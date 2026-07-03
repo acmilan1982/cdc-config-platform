@@ -1,0 +1,16 @@
+{
+  "permissions": {
+    "allow": [
+      "Bash(git config *)",
+      "Bash(git init *)",
+      "Bash(git checkout *)",
+      "Bash(mkdir -p backend frontend docs scripts)",
+      "Bash(touch backend/.gitkeep frontend/.gitkeep docs/.gitkeep scripts/.gitkeep)",
+      "Bash(echo \"exit: $?\")",
+      "Bash(git add *)",
+      "Bash(git commit *)",
+      "Bash(git remote *)",
+      "Bash(git push *)"
+    ]
+  }
+}
