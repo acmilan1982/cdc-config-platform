@@ -52,9 +52,53 @@ java -jar target/cdc-config-platform-backend-1.0.0-SNAPSHOT.jar
 | Swagger UI | http://localhost:8080/swagger-ui.html |
 | OpenAPI JSON | http://localhost:8080/v3/api-docs |
 
+## 接口地址
+
+| 接口 | 地址 |
+|------|------|
+| 健康检查 | http://localhost:8080/api/health |
+| 数据源分页查询 | GET /api/data-sources |
+| 数据源详情 | GET /api/data-sources/{dataSourceId} |
+| Swagger UI | http://localhost:8080/swagger-ui.html |
+| OpenAPI JSON | http://localhost:8080/v3/api-docs |
+
+## 数据源管理 API
+
+已实现数据源管理完整 CRUD（7 个接口），详见 `docs/api/data-source-api.md`。
+
+| 方法 | 路径 | 说明 |
+|------|------|------|
+| GET | `/api/data-sources` | 分页查询（ID精确/名称模糊） |
+| GET | `/api/data-sources/{id}` | 详情（含扩展配置） |
+| POST | `/api/data-sources` | 新增（主+扩展同事务） |
+| PUT | `/api/data-sources/{id}` | 修改（支持ID修改、密码留空不覆盖） |
+| DELETE | `/api/data-sources/{id}` | 删除（先扩展后主表，物理删除） |
+| PUT | `/api/data-sources/{id}/enable` | 启用（FG_ACTIVE=1） |
+| PUT | `/api/data-sources/{id}/disable` | 停用（FG_ACTIVE=0） |
+
+### 只读验证方式
+
+```bash
+# 分页查询
+curl http://localhost:8080/api/data-sources?pageNum=1\&pageSize=20
+
+# 详情查询
+curl http://localhost:8080/api/data-sources/DS001
+```
+
+### 真实写操作审批说明
+
+以下接口已开发完成但**未获得真实开发库写入授权**，调用前须经项目负责人审批：
+
+- POST /api/data-sources（新增）
+- PUT /api/data-sources/{id}（修改）
+- DELETE /api/data-sources/{id}（删除）
+- PUT /api/data-sources/{id}/enable（启用）
+- PUT /api/data-sources/{id}/disable（停用）
+
 ## 当前状态
 
-本项目当前仅为 Spring Boot 后端骨架，已实现：
+已实现：
 
 - 统一响应结构（ApiResponse）
 - 统一分页结构（PageResult）
@@ -64,5 +108,4 @@ java -jar target/cdc-config-platform-backend-1.0.0-SNAPSHOT.jar
 - 健康检查接口
 - CORS 开发环境跨域配置
 - Oracle 数据源连接
-
-尚未实现任何业务模块 CRUD。
+- 数据源管理 CRUD（含扩展表一对一事务）
