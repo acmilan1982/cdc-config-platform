@@ -1,0 +1,19 @@
+# 开发环境配置
+spring:
+  datasource:
+    url: jdbc:oracle:thin:@//192.168.174.65:1521/prod.enmotech.com
+    username: CDC
+    password: CDC
+    driver-class-name: oracle.jdbc.OracleDriver
+    hikari:
+      minimum-idle: 2
+      maximum-pool-size: 5
+      connection-timeout: 10000
+      idle-timeout: 300000
+      max-lifetime: 600000
+
+logging:
+  level:
+    root: INFO
+    com.bsoft.cdcconfig: DEBUG
+    com.bsoft.cdcconfig.**.mapper: DEBUG
