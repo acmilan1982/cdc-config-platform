@@ -1,12 +1,14 @@
 # 表结构详情
 
+> 最近更新：2026-07-03（根据项目负责人答复更新）
+
 ## 1. CDC_CLIENT_MULTIPLE（探针/客户端）
 
 ### 基本信息
 
-- 记录数：21
+- 记录数：3（已从21条去重）
 - 字段数：4
-- 主键：无
+- 主键：CLIENT_ID (PK_CDC_CLIENT_MULTIPLE)
 - 唯一约束：无
 - 外键：无
 - 表注释：(无)
@@ -24,30 +26,29 @@
 
 | 类型 | 名称 | 字段 | 状态 |
 |------|------|------|------|
+| Primary Key | PK_CDC_CLIENT_MULTIPLE | CLIENT_ID | ENABLED |
 | Check (NOT NULL) | SYS_C0041473 | CLIENT_ID | ENABLED |
 | Check (NOT NULL) | SYS_C0041474 | FG_ACTIVE | ENABLED |
 
 ### 索引
 
-无显式索引（无主键、无普通索引）。
+| 名称 | 类型 | 唯一性 | 字段 | 状态 |
+|------|------|--------|------|------|
+| PK_CDC_CLIENT_MULTIPLE | NORMAL | UNIQUE | CLIENT_ID | VALID |
 
-### 样例数据特征
+### 样例数据
 
-- CLIENT_ID：格式如 `hosp-001`, `hosp-002`, `hosp001-home`，用于标识探针实例
-- DATA_SOURCE_ID：可为单个值或逗号分隔的多个值，如 `199-source,5905f1ce83024410836b40ca0ebfc446`
-- FG_ACTIVE：取值 `0`（19条）或 `1`（2条）
-- 存在空 DATA_SOURCE_ID 的记录（如 hosp099, hosp-003 等）
+当前仅3条记录：hosp-001, hosp-002, hosp-006。
 
 ### 已确认
 
-- 探针注册表，记录每个探针客户端及其关联的数据源
-- CLIENT_ID 可重复（21条记录中有重复的 CLIENT_ID）
-- DATA_SOURCE_ID 支持逗号分隔的多值
+- CLIENT_ID 是主键，每条记录唯一
+- 项目负责人已清理重复记录（21→3条）
+- DATA_SOURCE_ID 支持逗号分隔多值
 
 ### 待确认
 
-- CLIENT_ID 重复是故意的（多环境配置）还是数据冗余
-- 无主键，CLIENT_ID 不唯一，业务上如何区分记录
+- 无
 
 ---
 
@@ -60,7 +61,7 @@
 - 主键：DATA_SOURCE_ID (PK_CDC_DATA_SOURCE)
 - 唯一约束：无
 - 外键：无
-- 表注释：(乱码，仅存"???")
+- 表注释：数据源，包括源库，目标库
 
 ### 字段明细
 
@@ -78,8 +79,8 @@
 | 10 | UPDATE_TIME | DATE | 7 | Y | - | 更新时间 |
 | 11 | DELETE_TIME | DATE | 7 | Y | - | 删除时间 |
 | 12 | FG_ACTIVE | VARCHAR2 | 1 | Y | - | 是否可用标记位-删除或停用后该值为0，正常为1 |
-| 13 | DATA_SOURCE_DOMAIN | VARCHAR2 | 32 | Y | - | 域名 |
-| 14 | DATA_SOURCE_CATEGORY | VARCHAR2 | 30 | Y | - | 源表还是目标表，取值source/target，大小写都行 |
+| 13 | DATA_SOURCE_DOMAIN | VARCHAR2 | 32 | Y | - | 域名（暂时不用） |
+| 14 | DATA_SOURCE_CATEGORY | VARCHAR2 | 30 | Y | - | 源表还是目标表，取值SOURCE/TARGET，程序中已转为大写 |
 | 15 | SOURCE_APP | VARCHAR2 | 20 | Y | - | 源应用 |
 | 16 | DATA_SOURCE_NAME | VARCHAR2 | 30 | Y | - | 数据源名称 |
 | 17 | DATA_SOURCE_BIZ_ATTR | VARCHAR2 | 2000 | Y | - | 业务属性JSON，目前只在doris类型中生效 |
@@ -108,27 +109,17 @@
 | IDX_CDC_LOG_CORRECT_ORG | NORMAL | NONUNIQUE | DATA_SOURCE_ORG | VALID |
 | IDX_CDS_ACTIVE | NORMAL | NONUNIQUE | FG_ACTIVE | VALID |
 
-### 样例数据特征
+### 已确认（本次更新）
 
-- DATA_SOURCE_ID：格式有 UUID 式（如 `5905f1ce83024410836b40ca0ebfc446`）和业务名式（如 `199-source`, `target-doris-v4`）
-- DATA_SOURCE_TYPE 分布：ORACLE(10), DORIS(3), MYSQL(2)
-- DATA_SOURCE_CATEGORY：source(2), target(8), SOURCE(5) — 存在大小写不一致
-- SOURCE_APP：全部为 `his应用`（15条）
-- FG_ACTIVE：0(13), 1(2)
-- DELETE_TIME：全部为 NULL（无软删除记录）
-- DATA_SOURCE_BIZ_ATTR：仅 `target-doris-v4` 有值（JSON格式Doris配置）
-
-### 已确认
-
-- 核心数据源配置表，存储源库和目标库连接信息
-- 密码以明文存储（DATA_SOURCE_PASSWORD 字段）
-- DATA_SOURCE_CATEGORY 注释说"大小写都行"，但实际存在 source/SOURCE 混用
+- 表注释：数据源，包括源库，目标库
+- DATA_SOURCE_CATEGORY：统一使用大写，程序已做转换
+- DATA_SOURCE_DOMAIN：暂时不用理会
+- 密码明文存储：不需要加密
+- 该表与 CDC_DATA_SOURCE_EXTEND 为 1:1 关系
 
 ### 待确认
 
-- 表注释原始内容已丢失（数据库存储为字面值"???"）
-- DATA_SOURCE_CATEGORY 大小写不一致是否需要统一
-- 明文密码存储是否符合安全规范
+- DATA_SOURCE_CATEGORY 当前样本仍存在大小写混用，虽然程序层面已兼容
 
 ---
 
@@ -160,24 +151,15 @@
 
 无显式索引。
 
-### 样例数据特征
+### 已确认（本次更新）
 
-- TABLE_NAMING_STRATEGY：TABLE_MERGE(4), CUSTOM_PREFIX_SUFFIX(5)
-- 当策略为 CUSTOM_PREFIX_SUFFIX 时，PREFIX 和 SUFFIX 有值（如 `DLS_011_V2022_01_` 和 `_fucking`）
-- 当策略为 TABLE_MERGE 时，PREFIX 和 SUFFIX 为空
-- 9条记录中有7条 DATA_SOURCE_ID 能与 CDC_DATA_SOURCE 匹配，2条不能匹配
-
-### 已确认
-
-- 是 CDC_DATA_SOURCE 的扩展表，存储目标表命名策略
-- 无主键，无外键，结构关系仅通过注释和字段命名推断
-- 与 CDC_DATA_SOURCE 的关系：高可信候选（注释明确说明，7/9数据可匹配）
+- 与 CDC_DATA_SOURCE 为 1:1 关系
+- mock7、mock8 等为测试数据，不用理会
+- `_fucking` 后缀为测试数据内容，无需理会
 
 ### 待确认
 
-- 为什么无主键约束
-- 2条无法匹配 CDC_DATA_SOURCE 的记录（mock7, mock8）是否为孤立数据
-- SUFFIX 值 `_fucking` 疑似测试占位数据
+- 无主键，与 CDC_DATA_SOURCE 的 1:1 关系无法通过数据库约束保证
 
 ---
 
@@ -219,22 +201,10 @@
 |------|------|--------|------|------|
 | PK_CDC_DS_RUN_STATE | NORMAL | UNIQUE | CLIENT_ID, DATA_SOURCE_ID | VALID |
 
-### 样例数据特征
+### 已确认（本次更新）
 
-- 仅1条记录：CLIENT_ID=`hosp-002`, DATA_SOURCE_ID=`5905f1ce83024410836b40ca0ebfc446`, 状态= SNAPSHOT_COMPLETED
-- 快照时间：2026-07-02（最近一次快照）
-- SNAPSHOT_STATUS 当前仅观察到 SNAPSHOT_COMPLETED（字段注释列出 SNAPSHOT_COMPLETED / SNAPSHOT_RUNNING）
-
-### 已确认
-
-- 记录每个探针对每个数据源的快照运行状态
-- 复合主键 (CLIENT_ID, DATA_SOURCE_ID) 保证唯一
-- 仅1条记录，可能为开发/测试环境
-
-### 待确认
-
-- 为何只有1条运行状态记录（是否应该覆盖所有探针-数据源组合）
-- SNAPSHOT_RUNNING 状态未在现有数据中出现
+- 该表由另外的程序插入，当前程序只读即可
+- 仅1条记录是开发环境特性，有几条都是正常的
 
 ---
 
@@ -244,7 +214,7 @@
 
 - 记录数：9
 - 字段数：12
-- 主键：无
+- 主键：DATA_SUB_ID (PK_CDC_DATA_SUBSCRIBE)
 - 唯一约束：无
 - 外键：无
 - 表注释：(无)
@@ -253,56 +223,47 @@
 
 | # | 字段名 | 数据类型 | 长度 | 可为空 | 默认值 | 注释 |
 |---|--------|----------|------|--------|--------|------|
-| 1 | DATA_SUB_ID | VARCHAR2 | 32 | N | - | (无注释) |
-| 2 | DATA_SUB_DESC | VARCHAR2 | 255 | Y | - | (无注释) |
-| 3 | DATA_FROM_SOURCE_ID | VARCHAR2 | 1024 | Y | - | (无注释) |
-| 4 | DATA_TO_SOURCE_ID | VARCHAR2 | 1024 | Y | - | (无注释) |
-| 5 | DATA_SOURCE_TABLE | CLOB | 4000 | Y | - | (无注释) |
-| 6 | DATA_SOURCE_COMMENT | CLOB | 4000 | Y | - | (无注释) |
-| 7 | DATA_TARGET_TABLE | CLOB | 4000 | Y | - | (无注释) |
-| 8 | DATA_TARGET_COMMENT | CLOB | 4000 | Y | - | (无注释) |
-| 9 | INSERT_TIME | DATE | 7 | Y | - | (无注释) |
-| 10 | UPDATE_TIME | DATE | 7 | Y | - | (无注释) |
-| 11 | DELETE_TIME | DATE | 7 | Y | - | (无注释) |
-| 12 | FG_ACTIVE | VARCHAR2 | 1 | Y | - | (无注释) |
+| 1 | DATA_SUB_ID | VARCHAR2 | 32 | N | - | 代理主键，程序自动生成，无任何业务含义 |
+| 2 | DATA_SUB_DESC | VARCHAR2 | 255 | Y | - | 订阅描述 |
+| 3 | DATA_FROM_SOURCE_ID | VARCHAR2 | 1024 | Y | - | 源库，即业务库，对应CDC_DATA_SOURCE表中，DATA_SOURCE_CATEGORY=source的记录主键，可以填多个，用英文逗号间隔 |
+| 4 | DATA_TO_SOURCE_ID | VARCHAR2 | 1024 | Y | - | 目标库，对应CDC_DATA_SOURCE表中，DATA_SOURCE_CATEGORY=target的记录主键，可以填多个，用英文逗号间隔 |
+| 5 | DATA_SOURCE_TABLE | CLOB | 4000 | Y | - | 源库中，需要同步的表，单个表的格式：DATA_SOURCE_ID.schema.表名，可以填多个，用英文逗号间隔 |
+| 6 | DATA_SOURCE_COMMENT | CLOB | 4000 | Y | - | 源库中，需要同步的表注释，与DATA_SOURCE_TABLE对应 |
+| 7 | DATA_TARGET_TABLE | CLOB | 4000 | Y | - | 暂时没用，可以不管 |
+| 8 | DATA_TARGET_COMMENT | CLOB | 4000 | Y | - | 暂时没用，可以不管 |
+| 9 | INSERT_TIME | DATE | 7 | Y | - | 当前记录的插入时间 |
+| 10 | UPDATE_TIME | DATE | 7 | Y | - | 当前记录的更新时间 |
+| 11 | DELETE_TIME | DATE | 7 | Y | - | 当前记录的删除时间 |
+| 12 | FG_ACTIVE | VARCHAR2 | 1 | Y | - | 当前记录是否启用标志，0：不启用 1：启用 |
 
 ### 约束
 
 | 类型 | 名称 | 字段 | 状态 |
 |------|------|------|------|
+| Primary Key | PK_CDC_DATA_SUBSCRIBE | DATA_SUB_ID | ENABLED |
 | Check (NOT NULL) | SYS_C0041443 | DATA_SUB_ID | ENABLED |
 
 ### 索引
 
 | 名称 | 类型 | 唯一性 | 字段 | 状态 |
 |------|------|--------|------|------|
+| PK_CDC_DATA_SUBSCRIBE | NORMAL | UNIQUE | DATA_SUB_ID | VALID |
 | SYS_IL0000106847C00005$$ | LOB | UNIQUE | (LOB索引) | VALID |
 | SYS_IL0000106847C00006$$ | LOB | UNIQUE | (LOB索引) | VALID |
 | SYS_IL0000106847C00007$$ | LOB | UNIQUE | (LOB索引) | VALID |
 | SYS_IL0000106847C00008$$ | LOB | UNIQUE | (LOB索引) | VALID |
 
-### 样例数据特征
+### 已确认（本次更新）
 
-- 所有12个字段均无注释
-- 4个CLOB字段：DATA_SOURCE_TABLE, DATA_SOURCE_COMMENT, DATA_TARGET_TABLE, DATA_TARGET_COMMENT
-- DATA_FROM_SOURCE_ID 和 DATA_TO_SOURCE_ID 关联 CDC_DATA_SOURCE.DATA_SOURCE_ID
-- DATA_TO_SOURCE_ID 支持逗号分隔多值（如 `target-doris-v3,target-doris-v4`）
-- FG_ACTIVE：0(8), 1(1)
-- DELETE_TIME：全部为 NULL
-- DATA_SOURCE_TABLE 存储源表全限定名（如 `5905f1ce83024410836b40ca0ebfc446.DEV_EHRVIEW.OPT_RECORD`）
-
-### 已确认
-
-- 数据订阅配置表，定义从哪个数据源的哪些表同步到哪个目标数据源
-- 无主键，DATA_SUB_ID 应为业务主键（通过 NOT NULL Check 约束确保非空）
-- 4个 CLOB 字段存储表名和注释，可能包含多行/多表信息
+- DATA_SUB_ID 是主键，程序自动生成的代理主键
+- DATA_SOURCE_COMMENT 是源表的表注释，与 DATA_SOURCE_TABLE 对应
+- DATA_TARGET_TABLE 和 DATA_TARGET_COMMENT 暂时不用，可以不管
+- CLOB 字段存储纯文本，非JSON
+- DATA_FROM_SOURCE_ID / DATA_TO_SOURCE_ID 支持逗号分隔多值
 
 ### 待确认
 
-- 全部字段注释缺失，每个字段的业务含义需要项目负责人确认
-- 无主键约束，DATA_SUB_ID 是否应保证唯一
-- DATA_SOURCE_COMMENT 和 DATA_TARGET_COMMENT 的出现规律和作用
-- CLOB字段是否可能存储JSON或结构化数据
+- 无
 
 ---
 
@@ -310,7 +271,7 @@
 
 ### 基本信息
 
-- 记录数：0（空表）
+- 记录数：0（已确认：因表空间不足被清空，该表仍在使用）
 - 字段数：16
 - 主键：CDC_LOG_ID (PK_CDC_LOG_CORRECT)
 - 唯一约束：无
@@ -322,7 +283,7 @@
 | # | 字段名 | 数据类型 | 长度 | 可为空 | 默认值 | 注释 |
 |---|--------|----------|------|--------|--------|------|
 | 1 | CDC_LOG_ID | VARCHAR2 | 32 | N | - | 主键 |
-| 2 | INSTRUCTION_TYPE | VARCHAR2 | 8 | Y | - | c：新增  u：更新  d：删除  r: 新增  ddl:表结构更新 |
+| 2 | INSTRUCTION_TYPE | VARCHAR2 | 8 | Y | - | c：增量新增  u：更新  d：删除  r：快照读取  ddl:表结构更新 |
 | 3 | SOURCE_TIME | DATE | 7 | Y | - | LOGMNR挖掘到源数据的时间 |
 | 4 | TARGET_TIME | DATE | 7 | Y | - | 源数据落盘到目标库的时间 |
 | 5 | INSERT_TIME | DATE | 7 | Y | - | 当前日志落盘的时间 |
@@ -335,8 +296,8 @@
 | 12 | RESULT_CODE | NUMBER | 22 | Y | - | 0表示执行成功，1表示执行出现异常 |
 | 13 | OFFSET | NUMBER | 22 | Y | - | 偏移量 |
 | 14 | KAFKA_ENQUEUE_TIME | DATE | 7 | Y | - | 数据进入Kafka的时间（数据进入链路） |
-| 15 | SOURCE_SCHEMA_NAME | VARCHAR2 | 64 | Y | - | 源-模式名 to lei |
-| 16 | RAW_MESSAGE | BLOB | 4000 | Y | - | 原始消息（注：字段注释为空，类型为BLOB） |
+| 15 | SOURCE_SCHEMA_NAME | VARCHAR2 | 64 | Y | - | 源-模式名 |
+| 16 | RAW_MESSAGE | CLOB | 4000 | Y | - | 原始消息（已从 BLOB 更新为 CLOB） |
 
 ### 约束
 
@@ -350,20 +311,19 @@
 | 名称 | 类型 | 唯一性 | 字段 | 状态 |
 |------|------|--------|------|------|
 | PK_CDC_LOG_CORRECT | NORMAL | UNIQUE | CDC_LOG_ID | VALID |
-| SYS_IL0000106857C00016$$ | LOB | UNIQUE | (RAW_MESSAGE BLOB索引) | VALID |
+| SYS_IL0000106857C00016$$ | LOB | UNIQUE | (RAW_MESSAGE LOB索引) | VALID |
 
-### 已确认
+### 已确认（本次更新）
 
-- 当前为空表（0条记录）
-- 与 CDC_LOG_ERROR 结构几乎完全相同，用于分别存储成功和失败的CDC操作日志
-- 注：INSTRUCTION_TYPE 注释中 `r` 和 `c` 均标注为"新增"，含义重叠
+- 该表仍在使用，保存已成功同步到目标库的数据记录
+- 当前为空是因为表空间不够且日志量大，之前被清空
+- INSTRUCTION_TYPE：c=create（增量数据），r=read（快照数据），u=更新，d=删除，ddl=表结构更新
+- RAW_MESSAGE 类型已从 BLOB 更新为 CLOB，与 CDC_LOG_ERROR 一致
+- RESULT_DETAIL：暂时不用
 
 ### 待确认
 
-- 表注释原始内容已丢失
-- 当前为空是由开发环境决定，还是该表已不再使用
-- INSTRUCTION_TYPE 中 `r` 的具体含义（与 `c` 的区别）
-- RAW_MESSAGE 为 BLOB 类型（CDC_LOG_ERROR 中为 CLOB），两表结构差异的原因
+- 表注释仍为 "???"，原始内容已丢失
 
 ---
 
@@ -383,7 +343,7 @@
 | # | 字段名 | 数据类型 | 长度 | 可为空 | 默认值 | 注释 |
 |---|--------|----------|------|--------|--------|------|
 | 1 | CDC_LOG_ID | VARCHAR2 | 32 | N | - | (无注释) |
-| 2 | INSTRUCTION_TYPE | VARCHAR2 | 8 | Y | - | (无注释) |
+| 2 | INSTRUCTION_TYPE | VARCHAR2 | 8 | Y | - | (无注释) — 含义同 CDC_LOG_CORRECT：c=增量,u=更新,d=删除,r=快照,ddl=表结构 |
 | 3 | SOURCE_TIME | DATE | 7 | Y | - | (无注释) |
 | 4 | TARGET_TIME | DATE | 7 | Y | - | (无注释) |
 | 5 | INSERT_TIME | DATE | 7 | Y | - | (无注释) |
@@ -392,58 +352,28 @@
 | 8 | TARGET_DATA_SOURCE_ID | VARCHAR2 | 32 | Y | - | (无注释) |
 | 9 | SOURCE_TABLE_NAME | VARCHAR2 | 64 | Y | - | (无注释) |
 | 10 | TARGET_TABLE_NAME | VARCHAR2 | 64 | Y | - | (无注释) |
-| 11 | RESULT_DETAIL | VARCHAR2 | 2000 | Y | - | (无注释) |
-| 12 | RESULT_CODE | NUMBER | 22 | Y | - | (无注释) |
+| 11 | RESULT_DETAIL | VARCHAR2 | 2000 | Y | - | (无注释) — 暂时不用 |
+| 12 | RESULT_CODE | NUMBER | 22 | Y | - | (无注释) — 0=成功, 1=异常 |
 | 13 | OFFSET | NUMBER | 22 | Y | - | (无注释) |
 | 14 | KAFKA_ENQUEUE_TIME | DATE | 7 | Y | - | (无注释) |
-| 15 | SOURCE_SCHEMA_NAME | VARCHAR2 | 64 | Y | - | 源-模式名 to lei |
+| 15 | SOURCE_SCHEMA_NAME | VARCHAR2 | 64 | Y | - | 源-模式名 |
 | 16 | RAW_MESSAGE | CLOB | 4000 | Y | - | 原始消息 |
 
-### 约束
+### 已确认（本次更新）
 
-| 类型 | 名称 | 字段 | 状态 |
-|------|------|------|------|
-| Primary Key | PK_CDC_LOG_ERROR | CDC_LOG_ID | ENABLED |
-| Check (NOT NULL) | SYS_C0041446 | CDC_LOG_ID | ENABLED |
-
-### 索引
-
-| 名称 | 类型 | 唯一性 | 字段 | 状态 |
-|------|------|--------|------|------|
-| PK_CDC_LOG_ERROR | NORMAL | UNIQUE | CDC_LOG_ID | VALID |
-| IDX_CDC_LOG_ERROR_TYPE | NORMAL | NONUNIQUE | INSTRUCTION_TYPE | VALID |
-| IDX_LOG_ERROR_TARGET_SRC | NORMAL | NONUNIQUE | INSERT_TIME, SOURCE_DATA_SOURCE_ID | VALID |
-| IDX_LOG_ERROR_TS_SRC_SCHEMA | NORMAL | NONUNIQUE | TARGET_TIME, SOURCE_DATA_SOURCE_ID, SOURCE_SCHEMA_NAME | VALID |
-| SYS_IL0000106861C00016$$ | LOB | UNIQUE | (RAW_MESSAGE LOB索引) | VALID |
-
-### 样例数据特征
-
-- 仅1条记录：INSTRUCTION_TYPE=`d`（删除操作），RESULT_CODE=1（异常）
-- LOG_DETAIL 包含完整Java异常堆栈（Flink CDC 任务异常）
-- RAW_MESSAGE 包含JSON格式的Kafka原始消息（含op、schema、table、before/after等CDC字段）
-- 错误原因：`single delete failed: FAILED: missing primary key value`
-
-### 已确认
-
-- CDC错误日志表，结构与 CDC_LOG_CORRECT 高度相似
-- 相比 CDC_LOG_CORRECT 多了3个普通索引（用于查询性能优化）
-- RAW_MESSAGE 类型为 CLOB（不同于 CDC_LOG_CORRECT 的 BLOB）
-- 日志包含 Flink CDC 任务的完整错误堆栈和Kafka原始消息
-
-### 待确认
-
-- 大部分字段注释缺失，业务含义需参考 CDC_LOG_CORRECT 的同名字段
-- INDEX 设计差异的原因（LOG_ERROR 有3个业务索引，LOG_CORRECT 没有）
+- 该表仍在使用，保存未能正常同步到目标库的数据记录
+- 结构与 CDC_LOG_CORRECT 相同（RAW_MESSAGE 类型已统一为 CLOB）
+- INSTRUCTION_TYPE、RESULT_CODE 等字段含义参考 CDC_LOG_CORRECT 同名字段
 
 ---
 
-## 8. CDC_SERVER（服务端注册）
+## 8. CDC_SERVER（中心端注册）
 
 ### 基本信息
 
 - 记录数：1
 - 字段数：4
-- 主键：无
+- 主键：SERVER_ID (PK_CDC_SERVER)
 - 唯一约束：无
 - 外键：无
 - 表注释：(无)
@@ -452,38 +382,38 @@
 
 | # | 字段名 | 数据类型 | 长度 | 可为空 | 默认值 | 注释 |
 |---|--------|----------|------|--------|--------|------|
-| 1 | SERVER_ID | VARCHAR2 | 32 | Y | - | (无注释) |
-| 2 | SERVER_DESC | VARCHAR2 | 256 | Y | - | (无注释) |
-| 3 | DATA_SOURCE_ID | VARCHAR2 | 32 | Y | - | (无注释) |
-| 4 | FG_ACTIVE | VARCHAR2 | 1 | Y | - | (无注释) |
+| 1 | SERVER_ID | VARCHAR2 | 32 | N | - | 每个中心端进程的标识符，每个中心端程序在其配置文件中，都预设一个标识符，不同的中心端，标识符不能重复 |
+| 2 | SERVER_DESC | VARCHAR2 | 256 | Y | - | 中心端进程描述符 |
+| 3 | DATA_SOURCE_ID | VARCHAR2 | 32 | Y | - | 暂时不用 |
+| 4 | FG_ACTIVE | VARCHAR2 | 1 | Y | - | 当前中心端是否启动 |
 
 ### 约束
 
-无。
+| 类型 | 名称 | 字段 | 状态 |
+|------|------|------|------|
+| Primary Key | PK_CDC_SERVER | SERVER_ID | ENABLED |
 
 ### 索引
 
-无。
-
-### 样例数据特征
-
-- 仅1条记录：SERVER_ID=`Server001`, DATA_SOURCE_ID=`a31a1a6e542747ea8bcbfb12bd43b6b9`, FG_ACTIVE=1
-- SERVER_DESC：`服务端注册自: Server001 IP: 3.3.0.168, 192.168.174.1, 10.0.0.4, 192.168.100.1, 192.168.1.130`
+| 名称 | 类型 | 唯一性 | 字段 | 状态 |
+|------|------|--------|------|------|
+| PK_CDC_SERVER | NORMAL | UNIQUE | SERVER_ID | VALID |
 
 ### 已确认
 
-- CDC Server 注册表，记录服务端实例及其关联的目标数据源
-- 所有字段无注释
+- CDC Server 注册表，记录每个中心端进程
+- SERVER_ID 是主键，不同中心端标识符不能重复
+- DATA_SOURCE_ID 暂时不用
 
-### 待确认
+### 待确认（待进一步核实）
 
-- 全部字段注释缺失
-- 无主键约束，SERVER_ID 是否应作为主键
-- DATA_SOURCE_ID 引用哪个数据源
+- 项目负责人已添加注释，但状态为"待进一步核实"
 
 ---
 
-## 9. CDC_SERVER_CONFIG（服务端配置项）
+## 9. CDC_SERVER_CONFIG（中心端配置项）
+
+（无变化，结构保持不变）
 
 ### 基本信息
 
@@ -503,7 +433,7 @@
 | 3 | CONFIG_DESC | VARCHAR2 | 1024 | Y | - | 配置项描述 |
 | 4 | CONFIG_KEY | VARCHAR2 | 64 | Y | - | 配置项key |
 | 5 | CONFIG_VALUE | VARCHAR2 | 64 | Y | - | 配置项value |
-| 6 | IS_EDITABLE | CHAR | 1 | Y | '1' | 当前配置项是否可编辑 |
+| 6 | IS_EDITABLE | CHAR | 1 | Y | 1 | 当前配置项是否可编辑 |
 
 ### 约束
 
@@ -511,13 +441,7 @@
 |------|------|------|------|
 | Primary Key | PK_CDC_SERVER_CONFIG | ID_SERVER_CONFIG | ENABLED |
 
-### 索引
-
-| 名称 | 类型 | 唯一性 | 字段 | 状态 |
-|------|------|--------|------|------|
-| PK_CDC_SERVER_CONFIG | NORMAL | UNIQUE | ID_SERVER_CONFIG | VALID |
-
-### 样例数据（8条配置项）
+### 配置项清单
 
 | CONFIG_KEY | CONFIG_VALUE | IS_EDITABLE | 描述 |
 |------------|-------------|-------------|------|
@@ -530,25 +454,13 @@
 | auto-expand-column-length | false | 1 | 是否自动扩充字段长度 |
 | realtime-insert-batch-enabled-database-types | doris,oracle | 1 | 批量写入启用的数据库类型 |
 
-### 已确认
-
-- CDC Server 运行时配置的键值存储
-- 通过 SERVER_ID 关联 CDC_SERVER
-- 配置项涵盖：Kafka topic、快照、消息存储策略、删除策略、自动建表、批量写入
-- 全部8条配置项关联 Server001
-
-### 待确认
-
-- 配置项是否可能随版本增加或变化
-- IS_EDITABLE 标记为1的配置项，是否允许通过配置界面动态修改
-
 ---
 
 ## 10. CDC_TOPIC_OFFSET（Kafka Topic偏移量）
 
 ### 基本信息
 
-- 记录数：1
+- 记录数：1（开发环境仅测试1个topic，生产环境每个中心端会消费数百个topic）
 - 字段数：4
 - 主键：SERVER_ID, KAFKA_TOPIC (复合主键 PK_CDC_TOPIC_OFFSET)
 - 唯一约束：无
@@ -559,10 +471,10 @@
 
 | # | 字段名 | 数据类型 | 长度 | 可为空 | 默认值 | 注释 |
 |---|--------|----------|------|--------|--------|------|
-| 1 | SERVER_ID | VARCHAR2 | 64 | N | - | (无注释) |
-| 2 | KAFKA_TOPIC | VARCHAR2 | 512 | N | - | (无注释) |
-| 3 | NEXT_OFFSET | NUMBER | 22(19,0) | N | - | (无注释) |
-| 4 | UPDATED_AT | DATE | 7 | N | - | (无注释) |
+| 1 | SERVER_ID | VARCHAR2 | 64 | N | - | 中心端标识符 |
+| 2 | KAFKA_TOPIC | VARCHAR2 | 512 | N | - | 中心端从kafka读取的topic |
+| 3 | NEXT_OFFSET | NUMBER | 22(19,0) | N | - | topic的下一个offset（下一条待消费消息的offset） |
+| 4 | UPDATED_AT | DATE | 7 | N | - | 记录更新时间 |
 
 ### 约束
 
@@ -580,19 +492,9 @@
 |------|------|--------|------|------|
 | PK_CDC_TOPIC_OFFSET | NORMAL | UNIQUE | SERVER_ID, KAFKA_TOPIC | VALID |
 
-### 样例数据特征
+### 已确认（本次更新）
 
-- 仅1条记录：SERVER_ID=`Server001`, KAFKA_TOPIC=`hosp-006.5905f1ce...`, NEXT_OFFSET=1712011
-- KAFKA_TOPIC 格式：`{探针ID}.{数据源ID}.{Schema}.{Table}.{目标数据源ID}`
-- UPDATED_AT：2026-06-17（最近一次偏移量更新时间）
-
-### 已确认
-
-- 记录每个Server对每个Kafka Topic的消费偏移量
-- KAFKA_TOPIC 命名规则揭示其对应特定 CDC 订阅任务
-- 属于 ZooKeeper 运行监控替代方案（基于数据库记录offset）
-
-### 待确认
-
-- 所有字段注释缺失
-- 为何只有1条offset记录（是否正常）
+- NEXT_OFFSET：下一条待消费消息的 offset
+- 每个中心端会消费 Kafka 数百个 topic，每条记录对应一个 topic 的消费位置
+- 当前仅1条记录是因为开发环境只测试了1个 topic
+- 该表记录 Kafka 消费偏移量，替代传统 ZooKeeper 存储方式

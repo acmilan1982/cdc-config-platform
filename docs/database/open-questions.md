@@ -1,178 +1,182 @@
 # 待确认问题清单
 
-## DB-Q-001
+> 最近更新：2026-07-03（根据项目负责人答复更新）
 
-- **涉及表**：CDC_LOG_CORRECT
-- **涉及字段**：(全部)
-- **已确认事实**：该表当前为完全空表（0条记录），其结构与 CDC_LOG_ERROR 高度相似，字段注释完整
-- **无法确认的原因**：无法通过数据库元数据或样例数据判断该表当前是否仍被系统程序使用
-- **禁止自行推断的内容**：该表是否已废弃，或仅因开发环境无CDC任务运行而为空
-- **需要项目负责人回答的问题**：CDC_LOG_CORRECT 表是否仍在生产中使用？空表原因是什么？
+## 问题状态总览
 
----
-
-## DB-Q-002
-
-- **涉及表**：CDC_CLIENT_MULTIPLE
-- **涉及字段**：CLIENT_ID
-- **已确认事实**：该表无主键约束，CLIENT_ID 存在重复值（如 hosp-002 出现2次，hosp-003 出现3次），DATA_SOURCE_ID 支持逗号分隔多值
-- **无法确认的原因**：无法判断CLIENT_ID重复是有意为之（多环境/多数据源配置）还是数据冗余
-- **禁止自行推断的内容**：CLIENT_ID 是否应作为主键或唯一约束字段
-- **需要项目负责人回答的问题**：CLIENT_ID 是否应唯一？当前重复数据是否需要清理？是否需要添加主键约束？
-
----
-
-## DB-Q-003
-
-- **涉及表**：CDC_DATA_SUBSCRIBE
-- **涉及字段**：(全部12个字段)
-- **已确认事实**：该表所有12个字段均无注释，包含4个CLOB字段，无主键约束，仅 DATA_SUB_ID 有 NOT NULL Check约束
-- **无法确认的原因**：完全无字段注释和数据库级文档
-- **禁止自行推断的内容**：每个字段的确切业务含义、CLOB字段的存储格式
-- **需要项目负责人回答的问题**：
-  1. DATA_SUB_ID 是否应作为主键？
-  2. DATA_SOURCE_COMMENT 和 DATA_TARGET_COMMENT 的用途是什么？
-  3. CLOB字段是否存储JSON格式数据，还是纯文本表名列表？
-  4. 该表是否需要添加主键约束？
+| 编号 | 涉及表 | 问题摘要 | 状态 |
+|------|--------|----------|------|
+| DB-Q-001 | CDC_LOG_CORRECT, CDC_LOG_ERROR | 两表是否仍在使用及空表原因 | 已确认 |
+| DB-Q-002 | CDC_CLIENT_MULTIPLE | CLIENT_ID 唯一性和主键 | 已确认（已修复） |
+| DB-Q-003 | CDC_DATA_SUBSCRIBE | 字段注释和主键缺失 | 已确认（已修复） |
+| DB-Q-004 | CDC_SERVER | 字段注释和主键缺失 | 待进一步核实 |
+| DB-Q-005 | CDC_TOPIC_OFFSET | 字段注释和NEXT_OFFSET含义 | 已确认（已修复） |
+| DB-Q-006 | CDC_DATA_SOURCE | DATA_SOURCE_CATEGORY 大小写 | 已确认 |
+| DB-Q-007 | CDC_DATA_SOURCE_EXTEND | mock7/mock8 孤立数据 | 已确认（测试数据） |
+| DB-Q-008 | CDC_DATA_SOURCE | DATA_SOURCE_DOMAIN 全空 | 已确认（暂时不用） |
+| DB-Q-009 | CDC_LOG_CORRECT | INSTRUCTION_TYPE c/r 区别 | 已确认（c=增量, r=快照） |
+| DB-Q-010 | CDC_LOG_CORRECT | RAW_MESSAGE BLOB vs CLOB | 已确认（已修复为CLOB） |
+| DB-Q-011 | CDC_DATA_SOURCE_EXTEND | _fucking 后缀 | 已确认（测试数据） |
+| DB-Q-012 | CDC_DATA_SOURCE | 密码明文存储 | 已确认（不用加密） |
+| DB-Q-013 | CDC_DATA_SOURCE | 表注释丢失 | 已确认（已修复） |
+| DB-Q-014 | CDC_DATA_SOURCE_RUN_STATE | 仅1条运行状态记录 | 已确认（开发环境特性） |
 
 ---
 
-## DB-Q-004
-
-- **涉及表**：CDC_SERVER
-- **涉及字段**：(全部4个字段)
-- **已确认事实**：该表所有字段均无注释，无主键约束，仅1条记录
-- **无法确认的原因**：完全无字段注释
-- **禁止自行推断的内容**：每个字段的确切业务含义、SERVER_ID 是否应为主键、DATA_SOURCE_ID 的业务含义
-- **需要项目负责人回答的问题**：CDC_SERVER 表各字段的确切含义是什么？是否需要添加主键约束？
-
----
-
-## DB-Q-005
-
-- **涉及表**：CDC_TOPIC_OFFSET
-- **涉及字段**：(全部4个字段)
-- **已确认事实**：该表所有字段均无注释，有复合主键 (SERVER_ID, KAFKA_TOPIC)，仅1条记录
-- **无法确认的原因**：完全无字段注释
-- **禁止自行推断的内容**：NEXT_OFFSET 的具体含义、KAFKA_TOPIC 的命名规则是否可程序化推导
-- **需要项目负责人回答的问题**：NEXT_OFFSET 是指下一个待消费的offset还是已消费的最后一个offset？为何只有1条记录？
-
----
-
-## DB-Q-006
-
-- **涉及表**：CDC_DATA_SOURCE
-- **涉及字段**：DATA_SOURCE_CATEGORY
-- **已确认事实**：字段注释写明取值 source/target，大小写都行。当前数据中存在 `source`(2条)、`SOURCE`(5条)、`target`(8条)
-- **无法确认的原因**：大小写混用是否为预期的运行时行为
-- **禁止自行推断的内容**：是否需要统一大小写
-- **需要项目负责人回答的问题**：source/SOURCE 大小写不一致是否需要修正？程序层面是否真的对大小写不敏感？
-
----
-
-## DB-Q-007
-
-- **涉及表**：CDC_DATA_SOURCE, CDC_DATA_SOURCE_EXTEND
-- **涉及字段**：DATA_SOURCE_ID
-- **已确认事实**：CDC_DATA_SOURCE_EXTEND 中有2条记录（mock7, mock8）的 DATA_SOURCE_ID 在 CDC_DATA_SOURCE 中无法找到匹配
-- **无法确认的原因**：不确定是孤立数据、测试数据还是 CDC_DATA_SOURCE 中的对应记录已被删除
-- **禁止自行推断的内容**：mock7/mock8 是否应保留
-- **需要项目负责人回答的问题**：CDC_DATA_SOURCE_EXTEND 中 mock7、mock8 是否为测试数据？是否需要清理或补充 CDC_DATA_SOURCE 中的对应记录？
-
----
-
-## DB-Q-008
-
-- **涉及表**：CDC_DATA_SOURCE
-- **涉及字段**：DATA_SOURCE_DOMAIN
-- **已确认事实**：15条记录中该字段全部为NULL
-- **无法确认的原因**：无法判断该字段是尚未投入使用还是已废弃
-- **禁止自行推断的内容**：该字段是否仍在计划中使用
-- **需要项目负责人回答的问题**：DATA_SOURCE_DOMAIN 字段是否仍在设计中？全部为NULL是否正常？
-
----
-
-## DB-Q-009
-
-- **涉及表**：CDC_LOG_CORRECT
-- **涉及字段**：INSTRUCTION_TYPE
-- **已确认事实**：字段注释中 `c` 和 `r` 均标注为"新增"，含义重叠
-- **无法确认的原因**：无法从注释或数据中区分 `c` 和 `r` 的实际区别
-- **禁止自行推断的内容**：`c` 和 `r` 各自的准确含义和使用场景
-- **需要项目负责人回答的问题**：INSTRUCTION_TYPE 中 `c`（新增）和 `r`（新增）的区别是什么？
-
----
-
-## DB-Q-010
+## DB-Q-001（已确认）✓
 
 - **涉及表**：CDC_LOG_CORRECT, CDC_LOG_ERROR
-- **涉及字段**：RAW_MESSAGE
-- **已确认事实**：CDC_LOG_CORRECT.RAW_MESSAGE 类型为 BLOB，CDC_LOG_ERROR.RAW_MESSAGE 类型为 CLOB。两表其他字段结构几乎相同
-- **无法确认的原因**：该类型差异是有意设计还是历史遗留
-- **禁止自行推断的内容**：类型差异的原因
-- **需要项目负责人回答的问题**：RAW_MESSAGE 在两个表中类型不同（BLOB vs CLOB）是有意设计吗？CDC_LOG_CORRECT 中是否需要改为 CLOB？
+- **答复**：两表均仍在使用。CDC_LOG_CORRECT 保存已成功同步到目标库的数据。CDC_LOG_ERROR 保存未成功同步的数据。当前为空/少量数据是由于表空间不够且日志量大，之前被清空。
+- **文档更新**：已在 table-detail.md、data-characteristics.md 中更新
 
 ---
 
-## DB-Q-011
+## DB-Q-002（已确认）✓
+
+- **涉及表**：CDC_CLIENT_MULTIPLE
+- **答复**：CLIENT_ID 是主键。已删除多余记录（21→3条），CLIENT_ID 已设为主键（PK_CDC_CLIENT_MULTIPLE）。
+- **数据库变更**：已验证 PK 存在，记录已去重为3条
+- **文档更新**：已在 table-list.md、table-detail.md、data-characteristics.md 中更新
+
+---
+
+## DB-Q-003（已确认）✓
+
+- **涉及表**：CDC_DATA_SUBSCRIBE
+- **答复**：
+  - 所有字段已添加注释
+  - DATA_SUB_ID 已设为主键（PK_CDC_DATA_SUBSCRIBE），为程序自动生成的代理主键
+  - DATA_SOURCE_COMMENT 是源表的表注释，与 DATA_SOURCE_TABLE 对应
+  - DATA_TARGET_COMMENT 字段忽略不计
+  - CLOB 字段为纯文本
+- **数据库变更**：已验证 PK 存在，12个字段注释已完善
+- **文档更新**：已在 table-detail.md、dictionary-candidates.md 中更新
+
+---
+
+## DB-Q-004（待进一步核实）⚠
+
+- **涉及表**：CDC_SERVER
+- **已确认事实**：
+  - 字段注释已添加（4个字段）
+  - SERVER_ID 已设为主键（PK_CDC_SERVER）
+  - 项目负责人答复：CDC_SERVER 已添加注释，请重读
+- **状态**：项目负责人标记为"待进一步核实"
+- **分析文档已基于现有注释更新，但该问题的最终确认状态仍为未完成**
+- **当前推断（基于新注释）**：
+  - SERVER_ID：每个中心端进程的标识符
+  - SERVER_DESC：中心端进程描述符
+  - DATA_SOURCE_ID：暂时不用
+  - FG_ACTIVE：当前中心端是否启动
+
+---
+
+## DB-Q-005（已确认）✓
+
+- **涉及表**：CDC_TOPIC_OFFSET
+- **答复**：
+  - 字段注释已添加
+  - NEXT_OFFSET 表示下一条待消费消息的 offset
+  - 每个中心端消费 Kafka 数百个 topic，该表记录每个 topic 的消费位置
+  - 当前仅1条记录是开发环境只测试了1个 topic
+- **数据库变更**：已验证4个字段注释已完善
+- **文档更新**：已在 table-detail.md 中更新
+
+---
+
+## DB-Q-006（已确认）✓
+
+- **涉及表**：CDC_DATA_SOURCE
+- **答复**：DATA_SOURCE_CATEGORY 最好都是大写。程序中已把该字段值都转成大写了。
+- **文档更新**：已在 dictionary-candidates.md、data-characteristics.md 中更新
+
+---
+
+## DB-Q-007（已确认）✓
+
+- **涉及表**：CDC_DATA_SOURCE, CDC_DATA_SOURCE_EXTEND
+- **答复**：CDC_DATA_SOURCE 与 CDC_DATA_SOURCE_EXTEND 正常是 1:1 关系。表中 mock7/mock8 为测试数据，不用理会。
+- **文档更新**：已在 table-relations.md、data-characteristics.md 中更新
+
+---
+
+## DB-Q-008（已确认）✓
+
+- **涉及表**：CDC_DATA_SOURCE
+- **答复**：DATA_SOURCE_DOMAIN 字段暂时不用理会。
+- **文档更新**：已在 dictionary-candidates.md、data-characteristics.md 中更新
+
+---
+
+## DB-Q-009（已确认）✓
+
+- **涉及表**：CDC_LOG_CORRECT
+- **答复**：c 表示 create（增量数据），r 表示 read（快照数据）。同步到目标库的数据都通过 Debezium 从 Oracle 读取，r=快照数据，c=增量数据。
+- **文档更新**：已在 dictionary-candidates.md、table-detail.md 中更新
+
+---
+
+## DB-Q-010（已确认）✓
+
+- **涉及表**：CDC_LOG_CORRECT
+- **答复**：已把 CDC_LOG_CORRECT 中 RAW_MESSAGE 字段类型更新为 CLOB。
+- **数据库变更**：已验证 RAW_MESSAGE 类型从 BLOB 变为 CLOB
+- **文档更新**：已在 table-detail.md 中更新
+
+---
+
+## DB-Q-011（已确认）✓
 
 - **涉及表**：CDC_DATA_SOURCE_EXTEND
-- **涉及字段**：TABLE_NAME_SUFFIX
-- **已确认事实**：5条记录的 TABLE_NAME_SUFFIX 值为 `_fucking`
-- **无法确认的原因**：明显为测试占位数据，但无法确认是否可以安全修改
-- **禁止自行推断的内容**：该值是否应替换为正式后缀
-- **需要项目负责人回答的问题**：`_fucking` 后缀是否为测试数据？是否需要替换为正式命名后缀？
+- **答复**：`_fucking` 为测试数据内容，无需理会。
+- **文档更新**：已在 data-characteristics.md 中更新
 
 ---
 
-## DB-Q-012
+## DB-Q-012（已确认）✓
 
 - **涉及表**：CDC_DATA_SOURCE
-- **涉及字段**：DATA_SOURCE_PASSWORD
-- **已确认事实**：该字段以明文存储15个数据源的数据库密码
-- **无法确认的原因**：不确定当前安全策略是否允许明文存储
-- **禁止自行推断的内容**：是否需要加密或脱敏
-- **需要项目负责人回答的问题**：数据库密码明文存储是否符合安全规范？是否需要引入加密机制？
+- **答复**：不用加密。
+- **文档更新**：已在 data-characteristics.md 中更新
 
 ---
 
-## DB-Q-013
+## DB-Q-013（已确认）✓
 
 - **涉及表**：CDC_DATA_SOURCE
-- **涉及字段**：(表注释)
-- **已确认事实**：表注释在数据库中存储为字面值 "???"（字节3f,3f,3f），原始中文内容已不可恢复
-- **无法确认的原因**：原始注释内容已永久丢失
-- **禁止自行推断的内容**：原始表注释内容
-- **需要项目负责人回答的问题**：CDC_DATA_SOURCE 表的原始中文注释内容是什么？是否需要重新添加？（CDC_LOG_CORRECT 表注释同样丢失）
+- **答复**：CDC_DATA_SOURCE 表注释已更新，请重读。
+- **数据库变更**：已验证表注释变为"数据源，包括源库，目标库"（有效 UTF-8 中文）
+- **注意**：CDC_LOG_CORRECT 表注释仍为 "???"，未更新
+- **文档更新**：已在 table-list.md、table-detail.md 中更新
 
 ---
 
-## DB-Q-014
+## DB-Q-014（已确认）✓
 
 - **涉及表**：CDC_DATA_SOURCE_RUN_STATE
-- **涉及字段**：(全部)
-- **已确认事实**：仅1条运行状态记录，而系统中有21个探针和15个数据源
-- **无法确认的原因**：无法判断是开发环境特性还是配置不完整
-- **禁止自行推断的内容**：应该有多少条运行状态记录
-- **需要项目负责人回答的问题**：只存在1条运行状态记录是否正常？运行状态是否应由系统自动维护？
+- **答复**：该表由另外的程序插入，当前程序只读即可。仅1条记录是开发环境特性，有几条都是正常的。
+- **文档更新**：已在 table-detail.md、data-characteristics.md 中更新
 
 ---
 
-## 问题优先级建议
+## 待进一步核实
 
-| 优先级 | 问题编号 | 原因 |
-|--------|----------|------|
-| 高 | DB-Q-003 | CDC_DATA_SUBSCRIBE 全部字段无注释，影响后续开发 |
-| 高 | DB-Q-004 | CDC_SERVER 全部字段无注释 |
-| 高 | DB-Q-005 | CDC_TOPIC_OFFSET 全部字段无注释 |
-| 高 | DB-Q-001 | CDC_LOG_CORRECT 空表，需确认是否仍在用 |
-| 中 | DB-Q-002 | CLIENT_ID 重复和主键缺失 |
-| 中 | DB-Q-012 | 密码明文存储安全问题 |
-| 中 | DB-Q-007 | 孤立数据清理 |
-| 低 | DB-Q-006 | 大小写不一致（注释说程序兼容） |
-| 低 | DB-Q-008 | DATA_SOURCE_DOMAIN 全空 |
-| 低 | DB-Q-009 | INSTRUCTION_TYPE 中 c/r 区别 |
-| 低 | DB-Q-010 | BLOB vs CLOB 差异 |
-| 低 | DB-Q-011 | 测试占位数据 |
-| 低 | DB-Q-013 | 表注释丢失 |
-| 低 | DB-Q-014 | 运行状态记录偏少 |
+| 编号 | 涉及表 | 问题摘要 |
+|------|--------|----------|
+| DB-Q-004 | CDC_SERVER | 字段注释已添加，主键已设置，但项目负责人标记为"待进一步核实" |
+
+其他13个问题已全部确认。
+
+## 数据库变更摘要
+
+| 变更 | 类型 | 状态 |
+|------|------|------|
+| CDC_CLIENT_MULTIPLE 添加主键 PK_CDC_CLIENT_MULTIPLE (CLIENT_ID) | DDL | 已验证 |
+| CDC_CLIENT_MULTIPLE 删除重复记录 (21→3) | DML | 已验证 |
+| CDC_DATA_SUBSCRIBE 添加主键 PK_CDC_DATA_SUBSCRIBE (DATA_SUB_ID) | DDL | 已验证 |
+| CDC_DATA_SUBSCRIBE 添加12个字段注释 | COMMENT | 已验证 |
+| CDC_SERVER 添加主键 PK_CDC_SERVER (SERVER_ID) | DDL | 已验证 |
+| CDC_SERVER 添加4个字段注释 | COMMENT | 已验证 |
+| CDC_TOPIC_OFFSET 添加4个字段注释 | COMMENT | 已验证 |
+| CDC_DATA_SOURCE 更新表注释 | COMMENT | 已验证 |
+| CDC_LOG_CORRECT RAW_MESSAGE BLOB→CLOB | DDL | 已验证 |
