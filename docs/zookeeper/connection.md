@@ -1,7 +1,7 @@
 # ZooKeeper 连接信息
 
 > 分析任务：ZK_MONITOR_ANALYSIS_001
-> 分析时间：2026-07-16 17:11 CST
+> 分析时间：2026-07-17 16:38–16:40 CST
 
 ## 客户端环境
 
@@ -24,7 +24,7 @@
 ## 连接结果
 
 - 连接状态：成功
-- Session ID：0x1000001c7c50019（示例）
+- Session ID：0x10000028e490045（示例）
 - Session Timeout：30000ms
 - 连接协议：无 SASL 认证
 
@@ -38,8 +38,4 @@
 
 ## 分析范围
 
-递归分析 /bsoft-cdc 下全部子节点，包括：
-- 节点路径与层级
-- 节点数据内容
-- Stat 元数据（czxid、mzxid、ctime、mtime、ephemeralOwner 等）
-- 数据格式判断
+递归分析 /bsoft-cdc 下全部子节点，包括节点路径与层级、节点数据内容、Stat 元数据、数据格式判断。
