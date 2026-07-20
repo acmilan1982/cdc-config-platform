@@ -178,20 +178,37 @@ onUnmounted(() => {
 
 <style scoped>
 .cdc-node-page {
-  --zk-bg: #F8FAFC;
-  --zk-border: #E2E8F0;
   --zk-text: #0F172A;
   --zk-muted: #64748B;
-  --zk-primary: #2563EB;
-  --zk-primary-hover: #1D4ED8;
-  --zk-success: #10B981;
-  --zk-success-bg: #ECFDF5;
-  --zk-danger: #EF4444;
-  --zk-danger-bg: #FEF2F2;
 
-  background-color: var(--zk-bg);
+  font-family:
+    Inter,
+    Roboto,
+    "PingFang SC",
+    "Microsoft YaHei",
+    system-ui,
+    -apple-system,
+    BlinkMacSystemFont,
+    "Segoe UI",
+    sans-serif;
+
   min-height: 100%;
-  padding: 4px 0;
+  padding: 16px;
+
+  background:
+    radial-gradient(circle at 12% 18%, rgba(99, 102, 241, 0.08), transparent 28%),
+    radial-gradient(circle at 88% 12%, rgba(56, 189, 248, 0.10), transparent 30%),
+    linear-gradient(135deg, #F8FAFC 0%, #F1F5F9 55%, #EEF2FF 100%);
+
+  /* Page-level glass wrapper */
+  border-radius: 16px;
+  background-color: rgba(255, 255, 255, 0.94); /* fallback */
+}
+
+@supports (backdrop-filter: blur(10px)) {
+  .cdc-node-page {
+    background-color: transparent;
+  }
 }
 
 .page-toolbar {
@@ -201,8 +218,20 @@ onUnmounted(() => {
   flex-wrap: wrap;
   gap: 12px;
   margin-bottom: 20px;
-  padding-bottom: 12px;
-  border-bottom: 1px solid var(--zk-border);
+  padding: 14px 20px;
+  border-radius: 16px;
+  background: rgba(255, 255, 255, 0.72);
+  backdrop-filter: blur(10px);
+  -webkit-backdrop-filter: blur(10px);
+  border: 1px solid rgba(255, 255, 255, 0.70);
+  box-shadow: 0 8px 28px rgba(15, 23, 42, 0.06);
+}
+
+@supports not (backdrop-filter: blur(10px)) {
+  .page-toolbar {
+    background: rgba(255, 255, 255, 0.94);
+    border: 1px solid rgba(226, 232, 240, 0.65);
+  }
 }
 
 .toolbar-left {
@@ -219,25 +248,27 @@ onUnmounted(() => {
   color: var(--zk-text);
 }
 
-/* Stat tags: pill/capsule style */
+/* Stat tags: glass pill/capsule style */
 .stat-tag {
   font-size: 12px;
   padding: 2px 8px;
   border-radius: 999px;
+  backdrop-filter: blur(6px);
+  -webkit-backdrop-filter: blur(6px);
 }
 .summary-tag--total {
-  background-color: #F3F4F6;
-  border-color: #D1D5DB;
+  background: rgba(243, 244, 246, 0.72);
+  border: 1px solid rgba(209, 213, 219, 0.45);
   color: #4B5563;
 }
 .summary-tag--online {
-  background-color: #ECFDF5;
-  border-color: #A7F3D0;
+  background: rgba(236, 253, 245, 0.72);
+  border: 1px solid rgba(167, 243, 208, 0.45);
   color: #059669;
 }
 .summary-tag--offline {
-  background-color: #FEF2F2;
-  border-color: #FECACA;
+  background: rgba(254, 242, 242, 0.72);
+  border: 1px solid rgba(254, 202, 202, 0.45);
   color: #DC2626;
 }
 
@@ -262,22 +293,43 @@ onUnmounted(() => {
   margin-bottom: 12px;
 }
 
-/* Refresh button */
+/* Refresh button: sky blue glass */
 .cdc-node-page :deep(.el-button--primary) {
-  --el-button-bg-color: var(--zk-primary);
-  --el-button-border-color: var(--zk-primary);
-  --el-button-hover-bg-color: var(--zk-primary-hover);
-  --el-button-hover-border-color: var(--zk-primary-hover);
-  border-radius: 6px;
+  --el-button-bg-color: transparent;
+  --el-button-border-color: transparent;
+  --el-button-hover-bg-color: transparent;
+  --el-button-hover-border-color: transparent;
+
+  background: linear-gradient(135deg, rgba(56, 189, 248, 0.95), rgba(37, 99, 235, 0.92));
+  border: none;
+  border-radius: 11px;
+  box-shadow: 0 6px 16px rgba(37, 99, 235, 0.18);
+  color: #fff;
+  font-weight: 500;
+  transition: all 0.2s ease;
+}
+.cdc-node-page :deep(.el-button--primary:hover) {
+  background: linear-gradient(135deg, rgba(14, 165, 233, 1), rgba(29, 78, 216, 1));
+  box-shadow: 0 8px 20px rgba(37, 99, 235, 0.26);
+}
+.cdc-node-page :deep(.el-button--primary:active) {
+  transform: scale(0.97);
+}
+.cdc-node-page :deep(.el-button--primary.is-loading),
+.cdc-node-page :deep(.el-button--primary.is-disabled) {
+  background: linear-gradient(135deg, rgba(56, 189, 248, 0.60), rgba(37, 99, 235, 0.55));
+  box-shadow: none;
 }
 
 /* Select dropdown */
 .cdc-node-page :deep(.el-select .el-input__wrapper) {
-  border-color: #E2E8F0;
+  border-color: rgba(226, 232, 240, 0.65);
+  border-radius: 8px;
+  background: rgba(255, 255, 255, 0.72);
 }
 .cdc-node-page :deep(.el-select .el-input.is-focus .el-input__wrapper) {
-  border-color: var(--zk-primary);
-  box-shadow: 0 0 0 1px var(--zk-primary) inset;
+  border-color: #38BDF8;
+  box-shadow: 0 0 0 1px rgba(56, 189, 248, 0.35) inset;
 }
 
 .client-grid {
