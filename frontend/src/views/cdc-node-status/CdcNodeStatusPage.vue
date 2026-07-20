@@ -5,9 +5,9 @@
       <div class="toolbar-left">
         <h2 class="page-title">CDC 节点状态</h2>
         <template v-if="!loading && data">
-          <el-tag size="small" type="info" class="stat-tag">客户端 {{ data.clients.length }}</el-tag>
-          <el-tag size="small" :type="onlineCount > 0 ? 'success' : 'info'" class="stat-tag">在线 {{ onlineCount }}</el-tag>
-          <el-tag size="small" :type="offlineCount > 0 ? 'danger' : 'info'" class="stat-tag">离线 {{ offlineCount }}</el-tag>
+          <el-tag size="small" class="stat-tag summary-tag--total">客户端 {{ data.clients.length }}</el-tag>
+          <el-tag size="small" class="stat-tag summary-tag--online">在线 {{ onlineCount }}</el-tag>
+          <el-tag size="small" class="stat-tag summary-tag--offline">离线 {{ offlineCount }}</el-tag>
         </template>
       </div>
       <div class="toolbar-right">
@@ -219,22 +219,24 @@ onUnmounted(() => {
   color: var(--zk-text);
 }
 
-/* Stat tags */
+/* Stat tags: pill/capsule style */
 .stat-tag {
   font-size: 12px;
+  padding: 2px 8px;
+  border-radius: 999px;
 }
-.cdc-node-page :deep(.el-tag--info) {
-  background-color: #F1F5F9;
-  border-color: #E2E8F0;
-  color: #475569;
+.summary-tag--total {
+  background-color: #F3F4F6;
+  border-color: #D1D5DB;
+  color: #4B5563;
 }
-.cdc-node-page :deep(.el-tag--success) {
-  background-color: var(--zk-success-bg);
+.summary-tag--online {
+  background-color: #ECFDF5;
   border-color: #A7F3D0;
   color: #059669;
 }
-.cdc-node-page :deep(.el-tag--danger) {
-  background-color: var(--zk-danger-bg);
+.summary-tag--offline {
+  background-color: #FEF2F2;
   border-color: #FECACA;
   color: #DC2626;
 }

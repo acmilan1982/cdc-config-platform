@@ -59,11 +59,24 @@
         :show-after="300"
       >
         <template #reference>
-          <div class="detail-content" :class="{ empty: !client.detailInfo }">
+          <div
+            class="detail-content"
+            :class="{
+              empty: !client.detailInfo,
+              'terminal-text--error': !client.online && client.detailInfo,
+              'terminal-text--normal': client.online && client.detailInfo
+            }"
+          >
             {{ client.detailInfo || '(无详细信息)' }}
           </div>
         </template>
-        <div class="detail-popover-content">
+        <div
+          class="detail-popover-content"
+          :class="{
+            'terminal-text--error': !client.online,
+            'terminal-text--normal': client.online
+          }"
+        >
           {{ client.detailInfo }}
         </div>
       </el-popover>
@@ -265,6 +278,14 @@ function copyDetailInfo() {
   -webkit-line-clamp: unset;
   display: block;
   background-color: #F8FAFC;
+}
+
+/* Terminal text colors: normal vs error (offline) */
+.terminal-text--normal {
+  color: #94A3B8;
+}
+.terminal-text--error {
+  color: #F87171;
 }
 
 /* detailInfo popover: match dark code block */
