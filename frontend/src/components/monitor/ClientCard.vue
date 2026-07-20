@@ -20,20 +20,30 @@
       class="card-alert"
     />
 
-    <!-- Summary info rows -->
-    <div class="summary-info">
-      <div class="info-row">
-        <span class="info-item"><label>IP:</label> {{ client.ip || '—' }}</span>
-        <span class="info-item"><label>状态码:</label> {{ client.statusCode || '—' }}</span>
-        <span class="info-item"><label>状态:</label> {{ client.statusMessage || '—' }}</span>
-        <span class="info-item"><label>更新时间:</label> {{ client.updateTime || '—' }}</span>
-      </div>
-      <div class="info-row">
-        <span class="info-item"><label>PID:</label> {{ client.pid }}</span>
-        <span class="info-item"><label>实例ID:</label> {{ client.instanceId }}</span>
-        <span class="info-item"><label>启动时间:</label> {{ client.startTime }}</span>
-      </div>
-    </div>
+    <!-- Summary info: structured description layout -->
+    <el-descriptions :column="4" size="small" border class="client-descriptions">
+      <el-descriptions-item label="IP">
+        {{ client.ip || '—' }}
+      </el-descriptions-item>
+      <el-descriptions-item label="状态码">
+        {{ client.statusCode || '—' }}
+      </el-descriptions-item>
+      <el-descriptions-item label="状态">
+        {{ client.statusMessage || '—' }}
+      </el-descriptions-item>
+      <el-descriptions-item label="更新时间">
+        {{ client.updateTime || '—' }}
+      </el-descriptions-item>
+      <el-descriptions-item label="PID">
+        {{ client.pid }}
+      </el-descriptions-item>
+      <el-descriptions-item label="实例ID">
+        {{ client.instanceId }}
+      </el-descriptions-item>
+      <el-descriptions-item label="启动时间">
+        {{ client.startTime }}
+      </el-descriptions-item>
+    </el-descriptions>
 
     <!-- detailInfo section -->
     <div class="detail-section">
@@ -70,14 +80,14 @@
               </span>
             </template>
           </el-table-column>
-          <el-table-column prop="statusCode" label="状态码" width="100" />
-          <el-table-column prop="statusMessage" label="状态描述" min-width="140" />
-          <el-table-column prop="scn" label="SCN" min-width="160">
+          <el-table-column prop="statusCode" label="状态码" width="90" />
+          <el-table-column prop="statusMessage" label="状态描述" min-width="130" />
+          <el-table-column prop="scn" label="SCN" min-width="180">
             <template #default="{ row }">
               {{ row.scn || '' }}
             </template>
           </el-table-column>
-          <el-table-column prop="scnUpdateTime" label="SCN 更新时间" min-width="170">
+          <el-table-column prop="scnUpdateTime" label="SCN 更新时间" min-width="180">
             <template #default="{ row }">
               {{ row.scnUpdateTime || '' }}
             </template>
@@ -121,7 +131,7 @@ function copyDetailInfo() {
   transition: border-color 0.3s;
 }
 .client-card.offline {
-  border-left: 4px solid #bfbfbf;
+  border-left: 4px solid #f56c6c;
 }
 
 .card-header {
@@ -140,14 +150,14 @@ function copyDetailInfo() {
   flex-shrink: 0;
 }
 .online-dot.online { background-color: #52c41a; }
-.online-dot.offline { background-color: #bfbfbf; }
+.online-dot.offline { background-color: #f56c6c; }
 
 .online-text {
   color: #52c41a;
   font-size: 13px;
 }
 .offline .online-text {
-  color: #bfbfbf;
+  color: #f56c6c;
 }
 
 .client-name {
@@ -165,22 +175,24 @@ function copyDetailInfo() {
   margin-bottom: 12px;
 }
 
-.summary-info {
+.client-descriptions {
   margin-bottom: 16px;
-  font-size: 13px;
-  color: #606266;
 }
 
-.info-row {
-  display: flex;
-  flex-wrap: wrap;
-  gap: 4px 24px;
-  margin-bottom: 4px;
+/* offline dot breathing animation */
+@keyframes breathe {
+  0%, 100% { opacity: 1; }
+  50% { opacity: 0.35; }
 }
 
-.info-item label {
-  color: #909399;
-  margin-right: 4px;
+.online-dot.offline {
+  animation: breathe 2s ease-in-out infinite;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .online-dot.offline {
+    animation: none;
+  }
 }
 
 .detail-section {
@@ -210,8 +222,6 @@ function copyDetailInfo() {
   font-size: 12px;
   line-height: 1.5;
   padding: 8px 12px;
-  height: calc(6 * 1.5em);
-  overflow-y: auto;
   white-space: pre-wrap;
   word-break: break-all;
   color: #303133;

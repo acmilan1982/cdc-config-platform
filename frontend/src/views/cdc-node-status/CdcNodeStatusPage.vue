@@ -4,9 +4,11 @@
     <div class="page-toolbar">
       <div class="toolbar-left">
         <h2 class="page-title">CDC 节点状态</h2>
-        <span v-if="!loading && data" class="stats-text">
-          共 {{ data.clients.length }} 个客户端（{{ onlineCount }} 在线 / {{ offlineCount }} 离线）
-        </span>
+        <template v-if="!loading && data">
+          <el-tag size="small" type="info" class="stat-tag">客户端 {{ data.clients.length }}</el-tag>
+          <el-tag size="small" :type="onlineCount > 0 ? 'success' : 'info'" class="stat-tag">在线 {{ onlineCount }}</el-tag>
+          <el-tag size="small" :type="offlineCount > 0 ? 'danger' : 'info'" class="stat-tag">离线 {{ offlineCount }}</el-tag>
+        </template>
       </div>
       <div class="toolbar-right">
         <span class="refresh-label">自动刷新:</span>
@@ -174,7 +176,7 @@ onUnmounted(() => {
 
 <style scoped>
 .cdc-node-page {
-  max-width: 1400px;
+  /* fills content area width, no fixed max-width */
 }
 
 .page-toolbar {
@@ -202,9 +204,8 @@ onUnmounted(() => {
   color: #303133;
 }
 
-.stats-text {
-  font-size: 13px;
-  color: #909399;
+.stat-tag {
+  font-size: 12px;
 }
 
 .toolbar-right {
