@@ -178,7 +178,20 @@ onUnmounted(() => {
 
 <style scoped>
 .cdc-node-page {
-  /* fills content area width, no fixed max-width */
+  --zk-bg: #F8FAFC;
+  --zk-border: #E2E8F0;
+  --zk-text: #0F172A;
+  --zk-muted: #64748B;
+  --zk-primary: #2563EB;
+  --zk-primary-hover: #1D4ED8;
+  --zk-success: #10B981;
+  --zk-success-bg: #ECFDF5;
+  --zk-danger: #EF4444;
+  --zk-danger-bg: #FEF2F2;
+
+  background-color: var(--zk-bg);
+  min-height: 100%;
+  padding: 4px 0;
 }
 
 .page-toolbar {
@@ -189,13 +202,13 @@ onUnmounted(() => {
   gap: 12px;
   margin-bottom: 20px;
   padding-bottom: 12px;
-  border-bottom: 1px solid #e4e7ed;
+  border-bottom: 1px solid var(--zk-border);
 }
 
 .toolbar-left {
   display: flex;
   align-items: baseline;
-  gap: 16px;
+  gap: 12px;
   flex-wrap: wrap;
 }
 
@@ -203,11 +216,27 @@ onUnmounted(() => {
   margin: 0;
   font-size: 18px;
   font-weight: 600;
-  color: #303133;
+  color: var(--zk-text);
 }
 
+/* Stat tags */
 .stat-tag {
   font-size: 12px;
+}
+.cdc-node-page :deep(.el-tag--info) {
+  background-color: #F1F5F9;
+  border-color: #E2E8F0;
+  color: #475569;
+}
+.cdc-node-page :deep(.el-tag--success) {
+  background-color: var(--zk-success-bg);
+  border-color: #A7F3D0;
+  color: #059669;
+}
+.cdc-node-page :deep(.el-tag--danger) {
+  background-color: var(--zk-danger-bg);
+  border-color: #FECACA;
+  color: #DC2626;
 }
 
 .toolbar-right {
@@ -219,16 +248,34 @@ onUnmounted(() => {
 
 .refresh-label {
   font-size: 13px;
-  color: #606266;
+  color: var(--zk-muted);
 }
 
 .last-refresh {
   font-size: 12px;
-  color: #c0c4cc;
+  color: #94A3B8;
 }
 
 .global-alert {
   margin-bottom: 12px;
+}
+
+/* Refresh button */
+.cdc-node-page :deep(.el-button--primary) {
+  --el-button-bg-color: var(--zk-primary);
+  --el-button-border-color: var(--zk-primary);
+  --el-button-hover-bg-color: var(--zk-primary-hover);
+  --el-button-hover-border-color: var(--zk-primary-hover);
+  border-radius: 6px;
+}
+
+/* Select dropdown */
+.cdc-node-page :deep(.el-select .el-input__wrapper) {
+  border-color: #E2E8F0;
+}
+.cdc-node-page :deep(.el-select .el-input.is-focus .el-input__wrapper) {
+  border-color: var(--zk-primary);
+  box-shadow: 0 0 0 1px var(--zk-primary) inset;
 }
 
 .client-grid {
@@ -249,6 +296,6 @@ onUnmounted(() => {
   align-items: center;
   justify-content: center;
   padding: 60px 0;
-  color: #909399;
+  color: var(--zk-muted);
 }
 </style>

@@ -135,56 +135,73 @@ function copyDetailInfo() {
 </script>
 
 <style scoped>
+/* Card */
 .client-card {
-  margin-bottom: 16px;
-  border-left: 4px solid #52c41a;
-  transition: border-color 0.3s;
+  margin-bottom: 0;
+  border: 1px solid #F1F5F9;
+  border-radius: 8px;
+  box-shadow: 0 1px 3px rgba(15, 23, 42, 0.05);
+  background-color: #FFFFFF;
+  transition: box-shadow 0.2s;
 }
-.client-card.offline {
-  border-left: 4px solid #f56c6c;
+.client-card:hover {
+  box-shadow: 0 1px 3px rgba(15, 23, 42, 0.08);
 }
 
+/* Card header */
 .card-header {
   display: flex;
   align-items: center;
   gap: 8px;
-  margin-bottom: 12px;
+  margin-bottom: 14px;
   font-size: 15px;
 }
 
+/* Status dot: 8px */
 .online-dot {
-  width: 10px;
-  height: 10px;
+  width: 8px;
+  height: 8px;
   border-radius: 50%;
   display: inline-block;
   flex-shrink: 0;
 }
-.online-dot.online { background-color: #52c41a; }
-.online-dot.offline { background-color: #f56c6c; }
+.online-dot.online { background-color: #10B981; }
+.online-dot.offline { background-color: #EF4444; }
 
 .online-text {
-  color: #52c41a;
   font-size: 13px;
 }
-.offline .online-text {
-  color: #f56c6c;
-}
+.online-dot.online ~ .online-text { color: #10B981; }
+.online-dot.offline ~ .online-text { color: #EF4444; }
 
 .client-name {
   font-weight: 700;
+  color: #0F172A;
 }
 
 .path-icon {
-  color: #909399;
+  color: #2563EB;
   cursor: pointer;
   font-size: 15px;
 }
-.path-icon:hover { color: #409eff; }
+.path-icon:hover { color: #1D4ED8; }
 
 .card-alert {
   margin-bottom: 12px;
 }
 
+/* el-descriptions overrides */
+.client-card :deep(.el-descriptions__label) {
+  background-color: #F8FAFC;
+  color: #64748B;
+}
+.client-card :deep(.el-descriptions__content) {
+  background-color: #FFFFFF;
+  color: #334155;
+}
+.client-card :deep(.el-descriptions) {
+  --el-descriptions-border-color: #E2E8F0;
+}
 .client-descriptions {
   margin-bottom: 16px;
 }
@@ -205,10 +222,11 @@ function copyDetailInfo() {
   }
 }
 
+/* detailInfo: dark code block */
 .detail-section {
   margin-bottom: 16px;
-  border: 1px solid #e4e7ed;
-  border-radius: 4px;
+  border: 1px solid #E2E8F0;
+  border-radius: 6px;
   overflow: hidden;
 }
 
@@ -217,25 +235,25 @@ function copyDetailInfo() {
   justify-content: space-between;
   align-items: center;
   padding: 6px 12px;
-  background-color: #fafafa;
-  border-bottom: 1px solid #e4e7ed;
+  background-color: #F8FAFC;
+  border-bottom: 1px solid #E2E8F0;
 }
 
 .detail-title {
   font-size: 13px;
   font-weight: 600;
-  color: #303133;
+  color: #334155;
 }
 
 .detail-content {
-  font-family: monospace, Consolas, "Courier New";
+  font-family: Consolas, "Courier New", monospace;
   font-size: 12px;
-  line-height: 1.5;
-  padding: 8px 12px;
+  line-height: 1.6;
+  padding: 10px 12px;
   white-space: pre-wrap;
   word-break: break-all;
-  color: #303133;
-  background-color: #fff;
+  color: #94A3B8;
+  background-color: #1E293B;
   display: -webkit-box;
   -webkit-line-clamp: 3;
   -webkit-box-orient: vertical;
@@ -243,21 +261,28 @@ function copyDetailInfo() {
   cursor: default;
 }
 .detail-content.empty {
-  color: #c0c4cc;
+  color: #64748B;
   -webkit-line-clamp: unset;
   display: block;
+  background-color: #F8FAFC;
 }
 
+/* detailInfo popover: match dark code block */
 .detail-popover-content {
-  font-family: monospace, Consolas, "Courier New";
+  font-family: Consolas, "Courier New", monospace;
   font-size: 12px;
-  line-height: 1.5;
+  line-height: 1.6;
   white-space: pre-wrap;
   word-break: break-all;
   max-height: 450px;
   overflow-y: auto;
+  color: #94A3B8;
+  background-color: #1E293B;
+  padding: 10px 12px;
+  border-radius: 6px;
 }
 
+/* Jobs table */
 .jobs-section {
   margin-top: 4px;
 }
@@ -265,8 +290,26 @@ function copyDetailInfo() {
 .jobs-title {
   font-size: 13px;
   font-weight: 600;
-  color: #303133;
+  color: #0F172A;
   margin-bottom: 8px;
+}
+
+/* Table header */
+.client-card :deep(.el-table__header-wrapper th) {
+  background-color: #F8FAFC;
+  color: #64748B;
+  font-weight: 500;
+  border-bottom-color: #E2E8F0;
+}
+.client-card :deep(.el-table__body-wrapper td) {
+  color: #334155;
+  border-bottom-color: #F1F5F9;
+}
+.client-card :deep(.el-table__body tr:hover > td) {
+  background-color: #F8FAFC;
+}
+.client-card :deep(.el-table--striped .el-table__body tr.el-table__row--striped td) {
+  background-color: #FAFBFC;
 }
 
 .jobs-table-wrap.scrollable {
@@ -289,8 +332,16 @@ function copyDetailInfo() {
 
 .path-icon-small {
   font-size: 13px;
-  color: #909399;
+  color: #2563EB;
   cursor: pointer;
 }
-.path-icon-small:hover { color: #409eff; }
+.path-icon-small:hover { color: #1D4ED8; }
+
+/* Copy button in detail header */
+.client-card :deep(.detail-header .el-button--primary) {
+  color: #2563EB;
+}
+.client-card :deep(.detail-header .el-button--primary:hover) {
+  color: #1D4ED8;
+}
 </style>
