@@ -54,9 +54,22 @@
           复制
         </el-button>
       </div>
-      <div class="detail-content" :class="{ empty: !client.detailInfo }">
-        {{ client.detailInfo || '(无详细信息)' }}
-      </div>
+      <el-popover
+        placement="bottom"
+        :width="700"
+        trigger="hover"
+        :disabled="!client.detailInfo"
+        :show-after="300"
+      >
+        <template #reference>
+          <div class="detail-content" :class="{ empty: !client.detailInfo }">
+            {{ client.detailInfo || '(无详细信息)' }}
+          </div>
+        </template>
+        <div class="detail-popover-content">
+          {{ client.detailInfo }}
+        </div>
+      </el-popover>
     </div>
 
     <!-- Jobs table -->
@@ -70,24 +83,24 @@
           style="width: 100%"
           :empty-text="'(无采集任务)'"
         >
-          <el-table-column label="任务名称" min-width="160">
+          <el-table-column label="任务名称" width="130" show-overflow-tooltip>
             <template #default="{ row }">
               <span class="job-name-cell">
-                {{ row.jobName }}
+                <span class="job-name-text">{{ row.jobName }}</span>
                 <el-tooltip :content="row.jobPath" placement="top" :show-after="500">
                   <el-icon class="path-icon-small"><InfoFilled /></el-icon>
                 </el-tooltip>
               </span>
             </template>
           </el-table-column>
-          <el-table-column prop="statusCode" label="状态码" width="90" />
-          <el-table-column prop="statusMessage" label="状态描述" min-width="130" />
-          <el-table-column prop="scn" label="SCN" min-width="180">
+          <el-table-column prop="statusCode" label="状态码" width="70" />
+          <el-table-column prop="statusMessage" label="状态描述" />
+          <el-table-column prop="scn" label="SCN" width="105" align="right">
             <template #default="{ row }">
               {{ row.scn || '' }}
             </template>
           </el-table-column>
-          <el-table-column prop="scnUpdateTime" label="SCN 更新时间" min-width="180">
+          <el-table-column prop="scnUpdateTime" label="SCN 更新时间" width="160">
             <template #default="{ row }">
               {{ row.scnUpdateTime || '' }}
             </template>
@@ -226,9 +239,26 @@ function copyDetailInfo() {
   word-break: break-all;
   color: #303133;
   background-color: #fff;
+  display: -webkit-box;
+  -webkit-line-clamp: 3;
+  -webkit-box-orient: vertical;
+  overflow: hidden;
+  cursor: default;
 }
 .detail-content.empty {
   color: #c0c4cc;
+  -webkit-line-clamp: unset;
+  display: block;
+}
+
+.detail-popover-content {
+  font-family: monospace, Consolas, "Courier New";
+  font-size: 12px;
+  line-height: 1.5;
+  white-space: pre-wrap;
+  word-break: break-all;
+  max-height: 450px;
+  overflow-y: auto;
 }
 
 .jobs-section {
@@ -251,6 +281,13 @@ function copyDetailInfo() {
   display: inline-flex;
   align-items: center;
   gap: 4px;
+  max-width: 100%;
+}
+
+.job-name-text {
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
 }
 
 .path-icon-small {

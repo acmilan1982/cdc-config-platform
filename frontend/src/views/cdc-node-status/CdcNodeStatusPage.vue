@@ -63,12 +63,14 @@
       </el-empty>
     </div>
 
-    <!-- Client cards -->
-    <ClientCard
-      v-for="client in sortedClients"
-      :key="client.clientName"
-      :client="client"
-    />
+    <!-- Client cards grid -->
+    <div class="client-grid">
+      <ClientCard
+        v-for="client in sortedClients"
+        :key="client.clientName"
+        :client="client"
+      />
+    </div>
   </div>
 </template>
 
@@ -227,6 +229,18 @@ onUnmounted(() => {
 
 .global-alert {
   margin-bottom: 12px;
+}
+
+.client-grid {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 16px;
+}
+
+@media (max-width: 1500px) {
+  .client-grid {
+    grid-template-columns: 1fr;
+  }
 }
 
 .state-box {
