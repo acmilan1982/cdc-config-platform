@@ -20,30 +20,62 @@
       class="card-alert"
     />
 
-    <!-- Summary info: structured description layout -->
-    <el-descriptions :column="4" size="small" border class="client-descriptions">
-      <el-descriptions-item label="IP">
-        {{ client.ip || '—' }}
-      </el-descriptions-item>
-      <el-descriptions-item label="状态码">
-        {{ client.statusCode || '—' }}
-      </el-descriptions-item>
-      <el-descriptions-item label="状态">
-        {{ client.statusMessage || '—' }}
-      </el-descriptions-item>
-      <el-descriptions-item label="更新时间">
-        {{ client.updateTime || '—' }}
-      </el-descriptions-item>
-      <el-descriptions-item label="PID">
-        {{ client.pid }}
-      </el-descriptions-item>
-      <el-descriptions-item label="实例ID">
-        {{ client.instanceId }}
-      </el-descriptions-item>
-      <el-descriptions-item label="启动时间">
-        {{ client.startTime }}
-      </el-descriptions-item>
-    </el-descriptions>
+    <!-- Info grid: two-row layout -->
+    <div class="info-grid">
+      <!-- Row 1: process identity -->
+      <div class="info-row">
+        <div class="info-field ip-field">
+          <label>IP</label>
+          <span>{{ client.ip || '—' }}</span>
+        </div>
+        <div class="info-field pid-field">
+          <label>PID</label>
+          <span>{{ client.pid }}</span>
+        </div>
+        <div class="info-field instance-field">
+          <label>实例ID</label>
+          <span class="instance-id-wrap">
+            <el-tooltip
+              :content="client.instanceId"
+              placement="top"
+              :disabled="client.instanceId === '--' || client.instanceId.length <= 17"
+              :show-after="300"
+            >
+              <span class="instance-id-text">{{ truncateInstanceId(client.instanceId) }}</span>
+            </el-tooltip>
+            <el-button
+              v-if="client.instanceId !== '--'"
+              size="small"
+              text
+              type="primary"
+              class="copy-instance-btn"
+              @click="copyInstanceId"
+            >
+              <el-icon><CopyDocument /></el-icon>
+            </el-button>
+          </span>
+        </div>
+      </div>
+      <!-- Row 2: run status -->
+      <div class="info-row">
+        <div class="info-field code-field">
+          <label>状态码</label>
+          <span>{{ client.statusCode || '—' }}</span>
+        </div>
+        <div class="info-field status-field">
+          <label>状态</label>
+          <span>{{ client.statusMessage || '—' }}</span>
+        </div>
+        <div class="info-field time-field">
+          <label>启动时间</label>
+          <span class="time-text">{{ client.startTime }}</span>
+        </div>
+        <div class="info-field time-field">
+          <label>更新时间</label>
+          <span class="time-text">{{ client.updateTime || '—' }}</span>
+        </div>
+      </div>
+    </div>
 
     <!-- detailInfo section -->
     <div class="detail-section">
@@ -135,6 +167,21 @@ function copyDetailInfo() {
     })
   }
 }
+
+function truncateInstanceId(id: string): string {
+  if (!id || id === '--' || id.length <= 17) return id
+  return id.substring(0, 8) + '…' + id.substring(id.length - 8)
+}
+
+function copyInstanceId() {
+  if (props.client.instanceId && props.client.instanceId !== '--') {
+    navigator.clipboard.writeText(props.client.instanceId).then(() => {
+      ElMessage.success('已复制完整实例ID')
+    }).catch(() => {
+      ElMessage.error('复制失败')
+    })
+  }
+}
 </script>
 
 <style scoped>
@@ -188,8 +235,80 @@ function copyDetailInfo() {
   margin-bottom: 12px;
 }
 
-.client-descriptions {
-  margin-bottom: 16px;
+/* Info grid: two-row layout */
+.info-grid {
+  margin-bottom: 14px;
+}
+
+.info-row {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 6px 12px;
+  padding: 4px 8px;
+  font-size: 13px;
+  color: #606266;
+  border-bottom: 1px solid #ebeef5;
+}
+.info-row:first-child {
+  border-bottom: 1px solid #e4e7ed;
+}
+
+.info-field {
+  display: flex;
+  align-items: baseline;
+  gap: 4px;
+  min-width: 0;
+}
+.info-field label {
+  color: #909399;
+  white-space: nowrap;
+  flex-shrink: 0;
+}
+.info-field > span {
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.ip-field { flex: 0 0 32%; }
+.pid-field { flex: 0 0 17%; }
+.instance-field { flex: 1 1 auto; min-width: 120px; }
+.code-field { flex: 0 0 13%; }
+.status-field { flex: 0 0 27%; }
+.time-field { flex: 0 0 28%; }
+
+.time-text {
+  white-space: nowrap;
+}
+
+.instance-id-wrap {
+  display: inline-flex;
+  align-items: center;
+  gap: 2px;
+  min-width: 0;
+}
+.instance-id-text {
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+.copy-instance-btn {
+  padding: 0 2px;
+  height: 20px;
+  flex-shrink: 0;
+}
+
+/* Responsive: row 2 wraps to 2+2 on narrow cards */
+@media (max-width: 550px) {
+  .time-field {
+    flex: 0 0 40%;
+  }
+  .code-field {
+    flex: 0 0 18%;
+  }
+  .status-field {
+    flex: 0 0 35%;
+  }
 }
 
 /* offline dot breathing animation */
