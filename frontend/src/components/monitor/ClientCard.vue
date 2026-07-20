@@ -158,7 +158,12 @@ function copyDetailInfo() {
   border: 1px solid rgba(255, 255, 255, 0.68);
   border-radius: 16px;
   box-shadow: 0 10px 30px rgba(15, 23, 42, 0.06);
-  background: rgba(236, 253, 245, 0.56);
+  background:
+    linear-gradient(
+      135deg,
+      rgba(236, 253, 245, 0.30),
+      rgba(255, 255, 255, 0.58)
+    );
   backdrop-filter: blur(12px);
   -webkit-backdrop-filter: blur(12px);
   transition: box-shadow 0.18s ease, transform 0.18s ease;
@@ -166,7 +171,12 @@ function copyDetailInfo() {
 /* fallback */
 @supports not (backdrop-filter: blur(12px)) {
   .client-card {
-    background: rgba(236, 253, 245, 0.82);
+    background:
+      linear-gradient(
+        135deg,
+        rgba(236, 253, 245, 0.55),
+        rgba(255, 255, 255, 0.88)
+      );
     border: 1px solid rgba(226, 232, 240, 0.55);
   }
 }
@@ -420,11 +430,25 @@ function copyDetailInfo() {
 }
 .path-icon-small:hover { color: #2563EB; }
 
-/* Copy button */
+/* Copy button — lightweight secondary action */
 .client-card :deep(.detail-header .el-button--primary) {
-  color: #2563EB;
+  background: rgba(255, 255, 255, 0.38);
+  color: #64748B;
+  border: 1px solid rgba(226, 232, 240, 0.72);
+  box-shadow: none;
+  border-radius: 8px;
+  font-size: 12px;
+  padding: 2px 8px;
+  transition: all 0.18s ease;
 }
 .client-card :deep(.detail-header .el-button--primary:hover) {
-  color: #1D4ED8;
+  color: #2563EB;
+  border-color: rgba(37, 99, 235, 0.35);
+  background: rgba(239, 246, 255, 0.72);
+  box-shadow: 0 2px 8px rgba(37, 99, 235, 0.08);
+}
+.client-card :deep(.detail-header .el-button--primary:focus-visible) {
+  outline: 2px solid rgba(37, 99, 235, 0.45);
+  outline-offset: 2px;
 }
 </style>
