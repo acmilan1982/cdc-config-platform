@@ -12,6 +12,13 @@ spring:
       idle-timeout: 300000
       max-lifetime: 600000
 
+cdc:
+  zookeeper:
+    connect-string: ${CDC_ZK_CONNECT:192.168.174.51:2181}
+    root-path: ${CDC_ZK_ROOT:/bsoft-cdc}
+    session-timeout-ms: 15000
+    connection-timeout-ms: 5000
+
 logging:
   level:
     root: INFO

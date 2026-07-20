@@ -109,3 +109,34 @@ curl http://localhost:8080/api/data-sources/DS001
 - CORS 开发环境跨域配置
 - Oracle 数据源连接
 - 数据源管理 CRUD（含扩展表一对一事务）
+- ZooKeeper 客户端监控只读 API
+
+## ZooKeeper 客户端监控 API
+
+| 方法 | 路径 | 说明 |
+|------|------|------|
+| GET | `/api/monitor/zookeeper/clients` | 查询全部 CDC 客户端节点（聚合 clients/status/ip/jobs/scn） |
+| GET | `/api/monitor/zookeeper/health` | ZooKeeper 连接健康检查 |
+
+详见 `docs/api/zk-client-monitor-api.md`。
+
+### 环境变量
+
+| 变量 | 默认值 | 说明 |
+|------|--------|------|
+| CDC_ZK_CONNECT | 192.168.174.51:2181 | ZooKeeper 连接地址 |
+| CDC_ZK_ROOT | /bsoft-cdc | ZooKeeper 根路径 |
+
+### 只读安全边界
+
+本模块仅使用 Curator 的 `checkExists`、`getChildren`、`getData` 操作。项目业务代码不调用任何 ZooKeeper 写 API（create、setData、delete、setACL 等）。
+
+### 真实 ZooKeeper 只读验证
+
+```bash
+# 查询所有客户端
+curl http://localhost:8080/api/monitor/zookeeper/clients
+
+# ZK 连接健康
+curl http://localhost:8080/api/monitor/zookeeper/health
+```
