@@ -1,0 +1,1 @@
+import{P as o}from"./PlaceholderPage-CflBG3s6.js";import{d as t,c as a,o as c}from"./index-KJhj0_R7.js";const f=t({__name:"TopicOffsetPage",setup(r){const e={nature:"只读",structure:"列表 + 分页",tables:"CDC_TOPIC_OFFSET",desc:"监控 Kafka Topic 消费偏移量。展示各中心端的消费进度，支持分页和自动刷新。"};return(s,n)=>(c(),a(o,{title:"Topic 偏移量",group:"运行监控",info:e}))}});export{f as default};
