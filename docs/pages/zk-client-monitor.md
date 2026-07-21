@@ -78,6 +78,19 @@ signals 节点（项目负责人确认已废弃）
 - 不使用 alive 的 updateTime、mtime、status.code 或 jobs 是否存在来判断在线状态。
 - status.code 仅反映应用层状态，不替代在线判断。
 
+### 4.1 Job 当前运行状态判断规则
+
+```text
+job 当前运行状态以 /bsoft-cdc/clients/{client}/jobs/{job}/alive 临时节点是否存在为准
+```
+
+- job alive 节点值为 `{}`，不解析其内容，仅判断节点是否存在
+- alive 存在 → 状态码/状态描述使用持久化 status.code / status.description
+- alive 不存在 → 状态码展示 `--`，状态描述展示 "未运行"
+- alive 读取失败 → 状态码展示 `--`，状态描述展示 "状态未知"
+- 持久化 status 仅代表最后一次上报状态，不得解释为当前运行状态
+- detailInfo 和 SCN 在 alive 不存在时仍保留最后一次值，不作为当前状态判断依据
+
 ---
 
 ## 5. 字段清单
@@ -107,10 +120,11 @@ signals 节点（项目负责人确认已废弃）
 | 序号 | 字段名 | ZK 来源 | 类型 | 页面展示规则 |
 |------|--------|---------|------|-------------|
 | 12 | 任务名称 | jobs/{job} 节点名 | string | 直接展示，带 ZK 路径悬浮 |
-| 13 | 状态码 | jobs/{job}/status → code | string | 直接展示当前值，不映射枚举 |
-| 14 | 状态描述 | jobs/{job}/status → description | string | 直接展示 |
-| 15 | SCN | jobs/{job}/scn → scn | string | **可为空**，为空时留空，不展示 `0`/`--`/`暂无`/`未知` |
-| 16 | SCN 更新时间 | jobs/{job}/scn → updateTime | datetime | SCN 为空时同样留空 |
+| 13 | 运行状态 | jobs/{job}/alive 是否存在 | boolean | 当前运行状态（alive 存在=运行中，不存在=未运行） |
+| 14 | 状态码 | jobs/{job}/status → code | string | alive 存在时展示实际值，不存在时展示 `--` |
+| 15 | 状态描述 | jobs/{job}/status → description | string | alive 存在时展示实际值，不存在时展示 "未运行" |
+| 16 | SCN | jobs/{job}/scn → scn | string | **可为空**，为空时留空，不展示 `0`/`--`/`暂无`/`未知` |
+| 17 | SCN 更新时间 | jobs/{job}/scn → updateTime | datetime | SCN 为空时同样留空 |
 
 ### 5.4 禁止使用的字段
 

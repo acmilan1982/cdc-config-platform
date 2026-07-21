@@ -213,13 +213,39 @@ public class ZooKeeperMonitorServiceImpl implements ZooKeeperMonitorService {
         vo.setJobName(jobName);
         vo.setJobPath(jobPath);
 
-        // Job status
+        // Check job alive (ephemeral node) to determine current runtime state
+        boolean aliveExists;
+        boolean aliveCheckFailed = false;
+        try {
+            aliveExists = zkClient.nodeExists(jobPath + "/alive");
+        } catch (Exception e) {
+            log.warn("Failed to check job alive for {}/{}", clientName, jobName, e);
+            aliveExists = false;
+            aliveCheckFailed = true;
+        }
+
+        if (aliveCheckFailed) {
+            vo.setRunning(null);
+            vo.setStatusCode("--");
+            vo.setStatusMessage("状态未知");
+            vo.addWarning("job alive 检查失败");
+        } else if (!aliveExists) {
+            vo.setRunning(false);
+            vo.setStatusCode("--");
+            vo.setStatusMessage("未运行");
+        } else {
+            vo.setRunning(true);
+        }
+
+        // Job status (persisted) — detailInfo retained regardless of alive
         try {
             String statusData = zkClient.getNodeDataAsString(jobPath + "/status");
             JsonNode statusJson = parser.parseJson(statusData);
             if (statusJson != null) {
-                vo.setStatusCode(parser.getTextField(statusJson, "code"));
-                vo.setStatusMessage(parser.getTextField(statusJson, "description"));
+                if (aliveExists && !aliveCheckFailed) {
+                    vo.setStatusCode(parser.getTextField(statusJson, "code"));
+                    vo.setStatusMessage(parser.getTextField(statusJson, "description"));
+                }
                 vo.setDetailInfo(parser.getTextField(statusJson, "detailInfo"));
             }
         } catch (Exception e) {
@@ -244,7 +270,8 @@ public class ZooKeeperMonitorServiceImpl implements ZooKeeperMonitorService {
             vo.addWarning("SCN 读取失败");
         }
 
-        vo.setReadStatus("OK");
+        boolean hasWarnings = vo.getWarnings() != null && !vo.getWarnings().isEmpty();
+        vo.setReadStatus(hasWarnings ? "PARTIAL" : "OK");
         return vo;
     }
 }

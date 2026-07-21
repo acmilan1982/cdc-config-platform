@@ -333,6 +333,163 @@ class ZooKeeperMonitorServiceTest {
         assertTrue(service.isZooKeeperConnected());
     }
 
+    @Test
+    void shouldSetRunningTrueWhenAliveExists() throws Exception {
+        createFullClient("hosp-006", true, "1002");
+        createJob("hosp-006", "my-job", "1101", null, null, true);
+
+        ZooKeeperClientMonitorResponse resp = service.getClients();
+        ZooKeeperJobVO job = resp.getClients().get(0).getJobs().get(0);
+
+        assertTrue(job.getRunning());
+    }
+
+    @Test
+    void shouldReturnPersistedStatusWhenAliveExists() throws Exception {
+        createFullClient("hosp-006", true, "1002");
+        createJob("hosp-006", "my-job", "1101", null, null, true);
+
+        ZooKeeperClientMonitorResponse resp = service.getClients();
+        ZooKeeperJobVO job = resp.getClients().get(0).getJobs().get(0);
+
+        assertEquals("1101", job.getStatusCode());
+        assertEquals("运行中", job.getStatusMessage());
+    }
+
+    @Test
+    void shouldSetRunningFalseAndDashWhenAliveMissing() throws Exception {
+        createFullClient("hosp-006", true, "1002");
+        createJob("hosp-006", "stopped-job", "1101", null, null, false);
+
+        ZooKeeperClientMonitorResponse resp = service.getClients();
+        ZooKeeperJobVO job = resp.getClients().get(0).getJobs().get(0);
+
+        assertFalse(job.getRunning());
+        assertEquals("--", job.getStatusCode());
+        assertEquals("未运行", job.getStatusMessage());
+    }
+
+    @Test
+    void shouldNotProduceWarningWhenAliveMissing() throws Exception {
+        createFullClient("hosp-006", true, "1002");
+        createJob("hosp-006", "stopped-job", "1101", null, null, false);
+
+        ZooKeeperClientMonitorResponse resp = service.getClients();
+        ZooKeeperJobVO job = resp.getClients().get(0).getJobs().get(0);
+
+        assertEquals("OK", job.getReadStatus());
+        assertTrue(job.getWarnings() == null || job.getWarnings().isEmpty());
+    }
+
+    @Test
+    void shouldRetainDetailInfoWhenAliveMissing() throws Exception {
+        createFullClient("hosp-006", true, "1002");
+        createJob("hosp-006", "stopped-job", "1101", null, null, false);
+
+        ZooKeeperClientMonitorResponse resp = service.getClients();
+        ZooKeeperJobVO job = resp.getClients().get(0).getJobs().get(0);
+
+        assertEquals("everything under control", job.getDetailInfo());
+    }
+
+    @Test
+    void shouldRetainScnWhenAliveMissing() throws Exception {
+        createFullClient("hosp-006", true, "1002");
+        createJob("hosp-006", "stopped-job", "1101", "31120290432", "2026-07-16 16:00:04", false);
+
+        ZooKeeperClientMonitorResponse resp = service.getClients();
+        ZooKeeperJobVO job = resp.getClients().get(0).getJobs().get(0);
+
+        assertEquals("31120290432", job.getScn());
+        assertEquals("2026-07-16 16:00:04", job.getScnUpdateTime());
+    }
+
+    @Test
+    void shouldKeepJobInListWhenAliveMissing() throws Exception {
+        createFullClient("hosp-006", true, "1002");
+        createJob("hosp-006", "stopped-job", "1101", null, null, false);
+
+        ZooKeeperClientMonitorResponse resp = service.getClients();
+
+        assertEquals(1, resp.getClients().get(0).getJobs().size());
+    }
+
+    @Test
+    void shouldShowNotRunningWhenPersistedStatusIs1101ButAliveMissing() throws Exception {
+        createFullClient("hosp-006", true, "1002");
+        createJob("hosp-006", "stopped-job", "1101", null, null, false);
+
+        ZooKeeperClientMonitorResponse resp = service.getClients();
+        ZooKeeperJobVO job = resp.getClients().get(0).getJobs().get(0);
+
+        assertEquals("--", job.getStatusCode());
+        assertEquals("未运行", job.getStatusMessage());
+        assertFalse(job.getRunning());
+    }
+
+    @Test
+    void shouldShowNotRunningWhenPersistedStatusIs1201ButAliveMissing() throws Exception {
+        createFullClient("hosp-006", true, "1002");
+        createJob("hosp-006", "stopped-job", "1201", null, null, false);
+
+        ZooKeeperClientMonitorResponse resp = service.getClients();
+        ZooKeeperJobVO job = resp.getClients().get(0).getJobs().get(0);
+
+        assertEquals("--", job.getStatusCode());
+        assertEquals("未运行", job.getStatusMessage());
+    }
+
+    @Test
+    void shouldHandleAliveNodeWithEmptyJsonValue() throws Exception {
+        createFullClient("hosp-006", true, "1002");
+        createJob("hosp-006", "my-job", "1101", null, null, true);
+
+        ZooKeeperClientMonitorResponse resp = service.getClients();
+        ZooKeeperJobVO job = resp.getClients().get(0).getJobs().get(0);
+
+        assertTrue(job.getRunning());
+        assertEquals("1101", job.getStatusCode());
+    }
+
+    @Test
+    void shouldHandleOfflineClientWithJobAliveMissing() throws Exception {
+        createFullClient("hosp-007", false, "9001");
+        createJob("hosp-007", "stopped-job", "1101", null, null, false);
+
+        ZooKeeperClientMonitorResponse resp = service.getClients();
+        ZooKeeperClientVO client = resp.getClients().get(0);
+        ZooKeeperJobVO job = client.getJobs().get(0);
+
+        assertFalse(client.getOnline());
+        assertEquals(1, client.getJobs().size());
+        assertEquals("--", job.getStatusCode());
+        assertEquals("未运行", job.getStatusMessage());
+    }
+
+    @Test
+    void shouldSurviveSingleJobAliveCheckFailureAndNotAffectOtherJobs() throws Exception {
+        createFullClient("hosp-006", true, "1002");
+        createJob("hosp-006", "good-job", "1101", null, null, true);
+        // Deleting the parent client path will cause alive check to fail for bad-job
+        // because the path won't exist when accessed outside normal flow
+        curatorClient.create().creatingParentsIfNeeded().forPath("/bsoft-cdc/clients/hosp-006/jobs/bad-job");
+        curatorClient.create().creatingParentsIfNeeded().forPath("/bsoft-cdc/clients/hosp-006/jobs/bad-job/status",
+                "not json".getBytes(StandardCharsets.UTF_8));
+        // Create an alive node then delete its parent to simulate a race
+        String badAlivePath = "/bsoft-cdc/clients/hosp-006/jobs/bad-job/alive";
+        createEphemeralNode(badAlivePath, "{}");
+        // bad-job alive exists, but status is invalid json — the job should still be processed
+
+        ZooKeeperClientMonitorResponse resp = service.getClients();
+        List<ZooKeeperJobVO> jobs = resp.getClients().get(0).getJobs();
+
+        assertEquals(2, jobs.size());
+        ZooKeeperJobVO goodJob = jobs.stream().filter(j -> "good-job".equals(j.getJobName())).findFirst().orElse(null);
+        assertNotNull(goodJob);
+        assertTrue(goodJob.getRunning());
+        assertEquals("1101", goodJob.getStatusCode());
+    }
+
     private void createFullClient(String name, boolean online, String statusCode) throws Exception {
         curatorClient.create().creatingParentsIfNeeded().forPath("/bsoft-cdc/clients/" + name);
 
@@ -357,6 +514,11 @@ class ZooKeeperMonitorServiceTest {
 
     private void createJob(String clientName, String jobName, String statusCode,
                            String scnValue, String scnUpdateTime) throws Exception {
+        createJob(clientName, jobName, statusCode, scnValue, scnUpdateTime, true);
+    }
+
+    private void createJob(String clientName, String jobName, String statusCode,
+                           String scnValue, String scnUpdateTime, boolean createAlive) throws Exception {
         String jobPath = "/bsoft-cdc/clients/" + clientName + "/jobs/" + jobName;
         curatorClient.create().creatingParentsIfNeeded().forPath(jobPath);
 
@@ -370,6 +532,10 @@ class ZooKeeperMonitorServiceTest {
             createJsonNode(jobPath + "/scn", scnJson);
         } else {
             createJsonNode(jobPath + "/scn", "{}");
+        }
+
+        if (createAlive) {
+            createEphemeralNode(jobPath + "/alive", "{}");
         }
     }
 }

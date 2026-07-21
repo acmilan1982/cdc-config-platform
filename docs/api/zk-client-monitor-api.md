@@ -46,13 +46,24 @@
         "warnings": null,
         "jobs": [
           {
-            "jobName": "my-19c",
-            "jobPath": "/bsoft-cdc/clients/hosp-006/jobs/my-19c",
+            "jobName": "5905f1ce83024410836b40ca0ebfc446",
+            "jobPath": "/bsoft-cdc/clients/hosp-006/jobs/5905f1ce83024410836b40ca0ebfc446",
+            "running": true,
             "statusCode": "1101",
             "statusMessage": "增量模式运行中",
             "detailInfo": "everything under control",
-            "scn": null,
-            "scnUpdateTime": null,
+            "scn": "110812544",
+            "scnUpdateTime": "2026-07-21 11:30:02",
+            "readStatus": "OK",
+            "warnings": null
+          },
+          {
+            "jobName": "my-19c",
+            "jobPath": "/bsoft-cdc/clients/hosp-006/jobs/my-19c",
+            "running": false,
+            "statusCode": "--",
+            "statusMessage": "未运行",
+            "detailInfo": "everything under control",
             "readStatus": "OK",
             "warnings": null
           }
@@ -100,12 +111,13 @@
 |------|------|------|
 | jobName | string | 任务名称（ZK 子节点名） |
 | jobPath | string | 完整 ZK 路径 |
-| statusCode | string\|null | job status.code |
-| statusMessage | string\|null | job status.description |
-| detailInfo | string\|null | job detailInfo |
-| scn | string\|null | SCN 值；快照阶段为空时返回 null |
+| running | boolean\|null | 当前运行状态（alive 存在=true, 不存在=false, 检查失败=null） |
+| statusCode | string\|null | job 当前状态码；alive 存在时返回持久化 status.code，alive 不存在时返回 "--" |
+| statusMessage | string\|null | job 当前状态描述；alive 存在时返回持久化 status.description，alive 不存在时返回 "未运行"，alive 读取失败时返回 "状态未知" |
+| detailInfo | string\|null | job detailInfo（无论 alive 是否存在均保留最后一次值） |
+| scn | string\|null | SCN 值；快照阶段为空时返回 null（无论 alive 是否存在均保留） |
 | scnUpdateTime | string\|null | SCN 更新时间；SCN 为空时返回 null |
-| readStatus | string | "OK" / "ERROR" |
+| readStatus | string | "OK" / "PARTIAL" / "ERROR" |
 | warnings | string[]\|null | 任务级警告信息 |
 
 ## 2. GET /api/monitor/zookeeper/health
@@ -136,6 +148,19 @@ alive 临时节点不存在 = 离线
 ```
 
 不依赖 alive 的 mtime、updateTime、status.code 或 jobs 是否存在。
+
+### Job 当前运行状态规则
+
+```
+job alive 临时节点存在 → running=true, statusCode=持久化 status.code, statusMessage=持久化 status.description
+job alive 临时节点不存在 → running=false, statusCode="--", statusMessage="未运行"
+job alive 读取失败 → running=null 或不返回, statusCode="--", statusMessage="状态未知"
+```
+
+- job alive 节点值为 `{}`，不解析其内容，仅判断节点是否存在
+- 持久化 status 仅代表最后一次上报状态，不得解释为当前运行状态
+- alive 不存在时不产生 warning，不设置 partialFailure
+- detailInfo 和 SCN 在 alive 不存在时仍保留最后一次值
 
 ### SCN 空值
 
