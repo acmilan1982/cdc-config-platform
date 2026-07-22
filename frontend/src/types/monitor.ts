@@ -1,6 +1,7 @@
 export interface ZooKeeperJobVO {
   jobName: string
   jobPath: string
+  displayName: string
   statusCode: string | null
   statusMessage: string | null
   detailInfo: string | null

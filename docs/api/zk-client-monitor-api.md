@@ -125,8 +125,9 @@
 
 | 字段 | 类型 | 说明 |
 |------|------|------|
-| jobName | string | 任务名称（ZK 子节点名） |
+| jobName | string | 任务名称（ZK 子节点名），技术标识，用于 ZK 路径拼接、唯一定位、row-key |
 | jobPath | string | 完整 ZK 路径 |
+| displayName | string | 任务展示名称；优先取 job 节点数据中的 dataSourceOrg，无效时回退为 jobName |
 | running | boolean\|null | 当前运行状态（alive 存在=true, 不存在=false, 检查失败=null） |
 | statusCode | string\|null | job 当前状态码；alive 存在时返回持久化 status.code，alive 不存在时返回 "--" |
 | statusMessage | string\|null | job 当前状态描述；alive 存在时返回持久化 status.description，alive 不存在时返回 "未运行"，alive 读取失败时返回 "状态未知" |

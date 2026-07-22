@@ -93,11 +93,15 @@
           style="width: 100%"
           :empty-text="'(无采集任务)'"
         >
-          <el-table-column label="任务名称" width="130" show-overflow-tooltip>
+          <el-table-column label="任务名称" width="150" show-overflow-tooltip>
             <template #default="{ row }">
               <span class="job-name-cell">
-                <span class="job-name-text">{{ row.jobName }}</span>
-                <el-tooltip :content="row.jobPath" placement="top" :show-after="500">
+                <span class="job-name-text">{{ row.displayName || row.jobName }}</span>
+                <el-tooltip placement="top" :show-after="500">
+                  <template #content>
+                    <div>任务标识：{{ row.jobName }}</div>
+                    <div>节点路径：{{ row.jobPath }}</div>
+                  </template>
                   <el-icon class="path-icon-small"><InfoFilled /></el-icon>
                 </el-tooltip>
               </span>

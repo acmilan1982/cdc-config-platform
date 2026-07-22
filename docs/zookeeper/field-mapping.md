@@ -32,7 +32,7 @@
 
 | 页面字段 | 数据来源 | ZK 路径/字段 | 类型 | 说明 |
 |---------|----------|-------------|------|------|
-| 任务名称 | ZK 节点名 | jobs/{job} 节点名 | string | 如 my-19c |
+| 任务名称 | ZK 节点名 + 节点数据 | jobs/{job} 节点名 + dataSourceOrg | string | 优先展示 dataSourceOrg，回退展示节点名 |
 | 任务状态码 | ZK 数据 | jobs/{job}/status → code | string | 直接展示当前值 |
 | 任务状态描述 | ZK 数据 | jobs/{job}/status → description | string | 直接展示 |
 | SCN | ZK 数据 | jobs/{job}/scn → scn | string | **允许为空**（快照阶段） |

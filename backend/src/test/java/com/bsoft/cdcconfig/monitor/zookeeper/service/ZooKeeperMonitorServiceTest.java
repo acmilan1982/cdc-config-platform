@@ -629,6 +629,196 @@ class ZooKeeperMonitorServiceTest {
         assertEquals("OK", job.getReadStatus());
     }
 
+    // --- displayName tests ---
+
+    @Test
+    void shouldSetDisplayNameFromDataSourceOrg() throws Exception {
+        createFullClient("hosp-006", true, "1002");
+        String jobNodeData = "{\"dataSourceOrg\":\"杭州市第一人民医院\",\"updateTime\":\"2026-07-22 15:54:20\"}";
+        createJob("hosp-006", "uuid-job", "1101", null, null, true, jobNodeData);
+
+        ZooKeeperClientMonitorResponse resp = service.getClients();
+        ZooKeeperJobVO job = resp.getClients().get(0).getJobs().get(0);
+
+        assertEquals("杭州市第一人民医院", job.getDisplayName());
+        assertEquals("uuid-job", job.getJobName());
+    }
+
+    @Test
+    void shouldKeepJobNameUnchangedWhenDataSourceOrgPresent() throws Exception {
+        createFullClient("hosp-006", true, "1002");
+        String jobNodeData = "{\"dataSourceOrg\":\"杭州市第一人民医院\",\"updateTime\":\"2026-07-22 15:54:20\"}";
+        createJob("hosp-006", "my-19c", "1101", null, null, true, jobNodeData);
+
+        ZooKeeperClientMonitorResponse resp = service.getClients();
+        ZooKeeperJobVO job = resp.getClients().get(0).getJobs().get(0);
+
+        assertEquals("my-19c", job.getJobName());
+        assertEquals("/bsoft-cdc/clients/hosp-006/jobs/my-19c", job.getJobPath());
+    }
+
+    @Test
+    void shouldFallbackToJobNameWhenJobNodeHasNoData() throws Exception {
+        createFullClient("hosp-006", true, "1002");
+        // createJob without jobNodeData creates empty job node
+        createJob("hosp-006", "empty-job", "1101", null, null, true, null);
+
+        ZooKeeperClientMonitorResponse resp = service.getClients();
+        ZooKeeperJobVO job = resp.getClients().get(0).getJobs().get(0);
+
+        assertEquals("empty-job", job.getDisplayName());
+    }
+
+    @Test
+    void shouldFallbackToJobNameWhenJobNodeIsEmptyJson() throws Exception {
+        createFullClient("hosp-006", true, "1002");
+        createJob("hosp-006", "empty-job", "1101", null, null, true, "{}");
+
+        ZooKeeperClientMonitorResponse resp = service.getClients();
+        ZooKeeperJobVO job = resp.getClients().get(0).getJobs().get(0);
+
+        assertEquals("empty-job", job.getDisplayName());
+    }
+
+    @Test
+    void shouldFallbackToJobNameWhenDataSourceOrgMissing() throws Exception {
+        createFullClient("hosp-006", true, "1002");
+        createJob("hosp-006", "no-org-job", "1101", null, null, true,
+                "{\"updateTime\":\"2026-07-22 15:54:20\"}");
+
+        ZooKeeperClientMonitorResponse resp = service.getClients();
+        ZooKeeperJobVO job = resp.getClients().get(0).getJobs().get(0);
+
+        assertEquals("no-org-job", job.getDisplayName());
+    }
+
+    @Test
+    void shouldFallbackToJobNameWhenDataSourceOrgIsEmptyString() throws Exception {
+        createFullClient("hosp-006", true, "1002");
+        createJob("hosp-006", "empty-org-job", "1101", null, null, true,
+                "{\"dataSourceOrg\":\"\",\"updateTime\":\"2026-07-22 15:54:20\"}");
+
+        ZooKeeperClientMonitorResponse resp = service.getClients();
+        ZooKeeperJobVO job = resp.getClients().get(0).getJobs().get(0);
+
+        assertEquals("empty-org-job", job.getDisplayName());
+    }
+
+    @Test
+    void shouldFallbackToJobNameWhenDataSourceOrgIsWhitespaceOnly() throws Exception {
+        createFullClient("hosp-006", true, "1002");
+        createJob("hosp-006", "ws-job", "1101", null, null, true,
+                "{\"dataSourceOrg\":\"   \",\"updateTime\":\"2026-07-22 15:54:20\"}");
+
+        ZooKeeperClientMonitorResponse resp = service.getClients();
+        ZooKeeperJobVO job = resp.getClients().get(0).getJobs().get(0);
+
+        assertEquals("ws-job", job.getDisplayName());
+    }
+
+    @Test
+    void shouldFallbackToJobNameForInvalidJson() throws Exception {
+        createFullClient("hosp-006", true, "1002");
+        createJob("hosp-006", "bad-json-job", "1101", null, null, true, "{invalid json");
+
+        ZooKeeperClientMonitorResponse resp = service.getClients();
+        ZooKeeperJobVO job = resp.getClients().get(0).getJobs().get(0);
+
+        assertEquals("bad-json-job", job.getDisplayName());
+    }
+
+    @Test
+    void shouldNotAffectOtherJobsWhenOneMetadataFails() throws Exception {
+        createFullClient("hosp-006", true, "1002");
+        String goodNodeData = "{\"dataSourceOrg\":\"杭州市第一人民医院\",\"updateTime\":\"2026-07-22 15:54:20\"}";
+        createJob("hosp-006", "good-job", "1101", null, null, true, goodNodeData);
+        createJob("hosp-006", "bad-json-job", "1101", null, null, true, "{invalid");
+
+        ZooKeeperClientMonitorResponse resp = service.getClients();
+        List<ZooKeeperJobVO> jobs = resp.getClients().get(0).getJobs();
+
+        assertEquals(2, jobs.size());
+        ZooKeeperJobVO goodJob = jobs.stream().filter(j -> "good-job".equals(j.getJobName())).findFirst().orElse(null);
+        assertNotNull(goodJob);
+        assertEquals("杭州市第一人民医院", goodJob.getDisplayName());
+
+        ZooKeeperJobVO badJob = jobs.stream().filter(j -> "bad-json-job".equals(j.getJobName())).findFirst().orElse(null);
+        assertNotNull(badJob);
+        assertEquals("bad-json-job", badJob.getDisplayName());
+    }
+
+    @Test
+    void shouldNotAffectStatusAndScnWhenMetadataFails() throws Exception {
+        createFullClient("hosp-006", true, "1002");
+        createJob("hosp-006", "bad-meta-job", "1101", "31120290432", "2026-07-16 16:00:04", true, "{invalid");
+
+        ZooKeeperClientMonitorResponse resp = service.getClients();
+        ZooKeeperJobVO job = resp.getClients().get(0).getJobs().get(0);
+
+        assertTrue(job.getRunning());
+        assertEquals("1101", job.getStatusCode());
+        assertEquals("31120290432", job.getScn());
+        assertEquals("2026-07-16 16:00:04", job.getScnUpdateTime());
+        assertEquals("bad-meta-job", job.getDisplayName());
+    }
+
+    @Test
+    void shouldReturnDisplayNameFromController() throws Exception {
+        createFullClient("hosp-006", true, "1002");
+        String jobNodeData = "{\"dataSourceOrg\":\"杭州市第一人民医院\",\"updateTime\":\"2026-07-22 15:54:20\"}";
+        createJob("hosp-006", "my-job", "1101", null, null, true, jobNodeData);
+
+        ZooKeeperClientMonitorResponse resp = service.getClients();
+        ZooKeeperJobVO job = resp.getClients().get(0).getJobs().get(0);
+
+        assertNotNull(job.getDisplayName());
+        assertEquals("杭州市第一人民医院", job.getDisplayName());
+    }
+
+    @Test
+    void shouldShowTwoJobsWithSameDisplayNameSeparately() throws Exception {
+        createFullClient("hosp-006", true, "1002");
+        String nodeData = "{\"dataSourceOrg\":\"杭州市第一人民医院\",\"updateTime\":\"2026-07-22 15:54:20\"}";
+        createJob("hosp-006", "job-1", "1101", null, null, true, nodeData);
+        createJob("hosp-006", "job-2", "1101", null, null, true, nodeData);
+
+        ZooKeeperClientMonitorResponse resp = service.getClients();
+        List<ZooKeeperJobVO> jobs = resp.getClients().get(0).getJobs();
+
+        assertEquals(2, jobs.size());
+        assertEquals("杭州市第一人民医院", jobs.get(0).getDisplayName());
+        assertEquals("杭州市第一人民医院", jobs.get(1).getDisplayName());
+        assertEquals("job-1", jobs.get(0).getJobName());
+        assertEquals("job-2", jobs.get(1).getJobName());
+    }
+
+    @Test
+    void shouldTrimDataSourceOrgWhitespace() throws Exception {
+        createFullClient("hosp-006", true, "1002");
+        createJob("hosp-006", "trim-job", "1101", null, null, true,
+                "{\"dataSourceOrg\":\"  杭州市第一人民医院  \",\"updateTime\":\"2026-07-22 15:54:20\"}");
+
+        ZooKeeperClientMonitorResponse resp = service.getClients();
+        ZooKeeperJobVO job = resp.getClients().get(0).getJobs().get(0);
+
+        assertEquals("杭州市第一人民医院", job.getDisplayName());
+    }
+
+    @Test
+    void shouldSetDisplayNameForStoppedJob() throws Exception {
+        createFullClient("hosp-006", true, "1002");
+        String jobNodeData = "{\"dataSourceOrg\":\"杭州市第一人民医院\",\"updateTime\":\"2026-07-22 15:54:20\"}";
+        createJob("hosp-006", "stopped-job", "1101", "110813170", "2026-07-21 12:00:00", false, jobNodeData);
+
+        ZooKeeperClientMonitorResponse resp = service.getClients();
+        ZooKeeperJobVO job = resp.getClients().get(0).getJobs().get(0);
+
+        assertFalse(job.getRunning());
+        assertEquals("--", job.getStatusCode());
+        assertEquals("杭州市第一人民医院", job.getDisplayName());
+        assertEquals("stopped-job", job.getJobName());
+    }
+
     @Test
     void shouldReturnPartialFailureWhenAllClientsHaveWarnings() throws Exception {
         createFullClient("hosp-006", true, "1002");
@@ -674,8 +864,19 @@ class ZooKeeperMonitorServiceTest {
 
     private void createJob(String clientName, String jobName, String statusCode,
                            String scnValue, String scnUpdateTime, boolean createAlive) throws Exception {
+        createJob(clientName, jobName, statusCode, scnValue, scnUpdateTime, createAlive, null);
+    }
+
+    private void createJob(String clientName, String jobName, String statusCode,
+                           String scnValue, String scnUpdateTime, boolean createAlive,
+                           String jobNodeData) throws Exception {
         String jobPath = "/bsoft-cdc/clients/" + clientName + "/jobs/" + jobName;
-        curatorClient.create().creatingParentsIfNeeded().forPath(jobPath);
+        if (jobNodeData != null) {
+            curatorClient.create().creatingParentsIfNeeded()
+                    .forPath(jobPath, jobNodeData.getBytes(StandardCharsets.UTF_8));
+        } else {
+            curatorClient.create().creatingParentsIfNeeded().forPath(jobPath);
+        }
 
         String statusJson = "{\"code\":\"" + statusCode + "\",\"description\":\"运行中\","
                 + "\"detailInfo\":\"everything under control\","

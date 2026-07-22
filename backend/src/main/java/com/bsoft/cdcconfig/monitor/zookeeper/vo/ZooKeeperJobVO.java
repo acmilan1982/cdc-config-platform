@@ -7,6 +7,7 @@ public class ZooKeeperJobVO {
 
     private String jobName;
     private String jobPath;
+    private String displayName;
     private Boolean running;
     private String statusCode;
     private String statusMessage;
@@ -30,6 +31,14 @@ public class ZooKeeperJobVO {
 
     public void setJobPath(String jobPath) {
         this.jobPath = jobPath;
+    }
+
+    public String getDisplayName() {
+        return displayName;
+    }
+
+    public void setDisplayName(String displayName) {
+        this.displayName = displayName;
     }
 
     public Boolean getRunning() {

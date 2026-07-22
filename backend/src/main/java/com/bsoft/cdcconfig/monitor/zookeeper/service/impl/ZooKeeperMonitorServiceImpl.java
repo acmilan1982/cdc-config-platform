@@ -278,6 +278,25 @@ public class ZooKeeperMonitorServiceImpl implements ZooKeeperMonitorService {
             vo.addWarning("job status 读取失败");
         }
 
+        // Job node metadata (dataSourceOrg -> displayName)
+        try {
+            String jobNodeData = zkClient.getNodeDataAsString(jobPath);
+            JsonNode jobNodeJson = parser.parseJson(jobNodeData);
+            String dataSourceOrg = null;
+            if (jobNodeJson != null) {
+                dataSourceOrg = parser.getTextField(jobNodeJson, "dataSourceOrg");
+            }
+            if (dataSourceOrg != null && !dataSourceOrg.trim().isEmpty()) {
+                vo.setDisplayName(dataSourceOrg.trim());
+            } else {
+                vo.setDisplayName(jobName);
+            }
+        } catch (Exception e) {
+            log.warn("Failed to read job node metadata for {}/{}", clientName, jobName, e);
+            vo.setDisplayName(jobName);
+            vo.addWarning("job 元数据读取失败");
+        }
+
         // SCN node
         try {
             String scnData = zkClient.getNodeDataAsString(jobPath + "/scn");

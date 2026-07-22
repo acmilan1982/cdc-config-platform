@@ -20,7 +20,12 @@
 | 路径 | 说明 |
 |------|------|
 | /bsoft-cdc/clients/{client}/jobs | 采集任务目录 |
-| /bsoft-cdc/clients/{client}/jobs/{job} | 采集任务实例 |
+
+### 可能为空的 JSON 数据节点
+
+| 路径 | 说明 |
+|------|------|
+| /bsoft-cdc/clients/{client}/jobs/{job} | 采集任务实例；可能为空 JSON `{}`，也可能包含数据源业务名称 |
 
 ### JSON 数据节点
 
@@ -111,6 +116,23 @@
 | updateTime | string | 否（增量阶段） | SCN 更新时间 |
 
 **项目负责人已确认**：快照阶段 SCN 可为空，进入增量阶段后写入。统一使用 `scn` 字段名。
+
+### job 节点（job 元数据）
+
+路径：`/bsoft-cdc/clients/{client}/jobs/{job}`
+
+job 节点本身可以保存数据源业务名称等元数据：
+
+```json
+{"dataSourceOrg":"杭州市第一人民医院","updateTime":"2026-07-22 15:54:20"}
+```
+
+也可能为空 JSON：`{}`
+
+| 字段 | 类型 | 可空 | 说明 |
+|------|------|------|------|
+| dataSourceOrg | string | **是** | 数据源业务名称，用于页面展示；缺失或为空时回退展示 job 节点名 |
+| updateTime | string | 是 | 元数据更新时间 |
 
 ## 状态码（已观察到的示例）
 

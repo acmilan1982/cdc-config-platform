@@ -116,7 +116,7 @@ status 只表示最后一次上报状态；
 
 | 序号 | 字段名 | ZK 来源 | 类型 | 页面展示规则 |
 |------|--------|---------|------|-------------|
-| 12 | 任务名称 | jobs/{job} 节点名 | string | 直接展示，带 ZK 路径悬浮 |
+| 12 | 任务名称 | jobs/{job} 节点名 + 节点数据 dataSourceOrg | string | 优先展示 dataSourceOrg（业务名称），回退展示节点名，带 ZK 路径悬浮 |
 | 13 | 运行状态 | jobs/{job}/alive 是否存在 | boolean | 当前运行状态（alive 存在=运行中，不存在=未运行） |
 | 14 | 状态码 | jobs/{job}/status → code | string | alive 存在时展示实际值，不存在时展示 `--` |
 | 15 | 状态描述 | jobs/{job}/status → description | string | alive 存在时展示实际值，不存在时展示 "未运行" |
