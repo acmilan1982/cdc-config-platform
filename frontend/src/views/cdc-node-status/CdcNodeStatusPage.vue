@@ -13,9 +13,9 @@
       <div class="toolbar-right">
         <span class="refresh-label">自动刷新:</span>
         <el-select v-model="refreshInterval" size="small" style="width: 100px" @change="resetTimer">
-          <el-option :value="10" label="10 秒" />
-          <el-option :value="30" label="30 秒" />
-          <el-option :value="60" label="60 秒" />
+          <el-option :value="60" label="1 分钟" />
+          <el-option :value="1800" label="30 分钟" />
+          <el-option :value="3600" label="60 分钟" />
         </el-select>
         <span v-if="lastRefreshedAt" class="last-refresh">最后刷新: {{ lastRefreshedAt }}</span>
         <el-button size="small" type="primary" :loading="refreshing" :disabled="refreshing" @click="manualRefresh">
@@ -88,7 +88,7 @@ const refreshing = ref(false)
 const error = ref(false)
 const zkDisconnected = ref(false)
 const lastRefreshedAt = ref('')
-const refreshInterval = ref(10)
+const refreshInterval = ref(3600)
 let timer: ReturnType<typeof setInterval> | null = null
 let requestId = 0
 
@@ -124,6 +124,7 @@ async function manualRefresh() {
   refreshing.value = true
   await loadData()
   refreshing.value = false
+  resetTimer()
 }
 
 function resetTimer() {

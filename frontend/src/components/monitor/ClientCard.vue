@@ -93,7 +93,7 @@
           style="width: 100%"
           :empty-text="'(无采集任务)'"
         >
-          <el-table-column label="任务名称" width="150" show-overflow-tooltip>
+          <el-table-column label="任务名称" width="220" show-overflow-tooltip>
             <template #default="{ row }">
               <span class="job-name-cell">
                 <span class="job-name-text">{{ row.displayName || row.jobName }}</span>
@@ -101,22 +101,25 @@
                   <template #content>
                     <div>任务标识：{{ row.jobName }}</div>
                     <div>节点路径：{{ row.jobPath }}</div>
+                    <div v-if="row.statusCode">状态码：{{ row.statusCode }}</div>
                   </template>
                   <el-icon class="path-icon-small"><InfoFilled /></el-icon>
                 </el-tooltip>
               </span>
             </template>
           </el-table-column>
-          <el-table-column prop="statusCode" label="状态码" width="70" />
-          <el-table-column prop="statusMessage" label="状态描述" />
-          <el-table-column prop="scn" label="SCN" width="105" align="right">
+          <el-table-column prop="statusMessage" label="状态描述" min-width="150" />
+          <el-table-column label="SCN" width="200" align="right">
             <template #default="{ row }">
-              {{ row.scn || '' }}
+              <el-tooltip v-if="row.scn" placement="top" :show-after="500" :content="row.scn">
+                <span class="scn-value">{{ row.scn }}</span>
+              </el-tooltip>
+              <span v-else class="scn-value scn-value--empty">—</span>
             </template>
           </el-table-column>
-          <el-table-column prop="scnUpdateTime" label="SCN 更新时间" width="160">
+          <el-table-column label="SCN 更新时间" width="170">
             <template #default="{ row }">
-              {{ row.scnUpdateTime || '' }}
+              <span class="scn-time-value">{{ row.scnUpdateTime || '' }}</span>
             </template>
           </el-table-column>
         </el-table>
@@ -422,6 +425,24 @@ function copyDetailInfo() {
 .job-name-text {
   overflow: hidden;
   text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+/* SCN value: single-line ellipsis with monospace */
+.scn-value {
+  display: block;
+  overflow: hidden;
+  white-space: nowrap;
+  text-overflow: ellipsis;
+  font-family: Consolas, "Courier New", monospace;
+  font-variant-numeric: tabular-nums;
+}
+.scn-value--empty {
+  color: #94A3B8;
+}
+
+/* SCN time: no wrap */
+.scn-time-value {
   white-space: nowrap;
 }
 

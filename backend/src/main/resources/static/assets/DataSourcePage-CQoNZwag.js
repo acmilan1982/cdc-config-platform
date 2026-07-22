@@ -1,0 +1,1 @@
+import{P as t}from"./PlaceholderPage-CNpGa_Ec.js";import{d as o,c as a,o as r}from"./index-CM55iFpY.js";const u=o({__name:"DataSourcePage",setup(c){const e={nature:"可维护",structure:"主列表 + 扩展配置子页",tables:"CDC_DATA_SOURCE、CDC_DATA_SOURCE_EXTEND",desc:"管理 CDC 平台的数据源配置，包括源库和目标库信息。扩展配置作为 1:1 子页展示。"};return(s,_)=>(r(),a(t,{title:"数据源管理",group:"配置管理",info:e}))}});export{u as default};

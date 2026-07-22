@@ -1,1 +1,0 @@
-import{P as o}from"./PlaceholderPage-CflBG3s6.js";import{d as r,c as t,o as a}from"./index-KJhj0_R7.js";const C=r({__name:"ServerConfigPage",setup(c){const e={nature:"可维护",structure:"列表 + 详情 + 配置明细",tables:"CDC_SERVER、CDC_SERVER_CONFIG",desc:"管理 CDC 中心端实例及其配置项。列表展示基本信息，详情页内嵌配置项表格。"};return(n,s)=>(a(),t(o,{title:"服务端配置",group:"配置管理",info:e}))}});export{C as default};

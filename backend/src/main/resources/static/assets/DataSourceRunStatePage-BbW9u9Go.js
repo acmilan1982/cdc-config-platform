@@ -1,1 +1,0 @@
-import{P as t}from"./PlaceholderPage-Dr0-9h22.js";import{d as a,c as o,o as r}from"./index-C25eIZD3.js";const p=a({__name:"DataSourceRunStatePage",setup(c){const e={nature:"只读",structure:"列表 + 详情（如适用）",tables:"CDC_DATA_SOURCE_RUN_STATE",desc:"监控数据源的实时运行状态。由外部程序维护，前端只读查询。支持唯一定位时跳转到配置页。"};return(n,s)=>(r(),o(t,{title:"数据源运行状态",group:"运行监控",info:e}))}});export{p as default};
