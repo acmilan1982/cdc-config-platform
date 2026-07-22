@@ -566,6 +566,69 @@ class ZooKeeperMonitorServiceTest {
         assertTrue(c.getDetailInfo().contains("ORA-00257"));
     }
 
+    // --- SCN preservation tests (unified alive+SCN rules) ---
+
+    @Test
+    void shouldReturnScnWhenJobAliveMissingAndScnHasValue() throws Exception {
+        createFullClient("hosp-006", true, "1002");
+        createJob("hosp-006", "stopped-job", "1101", "110813170", "2026-07-21 12:00:00", false);
+
+        ZooKeeperClientMonitorResponse resp = service.getClients();
+        ZooKeeperJobVO job = resp.getClients().get(0).getJobs().get(0);
+
+        assertFalse(job.getRunning());
+        assertEquals("--", job.getStatusCode());
+        assertEquals("未运行", job.getStatusMessage());
+        assertEquals("110813170", job.getScn());
+        assertEquals("2026-07-21 12:00:00", job.getScnUpdateTime());
+    }
+
+    @Test
+    void shouldReturnScnWhenJobAliveExistsAndScnHasValue() throws Exception {
+        createFullClient("hosp-006", true, "1002");
+        createJob("hosp-006", "running-job", "1101", "110813170", "2026-07-21 12:00:00", true);
+
+        ZooKeeperClientMonitorResponse resp = service.getClients();
+        ZooKeeperJobVO job = resp.getClients().get(0).getJobs().get(0);
+
+        assertTrue(job.getRunning());
+        assertEquals("1101", job.getStatusCode());
+        assertEquals("110813170", job.getScn());
+    }
+
+    @Test
+    void shouldHandleScnParseFailureWhenJobAliveMissing() throws Exception {
+        createFullClient("hosp-006", true, "1002");
+        String jobPath = "/bsoft-cdc/clients/hosp-006/jobs/bad-scn-job";
+        curatorClient.create().creatingParentsIfNeeded().forPath(jobPath);
+        createJsonNode(jobPath + "/status",
+                "{\"code\":\"1101\",\"description\":\"运行中\","
+                        + "\"detailInfo\":\"ok\",\"updateTime\":\"2026-07-17 16:29:38\"}");
+        createJsonNode(jobPath + "/scn", "{invalid scn json");
+
+        ZooKeeperClientMonitorResponse resp = service.getClients();
+        ZooKeeperJobVO job = resp.getClients().get(0).getJobs().get(0);
+
+        assertEquals("--", job.getStatusCode());
+        assertEquals("未运行", job.getStatusMessage());
+        assertNull(job.getScn());
+        // Parse failure caught by NodeDataParser, returns null – no exception propagated
+        assertEquals("OK", job.getReadStatus());
+    }
+
+    @Test
+    void shouldReturnScnNullWhenScnNodeIsEmptyJson() throws Exception {
+        createFullClient("hosp-006", true, "1002");
+        createJob("hosp-006", "empty-scn-job", "1101", null, null, false);
+
+        ZooKeeperClientMonitorResponse resp = service.getClients();
+        ZooKeeperJobVO job = resp.getClients().get(0).getJobs().get(0);
+
+        assertNull(job.getScn());
+        assertNull(job.getScnUpdateTime());
+        assertEquals("OK", job.getReadStatus());
+    }
+
     @Test
     void shouldReturnPartialFailureWhenAllClientsHaveWarnings() throws Exception {
         createFullClient("hosp-006", true, "1002");

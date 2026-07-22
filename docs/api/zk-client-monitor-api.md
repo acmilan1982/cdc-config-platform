@@ -177,6 +177,7 @@ alive 节点值为 {}，不解析其内容，仅判断节点是否存在。
 - 持久化 status 仅代表最后一次上报状态，不得解释为当前运行状态
 - alive 不存在时不产生 warning，不设置 partialFailure
 - detailInfo 和 SCN 在 alive 不存在时仍保留最后一次值
+- SCN、SCN 更新时间与 alive 完全独立，仅取决于 ZK SCN 节点是否有值
 
 ### SCN 空值
 
