@@ -278,7 +278,8 @@ class ZooKeeperMonitorServiceTest {
 
         ZooKeeperClientVO c = resp.getClients().get(0);
         assertFalse(c.getOnline());
-        assertEquals("9001", c.getStatusCode());
+        assertEquals("--", c.getStatusCode());
+        assertEquals("未运行", c.getStatusMessage());
         assertTrue(c.getJobs().isEmpty());
         assertEquals("--", c.getPid());
     }
@@ -488,6 +489,97 @@ class ZooKeeperMonitorServiceTest {
         assertNotNull(goodJob);
         assertTrue(goodJob.getRunning());
         assertEquals("1101", goodJob.getStatusCode());
+    }
+
+    // --- Client alive-based runtime state tests ---
+
+    @Test
+    void shouldUsePersistedStatusWhenClientAliveExists() throws Exception {
+        createFullClient("hosp-006", true, "1002");
+
+        ZooKeeperClientMonitorResponse resp = service.getClients();
+        ZooKeeperClientVO c = resp.getClients().get(0);
+
+        assertTrue(c.getOnline());
+        assertEquals("1002", c.getStatusCode());
+        assertEquals("正常运行", c.getStatusMessage());
+    }
+
+    @Test
+    void shouldReturnDashAndNotRunningWhenClientAliveMissing() throws Exception {
+        createFullClient("hosp-007", false, "1002");
+
+        ZooKeeperClientMonitorResponse resp = service.getClients();
+        ZooKeeperClientVO c = resp.getClients().get(0);
+
+        assertFalse(c.getOnline());
+        assertEquals("--", c.getStatusCode());
+        assertEquals("未运行", c.getStatusMessage());
+    }
+
+    @Test
+    void shouldOverridePersisted1002WhenClientAliveMissing() throws Exception {
+        createFullClient("hosp-007", false, "1002");
+
+        ZooKeeperClientMonitorResponse resp = service.getClients();
+        ZooKeeperClientVO c = resp.getClients().get(0);
+
+        assertEquals("--", c.getStatusCode());
+        assertEquals("未运行", c.getStatusMessage());
+    }
+
+    @Test
+    void shouldOverridePersisted9001WhenClientAliveMissing() throws Exception {
+        createFullClient("hosp-007", false, "9001");
+
+        ZooKeeperClientMonitorResponse resp = service.getClients();
+        ZooKeeperClientVO c = resp.getClients().get(0);
+
+        assertEquals("--", c.getStatusCode());
+        assertEquals("未运行", c.getStatusMessage());
+    }
+
+    @Test
+    void shouldNotProduceWarningWhenClientAliveMissing() throws Exception {
+        createFullClient("hosp-007", false, "1002");
+
+        ZooKeeperClientMonitorResponse resp = service.getClients();
+        ZooKeeperClientVO c = resp.getClients().get(0);
+
+        assertEquals("OK", c.getReadStatus());
+        assertTrue(c.getWarnings() == null || c.getWarnings().isEmpty());
+    }
+
+    @Test
+    void shouldRetainDetailInfoWhenClientAliveMissing() throws Exception {
+        createFullClient("hosp-007", false, "9001");
+        String errorStatus = "{\"code\":\"9001\",\"description\":\"进程异常\","
+                + "\"detailInfo\":\"ORA-00257: Archiver error\\n\","
+                + "\"updateTime\":\"2026-07-17 16:23:16\"}";
+        curatorClient.setData().forPath("/bsoft-cdc/clients/hosp-007/status",
+                errorStatus.getBytes(StandardCharsets.UTF_8));
+
+        ZooKeeperClientMonitorResponse resp = service.getClients();
+        ZooKeeperClientVO c = resp.getClients().get(0);
+
+        assertNotNull(c.getDetailInfo());
+        assertTrue(c.getDetailInfo().contains("ORA-00257"));
+    }
+
+    @Test
+    void shouldReturnPartialFailureWhenAllClientsHaveWarnings() throws Exception {
+        createFullClient("hosp-006", true, "1002");
+        // Delete the status node to cause a read warning
+        curatorClient.delete().forPath("/bsoft-cdc/clients/hosp-006/status");
+        // Delete the ip node too
+        curatorClient.delete().forPath("/bsoft-cdc/clients/hosp-006/ip");
+
+        ZooKeeperClientMonitorResponse resp = service.getClients();
+        ZooKeeperClientVO c = resp.getClients().get(0);
+
+        assertTrue(c.getOnline());
+        assertEquals("PARTIAL", c.getReadStatus());
+        assertTrue(c.getWarnings() != null && !c.getWarnings().isEmpty());
     }
 
     private void createFullClient(String name, boolean online, String statusCode) throws Exception {

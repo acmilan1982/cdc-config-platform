@@ -33,15 +33,15 @@
       {
         "clientName": "hosp-006",
         "clientPath": "/bsoft-cdc/clients/hosp-006",
-        "online": false,
+        "online": true,
         "ip": "10.16.18.86:10003",
         "statusCode": "1002",
         "statusMessage": "进程运行正常",
         "detailInfo": "everything under control",
         "updateTime": "2026-07-17 16:29:38",
-        "pid": "--",
-        "instanceId": "--",
-        "startTime": "--",
+        "pid": "19584",
+        "instanceId": "40833a77-ee6f-43b7-a302-0edcdae476ff",
+        "startTime": "2026-07-17 16:29:12",
         "readStatus": "OK",
         "warnings": null,
         "jobs": [
@@ -68,6 +68,22 @@
             "warnings": null
           }
         ]
+      },
+      {
+        "clientName": "hosp-007",
+        "clientPath": "/bsoft-cdc/clients/hosp-007",
+        "online": false,
+        "ip": "10.16.18.86:10003",
+        "statusCode": "--",
+        "statusMessage": "未运行",
+        "detailInfo": "java.sql.SQLException: ORA-00257: Archiver error\n",
+        "updateTime": "2026-07-17 16:23:16",
+        "pid": "--",
+        "instanceId": "--",
+        "startTime": "--",
+        "readStatus": "OK",
+        "warnings": null,
+        "jobs": []
       }
     ]
   }
@@ -92,10 +108,10 @@
 |------|------|------|
 | clientName | string | 客户端名称（ZK 子节点名） |
 | clientPath | string | 完整 ZK 路径 |
-| online | boolean | 在线状态（唯一依据 alive 临时节点是否存在） |
+| online | boolean\|null | 在线状态：alive 存在=true, 不存在=false, 检查失败=null |
 | ip | string\|null | IP:端口 |
-| statusCode | string\|null | status.code 当前值，不映射枚举 |
-| statusMessage | string\|null | status.description |
+| statusCode | string\|null | 当前状态码：alive 存在时返回持久化 status.code，alive 不存在时返回 "--" |
+| statusMessage | string\|null | 当前状态描述：alive 存在时返回 status.description，alive 不存在时返回 "未运行"，alive 读取失败时返回 "状态未知" |
 | detailInfo | string\|null | 完整 detailInfo，保留换行 |
 | updateTime | string\|null | status.updateTime |
 | pid | string | 在线时展示实际值，离线时展示 "--" |
@@ -140,24 +156,24 @@
 
 ## 业务规则
 
-### 在线规则
+### 统一当前运行状态规则
+
+客户端和 job 的当前运行状态均以各自 `alive` 临时节点是否存在为准。
+
+| 节点 | alive 存在 | alive 不存在 | alive 读取失败 |
+|------|-----------|-------------|--------------|
+| 客户端 | online=true, statusCode=status.code, statusMessage=status.description | online=false, statusCode="--", statusMessage="未运行" | online=null, statusCode="--", statusMessage="状态已知" |
+| job | running=true, statusCode=status.code, statusMessage=status.description | running=false, statusCode="--", statusMessage="未运行" | running=null, statusCode="--", statusMessage="状态已知" |
+
+统一原则：
 
 ```
-alive 临时节点存在 = 在线
-alive 临时节点不存在 = 离线
+alive 表示当前是否运行；
+status 只表示最后一次上报状态；
+只有 alive 存在时，status 才能作为当前状态展示。
+alive 节点值为 {}，不解析其内容，仅判断节点是否存在。
 ```
 
-不依赖 alive 的 mtime、updateTime、status.code 或 jobs 是否存在。
-
-### Job 当前运行状态规则
-
-```
-job alive 临时节点存在 → running=true, statusCode=持久化 status.code, statusMessage=持久化 status.description
-job alive 临时节点不存在 → running=false, statusCode="--", statusMessage="未运行"
-job alive 读取失败 → running=null 或不返回, statusCode="--", statusMessage="状态未知"
-```
-
-- job alive 节点值为 `{}`，不解析其内容，仅判断节点是否存在
 - 持久化 status 仅代表最后一次上报状态，不得解释为当前运行状态
 - alive 不存在时不产生 warning，不设置 partialFailure
 - detailInfo 和 SCN 在 alive 不存在时仍保留最后一次值

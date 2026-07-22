@@ -67,29 +67,26 @@ signals 节点（项目负责人确认已废弃）
 
 ---
 
-## 4. 在线判断规则（已确认）
+## 4. 统一当前运行状态规则（已确认）
+
+客户端和 job 的当前运行状态均以各自 `alive` 临时节点是否存在为准：
 
 ```text
-客户端在线 = /bsoft-cdc/clients/{client}/alive 临时节点存在
-客户端离线 = /bsoft-cdc/clients/{client}/alive 临时节点不存在
+alive 表示当前是否运行；
+status 只表示最后一次上报状态；
+只有 alive 存在时，status 才能作为当前状态展示。
 ```
 
-- alive 依赖 ZK 临时节点和会话生命周期，是唯一可靠判定依据。
-- 不使用 alive 的 updateTime、mtime、status.code 或 jobs 是否存在来判断在线状态。
-- status.code 仅反映应用层状态，不替代在线判断。
+| 节点 | alive 存在 | alive 不存在 | alive 读取失败 |
+|------|-----------|-------------|--------------|
+| 客户端 | online=true，状态码/状态描述使用持久化值 | online=false，状态码 `--`，描述 "未运行" | online=null，状态码 `--`，描述 "状态已知" |
+| job | running=true，状态码/状态描述使用持久化值 | running=false，状态码 `--`，描述 "未运行" | running=null，状态码 `--`，描述 "状态已知" |
 
-### 4.1 Job 当前运行状态判断规则
-
-```text
-job 当前运行状态以 /bsoft-cdc/clients/{client}/jobs/{job}/alive 临时节点是否存在为准
-```
-
-- job alive 节点值为 `{}`，不解析其内容，仅判断节点是否存在
-- alive 存在 → 状态码/状态描述使用持久化 status.code / status.description
-- alive 不存在 → 状态码展示 `--`，状态描述展示 "未运行"
-- alive 读取失败 → 状态码展示 `--`，状态描述展示 "状态未知"
+- alive 节点值为 `{}`，不解析其内容，仅判断节点是否存在
+- alive 依赖 ZK 临时节点和会话生命周期，是唯一可靠判定依据
 - 持久化 status 仅代表最后一次上报状态，不得解释为当前运行状态
-- detailInfo 和 SCN 在 alive 不存在时仍保留最后一次值，不作为当前状态判断依据
+- alive 不存在时不产生 warning，不设置 partialFailure
+- detailInfo 和 SCN 在 alive 不存在时仍保留最后一次值
 
 ---
 
@@ -106,8 +103,8 @@ job 当前运行状态以 /bsoft-cdc/clients/{client}/jobs/{job}/alive 临时节
 | 1 | 客户端名称 | clients/{client} 节点名 | string | 直接展示，粗体 |
 | 2 | 在线状态 | alive 节点是否存在 | boolean | 圆点 + "在线"/"离线" 文字 + 卡片左侧色条 |
 | 3 | IP 地址 | ip → ip | string | 直接展示 |
-| 4 | 状态码 | status → code | string | 直接展示当前值，不映射枚举 |
-| 5 | 状态描述 | status → description | string | 直接展示 |
+| 4 | 状态码 | status → code | string | alive 存在时展示实际值，不存在时展示 `--` |
+| 5 | 状态描述 | status → description | string | alive 存在时展示实际值，不存在时展示 "未运行" |
 | 6 | 详细信息 | status → detailInfo | string（多行） | 等宽字体完整展示，保留换行，6 行固定高度，支持复制 |
 | 7 | 更新时间 | status → updateTime | datetime | 直接展示 |
 | 8 | PID | alive → pid | string | 在线时展示实际值，离线时展示 `--` |

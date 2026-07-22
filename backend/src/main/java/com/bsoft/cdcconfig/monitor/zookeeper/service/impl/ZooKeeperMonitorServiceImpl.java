@@ -84,23 +84,48 @@ public class ZooKeeperMonitorServiceImpl implements ZooKeeperMonitorService {
         vo.setClientName(clientName);
         vo.setClientPath(clientPath);
 
-        // Online status: based solely on alive ephemeral node existence
-        boolean online = zkClient.isAlive(clientName);
-        vo.setOnline(online);
+        // Check client alive (ephemeral node) to determine current runtime state
+        boolean aliveExists;
+        boolean aliveCheckFailed = false;
+        try {
+            aliveExists = zkClient.nodeExists(clientPath + "/alive");
+        } catch (Exception e) {
+            log.warn("Failed to check client alive for {}", clientName, e);
+            aliveExists = false;
+            aliveCheckFailed = true;
+        }
+
+        if (aliveCheckFailed) {
+            vo.setOnline(null);
+        } else if (!aliveExists) {
+            vo.setOnline(false);
+        } else {
+            vo.setOnline(true);
+        }
 
         // IP node
         readIpNode(clientName, vo);
 
-        // Status node
+        // Status node (persisted) — detailInfo and updateTime retained regardless of alive
         readStatusNode(clientName, vo);
 
+        // Override status code/message for non-running client
+        if (!aliveExists) {
+            vo.setStatusCode("--");
+            vo.setStatusMessage(aliveCheckFailed ? "状态未知" : "未运行");
+        }
+
         // Alive data (pid, instanceId, startTime) — only when online
-        if (online) {
+        if (aliveExists && !aliveCheckFailed) {
             readAliveNode(clientName, vo);
         } else {
             vo.setPid("--");
             vo.setInstanceId("--");
             vo.setStartTime("--");
+        }
+
+        if (aliveCheckFailed) {
+            vo.addWarning("client alive 检查失败");
         }
 
         // Jobs
