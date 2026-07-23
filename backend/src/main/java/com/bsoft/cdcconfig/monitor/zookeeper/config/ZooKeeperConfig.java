@@ -15,8 +15,8 @@ public class ZooKeeperConfig {
 
     private String connectString = "192.168.174.51:2181";
     private String rootPath = "/bsoft-cdc";
-    private int sessionTimeoutMs = 15000;
-    private int connectionTimeoutMs = 5000;
+    private int sessionTimeoutMs = 30000;
+    private int connectionTimeoutMs = 15000;
 
     @Bean(initMethod = "start", destroyMethod = "close")
     public CuratorFramework curatorFramework() {
