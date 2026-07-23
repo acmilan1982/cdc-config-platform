@@ -251,6 +251,50 @@ status 只表示最后一次上报状态；
 | SCN 为空（快照阶段） | **留空**，不展示 `0`、`--`、`暂无`、`未知` 等占位文本 |
 | SCN 时间 | SCN 为空时同样留空 |
 
+### 9.1 SCN 长时间未更新告警（ZK_MONITOR_ALERT_001）
+
+**告警判定：** 后端使用服务器时间统一计算，前端不自行判断。
+
+仅在以下条件**全部**满足时告警：
+
+```text
+任务 alive 节点存在
+AND
+SCN 更新时间有效且可解析
+AND
+当前服务器时间 - SCN 更新时间 > 配置阈值
+```
+
+边界规则：`elapsed > threshold` 告警，`elapsed == threshold` 不告警。
+
+以下场景一律不告警：alive 不存在、alive 读取失败、SCN 更新时间为空/无法解析、更新时间晚于服务器时间。
+
+**配置项：**
+
+```yaml
+cdc:
+  monitor:
+    scn-stale-threshold-hours: ${CDC_MONITOR_SCN_STALE_THRESHOLD_HOURS:24}
+```
+
+默认阈值 24 小时，支持环境变量覆盖，值必须 >= 1。
+
+**后端返回字段（采集任务对象新增）：**
+
+| 字段 | 类型 | 说明 |
+|------|------|------|
+| scnStale | Boolean | 是否超过阈值 |
+| scnStaleThresholdHours | Long | 当前生效阈值 |
+| scnStaleDurationSeconds | Long | 距离最后更新时间的秒数 |
+
+**前端展示：**
+
+- `scnStale === true` 时，SCN 更新时间文字变为红色（`--el-color-danger`），柔和透明度脉冲闪烁（1.8s 周期）
+- `prefers-reduced-motion` 下停止闪烁但保留红色
+- Tooltip 动态显示：告警提示、阈值、最后更新时间、已持续时间（天/小时/分钟格式化）
+- 不新增图标、表格列、顶部统计
+- 不影响现有布局和列宽
+
 ---
 
 ## 10. ZK 路径展示规格（已确认）

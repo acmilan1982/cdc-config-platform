@@ -14,6 +14,9 @@ public class ZooKeeperJobVO {
     private String detailInfo;
     private String scn;
     private String scnUpdateTime;
+    private Boolean scnStale;
+    private Long scnStaleThresholdHours;
+    private Long scnStaleDurationSeconds;
     private String readStatus;
     private List<String> warnings;
 
@@ -87,6 +90,30 @@ public class ZooKeeperJobVO {
 
     public void setScnUpdateTime(String scnUpdateTime) {
         this.scnUpdateTime = scnUpdateTime;
+    }
+
+    public Boolean getScnStale() {
+        return scnStale;
+    }
+
+    public void setScnStale(Boolean scnStale) {
+        this.scnStale = scnStale;
+    }
+
+    public Long getScnStaleThresholdHours() {
+        return scnStaleThresholdHours;
+    }
+
+    public void setScnStaleThresholdHours(Long scnStaleThresholdHours) {
+        this.scnStaleThresholdHours = scnStaleThresholdHours;
+    }
+
+    public Long getScnStaleDurationSeconds() {
+        return scnStaleDurationSeconds;
+    }
+
+    public void setScnStaleDurationSeconds(Long scnStaleDurationSeconds) {
+        this.scnStaleDurationSeconds = scnStaleDurationSeconds;
     }
 
     public String getReadStatus() {

@@ -2,11 +2,15 @@ export interface ZooKeeperJobVO {
   jobName: string
   jobPath: string
   displayName: string
+  running: boolean | null
   statusCode: string | null
   statusMessage: string | null
   detailInfo: string | null
   scn: string | null
   scnUpdateTime: string | null
+  scnStale: boolean | null
+  scnStaleThresholdHours: number | null
+  scnStaleDurationSeconds: number | null
   readStatus: string
   warnings: string[] | null
 }

@@ -1,6 +1,7 @@
 package com.bsoft.cdcconfig.monitor.zookeeper.service.impl;
 
 import com.bsoft.cdcconfig.monitor.zookeeper.client.ZooKeeperReadOnlyClient;
+import com.bsoft.cdcconfig.monitor.zookeeper.config.MonitorConfig;
 import com.bsoft.cdcconfig.monitor.zookeeper.parser.NodeDataParser;
 import com.bsoft.cdcconfig.monitor.zookeeper.service.ZooKeeperMonitorService;
 import com.bsoft.cdcconfig.monitor.zookeeper.vo.ZooKeeperClientMonitorResponse;
@@ -11,6 +12,10 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Service;
 
+import java.time.Duration;
+import java.time.LocalDateTime;
+import java.time.format.DateTimeFormatter;
+import java.time.format.DateTimeParseException;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.Comparator;
@@ -21,12 +26,17 @@ public class ZooKeeperMonitorServiceImpl implements ZooKeeperMonitorService {
 
     private static final Logger log = LoggerFactory.getLogger(ZooKeeperMonitorServiceImpl.class);
 
+    private static final DateTimeFormatter SCN_TIME_FORMAT = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss");
+
     private final ZooKeeperReadOnlyClient zkClient;
     private final NodeDataParser parser;
+    private final MonitorConfig monitorConfig;
 
-    public ZooKeeperMonitorServiceImpl(ZooKeeperReadOnlyClient zkClient, NodeDataParser parser) {
+    public ZooKeeperMonitorServiceImpl(ZooKeeperReadOnlyClient zkClient, NodeDataParser parser,
+                                       MonitorConfig monitorConfig) {
         this.zkClient = zkClient;
         this.parser = parser;
+        this.monitorConfig = monitorConfig;
     }
 
     @Override
@@ -314,8 +324,51 @@ public class ZooKeeperMonitorServiceImpl implements ZooKeeperMonitorService {
             vo.addWarning("SCN 读取失败");
         }
 
+        // SCN stale detection — only for jobs with alive present and valid SCN update time
+        evaluateScnStale(vo, aliveExists, aliveCheckFailed);
+
         boolean hasWarnings = vo.getWarnings() != null && !vo.getWarnings().isEmpty();
         vo.setReadStatus(hasWarnings ? "PARTIAL" : "OK");
         return vo;
+    }
+
+    private void evaluateScnStale(ZooKeeperJobVO vo, boolean aliveExists, boolean aliveCheckFailed) {
+        long thresholdHours = monitorConfig.getScnStaleThresholdHours();
+        vo.setScnStaleThresholdHours(thresholdHours);
+
+        // Only evaluate when job is alive and check didn't fail
+        if (!aliveExists || aliveCheckFailed) {
+            return;
+        }
+
+        String scnUpdateTime = vo.getScnUpdateTime();
+        if (scnUpdateTime == null || scnUpdateTime.isEmpty()) {
+            return;
+        }
+
+        LocalDateTime scnTime;
+        try {
+            scnTime = LocalDateTime.parse(scnUpdateTime, SCN_TIME_FORMAT);
+        } catch (DateTimeParseException e) {
+            log.debug("SCN update time parse failed for job {}/{}: {}", vo.getJobName(), vo.getJobPath(), scnUpdateTime);
+            return;
+        }
+
+        LocalDateTime now = LocalDateTime.now();
+        Duration duration = Duration.between(scnTime, now);
+        long elapsedSeconds = duration.getSeconds();
+        vo.setScnStaleDurationSeconds(elapsedSeconds);
+
+        // Future time — don't alert
+        if (elapsedSeconds < 0) {
+            log.debug("SCN update time is in the future for job {}: {}", vo.getJobName(), scnUpdateTime);
+            return;
+        }
+
+        long thresholdSeconds = thresholdHours * 3600;
+        // Strictly greater than threshold
+        if (elapsedSeconds > thresholdSeconds) {
+            vo.setScnStale(true);
+        }
     }
 }

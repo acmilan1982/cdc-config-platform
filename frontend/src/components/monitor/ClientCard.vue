@@ -119,7 +119,16 @@
           </el-table-column>
           <el-table-column label="SCN 更新时间" width="170">
             <template #default="{ row }">
-              <span class="scn-time-value">{{ row.scnUpdateTime || '' }}</span>
+              <el-tooltip v-if="row.scnStale" placement="top" :show-after="500">
+                <template #content>
+                  <div>SCN长时间未更新</div>
+                  <div>告警阈值：{{ row.scnStaleThresholdHours }}小时</div>
+                  <div>最后更新时间：{{ row.scnUpdateTime }}</div>
+                  <div>已持续：{{ formatDuration(row.scnStaleDurationSeconds) }}</div>
+                </template>
+                <span class="scn-time-value scn-time-stale">{{ row.scnUpdateTime || '' }}</span>
+              </el-tooltip>
+              <span v-else class="scn-time-value">{{ row.scnUpdateTime || '' }}</span>
             </template>
           </el-table-column>
         </el-table>
@@ -151,6 +160,20 @@ function copyDetailInfo() {
       ElMessage.error('复制失败')
     })
   }
+}
+
+function formatDuration(totalSeconds: number | null): string {
+  if (totalSeconds == null || totalSeconds < 0) return ''
+  const days = Math.floor(totalSeconds / 86400)
+  const hours = Math.floor((totalSeconds % 86400) / 3600)
+  const minutes = Math.floor((totalSeconds % 3600) / 60)
+  if (days >= 1) {
+    return `${days}天${hours}小时`
+  }
+  if (hours >= 1) {
+    return `${hours}小时${minutes}分钟`
+  }
+  return `${minutes}分钟`
 }
 </script>
 
@@ -444,6 +467,22 @@ function copyDetailInfo() {
 /* SCN time: no wrap */
 .scn-time-value {
   white-space: nowrap;
+}
+
+/* SCN stale alert: red pulsing */
+.scn-time-stale {
+  color: var(--el-color-danger, #F56C6C);
+  font-weight: 600;
+  animation: scn-time-stale-pulse 1.8s ease-in-out infinite;
+}
+@keyframes scn-time-stale-pulse {
+  0%, 100% { opacity: 1; }
+  50% { opacity: 0.45; }
+}
+@media (prefers-reduced-motion: reduce) {
+  .scn-time-stale {
+    animation: none;
+  }
 }
 
 /* Small info icon — muted */

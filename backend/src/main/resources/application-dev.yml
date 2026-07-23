@@ -13,6 +13,8 @@ spring:
       max-lifetime: 600000
 
 cdc:
+  monitor:
+    scn-stale-threshold-hours: ${CDC_MONITOR_SCN_STALE_THRESHOLD_HOURS:24}
   zookeeper:
     connect-string: ${CDC_ZK_CONNECT:192.168.174.51:2181}
     root-path: ${CDC_ZK_ROOT:/bsoft-cdc}

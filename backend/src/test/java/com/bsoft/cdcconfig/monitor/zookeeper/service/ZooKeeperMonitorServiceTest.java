@@ -1,6 +1,7 @@
 package com.bsoft.cdcconfig.monitor.zookeeper.service;
 
 import com.bsoft.cdcconfig.monitor.zookeeper.client.ZooKeeperReadOnlyClient;
+import com.bsoft.cdcconfig.monitor.zookeeper.config.MonitorConfig;
 import com.bsoft.cdcconfig.monitor.zookeeper.config.ZooKeeperConfig;
 import com.bsoft.cdcconfig.monitor.zookeeper.parser.NodeDataParser;
 import com.bsoft.cdcconfig.monitor.zookeeper.service.impl.ZooKeeperMonitorServiceImpl;
@@ -44,7 +45,9 @@ class ZooKeeperMonitorServiceTest {
 
         ZooKeeperReadOnlyClient zkReadOnlyClient = new ZooKeeperReadOnlyClient(curatorClient, config);
         NodeDataParser parser = new NodeDataParser();
-        service = new ZooKeeperMonitorServiceImpl(zkReadOnlyClient, parser);
+        MonitorConfig monitorConfig = new MonitorConfig();
+        monitorConfig.setScnStaleThresholdHours(24);
+        service = new ZooKeeperMonitorServiceImpl(zkReadOnlyClient, parser, monitorConfig);
     }
 
     @AfterEach
@@ -833,6 +836,138 @@ class ZooKeeperMonitorServiceTest {
         assertTrue(c.getOnline());
         assertEquals("PARTIAL", c.getReadStatus());
         assertTrue(c.getWarnings() != null && !c.getWarnings().isEmpty());
+    }
+
+    // --- SCN stale detection tests ---
+
+    @Test
+    void shouldSetScnStaleTrueWhenAliveExistsAndOverThreshold() throws Exception {
+        createFullClient("hosp-006", true, "1002");
+        // SCN update time is 7 days ago — definitely over 24h threshold
+        createJob("hosp-006", "stale-job", "1101", "31120290432", "2026-07-16 16:00:04", true);
+
+        ZooKeeperClientMonitorResponse resp = service.getClients();
+        ZooKeeperJobVO job = resp.getClients().get(0).getJobs().get(0);
+
+        assertTrue(job.getRunning());
+        assertTrue(job.getScnStale());
+        assertEquals(Long.valueOf(24), job.getScnStaleThresholdHours());
+        assertTrue(job.getScnStaleDurationSeconds() > 24 * 3600);
+    }
+
+    @Test
+    void shouldNotSetScnStaleWhenAliveExistsAndUnderThreshold() throws Exception {
+        createFullClient("hosp-006", true, "1002");
+        String recentTime = java.time.LocalDateTime.now().minusHours(1)
+                .format(java.time.format.DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss"));
+        createJobWithScnTime("hosp-006", "recent-job", "1101", "31120290432", recentTime, true);
+
+        ZooKeeperClientMonitorResponse resp = service.getClients();
+        ZooKeeperJobVO job = resp.getClients().get(0).getJobs().get(0);
+
+        assertTrue(job.getRunning());
+        assertNull(job.getScnStale());
+        assertTrue(job.getScnStaleDurationSeconds() < 24 * 3600);
+    }
+
+    @Test
+    void shouldNotSetScnStaleWhenExactlyAtThreshold() throws Exception {
+        createFullClient("hosp-006", true, "1002");
+        String exactTime = java.time.LocalDateTime.now().minusHours(24)
+                .format(java.time.format.DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss"));
+        createJobWithScnTime("hosp-006", "exact-job", "1101", "31120290432", exactTime, true);
+
+        ZooKeeperClientMonitorResponse resp = service.getClients();
+        ZooKeeperJobVO job = resp.getClients().get(0).getJobs().get(0);
+
+        assertNull(job.getScnStale());
+    }
+
+    @Test
+    void shouldNotSetScnStaleWhenAliveMissing() throws Exception {
+        createFullClient("hosp-006", true, "1002");
+        // SCN update time is old but job is not running
+        createJob("hosp-006", "stopped-job", "1101", "31120290432", "2026-07-16 16:00:04", false);
+
+        ZooKeeperClientMonitorResponse resp = service.getClients();
+        ZooKeeperJobVO job = resp.getClients().get(0).getJobs().get(0);
+
+        assertFalse(job.getRunning());
+        assertNull(job.getScnStale());
+    }
+
+    @Test
+    void shouldNotSetScnStaleWhenScnUpdateTimeIsNull() throws Exception {
+        createFullClient("hosp-006", true, "1002");
+        createJob("hosp-006", "no-scn-job", "1101", null, null, true);
+
+        ZooKeeperClientMonitorResponse resp = service.getClients();
+        ZooKeeperJobVO job = resp.getClients().get(0).getJobs().get(0);
+
+        assertNull(job.getScnStale());
+        assertNull(job.getScnUpdateTime());
+    }
+
+    @Test
+    void shouldNotSetScnStaleWhenScnUpdateTimeIsInFuture() throws Exception {
+        createFullClient("hosp-006", true, "1002");
+        String futureTime = java.time.LocalDateTime.now().plusDays(1)
+                .format(java.time.format.DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss"));
+        createJobWithScnTime("hosp-006", "future-job", "1101", "31120290432", futureTime, true);
+
+        ZooKeeperClientMonitorResponse resp = service.getClients();
+        ZooKeeperJobVO job = resp.getClients().get(0).getJobs().get(0);
+
+        assertNull(job.getScnStale());
+    }
+
+    @Test
+    void shouldReturnThresholdValue() throws Exception {
+        createFullClient("hosp-006", true, "1002");
+        createJob("hosp-006", "my-job", "1101", null, null, true);
+
+        ZooKeeperClientMonitorResponse resp = service.getClients();
+        ZooKeeperJobVO job = resp.getClients().get(0).getJobs().get(0);
+
+        assertEquals(Long.valueOf(24), job.getScnStaleThresholdHours());
+    }
+
+    @Test
+    void shouldSetScnStaleDurationWhenAliveExistsAndScnHasTime() throws Exception {
+        createFullClient("hosp-006", true, "1002");
+        String pastTime = java.time.LocalDateTime.now().minusHours(5)
+                .format(java.time.format.DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss"));
+        createJobWithScnTime("hosp-006", "duration-job", "1101", "31120290432", pastTime, true);
+
+        ZooKeeperClientMonitorResponse resp = service.getClients();
+        ZooKeeperJobVO job = resp.getClients().get(0).getJobs().get(0);
+
+        assertNotNull(job.getScnStaleDurationSeconds());
+        // ~5 hours = ~18000 seconds, allow margin
+        assertTrue(job.getScnStaleDurationSeconds() > 4 * 3600);
+        assertTrue(job.getScnStaleDurationSeconds() < 6 * 3600);
+    }
+
+    private void createJobWithScnTime(String clientName, String jobName, String statusCode,
+                                       String scnValue, String scnUpdateTime, boolean createAlive) throws Exception {
+        String jobPath = "/bsoft-cdc/clients/" + clientName + "/jobs/" + jobName;
+        curatorClient.create().creatingParentsIfNeeded().forPath(jobPath);
+
+        String statusJson = "{\"code\":\"" + statusCode + "\",\"description\":\"运行中\","
+                + "\"detailInfo\":\"everything under control\","
+                + "\"updateTime\":\"2026-07-17 16:29:38\"}";
+        createJsonNode(jobPath + "/status", statusJson);
+
+        if (scnValue != null) {
+            String scnJson = "{\"scn\":\"" + scnValue + "\",\"updateTime\":\"" + scnUpdateTime + "\"}";
+            createJsonNode(jobPath + "/scn", scnJson);
+        } else {
+            createJsonNode(jobPath + "/scn", "{}");
+        }
+
+        if (createAlive) {
+            createEphemeralNode(jobPath + "/alive", "{}");
+        }
     }
 
     private void createFullClient(String name, boolean online, String statusCode) throws Exception {
