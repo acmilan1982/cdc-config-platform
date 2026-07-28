@@ -1,0 +1,365 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=1920, initial-scale=1.0">
+<title>Job 运行与故障恢复 - 主页面</title>
+<style>
+  *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+  body {
+    font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, "PingFang SC", "Microsoft YaHei", sans-serif;
+    background: #f0f2f5; color: #303133; font-size: 14px;
+    display: flex; height: 100vh; overflow: hidden;
+  }
+
+  .sidebar {
+    width: 220px; min-width: 220px; height: 100vh;
+    background: #304156; color: #bfcbd9;
+    display: flex; flex-direction: column; position: relative; z-index: 100;
+  }
+  .sidebar-brand {
+    height: 56px; display: flex; align-items: center; justify-content: center;
+    border-bottom: 1px solid rgba(255,255,255,0.08);
+    font-size: 16px; font-weight: 600; color: #fff; letter-spacing: 1px;
+  }
+  .sidebar-menu { flex: 1; overflow-y: auto; padding: 8px 0; }
+  .menu-group-title { color: rgba(255,255,255,0.4); font-size: 12px; padding: 12px 20px 4px; }
+  .menu-item {
+    display: flex; align-items: center; gap: 10px; padding: 10px 20px;
+    cursor: pointer; transition: background 0.2s; font-size: 14px; color: #bfcbd9;
+  }
+  .menu-item:hover { background: rgba(255,255,255,0.05); color: #fff; }
+  .menu-item.active { color: #409eff; background: rgba(64,158,255,0.1); }
+
+  .main-area { flex: 1; display: flex; flex-direction: column; min-width: 0; }
+  .header {
+    height: 48px; min-height: 48px; background: #fff;
+    border-bottom: 1px solid #e4e7ed; display: flex; align-items: center; padding: 0 16px;
+  }
+  .header-breadcrumb { font-size: 14px; color: #606266; display: flex; align-items: center; gap: 8px; }
+  .header-breadcrumb span { color: #909399; }
+  .header-breadcrumb span:last-child { color: #303133; }
+
+  .content { flex: 1; padding: 16px 20px; overflow-y: auto; background: #f0f2f5; }
+  .content-card { background: #fff; border-radius: 4px; min-height: 100%; padding: 20px; }
+
+  .page-toolbar {
+    display: flex; justify-content: space-between; align-items: center;
+    padding-bottom: 16px; border-bottom: 1px solid #ebeef5; margin-bottom: 20px;
+  }
+  .toolbar-left { display: flex; align-items: center; gap: 12px; }
+  .page-title { font-size: 18px; font-weight: 600; color: #303133; }
+  .refresh-area { display: flex; align-items: center; gap: 8px; font-size: 13px; color: #909399; }
+  .refresh-select {
+    padding: 4px 8px; border: 1px solid #dcdfe6; border-radius: 4px;
+    font-size: 13px; color: #606266; background: #fff; cursor: pointer;
+  }
+  .btn {
+    display: inline-flex; align-items: center; gap: 6px; padding: 7px 14px;
+    border-radius: 4px; font-size: 13px; cursor: pointer; border: 1px solid #dcdfe6;
+    background: #fff; color: #606266; transition: all 0.2s;
+  }
+  .btn-primary { background: #409eff; border-color: #409eff; color: #fff; }
+  .btn-primary:hover { background: #66b1ff; }
+  .btn:hover { color: #409eff; border-color: #c6e2ff; background: #ecf5ff; }
+  .btn-primary:hover { color: #fff; }
+
+  /* Client Group */
+  .client-group {
+    margin-bottom: 20px; border: 1px solid #e4e7ed; border-radius: 6px;
+    background: #fff; overflow: hidden;
+  }
+  .client-header {
+    display: flex; justify-content: space-between; align-items: center;
+    padding: 12px 20px; background: #f2f3f5; border-bottom: 1px solid #ebeef5;
+    cursor: pointer; user-select: none;
+  }
+  .client-header:hover { background: #e8e9eb; }
+  .client-header-left { display: flex; align-items: center; gap: 16px; }
+  .client-id { font-weight: 600; font-size: 15px; color: #303133; }
+  .client-meta { display: flex; align-items: center; gap: 12px; font-size: 13px; color: #909399; }
+  .client-meta .count-tag {
+    display: inline-block; padding: 1px 10px; border-radius: 3px; font-size: 12px; font-weight: 500;
+  }
+  .count-tag.total { background: #f0f2f5; color: #909399; border: 1px solid #e4e7ed; }
+  .count-tag.normal { background: #f0f9eb; color: #67C23A; border: 1px solid #e1f3d8; }
+  .count-tag.abnormal { background: #fef0f0; color: #F56C6C; border: 1px solid #fde2e2; }
+  .collapse-chevron { display: inline-block; transition: transform 0.2s; color: #909399; font-size: 13px; }
+  .collapse-chevron.open { transform: rotate(90deg); }
+
+  /* Table */
+  .table-wrap { padding: 0; display: none; }
+  .table-wrap.visible { display: block; }
+  table { width: 100%; border-collapse: collapse; font-size: 13px; }
+  thead th {
+    text-align: left; padding: 10px 12px; background: #fafafa;
+    color: #909399; font-weight: 500; border-bottom: 2px solid #ebeef5; white-space: nowrap;
+  }
+  tbody td {
+    padding: 10px 12px; border-bottom: 1px solid #ebeef5; color: #606266; vertical-align: middle;
+  }
+  tbody tr:hover td { background: #f5f7fa; }
+  tbody tr:nth-child(even) td { background: #fafafa; }
+  tbody tr:nth-child(even):hover td { background: #f5f7fa; }
+
+  /* Status tags */
+  .status-tag {
+    display: inline-block; padding: 2px 10px; border-radius: 3px; font-size: 12px; font-weight: 500;
+  }
+  .status-tag.normal { background: #f0f9eb; color: #67C23A; border: 1px solid #e1f3d8; }
+  .status-tag.recovering { background: #fef0f0; color: #F56C6C; border: 1px solid #fde2e2; }
+
+  /* Job ID */
+  .job-id { font-family: Consolas, "Courier New", monospace; font-size: 12px; color: #606266; }
+  .job-id-null { color: #c0c4cc; }
+  .time-null { color: #c0c4cc; }
+  .copy-icon {
+    cursor: pointer; color: #909399; margin-left: 4px; font-size: 13px;
+    display: inline-flex; align-items: center;
+  }
+  .copy-icon:hover { color: #409eff; }
+
+  /* Tooltip */
+  .has-tooltip { cursor: help; border-bottom: 1px dotted #909399; }
+
+  .btn-text { background: none; border: none; color: #409eff; cursor: pointer; font-size: 13px; padding: 0; }
+  .btn-text:hover { color: #66b1ff; }
+</style>
+</head>
+<body>
+
+<!-- Sidebar -->
+<div class="sidebar">
+  <div class="sidebar-brand">CDC 配置管理平台</div>
+  <div class="sidebar-menu">
+    <div class="menu-group-title">配置管理</div>
+    <div class="menu-item">数据源管理</div>
+    <div class="menu-item">客户端配置</div>
+    <div class="menu-item">数据订阅</div>
+    <div class="menu-item">服务端配置</div>
+    <div class="menu-group-title" style="margin-top:4px">运行监控</div>
+    <div class="menu-item">CDC 节点状态</div>
+    <div class="menu-item">数据源运行状态</div>
+    <div class="menu-item">Topic 偏移量</div>
+    <div class="menu-item">日志查询</div>
+    <div class="menu-item active">Job 运行与故障恢复</div>
+  </div>
+</div>
+
+<!-- Main -->
+<div class="main-area">
+  <div class="header">
+    <div class="header-breadcrumb">
+      <span>运行监控</span> <span style="color:#c0c4cc">/</span>
+      <span>Job 运行与故障恢复</span>
+    </div>
+  </div>
+
+  <div class="content">
+    <div class="content-card">
+
+      <!-- Page Toolbar -->
+      <div class="page-toolbar">
+        <div class="toolbar-left">
+          <h2 class="page-title">Job 运行与故障恢复</h2>
+        </div>
+        <div class="refresh-area">
+          <span>最近刷新: <strong style="color:#606266">2026-07-28 10:30:00</strong></span>
+          <span style="margin-left:8px">自动刷新:</span>
+          <select class="refresh-select">
+            <option selected>1 分钟</option>
+            <option>60 分钟</option>
+            <option>360 分钟</option>
+          </select>
+          <button class="btn btn-primary" style="margin-left:4px">
+            <span>&#x21bb;</span> 刷新
+          </button>
+        </div>
+      </div>
+
+      <!-- Client Group 1: hosp-006 - 异常=0, 默认折叠 -->
+      <div class="client-group">
+        <div class="client-header" onclick="toggleClient(this)">
+          <div class="client-header-left">
+            <span class="collapse-chevron">&#x25b6;</span>
+            <span class="client-id">hosp-006</span>
+            <div class="client-meta">
+              <span class="count-tag total">Job 总数 1</span>
+              <span class="count-tag normal">正常 1</span>
+              <span class="count-tag abnormal">异常 0</span>
+              <span style="color:#909399;font-size:12px">最近更新: 2026-07-27 19:23:44</span>
+            </div>
+          </div>
+        </div>
+        <div class="table-wrap">
+          <table>
+            <thead>
+              <tr>
+                <th style="width:14%">数据源 ID</th>
+                <th style="width:16%">数据源名称</th>
+                <th style="width:9%">Job 当前状态</th>
+                <th style="width:20%">当前物理 Job ID</th>
+                <th style="width:11%">最近失败时间</th>
+                <th style="width:11%">最近恢复时间</th>
+                <th style="width:9%">本次重启次数</th>
+                <th style="width:10%">操作</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr>
+                <td><span class="job-id">my-19c</span></td>
+                <td>oracle-业务库33</td>
+                <td><span class="status-tag normal">正常</span></td>
+                <td>
+                  <span class="job-id" title="1d45cf72cad04153b9c81409038561d0">1d45cf72cad04153...</span>
+                  <span class="copy-icon" title="复制完整 Job ID">&#x2398;</span>
+                </td>
+                <td>2026-07-27 19:17:24</td>
+                <td>2026-07-27 19:23:44</td>
+                <td style="text-align:center">1</td>
+                <td><button class="btn-text">查看</button></td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+      </div>
+
+      <!-- Client Group 2: hosp-002 - 异常=1, 默认展开 -->
+      <div class="client-group">
+        <div class="client-header" onclick="toggleClient(this)">
+          <div class="client-header-left">
+            <span class="collapse-chevron open">&#x25b6;</span>
+            <span class="client-id">hosp-002</span>
+            <div class="client-meta">
+              <span class="count-tag total">Job 总数 3</span>
+              <span class="count-tag normal">正常 2</span>
+              <span class="count-tag abnormal">异常 1</span>
+              <span style="color:#909399;font-size:12px">最近更新: 2026-07-28 09:47:12</span>
+            </div>
+          </div>
+        </div>
+        <div class="table-wrap visible">
+          <table>
+            <thead>
+              <tr>
+                <th style="width:14%">数据源 ID</th>
+                <th style="width:16%">数据源名称</th>
+                <th style="width:9%">Job 当前状态</th>
+                <th style="width:20%">当前物理 Job ID</th>
+                <th style="width:11%">最近失败时间</th>
+                <th style="width:11%">最近恢复时间</th>
+                <th style="width:9%">本次重启次数</th>
+                <th style="width:10%">操作</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr>
+                <td><span class="job-id">db-his-01</span></td>
+                <td>oracle-HIS生产库</td>
+                <td><span class="status-tag recovering">恢复中</span></td>
+                <td>
+                  <span class="job-id" title="b7f84e91a3d24c6f9e12ab345678cdef">b7f84e91a3d24c6f...</span>
+                  <span class="copy-icon" title="复制完整 Job ID">&#x2398;</span>
+                </td>
+                <td>2026-07-28 09:12:05</td>
+                <td><span class="time-null">--</span></td>
+                <td style="text-align:center">2</td>
+                <td><button class="btn-text">查看</button></td>
+              </tr>
+              <tr>
+                <td><span class="job-id">db-drug-master</span></td>
+                <td>oracle-药品主库</td>
+                <td><span class="status-tag normal">正常</span></td>
+                <td>
+                  <span class="job-id" title="c8a95f02b4e35d7a0f23bc456789defa">c8a95f02b4e35d7a...</span>
+                  <span class="copy-icon" title="复制完整 Job ID">&#x2398;</span>
+                </td>
+                <td>2026-07-27 14:30:00</td>
+                <td>2026-07-27 15:45:00</td>
+                <td style="text-align:center">3</td>
+                <td><button class="btn-text">查看</button></td>
+              </tr>
+              <tr>
+                <td><span class="job-id">db-emr-archive</span></td>
+                <td>oracle-EMR归档库</td>
+                <td>
+                  <span class="status-tag normal has-tooltip" title="当前失败恢复记录中不存在未闭环故障，不代表已验证物理 Job 正在运行。">正常</span>
+                </td>
+                <td><span class="job-id job-id-null">--</span></td>
+                <td><span class="time-null">--</span></td>
+                <td><span class="time-null">--</span></td>
+                <td style="text-align:center"><span class="time-null">--</span></td>
+                <td><button class="btn-text">查看</button></td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+      </div>
+
+      <!-- Client Group 3: hosp-004 - 异常=1 (等待重启→恢复中), 默认展开 -->
+      <div class="client-group">
+        <div class="client-header" onclick="toggleClient(this)">
+          <div class="client-header-left">
+            <span class="collapse-chevron open">&#x25b6;</span>
+            <span class="client-id">hosp-004</span>
+            <div class="client-meta">
+              <span class="count-tag total">Job 总数 1</span>
+              <span class="count-tag normal">正常 0</span>
+              <span class="count-tag abnormal">异常 1</span>
+              <span style="color:#909399;font-size:12px">最近更新: 2026-07-28 10:28:33</span>
+            </div>
+          </div>
+        </div>
+        <div class="table-wrap visible">
+          <table>
+            <thead>
+              <tr>
+                <th style="width:14%">数据源 ID</th>
+                <th style="width:16%">数据源名称</th>
+                <th style="width:9%">Job 当前状态</th>
+                <th style="width:20%">当前物理 Job ID</th>
+                <th style="width:11%">最近失败时间</th>
+                <th style="width:11%">最近恢复时间</th>
+                <th style="width:9%">本次重启次数</th>
+                <th style="width:10%">操作</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr>
+                <td><span class="job-id">db-pacs-01</span></td>
+                <td>oracle-PACS主库</td>
+                <td><span class="status-tag recovering">恢复中</span></td>
+                <td>
+                  <span class="job-id" title="d9b06f13c5f46e8b1a34cd567890efab">d9b06f13c5f46e8b...</span>
+                  <span class="copy-icon" title="复制完整 Job ID">&#x2398;</span>
+                </td>
+                <td>2026-07-28 10:28:00</td>
+                <td><span class="time-null">--</span></td>
+                <td style="text-align:center">0</td>
+                <td><button class="btn-text">查看</button></td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+      </div>
+
+    </div>
+  </div>
+</div>
+
+<script>
+function toggleClient(header) {
+  var wrap = header.parentElement.querySelector('.table-wrap');
+  var chevron = header.querySelector('.collapse-chevron');
+  if (wrap.classList.contains('visible')) {
+    wrap.classList.remove('visible');
+    chevron.classList.remove('open');
+  } else {
+    wrap.classList.add('visible');
+    chevron.classList.add('open');
+  }
+}
+</script>
+
+</body>
+</html>
