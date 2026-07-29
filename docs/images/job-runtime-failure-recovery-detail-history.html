@@ -79,8 +79,9 @@
   .status-tag.abnormal { background: #fef0f0; color: #F56C6C; border: 1px solid #fde2e2; }
 
   /* Copy icon */
-  .copy-icon { cursor: pointer; color: #909399; margin-left: 4px; font-size: 13px; display: inline-flex; align-items: center; }
+  .copy-icon { cursor: pointer; color: #909399; margin-left: 4px; font-size: 13px; display: inline-flex; align-items: center; vertical-align: middle; }
   .copy-icon:hover { color: #409eff; }
+  .copy-icon svg { display: block; }
 
   /* Tabs */
   .tabs { display: flex; border-bottom: 2px solid #e4e7ed; margin-bottom: 20px; }
@@ -196,7 +197,7 @@
         </div>
         <div class="info-item">
           <div class="info-label">当前物理 Job ID</div>
-          <div class="info-value mono" title="d9b06f13c5f46e8b1a34cd567890efab">d9b06f13c5f46e8... <span class="copy-icon" title="复制完整 Job ID">&#x2398;</span></div>
+          <div class="info-value mono" title="d9b06f13c5f46e8b1a34cd567890efab">d9b06f13c5f46e8... <span class="copy-icon" title="复制完整 Job ID"><svg width="14" height="14" viewBox="0 0 14 14"><rect x="4" y="0" width="9" height="11" rx="1.2" fill="none" stroke="currentColor" stroke-width="1.1"/><path d="M1.8 3h-.5a.5.5 0 0 0-.5.5v9a.5.5 0 0 0 .5.5h7a.5.5 0 0 0 .5-.5V12" fill="none" stroke="currentColor" stroke-width="1.1"/></svg></span></div>
         </div>
         <div class="info-item">
           <div class="info-label">最近更新时间</div>
@@ -214,7 +215,9 @@
       <div class="filter-bar">
         <label>时间范围:</label>
         <select class="filter-select">
-          <option selected>最近一天</option>
+          <option>最近一天</option>
+          <option>最近一周</option>
+          <option selected>最近一个月</option>
           <option>最近一周</option>
           <option>最近一个月</option>
         </select>
