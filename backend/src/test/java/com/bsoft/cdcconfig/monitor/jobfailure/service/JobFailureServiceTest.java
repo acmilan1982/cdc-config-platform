@@ -3,7 +3,6 @@ package com.bsoft.cdcconfig.monitor.jobfailure.service;
 import com.bsoft.cdcconfig.common.exception.BusinessException;
 import com.bsoft.cdcconfig.common.page.PageResult;
 import com.bsoft.cdcconfig.monitor.jobfailure.query.HistoryQuery;
-import com.bsoft.cdcconfig.monitor.jobfailure.query.JobFailureSummaryQuery;
 import com.bsoft.cdcconfig.monitor.jobfailure.vo.ClobDetailVO;
 import com.bsoft.cdcconfig.monitor.jobfailure.vo.FaultProcessDetailVO;
 import com.bsoft.cdcconfig.monitor.jobfailure.vo.FaultProcessSummaryVO;
@@ -35,82 +34,68 @@ class JobFailureServiceTest {
     // ==================== API-1: Summary ====================
 
     @Test
-    void summaryShouldReturnResultsForAllLogicalJobs() {
-        JobFailureSummaryQuery query = new JobFailureSummaryQuery();
-        PageResult<JobFailureSummaryVO> page = jobFailureService.querySummary(query);
+    void summaryShouldReturnAllFgActiveLogicalJobs() {
+        List<JobFailureSummaryVO> list = jobFailureService.querySummary();
 
-        assertNotNull(page);
-        assertTrue(page.getTotal() >= 1);
-        List<JobFailureSummaryVO> records = page.getRecords();
-        assertFalse(records.isEmpty());
+        assertNotNull(list);
+        assertTrue(list.size() >= 2, "Should return at least 2 FG_ACTIVE=1 records");
 
         // Verify existing logical job is present
-        boolean found = records.stream()
+        boolean found = list.stream()
                 .anyMatch(r -> EXISTING_CLIENT.equals(r.getClientId())
                         && EXISTING_DS.equals(r.getDataSourceId()));
         assertTrue(found, "Should find existing logical job in summary");
     }
 
     @Test
-    void summaryShouldFilterByClientId() {
-        JobFailureSummaryQuery query = new JobFailureSummaryQuery();
-        query.setClientId(EXISTING_CLIENT);
-        PageResult<JobFailureSummaryVO> page = jobFailureService.querySummary(query);
-
-        assertNotNull(page);
-        List<JobFailureSummaryVO> records = page.getRecords();
-        for (JobFailureSummaryVO vo : records) {
-            assertEquals(EXISTING_CLIENT, vo.getClientId());
-        }
-    }
-
-    @Test
-    void summaryShouldFilterByDataSourceId() {
-        JobFailureSummaryQuery query = new JobFailureSummaryQuery();
-        query.setDataSourceId(EXISTING_DS);
-        PageResult<JobFailureSummaryVO> page = jobFailureService.querySummary(query);
-
-        assertNotNull(page);
-        List<JobFailureSummaryVO> records = page.getRecords();
-        for (JobFailureSummaryVO vo : records) {
-            assertEquals(EXISTING_DS, vo.getDataSourceId());
-        }
-    }
-
-    @Test
-    void summaryWithNonExistentClientShouldReturnEmpty() {
-        JobFailureSummaryQuery query = new JobFailureSummaryQuery();
-        query.setClientId("non-existent-client");
-        PageResult<JobFailureSummaryVO> page = jobFailureService.querySummary(query);
-
-        assertNotNull(page);
-        assertEquals(0, page.getTotal());
-        assertTrue(page.getRecords().isEmpty());
-    }
-
-    @Test
     void summaryShouldHaveCorrectFieldsForExistingJob() {
-        JobFailureSummaryQuery query = new JobFailureSummaryQuery();
-        query.setClientId(EXISTING_CLIENT);
-        query.setDataSourceId(EXISTING_DS);
-        PageResult<JobFailureSummaryVO> page = jobFailureService.querySummary(query);
+        List<JobFailureSummaryVO> list = jobFailureService.querySummary();
 
-        assertEquals(1, page.getTotal());
-        JobFailureSummaryVO vo = page.getRecords().get(0);
+        JobFailureSummaryVO vo = list.stream()
+                .filter(r -> EXISTING_CLIENT.equals(r.getClientId())
+                        && EXISTING_DS.equals(r.getDataSourceId()))
+                .findFirst().get();
 
         assertEquals(EXISTING_CLIENT, vo.getClientId());
         assertEquals(EXISTING_DS, vo.getDataSourceId());
-        // hosp-006 not in CDC_CLIENT → clientName is null; my-19c has DATA_SOURCE_NAME
-        assertNull(vo.getClientName());
+        // hosp-006 CLIENT_DESC from CDC_CLIENT_MULTIPLE
+        assertNotNull(vo.getClientName());
+        assertTrue(vo.getClientName().contains("总部测试"));
         assertEquals("oracle-业务库33", vo.getDataSourceName());
+        assertNotNull(vo.getJobStatus());
+        assertTrue("正常运行".equals(vo.getJobStatus()) || "恢复中".equals(vo.getJobStatus()));
         assertNotNull(vo.getLatestFailureTime());
         assertNotNull(vo.getLatestEventId());
-        assertNotNull(vo.getLatestFaultRootId());
-        assertNotNull(vo.getLatestRecordStatus());
-        assertNotNull(vo.getLatestRecordStatusLabel());
-        assertNotNull(vo.getLatestFaultProcessResult());
-        assertNotNull(vo.getLatestFaultProcessResultLabel());
         assertTrue(vo.getEventCountInWindow() >= 1);
+    }
+
+    @Test
+    void summaryShouldReturnJobStatusForAllRecords() {
+        List<JobFailureSummaryVO> list = jobFailureService.querySummary();
+
+        assertFalse(list.isEmpty());
+        for (JobFailureSummaryVO vo : list) {
+            assertNotNull(vo.getJobStatus(), "Every record must have a jobStatus");
+            assertTrue("正常运行".equals(vo.getJobStatus()) || "恢复中".equals(vo.getJobStatus()),
+                    "jobStatus must be 正常运行 or 恢复中, got: " + vo.getJobStatus());
+            assertNotNull(vo.getClientId());
+            assertNotNull(vo.getDataSourceId());
+            // clientName comes from CDC_CLIENT_MULTIPLE.CLIENT_DESC
+            assertNotNull(vo.getClientName(), "clientName should come from CDC_CLIENT_MULTIPLE");
+        }
+    }
+
+    @Test
+    void existingClosedJobShouldReturnNormalStatus() {
+        List<JobFailureSummaryVO> list = jobFailureService.querySummary();
+
+        JobFailureSummaryVO vo = list.stream()
+                .filter(r -> EXISTING_CLIENT.equals(r.getClientId())
+                        && EXISTING_DS.equals(r.getDataSourceId()))
+                .findFirst().get();
+
+        // hosp-006/my-19c has STABLE_CHECK_PASSED → job should be 正常运行
+        assertEquals("正常运行", vo.getJobStatus());
     }
 
     // ==================== API-2: Latest Fault ====================
@@ -137,7 +122,6 @@ class JobFailureServiceTest {
     @Test
     void latestFaultShouldHaveCorrectRestartCount() {
         FaultProcessDetailVO vo = jobFailureService.getLatestFault(EXISTING_CLIENT, EXISTING_DS);
-        // The test data has 1 RESTART_STARTED log
         assertEquals(1, vo.getRestartCount());
     }
 
@@ -187,12 +171,11 @@ class JobFailureServiceTest {
 
     @Test
     void processDetailShouldReturnResultForExistingRoot() {
-        // First get the fault root ID from the summary
-        JobFailureSummaryQuery query = new JobFailureSummaryQuery();
-        query.setClientId(EXISTING_CLIENT);
-        query.setDataSourceId(EXISTING_DS);
-        PageResult<JobFailureSummaryVO> page = jobFailureService.querySummary(query);
-        Long faultRootId = page.getRecords().get(0).getLatestFaultRootId();
+        List<JobFailureSummaryVO> list = jobFailureService.querySummary();
+        Long faultRootId = list.stream()
+                .filter(r -> EXISTING_CLIENT.equals(r.getClientId())
+                        && EXISTING_DS.equals(r.getDataSourceId()))
+                .findFirst().get().getLatestFaultRootId();
 
         FaultProcessDetailVO vo = jobFailureService.getProcessDetail(faultRootId);
 
@@ -211,8 +194,6 @@ class JobFailureServiceTest {
     }
 
     // ==================== API-5: CLOB Lazy Load ====================
-
-    // -- FAILURE_EVENT_FAILURE_DETAIL tests --
 
     @Test
     void failureDetailByEvent_shouldReturnContent() {
@@ -234,17 +215,14 @@ class JobFailureServiceTest {
         assertEquals(40006, ex.getCode());
     }
 
-    // -- FAILURE_HANDLE_LOG_ERROR_DETAIL tests --
-
     @Test
     void errorDetailByLogId_shouldReturnContent() {
-        JobFailureSummaryQuery query = new JobFailureSummaryQuery();
-        query.setClientId(EXISTING_CLIENT);
-        query.setDataSourceId(EXISTING_DS);
-        Long faultRootId = jobFailureService.querySummary(query)
-                .getRecords().get(0).getLatestFaultRootId();
+        List<JobFailureSummaryVO> list = jobFailureService.querySummary();
+        Long faultRootId = list.stream()
+                .filter(r -> EXISTING_CLIENT.equals(r.getClientId())
+                        && EXISTING_DS.equals(r.getDataSourceId()))
+                .findFirst().get().getLatestFaultRootId();
 
-        // Get the log ID that has ERROR_DETAIL (RESTART_SCHEDULED from test data)
         FaultProcessDetailVO detail = jobFailureService.getLatestFault(EXISTING_CLIENT, EXISTING_DS);
         Long logWithErrorDetail = null;
         for (HandleTimelineVO t : detail.getHandleTimeline()) {
@@ -266,11 +244,11 @@ class JobFailureServiceTest {
 
     @Test
     void errorDetail_logNotInFaultProcess_shouldThrow() {
-        JobFailureSummaryQuery query = new JobFailureSummaryQuery();
-        query.setClientId(EXISTING_CLIENT);
-        query.setDataSourceId(EXISTING_DS);
-        Long faultRootId = jobFailureService.querySummary(query)
-                .getRecords().get(0).getLatestFaultRootId();
+        List<JobFailureSummaryVO> list = jobFailureService.querySummary();
+        Long faultRootId = list.stream()
+                .filter(r -> EXISTING_CLIENT.equals(r.getClientId())
+                        && EXISTING_DS.equals(r.getDataSourceId()))
+                .findFirst().get().getLatestFaultRootId();
 
         BusinessException ex = assertThrows(BusinessException.class,
                 () -> jobFailureService.getClobDetail(faultRootId,
@@ -280,13 +258,12 @@ class JobFailureServiceTest {
 
     @Test
     void errorDetail_nullErrorDetail_shouldReturnNullContent() {
-        JobFailureSummaryQuery query = new JobFailureSummaryQuery();
-        query.setClientId(EXISTING_CLIENT);
-        query.setDataSourceId(EXISTING_DS);
-        Long faultRootId = jobFailureService.querySummary(query)
-                .getRecords().get(0).getLatestFaultRootId();
+        List<JobFailureSummaryVO> list = jobFailureService.querySummary();
+        Long faultRootId = list.stream()
+                .filter(r -> EXISTING_CLIENT.equals(r.getClientId())
+                        && EXISTING_DS.equals(r.getDataSourceId()))
+                .findFirst().get().getLatestFaultRootId();
 
-        // Find a log without ERROR_DETAIL (JOB_FAILURE_RECEIVED has null)
         FaultProcessDetailVO detail = jobFailureService.getLatestFault(EXISTING_CLIENT, EXISTING_DS);
         Long logWithoutError = null;
         for (HandleTimelineVO t : detail.getHandleTimeline()) {
@@ -304,11 +281,8 @@ class JobFailureServiceTest {
         assertEquals(0, vo.getContentLength());
     }
 
-    // -- Cross-process rejection tests --
-
     @Test
     void failureDetail_wrongFaultRootForEventsFaultProcess_shouldThrow() {
-        // Use a non-existent faultRootId; any eventId is then not in that process
         BusinessException ex = assertThrows(BusinessException.class,
                 () -> jobFailureService.getClobDetail(999999999L,
                         "FAILURE_EVENT_FAILURE_DETAIL", EXISTING_EVENT_ID));
@@ -317,23 +291,20 @@ class JobFailureServiceTest {
 
     @Test
     void errorDetail_wrongFaultRootForLogsFaultProcess_shouldThrow() {
-        JobFailureSummaryQuery query = new JobFailureSummaryQuery();
-        query.setClientId(EXISTING_CLIENT);
-        query.setDataSourceId(EXISTING_DS);
-        Long faultRootId = jobFailureService.querySummary(query)
-                .getRecords().get(0).getLatestFaultRootId();
+        List<JobFailureSummaryVO> list = jobFailureService.querySummary();
+        Long faultRootId = list.stream()
+                .filter(r -> EXISTING_CLIENT.equals(r.getClientId())
+                        && EXISTING_DS.equals(r.getDataSourceId()))
+                .findFirst().get().getLatestFaultRootId();
 
         FaultProcessDetailVO detail = jobFailureService.getLatestFault(EXISTING_CLIENT, EXISTING_DS);
         Long anyLogId = detail.getHandleTimeline().get(0).getLogId();
 
-        // Use a non-existent faultRootId — the log is not in that process
         BusinessException ex = assertThrows(BusinessException.class,
                 () -> jobFailureService.getClobDetail(999999999L,
                         "FAILURE_HANDLE_LOG_ERROR_DETAIL", anyLogId));
         assertEquals(40401, ex.getCode());
     }
-
-    // -- Input validation tests --
 
     @Test
     void clobDetailWithInvalidFieldShouldThrow() {
@@ -355,84 +326,50 @@ class JobFailureServiceTest {
 
     @Test
     void summaryShouldNotContainClobContent() {
-        JobFailureSummaryQuery query = new JobFailureSummaryQuery();
-        PageResult<JobFailureSummaryVO> page = jobFailureService.querySummary(query);
-        // VOs don't have CLOB fields - verified by compilation (no getter for failureDetail/errorDetail)
-        assertNotNull(page);
-        assertTrue(page.getRecords().size() >= 1);
+        List<JobFailureSummaryVO> list = jobFailureService.querySummary();
+        assertNotNull(list);
+        assertTrue(list.size() >= 1);
     }
 
     @Test
     void faultDetailShouldNotContainClobContent() {
         FaultProcessDetailVO vo = jobFailureService.getLatestFault(EXISTING_CLIENT, EXISTING_DS);
-        // Detail VO has no CLOB fields - verified by compilation
         assertNotNull(vo);
         assertNotNull(vo.getHandleTimeline());
-    }
-
-    // ==================== Record status correctness ====================
-
-    @Test
-    void existingJobShouldHaveValidRecordStatus() {
-        JobFailureSummaryQuery query = new JobFailureSummaryQuery();
-        query.setClientId(EXISTING_CLIENT);
-        query.setDataSourceId(EXISTING_DS);
-        PageResult<JobFailureSummaryVO> page = jobFailureService.querySummary(query);
-
-        JobFailureSummaryVO vo = page.getRecords().get(0);
-        // The test data has STABLE_CHECK_PASSED → should be RECOVERY_RECORDED
-        assertEquals("RECOVERY_RECORDED", vo.getLatestFaultProcessResult());
-        assertNotNull(vo.getLatestRecordStatusLabel());
-        assertFalse(vo.getLatestRecordStatusLabel().isEmpty());
-    }
-
-    @Test
-    void existingJobShouldNotHaveAnomalies() {
-        JobFailureSummaryQuery query = new JobFailureSummaryQuery();
-        query.setClientId(EXISTING_CLIENT);
-        query.setDataSourceId(EXISTING_DS);
-        PageResult<JobFailureSummaryVO> page = jobFailureService.querySummary(query);
-
-        JobFailureSummaryVO vo = page.getRecords().get(0);
-        assertFalse(vo.isHasDataAnomaly());
     }
 
     // ==================== Config name resolution ====================
 
     @Test
     void summaryShouldResolveDataSourceNameFromConfig() {
-        JobFailureSummaryQuery query = new JobFailureSummaryQuery();
-        query.setDataSourceId(EXISTING_DS);
-        PageResult<JobFailureSummaryVO> page = jobFailureService.querySummary(query);
+        List<JobFailureSummaryVO> list = jobFailureService.querySummary();
 
-        for (JobFailureSummaryVO vo : page.getRecords()) {
-            assertEquals(EXISTING_DS, vo.getDataSourceId());
-            // my-19c exists in CDC_DATA_SOURCE with name "oracle-业务库33"
-            assertEquals("oracle-业务库33", vo.getDataSourceName());
-        }
+        JobFailureSummaryVO vo = list.stream()
+                .filter(r -> EXISTING_DS.equals(r.getDataSourceId()))
+                .findFirst().get();
+        assertEquals(EXISTING_DS, vo.getDataSourceId());
+        assertEquals("oracle-业务库33", vo.getDataSourceName());
     }
 
     @Test
-    void summaryShouldReturnNullClientNameWhenConfigMissing() {
-        JobFailureSummaryQuery query = new JobFailureSummaryQuery();
-        query.setClientId(EXISTING_CLIENT);
-        PageResult<JobFailureSummaryVO> page = jobFailureService.querySummary(query);
+    void summaryShouldHaveClientNameFromCdcClientMultiple() {
+        List<JobFailureSummaryVO> list = jobFailureService.querySummary();
 
-        for (JobFailureSummaryVO vo : page.getRecords()) {
-            assertEquals(EXISTING_CLIENT, vo.getClientId());
-            // hosp-006 does not exist in CDC_CLIENT
-            assertNull(vo.getClientName());
-        }
+        JobFailureSummaryVO vo = list.stream()
+                .filter(r -> EXISTING_CLIENT.equals(r.getClientId()))
+                .findFirst().get();
+        assertEquals(EXISTING_CLIENT, vo.getClientId());
+        // hosp-006 exists in CDC_CLIENT_MULTIPLE with CLIENT_DESC
+        assertNotNull(vo.getClientName());
+        assertFalse(vo.getClientName().isEmpty());
     }
 
     // ==================== N+1 verification ====================
 
     @Test
     void summaryShouldNotTriggerNPlusOne() {
-        // Repeated calls should not increase linearly
-        JobFailureSummaryQuery query = new JobFailureSummaryQuery();
-        PageResult<JobFailureSummaryVO> first = jobFailureService.querySummary(query);
-        PageResult<JobFailureSummaryVO> second = jobFailureService.querySummary(query);
-        assertEquals(first.getTotal(), second.getTotal());
+        List<JobFailureSummaryVO> first = jobFailureService.querySummary();
+        List<JobFailureSummaryVO> second = jobFailureService.querySummary();
+        assertEquals(first.size(), second.size());
     }
 }

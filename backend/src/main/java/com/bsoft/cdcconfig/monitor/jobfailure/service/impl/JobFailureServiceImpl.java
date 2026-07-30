@@ -10,10 +10,10 @@ import com.bsoft.cdcconfig.monitor.jobfailure.algorithm.FaultProcessGroup;
 import com.bsoft.cdcconfig.monitor.jobfailure.algorithm.JobChainNode;
 import com.bsoft.cdcconfig.datasource.entity.DataSource;
 import com.bsoft.cdcconfig.datasource.mapper.DataSourceMapper;
-import com.bsoft.cdcconfig.monitor.jobfailure.entity.CdcClient;
+import com.bsoft.cdcconfig.monitor.jobfailure.entity.CdcClientMultiple;
 import com.bsoft.cdcconfig.monitor.jobfailure.entity.JobFailureEvent;
 import com.bsoft.cdcconfig.monitor.jobfailure.entity.JobFailureHandleLog;
-import com.bsoft.cdcconfig.monitor.jobfailure.mapper.CdcClientMapper;
+import com.bsoft.cdcconfig.monitor.jobfailure.mapper.CdcClientMultipleMapper;
 import com.bsoft.cdcconfig.monitor.jobfailure.enums.ClobFieldType;
 import com.bsoft.cdcconfig.monitor.jobfailure.enums.EventValidity;
 import com.bsoft.cdcconfig.monitor.jobfailure.enums.FaultProcessResult;
@@ -22,7 +22,6 @@ import com.bsoft.cdcconfig.monitor.jobfailure.exception.JobFailureErrorCode;
 import com.bsoft.cdcconfig.monitor.jobfailure.mapper.JobFailureEventMapper;
 import com.bsoft.cdcconfig.monitor.jobfailure.mapper.JobFailureHandleLogMapper;
 import com.bsoft.cdcconfig.monitor.jobfailure.query.HistoryQuery;
-import com.bsoft.cdcconfig.monitor.jobfailure.query.JobFailureSummaryQuery;
 import com.bsoft.cdcconfig.monitor.jobfailure.service.JobFailureService;
 import com.bsoft.cdcconfig.monitor.jobfailure.vo.AnomalyVO;
 import com.bsoft.cdcconfig.monitor.jobfailure.vo.ClobDetailVO;
@@ -40,7 +39,6 @@ import java.util.ArrayList;
 import java.util.Collections;
 import java.util.Comparator;
 import java.util.HashMap;
-import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.Set;
@@ -54,17 +52,17 @@ public class JobFailureServiceImpl implements JobFailureService {
 
     private final JobFailureEventMapper eventMapper;
     private final JobFailureHandleLogMapper logMapper;
-    private final CdcClientMapper clientMapper;
+    private final CdcClientMultipleMapper clientMultipleMapper;
     private final DataSourceMapper dataSourceMapper;
     private final FaultProcessAssembler assembler;
 
     public JobFailureServiceImpl(JobFailureEventMapper eventMapper,
                                  JobFailureHandleLogMapper logMapper,
-                                 CdcClientMapper clientMapper,
+                                 CdcClientMultipleMapper clientMultipleMapper,
                                  DataSourceMapper dataSourceMapper) {
         this.eventMapper = eventMapper;
         this.logMapper = logMapper;
-        this.clientMapper = clientMapper;
+        this.clientMultipleMapper = clientMultipleMapper;
         this.dataSourceMapper = dataSourceMapper;
         this.assembler = new FaultProcessAssembler();
     }
@@ -72,109 +70,109 @@ public class JobFailureServiceImpl implements JobFailureService {
     // ==================== API-1: Summary ====================
 
     @Override
-    public PageResult<JobFailureSummaryVO> querySummary(JobFailureSummaryQuery query) {
-        // 1. Load all events matching pre-filters
+    public List<JobFailureSummaryVO> querySummary() {
+        // 1. Load all FG_ACTIVE=1 records from CDC_CLIENT_MULTIPLE as master set
+        LambdaQueryWrapper<CdcClientMultiple> masterWrapper = new LambdaQueryWrapper<>();
+        masterWrapper.eq(CdcClientMultiple::getFgActive, "1");
+        List<CdcClientMultiple> masterRecords = clientMultipleMapper.selectList(masterWrapper);
+
+        if (masterRecords.isEmpty()) {
+            return Collections.emptyList();
+        }
+
+        // 2. Collect all (clientId, dataSourceId) pairs and build client name map
+        Map<String, String> clientNameMap = new HashMap<>();
+        for (CdcClientMultiple r : masterRecords) {
+            clientNameMap.put(r.getClientId(), r.getClientDesc());
+        }
+
+        // 3. Load all events for all master pairs in two queries
+        Set<String> masterClientIds = masterRecords.stream()
+                .map(CdcClientMultiple::getClientId).collect(Collectors.toSet());
+        Set<String> masterDsIds = masterRecords.stream()
+                .map(CdcClientMultiple::getDataSourceId).collect(Collectors.toSet());
+
         LambdaQueryWrapper<JobFailureEvent> eventWrapper = new LambdaQueryWrapper<>();
-        if (query.getClientId() != null && !query.getClientId().isEmpty()) {
-            eventWrapper.eq(JobFailureEvent::getClientId, query.getClientId());
-        }
-        if (query.getDataSourceId() != null && !query.getDataSourceId().isEmpty()) {
-            eventWrapper.eq(JobFailureEvent::getDataSourceId, query.getDataSourceId());
-        }
-        if (query.getFailureTimeStart() != null) {
-            eventWrapper.ge(JobFailureEvent::getFailureTime, query.getFailureTimeStart());
-        }
-        if (query.getFailureTimeEnd() != null) {
-            eventWrapper.le(JobFailureEvent::getFailureTime, query.getFailureTimeEnd());
-        }
+        eventWrapper.in(JobFailureEvent::getClientId, masterClientIds)
+                    .in(JobFailureEvent::getDataSourceId, masterDsIds);
         List<JobFailureEvent> allEvents = eventMapper.selectList(eventWrapper);
 
-        if (allEvents.isEmpty()) {
-            return new PageResult<>(Collections.emptyList(), 0, query.getPageNum(), query.getPageSize());
-        }
-
-        // 2. Group events by logical job
-        Map<String, List<JobFailureEvent>> eventsByJob = allEvents.stream()
-                .collect(Collectors.groupingBy(
-                        e -> e.getClientId() + "||" + e.getDataSourceId(),
-                        LinkedHashMap::new,
-                        Collectors.toList()));
-
-        // 3. Batch load all logs for all events
+        // 4. Batch load all logs for all events
         List<Long> allEventIds = allEvents.stream().map(JobFailureEvent::getId).collect(Collectors.toList());
         List<JobFailureHandleLog> allLogs = loadLogsByEventIds(allEventIds);
 
-        // 4. Batch load config names
-        Set<String> clientIds = allEvents.stream().map(JobFailureEvent::getClientId).collect(Collectors.toSet());
-        Set<String> dataSourceIds = allEvents.stream().map(JobFailureEvent::getDataSourceId).collect(Collectors.toSet());
-        Map<String, String> clientNameMap = loadClientNames(clientIds);
-        Map<String, String> dsNameMap = loadDataSourceNames(dataSourceIds);
+        // 5. Batch load datasource names
+        Map<String, String> dsNameMap = loadDataSourceNames(masterDsIds);
 
-        // 5. Compute summary for each logical job
+        // 6. Compute summary for each master record
         List<JobFailureSummaryVO> summaries = new ArrayList<>();
-        for (Map.Entry<String, List<JobFailureEvent>> entry : eventsByJob.entrySet()) {
-            List<JobFailureEvent> jobEvents = entry.getValue();
-            jobEvents.sort(Comparator.comparing(JobFailureEvent::getFailureTime,
-                    Comparator.nullsLast(Comparator.naturalOrder())));
+        for (CdcClientMultiple master : masterRecords) {
+            String clientId = master.getClientId();
+            String dataSourceId = master.getDataSourceId();
 
-            // Filter logs for this job
-            Set<Long> jobEventIdSet = jobEvents.stream().map(JobFailureEvent::getId).collect(Collectors.toSet());
-            List<JobFailureHandleLog> jobLogs = allLogs.stream()
-                    .filter(l -> jobEventIdSet.contains(l.getFailureEventId()))
+            // Filter events for this logical job
+            List<JobFailureEvent> jobEvents = allEvents.stream()
+                    .filter(e -> clientId.equals(e.getClientId()) && dataSourceId.equals(e.getDataSourceId()))
+                    .sorted(Comparator.comparing(JobFailureEvent::getFailureTime,
+                            Comparator.nullsLast(Comparator.naturalOrder())))
                     .collect(Collectors.toList());
 
-            // Convert to algorithm models
-            List<FaultEventModel> models = jobEvents.stream()
-                    .map(JobFailureServiceImpl::toFaultEventModel)
-                    .collect(Collectors.toList());
-            List<FaultLogModel> logModels = jobLogs.stream()
-                    .map(JobFailureServiceImpl::toFaultLogModel)
-                    .collect(Collectors.toList());
+            JobFailureSummaryVO vo = new JobFailureSummaryVO();
+            vo.setClientId(clientId);
+            vo.setClientName(master.getClientDesc());
+            vo.setDataSourceId(dataSourceId);
+            vo.setDataSourceName(dsNameMap.get(dataSourceId));
+            vo.setEventCountInWindow(jobEvents.size());
 
-            // Assemble fault processes
-            List<FaultProcessGroup> groups = assembler.assemble(models, logModels);
+            if (jobEvents.isEmpty()) {
+                vo.setJobStatus("正常运行");
+                vo.setLatestRestartCount(0);
+            } else {
+                // Filter logs for this job
+                Set<Long> jobEventIdSet = jobEvents.stream().map(JobFailureEvent::getId).collect(Collectors.toSet());
+                List<JobFailureHandleLog> jobLogs = allLogs.stream()
+                        .filter(l -> jobEventIdSet.contains(l.getFailureEventId()))
+                        .collect(Collectors.toList());
 
-            // Compute summary
-            JobFailureSummaryVO vo = buildSummary(entry.getKey(), jobEvents, groups,
-                    clientNameMap, dsNameMap);
+                // Convert to algorithm models
+                List<FaultEventModel> models = jobEvents.stream()
+                        .map(JobFailureServiceImpl::toFaultEventModel)
+                        .collect(Collectors.toList());
+                List<FaultLogModel> logModels = jobLogs.stream()
+                        .map(JobFailureServiceImpl::toFaultLogModel)
+                        .collect(Collectors.toList());
+
+                // Assemble fault processes
+                List<FaultProcessGroup> groups = assembler.assemble(models, logModels);
+
+                JobFailureEvent latestEvent = jobEvents.get(jobEvents.size() - 1);
+                vo.setLatestFailureTime(latestEvent.getFailureTime());
+                vo.setLatestEventId(latestEvent.getId());
+
+                if (!groups.isEmpty()) {
+                    FaultProcessGroup latestGroup = groups.get(groups.size() - 1);
+                    vo.setLatestFaultRootId(latestGroup.getFaultRootId());
+                    vo.setLatestRestartCount(latestGroup.countRestarts());
+
+                    // Determine job status: check if latest fault process is closed
+                    boolean closed = false;
+                    for (FaultLogModel l : latestGroup.getAllLogs()) {
+                        if (l.isStableCheckPassed()) {
+                            closed = true;
+                            break;
+                        }
+                    }
+                    vo.setJobStatus(closed ? "正常运行" : "恢复中");
+                } else {
+                    vo.setJobStatus("正常运行");
+                    vo.setLatestRestartCount(0);
+                }
+            }
+
             summaries.add(vo);
         }
 
-        // 6. Apply post-filters (recordStatus, hasUnclosed, hasAnomaly)
-        if (query.getRecordStatus() != null && !query.getRecordStatus().isEmpty()) {
-            summaries = summaries.stream()
-                    .filter(s -> query.getRecordStatus().equals(s.getLatestRecordStatus()))
-                    .collect(Collectors.toList());
-        }
-        if (Boolean.TRUE.equals(query.getHasUnclosedProcess())) {
-            summaries = summaries.stream()
-                    .filter(JobFailureSummaryVO::isHasUnclosedProcess)
-                    .collect(Collectors.toList());
-        }
-        if (Boolean.TRUE.equals(query.getHasDataAnomaly())) {
-            summaries = summaries.stream()
-                    .filter(JobFailureSummaryVO::isHasDataAnomaly)
-                    .collect(Collectors.toList());
-        }
-
-        // 7. Sort by latestFailureTime DESC, latestEventId DESC
-        summaries.sort((a, b) -> {
-            int cmp = Comparator.nullsLast(Comparator.<java.time.LocalDateTime>naturalOrder().reversed())
-                    .compare(a.getLatestFailureTime(), b.getLatestFailureTime());
-            if (cmp != 0) return cmp;
-            return Comparator.nullsLast(Comparator.<Long>naturalOrder().reversed())
-                    .compare(a.getLatestEventId(), b.getLatestEventId());
-        });
-
-        // 8. Manual pagination
-        int total = summaries.size();
-        int fromIndex = (query.getPageNum() - 1) * query.getPageSize();
-        int toIndex = Math.min(fromIndex + query.getPageSize(), total);
-        if (fromIndex >= total) {
-            return new PageResult<>(Collections.emptyList(), total, query.getPageNum(), query.getPageSize());
-        }
-        List<JobFailureSummaryVO> page = summaries.subList(fromIndex, toIndex);
-        return new PageResult<>(page, total, query.getPageNum(), query.getPageSize());
+        return summaries;
     }
 
     // ==================== API-2: Latest Fault ====================
@@ -415,18 +413,6 @@ public class JobFailureServiceImpl implements JobFailureService {
 
     // ==================== Config Name Lookups ====================
 
-    private Map<String, String> loadClientNames(Set<String> clientIds) {
-        if (clientIds == null || clientIds.isEmpty()) {
-            return Collections.emptyMap();
-        }
-        List<CdcClient> clients = clientMapper.selectBatchIds(clientIds);
-        Map<String, String> map = new HashMap<>();
-        for (CdcClient c : clients) {
-            map.put(c.getClientId(), c.getClientDesc());
-        }
-        return map;
-    }
-
     private Map<String, String> loadDataSourceNames(Set<String> dataSourceIds) {
         if (dataSourceIds == null || dataSourceIds.isEmpty()) {
             return Collections.emptyMap();
@@ -440,55 +426,6 @@ public class JobFailureServiceImpl implements JobFailureService {
     }
 
     // ==================== VO Builders ====================
-
-    private JobFailureSummaryVO buildSummary(String logicalJobKey,
-                                              List<JobFailureEvent> jobEvents,
-                                              List<FaultProcessGroup> groups,
-                                              Map<String, String> clientNameMap,
-                                              Map<String, String> dsNameMap) {
-        String[] parts = logicalJobKey.split("\\|\\|", 2);
-        String clientId = parts[0];
-        String dataSourceId = parts.length > 1 ? parts[1] : "";
-
-        JobFailureEvent latestEvent = jobEvents.get(jobEvents.size() - 1);
-
-        JobFailureSummaryVO vo = new JobFailureSummaryVO();
-        vo.setClientId(clientId);
-        vo.setClientName(clientNameMap.get(clientId));
-        vo.setDataSourceId(dataSourceId);
-        vo.setDataSourceName(dsNameMap.get(dataSourceId));
-        vo.setLatestFailureTime(latestEvent.getFailureTime());
-        vo.setLatestEventId(latestEvent.getId());
-        vo.setEventCountInWindow(jobEvents.size());
-
-        // Latest fault process
-        if (!groups.isEmpty()) {
-            FaultProcessGroup latestGroup = groups.get(groups.size() - 1);
-            vo.setLatestFaultRootId(latestGroup.getFaultRootId());
-            vo.setLatestRestartCount(latestGroup.countRestarts());
-
-            RecordStatus status = assembler.resolveRecordStatus(latestGroup);
-            vo.setLatestRecordStatus(status.name());
-            vo.setLatestRecordStatusLabel(status.getLabel());
-
-            FaultProcessResult result = assembler.resolveResult(latestGroup);
-            vo.setLatestFaultProcessResult(result.name());
-            vo.setLatestFaultProcessResultLabel(result.getLabel());
-        }
-
-        // Check all groups for unclosed/anomaly
-        boolean hasUnclosed = false;
-        boolean hasAnomaly = false;
-        for (FaultProcessGroup g : groups) {
-            FaultProcessResult r = assembler.resolveResult(g);
-            if (r == FaultProcessResult.NOT_CLOSED) hasUnclosed = true;
-            if (g.hasAnomalies()) hasAnomaly = true;
-        }
-        vo.setHasUnclosedProcess(hasUnclosed);
-        vo.setHasDataAnomaly(hasAnomaly);
-
-        return vo;
-    }
 
     private FaultProcessDetailVO toDetailVO(FaultProcessGroup group) {
         FaultProcessDetailVO vo = new FaultProcessDetailVO();

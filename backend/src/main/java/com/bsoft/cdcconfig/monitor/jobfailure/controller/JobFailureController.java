@@ -3,7 +3,6 @@ package com.bsoft.cdcconfig.monitor.jobfailure.controller;
 import com.bsoft.cdcconfig.common.api.ApiResponse;
 import com.bsoft.cdcconfig.common.page.PageResult;
 import com.bsoft.cdcconfig.monitor.jobfailure.query.HistoryQuery;
-import com.bsoft.cdcconfig.monitor.jobfailure.query.JobFailureSummaryQuery;
 import com.bsoft.cdcconfig.monitor.jobfailure.service.JobFailureService;
 import com.bsoft.cdcconfig.monitor.jobfailure.vo.ClobDetailVO;
 import com.bsoft.cdcconfig.monitor.jobfailure.vo.FaultProcessDetailVO;
@@ -17,6 +16,8 @@ import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
+import java.util.List;
+
 @Tag(name = "Job失败监控", description = "Job失败重启记录查询、故障链分析与CLOB长文本懒加载")
 @RestController
 @RequestMapping("/api/job-failure")
@@ -28,12 +29,12 @@ public class JobFailureController {
         this.jobFailureService = jobFailureService;
     }
 
-    @Operation(summary = "API-1: 故障逻辑Job分页汇总",
-            description = "按(CLIENT_ID, DATA_SOURCE_ID)汇总所有发生过失败事件的逻辑Job，支持按状态、时间范围等筛选")
+    @Operation(summary = "API-1: 故障逻辑Job全量汇总",
+            description = "以CDC_CLIENT_MULTIPLE FG_ACTIVE=1记录为主集合，返回所有有效业务库及其最近故障过程摘要和Job状态")
     @GetMapping("/summary")
-    public ApiResponse<PageResult<JobFailureSummaryVO>> summary(JobFailureSummaryQuery query) {
-        PageResult<JobFailureSummaryVO> page = jobFailureService.querySummary(query);
-        return ApiResponse.success(page);
+    public ApiResponse<List<JobFailureSummaryVO>> summary() {
+        List<JobFailureSummaryVO> list = jobFailureService.querySummary();
+        return ApiResponse.success(list);
     }
 
     @Operation(summary = "API-2: 逻辑Job最近一次故障过程详情",

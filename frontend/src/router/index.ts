@@ -53,6 +53,18 @@ const routes: RouteRecordRaw[] = [
     name: 'LogQuery',
     component: () => import('@/views/log-query/LogQueryPage.vue'),
     meta: { title: '日志查询', group: '运行监控' }
+  },
+  {
+    path: '/monitor/job-failure',
+    name: 'JobFailure',
+    component: () => import('@/views/monitor/job-failure/index.vue'),
+    meta: { title: '故障监控', group: '运行监控' }
+  },
+  {
+    path: '/monitor/job-failure/detail',
+    name: 'JobFailureDetail',
+    component: () => import('@/views/monitor/job-failure/detail.vue'),
+    meta: { title: '故障过程详情', group: '运行监控' }
   }
 ]
 
