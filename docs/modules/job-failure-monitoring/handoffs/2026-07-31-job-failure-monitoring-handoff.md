@@ -19,41 +19,28 @@
 ## 3. 当前分支与提交
 
 - **分支**：`develop`
-- **最新 commit**：`420966cd1bae3b36d6eb8629ea2b9a7429062ba7`
-- **远程状态**：已同步（`Already up to date.`）
+- **模块功能基线提交**：`77be858f3df98753559f51dfd89c227d70d72127`
+- **提交说明**：`feat(job-failure-monitoring): finalize monitoring module`
+- **远程状态**：待推送（Phase 2 交接文档提交后统一推送）
 
 ---
 
 ## 4. 工作区状态
 
-工作区存在**未提交修改**，来源于 TASK 048 系列（详情页 UI 重构 + Overview 修正）：
+**模块代码已全部提交**（`77be858`），包含以下范围：
 
-**后端未提交**（3 个文件）：
-- `backend/src/main/java/.../vo/JobFailureSummaryVO.java` — 新增 `latestRecoveryTime` 字段
-- `backend/src/main/java/.../service/impl/JobFailureServiceImpl.java` — 从 STABLE_CHECK_PASSED 日志提取恢复时间
-- `backend/src/main/java/.../query/HistoryQuery.java` — 添加 `@DateTimeFormat` 修复时间参数解析
+- TASK 048 详情页 UI 重构（FaultProcessOverview, PhysicalJobChain, RestartCards, FailureEventList）
+- TASK 048 详情页修正 002（FaultHistory 恢复、ID 截断、排序修正）
+- TASK 048 Overview 修正 003（卡片结构、7 列表格、"故障"文案、latestRecoveryTime）
+- TASK 048 Overview 修正 004（数据源 ID 下拉框）
+- TASK 049 文档收口（README, BASELINE, handoff, CURRENT_HANDOFF）
 
-**前端未提交**（7 个文件）：
-- `frontend/src/types/jobFailure.ts` — 新增 `latestRecoveryTime` 字段
-- `frontend/src/views/monitor/job-failure/index.vue` — Overview 页面改写（TASK 048 Correction 003）
-- `frontend/src/views/monitor/job-failure/detail.vue` — 详情页调整（TASK 048 Correction 002）
-- `frontend/src/views/monitor/job-failure/components/FaultProcessOverview.vue`
-- `frontend/src/views/monitor/job-failure/components/PhysicalJobChain.vue`
-- `frontend/src/views/monitor/job-failure/components/FailureEventList.vue`
-- `frontend/src/views/monitor/job-failure/components/FaultHistory.vue`
-
-**前端新增未跟踪**（1 个文件）：
-- `frontend/src/views/monitor/job-failure/components/RestartCards.vue`
-
-**本次文档收口新增**（6 个文件）：
-- `docs/modules/job-failure-monitoring/README.md`
-- `docs/modules/job-failure-monitoring/JOB_FAILURE_MONITORING_BASELINE.md`
-- `docs/modules/job-failure-monitoring/handoffs/2026-07-31-job-failure-monitoring-handoff.md`（本文件）
-- `docs/modules/job-failure-monitoring/handoffs/CURRENT_HANDOFF.md`
-
-其他 untracked 文件（`docs/agent-prompts/`、`docs/database/`、`docs/pages/`、`docs/zookeeper/`、`package-lock.json`）不属于本模块更改。
-
-另有 `.claude/settings.local.json` 修改（与本模块无关）。
+**剩余未提交文件**（与本模块无关，保留不提交）：
+- `.claude/settings.local.json` — 本地 IDE 配置
+- `package-lock.json` — 无对应 package.json 变更，排除
+- `docs/agent-prompts/` — 历史任务提示词（保留作为追溯资料）
+- `docs/database/040-*.md` 等 — 历史分析文档
+- `docs/pages/zk-*`、`docs/zookeeper/` — 其他模块文档
 
 ---
 
@@ -64,10 +51,12 @@
 | TASK 046 | 后端 Phase 1：Entity、Mapper、VO、Service、Controller、测试 | 已完成并提交 |
 | TASK 047 | 前端开发：Overview + 详情页 + 所有组件 + 路由菜单 | 已完成并提交 |
 | TASK 047 修正 | Overview 页面修正（002） | 已完成并提交 |
-| TASK 048 | 详情页 UI 重构 | 已完成（未提交） |
-| TASK 048 修正 002 | 详情页 4 项修正 + FaultHistory 恢复 | 已完成（未提交） |
-| TASK 048 修正 003 | Overview 修正：卡片结构、7 列字段、"故障"文案、恢复时间 | 已完成（未提交） |
-| TASK 049 | 文档收口（本任务） | 执行中 |
+| TASK 048 | 详情页 UI 重构 | 已完成并提交 |
+| TASK 048 修正 002 | 详情页 4 项修正 + FaultHistory 恢复 | 已完成并提交 |
+| TASK 048 修正 003 | Overview 修正：卡片结构、7 列字段、"故障"文案、恢复时间 | 已完成并提交 |
+| TASK 048 修正 004 | 数据源 ID 下拉框 | 已完成并提交 |
+| TASK 049 | 文档收口（README, BASELINE, handoff, CURRENT_HANDOFF） | 已完成并提交 |
+| TASK 050 | 最终收尾：构建验证、一致性核查、提交与推送 | 执行中 |
 
 ---
 
@@ -92,15 +81,21 @@
 
 ## 7. 构建与运行状态
 
+### TASK 050 最终验证（2026-07-31）
+
 ### 前端
-- **构建**：`npm run build`（vue-tsc + vite build）— **SUCCESS**（2026-07-31）
+- **构建**：`npm run build`（vue-tsc + vite build）— **SUCCESS**
+- **Node**：v18.20.8
+- **npm**：10.8.2
 - **运行**：Vite dev server，`http://192.168.174.70:5173`，PID 2504
 - **代理**：`/api` → `http://127.0.0.1:8080`
 
 ### 后端
-- **构建**：`mvn clean package -DskipTests` — **SUCCESS**（2026-07-31）
+- **构建**：`mvn clean package -DskipTests` — **SUCCESS**
 - **测试**：`mvn test` — 179/180 pass，1 预存失败（OracleDateMappingTest，非本模块）
-- **运行**：Spring Boot，`http://127.0.0.1:8080`，PID 需要现场确认
+- **Java**：1.8.0_312
+- **Maven**：3.6.3
+- **运行**：Spring Boot，`http://127.0.0.1:8080`
 
 ### 访问方式
 - Overview：`http://192.168.174.70:5173/monitor/job-failure`
@@ -147,11 +142,12 @@
 
 ---
 
-## 11. 下一步建议
+## 11. 当前状态
 
-1. 人工验收本次文档收口产物
-2. 确认 Overview 和详情页 UI 验收通过
-3. 执行 `git add` + `git commit` + `git push`（将所有 TASK 048 + TASK 049 变更一次性提交）
+- TASK 050 Phase 1 已完成：模块功能基线提交 `77be858`
+- TASK 050 Phase 2 进行中：交接文档更新后提交并推送
+- 模块当前版本正式完成，功能冻结
+- 下一会话应从 `CURRENT_HANDOFF.md` 开始读取
 
 ---
 
@@ -169,11 +165,18 @@
 
 ---
 
-## 13. 本次文档收口产物
+## 13. 最终文档产物
 
-| 文件 | 类型 |
-|------|------|
-| `docs/modules/job-failure-monitoring/README.md` | 新建 |
-| `docs/modules/job-failure-monitoring/JOB_FAILURE_MONITORING_BASELINE.md` | 新建 |
-| `docs/modules/job-failure-monitoring/handoffs/2026-07-31-job-failure-monitoring-handoff.md` | 新建 |
-| `docs/modules/job-failure-monitoring/handoffs/CURRENT_HANDOFF.md` | 新建 |
+| 文件 | 类型 | 说明 |
+|------|------|------|
+| `docs/modules/job-failure-monitoring/README.md` | 新建 | 模块文档导航入口 |
+| `docs/modules/job-failure-monitoring/JOB_FAILURE_MONITORING_BASELINE.md` | 新建 | 模块功能基线（唯一事实来源） |
+| `docs/modules/job-failure-monitoring/handoffs/2026-07-31-job-failure-monitoring-handoff.md` | 新建 | 日期交接文档（本文件） |
+| `docs/modules/job-failure-monitoring/handoffs/CURRENT_HANDOFF.md` | 新建 | 交接入口（稳定指针） |
+
+### TASK 050 提交
+
+| Phase | Commit ID | 说明 |
+|-------|-----------|------|
+| Phase 1 | `77be858f3df98753559f51dfd89c227d70d72127` | 模块功能基线：代码 + 文档 |
+| Phase 2 | （待提交） | 交接文档最终更新 |
