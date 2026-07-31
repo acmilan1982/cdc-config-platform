@@ -14,6 +14,7 @@ public class JobFailureSummaryVO {
     private Long latestFaultRootId;
     private int latestRestartCount;
     private int eventCountInWindow;
+    private LocalDateTime latestRecoveryTime;
 
     public String getClientId() { return clientId; }
     public void setClientId(String clientId) { this.clientId = clientId; }
@@ -44,4 +45,7 @@ public class JobFailureSummaryVO {
 
     public int getEventCountInWindow() { return eventCountInWindow; }
     public void setEventCountInWindow(int eventCountInWindow) { this.eventCountInWindow = eventCountInWindow; }
+
+    public LocalDateTime getLatestRecoveryTime() { return latestRecoveryTime; }
+    public void setLatestRecoveryTime(LocalDateTime latestRecoveryTime) { this.latestRecoveryTime = latestRecoveryTime; }
 }

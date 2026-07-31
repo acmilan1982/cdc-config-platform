@@ -44,10 +44,26 @@
             />
           </el-select>
         </el-form-item>
+        <el-form-item label="数据源 ID">
+          <el-select
+            v-model="filter.dataSourceId"
+            placeholder="全部"
+            clearable
+            style="width: 220px"
+          >
+            <el-option label="全部" value="" />
+            <el-option
+              v-for="ds in dataSourceOptions"
+              :key="ds"
+              :label="ds"
+              :value="ds"
+            />
+          </el-select>
+        </el-form-item>
         <el-form-item label="Job 当前状态">
           <el-select v-model="filter.status" placeholder="全部" clearable style="width: 130px">
             <el-option label="全部" value="" />
-            <el-option label="正常运行" value="正常运行" />
+            <el-option label="正常" value="正常运行" />
             <el-option label="恢复中" value="恢复中" />
           </el-select>
         </el-form-item>
@@ -89,14 +105,20 @@
           <div class="card-header" @click="toggleClient(c.clientId)">
             <div class="card-header-left">
               <span class="card-client-id">{{ c.clientId }}</span>
-              <el-tag size="small" :type="c.overallStatus === '正常' ? 'success' : 'warning'">
-                {{ c.overallStatus === '正常' ? '正常' : '异常' }}
-              </el-tag>
+              <span class="card-divider">|</span>
+              <span class="card-stat">
+                Job 总数 <strong>{{ c.allRows.length }}</strong>
+              </span>
+              <span class="card-divider">|</span>
+              <span class="card-stat card-stat--normal">
+                正常 <strong>{{ c.normalCount }}</strong>
+              </span>
+              <span class="card-divider">|</span>
+              <span class="card-stat card-stat--abnormal">
+                异常 <strong>{{ c.abnormalCount }}</strong>
+              </span>
             </div>
             <div class="card-header-right">
-              <span class="card-count">
-                正常 <strong>{{ c.normalCount }}</strong> / 异常 <strong>{{ c.abnormalCount }}</strong>
-              </span>
               <el-icon class="card-toggle-icon" :class="{ 'is-collapsed': !isExpanded(c.clientId) }">
                 <ArrowDown />
               </el-icon>
@@ -105,35 +127,46 @@
         </template>
         <div v-show="isExpanded(c.clientId)">
           <el-table :data="c.rows" size="small" border style="width: 100%">
-            <el-table-column label="业务库" min-width="140">
+            <el-table-column label="数据源 ID" min-width="160">
               <template #default="{ row }">
-                <div>
-                  <div class="name-cell">{{ row.dataSourceName || '--' }}</div>
-                  <div class="id-cell">{{ row.dataSourceId }}</div>
-                </div>
+                <code class="cell-code">{{ row.dataSourceId }}</code>
+              </template>
+            </el-table-column>
+            <el-table-column label="数据源名称" min-width="140">
+              <template #default="{ row }">
+                <span class="name-cell">{{ row.dataSourceName || '--' }}</span>
               </template>
             </el-table-column>
             <el-table-column label="Job 当前状态" width="110">
               <template #default="{ row }">
                 <el-tag :type="row.jobStatus === '正常运行' ? 'success' : 'warning'" size="small">
-                  {{ row.jobStatus }}
+                  {{ row.jobStatus === '正常运行' ? '正常' : row.jobStatus }}
                 </el-tag>
               </template>
             </el-table-column>
             <el-table-column label="最近故障时间" width="160">
               <template #default="{ row }">{{ formatTime(row.latestFailureTime) }}</template>
             </el-table-column>
-            <el-table-column label="重启次数" width="80">
-              <template #default="{ row }">{{ row.latestRestartCount }}</template>
+            <el-table-column label="最近恢复时间" width="160">
+              <template #default="{ row }">{{ formatTime(row.latestRecoveryTime) }}</template>
             </el-table-column>
-            <el-table-column label="失败事件数" width="90">
-              <template #default="{ row }">{{ row.eventCountInWindow }}</template>
-            </el-table-column>
-            <el-table-column label="操作" width="100" fixed="right">
+            <el-table-column label="故障期间恢复尝试" width="140">
               <template #default="{ row }">
-                <el-button link type="primary" size="small" @click="openDetail(row.clientId, row.dataSourceId)">
-                  查看详情
+                {{ row.eventCountInWindow > 0 ? row.latestRestartCount + ' 次' : '—' }}
+              </template>
+            </el-table-column>
+            <el-table-column label="操作" width="80" fixed="right">
+              <template #default="{ row }">
+                <el-button
+                  v-if="row.latestFaultRootId"
+                  link
+                  type="primary"
+                  size="small"
+                  @click="openDetail(row.clientId, row.dataSourceId)"
+                >
+                  查看
                 </el-button>
+                <span v-else class="no-action">—</span>
               </template>
             </el-table-column>
           </el-table>
@@ -168,6 +201,7 @@ let requestId = 0
 
 const filter = reactive({
   selectedClients: ['__ALL__'] as string[],
+  dataSourceId: '' as string,
   status: '' as string
 })
 
@@ -196,7 +230,17 @@ const clientOptions = computed(() => {
   return Array.from(seen.values()).sort((a, b) => a.clientId.localeCompare(b.clientId))
 })
 
-// Expanded state: manual override takes priority, otherwise default by status
+// Build deduplicated data source options from data
+const dataSourceOptions = computed(() => {
+  if (!summaryList.value) return []
+  const seen = new Set<string>()
+  for (const r of summaryList.value) {
+    if (r.dataSourceId) seen.add(r.dataSourceId)
+  }
+  return Array.from(seen).sort()
+})
+
+// Expanded state: manual override takes priority
 const expandedState = ref<Record<string, boolean>>({})
 
 function isExpanded(clientId: string): boolean {
@@ -233,13 +277,16 @@ const visibleClients = computed<ClientCard[]>(() => {
     const normalCount = allRows.length - abnormalCount
     const overallStatus = abnormalCount > 0 ? '异常' : '正常'
 
-    // Apply status filter
+    // Apply filters
     let visibleRows = allRows
     if (filter.status) {
-      visibleRows = allRows.filter(r => r.jobStatus === filter.status)
+      visibleRows = visibleRows.filter(r => r.jobStatus === filter.status)
+    }
+    if (filter.dataSourceId) {
+      visibleRows = visibleRows.filter(r => r.dataSourceId === filter.dataSourceId)
     }
 
-    // Skip cards with no visible rows after status filter
+    // Skip cards with no visible rows after filter
     if (visibleRows.length === 0) continue
 
     // Set default expand state for new clients: all expanded on first load
@@ -273,7 +320,6 @@ function onClientFilterChange(values: string[]) {
   if (last === '__ALL__') {
     filter.selectedClients = ['__ALL__']
   } else if (values.includes('__ALL__') && values.length > 1) {
-    // "全部" was already selected, user picked a specific client → remove "全部"
     filter.selectedClients = values.filter(v => v !== '__ALL__')
   } else if (values.length === 0) {
     filter.selectedClients = ['__ALL__']
@@ -286,7 +332,11 @@ function doQuery() {
 
 function resetFilter() {
   filter.selectedClients = ['__ALL__']
+  filter.dataSourceId = ''
   filter.status = ''
+  // Reset expand states on query reset so new results default to all expanded
+  expandedState.value = {}
+  manualExpand.value = {}
 }
 
 async function loadData() {
@@ -356,7 +406,7 @@ function stopTimer() {
 }
 
 function formatTime(val?: string | null): string {
-  if (!val) return '--'
+  if (!val) return '—'
   const idx = val.indexOf('T')
   return idx >= 0 ? val.replace('T', ' ') : val
 }
@@ -428,7 +478,7 @@ onUnmounted(() => stopTimer())
 }
 .card-header-left {
   display: flex;
-  align-items: center;
+  align-items: baseline;
   gap: 10px;
 }
 .card-header-right {
@@ -442,13 +492,21 @@ onUnmounted(() => stopTimer())
   color: #303133;
   font-family: monospace;
 }
-.card-count {
-  font-size: 12px;
-  color: #909399;
+.card-divider {
+  color: #dcdfe6;
+  font-size: 14px;
 }
-.card-count strong {
+.card-stat {
+  font-size: 13px;
+  color: #606266;
+}
+.card-stat strong {
+  font-size: 14px;
   color: #303133;
+  margin-left: 2px;
 }
+.card-stat--normal strong { color: #67c23a; }
+.card-stat--abnormal strong { color: #e6a23c; }
 .card-toggle-icon {
   transition: transform 0.2s;
   color: #909399;
@@ -457,8 +515,24 @@ onUnmounted(() => stopTimer())
 .card-toggle-icon.is-collapsed {
   transform: rotate(-90deg);
 }
-.name-cell { font-weight: 500; color: #303133; }
-.id-cell { font-size: 12px; color: #909399; }
+.name-cell {
+  font-weight: 500;
+  color: #303133;
+  display: inline-block;
+  max-width: 100%;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+.cell-code {
+  font-size: 12px;
+  font-family: monospace;
+  color: #303133;
+}
+.no-action {
+  color: #c0c4cc;
+  font-size: 13px;
+}
 .filter-hint {
   margin-top: 8px;
   font-size: 12px;

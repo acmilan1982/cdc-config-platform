@@ -154,15 +154,20 @@ public class JobFailureServiceImpl implements JobFailureService {
                     vo.setLatestFaultRootId(latestGroup.getFaultRootId());
                     vo.setLatestRestartCount(latestGroup.countRestarts());
 
-                    // Determine job status: check if latest fault process is closed
+                    // Determine job status and recovery time
                     boolean closed = false;
+                    java.time.LocalDateTime recoveryTime = null;
                     for (FaultLogModel l : latestGroup.getAllLogs()) {
                         if (l.isStableCheckPassed()) {
                             closed = true;
+                            if (l.getHandleTime() != null) {
+                                recoveryTime = l.getHandleTime();
+                            }
                             break;
                         }
                     }
                     vo.setJobStatus(closed ? "正常运行" : "恢复中");
+                    vo.setLatestRecoveryTime(recoveryTime);
                 } else {
                     vo.setJobStatus("正常运行");
                     vo.setLatestRestartCount(0);

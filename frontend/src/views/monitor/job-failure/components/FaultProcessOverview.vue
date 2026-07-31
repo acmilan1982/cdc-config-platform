@@ -27,22 +27,23 @@
     <div class="overview-item">
       <span class="ov-label">当前处理状态</span>
       <el-tag :type="statusTagType(detail.recordStatus)" size="small">
-        {{ detail.recordStatusLabel || detail.recordStatus || '--' }}
-      </el-tag>
-    </div>
-    <div class="overview-item">
-      <span class="ov-label">故障过程结果</span>
-      <el-tag :type="resultTagType(detail.faultProcessResult)" size="small">
-        {{ detail.faultProcessResultLabel || detail.faultProcessResult || '--' }}
+        {{ currentStatusLabel }}
       </el-tag>
     </div>
   </div>
 </template>
 
 <script setup lang="ts">
+import { computed } from 'vue'
 import type { FaultProcessDetailVO } from '@/types/jobFailure'
 
-defineProps<{ detail: FaultProcessDetailVO }>()
+const props = defineProps<{ detail: FaultProcessDetailVO }>()
+
+const currentStatusLabel = computed(() => {
+  const status = props.detail.recordStatus
+  if (status === 'RECOVERY_RECORDED') return '已恢复'
+  return props.detail.recordStatusLabel || status || '--'
+})
 
 function formatTime(val?: string | null): string {
   if (!val) return '--'
@@ -53,16 +54,6 @@ function formatTime(val?: string | null): string {
 function statusTagType(status?: string | null): string {
   if (!status) return 'info'
   switch (status) {
-    case 'RECOVERY_RECORDED': return 'success'
-    case 'NOT_CLOSED': return 'warning'
-    case 'DATA_ANOMALY': return 'danger'
-    default: return 'info'
-  }
-}
-
-function resultTagType(result?: string | null): string {
-  if (!result) return 'info'
-  switch (result) {
     case 'RECOVERY_RECORDED': return 'success'
     case 'NOT_CLOSED': return 'warning'
     case 'DATA_ANOMALY': return 'danger'

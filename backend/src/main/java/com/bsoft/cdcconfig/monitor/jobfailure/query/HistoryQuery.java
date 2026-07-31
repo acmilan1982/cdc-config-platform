@@ -2,11 +2,17 @@ package com.bsoft.cdcconfig.monitor.jobfailure.query;
 
 import java.time.LocalDateTime;
 
+import org.springframework.format.annotation.DateTimeFormat;
+
 public class HistoryQuery {
 
     private String clientId;
     private String dataSourceId;
+
+    @DateTimeFormat(pattern = "yyyy-MM-dd'T'HH:mm:ss")
     private LocalDateTime startTime;
+
+    @DateTimeFormat(pattern = "yyyy-MM-dd'T'HH:mm:ss")
     private LocalDateTime endTime;
     private int pageNum = 1;
     private int pageSize = 20;
