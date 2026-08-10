@@ -1,1 +1,0 @@
-import{P as t}from"./PlaceholderPage--zFy8Afm.js";import{d as o,c as r,o as a}from"./index-3-pqBQrn.js";const C=o({__name:"ClientConfigPage",setup(n){const e={nature:"可维护",structure:"简单列表页",tables:"CDC_CLIENT_MULTIPLE",desc:"管理 CDC 探针注册信息。CLIENT_ID 唯一标识每个探针实例。"};return(c,s)=>(a(),r(t,{title:"客户端配置",group:"配置管理",info:e}))}});export{C as default};

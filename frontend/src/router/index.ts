@@ -65,6 +65,12 @@ const routes: RouteRecordRaw[] = [
     name: 'JobFailureDetail',
     component: () => import('@/views/monitor/job-failure/detail.vue'),
     meta: { title: '故障过程详情', group: '运行监控' }
+  },
+  {
+    path: '/large-screen',
+    name: 'LargeScreen',
+    component: () => import('@/views/large-screen/LargeScreenPage.vue'),
+    meta: { title: 'CDC 数据同步统计大屏', standalone: true }
   }
 ]
 
