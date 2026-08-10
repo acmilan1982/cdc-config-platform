@@ -57,13 +57,20 @@ public class BatchTransactionExecutor {
         // 1. 读取当前水位
         long oldLastLogId = watermarkCasUpdater.readCurrentWatermark(taskCode, logType);
 
-        // 2. 流式查询 + 聚合（不产生中间 List）
+        // 2. 已追平守卫：水位已达到或超过安全上限时，本流无新数据可处理
+        if (oldLastLogId >= safeUpperId) {
+            log.debug("Caught up: {} {}, lastId={}, safeUpper={}",
+                    taskCode, logType, oldLastLogId, safeUpperId);
+            return BatchResult.EMPTY;
+        }
+
+        // 3. 流式查询 + 聚合（不产生中间 List）
         BatchAggregationResult aggregationResult = batchAggregator.aggregateStreaming(
                 taskCode, logType,
                 rowConsumer -> logBatchReader.readBatchStreaming(
                         tableName, oldLastLogId, safeUpperId, batchSize, rowConsumer));
 
-        // 3. 空批次：不推进水位，标记追平
+        // 4. 空批次：不推进水位，标记追平
         if (aggregationResult.getTotalRowCount() == 0) {
             log.debug("Empty batch: {} {}, lastId={}, safeUpper={}",
                     taskCode, logType, oldLastLogId, safeUpperId);
@@ -73,10 +80,10 @@ public class BatchTransactionExecutor {
         long newLastLogId = aggregationResult.getMaxLogId();
         int processedCount = aggregationResult.getTotalRowCount();
 
-        // 4. 四类结果原子写入
+        // 5. 四类结果原子写入
         statsResultWriter.mergeAll(taskCode, batchId, aggregationResult);
 
-        // 5. CAS 推进水位
+        // 6. CAS 推进水位
         watermarkCasUpdater.casUpdate(taskCode, logType, oldLastLogId, newLastLogId,
                 processedCount, batchId);
 

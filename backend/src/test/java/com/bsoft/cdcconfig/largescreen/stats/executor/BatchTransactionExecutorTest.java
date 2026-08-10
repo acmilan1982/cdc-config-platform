@@ -136,6 +136,53 @@ class BatchTransactionExecutorTest {
                 executor.executeBatch(TASK_CODE, LOG_TYPE, TABLE_NAME, SAFE_UPPER_ID, BATCH_SIZE));
     }
 
+    @Test
+    void oldLastLogIdEqualsSafeUpperIdReturnsEmpty() {
+        when(watermarkCasUpdater.readCurrentWatermark(TASK_CODE, LOG_TYPE))
+                .thenReturn(SAFE_UPPER_ID);
+
+        BatchResult result = executor.executeBatch(TASK_CODE, LOG_TYPE, TABLE_NAME,
+                SAFE_UPPER_ID, BATCH_SIZE);
+
+        assertTrue(result.isEmpty());
+        assertTrue(result.isSuccess());
+        verify(watermarkCasUpdater).readCurrentWatermark(TASK_CODE, LOG_TYPE);
+        verifyNoMoreInteractions(watermarkCasUpdater);
+        verifyNoInteractions(logBatchReader);
+        verifyNoInteractions(batchAggregator);
+        verifyNoInteractions(statsResultWriter);
+    }
+
+    @Test
+    void oldLastLogIdExceedsSafeUpperIdReturnsEmpty() {
+        when(watermarkCasUpdater.readCurrentWatermark(TASK_CODE, LOG_TYPE))
+                .thenReturn(SAFE_UPPER_ID + 1);
+
+        BatchResult result = executor.executeBatch(TASK_CODE, LOG_TYPE, TABLE_NAME,
+                SAFE_UPPER_ID, BATCH_SIZE);
+
+        assertTrue(result.isEmpty());
+        assertTrue(result.isSuccess());
+        verify(watermarkCasUpdater).readCurrentWatermark(TASK_CODE, LOG_TYPE);
+        verifyNoMoreInteractions(watermarkCasUpdater);
+        verifyNoInteractions(logBatchReader);
+        verifyNoInteractions(batchAggregator);
+        verifyNoInteractions(statsResultWriter);
+    }
+
+    @Test
+    void errorStreamEqualsSafeUpperIdReturnsEmpty() {
+        when(watermarkCasUpdater.readCurrentWatermark(TASK_CODE, "ERROR"))
+                .thenReturn(SAFE_UPPER_ID);
+
+        BatchResult result = executor.executeBatch(TASK_CODE, "ERROR",
+                "CDC_LOG_ERROR", SAFE_UPPER_ID, BATCH_SIZE);
+
+        assertTrue(result.isEmpty());
+        assertTrue(result.isSuccess());
+        verifyNoInteractions(logBatchReader);
+    }
+
     @SuppressWarnings("unchecked")
     @Test
     void newWatermarkEqualsMaxCdcLogIdNotSafeUpperId() {

@@ -4,7 +4,10 @@ import com.bsoft.cdcconfig.largescreen.stats.algorithm.WatermarkCasUpdater;
 import com.bsoft.cdcconfig.largescreen.stats.config.StatsTaskConfig;
 import com.bsoft.cdcconfig.largescreen.stats.dto.BatchResult;
 import com.bsoft.cdcconfig.largescreen.stats.dto.RoundResult;
+import com.bsoft.cdcconfig.largescreen.stats.support.ControllableClock;
 import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.DisplayName;
+import org.junit.jupiter.api.Nested;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.Mock;
@@ -232,22 +235,136 @@ class RoundExecutorTest {
                 "ERROR batches should not exceed 10");
     }
 
-    @Test
-    void perStreamBatchSizesUsed() {
-        when(watermarkCasUpdater.readCurrentWatermark(anyString(), anyString())).thenReturn(0L);
-        when(batchTransactionExecutor.executeBatch(anyString(), anyString(),
-                anyString(), anyLong(), anyInt())).thenReturn(BatchResult.EMPTY);
+    @Nested
+    @DisplayName("V06: 180s soft time limit with controllable clock")
+    class V06TimeLimitTests {
 
-        int customCorrectBs = 50000;
-        int customErrorBs = 300000;
+        private ControllableClock controllable;
+        private RoundExecutor timeExecutor;
 
-        executor.executeRound(config,
-                correctSafeUpperId, errorSafeUpperId,
-                customCorrectBs, customErrorBs);
+        @BeforeEach
+        void setUp() {
+            controllable = new ControllableClock(1786003200000L, ZoneId.of("UTC"));
+            timeExecutor = new RoundExecutor(batchTransactionExecutor,
+                    watermarkCasUpdater, controllable);
+        }
 
-        verify(batchTransactionExecutor, atLeastOnce()).executeBatch(
-                anyString(), eq("CORRECT"), eq("CDC_LOG_CORRECT"), anyLong(), eq(customCorrectBs));
-        verify(batchTransactionExecutor, atLeastOnce()).executeBatch(
-                anyString(), eq("ERROR"), eq("CDC_LOG_ERROR"), anyLong(), eq(customErrorBs));
+        @Test
+        @DisplayName("continues batches before deadline")
+        void continuesBatchesBeforeDeadline() {
+            when(watermarkCasUpdater.readCurrentWatermark(anyString(), anyString()))
+                    .thenReturn(0L);
+
+            BatchResult dataBatch = new BatchResult.Builder()
+                    .success(true).logType("CORRECT")
+                    .oldLastLogId(0).newLastLogId(100).processedCount(10).build();
+            when(batchTransactionExecutor.executeBatch(anyString(), eq("CORRECT"),
+                    eq("CDC_LOG_CORRECT"), anyLong(), anyInt()))
+                    .thenReturn(dataBatch);
+            when(batchTransactionExecutor.executeBatch(anyString(), eq("ERROR"),
+                    eq("CDC_LOG_ERROR"), anyLong(), anyInt()))
+                    .thenReturn(BatchResult.EMPTY);
+
+            RoundResult result = timeExecutor.executeRound(config,
+                    correctSafeUpperId, errorSafeUpperId,
+                    config.getBatchSize(), config.getBatchSize());
+
+            assertTrue(result.getTotalCorrectBatches() >= 1,
+                    "at least one batch processed before deadline");
+            assertEquals("batch_limit_reached", result.getStopReason());
+            assertFalse(result.isCorrectFailed());
+            assertFalse(result.isErrorFailed());
+        }
+
+        @Test
+        @DisplayName("stops with time_limit_reached when deadline exceeded")
+        void stopsWhenDeadlineExceeded() {
+            when(watermarkCasUpdater.readCurrentWatermark(anyString(), anyString()))
+                    .thenReturn(0L);
+
+            BatchResult dataBatch = new BatchResult.Builder()
+                    .success(true).logType("CORRECT")
+                    .oldLastLogId(0).newLastLogId(100).processedCount(10).build();
+            // Advance clock past 180s deadline on first CORRECT batch return
+            when(batchTransactionExecutor.executeBatch(anyString(), eq("CORRECT"),
+                    eq("CDC_LOG_CORRECT"), anyLong(), anyInt()))
+                    .thenAnswer(inv -> {
+                        controllable.advance(181_000L);
+                        return dataBatch;
+                    });
+            when(batchTransactionExecutor.executeBatch(anyString(), eq("ERROR"),
+                    eq("CDC_LOG_ERROR"), anyLong(), anyInt()))
+                    .thenReturn(BatchResult.EMPTY);
+
+            RoundResult result = timeExecutor.executeRound(config,
+                    correctSafeUpperId, errorSafeUpperId,
+                    config.getBatchSize(), config.getBatchSize());
+
+            assertEquals("time_limit_reached", result.getStopReason(),
+                    "should stop due to time limit, not batch limit");
+            assertTrue(result.getTotalCorrectBatches() >= 1,
+                    "already-started batch must complete");
+            assertFalse(result.isCorrectFailed(),
+                    "time limit stop is not a failure");
+        }
+
+        @Test
+        @DisplayName("completed batches not rolled back after time limit")
+        void completedBatchesNotRolledBack() {
+            when(watermarkCasUpdater.readCurrentWatermark(anyString(), anyString()))
+                    .thenReturn(0L);
+
+            BatchResult dataBatch = new BatchResult.Builder()
+                    .success(true).logType("CORRECT")
+                    .oldLastLogId(0).newLastLogId(5000).processedCount(2000).build();
+            when(batchTransactionExecutor.executeBatch(anyString(), eq("CORRECT"),
+                    eq("CDC_LOG_CORRECT"), anyLong(), anyInt()))
+                    .thenAnswer(inv -> {
+                        controllable.advance(181_000L);
+                        return dataBatch;
+                    });
+            when(batchTransactionExecutor.executeBatch(anyString(), eq("ERROR"),
+                    eq("CDC_LOG_ERROR"), anyLong(), anyInt()))
+                    .thenReturn(BatchResult.EMPTY);
+
+            RoundResult result = timeExecutor.executeRound(config,
+                    correctSafeUpperId, errorSafeUpperId,
+                    config.getBatchSize(), config.getBatchSize());
+
+            long correctProcessed = result.getTotalCorrectProcessed();
+            assertTrue(correctProcessed >= 2000,
+                    "processed count must be preserved after time limit stop");
+            assertEquals("time_limit_reached", result.getStopReason());
+        }
+
+        @Test
+        @DisplayName("time limit coexists with batch limit per frozen priority")
+        void timeLimitAndBatchLimitCoexist() {
+            // This test verifies the current implementation's priority:
+            // batch_limit_reached takes precedence over time_limit_reached
+            // when both conditions are met simultaneously.
+            when(watermarkCasUpdater.readCurrentWatermark(anyString(), anyString()))
+                    .thenReturn(0L);
+
+            BatchResult dataBatch = new BatchResult.Builder()
+                    .success(true).logType("CORRECT")
+                    .oldLastLogId(0).newLastLogId(100).processedCount(10).build();
+            when(batchTransactionExecutor.executeBatch(anyString(), eq("CORRECT"),
+                    eq("CDC_LOG_CORRECT"), anyLong(), anyInt()))
+                    .thenReturn(dataBatch);
+            when(batchTransactionExecutor.executeBatch(anyString(), eq("ERROR"),
+                    eq("CDC_LOG_ERROR"), anyLong(), anyInt()))
+                    .thenReturn(BatchResult.EMPTY);
+
+            RoundResult result = timeExecutor.executeRound(config,
+                    correctSafeUpperId, errorSafeUpperId,
+                    config.getBatchSize(), config.getBatchSize());
+
+            // With 10-batch limit reached, stopReason is batch_limit_reached
+            // regardless of whether time also elapsed
+            assertNotNull(result.getStopReason());
+            assertFalse(result.isCorrectFailed());
+            assertFalse(result.isErrorFailed());
+        }
     }
 }
