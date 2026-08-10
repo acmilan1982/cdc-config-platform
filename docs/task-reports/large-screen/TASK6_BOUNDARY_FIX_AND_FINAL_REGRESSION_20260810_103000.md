@@ -2,13 +2,13 @@
 
 **报告类型**: 缺陷修复 + 回归验证 + 最终关闭申请
 **生成时间**: 2026-08-10 10:30 CST
-**结论**: 终态 A — 全部通过，建议 TASK 6 正式关闭
+**结论**: 功能修复与回归通过，完成最终提交与纯净验证后可申请关闭
 
 ---
 
 ## 1. 总体结论
 
-TASK 6 阶段 B 只读补证确认的追平边界缺陷已修复，V06 可控时钟测试已补齐。修复后通过全量回归测试（210 tests）、真实 Oracle 最小验证和编译打包检查。Git 状态异常已解释并排除。所有 V01-V20 验收场景具备有效证据。建议 TASK 6 正式关闭。
+TASK 6 阶段 B 只读补证确认的追平边界缺陷已修复，V06 可控时钟测试已补齐。修复后通过全量回归测试（210 tests）、真实 Oracle 最小验证和编译打包检查。Git 状态异常已解释并排除。所有 V01-V20 验收场景具备有效证据。最终提交与 detached 纯净验证待完成后即可申请关闭。
 
 ---
 
@@ -376,7 +376,7 @@ Round end: task=LARGE_SCREEN_STATS, correctBatches=7/10, errorBatches=0/10, corr
 
 ### 10.3 关闭条件判断
 
-所有 12 项关闭条件已满足:
+以下 12 项条件中，10 项已满足，2 项待 detached 纯净验证确认：
 
 1. ✅ Git 状态异常已解释且没有污染提交
 2. ✅ `oldLastLogId == safeUpperId` 正常短路
@@ -387,17 +387,18 @@ Round end: task=LARGE_SCREEN_STATS, correctBatches=7/10, errorBatches=0/10, corr
 7. ✅ 全部回归测试通过 (210 tests)
 8. ✅ 构建与 Java 8 兼容检查通过
 9. ✅ 真实 Oracle 最小验证通过
-10. ✅ 提交范围精确（见阶段 9）
-11. ✅ 未推送
-12. ✅ 没有未解释阻塞项
+10. ⏳ 提交范围精确 — 已于 commit `3863a09` 实现，见第 11 节
+11. ⏳ 未推送 — 已确认
+12. ⏳ detached 纯净提交验证 — 待执行
 
-**建议 TASK 6 正式关闭。**
+**完成最终提交与纯净验证后可申请关闭。**
 
 ---
 
-## 11. 最终提交信息（待执行）
+## 11. 提交信息
 
-Commit message:
+已创建 commit `3863a09fe825a2e96674515e53ce12aa7c2bf800`，父提交 `0d37a9d`。
+
 ```
 fix(large-screen): handle caught-up watermark boundary
 
@@ -407,8 +408,18 @@ from LogBatchReader when the stream has caught up.
 
 Add boundary tests for equal and excess safeUpperId scenarios.
 Add V06 controllable clock tests via RoundExecutorTest.V06TimeLimitTests.
+Add ControllableClock test helper for deterministic time control.
 
 Co-Authored-By: Claude Opus 4.7 <noreply@anthropic.com>
 ```
+
+**提交文件 (5)**:
+| 文件 | 状态 |
+|------|------|
+| `backend/src/main/java/.../BatchTransactionExecutor.java` | M |
+| `backend/src/test/java/.../BatchTransactionExecutorTest.java` | M |
+| `backend/src/test/java/.../RoundExecutorTest.java` | M |
+| `backend/src/test/java/.../support/ControllableClock.java` | A |
+| `docs/task-reports/large-screen/TASK6_BOUNDARY_FIX_AND_FINAL_REGRESSION_20260810_103000.md` | A |
 
 ---
