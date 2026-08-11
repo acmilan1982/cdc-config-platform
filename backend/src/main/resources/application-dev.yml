@@ -16,7 +16,7 @@ cdc:
   monitor:
     scn-stale-threshold-hours: ${CDC_MONITOR_SCN_STALE_THRESHOLD_HOURS:24}
   zookeeper:
-    connect-string: ${CDC_ZK_CONNECT:192.168.174.51:2181}
+    connect-string: ${CDC_ZK_CONNECT:10.19.16.111:2181}
     root-path: ${CDC_ZK_ROOT:/bsoft-cdc}
     session-timeout-ms: 30000
     connection-timeout-ms: 15000
