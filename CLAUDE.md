@@ -30,73 +30,133 @@
 - 如确需修改公共规则，必须由人工明确提出，并作为独立任务处理。
 - 存在歧义时必须停止并向人工确认，不得自行扩大实现范围。
 
+冲突处理：
+
+- 当前任务要求、正式基线、代码现状、环境现状之间出现实质冲突时，不得静默选边；
+- 应记录冲突、证据、影响范围和可选处理方式；
+- 涉及用户决策、越权操作或安全边界时，停止相关操作并报告；
+- 不得擅自修改正式基线来迎合当前实现；
+- 普通任务提示词不得暗中放宽安全规则；用户明确授权的规则维护任务可以修改本文件。
+
 ---
 
-## 3. Agent开发模式
+## 3. 项目基线读取规则
+
+### 3.1 正式项目级基线
+
+开始任何与本项目有关的分析、设计、开发、修复、测试、验收、文档或运维准备任务前，Agent 必须完整读取 `docs/baseline/` 下六份正式项目级基线：
+
+| 文件 | 职责 |
+|---|---|
+| `PROJECT.md` | 项目总览 |
+| `ENVIRONMENT.md` | 环境配置 |
+| `ARCHITECTURE.md` | 系统架构 |
+| `DEVELOPMENT_RULES.md` | 开发规则 |
+| `PROJECT_STATUS.md` | 项目状态快照 |
+| `DOMAIN_GLOSSARY.md` | 领域词汇表 |
+
+这六份文件承载当前有效的项目级结论性事实。即使当前任务提示词没有重复列出，Agent 也不得跳过。正式基线的修改必须是用户明确授权的基线维护任务，不得在普通业务任务中顺手修改。
+
+### 3.2 功能级基线
+
+如果当前任务属于一个已经建立正式功能基线的功能，还必须读取 `docs/features/<feature>/` 下与该任务相关的正式功能基线。功能级基线不存在时，不得自行假设已经存在；不得用过程材料、旧提示词或临时报告冒充正式功能基线。
+
+### 3.3 过程材料
+
+`docs/baseline-work/` 是分析、证据、修订、执行和验收等过程材料。日常会话和 Agent 交接默认不读取，不得无目的批量读取。只有在以下情况才定向读取：
+
+- 正式基线存在歧义或冲突，需要追溯证据；
+- 执行基线审计、修订或升级任务；
+- 继续未关闭的专项任务；
+- 正式基线明确引用且当前任务确需细节；
+- 用户明确要求。
+
+如果日常任务频繁依赖过程材料才能理解项目，应报告正式基线可能沉淀不足，而不是把全部过程材料改成默认必读。
+
+---
+
+## 4. Agent开发模式
 
 本项目采用 Agent 与人工串行开发模式：
 
 - Claude Code 只允许在 `develop` 分支上开发。
-- Claude Code 开始任务前必须拉取远程 `develop` 最新代码。
-- Claude Code 完成任务后必须完成验证、Commit 并 Push 到远程 `develop`。
-- 人工通过 Windows IDEA 拉取 `develop` 分支进行 Review、运行和验收。
-- 人工或 Codex 修改完成后必须 Commit 并 Push 回 `develop`。
 - Claude Code 与人工不得同时修改和推送 `develop`。
-- 每次任务只对应一个明确任务编号和一个独立 Commit。
+- 人工通过 Windows IDEA 拉取 `develop` 分支进行 Review、运行和验收。
 - 未经人工明确要求，不创建功能分支、不操作其他分支。
+- 任务开始前必须按 §3 读取项目基线，按 §5 记录 Git 现场。
 
 ---
 
-## 4. Git强约束规则
+## 5. Git 约束规则
 
-### 4.1 允许操作
+### 5.1 默认允许的只读检查
 
-- `git status`
-- `git status --short`
+Agent 可按任务需要执行以下只读 Git 操作：
+
+- `git status`、`git status --short`、`git status --branch --short`
 - `git branch --show-current`
-- `git fetch origin`
-- `git pull --ff-only origin develop`
-- `git diff`
-- `git diff --stat`
-- `git log`
-- `git rev-parse HEAD`
-- `git ls-remote origin refs/heads/develop`
-- `git add <明确文件>`
-- `git commit`
-- `git push origin develop`
+- `git diff`、`git diff --stat`、`git diff -- <path>`
+- `git log`、`git show`
+- `git rev-parse`、`git rev-list`
+- `git ls-remote`
 
-### 4.2 禁止操作
+### 5.2 需要明确授权的写操作
 
-- 操作 `develop` 以外的分支
-- 创建其他开发分支
-- `git push --force`
-- `git push --force-with-lease`
-- `git rebase`
-- `git merge`
-- `git reset --hard`
-- `git clean -fd`
-- `git restore .`
-- `git checkout -- .`
-- 未经人工确认执行 `git stash`
-- `git add .`
-- `git add -A`
+以下操作默认禁止，只有用户或当前上级任务明确授权时才能执行：
+
+- `git add`、`git commit`、`git push`
+- `git pull`、`git fetch`（会更新本地引用）
+- `git merge`、`git rebase`
+- `git reset`、`git clean`
+- `git stash`、`git stash pop`
+- `git checkout`（切换分支或恢复文件）
+- `git switch`
+- 分支创建、切换、重命名或删除
+- Tag 创建、修改、删除或推送
+- 任何可能改变工作区、索引、引用、本地历史或远程状态的 Git 命令
+
+### 5.3 Commit 授权
+
+- 只有用户或当前上级任务明确要求 Commit 时才允许执行；
+- "完成任务""修复完成""验收通过""关闭任务""保存修改"等表述不等于 Commit 授权；
+- 授权应能够识别提交范围以及是否包含新增文件；
+- 只能暂存和提交明确授权范围内的文件；
+- 默认禁止 `git add .`、`git add -A` 等可能混入范围外文件的宽泛暂存方式；
+- Commit 授权只对当次明确范围有效，不自动延续到后续任务。
+
+### 5.4 Push 授权
+
+- Commit 授权不包含 Push 授权；
+- 只有用户或当前上级任务明确要求 Push 时才允许执行；
+- "提交""任务关闭""验收通过"不等于 Push 授权；
+- 执行 Push 前应核对当前分支、本地 HEAD、远程目标、ahead/behind 和待推送 Commit；
+- Push 授权只对当次明确目标有效。
+- 同一条指令可以同时授权 Commit 与 Push，但必须明确包含两项操作及范围。
+
+### 5.5 永久禁止的操作
+
+无论是否授权，以下操作始终禁止：
+
+- 操作 `develop` 以外的分支（读取除外）
+- `git push --force`、`git push --force-with-lease`
 - 删除或覆盖人工尚未提交的代码
 - 自行解决本地与远程分叉
 - 自行改写提交历史
 
+### 5.6 停线条件
+
 出现以下任一情况时，必须停止任务并报告：
 
-- 工作区不干净
 - 当前分支不是 `develop`
-- 本地与远程发生分叉
-- 存在无法识别的人工修改
-- `git pull --ff-only` 失败
+- 本地与远程发生分叉（且未被授权解决）
+- 目标文件存在无法安全区分的既有修改
+- 需要超出授权范围的 Git 操作
 
 不得自行修复、覆盖、暂存、丢弃或改写历史。
 
 ---
 
-## 5. 任务开始规则
+## 6. 任务开始规则
 
 每次任务开始前必须执行：
 
@@ -106,8 +166,6 @@ source /agent/cdc-config-platform/agent-env.sh
 
 git status --short
 git branch --show-current
-git fetch origin
-git pull --ff-only origin develop
 git rev-parse HEAD
 ```
 
@@ -115,23 +173,25 @@ git rev-parse HEAD
 
 1. 当前目录为 `/agent/cdc-config-platform`
 2. 当前目录是有效 Git 仓库
-3. 工作区干净
-4. 当前分支为 `develop`
-5. 已同步远程最新代码
-6. 已记录任务开始前完整 Commit ID
-7. 当前任务所需环境通过预检
+3. 当前分支为 `develop`
+4. 已记录任务开始前完整 Commit ID 和 `git status --short` 输出
+5. 当前任务所需环境通过预检
 
-任一前置检查失败时：
+非干净工作区处理：
 
-- 立即停止任务
-- 不得继续编码
-- 不得 Commit
-- 不得 Push
-- 返回明确失败原因
+- 工作区不干净本身不构成自动停线；
+- 区分本任务授权范围、任务开始前已存在的无关修改，以及与目标文件重叠或归属无法确定的修改；
+- 本任务范围内的文件可按授权处理；
+- 与本任务无关的既有修改必须保持原样，不修改、不覆盖、不暂存、不提交；
+- 目标文件若在任务开始前已有修改，先判断是否可在保留既有内容的前提下安全编辑；如果无法明确区分或存在覆盖风险，停止修改该文件并报告；
+- 不得为了获得干净工作区执行 Reset、Checkout、Clean、Stash 或删除文件。
+- 不得执行 `git pull`、`git fetch`、`git merge` 或 `git rebase`，除非当前任务明确授权。
+
+任一阻塞性前置检查失败时（如分支非 develop、本地与远程分叉且未被授权解决），立即停止任务并返回明确失败原因。
 
 ---
 
-## 6. 任务范围与代码修改原则
+## 7. 任务范围与代码修改原则
 
 - 只修改当前任务明确涉及的代码和文档。
 - 不得擅自扩大任务范围。
@@ -143,6 +203,7 @@ git rev-parse HEAD
 - 不得修改 `.claude/settings.json`。
 - 不得修改 `.claude/skills/**`，除非任务明确要求。
 - 不得修改本文件，除非人工明确要求。
+- 不得修改 `docs/baseline/` 下六份正式项目级基线，除非当前任务是用户明确授权的基线维护任务。
 - 公共规则调整必须作为独立任务，不得夹带在业务任务中。
 - 发现需求、表结构、接口或现有实现存在歧义时，必须列出待确认问题，不得自行猜测。
 - 如发现任务开始前已存在的无关缺陷，必须报告，不得为了完成当前任务而顺手修复。
@@ -150,7 +211,7 @@ git rev-parse HEAD
 
 ---
 
-## 7. 预装基础环境
+## 8. 预装基础环境
 
 服务器已预先安装并配置：
 
@@ -161,7 +222,7 @@ git rev-parse HEAD
 - Node.js：`/opt/node`
 - Git
 - Claude Code CLI
-- ZooKeeper 客户端：`/opt/zookeeper/apache-zookeeper-3.5.6-bin`
+- ZooKeeper 客户端：`/opt/zookeeper/zookeeper-3.4.14`
 - 项目环境脚本：`/agent/cdc-config-platform/agent-env.sh`
 
 执行任何任务前必须先加载：
@@ -230,7 +291,7 @@ sqlplus -v
 ### 8.5 ZooKeeper任务
 
 ```bash
-test -x /opt/zookeeper/apache-zookeeper-3.5.6-bin/bin/zkCli.sh
+test -x ${ZOOKEEPER_HOME}/bin/zkCli.sh
 ```
 
 必要时执行只读连接检查。
@@ -445,10 +506,10 @@ source /agent/cdc-config-platform/agent-env.sh
 
 ### 14.1 环境信息
 
-- ZooKeeper 客户端版本：3.5.6
-- ZooKeeper 客户端目录：`/opt/zookeeper/apache-zookeeper-3.5.6-bin`
-- ZooKeeper 客户端命令：`/opt/zookeeper/apache-zookeeper-3.5.6-bin/bin/zkCli.sh`
-- CDC ZooKeeper 地址：`192.168.174.51:2181`
+- ZooKeeper 服务端目标版本：3.4.14
+- ZooKeeper 客户端目录：`/opt/zookeeper/zookeeper-3.4.14`（ZOOKEEPER_HOME）
+- ZooKeeper 客户端命令：`${ZOOKEEPER_HOME}/bin/zkCli.sh`
+- CDC ZooKeeper 地址：`10.19.16.111:2181`
 - CDC 根路径：`/bsoft-cdc`
 - ZooKeeper 无认证
 
@@ -642,7 +703,33 @@ npm test
 
 ---
 
-## 19. 配置与凭据规则
+## 19. 程序启动与外部访问验收规则
+
+当任务要求启动前端、后端或完整应用供用户验收时：
+
+1. 服务必须监听可被服务器外部访问的网络接口，通常绑定 `0.0.0.0`；不得只监听 `127.0.0.1` 或 `localhost`。
+2. Agent 必须在最终报告中提供用户可直接打开的完整 URL，主机部分使用 `192.168.174.70`。
+3. URL 必须包含实际协议、端口和页面路径，例如 `http://192.168.174.70:5173/large-screen`。示例只表达格式，不得把端口或路径当作所有任务的固定值；必须使用本次实际启动结果。
+4. 不得仅提供 `localhost`、`127.0.0.1`、`0.0.0.0` 作为最终验收 URL。`0.0.0.0` 只用于监听绑定，不能作为交付给用户打开的 URL 主机。
+5. Agent 必须核验并报告：
+   - 实际监听地址和端口；
+   - 进程是否仍在运行；
+   - 本机 HTTP 请求或健康检查结果；
+   - 供用户访问的完整 URL；
+   - 若前后端分别启动，分别给出必要地址，并明确主要页面验收入口。
+6. 本机请求成功不等于已经证明用户侧网络可达。若条件允许，应进一步验证使用 `192.168.174.70` 的 URL；若仍无法确认用户侧可访问，必须如实标注验证边界，不得虚假声明"外部访问已通过"。
+7. 如果服务启动成功但外部访问受防火墙、端口策略、反向代理或网络路由阻断，Agent 应报告具体阻断点和建议操作，不得擅自修改服务器防火墙、安全策略、代理或网络配置，除非用户另行明确授权。
+8. 为视觉验收启动的程序应保持运行，直到用户完成验收或明确要求停止；报告中应给出必要的进程或日志定位信息，便于后续检查和停止。
+
+**规则适用边界：**
+
+- 只有任务要求"启动程序供用户验收"时，才强制提供外部访问 URL。
+- 纯代码分析、文档、静态检查或不要求启动程序的任务，不得为了满足此规则擅自启动服务。
+- 若用户在具体任务中明确指定其他服务器地址、域名、协议、端口或访问方式，以该次明确指令为准，并在报告中说明。
+
+---
+
+## 20. 配置与凭据规则
 
 允许提交：
 
@@ -662,37 +749,35 @@ npm test
 
 ---
 
-## 20. 提交和推送规则
+## 21. 提交和推送规则
 
-任务完成后必须：
+Commit 和 Push 均需用户或当前上级任务明确授权，默认禁止执行。详见 §5.2-§5.4。
 
-1. 执行 `git status --short`
-2. 执行 `git diff --stat`
-3. 执行 `git diff`
-4. 确认修改仅属于当前任务
-5. 执行当前任务要求的构建或验证
-6. 使用 `git add <明确文件>` 逐个暂存
-7. 创建一个与当前任务对应的 Commit
-8. Push 到 `origin/develop`
-9. 确认本地 HEAD 与远程 `develop` HEAD 一致
-10. 确认任务结束时工作区干净
+当获得 Commit 和/或 Push 授权时：
 
-Commit Message 必须包含任务编号，例如：
+1. 执行 `git status --short`；
+2. 执行 `git diff --stat`，必要时执行 `git diff`；
+3. 确认操作范围仅包含本次明确授权内容；
+4. 执行当前任务要求的构建或验证；
+5. 获得 Commit 授权时，才允许逐个暂存本次授权范围内的文件并创建 Commit；
+6. 获得 Push 授权时，才允许推送已明确授权的 Commit；仅获得 Push 授权而未获得 Commit 授权时，不得创建新 Commit；
+7. 仅在实际执行 Push 后，确认本地 HEAD 与远程目标分支 HEAD 一致；
+8. 已执行 Commit、但未获得 Push 授权时，应报告本地 ahead 状态，不得因此自行 Push。
 
-```text
-feat(DATASOURCE_CREATE_002): implement entity and dto
-```
+Commit Message 必须包含任务编号，格式：`type(scope): subject`。
 
 不得：
 
 - 在一个 Commit 中混合多个无关任务
 - 提交日志、构建输出、缓存和临时文件
 - 将当前任务之外的人工修改一并提交
+- 提交未经授权的文件或变更
 - Push 到 `develop` 以外的分支
+- 在未获得 Push 授权的情况下推送
 
 ---
 
-## 21. 任务结果输出要求
+## 22. 任务结果输出要求
 
 每次任务结束必须输出：
 
@@ -700,16 +785,18 @@ feat(DATASOURCE_CREATE_002): implement entity and dto
 - 任务编号
 - 修改文件列表
 - 任务开始前 Commit ID
-- 任务完成后 Commit ID
 - 分支名称
 - 环境预检结果
 - 后端构建结果（适用时）
 - 前端构建结果（适用时）
 - 数据库写操作及审批状态（适用时）
 - ZooKeeper写操作及审批状态（适用时）
-- Push 状态
 - 遗留问题或失败原因
 - 服务 PID、URL和停止命令（适用时）
+
+当任务获得并执行了 Commit/Push 授权时，额外输出：
+- 任务完成后 Commit ID
+- Push 状态
 
 统一机器可读格式：
 
@@ -719,7 +806,7 @@ status=SUCCESS或FAILED
 task_code=实际任务编号
 branch=develop
 base_commit_id=任务开始前完整Commit ID
-result_commit_id=任务结束后完整Commit ID
+result_commit_id=任务结束后完整Commit ID（仅获得并执行Commit授权时填写，否则为NOT_APPLICABLE）
 env_check_status=SUCCESS或FAILED
 backend_build_status=SUCCESS、FAILED或NOT_APPLICABLE
 frontend_build_status=SUCCESS、FAILED或NOT_APPLICABLE
@@ -731,15 +818,11 @@ error=失败时填写具体原因，成功时留空
 AGENT_TASK_RESULT_END
 ```
 
-只有当前任务要求的全部条件满足时，才能返回：
-
-```text
-status=SUCCESS
-```
+只有当前任务要求的全部条件满足时，才能返回 `status=SUCCESS`。
 
 ---
 
-## 22. 单任务Prompt最小要求
+## 23. 单任务Prompt最小要求
 
 在本文件已经定义公共规则后，单任务 Markdown 原则上只需要包含：
 
@@ -749,16 +832,17 @@ status=SUCCESS
 4. 明确业务规则
 5. 特殊禁止事项
 6. 验收标准
-7. 提交信息
-8. 当前任务特有的真实环境验证
+7. 当前任务特有的真实环境验证
+8. 如需要 Commit/Push，应提供明确授权说明
 
 单任务 Prompt 不需要重复粘贴本文件中已经明确的：
 
-- Git通用规则
-- 环境通用规则
-- 数据库审批通用规则
-- ZooKeeper只读通用规则
-- 通用构建命令
-- 通用提交和结果输出格式
+- 项目基线读取规则（§3）
+- Git 通用规则（§5）
+- 环境通用规则（§8-§10）
+- 数据库审批通用规则（§12）
+- ZooKeeper 只读通用规则（§14）
+- 通用构建命令（§16-§17）
+- 通用结果输出格式（§22）
 
-如当前任务需要覆盖默认验证范围，必须明确说明，但不得放宽安全边界。
+如当前任务需要覆盖默认验证范围或 Git 授权范围，必须明确说明，但不得放宽安全边界。
