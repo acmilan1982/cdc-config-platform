@@ -8,6 +8,8 @@ public class JobFailureSummaryVO {
     private String clientName;
     private String dataSourceId;
     private String dataSourceName;
+    private String dataSourceOrg;
+    private Boolean dataSourceActive;
     private String jobStatus;
     private LocalDateTime latestFailureTime;
     private Long latestEventId;
@@ -27,6 +29,12 @@ public class JobFailureSummaryVO {
 
     public String getDataSourceName() { return dataSourceName; }
     public void setDataSourceName(String dataSourceName) { this.dataSourceName = dataSourceName; }
+
+    public String getDataSourceOrg() { return dataSourceOrg; }
+    public void setDataSourceOrg(String dataSourceOrg) { this.dataSourceOrg = dataSourceOrg; }
+
+    public Boolean getDataSourceActive() { return dataSourceActive; }
+    public void setDataSourceActive(Boolean dataSourceActive) { this.dataSourceActive = dataSourceActive; }
 
     public String getJobStatus() { return jobStatus; }
     public void setJobStatus(String jobStatus) { this.jobStatus = jobStatus; }

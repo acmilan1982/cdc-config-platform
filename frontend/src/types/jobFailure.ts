@@ -14,6 +14,8 @@ export interface JobFailureSummaryVO {
   clientName?: string | null
   dataSourceId: string
   dataSourceName?: string | null
+  dataSourceOrg?: string | null
+  dataSourceActive?: boolean | null
   jobStatus: string
   latestFailureTime?: string | null
   latestRecoveryTime?: string | null

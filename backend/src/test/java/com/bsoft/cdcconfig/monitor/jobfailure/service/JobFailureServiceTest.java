@@ -27,9 +27,9 @@ class JobFailureServiceTest {
     @Autowired
     private JobFailureService jobFailureService;
 
-    private static final String EXISTING_CLIENT = "hosp-006";
-    private static final String EXISTING_DS = "my-19c";
-    private static final long EXISTING_EVENT_ID = 340090292801880064L;
+    private static final String EXISTING_CLIENT = "hosp-012";
+    private static final String EXISTING_DS = "112-source-19c";
+    private static final long EXISTING_EVENT_ID = 341473352776552448L;
 
     // ==================== API-1: Summary ====================
 
@@ -349,6 +349,27 @@ class JobFailureServiceTest {
                 .findFirst().get();
         assertEquals(EXISTING_DS, vo.getDataSourceId());
         assertEquals("oracle-业务库33", vo.getDataSourceName());
+    }
+
+    @Test
+    void summaryShouldResolveDataSourceOrgFromConfig() {
+        List<JobFailureSummaryVO> list = jobFailureService.querySummary();
+
+        JobFailureSummaryVO vo = list.stream()
+                .filter(r -> EXISTING_DS.equals(r.getDataSourceId()))
+                .findFirst().get();
+        assertEquals(EXISTING_DS, vo.getDataSourceId());
+        assertEquals("孝感市第一人民医院", vo.getDataSourceOrg());
+    }
+
+    @Test
+    void summaryShouldMarkDataSourceActive() {
+        List<JobFailureSummaryVO> list = jobFailureService.querySummary();
+
+        JobFailureSummaryVO vo = list.stream()
+                .filter(r -> EXISTING_DS.equals(r.getDataSourceId()))
+                .findFirst().get();
+        assertEquals(Boolean.TRUE, vo.getDataSourceActive());
     }
 
     @Test

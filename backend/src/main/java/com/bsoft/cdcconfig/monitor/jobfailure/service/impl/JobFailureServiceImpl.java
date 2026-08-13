@@ -101,8 +101,8 @@ public class JobFailureServiceImpl implements JobFailureService {
         List<Long> allEventIds = allEvents.stream().map(JobFailureEvent::getId).collect(Collectors.toList());
         List<JobFailureHandleLog> allLogs = loadLogsByEventIds(allEventIds);
 
-        // 5. Batch load datasource names
-        Map<String, String> dsNameMap = loadDataSourceNames(masterDsIds);
+        // 5. Batch load datasource config (name + org) in a single query
+        Map<String, DataSource> dsConfigMap = loadDataSourceConfig(masterDsIds);
 
         // 6. Compute summary for each master record
         List<JobFailureSummaryVO> summaries = new ArrayList<>();
@@ -121,7 +121,10 @@ public class JobFailureServiceImpl implements JobFailureService {
             vo.setClientId(clientId);
             vo.setClientName(master.getClientDesc());
             vo.setDataSourceId(dataSourceId);
-            vo.setDataSourceName(dsNameMap.get(dataSourceId));
+            DataSource dsConfig = dsConfigMap.get(dataSourceId);
+            vo.setDataSourceName(dsConfig != null ? dsConfig.getDataSourceName() : null);
+            vo.setDataSourceOrg(dsConfig != null ? dsConfig.getDataSourceOrg() : null);
+            vo.setDataSourceActive(dsConfig != null ? "1".equals(dsConfig.getFgActive()) : null);
             vo.setEventCountInWindow(jobEvents.size());
 
             if (jobEvents.isEmpty()) {
@@ -418,14 +421,14 @@ public class JobFailureServiceImpl implements JobFailureService {
 
     // ==================== Config Name Lookups ====================
 
-    private Map<String, String> loadDataSourceNames(Set<String> dataSourceIds) {
+    private Map<String, DataSource> loadDataSourceConfig(Set<String> dataSourceIds) {
         if (dataSourceIds == null || dataSourceIds.isEmpty()) {
             return Collections.emptyMap();
         }
         List<DataSource> sources = dataSourceMapper.selectBatchIds(dataSourceIds);
-        Map<String, String> map = new HashMap<>();
+        Map<String, DataSource> map = new HashMap<>();
         for (DataSource ds : sources) {
-            map.put(ds.getDataSourceId(), ds.getDataSourceName());
+            map.put(ds.getDataSourceId(), ds);
         }
         return map;
     }

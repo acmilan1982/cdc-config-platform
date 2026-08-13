@@ -44,22 +44,6 @@
             />
           </el-select>
         </el-form-item>
-        <el-form-item label="数据源 ID">
-          <el-select
-            v-model="filter.dataSourceId"
-            placeholder="全部"
-            clearable
-            style="width: 220px"
-          >
-            <el-option label="全部" value="" />
-            <el-option
-              v-for="ds in dataSourceOptions"
-              :key="ds"
-              :label="ds"
-              :value="ds"
-            />
-          </el-select>
-        </el-form-item>
         <el-form-item label="Job 当前状态">
           <el-select v-model="filter.status" placeholder="全部" clearable style="width: 130px">
             <el-option label="全部" value="" />
@@ -104,6 +88,10 @@
         <template #header>
           <div class="card-header" @click="toggleClient(c.clientId)">
             <div class="card-header-left">
+              <span
+                class="status-dot"
+                :class="c.overallStatus === '异常' ? 'status-dot--abnormal' : 'status-dot--normal'"
+              ></span>
               <span class="card-client-id">{{ c.clientId }}</span>
               <span class="card-divider">|</span>
               <span class="card-stat">
@@ -127,14 +115,11 @@
         </template>
         <div v-show="isExpanded(c.clientId)">
           <el-table :data="c.rows" size="small" border style="width: 100%">
-            <el-table-column label="数据源 ID" min-width="160">
+            <el-table-column label="业务库" min-width="180">
               <template #default="{ row }">
-                <code class="cell-code">{{ row.dataSourceId }}</code>
-              </template>
-            </el-table-column>
-            <el-table-column label="数据源名称" min-width="140">
-              <template #default="{ row }">
-                <span class="name-cell">{{ row.dataSourceName || '--' }}</span>
+                <el-tooltip :content="`数据源 ID：${row.dataSourceId}`" placement="top" :show-after="300">
+                  <span class="name-cell">{{ businessDbLabel(row) }}</span>
+                </el-tooltip>
               </template>
             </el-table-column>
             <el-table-column label="Job 当前状态" width="110">
@@ -201,7 +186,6 @@ let requestId = 0
 
 const filter = reactive({
   selectedClients: ['__ALL__'] as string[],
-  dataSourceId: '' as string,
   status: '' as string
 })
 
@@ -228,16 +212,6 @@ const clientOptions = computed(() => {
     }
   }
   return Array.from(seen.values()).sort((a, b) => a.clientId.localeCompare(b.clientId))
-})
-
-// Build deduplicated data source options from data
-const dataSourceOptions = computed(() => {
-  if (!summaryList.value) return []
-  const seen = new Set<string>()
-  for (const r of summaryList.value) {
-    if (r.dataSourceId) seen.add(r.dataSourceId)
-  }
-  return Array.from(seen).sort()
 })
 
 // Expanded state: manual override takes priority
@@ -281,9 +255,6 @@ const visibleClients = computed<ClientCard[]>(() => {
     let visibleRows = allRows
     if (filter.status) {
       visibleRows = visibleRows.filter(r => r.jobStatus === filter.status)
-    }
-    if (filter.dataSourceId) {
-      visibleRows = visibleRows.filter(r => r.dataSourceId === filter.dataSourceId)
     }
 
     // Skip cards with no visible rows after filter
@@ -332,7 +303,6 @@ function doQuery() {
 
 function resetFilter() {
   filter.selectedClients = ['__ALL__']
-  filter.dataSourceId = ''
   filter.status = ''
   // Reset expand states on query reset so new results default to all expanded
   expandedState.value = {}
@@ -405,6 +375,12 @@ function stopTimer() {
   }
 }
 
+function businessDbLabel(row: JobFailureSummaryVO): string {
+  const org = row.dataSourceOrg
+  const base = org && org.trim() ? org : '未定义名称'
+  return row.dataSourceActive === false ? base + ' (数据源未激活)' : base
+}
+
 function formatTime(val?: string | null): string {
   if (!val) return '—'
   const idx = val.indexOf('T')
@@ -462,11 +438,56 @@ onUnmounted(() => stopTimer())
   gap: 16px;
 }
 .client-card {
-  border-left: 4px solid #e0e0e0;
-  transition: border-color 0.2s;
+  border: 1px solid rgba(255, 255, 255, 0.68);
+  border-radius: 16px;
+  box-shadow: 0 10px 30px rgba(15, 23, 42, 0.06);
+  background:
+    linear-gradient(
+      135deg,
+      rgba(236, 253, 245, 0.30),
+      rgba(255, 255, 255, 0.58)
+    );
+  backdrop-filter: blur(12px);
+  -webkit-backdrop-filter: blur(12px);
+  transition: box-shadow 0.18s ease, transform 0.18s ease;
+}
+@supports not (backdrop-filter: blur(12px)) {
+  .client-card {
+    background:
+      linear-gradient(
+        135deg,
+        rgba(236, 253, 245, 0.55),
+        rgba(255, 255, 255, 0.88)
+      );
+    border: 1px solid rgba(226, 232, 240, 0.55);
+  }
 }
 .client-card--abnormal {
-  border-left-color: #e6a23c;
+  background:
+    linear-gradient(
+      135deg,
+      rgba(254, 243, 199, 0.30),
+      rgba(255, 255, 255, 0.58)
+    );
+}
+@supports not (backdrop-filter: blur(12px)) {
+  .client-card--abnormal {
+    background:
+      linear-gradient(
+        135deg,
+        rgba(254, 243, 199, 0.55),
+        rgba(255, 255, 255, 0.88)
+      );
+  }
+}
+.client-card:hover {
+  box-shadow: 0 14px 36px rgba(15, 23, 42, 0.08);
+  transform: translateY(-1px);
+}
+@media (prefers-reduced-motion: reduce) {
+  .client-card:hover {
+    transform: none;
+  }
 }
 .card-header {
   display: flex;
@@ -478,8 +499,31 @@ onUnmounted(() => stopTimer())
 }
 .card-header-left {
   display: flex;
-  align-items: baseline;
+  align-items: center;
   gap: 10px;
+}
+.status-dot {
+  width: 8px;
+  height: 8px;
+  border-radius: 50%;
+  display: inline-block;
+  flex-shrink: 0;
+}
+.status-dot--normal {
+  background-color: rgba(16, 185, 129, 0.82);
+}
+.status-dot--abnormal {
+  background-color: rgba(245, 158, 11, 0.82);
+  animation: status-breathe 2s ease-in-out infinite;
+}
+@keyframes status-breathe {
+  0%, 100% { opacity: 1; }
+  50% { opacity: 0.35; }
+}
+@media (prefers-reduced-motion: reduce) {
+  .status-dot--abnormal {
+    animation: none;
+  }
 }
 .card-header-right {
   display: flex;
@@ -523,11 +567,7 @@ onUnmounted(() => stopTimer())
   overflow: hidden;
   text-overflow: ellipsis;
   white-space: nowrap;
-}
-.cell-code {
-  font-size: 12px;
-  font-family: monospace;
-  color: #303133;
+  cursor: default;
 }
 .no-action {
   color: #c0c4cc;
