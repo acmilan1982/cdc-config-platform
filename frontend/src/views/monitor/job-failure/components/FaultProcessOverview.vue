@@ -1,10 +1,10 @@
 <template>
   <div class="overview-grid">
-    <div class="overview-item">
+    <div class="overview-item overview-item--identity">
       <span class="ov-label">客户端</span>
       <span class="ov-value">{{ detail.clientId }}</span>
     </div>
-    <div class="overview-item">
+    <div class="overview-item overview-item--identity">
       <span class="ov-label">数据源</span>
       <DataSourceDisplay
         :data-source-id="detail.dataSourceId"
@@ -13,21 +13,21 @@
         :data-source-active="detail.dataSourceActive"
       />
     </div>
-    <div class="overview-item">
+    <div class="overview-item overview-item--result" :class="resultCellClass">
       <span class="ov-label">本次故障处理结果</span>
       <el-tag :type="statusTagType(detail.recordStatus)" size="small" class="ov-result-tag">
         {{ currentStatusLabel }}
       </el-tag>
     </div>
-    <div class="overview-item">
+    <div class="overview-item overview-item--time">
       <span class="ov-label">首次失败时间</span>
       <span class="ov-value">{{ formatTime(detail.firstFailureTime) }}</span>
     </div>
-    <div class="overview-item">
+    <div class="overview-item overview-item--time">
       <span class="ov-label">最近处理时间</span>
       <span class="ov-value">{{ formatTime(detail.lastHandleTime) }}</span>
     </div>
-    <div class="overview-item">
+    <div class="overview-item overview-item--summary">
       <span class="ov-label">处理概况</span>
       <el-tooltip :content="duration.tooltip" placement="top" :show-after="300" :disabled="!duration.tooltip">
         <span class="ov-value">重启 {{ detail.restartCount }} 次 · 历时 {{ duration.main }}</span>
@@ -47,6 +47,10 @@ const currentStatusLabel = computed(() => {
   const status = props.detail.recordStatus
   if (status === 'RECOVERY_RECORDED') return '已恢复'
   return props.detail.recordStatusLabel || status || '--'
+})
+
+const resultCellClass = computed(() => {
+  return `overview-item--result-${statusTagType(props.detail.recordStatus)}`
 })
 
 const duration = computed(() => {
@@ -117,7 +121,7 @@ function statusTagType(status?: string | null): string {
   display: grid;
   grid-template-columns: repeat(3, 1fr);
   gap: 1px;
-  background: #ebeef5;
+  background: #E2E8F0;
 }
 .overview-item {
   display: flex;
@@ -126,6 +130,27 @@ function statusTagType(status?: string | null): string {
   padding: 14px 16px;
   background: #fff;
   min-width: 0;
+}
+.overview-item--identity {
+  background: #F8FAFC;
+}
+.overview-item--time {
+  background: #FFFFFF;
+}
+.overview-item--summary {
+  background: #F5F9FF;
+}
+.overview-item--result-success {
+  background: #F0FDF4;
+}
+.overview-item--result-warning {
+  background: #FFFBEB;
+}
+.overview-item--result-danger {
+  background: #FEF2F2;
+}
+.overview-item--result-info {
+  background: #F8FAFC;
 }
 .ov-label {
   font-size: 12px;
