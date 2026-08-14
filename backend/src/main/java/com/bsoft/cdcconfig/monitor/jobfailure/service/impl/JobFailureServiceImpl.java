@@ -39,6 +39,7 @@ import java.util.ArrayList;
 import java.util.Collections;
 import java.util.Comparator;
 import java.util.HashMap;
+import java.util.HashSet;
 import java.util.List;
 import java.util.Map;
 import java.util.Set;
@@ -80,35 +81,47 @@ public class JobFailureServiceImpl implements JobFailureService {
             return Collections.emptyList();
         }
 
-        // 2. Collect all (clientId, dataSourceId) pairs and build client name map
-        Map<String, String> clientNameMap = new HashMap<>();
+        // 2. Expand each enabled client's comma-separated DATA_SOURCE_ID into ordered
+        //    (clientId, dataSourceId) rows. Inactive clients are already excluded above.
+        List<ClientDataSource> expanded = new ArrayList<>();
         for (CdcClientMultiple r : masterRecords) {
-            clientNameMap.put(r.getClientId(), r.getClientDesc());
+            for (String dsId : splitDataSourceIds(r.getDataSourceId())) {
+                expanded.add(new ClientDataSource(r.getClientId(), r.getClientDesc(), dsId));
+            }
         }
 
-        // 3. Load all events for all master pairs in two queries
-        Set<String> masterClientIds = masterRecords.stream()
-                .map(CdcClientMultiple::getClientId).collect(Collectors.toSet());
-        Set<String> masterDsIds = masterRecords.stream()
-                .map(CdcClientMultiple::getDataSourceId).collect(Collectors.toSet());
+        if (expanded.isEmpty()) {
+            return Collections.emptyList();
+        }
 
+        // 3. Collect client name map and distinct single-ID sets for batch queries
+        Map<String, String> clientNameMap = new HashMap<>();
+        Set<String> masterClientIds = new HashSet<>();
+        Set<String> masterDsIds = new HashSet<>();
+        for (ClientDataSource item : expanded) {
+            clientNameMap.put(item.clientId, item.clientDesc);
+            masterClientIds.add(item.clientId);
+            masterDsIds.add(item.dataSourceId);
+        }
+
+        // 4. Load all events for all expanded pairs in a single query
         LambdaQueryWrapper<JobFailureEvent> eventWrapper = new LambdaQueryWrapper<>();
         eventWrapper.in(JobFailureEvent::getClientId, masterClientIds)
                     .in(JobFailureEvent::getDataSourceId, masterDsIds);
         List<JobFailureEvent> allEvents = eventMapper.selectList(eventWrapper);
 
-        // 4. Batch load all logs for all events
+        // 5. Batch load all logs for all events
         List<Long> allEventIds = allEvents.stream().map(JobFailureEvent::getId).collect(Collectors.toList());
         List<JobFailureHandleLog> allLogs = loadLogsByEventIds(allEventIds);
 
-        // 5. Batch load datasource config (name + org) in a single query
+        // 6. Batch load datasource config (name + org) in a single query
         Map<String, DataSource> dsConfigMap = loadDataSourceConfig(masterDsIds);
 
-        // 6. Compute summary for each master record
+        // 7. Compute summary for each expanded row
         List<JobFailureSummaryVO> summaries = new ArrayList<>();
-        for (CdcClientMultiple master : masterRecords) {
-            String clientId = master.getClientId();
-            String dataSourceId = master.getDataSourceId();
+        for (ClientDataSource item : expanded) {
+            String clientId = item.clientId;
+            String dataSourceId = item.dataSourceId;
 
             // Filter events for this logical job
             List<JobFailureEvent> jobEvents = allEvents.stream()
@@ -119,12 +132,20 @@ public class JobFailureServiceImpl implements JobFailureService {
 
             JobFailureSummaryVO vo = new JobFailureSummaryVO();
             vo.setClientId(clientId);
-            vo.setClientName(master.getClientDesc());
+            vo.setClientName(clientNameMap.get(clientId));
             vo.setDataSourceId(dataSourceId);
             DataSource dsConfig = dsConfigMap.get(dataSourceId);
-            vo.setDataSourceName(dsConfig != null ? dsConfig.getDataSourceName() : null);
-            vo.setDataSourceOrg(dsConfig != null ? dsConfig.getDataSourceOrg() : null);
-            vo.setDataSourceActive(dsConfig != null ? "1".equals(dsConfig.getFgActive()) : null);
+            if (dsConfig != null) {
+                vo.setDataSourceName(dsConfig.getDataSourceName());
+                vo.setDataSourceOrg(dsConfig.getDataSourceOrg());
+                vo.setDataSourceExists(true);
+                vo.setDataSourceActive(!"0".equals(dsConfig.getFgActive()));
+            } else {
+                vo.setDataSourceName(null);
+                vo.setDataSourceOrg(null);
+                vo.setDataSourceExists(false);
+                vo.setDataSourceActive(null);
+            }
             vo.setEventCountInWindow(jobEvents.size());
 
             if (jobEvents.isEmpty()) {
@@ -421,6 +442,20 @@ public class JobFailureServiceImpl implements JobFailureService {
 
     // ==================== Config Name Lookups ====================
 
+    static List<String> splitDataSourceIds(String raw) {
+        if (raw == null || raw.isEmpty()) {
+            return Collections.emptyList();
+        }
+        List<String> result = new ArrayList<>();
+        for (String part : raw.split(",")) {
+            String trimmed = part.trim();
+            if (!trimmed.isEmpty()) {
+                result.add(trimmed);
+            }
+        }
+        return result;
+    }
+
     private Map<String, DataSource> loadDataSourceConfig(Set<String> dataSourceIds) {
         if (dataSourceIds == null || dataSourceIds.isEmpty()) {
             return Collections.emptyMap();
@@ -573,6 +608,18 @@ public class JobFailureServiceImpl implements JobFailureService {
             case CURRENT: return "当前Job";
             case FINAL: return "最终Job";
             default: return nodeType.name();
+        }
+    }
+
+    private static final class ClientDataSource {
+        private final String clientId;
+        private final String clientDesc;
+        private final String dataSourceId;
+
+        ClientDataSource(String clientId, String clientDesc, String dataSourceId) {
+            this.clientId = clientId;
+            this.clientDesc = clientDesc;
+            this.dataSourceId = dataSourceId;
         }
     }
 }

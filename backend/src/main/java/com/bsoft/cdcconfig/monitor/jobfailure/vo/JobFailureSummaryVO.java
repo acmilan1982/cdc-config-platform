@@ -10,6 +10,7 @@ public class JobFailureSummaryVO {
     private String dataSourceName;
     private String dataSourceOrg;
     private Boolean dataSourceActive;
+    private boolean dataSourceExists;
     private String jobStatus;
     private LocalDateTime latestFailureTime;
     private Long latestEventId;
@@ -35,6 +36,9 @@ public class JobFailureSummaryVO {
 
     public Boolean getDataSourceActive() { return dataSourceActive; }
     public void setDataSourceActive(Boolean dataSourceActive) { this.dataSourceActive = dataSourceActive; }
+
+    public boolean isDataSourceExists() { return dataSourceExists; }
+    public void setDataSourceExists(boolean dataSourceExists) { this.dataSourceExists = dataSourceExists; }
 
     public String getJobStatus() { return jobStatus; }
     public void setJobStatus(String jobStatus) { this.jobStatus = jobStatus; }

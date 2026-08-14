@@ -26,25 +26,35 @@ class OracleDateMappingTest {
 
     @Test
     void oracleDateToLocalDateTime_viaJdbcTemplate_shouldMapCorrectly() {
-        // Query DATE columns using getObject(col, LocalDateTime.class) — the same code path
-        // MyBatis uses via TypeHandler. Concrete date values are not hardcoded here because they
-        // drift as the CDC system generates new failure events; mapped-value correctness is
-        // exercised through the service-layer tests (JobFailureServiceTest).
-        Object[] row = jdbcTemplate.queryForObject(
-                "SELECT FAILURE_TIME, CREATED_AT FROM CDC_JOB_FAILURE_EVENT WHERE ROWNUM = 1",
-                (rs, rowNum) -> new Object[] {
-                        rs.getObject("FAILURE_TIME", LocalDateTime.class),
-                        rs.getObject("CREATED_AT", LocalDateTime.class)
-                });
+        // Query all DATE columns from the real table using getObject(col, LocalDateTime.class)
+        // This is the same code path MyBatis uses internally via TypeHandler
+        LocalDateTime failureTime = jdbcTemplate.queryForObject(
+                "SELECT FAILURE_TIME FROM CDC_JOB_FAILURE_EVENT WHERE ROWNUM = 1",
+                (rs, rowNum) -> rs.getObject("FAILURE_TIME", LocalDateTime.class));
 
-        LocalDateTime failureTime = (LocalDateTime) row[0];
-        LocalDateTime createdAt = (LocalDateTime) row[1];
+        LocalDateTime createdAt = jdbcTemplate.queryForObject(
+                "SELECT CREATED_AT FROM CDC_JOB_FAILURE_EVENT WHERE ROWNUM = 1",
+                (rs, rowNum) -> rs.getObject("CREATED_AT", LocalDateTime.class));
 
+        // -- FAILURE_TIME: known value 2026-07-27 19:17:24 --
         assertNotNull(failureTime, "FAILURE_TIME should map to non-null LocalDateTime");
+        assertEquals(2026, failureTime.getYear());
+        assertEquals(7, failureTime.getMonthValue());
+        assertEquals(27, failureTime.getDayOfMonth());
+        assertEquals(19, failureTime.getHour());
+        assertEquals(17, failureTime.getMinute());
+        assertEquals(24, failureTime.getSecond());
         assertEquals(0, failureTime.getNano(), "Oracle DATE has no sub-second precision");
 
+        // -- CREATED_AT: known value 2026-07-27 19:18:41 --
         assertNotNull(createdAt, "CREATED_AT should map to non-null LocalDateTime");
-        assertEquals(0, createdAt.getNano(), "Oracle DATE has no sub-second precision");
+        assertEquals(2026, createdAt.getYear());
+        assertEquals(7, createdAt.getMonthValue());
+        assertEquals(27, createdAt.getDayOfMonth());
+        assertEquals(19, createdAt.getHour());
+        assertEquals(18, createdAt.getMinute());
+        assertEquals(41, createdAt.getSecond());
+        assertEquals(0, createdAt.getNano());
 
         // Verify ordering invariant
         assertFalse(failureTime.isAfter(createdAt),

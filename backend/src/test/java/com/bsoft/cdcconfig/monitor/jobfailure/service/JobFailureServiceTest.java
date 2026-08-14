@@ -373,6 +373,16 @@ class JobFailureServiceTest {
     }
 
     @Test
+    void summaryShouldMarkDataSourceExists() {
+        List<JobFailureSummaryVO> list = jobFailureService.querySummary();
+
+        JobFailureSummaryVO vo = list.stream()
+                .filter(r -> EXISTING_DS.equals(r.getDataSourceId()))
+                .findFirst().get();
+        assertTrue(vo.isDataSourceExists());
+    }
+
+    @Test
     void summaryShouldHaveClientNameFromCdcClientMultiple() {
         List<JobFailureSummaryVO> list = jobFailureService.querySummary();
 

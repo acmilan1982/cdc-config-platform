@@ -118,7 +118,10 @@
             <el-table-column label="业务库" min-width="180">
               <template #default="{ row }">
                 <el-tooltip :content="`数据源 ID：${row.dataSourceId}`" placement="top" :show-after="300">
-                  <span class="name-cell">{{ businessDbLabel(row) }}</span>
+                  <span v-if="row.dataSourceExists === false" class="name-cell name-cell--invalid">无效数据源</span>
+                  <span v-else class="name-cell">
+                    {{ businessDbBaseLabel(row) }}<span v-if="row.dataSourceActive === false" class="name-cell__inactive-suffix">&nbsp;(数据源未激活)</span>
+                  </span>
                 </el-tooltip>
               </template>
             </el-table-column>
@@ -375,10 +378,9 @@ function stopTimer() {
   }
 }
 
-function businessDbLabel(row: JobFailureSummaryVO): string {
+function businessDbBaseLabel(row: JobFailureSummaryVO): string {
   const org = row.dataSourceOrg
-  const base = org && org.trim() ? org : '未定义名称'
-  return row.dataSourceActive === false ? base + ' (数据源未激活)' : base
+  return org && org.trim() ? org : '未定义名称'
 }
 
 function formatTime(val?: string | null): string {
@@ -568,6 +570,12 @@ onUnmounted(() => stopTimer())
   text-overflow: ellipsis;
   white-space: nowrap;
   cursor: default;
+}
+.name-cell--invalid {
+  color: #f56c6c;
+}
+.name-cell__inactive-suffix {
+  color: #f56c6c;
 }
 .no-action {
   color: #c0c4cc;
