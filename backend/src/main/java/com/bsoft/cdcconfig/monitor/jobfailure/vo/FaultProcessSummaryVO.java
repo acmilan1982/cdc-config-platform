@@ -5,6 +5,7 @@ import java.time.LocalDateTime;
 public class FaultProcessSummaryVO {
 
     private Long faultRootId;
+    private String faultRootIdText;
     private LocalDateTime startTime;
     private LocalDateTime lastRecordTime;
     private String startFailedJobId;
@@ -19,6 +20,9 @@ public class FaultProcessSummaryVO {
 
     public Long getFaultRootId() { return faultRootId; }
     public void setFaultRootId(Long faultRootId) { this.faultRootId = faultRootId; }
+
+    public String getFaultRootIdText() { return faultRootIdText; }
+    public void setFaultRootIdText(String faultRootIdText) { this.faultRootIdText = faultRootIdText; }
 
     public LocalDateTime getStartTime() { return startTime; }
     public void setStartTime(LocalDateTime startTime) { this.startTime = startTime; }

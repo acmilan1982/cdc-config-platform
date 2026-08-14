@@ -370,6 +370,7 @@ public class JobFailureServiceImpl implements JobFailureService {
                 throw JobFailureErrorCode.recordNotInFaultProcess(recordId, faultRootId);
             }
             vo.setRecordId(event.getId());
+            vo.setRecordIdText(idText(event.getId()));
             vo.setContentType("text/plain");
             String content = event.getFailureDetail();
             vo.setContent(content);
@@ -387,6 +388,7 @@ public class JobFailureServiceImpl implements JobFailureService {
                 throw JobFailureErrorCode.recordNotInFaultProcess(recordId, faultRootId);
             }
             vo.setRecordId(targetLog.getId());
+            vo.setRecordIdText(idText(targetLog.getId()));
             vo.setContentType("text/plain");
             String content = targetLog.getErrorDetail();
             vo.setContent(content);
@@ -401,6 +403,10 @@ public class JobFailureServiceImpl implements JobFailureService {
     }
 
     // ==================== Private Helpers ====================
+
+    static String idText(Long id) {
+        return id == null ? null : Long.toString(id);
+    }
 
     private List<FaultProcessGroup> loadAndAssemble(String clientId, String dataSourceId) {
         LambdaQueryWrapper<JobFailureEvent> wrapper = new LambdaQueryWrapper<>();
@@ -516,7 +522,7 @@ public class JobFailureServiceImpl implements JobFailureService {
     private FaultProcessDetailVO toDetailVO(FaultProcessGroup group) {
         FaultProcessDetailVO vo = new FaultProcessDetailVO();
         vo.setFaultRootId(group.getFaultRootId());
-        vo.setFaultRootIdText(group.getFaultRootId() == null ? null : Long.toString(group.getFaultRootId()));
+        vo.setFaultRootIdText(idText(group.getFaultRootId()));
 
         // Client/data-source from first event
         if (!group.getAllEvents().isEmpty()) {
@@ -570,6 +576,7 @@ public class JobFailureServiceImpl implements JobFailureService {
         for (FaultLogModel l : group.getAllLogs()) {
             HandleTimelineVO tv = new HandleTimelineVO();
             tv.setLogId(l.getId());
+            tv.setLogIdText(idText(l.getId()));
             tv.setEventId(l.getFailureEventId());
             tv.setHandleStage(l.getHandleStage());
             tv.setHandleTime(l.getHandleTime());
@@ -597,6 +604,7 @@ public class JobFailureServiceImpl implements JobFailureService {
     private FaultProcessSummaryVO toSummaryVO(FaultProcessGroup group) {
         FaultProcessSummaryVO vo = new FaultProcessSummaryVO();
         vo.setFaultRootId(group.getFaultRootId());
+        vo.setFaultRootIdText(idText(group.getFaultRootId()));
         vo.setStartTime(group.getFirstFailureTime());
         vo.setLastRecordTime(group.getLastHandleTime());
 
@@ -637,6 +645,7 @@ public class JobFailureServiceImpl implements JobFailureService {
     private EventCardVO toEventCard(FaultEventModel e) {
         EventCardVO vo = new EventCardVO();
         vo.setEventId(e.getId());
+        vo.setEventIdText(idText(e.getId()));
         vo.setFailedJobId(e.getFailedJobId());
         vo.setFailureTime(e.getFailureTime());
         vo.setEventResult(e.getEventResult());

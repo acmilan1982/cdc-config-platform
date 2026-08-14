@@ -54,32 +54,32 @@
       />
 
       <!-- Section: Overview -->
-      <el-card shadow="never" class="detail-section">
+      <el-card shadow="never" class="detail-section overview-section">
         <template #header><span class="section-title">概览</span></template>
         <FaultProcessOverview :detail="detail" />
       </el-card>
 
       <!-- Section: Physical Job Chain -->
       <el-card shadow="never" class="detail-section">
-        <template #header><span class="section-title">物理 Job 链</span></template>
+        <template #header><span class="section-title">Job 重启轨迹</span></template>
         <PhysicalJobChain :chain="detail.jobChain" :recovered="detail.recordStatus === 'RECOVERY_RECORDED'" />
       </el-card>
 
       <!-- Section: Main Chain Events -->
       <el-card shadow="never" class="detail-section">
-        <template #header><span class="section-title">主链事件</span></template>
+        <template #header><span class="section-title">故障发生明细</span></template>
         <FailureEventList
           :events="detail.mainChainEvents"
-          @view-detail="(eventId: number) => openClob('FAILURE_EVENT_FAILURE_DETAIL', eventId)"
+          @view-detail="(eventId: string) => openClob('FAILURE_EVENT_FAILURE_DETAIL', eventId)"
         />
       </el-card>
 
       <!-- Section: Excluded Events (if any) -->
       <el-card v-if="detail.excludedEvents.length > 0" shadow="never" class="detail-section">
-        <template #header><span class="section-title">排除事件</span></template>
+        <template #header><span class="section-title">未计入本次故障的事件</span></template>
         <FailureEventList
           :events="detail.excludedEvents"
-          @view-detail="(eventId: number) => openClob('FAILURE_EVENT_FAILURE_DETAIL', eventId)"
+          @view-detail="(eventId: string) => openClob('FAILURE_EVENT_FAILURE_DETAIL', eventId)"
         />
       </el-card>
 
@@ -89,7 +89,7 @@
         <RestartCards
           :timeline="detail.handleTimeline"
           :job-chain="detail.jobChain"
-          @view-error="(logId: number) => openClob('FAILURE_HANDLE_LOG_ERROR_DETAIL', logId)"
+          @view-error="(logId: string) => openClob('FAILURE_HANDLE_LOG_ERROR_DETAIL', logId)"
         />
       </el-card>
 
@@ -99,7 +99,7 @@
         <FaultHistory
           :client-id="detail.clientId"
           :data-source-id="detail.dataSourceId"
-          :current-fault-root-id="detail.faultRootId"
+          :current-fault-root-id="detail.faultRootIdText ?? null"
           @select="switchProcess"
         />
       </el-card>
@@ -138,14 +138,13 @@ const errorMsg = ref('')
 
 const clobVisible = ref(false)
 const clobField = ref('FAILURE_EVENT_FAILURE_DETAIL')
-const clobRecordId = ref<number | null>(null)
-const currentFaultRootId = ref<number | null>(null)
+const clobRecordId = ref<string | null>(null)
+const currentFaultRootId = ref<string | null>(null)
 
 const rootEventIdText = computed(() => {
   const d = detail.value
   if (!d) return ''
-  if (d.faultRootIdText) return d.faultRootIdText
-  return d.faultRootId != null ? String(d.faultRootId) : ''
+  return d.faultRootIdText ?? ''
 })
 
 const rootEventIdShort = computed(() => ellipsisId(rootEventIdText.value))
@@ -164,10 +163,10 @@ async function copyRootEventId() {
   }
 }
 
-function openClob(field: string, recordId: number) {
+function openClob(field: string, recordId: string) {
   clobField.value = field
   clobRecordId.value = recordId
-  currentFaultRootId.value = detail.value?.faultRootId ?? null
+  currentFaultRootId.value = detail.value?.faultRootIdText ?? null
   clobVisible.value = true
 }
 
@@ -186,7 +185,7 @@ async function loadDetail() {
     const res = await fetchLatestFault(clientId, dataSourceId)
     if (res.code === 200) {
       detail.value = res.data
-      currentFaultRootId.value = res.data.faultRootId
+      currentFaultRootId.value = res.data.faultRootIdText ?? null
     } else {
       errorMsg.value = res.message || '加载失败'
     }
@@ -197,14 +196,14 @@ async function loadDetail() {
   }
 }
 
-async function switchProcess(faultRootId: number) {
+async function switchProcess(faultRootId: string) {
   loading.value = true
   errorMsg.value = ''
   try {
     const res = await fetchProcessDetail(faultRootId)
     if (res.code === 200) {
       detail.value = res.data
-      currentFaultRootId.value = res.data.faultRootId
+      currentFaultRootId.value = res.data.faultRootIdText ?? null
     } else {
       ElMessage.warning(res.message || '加载失败')
     }
@@ -238,6 +237,7 @@ onMounted(() => loadDetail())
 .root-event-copy { padding: 0; margin-left: 2px; font-size: 12px; }
 .toolbar-right { display: flex; align-items: center; }
 .detail-section { margin-bottom: 16px; }
+.overview-section :deep(.el-card__body) { padding: 0; }
 .detail-alert { margin-bottom: 12px; }
 .section-title { font-size: 15px; font-weight: 600; color: #303133; }
 .state-box {

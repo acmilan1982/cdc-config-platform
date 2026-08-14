@@ -4,6 +4,7 @@ public class ClobDetailVO {
 
     private String recordType;
     private Long recordId;
+    private String recordIdText;
     private String contentType;
     private String content;
     private int contentLength;
@@ -14,6 +15,9 @@ public class ClobDetailVO {
 
     public Long getRecordId() { return recordId; }
     public void setRecordId(Long recordId) { this.recordId = recordId; }
+
+    public String getRecordIdText() { return recordIdText; }
+    public void setRecordIdText(String recordIdText) { this.recordIdText = recordIdText; }
 
     public String getContentType() { return contentType; }
     public void setContentType(String contentType) { this.contentType = contentType; }

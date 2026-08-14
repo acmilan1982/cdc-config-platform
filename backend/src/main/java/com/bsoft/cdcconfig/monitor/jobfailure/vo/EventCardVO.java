@@ -5,6 +5,7 @@ import java.time.LocalDateTime;
 public class EventCardVO {
 
     private Long eventId;
+    private String eventIdText;
     private String failedJobId;
     private LocalDateTime failureTime;
     private String eventResult;
@@ -14,6 +15,9 @@ public class EventCardVO {
 
     public Long getEventId() { return eventId; }
     public void setEventId(Long eventId) { this.eventId = eventId; }
+
+    public String getEventIdText() { return eventIdText; }
+    public void setEventIdText(String eventIdText) { this.eventIdText = eventIdText; }
 
     public String getFailedJobId() { return failedJobId; }
     public void setFailedJobId(String failedJobId) { this.failedJobId = failedJobId; }

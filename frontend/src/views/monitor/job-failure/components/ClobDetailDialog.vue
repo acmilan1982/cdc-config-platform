@@ -20,7 +20,7 @@
     <div v-else-if="clobData" class="clob-content-wrap">
       <div class="clob-meta">
         <span>记录类型: {{ clobData.recordType }}</span>
-        <span>记录 ID: {{ clobData.recordId }}</span>
+        <span>记录 ID: {{ clobData.recordIdText ?? props.recordId }}</span>
         <span>长度: {{ clobData.contentLength }}</span>
         <el-tag v-if="clobData.truncated" type="warning" size="small">已截断</el-tag>
       </div>
@@ -46,9 +46,9 @@ import type { ClobDetailVO } from '@/types/jobFailure'
 
 const props = defineProps<{
   visible: boolean
-  faultRootId: number | null
+  faultRootId: string | null
   clobField: string
-  recordId: number | null
+  recordId: string | null
 }>()
 
 defineEmits<{ 'update:visible': [val: boolean] }>()

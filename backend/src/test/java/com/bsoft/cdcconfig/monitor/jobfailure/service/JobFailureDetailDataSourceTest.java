@@ -3,6 +3,7 @@ package com.bsoft.cdcconfig.monitor.jobfailure.service;
 import com.baomidou.mybatisplus.core.MybatisConfiguration;
 import com.baomidou.mybatisplus.core.metadata.TableInfoHelper;
 import com.baomidou.mybatisplus.core.toolkit.GlobalConfigUtils;
+import com.bsoft.cdcconfig.common.page.PageResult;
 import com.bsoft.cdcconfig.datasource.entity.DataSource;
 import com.bsoft.cdcconfig.datasource.mapper.DataSourceMapper;
 import com.bsoft.cdcconfig.monitor.jobfailure.entity.CdcClientMultiple;
@@ -11,9 +12,14 @@ import com.bsoft.cdcconfig.monitor.jobfailure.entity.JobFailureHandleLog;
 import com.bsoft.cdcconfig.monitor.jobfailure.mapper.CdcClientMultipleMapper;
 import com.bsoft.cdcconfig.monitor.jobfailure.mapper.JobFailureEventMapper;
 import com.bsoft.cdcconfig.monitor.jobfailure.mapper.JobFailureHandleLogMapper;
+import com.bsoft.cdcconfig.monitor.jobfailure.query.HistoryQuery;
 import com.bsoft.cdcconfig.monitor.jobfailure.runtime.JobRuntimeStatusReader;
 import com.bsoft.cdcconfig.monitor.jobfailure.service.impl.JobFailureServiceImpl;
+import com.bsoft.cdcconfig.monitor.jobfailure.vo.ClobDetailVO;
+import com.bsoft.cdcconfig.monitor.jobfailure.vo.EventCardVO;
 import com.bsoft.cdcconfig.monitor.jobfailure.vo.FaultProcessDetailVO;
+import com.bsoft.cdcconfig.monitor.jobfailure.vo.FaultProcessSummaryVO;
+import com.bsoft.cdcconfig.monitor.jobfailure.vo.HandleTimelineVO;
 import org.apache.ibatis.builder.MapperBuilderAssistant;
 import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.BeforeEach;
@@ -262,6 +268,66 @@ class JobFailureDetailDataSourceTest {
         assertEquals(1, vo.getRestartCount());
         assertNotNull(vo.getRecordStatus());
         assertNotNull(vo.getFaultProcessResult());
+    }
+
+    // ==================== Precise string ID propagation ====================
+
+    @Test
+    void latestFault_shouldSetEventAndTimelineIdText() {
+        stubFaultProcess(ds(DS_ID, "孝感市第一人民医院", "1"));
+
+        FaultProcessDetailVO vo = service.getLatestFault(CLIENT_ID, DS_ID);
+
+        assertFalse(vo.getMainChainEvents().isEmpty());
+        EventCardVO card = vo.getMainChainEvents().get(0);
+        assertEquals(Long.valueOf(ROOT_ID), card.getEventId());
+        assertEquals(ROOT_ID_TEXT, card.getEventIdText());
+
+        assertFalse(vo.getHandleTimeline().isEmpty());
+        HandleTimelineVO tv = vo.getHandleTimeline().get(0);
+        assertEquals(Long.valueOf(101L), tv.getLogId());
+        assertEquals("101", tv.getLogIdText());
+    }
+
+    @Test
+    void history_shouldReturnFaultRootIdText() {
+        stubFaultProcess(ds(DS_ID, "孝感市第一人民医院", "1"));
+
+        HistoryQuery query = new HistoryQuery();
+        query.setClientId(CLIENT_ID);
+        query.setDataSourceId(DS_ID);
+        query.setPageNum(1);
+        query.setPageSize(20);
+
+        PageResult<FaultProcessSummaryVO> page = service.queryHistory(query);
+
+        assertEquals(1, page.getTotal());
+        FaultProcessSummaryVO vo = page.getRecords().get(0);
+        assertEquals(Long.valueOf(ROOT_ID), vo.getFaultRootId());
+        assertEquals(ROOT_ID_TEXT, vo.getFaultRootIdText());
+    }
+
+    @Test
+    void clobDetail_shouldSetRecordIdTextForEventBranch() {
+        stubFaultProcess(ds(DS_ID, "孝感市第一人民医院", "1"));
+        when(eventMapper.selectById(ROOT_ID)).thenReturn(event(ROOT_ID, JOB_A, T0, "ACCEPTED"));
+
+        ClobDetailVO vo = service.getClobDetail(ROOT_ID, "FAILURE_EVENT_FAILURE_DETAIL", ROOT_ID);
+
+        assertEquals(Long.valueOf(ROOT_ID), vo.getRecordId());
+        assertEquals(ROOT_ID_TEXT, vo.getRecordIdText());
+    }
+
+    @Test
+    void clobDetail_shouldSetRecordIdTextForLogBranch() {
+        stubFaultProcess(ds(DS_ID, "孝感市第一人民医院", "1"));
+        when(eventMapper.selectById(ROOT_ID)).thenReturn(event(ROOT_ID, JOB_A, T0, "ACCEPTED"));
+        when(logMapper.selectById(101L)).thenReturn(log(101L, ROOT_ID, "JOB_FAILURE_RECEIVED", T1, null));
+
+        ClobDetailVO vo = service.getClobDetail(ROOT_ID, "FAILURE_HANDLE_LOG_ERROR_DETAIL", 101L);
+
+        assertEquals(Long.valueOf(101L), vo.getRecordId());
+        assertEquals("101", vo.getRecordIdText());
     }
 
     // ==================== No ZK / write access ====================

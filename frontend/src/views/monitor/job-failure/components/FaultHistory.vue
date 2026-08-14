@@ -50,7 +50,7 @@
       </el-table-column>
       <el-table-column label="操作" width="80">
         <template #default="{ row }">
-          <el-button link type="primary" size="small" @click="$emit('select', row.faultRootId)">
+          <el-button link type="primary" size="small" @click="selectRow(row)">
             查看
           </el-button>
         </template>
@@ -68,17 +68,21 @@ import type { FaultProcessSummaryVO } from '@/types/jobFailure'
 const props = defineProps<{
   clientId: string
   dataSourceId: string
-  currentFaultRootId: number
+  currentFaultRootId: string | null
 }>()
 
-defineEmits<{ select: [faultRootId: number] }>()
+const emit = defineEmits<{ select: [faultRootId: string] }>()
+
+function selectRow(row: FaultProcessSummaryVO): void {
+  if (row.faultRootIdText) emit('select', row.faultRootIdText)
+}
 
 const timeRange = ref('1d')
 const records = ref<FaultProcessSummaryVO[]>([])
 const loading = ref(false)
 
 function rowClassName({ row }: { row: FaultProcessSummaryVO }): string {
-  return row.faultRootId === props.currentFaultRootId ? 'history-row--current' : ''
+  return row.faultRootIdText === props.currentFaultRootId ? 'history-row--current' : ''
 }
 
 function statusLabel(row: FaultProcessSummaryVO): string {

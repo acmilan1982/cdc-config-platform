@@ -34,19 +34,19 @@ export async function fetchHistory(
 }
 
 export async function fetchProcessDetail(
-  faultRootId: number
+  faultRootId: string
 ): Promise<ApiResponse<FaultProcessDetailVO>> {
   const res = await http.get<ApiResponse<FaultProcessDetailVO>>(
-    `/api/job-failure/process/${faultRootId}`
+    `/api/job-failure/process/${encodeURIComponent(faultRootId)}`
   )
   return res.data
 }
 
 export async function fetchClobDetail(
-  faultRootId: number, clobField: string, recordId: number
+  faultRootId: string, clobField: string, recordId: string
 ): Promise<ApiResponse<ClobDetailVO>> {
   const res = await http.get<ApiResponse<ClobDetailVO>>(
-    `/api/job-failure/clob/${faultRootId}/${clobField}/${recordId}`
+    `/api/job-failure/clob/${encodeURIComponent(faultRootId)}/${encodeURIComponent(clobField)}/${encodeURIComponent(recordId)}`
   )
   return res.data
 }

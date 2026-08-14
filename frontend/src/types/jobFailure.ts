@@ -61,6 +61,7 @@ export interface JobChainVO {
 
 export interface EventCardVO {
   eventId: number
+  eventIdText?: string | null
   failedJobId: string
   failureTime?: string | null
   eventResult?: string | null
@@ -71,6 +72,7 @@ export interface EventCardVO {
 
 export interface HandleTimelineVO {
   logId: number
+  logIdText?: string | null
   eventId: number
   handleStage?: string | null
   handleTime?: string | null
@@ -89,6 +91,7 @@ export interface AnomalyVO {
 
 export interface FaultProcessSummaryVO {
   faultRootId: number
+  faultRootIdText?: string | null
   startTime?: string | null
   lastRecordTime?: string | null
   startFailedJobId?: string | null
@@ -116,6 +119,7 @@ export interface HistoryQuery {
 export interface ClobDetailVO {
   recordType: string
   recordId: number
+  recordIdText?: string | null
   contentType?: string | null
   content?: string | null
   contentLength: number

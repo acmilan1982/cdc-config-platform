@@ -5,6 +5,7 @@ import java.time.LocalDateTime;
 public class HandleTimelineVO {
 
     private Long logId;
+    private String logIdText;
     private Long eventId;
     private String handleStage;
     private LocalDateTime handleTime;
@@ -14,6 +15,9 @@ public class HandleTimelineVO {
 
     public Long getLogId() { return logId; }
     public void setLogId(Long logId) { this.logId = logId; }
+
+    public String getLogIdText() { return logIdText; }
+    public void setLogIdText(String logIdText) { this.logIdText = logIdText; }
 
     public Long getEventId() { return eventId; }
     public void setEventId(Long eventId) { this.eventId = eventId; }

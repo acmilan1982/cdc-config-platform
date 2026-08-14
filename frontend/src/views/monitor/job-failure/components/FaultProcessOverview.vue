@@ -14,10 +14,10 @@
       />
     </div>
     <div class="overview-item">
-      <span class="ov-label">根事件</span>
-      <el-tooltip :content="rootEventIdText" placement="top" :show-after="300">
-        <span class="ov-value">{{ rootEventIdShort }}</span>
-      </el-tooltip>
+      <span class="ov-label">本次故障处理结果</span>
+      <el-tag :type="statusTagType(detail.recordStatus)" size="small" class="ov-result-tag">
+        {{ currentStatusLabel }}
+      </el-tag>
     </div>
     <div class="overview-item">
       <span class="ov-label">首次失败时间</span>
@@ -28,14 +28,10 @@
       <span class="ov-value">{{ formatTime(detail.lastHandleTime) }}</span>
     </div>
     <div class="overview-item">
-      <span class="ov-label">重启次数</span>
-      <span class="ov-value">{{ detail.restartCount }}</span>
-    </div>
-    <div class="overview-item overview-item--span2">
-      <span class="ov-label">本次故障处理结果</span>
-      <el-tag :type="statusTagType(detail.recordStatus)" size="small" class="ov-result-tag">
-        {{ currentStatusLabel }}
-      </el-tag>
+      <span class="ov-label">处理概况</span>
+      <el-tooltip :content="duration.tooltip" placement="top" :show-after="300" :disabled="!duration.tooltip">
+        <span class="ov-value">重启 {{ detail.restartCount }} 次 · 历时 {{ duration.main }}</span>
+      </el-tooltip>
     </div>
   </div>
 </template>
@@ -47,23 +43,57 @@ import DataSourceDisplay from './DataSourceDisplay.vue'
 
 const props = defineProps<{ detail: FaultProcessDetailVO }>()
 
-const rootEventIdText = computed(() => {
-  const d = props.detail
-  if (d.faultRootIdText) return d.faultRootIdText
-  return d.faultRootId != null ? String(d.faultRootId) : ''
-})
-
-const rootEventIdShort = computed(() => {
-  const t = rootEventIdText.value
-  if (t.length <= 10) return t
-  return t.slice(0, 6) + '…' + t.slice(-4)
-})
-
 const currentStatusLabel = computed(() => {
   const status = props.detail.recordStatus
   if (status === 'RECOVERY_RECORDED') return '已恢复'
   return props.detail.recordStatusLabel || status || '--'
 })
+
+const duration = computed(() => {
+  return durationDisplay(props.detail.firstFailureTime, props.detail.lastHandleTime)
+})
+
+function toEpochSeconds(val: string): number | null {
+  const m = /^(\d{4})-(\d{2})-(\d{2})[T ](\d{2}):(\d{2}):(\d{2})/.exec(val)
+  if (!m) return null
+  const [, y, mo, d, h, mi, s] = m
+  return Math.floor(
+    Date.UTC(Number(y), Number(mo) - 1, Number(d), Number(h), Number(mi), Number(s)) / 1000
+  )
+}
+
+function durationDisplay(start?: string | null, end?: string | null): { main: string; tooltip: string } {
+  if (!start || !end) return { main: '—', tooltip: '' }
+  const s = toEpochSeconds(start)
+  const e = toEpochSeconds(end)
+  if (s == null || e == null || e < s) return { main: '—', tooltip: '' }
+  const totalSec = e - s
+  return { main: mainDurationText(totalSec), tooltip: `精确历时：${preciseDurationText(totalSec)}` }
+}
+
+function mainDurationText(totalSec: number): string {
+  const sec = totalSec % 60
+  const min = Math.floor(totalSec / 60) % 60
+  const hr = Math.floor(totalSec / 3600) % 24
+  const days = Math.floor(totalSec / 86400)
+  if (totalSec < 60) return `${totalSec} 秒`
+  if (totalSec < 3600) return `${min} 分 ${sec} 秒`
+  if (totalSec < 86400) return `${hr} 小时 ${min} 分`
+  return `${days} 天 ${hr} 小时 ${min} 分`
+}
+
+function preciseDurationText(totalSec: number): string {
+  const sec = totalSec % 60
+  const min = Math.floor(totalSec / 60) % 60
+  const hr = Math.floor(totalSec / 3600) % 24
+  const days = Math.floor(totalSec / 86400)
+  const parts: string[] = []
+  if (days > 0) parts.push(`${days} 天`)
+  if (hr > 0) parts.push(`${hr} 小时`)
+  if (min > 0) parts.push(`${min} 分`)
+  parts.push(`${String(sec).padStart(2, '0')} 秒`)
+  return parts.join(' ')
+}
 
 function formatTime(val?: string | null): string {
   if (!val) return '--'
@@ -85,23 +115,17 @@ function statusTagType(status?: string | null): string {
 <style scoped>
 .overview-grid {
   display: grid;
-  grid-template-columns: repeat(4, 1fr);
+  grid-template-columns: repeat(3, 1fr);
   gap: 1px;
   background: #ebeef5;
-  border: 1px solid #ebeef5;
-  border-radius: 8px;
-  overflow: hidden;
 }
 .overview-item {
   display: flex;
   flex-direction: column;
   gap: 4px;
-  padding: 12px 16px;
+  padding: 14px 16px;
   background: #fff;
   min-width: 0;
-}
-.overview-item--span2 {
-  grid-column: span 2;
 }
 .ov-label {
   font-size: 12px;
@@ -120,6 +144,5 @@ function statusTagType(status?: string | null): string {
 }
 @media (max-width: 640px) {
   .overview-grid { grid-template-columns: 1fr; }
-  .overview-item--span2 { grid-column: span 1; }
 }
 </style>

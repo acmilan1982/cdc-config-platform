@@ -39,7 +39,7 @@
       </div>
 
       <div class="card-steps">
-        <div v-for="step in group.steps" :key="step.logId" class="step-row">
+        <div v-for="step in group.steps" :key="step.logIdText ?? step.logId" class="step-row">
           <span class="step-time">{{ formatTime(step.handleTime) }}</span>
           <el-tag :type="stageTag(step.handleStage)" size="small" class="step-stage">
             {{ stageLabel(step) }}
@@ -55,7 +55,7 @@
             type="primary"
             size="small"
             class="step-action"
-            @click="$emit('view-error', step.logId)"
+            @click="viewError(step)"
           >
             查看错误详情
           </el-button>
@@ -76,7 +76,7 @@ const props = defineProps<{
   jobChain: JobChainVO[]
 }>()
 
-defineEmits<{ 'view-error': [logId: number] }>()
+const emit = defineEmits<{ 'view-error': [logId: string] }>()
 
 interface CardGroup {
   label: string
@@ -216,6 +216,10 @@ function stageTag(stage?: string | null): string {
 
 function hasErrorDetail(stage?: string | null): boolean {
   return stage === 'NEW_JOB_SUBMIT_FAILED' || stage === 'JOB_FAILURE_RECEIVED'
+}
+
+function viewError(log: HandleTimelineVO): void {
+  if (log.logIdText) emit('view-error', log.logIdText)
 }
 </script>
 
