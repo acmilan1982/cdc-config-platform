@@ -437,53 +437,28 @@ onUnmounted(() => stopTimer())
 .cards-container {
   display: flex;
   flex-direction: column;
-  gap: 16px;
+  gap: 22px;
+  padding: 20px;
+  border-radius: 16px;
+  border: 1px solid #EEF2F7;
+  background:
+    radial-gradient(circle at 12% 18%, rgba(99, 102, 241, 0.06), transparent 28%),
+    radial-gradient(circle at 88% 12%, rgba(56, 189, 248, 0.08), transparent 30%),
+    linear-gradient(135deg, #F8FAFC 0%, #F1F5F9 55%, #EEF2FF 100%);
 }
 .client-card {
-  border: 1px solid rgba(255, 255, 255, 0.68);
+  border: 1px solid #E2E8F0;
   border-radius: 16px;
-  box-shadow: 0 10px 30px rgba(15, 23, 42, 0.06);
-  background:
-    linear-gradient(
-      135deg,
-      rgba(236, 253, 245, 0.30),
-      rgba(255, 255, 255, 0.58)
-    );
-  backdrop-filter: blur(12px);
-  -webkit-backdrop-filter: blur(12px);
-  transition: box-shadow 0.18s ease, transform 0.18s ease;
-}
-@supports not (backdrop-filter: blur(12px)) {
-  .client-card {
-    background:
-      linear-gradient(
-        135deg,
-        rgba(236, 253, 245, 0.55),
-        rgba(255, 255, 255, 0.88)
-      );
-    border: 1px solid rgba(226, 232, 240, 0.55);
-  }
+  box-shadow: 0 4px 12px rgba(15, 23, 42, 0.08);
+  background: linear-gradient(135deg, #F0FDF4 0%, #FFFFFF 100%);
+  transition: box-shadow 0.18s ease, transform 0.18s ease, border-color 0.18s ease;
 }
 .client-card--abnormal {
-  background:
-    linear-gradient(
-      135deg,
-      rgba(254, 243, 199, 0.30),
-      rgba(255, 255, 255, 0.58)
-    );
-}
-@supports not (backdrop-filter: blur(12px)) {
-  .client-card--abnormal {
-    background:
-      linear-gradient(
-        135deg,
-        rgba(254, 243, 199, 0.55),
-        rgba(255, 255, 255, 0.88)
-      );
-  }
+  background: linear-gradient(135deg, #FFFBEB 0%, #FFFFFF 100%);
 }
 .client-card:hover {
-  box-shadow: 0 14px 36px rgba(15, 23, 42, 0.08);
+  border-color: #CBD5E1;
+  box-shadow: 0 6px 16px rgba(15, 23, 42, 0.12);
   transform: translateY(-1px);
 }
 @media (prefers-reduced-motion: reduce) {
@@ -498,6 +473,15 @@ onUnmounted(() => stopTimer())
   cursor: pointer;
   user-select: none;
   width: 100%;
+}
+.client-card :deep(.el-card__header) {
+  padding: 12px 16px;
+  background: #F8FAFC;
+  border-bottom: 1px solid #E2E8F0;
+  border-radius: 16px 16px 0 0;
+}
+.client-card :deep(.el-card__body) {
+  padding: 16px;
 }
 .card-header-left {
   display: flex;
