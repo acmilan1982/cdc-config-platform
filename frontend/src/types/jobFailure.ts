@@ -32,8 +32,12 @@ export interface JobFailureSummaryVO {
 
 export interface FaultProcessDetailVO {
   faultRootId: number
+  faultRootIdText?: string | null
   clientId: string
   dataSourceId: string
+  dataSourceOrg?: string | null
+  dataSourceExists: boolean
+  dataSourceActive?: boolean | null
   firstFailureTime?: string | null
   lastHandleTime?: string | null
   jobChain: JobChainVO[]

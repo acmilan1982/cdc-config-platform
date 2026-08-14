@@ -4,7 +4,20 @@
     <div class="page-toolbar">
       <div class="toolbar-left">
         <h2 class="page-title">故障过程详情</h2>
-        <el-tag v-if="detail" size="small" type="info">根事件 {{ detail.faultRootId }}</el-tag>
+        <el-tooltip v-if="detail" :content="rootEventIdText" placement="top" :show-after="300">
+          <el-tag size="small" type="info" class="root-event-tag">
+            根事件 {{ rootEventIdShort }}
+            <el-button
+              link
+              size="small"
+              class="root-event-copy"
+              aria-label="复制根事件 ID"
+              @click.stop="copyRootEventId"
+            >
+              <el-icon><CopyDocument /></el-icon>
+            </el-button>
+          </el-tag>
+        </el-tooltip>
       </div>
       <div class="toolbar-right">
         <el-button size="small" @click="loadDetail" :loading="loading">
@@ -103,10 +116,10 @@
 </template>
 
 <script setup lang="ts">
-import { ref, onMounted } from 'vue'
+import { ref, computed, onMounted } from 'vue'
 import { useRoute } from 'vue-router'
 import { ElMessage } from 'element-plus'
-import { Refresh, Loading } from '@element-plus/icons-vue'
+import { Refresh, Loading, CopyDocument } from '@element-plus/icons-vue'
 import { fetchLatestFault, fetchProcessDetail } from '@/api/jobFailure'
 import type { FaultProcessDetailVO } from '@/types/jobFailure'
 
@@ -127,6 +140,29 @@ const clobVisible = ref(false)
 const clobField = ref('FAILURE_EVENT_FAILURE_DETAIL')
 const clobRecordId = ref<number | null>(null)
 const currentFaultRootId = ref<number | null>(null)
+
+const rootEventIdText = computed(() => {
+  const d = detail.value
+  if (!d) return ''
+  if (d.faultRootIdText) return d.faultRootIdText
+  return d.faultRootId != null ? String(d.faultRootId) : ''
+})
+
+const rootEventIdShort = computed(() => ellipsisId(rootEventIdText.value))
+
+function ellipsisId(text: string): string {
+  if (text.length <= 10) return text
+  return text.slice(0, 6) + '…' + text.slice(-4)
+}
+
+async function copyRootEventId() {
+  try {
+    await navigator.clipboard.writeText(rootEventIdText.value)
+    ElMessage.success('已复制')
+  } catch {
+    ElMessage.warning('复制失败')
+  }
+}
 
 function openClob(field: string, recordId: number) {
   clobField.value = field
@@ -198,6 +234,8 @@ onMounted(() => loadDetail())
 }
 .toolbar-left { display: flex; align-items: baseline; gap: 12px; }
 .page-title { margin: 0; font-size: 18px; font-weight: 600; color: #303133; }
+.root-event-tag { display: inline-flex; align-items: center; gap: 2px; }
+.root-event-copy { padding: 0; margin-left: 2px; font-size: 12px; }
 .toolbar-right { display: flex; align-items: center; }
 .detail-section { margin-bottom: 16px; }
 .detail-alert { margin-bottom: 12px; }

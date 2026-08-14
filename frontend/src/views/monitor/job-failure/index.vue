@@ -4,7 +4,7 @@
     <div class="page-toolbar">
       <div class="toolbar-left">
         <h2 class="page-title">故障监控</h2>
-        <el-tag v-if="summaryList" size="small" type="info">共 {{ summaryList.length }} 个业务库</el-tag>
+        <el-tag v-if="summaryList" size="small" type="info">共 {{ summaryList.length }} 个数据源</el-tag>
       </div>
       <div class="toolbar-right">
         <span class="refresh-label">自动刷新:</span>
@@ -107,18 +107,6 @@
                 :class="c.clientOnline ? 'client-status-text--online' : 'client-status-text--offline'"
               >{{ c.clientOnline ? '在线' : '离线' }}</span>
               <span class="card-client-id">{{ c.clientId }}</span>
-              <span class="card-divider">|</span>
-              <span class="card-stat">
-                Job 总数 <strong>{{ c.allRows.length }}</strong>
-              </span>
-              <span class="card-divider">|</span>
-              <span class="card-stat card-stat--normal">
-                正常 <strong>{{ c.normalCount }}</strong>
-              </span>
-              <span class="card-divider">|</span>
-              <span class="card-stat card-stat--abnormal">
-                异常 <strong>{{ c.abnormalCount }}</strong>
-              </span>
             </div>
             <div class="card-header-right">
               <el-icon class="card-toggle-icon" :class="{ 'is-collapsed': !isExpanded(c.clientId) }">
@@ -129,14 +117,14 @@
         </template>
         <div v-show="isExpanded(c.clientId)">
           <el-table :data="c.rows" size="small" border style="width: 100%">
-            <el-table-column label="业务库" min-width="180">
+            <el-table-column label="数据源" min-width="180">
               <template #default="{ row }">
-                <el-tooltip :content="`数据源 ID：${row.dataSourceId}`" placement="top" :show-after="300">
-                  <span v-if="row.dataSourceExists === false" class="name-cell name-cell--invalid">无效数据源</span>
-                  <span v-else class="name-cell">
-                    {{ businessDbBaseLabel(row) }}<span v-if="row.dataSourceActive === false" class="name-cell__inactive-suffix">&nbsp;(数据源未激活)</span>
-                  </span>
-                </el-tooltip>
+                <DataSourceDisplay
+                  :data-source-id="row.dataSourceId"
+                  :data-source-org="row.dataSourceOrg"
+                  :data-source-exists="row.dataSourceExists"
+                  :data-source-active="row.dataSourceActive"
+                />
               </template>
             </el-table-column>
             <el-table-column label="Job 当前状态" width="110">
@@ -173,7 +161,7 @@
             </el-table-column>
           </el-table>
           <div v-if="c.rows.length !== c.allRows.length" class="filter-hint">
-            当前显示 {{ c.rows.length }} / 共 {{ c.allRows.length }} 个业务库
+            当前显示 {{ c.rows.length }} / 共 {{ c.allRows.length }} 个数据源
           </div>
         </div>
       </el-card>
@@ -188,6 +176,7 @@ import { ElMessage } from 'element-plus'
 import { Refresh, Loading, ArrowDown, WarningFilled } from '@element-plus/icons-vue'
 import { fetchSummary } from '@/api/jobFailure'
 import type { JobFailureSummaryVO } from '@/types/jobFailure'
+import DataSourceDisplay from './components/DataSourceDisplay.vue'
 
 const router = useRouter()
 
@@ -218,8 +207,6 @@ interface ClientCard {
   clientName: string | null | undefined
   overallStatus: string
   clientOnline: boolean
-  normalCount: number
-  abnormalCount: number
   allRows: JobFailureSummaryVO[]
   rows: JobFailureSummaryVO[]
 }
@@ -288,7 +275,6 @@ const visibleClients = computed<ClientCard[]>(() => {
     if (!selAll && !selSet.has(clientId)) continue
 
     const abnormalCount = allRows.filter(r => r.jobStatus === '恢复中').length
-    const normalCount = allRows.length - abnormalCount
     const overallStatus = abnormalCount > 0 ? '异常' : '正常'
     const clientOnline = allRows[0]?.clientOnline === true
 
@@ -311,8 +297,6 @@ const visibleClients = computed<ClientCard[]>(() => {
       clientName: allRows[0]?.clientName,
       overallStatus,
       clientOnline,
-      normalCount,
-      abnormalCount,
       allRows,
       rows: visibleRows
     })
@@ -467,11 +451,6 @@ function clearZkRetry() {
   }
 }
 
-function businessDbBaseLabel(row: JobFailureSummaryVO): string {
-  const org = row.dataSourceOrg
-  return org && org.trim() ? org : '未定义名称'
-}
-
 function formatTime(val?: string | null): string {
   if (!val) return '—'
   const idx = val.indexOf('T')
@@ -618,21 +597,6 @@ onUnmounted(() => {
   color: #303133;
   font-family: monospace;
 }
-.card-divider {
-  color: #dcdfe6;
-  font-size: 14px;
-}
-.card-stat {
-  font-size: 13px;
-  color: #606266;
-}
-.card-stat strong {
-  font-size: 14px;
-  color: #303133;
-  margin-left: 2px;
-}
-.card-stat--normal strong { color: #67c23a; }
-.card-stat--abnormal strong { color: #e6a23c; }
 .card-toggle-icon {
   transition: transform 0.2s;
   color: #909399;
@@ -640,22 +604,6 @@ onUnmounted(() => {
 }
 .card-toggle-icon.is-collapsed {
   transform: rotate(-90deg);
-}
-.name-cell {
-  font-weight: 500;
-  color: #303133;
-  display: inline-block;
-  max-width: 100%;
-  overflow: hidden;
-  text-overflow: ellipsis;
-  white-space: nowrap;
-  cursor: default;
-}
-.name-cell--invalid {
-  color: #f56c6c;
-}
-.name-cell__inactive-suffix {
-  color: #f56c6c;
 }
 .no-action {
   color: #c0c4cc;

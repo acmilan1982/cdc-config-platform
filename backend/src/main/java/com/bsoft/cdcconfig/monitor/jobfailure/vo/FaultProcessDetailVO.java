@@ -6,8 +6,12 @@ import java.util.List;
 public class FaultProcessDetailVO {
 
     private Long faultRootId;
+    private String faultRootIdText;
     private String clientId;
     private String dataSourceId;
+    private String dataSourceOrg;
+    private boolean dataSourceExists;
+    private Boolean dataSourceActive;
     private LocalDateTime firstFailureTime;
     private LocalDateTime lastHandleTime;
     private List<JobChainVO> jobChain;
@@ -24,11 +28,23 @@ public class FaultProcessDetailVO {
     public Long getFaultRootId() { return faultRootId; }
     public void setFaultRootId(Long faultRootId) { this.faultRootId = faultRootId; }
 
+    public String getFaultRootIdText() { return faultRootIdText; }
+    public void setFaultRootIdText(String faultRootIdText) { this.faultRootIdText = faultRootIdText; }
+
     public String getClientId() { return clientId; }
     public void setClientId(String clientId) { this.clientId = clientId; }
 
     public String getDataSourceId() { return dataSourceId; }
     public void setDataSourceId(String dataSourceId) { this.dataSourceId = dataSourceId; }
+
+    public String getDataSourceOrg() { return dataSourceOrg; }
+    public void setDataSourceOrg(String dataSourceOrg) { this.dataSourceOrg = dataSourceOrg; }
+
+    public boolean isDataSourceExists() { return dataSourceExists; }
+    public void setDataSourceExists(boolean dataSourceExists) { this.dataSourceExists = dataSourceExists; }
+
+    public Boolean getDataSourceActive() { return dataSourceActive; }
+    public void setDataSourceActive(Boolean dataSourceActive) { this.dataSourceActive = dataSourceActive; }
 
     public LocalDateTime getFirstFailureTime() { return firstFailureTime; }
     public void setFirstFailureTime(LocalDateTime firstFailureTime) { this.firstFailureTime = firstFailureTime; }

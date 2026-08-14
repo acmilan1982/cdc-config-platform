@@ -492,11 +492,31 @@ public class JobFailureServiceImpl implements JobFailureService {
         return map;
     }
 
+    private void applyDataSourceContract(FaultProcessDetailVO vo, String dataSourceId) {
+        if (dataSourceId == null) {
+            vo.setDataSourceOrg(null);
+            vo.setDataSourceExists(false);
+            vo.setDataSourceActive(null);
+            return;
+        }
+        DataSource dsConfig = dataSourceMapper.selectById(dataSourceId);
+        if (dsConfig != null) {
+            vo.setDataSourceOrg(dsConfig.getDataSourceOrg());
+            vo.setDataSourceExists(true);
+            vo.setDataSourceActive(!"0".equals(dsConfig.getFgActive()));
+        } else {
+            vo.setDataSourceOrg(null);
+            vo.setDataSourceExists(false);
+            vo.setDataSourceActive(null);
+        }
+    }
+
     // ==================== VO Builders ====================
 
     private FaultProcessDetailVO toDetailVO(FaultProcessGroup group) {
         FaultProcessDetailVO vo = new FaultProcessDetailVO();
         vo.setFaultRootId(group.getFaultRootId());
+        vo.setFaultRootIdText(group.getFaultRootId() == null ? null : Long.toString(group.getFaultRootId()));
 
         // Client/data-source from first event
         if (!group.getAllEvents().isEmpty()) {
@@ -504,6 +524,8 @@ public class JobFailureServiceImpl implements JobFailureService {
             vo.setClientId(first.getClientId());
             vo.setDataSourceId(first.getDataSourceId());
         }
+
+        applyDataSourceContract(vo, vo.getDataSourceId());
 
         vo.setFirstFailureTime(group.getFirstFailureTime());
         vo.setLastHandleTime(group.getLastHandleTime());
