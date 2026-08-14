@@ -69,11 +69,17 @@
 | 编号 | 规则 | 说明 |
 |---|---|---|
 | JFM-FILTER-001 | `CDC_CLIENT_MULTIPLE` 须过滤 `FG_ACTIVE = '1'` | 只展示启用客户端 |
-| JFM-FILTER-002 | `CDC_DATA_SOURCE` 须过滤 `FG_ACTIVE = '1'` | 只展示启用数据源 |
+| JFM-FILTER-002 | `CDC_DATA_SOURCE` 须过滤 `FG_ACTIVE = '1'` | 只展示启用数据源 【在故障监控概览页范围内已被 §6.5 的页面例外规则替代，不再作为本页面现行规则/验收标准；其他功能场景不受影响（依据 JFM-ADJ-038、JFM-ADJ-040、JFM-ADJ-043、JFM-ACCEPT-049、JFM-ACCEPT-050）】 |
 | JFM-FILTER-003 | 停用客户端不进入页面展示范围 | — |
-| JFM-FILTER-004 | 停用数据源不作为采集任务展示 | — |
+| JFM-FILTER-004 | 停用数据源不作为采集任务展示 | — 【在故障监控概览页范围内已被 §6.5 的页面例外规则替代，不再作为本页面现行规则/验收标准；其他功能场景不受影响（依据 JFM-ADJ-038、JFM-ADJ-040、JFM-ADJ-043、JFM-ACCEPT-049、JFM-ACCEPT-050）】 |
 
-当前实现状态：JFM-FILTER-001 已实现（`JobFailureServiceImpl` 第 76 行），JFM-FILTER-002 尚未实现（见 §19 GAP-FILTER-001）。
+适用范围说明：
+
+- “只展示 `FG_ACTIVE = '1'` 的数据源”仍是其他功能和页面的一般规则；
+- 故障监控概览页是明确的局部例外：以 `CDC_CLIENT_MULTIPLE.DATA_SOURCE_ID` 的配置内容为展示全集，拆分后的每个非空 ID，无论 `CDC_DATA_SOURCE` 中记录是否存在、`FG_ACTIVE` 为何值，都必须显示；
+- 客户端过滤规则 `CDC_CLIENT_MULTIPLE.FG_ACTIVE = '1'` 不变，停用客户端仍不展示。
+
+当前实现状态：JFM-FILTER-001 已实现（`JobFailureServiceImpl` 第 76 行）。JFM-FILTER-002 与 JFM-FILTER-004 仅在故障监控概览页范围内由 §6.5 页面例外规则替代（详见 §19 GAP-FILTER-001）。
 
 ### 5.3 明确不读取的数据源
 
@@ -299,11 +305,11 @@
 |---|---|
 | JFM-ADJ-056 | Summary API 一条返回记录对应一个拆分后的 `DATA_SOURCE_ID` |
 | JFM-ADJ-057 | 接口至少保留 `dataSourceId`、`dataSourceName`（兼容保留，概览页不展示）、`dataSourceOrg`、`dataSourceActive` |
-| JFM-ADJ-058 | 接口必须提供一种无歧义的方式区分"记录存在 / 不存在"与"激活 / 未激活"，采用 `dataSourceExists` 三态契约 |
+| JFM-ADJ-058 | 接口必须提供一种无歧义的方式区分"记录存在 / 不存在"与"激活 / 未激活"，采用 `dataSourceExists` 存在性布尔字段与 `dataSourceActive` 激活状态三态字段组成的组合契约 |
 | JFM-ADJ-059 | 禁止通过 `dataSourceOrg == null` 判断记录不存在，因为"记录存在但 `DATA_SOURCE_ORG` 为空"是合法且必须显示 `未定义名称` 的另一种状态 |
-| JFM-ADJ-060 | `dataSourceActive` 自本轮起成为正式需求的一部分，不再作为越界字段删除；必须严格遵守下述三态契约 |
+| JFM-ADJ-060 | `dataSourceActive` 自本轮起成为正式需求的一部分，不再作为越界字段删除；必须严格遵守下述存在性/激活状态组合契约 |
 
-存在性与激活状态三态契约：
+存在性布尔字段与激活状态三态字段的组合契约：
 
 ```text
 dataSourceExists: true  = CDC_DATA_SOURCE 中存在对应记录
@@ -559,7 +565,7 @@ dataSourceActive: null  = 记录不存在，不适用
 
 > **概览页接口字段调整（本轮已确认 · 实现待开发）**：API-1 `/summary` 的响应类型 `JobFailureSummaryVO` 需新增 `dataSourceOrg` 字段（映射 `CDC_DATA_SOURCE.DATA_SOURCE_ORG`），用于概览页"业务库"列；`dataSourceId` 保留。现有 `dataSourceName` 字段允许为兼容保留，但概览页不再展示（见 §6.3.7）。
 
-> **多数据源展开与存在性契约（本轮已确认 · 实现待开发）**：API-1 `/summary` 的每条返回记录对应一个拆分后的单个 `DATA_SOURCE_ID`（拆分规则见 §6.5.1）。`JobFailureSummaryVO` 需新增 `dataSourceExists` 字段，并与 `dataSourceActive` 共同构成无歧义的三态契约：`dataSourceExists: true/false` 区分记录在 `CDC_DATA_SOURCE` 中是否存在；`dataSourceActive: true/false/null` 区分记录存在时的激活状态（null 表示记录不存在、不适用）。禁止通过 `dataSourceOrg == null` 判断记录不存在（详见 §6.5.5）。
+> **多数据源展开与存在性契约（本轮已确认 · 实现待开发）**：API-1 `/summary` 的每条返回记录对应一个拆分后的单个 `DATA_SOURCE_ID`（拆分规则见 §6.5.1）。`JobFailureSummaryVO` 需新增 `dataSourceExists` 字段，并与 `dataSourceActive` 共同构成无歧义的存在性/激活状态组合契约：`dataSourceExists: true/false` 区分记录在 `CDC_DATA_SOURCE` 中是否存在；`dataSourceActive: true/false/null` 区分记录存在时的激活状态（null 表示记录不存在、不适用）。禁止通过 `dataSourceOrg == null` 判断记录不存在（详见 §6.5.5）。
 
 ## 15. 只读与安全约束
 
@@ -590,9 +596,9 @@ dataSourceActive: null  = 记录不存在，不适用
 | JFM-ACCEPT-004 | 失败事件来自 `CDC_JOB_FAILURE_EVENT` | 代码审查 `JobFailureEventMapper` 引用 |
 | JFM-ACCEPT-005 | 处理过程来自 `CDC_JOB_FAILURE_HANDLE_LOG` | 代码审查 `JobFailureHandleLogMapper` 引用 |
 | JFM-ACCEPT-006 | 客户端必须满足 `FG_ACTIVE = '1'` | 代码审查 `JobFailureServiceImpl` 第 75-76 行 |
-| JFM-ACCEPT-007 | 数据源必须满足 `FG_ACTIVE = '1'` | 代码审查 `loadDataSourceNames()` 方法（当前为差距） |
+| JFM-ACCEPT-007 | 数据源必须满足 `FG_ACTIVE = '1'` | 代码审查 `loadDataSourceNames()` 方法（当前为差距） 【在故障监控概览页范围内已被 §6.5 的页面例外规则替代，不再作为本页面现行规则/验收标准；其他功能场景不受影响（依据 JFM-ADJ-038、JFM-ADJ-040、JFM-ADJ-043、JFM-ACCEPT-049、JFM-ACCEPT-050）】 |
 | JFM-ACCEPT-008 | 停用客户端不得展示 | 浏览器验证（需构造停用客户端数据） |
-| JFM-ACCEPT-009 | 停用数据源不得作为采集任务展示 | 浏览器验证（当前为差距，需先实现 FG_ACTIVE 过滤） |
+| JFM-ACCEPT-009 | 停用数据源不得作为采集任务展示 | 浏览器验证（当前为差距，需先实现 FG_ACTIVE 过滤） 【在故障监控概览页范围内已被 §6.5 的页面例外规则替代，不再作为本页面现行规则/验收标准；其他功能场景不受影响（依据 JFM-ADJ-038、JFM-ADJ-040、JFM-ADJ-043、JFM-ACCEPT-049、JFM-ACCEPT-050）】 |
 | JFM-ACCEPT-010 | Job 对外当前状态只能显示"正常"或"恢复中" | 浏览器实页验证，概览页表格列 |
 | JFM-ACCEPT-011 | 故障过程对外只能显示五种正式状态 | 浏览器实页验证，详情页状态标签 |
 | JFM-ACCEPT-012 | 内部 `FaultProcessResult` 不得直接作为页面最终状态 | 代码审查 VO 构建和前端渲染 |
@@ -640,12 +646,12 @@ dataSourceActive: null  = 记录不存在，不适用
 
 | 差距编号 | 类别 | 需求规则 | 当前实现 | 影响 |
 |---|---|---|---|---|
-| GAP-FILTER-001 | 数据过滤 | JFM-FILTER-002：`CDC_DATA_SOURCE` 须过滤 `FG_ACTIVE = '1'` | `DataSourceMapper.selectBatchIds()` 未添加 FG_ACTIVE 过滤 | 停用数据源可能被展示 |
+| GAP-FILTER-001 | 数据过滤 | JFM-FILTER-002（历史）：`CDC_DATA_SOURCE` 须过滤 `FG_ACTIVE = '1'` 【仅在故障监控概览页范围内由需求例外关闭，不再实施；其他功能场景不受影响】 | 关闭依据 JFM-ADJ-038/040/043、JFM-ACCEPT-049/050。`DataSourceMapper.selectBatchIds()` 未过滤 FG_ACTIVE 不再作为缺陷；新的正确目标是读取 `FG_ACTIVE` 并用于页面标识，不过滤该数据源（见 §6.5.2） | 故障监控概览页不再过滤停用数据源；不代表多数据源实现已完成（见 GAP-OVERVIEW-MULTI-DATASOURCE-001） |
 | GAP-STATUS-001 | 对外状态 | JFM-ACCEPT-011/012/013：对外故障过程状态须为 5 种正式状态，内部 `FaultProcessResult` 和 `RecordStatus` 不得直接对外返回 | 代码中 `FaultProcessResult`（3 种）和 `RecordStatus`（9 种）通过 VO 直接返回前端 | 详情页和概览页显示的状态标签为内部状态的直接中文映射（如"已记录恢复""记录未闭环"），不是 5 种正式状态 |
 | GAP-STATUS-002 | 状态映射 | §9.4.4 映射表：须实现统一的内部→对外映射层 | 尚未实现统一映射层。前端通过硬编码 `RECOVERY_RECORDED → '已恢复'` 做部分映射，其余状态直接透传 `recordStatusLabel` | 状态映射不完整、不统一，前后端均存在不一致风险 |
 | GAP-STATUS-003 | 恢复失败判定 | §9.4.2 优先级 5：须实现"恢复失败"的统一判定规则 | 代码不存在"恢复失败"概念。`SUBMIT_FAILED`、`RESTART_SKIPPED`、部分 `NOT_CLOSED` 仅为候选证据，从当前代码无法唯一确定"恢复失败"的精确判定条件，不得使用"其他情况"兜底 | "恢复失败"对外状态当前无对应实现，用户无法在页面看到该状态 |
 | GAP-HISTORY-001 | 历史全量返回 | JFM-HIST-002、JFM-HIST-003：无传统分页组件，所选时间范围内全部记录可见 | 前端固定 `pageSize=1000`（`FaultHistory.vue` 第 148 行），后端服务端分页 | 超过 1000 条时可能静默截断 |
-| GAP-OVERVIEW-001 | 概览页调整 | §6.3：删除"数据源 ID"查询与表格列、业务库改显示 `DATA_SOURCE_ORG`、Summary 新增 `dataSourceOrg`、客户端卡片视觉调整 | 当前代码仍为调整前行为（查询区含"数据源 ID"，表格 7 列且展示 `dataSourceName`，客户端卡片为 `border-left` 视觉） | 概览页已确认需求尚未实现，待开发 |
+| GAP-OVERVIEW-001 | 概览页调整 | §6.3：删除"数据源 ID"查询与表格列、业务库改显示 `DATA_SOURCE_ORG`、Summary 新增 `dataSourceOrg`、客户端卡片视觉调整 | 主体实现已在 7d320c25 提交，但尚未通过技术复核和人工页面验收；同时运行验证发现多数据源展开与异常数据源展示缺口，见 GAP-OVERVIEW-MULTI-DATASOURCE-001 | 概览页调整待技术复核与人工页面验收，GAP 在验收前保持开放 |
 | GAP-OVERVIEW-MULTI-DATASOURCE-001 | 多数据源展开 | §6.5：`CDC_CLIENT_MULTIPLE.DATA_SOURCE_ID` 按英文逗号拆分为多个单 ID 记录、逐条展示，并区分正常、未激活和无效数据源 | 当前实现尚未将 `DATA_SOURCE_ID` 展开为多个单 ID 记录，尚未完整区分正常、未激活和无效数据源，尚未实现无效数据源的红字与 Tooltip 行为 | 需求已批准，代码待后续修正和人工验收 |
 
 ## 20. 非目标
