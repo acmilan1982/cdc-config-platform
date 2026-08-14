@@ -166,9 +166,9 @@
 
 | 编号 | 规则 | 说明 |
 |---|---|---|
-| JFM-ADJ-015 | `DATA_SOURCE_ORG` 有值 → 原样显示字段值；`DATA_SOURCE_ORG` 为空 → 前端显示"未定义名称" | 兜底文案仅前端展示，不写回数据库 |
-| JFM-ADJ-016 | 不判断 `DATA_SOURCE_ORG` 是否重复、不去重、不合并记录 | 重复值原样展示 |
-| JFM-ADJ-017 | 鼠标悬停在业务库名称或"未定义名称"上时，Tooltip 显示对应的 `DATA_SOURCE_ID` | Tooltip 文案为 `数据源 ID：<实际值>` |
+| JFM-ADJ-015 | `DATA_SOURCE_ORG` 有值 → 原样显示字段值；`DATA_SOURCE_ORG` 为空 → 前端显示"未定义名称" | 兜底文案仅前端展示，不写回数据库 【已被本轮 §6.5.2 修订：补充未激活数据源红色后缀与无效数据源红字场景】 |
+| JFM-ADJ-016 | 不判断 `DATA_SOURCE_ORG` 是否重复、不去重、不合并记录 | 重复值原样展示；继续有效，并扩展至无效数据源场景（见 §6.5.2 JFM-ADJ-036、JFM-ADJ-045） |
+| JFM-ADJ-017 | 鼠标悬停在业务库名称或"未定义名称"上时，Tooltip 显示对应的 `DATA_SOURCE_ID` | Tooltip 文案为 `数据源 ID：<实际值>` 【已被本轮 §6.5.3 扩展：Tooltip 规则扩展至无效数据源，见 JFM-ADJ-047】 |
 | JFM-ADJ-018 | `DATA_SOURCE_ID` 继续用于行标识、数据关联和详情跳转；不得从后端响应或内部业务逻辑中删除 `dataSourceId` | — |
 
 #### 6.3.7 数据来源与接口契约
@@ -176,7 +176,7 @@
 | 编号 | 规则 | 说明 |
 |---|---|---|
 | JFM-ADJ-019 | 概览页主要显示字段改为 `CDC_DATA_SOURCE.DATA_SOURCE_ORG`；不得继续使用 `CDC_DATA_SOURCE.DATA_SOURCE_NAME` 作为本页面业务库名称 | — |
-| JFM-ADJ-020 | Summary 响应应使用语义明确的 `dataSourceOrg` 字段，映射 `CDC_DATA_SOURCE.DATA_SOURCE_ORG`；`dataSourceId` 保留 | 新增字段，见 §14 |
+| JFM-ADJ-020 | Summary 响应应使用语义明确的 `dataSourceOrg` 字段，映射 `CDC_DATA_SOURCE.DATA_SOURCE_ORG`；`dataSourceId` 保留 | 新增字段，见 §14 【已被本轮 §6.5.5 扩展：增加多 ID 展开与存在性/激活状态契约】 |
 | JFM-ADJ-021 | 不得把现有 `dataSourceName` 静默改成 `DATA_SOURCE_ORG` 的含义；如 `dataSourceName` 仍被其他代码使用，允许为兼容保留，但故障概览页不再展示它 | — |
 | JFM-ADJ-022 | `DATA_SOURCE_ORG` 为空时由前端显示"未定义名称"，不写回数据库；本任务和后续实现均不执行数据库写操作 | — |
 
@@ -200,10 +200,10 @@
 |---|---|
 | JFM-ACCEPT-036 | 查询区域不含"数据源 ID"条件，仅含客户端、Job 当前状态、查询、重置 |
 | JFM-ACCEPT-037 | 业务库表格为 6 列，顺序为业务库 / Job 当前状态 / 最近故障时间 / 最近恢复时间 / 故障期间恢复尝试 / 操作 |
-| JFM-ACCEPT-038 | 业务库列显示 `DATA_SOURCE_ORG`；有值原样显示，空值显示"未定义名称" |
-| JFM-ACCEPT-039 | 业务库名称或"未定义名称"悬停 Tooltip 显示 `数据源 ID：<实际值>` |
-| JFM-ACCEPT-040 | `DATA_SOURCE_ORG` 重复值原样展示，不去重不合并 |
-| JFM-ACCEPT-041 | 概览页不再展示 `DATA_SOURCE_NAME`；Summary 响应包含 `dataSourceOrg` 且保留 `dataSourceId` |
+| JFM-ACCEPT-038 | 业务库列显示 `DATA_SOURCE_ORG`；有值原样显示，空值显示"未定义名称" 【已被本轮 §6.5 修订：补充未激活与无效数据源场景，见 JFM-ACCEPT-049/050/051】 |
+| JFM-ACCEPT-039 | 业务库名称或"未定义名称"悬停 Tooltip 显示 `数据源 ID：<实际值>` 【已被本轮 §6.5 扩展：四类记录 Tooltip 均显示实际 ID，见 JFM-ACCEPT-052】 |
+| JFM-ACCEPT-040 | `DATA_SOURCE_ORG` 重复值原样展示，不去重不合并 【继续有效，见 JFM-ACCEPT-048】 |
+| JFM-ACCEPT-041 | 概览页不再展示 `DATA_SOURCE_NAME`；Summary 响应包含 `dataSourceOrg` 且保留 `dataSourceId` 【已被本轮 §6.5 扩展：增加多 ID 展开与存在性/激活契约，见 JFM-ACCEPT-053】 |
 | JFM-ACCEPT-042 | 客户端卡片视觉效果与"CDC 节点状态"协调（圆角、边框、背景、阴影、间距、标题层级），正常/异常差异清晰不过度 |
 | JFM-ACCEPT-043 | 卡片标题仍显示客户端 ID、Job 总数、正常数、异常数；首次加载全展开，刷新保持人工展开/折叠状态 |
 | JFM-ACCEPT-044 | 异常客户端优先，同状态按客户端 ID 升序 |
@@ -221,6 +221,126 @@
 | JFM-TABLE-005 | "数据源名称"长文本截断省略号展示 | 修订：截断规则保留，作用对象由"数据源名称"改为"业务库（DATA_SOURCE_ORG）" |
 | 页面展示 `CDC_DATA_SOURCE.DATA_SOURCE_NAME` | 概览页"数据源名称"列及 Summary `dataSourceName` 字段用于概览展示 | 概览页不再展示，见 §6.3.7 |
 | 旧式客户端卡片视觉 | 客户端卡片当前 `el-card` 左侧色条（`border-left`）式视觉 | 修订为参照"CDC 节点状态"视觉，见 §6.3.4 |
+
+### 6.5 多数据源展开与异常数据源展示规则（本轮已确认 · 目标需求）
+
+> **需求状态**：`baseline_status: APPROVED`（已批准），`implementation_status: PENDING`（实现待开发）。
+> 本节记录的是**目标需求**，当前代码尚未实现。
+> 运行验证确认 `CDC_CLIENT_MULTIPLE.DATA_SOURCE_ID` 不是单个数据源 ID，而是以英文逗号分隔的多个 `CDC_DATA_SOURCE.DATA_SOURCE_ID`。本节将多数据源拆分、未激活数据源与无效数据源的展示规则正式写入基线，作为后续代码修正任务的唯一正式依据。
+
+#### 6.5.1 配置字段语义与拆分规则
+
+| 编号 | 规则 | 说明 |
+|---|---|---|
+| JFM-ADJ-030 | `CDC_CLIENT_MULTIPLE.DATA_SOURCE_ID` 是多个 `CDC_DATA_SOURCE.DATA_SOURCE_ID` 组成的英文逗号分隔字符串，不得把整段字符串当成单个 ID 查询 | — |
+| JFM-ADJ-031 | 按英文逗号 `,` 拆分 | — |
+| JFM-ADJ-032 | 每个拆分项去除首尾空白 | — |
+| JFM-ADJ-033 | 忽略拆分后为空的项 | — |
+| JFM-ADJ-034 | 每个非空 `DATA_SOURCE_ID` 在对应客户端卡片中独立形成一条业务库记录 | — |
+| JFM-ADJ-035 | 拆分结果以配置字段中的先后顺序为基础 | — |
+| JFM-ADJ-036 | 不得因为多个 ID 对应相同的 `DATA_SOURCE_ORG` 而去重、合并或覆盖记录 | 强化旧规则 JFM-ADJ-016 |
+| JFM-ADJ-037 | 客户端卡片的 Job 总数应与最终展开出的记录数保持一致 | — |
+| JFM-ADJ-038 | 数据源是否激活、是否能在 `CDC_DATA_SOURCE` 中找到，只影响"业务库"列的标识，不得导致该 ID 行被过滤 | — |
+| JFM-ADJ-039 | Job 状态、最近故障时间、最近恢复时间、恢复尝试次数等既有字段继续按具体 `(CLIENT_ID, DATA_SOURCE_ID)` 维度关联；没有对应业务数据时沿用既有空值展示语义，不得伪造状态或时间 | — |
+
+边界示例（必须遵守）：
+
+```text
+原值：" source-a,source-b, , source-c "
+结果：source-a、source-b、source-c，共 3 条记录
+```
+
+#### 6.5.2 "业务库"列显示规则
+
+业务库列的显示必须形成无歧义的优先级规则：
+
+| 数据源匹配情况 | FG_ACTIVE | DATA_SOURCE_ORG | 页面"业务库"显示 |
+|---|---|---|---|
+| 找到记录 | 非 0 | 非空 | 原样显示 `DATA_SOURCE_ORG` |
+| 找到记录 | 非 0 | 空值或空白 | 显示 `未定义名称` |
+| 找到记录 | 0 | 非空 | 显示 `DATA_SOURCE_ORG`，后接红字 `(数据源未激活)` |
+| 找到记录 | 0 | 空值或空白 | 显示 `未定义名称`，后接红字 `(数据源未激活)` |
+| 未找到记录 | 不适用 | 不适用 | 整体以红字显示 `无效数据源` |
+
+补充约束：
+
+| 编号 | 规则 |
+|---|---|
+| JFM-ADJ-040 | 只有后缀 `(数据源未激活)` 使用红色，前面的机构名称或 `未定义名称` 保持正常文字样式 |
+| JFM-ADJ-041 | `无效数据源` 整体使用红色 |
+| JFM-ADJ-042 | `FG_ACTIVE = 0` 与"在 `CDC_DATA_SOURCE` 中没有记录"是两种不同状态，不得混淆 |
+| JFM-ADJ-043 | 未激活数据源和无效数据源均必须保留在表格中 |
+| JFM-ADJ-044 | 不得使用 `DATA_SOURCE_NAME` 代替 `DATA_SOURCE_ORG` |
+| JFM-ADJ-045 | 机构名称重复时仍逐条显示，不去重 |
+| JFM-ADJ-046 | 不得写数据库来修复、补齐或构造数据 |
+
+#### 6.5.3 Tooltip 规则
+
+| 编号 | 规则 | 说明 |
+|---|---|---|
+| JFM-ADJ-047 | 每一条展开记录的"业务库"单元格都必须支持 Tooltip，显示 `数据源 ID：<拆分后的实际 DATA_SOURCE_ID>` | 正常数据源、未定义名称、未激活数据源、无效数据源全部适用；即使页面显示红字 `无效数据源`，鼠标移入后仍必须看到原始 ID |
+
+#### 6.5.4 后端展开与查询约束
+
+| 编号 | 规则 |
+|---|---|
+| JFM-ADJ-048 | 多 ID 拆分与逐条 Summary 结果展开必须由后端完成，前端不得把一条 Summary 中的逗号字符串自行拆成多行 |
+| JFM-ADJ-049 | 后端必须以拆分后的单个 `DATA_SOURCE_ID` 作为关联键 |
+| JFM-ADJ-050 | 对 `CDC_DATA_SOURCE` 必须采用批量查询和内存映射，禁止逐 ID 查询造成 N+1 |
+| JFM-ADJ-051 | 批量查询未返回的 ID 仍要生成 Summary 条目，并标记为无效数据源 |
+| JFM-ADJ-052 | 不得只保留能在 `CDC_DATA_SOURCE` 中匹配到的 ID |
+| JFM-ADJ-053 | 不得读取或写入 ZooKeeper |
+| JFM-ADJ-054 | 不得修改数据库 |
+| JFM-ADJ-055 | 不得引入 `CDC_DATA_SOURCE_RUN_STATE` |
+
+#### 6.5.5 Summary API 契约
+
+| 编号 | 规则 |
+|---|---|
+| JFM-ADJ-056 | Summary API 一条返回记录对应一个拆分后的 `DATA_SOURCE_ID` |
+| JFM-ADJ-057 | 接口至少保留 `dataSourceId`、`dataSourceName`（兼容保留，概览页不展示）、`dataSourceOrg`、`dataSourceActive` |
+| JFM-ADJ-058 | 接口必须提供一种无歧义的方式区分"记录存在 / 不存在"与"激活 / 未激活"，采用 `dataSourceExists` 三态契约 |
+| JFM-ADJ-059 | 禁止通过 `dataSourceOrg == null` 判断记录不存在，因为"记录存在但 `DATA_SOURCE_ORG` 为空"是合法且必须显示 `未定义名称` 的另一种状态 |
+| JFM-ADJ-060 | `dataSourceActive` 自本轮起成为正式需求的一部分，不再作为越界字段删除；必须严格遵守下述三态契约 |
+
+存在性与激活状态三态契约：
+
+```text
+dataSourceExists: true  = CDC_DATA_SOURCE 中存在对应记录
+dataSourceExists: false = CDC_DATA_SOURCE 中不存在对应记录
+
+dataSourceActive: true  = 记录存在且 FG_ACTIVE != 0
+dataSourceActive: false = 记录存在且 FG_ACTIVE = 0
+dataSourceActive: null  = 记录不存在，不适用
+```
+
+#### 6.5.6 多数据源展开可执行验收标准
+
+| 编号 | 检查项 |
+|---|---|
+| JFM-ACCEPT-046 | `CDC_CLIENT_MULTIPLE.DATA_SOURCE_ID` 按英文逗号拆分、Trim、忽略空项，每个非空 ID 独立返回并显示一条记录 |
+| JFM-ACCEPT-047 | 示例 `" source-a,source-b, , source-c "` 最终严格产生 3 条记录，且 ID 正确 |
+| JFM-ACCEPT-048 | 多个 ID 对应相同 `DATA_SOURCE_ORG` 时仍逐条显示，不去重、不合并 |
+| JFM-ACCEPT-049 | `FG_ACTIVE = 0` 时名称正常显示，仅后缀 `(数据源未激活)` 为红色 |
+| JFM-ACCEPT-050 | `FG_ACTIVE = 0` 且 ORG 为空时显示 `未定义名称`，并追加红色 `(数据源未激活)` |
+| JFM-ACCEPT-051 | ID 在 `CDC_DATA_SOURCE` 中不存在时仍保留该行，业务库整项显示红色 `无效数据源` |
+| JFM-ACCEPT-052 | 正常、未定义、未激活和无效四类记录的 Tooltip 均显示拆分后的实际数据源 ID |
+| JFM-ACCEPT-053 | Summary API 一条记录对应一个拆分后的 ID，并能无歧义区分存在、未激活和不存在三种情况 |
+| JFM-ACCEPT-054 | 数据源配置采用批量查询，无 N+1；未匹配 ID 不被过滤 |
+| JFM-ACCEPT-055 | 客户端卡片 Job 总数与展开后的记录数一致，既有客户端排序、折叠、刷新和详情功能不回归 |
+| JFM-ACCEPT-056 | 本轮实现不得写数据库、不得写 ZooKeeper、不得读取 `CDC_DATA_SOURCE_RUN_STATE` |
+
+验收标准必须覆盖以下测试数据组合，允许后续代码任务使用单元测试或 Mock 验证，不得为验证而写数据库：
+
+```text
+一个客户端配置 3 个有效 ID
+两个 ID 的 DATA_SOURCE_ORG 相同
+一个已激活且 ORG 有值
+一个未激活且 ORG 有值
+一个未激活且 ORG 为空
+一个 ID 在 CDC_DATA_SOURCE 中不存在
+配置字符串含首尾空格和连续逗号
+```
 
 ## 7. 详情页需求
 
@@ -429,7 +549,7 @@
 
 | 编号 | API | 方法 | 路径 | 说明 |
 |---|---|---|---|---|
-| JFM-API-001 | API-1 | GET | `/api/job-failure/summary` | 故障汇总。按 `(CLIENT_ID, DATA_SOURCE_ID)` 分组，返回每个逻辑 Job 的最新故障概况。响应类型：`List<JobFailureSummaryVO>`。包含 clientId、clientName、dataSourceId、dataSourceName、jobStatus、latestFailureTime、latestFaultRootId、latestRestartCount、eventCountInWindow、latestRecoveryTime |
+| JFM-API-001 | API-1 | GET | `/api/job-failure/summary` | 故障汇总。将 `CDC_CLIENT_MULTIPLE.DATA_SOURCE_ID` 按英文逗号拆分为单个 ID，按 `(CLIENT_ID, 拆分后的单个 DATA_SOURCE_ID)` 展开，返回每个逻辑 Job 的最新故障概况。响应类型：`List<JobFailureSummaryVO>`。包含 clientId、clientName、dataSourceId、dataSourceName、dataSourceOrg、dataSourceActive、dataSourceExists、jobStatus、latestFailureTime、latestFaultRootId、latestRestartCount、eventCountInWindow、latestRecoveryTime |
 | JFM-API-002 | API-2 | GET | `/api/job-failure/latest/{clientId}/{dataSourceId}` | 最新故障。返回指定逻辑 Job 的最近一次故障过程详情。响应类型：`FaultProcessDetailVO` |
 | JFM-API-003 | API-3 | GET | `/api/job-failure/history/{clientId}/{dataSourceId}` | 历史故障。需 `startTime`/`endTime`（格式 `yyyy-MM-dd'T'HH:mm:ss`）。所选时间范围内的全部符合条件记录必须可见。响应类型：`PageResult<FaultProcessSummaryVO>` |
 | JFM-API-004 | API-4 | GET | `/api/job-failure/process/{faultRootId}` | 故障过程详情。按 faultRootId 查询任意一次历史故障过程。响应类型：`FaultProcessDetailVO` |
@@ -438,6 +558,8 @@
 所有接口均返回 `ApiResponse<T>` 统一响应格式（code/message/data）。
 
 > **概览页接口字段调整（本轮已确认 · 实现待开发）**：API-1 `/summary` 的响应类型 `JobFailureSummaryVO` 需新增 `dataSourceOrg` 字段（映射 `CDC_DATA_SOURCE.DATA_SOURCE_ORG`），用于概览页"业务库"列；`dataSourceId` 保留。现有 `dataSourceName` 字段允许为兼容保留，但概览页不再展示（见 §6.3.7）。
+
+> **多数据源展开与存在性契约（本轮已确认 · 实现待开发）**：API-1 `/summary` 的每条返回记录对应一个拆分后的单个 `DATA_SOURCE_ID`（拆分规则见 §6.5.1）。`JobFailureSummaryVO` 需新增 `dataSourceExists` 字段，并与 `dataSourceActive` 共同构成无歧义的三态契约：`dataSourceExists: true/false` 区分记录在 `CDC_DATA_SOURCE` 中是否存在；`dataSourceActive: true/false/null` 区分记录存在时的激活状态（null 表示记录不存在、不适用）。禁止通过 `dataSourceOrg == null` 判断记录不存在（详见 §6.5.5）。
 
 ## 15. 只读与安全约束
 
@@ -524,6 +646,7 @@
 | GAP-STATUS-003 | 恢复失败判定 | §9.4.2 优先级 5：须实现"恢复失败"的统一判定规则 | 代码不存在"恢复失败"概念。`SUBMIT_FAILED`、`RESTART_SKIPPED`、部分 `NOT_CLOSED` 仅为候选证据，从当前代码无法唯一确定"恢复失败"的精确判定条件，不得使用"其他情况"兜底 | "恢复失败"对外状态当前无对应实现，用户无法在页面看到该状态 |
 | GAP-HISTORY-001 | 历史全量返回 | JFM-HIST-002、JFM-HIST-003：无传统分页组件，所选时间范围内全部记录可见 | 前端固定 `pageSize=1000`（`FaultHistory.vue` 第 148 行），后端服务端分页 | 超过 1000 条时可能静默截断 |
 | GAP-OVERVIEW-001 | 概览页调整 | §6.3：删除"数据源 ID"查询与表格列、业务库改显示 `DATA_SOURCE_ORG`、Summary 新增 `dataSourceOrg`、客户端卡片视觉调整 | 当前代码仍为调整前行为（查询区含"数据源 ID"，表格 7 列且展示 `dataSourceName`，客户端卡片为 `border-left` 视觉） | 概览页已确认需求尚未实现，待开发 |
+| GAP-OVERVIEW-MULTI-DATASOURCE-001 | 多数据源展开 | §6.5：`CDC_CLIENT_MULTIPLE.DATA_SOURCE_ID` 按英文逗号拆分为多个单 ID 记录、逐条展示，并区分正常、未激活和无效数据源 | 当前实现尚未将 `DATA_SOURCE_ID` 展开为多个单 ID 记录，尚未完整区分正常、未激活和无效数据源，尚未实现无效数据源的红字与 Tooltip 行为 | 需求已批准，代码待后续修正和人工验收 |
 
 ## 20. 非目标
 
