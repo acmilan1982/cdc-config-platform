@@ -10,6 +10,8 @@ import com.bsoft.cdcconfig.monitor.jobfailure.entity.CdcClientMultiple;
 import com.bsoft.cdcconfig.monitor.jobfailure.mapper.CdcClientMultipleMapper;
 import com.bsoft.cdcconfig.monitor.jobfailure.mapper.JobFailureEventMapper;
 import com.bsoft.cdcconfig.monitor.jobfailure.mapper.JobFailureHandleLogMapper;
+import com.bsoft.cdcconfig.monitor.jobfailure.runtime.JobRuntimeSnapshot;
+import com.bsoft.cdcconfig.monitor.jobfailure.runtime.JobRuntimeStatusReader;
 import com.bsoft.cdcconfig.monitor.jobfailure.service.impl.JobFailureServiceImpl;
 import com.bsoft.cdcconfig.monitor.jobfailure.vo.JobFailureSummaryVO;
 import org.apache.ibatis.builder.MapperBuilderAssistant;
@@ -20,6 +22,8 @@ import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.ArgumentCaptor;
 import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
+import org.mockito.junit.jupiter.MockitoSettings;
+import org.mockito.quality.Strictness;
 
 import java.util.Arrays;
 import java.util.Collections;
@@ -31,12 +35,14 @@ import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertNull;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 import static org.mockito.ArgumentMatchers.any;
+import static org.mockito.ArgumentMatchers.anyString;
 import static org.mockito.Mockito.never;
 import static org.mockito.Mockito.times;
 import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
 
 @ExtendWith(MockitoExtension.class)
+@MockitoSettings(strictness = Strictness.LENIENT)
 class JobFailureSummaryExpansionTest {
 
     @Mock
@@ -47,6 +53,10 @@ class JobFailureSummaryExpansionTest {
     private CdcClientMultipleMapper clientMultipleMapper;
     @Mock
     private DataSourceMapper dataSourceMapper;
+    @Mock
+    private JobRuntimeStatusReader runtimeStatusReader;
+    @Mock
+    private JobRuntimeSnapshot runtimeSnapshot;
 
     private JobFailureServiceImpl service;
 
@@ -61,7 +71,10 @@ class JobFailureSummaryExpansionTest {
 
     @BeforeEach
     void setUp() {
-        service = new JobFailureServiceImpl(eventMapper, logMapper, clientMultipleMapper, dataSourceMapper);
+        when(runtimeStatusReader.snapshot(any())).thenReturn(runtimeSnapshot);
+        when(runtimeSnapshot.clientOnline(anyString())).thenReturn(Boolean.TRUE);
+        when(runtimeSnapshot.jobOnline(anyString(), anyString())).thenReturn(Boolean.TRUE);
+        service = new JobFailureServiceImpl(eventMapper, logMapper, clientMultipleMapper, dataSourceMapper, runtimeStatusReader);
     }
 
     private CdcClientMultiple client(String clientId, String clientDesc, String dataSourceIds, String fgActive) {
@@ -186,6 +199,26 @@ class JobFailureSummaryExpansionTest {
         assertTrue(result.isEmpty());
         verify(eventMapper, never()).selectList(any());
         verify(dataSourceMapper, never()).selectBatchIds(any());
+    }
+
+    @Test
+    @SuppressWarnings("unchecked")
+    void expansion_shouldPassInvalidAndInactiveDataSourcesToRuntimeSnapshot() {
+        when(clientMultipleMapper.selectList(any())).thenReturn(Collections.singletonList(
+                client("c1", "客户端1", "source-a,source-b,source-c,source-d", "1")));
+        when(eventMapper.selectList(any())).thenReturn(Collections.emptyList());
+        when(dataSourceMapper.selectBatchIds(any())).thenReturn(Arrays.asList(
+                ds("source-a", "name-a", "org-a", "1"),
+                ds("source-b", "name-b", "org-b", "0"),
+                ds("source-c", "name-c", "", "0")));
+
+        service.querySummary();
+
+        ArgumentCaptor<Map<String, List<String>>> captor = ArgumentCaptor.forClass(Map.class);
+        verify(runtimeStatusReader).snapshot(captor.capture());
+        Map<String, List<String>> clientJobs = captor.getValue();
+        assertEquals(Arrays.asList("source-a", "source-b", "source-c", "source-d"),
+                clientJobs.get("c1"));
     }
 
     @Test

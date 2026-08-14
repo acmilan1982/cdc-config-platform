@@ -10,6 +10,7 @@ public final class JobFailureErrorCode {
     public static final int CLOB_FIELD_INVALID = 40005;
     public static final int LOGICAL_JOB_NOT_FOUND = 40402;
     public static final int RECORD_NOT_IN_FAULT_PROCESS = 40006;
+    public static final int ZK_STATUS_UNAVAILABLE = 50010;
 
     public static BusinessException faultRootNotFound(Long faultRootId) {
         return new BusinessException(FAULT_ROOT_NOT_FOUND,
@@ -29,5 +30,9 @@ public final class JobFailureErrorCode {
     public static BusinessException recordNotInFaultProcess(Long recordId, Long faultRootId) {
         return new BusinessException(RECORD_NOT_IN_FAULT_PROCESS,
                 "记录不属于指定故障过程: recordId=" + recordId + ", faultRootId=" + faultRootId);
+    }
+
+    public static BusinessException zkStatusUnavailable() {
+        return new BusinessException(ZK_STATUS_UNAVAILABLE, "ZooKeeper 连接失败，将在 60 秒重试");
     }
 }

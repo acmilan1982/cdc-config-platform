@@ -8,7 +8,7 @@
       </div>
       <div class="toolbar-right">
         <span class="refresh-label">自动刷新:</span>
-        <el-select v-model="refreshInterval" size="small" style="width: 100px" @change="resetTimer">
+        <el-select v-model="refreshInterval" size="small" style="width: 100px" @change="onIntervalChange">
           <el-option :value="60" label="1 分钟" />
           <el-option :value="3600" label="60 分钟" />
           <el-option :value="21600" label="360 分钟" />
@@ -49,6 +49,7 @@
             <el-option label="全部" value="" />
             <el-option label="正常" value="正常运行" />
             <el-option label="恢复中" value="恢复中" />
+            <el-option label="离线" value="离线" />
           </el-select>
         </el-form-item>
         <el-form-item>
@@ -71,6 +72,12 @@
       </el-empty>
     </div>
 
+    <!-- ZooKeeper failure -->
+    <div v-else-if="zkError" class="state-box zk-error-box">
+      <el-icon class="zk-error-icon" :size="28"><WarningFilled /></el-icon>
+      <p class="zk-error-text">ZooKeeper 连接失败，将在 60 秒重试</p>
+    </div>
+
     <!-- Empty -->
     <div v-else-if="visibleClients.length === 0" class="state-box">
       <el-empty description="暂无匹配的故障记录" />
@@ -83,15 +90,22 @@
         :key="c.clientId"
         shadow="never"
         class="client-card"
-        :class="{ 'client-card--abnormal': c.overallStatus === '异常' }"
+        :class="{
+          'client-card--offline': !c.clientOnline,
+          'client-card--abnormal': c.clientOnline && c.overallStatus === '异常'
+        }"
       >
         <template #header>
           <div class="card-header" @click="toggleClient(c.clientId)">
             <div class="card-header-left">
               <span
                 class="status-dot"
-                :class="c.overallStatus === '异常' ? 'status-dot--abnormal' : 'status-dot--normal'"
+                :class="c.clientOnline ? 'status-dot--online' : 'status-dot--offline'"
               ></span>
+              <span
+                class="client-status-text"
+                :class="c.clientOnline ? 'client-status-text--online' : 'client-status-text--offline'"
+              >{{ c.clientOnline ? '在线' : '离线' }}</span>
               <span class="card-client-id">{{ c.clientId }}</span>
               <span class="card-divider">|</span>
               <span class="card-stat">
@@ -127,8 +141,8 @@
             </el-table-column>
             <el-table-column label="Job 当前状态" width="110">
               <template #default="{ row }">
-                <el-tag :type="row.jobStatus === '正常运行' ? 'success' : 'warning'" size="small">
-                  {{ row.jobStatus === '正常运行' ? '正常' : row.jobStatus }}
+                <el-tag :type="jobStatusTagType(finalJobStatus(row))" size="small">
+                  {{ jobStatusLabel(finalJobStatus(row)) }}
                 </el-tag>
               </template>
             </el-table-column>
@@ -171,7 +185,7 @@
 import { ref, reactive, computed, onMounted, onUnmounted } from 'vue'
 import { useRouter } from 'vue-router'
 import { ElMessage } from 'element-plus'
-import { Refresh, Loading, ArrowDown } from '@element-plus/icons-vue'
+import { Refresh, Loading, ArrowDown, WarningFilled } from '@element-plus/icons-vue'
 import { fetchSummary } from '@/api/jobFailure'
 import type { JobFailureSummaryVO } from '@/types/jobFailure'
 
@@ -181,10 +195,14 @@ const summaryList = ref<JobFailureSummaryVO[] | null>(null)
 const loading = ref(true)
 const refreshing = ref(false)
 const error = ref(false)
+const zkError = ref(false)
 const lastRefreshedAt = ref('')
 const refreshInterval = ref(3600)
 
+const ZK_FAILURE_MESSAGE = 'ZooKeeper 连接失败，将在 60 秒重试'
+
 let timer: ReturnType<typeof setInterval> | null = null
+let zkRetryTimer: ReturnType<typeof setTimeout> | null = null
 let requestId = 0
 
 const filter = reactive({
@@ -199,10 +217,29 @@ interface ClientCard {
   clientId: string
   clientName: string | null | undefined
   overallStatus: string
+  clientOnline: boolean
   normalCount: number
   abnormalCount: number
   allRows: JobFailureSummaryVO[]
   rows: JobFailureSummaryVO[]
+}
+
+// Final display status for a single Job row: client offline or job offline -> 离线,
+// otherwise the database fault status (正常运行 / 恢复中).
+function finalJobStatus(row: JobFailureSummaryVO): string {
+  if (row.clientOnline === false) return '离线'
+  if (row.jobOnline === false) return '离线'
+  return row.jobStatus
+}
+
+function jobStatusLabel(status: string): string {
+  return status === '正常运行' ? '正常' : status
+}
+
+function jobStatusTagType(status: string): 'success' | 'warning' | 'danger' {
+  if (status === '离线') return 'danger'
+  if (status === '正常运行') return 'success'
+  return 'warning'
 }
 
 // Build deduplicated client options from data
@@ -253,11 +290,12 @@ const visibleClients = computed<ClientCard[]>(() => {
     const abnormalCount = allRows.filter(r => r.jobStatus === '恢复中').length
     const normalCount = allRows.length - abnormalCount
     const overallStatus = abnormalCount > 0 ? '异常' : '正常'
+    const clientOnline = allRows[0]?.clientOnline === true
 
-    // Apply filters
+    // Apply filters (final display status decides the bucket)
     let visibleRows = allRows
     if (filter.status) {
-      visibleRows = visibleRows.filter(r => r.jobStatus === filter.status)
+      visibleRows = visibleRows.filter(r => finalJobStatus(r) === filter.status)
     }
 
     // Skip cards with no visible rows after filter
@@ -272,6 +310,7 @@ const visibleClients = computed<ClientCard[]>(() => {
       clientId,
       clientName: allRows[0]?.clientName,
       overallStatus,
+      clientOnline,
       normalCount,
       abnormalCount,
       allRows,
@@ -279,14 +318,24 @@ const visibleClients = computed<ClientCard[]>(() => {
     })
   }
 
-  // Sort: abnormal first, then by clientId
+  // Sort: offline client → online+abnormal/recovering → online+offline-job → all normal → clientId
   cards.sort((a, b) => {
-    if (a.overallStatus !== b.overallStatus) return a.overallStatus === '异常' ? -1 : 1
+    const rankA = sortRank(a)
+    const rankB = sortRank(b)
+    if (rankA !== rankB) return rankA - rankB
     return a.clientId.localeCompare(b.clientId)
   })
 
   return cards
 })
+
+function sortRank(c: ClientCard): number {
+  if (!c.clientOnline) return 0
+  const statuses = c.allRows.map(finalJobStatus)
+  if (statuses.some(s => s === '恢复中')) return 1
+  if (statuses.some(s => s === '离线')) return 2
+  return 3
+}
 
 // Client filter: handle "全部" mutual exclusion
 function onClientFilterChange(values: string[]) {
@@ -312,11 +361,14 @@ function resetFilter() {
   manualExpand.value = {}
 }
 
-async function loadData() {
+type LoadResult = 'success' | 'zk-failure' | 'error'
+
+async function loadData(): Promise<LoadResult> {
   const id = ++requestId
+  let result: LoadResult
   try {
     const res = await fetchSummary()
-    if (id !== requestId) return
+    if (id !== requestId) return 'error'
     if (res.code === 200) {
       // Prune stale entries from manualExpand and expandedState
       const activeClientIds = new Set((res.data || []).map(r => r.clientId))
@@ -333,22 +385,41 @@ async function loadData() {
       }
       summaryList.value = res.data
       error.value = false
+      zkError.value = false
       lastRefreshedAt.value = formatNow()
+      result = 'success'
+    } else if (res.message === ZK_FAILURE_MESSAGE) {
+      summaryList.value = null
+      error.value = false
+      zkError.value = true
+      lastRefreshedAt.value = ''
+      result = 'zk-failure'
     } else {
       if (!summaryList.value) error.value = true
       ElMessage.warning(res.message || '请求失败')
+      result = 'error'
     }
   } catch {
-    if (id !== requestId) return
+    if (id !== requestId) return 'error'
     if (!summaryList.value) error.value = true
+    result = 'error'
   }
+
+  if (result === 'success') {
+    clearZkRetry()
+    startTimer()
+  } else if (result === 'zk-failure') {
+    stopTimer()
+    scheduleZkRetry()
+  }
+  return result
 }
 
 async function manualRefresh() {
   refreshing.value = true
+  clearZkRetry()
   await loadData()
   refreshing.value = false
-  resetTimer()
 }
 
 function openDetail(clientId: string, dataSourceId: string) {
@@ -359,9 +430,12 @@ function openDetail(clientId: string, dataSourceId: string) {
   window.open(route.href, '_blank')
 }
 
-function resetTimer() {
-  stopTimer()
-  startTimer()
+function onIntervalChange() {
+  // During a ZK failure the fixed 60s retry takes precedence; the new interval only
+  // applies after recovery.
+  if (!zkError.value) {
+    startTimer()
+  }
 }
 
 function startTimer() {
@@ -375,6 +449,21 @@ function stopTimer() {
   if (timer !== null) {
     clearInterval(timer)
     timer = null
+  }
+}
+
+function scheduleZkRetry() {
+  clearZkRetry()
+  zkRetryTimer = setTimeout(() => {
+    zkRetryTimer = null
+    loadData()
+  }, 60000)
+}
+
+function clearZkRetry() {
+  if (zkRetryTimer !== null) {
+    clearTimeout(zkRetryTimer)
+    zkRetryTimer = null
   }
 }
 
@@ -398,10 +487,13 @@ function formatNow(): string {
 onMounted(async () => {
   await loadData()
   loading.value = false
-  startTimer()
+  if (!zkError.value) startTimer()
 })
 
-onUnmounted(() => stopTimer())
+onUnmounted(() => {
+  stopTimer()
+  clearZkRetry()
+})
 </script>
 
 <style scoped>
@@ -456,6 +548,10 @@ onUnmounted(() => stopTimer())
 .client-card--abnormal {
   background: linear-gradient(135deg, #FFFBEB 0%, #FFFFFF 100%);
 }
+.client-card--offline {
+  background: linear-gradient(135deg, #FEF2F2 0%, #FFFFFF 100%);
+  border-color: #FECACA;
+}
 .client-card:hover {
   border-color: #CBD5E1;
   box-shadow: 0 6px 16px rgba(15, 23, 42, 0.12);
@@ -495,21 +591,21 @@ onUnmounted(() => stopTimer())
   display: inline-block;
   flex-shrink: 0;
 }
-.status-dot--normal {
+.status-dot--online {
   background-color: rgba(16, 185, 129, 0.82);
 }
-.status-dot--abnormal {
-  background-color: rgba(245, 158, 11, 0.82);
-  animation: status-breathe 2s ease-in-out infinite;
+.status-dot--offline {
+  background-color: rgba(245, 34, 45, 0.85);
 }
-@keyframes status-breathe {
-  0%, 100% { opacity: 1; }
-  50% { opacity: 0.35; }
+.client-status-text {
+  font-size: 13px;
+  font-weight: 600;
 }
-@media (prefers-reduced-motion: reduce) {
-  .status-dot--abnormal {
-    animation: none;
-  }
+.client-status-text--online {
+  color: #16a34a;
+}
+.client-status-text--offline {
+  color: #ef4444;
 }
 .card-header-right {
   display: flex;
@@ -578,5 +674,17 @@ onUnmounted(() => stopTimer())
   justify-content: center;
   padding: 80px 0;
   color: #909399;
+}
+.zk-error-box {
+  gap: 12px;
+}
+.zk-error-icon {
+  color: #f56c6c;
+}
+.zk-error-text {
+  margin: 0;
+  font-size: 15px;
+  color: #f56c6c;
+  font-weight: 500;
 }
 </style>

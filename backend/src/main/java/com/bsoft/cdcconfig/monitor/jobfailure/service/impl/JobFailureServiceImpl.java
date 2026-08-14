@@ -22,6 +22,8 @@ import com.bsoft.cdcconfig.monitor.jobfailure.exception.JobFailureErrorCode;
 import com.bsoft.cdcconfig.monitor.jobfailure.mapper.JobFailureEventMapper;
 import com.bsoft.cdcconfig.monitor.jobfailure.mapper.JobFailureHandleLogMapper;
 import com.bsoft.cdcconfig.monitor.jobfailure.query.HistoryQuery;
+import com.bsoft.cdcconfig.monitor.jobfailure.runtime.JobRuntimeSnapshot;
+import com.bsoft.cdcconfig.monitor.jobfailure.runtime.JobRuntimeStatusReader;
 import com.bsoft.cdcconfig.monitor.jobfailure.service.JobFailureService;
 import com.bsoft.cdcconfig.monitor.jobfailure.vo.AnomalyVO;
 import com.bsoft.cdcconfig.monitor.jobfailure.vo.ClobDetailVO;
@@ -40,6 +42,8 @@ import java.util.Collections;
 import java.util.Comparator;
 import java.util.HashMap;
 import java.util.HashSet;
+import java.util.LinkedHashMap;
+import java.util.LinkedHashSet;
 import java.util.List;
 import java.util.Map;
 import java.util.Set;
@@ -55,16 +59,19 @@ public class JobFailureServiceImpl implements JobFailureService {
     private final JobFailureHandleLogMapper logMapper;
     private final CdcClientMultipleMapper clientMultipleMapper;
     private final DataSourceMapper dataSourceMapper;
+    private final JobRuntimeStatusReader runtimeStatusReader;
     private final FaultProcessAssembler assembler;
 
     public JobFailureServiceImpl(JobFailureEventMapper eventMapper,
                                  JobFailureHandleLogMapper logMapper,
                                  CdcClientMultipleMapper clientMultipleMapper,
-                                 DataSourceMapper dataSourceMapper) {
+                                 DataSourceMapper dataSourceMapper,
+                                 JobRuntimeStatusReader runtimeStatusReader) {
         this.eventMapper = eventMapper;
         this.logMapper = logMapper;
         this.clientMultipleMapper = clientMultipleMapper;
         this.dataSourceMapper = dataSourceMapper;
+        this.runtimeStatusReader = runtimeStatusReader;
         this.assembler = new FaultProcessAssembler();
     }
 
@@ -104,6 +111,21 @@ public class JobFailureServiceImpl implements JobFailureService {
             masterDsIds.add(item.dataSourceId);
         }
 
+        // 3.1 Strict ZooKeeper runtime status snapshot. DB config remains the master set; ZK only
+        //     supplies client/job online booleans. A single required-path read failure fails the
+        //     whole round (no partial results). Duplicate single IDs are deduped per client so each
+        //     alive path is read at most once.
+        Map<String, List<String>> clientJobs = new LinkedHashMap<>();
+        Map<String, LinkedHashSet<String>> clientJobSet = new LinkedHashMap<>();
+        for (ClientDataSource item : expanded) {
+            clientJobSet.computeIfAbsent(item.clientId, k -> new LinkedHashSet<>())
+                    .add(item.dataSourceId);
+        }
+        for (Map.Entry<String, LinkedHashSet<String>> entry : clientJobSet.entrySet()) {
+            clientJobs.put(entry.getKey(), new ArrayList<>(entry.getValue()));
+        }
+        JobRuntimeSnapshot runtimeSnapshot = runtimeStatusReader.snapshot(clientJobs);
+
         // 4. Load all events for all expanded pairs in a single query
         LambdaQueryWrapper<JobFailureEvent> eventWrapper = new LambdaQueryWrapper<>();
         eventWrapper.in(JobFailureEvent::getClientId, masterClientIds)
@@ -134,6 +156,8 @@ public class JobFailureServiceImpl implements JobFailureService {
             vo.setClientId(clientId);
             vo.setClientName(clientNameMap.get(clientId));
             vo.setDataSourceId(dataSourceId);
+            vo.setClientOnline(runtimeSnapshot.clientOnline(clientId));
+            vo.setJobOnline(runtimeSnapshot.jobOnline(clientId, dataSourceId));
             DataSource dsConfig = dsConfigMap.get(dataSourceId);
             if (dsConfig != null) {
                 vo.setDataSourceName(dsConfig.getDataSourceName());
