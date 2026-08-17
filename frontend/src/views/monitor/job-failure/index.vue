@@ -75,7 +75,7 @@
     <!-- ZooKeeper failure -->
     <div v-else-if="zkError" class="state-box zk-error-box">
       <el-icon class="zk-error-icon" :size="28"><WarningFilled /></el-icon>
-      <p class="zk-error-text">ZooKeeper 连接失败，将在 60 秒重试</p>
+      <p class="zk-error-text">{{ zkErrorText }}</p>
     </div>
 
     <!-- Empty -->
@@ -189,15 +189,30 @@ const lastRefreshedAt = ref('')
 const refreshInterval = ref(3600)
 
 const ZK_FAILURE_MESSAGE = 'ZooKeeper 连接失败，将在 60 秒重试'
+const ZK_RETRY_SECONDS = 60
+const ZK_RETRY_MS = 60_000
+
+const zkRetryRemainingSeconds = ref(ZK_RETRY_SECONDS)
+const zkRetrying = ref(false)
 
 let timer: ReturnType<typeof setInterval> | null = null
 let zkRetryTimer: ReturnType<typeof setTimeout> | null = null
+let zkCountdownTimer: ReturnType<typeof setInterval> | null = null
+let zkNextRetryAt: number | null = null
 let requestId = 0
+let loadPromise: Promise<LoadResult> | null = null
 
 const filter = reactive({
   selectedClients: ['__ALL__'] as string[],
   status: '' as string
 })
+
+// Dynamic ZK failure copy: countdown while waiting, connecting text while retrying.
+const zkErrorText = computed(() =>
+  zkRetrying.value
+    ? '正在重新连接 ZooKeeper…'
+    : `ZooKeeper 连接失败，将在 ${zkRetryRemainingSeconds.value} 秒后重试`
+)
 
 // Track which client cards the user has manually toggled
 const manualExpand = ref<Record<string, boolean>>({})
@@ -348,6 +363,19 @@ function resetFilter() {
 type LoadResult = 'success' | 'zk-failure' | 'error'
 
 async function loadData(): Promise<LoadResult> {
+  // Shared in-flight protection: at most one Summary request at a time across
+  // initial load, page auto-refresh, ZK auto-retry and manual refresh.
+  if (loadPromise) return loadPromise
+  const p = doLoad()
+  loadPromise = p
+  try {
+    return await p
+  } finally {
+    if (loadPromise === p) loadPromise = null
+  }
+}
+
+async function doLoad(): Promise<LoadResult> {
   const id = ++requestId
   let result: LoadResult
   try {
@@ -402,6 +430,7 @@ async function loadData(): Promise<LoadResult> {
 async function manualRefresh() {
   refreshing.value = true
   clearZkRetry()
+  if (zkError.value) zkRetrying.value = true
   await loadData()
   refreshing.value = false
 }
@@ -438,16 +467,58 @@ function stopTimer() {
 
 function scheduleZkRetry() {
   clearZkRetry()
+  zkRetryRemainingSeconds.value = ZK_RETRY_SECONDS
+  zkNextRetryAt = Date.now() + ZK_RETRY_MS
   zkRetryTimer = setTimeout(() => {
     zkRetryTimer = null
-    loadData()
-  }, 60000)
+    triggerZkRetry()
+  }, ZK_RETRY_MS)
+  zkCountdownTimer = setInterval(updateZkCountdown, 500)
 }
 
-function clearZkRetry() {
+function stopZkTimers() {
   if (zkRetryTimer !== null) {
     clearTimeout(zkRetryTimer)
     zkRetryTimer = null
+  }
+  if (zkCountdownTimer !== null) {
+    clearInterval(zkCountdownTimer)
+    zkCountdownTimer = null
+  }
+}
+
+function clearZkRetry() {
+  stopZkTimers()
+  zkNextRetryAt = null
+  zkRetrying.value = false
+  zkRetryRemainingSeconds.value = ZK_RETRY_SECONDS
+}
+
+function updateZkCountdown() {
+  if (zkNextRetryAt === null) return
+  const remainingMs = zkNextRetryAt - Date.now()
+  zkRetryRemainingSeconds.value = Math.max(
+    0,
+    Math.min(ZK_RETRY_SECONDS, Math.ceil(remainingMs / 1000))
+  )
+  // Expiry may be discovered by the timeout, the countdown tick or a visibility
+  // restore; the shared guard below ensures only a single retry request fires.
+  if (remainingMs <= 0 && !zkRetrying.value && !loadPromise) {
+    triggerZkRetry()
+  }
+}
+
+async function triggerZkRetry() {
+  if (zkRetrying.value || loadPromise) return
+  zkRetrying.value = true
+  stopZkTimers()
+  await loadData()
+}
+
+function handleVisibilityChange() {
+  if (document.hidden) return
+  if (zkNextRetryAt !== null) {
+    updateZkCountdown()
   }
 }
 
@@ -464,12 +535,14 @@ function formatNow(): string {
 }
 
 onMounted(async () => {
+  document.addEventListener('visibilitychange', handleVisibilityChange)
   await loadData()
   loading.value = false
   if (!zkError.value) startTimer()
 })
 
 onUnmounted(() => {
+  document.removeEventListener('visibilitychange', handleVisibilityChange)
   stopTimer()
   clearZkRetry()
 })
@@ -628,6 +701,16 @@ onUnmounted(() => {
 }
 .zk-error-icon {
   color: #f56c6c;
+  animation: zk-icon-breathe 1.4s ease-in-out infinite;
+}
+@keyframes zk-icon-breathe {
+  0%, 100% { opacity: 1; transform: scale(1); }
+  50% { opacity: 0.35; transform: scale(0.92); }
+}
+@media (prefers-reduced-motion: reduce) {
+  .zk-error-icon {
+    animation: none;
+  }
 }
 .zk-error-text {
   margin: 0;
