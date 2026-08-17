@@ -161,6 +161,7 @@
 
 | 层次 | 文件 | 职责 |
 |---|---|---|
+| 路由 | `frontend/src/router/index.ts` | 路由配置：概览、最近故障详情、指定历史故障过程详情（复用 `detail.vue`） |
 | 概览页 | `frontend/src/views/monitor/job-failure/index.vue` | 故障监控总览：客户端卡片、表格、筛选、自动刷新 |
 | 详情页 | `frontend/src/views/monitor/job-failure/detail.vue` | 故障过程详情：概览、Job 链、事件、重启卡片、历史 |
 | 故障概览 | `frontend/src/views/monitor/job-failure/components/FaultProcessOverview.vue` | 故障概览网格，含硬编码 `RECOVERY_RECORDED → '已恢复'` 映射 |
@@ -179,8 +180,11 @@
 | 配置 | 文件 | 路径 | 说明 |
 |---|---|---|---|
 | 路由 | `frontend/src/router/index.ts` | `/monitor/job-failure` | 概览页，路由组 `运行监控` |
-| 路由 | `frontend/src/router/index.ts` | `/monitor/job-failure/detail` | 详情页，接收 `clientId`、`dataSourceId` 查询参数 |
+| 路由 | `frontend/src/router/index.ts` | `/monitor/job-failure/detail` | 最近一次故障详情页，接收 `clientId`、`dataSourceId` 查询参数 |
+| 路由 | `frontend/src/router/index.ts` | `/monitor/job-failure/process/:faultRootId` | 指定历史故障过程详情页，路由名 `JobFailureProcessDetail`，复用 `detail.vue` |
 | 菜单 | `frontend/src/config/menu.ts` | `/monitor/job-failure` | 菜单项："故障监控"，图标 `Monitor`，位于 `运行监控` 组 |
+
+前端页面路由与后端 API 路径相互独立，不得混写：最近故障详情前端路由 `/monitor/job-failure/detail?clientId=<clientId>&dataSourceId=<dataSourceId>` 调用 Latest API `/api/job-failure/latest/{clientId}/{dataSourceId}`；指定过程前端路由 `/monitor/job-failure/process/:faultRootId` 调用 Process API `/api/job-failure/process/{faultRootId}`。历史"查看"与"故障监控"首页入口均指向上述详情路由，不提供独立菜单入口。
 
 ### 7.8 测试
 
@@ -211,11 +215,13 @@
 
 ### 8.2 详情页（Detail）
 
+- **两种访问模式**：同一个 `detail.vue` 支持两种模式——最近一次故障（前端路由 `/monitor/job-failure/detail?clientId=<clientId>&dataSourceId=<dataSourceId>`，调用 Latest API `/api/job-failure/latest/{clientId}/{dataSourceId}`）与指定历史故障过程（前端路由 `/monitor/job-failure/process/:faultRootId`，路由名 `JobFailureProcessDetail`，调用 Process API `/api/job-failure/process/{faultRootId}`）。前端页面路由与后端 API 路径相互独立
 - **故障概览**：客户端、业务库、故障根事件 ID、首次失败时间、最近处理时间、重启次数、当前处理状态
 - **物理 Job 链**：单行横向滚动，红色（异常标记）/绿色（正常）节点
 - **事件列表**：主链事件表格，ID 截断（≤16 字符完整显示，>16 字符显示前6…后8）
 - **恢复尝试卡片**：以 `RESTART_STARTED` 日志为界分组，每组一张卡片，绿色（含 STABLE_CHECK_PASSED）/红色（无），升序排列
-- **故障历史**：时间范围下拉（最近一天/最近一周/最近一个月），不显示传统分页组件，所选范围内的全部符合条件记录必须可见
+- **故障历史**：时间范围下拉（最近一天/最近一周/最近一个月），不显示传统分页组件，所选范围内的全部符合条件记录必须可见；"查看"为真实链接，普通点击在当前标签页打开指定过程，支持浏览器原生 Ctrl/Cmd+单击、中键、右键菜单新开标签页，URL 可复制、可刷新、可后退/前进，打开后回到详情顶部
+- **精确 ID**：历史链接、路由参数与 Process API 请求均使用 `faultRootIdText` 精确字符串，不经 JavaScript number 中转，超出安全整数范围的根事件 ID 仍逐字符精确
 - **CLOB 详情**：弹窗按需加载，支持复制
 
 ## 9. 接口概览
