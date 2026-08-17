@@ -1,5 +1,5 @@
 <template>
-  <div class="detail-page">
+  <div class="detail-page" ref="detailPageRef">
     <!-- Page header -->
     <div class="page-toolbar">
       <div class="toolbar-left">
@@ -20,7 +20,7 @@
         </el-tooltip>
       </div>
       <div class="toolbar-right">
-        <el-button size="small" @click="loadDetail" :loading="loading">
+        <el-button size="small" @click="loadDetailForCurrentRoute" :loading="loading">
           <el-icon><Refresh /></el-icon>
           刷新
         </el-button>
@@ -36,7 +36,7 @@
     <!-- Error -->
     <div v-else-if="errorMsg" class="state-box">
       <el-empty :description="errorMsg">
-        <el-button type="primary" @click="loadDetail">重试</el-button>
+        <el-button type="primary" @click="loadDetailForCurrentRoute">重试</el-button>
       </el-empty>
     </div>
 
@@ -100,7 +100,6 @@
           :client-id="detail.clientId"
           :data-source-id="detail.dataSourceId"
           :current-fault-root-id="detail.faultRootIdText ?? null"
-          @select="switchProcess"
         />
       </el-card>
     </template>
@@ -116,7 +115,7 @@
 </template>
 
 <script setup lang="ts">
-import { ref, computed, onMounted } from 'vue'
+import { ref, computed, watch, nextTick } from 'vue'
 import { useRoute } from 'vue-router'
 import { ElMessage } from 'element-plus'
 import { Refresh, Loading, CopyDocument } from '@element-plus/icons-vue'
@@ -140,6 +139,7 @@ const clobVisible = ref(false)
 const clobField = ref('FAILURE_EVENT_FAILURE_DETAIL')
 const clobRecordId = ref<string | null>(null)
 const currentFaultRootId = ref<string | null>(null)
+const detailPageRef = ref<HTMLElement | null>(null)
 
 const rootEventIdText = computed(() => {
   const d = detail.value
@@ -170,51 +170,90 @@ function openClob(field: string, recordId: string) {
   clobVisible.value = true
 }
 
-async function loadDetail() {
-  const clientId = route.query.clientId as string
-  const dataSourceId = route.query.dataSourceId as string
-  if (!clientId || !dataSourceId) {
-    errorMsg.value = '缺少 clientId 或 dataSourceId 参数'
-    loading.value = false
-    return
+let requestSeq = 0
+
+function routeKey(): string {
+  if (route.name === 'JobFailureProcessDetail') {
+    return `process:${route.params.faultRootId ?? ''}`
   }
+  return `latest:${route.query.clientId ?? ''}:${route.query.dataSourceId ?? ''}`
+}
+
+function isValidDecimalString(val: unknown): val is string {
+  return typeof val === 'string' && /^\d+$/.test(val)
+}
+
+async function scrollDetailTop() {
+  await nextTick()
+  detailPageRef.value?.scrollIntoView({ behavior: 'auto', block: 'start' })
+}
+
+async function loadDetailForCurrentRoute() {
+  const seq = ++requestSeq
+  const key = routeKey()
+  const isCurrent = () => seq === requestSeq && routeKey() === key
 
   loading.value = true
   errorMsg.value = ''
+  detail.value = null
+  currentFaultRootId.value = null
+
+  if (route.name === 'JobFailureProcessDetail') {
+    const faultRootId = route.params.faultRootId
+    if (!isValidDecimalString(faultRootId)) {
+      if (seq === requestSeq) {
+        loading.value = false
+        errorMsg.value = '故障根事件 ID 格式无效'
+      }
+      return
+    }
+    try {
+      const res = await fetchProcessDetail(faultRootId)
+      if (!isCurrent()) return
+      if (res.code === 200) {
+        detail.value = res.data
+        currentFaultRootId.value = res.data.faultRootIdText ?? null
+        await scrollDetailTop()
+      } else {
+        errorMsg.value = res.message || '加载失败'
+      }
+    } catch {
+      if (!isCurrent()) return
+      errorMsg.value = '网络请求失败'
+    } finally {
+      if (seq === requestSeq) loading.value = false
+    }
+    return
+  }
+
+  const clientId = route.query.clientId
+  const dataSourceId = route.query.dataSourceId
+  if (typeof clientId !== 'string' || !clientId || typeof dataSourceId !== 'string' || !dataSourceId) {
+    if (seq === requestSeq) {
+      loading.value = false
+      errorMsg.value = '缺少 clientId 或 dataSourceId 参数'
+    }
+    return
+  }
   try {
     const res = await fetchLatestFault(clientId, dataSourceId)
+    if (!isCurrent()) return
     if (res.code === 200) {
       detail.value = res.data
       currentFaultRootId.value = res.data.faultRootIdText ?? null
+      await scrollDetailTop()
     } else {
       errorMsg.value = res.message || '加载失败'
     }
   } catch {
+    if (!isCurrent()) return
     errorMsg.value = '网络请求失败'
   } finally {
-    loading.value = false
+    if (seq === requestSeq) loading.value = false
   }
 }
 
-async function switchProcess(faultRootId: string) {
-  loading.value = true
-  errorMsg.value = ''
-  try {
-    const res = await fetchProcessDetail(faultRootId)
-    if (res.code === 200) {
-      detail.value = res.data
-      currentFaultRootId.value = res.data.faultRootIdText ?? null
-    } else {
-      ElMessage.warning(res.message || '加载失败')
-    }
-  } catch {
-    ElMessage.warning('网络请求失败')
-  } finally {
-    loading.value = false
-  }
-}
-
-onMounted(() => loadDetail())
+watch(() => route.fullPath, () => { loadDetailForCurrentRoute() }, { immediate: true })
 </script>
 
 <style scoped>

@@ -67,6 +67,12 @@ const routes: RouteRecordRaw[] = [
     meta: { title: '故障过程详情', group: '运行监控' }
   },
   {
+    path: '/monitor/job-failure/process/:faultRootId',
+    name: 'JobFailureProcessDetail',
+    component: () => import('@/views/monitor/job-failure/detail.vue'),
+    meta: { title: '故障过程详情', group: '运行监控' }
+  },
+  {
     path: '/large-screen',
     name: 'LargeScreen',
     component: () => import('@/views/large-screen/LargeScreenPage.vue'),

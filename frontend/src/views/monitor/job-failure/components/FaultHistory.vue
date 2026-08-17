@@ -50,9 +50,14 @@
       </el-table-column>
       <el-table-column label="操作" width="80">
         <template #default="{ row }">
-          <el-button link type="primary" size="small" @click="selectRow(row)">
+          <RouterLink
+            v-if="isValidFaultRootIdText(row.faultRootIdText)"
+            :to="{ name: 'JobFailureProcessDetail', params: { faultRootId: row.faultRootIdText } }"
+            class="history-view-link"
+          >
             查看
-          </el-button>
+          </RouterLink>
+          <span v-else class="history-view-link history-view-link--disabled">查看</span>
         </template>
       </el-table-column>
     </el-table>
@@ -71,10 +76,8 @@ const props = defineProps<{
   currentFaultRootId: string | null
 }>()
 
-const emit = defineEmits<{ select: [faultRootId: string] }>()
-
-function selectRow(row: FaultProcessSummaryVO): void {
-  if (row.faultRootIdText) emit('select', row.faultRootIdText)
+function isValidFaultRootIdText(val?: string | null): val is string {
+  return typeof val === 'string' && /^\d+$/.test(val)
 }
 
 const timeRange = ref('1d')
@@ -183,6 +186,19 @@ onMounted(() => load())
   justify-content: center;
   color: #909399;
   font-size: 13px;
+}
+.history-view-link {
+  font-size: 12px;
+  color: #409eff;
+  text-decoration: none;
+  cursor: pointer;
+}
+.history-view-link:hover {
+  color: #79bbff;
+}
+.history-view-link--disabled {
+  color: #c0c4cc;
+  cursor: not-allowed;
 }
 </style>
 <style>
