@@ -708,7 +708,7 @@ Tooltip 规则：
 | JFM-ACCEPT-087 | 根事件 ID 中间省略、完整 Tooltip、复制完整值均正确 |
 | JFM-ACCEPT-088 | 概览为两行四列带边框网格，第二行结果跨两列，状态标签不横向铺满 | 【已被 §6.9.4 替代：概览改为 2 行 × 3 列（依据 JFM-ACCEPT-100）】 |
 | JFM-ACCEPT-089 | 常用桌面宽度无横向滚动，较窄宽度布局可用 | 【继续有效，由 §6.9 扩展（依据 JFM-ACCEPT-104）】 |
-| JFM-ACCEPT-090 | 物理 Job 链、主链事件、处理过程、历史故障过程及详情跳转不回归 | 【继续有效；其中"物理 Job 链""主链事件"的用户可见标题按 §6.9.1 改名，不回归语义由 JFM-ACCEPT-093/105 扩展】 |
+| JFM-ACCEPT-090 | 物理 Job 链、主链事件、处理过程、历史故障过程及详情跳转不回归 | 【继续有效；其中"物理 Job 链""主链事件"的用户可见标题按 §6.9.1 改名，不回归语义由 JFM-ACCEPT-093/105 扩展；"历史故障过程"详情页区块已被 §6.13 移除，不再回归该区块（依据 JFM-ADJ-298）】 |
 | JFM-ACCEPT-091 | 无数据库写、无 ZooKeeper 写，不修改其他页面 |
 
 ### 6.9 故障详情页运维可读性、ID 精度与概览布局二次调整（本轮已确认 · 已实现并验收）
@@ -733,7 +733,7 @@ Tooltip 规则：
 | JFM-ADJ-133 | 详情页分区标题"物理 Job 链"改为"Job 重启轨迹" | 修订 JFM-DETAIL-003 相关标题 |
 | JFM-ADJ-134 | 详情页分区标题"主链事件"改为"故障发生明细" | — |
 | JFM-ADJ-135 | 详情页分区标题"排除事件"改为"未计入本次故障的事件" | 修订 JFM-ANOMALY-005/006 相关用户可见标题 |
-| JFM-ADJ-136 | "处理过程"和"历史故障过程"标题保持不变 | — |
+| JFM-ADJ-136 | "处理过程"和"历史故障过程"标题保持不变 | — 【已被 §6.13 修订："历史故障过程"区块移除后该标题不再展示；"处理过程"标题继续有效（依据 JFM-ADJ-298）】 |
 | JFM-ADJ-137 | 只调整用户可见文案和说明，不修改内部领域模型、枚举、变量名、数据库字段及主链/排除链算法 | — |
 | JFM-ADJ-138 | `main chain`、`excluded events` 等内部技术概念可继续存在于代码和技术说明中，但不得继续直接作为面向运维人员的页面标题 | — |
 | JFM-ADJ-139 | "Job 重启轨迹"的节点顺序、初始/中间/当前/最终节点语义、颜色、复制和横向滚动等既有行为不得回归 | — |
@@ -893,13 +893,13 @@ Tooltip 规则：
 
 | 编号 | 检查项 |
 |---|---|
-| JFM-ACCEPT-092 | 用户可见标题为"Job 重启轨迹""故障发生明细""未计入本次故障的事件"，处理过程和历史故障过程标题不变 |
+| JFM-ACCEPT-092 | 用户可见标题为"Job 重启轨迹""故障发生明细""未计入本次故障的事件"，处理过程和历史故障过程标题不变 | 【已被 §6.13 修订："历史故障过程"标题随详情页区块移除不再展示（依据 JFM-ADJ-298）；其余标题继续有效】 |
 | JFM-ACCEPT-093 | Job 重启轨迹仍准确表达一次恢复过程中多个 Job ID 的先后关系，原节点语义和交互不回归 |
 | JFM-ACCEPT-094 | "故障发生明细"为严格 5 列，已删除"有效性"，使用"事件处理结果" |
 | JFM-ACCEPT-095 | `ACCEPTED`、`IGNORED_INVALID`、`IGNORED_STALE`、重复忽略和未知值的展示文案/颜色/Tooltip 符合本基线 |
 | JFM-ACCEPT-096 | "未计入本次故障的事件"能明确说明未计入原因，不出现"有效但已纳入主链"这类误导组合 |
 | JFM-ACCEPT-097 | 示例 ID `341473352776552448` 在接口精确文本、页面 Tooltip、复制、路由参数及后续请求中逐字符一致，不发生尾数舍入 |
-| JFM-ACCEPT-098 | 历史故障过程切换使用精确根事件 ID；事件详情、错误详情和 CLOB 请求使用精确事件/日志/记录 ID |
+| JFM-ACCEPT-098 | 历史故障过程切换使用精确根事件 ID；事件详情、错误详情和 CLOB 请求使用精确事件/日志/记录 ID | 【已被 §6.13 修订：详情页不再原地切换历史过程，改由独立历史列表 + 过程详情路由导航（JFM-ADJ-293）；精确 ID 要求继续有效并扩展至新页面（JFM-ACCEPT-148）】 |
 | JFM-ACCEPT-099 | 兼容数值字段仍存在，未实施全局 Jackson Long 序列化变更 |
 | JFM-ACCEPT-100 | 概览在常用桌面宽度下严格为 `2 行 × 3 列`，字段顺序符合 §6.9.4，根事件不在网格中重复展示 |
 | JFM-ACCEPT-101 | 概览只有一个外层卡片框体，内部为轻量共享分隔线，无明显嵌套圆角框和大块无意义留白 |
@@ -940,7 +940,7 @@ Tooltip 规则：
 | 编号 | 规则 | 说明 |
 |---|---|---|
 | JFM-ADJ-195 | 新增前端命名路由 `/monitor/job-failure/process/:faultRootId`，建议路由名 `JobFailureProcessDetail`，复用现有 `detail.vue`，通过精确 `faultRootId` 调用 `GET /api/job-failure/process/{faultRootId}` | API-4 语义不变 |
-| JFM-ADJ-196 | 不新建第二套详情页面组件，不复制详情模板和业务逻辑；两种模式都显示同一套概览、Job 重启轨迹、故障发生明细、处理过程和历史故障过程 | — |
+| JFM-ADJ-196 | 不新建第二套详情页面组件，不复制详情模板和业务逻辑；两种模式都显示同一套概览、Job 重启轨迹、故障发生明细、处理过程和历史故障过程 | — 【已被 §6.13 修订：详情页不再展示"历史故障过程"区块（依据 JFM-ADJ-298～300）；共用详情模板的其余内容继续有效】 |
 | JFM-ADJ-197 | 页面标题与面包屑继续为"故障过程详情"；新路由不是左侧菜单项，不增加菜单入口；不修改后端 API 路径、Controller 或查询语义 | — |
 
 #### 6.10.2 历史"查看"必须是真实路由链接
@@ -954,7 +954,7 @@ Tooltip 规则：
 | JFM-ADJ-200 | 普通左键点击：在当前浏览器标签页导航；不设置强制 `target="_blank"` | — |
 | JFM-ADJ-201 | 链接必须保留真实 `href`，使用户可以通过 Ctrl/Command+点击、鼠标中键、右键"在新标签页中打开"等浏览器原生操作自行新开标签页 | — |
 | JFM-ADJ-202 | 不得用一个只监听 `@click` 的按钮伪装成链接并丢失新标签页能力 | — |
-| JFM-ADJ-203 | 当前查看行仍应高亮 | 复用 JFM-HIST-004，当前 ID 由路由指定过程或最近过程的 `faultRootIdText` 决定 |
+| JFM-ADJ-203 | 当前查看行仍应高亮 | 复用 JFM-HIST-004，当前 ID 由路由指定过程或最近过程的 `faultRootIdText` 决定 【已被 §6.13 修订：详情页"历史故障过程"区块移除后，该高亮不再在该区块内适用（依据 JFM-ADJ-298）】 |
 
 #### 6.10.3 路由变化、刷新与浏览器历史
 
@@ -1214,6 +1214,211 @@ rootPath: string | null
 
 验收方式：代码审查、前端类型检查与构建、浏览器实页 ZK 失败态验证、网络面板核对 health 请求次数与来源、空值/失败降级场景验证、复制反馈核对、窄宽与桌面宽度无横向滚动核对、控制台及人工页面验收。本需求仅调整前端展示体验，不新增数据库或 ZooKeeper 写操作。
 
+### 6.13 独立"故障历史"页面与自然日统计（本轮已确认 · 目标需求）
+
+> **需求状态**：`baseline_status: APPROVED`（已批准），`implementation_status: PENDING`（尚未实现）。
+> **背景**：现有"故障监控"概览页主要表达客户端和 Job 的当前/最近运行状态（客户端当前在线/离线、Job 当前正常/恢复中/离线、最近故障时间、最近恢复时间、故障期间恢复尝试、当前数据源配置与详情入口），不适合同时承担长周期故障统计和历史过程检索；现有故障详情页底部的"历史故障过程"会把多个历史故障过程堆叠在单次过程详情页面中，信息层级不自然，也让"当前过程详情"和"数据源历史记录"混在一起。用户已确认将页面职责拆分："故障监控"继续负责当前/最近状态；新增独立"故障历史"页面负责自然日窗口内的故障次数统计与历史故障过程检索；当前故障详情页底部整块"历史故障过程"移除，不保留替代入口；具体历史过程仍通过已经实现的独立路由 `/monitor/job-failure/process/:faultRootId` 查看。
+> **状态说明**：本节是已批准的目标需求。当前代码尚未实现独立"故障历史"菜单、自然日聚合概览和独立历史列表；已有 `/monitor/job-failure/detail?...` 最近故障详情路由与 `/monitor/job-failure/process/:faultRootId` 指定过程详情路由继续有效，不属于待重做功能。README 继续描述当前实现事实，不得提前按本节改写。
+
+#### 6.13.1 功能定位、菜单与路由
+
+| 编号 | 规则 | 说明 |
+|---|---|---|
+| JFM-ADJ-255 | 将"故障监控"定位为当前/最近运行状态页面，将"故障历史"定位为自然日统计与历史故障过程检索页面；两者职责必须分离 | — |
+| JFM-ADJ-256 | 在左侧"运行监控"菜单组新增用户可见菜单"故障历史"，与"故障监控"同级，建议紧邻其后，不替换或重命名"故障监控" | — |
+| JFM-ADJ-257 | 新增独立故障历史概览前端路由，建议路径 `/monitor/job-failure/history`；最终路径和路由名须结合现有路由规范确定并写入本节接口/路由契约 | — |
+| JFM-ADJ-258 | "故障历史"页面完全基于数据库历史事实，不读取 ZooKeeper，不展示客户端在线/离线，不因 ZooKeeper 连接失败隐藏历史数据或进入 ZK 错误态 | — |
+
+#### 6.13.2 当前配置数据源全集
+
+| 编号 | 规则 | 说明 |
+|---|---|---|
+| JFM-ADJ-259 | 故障历史概览只加载 `CDC_CLIENT_MULTIPLE.FG_ACTIVE = '1'` 的当前启用客户端；客户端启用过滤规则与故障监控概览一致 | — |
+| JFM-ADJ-260 | 对每个启用客户端的 `DATA_SOURCE_ID` 按英文逗号拆分、逐项 Trim、忽略空项并保持配置顺序，复用 §6.5 的现行拆分语义 | — |
+| JFM-ADJ-261 | 只展示拆分后当前仍配置的数据源；已从 `CDC_CLIENT_MULTIPLE` 删除或取消配置的数据源，即使存在历史故障记录，也不得出现在概览或通过列表路由继续访问 | — |
+| JFM-ADJ-262 | 当前仍配置的数据源即使"今日/近7天/近30天"故障次数全部为0，也必须显示一行，不得只展示有故障的数据源 | — |
+| JFM-ADJ-263 | 当前配置数据源不按 `CDC_DATA_SOURCE.FG_ACTIVE` 或记录存在性过滤；停用、空 ORG、记录缺失均沿用 §6.5 的五种显示组合 | — |
+| JFM-ADJ-264 | 数据源名称悬停继续显示 `数据源 ID：<完整值>`；重复机构名不合并，不以 `DATA_SOURCE_ORG` 去重 | — |
+
+五种显示组合（与 §6.5 一致，继续扩展应用到"故障历史"页面）：
+
+| 匹配情况 | FG_ACTIVE | DATA_SOURCE_ORG | 用户可见"数据源" |
+|---|---|---|---|
+| 找到 | 非0 | 非空 | 原样显示 ORG |
+| 找到 | 非0 | 空 | 未定义名称 |
+| 找到 | 0 | 非空 | ORG + 红字 `(数据源未激活)` |
+| 找到 | 0 | 空 | 未定义名称 + 红字 `(数据源未激活)` |
+| 未找到 | 不适用 | 不适用 | 整体红字 `无效数据源` |
+
+#### 6.13.3 故障历史概览布局
+
+| 编号 | 规则 | 说明 |
+|---|---|---|
+| JFM-ADJ-265 | 概览按客户端单列纵向展示全宽卡片，视觉语言沿用已验收的故障监控客户端卡片，多个客户端之间保持清晰边界和稳定间距 | — |
+| JFM-ADJ-266 | 卡片头部只保留客户端 ID 与展开/折叠箭头；不得显示客户端故障次数汇总、Job 总数、正常数、异常数、在线数或离线数 | — |
+| JFM-ADJ-267 | 卡片头部不得显示在线/离线圆点或文字；该页面是数据库历史页面，不应制造当前运行状态语义 | — |
+| JFM-ADJ-268 | 概览查询区只保留"客户端"筛选及"查询/重置"；不增加数据源 ID、Job 当前状态或 ZK 状态筛选 | — |
+| JFM-ADJ-269 | 每个数据源严格一行，表格列顺序为：数据源 / 今日故障次数 / 近7天故障次数 / 近30天故障次数 / 最近故障时间 / 最近处理结果 / 操作 | — |
+
+#### 6.13.4 故障次数与自然日口径
+
+| 编号 | 规则 | 说明 |
+|---|---|---|
+| JFM-ADJ-270 | "故障次数"定义为不同故障过程的数量，即在客户端与单个数据源维度按 `FAULT_ROOT_ID` 去重计数 | — |
+| JFM-ADJ-271 | 同一 `FAULT_ROOT_ID` 下无论包含多少失败事件、重启 Job、处理日志或恢复尝试，都只能计为1次故障，不得按事件行数或重启次数累计 | — |
+| JFM-ADJ-272 | 一次故障过程的时间归属以该过程"首次失败时间"为准；后续失败、重启、恢复或日志时间不得改变其窗口归属 | — |
+| JFM-ADJ-273 | 同一次接口请求必须在后端确定唯一统计时点 `now` 和业务日期，三个窗口、最近故障及列表查询使用一致时间基准，避免跨秒/跨日产生互相矛盾的结果 | — |
+| JFM-ADJ-274 | "今日"窗口为当前业务时区当天 `00:00:00`（含）至本次请求 `now`（含/等价上界），不是最近24小时 | — |
+| JFM-ADJ-275 | "近7天"窗口为当前业务时区今天往前6个自然日的 `00:00:00`（含）至本次请求 `now`，共覆盖7个自然日，不是最近168小时 | — |
+| JFM-ADJ-276 | "近30天"窗口为当前业务时区今天往前29个自然日的 `00:00:00`（含）至本次请求 `now`，共覆盖30个自然日，不使用"最近1个月"或滚动720小时口径 | — |
+| JFM-ADJ-277 | 今日、近7天、近30天是嵌套窗口，正常情况下须满足 今日次数 ≤ 近7天次数 ≤ 近30天次数；边界时间必须有自动化测试 | — |
+
+**术语说明（真实字段与推导方式）**：`CDC_JOB_FAILURE_EVENT` 表结构（Oracle 数据字典已确认）不存在名为 `FAULT_ROOT_ID` 的物理列；本节"按故障过程根事件去重"指项目既有的推导概念 `faultRootId`（JFM-CHAIN-005：故障过程内按 `FAILURE_TIME ASC` 排序的第一条事件的 `ID`），其精确字符串同伴字段为 `faultRootIdText`。"首次失败时间"对应故障过程根事件（首条事件）的 `FAILURE_TIME` 字段。上述术语表述保持业务口径与提示词一致，但实现时必须以真实字段/推导方式为准。
+
+业务时区规则：
+
+- 优先沿用项目当前后端/Oracle 业务时区和既有日期转换规则；
+- 不得由每个浏览器本地时区各自计算边界；
+- 不得通过前端传入任意起止时间冒充统一自然日口径；
+- 若项目当前没有显式业务时区配置，目标实现应使用后端应用生效时区并在 README 实现收口时如实记录，不在本次需求文档中虚构新的全局时区配置。
+
+#### 6.13.5 最近故障与排序
+
+| 编号 | 规则 | 说明 |
+|---|---|---|
+| JFM-ADJ-278 | "最近故障时间"显示该当前配置数据源在全部已有历史过程中的最新首次失败时间，不受今日/近7天/近30天统计窗口限制 | — |
+| JFM-ADJ-279 | "最近处理结果"显示上述同一最新故障过程的本次故障处理结果，复用现有过程状态值、文案和标签颜色，不与客户端/Job 当前在线状态混淆 | — |
+| JFM-ADJ-280 | 当前配置数据源从未发生故障时，三个次数显示0，"最近故障时间""最近处理结果"显示 `—`，操作仍可显示"查看历史"但进入后呈现空列表 | — |
+| JFM-ADJ-281 | 同一客户端内数据源排序依次为：今日故障次数降序、近7天降序、近30天降序；完全相同时按当前配置顺序，必要时再按 dataSourceId 升序保证稳定 | — |
+| JFM-ADJ-282 | 客户端排序使用其当前配置数据源的内部汇总值：今日总次数降序、近7天总次数降序、近30天总次数降序，最后按 clientId 升序；这些汇总只用于排序，不展示在卡片头部 | — |
+| JFM-ADJ-283 | 筛选、刷新或统计相同时排序必须稳定，不得因数据库返回顺序变化造成卡片或数据源行随机跳动 | — |
+
+#### 6.13.6 "查看历史"与独立历史列表
+
+| 编号 | 规则 | 说明 |
+|---|---|---|
+| JFM-ADJ-284 | 概览行"查看历史"应为可导航入口，携带精确 `clientId` 与单个 `dataSourceId`，不得携带逗号拼接原字段 | — |
+| JFM-ADJ-285 | 新增独立数据源故障历史列表路由，建议路径 `/monitor/job-failure/history/list?clientId=<clientId>&dataSourceId=<dataSourceId>`；最终路径/路由名须遵循现有工程规范并与概览路由、过程详情路由清晰区分 | — |
+| JFM-ADJ-286 | `clientId`、`dataSourceId` 均按字符串处理并正确 URL 编码/解码，不经数字转换，不截断、不拼错；页面标题或识别区显示客户端与现行数据源名称/ID Tooltip | — |
+| JFM-ADJ-287 | 历史列表首次进入默认选择"今日"，只加载今日自然日窗口内的故障过程 | — |
+| JFM-ADJ-288 | 历史列表提供固定时间范围"今日 / 近7天 / 近30天"；不使用"近1天""最近1个月"，本轮不新增任意日期选择器 | — |
+| JFM-ADJ-289 | 历史列表列顺序为：首次失败时间 / 最终恢复时间 / 处理历时 / 故障事件数 / 重启次数 / 本次故障处理结果 / 操作 | — |
+| JFM-ADJ-290 | 历史列表中的"本次故障处理结果"复用详情页和既有历史摘要的过程状态计算、显示文案与标签语义，不表示 ZK 当前在线状态 | — |
+| JFM-ADJ-291 | 历史过程按首次失败时间降序排列；时间相同使用精确 `faultRootIdText` 或等价稳定字段作次级排序，保证刷新与翻页顺序稳定 | — |
+| JFM-ADJ-292 | 历史列表采用后端分页，默认每页20条，并提供项目现有风格允许的页大小选择（建议20/50/100）；切换时间范围回到第1页，空结果显示明确空状态 | — |
+| JFM-ADJ-293 | 每行"查看详情"复用现有真实链接 `/monitor/job-failure/process/:faultRootId`，参数必须来自精确 `faultRootIdText`，保留浏览器复制链接、新标签页、刷新及前进/后退能力 | — |
+| JFM-ADJ-294 | 独立历史列表路由必须再次校验该 clientId/dataSourceId 当前仍属于启用客户端的现行配置；不符合时显示"当前配置中不存在该数据源"或等价明确错误，且不得返回已取消配置数据源的历史列表 | — |
+| JFM-ADJ-295 | 同一组件内 clientId、dataSourceId、时间范围或页码变化时必须重新加载与当前 URL 一致的数据，不得显示上一个参数的残留结果 | — |
+| JFM-ADJ-296 | 列表请求需要请求序号、取消或等价一致性保护；较早请求晚返回时不得覆盖新筛选、新页码或新路由结果 | — |
+| JFM-ADJ-297 | 页面标题、面包屑和返回行为必须明确区分"故障历史概览""数据源故障历史""故障过程详情"；返回概览应保留可理解的浏览器导航语义 | — |
+
+#### 6.13.7 当前故障详情页调整
+
+| 编号 | 规则 | 说明 |
+|---|---|---|
+| JFM-ADJ-298 | 从当前故障过程详情页面中完整移除"历史故障过程"区块，包括时间范围下拉、历史表格、空状态及其页面内加载逻辑 | — |
+| JFM-ADJ-299 | 移除该区块后不在故障过程详情页增加"查看全部历史""返回历史"等替代入口；用户从哪个入口进入详情，使用浏览器后退即可返回 | — |
+| JFM-ADJ-300 | 保留最近故障详情路由 `/monitor/job-failure/detail?...` 与指定过程详情路由 `/monitor/job-failure/process/:faultRootId`；概览、Job 重启轨迹、故障发生明细、处理过程和精确 ID 行为不得回归 | — |
+
+#### 6.13.8 API、查询和性能契约
+
+| 编号 | 规则 | 说明 |
+|---|---|---|
+| JFM-ADJ-301 | 后端提供故障历史概览只读查询能力：返回所有当前配置数据源、三个自然日窗口次数、最近故障时间、最近处理结果以及现有五种数据源展示所需字段；具体 URL 按项目规范确定并写入 §14 | — |
+| JFM-ADJ-302 | 后端提供单个当前配置数据源的分页历史过程查询能力：接收 clientId、单个 dataSourceId、固定范围枚举、page/pageSize，返回总数和 JFM-ADJ-289 所需字段；优先复用已有过程摘要构建逻辑，避免状态口径分叉 | — |
+| JFM-ADJ-303 | 概览查询不得按客户端×数据源×三个窗口逐行发起数据库查询；数据源配置、故障过程聚合和最近过程应使用批量/分组方式，禁止 N+1 | — |
+| JFM-ADJ-304 | 聚合查询不得加载 CLOB 错误详情或整条处理日志；只读取计数、时间、状态和必要 ID。实现任务必须检查现有索引与 Oracle 执行计划风险，并为自然日边界、去重计数和配置全集编写定向测试 | — |
+| JFM-ADJ-305 | 所有 faultRootId/eventId/logId 等可能超过 JavaScript 安全整数的标识继续遵守精确字符串同伴字段规则；本功能全程只读，不写数据库、不读写 ZooKeeper、不修改 sync-client | — |
+
+#### 6.13.9 目标路由与 API 契约
+
+**三层页面关系（前端路由）**
+
+| 层级 | 页面 | 前端路由 | 路由名（建议） |
+|---|---|---|---|
+| 第一层 | 故障历史概览 | `/monitor/job-failure/history` | `JobFailureHistory` |
+| 第二层 | 单个数据源故障历史列表 | `/monitor/job-failure/history/list?clientId=<clientId>&dataSourceId=<dataSourceId>` | `JobFailureHistoryList` |
+| 第三层 | 单次故障过程详情（现有） | `/monitor/job-failure/process/:faultRootId` | `JobFailureProcessDetail`（现有） |
+
+- 前两个路径为本节目标路由。已核对现有 `frontend/src/router/index.ts` 无冲突：现有故障监控相关前端路由为 `/monitor/job-failure`（`JobFailure`）、`/monitor/job-failure/detail`（`JobFailureDetail`）、`/monitor/job-failure/process/:faultRootId`（`JobFailureProcessDetail`）。建议路由名 `JobFailureHistory`、`JobFailureHistoryList` 与现有 `JobFailureProcessDetail` 命名风格一致。
+- `clientId`、`dataSourceId` 查询参数按字符串处理并正确 URL 编码/解码，不经数字转换。
+- 前端路由与后端 API 必须分开书写，不得把二者写成同一个 URL（现有规则复用 §6.10 的同类要求）。
+
+**后端 API 与目标数据结构**：新增只读契约 `GET /api/job-failure/history/summary` 与 `GET /api/job-failure/history/list` 的定义、推荐参数、概览行与历史列表项的语义字段、数据来源说明详见 §14 接口需求（JFM-API-006、JFM-API-007）。
+
+#### 6.13.10 被本轮修订/替代的旧规则清单
+
+下表逐处标记旧规则被 §6.13 修订/替代的关系，保留历史原文但不得让旧规则继续作为现行验收标准：
+
+| 旧规则 | 原语义 | 修订/替代关系 |
+|---|---|---|
+| JFM-HIST-001 | 故障历史时间范围下拉为"最近一天 / 最近一周 / 最近一个月"（滚动口径） | 已被 §6.13 替代：独立列表固定"今日 / 近7天 / 近30天"自然日窗口（JFM-ADJ-274～276、JFM-ADJ-288） |
+| JFM-HIST-002 | 历史列表不显示传统分页组件 | 已被 §6.13 替代：独立历史列表采用后端分页，默认每页20条并提供20/50/100选择（JFM-ADJ-292） |
+| JFM-HIST-003 | 所选时间范围内全部记录必须可见，不得因 pageSize 限制静默截断 | 已被 §6.13 替代：独立历史列表通过后端分页与总数返回提供完整可导航的可见范围（JFM-ADJ-292），不再固定 pageSize=1000 |
+| JFM-HIST-004 | 故障历史当前查看的行高亮（详情页历史区块内） | 已被 §6.13 修订：详情页"历史故障过程"区块移除，"当前查看行高亮"在该区块内不再适用；如需要在新的独立历史列表中另行定义（JFM-ADJ-298） |
+| JFM-ADJ-136 | "处理过程"和"历史故障过程"标题保持不变 | 已被 §6.13 修订："历史故障过程"区块移除后该标题不再展示；"处理过程"标题继续有效（JFM-ADJ-298） |
+| JFM-ADJ-196 | 两种详情模式都显示同一套概览、Job 重启轨迹、故障发生明细、处理过程和历史故障过程 | 已被 §6.13 修订：详情页不再展示"历史故障过程"区块（JFM-ADJ-298～300）；共用详情模板的其余内容继续有效 |
+| JFM-ADJ-203 | 详情页历史区块"当前查看行仍应高亮" | 已被 §6.13 修订：历史区块移除后不再适用（JFM-ADJ-298） |
+| JFM-ACCEPT-090 | 物理 Job 链、主链事件、处理过程、历史故障过程及详情跳转不回归 | 已被 §6.13 修订："历史故障过程"详情页区块移除后不再回归该区块（JFM-ADJ-298）；其余部分继续有效 |
+| JFM-ACCEPT-092 | 用户可见标题"Job 重启轨迹""故障发生明细""未计入本次故障的事件"，处理过程和历史故障过程标题不变 | 已被 §6.13 修订："历史故障过程"标题随区块移除不再展示（JFM-ADJ-298）；其余标题继续有效 |
+| JFM-ACCEPT-098 | 详情页内"历史故障过程切换"使用精确根事件 ID | 已被 §6.13 修订：详情页不再原地切换历史过程，改由独立历史列表 + 过程详情路由导航；精确 ID 要求继续有效并扩展至新页面（JFM-ADJ-293、JFM-ACCEPT-148） |
+| JFM-API-003 | API-3 `/history/{clientId}/{dataSourceId}` 接受任意 startTime/endTime | 已被 §6.13 修订：新页面使用固定 `range` 枚举的 API-7（JFM-ADJ-288、JFM-ADJ-302）；API-3 仅保留至旧详情页"历史故障过程"区块移除 |
+| JFM-PERF-003 | 故障历史按时间范围查询，不设 pageSize 硬编码上限 | 已被 §6.13 修订：独立列表采用后端分页（JFM-ADJ-292）；"避免静默截断"的意图由分页 + 总数返回承接 |
+
+**继续有效、不误废弃的规则**：§6.10 独立过程路由能力继续有效，只是入口从旧详情页历史区迁移到新故障历史列表，不得把 §6.10 标记为失效；§6.5 五种数据源显示规则继续有效并扩展到新页面；故障监控概览的 ZK 在线/离线规则继续有效但不扩展到故障历史页面；JFM-HIST-005（`RECOVERY_RECORDED` → "已恢复"）继续有效并扩展到新的独立历史列表。
+
+#### 6.13.11 不回归与非范围
+
+**必须保持**：
+
+- "故障监控"现有查询、ZK 状态融合、客户端卡片、数据源六列表格和详情入口；
+- 多数据源拆分、停用/无效数据源、ORG 与 Tooltip 规则；
+- 最近故障详情模式；
+- 指定故障过程独立路由及精确 ID；
+- Job 重启轨迹、故障发生明细、处理过程、事件详情 CLOB 懒加载；
+- 现有故障过程状态计算和标签映射；
+- ZK 倒计时与集群连接诊断；
+- 所有数据库/ZK 只读安全边界。
+
+**本轮不做**：
+
+- 不修改任何代码；
+- 不创建或变更数据库表、索引、视图、物化视图、存储过程；
+- 不写 ZooKeeper，不修改 sync-client；
+- 不在故障历史页面展示 ZK 在线/离线；
+- 不支持任意自定义日期范围；
+- 不做客户端卡片头部统计；
+- 不展示已取消配置的数据源；
+- 不把失败事件数、重启次数当作故障次数；
+- 不新增图表、趋势图、热力图或导出功能；
+- 不提前更新 README；
+- 不提前关闭实现 GAP。
+
+#### 6.13.12 可执行验收标准
+
+| 编号 | 验收标准 | 建议证据 |
+|---|---|---|
+| JFM-ACCEPT-139 | 左侧"运行监控"出现独立"故障历史"菜单，路由与"故障监控"分离，刷新和直接访问可用 | 路由/菜单代码审查 + 浏览器 |
+| JFM-ACCEPT-140 | 页面只显示启用客户端当前配置的数据源；已取消配置数据源不显示，当前配置但0故障的数据源仍显示 | 后端定向测试 + API + 浏览器 |
+| JFM-ACCEPT-141 | 客户端卡片全宽单列，头部只有客户端 ID 与展开箭头；表格严格7列且无在线/离线或客户端汇总 | DOM/截图核对 |
+| JFM-ACCEPT-142 | 今日、近7天、近30天按统一后端自然日边界计算，示例凌晨场景不退化成滚动24小时，且满足嵌套关系 | 时钟可控单元测试 |
+| JFM-ACCEPT-143 | 同一 FAULT_ROOT_ID 多事件、多重启、多日志只计1次，时间归属使用首次失败时间；不同根事件分别计数 | 后端单元测试 + 构造数据 |
+| JFM-ACCEPT-144 | 客户端和数据源按今日、近7天、近30天及稳定次级键正确排序；筛选/刷新无随机跳动 | 单元测试 + 浏览器 |
+| JFM-ACCEPT-145 | 数据源五种显示组合、红字未激活/无效、完整 ID Tooltip 均与故障监控一致，不按 ORG 合并 | 单元测试 + 浏览器/代码审查 |
+| JFM-ACCEPT-146 | "查看历史"进入正确 clientId/dataSourceId 的独立列表，默认"今日"，URL 可刷新/复制/前进后退 | 浏览器实页 |
+| JFM-ACCEPT-147 | 历史列表支持今日/近7天/近30天、后端分页、7列顺序、首次失败时间倒序、空状态和切换范围回第1页 | API + 浏览器 |
+| JFM-ACCEPT-148 | 历史行"查看详情"为真实精确链接，使用 faultRootIdText 打开既有过程详情，超安全整数不失真 | 精确 ID 测试 + 浏览器 |
+| JFM-ACCEPT-149 | 已取消配置或无效路由参数不能绕过概览直接查询旧历史，页面显示明确错误且不泄漏错误数据 | 后端/前端定向测试 |
+| JFM-ACCEPT-150 | 现有故障过程详情页已完整移除"历史故障过程"区块，其他概览、轨迹、事件和处理过程不回归 | DOM/截图 + 回归核对 |
+| JFM-ACCEPT-151 | ZooKeeper 关闭或 health 失败不影响故障历史概览和列表；历史页面不发起 ZK 状态请求、不展示在线/离线 | 网络请求核对 + 浏览器 |
+| JFM-ACCEPT-152 | 概览配置和统计使用批量/分组查询，无客户端×数据源×窗口 N+1，不加载 CLOB，Oracle 查询风险已检查 | Mapper/SQL 审查 + 调用次数/执行计划说明 |
+| JFM-ACCEPT-153 | 路由参数、筛选、页码快速变化时结果与当前 URL 一致，无旧请求覆盖，无页面横向滚动或控制台错误 | 浏览器交互/控制台 |
+| JFM-ACCEPT-154 | 后端定向测试、后端打包、前端类型检查与构建通过；数据库/ZK/sync-client 全程只读且无本任务外回归 | 测试/构建报告 |
+
+以上验收标准为本节目标需求，尚未实现，不得标记为已通过。
+
+验收方式：本节为已批准的目标需求，文档任务不伪造已完成的代码验收证据；实现完成后按上表执行后端定向测试、前端类型检查与构建、浏览器实页核验、精确 ID 核对、网络请求核对及人工页面验收。本需求全程只读，不新增数据库或 ZooKeeper 写操作。
+
 ## 7. 详情页需求
 
 ### 7.1 故障概览
@@ -1250,13 +1455,13 @@ rootPath: string | null
 
 | 编号 | 规则 | 说明 |
 |---|---|---|
-| JFM-HIST-001 | 故障历史使用时间范围下拉选择：最近一天 / 最近一周 / 最近一个月 | 三个固定选项 |
-| JFM-HIST-002 | 不显示传统分页组件（无页码、无每页条数选择器） | — |
-| JFM-HIST-003 | 所选时间范围内的全部符合条件记录必须可见 | 不得因 pageSize 限制静默截断 |
-| JFM-HIST-004 | 故障历史当前查看的行高亮 | `highlight-current-row` |
+| JFM-HIST-001 | 故障历史使用时间范围下拉选择：最近一天 / 最近一周 / 最近一个月 | 三个固定选项 【已被 §6.13 替代：独立历史列表固定"今日 / 近7天 / 近30天"自然日窗口（依据 JFM-ADJ-274～276、JFM-ADJ-288）】 |
+| JFM-HIST-002 | 不显示传统分页组件（无页码、无每页条数选择器） | — 【已被 §6.13 替代：独立历史列表采用后端分页，默认每页20条并提供20/50/100选择（依据 JFM-ADJ-292）】 |
+| JFM-HIST-003 | 所选时间范围内的全部符合条件记录必须可见 | 不得因 pageSize 限制静默截断 【已被 §6.13 替代：独立历史列表通过后端分页与总数返回提供完整可导航的可见范围，不再固定 pageSize=1000（依据 JFM-ADJ-292）】 |
+| JFM-HIST-004 | 故障历史当前查看的行高亮 | `highlight-current-row` 【已被 §6.13 修订：详情页"历史故障过程"区块移除后，该高亮不再在该区块内适用；如需要在新的独立历史列表中另行定义（依据 JFM-ADJ-298）】 |
 | JFM-HIST-005 | `RECOVERY_RECORDED` 状态在历史列表中显示为"已恢复" | 该映射为临时前端硬编码，正式映射应由统一映射层实现 |
 
-当前实现状态：JFM-HIST-002 和 JFM-HIST-003 尚未完全实现（见 §19 GAP-HISTORY-001）。
+当前实现状态：JFM-HIST-002 和 JFM-HIST-003 尚未完全实现（见 §19 GAP-HISTORY-001）。本节的故障历史展示在目标需求中由独立"故障历史"页面替代，详情页底部"历史故障过程"区块按 §6.13 移除（JFM-ADJ-298）；实现差距继续由 GAP-HISTORY-001 追踪（保持 OPEN）。
 
 > **与 §6.10 的关系**：`JFM-HIST-004`（当前查看行高亮）继续有效，当前查看行的 ID 由路由指定过程或最近过程的 `faultRootIdText` 决定；历史"查看"改为真实路由链接的规则见 §6.10.2。
 
@@ -1425,9 +1630,11 @@ rootPath: string | null
 |---|---|---|---|---|
 | JFM-API-001 | API-1 | GET | `/api/job-failure/summary` | 故障汇总。将 `CDC_CLIENT_MULTIPLE.DATA_SOURCE_ID` 按英文逗号拆分为单个 ID，按 `(CLIENT_ID, 拆分后的单个 DATA_SOURCE_ID)` 展开，返回每个逻辑 Job 的最新故障概况。响应类型：`List<JobFailureSummaryVO>`。包含 clientId、clientName、dataSourceId、dataSourceName、dataSourceOrg、dataSourceActive、dataSourceExists、jobStatus、latestFailureTime、latestFaultRootId、latestRestartCount、eventCountInWindow、latestRecoveryTime |
 | JFM-API-002 | API-2 | GET | `/api/job-failure/latest/{clientId}/{dataSourceId}` | 最新故障。返回指定逻辑 Job 的最近一次故障过程详情。响应类型：`FaultProcessDetailVO` |
-| JFM-API-003 | API-3 | GET | `/api/job-failure/history/{clientId}/{dataSourceId}` | 历史故障。需 `startTime`/`endTime`（格式 `yyyy-MM-dd'T'HH:mm:ss`）。所选时间范围内的全部符合条件记录必须可见。响应类型：`PageResult<FaultProcessSummaryVO>` |
+| JFM-API-003 | API-3 | GET | `/api/job-failure/history/{clientId}/{dataSourceId}` | 历史故障。需 `startTime`/`endTime`（格式 `yyyy-MM-dd'T'HH:mm:ss`）。所选时间范围内的全部符合条件记录必须可见。响应类型：`PageResult<FaultProcessSummaryVO>` 【已被 §6.13 修订：新"故障历史"列表改用固定 `range` 枚举的 API-7，不再使用任意 startTime/endTime（依据 JFM-ADJ-288、JFM-ADJ-302）；本接口保留至旧详情页"历史故障过程"区块移除】 |
 | JFM-API-004 | API-4 | GET | `/api/job-failure/process/{faultRootId}` | 故障过程详情。按 faultRootId 查询任意一次历史故障过程。响应类型：`FaultProcessDetailVO` |
 | JFM-API-005 | API-5 | GET | `/api/job-failure/clob/{faultRootId}/{clobField}/{recordId}` | CLOB 内容。clobField 取值：`failureDetail` 或 `errorDetail`。响应类型：`ClobDetailVO` |
+| JFM-API-006 | API-6 | GET | `/api/job-failure/history/summary` | 故障历史概览。返回所有当前配置数据源的全集、三个自然日窗口故障次数、最近故障时间、最近处理结果以及五种数据源展示所需字段。可选参数 `clientId` 用于筛选单个客户端。响应类型：`List<FaultHistorySummaryVO>`。与 API-1 的区别：API-1 表达当前/最近运行状态（含 ZK 在线/离线），API-6 是纯数据库历史统计，不读取 ZooKeeper（详见 §6.13） |
+| JFM-API-007 | API-7 | GET | `/api/job-failure/history/list` | 单个当前配置数据源的分页历史故障过程。参数：`clientId`、`dataSourceId`、`range=TODAY\|LAST_7_DAYS\|LAST_30_DAYS`、`page`、`pageSize`。后端校验该 clientId/dataSourceId 当前仍属于启用客户端的现行配置，不符合时返回明确错误且不得返回已取消配置数据源的历史。响应类型：`PageResult<FaultProcessSummaryVO>`（复用现有过程摘要 VO）。`range` 为固定枚举，不允许前端自行传任意 start/end（详见 §6.13） |
 
 所有接口均返回 `ApiResponse<T>` 统一响应格式（code/message/data）。
 
@@ -1438,6 +1645,44 @@ rootPath: string | null
 > **详情页精确字符串 ID 契约（本轮已确认 · 目标需求）**：详情页相关接口（API-2/API-3/API-4/API-5）需在既有数值字段基础上，增加由 Java 原始 `Long` 通过 `Long.toString()` 生成的字符串同伴字段（如 `faultRootIdText`、`FaultProcessSummaryVO.faultRootIdText`、`EventCardVO.eventIdText`、`HandleTimelineVO.logIdText`、`ClobDetailVO.recordIdText`），供前端显示、Tooltip、复制、路由参数与请求参数使用，避免 JavaScript `number` 精度丢失。既有数值字段保留，不实施全局 Jackson Long 序列化变更（详见 §6.9.3）。
 
 > **与 §6.10 的关系（本轮已确认 · 已实现并验收）**：`JFM-API-004`（`GET /api/job-failure/process/{faultRootId}`）后端 API 路径、Controller 与查询语义不变；新增的前端 `/monitor/job-failure/process/:faultRootId` 路由复用该 API。前端页面路由与后端 API 路由是两种不同资源，不得把二者写成同一个 URL（详见 §6.10）。
+
+> **独立"故障历史"页面 API/VO 契约（本轮已确认 · 目标需求，baseline_status: APPROVED / implementation_status: PENDING）**：详见 §6.13。目标概览行数据结构（精确字段名与现有 VO/类型体系协调）：
+
+```ts
+clientId: string
+dataSourceId: string
+dataSourceOrg: string | null
+dataSourceExists: boolean
+dataSourceActive: boolean | null
+todayFailureCount: number
+last7DaysFailureCount: number
+last30DaysFailureCount: number
+latestFailureTime: datetime | null          // 该数据源全部历史过程中最新一次故障的首次失败时间
+latestProcessStatus: existing process status | null   // 复用现有过程状态值、文案与标签字段（如 recordStatus/recordStatusLabel、faultProcessResult/faultProcessResultLabel）
+```
+
+历史列表项数据结构（复用 `FaultProcessSummaryVO` 现有字段的语义映射）：
+
+```ts
+faultRootIdText: string            // 精确字符串同伴字段，供"查看详情"路由参数使用（JFM-ADJ-293）
+firstFailureTime: datetime         // 过程根事件 FAILURE_TIME（复用现有 startTime）
+finalRecoveryTime: datetime | null // 存在 STABLE_CHECK_PASSED 时为其 HANDLE_TIME，否则 null（复用现有 lastRecordTime 语义）
+duration/displayDuration           // 处理历时，复用现有 startTime→lastRecordTime 展示层计算
+failureEventCount: number          // 主链事件数（复用现有 mainChainEventCount）
+restartCount: number               // 重启次数（复用现有 countRestarts 口径）
+recordStatus/processStatus: existing process status  // 现有过程状态（recordStatus/recordStatusLabel、faultProcessResult/faultProcessResultLabel）
+```
+
+数据来源与口径说明：
+
+- 当前配置全集来自 `CDC_CLIENT_MULTIPLE`（`FG_ACTIVE='1'`，`DATA_SOURCE_ID` 按英文逗号拆分）；
+- 数据源展示字段来自 `CDC_DATA_SOURCE`（`DATA_SOURCE_ORG`、`FG_ACTIVE`），记录缺失仍保留配置项；
+- 历史故障次数来自故障过程根事件，按推导 `faultRootId`（JFM-CHAIN-005）去重，数据库不存在名为 `FAULT_ROOT_ID` 的物理列；
+- 过程时间归属使用首次失败时间（根事件 `FAILURE_TIME`）；
+- 处理结果复用现有过程状态计算；
+- 本页面不读取 ZooKeeper；
+- 详细表名、字段名和查询链路必须与实际 Entity/Mapper 一致；
+- 精确字段名必须与现有 VO/类型体系协调，不得为了文档方便把 Java Long 直接约定为前端 number。
 
 ## 15. 只读与安全约束
 
@@ -1456,7 +1701,7 @@ rootPath: string | null
 |---|---|---|
 | JFM-PERF-001 | 两张故障表仅有主键索引 | 未来数据增长需补充业务索引（`CLIENT_ID`、`DATA_SOURCE_ID`、`FAILURE_TIME`） |
 | JFM-PERF-002 | 自动刷新默认间隔为 60 分钟 | 后端不提供实时推送 |
-| JFM-PERF-003 | 故障历史按时间范围查询，不设 pageSize 硬编码上限 | 数据量增长后需评估是否需要后端调整查询策略 |
+| JFM-PERF-003 | 故障历史按时间范围查询，不设 pageSize 硬编码上限 | 数据量增长后需评估是否需要后端调整查询策略 【已被 §6.13 修订：独立历史列表采用后端分页（JFM-ADJ-292）；"避免静默截断"的意图由分页 + 总数返回承接】 |
 
 ## 17. 验收标准
 
@@ -1488,10 +1733,10 @@ rootPath: string | null
 | JFM-ACCEPT-024 | 首次加载全部展开，折叠后刷新保持状态 | 浏览器交互验证 |
 | JFM-ACCEPT-025 | 【已被 JFM-ACCEPT-037 替代】原调整前实现为 7 列，仅用于历史追溯，不再作为本轮验收标准 | 当前实现核对见 README；新验收标准见 §6.3.9 JFM-ACCEPT-037 |
 | JFM-ACCEPT-026 | 无故障历史时显示 `—`，无详情入口 | 需构造无故障数据或检查代码逻辑 |
-| JFM-ACCEPT-027 | 历史范围选项为"最近一天、最近一周、最近一个月" | 浏览器实页验证，FaultHistory 组件 |
-| JFM-ACCEPT-028 | 历史页面不显示传统分页组件（无页码、无每页条数选择器） | 浏览器实页验证 |
-| JFM-ACCEPT-029 | 所选时间范围内全部符合条件的记录必须可见 | 浏览器实页验证 + 接口返回核对 |
-| JFM-ACCEPT-030 | 固定 `pageSize=1000` 不得造成静默截断 | 代码审查 + 需确认数据量超过 1000 时的行为 |
+| JFM-ACCEPT-027 | 历史范围选项为"最近一天、最近一周、最近一个月" | 浏览器实页验证，FaultHistory 组件 【已被 §6.13 替代：独立列表固定"今日 / 近7天 / 近30天"（依据 JFM-ADJ-274～276、JFM-ADJ-288、JFM-ACCEPT-147）】 |
+| JFM-ACCEPT-028 | 历史页面不显示传统分页组件（无页码、无每页条数选择器） | 浏览器实页验证 【已被 §6.13 替代：独立历史列表采用后端分页（依据 JFM-ADJ-292、JFM-ACCEPT-147）】 |
+| JFM-ACCEPT-029 | 所选时间范围内全部符合条件的记录必须可见 | 浏览器实页验证 + 接口返回核对 【已被 §6.13 替代：独立历史列表通过后端分页与总数返回提供完整可导航的可见范围（依据 JFM-ADJ-292、JFM-ACCEPT-147）】 |
+| JFM-ACCEPT-030 | 固定 `pageSize=1000` 不得造成静默截断 | 代码审查 + 需确认数据量超过 1000 时的行为 【已被 §6.13 替代：独立历史列表以后端分页替代固定 pageSize=1000（依据 JFM-ADJ-292、JFM-ACCEPT-147）】 |
 | JFM-ACCEPT-031 | 列表不得一次性返回全部 CLOB | 代码审查 API-1/API-2/API-3 返回字段 |
 | JFM-ACCEPT-032 | CLOB 详情必须按需加载 | 浏览器验证弹窗行为（API-5） 【已被 §6.9.3 扩展：CLOB 请求路径的 `faultRootId`、`recordId` 必须由精确字符串字段构造，不改变懒加载（依据 JFM-ACCEPT-098）】 |
 | JFM-ACCEPT-033 | 5 个 API 接口全部只读 GET，返回 `ApiResponse<T>` 统一格式 | 代码审查 `JobFailureController` |
@@ -1522,7 +1767,7 @@ rootPath: string | null
 | GAP-STATUS-001 | 对外状态 | JFM-ACCEPT-011/012/013：对外故障过程状态须为 5 种正式状态，内部 `FaultProcessResult` 和 `RecordStatus` 不得直接对外返回 | 代码中 `FaultProcessResult`（3 种）和 `RecordStatus`（9 种）通过 VO 直接返回前端 | 详情页和概览页显示的状态标签为内部状态的直接中文映射（如"已记录恢复""记录未闭环"），不是 5 种正式状态 |
 | GAP-STATUS-002 | 状态映射 | §9.4.4 映射表：须实现统一的内部→对外映射层 | 尚未实现统一映射层。前端通过硬编码 `RECOVERY_RECORDED → '已恢复'` 做部分映射，其余状态直接透传 `recordStatusLabel` | 状态映射不完整、不统一，前后端均存在不一致风险 |
 | GAP-STATUS-003 | 恢复失败判定 | §9.4.2 优先级 5：须实现"恢复失败"的统一判定规则 | 代码不存在"恢复失败"概念。`SUBMIT_FAILED`、`RESTART_SKIPPED`、部分 `NOT_CLOSED` 仅为候选证据，从当前代码无法唯一确定"恢复失败"的精确判定条件，不得使用"其他情况"兜底 | "恢复失败"对外状态当前无对应实现，用户无法在页面看到该状态 |
-| GAP-HISTORY-001 | 历史全量返回 | JFM-HIST-002、JFM-HIST-003：无传统分页组件，所选时间范围内全部记录可见 | 前端固定 `pageSize=1000`（`FaultHistory.vue` 第 148 行），后端服务端分页 | 超过 1000 条时可能静默截断 |
+| GAP-HISTORY-001 | 历史查询/展示/时间范围（独立"故障历史"页面） | JFM-HIST-002、JFM-HIST-003：无传统分页组件，所选时间范围内全部记录可见；该展示在目标需求中由 §6.13 独立"故障历史"页面替代：独立菜单、自然日统计概览（今日/近7天/近30天）、独立分页历史列表、当前配置校验及详情页"历史故障过程"区块移除（JFM-ADJ-255～305、JFM-ACCEPT-139～154） | 前端固定 `pageSize=1000`（`FaultHistory.vue` 第 148 行），后端服务端分页；独立"故障历史"菜单、自然日聚合概览与独立分页列表尚未实现 | 超过 1000 条时可能静默截断；独立菜单、自然日聚合概览与独立分页列表尚未实现。`baseline_status: APPROVED / implementation_status: PENDING`，本 GAP 保持 OPEN，不提前关闭 |
 | GAP-OVERVIEW-001 | 概览页调整 | §6.3/§6.6/§6.7/§6.11/§6.12：查询区与六列表格、多数据源展开、客户端卡片视觉一致性、ZooKeeper 运行状态融合、ZK 错误态集群连接目标展示 | 概览功能主体（含多数据源展开与异常数据源展示）已实现并通过技术核验与人工页面验收（Commit `277e7d314ecafe0845bb4e6e9438b18767cb94c8`）；客户端卡片视觉一致性（§6.6）已由 Commit `4993400cebc145dd1fa69de1d1de8733e4568a2e` 实现并人工验收；ZooKeeper 运行状态融合（§6.7）主体已由 Commit `c3b06bf1dec950e3c4b9a8a6f5e7434616f66317` 实现并完成技术核验；§6.11 倒计时与图标动效已由 Commit `715b476a26d8ad12abc22cdd29e23c60fe9df7a1` 实现并人工验收；§6.12 集群连接目标展示已由 Commit `8268e1b266b64187cc41a6aa1612e37c2f692ef3` 实现、真实 HTTP 复制兼容由 Commit `533bbbc37bf2c9e1aa0939d20d6b6458c035a212` 修正并获用户真实 HTTP 确认；README 当前实现事实已同步，功能基线最终收口完成 | 已解决/已关闭，仅保留用于历史追溯，已不存在该 GAP 描述的待实现差距 |
 | GAP-OVERVIEW-MULTI-DATASOURCE-001 | 多数据源展开 | §6.5：`CDC_CLIENT_MULTIPLE.DATA_SOURCE_ID` 按英文逗号拆分为多个单 ID 记录、逐条展示，并区分正常、未激活和无效数据源 | 已由 Commit `277e7d314ecafe0845bb4e6e9438b18767cb94c8` 解决：英文逗号拆分、Trim、忽略空项、每个 ID 独立一行、配置顺序、批量查询且无 N+1、`dataSourceExists` 与 `dataSourceActive` 契约、停用数据源红字后缀、无效数据源红字及 Tooltip 均已实现并通过技术核验与人工页面验收 | 已解决/已关闭，仅保留用于历史追溯，已不存在待实现差距 |
 | GAP-OVERVIEW-CARD-VISUAL-001 | 客户端卡片视觉一致性 | §6.6：故障监控客户端卡片采用 CDC 节点状态卡片的同一视觉效果，并保持全宽单列 | 已由 Commit `4993400cebc145dd1fa69de1d1de8733e4568a2e` 解决：改为可见灰蓝边框、明确轮廓阴影、高不透明度浅色背景与标题区分隔，完成前端类型检查与构建、浏览器实页核验，并由用户根据真实截图人工确认"卡片能够明显分开"目标达成 | 已解决/已关闭，仅保留用于历史追溯，已不存在待实现差距 |
