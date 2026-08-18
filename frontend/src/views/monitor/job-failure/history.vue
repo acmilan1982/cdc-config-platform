@@ -7,7 +7,7 @@
         <el-tag v-if="summaryList" size="small" type="info">共 {{ summaryList.length }} 个数据源</el-tag>
       </div>
       <div class="toolbar-right">
-        <el-button size="small" type="primary" :loading="loading" @click="load">
+        <el-button size="small" type="primary" :loading="loading" @click="load('preserve')">
           <el-icon><Refresh /></el-icon>
           刷新
         </el-button>
@@ -39,7 +39,7 @@
     <!-- Error -->
     <div v-else-if="error" class="state-box">
       <el-empty description="数据加载失败">
-        <el-button type="primary" @click="load">重试</el-button>
+        <el-button type="primary" @click="load('reset')">重试</el-button>
       </el-empty>
     </div>
 
@@ -158,13 +158,32 @@ function toggleClient(clientId: string) {
   expandedState.value[clientId] = !isExpanded(clientId)
 }
 
+// reset: 当前结果全部展开；preserve: 保留仍存在 clientId 的人工状态，新 clientId 展开
+type ExpansionMode = 'reset' | 'preserve'
+
+function applyExpansion(mode: ExpansionMode, rows: FaultHistorySummaryVO[] | null) {
+  const current = new Set<string>()
+  for (const r of rows ?? []) {
+    current.add(r.clientId)
+    if (mode === 'reset') {
+      expandedState.value[r.clientId] = true
+    } else if (!(r.clientId in expandedState.value)) {
+      expandedState.value[r.clientId] = true
+    }
+  }
+  for (const key of Object.keys(expandedState.value)) {
+    if (!current.has(key)) delete expandedState.value[key]
+  }
+}
+
 function doQuery() {
   // filter is reactive; visibleCards recomputes automatically
+  applyExpansion('reset', summaryList.value)
 }
 
 function resetFilter() {
   filterClient.value = ''
-  expandedState.value = {}
+  applyExpansion('reset', summaryList.value)
 }
 
 function formatTime(val?: string | null): string {
@@ -173,13 +192,14 @@ function formatTime(val?: string | null): string {
   return idx >= 0 ? val.replace('T', ' ') : val
 }
 
-async function load() {
+async function load(mode: ExpansionMode = 'preserve') {
   loading.value = true
   error.value = false
   try {
     const res = await fetchHistorySummary()
     if (res.code === 200) {
       summaryList.value = res.data
+      applyExpansion(mode, res.data)
     } else {
       error.value = true
       ElMessage.warning(res.message || '请求失败')
@@ -191,7 +211,7 @@ async function load() {
   }
 }
 
-onMounted(load)
+onMounted(() => load('reset'))
 </script>
 
 <style scoped>
