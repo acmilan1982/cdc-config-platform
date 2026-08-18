@@ -307,24 +307,84 @@ const zkRootPathDisplay = computed(() => zkRootPath.value ?? '未配置')
 const zkConnectStringCopiable = computed(() => zkConnectString.value !== null)
 const zkRootPathCopiable = computed(() => zkRootPath.value !== null)
 
+// Fallback for LAN HTTP deployments where the Clipboard API is unavailable
+// (non-secure context). Uses a transient textarea + execCommand('copy') in the
+// synchronous user-gesture call chain, then always removes the node and
+// best-effort restores focus/selection.
+function legacyCopyText(text: string): boolean {
+  const activeEl = document.activeElement as HTMLElement | null
+  const selection = window.getSelection()
+  let prevRange: Range | null = null
+  if (selection && selection.rangeCount > 0) prevRange = selection.getRangeAt(0)
+
+  const ta = document.createElement('textarea')
+  ta.value = text
+  ta.setAttribute('readonly', '')
+  ta.style.position = 'fixed'
+  ta.style.left = '-9999px'
+  ta.style.top = '0'
+  ta.style.opacity = '0'
+  ta.style.pointerEvents = 'none'
+  document.body.appendChild(ta)
+
+  let ok = false
+  try {
+    ta.focus()
+    ta.select()
+    ta.setSelectionRange(0, text.length)
+    ok = document.execCommand('copy') === true
+  } catch {
+    ok = false
+  } finally {
+    if (ta.parentNode) ta.parentNode.removeChild(ta)
+    if (activeEl && typeof activeEl.focus === 'function') {
+      try {
+        activeEl.focus()
+      } catch {
+        /* focus restore is best-effort */
+      }
+    }
+    if (prevRange && selection && document.contains(prevRange.startContainer)) {
+      try {
+        selection.removeAllRanges()
+        selection.addRange(prevRange)
+      } catch {
+        /* selection restore is best-effort */
+      }
+    }
+  }
+  return ok
+}
+
+async function writeClipboardText(text: string): Promise<boolean> {
+  if (window.isSecureContext && navigator.clipboard?.writeText) {
+    try {
+      await navigator.clipboard.writeText(text)
+      return true
+    } catch {
+      return legacyCopyText(text)
+    }
+  }
+  return legacyCopyText(text)
+}
+
+async function copyZkConnectionValue(text: string, label: string): Promise<void> {
+  const ok = await writeClipboardText(text)
+  if (ok) {
+    ElMessage.success({ message: `${label}已复制`, grouping: true })
+  } else {
+    ElMessage.error({ message: '复制失败，请手动选择复制', grouping: true })
+  }
+}
+
 async function copyConnectString() {
   if (zkConnectString.value === null) return
-  try {
-    await navigator.clipboard.writeText(zkConnectString.value)
-    ElMessage.success('集群地址已复制')
-  } catch {
-    ElMessage.error('复制失败')
-  }
+  await copyZkConnectionValue(zkConnectString.value, '集群地址')
 }
 
 async function copyRootPath() {
   if (zkRootPath.value === null) return
-  try {
-    await navigator.clipboard.writeText(zkRootPath.value)
-    ElMessage.success('根路径已复制')
-  } catch {
-    ElMessage.error('复制失败')
-  }
+  await copyZkConnectionValue(zkRootPath.value, '根路径')
 }
 
 // Track which client cards the user has manually toggled
