@@ -76,6 +76,40 @@
     <div v-else-if="zkError" class="state-box zk-error-box">
       <el-icon class="zk-error-icon" :size="28"><WarningFilled /></el-icon>
       <p class="zk-error-text">{{ zkErrorText }}</p>
+      <div class="zk-connection-info" role="status" aria-live="polite">
+        <div v-if="zkConnectionInfoLoading" class="zk-info-placeholder">正在获取连接配置…</div>
+        <div v-else-if="zkConnectionInfoFailed" class="zk-info-placeholder">连接配置信息获取失败</div>
+        <template v-else>
+          <div class="zk-info-row">
+            <span class="zk-info-label">集群地址</span>
+            <span class="zk-info-value">{{ zkConnectStringDisplay }}</span>
+            <el-button
+              v-if="zkConnectStringCopiable"
+              link
+              type="primary"
+              size="small"
+              class="zk-copy-btn"
+              aria-label="复制集群地址"
+              title="复制集群地址"
+              @click="copyConnectString"
+            >复制</el-button>
+          </div>
+          <div class="zk-info-row">
+            <span class="zk-info-label">根路径</span>
+            <span class="zk-info-value">{{ zkRootPathDisplay }}</span>
+            <el-button
+              v-if="zkRootPathCopiable"
+              link
+              type="primary"
+              size="small"
+              class="zk-copy-btn"
+              aria-label="复制根路径"
+              title="复制根路径"
+              @click="copyRootPath"
+            >复制</el-button>
+          </div>
+        </template>
+      </div>
     </div>
 
     <!-- Empty -->
@@ -175,6 +209,7 @@ import { useRouter } from 'vue-router'
 import { ElMessage } from 'element-plus'
 import { Refresh, Loading, ArrowDown, WarningFilled } from '@element-plus/icons-vue'
 import { fetchSummary } from '@/api/jobFailure'
+import { fetchZkHealth } from '@/api/monitor'
 import type { JobFailureSummaryVO } from '@/types/jobFailure'
 import DataSourceDisplay from './components/DataSourceDisplay.vue'
 
@@ -195,6 +230,17 @@ const ZK_RETRY_MS = 60_000
 const zkRetryRemainingSeconds = ref(ZK_RETRY_SECONDS)
 const zkRetrying = ref(false)
 
+// ZK connection-target diagnostics (§6.12): separate from Summary status and the
+// retry countdown. Health config is fetched once per error lifecycle.
+const zkConnectionInfoLoading = ref(false)
+const zkConnectionInfoFailed = ref(false)
+const zkConnectString = ref<string | null>(null)
+const zkRootPath = ref<string | null>(null)
+
+let zkHealthLoadPromise: Promise<void> | null = null
+let zkConnectionInfoRequested = false
+let zkHealthEpoch = 0
+
 let timer: ReturnType<typeof setInterval> | null = null
 let zkRetryTimer: ReturnType<typeof setTimeout> | null = null
 let zkCountdownTimer: ReturnType<typeof setInterval> | null = null
@@ -213,6 +259,73 @@ const zkErrorText = computed(() =>
     ? '正在重新连接 ZooKeeper…'
     : `ZooKeeper 连接失败，将在 ${zkRetryRemainingSeconds.value} 秒后重试`
 )
+
+function resetZkConnectionInfo() {
+  zkHealthEpoch += 1
+  zkConnectionInfoLoading.value = false
+  zkConnectionInfoFailed.value = false
+  zkConnectString.value = null
+  zkRootPath.value = null
+  zkConnectionInfoRequested = false
+  zkHealthLoadPromise = null
+}
+
+function toNullableString(raw: unknown): string | null {
+  return typeof raw === 'string' && raw.trim() !== '' ? raw : null
+}
+
+function loadZkConnectionInfo() {
+  if (zkConnectionInfoRequested || zkHealthLoadPromise) return
+  zkConnectionInfoRequested = true
+  zkConnectionInfoLoading.value = true
+  zkConnectionInfoFailed.value = false
+  const epoch = zkHealthEpoch
+  const p = (async () => {
+    try {
+      const res = await fetchZkHealth()
+      if (epoch !== zkHealthEpoch) return
+      if (res.code === 200 && res.data) {
+        zkConnectString.value = toNullableString(res.data.connectString)
+        zkRootPath.value = toNullableString(res.data.rootPath)
+        zkConnectionInfoFailed.value = false
+      } else {
+        zkConnectionInfoFailed.value = true
+      }
+    } catch {
+      if (epoch !== zkHealthEpoch) return
+      zkConnectionInfoFailed.value = true
+    } finally {
+      if (epoch === zkHealthEpoch) zkConnectionInfoLoading.value = false
+      zkHealthLoadPromise = null
+    }
+  })()
+  zkHealthLoadPromise = p
+}
+
+const zkConnectStringDisplay = computed(() => zkConnectString.value ?? '未配置')
+const zkRootPathDisplay = computed(() => zkRootPath.value ?? '未配置')
+const zkConnectStringCopiable = computed(() => zkConnectString.value !== null)
+const zkRootPathCopiable = computed(() => zkRootPath.value !== null)
+
+async function copyConnectString() {
+  if (zkConnectString.value === null) return
+  try {
+    await navigator.clipboard.writeText(zkConnectString.value)
+    ElMessage.success('集群地址已复制')
+  } catch {
+    ElMessage.error('复制失败')
+  }
+}
+
+async function copyRootPath() {
+  if (zkRootPath.value === null) return
+  try {
+    await navigator.clipboard.writeText(zkRootPath.value)
+    ElMessage.success('根路径已复制')
+  } catch {
+    ElMessage.error('复制失败')
+  }
+}
 
 // Track which client cards the user has manually toggled
 const manualExpand = ref<Record<string, boolean>>({})
@@ -399,13 +512,16 @@ async function doLoad(): Promise<LoadResult> {
       error.value = false
       zkError.value = false
       lastRefreshedAt.value = formatNow()
+      resetZkConnectionInfo()
       result = 'success'
     } else if (res.message === ZK_FAILURE_MESSAGE) {
+      const firstEntry = !zkError.value
       summaryList.value = null
       error.value = false
       zkError.value = true
       lastRefreshedAt.value = ''
       result = 'zk-failure'
+      if (firstEntry) loadZkConnectionInfo()
     } else {
       if (!summaryList.value) error.value = true
       ElMessage.warning(res.message || '请求失败')
@@ -545,6 +661,7 @@ onUnmounted(() => {
   document.removeEventListener('visibilitychange', handleVisibilityChange)
   stopTimer()
   clearZkRetry()
+  resetZkConnectionInfo()
 })
 </script>
 
@@ -717,5 +834,47 @@ onUnmounted(() => {
   font-size: 15px;
   color: #f56c6c;
   font-weight: 500;
+}
+.zk-connection-info {
+  max-width: 560px;
+  width: 100%;
+  margin-top: 4px;
+  padding: 10px 14px;
+  background: #fafafa;
+  border: 1px solid #ebeef5;
+  border-radius: 8px;
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+  text-align: left;
+}
+.zk-info-placeholder {
+  font-size: 12px;
+  color: #909399;
+}
+.zk-info-row {
+  display: flex;
+  align-items: baseline;
+  gap: 10px;
+  flex-wrap: wrap;
+  min-width: 0;
+}
+.zk-info-label {
+  flex-shrink: 0;
+  font-size: 12px;
+  color: #a8abb2;
+  width: 48px;
+}
+.zk-info-value {
+  flex: 1;
+  min-width: 0;
+  font-family: monospace;
+  font-size: 12px;
+  color: #606266;
+  overflow-wrap: anywhere;
+}
+.zk-copy-btn {
+  flex-shrink: 0;
+  font-size: 12px;
 }
 </style>
