@@ -13,13 +13,21 @@
       </div>
     </div>
 
-    <!-- Identity: client + data source with ID tooltip -->
+    <!-- Identity: client + readable data source name, full ID in tooltip -->
     <div v-if="clientId && dataSourceId" class="identity-bar">
       <span class="identity-label">客户端</span>
       <span class="identity-client">{{ clientId }}</span>
       <el-divider direction="vertical" />
-      <el-tooltip :content="`数据源 ID：${dataSourceId}`" placement="top" :show-after="300">
-        <span class="identity-ds">{{ dataSourceId }}</span>
+      <span class="identity-label">数据源</span>
+      <DataSourceDisplay
+        v-if="dsContext"
+        :data-source-id="dataSourceId"
+        :data-source-org="dsContext.dataSourceOrg"
+        :data-source-exists="dsContext.dataSourceExists"
+        :data-source-active="dsContext.dataSourceActive"
+      />
+      <el-tooltip v-else :content="`数据源 ID：${dataSourceId}`" placement="top" :show-after="300">
+        <span class="identity-ds identity-ds--muted">{{ contextLoading ? '正在加载数据源信息…' : '（无法获取数据源上下文）' }}</span>
       </el-tooltip>
     </div>
 
@@ -51,15 +59,15 @@
 
     <template v-else>
       <el-table :data="records" size="small" border style="width: 100%">
-        <el-table-column label="首次失败时间" width="170">
+        <el-table-column label="首次失败时间" min-width="180">
           <template #default="{ row }">{{ formatTime(row.startTime) }}</template>
         </el-table-column>
-        <el-table-column label="最终恢复时间" width="170">
+        <el-table-column label="最终恢复时间" min-width="180">
           <template #default="{ row }">
             {{ row.recordStatus === 'RECOVERY_RECORDED' ? formatTime(row.lastRecordTime) : '--' }}
           </template>
         </el-table-column>
-        <el-table-column label="处理历时" width="120">
+        <el-table-column label="处理历时" min-width="120">
           <template #default="{ row }">{{ durationText(row) }}</template>
         </el-table-column>
         <el-table-column label="故障事件数" width="110">
@@ -68,7 +76,7 @@
         <el-table-column label="重启次数" width="100">
           <template #default="{ row }">{{ row.restartCount }}</template>
         </el-table-column>
-        <el-table-column label="本次故障处理结果" width="150">
+        <el-table-column label="本次故障处理结果" min-width="160">
           <template #default="{ row }">
             <el-tag :type="resultTagType(row)" size="small">{{ resultLabel(row) }}</el-tag>
           </template>
@@ -103,8 +111,9 @@
 import { ref, watch } from 'vue'
 import { useRoute } from 'vue-router'
 import { Refresh, Loading } from '@element-plus/icons-vue'
-import { fetchFaultHistoryList } from '@/api/jobFailure'
-import type { FaultHistoryListQuery, FaultProcessSummaryVO } from '@/types/jobFailure'
+import { fetchFaultHistoryList, fetchHistorySummary } from '@/api/jobFailure'
+import type { FaultHistoryListQuery, FaultProcessSummaryVO, FaultHistorySummaryVO } from '@/types/jobFailure'
+import DataSourceDisplay from './components/DataSourceDisplay.vue'
 
 const route = useRoute()
 
@@ -119,6 +128,10 @@ const total = ref(0)
 const loading = ref(false)
 const errorMsg = ref('')
 const retryable = ref(false)
+
+// 可信数据源上下文：来自后端 Summary，按 clientId + dataSourceId 精确匹配
+const dsContext = ref<FaultHistorySummaryVO | null>(null)
+const contextLoading = ref(false)
 
 let requestSeq = 0
 
@@ -172,11 +185,32 @@ function buildQuery(): FaultHistoryListQuery {
   }
 }
 
+async function loadContext(seq: number) {
+  contextLoading.value = true
+  dsContext.value = null
+  try {
+    const res = await fetchHistorySummary(clientId.value)
+    if (seq !== requestSeq) return
+    if (res.code === 200) {
+      const ctx = res.data.find(
+        r => r.clientId === clientId.value && r.dataSourceId === dataSourceId.value
+      )
+      if (ctx) dsContext.value = ctx
+    }
+  } catch {
+    if (seq !== requestSeq) return
+  } finally {
+    if (seq === requestSeq) contextLoading.value = false
+  }
+}
+
 async function load() {
   if (!clientId.value || !dataSourceId.value) {
     errorMsg.value = '缺少 clientId 或 dataSourceId 参数'
     records.value = []
     total.value = 0
+    dsContext.value = null
+    contextLoading.value = false
     retryable.value = false
     loading.value = false
     return
@@ -185,6 +219,7 @@ async function load() {
   loading.value = true
   errorMsg.value = ''
   retryable.value = false
+  loadContext(seq)
   try {
     const res = await fetchFaultHistoryList(buildQuery())
     if (seq !== requestSeq) return
@@ -288,6 +323,10 @@ watch(
   color: #303133;
   font-family: monospace;
   cursor: default;
+}
+.identity-ds--muted {
+  font-weight: 400;
+  color: #909399;
 }
 .query-area {
   background: #fafafa;

@@ -4,7 +4,7 @@
     <div class="page-toolbar">
       <div class="toolbar-left">
         <h2 class="page-title">故障历史</h2>
-        <el-tag v-if="summaryList" size="small" type="info">共 {{ summaryList.length }} 个数据源</el-tag>
+        <el-tag v-if="summaryList" size="small" type="info">同步平台共 {{ platformClientCount }} 个客户端，{{ platformDataSourceCount }} 个数据源</el-tag>
       </div>
       <div class="toolbar-right">
         <el-button size="small" type="primary" :loading="loading" @click="load('preserve')">
@@ -98,6 +98,8 @@
               <template #default="{ row }">
                 <RouterLink
                   :to="{ name: 'JobFailureHistoryList', query: { clientId: row.clientId, dataSourceId: row.dataSourceId } }"
+                  target="_blank"
+                  rel="noopener noreferrer"
                   class="history-link"
                 >查看历史</RouterLink>
               </template>
@@ -123,6 +125,16 @@ const error = ref(false)
 
 const filterClient = ref('')
 const expandedState = ref<Record<string, boolean>>({})
+
+// 平台整体规模：始终从未筛选的完整 Summary 计算，不随客户端筛选变化
+const platformClientCount = computed(() => {
+  if (!summaryList.value) return 0
+  const seen = new Set<string>()
+  for (const r of summaryList.value) seen.add(r.clientId)
+  return seen.size
+})
+
+const platformDataSourceCount = computed(() => (summaryList.value ? summaryList.value.length : 0))
 
 const clientOptions = computed(() => {
   if (!summaryList.value) return []
