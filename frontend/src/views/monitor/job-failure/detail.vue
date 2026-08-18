@@ -92,16 +92,6 @@
           @view-error="(logId: string) => openClob('FAILURE_HANDLE_LOG_ERROR_DETAIL', logId)"
         />
       </el-card>
-
-      <!-- Section: Fault History -->
-      <el-card shadow="never" class="detail-section">
-        <template #header><span class="section-title">历史故障过程</span></template>
-        <FaultHistory
-          :client-id="detail.clientId"
-          :data-source-id="detail.dataSourceId"
-          :current-fault-root-id="detail.faultRootIdText ?? null"
-        />
-      </el-card>
     </template>
 
     <!-- CLOB Dialog -->
@@ -126,7 +116,6 @@ import FaultProcessOverview from './components/FaultProcessOverview.vue'
 import PhysicalJobChain from './components/PhysicalJobChain.vue'
 import FailureEventList from './components/FailureEventList.vue'
 import RestartCards from './components/RestartCards.vue'
-import FaultHistory from './components/FaultHistory.vue'
 import ClobDetailDialog from './components/ClobDetailDialog.vue'
 
 const route = useRoute()

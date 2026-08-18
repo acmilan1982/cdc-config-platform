@@ -114,6 +114,32 @@ export interface HistoryQuery {
   pageSize: number
 }
 
+// ==================== API-6: Fault History Summary ====================
+
+export interface FaultHistorySummaryVO {
+  clientId: string
+  dataSourceId: string
+  dataSourceOrg?: string | null
+  dataSourceExists: boolean
+  dataSourceActive?: boolean | null
+  todayFailureCount: number
+  last7DaysFailureCount: number
+  last30DaysFailureCount: number
+  latestFailureTime?: string | null
+  latestProcessStatus?: string | null
+  latestProcessStatusLabel?: string | null
+}
+
+// ==================== API-7: Fault History List ====================
+
+export interface FaultHistoryListQuery {
+  clientId: string
+  dataSourceId: string
+  range: 'TODAY' | 'LAST_7_DAYS' | 'LAST_30_DAYS'
+  page: number
+  pageSize: number
+}
+
 // ==================== API-5: CLOB ====================
 
 export interface ClobDetailVO {

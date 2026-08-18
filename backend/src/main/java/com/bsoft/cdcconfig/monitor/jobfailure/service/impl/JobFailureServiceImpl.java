@@ -442,7 +442,7 @@ public class JobFailureServiceImpl implements JobFailureService {
         return logMapper.selectList(wrapper);
     }
 
-    private static FaultEventModel toFaultEventModel(JobFailureEvent e) {
+    static FaultEventModel toFaultEventModel(JobFailureEvent e) {
         FaultEventModel m = new FaultEventModel();
         m.setId(e.getId());
         m.setClientId(e.getClientId());
@@ -454,7 +454,7 @@ public class JobFailureServiceImpl implements JobFailureService {
         return m;
     }
 
-    private static FaultLogModel toFaultLogModel(JobFailureHandleLog l) {
+    static FaultLogModel toFaultLogModel(JobFailureHandleLog l) {
         FaultLogModel m = new FaultLogModel();
         m.setId(l.getId());
         m.setFailureEventId(l.getFailureEventId());
@@ -602,6 +602,11 @@ public class JobFailureServiceImpl implements JobFailureService {
     }
 
     private FaultProcessSummaryVO toSummaryVO(FaultProcessGroup group) {
+        return toSummaryVO(group, assembler);
+    }
+
+    /** 共享过程摘要 VO 构建，供本服务与故障历史服务复用（JFM-API-007 状态口径一致）。 */
+    static FaultProcessSummaryVO toSummaryVO(FaultProcessGroup group, FaultProcessAssembler assembler) {
         FaultProcessSummaryVO vo = new FaultProcessSummaryVO();
         vo.setFaultRootId(group.getFaultRootId());
         vo.setFaultRootIdText(idText(group.getFaultRootId()));

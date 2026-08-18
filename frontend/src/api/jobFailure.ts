@@ -2,6 +2,8 @@ import http from '@/services/http'
 import type { ApiResponse } from '@/types/monitor'
 import type {
   JobFailureSummaryVO,
+  FaultHistorySummaryVO,
+  FaultHistoryListQuery,
   FaultProcessDetailVO,
   FaultProcessSummaryVO,
   HistoryQuery,
@@ -28,6 +30,26 @@ export async function fetchHistory(
 ): Promise<ApiResponse<PageResult<FaultProcessSummaryVO>>> {
   const res = await http.get<ApiResponse<PageResult<FaultProcessSummaryVO>>>(
     `/api/job-failure/history/${encodeURIComponent(clientId)}/${encodeURIComponent(dataSourceId)}`,
+    { params }
+  )
+  return res.data
+}
+
+export async function fetchHistorySummary(
+  clientId?: string
+): Promise<ApiResponse<FaultHistorySummaryVO[]>> {
+  const res = await http.get<ApiResponse<FaultHistorySummaryVO[]>>(
+    '/api/job-failure/history/summary',
+    { params: clientId ? { clientId } : undefined }
+  )
+  return res.data
+}
+
+export async function fetchFaultHistoryList(
+  params: FaultHistoryListQuery
+): Promise<ApiResponse<PageResult<FaultProcessSummaryVO>>> {
+  const res = await http.get<ApiResponse<PageResult<FaultProcessSummaryVO>>>(
+    '/api/job-failure/history/list',
     { params }
   )
   return res.data

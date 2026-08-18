@@ -2,9 +2,12 @@ package com.bsoft.cdcconfig.monitor.jobfailure.controller;
 
 import com.bsoft.cdcconfig.common.api.ApiResponse;
 import com.bsoft.cdcconfig.common.page.PageResult;
+import com.bsoft.cdcconfig.monitor.jobfailure.query.FaultHistoryListQuery;
 import com.bsoft.cdcconfig.monitor.jobfailure.query.HistoryQuery;
+import com.bsoft.cdcconfig.monitor.jobfailure.service.FaultHistoryService;
 import com.bsoft.cdcconfig.monitor.jobfailure.service.JobFailureService;
 import com.bsoft.cdcconfig.monitor.jobfailure.vo.ClobDetailVO;
+import com.bsoft.cdcconfig.monitor.jobfailure.vo.FaultHistorySummaryVO;
 import com.bsoft.cdcconfig.monitor.jobfailure.vo.FaultProcessDetailVO;
 import com.bsoft.cdcconfig.monitor.jobfailure.vo.FaultProcessSummaryVO;
 import com.bsoft.cdcconfig.monitor.jobfailure.vo.JobFailureSummaryVO;
@@ -14,6 +17,7 @@ import io.swagger.v3.oas.annotations.tags.Tag;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
 import java.util.List;
@@ -24,9 +28,12 @@ import java.util.List;
 public class JobFailureController {
 
     private final JobFailureService jobFailureService;
+    private final FaultHistoryService faultHistoryService;
 
-    public JobFailureController(JobFailureService jobFailureService) {
+    public JobFailureController(JobFailureService jobFailureService,
+                                FaultHistoryService faultHistoryService) {
         this.jobFailureService = jobFailureService;
+        this.faultHistoryService = faultHistoryService;
     }
 
     @Operation(summary = "API-1: 故障逻辑Job全量汇总",
@@ -57,6 +64,25 @@ public class JobFailureController {
         query.setClientId(clientId);
         query.setDataSourceId(dataSourceId);
         PageResult<FaultProcessSummaryVO> page = jobFailureService.queryHistory(query);
+        return ApiResponse.success(page);
+    }
+
+    @Operation(summary = "API-6: 故障历史概览",
+            description = "按自然日统计当前启用配置全集数据源的今日/近7天/近30天故障次数、最近故障时间与处理结果。纯数据库历史统计，不读取ZooKeeper、不加载CLOB。")
+    @GetMapping("/history/summary")
+    public ApiResponse<List<FaultHistorySummaryVO>> historySummary(
+            @Parameter(description = "客户端ID，可选；只能命中启用客户端")
+            @RequestParam(required = false) String clientId) {
+        List<FaultHistorySummaryVO> list = faultHistoryService.querySummary(clientId);
+        return ApiResponse.success(list);
+    }
+
+    @Operation(summary = "API-7: 故障历史分页列表",
+            description = "单个当前配置数据源的自然日故障历史分页。range仅支持 TODAY / LAST_7_DAYS / LAST_30_DAYS，"
+                    + "pageSize仅支持 20 / 50 / 100。服务端校验该数据源当前仍属启用客户端现行配置。")
+    @GetMapping("/history/list")
+    public ApiResponse<PageResult<FaultProcessSummaryVO>> historyList(FaultHistoryListQuery query) {
+        PageResult<FaultProcessSummaryVO> page = faultHistoryService.queryHistory(query);
         return ApiResponse.success(page);
     }
 
