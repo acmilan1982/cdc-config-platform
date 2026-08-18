@@ -1,7 +1,5 @@
 # Job 失败事件监控（job-failure-monitor）
 
-> 注：概览页调整需求已批准、实现待开发（详见 REQUIREMENTS.md §6.3）；本文档仍描述调整前的当前实现。
-
 ## 1. 功能名称
 
 **Job 失败事件监控**（菜单和页面标题："故障监控"）。
@@ -46,29 +44,27 @@
 
 ### 4.2 启用范围过滤
 
-客户端和采集任务都只展示已启用的记录：
+客户端只展示启用的记录：
 
 | 表 | 过滤字段 | 过滤值 |
 |---|---|---|
 | `CDC_CLIENT_MULTIPLE` | `FG_ACTIVE` | `'1'` |
-| `CDC_DATA_SOURCE` | `FG_ACTIVE` | `'1'` |
 
 规则：
 
 - 只展示启用客户端（`CDC_CLIENT_MULTIPLE.FG_ACTIVE = '1'`）；
-- 只展示启用数据源（`CDC_DATA_SOURCE.FG_ACTIVE = '1'`）；
-- 停用客户端不进入页面展示范围；
-- 停用数据源不作为采集任务展示。
+- 停用客户端不进入页面展示范围。
+
+数据源展示存在概览页局部例外（详见 REQUIREMENTS.md §5.2、§6.5）：故障监控概览页以 `CDC_CLIENT_MULTIPLE.DATA_SOURCE_ID` 的配置内容为展示全集，按英文逗号拆分的每个非空 ID 无论 `CDC_DATA_SOURCE` 中是否存在、`FG_ACTIVE` 为何值都必须显示；存在但未激活显示红字 `(数据源未激活)`，不存在显示红字 `无效数据源`。其他功能场景仍按 `CDC_DATA_SOURCE.FG_ACTIVE = '1'` 的一般过滤规则。
 
 ### 4.3 当前实现状态
 
-已实现：`CDC_CLIENT_MULTIPLE` 的 `FG_ACTIVE = '1'` 过滤（`JobFailureServiceImpl` 第 76 行）。
-
-未实现：`CDC_DATA_SOURCE` 的 `FG_ACTIVE = '1'` 过滤（见 §13 GAP-FILTER-001）。
+- 已实现：`CDC_CLIENT_MULTIPLE` 的 `FG_ACTIVE = '1'` 过滤（`JobFailureServiceImpl`）；
+- 概览页多数据源拆分与异常数据源展示已实现并验收，`CDC_DATA_SOURCE` 的 `FG_ACTIVE` 过滤在概览页范围内由页面例外规则替代（见 §6.5），不再作为概览页缺陷（详见 REQUIREMENTS.md §19 GAP-FILTER-001）。
 
 ### 4.4 明确不读取的数据源
 
-- ZooKeeper（任何路径）
+- ZooKeeper 业务节点数据（在概览页范围内除外：只读判断客户端/Job `alive` 临时节点存在性，用于在线/离线运行状态，见 §8.1）
 - `CDC_DATA_SOURCE_RUN_STATE` 或其他 RUN_STATE 表
 - `CDC_CLIENT` 表（已废弃）
 
@@ -77,14 +73,26 @@
 **严格只读：**
 
 - 不向任何业务表写入数据；
-- 不读取 ZooKeeper（任何路径）；
+- 概览页只读判断 ZooKeeper `alive` 临时节点存在性（客户端/Job 在线状态），不写 ZooKeeper、不创建或删除任何 ZK 节点；其他 ZK 路径不读取；
 - 不提供重启、停止、修改或删除操作。
+
+**ZooKeeper 运行状态读取路径**（根路径为当前配置/示例 `/bsoft-cdc`，运行时以 `GET /api/monitor/zookeeper/health` 返回的 `rootPath` 为准）：
+
+```text
+/bsoft-cdc/clients/{clientId}/alive
+/bsoft-cdc/clients/{clientId}/jobs/{jobCode}/alive
+```
+
+- `{clientId}` 来自启用的 `CDC_CLIENT_MULTIPLE.CLIENT_ID`；
+- `{jobCode}` 为 `CDC_CLIENT_MULTIPLE.DATA_SOURCE_ID` 按英文逗号拆分后的单个数据源 ID；
+- `alive` 为临时节点，只判断存在性（存在=在线，不存在=离线），不读取其内容；
+- 复用现有只读 ZooKeeper 客户端，不创建第二套连接。
 
 ## 6. 与其他功能的职责关系
 
 | 功能 | 职责 | 与本功能的关系 |
 |---|---|---|
-| **zk-node-monitor**（ZK 节点监控） | ZK 实时在线状态和 SCN 监控 | 职责分离：ZK 监控展示 ZK 节点级运行信息，本功能展示数据库中的故障事件和处理链路。Flink Job ID 与 ZK jobName 是两套独立标识体系，不交叉引用 |
+| **zk-node-monitor**（ZK 节点监控） | ZK 实时在线状态和 SCN 监控 | 职责互补：ZK 监控展示 ZK 节点级运行信息；本功能概览页只读判断客户端/Job `alive` 节点存在性以补充"运行状态"，并继续展示数据库中的故障事件和处理链路。Flink Job ID 与 ZK jobName 是两套独立标识体系，不交叉引用 |
 | **large-screen**（数据同步统计大屏） | 基于 CDC 日志的增量统计可视化 | 职责分离：大屏展示统计聚合数据，本功能追踪故障生命周期 |
 | **数据源/客户端/订阅配置管理** | CDC 配置数据的 CRUD 维护 | 职责分离：本功能只读监控，配置管理读写数据库 |
 
@@ -99,6 +107,13 @@
 | Controller | `backend/src/main/java/com/bsoft/cdcconfig/monitor/jobfailure/controller/JobFailureController.java` | REST Controller，5 个 API 端点 |
 | Service 接口 | `backend/src/main/java/com/bsoft/cdcconfig/monitor/jobfailure/service/JobFailureService.java` | 服务接口定义 |
 | Service 实现 | `backend/src/main/java/com/bsoft/cdcconfig/monitor/jobfailure/service/impl/JobFailureServiceImpl.java` | 核心编排：加载数据、调用算法管线、构建 VO |
+
+#### 7.1.1 后端 — ZooKeeper 运行状态融合（runtime）
+
+| 层次 | 文件 | 职责 |
+|---|---|---|
+| 运行状态读取 | `backend/src/main/java/com/bsoft/cdcconfig/monitor/jobfailure/runtime/JobRuntimeStatusReader.java` | 按 ZK `alive` 节点存在性判断客户端/Job 在线状态；客户端离线时短路，不读取其 Job `alive` |
+| 运行状态快照 | `backend/src/main/java/com/bsoft/cdcconfig/monitor/jobfailure/runtime/JobRuntimeSnapshot.java` | 一次运行状态读取的结果快照，供 Summary 与数据库故障事实组合展示 |
 
 ### 7.2 后端 — 数据访问
 
@@ -203,22 +218,25 @@
 
 ### 8.1 概览页（Overview）
 
-- **查询区**：客户端（多选下拉）、数据源 ID（下拉，精确匹配）、Job 当前状态（正常/恢复中）、查询/重置按钮
+- **查询区**：客户端（多选下拉）、Job 当前状态（正常/恢复中/离线）、查询/重置按钮（无"数据源 ID"查询条件）
 - **自动刷新**：1 分钟 / 60 分钟 / 360 分钟可选，显示最后刷新时间
-- **客户端卡片**：按客户端分组，标题显示 `CLIENT_ID | Job 总数 N | 正常 N | 异常 N`
+- **客户端卡片**：按客户端分组，全宽单列，头部显示 `[在线/离线状态圆点 + 文字] 客户端 ID 展开/折叠箭头`（不显示 Job 总数/正常/异常）
+- **数据源表格**：严格 6 列（数据源、Job 当前状态、最近故障时间、最近恢复时间、故障期间恢复尝试、操作）；"数据源"列显示 `DATA_SOURCE_ORG`（空值显示"未定义名称"，未激活加红字 `(数据源未激活)`，无记录显示红字 `无效数据源`），悬停 Tooltip 显示完整 `DATA_SOURCE_ID`
 - **首次加载**：所有卡片默认展开
 - **刷新行为**：保持用户当前的展开/折叠状态
-- **卡片排序**：异常客户端优先，同状态按 clientId 字母序
-- **业务库表格**：7 列（数据源 ID、数据源名称、Job 当前状态、最近故障时间、最近恢复时间、故障期间恢复尝试、操作）
-- **详情入口**：仅当存在最近故障时，点击"查看"进入该业务库最近一次故障的详情页（新标签页）
+- **卡片排序**：离线客户端 → 在线且存在异常/恢复中 Job → 在线但存在离线 Job → 在线全部正常 → 同层按 clientId 升序
+- **详情入口**：仅当存在最近故障时，点击"查看"进入该数据源最近一次故障的详情页（同标签页导航）
 - **无故障处理**：无历史故障时，故障相关字段显示 `—`，不显示详情入口
+- **ZooKeeper 运行状态融合**：概览页同时使用数据库故障事实与 ZooKeeper `alive` 运行状态；客户端 `alive` 不存在 → 该客户端离线、其下所有 Job 显示"离线"并短路 Job alive 读取；客户端在线、某 Job `alive` 不存在 → 该 Job 显示"离线"；客户端与 Job 均在线 → 使用数据库故障逻辑计算的状态；页面不引入"未知"状态
+- **ZK 连接失败错误态**：Summary 无法可靠读取 ZK 时页面进入统一错误态，不把读取异常判定成所有客户端离线，也不显示任何客户端卡片、统计或上次成功的旧数据；等待期间动态显示"ZooKeeper 连接失败，将在 {N} 秒后重试"（60～1 秒），到点重试期间显示"正在重新连接 ZooKeeper…"，失败后重新从 60 秒开始；感叹号柔和呼吸动画（`prefers-reduced-motion: reduce` 下关闭动画、保留完整信息）；60 秒自动重试、顶部手动刷新（点击立即重试）与页面常规自动刷新周期相互独立且共享请求在途保护；成功后清除错误态并恢复客户端卡片
+- **集群连接目标诊断**：ZK 错误态倒计时下方通过 `GET /api/monitor/zookeeper/health` 展示运行时生效的完整"集群地址"（connectString）与"根路径"（rootPath），单错误生命周期只请求一次；集群连接串展示全部逗号分隔地址，不表示某一台是"当前连接节点"，也不据此断言单台服务宕机；加载失败或空值有降级显示（"未配置"/"连接配置信息获取失败"）；`health.connected` 不覆盖 Summary 错误态；页面不展示 health 内部错误消息与敏感配置；两个字段提供复制按钮，复制完整原始值（HTTPS/localhost 安全上下文优先使用 Clipboard API，局域网 HTTP 非安全上下文使用同步临时 textarea + `document.execCommand('copy')` 兼容回退——仅作为当前局域网 HTTP 部署的兼容回退路径，不作为全局推荐方案），成功/失败有反馈、同类提示合并、临时 DOM 会清理且不影响倒计时和请求
 
 ### 8.2 详情页（Detail）
 
 - **两种访问模式**：同一个 `detail.vue` 支持两种模式——最近一次故障（前端路由 `/monitor/job-failure/detail?clientId=<clientId>&dataSourceId=<dataSourceId>`，调用 Latest API `/api/job-failure/latest/{clientId}/{dataSourceId}`）与指定历史故障过程（前端路由 `/monitor/job-failure/process/:faultRootId`，路由名 `JobFailureProcessDetail`，调用 Process API `/api/job-failure/process/{faultRootId}`）。前端页面路由与后端 API 路径相互独立
-- **故障概览**：客户端、业务库、故障根事件 ID、首次失败时间、最近处理时间、重启次数、当前处理状态
-- **物理 Job 链**：单行横向滚动，红色（异常标记）/绿色（正常）节点
-- **事件列表**：主链事件表格，ID 截断（≤16 字符完整显示，>16 字符显示前6…后8）
+- **故障概览**：2×3 网格（客户端、数据源、本次故障处理结果 / 首次失败时间、最近处理时间、处理概况）；根事件 ID 不占用网格，只在详情页标题展示（过长缩略 + Tooltip 完整 + 复制按钮）
+- **Job 重启轨迹**：单行横向滚动，红色（异常标记）/绿色（正常）节点
+- **故障发生明细**：主链事件表格，5 列（故障事件 ID、发生故障的 Job ID、故障时间、事件处理结果、操作），ID 截断（≤16 字符完整显示，>16 字符显示前6…后8）；未计入本次故障的事件单独成表展示
 - **恢复尝试卡片**：以 `RESTART_STARTED` 日志为界分组，每组一张卡片，绿色（含 STABLE_CHECK_PASSED）/红色（无），升序排列
 - **故障历史**：时间范围下拉（最近一天/最近一周/最近一个月），不显示传统分页组件，所选范围内的全部符合条件记录必须可见；"查看"为真实链接，普通点击在当前标签页打开指定过程，支持浏览器原生 Ctrl/Cmd+单击、中键、右键菜单新开标签页，URL 可复制、可刷新、可后退/前进，打开后回到详情顶部
 - **精确 ID**：历史链接、路由参数与 Process API 请求均使用 `faultRootIdText` 精确字符串，不经 JavaScript number 中转，超出安全整数范围的根事件 ID 仍逐字符精确
@@ -233,8 +251,11 @@
 | API-3 | GET | `/api/job-failure/history/{clientId}/{dataSourceId}` | 历史故障：按时间范围查询，需 `startTime`/`endTime` |
 | API-4 | GET | `/api/job-failure/process/{faultRootId}` | 故障过程详情：按 `faultRootId` 查询任意一次故障过程 |
 | API-5 | GET | `/api/job-failure/clob/{faultRootId}/{clobField}/{recordId}` | CLOB 内容：按需懒加载，`recordId` 用于校验记录归属 |
+| API-6 | GET | `/api/monitor/zookeeper/health` | ZooKeeper 连接健康检查：只读返回运行时生效的集群地址（connectString）、根路径（rootPath）与连接状态，供概览页 ZK 错误态诊断展示 |
 
 所有接口均返回 `ApiResponse<T>` 统一响应格式（code/message/data）。
+
+> 注：Summary API（API-1）的响应除数据库故障事实外，还携带 ZooKeeper 运行状态融合结果（客户端/Job 在线、离线）；`/api/monitor/zookeeper/health`（API-6）单独提供连接目标与健康信息，不读取业务节点数据。
 
 ## 10. 核心业务对象
 
@@ -244,7 +265,7 @@
 逻辑 Job = (CLIENT_ID, DATA_SOURCE_ID)
 ```
 
-两个字段联合唯一确定一个"业务库"。主集合来源为 `CDC_CLIENT_MULTIPLE` 表中 `FG_ACTIVE = '1'` 的记录。
+两个字段联合唯一确定一个"数据源"（即概览页展示的数据源对象）。主集合来源为 `CDC_CLIENT_MULTIPLE` 表中 `FG_ACTIVE = '1'` 的记录。
 
 ### 10.2 物理 Job ID
 
@@ -280,7 +301,7 @@ Flink 作业的唯一标识（32 位 hex 字符串），存储在 `FAILED_JOB_ID
 
 | 层次 | 状态体系 | 数量 | 用途 |
 |---|---|---|---|
-| 对外 Job 当前状态 | 正常、恢复中 | 2 种 | 概览页和接口面向用户展示 |
+| 对外 Job 当前状态 | 正常、恢复中、离线 | 3 种 | 概览页和接口面向用户展示；"离线"由 ZooKeeper `alive` 临时节点存在性判定（客户端/Job alive 不存在），页面不引入"未知"状态 |
 | 对外故障过程状态 | 流程异常、恢复失败、重启中、等待重启、已恢复 | 5 种 | 详情页和接口面向用户展示 |
 | 内部计算结果 | `FaultProcessResult` | 3 种 | 后端内部计算 |
 | 内部记录状态 | `RecordStatus` | 9 种 | 处理日志和流程阶段识别 |
@@ -374,17 +395,19 @@ Flink 作业的唯一标识（32 位 hex 字符串），存储在 `FAILED_JOB_ID
 
 | 差距编号 | 类别 | 需求 | 当前实现 | 影响 |
 |---|---|---|---|---|
-| GAP-FILTER-001 | 数据过滤 | `CDC_DATA_SOURCE` 须过滤 `FG_ACTIVE = '1'` | `DataSourceMapper.selectBatchIds()` 未添加 FG_ACTIVE 过滤 | 停用数据源可能被展示 |
+| GAP-FILTER-001 | 数据过滤 | `CDC_DATA_SOURCE` 须过滤 `FG_ACTIVE = '1'` | `DataSourceMapper.selectBatchIds()` 未添加 FG_ACTIVE 过滤；概览页范围内由页面例外规则替代（§4.2/§4.3），GAP-FILTER-001 在概览页范围已关闭 | 停用数据源可能被展示 |
 | GAP-STATUS-001 | 对外状态 | 对外故障过程状态须为 5 种正式状态，内部枚举不得直接对外返回 | 代码中 `FaultProcessResult`（3 种）和 `RecordStatus`（9 种）通过 VO 直接返回前端 | 页面状态标签与正式需求不一致 |
 | GAP-STATUS-002 | 状态映射 | 须实现统一的内部→对外映射层 | 前端硬编码 `RECOVERY_RECORDED → '已恢复'`，其余透传 `recordStatusLabel` | 映射不完整、不统一 |
 | GAP-STATUS-003 | 恢复失败判定 | 须实现"恢复失败"的统一判定规则 | 代码不存在"恢复失败"概念。`SUBMIT_FAILED`、`RESTART_SKIPPED`、部分 `NOT_CLOSED` 仅为候选证据，从当前代码无法唯一确定"恢复失败"的精确判定条件，不得使用"其他情况"兜底 | "恢复失败"对外状态当前无对应实现 |
 | GAP-HISTORY-001 | 历史全量返回 | 无传统分页组件，所选时间范围内全部记录可见 | 前端固定 `pageSize=1000`（`FaultHistory.vue` 第 148 行），后端服务端分页 | 超过 1000 条时可能静默截断 |
 
+> 注：ZooKeeper 运行状态融合（`GAP-OVERVIEW-ZK-STATUS-001`）、集群连接目标诊断（`GAP-OVERVIEW-ZK-CONNECTION-TARGET-001`）、重试倒计时（`GAP-OVERVIEW-ZK-RETRY-COUNTDOWN-001`）与概览整体收口（`GAP-OVERVIEW-001`）均已关闭，关闭原因与历史说明见 REQUIREMENTS.md §19，不再作为未完成差距列入上表。
+
 ## 14. 运行与维护约束
 
 - **分支**：仅 `develop` 分支开发
 - **数据只读**：不写入任何业务数据
-- **不读 ZooKeeper**：本功能完全基于数据库查询
+- **ZooKeeper 只读**：概览页只读判断 `alive` 临时节点存在性以补充在线/离线运行状态（客户端离线时短路，不读取其 Job alive），不写 ZooKeeper、不创建或删除节点；本功能其余数据完全基于数据库查询
 - **表只插不更不删**：两张故障表由 CDC 同步程序维护，管理平台不得修改
 - **无认证**：当前无用户认证机制
 
