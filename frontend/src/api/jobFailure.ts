@@ -47,8 +47,8 @@ export async function fetchHistorySummary(
 
 export async function fetchFaultHistoryList(
   params: FaultHistoryListQuery
-): Promise<ApiResponse<PageResult<FaultProcessSummaryVO>>> {
-  const res = await http.get<ApiResponse<PageResult<FaultProcessSummaryVO>>>(
+): Promise<ApiResponse<FaultProcessSummaryVO[]>> {
+  const res = await http.get<ApiResponse<FaultProcessSummaryVO[]>>(
     '/api/job-failure/history/list',
     { params }
   )

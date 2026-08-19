@@ -1,7 +1,6 @@
 package com.bsoft.cdcconfig.monitor.jobfailure.service.impl;
 
 import com.baomidou.mybatisplus.core.conditions.query.LambdaQueryWrapper;
-import com.bsoft.cdcconfig.common.page.PageResult;
 import com.bsoft.cdcconfig.datasource.entity.DataSource;
 import com.bsoft.cdcconfig.datasource.mapper.DataSourceMapper;
 import com.bsoft.cdcconfig.monitor.jobfailure.algorithm.FaultEventModel;
@@ -27,7 +26,6 @@ import org.springframework.stereotype.Service;
 import java.time.Clock;
 import java.time.LocalDateTime;
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.Collections;
 import java.util.Comparator;
 import java.util.HashMap;
@@ -46,7 +44,6 @@ import java.util.stream.Collectors;
 @Service
 public class FaultHistoryServiceImpl implements FaultHistoryService {
 
-    private static final Set<Integer> ALLOWED_PAGE_SIZES = new HashSet<>(Arrays.asList(20, 50, 100));
     private static final String JOB_KEY_SEPARATOR = "";
 
     private final JobFailureEventMapper eventMapper;
@@ -154,19 +151,13 @@ public class FaultHistoryServiceImpl implements FaultHistoryService {
         return result;
     }
 
-    // ==================== JFM-API-007: 分页历史列表 ====================
+    // ==================== JFM-API-007: 完整历史列表（不分页） ====================
 
     @Override
-    public PageResult<FaultProcessSummaryVO> queryHistory(FaultHistoryListQuery query) {
+    public List<FaultProcessSummaryVO> queryHistory(FaultHistoryListQuery query) {
         FaultHistoryRange range = FaultHistoryRange.from(query.getRange());
         if (range == null) {
             throw JobFailureErrorCode.historyRangeInvalid(query.getRange());
-        }
-        if (query.getPage() < 1) {
-            throw JobFailureErrorCode.historyPageInvalid(query.getPage());
-        }
-        if (!ALLOWED_PAGE_SIZES.contains(query.getPageSize())) {
-            throw JobFailureErrorCode.historyPageSizeInvalid(query.getPageSize());
         }
 
         validateCurrentConfig(query.getClientId(), query.getDataSourceId());
@@ -189,16 +180,9 @@ public class FaultHistoryServiceImpl implements FaultHistoryService {
             return Long.compare(a.getFaultRootId(), b.getFaultRootId());
         });
 
-        int total = filtered.size();
-        int fromIndex = (query.getPage() - 1) * query.getPageSize();
-        int toIndex = Math.min(fromIndex + query.getPageSize(), total);
-        if (fromIndex >= total) {
-            return new PageResult<>(Collections.emptyList(), total, query.getPage(), query.getPageSize());
-        }
-        List<FaultProcessSummaryVO> vos = filtered.subList(fromIndex, toIndex).stream()
+        return filtered.stream()
                 .map(g -> JobFailureServiceImpl.toSummaryVO(g, assembler))
                 .collect(Collectors.toList());
-        return new PageResult<>(vos, total, query.getPage(), query.getPageSize());
     }
 
     // ==================== 概览构建 ====================

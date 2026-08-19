@@ -13,8 +13,6 @@ public final class JobFailureErrorCode {
     public static final int ZK_STATUS_UNAVAILABLE = 50010;
     public static final int HISTORY_DATA_SOURCE_NOT_IN_CURRENT_CONFIG = 40403;
     public static final int HISTORY_RANGE_INVALID = 40007;
-    public static final int HISTORY_PAGE_INVALID = 40008;
-    public static final int HISTORY_PAGE_SIZE_INVALID = 40009;
 
     public static BusinessException faultRootNotFound(Long faultRootId) {
         return new BusinessException(FAULT_ROOT_NOT_FOUND,
@@ -48,14 +46,5 @@ public final class JobFailureErrorCode {
     public static BusinessException historyRangeInvalid(String range) {
         return new BusinessException(HISTORY_RANGE_INVALID,
                 "无效的时间范围: " + range + "（仅支持 TODAY / LAST_7_DAYS / LAST_30_DAYS）");
-    }
-
-    public static BusinessException historyPageInvalid(int page) {
-        return new BusinessException(HISTORY_PAGE_INVALID, "无效的页码: " + page + "（page 必须 >= 1）");
-    }
-
-    public static BusinessException historyPageSizeInvalid(int pageSize) {
-        return new BusinessException(HISTORY_PAGE_SIZE_INVALID,
-                "无效的每页条数: " + pageSize + "（仅支持 20 / 50 / 100）");
     }
 }

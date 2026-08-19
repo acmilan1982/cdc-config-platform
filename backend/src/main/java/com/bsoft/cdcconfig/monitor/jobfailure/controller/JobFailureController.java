@@ -77,13 +77,14 @@ public class JobFailureController {
         return ApiResponse.success(list);
     }
 
-    @Operation(summary = "API-7: 故障历史分页列表",
-            description = "单个当前配置数据源的自然日故障历史分页。range仅支持 TODAY / LAST_7_DAYS / LAST_30_DAYS，"
-                    + "pageSize仅支持 20 / 50 / 100。服务端校验该数据源当前仍属启用客户端现行配置。")
+    @Operation(summary = "API-7: 故障历史完整列表（不分页）",
+            description = "单个当前配置数据源的自然日故障历史完整列表，一次性返回所选范围内全部故障过程。"
+                    + "参数仅 clientId / dataSourceId / range（TODAY / LAST_7_DAYS / LAST_30_DAYS），不接受任何分页参数。"
+                    + "服务端校验该数据源当前仍属启用客户端现行配置。")
     @GetMapping("/history/list")
-    public ApiResponse<PageResult<FaultProcessSummaryVO>> historyList(FaultHistoryListQuery query) {
-        PageResult<FaultProcessSummaryVO> page = faultHistoryService.queryHistory(query);
-        return ApiResponse.success(page);
+    public ApiResponse<List<FaultProcessSummaryVO>> historyList(FaultHistoryListQuery query) {
+        List<FaultProcessSummaryVO> list = faultHistoryService.queryHistory(query);
+        return ApiResponse.success(list);
     }
 
     @Operation(summary = "API-4: 指定故障过程详情",

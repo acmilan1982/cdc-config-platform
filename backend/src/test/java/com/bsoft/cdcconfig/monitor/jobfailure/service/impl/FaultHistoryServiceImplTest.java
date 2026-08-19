@@ -5,7 +5,6 @@ import com.baomidou.mybatisplus.core.conditions.query.LambdaQueryWrapper;
 import com.baomidou.mybatisplus.core.metadata.TableInfoHelper;
 import com.baomidou.mybatisplus.core.toolkit.GlobalConfigUtils;
 import com.bsoft.cdcconfig.common.exception.BusinessException;
-import com.bsoft.cdcconfig.common.page.PageResult;
 import com.bsoft.cdcconfig.datasource.entity.DataSource;
 import com.bsoft.cdcconfig.datasource.mapper.DataSourceMapper;
 import com.bsoft.cdcconfig.monitor.jobfailure.entity.CdcClientMultiple;
@@ -272,49 +271,43 @@ class FaultHistoryServiceImplTest {
         verify(dataSourceMapper, never()).selectById(any());
     }
 
-    // ==================== JFM-API-007 分页列表 ====================
+    // ==================== JFM-API-007 完整列表（不分页） ====================
 
     @Test
-    void history_rangeFilteringSortAndPagination() {
+    void history_rangeFilteringSortAndFullReturn() {
         stubBoundaryScenario();
 
-        // TODAY：仅一条两事件链
-        FaultHistoryListQuery today = query("c1", "ds-a", "TODAY", 1, 20);
-        PageResult<FaultProcessSummaryVO> todayPage = service.queryHistory(today);
-        assertEquals(1, todayPage.getTotal());
-        FaultProcessSummaryVO root1 = todayPage.getRecords().get(0);
+        // TODAY：仅一条两事件链，完整返回
+        List<FaultProcessSummaryVO> todayList = service.queryHistory(query("c1", "ds-a", "TODAY"));
+        assertEquals(1, todayList.size());
+        FaultProcessSummaryVO root1 = todayList.get(0);
         assertEquals("1", root1.getFaultRootIdText());
         assertEquals(LocalDateTime.of(2026, 8, 18, 2, 0, 0), root1.getStartTime());
         assertEquals(2, root1.getMainChainEventCount());
         assertEquals(1, root1.getRestartCount());
         assertEquals("RECOVERY_RECORDED", root1.getRecordStatus());
 
-        // LAST_7_DAYS：两事件链 + 08-12 00:00 边界事件
-        PageResult<FaultProcessSummaryVO> weekPage = service.queryHistory(query("c1", "ds-a", "LAST_7_DAYS", 1, 20));
-        assertEquals(2, weekPage.getTotal());
+        // LAST_7_DAYS：两事件链 + 08-12 00:00 边界事件，完整返回
+        List<FaultProcessSummaryVO> weekList = service.queryHistory(query("c1", "ds-a", "LAST_7_DAYS"));
+        assertEquals(2, weekList.size());
         assertEquals(Arrays.asList("1", "3"),
-                weekPage.getRecords().stream().map(FaultProcessSummaryVO::getFaultRootIdText).collect(Collectors.toList()));
+                weekList.stream().map(FaultProcessSummaryVO::getFaultRootIdText).collect(Collectors.toList()));
 
-        // LAST_30_DAYS：4 条，按首次失败时间倒序
-        PageResult<FaultProcessSummaryVO> monthPage = service.queryHistory(query("c1", "ds-a", "LAST_30_DAYS", 1, 20));
-        assertEquals(4, monthPage.getTotal());
+        // LAST_30_DAYS：4 条，按首次失败时间倒序，完整返回（无分页截断）
+        List<FaultProcessSummaryVO> monthList = service.queryHistory(query("c1", "ds-a", "LAST_30_DAYS"));
+        assertEquals(4, monthList.size());
         assertEquals(Arrays.asList("1", "3", "4", "5"),
-                monthPage.getRecords().stream().map(FaultProcessSummaryVO::getFaultRootIdText).collect(Collectors.toList()));
-
-        // 越界分页：第 2 页 20 条/页 → 空记录但 total 保留
-        PageResult<FaultProcessSummaryVO> page2 = service.queryHistory(query("c1", "ds-a", "LAST_30_DAYS", 2, 20));
-        assertEquals(4, page2.getTotal());
-        assertTrue(page2.getRecords().isEmpty());
+                monthList.stream().map(FaultProcessSummaryVO::getFaultRootIdText).collect(Collectors.toList()));
     }
 
     @Test
-    void history_paginationSliceWithPageSize() {
+    void history_over20AllReturned() {
         when(clientMultipleMapper.selectList(any())).thenReturn(Collections.singletonList(
                 client("c1", "ds-a", "1")));
         when(dataSourceMapper.selectBatchIds(any())).thenReturn(Collections.singletonList(
                 ds("ds-a", "org-a", "1")));
 
-        // 25 条独立事件（无 NEW_JOB_ID 关联），全部落在今日窗口
+        // 25 条独立事件（无 NEW_JOB_ID 关联），全部落在今日窗口，超过旧默认 20 条上限仍应全部返回
         List<JobFailureEvent> events = new java.util.ArrayList<>();
         List<JobFailureHandleLog> logs = new java.util.ArrayList<>();
         for (int i = 0; i < 25; i++) {
@@ -327,29 +320,50 @@ class FaultHistoryServiceImplTest {
         when(eventMapper.selectList(any())).thenReturn(events);
         when(logMapper.selectList(any())).thenReturn(logs);
 
-        PageResult<FaultProcessSummaryVO> page1 = service.queryHistory(query("c1", "ds-a", "TODAY", 1, 20));
-        assertEquals(25, page1.getTotal());
-        assertEquals(20, page1.getRecords().size());
-        assertEquals(1, page1.getPageNum());
+        List<FaultProcessSummaryVO> list = service.queryHistory(query("c1", "ds-a", "TODAY"));
 
-        PageResult<FaultProcessSummaryVO> page2 = service.queryHistory(query("c1", "ds-a", "TODAY", 2, 20));
-        assertEquals(25, page2.getTotal());
-        assertEquals(5, page2.getRecords().size());
-        assertEquals(2, page2.getPageNum());
+        assertEquals(25, list.size());
+        // 按首次失败时间倒序：最新（id 2024）在前
+        assertEquals("2024", list.get(0).getFaultRootIdText());
+        assertEquals("2000", list.get(24).getFaultRootIdText());
     }
 
     @Test
-    void history_emptyEventsReturnsEmptyPage() {
+    void history_over100AllReturned() {
+        when(clientMultipleMapper.selectList(any())).thenReturn(Collections.singletonList(
+                client("c1", "ds-a", "1")));
+        when(dataSourceMapper.selectBatchIds(any())).thenReturn(Collections.singletonList(
+                ds("ds-a", "org-a", "1")));
+
+        // 120 条独立事件，超过旧最大 100 条上限仍应全部返回，无 SQL/Java/接口层截断
+        List<JobFailureEvent> events = new java.util.ArrayList<>();
+        List<JobFailureHandleLog> logs = new java.util.ArrayList<>();
+        for (int i = 0; i < 120; i++) {
+            long id = 5000L + i;
+            String job = "BIGJOB" + i;
+            events.add(event(id, "c1", "ds-a", job, TODAY_START.plusMinutes(1 + i)));
+            logs.add(log(6000L + i, id, "STABLE_CHECK_PASSED",
+                    TODAY_START.plusMinutes(2 + i), job + "-NEW"));
+        }
+        when(eventMapper.selectList(any())).thenReturn(events);
+        when(logMapper.selectList(any())).thenReturn(logs);
+
+        List<FaultProcessSummaryVO> list = service.queryHistory(query("c1", "ds-a", "TODAY"));
+
+        assertEquals(120, list.size());
+        assertEquals("5119", list.get(0).getFaultRootIdText());
+        assertEquals("5000", list.get(119).getFaultRootIdText());
+    }
+
+    @Test
+    void history_emptyEventsReturnsEmptyList() {
         when(clientMultipleMapper.selectList(any())).thenReturn(Collections.singletonList(
                 client("c1", "ds-a", "1")));
         when(eventMapper.selectList(any())).thenReturn(Collections.emptyList());
 
-        PageResult<FaultProcessSummaryVO> page = service.queryHistory(query("c1", "ds-a", "TODAY", 1, 20));
+        List<FaultProcessSummaryVO> list = service.queryHistory(query("c1", "ds-a", "TODAY"));
 
-        assertEquals(0, page.getTotal());
-        assertTrue(page.getRecords().isEmpty());
-        assertEquals(1, page.getPageNum());
-        assertEquals(20, page.getPageSize());
+        assertTrue(list.isEmpty());
     }
 
     @Test
@@ -358,19 +372,8 @@ class FaultHistoryServiceImplTest {
                 client("c1", "ds-a", "1")));
 
         BusinessException ex = assertThrows(BusinessException.class,
-                () -> service.queryHistory(query("c1", "ds-a", "FOO", 1, 20)));
+                () -> service.queryHistory(query("c1", "ds-a", "FOO")));
         assertEquals(JobFailureErrorCode.HISTORY_RANGE_INVALID, ex.getCode());
-    }
-
-    @Test
-    void history_invalidPageOrPageSizeRejected() {
-        BusinessException pageEx = assertThrows(BusinessException.class,
-                () -> service.queryHistory(query("c1", "ds-a", "TODAY", 0, 20)));
-        assertEquals(JobFailureErrorCode.HISTORY_PAGE_INVALID, pageEx.getCode());
-
-        BusinessException sizeEx = assertThrows(BusinessException.class,
-                () -> service.queryHistory(query("c1", "ds-a", "TODAY", 1, 15)));
-        assertEquals(JobFailureErrorCode.HISTORY_PAGE_SIZE_INVALID, sizeEx.getCode());
     }
 
     @Test
@@ -379,21 +382,19 @@ class FaultHistoryServiceImplTest {
                 client("c1", "ds-a", "1")));
 
         BusinessException notConfig = assertThrows(BusinessException.class,
-                () -> service.queryHistory(query("c1", "ds-not-configured", "TODAY", 1, 20)));
+                () -> service.queryHistory(query("c1", "ds-not-configured", "TODAY")));
         assertEquals(JobFailureErrorCode.HISTORY_DATA_SOURCE_NOT_IN_CURRENT_CONFIG, notConfig.getCode());
 
         BusinessException comma = assertThrows(BusinessException.class,
-                () -> service.queryHistory(query("c1", "ds-a,ds-b", "TODAY", 1, 20)));
+                () -> service.queryHistory(query("c1", "ds-a,ds-b", "TODAY")));
         assertEquals(JobFailureErrorCode.HISTORY_DATA_SOURCE_NOT_IN_CURRENT_CONFIG, comma.getCode());
     }
 
-    private FaultHistoryListQuery query(String clientId, String dataSourceId, String range, int page, int pageSize) {
+    private FaultHistoryListQuery query(String clientId, String dataSourceId, String range) {
         FaultHistoryListQuery q = new FaultHistoryListQuery();
         q.setClientId(clientId);
         q.setDataSourceId(dataSourceId);
         q.setRange(range);
-        q.setPage(page);
-        q.setPageSize(pageSize);
         return q;
     }
 }

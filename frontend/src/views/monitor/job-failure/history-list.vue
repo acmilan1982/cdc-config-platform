@@ -58,7 +58,13 @@
     </div>
 
     <template v-else>
-      <el-table :data="records" size="small" border style="width: 100%">
+      <el-table
+        :data="records"
+        size="small"
+        border
+        style="width: 100%"
+        empty-text="当前时间范围内没有故障历史记录"
+      >
         <el-table-column label="首次失败时间" min-width="180">
           <template #default="{ row }">{{ formatTime(row.startTime) }}</template>
         </el-table-column>
@@ -92,17 +98,6 @@
           </template>
         </el-table-column>
       </el-table>
-
-      <el-pagination
-        class="list-pagination"
-        :current-page="page"
-        :page-size="pageSize"
-        :total="total"
-        :page-sizes="[20, 50, 100]"
-        layout="total, sizes, prev, pager, next, jumper"
-        @current-change="onPageChange"
-        @size-change="onSizeChange"
-      />
     </template>
   </div>
 </template>
@@ -120,11 +115,8 @@ const route = useRoute()
 const clientId = ref('')
 const dataSourceId = ref('')
 const range = ref<'TODAY' | 'LAST_7_DAYS' | 'LAST_30_DAYS'>('TODAY')
-const page = ref(1)
-const pageSize = ref(20)
 
 const records = ref<FaultProcessSummaryVO[] | null>(null)
-const total = ref(0)
 const loading = ref(false)
 const errorMsg = ref('')
 const retryable = ref(false)
@@ -179,9 +171,7 @@ function buildQuery(): FaultHistoryListQuery {
   return {
     clientId: clientId.value,
     dataSourceId: dataSourceId.value,
-    range: range.value,
-    page: page.value,
-    pageSize: pageSize.value
+    range: range.value
   }
 }
 
@@ -208,7 +198,6 @@ async function load() {
   if (!clientId.value || !dataSourceId.value) {
     errorMsg.value = '缺少 clientId 或 dataSourceId 参数'
     records.value = []
-    total.value = 0
     dsContext.value = null
     contextLoading.value = false
     retryable.value = false
@@ -224,17 +213,9 @@ async function load() {
     const res = await fetchFaultHistoryList(buildQuery())
     if (seq !== requestSeq) return
     if (res.code === 200) {
-      records.value = res.data.records
-      total.value = res.data.total
-      // Clamp: if the current page is now beyond the valid range, jump to the last page
-      if (page.value > 1 && records.value.length === 0 && total.value > 0) {
-        page.value = Math.max(1, Math.ceil(total.value / pageSize.value))
-        load()
-        return
-      }
+      records.value = res.data
     } else {
       records.value = []
-      total.value = 0
       errorMsg.value = res.code === 40403
         ? '当前配置中不存在该数据源'
         : (res.message || '请求失败')
@@ -243,7 +224,6 @@ async function load() {
   } catch {
     if (seq !== requestSeq) return
     records.value = []
-    total.value = 0
     errorMsg.value = '网络请求失败'
     retryable.value = true
   } finally {
@@ -252,18 +232,6 @@ async function load() {
 }
 
 function onRangeChange() {
-  page.value = 1
-  load()
-}
-
-function onPageChange(p: number) {
-  page.value = p
-  load()
-}
-
-function onSizeChange(size: number) {
-  pageSize.value = size
-  page.value = 1
   load()
 }
 
@@ -274,7 +242,6 @@ watch(
     const did = route.query.dataSourceId
     clientId.value = typeof cid === 'string' ? cid : ''
     dataSourceId.value = typeof did === 'string' ? did : ''
-    page.value = 1
     load()
   },
   { immediate: true }
@@ -338,10 +305,6 @@ watch(
 .query-form {
   display: flex;
   flex-wrap: wrap;
-}
-.list-pagination {
-  margin-top: 16px;
-  justify-content: flex-end;
 }
 .view-link {
   font-size: 13px;

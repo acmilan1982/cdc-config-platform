@@ -1,6 +1,5 @@
 package com.bsoft.cdcconfig.monitor.jobfailure.service;
 
-import com.bsoft.cdcconfig.common.page.PageResult;
 import com.bsoft.cdcconfig.monitor.jobfailure.query.FaultHistoryListQuery;
 import com.bsoft.cdcconfig.monitor.jobfailure.vo.FaultHistorySummaryVO;
 import com.bsoft.cdcconfig.monitor.jobfailure.vo.FaultProcessSummaryVO;
@@ -21,8 +20,8 @@ public interface FaultHistoryService {
     List<FaultHistorySummaryVO> querySummary(String clientId);
 
     /**
-     * 单个当前配置数据源的分页历史故障过程。
-     * 后端校验 clientId/dataSourceId 当前仍属启用客户端现行配置。
+     * 单个当前配置数据源的完整历史故障过程（不分页）。
+     * 一次性返回所选自然日范围内全部故障过程；后端校验 clientId/dataSourceId 当前仍属启用客户端现行配置。
      */
-    PageResult<FaultProcessSummaryVO> queryHistory(FaultHistoryListQuery query);
+    List<FaultProcessSummaryVO> queryHistory(FaultHistoryListQuery query);
 }

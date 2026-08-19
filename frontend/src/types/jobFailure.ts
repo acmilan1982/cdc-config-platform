@@ -136,8 +136,6 @@ export interface FaultHistoryListQuery {
   clientId: string
   dataSourceId: string
   range: 'TODAY' | 'LAST_7_DAYS' | 'LAST_30_DAYS'
-  page: number
-  pageSize: number
 }
 
 // ==================== API-5: CLOB ====================
