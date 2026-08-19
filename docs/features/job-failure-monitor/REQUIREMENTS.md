@@ -1214,11 +1214,11 @@ rootPath: string | null
 
 验收方式：代码审查、前端类型检查与构建、浏览器实页 ZK 失败态验证、网络面板核对 health 请求次数与来源、空值/失败降级场景验证、复制反馈核对、窄宽与桌面宽度无横向滚动核对、控制台及人工页面验收。本需求仅调整前端展示体验，不新增数据库或 ZooKeeper 写操作。
 
-### 6.13 独立"故障历史"页面与自然日统计（本轮已确认 · 目标需求）
+### 6.13 独立"故障历史"页面与自然日统计（本轮已确认 · 已实现并验收）
 
-> **需求状态**：`baseline_status: APPROVED`（已批准），`implementation_status: IMPLEMENTED_ADJUSTMENT_PENDING`（主体与默认展开已实现；历史导航/平台总量/可读头部/表格全宽体验调整，以及"历史列表前后端完全不分页"调整待实现）。
+> **需求状态**：`baseline_status: APPROVED`（已批准），`implementation_status: IMPLEMENTED_ACCEPTED`（已实现并验收，完整实现链见下方状态说明）。
 > **背景**：现有"故障监控"概览页主要表达客户端和 Job 的当前/最近运行状态（客户端当前在线/离线、Job 当前正常/恢复中/离线、最近故障时间、最近恢复时间、故障期间恢复尝试、当前数据源配置与详情入口），不适合同时承担长周期故障统计和历史过程检索；现有故障详情页底部的"历史故障过程"会把多个历史故障过程堆叠在单次过程详情页面中，信息层级不自然，也让"当前过程详情"和"数据源历史记录"混在一起。用户已确认将页面职责拆分："故障监控"继续负责当前/最近状态；新增独立"故障历史"页面负责自然日窗口内的故障次数统计与历史故障过程检索；当前故障详情页底部整块"历史故障过程"移除，不保留替代入口；具体历史过程仍通过已经实现的独立路由 `/monitor/job-failure/process/:faultRootId` 查看。
-> **状态说明**：本节是已批准的目标需求。Commit `744980f45060a30d507c75fddf06aa164a042167` 已实现 §6.13 主体：独立"故障历史"菜单、自然日统计概览（今日/近7天/近30天）、当前配置数据源全集、根过程去重计数、独立分页历史列表、精确 `faultRootIdText` 详情链接、详情页"历史故障过程"区块移除，以及 DB-only 与 ZooKeeper 解耦；后端定向测试、后端打包与前端构建已完成技术核验。Commit `19167d489699d964022522ca6c4ff88b3d09b2d9` 已实现客户端卡片默认全部展开、按稳定 `clientId` 保留人工展开/折叠状态（`preserve` 合并路径）、查询/重置后全部展开、新 clientId 默认展开与消失 clientId 状态清理（JFM-ADJ-306～312），并完成前端构建与浏览器技术核验；用户已在真实页面确认首次进入时客户端卡片"倒是全部展开了"，即"首次默认全部展开"的人工页面确认成立。该人工确认仅覆盖首次进入默认展开，未逐项验证顶部刷新保持、查询/重置、新增/消失 clientId 等其余交互；当前页面没有自动刷新定时器，因此"自动刷新保持状态"不作为现行验收事实，仅说明 `preserve` 合并路径具备复用能力并经过代码级核对。本轮（JOB-FAILURE-HISTORY-REQ-001-R2）人工评审进一步确认四项体验调整：概览"查看历史"默认新标签页打开、顶部稳定"同步平台共 X 个客户端，Y 个数据源"平台总量、历史列表顶部数据源可读名称与 ID Tooltip、历史列表7列表格全宽（JFM-ADJ-313～331、JFM-ACCEPT-159～166），仍待实现与技术核验/人工验收，因此本节不得标记为 `IMPLEMENTED_ACCEPTED`，`GAP-HISTORY-001` 保持 OPEN。README 继续描述当前实现事实，不得提前按本节改写。本轮（JOB-FAILURE-HISTORY-NO-PAGINATION-REQ-001）进一步确认：数据源故障历史列表改为前后端完全不分页，所选"今日/近7天/近30天"范围内全部故障过程一次性返回、一次性展示（JFM-ADJ-332～340、JFM-ACCEPT-167～171）；当前 Commit `0bcefdcf75dabae0f1f9d293b070c9b5839dfe91` 的 List API 仍为分页实现（page/pageSize/PageResult + 前端分页控件与状态），目标契约尚待独立代码任务实现、技术核验与人工验收，因此本节仍不得标记为 `IMPLEMENTED_ACCEPTED`，`GAP-HISTORY-001` 保持 OPEN。
+> **状态说明**：本节是已批准的目标需求，现已收口为 `implementation_status: IMPLEMENTED_ACCEPTED`（已实现并验收）。完整实现链如下。主体 Commit `744980f45060a30d507c75fddf06aa164a042167` 实现独立"故障历史"菜单、自然日统计概览（今日/近7天/近30天）、当前配置数据源全集、根过程去重计数、独立分页历史列表、精确 `faultRootIdText` 详情链接、详情页"历史故障过程"区块移除，以及 DB-only 与 ZooKeeper 解耦；后端定向测试、后端打包与前端构建已完成技术核验。R1 Commit `19167d489699d964022522ca6c4ff88b3d09b2d9` 实现客户端卡片默认全部展开、按稳定 `clientId` 保留人工展开/折叠状态（`preserve` 合并路径）、查询/重置后全部展开、新 clientId 默认展开与消失 clientId 状态清理（JFM-ADJ-306～312），并完成前端构建与浏览器技术核验；用户已在真实页面确认首次进入时客户端卡片"倒是全部展开了"，即"首次默认全部展开"的人工页面确认成立。该人工确认仅覆盖首次进入默认展开，未逐项验证顶部刷新保持、查询/重置、新增/消失 clientId 等其余交互；当前页面没有自动刷新定时器，因此"自动刷新保持状态"不作为现行验收事实，仅说明 `preserve` 合并路径具备复用能力并经过代码级核对。R2 Commit `0bcefdcf75dabae0f1f9d293b070c9b5839dfe91` 实现四项体验调整（JFM-ADJ-313～331、JFM-ACCEPT-159～166）：概览"查看历史"默认新标签页打开、顶部稳定"同步平台共 X 个客户端，Y 个数据源"平台总量、历史列表顶部数据源可读名称与 ID Tooltip、历史列表7列表格全宽，并完成浏览器技术核验。无分页需求调整 Commit `afff7fca55e5c9c0ec4c2c0f0f62e1373344d172` 将数据源故障历史列表改为前后端完全不分页（JFM-ADJ-332～340、JFM-ACCEPT-167～171，见 §6.13.15）。无分页实现 Commit `ba89aa9c239be393197aee1de96930e3a3decb48` 完成 API-7 与前端完全取消分页：List API 仅接收 `clientId/dataSourceId/range` 并返回完整 `FaultProcessSummaryVO` 数组（移除 page/pageSize/PageResult/subList 与分页错误码），前端移除分页控件、分页状态与分页请求参数并完整消费数组；定向后端测试 10/10、后端打包与前端类型检查/构建通过，浏览器核验 14/14 通过，其中 25 条与 120 条场景全部返回并完整渲染、三个自然日范围完整重载、7列表格/精确 `faultRootIdText`/详情真实链接/空状态/纵向滚动未回归（25条/120条完整渲染与请求参数属于技术核验证据）。用户已在真实页面完成人工验收并明确反馈"的确没有分页了，查看详情，也能看到故障过程"（无分页、查看详情能够看到对应故障过程属用户人工验收事实，未逐条人工核对120行、所有自然日边界或全部 API 字段）。本节现已收口为 `IMPLEMENTED_ACCEPTED`，`GAP-HISTORY-001` 已关闭并仅保留历史追溯（见 §19）。
 
 #### 6.13.1 功能定位、菜单与路由
 
@@ -1432,13 +1432,13 @@ rootPath: string | null
 | JFM-ACCEPT-164 | 复制 URL、刷新和直接访问时数据源名称仍来自后端可信上下文；即使历史列表为空也能显示正确上下文，不依赖 URL 中的 ORG | 直接访问 + 空列表场景 + 网络证据 |
 | JFM-ACCEPT-165 | 7列表格在常用桌面宽度铺满内容区域，操作列贴近右边界且无大块空白；窄宽无页面级横向滚动，分页对齐正常 | 桌面/窄宽截图 + 几何测量 【已被本轮修订：取消分页后不再存在分页器，窄宽"分页对齐"项由 JFM-ACCEPT-167（无分页控件）与页面纵向滚动（JFM-ADJ-338）承接；表格铺满与无页面级横向滚动继续有效】 |
 | JFM-ACCEPT-166 | 默认全部展开、查询/重置/刷新状态、自然日统计、排序、分页、精确 ID、数据源显示、详情导航和 DB-only 均无回归；构建、测试和控制台核验通过 | diff + tests/build + 浏览器回归 【已被本轮修订：原"分页"回归项由 JFM-ACCEPT-171 承接（取消分页后相关口径不回归）；其余继续有效】 |
-| JFM-ACCEPT-167 | 历史列表页面不存在分页器、页码、每页条数、上一页/下一页、跳页控件和分页状态；今日/近7天/近30天三个范围均一次展示完整结果 | DOM/浏览器 + 前端代码审查 |
-| JFM-ACCEPT-168 | List API 请求不含 page/pageSize/cursor/offset/limit，响应为完整数组且无 total/pages/current/size 等分页元数据 | Controller/API/类型审查 + 真实响应 |
-| JFM-ACCEPT-169 | 今日、近7天、近30天切换后分别返回范围内全部故障过程，行数与后端完整结果一致，排序稳定，无残留旧范围数据 | 后端测试 + API + 浏览器 |
-| JFM-ACCEPT-170 | 使用超过原默认20条和100条的自动化/模拟数据验证无静默上限、无 SQL/业务层截断、无懒加载或分批请求；不得写开发库制造数据 | 单元测试/Mock + SQL/代码审查 |
-| JFM-ACCEPT-171 | 取消分页后自然日、根过程去重、当前配置校验、精确 ID、7列、详情链接、无 N+1、无 CLOB、DB-only 均不回归 | 定向测试 + 构建 + 浏览器回归 |
+| JFM-ACCEPT-167 | 历史列表页面不存在分页器、页码、每页条数、上一页/下一页、跳页控件和分页状态；今日/近7天/近30天三个范围均一次展示完整结果 | DOM/浏览器 + 前端代码审查 【已通过：前端已移除分页器/页码/每页条数/上一页下一页/跳页控件与分页状态，三个范围均一次完整展示（Commit `ba89aa9…`，浏览器 25条/120条 + DOM 核验）】 |
+| JFM-ACCEPT-168 | List API 请求不含 page/pageSize/cursor/offset/limit，响应为完整数组且无 total/pages/current/size 等分页元数据 | Controller/API/类型审查 + 真实响应 【已通过：List API 仅接收 clientId/dataSourceId/range，请求不含分页/分批参数；响应为完整数组，无 total/pages/current/size 等分页元数据】 |
+| JFM-ACCEPT-169 | 今日、近7天、近30天切换后分别返回范围内全部故障过程，行数与后端完整结果一致，排序稳定，无残留旧范围数据 | 后端测试 + API + 浏览器 【已通过：三个范围切换后分别完整重载，行数与后端完整结果一致、排序稳定、无残留旧范围数据（后端测试 + 浏览器核验）】 |
+| JFM-ACCEPT-170 | 使用超过原默认20条和100条的自动化/模拟数据验证无静默上限、无 SQL/业务层截断、无懒加载或分批请求；不得写开发库制造数据 | 单元测试/Mock + SQL/代码审查 【已通过：使用 25 条（超原默认20）与 120 条（超原最大100）模拟数据核验无静默上限、无 SQL/业务层截断、无懒加载或分批请求（单元测试/Mock + 代码审查，未写开发库制造数据）】 |
+| JFM-ACCEPT-171 | 取消分页后自然日、根过程去重、当前配置校验、精确 ID、7列、详情链接、无 N+1、无 CLOB、DB-only 均不回归 | 定向测试 + 构建 + 浏览器回归 【已通过：取消分页后自然日、根过程去重、当前配置校验、精确 ID、7列、详情链接、无 N+1、无 CLOB、DB-only 均未回归（定向测试 + 构建 + 浏览器回归）】 |
 
-JFM-ACCEPT-139～154 为 §6.13 主体验收标准：主体技术核验已完成（Commit `744980f45060a30d507c75fddf06aa164a042167`），但本轮体验调整尚未完成，本节不得整体标记为已通过。JFM-ACCEPT-155～158 中：Commit `19167d489699d964022522ca6c4ff88b3d09b2d9` 已完成默认展开与状态保持的技术核验，用户已在真实页面确认首次进入全部展开（对应 JFM-ACCEPT-155）；其余交互（顶部刷新保持、查询/重置、新增/消失 clientId）未逐项人工验收，当前页面无自动刷新定时器，该项按当前不适用/代码路径可复用表述，不虚构真实自动刷新验收。JFM-ACCEPT-159～166 为本轮人工评审新确认的体验调整验收标准，尚未实现，不得标记为已通过。JFM-ACCEPT-167～171 为本轮（JOB-FAILURE-HISTORY-NO-PAGINATION-REQ-001）新增的"数据源故障历史列表前后端完全不分页"目标验收标准，当前 Commit `0bcefdcf75dabae0f1f9d293b070c9b5839dfe91` 的 List API 仍为分页实现，尚未实现，不得标记为已通过。
+JFM-ACCEPT-139～154 为 §6.13 主体验收标准：主体技术核验已完成（Commit `744980f45060a30d507c75fddf06aa164a042167`）。JFM-ACCEPT-155～158 中：Commit `19167d489699d964022522ca6c4ff88b3d09b2d9` 已完成默认展开与状态保持的技术核验，用户已在真实页面确认首次进入全部展开（对应 JFM-ACCEPT-155）；其余交互（顶部刷新保持、查询/重置、新增/消失 clientId）未逐项人工验收，当前页面无自动刷新定时器，该项按当前不适用/代码路径可复用表述，不虚构真实自动刷新验收。JFM-ACCEPT-159～166 为本轮人工评审新确认的体验调整验收标准，已由 Commit `0bcefdcf75dabae0f1f9d293b070c9b5839dfe91` 实现并完成浏览器技术核验；用户在本轮整体人工验收中对最终页面进行了确认（真实页面标题"数据源故障历史"、今日/近7天/近30天三范围、当前近30天、7列表格、无分页器、每行保留"查看详情"且点击可见对应故障过程），未逐项人工核对每个体验调整。JFM-ACCEPT-167～171 为"数据源故障历史列表前后端完全不分页"验收标准，已由 Commit `ba89aa9c239be393197aee1de96930e3a3decb48` 实现并通过技术核验与人工验收，标记为已通过（证据摘要见本表各行标注）。本节整体已收口为 `implementation_status: IMPLEMENTED_ACCEPTED`。全量后端测试 440 项中 4 项失败（`OracleDateMappingTest` 1 项、`JobFailureServiceTest` 3 项）为任务开始前已存在的开发库数据漂移，与本轮无分页实现无关，不作为验收未通过依据。
 
 验收方式：本节为已批准的目标需求，文档任务不伪造已完成的代码验收证据；实现完成后按上表执行后端定向测试、前端类型检查与构建、浏览器实页核验、精确 ID 核对、网络请求核对及人工页面验收。本需求全程只读，不新增数据库或 ZooKeeper 写操作。
 
@@ -1485,7 +1485,7 @@ JFM-ACCEPT-139～154 为 §6.13 主体验收标准：主体技术核验已完成
 
 #### 6.13.14 历史导航、平台总量与展示优化（本轮人工页面评审补充）
 
-**背景（人工页面评审）**：Commit `19167d489699d964022522ca6c4ff88b3d09b2d9` 已修正客户端卡片默认折叠。人工评审进一步确认四项体验调整：① 概览"查看历史"默认在新浏览器标签页打开数据源历史列表，保留概览页筛选、卡片展开状态和滚动位置，便于连续查看多个数据源；② 顶部原"共 N 个数据源"改为稳定的"同步平台共 X 个客户端，Y 个数据源"平台规模文案，不随客户端筛选或查询结果变化；③ 数据源历史列表顶部不再把不可读的 `DATA_SOURCE_ID` 作为主文本，改为"客户端 <clientId>｜数据源 <DATA_SOURCE_ORG/规则化名称>"，完整 ID 放入 Tooltip；④ 数据源历史列表表格列铺满内容区域，消除操作列右侧的大块空白。本轮为需求基线修订，尚未实现。
+**背景（人工页面评审）**：Commit `19167d489699d964022522ca6c4ff88b3d09b2d9` 已修正客户端卡片默认折叠。人工评审进一步确认四项体验调整：① 概览"查看历史"默认在新浏览器标签页打开数据源历史列表，保留概览页筛选、卡片展开状态和滚动位置，便于连续查看多个数据源；② 顶部原"共 N 个数据源"改为稳定的"同步平台共 X 个客户端，Y 个数据源"平台规模文案，不随客户端筛选或查询结果变化；③ 数据源历史列表顶部不再把不可读的 `DATA_SOURCE_ID` 作为主文本，改为"客户端 <clientId>｜数据源 <DATA_SOURCE_ORG/规则化名称>"，完整 ID 放入 Tooltip；④ 数据源历史列表表格列铺满内容区域，消除操作列右侧的大块空白。本轮为需求基线修订；上述四项体验调整（JFM-ADJ-313～331、JFM-ACCEPT-159～166）已由 Commit `0bcefdcf75dabae0f1f9d293b070c9b5839dfe91` 实现并完成浏览器技术核验，验收状态见 §6.13.12。
 
 | 编号 | 规则 | 说明 |
 |---|---|---|
@@ -1557,7 +1557,7 @@ JFM-ACCEPT-139～154 为 §6.13 主体验收标准：主体技术核验已完成
 | JFM-ADJ-339 | 取消分页后仍须保持批量过程构建、无 N+1、不逐行查询事件/日志/状态、不加载 CLOB；不得以性能为由私自截断结果 | 承接 JFM-ADJ-302/303/304 的性能与复用要求 |
 | JFM-ADJ-340 | 本轮规模边界为单个当前配置数据源、最大近30个自然日；若未来数据量需要分页或归档，应通过新的需求任务评估，不得在本轮实现中自行恢复分页 | 明确后续分页需新任务 |
 
-**验收标准**：`JFM-ACCEPT-167～171` 已并入 §6.13.12 验收表，作为目标需求，本轮文档任务不得标记为已通过。
+**验收标准**：`JFM-ACCEPT-167～171` 已并入 §6.13.12 验收表，并已随实现 Commit `ba89aa9c239be393197aee1de96930e3a3decb48` 完成技术核验与人工验收，标记为已通过（证据摘要见 §6.13.12 表各行标注）。
 
 **本轮被替代/修订的旧分页规则**（详见 §6.13.10 清单与本表说明列）：
 
@@ -1570,7 +1570,7 @@ JFM-ACCEPT-139～154 为 §6.13 主体验收标准：主体技术核验已完成
 - `JFM-API-007`：分页参数与 PageResult 响应被新的完整 List 契约替代（见 §14）；
 - 被分页方案标记替代的旧"不分页"规则（JFM-HIST-002、JFM-HIST-003、JFM-ACCEPT-028/029/030、JFM-PERF-003）纠正为由本轮不分页目标重新承接/精确定义（见 §6.13.10、§7.5、§16、§17）。
 
-**当前实现与目标区分**：当前 Commit `0bcefdc...` 的 List API 仍是分页实现（page/pageSize/PageResult + 前端分页控件与状态），上述完整 List 是已批准的目标契约，尚待独立代码任务实现、技术核验与人工验收；本轮只改需求文档，不提前把当前代码写成已不分页。
+**当前实现与目标区分**：本组规则的目标契约已由需求调整 Commit `afff7fca55e5c9c0ec4c2c0f0f62e1373344d172` 与实现 Commit `ba89aa9c239be393197aee1de96930e3a3decb48` 落地为当前实现事实：API-7 仅接收 `clientId/dataSourceId/range` 并返回完整 `List<FaultProcessSummaryVO>`，前端无分页控件、分页状态与分页请求参数，无分页已是当前实现事实（历史状态：需求提出时点 Commit `0bcefdc...` 的 List API 仍为分页实现，见 §6.13 状态说明）。
 
 ## 7. 详情页需求
 
@@ -1614,7 +1614,7 @@ JFM-ACCEPT-139～154 为 §6.13 主体验收标准：主体技术核验已完成
 | JFM-HIST-004 | 故障历史当前查看的行高亮 | `highlight-current-row` 【已被 §6.13 修订：详情页"历史故障过程"区块移除后，该高亮不再在该区块内适用；如需要在新的独立历史列表中另行定义（依据 JFM-ADJ-298）】 |
 | JFM-HIST-005 | `RECOVERY_RECORDED` 状态在历史列表中显示为"已恢复" | 该映射为临时前端硬编码，正式映射应由统一映射层实现 |
 
-当前实现状态：JFM-HIST-002 和 JFM-HIST-003 尚未完全实现（见 §19 GAP-HISTORY-001）。本节的故障历史展示在目标需求中由独立"故障历史"页面替代，详情页底部"历史故障过程"区块按 §6.13 移除（JFM-ADJ-298）；实现差距继续由 GAP-HISTORY-001 追踪（保持 OPEN）。
+当前实现状态：JFM-HIST-002 和 JFM-HIST-003 的意图已由 §6.13 独立"故障历史"页面承接并实现——独立历史列表前后端完全不分页、所选自然日范围内全部故障过程一次性返回与一次性展示（见 §6.13.15）；详情页底部"历史故障过程"区块已按 §6.13 移除（JFM-ADJ-298）。GAP-HISTORY-001 已关闭，仅保留历史追溯（见 §19）。
 
 > **与 §6.10 的关系**：`JFM-HIST-004`（当前查看行高亮）继续有效，当前查看行的 ID 由路由指定过程或最近过程的 `faultRootIdText` 决定；历史"查看"改为真实路由链接的规则见 §6.10.2。
 
@@ -1787,11 +1787,11 @@ JFM-ACCEPT-139～154 为 §6.13 主体验收标准：主体技术核验已完成
 | JFM-API-004 | API-4 | GET | `/api/job-failure/process/{faultRootId}` | 故障过程详情。按 faultRootId 查询任意一次历史故障过程。响应类型：`FaultProcessDetailVO` |
 | JFM-API-005 | API-5 | GET | `/api/job-failure/clob/{faultRootId}/{clobField}/{recordId}` | CLOB 内容。clobField 取值：`failureDetail` 或 `errorDetail`。响应类型：`ClobDetailVO` |
 | JFM-API-006 | API-6 | GET | `/api/job-failure/history/summary` | 故障历史概览。返回所有当前配置数据源的全集、三个自然日窗口故障次数、最近故障时间、最近处理结果以及五种数据源展示所需字段。可选参数 `clientId` 用于筛选单个客户端。响应类型：`List<FaultHistorySummaryVO>`。与 API-1 的区别：API-1 表达当前/最近运行状态（含 ZK 在线/离线），API-6 是纯数据库历史统计，不读取 ZooKeeper（详见 §6.13） |
-| JFM-API-007 | API-7 | GET | `/api/job-failure/history/list` | 单个当前配置数据源的完整历史故障过程（目标契约，JFM-ADJ-332～334）。参数：`clientId`、`dataSourceId`、`range=TODAY\|LAST_7_DAYS\|LAST_30_DAYS`；不得接收 `page`、`pageSize`、`cursor`、`offset`、`limit` 等分页/分批参数。后端校验该 clientId/dataSourceId 当前仍属于启用客户端的现行配置，不符合时返回明确错误且不得返回已取消配置数据源的历史。响应类型：`ApiResponse<List<FaultProcessSummaryVO>>`（所选范围内全部故障过程的完整数组，无 `total`/`pages`/`current`/`size` 等分页元数据，复用现有过程摘要 VO）。`range` 为固定枚举，不允许前端自行传任意 start/end（详见 §6.13、§6.13.15）。【当前 Commit `0bcefdcf75dabae0f1f9d293b070c9b5839dfe91` 的 API-7 仍为分页实现（`page`/`pageSize`/`PageResult<FaultProcessSummaryVO>`），上述完整 List 为目标契约，尚待代码调整】 |
+| JFM-API-007 | API-7 | GET | `/api/job-failure/history/list` | 单个当前配置数据源的完整历史故障过程（已实现，JFM-ADJ-332～334）。参数：`clientId`、`dataSourceId`、`range=TODAY\|LAST_7_DAYS\|LAST_30_DAYS`；不得接收 `page`、`pageSize`、`cursor`、`offset`、`limit` 等分页/分批参数。后端校验该 clientId/dataSourceId 当前仍属于启用客户端的现行配置，不符合时返回明确错误且不得返回已取消配置数据源的历史。响应类型：`ApiResponse<List<FaultProcessSummaryVO>>`（所选范围内全部故障过程的完整数组，无 `total`/`pages`/`current`/`size` 等分页元数据，复用现有过程摘要 VO）。`range` 为固定枚举，不允许前端自行传任意 start/end（详见 §6.13、§6.13.15）。【已由 Commit `ba89aa9c239be393197aee1de96930e3a3decb48` 实现：仅接收 `clientId/dataSourceId/range`，返回完整 `List<FaultProcessSummaryVO>`，无分页参数与分页元数据；定向测试 10/10、浏览器 25条/120条完整渲染核验通过】 |
 
 所有接口均返回 `ApiResponse<T>` 统一响应格式（code/message/data）。
 
-> **历史列表 API 完整 List 契约（本轮已确认 · 目标需求，详见 §6.13.15）**：`JFM-API-007`（API-7 `/api/job-failure/history/list`）由分页契约修订为完整 List 契约：请求参数只含 `clientId`、单个 `dataSourceId`、`range=TODAY|LAST_7_DAYS|LAST_30_DAYS`，不含 `page`、`pageSize`、`cursor`、`offset`、`limit` 等任何分页/分批参数；响应类型为 `ApiResponse<List<FaultProcessSummaryVO>>`，返回所选范围内全部故障过程的完整数组，不含 `total`、`pages`、`current`、`size` 等分页对象或元数据；不得使用 ROWNUM、FETCH FIRST、LIMIT、subList、懒加载、无限滚动、分批加载或虚拟分页截断/拆分结果（JFM-ADJ-332～340、JFM-ACCEPT-167～171）。当前 Commit `0bcefdcf75dabae0f1f9d293b070c9b5839dfe91` 的 API-7 仍为分页实现（`page`/`pageSize`/`PageResult<FaultProcessSummaryVO>`），上述完整 List 是本轮批准的目标契约，尚待独立代码任务实现、技术核验与人工验收。
+> **历史列表 API 完整 List 契约（本轮已确认 · 已实现并验收，详见 §6.13.15）**：`JFM-API-007`（API-7 `/api/job-failure/history/list`）由分页契约修订为完整 List 契约：请求参数只含 `clientId`、单个 `dataSourceId`、`range=TODAY|LAST_7_DAYS|LAST_30_DAYS`，不含 `page`、`pageSize`、`cursor`、`offset`、`limit` 等任何分页/分批参数；响应类型为 `ApiResponse<List<FaultProcessSummaryVO>>`，返回所选范围内全部故障过程的完整数组，不含 `total`、`pages`、`current`、`size` 等分页对象或元数据；不得使用 ROWNUM、FETCH FIRST、LIMIT、subList、懒加载、无限滚动、分批加载或虚拟分页截断/拆分结果（JFM-ADJ-332～340、JFM-ACCEPT-167～171）。该契约已由 Commit `ba89aa9c239be393197aee1de96930e3a3decb48` 实现并经技术核验与人工验收，成为当前实现事实（历史状态：需求调整 Commit `afff7fca55e5c9c0ec4c2c0f0f62e1373344d172` 批准目标契约时，Commit `0bcefdc...` 的 API-7 仍为分页实现）。
 
 > **概览页接口字段调整（本轮已确认 · 已实现并验收）**：API-1 `/summary` 的响应类型 `JobFailureSummaryVO` 需新增 `dataSourceOrg` 字段（映射 `CDC_DATA_SOURCE.DATA_SOURCE_ORG`），用于概览页"数据源"列；`dataSourceId` 保留。现有 `dataSourceName` 字段允许为兼容保留，但概览页不再展示（见 §6.3.7）。
 
@@ -1801,7 +1801,7 @@ JFM-ACCEPT-139～154 为 §6.13 主体验收标准：主体技术核验已完成
 
 > **与 §6.10 的关系（本轮已确认 · 已实现并验收）**：`JFM-API-004`（`GET /api/job-failure/process/{faultRootId}`）后端 API 路径、Controller 与查询语义不变；新增的前端 `/monitor/job-failure/process/:faultRootId` 路由复用该 API。前端页面路由与后端 API 路由是两种不同资源，不得把二者写成同一个 URL（详见 §6.10）。
 
-> **独立"故障历史"页面 API/VO 契约（本轮已确认 · 目标需求，baseline_status: APPROVED / implementation_status: IMPLEMENTED_ADJUSTMENT_PENDING）**：详见 §6.13。目标概览行数据结构（精确字段名与现有 VO/类型体系协调）：
+> **独立"故障历史"页面 API/VO 契约（本轮已确认 · 已实现并验收，baseline_status: APPROVED / implementation_status: IMPLEMENTED_ACCEPTED）**：详见 §6.13。目标概览行数据结构（精确字段名与现有 VO/类型体系协调）：
 
 ```ts
 clientId: string
@@ -1922,7 +1922,7 @@ recordStatus/processStatus: existing process status  // 现有过程状态（rec
 | GAP-STATUS-001 | 对外状态 | JFM-ACCEPT-011/012/013：对外故障过程状态须为 5 种正式状态，内部 `FaultProcessResult` 和 `RecordStatus` 不得直接对外返回 | 代码中 `FaultProcessResult`（3 种）和 `RecordStatus`（9 种）通过 VO 直接返回前端 | 详情页和概览页显示的状态标签为内部状态的直接中文映射（如"已记录恢复""记录未闭环"），不是 5 种正式状态 |
 | GAP-STATUS-002 | 状态映射 | §9.4.4 映射表：须实现统一的内部→对外映射层 | 尚未实现统一映射层。前端通过硬编码 `RECOVERY_RECORDED → '已恢复'` 做部分映射，其余状态直接透传 `recordStatusLabel` | 状态映射不完整、不统一，前后端均存在不一致风险 |
 | GAP-STATUS-003 | 恢复失败判定 | §9.4.2 优先级 5：须实现"恢复失败"的统一判定规则 | 代码不存在"恢复失败"概念。`SUBMIT_FAILED`、`RESTART_SKIPPED`、部分 `NOT_CLOSED` 仅为候选证据，从当前代码无法唯一确定"恢复失败"的精确判定条件，不得使用"其他情况"兜底 | "恢复失败"对外状态当前无对应实现，用户无法在页面看到该状态 |
-| GAP-HISTORY-001 | 历史查询/展示/时间范围（独立"故障历史"页面） | JFM-HIST-002、JFM-HIST-003：无传统分页组件，所选时间范围内全部记录可见；该展示在目标需求中由 §6.13 独立"故障历史"页面替代：独立菜单、自然日统计概览（今日/近7天/近30天）、当前配置校验、详情页"历史故障过程"区块移除、历史导航/平台总量/可读头部/表格全宽优化，以及历史列表前后端完全不分页、所选范围内全部故障过程一次性返回与一次性展示（JFM-ADJ-255～331、JFM-ACCEPT-139～166；JFM-ADJ-332～340、JFM-ACCEPT-167～171，详见 §6.13.15） | §6.13 主体已由 Commit `744980f45060a30d507c75fddf06aa164a042167` 实现：独立"故障历史"菜单、自然日统计概览、当前配置数据源全集、根过程去重计数、独立分页历史列表、精确 `faultRootIdText` 详情链接、详情页"历史故障过程"区块移除及 DB-only，后端定向测试/打包与前端构建已完成技术核验；Commit `19167d489699d964022522ca6c4ff88b3d09b2d9` 已修正客户端卡片默认全部展开并按 `clientId` 保持人工状态，完成技术核验，用户已在真实页面确认首次进入全部展开；Commit `0bcefdcf75dabae0f1f9d293b070c9b5839dfe91` 已实现本轮四项体验调整（JFM-ADJ-313～331）并完成浏览器技术核验，但其 List API 仍为分页实现（page/pageSize/PageResult + 前端分页控件与状态），尚未实现不分页目标契约 | 超过 1000 条的旧截断问题已由独立分页列表承接；客户端卡片默认全部展开与状态保持（JFM-ADJ-306～312）已实现并获首次默认展开人工确认；四项体验调整（JFM-ADJ-313～331）已由 Commit `0bcefdc...` 实现并完成浏览器技术核验，JFM-ACCEPT-159～166 待人工页面验收；历史列表前后端完全不分页（JFM-ADJ-332～340、JFM-ACCEPT-167～171）为本轮新确认目标，当前代码仍分页，尚待独立代码任务实现、技术核验与人工验收；README 与最终基线收口仍待后续任务。`baseline_status: APPROVED / implementation_status: IMPLEMENTED_ADJUSTMENT_PENDING`，本 GAP 保持 OPEN，不提前关闭 |
+| GAP-HISTORY-001 | 历史查询/展示/时间范围（独立"故障历史"页面） | JFM-HIST-002、JFM-HIST-003：无传统分页组件，所选时间范围内全部记录可见；该展示在目标需求中由 §6.13 独立"故障历史"页面替代：独立菜单、自然日统计概览（今日/近7天/近30天）、当前配置校验、详情页"历史故障过程"区块移除、历史导航/平台总量/可读头部/表格全宽优化，以及历史列表前后端完全不分页、所选范围内全部故障过程一次性返回与一次性展示（JFM-ADJ-255～331、JFM-ACCEPT-139～166；JFM-ADJ-332～340、JFM-ACCEPT-167～171，详见 §6.13.15） | 已解决/已关闭，仅保留用于历史追溯。实现链：§6.13 主体由 Commit `744980f45060a30d507c75fddf06aa164a042167` 实现（独立"故障历史"菜单、自然日统计概览、当前配置数据源全集、根过程去重计数、独立分页历史列表、精确 `faultRootIdText` 详情链接、详情页"历史故障过程"区块移除及 DB-only）；R1 由 Commit `19167d489699d964022522ca6c4ff88b3d09b2d9` 实现（客户端卡片默认全部展开与状态保持，用户确认首次进入全部展开）；R2 由 Commit `0bcefdcf75dabae0f1f9d293b070c9b5839dfe91` 实现（四项体验调整 JFM-ADJ-313～331，浏览器技术核验通过）；无分页需求调整由 Commit `afff7fca55e5c9c0ec4c2c0f0f62e1373344d172` 完成；API-7 与前端完全取消分页由 Commit `ba89aa9c239be393197aee1de96930e3a3decb48` 完成（List API 仅接收 clientId/dataSourceId/range，返回完整数组，无分页参数与分页元数据；前端移除分页控件、状态与请求参数）。技术核验包含 25 条、120 条全部返回并完整渲染、三个自然日范围完整重载、定向测试 10/10、后端打包与前端类型检查/构建通过；用户人工确认真实页面无分页且"查看详情"能够看到对应故障过程。README 已在本任务同步当前实现事实 | 已解决/已关闭，仅保留用于历史追溯，已不存在该 GAP 描述的待实现差距。历史状态：原"超过 1000 条静默截断"由独立分页列表承接，随后随 API-7 无分页调整彻底消除；JFM-ACCEPT-139～171 均已按技术核验与人工验收收口（详见 §6.13.12）；全量后端测试 4 项既有失败（开发库数据漂移）与本 GAP 无关。`baseline_status: APPROVED / implementation_status: IMPLEMENTED_ACCEPTED` |
 | GAP-OVERVIEW-001 | 概览页调整 | §6.3/§6.6/§6.7/§6.11/§6.12：查询区与六列表格、多数据源展开、客户端卡片视觉一致性、ZooKeeper 运行状态融合、ZK 错误态集群连接目标展示 | 概览功能主体（含多数据源展开与异常数据源展示）已实现并通过技术核验与人工页面验收（Commit `277e7d314ecafe0845bb4e6e9438b18767cb94c8`）；客户端卡片视觉一致性（§6.6）已由 Commit `4993400cebc145dd1fa69de1d1de8733e4568a2e` 实现并人工验收；ZooKeeper 运行状态融合（§6.7）主体已由 Commit `c3b06bf1dec950e3c4b9a8a6f5e7434616f66317` 实现并完成技术核验；§6.11 倒计时与图标动效已由 Commit `715b476a26d8ad12abc22cdd29e23c60fe9df7a1` 实现并人工验收；§6.12 集群连接目标展示已由 Commit `8268e1b266b64187cc41a6aa1612e37c2f692ef3` 实现、真实 HTTP 复制兼容由 Commit `533bbbc37bf2c9e1aa0939d20d6b6458c035a212` 修正并获用户真实 HTTP 确认；README 当前实现事实已同步，功能基线最终收口完成 | 已解决/已关闭，仅保留用于历史追溯，已不存在该 GAP 描述的待实现差距 |
 | GAP-OVERVIEW-MULTI-DATASOURCE-001 | 多数据源展开 | §6.5：`CDC_CLIENT_MULTIPLE.DATA_SOURCE_ID` 按英文逗号拆分为多个单 ID 记录、逐条展示，并区分正常、未激活和无效数据源 | 已由 Commit `277e7d314ecafe0845bb4e6e9438b18767cb94c8` 解决：英文逗号拆分、Trim、忽略空项、每个 ID 独立一行、配置顺序、批量查询且无 N+1、`dataSourceExists` 与 `dataSourceActive` 契约、停用数据源红字后缀、无效数据源红字及 Tooltip 均已实现并通过技术核验与人工页面验收 | 已解决/已关闭，仅保留用于历史追溯，已不存在待实现差距 |
 | GAP-OVERVIEW-CARD-VISUAL-001 | 客户端卡片视觉一致性 | §6.6：故障监控客户端卡片采用 CDC 节点状态卡片的同一视觉效果，并保持全宽单列 | 已由 Commit `4993400cebc145dd1fa69de1d1de8733e4568a2e` 解决：改为可见灰蓝边框、明确轮廓阴影、高不透明度浅色背景与标题区分隔，完成前端类型检查与构建、浏览器实页核验，并由用户根据真实截图人工确认"卡片能够明显分开"目标达成 | 已解决/已关闭，仅保留用于历史追溯，已不存在待实现差距 |

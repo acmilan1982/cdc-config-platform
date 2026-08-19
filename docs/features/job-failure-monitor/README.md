@@ -176,16 +176,17 @@
 
 | 层次 | 文件 | 职责 |
 |---|---|---|
-| 路由 | `frontend/src/router/index.ts` | 路由配置：概览、最近故障详情、指定历史故障过程详情（复用 `detail.vue`） |
+| 路由 | `frontend/src/router/index.ts` | 路由配置：故障监控概览、最近故障详情、独立"故障历史"概览、数据源故障历史列表、指定历史故障过程详情（复用 `detail.vue`） |
 | 概览页 | `frontend/src/views/monitor/job-failure/index.vue` | 故障监控总览：客户端卡片、表格、筛选、自动刷新 |
-| 详情页 | `frontend/src/views/monitor/job-failure/detail.vue` | 故障过程详情：概览、Job 链、事件、重启卡片、历史 |
+| 详情页 | `frontend/src/views/monitor/job-failure/detail.vue` | 故障过程详情：概览、Job 链、事件、重启卡片（底部"历史故障过程"区块已移除，不设置替代入口） |
 | 故障概览 | `frontend/src/views/monitor/job-failure/components/FaultProcessOverview.vue` | 故障概览网格，含硬编码 `RECOVERY_RECORDED → '已恢复'` 映射 |
 | Job 链 | `frontend/src/views/monitor/job-failure/components/PhysicalJobChain.vue` | 物理 Job 链：单行横向滚动，红/绿标记 |
 | 事件列表 | `frontend/src/views/monitor/job-failure/components/FailureEventList.vue` | 事件列表：ID 截断（≤16 完整，>16 前6…后8） |
 | 重启卡片 | `frontend/src/views/monitor/job-failure/components/RestartCards.vue` | 恢复尝试卡片：按 RESTART_STARTED 分组 |
-| 历史故障 | `frontend/src/views/monitor/job-failure/components/FaultHistory.vue` | 历史故障：时间范围下拉（最近一天/最近一周/最近一个月），固定 `pageSize=1000` |
+| 故障历史概览 | `frontend/src/views/monitor/job-failure/history.vue` | 独立"故障历史"页：客户端卡片、今日/近7天/近30天故障次数、稳定平台总量、默认全部展开 |
+| 数据源历史列表 | `frontend/src/views/monitor/job-failure/history-list.vue` | 数据源故障历史列表：今日/近7天/近30天，无分页完整展示，7列表格，`查看详情` 精确链接 |
 | CLOB 弹窗 | `frontend/src/views/monitor/job-failure/components/ClobDetailDialog.vue` | CLOB 详情弹窗：按需加载，复制按钮 |
-| API 模块 | `frontend/src/api/jobFailure.ts` | 5 个后端 API 的 axios 封装 |
+| API 模块 | `frontend/src/api/jobFailure.ts` | 7 个后端 API 的 axios 封装（含历史概览与无分页历史列表） |
 | 类型定义 | `frontend/src/types/jobFailure.ts` | TypeScript 接口定义 |
 
 > 注：`HandleTimeline.vue` 和 `JobFailureSummaryTable.vue` 保留在代码中但已不被使用。
@@ -194,18 +195,22 @@
 
 | 配置 | 文件 | 路径 | 说明 |
 |---|---|---|---|
-| 路由 | `frontend/src/router/index.ts` | `/monitor/job-failure` | 概览页，路由组 `运行监控` |
+| 路由 | `frontend/src/router/index.ts` | `/monitor/job-failure` | 故障监控概览页，路由组 `运行监控` |
 | 路由 | `frontend/src/router/index.ts` | `/monitor/job-failure/detail` | 最近一次故障详情页，接收 `clientId`、`dataSourceId` 查询参数 |
+| 路由 | `frontend/src/router/index.ts` | `/monitor/job-failure/history` | 独立"故障历史"概览页，路由名 `JobFailureHistory` |
+| 路由 | `frontend/src/router/index.ts` | `/monitor/job-failure/history/list` | 数据源故障历史列表页，路由名 `JobFailureHistoryList`，接收 `clientId`、`dataSourceId` 查询参数 |
 | 路由 | `frontend/src/router/index.ts` | `/monitor/job-failure/process/:faultRootId` | 指定历史故障过程详情页，路由名 `JobFailureProcessDetail`，复用 `detail.vue` |
+| 菜单 | `frontend/src/config/menu.ts` | `/monitor/job-failure/history` | 菜单项："故障历史"，图标 `Document`，位于 `运行监控` 组，紧邻"故障监控" |
 | 菜单 | `frontend/src/config/menu.ts` | `/monitor/job-failure` | 菜单项："故障监控"，图标 `Monitor`，位于 `运行监控` 组 |
 
-前端页面路由与后端 API 路径相互独立，不得混写：最近故障详情前端路由 `/monitor/job-failure/detail?clientId=<clientId>&dataSourceId=<dataSourceId>` 调用 Latest API `/api/job-failure/latest/{clientId}/{dataSourceId}`；指定过程前端路由 `/monitor/job-failure/process/:faultRootId` 调用 Process API `/api/job-failure/process/{faultRootId}`。历史"查看"与"故障监控"首页入口均指向上述详情路由，不提供独立菜单入口。
+前端页面路由与后端 API 路径相互独立，不得混写：最近故障详情前端路由 `/monitor/job-failure/detail?clientId=<clientId>&dataSourceId=<dataSourceId>` 调用 Latest API `/api/job-failure/latest/{clientId}/{dataSourceId}`；数据源故障历史列表前端路由 `/monitor/job-failure/history/list?clientId=<clientId>&dataSourceId=<dataSourceId>` 调用 History List API `/api/job-failure/history/list`；指定过程前端路由 `/monitor/job-failure/process/:faultRootId` 调用 Process API `/api/job-failure/process/{faultRootId}`。独立"故障历史"菜单入口指向 `/monitor/job-failure/history`；其"查看历史"默认新标签页打开数据源历史列表，列表"查看详情"与"故障监控"首页详情入口均指向过程详情路由。
 
 ### 7.8 测试
 
 | 文件 | 类型 | 覆盖范围 |
 |---|---|---|
 | `backend/src/test/java/com/bsoft/cdcconfig/monitor/jobfailure/service/JobFailureServiceTest.java` | 集成测试 | 5 个 API 全路径 |
+| `backend/src/test/java/com/bsoft/cdcconfig/monitor/jobfailure/service/impl/FaultHistoryServiceImplTest.java` | 单元/集成测试 | 历史概览（API-6）与历史列表（API-7）：自然日边界、根过程去重、当前配置全集、范围筛选排序，以及 25条/120条全量返回无静默上限 |
 | `backend/src/test/java/com/bsoft/cdcconfig/monitor/jobfailure/algorithm/AnomalyDetectorTest.java` | 单元测试 | 异常检测 |
 | `backend/src/test/java/com/bsoft/cdcconfig/monitor/jobfailure/algorithm/MainChainFilterTest.java` | 单元测试 | 主链过滤 |
 | `backend/src/test/java/com/bsoft/cdcconfig/monitor/jobfailure/algorithm/FaultProcessGrouperTest.java` | 单元测试 | 事件分组 |
@@ -238,9 +243,27 @@
 - **Job 重启轨迹**：单行横向滚动，红色（异常标记）/绿色（正常）节点
 - **故障发生明细**：主链事件表格，5 列（故障事件 ID、发生故障的 Job ID、故障时间、事件处理结果、操作），ID 截断（≤16 字符完整显示，>16 字符显示前6…后8）；未计入本次故障的事件单独成表展示
 - **恢复尝试卡片**：以 `RESTART_STARTED` 日志为界分组，每组一张卡片，绿色（含 STABLE_CHECK_PASSED）/红色（无），升序排列
-- **故障历史**：时间范围下拉（最近一天/最近一周/最近一个月），不显示传统分页组件，所选范围内的全部符合条件记录必须可见；"查看"为真实链接，普通点击在当前标签页打开指定过程，支持浏览器原生 Ctrl/Cmd+单击、中键、右键菜单新开标签页，URL 可复制、可刷新、可后退/前进，打开后回到详情顶部
 - **精确 ID**：历史链接、路由参数与 Process API 请求均使用 `faultRootIdText` 精确字符串，不经 JavaScript number 中转，超出安全整数范围的根事件 ID 仍逐字符精确
 - **CLOB 详情**：弹窗按需加载，支持复制
+
+### 8.3 独立"故障历史"三级页面
+
+故障历史按三级页面组织：
+
+1. **"故障历史"独立菜单页**（`/monitor/job-failure/history`）：按客户端卡片展示当前仍配置的数据源及今日/近7天/近30天故障次数；客户端卡片默认全部展开并保留人工折叠状态，顶部显示稳定平台总量；每行"查看历史"默认新标签页打开对应数据源历史列表。
+2. **"数据源故障历史"列表页**（`/monitor/job-failure/history/list?clientId=<clientId>&dataSourceId=<dataSourceId>`）：指定客户端与数据源，按今日/近7天/近30天展示全部故障过程；数据源可读名称与完整 ID Tooltip 来自后端可信上下文（History Summary），列表为空时仍可显示正确上下文。
+3. **"故障过程详情"页**（`/monitor/job-failure/process/:faultRootId`）：通过精确 `faultRootIdText` 查看指定故障过程（复用 `detail.vue`，与最近故障详情同页）。
+
+详情页底部已移除"历史故障过程"区块，不设置替代入口；历史查询职责由上述独立"故障历史"页面承担。
+
+**无分页当前事实（数据源故障历史列表）**：
+
+- 列表前端无分页器、页码、每页条数、上一页/下一页与跳页控件，也不维护分页状态；
+- 后端 History List API 无分页参数，不返回 `PageResult` 或分页元数据；
+- 选择今日/近7天/近30天后，后端一次性返回该客户端、该数据源范围内全部故障过程，前端在同一张表格中一次性展示全部结果；
+- 无默认20条、最大100条或其他静默条数上限，不因行数静默截断；
+- 结果较多时使用页面普通纵向滚动，不使用加载更多、无限滚动或虚拟分页替代；
+- 时间归属按故障过程首次失败时间；今日为当日00:00至当前时刻，近7天/近30天按包含今天在内的自然日计算；列表按首次失败时间降序，根事件精确字符串保证稳定次序。
 
 ## 9. 接口概览
 
@@ -248,14 +271,15 @@
 |---|---|---|---|
 | API-1 | GET | `/api/job-failure/summary` | 故障汇总：按逻辑 Job 返回最新故障概况 |
 | API-2 | GET | `/api/job-failure/latest/{clientId}/{dataSourceId}` | 最新故障：指定逻辑 Job 的最近一次故障过程详情 |
-| API-3 | GET | `/api/job-failure/history/{clientId}/{dataSourceId}` | 历史故障：按时间范围查询，需 `startTime`/`endTime` |
+| API-3 | GET | `/api/job-failure/history/{clientId}/{dataSourceId}` | 历史故障（另一条既有合法调用链，可继续分页）：按时间范围查询，需 `startTime`/`endTime` |
 | API-4 | GET | `/api/job-failure/process/{faultRootId}` | 故障过程详情：按 `faultRootId` 查询任意一次故障过程 |
 | API-5 | GET | `/api/job-failure/clob/{faultRootId}/{clobField}/{recordId}` | CLOB 内容：按需懒加载，`recordId` 用于校验记录归属 |
-| API-6 | GET | `/api/monitor/zookeeper/health` | ZooKeeper 连接健康检查：只读返回运行时生效的集群地址（connectString）、根路径（rootPath）与连接状态，供概览页 ZK 错误态诊断展示 |
+| API-6 | GET | `/api/job-failure/history/summary` | 故障历史概览汇总：返回所有当前配置数据源的全集与今日/近7天/近30天故障次数，纯数据库历史统计，不读 ZooKeeper |
+| API-7 | GET | `/api/job-failure/history/list` | 单数据源完整历史列表，无分页：参数仅 `clientId`、`dataSourceId`、固定 `range`，一次返回所选自然日范围内全部故障过程 |
 
 所有接口均返回 `ApiResponse<T>` 统一响应格式（code/message/data）。
 
-> 注：Summary API（API-1）的响应除数据库故障事实外，还携带 ZooKeeper 运行状态融合结果（客户端/Job 在线、离线）；`/api/monitor/zookeeper/health`（API-6）单独提供连接目标与健康信息，不读取业务节点数据。
+> 注：Summary API（API-1）的响应除数据库故障事实外，还携带 ZooKeeper 运行状态融合结果（客户端/Job 在线、离线）；`/api/monitor/zookeeper/health` 单独提供连接目标与健康信息，不读取业务节点数据。API-3 是另一条既有合法调用链，可继续分页；API-6 是故障历史概览汇总；API-7 是单数据源完整历史列表，无分页（不分页语义见 §8.3）。
 
 ## 10. 核心业务对象
 
@@ -358,7 +382,7 @@ Flink 作业的唯一标识（32 位 hex 字符串），存储在 `FAILED_JOB_ID
 代码中 `FaultProcessResult`（3 种）和 `RecordStatus`（9 种）通过 VO 直接返回前端：
 - `JobFailureServiceImpl.toDetailVO()` 第 450-456 行：`vo.setRecordStatus(status.name())` + `vo.setFaultProcessResult(result.name())`
 - 前端 `FaultProcessOverview.vue` 硬编码 `RECOVERY_RECORDED → '已恢复'`，其余状态透传 `recordStatusLabel`
-- 前端 `FaultHistory.vue` 同上的硬编码映射
+- 前端 `history-list.vue` `resultLabel()` 同上的硬编码映射
 
 这导致页面显示的是内部状态的直接中文映射（如"已记录恢复""记录未闭环""本次提交失败"等），而非 5 种正式对外状态。
 
@@ -399,9 +423,7 @@ Flink 作业的唯一标识（32 位 hex 字符串），存储在 `FAILED_JOB_ID
 | GAP-STATUS-001 | 对外状态 | 对外故障过程状态须为 5 种正式状态，内部枚举不得直接对外返回 | 代码中 `FaultProcessResult`（3 种）和 `RecordStatus`（9 种）通过 VO 直接返回前端 | 页面状态标签与正式需求不一致 |
 | GAP-STATUS-002 | 状态映射 | 须实现统一的内部→对外映射层 | 前端硬编码 `RECOVERY_RECORDED → '已恢复'`，其余透传 `recordStatusLabel` | 映射不完整、不统一 |
 | GAP-STATUS-003 | 恢复失败判定 | 须实现"恢复失败"的统一判定规则 | 代码不存在"恢复失败"概念。`SUBMIT_FAILED`、`RESTART_SKIPPED`、部分 `NOT_CLOSED` 仅为候选证据，从当前代码无法唯一确定"恢复失败"的精确判定条件，不得使用"其他情况"兜底 | "恢复失败"对外状态当前无对应实现 |
-| GAP-HISTORY-001 | 历史全量返回 | 无传统分页组件，所选时间范围内全部记录可见 | 前端固定 `pageSize=1000`（`FaultHistory.vue` 第 148 行），后端服务端分页 | 超过 1000 条时可能静默截断 |
-
-> 注：ZooKeeper 运行状态融合（`GAP-OVERVIEW-ZK-STATUS-001`）、集群连接目标诊断（`GAP-OVERVIEW-ZK-CONNECTION-TARGET-001`）、重试倒计时（`GAP-OVERVIEW-ZK-RETRY-COUNTDOWN-001`）与概览整体收口（`GAP-OVERVIEW-001`）均已关闭，关闭原因与历史说明见 REQUIREMENTS.md §19，不再作为未完成差距列入上表。
+> 注：ZooKeeper 运行状态融合（`GAP-OVERVIEW-ZK-STATUS-001`）、集群连接目标诊断（`GAP-OVERVIEW-ZK-CONNECTION-TARGET-001`）、重试倒计时（`GAP-OVERVIEW-ZK-RETRY-COUNTDOWN-001`）、概览整体收口（`GAP-OVERVIEW-001`）与独立"故障历史"页面及无分页调整（`GAP-HISTORY-001`）均已关闭，关闭原因与历史说明见 REQUIREMENTS.md §19，不再作为未完成差距列入上表。
 
 ## 14. 运行与维护约束
 
