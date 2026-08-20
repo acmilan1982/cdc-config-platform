@@ -1,0 +1,382 @@
+# 日志查询逻辑查询设计（DESIGN）
+
+## 1. 文档元数据与状态
+
+| 项目 | 值 |
+|---|---|
+| 正式功能标识 | `log-query` |
+| 目标文档 | `docs/features/log-query/DESIGN.md` |
+| 文档状态 | `DRAFT_PENDING_USER_REVIEW` |
+| 对应需求状态 | `APPROVED`（R2、R2.1、R2.2 完整修订已用户人工复审批准） |
+| 实现状态 | `NOT_STARTED`（现有页面仍为占位页，本文不构成任何已实现声明） |
+| 依据需求 | `docs/features/log-query/REQUIREMENTS.md` |
+| 关联契约 | `docs/features/log-query/API.md`（两文档使用同一游标、翻页与字段隔离方案） |
+| 创建日期 | 2026-08-20 |
+| 关联任务 | `LOG-QUERY-API-DESIGN-001` |
+
+本文定义应用结构、请求流程和逻辑 SQL。本文**不确定**最终分区粒度、子分区、最终索引、生产 DDL 或最终执行计划（LQ-DB-07 / 08 / 09、LQ-NONGOAL-18）。
+
+## 2. 设计边界与输入
+
+- 已批准业务输入：时间必填且默认当前自然日、半开区间、7 天公式、固定 100 条、双字段游标、`CDC_LOG_ID` 字符串传输、Oracle 19c+、`TARGET_TIME` 为第一层 `RANGE` 分区键（LQ-FILTER-52~57、LQ-PAGE-20~28、LQ-DB-06 / 07、LQ-TIME-04）。
+- 物理延期项：一级 RANGE 粒度、是否子分区、最终索引名称/数量/列序/本地全局属性、生产 DDL、最终执行计划与性能验收，均等待约 40 个数据源完成首次全量后按真实分布确定（LQ-DB-08 / 09 / 12、LQ-PERF-14）。
+- 程序必须与最终物理粒度、子分区和索引形态解耦；不引用具体分区名称，不硬编码依赖分区结构的逻辑（LQ-DB-01、§19.1）。
+- 菜单在最终物理设计与生产等价性能验收完成前必须保持隐藏（LQ-DB-14、AC-74）。
+
+## 3. 应用分层与职责
+
+包根：`com.bsoft.cdcconfig.logquery`（沿用仓库 `datasource`、`jobfailure`、`largescreen` 分层风格）。资源 XML：`src/main/resources/mapper/logquery/LogQueryMapper.xml`（`application.yml` 已配置 `mapper-locations: classpath:mapper/**/*.xml`）。
+
+| 编号 | 层/类（草案） | 职责 | 边界 |
+|---|---|---|---|
+| LQ-DESIGN-01 | `controller/LogQueryController` | 协议接入、URL 绑定、基础白名单校验、委托 Service；`@Tag` / `@Operation` / `@Parameter` Swagger 注解 | 不做业务规则判断，不拼 SQL |
+| LQ-DESIGN-02 | `dto/LogListQuery` | GET 查询对象绑定（数组以重复参数接收） | 只承载原始输入 |
+| LQ-DESIGN-03 | `service/LogQueryService` + `impl/LogQueryServiceImpl` | 条件规范化、时间半开区间与 7 天公式、日志类型白名单、数据源一次读取与映射、游标校验、结果组装 | 无状态；不持有会话 |
+| LQ-DESIGN-04 | `mapper/LogQueryMapper` + `LogQueryMapper.xml` | 只接受已验证的固定表枚举与绑定参数；实现列表/详情/原始消息三类独立查询 | 不允许客户端字符串触达表名 |
+| LQ-DESIGN-05 | `enums/LogTypeEnum` | 白名单值到固定表名的唯一封闭映射 | 见 §4 |
+| LQ-DESIGN-06 | `vo/LogListResponse`、`vo/LogListVO`、`vo/LogDetailVO`、`vo/RawMessageVO`、`vo/DataSourceOptionsVO`、`vo/DataSourceOptionVO` | 响应组装 | `cdcLogId`、`offset` 为 String |
+| LQ-DESIGN-07 | `exception/LogQueryErrorCode` | 错误码常量与返回 `BusinessException` 的静态工厂（风格同 `JobFailureErrorCode`） | 码值草案，待确认 |
+| LQ-DESIGN-08 | `cursor/LogCursorCodec` | 不透明游标编解码与验签 | 密钥来自后端配置 |
+| LQ-DESIGN-09 | `cursor/LogQueryFingerprint` | 条件指纹规范化与 SHA-256 | 生成/校验同一规则 |
+| LQ-DESIGN-10 | 前端 Tab 状态 | 表单/已生效条件/列表/游标栈/首次查询/加载/错误，两个 Tab 各自独立 | 后端无会话（LQ-TAB-01~08） |
+
+| 编号 | 规则 |
+|---|---|
+| LQ-DESIGN-11 | Controller 只做协议接入和基础校验；Service 负责条件规范化、时间半开区间、日志类型白名单、数据源映射、游标校验和结果组装；Mapper/Repository 只接受已验证的固定表枚举和绑定参数（LQ-API-30 ~ 40）。 |
+| LQ-DESIGN-12 | 列表、日志详情、原始消息必须是三类独立查询，不得合并读取大字段（§9）。 |
+| LQ-DESIGN-13 | 后端保持无会话状态；Tab 表单、已生效条件和游标栈由前端管理（LQ-TAB-01~12、LQ-VALID-06）。 |
+| LQ-DESIGN-14 | `CDC_LOG_ID` 在 Java DTO/VO 与序列化边界使用不会丢精度的类型（本设计全程以 String 贯穿 Controller/Service/Mapper，SQL 以字符串绑定参数，Oracle 隐式转换 NUMBER 比较），并确保 JSON 输出为字符串（LQ-PAGE-27 / 28）。 |
+
+### 3.1 `${}` 固定表名安全性
+
+| 编号 | 规则 |
+|---|---|
+| LQ-DESIGN-15 | 若 MyBatis 使用 `${tableName}` 选择固定表名，`tableName` 只能由服务端封闭枚举 `LogTypeEnum` 产生（`CDC_LOG_ERROR` / `CDC_LOG_CORRECT`）。 |
+| LQ-DESIGN-16 | 用户输入永远无法到达 `${}`：HTTP 层 Controller 对 `logType` 做白名单校验（非 `error` / `correct` 直接拒绝 `LOG_TYPE_INVALID`）→ Service 经 `LogTypeEnum` 枚举查找（未命中即抛业务异常）→ Mapper 只收到枚举产生的常量。任何其他值在到达 SQL 之前即被拒绝。 |
+| LQ-DESIGN-17 | 该白名单模式已有仓库先例：`largescreen` 的 `SafeUpperIdProvider` 与 `LogBatchReader` 均用 `ALLOWED_TABLES = {CDC_LOG_CORRECT, CDC_LOG_ERROR}` 白名单后才允许 `SELECT ... FROM <table>`。日志查询沿用同一信任边界。 |
+
+## 4. 日志类型与固定表映射
+
+`LogTypeEnum`（草案）：
+
+| 白名单值 | 枚举名 | 固定表 | Tab |
+|---|---|---|---|
+| `error` | `ERROR` | `CDC_LOG_ERROR` | 错误日志 |
+| `correct` | `CORRECT` | `CDC_LOG_CORRECT` | 正确日志 |
+
+| 编号 | 规则 |
+|---|---|
+| LQ-DESIGN-20 | 只允许上述两个白名单值；其余值一律拒绝（LQ-API-08 / 84）。 |
+| LQ-DESIGN-21 | 两张表字段结构相同，页面采用共用的查询、列表与详情交互规范（LQ-SCOPE-07 / 10）。 |
+| LQ-DESIGN-22 | 严禁客户端直接传表名或把任意字符串拼入 SQL；API 层只暴露 `logType`（LQ-API-08）。 |
+
+## 5. 列表查询流程
+
+每次列表请求（首查、点击查询、下一页、上一页）按固定步骤执行：
+
+| 编号 | 步骤 |
+|---|---|
+| LQ-DESIGN-30 | 校验日志类型：`logType` 白名单 → 解析固定表名（§4）。 |
+| LQ-DESIGN-31 | 校验时间：`startTime` / `endTime` 存在且格式合法 → 顺序校验 → 将 `endTime` 加 1 秒转换为 `endExclusive` → 校验 `endExclusive - startTime <= 7 × 24 小时`（LQ-FILTER-52~57）。 |
+| LQ-DESIGN-32 | 校验可选条件：表名首尾空白规范化且 ≤64 字符；源库/目标库数组 ≤100 且元素合法；多选去重（LQ-VALID-04 / 05）。 |
+| LQ-DESIGN-33 | 校验游标（如提供）：签名/版本/`logType`/条件指纹（§7）；非法或失配拒绝（LQ-API-54）。 |
+| LQ-DESIGN-34 | 恰好读取一次 `CDC_DATA_SOURCE` 全表，构建请求内全量映射 `Map<DATA_SOURCE_ID, DATA_SOURCE_ORG>`，并同时构建有效候选集合（`FG_ACTIVE=1` 且类别匹配）；校验已选源/目标 ID 属于对应候选集合（LQ-DATA-01 / 05 / 06、LQ-VALID-03）。 |
+| LQ-DESIGN-35 | 固化本次请求有效条件（时间半开区间 + 可选谓词 + 游标边界谓词）。 |
+| LQ-DESIGN-36 | 执行固定日志表上的轻量列表 SQL，`FETCH FIRST 101 ROWS ONLY`（§6.1）。 |
+| LQ-DESIGN-37 | 取到 101 条则 `hasNext=true`、`nextCursor` 为第 100 条记录的边界、只返回前 100 条；取到 ≤100 条则 `hasNext=false`、`nextCursor` 省略（LQ-API-58）。 |
+| LQ-DESIGN-38 | 在内存映射源库/目标库名称（LQ-DATA-02），组装响应；同一请求内只读一次数据源全表，无 N+1、无大表 JOIN（LQ-DATA-03 / 04）。 |
+
+历史日志引用失效或不存在的数据源 ID 的降级显示：名称映射基于全量 `CDC_DATA_SOURCE`，不存在时回退显示日志原始 `DATA_SOURCE_ID`，存在但名称为空显示“未定义名称”（LQ-DATA-07 ~ 09、LQ-API-64）。候选校验（已选 ID 必须在有效候选集合）与历史名称展示（全量映射）不可混为一谈（LQ-API-66）。
+
+## 6. 逻辑 SQL
+
+以下 SQL 均为参数化伪 SQL / MyBatis 风格动态 SQL，用于描述逻辑查询契约，**不是最终 DDL，也不是性能方案**。所有值条件使用绑定参数；`${tableName}` 仅来自 §4 封闭枚举。
+
+### 6.1 列表首查 SQL
+
+```sql
+SELECT
+    CDC_LOG_ID,
+    SOURCE_DATA_SOURCE_ID,
+    SOURCE_TABLE_NAME,
+    TARGET_DATA_SOURCE_ID,
+    TARGET_TABLE_NAME,
+    INSTRUCTION_TYPE,
+    SUBSTR(LOG_DETAIL, 1, 300) AS LOG_DETAIL_SUMMARY,
+    CASE WHEN LENGTH(LOG_DETAIL) > 0 THEN 1 ELSE 0 END  AS HAS_LOG_DETAIL,
+    CASE WHEN LENGTH(RAW_MESSAGE) > 0 THEN 1 ELSE 0 END  AS HAS_RAW_MESSAGE,
+    OFFSET,
+    SOURCE_TIME,
+    KAFKA_ENQUEUE_TIME,
+    TARGET_TIME,
+    INSERT_TIME
+FROM ${tableName}
+WHERE TARGET_TIME >= #{startTime}
+  AND TARGET_TIME <  #{endExclusive}
+  -- 以下四类条件按非空动态追加
+  <if test="sourceDataSourceIds != null and !sourceDataSourceIds.isEmpty()">
+    AND SOURCE_DATA_SOURCE_ID IN
+    <foreach collection="sourceDataSourceIds" item="id" open="(" separator="," close=")">#{id}</foreach>
+  </if>
+  <if test="sourceTableName != null and sourceTableName != ''">
+    AND SOURCE_TABLE_NAME = #{sourceTableName}
+  </if>
+  <if test="targetDataSourceIds != null and !targetDataSourceIds.isEmpty()">
+    AND TARGET_DATA_SOURCE_ID IN
+    <foreach collection="targetDataSourceIds" item="id" open="(" separator="," close=")">#{id}</foreach>
+  </if>
+  <if test="targetTableName != null and targetTableName != ''">
+    AND TARGET_TABLE_NAME = #{targetTableName}
+  </if>
+ORDER BY TARGET_TIME DESC, CDC_LOG_ID DESC
+FETCH FIRST 101 ROWS ONLY
+```
+
+### 6.2 下一页 SQL（追加游标边界谓词）
+
+```sql
+WHERE TARGET_TIME >= #{startTime}
+  AND TARGET_TIME <  #{endExclusive}
+  -- 其余四类条件同上
+  AND (
+         TARGET_TIME <  #{cursorTargetTime}
+      OR (TARGET_TIME = #{cursorTargetTime} AND CDC_LOG_ID < #{cursorCdcLogId})
+  )
+ORDER BY TARGET_TIME DESC, CDC_LOG_ID DESC
+FETCH FIRST 101 ROWS ONLY
+```
+
+### 6.3 列表 SQL 约束
+
+| 编号 | 规则 |
+|---|---|
+| LQ-DESIGN-40 | `101` 是服务器固定的 `pageSize(100) + 1`，不得来自不可信字符串拼接；可依据 Oracle 驱动与项目惯例采用安全绑定或服务端固定字面量。 |
+| LQ-DESIGN-41 | 所有值条件使用绑定参数；源库、目标库使用安全的 `IN` 参数展开（`foreach`），每个数组已校验 ≤100 元素（LQ-API-35）。 |
+| LQ-DESIGN-42 | 表名条件使用 `=` 精确匹配，不得对日志列套 `UPPER()` / `LOWER()` / `LIKE` 或通配符（LQ-FILTER-22 / 42、LQ-NONGOAL-08 / 09）。 |
+| LQ-DESIGN-43 | 不执行 `COUNT`；不使用 `OFFSET`；不 JOIN `CDC_DATA_SOURCE`；不读取 `RAW_MESSAGE`、`RESULT_DETAIL` 或完整 `LOG_DETAIL`（LQ-PERF-03 / 05、LQ-API-42 / 43）。 |
+| LQ-DESIGN-44 | 摘要若在 Oracle 截取，使用字符语义一致的 `SUBSTR`（`SUBSTR(LOG_DETAIL, 1, 300)`），长度固定为 300（LQ-API-45，草案待复审）。`LENGTH(LOG_DETAIL)` / `LENGTH(RAW_MESSAGE)` 返回存在性标记，不读取完整内容（LQ-DETAIL-11）。 |
+| LQ-DESIGN-45 | 若同一 `TARGET_TIME` 下存在多条记录，`CDC_LOG_ID` 必须提供严格稳定的第二排序键（LQ-PAGE-24）；排序键必须同时包含 `TARGET_TIME` 与 `CDC_LOG_ID`（LQ-PAGE-23）。 |
+| LQ-DESIGN-46 | `startTime` / `endExclusive` / `cursorTargetTime` 以 `java.time.LocalDateTime` 绑定（Oracle `DATE` 语义）；`cursorCdcLogId` 以字符串绑定，Oracle 隐式转换 NUMBER 比较。 |
+
+### 6.4 数据源全表一次读取 SQL（列表名称映射）
+
+```sql
+SELECT DATA_SOURCE_ID, DATA_SOURCE_ORG
+FROM CDC_DATA_SOURCE
+```
+
+| 编号 | 规则 |
+|---|---|
+| LQ-DESIGN-47 | 列表请求必须恰好读取一次该结果，构建请求内 `Map<DATA_SOURCE_ID, DATA_SOURCE_ORG>`；不跨请求缓存（LQ-DATA-01 / 02 / 11）。 |
+| LQ-DESIGN-48 | 名称映射读取全部数据源记录，不按 `FG_ACTIVE` 过滤（LQ-DATA-06）。 |
+
+### 6.5 源/目标候选过滤（候选接口）
+
+候选在数据源全表结果上按类别内存过滤（候选接口一次读取全表后分组）：
+
+```sql
+SELECT DATA_SOURCE_ID, DATA_SOURCE_ORG
+FROM CDC_DATA_SOURCE
+WHERE FG_ACTIVE = '1'
+  AND UPPER(TRIM(DATA_SOURCE_CATEGORY)) = 'SOURCE'   -- 源库
+--  或
+  AND UPPER(TRIM(DATA_SOURCE_CATEGORY)) = 'TARGET'   -- 目标库
+ORDER BY DATA_SOURCE_ORG
+```
+
+| 编号 | 规则 |
+|---|---|
+| LQ-DESIGN-49 | 候选过滤选择在 SQL 上过滤（`FG_ACTIVE='1'` 且类别匹配）还是内存过滤均可接受；两种方式的**结果集合语义相同**，且列表请求仍需一次读取全表完成名称映射（LQ-DATA-01）。设计取向：候选接口在 SQL 过滤返回排序结果；列表请求一次读取全表后在内存同时完成候选校验与名称映射（LQ-DESIGN-34）。 |
+
+### 6.6 日志详情最小字段 SQL
+
+```sql
+SELECT
+    CDC_LOG_ID,
+    SOURCE_DATA_SOURCE_ID,
+    SOURCE_TABLE_NAME,
+    TARGET_DATA_SOURCE_ID,
+    TARGET_TABLE_NAME,
+    INSTRUCTION_TYPE,
+    RESULT_CODE,
+    OFFSET,
+    SOURCE_TIME,
+    KAFKA_ENQUEUE_TIME,
+    TARGET_TIME,
+    INSERT_TIME,
+    LOG_DETAIL
+FROM ${tableName}
+WHERE CDC_LOG_ID = #{cdcLogId}
+FETCH FIRST 1 ROWS ONLY
+```
+
+| 编号 | 规则 |
+|---|---|
+| LQ-DESIGN-50 | 详情只读取详情所需字段，含完整 `LOG_DETAIL` 与 `RESULT_CODE`；不读取 `RESULT_DETAIL`，不顺带读取 `RAW_MESSAGE`（LQ-DETAIL-27 / 28、LQ-API-71）。 |
+| LQ-DESIGN-51 | 记录不存在返回 `LOG_RECORD_NOT_FOUND`（LQ-API-72 / 88）。 |
+
+### 6.7 原始消息最小字段 SQL
+
+```sql
+SELECT CDC_LOG_ID, RAW_MESSAGE
+FROM ${tableName}
+WHERE CDC_LOG_ID = #{cdcLogId}
+FETCH FIRST 1 ROWS ONLY
+```
+
+| 编号 | 规则 |
+|---|---|
+| LQ-DESIGN-52 | 原始消息只读取 `RAW_MESSAGE` 及最小标识，不顺带读取完整日志详情或其他大字段（LQ-API-75）。 |
+| LQ-DESIGN-53 | 记录不存在返回 `LOG_RECORD_NOT_FOUND`；记录存在但 `RAW_MESSAGE` 为 NULL/空串时，Service 归一化为空字符串返回（空内容与记录不存在互不混淆，LQ-API-76）。 |
+| LQ-DESIGN-54 | `RAW_MESSAGE` 原样返回，不修改、不格式化、不保存（LQ-API-77）。 |
+
+## 7. 游标与上一页
+
+与 `API.md` §7 使用同一个唯一方案：**服务端签名不透明游标 + 条件指纹 + 前端游标栈实现上一页（服务端仅向后翻页）**。
+
+### 7.1 游标生成与验证
+
+| 编号 | 规则 |
+|---|---|
+| LQ-DESIGN-60 | 载荷 JSON：`{"v":1,"lt":"<logType>","fp":"<sha256-hex>","t":"<yyyy-MM-dd HH:mm:ss>","id":"<cdcLogId>"}`；编码为 UTF-8 JSON 的 `base64url`（无填充）。 |
+| LQ-DESIGN-61 | 签名 = `HMAC-SHA256(secret, payload)` 十六进制；游标 = `payload + "." + signature`。密钥由后端配置持有（如 `cdc.log-query.cursor-secret`），不入 DTO、不入库、不出接口。 |
+| LQ-DESIGN-62 | 条件指纹：对规范化条件串 `logType=<v>|start=<startTime>|endExclusive=<endExclusive>|sourceIds=<按字典序升序逗号连接，空为 ''>|sourceTable=<trim后值>|targetIds=<...>|targetTable=<...>` 计算 SHA-256 小写十六进制。生成与校验使用同一规范化与同一秒级时间值。 |
+| LQ-DESIGN-63 | 验证步骤：按最后一个 `.` 拆解 → base64url 解码 → 重算并常量时间比较签名 → 校验 `v==1` → 校验 `lt` 与请求 `logType` 一致 → 用当前请求条件重算 `fp` 比对。失败分类见 `LQ-API-54`（`CURSOR_INVALID` / `CURSOR_CONDITION_MISMATCH`）。 |
+
+### 7.2 前端每个 Tab 的游标栈结构
+
+| 编号 | 规则 |
+|---|---|
+| LQ-DESIGN-64 | 每个 Tab 维护 `cursors` 列表：`cursors[i]` = 请求第 i+1 页时使用的游标，`cursors[0]` 恒为 null（第 1 页不携带游标）。 |
+| LQ-DESIGN-65 | 下一页：请求游标 = `cursors[cursors.length-1]`；成功后追加响应 `nextCursor`。 |
+| LQ-DESIGN-66 | 上一页：当 `cursors.length >= 2` 时，请求游标 = `cursors[cursors.length-2]`；请求前将列表截断为 `length-1`；成功后追加新的 `nextCursor`。 |
+| LQ-DESIGN-67 | 上一页按钮启用条件为 `cursors.length >= 2`（已有前一页）；下一页按钮启用条件为当前页响应 `hasNext == true`。 |
+| LQ-DESIGN-68 | 因 keyset 排序确定，重复发送同一游标可稳定重取前一页内容；持续写入场景下不承诺跨请求快照（LQ-API-59），但该重取不会因新插入产生 OFFSET 式大范围漂移。 |
+
+### 7.3 请求序列示例
+
+| 页码 | 请求游标 | 响应 `nextCursor` | 响应后 `cursors` |
+|---|---|---|---|
+| 1（首查） | 无 | `C1` | `[null, C1]` |
+| 2（下一页） | `C1` | `C2` | `[null, C1, C2]` |
+| 3（下一页） | `C2` | `C3` | `[null, C1, C2, C3]` |
+| 2（上一页） | `C2`（即 `cursors[length-2]`） | `C3`（重取后的新值，数据未变时与旧 `C3` 相同） | `[null, C1, C2, C3]` |
+
+### 7.4 状态替换与失效
+
+| 编号 | 规则 |
+|---|---|
+| LQ-DESIGN-70 | 点击“查询”：生成候选条件快照 → 首查成功后才**原子替换**已生效条件、列表与游标栈（`cursors=[null, C1]`）；失败或超时保留旧列表、旧已生效条件与旧游标（LQ-TAB-30 ~ 34）。 |
+| LQ-DESIGN-71 | 点击“重置”：只修改当前 Tab 的表单条件（时间恢复点击重置时所在自然日），不发起查询、不清列表、不改已生效条件、不改游标栈（LQ-TAB-40 / 41）。 |
+| LQ-DESIGN-72 | 重新进入页面：清除两个 Tab 全部临时状态与游标，恢复默认表单，默认打开错误日志并自动首查（LQ-TAB-50 ~ 52）。 |
+| LQ-DESIGN-73 | 旧响应失效：重新进入、Tab 切换或新查询时，用页面代次 + 每 Tab 请求令牌丢弃过期响应；错误日志响应不得写入正确日志状态（LQ-TAB-54 ~ 56、LQ-LOAD-38 / 39）。 |
+
+## 8. 数据源名称映射与降级
+
+| 编号 | 规则 |
+|---|---|
+| LQ-DESIGN-80 | 列表请求读取一次 `CDC_DATA_SOURCE` 全表，构建 `Map<DATA_SOURCE_ID, DATA_SOURCE_ORG>`（LQ-DATA-01 / 02）。 |
+| LQ-DESIGN-81 | 显示规则：找到且 `DATA_SOURCE_ORG` 有值 → 显示该名称；找到但为空 → “未定义名称”；未找到 → 显示日志原始 `DATA_SOURCE_ID`（LQ-DATA-07 ~ 09、LQ-API-64）。 |
+| LQ-DESIGN-82 | 悬停显示完整名称与完整 ID，由前端从响应中的 `sourceDataSourceId` + `sourceDataSourceName` 组合（LQ-DATA-10、LQ-API-65）。 |
+| LQ-DESIGN-83 | 已选过滤 ID 的校验基于候选集合（启用且类别匹配）；历史名称展示基于全量映射；两者不可混为一谈（LQ-API-66）。 |
+
+## 9. 大字段隔离
+
+| 编号 | 读取路径 | 读取内容 | 说明 |
+|---|---|---|---|
+| LQ-DESIGN-90 | 列表 | 轻字段 + `SUBSTR(LOG_DETAIL,1,300)` 摘要 + `LENGTH` 存在性标记 | 不读完整 `LOG_DETAIL`、不读 `RAW_MESSAGE`、不读 `RESULT_DETAIL` |
+| LQ-DESIGN-91 | 日志详情 | 完整 `LOG_DETAIL` + 详情所需字段 | 不读 `RESULT_DETAIL`、不读 `RAW_MESSAGE` |
+| LQ-DESIGN-92 | 原始消息 | 只读 `RAW_MESSAGE` + 最小标识 | 不读完整日志详情 |
+
+| 编号 | 规则 |
+|---|---|
+| LQ-DESIGN-93 | 该隔离避免每页 100 行批量搬运 `VARCHAR2(4000)`/CLOB 大字段，保证弹窗按需加载（LQ-DETAIL-20 / 30 / 32）。 |
+| LQ-DESIGN-94 | 不得建议列表预取 `RAW_MESSAGE`；列表摘要最大 300 字符（LQ-API-45）。 |
+
+## 10. 并发、数据变化与一致性
+
+| 编号 | 规则 |
+|---|---|
+| LQ-DESIGN-100 | 日志持续追加时，双字段 keyset 游标避免 OFFSET 因新插入造成的大范围漂移（LQ-PAGE-02 / 25）。 |
+| LQ-DESIGN-101 | 已经晚到但 `TARGET_TIME` 落在旧边界之前的数据，可能在后续页出现（keyset 向后扫描天然包含）。 |
+| LQ-DESIGN-102 | 新插入且排序位置位于当前第一页之前的数据，不会自动插入已显示列表；用户需重新点击查询（LQ-LOAD-02、LQ-API-59）。 |
+| LQ-DESIGN-103 | 多页请求不保证同一数据库快照；不得承诺 Oracle 未实现的跨请求快照一致性（LQ-API-59）。 |
+| LQ-DESIGN-104 | 不做自动刷新、轮询、WebSocket 与自动重试（LQ-LOAD-01 / 33、LQ-NONGOAL-13）。 |
+
+## 11. 超时、取消与失败恢复
+
+| 编号 | 规则 |
+|---|---|
+| LQ-DESIGN-110 | 前端请求开始立即显示加载动画，3 秒后追加“查询耗时较长，请耐心等待”提示，动态显示已等待秒数（LQ-LOAD-10 ~ 14）。 |
+| LQ-DESIGN-111 | 30 秒超时后结束本次加载并显示可操作错误（LQ-LOAD-30 / 32）；后端数据库语句超时 25 秒并映射 `QUERY_TIMEOUT`（LQ-API-92，秒数草案待确认）。 |
+| LQ-DESIGN-112 | 后端与数据库查询配置相互协调的超时（前端 30 秒 > 后端语句 25 秒），保证浏览器停止等待前数据库已经中止（LQ-LOAD-31）。 |
+| LQ-DESIGN-113 | 能取消则取消旧请求；不能取消则用页面代次和每 Tab 请求令牌丢弃过期响应（LQ-TAB-54 ~ 56）。 |
+| LQ-DESIGN-114 | 失败保留旧表单、旧已生效条件、旧列表和旧游标历史；新查询失败与“查询成功但无数据”必须区分（LQ-VALID-01 / 02、LQ-LOAD-35 ~ 37）。 |
+| LQ-DESIGN-115 | 不自动重试；超时提示用户缩小查询范围或增加条件（LQ-LOAD-33 / 34）。 |
+
+## 12. 与物理设计解耦
+
+| 编号 | 规则 |
+|---|---|
+| LQ-DESIGN-120 | 应用 SQL 只依赖逻辑表名（`CDC_LOG_ERROR` / `CDC_LOG_CORRECT`）、字段、必填 `TARGET_TIME` 范围和稳定排序键；不引用具体分区名称，不硬编码依赖分区粒度的逻辑（§19.1）。 |
+| LQ-DESIGN-121 | `TARGET_TIME` 第一层 `RANGE` 分区键是已批准边界；RANGE 粒度、子分区、索引本地/全局形态和最终 DDL 待约 40 个数据源完成首次全量后按真实分布确定（LQ-DB-07 / 08 / 09 / 12）。 |
+| LQ-DESIGN-122 | 后续离线重组分区与索引不应改变 API、DTO、查询条件或业务 SQL 语义（LQ-DB-10）。 |
+| LQ-DESIGN-123 | 逻辑访问路径需求（供后续 SQL/索引设计输入，**不构成已批准索引 DDL**）：(a) 必填时间范围下的 `TARGET_TIME` 范围扫描；(b) `TARGET_TIME DESC, CDC_LOG_ID DESC` 固定排序（对应复合索引候选，延期）；(c) `CDC_LOG_ID` 精确点查（详情/原始消息）；(d) `SOURCE_DATA_SOURCE_ID` / `TARGET_DATA_SOURCE_ID` 在时间范围内等值/`IN`；(e) `SOURCE_TABLE_NAME` / `TARGET_TABLE_NAME` 时间范围内等值。 |
+| LQ-DESIGN-124 | 菜单在最终物理设计和生产等价性能验收完成前必须隐藏；全部验证通过后方可开放（LQ-DB-14、AC-74）。 |
+
+## 13. 测试设计要点
+
+只写测试场景，不创建测试代码（LQ-API-90-L 的 Mapper 方案决定测试可在 SQL/接口两层展开）。
+
+| 编号 | 场景 |
+|---|---|
+| LQ-DESIGN-130 | 默认当前自然日：首查请求不带时间时按进入时自然日生成 `00:00:00`~`23:59:59`（服务端校验拒绝缺失时间，前端负责默认生成，二者都要测）。 |
+| LQ-DESIGN-131 | 完整 7 个自然日合法（`endExclusive - startTime = 7×24h`）；超过 1 秒拒绝（`TIME_SPAN_EXCEEDED`）。 |
+| LQ-DESIGN-132 | 四类可选条件的单独与组合查询；四条件全空时仅按时间范围查固定排序第一页。 |
+| LQ-DESIGN-133 | 表名大小写敏感精确匹配；同一名称不同大小写返回不同结果；超 64 字符拒绝。 |
+| LQ-DESIGN-134 | 多选 `IN` 去重；空数组等同未选择；非法/非候选 ID 拒绝（`DATA_SOURCE_IDS_INVALID`）。 |
+| LQ-DESIGN-135 | 同一 `TARGET_TIME` 多行时 `CDC_LOG_ID` 提供稳定第二排序；翻页不重不漏。 |
+| LQ-DESIGN-136 | `CDC_LOG_ID` 超过 JavaScript `MAX_SAFE_INTEGER` 的字符串传输与精确回传；示例 `7755033852453421056`。 |
+| LQ-DESIGN-137 | 100 / 101 条的 `hasNext` 边界：100 条 → false；101 条 → true 且 `nextCursor` 为第 100 条边界。 |
+| LQ-DESIGN-138 | 下一页与上一页游标栈：连续 3 页下一页后 2 次上一页回到首页，内容与游标栈一致。 |
+| LQ-DESIGN-139 | 两 Tab 独立状态：正确日志切换不影响错误日志，反之亦然。 |
+| LQ-DESIGN-140 | 数据源已停用/缺失映射：停用源的历史日志仍可展示（回退名称），但停用源不可作为新候选选中。 |
+| LQ-DESIGN-141 | 详情与原始消息大字段隔离：列表请求不读取完整 `LOG_DETAIL` / `RAW_MESSAGE`；详情不读 `RESULT_DETAIL` / `RAW_MESSAGE`；原始消息只读 `RAW_MESSAGE`。 |
+| LQ-DESIGN-142 | `RAW_MESSAGE` 为 NULL / 空串 / 合法 JSON / 非 JSON / 超大文本时的响应语义；空内容与记录不存在互不混淆。 |
+| LQ-DESIGN-143 | 30 秒超时、旧响应失效和失败保留旧列表：超时后列表不变、错误提示明确；过期响应不覆盖新页面状态。 |
+| LQ-DESIGN-144 | SQL 注入防护：`logType` / `${tableName}` 只能来自封闭枚举；表名、`IN`、时间全部绑定参数；非法输入在到达 SQL 前被拒绝。 |
+
+## 14. 待用户确认项
+
+与 `API.md` §12 保持一致：
+
+| 编号 | 待确认项 |
+|---|---|
+| LQ-DESIGN-150 | `logSummary` 摘要最大长度 300 字符（需求上限 500 内）。 |
+| LQ-DESIGN-151 | 游标采用服务端签名不透明游标 + 条件指纹，密钥入后端配置。 |
+| LQ-DESIGN-152 | 上一页采用“前端游标栈 + 服务端仅向后翻页”。 |
+| LQ-DESIGN-153 | 数据源候选为单接口一次返回 source+target。 |
+| LQ-DESIGN-154 | 详情/原始消息接口复用列表行名称，不重新读取数据源表（收口 LQ-DATA-12）。 |
+| LQ-DESIGN-155 | `logType` 取值 `error` / `correct`（大小写敏感）。 |
+| LQ-DESIGN-156 | 数据源 ID 数组最大 100 个元素。 |
+| LQ-DESIGN-157 | `OFFSET` 列真实类型待生产 DDL 确认，JSON 暂按字符串。 |
+| LQ-DESIGN-158 | 前端 30 秒超时需覆盖全局 `http.ts` 10 秒（前端改造点）。 |
+| LQ-DESIGN-159 | 后端数据库语句超时 25 秒（低于前端 30 秒）。 |
+| LQ-DESIGN-160 | 错误码数值（40010~40017 / 40410 / 50020~50021）为草案。 |
+| LQ-DESIGN-161 | 后端 Mapper 采用 MyBatis XML 固定表 `${}` + 固定表枚举。 |
+
+## 15. 与 API.md 及已批准需求的一致性
+
+- 接口、URL、HTTP 方法与 `API.md` §4 一致。
+- DTO/VO 字段、类型、必填性与 `API.md` §5/6/9 一致。
+- 时间端点（`endTime` 包含端点 → 后端转 `endExclusive`）与 7 天公式一致。
+- 游标格式、校验、上一页策略与 `API.md` §7 一致（服务端签名不透明游标 + 条件指纹 + 前端游标栈）。
+- 页容量固定 100、取 101 条、无总数一致。
+- `CDC_LOG_ID` JSON 字符串规则一致。
+- 固定排序与下一页谓词一致。
+- 数据源每次列表请求读取全表一次、禁止 N+1 与大表 JOIN 一致。
+- 列表/详情/原始消息三类查询字段隔离一致。
+- 30 秒超时与不自动重试一致。
+- 固定日志类型到固定表的安全映射一致（含 `${}` 封闭枚举说明）。
+- 最终分区、子分区、索引、DDL 仍为延期项；菜单保持隐藏的部署边界一致。
+- 两份文档状态均为 `DRAFT_PENDING_USER_REVIEW / NOT_STARTED`，与已批准 `REQUIREMENTS.md` 不冲突。
