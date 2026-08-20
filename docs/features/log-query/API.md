@@ -11,12 +11,13 @@
 | 实现状态 | `NOT_STARTED`（现有页面仍为占位页，本文不构成任何已实现声明） |
 | 依据需求 | `docs/features/log-query/REQUIREMENTS.md` |
 | 创建日期 | 2026-08-20 |
-| 关联任务 | `LOG-QUERY-API-DESIGN-001`（初版）、`LOG-QUERY-API-DESIGN-001-R1`（定向修订） |
+| 关联任务 | `LOG-QUERY-API-DESIGN-001`（初版）、`LOG-QUERY-API-DESIGN-001-R1`（定向修订）、`LOG-QUERY-API-DESIGN-001-R1.1`（微型一致性修订） |
 
 修订记录：
 
 - `LOG-QUERY-API-DESIGN-001`：初版，创建两份设计文档（均为 `DRAFT_PENDING_USER_REVIEW / NOT_STARTED`）。
 - `LOG-QUERY-API-DESIGN-001-R1`：修正四类设计缺陷（列表接口改 POST、前端游标栈模型、`CDC_LOG_ID` 内部数值绑定、数据源一次全表读取）、游标条件指纹规范化、将 12 项待确认设计转为已确认设计决策、同步一致性。修订完成仍为 `DRAFT_PENDING_USER_REVIEW / NOT_STARTED`，等待用户最终复审。
+- `LOG-QUERY-API-DESIGN-001-R1.1`：微型一致性修订，仅完成：(1) 数据源名称字段可空性补正（`sourceDataSourceName` / `targetDataSourceName` 改为可选，原始数据源 ID 为 NULL 时名称省略并显示 `--`）；(2) 相同签名密钥下普通服务重启不使游标失效，只有密钥轮换、密钥配置改变、版本不兼容或篡改才可能使旧游标失效；(3) 重取上一页只保证按相同固定排序与边界谓词重新查询目标页，不保证返回内容与首次访问该页时完全一致。修订完成仍为 `DRAFT_PENDING_USER_REVIEW / NOT_STARTED`，等待用户最终复审。
 
 本文只定义 API 契约，不代表接口已经实现或验收通过。最终物理数据库设计（分区粒度、子分区、索引、生产 DDL、最终执行计划）不在本文范围内。
 
@@ -188,10 +189,10 @@ FROM CDC_DATA_SOURCE
 |---|---|---|---|
 | `cdcLogId` | String | 是 | 记录唯一标识、游标辅助字段、详情/原始消息查询依据（LQ-LIST-14）；十进制字符串 |
 | `sourceDataSourceId` | String | 否 | 日志中的 `SOURCE_DATA_SOURCE_ID` 原始值；NULL 时省略，前端显示 `--` |
-| `sourceDataSourceName` | String | 是 | 源库显示名称（映射规则见 §8），恒有值（至少回退为原始 ID 或“未定义名称”） |
+| `sourceDataSourceName` | String | 否 | 源库显示名称（映射规则见 §8）；原始 ID 为 NULL 或映射无可用名称时省略，前端显示 `--` |
 | `sourceTableName` | String | 否 | 源表名；NULL 时省略，前端显示 `--` |
 | `targetDataSourceId` | String | 否 | 日志中的 `TARGET_DATA_SOURCE_ID` 原始值；NULL 时省略，前端显示 `--` |
-| `targetDataSourceName` | String | 是 | 目标库显示名称，恒有值 |
+| `targetDataSourceName` | String | 否 | 目标库显示名称；原始 ID 为 NULL 或映射无可用名称时省略，前端显示 `--` |
 | `targetTableName` | String | 否 | 目标表名；NULL 时省略，前端显示 `--` |
 | `instructionType` | String | 否 | 指令类型，原样显示不转换；NULL 时省略，前端显示 `--` |
 | `logSummary` | String | 否 | `LOG_DETAIL` 的有界摘要，最大 300 字符（已确认决策 LQ-API-90-A，见 §6.5）；`LOG_DETAIL` 为 NULL 时省略，前端显示 `--` |
@@ -235,14 +236,14 @@ FROM CDC_DATA_SOURCE
 |---|---|
 | LQ-API-50 | 采用 **服务端可验证的不透明游标**（唯一方案，不留多选）。游标由前端原样保存与回传，前端不解码、不解析其内容。 |
 | LQ-API-51 | 游标载荷包含：版本 `v`、日志类型 `lt`、条件指纹 `fp`、边界 `TARGET_TIME`（`yyyy-MM-dd HH:mm:ss`）、边界 `CDC_LOG_ID`（十进制字符串）。 |
-| LQ-API-52 | 编解码格式：载荷为 UTF-8 JSON 的 `base64url`（无填充）编码，格式为 `payload + "." + HMAC-SHA256(secret, payload)` 十六进制签名，HMAC 覆盖载荷的原始 base64url 文本。签名使用常量时间比较。签名密钥由后端配置持有（不入 DTO、不入库、不出接口、不硬编码）。游标不要求跨部署永久有效：服务重启或密钥轮换导致旧游标失效时，验签失败返回 `CURSOR_INVALID`，页面提示用户重新查询第一页。不得引入服务端游标会话或游标数据库表。 |
+| LQ-API-52 | 编解码格式：载荷为 UTF-8 JSON 的 `base64url`（无填充）编码，格式为 `payload + "." + HMAC-SHA256(secret, payload)` 十六进制签名，HMAC 覆盖载荷的原始 base64url 文本。签名使用常量时间比较。签名密钥来自后端持久化配置，不硬编码、不入 DTO、不入库、不出接口。服务使用相同签名密钥重启或重新部署时，旧游标仍可正常验签；只有密钥轮换、密钥配置改变、游标版本不兼容或游标被篡改时，旧游标才可能失效。验签失败返回 `CURSOR_INVALID`，页面提示用户重新查询第一页。不承诺游标永久有效。不得引入服务端游标会话、缓存或游标数据库表。 |
 | LQ-API-53 | 条件指纹 `fp`：对规范化条件 JSON（固定字段顺序、UTF-8、时间统一秒级 `yyyy-MM-dd HH:mm:ss`、数据源 ID 数组去重后按字典序升序排序、空数组统一为 `[]`、空文本统一为 `null`）的字节计算 SHA-256，取小写十六进制。生成与校验必须使用同一规范化规则（见 `DESIGN.md` §7.1）。不使用未经转义的分隔符拼接字符串。 |
-| LQ-API-54 | 服务端校验顺序：拆解 `payload.signature` → base64url 解码 → 验签（常量时间比较）→ 校验版本 → 校验 `lt` 与请求 `logType` 一致 → 用当前请求条件重算 `fp` 并比对。任何一步失败：格式/签名/版本失败返回 `CURSOR_INVALID`；日志类型或指纹不一致返回 `CURSOR_CONDITION_MISMATCH`。服务重启或密钥轮换导致旧游标失效按验签失败处理为 `CURSOR_INVALID`。 |
+| LQ-API-54 | 服务端校验顺序：拆解 `payload.signature` → base64url 解码 → 验签（常量时间比较）→ 校验版本 → 校验 `lt` 与请求 `logType` 一致 → 用当前请求条件重算 `fp` 并比对。任何一步失败：格式/签名/版本失败返回 `CURSOR_INVALID`；日志类型或指纹不一致返回 `CURSOR_CONDITION_MISMATCH`。密钥轮换、密钥配置改变、版本不兼容或篡改导致旧游标失效时按验签失败处理为 `CURSOR_INVALID`。 |
 | LQ-API-55 | 游标只支持“向后（更旧）”翻页；上一页由前端游标栈重新发送前一页的请求游标实现，服务端不实现反向排序（见 §7.1）。 |
 | LQ-API-56 | 上一页唯一方案（与 `DESIGN.md` §7.2 / §7.3 一致）：前端为每个 Tab 维护 **已访问页面各自的请求游标栈**，栈顶对应当前页；`requestCursorStack[0] = null` 表示第 1 页请求无游标。当前页请求游标始终等于栈顶；当前响应的 `nextCursor` 单独保存在当前页状态中，不得在尚未进入下一页时提前压入栈。状态转换见 §7.1 表格。 |
 | LQ-API-57 | 首查不携带 `cursor`（栈为 `[null]`）；下一页请求携带当前页响应保存的 `nextCursor`；上一页请求携带弹出栈顶后新的栈顶游标（第 2 页返回第 1 页时为 `null`）。 |
 | LQ-API-58 | `hasNext` 精确定义：服务端取 101 条，取到 101 条则 `hasNext=true`、`nextCursor` 为第 100 条记录的边界；取到 ≤100 条则 `hasNext=false`、`nextCursor` 省略。 |
-| LQ-API-59 | 在持续写入场景下，keyset 游标保证排序边界语义，但**不承诺跨多个请求的数据库一致性快照**：持续写入期间重复请求旧游标不保证返回完全相同的数据页，只保证使用相同的排序边界语义。晚到且排序位置落入后续页的数据可能在后续页出现，新插入且排序位置位于第一页之前的数据不会自动进入已显示列表（LQ-PAGE-25 语义下的“不重不漏”以固定排序与边界谓词为准）。 |
+| LQ-API-59 | 重复发送目标页的请求游标，会按照相同的固定排序和边界谓词重新查询目标页；在持续写入或晚到数据场景下，**不保证返回内容与首次访问该页时完全一致**，也不承诺跨请求数据库快照一致性。晚到且排序位置落入后续页的数据可能在后续页出现，新插入且排序位置位于第一页之前的数据不会自动进入已显示列表（LQ-PAGE-25 语义下的“不重不漏”以固定排序与边界谓词为准）。 |
 | LQ-API-60 | `CDC_LOG_ID` 在 JSON/路径/游标载荷中一律为字符串，Service 校验后以不丢精度数值类型（建议 `BigDecimal`）执行绑定，不使用隐式转换（§6.6、LQ-API-97 / 98）。 |
 
 ### 7.1 前端游标栈精确状态转换
@@ -273,8 +274,8 @@ FROM CDC_DATA_SOURCE
 | LQ-API-61 | 每次列表请求（首查、点击查询、下一页、上一页）都重新读取一次 `CDC_DATA_SOURCE` 全表（四列，见 LQ-API-25），在该请求内构建 `DATA_SOURCE_ID -> DATA_SOURCE_ORG` 内存映射并同时建立候选集合；不跨请求缓存（LQ-DATA-01 / 02 / 11）。 |
 | LQ-API-62 | 一次列表请求只能读取一次数据源全表；禁止按日志行逐行查数据源（禁止 N+1），不在分页前与超大日志表做大表关联（LQ-DATA-03 / 04、LQ-PERF-07）。 |
 | LQ-API-63 | 历史名称映射读取全部数据源记录，不按 `FG_ACTIVE` 和类别过滤（LQ-DATA-06）。 |
-| LQ-API-64 | 降级显示规则（LQ-DATA-07 ~ 09）：找到数据源且 `DATA_SOURCE_ORG` 有值 → 显示该名称；找到数据源但 `DATA_SOURCE_ORG` 为空 → 显示“未定义名称”；找不到数据源记录 → 显示日志中的原始 `DATA_SOURCE_ID`。 |
-| LQ-API-65 | 响应同时返回原始 ID 与显示名称（`sourceDataSourceId` + `sourceDataSourceName`），前端据此展示与继续操作；悬停内容由前端组合完整名称与完整 ID（LQ-DATA-10）。 |
+| LQ-API-64 | 降级显示规则（LQ-DATA-07 ~ 09）：原始 `SOURCE_DATA_SOURCE_ID` / `TARGET_DATA_SOURCE_ID` 为 NULL 时，对应 ID 与名称均省略（字段缺省/NULL），前端显示 `--`，不得回退为字符串 `"null"`、空串或“未定义名称”；原始 ID 非 NULL 时：找到数据源且 `DATA_SOURCE_ORG` 有值 → 显示该名称；找到数据源但 `DATA_SOURCE_ORG` 为空 → 显示“未定义名称”；找不到数据源记录 → 显示日志中的原始 `DATA_SOURCE_ID`。 |
+| LQ-API-65 | 响应同时返回原始 ID 与显示名称（`sourceDataSourceId` + `sourceDataSourceName`），前端据此展示与继续操作；悬停信息只有当对应 ID 或名称存在时才由前端组合完整名称与完整 ID 展示，两者均为空时不显示 Tooltip（LQ-DATA-10）。 |
 | LQ-API-66 | 名称映射只作用于列表展示，不参与 SQL 过滤；历史日志引用的已停用、类别变化或已缺失数据源 ID 不影响列表返回（降级为 LQ-API-64 规则），但作为“已选过滤条件”的提交 ID 仍必须通过 LQ-API-38 的候选校验。候选校验与历史名称展示不可混为一谈。 |
 
 ## 9. 日志详情与原始消息接口
@@ -289,7 +290,7 @@ FROM CDC_DATA_SOURCE
 | LQ-API-71 | 详情只读取详情所需字段：`CDC_LOG_ID`、`SOURCE_DATA_SOURCE_ID`、`SOURCE_TABLE_NAME`、`TARGET_DATA_SOURCE_ID`、`TARGET_TABLE_NAME`、`INSTRUCTION_TYPE`、`RESULT_CODE`、`OFFSET`、`SOURCE_TIME`、`KAFKA_ENQUEUE_TIME`、`TARGET_TIME`、`INSERT_TIME`、完整 `LOG_DETAIL`；不读取 `RESULT_DETAIL`，不顺带读取 `RAW_MESSAGE`（LQ-DETAIL-27 / 28）。 |
 | LQ-API-72 | 记录不存在返回 `LOG_RECORD_NOT_FOUND`（HTTP 200 + 业务码）。 |
 | LQ-API-73 | 响应 `data` 结构 `LogDetailVO`：`cdcLogId`（必填，String）、`sourceDataSourceId`、`sourceTableName`、`targetDataSourceId`、`targetTableName`、`instructionType`、`resultCode`、`offset`、`sourceTime`、`kafkaEnqueueTime`、`targetTime`、`insertTime`、`logDetail`（完整内容）。时间字段为 `yyyy-MM-dd HH:mm:ss` 字符串；`cdcLogId`、`offset` 为字符串。除 `cdcLogId`、`targetTime` 外字段按数据库可空性标为可选，缺失时前端渲染 `--`（与列表规则一致，LQ-LIST-25）。 |
-| LQ-API-74 | 详情弹窗展示“源库名称和 ID”“目标库名称和 ID”，名称复用发起弹窗的列表行已返回的 `sourceDataSourceName` / `targetDataSourceName`；本接口不重新读取数据源表、不返回名称（已确认决策 LQ-API-90-E）。 |
+| LQ-API-74 | 详情弹窗展示“源库名称和 ID”“目标库名称和 ID”，名称复用发起弹窗的列表行已返回的 `sourceDataSourceName` / `targetDataSourceName`；当名称缺失（原始 ID 为 NULL 或映射无可用名称）时弹窗对应位置显示 `--`；本接口不重新读取数据源表、不返回名称（已确认决策 LQ-API-90-E）。 |
 
 ### 9.2 原始消息接口
 

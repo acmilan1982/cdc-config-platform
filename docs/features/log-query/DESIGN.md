@@ -12,12 +12,13 @@
 | 依据需求 | `docs/features/log-query/REQUIREMENTS.md` |
 | 关联契约 | `docs/features/log-query/API.md`（两文档使用同一游标、翻页与字段隔离方案） |
 | 创建日期 | 2026-08-20 |
-| 关联任务 | `LOG-QUERY-API-DESIGN-001`（初版）、`LOG-QUERY-API-DESIGN-001-R1`（定向修订） |
+| 关联任务 | `LOG-QUERY-API-DESIGN-001`（初版）、`LOG-QUERY-API-DESIGN-001-R1`（定向修订）、`LOG-QUERY-API-DESIGN-001-R1.1`（微型一致性修订） |
 
 修订记录：
 
 - `LOG-QUERY-API-DESIGN-001`：初版，创建两份设计文档（均为 `DRAFT_PENDING_USER_REVIEW / NOT_STARTED`）。
 - `LOG-QUERY-API-DESIGN-001-R1`：修正四类设计缺陷（列表接口改 POST、前端游标栈模型、`CDC_LOG_ID` 内部数值绑定、数据源一次全表读取）、游标条件指纹规范化、将 12 项待确认设计转为已确认设计决策、同步一致性。修订完成仍为 `DRAFT_PENDING_USER_REVIEW / NOT_STARTED`，等待用户最终复审。
+- `LOG-QUERY-API-DESIGN-001-R1.1`：微型一致性修订，仅完成：(1) 数据源名称字段可空性补正（`sourceDataSourceName` / `targetDataSourceName` 改为可选，原始数据源 ID 为 NULL 时名称省略并显示 `--`）；(2) 相同签名密钥下普通服务重启不使游标失效，只有密钥轮换、密钥配置改变、版本不兼容或篡改才可能使旧游标失效；(3) 重取上一页只保证按相同固定排序与边界谓词重新查询目标页，不保证返回内容与首次访问该页时完全一致。修订完成仍为 `DRAFT_PENDING_USER_REVIEW / NOT_STARTED`，等待用户最终复审。
 
 本文定义应用结构、请求流程和逻辑 SQL。本文**不确定**最终分区粒度、子分区、最终索引、生产 DDL 或最终执行计划（LQ-DB-07 / 08 / 09、LQ-NONGOAL-18）。
 
@@ -88,7 +89,7 @@
 | LQ-DESIGN-37 | 取到 101 条则 `hasNext=true`、`nextCursor` 为第 100 条记录的边界、只返回前 100 条；取到 ≤100 条则 `hasNext=false`、`nextCursor` 省略（LQ-API-58）。 |
 | LQ-DESIGN-38 | 在内存映射源库/目标库名称（LQ-DATA-02），组装响应；同一请求内只读一次数据源全表，无 N+1、无大表 JOIN（LQ-DATA-03 / 04）。 |
 
-历史日志引用失效或不存在的数据源 ID 的降级显示：名称映射基于全量 `CDC_DATA_SOURCE`，不存在时回退显示日志原始 `DATA_SOURCE_ID`，存在但名称为空显示“未定义名称”（LQ-DATA-07 ~ 09、LQ-API-64）。候选校验（已选 ID 必须在有效候选集合）与历史名称展示（全量映射）不可混为一谈（LQ-API-66）。
+历史日志引用失效或不存在的数据源 ID 的降级显示：名称映射基于全量 `CDC_DATA_SOURCE`；原始 `SOURCE_DATA_SOURCE_ID` / `TARGET_DATA_SOURCE_ID` 为 NULL 时，对应 ID 与名称均省略，前端显示 `--`，不得回退为字符串 `"null"`、空串或“未定义名称”；原始 ID 非 NULL 时，不存在对应数据源记录则回退显示日志原始 `DATA_SOURCE_ID`，存在但名称为空显示“未定义名称”（LQ-DATA-07 ~ 09、LQ-API-64）。候选校验（已选 ID 必须在有效候选集合）与历史名称展示（全量映射）不可混为一谈（LQ-API-66）。
 
 ## 6. 逻辑 SQL
 
@@ -237,7 +238,7 @@ FETCH FIRST 1 ROWS ONLY
 | 编号 | 规则 |
 |---|---|
 | LQ-DESIGN-60 | 载荷 JSON：`{"v":1,"lt":"<logType>","fp":"<sha256-hex>","t":"<yyyy-MM-dd HH:mm:ss>","id":"<cdcLogId>"}`；编码为 UTF-8 JSON 的 `base64url`（无填充）。 |
-| LQ-DESIGN-61 | 签名 = `HMAC-SHA256(secret, payload_base64url 原始文本)` 十六进制；游标 = `payload + "." + signature`。签名使用常量时间比较。密钥由后端配置持有（如 `cdc.log-query.cursor-secret`），不硬编码、不入 DTO、不入库、不出接口。游标不要求跨部署永久有效：服务重启或密钥轮换导致旧游标失效时验签失败返回 `CURSOR_INVALID`，页面提示用户重新查询第一页。不得引入服务端游标会话或游标数据库表。 |
+| LQ-DESIGN-61 | 签名 = `HMAC-SHA256(secret, payload_base64url 原始文本)` 十六进制；游标 = `payload + "." + signature`。签名使用常量时间比较。密钥来自后端持久化配置（如 `cdc.log-query.cursor-secret`），不硬编码、不入 DTO、不入库、不出接口。服务使用相同密钥重启或重新部署时，旧游标仍可正常验签；只有密钥轮换、密钥配置改变、游标版本不兼容或游标被篡改时，旧游标才可能失效。验签失败返回 `CURSOR_INVALID`，页面提示用户重新查询第一页。不承诺游标永久有效。不得引入服务端游标会话、缓存或游标数据库表。 |
 | LQ-DESIGN-62 | 条件指纹：对规范化条件 JSON 的字节计算 SHA-256 小写十六进制。规范化规则（生成与校验使用同一规则）：字段顺序固定为 `logType, startTime, endExclusive, sourceDataSourceIds, sourceTableName, targetDataSourceIds, targetTableName`；时间为秒级 `yyyy-MM-dd HH:mm:ss`；数据源 ID 数组去重后按字典序升序排序；空数组统一为 `[]`；空文本统一为 `null`；JSON 序列化使用固定字段顺序与 UTF-8。不使用未经转义的分隔符拼接字符串。示例（仅示意字段顺序与空值语义，实际以规范化器输出为准）：`{"logType":"error","startTime":"2026-08-14 00:00:00","endExclusive":"2026-08-21 00:00:00","sourceDataSourceIds":["DS_SRC_001","DS_SRC_002"],"sourceTableName":"T_ORDER","targetDataSourceIds":["DS_TGT_001"],"targetTableName":null}`。 |
 | LQ-DESIGN-63 | 验证步骤：按最后一个 `.` 拆解 → base64url 解码 → 重算并常量时间比较签名 → 校验 `v==1` → 校验 `lt` 与请求 `logType` 一致 → 用当前请求条件重算 `fp` 比对。失败分类见 `LQ-API-54`（`CURSOR_INVALID` / `CURSOR_CONDITION_MISMATCH`）。 |
 
@@ -252,7 +253,7 @@ FETCH FIRST 1 ROWS ONLY
 | LQ-DESIGN-66 | 上一页：不得在请求成功前永久弹栈；先计算目标栈（弹出栈顶），用新的栈顶作为请求游标，成功后整体替换为目标栈；请求失败，当前页和原栈保持不变（LQ-API-111）。 |
 | LQ-DESIGN-67 | 当前页单独保存该页响应的 `hasNext`、`nextCursor`。没有上一页的判断为栈长度等于 1；没有下一页的判断为当前响应 `hasNext=false`（LQ-API-112）。 |
 | LQ-DESIGN-68 | 点击“查询”成功后原子重置为 `[null]`；失败保留旧栈。两个 Tab 各自维护独立栈（LQ-API-113）。 |
-| LQ-DESIGN-69 | 因 keyset 排序确定，重复发送同一请求游标可稳定重取前一页内容；持续写入场景下不承诺跨请求一致性快照，只保证相同排序边界语义（LQ-API-59）。 |
+| LQ-DESIGN-69 | 重复发送目标页的请求游标，会按照相同的固定排序和边界谓词重新查询目标页；在持续写入或晚到数据场景下，不保证返回内容与首次访问该页时完全一致，也不承诺跨请求一致性快照（LQ-API-59）。 |
 
 ### 7.3 请求序列示例
 
@@ -278,8 +279,8 @@ FETCH FIRST 1 ROWS ONLY
 | 编号 | 规则 |
 |---|---|
 | LQ-DESIGN-80 | 列表请求读取一次 `CDC_DATA_SOURCE` 全表（四列），构建 `Map<DATA_SOURCE_ID, DATA_SOURCE_ORG>`（LQ-DATA-01 / 02、LQ-API-61）。 |
-| LQ-DESIGN-81 | 显示规则：找到且 `DATA_SOURCE_ORG` 有值 → 显示该名称；找到但为空 → “未定义名称”；未找到 → 显示日志原始 `DATA_SOURCE_ID`（LQ-DATA-07 ~ 09、LQ-API-64）。 |
-| LQ-DESIGN-82 | 悬停显示完整名称与完整 ID，由前端从响应中的 `sourceDataSourceId` + `sourceDataSourceName` 组合（LQ-DATA-10、LQ-API-65）。 |
+| LQ-DESIGN-81 | 显示规则：原始数据源 ID 为 NULL → 对应 ID 与名称均省略，前端显示 `--`（不得回退为字符串 `"null"`、空串或“未定义名称”）；原始 ID 非 NULL 且找到且 `DATA_SOURCE_ORG` 有值 → 显示该名称；找到但为空 → “未定义名称”；未找到 → 显示日志原始 `DATA_SOURCE_ID`（LQ-DATA-07 ~ 09、LQ-API-64）。 |
+| LQ-DESIGN-82 | 悬停显示完整名称与完整 ID，只有当对应 ID 或名称存在时才由前端组合展示，两者均为空时不显示 Tooltip（LQ-DATA-10、LQ-API-65）。 |
 | LQ-DESIGN-83 | 已选过滤 ID 的校验基于候选集合（启用且类别匹配）；历史名称展示基于全量映射；两者由同一次全表读取产生但语义不同，不可混为一谈（LQ-API-66）。 |
 
 ## 9. 大字段隔离
@@ -303,7 +304,7 @@ FETCH FIRST 1 ROWS ONLY
 | LQ-DESIGN-100 | 日志持续追加时，双字段 keyset 游标避免 OFFSET 因新插入造成的大范围漂移（LQ-PAGE-02 / 25）。 |
 | LQ-DESIGN-101 | 已经晚到但 `TARGET_TIME` 落在旧边界之前的数据，可能在后续页出现（keyset 向后扫描天然包含）。 |
 | LQ-DESIGN-102 | 新插入且排序位置位于当前第一页之前的数据，不会自动插入已显示列表；用户需重新点击查询（LQ-LOAD-02、LQ-API-59）。 |
-| LQ-DESIGN-103 | 多页请求不保证同一数据库快照；重复请求旧游标不保证返回完全相同的数据页，只保证相同排序边界语义；不得承诺跨请求快照一致性（LQ-API-59）。 |
+| LQ-DESIGN-103 | 多页请求不保证同一数据库快照；重复发送目标页的请求游标按相同固定排序和边界谓词重新查询，不保证返回内容与首次访问该页时完全一致；不得承诺跨请求快照一致性（LQ-API-59）。 |
 | LQ-DESIGN-104 | 不做自动刷新、轮询、WebSocket 与自动重试（LQ-LOAD-01 / 33、LQ-NONGOAL-13）。 |
 
 ## 11. 超时、取消与失败恢复
@@ -341,9 +342,9 @@ FETCH FIRST 1 ROWS ONLY
 | LQ-DESIGN-135 | 同一 `TARGET_TIME` 多行时 `CDC_LOG_ID` 提供稳定第二排序；翻页不重不漏。 |
 | LQ-DESIGN-136 | `CDC_LOG_ID` 超过 JavaScript `MAX_SAFE_INTEGER` 的字符串传输与精确回传；示例 `7755033852453421056`；外部字符串与内部 BigDecimal（scale=0）绑定不丢精度，不使用隐式转换。 |
 | LQ-DESIGN-137 | 100 / 101 条的 `hasNext` 边界：100 条 → false；101 条 → true 且 `nextCursor` 为第 100 条边界。 |
-| LQ-DESIGN-138 | 请求游标栈：连续 3 页下一页后 2 次上一页回到首页；第 3 页返回第 2 页请求游标为 `C1`，第 2 页返回第 1 页请求游标为 `null`，内容与游标栈一致（修正 off-by-one）。 |
+| LQ-DESIGN-138 | 请求游标栈：连续 3 页下一页后 2 次上一页回到首页；第 3 页返回第 2 页请求游标为 `C1`，第 2 页返回第 1 页请求游标为 `null`，栈结构与请求游标正确回退（修正 off-by-one）。 |
 | LQ-DESIGN-139 | 两 Tab 独立状态：正确日志切换不影响错误日志，反之亦然。 |
-| LQ-DESIGN-140 | 数据源已停用/缺失映射：停用源的历史日志仍可展示（回退名称），但停用源不可作为新候选选中。 |
+| LQ-DESIGN-140 | 数据源已停用/缺失映射：停用源的历史日志仍可展示（回退名称），但停用源不可作为新候选选中；原始数据源 ID 为 NULL 时对应 ID 与名称均省略并显示 `--`。 |
 | LQ-DESIGN-141 | 详情与原始消息大字段隔离：列表请求不读取完整 `LOG_DETAIL` / `RAW_MESSAGE`；详情不读 `RESULT_DETAIL` / `RAW_MESSAGE`；原始消息只读 `RAW_MESSAGE`。 |
 | LQ-DESIGN-142 | `RAW_MESSAGE` 为 NULL / 空串 / 合法 JSON / 非 JSON / 超大文本时的响应语义；空内容与记录不存在互不混淆。 |
 | LQ-DESIGN-143 | 30 秒超时、旧响应失效和失败保留旧列表：超时后列表不变、错误提示明确；过期响应不覆盖新页面状态。 |
@@ -352,6 +353,7 @@ FETCH FIRST 1 ROWS ONLY
 | LQ-DESIGN-146 | `cdcLogId` 非法格式/越界：路径参数非十进制或超出 `NUMBER(19,0)` 返回 HTTP 400，与 `LOG_RECORD_NOT_FOUND`（40410）区分。 |
 | LQ-DESIGN-147 | 数据源全表 4 列单次读取：列表请求与候选接口各自恰好一次读取；名称映射不过滤、候选过滤，`FG_ACTIVE` 按字符串 `'1'` 判断；无 N+1、无跨请求缓存。 |
 | LQ-DESIGN-148 | 规范化 JSON 条件指纹：字段顺序固定、时间秒级、数组去重排序、空数组 `[]` / 空文本 `null` 语义固定；生成与校验一致，接口与游标校验对同一请求的指纹一致。 |
+| LQ-DESIGN-149 | 游标密钥语义：服务使用相同签名密钥重启后旧游标仍可正常验签；密钥轮换、密钥配置改变、版本不兼容或篡改后旧游标失效并返回 `CURSOR_INVALID`，页面提示重新查询第一页。 |
 
 ## 14. 已确认设计决策
 
