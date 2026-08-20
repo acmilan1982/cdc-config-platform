@@ -9,22 +9,27 @@
 | 正式菜单 | 日志查询（单菜单，双 Tab） |
 | 目标路由 | `/monitor/log-query` |
 | 目标文档 | `docs/features/log-query/ACCEPTANCE.md` |
-| 文档状态 | `DRAFT_PENDING_USER_REVIEW` |
+| 文档状态 | `APPROVED`（初版、R1、R1.1 完整详细验收设计已用户最终人工复审批准；允许据此开发测试、联调与执行开发阶段验收；批准不代表任何验收用例已经执行或通过；所有普通用例仍为 `NOT_RUN`，延期用例仍为 `DEFERRED_UNTIL_PHYSICAL_DESIGN`；最终物理数据库设计与生产等价性能验收仍为延期项；日志查询菜单在最终物理设计、生产 DDL 与生产等价性能验收完成前必须保持隐藏） |
 | 实现状态 | `NOT_STARTED`（本文件是验收设计，不是已执行的验收报告） |
 | 创建日期 | 2026-08-20 |
 | 创建任务 | `LOG-QUERY-UI-ACCEPTANCE-DESIGN-001` |
+| 关联任务 | `LOG-QUERY-UI-ACCEPTANCE-DESIGN-001`（初版）、`LOG-QUERY-UI-ACCEPTANCE-DESIGN-001-R1`（定向修订）、`LOG-QUERY-UI-ACCEPTANCE-DESIGN-001-R1.1`（微型一致性修订） |
 | 依据需求 | `docs/features/log-query/REQUIREMENTS.md`（`APPROVED / NOT_STARTED`） |
 | 关联契约 | `docs/features/log-query/API.md`（`APPROVED / NOT_STARTED`） |
 | 关联设计 | `docs/features/log-query/DESIGN.md`（`APPROVED / NOT_STARTED`） |
-| 关联 UI | `docs/features/log-query/UI.md`（`DRAFT_PENDING_USER_REVIEW / NOT_STARTED`，本任务同步创建） |
+| 关联 UI | `docs/features/log-query/UI.md`（`APPROVED / NOT_STARTED`） |
+| 最新批准日期 | `2026-08-20` |
+| 最新批准任务 | `LOG-QUERY-UI-ACCEPTANCE-APPROVAL-001` |
+| 最新批准范围 | `LOG-QUERY-UI-ACCEPTANCE-DESIGN-001 + R1 + R1.1 完整详细验收设计` |
 
-修订记录：
+修订记录（以下各条目描述对应任务完成当时的状态，均为历史记录，不代表当前文档状态）：
 
 - `LOG-QUERY-UI-ACCEPTANCE-DESIGN-001`：初版，创建 UI 与 ACCEPTANCE 两份设计文档（均为 `DRAFT_PENDING_USER_REVIEW / NOT_STARTED`）。本文件为日志查询详细验收设计，待用户人工复审；通过本文件复审不等于代码实现通过，本文件不构成任何已执行验收结论。
-- `LOG-QUERY-UI-ACCEPTANCE-DESIGN-001-R1`：基于对提交 `ce973d1f0ed5eb561a31430b3220a957f37b01b7` 的人工复审结论定向修订：① 分页条严格不显示任何页码/页次，删除待确认项 `LQ-UI-P-01`（`LQ-AC-059 / 060` 同步收口）；② 修正三页游标用例 off-by-one（`LQ-AC-065 / 066`，第 3 页栈严格 `[null,C1,C2]`，无 `C3`）；③ 纵向滚动统一为"仅表格数据区一条纵向滚动条"（`LQ-AC-149`）；④ 明确当前阶段菜单隐藏、路由直访（`LQ-AC-001 / 155 / 170`）；⑤ 物理设计相关用例 `LQ-AC-156~158` 状态统一为 `DEFERRED_UNTIL_PHYSICAL_DESIGN`；⑥ 首次查询失败标志语义收口为 `initialQueryAttempted`，新增 `LQ-AC-020`。文档仍为 `DRAFT_PENDING_USER_REVIEW / NOT_STARTED`，待用户人工复审。
-- `LOG-QUERY-UI-ACCEPTANCE-DESIGN-001-R1.1`：拆分"当前物理解耦检查"与"未来物理方案落地验收"两类用例职责：`LQ-AC-156~158` 恢复为代码开发阶段可执行的物理解耦边界检查（不绑定最终 RANGE 粒度、子分区、索引或生产 DDL），初始状态改回 `NOT_RUN`，不再放入 §8 B 层；新增 `LQ-AC-171`（最终物理设计完成并批准）、`LQ-AC-172`（生产 DDL 在完全离线窗口执行并验证）、`LQ-AC-173`（菜单开放前阻断条件全部通过），初始状态 `DEFERRED_UNTIL_PHYSICAL_DESIGN`；§8 A/B 分层同步，B 层延期用例精确为 `LQ-AC-164 / 165 / 171 / 172 / 173` 共 5 个，`LQ-AC-155` 保持 `NOT_RUN`。文档仍为 `DRAFT_PENDING_USER_REVIEW / NOT_STARTED`，待用户人工复审。
+- `LOG-QUERY-UI-ACCEPTANCE-DESIGN-001-R1`：基于对提交 `ce973d1f0ed5eb561a31430b3220a957f37b01b7` 的人工复审结论定向修订：① 分页条严格不显示任何页码/页次，删除待确认项 `LQ-UI-P-01`（`LQ-AC-059 / 060` 同步收口）；② 修正三页游标用例 off-by-one（`LQ-AC-065 / 066`，第 3 页栈严格 `[null,C1,C2]`，无 `C3`）；③ 纵向滚动统一为"仅表格数据区一条纵向滚动条"（`LQ-AC-149`）；④ 明确当前阶段菜单隐藏、路由直访（`LQ-AC-001 / 155 / 170`）；⑤ 物理设计相关用例 `LQ-AC-156~158` 状态统一为 `DEFERRED_UNTIL_PHYSICAL_DESIGN`；⑥ 首次查询失败标志语义收口为 `initialQueryAttempted`，新增 `LQ-AC-020`。文档当时仍为 `DRAFT_PENDING_USER_REVIEW / NOT_STARTED`，待用户人工复审。
+- `LOG-QUERY-UI-ACCEPTANCE-DESIGN-001-R1.1`：拆分"当前物理解耦检查"与"未来物理方案落地验收"两类用例职责：`LQ-AC-156~158` 恢复为代码开发阶段可执行的物理解耦边界检查（不绑定最终 RANGE 粒度、子分区、索引或生产 DDL），初始状态改回 `NOT_RUN`，不再放入 §8 B 层；新增 `LQ-AC-171`（最终物理设计完成并批准）、`LQ-AC-172`（生产 DDL 在完全离线窗口执行并验证）、`LQ-AC-173`（菜单开放前阻断条件全部通过），初始状态 `DEFERRED_UNTIL_PHYSICAL_DESIGN`；§8 A/B 分层同步，B 层延期用例精确为 `LQ-AC-164 / 165 / 171 / 172 / 173` 共 5 个，`LQ-AC-155` 保持 `NOT_RUN`。文档当时仍为 `DRAFT_PENDING_USER_REVIEW / NOT_STARTED`，待用户人工复审。
+- `LOG-QUERY-UI-ACCEPTANCE-APPROVAL-001`（2026-08-20）：用户已最终人工复审并批准初版、R1、R1.1 形成的完整详细验收设计链，执行正式批准收口。本文档状态由 `DRAFT_PENDING_USER_REVIEW` 转为 `APPROVED`，实现状态仍为 `NOT_STARTED`。当前文档成为日志查询功能的正式验收基线；允许据此开发测试、联调与执行开发阶段验收；文档批准不等于任何验收用例已经执行或通过，所有普通用例仍为 `NOT_RUN`，延期用例仍为 `DEFERRED_UNTIL_PHYSICAL_DESIGN`（精确集合 `LQ-AC-164 / 165 / 171 / 172 / 173`）；菜单开放阻断链继续有效，最终物理设计、生产 DDL 与生产等价性能验收完成并批准前，日志查询菜单必须保持隐藏。
 
-**重要声明**：本文档定义「应该被如何验收」的验收基线，所有用例初始状态均为 `NOT_RUN`（未执行）或 `DEFERRED_UNTIL_PHYSICAL_DESIGN`（受最终物理设计延期约束），**不伪造任何执行结果**。最终物理数据库设计（一级 RANGE 分区粒度、子分区、索引形态、生产 DDL、生产等价性能验收）仍为延期项（`LQ-AC-171 / 172 / 173` 验收），完成前日志查询菜单必须保持隐藏（`LQ-DB-14`、`LQ-UI` 文档 §1）；`LQ-AC-156~158` 仅为代码开发阶段可执行的"物理解耦边界检查"，不代表最终物理设计已完成。
+本验收设计已经批准，可以作为实现、自测、联调和验收依据；批准设计不等于验收通过，用例尚未执行。**重要声明**：本文档定义「应该被如何验收」的验收基线，所有用例初始状态均为 `NOT_RUN`（未执行）或 `DEFERRED_UNTIL_PHYSICAL_DESIGN`（受最终物理设计延期约束），**不伪造任何执行结果**。最终物理数据库设计（一级 RANGE 分区粒度、子分区、索引形态、生产 DDL、生产等价性能验收）仍为延期项（`LQ-AC-171 / 172 / 173` 验收），完成前日志查询菜单必须保持隐藏（`LQ-DB-14`、`LQ-UI` 文档 §1）；`LQ-AC-156~158` 仅为代码开发阶段可执行的"物理解耦边界检查"，不代表最终物理设计已完成。
 
 ## 2. 验收设计目的、适用范围与非目标
 
@@ -1707,7 +1712,7 @@
 9. 受支持分辨率内页面整体不出现纵向滚动条，仅表格数据区出现一条纵向滚动条（`LQ-AC-149` ↔ `UI.md` `LQ-UI-091 / 092 / 193`）。
 10. 验收用例未要求上游设计明确禁止的行为（§2.3 反向约束）。
 11. 两文档无待用户确认项（§9）。
-12. 两文档均保持 `DRAFT_PENDING_USER_REVIEW / NOT_STARTED`。
+12. 两文档状态均为 `APPROVED / NOT_STARTED`。
 13. 所有验收用例初始状态为 `NOT_RUN`；延期用例精确为 `LQ-AC-164 / 165 / 171 / 172 / 173`，均为 `DEFERRED_UNTIL_PHYSICAL_DESIGN`；`LQ-AC-156~158` 为当前可执行的物理解耦边界检查，状态 `NOT_RUN`；`LQ-AC-155` 保持 `NOT_RUN`；未伪造执行结果。
 14. `LQ-AC-156~158` 只验证当前代码/文档未提前绑定最终 RANGE 粒度、子分区、索引或生产 DDL，不再放入 B 层完成项；未来物理方案落地由延期用例 `LQ-AC-171`（物理设计批准）、`LQ-AC-172`（生产 DDL 离线执行）验收；菜单开放以 `LQ-AC-171 / 172 / 164 / 165` 全部 PASS 且 `LQ-AC-173` 最终批准为前提。
 15. 追踪矩阵无悬空引用、无重复 ID；上游关键规则均有验收落点。
@@ -1716,8 +1721,8 @@
 
 提交前已逐项核对：
 
-1. 仅 `ACCEPTANCE.md` 发生变化且非空；`UI.md` 与三份已批准上游文档均未变化。
-2. `ACCEPTANCE.md` 与 `UI.md` 状态均为 `DRAFT_PENDING_USER_REVIEW / NOT_STARTED`。
+1. 仅 `UI.md` 与 `ACCEPTANCE.md` 两份目标文档发生变化且非空；三份已批准上游文档均未变化。
+2. `ACCEPTANCE.md` 与 `UI.md` 状态均为 `APPROVED / NOT_STARTED`。
 3. 三份已批准上游文档内容与状态未变化。
 4. UI 规则编号唯一（`LQ-UI-001` 起），无悬空引用。
 5. 验收用例编号唯一（`LQ-AC-001` 起），无悬空引用。

@@ -9,21 +9,26 @@
 | 正式菜单 | 日志查询（单菜单，双 Tab） |
 | 目标路由 | `/monitor/log-query` |
 | 目标文档 | `docs/features/log-query/UI.md` |
-| 文档状态 | `DRAFT_PENDING_USER_REVIEW` |
+| 文档状态 | `APPROVED`（初版、R1、R1.1 完整 UI 与交互设计已用户最终人工复审批准；允许进入前端实现、前后端联调、自动化测试与人工 UI 验收；批准不代表代码已实现或页面已验收；最终物理数据库设计与生产等价性能验收仍为延期项；日志查询菜单在最终物理设计、生产 DDL 与生产等价性能验收完成前必须保持隐藏） |
 | 实现状态 | `NOT_STARTED`（现有页面仍为占位页，本文不构成任何已实现声明） |
 | 创建日期 | 2026-08-20 |
 | 创建任务 | `LOG-QUERY-UI-ACCEPTANCE-DESIGN-001` |
+| 关联任务 | `LOG-QUERY-UI-ACCEPTANCE-DESIGN-001`（初版）、`LOG-QUERY-UI-ACCEPTANCE-DESIGN-001-R1`（定向修订） |
 | 依据需求 | `docs/features/log-query/REQUIREMENTS.md`（`APPROVED / NOT_STARTED`） |
 | 关联契约 | `docs/features/log-query/API.md`（`APPROVED / NOT_STARTED`） |
 | 关联设计 | `docs/features/log-query/DESIGN.md`（`APPROVED / NOT_STARTED`） |
-| 关联验收 | `docs/features/log-query/ACCEPTANCE.md`（`DRAFT_PENDING_USER_REVIEW / NOT_STARTED`，本任务同步创建） |
+| 关联验收 | `docs/features/log-query/ACCEPTANCE.md`（`APPROVED / NOT_STARTED`） |
+| 最新批准日期 | `2026-08-20` |
+| 最新批准任务 | `LOG-QUERY-UI-ACCEPTANCE-APPROVAL-001` |
+| 最新批准范围 | `LOG-QUERY-UI-ACCEPTANCE-DESIGN-001 + R1 + R1.1 完整 UI 与交互设计` |
 
-修订记录：
+修订记录（以下各条目描述对应任务完成当时的状态，均为历史记录，不代表当前文档状态）：
 
 - `LOG-QUERY-UI-ACCEPTANCE-DESIGN-001`：初版，创建 UI 与 ACCEPTANCE 两份设计文档（均为 `DRAFT_PENDING_USER_REVIEW / NOT_STARTED`）。UI 设计待用户人工复审，不代表代码已实现或页面已验收。
-- `LOG-QUERY-UI-ACCEPTANCE-DESIGN-001-R1`：基于对提交 `ce973d1f0ed5eb561a31430b3220a957f37b01b7` 的人工复审结论定向修订：① 分页条严格不显示任何页码/页次，删除待确认项 `LQ-UI-P-01`；② 修正三页游标验收用例 off-by-one（第 3 页栈严格为 `[null,C1,C2]`，无 `C3`）；③ 纵向滚动统一为"仅表格数据区一条纵向滚动条"的唯一方案；④ 明确当前阶段左侧菜单隐藏、路由 `/monitor/log-query` 直访，允许实现阶段仅调整日志查询菜单项可见性；⑤ 物理设计相关验收用例状态统一为 `DEFERRED_UNTIL_PHYSICAL_DESIGN`；⑥ 首次查询失败标志语义收口为 `initialQueryAttempted`（已触发即置 `true`，不自动重试）。文档仍为 `DRAFT_PENDING_USER_REVIEW / NOT_STARTED`，待用户人工复审。
+- `LOG-QUERY-UI-ACCEPTANCE-DESIGN-001-R1`：基于对提交 `ce973d1f0ed5eb561a31430b3220a957f37b01b7` 的人工复审结论定向修订：① 分页条严格不显示任何页码/页次，删除待确认项 `LQ-UI-P-01`；② 修正三页游标验收用例 off-by-one（第 3 页栈严格为 `[null,C1,C2]`，无 `C3`）；③ 纵向滚动统一为"仅表格数据区一条纵向滚动条"的唯一方案；④ 明确当前阶段左侧菜单隐藏、路由 `/monitor/log-query` 直访，允许实现阶段仅调整日志查询菜单项可见性；⑤ 物理设计相关验收用例状态统一为 `DEFERRED_UNTIL_PHYSICAL_DESIGN`；⑥ 首次查询失败标志语义收口为 `initialQueryAttempted`（已触发即置 `true`，不自动重试）。文档当时仍为 `DRAFT_PENDING_USER_REVIEW / NOT_STARTED`，待用户人工复审。
+- `LOG-QUERY-UI-ACCEPTANCE-APPROVAL-001`（2026-08-20）：用户已最终人工复审并批准初版、R1、R1.1 形成的完整 UI 与交互设计链，执行正式批准收口。本文档状态由 `DRAFT_PENDING_USER_REVIEW` 转为 `APPROVED`，实现状态仍为 `NOT_STARTED`。当前文档成为日志查询功能的正式 UI/交互设计基线；允许进入前端实现、前后端联调与自动化测试；不代表代码已实现或页面已验收；最终物理数据库设计与生产等价性能验收仍为延期项；日志查询菜单继续隐藏，在最终物理设计、生产 DDL 与生产等价性能验收完成并批准前不得解除隐藏。
 
-本文只定义 UI/交互详细设计，不代表接口或页面已经实现、功能已经验收或性能已经验证。最终物理数据库设计（一级 RANGE 分区粒度、子分区、索引形态、生产 DDL、生产等价性能验收）仍属于延期项，完成前日志查询菜单必须保持隐藏；开发与验收人员可通过路由 `/monitor/log-query` 直接访问页面。
+本文档已经批准，是当前正式 UI/交互设计基线；可以进入代码实现和后续验收，实现与验收仍需独立完成。本文只定义 UI/交互详细设计，不代表接口或页面已经实现、功能已经验收或性能已经验证。最终物理数据库设计（一级 RANGE 分区粒度、子分区、索引形态、生产 DDL、生产等价性能验收）仍属于延期项，完成前日志查询菜单必须保持隐藏；开发与验收人员可通过路由 `/monitor/log-query` 直接访问页面。
 
 ## 2. 页面目标、适用范围与非目标
 
@@ -428,7 +433,7 @@
 提交前已逐项核对：
 
 1. 两目标文件存在且非空。
-2. 本文档状态 `DRAFT_PENDING_USER_REVIEW / NOT_STARTED`。
+2. 本文档状态 `APPROVED / NOT_STARTED`。
 3. 三份已批准上游文档内容与状态未变化。
 4. UI 规则编号唯一（`LQ-UI-001` 起），无重复、无悬空引用。
 5. 验收用例编号唯一（见 `ACCEPTANCE.md`），无悬空引用。
