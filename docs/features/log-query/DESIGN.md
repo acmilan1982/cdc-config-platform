@@ -6,19 +6,23 @@
 |---|---|
 | 正式功能标识 | `log-query` |
 | 目标文档 | `docs/features/log-query/DESIGN.md` |
-| 文档状态 | `DRAFT_PENDING_USER_REVIEW` |
+| 文档状态 | `APPROVED`（初版、R1、R1.1 完整 API 与逻辑查询设计已用户最终人工复审批准；允许进入 UI 详细设计、ACCEPTANCE 详细验收设计和前后端业务代码开发；批准不代表代码已实现、功能已验收或性能已验证；最终物理数据库设计仍为延期项；日志查询菜单在最终分区、索引和生产等价性能验证完成前必须保持隐藏） |
 | 对应需求状态 | `APPROVED`（R2、R2.1、R2.2 完整修订已用户人工复审批准） |
 | 实现状态 | `NOT_STARTED`（现有页面仍为占位页，本文不构成任何已实现声明） |
 | 依据需求 | `docs/features/log-query/REQUIREMENTS.md` |
 | 关联契约 | `docs/features/log-query/API.md`（两文档使用同一游标、翻页与字段隔离方案） |
 | 创建日期 | 2026-08-20 |
 | 关联任务 | `LOG-QUERY-API-DESIGN-001`（初版）、`LOG-QUERY-API-DESIGN-001-R1`（定向修订）、`LOG-QUERY-API-DESIGN-001-R1.1`（微型一致性修订） |
+| 最新批准日期 | `2026-08-20` |
+| 最新批准任务 | `LOG-QUERY-API-DESIGN-APPROVAL-001` |
+| 最新批准范围 | `LOG-QUERY-API-DESIGN-001 + R1 + R1.1 完整 API 与逻辑查询设计` |
 
 修订记录：
 
 - `LOG-QUERY-API-DESIGN-001`：初版，创建两份设计文档（均为 `DRAFT_PENDING_USER_REVIEW / NOT_STARTED`）。
 - `LOG-QUERY-API-DESIGN-001-R1`：修正四类设计缺陷（列表接口改 POST、前端游标栈模型、`CDC_LOG_ID` 内部数值绑定、数据源一次全表读取）、游标条件指纹规范化、将 12 项待确认设计转为已确认设计决策、同步一致性。修订完成仍为 `DRAFT_PENDING_USER_REVIEW / NOT_STARTED`，等待用户最终复审。
 - `LOG-QUERY-API-DESIGN-001-R1.1`：微型一致性修订，仅完成：(1) 数据源名称字段可空性补正（`sourceDataSourceName` / `targetDataSourceName` 改为可选，原始数据源 ID 为 NULL 时名称省略并显示 `--`）；(2) 相同签名密钥下普通服务重启不使游标失效，只有密钥轮换、密钥配置改变、版本不兼容或篡改才可能使旧游标失效；(3) 重取上一页只保证按相同固定排序与边界谓词重新查询目标页，不保证返回内容与首次访问该页时完全一致。修订完成仍为 `DRAFT_PENDING_USER_REVIEW / NOT_STARTED`，等待用户最终复审。
+- `LOG-QUERY-API-DESIGN-APPROVAL-001`（2026-08-20）：用户已最终人工复审并批准初版、R1、R1.1 形成的完整 API 与逻辑查询设计，执行正式批准收口。本文档状态由 `DRAFT_PENDING_USER_REVIEW` 转为 `APPROVED`，实现状态仍为 `NOT_STARTED`。当前文档成为日志查询功能的正式逻辑查询设计基线；可以进入 UI 详细设计、ACCEPTANCE 详细验收设计、前后端业务代码开发、Mapper 逻辑 SQL 实现、自动化测试与开发库功能验证；不代表 UI、ACCEPTANCE 已批准，不代表代码已实现或功能已验收，不代表最终分区、子分区、索引、生产 DDL 或生产等价性能已确定/通过；最终验证完成前，日志查询菜单必须保持隐藏。
 
 本文定义应用结构、请求流程和逻辑 SQL。本文**不确定**最终分区粒度、子分区、最终索引、生产 DDL 或最终执行计划（LQ-DB-07 / 08 / 09、LQ-NONGOAL-18）。
 
@@ -388,4 +392,4 @@ FETCH FIRST 1 ROWS ONLY
 - 30 秒超时与不自动重试一致。
 - 固定日志类型到固定表的安全映射一致（含 `${}` 封闭枚举说明）。
 - 最终分区、子分区、索引、DDL 仍为延期项；菜单保持隐藏的部署边界一致。
-- 两份文档状态均为 `DRAFT_PENDING_USER_REVIEW / NOT_STARTED`，与已批准 `REQUIREMENTS.md` 不冲突。
+- 两份文档状态均为 `APPROVED / NOT_STARTED`，与已批准 `REQUIREMENTS.md` 状态一致；API 与逻辑查询设计已批准，代码实现与功能验收仍需独立完成。
