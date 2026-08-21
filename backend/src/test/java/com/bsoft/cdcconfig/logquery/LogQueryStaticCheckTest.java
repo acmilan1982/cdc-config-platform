@@ -101,6 +101,41 @@ class LogQueryStaticCheckTest {
         assertFalse(config.contains("hardcoded"));
     }
 
+    // ============ 功能开关调整（LQ-API-170 ~ 180） ============
+
+    @Test
+    void controller_addsStatusEndpoint_withoutEnabledGateOnAnyEndpoint() throws IOException {
+        String controller = readFile(SRC.resolve("controller/LogQueryController.java"));
+        // 状态接口存在且只通过 Service 读取开关
+        assertTrue(controller.contains("getLogQueryStatus"));
+        assertTrue(controller.contains("@GetMapping(\"/status\")"));
+        // 原四接口与控制器本身均不出现 isEnabled()/enabled 门控，开关只在 Service 状态接口内生效
+        assertFalse(controller.contains("isEnabled("));
+        assertFalse(controller.contains("properties"));
+    }
+
+    @Test
+    void statusService_doesNotAccessDatabaseOrZk() throws IOException {
+        String impl = readFile(SRC.resolve("service/impl/LogQueryServiceImpl.java"));
+        assertTrue(impl.contains("getLogQueryStatus"));
+        // 状态方法只读配置：实现类不注入 JdbcTemplate/SqlSession/ZooKeeper
+        assertFalse(impl.contains("JdbcTemplate"));
+        assertFalse(impl.contains("SqlSession"));
+        assertFalse(impl.contains("ZooKeeper"));
+        assertFalse(impl.contains("zookeeper"));
+    }
+
+    @Test
+    void errorCode_hasNo403OrFeatureClosedCode() throws IOException {
+        String errorCode = readFile(SRC.resolve("exception/LogQueryErrorCode.java"));
+        assertFalse(Pattern.compile("= 403\\b").matcher(errorCode).find(),
+                "must not add a 403 or feature-closed error code");
+        assertFalse(Pattern.compile("= 40310\\b").matcher(errorCode).find());
+        assertFalse(errorCode.contains("FEATURE_CLOSED"));
+        assertFalse(errorCode.contains("NOT_OPEN"));
+        assertFalse(errorCode.contains("功能未开放"));
+    }
+
     @Test
     void noToCharOrCastInAnySource() throws IOException {
         for (String content : readAllSources()) {

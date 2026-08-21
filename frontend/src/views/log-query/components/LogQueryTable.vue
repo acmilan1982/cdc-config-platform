@@ -127,6 +127,7 @@ import { computed } from 'vue'
 import { Loading, WarningFilled } from '@element-plus/icons-vue'
 import type { LogListVO, LogType } from '@/types/logQuery'
 import type { AppliedCriteria } from '../composables/useLogQueryTab'
+import { dsCellText, dsTooltipText } from './dsDisplay'
 
 defineOptions({ name: 'LogQueryTable' })
 
@@ -157,26 +158,15 @@ type NameField = 'sourceDataSourceName' | 'targetDataSourceName'
 type IdField = 'sourceDataSourceId' | 'targetDataSourceId'
 
 /**
- * 数据源名称降级展示（LQ-UI-183 / LQ-API-64）：
- * 名称有值 → 显示名称（空名称显示"未定义名称"）；名称缺失但 ID 存在 → 回退显示原始 ID；两者皆缺 → `--`。
+ * 数据源名称降级展示（LQ-UI-183 / LQ-API-64 / LQ-DESIGN-180）：
+ * 复用 dsDisplay 统一四态规则，名称等于 ID 视为名称缺失，不出现 `ID（ID）`。
  */
 function dsCell(row: LogListVO, nameField: NameField, idField: IdField): string {
-  const name = row[nameField]
-  if (name === undefined || name === null) {
-    const id = row[idField]
-    return id ? id : '--'
-  }
-  if (name.trim() === '') return '未定义名称'
-  return name
+  return dsCellText(row[nameField], row[idField])
 }
 
 function dsTooltip(row: LogListVO, nameField: NameField, idField: IdField): string {
-  const name = row[nameField]
-  const id = row[idField]
-  const nm = name && name.trim() ? name : '未定义名称'
-  const parts: string[] = [`名称：${nm}`]
-  if (id) parts.push(`ID：${id}`)
-  return parts.join('  ')
+  return dsTooltipText(row[nameField], row[idField])
 }
 </script>
 

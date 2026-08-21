@@ -110,6 +110,7 @@ import { Search, WarningFilled } from '@element-plus/icons-vue'
 import { ALL_DATA_SOURCE, parseDateTime } from '../composables/useLogQueryTab'
 import type { LogQueryForm } from '../composables/useLogQueryTab'
 import type { DataSourceOptionVO } from '@/types/logQuery'
+import { normalizeSelection } from './selection'
 
 defineOptions({ name: 'LogQueryFilter' })
 
@@ -134,22 +135,6 @@ const DAY_SPAN_MS = 7 * 24 * 60 * 60 * 1000
 interface SelectOption {
   value: string
   label: string
-}
-
-/**
- * 多选互斥："全部"与具体值互斥（LQ-UI-058）。
- * 原值含"全部"时用户新增具体值 → 去掉"全部"；原值无"全部"时用户选了"全部" → 只保留"全部"。
- * 清空后恢复"全部"，避免出现无任何选择的空白态。
- */
-function normalizeSelection(prev: string[], next: string[]): string[] {
-  if (next.length === 0) return [ALL_DATA_SOURCE]
-  if (next.includes(ALL_DATA_SOURCE)) {
-    if (prev.includes(ALL_DATA_SOURCE)) {
-      return Array.from(new Set(next.filter((v) => v !== ALL_DATA_SOURCE)))
-    }
-    return [ALL_DATA_SOURCE]
-  }
-  return Array.from(new Set(next))
 }
 
 function buildOptions(list: DataSourceOptionVO[]): SelectOption[] {

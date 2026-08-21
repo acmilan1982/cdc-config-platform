@@ -14,6 +14,7 @@
       text-color="#bfcbd9"
       active-text-color="#409eff"
       class="sidebar-menu"
+      @select="onMenuSelect"
     >
       <template v-for="group in menuGroups" :key="group.title">
         <el-menu-item-group :title="group.title" class="menu-group">
@@ -36,11 +37,22 @@ import { computed } from 'vue'
 import { useRoute } from 'vue-router'
 import { useAppStore } from '@/stores/app'
 import { menuGroups } from '@/config/menu'
+import { triggerLogQueryReinit } from '@/views/log-query/reinitBus'
 
 const appStore = useAppStore()
 const route = useRoute()
 
 const currentPath = computed(() => route.path)
+
+/**
+ * 再次点击当前"日志查询"菜单项时触发页面完整重新初始化（LQ-UI-142~146 / LQ-AC-181）。
+ * `:router="true"` 下同路由点击不会重挂载组件，通过事件总线通知页面。
+ */
+function onMenuSelect(index: string) {
+  if (index === '/monitor/log-query' && route.path === '/monitor/log-query') {
+    triggerLogQueryReinit()
+  }
+}
 </script>
 
 <style scoped>

@@ -21,6 +21,7 @@ import static org.assertj.core.api.Assertions.assertThatThrownBy;
  * R1-05 密钥配置行为（LQ-API-52 / DESIGN §7.1）：
  * 外部 Spring 属性绑定、非空可用、空白 fail-closed 且无默认密钥、
  * 同值重启等价、@Lazy 下仅扫描/注入代理不误用默认密钥、实际调用才 fail-closed。
+ * enabled 开关（LQ-API-170）：默认 false、外部配置绑定、fail-closed。
  */
 class LogQueryConfigTest {
 
@@ -114,6 +115,32 @@ class LogQueryConfigTest {
                     .isInstanceOf(BeanCreationException.class)
                     .hasRootCauseInstanceOf(IllegalStateException.class);
         });
+    }
+
+    @Test
+    void enabled_unset_defaultsToFalse() {
+        contextRunner.run(context -> {
+            LogQueryProperties props = context.getBean(LogQueryProperties.class);
+            assertThat(props.isEnabled()).isFalse();
+        });
+    }
+
+    @Test
+    void enabled_true_bindsTrue() {
+        contextRunner.withPropertyValues("cdc.log-query.enabled=true")
+                .run(context -> {
+                    LogQueryProperties props = context.getBean(LogQueryProperties.class);
+                    assertThat(props.isEnabled()).isTrue();
+                });
+    }
+
+    @Test
+    void enabled_false_bindsFalse() {
+        contextRunner.withPropertyValues("cdc.log-query.enabled=false")
+                .run(context -> {
+                    LogQueryProperties props = context.getBean(LogQueryProperties.class);
+                    assertThat(props.isEnabled()).isFalse();
+                });
     }
 
     @Test

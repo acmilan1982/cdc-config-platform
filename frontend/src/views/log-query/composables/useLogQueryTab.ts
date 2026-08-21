@@ -42,7 +42,7 @@ export interface LogQueryTabState {
   validationError: string
   initialQueryAttempted: boolean
   elapsed: number
-  initialize: () => void
+  reinitialize: () => void
   initialQuery: () => void
   query: () => void
   reset: () => void
@@ -235,8 +235,24 @@ export function useLogQueryTab(
     }
   }
 
-  function initialize(): void {
+  /**
+   * 完整重新初始化（LQ-UI-210 / LQ-AC-181）：重新进入/再次点击当前菜单时，
+   * 作废在途请求并清空全部状态，恢复默认表单，等待页面按 enabled 分支重新初始化。
+   */
+  function reinitialize(): void {
+    requestToken += 1
+    stopElapsed()
     setDefaultForm()
+    state.applied = null
+    state.items = []
+    state.requestCursorStack = [null]
+    state.hasNext = false
+    state.nextCursor = null
+    state.loading = false
+    state.error = null
+    state.validationError = ''
+    state.initialQueryAttempted = false
+    state.elapsed = 0
   }
 
   async function initialQuery(): Promise<void> {
@@ -259,8 +275,10 @@ export function useLogQueryTab(
     await runSearch(criteria, null, 'query', null)
   }
 
+  /** 重置表单并清除校验错误，但保留列表、已生效条件和游标，不发起查询（LQ-DESIGN-172 / LQ-UI-073） */
   function reset(): void {
     setDefaultForm()
+    state.validationError = ''
   }
 
   async function nextPage(): Promise<void> {
@@ -289,7 +307,7 @@ export function useLogQueryTab(
     validationError: '',
     initialQueryAttempted: false,
     elapsed: 0,
-    initialize,
+    reinitialize,
     initialQuery,
     query,
     reset,

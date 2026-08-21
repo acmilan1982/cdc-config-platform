@@ -52,6 +52,7 @@ import { Loading, WarningFilled } from '@element-plus/icons-vue'
 import { fetchLogDetail } from '@/api/logQuery'
 import type { LogDetailVO, LogListVO, LogType } from '@/types/logQuery'
 import { resolveBusinessError, resolveHttpError } from '../composables/useLogQueryTab'
+import { dsDetailText } from './dsDisplay'
 
 defineOptions({ name: 'LogDetailDialog' })
 
@@ -86,10 +87,7 @@ function dsNameText(
   idField: 'sourceDataSourceId' | 'targetDataSourceId',
 ): string {
   if (!row) return '--'
-  const name = row[nameField]
-  const id = row[idField]
-  const nm = name ? (name.trim() ? name : '未定义名称') : (id ? id : '--')
-  return id ? `${nm}（${id}）` : nm
+  return dsDetailText(row[nameField], row[idField])
 }
 
 async function load() {

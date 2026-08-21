@@ -5,6 +5,7 @@ import type {
   LogDetailVO,
   LogListQuery,
   LogListResponse,
+  LogQueryStatusVO,
   RawMessageVO,
 } from '@/types/logQuery'
 
@@ -14,6 +15,15 @@ import type {
  * 不修改全局默认值，不影响其他功能。
  */
 const REQUEST_TIMEOUT = 30000
+
+/** GET /api/log-query/status（LQ-API-11 / 170，请求级 30 秒超时，不自动重试） */
+export async function getLogQueryStatus(): Promise<ApiResponse<LogQueryStatusVO>> {
+  const res = await http.get<ApiResponse<LogQueryStatusVO>>(
+    '/api/log-query/status',
+    { timeout: REQUEST_TIMEOUT },
+  )
+  return res.data
+}
 
 /** GET /api/log-query/data-source-options（LQ-API-11 / 20） */
 export async function fetchDataSourceOptions(): Promise<ApiResponse<DataSourceOptionsVO>> {

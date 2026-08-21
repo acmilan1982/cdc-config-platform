@@ -104,6 +104,13 @@ class LogQueryMapperXmlCheckTest {
     }
 
     @Test
+    void emptyDataSourceArray_omitsBothInPredicates() {
+        // 空数组不生成 IN 条件：两个 IN 谓词均由非空判断守卫
+        assertTrue(xml.contains("<if test=\"sourceDataSourceIds != null and !sourceDataSourceIds.isEmpty()\">"));
+        assertTrue(xml.contains("<if test=\"targetDataSourceIds != null and !targetDataSourceIds.isEmpty()\">"));
+    }
+
+    @Test
     void fixedSortAndFetchLimits() {
         assertTrue(xml.contains("ORDER BY TARGET_TIME DESC, CDC_LOG_ID DESC"));
         assertTrue(xml.contains("FETCH FIRST 101 ROWS ONLY"));

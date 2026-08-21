@@ -8,6 +8,7 @@ import com.bsoft.cdcconfig.logquery.service.LogQueryService;
 import com.bsoft.cdcconfig.logquery.vo.DataSourceOptionsVO;
 import com.bsoft.cdcconfig.logquery.vo.LogDetailVO;
 import com.bsoft.cdcconfig.logquery.vo.LogListResponse;
+import com.bsoft.cdcconfig.logquery.vo.LogQueryStatusVO;
 import com.bsoft.cdcconfig.logquery.vo.RawMessageVO;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.Parameter;
@@ -32,6 +33,12 @@ public class LogQueryController {
 
     public LogQueryController(LogQueryService logQueryService) {
         this.logQueryService = logQueryService;
+    }
+
+    @Operation(summary = "功能开关状态", description = "返回日志查询功能是否已启用，仅读配置不访问数据库")
+    @GetMapping("/status")
+    public ApiResponse<LogQueryStatusVO> status() {
+        return ApiResponse.success(logQueryService.getLogQueryStatus());
     }
 
     @Operation(summary = "数据源候选", description = "一次返回源库与目标库下拉候选，仅启用且类别匹配")

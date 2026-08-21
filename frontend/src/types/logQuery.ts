@@ -78,3 +78,8 @@ export interface DataSourceOptionVO {
   id: string
   org?: string
 }
+
+/** 功能开关状态响应 data（LQ-API-171）：仅读取后端配置，不访问数据库 */
+export interface LogQueryStatusVO {
+  enabled: boolean
+}

@@ -1,6 +1,7 @@
 package com.bsoft.cdcconfig.logquery.service;
 
 import com.bsoft.cdcconfig.common.exception.BusinessException;
+import com.bsoft.cdcconfig.logquery.config.LogQueryProperties;
 import com.bsoft.cdcconfig.logquery.cursor.LogCursorBoundary;
 import com.bsoft.cdcconfig.logquery.cursor.LogCursorCodec;
 import com.bsoft.cdcconfig.logquery.cursor.LogCursorConditionMismatchException;
@@ -19,6 +20,7 @@ import com.bsoft.cdcconfig.logquery.vo.DataSourceOptionsVO;
 import com.bsoft.cdcconfig.logquery.vo.LogDetailVO;
 import com.bsoft.cdcconfig.logquery.vo.LogListResponse;
 import com.bsoft.cdcconfig.logquery.vo.LogListVO;
+import com.bsoft.cdcconfig.logquery.vo.LogQueryStatusVO;
 import com.bsoft.cdcconfig.logquery.vo.RawMessageVO;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
@@ -49,6 +51,7 @@ import static org.mockito.ArgumentMatchers.eq;
 import static org.mockito.Mockito.never;
 import static org.mockito.Mockito.times;
 import static org.mockito.Mockito.verify;
+import static org.mockito.Mockito.verifyNoInteractions;
 import static org.mockito.Mockito.when;
 
 @ExtendWith(MockitoExtension.class)
@@ -62,6 +65,9 @@ class LogQueryServiceImplTest {
 
     @Mock
     private LogCursorCodec cursorCodec;
+
+    @Mock
+    private LogQueryProperties properties;
 
     @InjectMocks
     private LogQueryServiceImpl service;
@@ -722,6 +728,32 @@ class LogQueryServiceImplTest {
         // 输入行顺序改变时输出仍一致：同名按 ID 升序，空名称放最后
         assertEquals(ids2, ids1);
         assertEquals(Arrays.asList("DS_A", "DS_B", "DS_C"), ids1);
+    }
+
+    // ============ 功能开关状态（LQ-API-170/171） ============
+
+    @Test
+    void getLogQueryStatus_enabledTrue_returnsTrue_andTouchesNoMapperOrZk() {
+        when(properties.isEnabled()).thenReturn(true);
+
+        LogQueryStatusVO vo = service.getLogQueryStatus();
+
+        assertNotNull(vo);
+        assertTrue(vo.isEnabled());
+        verifyNoInteractions(mapper);
+        verifyNoInteractions(cursorCodec);
+    }
+
+    @Test
+    void getLogQueryStatus_enabledFalse_returnsFalse() {
+        when(properties.isEnabled()).thenReturn(false);
+
+        LogQueryStatusVO vo = service.getLogQueryStatus();
+
+        assertNotNull(vo);
+        assertFalse(vo.isEnabled());
+        verifyNoInteractions(mapper);
+        verifyNoInteractions(cursorCodec);
     }
 
     // ============ helpers ============

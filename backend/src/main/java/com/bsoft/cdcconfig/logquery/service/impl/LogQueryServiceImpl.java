@@ -12,6 +12,7 @@ import com.bsoft.cdcconfig.logquery.exception.LogQueryErrorCode;
 import com.bsoft.cdcconfig.logquery.mapper.DataSourceRow;
 import com.bsoft.cdcconfig.logquery.mapper.LogDetailRow;
 import com.bsoft.cdcconfig.logquery.mapper.LogListRow;
+import com.bsoft.cdcconfig.logquery.config.LogQueryProperties;
 import com.bsoft.cdcconfig.logquery.mapper.LogQueryMapper;
 import com.bsoft.cdcconfig.logquery.mapper.RawMessageRow;
 import com.bsoft.cdcconfig.logquery.service.LogQueryService;
@@ -20,6 +21,7 @@ import com.bsoft.cdcconfig.logquery.vo.DataSourceOptionsVO;
 import com.bsoft.cdcconfig.logquery.vo.LogDetailVO;
 import com.bsoft.cdcconfig.logquery.vo.LogListResponse;
 import com.bsoft.cdcconfig.logquery.vo.LogListVO;
+import com.bsoft.cdcconfig.logquery.vo.LogQueryStatusVO;
 import com.bsoft.cdcconfig.logquery.vo.RawMessageVO;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -75,10 +77,21 @@ public class LogQueryServiceImpl implements LogQueryService {
 
     private final LogQueryMapper mapper;
     private final LogCursorCodec cursorCodec;
+    private final LogQueryProperties properties;
 
-    public LogQueryServiceImpl(LogQueryMapper mapper, @Lazy LogCursorCodec cursorCodec) {
+    public LogQueryServiceImpl(LogQueryMapper mapper, @Lazy LogCursorCodec cursorCodec,
+                               LogQueryProperties properties) {
         this.mapper = mapper;
         this.cursorCodec = cursorCodec;
+        this.properties = properties;
+    }
+
+    /**
+     * 功能开关状态：仅读取配置 ${CDC_LOG_QUERY_ENABLED}，不访问数据库（LQ-API-171）。
+     */
+    @Override
+    public LogQueryStatusVO getLogQueryStatus() {
+        return new LogQueryStatusVO(properties.isEnabled());
     }
 
     @Override

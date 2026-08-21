@@ -9,6 +9,7 @@ import com.bsoft.cdcconfig.logquery.vo.DataSourceOptionsVO;
 import com.bsoft.cdcconfig.logquery.vo.LogDetailVO;
 import com.bsoft.cdcconfig.logquery.vo.LogListResponse;
 import com.bsoft.cdcconfig.logquery.vo.LogListVO;
+import com.bsoft.cdcconfig.logquery.vo.LogQueryStatusVO;
 import com.bsoft.cdcconfig.logquery.vo.RawMessageVO;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import org.junit.jupiter.api.Test;
@@ -47,6 +48,28 @@ class LogQueryControllerTest {
 
     @MockBean
     private LogQueryService logQueryService;
+
+    // ---- status ----
+
+    @Test
+    void status_enabledTrue_returnsEnabledBoolean() throws Exception {
+        when(logQueryService.getLogQueryStatus()).thenReturn(new LogQueryStatusVO(true));
+
+        mockMvc.perform(get("/api/log-query/status"))
+                .andExpect(status().isOk())
+                .andExpect(jsonPath("$.code").value(200))
+                .andExpect(jsonPath("$.data.enabled").value(true));
+    }
+
+    @Test
+    void status_enabledFalse_returnsEnabledFalse() throws Exception {
+        when(logQueryService.getLogQueryStatus()).thenReturn(new LogQueryStatusVO(false));
+
+        mockMvc.perform(get("/api/log-query/status"))
+                .andExpect(status().isOk())
+                .andExpect(jsonPath("$.code").value(200))
+                .andExpect(jsonPath("$.data.enabled").value(false));
+    }
 
     // ---- data-source-options ----
 
