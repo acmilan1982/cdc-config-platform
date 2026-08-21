@@ -10,10 +10,10 @@
 
 ## 1. 任务结论
 
-依据五份已批准基线（`docs/features/log-query/REQUIREMENTS.md`、`API.md`、`DESIGN.md`、`UI.md`、`ACCEPTANCE.md`），日志查询后端已实现完成，包含四个 HTTP API、列表 SQL 与游标分页、数据源一次全表读取与名称映射、大字段隔离、25 秒语句超时、批准错误码映射、游标签名密钥外部配置绑定及 99 个本任务相关自动化测试。
+依据五份已批准基线（`docs/features/log-query/REQUIREMENTS.md`、`API.md`、`DESIGN.md`、`UI.md`、`ACCEPTANCE.md`），日志查询后端已实现完成，包含四个 HTTP API、列表 SQL 与游标分页、数据源一次全表读取与名称映射、大字段隔离、25 秒语句超时、批准错误码映射、游标签名密钥外部配置绑定及 124 个本任务相关自动化测试。
 
-- 本任务相关自动化测试：**99/99 通过**
-- 后端完整测试：539 个，其中 3 个失败 + 1 个错误，**全部 4 个为任务开始前已可复现的既有失败**（依赖开发库实时数据），与本任务无关，详见 §8、§11。
+- 本任务相关自动化测试：**124/124 通过**
+- 后端完整测试：564 个，其中 3 个失败 + 1 个错误，**全部 4 个为任务开始前已可复现的既有失败**（依赖开发库实时数据），与本任务无关，详见 §8、§11。
 - 后端编译/打包：`mvn clean package -DskipTests` **BUILD SUCCESS**。
 - 提交与推送：创建一次精确普通提交并推送到 `origin/develop`，验证本地 `HEAD == origin/develop`，ahead/behind `0 0`。
 
@@ -209,13 +209,14 @@ git rev-list --left-right --count HEAD...origin/develop
 
 | 测试类 | 通过 | 失败 | 错误 | 跳过 |
 |---|---:|---:|---:|---:|
-| `logquery.service.LogQueryServiceImplTest` | 44 | 0 | 0 | 0 |
+| `logquery.service.LogQueryServiceImplTest` | 51 | 0 | 0 | 0 |
 | `logquery.controller.LogQueryControllerTest` | 11 | 0 | 0 | 0 |
-| `logquery.cursor.LogCursorCodecTest` | 15 | 0 | 0 | 0 |
+| `logquery.cursor.LogCursorCodecTest` | 28 | 0 | 0 | 0 |
 | `logquery.cursor.LogQueryFingerprintTest` | 10 | 0 | 0 | 0 |
 | `logquery.mapper.LogQueryMapperXmlCheckTest` | 12 | 0 | 0 | 0 |
 | `logquery.LogQueryStaticCheckTest` | 7 | 0 | 0 | 0 |
-| **logquery 合计** | **99** | **0** | **0** | **0** |
+| `logquery.config.LogQueryConfigTest` | 5 | 0 | 0 | 0 |
+| **logquery 合计** | **124** | **0** | **0** | **0** |
 
 覆盖 §12 的 23 项最低覆盖要求：4 接口路由/响应（1）、不接受/不定义 pageSize（2）、必填时间两端/顺序/端点转换/7 天公式（3）、完整 7 个自然日合法且超 1 秒拒绝（4）、可选条件与 IN 上限 100（5）、封闭枚举表名/非法 logType 不进 Mapper（6）、SQL 无拼接/LIKE/OFFSET/COUNT/大表 JOIN/大字段预取（7）、固定排序与 keyset 谓词（8）、101 判断 hasNext 且只返回 100（9）、cdcLogId 外部字符串内部数值绑定并覆盖大于 JS 安全整数（10）、非法/超范围/带小数/非十进制 → HTTP 400、不存在 → 40410（11）、游标生成/解析/篡改/版本/logType/指纹（12）、规范化 JSON 字段顺序/数组去重排序/空数组空文本/UTF-8（13）、同密钥重启可验签/不同密钥失效（14）、数据源每请求一次四列全表无 N+1（15）、FG_ACTIVE/类别 trim/名称 NULL 与降级（16）、三类字段隔离（17）、LOG_DETAIL 摘要 300 与存在性不加载正文（18）、25 秒超时配置与异常映射（19）、不自动重试（20）、响应 CDC_LOG_ID 恒为字符串（21）、NULL 字段与 `--` 省略语义（22）、物理设计解耦（23）。
 
@@ -223,7 +224,7 @@ git rev-list --left-right --count HEAD...origin/develop
 
 | 项 | 结果 |
 |---|---|
-| 总测试数 | 539 |
+| 总测试数 | 564 |
 | 失败 | 3 |
 | 错误 | 1 |
 | 跳过 | 0 |
@@ -241,14 +242,14 @@ mvn clean package -DskipTests
 
 结果：**BUILD SUCCESS**，产出 `target/cdc-config-platform-backend-1.0.0-SNAPSHOT.jar`（约 45 MB）。
 
-### 8.2 本任务相关测试
+### 8.2 本任务相关测试（初版历史结果）
 
 ```bash
 cd /agent/cdc-config-platform/backend
 mvn test
 ```
 
-结果：logquery 相关 99 个测试全部通过（见 §7）；完整套件仅余 4 个既有失败（见 §11）。
+结果（初版历史结果）：logquery 相关 99 个测试全部通过（初版累计，R1 后累计为 124 个，见 §7 / §R1.2）；完整套件仅余 4 个既有失败（见 §11）。
 
 ### 8.3 静态检索禁止项
 
@@ -286,7 +287,7 @@ mvn test
 
 ### 11.1 完整测试套件中的 4 个既有失败（与本任务无关）
 
-完整测试 `mvn test` 输出：
+完整测试 `mvn test` 输出（初版历史结果，总数 539；R1 后完整套件累计 564，仍为相同 3 失败 + 1 错误，见 §R1.2）：
 
 ```text
 [INFO] Tests run: 539, Failures: 3, Errors: 1, Skipped: 0
@@ -308,7 +309,7 @@ mvn test
 2. **零 git 修改**：`git diff -- backend/src/main/java/com/bsoft/cdcconfig/monitor/jobfailure backend/src/test/java/com/bsoft/cdcconfig/monitor/jobfailure` 为空，上述文件未被本任务触碰。
 3. **依赖实时开发库数据**：失败测试为 `@SpringBootTest` 或直接走 `JdbcTemplate`/真实 Mapper 读取 `CDC_JOB_FAILURE_EVENT`、`CDC_JOB_FAILURE_HANDLE_LOG` 等表并断言具体数值/分支；这些数据随运维持续变化（此前会话已观察到不同失败形态）。
 4. **本任务零写库**：本任务所有接口只读，未执行任何 INSERT/UPDATE/DELETE，不可能是本任务改动数据导致的失败。
-5. **本任务相关测试全绿**：logquery 99 个测试全部通过；`mvn clean package -DskipTests` 构建成功。
+5. **本任务相关测试全绿**：logquery 测试全部通过（初版历史结果：99 个；R1 后累计 124 个）；`mvn clean package -DskipTests` 构建成功。
 
 影响：上述失败与本任务无关，按任务 §13 以 `PARTIAL_WITH_PROVEN_PREEXISTING_FAILURES` 记录，不影响本任务的提交与推送。
 
@@ -370,7 +371,7 @@ git status --short
 
 ### R1.2 R1 测试与构建结果
 
-- logquery 相关测试：**124/124 通过**（原 99 + R1 新增 25：Service +7、Codec +13、Config 新增文件 5）。
+- logquery 相关测试：**124/124 通过**（初版历史结果：原 99 + R1 新增 25：Service +7、Codec +13、Config 新增文件 5）。
 - 完整后端测试套件：**564 个，3 失败 + 1 错误**，4 个全部为前序 §11 已证明、依赖开发库实时数据的既有无关失败，与 R1 修订无关（`OracleDateMappingTest.oracleDateToLocalDateTime_viaJdbcTemplate_shouldMapCorrectly:43`、`JobFailureServiceTest.latestFaultShouldHaveCorrectRestartCount:125`、`JobFailureServiceTest.failureDetail_eventNotInFaultProcess_shouldThrow:215`、`JobFailureServiceTest.failureDetailByEvent_shouldReturnContent:200`），失败集合/数量/原因与前序一致。
 - 构建：`mvn clean package -DskipTests` **BUILD SUCCESS**。
 - `git diff --check`：通过。
@@ -410,7 +411,7 @@ git status --short
 | 16 | 详情与原始消息按需、最小字段、相互隔离 | ✅ 详情不含 RAW/RESULT_DETAIL；原始消息仅 RAW+ID |
 | 17 | 25 秒语句超时生效，不自动重试 | ✅ 4 条语句均 `timeout="25"` |
 | 18 | 错误码与统一异常响应符合 API.md 和仓库规范 | ✅ 40010~40017/40410/50020~50021 |
-| 19 | 本任务测试通过 | ✅ 99/99 |
+| 19 | 本任务测试通过 | ✅ 124/124 |
 | 20 | 后端编译/构建通过，或仅存在已被充分证明的无关既有失败 | ✅ BUILD SUCCESS；4 个既有失败已证明与本任务无关 |
 | 21 | `git diff --check` 通过 | ✅ |
 | 22 | 暂存区只包含本任务文件 | ✅ 精确 `git add -- <paths>`，见 §16 |
@@ -502,7 +503,7 @@ git status --short
 见对话最终回复；机器可读结果块中：
 
 - `status=SUCCESS`
-- `backend_test_status=PARTIAL_WITH_PROVEN_PREEXISTING_FAILURES`（99/99 本任务测试通过，完整套件仅 4 个已证明既有无关失败）
+- `backend_test_status=PARTIAL_WITH_PROVEN_PREEXISTING_FAILURES`（124/124 本任务测试通过，完整套件仅 4 个已证明既有无关失败）
 - `backend_build_status=PASS`
 - `database_read_status=READ_ONLY_METADATA`（依据人工指示记录本次只读元数据核验）
 - `database_write_status=NONE`
