@@ -9,15 +9,15 @@
 | 正式菜单 | 日志查询（单菜单，双 Tab） |
 | 目标路由 | `/monitor/log-query` |
 | 目标文档 | `docs/features/log-query/UI.md` |
-| 文档状态 | `APPROVED`（初版、R1、R1.1 完整 UI 与交互设计已用户最终人工复审批准；允许进入前端实现、前后端联调、自动化测试与人工 UI 验收；批准不代表代码已实现或页面已验收；最终物理数据库设计与生产等价性能验收仍为延期项；日志查询菜单在最终物理设计、生产 DDL 与生产等价性能验收完成前必须保持隐藏） |
-| 实现状态 | `NOT_STARTED`（现有页面仍为占位页，本文不构成任何已实现声明） |
+| 文档状态 | `DRAFT_PENDING_USER_REVIEW`（初版、R1、R1.1 完整 UI 与交互设计此前已用户最终人工复审批准；`LOG-QUERY-BASELINE-ADJUSTMENT-001` 修订菜单开放控制、页面状态流程、重新进入、“全部”互斥、重置校验、数据源降级展示与前端测试要求，本次调整待用户复审） |
+| 实现状态 | `IN_PROGRESS`（后端既有四接口 `IMPLEMENTED_ACCEPTED`；前端初版 `IMPLEMENTED_PENDING_REVIEW`；本次状态接口、未开放页、重新检测等调整尚未实现） |
 | 创建日期 | 2026-08-20 |
 | 创建任务 | `LOG-QUERY-UI-ACCEPTANCE-DESIGN-001` |
-| 关联任务 | `LOG-QUERY-UI-ACCEPTANCE-DESIGN-001`（初版）、`LOG-QUERY-UI-ACCEPTANCE-DESIGN-001-R1`（定向修订） |
-| 依据需求 | `docs/features/log-query/REQUIREMENTS.md`（`APPROVED / NOT_STARTED`） |
-| 关联契约 | `docs/features/log-query/API.md`（`APPROVED / NOT_STARTED`） |
-| 关联设计 | `docs/features/log-query/DESIGN.md`（`APPROVED / NOT_STARTED`） |
-| 关联验收 | `docs/features/log-query/ACCEPTANCE.md`（`APPROVED / NOT_STARTED`） |
+| 关联任务 | `LOG-QUERY-UI-ACCEPTANCE-DESIGN-001`（初版）、`LOG-QUERY-UI-ACCEPTANCE-DESIGN-001-R1`（定向修订）、`LOG-QUERY-BASELINE-ADJUSTMENT-001`（功能开放与交互基线调整） |
+| 依据需求 | `docs/features/log-query/REQUIREMENTS.md`（`DRAFT_PENDING_USER_REVIEW / IN_PROGRESS`） |
+| 关联契约 | `docs/features/log-query/API.md`（`DRAFT_PENDING_USER_REVIEW / IN_PROGRESS`） |
+| 关联设计 | `docs/features/log-query/DESIGN.md`（`DRAFT_PENDING_USER_REVIEW / IN_PROGRESS`） |
+| 关联验收 | `docs/features/log-query/ACCEPTANCE.md`（`DRAFT_PENDING_USER_REVIEW / IN_PROGRESS`） |
 | 最新批准日期 | `2026-08-20` |
 | 最新批准任务 | `LOG-QUERY-UI-ACCEPTANCE-APPROVAL-001` |
 | 最新批准范围 | `LOG-QUERY-UI-ACCEPTANCE-DESIGN-001 + R1 + R1.1 完整 UI 与交互设计` |
@@ -25,10 +25,11 @@
 修订记录（以下各条目描述对应任务完成当时的状态，均为历史记录，不代表当前文档状态）：
 
 - `LOG-QUERY-UI-ACCEPTANCE-DESIGN-001`：初版，创建 UI 与 ACCEPTANCE 两份设计文档（均为 `DRAFT_PENDING_USER_REVIEW / NOT_STARTED`）。UI 设计待用户人工复审，不代表代码已实现或页面已验收。
-- `LOG-QUERY-UI-ACCEPTANCE-DESIGN-001-R1`：基于对提交 `ce973d1f0ed5eb561a31430b3220a957f37b01b7` 的人工复审结论定向修订：① 分页条严格不显示任何页码/页次，删除待确认项 `LQ-UI-P-01`；② 修正三页游标验收用例 off-by-one（第 3 页栈严格为 `[null,C1,C2]`，无 `C3`）；③ 纵向滚动统一为"仅表格数据区一条纵向滚动条"的唯一方案；④ 明确当前阶段左侧菜单隐藏、路由 `/monitor/log-query` 直访，允许实现阶段仅调整日志查询菜单项可见性；⑤ 物理设计相关验收用例状态统一为 `DEFERRED_UNTIL_PHYSICAL_DESIGN`；⑥ 首次查询失败标志语义收口为 `initialQueryAttempted`（已触发即置 `true`，不自动重试）。文档当时仍为 `DRAFT_PENDING_USER_REVIEW / NOT_STARTED`，待用户人工复审。
-- `LOG-QUERY-UI-ACCEPTANCE-APPROVAL-001`（2026-08-20）：用户已最终人工复审并批准初版、R1、R1.1 形成的完整 UI 与交互设计链，执行正式批准收口。本文档状态由 `DRAFT_PENDING_USER_REVIEW` 转为 `APPROVED`，实现状态仍为 `NOT_STARTED`。当前文档成为日志查询功能的正式 UI/交互设计基线；允许进入前端实现、前后端联调与自动化测试；不代表代码已实现或页面已验收；最终物理数据库设计与生产等价性能验收仍为延期项；日志查询菜单继续隐藏，在最终物理设计、生产 DDL 与生产等价性能验收完成并批准前不得解除隐藏。
+- `LOG-QUERY-UI-ACCEPTANCE-DESIGN-001-R1`：基于对提交 `ce973d1f0ed5eb561a31430b3220a957f37b01b7` 的人工复审结论定向修订：① 分页条严格不显示任何页码/页次，删除待确认项 `LQ-UI-P-01`；② 修正三页游标验收用例 off-by-one（第 3 页栈严格为 `[null,C1,C2]`，无 `C3`）；③ 纵向滚动统一为"仅表格数据区一条纵向滚动条"的唯一方案；④ 明确当前阶段左侧菜单隐藏、路由 `/monitor/log-query` 直访，允许实现阶段仅调整日志查询菜单项可见性（历史规则，其“菜单隐藏”现行口径已被 `LOG-QUERY-BASELINE-ADJUSTMENT-001` 废止，改为“菜单始终显示、开关控制页面是否进入查询功能”）；⑤ 物理设计相关验收用例状态统一为 `DEFERRED_UNTIL_PHYSICAL_DESIGN`；⑥ 首次查询失败标志语义收口为 `initialQueryAttempted`（已触发即置 `true`，不自动重试）。文档当时仍为 `DRAFT_PENDING_USER_REVIEW / NOT_STARTED`，待用户人工复审。
+- `LOG-QUERY-UI-ACCEPTANCE-APPROVAL-001`（2026-08-20）：用户已最终人工复审并批准初版、R1、R1.1 形成的完整 UI 与交互设计链，执行正式批准收口。本文档状态由 `DRAFT_PENDING_USER_REVIEW` 转为 `APPROVED`，实现状态仍为 `NOT_STARTED`。当前文档成为日志查询功能的正式 UI/交互设计基线；允许进入前端实现、前后端联调与自动化测试；不代表代码已实现或页面已验收；最终物理数据库设计与生产等价性能验收仍为延期项；日志查询菜单继续隐藏，在最终物理设计、生产 DDL 与生产等价性能验收完成并批准前不得解除隐藏（历史规则，“菜单继续隐藏”已被 `LOG-QUERY-BASELINE-ADJUSTMENT-001` 废止，改为“菜单始终显示、开关控制页面是否进入查询功能”）。
+- `LOG-QUERY-BASELINE-ADJUSTMENT-001`（2026-08-21）：依据用户对日志查询功能开放方式及 ChatGPT 前端复审问题的最新确认，定向修订 UI 与交互基线：菜单改为始终显示、始终可点击，开放由 `cdc.log-query.enabled` 控制页面是否进入查询功能（LQ-UI-003 / 010 / 018）；新增状态检测中 / 功能未开放 / 状态检测失败三种页面状态与固定未开放文案（LQ-UI-006 ~ 009 / 019）；修订同路由菜单再次点击的重新进入初始化（LQ-UI-142 ~ 146 / 217 / 218）；修订“全部”双向互斥（LQ-UI-056 / 058）、重置清除校验错误（LQ-UI-073 / 074）、数据源降级展示（LQ-UI-086 / 113 / 183）；允许引入兼容前端测试框架（LQ-UI-127 / 128）。本文档状态由 `APPROVED` 调整为 `DRAFT_PENDING_USER_REVIEW`，本次调整待用户复审；已有前端初版实现 `IMPLEMENTED_PENDING_REVIEW`，本次调整尚未实现。
 
-本文档已经批准，是当前正式 UI/交互设计基线；可以进入代码实现和后续验收，实现与验收仍需独立完成。本文只定义 UI/交互详细设计，不代表接口或页面已经实现、功能已经验收或性能已经验证。最终物理数据库设计（一级 RANGE 分区粒度、子分区、索引形态、生产 DDL、生产等价性能验收）仍属于延期项，完成前日志查询菜单必须保持隐藏；开发与验收人员可通过路由 `/monitor/log-query` 直接访问页面。
+本文档状态为 `DRAFT_PENDING_USER_REVIEW`：`LOG-QUERY-BASELINE-ADJUSTMENT-001` 本次调整待用户复审；复审批准前，本次调整不视为已批准，也不代表已有前端实现已经符合本次新基线。本文只定义 UI/交互详细设计，不代表接口或页面已经实现、功能已经验收或性能已经验证。最终物理数据库设计（一级 RANGE 分区粒度、子分区、索引形态、生产 DDL、生产等价性能验收）仍属于延期项；菜单始终显示，生产环境 `CDC_LOG_QUERY_ENABLED` 在全部阻断项通过并获批前保持 `false`。
 
 ## 2. 页面目标、适用范围与非目标
 
@@ -38,7 +39,7 @@
 |---|---|
 | LQ-UI-001 | 提供可直接指导前端实现的日志查询页面 UI/交互详细设计，覆盖错误日志与正确日志两个 Tab 的查询、列表、分页、日志详情与原始消息完整交互。 |
 | LQ-UI-002 | 全部 UI 规则以已批准 `REQUIREMENTS.md`、`API.md`、`DESIGN.md` 为唯一业务基线，通过上游规则编号建立追踪关系，不复制整份需求。 |
-| LQ-UI-003 | 页面替换现有 `LogQueryPage.vue` 占位内容（`LQ-SCOPE-03`），保留既有路由 `/monitor/log-query` 与未来菜单定义（名称、分组、图标、目标路由）不变（`LQ-SCOPE-01 / 02`）；当前阶段左侧菜单中的"日志查询"入口必须保持隐藏，路由仍允许直接访问，最终物理设计与生产等价性能验收完成并批准前不得解除隐藏。 |
+| LQ-UI-003 | 页面替换现有 `LogQueryPage.vue` 占位内容（`LQ-SCOPE-03`），保留既有路由 `/monitor/log-query` 与菜单定义（名称、分组、图标、目标路由）不变（`LQ-SCOPE-01 / 02`）；左侧"日志查询"菜单始终保留、始终显示并可点击，路由允许直接访问；功能开放由 `cdc.log-query.enabled` 配置控制页面是否进入查询流程，不再通过隐藏菜单控制（`LQ-OPEN-01 ~ 04`）。 |
 
 ### 2.2 适用范围
 
@@ -52,13 +53,22 @@
 |---|---|
 | LQ-UI-005 | 本文不包含：后端实现、接口实现、物理分区/索引 DDL、生产性能验收、其他功能页面的 UI 设计。本文不新增任何需求之外的功能。 |
 
+### 2.4 功能开放控制与页面状态流程（LOG-QUERY-BASELINE-ADJUSTMENT-001）
+
+| 编号 | 规则 |
+|---|---|
+| LQ-UI-006 | 页面初始化必须先执行状态检测流程：进入页面、浏览器刷新、离开后返回、再次点击当前“日志查询”菜单时，前端先调用 `GET /api/log-query/status`；状态接口请求返回前，页面显示“状态检测中”。 |
+| LQ-UI-007 | `enabled=false`：前端不加载数据源选项、不查询任何日志，显示功能未开放页（LQ-UI-019）。 |
+| LQ-UI-008 | `enabled=true`：前端加载数据源选项，并按既有规则执行错误日志默认查询（`LQ-SCOPE-05`、`LQ-FILTER-61`）。 |
+| LQ-UI-009 | 状态接口失败或超时：页面显示“功能状态获取失败”独立错误态，提供手动“重新检测”按钮；“重新检测”只由用户点击触发，不自动轮询、不自动刷新、不自动重试；重新检测为 `true` 后进入正常初始化流程，为 `false` 后继续显示未开放页（`LQ-OPEN-11 / 12`）。 |
+
 ## 3. 仓库现状与复用原则
 
 ### 3.1 现状
 
 | 编号 | 规则 |
 |---|---|
-| LQ-UI-010 | 现有 `frontend/src/views/log-query/LogQueryPage.vue` 为占位页（复用 `PlaceholderPage` 组件），本次设计以真实页面替换占位内容；路由 `name=LogQuery`、`meta.title=日志查询`、`meta.group=运行监控`、菜单图标 `Document` 作为未来开放时的菜单定义保持不变，不构成当前入口可见；当前阶段左侧菜单中的"日志查询"入口保持隐藏。 |
+| LQ-UI-010 | 现有 `frontend/src/views/log-query/LogQueryPage.vue` 为占位页（复用 `PlaceholderPage` 组件），本次设计以真实页面替换占位内容；路由 `name=LogQuery`、`meta.title=日志查询`、`meta.group=运行监控`、菜单图标 `Document` 的菜单定义保持不变；左侧"日志查询"菜单项始终可见、始终可点击，开放与否由 `cdc.log-query.enabled` 决定。 |
 | LQ-UI-011 | 仓库布局由 `MainLayout.vue` 提供：页面内容处于 `.content-area`（保留仓库既有 `overflow-y:auto` CSS 属性）；日志查询页整体高度必须受控，使页面级纵向滚动条在受支持桌面分辨率内不实际出现；页面级与表格数据区不得同时出现两条纵向滚动条（`LQ-LIST-24`）。 |
 | LQ-UI-012 | 仓库现有页面查询区使用 `el-form :inline` + `.query-area`（浅灰底圆角）范式；表格使用 `el-table size="small" border`；弹窗使用 `el-dialog`（仓库既有范式 `width="800px"`、`top="5vh"`、`destroy-on-close`）；Tooltip 使用 `el-tooltip placement="top"`。本文按同一视觉与交互语言设计。 |
 | LQ-UI-013 | 全局主题令牌（`global.css`/`theme.css`）：页面背景 `--app-page-bg`、主色 `--app-primary: #2563eb`、卡片圆角 `--app-card-radius`、卡片阴影 `--app-card-shadow` 等；Element Plus 主色已覆盖为同一主色。页面组件复用这些令牌，不新增独立主题。 |
@@ -71,7 +81,7 @@
 |---|---|
 | LQ-UI-016 | 允许复用：既有布局、主题令牌、`el-form`/`el-table`/`el-dialog`/`el-tooltip`/`el-tag` 使用范式、`ApiResponse` 约定、既有 api 层封装结构。 |
 | LQ-UI-017 | 允许的必要改造点（前端实现阶段执行，本任务不改代码）：日志查询相关请求显式 `timeout: 30000`（不改全局默认、不影响其他功能）；首次引入精确到秒的时间范围控件；为实现"操作列固定右侧 + 源库/源表名固定左侧 + 中间横向滚动 + 表头固定"的表格滚动方案。 |
-| LQ-UI-018 | 不得改动：路由结构、全局样式、其他功能页面、`PlaceholderPage` 组件本身、全局 HTTP 默认超时；为实现当前阶段菜单隐藏，只允许调整日志查询菜单项的可见性配置，不得因此修改其他菜单、路由语义或全局菜单机制。 |
+| LQ-UI-018 | 不得改动：路由结构、全局样式、其他功能页面、`PlaceholderPage` 组件本身、全局 HTTP 默认超时；菜单始终显示、始终可点击，不实施任何菜单隐藏机制，不因隐藏菜单修改其他菜单、路由语义或全局菜单机制。 |
 
 ## 4. 信息架构与页面整体布局
 
@@ -96,6 +106,7 @@
 
 | 编号 | 规则 |
 |---|---|
+| LQ-UI-019 | 功能未开放页固定文案：标题“日志查询功能暂未开放”，说明“当前环境尚未启用日志查询功能。如需使用，请联系系统管理员。”；未开放状态下不显示双 Tab、查询区、列表、分页和详情/原始消息按钮；状态检测失败页固定文案：标题“功能状态获取失败”，提供手动“重新检测”按钮（`LQ-OPEN-13`、`LQ-UI-009`）。 |
 | LQ-UI-020 | 页面高度布局：标题/Tab/查询区/分页条固定高度，列表区占据剩余可用高度；在受支持桌面分辨率内只有表格数据区出现纵向滚动条，页面级不出现纵向滚动条，页面级与表格数据区不得同时出现两条纵向滚动条（见 §18）。 |
 | LQ-UI-021 | 页面标题显示"日志查询"，标题下显示一行简短说明（只读检索同步日志、错误日志/正确日志双 Tab、按固定排序游标分页）。 |
 | LQ-UI-022 | 双 Tab 位于标题之下、查询区之上；每个 Tab 面板内部自包含"查询区 → 列表区 → 分页条"。 |
@@ -155,13 +166,13 @@
 
 | 编号 | 规则 |
 |---|---|
-| LQ-UI-058 | 下拉框顶部固定提供"全部"选项；选择"全部"时清空全部具体值，选择任一具体值时自动取消"全部"（互斥语义，`LQ-FILTER-16 / 36`）。 |
+| LQ-UI-058 | 下拉框顶部固定提供"全部"选项，"全部"与具体值双向即时互斥：点击"全部"后立即取消全部已选具体数据源、表单仅保留"全部"；选择任一具体数据源后立即取消"全部"；清空全部具体值后恢复"全部"（`LQ-FILTER-16 / 36`）。 |
 | LQ-UI-051 | 候选数据来自 `GET /api/log-query/data-source-options` 返回的 `sourceList` / `targetList`（`LQ-API-11 / 20`）；显示 `org`（`DATA_SOURCE_ORG`），提交 `id`（`DATA_SOURCE_ID`）（`LQ-FILTER-12 / 32`、`LQ-API-20`）。 |
 | LQ-UI-052 | 候选按 `DATA_SOURCE_ORG` 排序；`org` 为 NULL 或空串时显示"未定义名称"，仍保留 `id` 辅助识别（`LQ-API-22`）。 |
 | LQ-UI-053 | 下拉框支持按名称（`org`）输入过滤候选项（`LQ-FILTER-14 / 34`）。 |
 | LQ-UI-054 | 名称重复时，选项辅助显示 `DATA_SOURCE_ID`，避免误选（`LQ-FILTER-15 / 35`）。 |
 | LQ-UI-055 | 选中多个具体值时以标签折叠展示（`collapse-tags`，超出上限折叠到 Tooltip），选中值提交前去重（`LQ-FILTER-18 / 38`、`LQ-VALID-05`）。 |
-| LQ-UI-056 | "全部"不作为魔法字符串提交：表单处于"全部"时，请求不携带该数组条件（`LQ-FILTER-17 / 37`）；提交值为具体 `DATA_SOURCE_ID` 数组或空数组（`LQ-API-35 / 36`）。 |
+| LQ-UI-056 | "全部"只属于前端表单状态，不作为数据源 ID 传输：表单处于"全部"时，请求省略对应数据源 ID 数组（或按批准 API 约定传空数组），后端 SQL 不生成对应字段的 `IN (...)` 谓词；禁止把候选列表中的所有 ID 拼接成 `IN (...)` 来模拟"全部"；仅在选择具体数据源时提交 `DATA_SOURCE_ID` 数组（`LQ-FILTER-17 / 18 / 37 / 38`、`LQ-API-35 / 36`）。 |
 | LQ-UI-057 | 候选加载失败只影响下拉框可用性（禁用并给出可重试入口），不影响已生效列表与详情/原始消息（`LQ-API-24`）。 |
 
 ## 8. 同步到目标库时间范围选择器
@@ -185,7 +196,7 @@
 | LQ-UI-070 | "查询"触发当前 Tab 第一页查询；点击后生成当前表单的不可变候选条件快照，仅查询成功后才原子替换已生效条件、列表与请求游标栈（`LQ-TAB-30 ~ 32`）。 |
 | LQ-UI-071 | 查询进行中，"查询"按钮显示加载状态；当前 Tab 的查询控件、查询、重置、分页按钮暂时禁用，防止重复提交（`LQ-LOAD-15 / 16`）。 |
 | LQ-UI-072 | 查询失败或超时，保留旧列表、旧已生效条件与旧游标；失败条件不得标记为已生效（`LQ-TAB-33 / 34`、`LQ-LOAD-35`）。 |
-| LQ-UI-073 | "重置"只修改当前 Tab 的表单：源库恢复"全部"、源表名清空、目标库恢复"全部"、目标表名清空、时间恢复为点击重置时所在自然日；保持当前 Tab（`LQ-TAB-40`）。 |
+| LQ-UI-073 | "重置"只修改当前 Tab 的表单：源库恢复"全部"、源表名清空、目标库恢复"全部"、目标表名清空、时间恢复为点击重置时所在自然日；同时清除当前 Tab 已显示的 `validationError` 和逐字段校验错误；保持当前 Tab（`LQ-TAB-40`）。 |
 | LQ-UI-074 | "重置"明确不得：发起查询、清空当前列表、改变当前分页位置、清空游标历史、修改已生效条件、跳回错误日志 Tab（`LQ-TAB-41`）。 |
 | LQ-UI-075 | 表单条件在用户编辑或重置后、再次成功查询前，上一页/下一页仍必须使用原已生效条件；分页请求不得读取尚未生效的表单条件（`LQ-TAB-11 / 12`、`LQ-PAGE-10`）。 |
 | LQ-UI-076 | 时间范围非法（§8）或表名超长（§6.3）时，"查询"不可发起请求；用户修正后才恢复可用。 |
@@ -245,7 +256,7 @@
 | 编号 | 规则 |
 |---|---|
 | LQ-UI-085 | 普通空值统一显示 `--`（`LQ-LIST-25`）。API 按 `non_null` 序列化省略 null 字段，前端必须把缺失字段等同 null 渲染 `--`（`LQ-API-05`）。 |
-| LQ-UI-086 | 被截断的数据源名、表名通过 Tooltip 显示完整信息（`LQ-LIST-26`、`LQ-DATA-10`）：源库/目标库悬停显示完整名称与完整 `DATA_SOURCE_ID`；源表名/目标表名悬停显示完整表名。 |
+| LQ-UI-086 | 数据源 Tooltip 与单元格降级展示统一（`LQ-LIST-26`、`LQ-DATA-07 ~ 10 / 13 / 14`、`LQ-API-64 / 65`）：名称和 ID 均缺失 → 单元格显示 `--`，不显示 Tooltip；名称缺失但 ID 存在 → 单元格只显示 ID，Tooltip 只显示“数据源 ID：{ID}”；名称存在且 ID 存在 → 单元格显示名称，Tooltip 显示完整名称和“数据源 ID：{ID}”；记录存在但 `DATA_SOURCE_ORG` 为空 → 单元格显示“未定义名称”，Tooltip 同时显示 ID。不出现 Tooltip 与单元格降级值矛盾、不出现 `ID（ID）`。源表名/目标表名悬停显示完整表名。 |
 | LQ-UI-087 | 日志摘要固定宽度单行省略显示，不通过 Tooltip 展示完整异常（`LQ-LIST-27`、`LQ-DETAIL-05`）；完整异常只能通过"日志详情"弹窗查看（`LQ-DETAIL-07`）。正确日志较短时允许自然完整显示（`LQ-DETAIL-06`）。 |
 | LQ-UI-088 | 操作列两按钮固定文案"日志详情""原始消息"（`LQ-DETAIL-10`）。 |
 
@@ -279,7 +290,7 @@
 | LQ-UI-110 | 标题固定为"日志详情"；尺寸建议宽度约 800px、距顶部约 5vh，内容区域可滚动（`LQ-DETAIL-20 / 24`）。 |
 | LQ-UI-111 | 点击"日志详情"后按当前 Tab 类型与 `cdcLogId` 请求 `GET /api/log-query/logs/{logType}/{cdcLogId}/detail`，按需加载（`LQ-DETAIL-20`、`LQ-API-70`）。 |
 | LQ-UI-112 | 展示字段（`LQ-DETAIL-21`、`LQ-API-73`）：CDC 日志 ID（字符串）；源库名称和 ID；源表名；目标库名称和 ID；目标表名；指令类型；结果码（`resultCode`）；Kafka 偏移量（字符串）；四个时间字段（采集时间、进入链路时间、同步到目标表时间、日志落盘时间）；完整 `LOG_DETAIL`。 |
-| LQ-UI-113 | 源库/目标库名称复用发起弹窗的列表行已返回的 `sourceDataSourceName` / `targetDataSourceName`，弹窗内不重新读取数据源表、不返回名称；名称缺失（原始 ID 为 NULL 或映射无可用名称）时对应位置显示 `--`（`LQ-API-74`）。 |
+| LQ-UI-113 | 源库/目标库名称复用发起弹窗的列表行已返回的 `sourceDataSourceName` / `targetDataSourceName`，弹窗内不重新读取数据源表、不返回名称；详情降级展示与列表一致（`LQ-DATA-07 ~ 10 / 13 / 14`、`LQ-API-64`）：名称和 ID 均缺失显示 `--`；名称缺失但 ID 存在时详情只显示一次 ID；名称存在且 ID 存在时详情展示名称与 ID（`LQ-API-74`）。 |
 | LQ-UI-114 | `LOG_DETAIL` 保留换行、空格、缩进与异常堆栈（`LQ-DETAIL-23`），以等宽字体展示（`LQ-DETAIL-25`），内容区域可滚动。 |
 | LQ-UI-115 | 弹窗提供"复制"按钮，一键复制完整 `LOG_DETAIL` 原文（`LQ-DETAIL-26`）。 |
 | LQ-UI-116 | `RESULT_DETAIL` 第一版不展示、不请求（`LQ-DETAIL-27`、`LQ-NONGOAL-15`）；`RAW_MESSAGE` 不随日志详情自动加载（`LQ-DETAIL-28`）。 |
@@ -298,6 +309,13 @@
 | LQ-UI-124 | 内容区域支持滚动与换行；超长文本、超大 CLOB 以滚动方式承载，不截断内容（`LQ-DETAIL-38`）。 |
 | LQ-UI-125 | 弹窗关闭后清理前端持有的消息内容（`LQ-DETAIL-39`），实现采用 `destroy-on-close` 并清空本地状态。 |
 | LQ-UI-126 | 弹窗请求失败或页面已离开/关闭后返回的响应，不得重新打开已关闭弹窗或写入新页面实例（`LQ-LOAD-38`、`LQ-API-96`）。 |
+
+### 13.3 前端测试策略（LOG-QUERY-BASELINE-ADJUSTMENT-001）
+
+| 编号 | 规则 |
+|---|---|
+| LQ-UI-127 | 旧规则“不得引入新测试框架或依赖”废止；实现阶段允许依据 Vue 3、Vite 5、TypeScript 与当前 Node 环境，选择兼容的前端测试框架并更新 `package.json` 和锁文件。推荐但不强制 Vitest、Vue Test Utils、jsdom；是否最终采用由实现 Agent 依据兼容性决定（对应 REQUIREMENTS §9、DESIGN §13.1）。 |
+| LQ-UI-128 | 前端自动化测试至少覆盖 `DESIGN.md` §13.1（LQ-DESIGN-170 ~ 182）列出的场景：“全部”与具体值双向互斥、请求不携带全部 ID/SQL 无 `IN`、重置清除校验错误但保留列表/已生效/游标、两 Tab 独立、三页游标序列及前后翻页失败原子性、再次点击当前菜单清空状态并重新初始化、`enabled=false` 未开放页且不调原四接口、`enabled=true` 按序加载并默认查询错误日志、状态接口失败手动重新检测且无自动重试、旧请求与旧弹窗响应失效、数据源降级展示不矛盾不重复 ID、`cdcLogId` 始终字符串、原始消息纯文本安全不使用 `v-html`。 |
 
 ## 14. 游标分页
 
@@ -331,17 +349,18 @@
 | 下一页 | 当前页响应的 `nextCursor` | 成功后压栈并更新 `items` | 不压栈，停留当前页 |
 | 上一页 | 弹出栈顶后的新栈顶游标 | 成功后整体替换为目标栈并更新 `items` | 不弹栈，停留当前页 |
 | Tab 切换 | 无请求（该 Tab 首次打开除外） | 恢复目标 Tab 状态；已触发过首次查询（无论成败）的 Tab 不再自动触发首次查询 | 不适用 |
-| 重新进入菜单 | 见 §15.3 | 两 Tab 状态全部失效并重新初始化，`initialQueryAttempted` 清零 | 旧请求被丢弃 |
+| 重新进入菜单 | 见 §15.3 | 先调用状态接口：两 Tab 状态全部失效并重新初始化，`initialQueryAttempted` 清零；`enabled=true` 恢复错误日志默认查询，`enabled=false` 显示未开放页 | 旧请求被丢弃 |
 
 ### 15.3 重新进入与请求失效
 
 | 编号 | 规则 |
 |---|---|
 | LQ-UI-142 | 以下情况视为重新进入功能（`LQ-TAB-50`）：浏览器刷新；离开日志查询页面后从其他菜单返回；再次点击左侧"日志查询"菜单，即使当前已处于该路由。 |
-| LQ-UI-143 | 重新进入时清除两个 Tab 全部临时状态与游标，两 Tab 的 `initialQueryAttempted` 标志清零，恢复默认表单（时间=重新进入时所在自然日），默认打开错误日志并自动查询第一页；正确日志等第一次切换时再触发首次查询（`LQ-TAB-51 / 52`）。 |
+| LQ-UI-143 | 重新进入时立即作废两个 Tab 的在途列表、详情、原始消息与状态请求；关闭并清理弹窗内容；清空两 Tab 的表单条件、已生效条件、列表、游标历史、错误、加载、等待秒数和 `initialQueryAttempted` 标志；先调用状态接口；`enabled=true` 时恢复默认错误日志 Tab 并按动作发生时的当前自然日执行默认查询，`enabled=false` 时显示未开放页；正确日志等第一次切换时再触发首次查询（`LQ-TAB-51 / 52`、`LQ-OPEN-08 ~ 10`）。 |
 | LQ-UI-144 | 不使用 LocalStorage、SessionStorage 或其他持久化方式保存查询状态（`LQ-TAB-53`、`LQ-VALID-06`）。 |
-| LQ-UI-145 | 重新进入时旧页面实例未完成的请求尽量取消；无法真正取消时，通过页面代次或每 Tab 请求令牌将旧请求标记为失效，旧请求成功或失败返回均不得覆盖新页面状态（`LQ-TAB-54 / 55`）。 |
+| LQ-UI-145 | 重新进入时旧页面实例未完成的请求尽量取消；无法真正取消时，通过页面代次或每 Tab 请求令牌将旧请求标记为失效（含状态请求），旧请求成功或失败返回均不得覆盖新页面状态（`LQ-TAB-54 / 55`）。 |
 | LQ-UI-146 | 弹窗响应过期后不得重新打开已关闭弹窗或写入新页面实例（`LQ-LOAD-38`）；跨 Tab 响应隔离见 `LQ-UI-037`。 |
+| LQ-UI-147 | 同一路由点击不能依赖组件必然卸载重挂载：再次点击当前“日志查询”菜单即视为重新进入，必须设计可靠、可验证的触发机制（路由/菜单点击层面的重新进入事件或等价机制，不写死未经盘点的具体第三方事件总线）；触发后按 LQ-UI-143 执行完整重新初始化并重新检测状态（`LQ-TAB-57`、`LQ-DESIGN-129`）。 |
 
 ## 16. 加载、慢查询提示、超时与失败恢复
 
@@ -364,7 +383,7 @@
 | LQ-UI-180 | 查询成功但无数据：列表区显示"当前查询条件下暂无日志"（空数据态），分页按钮禁用（`LQ-VALID-01`）。 |
 | LQ-UI-181 | 查询失败：显示明确错误信息并保留旧数据，不得显示为空数据（`LQ-VALID-02`）。 |
 | LQ-UI-182 | 字段空值统一显示 `--`（含缺失字段等同 null 的 `--` 规则，`LQ-LIST-25`、`LQ-API-05`）。 |
-| LQ-UI-183 | 数据源名称缺失的降级展示（`LQ-DATA-07~09`、`LQ-API-64`）：原始 ID 为 NULL → 对应 ID 与名称均省略显示 `--`；找到数据源且名称有值 → 显示名称；找到但名称为空 → 显示"未定义名称"；找不到记录 → 回退显示日志原始 ID。名称映射只作用于展示，不参与过滤（`LQ-API-66`）。 |
+| LQ-UI-183 | 数据源名称缺失的降级展示（`LQ-DATA-07 ~ 10 / 13 / 14`、`LQ-API-64`），列表、Tooltip 与详情统一：名称和 ID 均缺失 → 显示 `--`，不显示 Tooltip；名称缺失但 ID 存在 → 单元格只显示 ID，Tooltip 只显示“数据源 ID：{ID}”，详情只显示一次 ID；名称存在且 ID 存在 → 单元格显示名称，Tooltip 显示完整名称和“数据源 ID：{ID}”，详情展示名称与 ID；数据源记录存在但 `DATA_SOURCE_ORG` 为空 → 显示“未定义名称”，Tooltip 同时显示 ID。不出现 Tooltip 与单元格降级值矛盾、不出现 `ID（ID）`。名称映射只作用于展示，不参与过滤（`LQ-API-66`）。 |
 | LQ-UI-184 | 游标失效：接口返回 `CURSOR_INVALID`（40015）时，列表区展示"查询条件已变化或游标已失效，请重新查询第一页"并提供重新查询入口；`CURSOR_CONDITION_MISMATCH`（40016）时提示重新查询（`LQ-API-85 / 86`）。 |
 | LQ-UI-185 | 业务错误码统一映射为用户可读提示并展示于列表区错误态（如 `TIME_RANGE_REQUIRED`、`TIME_ORDER_INVALID`、`TIME_SPAN_EXCEEDED`、`DATA_SOURCE_IDS_INVALID`、`LOG_TYPE_INVALID`、`TABLE_NAME_INVALID`、`LOG_RECORD_NOT_FOUND`、`QUERY_TIMEOUT`、`DATABASE_ACCESS_FAILED`），错误态不与空数据态混淆（`LQ-API-80~89`）。 |
 | LQ-UI-186 | 网络错误/超时（HTTP 层）展示"网络请求失败"或明确超时提示；接口异常只影响当前请求所在 Tab 或弹窗，不污染其他 Tab 与列表旧数据（`LQ-LOAD-35~38`、`LQ-API-96`）。 |
@@ -400,7 +419,7 @@
 
 | 编号 | 建议组件 | 职责 |
 |---|---|---|
-| LQ-UI-210 | `LogQueryPage.vue`（页面容器） | 持有路由/菜单生命周期：负责"重新进入"检测与两 Tab 全部状态失效重建、页面代次管理、错误日志默认初始化；不承载具体查询逻辑。 |
+| LQ-UI-210 | `LogQueryPage.vue`（页面容器） | 持有路由/菜单生命周期：负责"重新进入"检测与两 Tab 全部状态失效重建、页面代次管理、状态检测流程（调用 `GET /api/log-query/status`）与"状态检测中 / 功能未开放 / 状态检测失败"三种页面级状态（含手动"重新检测"）、`enabled=true` 后错误日志默认初始化；不承载具体查询逻辑。 |
 | LQ-UI-211 | `LogQueryTabs.vue` 或每 Tab 独立子组件 + `useLogQueryTab` 组合式逻辑 | 每 Tab 独立实现 `formCriteria / appliedCriteria / items / requestCursorStack / hasNext / nextCursor / loading / error / initialQueryAttempted` 状态机与动作（首查、查询、重置、下一页、上一页、失效丢弃）；`initialQueryAttempted` 仅标记首次查询已触发，不表示成功。 |
 | LQ-UI-212 | `LogQueryFilter.vue` | 查询区表单：多选下拉（"全部"互斥）、表名输入、时间范围选择、校验提示；只与所属 Tab 状态交互。 |
 | LQ-UI-213 | `LogQueryTable.vue` | 12 列列表、固定列、横向/纵向滚动、空数据/错误/加载态、行操作按钮。 |
@@ -414,6 +433,7 @@
 |---|---|
 | LQ-UI-217 | 页面级维护一个"页面代次"，重新进入菜单时递增；每 Tab 维护请求令牌，识别本 Tab 有效响应；旧代次/旧令牌响应一律丢弃（`LQ-TAB-54~56`）。 |
 | LQ-UI-218 | 每 Tab 状态为页面内存态，不持久化；Tab 切换不销毁状态，重新进入销毁重建（`LQ-VALID-06`、`LQ-TAB-50~53`）。 |
+| LQ-UI-219 | 页面级维护功能开放状态：`statusLoading`（状态检测中）、`enabled`（当前 `cdc.log-query.enabled` 解析结果）、`statusError`（状态检测失败），以及手动“重新检测”动作；`enabled` 为 `false` 时整个页面仅渲染未开放页，不初始化两 Tab 状态；状态请求也纳入页面代次/请求令牌失效管理，重新进入时旧状态响应不得覆盖新状态（`LQ-OPEN-05 ~ 13`、`LQ-DESIGN-128`）。 |
 
 ## 21. 与上游基线的追踪关系
 
@@ -424,7 +444,7 @@
 
 ## 22. 待用户确认项
 
-待用户确认项：无。
+待用户确认项：无（当前文档状态为 `DRAFT_PENDING_USER_REVIEW`，`LOG-QUERY-BASELINE-ADJUSTMENT-001` 本次调整整体待用户复审，不属于文档内部待确认项）。
 
 > 本版已删除原 `LQ-UI-P-01` 待确认项（"当前页次"与"不显示页码"的取舍）。分页条按已批准需求 `LQ-PAGE-05` 严格不显示任何页码/页次，仅保留"上一页 / 下一页"两个按钮；其余 UI 细节均由已批准上游规则或仓库既有规范唯一确定。
 
@@ -433,8 +453,8 @@
 提交前已逐项核对：
 
 1. 两目标文件存在且非空。
-2. 本文档状态 `APPROVED / NOT_STARTED`。
-3. 三份已批准上游文档内容与状态未变化。
+2. 本文档状态 `DRAFT_PENDING_USER_REVIEW / IN_PROGRESS`（后端既有四接口 `IMPLEMENTED_ACCEPTED`，前端初版 `IMPLEMENTED_PENDING_REVIEW`，本次状态接口、未开放页、重新检测等调整尚未实现）。
+3. 四份上游文档状态均为 `DRAFT_PENDING_USER_REVIEW / IN_PROGRESS`，与本文一致。
 4. UI 规则编号唯一（`LQ-UI-001` 起），无重复、无悬空引用。
 5. 验收用例编号唯一（见 `ACCEPTANCE.md`），无悬空引用。
 6. 上游关键规则均有明确追踪。
@@ -448,7 +468,11 @@
 14. 列表、详情、原始消息大字段隔离正确（§12/§13）。
 15. 加载、慢提示、超时与失败原子性完整（§15/§16/§17）；首次查询失败后切回 Tab 不自动重试，仅用户点击"查询"重试（`initialQueryAttempted` 语义）。
 16. 受支持分辨率内仅表格数据区出现一条纵向滚动条，页面级不出现（§11/§18）。
-17. 物理设计与生产性能验收仍明确延期（§1 声明）。
-18. 菜单保持隐藏、路由直访可用；实现阶段仅允许调整日志查询菜单项可见性，不删除未来菜单定义（§1/§2/§3）。
-19. 待用户确认项为无（§22）。
-20. 与 `ACCEPTANCE.md` 一致（§21 与 ACCEPTANCE §7 追踪矩阵）。
+17. 物理设计与生产性能验收仍明确延期（§1 声明）；菜单始终显示，生产环境 `CDC_LOG_QUERY_ENABLED` 在全部阻断项通过并获批前保持 `false`。
+18. 菜单始终显示、始终可点击，路由直访可用；不删除未来菜单定义，不实施菜单隐藏（§1/§2/§3）。
+19. 状态检测流程（进入/刷新/返回/再次点击当前菜单先调用状态接口）、未开放页固定文案、状态检测失败独立错误态与手动"重新检测"规则完整（§2.4、LQ-UI-006 ~ 009 / 019 / 219）。
+20. "全部"双向即时互斥、不传输"全部" ID、请求省略数组、禁止拼接全部 ID 规则完整（LQ-UI-056 / 058）。
+21. 重置清除校验错误、数据源降级展示四态统一且无 `ID（ID）`（LQ-UI-073 / 086 / 113 / 183）。
+22. 前端测试框架授权与测试覆盖要求完整（LQ-UI-127 / 128）。
+23. 待用户确认项为无（§22）。
+24. 与 `ACCEPTANCE.md` 一致（§21 与 ACCEPTANCE §7 追踪矩阵）。

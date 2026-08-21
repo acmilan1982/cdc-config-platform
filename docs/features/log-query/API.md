@@ -6,12 +6,12 @@
 |---|---|
 | 正式功能标识 | `log-query` |
 | 目标文档 | `docs/features/log-query/API.md` |
-| 文档状态 | `APPROVED`（初版、R1、R1.1 完整 API 与逻辑查询设计已用户最终人工复审批准；允许进入 UI 详细设计、ACCEPTANCE 详细验收设计和前后端业务代码开发；批准不代表代码已实现、功能已验收或性能已验证；最终物理数据库设计仍为延期项；日志查询菜单在最终分区、索引和生产等价性能验证完成前必须保持隐藏） |
-| 对应需求状态 | `APPROVED`（R2、R2.1、R2.2 完整修订已用户人工复审批准） |
-| 实现状态 | `NOT_STARTED`（现有页面仍为占位页，本文不构成任何已实现声明） |
+| 文档状态 | `DRAFT_PENDING_USER_REVIEW`（初版、R1、R1.1 完整 API 与逻辑查询设计此前已用户最终人工复审批准；`LOG-QUERY-BASELINE-ADJUSTMENT-001` 新增功能开放状态接口并调整开放边界，本次调整待用户复审） |
+| 对应需求状态 | `DRAFT_PENDING_USER_REVIEW`（`LOG-QUERY-BASELINE-ADJUSTMENT-001` 定向修订待用户复审） |
+| 实现状态 | `IN_PROGRESS`（后端既有四接口 `IMPLEMENTED_ACCEPTED`；前端初版 `IMPLEMENTED_PENDING_REVIEW`；本次状态接口及相应交互修订尚未实现） |
 | 依据需求 | `docs/features/log-query/REQUIREMENTS.md` |
 | 创建日期 | 2026-08-20 |
-| 关联任务 | `LOG-QUERY-API-DESIGN-001`（初版）、`LOG-QUERY-API-DESIGN-001-R1`（定向修订）、`LOG-QUERY-API-DESIGN-001-R1.1`（微型一致性修订） |
+| 关联任务 | `LOG-QUERY-API-DESIGN-001`（初版）、`LOG-QUERY-API-DESIGN-001-R1`（定向修订）、`LOG-QUERY-API-DESIGN-001-R1.1`（微型一致性修订）、`LOG-QUERY-BASELINE-ADJUSTMENT-001`（功能开放状态接口调整） |
 | 最新批准日期 | `2026-08-20` |
 | 最新批准任务 | `LOG-QUERY-API-DESIGN-APPROVAL-001` |
 | 最新批准范围 | `LOG-QUERY-API-DESIGN-001 + R1 + R1.1 完整 API 与逻辑查询设计` |
@@ -21,15 +21,16 @@
 - `LOG-QUERY-API-DESIGN-001`：初版，创建两份设计文档（均为 `DRAFT_PENDING_USER_REVIEW / NOT_STARTED`）。
 - `LOG-QUERY-API-DESIGN-001-R1`：修正四类设计缺陷（列表接口改 POST、前端游标栈模型、`CDC_LOG_ID` 内部数值绑定、数据源一次全表读取）、游标条件指纹规范化、将 12 项待确认设计转为已确认设计决策、同步一致性。修订完成仍为 `DRAFT_PENDING_USER_REVIEW / NOT_STARTED`，等待用户最终复审。
 - `LOG-QUERY-API-DESIGN-001-R1.1`：微型一致性修订，仅完成：(1) 数据源名称字段可空性补正（`sourceDataSourceName` / `targetDataSourceName` 改为可选，原始数据源 ID 为 NULL 时名称省略并显示 `--`）；(2) 相同签名密钥下普通服务重启不使游标失效，只有密钥轮换、密钥配置改变、版本不兼容或篡改才可能使旧游标失效；(3) 重取上一页只保证按相同固定排序与边界谓词重新查询目标页，不保证返回内容与首次访问该页时完全一致。修订完成仍为 `DRAFT_PENDING_USER_REVIEW / NOT_STARTED`，等待用户最终复审。
-- `LOG-QUERY-API-DESIGN-APPROVAL-001`（2026-08-20）：用户已最终人工复审并批准初版、R1、R1.1 形成的完整 API 与逻辑查询设计，执行正式批准收口。本文档状态由 `DRAFT_PENDING_USER_REVIEW` 转为 `APPROVED`，实现状态仍为 `NOT_STARTED`。当前文档成为日志查询功能的正式 API 设计基线；可以进入 UI 详细设计、ACCEPTANCE 详细验收设计、前后端业务代码开发、Mapper 逻辑 SQL 实现、自动化测试与开发库功能验证；不代表 UI、ACCEPTANCE 已批准，不代表代码已实现或功能已验收，不代表最终分区、子分区、索引、生产 DDL 或生产等价性能已确定/通过；最终验证完成前，日志查询菜单必须保持隐藏。
+- `LOG-QUERY-API-DESIGN-APPROVAL-001`（2026-08-20）：用户已最终人工复审并批准初版、R1、R1.1 形成的完整 API 与逻辑查询设计，执行正式批准收口。本文档状态由 `DRAFT_PENDING_USER_REVIEW` 转为 `APPROVED`，实现状态仍为 `NOT_STARTED`。当前文档成为日志查询功能的正式 API 设计基线；可以进入 UI 详细设计、ACCEPTANCE 详细验收设计、前后端业务代码开发、Mapper 逻辑 SQL 实现、自动化测试与开发库功能验证；不代表 UI、ACCEPTANCE 已批准，不代表代码已实现或功能已验收，不代表最终分区、子分区、索引、生产 DDL 或生产等价性能已确定/通过；最终验证完成前，日志查询菜单必须保持隐藏（历史规则，“菜单必须保持隐藏”已被 `LOG-QUERY-BASELINE-ADJUSTMENT-001` 废止，改为“菜单始终显示、开关控制页面是否进入查询功能”）。
+- `LOG-QUERY-BASELINE-ADJUSTMENT-001`（2026-08-21）：依据用户对日志查询功能开放方式及 ChatGPT 前端复审问题的最新确认，新增功能开放状态接口 `GET /api/log-query/status`（LQ-API-16、LQ-API-114 ~ 119），接口数量由 4 调整为 5；明确原四接口完全不检查开关、不新增“功能未开放”错误码；同步“全部”请求边界与数据源降级展示。本文档状态由 `APPROVED` 调整为 `DRAFT_PENDING_USER_REVIEW`，本次调整待用户复审；已有后端四接口实现 `IMPLEMENTED_ACCEPTED`，前端初版 `IMPLEMENTED_PENDING_REVIEW`，本次状态接口尚未实现。
 
-本文只定义 API 契约，不代表接口已经实现或验收通过。最终物理数据库设计（分区粒度、子分区、索引、生产 DDL、最终执行计划）不在本文范围内。
+本文只定义 API 契约，不代表接口已经实现或验收通过。本文档状态为 `DRAFT_PENDING_USER_REVIEW`：`LOG-QUERY-BASELINE-ADJUSTMENT-001` 本次调整待用户复审；复审批准前，本次调整不视为已批准，也不代表已有后端/前端实现已经符合本次新基线。最终物理数据库设计（分区粒度、子分区、索引、生产 DDL、最终执行计划）不在本文范围内。
 
 ## 2. 设计依据与追踪方式
 
 - 本文所有业务规则均以已批准的 `REQUIREMENTS.md` 为唯一来源，通过需求编号引用建立追踪关系，不复制整份需求。
 - 本文只确定「API 契约」与「逻辑查询边界」；最终分区粒度、子分区、最终索引形态、生产 DDL 与最终执行计划仍属于延期项（LQ-DB-07 / 08 / 09、LQ-NONGOAL-18）。
-- 本文档已经批准，是当前正式 API 设计基线；允许依据该基线进入 UI 详细设计、ACCEPTANCE 详细验收设计和后续开发；后续实现与验收仍需独立完成。
+- 本文档此前已经批准，是日志查询功能的正式 API 设计基线；`LOG-QUERY-BASELINE-ADJUSTMENT-001` 新增状态接口并调整开放边界，当前文档状态为 `DRAFT_PENDING_USER_REVIEW`，本次调整待用户复审；复审批准前，后续开发不得把状态接口及相应开放控制视为已批准。
 
 ## 3. 总体约定
 
@@ -54,10 +55,17 @@
 | LQ-API-12 | POST | `/api/log-query/logs/search` | 查询错误/正确日志列表（首查、下一页、上一页共用） |
 | LQ-API-13 | GET | `/api/log-query/logs/{logType}/{cdcLogId}/detail` | 按日志类型与 `CDC_LOG_ID` 获取日志详情 |
 | LQ-API-14 | GET | `/api/log-query/logs/{logType}/{cdcLogId}/raw-message` | 按日志类型与 `CDC_LOG_ID` 获取原始消息 |
+| LQ-API-16 | GET | `/api/log-query/status` | 返回当前功能开放状态（`data.enabled`），不读取数据库 |
 
 | 编号 | 规则 |
 |---|---|
 | LQ-API-15 | 列表查询唯一确定为 `POST /api/log-query/logs/search`，`Content-Type: application/json`，查询条件由 `LogListQuery` 以 JSON 请求体经 `@RequestBody` 承载。理由：请求可能包含两组多选 ID、两个表名、时间范围和签名游标，GET 查询串存在浏览器、代理、网关或服务器 URL 长度差异风险。POST 只用于承载只读查询条件，不改变接口只读语义（LQ-SCOPE-08）。 |
+| LQ-API-114 | 功能开放状态接口 `GET /api/log-query/status` 只读、无请求参数，响应 `data` 为 `LogQueryStatusVO`：`enabled`（boolean，必填），即当前后端配置 `cdc.log-query.enabled`（`CDC_LOG_QUERY_ENABLED`）解析结果；默认 `false`（fail-closed）。统一响应使用项目既有 `ApiResponse<T>`。 |
+| LQ-API-115 | 状态接口不读取数据库、不操作数据库或 ZooKeeper，只返回当前配置解析后的 `enabled`。 |
+| LQ-API-116 | 状态接口请求级前端超时仍为 30 秒，不自动重试；失败或超时前端进入“功能状态获取失败”独立错误态并提供手动“重新检测”（见 UI 基线）。 |
+| LQ-API-117 | 不新增“功能未开放”业务错误码（不新增 40310 或其他功能关闭错误码）；状态接口正常返回 `code=200`，开放状态以 `data.enabled` 表达。 |
+| LQ-API-118 | 原四接口（LQ-API-11 ~ 14）完全不检查 `enabled` 开关：不拦截、不返回 403、不新增业务错误码、不增加数据库访问保护；`enabled=false` 时仅是前端页面不得主动调用这四个接口，直接调用仍按原契约执行（见 REQUIREMENTS LQ-OPEN-07）。 |
+| LQ-API-119 | `cdc.log-query.enabled` 只控制前端页面使用流程，不是认证、鉴权或接口安全控制；本文不把该配置描述成权限、安全控制或接口封禁。 |
 
 设计决策（单一方案，不保留多选）：数据源候选使用 **一个接口一次返回 source+target 两份列表**（LQ-API-11），不拆成两个接口。理由：
 
@@ -171,7 +179,7 @@ FROM CDC_DATA_SOURCE
 | LQ-API-33 | 解析后 `startTime` 不得晚于 `endTime`，否则 `TIME_ORDER_INVALID`（LQ-FILTER-55）。 |
 | LQ-API-34 | `endExclusive = endTime + 1 秒`；`endExclusive - startTime <= 7 × 24 小时`，超过返回 `TIME_SPAN_EXCEEDED`（LQ-FILTER-56 / 57、AC-12）。完整选择连续 7 个自然日为合法边界值。 |
 | LQ-API-35 | `sourceDataSourceIds`、`targetDataSourceIds` 每个数组最大 100 个元素（依据 `CDC_DATA_SOURCE` 全表约 100 条的安全上限，见 LQ-DATA-01）；数组元素必须为非空字符串且格式合法，否则 `DATA_SOURCE_IDS_INVALID`。多选去重后再进入查询（LQ-FILTER-18 / 38、LQ-VALID-05）。 |
-| LQ-API-36 | 空数组 `[]` 等同未选择，不得传递“全部”等魔法 ID；对应条件为空时后端不生成该字段过滤谓词（LQ-FILTER-17 / 37、LQ-FILTER-73）。 |
+| LQ-API-36 | “全部”是前端表单状态，不作为数据源 ID 传输；处于“全部”状态时前端省略对应数组或传空数组 `[]`，后端不生成对应字段的 `IN (...)` 谓词（LQ-FILTER-17 / 37、LQ-FILTER-73）；禁止把候选列表中的所有 ID 拼接成 `IN (...)` 来模拟“全部”，仅在选择具体数据源时使用绑定参数 `IN` 查询。 |
 | LQ-API-37 | `sourceTableName`、`targetTableName` 去除首尾空白后长度不得超过 64 字符，否则 `TABLE_NAME_INVALID`（LQ-FILTER-23 / 43）。只做首尾空白规范化；不修改中间空格、不转换大小写、不做 `UPPER()` / `LOWER()` / `LIKE` / 通配符（LQ-FILTER-21 / 22 / 41 / 42、LQ-NONGOAL-08 / 09）。空文本视为未选择。 |
 | LQ-API-38 | 已选源库/目标库 ID 必须存在于当前请求内构建的有效候选集合（启用且类别匹配，见 LQ-API-25 / 26），否则 `DATA_SOURCE_IDS_INVALID`（LQ-VALID-03）。 |
 | LQ-API-39 | 请求契约不含 `pageSize`，服务端不读取任何页容量输入。若框架收到未知字段，按项目统一未知字段策略处理（Spring Boot Jackson 默认忽略未知 JSON 属性），不为 `pageSize` 建立专门规则。 |
@@ -278,8 +286,8 @@ FROM CDC_DATA_SOURCE
 | LQ-API-61 | 每次列表请求（首查、点击查询、下一页、上一页）都重新读取一次 `CDC_DATA_SOURCE` 全表（四列，见 LQ-API-25），在该请求内构建 `DATA_SOURCE_ID -> DATA_SOURCE_ORG` 内存映射并同时建立候选集合；不跨请求缓存（LQ-DATA-01 / 02 / 11）。 |
 | LQ-API-62 | 一次列表请求只能读取一次数据源全表；禁止按日志行逐行查数据源（禁止 N+1），不在分页前与超大日志表做大表关联（LQ-DATA-03 / 04、LQ-PERF-07）。 |
 | LQ-API-63 | 历史名称映射读取全部数据源记录，不按 `FG_ACTIVE` 和类别过滤（LQ-DATA-06）。 |
-| LQ-API-64 | 降级显示规则（LQ-DATA-07 ~ 09）：原始 `SOURCE_DATA_SOURCE_ID` / `TARGET_DATA_SOURCE_ID` 为 NULL 时，对应 ID 与名称均省略（字段缺省/NULL），前端显示 `--`，不得回退为字符串 `"null"`、空串或“未定义名称”；原始 ID 非 NULL 时：找到数据源且 `DATA_SOURCE_ORG` 有值 → 显示该名称；找到数据源但 `DATA_SOURCE_ORG` 为空 → 显示“未定义名称”；找不到数据源记录 → 显示日志中的原始 `DATA_SOURCE_ID`。 |
-| LQ-API-65 | 响应同时返回原始 ID 与显示名称（`sourceDataSourceId` + `sourceDataSourceName`），前端据此展示与继续操作；悬停信息只有当对应 ID 或名称存在时才由前端组合完整名称与完整 ID 展示，两者均为空时不显示 Tooltip（LQ-DATA-10）。 |
+| LQ-API-64 | 降级显示规则（LQ-DATA-07 ~ 10 / 13 / 14），列表、Tooltip 与详情统一：名称和 ID 均缺失 → 显示 `--`，不显示 Tooltip；名称缺失但 ID 存在 → 单元格只显示 ID，Tooltip 只显示“数据源 ID：{ID}”，详情只显示一次 ID；名称存在且 ID 存在 → 单元格显示名称，Tooltip 显示完整名称和“数据源 ID：{ID}”，详情展示名称与 ID；数据源记录存在但 `DATA_SOURCE_ORG` 为空 → 显示“未定义名称”，Tooltip 同时显示 ID。不得出现 Tooltip 显示值与单元格降级值矛盾，不得出现 `ID（ID）` 重复展示；不得回退为字符串 `"null"`。 |
+| LQ-API-65 | 响应同时返回原始 ID 与显示名称（`sourceDataSourceId` + `sourceDataSourceName`），前端据此组合单元格与 Tooltip 展示；两者均为空时不显示 Tooltip；名称映射和降级只影响展示，不改变查询条件（LQ-DATA-14）。 |
 | LQ-API-66 | 名称映射只作用于列表展示，不参与 SQL 过滤；历史日志引用的已停用、类别变化或已缺失数据源 ID 不影响列表返回（降级为 LQ-API-64 规则），但作为“已选过滤条件”的提交 ID 仍必须通过 LQ-API-38 的候选校验。候选校验与历史名称展示不可混为一谈。 |
 
 ## 9. 日志详情与原始消息接口
@@ -327,6 +335,8 @@ FROM CDC_DATA_SOURCE
 | LQ-API-88 | `LOG_RECORD_NOT_FOUND` | 40410 | 详情/原始消息记录不存在（与路径参数 `cdcLogId` 非法返回 HTTP 400 区分，见 LQ-API-99） |
 | LQ-API-89 | `QUERY_TIMEOUT` | 50020 | 数据库语句超时（Service 捕获超时异常映射为业务码） |
 | LQ-API-90 | `DATABASE_ACCESS_FAILED` | 50021 | 数据库访问失败 |
+
+> 本功能**不新增“功能未开放”业务错误码**：不新增 40310 或其他功能关闭错误码。`enabled=false` 时前端不主动调用原四接口（LQ-API-118），状态接口正常返回 `code=200`，开放状态以 `data.enabled` 表达（LQ-API-117）。
 
 ### 10.2 超时职责与先后关系
 
@@ -516,6 +526,25 @@ GET /api/log-query/logs/error/7755033852453421056/detail
 }
 ```
 
+### 11.7 功能开放状态接口
+
+```text
+GET /api/log-query/status
+```
+
+```json
+{
+  "code": 200,
+  "message": "success",
+  "data": {
+    "enabled": false
+  },
+  "timestamp": "2026-08-21T10:00:00.000"
+}
+```
+
+`enabled=false` 表示当前环境未启用日志查询功能，前端显示未开放页且不主动调用原四接口；`enabled=true` 时前端正常初始化（LQ-API-114 ~ 118）。
+
 ## 12. 已确认设计决策
 
 以下设计已经用户确认，由 `LOG-QUERY-API-DESIGN-001` 的待确认项转为正式设计决策（追踪编号沿用原编号）：
@@ -544,4 +573,8 @@ GET /api/log-query/logs/error/7755033852453421056/detail
 - 三类字段隔离（列表摘要/详情/原始消息）：与 LQ-DETAIL-03 / 20 / 27 / 28 / 32、LQ-PERF-02 一致。
 - 30 秒超时、不自动重试、失败保留旧状态：与 LQ-LOAD-30~37 一致。
 - 详情与原始消息不携带时间范围：与 LQ-DETAIL-20 / 30 一致。
-- 本文不给出最终分区/子分区/索引 DDL，不把候选索引写成已批准方案，菜单开放前置条件不变：与 LQ-DB-06~14、LQ-NONGOAL-18、AC-74 一致。
+- 功能开放状态接口 `GET /api/log-query/status`：`enabled` 默认 `false`、不读数据库、30 秒超时、不新增“功能未开放”错误码：与 REQUIREMENTS LQ-OPEN-02 / 05 / 06、LQ-API-114 ~ 117 一致。
+- 原四接口完全不检查开关、`enabled=false` 仅前端不主动调用、直接调用仍按原契约：与 REQUIREMENTS LQ-OPEN-03 / 07、LQ-API-118 / 119 一致。
+- “全部”为前端表单状态、省略数组/空数组、后端不生成 `IN` 谓词、禁止拼接全部 ID：与 REQUIREMENTS LQ-FILTER-16 ~ 18 / 36 ~ 38 / 76、LQ-API-36 一致。
+- 数据源降级展示四态统一、不矛盾、无 `ID（ID）`：与 REQUIREMENTS LQ-DATA-07 ~ 10 / 13 / 14、LQ-API-64 / 65 一致。
+- 本文不给出最终分区/子分区/索引 DDL，不把候选索引写成已批准方案；物理设计、生产 DDL 与性能验收仍延期，菜单始终显示，生产环境 `CDC_LOG_QUERY_ENABLED` 在全部阻断项通过并获批前保持 `false`：与 LQ-DB-06~14、LQ-OPEN-04、AC-74 一致。
