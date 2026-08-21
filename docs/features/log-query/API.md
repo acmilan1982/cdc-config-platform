@@ -8,7 +8,7 @@
 | 目标文档 | `docs/features/log-query/API.md` |
 | 文档状态 | `APPROVED`（初版、R1、R1.1 完整 API 与逻辑查询设计此前已用户最终人工复审批准；`LOG-QUERY-BASELINE-ADJUSTMENT-001` 及 `-R1` 完整调整内容已经用户复审批准收口） |
 | 对应需求状态 | `APPROVED`（`LOG-QUERY-BASELINE-ADJUSTMENT-001` 及 `-R1` 完整调整内容已经用户复审批准收口） |
-| 实现状态 | `IN_PROGRESS`（后端既有四接口 `IMPLEMENTED_ACCEPTED`；前端初版 `IMPLEMENTED_PENDING_REVIEW`；本次状态接口及相应交互修订尚未实现） |
+| 实现状态 | `IN_PROGRESS`（后端既有四接口 `IMPLEMENTED_ACCEPTED`；前端初版 `IMPLEMENTED_PENDING_REVIEW_WITH_REQUIRED_CHANGES`；本次状态接口及相应交互修订尚未实现） |
 | 依据需求 | `docs/features/log-query/REQUIREMENTS.md` |
 | 创建日期 | 2026-08-20 |
 | 关联任务 | `LOG-QUERY-API-DESIGN-001`（初版）、`LOG-QUERY-API-DESIGN-001-R1`（定向修订）、`LOG-QUERY-API-DESIGN-001-R1.1`（微型一致性修订）、`LOG-QUERY-BASELINE-ADJUSTMENT-001`（功能开放状态接口调整）、`LOG-QUERY-BASELINE-ADJUSTMENT-APPROVAL-001`（正式批准收口） |
@@ -25,6 +25,7 @@
 - `LOG-QUERY-BASELINE-ADJUSTMENT-001`（2026-08-21）：依据用户对日志查询功能开放方式及 ChatGPT 前端复审问题的最新确认，新增功能开放状态接口 `GET /api/log-query/status`（LQ-API-16、LQ-API-114 ~ 119），接口数量由 4 调整为 5；明确原四接口完全不检查开关、不新增“功能未开放”错误码；同步“全部”请求边界与数据源降级展示。本文档状态由 `APPROVED` 调整为 `DRAFT_PENDING_USER_REVIEW`，本次调整待用户复审；已有后端四接口实现 `IMPLEMENTED_ACCEPTED`，前端初版 `IMPLEMENTED_PENDING_REVIEW`，本次状态接口尚未实现。
 - `LOG-QUERY-BASELINE-ADJUSTMENT-001-R1`（2026-08-21）：依据用户复审确认做微型一致性修订：状态接口失败/超时前端不再提供“重新检测”按钮，仅显示“功能状态获取失败”独立错误页（固定文案与恢复方式见 UI 基线），用户只能通过刷新、重新进入或再次点击当前“日志查询”菜单重新检测状态；状态接口契约本身（GET、无参、`data.enabled`、默认 false、不读数据库、30 秒超时、不自动重试、无新增错误码）保持不变（见 LQ-API-114 ~ 117）。本文档状态保持 `DRAFT_PENDING_USER_REVIEW`，实现状态保持 `IN_PROGRESS`；本条目描述修订动作，不代表本次调整已经用户复审批准。
 - `LOG-QUERY-BASELINE-ADJUSTMENT-APPROVAL-001`（2026-08-21）：用户已批准 `LOG-QUERY-BASELINE-ADJUSTMENT-001` 与 `LOG-QUERY-BASELINE-ADJUSTMENT-001-R1` 形成的完整调整内容，执行正式批准收口。本文档状态由 `DRAFT_PENDING_USER_REVIEW` 转为 `APPROVED`，成为日志查询功能当前正式 API 设计基线；允许进入本次调整相关的后端、前端、自动化测试、开发库联调和验收执行；批准不代表新增状态接口和前端调整已经实现，不代表任何验收用例已经执行或通过；最终物理设计、生产 DDL 与生产等价性能验收继续延期；菜单始终显示，但生产阻断条件完成前 `CDC_LOG_QUERY_ENABLED` 必须保持 `false`；原四接口不判断开关的边界继续有效。
+- `LOG-QUERY-BASELINE-ADJUSTMENT-APPROVAL-001-R1`（2026-08-21）：批准后现行状态标识与声明措辞微型一致性补正：统一现行前端实现状态为 `IMPLEMENTED_PENDING_REVIEW_WITH_REQUIRED_CHANGES`（历史修订记录中的 `IMPLEMENTED_PENDING_REVIEW` 保留为当时状态）。本补正仅为批准后的状态与措辞一致性修订，不改变批准范围、业务语义、实现事实或验收状态；文档状态保持 `APPROVED / IN_PROGRESS`，最新批准任务仍为 `LOG-QUERY-BASELINE-ADJUSTMENT-APPROVAL-001`。
 
 本文只定义 API 契约，不代表接口已经实现或验收通过。本文档状态为 `APPROVED`：`LOG-QUERY-BASELINE-ADJUSTMENT-001` 与 `-R1` 完整调整内容已经用户批准收口，本文档是日志查询功能当前正式 API 设计基线；批准不代表新增状态接口和前端调整已经实现，不代表已有后端/前端实现已经符合本次新基线。实现、测试与验收仍需独立完成。最终物理数据库设计（分区粒度、子分区、索引、生产 DDL、最终执行计划）不在本文范围内。
 

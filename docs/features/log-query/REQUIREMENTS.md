@@ -10,7 +10,7 @@
 | 既有路由 | `/monitor/log-query` |
 | 目标文档 | `docs/features/log-query/REQUIREMENTS.md` |
 | 文档状态 | `APPROVED`（`LOG-QUERY-BASELINE-ADJUSTMENT-001` 及 `-R1` 完整调整内容已经用户复审批准收口；批准不代表新增状态接口与前端调整已经实现，不代表任何验收用例已经执行或通过） |
-| 实现状态 | `IN_PROGRESS`（后端既有四接口 `IMPLEMENTED_ACCEPTED`；前端初版 `IMPLEMENTED_PENDING_REVIEW`；本次功能开放控制、状态接口及相应交互修订尚未实现） |
+| 实现状态 | `IN_PROGRESS`（后端既有四接口 `IMPLEMENTED_ACCEPTED`；前端初版 `IMPLEMENTED_PENDING_REVIEW_WITH_REQUIRED_CHANGES`；本次功能开放控制、状态接口及相应交互修订尚未实现） |
 | 需求来源 | 用户逐项确认的完整第一版产品需求 + `LOG-QUERY-REQUIREMENTS-002-R2` 定向修订 + `LOG-QUERY-REQUIREMENTS-002-R2.1` 定向补正 + `LOG-QUERY-REQUIREMENTS-002-R2.2` 微型一致性修订 |
 | 创建日期 | 2026-08-19 |
 | 首次批准日期 | 2026-08-19 |
@@ -60,8 +60,9 @@
   - 修正“占位页”陈旧事实：前端提交 `17680b34d703a663242b4b564b23f0ce21e1dd83` 已将 `/monitor/log-query` 占位页替换为真实日志查询初版页面；现行规则明确真实页面初版已实现、本次调整尚未实现，不得继续声称当前页面为占位页或后续才替换占位内容（见 §2、LQ-SCOPE-03、AC-02）。
   - 本条目描述修订动作，不代表本次调整已经用户复审批准；本文档状态保持 `DRAFT_PENDING_USER_REVIEW`，实现状态保持 `IN_PROGRESS`。
 - `LOG-QUERY-BASELINE-ADJUSTMENT-APPROVAL-001`（2026-08-21）：用户已批准 `LOG-QUERY-BASELINE-ADJUSTMENT-001` 与 `LOG-QUERY-BASELINE-ADJUSTMENT-001-R1` 形成的完整调整内容，执行正式批准收口。本文档状态由 `DRAFT_PENDING_USER_REVIEW` 转为 `APPROVED`，成为日志查询功能当前正式需求基线；允许进入本次调整相关的后端、前端、自动化测试、开发库联调和验收执行；批准不代表新增状态接口和前端调整已经实现，不代表任何验收用例已经执行或通过；最终物理设计、生产 DDL 与生产等价性能验收继续延期；菜单始终显示，但生产阻断条件完成前 `CDC_LOG_QUERY_ENABLED` 必须保持 `false`；原四接口不判断开关的边界继续有效。
+- `LOG-QUERY-BASELINE-ADJUSTMENT-APPROVAL-001-R1`（2026-08-21）：批准后现行状态标识与声明措辞微型一致性补正：统一现行前端实现状态为 `IMPLEMENTED_PENDING_REVIEW_WITH_REQUIRED_CHANGES`（历史修订记录中的 `IMPLEMENTED_PENDING_REVIEW` 保留为当时状态）；修正现行批准声明，不再称"不代表 API、UI、SQL/索引设计已经批准"。本补正仅为批准后的状态与措辞一致性修订，不改变批准范围、业务语义、实现事实或验收状态；文档状态保持 `APPROVED / IN_PROGRESS`，最新批准任务仍为 `LOG-QUERY-BASELINE-ADJUSTMENT-APPROVAL-001`。
 
-本文档曾作为日志查询第一版正式需求基线通过验收（R1）。R2 引入业务行为变化，R2.1 完成定向补正，R2.2 完成微型一致性修订，并经 `LOG-QUERY-REQUIREMENTS-APPROVAL-002` 人工批准收口，形成此前已批准的正式需求基线。`LOG-QUERY-BASELINE-ADJUSTMENT-001` 依据用户最新确认定向调整功能开放控制与交互规则，`-R1` 完成三项微型一致性修订，并经 `LOG-QUERY-BASELINE-ADJUSTMENT-APPROVAL-001` 正式批准收口，本文档状态为 `APPROVED`，是日志查询功能当前正式需求基线。批准不代表新增状态接口和前端调整已经实现，不代表 API、UI、SQL/索引设计已经批准，不代表已有后端/前端实现已经符合本次新基线，不代表业务代码或功能已经验收完成。
+本文档曾作为日志查询第一版正式需求基线通过验收（R1）。R2 引入业务行为变化，R2.1 完成定向补正，R2.2 完成微型一致性修订，并经 `LOG-QUERY-REQUIREMENTS-APPROVAL-002` 人工批准收口，形成此前已批准的正式需求基线。`LOG-QUERY-BASELINE-ADJUSTMENT-001` 依据用户最新确认定向调整功能开放控制与交互规则，`-R1` 完成三项微型一致性修订，并经 `LOG-QUERY-BASELINE-ADJUSTMENT-APPROVAL-001` 正式批准收口，本文档状态为 `APPROVED`，是日志查询功能当前正式需求基线。批准不代表本次调整已经实现，不代表已有后端/前端实现已经符合当前新基线，不代表业务代码或功能已经验收完成；最终物理分区、子分区、索引、生产 DDL 与生产等价性能验收仍未完成，继续作为生产启用前置条件。
 
 ## 2. 功能背景与当前现状
 
@@ -730,7 +731,7 @@ TARGET_TIME DESC, CDC_LOG_ID DESC
 
 - 用户已人工审阅本 `REQUIREMENTS.md` 初版及 R1 定向修订，需求内容验收通过（LOG-QUERY-REQUIREMENTS-APPROVAL-001，2026-08-19）。
 - 本 `REQUIREMENTS.md` 经 `LOG-QUERY-REQUIREMENTS-002-R2` 定向修订（时间必填、默认当前自然日、Oracle 19c+、`TARGET_TIME` 第一层 RANGE 分区键、完全离线调整窗口、`CDC_LOG_ID` 字符串传输）、`LOG-QUERY-REQUIREMENTS-002-R2.1` 定向补正（开发前置与菜单开放前置分离、20 亿条口径、时间必填语气、7 天排他公式）及 `LOG-QUERY-REQUIREMENTS-002-R2.2` 微型一致性修订，并经 `LOG-QUERY-REQUIREMENTS-APPROVAL-002` 人工批准收口，修订链为 `R2 -> R2.1 -> R2.2 -> APPROVAL-002`（其中“菜单开放前置”为历史口径，生产启用阻断对象已由 `LOG-QUERY-BASELINE-ADJUSTMENT-001` 调整为 `CDC_LOG_QUERY_ENABLED=true`）。
-- 后端既有四接口已实现并被用户接受（`IMPLEMENTED_ACCEPTED`，见 `reports/LOG-QUERY-BACKEND-IMPLEMENTATION-001.md`）；前端初版已实现但用户复审要求修订（`IMPLEMENTED_PENDING_REVIEW`，见 `reports/LOG-QUERY-FRONTEND-IMPLEMENTATION-001.md`）。`LOG-QUERY-BASELINE-ADJUSTMENT-001`（2026-08-21）按用户最新确认调整功能开放控制与交互规则，`-R1` 完成微型一致性修订，并经 `LOG-QUERY-BASELINE-ADJUSTMENT-APPROVAL-001`（2026-08-21）批准收口；本次调整尚未实现。当前文档状态为 `APPROVED`，实现状态为 `IN_PROGRESS`。
+- 后端既有四接口已实现并被用户接受（`IMPLEMENTED_ACCEPTED`，见 `reports/LOG-QUERY-BACKEND-IMPLEMENTATION-001.md`）；前端初版已实现但用户复审要求修订（`IMPLEMENTED_PENDING_REVIEW_WITH_REQUIRED_CHANGES`，见 `reports/LOG-QUERY-FRONTEND-IMPLEMENTATION-001.md`）。`LOG-QUERY-BASELINE-ADJUSTMENT-001`（2026-08-21）按用户最新确认调整功能开放控制与交互规则，`-R1` 完成微型一致性修订，并经 `LOG-QUERY-BASELINE-ADJUSTMENT-APPROVAL-001`（2026-08-21）批准收口；本次调整尚未实现。当前文档状态为 `APPROVED`，实现状态为 `IN_PROGRESS`。
 
 ### 19.1 需求批准后可以立即推进的工作
 

@@ -8,7 +8,7 @@
 | 目标文档 | `docs/features/log-query/DESIGN.md` |
 | 文档状态 | `APPROVED`（初版、R1、R1.1 完整 API 与逻辑查询设计此前已用户最终人工复审批准；`LOG-QUERY-BASELINE-ADJUSTMENT-001` 及 `-R1` 完整调整内容已经用户复审批准收口） |
 | 对应需求状态 | `APPROVED`（`LOG-QUERY-BASELINE-ADJUSTMENT-001` 及 `-R1` 完整调整内容已经用户复审批准收口） |
-| 实现状态 | `IN_PROGRESS`（后端既有四接口 `IMPLEMENTED_ACCEPTED`；前端初版 `IMPLEMENTED_PENDING_REVIEW`；本次状态接口、开放控制及相应交互修订尚未实现） |
+| 实现状态 | `IN_PROGRESS`（后端既有四接口 `IMPLEMENTED_ACCEPTED`；前端初版 `IMPLEMENTED_PENDING_REVIEW_WITH_REQUIRED_CHANGES`；本次状态接口、开放控制及相应交互修订尚未实现） |
 | 依据需求 | `docs/features/log-query/REQUIREMENTS.md` |
 | 关联契约 | `docs/features/log-query/API.md`（两文档使用同一游标、翻页与字段隔离方案） |
 | 创建日期 | 2026-08-20 |
@@ -26,6 +26,7 @@
 - `LOG-QUERY-BASELINE-ADJUSTMENT-001`（2026-08-21）：依据用户对日志查询功能开放方式及 ChatGPT 前端复审问题的最新确认，新增功能开放控制设计：定义 `cdc.log-query.enabled` 配置绑定（默认 `false`）、状态接口最小实现路径（禁数据库访问）、前端启动状态流程与失败恢复、原四接口不增加拦截、同路由菜单再次点击的可靠重新进入设计边界；修订“全部”状态模型、重置清除校验错误、数据源降级展示与前端测试策略（见 LQ-DESIGN-125 ~ 129、LQ-DESIGN-71 / 72 / 80 ~ 83 / 124、§13 前端测试）。本文档状态由 `APPROVED` 调整为 `DRAFT_PENDING_USER_REVIEW`，本次调整待用户复审；已有后端四接口实现 `IMPLEMENTED_ACCEPTED`，前端初版 `IMPLEMENTED_PENDING_REVIEW`，本次状态接口及交互尚未实现。
 - `LOG-QUERY-BASELINE-ADJUSTMENT-001-R1`（2026-08-21）：依据用户复审确认做微型一致性修订：状态接口失败/超时的前端状态失败页不再提供“重新检测”按钮，固定文案为标题“功能状态获取失败”、说明“暂时无法获取日志查询功能状态，请刷新页面或稍后重新进入。”，不自动重试/轮询/刷新，用户只能通过刷新、重新进入或再次点击当前“日志查询”菜单重新检测状态（见 LQ-DESIGN-128、LQ-DESIGN-178）；前端启动状态流程与状态接口契约本身保持不变。本文档状态保持 `DRAFT_PENDING_USER_REVIEW`，实现状态保持 `IN_PROGRESS`；本条目描述修订动作，不代表本次调整已经用户复审批准。
 - `LOG-QUERY-BASELINE-ADJUSTMENT-APPROVAL-001`（2026-08-21）：用户已批准 `LOG-QUERY-BASELINE-ADJUSTMENT-001` 与 `LOG-QUERY-BASELINE-ADJUSTMENT-001-R1` 形成的完整调整内容，执行正式批准收口。本文档状态由 `DRAFT_PENDING_USER_REVIEW` 转为 `APPROVED`，成为日志查询功能当前正式逻辑查询设计基线；允许进入本次调整相关的后端、前端、自动化测试、开发库联调和验收执行；批准不代表新增状态接口和前端调整已经实现，不代表任何验收用例已经执行或通过；最终物理设计、生产 DDL 与生产等价性能验收继续延期；菜单始终显示，但生产阻断条件完成前 `CDC_LOG_QUERY_ENABLED` 必须保持 `false`；原四接口不判断开关的边界继续有效。
+- `LOG-QUERY-BASELINE-ADJUSTMENT-APPROVAL-001-R1`（2026-08-21）：批准后现行状态标识与声明措辞微型一致性补正：统一现行前端实现状态为 `IMPLEMENTED_PENDING_REVIEW_WITH_REQUIRED_CHANGES`（历史修订记录中的 `IMPLEMENTED_PENDING_REVIEW` 保留为当时状态）。本补正仅为批准后的状态与措辞一致性修订，不改变批准范围、业务语义、实现事实或验收状态；文档状态保持 `APPROVED / IN_PROGRESS`，最新批准任务仍为 `LOG-QUERY-BASELINE-ADJUSTMENT-APPROVAL-001`。
 
 本文定义应用结构、请求流程和逻辑 SQL。本文**不确定**最终分区粒度、子分区、最终索引、生产 DDL 或最终执行计划（LQ-DB-07 / 08 / 09、LQ-NONGOAL-18）。
 
@@ -430,4 +431,4 @@ FETCH FIRST 1 ROWS ONLY
 - “全部”状态模型（省略数组/空数组/无 `IN`/禁拼全部 ID）：与 `API.md` LQ-API-36 及 REQUIREMENTS LQ-FILTER-16 ~ 18 / 36 ~ 38 一致。
 - 重置清除校验错误、数据源降级展示四态统一：与 REQUIREMENTS LQ-TAB-40 / 41、LQ-DATA-07 ~ 10 / 13 / 14 一致。
 - 前端自动化测试策略：与 REQUIREMENTS §9 前端测试框架授权及 ACCEPTANCE 前端测试要求一致。
-- 五份文档状态均为 `APPROVED / IN_PROGRESS`（后端既有四接口 `IMPLEMENTED_ACCEPTED`，前端初版 `IMPLEMENTED_PENDING_REVIEW`，本次状态接口及交互尚未实现）；本次调整已经用户批准收口，可进入本次调整相关的代码修订、自动化测试和开发库验证，实现、测试与验收仍需独立完成。
+- 五份文档状态均为 `APPROVED / IN_PROGRESS`（后端既有四接口 `IMPLEMENTED_ACCEPTED`，前端初版 `IMPLEMENTED_PENDING_REVIEW_WITH_REQUIRED_CHANGES`，本次状态接口及交互尚未实现）；本次调整已经用户批准收口，可进入本次调整相关的代码修订、自动化测试和开发库验证，实现、测试与验收仍需独立完成。

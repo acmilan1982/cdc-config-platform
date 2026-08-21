@@ -10,7 +10,7 @@
 | 目标路由 | `/monitor/log-query` |
 | 目标文档 | `docs/features/log-query/UI.md` |
 | 文档状态 | `APPROVED`（初版、R1、R1.1 完整 UI 与交互设计此前已用户最终人工复审批准；`LOG-QUERY-BASELINE-ADJUSTMENT-001` 及 `-R1` 完整调整内容已经用户复审批准收口） |
-| 实现状态 | `IN_PROGRESS`（后端既有四接口 `IMPLEMENTED_ACCEPTED`；前端初版 `IMPLEMENTED_PENDING_REVIEW`；本次状态接口、未开放页、状态检测失败页等调整尚未实现） |
+| 实现状态 | `IN_PROGRESS`（后端既有四接口 `IMPLEMENTED_ACCEPTED`；前端初版 `IMPLEMENTED_PENDING_REVIEW_WITH_REQUIRED_CHANGES`；本次状态接口、未开放页、状态检测失败页等调整尚未实现） |
 | 创建日期 | 2026-08-20 |
 | 创建任务 | `LOG-QUERY-UI-ACCEPTANCE-DESIGN-001` |
 | 关联任务 | `LOG-QUERY-UI-ACCEPTANCE-DESIGN-001`（初版）、`LOG-QUERY-UI-ACCEPTANCE-DESIGN-001-R1`（定向修订）、`LOG-QUERY-BASELINE-ADJUSTMENT-001`（功能开放与交互基线调整）、`LOG-QUERY-BASELINE-ADJUSTMENT-APPROVAL-001`（正式批准收口） |
@@ -30,8 +30,9 @@
 - `LOG-QUERY-BASELINE-ADJUSTMENT-001`（2026-08-21）：依据用户对日志查询功能开放方式及 ChatGPT 前端复审问题的最新确认，定向修订 UI 与交互基线：菜单改为始终显示、始终可点击，开放由 `cdc.log-query.enabled` 控制页面是否进入查询功能（LQ-UI-003 / 010 / 018）；新增状态检测中 / 功能未开放 / 状态检测失败三种页面状态与固定未开放文案（LQ-UI-006 ~ 009 / 019）；修订同路由菜单再次点击的重新进入初始化（LQ-UI-142 ~ 146 / 217 / 218）；修订“全部”双向互斥（LQ-UI-056 / 058）、重置清除校验错误（LQ-UI-073 / 074）、数据源降级展示（LQ-UI-086 / 113 / 183）；允许引入兼容前端测试框架（LQ-UI-127 / 128）。本文档状态由 `APPROVED` 调整为 `DRAFT_PENDING_USER_REVIEW`，本次调整待用户复审；已有前端初版实现 `IMPLEMENTED_PENDING_REVIEW`，本次调整尚未实现。
 - `LOG-QUERY-BASELINE-ADJUSTMENT-001-R1`（2026-08-21）：依据用户复审确认做三项微型一致性修订：① 取消状态失败页“重新检测”按钮，固定文案为标题“功能状态获取失败”、说明“暂时无法获取日志查询功能状态，请刷新页面或稍后重新进入。”，不自动重试/轮询/刷新，用户只能通过刷新、重新进入或再次点击当前“日志查询”菜单重新检测状态（LQ-UI-009 / 019 / 210 / 219）；② 页面事实修正：真实日志查询页面初版已实现（前端提交 `17680b34` 已将原占位页替换），本文档现行规则明确“当前页面为占位页”“后续才替换占位内容”为历史口径（LQ-UI-003 / 010）。本文档状态保持 `DRAFT_PENDING_USER_REVIEW`，实现状态保持 `IN_PROGRESS`；本条目描述修订动作，不代表本次调整已经用户复审批准。
 - `LOG-QUERY-BASELINE-ADJUSTMENT-APPROVAL-001`（2026-08-21）：用户已批准 `LOG-QUERY-BASELINE-ADJUSTMENT-001` 与 `LOG-QUERY-BASELINE-ADJUSTMENT-001-R1` 形成的完整调整内容，执行正式批准收口。本文档状态由 `DRAFT_PENDING_USER_REVIEW` 转为 `APPROVED`，成为日志查询功能当前正式 UI/交互设计基线；允许进入本次调整相关的后端、前端、自动化测试、开发库联调和验收执行；批准不代表新增状态接口和前端调整已经实现，不代表任何验收用例已经执行或通过；最终物理设计、生产 DDL 与生产等价性能验收继续延期；菜单始终显示，但生产阻断条件完成前 `CDC_LOG_QUERY_ENABLED` 必须保持 `false`；原四接口不判断开关的边界继续有效。
+- `LOG-QUERY-BASELINE-ADJUSTMENT-APPROVAL-001-R1`（2026-08-21）：批准后现行状态标识与声明措辞微型一致性补正：统一现行前端实现状态为 `IMPLEMENTED_PENDING_REVIEW_WITH_REQUIRED_CHANGES`（历史修订记录中的 `IMPLEMENTED_PENDING_REVIEW` 保留为当时状态）；修正当前页面实现声明，不再笼统称"不代表接口或页面已经实现"。本补正仅为批准后的状态与措辞一致性修订，不改变批准范围、业务语义、实现事实或验收状态；文档状态保持 `APPROVED / IN_PROGRESS`，最新批准任务仍为 `LOG-QUERY-BASELINE-ADJUSTMENT-APPROVAL-001`。
 
-本文档状态为 `APPROVED`：`LOG-QUERY-BASELINE-ADJUSTMENT-001` 与 `-R1` 完整调整内容已经用户批准收口，本文档是日志查询功能当前正式 UI/交互设计基线；批准不代表新增状态接口和前端调整已经实现，不代表已有前端实现已经符合本次新基线。本文只定义 UI/交互详细设计，不代表接口或页面已经实现、功能已经验收或性能已经验证。实现、测试与验收仍需独立完成。最终物理数据库设计（一级 RANGE 分区粒度、子分区、索引形态、生产 DDL、生产等价性能验收）仍属于延期项；菜单始终显示，生产环境 `CDC_LOG_QUERY_ENABLED` 在全部阻断项通过并获批前保持 `false`。
+本文档状态为 `APPROVED`：`LOG-QUERY-BASELINE-ADJUSTMENT-001` 与 `-R1` 完整调整内容已经用户批准收口，本文档是日志查询功能当前正式 UI/交互设计基线；批准不代表本次新增状态接口、开放控制、未开放页、状态失败页以及相关前端定向调整已经实现，也不代表已有前端初版已经符合当前新基线。日志查询真实页面初版已经存在，但本次调整尚未实现。本文只定义 UI/交互详细设计，不代表接口已经实现、功能已经验收或性能已经验证。实现、测试与验收仍需独立完成。最终物理数据库设计（一级 RANGE 分区粒度、子分区、索引形态、生产 DDL、生产等价性能验收）仍属于延期项；菜单始终显示，生产环境 `CDC_LOG_QUERY_ENABLED` 在全部阻断项通过并获批前保持 `false`。
 
 ## 2. 页面目标、适用范围与非目标
 
@@ -455,7 +456,7 @@
 提交前已逐项核对：
 
 1. 两目标文件存在且非空。
-2. 本文档状态 `APPROVED / IN_PROGRESS`（后端既有四接口 `IMPLEMENTED_ACCEPTED`，前端初版 `IMPLEMENTED_PENDING_REVIEW`，本次状态接口、未开放页、状态检测失败页等调整尚未实现）。
+2. 本文档状态 `APPROVED / IN_PROGRESS`（后端既有四接口 `IMPLEMENTED_ACCEPTED`，前端初版 `IMPLEMENTED_PENDING_REVIEW_WITH_REQUIRED_CHANGES`，本次状态接口、未开放页、状态检测失败页等调整尚未实现）。
 3. 五份文档状态均为 `APPROVED / IN_PROGRESS`，与本文一致。
 4. UI 规则编号唯一（`LQ-UI-001` 起），无重复、无悬空引用。
 5. 验收用例编号唯一（见 `ACCEPTANCE.md`），无悬空引用。
