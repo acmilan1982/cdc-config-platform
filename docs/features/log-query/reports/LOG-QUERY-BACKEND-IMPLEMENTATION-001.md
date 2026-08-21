@@ -16,6 +16,9 @@
 - 后端完整测试：564 个，其中 3 个失败 + 1 个错误，**全部 4 个为任务开始前已可复现的既有失败**（依赖开发库实时数据），与本任务无关，详见 §8、§11。
 - 后端编译/打包：`mvn clean package -DskipTests` **BUILD SUCCESS**。
 - 提交与推送：创建一次精确普通提交并推送到 `origin/develop`，验证本地 `HEAD == origin/develop`，ahead/behind `0 0`。
+- 后端实现状态：**IMPLEMENTED_ACCEPTED**（初版、R1、R1.1、R1.2 已通过 ChatGPT 复审，见 §18）。
+- 功能整体状态：**IN_PROGRESS**；前端：**NOT_STARTED**；整体验收：**NOT_RUN**。
+- 菜单继续保持隐藏；最终物理分区/索引设计与性能验收继续延期。
 
 本任务只代表日志查询功能的后端阶段实现，不代表整个功能已实现、已验收或可开放菜单。
 
@@ -346,8 +349,9 @@ git status --short
 
 ## 14. 下一步
 
-- **ChatGPT 从 GitHub 复审本次后端实现**（依据人工指示：完成并推送后停止，等待 ChatGPT 从 GitHub 复审，不得自行进入前端实现）。
-- 复审通过后，再进入前端实现或定向修订；本任务不包含前端、菜单开放、最终物理分区/索引设计与生产 DDL。
+- 后端实现已通过 ChatGPT 复审并收口为 `IMPLEMENTED_ACCEPTED`（初版、R1、R1.1、R1.2 复审结论见 §18）；本段不再包含"等待复审、不得进入前端"的约束。
+- 下一步为前端实现阶段：等待人工下发前端实现指示；在人工指示前不自行进入前端实现、不开放菜单、不执行整体验收。
+- 最终物理分区/索引设计与生产 DDL 继续延期。
 
 ---
 
@@ -386,7 +390,7 @@ git status --short
 
 - 五份已批准基线正文与状态未修改；前端与菜单未修改；无数据库读写与 DDL。
 - 本 R1 修订不代表日志查询功能整体验收通过；菜单仍保持隐藏，最终物理设计仍延期。
-- 下一步：等待 ChatGPT 从 GitHub 复审 R1，不得进入前端开发。
+- 下一步：等待 ChatGPT 从 GitHub 复审 R1，不得进入前端开发。（历史阶段表述，仅记录 R1 当时状态；复审已通过，见 §18）
 
 ---
 
@@ -514,3 +518,22 @@ git status --short
 - `menu_status=HIDDEN_UNTIL_PHYSICAL_AND_PERFORMANCE_ACCEPTANCE`
 - `commit_status=SUCCESS`
 - `push_status=SUCCESS`
+
+---
+
+## 18. ChatGPT 复审通过记录与状态收口（LOG-QUERY-BACKEND-IMPLEMENTATION-APPROVAL-001）
+
+- 任务编号：`LOG-QUERY-BACKEND-IMPLEMENTATION-APPROVAL-001`
+- 授权基线提交：`58e877f5c6f3a04f8d62415bf103b03535e4f43d`
+- 复审结论：以下四个阶段均已由 ChatGPT 从 GitHub 完成复审，无遗留修订项，后端实现据此收口：
+  1. 初版实现：`feat(log-query): implement backend query api`（提交 `afdfc889fb3e9b4c03056febcd321488e7c45765`）
+  2. R1 定向修订：`fix(log-query): harden backend validation`（提交 `4f6de884897054f7466d5930b77af6c17a28c9aa`）
+  3. R1.1 报告一致性修订：`docs(log-query): align backend implementation report`（提交 `1fc4a587fbf1eda51678c96220e3ca4786500665`）
+  4. R1.2 报告清单补正：`docs(log-query): complete backend report inventory`（提交 `58e877f5c6f3a04f8d62415bf103b03535e4f43d`）
+- 状态收口：
+  - 后端实现状态：**IMPLEMENTED_ACCEPTED**
+  - 功能整体：**IN_PROGRESS**
+  - 前端：**NOT_STARTED**
+  - 整体验收：**NOT_RUN**
+- 保持项：五份已批准基线正文与状态未修改；代码、测试、配置、菜单未修改；菜单保持隐藏；最终物理分区/索引设计与性能验收继续延期。
+- 本任务不重新构建、不重新测试、不操作数据库；仅收口报告状态表述并清理过期的"等待复审"语气。
