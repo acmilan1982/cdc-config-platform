@@ -6,7 +6,7 @@
 |---|---|
 | 正式功能标识 | `log-query` |
 | 目标文档 | `docs/features/log-query/API.md` |
-| 文档状态 | `DRAFT_PENDING_USER_REVIEW`（初版、R1、R1.1 完整 API 与逻辑查询设计此前已用户最终人工复审批准；`LOG-QUERY-BASELINE-ADJUSTMENT-001` 新增功能开放状态接口并调整开放边界，本次调整待用户复审） |
+| 文档状态 | `DRAFT_PENDING_USER_REVIEW`（初版、R1、R1.1 完整 API 与逻辑查询设计此前已用户最终人工复审批准；`LOG-QUERY-BASELINE-ADJUSTMENT-001` 新增功能开放状态接口并调整开放边界，`-R1` 取消状态失败页“重新检测”方案，本次调整待用户复审） |
 | 对应需求状态 | `DRAFT_PENDING_USER_REVIEW`（`LOG-QUERY-BASELINE-ADJUSTMENT-001` 定向修订待用户复审） |
 | 实现状态 | `IN_PROGRESS`（后端既有四接口 `IMPLEMENTED_ACCEPTED`；前端初版 `IMPLEMENTED_PENDING_REVIEW`；本次状态接口及相应交互修订尚未实现） |
 | 依据需求 | `docs/features/log-query/REQUIREMENTS.md` |
@@ -23,6 +23,7 @@
 - `LOG-QUERY-API-DESIGN-001-R1.1`：微型一致性修订，仅完成：(1) 数据源名称字段可空性补正（`sourceDataSourceName` / `targetDataSourceName` 改为可选，原始数据源 ID 为 NULL 时名称省略并显示 `--`）；(2) 相同签名密钥下普通服务重启不使游标失效，只有密钥轮换、密钥配置改变、版本不兼容或篡改才可能使旧游标失效；(3) 重取上一页只保证按相同固定排序与边界谓词重新查询目标页，不保证返回内容与首次访问该页时完全一致。修订完成仍为 `DRAFT_PENDING_USER_REVIEW / NOT_STARTED`，等待用户最终复审。
 - `LOG-QUERY-API-DESIGN-APPROVAL-001`（2026-08-20）：用户已最终人工复审并批准初版、R1、R1.1 形成的完整 API 与逻辑查询设计，执行正式批准收口。本文档状态由 `DRAFT_PENDING_USER_REVIEW` 转为 `APPROVED`，实现状态仍为 `NOT_STARTED`。当前文档成为日志查询功能的正式 API 设计基线；可以进入 UI 详细设计、ACCEPTANCE 详细验收设计、前后端业务代码开发、Mapper 逻辑 SQL 实现、自动化测试与开发库功能验证；不代表 UI、ACCEPTANCE 已批准，不代表代码已实现或功能已验收，不代表最终分区、子分区、索引、生产 DDL 或生产等价性能已确定/通过；最终验证完成前，日志查询菜单必须保持隐藏（历史规则，“菜单必须保持隐藏”已被 `LOG-QUERY-BASELINE-ADJUSTMENT-001` 废止，改为“菜单始终显示、开关控制页面是否进入查询功能”）。
 - `LOG-QUERY-BASELINE-ADJUSTMENT-001`（2026-08-21）：依据用户对日志查询功能开放方式及 ChatGPT 前端复审问题的最新确认，新增功能开放状态接口 `GET /api/log-query/status`（LQ-API-16、LQ-API-114 ~ 119），接口数量由 4 调整为 5；明确原四接口完全不检查开关、不新增“功能未开放”错误码；同步“全部”请求边界与数据源降级展示。本文档状态由 `APPROVED` 调整为 `DRAFT_PENDING_USER_REVIEW`，本次调整待用户复审；已有后端四接口实现 `IMPLEMENTED_ACCEPTED`，前端初版 `IMPLEMENTED_PENDING_REVIEW`，本次状态接口尚未实现。
+- `LOG-QUERY-BASELINE-ADJUSTMENT-001-R1`（2026-08-21）：依据用户复审确认做微型一致性修订：状态接口失败/超时前端不再提供“重新检测”按钮，仅显示“功能状态获取失败”独立错误页（固定文案与恢复方式见 UI 基线），用户只能通过刷新、重新进入或再次点击当前“日志查询”菜单重新检测状态；状态接口契约本身（GET、无参、`data.enabled`、默认 false、不读数据库、30 秒超时、不自动重试、无新增错误码）保持不变（见 LQ-API-114 ~ 117）。本文档状态保持 `DRAFT_PENDING_USER_REVIEW`，实现状态保持 `IN_PROGRESS`；本条目描述修订动作，不代表本次调整已经用户复审批准。
 
 本文只定义 API 契约，不代表接口已经实现或验收通过。本文档状态为 `DRAFT_PENDING_USER_REVIEW`：`LOG-QUERY-BASELINE-ADJUSTMENT-001` 本次调整待用户复审；复审批准前，本次调整不视为已批准，也不代表已有后端/前端实现已经符合本次新基线。最终物理数据库设计（分区粒度、子分区、索引、生产 DDL、最终执行计划）不在本文范围内。
 
@@ -62,7 +63,7 @@
 | LQ-API-15 | 列表查询唯一确定为 `POST /api/log-query/logs/search`，`Content-Type: application/json`，查询条件由 `LogListQuery` 以 JSON 请求体经 `@RequestBody` 承载。理由：请求可能包含两组多选 ID、两个表名、时间范围和签名游标，GET 查询串存在浏览器、代理、网关或服务器 URL 长度差异风险。POST 只用于承载只读查询条件，不改变接口只读语义（LQ-SCOPE-08）。 |
 | LQ-API-114 | 功能开放状态接口 `GET /api/log-query/status` 只读、无请求参数，响应 `data` 为 `LogQueryStatusVO`：`enabled`（boolean，必填），即当前后端配置 `cdc.log-query.enabled`（`CDC_LOG_QUERY_ENABLED`）解析结果；默认 `false`（fail-closed）。统一响应使用项目既有 `ApiResponse<T>`。 |
 | LQ-API-115 | 状态接口不读取数据库、不操作数据库或 ZooKeeper，只返回当前配置解析后的 `enabled`。 |
-| LQ-API-116 | 状态接口请求级前端超时仍为 30 秒，不自动重试；失败或超时前端进入“功能状态获取失败”独立错误态并提供手动“重新检测”（见 UI 基线）。 |
+| LQ-API-116 | 状态接口请求级前端超时仍为 30 秒，不自动重试；失败或超时前端进入“功能状态获取失败”独立错误页（固定文案见 UI 基线），不提供“重新检测”按钮，用户只能通过刷新页面、离开后重新进入、再次点击当前“日志查询”菜单重新检测状态。 |
 | LQ-API-117 | 不新增“功能未开放”业务错误码（不新增 40310 或其他功能关闭错误码）；状态接口正常返回 `code=200`，开放状态以 `data.enabled` 表达。 |
 | LQ-API-118 | 原四接口（LQ-API-11 ~ 14）完全不检查 `enabled` 开关：不拦截、不返回 403、不新增业务错误码、不增加数据库访问保护；`enabled=false` 时仅是前端页面不得主动调用这四个接口，直接调用仍按原契约执行（见 REQUIREMENTS LQ-OPEN-07）。 |
 | LQ-API-119 | `cdc.log-query.enabled` 只控制前端页面使用流程，不是认证、鉴权或接口安全控制；本文不把该配置描述成权限、安全控制或接口封禁。 |

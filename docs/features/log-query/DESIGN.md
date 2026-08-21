@@ -6,7 +6,7 @@
 |---|---|
 | 正式功能标识 | `log-query` |
 | 目标文档 | `docs/features/log-query/DESIGN.md` |
-| 文档状态 | `DRAFT_PENDING_USER_REVIEW`（初版、R1、R1.1 完整 API 与逻辑查询设计此前已用户最终人工复审批准；`LOG-QUERY-BASELINE-ADJUSTMENT-001` 新增功能开放控制、状态接口与前端状态流程设计，本次调整待用户复审） |
+| 文档状态 | `DRAFT_PENDING_USER_REVIEW`（初版、R1、R1.1 完整 API 与逻辑查询设计此前已用户最终人工复审批准；`LOG-QUERY-BASELINE-ADJUSTMENT-001` 新增功能开放控制、状态接口与前端状态流程设计，`-R1` 取消状态失败页“重新检测”方案，本次调整待用户复审） |
 | 对应需求状态 | `DRAFT_PENDING_USER_REVIEW`（`LOG-QUERY-BASELINE-ADJUSTMENT-001` 定向修订待用户复审） |
 | 实现状态 | `IN_PROGRESS`（后端既有四接口 `IMPLEMENTED_ACCEPTED`；前端初版 `IMPLEMENTED_PENDING_REVIEW`；本次状态接口、开放控制及相应交互修订尚未实现） |
 | 依据需求 | `docs/features/log-query/REQUIREMENTS.md` |
@@ -24,6 +24,7 @@
 - `LOG-QUERY-API-DESIGN-001-R1.1`：微型一致性修订，仅完成：(1) 数据源名称字段可空性补正（`sourceDataSourceName` / `targetDataSourceName` 改为可选，原始数据源 ID 为 NULL 时名称省略并显示 `--`）；(2) 相同签名密钥下普通服务重启不使游标失效，只有密钥轮换、密钥配置改变、版本不兼容或篡改才可能使旧游标失效；(3) 重取上一页只保证按相同固定排序与边界谓词重新查询目标页，不保证返回内容与首次访问该页时完全一致。修订完成仍为 `DRAFT_PENDING_USER_REVIEW / NOT_STARTED`，等待用户最终复审。
 - `LOG-QUERY-API-DESIGN-APPROVAL-001`（2026-08-20）：用户已最终人工复审并批准初版、R1、R1.1 形成的完整 API 与逻辑查询设计，执行正式批准收口。本文档状态由 `DRAFT_PENDING_USER_REVIEW` 转为 `APPROVED`，实现状态仍为 `NOT_STARTED`。当前文档成为日志查询功能的正式逻辑查询设计基线；可以进入 UI 详细设计、ACCEPTANCE 详细验收设计、前后端业务代码开发、Mapper 逻辑 SQL 实现、自动化测试与开发库功能验证；不代表 UI、ACCEPTANCE 已批准，不代表代码已实现或功能已验收，不代表最终分区、子分区、索引、生产 DDL 或生产等价性能已确定/通过；最终验证完成前，日志查询菜单必须保持隐藏（历史规则，“菜单必须保持隐藏”已被 `LOG-QUERY-BASELINE-ADJUSTMENT-001` 废止，改为“菜单始终显示、开关控制页面是否进入查询功能”）。
 - `LOG-QUERY-BASELINE-ADJUSTMENT-001`（2026-08-21）：依据用户对日志查询功能开放方式及 ChatGPT 前端复审问题的最新确认，新增功能开放控制设计：定义 `cdc.log-query.enabled` 配置绑定（默认 `false`）、状态接口最小实现路径（禁数据库访问）、前端启动状态流程与失败恢复、原四接口不增加拦截、同路由菜单再次点击的可靠重新进入设计边界；修订“全部”状态模型、重置清除校验错误、数据源降级展示与前端测试策略（见 LQ-DESIGN-125 ~ 129、LQ-DESIGN-71 / 72 / 80 ~ 83 / 124、§13 前端测试）。本文档状态由 `APPROVED` 调整为 `DRAFT_PENDING_USER_REVIEW`，本次调整待用户复审；已有后端四接口实现 `IMPLEMENTED_ACCEPTED`，前端初版 `IMPLEMENTED_PENDING_REVIEW`，本次状态接口及交互尚未实现。
+- `LOG-QUERY-BASELINE-ADJUSTMENT-001-R1`（2026-08-21）：依据用户复审确认做微型一致性修订：状态接口失败/超时的前端状态失败页不再提供“重新检测”按钮，固定文案为标题“功能状态获取失败”、说明“暂时无法获取日志查询功能状态，请刷新页面或稍后重新进入。”，不自动重试/轮询/刷新，用户只能通过刷新、重新进入或再次点击当前“日志查询”菜单重新检测状态（见 LQ-DESIGN-128、LQ-DESIGN-178）；前端启动状态流程与状态接口契约本身保持不变。本文档状态保持 `DRAFT_PENDING_USER_REVIEW`，实现状态保持 `IN_PROGRESS`；本条目描述修订动作，不代表本次调整已经用户复审批准。
 
 本文定义应用结构、请求流程和逻辑 SQL。本文**不确定**最终分区粒度、子分区、最终索引、生产 DDL 或最终执行计划（LQ-DB-07 / 08 / 09、LQ-NONGOAL-18）。
 
@@ -340,7 +341,7 @@ FETCH FIRST 1 ROWS ONLY
 | LQ-DESIGN-125 | 在既有 `LogQueryProperties`（`@ConfigurationProperties(prefix = "cdc.log-query")`，当前含 `cursorSecret`）中增加 `enabled` 布尔字段，绑定 `cdc.log-query.enabled: ${CDC_LOG_QUERY_ENABLED:false}`，默认 `false`（fail-closed）；后端配置是页面开放状态的唯一权威来源；该配置只控制前端页面使用流程，不是认证、鉴权或接口安全控制。 |
 | LQ-DESIGN-126 | 状态接口最小实现路径：`LogQueryController` 增加只读端点 `GET /api/log-query/status`，Service 直接返回 `LogQueryProperties.enabled` 的解析结果（`ApiResponse<LogQueryStatusVO>`，VO 含 `enabled` 布尔字段）；**禁止任何数据库、MyBatis、ZooKeeper 访问**；不新增“功能未开放”业务错误码。 |
 | LQ-DESIGN-127 | 原四接口（数据源候选、列表查询、日志详情、原始消息）不增加任何 `enabled` 判断：不拦截、不返回 403、不新增业务错误码、不增加数据库访问保护；`enabled=false` 仅是前端页面不得主动调用这四个接口，直接调用仍按原契约执行（LQ-OPEN-07、LQ-API-118）。 |
-| LQ-DESIGN-128 | 前端启动状态流程：进入页面、浏览器刷新、离开后返回、再次点击当前“日志查询”菜单时，先调用状态接口；结果返回前显示“状态检测中”；`enabled=false` 不加载数据源选项、不查询任何日志、显示未开放页；`enabled=true` 加载数据源选项并按既有规则执行错误日志默认查询；状态接口失败或超时显示“功能状态获取失败”独立错误态并提供手动“重新检测”按钮（只由用户点击触发，不自动轮询、不自动刷新、不自动重试）；重新检测为 `true` 后进入正常初始化，为 `false` 后继续显示未开放页。 |
+| LQ-DESIGN-128 | 前端启动状态流程：进入页面、浏览器刷新、离开后返回、再次点击当前“日志查询”菜单时，先调用状态接口；结果返回前显示“状态检测中”；`enabled=false` 不加载数据源选项、不查询任何日志、显示未开放页；`enabled=true` 加载数据源选项并按既有规则执行错误日志默认查询；状态接口失败或超时显示“功能状态获取失败”独立错误页（固定文案：标题“功能状态获取失败”，说明“暂时无法获取日志查询功能状态，请刷新页面或稍后重新进入。”），不提供“重新检测”按钮；不自动重试、不自动轮询、不自动刷新；用户只能通过刷新页面、离开后重新进入、再次点击当前“日志查询”菜单重新发起状态检测，状态检测返回 `true` 后进入正常初始化，返回 `false` 后继续显示未开放页。 |
 | LQ-DESIGN-129 | 同路由菜单再次点击的重新进入：不能依赖组件必然卸载重挂载，必须设计可靠、可验证的触发机制（如路由/菜单点击层面的重新进入事件或等价机制；不写死未经盘点的具体第三方事件总线）；再次点击当前“日志查询”菜单即视为重新进入，立即使在途列表/详情/原始消息/状态请求失效（页面代次 + 请求令牌）、关闭并清理弹窗、清空两 Tab 全部状态与 `initialQueryAttempted`，随后重新调用状态接口并重新初始化（LQ-TAB-57、LQ-OPEN-08）。 |
 
 ## 13. 测试设计要点
@@ -381,10 +382,10 @@ FETCH FIRST 1 ROWS ONLY
 | LQ-DESIGN-172 | 重置清除当前 Tab 校验错误（`validationError` 与逐字段错误）但保留列表、已生效条件和游标，且不发起查询、不切换 Tab。 |
 | LQ-DESIGN-173 | 两 Tab 状态完全独立：一个 Tab 的查询/重置/分页不影响另一个 Tab 的表单、已生效条件、列表、游标、加载与错误。 |
 | LQ-DESIGN-174 | 三页游标序列及前后翻页失败原子性：下一页失败不压栈、上一页失败不弹栈，当前页与游标栈保持不变。 |
-| LQ-DESIGN-175 | 再次点击当前“日志查询”菜单清空两 Tab 全部状态并重新初始化：在途请求失效、弹窗清理、`initialQueryAttempted` 清零、重新检测状态。 |
+| LQ-DESIGN-175 | 再次点击当前“日志查询”菜单清空两 Tab 全部状态并重新初始化：在途请求失效、弹窗清理、`initialQueryAttempted` 清零、重新调用状态接口。 |
 | LQ-DESIGN-176 | `enabled=false` 时显示未开放页且前端不调用原四接口（数据源候选、列表查询、详情、原始消息）。 |
 | LQ-DESIGN-177 | `enabled=true` 后按顺序加载数据源选项并默认查询错误日志第一页；正确日志第一次切换时才首查。 |
-| LQ-DESIGN-178 | 状态接口失败/超时后的手动“重新检测”及无自动轮询/刷新/重试：重新检测为 `true` 正常初始化，为 `false` 继续显示未开放页。 |
+| LQ-DESIGN-178 | 状态接口失败/超时后的状态失败页及无自动重试/轮询/刷新：页面显示“功能状态获取失败”独立错误页（固定文案）且不提供“重新检测”按钮；用户只能通过刷新页面、离开后重新进入、再次点击当前“日志查询”菜单重新发起状态检测；状态检测返回 `true` 正常初始化，返回 `false` 继续显示未开放页。 |
 | LQ-DESIGN-179 | 旧请求与旧弹窗响应失效：重新进入/新查询后过期响应不得覆盖新页面状态或重新打开弹窗。 |
 | LQ-DESIGN-180 | 数据源降级展示不矛盾、不重复 ID：四种降级场景下单元格/Tooltip/详情一致，无 `ID（ID）`。 |
 | LQ-DESIGN-181 | `cdcLogId` 始终以字符串处理，不转 JavaScript Number 后传回；超过 `MAX_SAFE_INTEGER` 的 ID 往返不丢精度。 |
