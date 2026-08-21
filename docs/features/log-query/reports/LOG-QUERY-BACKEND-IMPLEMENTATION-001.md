@@ -110,12 +110,13 @@ git rev-list --left-right --count HEAD...origin/develop
 
 | 文件 | 测试数 | 覆盖要点 |
 |---|---|---|
-| `service/LogQueryServiceImplTest.java` | 44 | 时间必填/顺序/半开端点/7 天公式、条件规范化与 IN 上限 100、logType 白名单、数据源一次读取无 N+1、名称降级、101/100 边界、游标错误映射、cdcLogId 十进制与 NUMBER(19,0) 范围、详情/原始消息隔离、超时 50020/通用 50021/不重试、候选项过滤排序 |
+| `service/LogQueryServiceImplTest.java` | 51 | 时间必填/顺序/半开端点/7 天公式、条件规范化与 IN 上限 100、logType 白名单、数据源一次读取无 N+1、名称降级、101/100 边界、游标错误映射、cdcLogId 十进制与 NUMBER(19,0) 范围、详情/原始消息隔离、超时 50020/通用 50021/不重试、候选项过滤排序、R1-01 严格自然日期、R1-04 候选项稳定排序 |
 | `controller/LogQueryControllerTest.java` | 11 | 4 路由/方法/统一响应、pageSize 输入被忽略、非法 logType → 200+业务码、非法 cdcLogId → HTTP 400、不存在 → 200+40410、cdcLogId 字符串化 |
-| `cursor/LogCursorCodecTest.java` | 15 | 编码/验签往返、base64url 无填充、篡改→非法、版本错误、logType/指纹不匹配、同密钥重启等价、不同密钥失效、空密钥 fail-fast |
+| `cursor/LogCursorCodecTest.java` | 28 | 编码/验签往返、base64url 无填充、篡改→非法、版本错误、logType/指纹不匹配、同密钥重启等价、不同密钥失效、空密钥 fail-fast、R1-02 游标 CDC_LOG_ID 严格校验、R1-03 验证顺序 |
 | `cursor/LogQueryFingerprintTest.java` | 10 | 确定性、字段顺序、数组去重排序、空数组/空文本、UTF-8 |
 | `mapper/LogQueryMapperXmlCheckTest.java` | 12 | 4 个 select、4 个 timeout="25"、无 SELECT*/LIKE/COUNT/JOIN/TO_CHAR/CAST/OFFSET 分页/DDL、大字段隔离、keyset 谓词、绑定参数、无物理设计 DDL |
 | `LogQueryStaticCheckTest.java` | 7 | 源码无物理设计解耦、DTO/VO 无页容量/total 字段、无直接 JDBC、BigDecimal 绑定、无 TO_CHAR/CAST |
+| `config/LogQueryConfigTest.java` | 5 | R1-05 密钥配置行为：外部属性绑定、非空可用、空白 fail-closed 无默认密钥、同值重启等价、@Lazy 下仅扫描/注入不误用、实际调用才 fail-closed |
 
 ### 4.5 新增报告文件
 
@@ -457,6 +458,7 @@ git status --short
 - `backend/src/test/java/com/bsoft/cdcconfig/logquery/cursor/LogQueryFingerprintTest.java`
 - `backend/src/test/java/com/bsoft/cdcconfig/logquery/controller/LogQueryControllerTest.java`
 - `backend/src/test/java/com/bsoft/cdcconfig/logquery/mapper/LogQueryMapperXmlCheckTest.java`
+- `backend/src/test/java/com/bsoft/cdcconfig/logquery/config/LogQueryConfigTest.java`
 - `docs/features/log-query/reports/LOG-QUERY-BACKEND-IMPLEMENTATION-001.md`
 
 修改：
