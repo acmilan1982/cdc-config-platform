@@ -6,17 +6,17 @@
 |---|---|
 | 正式功能标识 | `log-query` |
 | 目标文档 | `docs/features/log-query/API.md` |
-| 文档状态 | `DRAFT_PENDING_USER_REVIEW`（初版、R1、R1.1 完整 API 与逻辑查询设计此前已用户最终人工复审批准；`LOG-QUERY-BASELINE-ADJUSTMENT-001` 新增功能开放状态接口并调整开放边界，`-R1` 取消状态失败页“重新检测”方案，本次调整待用户复审） |
-| 对应需求状态 | `DRAFT_PENDING_USER_REVIEW`（`LOG-QUERY-BASELINE-ADJUSTMENT-001` 定向修订待用户复审） |
+| 文档状态 | `APPROVED`（初版、R1、R1.1 完整 API 与逻辑查询设计此前已用户最终人工复审批准；`LOG-QUERY-BASELINE-ADJUSTMENT-001` 及 `-R1` 完整调整内容已经用户复审批准收口） |
+| 对应需求状态 | `APPROVED`（`LOG-QUERY-BASELINE-ADJUSTMENT-001` 及 `-R1` 完整调整内容已经用户复审批准收口） |
 | 实现状态 | `IN_PROGRESS`（后端既有四接口 `IMPLEMENTED_ACCEPTED`；前端初版 `IMPLEMENTED_PENDING_REVIEW`；本次状态接口及相应交互修订尚未实现） |
 | 依据需求 | `docs/features/log-query/REQUIREMENTS.md` |
 | 创建日期 | 2026-08-20 |
-| 关联任务 | `LOG-QUERY-API-DESIGN-001`（初版）、`LOG-QUERY-API-DESIGN-001-R1`（定向修订）、`LOG-QUERY-API-DESIGN-001-R1.1`（微型一致性修订）、`LOG-QUERY-BASELINE-ADJUSTMENT-001`（功能开放状态接口调整） |
-| 最新批准日期 | `2026-08-20` |
-| 最新批准任务 | `LOG-QUERY-API-DESIGN-APPROVAL-001` |
-| 最新批准范围 | `LOG-QUERY-API-DESIGN-001 + R1 + R1.1 完整 API 与逻辑查询设计` |
+| 关联任务 | `LOG-QUERY-API-DESIGN-001`（初版）、`LOG-QUERY-API-DESIGN-001-R1`（定向修订）、`LOG-QUERY-API-DESIGN-001-R1.1`（微型一致性修订）、`LOG-QUERY-BASELINE-ADJUSTMENT-001`（功能开放状态接口调整）、`LOG-QUERY-BASELINE-ADJUSTMENT-APPROVAL-001`（正式批准收口） |
+| 最新批准日期 | `2026-08-21` |
+| 最新批准任务 | `LOG-QUERY-BASELINE-ADJUSTMENT-APPROVAL-001` |
+| 最新批准范围 | `LOG-QUERY-BASELINE-ADJUSTMENT-001 + LOG-QUERY-BASELINE-ADJUSTMENT-001-R1` 完整调整后的当前日志查询基线 |
 
-修订记录：
+修订记录（以下各条目描述对应任务完成当时的状态，均为历史记录，不代表当前文档状态）：
 
 - `LOG-QUERY-API-DESIGN-001`：初版，创建两份设计文档（均为 `DRAFT_PENDING_USER_REVIEW / NOT_STARTED`）。
 - `LOG-QUERY-API-DESIGN-001-R1`：修正四类设计缺陷（列表接口改 POST、前端游标栈模型、`CDC_LOG_ID` 内部数值绑定、数据源一次全表读取）、游标条件指纹规范化、将 12 项待确认设计转为已确认设计决策、同步一致性。修订完成仍为 `DRAFT_PENDING_USER_REVIEW / NOT_STARTED`，等待用户最终复审。
@@ -24,14 +24,15 @@
 - `LOG-QUERY-API-DESIGN-APPROVAL-001`（2026-08-20）：用户已最终人工复审并批准初版、R1、R1.1 形成的完整 API 与逻辑查询设计，执行正式批准收口。本文档状态由 `DRAFT_PENDING_USER_REVIEW` 转为 `APPROVED`，实现状态仍为 `NOT_STARTED`。当前文档成为日志查询功能的正式 API 设计基线；可以进入 UI 详细设计、ACCEPTANCE 详细验收设计、前后端业务代码开发、Mapper 逻辑 SQL 实现、自动化测试与开发库功能验证；不代表 UI、ACCEPTANCE 已批准，不代表代码已实现或功能已验收，不代表最终分区、子分区、索引、生产 DDL 或生产等价性能已确定/通过；最终验证完成前，日志查询菜单必须保持隐藏（历史规则，“菜单必须保持隐藏”已被 `LOG-QUERY-BASELINE-ADJUSTMENT-001` 废止，改为“菜单始终显示、开关控制页面是否进入查询功能”）。
 - `LOG-QUERY-BASELINE-ADJUSTMENT-001`（2026-08-21）：依据用户对日志查询功能开放方式及 ChatGPT 前端复审问题的最新确认，新增功能开放状态接口 `GET /api/log-query/status`（LQ-API-16、LQ-API-114 ~ 119），接口数量由 4 调整为 5；明确原四接口完全不检查开关、不新增“功能未开放”错误码；同步“全部”请求边界与数据源降级展示。本文档状态由 `APPROVED` 调整为 `DRAFT_PENDING_USER_REVIEW`，本次调整待用户复审；已有后端四接口实现 `IMPLEMENTED_ACCEPTED`，前端初版 `IMPLEMENTED_PENDING_REVIEW`，本次状态接口尚未实现。
 - `LOG-QUERY-BASELINE-ADJUSTMENT-001-R1`（2026-08-21）：依据用户复审确认做微型一致性修订：状态接口失败/超时前端不再提供“重新检测”按钮，仅显示“功能状态获取失败”独立错误页（固定文案与恢复方式见 UI 基线），用户只能通过刷新、重新进入或再次点击当前“日志查询”菜单重新检测状态；状态接口契约本身（GET、无参、`data.enabled`、默认 false、不读数据库、30 秒超时、不自动重试、无新增错误码）保持不变（见 LQ-API-114 ~ 117）。本文档状态保持 `DRAFT_PENDING_USER_REVIEW`，实现状态保持 `IN_PROGRESS`；本条目描述修订动作，不代表本次调整已经用户复审批准。
+- `LOG-QUERY-BASELINE-ADJUSTMENT-APPROVAL-001`（2026-08-21）：用户已批准 `LOG-QUERY-BASELINE-ADJUSTMENT-001` 与 `LOG-QUERY-BASELINE-ADJUSTMENT-001-R1` 形成的完整调整内容，执行正式批准收口。本文档状态由 `DRAFT_PENDING_USER_REVIEW` 转为 `APPROVED`，成为日志查询功能当前正式 API 设计基线；允许进入本次调整相关的后端、前端、自动化测试、开发库联调和验收执行；批准不代表新增状态接口和前端调整已经实现，不代表任何验收用例已经执行或通过；最终物理设计、生产 DDL 与生产等价性能验收继续延期；菜单始终显示，但生产阻断条件完成前 `CDC_LOG_QUERY_ENABLED` 必须保持 `false`；原四接口不判断开关的边界继续有效。
 
-本文只定义 API 契约，不代表接口已经实现或验收通过。本文档状态为 `DRAFT_PENDING_USER_REVIEW`：`LOG-QUERY-BASELINE-ADJUSTMENT-001` 本次调整待用户复审；复审批准前，本次调整不视为已批准，也不代表已有后端/前端实现已经符合本次新基线。最终物理数据库设计（分区粒度、子分区、索引、生产 DDL、最终执行计划）不在本文范围内。
+本文只定义 API 契约，不代表接口已经实现或验收通过。本文档状态为 `APPROVED`：`LOG-QUERY-BASELINE-ADJUSTMENT-001` 与 `-R1` 完整调整内容已经用户批准收口，本文档是日志查询功能当前正式 API 设计基线；批准不代表新增状态接口和前端调整已经实现，不代表已有后端/前端实现已经符合本次新基线。实现、测试与验收仍需独立完成。最终物理数据库设计（分区粒度、子分区、索引、生产 DDL、最终执行计划）不在本文范围内。
 
 ## 2. 设计依据与追踪方式
 
 - 本文所有业务规则均以已批准的 `REQUIREMENTS.md` 为唯一来源，通过需求编号引用建立追踪关系，不复制整份需求。
 - 本文只确定「API 契约」与「逻辑查询边界」；最终分区粒度、子分区、最终索引形态、生产 DDL 与最终执行计划仍属于延期项（LQ-DB-07 / 08 / 09、LQ-NONGOAL-18）。
-- 本文档此前已经批准，是日志查询功能的正式 API 设计基线；`LOG-QUERY-BASELINE-ADJUSTMENT-001` 新增状态接口并调整开放边界，当前文档状态为 `DRAFT_PENDING_USER_REVIEW`，本次调整待用户复审；复审批准前，后续开发不得把状态接口及相应开放控制视为已批准。
+- 本文档此前已经批准，是日志查询功能的正式 API 设计基线；`LOG-QUERY-BASELINE-ADJUSTMENT-001` 新增状态接口并调整开放边界，`-R1` 完成微型一致性修订，并经 `LOG-QUERY-BASELINE-ADJUSTMENT-APPROVAL-001` 批准收口，当前文档状态为 `APPROVED`，本次调整已经批准；可进入本次调整相关的代码修订、自动化测试和开发库验证，实现、测试与验收仍需独立完成。
 
 ## 3. 总体约定
 

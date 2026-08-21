@@ -9,18 +9,18 @@
 | 正式菜单 | 日志查询（单菜单，双 Tab） |
 | 目标路由 | `/monitor/log-query` |
 | 目标文档 | `docs/features/log-query/ACCEPTANCE.md` |
-| 文档状态 | `DRAFT_PENDING_USER_REVIEW`（`LOG-QUERY-BASELINE-ADJUSTMENT-001` 依据用户最新确认对功能开放控制、状态接口及相应交互基线定向修订，`-R1` 取消状态失败页“重新检测”方案并修正页面事实，本次调整待用户复审；批准不代表任何验收用例已经执行或通过；所有普通用例仍为 `NOT_RUN`，延期用例仍为 `DEFERRED_UNTIL_PHYSICAL_DESIGN`；最终物理数据库设计与生产等价性能验收仍为延期项；菜单始终显示、始终可点击，生产环境在全部阻断项通过并获批前 `CDC_LOG_QUERY_ENABLED` 必须保持 `false`） |
+| 文档状态 | `APPROVED`（`LOG-QUERY-BASELINE-ADJUSTMENT-001` 及 `-R1` 完整调整内容已经用户复审批准收口；批准不代表任何验收用例已经执行或通过；所有普通用例仍为 `NOT_RUN`，延期用例仍为 `DEFERRED_UNTIL_PHYSICAL_DESIGN`；最终物理数据库设计与生产等价性能验收仍为延期项；菜单始终显示、始终可点击，生产环境在全部阻断项通过并获批前 `CDC_LOG_QUERY_ENABLED` 必须保持 `false`） |
 | 实现状态 | `IN_PROGRESS`（后端既有四接口 `IMPLEMENTED_ACCEPTED`；前端初版 `IMPLEMENTED_PENDING_REVIEW`；本次功能开放状态接口及相应交互修订尚未实现；本文件是验收设计，不是已执行的验收报告） |
 | 创建日期 | 2026-08-20 |
 | 创建任务 | `LOG-QUERY-UI-ACCEPTANCE-DESIGN-001` |
-| 关联任务 | `LOG-QUERY-UI-ACCEPTANCE-DESIGN-001`（初版）、`LOG-QUERY-UI-ACCEPTANCE-DESIGN-001-R1`（定向修订）、`LOG-QUERY-UI-ACCEPTANCE-DESIGN-001-R1.1`（微型一致性修订）、`LOG-QUERY-BASELINE-ADJUSTMENT-001`（功能开放控制与交互基线定向修订，待用户复审） |
-| 依据需求 | `docs/features/log-query/REQUIREMENTS.md`（`DRAFT_PENDING_USER_REVIEW / IN_PROGRESS`） |
-| 关联契约 | `docs/features/log-query/API.md`（`DRAFT_PENDING_USER_REVIEW / IN_PROGRESS`） |
-| 关联设计 | `docs/features/log-query/DESIGN.md`（`DRAFT_PENDING_USER_REVIEW / IN_PROGRESS`） |
-| 关联 UI | `docs/features/log-query/UI.md`（`DRAFT_PENDING_USER_REVIEW / IN_PROGRESS`） |
-| 最新批准日期 | `2026-08-20` |
-| 最新批准任务 | `LOG-QUERY-UI-ACCEPTANCE-APPROVAL-001` |
-| 最新批准范围 | `LOG-QUERY-UI-ACCEPTANCE-DESIGN-001 + R1 + R1.1 完整详细验收设计` |
+| 关联任务 | `LOG-QUERY-UI-ACCEPTANCE-DESIGN-001`（初版）、`LOG-QUERY-UI-ACCEPTANCE-DESIGN-001-R1`（定向修订）、`LOG-QUERY-UI-ACCEPTANCE-DESIGN-001-R1.1`（微型一致性修订）、`LOG-QUERY-BASELINE-ADJUSTMENT-001`（功能开放控制与交互基线定向修订）、`LOG-QUERY-BASELINE-ADJUSTMENT-APPROVAL-001`（正式批准收口） |
+| 依据需求 | `docs/features/log-query/REQUIREMENTS.md`（`APPROVED / IN_PROGRESS`） |
+| 关联契约 | `docs/features/log-query/API.md`（`APPROVED / IN_PROGRESS`） |
+| 关联设计 | `docs/features/log-query/DESIGN.md`（`APPROVED / IN_PROGRESS`） |
+| 关联 UI | `docs/features/log-query/UI.md`（`APPROVED / IN_PROGRESS`） |
+| 最新批准日期 | `2026-08-21` |
+| 最新批准任务 | `LOG-QUERY-BASELINE-ADJUSTMENT-APPROVAL-001` |
+| 最新批准范围 | `LOG-QUERY-BASELINE-ADJUSTMENT-001 + LOG-QUERY-BASELINE-ADJUSTMENT-001-R1` 完整调整后的当前日志查询基线 |
 
 修订记录（以下各条目描述对应任务完成当时的状态，均为历史记录，不代表当前文档状态）：
 
@@ -30,8 +30,9 @@
 - `LOG-QUERY-UI-ACCEPTANCE-APPROVAL-001`（2026-08-20）：用户已最终人工复审并批准初版、R1、R1.1 形成的完整详细验收设计链，执行正式批准收口。本文档状态由 `DRAFT_PENDING_USER_REVIEW` 转为 `APPROVED`，实现状态仍为 `NOT_STARTED`。当前文档成为日志查询功能的正式验收基线；允许据此开发测试、联调与执行开发阶段验收；文档批准不等于任何验收用例已经执行或通过，所有普通用例仍为 `NOT_RUN`，延期用例仍为 `DEFERRED_UNTIL_PHYSICAL_DESIGN`（精确集合 `LQ-AC-164 / 165 / 171 / 172 / 173`）；菜单开放阻断链继续有效，最终物理设计、生产 DDL 与生产等价性能验收完成并批准前，日志查询菜单必须保持隐藏（本条目为历史记录，其"菜单必须保持隐藏"的现行口径已被 `LOG-QUERY-BASELINE-ADJUSTMENT-001` 废止，生产启用阻断对象改为将 `CDC_LOG_QUERY_ENABLED` 置为 `true`）。
 - `LOG-QUERY-BASELINE-ADJUSTMENT-001`（2026-08-21）：依据用户对日志查询功能开放方式的最新确认及 ChatGPT 前端实现复审要求定向修订：① 菜单改为始终显示、始终可点击、路由 `/monitor/log-query` 允许直访，废止"验证完成前菜单隐藏"现行规则，功能开放改由后端 `cdc.log-query.enabled`（默认 `false`，`CDC_LOG_QUERY_ENABLED`）唯一权威控制；② 新增只读状态接口 `GET /api/log-query/status`（不读数据库，返回 `data.enabled`），新增功能未开放页与状态检测失败页及手动"重新检测"（无自动轮询/刷新/重试）（其中手动"重新检测"按钮为历史方案，已由 `LOG-QUERY-BASELINE-ADJUSTMENT-001-R1` 废止）；③ 明确原四接口不受开关保护，直接调用仍按原契约工作；④ 修订"全部"双向即时互斥、再次点击当前菜单完整重新初始化、重置清除校验错误、数据源降级展示四种情况；⑤ 授权前端测试框架引入并同步验收覆盖。本文档状态由 `APPROVED` 调整为 `DRAFT_PENDING_USER_REVIEW`，实现状态为 `IN_PROGRESS`（后端既有四接口 `IMPLEMENTED_ACCEPTED`；前端初版 `IMPLEMENTED_PENDING_REVIEW`；本次状态接口及相应交互修订尚未实现）。本条目描述修订动作，不代表本次调整已经用户复审批准。
 - `LOG-QUERY-BASELINE-ADJUSTMENT-001-R1`（2026-08-21）：依据用户复审确认做三项微型一致性修订：① 取消状态失败页"重新检测"按钮及全部现行规则，状态失败页固定文案为标题"功能状态获取失败"、说明"暂时无法获取日志查询功能状态，请刷新页面或稍后重新进入。"，无"重新检测"按钮，不自动重试/轮询/刷新，用户只能通过刷新页面、离开后重新进入、再次点击当前"日志查询"菜单重新检测状态（`LQ-AC-178 / 179` 同步改写）；② 列表查询触发事件严格为五类（首次进入且 `enabled=true` 后默认查询、某 Tab 首次打开、点击查询、上一页/下一页、重新进入且 `enabled=true` 后默认查询），同步 `LQ-AC-135`；③ 页面事实修正：真实日志查询页面初版已实现（前端提交 `17680b34` 已将原占位页替换），`LQ-AC-001` 同步明确不再显示占位内容。本文档状态保持 `DRAFT_PENDING_USER_REVIEW`，实现状态保持 `IN_PROGRESS`，所有用例状态不变；本条目描述修订动作，不代表本次调整已经用户复审批准。
+- `LOG-QUERY-BASELINE-ADJUSTMENT-APPROVAL-001`（2026-08-21）：用户已批准 `LOG-QUERY-BASELINE-ADJUSTMENT-001` 与 `LOG-QUERY-BASELINE-ADJUSTMENT-001-R1` 形成的完整调整内容，执行正式批准收口。本文档状态由 `DRAFT_PENDING_USER_REVIEW` 转为 `APPROVED`，成为日志查询功能当前正式验收基线；允许进入本次调整相关的后端、前端、自动化测试、开发库联调和验收执行；批准不代表新增状态接口和前端调整已经实现，不代表任何验收用例已经执行或通过；所有普通用例仍为 `NOT_RUN`，延期用例仍为 `DEFERRED_UNTIL_PHYSICAL_DESIGN`（精确集合 `LQ-AC-164 / 165 / 171 / 172 / 173`）；最终物理设计、生产 DDL 与生产等价性能验收继续延期；菜单始终显示，但生产阻断条件完成前 `CDC_LOG_QUERY_ENABLED` 必须保持 `false`；原四接口不判断开关的边界继续有效。
 
-本验收设计处于 `DRAFT_PENDING_USER_REVIEW`，`LOG-QUERY-BASELINE-ADJUSTMENT-001` 的功能开放控制与交互基线调整待用户复审；批准设计不等于验收通过，用例尚未执行。**重要声明**：本文档定义「应该被如何验收」的验收基线，所有用例初始状态均为 `NOT_RUN`（未执行）或 `DEFERRED_UNTIL_PHYSICAL_DESIGN`（受最终物理设计延期约束），**不伪造任何执行结果**。最终物理数据库设计（一级 RANGE 分区粒度、子分区、索引形态、生产 DDL、生产等价性能验收）仍为延期项（`LQ-AC-171 / 172 / 173` 验收）；菜单始终显示、始终可点击（`LQ-AC-001`），生产启用阻断对象为在全部阻断项通过并获批前将 `CDC_LOG_QUERY_ENABLED` 置为 `true`（`LQ-AC-173`、`LQ-DB-13~14`）；`LQ-AC-156~158` 仅为代码开发阶段可执行的"物理解耦边界检查"，不代表最终物理设计已完成。
+本验收设计状态为 `APPROVED`，`LOG-QUERY-BASELINE-ADJUSTMENT-001` 与 `-R1` 完整调整内容已经用户批准收口，本文档是日志查询功能当前正式验收基线；批准设计不等于验收通过，用例尚未执行。**重要声明**：本文档定义「应该被如何验收」的验收基线，所有用例初始状态均为 `NOT_RUN`（未执行）或 `DEFERRED_UNTIL_PHYSICAL_DESIGN`（受最终物理设计延期约束），**不伪造任何执行结果**。最终物理数据库设计（一级 RANGE 分区粒度、子分区、索引形态、生产 DDL、生产等价性能验收）仍为延期项（`LQ-AC-171 / 172 / 173` 验收）；菜单始终显示、始终可点击（`LQ-AC-001`），生产启用阻断对象为在全部阻断项通过并获批前将 `CDC_LOG_QUERY_ENABLED` 置为 `true`（`LQ-AC-173`、`LQ-DB-13~14`）；`LQ-AC-156~158` 仅为代码开发阶段可执行的"物理解耦边界检查"，不代表最终物理设计已完成。
 
 ## 2. 验收设计目的、适用范围与非目标
 
@@ -1781,7 +1782,7 @@
 
 待用户确认项：无（产品性待确认项）。
 
-> 当前文档状态为 `DRAFT_PENDING_USER_REVIEW`，`LOG-QUERY-BASELINE-ADJUSTMENT-001` 的功能开放控制与交互基线调整待用户复审，不属于"产品性待确认项"。
+> `LOG-QUERY-BASELINE-ADJUSTMENT-001` 及 `-R1` 完整调整内容已经用户批准收口，本文档状态为 `APPROVED`，不属于"产品性待确认项"。
 > 本版已删除原 `LQ-UI-P-01` 待确认项（"当前页次"与"不显示页码"的取舍）。分页条按已批准需求 `LQ-PAGE-05` 严格不显示任何页码/页次，仅保留"上一页 / 下一页"两个按钮；其余验收细节均由已批准上游规则、`UI.md` 与仓库既有规范唯一确定。
 
 ## 10. 一致性自检清单
@@ -1798,8 +1799,8 @@
 8. 首次查询失败后切回 Tab 不自动重试，仅用户点击"查询"重试（`LQ-AC-020` ↔ `UI.md` `LQ-UI-035` / §15.2）。
 9. 受支持分辨率内页面整体不出现纵向滚动条，仅表格数据区出现一条纵向滚动条（`LQ-AC-149` ↔ `UI.md` `LQ-UI-091 / 092 / 193`）。
 10. 验收用例未要求上游设计明确禁止的行为（§2.3 反向约束）。
-11. 文档无产品性待确认项（§9）；`LOG-QUERY-BASELINE-ADJUSTMENT-001` 调整处于 `DRAFT_PENDING_USER_REVIEW` 待用户复审。
-12. 本文档状态为 `DRAFT_PENDING_USER_REVIEW / IN_PROGRESS`。
+11. 文档无产品性待确认项（§9）；`LOG-QUERY-BASELINE-ADJUSTMENT-001` 及 `-R1` 完整调整内容已经用户批准收口。
+12. 本文档状态为 `APPROVED / IN_PROGRESS`。
 13. 所有验收用例初始状态为 `NOT_RUN`（含新增 `LQ-AC-174~182`）；延期用例精确为 `LQ-AC-164 / 165 / 171 / 172 / 173`，均为 `DEFERRED_UNTIL_PHYSICAL_DESIGN`；`LQ-AC-156~158` 为当前可执行的物理解耦边界检查，状态 `NOT_RUN`；`LQ-AC-155` 保持 `NOT_RUN`；未伪造执行结果。
 14. `LQ-AC-156~158` 只验证当前代码/文档未提前绑定最终 RANGE 粒度、子分区、索引或生产 DDL，不再放入 B 层完成项；未来物理方案落地由延期用例 `LQ-AC-171`（物理设计批准）、`LQ-AC-172`（生产 DDL 离线执行）验收；生产启用（将 `CDC_LOG_QUERY_ENABLED` 置为 `true`）以 `LQ-AC-171 / 172 / 164 / 165` 全部 PASS 且 `LQ-AC-173` 最终批准为前提。
 15. 追踪矩阵无悬空引用、无重复 ID；上游关键规则均有验收落点；新增 `LQ-OPEN-01~13`、`LQ-API-114~119`、`LQ-UI-006~009 / 019 / 127~128 / 219`、`LQ-DESIGN-125~129 / 170~182` 均映射到 `LQ-AC-174~182`。
@@ -1809,7 +1810,7 @@
 提交前已逐项核对：
 
 1. 仅 `LOG-QUERY-BASELINE-ADJUSTMENT-001` 授权的五份目标文档（REQUIREMENTS / API / DESIGN / UI / ACCEPTANCE）发生变化且非空；无代码、配置、测试或实现报告改动。
-2. 五份目标文档状态均为 `DRAFT_PENDING_USER_REVIEW / IN_PROGRESS`，本次调整待用户复审。
+2. 五份目标文档状态均为 `APPROVED / IN_PROGRESS`，本次调整已经用户批准收口，可进入本次调整相关的代码修订、自动化测试和开发库验证。
 3. 未修改代码、配置、测试和实现报告；未操作数据库、ZooKeeper、构建或测试。
 4. UI 规则编号唯一（`LQ-UI-001` 起），无悬空引用。
 5. 验收用例编号唯一（`LQ-AC-001` 起），无悬空引用。
