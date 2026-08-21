@@ -35,6 +35,7 @@ import java.time.Duration;
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
 import java.time.format.DateTimeParseException;
+import java.time.format.ResolverStyle;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.Comparator;
@@ -56,8 +57,11 @@ public class LogQueryServiceImpl implements LogQueryService {
 
     private static final Logger log = LoggerFactory.getLogger(LogQueryServiceImpl.class);
 
+    // 严格自然日期校验（R1-01 / LQ-API-32）：uuuu + ResolverStyle.STRICT，
+    // 拒绝 2026-02-30、非闰年 2 月 29、4 月 31、13 月、24 时、60 分/秒等不存在日期；
+    // 对外格式化输出仍为 yyyy-MM-dd HH:mm:ss 视觉契约。
     private static final DateTimeFormatter TIME_FORMAT =
-            DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss");
+            DateTimeFormatter.ofPattern("uuuu-MM-dd HH:mm:ss").withResolverStyle(ResolverStyle.STRICT);
     private static final Duration MAX_SPAN = Duration.ofHours(7 * 24);
     private static final int PAGE_SIZE = 100;
     private static final int FETCH_LIMIT = 101;
@@ -382,9 +386,13 @@ public class LogQueryServiceImpl implements LogQueryService {
         return trimmed.isEmpty() ? null : trimmed;
     }
 
+    // 稳定排序（R1-04）：主排序 DATA_SOURCE_ORG（NULL 放最后），
+    // 同名或空名称时以 DATA_SOURCE_ID 升序稳定第二排序，保证跨请求顺序一致。
     private static Comparator<DataSourceOptionVO> orgComparator() {
         return Comparator.comparing(DataSourceOptionVO::getOrg,
-                Comparator.nullsLast(Comparator.naturalOrder()));
+                Comparator.nullsLast(Comparator.naturalOrder()))
+                .thenComparing(DataSourceOptionVO::getId,
+                        Comparator.nullsLast(Comparator.naturalOrder()));
     }
 
     // ---- 超时与数据库访问失败映射（LQ-API-89 / 90） ----

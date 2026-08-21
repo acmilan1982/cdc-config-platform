@@ -169,6 +169,120 @@ class LogCursorCodecTest {
                 () -> codec.decodeAndVerify(cursor, LOG_TYPE, other));
     }
 
+    // ============ R1-02：游标 CDC_LOG_ID 严格校验 ============
+
+    @Test
+    void boundary_scientificNotation_shouldThrowInvalid() throws Exception {
+        LogCursorCodec codec = new LogCursorCodec(SECRET);
+        String cursor = buildCursor(validMap("1e3"), SECRET);
+        assertThrows(LogCursorInvalidException.class,
+                () -> codec.decodeAndVerify(cursor, LOG_TYPE, FINGERPRINT));
+    }
+
+    @Test
+    void boundary_negative_shouldThrowInvalid() throws Exception {
+        LogCursorCodec codec = new LogCursorCodec(SECRET);
+        String cursor = buildCursor(validMap("-1"), SECRET);
+        assertThrows(LogCursorInvalidException.class,
+                () -> codec.decodeAndVerify(cursor, LOG_TYPE, FINGERPRINT));
+    }
+
+    @Test
+    void boundary_decimal_shouldThrowInvalid() throws Exception {
+        LogCursorCodec codec = new LogCursorCodec(SECRET);
+        String cursor = buildCursor(validMap("1.0"), SECRET);
+        assertThrows(LogCursorInvalidException.class,
+                () -> codec.decodeAndVerify(cursor, LOG_TYPE, FINGERPRINT));
+    }
+
+    @Test
+    void boundary_over19Digits_shouldThrowInvalid() throws Exception {
+        LogCursorCodec codec = new LogCursorCodec(SECRET);
+        String cursor = buildCursor(validMap("123456789012345678901"), SECRET);
+        assertThrows(LogCursorInvalidException.class,
+                () -> codec.decodeAndVerify(cursor, LOG_TYPE, FINGERPRINT));
+    }
+
+    @Test
+    void boundary_missingId_shouldThrowInvalid() throws Exception {
+        LogCursorCodec codec = new LogCursorCodec(SECRET);
+        Map<String, Object> map = validMap("1");
+        map.remove("id");
+        String cursor = buildCursor(map, SECRET);
+        assertThrows(LogCursorInvalidException.class,
+                () -> codec.decodeAndVerify(cursor, LOG_TYPE, FINGERPRINT));
+    }
+
+    @Test
+    void boundary_idAsJsonNumber_shouldThrowInvalid() throws Exception {
+        LogCursorCodec codec = new LogCursorCodec(SECRET);
+        Map<String, Object> map = validMap("1");
+        map.put("id", new BigDecimal("123"));
+        String cursor = buildCursor(map, SECRET);
+        assertThrows(LogCursorInvalidException.class,
+                () -> codec.decodeAndVerify(cursor, LOG_TYPE, FINGERPRINT));
+    }
+
+    @Test
+    void boundary_maxNUMBER190_shouldRoundTrip() {
+        LogCursorCodec codec = new LogCursorCodec(SECRET);
+        BigDecimal max = new BigDecimal("9999999999999999999");
+        String cursor = codec.encode(LOG_TYPE, FINGERPRINT, TARGET_TIME, max);
+        LogCursorBoundary b = codec.decodeAndVerify(cursor, LOG_TYPE, FINGERPRINT);
+        assertEquals(max, b.getCdcLogId());
+        assertEquals(0, b.getCdcLogId().scale());
+    }
+
+    @Test
+    void encode_rejectsNullId() {
+        LogCursorCodec codec = new LogCursorCodec(SECRET);
+        assertThrows(IllegalArgumentException.class,
+                () -> codec.encode(LOG_TYPE, FINGERPRINT, TARGET_TIME, null));
+    }
+
+    @Test
+    void encode_rejectsNonZeroScaleId() {
+        LogCursorCodec codec = new LogCursorCodec(SECRET);
+        assertThrows(IllegalArgumentException.class,
+                () -> codec.encode(LOG_TYPE, FINGERPRINT, TARGET_TIME, new BigDecimal("1.0")));
+    }
+
+    @Test
+    void encode_rejectsOutOfRangeId() {
+        LogCursorCodec codec = new LogCursorCodec(SECRET);
+        assertThrows(IllegalArgumentException.class,
+                () -> codec.encode(LOG_TYPE, FINGERPRINT, TARGET_TIME, new BigDecimal("10000000000000000000")));
+    }
+
+    // ============ R1-03：验证顺序（LQ-DESIGN-63） ============
+
+    @Test
+    void base64Invalid_butSignatureFormatValid_shouldThrowInvalid() {
+        LogCursorCodec codec = new LogCursorCodec(SECRET);
+        // payload 含非法 base64url 字符，签名文本为 64 位合法 hex；应在 base64 解码步拒绝
+        String hex = repeat('a', 64);
+        assertThrows(LogCursorInvalidException.class,
+                () -> codec.decodeAndVerify("a%b&c." + hex, LOG_TYPE, FINGERPRINT));
+    }
+
+    @Test
+    void base64Valid_butSignatureWrong_shouldThrowInvalid() throws Exception {
+        LogCursorCodec codec = new LogCursorCodec(SECRET);
+        String payload = Base64.getUrlEncoder().withoutPadding()
+                .encodeToString("{\"x\":1}".getBytes(StandardCharsets.UTF_8));
+        String wrongSig = repeat('f', 64);
+        assertThrows(LogCursorInvalidException.class,
+                () -> codec.decodeAndVerify(payload + "." + wrongSig, LOG_TYPE, FINGERPRINT));
+    }
+
+    @Test
+    void signatureCorrect_butJsonInvalid_shouldThrowInvalid() throws Exception {
+        LogCursorCodec codec = new LogCursorCodec(SECRET);
+        String cursor = buildCursorFromRaw("not-json-{{{", SECRET);
+        assertThrows(LogCursorInvalidException.class,
+                () -> codec.decodeAndVerify(cursor, LOG_TYPE, FINGERPRINT));
+    }
+
     // ============ 密钥语义（LQ-API-52） ============
 
     @Test
@@ -199,10 +313,26 @@ class LogCursorCodecTest {
 
     // ============ helpers ============
 
+    private static Map<String, Object> validMap(String id) {
+        Map<String, Object> map = new LinkedHashMap<>();
+        map.put("v", 1);
+        map.put("lt", LOG_TYPE);
+        map.put("fp", FINGERPRINT);
+        map.put("t", "2026-08-20 10:00:00");
+        map.put("id", id);
+        return map;
+    }
+
     private static String buildCursor(Map<String, Object> map, String secret) throws Exception {
         String json = OBJECT_MAPPER.writeValueAsString(map);
         String payload = Base64.getUrlEncoder().withoutPadding()
                 .encodeToString(json.getBytes(StandardCharsets.UTF_8));
+        return payload + "." + hmacHex(payload, secret);
+    }
+
+    private static String buildCursorFromRaw(String rawJson, String secret) throws Exception {
+        String payload = Base64.getUrlEncoder().withoutPadding()
+                .encodeToString(rawJson.getBytes(StandardCharsets.UTF_8));
         return payload + "." + hmacHex(payload, secret);
     }
 

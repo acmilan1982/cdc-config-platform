@@ -131,7 +131,7 @@ git rev-list --left-right --count HEAD...origin/develop
 
 - 无参数；执行一次 `CDC_DATA_SOURCE` 四列全表只读（`DATA_SOURCE_ID`、`DATA_SOURCE_ORG`、`DATA_SOURCE_CATEGORY`、`FG_ACTIVE`）。
 - 候选过滤：`FG_ACTIVE = '1'`；类别 `trim()` 后 `equalsIgnoreCase` 识别 `source`/`target`。
-- 名称为空 → 降级为已批准「未定义名称」；按 ID 排序输出 `sourceList`、`targetList`。
+- 候选排序（R1-04）：主排序 `DATA_SOURCE_ORG`（NULL 放最后），同名或空名称时以 `DATA_SOURCE_ID` 升序作为稳定第二排序，保证跨请求顺序一致；名称为空 → 降级为已批准「未定义名称」（降级规则见 §6.3）。
 
 ### 5.2 `POST /api/log-query/logs/search`
 
@@ -175,7 +175,12 @@ git rev-list --left-right --count HEAD...origin/develop
 ### 6.3 数据源映射
 
 - 每个列表查询请求与每个候选项请求各自执行一次 `CDC_DATA_SOURCE` 四列全表读取，本次请求内构建映射；无跨请求缓存、无逐行查询、无 N+1；列表 SQL 不 JOIN `CDC_DATA_SOURCE`。
-- 候选仅 `FG_ACTIVE='1'`；类别 trim + equalsIgnoreCase；NULL ID 省略、非 NULL 无名称降级「未定义名称」。
+- 候选仅 `FG_ACTIVE='1'`；类别 trim + equalsIgnoreCase；候选排序见 §5.1（R1-04 稳定排序）。
+- 名称映射降级规则（LQ-API-64 / LQ-DESIGN-81，R1-06 勘误）：
+  - 原始 `DATA_SOURCE_ID` 为 NULL → ID 与名称均省略；
+  - 在名称映射中找到记录且 `DATA_SOURCE_ORG` 有值 → 显示机构名称；
+  - 找到记录但名称为空 → 降级为「未定义名称」；
+  - 找不到记录 → 回退显示原始 ID。
 
 ### 6.4 大字段隔离
 
@@ -341,6 +346,45 @@ git status --short
 
 - **ChatGPT 从 GitHub 复审本次后端实现**（依据人工指示：完成并推送后停止，等待 ChatGPT 从 GitHub 复审，不得自行进入前端实现）。
 - 复审通过后，再进入前端实现或定向修订；本任务不包含前端、菜单开放、最终物理分区/索引设计与生产 DDL。
+
+---
+
+## R1. ChatGPT 复审与 R1 定向修订记录（LOG-QUERY-BACKEND-IMPLEMENTATION-001-R1）
+
+本段为 ChatGPT 对前序已推送后端实现进行 GitHub 复审后的定向修订记录，保留前序实现与测试历史，不重写实现、不进入前端、不改变已批准业务/API/UI 语义。
+
+- 任务编号：`LOG-QUERY-BACKEND-IMPLEMENTATION-001-R1`
+- 授权基线提交：`afdfc889fb3e9b4c03056febcd321488e7c45765`（前序 `feat(log-query): implement backend query api`）
+- R1 提交信息：`fix(log-query): harden backend validation`（提交 ID 与推送状态见最终聊天报告机器可读结果块）
+
+### R1.1 六项修订的实际位置与结果
+
+| 修订 | 代码位置 | 行为变更 | 测试 |
+|---|---|---|---|
+| R1-01 严格自然日期校验 | `service/impl/LogQueryServiceImpl.java` `TIME_FORMAT` | `yyyy-MM-dd HH:mm:ss`（SMART）→ `uuuu-MM-dd HH:mm:ss` + `ResolverStyle.STRICT`；`2026-02-30`、非闰年 `02-29`、`04-31`、`13-01`、`24:00`、`60` 分/秒等不存在日期 → `TIME_RANGE_REQUIRED=40010`；合法闰日通过；时间顺序、`endExclusive=end+1s`、7 天公式不变；对外字符串格式仍为 `yyyy-MM-dd HH:mm:ss` | `LogQueryServiceImplTest` 新增 R1-01 用例 |
+| R1-02 游标 CDC_LOG_ID 严格校验 | `cursor/LogCursorCodec.java` `encode()`、`requireCdcLogId()`、`decodeAndVerify()` | 解码后 `id` 必须为 JSON 字符串且严格 `[0-9]{1,19}`、scale=0、`≤9999999999999999999`；`1e3`/`-1`/`1.0`/空/20 位/JSON number/缺失 → `CURSOR_INVALID=40015`；`encode()` 拒绝 null、非整数 scale、超范围 BigDecimal；合法 19 位大于 `Long.MAX_VALUE` 的 ID 正常往返 | `LogCursorCodecTest` 新增 R1-02 用例 |
+| R1-03 对齐游标验证顺序 | `cursor/LogCursorCodec.java` `decodeAndVerify()` | 按批准 `LQ-DESIGN-63`/`LQ-API-54`：①按最后 `.` 拆解 → ②base64url 解码确认编码合法 → ③重算 HMAC 并以 `MessageDigest.isEqual` 常量时间比较（HMAC 覆盖原始 base64url 文本）→ ④验签通过后才解析 JSON → ⑤`v==1` → ⑥logType → ⑦条件指纹 → ⑧校验并构造排序边界；格式/base64/签名/版本/边界 → 40015，logType/指纹 → 40016 | `LogCursorCodecTest` 新增 R1-03 用例（base64 非法但签名格式合法 / base64 合法但签名错误 / 签名正确但 JSON 非法） |
+| R1-04 候选项稳定排序 | `service/impl/LogQueryServiceImpl.java` `orgComparator()` | 主排序 `DATA_SOURCE_ORG`（NULL 放最后），同名/空名称时以 `DATA_SOURCE_ID` 升序稳定第二排序；仍为一次四列全表读取后内存排序，不在 SQL 增加过滤/第二套候选 | `LogQueryServiceImplTest` 新增 R1-04 用例（同名、多 NULL 名称、输入行顺序改变输出一致） |
+| R1-05 密钥配置行为测试 | 新增 `config/LogQueryConfigTest.java`（5 个用例） | 验证外部 Spring 属性绑定 `cdc.log-query.cursor-secret`；非空可创建 codec 并编解码；空/空白不能创建可用 codec 且无默认密钥；同配置值新 codec 可验证旧游标；`@Lazy` 下仅扫描/注入代理不因缺失密钥失败；真正调用时缺失密钥 fail-closed（不生成无签名/固定默认签名游标）。未发现既有实现错误，未新增错误码、未改 API | `LogQueryConfigTest` 5/5 通过 |
+| R1-06 本报告勘误 | 本报告 §5.1、§6.3、§R1 | §5.1 修正为「主排序 `DATA_SOURCE_ORG`，同名/空名称以 `DATA_SOURCE_ID` 稳定排序」；§6.3 名称映射降级规则写准确；新增本 R1 记录 | — |
+
+### R1.2 R1 测试与构建结果
+
+- logquery 相关测试：**124/124 通过**（原 99 + R1 新增 25：Service +7、Codec +13、Config 新增文件 5）。
+- 完整后端测试套件：**564 个，3 失败 + 1 错误**，4 个全部为前序 §11 已证明、依赖开发库实时数据的既有无关失败，与 R1 修订无关（`OracleDateMappingTest.oracleDateToLocalDateTime_viaJdbcTemplate_shouldMapCorrectly:43`、`JobFailureServiceTest.latestFaultShouldHaveCorrectRestartCount:125`、`JobFailureServiceTest.failureDetail_eventNotInFaultProcess_shouldThrow:215`、`JobFailureServiceTest.failureDetailByEvent_shouldReturnContent:200`），失败集合/数量/原因与前序一致。
+- 构建：`mvn clean package -DskipTests` **BUILD SUCCESS**。
+- `git diff --check`：通过。
+- 部署/联调前必须配置环境变量 `CDC_LOG_QUERY_CURSOR_SECRET`，本任务未记录具体值，未把真实密钥写入源码、正式配置、报告或日志（测试仅使用测试专用值）。
+
+### R1.3 R1 未改变的实现
+
+四 API 方法与路径、列表 POST 请求体（无 pageSize）、`error/correct` 固定表枚举、必填时间范围/半开区间/7 天公式、数据源每请求一次四列全表读取、固定 100/读取 101/无 COUNT/OFFSET/页码、`TARGET_TIME DESC, CDC_LOG_ID DESC`、BigDecimal 数值绑定、三类大字段隔离、25 秒超时与不重试、错误码 40010~40017/40410/50020~50021、HMAC-SHA256/规范化 JSON 指纹/无服务端游标会话、菜单隐藏、最终分区/子分区/索引/生产 DDL 继续延期，均保持不变。
+
+### R1.4 R1 声明
+
+- 五份已批准基线正文与状态未修改；前端与菜单未修改；无数据库读写与 DDL。
+- 本 R1 修订不代表日志查询功能整体验收通过；菜单仍保持隐藏，最终物理设计仍延期。
+- 下一步：等待 ChatGPT 从 GitHub 复审 R1，不得进入前端开发。
 
 ---
 

@@ -129,6 +129,54 @@ class LogQueryServiceImplTest {
         assertEquals(LogQueryErrorCode.TIME_SPAN_EXCEEDED, ex.getCode());
     }
 
+    // ============ R1-01：严格自然日期（LQ-API-32） ============
+
+    @Test
+    void searchLogs_feb30_shouldThrowTimeRangeRequired() {
+        LogListQuery q = query();
+        q.setStartTime("2026-02-30 12:00:00");
+        BusinessException ex = assertThrows(BusinessException.class, () -> service.searchLogs(q));
+        assertEquals(LogQueryErrorCode.TIME_RANGE_REQUIRED, ex.getCode());
+    }
+
+    @Test
+    void searchLogs_nonLeapFeb29_shouldThrowTimeRangeRequired() {
+        LogListQuery q = query();
+        q.setStartTime("2025-02-29 12:00:00");
+        BusinessException ex = assertThrows(BusinessException.class, () -> service.searchLogs(q));
+        assertEquals(LogQueryErrorCode.TIME_RANGE_REQUIRED, ex.getCode());
+    }
+
+    @Test
+    void searchLogs_otherImpossibleDates_shouldThrowTimeRangeRequired() {
+        LogListQuery q = query();
+        q.setStartTime("2026-04-31 00:00:00");
+        assertThrows(BusinessException.class, () -> service.searchLogs(q));
+        q.setStartTime("2026-13-01 00:00:00");
+        assertThrows(BusinessException.class, () -> service.searchLogs(q));
+        q.setStartTime("2026-08-20 24:00:00");
+        assertThrows(BusinessException.class, () -> service.searchLogs(q));
+        q.setStartTime("2026-08-20 10:60:00");
+        assertThrows(BusinessException.class, () -> service.searchLogs(q));
+        q.setStartTime("2026-08-20 10:00:60");
+        assertThrows(BusinessException.class, () -> service.searchLogs(q));
+    }
+
+    @Test
+    void searchLogs_validLeapDay_shouldPass() {
+        when(mapper.selectAllDataSources()).thenReturn(defaultDataSourceRows());
+        when(mapper.selectLogList(any(), any(), any(), any(), any(), any(), any(), any(), any()))
+                .thenReturn(Collections.emptyList());
+
+        LogListQuery q = query();
+        q.setStartTime("2024-02-29 00:00:00");
+        q.setEndTime("2024-02-29 23:59:59");
+
+        LogListResponse r = service.searchLogs(q);
+        assertNotNull(r);
+        assertFalse(r.isHasNext());
+    }
+
     // ============ 日志类型（§12-6） ============
 
     @Test
@@ -616,6 +664,64 @@ class LogQueryServiceImplTest {
         DataSourceOptionsVO vo = service.getDataSourceOptions();
         assertEquals(1, vo.getSourceList().size());
         assertNull(vo.getSourceList().get(0).getOrg());
+    }
+
+    // ============ R1-04：候选同名 / 空名称稳定排序 ============
+
+    @Test
+    void getOptions_sameOrg_tieBreakByIdAscending() {
+        List<DataSourceRow> rows = new ArrayList<>();
+        rows.add(row("DS_B", "共享库", "SOURCE", "1"));
+        rows.add(row("DS_A", "共享库", "SOURCE", "1"));
+        when(mapper.selectAllDataSources()).thenReturn(rows);
+
+        DataSourceOptionsVO vo = service.getDataSourceOptions();
+        assertEquals(2, vo.getSourceList().size());
+        assertEquals("DS_A", vo.getSourceList().get(0).getId());
+        assertEquals("DS_B", vo.getSourceList().get(1).getId());
+    }
+
+    @Test
+    void getOptions_nullOrgs_tieBreakByIdAscending() {
+        List<DataSourceRow> rows = new ArrayList<>();
+        rows.add(row("DS_B", null, "SOURCE", "1"));
+        rows.add(row("DS_A", null, "SOURCE", "1"));
+        when(mapper.selectAllDataSources()).thenReturn(rows);
+
+        DataSourceOptionsVO vo = service.getDataSourceOptions();
+        assertEquals(2, vo.getSourceList().size());
+        assertEquals("DS_A", vo.getSourceList().get(0).getId());
+        assertEquals("DS_B", vo.getSourceList().get(1).getId());
+    }
+
+    @Test
+    void getOptions_inputRowOrderChange_outputConsistent() {
+        List<DataSourceRow> order1 = new ArrayList<>();
+        order1.add(row("DS_B", "共享库", "SOURCE", "1"));
+        order1.add(row("DS_C", null, "SOURCE", "1"));
+        order1.add(row("DS_A", "共享库", "SOURCE", "1"));
+
+        List<DataSourceRow> order2 = new ArrayList<>();
+        order2.add(row("DS_A", "共享库", "SOURCE", "1"));
+        order2.add(row("DS_B", "共享库", "SOURCE", "1"));
+        order2.add(row("DS_C", null, "SOURCE", "1"));
+
+        when(mapper.selectAllDataSources()).thenReturn(order1);
+        DataSourceOptionsVO vo1 = service.getDataSourceOptions();
+        when(mapper.selectAllDataSources()).thenReturn(order2);
+        DataSourceOptionsVO vo2 = service.getDataSourceOptions();
+
+        List<String> ids1 = new ArrayList<>();
+        for (DataSourceOptionVO v : vo1.getSourceList()) {
+            ids1.add(v.getId());
+        }
+        List<String> ids2 = new ArrayList<>();
+        for (DataSourceOptionVO v : vo2.getSourceList()) {
+            ids2.add(v.getId());
+        }
+        // 输入行顺序改变时输出仍一致：同名按 ID 升序，空名称放最后
+        assertEquals(ids2, ids1);
+        assertEquals(Arrays.asList("DS_A", "DS_B", "DS_C"), ids1);
     }
 
     // ============ helpers ============
