@@ -1,0 +1,100 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<!--
+  日志查询 Mapper（LQ-DESIGN-04 / DESIGN §6）。
+  所有值条件使用绑定参数；${tableName} 只接收封闭枚举 LogTypeEnum 产生的固定常量（LQ-API-90-L）。
+  CDC_LOG_ID 相关绑定使用 BigDecimal（scale=0），不使用 TO_CHAR/CAST 或隐式转换（LQ-API-97/98）。
+  每条语句超时 25 秒（LQ-API-92）。
+-->
+<mapper namespace="com.bsoft.cdcconfig.logquery.mapper.LogQueryMapper">
+
+    <select id="selectLogList"
+            resultType="com.bsoft.cdcconfig.logquery.mapper.LogListRow"
+            timeout="25">
+        SELECT
+            CDC_LOG_ID,
+            SOURCE_DATA_SOURCE_ID,
+            SOURCE_TABLE_NAME,
+            TARGET_DATA_SOURCE_ID,
+            TARGET_TABLE_NAME,
+            INSTRUCTION_TYPE,
+            SUBSTR(LOG_DETAIL, 1, 300) AS LOG_DETAIL_SUMMARY,
+            CASE WHEN LENGTH(LOG_DETAIL) &gt; 0 THEN 1 ELSE 0 END AS HAS_LOG_DETAIL,
+            CASE WHEN LENGTH(RAW_MESSAGE) &gt; 0 THEN 1 ELSE 0 END AS HAS_RAW_MESSAGE,
+            OFFSET,
+            SOURCE_TIME,
+            KAFKA_ENQUEUE_TIME,
+            TARGET_TIME,
+            INSERT_TIME
+        FROM ${tableName}
+        WHERE TARGET_TIME &gt;= #{startTime}
+          AND TARGET_TIME &lt;  #{endExclusive}
+        <if test="sourceDataSourceIds != null and !sourceDataSourceIds.isEmpty()">
+          AND SOURCE_DATA_SOURCE_ID IN
+          <foreach collection="sourceDataSourceIds" item="id" open="(" separator="," close=")">#{id}</foreach>
+        </if>
+        <if test="sourceTableName != null and sourceTableName != ''">
+          AND SOURCE_TABLE_NAME = #{sourceTableName}
+        </if>
+        <if test="targetDataSourceIds != null and !targetDataSourceIds.isEmpty()">
+          AND TARGET_DATA_SOURCE_ID IN
+          <foreach collection="targetDataSourceIds" item="id" open="(" separator="," close=")">#{id}</foreach>
+        </if>
+        <if test="targetTableName != null and targetTableName != ''">
+          AND TARGET_TABLE_NAME = #{targetTableName}
+        </if>
+        <if test="cursorTargetTime != null">
+          AND (
+                 TARGET_TIME &lt;  #{cursorTargetTime}
+              OR (TARGET_TIME = #{cursorTargetTime} AND CDC_LOG_ID &lt; #{cursorCdcLogId})
+          )
+        </if>
+        ORDER BY TARGET_TIME DESC, CDC_LOG_ID DESC
+        FETCH FIRST 101 ROWS ONLY
+    </select>
+
+    <select id="selectAllDataSources"
+            resultType="com.bsoft.cdcconfig.logquery.mapper.DataSourceRow"
+            timeout="25">
+        SELECT
+            DATA_SOURCE_ID,
+            DATA_SOURCE_ORG,
+            DATA_SOURCE_CATEGORY,
+            FG_ACTIVE
+        FROM CDC_DATA_SOURCE
+    </select>
+
+    <select id="selectLogDetail"
+            resultType="com.bsoft.cdcconfig.logquery.mapper.LogDetailRow"
+            timeout="25">
+        SELECT
+            CDC_LOG_ID,
+            SOURCE_DATA_SOURCE_ID,
+            SOURCE_TABLE_NAME,
+            TARGET_DATA_SOURCE_ID,
+            TARGET_TABLE_NAME,
+            INSTRUCTION_TYPE,
+            RESULT_CODE,
+            OFFSET,
+            SOURCE_TIME,
+            KAFKA_ENQUEUE_TIME,
+            TARGET_TIME,
+            INSERT_TIME,
+            LOG_DETAIL
+        FROM ${tableName}
+        WHERE CDC_LOG_ID = #{cdcLogId}
+        FETCH FIRST 1 ROWS ONLY
+    </select>
+
+    <select id="selectRawMessage"
+            resultType="com.bsoft.cdcconfig.logquery.mapper.RawMessageRow"
+            timeout="25">
+        SELECT
+            CDC_LOG_ID,
+            RAW_MESSAGE
+        FROM ${tableName}
+        WHERE CDC_LOG_ID = #{cdcLogId}
+        FETCH FIRST 1 ROWS ONLY
+    </select>
+
+</mapper>

@@ -20,6 +20,8 @@ cdc:
     root-path: ${CDC_ZK_ROOT:/bsoft-cdc}
     session-timeout-ms: 30000
     connection-timeout-ms: 15000
+  log-query:
+    cursor-secret: ${CDC_LOG_QUERY_CURSOR_SECRET:}
 
 logging:
   level:
