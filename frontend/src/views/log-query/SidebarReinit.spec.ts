@@ -1,6 +1,7 @@
 import { describe, it, expect, vi, beforeEach } from 'vitest'
 import { mount, flushPromises, type VueWrapper } from '@vue/test-utils'
 import ElementPlus from 'element-plus'
+import { createPinia } from 'pinia'
 import { createRouter, createMemoryHistory, type Router } from 'vue-router'
 
 vi.mock('@/views/log-query/reinitBus', () => ({
@@ -27,7 +28,7 @@ async function mountSidebar(initialPath: string) {
   router.push(initialPath)
   await router.isReady()
   const wrapper = mount(Sidebar, {
-    global: { plugins: [router, ElementPlus] },
+    global: { plugins: [createPinia(), router, ElementPlus] },
   })
   await flushPromises()
   return { wrapper, router }

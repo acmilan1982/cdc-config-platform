@@ -622,14 +622,19 @@ R1 §7 的 18 项前端覆盖要求全部落实：真实多选组件事件顺序
 
 ### 18.7 干净提交验证
 
-验证方法（提交后立即在 detached 临时 worktree 执行）：
+验证方法（提交后在 detached 临时 worktree 检出结果提交执行）：
 
-1. 在主工作区精确暂存本任务 9 个文件，核对暂存 diff 不含用户既有修改；
-2. 以固定提交信息 `fix(log-query): correct frontend interaction semantics` 创建提交；
+1. 在主工作区精确暂存本任务文件，核对暂存 diff 不含用户既有修改；
+2. 以固定提交信息 `fix(log-query): correct frontend interaction semantics` 创建主提交；
 3. 在 detached 临时 worktree 检出该提交，仅对提交内容重新执行前端测试与构建、后端日志查询测试与打包；
-4. 记录结果；删除临时 worktree 不影响用户工作区。
+4. 记录结果；删除临时 worktree 不影响主工作区。
 
-因提交内容与已通过验证的主工作区代码完全一致，干净环境验证结果与主工作区确定性一致：
+首次干净验证发现一处测试缺陷并已修复：
+
+- **缺陷**：`SidebarReinit.spec.ts` 初版挂载 `Sidebar.vue` 时未初始化 Pinia。提交中的 `Sidebar.vue` 使用 `useAppStore()`（`@/stores/app`），干净环境检出提交内容后该测试 4 项失败（`getActivePinia() was called but there was no active Pinia`）。主工作区因存在用户未提交的 `Sidebar.vue` 变体（其已去除 store 引用）而通过，掩盖了该缺陷。
+- **修复**：测试 `mount` 的 `global.plugins` 增加 `createPinia()`。`app` store 无副作用（仅三个 ref），该插件对"不含 store 的用户工作区版本"无影响、对"含 store 的提交版本"为必需。修复后主工作区与干净提交内容均为 `33/33` 通过。
+
+修复后重新检出提交内容验证结果：
 
 - 前端：`Test Files 7 passed (7)`、`Tests 33 passed (33)`；`npm run build`（`vue-tsc --noEmit && vite build`）成功。
 - 后端日志查询：`Tests run: 135, Failures: 0, Errors: 0, Skipped: 0`，`BUILD SUCCESS`；`mvn clean package -DskipTests` → `BUILD SUCCESS`。
