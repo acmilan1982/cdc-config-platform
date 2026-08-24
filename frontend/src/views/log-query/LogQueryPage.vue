@@ -52,8 +52,9 @@
           :target-options="targetList"
           :options-error="optionsError"
           :options-loading="optionsLoading"
-          @query="errorTab.query"
-          @reset="errorTab.reset"
+          :initializing="initializing"
+          @query="onQuery('error')"
+          @reset="onReset('error')"
           @retry-options="loadOptions"
         />
         <LogQueryTable
@@ -70,8 +71,8 @@
           :loading="errorTab.loading"
           :has-prev="errorTab.requestCursorStack.length > 1"
           :has-next="errorTab.hasNext"
-          @prev="errorTab.prevPage"
-          @next="errorTab.nextPage"
+          @prev="onPrev('error')"
+          @next="onNext('error')"
         />
       </section>
 
@@ -84,8 +85,9 @@
           :target-options="targetList"
           :options-error="optionsError"
           :options-loading="optionsLoading"
-          @query="correctTab.query"
-          @reset="correctTab.reset"
+          :initializing="initializing"
+          @query="onQuery('correct')"
+          @reset="onReset('correct')"
           @retry-options="loadOptions"
         />
         <LogQueryTable
@@ -102,8 +104,8 @@
           :loading="correctTab.loading"
           :has-prev="correctTab.requestCursorStack.length > 1"
           :has-next="correctTab.hasNext"
-          @prev="correctTab.prevPage"
-          @next="correctTab.nextPage"
+          @prev="onPrev('correct')"
+          @next="onNext('correct')"
         />
       </section>
 
@@ -163,6 +165,14 @@ const targetList = ref<DataSourceOptionVO[]>([])
 const optionsLoading = ref(false)
 const optionsError = ref('')
 
+/**
+ * 初始化锁定（R1.1）：enabled=true 到默认错误日志查询结束期间为 true。
+ * 期间禁止一切会改变查询状态的用户操作（编辑条件、查询、重置、切换 Tab、翻页、打开弹窗），
+ * 避免"用户主动查询先返回、初始化默认查询后返回并覆盖用户结果"的竞争。
+ * 默认查询成功/业务失败/网络失败/超时后均解除锁定；只有当前页面代次可以结束锁定。
+ */
+const initializing = ref(false)
+
 /** 状态接口请求也纳入页面代次/令牌失效管理，重新进入时旧状态响应不得覆盖新状态（LQ-UI-219） */
 async function loadStatus() {
   const token = ++statusToken
@@ -188,21 +198,55 @@ async function loadStatus() {
 }
 
 /**
- * enabled=true 后初始化顺序（LQ-AC-177 / LQ-DESIGN-177 / R1-03）：
- * 重置两 Tab → 按顺序等待本次页面代次的数据源候选加载结束 →
- * 若页面代次仍有效且仍为 enabled=true，再执行错误日志默认首查；
- * 正确日志首次切换才首查。
+ * enabled=true 后初始化顺序（LQ-AC-177 / LQ-DESIGN-177 / R1-03 / R1.1）：
+ * 重置两 Tab → 进入初始化锁定 → 按顺序等待本次页面代次的数据源候选加载结束 →
+ * 若页面代次仍有效且仍为 enabled=true，再 await 错误日志默认首查（真正等待其结束）→
+ * 默认查询成功/失败/超时后由当前代次 finally 解除锁定。
  * 候选加载失败只影响下拉框（显示候选失败状态），不阻止列表默认查询；
- * 重新进入导致代次变化时，旧初始化链不再触发默认查询，也不自动重试/轮询。
+ * 重新进入导致代次变化时，旧初始化链不再触发默认查询、旧 finally 不解锁新代次；
+ * 不自动重试/轮询。
  */
 async function initNormal() {
+  const generation = getGeneration()
   activeTab.value = 'error'
   errorTab.reinitialize()
   correctTab.reinitialize()
-  const generation = getGeneration()
-  await loadOptions()
-  if (generation !== getGeneration() || !enabled.value) return
-  void errorTab.initialQuery()
+  initializing.value = true
+  try {
+    await loadOptions()
+    if (generation !== getGeneration() || !enabled.value) return
+    await errorTab.initialQuery()
+  } finally {
+    // 只有当前有效代次可以结束初始化锁定；旧链 finally 不得误解锁新代次（R1.1 §6.3）
+    if (generation === getGeneration()) {
+      initializing.value = false
+    }
+  }
+}
+
+/** 初始化锁定期间禁止查询/重置/翻页，避免与初始化默认查询竞争（R1.1） */
+function onQuery(logType: LogType) {
+  if (initializing.value) return
+  const tab = logType === 'error' ? errorTab : correctTab
+  void tab.query()
+}
+
+function onReset(logType: LogType) {
+  if (initializing.value) return
+  const tab = logType === 'error' ? errorTab : correctTab
+  tab.reset()
+}
+
+function onPrev(logType: LogType) {
+  if (initializing.value) return
+  const tab = logType === 'error' ? errorTab : correctTab
+  void tab.prevPage()
+}
+
+function onNext(logType: LogType) {
+  if (initializing.value) return
+  const tab = logType === 'error' ? errorTab : correctTab
+  void tab.nextPage()
 }
 
 async function loadOptions() {
@@ -228,6 +272,7 @@ async function loadOptions() {
 }
 
 function onTabSwitch(key: LogType) {
+  if (initializing.value) return
   activeTab.value = key
   const tab = key === 'error' ? errorTab : correctTab
   if (!tab.initialQueryAttempted) {
@@ -238,6 +283,7 @@ function onTabSwitch(key: LogType) {
 const detailTarget = ref<{ logType: LogType; row: LogListVO } | null>(null)
 const detailVisible = ref(false)
 function openDetail(logType: LogType, row: LogListVO) {
+  if (initializing.value) return
   detailTarget.value = { logType, row }
   detailVisible.value = true
 }
@@ -245,6 +291,7 @@ function openDetail(logType: LogType, row: LogListVO) {
 const rawTarget = ref<{ logType: LogType; row: LogListVO } | null>(null)
 const rawVisible = ref(false)
 function openRaw(logType: LogType, row: LogListVO) {
+  if (initializing.value) return
   rawTarget.value = { logType, row }
   rawVisible.value = true
 }
@@ -267,6 +314,7 @@ function fullReinit() {
   targetList.value = []
   optionsError.value = ''
   optionsLoading.value = false
+  initializing.value = false
   void loadStatus()
 }
 

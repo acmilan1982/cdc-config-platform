@@ -45,7 +45,7 @@ function makeForm(): LogQueryForm {
   }
 }
 
-async function mountFilter(initial: Partial<LogQueryForm> = {}) {
+async function mountFilter(initial: Partial<LogQueryForm> = {}, extra = {}) {
   const form = reactive<LogQueryForm>({ ...makeForm(), ...initial })
   const wrapper = mount(LogQueryFilter, {
     props: {
@@ -56,6 +56,7 @@ async function mountFilter(initial: Partial<LogQueryForm> = {}) {
       targetOptions: TARGET_OPTS,
       optionsError: '',
       optionsLoading: false,
+      ...extra,
     },
     global: { plugins: [ElementPlus] },
   })
@@ -154,6 +155,49 @@ describe('LogQueryFilter 真实 el-select 组件事件顺序（R1-01）', () => 
     await clickOption(sourceDropdown, '业务库-订单')
     await clickOption(sourceDropdown, '业务库-商品')
     expect(form.sourceDataSourceIds).toEqual([ALL_DATA_SOURCE])
+    wrapper.unmount()
+  })
+})
+
+describe('LogQueryFilter 初始化锁定禁用态（R1.1 §8）', () => {
+  it('initializing=true 时源库/目标库下拉、表名输入、时间范围与查询/重置按钮全部禁用', async () => {
+    const { wrapper } = await mountFilter({}, { initializing: true })
+
+    // 源库、目标库 el-select 呈禁用态
+    const selects = wrapper.findAll('.el-select__wrapper')
+    expect(selects.length).toBe(2)
+    for (const s of selects) {
+      expect(s.classes()).toContain('is-disabled')
+    }
+
+    // 源表名、目标表名输入禁用
+    const inputs = wrapper.findAll('input')
+    for (const inp of inputs) {
+      expect((inp.element as HTMLInputElement).disabled).toBe(true)
+    }
+
+    // 查询、重置按钮禁用
+    const buttons = wrapper.findAll('button')
+    const queryBtn = buttons.find((b) => b.text().includes('查询'))
+    const resetBtn = buttons.find((b) => b.text().includes('重置'))
+    expect(queryBtn).toBeTruthy()
+    expect(resetBtn).toBeTruthy()
+    expect((queryBtn!.element as HTMLButtonElement).disabled).toBe(true)
+    expect((resetBtn!.element as HTMLButtonElement).disabled).toBe(true)
+    wrapper.unmount()
+  })
+
+  it('点击禁用按钮不触发 query / reset 事件', async () => {
+    const { wrapper } = await mountFilter({}, { initializing: true })
+
+    const buttons = wrapper.findAll('button')
+    const queryBtn = buttons.find((b) => b.text().includes('查询'))!
+    const resetBtn = buttons.find((b) => b.text().includes('重置'))!
+    await queryBtn.trigger('click')
+    await resetBtn.trigger('click')
+
+    expect(wrapper.emitted('query')).toBeUndefined()
+    expect(wrapper.emitted('reset')).toBeUndefined()
     wrapper.unmount()
   })
 })

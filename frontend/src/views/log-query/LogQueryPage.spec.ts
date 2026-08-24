@@ -2,7 +2,7 @@ import { describe, it, expect, vi, beforeEach } from 'vitest'
 import { mount, flushPromises } from '@vue/test-utils'
 import ElementPlus from 'element-plus'
 import type { ApiResponse } from '@/types/monitor'
-import type { DataSourceOptionsVO, LogListResponse, LogQueryStatusVO } from '@/types/logQuery'
+import type { DataSourceOptionsVO, LogListResponse, LogQueryStatusVO, LogListVO } from '@/types/logQuery'
 
 vi.mock('@/api/logQuery', () => ({
   getLogQueryStatus: vi.fn(),
@@ -47,6 +47,26 @@ function okOptions(): ApiResponse<DataSourceOptionsVO> {
 
 function okList(): ApiResponse<LogListResponse> {
   return { code: 200, message: 'success', timestamp: '', data: { items: [], hasNext: false } }
+}
+
+function failList(code: number, message: string): ApiResponse<LogListResponse> {
+  return { code, message, timestamp: '', data: null as unknown as LogListResponse }
+}
+
+function listWithOne(id: string): ApiResponse<LogListResponse> {
+  return {
+    code: 200,
+    message: 'success',
+    timestamp: '',
+    data: {
+      items: [{ cdcLogId: id, hasLogDetail: true, hasRawMessage: false, targetTime: '2026-08-20 10:00:00' }],
+      hasNext: false,
+    },
+  }
+}
+
+function row(id: string): LogListVO {
+  return { cdcLogId: id, hasLogDetail: true, hasRawMessage: false, targetTime: '2026-08-20 10:00:00' }
 }
 
 async function mountPage() {
@@ -245,6 +265,170 @@ describe('enabled=true 初始化顺序（R1-03 / LQ-DESIGN-177）', () => {
     await flushPromises()
     expect(mockedSearch).toHaveBeenCalledTimes(1)
     expect(mockedSearch.mock.calls[0][0].logType).toBe('error')
+    wrapper.unmount()
+  })
+})
+
+describe('R1.1 初始化锁定与查询 A/B 竞争消除', () => {
+  type PageWrapper = Awaited<ReturnType<typeof mountPage>>
+  const filter = (w: PageWrapper) => w.findComponent({ name: 'LogQueryFilter' })
+  const table = (w: PageWrapper) => w.findComponent({ name: 'LogQueryTable' })
+  const pager = (w: PageWrapper) => w.findComponent({ name: 'CursorPagination' })
+
+  it('候选加载在途时初始化锁定，点击查询不发起列表请求（§8.1/8.2）', async () => {
+    mockedStatus.mockResolvedValue(okStatus(true))
+    const dOpts = deferred<ApiResponse<DataSourceOptionsVO>>()
+    mockedOptions.mockImplementationOnce(() => dOpts.promise)
+    const wrapper = await mountPage()
+    await flushPromises()
+
+    expect(mockedOptions).toHaveBeenCalledTimes(1)
+    expect(mockedSearch).not.toHaveBeenCalled()
+    expect(filter(wrapper).props('initializing')).toBe(true)
+
+    // 锁定期间点击查询：不得发起列表请求
+    filter(wrapper).vm.$emit('query')
+    await flushPromises()
+    expect(mockedSearch).not.toHaveBeenCalled()
+
+    // 候选完成 → 默认查询发起并解锁
+    dOpts.resolve(okOptions())
+    await flushPromises()
+    expect(mockedSearch).toHaveBeenCalledTimes(1)
+    expect(mockedSearch.mock.calls[0][0].logType).toBe('error')
+    expect(filter(wrapper).props('initializing')).toBe(false)
+    wrapper.unmount()
+  })
+
+  it('默认查询在途时查询/重置/Tab/翻页/详情全部锁定，成功后解除（§8.3/8.4/8.5/8.13）', async () => {
+    mockedStatus.mockResolvedValue(okStatus(true))
+    const dSearch = deferred<ApiResponse<LogListResponse>>()
+    mockedSearch.mockImplementationOnce(() => dSearch.promise)
+    const wrapper = await mountPage()
+    await flushPromises()
+
+    expect(mockedSearch).toHaveBeenCalledTimes(1)
+    expect(filter(wrapper).props('initializing')).toBe(true)
+
+    // 默认查询在途：查询/重置/Tab/上一页/下一页/详情/原始消息均不可触发
+    mockedSearch.mockClear()
+    filter(wrapper).vm.$emit('query')
+    filter(wrapper).vm.$emit('reset')
+    await wrapper.findAll('.tab-item')[1].trigger('click')
+    pager(wrapper).vm.$emit('prev')
+    pager(wrapper).vm.$emit('next')
+    table(wrapper).vm.$emit('detail', row('1'))
+    table(wrapper).vm.$emit('raw', row('1'))
+    await flushPromises()
+
+    expect(mockedSearch).not.toHaveBeenCalled()
+    expect(wrapper.find('.tab-item.active').text()).toContain('错误日志')
+    expect(wrapper.findComponent({ name: 'LogDetailDialog' }).props('visible')).toBe(false)
+    expect(wrapper.findComponent({ name: 'RawMessageDialog' }).props('visible')).toBe(false)
+
+    // 默认查询成功 → 解锁
+    dSearch.resolve(okList())
+    await flushPromises()
+    expect(filter(wrapper).props('initializing')).toBe(false)
+    wrapper.unmount()
+  })
+
+  it('默认查询业务失败后解除初始化锁定（§8.6）', async () => {
+    mockedStatus.mockResolvedValue(okStatus(true))
+    mockedSearch.mockResolvedValueOnce(failList(40017, '查询失败'))
+    const wrapper = await mountPage()
+    await flushPromises()
+
+    expect(mockedSearch).toHaveBeenCalledTimes(1)
+    expect(filter(wrapper).props('initializing')).toBe(false)
+    expect(table(wrapper).props('error')).toContain('查询失败')
+    wrapper.unmount()
+  })
+
+  it('默认查询网络失败或超时后解除初始化锁定（§8.7）', async () => {
+    mockedStatus.mockResolvedValue(okStatus(true))
+    mockedSearch.mockRejectedValueOnce(new Error('network'))
+    const wrapper = await mountPage()
+    await flushPromises()
+
+    expect(mockedSearch).toHaveBeenCalledTimes(1)
+    expect(filter(wrapper).props('initializing')).toBe(false)
+    expect(table(wrapper).props('error')).toContain('网络请求失败')
+    wrapper.unmount()
+  })
+
+  it('候选加载失败后仍执行一次默认错误日志查询并在结束后解锁（§8.8）', async () => {
+    mockedStatus.mockResolvedValue(okStatus(true))
+    mockedOptions.mockRejectedValueOnce(new Error('network'))
+    const wrapper = await mountPage()
+    await flushPromises()
+
+    expect(mockedOptions).toHaveBeenCalledTimes(1)
+    expect(mockedSearch).toHaveBeenCalledTimes(1)
+    expect(mockedSearch.mock.calls[0][0].logType).toBe('error')
+    expect(filter(wrapper).props('initializing')).toBe(false)
+    expect(filter(wrapper).props('optionsError')).toContain('数据源候选加载失败')
+    wrapper.unmount()
+  })
+
+  it('初始化完成后用户查询结果不被延迟默认查询覆盖（§8.9）', async () => {
+    mockedStatus.mockResolvedValue(okStatus(true))
+    const wrapper = await mountPage()
+    await flushPromises()
+    expect(mockedSearch).toHaveBeenCalledTimes(1)
+    expect(filter(wrapper).props('initializing')).toBe(false)
+
+    // 用户主动查询（deferred）：结果稳定展示，不存在后续默认查询覆盖
+    const dUser = deferred<ApiResponse<LogListResponse>>()
+    mockedSearch.mockImplementationOnce(() => dUser.promise)
+    filter(wrapper).vm.$emit('query')
+    await flushPromises()
+    expect(mockedSearch).toHaveBeenCalledTimes(2)
+
+    dUser.resolve(listWithOne('u1'))
+    await flushPromises()
+    expect(mockedSearch).toHaveBeenCalledTimes(2)
+    expect(table(wrapper).props('items')).toHaveLength(1)
+    expect((table(wrapper).props('items') as LogListVO[])[0].cdcLogId).toBe('u1')
+    expect(filter(wrapper).props('initializing')).toBe(false)
+    wrapper.unmount()
+  })
+
+  it('初始化期间重新进入：旧候选不触发旧默认查询、旧默认不覆盖新代次、旧 finally 不解锁新代次（§8.10-8.12）', async () => {
+    mockedStatus.mockResolvedValue(okStatus(true))
+    const dOpts1 = deferred<ApiResponse<DataSourceOptionsVO>>()
+    const dSearch1 = deferred<ApiResponse<LogListResponse>>()
+    const dOpts2 = deferred<ApiResponse<DataSourceOptionsVO>>()
+    mockedOptions.mockImplementationOnce(() => dOpts1.promise)
+    mockedSearch.mockImplementationOnce(() => dSearch1.promise)
+    mockedOptions.mockImplementationOnce(() => dOpts2.promise)
+    const wrapper = await mountPage()
+    await flushPromises()
+
+    // 旧代次候选完成 → 旧默认查询在途
+    dOpts1.resolve(okOptions())
+    await flushPromises()
+    expect(mockedSearch).toHaveBeenCalledTimes(1)
+
+    // 重新进入 → 新代次发起候选加载
+    triggerLogQueryReinit()
+    await flushPromises()
+    expect(mockedOptions).toHaveBeenCalledTimes(2)
+    expect(mockedSearch).toHaveBeenCalledTimes(1)
+    expect(filter(wrapper).props('initializing')).toBe(true)
+
+    // 旧默认查询返回：代次已变，不得覆盖新代次、不得追加请求
+    dSearch1.resolve(okList())
+    await flushPromises()
+    expect(mockedSearch).toHaveBeenCalledTimes(1)
+
+    // 新代次候选完成 → 仅新链发起一次默认错误日志查询并解锁
+    mockedSearch.mockImplementationOnce(() => Promise.resolve(okList()))
+    dOpts2.resolve(okOptions())
+    await flushPromises()
+    expect(mockedSearch).toHaveBeenCalledTimes(2)
+    expect(mockedSearch.mock.calls[1][0].logType).toBe('error')
+    expect(filter(wrapper).props('initializing')).toBe(false)
     wrapper.unmount()
   })
 })

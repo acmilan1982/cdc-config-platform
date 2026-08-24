@@ -43,11 +43,11 @@ export interface LogQueryTabState {
   initialQueryAttempted: boolean
   elapsed: number
   reinitialize: () => void
-  initialQuery: () => void
-  query: () => void
+  initialQuery: () => Promise<void>
+  query: () => Promise<void>
   reset: () => void
-  nextPage: () => void
-  prevPage: () => void
+  nextPage: () => Promise<void>
+  prevPage: () => Promise<void>
 }
 
 const DAY_SPAN_MS = 7 * 24 * 60 * 60 * 1000

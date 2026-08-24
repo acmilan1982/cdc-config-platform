@@ -85,18 +85,18 @@
         <template #label>
           <span class="action-label">&nbsp;</span>
         </template>
-        <el-button type="primary" :loading="loading" :disabled="loading" @click="$emit('query')">
+        <el-button type="primary" :loading="loading" :disabled="locked" @click="$emit('query')">
           <el-icon v-if="!loading"><Search /></el-icon>
           <span>查询</span>
         </el-button>
-        <el-button :disabled="loading" @click="$emit('reset')">重置</el-button>
+        <el-button :disabled="locked" @click="$emit('reset')">重置</el-button>
       </el-form-item>
     </el-form>
 
     <div v-if="optionsError" class="options-error" role="alert">
       <el-icon><WarningFilled /></el-icon>
       <span>数据源候选加载失败：{{ optionsError }}</span>
-      <el-button link type="primary" :disabled="optionsLoading" @click="$emit('retry-options')">
+      <el-button link type="primary" :disabled="optionsLoading || locked" @click="$emit('retry-options')">
         {{ optionsLoading ? '正在重新加载…' : '重新加载' }}
       </el-button>
     </div>
@@ -122,6 +122,8 @@ const props = defineProps<{
   targetOptions: DataSourceOptionVO[]
   optionsError: string
   optionsLoading: boolean
+  /** 页面初始化锁定（R1.1）：候选加载与默认查询期间禁止编辑条件与发起查询/重置 */
+  initializing?: boolean
 }>()
 
 defineEmits<{
@@ -161,8 +163,9 @@ const targetSelectOptions = computed<SelectOption[]>(() => [
   ...buildOptions(props.targetOptions),
 ])
 
-const dsDisabled = computed(() => props.loading || props.optionsLoading || !!props.optionsError)
-const controlsDisabled = computed(() => props.loading)
+const locked = computed(() => props.loading || !!props.initializing)
+const dsDisabled = computed(() => props.loading || props.optionsLoading || !!props.optionsError || !!props.initializing)
+const controlsDisabled = computed(() => locked.value)
 
 /**
  * 多选互斥：使用单向 `:model-value` + `@update:model-value` 受控。

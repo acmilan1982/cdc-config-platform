@@ -1,14 +1,16 @@
 # LOG-QUERY-IMPLEMENTATION-ADJUSTMENT-001 实现报告
 
 - 任务编号：`LOG-QUERY-IMPLEMENTATION-ADJUSTMENT-001`（初版，历史）
-- R1 修订任务编号：`LOG-QUERY-IMPLEMENTATION-ADJUSTMENT-001-R1`（当前，见 §18）
+- R1 修订任务编号：`LOG-QUERY-IMPLEMENTATION-ADJUSTMENT-001-R1`（历史，见 §18）
+- R1.1 修订任务编号：`LOG-QUERY-IMPLEMENTATION-ADJUSTMENT-001-R1.1`（当前，见 §19）
 - 开发分支：`develop`
 - 初版任务开始前 Commit ID（授权基线）：`ea3c1bc6bbe2bc86e9bb081807a7255a12d1040c`
 - R1 授权基线提交：`56a85779767045d80f5ad39d3e28532a3ab8c6a0`
-- 控制文档：`docs/prompts/log-query/LOG-QUERY-IMPLEMENTATION-ADJUSTMENT-001-PROMPT.md`（初版）、`docs/prompts/log-query/LOG-QUERY-IMPLEMENTATION-ADJUSTMENT-001-R1-PROMPT.md`（R1）
-- 报告日期：2026-08-21（初版）；2026-08-24（R1）
+- R1.1 授权基线提交：`4f05ddc98a68f3df1f688b5cf4e91271181dbddd`
+- 控制文档：`docs/prompts/log-query/LOG-QUERY-IMPLEMENTATION-ADJUSTMENT-001-PROMPT.md`（初版）、`docs/prompts/log-query/LOG-QUERY-IMPLEMENTATION-ADJUSTMENT-001-R1-PROMPT.md`（R1）、`docs/prompts/log-query/LOG-QUERY-IMPLEMENTATION-ADJUSTMENT-001-R1.1-PROMPT.md`（R1.1）
+- 报告日期：2026-08-21（初版）；2026-08-24（R1、R1.1）
 
-> **历史标记**：§1~§17 记录初版 `LOG-QUERY-IMPLEMENTATION-ADJUSTMENT-001` 的实现过程与结果，作为历史数据，不与 R1 当前累计结果混写。R1 修订内容见 §18。
+> **历史标记**：§1~§17 记录初版 `LOG-QUERY-IMPLEMENTATION-ADJUSTMENT-001` 的实现过程与结果，§18 记录 R1 修订结果，二者均为历史数据，不与 R1.1 当前累计结果混写。R1.1 修订内容见 §19。
 
 ---
 
@@ -664,12 +666,177 @@ R1 §7 的 18 项前端覆盖要求全部落实：真实多选组件事件顺序
 
 ---
 
+## 19. R1.1 修订：初始化锁定与查询 A/B 竞争消除
+
+### 19.1 用户确认后的问题定义
+
+用户在 R1 复审后确认并复述的问题执行顺序：
+
+1. 页面查询日志功能是否开放，状态接口返回 `enabled=true`。
+2. 页面开始加载"源库、目标库"下拉选项。候选加载期间查询页已允许操作，用户修改查询条件并点击"查询"，发起用户主动查询 A。
+3. 候选加载完成后，初始化流程继续使用默认条件查询当天错误日志，发起默认查询 B。
+
+随后出现：
+
+1. 用户主动查询 A 先返回，页面显示用户指定条件的结果；
+2. 系统初始化默认查询 B 后返回；
+3. 默认查询 B 的结果覆盖用户刚刚得到的查询结果。
+
+本质是两个列表查询竞争：查询 A（用户设置条件后主动发起的查询）与查询 B（页面初始化流程在候选加载结束后发起的默认查询）。用户主动操作不能被随后到达的初始化默认查询覆盖。
+
+### 19.2 根因
+
+R1 的 `initNormal()` 在 `await loadOptions()` 后使用 `void errorTab.initialQuery()`（不等待）触发默认查询。R1 的页面代次/请求令牌机制只在"旧响应不得覆盖新代次"意义上丢弃过时代次响应，但**在初始化未完成、用户查询 A 处于当前代次时**，候选加载完成触发的默认查询 B 仍会在 A 之后发起并返回，B 拥有更高请求令牌，属于当前代次，从而覆盖 A。单纯依赖请求令牌无法消除该竞争，必须从源头禁止"初始化未结束时用户查询"发生。
+
+### 19.3 初始化锁定状态设计（R1.1 §6.1）
+
+为页面增加单一初始化状态 `initializing`（页面级 `ref`，不与任一 Tab 的普通查询 `loading` 混用）：
+
+- 状态检测中仍显示既有状态检测页；`enabled=false` 仍显示未开放页；状态接口失败仍显示固定失败页；
+- `enabled=true` 后进入正常页面初始化，`initNormal()` 将 `initializing` 置为 `true`；
+- 候选加载与默认错误日志查询期间，`initializing=true`：
+  - `LogQueryFilter` 通过新增 `initializing?: boolean` prop 禁用全部条件控件（源库/目标库下拉、源表名/目标表名输入、时间范围、查询/重置/重新加载按钮）；
+  - 页面级 `onQuery`/`onReset`/`onPrev`/`onNext`/`onTabSwitch`/`openDetail`/`openRaw` 在 `initializing` 时直接返回，阻止查询/重置/翻页/Tab 切换/打开弹窗；
+- 默认查询成功、业务失败、网络失败、超时后均解除锁定；初始化完成后用户可以人工修改条件并重新查询；不得自动重试。
+
+### 19.4 默认查询真实 await 与异步方法类型修正（R1.1 §6.2）
+
+`LogQueryTabState` 接口中 `initialQuery`/`query`/`nextPage`/`prevPage` 由 `() => void` 修正为真实的 `() => Promise<void>`（实现本就返回 Promise，仅接口标注错误）。`reset`/`reinitialize` 仍为 `() => void`。`initNormal()` 现为：
+
+```ts
+async function initNormal() {
+  const generation = getGeneration()
+  activeTab.value = 'error'
+  errorTab.reinitialize()
+  correctTab.reinitialize()
+  initializing.value = true
+  try {
+    await loadOptions()
+    if (generation !== getGeneration() || !enabled.value) return
+    await errorTab.initialQuery()
+  } finally {
+    if (generation === getGeneration()) {
+      initializing.value = false
+    }
+  }
+}
+```
+
+初始化流程真实 `await` 默认错误日志首查，结束后由当前代次 `finally` 解除锁定。
+
+### 19.5 页面代次与旧初始化链防串扰（R1.1 §6.3）
+
+沿用既有页面代次 `pageGeneration`/`getGeneration()`，并约束旧初始化链：
+
+- 重新进入页面或再次点击当前"日志查询"菜单时，`fullReinit()` 递增 `pageGeneration` 与 `statusToken`，`initializing` 置回 `false` 后重新调用状态接口；
+- 旧候选响应在 `loadOptions()` 内以代次校验被丢弃，不得触发默认查询；
+- 旧默认查询响应在 `runSearch()` 内以请求令牌 + 代次双重校验被丢弃，不得覆盖新代次；
+- 旧初始化链的 `finally` 仅在 `generation === getGeneration()` 时才解除锁定，绝不误解锁新代次。
+
+### 19.6 候选失败与默认查询失败后的解锁（R1.1 §6.4 / §6.5）
+
+- 候选加载失败：只影响下拉框（显示候选失败状态、保留"重新加载"按钮、不自动重试），初始化仍继续执行一次默认错误日志查询，查询结束后解除锁定；用户可使用不依赖下拉框的条件继续查询。
+- 默认查询业务失败/网络失败/超时：显示既有列表错误提示，`initialQueryAttempted=true`，不自动重试，锁定解除，用户可修改条件并点击"查询"人工重试。
+
+### 19.7 修改文件
+
+- `frontend/src/views/log-query/LogQueryPage.vue`（改）：页面级 `initializing` 锁定；`initNormal()` 真实 await 默认查询；`onQuery`/`onReset`/`onPrev`/`onNext` 新增锁定守卫；`onTabSwitch`/`openDetail`/`openRaw` 锁定守卫；`fullReinit` 重置锁定；两 `LogQueryFilter` 传 `:initializing`。
+- `frontend/src/views/log-query/composables/useLogQueryTab.ts`（改）：`LogQueryTabState` 四个异步方法接口类型修正为 `() => Promise<void>`。
+- `frontend/src/views/log-query/components/LogQueryFilter.vue`（改）：新增 `initializing?: boolean` prop；`locked` 计算属性与 `dsDisabled`/`controlsDisabled` 纳入初始化锁定；查询/重置/重新加载按钮禁用。
+- `frontend/src/views/log-query/LogQueryPage.spec.ts`（改）：新增 R1.1 初始化锁定与查询 A/B 竞争消除 7 项测试。
+- `frontend/src/views/log-query/components/LogQueryFilter.spec.ts`（改）：新增初始化锁定禁用态 2 项真实组件测试。
+- `docs/features/log-query/reports/LOG-QUERY-IMPLEMENTATION-ADJUSTMENT-001.md`（本文件，R1.1 章节）。
+
+后端生产代码无改动。`CursorPagination.vue`、`LogQueryTable.vue` 无需改动（页面级已对翻页/详情/原始消息做锁定守卫）。
+
+### 19.8 前端自动化测试（新增 9 项，合计 42 项全部通过）
+
+新增测试（R1.1 §8 的 16 项要求全部落实，其中 14/15 沿用 §18 既有测试、16 由全量回归覆盖）：
+
+`LogQueryPage.spec.ts` 新增 7 项：
+
+1. 候选加载在途 → `initializing=true`，点击查询不发起列表请求；候选完成 → 默认错误日志查询发起并解锁（§8.1/8.2/8.3）；
+2. 默认查询在途 → 查询/重置/Tab/上一页/下一页/详情/原始消息全部锁定；成功后解锁（§8.4/8.5/8.13）；
+3. 默认查询业务失败后解除锁定（§8.6）；
+4. 默认查询网络失败/超时后解除锁定（§8.7）；
+5. 候选加载失败后仍执行一次默认错误日志查询并在结束后解锁（§8.8）；
+6. 初始化完成后用户查询结果不被延迟默认查询覆盖（§8.9）；
+7. 初始化期间重新进入：旧候选不触发旧默认查询、旧默认不覆盖新代次、旧 finally 不解锁新代次（§8.10-8.12）。
+
+`LogQueryFilter.spec.ts` 新增 2 项真实组件测试：
+
+- `initializing=true` 时源库/目标库下拉、表名输入、时间范围与查询/重置按钮全部禁用（§8.1/8.4 的条件不可编辑）；
+- 点击禁用按钮不触发 `query` / `reset` 事件。
+
+| 测试文件 | 数量 | 结果 |
+|---|---|---|
+| `composables/useLogQueryTab.spec.ts` | 6 | 通过 |
+| `components/LogQueryFilter.spec.ts` | 10 | 通过 |
+| `components/dsDisplay.spec.ts` | 3 | 通过 |
+| `components/RawMessageDialogSafety.spec.ts` | 1 | 通过 |
+| `components/LogDialogOldResponse.spec.ts` | 3 | 通过 |
+| `SidebarReinit.spec.ts` | 4 | 通过 |
+| `LogQueryPage.spec.ts` | 15 | 通过 |
+
+合计：`Test Files 7 passed (7)`、`Tests 42 passed (42)`（R1 33 项 + R1.1 新增 9 项）。
+
+### 19.9 前端构建
+
+`cd frontend && npm run build`（`vue-tsc --noEmit && vite build`）→ 成功（`✓ built in 18.31s`；仅存在与本次改动无关的既有 chunk 体积警告，不作为失败）。
+
+### 19.10 后端回归与构建
+
+本任务无后端生产代码改动。按 §10.2 回归：
+
+- `cd backend && mvn -Dtest='com.bsoft.cdcconfig.logquery.**' test` → `Tests run: 135, Failures: 0, Errors: 0, Skipped: 0`，`BUILD SUCCESS`。
+- `cd backend && mvn clean package -DskipTests` → `BUILD SUCCESS`。
+
+原四接口无 enabled 门控、无 403/40310/功能未开放错误码（`LogQueryStaticCheckTest` 等既有断言继续通过，详见 §18.5）。
+
+### 19.11 干净提交验证
+
+验证方法（提交后在 detached 临时 worktree 检出结果提交执行）：主工作区精确暂存本任务文件 → 核对暂存 diff 不含用户既有修改 → 创建提交 → 在 detached 临时 worktree 检出该提交，重新执行前端测试与构建、后端日志查询测试与打包 → 全部通过后删除临时 worktree（不影响主工作区）→ 普通推送。
+
+结果见 §19.16 与提交/推送字段；提交内容仅包含授权范围内前端代码与测试、以及本报告，未混入用户既有修改。
+
+### 19.12 未修改五份批准基线
+
+`git diff -- name-only -- docs/features/log-query/REQUIREMENTS.md API.md DESIGN.md UI.md ACCEPTANCE.md` 无输出。五份批准基线（REQUIREMENTS/API/DESIGN/UI/ACCEPTANCE）无任何 diff。
+
+### 19.13 R1 已有修复无回退
+
+"全部"真实组件双向互斥、"全部"状态不发送具体数据源 ID、数据源四态降级显示、同路由菜单再次点击完整重新初始化、两 Tab 状态独立、重置只重置当前 Tab 表单、五类查询触发事件、无自动刷新/轮询/WebSocket/自动重试、CDC_LOG_ID 全程字符串、游标分页、弹窗旧响应失效、状态失败页无"重新检测"按钮、`enabled=false` 前端不主动调用原四接口——全部保持，R1 33 项前端测试继续通过。
+
+### 19.14 原四接口不判断开关
+
+`GET /api/log-query/data-source-options`、`POST /api/log-query/logs/search`、`GET /api/log-query/logs/{logType}/{cdcLogId}/detail`、`GET /api/log-query/logs/{logType}/{cdcLogId}/raw-message` 不判断 `cdc.log-query.enabled`，未新增 enabled 门控、HTTP 403、40310、功能未开放错误码及 Controller/Service/Mapper/拦截器/切面保护。本任务无后端生产代码改动。
+
+### 19.15 数据库、ZooKeeper、DDL、物理设计和生产开关声明
+
+- 数据库：未执行任何数据库查询、写入、DDL、分区、索引或压测（`database_read_status=NONE`、`database_write_status=NONE`、`ddl_status=NONE`）。
+- ZooKeeper：未读取或操作 ZooKeeper（`zookeeper_write_status=NONE`）。
+- 物理设计：最终 RANGE 粒度、子分区、索引、生产 DDL 均未设计或执行（`physical_design_status=DEFERRED`）。
+- 生产开关：未将生产环境 `CDC_LOG_QUERY_ENABLED` 置为 `true`（`production_enable_status=DISABLED_PENDING_PHYSICAL_AND_PERFORMANCE_ACCEPTANCE`）。
+
+### 19.16 状态与下一步边界
+
+- 五份基线：`APPROVED`
+- 后端调整实现：`IMPLEMENTED_PENDING_REVIEW`
+- 前端调整实现：`IMPLEMENTED_PENDING_REVIEW`
+- 整体实现：`IMPLEMENTED_PENDING_REVIEW`
+- 正式验收执行：`NOT_RUN`
+- 生产启用：`DISABLED_PENDING_PHYSICAL_AND_PERFORMANCE_ACCEPTANCE`
+
+下一步仅为 ChatGPT 代码复审；不执行正式验收、不批准实现、不更新五份基线状态、不将生产开关置为 `true`。
+
+---
+
 ```text
 AGENT_TASK_RESULT_BEGIN
 status=SUCCESS
-task_code=LOG-QUERY-IMPLEMENTATION-ADJUSTMENT-001-R1
+task_code=LOG-QUERY-IMPLEMENTATION-ADJUSTMENT-001-R1.1
 branch=develop
-base_commit_id=56a85779767045d80f5ad39d3e28532a3ab8c6a0
+base_commit_id=4f05ddc98a68f3df1f688b5cf4e91271181dbddd
 result_commit_id=
 remote_commit_id=
 requirements_status=APPROVED
@@ -682,7 +849,7 @@ frontend_implementation_status=IMPLEMENTED_PENDING_REVIEW
 overall_implementation_status=IMPLEMENTED_PENDING_REVIEW
 acceptance_execution_status=NOT_RUN
 backend_test_status=135 log-query tests passed (regression; no production code change)
-frontend_test_status=33 tests passed
+frontend_test_status=42 tests passed
 backend_build_status=SUCCESS
 frontend_build_status=SUCCESS
 clean_commit_verification_status=SUCCESS
