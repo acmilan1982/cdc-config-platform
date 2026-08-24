@@ -3,7 +3,7 @@
     <el-form :inline="true" size="small" class="filter-form" @submit.prevent>
       <el-form-item label="源库" class="field-item">
         <el-select
-          v-model="form.sourceDataSourceIds"
+          :model-value="form.sourceDataSourceIds"
           multiple
           filterable
           collapse-tags
@@ -11,7 +11,7 @@
           :disabled="dsDisabled"
           :placeholder="optionsError ? '数据源候选加载失败' : '请选择源库'"
           class="ds-select"
-          @change="onSourceChange"
+          @update:model-value="onSourceChange"
         >
           <el-option
             v-for="opt in sourceSelectOptions"
@@ -35,7 +35,7 @@
 
       <el-form-item label="目标库" class="field-item">
         <el-select
-          v-model="form.targetDataSourceIds"
+          :model-value="form.targetDataSourceIds"
           multiple
           filterable
           collapse-tags
@@ -43,7 +43,7 @@
           :disabled="dsDisabled"
           :placeholder="optionsError ? '数据源候选加载失败' : '请选择目标库'"
           class="ds-select"
-          @change="onTargetChange"
+          @update:model-value="onTargetChange"
         >
           <el-option
             v-for="opt in targetSelectOptions"
@@ -164,6 +164,12 @@ const targetSelectOptions = computed<SelectOption[]>(() => [
 const dsDisabled = computed(() => props.loading || props.optionsLoading || !!props.optionsError)
 const controlsDisabled = computed(() => props.loading)
 
+/**
+ * 多选互斥：使用单向 `:model-value` + `@update:model-value` 受控。
+ * Element Plus 在触发 `change` 前已更新 `v-model`，若用 `v-model` + `@change`，
+ * 处理函数里拿到的"旧值"实际已是新值，导致"全部"互斥被误判（R1-01）。
+ * 受控写法下 `props.form.sourceDataSourceIds` 仍是点击前的真实旧值。
+ */
 function onSourceChange(val: string[]) {
   props.form.sourceDataSourceIds = normalizeSelection(props.form.sourceDataSourceIds, val)
 }

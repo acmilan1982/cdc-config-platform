@@ -187,12 +187,21 @@ async function loadStatus() {
   }
 }
 
-/** enabled=true 后初始化顺序（LQ-AC-177）：重置两 Tab → 加载候选 → 错误日志默认首查；正确日志首次切换才首查 */
-function initNormal() {
+/**
+ * enabled=true 后初始化顺序（LQ-AC-177 / LQ-DESIGN-177 / R1-03）：
+ * 重置两 Tab → 按顺序等待本次页面代次的数据源候选加载结束 →
+ * 若页面代次仍有效且仍为 enabled=true，再执行错误日志默认首查；
+ * 正确日志首次切换才首查。
+ * 候选加载失败只影响下拉框（显示候选失败状态），不阻止列表默认查询；
+ * 重新进入导致代次变化时，旧初始化链不再触发默认查询，也不自动重试/轮询。
+ */
+async function initNormal() {
   activeTab.value = 'error'
   errorTab.reinitialize()
   correctTab.reinitialize()
-  void loadOptions()
+  const generation = getGeneration()
+  await loadOptions()
+  if (generation !== getGeneration() || !enabled.value) return
   void errorTab.initialQuery()
 }
 

@@ -64,6 +64,16 @@ async function mountPage() {
   })
 }
 
+function deferred<T>() {
+  let resolve!: (v: T) => void
+  let reject!: (e: unknown) => void
+  const promise = new Promise<T>((res, rej) => {
+    resolve = res
+    reject = rej
+  })
+  return { promise, resolve, reject }
+}
+
 beforeEach(() => {
   mockedStatus.mockReset()
   mockedOptions.mockReset()
@@ -127,6 +137,113 @@ describe('LogQueryPage 状态流程', () => {
     expect(mockedStatus).toHaveBeenCalledTimes(1)
     expect(mockedOptions).toHaveBeenCalled()
     expect(mockedSearch).toHaveBeenCalled()
+    expect(mockedSearch.mock.calls[0][0].logType).toBe('error')
+    wrapper.unmount()
+  })
+
+  it('真实入口重新初始化后清空两 Tab、关闭弹窗、重查默认错误日志（R1-04）', async () => {
+    mockedStatus.mockResolvedValue(okStatus(true))
+    mockedOptions.mockResolvedValue(okOptions())
+    mockedSearch.mockResolvedValue(okList())
+    const wrapper = await mountPage()
+    await flushPromises()
+
+    // 切到"正确日志"Tab
+    await wrapper.findAll('.tab-item')[1].trigger('click')
+    await flushPromises()
+    expect(wrapper.find('.tab-item.active').text()).toContain('正确日志')
+
+    // 打开详情弹窗（从列表真实 emit detail）
+    const table = wrapper.findComponent({ name: 'LogQueryTable' })
+    table.vm.$emit('detail', {
+      cdcLogId: '1',
+      hasLogDetail: true,
+      hasRawMessage: false,
+      targetTime: '2026-08-20 10:00:00',
+    })
+    await flushPromises()
+    expect(wrapper.findComponent({ name: 'LogDetailDialog' }).props('visible')).toBe(true)
+
+    mockedStatus.mockClear()
+    mockedOptions.mockClear()
+    mockedSearch.mockClear()
+
+    triggerLogQueryReinit()
+    await flushPromises()
+
+    // Tab 回到"错误日志"、弹窗关闭
+    expect(wrapper.find('.tab-item.active').text()).toContain('错误日志')
+    expect(wrapper.findComponent({ name: 'LogDetailDialog' }).props('visible')).toBe(false)
+    // 重新调用状态接口并重新执行默认错误日志查询
+    expect(mockedStatus).toHaveBeenCalledTimes(1)
+    expect(mockedSearch).toHaveBeenCalledTimes(1)
+    expect(mockedSearch.mock.calls[0][0].logType).toBe('error')
+    wrapper.unmount()
+  })
+})
+
+describe('enabled=true 初始化顺序（R1-03 / LQ-DESIGN-177）', () => {
+  it('候选加载完成后才发起默认错误日志查询', async () => {
+    mockedStatus.mockResolvedValue(okStatus(true))
+    const dOpts = deferred<ApiResponse<DataSourceOptionsVO>>()
+    mockedOptions.mockImplementationOnce(() => dOpts.promise)
+    const wrapper = await mountPage()
+    await flushPromises()
+
+    // 候选在途：不得提前默认查询
+    expect(mockedOptions).toHaveBeenCalledTimes(1)
+    expect(mockedSearch).not.toHaveBeenCalled()
+
+    dOpts.resolve(okOptions())
+    await flushPromises()
+
+    expect(mockedSearch).toHaveBeenCalledTimes(1)
+    expect(mockedSearch.mock.calls[0][0].logType).toBe('error')
+    wrapper.unmount()
+  })
+
+  it('候选加载失败后仍允许默认错误日志查询', async () => {
+    mockedStatus.mockResolvedValue(okStatus(true))
+    mockedOptions.mockRejectedValue(new Error('network'))
+    const wrapper = await mountPage()
+    await flushPromises()
+
+    expect(mockedOptions).toHaveBeenCalledTimes(1)
+    expect(mockedSearch).toHaveBeenCalledTimes(1)
+    expect(mockedSearch.mock.calls[0][0].logType).toBe('error')
+    // 候选失败只影响下拉框（候选失败状态），不影响列表查询
+    const filterStub = wrapper.findComponent({ name: 'LogQueryFilter' })
+    expect(filterStub.props('optionsError')).toContain('数据源候选加载失败')
+    wrapper.unmount()
+  })
+
+  it('初始化过程中重新进入，旧初始化链不得发起旧默认查询', async () => {
+    mockedStatus.mockResolvedValue(okStatus(true))
+    const dOpts1 = deferred<ApiResponse<DataSourceOptionsVO>>()
+    const dOpts2 = deferred<ApiResponse<DataSourceOptionsVO>>()
+    mockedOptions.mockImplementationOnce(() => dOpts1.promise)
+    mockedOptions.mockImplementationOnce(() => dOpts2.promise)
+    const wrapper = await mountPage()
+    await flushPromises()
+
+    expect(mockedOptions).toHaveBeenCalledTimes(1)
+    expect(mockedSearch).not.toHaveBeenCalled()
+
+    // 重新进入 → 新代次初始化也发起候选加载
+    triggerLogQueryReinit()
+    await flushPromises()
+    expect(mockedOptions).toHaveBeenCalledTimes(2)
+    expect(mockedSearch).not.toHaveBeenCalled()
+
+    // 旧代次候选先返回：不得触发默认查询
+    dOpts1.resolve(okOptions())
+    await flushPromises()
+    expect(mockedSearch).not.toHaveBeenCalled()
+
+    // 新代次候选返回：仅新初始化链触发一次默认错误日志查询
+    dOpts2.resolve(okOptions())
+    await flushPromises()
+    expect(mockedSearch).toHaveBeenCalledTimes(1)
     expect(mockedSearch.mock.calls[0][0].logType).toBe('error')
     wrapper.unmount()
   })
