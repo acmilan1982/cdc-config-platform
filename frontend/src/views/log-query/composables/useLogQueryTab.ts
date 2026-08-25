@@ -292,6 +292,11 @@ export function useLogQueryTab(
     await runSearch(criteria, null, 'initial', null)
   }
 
+  /**
+   * 手动查询（R1-02）：校验通过且准备真正发起请求时置 initialQueryAttempted = true，
+   * 无论随后成功、业务失败、网络失败或超时都保持 true（与 LQ-AC-004 一致）。
+   * 在途请求被 loading 拒绝、表单校验失败不改变标志；reinitialize 仍重置为 false。
+   */
   async function query(): Promise<void> {
     if (state.loading) return
     const err = validate()
@@ -300,6 +305,7 @@ export function useLogQueryTab(
       return
     }
     state.validationError = ''
+    state.initialQueryAttempted = true
     const criteria = buildApplied()
     await runSearch(criteria, null, 'query', null)
   }

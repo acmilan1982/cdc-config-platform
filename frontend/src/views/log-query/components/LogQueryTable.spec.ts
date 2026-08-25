@@ -104,4 +104,38 @@ describe('LogQueryTable 未查询引导与查询状态（LOG-QUERY-CURSOR-CORREC
     expect(wrapper.text()).toContain('正在查询正确日志，请稍候')
     expect(wrapper.text()).toContain('已等待 5 秒')
   })
+
+  it('错误日志 NOT_QUERIED：不显示正确日志引导，渲染空白表格且无加载遮罩（R1-01-7）', async () => {
+    const wrapper = await mountTable({
+      logType: 'error',
+      items: [],
+      loading: false,
+      error: null,
+      elapsed: 0,
+      queryStatus: 'NOT_QUERIED',
+    })
+
+    expect(wrapper.find('.table-guide').exists()).toBe(false)
+    expect(wrapper.text()).not.toContain('正确日志数据量较大')
+    expect(wrapper.text()).not.toContain('请设置查询条件')
+    expect(wrapper.text()).not.toContain('暂无数据')
+    expect(wrapper.find('.table-mask').exists()).toBe(false)
+    expect(wrapper.find('.el-table').exists()).toBe(true)
+  })
+
+  it('错误日志 LOADING：显示错误日志加载遮罩与等待秒数，不显示引导（R1-01-5）', async () => {
+    const wrapper = await mountTable({
+      logType: 'error',
+      items: [],
+      loading: true,
+      error: null,
+      elapsed: 3,
+      queryStatus: 'LOADING',
+    })
+
+    expect(wrapper.find('.table-guide').exists()).toBe(false)
+    expect(wrapper.find('.table-mask').exists()).toBe(true)
+    expect(wrapper.text()).toContain('正在查询错误日志，请稍候')
+    expect(wrapper.text()).toContain('已等待 3 秒')
+  })
 })

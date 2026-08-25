@@ -86,6 +86,21 @@ async function mountPage() {
   })
 }
 
+/** R1-01 页级回归：真实挂载 LogQueryTable，验证错误日志初始化期间不显示正确日志引导 */
+async function mountPageRealTable() {
+  return mount(LogQueryPage, {
+    global: {
+      plugins: [ElementPlus],
+      stubs: {
+        LogQueryFilter: true,
+        CursorPagination: true,
+        LogDetailDialog: true,
+        RawMessageDialog: true,
+      },
+    },
+  })
+}
+
 function deferred<T>() {
   let resolve!: (v: T) => void
   let reject!: (e: unknown) => void
@@ -577,6 +592,103 @@ describe('正确日志首次切换不自动查询（LOG-QUERY-CURSOR-CORRECT-TAB
     await flushPromises()
     expect(tables(wrapper)[1].props('queryStatus')).toBe('NOT_QUERIED')
     expect(tables(wrapper)[1].props('items')).toHaveLength(0)
+    wrapper.unmount()
+  })
+})
+
+describe('错误日志初始化候选加载期间不显示正确日志引导（LOG-QUERY-CURSOR-CORRECT-TAB-ADJUSTMENT-001-R1 / R1-01）', () => {
+  type PageWrapper = Awaited<ReturnType<typeof mountPageRealTable>>
+  const tables = (w: PageWrapper) => w.findAllComponents({ name: 'LogQueryTable' })
+
+  it('候选加载 deferred 时激活错误日志，错误日志不显示正确日志引导，且候选完成后仅一次错误日志默认查询（R1-01-1/2/3/4）', async () => {
+    mockedStatus.mockResolvedValue(okStatus(true))
+    const dOpts = deferred<ApiResponse<DataSourceOptionsVO>>()
+    mockedOptions.mockImplementationOnce(() => dOpts.promise)
+    const wrapper = await mountPageRealTable()
+    await flushPromises()
+
+    // 1. 当前激活的是错误日志
+    expect(wrapper.find('.tab-item.active').text()).toContain('错误日志')
+
+    // 3. 候选在途：无任何列表请求，尤其无正确日志列表请求
+    expect(mockedSearch).not.toHaveBeenCalled()
+
+    // 2. 错误日志表格不渲染"正确日志数据量较大"引导；正确日志（隐藏面板）NOT_QUERIED 引导仍在 DOM
+    expect(tables(wrapper)).toHaveLength(2)
+    expect(tables(wrapper)[0].find('.table-guide').exists()).toBe(false)
+    expect(tables(wrapper)[0].text()).not.toContain('正确日志数据量较大')
+    expect(tables(wrapper)[1].find('.table-guide').exists()).toBe(true)
+
+    // 4. 候选完成 → 仅一次错误日志默认查询
+    dOpts.resolve(okOptions())
+    await flushPromises()
+    expect(mockedSearch).toHaveBeenCalledTimes(1)
+    expect(mockedSearch.mock.calls[0][0].logType).toBe('error')
+    // 全程无正确日志请求
+    expect(mockedSearch.mock.calls.filter((c) => c[0].logType === 'correct')).toHaveLength(0)
+    wrapper.unmount()
+  })
+
+  it('正确日志 NOT_QUERIED 引导两行文案在页面真实挂载下仍显示（R1-01-6）', async () => {
+    mockedStatus.mockResolvedValue(okStatus(true))
+    mockedOptions.mockResolvedValue(okOptions())
+    const wrapper = await mountPageRealTable()
+    await flushPromises()
+
+    const correctTable = tables(wrapper)[1]
+    expect(correctTable.find('.table-guide').exists()).toBe(true)
+    expect(correctTable.text()).toContain('正确日志数据量较大，请设置查询条件后点击"查询"')
+    expect(correctTable.text()).toContain('默认查询时间为当天。缩小时间范围或指定数据源、表名可提高查询速度。')
+    // 正确日志引导不附带"暂无数据"与加载遮罩
+    expect(correctTable.text()).not.toContain('暂无数据')
+    expect(correctTable.find('.table-mask').exists()).toBe(false)
+    wrapper.unmount()
+  })
+
+  it('错误日志默认查询在途时仍显示查询遮罩、旋转图标与等待秒数（R1-01-5）', async () => {
+    mockedStatus.mockResolvedValue(okStatus(true))
+    mockedOptions.mockResolvedValue(okOptions())
+    const dSearch = deferred<ApiResponse<LogListResponse>>()
+    mockedSearch.mockImplementationOnce(() => dSearch.promise)
+    const wrapper = await mountPageRealTable()
+    await flushPromises()
+
+    expect(mockedSearch).toHaveBeenCalledTimes(1)
+    expect(mockedSearch.mock.calls[0][0].logType).toBe('error')
+    const errorTable = tables(wrapper)[0]
+    expect(errorTable.find('.table-mask').exists()).toBe(true)
+    expect(errorTable.text()).toContain('正在查询错误日志，请稍候')
+    expect(errorTable.text()).toContain('已等待')
+
+    dSearch.resolve(okList())
+    await flushPromises()
+    expect(tables(wrapper)[0].find('.table-mask').exists()).toBe(false)
+    wrapper.unmount()
+  })
+
+  it('正确日志手动查询成功后，切换 Tab 返回不再自动请求且保留结果（R1-02-7 页级）', async () => {
+    mockedStatus.mockResolvedValue(okStatus(true))
+    mockedOptions.mockResolvedValue(okOptions())
+    const wrapper = await mountPageRealTable()
+    await flushPromises()
+
+    await wrapper.findAll('.tab-item')[1].trigger('click')
+    await flushPromises()
+    mockedSearch.mockClear()
+    mockedSearch.mockResolvedValue(listWithOne('c1'))
+    // 正确日志手动查询（正确面板的筛选器为第二个 LogQueryFilter）
+    wrapper.findAllComponents({ name: 'LogQueryFilter' })[1].vm.$emit('query')
+    await flushPromises()
+    expect(tables(wrapper)[1].props('queryStatus')).toBe('SUCCESS_WITH_DATA')
+
+    mockedSearch.mockClear()
+    await wrapper.findAll('.tab-item')[0].trigger('click')
+    await wrapper.findAll('.tab-item')[1].trigger('click')
+    await flushPromises()
+
+    expect(mockedSearch).not.toHaveBeenCalled()
+    expect(tables(wrapper)[1].props('queryStatus')).toBe('SUCCESS_WITH_DATA')
+    expect((tables(wrapper)[1].props('items') as LogListVO[])[0].cdcLogId).toBe('c1')
     wrapper.unmount()
   })
 })

@@ -5,7 +5,7 @@
       <span>{{ error }}</span>
     </div>
     <div class="table-wrap">
-      <div v-if="queryStatus === 'NOT_QUERIED'" class="table-guide" role="status">
+      <div v-if="showGuide" class="table-guide" role="status">
         <p class="guide-main">正确日志数据量较大，请设置查询条件后点击"查询"</p>
         <p class="guide-hint">默认查询时间为当天。缩小时间范围或指定数据源、表名可提高查询速度。</p>
       </div>
@@ -150,6 +150,13 @@ defineEmits<{
   detail: [row: LogListVO]
   raw: [row: LogListVO]
 }>()
+
+/**
+ * "正确日志数据量较大"引导仅在正确日志且尚未查询时显示（R1-01）：
+ * 错误日志初始化候选加载期间 applied 仍为 null，deriveTabQueryStatus 返回 NOT_QUERIED，
+ * 但错误日志绝不能显示属于正确日志的引导文案。
+ */
+const showGuide = computed(() => props.logType === 'correct' && props.queryStatus === 'NOT_QUERIED')
 
 const loadingText = computed(() =>
   `正在查询${props.logType === 'error' ? '错误' : '正确'}日志，请稍候`,

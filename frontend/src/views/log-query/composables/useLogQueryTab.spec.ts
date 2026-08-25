@@ -226,3 +226,77 @@ describe('正确日志缺省查询与查询状态推导（LOG-QUERY-CURSOR-CORRE
     expect(deriveTabQueryStatus(tab)).toBe('FAILED')
   })
 })
+
+describe('正确日志 initialQueryAttempted（LOG-QUERY-CURSOR-CORRECT-TAB-ADJUSTMENT-001-R1 / R1-02）', () => {
+  it('创建/重新初始化后为 false（R1-02-1/8）', () => {
+    const tab = useLogQueryTab('correct', () => 0)
+    expect(tab.initialQueryAttempted).toBe(false)
+    tab.reinitialize()
+    expect(tab.initialQueryAttempted).toBe(false)
+  })
+
+  it('首次切换但尚未点击查询时仍为 false（R1-02-2）', () => {
+    const tab = useLogQueryTab('correct', () => 0)
+    tab.reinitialize()
+    expect(tab.initialQueryAttempted).toBe(false)
+    expect(tab.applied).toBeNull()
+    expect(tab.items).toHaveLength(0)
+  })
+
+  it('表单校验失败时仍为 false，且不调用 API（R1-02-3）', async () => {
+    const tab = useLogQueryTab('correct', () => 0)
+    tab.reinitialize()
+    tab.form.timeRange = null
+    await tab.query()
+    expect(tab.initialQueryAttempted).toBe(false)
+    expect(tab.validationError).not.toBe('')
+    expect(mockedSearch).not.toHaveBeenCalled()
+  })
+
+  it('手动查询成功后为 true（R1-02-4）', async () => {
+    mockedSearch.mockResolvedValue(okList([]))
+    const tab = useLogQueryTab('correct', () => 0)
+    tab.reinitialize()
+    await tab.query()
+    expect(tab.initialQueryAttempted).toBe(true)
+    expect(mockedSearch).toHaveBeenCalledTimes(1)
+  })
+
+  it('手动查询业务失败后仍为 true（R1-02-5）', async () => {
+    mockedSearch.mockResolvedValue({ code: 40015, message: '游标已失效', timestamp: '', data: null as unknown as LogListResponse })
+    const tab = useLogQueryTab('correct', () => 0)
+    tab.reinitialize()
+    await tab.query()
+    expect(tab.initialQueryAttempted).toBe(true)
+    expect(tab.error).not.toBeNull()
+  })
+
+  it('手动查询网络失败或超时后仍为 true（R1-02-6）', async () => {
+    mockedSearch.mockRejectedValue(new Error('timeout'))
+    const tab = useLogQueryTab('correct', () => 0)
+    tab.reinitialize()
+    await tab.query()
+    expect(tab.initialQueryAttempted).toBe(true)
+    expect(tab.error).not.toBeNull()
+  })
+
+  it('后续再次查询保持 true（R1-02 后续查询）', async () => {
+    mockedSearch.mockResolvedValue(okList([]))
+    const tab = useLogQueryTab('correct', () => 0)
+    tab.reinitialize()
+    await tab.query()
+    await tab.query()
+    expect(tab.initialQueryAttempted).toBe(true)
+    expect(mockedSearch).toHaveBeenCalledTimes(2)
+  })
+
+  it('完整重新初始化后恢复为 false（R1-02-8）', async () => {
+    mockedSearch.mockResolvedValue(okList([]))
+    const tab = useLogQueryTab('correct', () => 0)
+    tab.reinitialize()
+    await tab.query()
+    expect(tab.initialQueryAttempted).toBe(true)
+    tab.reinitialize()
+    expect(tab.initialQueryAttempted).toBe(false)
+  })
+})

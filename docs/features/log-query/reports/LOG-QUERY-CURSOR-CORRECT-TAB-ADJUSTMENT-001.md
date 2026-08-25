@@ -115,3 +115,78 @@ mvn clean package -DskipTests                      → BUILD SUCCESS
 - 后端完整测试 4 例既有失败（§5.3）属任务开始前已存在的开发库实时数据依赖问题，留待相应域任务处理，本任务不顺手修复。
 - 正确日志/错误日志视觉与交互需用户按新规则人工复审验收（对应 ACCEPTANCE 中 `NOT_RUN` 用例）。
 - 生产游标密钥、轮换与安全加固不在本任务范围（用户明确要求不引入 Vault/KMS/轮换/安全重构）。
+
+---
+
+## 10. R1 复审修订章节（LOG-QUERY-CURSOR-CORRECT-TAB-ADJUSTMENT-001-R1，2026-08-25）
+
+> 本章节为对提交 `ab7bf528e4c68b1f7a71b1d5f66861aac4fe801c` 的 ChatGPT 代码复审定向修订的当前结论。§1~§9 为初版任务当时记录；本 R1 章节为当前结论。
+
+### 10.1 修订概述
+
+本任务为微调修订，只处理三个已明确问题，不重新设计日志查询，不扩大到游标算法、Tab 结构、查询条件、超时机制、物理索引或生产安全改造：
+
+1. 错误日志初始化期间误显示"正确日志数据量较大"引导文案（R1-01）。
+2. 正确日志第一次手动查询后 `initialQueryAttempted` 未变为 `true`（R1-02）。
+3. `LQ-AC-119 / 120 / 125` 三个证据不足用例仍错误保留为 `PASS`，恢复为 `NOT_RUN` 并修正当前有效统计（R1-03）。
+
+### 10.2 R1-01 错误日志初始化误显示正确日志引导
+
+**触发链**：状态接口返回 `enabled=true` 后 `loadStatus()` 以 `void initNormal()` 启动正常初始化；`initNormal()` 对两 Tab 执行 `reinitialize()`，错误日志此时 `applied === null`，`deriveTabQueryStatus(errorTab)` 返回 `NOT_QUERIED`；当前激活 Tab 仍为错误日志；`LogQueryTable.vue` 原实现对所有 `NOT_QUERIED` 无条件显示固定文案，导致候选接口稍慢时用户会在"错误日志"Tab 中看到属于正确日志的引导。
+
+**修复条件**："正确日志数据量较大"引导只在 `logType === 'correct' && queryStatus === 'NOT_QUERIED'` 同时成立时显示（`LogQueryTable.vue` 新增 `showGuide` 推导）。错误日志无论处于初始化候选加载、默认查询前、失败、空数据或成功状态，都绝不显示正确日志引导；不得把错误日志初始化状态伪装成"正确日志尚未查询"。
+
+**行为保持**：错误日志默认查询真正开始后既有查询遮罩、旋转图标、动态等待秒数与慢查询提示继续正常；正确日志首次切换后的引导文案、弱提示、无"暂无数据"、无加载遮罩行为保持不变；正确日志查询成功空数据后必须显示"当前查询条件下暂无日志"，不得重新显示首次引导。错误日志候选加载期间沿用空白表格/既有锁定表现，不出现错误文案。
+
+**回归测试**：`LogQueryTable.spec.ts` 新增错误日志 `NOT_QUERIED`/`LOADING` 组件用例；`LogQueryPage.spec.ts` 真实挂载 `LogQueryTable` 覆盖候选 deferred 期间激活错误日志不显示引导、无正确日志请求、候选完成后仅一次错误日志默认查询、错误日志默认查询在途显示加载表现、正确日志 `NOT_QUERIED` 仍显示两行引导、切换 Tab 返回不自动请求。
+
+### 10.3 R1-02 正确日志手动查询未更新 initialQueryAttempted
+
+**不一致**：`ACCEPTANCE.md` 要求正确日志第一次点击"查询"真正发起请求后 `initialQueryAttempted` 必须为 `true`，且无论成功、业务失败、网络失败或超时都保持 `true`；原实现只有 `initialQuery()` 设置该字段，正确日志经用户点击调用的是 `query()`，其中未设置该字段。
+
+**修复语义**（`useLogQueryTab.ts` 的 `query()`）：在途请求被 `state.loading` 拒绝不改变标志；表单校验失败、没有真正发起请求不改变标志；表单校验通过且准备真正调用 `runSearch()` 时置 `state.initialQueryAttempted = true`；请求成功、业务失败、网络失败、前端超时后均保持 `true`；后续再次查询保持 `true`；`reinitialize()` 仍将其重置为 `false`；错误日志 `initialQuery()` 既有行为不回退；切换 Tab 仍不得依赖该字段触发正确日志自动查询。
+
+**状态断言**：创建/重新初始化后 `false`；首次切换尚未点击查询时 `false`；校验失败时 `false` 且不调用 API；手动查询成功后 `true`；业务错误后 `true`；网络错误或超时后 `true`；后续查询保持 `true`；完整重新初始化后恢复 `false`。
+
+### 10.4 R1-03 三个证据不足验收用例恢复 NOT_RUN
+
+- `LQ-AC-119`（查询按钮加载状态与控件禁用）：既有证据主要覆盖初始化锁定，不等于普通用户查询 `loading=true` 期间的真实控件状态，也没有足够的人工 UI 截图。
+- `LQ-AC-120`（前端请求 30 秒超时）：既有证据只证明请求代码静态设置 `timeout: 30000`，没有实际模拟超过 30 秒未返回并验证前端结束加载、进入可操作错误态。
+- `LQ-AC-125`（超时提示可操作）：既有证据是后端 25 秒语句超时/50020 路径或静态错误映射，不是"制造前端 30 秒超时并观察页面提示"。
+- 处理：三例从 `PASS` 恢复为 `NOT_RUN`，各用例旁注明证据不足原因；不写成 `FAIL`/`BLOCKED`（当前没有实现错误的证据，只是尚未完成对应验收）。保留 `LOG-QUERY-DEVELOPMENT-ACCEPTANCE-EXECUTION-001` 当时"121 PASS"历史执行记录原貌，并明确该数字是当时记录，不是当前有效状态。
+
+**当前有效状态统计**（脚本核对）：`113 PASS / 58 NOT_RUN / 8 BLOCKED / 5 DEFERRED_UNTIL_PHYSICAL_DESIGN = 184`。用例编号总数为 184、唯一且无重复；执行状态总数为 184；五个延期用例仍精确为 `LQ-AC-164 / 165 / 171 / 172 / 173`；没有新增伪造的 `PASS / FAIL / BLOCKED`。
+
+### 10.5 修改文件清单
+
+- `frontend/src/views/log-query/components/LogQueryTable.vue`
+- `frontend/src/views/log-query/components/LogQueryTable.spec.ts`
+- `frontend/src/views/log-query/composables/useLogQueryTab.ts`
+- `frontend/src/views/log-query/composables/useLogQueryTab.spec.ts`
+- `frontend/src/views/log-query/LogQueryPage.spec.ts`
+- `docs/features/log-query/ACCEPTANCE.md`
+- `docs/features/log-query/reports/LOG-QUERY-CURSOR-CORRECT-TAB-ADJUSTMENT-001.md`（本报告，追加 R1 章节）
+
+未修改后端生产代码、`application-dev.yml`、REQUIREMENTS / DESIGN / UI 三份业务基线、README、菜单、主题或布局。
+
+### 10.6 前后端测试与构建结果
+
+- 前端 `npm test`：8 个测试文件 70 例全部通过（新增 14 例）。
+- 前端 `npm run build`：BUILD SUCCESS（大 chunk 提示为既有情况）。
+- 后端 `mvn -Dtest='com.bsoft.cdcconfig.logquery.**' test`：136 例全部通过，0 失败 0 错误。
+- 后端 `mvn clean package -DskipTests`：BUILD SUCCESS。
+
+### 10.7 Git 开始/结束状态
+
+- 授权基线：`ab7bf528e4c68b1f7a71b1d5f66861aac4fe801c`；任务开始前本地 HEAD == `origin/develop` == 基线，ahead/behind 为 `0 0`。
+- 结果提交：见本任务提交与推送段；普通 push 后本地 HEAD 与 `origin/develop` 一致，ahead/behind 为 `0 0`。
+- 提交后建立 detached 临时 worktree 检出结果提交，仅基于提交内容重新执行前端全部测试、前端构建、后端日志查询专项测试、后端打包与 ACCEPTANCE 用例数量/状态统计脚本，验证通过后删除临时 worktree，不影响主工作区。
+
+### 10.8 声明与约束遵守
+
+- 分支 `develop`，未创建/切换其他分支，未 force push，未改写历史。
+- 未修改后端生产代码、`application-dev.yml`、REQUIREMENTS / DESIGN / UI 三份业务基线、README、菜单、主题或布局；`cdc.log-query.cursor-secret` 固定开发密钥保持原值和原位置。
+- 未执行数据库写操作（INSERT/UPDATE/DELETE/MERGE/DDL/PLSQL）；未操作 ZooKeeper；生产 `CDC_LOG_QUERY_ENABLED` 保持 `false`。
+- 用户既有已修改文件与未跟踪文件全程原样保留，未修改、未覆盖、未暂存、未提交、未清理。
+- 未删除或弱化既有测试；仅新增与调整本任务相关测试。
+- 状态止步 `IMPLEMENTED_PENDING_REVIEW`，未自评 `IMPLEMENTED_ACCEPTED`，未收口 README，未执行正式验收；下一步仅限 ChatGPT 代码复审。
