@@ -692,3 +692,48 @@ describe('错误日志初始化候选加载期间不显示正确日志引导（L
     wrapper.unmount()
   })
 })
+
+describe('页面入口与查询加载态（LOG-QUERY-USER-VISUAL-ACCEPTANCE-SUPPLEMENT-001）', () => {
+  type PageWrapper = Awaited<ReturnType<typeof mountPage>>
+  const filter = (w: PageWrapper) => w.findComponent({ name: 'LogQueryFilter' })
+  const table = (w: PageWrapper) => w.findComponent({ name: 'LogQueryTable' })
+
+  it('两个 Tab 顺序为错误日志在前、正确日志在后，默认打开错误日志（LQ-AC-002）', async () => {
+    mockedStatus.mockResolvedValue(okStatus(true))
+    const wrapper = await mountPage()
+    await flushPromises()
+
+    const tabs = wrapper.findAll('.tab-item')
+    expect(tabs).toHaveLength(2)
+    expect(tabs[0].text()).toContain('错误日志')
+    expect(tabs[1].text()).toContain('正确日志')
+    expect(wrapper.find('.tab-item.active').text()).toContain('错误日志')
+    wrapper.unmount()
+  })
+
+  it('普通用户查询在途（loading=true 且初始化已结束）时仍允许切换到另一 Tab（LQ-AC-119）', async () => {
+    mockedStatus.mockResolvedValue(okStatus(true))
+    const wrapper = await mountPage()
+    await flushPromises()
+
+    // 初始化已结束、默认错误日志查询已完成
+    expect(mockedSearch).toHaveBeenCalledTimes(1)
+    expect(filter(wrapper).props('initializing')).toBe(false)
+
+    // 用户对错误日志发起一次耗时查询（deferred），进入普通查询加载态
+    const dUser = deferred<ApiResponse<LogListResponse>>()
+    mockedSearch.mockImplementationOnce(() => dUser.promise)
+    filter(wrapper).vm.$emit('query')
+    await flushPromises()
+    expect(mockedSearch).toHaveBeenCalledTimes(2)
+    expect(table(wrapper).props('loading')).toBe(true)
+
+    // 查询在途仍可切换到正确日志
+    await wrapper.findAll('.tab-item')[1].trigger('click')
+    expect(wrapper.find('.tab-item.active').text()).toContain('正确日志')
+
+    dUser.resolve(okList())
+    await flushPromises()
+    wrapper.unmount()
+  })
+})

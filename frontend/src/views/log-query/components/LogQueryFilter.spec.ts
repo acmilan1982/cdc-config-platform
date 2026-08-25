@@ -201,3 +201,49 @@ describe('LogQueryFilter 初始化锁定禁用态（R1.1 §8）', () => {
     wrapper.unmount()
   })
 })
+
+describe('LogQueryFilter 普通查询加载态控件禁用（LOG-QUERY-USER-VISUAL-ACCEPTANCE-SUPPLEMENT-001 / LQ-AC-119）', () => {
+  it('loading=true 时源库/目标库下拉、表名输入、时间范围、查询/重置按钮全部禁用', async () => {
+    const { wrapper } = await mountFilter({}, { loading: true })
+
+    const selects = wrapper.findAll('.el-select__wrapper')
+    expect(selects.length).toBe(2)
+    for (const s of selects) {
+      expect(s.classes()).toContain('is-disabled')
+    }
+
+    const inputs = wrapper.findAll('input')
+    for (const inp of inputs) {
+      expect((inp.element as HTMLInputElement).disabled).toBe(true)
+    }
+
+    const buttons = wrapper.findAll('button')
+    const queryBtn = buttons.find((b) => b.text().includes('查询'))!
+    const resetBtn = buttons.find((b) => b.text().includes('重置'))!
+    expect(queryBtn).toBeTruthy()
+    expect(resetBtn).toBeTruthy()
+    expect((queryBtn.element as HTMLButtonElement).disabled).toBe(true)
+    expect((resetBtn.element as HTMLButtonElement).disabled).toBe(true)
+    wrapper.unmount()
+  })
+
+  it('loading=true 时查询按钮显示加载状态（is-loading）', async () => {
+    const { wrapper } = await mountFilter({}, { loading: true })
+    const buttons = wrapper.findAll('button')
+    const queryBtn = buttons.find((b) => b.text().includes('查询'))!
+    expect(queryBtn.classes()).toContain('is-loading')
+    wrapper.unmount()
+  })
+
+  it('loading=true 时点击查询/重置不触发事件', async () => {
+    const { wrapper } = await mountFilter({}, { loading: true })
+    const buttons = wrapper.findAll('button')
+    const queryBtn = buttons.find((b) => b.text().includes('查询'))!
+    const resetBtn = buttons.find((b) => b.text().includes('重置'))!
+    await queryBtn.trigger('click')
+    await resetBtn.trigger('click')
+    expect(wrapper.emitted('query')).toBeUndefined()
+    expect(wrapper.emitted('reset')).toBeUndefined()
+    wrapper.unmount()
+  })
+})

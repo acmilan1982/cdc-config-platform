@@ -139,3 +139,31 @@ describe('LogQueryTable 未查询引导与查询状态（LOG-QUERY-CURSOR-CORREC
     expect(wrapper.text()).toContain('已等待 3 秒')
   })
 })
+
+describe('超过 3 秒显示慢查询提示（LOG-QUERY-USER-VISUAL-ACCEPTANCE-SUPPLEMENT-001 / LQ-AC-118）', () => {
+  it('elapsed=3 秒不显示慢查询提示，elapsed>3 秒后追加提示', async () => {
+    const at3 = await mountTable({
+      logType: 'error',
+      items: [],
+      loading: true,
+      error: null,
+      elapsed: 3,
+      queryStatus: 'LOADING',
+    })
+    expect(at3.text()).toContain('已等待 3 秒')
+    expect(at3.text()).not.toContain('查询耗时较长，请耐心等待')
+    at3.unmount()
+
+    const at5 = await mountTable({
+      logType: 'error',
+      items: [],
+      loading: true,
+      error: null,
+      elapsed: 5,
+      queryStatus: 'LOADING',
+    })
+    expect(at5.text()).toContain('已等待 5 秒')
+    expect(at5.text()).toContain('查询耗时较长，请耐心等待')
+    at5.unmount()
+  })
+})
