@@ -5,7 +5,12 @@
       <span>{{ error }}</span>
     </div>
     <div class="table-wrap">
+      <div v-if="queryStatus === 'NOT_QUERIED'" class="table-guide" role="status">
+        <p class="guide-main">正确日志数据量较大，请设置查询条件后点击"查询"</p>
+        <p class="guide-hint">默认查询时间为当天。缩小时间范围或指定数据源、表名可提高查询速度。</p>
+      </div>
       <el-table
+        v-else
         :data="items"
         size="small"
         border
@@ -126,7 +131,7 @@
 import { computed } from 'vue'
 import { Loading, WarningFilled } from '@element-plus/icons-vue'
 import type { LogListVO, LogType } from '@/types/logQuery'
-import type { AppliedCriteria } from '../composables/useLogQueryTab'
+import type { LogQueryTabStatus } from '../composables/useLogQueryTab'
 import { dsCellText, dsTooltipText } from './dsDisplay'
 
 defineOptions({ name: 'LogQueryTable' })
@@ -137,7 +142,8 @@ const props = defineProps<{
   loading: boolean
   error: string | null
   elapsed: number
-  applied: AppliedCriteria | null
+  /** 每 Tab 推导查询状态（LQ-UI-140 修订）：NOT_QUERIED 显示引导，SUCCESS_EMPTY 显示"暂无数据" */
+  queryStatus: LogQueryTabStatus
 }>()
 
 defineEmits<{
@@ -151,7 +157,7 @@ const loadingText = computed(() =>
 
 const emptyText = computed(() => {
   if (props.error) return ''
-  return props.applied ? '当前查询条件下暂无日志' : ''
+  return props.queryStatus === 'SUCCESS_EMPTY' ? '当前查询条件下暂无日志' : ''
 })
 
 type NameField = 'sourceDataSourceName' | 'targetDataSourceName'
@@ -196,6 +202,30 @@ function dsTooltip(row: LogListVO, nameField: NameField, idField: IdField): stri
   position: relative;
   flex: 1;
   min-height: 0;
+}
+
+.table-guide {
+  position: absolute;
+  inset: 0;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 6px;
+  text-align: center;
+}
+
+.guide-main {
+  margin: 0;
+  font-size: 14px;
+  font-weight: 600;
+  color: #606266;
+}
+
+.guide-hint {
+  margin: 0;
+  font-size: 12px;
+  color: #909399;
 }
 
 .table-mask {

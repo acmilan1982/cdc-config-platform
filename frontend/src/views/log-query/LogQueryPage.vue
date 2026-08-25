@@ -63,7 +63,7 @@
           :loading="errorTab.loading"
           :error="errorTab.error"
           :elapsed="errorTab.elapsed"
-          :applied="errorTab.applied"
+          :query-status="errorQueryStatus"
           @detail="(row) => openDetail('error', row)"
           @raw="(row) => openRaw('error', row)"
         />
@@ -96,7 +96,7 @@
           :loading="correctTab.loading"
           :error="correctTab.error"
           :elapsed="correctTab.elapsed"
-          :applied="correctTab.applied"
+          :query-status="correctQueryStatus"
           @detail="(row) => openDetail('correct', row)"
           @raw="(row) => openRaw('correct', row)"
         />
@@ -124,9 +124,9 @@
 </template>
 
 <script setup lang="ts">
-import { ref, onMounted, onUnmounted } from 'vue'
+import { ref, computed, onMounted, onUnmounted } from 'vue'
 import { Loading, Lock, WarningFilled } from '@element-plus/icons-vue'
-import { useLogQueryTab } from './composables/useLogQueryTab'
+import { useLogQueryTab, deriveTabQueryStatus } from './composables/useLogQueryTab'
 import type { LogQueryTabState } from './composables/useLogQueryTab'
 import type { DataSourceOptionVO, LogListVO, LogType } from '@/types/logQuery'
 import { fetchDataSourceOptions, getLogQueryStatus } from '@/api/logQuery'
@@ -153,6 +153,9 @@ const tabs: { key: LogType; label: string; state: LogQueryTabState }[] = [
 ]
 
 const activeTab = ref<LogType>('error')
+
+const errorQueryStatus = computed(() => deriveTabQueryStatus(errorTab))
+const correctQueryStatus = computed(() => deriveTabQueryStatus(correctTab))
 
 // ---- 页面级功能开放状态（LQ-UI-219） ----
 const statusLoading = ref(true)
@@ -271,13 +274,14 @@ async function loadOptions() {
   }
 }
 
+/**
+ * 切换 Tab（本任务修订）：只切换活动 Tab，不再触发首次自动查询。
+ * 错误日志默认首查仍由初始化链（initNormal → errorTab.initialQuery）负责；
+ * 正确日志首次切换只展示已初始化的缺省条件，保持 NOT_QUERIED，等待用户点击"查询"。
+ */
 function onTabSwitch(key: LogType) {
   if (initializing.value) return
   activeTab.value = key
-  const tab = key === 'error' ? errorTab : correctTab
-  if (!tab.initialQueryAttempted) {
-    void tab.initialQuery()
-  }
 }
 
 const detailTarget = ref<{ logType: LogType; row: LogListVO } | null>(null)

@@ -21,7 +21,7 @@ cdc:
     session-timeout-ms: 30000
     connection-timeout-ms: 15000
   log-query:
-    cursor-secret: ${CDC_LOG_QUERY_CURSOR_SECRET:}
+    cursor-secret: "523d90884c7f59330f3ab974fa96ced1767154b4f6a74f14ad7b522362372d16"
     enabled: ${CDC_LOG_QUERY_ENABLED:false}
 
 logging:

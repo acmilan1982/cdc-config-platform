@@ -27,6 +27,10 @@
 - `LOG-QUERY-BASELINE-ADJUSTMENT-001-R1`（2026-08-21）：依据用户复审确认做微型一致性修订：状态接口失败/超时的前端状态失败页不再提供“重新检测”按钮，固定文案为标题“功能状态获取失败”、说明“暂时无法获取日志查询功能状态，请刷新页面或稍后重新进入。”，不自动重试/轮询/刷新，用户只能通过刷新、重新进入或再次点击当前“日志查询”菜单重新检测状态（见 LQ-DESIGN-128、LQ-DESIGN-178）；前端启动状态流程与状态接口契约本身保持不变。本文档状态保持 `DRAFT_PENDING_USER_REVIEW`，实现状态保持 `IN_PROGRESS`；本条目描述修订动作，不代表本次调整已经用户复审批准。
 - `LOG-QUERY-BASELINE-ADJUSTMENT-APPROVAL-001`（2026-08-21）：用户已批准 `LOG-QUERY-BASELINE-ADJUSTMENT-001` 与 `LOG-QUERY-BASELINE-ADJUSTMENT-001-R1` 形成的完整调整内容，执行正式批准收口。本文档状态由 `DRAFT_PENDING_USER_REVIEW` 转为 `APPROVED`，成为日志查询功能当前正式逻辑查询设计基线；允许进入本次调整相关的后端、前端、自动化测试、开发库联调和验收执行；批准不代表新增状态接口和前端调整已经实现，不代表任何验收用例已经执行或通过；最终物理设计、生产 DDL 与生产等价性能验收继续延期；菜单始终显示，但生产阻断条件完成前 `CDC_LOG_QUERY_ENABLED` 必须保持 `false`；原四接口不判断开关的边界继续有效。
 - `LOG-QUERY-BASELINE-ADJUSTMENT-APPROVAL-001-R1`（2026-08-21）：批准后现行状态标识与声明措辞微型一致性补正：统一现行前端实现状态为 `IMPLEMENTED_PENDING_REVIEW_WITH_REQUIRED_CHANGES`（历史修订记录中的 `IMPLEMENTED_PENDING_REVIEW` 保留为当时状态）。本补正仅为批准后的状态与措辞一致性修订，不改变批准范围、业务语义、实现事实或验收状态；文档状态保持 `APPROVED / IN_PROGRESS`，最新批准任务仍为 `LOG-QUERY-BASELINE-ADJUSTMENT-APPROVAL-001`。
+- `LOG-QUERY-CURSOR-CORRECT-TAB-ADJUSTMENT-001`（2026-08-25）：依据用户对游标分页与正确日志 Tab 的视觉复审，做两项定向微调：
+  - 开发环境游标密钥：`cdc.log-query.cursor-secret` 在 `application-dev.yml` 配置为固定开发密钥（值不写入本文档正文，见对应报告）；开发环境结果超过固定页大小（100）需要生成 `nextCursor` 时不再抛 `IllegalStateException`。生产配置不携带该密钥；原四接口不判断开关、不新增 403/拦截器/服务门禁边界不变；仍为固定排序 + 固定页大小游标分页，不改为 offset/页号分页（LQ-DESIGN-50 ~ 68）。
+  - 正确日志首次切换不自动查询：`enabled=true` 初始化链只默认查询错误日志第一页；正确日志第一次切换只初始化并展示缺省条件，`appliedCriteria` 保持 `null`、`requestCursorStack=[null]`、不发起列表请求，查询状态为 `NOT_QUERIED`，等待用户点击“查询”后才首查；查询状态由 `loading / error / appliedCriteria / items` 推导区分 `NOT_QUERIED / LOADING / SUCCESS_WITH_DATA / SUCCESS_EMPTY / FAILED`，不得用 `items.length === 0` 推断是否已查询（见 LQ-DESIGN-177、LQ-DESIGN-72，前端状态机对应调整见 `UI.md` §15）。
+  - 本次调整只改变正确日志首次切换行为与开发环境游标密钥配置，不改变其他已批准设计；本文档状态保持 `APPROVED`，实现状态保持 `IN_PROGRESS`。
 
 本文定义应用结构、请求流程和逻辑 SQL。本文**不确定**最终分区粒度、子分区、最终索引、生产 DDL 或最终执行计划（LQ-DB-07 / 08 / 09、LQ-NONGOAL-18）。
 
@@ -279,7 +283,7 @@ FETCH FIRST 1 ROWS ONLY
 |---|---|
 | LQ-DESIGN-70 | 点击“查询”：生成候选条件快照 → 首查成功后才**原子替换**已生效条件、列表与请求游标栈（栈重置为 `[null]`）；失败或超时保留旧列表、旧已生效条件与旧游标栈（LQ-TAB-30 ~ 34）。 |
 | LQ-DESIGN-71 | 点击“重置”：只修改当前 Tab 的表单条件（源库/目标库恢复“全部”、表名清空、时间恢复点击重置时所在自然日），同时清除当前 Tab 的 `validationError` 和逐字段校验错误；不发起查询、不清列表、不改已生效条件、不改游标栈、不切换 Tab（LQ-TAB-40 / 41）。 |
-| LQ-DESIGN-72 | 重新进入页面（含浏览器刷新、从其他菜单返回、再次点击当前“日志查询”菜单）：作废两 Tab 在途列表/详情/原始消息/状态请求，关闭并清理弹窗，清空两 Tab 表单、已生效条件、列表、游标、错误、加载、等待秒数和 `initialQueryAttempted`，先调用状态接口；`enabled=true` 恢复默认错误日志 Tab 并按动作发生时的当前自然日默认首查，`enabled=false` 显示未开放页（LQ-TAB-50 ~ 52 / 57、LQ-OPEN-08 ~ 10）。 |
+| LQ-DESIGN-72 | 重新进入页面（含浏览器刷新、从其他菜单返回、再次点击当前“日志查询”菜单）：作废两 Tab 在途列表/详情/原始消息/状态请求，关闭并清理弹窗，清空两 Tab 表单、已生效条件、列表、游标、错误、加载、等待秒数和 `initialQueryAttempted`，先调用状态接口；`enabled=true` 恢复默认错误日志 Tab 并按动作发生时的当前自然日默认首查，正确日志恢复到“缺省条件已填充但未查询”的 `NOT_QUERIED` 状态（不自动查询，等待用户点击“查询”），`enabled=false` 显示未开放页（LQ-TAB-50 ~ 52 / 57、LQ-OPEN-08 ~ 10）。 |
 | LQ-DESIGN-73 | 旧响应失效：重新进入、Tab 切换或新查询时，用页面代次 + 每 Tab 请求令牌丢弃过期响应；错误日志响应不得写入正确日志状态（LQ-TAB-54 ~ 56、LQ-LOAD-38 / 39）。 |
 
 ## 8. 数据源名称映射与降级
@@ -386,7 +390,7 @@ FETCH FIRST 1 ROWS ONLY
 | LQ-DESIGN-174 | 三页游标序列及前后翻页失败原子性：下一页失败不压栈、上一页失败不弹栈，当前页与游标栈保持不变。 |
 | LQ-DESIGN-175 | 再次点击当前“日志查询”菜单清空两 Tab 全部状态并重新初始化：在途请求失效、弹窗清理、`initialQueryAttempted` 清零、重新调用状态接口。 |
 | LQ-DESIGN-176 | `enabled=false` 时显示未开放页且前端不调用原四接口（数据源候选、列表查询、详情、原始消息）。 |
-| LQ-DESIGN-177 | `enabled=true` 后按顺序加载数据源选项并默认查询错误日志第一页；正确日志第一次切换时才首查。 |
+| LQ-DESIGN-177 | `enabled=true` 后按顺序加载数据源选项并默认查询错误日志第一页；正确日志第一次切换只初始化并展示缺省条件（当前自然日、源库/目标库“全部”、表名空），`appliedCriteria=null`、`requestCursorStack=[null]`、不发起列表请求、状态为 `NOT_QUERIED` 并显示引导文案，等待用户点击“查询”后才发起首次列表查询。 |
 | LQ-DESIGN-178 | 状态接口失败/超时后的状态失败页及无自动重试/轮询/刷新：页面显示“功能状态获取失败”独立错误页（固定文案）且不提供“重新检测”按钮；用户只能通过刷新页面、离开后重新进入、再次点击当前“日志查询”菜单重新发起状态检测；状态检测返回 `true` 正常初始化，返回 `false` 继续显示未开放页。 |
 | LQ-DESIGN-179 | 旧请求与旧弹窗响应失效：重新进入/新查询后过期响应不得覆盖新页面状态或重新打开弹窗。 |
 | LQ-DESIGN-180 | 数据源降级展示不矛盾、不重复 ID：四种降级场景下单元格/Tooltip/详情一致，无 `ID（ID）`。 |

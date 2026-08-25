@@ -4,15 +4,18 @@ import com.bsoft.cdcconfig.logquery.cursor.LogCursorBoundary;
 import com.bsoft.cdcconfig.logquery.cursor.LogCursorCodec;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.BeanCreationException;
+import org.springframework.beans.factory.config.YamlPropertiesFactoryBean;
 import org.springframework.boot.context.properties.EnableConfigurationProperties;
 import org.springframework.boot.test.context.runner.ApplicationContextRunner;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.context.annotation.Lazy;
+import org.springframework.core.io.ClassPathResource;
 
 import java.math.BigDecimal;
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
+import java.util.Properties;
 
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.assertj.core.api.Assertions.assertThatThrownBy;
@@ -22,6 +25,8 @@ import static org.assertj.core.api.Assertions.assertThatThrownBy;
  * 外部 Spring 属性绑定、非空可用、空白 fail-closed 且无默认密钥、
  * 同值重启等价、@Lazy 下仅扫描/注入代理不误用默认密钥、实际调用才 fail-closed。
  * enabled 开关（LQ-API-170）：默认 false、外部配置绑定、fail-closed。
+ * 开发环境固定密钥（本任务 LOG-QUERY-CURSOR-CORRECT-TAB-ADJUSTMENT-001）：
+ * application-dev.yml 中的固定值可被绑定并可完成编码/验签，密钥不写入测试源码。
  */
 class LogQueryConfigTest {
 
@@ -157,6 +162,39 @@ class LogQueryConfigTest {
                                 LogCursorBoundary b = codecB.decodeAndVerify(cursor, LOG_TYPE, FINGERPRINT);
                                 assertThat(b.getCdcLogId()).isEqualByComparingTo(CDC_LOG_ID);
                             });
+                });
+    }
+
+    /**
+     * 开发环境固定密钥（LOG-QUERY-CURSOR-CORRECT-TAB-ADJUSTMENT-001）：
+     * 从 application-dev.yml 读取 cdc.log-query.cursor-secret（不把密钥写进测试源码），
+     * 断言非空、可被 Spring 属性绑定，并可创建 LogCursorCodec 完成正常编码/验签。
+     * 同时验证生产配置 application.yml 未携带 cursor-secret（不扩散密钥）。
+     */
+    @Test
+    void applicationDevYml_bindsFixedSecret_createsCodecAndRoundTrips() throws Exception {
+        YamlPropertiesFactoryBean yaml = new YamlPropertiesFactoryBean();
+        yaml.setResources(new ClassPathResource("application-dev.yml"));
+        yaml.afterPropertiesSet();
+        Properties devProps = yaml.getObject();
+        String devSecret = devProps.getProperty("cdc.log-query.cursor-secret");
+        assertThat(devSecret).isNotBlank();
+
+        YamlPropertiesFactoryBean prodYaml = new YamlPropertiesFactoryBean();
+        prodYaml.setResources(new ClassPathResource("application.yml"));
+        prodYaml.afterPropertiesSet();
+        Properties prodProps = prodYaml.getObject();
+        assertThat(prodProps.getProperty("cdc.log-query.cursor-secret")).isNull();
+
+        new ApplicationContextRunner()
+                .withUserConfiguration(LogQueryConfig.class, ConfigBinding.class)
+                .withPropertyValues("cdc.log-query.cursor-secret=" + devSecret)
+                .run(context -> {
+                    LogCursorCodec codec = context.getBean(LogCursorCodec.class);
+                    String cursor = codec.encode(LOG_TYPE, FINGERPRINT, TARGET_TIME, CDC_LOG_ID);
+                    LogCursorBoundary b = codec.decodeAndVerify(cursor, LOG_TYPE, FINGERPRINT);
+                    assertThat(b.getTargetTime()).isEqualTo(TARGET_TIME);
+                    assertThat(b.getCdcLogId()).isEqualByComparingTo(CDC_LOG_ID);
                 });
     }
 }

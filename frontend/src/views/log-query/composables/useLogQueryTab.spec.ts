@@ -1,7 +1,12 @@
 import { describe, it, expect, vi, beforeEach } from 'vitest'
 import type { LogListVO, LogListResponse } from '@/types/logQuery'
 import type { ApiResponse } from '@/types/monitor'
-import { useLogQueryTab, ALL_DATA_SOURCE } from './useLogQueryTab'
+import {
+  useLogQueryTab,
+  ALL_DATA_SOURCE,
+  currentNaturalDay,
+  deriveTabQueryStatus,
+} from './useLogQueryTab'
 
 vi.mock('@/api/logQuery', () => ({
   searchLogs: vi.fn(),
@@ -152,5 +157,72 @@ describe('useLogQueryTab', () => {
     await tab.query()
     expect(typeof tab.items[0].cdcLogId).toBe('string')
     expect(tab.items[0].cdcLogId).toBe(big)
+  })
+})
+
+describe('正确日志缺省查询与查询状态推导（LOG-QUERY-CURSOR-CORRECT-TAB-ADJUSTMENT-001）', () => {
+  it('缺省条件直接点击查询：请求为当天时间范围且不携带“全部”的具体数据源 ID 数组', async () => {
+    mockedSearch.mockResolvedValue(okList([]))
+    const tab = useLogQueryTab('correct', () => 0)
+    tab.reinitialize()
+    const [start, end] = currentNaturalDay()
+    await tab.query()
+
+    const payload = mockedSearch.mock.calls[0][0]
+    expect(payload.logType).toBe('correct')
+    expect(payload.startTime).toBe(start)
+    expect(payload.endTime).toBe(end)
+    expect(payload.sourceDataSourceIds).toBeUndefined()
+    expect(payload.targetDataSourceIds).toBeUndefined()
+  })
+
+  it('正确日志重置不触发查询，并保留已生效条件与列表（表单/已生效条件分离）', async () => {
+    mockedSearch.mockResolvedValue(okList([row('1')]))
+    const tab = useLogQueryTab('correct', () => 0)
+    tab.reinitialize()
+    await tab.query()
+    expect(tab.applied).not.toBeNull()
+    expect(tab.items).toHaveLength(1)
+
+    mockedSearch.mockClear()
+    tab.form.sourceTableName = 'T_X'
+    tab.reset()
+    expect(mockedSearch).not.toHaveBeenCalled()
+    expect(tab.applied).not.toBeNull()
+    expect(tab.items).toHaveLength(1)
+    expect(tab.form.sourceTableName).toBe('')
+  })
+
+  it('查询状态推导覆盖 NOT_QUERIED/LOADING/SUCCESS_WITH_DATA/SUCCESS_EMPTY/FAILED', async () => {
+    // NOT_QUERIED：缺省条件已填充但尚未查询
+    const tab = useLogQueryTab('correct', () => 0)
+    tab.reinitialize()
+    expect(deriveTabQueryStatus(tab)).toBe('NOT_QUERIED')
+    expect(tab.form.sourceDataSourceIds).toEqual([ALL_DATA_SOURCE])
+    expect(tab.form.targetDataSourceIds).toEqual([ALL_DATA_SOURCE])
+    expect(tab.form.timeRange).not.toBeNull()
+
+    // LOADING：用户发起查询后立即进入加载
+    let resolve!: (v: ApiResponse<LogListResponse>) => void
+    mockedSearch.mockImplementationOnce(() => new Promise((res) => { resolve = res }))
+    const p = tab.query()
+    expect(deriveTabQueryStatus(tab)).toBe('LOADING')
+
+    // SUCCESS_WITH_DATA
+    resolve(okList([row('1')], true, 'C1'))
+    await p
+    expect(deriveTabQueryStatus(tab)).toBe('SUCCESS_WITH_DATA')
+
+    // SUCCESS_EMPTY：成功但无数据，区别于 NOT_QUERIED
+    mockedSearch.mockResolvedValueOnce(okList([]))
+    await tab.query()
+    expect(tab.items).toHaveLength(0)
+    expect(deriveTabQueryStatus(tab)).toBe('SUCCESS_EMPTY')
+
+    // FAILED
+    mockedSearch.mockRejectedValueOnce(new Error('timeout'))
+    await tab.query()
+    expect(tab.error).not.toBeNull()
+    expect(deriveTabQueryStatus(tab)).toBe('FAILED')
   })
 })

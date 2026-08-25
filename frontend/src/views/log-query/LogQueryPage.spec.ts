@@ -3,6 +3,8 @@ import { mount, flushPromises } from '@vue/test-utils'
 import ElementPlus from 'element-plus'
 import type { ApiResponse } from '@/types/monitor'
 import type { DataSourceOptionsVO, LogListResponse, LogQueryStatusVO, LogListVO } from '@/types/logQuery'
+import { ALL_DATA_SOURCE, currentNaturalDay } from '@/views/log-query/composables/useLogQueryTab'
+import type { LogQueryForm } from '@/views/log-query/composables/useLogQueryTab'
 
 vi.mock('@/api/logQuery', () => ({
   getLogQueryStatus: vi.fn(),
@@ -429,6 +431,152 @@ describe('R1.1 初始化锁定与查询 A/B 竞争消除', () => {
     expect(mockedSearch).toHaveBeenCalledTimes(2)
     expect(mockedSearch.mock.calls[1][0].logType).toBe('error')
     expect(filter(wrapper).props('initializing')).toBe(false)
+    wrapper.unmount()
+  })
+})
+
+describe('正确日志首次切换不自动查询（LOG-QUERY-CURSOR-CORRECT-TAB-ADJUSTMENT-001）', () => {
+  type PageWrapper = Awaited<ReturnType<typeof mountPage>>
+  const filters = (w: PageWrapper) => w.findAllComponents({ name: 'LogQueryFilter' })
+  const tables = (w: PageWrapper) => w.findAllComponents({ name: 'LogQueryTable' })
+  const tabItems = (w: PageWrapper) => w.findAll('.tab-item')
+
+  it('页面首次进入仍只自动查询错误日志一次（LQ-AC-177 延续）', async () => {
+    mockedStatus.mockResolvedValue(okStatus(true))
+    const wrapper = await mountPage()
+    await flushPromises()
+    expect(mockedOptions).toHaveBeenCalledTimes(1)
+    expect(mockedSearch).toHaveBeenCalledTimes(1)
+    expect(mockedSearch.mock.calls[0][0].logType).toBe('error')
+    wrapper.unmount()
+  })
+
+  it('第一次切换到正确日志不调用正确日志列表 API，缺省条件已初始化（§4.2/§7.1-2/3）', async () => {
+    mockedStatus.mockResolvedValue(okStatus(true))
+    const wrapper = await mountPage()
+    await flushPromises()
+    expect(mockedSearch).toHaveBeenCalledTimes(1)
+    expect(mockedSearch.mock.calls[0][0].logType).toBe('error')
+
+    mockedSearch.mockClear()
+    await tabItems(wrapper)[1].trigger('click')
+    await flushPromises()
+
+    expect(wrapper.find('.tab-item.active').text()).toContain('正确日志')
+    expect(mockedSearch).not.toHaveBeenCalled()
+
+    // 缺省时间与四个筛选条件正确初始化
+    const form = filters(wrapper)[1].props('form') as LogQueryForm
+    const [start, end] = currentNaturalDay()
+    expect(form.timeRange).toEqual([start, end])
+    expect(form.sourceDataSourceIds).toEqual([ALL_DATA_SOURCE])
+    expect(form.targetDataSourceIds).toEqual([ALL_DATA_SOURCE])
+    expect(form.sourceTableName).toBe('')
+    expect(form.targetTableName).toBe('')
+
+    // 正确日志保持尚未查询状态
+    expect(tables(wrapper)[1].props('queryStatus')).toBe('NOT_QUERIED')
+    wrapper.unmount()
+  })
+
+  it('用户点击正确日志"查询"后才恰好发起一次列表请求（§7.1-6）', async () => {
+    mockedStatus.mockResolvedValue(okStatus(true))
+    const wrapper = await mountPage()
+    await flushPromises()
+    expect(mockedSearch).toHaveBeenCalledTimes(1)
+
+    await tabItems(wrapper)[1].trigger('click')
+    await flushPromises()
+    mockedSearch.mockClear()
+
+    filters(wrapper)[1].vm.$emit('query')
+    await flushPromises()
+
+    expect(mockedSearch).toHaveBeenCalledTimes(1)
+    expect(mockedSearch.mock.calls[0][0].logType).toBe('correct')
+    wrapper.unmount()
+  })
+
+  it('正确日志查询后切换 Tab 再返回不自动重查且保留结果（§4.2/§7.1-9）', async () => {
+    mockedStatus.mockResolvedValue(okStatus(true))
+    const wrapper = await mountPage()
+    await flushPromises()
+
+    await tabItems(wrapper)[1].trigger('click')
+    await flushPromises()
+    mockedSearch.mockClear()
+    mockedSearch.mockResolvedValue(listWithOne('c1'))
+    filters(wrapper)[1].vm.$emit('query')
+    await flushPromises()
+    expect(tables(wrapper)[1].props('queryStatus')).toBe('SUCCESS_WITH_DATA')
+    expect((tables(wrapper)[1].props('items') as LogListVO[])[0].cdcLogId).toBe('c1')
+
+    mockedSearch.mockClear()
+    await tabItems(wrapper)[0].trigger('click')
+    await tabItems(wrapper)[1].trigger('click')
+    await flushPromises()
+
+    expect(mockedSearch).not.toHaveBeenCalled()
+    expect(tables(wrapper)[1].props('queryStatus')).toBe('SUCCESS_WITH_DATA')
+    expect((tables(wrapper)[1].props('items') as LogListVO[])[0].cdcLogId).toBe('c1')
+    wrapper.unmount()
+  })
+
+  it('同路由再次点击菜单后错误日志重新默认查询、正确日志恢复尚未查询（§4.2/§7.1-11）', async () => {
+    mockedStatus.mockResolvedValue(okStatus(true))
+    const wrapper = await mountPage()
+    await flushPromises()
+
+    // 正确日志先完成一次有数据查询
+    await tabItems(wrapper)[1].trigger('click')
+    await flushPromises()
+    mockedSearch.mockClear()
+    mockedSearch.mockResolvedValue(listWithOne('c1'))
+    filters(wrapper)[1].vm.$emit('query')
+    await flushPromises()
+    expect(tables(wrapper)[1].props('queryStatus')).toBe('SUCCESS_WITH_DATA')
+
+    mockedStatus.mockClear()
+    mockedOptions.mockClear()
+    mockedSearch.mockClear()
+
+    triggerLogQueryReinit()
+    await flushPromises()
+
+    // 错误日志重新执行默认查询
+    expect(mockedSearch).toHaveBeenCalledTimes(1)
+    expect(mockedSearch.mock.calls[0][0].logType).toBe('error')
+    // 正确日志恢复尚未查询状态且无数据
+    expect(tables(wrapper)[1].props('queryStatus')).toBe('NOT_QUERIED')
+    expect(tables(wrapper)[1].props('items')).toHaveLength(0)
+    // 缺省条件重新填充
+    const form = filters(wrapper)[1].props('form') as LogQueryForm
+    expect(form.sourceDataSourceIds).toEqual([ALL_DATA_SOURCE])
+    wrapper.unmount()
+  })
+
+  it('旧页面代次中的正确日志响应不得覆盖重新初始化后的尚未查询状态（§7.1-12）', async () => {
+    mockedStatus.mockResolvedValue(okStatus(true))
+    const wrapper = await mountPage()
+    await flushPromises()
+
+    await tabItems(wrapper)[1].trigger('click')
+    await flushPromises()
+    const dOld = deferred<ApiResponse<LogListResponse>>()
+    mockedSearch.mockClear()
+    mockedSearch.mockImplementationOnce(() => dOld.promise)
+    filters(wrapper)[1].vm.$emit('query')
+    await flushPromises()
+    expect(tables(wrapper)[1].props('queryStatus')).toBe('LOADING')
+
+    triggerLogQueryReinit()
+    await flushPromises()
+    expect(tables(wrapper)[1].props('queryStatus')).toBe('NOT_QUERIED')
+
+    dOld.resolve(listWithOne('old'))
+    await flushPromises()
+    expect(tables(wrapper)[1].props('queryStatus')).toBe('NOT_QUERIED')
+    expect(tables(wrapper)[1].props('items')).toHaveLength(0)
     wrapper.unmount()
   })
 })

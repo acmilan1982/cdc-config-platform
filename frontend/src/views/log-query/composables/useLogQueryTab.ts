@@ -6,6 +6,8 @@ import type { LogListQuery, LogListVO, LogType } from '@/types/logQuery'
  * 每 Tab 独立状态机（LQ-UI-035 / 140、LQ-TAB-01~08）。
  * 表单条件、已生效条件、列表、请求游标栈、hasNext/nextCursor、loading、error、
  * initialQueryAttempted 全部独立；成功才原子替换；失败保留旧状态；请求令牌防旧响应覆盖。
+ * 正确日志 Tab 首次切换只初始化缺省条件、不自动查询，保持 NOT_QUERIED 状态（本任务修订，
+ * 见 deriveTabQueryStatus）；错误日志仍按既有规则在初始化完成后自动首查。
  */
 
 /** "全部"互斥哨兵，仅存在于表单内，提交时映射为"不携带该数组条件"（LQ-UI-056） */
@@ -48,6 +50,33 @@ export interface LogQueryTabState {
   reset: () => void
   nextPage: () => Promise<void>
   prevPage: () => Promise<void>
+}
+
+/**
+ * Tab 查询状态（LQ-UI-140 修订）：
+ * NOT_QUERIED 尚未执行查询，显示引导文案；
+ * LOADING 查询中，显示遮罩、旋转图标与等待秒数；
+ * SUCCESS_WITH_DATA 查询成功且有数据，显示表格；
+ * SUCCESS_EMPTY 查询成功但无数据，显示"暂无数据"；
+ * FAILED 查询失败，显示既有失败提示并保留既有列表语义。
+ */
+export type LogQueryTabStatus =
+  | 'NOT_QUERIED'
+  | 'LOADING'
+  | 'SUCCESS_WITH_DATA'
+  | 'SUCCESS_EMPTY'
+  | 'FAILED'
+
+/**
+ * 从每 Tab 独立状态推导查询状态。
+ * 以 applied 是否已生效（成功执行过查询）区分 NOT_QUERIED 与 SUCCESS_EMPTY，
+ * 不用 items.length === 0 推断"是否查询过"。
+ */
+export function deriveTabQueryStatus(tab: LogQueryTabState): LogQueryTabStatus {
+  if (tab.loading) return 'LOADING'
+  if (tab.error !== null) return 'FAILED'
+  if (tab.applied === null) return 'NOT_QUERIED'
+  return tab.items.length > 0 ? 'SUCCESS_WITH_DATA' : 'SUCCESS_EMPTY'
 }
 
 const DAY_SPAN_MS = 7 * 24 * 60 * 60 * 1000

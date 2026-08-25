@@ -31,6 +31,10 @@
 - `LOG-QUERY-BASELINE-ADJUSTMENT-001-R1`（2026-08-21）：依据用户复审确认做三项微型一致性修订：① 取消状态失败页“重新检测”按钮，固定文案为标题“功能状态获取失败”、说明“暂时无法获取日志查询功能状态，请刷新页面或稍后重新进入。”，不自动重试/轮询/刷新，用户只能通过刷新、重新进入或再次点击当前“日志查询”菜单重新检测状态（LQ-UI-009 / 019 / 210 / 219）；② 页面事实修正：真实日志查询页面初版已实现（前端提交 `17680b34` 已将原占位页替换），本文档现行规则明确“当前页面为占位页”“后续才替换占位内容”为历史口径（LQ-UI-003 / 010）。本文档状态保持 `DRAFT_PENDING_USER_REVIEW`，实现状态保持 `IN_PROGRESS`；本条目描述修订动作，不代表本次调整已经用户复审批准。
 - `LOG-QUERY-BASELINE-ADJUSTMENT-APPROVAL-001`（2026-08-21）：用户已批准 `LOG-QUERY-BASELINE-ADJUSTMENT-001` 与 `LOG-QUERY-BASELINE-ADJUSTMENT-001-R1` 形成的完整调整内容，执行正式批准收口。本文档状态由 `DRAFT_PENDING_USER_REVIEW` 转为 `APPROVED`，成为日志查询功能当前正式 UI/交互设计基线；允许进入本次调整相关的后端、前端、自动化测试、开发库联调和验收执行；批准不代表新增状态接口和前端调整已经实现，不代表任何验收用例已经执行或通过；最终物理设计、生产 DDL 与生产等价性能验收继续延期；菜单始终显示，但生产阻断条件完成前 `CDC_LOG_QUERY_ENABLED` 必须保持 `false`；原四接口不判断开关的边界继续有效。
 - `LOG-QUERY-BASELINE-ADJUSTMENT-APPROVAL-001-R1`（2026-08-21）：批准后现行状态标识与声明措辞微型一致性补正：统一现行前端实现状态为 `IMPLEMENTED_PENDING_REVIEW_WITH_REQUIRED_CHANGES`（历史修订记录中的 `IMPLEMENTED_PENDING_REVIEW` 保留为当时状态）；修正当前页面实现声明，不再笼统称"不代表接口或页面已经实现"。本补正仅为批准后的状态与措辞一致性修订，不改变批准范围、业务语义、实现事实或验收状态；文档状态保持 `APPROVED / IN_PROGRESS`，最新批准任务仍为 `LOG-QUERY-BASELINE-ADJUSTMENT-APPROVAL-001`。
+- `LOG-QUERY-CURSOR-CORRECT-TAB-ADJUSTMENT-001`（2026-08-25）：依据用户对游标分页与正确日志 Tab 的视觉复审，做两项定向微调：
+  - 正确日志首次切换不自动查询：正确日志第一次切换只初始化并展示缺省条件（当前自然日、源库/目标库“全部”、表名空），不发起列表请求；未查询状态（`NOT_QUERIED`）显示引导文案“正确日志数据量较大，请设置查询条件后点击"查询"”（弱提示“默认查询时间为当天。缩小时间范围或指定数据源、表名可提高查询速度。”可选），不显示“暂无数据”、无加载遮罩/旋转图标/等待秒数/慢查询提示；等待用户点击“查询”后才发起首次列表查询；查询后切换回正确日志恢复其表单/已生效条件/列表/错误/游标历史，不重新查询；查询状态由 `loading / error / appliedCriteria / items` 推导区分 `NOT_QUERIED / LOADING / SUCCESS_WITH_DATA / SUCCESS_EMPTY / FAILED`，不得用 `items.length === 0` 推断是否已查询（见 LQ-UI-032 / 035 / 140、§15.2 状态转换表、LQ-UI-180 ~ 181 的 `NOT_QUERIED` 新行）。
+  - 开发环境游标密钥：`cdc.log-query.cursor-secret` 在 `application-dev.yml` 配置为固定开发密钥（值不写入本文档正文，见对应报告）；开发环境结果超过固定页大小（100）需要生成 `nextCursor` 时不再抛 `IllegalStateException`；生产配置不携带该密钥（本调整不改写 UI 交互）。
+  - 本次调整只改变正确日志首次切换交互，不改变其他已批准 UI 规则；本文档状态保持 `APPROVED`，实现状态保持 `IN_PROGRESS`。
 
 本文档状态为 `APPROVED`：`LOG-QUERY-BASELINE-ADJUSTMENT-001` 与 `-R1` 完整调整内容已经用户批准收口，本文档是日志查询功能当前正式 UI/交互设计基线；批准不代表本次新增状态接口、开放控制、未开放页、状态失败页以及相关前端定向调整已经实现，也不代表已有前端初版已经符合当前新基线。日志查询真实页面初版已经存在，但本次调整尚未实现。本文只定义 UI/交互详细设计，不代表接口已经实现、功能已经验收或性能已经验证。实现、测试与验收仍需独立完成。最终物理数据库设计（一级 RANGE 分区粒度、子分区、索引形态、生产 DDL、生产等价性能验收）仍属于延期项；菜单始终显示，生产环境 `CDC_LOG_QUERY_ENABLED` 在全部阻断项通过并获批前保持 `false`。
 
@@ -124,7 +128,7 @@
 |---|---|
 | LQ-UI-030 | 页面内两个 Tab，顺序固定：错误日志在前、正确日志在后（`LQ-SCOPE-04`）。 |
 | LQ-UI-031 | 默认打开"错误日志"Tab（`LQ-SCOPE-05`）；首次进入页面时，错误日志以默认条件自动查询第一页。 |
-| LQ-UI-032 | "正确日志"Tab 在第一次切换到时才触发并执行其首次查询；此前不查询、不创建其状态（`LQ-SCOPE-11`、`LQ-TAB-21`）；其 `initialQueryAttempted` 在首次查询触发后置为 `true`，无论成功、失败或超时。 |
+| LQ-UI-032 | "正确日志"Tab 第一次切换时只初始化并展示缺省条件（当前自然日、源库/目标库“全部”、表名空），不触发查询；其查询状态为 `NOT_QUERIED`，显示引导文案“正确日志数据量较大，请设置查询条件后点击"查询"”（弱提示“默认查询时间为当天。缩小时间范围或指定数据源、表名可提高查询速度。”可选），无加载遮罩/旋转图标/等待秒数/慢查询提示、不显示“暂无数据”；等待用户点击“查询”后才发起首次列表查询（`LQ-SCOPE-11`、`LQ-TAB-21`）。 |
 | LQ-UI-033 | 两个 Tab 查询区、列表区、详情/原始消息交互规范完全共用，仅 Tab 标题与数据源表不同（`LQ-SCOPE-10`）。 |
 | LQ-UI-034 | Tab 标题只显示"错误日志""正确日志"，不显示任何总数（`LQ-SCOPE-09`、`LQ-TAB-24`）。 |
 
@@ -132,7 +136,7 @@
 
 | 编号 | 规则 |
 |---|---|
-| LQ-UI-035 | 每个 Tab 独立保存以下状态，互不覆盖（`LQ-TAB-01~08`）：表单条件 `formCriteria`、已生效条件 `appliedCriteria`、当前结果列表 `items`、请求游标栈 `requestCursorStack`、当前页 `hasNext` / `nextCursor`、加载状态 `loading`、错误状态 `error`、首次查询触发标志 `initialQueryAttempted`。`initialQueryAttempted` 表示"该 Tab 已完成首次初始化流程且首次查询已经触发"，不表示请求成功；第一次自动查询无论成功、失败或超时，该标志都变为 `true`；随后切换离开再返回该 Tab，不得再次自动触发首次查询，失败后由用户点击"查询"主动重试；重新进入整个页面时两 Tab 的该标志清零。 |
+| LQ-UI-035 | 每个 Tab 独立保存以下状态，互不覆盖（`LQ-TAB-01~08`）：表单条件 `formCriteria`、已生效条件 `appliedCriteria`、当前结果列表 `items`、请求游标栈 `requestCursorStack`、当前页 `hasNext` / `nextCursor`、加载状态 `loading`、错误状态 `error`、首次查询触发标志 `initialQueryAttempted`。`initialQueryAttempted` 表示"该 Tab 已完成首次初始化流程且首次查询已经触发"，不表示请求成功；第一次查询无论成功、失败或超时，该标志都变为 `true`；随后切换离开再返回该 Tab，不得再次自动触发首次查询，失败后由用户点击"查询"主动重试；重新进入整个页面时两 Tab 的该标志清零。错误日志的首次查询由初始化链自动触发；正确日志的首次查询必须由用户点击“查询”触发，第一次切换只填充缺省条件并保持 `NOT_QUERIED`。 |
 | LQ-UI-036 | 切换 Tab 只切换视图，不销毁目标 Tab 状态；后续切换直接恢复目标 Tab 自己的表单、列表、游标和分页，不发起新查询（`LQ-TAB-22`）。 |
 | LQ-UI-037 | 在一个 Tab 中查询、重置、分页或加载，不影响另一个 Tab 的任何状态（`LQ-TAB-23`）；两个 Tab 的请求各自带 Tab 标识，错误日志响应不得写入正确日志状态（`LQ-TAB-56`）。 |
 | LQ-UI-038 | 后台正在查询的 Tab 标题旁显示小型加载标识，与当前可见 Tab 的加载遮罩相互独立（`LQ-LOAD-20 / 21`）。 |
@@ -184,7 +188,7 @@
 |---|---|
 | LQ-UI-060 | 控件为精确到秒的时间范围选择（`el-date-picker type="datetimerange"`），`format` 与提交值格式均为 `yyyy-MM-dd HH:mm:ss`，不含毫秒与时区后缀（`LQ-FILTER-51 / 59`、`LQ-TIME-02`）。 |
 | LQ-UI-061 | 默认值为当前自然日：开始 `00:00:00`、结束 `23:59:59`（含开始秒与结束秒）（`LQ-FILTER-52`）。 |
-| LQ-UI-062 | 当前自然日按以下三个时点分别计算，互不混用（`LQ-FILTER-61 / 62 / 63`、`AC-14`）：首次进入页面（错误日志）；第一次打开正确日志 Tab；点击当前 Tab"重置"。 |
+| LQ-UI-062 | 当前自然日按以下三个时点分别计算，互不混用（`LQ-FILTER-61 / 62 / 63`、`AC-14`）：首次进入页面（错误日志）；第一次切换正确日志 Tab（只填充缺省时间范围，不自动查询，保持 `NOT_QUERIED`）；点击当前 Tab"重置"。 |
 | LQ-UI-063 | 时间范围为必填；控件内任一端为空或整体为空时不得发起查询，并给出必填提示（`LQ-FILTER-53 / 54`）。 |
 | LQ-UI-064 | 开始时间晚于结束时间时不得发起查询，并给出顺序错误提示（`LQ-FILTER-55`）。 |
 | LQ-UI-065 | 最大跨度为 7 天，采用排他边界公式校验 `endExclusive - startTime <= 7 × 24 小时`（`endExclusive` = 所选结束秒 + 1 秒）；超过即拒绝查询，提示"时间跨度超过 7 天，请缩小查询范围"（`LQ-FILTER-56`、`LQ-API-34`）。完整选择连续 7 个自然日为合法边界值。 |
@@ -338,7 +342,7 @@
 
 | 编号 | 规则 |
 |---|---|
-| LQ-UI-140 | 每个 Tab 维护：`formCriteria`（表单条件）、`appliedCriteria`（已生效条件）、`items`（当前列表）、`requestCursorStack`（请求游标栈）、`hasNext`、`nextCursor`（当前页响应保存）、`loading`、`error`、`initialQueryAttempted`（首次查询触发标志），相互独立且互不覆盖（`LQ-TAB-01~08`、`LQ-UI-035`）。 |
+| LQ-UI-140 | 每个 Tab 维护：`formCriteria`（表单条件）、`appliedCriteria`（已生效条件）、`items`（当前列表）、`requestCursorStack`（请求游标栈）、`hasNext`、`nextCursor`（当前页响应保存）、`loading`、`error`、`initialQueryAttempted`（首次查询触发标志），相互独立且互不覆盖（`LQ-TAB-01~08`、`LQ-UI-035`）。查询状态由 `loading / error / appliedCriteria / items` 推导：`appliedCriteria===null` 且未加载未失败为 `NOT_QUERIED`（正确日志缺省条件已填充但未查询时的状态，显示引导文案）；加载中为 `LOADING`；失败为 `FAILED`；`appliedCriteria!==null` 且有数据为 `SUCCESS_WITH_DATA`、无数据为 `SUCCESS_EMPTY`。不得用 `items.length === 0` 推断未查询。 |
 | LQ-UI-141 | 表单值变化不立即查询，不改变 `appliedCriteria`；只有成功点击"查询"后 `appliedCriteria` 才被原子替换（`LQ-TAB-10~12`）。 |
 
 ### 15.2 状态转换表
@@ -346,20 +350,20 @@
 | 动作 | 请求条件 | 成功后的状态变化 | 失败后的状态变化 |
 |---|---|---|---|
 | 首次进入页面 | 错误日志默认条件（当前自然日） | 错误日志 `appliedCriteria`=默认、`requestCursorStack=[null]`、`items`=第一页、`initialQueryAttempted=true` | 保留空列表与初始表单，显示错误，`initialQueryAttempted=true`（已触发首次查询，不代表成功），不自动重试 |
-| 第一次切换正确日志 | 正确日志默认条件（当前自然日） | 正确日志首次查询，行为同首次进入 | 同错误日志失败处理（`initialQueryAttempted=true`、不自动重试），仅在正确日志内生效 |
+| 第一次切换正确日志 | 正确日志缺省条件（当前自然日、源库/目标库“全部”、表名空），仅初始化不发起请求 | 缺省条件已填充、`appliedCriteria=null`、`requestCursorStack=[null]`、`items` 空、状态 `NOT_QUERIED`，显示引导文案“正确日志数据量较大，请设置查询条件后点击"查询"” | 不适用（未发起请求，无失败路径） |
 | 点击查询 | 当前表单快照 | 成功后才原子替换 `appliedCriteria`、`items`、`requestCursorStack=[null]`、`hasNext/nextCursor` | 保留旧列表、旧已生效条件、旧游标栈 |
 | 点击重置 | 无请求 | 仅改当前 Tab 表单（时间=点击时所在自然日） | 无失败路径（本地操作） |
 | 下一页 | 当前页响应的 `nextCursor` | 成功后压栈并更新 `items` | 不压栈，停留当前页 |
 | 上一页 | 弹出栈顶后的新栈顶游标 | 成功后整体替换为目标栈并更新 `items` | 不弹栈，停留当前页 |
-| Tab 切换 | 无请求（该 Tab 首次打开除外） | 恢复目标 Tab 状态；已触发过首次查询（无论成败）的 Tab 不再自动触发首次查询 | 不适用 |
-| 重新进入菜单 | 见 §15.3 | 先调用状态接口：两 Tab 状态全部失效并重新初始化，`initialQueryAttempted` 清零；`enabled=true` 恢复错误日志默认查询，`enabled=false` 显示未开放页 | 旧请求被丢弃 |
+| Tab 切换 | 无请求 | 恢复目标 Tab 状态；正确日志首次切换也只填充缺省条件保持 `NOT_QUERIED`；已触发过首次查询（无论成败）的 Tab 不再自动触发首次查询 | 不适用 |
+| 重新进入菜单 | 见 §15.3 | 先调用状态接口：两 Tab 状态全部失效并重新初始化，`initialQueryAttempted` 清零；`enabled=true` 恢复错误日志默认查询、正确日志恢复到“缺省条件已填充但未查询”的 `NOT_QUERIED`，`enabled=false` 显示未开放页 | 旧请求被丢弃 |
 
 ### 15.3 重新进入与请求失效
 
 | 编号 | 规则 |
 |---|---|
 | LQ-UI-142 | 以下情况视为重新进入功能（`LQ-TAB-50`）：浏览器刷新；离开日志查询页面后从其他菜单返回；再次点击左侧"日志查询"菜单，即使当前已处于该路由。 |
-| LQ-UI-143 | 重新进入时立即作废两个 Tab 的在途列表、详情、原始消息与状态请求；关闭并清理弹窗内容；清空两 Tab 的表单条件、已生效条件、列表、游标历史、错误、加载、等待秒数和 `initialQueryAttempted` 标志；先调用状态接口；`enabled=true` 时恢复默认错误日志 Tab 并按动作发生时的当前自然日执行默认查询，`enabled=false` 时显示未开放页；正确日志等第一次切换时再触发首次查询（`LQ-TAB-51 / 52`、`LQ-OPEN-08 ~ 10`）。 |
+| LQ-UI-143 | 重新进入时立即作废两个 Tab 的在途列表、详情、原始消息与状态请求；关闭并清理弹窗内容；清空两 Tab 的表单条件、已生效条件、列表、游标历史、错误、加载、等待秒数和 `initialQueryAttempted` 标志；先调用状态接口；`enabled=true` 时恢复默认错误日志 Tab 并按动作发生时的当前自然日执行默认查询，正确日志恢复到“缺省条件已填充但未查询”的 `NOT_QUERIED` 状态，`enabled=false` 时显示未开放页；正确日志的首次列表查询必须由用户点击“查询”触发（`LQ-TAB-51 / 52`、`LQ-OPEN-08 ~ 10`）。 |
 | LQ-UI-144 | 不使用 LocalStorage、SessionStorage 或其他持久化方式保存查询状态（`LQ-TAB-53`、`LQ-VALID-06`）。 |
 | LQ-UI-145 | 重新进入时旧页面实例未完成的请求尽量取消；无法真正取消时，通过页面代次或每 Tab 请求令牌将旧请求标记为失效（含状态请求），旧请求成功或失败返回均不得覆盖新页面状态（`LQ-TAB-54 / 55`）。 |
 | LQ-UI-146 | 弹窗响应过期后不得重新打开已关闭弹窗或写入新页面实例（`LQ-LOAD-38`）；跨 Tab 响应隔离见 `LQ-UI-037`。 |
@@ -384,6 +388,7 @@
 | 编号 | 规则 |
 |---|---|
 | LQ-UI-180 | 查询成功但无数据：列表区显示"当前查询条件下暂无日志"（空数据态），分页按钮禁用（`LQ-VALID-01`）。 |
+| LQ-UI-180A | 未查询状态（`NOT_QUERIED`，仅正确日志首次切换时出现）：列表区显示引导文案"正确日志数据量较大，请设置查询条件后点击"查询""（弱提示"默认查询时间为当天。缩小时间范围或指定数据源、表名可提高查询速度。"可选），不显示"暂无数据"、不显示加载遮罩/旋转图标/等待秒数/慢查询提示，分页按钮不可用（`LQ-SCOPE-11`、`LQ-TAB-21`）。 |
 | LQ-UI-181 | 查询失败：显示明确错误信息并保留旧数据，不得显示为空数据（`LQ-VALID-02`）。 |
 | LQ-UI-182 | 字段空值统一显示 `--`（含缺失字段等同 null 的 `--` 规则，`LQ-LIST-25`、`LQ-API-05`）。 |
 | LQ-UI-183 | 数据源名称缺失的降级展示（`LQ-DATA-07 ~ 10 / 13 / 14`、`LQ-API-64`），列表、Tooltip 与详情统一：名称和 ID 均缺失 → 显示 `--`，不显示 Tooltip；名称缺失但 ID 存在 → 单元格只显示 ID，Tooltip 只显示“数据源 ID：{ID}”，详情只显示一次 ID；名称存在且 ID 存在 → 单元格显示名称，Tooltip 显示完整名称和“数据源 ID：{ID}”，详情展示名称与 ID；数据源记录存在但 `DATA_SOURCE_ORG` 为空 → 显示“未定义名称”，Tooltip 同时显示 ID。不出现 Tooltip 与单元格降级值矛盾、不出现 `ID（ID）`。名称映射只作用于展示，不参与过滤（`LQ-API-66`）。 |
@@ -423,7 +428,7 @@
 | 编号 | 建议组件 | 职责 |
 |---|---|---|
 | LQ-UI-210 | `LogQueryPage.vue`（页面容器） | 持有路由/菜单生命周期：负责"重新进入"检测与两 Tab 全部状态失效重建、页面代次管理、状态检测流程（调用 `GET /api/log-query/status`）与"状态检测中 / 功能未开放 / 状态检测失败"三种页面级状态、`enabled=true` 后错误日志默认初始化；不承载具体查询逻辑。 |
-| LQ-UI-211 | `LogQueryTabs.vue` 或每 Tab 独立子组件 + `useLogQueryTab` 组合式逻辑 | 每 Tab 独立实现 `formCriteria / appliedCriteria / items / requestCursorStack / hasNext / nextCursor / loading / error / initialQueryAttempted` 状态机与动作（首查、查询、重置、下一页、上一页、失效丢弃）；`initialQueryAttempted` 仅标记首次查询已触发，不表示成功。 |
+| LQ-UI-211 | `LogQueryTabs.vue` 或每 Tab 独立子组件 + `useLogQueryTab` 组合式逻辑 | 每 Tab 独立实现 `formCriteria / appliedCriteria / items / requestCursorStack / hasNext / nextCursor / loading / error / initialQueryAttempted` 状态机与动作（首查、查询、重置、下一页、上一页、失效丢弃）；`initialQueryAttempted` 仅标记首次查询已触发，不表示成功；查询状态由 `loading / error / appliedCriteria / items` 推导（`NOT_QUERIED / LOADING / SUCCESS_WITH_DATA / SUCCESS_EMPTY / FAILED`，见 LQ-UI-140），错误日志首查由初始化链自动触发、正确日志首查由用户点击“查询”触发。 |
 | LQ-UI-212 | `LogQueryFilter.vue` | 查询区表单：多选下拉（"全部"互斥）、表名输入、时间范围选择、校验提示；只与所属 Tab 状态交互。 |
 | LQ-UI-213 | `LogQueryTable.vue` | 12 列列表、固定列、横向/纵向滚动、空数据/错误/加载态、行操作按钮。 |
 | LQ-UI-214 | `LogDetailDialog.vue` | 日志详情弹窗：按需加载、字段展示、纯文本安全、复制、独立加载/错误态。 |
