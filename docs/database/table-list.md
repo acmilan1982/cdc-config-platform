@@ -1,3 +1,11 @@
+> **HISTORICAL_SUPERSEDED（历史文档，已被取代）**
+>
+> 本文件为历史快照，已由 PROJECT-DATABASE-BASELINE-001 数据库基线取代（取代日期 2026-08-26）。文件保留原貌仅供追溯，不得作为当前事实直接引用；与现行数据库/代码不一致处以新基线为准。
+> 新权威文档：`docs/database/README.md`（总入口）、`docs/database/SCHEMA.md`（当前实际使用表总清单）、`docs/database/tables/`（14 张单表物理基线）。
+> 本快照为 2026-07-03 的旧 10 表白名单（含 CDC_SERVER / CDC_SERVER_CONFIG / CDC_TOPIC_OFFSET / CDC_DATA_SOURCE_RUN_STATE 等），当前生产代码仅使用 14 张表，见 `SCHEMA.md` §2。
+
+---
+
 # 白名单表清单与分析状态
 
 ## 数据库信息

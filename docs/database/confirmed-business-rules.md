@@ -1,3 +1,11 @@
+> **HISTORICAL_SUPERSEDED（历史文档，已被取代）**
+>
+> 本文件为历史快照，已由 PROJECT-DATABASE-BASELINE-001 数据库基线取代（取代日期 2026-08-26）。文件保留原貌仅供追溯，不得作为当前事实直接引用；与现行数据库/代码不一致处以新基线为准。
+> 新权威文档：`docs/database/CODE_VALUES.md`（公共码值）、`docs/database/RELATIONS.md`（跨表关系）、`docs/database/SCHEMA.md`（使用范围）、`docs/database/DATA_PROFILE.md`（规模与确认项）；业务规则以对应 Feature 功能基线为准。
+> 本快照为 2026-07-03 确认记录，其中旧 10 表使用范围（含 CDC_SERVER 等）已过时；主键状态等与本次核验存在差异（如 CDC_DATA_SUBSCRIBE 当前无主键）需以新基线为准。
+
+---
+
 # 已确认数据库业务规则
 
 > 来源：DATABASE_ANALYSIS_001 问题答复

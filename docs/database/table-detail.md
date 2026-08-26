@@ -1,3 +1,11 @@
+> **HISTORICAL_SUPERSEDED（历史文档，已被取代）**
+>
+> 本文件为历史快照，已由 PROJECT-DATABASE-BASELINE-001 数据库基线取代（取代日期 2026-08-26）。文件保留原貌仅供追溯，不得作为当前事实直接引用；与现行数据库/代码不一致处以新基线为准。
+> 新权威文档：`docs/database/tables/` 下 14 张单表物理基线（如 `tables/CDC_DATA_SOURCE.md`）、`docs/database/SCHEMA.md`。
+> 本快照为 2026-07-03 记录，含旧 10 表（CDC_SERVER / CDC_SERVER_CONFIG / CDC_TOPIC_OFFSET / CDC_DATA_SOURCE_RUN_STATE 等）与当时记录数/类型；字段类型以本次核验为准（如 CDC_LOG_*.RESULT_CODE/OFFSET 为 NUMBER(10)），主键/约束/索引以单表基线为准。
+
+---
+
 # 表结构详情
 
 > 最近更新：2026-07-03（根据项目负责人答复更新）
