@@ -1,6 +1,9 @@
 # SCHEMA — CDC Schema 整体概览（项目数据库物理基线）
 
-> 文档状态：`DRAFT_PENDING_USER_REVIEW`
+> 文档状态：`APPROVED`
+> 批准任务：PROJECT-DATABASE-BASELINE-APPROVAL-001
+> 批准日期：2026-08-26
+> 批准基线提交：35ca45d3fab23ac95c5fb42c6623cfb7589ce82a
 > 核验时间：2026-08-26
 > 数据库：Oracle 19c 开发库（192.168.174.65:1521/prod.enmotech.com）
 > Schema：CDC
@@ -125,7 +128,7 @@
 
 ## 7. 与项目基线、Feature 文档、代码和真实数据库的权威边界
 
-- 本文件与 `tables/*.md` 为**数据库物理结构权威快照**，状态 `DRAFT_PENDING_USER_REVIEW`，尚未 `APPROVED`。
+- 本文件与 `tables/*.md` 为**数据库物理结构权威快照**，状态 `APPROVED`（2026-08-26 批准，PROJECT-DATABASE-BASELINE-APPROVAL-001）。
 - 结构以真实数据库为准；文档为已核验快照。发现文档与数据库不一致时，以数据库为准并更新文档。
 - 业务规则、代码行为、Feature 级设计以 `docs/features/` 与 `docs/baseline/` 为准；本文件只登记物理结构、代码访问入口与读写边界，不复制 Feature 详细设计。
 - 禁止在数据库文档中记录连接密码、字段密码值、RAW_MESSAGE、LOG_DETAIL 或敏感业务原文（见 README §9）。
@@ -139,3 +142,4 @@
 | 2026-08-26 | 建立 Schema 整体概览（DRAFT_PENDING_USER_REVIEW） | PROJECT-DATABASE-BASELINE-001 只读核验 |
 | 2026-08-26 | R1：修正无物理外键表述；更新 SUBSCRIBE/JFE/JHL 数据维护方；移除 CDC_CLIENT 现行说明并重排 §5 | PROJECT-DATABASE-BASELINE-001-R1 修订 |
 | 2026-08-26 | R2：修正 §3 总体访问边界（14 张使用表访问入口走项目后端代码，部分表由外部进程或人工维护）；CDC_CLIENT_MULTIPLE 维护方调整为人工维护（当前管理平台仅只读，后续计划单独开发 CRUD，尚未实现） | PROJECT-DATABASE-BASELINE-001-R2 修订 |
+| 2026-08-26 | 批准：项目级数据库基线正式批准收口（APPROVED） | PROJECT-DATABASE-BASELINE-APPROVAL-001 批准 |

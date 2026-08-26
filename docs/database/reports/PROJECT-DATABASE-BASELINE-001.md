@@ -1,6 +1,9 @@
 # 实施报告：PROJECT-DATABASE-BASELINE-001（建立项目级数据库基线）
 
-> 文档状态：`DRAFT_PENDING_USER_REVIEW`
+> 文档状态：`APPROVED`
+> 批准任务：PROJECT-DATABASE-BASELINE-APPROVAL-001
+> 批准日期：2026-08-26
+> 批准基线提交：35ca45d3fab23ac95c5fb42c6623cfb7589ce82a
 > 执行日期：2026-08-26
 > 数据库环境：Oracle 19c 开发库（192.168.174.65:1521/prod.enmotech.com），Schema `CDC`
 > 任务提示词：`docs/prompts/database/PROJECT-DATABASE-BASELINE-001-PROMPT.md`
@@ -375,3 +378,75 @@ R1 报告记录的提示词路径 `docs/prompts/database/PROJECT-DATABASE-BASELI
 - 推送：普通 `git push origin develop`，禁止 force push；推送后核验本地 HEAD 与 origin/develop 一致、ahead/behind `0 0`。
 - 实际 result_commit_id / remote_commit_id / ahead_behind：以最终机器可读结果（AGENT_TASK_RESULT）为准。
 - 后续边界：R2 任务在推送后停止；当前状态仍为 `DRAFT_PENDING_USER_REVIEW`，下一步仅限 ChatGPT 复审与用户批准；不进入基线批准、Feature 设计、CRUD 实现、业务代码清理或数据库整改。
+
+---
+
+# 批准收口附录（PROJECT-DATABASE-BASELINE-APPROVAL-001）
+
+> 本附录为项目级数据库基线正式批准收口记录。初版、R1、R2 历史正文保持原貌；本附录明确：现行基线状态已由 `DRAFT_PENDING_USER_REVIEW` 收口为 `APPROVED`，取代历史状态，但不改写历史执行事实。
+
+## AP-1. 批准任务与元数据
+
+- 批准任务：`PROJECT-DATABASE-BASELINE-APPROVAL-001`
+- 批准日期：2026-08-26
+- 授权基线提交：`35ca45d3fab23ac95c5fb42c6623cfb7589ce82a`（本地 HEAD 与 `origin/develop` 一致，ahead/behind `0 0`）
+- 提交链：初版 `4d98f9f0da5d7bc8e8314a6fbe071a8c619837a8` → R1 `935786498173a3ead6e56851f248303ebf75b3f7` → R2 `35ca45d3fab23ac95c5fb42c6623cfb7589ce82a`
+- ChatGPT 最终复审结论：`REVIEW_PASS`
+- 批准范围：7 份总体文档 + 14 份单表文档（共 21 份现行数据库基线文档），全部统一为 `APPROVED`
+
+## AP-2. 批准内容
+
+- 当前开发库只读核验得到的物理结构快照（主键、约束、索引、字段类型、可空性、注释、LOB、分区状态）；
+- 当前生产代码实际使用的 14 张表范围，一张表一个文件的组织形式；
+- 15 条跨表逻辑关系及“项目不设置物理外键”的架构决策；数据库不保证引用完整性、代码必须处理空引用/孤立引用/无效引用的规则；
+- 数据维护方与当前管理平台读写边界；
+- 公共码值和带时间点的数据画像（开发库 2026-08-26 瞬时状态，不代表生产常态）；
+- `CDC_CLIENT_MULTIPLE ≤ 20` 的负责人硬上限；
+- `CDC_LOG_ERROR` 可能达到十万、百万、千万级且不是硬上限；
+- 一般 Feature 优先读取批准文档、仅在明确触发条件下定向重新读库的规则。
+
+## AP-3. 数量与分类核验
+
+- 当前使用表：14 张；
+- 逻辑关系：15 条（R01～R15）；
+- 已确认关系：12 条（R01～R11、R15）；
+- 高度可信关系：3 条（R12～R14）；
+- 待确认关系：0 条；
+- `pending_user_confirmation_count=0`；
+- 物理外键：0；14 张表均为非分区表；
+- 4 项候选物理设计保持 `PENDING_DECISION` 未批准：D01（SUBSCRIBE 主键）、R01（EXTEND 一对一唯一约束）、D03（JFE 查询索引）、D04（JHL 查询索引）。
+
+## AP-4. 批准边界（不批准、不实现）
+
+- 本批准不代表 `CDC_CLIENT_MULTIPLE` / `CDC_DATA_SUBSCRIBE` CRUD 已经实现（均仍为计划中、尚未实现）；
+- 不代表任何数据库整改已批准或排期；
+- 不代表任何 DDL、分区、索引或生产库变更已执行；
+- 不代表 `CDC_CLIENT` 死代码已清理；
+- 不代表 Feature 级数据库特殊规则已自动批准；
+- 不代表数据库所有未使用对象都进入当前项目范围；
+- 2026-08-26 的数据行数和码值分布不是永久不变事实；
+- 开发库数据画像不等同于生产库常态；
+- 批准后仍需按 README §6 触发条件重新核验数据库。
+
+## AP-5. 数据画像时间点边界
+
+数据画像所有当前记录数均带环境（开发库）与时间点（2026-08-26），区分 `OBSERVED_EXACT` / `OBSERVED_ESTIMATED` / `CONFIRMED_HARD_LIMIT` / `CONFIRMED_EXPECTED_SCALE` / `UNVERIFIED_ASSUMPTION` / `PENDING_CONFIRMATION` / `PENDING_DECISION`；不构成永久事实，不作为生产常态。
+
+## AP-6. 不包含内容
+
+本批准收口为纯文档任务，不包含业务代码、Feature 实现、数据库整改、DDL 或生产变更；未连接数据库、未执行数据库写操作、DDL、ZooKeeper、构建、测试或业务代码修改（`database_read_status=NONE`、`database_write_status=NONE`、`ddl_status=NONE`、`zookeeper_status=NONE`、`business_code_change_status=NONE`、`feature_document_change_status=NONE`）。
+
+## AP-7. 状态与历史处理
+
+- 21 份现行数据库基线文档顶部状态已统一为 `APPROVED`；
+- 初版、R1、R2 历史正文中当时的 `DRAFT_PENDING_USER_REVIEW`、旧待确认项和旧状态保持原样，未批量替换；
+- 5 份历史化旧文档（`table-detail.md`、`confirmed-business-rules.md`、`table-list.md`、`table-relations.md`、`data-characteristics.md`）继续保持 `HISTORICAL_SUPERSEDED`；
+- 批准只改变现行基线状态，不改写历史执行事实；当前状态取代历史状态。
+
+## AP-8. Git 提交、推送与后续维护
+
+- 暂存范围：本任务实际修改的 21 份现行数据库基线文档 + 本实施报告（追加批准收口附录）。
+- 提交信息：`docs(database): approve project database baseline`。
+- 推送：普通 `git push origin develop`，禁止 force push；推送后核验本地 HEAD 与 origin/develop 一致、ahead/behind `0 0`。
+- 实际 result_commit_id / remote_commit_id / ahead_behind：以最终机器可读结果（AGENT_TASK_RESULT）为准。
+- 后续维护：批准后一般 Feature 开发优先读取批准后的数据库文档，仅在 README §6 明确触发条件下定向重新读库；数据库结构变更（DDL）后按现有规则重新读库核验并更新对应文档；候选物理设计决策仍为 `PENDING_DECISION`，未批准不得实施。

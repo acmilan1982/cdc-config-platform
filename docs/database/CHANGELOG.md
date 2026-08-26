@@ -1,6 +1,9 @@
 # CHANGELOG — 数据库结构历史（项目数据库物理基线）
 
-> 文档状态：`DRAFT_PENDING_USER_REVIEW`
+> 文档状态：`APPROVED`
+> 批准任务：PROJECT-DATABASE-BASELINE-APPROVAL-001
+> 批准日期：2026-08-26
+> 批准基线提交：35ca45d3fab23ac95c5fb42c6623cfb7589ce82a
 > 核验时间：2026-08-26
 > 数据库：Oracle 19c 开发库（192.168.174.65:1521/prod.enmotech.com）
 > Schema：CDC
@@ -50,3 +53,4 @@
 |---|---|---|
 | 2026-08-26 | 建立数据库结构历史基线（DRAFT_PENDING_USER_REVIEW）；本任务不产生数据库结构变化 | PROJECT-DATABASE-BASELINE-001 只读核验 |
 | 2026-08-26 | R1：修正结构历史边界（LAST_DDL_TIME 不证变更内容）；SUBSCRIBE 主键冲突关闭为 P4；候选物理设计状态改为 PENDING_DECISION | PROJECT-DATABASE-BASELINE-001-R1 修订 |
+| 2026-08-26 | 批准：项目级数据库基线正式批准收口（APPROVED） | PROJECT-DATABASE-BASELINE-APPROVAL-001 批准 |

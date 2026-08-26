@@ -1,6 +1,9 @@
 # 数据库文档总入口（CDC 配置管理平台）
 
-> 文档状态：`DRAFT_PENDING_USER_REVIEW`
+> 文档状态：`APPROVED`
+> 批准任务：PROJECT-DATABASE-BASELINE-APPROVAL-001
+> 批准日期：2026-08-26
+> 批准基线提交：35ca45d3fab23ac95c5fb42c6623cfb7589ce82a
 > 核验时间：2026-08-26
 > 数据库：Oracle 19c 开发库（192.168.174.65:1521/prod.enmotech.com）
 > Schema：CDC
@@ -82,12 +85,12 @@
 
 | 状态 | 含义 |
 |---|---|
-| `VERIFIED` | 已按真实数据库核验（当前文档为 `DRAFT_PENDING_USER_REVIEW`，尚未 APPROVED） |
+| `VERIFIED` | 已按真实数据库核验（当前文档为 `APPROVED`，2026-08-26 批准） |
 | `PENDING_REVERIFY` | 需重新读库核验 |
 | `HISTORICAL_SUPERSEDED` | 旧文档已被本基线取代，保留历史原貌并指向新权威文档 |
 | `DOCUMENTED_NOT_USED` | 数据库存在但当前生产代码未使用（见 `SCHEMA.md` §5） |
 
-> 本项目数据库基线当前统一为 `DRAFT_PENDING_USER_REVIEW`，未经人工批准不标记 `APPROVED`。
+> 本项目数据库基线已于 2026-08-26 经 PROJECT-DATABASE-BASELINE-APPROVAL-001 批准，当前统一为 `APPROVED`。
 
 ## 8. 元数据与数据画像更新规则
 
@@ -115,3 +118,4 @@
 |---|---|---|
 | 2026-08-26 | 建立数据库文档总入口（DRAFT_PENDING_USER_REVIEW） | PROJECT-DATABASE-BASELINE-001 只读核验 |
 | 2026-08-26 | R1：收窄重新读库触发条件；补充无物理外键架构决策；移除 CDC_CLIENT 现行说明；更新关系编号为 R01～R15 | PROJECT-DATABASE-BASELINE-001-R1 修订 |
+| 2026-08-26 | 批准：项目级数据库基线正式批准收口（APPROVED） | PROJECT-DATABASE-BASELINE-APPROVAL-001 批准 |

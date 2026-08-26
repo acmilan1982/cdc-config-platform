@@ -1,6 +1,9 @@
 # CDC_STATS_TASK_CONFIG — 大屏统计任务配置表
 
-> 文档状态：`DRAFT_PENDING_USER_REVIEW`
+> 文档状态：`APPROVED`
+> 批准任务：PROJECT-DATABASE-BASELINE-APPROVAL-001
+> 批准日期：2026-08-26
+> 批准基线提交：35ca45d3fab23ac95c5fb42c6623cfb7589ce82a
 > 核验时间：2026-08-26
 > 数据库：Oracle 19c 开发库（192.168.174.65:1521/prod.enmotech.com）
 > Schema：CDC
@@ -118,3 +121,4 @@
 |---|---|---|
 | 2026-08-26 | 建立单表物理基线（DRAFT_PENDING_USER_REVIEW） | PROJECT-DATABASE-BASELINE-001 只读核验 |
 | 2026-08-26 | R1：UPDATED_BY 维护约定确认（可选修改人标识，无固定规则）；删除待确认措辞 | PROJECT-DATABASE-BASELINE-001-R1 修订 |
+| 2026-08-26 | 批准：项目级数据库基线正式批准收口（APPROVED） | PROJECT-DATABASE-BASELINE-APPROVAL-001 批准 |

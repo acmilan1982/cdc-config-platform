@@ -1,6 +1,9 @@
 # DATA_PROFILE — 数据现状与负责人规模画像（项目数据库物理基线）
 
-> 文档状态：`DRAFT_PENDING_USER_REVIEW`
+> 文档状态：`APPROVED`
+> 批准任务：PROJECT-DATABASE-BASELINE-APPROVAL-001
+> 批准日期：2026-08-26
+> 批准基线提交：35ca45d3fab23ac95c5fb42c6623cfb7589ce82a
 > 核验时间：2026-08-26
 > 数据库：Oracle 19c 开发库（192.168.174.65:1521/prod.enmotech.com）
 > Schema：CDC
@@ -152,3 +155,4 @@
 |---|---|---|
 | 2026-08-26 | 建立数据现状与规模画像（DRAFT_PENDING_USER_REVIEW） | PROJECT-DATABASE-BASELINE-001 只读核验 + R1 数据核验 + 项目负责人确认 |
 | 2026-08-26 | R1：拆分日志写入链与保留规则；更新数据完整性核验结论（含 R15）；关闭 P1～P5 并新增 PENDING_DECISION | PROJECT-DATABASE-BASELINE-001-R1 修订 |
+| 2026-08-26 | 批准：项目级数据库基线正式批准收口（APPROVED） | PROJECT-DATABASE-BASELINE-APPROVAL-001 批准 |
