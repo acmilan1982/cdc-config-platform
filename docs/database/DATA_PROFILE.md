@@ -4,7 +4,7 @@
 > 核验时间：2026-08-26
 > 数据库：Oracle 19c 开发库（192.168.174.65:1521/prod.enmotech.com）
 > Schema：CDC
-> 说明：本文档是**数据画像**，不是结构基线。区分信息类型：`OBSERVED_EXACT`（数据库精确查询）、`OBSERVED_ESTIMATED`（统计信息/受控估算）、`CONFIRMED_HARD_LIMIT`（负责人确认的业务硬上限）、`CONFIRMED_EXPECTED_SCALE`（负责人确认的典型/可能量级，不构成严格上限）、`UNVERIFIED_ASSUMPTION`（未核验假设）、`PENDING_CONFIRMATION`（待项目负责人确认）。所有当前记录数均带环境（开发库）与时间点（2026-08-26），不代表生产常态。禁止记录密码、RAW_MESSAGE、LOG_DETAIL 或敏感业务原文。
+> 说明：本文档是**数据画像**，不是结构基线。区分信息类型：`OBSERVED_EXACT`（数据库精确查询）、`OBSERVED_ESTIMATED`（统计信息/受控估算）、`CONFIRMED_HARD_LIMIT`（负责人确认的业务硬上限）、`CONFIRMED_EXPECTED_SCALE`（负责人确认的典型/可能量级，不构成严格上限）、`UNVERIFIED_ASSUMPTION`（未核验假设）、`PENDING_CONFIRMATION`（待项目负责人确认）、`PENDING_DECISION`（待独立设计决策）。所有当前记录数均带环境（开发库）与时间点（2026-08-26），不代表生产常态。禁止记录密码、RAW_MESSAGE、LOG_DETAIL 或敏感业务原文。
 
 ---
 
@@ -51,12 +51,13 @@
 
 ---
 
-## 3. 增长方式、增长速度与保留特征（`UNVERIFIED_ASSUMPTION` / `OBSERVED_*`）
+## 3. 写入链、增长方式与保留特征
 
 | 表/对象 | 观测与假设 | 性质 |
 |---|---|---|
-| CDC_LOG_CORRECT / CDC_LOG_ERROR | 由外部 CDC 同步程序按数据变更持续写入，为流水型增长；保留策略（归档/清理）未在代码或资料中确认 | `UNVERIFIED_ASSUMPTION` |
-| CDC_STATS_* 结果表 | 由大屏统计调度按批次 MERGE 更新，行数随维度/自然日缓慢增长 | `OBSERVED_EXACT`（当前规模）+ `UNVERIFIED_ASSUMPTION`（长期增长） |
+| CDC_LOG_CORRECT / CDC_LOG_ERROR | 写入链 `sync-server → Kafka → sync-log → CDC_LOG_CORRECT / CDC_LOG_ERROR` 为已确认业务事实（见日志查询 Feature 基线）；按数据变更持续写入，为流水型增长；当前开发库行数见 §1（OBSERVED_EXACT / ESTIMATED，2026-08-26） | 已确认业务事实 + `OBSERVED_*` |
+| CDC_LOG_CORRECT / CDC_LOG_ERROR | 归档/清理/保留时长目前**无统一规则**，代码与资料未确认，不得推断 | 未建立规则（不得写成假设或事实） |
+| CDC_STATS_* 结果表 | 由大屏统计调度按批次 MERGE 更新，行数随维度/自然日缓慢增长 | `OBSERVED_EXACT`（当前规模）+ 长期增长为观测 |
 | CDC_JOB_FAILURE_EVENT / HANDLE_LOG | 随失败事件与处理流程增长，当前规模小（28/116） | `OBSERVED_EXACT` |
 
 ---
@@ -80,17 +81,20 @@
 
 ---
 
-## 5. 数据完整性核验结论（R1 只读聚合核验，来源：DATABASE-CODE-MAPPING-001 第一阶段；开发库）
+## 5. 数据完整性核验结论（只读定向核验，开发库 2026-08-26）
+
+> 数据核验仅描述核验时点的实际状态，不构成持续完整性保证；行数快照见 §1。
 
 | 检查项 | 结论 |
 |---|---|
 | CDC_DATA_SOURCE_EXTEND.DATA_SOURCE_ID | 10 行 0 空值；1 组重复（同 ID 3 行）；2 条孤立；13 个数据源无扩展记录——均为人工构造容错测试场景，非待清理异常 |
+| CDC_DATA_SOURCE_EXTEND.TARGET_DATA_SOURCE_ID | 10 行中 2 行非空（2 个不同值），均匹配 DATA_SOURCE_CATEGORY='TARGET'，0 孤立 |
 | CDC_DATA_SUBSCRIBE.DATA_SUB_ID | 12 行 0 空值 0 重复 |
-| 逗号分隔字段 token 匹配 | CDC_CLIENT_MULTIPLE.DATA_SOURCE_ID（8 token）、DATA_FROM_SOURCE_ID（12 token）、DATA_TO_SOURCE_ID（13 token）均“每行至少一个 token 可匹配”，不证明 token 级完整性 |
-| CDC_LOG_CORRECT 数据源引用 | SOURCE/TARGET_DATA_SOURCE_ID 全量 0 空值、0 不匹配 DISTINCT 值 |
-| CDC_LOG_ERROR 数据源引用 | SOURCE 仅 1 行且为 NULL；TARGET 0 空值 0 不匹配 |
-| JFE 引用 | CLIENT_ID→CCM、DATA_SOURCE_ID→DS：R1 时 25 行 0 空值 0 孤立（当前行数 28） |
-| JHL 引用 | FAILURE_EVENT_ID→JFE.ID、CLIENT_ID→CCM、DATA_SOURCE_ID→DS：R1 时 104 行 0 空值 0 孤立（当前行数 116） |
+| 逗号分隔字段 token 匹配 | CDC_CLIENT_MULTIPLE.DATA_SOURCE_ID（12 token）、DATA_FROM_SOURCE_ID（12 token）、DATA_TO_SOURCE_ID（13 token）均“每行至少一个 token 可匹配”，不证明 token 级完整性 |
+| CDC_LOG_CORRECT 数据源引用 | SOURCE/TARGET_DATA_SOURCE_ID 全量 DISTINCT 值 0 不匹配；行数为估算，见 §1.2 |
+| CDC_LOG_ERROR 数据源引用 | SOURCE/TARGET 均非空 0 空值；TARGET 0 孤立（442 行，见 §1.1） |
+| JFE 引用 | CLIENT_ID→CCM、DATA_SOURCE_ID→DS：28 行 0 空值 0 孤立 |
+| JHL 引用 | FAILURE_EVENT_ID→JFE.ID、CLIENT_ID→CCM、DATA_SOURCE_ID→DS：116 行 0 空值 0 孤立 |
 | JFE.FAILED_JOB_ID | 非空（Flink 实际 Job ID，不在 ZK 保存） |
 
 ---
@@ -108,15 +112,32 @@
 
 ---
 
-## 7. 待项目负责人确认项（`PENDING_CONFIRMATION`）
+## 7. 待确认项与待决策项
 
-| 项 | 内容 |
-|---|---|
-| 写入方 | CDC_DATA_SUBSCRIBE、CDC_JOB_FAILURE_EVENT、CDC_JOB_FAILURE_HANDLE_LOG 的写入方未在本项目后端代码中发现，需确认维护方 |
-| 字段含义 | CDC_DATA_SOURCE_EXTEND.TARGET_DATA_SOURCE_ID 含义待确认（数据库存在、代码未映射） |
-| 维护约定 | CDC_STATS_TASK_CONFIG.UPDATED_BY 由谁维护待确认 |
-| 历史冲突 | `open-questions.md` 声称 SUBSCRIBE 主键“已验证”与本次核验“无主键”冲突，需确认 |
-| 对象范围 | SCHEMA.md §5 中历史/待分析对象是否仍属当前项目范围，需确认（CDC_CLIENT 已确认废弃除外） |
+### 7.1 待项目负责人确认项（`PENDING_CONFIRMATION`）
+
+当前 **0 项**。原 P1～P5 已按项目负责人 2026-08-26 确认结论关闭（见 §7.3）。
+
+### 7.2 待独立设计决策项（`PENDING_DECISION`）
+
+以下为候选物理设计项，未经正式批准，不承诺实施或排期：
+
+| 编号 | 对象 | 事项 | 当前物理事实 |
+|---|---|---|---|
+| D01 | CDC_DATA_SUBSCRIBE | 是否将 DATA_SUB_ID 设置为主键 | 无主键、无唯一约束、无索引 |
+| R01 | CDC_DATA_SOURCE_EXTEND | 是否约束每数据源一条扩展配置（一对一必填目标） | 无唯一约束/外键，物理允许 0..N，存在测试构造的重复/孤立/缺失 |
+| D03 | CDC_JOB_FAILURE_EVENT | 是否为 CLIENT_ID / DATA_SOURCE_ID / FAILURE_TIME 等查询字段补索引 | 仅主键索引 |
+| D04 | CDC_JOB_FAILURE_HANDLE_LOG | 是否为 FAILURE_EVENT_ID / CLIENT_ID / DATA_SOURCE_ID 补索引 | 仅主键索引 |
+
+### 7.3 原 P1～P5 关闭记录（项目负责人 2026-08-26 确认）
+
+| 原编号 | 事项 | 关闭依据 |
+|---|---|---|
+| P1 | SUBSCRIBE / JFE / JHL 写入方 | SUBSCRIBE 人工维护（管理平台仅只读，后续 CRUD 计划尚未实现）；JFE/JHL 由 sync-client 进程写入，管理平台仅只读 |
+| P2 | EXTEND.TARGET_DATA_SOURCE_ID 含义 | 业务语义为目标库（category='TARGET'），为无类别约束的弱逻辑引用；代码未映射该字段 |
+| P3 | STATS_TASK_CONFIG.UPDATED_BY 维护约定 | 可选修改人标识，无固定维护规则 |
+| P4 | SUBSCRIBE 主键历史冲突 | 当前物理事实为无主键；历史“已验证”为旧资料错误；是否增加主键属 D01 独立决策 |
+| P5 | SCHEMA §5 对象范围 | 当前基线范围为 14 张使用表；其余对象按 `DOCUMENTED_NOT_USED` / 范围外登记，不阻塞基线批准 |
 
 ## 8. 数据特征对通用设计的影响提示
 
@@ -130,3 +151,4 @@
 | 日期 | 变更 | 依据 |
 |---|---|---|
 | 2026-08-26 | 建立数据现状与规模画像（DRAFT_PENDING_USER_REVIEW） | PROJECT-DATABASE-BASELINE-001 只读核验 + R1 数据核验 + 项目负责人确认 |
+| 2026-08-26 | R1：拆分日志写入链与保留规则；更新数据完整性核验结论（含 R15）；关闭 P1～P5 并新增 PENDING_DECISION | PROJECT-DATABASE-BASELINE-001-R1 修订 |

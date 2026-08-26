@@ -34,9 +34,9 @@
 | 2 | TABLE_NAMING_STRATEGY | VARCHAR2 | 32 | — | Y | — | 当前业务库在目标库表的命名策略 |
 | 3 | TABLE_NAME_PREFIX | VARCHAR2 | 128 | — | Y | — | 目标表的前缀 |
 | 4 | TABLE_NAME_SUFFIX | VARCHAR2 | 128 | — | Y | — | 目标表的后缀 |
-| 5 | TARGET_DATA_SOURCE_ID | VARCHAR2 | 128 | — | Y | — | （无注释；当前代码 Entity 未映射此列） |
+| 5 | TARGET_DATA_SOURCE_ID | VARCHAR2 | 128 | — | Y | — | （无数据库注释；字段含义已确认，见 §9） |
 
-> 备注：列 5 `TARGET_DATA_SOURCE_ID` 为本次核验新增发现的字段；既有 `docs/database/table-detail.md`（2026-07-03 快照）仅记录 4 列，且当前代码 `DataSourceExtend` 实体也未映射该列。属“数据库存在、代码未使用”的差异，列入 §9。
+> 备注：列 5 `TARGET_DATA_SOURCE_ID` 为本次核验新增发现的字段；既有 `docs/database/table-detail.md`（2026-07-03 快照）仅记录 4 列，且当前代码 `DataSourceExtend` 实体也未映射该列。字段含义已由项目负责人 2026-08-26 确认（目标库弱逻辑引用，见 `RELATIONS.md` R15），详见 §9。
 
 ---
 
@@ -77,14 +77,15 @@
 
 ---
 
-## 9. 已知结构差异、历史兼容与待确认项
+## 9. 已知结构差异、历史兼容与待决策项
 
-- D02：该表无主键、无唯一约束、无索引。目标规则为“每个数据源应有且仅有一条扩展配置（一对一必填）”，当前物理结构未强制该规则。
+- D02：该表无主键、无唯一约束、无索引（当前物理事实）。目标规则为“每个数据源应有且仅有一条扩展配置（一对一必填）”，当前物理结构未强制；是否增加唯一约束属 `PENDING_DECISION`（候选物理设计，未经正式批准，不承诺实施或排期）。
 - 当前开发库存在人工构造的容错测试场景：重复 DATA_SOURCE_ID（同一 ID 3 行）、孤立记录（引用不到 CDC_DATA_SOURCE）、缺失扩展记录（部分数据源无扩展行）。属测试构造数据，不固化为正常业务基数（见 `DATA_PROFILE.md`）。
-- `TARGET_DATA_SOURCE_ID`（列 5）：数据库存在、当前代码未使用。含义待确认。
+- `TARGET_DATA_SOURCE_ID`（列 5）：字段含义已由项目负责人 2026-08-26 确认——业务语义为目标库（DATA_SOURCE_CATEGORY='TARGET'），为无物理外键、无类别约束的单值弱逻辑引用（见 `RELATIONS.md` R15）。当前代码 Entity 未映射该字段、无代码级 JOIN；引用方代码须兼容目标缺失、停用或类别不符等引用情况，容错由业务代码负责。
 
 ## 10. 文档级变更记录
 
 | 日期 | 变更 | 依据 |
 |---|---|---|
 | 2026-08-26 | 建立单表物理基线（DRAFT_PENDING_USER_REVIEW） | PROJECT-DATABASE-BASELINE-001 只读核验 |
+| 2026-08-26 | R1：TARGET_DATA_SOURCE_ID 含义确认（R15）；删除“含义待确认”；D02 状态改为 PENDING_DECISION | PROJECT-DATABASE-BASELINE-001-R1 修订 |

@@ -34,11 +34,11 @@
 | 1 | CDC_DATA_SOURCE | 数据源，包括源库，目标库 | PK_CDC_DATA_SOURCE（DATA_SOURCE_ID） | 普通堆表 | 数据源配置主表（源库/目标库登记） | 读 + 写 | 管理平台（DataSourceServiceImpl CRUD+启停） | [CDC_DATA_SOURCE.md](tables/CDC_DATA_SOURCE.md) |
 | 2 | CDC_DATA_SOURCE_EXTEND | （无注释） | 无 | 普通堆表 | 数据源扩展配置（目标表命名策略） | 读 + 写 | 管理平台（随 CDC_DATA_SOURCE 联写） | [CDC_DATA_SOURCE_EXTEND.md](tables/CDC_DATA_SOURCE_EXTEND.md) |
 | 3 | CDC_CLIENT_MULTIPLE | 客户端表 | PK_CDC_CLIENT_MULTIPLE（CLIENT_ID） | 普通堆表 | 客户端（探针）注册表 | 只读 | 外部同步程序写入 | [CDC_CLIENT_MULTIPLE.md](tables/CDC_CLIENT_MULTIPLE.md) |
-| 4 | CDC_DATA_SUBSCRIBE | 订阅表 | 无 | 普通堆表 | 订阅配置（源库→目标库订阅关系） | 只读 | 写入方待确认（项目代码仅只读） | [CDC_DATA_SUBSCRIBE.md](tables/CDC_DATA_SUBSCRIBE.md) |
+| 4 | CDC_DATA_SUBSCRIBE | 订阅表 | 无 | 普通堆表 | 订阅配置（源库→目标库订阅关系） | 只读 | 人工维护（当前管理平台仅只读；后续计划单独开发 CRUD，尚未实现） | [CDC_DATA_SUBSCRIBE.md](tables/CDC_DATA_SUBSCRIBE.md) |
 | 5 | CDC_LOG_CORRECT | 同步正确日志表 | PK_CDC_LOG_CORRECT（CDC_LOG_ID） | 普通堆表 | 同步正确日志（大屏统计源数据/日志查询） | 只读 | 外部 CDC 同步程序写入 | [CDC_LOG_CORRECT.md](tables/CDC_LOG_CORRECT.md) |
 | 6 | CDC_LOG_ERROR | 同步错误日志表 | PK_CDC_LOG_ERROR（CDC_LOG_ID） | 普通堆表 | 同步错误日志（大屏统计源数据/日志查询） | 只读 | 外部 CDC 同步程序写入 | [CDC_LOG_ERROR.md](tables/CDC_LOG_ERROR.md) |
-| 7 | CDC_JOB_FAILURE_EVENT | 作业失败事件表 | PK_CDC_JOB_FAILURE_EVENT（ID） | 普通堆表 | Flink job 失败回调事件记录 | 只读 | 写入方为失败事件上报组件（项目代码仅只读，待确认） | [CDC_JOB_FAILURE_EVENT.md](tables/CDC_JOB_FAILURE_EVENT.md) |
-| 8 | CDC_JOB_FAILURE_HANDLE_LOG | 作业失败处理记录表 | PK_CDC_JOB_FAILURE_HANDLE_LOG（ID） | 普通堆表 | 失败事件处理流程各阶段记录 | 只读 | 写入方为失败处理上报组件（项目代码仅只读，待确认） | [CDC_JOB_FAILURE_HANDLE_LOG.md](tables/CDC_JOB_FAILURE_HANDLE_LOG.md) |
+| 7 | CDC_JOB_FAILURE_EVENT | 作业失败事件表 | PK_CDC_JOB_FAILURE_EVENT（ID） | 普通堆表 | Flink job 失败回调事件记录 | 只读 | sync-client 进程写入（管理平台仅只读） | [CDC_JOB_FAILURE_EVENT.md](tables/CDC_JOB_FAILURE_EVENT.md) |
+| 8 | CDC_JOB_FAILURE_HANDLE_LOG | 作业失败处理记录表 | PK_CDC_JOB_FAILURE_HANDLE_LOG（ID） | 普通堆表 | 失败事件处理流程各阶段记录 | 只读 | sync-client 进程写入（管理平台仅只读） | [CDC_JOB_FAILURE_HANDLE_LOG.md](tables/CDC_JOB_FAILURE_HANDLE_LOG.md) |
 | 9 | CDC_STATS_CUMULATIVE_OVERVIEW | 大屏累计总览结果表 | PK_CDC_STATS_CUM_OVERVIEW（TASK_CODE） | 普通堆表 | 大屏累计总览统计结果 | 读 + 写 | 管理平台大屏统计调度（MERGE） | [CDC_STATS_CUMULATIVE_OVERVIEW.md](tables/CDC_STATS_CUMULATIVE_OVERVIEW.md) |
 | 10 | CDC_STATS_DAILY_OVERVIEW | 大屏每日总览结果表 | PK_CDC_STATS_DAILY_OVERVIEW（TASK_CODE, STAT_DATE） | 普通堆表 | 大屏每日总览统计结果 | 读 + 写 | 管理平台大屏统计调度（MERGE） | [CDC_STATS_DAILY_OVERVIEW.md](tables/CDC_STATS_DAILY_OVERVIEW.md) |
 | 11 | CDC_STATS_DIM_CUMULATIVE | 大屏维度累计结果表（不保存机构名称） | PK_CDC_STATS_DIM_CUMULATIVE（TASK_CODE, DIM_TYPE, DIM_VALUE） | 普通堆表 | 大屏维度累计统计结果 | 读 + 写 | 管理平台大屏统计调度（MERGE） | [CDC_STATS_DIM_CUMULATIVE.md](tables/CDC_STATS_DIM_CUMULATIVE.md) |
@@ -46,7 +46,7 @@
 | 13 | CDC_STATS_TASK_CONFIG | 大屏统计任务配置表（启动时读取一次，修改后重启生效） | PK_CDC_STATS_TASK_CONFIG（TASK_CODE） | 普通堆表 | 大屏统计任务调度参数 | 只读 | 人工维护（启动时读取一次） | [CDC_STATS_TASK_CONFIG.md](tables/CDC_STATS_TASK_CONFIG.md) |
 | 14 | CDC_STATS_WATERMARK | 大屏统计水位表（CORRECT/ERROR 独立水位） | PK_CDC_STATS_WATERMARK（TASK_CODE, LOG_TYPE） | 普通堆表 | 大屏统计增量断点水位 | 读 + 写 | 管理平台大屏统计调度（CAS） | [CDC_STATS_WATERMARK.md](tables/CDC_STATS_WATERMARK.md) |
 
-**自校验：上表 14 行 = 任务确认的 14 张表。** 无 `tables/CDC_CLIENT.md`。
+**自校验：上表 14 行 = 任务确认的 14 张表，每张恰好一个单表文件。**
 
 ---
 
@@ -64,21 +64,17 @@
 
 ## 4. 数据库层物理外键总体情况
 
-**本次核验在 14 张使用表上未发现任何物理 FOREIGN KEY 约束。** 全部跨表关系均为逻辑外键（弱逻辑引用），由代码路径与数据核验保证，见 `RELATIONS.md`。这是架构决策，不是缺陷。
+**本次核验在 14 张使用表上未发现任何物理 FOREIGN KEY 约束。**
+
+14 张使用表**不设置物理外键**，这是项目确认的架构决策。数据库不强制保证引用完整性；各写入方和读取方必须在代码层处理空引用、孤立引用与无效引用。只读数据核验仅描述核验时点的实际状态，不构成持续完整性保证。跨表关系定义见 `RELATIONS.md`。
 
 ---
 
-## 5. 数据库存在但当前生产代码未使用 / 已废弃 / 禁止使用 / 待分析的对象
+## 5. 数据库存在但当前生产代码未使用 / 禁止使用 / 待分析的对象
 
-以下对象存在于 CDC Schema，但**均不在当前生产代码访问范围内**（代码扫描确认生产数据库表访问恰好为 §2 的 14 张表），不建立单表基线文件，仅在此登记分类。
+以下对象存在于 CDC Schema，但**均不在当前生产代码访问范围内**（代码扫描确认生产数据库表访问恰好为 §2 的 14 张表），不建立单表基线文件，仅在此登记分类。这些对象按 `DOCUMENTED_NOT_USED` / 范围外登记，不阻塞基线批准；是否纳入后续范围由独立决策决定。
 
-### 5.1 已废弃对象
-
-| 对象 | 类型 | 说明 |
-|---|---|---|
-| CDC_CLIENT | TABLE | 旧客户端表，已废弃。项目代码中残留 `monitor/jobfailure/entity/CdcClient.java`、`monitor/jobfailure/mapper/CdcClientMapper.java` 为死代码（无任何注入/调用点）。按任务规则不进入新基线清单，不创建 `tables/CDC_CLIENT.md`；死代码清理另建独立任务处理。 |
-
-### 5.2 历史提及但当前生产代码未使用（待分析）
+### 5.1 历史提及但当前生产代码未使用（待分析）
 
 以下表在旧文档 `table-list.md` / `table-detail.md` 或其他历史资料中出现，但当前生产代码未访问（`DOCUMENTED_NOT_USED` / 待分析）：
 
@@ -108,9 +104,9 @@
 | CDC_TABLE_CREATION_LOG | TABLE | 本次核验发现 | 无 |
 | MV_CDC_STATS | MATERIALIZED VIEW | 本次核验发现 | 无 |
 
-> 说明：以上对象仅作分类登记，未逐一读取其结构与数据；其中表注释乱码（`??????`）的对象，按规则不基于乱码内容做业务推断。这些对象是否仍属当前项目范围，见 `VERIFICATION.md` / 报告中的 `PENDING_USER_CONFIRMATION` 项。
+> 说明：以上对象仅作分类登记，未逐一读取其结构与数据；其中表注释乱码（`??????`）的对象，按规则不基于乱码内容做业务推断。这些对象属于范围外登记，不属于当前项目数据库基线使用范围，不阻塞基线批准。
 
-### 5.3 系统/导出对象（禁止作为业务表使用）
+### 5.2 系统/导出对象（禁止作为业务表使用）
 
 | 对象 | 类型 | 说明 |
 |---|---|---|
@@ -121,8 +117,8 @@
 ## 6. 数据维护方与读写边界总则
 
 - **管理平台写入**：CDC_DATA_SOURCE、CDC_DATA_SOURCE_EXTEND（数据源管理 CRUD+启停）；CDC_STATS_CUMULATIVE_OVERVIEW、CDC_STATS_DAILY_OVERVIEW、CDC_STATS_DIM_CUMULATIVE、CDC_STATS_DIM_DAILY、CDC_STATS_WATERMARK（大屏统计调度 MERGE/CAS 写入）。
-- **外部同步程序写入**：CDC_CLIENT_MULTIPLE、CDC_LOG_CORRECT、CDC_LOG_ERROR；CDC_DATA_SUBSCRIBE、CDC_JOB_FAILURE_EVENT、CDC_JOB_FAILURE_HANDLE_LOG 的写入方待确认（项目代码仅只读），详见各单表文档 §9 与 `DATA_PROFILE.md`。
-- **人工维护**：CDC_STATS_TASK_CONFIG（调度配置，启动时读取一次，修改后重启生效）。
+- **外部同步程序写入**：CDC_CLIENT_MULTIPLE（探针注册）、CDC_LOG_CORRECT、CDC_LOG_ERROR（写入链 `sync-server → Kafka → sync-log`，见日志查询 Feature 基线）；CDC_JOB_FAILURE_EVENT、CDC_JOB_FAILURE_HANDLE_LOG 由 `sync-client` 进程写入（项目负责人 2026-08-26 确认）。
+- **人工维护**：CDC_DATA_SUBSCRIBE（当前管理平台仅只读，后续计划单独开发 CRUD，尚未实现）；CDC_STATS_TASK_CONFIG（调度配置，启动时读取一次，修改后重启生效）。
 - 管理平台对上述全部 14 张表均只读或按上述写入方边界操作；单表文档 §8 列出代码访问入口。
 
 ---
@@ -141,3 +137,4 @@
 | 日期 | 变更 | 依据 |
 |---|---|---|
 | 2026-08-26 | 建立 Schema 整体概览（DRAFT_PENDING_USER_REVIEW） | PROJECT-DATABASE-BASELINE-001 只读核验 |
+| 2026-08-26 | R1：修正无物理外键表述；更新 SUBSCRIBE/JFE/JHL 数据维护方；移除 CDC_CLIENT 现行说明并重排 §5 | PROJECT-DATABASE-BASELINE-001-R1 修订 |

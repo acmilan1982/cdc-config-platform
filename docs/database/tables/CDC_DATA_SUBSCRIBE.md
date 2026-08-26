@@ -6,7 +6,7 @@
 > Schema：CDC
 > 元数据来源：真实数据库只读核验（ALL_TABLES / ALL_TAB_COLUMNS / ALL_COL_COMMENTS / ALL_CONSTRAINTS / ALL_INDEXES / ALL_OBJECTS）
 > 关联代码模块 / Feature：大屏统计（`largescreen/stats`）
-> 数据维护方：当前项目后端代码仅只读使用；写入方未在本项目后端代码中发现（待确认，见 §9）
+> 数据维护方：人工维护（当前管理平台仅只读；后续计划单独开发 CRUD，尚未实现）
 
 ---
 
@@ -20,7 +20,7 @@
 | 外键 | 无 |
 | 分区 | 无 |
 | LOB | 有（4 个 CLOB 字段，见 §6） |
-| 当前读写属性 | 只读（大屏统计模块按 FG_ACTIVE='1' 读取）；项目代码未见写入入口 |
+| 当前读写属性 | 只读（大屏统计模块按 FG_ACTIVE='1' 读取）；由人工维护；后续计划单独开发 CRUD，尚未实现 |
 | 表注释 | 订阅表 |
 | LAST_DDL_TIME | 2026-07-14 14:12:16 |
 
@@ -51,7 +51,7 @@
 |---|---|---|---|
 | CHECK (NOT NULL) | SYS_C0041443 | DATA_SUB_ID | ENABLED |
 
-无 PRIMARY KEY、无 UNIQUE、无 FOREIGN KEY 约束。该差异对应既有映射资料中的 D01（SUBSCRIBE 无主键，高严重度）。
+无 PRIMARY KEY、无 UNIQUE、无 FOREIGN KEY 约束。该差异对应既有映射资料中的 D01（SUBSCRIBE 无主键，高严重度）。是否增加主键属 `PENDING_DECISION`（候选物理设计，未经正式批准，不承诺实施或排期）。
 
 ## 4. 索引
 
@@ -91,14 +91,15 @@
 
 ---
 
-## 9. 已知结构差异、历史兼容与待确认项
+## 9. 已知结构差异、历史兼容与待决策项
 
-- D01：该表无主键、无唯一约束、无索引。目标规则为 `DATA_SUB_ID` 应设置为主键（见既有映射资料），当前物理结构未强制。实际添加主键另建数据库整改任务。
+- D01：该表无主键、无唯一约束、无索引（当前物理事实）。历史资料声称 DATA_SUB_ID 主键“已验证”经核验为旧资料错误（P4 已关闭）；是否将 DATA_SUB_ID 设置为主键属 `PENDING_DECISION`（候选物理设计，未经正式批准，不承诺实施或排期）。
 - `DATA_SOURCE_TABLE` 等 4 个 CLOB 字段在代码中如何解析（逗号拆分、表清单解析）由大屏统计模块消费；当前基线仅登记物理结构，解析规则详见对应功能基线。
-- 写入方待确认：当前项目后端代码未发现对 CDC_DATA_SUBSCRIBE 的 INSERT/UPDATE/DELETE 入口，数据维护方式未在代码中体现（`PENDING_CONFIRMATION`，见 `DATA_PROFILE.md`）。
+- 数据维护：本表由人工维护（当前管理平台仅只读）；后续计划单独开发 CRUD，尚未实现。当前项目后端代码未发现对该表的写入口。
 
 ## 10. 文档级变更记录
 
 | 日期 | 变更 | 依据 |
 |---|---|---|
 | 2026-08-26 | 建立单表物理基线（DRAFT_PENDING_USER_REVIEW） | PROJECT-DATABASE-BASELINE-001 只读核验 |
+| 2026-08-26 | R1：数据维护方修订为人工维护；删除“写入方待确认”；D01 状态改为 PENDING_DECISION | PROJECT-DATABASE-BASELINE-001-R1 修订 |

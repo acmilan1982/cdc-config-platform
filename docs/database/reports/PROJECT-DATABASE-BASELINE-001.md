@@ -209,3 +209,97 @@
 - 提交文档供 ChatGPT 复审数据库基线一致性与完整性；
 - 由用户（项目负责人）批准后，方可把文档状态从 `DRAFT_PENDING_USER_REVIEW` 更新为 `APPROVED`；
 - 本任务结束后不得自行进入 Feature 设计、代码实现或生产数据库调整阶段。
+
+---
+
+# R1 修订附录（PROJECT-DATABASE-BASELINE-001-R1）
+
+> 文档状态：`DRAFT_PENDING_USER_REVIEW`
+> 修订任务：PROJECT-DATABASE-BASELINE-001-R1（ChatGPT 复审驱动的数据库基线修订，纯文档任务）
+> 执行日期：2026-08-26
+> 任务提示词：`docs/prompts/database/PROJECT-DATABASE-BASELINE-001-R1-PROMPT.md`
+> 说明：本附录独立追加于初始实施报告之后，不覆盖初始版本；初始报告 §1～§16 保持历史原貌。
+
+## R1-1. Git 开始状态和授权基线
+
+| 项 | 值 |
+|---|---|
+| 当前分支 | `develop` |
+| 授权基线提交（base_commit_id） | `4d98f9f0da5d7bc8e8314a6fbe071a8c619837a8`（PROJECT-DATABASE-BASELINE-001 结果提交） |
+| 本地 HEAD（开始） | `4d98f9f0da5d7bc8e8314a6fbe071a8c619837a8`（= 授权基线） |
+| origin/develop（开始） | `4d98f9f0da5d7bc8e8314a6fbe071a8c619837a8` |
+| ahead / behind（开始） | `0 0` |
+
+开始前已确认：分支为 `develop`；本地 HEAD 与 `origin/develop` 均为授权基线，授权基线之后无新提交、无分叉；用户工作区既有修改保持原样。
+
+## R1-2. 项目负责人确认事实（2026-08-26）
+
+| # | 确认内容 | 落地位置 |
+|---|---|---|
+| 5.1 | 14 张使用表不设置物理外键为项目确认的架构决策；数据库不强制保证引用完整性；各写入方和读取方必须在代码层处理空引用、孤立引用与无效引用；只读数据核验仅为核验时点实际状态，不构成持续完整性保证 | README §10、SCHEMA §4、RELATIONS §1/§4、单表文档 §8 |
+| 5.2 | CDC_DATA_SUBSCRIBE 由人工维护；当前管理平台仅只读；后续计划单独开发 CRUD 尚未实现（作为未来 Feature 规划/边界，非当前能力） | SCHEMA §2/§6、SUBSCRIBE 单表文档、DATA_PROFILE §7.3 |
+| 5.3 | CDC_JOB_FAILURE_EVENT 与 CDC_JOB_FAILURE_HANDLE_LOG 均由 sync-client 进程写入；管理平台仅只读 | SCHEMA §2/§6、JFE/JHL 单表文档、RELATIONS 维护方 |
+| 5.4 | EXTEND.TARGET_DATA_SOURCE_ID 业务语义为目标库（DATA_SOURCE_CATEGORY='TARGET'），为无物理外键、无类别约束的弱逻辑引用；新增独立编号关系 R15 | RELATIONS §4 R15、§5.3、§7 图；EXTEND 单表文档；DATA_PROFILE §5 |
+| 5.5 | STATS_TASK_CONFIG.UPDATED_BY 为可选修改人标识，无固定维护规则 | TASK_CONFIG 单表文档 §9 |
+
+## R1-3. ChatGPT 复审问题（R1-01～R1-07）处理记录
+
+| 编号 | 问题 | 处理 |
+|---|---|---|
+| R1-01 | “必须重新读库核验”触发条件过宽 | README §6 收窄为 7 类定向场景，并补充“普通业务规则调整、前端开发、后端非结构性开发、常规单元测试不得仅因涉及数据库强制重连”；VERIFICATION §11 同步 |
+| R1-02 | 无物理外键表述不统一 | 统一为“不设置物理外键是项目确认的架构决策；引用完整性不由数据库保证；代码必须做容错；只读数据核验仅描述核验时点实际状态”，删除“全部关系由代码和数据核验保证”等表述 |
+| R1-03 | 关系文档混入数据快照（LOG_ERROR 1→442、JFE 25→28、JHL 104→116） | RELATIONS 数据核验列只保留定向完整性结论并标注环境/日期，行数统一引用 DATA_PROFILE；DATA_PROFILE §5 更新为 2026-08-26 定向核验结果并新增 R15 核验行 |
+| R1-04 | 结构历史边界（LAST_DDL_TIME 不证变更内容；“5 张大屏统计表”应为 6 张 CDC_STATS_* 表；CLIENT_MULTIPLE DML 清理与 PK DDL 区分；EXTEND 列存在非可证日期变更；D01/R01/D03/D04 未批准项不得写 DEFERRED） | CHANGELOG §1 重构为“有明确确认依据的历史变更”+“当前物理事实（变更日期不可证）”；候选物理设计状态改为 PENDING_DECISION |
+| R1-05 | 日志表写入链与保留策略混为一谈 | DATA_PROFILE §3 拆分：写入链（sync-server → Kafka → sync-log）为已确认业务事实；归档/清理/保留时长无统一规则、不得推断 |
+| R1-06 | 初始 5 项待确认（P1～P5） | 按 §5.2～§5.5 与数据库物理事实关闭；pending_user_confirmation_count=0；SUBSCRIBE 主键历史冲突按“旧资料错误”关闭，未来主键归 D01 独立决策 |
+| R1-07 | 清理当前基线中的 CDC_CLIENT（无 MULTIPLE）现行描述 | README/SCHEMA 当前描述已删除；不创建 tables/CDC_CLIENT.md；不进入 14 表清单；历史化旧文档与初始报告保留历史正文；Java Entity/Mapper 属独立任务、不在此范围 |
+
+## R1-4. 定向数据库只读关系核验（R1）
+
+执行针对性只读关系核验（开发库 2026-08-26），未重读全部 14 张表结构：
+
+- 小表行数快照：EXTEND=10、SUBSCRIBE=12、CLIENT_MULTIPLE=7、LOG_ERROR=442、JFE=28、JHL=116。
+- EXTEND.TARGET_DATA_SOURCE_ID：10 行中 2 行非空（2 个不同值），均匹配 DATA_SOURCE_CATEGORY='TARGET'，0 孤立。
+- 逗号分隔 token：CCM.DATA_SOURCE_ID=12 token、SUB.DATA_FROM=12、SUB.DATA_TO=13，均“每行至少一个 token 可匹配”。
+- LOG_ERROR：SOURCE/TARGET 均非空（442/442），TARGET 0 孤立。
+- JFE：CLIENT_ID→CCM、DATA_SOURCE_ID→DS 均 0 空值 0 孤立（28 行）。
+- JHL：FAILURE_EVENT_ID→JFE.ID、CLIENT_ID→CCM、DATA_SOURCE_ID→DS 均 0 空值 0 孤立（116 行）。
+
+全部为 SELECT / WITH...SELECT / 数据字典与受控聚合查询，未执行任何写操作；敏感字段（RAW_MESSAGE / LOG_DETAIL / 密码）未读取输出。
+
+## R1-5. 修改文件清单（12 个）
+
+- `docs/database/README.md`
+- `docs/database/SCHEMA.md`
+- `docs/database/RELATIONS.md`
+- `docs/database/DATA_PROFILE.md`
+- `docs/database/CHANGELOG.md`
+- `docs/database/VERIFICATION.md`
+- `docs/database/tables/CDC_DATA_SUBSCRIBE.md`
+- `docs/database/tables/CDC_JOB_FAILURE_EVENT.md`
+- `docs/database/tables/CDC_JOB_FAILURE_HANDLE_LOG.md`
+- `docs/database/tables/CDC_DATA_SOURCE_EXTEND.md`
+- `docs/database/tables/CDC_STATS_TASK_CONFIG.md`
+- `docs/database/reports/PROJECT-DATABASE-BASELINE-001.md`（本文件）
+
+未修改：`CODE_VALUES.md`（复核无需变更）；14 张表数量与 14 个单表文件保持不变；未新增/删除任何字段描述。
+
+## R1-6. 自检结果
+
+按任务 §9 的 15 项自检全部通过：修改范围仅限授权文档；14 张使用表与 14 个单表文件数量不变；当前基线无 CDC_CLIENT 现行描述或死代码路径（历史化旧文档与初始报告除外）；无“代码路径与数据核验保证引用完整性”“SUBSCRIBE 写入方待确认”“Job 两表写入方待确认”“TARGET_DATA_SOURCE_ID 含义待确认”“UPDATED_BY 维护待确认”等遗留表述；RELATIONS 新增 R15 且编号/计数/图一致；关系核验数据带环境+日期且无旧混用数字；CHANGELOG 无 LAST_DDL_TIME 推导历史；未批准物理设计均为 PENDING_DECISION；README 重新读库触发条件已收窄；日志写入链与保留策略分离；P1～P5 关闭、pending_user_confirmation_count=0；无密码/RAW_MESSAGE/LOG_DETAIL/敏感业务原文；无业务代码、配置、Feature 文档、数据库写、DDL、ZooKeeper 变更；`git diff --check` 通过；Markdown 链接/表格/标题/相对路径一致。
+
+## R1-7. 未执行修改声明
+
+- **数据库写操作 / DDL**：均未执行（`database_write_status=NONE`、`ddl_status=NONE`）。
+- **ZooKeeper / 业务进程**：未读写、未启停（`zookeeper_status=NONE`）。
+- **业务代码**：未修改任何 Java/XML/Vue/TypeScript/YAML/POM/package/测试文件（`business_code_change_status=NONE`）。
+- **Feature 文档 / 项目根 README / 历史化旧文档正文**：未修改（`feature_document_change_status=NONE`）。
+- **数据库文档状态**：保持 `DRAFT_PENDING_USER_REVIEW`，未标记 `APPROVED`。
+
+## R1-8. Git 提交、推送与后续边界
+
+- 暂存范围：仅本 R1 修改的 `docs/database/` 授权文件。
+- 提交信息：`docs(database): correct baseline facts and ownership`。
+- 推送：普通 `git push origin develop`，禁止 force push；推送后核验本地 HEAD 与 origin/develop 一致、ahead/behind `0 0`。
+- 实际 result_commit_id / remote_commit_id / ahead_behind：以最终机器可读结果（AGENT_TASK_RESULT）为准。
+- 后续边界：R1 任务在推送后停止；下一步仅限 ChatGPT 复审与用户批准；不进入 Feature 设计、代码实现或数据库整改。

@@ -6,7 +6,7 @@
 > Schema：CDC
 > 元数据来源：真实数据库只读核验（ALL_TABLES / ALL_TAB_COLUMNS / ALL_COL_COMMENTS / ALL_CONSTRAINTS / ALL_INDEXES / ALL_OBJECTS）
 > 关联代码模块 / Feature：Job故障监控（`monitor/jobfailure`）
-> 数据维护方：写入方为 CDC 同步链路外部组件（失败处理流程上报）；当前项目后端代码仅只读
+> 数据维护方：sync-client 进程写入（项目负责人 2026-08-26 确认）；管理平台仅只读
 
 ---
 
@@ -20,7 +20,7 @@
 | 外键 | 无 |
 | 分区 | 无 |
 | LOB | 有（1 个 CLOB 字段 ERROR_DETAIL，见 §6） |
-| 当前读写属性 | 只读（管理平台 Job故障监控模块）；写入方为外部失败处理流程上报组件 |
+| 当前读写属性 | 只读（管理平台 Job故障监控模块）；写入方为 sync-client 进程（项目负责人 2026-08-26 确认） |
 | 表注释 | 作业失败处理记录表：记录某个失败事件进入处理流程后的各阶段动作，包括接收、忽略、调度重启、开始重启、新 job 提交、提交失败、稳定检查通过等。一个失败事件可以对应多条处理记录。 |
 | LAST_DDL_TIME | 2026-07-27 |
 
@@ -103,18 +103,19 @@
 | Job故障监控 | `monitor/jobfailure/service/impl/JobFailureServiceImpl.java` | loadLogsByEventIds 中 .in(JobFailureHandleLog::getFailureEventId, eventIds) | 只读 |
 | Job故障监控 | `monitor/jobfailure/service/impl/FaultHistoryServiceImpl.java` | 按事件查询处理记录 | 只读 |
 
-> 说明：`FAILURE_EVENT_ID` 弱逻辑引用 CDC_JOB_FAILURE_EVENT.ID；`CLIENT_ID` 弱逻辑引用 CDC_CLIENT_MULTIPLE.CLIENT_ID；`DATA_SOURCE_ID` 弱逻辑引用 CDC_DATA_SOURCE.DATA_SOURCE_ID。均无物理外键，由程序保证关联。写入入口未在本项目后端代码中发现（外部失败处理流程上报组件写入），为 `PENDING_CONFIRMATION`（见 `DATA_PROFILE.md`）。
+> 说明：`FAILURE_EVENT_ID` 弱逻辑引用 CDC_JOB_FAILURE_EVENT.ID；`CLIENT_ID` 弱逻辑引用 CDC_CLIENT_MULTIPLE.CLIENT_ID；`DATA_SOURCE_ID` 弱逻辑引用 CDC_DATA_SOURCE.DATA_SOURCE_ID（见 `RELATIONS.md` R11/R13/R14）。均无物理外键，引用完整性不由数据库保证，写入方与读取方须在代码层处理空引用、孤立引用与无效引用。写入方为 sync-client 进程（项目负责人 2026-08-26 确认），管理平台仅只读。
 
 ---
 
-## 9. 已知结构差异、历史兼容与待确认项
+## 9. 已知结构差异、历史兼容与待决策项
 
-- D04：仅主键索引；FAILURE_EVENT_ID / CLIENT_ID / DATA_SOURCE_ID 无独立索引。当前数据量小（见 `DATA_PROFILE.md`），索引缺口影响有限；是否补索引另建数据库整改任务。
+- D04：仅主键索引；FAILURE_EVENT_ID / CLIENT_ID / DATA_SOURCE_ID 无独立索引（当前物理事实）。当前数据量小（见 `DATA_PROFILE.md`），索引缺口影响有限；是否补索引属 `PENDING_DECISION`（候选物理设计，未经正式批准，不承诺实施或排期）。
 - `HANDLE_STAGE` 枚举值（JOB_FAILURE_RECEIVED 等 10 个阶段）与重启相关字段的取值时机为功能级业务规则，详见 Job故障监控功能基线；本基线只登记物理结构与代码访问入口。
-- 写入方待确认：当前项目后端代码未发现对该表的 INSERT 入口，写入方应为 CDC 同步链路中的失败处理流程上报组件（`PENDING_CONFIRMATION`，见 `DATA_PROFILE.md`）。
+- 写入方：由 sync-client 进程写入（项目负责人 2026-08-26 确认）；管理平台仅只读，代码层须兼容孤立/无效引用。
 
 ## 10. 文档级变更记录
 
 | 日期 | 变更 | 依据 |
 |---|---|---|
 | 2026-08-26 | 建立单表物理基线（DRAFT_PENDING_USER_REVIEW） | PROJECT-DATABASE-BASELINE-001 只读核验 |
+| 2026-08-26 | R1：写入方修订为 sync-client 进程（负责人确认）；删除待确认措辞；D04 状态改为 PENDING_DECISION | PROJECT-DATABASE-BASELINE-001-R1 修订 |
