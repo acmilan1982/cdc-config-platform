@@ -303,3 +303,75 @@
 - 推送：普通 `git push origin develop`，禁止 force push；推送后核验本地 HEAD 与 origin/develop 一致、ahead/behind `0 0`。
 - 实际 result_commit_id / remote_commit_id / ahead_behind：以最终机器可读结果（AGENT_TASK_RESULT）为准。
 - 后续边界：R1 任务在推送后停止；下一步仅限 ChatGPT 复审与用户批准；不进入 Feature 设计、代码实现或数据库整改。
+
+---
+
+# R2 修订附录（PROJECT-DATABASE-BASELINE-001-R2）
+
+> 本附录为独立 R2 微型一致性修订记录。初版与 R1 历史正文保持原样；现行事实以本附录及最新版各基线文档为准，如与历史段落不一致，由本附录明确取代。
+
+## R2-1. 任务与授权基线
+
+- 任务编号：`PROJECT-DATABASE-BASELINE-001-R2`
+- 授权基线提交：`935786498173a3ead6e56851f248303ebf75b3f7`（本地 HEAD 与 `origin/develop` 一致，ahead/behind `0 0`）
+- 任务性质：纯文档微型一致性修订；未连接数据库、未执行数据库写操作、DDL、ZooKeeper、构建、测试或业务代码修改。
+
+## R2-2. 三项复审修订逐项结果
+
+### R2-01：修正 SCHEMA 总体访问边界
+
+`SCHEMA.md §3` 已由“当前 14 张使用表的读写均走项目后端代码”修正为：
+
+> 当前管理平台对 14 张使用表的访问入口走项目后端代码（MyBatis-Plus / JdbcTemplate / Mapper XML），不依赖 CDC Schema 下数据库存储过程完成这些访问；部分表同时由外部进程或人工维护，具体写入边界见 §6 与各单表文档。
+
+保持“管理平台不依赖数据库存储过程完成其访问”的已核验结论不变；视图、序列、触发器、物化视图、过程、函数与作业的物理核验结果不变；同步核对 §2 表清单与 §6 维护方总则。
+
+### R2-02：R15 调整为已确认关系
+
+- R15 定义：`CDC_DATA_SOURCE_EXTEND.TARGET_DATA_SOURCE_ID -> CDC_DATA_SOURCE.DATA_SOURCE_ID`，业务语义目标库（`DATA_SOURCE_CATEGORY = TARGET`），数据库无物理外键与类别约束。
+- 分类调整：高度可信 → 已确认逻辑关系（项目负责人 2026-08-26 明确确认字段含义）。
+- 调整前：已确认 11 条（R01～R11）、高度可信 4 条（R12～R15）、待确认 0 条。
+- 调整后：已确认 12 条（R01～R11、R15）、高度可信 3 条（R12～R14）、待确认 0 条。
+- R15 物理事实、可空性、无代码映射、无物理外键、无类别约束与 2026-08-26 定向核验结果保持不变；编号不变，未重新编号 R12～R15；小型关系图 R15 保持不变。
+- 分级含义明确为：已确认 = 由代码直接关系、批准文档或项目负责人明确确认；高度可信 = 字段、类型和数据一致，但缺少代码、批准文档或负责人明确确认。当前代码未映射 `TARGET_DATA_SOURCE_ID` 不改变负责人确认的业务关系分类。
+
+### R2-03：修正 CDC_CLIENT_MULTIPLE 维护方
+
+项目负责人确认：`CDC_CLIENT_MULTIPLE` 与 `CDC_DATA_SUBSCRIBE` 一样当前由人工维护；当前管理平台对其只读；后续会单独开发增删改查（CRUD），当前尚未实现。据此同步：
+
+- `SCHEMA.md`：§2 表清单与 §6 维护方总则中，CDC_CLIENT_MULTIPLE 由“外部同步程序写入”调整为“人工维护（当前管理平台仅只读；后续计划单独开发 CRUD，尚未实现）”；日志表 `sync-server → Kafka → sync-log` 写入链与 Job 两表 `sync-client` 写入方不变。
+- `RELATIONS.md`：R04 维护方调整为“人工维护 / 管理平台只读”；R04 字段关系、逗号分隔语义与 2026-08-26 核验结果不变。
+- `tables/CDC_CLIENT_MULTIPLE.md`：文档头部数据维护方改为人工维护；当前读写属性明确为“管理平台只读、当前人工维护”；§8 边界说明记录后续计划单独开发 CRUD、当前尚未实现；代码访问入口与只读事实不变；`CONFIRMED_HARD_LIMIT`（总记录数不超过 20 条）、表结构、主键、字段、索引、数据快照与历史记录事实不变。
+- `DATA_PROFILE.md`：核对后无 CDC_CLIENT_MULTIPLE 写入方/维护方描述（仅行数快照、硬上限、FG_ACTIVE 分布与逗号 token 匹配核验），按任务要求不修改该文件。
+
+## R2-3. 提示词路径问题（已撤销）
+
+R1 报告记录的提示词路径 `docs/prompts/database/PROJECT-DATABASE-BASELINE-001-R1-PROMPT.md` 经项目负责人确认真实存在于 Agent 服务器，为执行文件；本项已撤销，不属于 R2 修订问题。R1 报告对应路径保持不变，不删除、不修改、不补交 Git。
+
+## R2-4. 实际修改文件（4 个）
+
+- `docs/database/SCHEMA.md`
+- `docs/database/RELATIONS.md`
+- `docs/database/tables/CDC_CLIENT_MULTIPLE.md`
+- `docs/database/reports/PROJECT-DATABASE-BASELINE-001.md`（本文件，追加本 R2 附录）
+
+未修改：`DATA_PROFILE.md`（无维护方描述，无需同步）；其余单表文档、README、CHANGELOG、VERIFICATION、CODE_VALUES、`docs/baseline/**`、`docs/features/**`、项目根 README 及全部业务代码、配置与测试文件。
+
+## R2-5. 自检结果
+
+按任务 §10 的 16 项自检全部通过：`git diff --check` 通过；修改文件均在白名单内；无业务代码、Feature 文档、配置或测试差异；SCHEMA 不再声称 14 张表全部读写均由当前项目后端完成；SCHEMA §2 表清单与 §6 维护方总则均将 CDC_CLIENT_MULTIPLE 标为人工维护；RELATIONS 汇总为已确认 12 条（R01～R11、R15）、高度可信 3 条（R12～R14）、待确认 0 条；R15 保持原编号、字段关系、物理边界与核验数据；R04 维护方为人工维护；CDC_CLIENT_MULTIPLE.md 不再出现“外部同步程序写入”等错误现行表述；未来 CRUD 明确为尚未实现；≤20 硬上限保持不变；R1 提示词路径保持不变；14 张表、15 条关系、P1～P5 关闭与 `pending_user_confirmation_count=0` 保持不变；未恢复任何 CDC_CLIENT 现行信息；所有现行状态仍为 `DRAFT_PENDING_USER_REVIEW`；Markdown 表格、标题、数量、相对链接一致。
+
+## R2-6. 未执行修改声明
+
+- **数据库读/写 / DDL**：均未执行（`database_read_status=NONE`、`database_write_status=NONE`、`ddl_status=NONE`）。
+- **ZooKeeper / 业务进程**：未读写、未启停（`zookeeper_status=NONE`）。
+- **业务代码 / 配置 / 测试 / 构建**：未修改、未执行（`business_code_change_status=NONE`）；Feature 文档未修改（`feature_document_change_status=NONE`）。
+- **数据库文档状态**：保持 `DRAFT_PENDING_USER_REVIEW`，未标记 `APPROVED`。
+
+## R2-7. Git 提交、推送与后续边界
+
+- 暂存范围：仅本 R2 修改的 4 个白名单文件。
+- 提交信息：`docs(database): correct relation and ownership classification`。
+- 推送：普通 `git push origin develop`，禁止 force push；推送后核验本地 HEAD 与 origin/develop 一致、ahead/behind `0 0`。
+- 实际 result_commit_id / remote_commit_id / ahead_behind：以最终机器可读结果（AGENT_TASK_RESULT）为准。
+- 后续边界：R2 任务在推送后停止；当前状态仍为 `DRAFT_PENDING_USER_REVIEW`，下一步仅限 ChatGPT 复审与用户批准；不进入基线批准、Feature 设计、CRUD 实现、业务代码清理或数据库整改。

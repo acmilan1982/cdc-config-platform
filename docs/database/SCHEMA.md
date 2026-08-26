@@ -33,7 +33,7 @@
 |---|---|---|---|---|---|---|---|---|
 | 1 | CDC_DATA_SOURCE | 数据源，包括源库，目标库 | PK_CDC_DATA_SOURCE（DATA_SOURCE_ID） | 普通堆表 | 数据源配置主表（源库/目标库登记） | 读 + 写 | 管理平台（DataSourceServiceImpl CRUD+启停） | [CDC_DATA_SOURCE.md](tables/CDC_DATA_SOURCE.md) |
 | 2 | CDC_DATA_SOURCE_EXTEND | （无注释） | 无 | 普通堆表 | 数据源扩展配置（目标表命名策略） | 读 + 写 | 管理平台（随 CDC_DATA_SOURCE 联写） | [CDC_DATA_SOURCE_EXTEND.md](tables/CDC_DATA_SOURCE_EXTEND.md) |
-| 3 | CDC_CLIENT_MULTIPLE | 客户端表 | PK_CDC_CLIENT_MULTIPLE（CLIENT_ID） | 普通堆表 | 客户端（探针）注册表 | 只读 | 外部同步程序写入 | [CDC_CLIENT_MULTIPLE.md](tables/CDC_CLIENT_MULTIPLE.md) |
+| 3 | CDC_CLIENT_MULTIPLE | 客户端表 | PK_CDC_CLIENT_MULTIPLE（CLIENT_ID） | 普通堆表 | 客户端（探针）注册表 | 只读 | 人工维护（当前管理平台仅只读；后续计划单独开发 CRUD，尚未实现） | [CDC_CLIENT_MULTIPLE.md](tables/CDC_CLIENT_MULTIPLE.md) |
 | 4 | CDC_DATA_SUBSCRIBE | 订阅表 | 无 | 普通堆表 | 订阅配置（源库→目标库订阅关系） | 只读 | 人工维护（当前管理平台仅只读；后续计划单独开发 CRUD，尚未实现） | [CDC_DATA_SUBSCRIBE.md](tables/CDC_DATA_SUBSCRIBE.md) |
 | 5 | CDC_LOG_CORRECT | 同步正确日志表 | PK_CDC_LOG_CORRECT（CDC_LOG_ID） | 普通堆表 | 同步正确日志（大屏统计源数据/日志查询） | 只读 | 外部 CDC 同步程序写入 | [CDC_LOG_CORRECT.md](tables/CDC_LOG_CORRECT.md) |
 | 6 | CDC_LOG_ERROR | 同步错误日志表 | PK_CDC_LOG_ERROR（CDC_LOG_ID） | 普通堆表 | 同步错误日志（大屏统计源数据/日志查询） | 只读 | 外部 CDC 同步程序写入 | [CDC_LOG_ERROR.md](tables/CDC_LOG_ERROR.md) |
@@ -58,7 +58,7 @@
 - 序列：**本次核验未发现**（14 张使用表均未使用数据库序列；主键由程序统一 ID 生成器生成）。
 - 触发器：**本次核验未发现**（14 张使用表均无触发器）。
 - 物化视图：当前 14 张使用表无相关物化视图；CDC Schema 下存在 `MV_CDC_STATS`，见 §5。
-- 存储过程 / 函数 / 作业：当前 14 张使用表的读写均走项目后端代码（MyBatis-Plus / JdbcTemplate / Mapper XML），不依赖 CDC Schema 下数据库存储过程。CDC Schema 下存在 7 个 PROCEDURE、1 个 FUNCTION、8 个 JOB（数据库调度作业），均不在本项目后端调用范围，列入 §5 排除区，未逐一对业务含义核验。
+- 存储过程 / 函数 / 作业：当前管理平台对 14 张使用表的访问入口走项目后端代码（MyBatis-Plus / JdbcTemplate / Mapper XML），不依赖 CDC Schema 下数据库存储过程完成这些访问；部分表同时由外部进程或人工维护，具体写入边界见 §6 与各单表文档。CDC Schema 下存在 7 个 PROCEDURE、1 个 FUNCTION、8 个 JOB（数据库调度作业），均不在本项目后端调用范围，列入 §5 排除区，未逐一对业务含义核验。
 
 ---
 
@@ -117,8 +117,8 @@
 ## 6. 数据维护方与读写边界总则
 
 - **管理平台写入**：CDC_DATA_SOURCE、CDC_DATA_SOURCE_EXTEND（数据源管理 CRUD+启停）；CDC_STATS_CUMULATIVE_OVERVIEW、CDC_STATS_DAILY_OVERVIEW、CDC_STATS_DIM_CUMULATIVE、CDC_STATS_DIM_DAILY、CDC_STATS_WATERMARK（大屏统计调度 MERGE/CAS 写入）。
-- **外部同步程序写入**：CDC_CLIENT_MULTIPLE（探针注册）、CDC_LOG_CORRECT、CDC_LOG_ERROR（写入链 `sync-server → Kafka → sync-log`，见日志查询 Feature 基线）；CDC_JOB_FAILURE_EVENT、CDC_JOB_FAILURE_HANDLE_LOG 由 `sync-client` 进程写入（项目负责人 2026-08-26 确认）。
-- **人工维护**：CDC_DATA_SUBSCRIBE（当前管理平台仅只读，后续计划单独开发 CRUD，尚未实现）；CDC_STATS_TASK_CONFIG（调度配置，启动时读取一次，修改后重启生效）。
+- **外部同步程序写入**：CDC_LOG_CORRECT、CDC_LOG_ERROR（写入链 `sync-server → Kafka → sync-log`，见日志查询 Feature 基线）；CDC_JOB_FAILURE_EVENT、CDC_JOB_FAILURE_HANDLE_LOG 由 `sync-client` 进程写入（项目负责人 2026-08-26 确认）。
+- **人工维护**：CDC_CLIENT_MULTIPLE（客户端登记，当前管理平台仅只读，后续计划单独开发 CRUD，尚未实现）；CDC_DATA_SUBSCRIBE（当前管理平台仅只读，后续计划单独开发 CRUD，尚未实现）；CDC_STATS_TASK_CONFIG（调度配置，启动时读取一次，修改后重启生效）。
 - 管理平台对上述全部 14 张表均只读或按上述写入方边界操作；单表文档 §8 列出代码访问入口。
 
 ---
@@ -138,3 +138,4 @@
 |---|---|---|
 | 2026-08-26 | 建立 Schema 整体概览（DRAFT_PENDING_USER_REVIEW） | PROJECT-DATABASE-BASELINE-001 只读核验 |
 | 2026-08-26 | R1：修正无物理外键表述；更新 SUBSCRIBE/JFE/JHL 数据维护方；移除 CDC_CLIENT 现行说明并重排 §5 | PROJECT-DATABASE-BASELINE-001-R1 修订 |
+| 2026-08-26 | R2：修正 §3 总体访问边界（14 张使用表访问入口走项目后端代码，部分表由外部进程或人工维护）；CDC_CLIENT_MULTIPLE 维护方调整为人工维护（当前管理平台仅只读，后续计划单独开发 CRUD，尚未实现） | PROJECT-DATABASE-BASELINE-001-R2 修订 |

@@ -6,7 +6,7 @@
 > Schema：CDC
 > 元数据来源：真实数据库只读核验（ALL_TABLES / ALL_TAB_COLUMNS / ALL_COL_COMMENTS / ALL_CONSTRAINTS / ALL_INDEXES / ALL_OBJECTS）
 > 关联代码模块 / Feature：Job故障监控（`monitor/jobfailure`）、大屏统计（`largescreen/stats`）、ZK客户端监控（`monitor/zookeeper`）
-> 数据维护方：外部同步程序写入；管理平台只读
+> 数据维护方：人工维护（当前管理平台仅只读；后续计划单独开发 CRUD，尚未实现）
 
 ---
 
@@ -20,7 +20,7 @@
 | 外键 | 无 |
 | 分区 | 无 |
 | LOB | 无 |
-| 当前读写属性 | 只读（管理平台）；由外部同步程序写入 |
+| 当前读写属性 | 管理平台只读、当前人工维护；后续计划单独开发 CRUD，尚未实现 |
 | 表注释 | 客户端表 |
 | LAST_DDL_TIME | 2026-07-03 14:15:33 |
 
@@ -81,6 +81,8 @@
 | 大屏统计 | `largescreen/stats/mapper/LargeScreenMapper.java` | selectActiveClientDataSources（FG_ACTIVE='1'） | 只读 |
 
 > 说明：`DATA_SOURCE_ID` 为英文逗号分隔的多值弱逻辑引用，代码按逗号拆分、Trim、忽略空项，不作为普通外键处理。
+>
+> 边界说明：本表当前由人工维护（项目负责人 2026-08-26 确认），管理平台对 CDC_CLIENT_MULTIPLE 仅只读；后续计划为该表单独开发增删改查（CRUD）功能，当前尚未实现。代码访问入口仍按实际代码记录，只读事实不变。
 
 ---
 
@@ -94,3 +96,4 @@
 | 日期 | 变更 | 依据 |
 |---|---|---|
 | 2026-08-26 | 建立单表物理基线（DRAFT_PENDING_USER_REVIEW） | PROJECT-DATABASE-BASELINE-001 只读核验 |
+| 2026-08-26 | R2：数据维护方调整为人工维护（管理平台只读）；边界说明记录后续计划单独开发 CRUD、当前尚未实现 | PROJECT-DATABASE-BASELINE-001-R2 修订 |
