@@ -74,7 +74,7 @@
 4. 数据来源与已批准数据库基线引用（16 张已批准单表物理基线分层，14 当前访问 + 2 已批准待实现）；
 5. 范围内/范围外；
 6. 角色与主要使用场景；
-7. 菜单、路由、页面结构和字段显示规则（含配置项说明为主内容宽列、Key/Value 紧凑列、换行/省略/Tooltip 规则，未锁死像素）；
+7. 菜单、路由、页面结构和字段显示规则（页面主体为“配置项说明 + 配置值”两列，配置项说明为主内容宽列；配置Key 通过信息图标 Tooltip 按需查看；配置项显示名称兜底；换行/省略/Tooltip 规则，未锁死像素）；
 8. 唯一中心端识别与异常行为（0/1/多中心端、0 配置）；
 9. 全部配置展示规则；
 10. 可编辑性双重判定与未知 Key 兼容策略（`IS_EDITABLE='1'` + 白名单）；
@@ -93,7 +93,7 @@
 
 ## 6. ACCEPTANCE 验收项分类与数量
 
-`ACCEPTANCE.md` 将所有需求转换为可客观验收的场景，使用唯一、稳定的验收编号 `SC-AC-001` ~ `SC-AC-064`，共 **64** 项，覆盖 §14 列出的全部验收领域，包括：菜单名称/路由复用/无重复菜单；顶部中心端信息与配置数量；不展示“是否可编辑”字段；不展示主键与 `SERVER_ID` 列；说明列宽+多行完整展示、Key/Value 紧凑非等宽；超长省略悬停原文与编辑控件宽度；无搜索/筛选/分页/自动刷新/增删入口；唯一中心端正常场景；0/多中心端与 0 配置异常场景；全部配置展示与 `CONFIG_KEY` 升序；`IS_EDITABLE` 双重判定；未知 key 只读；布尔/枚举/多选/整数/删除策略的有效与无效边界；只读配置；通用非空与 64 字符边界；多项编辑、无修改、撤销；确认框仅列变更项；取消不保存；后端拒绝不可编辑/未知/非当前中心端/不存在记录/非 `CONFIG_VALUE` 字段；单事务全部成功/任一失败整批回滚；无并发保护与最后成功保存覆盖；保存成功重新加载；保存失败保留编辑值；不脱敏；不触发 `sync-server` 重启/生效；无 DDL、无 `CDC_SERVER` 维护能力。
+`ACCEPTANCE.md` 将所有需求转换为可客观验收的场景，使用唯一、稳定的验收编号 `SC-AC-001` ~ `SC-AC-065`，共 **65** 项，覆盖 §14 列出的全部验收领域，包括：菜单名称/路由复用/无重复菜单；顶部中心端信息与配置数量；不展示“是否可编辑”字段；不展示主键与 `SERVER_ID` 列；页面主体“配置项说明 + 配置值”两列布局与配置项显示名称兜底；配置Key 信息图标 Tooltip；异常当前值允许纠正（SC-AC-065）；超长省略悬停原文与编辑控件宽度；无搜索/筛选/分页/自动刷新/增删入口；唯一中心端正常场景；0/多中心端与 0 配置异常场景；全部配置展示与 `CONFIG_KEY` 升序；`IS_EDITABLE` 双重判定；未知 key 只读；布尔/枚举/多选/整数/删除策略的有效与无效边界；只读配置；通用非空与物理长度（长度≤64 为通用上限）；多项编辑、无修改、撤销；确认框仅列变更项、不突出 Key；取消不保存；后端拒绝不可编辑/未知/非当前中心端/不存在记录/非 `CONFIG_VALUE` 字段；单事务全部成功/任一失败整批回滚；无并发保护与最后成功保存覆盖；保存成功重新加载；保存失败保留编辑值；不脱敏；不触发 `sync-server` 重启/生效；无 DDL、无 `CDC_SERVER` 维护能力。
 
 每个验收项均写明前置条件、操作/输入、预期结果，未使用“功能正常”“体验良好”等无法客观判断的表述。对需要构造数据库异常数据的验收场景只定义期望行为，未授权本任务或未来验收人员执行数据库写操作；任何测试数据写入仍需按项目数据库审批规则另行获得授权。所有用例初始状态为 `NOT_RUN`。
 
@@ -117,7 +117,8 @@
 | `REQUIREMENTS.md` 与 `ACCEPTANCE.md` 对每项规则无冲突 | 通过 |
 | 中文名称、Feature 标识、菜单和路由一致（中心端配置 / `server-config` / 中心端配置 / `/config/server`） | 通过 |
 | 不展示“是否可编辑”字段的要求明确且有验收项（SC-AC-005） | 通过 |
-| 页面列布局明确反映“配置项说明较长、配置Key和配置值通常较短”并有对应验收项（SC-UI-10~14、SC-AC-007/008/009/010） | 通过 |
+| 页面主体明确为“配置项说明 + 配置值”两列，配置项说明为主宽列；配置Key 通过信息图标 Tooltip 按需查看；配置项显示名称有兜底；异常当前值允许纠正；均有对应验收项（SC-UI-10~22、SC-AC-007/008/009/018/022/065） | 通过 |
+| 验收用例总数由 64 更新为 65（新增 SC-AC-065），REQUIREMENTS、ACCEPTANCE、本报告三处一致 | 通过 |
 | 六个支持编辑配置（auto-create-table、auto-expand-column-length、raw-message-storage-strategy、realtime-insert-batch-enabled-database-types、snapshotBatchSize、tableRowDeleteStrategy）及两个只读配置（monitor-metric-topic-name、server-log-topic-name）清单准确 | 通过 |
 | 数据库类型固定顺序为 `doris,oracle,mysql` 子序列 | 通过 |
 | 所有枚举、范围和大小写规则准确（布尔小写 true/false；RMSS 大写枚举；DBTYPE 小写子序列；snapshotBatchSize 100~10000；DELSTRAT 大写枚举） | 通过 |
@@ -154,3 +155,60 @@ feature_document_change_status=NONE（未修改任何已有 Feature 文档；仅
 ## 12. 下一步
 
 本任务完成三个候选文档的建立、验证、Commit 并 Push 后立即停止。下一步只能是 **ChatGPT 复审与用户批准**：由 ChatGPT 直接读取固定报告、`REQUIREMENTS.md` 和 `ACCEPTANCE.md` 复审；用户批准前不得创建 DESIGN/API/UI 文档，不得修改代码，不得进入实现。
+
+## 13. R1 复审修订记录（SERVER-CONFIG-FEATURE-BASELINE-001-R1）
+
+### 13.1 R1 结论
+
+本 R1 修订由 ChatGPT 复审驱动。ChatGPT 已直接核对远程 `develop` 提交 `90a02aad40a29f404c1d369c3a297d57b3f1a13e`，确认该提交只新增 `docs/features/server-config/REQUIREMENTS.md`、`docs/features/server-config/ACCEPTANCE.md`、`docs/features/server-config/reports/SERVER-CONFIG-FEATURE-BASELINE-001.md` 三个文件，候选基线核心规则完整，复审结论为“有条件通过，需要 R1 修订后再次复审”。项目负责人已确认 R1 调整方案。
+
+### 13.2 ChatGPT 发现的三类问题
+
+1. `CONFIG_KEY` 不应作为独立面向用户的列表列；
+2. “异常当前值强制只读”与 `IS_EDITABLE='1'` + 可编辑白名单的双重判定冲突；
+3. 当前可编辑白名单均为布尔/枚举/多选/整数 Key，不存在可执行的“提交合法 64 字符值保存成功”验收项。
+
+### 13.3 R1 在 REQUIREMENTS 中的落实位置
+
+- 术语：`CONFIG_KEY` 定位为技术标识（§2.2），不作为独立列表列、不作为面向用户的主要名称；
+- 页面主体：§7.2 SC-UI-05、§7.3 SC-UI-10~14 改为“配置项说明 + 配置值”两列；
+- 配置Key 按需查看：§7.4 SC-UI-15~17 信息图标 Tooltip `配置Key：{CONFIG_KEY}`；
+- 配置项显示名称兜底：§7.5 SC-UI-18~22；
+- 排序：§7.2 SC-UI-04、§9 SC-DISPLAY-02 明确 Key 不显示不影响排序，NULL/重复 Key 保持确定性稳定次序；
+- 异常当前值纠正：§9 SC-DISPLAY-04/06/07/08；
+- 保存确认框：§14 SC-CONFIRM-02 不突出 Key，技术 Key 通过信息图标按需查看；
+- 物理长度：§11.7 SC-CFG-GEN-02/04 明确“长度≤64 为通用上限，不替代专门值域”；
+- §20 追加 R1 文档级变更记录；文档状态保持 `DRAFT_PENDING_USER_REVIEW`。
+
+### 13.4 R1 在 ACCEPTANCE 中的落实位置
+
+- 修订 SC-AC-004/007/008/009/010/018/022/046/049/062；
+- 修正 SC-AC-042：不再要求当前 Key 保存 64 字符合法值；超过 64 字符的新值请求由后端在写库前拒绝并整批回滚；
+- 新增 SC-AC-065（非法当前值允许纠正）；
+- 配置项显示名称兜底覆盖并入 SC-AC-007/008/009/022；
+- 分类与合计更新为 65；全部用例保持 `NOT_RUN`；文档状态保持 `DRAFT_PENDING_USER_REVIEW`。
+
+### 13.5 数据库访问 / 写操作 / DDL / 业务代码修改声明
+
+```text
+database_access_status=NONE
+database_write_status=NONE
+ddl_status=NONE
+zookeeper_write_status=NONE
+service_start_stop_status=NONE
+business_code_change_status=NONE
+```
+
+本 R1 修订为纯文档任务，未连接数据库，未执行任何 SQL，未执行 DDL，未修改任何业务代码、前端、后端、测试、配置、菜单、路由或占位页，未创建 DESIGN/API/UI/DATABASE 文档。
+
+### 13.6 R1 Commit / Push
+
+- 授权基线提交：`90a02aad40a29f404c1d369c3a297d57b3f1a13e`；
+- 提交信息：`docs(server-config): revise feature display requirements`；
+- 普通 `git push origin develop`，禁止 force push；
+- 本 R1 最终 Commit ID 与远程 Commit ID 以控制台 `AGENT_TASK_RESULT` 输出为准，本报告不保留尖括号占位符；
+- 验收用例总数：65。
+
+### 13.7 下一步
+
+本 R1 修订完成三个候选文档的精确修订、验证、Commit 并 Push 后立即停止。下一步仍是 **ChatGPT 复审与用户批准**：由 ChatGPT 直接核对远程 R1 提交并复审；复审通过后由用户批准 Feature 需求基线。批准前不得创建 DESIGN/API/UI 文档，不得修改代码，不得进入实现。
