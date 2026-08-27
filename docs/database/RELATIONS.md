@@ -14,19 +14,22 @@
 
 ## 1. 物理外键
 
-**本次核验在 14 张使用表上未发现任何物理 FOREIGN KEY 约束。**
+**本次核验在 16 张已批准单表物理基线范围内均未发现任何物理 FOREIGN KEY 约束。**
 
-14 张使用表**不设置物理外键**，这是项目确认的架构决策。数据库不强制保证引用完整性；各写入方和读取方必须在代码层处理空引用、孤立引用与无效引用。只读数据核验仅描述核验时点的实际状态，不构成持续完整性保证。
+- 14 张当前访问表：2026-08-26 只读核验（PROJECT-DATABASE-BASELINE-001）未发现物理外键；
+- 2 张已批准待实现表（`CDC_SERVER`、`CDC_SERVER_CONFIG`）：2026-08-27 只读核验（DATABASE-BASELINE-SERVER-CONFIG-001）同样未发现物理外键。
+
+16 张已批准表范围内**均不设置物理外键**，这是项目确认的架构决策。数据库不强制保证引用完整性；各写入方和读取方必须在代码层处理空引用、孤立引用与无效引用。只读数据核验仅描述核验时点的实际状态，不构成持续完整性保证。
 
 ## 2. 逻辑关系分级汇总
 
 | 确认状态 | 数量 | 编号 |
 |---|---|---|
-| 已确认（由代码直接关系、批准文档或项目负责人明确确认） | 12 | R01～R11、R15 |
+| 已确认（由代码直接关系、批准文档或项目负责人明确确认） | 13 | R01～R11、R15、R16 |
 | 高度可信（字段/类型/数据一致，但缺少代码、批准文档或负责人明确确认） | 3 | R12～R14 |
 | 待用户确认 | 0 | — |
 
-## 3. 已确认逻辑关系（R01～R11、R15）
+## 3. 已确认逻辑关系（R01～R11、R15、R16）
 
 | # | 来源对象.字段 | 目标对象.字段 | 关系类型 | 可空 | 使用场景/关联方式 | 维护方 | 代码证据 | 数据核验（开发库 2026-08-26） |
 |---|---|---|---|---|---|---|---|---|
@@ -42,6 +45,7 @@
 | R10 | CDC_JOB_FAILURE_EVENT.DATA_SOURCE_ID | CDC_DATA_SOURCE.DATA_SOURCE_ID | 多对一 | N | JobFailureServiceImpl 按 dataSourceId 筛选故障事件，并通过 selectBatchIds 获取数据源名称 | sync-client 写入 / 管理平台只读 | JobFailureServiceImpl.loadAndAssemble 中 .eq(JobFailureEvent::getDataSourceId, dataSourceId)；loadDataSourceNames 中 dataSourceMapper.selectBatchIds | 0 空值 0 孤立；行数见 DATA_PROFILE.md §1.1 |
 | R11 | CDC_JOB_FAILURE_HANDLE_LOG.FAILURE_EVENT_ID | CDC_JOB_FAILURE_EVENT.ID | 多对一（反向：一个故障事件对应多条处理日志） | N | JobFailureServiceImpl 按事件 ID 列表批量获取处理日志 | sync-client 写入 / 管理平台只读 | JobFailureServiceImpl.loadLogsByEventIds 中 .in(JobFailureHandleLog::getFailureEventId, eventIds) | 0 空值 0 孤立；行数见 DATA_PROFILE.md §1.1 |
 | R15 | CDC_DATA_SOURCE_EXTEND.TARGET_DATA_SOURCE_ID | CDC_DATA_SOURCE.DATA_SOURCE_ID | 多对一弱逻辑引用（业务语义目标库，应 DATA_SOURCE_CATEGORY='TARGET'） | Y | 字段含义由项目负责人 2026-08-26 明确确认；当前代码未映射该字段、无代码级 JOIN；无物理外键、无类别约束 | 管理平台（EXTEND 联写维护该行；TARGET_DATA_SOURCE_ID 字段当前代码未映射） | 项目负责人 2026-08-26 明确确认字段含义（目标库）；无代码级 JOIN | 10 行中 2 行非空（2 个不同值），均匹配 category=target，0 孤立（定向核验） |
+| R16 | CDC_SERVER_CONFIG.SERVER_ID | CDC_SERVER.SERVER_ID | 多对一（反向：一个中心端对应多条配置项） | Y | 负责人确认（`CONFIRMED_BY_OWNER`）；未来 `server-config` Feature 查询全部既有配置并只更新可编辑记录的 `CONFIG_VALUE`，不新增/删除，也不维护 `CDC_SERVER` | 未来 `server-config` Feature（未实现）；当前管理平台不维护两表 | 项目负责人 2026-08-27 明确确认一对多逻辑关系；无代码级 JOIN（当前仓库无生产代码访问两表，仅占位路由/占位页提及表名） | 8 行全部归属 `Server001`，`SERVER_ID` NULL 0、孤立引用 0、同中心端重复 `CONFIG_KEY` 0（定向核验，开发库 2026-08-27） |
 
 ## 4. 高度可信逻辑关系（R12～R14）
 
@@ -51,7 +55,7 @@
 | R13 | CDC_JOB_FAILURE_HANDLE_LOG.CLIENT_ID | CDC_CLIENT_MULTIPLE.CLIENT_ID | 多对一 | N | 与 JOB_FAILURE_EVENT.CLIENT_ID 语义相同、类型一致、值可匹配 | 0 空值 0 孤立；行数见 DATA_PROFILE.md §1.1 |
 | R14 | CDC_JOB_FAILURE_HANDLE_LOG.DATA_SOURCE_ID | CDC_DATA_SOURCE.DATA_SOURCE_ID | 多对一 | N | 与 JOB_FAILURE_EVENT.DATA_SOURCE_ID 语义相同、类型一致、值可匹配 | 0 空值 0 孤立；行数见 DATA_PROFILE.md §1.1 |
 
-> 完整性/孤立语义：已确认与高度可信关系均标注定向数据核验（0 空值、0 孤立或 token 级匹配），数据核验仅描述核验时点的实际状态（开发库 2026-08-26），行数快照统一见 `DATA_PROFILE.md`。数据库不设置物理外键（已确认架构决策），不强制保证引用完整性；各写入方和读取方须在代码层兼容空引用、孤立引用与无效引用，详见单表文档 §9 与功能基线。
+> 完整性/孤立语义：已确认与高度可信关系均标注定向数据核验（0 空值、0 孤立或 token 级匹配），数据核验仅描述核验时点的实际状态（已确认/高度可信关系为开发库 2026-08-26，R16 为开发库 2026-08-27），行数快照统一见 `DATA_PROFILE.md`。数据库不设置物理外键（已确认架构决策），不强制保证引用完整性；各写入方和读取方须在代码层兼容空引用、孤立引用与无效引用，详见单表文档 §9 与功能基线。
 
 ## 5. 特殊关系（非传统外键）
 
@@ -96,6 +100,7 @@ CDC_JOB_FAILURE_EVENT ──< R11 ── CDC_JOB_FAILURE_HANDLE_LOG
 CDC_CLIENT_MULTIPLE ──< R13 ── CDC_JOB_FAILURE_HANDLE_LOG
 CDC_DATA_SOURCE ──────< R14 ── CDC_JOB_FAILURE_HANDLE_LOG
 CDC_STATS_TASK_CONFIG ──< R12 ── CDC_STATS_WATERMARK
+CDC_SERVER ──< R16（逻辑一对多，无物理外键）────── CDC_SERVER_CONFIG
 ```
 
 > 图中 `<` 表示目标对象到来源对象方向（来源为子表/引用方，目标为主表/被引用方）；箭头不做物理外键含义。
@@ -108,3 +113,4 @@ CDC_STATS_TASK_CONFIG ──< R12 ── CDC_STATS_WATERMARK
 | 2026-08-26 | R1：补充 R15（EXTEND.TARGET_DATA_SOURCE_ID→DATA_SOURCE）；维护方与数据核验口径修订 | PROJECT-DATABASE-BASELINE-001-R1 修订 |
 | 2026-08-26 | R2：R15 由高度可信调整为已确认逻辑关系（项目负责人确认）；R04 维护方调整为人工维护 / 管理平台只读 | PROJECT-DATABASE-BASELINE-001-R2 修订 |
 | 2026-08-26 | 批准：项目级数据库基线正式批准收口（APPROVED） | PROJECT-DATABASE-BASELINE-APPROVAL-001 批准 |
+| 2026-08-27 | 新增 R16（CDC_SERVER_CONFIG.SERVER_ID→CDC_SERVER.SERVER_ID，逻辑一对多，无物理外键，负责人确认）；已确认关系 12→13、关系总数 12→16；§1 物理外键说明更新为覆盖 16 张已批准表（保留原 14 表核验历史）；§7 关系图补充 R16 | DATABASE-BASELINE-SERVER-CONFIG-001（候选）+ DATABASE-BASELINE-SERVER-CONFIG-APPROVAL-001（批准） |

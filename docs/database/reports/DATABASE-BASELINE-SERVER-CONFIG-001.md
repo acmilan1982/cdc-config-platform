@@ -1,11 +1,15 @@
 # 实施报告：DATABASE-BASELINE-SERVER-CONFIG-001
 
-> 报告状态：`DRAFT_PENDING_USER_REVIEW`
+> 报告状态：`APPROVED`
 > 任务编号：DATABASE-BASELINE-SERVER-CONFIG-001
 > 报告日期：2026-08-27
-> 执行基线（本地 HEAD == origin/develop）：605afd5719470333cf062262fe8d365c4e2d66d2
+> 批准任务：DATABASE-BASELINE-SERVER-CONFIG-APPROVAL-001
+> 批准日期：2026-08-27
+> 批准依据：ChatGPT 复审“有条件通过” + 用户/负责人批准收口（详见 `DATABASE-BASELINE-SERVER-CONFIG-APPROVAL-001.md`）
+> ChatGPT 已核验候选提交：`175558173ce6703542e4b626aace5ceef2841ece`（远程 `origin/develop` 亦为该提交，ahead/behind `0 0`）
+> 执行基线（候选任务本地 HEAD == origin/develop）：605afd5719470333cf062262fe8d365c4e2d66d2
 > 任务类型：真实数据库只读核验 + 纯文档基线候选任务（数据库表白名单：`CDC_SERVER`、`CDC_SERVER_CONFIG`）
-> 目标状态：`DRAFT_PENDING_USER_REVIEW`
+> 目标状态：`APPROVED`（本报告已由批准任务更新为 APPROVED；候选执行时的原始事实保留在正文）
 
 ## 1. 任务结论和状态
 
@@ -22,6 +26,8 @@
 | 本地 HEAD | `605afd5719470333cf062262fe8d365c4e2d66d2`（== 授权基线） |
 | origin/develop | `605afd5719470333cf062262fe8d365c4e2d66d2`（== 授权基线） |
 | ahead/behind | `0 0` |
+
+> 本任务完成后已 Commit 并 Push，候选提交为 `175558173ce6703542e4b626aace5ceef2841ece`。ChatGPT 已直接核验远程 `develop`，确认候选提交与远程提交均为 `175558173ce6703542e4b626aace5ceef2841ece`，ahead/behind 为 `0 0`。
 
 工作区分类（任务开始前记录）：
 
@@ -117,7 +123,7 @@
 3. `(SERVER_ID, CONFIG_KEY)` 无数据库唯一约束；若未来要求配置项 key 在中心端内唯一，需由需求确认后走独立收口任务。
 4. “当前只有一个中心端”为开发库数据事实 + 负责人确认，数据库未强制单中心端唯一。
 
-`PENDING_USER_CONFIRMATION` 数量：0。
+上述 1–4 项均为未来边界前瞻说明（批准任务已归类为 `FUTURE_SCOPE_RECONFIRMATION`，未来边界，非当前待确认项），不构成本基线的当前待确认项。`PENDING_USER_CONFIRMATION` 数量：0。
 
 ## 10. 实际新增/修改文件清单
 
@@ -127,7 +133,7 @@
 | docs/database/tables/CDC_SERVER_CONFIG.md | 新增 |
 | docs/database/reports/DATABASE-BASELINE-SERVER-CONFIG-001.md | 新增（本报告） |
 
-两份单表文档与报告均标记 `DRAFT_PENDING_USER_REVIEW`，未冒充批准基线。未修改其他任何文件。
+候选执行时两份单表文档与报告均标记 `DRAFT_PENDING_USER_REVIEW`，未冒充批准基线；批准任务后已更新为 `APPROVED`。候选任务未修改其他任何文件。
 
 ## 11. 数据库写操作、DDL、ZooKeeper、业务进程、业务代码、Feature 文档均未执行或修改的声明
 
@@ -145,7 +151,7 @@ feature_document_change_status=NONE
 ## 12. 文档自检结果
 
 - 两份单表文档字段集合、顺序、类型、长度、可空性、默认值、约束和索引与本次真实库查询一致。
-- 三个文档均为 `DRAFT_PENDING_USER_REVIEW`，未冒充批准基线。
+- 候选执行时三个文档均为 `DRAFT_PENDING_USER_REVIEW`，未冒充批准基线；本批准任务已将其更新为 `APPROVED`（见 `DATABASE-BASELINE-SERVER-CONFIG-APPROVAL-001.md`）。
 - 未泄露数据库密码或其他凭据。
 - 未将瞬时开发库数据写成生产常态；数据画像均标注为开发库快照。
 - 未将逻辑关系写成物理外键；未将“当前只有一个中心端”写成数据库强制唯一。
@@ -161,16 +167,16 @@ feature_document_change_status=NONE
 - 提交信息：`docs(database): baseline server configuration tables`。
 - 推送：普通 `git push origin develop`，禁止 force push。
 - 推送后核验：`git rev-parse HEAD` 与 `git rev-parse origin/develop` 一致，`git rev-list --left-right --count HEAD...origin/develop` 为 `0 0`；目标文件不留未提交差异，用户工作区内容保持原样。
-- 实际 result_commit_id / remote_commit_id / ahead_behind：以最终机器可读结果（AGENT_TASK_RESULT，见 §15）为准。
+- 实际结果：result_commit_id=`175558173ce6703542e4b626aace5ceef2841ece`，remote_commit_id=`175558173ce6703542e4b626aace5ceef2841ece`，ahead_behind=`0 0`（ChatGPT 已直接核验远程提交一致）。
 
 ## 14. 下一步
 
-本任务在“三个候选基线文档完成、验证通过、Commit 并 Push、控制台输出结果”后结束。下一步只能是：
+候选任务在“三个候选基线文档完成、验证通过、Commit 并 Push、控制台输出结果”后结束。后续已由独立批准任务执行：
 
-1. ChatGPT 读取本报告及两份单表文档进行复审；
-2. 项目负责人决定是否批准，并确定是否执行数据库基线收口（将两表纳入 14 表总基线并更新总入口、总表清单、关系、码值、画像和变更记录，由独立收口任务执行）。
+1. ChatGPT 读取本报告及两份单表文档进行复审，结论为“有条件通过”；
+2. 项目负责人/用户决定批准，批准任务 `DATABASE-BASELINE-SERVER-CONFIG-APPROVAL-001` 已执行：将两表纳入已批准物理基线（保持 14 张当前访问表 + 2 张已批准待实现表 = 16 张分层），更新总入口、总表清单、关系、数据画像和变更记录，并将本报告更新为 `APPROVED`。
 
-不得自行进入中心端配置 Feature 设计或代码实现；不创建 Feature 文档；不修改菜单、路由、占位页；不实现后端接口；不修改数据库。
+批准后不得自行进入中心端配置 Feature 设计或代码实现；不创建 Feature 文档；不修改菜单、路由、占位页；不实现后端接口；不修改数据库。下一步由 ChatGPT 直接读取远程批准报告和数据库基线复审，确认收口无误后，才进入“中心端配置”Feature 的需求基线建立阶段。
 
 ---
 
@@ -181,9 +187,9 @@ AGENT_TASK_RESULT
 task_id=DATABASE-BASELINE-SERVER-CONFIG-001
 status=SUCCESS
 base_commit_id=605afd5719470333cf062262fe8d365c4e2d66d2
-result_commit_id=<result_commit_id>
-remote_commit_id=<remote_commit_id>
-ahead_behind=<ahead_behind>
+result_commit_id=175558173ce6703542e4b626aace5ceef2841ece
+remote_commit_id=175558173ce6703542e4b626aace5ceef2841ece
+ahead_behind=0 0
 database_write_status=NONE
 ddl_status=NONE
 business_code_change_status=NONE
@@ -191,7 +197,7 @@ feature_document_change_status=NONE
 created_files=docs/database/tables/CDC_SERVER.md,docs/database/tables/CDC_SERVER_CONFIG.md,docs/database/reports/DATABASE-BASELINE-SERVER-CONFIG-001.md
 report_path=docs/database/reports/DATABASE-BASELINE-SERVER-CONFIG-001.md
 pending_user_confirmation_count=0
-summary=<summary>
+summary=真实库只读核验并建立 CDC_SERVER、CDC_SERVER_CONFIG 两张表候选基线，Commit 并 Push 成功；ChatGPT 复审“有条件通过”后，已由批准任务 DATABASE-BASELINE-SERVER-CONFIG-APPROVAL-001 纳入已批准物理基线
 ```
 
-> 说明：`result_commit_id` / `remote_commit_id` / `ahead_behind` / `summary` 的实际取值以任务结束时控制台输出的 `AGENT_TASK_RESULT` 为准；本小节按项目既有报告惯例以最终机器可读结果为准，不在报告内硬编码提交时尚未生成的 Commit ID。
+> 说明：本小节的 `result_commit_id` / `remote_commit_id` / `ahead_behind` / `summary` 已按 ChatGPT 直接核验的远程提交实际值填写（候选提交 `175558173ce6703542e4b626aace5ceef2841ece`，ahead/behind `0 0`）。批准任务 `DATABASE-BASELINE-SERVER-CONFIG-APPROVAL-001` 自身的最终 Commit ID 不属于本报告执行结果，由批准收口报告与批准任务控制台 `AGENT_TASK_RESULT` 输出，不在本报告内伪造。

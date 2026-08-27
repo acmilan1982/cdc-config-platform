@@ -8,7 +8,7 @@
 > 数据库：Oracle 19c 开发库（192.168.174.65:1521/prod.enmotech.com）
 > Schema：CDC
 > 元数据来源：真实数据库只读核验（ALL_TABLES / ALL_TAB_COLUMNS / ALL_COL_COMMENTS / ALL_CONSTRAINTS / ALL_INDEXES / ALL_OBJECTS / ALL_LOBS / ALL_TAB_PARTITIONS / DATABASE_PROPERTIES / V$VERSION / V$NLS_PARAMETERS）
-> 本文件是数据库结构权威入口之一；单表物理结构见 `tables/` 下 14 个单表基线文件。
+> 本文件是数据库结构权威入口之一；单表物理结构见 `tables/` 下 16 个单表基线文件（14 张当前访问表 + 2 张已批准待实现表）。
 
 ---
 
@@ -51,6 +51,17 @@
 
 **自校验：上表 14 行 = 任务确认的 14 张表，每张恰好一个单表文件。**
 
+### 2.1 已批准、待 `server-config` Feature 实现使用表（2 张）
+
+以下 2 张表已于 2026-08-27 建立并批准单表物理基线，但当前生产代码尚未访问（见 §7 权威边界与 `tables/` 下对应文档）。主键栏注明数据库层主键；数据维护方区分外部进程写入与未来 Feature 维护。
+
+| # | 表名 | 表注释 | 主键 | 表类型 | 当前用途 | 读写属性 | 数据维护方 | 单表文档 |
+|---|---|---|---|---|---|---|---|---|
+| 15 | CDC_SERVER | 中心端 | PK_CDC_SERVER（SERVER_ID） | 普通堆表 | 中心端登记（当前开发库 1 行，主键 SERVER_ID） | 只读（当前仓库无写路径） | `sync-server` 启动时插入（负责人确认，本仓库不可验证实现）；管理平台不维护 | [CDC_SERVER.md](tables/CDC_SERVER.md) |
+| 16 | CDC_SERVER_CONFIG | （无注释） | PK_CDC_SERVER_CONFIG（ID_SERVER_CONFIG） | 普通堆表 | 中心端配置项（当前开发库 8 行，全部归属 Server001） | 只读（当前仓库无读写路径） | 未来 `server-config` Feature 只更新可编辑记录的 CONFIG_VALUE（未实现） | [CDC_SERVER_CONFIG.md](tables/CDC_SERVER_CONFIG.md) |
+
+> 自校验：§2 的 14 张当前访问表 + §2.1 的 2 张已批准待实现表 = **16 张已批准单表物理基线**，每张恰好一个单表文件。当前仓库实际访问仍为 14 张；两表批准不等于 Feature 已实现，Feature 实现后再按实际代码事实调整分类。
+
 ---
 
 ## 3. 当前使用的视图、序列、触发器、物化视图、存储过程等对象
@@ -67,9 +78,12 @@
 
 ## 4. 数据库层物理外键总体情况
 
-**本次核验在 14 张使用表上未发现任何物理 FOREIGN KEY 约束。**
+**本次核验在 16 张已批准单表物理基线范围内均未发现任何物理 FOREIGN KEY 约束。**
 
-14 张使用表**不设置物理外键**，这是项目确认的架构决策。数据库不强制保证引用完整性；各写入方和读取方必须在代码层处理空引用、孤立引用与无效引用。只读数据核验仅描述核验时点的实际状态，不构成持续完整性保证。跨表关系定义见 `RELATIONS.md`。
+- 14 张当前访问表：2026-08-26 只读核验（PROJECT-DATABASE-BASELINE-001）未发现物理外键；
+- 2 张已批准待实现表（`CDC_SERVER`、`CDC_SERVER_CONFIG`）：2026-08-27 只读核验（DATABASE-BASELINE-SERVER-CONFIG-001）同样未发现物理外键。
+
+16 张已批准表范围内**均不设置物理外键**，这是项目确认的架构决策。数据库不强制保证引用完整性；各写入方和读取方必须在代码层处理空引用、孤立引用与无效引用。只读数据核验仅描述核验时点的实际状态，不构成持续完整性保证。跨表关系定义见 `RELATIONS.md`。
 
 ---
 
@@ -83,8 +97,6 @@
 
 | 对象 | 类型 | 历史提及 | 当前代码访问 |
 |---|---|---|---|
-| CDC_SERVER | TABLE | 旧 10 表白名单提及 | 无 |
-| CDC_SERVER_CONFIG | TABLE | 旧 10 表白名单提及 | 无 |
 | CDC_TOPIC_OFFSET | TABLE | 旧 10 表白名单提及 | 无 |
 | CDC_DATA_SOURCE_RUN_STATE | TABLE | 旧 10 表白名单提及 | 无 |
 | CDC_DATA_SOURCE_SCN | TABLE | 历史资料提及 | 无 |
@@ -143,3 +155,4 @@
 | 2026-08-26 | R1：修正无物理外键表述；更新 SUBSCRIBE/JFE/JHL 数据维护方；移除 CDC_CLIENT 现行说明并重排 §5 | PROJECT-DATABASE-BASELINE-001-R1 修订 |
 | 2026-08-26 | R2：修正 §3 总体访问边界（14 张使用表访问入口走项目后端代码，部分表由外部进程或人工维护）；CDC_CLIENT_MULTIPLE 维护方调整为人工维护（当前管理平台仅只读，后续计划单独开发 CRUD，尚未实现） | PROJECT-DATABASE-BASELINE-001-R2 修订 |
 | 2026-08-26 | 批准：项目级数据库基线正式批准收口（APPROVED） | PROJECT-DATABASE-BASELINE-APPROVAL-001 批准 |
+| 2026-08-27 | 新增 2 张已批准待实现表（CDC_SERVER、CDC_SERVER_CONFIG）：新增 §2.1 独立小节登记，保持 14+2=16 分层自校验；从 §5.1 排除区移除两表，避免同一对象同时处于批准和排除状态；§4 物理外键总体说明更新为覆盖 16 张已批准表（保留原 14 表核验历史） | DATABASE-BASELINE-SERVER-CONFIG-001（候选）+ DATABASE-BASELINE-SERVER-CONFIG-APPROVAL-001（批准） |

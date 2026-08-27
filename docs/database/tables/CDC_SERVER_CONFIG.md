@@ -1,7 +1,11 @@
-# CDC_SERVER_CONFIG — 中心端配置项表（候选补充基线）
+# CDC_SERVER_CONFIG — 中心端配置项表（项目数据库物理基线）
 
-> 文档状态：`DRAFT_PENDING_USER_REVIEW`
-> 候选基线任务：DATABASE-BASELINE-SERVER-CONFIG-001
+> 文档状态：`APPROVED`
+> 批准任务：DATABASE-BASELINE-SERVER-CONFIG-APPROVAL-001
+> 批准日期：2026-08-27
+> 候选事实来源提交：175558173ce6703542e4b626aace5ceef2841ece
+> 批准依据：ChatGPT 复审“有条件通过” + 用户/负责人批准收口
+> 候选基线任务：DATABASE-BASELINE-SERVER-CONFIG-001（真实数据库只读核验 + 文档基线）
 > 核验时间：2026-08-27
 > 数据库：Oracle 19c 开发库（192.168.174.65:1521/prod.enmotech.com）
 > Schema：CDC
@@ -9,7 +13,7 @@
 > 关联代码模块 / Feature：无（当前仓库无生产代码访问；仅占位路由与占位页提及表名，见 §8）
 > 数据维护方：未来“中心端配置”Feature 只维护既有记录中 `IS_EDITABLE` 允许编辑行的 `CONFIG_VALUE`（`CONFIRMED_BY_OWNER` / `FUTURE_FEATURE_TARGET`；当前未实现）
 
-> 本文档为**候选补充基线**，尚未获批准。批准前不得视为正式项目级数据库基线的一部分；现有 14 表总基线、关系、码值、画像和变更记录均未因本文档改变。
+> 正式定位：已批准单表物理基线。当前管理平台尚未实现访问；未来 `server-config` Feature 查询全部既有配置，并且只更新可编辑记录的 `CONFIG_VALUE`（`FUTURE_FEATURE_TARGET`，尚未实现，见 §8）。本表批准纳入已批准物理基线，不改变“当前生产代码实际访问 14 张表”的事实分层（详见 `docs/database/README.md` 与 `SCHEMA.md`）。
 
 ---
 
@@ -170,8 +174,8 @@
 
 - `IS_EDITABLE` 无数据库 Check 约束：其取值语义（如 `0/1` 之外是否还有其他合法值）只能由未来 Feature 应用层定义（`FUTURE_FEATURE_TARGET`）；当前数据仅出现 `0/1`（`OBSERVED_DATABASE`），不得写成数据库允许值全集。
 - `SERVER_ID`、`CONFIG_KEY`、`CONFIG_VALUE`、`CONFIG_DESC` 均无 NOT NULL 约束；未来 Feature 若依赖这些字段必须为应用层提供，需在需求阶段确认（`FUTURE_FEATURE_TARGET` 前瞻）。
-- `(SERVER_ID, CONFIG_KEY)` 无数据库唯一约束；若未来业务要求配置项 key 在中心端内唯一，需由需求确认后走独立收口任务（`PENDING_USER_CONFIRMATION` 前瞻，非当前冲突）。
-- 无其他待确认项。
+- `(SERVER_ID, CONFIG_KEY)` 无数据库唯一约束；若未来业务要求配置项 key 在中心端内唯一，需由需求确认后走独立收口任务（`FUTURE_SCOPE_RECONFIRMATION`，未来边界，非当前待确认项）。
+- 当前 `PENDING_USER_CONFIRMATION` 数量为 0；以上均为未来边界前瞻说明，不构成本基线的当前待确认项。
 
 ---
 
@@ -180,5 +184,6 @@
 | 日期 | 变更 | 依据 |
 |---|---|---|
 | 2026-08-27 | 建立单表候选补充基线（DRAFT_PENDING_USER_REVIEW） | DATABASE-BASELINE-SERVER-CONFIG-001 真实数据库只读核验 |
+| 2026-08-27 | 批准：纳入项目级数据库物理基线（APPROVED） | DATABASE-BASELINE-SERVER-CONFIG-APPROVAL-001 批准收口（ChatGPT 复审有条件通过） |
 
-> 本文档为候选基线，未获批准；批准流程与后续收口见 `docs/database/reports/DATABASE-BASELINE-SERVER-CONFIG-001.md`。
+> 批准收口与事实分层见 `docs/database/reports/DATABASE-BASELINE-SERVER-CONFIG-APPROVAL-001.md` 与 `docs/database/reports/DATABASE-BASELINE-SERVER-CONFIG-001.md`。

@@ -41,6 +41,27 @@
 
 > 成本原则：CDC_LOG_CORRECT 为大规模日志表，按统计信息估算；若需精确值需另行评估成本与授权。个别小表统计信息陈旧（如 ALL_TABLES.NUM_ROWS 对 CDC_LOG_ERROR=1、CDC_STATS_DAILY_OVERVIEW=2、CDC_STATS_DIM_DAILY=13），精确计数以 §1.1 为准。
 
+### 1.3 已批准待实现表快照（`OBSERVED_EXACT`，开发库 2026-08-27）
+
+以下为 2026-08-27 只读核验（DATABASE-BASELINE-SERVER-CONFIG-001）的精确 `COUNT(*)` 与定向核验结果：
+
+| 表名 | 精确行数 | 查询口径 | 说明 |
+|---|---|---|---|
+| CDC_SERVER | 1 | COUNT(*) | 中心端登记表；当前唯一记录为 `Server001`；写入方为 `sync-server` 启动登记（负责人确认，本仓库不可验证实现），管理平台不维护 |
+| CDC_SERVER_CONFIG | 8 | COUNT(*) | 中心端配置项表；8 条全部归属 `Server001` |
+
+配置数据定向核验（2026-08-27）：
+
+| 检查项 | 结论 |
+|---|---|
+| `CDC_SERVER_CONFIG.SERVER_ID` 为 NULL | 0 |
+| 找不到对应中心端的孤立引用 | 0（所有 `SERVER_ID` 均能在 `CDC_SERVER` 中找到） |
+| 同一中心端下重复 `CONFIG_KEY` | 0（数据库无对应唯一约束，当前无重复为数据事实） |
+| `CONFIG_KEY` 为 NULL | 0 |
+| `IS_EDITABLE` 取值分布 | `1` 六条、`0` 两条 |
+
+> 以上为开发库瞬时快照（2026-08-27），不代表生产常态，也不代表数据库允许值全集；`IS_EDITABLE` 取值分布不等于数据库合法值全集（无 CHECK 约束，见 `tables/CDC_SERVER_CONFIG.md`）。
+
 ---
 
 ## 2. 项目负责人确认的规模描述
@@ -156,3 +177,4 @@
 | 2026-08-26 | 建立数据现状与规模画像（DRAFT_PENDING_USER_REVIEW） | PROJECT-DATABASE-BASELINE-001 只读核验 + R1 数据核验 + 项目负责人确认 |
 | 2026-08-26 | R1：拆分日志写入链与保留规则；更新数据完整性核验结论（含 R15）；关闭 P1～P5 并新增 PENDING_DECISION | PROJECT-DATABASE-BASELINE-001-R1 修订 |
 | 2026-08-26 | 批准：项目级数据库基线正式批准收口（APPROVED） | PROJECT-DATABASE-BASELINE-APPROVAL-001 批准 |
+| 2026-08-27 | 新增 §1.3 已批准待实现表快照（CDC_SERVER 精确 1 行、CDC_SERVER_CONFIG 精确 8 行，全部归属 Server001；IS_EDITABLE 1=6、0=2；SERVER_ID NULL 0、孤立引用 0、同中心端重复 CONFIG_KEY 0）；明确为开发库瞬时画像，不代表生产常态与数据库允许值全集 | DATABASE-BASELINE-SERVER-CONFIG-001（候选）+ DATABASE-BASELINE-SERVER-CONFIG-APPROVAL-001（批准） |

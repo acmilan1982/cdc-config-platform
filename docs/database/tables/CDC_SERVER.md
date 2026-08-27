@@ -1,7 +1,11 @@
-# CDC_SERVER — 中心端登记表（候选补充基线）
+# CDC_SERVER — 中心端登记表（项目数据库物理基线）
 
-> 文档状态：`DRAFT_PENDING_USER_REVIEW`
-> 候选基线任务：DATABASE-BASELINE-SERVER-CONFIG-001
+> 文档状态：`APPROVED`
+> 批准任务：DATABASE-BASELINE-SERVER-CONFIG-APPROVAL-001
+> 批准日期：2026-08-27
+> 候选事实来源提交：175558173ce6703542e4b626aace5ceef2841ece
+> 批准依据：ChatGPT 复审“有条件通过” + 用户/负责人批准收口
+> 候选基线任务：DATABASE-BASELINE-SERVER-CONFIG-001（真实数据库只读核验 + 文档基线）
 > 核验时间：2026-08-27
 > 数据库：Oracle 19c 开发库（192.168.174.65:1521/prod.enmotech.com）
 > Schema：CDC
@@ -9,7 +13,7 @@
 > 关联代码模块 / Feature：无（当前仓库无生产代码访问；仅占位路由与占位页提及表名，见 §8）
 > 数据维护方：`sync-server` 启动时插入（`CONFIRMED_BY_OWNER`；当前仓库无法验证其实现，见 §8）
 
-> 本文档为**候选补充基线**，尚未获批准。批准前不得视为正式项目级数据库基线的一部分；现有 14 表总基线、关系、码值、画像和变更记录均未因本文档改变。
+> 正式定位：已批准单表物理基线。当前管理平台不维护 `CDC_SERVER` 记录；未来 `server-config` Feature 读取该表以确定唯一中心端并用于异常判断（`FUTURE_FEATURE_TARGET`，尚未实现，见 §8）。本表批准纳入已批准物理基线，不改变“当前生产代码实际访问 14 张表”的事实分层（详见 `docs/database/README.md` 与 `SCHEMA.md`）。
 
 ---
 
@@ -123,9 +127,9 @@
 
 ## 10. 已知结构差异、待确认项与观察项
 
-- `DATA_SOURCE_ID` 字段注释为“暂时不用”，但当前唯一一条记录填有值（`OBSERVED_DATABASE`）。字段含义与当前数据的关系未由数据库或当前仓库说明，是否纳入未来 Feature 维护范围待负责人确认。本项不构成与负责人确认事实的冲突，仅作观察记录。
-- 当前仅一条中心端记录属开发库数据事实，数据库未强制单中心端；若未来出现多中心端，管理平台维护边界需重新确认（`PENDING_USER_CONFIRMATION` 前瞻，非当前冲突）。
-- 无其他待确认项。
+- `DATA_SOURCE_ID` 字段注释为“暂时不用”，但当前唯一一条记录填有值（`OBSERVED_DATABASE`）。字段含义与当前数据的关系未由数据库或当前仓库说明，是否纳入未来 Feature 维护范围留待需求阶段确认（`FUTURE_SCOPE_RECONFIRMATION`，未来边界，非当前待确认项）。
+- 当前仅一条中心端记录属开发库数据事实，数据库未强制单中心端；若未来出现多中心端，管理平台维护边界需在 `server-config` Feature 需求阶段重新确认（`FUTURE_SCOPE_RECONFIRMATION`，未来边界，非当前待确认项）。
+- 当前 `PENDING_USER_CONFIRMATION` 数量为 0；以上均为未来边界前瞻说明，不构成本基线的当前待确认项。
 
 ---
 
@@ -134,5 +138,6 @@
 | 日期 | 变更 | 依据 |
 |---|---|---|
 | 2026-08-27 | 建立单表候选补充基线（DRAFT_PENDING_USER_REVIEW） | DATABASE-BASELINE-SERVER-CONFIG-001 真实数据库只读核验 |
+| 2026-08-27 | 批准：纳入项目级数据库物理基线（APPROVED） | DATABASE-BASELINE-SERVER-CONFIG-APPROVAL-001 批准收口（ChatGPT 复审有条件通过） |
 
-> 本文档为候选基线，未获批准；批准流程与后续收口见 `docs/database/reports/DATABASE-BASELINE-SERVER-CONFIG-001.md`。
+> 批准收口与事实分层见 `docs/database/reports/DATABASE-BASELINE-SERVER-CONFIG-APPROVAL-001.md` 与 `docs/database/reports/DATABASE-BASELINE-SERVER-CONFIG-001.md`。
