@@ -6,21 +6,26 @@
 |---|---|
 | 正式功能标识 | `server-config` |
 | 目标文档 | `docs/features/server-config/DESIGN.md` |
-| 文档状态 | `DRAFT_PENDING_USER_REVIEW` |
+| 文档状态 | `APPROVED`（已由项目负责人正式批准的设计基线；批准只代表设计契约正式生效，不代表代码已实现或 65 条验收已经执行通过） |
 | 需求基线状态 | `APPROVED` |
 | 验收基线状态 | `APPROVED` |
 | 实现状态 | `NOT_STARTED` |
+| 验收用例状态 | `65 条全部 NOT_RUN` |
 | 设计任务 | `SERVER-CONFIG-DESIGN-BASELINE-001` |
 | 授权基线提交 | `c1a6d7dc38de261093383d7abf719f0834dd9bb3` |
 | R1 修订任务 | `SERVER-CONFIG-DESIGN-BASELINE-001-R1` |
 | R1 授权基线提交 | `53d74c19e31c4068963e7b3c50c12073e9ebad8f` |
 | R2 修订任务 | `SERVER-CONFIG-DESIGN-BASELINE-001-R2` |
 | R2 授权基线提交 | `8f8e1182896bdb71d52516a1f441ae611845b359` |
+| 批准任务 | `SERVER-CONFIG-DESIGN-BASELINE-APPROVAL-001` |
+| 批准日期 | 2026-08-27 |
+| 批准人 | 项目负责人 |
+| ChatGPT 复审通过提交 | `77a8c639911bee78a17f62d2ce8af2db53c44d29` |
 | 依据需求 | `docs/features/server-config/REQUIREMENTS.md`（已批准） |
 | 关联契约 | `docs/features/server-config/API.md`、`UI.md`、`DATABASE.md`（四文档使用同一接口、字段、错误码与状态模型） |
 | 创建日期 | 2026-08-27 |
 
-声明：本文档为**候选设计基线**，待 ChatGPT 与项目负责人复审，不能自行批准。设计完成不代表代码已实现，也不代表 65 条验收用例已执行（全部仍为 `NOT_RUN`）。若实现前发现必须改变已批准业务语义，不得在本设计中静默处理，应记录为 `PENDING_USER_CONFIRMATION` 并停止提交设计结论；纯技术实现选择在不改变业务语义的前提下，本文档给出单一推荐方案并说明理由。
+声明：本文档为**已批准设计基线**（批准任务 `SERVER-CONFIG-DESIGN-BASELINE-APPROVAL-001`，批准日期 2026-08-27，批准人=项目负责人）。设计完成不代表代码已实现，也不代表 65 条验收用例已执行（全部仍为 `NOT_RUN`）；当前 `/config/server` 仍是占位实现，当前仓库不存在中心端配置正式后端接口和数据库访问代码。设计批准不等于实现完成，也不等于验收执行或 PASS。若实现前发现必须改变已批准业务语义，不得在本设计中静默处理，应记录为 `PENDING_USER_CONFIRMATION` 并停止提交设计结论；纯技术实现选择在不改变业务语义的前提下，本文档给出单一推荐方案并说明理由。
 
 ## 2. 设计边界与输入
 
@@ -120,7 +125,7 @@
 | SC-DESIGN-073 | **脏值判断**：一行是否实际变化 = 该行规范化后的编辑值 ≠ 规范化后的原始值（`SC-DIRTY-03`）。仅选择顺序不同的多选集合规范化后相等，不产生修改（`SC-CFG-DBTYPE-09`、`SC-AC-032/046`）。 |
 | SC-DESIGN-074 | 确认框展示的原值 = `rawValue`（数据库原样值，不脱敏、不掩码、不做规范化；NULL/空 → 显示“（空值）”），新值 = `canonicalValue`（规范化后的最终保存形式）；多选新值展示规范化后的固定顺序字符串，保证用户所见与最终保存一致（`UI.md` `SC-UI-DESIGN-104/105`）。 |
 | SC-DESIGN-075 | 规范化不修改数据库原值；只有保存提交的 `configValue` 使用规范化值。撤销恢复原始值（`SC-DIRTY-05`）。 |
-| SC-DESIGN-076 | `configValue` 校验顺序固定：① 缺失或 JSON null（否则 `VALUE_EMPTY` `40224`）→ ② 非 JSON 字符串类型（否则 `VALUE_FORMAT_INVALID` `40226`，不允许隐式转字符串）→ ③ trim 后非空（否则 `VALUE_EMPTY` `40224`）→ ④ **原样提交长度**（未 trim 前）≤ 64（否则 `VALUE_LENGTH_EXCEEDED` `40225`）→ ⑤ 按 Key 专门规则解析/规范化/领域校验（否则 `VALUE_FORMAT_INVALID` `40226`）→ ⑥ 规范化后最终值非空且 ≤ 64；长度上限以数据库物理长度 64 为准，不依赖数据库截断（`SC-CFG-GEN-02`、`API.md` `SC-API-052`）。任一步失败即该条失败并整批拒绝。 |
+| SC-DESIGN-076 | `configValue` 校验顺序固定：① 缺失或 JSON null（则 `VALUE_EMPTY` `40224`）→ ② 非 JSON 字符串类型（则 `VALUE_FORMAT_INVALID` `40226`，不允许隐式转字符串）→ ③ trim 后非空（否则 `VALUE_EMPTY` `40224`）→ ④ **原样提交长度**（未 trim 前）≤ 64（否则 `VALUE_LENGTH_EXCEEDED` `40225`）→ ⑤ 按 Key 专门规则解析/规范化/领域校验（否则 `VALUE_FORMAT_INVALID` `40226`）→ ⑥ 规范化后最终值非空且 ≤ 64；长度上限以数据库物理长度 64 为准，不依赖数据库截断（`SC-CFG-GEN-02`、`API.md` `SC-API-052`）。任一步失败即该条失败并整批拒绝。 |
 
 ## 10. 六类 Key 的控件选择、前后端规则映射及未知 Key 默认只读策略
 
@@ -235,3 +240,4 @@
 | 2026-08-27 | 建立“中心端配置”Feature 候选设计基线（DRAFT_PENDING_USER_REVIEW / NOT_STARTED） | SERVER-CONFIG-DESIGN-BASELINE-001（阶段 4 设计与契约；纯文档任务；依据已批准 REQUIREMENTS.md 与 ACCEPTANCE.md、已批准数据库基线、当前代码结构与 log-query 设计文档惯例） |
 | 2026-08-27 | R1 修订：接口最少化引用纠正（`SC-API-020/040`、`SC-API-023~030`、错误码表 `SC-API-060~073/076`）；`items` 稳定排序 `CONFIG_KEY ASC NULLS LAST, ID_SERVER_CONFIG ASC`；`configValue` 校验顺序与长度口径明确（原样提交 ≤64、规范化后非空且 ≤64）；确认框原值 = rawValue 原样展示、新值 = canonicalValue；当前非法值不得静默规范化；新增 `SAVE_SUCCEEDED_RELOAD_FAILED` 状态；数据库异常映射唯一化（不新增 `DATABASE_ACCESS_FAILED`）；阶段边界与 DDL 排除范围澄清；保持 DRAFT_PENDING_USER_REVIEW / NOT_STARTED | SERVER-CONFIG-DESIGN-BASELINE-001-R1（REQUIRES_CHANGES 修订；纯文档任务） |
 | 2026-08-27 | R2 修订：请求体结构契约统一为顶层 JSON object 且仅 `items`、`items` 为 JSON array、元素为 JSON object、item 仅 `idServerConfig`/`configValue` 且均为 JSON 字符串（`SC-DESIGN-021/057/111`）；新增 `SC-DESIGN-115` 结构/类型契约 Feature 局部实现与 HTTP 400 映射；`SC-DESIGN-076` 校验顺序修正为先缺失/null 后非字符串类型；错误码总数保持 15；保持 DRAFT_PENDING_USER_REVIEW / NOT_STARTED | SERVER-CONFIG-DESIGN-BASELINE-001-R2（REQUIRES_ONE_MICRO_FIX 修订；纯文档任务） |
+| 2026-08-27 | 批准：文档状态由 `DRAFT_PENDING_USER_REVIEW` 改为 `APPROVED`；记录批准任务、批准日期、批准人（项目负责人）与 ChatGPT 复审通过提交 `77a8c639...`；同步 `SC-DESIGN-076` 两处“否则→则”纯文字逻辑方向修正（ChatGPT R2 复审后确认，与 `API.md` `SC-API-052` 完全一致：① 缺失或 JSON null 则 `VALUE_EMPTY` `40224`、② 非 JSON 字符串类型则 `VALUE_FORMAT_INVALID` `40226`，后续正向条件 trim 非空、原样长度 ≤64、符合 Key 专门规则仍保留“否则”）；设计批准不等于实现完成或验收执行；实现状态保持 `NOT_STARTED`，65 条验收保持 `NOT_RUN` | SERVER-CONFIG-DESIGN-BASELINE-APPROVAL-001（项目负责人批准驱动的设计基线收口；纯文档任务） |

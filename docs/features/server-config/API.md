@@ -6,21 +6,26 @@
 |---|---|
 | 正式功能标识 | `server-config` |
 | 目标文档 | `docs/features/server-config/API.md` |
-| 文档状态 | `DRAFT_PENDING_USER_REVIEW` |
+| 文档状态 | `APPROVED`（已由项目负责人正式批准的 API 契约基线；批准只代表设计契约正式生效，不代表代码已实现或 65 条验收已经执行通过） |
 | 需求基线状态 | `APPROVED` |
 | 验收基线状态 | `APPROVED` |
 | 实现状态 | `NOT_STARTED` |
+| 验收用例状态 | `65 条全部 NOT_RUN` |
 | 设计任务 | `SERVER-CONFIG-DESIGN-BASELINE-001` |
 | 授权基线提交 | `c1a6d7dc38de261093383d7abf719f0834dd9bb3` |
 | R1 修订任务 | `SERVER-CONFIG-DESIGN-BASELINE-001-R1` |
 | R1 授权基线提交 | `53d74c19e31c4068963e7b3c50c12073e9ebad8f` |
 | R2 修订任务 | `SERVER-CONFIG-DESIGN-BASELINE-001-R2` |
 | R2 授权基线提交 | `8f8e1182896bdb71d52516a1f441ae611845b359` |
+| 批准任务 | `SERVER-CONFIG-DESIGN-BASELINE-APPROVAL-001` |
+| 批准日期 | 2026-08-27 |
+| 批准人 | 项目负责人 |
+| ChatGPT 复审通过提交 | `77a8c639911bee78a17f62d2ce8af2db53c44d29` |
 | 依据需求 | `docs/features/server-config/REQUIREMENTS.md`（已批准） |
 | 关联契约 | `docs/features/server-config/DESIGN.md`、`UI.md`、`DATABASE.md`（同一接口路径、字段与错误码） |
 | 创建日期 | 2026-08-27 |
 
-声明：本文档为**候选 API 契约设计**，待 ChatGPT 与项目负责人复审，不能自行批准。本文只定义接口契约，不代表接口已经实现或验收通过；65 条验收用例全部仍为 `NOT_RUN`。本文档保持接口最少化，唯一确定两套接口，不保留多套备选方案。
+声明：本文档为**已批准 API 契约设计**（批准任务 `SERVER-CONFIG-DESIGN-BASELINE-APPROVAL-001`，批准日期 2026-08-27，批准人=项目负责人）。本文只定义接口契约，不代表接口已经实现或验收通过；当前 `/config/server` 仍是占位实现，当前仓库不存在中心端配置正式后端接口和数据库访问代码；65 条验收用例全部仍为 `NOT_RUN`。设计批准不等于实现完成，也不等于验收执行或 PASS。本文档保持接口最少化，唯一确定两套接口，不保留多套备选方案。
 
 ## 2. 设计依据与追踪方式
 
@@ -112,7 +117,7 @@
 | SC-API-044 | 请求 `items` 缺失/NULL/空数组 → `BATCH_EMPTY`（`40220`）（`SC-API-056`）；包含重复主键 → `DUPLICATE_ID`（`40222`）。 |
 | SC-API-050 | 请求体契约检查由本 Feature 自带的严格反序列化器完成（Request/Item DTO `@JsonAnySetter` 收集未知字段，或等价的 Feature 局部 `JsonNode` 预校验），在进入业务校验前校验结构（顶层 JSON object、`items` 为 JSON array、元素为 JSON object）与字段类型：顶层/元素结构错误统一映射 HTTP 400 + `ApiResponse.fail(400, "请求格式错误")`（不得被全局兜底异常处理映射成 HTTP 500），未知/额外字段即**整批拒绝** `REQUEST_FIELD_NOT_ALLOWED`（`40227`）；全局 `spring.jackson.default-property-inclusion=non_null` 只影响序列化输出，不影响反序列化契约；如实现需补充 `HttpMessageNotReadableException` 精确映射，只限定本 Feature 影响范围与返回契约，不修改全局 Jackson 宽松策略（结构/类型契约见 `SC-API-051/055~057`）。 |
 | SC-API-051 | 反序列化契约的合法请求体结构：顶层必须是 JSON object，只允许字段 `items`；`items` 必须是 JSON array，其元素必须是 JSON object；每个 item 只允许 `idServerConfig`、`configValue` 两个字段，且这两个字段均必须是 JSON 字符串类型（`VALUE_STRING`）。数字、布尔等非字符串值一律按类型不匹配处理，不允许隐式转换为字符串后继续查询/保存。 |
-| SC-API-052 | `configValue` 校验顺序固定为：① 缺失或 JSON null（否则 `VALUE_EMPTY` `40224`）→ ② 非 JSON 字符串类型（数字/布尔等，否则 `VALUE_FORMAT_INVALID` `40226`，不允许隐式转字符串）→ ③ trim 后非空（否则 `VALUE_EMPTY` `40224`）→ ④ **原样提交长度**（未 trim 前）≤ 64（否则 `VALUE_LENGTH_EXCEEDED` `40225`）→ ⑤ 按 Key 专门规则解析/规范化/领域校验（否则 `VALUE_FORMAT_INVALID` `40226`）→ ⑥ 规范化后最终值非空且 ≤ 64；任一步失败即该条失败，整批拒绝，禁止部分成功。 |
+| SC-API-052 | `configValue` 校验顺序固定为：① 缺失或 JSON null（则 `VALUE_EMPTY` `40224`）→ ② 非 JSON 字符串类型（数字/布尔等，则 `VALUE_FORMAT_INVALID` `40226`，不允许隐式转字符串）→ ③ trim 后非空（否则 `VALUE_EMPTY` `40224`）→ ④ **原样提交长度**（未 trim 前）≤ 64（否则 `VALUE_LENGTH_EXCEEDED` `40225`）→ ⑤ 按 Key 专门规则解析/规范化/领域校验（否则 `VALUE_FORMAT_INVALID` `40226`）→ ⑥ 规范化后最终值非空且 ≤ 64；任一步失败即该条失败，整批拒绝，禁止部分成功。 |
 | SC-API-055 | 顶层请求体必须是 JSON object，顶层只允许字段 `items`；出现 `items` 之外的其他字段 → **整批拒绝** `REQUEST_FIELD_NOT_ALLOWED`（`40227`），不进入数据库处理。 |
 | SC-API-056 | `items` 必须是 JSON array：缺失、JSON null 或空数组 → `BATCH_EMPTY`（`40220`）；非数组类型（object/字符串/数字/布尔）→ 请求体结构错误，HTTP 400 + `ApiResponse.fail(400, "请求格式错误")`，不进入数据库处理。 |
 | SC-API-057 | `items` 每个元素必须是 JSON object：元素为 null、字符串、数字、数组等非对象 → 请求体结构错误，HTTP 400 + `ApiResponse.fail(400, "请求格式错误")`，不进入数据库处理；每个 item 只允许 `idServerConfig`、`configValue`，出现其他字段 → **整批拒绝** `40227`。 |
@@ -289,3 +294,4 @@
 | 2026-08-27 | 建立“中心端配置”Feature 候选 API 契约（DRAFT_PENDING_USER_REVIEW / NOT_STARTED） | SERVER-CONFIG-DESIGN-BASELINE-001（阶段 4 设计与契约；纯文档任务） |
 | 2026-08-27 | R1 修订：批量保存出现不允许的额外字段一律**整批拒绝**并新增错误码 `40227`（`REQUEST_FIELD_NOT_ALLOWED`，专用错误码 14→15）；`items` 排序补充稳定次序 `ID_SERVER_CONFIG ASC`；JSON 示例主键改为 ≤32 字符；`configValue` 校验顺序与长度口径明确（原样提交长度 ≤64）；保存/查询数据库异常映射唯一化（不新增 `DATABASE_ACCESS_FAILED`）；新增 `SAVE_SUCCEEDED_RELOAD_FAILED` 状态；保持 DRAFT_PENDING_USER_REVIEW / NOT_STARTED | SERVER-CONFIG-DESIGN-BASELINE-001-R1（REQUIRES_CHANGES 修订；纯文档任务） |
 | 2026-08-27 | R2 修订：修正 `SC-API-051` 请求体结构契约（`items` 为 JSON array、元素为 JSON object，仅 `idServerConfig`/`configValue` 为 JSON 字符串）；新增 `SC-API-055~057` 顶层 object/`items` array/item object 结构与类型唯一映射（非数组/非对象 → HTTP 400 + `code=400`，额外字段 → `40227`，`items` 缺失/null/空 → `40220`，`idServerConfig` 非字符串 → `40223`，`configValue` 非字符串 → `40226`）；`configValue` 校验顺序修正为先缺失/null 后非字符串类型；错误码总数保持 15；保持 DRAFT_PENDING_USER_REVIEW / NOT_STARTED | SERVER-CONFIG-DESIGN-BASELINE-001-R2（REQUIRES_ONE_MICRO_FIX 修订；纯文档任务） |
+| 2026-08-27 | 批准：文档状态由 `DRAFT_PENDING_USER_REVIEW` 改为 `APPROVED`；记录批准任务、批准日期、批准人（项目负责人）与 ChatGPT 复审通过提交 `77a8c639...`；同步 `SC-API-052` 两处“否则→则”纯文字逻辑方向修正（ChatGPT R2 复审后确认：① 缺失或 JSON null 则 `VALUE_EMPTY` `40224`、② 非 JSON 字符串类型则 `VALUE_FORMAT_INVALID` `40226`，后续正向条件 trim 非空、原样长度 ≤64、符合 Key 专门规则仍保留“否则”）；设计批准不等于实现完成或验收执行；实现状态保持 `NOT_STARTED`，65 条验收保持 `NOT_RUN` | SERVER-CONFIG-DESIGN-BASELINE-APPROVAL-001（项目负责人批准驱动的设计基线收口；纯文档任务） |

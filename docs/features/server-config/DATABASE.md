@@ -6,21 +6,26 @@
 |---|---|
 | 正式功能标识 | `server-config` |
 | 目标文档 | `docs/features/server-config/DATABASE.md` |
-| 文档状态 | `DRAFT_PENDING_USER_REVIEW` |
+| 文档状态 | `APPROVED`（已由项目负责人正式批准的数据库使用设计基线；批准只代表设计契约正式生效，不代表代码已实现或 65 条验收已经执行通过） |
 | 需求基线状态 | `APPROVED` |
 | 验收基线状态 | `APPROVED` |
 | 实现状态 | `NOT_STARTED` |
+| 验收用例状态 | `65 条全部 NOT_RUN` |
 | 设计任务 | `SERVER-CONFIG-DESIGN-BASELINE-001` |
 | 授权基线提交 | `c1a6d7dc38de261093383d7abf719f0834dd9bb3` |
 | R1 修订任务 | `SERVER-CONFIG-DESIGN-BASELINE-001-R1` |
 | R1 授权基线提交 | `53d74c19e31c4068963e7b3c50c12073e9ebad8f` |
 | R2 修订任务 | `SERVER-CONFIG-DESIGN-BASELINE-001-R2` |
 | R2 授权基线提交 | `8f8e1182896bdb71d52516a1f441ae611845b359` |
+| 批准任务 | `SERVER-CONFIG-DESIGN-BASELINE-APPROVAL-001` |
+| 批准日期 | 2026-08-27 |
+| 批准人 | 项目负责人 |
+| ChatGPT 复审通过提交 | `77a8c639911bee78a17f62d2ce8af2db53c44d29` |
 | 依据需求 | `docs/features/server-config/REQUIREMENTS.md`（已批准） |
 | 关联契约 | `docs/features/server-config/DESIGN.md`、`API.md`、`UI.md`（同一事务、字段与校验规则） |
 | 创建日期 | 2026-08-27 |
 
-声明：本文档为**候选数据库使用设计**，待 ChatGPT 与项目负责人复审，不能自行批准。本文只描述本 Feature 如何读取与使用已批准数据库对象，**不复制项目级数据库基线，不设计 DDL，不新增索引/约束/外键**；`DDL_STATUS=NONE`（`SC-DB-120~123`）。本任务未连接数据库，未执行任何 SQL。
+声明：本文档为**已批准数据库使用设计**，由项目负责人于 2026-08-27 正式批准（`SERVER-CONFIG-DESIGN-BASELINE-APPROVAL-001`），ChatGPT 复审通过提交为 `77a8c639911bee78a17f62d2ce8af2db53c44d29`。设计批准不代表代码已实现，不代表 65 条验收已执行；当前不存在中心端配置正式后端接口和数据库访问代码。本文只描述本 Feature 如何读取与使用已批准数据库对象，**不复制项目级数据库基线，不设计 DDL，不新增索引/约束/外键**；`DDL_STATUS=NONE`（`SC-DB-120~123`）。本任务未连接数据库，未执行任何 SQL。
 
 ## 2. 权威数据库基线引用和事实/目标分层
 
@@ -184,3 +189,4 @@
 | 2026-08-27 | 建立“中心端配置”Feature 候选数据库使用设计（DRAFT_PENDING_USER_REVIEW / NOT_STARTED；`DDL_STATUS=NONE`） | SERVER-CONFIG-DESIGN-BASELINE-001（阶段 4 设计与契约；纯文档任务；依据已批准数据库基线，未连接数据库） |
 | 2026-08-27 | R1 修订：排序补充稳定次序 `CONFIG_KEY ASC NULLS LAST, ID_SERVER_CONFIG ASC`；重复 Key 按行独立判定可编辑、重复本身不导致只读；保存值长度口径明确（原样提交 ≤64、规范化后非空且 ≤64）；校验顺序增加请求契约检查 `40227` 与 `SC-API-052` 值校验顺序；保存异常唯一映射 `SAVE_FAILED 50030`（不新增 `DATABASE_ACCESS_FAILED`）、查询异常映射 HTTP 500 → `LOAD_FAILED`；保持 DRAFT_PENDING_USER_REVIEW / NOT_STARTED | SERVER-CONFIG-DESIGN-BASELINE-001-R1（REQUIRES_CHANGES 修订；纯文档任务） |
 | 2026-08-27 | R2 修订：`SC-DB-072` 请求结构/契约检查统一为顶层 JSON object 仅 `items`、`items` 为 JSON array、元素为 JSON object、item 字段均为 JSON 字符串（非数组/非对象 → HTTP 400 + `code=400`，额外字段 → `40227`）；⑥ 值校验顺序修正为先缺失/null 后非字符串类型；新增 `SC-DB-113` 全部结构/类型检查在数据库更新前完成；错误码总数保持 15；保持 DRAFT_PENDING_USER_REVIEW / NOT_STARTED | SERVER-CONFIG-DESIGN-BASELINE-001-R2（REQUIRES_ONE_MICRO_FIX 修订；纯文档任务） |
+| 2026-08-27 | 批准收口：文档状态由 `DRAFT_PENDING_USER_REVIEW` 迁移为 `APPROVED`（实现仍 `NOT_STARTED`、65 条验收仍全部 `NOT_RUN`）；补充批准元数据；声明由“候选设计、待复审”更新为“已批准设计”；DATABASE 处理顺序与 `否则→则` 文字修正无关（该修正仅在 `API.md` `SC-API-052` 与 `DESIGN.md` `SC-DESIGN-076`），无需修改 | SERVER-CONFIG-DESIGN-BASELINE-APPROVAL-001（阶段 4 设计批准收口；纯文档任务） |

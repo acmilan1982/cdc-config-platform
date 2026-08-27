@@ -1,6 +1,6 @@
 # 执行报告：SERVER-CONFIG-DESIGN-BASELINE-001
 
-> 报告状态：`DRAFT_PENDING_USER_REVIEW`
+> 报告状态：`APPROVED`
 > 任务编号：`SERVER-CONFIG-DESIGN-BASELINE-001`
 > Feature 中文名称：中心端配置
 > Feature 标识：`server-config`
@@ -8,6 +8,10 @@
 > 任务类型：阶段 4 设计与契约（纯文档候选设计基线建立）
 > 数据库访问：不需要，也不允许连接数据库（本任务未连接数据库，未执行任何 SQL）
 > 授权基线提交：`c1a6d7dc38de261093383d7abf719f0834dd9bb3`
+> 批准任务：`SERVER-CONFIG-DESIGN-BASELINE-APPROVAL-001`
+> 批准日期：2026-08-27
+> 批准人：项目负责人
+> ChatGPT 复审通过提交：`77a8c639911bee78a17f62d2ce8af2db53c44d29`
 
 ## 1. 任务状态与结论
 
@@ -373,3 +377,88 @@ R2 修改、验证、Commit、Push 后立即停止。
 - 连接或修改数据库、ZooKeeper；
 - 启动服务或进入联调、验收；
 - 生成下一阶段实现提示词。
+
+## 15. 批准收口记录（SERVER-CONFIG-DESIGN-BASELINE-APPROVAL-001）
+
+> 批准任务编号：`SERVER-CONFIG-DESIGN-BASELINE-APPROVAL-001`
+> 批准日期：2026-08-27
+> 批准人：项目负责人
+> 任务类型：阶段 4 设计基线批准收口（纯文档）
+> 授权基线提交：`77a8c639911bee78a17f62d2ce8af2db53c44d29`
+> 数据库访问：不需要，也不允许连接数据库（未连接数据库，未执行任何 SQL）
+
+### 15.1 ChatGPT 复审链与批准事实
+
+ChatGPT 已直接复审远程完整设计链：
+
+- 初始设计提交：`53d74c19e31c4068963e7b3c50c12073e9ebad8f`
+- R1 提交：`8f8e1182896bdb71d52516a1f441ae611845b359`
+- R2 提交：`77a8c639911bee78a17f62d2ce8af2db53c44d29`
+
+ChatGPT 复审结论：R1 十项主要修订和 R2 请求体结构/类型契约均已落实，完整设计具备批准条件。项目负责人已明确回复“同意”，正式批准“中心端配置”Feature 的 DESIGN、API、UI、DATABASE 设计基线，并授权执行本批准收口任务。
+
+### 15.2 批准前两处纯文字修正（否则→则）
+
+ChatGPT 在 R2 复审中确认：正式处理流程和错误映射已经正确，但 API 与 DESIGN 各有一处“否则”方向词错误。批准收口前已完成纯文字逻辑方向修正，未改变任何语义、编号、错误码或流程：
+
+- `API.md` `SC-API-052`：① 缺失或 JSON null 后接错误码由“否则”改为“则”；② 非 JSON 字符串类型后接错误码由“否则”改为“则”。后续正向条件（trim 后非空否则 `40224`；原样长度 ≤64 否则 `40225`；符合 Key 专门规则否则 `40226`）继续保留“否则”。
+- `DESIGN.md` `SC-DESIGN-076`：完成完全相同的两处“否则→则”修正。
+- `DATABASE.md` 处理顺序当前表述已经正确，无需修改。
+
+### 15.3 四份设计文档状态迁移
+
+| 文档 | 批准前 | 批准后 |
+|---|---|---|
+| `DESIGN.md` | `DRAFT_PENDING_USER_REVIEW` | `APPROVED` |
+| `API.md` | `DRAFT_PENDING_USER_REVIEW` | `APPROVED` |
+| `UI.md` | `DRAFT_PENDING_USER_REVIEW` | `APPROVED` |
+| `DATABASE.md` | `DRAFT_PENDING_USER_REVIEW` | `APPROVED` |
+
+四份设计文档实现状态均为 `NOT_STARTED`；需求基线状态 `APPROVED`；验收基线状态 `APPROVED`；验收用例状态 `65 条全部 NOT_RUN`。
+
+### 15.4 批准范围与正式设计事实
+
+批准后以下设计成为正式 Feature 技术基线，保持不变：
+
+- 仅两个业务接口：`GET /api/server-config`、`POST /api/server-config/save`。
+- 0/多中心端分别用 `40210`、`40211`；正常空配置为 `code=200` + 空 `items`。
+- 保存请求顶层为 object，`items` 为 array，item 为 object，只允许字符串字段 `idServerConfig`、`configValue`。
+- 非数组/非对象结构错误：HTTP 400 + `code=400`；额外字段：整批拒绝 `40227`。
+- 15 个 Feature 专用错误码保持不变（`40210`、`40211`、`40220~40227`、`40420~40423`、`50030`）。
+- 查询排序：`CONFIG_KEY ASC NULLS LAST, ID_SERVER_CONFIG ASC`。
+- 重复 Key 本身不导致只读；每条记录按真实 `IS_EDITABLE='1'` + Key 白名单独立判定。
+- 页面单一布局：一个 `el-card` + 恰好两列 `el-table`；说明主宽列，配置值列约 `360px`/窄屏不低于约 `300px`；非 sticky 操作区。
+- 页面不显示 Key 独立列、可编辑状态、原始 `IS_EDITABLE`、主键列或中心端列。
+- Key 通过信息图标 Tooltip 展示。
+- 确认框原值为 `rawValue`，新值为 `canonicalValue`。
+- 非法当前值不得静默规范化；受支持且可编辑时允许纠正，修正前不能保存。
+- 批量保存后端重读真实记录、防绕过、单事务、任一失败整批回滚。
+- 不做并发保护，最后一次成功保存生效。
+- `SAVE_SUCCEEDED_RELOAD_FAILED` 为正式页面状态，只允许重新 GET 加载。
+- 保存数据库异常映射 `50030 SAVE_FAILED`；查询数据库异常沿用全局 HTTP 500 / `code=500`。
+- 不需要 DDL、索引、约束、物理外键、缓存、分页、自动刷新或 `sync-server` 生效控制。
+
+### 15.5 当前待确认项
+
+| 编号 | 待确认项 |
+|---|---|
+| SC-PENDING-002 | 无。当前 `PENDING_USER_CONFIRMATION` 数量为 0。 |
+
+### 15.6 副作用声明（批准收口）
+
+```text
+database_access_status=NONE
+database_write_status=NONE
+ddl_status=NONE
+zookeeper_access_status=NONE
+business_code_change_status=NONE
+build_status=NOT_RUN_NOT_REQUIRED
+```
+
+批准收口未连接数据库，未执行任何 SQL/写操作/DDL；未连接 ZooKeeper；未修改任何业务代码、测试、配置、菜单、路由或占位页；未修改项目级或数据库基线、已批准 `REQUIREMENTS.md`/`ACCEPTANCE.md`、`CLAUDE.md`；未创建 Feature `README.md`；纯 Markdown 文档任务，未执行 Maven/npm 构建（`NOT_RUN_NOT_REQUIRED`）。
+
+### 15.7 下一步
+
+批准收口完成、验证、Commit、Push 后立即停止。
+
+下一步改为阶段 5 实现任务规划/提示词建立，由 ChatGPT 直接核对远程批准提交；核对通过后，才为阶段 5“实现”建立独立 Agent 任务提示词。本任务不进入前后端实现、构建、启动、联调或验收。

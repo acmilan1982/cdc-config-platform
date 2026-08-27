@@ -6,19 +6,24 @@
 |---|---|
 | 正式功能标识 | `server-config` |
 | 目标文档 | `docs/features/server-config/UI.md` |
-| 文档状态 | `DRAFT_PENDING_USER_REVIEW` |
+| 文档状态 | `APPROVED`（已由项目负责人正式批准的 UI 详细设计基线；批准只代表设计契约正式生效，不代表代码已实现或 65 条验收已经执行通过） |
 | 需求基线状态 | `APPROVED` |
 | 验收基线状态 | `APPROVED` |
 | 实现状态 | `NOT_STARTED` |
+| 验收用例状态 | `65 条全部 NOT_RUN` |
 | 设计任务 | `SERVER-CONFIG-DESIGN-BASELINE-001` |
 | 授权基线提交 | `c1a6d7dc38de261093383d7abf719f0834dd9bb3` |
 | R1 修订任务 | `SERVER-CONFIG-DESIGN-BASELINE-001-R1` |
 | R1 授权基线提交 | `53d74c19e31c4068963e7b3c50c12073e9ebad8f` |
+| 批准任务 | `SERVER-CONFIG-DESIGN-BASELINE-APPROVAL-001` |
+| 批准日期 | 2026-08-27 |
+| 批准人 | 项目负责人 |
+| ChatGPT 复审通过提交 | `77a8c639911bee78a17f62d2ce8af2db53c44d29` |
 | 依据需求 | `docs/features/server-config/REQUIREMENTS.md`（已批准） |
 | 关联契约 | `docs/features/server-config/DESIGN.md`、`API.md`、`DATABASE.md`（同一状态模型、控件规则与错误码） |
 | 创建日期 | 2026-08-27 |
 
-声明：本文档为**候选 UI 详细设计**，待 ChatGPT 与项目负责人复审，不能自行批准。设计完成不代表代码已实现，不代表 65 条验收已执行。本文只描述本 Feature 页面；不引入搜索、分页、卡片大屏风格、Tab、抽屉、中心端选择器或独立详情页（`SC-NONGOAL-01~10`）。
+声明：本文档为**已批准 UI 详细设计**，由项目负责人于 2026-08-27 正式批准（`SERVER-CONFIG-DESIGN-BASELINE-APPROVAL-001`），ChatGPT 复审通过提交为 `77a8c639911bee78a17f62d2ce8af2db53c44d29`。设计批准不代表代码已实现，不代表 65 条验收已执行；当前 `/config/server` 仍为占位实现，正式页面在后续独立任务中实现。本文只描述本 Feature 页面；不引入搜索、分页、卡片大屏风格、Tab、抽屉、中心端选择器或独立详情页（`SC-NONGOAL-01~10`）。
 
 ## 2. 设计依据
 
@@ -227,3 +232,4 @@
 |---|---|---|
 | 2026-08-27 | 建立“中心端配置”Feature 候选 UI 详细设计（DRAFT_PENDING_USER_REVIEW / NOT_STARTED） | SERVER-CONFIG-DESIGN-BASELINE-001（阶段 4 设计与契约；纯文档任务） |
 | 2026-08-27 | R1 修订：布局改为**单一确定方案**（一个 `el-card` + 恰好两列 `el-table`，配置值列约 `360px`/收缩下限约 `300px`、控件宽度 `100%`、操作区表格下方右对齐非 sticky）；确认框原值 = rawValue 原样展示（NULL/空 → “（空值）”）与新值 = canonicalValue；当前非法值不得静默规范化；新增 `SAVE_SUCCEEDED_RELOAD_FAILED` 状态（重试加载仅 GET）与对应文案；保持 DRAFT_PENDING_USER_REVIEW / NOT_STARTED | SERVER-CONFIG-DESIGN-BASELINE-001-R1（REQUIRES_CHANGES 修订；纯文档任务） |
+| 2026-08-27 | 批准收口：文档状态由 `DRAFT_PENDING_USER_REVIEW` 迁移为 `APPROVED`（实现仍 `NOT_STARTED`、65 条验收仍全部 `NOT_RUN`）；补充批准元数据；声明由“候选设计、待复审”更新为“已批准设计”；本设计不含需修正的“否则→则”文字问题（该修正仅在 `API.md` `SC-API-052` 与 `DESIGN.md` `SC-DESIGN-076`） | SERVER-CONFIG-DESIGN-BASELINE-APPROVAL-001（阶段 4 设计批准收口；纯文档任务） |

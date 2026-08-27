@@ -37,7 +37,7 @@
 | data-source-management | 数据源管理 | 部分实现（后端 CRUD 完整，前端占位） | 无 | BASELINE_NOT_ESTABLISHED | backend `datasource` 包（CRUD+启停，7 个 API 端点） | 前端占位未对接；缺全部基线文档；docs/pages/data-source-management.md 为恢复候选 | 新建 |
 | client-config | 客户端配置 | 占位 | 无 | BASELINE_NOT_ESTABLISHED | frontend `views/client-config/`（占位页） | 占位页；缺全部基线文档 | 新建 |
 | data-subscribe | 数据订阅 | 占位 | 无 | BASELINE_NOT_ESTABLISHED | frontend `views/data-subscribe/`（占位页） | 占位页；缺全部基线文档 | 新建 |
-| server-config | 中心端配置 | 占位 / 未开始正式实现 | REQUIREMENTS、ACCEPTANCE、reports | APPROVED | docs/features/server-config/；候选提交 `4e55493a...`；批准报告 SERVER-CONFIG-FEATURE-BASELINE-APPROVAL-001 | 缺 DESIGN、API、UI、DATABASE；未实现、未执行 65 条验收 | 阶段4设计与契约 |
+| server-config | 中心端配置 | 占位 / 未开始正式实现 | REQUIREMENTS、ACCEPTANCE、DESIGN、API、UI、DATABASE、reports | APPROVED | docs/features/server-config/；设计批准报告 SERVER-CONFIG-DESIGN-BASELINE-APPROVAL-001 及完整设计链（DESIGN/API/UI/DATABASE，批准提交 `77a8c63...`） | 未实现、未执行 65 条验收；Feature README 待实现验收收口 | 阶段5实现任务规划/前后端实现 |
 
 ## 运行监控
 
@@ -69,3 +69,4 @@
 | 日期 | 变更 | 依据 |
 |---|---|---|
 | 2026-08-27 | 仅同步 `server-config` 已批准需求/验收基线事实（基线覆盖、基线状态、最新有效证据、当前缺口、下一入口），不批准其他 Feature，不改变路由和菜单数量事实；本索引自身状态仍为 `DRAFT_PENDING_USER_REVIEW` | SERVER-CONFIG-FEATURE-BASELINE-APPROVAL-001（项目负责人批准驱动的 Feature 需求与验收基线收口；纯文档任务） |
+| 2026-08-27 | 仅同步 `server-config` 已批准设计基线事实：基线覆盖更新为 REQUIREMENTS、ACCEPTANCE、DESIGN、API、UI、DATABASE、reports；基线状态 APPROVED；最新有效证据更新为设计批准报告及完整设计链；当前缺口更新为未实现、65 条验收未执行、Feature README 待实现验收收口；下一入口更新为阶段5实现任务规划/前后端实现；不批准其他 Feature，不改变路由和菜单数量事实；本索引自身状态仍为 `DRAFT_PENDING_USER_REVIEW` | SERVER-CONFIG-DESIGN-BASELINE-APPROVAL-001（项目负责人批准驱动的阶段 4 设计基线收口；纯文档任务） |
