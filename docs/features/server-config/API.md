@@ -14,6 +14,8 @@
 | 授权基线提交 | `c1a6d7dc38de261093383d7abf719f0834dd9bb3` |
 | R1 修订任务 | `SERVER-CONFIG-DESIGN-BASELINE-001-R1` |
 | R1 授权基线提交 | `53d74c19e31c4068963e7b3c50c12073e9ebad8f` |
+| R2 修订任务 | `SERVER-CONFIG-DESIGN-BASELINE-001-R2` |
+| R2 授权基线提交 | `8f8e1182896bdb71d52516a1f441ae611845b359` |
 | 依据需求 | `docs/features/server-config/REQUIREMENTS.md`（已批准） |
 | 关联契约 | `docs/features/server-config/DESIGN.md`、`UI.md`、`DATABASE.md`（同一接口路径、字段与错误码） |
 | 创建日期 | 2026-08-27 |
@@ -100,24 +102,27 @@
 | 字段 | 类型 | 必填 | 说明 |
 |---|---|---|---|
 | `idServerConfig` | String | 是 | 既有记录主键（非空、≤32 字符、字符串） |
-| `configValue` | String | 是 | 新配置值（提交后按规范校验：trim 非空、≤64、符合 Key 专门规则） |
+| `configValue` | String | 是 | 新配置值（必须为 JSON 字符串；缺失/null → `40224`、非字符串类型 → `40226`，提交后按 `SC-API-052` 顺序校验：trim 非空、≤64、符合 Key 专门规则） |
 
 | 编号 | 规则 |
 |---|---|
 | SC-API-041 | 批量条数上限固定为 `200`（`MAX_BATCH_SIZE`）；当前开发库 8 行，200 为防御性上限，防止超长载荷。超出返回 `ITEM_COUNT_EXCEEDED`（`40221`）。 |
-| SC-API-042 | 请求只携带 `idServerConfig` + `configValue`；**禁止携带并信任** `CONFIG_KEY`、`CONFIG_DESC`、原值、`IS_EDITABLE`、`SERVER_ID`（`SC-BATCH-01`）。若请求出现这些不允许的额外字段，后端**整批拒绝**并返回 `REQUEST_FIELD_NOT_ALLOWED`（`40227`），不做部分保存、不以客户端声明的 Key/可编辑状态/归属作为判定依据（`SC-AC-056`）。 |
-| SC-API-043 | 主键为字符串；`idServerConfig` 为 NULL/空白 → `ID_INVALID`（`40223`）。 |
-| SC-API-044 | 请求 `items` 为 NULL/空数组 → `BATCH_EMPTY`（`40220`）；包含重复主键 → `DUPLICATE_ID`（`40222`）。 |
-| SC-API-050 | 请求体契约检查由本 Feature 自带的严格反序列化器完成（@JsonAnySetter 收集所有未知字段 + 字段值严格类型校验），未知/额外字段出现即**整批拒绝**，返回 `REQUEST_FIELD_NOT_ALLOWED`（`40227`）；不依赖全局 Jackson 宽松忽略行为（全局 `spring.jackson.default-property-inclusion=non_null` 只影响序列化输出，不影响反序列化契约）。 |
-| SC-API-051 | 反序列化契约要求 `items`、`idServerConfig`、`configValue` 均必须是 JSON 字符串类型（`VALUE_STRING`）；数字、布尔等非字符串类型按类型不匹配拒绝（`VALUE_FORMAT_INVALID` `40226` 的请求体形态由严格反序列化器在进入业务校验前拦截）。 |
-| SC-API-052 | `configValue` 校验顺序固定为：① JSON 字符串类型 → ② `null` → ③ trim 后非空（否则 `VALUE_EMPTY` `40224`）→ ④ **原样提交长度**（未 trim 前）≤ 64（否则 `VALUE_LENGTH_EXCEEDED` `40225`）→ ⑤ 按 Key 专门规则解析/规范化/领域校验（否则 `VALUE_FORMAT_INVALID` `40226`）→ ⑥ 规范化后最终值非空且 ≤ 64；任一步失败即该条失败，整批拒绝，禁止部分成功。 |
+| SC-API-042 | 请求只携带顶层 `items`（每个 item 仅 `idServerConfig` + `configValue`）；**禁止携带并信任** `CONFIG_KEY`、`CONFIG_DESC`、原值、`IS_EDITABLE`、`SERVER_ID`（`SC-BATCH-01`）。若请求出现这些不允许的额外字段（顶层或 item 级），后端**整批拒绝**并返回 `REQUEST_FIELD_NOT_ALLOWED`（`40227`），不做部分保存、不以客户端声明的 Key/可编辑状态/归属作为判定依据（`SC-AC-056`、`SC-API-055/057`）。 |
+| SC-API-043 | 主键为字符串；`idServerConfig` 缺失、JSON null、空白、长度超过 32 或非 JSON 字符串（数字/布尔等，不隐式转换）→ `ID_INVALID`（`40223`）。 |
+| SC-API-044 | 请求 `items` 缺失/NULL/空数组 → `BATCH_EMPTY`（`40220`）（`SC-API-056`）；包含重复主键 → `DUPLICATE_ID`（`40222`）。 |
+| SC-API-050 | 请求体契约检查由本 Feature 自带的严格反序列化器完成（Request/Item DTO `@JsonAnySetter` 收集未知字段，或等价的 Feature 局部 `JsonNode` 预校验），在进入业务校验前校验结构（顶层 JSON object、`items` 为 JSON array、元素为 JSON object）与字段类型：顶层/元素结构错误统一映射 HTTP 400 + `ApiResponse.fail(400, "请求格式错误")`（不得被全局兜底异常处理映射成 HTTP 500），未知/额外字段即**整批拒绝** `REQUEST_FIELD_NOT_ALLOWED`（`40227`）；全局 `spring.jackson.default-property-inclusion=non_null` 只影响序列化输出，不影响反序列化契约；如实现需补充 `HttpMessageNotReadableException` 精确映射，只限定本 Feature 影响范围与返回契约，不修改全局 Jackson 宽松策略（结构/类型契约见 `SC-API-051/055~057`）。 |
+| SC-API-051 | 反序列化契约的合法请求体结构：顶层必须是 JSON object，只允许字段 `items`；`items` 必须是 JSON array，其元素必须是 JSON object；每个 item 只允许 `idServerConfig`、`configValue` 两个字段，且这两个字段均必须是 JSON 字符串类型（`VALUE_STRING`）。数字、布尔等非字符串值一律按类型不匹配处理，不允许隐式转换为字符串后继续查询/保存。 |
+| SC-API-052 | `configValue` 校验顺序固定为：① 缺失或 JSON null（否则 `VALUE_EMPTY` `40224`）→ ② 非 JSON 字符串类型（数字/布尔等，否则 `VALUE_FORMAT_INVALID` `40226`，不允许隐式转字符串）→ ③ trim 后非空（否则 `VALUE_EMPTY` `40224`）→ ④ **原样提交长度**（未 trim 前）≤ 64（否则 `VALUE_LENGTH_EXCEEDED` `40225`）→ ⑤ 按 Key 专门规则解析/规范化/领域校验（否则 `VALUE_FORMAT_INVALID` `40226`）→ ⑥ 规范化后最终值非空且 ≤ 64；任一步失败即该条失败，整批拒绝，禁止部分成功。 |
+| SC-API-055 | 顶层请求体必须是 JSON object，顶层只允许字段 `items`；出现 `items` 之外的其他字段 → **整批拒绝** `REQUEST_FIELD_NOT_ALLOWED`（`40227`），不进入数据库处理。 |
+| SC-API-056 | `items` 必须是 JSON array：缺失、JSON null 或空数组 → `BATCH_EMPTY`（`40220`）；非数组类型（object/字符串/数字/布尔）→ 请求体结构错误，HTTP 400 + `ApiResponse.fail(400, "请求格式错误")`，不进入数据库处理。 |
+| SC-API-057 | `items` 每个元素必须是 JSON object：元素为 null、字符串、数字、数组等非对象 → 请求体结构错误，HTTP 400 + `ApiResponse.fail(400, "请求格式错误")`，不进入数据库处理；每个 item 只允许 `idServerConfig`、`configValue`，出现其他字段 → **整批拒绝** `40227`。 |
 
 ### 6.2 后端处理顺序（全部在一个事务内，`SC-DESIGN-057/058`、`SC-DB-070~076`）
 
-1. HTTP/参数层：请求体严格反序列化契约（仅 `items[].idServerConfig` + `items[].configValue`，额外字段整批拒绝，`SC-API-050/051`）；`items` 非空、条数 ≤ 200、无重复主键、主键格式（`SC-API-041~044`、`SC-API-042` 含 `40227`）。
+1. HTTP/参数层：请求体结构契约与严格反序列化（顶层 JSON object 且仅 `items`、`items` 为 JSON array、元素为 JSON object、item 仅 `idServerConfig` + `configValue` 且均为 JSON 字符串；顶层/元素结构错误 HTTP 400 + `ApiResponse.fail(400, "请求格式错误")`，额外字段整批拒绝 `40227`，`SC-API-050/051/055~057`）；`items` 非空、条数 ≤ 200、无重复主键、主键格式（`SC-API-041~044`、`SC-API-042` 含 `40227`）。
 2. 重新识别唯一中心端：`CDC_SERVER` 0 条 → `SERVER_NOT_REGISTERED`（`40210`）；>1 条 → `SERVER_MULTIPLE`（`40211`）；恰 1 条 → 继续（`SC-SERVER-01~04`）。
 3. 逐条按主键重读真实记录：不存在 → `CONFIG_RECORD_NOT_FOUND`（`40420`）；归属不是唯一中心端 → `SERVER_BELONGING_MISMATCH`（`40423`）；`IS_EDITABLE` 精确非 `'1'` → `CONFIG_NOT_EDITABLE`（`40421`）；Key 不在白名单 → `CONFIG_KEY_NOT_SUPPORTED`（`40422`）。
-4. 逐条值校验，顺序固定：JSON 字符串类型 → `null` → trim 后非空（`VALUE_EMPTY` `40224`）→ 原样提交长度 ≤ 64（`VALUE_LENGTH_EXCEEDED` `40225`）→ 符合该 Key 专门规则（含多选规范化）（`VALUE_FORMAT_INVALID` `40226`）→ 规范化后最终值非空且 ≤ 64（`SC-API-052`）。
+4. 逐条值校验，顺序固定：缺失/JSON null（`VALUE_EMPTY` `40224`）→ 非 JSON 字符串类型（`VALUE_FORMAT_INVALID` `40226`）→ trim 后非空（`VALUE_EMPTY` `40224`）→ 原样提交长度 ≤ 64（`VALUE_LENGTH_EXCEEDED` `40225`）→ 符合该 Key 专门规则（含多选规范化）（`VALUE_FORMAT_INVALID` `40226`）→ 规范化后最终值非空且 ≤ 64（`SC-API-052`）。
 5. 任一记录任一环节失败 → 抛 `BusinessException` → **整批回滚**，禁止部分成功（`SC-BATCH-06`）。
 
 | 编号 | 规则 |
@@ -283,3 +288,4 @@
 |---|---|---|
 | 2026-08-27 | 建立“中心端配置”Feature 候选 API 契约（DRAFT_PENDING_USER_REVIEW / NOT_STARTED） | SERVER-CONFIG-DESIGN-BASELINE-001（阶段 4 设计与契约；纯文档任务） |
 | 2026-08-27 | R1 修订：批量保存出现不允许的额外字段一律**整批拒绝**并新增错误码 `40227`（`REQUEST_FIELD_NOT_ALLOWED`，专用错误码 14→15）；`items` 排序补充稳定次序 `ID_SERVER_CONFIG ASC`；JSON 示例主键改为 ≤32 字符；`configValue` 校验顺序与长度口径明确（原样提交长度 ≤64）；保存/查询数据库异常映射唯一化（不新增 `DATABASE_ACCESS_FAILED`）；新增 `SAVE_SUCCEEDED_RELOAD_FAILED` 状态；保持 DRAFT_PENDING_USER_REVIEW / NOT_STARTED | SERVER-CONFIG-DESIGN-BASELINE-001-R1（REQUIRES_CHANGES 修订；纯文档任务） |
+| 2026-08-27 | R2 修订：修正 `SC-API-051` 请求体结构契约（`items` 为 JSON array、元素为 JSON object，仅 `idServerConfig`/`configValue` 为 JSON 字符串）；新增 `SC-API-055~057` 顶层 object/`items` array/item object 结构与类型唯一映射（非数组/非对象 → HTTP 400 + `code=400`，额外字段 → `40227`，`items` 缺失/null/空 → `40220`，`idServerConfig` 非字符串 → `40223`，`configValue` 非字符串 → `40226`）；`configValue` 校验顺序修正为先缺失/null 后非字符串类型；错误码总数保持 15；保持 DRAFT_PENDING_USER_REVIEW / NOT_STARTED | SERVER-CONFIG-DESIGN-BASELINE-001-R2（REQUIRES_ONE_MICRO_FIX 修订；纯文档任务） |

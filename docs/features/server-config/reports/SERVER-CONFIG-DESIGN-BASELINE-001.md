@@ -279,3 +279,97 @@ R1 修改、验证、Commit、Push 后立即停止。
 - 连接或修改数据库、ZooKeeper；
 - 启动服务或进入联调、验收；
 - 生成下一阶段实现提示词。
+
+---
+
+## 14. R2 复审修订记录（SERVER-CONFIG-DESIGN-BASELINE-001-R2）
+
+> R2 任务编号：`SERVER-CONFIG-DESIGN-BASELINE-001-R2`
+> R2 授权基线提交：`8f8e1182896bdb71d52516a1f441ae611845b359`
+> R2 报告日期：2026-08-27
+> R2 复审结论：ChatGPT 复审为 `REQUIRES_ONE_MICRO_FIX`（十项主修订通过，仅 `API.md` `SC-API-051` 一处请求体类型错误需微型修订）
+> R2 任务类型：阶段 4 候选设计基线微型契约修订（纯文档）
+> R2 数据库访问：不需要，也不允许连接数据库（未连接数据库，未执行任何 SQL）
+> R2 变更文件：仅本报告 + `DESIGN.md`、`API.md`、`DATABASE.md` 共 4 个授权文件（`UI.md` 未修改）
+
+### 14.1 R2 修订范围与状态
+
+R2 只修正请求体 JSON 结构与类型错误契约，不改变任何业务需求、接口路径、字段名称、错误码总数或 UI 设计。四份设计文档继续保持 `DRAFT_PENDING_USER_REVIEW` / `NOT_STARTED`；`REQUIREMENTS.md`/`ACCEPTANCE.md` 保持 `APPROVED`；65 条验收用例继续全部保持 `NOT_RUN`。初始报告与 R1 记录的历史事实不回写、不伪造。
+
+### 14.2 ChatGPT R1 复审结论
+
+ChatGPT 已直接复审远程 R1 提交 `8f8e118...`：R1 的十类主修订均已落实，但发现 `API.md` `SC-API-051` 新引入一处请求体类型错误——把合法请求中的 `items` 错写成必须是 JSON 字符串；实际 `items` 必须是 JSON 数组、数组元素必须是 JSON 对象。此外现行顺序“先要求 `configValue` 是字符串、再检查 null”逻辑不自洽：JSON null 不是字符串，应先处理缺失/null，再检查非 null 值是否为字符串。
+
+### 14.3 R2 修正后的请求体结构契约
+
+唯一正式请求体结构：
+
+```json
+{
+  "items": [
+    {
+      "idServerConfig": "00000000000000000000000000000001",
+      "configValue": "false"
+    }
+  ]
+}
+```
+
+- 顶层请求体必须是 JSON object，只允许字段 `items`；
+- `items` 必须是 JSON array（缺失/JSON null/空数组 → `40220 BATCH_EMPTY`；非数组类型 → 请求体结构错误 HTTP 400 + `ApiResponse.fail(400, "请求格式错误")`，不进入数据库）；
+- `items` 每个元素必须是 JSON object（null/字符串/数字/数组等非对象元素 → 请求体结构错误 HTTP 400 + `code=400`，不进入数据库）；
+- 每个 item 只允许 `idServerConfig`、`configValue`，且两者均为 JSON 字符串（`VALUE_STRING`）；
+- 额外字段（顶层或 item 级）→ 整批拒绝 `40227 REQUEST_FIELD_NOT_ALLOWED`。
+
+### 14.4 结构/缺失/null/类型错误的唯一映射
+
+| 场景 | 唯一映射 |
+|---|---|
+| 顶层/元素结构错误（非数组、非对象） | HTTP 400 + `ApiResponse.fail(400, "请求格式错误")`，不进入数据库 |
+| 额外字段（顶层或 item 级） | `40227 REQUEST_FIELD_NOT_ALLOWED`，整批拒绝 |
+| `items` 缺失 / JSON null / 空数组 | `40220 BATCH_EMPTY` |
+| `idServerConfig` 缺失 / JSON null / 空白 / 超长 / 非字符串 | `40223 ID_INVALID`（非字符串不隐式转换） |
+| `configValue` 缺失 / JSON null | `40224 VALUE_EMPTY` |
+| `configValue` 非 JSON 字符串（数字/布尔） | `40226 VALUE_FORMAT_INVALID` |
+| `configValue` 非 null 字符串后依次校验 | trim 非空 `40224` → 原样长度 ≤64 `40225` → Key 专门规则 `40226` → 规范化后非空且 ≤64 |
+
+### 14.5 错误码总数
+
+专用错误码总数仍为 **15**（`40210`、`40211`、`40220~40227`、`40420~40423`、`50030`），未新增 `40228` 或其他错误码。
+
+### 14.6 修改范围
+
+仅修改 4 个授权文件：`DESIGN.md`、`API.md`、`DATABASE.md`、本报告。`UI.md`、`REQUIREMENTS.md`、`ACCEPTANCE.md` 未修改。
+
+### 14.7 副作用声明（R2）
+
+```text
+database_access_status=NONE
+database_write_status=NONE
+ddl_status=NONE
+zookeeper_access_status=NONE
+business_code_change_status=NONE
+build_status=NOT_RUN_NOT_REQUIRED
+```
+
+R2 未连接数据库，未执行任何 SQL/写操作/DDL；未连接 ZooKeeper；未修改任何业务代码、测试、配置、菜单、路由或占位页；未修改 `docs/baseline/**`、`docs/database/**`、`docs/features/README.md`、已批准 `REQUIREMENTS.md`/`ACCEPTANCE.md` 或 `CLAUDE.md`；纯 Markdown 文档任务，未执行 Maven/npm 构建（`NOT_RUN_NOT_REQUIRED`）。
+
+### 14.8 当前待确认项
+
+| 编号 | 待确认项 |
+|---|---|
+| SC-PENDING-001 | 无。当前 `PENDING_USER_CONFIRMATION` 数量为 0（R2 修订未新增待确认项）。 |
+
+### 14.9 下一步（R2）
+
+R2 修改、验证、Commit、Push 后立即停止。
+
+下一步仍只能由 ChatGPT 直接核对远程 R2 提交并复审；R2 复审通过后，再由项目负责人决定是否批准四份设计基线。R2 通过并由项目负责人批准前不得：
+
+- 将四份设计文档改为 `APPROVED`；
+- 修改已批准需求或验收基线；
+- 创建 Feature `README.md`；
+- 编写任何前后端或测试代码；
+- 连接或修改数据库、ZooKeeper；
+- 启动服务或进入联调、验收；
+- 生成下一阶段实现提示词。

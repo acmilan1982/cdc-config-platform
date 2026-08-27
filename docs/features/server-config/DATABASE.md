@@ -14,6 +14,8 @@
 | 授权基线提交 | `c1a6d7dc38de261093383d7abf719f0834dd9bb3` |
 | R1 修订任务 | `SERVER-CONFIG-DESIGN-BASELINE-001-R1` |
 | R1 授权基线提交 | `53d74c19e31c4068963e7b3c50c12073e9ebad8f` |
+| R2 修订任务 | `SERVER-CONFIG-DESIGN-BASELINE-001-R2` |
+| R2 授权基线提交 | `8f8e1182896bdb71d52516a1f441ae611845b359` |
 | 依据需求 | `docs/features/server-config/REQUIREMENTS.md`（已批准） |
 | 关联契约 | `docs/features/server-config/DESIGN.md`、`API.md`、`UI.md`（同一事务、字段与校验规则） |
 | 创建日期 | 2026-08-27 |
@@ -105,7 +107,7 @@
 |---|---|
 | SC-DB-070 | 批量保存方法整体置于一个数据库事务（`@Transactional(rollbackFor = Exception.class)`）；唯一中心端识别、逐条按主键重读、全部校验、逐条更新都在同一事务内（`SC-BATCH-05`、`SC-DESIGN-100`）。 |
 | SC-DB-071 | 逐条按主键 `ID_SERVER_CONFIG` 重新读取真实记录；不信任客户端提交的 Key、可编辑状态、原值或中心端归属（`SC-BATCH-02`、`SC-EDIT-05`）。 |
-| SC-DB-072 | 逐条校验顺序：① 请求契约检查（仅 `idServerConfig` + `configValue`，出现额外字段整批拒绝 `REQUEST_FIELD_NOT_ALLOWED` `40227`，`SC-API-042/050/076`）→ ② 记录存在（`40420`）→ ③ 归属等于唯一中心端（`40423`）→ ④ `IS_EDITABLE` 精确 `'1'`（`40421`）→ ⑤ Key 白名单（`40422`）→ ⑥ 值校验（`SC-API-052` 固定顺序：JSON 字符串类型 → `null` → trim 后非空 `40224` → 原样长度 ≤64 `40225` → Key 专门规则 `40226` → 规范化后非空且 ≤64）；任一失败 → 整批回滚（`SC-BATCH-03/06`）。 |
+| SC-DB-072 | 逐条校验顺序：① 请求结构/契约检查（顶层 JSON object 仅 `items`、`items` 为 JSON array、元素为 JSON object、item 仅 `idServerConfig` + `configValue` 且均为 JSON 字符串；非数组/非对象结构错误 HTTP 400 + `ApiResponse.fail(400, "请求格式错误")`，不进入数据库；额外字段整批拒绝 `REQUEST_FIELD_NOT_ALLOWED` `40227`，`SC-API-042/050/051/055~057/076`）→ ② 记录存在（`40420`）→ ③ 归属等于唯一中心端（`40423`）→ ④ `IS_EDITABLE` 精确 `'1'`（`40421`）→ ⑤ Key 白名单（`40422`）→ ⑥ 值校验（`SC-API-052` 固定顺序：缺失/JSON null `40224` → 非 JSON 字符串类型 `40226` → trim 后非空 `40224` → 原样长度 ≤64 `40225` → Key 专门规则 `40226` → 规范化后非空且 ≤64）；任一失败 → 整批回滚（`SC-BATCH-03/06`）。 |
 | SC-DB-073 | 更新按主键 `UPDATE CDC_SERVER_CONFIG SET CONFIG_VALUE = ? WHERE ID_SERVER_CONFIG = ?`；逐条核验更新行数恰为 1（`SC-DB-092`）。 |
 | SC-DB-074 | 任一更新行数不符或抛异常 → 整批回滚，禁止部分成功（`SC-BATCH-06`、`SC-AC-058`）。 |
 | SC-DB-075 | 事务边界只覆盖批量保存；查询为单次只读，无事务要求。 |
@@ -147,6 +149,7 @@
 | SC-DB-110 | 更新行数与预期不符（应为 1）即视为异常，抛出并整批回滚（`SC-BATCH-06`、`SC-AC-058`）。 |
 | SC-DB-111 | 保存阶段数据库连接/执行异常：统一转译为运行时 `BusinessException` 并整批回滚，映射为 `SAVE_FAILED`（`50030`），**不新增 `DATABASE_ACCESS_FAILED` 风格错误码，不提供“或”选项**；message 不泄露底层堆栈与 SQL（`SC-NFR-02`、`SC-DESIGN-109`、`API.md` `SC-API-053`）。 |
 | SC-DB-112 | 查询阶段数据库异常不转译业务码，由 `GlobalExceptionHandler` 按未捕获异常映射为 HTTP 500、`code=500`、`message="服务器内部错误"`，前端进入 `LOAD_FAILED` 并提供“重试”；不写入、不修复节点（本 Feature 不涉及 ZooKeeper）。 |
+| SC-DB-113 | 所有请求体结构与类型检查在数据库更新前完成：非数组/非对象结构错误唯一映射 HTTP 400 + `code=400`（`ApiResponse.fail(400, "请求格式错误")`）、额外字段唯一映射 `40227`，均不进入数据库处理；结构/类型校验通过后才进入唯一中心端识别、逐条按主键重读与值校验，任一环节失败整批不写（`API.md` `SC-API-050/051/055~057`、`DESIGN.md` `SC-DESIGN-057`）。 |
 
 ## 16. 明确 `DDL_STATUS=NONE`
 
@@ -180,3 +183,4 @@
 |---|---|---|
 | 2026-08-27 | 建立“中心端配置”Feature 候选数据库使用设计（DRAFT_PENDING_USER_REVIEW / NOT_STARTED；`DDL_STATUS=NONE`） | SERVER-CONFIG-DESIGN-BASELINE-001（阶段 4 设计与契约；纯文档任务；依据已批准数据库基线，未连接数据库） |
 | 2026-08-27 | R1 修订：排序补充稳定次序 `CONFIG_KEY ASC NULLS LAST, ID_SERVER_CONFIG ASC`；重复 Key 按行独立判定可编辑、重复本身不导致只读；保存值长度口径明确（原样提交 ≤64、规范化后非空且 ≤64）；校验顺序增加请求契约检查 `40227` 与 `SC-API-052` 值校验顺序；保存异常唯一映射 `SAVE_FAILED 50030`（不新增 `DATABASE_ACCESS_FAILED`）、查询异常映射 HTTP 500 → `LOAD_FAILED`；保持 DRAFT_PENDING_USER_REVIEW / NOT_STARTED | SERVER-CONFIG-DESIGN-BASELINE-001-R1（REQUIRES_CHANGES 修订；纯文档任务） |
+| 2026-08-27 | R2 修订：`SC-DB-072` 请求结构/契约检查统一为顶层 JSON object 仅 `items`、`items` 为 JSON array、元素为 JSON object、item 字段均为 JSON 字符串（非数组/非对象 → HTTP 400 + `code=400`，额外字段 → `40227`）；⑥ 值校验顺序修正为先缺失/null 后非字符串类型；新增 `SC-DB-113` 全部结构/类型检查在数据库更新前完成；错误码总数保持 15；保持 DRAFT_PENDING_USER_REVIEW / NOT_STARTED | SERVER-CONFIG-DESIGN-BASELINE-001-R2（REQUIRES_ONE_MICRO_FIX 修订；纯文档任务） |

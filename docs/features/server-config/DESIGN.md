@@ -14,6 +14,8 @@
 | 授权基线提交 | `c1a6d7dc38de261093383d7abf719f0834dd9bb3` |
 | R1 修订任务 | `SERVER-CONFIG-DESIGN-BASELINE-001-R1` |
 | R1 授权基线提交 | `53d74c19e31c4068963e7b3c50c12073e9ebad8f` |
+| R2 修订任务 | `SERVER-CONFIG-DESIGN-BASELINE-001-R2` |
+| R2 授权基线提交 | `8f8e1182896bdb71d52516a1f441ae611845b359` |
 | 依据需求 | `docs/features/server-config/REQUIREMENTS.md`（已批准） |
 | 关联契约 | `docs/features/server-config/API.md`、`UI.md`、`DATABASE.md`（四文档使用同一接口、字段、错误码与状态模型） |
 | 创建日期 | 2026-08-27 |
@@ -45,7 +47,7 @@
 | 编号 | 层/类（草案） | 职责 | 边界 |
 |---|---|---|---|
 | SC-DESIGN-020 | `controller/ServerConfigController` | 协议接入、URL 绑定、HTTP 层基础参数校验、委托 Service；`@Tag` / `@Operation` / `@Parameter` Swagger 注解 | 不做业务规则判断、不拼 SQL（同 `LogQueryController` 风格） |
-| SC-DESIGN-021 | `dto/ServerConfigSaveRequest`、`dto/ServerConfigSaveItem` | 批量保存 JSON 请求体绑定（`@RequestBody`） | 只承载 `idServerConfig` + `configValue`；禁止携带 Key、描述、原值、编辑标志或中心端 ID（`SC-BATCH-01`） |
+| SC-DESIGN-021 | `dto/ServerConfigSaveRequest`、`dto/ServerConfigSaveItem` | 批量保存 JSON 请求体绑定（`@RequestBody`） | `ServerConfigSaveRequest` 顶层只承载 `items`；`ServerConfigSaveItem` 只承载 `idServerConfig` + `configValue`（均为 JSON 字符串）；禁止携带 Key、描述、原值、编辑标志或中心端 ID（`SC-BATCH-01`、`API.md` `SC-API-051/055~057`） |
 | SC-DESIGN-022 | `service/ServerConfigService` + `impl/ServerConfigServiceImpl` | 唯一中心端识别、配置查询与排序、批量保存全流程校验与事务更新、DTO/VO 转换、错误码抛出 | 无状态；`@Transactional` 只落在批量保存方法 |
 | SC-DESIGN-023 | `mapper/CdcServerMapper`、`mapper/CdcServerConfigMapper` | `BaseMapper<CdcServer>` / `BaseMapper<CdcServerConfig>`（MyBatis-Plus，同 `DataSourceMapper` 风格）；必要时补充按 `SERVER_ID` 查询、按主键更新的方法 | 只接收绑定参数与固定实体；不做动态表名 |
 | SC-DESIGN-024 | `entity/CdcServer`、`entity/CdcServerConfig` | 对应 `CDC_SERVER` / `CDC_SERVER_CONFIG` 的 MyBatis-Plus 实体；`@TableId`/`@TableField` 映射 | 字段类型遵循数据库基线：主键/关联字段为 `String` |
@@ -91,7 +93,7 @@
 | SC-DESIGN-054 | 校验通过 → 弹出确认框，只列实际变更项，展示显示名称/原值/新值，Key 走信息图标 Tooltip（`SC-CONFIRM-02`）。 |
 | SC-DESIGN-055 | 取消 → 不发请求，保留全部编辑内容（`SC-CONFIRM-03`）。 |
 | SC-DESIGN-056 | 确认 → 页面进入 `SAVING`，禁用保存/撤销/编辑控件，发送一次 `POST /api/server-config/save`，请求只携带 `[{idServerConfig, configValue}]`（`SC-CONFIRM-04`、`SC-BATCH-01`）。 |
-| SC-DESIGN-057 | 后端收到请求：HTTP 层基础校验（非空、条数上限、重复主键、主键格式）→ 重新识别唯一中心端（0/1/多）→ 逐条按主键重读真实记录 → 归属/`IS_EDITABLE`/Key 白名单/值校验（`SC-BATCH-02/03/04`、`SC-EDIT-05`）。 |
+| SC-DESIGN-057 | 后端收到请求：HTTP 层结构契约与基础校验（顶层 JSON object 且仅 `items`、`items` 为 JSON array、元素为 JSON object、item 字段均为 JSON 字符串；非数组/非对象结构错误 HTTP 400 + `ApiResponse.fail(400, "请求格式错误")`，额外字段整批拒绝 `40227`；非空、条数上限、重复主键、主键格式，`API.md` `SC-API-041~044/050~057`）→ 重新识别唯一中心端（0/1/多）→ 逐条按主键重读真实记录 → 归属/`IS_EDITABLE`/Key 白名单/值校验（`SC-BATCH-02/03/04`、`SC-EDIT-05`）。 |
 | SC-DESIGN-058 | 全部通过 → 同一数据库事务内按主键更新 `CONFIG_VALUE`，逐条核验更新行数（`SC-BATCH-05`、`SC-DB-070~076`）；任一失败 → 抛异常整批回滚（`SC-BATCH-06`）。 |
 | SC-DESIGN-059 | 保存成功 → 返回 `ApiResponse.success()`；前端提示成功 → 重新调用查询接口，重新加载结果成为新的原始值（`SC-STATE-01`、`SC-AC-060`）。 |
 | SC-DESIGN-060 | 保存失败 → 前端提示可理解错误（不泄露底层堆栈），数据库已整批回滚，页面保留用户编辑内容（`SC-STATE-02`、`SC-NFR-02`）。 |
@@ -118,7 +120,7 @@
 | SC-DESIGN-073 | **脏值判断**：一行是否实际变化 = 该行规范化后的编辑值 ≠ 规范化后的原始值（`SC-DIRTY-03`）。仅选择顺序不同的多选集合规范化后相等，不产生修改（`SC-CFG-DBTYPE-09`、`SC-AC-032/046`）。 |
 | SC-DESIGN-074 | 确认框展示的原值 = `rawValue`（数据库原样值，不脱敏、不掩码、不做规范化；NULL/空 → 显示“（空值）”），新值 = `canonicalValue`（规范化后的最终保存形式）；多选新值展示规范化后的固定顺序字符串，保证用户所见与最终保存一致（`UI.md` `SC-UI-DESIGN-104/105`）。 |
 | SC-DESIGN-075 | 规范化不修改数据库原值；只有保存提交的 `configValue` 使用规范化值。撤销恢复原始值（`SC-DIRTY-05`）。 |
-| SC-DESIGN-076 | `configValue` 校验顺序固定：① JSON 字符串类型 → ② `null` → ③ trim 后非空（否则 `VALUE_EMPTY` `40224`）→ ④ **原样提交长度**（未 trim 前）≤ 64（否则 `VALUE_LENGTH_EXCEEDED` `40225`）→ ⑤ 按 Key 专门规则解析/规范化/领域校验（否则 `VALUE_FORMAT_INVALID` `40226`）→ ⑥ 规范化后最终值非空且 ≤ 64；长度上限以数据库物理长度 64 为准，不依赖数据库截断（`SC-CFG-GEN-02`、`API.md` `SC-API-052`）。任一步失败即该条失败并整批拒绝。 |
+| SC-DESIGN-076 | `configValue` 校验顺序固定：① 缺失或 JSON null（否则 `VALUE_EMPTY` `40224`）→ ② 非 JSON 字符串类型（否则 `VALUE_FORMAT_INVALID` `40226`，不允许隐式转字符串）→ ③ trim 后非空（否则 `VALUE_EMPTY` `40224`）→ ④ **原样提交长度**（未 trim 前）≤ 64（否则 `VALUE_LENGTH_EXCEEDED` `40225`）→ ⑤ 按 Key 专门规则解析/规范化/领域校验（否则 `VALUE_FORMAT_INVALID` `40226`）→ ⑥ 规范化后最终值非空且 ≤ 64；长度上限以数据库物理长度 64 为准，不依赖数据库截断（`SC-CFG-GEN-02`、`API.md` `SC-API-052`）。任一步失败即该条失败并整批拒绝。 |
 
 ## 10. 六类 Key 的控件选择、前后端规则映射及未知 Key 默认只读策略
 
@@ -163,10 +165,11 @@
 | 编号 | 规则 |
 |---|---|
 | SC-DESIGN-110 | 后端不得信任前端传入的 Key、可编辑状态、原值或中心端归属；保存时按主键重新查询数据库真实记录并独立重新校验（`SC-BATCH-02`、`SC-EDIT-05`、`SC-NFR-01`）。 |
-| SC-DESIGN-111 | 批量请求只接受 `idServerConfig` + `configValue`；请求中若携带其他字段（Key、描述、原值、编辑标志、中心端 ID），后端一律**整批拒绝**并返回 `REQUEST_FIELD_NOT_ALLOWED`（`40227`），不忽略、不部分保存（`SC-BATCH-01`、`SC-AC-056`、`API.md` `SC-API-042/050/076`）。 |
+| SC-DESIGN-111 | 批量请求体只接受顶层 `items`（每个 item 仅 `idServerConfig` + `configValue`）；顶层或 item 级出现其他字段（Key、描述、原值、编辑标志、中心端 ID、其他顶层字段），后端一律**整批拒绝**并返回 `REQUEST_FIELD_NOT_ALLOWED`（`40227`），不忽略、不部分保存（`SC-BATCH-01`、`SC-AC-056`、`API.md` `SC-API-042/050/055~057/076`）。 |
 | SC-DESIGN-112 | 错误信息面向用户可理解、不泄露底层堆栈；内部异常记入服务端日志，堆栈不返回前端（`SC-NFR-02`）。 |
 | SC-DESIGN-113 | 日志与可诊断性：Service 记录“保存成功/失败”与受影响主键数量级，不记录不必要的完整 `CONFIG_VALUE`；查询不记录完整配置值。日志不包含数据库连接凭据。 |
 | SC-DESIGN-114 | 沿用项目现有访问边界，不做认证授权体系调整（`SC-NONGOAL-07`）。 |
+| SC-DESIGN-115 | 请求体结构/类型契约实现为 Feature 局部方案（不改全局 Jackson）：顶层/元素结构错误（非数组/非对象）唯一映射 HTTP 400 + `ApiResponse.fail(400, "请求格式错误")`，不得被全局兜底异常处理映射成 HTTP 500；未知/额外字段通过 Request/Item DTO `@JsonAnySetter` 或等价 `JsonNode` 预校验，在业务校验前整批拒绝 `40227`；字段严格类型校验采用 Feature 局部反序列化/`JsonNode` 预校验，不改项目全局 `spring.jackson.default-property-inclusion=non_null`；如实现需补充 `HttpMessageNotReadableException` 精确映射，只限定本 Feature 影响范围与返回契约（`API.md` `SC-API-050/055~057`）。 |
 
 ## 14. 性能判断
 
@@ -231,3 +234,4 @@
 |---|---|---|
 | 2026-08-27 | 建立“中心端配置”Feature 候选设计基线（DRAFT_PENDING_USER_REVIEW / NOT_STARTED） | SERVER-CONFIG-DESIGN-BASELINE-001（阶段 4 设计与契约；纯文档任务；依据已批准 REQUIREMENTS.md 与 ACCEPTANCE.md、已批准数据库基线、当前代码结构与 log-query 设计文档惯例） |
 | 2026-08-27 | R1 修订：接口最少化引用纠正（`SC-API-020/040`、`SC-API-023~030`、错误码表 `SC-API-060~073/076`）；`items` 稳定排序 `CONFIG_KEY ASC NULLS LAST, ID_SERVER_CONFIG ASC`；`configValue` 校验顺序与长度口径明确（原样提交 ≤64、规范化后非空且 ≤64）；确认框原值 = rawValue 原样展示、新值 = canonicalValue；当前非法值不得静默规范化；新增 `SAVE_SUCCEEDED_RELOAD_FAILED` 状态；数据库异常映射唯一化（不新增 `DATABASE_ACCESS_FAILED`）；阶段边界与 DDL 排除范围澄清；保持 DRAFT_PENDING_USER_REVIEW / NOT_STARTED | SERVER-CONFIG-DESIGN-BASELINE-001-R1（REQUIRES_CHANGES 修订；纯文档任务） |
+| 2026-08-27 | R2 修订：请求体结构契约统一为顶层 JSON object 且仅 `items`、`items` 为 JSON array、元素为 JSON object、item 仅 `idServerConfig`/`configValue` 且均为 JSON 字符串（`SC-DESIGN-021/057/111`）；新增 `SC-DESIGN-115` 结构/类型契约 Feature 局部实现与 HTTP 400 映射；`SC-DESIGN-076` 校验顺序修正为先缺失/null 后非字符串类型；错误码总数保持 15；保持 DRAFT_PENDING_USER_REVIEW / NOT_STARTED | SERVER-CONFIG-DESIGN-BASELINE-001-R2（REQUIRES_ONE_MICRO_FIX 修订；纯文档任务） |
