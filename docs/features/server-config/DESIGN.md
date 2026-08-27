@@ -12,6 +12,8 @@
 | 实现状态 | `NOT_STARTED` |
 | 设计任务 | `SERVER-CONFIG-DESIGN-BASELINE-001` |
 | 授权基线提交 | `c1a6d7dc38de261093383d7abf719f0834dd9bb3` |
+| R1 修订任务 | `SERVER-CONFIG-DESIGN-BASELINE-001-R1` |
+| R1 授权基线提交 | `53d74c19e31c4068963e7b3c50c12073e9ebad8f` |
 | 依据需求 | `docs/features/server-config/REQUIREMENTS.md`（已批准） |
 | 关联契约 | `docs/features/server-config/API.md`、`UI.md`、`DATABASE.md`（四文档使用同一接口、字段、错误码与状态模型） |
 | 创建日期 | 2026-08-27 |
@@ -25,7 +27,7 @@
 | SC-DESIGN-001 | 本文只确定应用结构、请求/处理/数据流、状态模型、事务与并发边界、安全与防绕过、性能与测试设计，以及用于追溯的设计编号。最终数据库物理结构不做任何变更（`SC-DB-001`、`SC-NFR-05`）。 |
 | SC-DESIGN-002 | 本文全部业务语义以已批准的 `REQUIREMENTS.md`（`SC-MENU-*`、`SC-UI-*`、`SC-SERVER-*`、`SC-DISPLAY-*`、`SC-EDIT-*`、`SC-CFG-*`、`SC-READONLY-*`、`SC-DIRTY-*`、`SC-CONFIRM-*`、`SC-BATCH-*`、`SC-STATE-*`、`SC-NFR-*`、`SC-NONGOAL-*`）为唯一来源，通过需求编号引用建立追踪关系，不复制整份需求。 |
 | SC-DESIGN-003 | 当前仓库不存在中心端配置的任何后端接口、前端正式页面或数据库访问（`OBSERVED_CODE`，已批准数据库基线 `CDC_SERVER.md` §8、`CDC_SERVER_CONFIG.md` §8 核验）；本文全部组件、流程、接口均为未来目标（`FUTURE_FEATURE_TARGET`），不得写成已实现。 |
-| SC-DESIGN-004 | 设计遵循“接口最少化”原则：只提供“查询页面数据”与“批量保存配置值”两个业务接口（见 `API.md` `SC-API-011/012`），不引入额外的中心端选择、配置项增删、历史、搜索、分页或生效控制接口（`SC-NONGOAL-01~10`）。 |
+| SC-DESIGN-004 | 设计遵循“接口最少化”原则：只提供“查询页面数据”与“批量保存配置值”两个业务接口（见 `API.md` `SC-API-020/040`），不引入额外的中心端选择、配置项增删、历史、搜索、分页或生效控制接口（`SC-NONGOAL-01~10`）。 |
 
 ## 3. 当前占位实现与目标实现事实分层
 
@@ -47,11 +49,11 @@
 | SC-DESIGN-022 | `service/ServerConfigService` + `impl/ServerConfigServiceImpl` | 唯一中心端识别、配置查询与排序、批量保存全流程校验与事务更新、DTO/VO 转换、错误码抛出 | 无状态；`@Transactional` 只落在批量保存方法 |
 | SC-DESIGN-023 | `mapper/CdcServerMapper`、`mapper/CdcServerConfigMapper` | `BaseMapper<CdcServer>` / `BaseMapper<CdcServerConfig>`（MyBatis-Plus，同 `DataSourceMapper` 风格）；必要时补充按 `SERVER_ID` 查询、按主键更新的方法 | 只接收绑定参数与固定实体；不做动态表名 |
 | SC-DESIGN-024 | `entity/CdcServer`、`entity/CdcServerConfig` | 对应 `CDC_SERVER` / `CDC_SERVER_CONFIG` 的 MyBatis-Plus 实体；`@TableId`/`@TableField` 映射 | 字段类型遵循数据库基线：主键/关联字段为 `String` |
-| SC-DESIGN-025 | `vo/ServerConfigPageVO`、`vo/ServerConfigItemVO` | 查询响应组装；见 `API.md` `SC-API-021/022` | `idServerConfig`、`serverId` 为 `String`；`editable` 为计算布尔（仅控件形态） |
+| SC-DESIGN-025 | `vo/ServerConfigPageVO`、`vo/ServerConfigItemVO` | 查询响应组装；字段见 `API.md` `SC-API-023~030` | `idServerConfig`、`serverId` 为 `String`；`editable` 为计算布尔（仅控件形态） |
 | SC-DESIGN-026 | `converter/ServerConfigConverter` | Entity → VO、DTO → 更新参数的映射（同 `DataSourceConverter` 风格） | 不含业务校验 |
 | SC-DESIGN-027 | `validator/ServerConfigValueValidator` | 六类已支持 Key 的专门校验 + 通用非空与物理长度校验 + 多选规范化；提供静态方法供 Service 调用 | 单一事实源，与前端 `configRules.ts` 规则一致（`SC-EDIT-04`） |
 | SC-DESIGN-028 | `enums/ServerConfigEditableKey` | 已支持可编辑白名单（6 个 Key）的封闭枚举与静态查找 | 新增 Key 必须前后端同步扩展（`SC-EDIT-03`） |
-| SC-DESIGN-029 | `exception/ServerConfigErrorCode` | 错误码常量与返回 `BusinessException` 的静态工厂（风格同 `LogQueryErrorCode` / `DataSourceErrorCode` / `JobFailureErrorCode`） | 码值见 `API.md` `SC-API-060~070`，不与仓库既有码冲突 |
+| SC-DESIGN-029 | `exception/ServerConfigErrorCode` | 错误码常量与返回 `BusinessException` 的静态工厂（风格同 `LogQueryErrorCode` / `DataSourceErrorCode` / `JobFailureErrorCode`） | 码值见 `API.md` §7 专用错误码表（`SC-API-060~073`、`SC-API-076`，共 15 个），不与仓库既有码冲突 |
 | SC-DESIGN-030 | `config/`（如需要） | 可编辑白名单与批量上限等常量集中放置 | 不引入与当前任务无关的配置项 |
 
 ## 5. 前端建议文件与组件拆分
@@ -74,9 +76,9 @@
 | SC-DESIGN-041 | 响应 `code=200`：读取 `data.serverId`、`data.configCount`、`data.items`；按展示规则渲染（`SC-UI-01~22`、`SC-DISPLAY-01~08`）。`items` 非空 → `SUCCESS_WITH_DATA`；`items` 为空 → `SUCCESS_EMPTY`（`SC-SERVER-05`）。 |
 | SC-DESIGN-042 | 响应业务错误码 `40210` → 页面进入 `SERVER_NOT_REGISTERED`：显示“中心端尚未注册，请先启动 sync-server”，不加载配置、无编辑控件、“保存全部”不可用（`SC-SERVER-03`）。 |
 | SC-DESIGN-043 | 响应业务错误码 `40211` → 页面进入 `SERVER_MULTIPLE`：显示“检测到多个中心端，当前功能仅支持唯一中心端”，不加载配置、不编辑、不保存（`SC-SERVER-04`）。 |
-| SC-DESIGN-044 | 其余错误/HTTP 失败/超时 → 页面进入 `LOAD_FAILED`：显示可理解错误与“重试”按钮；用户主动点击才重新查询（`UI.md` `SC-UI-DESIGN-110~114`）。 |
+| SC-DESIGN-044 | 其余错误/HTTP 失败/超时 → 页面进入 `LOAD_FAILED`：显示可理解错误与“重试”按钮；用户主动点击才重新查询（`UI.md` `SC-UI-DESIGN-120~122`）。 |
 | SC-DESIGN-045 | 页面不自动刷新、不轮询；首次加载与保存成功后重载是仅有的两次查询时机（`SC-DIRTY-06`）。 |
-| SC-DESIGN-046 | 列表按 `CONFIG_KEY` 升序由后端排序返回（`SC-DISPLAY-02`）；前端不再重新排序，保持与后端一致。 |
+| SC-DESIGN-046 | 列表由后端按 `ORDER BY CONFIG_KEY ASC NULLS LAST, ID_SERVER_CONFIG ASC` 的稳定次序返回（`SC-DISPLAY-02`、`API.md` `SC-API-034`）；前端不再重新排序，保持与后端一致。 |
 
 ## 7. 批量保存完整处理流
 
@@ -100,8 +102,9 @@
 | 编号 | 规则 |
 |---|---|
 | SC-DESIGN-062 | 唯一中心端状态由后端在查询与保存两个入口分别独立识别（`SC-SERVER-01~06`）：`CDC_SERVER` 0 条 → `SERVER_NOT_REGISTERED`（`40210`）；恰 1 条 → 正常；>1 条 → `SERVER_MULTIPLE`（`40211`）。不得自动选择第一条。 |
-| SC-DESIGN-063 | 页面状态机：`INITIAL` → `LOADING` → `SUCCESS_WITH_DATA` / `SUCCESS_EMPTY` / `SERVER_NOT_REGISTERED` / `SERVER_MULTIPLE` / `LOAD_FAILED`；编辑后进入 `EDITING`（存在非法值时叠加 `HAS_INVALID`）；保存流程为 `CONFIRMING` → `SAVING` → `SAVE_SUCCESS`（短暂提示后重载）或 `SAVE_FAILED`（保留编辑）。 |
+| SC-DESIGN-063 | 页面状态机：`INITIAL` → `LOADING` → `SUCCESS_WITH_DATA` / `SUCCESS_EMPTY` / `SERVER_NOT_REGISTERED` / `SERVER_MULTIPLE` / `LOAD_FAILED`；编辑后进入 `EDITING`（存在非法值时叠加 `HAS_INVALID`）；保存流程为 `CONFIRMING` → `SAVING` → `SAVE_SUCCESS`（短暂提示后重载；重载失败进入 `SAVE_SUCCEEDED_RELOAD_FAILED`，`SC-DESIGN-067`）或 `SAVE_FAILED`（保留编辑）。 |
 | SC-DESIGN-064 | 状态不得仅依赖中文 message 判断：前端以响应 `code` 区分 `40210`/`40211`（页面可识别状态）与普通参数/业务错误；`code=200` + `items.length===0` 才是“正常空配置”，不得与中心端异常混淆（`SC-AC-016`）。 |
+| SC-DESIGN-067 | 保存成功但重载查询失败 → 页面进入独立状态 `SAVE_SUCCEEDED_RELOAD_FAILED`：提示“保存成功，但最新配置加载失败，请重试加载”，禁用编辑控件与“保存全部”，仅提供“重试加载”按钮（该按钮只调用 `GET /api/server-config`，不发送任何保存请求）；重试成功 → 以最新加载结果重建原始值并回到 `SUCCESS_WITH_DATA`/`SUCCESS_EMPTY`；重试仍失败 → 保持该状态（`API.md` `SC-API-054`、`UI.md` `SC-UI-DESIGN-084`）。 |
 | SC-DESIGN-065 | `SERVER_NOT_REGISTERED` / `SERVER_MULTIPLE` / `SUCCESS_EMPTY` 状态下，“保存全部”与“撤销修改”均不可用，且不发起任何保存请求（`SC-SERVER-06`）。 |
 | SC-DESIGN-066 | 保存成功重载后清除全部脏值与编辑状态；保存失败保留脏值与编辑内容，用户可修改后重试（`SC-STATE-02`）。 |
 
@@ -111,10 +114,11 @@
 |---|---|
 | SC-DESIGN-070 | **原始值（rawValue）**：最近一次成功加载时数据库返回的 `configValue` 原样；进入页面或保存成功后重载即更新（`SC-DIRTY-02`）。 |
 | SC-DESIGN-071 | **编辑值（editValue）**：用户在当前控件中输入/选择的原始内容；未编辑时等于控件按原始值初始化的展示值。 |
-| SC-DESIGN-072 | **规范化值（canonicalValue）**：按该 Key 专门规则对编辑值（或原始值）规范化后的最终可保存形式：布尔为精确小写 `true/false`；枚举为精确大写值；多选为 trim→小写→去重→固定顺序 `doris,oracle,mysql` 子序列→逗号连接；数字为标准十进制字符串（去除首尾空格与前导零）；长度校验与值域校验基于规范化值。 |
+| SC-DESIGN-072 | **规范化值（canonicalValue）**：按该 Key 专门规则对编辑值（或原始值）规范化后的最终可保存形式：布尔为精确小写 `true/false`；枚举为精确大写值；多选为 trim→小写→去重→固定顺序 `doris,oracle,mysql` 子序列→逗号连接；数字为标准十进制字符串（去除首尾空格与前导零）；值域校验基于规范化值，长度校验基于**原样提交值**（未 trim 前）≤64 且规范化后非空并 ≤64（`SC-DESIGN-076`）。 |
 | SC-DESIGN-073 | **脏值判断**：一行是否实际变化 = 该行规范化后的编辑值 ≠ 规范化后的原始值（`SC-DIRTY-03`）。仅选择顺序不同的多选集合规范化后相等，不产生修改（`SC-CFG-DBTYPE-09`、`SC-AC-032/046`）。 |
-| SC-DESIGN-074 | 确认框展示的原值/新值使用规范化值（多选展示规范化后的固定顺序字符串），保证用户所见与最终保存一致。 |
+| SC-DESIGN-074 | 确认框展示的原值 = `rawValue`（数据库原样值，不脱敏、不掩码、不做规范化；NULL/空 → 显示“（空值）”），新值 = `canonicalValue`（规范化后的最终保存形式）；多选新值展示规范化后的固定顺序字符串，保证用户所见与最终保存一致（`UI.md` `SC-UI-DESIGN-104/105`）。 |
 | SC-DESIGN-075 | 规范化不修改数据库原值；只有保存提交的 `configValue` 使用规范化值。撤销恢复原始值（`SC-DIRTY-05`）。 |
+| SC-DESIGN-076 | `configValue` 校验顺序固定：① JSON 字符串类型 → ② `null` → ③ trim 后非空（否则 `VALUE_EMPTY` `40224`）→ ④ **原样提交长度**（未 trim 前）≤ 64（否则 `VALUE_LENGTH_EXCEEDED` `40225`）→ ⑤ 按 Key 专门规则解析/规范化/领域校验（否则 `VALUE_FORMAT_INVALID` `40226`）→ ⑥ 规范化后最终值非空且 ≤ 64；长度上限以数据库物理长度 64 为准，不依赖数据库截断（`SC-CFG-GEN-02`、`API.md` `SC-API-052`）。任一步失败即该条失败并整批拒绝。 |
 
 ## 10. 六类 Key 的控件选择、前后端规则映射及未知 Key 默认只读策略
 
@@ -137,6 +141,7 @@
 | SC-DESIGN-092 | 未修正为合法值前，前端整页校验不通过，“保存全部”不提交包含非法值的批次；后端收到非法新值仍整批拒绝（`SC-DISPLAY-07`）。 |
 | SC-DESIGN-093 | 修正为合法值后按正常确认→批量保存流程提交；保存成功后重载显示合法值（`SC-AC-065`）。 |
 | SC-DESIGN-094 | `IS_EDITABLE` 不为 `'1'` 或 Key 不受支持时，即使当前值异常也保持只读，不开放编辑（`SC-DISPLAY-08`）。 |
+| SC-DESIGN-095 | 当前值异常/非法时不得静默规范化：控件按数据库原样值初始化并标注“当前值无效”，不自动改写为规范形式（如 `snapshotBatchSize` 前导零不得在展示或确认时静默修复）；确认框原值展示原样值；只有用户显式修改为合法值后才按规范形式保存（`SC-AC-065`、`UI.md` `SC-UI-DESIGN-059`）。 |
 
 ## 12. 事务、回滚、防重复提交、并发不保护和最后成功保存语义
 
@@ -151,13 +156,14 @@
 | SC-DESIGN-106 | 前端不自动重试保存；保存失败后用户修改或重新点击“保存全部”才再次提交（`SC-STATE-02`、`SC-AC-061`）。 |
 | SC-DESIGN-107 | 更新按主键 `ID_SERVER_CONFIG` 作为 `WHERE` 条件执行（`SC-DB-092`）；逐条校验更新行数恰为 1，不符即回滚（`SC-AC-058`）。 |
 | SC-DESIGN-108 | 不引入缓存、定时任务、异步刷新或消息推送（`SC-NONGOAL-09`）；页面与后端均无自动刷新路径。 |
+| SC-DESIGN-109 | 数据库异常映射唯一确定：**保存**过程抛出的数据库异常一律转译为运行时 `BusinessException` 并回滚，最终返回 `SAVE_FAILED`（`50030`）；**查询**过程抛出的数据库异常不转译业务码，由 `GlobalExceptionHandler` 按未捕获异常映射为 HTTP 500、`code=500`、`message="服务器内部错误"`，前端进入 `LOAD_FAILED`；本 Feature 不新增 `DATABASE_ACCESS_FAILED` 风格错误码，不提供“或”选项（`API.md` `SC-API-053`、`DATABASE.md` `SC-DB-111/112`）。 |
 
 ## 13. 安全、防绕过、日志和可诊断性
 
 | 编号 | 规则 |
 |---|---|
 | SC-DESIGN-110 | 后端不得信任前端传入的 Key、可编辑状态、原值或中心端归属；保存时按主键重新查询数据库真实记录并独立重新校验（`SC-BATCH-02`、`SC-EDIT-05`、`SC-NFR-01`）。 |
-| SC-DESIGN-111 | 批量请求只接受 `idServerConfig` + `configValue`；请求中若携带其他字段（Key、描述、原值、编辑标志、中心端 ID）一律忽略或按格式校验拒绝（`SC-BATCH-01`、`SC-AC-056`）。 |
+| SC-DESIGN-111 | 批量请求只接受 `idServerConfig` + `configValue`；请求中若携带其他字段（Key、描述、原值、编辑标志、中心端 ID），后端一律**整批拒绝**并返回 `REQUEST_FIELD_NOT_ALLOWED`（`40227`），不忽略、不部分保存（`SC-BATCH-01`、`SC-AC-056`、`API.md` `SC-API-042/050/076`）。 |
 | SC-DESIGN-112 | 错误信息面向用户可理解、不泄露底层堆栈；内部异常记入服务端日志，堆栈不返回前端（`SC-NFR-02`）。 |
 | SC-DESIGN-113 | 日志与可诊断性：Service 记录“保存成功/失败”与受影响主键数量级，不记录不必要的完整 `CONFIG_VALUE`；查询不记录完整配置值。日志不包含数据库连接凭据。 |
 | SC-DESIGN-114 | 沿用项目现有访问边界，不做认证授权体系调整（`SC-NONGOAL-07`）。 |
@@ -167,7 +173,7 @@
 | 编号 | 规则 |
 |---|---|
 | SC-DESIGN-120 | 当前配置为小表（开发库 8 行），一次全量加载全部配置；不分页、不筛选、不搜索（`SC-NFR-08`、`SC-NONGOAL-09`）。 |
-| SC-DESIGN-121 | 查询：先按唯一 `SERVER_ID` 读 `CDC_SERVER`（1 行），再按 `SERVER_ID` 读 `CDC_SERVER_CONFIG` 全量并按 `CONFIG_KEY` 升序排序；无 N+1、无大表 JOIN、无缓存（`SC-DB-100~104`）。 |
+| SC-DESIGN-121 | 查询：先按唯一 `SERVER_ID` 读 `CDC_SERVER`（1 行），再按 `SERVER_ID` 读 `CDC_SERVER_CONFIG` 全量并按 `CONFIG_KEY ASC NULLS LAST, ID_SERVER_CONFIG ASC` 稳定排序；无 N+1、无大表 JOIN、无缓存（`SC-DB-100~104`）。 |
 | SC-DESIGN-122 | 保存：单事务内对批量项逐个 `UPDATE` 按主键更新；批量上限 200，事务短小；不新增索引（`SC-DB-100~104`、`SC-API-041`）。 |
 | SC-DESIGN-123 | 不做服务端分页、游标、缓存或预加载；后端不引入额外组件。 |
 
@@ -198,7 +204,7 @@
 | 编号 | 规则 |
 |---|---|
 | SC-DESIGN-150 | 不实现 `CDC_SERVER` 维护（`SC-NONGOAL-01`）、配置项增删（`SC-NONGOAL-02`）、非 `CONFIG_VALUE` 字段修改（`SC-NONGOAL-03`）、DDL/索引/外键/约束（`SC-NONGOAL-04`）、`sync-server` 启停/生效控制（`SC-NONGOAL-05`）、历史/审计/回滚（`SC-NONGOAL-06`）、权限体系（`SC-NONGOAL-07`）、并发控制（`SC-NONGOAL-08`）、搜索/筛选/分页/导入/导出/自动刷新（`SC-NONGOAL-09`）、未知 Key 通用文本编辑（`SC-NONGOAL-10`）。 |
-| SC-DESIGN-151 | 实现阶段禁止：新增数据库表/列/约束/索引/外键/触发器/序列；对开发库执行任何写操作或 DDL；写 ZooKeeper；启动服务进行联调/验收；生成下一阶段实现提示词。 |
+| SC-DESIGN-151 | 阶段边界（R1 澄清）：本文档（设计与契约阶段）本身不启动服务、不执行构建、不执行任何数据库写操作或 DDL，也不生成下一阶段实现提示词；后续各实现阶段按各自独立任务提示词的授权范围执行，不得沿用本文档范围推断超范围操作；任何数据库写操作始终遵循数据库写操作审批规则（CLAUDE.md §12），DDL/索引/约束/外键/触发器/序列仍属排除范围，除非由明确授权的基线维护任务另行处理。 |
 | SC-DESIGN-152 | 实现阶段必须保持：页面不显示 `IS_EDITABLE`、不显示主键与中心端列、不显示 Key 独立列（`SC-UI-05~07`）；后端保存时独立防绕过校验（`SC-NFR-01`）。 |
 
 ## 18. 需求、设计、契约与验收可追溯矩阵
@@ -217,10 +223,11 @@
 | 成功/失败/空状态 | `SC-STATE-01~04` | `SC-DESIGN-059~066` | `UI.md`、`API.md` | `SC-AC-060/061` |
 | 非功能/安全/非目标 | `SC-NFR-01~08`、`SC-NONGOAL-01~10` | `SC-DESIGN-110~114`、`SC-DESIGN-120~123`、`SC-DESIGN-150~152` | `API.md`、`UI.md`、`DATABASE.md` | `SC-AC-062~064` |
 
-设计编号说明：本文档编号前缀 `SC-DESIGN-`，连续、唯一；`API.md` 使用 `SC-API-`，`UI.md` 使用 `SC-UI-DESIGN-`（与 REQUIREMENTS 既有 `SC-UI-*` 需求编号明确区分），`DATABASE.md` 使用 `SC-DB-`。
+编号策略：本文档编号前缀 `SC-DESIGN-`，按章节分组、预留区间编号（章节内递增），不要求全文连续；每条编号唯一、引用可解析，章节内相邻编号保持递增，全局不保证无空隙。`API.md` 使用 `SC-API-`，`UI.md` 使用 `SC-UI-DESIGN-`（与 REQUIREMENTS 既有 `SC-UI-*` 需求编号明确区分），`DATABASE.md` 使用 `SC-DB-`。
 
 ## 19. 文档级变更记录
 
 | 日期 | 变更 | 依据 |
 |---|---|---|
 | 2026-08-27 | 建立“中心端配置”Feature 候选设计基线（DRAFT_PENDING_USER_REVIEW / NOT_STARTED） | SERVER-CONFIG-DESIGN-BASELINE-001（阶段 4 设计与契约；纯文档任务；依据已批准 REQUIREMENTS.md 与 ACCEPTANCE.md、已批准数据库基线、当前代码结构与 log-query 设计文档惯例） |
+| 2026-08-27 | R1 修订：接口最少化引用纠正（`SC-API-020/040`、`SC-API-023~030`、错误码表 `SC-API-060~073/076`）；`items` 稳定排序 `CONFIG_KEY ASC NULLS LAST, ID_SERVER_CONFIG ASC`；`configValue` 校验顺序与长度口径明确（原样提交 ≤64、规范化后非空且 ≤64）；确认框原值 = rawValue 原样展示、新值 = canonicalValue；当前非法值不得静默规范化；新增 `SAVE_SUCCEEDED_RELOAD_FAILED` 状态；数据库异常映射唯一化（不新增 `DATABASE_ACCESS_FAILED`）；阶段边界与 DDL 排除范围澄清；保持 DRAFT_PENDING_USER_REVIEW / NOT_STARTED | SERVER-CONFIG-DESIGN-BASELINE-001-R1（REQUIRES_CHANGES 修订；纯文档任务） |

@@ -12,6 +12,8 @@
 | 实现状态 | `NOT_STARTED` |
 | 设计任务 | `SERVER-CONFIG-DESIGN-BASELINE-001` |
 | 授权基线提交 | `c1a6d7dc38de261093383d7abf719f0834dd9bb3` |
+| R1 修订任务 | `SERVER-CONFIG-DESIGN-BASELINE-001-R1` |
+| R1 授权基线提交 | `53d74c19e31c4068963e7b3c50c12073e9ebad8f` |
 | 依据需求 | `docs/features/server-config/REQUIREMENTS.md`（已批准） |
 | 关联契约 | `docs/features/server-config/DESIGN.md`、`API.md`、`DATABASE.md`（同一状态模型、控件规则与错误码） |
 | 创建日期 | 2026-08-27 |
@@ -23,7 +25,7 @@
 | 编号 | 规则 |
 |---|---|
 | SC-UI-DESIGN-001 | 页面全部交互规则以已批准 `REQUIREMENTS.md`（`SC-MENU-*`、`SC-UI-*`、`SC-SERVER-*`、`SC-DISPLAY-*`、`SC-EDIT-*`、`SC-CFG-*`、`SC-READONLY-*`、`SC-DIRTY-*`、`SC-CONFIRM-*`、`SC-STATE-*`）为唯一来源。 |
-| SC-UI-DESIGN-002 | 页面状态机与查询/保存流程见 `DESIGN.md` `SC-DESIGN-040~066`；接口契约见 `API.md`。 |
+| SC-UI-DESIGN-002 | 页面状态机与查询/保存流程见 `DESIGN.md` `SC-DESIGN-040~046`、`SC-DESIGN-050~067`；接口契约见 `API.md`。 |
 
 ## 3. 页面入口、菜单和路由事实
 
@@ -37,10 +39,10 @@
 
 | 编号 | 规则 |
 |---|---|
-| SC-UI-DESIGN-010 | 页面使用 Element Plus（项目既有 UI 库）构建：外层 `el-card` 或 `el-container`，内部顶部信息区 + 主体两列列表 + 底部操作区。 |
+| SC-UI-DESIGN-010 | 页面使用 Element Plus（项目既有 UI 库）构建，采用**单一确定布局**：外层一个 `el-card`，内部顶部信息区 + 主体两列 `el-table` + 表格下方操作区。 |
 | SC-UI-DESIGN-011 | 顶部信息区：`SERVER_ID` 与“配置项总数”并列展示；无中心端选择器（`SC-UI-01/02`）。 |
-| SC-UI-DESIGN-012 | 主体列表建议 `el-table`（两列，无边框表头符合主内容宽列要求）或自定义行布局；每行 = 配置项说明 + 配置值。 |
-| SC-UI-DESIGN-013 | 底部操作区：固定或页脚位置放置“保存全部”“撤销修改”按钮；按状态启禁（§11）。 |
+| SC-UI-DESIGN-012 | 主体使用单一 `el-table`，**恰好两列**：列 1“配置项说明”（弹性主内容列）、列 2“配置值”（操作列）；每行 = 配置项说明 + 配置值。 |
+| SC-UI-DESIGN-013 | 底部操作区：位于表格下方、**右对齐、非 sticky**，放置“保存全部”“撤销修改”按钮；按状态启禁（§11）。 |
 | SC-UI-DESIGN-014 | 保存确认弹窗使用 `el-dialog`；Key Tooltip 与超宽值 Tooltip 使用 `el-tooltip`；异常当前值提示使用 `el-form-item` 错误文案/`el-alert` 行内提示。 |
 
 ## 5. 顶部信息区、两列表格、操作区、确认弹窗的结构
@@ -49,17 +51,17 @@
 |---|---|
 | SC-UI-DESIGN-015 | 顶部信息区：显示“中心端 ID：{SERVER_ID}”与“配置项总数：{configCount}”；异常状态（0/多中心端、查询失败）时该区域按状态矩阵替换为对应文案与操作。 |
 | SC-UI-DESIGN-016 | 两列表格：列 1“配置项说明”（主宽列）、列 2“配置值”（操作列）；不出现 `CONFIG_KEY` 独立表头或独立列（`SC-UI-05`、`SC-DISPLAY-03`）。 |
-| SC-UI-DESIGN-017 | 操作区：仅“保存全部”“撤销修改”两个按钮，右侧对齐或页脚固定；不提供新增、复制、删除、搜索、筛选、分页控件（`SC-UI-11`）。 |
+| SC-UI-DESIGN-017 | 操作区：仅“保存全部”“撤销修改”两个按钮，位于表格下方**右对齐、非 sticky**；不提供新增、复制、删除、搜索、筛选、分页控件（`SC-UI-11`）。 |
 | SC-UI-DESIGN-018 | 确认弹窗：只列实际变更项；每项为“显示名称（+Key 信息图标）+ 原值 + 新值”；底部“确认”“取消”。 |
 
 ## 6. 配置项说明主宽列与配置值操作列宽度优先级和响应式规则
 
 | 编号 | 规则 |
 |---|---|
-| SC-UI-DESIGN-020 | 配置项说明为主内容列，占据最大可用宽度（例如在常规桌面宽度下约 60%～75%），配置值列相对紧凑但必须可读、可操作（`SC-UI-10`、`SC-UI-14`）。 |
-| SC-UI-DESIGN-021 | 两列宽度优先级：优先保证配置项说明可读性；配置值列只在满足控件最小可用宽度的前提下收缩（`SC-UI-14`）。 |
-| SC-UI-DESIGN-022 | 响应式：常规桌面宽度（≥1280px）两列稳定；较窄桌面（约 1024px）仍保持两列并允许配置值列内控件换行或自动收缩，但不允许出现横向溢出或控件不可操作（`SC-UI-13`）。具体像素值由实现阶段依据现有布局确定，本设计不锁死像素（`SC-UI-14`）。 |
-| SC-UI-DESIGN-023 | 配置值列每个编辑控件最小可用宽度：下拉/多选/数字控件需保证选项与输入可完整阅读与操作；枚举下拉展开后选项说明完整显示（`SC-UI-13`、`SC-AC-010`）。 |
+| SC-UI-DESIGN-020 | 配置项说明为弹性主内容列，占据剩余可用宽度；配置值列在常规桌面宽度下约 `360px`，较窄桌面收缩时**下限不低于约 `300px`**，控件宽度占满该列（`SC-UI-10`、`SC-UI-14`）。 |
+| SC-UI-DESIGN-021 | 两列宽度优先级：优先保证配置项说明可读性；配置值列在约 `300px` 下限内收缩，不无限压缩、不出现控件不可操作（`SC-UI-14`）。 |
+| SC-UI-DESIGN-022 | 响应式：常规桌面宽度（≥1280px）配置值列约 `360px`；较窄桌面（约 1024px）仍保持两列，配置值列收缩但不低于约 `300px`，控件宽度 `100%` 自适应，不允许出现横向溢出或控件不可操作（`SC-UI-13`）。具体像素在实现阶段按现有布局微调，本设计给出目标区间（`SC-UI-14`）。 |
+| SC-UI-DESIGN-023 | 配置值列编辑控件宽度占满该列（`width: 100%`）；下拉/多选/数字控件需保证选项与输入可完整阅读与操作；枚举下拉展开后选项说明完整显示（`SC-UI-13`、`SC-AC-010`）。 |
 
 ## 7. 长说明换行、只读长值省略与 Tooltip、Key 信息图标 Tooltip
 
@@ -94,6 +96,7 @@
 | SC-UI-DESIGN-056 | 未修正为合法值前，前端整页校验不通过，“保存全部”不提交包含非法值的批次（`SC-DISPLAY-07`、`SC-CONFIRM-01`）。 |
 | SC-UI-DESIGN-057 | `IS_EDITABLE` 不为 `'1'` 或 Key 不受支持的行（含未来新 Key）只读展示配置值，不渲染编辑控件（`SC-EDIT-02/03`、`SC-AC-019~023`）。 |
 | SC-UI-DESIGN-058 | 当前两个只读 Key（`monitor-metric-topic-name`、`server-log-topic-name`）只读展示，不渲染编辑控件；即使未来 `IS_EDITABLE` 变为 `'1'`，在前后端增加专门规则前仍只读（`SC-READONLY-01/02`）。 |
+| SC-UI-DESIGN-059 | 当前值异常/非法时**不得静默规范化**：控件按数据库原样值初始化（不自动 trim、不自动补全、不自动改写为规范形式），标注“当前值无效：{原因}”；如 `snapshotBatchSize` 前导零的当前值不自动修复为无前导零形式；只有用户显式修改为合法值后才按规范形式保存（`SC-DISPLAY-06`、`SC-AC-065`、`DESIGN.md` `SC-DESIGN-095`）。 |
 
 ## 10. 不显示 Key 独立列、不显示可编辑状态、不显示主键和中心端列
 
@@ -119,12 +122,13 @@
 | SC-UI-DESIGN-078 | `HAS_INVALID` | `EDITING` 且存在校验非法值 | 非法行显示校验错误；“保存全部”不可用（不提交包含非法值的批次） |
 | SC-UI-DESIGN-079 | `CONFIRMING` | 点击“保存全部”且校验通过 | 弹出确认框，只列实际变更项 |
 | SC-UI-DESIGN-080 | `SAVING` | 确认保存 | 弹窗关闭；保存按钮与全部编辑控件禁用（防重复提交）；显示“保存中…” |
-| SC-UI-DESIGN-081 | `SAVE_SUCCESS_RELOADING` | 保存成功 | 提示“保存成功”；自动重新查询并回到 `SUCCESS_WITH_DATA` / `SUCCESS_EMPTY`；新结果成为原始值（`SC-STATE-01`） |
+| SC-UI-DESIGN-081 | `SAVE_SUCCESS_RELOADING` | 保存成功 | 提示“保存成功”；自动重新查询并回到 `SUCCESS_WITH_DATA` / `SUCCESS_EMPTY`；重载失败进入 `SAVE_SUCCEEDED_RELOAD_FAILED`（`SC-UI-DESIGN-084`）；新结果成为原始值（`SC-STATE-01`） |
 | SC-UI-DESIGN-082 | `SAVE_FAILED` | 保存失败/超时 | 提示可理解错误（不泄露堆栈）；保留全部编辑内容；“保存全部”可再次点击（`SC-STATE-02`） |
 
 | 编号 | 规则 |
 |---|---|
 | SC-UI-DESIGN-083 | 页面以响应 `code` 区分 `SERVER_NOT_REGISTERED`/`SERVER_MULTIPLE`（`40210`/`40211`）与普通失败；`code=200` + `items` 空才是空配置，不与中心端异常混淆（`SC-AC-016`）。 |
+| SC-UI-DESIGN-084 | 保存成功但重载查询失败 → 进入独立状态 `SAVE_SUCCEEDED_RELOAD_FAILED`：提示“保存成功，但最新配置加载失败，请重试加载”；禁用编辑控件与“保存全部”“撤销修改”，仅提供“重试加载”按钮（该按钮只调用 `GET /api/server-config`，不发送任何保存请求）；重试成功 → 以最新加载结果重建原始值并回到 `SUCCESS_WITH_DATA`/`SUCCESS_EMPTY`；重试仍失败 → 保持该状态（`DESIGN.md` `SC-DESIGN-067`、`API.md` `SC-API-054`）。 |
 
 ## 12. “保存全部”“撤销修改”的启禁规则和防重复提交
 
@@ -144,7 +148,8 @@
 | SC-UI-DESIGN-101 | 确认框只列**实际变更项**；未变更配置不出现（`SC-CONFIRM-02`、`SC-AC-049`）。 |
 | SC-UI-DESIGN-102 | 每项主要展示：配置项显示名称、原值、新值；`CONFIG_KEY` 不作为醒目字段或独立列，通过信息图标 Tooltip 按需查看（`SC-CONFIRM-02`）。 |
 | SC-UI-DESIGN-103 | 显示名称因 `CONFIG_DESC` 缺失而回退为 Key 时，不重复展示第二份 Key（`SC-CONFIRM-02`）。 |
-| SC-UI-DESIGN-104 | 原值/新值使用规范化值展示（多选展示固定顺序字符串），保证用户所见与最终保存一致（`SC-DESIGN-074`）。 |
+| SC-UI-DESIGN-104 | 确认弹窗展示：原值 = `rawValue`（数据库原样值，不脱敏、不掩码、不做规范化；NULL/空 → 显示“（空值）”，`SC-UI-DESIGN-105`）；新值 = `canonicalValue`（规范化后的最终保存形式）；多选新值展示规范化后的固定顺序字符串，保证用户所见与最终保存一致（`SC-DESIGN-074`）。 |
+| SC-UI-DESIGN-105 | 确认框原值展示与页面当前值保持一致、不对当前值做静默规范化或修复（与 `SC-UI-DESIGN-059` 一致）；原值/新值均仅作确认展示，不提供在确认框中直接修改值或编辑可编辑性的入口（`SC-CONFIRM-02`）。 |
 
 ## 14. 页面离开或刷新时未保存修改的处理
 
@@ -175,6 +180,7 @@
 | SC-UI-DESIGN-136 | 保存成功 | “保存成功” |
 | SC-UI-DESIGN-137 | 保存失败 | “保存失败，请检查后重试”（服务端堆栈不展示，`SC-NFR-02`） |
 | SC-UI-DESIGN-138 | 非法当前值 | 行内“当前值无效：{具体原因}”；保存按钮不可用提示“存在非法配置值，请修正后再保存” |
+| SC-UI-DESIGN-139 | 保存成功但重载失败 | “保存成功，但最新配置加载失败，请重试加载” + “重试加载”按钮 |
 
 ## 17. 无障碍和可操作性
 
@@ -192,7 +198,7 @@
 | SC-UI-DESIGN-150 | 菜单显示“中心端配置”、地址 `/config/server`、无重复菜单/重复路由（`SC-AC-001~003`）。 |
 | SC-UI-DESIGN-151 | 顶部显示唯一中心端 `SERVER_ID` 与配置项总数；无中心端选择器（`SC-AC-004/012`）。 |
 | SC-UI-DESIGN-152 | 页面主体仅两列：配置项说明（主宽列）+ 配置值；无 `CONFIG_KEY` 独立列；长说明自然换行完整展示（`SC-AC-007/008/018`）。 |
-| SC-UI-DESIGN-153 | 较窄桌面宽度（约 1024px）下两列仍可读、控件可操作、无横向溢出（`SC-AC-010`）。 |
+| SC-UI-DESIGN-153 | 较窄桌面宽度（约 1024px）下仍保持两列、配置值列不低于约 `300px`、控件可操作、无横向溢出；操作区位于表格下方右对齐且非 sticky（`SC-AC-010`、`SC-UI-DESIGN-022/013`）。 |
 | SC-UI-DESIGN-154 | 枚举下拉可完整阅读选项说明；多选与数字控件可正常操作（`SC-AC-010`）。 |
 | SC-UI-DESIGN-155 | 确认弹窗只列实际变更项，主展示显示名称/原值/新值，Key 走 Tooltip；取消不发请求并保留编辑（`SC-AC-049/050`）。 |
 | SC-UI-DESIGN-156 | 只读超宽值省略 + 悬停完整原文；信息图标 Tooltip 完整 Key；均不脱敏（`SC-AC-009/062`）。 |
@@ -205,16 +211,19 @@
 |---|---|
 | `SC-UI-DESIGN-003~005` | `SC-AC-001~003` |
 | `SC-UI-DESIGN-010~018`、`SC-UI-DESIGN-020~023`、`SC-UI-DESIGN-030~034`、`SC-UI-DESIGN-040~044`、`SC-UI-DESIGN-060~063` | `SC-AC-004~012`、`SC-AC-018` |
-| `SC-UI-DESIGN-070~076`、`SC-UI-DESIGN-083` | `SC-AC-013~016` |
-| `SC-UI-DESIGN-050~058`、`SC-UI-DESIGN-077~078` | `SC-AC-019~026`、`SC-AC-027~038`、`SC-AC-041/042`、`SC-AC-065` |
+| `SC-UI-DESIGN-070~076`、`SC-UI-DESIGN-083`、`SC-UI-DESIGN-084` | `SC-AC-013~016` |
+| `SC-UI-DESIGN-050~059`、`SC-UI-DESIGN-077~078` | `SC-AC-019~026`、`SC-AC-027~038`、`SC-AC-041/042`、`SC-AC-065` |
 | `SC-UI-DESIGN-058` | `SC-AC-039/040` |
 | `SC-UI-DESIGN-077`、`SC-UI-DESIGN-090~094` | `SC-AC-043~047` |
-| `SC-UI-DESIGN-079`、`SC-UI-DESIGN-100~104` | `SC-AC-048~051` |
-| `SC-UI-DESIGN-080~082`、`SC-UI-DESIGN-093~094` | `SC-AC-060/061` |
+| `SC-UI-DESIGN-079`、`SC-UI-DESIGN-100~105` | `SC-AC-048~051` |
+| `SC-UI-DESIGN-080~084`、`SC-UI-DESIGN-093~094` | `SC-AC-060/061` |
 | `SC-UI-DESIGN-060~063`、`SC-UI-DESIGN-150~158` | `SC-AC-062~064` |
+
+编号策略：本文档编号按章节分组、预留区间编号（章节内递增），不要求全文连续；每条编号唯一、引用可解析，章节内相邻编号保持递增，全局不保证无空隙。
 
 ## 20. 文档级变更记录
 
 | 日期 | 变更 | 依据 |
 |---|---|---|
 | 2026-08-27 | 建立“中心端配置”Feature 候选 UI 详细设计（DRAFT_PENDING_USER_REVIEW / NOT_STARTED） | SERVER-CONFIG-DESIGN-BASELINE-001（阶段 4 设计与契约；纯文档任务） |
+| 2026-08-27 | R1 修订：布局改为**单一确定方案**（一个 `el-card` + 恰好两列 `el-table`，配置值列约 `360px`/收缩下限约 `300px`、控件宽度 `100%`、操作区表格下方右对齐非 sticky）；确认框原值 = rawValue 原样展示（NULL/空 → “（空值）”）与新值 = canonicalValue；当前非法值不得静默规范化；新增 `SAVE_SUCCEEDED_RELOAD_FAILED` 状态（重试加载仅 GET）与对应文案；保持 DRAFT_PENDING_USER_REVIEW / NOT_STARTED | SERVER-CONFIG-DESIGN-BASELINE-001-R1（REQUIRES_CHANGES 修订；纯文档任务） |

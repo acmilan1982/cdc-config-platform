@@ -117,7 +117,7 @@
 | 批量保存只传主键与新值；原值仅用于确认展示，不参与并发比较 | 通过 |
 | 不把数据库可空写成业务允许空，不把逻辑关系写成物理外键 | 通过 |
 | 不把未来设计写成已实现；不把设计完成写成验收通过；65 条验收全部仍为 `NOT_RUN` | 通过 |
-| 相对链接可解析；各文档设计编号连续、唯一（`SC-DESIGN-` / `SC-API-` / `SC-UI-DESIGN-` / `SC-DB-`） | 通过 |
+| 相对链接可解析；各文档设计编号唯一、稳定、引用可解析（`SC-DESIGN-` / `SC-API-` / `SC-UI-DESIGN-` / `SC-DB-`），章节分组预留空档符合编号策略 | 通过 |
 
 ### 7.2 需求/验收覆盖检查（65 条全覆盖，按编号范围映射）
 
@@ -172,7 +172,7 @@ build_status=NOT_RUN_NOT_REQUIRED
 | 四份文档实现状态 `NOT_STARTED` | 逐份检查元数据表 | 通过 |
 | 已批准 `REQUIREMENTS.md`、`ACCEPTANCE.md` blob/内容未改变 | `git status --short`（无这两文件修改） | 通过 |
 | `SC-AC-001~065` 连续、唯一、未执行 | 读取 `ACCEPTANCE.md` 分类表与用例编号 | 通过：65 条，全部 `NOT_RUN` |
-| 设计编号连续、唯一 | 逐份检查 `SC-DESIGN-`/`SC-API-`/`SC-UI-DESIGN-`/`SC-DB-` 编号 | 通过 |
+| 设计编号唯一、稳定、引用可解析（章节分组预留空档符合编号策略） | 逐份检查 `SC-DESIGN-`/`SC-API-`/`SC-UI-DESIGN-`/`SC-DB-` 编号定义唯一、引用可解析 | 通过 |
 | 跨文档一致性（路径/字段/错误码） | 四份文档交叉核对 | 通过（见 §7.1） |
 | Markdown 相对链接可解析 | 检查文档内相对链接目标存在 | 通过 |
 | 无尖括号伪结果占位符 | 全文检索 `<COMMIT_ID>` 等模式 | 通过 |
@@ -193,6 +193,84 @@ build_status=NOT_RUN_NOT_REQUIRED
 本任务在 5 个候选文档建立、验证、Commit 并 Push 后立即停止。
 
 下一步仅允许：ChatGPT 直接读取远程报告与四份候选设计文档进行复审；复审通过后由项目负责人决定是否批准设计基线（阶段 5 设计批准）。批准前不得：
+
+- 将四份设计文档改为 `APPROVED`；
+- 修改已批准需求或验收基线；
+- 创建 Feature `README.md`；
+- 编写任何前后端或测试代码；
+- 连接或修改数据库、ZooKeeper；
+- 启动服务或进入联调、验收；
+- 生成下一阶段实现提示词。
+
+---
+
+## 13. R1 复审修订记录（SERVER-CONFIG-DESIGN-BASELINE-001-R1）
+
+> R1 任务编号：`SERVER-CONFIG-DESIGN-BASELINE-001-R1`
+> R1 授权基线提交：`53d74c19e31c4068963e7b3c50c12073e9ebad8f`
+> R1 报告日期：2026-08-27
+> R1 复审结论：ChatGPT 复审为 `REQUIRES_CHANGES`（本 R1 按提示词 §5 十类问题定向修订）
+> R1 任务类型：阶段 4 候选设计基线复审修订（纯文档）
+> R1 数据库访问：不需要，也不允许连接数据库（未连接数据库，未执行任何 SQL）
+> R1 变更文件：仅本报告 + `DESIGN.md`、`API.md`、`UI.md`、`DATABASE.md` 共 5 个授权文件
+
+### 13.1 R1 修订范围与状态
+
+R1 只修订 4 份候选设计文档与本执行报告，不修改已批准 `REQUIREMENTS.md` / `ACCEPTANCE.md`，不进入代码实现。四份设计文档继续保持 `DRAFT_PENDING_USER_REVIEW` / `NOT_STARTED`；`REQUIREMENTS.md`/`ACCEPTANCE.md` 保持 `APPROVED`；65 条验收用例继续全部保持 `NOT_RUN`。初始报告 §5.2 的“错误码 14 个”与 §5.3 的“13 态页面状态矩阵”为初始任务历史记录；R1 后专用错误码为 **15 个**、页面状态为 **14 个**（见 §13.3），以 R1 为准。
+
+### 13.2 §5 十类问题的修正结论与落点
+
+| # | R1 问题 | 原问题 | 修正结论 | 落点 |
+|---|---|---|---|---|
+| 5.1 | 额外请求字段唯一确定为“整批拒绝” | DESIGN `SC-DESIGN-111` 与 API `SC-API-042` 写“忽略或拒绝”两种行为，可能忽略额外字段仍更新 `CONFIG_VALUE`，不符合 `SC-AC-056` | 顶层与每个 `ServerConfigSaveItem` 仅允许契约字段；出现任何未允许字段，后端在进入数据库写入前**整批拒绝**，不得忽略后继续保存；新增错误码 `40227 REQUEST_FIELD_NOT_ALLOWED`（message=“批量保存请求包含不允许的字段”，HTTP 200）；给出 Feature 局部严格反序列化方向（`@JsonAnySetter` 收集额外字段统一判空，不改全局 Jackson 行为）；`idServerConfig`/`configValue` 必须为 JSON 字符串，类型不符按请求格式/参数错误拒绝 | API `SC-API-042/050/051/052/074/076`、§6.2 步骤 1；DESIGN `SC-DESIGN-111`；DATABASE `SC-DB-072`①；报告 §13.3 |
+| 5.2 | NULL/重复 Key 稳定排序与可编辑性 | 仅 `ORDER BY CONFIG_KEY ASC` 无法保证重复 Key 稳定次序；DATABASE `SC-DB-054` 把“重复 Key 或空 Key”整体写成只读，违反双重可编辑判定 | 排序唯一确定为 `ORDER BY CONFIG_KEY ASC NULLS LAST, ID_SERVER_CONFIG ASC`（`ID_SERVER_CONFIG` 仅作稳定 Tie-breaker）；NULL/空 Key 不在白名单故只读；重复 Key 全部完整展示，每条记录仍独立按 `IS_EDITABLE='1'` 且 Key ∈ 白名单判定可编辑，**重复本身不导致只读**；不新增唯一约束、不做数据清理 | API `SC-API-034`；DESIGN `SC-DESIGN-046/121`；DATABASE `SC-DB-034/054/091` |
+| 5.3 | API 示例主键必须满足 VARCHAR2(32) | JSON 示例 `SC0000000000000000000000000000001` 长度 33，违反 `ID_SERVER_CONFIG VARCHAR2(32)` | 全部示例主键替换为 32 字符字符串（`00000000000000000000000000000001/02/04`）；“主键全程按字符串处理”规则不变；验证自动检查示例 ID 长度 ≤32 | API §8 全部 JSON 示例 |
+| 5.4 | CONFIG_VALUE 长度校验与规范化顺序唯一一致 | API 先校验长度再做 Key 规范化；DESIGN `SC-DESIGN-072` 又写“长度校验基于规范化值”，超过 64 字符原始请求是否可经去重/trim 后继续保存无唯一答案 | 校验顺序唯一确定：① JSON 字符串类型 → ② NULL → ③ trim 后非空 → ④ **原样提交长度** ≤64 → ⑤ 按 Key 解析/规范化/值域校验 → ⑥ 规范化后最终值非空且 ≤64；任一步失败整批拒绝；不得把数据库异常或截断当长度校验 | API `SC-API-052`、§6.2 步骤 4；DESIGN `SC-DESIGN-072/076`；DATABASE `SC-DB-061/072` |
+| 5.5 | 保存确认框“原值”必须展示最近成功加载的真实原值 | DESIGN `SC-DESIGN-074` 与 UI `SC-UI-DESIGN-104` 规定原值/新值都展示规范化值，掩盖数据库实际原值 | 原值 = 最近成功加载的 `rawValue` 原文，不脱敏，NULL/空 → “（空值）”；新值 = `canonicalValue`；多选新值按固定顺序；Key 仅 Tooltip；确认框只列实际变更项；补充脏值判定与当前非法值纠正规则（非法当前值不得因前端自动规范化被静默视为合法；已支持且可编辑的非法当前值仍可纠正，修正前不能保存；多选仅顺序/大小写/首尾空格/重复等已批准差异按 canonical 集合比较避免伪脏值；`snapshotBatchSize` 非法原始格式如前导零不得在用户未操作时被静默修复） | DESIGN `SC-DESIGN-074/095`；UI `SC-UI-DESIGN-059/104/105` |
+| 5.6 | UI 必须选择单一、可实现的布局方案 | UI 存在 `el-card 或 el-container`、`el-table 或自定义行布局`、`固定或页脚`等多套备选 | 采用单一确定方案：外层单个 `el-card`；主体 `el-table` 恰好两列（“配置项说明”“配置值”）；说明列 `min-width` 占剩余空间自然换行；配置值列常规桌面约 360px、较窄桌面收缩下限约 300px、控件宽度 100%；操作区表格下方右对齐、非 sticky/non-fixed；较窄桌面保持两列无横向溢出；确认弹窗仍用 `el-dialog`；同步更新人工视觉验收要点 | UI `SC-UI-DESIGN-010/012/013/017/020~023/153` |
+| 5.7 | 增加“保存已成功、重新加载失败”独立状态 | 原设计把“保存成功→重查”作为连续成功路径，未定义 POST 成功但 GET 重载失败的状态 | 新增独立状态 `SAVE_SUCCEEDED_RELOAD_FAILED`：POST 明确成功即数据库已提交，后续 GET 失败不提示“保存失败”；文案“保存成功，但最新配置加载失败，请重试加载”；“重试加载”按钮仅重调 GET，不自动重发保存；重载成功前禁用编辑与再次保存；GET 重试成功后以最新结果重建原始值并恢复正常状态；保存请求自身失败/超时仍按原设计（不自动重试、保留编辑、由用户决定再次提交） | DESIGN `SC-DESIGN-063/067`；UI `SC-UI-DESIGN-081/084/139`；API `SC-API-054` |
+| 5.8 | 数据库异常映射唯一，不引用未定义错误码 | DATABASE `SC-DB-111` 写 `SAVE_FAILED 50030`“或 `DATABASE_ACCESS_FAILED` 风格”，API 未定义 `DATABASE_ACCESS_FAILED` | 保存过程数据库异常：确保事务回滚，映射为已定义 `SAVE_FAILED=50030`，不返回堆栈/SQL，不新增 `DATABASE_ACCESS_FAILED`，不保留“或”方案；查询过程未捕获数据库异常：沿用 `GlobalExceptionHandler` HTTP 500 + `code=500` +“服务器内部错误”，前端进入 `LOAD_FAILED`；设计说明实现时须保证捕获保存异常后仍抛运行时 `BusinessException`（或等价异常）使 `@Transactional` 回滚，不得吞异常返回成功 | DATABASE `SC-DB-111/112`；DESIGN `SC-DESIGN-109`；API `SC-API-053` |
+| 5.9 | 修正未来阶段授权边界 | DESIGN `SC-DESIGN-151` 把“启动服务进行联调/验收”写成整个实现阶段永久禁止，范围过宽 | 本 R1 纯文档任务不启动服务、不构建、不联调、不验收；后续实现/构建/启动/联调/验收是否允许以各阶段独立 Agent 提示词与人工授权为准；数据库写入无论哪个阶段都遵守项目审批规则，不得把本任务无写授权扩大为未来永远禁止验证，也不提前授权未来写库；DDL/结构变更仍明确不属于本 Feature | DESIGN `SC-DESIGN-151`；报告 §13.7 |
+| 5.10 | 修正编号验证报告与语义错引 | 编号按章节预留区间分组、全局存在空档，报告却声称“编号连续、唯一”；`SC-DESIGN-004/025/029` 语义错引 | 不重编号现有规则；四份文档明确编号策略（按章节分组预留区间、定义唯一、引用可解析、同一小节内部递增，不要求全局无空档）；报告与验证项把“连续、唯一”修正为“唯一、稳定、引用可解析；章节分组预留空档符合编号策略”；自动验证无重复定义、无引用不存在的编号；修正语义错引（`SC-DESIGN-004` → API 接口清单 `SC-API-020/040`；`SC-DESIGN-025` → API 响应字段 `SC-API-023~030`；`SC-DESIGN-029` → 完整现行错误码表含 `40227`） | API §10、DESIGN §18、UI §19、DATABASE §17 编号策略段落；DESIGN `SC-DESIGN-004/025/029`；报告 §7.1/§10/§13.6 |
+
+### 13.3 错误码与契约变化汇总
+
+- 专用错误码总数由 **14** 更新为 **15**：新增 `40227 REQUEST_FIELD_NOT_ALLOWED`（“批量保存请求包含不允许的字段”，HTTP 200）；完整错误码表见 `API.md` §7（`40210`、`40211`、`40220~40227`、`40420~40423`、`50030`），`SC-API-074` 已同步。
+- 排序唯一确定为 `ORDER BY CONFIG_KEY ASC NULLS LAST, ID_SERVER_CONFIG ASC`；重复 Key 与空 Key 均完整展示，重复不导致只读，空 Key 不在白名单故只读。
+- 批量保存请求出现任何未允许字段即整批拒绝（`40227`），不忽略、不部分保存。
+- 长度校验顺序唯一化：原样提交长度 ≤64 → 按 Key 规范化/值域校验 → 规范化后非空且 ≤64；确认框原值 = rawValue 原文（NULL/空 →“（空值）”）、新值 = canonicalValue；UI 采用单一可实现的 `el-card` + 两列 `el-table` 布局。
+- 新增独立状态 `SAVE_SUCCEEDED_RELOAD_FAILED`（保存成功但重载失败，仅“重试加载” GET）。
+- 数据库异常映射唯一：保存异常 → 回滚 → `SAVE_FAILED 50030`；查询异常 → HTTP 500/`code=500` → `LOAD_FAILED`；不新增 `DATABASE_ACCESS_FAILED`。
+- 未来阶段授权边界：本 R1 纯文档任务不启动/不构建/不联调/不验收；后续阶段以各自独立提示词与人工授权为准；DDL 仍排除。
+
+### 13.4 当前待确认项
+
+| 编号 | 待确认项 |
+|---|---|
+| SC-PENDING-001 | 无。当前 `PENDING_USER_CONFIRMATION` 数量为 0（R1 修订未新增待确认项，未改变已批准需求/验收语义）。 |
+
+### 13.5 数据库、DDL、ZooKeeper、代码、构建副作用声明（R1）
+
+```text
+database_access_status=NONE
+database_write_status=NONE
+ddl_status=NONE
+zookeeper_access_status=NONE
+business_code_change_status=NONE
+build_status=NOT_RUN_NOT_REQUIRED
+```
+
+R1 未连接数据库，未执行任何 SQL/写操作/DDL；未连接 ZooKeeper；未修改任何业务代码、测试、配置、菜单、路由或占位页；未修改 `docs/baseline/**`、`docs/database/**`、`docs/features/README.md`、已批准 `REQUIREMENTS.md`/`ACCEPTANCE.md` 或 `CLAUDE.md`；纯 Markdown 文档任务，未执行 Maven/npm 构建（`NOT_RUN_NOT_REQUIRED`）。
+
+### 13.6 编号策略与验证声明修正
+
+R1 明确编号策略为：四份文档编号按章节分组、预留区间编号，要求“定义唯一、引用可解析、同一小节内部递增”，不要求从最小值到最大值全局无空档。本报告原 §7.1 与 §10 中的“设计编号连续、唯一”表述已修正为“唯一、稳定、引用可解析；章节分组预留空档符合编号策略”。R1 自动验证：无重复定义编号、无引用不存在的编号、示例主键长度 ≤32、无尖括号伪结果占位符。
+
+### 13.7 下一步（R1）
+
+R1 修改、验证、Commit、Push 后立即停止。
+
+下一步仍只能由 ChatGPT 直接核对远程 R1 提交并复审；R1 复审通过后，再由项目负责人决定是否批准四份设计基线。R1 通过并由项目负责人批准前不得：
 
 - 将四份设计文档改为 `APPROVED`；
 - 修改已批准需求或验收基线；

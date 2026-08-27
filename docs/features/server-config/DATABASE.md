@@ -12,11 +12,13 @@
 | 实现状态 | `NOT_STARTED` |
 | 设计任务 | `SERVER-CONFIG-DESIGN-BASELINE-001` |
 | 授权基线提交 | `c1a6d7dc38de261093383d7abf719f0834dd9bb3` |
+| R1 修订任务 | `SERVER-CONFIG-DESIGN-BASELINE-001-R1` |
+| R1 授权基线提交 | `53d74c19e31c4068963e7b3c50c12073e9ebad8f` |
 | 依据需求 | `docs/features/server-config/REQUIREMENTS.md`（已批准） |
 | 关联契约 | `docs/features/server-config/DESIGN.md`、`API.md`、`UI.md`（同一事务、字段与校验规则） |
 | 创建日期 | 2026-08-27 |
 
-声明：本文档为**候选数据库使用设计**，待 ChatGPT 与项目负责人复审，不能自行批准。本文只描述本 Feature 如何读取与使用已批准数据库对象，**不复制项目级数据库基线，不设计 DDL，不新增索引/约束/外键**；`DDL_STATUS=NONE`（`SC-DB-120~124`）。本任务未连接数据库，未执行任何 SQL。
+声明：本文档为**候选数据库使用设计**，待 ChatGPT 与项目负责人复审，不能自行批准。本文只描述本 Feature 如何读取与使用已批准数据库对象，**不复制项目级数据库基线，不设计 DDL，不新增索引/约束/外键**；`DDL_STATUS=NONE`（`SC-DB-120~123`）。本任务未连接数据库，未执行任何 SQL。
 
 ## 2. 权威数据库基线引用和事实/目标分层
 
@@ -62,7 +64,7 @@
 | 编号 | 规则 |
 |---|---|
 | SC-DB-033 | 配置查询：按唯一中心端 `SERVER_ID` 等值过滤 `CDC_SERVER_CONFIG.SERVER_ID`，返回该中心端全部记录，无新增/删除/分页/筛选（`SC-UI-03`、`SC-NFR-08`）。 |
-| SC-DB-034 | 排序：`ORDER BY CONFIG_KEY ASC`（Oracle 升序默认 NULLS LAST），NULL Key 稳定排在最后；返回全部记录（`SC-DISPLAY-02`、`SC-AC-017`）。 |
+| SC-DB-034 | 排序：`ORDER BY CONFIG_KEY ASC NULLS LAST, ID_SERVER_CONFIG ASC`（先按 `CONFIG_KEY` 升序，NULL Key 排最后；`CONFIG_KEY` 相同时以 `ID_SERVER_CONFIG` 升序作为稳定次序，多次查询顺序确定不变）；返回全部记录（`SC-DISPLAY-02`、`SC-AC-017`、`API.md` `SC-API-034`）。 |
 
 ## 7. 逻辑 1:N 关系、无物理外键及应用层归属校验
 
@@ -85,7 +87,7 @@
 | 编号 | 规则 |
 |---|---|
 | SC-DB-053 | `(SERVER_ID, CONFIG_KEY)` 无数据库唯一约束；`CONFIG_KEY` 可空（`CDC_SERVER_CONFIG.md` §2/§3）。不得假设数据库强制唯一或非空（`SC-DISPLAY-02`）。 |
-| SC-DB-054 | 重复 Key 或空 Key：仍完整展示全部记录（按 `CONFIG_KEY ASC` 的稳定次序），显示名称兜底（空 Key 时 `CONFIG_DESC` 缺失则显示“未定义配置项”），该行只读；保存保护：空 Key 不在白名单 → `CONFIG_KEY_NOT_SUPPORTED`（`40422`），不因空 Key 走到值校验；不新增数据库约束，不做数据清理（`SC-DISPLAY-02`、`SC-UI-DESIGN-042`）。 |
+| SC-DB-054 | 重复 Key 或空 Key：仍完整展示全部记录（按 `CONFIG_KEY ASC NULLS LAST, ID_SERVER_CONFIG ASC` 的稳定次序），显示名称兜底（空 Key 时 `CONFIG_DESC` 缺失则显示“未定义配置项”）；可编辑性按**每条记录独立判定**（`IS_EDITABLE='1'` 且 Key ∈ 白名单，`SC-EDIT-01`），**重复 Key 本身不导致只读**；空 Key 不在白名单 → 只读并返回 `CONFIG_KEY_NOT_SUPPORTED`（`40422`），不因空 Key 走到值校验；不新增数据库约束，不做数据清理（`SC-DISPLAY-02`、`SC-UI-DESIGN-042`、`SC-AC-022/023`）。 |
 | SC-DB-055 | 当前开发库无重复/空 Key 属数据事实，不得写成永久保证（`CDC_SERVER_CONFIG.md` §10）。 |
 
 ## 10. `CONFIG_VALUE` 可空但业务保存值非空、物理长度 64 与应用层校验
@@ -93,7 +95,7 @@
 | 编号 | 规则 |
 |---|---|
 | SC-DB-060 | `CONFIG_VALUE` 物理类型 `VARCHAR2(64)`、可空（`CDC_SERVER_CONFIG.md` §2）。数据库可空不代表业务允许空：保存值必须 trim 后非空（`SC-CFG-GEN-01`）。 |
-| SC-DB-061 | 保存值物理长度上限 64 字符，应用层在写库前校验（`SC-CFG-GEN-02`）；不依赖数据库截断作为正常校验方式（`SC-AC-042`）。 |
+| SC-DB-061 | 保存值长度口径：**原样提交长度**（未 trim 前）物理上限 64 字符，且规范化后最终可保存值必须非空并 ≤ 64，应用层在写库前按固定顺序校验（`SC-CFG-GEN-02`、`SC-DESIGN-076`）；不依赖数据库截断作为正常校验方式（`SC-AC-042`）。 |
 | SC-DB-062 | 专门规则与通用规则（非空、长度 64）必须同时满足；任一不满足整条记录校验失败（`SC-CFG-GEN-03/04`）。 |
 | SC-DB-063 | 查询返回的当前 `CONFIG_VALUE` 可能为 NULL/空白/非法；展示不脱敏、不掩码（`SC-NFR-03`、`SC-DISPLAY-05`）。 |
 
@@ -103,7 +105,7 @@
 |---|---|
 | SC-DB-070 | 批量保存方法整体置于一个数据库事务（`@Transactional(rollbackFor = Exception.class)`）；唯一中心端识别、逐条按主键重读、全部校验、逐条更新都在同一事务内（`SC-BATCH-05`、`SC-DESIGN-100`）。 |
 | SC-DB-071 | 逐条按主键 `ID_SERVER_CONFIG` 重新读取真实记录；不信任客户端提交的 Key、可编辑状态、原值或中心端归属（`SC-BATCH-02`、`SC-EDIT-05`）。 |
-| SC-DB-072 | 逐条校验顺序：记录存在（`40420`）→ 归属等于唯一中心端（`40423`）→ `IS_EDITABLE` 精确 `'1'`（`40421`）→ Key 白名单（`40422`）→ 值校验（`40224~40226`）；任一失败 → 整批回滚（`SC-BATCH-03/06`）。 |
+| SC-DB-072 | 逐条校验顺序：① 请求契约检查（仅 `idServerConfig` + `configValue`，出现额外字段整批拒绝 `REQUEST_FIELD_NOT_ALLOWED` `40227`，`SC-API-042/050/076`）→ ② 记录存在（`40420`）→ ③ 归属等于唯一中心端（`40423`）→ ④ `IS_EDITABLE` 精确 `'1'`（`40421`）→ ⑤ Key 白名单（`40422`）→ ⑥ 值校验（`SC-API-052` 固定顺序：JSON 字符串类型 → `null` → trim 后非空 `40224` → 原样长度 ≤64 `40225` → Key 专门规则 `40226` → 规范化后非空且 ≤64）；任一失败 → 整批回滚（`SC-BATCH-03/06`）。 |
 | SC-DB-073 | 更新按主键 `UPDATE CDC_SERVER_CONFIG SET CONFIG_VALUE = ? WHERE ID_SERVER_CONFIG = ?`；逐条核验更新行数恰为 1（`SC-DB-092`）。 |
 | SC-DB-074 | 任一更新行数不符或抛异常 → 整批回滚，禁止部分成功（`SC-BATCH-06`、`SC-AC-058`）。 |
 | SC-DB-075 | 事务边界只覆盖批量保存；查询为单次只读，无事务要求。 |
@@ -123,7 +125,7 @@
 | 编号 | 规则 |
 |---|---|
 | SC-DB-090 | 唯一中心端识别（逻辑形态）：`SELECT SERVER_ID FROM CDC_SERVER ORDER BY SERVER_ID`，应用层统计行数并取唯一值；不依赖 `ROWNUM` 猜测第一条（0/多按异常处理，`SC-DB-030`）。 |
-| SC-DB-091 | 配置查询（逻辑形态）：`SELECT ID_SERVER_CONFIG, SERVER_ID, CONFIG_DESC, CONFIG_KEY, CONFIG_VALUE, IS_EDITABLE FROM CDC_SERVER_CONFIG WHERE SERVER_ID = ? ORDER BY CONFIG_KEY ASC`；`SERVER_ID` 为绑定参数，取自唯一中心端识别结果。 |
+| SC-DB-091 | 配置查询（逻辑形态）：`SELECT ID_SERVER_CONFIG, SERVER_ID, CONFIG_DESC, CONFIG_KEY, CONFIG_VALUE, IS_EDITABLE FROM CDC_SERVER_CONFIG WHERE SERVER_ID = ? ORDER BY CONFIG_KEY ASC NULLS LAST, ID_SERVER_CONFIG ASC`；`SERVER_ID` 为绑定参数，取自唯一中心端识别结果。 |
 | SC-DB-092 | 更新（逻辑形态）：`UPDATE CDC_SERVER_CONFIG SET CONFIG_VALUE = ? WHERE ID_SERVER_CONFIG = ?`；两个参数均为绑定参数；主键为字符串。 |
 | SC-DB-093 | 以上为参数化逻辑 SQL 形态（MyBatis/MyBatis-Plus 绑定参数风格），**不是可执行的 DDL**；所有用户输入一律走绑定参数，不使用字符串拼接，杜绝 SQL 注入（`SC-NFR` 通用安全约束）。 |
 | SC-DB-094 | 查询/更新均通过 MyBatis-Plus `BaseMapper`（实体/`LambdaQueryWrapper`/`LambdaUpdateWrapper`）实现（同 `DataSourceMapper`/`DataSourceServiceImpl` 风格）；不新增动态表名或 `${}` 拼接。 |
@@ -143,8 +145,8 @@
 | 编号 | 规则 |
 |---|---|
 | SC-DB-110 | 更新行数与预期不符（应为 1）即视为异常，抛出并整批回滚（`SC-BATCH-06`、`SC-AC-058`）。 |
-| SC-DB-111 | 数据库连接/执行异常：捕获并映射为可理解业务错误（`SAVE_FAILED` `50030` 或 `DATABASE_ACCESS_FAILED` 风格），message 不泄露底层堆栈与 SQL（`SC-NFR-02`）。 |
-| SC-DB-112 | 查询阶段数据库异常按 `LOAD_FAILED` 处理，页面提供“重试”，不写入、不修复节点（本 Feature 不涉及 ZooKeeper）。 |
+| SC-DB-111 | 保存阶段数据库连接/执行异常：统一转译为运行时 `BusinessException` 并整批回滚，映射为 `SAVE_FAILED`（`50030`），**不新增 `DATABASE_ACCESS_FAILED` 风格错误码，不提供“或”选项**；message 不泄露底层堆栈与 SQL（`SC-NFR-02`、`SC-DESIGN-109`、`API.md` `SC-API-053`）。 |
+| SC-DB-112 | 查询阶段数据库异常不转译业务码，由 `GlobalExceptionHandler` 按未捕获异常映射为 HTTP 500、`code=500`、`message="服务器内部错误"`，前端进入 `LOAD_FAILED` 并提供“重试”；不写入、不修复节点（本 Feature 不涉及 ZooKeeper）。 |
 
 ## 16. 明确 `DDL_STATUS=NONE`
 
@@ -170,8 +172,11 @@
 | `SC-DB-100~104` | `SC-API-035/041` | `SC-DESIGN-120~123` | `SC-NFR-08`、`SC-NONGOAL-09` | `SC-AC-017` |
 | `SC-DB-120~123` | — | `SC-DESIGN-150/151` | `SC-NFR-05`、`SC-NONGOAL-04` | `SC-AC-064` |
 
+编号策略：本文档编号按章节分组、预留区间编号（章节内递增），不要求全文连续；每条编号唯一、引用可解析，章节内相邻编号保持递增，全局不保证无空隙。
+
 ## 18. 文档级变更记录
 
 | 日期 | 变更 | 依据 |
 |---|---|---|
 | 2026-08-27 | 建立“中心端配置”Feature 候选数据库使用设计（DRAFT_PENDING_USER_REVIEW / NOT_STARTED；`DDL_STATUS=NONE`） | SERVER-CONFIG-DESIGN-BASELINE-001（阶段 4 设计与契约；纯文档任务；依据已批准数据库基线，未连接数据库） |
+| 2026-08-27 | R1 修订：排序补充稳定次序 `CONFIG_KEY ASC NULLS LAST, ID_SERVER_CONFIG ASC`；重复 Key 按行独立判定可编辑、重复本身不导致只读；保存值长度口径明确（原样提交 ≤64、规范化后非空且 ≤64）；校验顺序增加请求契约检查 `40227` 与 `SC-API-052` 值校验顺序；保存异常唯一映射 `SAVE_FAILED 50030`（不新增 `DATABASE_ACCESS_FAILED`）、查询异常映射 HTTP 500 → `LOAD_FAILED`；保持 DRAFT_PENDING_USER_REVIEW / NOT_STARTED | SERVER-CONFIG-DESIGN-BASELINE-001-R1（REQUIRES_CHANGES 修订；纯文档任务） |
