@@ -28,7 +28,7 @@ const routes: RouteRecordRaw[] = [
     path: '/config/server',
     name: 'ServerConfig',
     component: () => import('@/views/server-config/ServerConfigPage.vue'),
-    meta: { title: '服务端配置', group: '配置管理' }
+    meta: { title: '中心端配置', group: '配置管理' }
   },
   {
     path: '/monitor/cdc-node',
