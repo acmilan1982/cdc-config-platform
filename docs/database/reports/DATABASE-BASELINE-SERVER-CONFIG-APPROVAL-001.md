@@ -79,7 +79,7 @@ ChatGPT 已直接核对远程 `develop` 提交 `175558173ce6703542e4b626aace5cee
 
 - `README.md`：总入口调整为 16 张已批准单表物理基线分层（14 当前访问 + 2 已批准待实现），新增 §4.2 两张表链接与用途摘要，更新读取顺序、自校验与变更记录，明确两表批准不等于 Feature 已实现。
 - `SCHEMA.md`：新增 §2.1 独立小节登记 2 张已批准待实现表（行号 15、16），保持 14+2=16 分层自校验；§4 物理外键总体说明覆盖 16 张已批准表（保留原 14 表核验历史）；§5.1 排除区移除两表；§8 追加变更记录。
-- `RELATIONS.md`：新增 R16（`CDC_SERVER_CONFIG.SERVER_ID` → `CDC_SERVER.SERVER_ID`，逻辑一对多，无物理外键，负责人确认）；已确认关系 12→13、关系总数 12→16；§1 物理外键说明覆盖 16 张已批准表；§7 关系图补充 R16；§8 追加变更记录。
+- `RELATIONS.md`：新增 R16（`CDC_SERVER_CONFIG.SERVER_ID` → `CDC_SERVER.SERVER_ID`，逻辑一对多，无物理外键，负责人确认）；已确认关系 12→13、关系总数 15→16；§1 物理外键说明覆盖 16 张已批准表；§7 关系图补充 R16；§8 追加变更记录。
 - `DATA_PROFILE.md`：新增 §1.3 已批准待实现表快照（`CDC_SERVER` 精确 1 行、`CDC_SERVER_CONFIG` 精确 8 行，全部归属 `Server001`；`IS_EDITABLE` `1` 六条、`0` 两条；`SERVER_ID` NULL 0、孤立引用 0、同中心端重复 `CONFIG_KEY` 0），明确为开发库瞬时画像；§9 追加变更记录。
 - `CHANGELOG.md`：§4 追加 2026-08-27 记录（只读核验并建立两表候选基线 + 本批准任务纳入已批准物理基线，候选提交 `175558173ce6703542e4b626aace5ceef2841ece`；未执行 DDL/DML，为文档基线变化）。
 - `tables/CDC_SERVER.md`：状态 `DRAFT_PENDING_USER_REVIEW` → `APPROVED`，增加批准任务/日期/候选事实来源提交，移除候选警示并改为正式基线定位，保留事实分层，两处未来边界改为 `FUTURE_SCOPE_RECONFIRMATION`，追加批准变更记录。
@@ -116,7 +116,7 @@ business_code_change_status=NONE
 feature_document_change_status=NONE
 ```
 
-本任务按提示词要求不连接数据库；未执行任何 SELECT 以外的只读查询，未执行任何数据库写操作（INSERT/UPDATE/DELETE/MERGE/CREATE/ALTER/DROP/TRUNCATE/COMMENT/GRANT/REVOKE/PL-SQL）；未修改任何业务代码、前端、后端、测试、配置、菜单、路由或占位页；未创建或修改任何 Feature 文档；未修改 `docs/baseline/**`、`CODE_VALUES.md`、`VERIFICATION.md`、`CLAUDE.md`。本任务对 16 张已批准表范围内均不设置物理外键的事实只作文档登记，不改变任何数据库对象。
+本任务按提示词要求未连接数据库，未执行任何数据库查询，未执行任何数据库写操作（INSERT/UPDATE/DELETE/MERGE/CREATE/ALTER/DROP/TRUNCATE/COMMENT/GRANT/REVOKE/PL-SQL）；未修改任何业务代码、前端、后端、测试、配置、菜单、路由或占位页；未创建或修改任何 Feature 文档；未修改 `docs/baseline/**`、`CODE_VALUES.md`、`VERIFICATION.md`、`CLAUDE.md`。本任务对 16 张已批准表范围内均不设置物理外键的事实只作文档登记，不改变任何数据库对象。
 
 ## 9. Commit 和 Push 执行情况
 
@@ -132,3 +132,62 @@ feature_document_change_status=NONE
 本批准收口任务完成后立即停止。下一步为创建 `docs/features/server-config/REQUIREMENTS.md` 与 `docs/features/server-config/ACCEPTANCE.md`（中心端配置 Feature 需求基线与验收基线），**不得自行执行**。
 
 由 ChatGPT 直接读取远程批准报告和数据库基线复审，确认收口无误后，才进入“中心端配置”Feature 的需求基线建立阶段。
+
+---
+
+## 11. R1 复审修正记录
+
+本小节由 R1 任务 `DATABASE-BASELINE-SERVER-CONFIG-APPROVAL-001-R1` 追加，记录 ChatGPT 第二轮复审发现的两处文字问题及本次精确修正。报告状态保持 `APPROVED`，不退回草稿状态。
+
+### 11.1 R1 任务编号与依据
+
+- 任务编号：`DATABASE-BASELINE-SERVER-CONFIG-APPROVAL-001-R1`
+- 依据：ChatGPT 第二轮复审（直接核对远程 `develop` 提交 `a585e0e44e3d5ecb308a2dea1523c1c47de058fe`）
+- 任务类型：纯文档 R1 精确修正，不重新查库，不改变任何表结构事实、关系定义或批准状态
+
+### 11.2 ChatGPT 第二轮复审结论
+
+批准收口主体正确，以下内容均已通过：修改范围恰好为授权的 9 个文件；14 张当前访问表 + 2 张已批准待实现表 = 16 张已批准单表物理基线；两份中心端单表文档状态为 `APPROVED`；R16 关系本身、数据画像、链接、事实分层和待确认项数量均正确；未把未来 Feature 写成已实现；未执行数据库操作或修改业务代码。
+
+发现一处关系总数历史变化写错，并在批准报告中重复出现。
+
+### 11.3 关系总数历史变化计数修正
+
+```text
+错误：已确认关系 12→13、关系总数 12→16
+正确：已确认关系 12→13、关系总数 15→16
+```
+
+原因：批准前 `RELATIONS.md` 已有 R01～R15，共 15 条逻辑关系；本次新增 R16 后总数由 15 增至 16。已确认关系数量由 12 增至 13，这一部分原文正确。
+
+修正落实位置：
+
+- `docs/database/RELATIONS.md` §8 文档级变更记录：历史变化计数由“关系总数 12→16”修正为“关系总数 15→16”，并追加一条 R1 修正记录；
+- 本报告 §6 修改摘要中 `RELATIONS.md` 一条：由“关系总数 12→16”修正为“关系总数 15→16”。
+
+### 11.4 零数据库访问表述修正
+
+```text
+原文：本任务按提示词要求不连接数据库；未执行任何 SELECT 以外的只读查询
+修正：本任务按提示词要求未连接数据库，未执行任何数据库查询
+```
+
+修正落实位置：本报告 §8 数据库访问/写操作声明首句已改为“本任务按提示词要求未连接数据库，未执行任何数据库查询”。
+
+### 11.5 不改变事项声明
+
+R1 不改变以下事实与状态：
+
+- 两张表（`CDC_SERVER`、`CDC_SERVER_CONFIG`）的物理结构；
+- R16 关系正文（字段、方向、关系类型、可空性、维护边界、代码证据、数据核验）；
+- 当前关系汇总（已确认 13 + 高度可信 3 = 总计 16）；
+- 14 张当前访问表 + 2 张已批准待实现表 = 16 张已批准单表物理基线的分类；
+- 无物理外键结论；
+- 批准状态 `APPROVED`（本报告与两份单表文档均保持 `APPROVED`）；
+- 当前待确认项数量（`PENDING_USER_CONFIRMATION` 数量为 0）。
+
+### 11.6 修改文件范围与 R1 结果 Commit ID
+
+- R1 修改文件仅为两个：`docs/database/RELATIONS.md`、`docs/database/reports/DATABASE-BASELINE-SERVER-CONFIG-APPROVAL-001.md`；未修改、暂存或提交其他任何文件。
+- R1 未连接数据库、未执行任何数据库查询或写操作、未修改业务代码、未创建新报告文件、未调整无关措辞或格式。
+- R1 最终 Commit ID、远程 Commit ID 与 ahead/behind 以控制台 `AGENT_TASK_RESULT` 输出为准，由 ChatGPT 直接核验远程提交；本报告不保留任何伪装成实际值的尖括号占位符。

@@ -113,4 +113,5 @@ CDC_SERVER ──< R16（逻辑一对多，无物理外键）────── 
 | 2026-08-26 | R1：补充 R15（EXTEND.TARGET_DATA_SOURCE_ID→DATA_SOURCE）；维护方与数据核验口径修订 | PROJECT-DATABASE-BASELINE-001-R1 修订 |
 | 2026-08-26 | R2：R15 由高度可信调整为已确认逻辑关系（项目负责人确认）；R04 维护方调整为人工维护 / 管理平台只读 | PROJECT-DATABASE-BASELINE-001-R2 修订 |
 | 2026-08-26 | 批准：项目级数据库基线正式批准收口（APPROVED） | PROJECT-DATABASE-BASELINE-APPROVAL-001 批准 |
-| 2026-08-27 | 新增 R16（CDC_SERVER_CONFIG.SERVER_ID→CDC_SERVER.SERVER_ID，逻辑一对多，无物理外键，负责人确认）；已确认关系 12→13、关系总数 12→16；§1 物理外键说明更新为覆盖 16 张已批准表（保留原 14 表核验历史）；§7 关系图补充 R16 | DATABASE-BASELINE-SERVER-CONFIG-001（候选）+ DATABASE-BASELINE-SERVER-CONFIG-APPROVAL-001（批准） |
+| 2026-08-27 | 新增 R16（CDC_SERVER_CONFIG.SERVER_ID→CDC_SERVER.SERVER_ID，逻辑一对多，无物理外键，负责人确认）；已确认关系 12→13、关系总数 15→16；§1 物理外键说明更新为覆盖 16 张已批准表（保留原 14 表核验历史）；§7 关系图补充 R16 | DATABASE-BASELINE-SERVER-CONFIG-001（候选）+ DATABASE-BASELINE-SERVER-CONFIG-APPROVAL-001（批准） |
+| 2026-08-27 | R1：修正文档级变更记录中历史变化计数笔误（批准前已有 R01～R15 共 15 条逻辑关系，新增 R16 后由 15 增至 16，故历史变化计数应为“关系总数 15→16”，原误写为“12→16”）；本修正仅改正历史变化计数，不改变当前关系清单、R16 正文、无物理外键结论与 `APPROVED` 状态 | DATABASE-BASELINE-SERVER-CONFIG-APPROVAL-001-R1 复审修正 |
