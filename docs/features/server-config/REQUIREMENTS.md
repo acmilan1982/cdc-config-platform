@@ -9,15 +9,21 @@
 | 正式菜单 | 中心端配置（直接演进自既有“服务端配置”占位菜单，不新增第二套菜单） |
 | 既有路由 | `/config/server`（保持不变，不另建重复路由） |
 | 目标文档 | `docs/features/server-config/REQUIREMENTS.md` |
-| 文档状态 | `DRAFT_PENDING_USER_REVIEW`（候选 Feature 需求基线，待用户复审批准；本文档是需求与验收设计，不代表任何功能已经实现或验收通过） |
+| 文档状态 | `APPROVED`（已由项目负责人正式批准的需求基线；批准只代表“系统应该做什么、怎样验收”正式生效，不代表设计已完成、代码已实现或 65 条验收已经执行通过） |
 | 实现状态 | `NOT_STARTED`（当前占位页仍为占位实现，正式页面与前后端能力均为未来目标） |
 | 任务编号 | `SERVER-CONFIG-FEATURE-BASELINE-001` |
 | 授权基线提交 | `7ea9d702e831245fbe8f0e84691bf0aea093dbdf` |
-| 任务类型 | 纯文档 Feature 需求基线建立 |
+| 候选基线初始任务 | `SERVER-CONFIG-FEATURE-BASELINE-001` |
+| 候选基线 R1 任务 | `SERVER-CONFIG-FEATURE-BASELINE-001-R1` |
+| 批准任务 | `SERVER-CONFIG-FEATURE-BASELINE-APPROVAL-001` |
+| 批准日期 | 2026-08-27 |
+| 批准人 | 项目负责人 |
+| ChatGPT 复审通过候选提交 | `4e55493a0292b462885e4dde0d789e5e1ca48df2` |
+| 任务类型 | 纯文档 Feature 需求基线建立（后续经批准收口为正式需求基线） |
 | 创建日期 | 2026-08-27 |
 | 需求来源 | 项目负责人逐项确认的业务需求（本提示词 §6 记录的 12 项负责人确认事实）+ 已批准数据库基线（`docs/database/`） |
 
-说明：本文件把已经完成沟通并由项目负责人确认的业务需求落成候选 Feature 基线。本任务不得实现前后端代码，不得修改数据库，不得创建 DESIGN/API/UI 文档，不得修改项目级或数据库已批准基线。本文档状态为 `DRAFT_PENDING_USER_REVIEW`，不得自行批准。
+说明：本文件把已经完成沟通并由项目负责人确认的业务需求落成 Feature 需求基线，已经 ChatGPT 复审通过，并由项目负责人正式批准（批准任务 `SERVER-CONFIG-FEATURE-BASELINE-APPROVAL-001`）。批准只代表“系统应该做什么、怎样验收”正式生效；不代表设计已完成、代码已实现或 65 条验收已经执行通过。本 Feature 当前实现状态仍为 `NOT_STARTED`，验收用例均未执行；后续按阶段 4“设计与契约”推进，不得直接进入实现。
 
 ## 2. Feature 定位与术语
 
@@ -371,5 +377,6 @@
 |---|---|---|
 | 2026-08-27 | 建立“中心端配置”Feature 需求基线（DRAFT_PENDING_USER_REVIEW） | SERVER-CONFIG-FEATURE-BASELINE-001（纯文档任务；负责人确认业务需求 + 已批准数据库基线） |
 | 2026-08-27 | R1 修订：隐藏 Key 独立列并改为信息图标 Tooltip；页面主体改为“配置项说明 + 配置值”两列；配置项显示名称兜底；异常当前值允许纠正；物理长度验收口径修正 | SERVER-CONFIG-FEATURE-BASELINE-001-R1（ChatGPT 复审“有条件通过” + 项目负责人确认；纯文档修订，状态保持 DRAFT_PENDING_USER_REVIEW） |
+| 2026-08-27 | 批准：文档状态由 `DRAFT_PENDING_USER_REVIEW` 改为 `APPROVED`；记录批准任务、批准日期、批准人（项目负责人）与 ChatGPT 复审通过的候选提交 `4e55493a...`；移除“不得自行批准”“候选基线待批准”等失效警示（初始草案状态保留于本变更记录）；实现状态保持 `NOT_STARTED`，当前待确认项保持 0，所有现行业务规则不变 | SERVER-CONFIG-FEATURE-BASELINE-APPROVAL-001（项目负责人批准驱动的 Feature 需求与验收基线收口；纯文档任务，不连接数据库，不修改代码） |
 
 > 关联文档：验收基线 `docs/features/server-config/ACCEPTANCE.md`；执行报告 `docs/features/server-config/reports/SERVER-CONFIG-FEATURE-BASELINE-001.md`。

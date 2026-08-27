@@ -8,7 +8,7 @@
 2. `docs/features/server-config/ACCEPTANCE.md`
 3. `docs/features/server-config/reports/SERVER-CONFIG-FEATURE-BASELINE-001.md`（本报告）
 
-任务结论：**SUCCESS**。三份文档状态均为 `DRAFT_PENDING_USER_REVIEW`（候选基线，待用户复审批准）。本任务为纯文档任务，未连接数据库，未执行任何数据库查询或写操作，未执行 DDL，未修改任何业务代码、前端、后端、测试、配置、菜单、路由或占位页，未创建或修改其他文档。
+任务结论：**SUCCESS**。初始任务（含 R1）建立了“中心端配置”Feature 的候选需求与验收基线：初始创建与 R1 修订时三份文档状态均为 `DRAFT_PENDING_USER_REVIEW`（候选基线，待用户复审批准）；此后经 ChatGPT 复审通过并由项目负责人批准，`REQUIREMENTS.md` 与 `ACCEPTANCE.md` 的现行文档状态已更新为 `APPROVED`（详见本报告 §14 批准收口记录）。本任务为纯文档任务，未连接数据库，未执行任何数据库查询或写操作，未执行 DDL，未修改任何业务代码、前端、后端、测试、配置、菜单、路由或占位页，未创建或修改其他文档。
 
 ## 2. Git 开始状态、授权基线和分类
 
@@ -154,7 +154,7 @@ feature_document_change_status=NONE（未修改任何已有 Feature 文档；仅
 
 ## 12. 下一步
 
-本任务完成三个候选文档的建立、验证、Commit 并 Push 后立即停止。下一步只能是 **ChatGPT 复审与用户批准**：由 ChatGPT 直接读取固定报告、`REQUIREMENTS.md` 和 `ACCEPTANCE.md` 复审；用户批准前不得创建 DESIGN/API/UI 文档，不得修改代码，不得进入实现。
+初始任务完成三个候选文档的建立、验证、Commit 并 Push 后立即停止。此后按标准流程推进 **ChatGPT 复审（R1 修订）→ 用户批准（`SERVER-CONFIG-FEATURE-BASELINE-APPROVAL-001`）**，需求与验收基线已批准（详见本报告 §14）。批准后下一阶段为 **阶段 4“设计与契约”**：建立 `DESIGN.md`、`API.md`、`UI.md`、`DATABASE.md` 中适用文件；不得直接进入代码实现。
 
 ## 13. R1 复审修订记录（SERVER-CONFIG-FEATURE-BASELINE-001-R1）
 
@@ -211,4 +211,34 @@ business_code_change_status=NONE
 
 ### 13.7 下一步
 
-本 R1 修订完成三个候选文档的精确修订、验证、Commit 并 Push 后立即停止。下一步仍是 **ChatGPT 复审与用户批准**：由 ChatGPT 直接核对远程 R1 提交并复审；复审通过后由用户批准 Feature 需求基线。批准前不得创建 DESIGN/API/UI 文档，不得修改代码，不得进入实现。
+本 R1 修订完成三个候选文档的精确修订、验证、Commit 并 Push 后立即停止。R1 之后 ChatGPT 再次直接核验远程提交 `4e55493a0292b462885e4dde0d789e5e1ca48df2`，判定 R1 复审通过；项目负责人批准需求与验收基线（批准任务 `SERVER-CONFIG-FEATURE-BASELINE-APPROVAL-001`），详见本报告 §14。批准后下一阶段为 **阶段 4“设计与契约”**，不得直接进入实现。
+
+## 14. 批准收口记录（SERVER-CONFIG-FEATURE-BASELINE-APPROVAL-001）
+
+本小节由批准收口任务 `SERVER-CONFIG-FEATURE-BASELINE-APPROVAL-001` 追加，记录需求与验收基线由候选状态批准为正式状态的事实。本小节为纯文档记录，不改变 §1～§13 记录的初始任务与 R1 历史执行事实。
+
+### 14.1 ChatGPT 复审结论
+
+ChatGPT 已直接核对远程 `develop` 提交 `4e55493a0292b462885e4dde0d789e5e1ca48df2`，确认 R1 只修改 `REQUIREMENTS.md`、`ACCEPTANCE.md` 与原执行报告；页面主体统一为“配置项说明 + 配置值”两列；`CONFIG_KEY` 不作为独立列、通过信息图标 Tooltip 按需查看；配置项显示名称兜底规则完整；异常当前值允许纠正；物理长度验收口径准确；验收编号 `SC-AC-001`～`SC-AC-065` 连续、无重复、无缺失；需求、验收和执行报告一致；当前待确认项为 0；文档仍为 `DRAFT_PENDING_USER_REVIEW`、实现状态 `NOT_STARTED`、未修改代码或数据库。
+
+ChatGPT 复审结论：**R1 复审通过，具备批准条件。**
+
+### 14.2 项目负责人批准事实
+
+项目负责人已明确批准“中心端配置”Feature 的需求与验收基线，批准任务编号为 `SERVER-CONFIG-FEATURE-BASELINE-APPROVAL-001`。批准只代表“系统应该做什么、怎样验收”正式生效；不代表设计已完成、代码已实现或 65 条验收已经执行通过。
+
+### 14.3 批准后的文档与实现状态
+
+| 项目 | 状态 |
+|---|---|
+| `REQUIREMENTS.md` 文档状态 | `APPROVED` |
+| `ACCEPTANCE.md` 文档状态 | `APPROVED` |
+| 实现状态 | `NOT_STARTED`（代码尚未开始） |
+| 验收用例状态 | 65 条全部 `NOT_RUN`（尚未执行） |
+| 当前待确认项 | 0 |
+
+批准收口不改变任何现行业务规则，不把未来目标写成已实现，不把 65 条验收写成已执行或 PASS，不伪造实现、构建、测试或验收证据。
+
+### 14.4 下一步
+
+批准后进入 **阶段 4“设计与契约”**：建立 `DESIGN.md`、`API.md`、`UI.md`、`DATABASE.md` 中适用文件；不得直接进入代码实现。本任务最终 Commit ID 与远程 Commit ID 以控制台 `AGENT_TASK_RESULT` 输出为准，本报告不保留任何伪装成实际结果的尖括号占位符。

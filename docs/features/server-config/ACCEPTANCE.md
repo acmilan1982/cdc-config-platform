@@ -9,14 +9,22 @@
 | 正式菜单 | 中心端配置（直接演进自既有“服务端配置”占位菜单，不新增第二套菜单） |
 | 既有路由 | `/config/server`（保持不变，不另建重复路由） |
 | 目标文档 | `docs/features/server-config/ACCEPTANCE.md` |
-| 文档状态 | `DRAFT_PENDING_USER_REVIEW`（候选 Feature 验收基线，待用户复审批准；本文档定义“应该如何被验收”，所有用例初始状态均为 `NOT_RUN`，不伪造任何执行结果） |
+| 文档状态 | `APPROVED`（验收标准已由项目负责人正式批准；批准只代表“应该如何被验收”正式生效，不代表任何用例已执行；65 条用例全部保持 `NOT_RUN`，不伪造任何执行结果） |
 | 实现状态 | `NOT_STARTED`（当前占位页仍为占位实现；验收用例均未执行） |
 | 任务编号 | `SERVER-CONFIG-FEATURE-BASELINE-001` |
 | 授权基线提交 | `7ea9d702e831245fbe8f0e84691bf0aea093dbdf` |
-| 依据需求 | `docs/features/server-config/REQUIREMENTS.md`（`DRAFT_PENDING_USER_REVIEW`） |
+| 候选基线初始任务 | `SERVER-CONFIG-FEATURE-BASELINE-001` |
+| 候选基线 R1 任务 | `SERVER-CONFIG-FEATURE-BASELINE-001-R1` |
+| 批准任务 | `SERVER-CONFIG-FEATURE-BASELINE-APPROVAL-001` |
+| 批准日期 | 2026-08-27 |
+| 批准人 | 项目负责人 |
+| ChatGPT 复审通过候选提交 | `4e55493a0292b462885e4dde0d789e5e1ca48df2` |
+| 依据需求 | `docs/features/server-config/REQUIREMENTS.md`（已批准，状态 `APPROVED`） |
 | 创建日期 | 2026-08-27 |
 
 重要声明：本文件把所有需求转换为可客观验收的场景，使用唯一、稳定的验收编号。所有用例初始状态为 `NOT_RUN`（未执行）。本文档不是已执行的验收报告；任何用例状态只有在执行并取得与步骤匹配的客观证据后才允许更新。对需要构造数据库异常数据的验收场景，本文件只定义期望行为，不授权任何测试数据写入；任何数据库写操作仍需按项目数据库审批规则另行获得授权。
+
+状态含义必须清楚，三者不得混淆：本文件 `APPROVED` 只表示验收标准已正式批准；用例 `NOT_RUN` 表示尚未执行，不能推定通过；实现状态 `NOT_STARTED` 表示代码尚未开始。本文件批准不等于验收用例已经执行通过，也不等于功能已经实现。
 
 ## 2. 验收结果状态模型
 
@@ -192,3 +200,4 @@
 |---|---|---|
 | 2026-08-27 | 建立“中心端配置”Feature 验收基线（DRAFT_PENDING_USER_REVIEW；共 64 项，全部 NOT_RUN） | SERVER-CONFIG-FEATURE-BASELINE-001（纯文档任务） |
 | 2026-08-27 | R1 修订：显示结构改按“配置项说明 + 配置值”两列验收，新增信息图标 Key Tooltip 与显示名称兜底覆盖；修订 SC-AC-004/007/008/009/018/022/046/049/062；修正 SC-AC-042 为“专门值域 + 长度≤64”口径；新增 SC-AC-065 非法当前值纠正用例；合计更新为 65，全部保持 NOT_RUN | SERVER-CONFIG-FEATURE-BASELINE-001-R1（ChatGPT 复审 + 项目负责人确认；纯文档修订，状态保持 DRAFT_PENDING_USER_REVIEW） |
+| 2026-08-27 | 批准：文档状态由 `DRAFT_PENDING_USER_REVIEW` 改为 `APPROVED`；`依据需求`更新为已批准的 `REQUIREMENTS.md`；记录批准任务、批准日期、批准人（项目负责人）与 ChatGPT 复审通过的候选提交 `4e55493a...`；65 条用例 `SC-AC-001`～`SC-AC-065` 全部保持 `NOT_RUN`，编号连续、唯一且内容不变；不得将需求批准误写为验收执行通过 | SERVER-CONFIG-FEATURE-BASELINE-APPROVAL-001（项目负责人批准驱动的 Feature 需求与验收基线收口；纯文档任务，不连接数据库，不修改代码） |
