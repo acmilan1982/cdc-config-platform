@@ -3,7 +3,9 @@
 > 文档状态：`DRAFT_PENDING_USER_REVIEW`
 > 恢复任务：PROJECT-BASELINE-AND-DOCUMENTATION-RECOVERY-001
 > 恢复日期：2026-08-27
-> 基线提交：6dc22ecd67b7268ae3ee4761f5412c1e7b50ce5c
+> 恢复任务执行基线：6dc22ecd67b7268ae3ee4761f5412c1e7b50ce5c
+> 恢复草案首次入库提交：a6f51f8a8ff984bc946a4e2ccaccbf56692722fe
+> 本轮修订任务：PROJECT-BASELINE-DOCUMENTATION-REVIEW-FIX-001（结果提交见本轮实施报告）
 
 ## 用途
 
@@ -22,7 +24,9 @@
 - **代码状态**：已实现 / 部分实现 / 占位 / 未开始。
 - Feature 状态编码（NOT_RUN / PASS / FAIL / BLOCKED / DEFERRED）见 DOMAIN_GLOSSARY.md。
 
-清单以当前路由（frontend/src/router/index.ts，14 条）、菜单（frontend/src/config/menu.ts，2 组 11 项）、前端页面（frontend/src/views/）、后端包与现有文档为准。
+清单以当前路由（frontend/src/router/index.ts，共 **15 条 Route Record**：1 条根路径重定向 + 14 条具名页面路由）、Git 已提交菜单（frontend/src/config/menu.ts，**2 组 10 项**，不含大屏入口）、前端页面（frontend/src/views/）、后端包与现有文档为准。
+
+> 菜单 Git 事实与本地候选：Git 已提交菜单为 2 组 10 项（配置管理 4 + 运行监控 6，不含大屏入口）；大屏 standalone 路由 `/large-screen` 已提交；大屏菜单入口仅存在于服务器工作区未提交的 `menu.ts` 修改中（本地候选，未提交），不作为 Git 可复核事实。
 
 ---
 
@@ -43,8 +47,8 @@
 | data-source-run-state | 数据源运行状态 | 占位 | 无 | BASELINE_NOT_ESTABLISHED | frontend `views/data-source-run-state/`（占位页） | 占位页；缺全部基线文档 | 新建 |
 | topic-offset | Topic 偏移量 | 占位 | 无 | BASELINE_NOT_ESTABLISHED | frontend `views/topic-offset/`（占位页） | 占位页；缺全部基线文档 | 新建 |
 | log-query | 日志查询 | 已实现（功能基线已批准，实现与开发验收已完成） | REQUIREMENTS、DESIGN、API、UI、ACCEPTANCE、reports | APPROVED | docs/features/log-query/；实现提交 17680b3 等；开发验收执行 7b3010e（前端 42 例、后端 logquery 专项 135 例通过） | 缺 README、DATABASE；用户视觉验收与最终收口待完成 | 接续（视觉验收→收口）；补 README/DATABASE |
-| job-failure-monitor | 故障监控 | 已实现（用户验收通过） | README、REQUIREMENTS | DRAFT（已入库，未查到独立批准记录） | docs/features/job-failure-monitor/；docs/acceptance/job-failure-acceptance.md | 缺 DESIGN/API/UI/ACCEPTANCE/DATABASE；部分资料散落 modules/pages/database（docs/database/job-failure-*.md 为恢复候选） | 调整/补全 |
-| large-screen | 数据同步统计大屏 | 已实现（视觉验收通过） | README、REQUIREMENTS（AS-IS-R3） | LOCAL_CANDIDATE（未入库，待独立复审） | docs/features/large-screen/（未提交） | 未进入 Git；缺 DESIGN/API/UI/ACCEPTANCE/DATABASE 正式基线 | 复审（独立任务） |
+| job-failure-monitor | 故障监控 | 主要页面与已列调整已实现并验收；仍存在已记录的状态映射差距 | README、REQUIREMENTS | 基线：现行业务需求已建立，多个调整链（ZK 状态融合/详情导航/故障历史/无分页等）已 APPROVED/收口（closeout 提交 e03c6df、bcc2320、2b54db3）；实现：主要页面与已列调整已实现验收，GAP-STATUS-001/002/003 仍开放 | docs/features/job-failure-monitor/；docs/acceptance/job-failure-acceptance.md | 统一的内部→对外状态映射层（对外 5 种状态）未实现（GAP-STATUS-001/002/003）；缺 DESIGN/API/UI/ACCEPTANCE/DATABASE 独立基线文档 | 针对开放 GAP 进入已有 Feature 调整/接续，不重新新建 Feature |
+| large-screen | 数据同步统计大屏 | 已实现（视觉验收通过） | README、REQUIREMENTS（AS-IS-R3） | LOCAL_CANDIDATE（未入库，待独立复审） | docs/features/large-screen/（未提交）；Git 已提交 standalone 路由 /large-screen | 大屏基线文档未进入 Git；缺 DESIGN/API/UI/ACCEPTANCE/DATABASE 正式基线；大屏菜单入口仅存在于工作区未提交 menu.ts（本地候选），Git 已提交菜单不含大屏入口 | 复审（独立任务） |
 
 ## 应用外壳
 

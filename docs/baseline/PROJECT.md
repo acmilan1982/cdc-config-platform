@@ -3,8 +3,10 @@
 > 文档状态：`DRAFT_PENDING_USER_REVIEW`
 > 恢复任务：PROJECT-BASELINE-AND-DOCUMENTATION-RECOVERY-001
 > 恢复日期：2026-08-27
-> 基线提交：6dc22ecd67b7268ae3ee4761f5412c1e7b50ce5c
-> 来源：服务器既有候选（docs/baseline/ 未提交文件，原 BASELINE-001/002 与 DATABASE-CODE-MAPPING-001 Phase 2 落版）+ 本任务修订对齐当前代码与已批准数据库基线
+> 恢复任务执行基线：6dc22ecd67b7268ae3ee4761f5412c1e7b50ce5c
+> 恢复草案首次入库提交：a6f51f8a8ff984bc946a4e2ccaccbf56692722fe
+> 本轮修订任务：PROJECT-BASELINE-DOCUMENTATION-REVIEW-FIX-001（结果提交见本轮实施报告）
+> 来源：服务器既有候选（docs/baseline/ 未提交文件，原 BASELINE-001/002 与 DATABASE-CODE-MAPPING-001 Phase 2 落版）+ 恢复任务修订 + 本轮复审修订，对齐当前代码与已批准数据库基线
 > 首次草拟：2026-08-11
 
 基线日期: 2026-08-27（恢复草案，历史草稿 2026-08-11）
@@ -27,9 +29,9 @@
 
 ### 2.1 功能模块
 
-两大功能模块，共11个菜单项（含大屏）：
+两大功能模块（产品/项目目标范围共 11 个菜单项，含大屏）：
 
-**配置管理（4页）**：
+**配置管理（4项）**：
 - 数据源管理 — 源库/目标库连接配置的CRUD与启停
 - 客户端配置 — CDC同步客户端实例管理
 - 数据订阅 — 源表到目标表的同步订阅关系管理
@@ -44,7 +46,13 @@
 - 故障历史 — 故障事件历史检索（按时间范围/客户端/数据源）
 - 数据同步统计大屏 — 增量统计数据的ECharts可视化大屏
 
-来源: menu.ts、router/index.ts、docs/product/modules.md
+**菜单 Git 事实与本地候选**（三分法，GitHub 新会话可复核口径）：
+
+1. **产品/项目目标范围**：大屏属于平台功能范围，产品目标菜单为 2 组 11 项；
+2. **Git 已提交实现事实**：大屏 standalone 路由 `/large-screen` 已提交；Git 已提交菜单为 **2 组 10 项**（配置管理 4 + 运行监控 6，不含大屏入口）；
+3. **服务器本地候选**：工作区未提交的 `menu.ts` 修改已增加大屏入口（共 11 项），仅能标为本地候选，不作为 Git 可复核事实。
+
+来源: menu.ts（Git 已提交 10 项 / 工作区本地候选 11 项）、router/index.ts、docs/product/modules.md
 
 ### 2.2 实现现状
 
@@ -52,9 +60,9 @@
 
 4个较完整业务功能页面：
 - CDC节点状态 (ZK客户端监控) — 用户验收通过
-- 故障监控（含故障过程详情、故障历史）— 用户验收通过
+- 故障监控（含故障过程详情、故障历史）— 主要页面与已列调整用户验收通过；统一内部→对外状态映射层（对外 5 种状态）仍存在开放 GAP（GAP-STATUS-001/002/003，见 docs/features/job-failure-monitor/）
 - 日志查询 — 功能基线已批准，实现与开发验收已完成
-- 数据同步统计大屏 — 视觉验收通过
+- 数据同步统计大屏 — 视觉验收通过（standalone 路由已提交；菜单入口为工作区本地候选）
 
 6个占位页面（全部使用PlaceholderPage）：
 - 数据源管理 — 后端CRUD已完成，前端未对接
@@ -108,7 +116,7 @@
 |---|---|
 | 项目启动 | 约2026-07-03（基于最早commit） |
 | 开发模式 | Agent (Claude Code) + 人工 (Windows IDEA) 串行 |
-| 分支策略 | 仅develop单分支，121 commits（截至2026-08-27），线性历史，单作者 (acmilan1982) |
+| 分支策略 | 仅 develop 单分支，线性历史，单作者 (acmilan1982)。提交总数属动态口径，以 Git 实际为准，不在本文固定（截至恢复快照提交 a6f51f8 时点可由 Git 统计） |
 | 任务编号体系 | 按功能模块编号（TASK/Feature/Database 等），Conventional Commits |
 
 来源: Git历史

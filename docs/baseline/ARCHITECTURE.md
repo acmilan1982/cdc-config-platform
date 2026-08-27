@@ -3,8 +3,10 @@
 > 文档状态：`DRAFT_PENDING_USER_REVIEW`
 > 恢复任务：PROJECT-BASELINE-AND-DOCUMENTATION-RECOVERY-001
 > 恢复日期：2026-08-27
-> 基线提交：6dc22ecd67b7268ae3ee4761f5412c1e7b50ce5c
-> 来源：服务器既有候选（docs/baseline/ 未提交文件，原 BASELINE-001/002 与 DATABASE-CODE-MAPPING-001 Phase 2 固化）+ 本任务修订对齐当前代码与已批准数据库基线
+> 恢复任务执行基线：6dc22ecd67b7268ae3ee4761f5412c1e7b50ce5c
+> 恢复草案首次入库提交：a6f51f8a8ff984bc946a4e2ccaccbf56692722fe
+> 本轮修订任务：PROJECT-BASELINE-DOCUMENTATION-REVIEW-FIX-001（结果提交见本轮实施报告）
+> 来源：服务器既有候选（docs/baseline/ 未提交文件，原 BASELINE-001/002 与 DATABASE-CODE-MAPPING-001 Phase 2 固化）+ 恢复任务修订 + 本轮复审修订，对齐当前代码与已批准数据库基线
 > 首次草拟：2026-08-12
 
 基线日期: 2026-08-27（恢复草案，历史草稿 2026-08-12）
@@ -17,11 +19,13 @@
 
 CDC配置管理平台是一个 **Oracle CDC配置维护和运行监控Web平台**，不替代现有CDC同步程序。
 
-功能分为两大模块：
-- 配置管理（4页）：数据源管理、客户端配置、数据订阅、服务端配置
+功能分为两大模块（产品/项目目标范围）：
+- 配置管理（4项）：数据源管理、客户端配置、数据订阅、服务端配置
 - 运行监控（7项，含大屏）：CDC节点状态、数据源运行状态、Topic偏移量、日志查询、故障监控、故障历史、数据同步统计大屏
 
-来源: CLAUDE.md、menu.ts、docs/product/modules.md
+菜单 Git 事实与本地候选：Git 已提交菜单为 **2 组 10 项**（配置管理 4 + 运行监控 6，不含大屏入口）；大屏 standalone 路由 `/large-screen` 已提交；大屏菜单入口仅存在于工作区未提交的 `menu.ts` 修改中（本地候选，未提交），不作为 Git 可复核事实。
+
+来源: CLAUDE.md、menu.ts（Git 已提交 10 项 / 工作区本地候选 11 项）、router/index.ts、docs/product/modules.md
 
 ---
 
@@ -86,8 +90,8 @@ com.bsoft.cdcconfig
 src/
 ├── api/             # API层: monitor.ts, jobFailure.ts, largeScreen.ts, logQuery.ts
 ├── stores/          # Pinia状态: app.ts
-├── router/          # Vue Router: 14条路由定义 + / 重定向
-├── config/          # menu.ts: 菜单配置 (2组11项，含大屏)
+├── router/          # Vue Router: 15条 Route Record（1条根路径重定向 + 14条具名页面路由）
+├── config/          # menu.ts: Git 已提交菜单 2组10项；工作区本地候选含大屏入口（11项，未提交）
 ├── layouts/         # MainLayout.vue, HeaderBar.vue, Sidebar.vue
 ├── components/      # PlaceholderPage.vue、ClientCard.vue等可复用组件
 ├── views/
@@ -122,12 +126,14 @@ src/
 | CDC_JOB_FAILURE_HANDLE_LOG | 116 | 只读（sync-client 写入） | 故障处理记录，18 字段完整链路 |
 | CDC_CLIENT_MULTIPLE | 7 | 只读（人工维护） | 客户端/探针列表，DATA_SOURCE_ID 为逗号分隔多值弱逻辑引用 |
 
-**大屏统计 — 源数据（2 张，JdbcTemplate 访问）**：
+**日志源数据（2 张，两条只读链路）**：
+
+`CDC_LOG_CORRECT` 与 `CDC_LOG_ERROR` 为同步日志表，管理平台只读，存在两条独立读路径：① 日志查询页经 `LogQueryMapper` + `mapper/logquery/LogQueryMapper.xml` 游标分页只读检索；② 大屏增量统计经 `LogBatchReader`（JdbcTemplate）批量读取并在内存聚合。不得将两张日志表概括为"仅通过 JdbcTemplate 读取"。
 
 | 表 | 行数 | 读写 | 说明 |
 |---|---|---|---|
-| CDC_LOG_CORRECT | ~3,819,479 | 只读（JdbcTemplate） | 同步正确日志，统计源数据 |
-| CDC_LOG_ERROR | 442 | 只读（JdbcTemplate） | 同步错误日志，统计源数据 |
+| CDC_LOG_CORRECT | ~3,819,479 | 只读（日志查询 XML 游标分页 + 大屏统计 JdbcTemplate） | 同步正确日志，日志查询源数据 + 统计源数据 |
+| CDC_LOG_ERROR | 442 | 只读（同上双路径） | 同步错误日志，日志查询源数据 + 统计源数据 |
 
 **大屏统计 — 调度写入（5 张，含水位）**：
 
@@ -265,7 +271,7 @@ LargeScreenPage.vue (ECharts大屏, 60s轮询, CSS scale自适应)
 |---|---|---|
 | CDC_CLIENT_MULTIPLE | 人工维护 | 只读（Job 故障监控 + 大屏统计 API） |
 | CDC_DATA_SUBSCRIBE | 人工维护 | 只读（大屏统计维度映射） |
-| CDC_LOG_CORRECT / CDC_LOG_ERROR | sync-server → Kafka → sync-log 写入 | 仅通过 JdbcTemplate 读取（大屏统计调度） |
+| CDC_LOG_CORRECT / CDC_LOG_ERROR | sync-server → Kafka → sync-log 写入 | 只读，两条读路径：日志查询（LogQueryMapper XML 游标分页）+ 大屏统计（JdbcTemplate 批量读取 + 内存聚合） |
 | CDC_JOB_FAILURE_EVENT | sync-client 写入 | 只读（故障监控） |
 | CDC_JOB_FAILURE_HANDLE_LOG | sync-client 写入 | 只读（故障监控） |
 | R09～R11 对应关系 | sync-client 写入 | 只读，不负责维护该关系 |
@@ -370,9 +376,9 @@ FaultResultResolver (结果解析)
 
 ## 7. 前端路由与布局
 
-### 7.1 路由定义 (14条)
+### 7.1 路由定义（共 15 条 Route Record：1 条根路径重定向 + 14 条具名页面路由）
 
-主要路由:
+Route Record 清单:
 
 | 路径 | 页面 | 特性 |
 |---|---|---|

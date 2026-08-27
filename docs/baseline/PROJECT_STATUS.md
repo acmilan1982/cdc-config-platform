@@ -3,8 +3,10 @@
 > 文档状态：`DRAFT_PENDING_USER_REVIEW`
 > 恢复任务：PROJECT-BASELINE-AND-DOCUMENTATION-RECOVERY-001
 > 恢复日期：2026-08-27
-> 基线提交：6dc22ecd67b7268ae3ee4761f5412c1e7b50ce5c
-> 来源：服务器既有候选（docs/baseline/ 未提交文件，原 BASELINE-001/002 与 DATABASE-CODE-MAPPING-001 Phase 2 固化）+ 本任务修订对齐当前代码与已批准数据库基线
+> 恢复任务执行基线：6dc22ecd67b7268ae3ee4761f5412c1e7b50ce5c
+> 恢复草案首次入库提交：a6f51f8a8ff984bc946a4e2ccaccbf56692722fe
+> 本轮修订任务：PROJECT-BASELINE-DOCUMENTATION-REVIEW-FIX-001（结果提交见本轮实施报告）
+> 来源：服务器既有候选（docs/baseline/ 未提交文件，原 BASELINE-001/002 与 DATABASE-CODE-MAPPING-001 Phase 2 固化）+ 恢复任务修订 + 本轮复审修订，对齐当前代码与已批准数据库基线
 > 首次草拟：2026-08-12
 
 基线日期: 2026-08-27（恢复草案，历史草稿 2026-08-12）
@@ -23,7 +25,7 @@
 | 页面 | 路由 | 实现形态 | 说明 |
 |---|---|---|---|
 | CDC节点状态 (ZK客户端监控) | /monitor/cdc-node | 较完整业务实现 | 用户验收通过 |
-| 故障监控（总览/详情/历史） | /monitor/job-failure 及子路由 | 较完整业务实现 | 用户验收通过 |
+| 故障监控（总览/详情/历史） | /monitor/job-failure 及子路由 | 较完整业务实现 | 主要页面与已列调整用户验收通过；统一内部→对外状态映射层（对外 5 种状态）仍开放（GAP-STATUS-001/002/003，见 docs/features/job-failure-monitor/） |
 | 日志查询 | /monitor/log-query | 较完整业务实现 | 功能基线已批准，实现与开发验收已完成 |
 | 数据同步统计大屏 | /large-screen | 较完整业务实现 | 视觉验收通过，standalone路由 |
 | 数据源管理 | /config/data-source | 占位页 | 后端CRUD已完成，前端未对接 |
@@ -34,6 +36,8 @@
 | Topic偏移量 | /monitor/topic-offset | 占位页 | PlaceholderPage |
 
 6个占位页面的本期正式范围及优先级待用户确认。
+
+> 菜单 Git 事实与本地候选：Git 已提交菜单为 2 组 10 项（配置管理 4 + 运行监控 6，不含大屏入口）；大屏 standalone 路由 `/large-screen` 已提交；大屏菜单入口仅存在于工作区未提交 `menu.ts` 修改中（本地候选，未提交），不作为 Git 可复核事实。
 
 ### 1.2 后端
 
@@ -86,7 +90,7 @@
 | 维度 | 状态 | 证据 |
 |---|---|---|
 | 页面视觉 | 用户验收通过 | TASK7视觉验收报告 |
-| 菜单入口 | 已实现 | menu.ts 已含大屏菜单项；menu.ts 当前为工作区未提交修改 |
+| 菜单入口（本地候选） | 工作区未提交 menu.ts 已含大屏菜单项；Git 已提交菜单为 2 组 10 项（不含大屏入口），大屏菜单入口不作为 Git 已提交事实 | menu.ts 当前为工作区未提交修改 |
 | 前后端接口 | 代码已实现 | LargeScreenController + largeScreen.ts API |
 | 统计任务代码 | Large Screen Stats 测试类在最近完整测试中无失败 | mvn test输出（见 §2.1） |
 | 开发库真实数据验证 | 有源数据（CDC_LOG_CORRECT 约381万行、CDC_LOG_ERROR 442行，2026-08-26 数据画像），增量统计端到端验证待执行 | 已批准 DATA_PROFILE.md |
@@ -99,7 +103,7 @@
 | 验收项 | 报告状态 | 复核状态 |
 |---|---|---|
 | ZK客户端监控集成验收 | 通过 (docs/acceptance/zk-client-monitor-integration.md) | ZK-ENV-001: ZK 10.19.16.111:2181 可达，v3.4.14，会话建立成功，/bsoft-cdc/clients 读取成功 |
-| 故障监控功能验收 | 通过 (docs/acceptance/job-failure-acceptance.md) | 用户验收通过 |
+| 故障监控功能验收 | 通过 (docs/acceptance/job-failure-acceptance.md) | 用户验收通过（主要页面与已列调整）；统一内部→对外状态映射层仍开放（GAP-STATUS-001/002/003，独立接续任务处理） |
 | 大屏视觉验收 (TASK7) | 用户验收通过 (commit 8822795) | 已确认 |
 | 日志查询开发验收 | 功能基线已批准，实现与开发验收已完成 | ACCEPTANCE PASS 121 / BLOCKED 8 / NOT_RUN 46 / DEFERRED_UNTIL_PHYSICAL_DESIGN 5 |
 
@@ -143,13 +147,15 @@
 | 项目 | 值 |
 |---|---|
 | 当前分支 | develop |
-| 总提交数 | 121 |
 | 作者 | acmilan1982 (单作者) |
 | 分支模型 | 仅develop，无main/master/release |
 | 合并历史 | 无merge，线性历史 |
 | Tag | 无 |
-| 当前基线提交 | 6dc22ecd67b7268ae3ee4761f5412c1e7b50ce5c |
-| 最新提交 | docs(process): add unified feature development workflow |
+| 恢复任务执行基线 | 6dc22ecd67b7268ae3ee4761f5412c1e7b50ce5c |
+| 恢复草案首次入库提交 | a6f51f8a8ff984bc946a4e2ccaccbf56692722fe（PROJECT-BASELINE-AND-DOCUMENTATION-RECOVERY-001） |
+| 本轮修订提交 | 见 Git 历史与本轮实施报告（PROJECT-BASELINE-DOCUMENTATION-REVIEW-FIX-001） |
+
+> 提交总数与最新提交为动态口径，不在本文固定；如需统计以 Git 实际为准（截至恢复快照提交 a6f51f8 时点可由 Git 统计）。
 
 ---
 
@@ -162,6 +168,7 @@
 | ZK Java客户端/Curator兼容性验证 | 高 | CLI 只读连接成功（ZK-ENV-001）；pom.xml Curator 2.13.0 / ZK 3.4.14 与服务端 3.4.14 的 Java/Curator 层兼容性待应用层独立验证 |
 | 大屏增量统计端到端验证 | 中 | 开发库有源数据，调度运行验证待执行 |
 | 日志查询物理设计与生产启用 | 中 | LQ-AC-164/165/171/172/173 保持延期 |
+| 故障监控状态映射层收口（GAP-STATUS-001/002/003） | 中 | 统一内部→对外状态映射层（对外5种状态）仍开放，作为独立接续任务处理，见 docs/features/job-failure-monitor/ |
 | 未提交文件治理 | 中 | 129个未跟踪 / 9个已修改 / 3个已删除文件需分类处理 |
 | 数据源前端对接 | 低 | 后端CRUD已完成，前端对接待排定 |
 | 6个占位页面范围确认 | 低 | 本期正式范围和优先级待用户排定 |

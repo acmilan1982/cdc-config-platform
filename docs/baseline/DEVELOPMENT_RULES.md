@@ -3,8 +3,10 @@
 > 文档状态：`DRAFT_PENDING_USER_REVIEW`
 > 恢复任务：PROJECT-BASELINE-AND-DOCUMENTATION-RECOVERY-001
 > 恢复日期：2026-08-27
-> 基线提交：6dc22ecd67b7268ae3ee4761f5412c1e7b50ce5c
-> 来源：服务器既有候选（docs/baseline/ 未提交文件，原 BASELINE-001/002 与 DATABASE-CODE-MAPPING-001 Phase 2 固化）+ 本任务修订对齐当前代码与已批准数据库基线
+> 恢复任务执行基线：6dc22ecd67b7268ae3ee4761f5412c1e7b50ce5c
+> 恢复草案首次入库提交：a6f51f8a8ff984bc946a4e2ccaccbf56692722fe
+> 本轮修订任务：PROJECT-BASELINE-DOCUMENTATION-REVIEW-FIX-001（结果提交见本轮实施报告）
+> 来源：服务器既有候选（docs/baseline/ 未提交文件，原 BASELINE-001/002 与 DATABASE-CODE-MAPPING-001 Phase 2 固化）+ 恢复任务修订 + 本轮复审修订，对齐当前代码与已批准数据库基线
 > 首次草拟：2026-08-12
 
 基线日期: 2026-08-27（恢复草案，历史草稿 2026-08-12）
@@ -34,20 +36,41 @@
 ### 2.1 分支约束
 
 - 只允许在 `develop` 分支上开发。
-- 当前仓库仅有 `develop` 分支（121 commits，截至 2026-08-27，线性历史，单作者），无 main/master/release 分支。
+- 当前仓库仅 `develop` 单分支，线性历史，单作者（acmilan1982），无 main/master/release 分支。提交总数属动态口径，以 Git 实际为准，不在本文固定。
 - 未经人工明确要求，不创建功能分支、不操作其他分支。
 
-### 2.2 允许的操作
+### 2.2 默认允许的只读检查
 
-`git status`, `git fetch origin`, `git pull --ff-only origin develop`, `git diff`, `git log`, `git add <明确文件>`, `git commit`, `git push origin develop`
+以下操作不改变工作区、索引、引用、本地历史或远程状态，Agent 可按任务需要执行：
 
-### 2.3 禁止的操作
+`git status`、`git status --short`、`git status --branch --short`、`git diff`、`git diff --stat`、`git diff -- <path>`、`git log`、`git show`、`git rev-parse`、`git rev-list`、`git ls-remote`
 
-`git push --force`, `git push --force-with-lease`, `git rebase`, `git merge`, `git reset --hard`, `git clean -fd`, `git add -A`, `git add .`，删除或覆盖人工尚未提交的代码，自行解决本地与远程分叉，自行改写提交历史
+### 2.3 需要用户或当前任务明确授权的操作
 
-### 2.4 工作区预检
+以下操作默认禁止，只有用户或当前任务明确授权时才能执行：
 
-出现以下任一情况时必须停止：工作区不干净、当前分支非 `develop`、本地与远程分叉、存在无法识别的人工修改、`git pull --ff-only` 失败
+- `git fetch`、`git pull`、`git merge --ff-only`（会更新本地引用）；
+- `git add`、`git commit`、`git push`；
+- `git reset`、`git clean`、`git stash`、`git stash pop`；
+- `git checkout` / `git switch`（切换分支或恢复文件）；
+- 分支、Tag 的创建、切换、重命名或删除；
+- 任何可能改变工作区、索引、引用、本地历史或远程状态的 Git 命令。
+
+### 2.4 永久禁止的操作
+
+- 操作 `develop` 以外的分支（读取除外）；
+- `git push --force`、`git push --force-with-lease`；
+- 删除或覆盖人工尚未提交的代码；
+- 自行解决本地与远程分叉；
+- 自行改写提交历史。
+
+### 2.5 非干净工作区处理
+
+- 工作区不干净本身不构成自动停线；
+- 任务开始前必须记录 Git 现场，并区分本任务授权范围、任务开始前已存在的无关修改、以及归属无法确定的修改；
+- 与本任务无关的既有修改保持原样：不修改、不覆盖、不暂存、不提交；
+- 目标文件若在任务开始前已有修改，只有能够确认归属并安全保留时才允许继续编辑；无法明确区分或存在覆盖风险时，停止修改该文件并报告；
+- 当前分支非 `develop`、本地与远程分叉（且未被授权解决）、暂存区存在未知内容或需要超出授权范围时，停止任务并报告。
 
 来源: CLAUDE.md §4, §5
 
@@ -161,19 +184,19 @@ npm test           # vitest run（log-query 等已含组件测试）
 
 ### 8.1 凭据保护
 
-- **允许提交**: 内网开发数据库连接信息（CLAUDE.md §11明确授权）
-- **禁止提交**: 生产环境账号/密码、GitHub Token、Claude Code认证信息、SSH私钥、操作系统私钥
-- 不得在日志、任务结果或 Commit Message 中打印完整认证令牌或私钥
+- **允许提交**: 内网开发数据库连接信息（CLAUDE.md §11 明确授权）。本项目现有内网开发数据库连接信息（地址/端口/Schema/用户名/密码及带凭据连接串）已经用户明确授权保留（PROJECT-BASELINE-DOCUMENTATION-REVIEW-FIX-001 §4），敏感内容检查将其视为用户批准例外，不删除、不替换、不脱敏。
+- **禁止提交**: 生产环境账号或密码、GitHub Token、Claude Code 认证信息、SSH 私钥或操作系统私钥、与本项目无关的凭据，以及任务开始时尚未入库的新密码或新密钥。发现此类内容时立即停止相关提交并报告。
+- 不得在日志、任务结果或 Commit Message 中打印完整认证令牌或私钥；实施报告不得重复打印完整密码或带密码连接串，只记录"现有内网开发数据库凭据经用户明确授权保留"。
 
 ### 8.2 认证机制
 
 当前系统无认证/授权机制（无 Spring Security、Shiro、JWT）。是否为长期目标待后续决策。
 
-来源: 代码审查、CLAUDE.md §19
+来源: 代码审查、CLAUDE.md §11、§20
 
 ### 8.3 未提交文件
 
-CLAUDE.md §5 要求工作区干净才能开始新任务。截至 2026-08-27 恢复任务盘点，开发环境存在 129 个未跟踪文件、9 个已修改文件、3 个已删除文件（含文档、截图、配置修改、源码修改和模拟数据），尚未逐项确认归属与冲突。未提交文件治理为独立任务，不阻塞基线。
+工作区不干净不构成自动停线，但任务开始前必须记录现场并区分归属（见 §2.5）。截至 2026-08-27 恢复任务盘点，开发环境存在 129 个未跟踪文件、9 个已修改文件、3 个已删除文件（含文档、截图、配置修改、源码修改和模拟数据），尚未逐项确认归属与冲突。未提交文件治理为独立任务，不阻塞基线。
 
 ---
 
@@ -298,4 +321,3 @@ CLAUDE.md §5 要求工作区干净才能开始新任务。截至 2026-08-27 恢
 | 认证方案 | 当前无认证，长期是否需要待决定 |
 | 分支策略 | 当前仅develop单分支，未来是否引入main分支待决定 |
 | 未提交文件治理 | 需独立任务执行分类和处理 |
-| §2.2 与现行 CLAUDE.md §5.2 的对齐 | 现行 CLAUDE.md §5.2 将 `git pull`、`git fetch` 列为需明确授权的操作；本草案 §2.2 仍把二者列为默认允许。涉及 Git 权限规则，本任务不擅自改写，留待用户复审时确认处理方式 |

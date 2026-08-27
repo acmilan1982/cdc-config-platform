@@ -3,8 +3,10 @@
 > 文档状态：`DRAFT_PENDING_USER_REVIEW`
 > 恢复任务：PROJECT-BASELINE-AND-DOCUMENTATION-RECOVERY-001
 > 恢复日期：2026-08-27
-> 基线提交：6dc22ecd67b7268ae3ee4761f5412c1e7b50ce5c
-> 来源：服务器既有候选（docs/baseline/ 未提交文件，原 BASELINE-001/002 与 DATABASE-CODE-MAPPING-001 Phase 2 固化）+ 本任务修订对齐当前代码与已批准数据库基线
+> 恢复任务执行基线：6dc22ecd67b7268ae3ee4761f5412c1e7b50ce5c
+> 恢复草案首次入库提交：a6f51f8a8ff984bc946a4e2ccaccbf56692722fe
+> 本轮修订任务：PROJECT-BASELINE-DOCUMENTATION-REVIEW-FIX-001（结果提交见本轮实施报告）
+> 来源：服务器既有候选（docs/baseline/ 未提交文件，原 BASELINE-001/002 与 DATABASE-CODE-MAPPING-001 Phase 2 固化）+ 恢复任务修订 + 本轮复审修订，对齐当前代码与已批准数据库基线
 > 首次草拟：2026-08-12
 
 基线日期: 2026-08-27（恢复草案，历史草稿 2026-08-12）
@@ -88,7 +90,7 @@
 来源: RELATIONS.md（R09～R11 维护方）、ARCHITECTURE.md §4.8
 
 ### sync-server
-**CDC 同步服务端进程**。负责日志生成与投递，正确日志/错误日志经 Kafka 由 sync-log 写入 CDC_LOG_CORRECT / CDC_LOG_ERROR（R05～R08 维护方）。管理平台通过 JdbcTemplate 只读读取这些日志用于大屏统计。
+**CDC 同步服务端进程**。负责日志生成与投递，正确日志/错误日志经 Kafka 由 sync-log 写入 CDC_LOG_CORRECT / CDC_LOG_ERROR（R05～R08 维护方）。管理平台对两张日志表只读，通过两条读路径读取：日志查询经 LogQueryMapper XML 游标分页，大屏增量统计经 JdbcTemplate 批量读取 + 内存聚合。
 
 来源: RELATIONS.md（R05～R08 维护方）、ARCHITECTURE.md §4.8
 
@@ -103,14 +105,14 @@
 来源: ARCHITECTURE.md §4.1、CDC_CLIENT_MULTIPLE
 
 ### 正确日志 (Correct Log)
-**同步成功的日志记录**。存储在 CDC_LOG_CORRECT 表，是大屏增量统计的源数据之一（通过 JdbcTemplate 只读访问）。
+**同步成功的日志记录**。存储在 CDC_LOG_CORRECT 表，是大屏增量统计的源数据之一，同时供日志查询页只读检索。两条读路径：日志查询经 LogQueryMapper XML 游标分页，大屏统计经 JdbcTemplate 批量读取 + 内存聚合。
 
-来源: CDC_LOG_CORRECT、ARCHITECTURE.md §4.5
+来源: CDC_LOG_CORRECT、ARCHITECTURE.md §4.1/§4.5
 
 ### 错误日志 (Error Log)
-**同步失败的日志记录**。存储在 CDC_LOG_ERROR 表，是大屏增量统计的源数据之一。
+**同步失败的日志记录**。存储在 CDC_LOG_ERROR 表，是大屏增量统计的源数据之一，同时供日志查询页只读检索。读取路径与正确日志相同（日志查询 XML 游标分页 + 大屏统计 JdbcTemplate）。
 
-来源: CDC_LOG_ERROR、ARCHITECTURE.md §4.5
+来源: CDC_LOG_ERROR、ARCHITECTURE.md §4.1/§4.5
 
 ### Topic
 **Kafka 消息主题**。日志链路中同步日志经 Kafka 按 Topic 组织投递（sync-server → Kafka → sync-log）。运行监控中的"Topic偏移量"页对应 Kafka Topic 消费偏移量监控。

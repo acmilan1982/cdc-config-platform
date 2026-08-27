@@ -3,8 +3,10 @@
 > 文档状态：`DRAFT_PENDING_USER_REVIEW`
 > 恢复任务：PROJECT-BASELINE-AND-DOCUMENTATION-RECOVERY-001
 > 恢复日期：2026-08-27
-> 基线提交：6dc22ecd67b7268ae3ee4761f5412c1e7b50ce5c
-> 来源：服务器既有候选（docs/baseline/ 未提交文件，原 BASELINE-001/002 与 DATABASE-CODE-MAPPING-001 Phase 2 落版）+ 本任务修订对齐当前代码与配置
+> 恢复任务执行基线：6dc22ecd67b7268ae3ee4761f5412c1e7b50ce5c
+> 恢复草案首次入库提交：a6f51f8a8ff984bc946a4e2ccaccbf56692722fe
+> 本轮修订任务：PROJECT-BASELINE-DOCUMENTATION-REVIEW-FIX-001（结果提交见本轮实施报告）
+> 来源：服务器既有候选（docs/baseline/ 未提交文件，原 BASELINE-001/002 与 DATABASE-CODE-MAPPING-001 Phase 2 落版）+ 恢复任务修订 + 本轮复审修订，对齐当前代码与配置
 > 首次草拟：2026-08-11
 
 基线日期: 2026-08-27（恢复草案，历史草稿 2026-08-11）
@@ -55,6 +57,8 @@
 | 认证 | 用户名/密码（开发环境，CLAUDE.md §11授权可提交） | 生产密码禁止提交 |
 
 连接示例: `sqlplus 'CDC/CDC@//192.168.174.65:1521/prod.enmotech.com'`
+
+> 凭据保留授权：本仓库现有内网开发数据库连接信息（地址/端口/Schema/用户名/密码及带凭据连接串）已经用户明确授权保留（PROJECT-BASELINE-DOCUMENTATION-REVIEW-FIX-001 §4），不删除、不替换、不脱敏；敏感内容检查将其视为用户批准例外。此授权不适用于生产环境凭据、GitHub Token、Claude Code 认证信息、SSH/OS 私钥或本任务开始时尚未入库的新凭据。
 
 ---
 
