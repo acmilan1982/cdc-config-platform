@@ -1,6 +1,10 @@
 # 项目级基线（docs/baseline/）
 
-> 文档状态：`DRAFT_PENDING_USER_REVIEW`（六份项目级基线）
+> 文档状态：`APPROVED`（六份项目级基线）
+> 批准任务：PROJECT-BASELINE-APPROVAL-CLOSEOUT-001
+> 批准日期：2026-08-27
+> 批准内容提交：b054718130bbe922f2e26b79b3ee946290949ef1
+> 批准依据：ChatGPT 第二轮复审 PASS + 用户明确正式批准
 > 恢复任务：PROJECT-BASELINE-AND-DOCUMENTATION-RECOVERY-001
 > 恢复日期：2026-08-27
 > 恢复任务执行基线：6dc22ecd67b7268ae3ee4761f5412c1e7b50ce5c
@@ -49,8 +53,10 @@
 
 ## 当前状态与核验提交
 
-- 六份项目级基线状态：`DRAFT_PENDING_USER_REVIEW`（恢复任务恢复草案，未自行批准；本轮仅按 ChatGPT 复审意见修订）。
+- 六份项目级基线状态：`APPROVED`（ChatGPT 第二轮复审 PASS + 用户于 2026-08-27 明确正式批准，批准任务 PROJECT-BASELINE-APPROVAL-CLOSEOUT-001，批准内容提交 `b054718`）。
 - 恢复任务执行基线：`6dc22ecd67b7268ae3ee4761f5412c1e7b50ce5c`。
 - 恢复草案首次入库提交：`a6f51f8a8ff984bc946a4e2ccaccbf56692722fe`（六份草案首次进入 Git）。
 - 本轮修订结果提交：见 `docs/baseline/reports/PROJECT-BASELINE-DOCUMENTATION-REVIEW-FIX-001.md` 及 Git 历史。
-- 批准流程：ChatGPT 复审 → 用户批准 → 开启具体 Feature 会话。
+- 批准收口结果提交：见 `docs/baseline/reports/PROJECT-BASELINE-APPROVAL-CLOSEOUT-001.md` 及 Git 历史。
+- 批准流程状态：ChatGPT 第二轮复审通过 → 用户正式批准 → Git 状态已收口。
+- Feature 总索引（docs/features/README.md）与具体 Feature 未随项目级基线批准，仍按各自状态处理；Feature 总索引仍为 `DRAFT_PENDING_USER_REVIEW`。

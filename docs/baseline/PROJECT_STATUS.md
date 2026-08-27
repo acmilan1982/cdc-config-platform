@@ -1,6 +1,10 @@
 # PROJECT_STATUS — 项目状态快照（项目级基线）
 
-> 文档状态：`DRAFT_PENDING_USER_REVIEW`
+> 文档状态：`APPROVED`
+> 批准任务：PROJECT-BASELINE-APPROVAL-CLOSEOUT-001
+> 批准日期：2026-08-27
+> 批准内容提交：b054718130bbe922f2e26b79b3ee946290949ef1
+> 批准依据：ChatGPT 第二轮复审 PASS + 用户明确正式批准
 > 恢复任务：PROJECT-BASELINE-AND-DOCUMENTATION-RECOVERY-001
 > 恢复日期：2026-08-27
 > 恢复任务执行基线：6dc22ecd67b7268ae3ee4761f5412c1e7b50ce5c
@@ -172,7 +176,6 @@
 | 未提交文件治理 | 中 | 129个未跟踪 / 9个已修改 / 3个已删除文件需分类处理 |
 | 数据源前端对接 | 低 | 后端CRUD已完成，前端对接待排定 |
 | 6个占位页面范围确认 | 低 | 本期正式范围和优先级待用户排定 |
-| 六份项目级基线批准 | 待用户 | 本任务恢复为 DRAFT_PENDING_USER_REVIEW，待 ChatGPT 复审与用户批准 |
 | 认证方案 | 待决策 | 当前无认证，长期是否需要待决定 |
 | 分支策略 | 待决策 | 当前仅develop单分支，未来是否引入main分支待决定 |
 
@@ -261,9 +264,10 @@ CDC_DATA_SOURCE 另被日志查询的 selectAllDataSources 读取用于过滤条
 
 ### 10.2 当前状态
 
-- 六份项目级基线此前仅存在于服务器工作区（未进入 Git）。本任务按 PROJECT-BASELINE-AND-DOCUMENTATION-RECOVERY-001 恢复并修订，统一标记为 `DRAFT_PENDING_USER_REVIEW`，未自行批准。
+- 六份项目级基线此前仅存在于服务器工作区（未进入 Git）。本任务按 PROJECT-BASELINE-AND-DOCUMENTATION-RECOVERY-001 恢复并修订，经 PROJECT-BASELINE-DOCUMENTATION-REVIEW-FIX-001 按 ChatGPT 复审意见修订。
 - 历史 BASELINE-001/002、ZK-ENV-001、DATABASE-CODE-MAPPING-001 的结论在恢复时已对齐当前代码与已批准数据库基线。
-- 项目级基线批准需 ChatGPT 复审与用户批准，Agent 不得自行批准。
+- 六份项目级基线已于 2026-08-27 由用户正式批准（批准任务：PROJECT-BASELINE-APPROVAL-CLOSEOUT-001；批准内容提交：`b054718`；批准依据：ChatGPT 第二轮复审 PASS + 用户明确正式批准），状态为 `APPROVED`。
+- 项目级基线批准人为用户，Agent 不得自行批准；批准后项目目标、环境、架构、规则、状态或术语发生变化时，仍需通过新的独立维护任务更新。
 
 ### 10.3 维护原则
 
