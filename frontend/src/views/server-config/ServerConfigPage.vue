@@ -38,10 +38,10 @@
         </div>
       </div>
 
-      <!-- 保存成功但刷新列表失败（SAVE_SUCCEEDED_RELOAD_FAILED，仅可重试加载） -->
+      <!-- 保存成功但重载失败（SAVE_SUCCEEDED_RELOAD_FAILED：禁用编辑与保存，仅可重试加载，SC-DESIGN-067） -->
       <div v-if="reloadFailedAfterSave" class="save-reload-error">
-        保存成功，但刷新配置列表失败：{{ reloadFailedMessage }}
-        <el-button size="small" class="retry-load-btn" @click="loadPage">重试加载</el-button>
+        保存成功，但最新配置加载失败，请重试加载{{ reloadFailedMessage ? `：${reloadFailedMessage}` : '' }}
+        <el-button size="small" class="retry-load-btn" @click="reloadAfterSave">重试加载</el-button>
       </div>
 
       <!-- 保存失败：保留修改 -->
@@ -63,6 +63,7 @@
             <ConfigValueEditor
               :item="row"
               :value="editValue(row)"
+              :disabled="controlsDisabled"
               @update:value="onEdit(row.idServerConfig, $event)"
             />
           </template>
@@ -71,7 +72,9 @@
 
       <div class="card-actions">
         <el-button :disabled="!canRevert" @click="revert">撤销修改</el-button>
-        <el-button type="primary" :disabled="!canSave" @click="openConfirm">保存全部</el-button>
+        <el-button type="primary" :disabled="!canSave" @click="openConfirm">
+          {{ saving ? '保存中…' : '保存全部' }}
+        </el-button>
       </div>
     </el-card>
 
@@ -87,6 +90,7 @@
 <script setup lang="ts">
 import { computed, onMounted, ref } from 'vue'
 import { InfoFilled, Loading, WarningFilled } from '@element-plus/icons-vue'
+import { ElMessage } from 'element-plus'
 import { fetchServerConfigPage, saveServerConfig } from '@/api/serverConfig'
 import type { ServerConfigItemVO, ServerConfigPageVO } from '@/types/serverConfig'
 import ConfigValueEditor from './ConfigValueEditor.vue'
@@ -152,7 +156,12 @@ const canSave = computed(
   () => hasDirty.value && !hasInvalid.value && !saving.value && !reloadFailedAfterSave.value,
 )
 
-const canRevert = computed(() => hasDirty.value && !saving.value)
+const canRevert = computed(
+  () => hasDirty.value && !saving.value && !reloadFailedAfterSave.value,
+)
+
+/** 保存中或保存成功但重载失败阻断态：禁用全部编辑控件（SC-UI-DESIGN-080/084）。 */
+const controlsDisabled = computed(() => saving.value || reloadFailedAfterSave.value)
 
 const changes = computed<SaveChange[]>(() =>
   dirtyItems.value.map((item) => {
@@ -160,7 +169,7 @@ const changes = computed<SaveChange[]>(() =>
     return {
       idServerConfig: item.idServerConfig,
       displayName: getDisplayName(item.configDesc, item.configKey),
-      configKey: item.configKey,
+      configKey: item.configKey ?? null,
       fromRaw: item.configValue ?? '',
       toValue: canonicalOrNull(item.configKey, edit) ?? edit,
     }
@@ -168,6 +177,10 @@ const changes = computed<SaveChange[]>(() =>
 )
 
 function onEdit(id: string, value: string) {
+  // 保存中或重载失败阻断态不得改变编辑状态（不依赖 DOM disabled 的防御性守卫）。
+  if (saving.value || reloadFailedAfterSave.value) {
+    return
+  }
   const item = itemById(id)
   if (!item) {
     return
@@ -180,10 +193,16 @@ function onEdit(id: string, value: string) {
 }
 
 function revert() {
+  if (saving.value || reloadFailedAfterSave.value) {
+    return
+  }
   edits.value = {}
 }
 
 function openConfirm() {
+  if (!canSave.value) {
+    return
+  }
   confirmVisible.value = true
 }
 
@@ -207,8 +226,35 @@ async function loadPage() {
   }
 }
 
+/**
+ * 保存成功后的重载/重试（SC-DESIGN-067 / SC-UI-DESIGN-084，仅 GET）。
+ * 与首次/普通 loadPage 分离：开始与失败期间不提前清除 SAVE_SUCCEEDED_RELOAD_FAILED 阻断态，
+ * 仅 GET 成功且 code=200 才清除并重建原始值；任何 HTTP/网络/业务失败均保持该状态并更新消息，
+ * 从不设置 loadError（避免切到普通加载失败页），从不触发 POST。
+ */
+async function reloadAfterSave() {
+  loading.value = true
+  try {
+    const res = await fetchServerConfigPage()
+    if (res.code === 200) {
+      page.value = res.data
+      edits.value = {}
+      reloadFailedAfterSave.value = false
+      reloadFailedMessage.value = ''
+    } else {
+      reloadFailedAfterSave.value = true
+      reloadFailedMessage.value = res.message || '加载失败'
+    }
+  } catch (e) {
+    reloadFailedAfterSave.value = true
+    reloadFailedMessage.value = resolveHttpMessage(e)
+  } finally {
+    loading.value = false
+  }
+}
+
 async function doSave() {
-  if (!hasDirty.value || hasInvalid.value || saving.value) {
+  if (!canSave.value) {
     return
   }
   const items = dirtyItems.value.map((item) => {
@@ -224,13 +270,9 @@ async function doSave() {
   try {
     const res = await saveServerConfig({ items })
     if (res.code === 200) {
+      ElMessage.success('保存成功')
       edits.value = {}
-      await loadPage()
-      if (loadError.value) {
-        reloadFailedMessage.value = loadError.value.message
-        reloadFailedAfterSave.value = true
-        loadError.value = null
-      }
+      await reloadAfterSave()
     } else {
       saveError.value = res.message || '保存失败，请稍后重试'
     }

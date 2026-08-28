@@ -1,6 +1,7 @@
-import { describe, it, expect, vi, beforeEach } from 'vitest'
+import { describe, it, expect, vi, beforeEach, afterEach } from 'vitest'
+import type { MockInstance } from 'vitest'
 import { mount, flushPromises } from '@vue/test-utils'
-import ElementPlus from 'element-plus'
+import ElementPlus, { ElMessage } from 'element-plus'
 import type { ApiResponse } from '@/types/monitor'
 import type { ServerConfigItemVO, ServerConfigPageVO } from '@/types/serverConfig'
 
@@ -73,9 +74,17 @@ type PageWrapper = Awaited<ReturnType<typeof mountPage>>
 const editors = (w: PageWrapper) => w.findAllComponents({ name: 'ConfigValueEditor' })
 const dialog = (w: PageWrapper) => w.findComponent({ name: 'SaveConfirmDialog' })
 
+let elMessageSuccessSpy: MockInstance
+
 beforeEach(() => {
   mockedFetch.mockReset()
   mockedSave.mockReset()
+  // 屏蔽保存成功提示的真实 DOM 副作用，仅当测试需要时断言调用
+  elMessageSuccessSpy = vi.spyOn(ElMessage, 'success').mockImplementation(() => undefined as never)
+})
+
+afterEach(() => {
+  vi.restoreAllMocks()
 })
 
 describe('加载状态', () => {
@@ -280,7 +289,7 @@ describe('保存流程', () => {
     wrapper.unmount()
   })
 
-  it('保存成功后刷新列表失败展示可重试加载（仅 GET）', async () => {
+  it('保存成功后刷新列表失败展示独立阻断态：禁用编辑/保存/撤销，仅可重试加载（仅 GET）', async () => {
     mockedFetch.mockResolvedValue(okPage(twoItemPage))
     mockedSave.mockResolvedValue(okSave())
     const wrapper = await mountPage()
@@ -294,16 +303,27 @@ describe('保存流程', () => {
     dialog(wrapper).vm.$emit('confirm')
     await flushPromises()
 
-    expect(wrapper.text()).toContain('保存成功，但刷新配置列表失败')
+    expect(wrapper.text()).toContain('保存成功，但最新配置加载失败，请重试加载')
     expect(wrapper.text()).toContain('network')
 
-    // 重试加载重新 GET 成功 → 清除错误横幅
+    // 阻断态：编辑控件、保存、撤销均禁用，仅重试加载可用
+    expect(editors(wrapper)[0].props('disabled')).toBe(true)
+    const btns = wrapper.findAll('.card-actions button')
+    expect(btns[0].attributes('disabled')).toBeDefined()
+    expect(btns[1].attributes('disabled')).toBeDefined()
+    expect(wrapper.find('.save-reload-error .retry-load-btn').exists()).toBe(true)
+    // 未产生第二次 POST
+    expect(mockedSave).toHaveBeenCalledTimes(1)
+
+    // 重试加载重新 GET 成功 → 清除阻断态，重建原始值
     mockedFetch.mockResolvedValue(okPage(twoItemPage))
     await wrapper.find('.save-reload-error .retry-load-btn').trigger('click')
     await flushPromises()
     expect(mockedFetch).toHaveBeenCalledTimes(3)
-    expect(wrapper.text()).not.toContain('保存成功，但刷新配置列表失败')
+    expect(mockedSave).toHaveBeenCalledTimes(1)
+    expect(wrapper.text()).not.toContain('保存成功，但最新配置加载失败')
     expect(wrapper.text()).toContain('中心端 ID：S1')
+    expect(wrapper.text()).not.toContain('存在未保存的修改')
     wrapper.unmount()
   })
 
@@ -316,6 +336,152 @@ describe('保存流程', () => {
 
     expect(mockedSave).not.toHaveBeenCalled()
     expect(dialog(wrapper).props('visible')).toBe(false)
+    wrapper.unmount()
+  })
+})
+
+describe('R1 字段缺失（SC-API-014 空字段被 JSON 省略）', () => {
+  it('configKey/configDesc/configValue 属性缺失按 null 语义处理，页面不抛异常', async () => {
+    const absentItem = {
+      idServerConfig: '0001',
+      editable: false,
+    } as ServerConfigItemVO
+    mockedFetch.mockResolvedValue(okPage({ serverId: 'S1', configCount: 1, items: [absentItem] }))
+    const wrapper = await mountPage()
+
+    expect(wrapper.text()).toContain('未定义配置项')
+    expect(wrapper.find('.raw-value').text()).toBe('（空值）')
+    wrapper.unmount()
+  })
+
+  it('可编辑行 configValue 属性缺失按 null 语义处理，编辑兜底为空串不崩溃', async () => {
+    const absentValue = {
+      idServerConfig: '0002',
+      configKey: 'auto-create-table',
+      editable: true,
+    } as ServerConfigItemVO
+    mockedFetch.mockResolvedValue(okPage({ serverId: 'S1', configCount: 1, items: [absentValue] }))
+    const wrapper = await mountPage()
+
+    expect(editors(wrapper)).toHaveLength(1)
+    expect(wrapper.text()).toContain('auto-create-table')
+    wrapper.unmount()
+  })
+})
+
+describe('R1 保存中状态（SC-UI-DESIGN-080）', () => {
+  it('POST 未完成期间显示保存中…，编辑器/保存/撤销禁用，程序化编辑不改变待保存内容，不产生第二次 POST', async () => {
+    mockedFetch.mockResolvedValue(okPage(twoItemPage))
+    let resolveSave!: (v: ApiResponse<null>) => void
+    mockedSave.mockReturnValue(
+      new Promise<ApiResponse<null>>((res) => {
+        resolveSave = res
+      }),
+    )
+    const wrapper = await mountPage()
+
+    editors(wrapper)[0].vm.$emit('update:value', 'false')
+    await flushPromises()
+    await wrapper.findAll('.card-actions button')[1].trigger('click')
+    await flushPromises()
+    dialog(wrapper).vm.$emit('confirm')
+    await flushPromises()
+
+    expect(wrapper.text()).toContain('保存中…')
+    const btns = wrapper.findAll('.card-actions button')
+    expect(btns[0].attributes('disabled')).toBeDefined()
+    expect(btns[1].attributes('disabled')).toBeDefined()
+    expect(editors(wrapper)[0].props('disabled')).toBe(true)
+
+    // 程序化触发编辑不得改变待保存内容（不依赖 DOM disabled 的防御性守卫）
+    editors(wrapper)[0].vm.$emit('update:value', 'true')
+    await flushPromises()
+    expect(mockedSave).toHaveBeenCalledTimes(1)
+
+    // POST 完成后恢复
+    resolveSave(okSave())
+    await flushPromises()
+    expect(wrapper.text()).not.toContain('保存中…')
+    expect(mockedSave).toHaveBeenCalledTimes(1)
+    expect(mockedFetch).toHaveBeenCalledTimes(2)
+    wrapper.unmount()
+  })
+})
+
+describe('R1 保存成功反馈（SC-UI-DESIGN-081/136）', () => {
+  it('POST 成功时仅产生一次保存成功反馈，然后 GET 重载', async () => {
+    mockedFetch.mockResolvedValue(okPage(twoItemPage))
+    mockedSave.mockResolvedValue(okSave())
+    const wrapper = await mountPage()
+
+    editors(wrapper)[0].vm.$emit('update:value', 'false')
+    await flushPromises()
+    await wrapper.findAll('.card-actions button')[1].trigger('click')
+    await flushPromises()
+    dialog(wrapper).vm.$emit('confirm')
+    await flushPromises()
+
+    expect(elMessageSuccessSpy).toHaveBeenCalledTimes(1)
+    expect(elMessageSuccessSpy).toHaveBeenCalledWith('保存成功')
+    // 保存后自动 GET 重载
+    expect(mockedFetch).toHaveBeenCalledTimes(2)
+    wrapper.unmount()
+  })
+})
+
+describe('R1 保存成功但重载失败重试（SC-DESIGN-067/SC-UI-DESIGN-084）', () => {
+  it('重试 GET 再次网络失败保持阻断态，不恢复编辑，不产生第二次 POST', async () => {
+    mockedFetch.mockResolvedValue(okPage(twoItemPage))
+    mockedSave.mockResolvedValue(okSave())
+    const wrapper = await mountPage()
+
+    editors(wrapper)[0].vm.$emit('update:value', 'false')
+    await flushPromises()
+    await wrapper.findAll('.card-actions button')[1].trigger('click')
+    await flushPromises()
+    mockedFetch.mockRejectedValueOnce(new Error('network'))
+    dialog(wrapper).vm.$emit('confirm')
+    await flushPromises()
+
+    expect(wrapper.text()).toContain('保存成功，但最新配置加载失败，请重试加载')
+
+    // 重试再次网络失败
+    mockedFetch.mockRejectedValueOnce(new Error('network2'))
+    await wrapper.find('.save-reload-error .retry-load-btn').trigger('click')
+    await flushPromises()
+
+    expect(wrapper.text()).toContain('保存成功，但最新配置加载失败，请重试加载')
+    expect(wrapper.text()).toContain('network2')
+    expect(editors(wrapper)[0].props('disabled')).toBe(true)
+    expect(wrapper.findAll('.card-actions button')[1].attributes('disabled')).toBeDefined()
+    expect(mockedSave).toHaveBeenCalledTimes(1)
+    wrapper.unmount()
+  })
+
+  it('重试 GET 返回非 200 业务响应保持阻断态，不切换到普通阻断页', async () => {
+    mockedFetch.mockResolvedValue(okPage(twoItemPage))
+    mockedSave.mockResolvedValue(okSave())
+    const wrapper = await mountPage()
+
+    editors(wrapper)[0].vm.$emit('update:value', 'false')
+    await flushPromises()
+    await wrapper.findAll('.card-actions button')[1].trigger('click')
+    await flushPromises()
+    mockedFetch.mockRejectedValueOnce(new Error('network'))
+    dialog(wrapper).vm.$emit('confirm')
+    await flushPromises()
+
+    // 重试返回 40210 业务失败
+    mockedFetch.mockResolvedValueOnce(failPage(40210, '中心端尚未注册，请先启动 sync-server'))
+    await wrapper.find('.save-reload-error .retry-load-btn').trigger('click')
+    await flushPromises()
+
+    expect(wrapper.text()).toContain('保存成功，但最新配置加载失败，请重试加载')
+    expect(wrapper.text()).toContain('中心端尚未注册，请先启动 sync-server')
+    // 仍处于独立阻断横幅，未切换到普通中心端阻断页
+    expect(wrapper.find('.save-reload-error').exists()).toBe(true)
+    expect(wrapper.find('.page-state').exists()).toBe(false)
+    expect(mockedSave).toHaveBeenCalledTimes(1)
     wrapper.unmount()
   })
 })

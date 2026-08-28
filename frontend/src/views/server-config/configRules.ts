@@ -39,8 +39,8 @@ export const SUPPORTED_KEYS: ReadonlySet<string> = new Set([
 ])
 
 /** 编辑器元数据：boolean / 单选 enum / 多选 dbtypes / 整数输入。 */
-export function editorMeta(configKey: string | null): EditorMeta | null {
-  if (configKey === null || !SUPPORTED_KEYS.has(configKey)) {
+export function editorMeta(configKey: string | null | undefined): EditorMeta | null {
+  if (configKey == null || !SUPPORTED_KEYS.has(configKey)) {
     return null
   }
   if (BOOL_KEYS.has(configKey)) {
@@ -58,23 +58,32 @@ export function editorMeta(configKey: string | null): EditorMeta | null {
   }
 }
 
-/** 配置项显示名回退（SC-UI-DESIGN-040~044）：configDesc 原样，否则 configKey，否则占位。 */
-export function getDisplayName(configDesc: string | null, configKey: string | null): string {
-  if (configDesc !== null && configDesc.trim() !== '') {
+/**
+ * 配置项显示名回退（SC-UI-DESIGN-040~044）：configDesc 原样，否则 configKey，否则占位。
+ * configDesc/configKey 缺失（undefined）、null、空串或纯空白均按缺失处理（SC-API-014）。
+ */
+export function getDisplayName(
+  configDesc: string | null | undefined,
+  configKey: string | null | undefined,
+): string {
+  if (configDesc != null && configDesc.trim() !== '') {
     return configDesc
   }
-  if (configKey !== null && configKey.trim() !== '') {
+  if (configKey != null && configKey.trim() !== '') {
     return configKey
   }
   return '未定义配置项'
 }
 
 /** 对 configValue 执行通用校验 + Key 专门规则校验并返回规范化值（与后端顺序一致）。 */
-export function validateAndNormalize(configKey: string | null, submittedValue: string | null): ValidateResult {
-  if (configKey === null || !SUPPORTED_KEYS.has(configKey)) {
+export function validateAndNormalize(
+  configKey: string | null | undefined,
+  submittedValue: string | null | undefined,
+): ValidateResult {
+  if (configKey == null || !SUPPORTED_KEYS.has(configKey)) {
     return { ok: false, reason: CONFIG_KEY_NOT_SUPPORTED }
   }
-  if (submittedValue === null || submittedValue.trim() === '') {
+  if (submittedValue == null || submittedValue.trim() === '') {
     return { ok: false, reason: VALUE_EMPTY }
   }
   if (submittedValue.length > MAX_VALUE_LENGTH) {
@@ -91,8 +100,11 @@ export function validateAndNormalize(configKey: string | null, submittedValue: s
  * 规范化后的值（用于脏值判定，SC-DESIGN-070~076）。
  * 不可编辑或规范化失败返回 null；可编辑且成功返回 canonical 字符串。
  */
-export function canonicalOrNull(configKey: string | null, value: string | null): string | null {
-  if (configKey === null || !SUPPORTED_KEYS.has(configKey)) {
+export function canonicalOrNull(
+  configKey: string | null | undefined,
+  value: string | null | undefined,
+): string | null {
+  if (configKey == null || !SUPPORTED_KEYS.has(configKey)) {
     return null
   }
   const result = validateAndNormalize(configKey, value)

@@ -219,3 +219,54 @@ formal_acceptance_status=NOT_RUN
 error=
 AGENT_TASK_RESULT_END
 ```
+
+---
+
+## 15. R1 复审修正记录（SERVER-CONFIG-IMPLEMENTATION-001-R1）
+
+- 任务编号：`SERVER-CONFIG-IMPLEMENTATION-001-R1`
+- 授权基线提交：`96aba1e93dd7f8d73d3882c2f757229bdb8fa6d0`
+- ChatGPT 复审结论：`REQUIRES_CHANGES`
+- 建议提交信息：`fix(server-config): correct frontend state contracts`
+- 报告时间：2026-08-28
+
+### 15.1 复审结论与本任务范围
+
+远程实现提交 `96aba1e` 的文件范围、后端主流程、严格 JSON、校验规范化、事务边界、菜单路由与报告已完成只读复审，后端主体没有发现需要 R1 修改的阻断问题。前端存在 5 项批准契约偏差，本 R1 仅修正前端契约问题并补充自动化测试，未涉及后端、数据库、真实集成与正式验收。
+
+### 15.2 五项问题与修正实现
+
+| # | 问题 | 修正方式 |
+|---|---|---|
+| 3.1 | 空字段被 JSON 省略（`spring.jackson.default-property-inclusion=non_null`，SC-API-014）时 `undefined.trim()` 可能运行时崩溃 | `types/serverConfig.ts` 将 `configKey/configDesc/configValue` 放宽为 `string \| null \| undefined`；`configRules.ts` 的 `getDisplayName/editorMeta/validateAndNormalize/canonicalOrNull` 全部改用 `== null`/`!= null` 与 `?? ''` 守卫，缺失（undefined）与 null 等同处理 |
+| 3.2 | `SAVING` 未禁用全部编辑控件、无“保存中…”（SC-DESIGN-056/104、SC-UI-DESIGN-080/093） | `ConfigValueEditor.vue` 新增 `disabled` 入参并传递给全部四个 Element Plus 控件；`ServerConfigPage.vue` 新增 `controlsDisabled = saving \|\| reloadFailedAfterSave`，保存按钮文案改为 `保存中…`，`onEdit` 增加保存中/阻断态防御性守卫 |
+| 3.3 | `SAVE_SUCCEEDED_RELOAD_FAILED` 状态不完整且重试失败会丢失（SC-DESIGN-067、SC-UI-DESIGN-084） | 新增独立 `reloadAfterSave()`（仅 GET）与普通 `loadPage()` 分离；重载开始与失败期间不提前清除阻断态，仅 GET 成功且 `code=200` 才清除并重建原始值；任何 HTTP/网络/业务失败（含 40210/40211）均保持状态并更新消息，从不设置 `loadError`、从不触发 POST；`canRevert` 增加 `!reloadFailedAfterSave`，`onEdit/openConfirm/revert/doSave` 均加状态一致守卫 |
+| 3.4 | 保存成功后缺少成功反馈（SC-DESIGN-059、SC-UI-DESIGN-081/136、SC-AC-060） | `doSave` 在 POST `code=200` 后 `ElMessage.success('保存成功')`，再调用 `reloadAfterSave()`；GET 重试成功不重复产生保存成功反馈；POST 成功但重载失败仍保留独立横幅“保存成功，但最新配置加载失败，请重试加载” |
+| 3.5 | GET 超时误设为 30000ms（SC-API-090） | `api/serverConfig.ts` 拆分 `GET_TIMEOUT=15000` 与 `POST_TIMEOUT=30000`，GET 精确 15000ms、POST 保持 30000ms；未修改全局 `http.ts` 默认超时（仍 10000ms） |
+
+### 15.3 新增与更新的自动化测试
+
+| 测试文件 | 覆盖内容 |
+|---|---|
+| `api/serverConfig.spec.ts`（新增 2） | GET 精确 timeout=15000、URL 与参数；POST 精确 timeout=30000、请求体仅 items；全局默认超时保持 10000 |
+| `views/server-config/configRules.spec.ts`（新增 6，原 22→28） | `configDesc`/`configKey`/`configValue` 属性缺失（undefined）按 null 语义；`getDisplayName` 缺失回退 Key/占位；`validateAndNormalize` undefined Key→不支持、undefined Value→空值；`canonicalOrNull` undefined→null |
+| `views/server-config/ServerConfigPage.spec.ts`（新增 6，原 17→23） | 属性缺失不抛异常、显示名回退与（空值）占位；deferred POST 期间“保存中…”/编辑器/保存/撤销禁用、程序化编辑不改变待保存内容、仅一次 POST；POST 成功仅一次“保存成功”反馈后 GET 重载；POST 成功+GET 失败独立阻断态（禁用编辑/保存/撤销、仅重试加载、不产生第二次 POST）；重试 GET 再次网络失败保持阻断态；重试返回 40210 业务失败保持阻断态不切换到普通阻断页 |
+
+### 15.4 验证命令与真实结果
+
+| 项目 | 命令 | 结果 |
+|---|---|---|
+| server-config 前端定向测试 | `npx vitest run src/api/serverConfig.spec.ts src/views/server-config/configRules.spec.ts src/views/server-config/ServerConfigPage.spec.ts` | 3 文件、**53/53 通过** |
+| 前端完整测试套件 | `npx vitest run` | 13 文件、**139/139 通过**（含既有 log-query 相关测试，无回归） |
+| 前端生产构建（含 TS 类型检查） | `npm run build`（`vue-tsc --noEmit && vite build`） | 成功 |
+| 空白错误 | `git diff --check` | 通过 |
+| 相对授权基线的变更文件 | `git diff 96aba1e -- backend/` | 空（后端零变化） |
+| 六份批准文档相对基线 | `git diff 96aba1e -- <六份文档>` | 空（零变化） |
+
+### 15.5 明确未执行边界与状态
+
+- 未修改任何后端生产代码或测试；未修改六份批准 Feature 文档；未修改数据库基线、项目级基线或其他 Feature；未修改 `docs/features/README.md`、菜单、路由或与 R1 无关的前端文件；未修改依赖清单、锁文件与构建配置。
+- 未连接数据库与 ZooKeeper；未启动前后端业务服务；未触发/重启 `sync-server`；未执行任何 SQL/DDL 与数据库/写操作；65 条正式验收 `NOT_RUN`。
+- 实现状态保持 **IMPLEMENTED_PENDING_REVIEW**，不是正式验收通过；待复审数量即本 R1 修正（`fixed_review_issue_count=5`）。
+- 下一步为 ChatGPT 复审 R1，不得自行进入真实联调、视觉验收或收口。
+

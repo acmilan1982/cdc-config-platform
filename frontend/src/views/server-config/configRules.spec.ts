@@ -10,13 +10,13 @@ import {
   VALUE_FORMAT_INVALID,
 } from './configRules'
 
-function valid(key: string, value: string, canonical: string) {
+function valid(key: string | null | undefined, value: string, canonical: string) {
   const r = validateAndNormalize(key, value)
   expect(r.ok).toBe(true)
   expect(r.canonical).toBe(canonical)
 }
 
-function invalid(key: string, value: string, reason: string) {
+function invalid(key: string | null | undefined, value: string | null | undefined, reason: string) {
   const r = validateAndNormalize(key, value)
   expect(r.ok).toBe(false)
   expect(r.reason).toBe(reason)
@@ -122,6 +122,14 @@ describe('未知 Key / 通用规则', () => {
   it('超过 64 字符拒绝为 VALUE_LENGTH_EXCEEDED', () => {
     invalid('auto-create-table', 't'.repeat(65), VALUE_LENGTH_EXCEEDED)
   })
+
+  it('configKey 属性缺失（undefined）按不支持处理', () => {
+    invalid(undefined, 'true', CONFIG_KEY_NOT_SUPPORTED)
+  })
+
+  it('configValue 属性缺失（undefined）按空值处理', () => {
+    invalid('auto-create-table', undefined, VALUE_EMPTY)
+  })
 })
 
 describe('getDisplayName 回退（SC-UI-DESIGN-040~044）', () => {
@@ -135,6 +143,18 @@ describe('getDisplayName 回退（SC-UI-DESIGN-040~044）', () => {
 
   it('两者皆空回退到占位', () => {
     expect(getDisplayName(null, null)).toBe('未定义配置项')
+  })
+
+  it('configDesc 属性缺失（undefined）回退到 configKey，不抛异常', () => {
+    expect(getDisplayName(undefined, 'auto-create-table')).toBe('auto-create-table')
+  })
+
+  it('configDesc 与 configKey 均属性缺失（undefined）回退到占位', () => {
+    expect(getDisplayName(undefined, undefined)).toBe('未定义配置项')
+  })
+
+  it('configDesc 存在但 configKey 属性缺失（undefined），原样展示 desc', () => {
+    expect(getDisplayName('自动建表', undefined)).toBe('自动建表')
   })
 })
 
@@ -151,6 +171,7 @@ describe('editorMeta', () => {
   it('未知 Key 返回 null', () => {
     expect(editorMeta('monitor-metric-topic-name')).toBeNull()
     expect(editorMeta(null)).toBeNull()
+    expect(editorMeta(undefined)).toBeNull()
   })
 })
 
@@ -166,5 +187,10 @@ describe('canonicalOrNull 脏值判定（SC-DESIGN-070~076）', () => {
     expect(canonicalOrNull('auto-create-table', 'TRUE')).toBeNull()
     expect(canonicalOrNull('monitor-metric-topic-name', 'x')).toBeNull()
     expect(canonicalOrNull('snapshotBatchSize', '99')).toBeNull()
+  })
+
+  it('configKey/configValue 属性缺失（undefined）按 null 语义返回 null', () => {
+    expect(canonicalOrNull(undefined, 'true')).toBeNull()
+    expect(canonicalOrNull('auto-create-table', undefined)).toBeNull()
   })
 })

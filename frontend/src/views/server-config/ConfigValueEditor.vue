@@ -11,6 +11,7 @@
         v-if="meta?.type === 'boolean'"
         class="editor-control"
         :model-value="value"
+        :disabled="disabled"
         placeholder="请选择"
         @update:model-value="emitValue($event)"
       >
@@ -22,6 +23,7 @@
         v-else-if="meta?.type === 'enum'"
         class="editor-control"
         :model-value="value"
+        :disabled="disabled"
         placeholder="请选择"
         @update:model-value="emitValue($event)"
       >
@@ -33,6 +35,7 @@
         class="editor-control"
         multiple
         :model-value="arrayValue"
+        :disabled="disabled"
         placeholder="请选择数据库类型"
         @update:model-value="emitArray($event)"
       >
@@ -43,6 +46,7 @@
         v-else
         class="editor-control"
         :model-value="value"
+        :disabled="disabled"
         placeholder="请输入整数（100~10000）"
         @input="emitInput($event)"
       />
@@ -68,6 +72,8 @@ const props = defineProps<{
   item: ServerConfigItemVO
   /** 当前展示值（编辑值优先，否则原始值）。 */
   value: string
+  /** 保存中/阻断态等禁编辑场景：禁用全部可编辑控件（SC-UI-DESIGN-080/084）。 */
+  disabled?: boolean
 }>()
 
 const emit = defineEmits<{
