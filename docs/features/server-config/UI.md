@@ -6,11 +6,11 @@
 |---|---|
 | 正式功能标识 | `server-config` |
 | 目标文档 | `docs/features/server-config/UI.md` |
-| 文档状态 | `APPROVED`（已由项目负责人正式批准的 UI 详细设计基线；批准只代表设计契约正式生效，不代表代码已实现或 65 条验收已经执行通过） |
-| 需求基线状态 | `APPROVED` |
-| 验收基线状态 | `APPROVED` |
-| 实现状态 | `NOT_STARTED` |
-| 验收用例状态 | `65 条全部 NOT_RUN` |
+| 文档状态 | `DRAFT_ADJUSTMENT_PENDING_USER_REVIEW`（原批准 UI 设计基线仍有效；本次为负责人在正式验收前提出的两项候选调整，待用户复审，见 §20 变更记录） |
+| 需求基线状态 | `DRAFT_ADJUSTMENT_PENDING_USER_REVIEW`（原已批准） |
+| 验收基线状态 | `DRAFT_ADJUSTMENT_PENDING_USER_REVIEW`（原已批准） |
+| 实现状态 | `IMPLEMENTED_ADJUSTMENT_PENDING`（旧批准设计已实现并经过 R1/R2 复审；本次两项候选调整尚未实现） |
+| 验收用例状态 | `66 条全部 NOT_RUN` |
 | 设计任务 | `SERVER-CONFIG-DESIGN-BASELINE-001` |
 | 授权基线提交 | `c1a6d7dc38de261093383d7abf719f0834dd9bb3` |
 | R1 修订任务 | `SERVER-CONFIG-DESIGN-BASELINE-001-R1` |
@@ -22,8 +22,10 @@
 | 依据需求 | `docs/features/server-config/REQUIREMENTS.md`（已批准） |
 | 关联契约 | `docs/features/server-config/DESIGN.md`、`API.md`、`DATABASE.md`（同一状态模型、控件规则与错误码） |
 | 创建日期 | 2026-08-27 |
+| 候选调整任务 | `SERVER-CONFIG-PRE-ACCEPTANCE-ADJUSTMENT-BASELINE-001` |
+| 候选调整授权基线提交 | `c0b9d4973e2b6bdd3e7b02a3748816ffc55362ba` |
 
-声明：本文档为**已批准 UI 详细设计**，由项目负责人于 2026-08-27 正式批准（`SERVER-CONFIG-DESIGN-BASELINE-APPROVAL-001`），ChatGPT 复审通过提交为 `77a8c639911bee78a17f62d2ce8af2db53c44d29`。设计批准不代表代码已实现，不代表 65 条验收已执行；当前 `/config/server` 仍为占位实现，正式页面在后续独立任务中实现。本文只描述本 Feature 页面；不引入搜索、分页、卡片大屏风格、Tab、抽屉、中心端选择器或独立详情页（`SC-NONGOAL-01~10`）。
+声明：本文档原为**已批准 UI 详细设计**，由项目负责人于 2026-08-27 正式批准（`SERVER-CONFIG-DESIGN-BASELINE-APPROVAL-001`），ChatGPT 复审通过提交为 `77a8c639911bee78a17f62d2ce8af2db53c44d29`。旧批准设计已实现并经过 R1/R2 复审。本次为负责人在正式验收前提出的两项候选调整（`CONFIG_DESC` 人工换行显示、保持后端 `ID_SERVER_CONFIG ASC` 顺序且不二次排序），文档状态为 `DRAFT_ADJUSTMENT_PENDING_USER_REVIEW`，两项调整**尚未实现**，66 条验收保持 `NOT_RUN`。设计批准不代表代码已实现，不代表验收已执行。本文只描述本 Feature 页面；不引入搜索、分页、卡片大屏风格、Tab、抽屉、中心端选择器或独立详情页（`SC-NONGOAL-01~10`）。
 
 ## 2. 设计依据
 
@@ -72,11 +74,15 @@
 
 | 编号 | 规则 |
 |---|---|
-| SC-UI-DESIGN-030 | 配置项说明列允许自然换行、多行完整展示；不因固定窄列造成大段省略（`SC-UI-11`、`SC-AC-007`）。 |
+| SC-UI-DESIGN-030 | 配置项说明列允许普通过长文本按列宽自动折行、多行完整展示；不因固定窄列造成大段省略（`SC-UI-11`、`SC-AC-007`）。数据库真实换行显示见 `SC-UI-DESIGN-035~038`。 |
 | SC-UI-DESIGN-031 | 只读配置值超宽时使用省略号显示，`el-tooltip` 悬停展示完整原文，原文与数据库值完全一致、不截断、不脱敏（`SC-UI-12`、`SC-AC-009`）。 |
 | SC-UI-DESIGN-032 | 每行配置项说明旁放置轻量信息图标（`el-icon`），悬停显示 `配置Key：{CONFIG_KEY}`；Key 完整显示、不截断、不脱敏（`SC-UI-15/16`）。 |
 | SC-UI-DESIGN-033 | `CONFIG_KEY` 为 NULL/空时，信息图标 Tooltip 显示“未定义配置项”（与该行显示名称兜底一致），避免展示无意义空值；该行按 `SC-UI-DESIGN-042` 只读（`SC-UI-20`）。 |
 | SC-UI-DESIGN-034 | 未知或异常 Key 同样通过信息图标提供技术追溯（`SC-UI-17`）；信息图标不挤占配置项说明主要空间（`SC-UI-16`）。 |
+| SC-UI-DESIGN-035 | 配置项说明列样式语义：`white-space: pre-line`（保留数据库真实 LF/CRLF 换行按换行位置显示，同时允许普通过长文本自动折行）、`line-height: 1.6`（换行后行高易读）、`overflow-wrap: anywhere`（极长且无空格的连续内容可断行）（`SC-UI-23/26`、`SC-AC-066`）。 |
+| SC-UI-DESIGN-036 | 真实换行来源是数据库 `CONFIG_DESC` 中的实际换行字符（如 Oracle `CHR(10)`），不是两个字符组成的字面量 `\n`；`<br>` 不作为换行协议（数据中出现 `<br>` 作为普通文本显示）；不把字面量 `\n` 自动转换为换行（`SC-UI-24`）。 |
+| SC-UI-DESIGN-037 | 前端使用 Vue 文本插值/文本渲染保持 HTML 转义，严禁 `v-html`；`CONFIG_DESC` 为只读字段，页面不提供编辑入口（`SC-UI-25`）。 |
+| SC-UI-DESIGN-038 | 多行说明下信息图标/Key Tooltip 合理对齐、不破坏布局；多行说明不造成横向溢出（`SC-UI-26`、`SC-AC-066`）。 |
 
 ## 8. 显示名称兜底规则和两者均缺失时的只读行为
 
@@ -87,6 +93,7 @@
 | SC-UI-DESIGN-042 | `CONFIG_DESC` 与 `CONFIG_KEY` 均为空/NULL → 显示“未定义配置项”，该行只读、不允许保存（`SC-UI-20`、`SC-AC-008`）。 |
 | SC-UI-DESIGN-043 | 兜底只影响显示，不修改数据库 `CONFIG_DESC`/`CONFIG_KEY`（`SC-UI-21`）。 |
 | SC-UI-DESIGN-044 | 说明正常存在时，页面不把英文 Key 作为主内容持续展示（`SC-UI-22`）。 |
+| SC-UI-DESIGN-045 | 页面展示顺序保持后端 `GET /api/server-config` 返回的 `ID_SERVER_CONFIG ASC` 顺序，前端不按 `CONFIG_KEY` 或其他字段二次排序（`SC-DISPLAY-02`、`API.md` `SC-API-034`）。 |
 
 ## 9. 六类支持 Key 的具体控件、选项顺序、显示文案和非法当前值降级方案
 
@@ -202,7 +209,7 @@
 |---|---|
 | SC-UI-DESIGN-150 | 菜单显示“中心端配置”、地址 `/config/server`、无重复菜单/重复路由（`SC-AC-001~003`）。 |
 | SC-UI-DESIGN-151 | 顶部显示唯一中心端 `SERVER_ID` 与配置项总数；无中心端选择器（`SC-AC-004/012`）。 |
-| SC-UI-DESIGN-152 | 页面主体仅两列：配置项说明（主宽列）+ 配置值；无 `CONFIG_KEY` 独立列；长说明自然换行完整展示（`SC-AC-007/008/018`）。 |
+| SC-UI-DESIGN-152 | 页面主体仅两列：配置项说明（主宽列）+ 配置值；无 `CONFIG_KEY` 独立列；普通过长说明自动折行完整展示，`CONFIG_DESC` 真实换行按换行位置显示（`SC-AC-007/008/018`、`SC-AC-066`）。 |
 | SC-UI-DESIGN-153 | 较窄桌面宽度（约 1024px）下仍保持两列、配置值列不低于约 `300px`、控件可操作、无横向溢出；操作区位于表格下方右对齐且非 sticky（`SC-AC-010`、`SC-UI-DESIGN-022/013`）。 |
 | SC-UI-DESIGN-154 | 枚举下拉可完整阅读选项说明；多选与数字控件可正常操作（`SC-AC-010`）。 |
 | SC-UI-DESIGN-155 | 确认弹窗只列实际变更项，主展示显示名称/原值/新值，Key 走 Tooltip；取消不发请求并保留编辑（`SC-AC-049/050`）。 |
@@ -233,3 +240,4 @@
 | 2026-08-27 | 建立“中心端配置”Feature 候选 UI 详细设计（DRAFT_PENDING_USER_REVIEW / NOT_STARTED） | SERVER-CONFIG-DESIGN-BASELINE-001（阶段 4 设计与契约；纯文档任务） |
 | 2026-08-27 | R1 修订：布局改为**单一确定方案**（一个 `el-card` + 恰好两列 `el-table`，配置值列约 `360px`/收缩下限约 `300px`、控件宽度 `100%`、操作区表格下方右对齐非 sticky）；确认框原值 = rawValue 原样展示（NULL/空 → “（空值）”）与新值 = canonicalValue；当前非法值不得静默规范化；新增 `SAVE_SUCCEEDED_RELOAD_FAILED` 状态（重试加载仅 GET）与对应文案；保持 DRAFT_PENDING_USER_REVIEW / NOT_STARTED | SERVER-CONFIG-DESIGN-BASELINE-001-R1（REQUIRES_CHANGES 修订；纯文档任务） |
 | 2026-08-27 | 批准收口：文档状态由 `DRAFT_PENDING_USER_REVIEW` 迁移为 `APPROVED`（实现仍 `NOT_STARTED`、65 条验收仍全部 `NOT_RUN`）；补充批准元数据；声明由“候选设计、待复审”更新为“已批准设计”；本设计不含需修正的“否则→则”文字问题（该修正仅在 `API.md` `SC-API-052` 与 `DESIGN.md` `SC-DESIGN-076`） | SERVER-CONFIG-DESIGN-BASELINE-APPROVAL-001（阶段 4 设计批准收口；纯文档任务） |
+| 2026-08-28 | 候选调整（预验收）：新增 SC-UI-DESIGN-035~038（`white-space: pre-line` 人工换行、真实 LF/CRLF 语义、`<br>`/字面量 `\n` 不作为协议、禁止 `v-html`、多行下 Key Tooltip 对齐）；新增 SC-UI-DESIGN-045（页面不二次排序，保持后端 `ID_SERVER_CONFIG ASC` 顺序）；修订 SC-UI-DESIGN-030/152；文档状态迁移为 `DRAFT_ADJUSTMENT_PENDING_USER_REVIEW`、实现状态迁移为 `IMPLEMENTED_ADJUSTMENT_PENDING`，66 条验收保持 NOT_RUN | SERVER-CONFIG-PRE-ACCEPTANCE-ADJUSTMENT-BASELINE-001（纯文档候选基线任务；待用户复审） |

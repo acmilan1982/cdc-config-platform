@@ -6,11 +6,11 @@
 |---|---|
 | 正式功能标识 | `server-config` |
 | 目标文档 | `docs/features/server-config/DESIGN.md` |
-| 文档状态 | `APPROVED`（已由项目负责人正式批准的设计基线；批准只代表设计契约正式生效，不代表代码已实现或 65 条验收已经执行通过） |
-| 需求基线状态 | `APPROVED` |
-| 验收基线状态 | `APPROVED` |
-| 实现状态 | `NOT_STARTED` |
-| 验收用例状态 | `65 条全部 NOT_RUN` |
+| 文档状态 | `DRAFT_ADJUSTMENT_PENDING_USER_REVIEW`（原批准设计基线仍有效；本次为负责人在正式验收前提出的两项候选调整，待用户复审，见 §19 变更记录） |
+| 需求基线状态 | `DRAFT_ADJUSTMENT_PENDING_USER_REVIEW`（原已批准） |
+| 验收基线状态 | `DRAFT_ADJUSTMENT_PENDING_USER_REVIEW`（原已批准） |
+| 实现状态 | `IMPLEMENTED_ADJUSTMENT_PENDING`（旧批准设计已实现并经过 R1/R2 复审；本次两项候选调整尚未实现） |
+| 验收用例状态 | `66 条全部 NOT_RUN` |
 | 设计任务 | `SERVER-CONFIG-DESIGN-BASELINE-001` |
 | 授权基线提交 | `c1a6d7dc38de261093383d7abf719f0834dd9bb3` |
 | R1 修订任务 | `SERVER-CONFIG-DESIGN-BASELINE-001-R1` |
@@ -24,8 +24,10 @@
 | 依据需求 | `docs/features/server-config/REQUIREMENTS.md`（已批准） |
 | 关联契约 | `docs/features/server-config/API.md`、`UI.md`、`DATABASE.md`（四文档使用同一接口、字段、错误码与状态模型） |
 | 创建日期 | 2026-08-27 |
+| 候选调整任务 | `SERVER-CONFIG-PRE-ACCEPTANCE-ADJUSTMENT-BASELINE-001` |
+| 候选调整授权基线提交 | `c0b9d4973e2b6bdd3e7b02a3748816ffc55362ba` |
 
-声明：本文档为**已批准设计基线**（批准任务 `SERVER-CONFIG-DESIGN-BASELINE-APPROVAL-001`，批准日期 2026-08-27，批准人=项目负责人）。设计完成不代表代码已实现，也不代表 65 条验收用例已执行（全部仍为 `NOT_RUN`）；当前 `/config/server` 仍是占位实现，当前仓库不存在中心端配置正式后端接口和数据库访问代码。设计批准不等于实现完成，也不等于验收执行或 PASS。若实现前发现必须改变已批准业务语义，不得在本设计中静默处理，应记录为 `PENDING_USER_CONFIRMATION` 并停止提交设计结论；纯技术实现选择在不改变业务语义的前提下，本文档给出单一推荐方案并说明理由。
+声明：本文档原为**已批准设计基线**（批准任务 `SERVER-CONFIG-DESIGN-BASELINE-APPROVAL-001`，批准日期 2026-08-27，批准人=项目负责人）。旧批准设计已实现并经过 R1/R2 复审（实现审查基线 `24d8b80340cc691895bed8bc45a4cb2dc2c6b9b6`）。本次为负责人在正式验收前提出的两项候选调整（`CONFIG_DESC` 人工换行、按 `ID_SERVER_CONFIG ASC` 排序），文档状态为 `DRAFT_ADJUSTMENT_PENDING_USER_REVIEW`，两项调整**尚未实现**，正式验收（现 66 条）仍未执行。设计批准不等于实现完成，也不等于验收执行或 PASS。若实现前发现必须改变已批准业务语义，不得在本设计中静默处理，应记录为 `PENDING_USER_CONFIRMATION` 并停止提交设计结论；纯技术实现选择在不改变业务语义的前提下，本文档给出单一推荐方案并说明理由。
 
 ## 2. 设计边界与输入
 
@@ -85,7 +87,8 @@
 | SC-DESIGN-043 | 响应业务错误码 `40211` → 页面进入 `SERVER_MULTIPLE`：显示“检测到多个中心端，当前功能仅支持唯一中心端”，不加载配置、不编辑、不保存（`SC-SERVER-04`）。 |
 | SC-DESIGN-044 | 其余错误/HTTP 失败/超时 → 页面进入 `LOAD_FAILED`：显示可理解错误与“重试”按钮；用户主动点击才重新查询（`UI.md` `SC-UI-DESIGN-120~122`）。 |
 | SC-DESIGN-045 | 页面不自动刷新、不轮询；首次加载与保存成功后重载是仅有的两次查询时机（`SC-DIRTY-06`）。 |
-| SC-DESIGN-046 | 列表由后端按 `ORDER BY CONFIG_KEY ASC NULLS LAST, ID_SERVER_CONFIG ASC` 的稳定次序返回（`SC-DISPLAY-02`、`API.md` `SC-API-034`）；前端不再重新排序，保持与后端一致。 |
+| SC-DESIGN-046 | 列表由后端按 `ORDER BY ID_SERVER_CONFIG ASC` 的稳定次序返回（`SC-DISPLAY-02`、`API.md` `SC-API-034`）；前端不再重新排序，保持与后端一致。 |
+| SC-DESIGN-047 | `configDesc` 由后端从 `CONFIG_DESC` 原样读出并作为 JSON 字段原样返回（不做 HTML 解析、不做换行替换或规范化；真实换行字符通过 JSON 标准转义在线路上传输，客户端解析后恢复为换行）；前端使用 Vue 文本插值/文本渲染保持 HTML 转义，严禁 `v-html`；配置项说明列样式语义为 `white-space: pre-line`（保留数据库真实 LF/CRLF 换行并同时允许自动折行）、`line-height: 1.6`、`overflow-wrap: anywhere`（极长无空格连续内容可断行）（`SC-UI-23~26`、`API.md` `SC-API-036`、`UI.md` `SC-UI-DESIGN-035~038`）。 |
 
 ## 7. 批量保存完整处理流
 
@@ -181,7 +184,7 @@
 | 编号 | 规则 |
 |---|---|
 | SC-DESIGN-120 | 当前配置为小表（开发库 8 行），一次全量加载全部配置；不分页、不筛选、不搜索（`SC-NFR-08`、`SC-NONGOAL-09`）。 |
-| SC-DESIGN-121 | 查询：先按唯一 `SERVER_ID` 读 `CDC_SERVER`（1 行），再按 `SERVER_ID` 读 `CDC_SERVER_CONFIG` 全量并按 `CONFIG_KEY ASC NULLS LAST, ID_SERVER_CONFIG ASC` 稳定排序；无 N+1、无大表 JOIN、无缓存（`SC-DB-100~104`）。 |
+| SC-DESIGN-121 | 查询：先按唯一 `SERVER_ID` 读 `CDC_SERVER`（1 行），再按 `SERVER_ID` 读 `CDC_SERVER_CONFIG` 全量并按 `ID_SERVER_CONFIG ASC` 稳定排序；无 N+1、无大表 JOIN、无缓存（`SC-DB-100~104`）。 |
 | SC-DESIGN-122 | 保存：单事务内对批量项逐个 `UPDATE` 按主键更新；批量上限 200，事务短小；不新增索引（`SC-DB-100~104`、`SC-API-041`）。 |
 | SC-DESIGN-123 | 不做服务端分页、游标、缓存或预加载；后端不引入额外组件。 |
 
@@ -241,3 +244,4 @@
 | 2026-08-27 | R1 修订：接口最少化引用纠正（`SC-API-020/040`、`SC-API-023~030`、错误码表 `SC-API-060~073/076`）；`items` 稳定排序 `CONFIG_KEY ASC NULLS LAST, ID_SERVER_CONFIG ASC`；`configValue` 校验顺序与长度口径明确（原样提交 ≤64、规范化后非空且 ≤64）；确认框原值 = rawValue 原样展示、新值 = canonicalValue；当前非法值不得静默规范化；新增 `SAVE_SUCCEEDED_RELOAD_FAILED` 状态；数据库异常映射唯一化（不新增 `DATABASE_ACCESS_FAILED`）；阶段边界与 DDL 排除范围澄清；保持 DRAFT_PENDING_USER_REVIEW / NOT_STARTED | SERVER-CONFIG-DESIGN-BASELINE-001-R1（REQUIRES_CHANGES 修订；纯文档任务） |
 | 2026-08-27 | R2 修订：请求体结构契约统一为顶层 JSON object 且仅 `items`、`items` 为 JSON array、元素为 JSON object、item 仅 `idServerConfig`/`configValue` 且均为 JSON 字符串（`SC-DESIGN-021/057/111`）；新增 `SC-DESIGN-115` 结构/类型契约 Feature 局部实现与 HTTP 400 映射；`SC-DESIGN-076` 校验顺序修正为先缺失/null 后非字符串类型；错误码总数保持 15；保持 DRAFT_PENDING_USER_REVIEW / NOT_STARTED | SERVER-CONFIG-DESIGN-BASELINE-001-R2（REQUIRES_ONE_MICRO_FIX 修订；纯文档任务） |
 | 2026-08-27 | 批准：文档状态由 `DRAFT_PENDING_USER_REVIEW` 改为 `APPROVED`；记录批准任务、批准日期、批准人（项目负责人）与 ChatGPT 复审通过提交 `77a8c639...`；同步 `SC-DESIGN-076` 两处“否则→则”纯文字逻辑方向修正（ChatGPT R2 复审后确认，与 `API.md` `SC-API-052` 完全一致：① 缺失或 JSON null 则 `VALUE_EMPTY` `40224`、② 非 JSON 字符串类型则 `VALUE_FORMAT_INVALID` `40226`，后续正向条件 trim 非空、原样长度 ≤64、符合 Key 专门规则仍保留“否则”）；设计批准不等于实现完成或验收执行；实现状态保持 `NOT_STARTED`，65 条验收保持 `NOT_RUN` | SERVER-CONFIG-DESIGN-BASELINE-APPROVAL-001（项目负责人批准驱动的设计基线收口；纯文档任务） |
+| 2026-08-28 | 候选调整（预验收）：排序统一为 `ORDER BY ID_SERVER_CONFIG ASC`（SC-DESIGN-046/121）；新增 SC-DESIGN-047 说明 `configDesc` 原样传输、前端安全文本渲染与 `white-space: pre-line` 样式语义；明确旧实现仍按旧排序且缺少显式换行保留、本次调整尚待代码实现；文档状态迁移为 `DRAFT_ADJUSTMENT_PENDING_USER_REVIEW`、实现状态迁移为 `IMPLEMENTED_ADJUSTMENT_PENDING`，66 条验收保持 NOT_RUN | SERVER-CONFIG-PRE-ACCEPTANCE-ADJUSTMENT-BASELINE-001（纯文档候选基线任务；待用户复审） |

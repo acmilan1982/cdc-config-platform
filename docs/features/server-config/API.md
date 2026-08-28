@@ -6,11 +6,11 @@
 |---|---|
 | 正式功能标识 | `server-config` |
 | 目标文档 | `docs/features/server-config/API.md` |
-| 文档状态 | `APPROVED`（已由项目负责人正式批准的 API 契约基线；批准只代表设计契约正式生效，不代表代码已实现或 65 条验收已经执行通过） |
-| 需求基线状态 | `APPROVED` |
-| 验收基线状态 | `APPROVED` |
-| 实现状态 | `NOT_STARTED` |
-| 验收用例状态 | `65 条全部 NOT_RUN` |
+| 文档状态 | `DRAFT_ADJUSTMENT_PENDING_USER_REVIEW`（原批准 API 契约基线仍有效；本次为负责人在正式验收前提出的两项候选调整，待用户复审，见 §11 变更记录） |
+| 需求基线状态 | `DRAFT_ADJUSTMENT_PENDING_USER_REVIEW`（原已批准） |
+| 验收基线状态 | `DRAFT_ADJUSTMENT_PENDING_USER_REVIEW`（原已批准） |
+| 实现状态 | `IMPLEMENTED_ADJUSTMENT_PENDING`（旧批准契约已实现并经过 R1/R2 复审；本次两项候选调整尚未实现） |
+| 验收用例状态 | `66 条全部 NOT_RUN` |
 | 设计任务 | `SERVER-CONFIG-DESIGN-BASELINE-001` |
 | 授权基线提交 | `c1a6d7dc38de261093383d7abf719f0834dd9bb3` |
 | R1 修订任务 | `SERVER-CONFIG-DESIGN-BASELINE-001-R1` |
@@ -24,8 +24,10 @@
 | 依据需求 | `docs/features/server-config/REQUIREMENTS.md`（已批准） |
 | 关联契约 | `docs/features/server-config/DESIGN.md`、`UI.md`、`DATABASE.md`（同一接口路径、字段与错误码） |
 | 创建日期 | 2026-08-27 |
+| 候选调整任务 | `SERVER-CONFIG-PRE-ACCEPTANCE-ADJUSTMENT-BASELINE-001` |
+| 候选调整授权基线提交 | `c0b9d4973e2b6bdd3e7b02a3748816ffc55362ba` |
 
-声明：本文档为**已批准 API 契约设计**（批准任务 `SERVER-CONFIG-DESIGN-BASELINE-APPROVAL-001`，批准日期 2026-08-27，批准人=项目负责人）。本文只定义接口契约，不代表接口已经实现或验收通过；当前 `/config/server` 仍是占位实现，当前仓库不存在中心端配置正式后端接口和数据库访问代码；65 条验收用例全部仍为 `NOT_RUN`。设计批准不等于实现完成，也不等于验收执行或 PASS。本文档保持接口最少化，唯一确定两套接口，不保留多套备选方案。
+声明：本文档原为**已批准 API 契约设计**（批准任务 `SERVER-CONFIG-DESIGN-BASELINE-APPROVAL-001`，批准日期 2026-08-27，批准人=项目负责人）。旧批准契约已实现并经过 R1/R2 复审（实现审查基线 `24d8b80340cc691895bed8bc45a4cb2dc2c6b9b6`）。本次为负责人在正式验收前提出的两项候选调整（`configDesc` 原样返回与真实换行传输语义、`items` 按 `ID_SERVER_CONFIG ASC` 返回），文档状态为 `DRAFT_ADJUSTMENT_PENDING_USER_REVIEW`，两项调整**尚未实现**，66 条验收用例全部仍为 `NOT_RUN`。设计批准不等于实现完成，也不等于验收执行或 PASS。本文档保持接口最少化，唯一确定两套接口，不保留多套备选方案。
 
 ## 2. 设计依据与追踪方式
 
@@ -74,15 +76,15 @@
 |---|---|---|---|---|---|
 | SC-API-023 | `serverId` | String | 是 | 唯一中心端 `SERVER_ID`（字符串） | `CDC_SERVER.SERVER_ID` |
 | SC-API-024 | `configCount` | int | 是 | 配置项总数（与 `items.length` 一致） | `CDC_SERVER_CONFIG` 计数 |
-| SC-API-025 | `items` | `ServerConfigItemVO[]` | 是 | 全部配置项，按 `CONFIG_KEY` 升序稳定排序 | 见下 |
+| SC-API-025 | `items` | `ServerConfigItemVO[]` | 是 | 全部配置项，按 `ID_SERVER_CONFIG` 升序返回 | 见下 |
 
 ### 5.3 `ServerConfigItemVO`
 
 | 编号 | 字段 | 类型 | 必填 | 说明 | 来源 |
 |---|---|---|---|---|---|
 | SC-API-026 | `idServerConfig` | String | 是 | 配置记录主键（保存时回传） | `CDC_SERVER_CONFIG.ID_SERVER_CONFIG` |
-| SC-API-027 | `configKey` | String | 否 | 配置 Key（可 NULL/空），用于 Key Tooltip、白名单判定与排序 | `CONFIG_KEY` |
-| SC-API-028 | `configDesc` | String | 否 | 配置项说明原始值（可 NULL/空/纯空格），前端按兜底规则计算显示名称 | `CONFIG_DESC` |
+| SC-API-027 | `configKey` | String | 否 | 配置 Key（可 NULL/空），用于 Key Tooltip 与白名单判定；不再承担排序职责 | `CONFIG_KEY` |
+| SC-API-028 | `configDesc` | String | 否 | 配置项说明原始值（可 NULL/空/纯空格/含真实换行），原样返回；前端按兜底规则计算显示名称 | `CONFIG_DESC` |
 | SC-API-029 | `configValue` | String | 否 | 当前配置值（可 NULL/空/非法），完整返回，不脱敏、不掩码 | `CONFIG_VALUE` |
 | SC-API-030 | `editable` | boolean | 是 | **计算可编辑布尔** = 数据库 `IS_EDITABLE` 规范值精确为 `'1'` 且 `CONFIG_KEY` 属于可编辑白名单（`SC-EDIT-01`） | 应用层计算 |
 
@@ -91,8 +93,9 @@
 | SC-API-031 | `idServerConfig`、`serverId` 均为字符串，`spring.jackson.default-property-inclusion=non_null` 不影响非 null 主键；前端不得把主键转数值。 |
 | SC-API-032 | **不返回原始 `IS_EDITABLE`**。`editable` 是计算后的布尔值，**只用于前端控件形态判定**（是否渲染编辑控件），不是可编辑证明；后端保存时仍按主键重新读取数据库真实记录并独立重新校验（`SC-EDIT-05`、`SC-NFR-01`）。页面任何位置不得把 `editable` 或 `IS_EDITABLE` 展示为“是否可编辑”列（`SC-UI-07`）。 |
 | SC-API-033 | `configCount` 与 `items` 为空是“正常空配置”（`code=200`），前端进入空状态；0/多中心端由错误码 `40210`/`40211` 表达，前端不得把 `configCount=0` 当作中心端异常（`SC-AC-016`）。 |
-| SC-API-034 | `items` 排序由后端执行：`ORDER BY CONFIG_KEY ASC NULLS LAST, ID_SERVER_CONFIG ASC`（先按 `CONFIG_KEY` 升序，NULL Key 排最后；`CONFIG_KEY` 相同时以 `ID_SERVER_CONFIG` 升序作为稳定次序，保证多次查询结果顺序确定不变），前端不重新排序（`SC-DISPLAY-02`）。 |
+| SC-API-034 | `items` 排序由后端执行：`ORDER BY ID_SERVER_CONFIG ASC`（按数据库字段自身的字符串排序语义升序，不做数值转换，保证多次查询结果顺序确定不变）；前端不重新排序，不按 `CONFIG_KEY` 或其他字段二次排序（`SC-DISPLAY-02`）。 |
 | SC-API-035 | 接口一次返回全部配置（小表全量，无分页、无筛选、无搜索参数），符合 `SC-NFR-08`、`SC-NONGOAL-09`。 |
+| SC-API-036 | `configDesc` 为 `CONFIG_DESC` 原样返回字段：真实换行字符通过 JSON 标准转义（如 `\n`）在线路上传输，客户端 JSON 解析后仍是换行字符；后端不做 HTML 解析、不做换行替换或规范化。本语义是 HTTP JSON 响应字段 `configDesc` 的传输契约，不是某个 `CONFIG_VALUE` 的格式协议。 |
 
 ## 6. 批量保存接口 `POST /api/server-config/save`
 
@@ -295,3 +298,4 @@
 | 2026-08-27 | R1 修订：批量保存出现不允许的额外字段一律**整批拒绝**并新增错误码 `40227`（`REQUEST_FIELD_NOT_ALLOWED`，专用错误码 14→15）；`items` 排序补充稳定次序 `ID_SERVER_CONFIG ASC`；JSON 示例主键改为 ≤32 字符；`configValue` 校验顺序与长度口径明确（原样提交长度 ≤64）；保存/查询数据库异常映射唯一化（不新增 `DATABASE_ACCESS_FAILED`）；新增 `SAVE_SUCCEEDED_RELOAD_FAILED` 状态；保持 DRAFT_PENDING_USER_REVIEW / NOT_STARTED | SERVER-CONFIG-DESIGN-BASELINE-001-R1（REQUIRES_CHANGES 修订；纯文档任务） |
 | 2026-08-27 | R2 修订：修正 `SC-API-051` 请求体结构契约（`items` 为 JSON array、元素为 JSON object，仅 `idServerConfig`/`configValue` 为 JSON 字符串）；新增 `SC-API-055~057` 顶层 object/`items` array/item object 结构与类型唯一映射（非数组/非对象 → HTTP 400 + `code=400`，额外字段 → `40227`，`items` 缺失/null/空 → `40220`，`idServerConfig` 非字符串 → `40223`，`configValue` 非字符串 → `40226`）；`configValue` 校验顺序修正为先缺失/null 后非字符串类型；错误码总数保持 15；保持 DRAFT_PENDING_USER_REVIEW / NOT_STARTED | SERVER-CONFIG-DESIGN-BASELINE-001-R2（REQUIRES_ONE_MICRO_FIX 修订；纯文档任务） |
 | 2026-08-27 | 批准：文档状态由 `DRAFT_PENDING_USER_REVIEW` 改为 `APPROVED`；记录批准任务、批准日期、批准人（项目负责人）与 ChatGPT 复审通过提交 `77a8c639...`；同步 `SC-API-052` 两处“否则→则”纯文字逻辑方向修正（ChatGPT R2 复审后确认：① 缺失或 JSON null 则 `VALUE_EMPTY` `40224`、② 非 JSON 字符串类型则 `VALUE_FORMAT_INVALID` `40226`，后续正向条件 trim 非空、原样长度 ≤64、符合 Key 专门规则仍保留“否则”）；设计批准不等于实现完成或验收执行；实现状态保持 `NOT_STARTED`，65 条验收保持 `NOT_RUN` | SERVER-CONFIG-DESIGN-BASELINE-APPROVAL-001（项目负责人批准驱动的设计基线收口；纯文档任务） |
+| 2026-08-28 | 候选调整（预验收）：`items` 按 `ID_SERVER_CONFIG ASC` 返回（SC-API-025/034）；`configKey` 不再承担排序职责（SC-API-027）；新增 SC-API-036 明确 `configDesc` 原样返回、真实换行经 JSON 标准转义传输；不新增接口、请求字段、响应字段或错误码；文档状态迁移为 `DRAFT_ADJUSTMENT_PENDING_USER_REVIEW`、实现状态迁移为 `IMPLEMENTED_ADJUSTMENT_PENDING`，66 条验收保持 NOT_RUN | SERVER-CONFIG-PRE-ACCEPTANCE-ADJUSTMENT-BASELINE-001（纯文档候选基线任务；待用户复审） |

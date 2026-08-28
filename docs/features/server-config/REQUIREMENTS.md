@@ -9,8 +9,8 @@
 | 正式菜单 | 中心端配置（直接演进自既有“服务端配置”占位菜单，不新增第二套菜单） |
 | 既有路由 | `/config/server`（保持不变，不另建重复路由） |
 | 目标文档 | `docs/features/server-config/REQUIREMENTS.md` |
-| 文档状态 | `APPROVED`（已由项目负责人正式批准的需求基线；批准只代表“系统应该做什么、怎样验收”正式生效，不代表设计已完成、代码已实现或 65 条验收已经执行通过） |
-| 实现状态 | `NOT_STARTED`（当前占位页仍为占位实现，正式页面与前后端能力均为未来目标） |
+| 文档状态 | `DRAFT_ADJUSTMENT_PENDING_USER_REVIEW`（原批准需求基线仍有效；本次为负责人在正式验收前提出的两项候选调整——`CONFIG_DESC` 人工换行与按 `ID_SERVER_CONFIG ASC` 排序，待用户复审，见 §20 变更记录） |
+| 实现状态 | `IMPLEMENTED_ADJUSTMENT_PENDING`（旧批准需求版本已实现并经过 R1/R2 复审；本次两项候选调整尚未实现） |
 | 任务编号 | `SERVER-CONFIG-FEATURE-BASELINE-001` |
 | 授权基线提交 | `7ea9d702e831245fbe8f0e84691bf0aea093dbdf` |
 | 候选基线初始任务 | `SERVER-CONFIG-FEATURE-BASELINE-001` |
@@ -20,10 +20,12 @@
 | 批准人 | 项目负责人 |
 | ChatGPT 复审通过候选提交 | `4e55493a0292b462885e4dde0d789e5e1ca48df2` |
 | 任务类型 | 纯文档 Feature 需求基线建立（后续经批准收口为正式需求基线） |
+| 候选调整任务 | `SERVER-CONFIG-PRE-ACCEPTANCE-ADJUSTMENT-BASELINE-001` |
+| 候选调整授权基线提交 | `c0b9d4973e2b6bdd3e7b02a3748816ffc55362ba` |
 | 创建日期 | 2026-08-27 |
 | 需求来源 | 项目负责人逐项确认的业务需求（本提示词 §6 记录的 12 项负责人确认事实）+ 已批准数据库基线（`docs/database/`） |
 
-说明：本文件把已经完成沟通并由项目负责人确认的业务需求落成 Feature 需求基线，已经 ChatGPT 复审通过，并由项目负责人正式批准（批准任务 `SERVER-CONFIG-FEATURE-BASELINE-APPROVAL-001`）。批准只代表“系统应该做什么、怎样验收”正式生效；不代表设计已完成、代码已实现或 65 条验收已经执行通过。本 Feature 当前实现状态仍为 `NOT_STARTED`，验收用例均未执行；后续按阶段 4“设计与契约”推进，不得直接进入实现。
+说明：本文件把已经完成沟通并由项目负责人确认的业务需求落成 Feature 需求基线，已经 ChatGPT 复审通过，并由项目负责人正式批准（批准任务 `SERVER-CONFIG-FEATURE-BASELINE-APPROVAL-001`）。批准只代表“系统应该做什么、怎样验收”正式生效；不代表设计已完成、代码已实现或 65 条验收已经执行通过。本 Feature 旧批准版本已实现并经过 R1/R2 复审（实现审查基线 `24d8b80340cc691895bed8bc45a4cb2dc2c6b9b6`），只读联调交接完成（授权基线 `c0b9d4973e2b6bdd3e7b02a3748816ffc55362ba`）。本次为负责人在正式验收前提出的两项候选调整（`CONFIG_DESC` 人工换行、按 `ID_SERVER_CONFIG ASC` 排序），文档状态为 `DRAFT_ADJUSTMENT_PENDING_USER_REVIEW`，两项调整尚未实现；正式验收（现 66 条）仍未执行。
 
 ## 2. Feature 定位与术语
 
@@ -153,7 +155,7 @@
 | SC-UI-01 | 页面顶部展示唯一中心端的 `SERVER_ID` 和配置项总数。 |
 | SC-UI-02 | 不提供中心端下拉框或切换器。 |
 | SC-UI-03 | 一次加载并展示该中心端全部配置，不分页、不搜索、不筛选。 |
-| SC-UI-04 | 按内部 `CONFIG_KEY` 升序稳定排列；Key 不显示不影响排序规则。 |
+| SC-UI-04 | 配置列表按数据库 `ID_SERVER_CONFIG` 升序展示（字符串排序语义，不做数值转换）；不再按 `CONFIG_KEY` 排序，`CONFIG_KEY` 仍是 Key Tooltip、白名单与编辑控件匹配所需的技术标识。 |
 | SC-UI-05 | 列表主体只展示两列：配置项说明、配置值。不得出现 `CONFIG_KEY` 独立表头或独立列。 |
 | SC-UI-06 | 不展示 `ID_SERVER_CONFIG`、`SERVER_ID` 列。 |
 | SC-UI-07 | 不展示“是否可编辑”字段或状态列，也不单独展示 `IS_EDITABLE` 值。 |
@@ -165,7 +167,7 @@
 | 编号 | 需求 |
 |---|---|
 | SC-UI-10 | 页面主体为两列：配置项说明、配置值。配置项说明为主内容列，占据最大可用宽度，允许自然换行和多行完整展示；配置值列相对紧凑，但必须满足只读值查看和专用编辑控件操作。 |
-| SC-UI-11 | 配置项说明允许自然换行、多行完整展示，不应因固定窄列造成大段内容省略。 |
+| SC-UI-11 | 配置项说明允许多行完整展示：普通过长文本根据列宽自动折行，不应因固定窄列造成大段内容省略；数据库真实换行的显示见 §7.6。 |
 | SC-UI-12 | 只读配置值偶尔超出列宽时可以使用省略显示，但悬停必须展示完整原文；这不属于脱敏。 |
 | SC-UI-13 | 配置值处于编辑状态时，编辑控件应充分使用配置值列的可用宽度，不得因列宽过窄导致枚举说明、多选值或数字难以操作。 |
 | SC-UI-14 | 页面在项目支持的常规桌面宽度下应优先保证配置项说明的可读性；具体像素值由后续 UI/实现阶段依据现有布局确定，本需求不锁死像素。 |
@@ -188,6 +190,15 @@
 | SC-UI-21 | 兜底只影响显示，不修改数据库的 `CONFIG_DESC` 或 `CONFIG_KEY`。 |
 | SC-UI-22 | 配置说明正常存在时，页面不应把英文 Key 直接作为主内容持续展示。 |
 
+### 7.6 配置项说明的人工换行与安全文本渲染
+
+| 编号 | 需求 |
+|---|---|
+| SC-UI-23 | “配置项说明”必须同时支持两种多行行为：普通过长文本按列宽自动折行；`CONFIG_DESC` 中真实的 LF 或 CRLF 换行按换行位置显示（目标 CSS 语义 `white-space: pre-line`）。 |
+| SC-UI-24 | 真实换行来自数据库 `CONFIG_DESC` 中的实际换行字符（如 Oracle `CHR(10)`），不是两个字符组成的字面量 `\n`；不把 `<br>` 当作换行协议（若数据中存在 `<br>` 则作为普通文本显示）；不把字面量 `\n` 自动转换为换行。 |
+| SC-UI-25 | 前端继续使用 Vue 文本插值/文本渲染，保持 HTML 转义；严禁为换行使用 `v-html`。`CONFIG_DESC` 为只读字段，本 Feature 不允许页面修改它。 |
+| SC-UI-26 | 换行后的行高应易读（建议 `line-height: 1.6`）；极长且没有空格的连续内容仍可断行（建议 `overflow-wrap: anywhere`）；信息图标/Key Tooltip 在多行说明下合理对齐，不得破坏布局。 |
+
 ## 8. 唯一中心端识别与异常行为
 
 | 编号 | 需求 |
@@ -204,7 +215,7 @@
 | 编号 | 需求 |
 |---|---|
 | SC-DISPLAY-01 | 页面展示唯一中心端的全部 `CDC_SERVER_CONFIG` 记录，包括不可编辑、未知或异常配置项。 |
-| SC-DISPLAY-02 | 展示顺序为 `CONFIG_KEY` 升序，属稳定排序；Key 不显示不影响排序规则。对于 NULL 或重复 Key，只需保持确定性稳定次序并展示全部记录，不发明数据库唯一约束，不执行数据清理；不得把当前无重复快照写成永久保证。 |
+| SC-DISPLAY-02 | 展示顺序为 `ID_SERVER_CONFIG` 升序（字符串排序语义，不做数值转换），属稳定排序；不再按 `CONFIG_KEY` 排序。对于 NULL 或重复 Key，只需保持确定性稳定次序并展示全部记录，不发明数据库唯一约束，不执行数据清理；不得把当前无重复快照写成永久保证。 |
 | SC-DISPLAY-03 | 每条记录主体展示两列：配置项说明、配置值；不出现 `CONFIG_KEY` 独立列。 |
 | SC-DISPLAY-04 | 可编辑性只由两个条件决定：数据库记录 `IS_EDITABLE` 的规范值为字符 `'1'` 且 `CONFIG_KEY` 属于已支持可编辑白名单。当前值为空、空白、大小写错误、枚举非法、超范围或其他不符合专门规则的情况，不自动取消该记录的编辑能力。 |
 | SC-DISPLAY-05 | 展示全部值不脱敏、不掩码；`CONFIG_VALUE` 当前不包含敏感内容（`CONFIRMED_BY_OWNER`），但展示规则不依赖“当前无敏感内容”作为唯一依据。 |
@@ -378,5 +389,6 @@
 | 2026-08-27 | 建立“中心端配置”Feature 需求基线（DRAFT_PENDING_USER_REVIEW） | SERVER-CONFIG-FEATURE-BASELINE-001（纯文档任务；负责人确认业务需求 + 已批准数据库基线） |
 | 2026-08-27 | R1 修订：隐藏 Key 独立列并改为信息图标 Tooltip；页面主体改为“配置项说明 + 配置值”两列；配置项显示名称兜底；异常当前值允许纠正；物理长度验收口径修正 | SERVER-CONFIG-FEATURE-BASELINE-001-R1（ChatGPT 复审“有条件通过” + 项目负责人确认；纯文档修订，状态保持 DRAFT_PENDING_USER_REVIEW） |
 | 2026-08-27 | 批准：文档状态由 `DRAFT_PENDING_USER_REVIEW` 改为 `APPROVED`；记录批准任务、批准日期、批准人（项目负责人）与 ChatGPT 复审通过的候选提交 `4e55493a...`；移除“不得自行批准”“候选基线待批准”等失效警示（初始草案状态保留于本变更记录）；实现状态保持 `NOT_STARTED`，当前待确认项保持 0，所有现行业务规则不变 | SERVER-CONFIG-FEATURE-BASELINE-APPROVAL-001（项目负责人批准驱动的 Feature 需求与验收基线收口；纯文档任务，不连接数据库，不修改代码） |
+| 2026-08-28 | 候选调整（预验收）：将配置列表排序由 `CONFIG_KEY ASC NULLS LAST, ID_SERVER_CONFIG ASC` 改为仅 `ID_SERVER_CONFIG ASC`（SC-UI-04、SC-DISPLAY-02）；新增 `CONFIG_DESC` 人工换行与安全文本渲染规则 SC-UI-23~26；文档状态由 `APPROVED` 迁移为 `DRAFT_ADJUSTMENT_PENDING_USER_REVIEW`，实现状态由 `NOT_STARTED` 迁移为 `IMPLEMENTED_ADJUSTMENT_PENDING`（旧批准版本已实现并复审，两项调整尚未实现）；正式验收仍未执行 | SERVER-CONFIG-PRE-ACCEPTANCE-ADJUSTMENT-BASELINE-001（纯文档候选基线任务；负责人在正式验收前提出的调整，待用户复审） |
 
 > 关联文档：验收基线 `docs/features/server-config/ACCEPTANCE.md`；执行报告 `docs/features/server-config/reports/SERVER-CONFIG-FEATURE-BASELINE-001.md`。
