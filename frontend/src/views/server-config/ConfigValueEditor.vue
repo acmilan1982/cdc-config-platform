@@ -1,8 +1,10 @@
 <template>
   <div class="config-value-editor">
-    <!-- 不可编辑：原样展示，空值占位 -->
+    <!-- 不可编辑：原样展示，空值占位；非空值单行省略并悬停显示完整原文（SC-UI-12 / SC-AC-009） -->
     <template v-if="!item.editable">
-      <span class="raw-value">{{ displayRaw }}</span>
+      <el-tooltip :disabled="!hasRawValue" :content="rawDisplay" placement="top">
+        <span class="raw-value">{{ displayRaw }}</span>
+      </el-tooltip>
     </template>
 
     <!-- 可编辑：按 Key 类型渲染专门控件 -->
@@ -83,6 +85,8 @@ const emit = defineEmits<{
 const meta = computed(() => editorMeta(props.item.configKey))
 
 const rawDisplay = props.item.configValue ?? ''
+/** 是否有非空原始值：决定 Tooltip 是否启用（空值占位不弹出空 Tooltip）。 */
+const hasRawValue = rawDisplay !== ''
 
 /** 不可编辑行原样展示值：空值占位 */
 const displayRaw = rawDisplay === '' ? '（空值）' : rawDisplay
@@ -113,6 +117,7 @@ function emitInput(next: string) {
 <style scoped>
 .config-value-editor {
   width: 100%;
+  min-width: 0;
 }
 
 .editor-control {
@@ -120,6 +125,11 @@ function emitInput(next: string) {
 }
 
 .raw-value {
+  display: block;
+  width: 100%;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
   color: var(--el-text-color-regular);
 }
 

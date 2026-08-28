@@ -53,7 +53,7 @@
         <el-table-column label="配置项说明" min-width="240">
           <template #default="{ row }">
             <span class="item-name">{{ getDisplayName(row.configDesc, row.configKey) }}</span>
-            <el-tooltip v-if="row.configKey" :content="row.configKey" placement="top">
+            <el-tooltip v-if="row.configKey" :content="`配置Key：${row.configKey}`" placement="top">
               <el-icon class="key-icon" :size="14"><InfoFilled /></el-icon>
             </el-tooltip>
           </template>

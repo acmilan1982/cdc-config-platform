@@ -1,5 +1,7 @@
 import { describe, it, expect, vi, beforeEach, afterEach } from 'vitest'
 import type { MockInstance } from 'vitest'
+import { readFileSync } from 'node:fs'
+import { resolve } from 'node:path'
 import { mount, flushPromises } from '@vue/test-utils'
 import ElementPlus, { ElMessage } from 'element-plus'
 import type { ApiResponse } from '@/types/monitor'
@@ -573,6 +575,97 @@ describe('验收前调整：CONFIG_DESC 真实换行安全显示（SC-AC-066 / S
     expect(wrapper.findAll('.key-icon')).toHaveLength(2)
     expect(wrapper.text()).toContain('配置项说明')
     expect(wrapper.text()).toContain('配置值')
+    wrapper.unmount()
+  })
+})
+
+describe('缺陷修复：Key Tooltip 前缀与只读超宽值省略/悬停原文（SC-AC-009/SC-AC-062）', () => {
+  it('Key 信息图标 Tooltip content 精确为 `配置Key：{CONFIG_KEY}`，不是纯 Key', async () => {
+    mockedFetch.mockResolvedValue(
+      okPage({ serverId: 'S1', configCount: 1, items: [item('0001', 'snapshotBatchSize', '快照批次大小', '1000', true)] }),
+    )
+    const wrapper = await mountPage()
+
+    const contents = wrapper.findAllComponents({ name: 'ElTooltip' }).map((t) => t.props('content'))
+    expect(contents).toContain('配置Key：snapshotBatchSize')
+    expect(contents).not.toContain('snapshotBatchSize')
+    wrapper.unmount()
+  })
+
+  it('configKey 缺失时不渲染 .key-icon', async () => {
+    mockedFetch.mockResolvedValue(
+      okPage({ serverId: 'S1', configCount: 1, items: [item('0001', null, '无Key说明', 'v', false)] }),
+    )
+    const wrapper = await mountPage()
+
+    expect(wrapper.findAll('.key-icon')).toHaveLength(0)
+    wrapper.unmount()
+  })
+
+  it('非空只读值由 Tooltip 包裹，content 为完整原始值', async () => {
+    mockedFetch.mockResolvedValue(okPage({ serverId: 'S1', configCount: 1, items: [readonlyItem] }))
+    const wrapper = await mountPage()
+
+    const editor = editors(wrapper)[0]
+    expect(editor.find('.raw-value').exists()).toBe(true)
+    expect(editor.find('.raw-value').text()).toBe('cdc-metric')
+    const tip = editor.findComponent({ name: 'ElTooltip' })
+    expect(tip.exists()).toBe(true)
+    expect(tip.props('content')).toBe('cdc-metric')
+    expect(tip.props('disabled')).toBe(false)
+    wrapper.unmount()
+  })
+
+  it('长只读值 DOM 文本保持完整原文，不在 JS 中截断', async () => {
+    const longValue = 'x'.repeat(120)
+    mockedFetch.mockResolvedValue(
+      okPage({ serverId: 'S1', configCount: 1, items: [item('0001', 'k', 'd', longValue, false)] }),
+    )
+    const wrapper = await mountPage()
+
+    const editor = editors(wrapper)[0]
+    const raw = editor.find('.raw-value')
+    expect(raw.text()).toBe(longValue)
+    expect(raw.text()).toHaveLength(120)
+    expect(editor.findComponent({ name: 'ElTooltip' }).props('content')).toBe(longValue)
+    wrapper.unmount()
+  })
+
+  it('.raw-value 具备单行省略所需样式语义（源码静态断言，JSDOM 不计算真实布局）', () => {
+    const src = readFileSync(resolve(process.cwd(), 'src/views/server-config/ConfigValueEditor.vue'), 'utf8')
+    expect(src).toMatch(/\.raw-value/)
+    expect(src).toMatch(/overflow:\s*hidden/)
+    expect(src).toMatch(/text-overflow:\s*ellipsis/)
+    expect(src).toMatch(/white-space:\s*nowrap/)
+    expect(src).not.toMatch(/v-html/)
+  })
+
+  it('NULL/空只读值仍显示（空值），Tooltip 被禁用', async () => {
+    mockedFetch.mockResolvedValue(
+      okPage({ serverId: 'S1', configCount: 1, items: [item('0001', 'k', 'd', null, false)] }),
+    )
+    const wrapper = await mountPage()
+
+    const editor = editors(wrapper)[0]
+    expect(editor.find('.raw-value').text()).toBe('（空值）')
+    const tip = editor.findComponent({ name: 'ElTooltip' })
+    expect(tip.exists()).toBe(true)
+    expect(tip.props('disabled')).toBe(true)
+    wrapper.unmount()
+  })
+
+  it('只读值含 <b>/<script> 文本时不生成对应 DOM 元素，Tooltip 与页面文本均保持安全原文', async () => {
+    const rawVal = '<b>bold</b><script>alert(1)</script>'
+    mockedFetch.mockResolvedValue(
+      okPage({ serverId: 'S1', configCount: 1, items: [item('0001', 'k', 'd', rawVal, false)] }),
+    )
+    const wrapper = await mountPage()
+
+    const editor = editors(wrapper)[0]
+    expect(editor.find('b').exists()).toBe(false)
+    expect(editor.find('script').exists()).toBe(false)
+    expect(editor.find('.raw-value').text()).toBe(rawVal)
+    expect(editor.findComponent({ name: 'ElTooltip' }).props('content')).toBe(rawVal)
     wrapper.unmount()
   })
 })
