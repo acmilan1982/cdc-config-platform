@@ -1,6 +1,6 @@
 # 中心端配置 66 条正式验收候选结果报告
 
-> **重要声明**：本报告只记录 `SC-AC-001` ~ `SC-AC-066` 共 66 条正式验收的逐条执行结果与证据，**不构成"正式验收通过"结论**。因 `SC-AC-009` 存在两处与批准基线不一致的显示偏差，本任务标记 `formal_acceptance_status=EXECUTED_PENDING_CHATGPT_REVIEW`，等待 ChatGPT 复审与项目负责人确认后再建立验收收口任务。本报告不修改六份批准功能文档，不更新 Feature 状态，不进入最终收口。
+> **重要声明**：本报告只记录 `SC-AC-001` ~ `SC-AC-066` 共 66 条正式验收的逐条执行结果与证据，**不构成"正式验收通过"结论**。经 ChatGPT 复审，`SC-AC-009` 与 `SC-AC-062` 共 2 条存在与批准基线不一致的显示缺陷，项目负责人已决定按批准基线修复（不接受现状）。当前有效统计为 64 条 `PASSED`、2 条 `FAILED`；`formal_acceptance_status=FAILED_PENDING_FIX_AND_TARGETED_RETEST`。修复后再对 `SC-AC-009`、`SC-AC-062` 定向重验并完成收口。本报告不修改六份批准功能文档，不更新 Feature 状态，不进入最终收口。
 
 ## 1. 任务元数据、基线提交、运行环境与服务版本
 
@@ -13,7 +13,7 @@
 | 任务性质 | 正式验收执行、证据记录、验收报告提交（非代码修改、非需求调整、非验收收口） |
 | 执行日期 | 2026-08-28 |
 | 验收契约 | `ACCEPTANCE.md`（`APPROVED`，含两项已批准调整：`CONFIG_DESC` 人工换行、按 `ID_SERVER_CONFIG ASC` 排序） |
-| 运行环境 | Linux；JDK 8（1.8.0_202）；Maven 3.8.8；Node v24.17.0；Oracle 19c（`192.168.174.65:1521/prod.enmotech.com`，CDC/CDC） |
+| 运行环境 | Linux；JDK 8（1.8.0_202）；Maven 3.8.8；Node v24.17.0；Oracle 19c 开发数据源（连接参数由既有环境配置提供；报告不记录数据库口令） |
 | 服务版本 | 后端 Spring Boot 2.7.18（端口 8080，pid 3312）；前端 Vite 5.4.21（`0.0.0.0:5173`，pid 3376）；Chrome CDP（`127.0.0.1:9222`，pid 5045） |
 | 服务运行方式 | 复用任务开始前已运行且健康的 `cdc-config` 前后端，未做无必要重启；未启动/停止/重启 `sync-server`/`sync-client`/`sync-log`/Kafka 等业务进程 |
 
@@ -116,9 +116,9 @@ docs/features/server-config/reports/SERVER-CONFIG-FORMAL-ACCEPTANCE-001.md
 | SC-AC-059 | API + SQL | 两个均合法、值不同的并发请求（`006=true` 与 `006=false`）：均返回 200 无版本/冲突错误，最终 DB `006=true` 与较晚完成请求值一致，证明"最后一次成功保存生效" | PASSED |
 | SC-AC-060 | 浏览器交互 | 保存成功：页面给出成功反馈，并重新查询唯一中心端及全部配置，重载结果成为新的原始值（脏值清空、按钮回禁用） | PASSED |
 | SC-AC-061 | 浏览器 + DML | DML 在确认框打开期间将 003 `IS_EDITABLE='0'`：确认保存被后端 40421 拒绝，页面显示明确错误"保存失败：配置项不可编辑"（不泄露底层堆栈），数据库整批回滚、编辑内容保留；恢复 `IS_EDITABLE` | PASSED |
-| SC-AC-062 | 浏览器 | 正常态所有 `CONFIG_VALUE` 完整展示、不脱敏不掩码；无配置 Key 独立列，Key 仅信息图标 Tooltip 展示。注：本用例的"只读值超宽省略时悬停展示完整原文"子条款与 `SC-AC-009` 同一行为，该行为在 `SC-AC-009` 专项中失败（见 §11） | PASSED（附披露） |
+| SC-AC-062 | 浏览器 | 正常态所有 `CONFIG_VALUE` 完整展示、不脱敏不掩码、无配置 Key 独立列、Key 仅信息图标 Tooltip 展示等子项均已通过；但"只读值超宽省略并悬停展示完整原文"未实现（与 `SC-AC-009` 同一行为，实测见 §11）。本用例含合取要求，任一必要子项失败即整条失败，不能使用"PASSED（附披露）" | **FAILED** |
 | SC-AC-063 | 静态代码 + 全程观察 | `server-config` 后端无任何 `sync-server` 重启/通知/生效检测/生效提示调用（唯一 "sync-server" 引用为错误提示文案）；验收全程保存操作未触发、未提示 `sync-server` 重启 | PASSED |
-| SC-AC-064 | 静态代码 + 全程观察 | 后端无任何 DDL 语句；`CDC_SERVER` 在 server-config 模块仅 `selectList` 读取；`CDC_SERVER_CONFIG` 仅 select/update，无 insert/delete；验收全程未执行 DDL、未新增索引/约束/外键、未提供 `CDC_SERVER` 维护能力、未新增或删除配置记录（最终行数仍为 8） | PASSED |
+| SC-AC-064 | 静态代码 + 全程观察 | 后端无任何 DDL 语句；产品页面、正式 API 与 `server-config` 业务代码不提供、不调用 `CDC_SERVER_CONFIG` 新增/删除能力（业务代码仅 select/update）；`CDC_SERVER` 业务代码仍只读（仅 `selectList`）；验收期间确有项目负责人授权的直接 DML `DELETE/INSERT`，仅用于测试数据构造与恢复（见 §6），不属于产品功能行为；最终恢复为原有 8 个配置记录身份并可正常加载；产品能力边界符合批准验收标准 | PASSED |
 | SC-AC-065 | 浏览器 + DML + API | DML 构造 006 非法当前值（不符合布尔规则）：页面显示专用控件与当前值异常提示、不因值异常变只读；未修正前"保存全部"不得提交含非法值的批次；通过 UI 改为合法值 `true` 后进入确认并按正常批量规则保存成功 | PASSED |
 | SC-AC-066 | 浏览器 + DML 构造 | DML 构造 005 `CONFIG_DESC` 含真实 LF 与 CRLF：`innerText` 在真实换行位置分行（`afterL1=10`、`afterL2=10` CRLF 归一）；字面量 `\n`（`betweenLit=92` 反斜杠）、`<br>`、`<b>` 均保持普通文本（`brElementCount=0`，无 `v-html`）；多行说明无横向溢出（`doc_no_hscroll=true`）；信息图标 Key Tooltip 仍可悬停查看（"tableRowDeleteStrategy"）；已恢复 desc | PASSED |
 
@@ -126,8 +126,8 @@ docs/features/server-config/reports/SERVER-CONFIG-FORMAL-ACCEPTANCE-001.md
 
 | 状态 | 数量 |
 |---|---|
-| PASSED | 65（含 `PASSED_BY_TEST_AND_CODE_EVIDENCE` 2 条：SC-AC-014、SC-AC-015） |
-| FAILED | 1（SC-AC-009） |
+| PASSED | 64（含 `PASSED_BY_TEST_AND_CODE_EVIDENCE` 2 条：SC-AC-014、SC-AC-015） |
+| FAILED | 2（SC-AC-009、SC-AC-062） |
 | BLOCKED | 0 |
 | NOT_RUN | 0 |
 | **合计** | **66** |
@@ -136,7 +136,7 @@ docs/features/server-config/reports/SERVER-CONFIG-FORMAL-ACCEPTANCE-001.md
 
 ### 5.1 浏览器（Chrome headless CDP，端口 9222，`--no-proxy-server`）
 
-- 菜单/路由（SC-AC-001/002）、页面结构与列布局（SC-AC-004~008/011/012/013/017/018/019/020/039/062）、空状态（SC-AC-016）、排序（SC-AC-017）、真实换行（SC-AC-066）、Key Tooltip（SC-AC-009/022/023/040/049/066）均通过真实浏览器导航与 DOM 测量采集。
+- 菜单/路由（SC-AC-001/002）、页面结构与列布局（SC-AC-004~008/011/012/013/017/018/019/020/039）、空状态（SC-AC-016）、排序（SC-AC-017）、真实换行（SC-AC-066）、Key Tooltip（SC-AC-022/023/040/049/066）均通过真实浏览器导航与 DOM 测量采集；`SC-AC-062` 正常态展示子项经浏览器采集（子项通过），其省略/悬停子项与 `SC-AC-009` 同一行为，浏览器实测为失败证据（见 §11）。
 - 前端交互（SC-AC-043~051/060）：使用原生 value setter + `input` 事件驱动 el-input；el-select 通过点击 `.el-select__wrapper` 打开下拉、CDP `Input.dispatchMouseEvent` 真实坐标点击 `.el-select-dropdown__item` 选项；Network 捕获 `POST /api/server-config/save` 请求体。
 - SC-AC-009 溢出测量：只读 `.raw-value` `whiteSpace=normal`、`textOverflow=clip`；64 字符值渲染为 3 行折行（`lineCount=3`）；仅 key-icon 为 `.el-tooltip__trigger`（`tooltipTriggerCount=1`），值本身无 tooltip。
 
@@ -182,9 +182,11 @@ docs/features/server-config/reports/SERVER-CONFIG-FORMAL-ACCEPTANCE-001.md
 - `ServerConfigServiceImplTest.getPage_noServer_shouldThrowServerNotRegistered()`：服务层零中心端抛错；
 - `ServerConfigControllerTest.page_noServer_shouldReturnHttp200With40210()`：控制器零中心端返回业务码 40210；
 - `ServerConfigControllerTest.page_multipleServers_shouldReturnHttp200With40211()`：控制器多中心端返回业务码 40211；
+- `ServerConfigPage.spec.ts`：`中心端未注册（40210）展示阻断页`；
+- `ServerConfigPage.spec.ts`：`多个中心端（40211）展示阻断页`；
 - 静态代码：`ServerConfigServiceImpl` 依据 `CDC_SERVER` 查询结果分支——0 条走"中心端尚未注册，请先启动 sync-server"（不加载配置、不返回数据）、>1 条走"检测到多个中心端，当前功能仅支持唯一中心端"（不加载、不编辑、不保存、不自行选择首条）；前端把 40210/40211 映射为对应提示与禁用状态。
 
-充分性判断：上述证据已覆盖前置状态（0 条 / >1 条）、返回状态（40210/40211）、禁止加载/编辑/保存（服务层空返回 + 前端禁用）及提示文案（两个分支文案），满足"仅以测试+代码证据交叉通过"的条件。故两用例判为 `PASSED_BY_TEST_AND_CODE_EVIDENCE`，在最终统计中归入 `PASSED`，并在此单独披露"未在真实数据库构造"。
+充分性判断：上述证据已覆盖前置状态（0 条 / >1 条）、返回状态（40210/40211）、前端阻断页展示（两条 `ServerConfigPage.spec.ts` 用例）、禁止加载/编辑/保存（服务层空返回 + 前端禁用）及提示文案（两个分支文案），满足"仅以测试+代码证据交叉通过"的条件。故两用例判为 `PASSED_BY_TEST_AND_CODE_EVIDENCE`，在最终统计中归入 `PASSED`，并在此单独披露"未在真实数据库构造"。`SC-AC-014/015` 的前端测试名称为 R1 按原验收执行已覆盖证据补强列出，未重新运行测试。
 
 ## 8. 保存成功、整批回滚与并发覆盖的数据库前后证据
 
@@ -200,7 +202,7 @@ docs/features/server-config/reports/SERVER-CONFIG-FORMAL-ACCEPTANCE-001.md
 - 只读 key（`IS_EDITABLE='0'`）：`server-log-topic-name`、`monitor-metric-topic-name`，值完整展示、无编辑控件；
 - 可编辑白名单 key（`IS_EDITABLE='1'`）：`snapshotBatchSize`、`raw-message-storage-strategy`、`tableRowDeleteStrategy`、`auto-create-table`、`auto-expand-column-length`、`realtime-insert-batch-enabled-database-types`；
 - 全部行 `SERVER_ID='Server001'`；`CONFIG_DESC` 为原始多行说明文本（003/004/005/008 含真实 LF，与验收前一致），无验收临时标记残留；
-- 未新增、未删除配置记录；无未知 Key、无伪造 `SERVER_ID`、无非法 `IS_EDITABLE`、无非法当前值残留。
+- 未遗留新增或删除的配置记录（验收期间授权的直接 DML `DELETE/INSERT` 仅用于测试构造与恢复，见 §6）；无未知 Key、无伪造 `SERVER_ID`、无非法 `IS_EDITABLE`、无非法当前值残留。
 
 本报告不声称"已恢复任务开始前的每个原值"；当前为验收后可正常加载的连贯合法状态（其中 003/004/005/006 等值含经正式保存接口产生的合法配置值）。
 
@@ -208,15 +210,15 @@ docs/features/server-config/reports/SERVER-CONFIG-FORMAL-ACCEPTANCE-001.md
 
 | 状态 | 数量 |
 |---|---|
-| PASSED | 65 |
-| FAILED | 1 |
+| PASSED | 64 |
+| FAILED | 2 |
 | BLOCKED | 0 |
 | NOT_RUN | 0 |
 | **合计** | **66** |
 
 其中 `PASSED_BY_TEST_AND_CODE_EVIDENCE` 2 条（SC-AC-014/015）已归入 PASSED 并单独披露。
 
-## 11. 缺陷、阻塞项、残余风险与待负责人确认项
+## 11. 缺陷、阻塞项、残余风险与负责人决定
 
 ### 11.1 缺陷（FAILED）
 
@@ -225,9 +227,9 @@ docs/features/server-config/reports/SERVER-CONFIG-FORMAL-ACCEPTANCE-001.md
 - **问题一：Key 信息图标 Tooltip 缺少 `配置Key：` 前缀。** `REQUIREMENTS` SC-UI-15 与 `ACCEPTANCE` SC-AC-009 要求悬停信息图标显示 `配置Key：{CONFIG_KEY}`；实测 Tooltip 内容为纯 Key（如 "snapshotBatchSize"、"server-log-topic-name"）。代码位置：`frontend/src/views/server-config/ServerConfigPage.vue` 第 56 行 `<el-tooltip :content="row.configKey">`。
 - **问题二：超宽只读值未省略、值本身无悬停完整原文。** `REQUIREMENTS` SC-UI-12 / SC-READONLY-03 与 `ACCEPTANCE` SC-AC-009 要求超宽只读值省略显示、悬停弹出完整原文。实测将 001 的 `CONFIG_VALUE` 置为 64 字符后：`.raw-value` `white-space:normal`、无 `text-overflow:ellipsis`（`rawEllipsis=false`），文本折行为 3 行完整铺满而非省略；且值本身不是 `el-tooltip__trigger`（仅 key-icon 是），悬停只读值不弹出任何 tooltip——悬停显示的内容实为 key-icon 上的 Key 名而非完整原文。代码位置：`frontend/src/views/server-config/ConfigValueEditor.vue` 第 5 行（普通 `<span class="raw-value">`，`.raw-value` 样式仅 `color`）。
 
-**影响与处置**：此为显示/交互层偏差，不影响数据保存正确性、事务性、安全性与其余 65 条用例。按任务要求，保留证据（浏览器 DOM 测量 + 截图 + 代码位置）、标记 SC-AC-009 为 `FAILED`，并停止进一步可能扩大影响的写操作；后续只执行只读/独立用例。本任务不修改代码/测试/文档来掩盖缺口。
+**影响与处置**：此为显示/交互层偏差，不影响数据保存正确性、事务性、安全性与其余 64 条用例。按任务要求，保留证据（浏览器 DOM 测量 + 截图 + 代码位置）、标记 `SC-AC-009`、`SC-AC-062` 为 `FAILED`，并停止进一步可能扩大影响的写操作；后续只执行只读/独立用例。本任务不修改代码/测试/文档来掩盖缺口。
 
-**待负责人确认**：是否接受当前"纯 Key Tooltip + 折行展示只读值"的现有实现，或要求按批准基线补 `配置Key：` 前缀与超宽值省略+悬停原文；若接受现状，请明确是否需同步修订 `REQUIREMENTS`/`ACCEPTANCE` 相应条目。
+**负责人决定**：项目负责人已明确决定按批准基线修复，不接受现状；不修订 `REQUIREMENTS`/`ACCEPTANCE` 来迁就当前实现，`pending_user_confirmation_count=0`。修复后再对 `SC-AC-009`、`SC-AC-062` 定向重验。
 
 ### 11.2 阻塞项
 
@@ -236,7 +238,7 @@ docs/features/server-config/reports/SERVER-CONFIG-FORMAL-ACCEPTANCE-001.md
 ### 11.3 残余风险
 
 - `SC-AC-014/015` 未在真实库构造（无 `CDC_SERVER` 写权限），以测试+代码证据替代；若需真实库复核，须另获 `CDC_SERVER` 写授权。
-- `SC-AC-062` 正常态所有值完整展示（不脱敏、不掩码）、无 Key 列、Key 仅图标 Tooltip，均通过；其"只读值超宽省略时悬停展示完整原文"子条款依赖的行为与 `SC-AC-009` 相同，该行为专项失败，已在上文披露。
+- `SC-AC-062` 判 `FAILED`：其"只读值超宽省略时悬停展示完整原文"子条款依赖的行为与 `SC-AC-009` 相同，实测失败；正常态不脱敏/不掩码、无 Key 列、Key 仅图标 Tooltip 等子项已通过。修复 `SC-AC-009` 缺陷后该子项即可通过，需与 `SC-AC-009` 一并定向重验。
 - `SC-AC-023` 属于"未来新增 key"场景，当前白名单内 6 个 key 均内置控件与校验规则；白名单外 key 的前后端只读行为已由同机制证据覆盖（DML 构造 + API 40422）。
 
 ## 12. 数据库、DDL、ZooKeeper、服务、接口操作的真实状态
@@ -265,5 +267,40 @@ docs/features/server-config/reports/SERVER-CONFIG-FORMAL-ACCEPTANCE-001.md
 
 ## 14. 声明
 
-本任务只形成**候选验收结果**，不把六份批准功能文档（`REQUIREMENTS/ACCEPTANCE/DESIGN/API/UI/DATABASE`）或 Feature 状态直接收口。`formal_acceptance_status=EXECUTED_PENDING_CHATGPT_REVIEW`，等待 ChatGPT 复审与项目负责人确认后再建立验收收口任务。因存在 1 条 `FAILED`（SC-AC-009），本报告不以"正式验收通过"自居，如实记录 65 条通过、1 条失败。
+本任务只形成**候选验收结果**，不把六份批准功能文档（`REQUIREMENTS/ACCEPTANCE/DESIGN/API/UI/DATABASE`）或 Feature 状态直接收口。经 ChatGPT 复审与项目负责人决定，`formal_acceptance_status=FAILED_PENDING_FIX_AND_TARGETED_RETEST`。因存在 2 条 `FAILED`（`SC-AC-009`、`SC-AC-062`），本报告不以"正式验收通过"自居，如实记录 64 条通过、2 条失败。
+
+## 15. R1 复审修正章节（SERVER-CONFIG-FORMAL-ACCEPTANCE-001-R1）
+
+本节由 R1 文档修正任务新增，用于记录 ChatGPT 复审结论、项目负责人决定以及本报告的事实与状态修正。本 R1 为纯文档任务，未重跑任何验收、自动化测试或构建，未操作服务、接口、数据库或 ZooKeeper，只做报告修正。
+
+### 15.1 任务与授权基线
+
+- R1 任务编号：`SERVER-CONFIG-FORMAL-ACCEPTANCE-001-R1`
+- 授权基线（HEAD = origin/develop）：`b5a3a873968ae51817ecf495b7522822f30041d7`
+
+### 15.2 ChatGPT 复审范围与结论
+
+ChatGPT 已对远程提交 `b5a3a87` 及批准基线、前端代码进行只读复审。结论：
+
+- `SC-AC-009` 的两项偏差均为真实实现缺陷：①Key Tooltip 缺少 `配置Key：` 前缀；②超宽只读值没有省略，值本身也没有悬停完整原文 Tooltip。
+- `SC-AC-062` 包含同一项明确要求"只读值超宽省略时悬停展示完整原文"，该子要求实测失败，因此整条不能仍标 `PASSED（附披露）`，必须改为 `FAILED`。
+- 两个失败用例是同一组前端显示缺陷影响的两个批准验收编号，不应虚构成互不相关的两个根因。
+
+### 15.3 项目负责人决定
+
+项目负责人已明确回复同意 ChatGPT 复审结论，决定**按批准基线修复，不接受现状**；不修订 `REQUIREMENTS`/`ACCEPTANCE` 来迁就当前实现。`pending_user_confirmation_count` 由 1 改为 0。
+
+### 15.4 本报告的事实与状态修正
+
+- 统计由 `65 PASSED / 1 FAILED` 修正为 `64 PASSED / 2 FAILED / 0 BLOCKED / 0 NOT_RUN / 合计 66`；`SC-AC-062` 由 `PASSED（附披露）` 改为 `FAILED`。历史"原统计为 65/1"仅用于说明变更，为已废止历史错误，不代表当前有效口径。
+- `SC-AC-009` 与 `SC-AC-062` 属同一组前端显示缺陷影响的两个批准验收编号，不作为互不相关的两个根因处理。
+- `SC-AC-014/015` 的后端测试、前端测试与静态代码交叉证据充分，继续保持 `PASSED_BY_TEST_AND_CODE_EVIDENCE` 并归入 64 条 `PASSED`。
+- `SC-AC-064` 证据表述已修正：产品页面、正式 API 与 `server-config` 业务代码不提供、不调用 `CDC_SERVER_CONFIG` 新增/删除能力；`CDC_SERVER` 业务代码仍只读；验收期间确有授权的直接 DML `DELETE/INSERT` 仅用于测试数据构造与恢复（见 §6），不属于产品功能行为；产品能力边界符合批准验收标准，保持 `PASSED`。
+- 原报告运行环境行误记录了数据库明文口令，现已删除；本报告不记录任何数据库口令，且不在此重复写出明文口令。
+- `SC-AC-014/015` 前端测试名称已在 §7 补强：`ServerConfigPage.spec.ts`：`中心端未注册（40210）展示阻断页`、`多个中心端（40211）展示阻断页`；仅准确列出原验收执行已覆盖的证据，未重新运行测试。
+
+### 15.5 当前状态与下一步
+
+- `formal_acceptance_status=FAILED_PENDING_FIX_AND_TARGETED_RETEST`。
+- 下一步：小范围前端缺陷修复（补 `配置Key：` 前缀与超宽只读值省略+悬停原文），然后只定向重验 `SC-AC-009`、`SC-AC-062` 及相关回归测试，再进入验收收口。
 
