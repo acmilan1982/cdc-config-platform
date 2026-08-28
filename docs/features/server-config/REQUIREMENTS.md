@@ -25,7 +25,7 @@
 | 创建日期 | 2026-08-27 |
 | 需求来源 | 项目负责人逐项确认的业务需求（本提示词 §6 记录的 12 项负责人确认事实）+ 已批准数据库基线（`docs/database/`） |
 
-说明：本文件把已经完成沟通并由项目负责人确认的业务需求落成 Feature 需求基线，已经 ChatGPT 复审通过，并由项目负责人正式批准（批准任务 `SERVER-CONFIG-FEATURE-BASELINE-APPROVAL-001`）。批准只代表“系统应该做什么、怎样验收”正式生效；不代表设计已完成、代码已实现或 65 条验收已经执行通过。本 Feature 旧批准版本已实现并经过 R1/R2 复审（实现审查基线 `24d8b80340cc691895bed8bc45a4cb2dc2c6b9b6`），只读联调交接完成（授权基线 `c0b9d4973e2b6bdd3e7b02a3748816ffc55362ba`）。本次为负责人在正式验收前提出的两项候选调整（`CONFIG_DESC` 人工换行、按 `ID_SERVER_CONFIG ASC` 排序），文档状态为 `DRAFT_ADJUSTMENT_PENDING_USER_REVIEW`，两项调整尚未实现；正式验收（现 66 条）仍未执行。
+说明：本文件把已经完成沟通并由项目负责人确认的业务需求落成 Feature 需求基线，已经 ChatGPT 复审通过，并由项目负责人正式批准（批准任务 `SERVER-CONFIG-FEATURE-BASELINE-APPROVAL-001`）。批准只代表“系统应该做什么、怎样验收”正式生效；不代表设计已完成、代码已实现或原需求批准当时的 65 条验收已经执行通过（本次新增 `SC-AC-066` 后，当前共 66 条，仍全部未执行）。本 Feature 旧批准版本已实现并经过 R1/R2 复审（实现审查基线 `24d8b80340cc691895bed8bc45a4cb2dc2c6b9b6`），只读联调交接完成（授权基线 `c0b9d4973e2b6bdd3e7b02a3748816ffc55362ba`）。本次为负责人在正式验收前提出的两项候选调整（`CONFIG_DESC` 人工换行、按 `ID_SERVER_CONFIG ASC` 排序），文档状态为 `DRAFT_ADJUSTMENT_PENDING_USER_REVIEW`，两项调整尚未实现；正式验收（现 66 条）仍未执行。
 
 ## 2. Feature 定位与术语
 
@@ -85,7 +85,7 @@
 
 | 引用项 | 权威文档 |
 |---|---|
-| 数据库文档总入口与 16 张已批准单表物理基线分层（14 当前访问 + 2 已批准待实现） | `docs/database/README.md` |
+| 数据库文档总入口与数据库基线批准时的 16 张单表物理基线分层（当时为 14 张当前访问 + 2 张已批准待实现；后两张现已由本 Feature 实现访问） | `docs/database/README.md` |
 | Schema 整体概览、表总清单、物理外键总体情况 | `docs/database/SCHEMA.md` |
 | 跨表关系（`CDC_SERVER_CONFIG.SERVER_ID` → `CDC_SERVER.SERVER_ID` 逻辑一对多 R16，无物理外键） | `docs/database/RELATIONS.md` |
 | `CDC_SERVER` 单表物理基线 | `docs/database/tables/CDC_SERVER.md` |
@@ -398,5 +398,6 @@
 | 2026-08-27 | 批准：文档状态由 `DRAFT_PENDING_USER_REVIEW` 改为 `APPROVED`；记录批准任务、批准日期、批准人（项目负责人）与 ChatGPT 复审通过的候选提交 `4e55493a...`；移除“不得自行批准”“候选基线待批准”等失效警示（初始草案状态保留于本变更记录）；实现状态保持 `NOT_STARTED`，当前待确认项保持 0，所有现行业务规则不变 | SERVER-CONFIG-FEATURE-BASELINE-APPROVAL-001（项目负责人批准驱动的 Feature 需求与验收基线收口；纯文档任务，不连接数据库，不修改代码） |
 | 2026-08-28 | 候选调整（预验收）：将配置列表排序由 `CONFIG_KEY ASC NULLS LAST, ID_SERVER_CONFIG ASC` 改为仅 `ID_SERVER_CONFIG ASC`（SC-UI-04、SC-DISPLAY-02）；新增 `CONFIG_DESC` 人工换行与安全文本渲染规则 SC-UI-23~26；文档状态由 `APPROVED` 迁移为 `DRAFT_ADJUSTMENT_PENDING_USER_REVIEW`，实现状态由 `NOT_STARTED` 迁移为 `IMPLEMENTED_ADJUSTMENT_PENDING`（旧批准版本已实现并复审，两项调整尚未实现）；正式验收仍未执行 | SERVER-CONFIG-PRE-ACCEPTANCE-ADJUSTMENT-BASELINE-001（纯文档候选基线任务；负责人在正式验收前提出的调整，待用户复审） |
 | 2026-08-28 | R1 实现事实修正：§3 由“当前代码事实与未来目标分层”改写为“当前已实现事实与候选调整目标分层”，删除“菜单仍为服务端配置”“页面仍为 PlaceholderPage”“无后端接口/数据库访问”“全部读写路径未实现”等实现前旧事实；明确旧批准版本已实现（`IMPLEMENTED_REVIEWED`），本次仅两项候选调整未实现（`ADJUSTMENT_TARGET`）；SC-MENU-04 分层约定同步更新；业务规则、配置校验、接口路径与 66 条验收口径不变 | SERVER-CONFIG-PRE-ACCEPTANCE-ADJUSTMENT-BASELINE-001-R1（ChatGPT 远程复审发现跨文档实现前旧事实；纯文档 R1 精确修正，待用户复审） |
+| 2026-08-28 | R2 口径微修正：§1 说明中“65 条验收”明确为原需求批准时的历史数量，并注明新增 `SC-AC-066` 后当前共 66 条仍全部未执行；§4 权威文档引用表中“16 张（14 当前访问 + 2 已批准待实现）”明确为数据库基线批准时的历史分层，并注明后两张现已由本 Feature 实现访问；不改变业务规则、接口、验证规则、状态或验收数量 | SERVER-CONFIG-PRE-ACCEPTANCE-ADJUSTMENT-BASELINE-001-R2（ChatGPT 复审发现两处当前口径残留；纯文档 R2 微修正，待用户复审） |
 
 > 关联文档：验收基线 `docs/features/server-config/ACCEPTANCE.md`；执行报告 `docs/features/server-config/reports/SERVER-CONFIG-FEATURE-BASELINE-001.md`。

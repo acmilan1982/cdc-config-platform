@@ -191,3 +191,55 @@ ChatGPT 已直接核对远程提交 `2a8255a231a20a4fc9414c25494c25f54d716ae5`�
 - R1 验证：`git diff --check` 退出码 0 无输出；相对 `2a8255a` 仅 5 个授权文件发生变化；`ACCEPTANCE.md`、`API.md` 相对授权基线零变化；业务代码/测试/数据库基线相对授权基线零变化；四份文档不再保留实现前旧事实，且一致区分“旧批准版本已实现；真实换行与新排序尚未实现”；候选规则 `white-space: pre-line` 安全文本显示与 `ORDER BY ID_SERVER_CONFIG ASC` 未变化；66 条验收全部 `NOT_RUN`、待确认 0；历史记录保留且追加 R1 记录；无数据库/ZooKeeper/服务访问或操作。
 - Commit：精确暂存 5 个授权文件，提交信息 `docs(server-config): correct implemented-state facts`。
 - Push：普通 Push 到 `origin/develop`；Push 后确认 `HEAD == origin/develop` 且 ahead/behind 为 `0 0`；任务前无关工作区内容原样保留。
+
+---
+
+## 13. R2 复审微修正章节
+
+### 13.1 R2 任务标识
+
+- `task_id`: `SERVER-CONFIG-PRE-ACCEPTANCE-ADJUSTMENT-BASELINE-001-R2`
+- 授权基线：`789087dda2382ed72b913ecc500b1dbe8c3186fa`
+- 任务性质：纯文档、两处文字口径微修正
+- 建议提交信息：`docs(server-config): finalize adjustment baseline wording`
+
+### 13.2 ChatGPT R1 复审结论与剩余问题
+
+ChatGPT 已直接核对远程提交 `789087dda2382ed72b913ecc500b1dbe8c3186fa`：
+
+- 相对 `2a8255a` 恰好 1 个提交、5 个授权文件；
+- R1 对 `REQUIREMENTS/DESIGN/UI/DATABASE` 的实现事实修正正确；
+- 两项候选规则未改变；
+- `ACCEPTANCE.md`、`API.md`、代码、测试和数据库基线未被修改；
+- 状态仍为 `DRAFT_ADJUSTMENT_PENDING_USER_REVIEW / IMPLEMENTED_ADJUSTMENT_PENDING`；
+- 66 条验收仍全部 `NOT_RUN`。
+
+剩余问题仅为 `REQUIREMENTS.md` 的两处当前口径残留，批准前必须精确修正：
+
+1. §1 说明同一句先写“65 条验收”、后写“现 66 条”，容易形成当前数量矛盾；前者必须明确为原需求批准时的历史数量 65 条，当前候选基线一律为 66 条。
+2. §4 数据库文档引用表仍写“14 当前访问 + 2 已批准待实现”；该分层是数据库基线批准当时的历史口径，现在两张表已经由 `server-config` 实现访问，必须明确标注为历史分层，且不得修改数据库基线文档。
+
+### 13.3 本 R2 修正的文件
+
+本 R2 仅修改 2 个授权文件，未修改其他任何文件：
+
+| 文件 | 修正内容 |
+|---|---|
+| `docs/features/server-config/REQUIREMENTS.md` | §1 说明“65 条验收”明确为原需求批准时的历史数量，并注明新增 `SC-AC-066` 后当前共 66 条仍全部未执行；§4 权威文档引用表“16 张（14 当前访问 + 2 已批准待实现）”明确为数据库基线批准时的历史分层，并注明后两张现已由本 Feature 实现访问；§20 追加 R2 变更记录 |
+| `docs/features/server-config/reports/SERVER-CONFIG-PRE-ACCEPTANCE-ADJUSTMENT-BASELINE-001.md` | 追加本 R2 复审微修正章节 |
+
+### 13.4 不变项声明
+
+本 R2 不改变：
+
+- 换行规则（真实换行安全显示，`white-space: pre-line` 目标语义）；
+- 排序规则（`ORDER BY ID_SERVER_CONFIG ASC`）；
+- 接口、验证规则、状态或验收数量（仍为 66 条，全部 `NOT_RUN`）；
+- 六份候选文档状态（`DRAFT_ADJUSTMENT_PENDING_USER_REVIEW` / `IMPLEMENTED_ADJUSTMENT_PENDING`）；
+- 代码或数据库基线（零修改，`ACCEPTANCE.md`、`API.md` 亦零变化）。
+
+### 13.5 验证、Commit、Push 结果
+
+- R2 验证：`git diff --check` 退出码 0 无输出；相对授权基线 `789087d` 仅 2 个授权文件发生变化；`REQUIREMENTS.md` 当前口径不再出现未标注历史的“65 条验收”；“14 当前访问 + 2 已批准待实现”仅作为明确标注的数据库批准时历史口径且同处说明后两张现已实现访问；其他 5 份功能文档、代码、测试、数据库基线零变化；两项候选规则、66 条验收与状态零漂移；报告追加 R2 记录；无数据库/ZooKeeper/业务服务操作。
+- Commit：精确暂存 2 个授权文件，提交信息 `docs(server-config): finalize adjustment baseline wording`。
+- Push：普通 Push 到 `origin/develop`；Push 后确认 `HEAD == origin/develop` 且 ahead/behind 为 `0 0`；任务前无关工作区内容原样保留。
