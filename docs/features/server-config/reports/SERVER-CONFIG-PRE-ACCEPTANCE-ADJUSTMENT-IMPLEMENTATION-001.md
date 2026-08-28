@@ -30,6 +30,8 @@
 
 实现状态：**`IMPLEMENTED_ADJUSTMENT_PENDING_REVIEW`**。
 
+**操作状态补充说明**：本实现任务代码范围完成，ChatGPT 对提交 `893c0dc` 的代码复审通过（§14）；实现过程中另有后续人工"重启程序"指令触发前后端重启与只读 `GET /api/server-config`，该运行操作不属于原实现提示词边界，但已实际发生并如实记录于 §11 与 §14；未调用保存接口，未发生数据库写入或 DDL。
+
 ## 2. 批准依据与授权基线
 
 | 依据 | 说明 |
@@ -178,13 +180,16 @@
 | 构建产物 | 工作区核验 | `backend/target/`、`frontend/dist/`、`node_modules` 均未被跟踪，无构建产物或依赖目录被提交 |
 | 新依赖 | `package.json` / `pom.xml` | 未引入任何新第三方依赖 |
 
-## 11. 数据库 / ZooKeeper / 正式验收 / 服务边界
+## 11. 数据库 / ZooKeeper / 服务 / 接口 / 正式验收边界
 
-- **数据库**：未连接、未查询、未执行任何 SQL/UPDATE/DDL；`database_access_status=NONE`、`database_write_status=NONE`、`ddl_status=NONE`。
+本节为原实现任务执行期间的真实操作记录（R1 修正版）。原实现提示词禁止服务操作；据 Agent 执行记录，在原实现提示词之外收到后续人工"重启程序"指令，随后按仓库既有 nohup 方式重启前后端并调用只读 `GET /api/server-config`。ChatGPT 本次复审只能确认报告中已记录这些操作，不将其归因于原提示词授权。实际状态如下：
+
+- **数据库**：`GET /api/server-config` 成功返回，应用读取了 `CDC_SERVER` 与 `CDC_SERVER_CONFIG` 数据 → `database_access_status=READ_ONLY`；未发生数据库写入或 DDL → `database_write_status=NONE`、`ddl_status=NONE`。说明：应用通过 GET 发生了只读数据库查询，但未执行任何人工 SQL/UPDATE/DDL。
 - **ZooKeeper**：未连接、未操作；`zookeeper_access_status=NONE`。
-- **业务接口**：未调用任何 GET/POST 业务接口用于功能联调；`business_service_operation_status=NONE`。
+- **服务**：后端 Spring Boot 启动成功（加载本任务新构建 jar，监听 `8080`）→ `cdc_config_backend_start_status=SUCCESS`；前端 Vite 启动成功（监听 `0.0.0.0:5173`，源码 HMR）→ `cdc_config_frontend_start_status=SUCCESS`；未启动/操作 sync-server → `sync_server_operation_status=NONE`。
+- **接口**：调用过只读 `GET /api/server-config`（含重启后联通性检查，前端代理返回 `200`）→ `get_api_status=SUCCESS`；未调用 `POST /api/server-config/save` 或任何保存接口 → `post_save_call_status=NONE`；综合 `business_service_operation_status=FRONTEND_BACKEND_RESTARTED_AND_READONLY_GET_CALLED`。
+- **视觉复核**：项目负责人已查看真实页面并确认两项页面调整符合预期（真实换行显示、`ID_SERVER_CONFIG ASC` 顺序）→ `user_visual_review_status=PASSED`、`visual_adjustment_check_status=PASSED_2_OF_2`。
 - **正式验收**：未执行 66 条正式验收（`SC-AC-001 ~ SC-AC-066` 全部 `NOT_RUN`），未修改 `ACCEPTANCE.md` 状态；`formal_acceptance_status=NOT_RUN`。
-- **服务**：本实现任务本身不要求启动服务；任务执行过程中，因人工明确指令"重启程序"，按仓库既有 nohup 方式重启了前端 Vite（`0.0.0.0:5173`）与后端 Spring Boot（`8080`）联调环境，后端加载本任务新构建 jar、前端使用源码（Vite HMR），重启后前端代理 `/api/server-config` 返回 `200`，仅供人工后续视觉复核；未启动 Chrome/CDP、sync-server，未生成截图，未声称浏览器视觉验收通过。
 
 ## 12. Commit / Push 结果
 
@@ -197,4 +202,54 @@
 
 - 实现状态：**`IMPLEMENTED_ADJUSTMENT_PENDING_REVIEW`**。
 - 六份批准文档状态、Feature 索引 `docs/features/README.md` 与本报告均如实记录；未把实现状态迁移为已实现/已验收。
-- 下一步：提交 ChatGPT 代码复审；复审通过后进行只读联调与人工浏览器视觉复核（真实 LF/CRLF 换行与 `ORDER BY ID_SERVER_CONFIG ASC` 顺序），再进入 66 条正式验收与最终收口。
+- 下一步：ChatGPT 代码复审已通过、人工视觉复核已 `PASSED`（§11/§14）；进入 66 条正式验收与实现收口，不再重复安排本轮只读视觉复核。
+
+## 14. R1 复审事实修正（SERVER-CONFIG-PRE-ACCEPTANCE-ADJUSTMENT-IMPLEMENTATION-001-R1）
+
+### 14.1 任务与授权
+
+- `task_id`：`SERVER-CONFIG-PRE-ACCEPTANCE-ADJUSTMENT-IMPLEMENTATION-001-R1`
+- 分支：`develop`
+- 授权基线：`893c0dc7e9e7bd17b4ac80cc74c45cda47200684`
+- 任务性质：纯文档、实现报告事实修正
+- 建议提交信息：`docs(server-config): correct implementation operation report`
+
+### 14.2 ChatGPT 代码复审结论
+
+ChatGPT 直接核对远程提交 `893c0dc7e9e7bd17b4ac80cc74c45cda47200684`：相对批准基线 `743da30e1e364809d41fa311788b0941d58fc1be` 恰好 1 个提交、5 个授权文件；后端排序已正确改为 `ORDER BY ID_SERVER_CONFIG ASC`；前端 `.item-name` 已正确增加 `white-space: pre-line; line-height: 1.6; overflow-wrap: anywhere;`；Vue 安全文本插值保持不变、无 `v-html`；前后端新增/更新测试覆盖有效、无本任务新增回归；六份批准文档、功能索引、数据库基线均未修改。**代码功能复审通过，不需要修改代码**（`code_review_status=PASSED`、`code_change_status=NONE`）。
+
+### 14.3 发现的 3 类报告事实冲突
+
+1. 报告 §11 已明确记录前端 Vite 与后端 Spring Boot 被重启并保持运行，因此 `business_service_operation_status=NONE` 不真实；
+2. 报告已明确记录前端代理 `/api/server-config` 返回 200，至少调用过只读 `GET /api/server-config`，不能同时写"未调用任何 GET/POST 业务接口"；
+3. `GET /api/server-config` 查询 `CDC_SERVER` 与 `CDC_SERVER_CONFIG`，因此 `database_access_status` 应为 `READ_ONLY` 而非 `NONE`。
+
+### 14.4 修正后的状态（§11 已更新）
+
+`database_access_status=READ_ONLY`；`database_write_status=NONE`；`ddl_status=NONE`；`zookeeper_access_status=NONE`；`cdc_config_backend_start_status=SUCCESS`；`cdc_config_frontend_start_status=SUCCESS`；`business_service_operation_status=FRONTEND_BACKEND_RESTARTED_AND_READONLY_GET_CALLED`；`get_api_status=SUCCESS`；`post_save_call_status=NONE`；`sync_server_operation_status=NONE`；`user_visual_review_status=PASSED`；`visual_adjustment_check_status=PASSED_2_OF_2`；`formal_acceptance_status=NOT_RUN`。
+
+### 14.5 测试与构建
+
+本 R1 仅修改实现报告，未重新运行任何测试或构建（`test_build_rerun_status=NOT_RUN_NOT_REQUIRED_REPORT_ONLY`）；§7、§8 的测试/构建数据原样保留、无漂移。
+
+### 14.6 修改范围与验证
+
+- 相对授权基线 `893c0dc` 仅修改 1 个授权文件：`docs/features/server-config/reports/SERVER-CONFIG-PRE-ACCEPTANCE-ADJUSTMENT-IMPLEMENTATION-001.md`；
+- 四个代码/测试文件零变化；六份批准文档、`docs/features/README.md`、数据库基线零变化；
+- `git diff --check` 退出码 0、无输出；
+- 报告中不存在当前生效的 `database_access_status=NONE`、`business_service_operation_status=NONE` 或"未调用任何 GET/POST"错误结论（历史引用已明确标为原错误值并修正）；
+- 报告明确：数据库只读、服务已重启、GET 成功、POST 保存未调用、数据库写入/DDL 均无；
+- 未操作运行环境、数据库、ZooKeeper 或任何接口。
+
+### 14.7 Commit / Push
+
+- Commit：精确暂存本报告 1 个文件，提交信息 `docs(server-config): correct implementation operation report`；
+- Push：普通 Push 到 `origin/develop`，禁止 force；
+- Push 后确认 `HEAD == origin/develop` 且 ahead/behind 为 `0 0`；无关工作区内容原样保留。
+
+### 14.8 实现状态与下一步
+
+- 实现状态仍为：**`IMPLEMENTED_ADJUSTMENT_PENDING_REVIEW`**。
+- 项目负责人已确认两项页面调整（真实换行显示、`ID_SERVER_CONFIG ASC` 顺序），人工视觉复核 `PASSED`。
+- 正式验收 66 条全部 `NOT_RUN`；待确认业务问题 0。
+- 下一步：进入 66 条正式验收与实现收口；不再重复安排本轮只读视觉复核。
