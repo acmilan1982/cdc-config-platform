@@ -38,9 +38,10 @@
 
 | 编号 | 规则 |
 |---|---|
-| SC-UI-DESIGN-003 | 菜单显示名称目标为“中心端配置”，直接替换现有“服务端配置”占位菜单，不新增第二套菜单（`SC-MENU-01/02`）；当前代码菜单 title 仍为“服务端配置”（`OBSERVED_CODE`），实现阶段才替换。 |
+| SC-UI-DESIGN-003 | 菜单显示名称当前已是“中心端配置”，已直接替换既有“服务端配置”占位菜单，不新增第二套菜单（`SC-MENU-01/02`）；`frontend/src/config/menu.ts` 菜单项 `/config/server` title 为“中心端配置”，`frontend/src/router/index.ts` 路由 meta title 亦为“中心端配置”（`IMPLEMENTED_REVIEWED`）。 |
 | SC-UI-DESIGN-004 | 路由复用 `/config/server`（name `ServerConfig`，group“配置管理”），不新建重复路由（`SC-MENU-03`）。 |
-| SC-UI-DESIGN-005 | 页面组件替换现有占位页 `views/server-config/ServerConfigPage.vue`（`PlaceholderPage`）为正式页面（`OBSERVED_CODE` → `FUTURE_FEATURE_TARGET`）。 |
+| SC-UI-DESIGN-005 | `views/server-config/ServerConfigPage.vue` 当前已为正式“中心端配置”页面（非占位页 `PlaceholderPage`），已实现两列表格、编辑控件、保存确认与状态处理（`IMPLEMENTED_REVIEWED`）；页面路由已指向该正式组件。 |
+| SC-UI-DESIGN-006 | 当前 UI 已实现旧批准设计：两列表格（配置项说明 + 配置值）、编辑控件、保存确认与状态处理。页面对普通长说明已能自动折行，但尚未显式保留 `CONFIG_DESC` 真实 LF/CRLF 换行（`white-space: pre-line` 行为待本次候选实现，见 `SC-UI-DESIGN-035~038`）；列表当前保持后端返回的旧排序（`CONFIG_KEY ASC NULLS LAST, ID_SERVER_CONFIG ASC`），本次候选目标才是不二次排序并接受 `ID_SERVER_CONFIG ASC`（`SC-UI-DESIGN-045`）。 |
 
 ## 4. 页面整体布局与 Element Plus 组件建议
 
@@ -241,3 +242,4 @@
 | 2026-08-27 | R1 修订：布局改为**单一确定方案**（一个 `el-card` + 恰好两列 `el-table`，配置值列约 `360px`/收缩下限约 `300px`、控件宽度 `100%`、操作区表格下方右对齐非 sticky）；确认框原值 = rawValue 原样展示（NULL/空 → “（空值）”）与新值 = canonicalValue；当前非法值不得静默规范化；新增 `SAVE_SUCCEEDED_RELOAD_FAILED` 状态（重试加载仅 GET）与对应文案；保持 DRAFT_PENDING_USER_REVIEW / NOT_STARTED | SERVER-CONFIG-DESIGN-BASELINE-001-R1（REQUIRES_CHANGES 修订；纯文档任务） |
 | 2026-08-27 | 批准收口：文档状态由 `DRAFT_PENDING_USER_REVIEW` 迁移为 `APPROVED`（实现仍 `NOT_STARTED`、65 条验收仍全部 `NOT_RUN`）；补充批准元数据；声明由“候选设计、待复审”更新为“已批准设计”；本设计不含需修正的“否则→则”文字问题（该修正仅在 `API.md` `SC-API-052` 与 `DESIGN.md` `SC-DESIGN-076`） | SERVER-CONFIG-DESIGN-BASELINE-APPROVAL-001（阶段 4 设计批准收口；纯文档任务） |
 | 2026-08-28 | 候选调整（预验收）：新增 SC-UI-DESIGN-035~038（`white-space: pre-line` 人工换行、真实 LF/CRLF 语义、`<br>`/字面量 `\n` 不作为协议、禁止 `v-html`、多行下 Key Tooltip 对齐）；新增 SC-UI-DESIGN-045（页面不二次排序，保持后端 `ID_SERVER_CONFIG ASC` 顺序）；修订 SC-UI-DESIGN-030/152；文档状态迁移为 `DRAFT_ADJUSTMENT_PENDING_USER_REVIEW`、实现状态迁移为 `IMPLEMENTED_ADJUSTMENT_PENDING`，66 条验收保持 NOT_RUN | SERVER-CONFIG-PRE-ACCEPTANCE-ADJUSTMENT-BASELINE-001（纯文档候选基线任务；待用户复审） |
+| 2026-08-28 | R1 实现事实修正：SC-UI-DESIGN-003 删除“当前菜单 title 仍为服务端配置”的旧事实，改为菜单/路由 title 当前已是“中心端配置”；SC-UI-DESIGN-005 删除“页面仍为 PlaceholderPage 待替换”的旧事实，改为正式页面已实现；新增 SC-UI-DESIGN-006 记录当前已实现 UI 状态（两列表格/编辑控件/保存确认/状态处理、普通长说明可自动折行、真实 LF/CRLF 换行尚待实现、列表当前保持旧排序）；候选规则 SC-UI-DESIGN-035~038、SC-UI-DESIGN-045 目标语义不变 | SERVER-CONFIG-PRE-ACCEPTANCE-ADJUSTMENT-BASELINE-001-R1（ChatGPT 远程复审发现跨文档实现前旧事实；纯文档 R1 精确修正，待用户复审） |

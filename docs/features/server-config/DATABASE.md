@@ -34,7 +34,7 @@
 | 编号 | 规则 |
 |---|---|
 | SC-DB-001 | 本 Feature 涉及两张表的物理结构、字段类型、长度、可空性、约束、当前行数与数据分布均引用已批准数据库基线，不重新查询数据库（`REQUIREMENTS.md` §4）：`docs/database/README.md`、`docs/database/SCHEMA.md`、`docs/database/RELATIONS.md`、`docs/database/tables/CDC_SERVER.md`、`docs/database/tables/CDC_SERVER_CONFIG.md`。 |
-| SC-DB-002 | 事实分层：表结构/字段/约束/索引为 `OBSERVED_DATABASE`（已批准基线）；“当前开发库 1 行中心端、8 行配置、`IS_EDITABLE` 6 个 `'1'` 2 个 `'0'`”为数据快照，不得写成生产常态或数据库强制约束；本 Feature 全部读取/写入路径为 `FUTURE_FEATURE_TARGET`（当前未实现）。 |
+| SC-DB-002 | 事实分层：表结构/字段/约束/索引为 `OBSERVED_DATABASE`（已批准基线）；“当前开发库 1 行中心端、8 行配置、`IS_EDITABLE` 6 个 `'1'` 2 个 `'0'`”为数据快照，不得写成生产常态或数据库强制约束；旧批准的读取/写入路径已实现（`IMPLEMENTED_REVIEWED`：查询 `CDC_SERVER` 识别唯一中心端、查询 `CDC_SERVER_CONFIG` 全部配置、批量更新既有记录的 `CONFIG_VALUE`），本次数据库使用调整仅为查询排序由旧顺序改为 `ORDER BY ID_SERVER_CONFIG ASC`（`SC-DB-034/054/091`，`ADJUSTMENT_TARGET`）；`CONFIG_DESC` 真实换行不需要数据库结构或写路径变化，API 原样读取即可，页面展示行为仍待前端实现。 |
 | SC-DB-003 | 本 Feature 不做任何数据库结构变更：不新增表/列/索引/唯一约束/Check/外键/触发器/序列，不做数据清洗或回填（`SC-NFR-05`、`SC-NONGOAL-04`）。 |
 
 ## 3. `CDC_SERVER`、`CDC_SERVER_CONFIG` 在本 Feature 中的用途
@@ -87,7 +87,7 @@
 
 | 编号 | 规则 |
 |---|---|
-| SC-DB-050 | `IS_EDITABLE` 物理类型 `CHAR(1)`、可空、默认值 `'1'`，数据库无 Check 约束（`CDC_SERVER_CONFIG.md` §2/§3）；其合法值全集只能由本 Feature 应用层定义（`FUTURE_FEATURE_TARGET`）。 |
+| SC-DB-050 | `IS_EDITABLE` 物理类型 `CHAR(1)`、可空、默认值 `'1'`，数据库无 Check 约束（`CDC_SERVER_CONFIG.md` §2/§3）；其合法值全集只能由本 Feature 应用层定义（旧批准版本已实现，属 `IMPLEMENTED_REVIEWED`），仍不是数据库约束。 |
 | SC-DB-051 | 应用层可编辑判定：数据库真实记录 `IS_EDITABLE` 去除尾部填充后**精确等于字符 `'1'`** 且 `CONFIG_KEY` ∈ 白名单（`SC-EDIT-01`）；`'0'`、NULL、空白、任何非 `'1'` 值一律只读（`SC-EDIT-02`、`SC-AC-021`）。 |
 | SC-DB-052 | `editable` 计算布尔只用于前端控件形态；后端保存时按主键重读真实 `IS_EDITABLE` 并独立重新判定（`SC-API-032`、`SC-NFR-01`）。 |
 
@@ -194,3 +194,4 @@
 | 2026-08-27 | R2 修订：`SC-DB-072` 请求结构/契约检查统一为顶层 JSON object 仅 `items`、`items` 为 JSON array、元素为 JSON object、item 字段均为 JSON 字符串（非数组/非对象 → HTTP 400 + `code=400`，额外字段 → `40227`）；⑥ 值校验顺序修正为先缺失/null 后非字符串类型；新增 `SC-DB-113` 全部结构/类型检查在数据库更新前完成；错误码总数保持 15；保持 DRAFT_PENDING_USER_REVIEW / NOT_STARTED | SERVER-CONFIG-DESIGN-BASELINE-001-R2（REQUIRES_ONE_MICRO_FIX 修订；纯文档任务） |
 | 2026-08-27 | 批准收口：文档状态由 `DRAFT_PENDING_USER_REVIEW` 迁移为 `APPROVED`（实现仍 `NOT_STARTED`、65 条验收仍全部 `NOT_RUN`）；补充批准元数据；声明由“候选设计、待复审”更新为“已批准设计”；DATABASE 处理顺序与 `否则→则` 文字修正无关（该修正仅在 `API.md` `SC-API-052` 与 `DESIGN.md` `SC-DESIGN-076`），无需修改 | SERVER-CONFIG-DESIGN-BASELINE-APPROVAL-001（阶段 4 设计批准收口；纯文档任务） |
 | 2026-08-28 | 候选调整（预验收）：查询顺序统一为 `ORDER BY ID_SERVER_CONFIG ASC`（SC-DB-034/054/091）；`CONFIG_KEY` 职责移除排序用途（SC-DB-024）；新增 SC-DB-056 明确 `CONFIG_DESC` 可含真实换行、应用只读原样展示，且本次不进行数据迁移/DDL/约束/索引变更；文档状态迁移为 `DRAFT_ADJUSTMENT_PENDING_USER_REVIEW`、实现状态迁移为 `IMPLEMENTED_ADJUSTMENT_PENDING`，66 条验收保持 NOT_RUN | SERVER-CONFIG-PRE-ACCEPTANCE-ADJUSTMENT-BASELINE-001（纯文档候选基线任务；待用户复审） |
+| 2026-08-28 | R1 实现事实修正：SC-DB-002 删除“本 Feature 全部读取/写入路径当前未实现”的旧事实，改为旧批准查询/保存/两表访问路径已实现（`IMPLEMENTED_REVIEWED`），本次数据库使用调整仅为查询排序改为 `ORDER BY ID_SERVER_CONFIG ASC`（`ADJUSTMENT_TARGET`），且 `CONFIG_DESC` 真实换行不需要数据库结构或写路径变化；SC-DB-050 的 `FUTURE_FEATURE_TARGET` 改为旧批准版本已实现的应用层规则；`DDL_STATUS=NONE`、数据库设计边界不变 | SERVER-CONFIG-PRE-ACCEPTANCE-ADJUSTMENT-BASELINE-001-R1（ChatGPT 远程复审发现跨文档实现前旧事实；纯文档 R1 精确修正，待用户复审） |

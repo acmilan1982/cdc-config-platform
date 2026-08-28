@@ -35,17 +35,17 @@
 |---|---|
 | SC-DESIGN-001 | 本文只确定应用结构、请求/处理/数据流、状态模型、事务与并发边界、安全与防绕过、性能与测试设计，以及用于追溯的设计编号。最终数据库物理结构不做任何变更（`SC-DB-001`、`SC-NFR-05`）。 |
 | SC-DESIGN-002 | 本文全部业务语义以已批准的 `REQUIREMENTS.md`（`SC-MENU-*`、`SC-UI-*`、`SC-SERVER-*`、`SC-DISPLAY-*`、`SC-EDIT-*`、`SC-CFG-*`、`SC-READONLY-*`、`SC-DIRTY-*`、`SC-CONFIRM-*`、`SC-BATCH-*`、`SC-STATE-*`、`SC-NFR-*`、`SC-NONGOAL-*`）为唯一来源，通过需求编号引用建立追踪关系，不复制整份需求。 |
-| SC-DESIGN-003 | 当前仓库不存在中心端配置的任何后端接口、前端正式页面或数据库访问（`OBSERVED_CODE`，已批准数据库基线 `CDC_SERVER.md` §8、`CDC_SERVER_CONFIG.md` §8 核验）；本文全部组件、流程、接口均为未来目标（`FUTURE_FEATURE_TARGET`），不得写成已实现。 |
+| SC-DESIGN-003 | 旧批准版本已实现：仓库已存在正式后端 `com.bsoft.cdcconfig.serverconfig` 包、`GET /api/server-config` 与 `POST /api/server-config/save` 接口、正式前端页面 `ServerConfigPage.vue`、菜单与路由（`IMPLEMENTED_REVIEWED`）；本文仅本次两项候选调整（真实换行显示、`ORDER BY ID_SERVER_CONFIG ASC`）尚未实现（`ADJUSTMENT_TARGET`），不得把候选目标写成已实现。 |
 | SC-DESIGN-004 | 设计遵循“接口最少化”原则：只提供“查询页面数据”与“批量保存配置值”两个业务接口（见 `API.md` `SC-API-020/040`），不引入额外的中心端选择、配置项增删、历史、搜索、分页或生效控制接口（`SC-NONGOAL-01~10`）。 |
 
-## 3. 当前占位实现与目标实现事实分层
+## 3. 当前已实现事实与候选调整目标分层
 
 | 编号 | 事实层 | 内容 |
 |---|---|---|
-| SC-DESIGN-010 | `OBSERVED_CODE` | 前端路由 `/config/server`（name `ServerConfig`，title“服务端配置”，group“配置管理”）指向占位页；菜单项 `/config/server` title“服务端配置”；页面 `views/server-config/ServerConfigPage.vue` 为 `PlaceholderPage`，无数据访问；无任何 Java 代码访问 `CDC_SERVER`/`CDC_SERVER_CONFIG`，无相关接口。 |
-| SC-DESIGN-011 | `FUTURE_FEATURE_TARGET` | 菜单显示名称改为“中心端配置”（`SC-MENU-01/02`），路由保持 `/config/server`（`SC-MENU-03`）；页面正式实现查询唯一中心端、展示全部配置、受控编辑并批量保存；只查询 `CDC_SERVER`、查询并修改 `CDC_SERVER_CONFIG` 既有记录的 `CONFIG_VALUE`。 |
+| SC-DESIGN-010 | `IMPLEMENTED_REVIEWED` | 前端路由 `/config/server`（name `ServerConfig`，title“中心端配置”，group“配置管理”）指向正式页面；菜单项 `/config/server` title“中心端配置”；页面 `views/server-config/ServerConfigPage.vue` 为正式页面（非 `PlaceholderPage`）；后端已存在 `com.bsoft.cdcconfig.serverconfig` 包，`GET /api/server-config` 查询、`POST /api/server-config/save` 批量保存均已实现；已查询 `CDC_SERVER` 与 `CDC_SERVER_CONFIG`。当前实现仍采用旧排序 `CONFIG_KEY ASC NULLS LAST, ID_SERVER_CONFIG ASC`，页面对普通长说明可自动折行但尚未保留真实 LF/CRLF 换行。 |
+| SC-DESIGN-011 | `ADJUSTMENT_TARGET` | 本次候选调整目标仅为两项：配置项说明按 `CONFIG_DESC` 真实 LF/CRLF 换行显示（`SC-DESIGN-047`）；列表查询排序改为 `ORDER BY ID_SERVER_CONFIG ASC`（`SC-DESIGN-046`）。菜单显示名称、路由、页面查询/展示/编辑/批量保存能力均属于旧批准版本，已实现。 |
 | SC-DESIGN-012 | `OBSERVED_DATABASE` | 开发库 `CDC_SERVER` 1 行（`Server001`）、`CDC_SERVER_CONFIG` 8 行；`IS_EDITABLE` 分布 6 个 `'1'`、2 个 `'0'`；当前数据无空 Key、无重复 Key、无孤立引用。以上为数据快照，不得写成数据库约束或生产常态。 |
-| SC-DESIGN-013 | 分层约定 | 文档与实现不得把未来目标写成已实现；不得把“当前开发库恰好一条中心端/八个配置”写成数据库强制唯一或强制非空；所有校验（`IS_EDITABLE='1'`、白名单、值域、非空与长度）均为应用层规则（`FUTURE_FEATURE_TARGET`）。 |
+| SC-DESIGN-013 | 分层约定 | 旧批准版本已实现并复审（`IMPLEMENTED_REVIEWED`），本次两项候选调整尚未实现（`ADJUSTMENT_TARGET`），文档与实现不得把候选目标写成已实现；不得把“当前开发库恰好一条中心端/八个配置”写成数据库强制唯一或强制非空；所有校验（`IS_EDITABLE='1'`、白名单、值域、非空与长度）均为应用层规则（旧批准版本已实现），仍不是数据库约束。 |
 
 ## 4. 后端建议包结构与各层职责
 
@@ -245,3 +245,4 @@
 | 2026-08-27 | R2 修订：请求体结构契约统一为顶层 JSON object 且仅 `items`、`items` 为 JSON array、元素为 JSON object、item 仅 `idServerConfig`/`configValue` 且均为 JSON 字符串（`SC-DESIGN-021/057/111`）；新增 `SC-DESIGN-115` 结构/类型契约 Feature 局部实现与 HTTP 400 映射；`SC-DESIGN-076` 校验顺序修正为先缺失/null 后非字符串类型；错误码总数保持 15；保持 DRAFT_PENDING_USER_REVIEW / NOT_STARTED | SERVER-CONFIG-DESIGN-BASELINE-001-R2（REQUIRES_ONE_MICRO_FIX 修订；纯文档任务） |
 | 2026-08-27 | 批准：文档状态由 `DRAFT_PENDING_USER_REVIEW` 改为 `APPROVED`；记录批准任务、批准日期、批准人（项目负责人）与 ChatGPT 复审通过提交 `77a8c639...`；同步 `SC-DESIGN-076` 两处“否则→则”纯文字逻辑方向修正（ChatGPT R2 复审后确认，与 `API.md` `SC-API-052` 完全一致：① 缺失或 JSON null 则 `VALUE_EMPTY` `40224`、② 非 JSON 字符串类型则 `VALUE_FORMAT_INVALID` `40226`，后续正向条件 trim 非空、原样长度 ≤64、符合 Key 专门规则仍保留“否则”）；设计批准不等于实现完成或验收执行；实现状态保持 `NOT_STARTED`，65 条验收保持 `NOT_RUN` | SERVER-CONFIG-DESIGN-BASELINE-APPROVAL-001（项目负责人批准驱动的设计基线收口；纯文档任务） |
 | 2026-08-28 | 候选调整（预验收）：排序统一为 `ORDER BY ID_SERVER_CONFIG ASC`（SC-DESIGN-046/121）；新增 SC-DESIGN-047 说明 `configDesc` 原样传输、前端安全文本渲染与 `white-space: pre-line` 样式语义；明确旧实现仍按旧排序且缺少显式换行保留、本次调整尚待代码实现；文档状态迁移为 `DRAFT_ADJUSTMENT_PENDING_USER_REVIEW`、实现状态迁移为 `IMPLEMENTED_ADJUSTMENT_PENDING`，66 条验收保持 NOT_RUN | SERVER-CONFIG-PRE-ACCEPTANCE-ADJUSTMENT-BASELINE-001（纯文档候选基线任务；待用户复审） |
+| 2026-08-28 | R1 实现事实修正：§3 由“当前占位实现与目标实现事实分层”改写为“当前已实现事实与候选调整目标分层”；SC-DESIGN-003 删除“仓库不存在后端接口/正式页面/数据库访问”的旧事实，改为旧批准版本已实现；SC-DESIGN-010 由 `OBSERVED_CODE` 占位事实改为 `IMPLEMENTED_REVIEWED` 已实现事实；SC-DESIGN-011 由 `FUTURE_FEATURE_TARGET` 整体目标改为 `ADJUSTMENT_TARGET` 仅两项候选调整；SC-DESIGN-013 分层约定同步更新；保持编号稳定、不重排、不改变其他设计语义 | SERVER-CONFIG-PRE-ACCEPTANCE-ADJUSTMENT-BASELINE-001-R1（ChatGPT 远程复审发现跨文档实现前旧事实；纯文档 R1 精确修正，待用户复审） |

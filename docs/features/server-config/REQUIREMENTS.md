@@ -48,28 +48,35 @@
 | 可编辑白名单 | 管理平台明确支持编辑、且已内置专门校验规则的 `CONFIG_KEY` 集合（见 §11）。 |
 | 最近一次成功加载 | 页面保存的原始值来源；进入页面或保存成功后重新查询得到的值即“最近一次成功加载”。 |
 
-## 3. 当前代码事实与未来目标分层
+## 3. 当前已实现事实与候选调整目标分层
 
-本文档严格区分“当前代码事实”与“未来 Feature 目标”，不得混淆。
+本文档严格区分“当前已实现事实”“本次候选调整目标”与“已批准数据库基线”，不得混淆。
 
-### 3.1 当前代码事实（`OBSERVED_CODE`）
+### 3.1 当前已实现事实（`IMPLEMENTED_REVIEWED`）
 
-- 前端路由 `frontend/src/router/index.ts`：存在路由 `/config/server`（name `ServerConfig`，title“服务端配置”，group“配置管理”）指向占位页。
-- 前端菜单 `frontend/src/config/menu.ts`：“配置管理”组下存在菜单项 `/config/server`，title“服务端配置”。
-- 前端页面 `frontend/src/views/server-config/ServerConfigPage.vue`：占位页（`PlaceholderPage`），info 文本提及 `CDC_SERVER`、`CDC_SERVER_CONFIG`，无任何数据访问。
-- 前端构建产物：`backend/src/main/resources/static/assets/ServerConfigPage-BLgdPsG8.js` 为提交进仓库的既有 Vite 构建产物，仅含占位页字符串。
-- 未发现任何 Java Entity、Mapper、Service、Controller、XML Mapper 或 SQL 访问 `CDC_SERVER` / `CDC_SERVER_CONFIG`；当前仓库不存在中心端配置的查询或批量保存接口（`OBSERVED_CODE`，已批准数据库基线 `CDC_SERVER.md` §8 / `CDC_SERVER_CONFIG.md` §8 核验）。
-- 当前管理平台对两张表的实际访问：无（`OBSERVED_CODE`）。已批准数据库基线分层为：14 张当前生产代码实际访问表 + 2 张已批准、待 `server-config` Feature 实现使用表 = 16 张已批准单表物理基线。
+旧批准需求版本已实现并经过 R1/R2 复审（实现审查基线 `24d8b80340cc691895bed8bc45a4cb2dc2c6b9b6`，初始实现提交 `96aba1e93dd7f8d73d3882c2f757229bdb8fa6d0`），只读联调与视觉交接完成（授权基线 `c0b9d4973e2b6bdd3e7b02a3748816ffc55362ba`）。当前仓库已存在正式的中心端配置实现：
 
-### 3.2 未来 Feature 目标（`FUTURE_FEATURE_TARGET`）
+- 前端路由 `frontend/src/router/index.ts`：路由 `/config/server`（name `ServerConfig`，title“中心端配置”，group“配置管理”）指向正式页面 `ServerConfigPage.vue`。
+- 前端菜单 `frontend/src/config/menu.ts`：“配置管理”组下菜单项 `/config/server`，title“中心端配置”（已直接替换既有“服务端配置”占位菜单，不新增第二套菜单）。
+- 前端页面 `frontend/src/views/server-config/ServerConfigPage.vue`：正式“中心端配置”页面（非占位页），实现两列表格、受控编辑、保存确认与状态处理。
+- 后端 `com.bsoft.cdcconfig.serverconfig` 包：已存在 Entity（`CdcServer`、`CdcServerConfig`）、Mapper（`CdcServerMapper`、`CdcServerConfigMapper`）、Service、Controller、DTO/VO、Validator、Exception 等正式组件。
+- 后端接口：`GET /api/server-config`（查询页面数据）与 `POST /api/server-config/save`（批量保存配置值）均已实现。
+- 数据库访问：旧批准实现已查询 `CDC_SERVER` 识别唯一中心端、查询 `CDC_SERVER_CONFIG` 全部配置并批量更新既有记录的 `CONFIG_VALUE`。已批准数据库基线分层为：14 张当前生产代码实际访问表 + 2 张本 Feature 实现访问表 = 16 张已批准单表物理基线。
+- 当前已实现版本仍采用旧排序 `CONFIG_KEY ASC NULLS LAST, ID_SERVER_CONFIG ASC`；页面对普通长说明已能自动折行，但尚未显式保留 `CONFIG_DESC` 中的真实 LF/CRLF 换行。
 
-- 菜单显示名称改为“中心端配置”，直接替换现有“服务端配置”占位功能；路由保持 `/config/server`，不新增重复路由。
-- 页面正式实现为“中心端配置”页面：查询唯一中心端、展示全部配置、受控编辑并批量保存（本文档全部页面与交互规则均为未来目标）。
-- 本 Feature 只查询 `CDC_SERVER`、查询并修改 `CDC_SERVER_CONFIG`；只修改既有记录的 `CONFIG_VALUE`，禁止新增和删除（`CONFIRMED_BY_OWNER`）。
+### 3.2 本次候选调整目标（`ADJUSTMENT_TARGET`）
+
+本次仅有两项候选调整尚未实现，均为本文档中标注为候选的规则：
+
+- 配置项说明按 `CONFIG_DESC` 中的真实 LF/CRLF 换行按换行位置显示（`SC-UI-23~26`，目标样式语义 `white-space: pre-line` 等）；
+- 配置列表查询排序由旧顺序改为 `ORDER BY ID_SERVER_CONFIG ASC`（`SC-UI-04`、`SC-DISPLAY-02`）。
+
+除上述两项外，旧批准版本的其他页面与交互规则均已实现；不得把候选调整目标写成已实现。
 
 ### 3.3 分层约定
 
-- 当前占位实现属于 `OBSERVED_CODE`；正式页面与全部新增能力属于 `FUTURE_FEATURE_TARGET`，本文档不得把未来目标写成已实现。
+- 旧批准版本（正式页面、两个接口、两表访问及全部已批准规则）属于 `IMPLEMENTED_REVIEWED`（已实现并复审）；
+- 本次两项候选调整属于 `ADJUSTMENT_TARGET`（已写入候选基线、尚未实现）；
 - 开发库当前数据快照（1 行中心端、8 行配置、`IS_EDITABLE` 分布等）属于 `OBSERVED_DATABASE`，不得写成生产常态，也不得写成数据库强制约束。
 
 ## 4. 数据来源与已批准数据库基线引用
@@ -94,7 +101,7 @@
 - 当前 8 条配置全部归属唯一中心端，无空 `SERVER_ID`、无孤立引用、无重复 key。
 - 两表间为逻辑一对多关系，无物理外键；16 张已批准表范围内均不设置物理外键（项目确认的架构决策）。
 
-本 Feature 的校验规则（`IS_EDITABLE` 规范值、可编辑白名单、值域校验、非空与物理长度）均属应用层规则（`FUTURE_FEATURE_TARGET`），不得写成数据库已有约束。
+本 Feature 的校验规则（`IS_EDITABLE` 规范值、可编辑白名单、值域校验、非空与物理长度）均属应用层规则（旧批准版本已实现，属 `IMPLEMENTED_REVIEWED`），仍不得写成数据库已有约束。
 
 ## 5. 功能范围（范围内/范围外）
 
@@ -146,7 +153,7 @@
 | SC-MENU-01 | 菜单显示名称改为“中心端配置”。 |
 | SC-MENU-02 | 直接替换现有“服务端配置”占位功能，不新增第二套菜单。 |
 | SC-MENU-03 | 路由保持 `/config/server`；不得另建重复路由。 |
-| SC-MENU-04 | 当前占位实现属于 `OBSERVED_CODE`，正式页面属于 `FUTURE_FEATURE_TARGET`，文档与实现不得混淆。 |
+| SC-MENU-04 | 旧批准版本已实现并复审（`IMPLEMENTED_REVIEWED`），本次候选调整目标（`ADJUSTMENT_TARGET`）尚未实现；文档与实现不得把候选目标写成已实现。 |
 
 ### 7.2 页面结构
 
@@ -390,5 +397,6 @@
 | 2026-08-27 | R1 修订：隐藏 Key 独立列并改为信息图标 Tooltip；页面主体改为“配置项说明 + 配置值”两列；配置项显示名称兜底；异常当前值允许纠正；物理长度验收口径修正 | SERVER-CONFIG-FEATURE-BASELINE-001-R1（ChatGPT 复审“有条件通过” + 项目负责人确认；纯文档修订，状态保持 DRAFT_PENDING_USER_REVIEW） |
 | 2026-08-27 | 批准：文档状态由 `DRAFT_PENDING_USER_REVIEW` 改为 `APPROVED`；记录批准任务、批准日期、批准人（项目负责人）与 ChatGPT 复审通过的候选提交 `4e55493a...`；移除“不得自行批准”“候选基线待批准”等失效警示（初始草案状态保留于本变更记录）；实现状态保持 `NOT_STARTED`，当前待确认项保持 0，所有现行业务规则不变 | SERVER-CONFIG-FEATURE-BASELINE-APPROVAL-001（项目负责人批准驱动的 Feature 需求与验收基线收口；纯文档任务，不连接数据库，不修改代码） |
 | 2026-08-28 | 候选调整（预验收）：将配置列表排序由 `CONFIG_KEY ASC NULLS LAST, ID_SERVER_CONFIG ASC` 改为仅 `ID_SERVER_CONFIG ASC`（SC-UI-04、SC-DISPLAY-02）；新增 `CONFIG_DESC` 人工换行与安全文本渲染规则 SC-UI-23~26；文档状态由 `APPROVED` 迁移为 `DRAFT_ADJUSTMENT_PENDING_USER_REVIEW`，实现状态由 `NOT_STARTED` 迁移为 `IMPLEMENTED_ADJUSTMENT_PENDING`（旧批准版本已实现并复审，两项调整尚未实现）；正式验收仍未执行 | SERVER-CONFIG-PRE-ACCEPTANCE-ADJUSTMENT-BASELINE-001（纯文档候选基线任务；负责人在正式验收前提出的调整，待用户复审） |
+| 2026-08-28 | R1 实现事实修正：§3 由“当前代码事实与未来目标分层”改写为“当前已实现事实与候选调整目标分层”，删除“菜单仍为服务端配置”“页面仍为 PlaceholderPage”“无后端接口/数据库访问”“全部读写路径未实现”等实现前旧事实；明确旧批准版本已实现（`IMPLEMENTED_REVIEWED`），本次仅两项候选调整未实现（`ADJUSTMENT_TARGET`）；SC-MENU-04 分层约定同步更新；业务规则、配置校验、接口路径与 66 条验收口径不变 | SERVER-CONFIG-PRE-ACCEPTANCE-ADJUSTMENT-BASELINE-001-R1（ChatGPT 远程复审发现跨文档实现前旧事实；纯文档 R1 精确修正，待用户复审） |
 
 > 关联文档：验收基线 `docs/features/server-config/ACCEPTANCE.md`；执行报告 `docs/features/server-config/reports/SERVER-CONFIG-FEATURE-BASELINE-001.md`。

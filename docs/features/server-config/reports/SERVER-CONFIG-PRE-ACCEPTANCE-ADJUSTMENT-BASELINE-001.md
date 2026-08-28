@@ -140,3 +140,54 @@
 本任务在 Commit 与 Push 成功后即停止，不进行批准收口、不创建实现任务、不修改代码、不运行构建/测试/业务服务，也不操作数据库、ZooKeeper 或 sync-server。
 
 下一步仅允许：ChatGPT 直接核对远程提交和本报告；复审通过后，由项目负责人决定是否批准本次调整基线。批准后再建立一个只修改排序与说明换行显示的小范围实现任务。
+
+---
+
+## 12. R1 复审修正章节
+
+### 12.1 R1 任务标识
+
+- `task_id`: `SERVER-CONFIG-PRE-ACCEPTANCE-ADJUSTMENT-BASELINE-001-R1`
+- 授权基线：`2a8255a231a20a4fc9414c25494c25f54d716ae5`
+- 任务性质：纯文档 R1 精确修正
+- 建议提交信息：`docs(server-config): correct implemented-state facts`
+
+### 12.2 ChatGPT 远程复审结论与阻断点
+
+ChatGPT 已直接核对远程提交 `2a8255a231a20a4fc9414c25494c25f54d716ae5`：
+
+- 相对授权基线 `c0b9d4973e2b6bdd3e7b02a3748816ffc55362ba` 恰好 1 个提交；
+- 变更范围恰好为任务授权的 7 个文档；
+- `CONFIG_DESC` 真实换行规则正确；
+- 排序目标已统一为 `ORDER BY ID_SERVER_CONFIG ASC`；
+- `SC-AC-001`～`SC-AC-066` 共 66 条、全部 `NOT_RUN`；
+- 两项候选调整本身无业务待确认项。
+
+**阻断点**：若干正文仍保留 Feature 实现前的旧事实，例如“页面仍是 PlaceholderPage”“菜单仍叫服务端配置”“当前没有后端接口或数据库访问”“全部读写路径尚未实现”。这些表述与同一文档顶部的真实状态——旧批准版本已实现、经 R1/R2 复审并完成只读联调，本次仅有两项调整尚未实现——直接矛盾。因此提交 `2a8255a` 暂不批准，必须先执行本 R1。
+
+### 12.3 本 R1 修正的文件与规则
+
+仅修改 4 个文档 + 追加本报告 R1 章节，未修改 `ACCEPTANCE.md`、`API.md`、任何代码、测试、数据库基线、索引或其他报告：
+
+| 文件 | 修正内容 |
+|---|---|
+| `docs/features/server-config/REQUIREMENTS.md` | §3 由“当前代码事实与未来目标分层”改写为“当前已实现事实与候选调整目标分层”（§3.1 `IMPLEMENTED_REVIEWED`、§3.2 `ADJUSTMENT_TARGET`、§3.3 分层约定）；删除“菜单仍为服务端配置”“页面仍为 PlaceholderPage”“无后端接口/数据库访问”“全部读写路径未实现”等实现前旧事实；SC-MENU-04 分层约定同步更新；追加 R1 变更记录 |
+| `docs/features/server-config/DESIGN.md` | §3 标题与 SC-DESIGN-003/010/011/013 修正：由实现前“占位实现 → 整体未来目标”更新为“旧批准版本已实现 → 两项候选调整尚未实现”，列出正式前后端能力与本次仅两项调整目标；追加 R1 变更记录 |
+| `docs/features/server-config/UI.md` | SC-UI-DESIGN-003 改为菜单/路由 title 当前已是“中心端配置”；SC-UI-DESIGN-005 改为正式页面已实现；新增 SC-UI-DESIGN-006 记录当前 UI 已实现状态与尚待实现项；候选规则 SC-UI-DESIGN-035~038、SC-UI-DESIGN-045 目标语义不变；追加 R1 变更记录 |
+| `docs/features/server-config/DATABASE.md` | SC-DB-002 改为旧批准查询/保存/两表访问路径已实现，本次数据库使用调整仅为查询排序改为 `ORDER BY ID_SERVER_CONFIG ASC`，`CONFIG_DESC` 真实换行不需要数据库结构或写路径变化；SC-DB-050 移除 `FUTURE_FEATURE_TARGET` 标签；`DDL_STATUS=NONE` 不变；追加 R1 变更记录 |
+
+### 12.4 不变项声明
+
+本 R1：
+
+- 不改变两项候选业务规则（真实换行显示、`ORDER BY ID_SERVER_CONFIG ASC`）；
+- 不改变验收数量（仍为 66 条，全部 `NOT_RUN`）；
+- 不批准候选调整（状态仍为 `DRAFT_ADJUSTMENT_PENDING_USER_REVIEW` / `IMPLEMENTED_ADJUSTMENT_PENDING`）；
+- 不修改代码或数据库；
+- 保持六份候选文档状态一致，待确认 0。
+
+### 12.5 验证、Commit、Push 结果
+
+- R1 验证：`git diff --check` 退出码 0 无输出；相对 `2a8255a` 仅 5 个授权文件发生变化；`ACCEPTANCE.md`、`API.md` 相对授权基线零变化；业务代码/测试/数据库基线相对授权基线零变化；四份文档不再保留实现前旧事实，且一致区分“旧批准版本已实现；真实换行与新排序尚未实现”；候选规则 `white-space: pre-line` 安全文本显示与 `ORDER BY ID_SERVER_CONFIG ASC` 未变化；66 条验收全部 `NOT_RUN`、待确认 0；历史记录保留且追加 R1 记录；无数据库/ZooKeeper/服务访问或操作。
+- Commit：精确暂存 5 个授权文件，提交信息 `docs(server-config): correct implemented-state facts`。
+- Push：普通 Push 到 `origin/develop`；Push 后确认 `HEAD == origin/develop` 且 ahead/behind 为 `0 0`；任务前无关工作区内容原样保留。
