@@ -243,3 +243,52 @@ ChatGPT 已直接核对远程提交 `789087dda2382ed72b913ecc500b1dbe8c3186fa`�
 - R2 验证：`git diff --check` 退出码 0 无输出；相对授权基线 `789087d` 仅 2 个授权文件发生变化；`REQUIREMENTS.md` 当前口径不再出现未标注历史的“65 条验收”；“14 当前访问 + 2 已批准待实现”仅作为明确标注的数据库批准时历史口径且同处说明后两张现已实现访问；其他 5 份功能文档、代码、测试、数据库基线零变化；两项候选规则、66 条验收与状态零漂移；报告追加 R2 记录；无数据库/ZooKeeper/业务服务操作。
 - Commit：精确暂存 2 个授权文件，提交信息 `docs(server-config): finalize adjustment baseline wording`。
 - Push：普通 Push 到 `origin/develop`；Push 后确认 `HEAD == origin/develop` 且 ahead/behind 为 `0 0`；任务前无关工作区内容原样保留。
+
+---
+
+## 14. 批准收口（SERVER-CONFIG-PRE-ACCEPTANCE-ADJUSTMENT-BASELINE-APPROVAL-001）
+
+本候选基线任务在 R2 提交 `b1c5349df43c73bc855b5ca8b3ea92acb6faa7ee` 后，经 ChatGPT 远程复审与项目负责人批准，由独立批准任务完成收口，结论如下。
+
+### 14.1 复审与批准事实
+
+- ChatGPT 已直接核对远程 R2（`b1c5349df43c73bc855b5ca8b3ea92acb6faa7ee`）：范围、两处口径、两项候选规则、66 条验收和状态均通过，**无需 R3**；
+- 项目负责人已在 ChatGPT 会话中明确回复“同意”，正式批准本次验收前调整基线；
+- 当前业务待确认项 `PENDING_USER_CONFIRMATION=0`。
+
+### 14.2 六份文档状态迁移结果
+
+| 文档 | 迁移前 | 迁移后 |
+|---|---|---|
+| `REQUIREMENTS.md` | `DRAFT_ADJUSTMENT_PENDING_USER_REVIEW` | `APPROVED` |
+| `ACCEPTANCE.md` | `DRAFT_ADJUSTMENT_PENDING_USER_REVIEW` | `APPROVED` |
+| `DESIGN.md` | `DRAFT_ADJUSTMENT_PENDING_USER_REVIEW` | `APPROVED` |
+| `API.md` | `DRAFT_ADJUSTMENT_PENDING_USER_REVIEW` | `APPROVED` |
+| `UI.md` | `DRAFT_ADJUSTMENT_PENDING_USER_REVIEW` | `APPROVED` |
+| `DATABASE.md` | `DRAFT_ADJUSTMENT_PENDING_USER_REVIEW` | `APPROVED` |
+
+六份文档均保留原需求/设计首次批准历史、候选调整初始提交 `2a8255a`、R1 `789087d`、R2 `b1c5349` 全部历史记录，未覆盖或删除；均追加批准收口变更记录与批准元数据（批准任务 `SERVER-CONFIG-PRE-ACCEPTANCE-ADJUSTMENT-BASELINE-APPROVAL-001`、批准日期 2026-08-28、批准人=项目负责人、ChatGPT 最终复审通过提交 `b1c5349df43c73bc855b5ca8b3ea92acb6faa7ee`）。
+
+### 14.3 两项规则内容不变
+
+- `CONFIG_DESC` 真实 LF/CRLF 在页面按换行位置安全显示；普通长文本仍自动折行；不解析 `<br>`、字面量 `\n` 或 HTML，禁止 `v-html`；
+- 配置列表查询与展示顺序改为 `ORDER BY ID_SERVER_CONFIG ASC`，前端不二次排序。
+
+### 14.4 实现与验收状态
+
+- 旧批准版本：`IMPLEMENTED_REVIEWED`（已实现并复审）；
+- 本次两项调整：已批准，但代码**尚未实现**；
+- 总体实现状态：`IMPLEMENTED_ADJUSTMENT_PENDING`；
+- 正式验收：66 条 `SC-AC-001~066` 全部 `NOT_RUN`；
+- `PENDING_USER_CONFIRMATION=0`。
+
+### 14.5 批准任务修改范围、验证与 Commit/Push 结果
+
+- 修改范围：仅 9 个授权文件（六份功能文档 + 本报告追加批准章节 + 新建批准报告 `SERVER-CONFIG-PRE-ACCEPTANCE-ADJUSTMENT-BASELINE-APPROVAL-001.md` + `docs/features/README.md` server-config 行）；
+- 验证：`git diff --check` 退出码 0 无输出；相对授权基线 `b1c5349` 仅 9 个授权文件变化；六份文档状态均为 `APPROVED`、实现状态均为 `IMPLEMENTED_ADJUSTMENT_PENDING`、66 条验收全部 `NOT_RUN` 且编号连续唯一；无当前生效的 `DRAFT_ADJUSTMENT_PENDING_USER_REVIEW` 状态（历史记录除外）；初始候选、R1、R2 历史均保留；代码、测试、数据库基线相对授权基线零变化；所有相对 Markdown 链接可解析；未访问数据库/ZK、未操作服务、未执行构建测试或验收；
+- Commit：精确暂存 9 个授权文件，提交信息 `docs(server-config): approve pre-acceptance adjustment baseline`；
+- Push：普通 Push 到 `origin/develop`，禁止 force；Push 后确认 `HEAD == origin/develop` 且 ahead/behind 为 `0 0`；任务前无关工作区内容原样保留。
+
+### 14.6 下一步
+
+本次批准不代表两项代码调整已经实现，也不代表 66 条正式验收已经执行。下一阶段为**单独建立小范围代码实现任务**，在本任务中不实现任何代码。

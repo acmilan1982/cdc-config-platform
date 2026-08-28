@@ -6,10 +6,10 @@
 |---|---|
 | 正式功能标识 | `server-config` |
 | 目标文档 | `docs/features/server-config/DATABASE.md` |
-| 文档状态 | `DRAFT_ADJUSTMENT_PENDING_USER_REVIEW`（原批准数据库使用设计基线仍有效；本次为负责人在正式验收前提出的两项候选调整，待用户复审，见 §18 变更记录） |
-| 需求基线状态 | `DRAFT_ADJUSTMENT_PENDING_USER_REVIEW`（原已批准） |
-| 验收基线状态 | `DRAFT_ADJUSTMENT_PENDING_USER_REVIEW`（原已批准） |
-| 实现状态 | `IMPLEMENTED_ADJUSTMENT_PENDING`（旧批准设计已实现并经过 R1/R2 复审；本次两项候选调整尚未实现） |
+| 文档状态 | `APPROVED`（原批准数据库使用设计基线仍有效；本次验收前两项调整——`ORDER BY ID_SERVER_CONFIG ASC` 与 `CONFIG_DESC` 真实换行——已获项目负责人批准，代码尚未实现，见 §18 变更记录） |
+| 需求基线状态 | `APPROVED`（原已批准，本次调整已批准） |
+| 验收基线状态 | `APPROVED`（原已批准，本次调整已批准） |
+| 实现状态 | `IMPLEMENTED_ADJUSTMENT_PENDING`（旧批准设计已实现并经过 R1/R2 复审；本次两项已批准调整尚未实现） |
 | 验收用例状态 | `66 条全部 NOT_RUN` |
 | 设计任务 | `SERVER-CONFIG-DESIGN-BASELINE-001` |
 | 授权基线提交 | `c1a6d7dc38de261093383d7abf719f0834dd9bb3` |
@@ -26,8 +26,12 @@
 | 创建日期 | 2026-08-27 |
 | 候选调整任务 | `SERVER-CONFIG-PRE-ACCEPTANCE-ADJUSTMENT-BASELINE-001` |
 | 候选调整授权基线提交 | `c0b9d4973e2b6bdd3e7b02a3748816ffc55362ba` |
+| 候选调整批准任务 | `SERVER-CONFIG-PRE-ACCEPTANCE-ADJUSTMENT-BASELINE-APPROVAL-001` |
+| 候选调整批准日期 | 2026-08-28 |
+| 候选调整批准人 | 项目负责人 |
+| ChatGPT 最终复审通过提交 | `b1c5349df43c73bc855b5ca8b3ea92acb6faa7ee` |
 
-声明：本文档原为**已批准数据库使用设计**，由项目负责人于 2026-08-27 正式批准（`SERVER-CONFIG-DESIGN-BASELINE-APPROVAL-001`），ChatGPT 复审通过提交为 `77a8c639911bee78a17f62d2ce8af2db53c44d29`。旧批准设计已实现并经过 R1/R2 复审。本次为负责人在正式验收前提出的两项候选调整（查询顺序统一为 `ID_SERVER_CONFIG ASC`、明确 `CONFIG_DESC` 可含真实换行并只读原样展示），文档状态为 `DRAFT_ADJUSTMENT_PENDING_USER_REVIEW`，两项调整**尚未实现**，66 条验收保持 `NOT_RUN`。设计批准不代表代码已实现，不代表验收已执行。本文只描述本 Feature 如何读取与使用已批准数据库对象，**不复制项目级数据库基线，不设计 DDL，不新增索引/约束/外键**；`DDL_STATUS=NONE`（`SC-DB-120~123`）。本任务未连接数据库，未执行任何 SQL。
+声明：本文档原为**已批准数据库使用设计**，由项目负责人于 2026-08-27 正式批准（`SERVER-CONFIG-DESIGN-BASELINE-APPROVAL-001`），ChatGPT 复审通过提交为 `77a8c639911bee78a17f62d2ce8af2db53c44d29`。旧批准设计已实现并经过 R1/R2 复审。本次为负责人在正式验收前提出的两项候选调整（查询顺序统一为 `ID_SERVER_CONFIG ASC`、明确 `CONFIG_DESC` 可含真实换行并只读原样展示），已获项目负责人批准（批准任务 `SERVER-CONFIG-PRE-ACCEPTANCE-ADJUSTMENT-BASELINE-APPROVAL-001`，批准日期 2026-08-28，ChatGPT 最终复审通过提交 `b1c5349df43c73bc855b5ca8b3ea92acb6faa7ee`），文档状态为 `APPROVED`，两项已批准调整的代码**尚未实现**（实现状态 `IMPLEMENTED_ADJUSTMENT_PENDING`），正式验收（现 66 条）仍未执行。设计批准不代表代码已实现，不代表验收已执行。本文只描述本 Feature 如何读取与使用已批准数据库对象，**不复制项目级数据库基线，不设计 DDL，不新增索引/约束/外键**；`DDL_STATUS=NONE`（`SC-DB-120~123`）。本任务未连接数据库，未执行任何 SQL。
 
 ## 2. 权威数据库基线引用和事实/目标分层
 
@@ -195,3 +199,4 @@
 | 2026-08-27 | 批准收口：文档状态由 `DRAFT_PENDING_USER_REVIEW` 迁移为 `APPROVED`（实现仍 `NOT_STARTED`、65 条验收仍全部 `NOT_RUN`）；补充批准元数据；声明由“候选设计、待复审”更新为“已批准设计”；DATABASE 处理顺序与 `否则→则` 文字修正无关（该修正仅在 `API.md` `SC-API-052` 与 `DESIGN.md` `SC-DESIGN-076`），无需修改 | SERVER-CONFIG-DESIGN-BASELINE-APPROVAL-001（阶段 4 设计批准收口；纯文档任务） |
 | 2026-08-28 | 候选调整（预验收）：查询顺序统一为 `ORDER BY ID_SERVER_CONFIG ASC`（SC-DB-034/054/091）；`CONFIG_KEY` 职责移除排序用途（SC-DB-024）；新增 SC-DB-056 明确 `CONFIG_DESC` 可含真实换行、应用只读原样展示，且本次不进行数据迁移/DDL/约束/索引变更；文档状态迁移为 `DRAFT_ADJUSTMENT_PENDING_USER_REVIEW`、实现状态迁移为 `IMPLEMENTED_ADJUSTMENT_PENDING`，66 条验收保持 NOT_RUN | SERVER-CONFIG-PRE-ACCEPTANCE-ADJUSTMENT-BASELINE-001（纯文档候选基线任务；待用户复审） |
 | 2026-08-28 | R1 实现事实修正：SC-DB-002 删除“本 Feature 全部读取/写入路径当前未实现”的旧事实，改为旧批准查询/保存/两表访问路径已实现（`IMPLEMENTED_REVIEWED`），本次数据库使用调整仅为查询排序改为 `ORDER BY ID_SERVER_CONFIG ASC`（`ADJUSTMENT_TARGET`），且 `CONFIG_DESC` 真实换行不需要数据库结构或写路径变化；SC-DB-050 的 `FUTURE_FEATURE_TARGET` 改为旧批准版本已实现的应用层规则；`DDL_STATUS=NONE`、数据库设计边界不变 | SERVER-CONFIG-PRE-ACCEPTANCE-ADJUSTMENT-BASELINE-001-R1（ChatGPT 远程复审发现跨文档实现前旧事实；纯文档 R1 精确修正，待用户复审） |
+| 2026-08-28 | 批准收口（预验收调整基线）：文档状态由 `DRAFT_ADJUSTMENT_PENDING_USER_REVIEW` 迁移为 `APPROVED`；记录候选调整批准任务、批准日期、批准人（项目负责人）与 ChatGPT 最终复审通过提交 `b1c5349df43c73bc855b5ca8b3ea92acb6faa7ee`；两项调整内容不变（`ORDER BY ID_SERVER_CONFIG ASC`、`CONFIG_DESC` 真实换行只读原样展示）；实现状态保持 `IMPLEMENTED_ADJUSTMENT_PENDING`（两项已批准调整代码尚未实现），66 条验收保持 `NOT_RUN`；`PENDING_USER_CONFIRMATION=0`；保留初始候选、R1、R2 全部历史；`DDL_STATUS=NONE`、数据库设计边界不变 | SERVER-CONFIG-PRE-ACCEPTANCE-ADJUSTMENT-BASELINE-APPROVAL-001（项目负责人批准驱动的验收前调整基线收口；纯文档任务） |
