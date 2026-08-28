@@ -35,7 +35,7 @@ public class ServerConfigServiceImpl implements ServerConfigService {
     private static final Logger log = LoggerFactory.getLogger(ServerConfigServiceImpl.class);
 
     private static final String ORDER_BY_SQL =
-            "ORDER BY CONFIG_KEY ASC NULLS LAST, ID_SERVER_CONFIG ASC";
+            "ORDER BY ID_SERVER_CONFIG ASC";
 
     private final CdcServerMapper cdcServerMapper;
     private final CdcServerConfigMapper cdcServerConfigMapper;

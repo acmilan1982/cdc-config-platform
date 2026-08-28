@@ -130,7 +130,7 @@ class ServerConfigServiceImplTest {
     }
 
     @Test
-    void getPage_withConfigs_shouldReturnItemsAndStableSortSql() {
+    void getPage_withConfigs_shouldReturnItemsAndOrderByIdServerConfigAsc() {
         CdcServerConfig c1 = config("C1", "S1", "snapshotBatchSize", "1000", "1");
         CdcServerConfig c2 = config("C2", "S1", "auto-create-table", "true", "1");
         when(cdcServerMapper.selectList(any(LambdaQueryWrapper.class)))
@@ -142,15 +142,20 @@ class ServerConfigServiceImplTest {
 
         assertEquals("S1", vo.getServerId());
         assertEquals(2, vo.getConfigCount());
+        // 返回列表顺序与 Mapper 返回顺序一致，证明 Service 不做二次内存排序
         assertEquals("C1", vo.getItems().get(0).getIdServerConfig());
         assertEquals("C2", vo.getItems().get(1).getIdServerConfig());
 
         ArgumentCaptor<LambdaQueryWrapper<CdcServerConfig>> wrapperCaptor =
                 ArgumentCaptor.forClass(LambdaQueryWrapper.class);
         verify(cdcServerConfigMapper).selectList(wrapperCaptor.capture());
-        String lastSql = readLastSql(wrapperCaptor.getValue());
-        assertTrue(lastSql.contains("CONFIG_KEY ASC NULLS LAST"));
-        assertTrue(lastSql.contains("ID_SERVER_CONFIG ASC"));
+        LambdaQueryWrapper<CdcServerConfig> queryWrapper = wrapperCaptor.getValue();
+        String lastSql = readLastSql(queryWrapper);
+        assertTrue(lastSql.contains("ORDER BY ID_SERVER_CONFIG ASC"));
+        assertFalse(lastSql.contains("CONFIG_KEY ASC NULLS LAST"));
+        assertFalse(lastSql.contains("CONFIG_KEY"));
+        assertTrue(queryWrapper.getSqlSegment().contains("SERVER_ID"));
+        assertTrue(queryWrapper.getParamNameValuePairs().containsValue("S1"));
     }
 
     // ---- getPage：编辑资格双重判定（SC-EDIT-01） ----

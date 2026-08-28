@@ -502,3 +502,77 @@ describe('整数编辑器（snapshotBatchSize）', () => {
     wrapper.unmount()
   })
 })
+
+describe('验收前调整：CONFIG_DESC 真实换行安全显示（SC-AC-066 / SC-UI-DESIGN-035~038）', () => {
+  it('configDesc 含真实 LF 时 .item-name 完整保留换行两侧内容且含真实换行', async () => {
+    const lfItem = item('0010', 'auto-create-table', '第一行\n第二行', 'true', true)
+    mockedFetch.mockResolvedValue(okPage({ serverId: 'S1', configCount: 1, items: [lfItem] }))
+    const wrapper = await mountPage()
+
+    const name = wrapper.find('.item-name')
+    expect(name.exists()).toBe(true)
+    expect(name.text()).toContain('第一行')
+    expect(name.text()).toContain('第二行')
+    expect(name.text()).toContain('\n')
+    wrapper.unmount()
+  })
+
+  it('configDesc 含真实 CRLF 时 .item-name 完整保留两侧内容且含 CRLF', async () => {
+    const crlfItem = item('0011', 'auto-create-table', '第一行\r\n第二行', 'true', true)
+    mockedFetch.mockResolvedValue(okPage({ serverId: 'S1', configCount: 1, items: [crlfItem] }))
+    const wrapper = await mountPage()
+
+    const name = wrapper.find('.item-name')
+    expect(name.text()).toContain('第一行')
+    expect(name.text()).toContain('第二行')
+    expect(name.text()).toContain('\r\n')
+    wrapper.unmount()
+  })
+
+  it('含 <br> 的说明不作为换行协议：不生成 br 元素，文本可见且转义', async () => {
+    const brItem = item('0012', 'auto-create-table', '第一段<br>第二段', 'true', true)
+    mockedFetch.mockResolvedValue(okPage({ serverId: 'S1', configCount: 1, items: [brItem] }))
+    const wrapper = await mountPage()
+
+    const name = wrapper.find('.item-name')
+    expect(name.find('br').exists()).toBe(false)
+    expect(name.html()).toContain('&lt;br&gt;')
+    expect(name.text()).toContain('第一段<br>第二段')
+    wrapper.unmount()
+  })
+
+  it('含字面量 \\n 的说明不转换为换行：文本保持字面量且不含真实换行', async () => {
+    const literalItem = item('0013', 'auto-create-table', '第一段\\n第二段', 'true', true)
+    mockedFetch.mockResolvedValue(okPage({ serverId: 'S1', configCount: 1, items: [literalItem] }))
+    const wrapper = await mountPage()
+
+    const name = wrapper.find('.item-name')
+    expect(name.text()).toContain('第一段\\n第二段')
+    expect(name.text()).toContain('\\n')
+    expect(name.text()).not.toContain('\n')
+    wrapper.unmount()
+  })
+
+  it('含 HTML 标签的说明不作为 HTML 执行：DOM 不生成对应元素，文本可见且转义', async () => {
+    const htmlItem = item('0014', 'auto-create-table', '<b>加粗</b>说明', 'true', true)
+    mockedFetch.mockResolvedValue(okPage({ serverId: 'S1', configCount: 1, items: [htmlItem] }))
+    const wrapper = await mountPage()
+
+    const name = wrapper.find('.item-name')
+    expect(name.find('b').exists()).toBe(false)
+    expect(name.html()).toContain('&lt;b&gt;')
+    expect(name.text()).toContain('<b>加粗</b>说明')
+    wrapper.unmount()
+  })
+
+  it('.item-name、Key 信息图标与两列结构均保留', async () => {
+    mockedFetch.mockResolvedValue(okPage(twoItemPage))
+    const wrapper = await mountPage()
+
+    expect(wrapper.findAll('.item-name')).toHaveLength(2)
+    expect(wrapper.findAll('.key-icon')).toHaveLength(2)
+    expect(wrapper.text()).toContain('配置项说明')
+    expect(wrapper.text()).toContain('配置值')
+    wrapper.unmount()
+  })
+})

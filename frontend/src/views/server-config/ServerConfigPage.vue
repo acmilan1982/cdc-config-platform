@@ -385,6 +385,9 @@ onMounted(() => {
 
 .item-name {
   color: var(--el-text-color-primary);
+  white-space: pre-line;
+  line-height: 1.6;
+  overflow-wrap: anywhere;
 }
 
 .key-icon {
