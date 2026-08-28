@@ -342,10 +342,11 @@ describe('保存流程', () => {
 
 describe('R1 字段缺失（SC-API-014 空字段被 JSON 省略）', () => {
   it('configKey/configDesc/configValue 属性缺失按 null 语义处理，页面不抛异常', async () => {
-    const absentItem = {
+    // 可选属性让 TypeScript 直接证明字段可被省略，无需强制断言
+    const absentItem: ServerConfigItemVO = {
       idServerConfig: '0001',
       editable: false,
-    } as ServerConfigItemVO
+    }
     mockedFetch.mockResolvedValue(okPage({ serverId: 'S1', configCount: 1, items: [absentItem] }))
     const wrapper = await mountPage()
 
@@ -355,11 +356,11 @@ describe('R1 字段缺失（SC-API-014 空字段被 JSON 省略）', () => {
   })
 
   it('可编辑行 configValue 属性缺失按 null 语义处理，编辑兜底为空串不崩溃', async () => {
-    const absentValue = {
+    const absentValue: ServerConfigItemVO = {
       idServerConfig: '0002',
       configKey: 'auto-create-table',
       editable: true,
-    } as ServerConfigItemVO
+    }
     mockedFetch.mockResolvedValue(okPage({ serverId: 'S1', configCount: 1, items: [absentValue] }))
     const wrapper = await mountPage()
 

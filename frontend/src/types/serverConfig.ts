@@ -3,11 +3,11 @@ export interface ServerConfigItemVO {
   idServerConfig: string
   /**
    * 空值输出字段会被 JSON 省略（spring.jackson.default-property-inclusion=non_null，SC-API-014）。
-   * configKey/configDesc/configValue 必须接受 null 与 undefined 两种缺失形态。
+   * configKey/configDesc/configValue 为真实可选属性：缺失（undefined）与 null 等同处理。
    */
-  configKey: string | null | undefined
-  configDesc: string | null | undefined
-  configValue: string | null | undefined
+  configKey?: string | null
+  configDesc?: string | null
+  configValue?: string | null
   /** 计算可编辑布尔，仅用于控件形态判定（SC-API-032）。 */
   editable: boolean
 }

@@ -259,7 +259,7 @@ AGENT_TASK_RESULT_END
 | server-config 前端定向测试 | `npx vitest run src/api/serverConfig.spec.ts src/views/server-config/configRules.spec.ts src/views/server-config/ServerConfigPage.spec.ts` | 3 文件、**53/53 通过** |
 | 前端完整测试套件 | `npx vitest run` | 13 文件、**139/139 通过**（含既有 log-query 相关测试，无回归） |
 | 前端生产构建（含 TS 类型检查） | `npm run build`（`vue-tsc --noEmit && vite build`） | 成功 |
-| 空白错误 | `git diff --check` | 通过 |
+| 空白错误 | `git diff --check` | 通过（Agent 当时报告值，检查对象为提交前工作区；ChatGPT 复审提交 `340945a` 实际发现 `new blank line at EOF` 警告，已由 R2 清理并重新验证，见 §16） |
 | 相对授权基线的变更文件 | `git diff 96aba1e -- backend/` | 空（后端零变化） |
 | 六份批准文档相对基线 | `git diff 96aba1e -- <六份文档>` | 空（零变化） |
 
@@ -270,3 +270,39 @@ AGENT_TASK_RESULT_END
 - 实现状态保持 **IMPLEMENTED_PENDING_REVIEW**，不是正式验收通过；待复审数量即本 R1 修正（`fixed_review_issue_count=5`）。
 - 下一步为 ChatGPT 复审 R1，不得自行进入真实联调、视觉验收或收口。
 
+---
+
+## 16. R2 复审微修正记录（SERVER-CONFIG-IMPLEMENTATION-001-R2）
+
+- 任务编号：`SERVER-CONFIG-IMPLEMENTATION-001-R2`
+- 授权基线提交：`340945a035db4f8c272d085894f46d1fe0b44ad8`
+- ChatGPT 对 R1 的复审结论：5 项功能修正通过；剩余 2 项微小收口问题
+- 建议提交信息：`fix(server-config): finalize R1 review corrections`
+- 报告时间：2026-08-28
+
+### 16.1 两项问题与修正
+
+| # | 问题 | 修正方式 |
+|---|---|---|
+| 3.1 | TS 类型写成 `configKey: string \| null \| undefined`，字段值可为 undefined 但属性本身仍必填；真实 HTTP JSON 可完全省略这些属性 | `types/serverConfig.ts` 改为真实可选属性 `configKey?/configDesc?/configValue?: string \| null`；不改变运行时逻辑、页面行为、API 字段名与保存请求类型；`ServerConfigPage.spec.ts` 去掉构造“属性缺失”对象的 `as ServerConfigItemVO` 强制断言，改由 TypeScript 证明属性可省略 |
+| 3.2 | ChatGPT 对提交 `340945a` 执行 `git diff --check` 实际发现 `docs/features/server-config/reports/SERVER-CONFIG-IMPLEMENTATION-001.md:272: new blank line at EOF`；R1 报告“git diff --check 通过”与提交事实不一致 | 删除报告文件末尾多余空白行；本报告 §15.4 相应行注明为 Agent 当时报告值、由 R2 纠正；追加本 R2 记录；重新执行 `git diff --check 340945a..HEAD` 与 `git diff --check 96aba1e..HEAD` 确认无输出、退出码 0 |
+
+### 16.2 验证命令与真实结果
+
+| 项目 | 命令 | 结果 |
+|---|---|---|
+| server-config 前端定向测试 | `npx vitest run src/api/serverConfig.spec.ts src/views/server-config/configRules.spec.ts src/views/server-config/ServerConfigPage.spec.ts` | 3 文件、**53/53 通过** |
+| 前端完整测试套件 | `npx vitest run` | 13 文件、**139/139 通过**（含既有 log-query 相关测试，无回归） |
+| 前端生产构建（含 TS 类型检查） | `npm run build`（`vue-tsc --noEmit && vite build`） | 成功 |
+| 空白错误（R2 相对授权基线） | `git diff --check 340945a..HEAD` | 无输出、退出码 0 |
+| 空白错误（R1+R2 总体） | `git diff --check 96aba1e..HEAD` | 无输出、退出码 0 |
+| 相对授权基线的变更文件 | `git diff 340945a --name-only` | 仅本任务授权文件 |
+| 后端目录相对基线 | `git diff 340945a -- backend/` | 空（零变化） |
+| 六份批准文档相对基线 | `git diff 340945a -- <六份文档>` | 空（零变化） |
+
+### 16.3 明确未执行边界与状态
+
+- 未修改任何后端生产代码或测试；未修改六份批准 Feature 文档、数据库/项目级基线、其他 Feature、菜单、路由、依赖清单与构建配置。
+- 未连接数据库与 ZooKeeper；未启动前后端业务服务；未执行任何 SQL/DDL 与数据库/写操作；65 条正式验收 `NOT_RUN`。
+- 实现状态保持 **IMPLEMENTED_PENDING_REVIEW**，不是正式验收通过。
+- 下一步为 ChatGPT 复审 R2，不得自行进入真实联调、视觉验收或收口。
