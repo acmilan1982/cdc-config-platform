@@ -1,23 +1,46 @@
 # 数据源管理 —— UI 设计基线草案（UI.md）
 
-> 文档状态：`DRAFT_PENDING_USER_REVIEW`
+> 文档状态：`APPROVED`
 > 需求状态：`APPROVED`
 > 验收标准状态：`APPROVED`
 > 实现状态：`NOT_STARTED`
 > 设计任务：`DATA-SOURCE-DESIGN-BASELINE-001`
 > 授权基准提交：`c24bbb826b252f06f75ec05bcac77e94a9871019`
 > 创建日期：2026-08-29
+> 批准任务：`DATA-SOURCE-DESIGN-APPROVAL-CLOSEOUT-001`
+> 批准日期：2026-08-29
+> 批准依据提交：`fdb9ecaf5bc24373e586d853b4174d1a9cd8bbfc`
 
 ---
 
 ## 0. 声明与边界
 
-- 本设计为**草案**，Agent 不能批准设计；草案等待 ChatGPT 复审与用户最终批准。
-- 设计草案**不代表**代码已实现、构建通过、验收执行或生产可用。
+- 本设计已获用户正式批准（批准任务 `DATA-SOURCE-DESIGN-APPROVAL-CLOSEOUT-001`，批准日期 2026-08-29，批准依据提交 `fdb9ecaf5bc24373e586d853b4174d1a9cd8bbfc`），成为数据源管理 Feature 当前正式设计基线；不再处于"草案等待批准"状态。
+- 设计批准**不代表**代码已实现、构建通过、验收执行或生产可用。
 - 106 条验收用例仍全部为 `NOT_RUN`。
 - 本设计不改变任何已批准 `DS-REQ`/`DS-AC`；不新增 DDL、锁、权限、认证或自动刷新等未批准能力。
 - 本设计不修改代码、测试、构建文件、配置、菜单、路由、历史候选或任何已批准项目/数据库基线。
 - 本页面替换既有 `/config/data-source` 占位页；菜单项"数据源管理"与路由 `/config/data-source`（name `DataSource`）保持既有值不变（`DS-AC-001`~`003`）。
+
+### 0.1 批准声明
+
+- 用户已正式批准初版、R1、R2 共同形成的完整设计与契约内容；本文件成为数据源管理 Feature 当前正式设计基线。
+- 允许下一阶段基于已批准需求、验收标准和四份设计基线生成实现任务提示词。
+- 批准设计**不代表**：代码已经实现；后端或前端构建已经通过；服务已经启动或联调完成；数据库或 ZooKeeper 已被访问；任何 SQL/DDL 已执行；任何一条验收用例已经执行或通过；功能已经生产可用。
+- 106 条验收用例继续全部为 `NOT_RUN`，不得写成 `PASS`/`FAIL`/`BLOCKED`。
+- 实现状态继续为 `NOT_STARTED`。
+- 第一版仍无数据库 DDL、主键/唯一约束/索引变更；批准本文档不等于批准执行数据库变更。
+
+### 0.2 批准链
+
+1. 需求及验收批准收口：`fed87640e007967ece60c1dad5e83438e2bc4672`
+2. 基线影响同步及 R1：`3f8747b7aff076f06fc8fdad214e1f14e0013afe`、`c24bbb826b252f06f75ec05bcac77e94a9871019`
+3. 设计草案初版：`f7ea3eb2a1343a0600deb86404ce6775a810dce9`
+4. 设计 R1：`3b6496b6a2312450fd69be2edbbd287ceb756810`
+5. 设计 R2 与最终复审通过基准：`fdb9ecaf5bc24373e586d853b4174d1a9cd8bbfc`
+6. 用户最终批准与本批准收口任务：`DATA-SOURCE-DESIGN-APPROVAL-CLOSEOUT-001`
+
+本文件不伪造独立 ChatGPT 报告，仅陈述本批准收口任务已收到的复审结论（基于 `fdb9ecaf...` 的 `REVIEW_PASS`）与用户批准事实。
 
 ---
 
@@ -163,3 +186,14 @@
 - UI 组件/交互 → DS-REQ/DS-AC 映射见各节"追踪"行。
 - 组件与 `API.md` 接口一一对应：列表/详情/新增/编辑/删除 → §4.1~4.5；测试连接 → §4.6；目标候选下拉 → §4.7；业务属性 → §4.8/4.9；命名策略列表/新增/编辑/删除 → §4.10~4.13。
 - 字段名（camelCase）与 `API.md`/`DESIGN.md`/`DATABASE.md` 保持一致；密码状态模型（缺席/提供、`originalDataSourceId` 读取旧密码）、`port` 数值类型契约、角色大小写兼容与限定、逻辑组合键（原目标库 + 新目标库）、超时/倒计时（10 秒/10→0）与四文档一致。
+
+---
+
+## 8. 批准收口变更记录（2026-08-29）
+
+- 2026-08-29；
+- 文档状态由 `DRAFT_PENDING_USER_REVIEW` 转为 `APPROVED`；
+- 技术/产品正文不变；
+- 实现状态仍为 `NOT_STARTED`；
+- 106 条验收仍为 `NOT_RUN`；
+- 依据为本批准任务 `DATA-SOURCE-DESIGN-APPROVAL-CLOSEOUT-001` 及 `fdb9ecaf5bc24373e586d853b4174d1a9cd8bbfc` 最终复审通过基准。
