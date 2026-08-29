@@ -81,6 +81,8 @@ FAILED_JOB_ID 是 Flink 实际 Job ID，**不保存在 ZooKeeper** 中；ZK 路�
 
 `CDC_DATA_SOURCE_EXTEND` 在本 Feature 中为源库到目标库的命名策略：`DATA_SOURCE_ID` 表示源库（R01，反向一个源库 0..N 条策略），`TARGET_DATA_SOURCE_ID` 是到 `CDC_DATA_SOURCE.DATA_SOURCE_ID` 的目标库弱逻辑引用（R15，业务上每条策略的目标库必填）。数据库无物理外键、无类别约束；当前生产代码未映射 `TARGET_DATA_SOURCE_ID` 字段、无代码级 JOIN。`(DATA_SOURCE_ID, TARGET_DATA_SOURCE_ID)` 为逻辑联合唯一组合，第一版仅由后端保存前查询校验，不新增主键、唯一约束、索引或 DDL。引用方代码须兼容目标缺失、停用或类别不符等情况，容错由业务代码负责。
 
+已批准目标维护边界（**尚未实现**）：修改 `CDC_DATA_SOURCE.DATA_SOURCE_ID` 只修改主表当前记录，不同步修改 `CDC_DATA_SOURCE_EXTEND.DATA_SOURCE_ID`、`TARGET_DATA_SOURCE_ID` 或其他表任何引用；删除源库或目标库只物理删除 `CDC_DATA_SOURCE` 当前记录，不检查、不删除、不更新、不级联处理 `CDC_DATA_SOURCE_EXTEND` 或其他表；删除单条命名策略只物理删除对应的 `CDC_DATA_SOURCE_EXTEND` 行。以上均为已批准目标业务维护边界；当前 `DataSourceServiceImpl` 的双表联写、ID 同步、级联删除仍为旧候选实现（待改造），尚未满足上述目标边界。
+
 ## 6. 无法确认或已废弃关系
 
 - 旧资料中曾存在的 `FAILED_JOB_ID ↔ ZK jobName` 关系已由用户确认不成立（FAILED_JOB_ID 为 Flink Job ID，不在 ZK 保存），不列入有效关系。
@@ -114,5 +116,6 @@ CDC_SERVER ──< R16（逻辑一对多，无物理外键）────── 
 | 2026-08-26 | R2：R15 由高度可信调整为已确认逻辑关系（项目负责人确认）；R04 维护方调整为人工维护 / 管理平台只读 | PROJECT-DATABASE-BASELINE-001-R2 修订 |
 | 2026-08-26 | 批准：项目级数据库基线正式批准收口（APPROVED） | PROJECT-DATABASE-BASELINE-APPROVAL-001 批准 |
 | 2026-08-27 | 新增 R16（CDC_SERVER_CONFIG.SERVER_ID→CDC_SERVER.SERVER_ID，逻辑一对多，无物理外键，负责人确认）；已确认关系 12→13、关系总数 15→16；§1 物理外键说明更新为覆盖 16 张已批准表（保留原 14 表核验历史）；§7 关系图补充 R16 | DATABASE-BASELINE-SERVER-CONFIG-001（候选）+ DATABASE-BASELINE-SERVER-CONFIG-APPROVAL-001（批准） |
-| 2026-08-27 | R1：修正文档级变更记录中历史变化计数笔误（批准前已有 R01～R15 共 15 条逻辑关系，新增 R16 后由 15 增至 16，故历史变化计数应为”关系总数 15→16”，原误写为”12→16”）；本修正仅改正历史变化计数，不改变当前关系清单、R16 正文、无物理外键结论与 `APPROVED` 状态 | DATABASE-BASELINE-SERVER-CONFIG-APPROVAL-001-R1 复审修正 |
+| 2026-08-27 | R1：修正文档级变更记录中历史变化计数笔误（批准前已有 R01～R15 共 15 条逻辑关系，新增 R16 后由 15 增至 16，故历史变化计数应为“关系总数 15→16”，原误写为“12→16”）；本修正仅改正历史变化计数，不改变当前关系清单、R16 正文、无物理外键结论与 `APPROVED` 状态 | DATABASE-BASELINE-SERVER-CONFIG-APPROVAL-001-R1 复审修正 |
 | 2026-08-29 | 已批准数据源管理 Feature 规则同步：R01 由“一对一必填目标”更新为源库弱逻辑引用（`DATA_SOURCE_ID` 表示源库，反向一个源库 0..N 条命名策略）；R15 明确每条策略目标库业务必填、一个目标库可被多个源库策略引用、数据库字段仍物理可空且无外键/类别约束；记录 `(DATA_SOURCE_ID, TARGET_DATA_SOURCE_ID)` 为逻辑联合唯一组合、第一版仅由后端保存前查询校验、无数据库唯一约束/DDL；§7 关系图更新；当前旧代码证据保留并标注为待改造；关系数量与确认等级未变化 | DATA-SOURCE-BASELINE-IMPACT-ALIGNMENT-001（已批准业务规则向权威数据库基线同步；纯文档任务，数据库物理结构无变化） |
+| 2026-08-29 | R1 修订：§5.3 补充已批准目标维护边界（修改数据源 ID 只改 `CDC_DATA_SOURCE` 主表当前记录、删除源库/目标库只删主表当前记录且不级联、删除单条命名策略只删对应 `CDC_DATA_SOURCE_EXTEND` 行）并明确尚未实现、当前 `DataSourceServiceImpl` 双表联写/ID 同步/级联删除仍为旧候选实现（待改造）；恢复 2026-08-27 R1 历史变更记录中被误改的引号字符（左双引号 `“` 被误改为右双引号 `”`，已还原为 `“`），该行现与 `fed8764` 原文逐字符一致；R01/R15 关系方向、业务基数、物理可空性、逻辑联合唯一与无 DDL 规则不变；关系数量与确认等级不变 | DATA-SOURCE-BASELINE-IMPACT-ALIGNMENT-001-R1（ChatGPT 复审 CHANGES_REQUIRED 定向修订；纯文档任务） |

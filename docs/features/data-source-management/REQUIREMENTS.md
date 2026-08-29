@@ -380,7 +380,7 @@
 
 ## 19. 开放问题
 
-无。当前已确认事项均已记录，没有阻塞本 Feature 基线的开放问题。MySQL/Doris JDBC 驱动为设计/实现阶段的依赖约束（§18），已批准基线的后续维护为独立任务（§17），均不构成本基线的当前开放问题。
+无。当前已确认事项均已记录，没有阻塞本 Feature 基线的开放问题。项目/数据库权威基线的“数据源管理”规则影响已由 `DATA-SOURCE-BASELINE-IMPACT-ALIGNMENT-001` 完成同步（见 §17），不再作为后续独立维护事项或开放问题。MySQL/Doris JDBC 驱动为设计/实现阶段的依赖约束（§18），现有后端候选实现改造与前端占位页替换仍是后续阶段工作（§18），均不构成本基线的当前开放问题。
 
 ## 20. 文档级变更记录
 
@@ -389,5 +389,6 @@
 | 2026-08-29 | 建立“数据源管理”Feature 需求基线草案（DRAFT_PENDING_USER_REVIEW；实现状态 NOT_STARTED；全部验收用例 NOT_RUN） | DATA-SOURCE-REQUIREMENTS-BASELINE-001（纯文档任务；基于已确认产品决策 + 已批准数据库基线；待 ChatGPT 复审与用户批准） |
 | 2026-08-29 | 需求与验收基线批准收口：文档状态由 `DRAFT_PENDING_USER_REVIEW` 更新为 `APPROVED`；实现状态保持 `NOT_STARTED`；补充批准任务 `DATA-SOURCE-REQUIREMENTS-APPROVAL-CLOSEOUT-001`、批准日期 2026-08-29、批准依据（用户明确回复“认可，继续”）与批准链（初始提交 `07a1792...`、R1 提交 `ca4d87b...`、ChatGPT 复审 `REVIEW_PASS`）；§17 受影响基线说明更新为本 Feature 需求已批准、受影响的已批准基线仍须独立维护任务修订；不改变任何 DS-REQ 编号、文本或语义 | DATA-SOURCE-REQUIREMENTS-APPROVAL-CLOSEOUT-001（项目负责人批准驱动的需求与验收基线批准收口；纯文档任务） |
 | 2026-08-29 | 项目/数据库权威基线一致性调整：将已批准“数据源管理”规则（`CDC_DATA_SOURCE_EXTEND` 为源库到目标库的命名策略、源库 0..N、`(DATA_SOURCE_ID, TARGET_DATA_SOURCE_ID)` 逻辑联合唯一由后端保存前校验、第一版无 DDL、删除/改 ID 不级联不同步）同步至 `docs/database/**` 与项目级基线；本 Feature 需求、验收状态保持 `APPROVED`，实现状态保持 `NOT_STARTED`；§17/§18 更新为本次同步完成；不改变任何 DS-REQ 编号、文本或语义 | DATA-SOURCE-BASELINE-IMPACT-ALIGNMENT-001（已批准业务规则向权威项目/数据库基线的纯文档同步；纯文档任务） |
+| 2026-08-29 | R1 修订：§19 更新为“项目/数据库权威基线影响同步已完成（`DATA-SOURCE-BASELINE-IMPACT-ALIGNMENT-001`），不再作为后续独立维护事项或开放问题”；MySQL/Doris JDBC 驱动、现有后端候选实现改造与前端占位页替换仍为后续阶段工作；§17/§18 保持正确、未无必要重写；不改变任何 DS-REQ 编号、文本或语义；文档状态保持 `APPROVED`、实现状态保持 `NOT_STARTED` | DATA-SOURCE-BASELINE-IMPACT-ALIGNMENT-001-R1（ChatGPT 复审 CHANGES_REQUIRED 定向修订；纯文档任务） |
 
 > 关联文档：验收基线 `docs/features/data-source-management/ACCEPTANCE.md`；执行报告 `docs/features/data-source-management/reports/DATA-SOURCE-REQUIREMENTS-BASELINE-001.md`。

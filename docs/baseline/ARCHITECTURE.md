@@ -263,7 +263,7 @@ LargeScreenPage.vue (ECharts大屏, 60s轮询, CSS scale自适应)
 - **逗号分隔多值弱逻辑引用**（R02/R03/R04）：以逗号分隔字符串存储多个引用值，代码层通过 `.split(",")` 解析，无法使用标准 SQL JOIN。R1 核验确认每条记录至少存在一个可匹配 token。
 - **失败 Job ID 链**：CDC_JOB_FAILURE_EVENT.FAILED_JOB_ID 是 Flink 实际 Job ID，不保存在 ZooKeeper 中。ZK 路径 `/bsoft-cdc/clients/{clientId}/{jobName}` 中的 `jobName` 是另一套标识，两者不建立直接逻辑关系。FAILED_JOB_ID 与 NEW_JOB_ID 在 algorithm 包中用于构建作业间故障链。
 - **统计水位关系**（R12）：1 个 TASK_CODE 对应 2 条水位记录（CORRECT + ERROR），多对一。
-- **源库到目标库命名策略**（R01/R15）：`CDC_DATA_SOURCE_EXTEND` 为源库到目标库的命名策略；`DATA_SOURCE_ID` 表示源库（一个源库 0..N 条策略），`TARGET_DATA_SOURCE_ID` 表示业务必填目标库（一条策略对应一个目标库，一个目标库可被多个源库策略引用）；数据库无物理外键/类别约束。`(DATA_SOURCE_ID, TARGET_DATA_SOURCE_ID)` 为逻辑联合唯一组合，第一版仅由未来后端保存前查询校验，不新增主键、唯一约束、索引或任何 DDL。目标库选择仅来自 `FG_ACTIVE='1' AND DATA_SOURCE_CATEGORY='TARGET'`（Feature 业务规则，不是数据库物理约束）。当前代码 Entity 未映射 `TARGET_DATA_SOURCE_ID`、无代码级 JOIN、`ROWNUM=1` 取单条，均属待改造旧实现。
+- **源库到目标库命名策略**（R01/R15）：`CDC_DATA_SOURCE_EXTEND` 为源库到目标库的命名策略；`DATA_SOURCE_ID` 表示源库（一个源库 0..N 条策略），`TARGET_DATA_SOURCE_ID` 表示业务必填目标库（一条策略对应一个目标库，一个目标库可被多个源库策略引用）；数据库无物理外键/类别约束。`(DATA_SOURCE_ID, TARGET_DATA_SOURCE_ID)` 为逻辑联合唯一组合，第一版仅由未来后端保存前查询校验，不新增主键、唯一约束、索引或任何 DDL。目标库选择仅来自 `FG_ACTIVE='1' AND DATA_SOURCE_CATEGORY='TARGET'`（Feature 业务规则，不是数据库物理约束）。当前代码 Entity 未映射 `TARGET_DATA_SOURCE_ID`、无代码级 JOIN、`ROWNUM=1` 取单条，均属待改造旧实现。**已批准目标维护边界（尚未实现）**：修改 `CDC_DATA_SOURCE.DATA_SOURCE_ID` 只修改主表当前记录，不同步修改 `CDC_DATA_SOURCE_EXTEND.DATA_SOURCE_ID`、`TARGET_DATA_SOURCE_ID` 或其他表任何引用；删除源库或目标库只物理删除 `CDC_DATA_SOURCE` 当前记录，不检查、不删除、不更新、不级联处理 `CDC_DATA_SOURCE_EXTEND` 或其他表；删除单条命名策略只物理删除对应的 `CDC_DATA_SOURCE_EXTEND` 行。当前代码的 ID 同步、双表联写/级联删除仍是旧候选实现，尚未满足以上目标边界。
 
 > 详细证据：`docs/baseline-work/DATABASE-CODE-MAPPING-001/03_LOGICAL_RELATIONSHIPS.md`
 
@@ -452,3 +452,4 @@ Route Record 清单:
 | 日期 | 变更 | 依据 |
 |---|---|---|
 | 2026-08-29 | 数据源管理 Feature 已批准规则同步：`CDC_DATA_SOURCE_EXTEND` 由“通用扩展配置、一对一必填”更新为“源库到目标库的命名策略，源库 0..N”；R01 更新为 `DATA_SOURCE_ID` 到源库的多对一弱逻辑引用（反向一个源库 0..N 条策略）；R15 明确一条策略对应一个业务必填目标库、一个目标库可被多个源库策略引用；记录逻辑联合唯一组合 `(DATA_SOURCE_ID, TARGET_DATA_SOURCE_ID)` 仅由后端保存前校验、第一版不新增 DDL；§9 D02 不再描述为“一对一未约束”高严重度缺陷；数据库物理事实与当前旧代码事实保留 | DATA-SOURCE-BASELINE-IMPACT-ALIGNMENT-001（已批准业务规则向权威项目基线同步；纯文档任务，数据库物理结构和当前代码无变化） |
+| 2026-08-29 | R1 修订：§4.7“源库到目标库命名策略”补充已批准目标维护边界（修改数据源 ID 只改 `CDC_DATA_SOURCE` 主表当前记录、删除源库/目标库只删主表当前记录且不级联、删除单条命名策略只删对应 `CDC_DATA_SOURCE_EXTEND` 行）；明确上述边界尚未实现、当前 ID 同步/双表联写/级联删除仍为旧候选实现（待改造）；§4.1/§4.7/§9 数据库物理事实与表数、关系数不变 | DATA-SOURCE-BASELINE-IMPACT-ALIGNMENT-001-R1（ChatGPT 复审 CHANGES_REQUIRED 定向修订；纯文档任务） |
