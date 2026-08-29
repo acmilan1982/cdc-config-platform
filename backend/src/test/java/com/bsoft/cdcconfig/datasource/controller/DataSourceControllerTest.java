@@ -1,13 +1,17 @@
 package com.bsoft.cdcconfig.datasource.controller;
 
-import com.bsoft.cdcconfig.common.page.PageResult;
+import com.bsoft.cdcconfig.datasource.dto.BizAttrSaveDTO;
 import com.bsoft.cdcconfig.datasource.dto.DataSourceCreateDTO;
-import com.bsoft.cdcconfig.datasource.dto.DataSourceExtendDTO;
 import com.bsoft.cdcconfig.datasource.dto.DataSourceUpdateDTO;
+import com.bsoft.cdcconfig.datasource.dto.NamingStrategyDTO;
+import com.bsoft.cdcconfig.datasource.dto.TestConnectionDTO;
 import com.bsoft.cdcconfig.datasource.service.DataSourceService;
+import com.bsoft.cdcconfig.datasource.vo.BizAttrVO;
 import com.bsoft.cdcconfig.datasource.vo.DataSourceDetailVO;
-import com.bsoft.cdcconfig.datasource.vo.DataSourceExtendVO;
 import com.bsoft.cdcconfig.datasource.vo.DataSourceListVO;
+import com.bsoft.cdcconfig.datasource.vo.NamingStrategyVO;
+import com.bsoft.cdcconfig.datasource.vo.TargetOptionVO;
+import com.bsoft.cdcconfig.datasource.vo.TestConnectionResultVO;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -44,28 +48,26 @@ class DataSourceControllerTest {
 
     // ---- list ----
     @Test
-    void list_shouldReturnPageResult() throws Exception {
-        PageResult<DataSourceListVO> page = new PageResult<>(
-                Collections.emptyList(), 0, 1, 20);
-        when(dataSourceService.queryPage(any())).thenReturn(page);
+    void list_shouldReturnList() throws Exception {
+        DataSourceListVO vo = new DataSourceListVO();
+        vo.setDataSourceId("DS001");
+        vo.setDataSourceName("测试数据源");
+        when(dataSourceService.list(any())).thenReturn(Collections.singletonList(vo));
 
-        mockMvc.perform(get("/api/data-sources")
-                        .param("pageNum", "1")
-                        .param("pageSize", "20"))
+        mockMvc.perform(get("/api/data-sources"))
                 .andExpect(status().isOk())
                 .andExpect(jsonPath("$.code").value(200))
-                .andExpect(jsonPath("$.data.total").value(0));
+                .andExpect(jsonPath("$.data[0].dataSourceId").value("DS001"));
     }
 
     @Test
     void list_withFilters_shouldPassParams() throws Exception {
-        PageResult<DataSourceListVO> page = new PageResult<>(
-                Collections.emptyList(), 0, 1, 20);
-        when(dataSourceService.queryPage(any())).thenReturn(page);
+        when(dataSourceService.list(any())).thenReturn(Collections.emptyList());
 
         mockMvc.perform(get("/api/data-sources")
-                        .param("dataSourceId", "DS001")
-                        .param("dataSourceName", "测试"))
+                        .param("id", "DS")
+                        .param("name", "测试")
+                        .param("host", "192.168"))
                 .andExpect(status().isOk())
                 .andExpect(jsonPath("$.code").value(200));
     }
@@ -75,10 +77,6 @@ class DataSourceControllerTest {
     void detail_shouldReturnDetail() throws Exception {
         DataSourceDetailVO vo = new DataSourceDetailVO();
         vo.setDataSourceId("DS001");
-        vo.setExtendExists(true);
-        DataSourceExtendVO ext = new DataSourceExtendVO();
-        ext.setTableNamingStrategy("TABLE_MERGE");
-        vo.setExtend(ext);
         when(dataSourceService.getDetail("DS001")).thenReturn(vo);
 
         mockMvc.perform(get("/api/data-sources/DS001"))
@@ -89,8 +87,8 @@ class DataSourceControllerTest {
 
     // ---- create ----
     @Test
-    void create_shouldSucceed() throws Exception {
-        doNothing().when(dataSourceService).create(any(DataSourceCreateDTO.class));
+    void create_shouldReturnNewId() throws Exception {
+        when(dataSourceService.create(any(DataSourceCreateDTO.class))).thenReturn("DS001");
 
         String body = objectMapper.writeValueAsString(buildCreateDTO());
 
@@ -98,23 +96,24 @@ class DataSourceControllerTest {
                         .contentType(MediaType.APPLICATION_JSON)
                         .content(body))
                 .andExpect(status().isOk())
-                .andExpect(jsonPath("$.code").value(200));
+                .andExpect(jsonPath("$.code").value(200))
+                .andExpect(jsonPath("$.data").value("DS001"));
+
+        verify(dataSourceService).create(any(DataSourceCreateDTO.class));
     }
 
     @Test
     void create_missingRequiredFields_shouldReturn400() throws Exception {
-        String body = "{}";
-
         mockMvc.perform(post("/api/data-sources")
                         .contentType(MediaType.APPLICATION_JSON)
-                        .content(body))
+                        .content("{}"))
                 .andExpect(status().isBadRequest());
     }
 
     // ---- update ----
     @Test
-    void update_shouldSucceed() throws Exception {
-        doNothing().when(dataSourceService).update(eq("DS001"), any(DataSourceUpdateDTO.class));
+    void update_shouldReturnEditedId() throws Exception {
+        when(dataSourceService.update(eq("DS001"), any(DataSourceUpdateDTO.class))).thenReturn("DS001");
 
         String body = objectMapper.writeValueAsString(buildUpdateDTO());
 
@@ -122,16 +121,15 @@ class DataSourceControllerTest {
                         .contentType(MediaType.APPLICATION_JSON)
                         .content(body))
                 .andExpect(status().isOk())
-                .andExpect(jsonPath("$.code").value(200));
+                .andExpect(jsonPath("$.code").value(200))
+                .andExpect(jsonPath("$.data").value("DS001"));
     }
 
     @Test
     void update_missingRequiredFields_shouldReturn400() throws Exception {
-        String body = "{}";
-
         mockMvc.perform(put("/api/data-sources/DS001")
                         .contentType(MediaType.APPLICATION_JSON)
-                        .content(body))
+                        .content("{}"))
                 .andExpect(status().isBadRequest());
     }
 
@@ -147,65 +145,181 @@ class DataSourceControllerTest {
         verify(dataSourceService).delete("DS001");
     }
 
-    // ---- enable ----
+    // ---- test-connection ----
     @Test
-    void enable_shouldSucceed() throws Exception {
-        doNothing().when(dataSourceService).enable("DS001");
+    void testConnection_shouldReturnResult() throws Exception {
+        when(dataSourceService.testConnection(any(TestConnectionDTO.class)))
+                .thenReturn(new TestConnectionResultVO(true, "连接成功"));
 
-        mockMvc.perform(put("/api/data-sources/DS001/enable"))
+        String body = objectMapper.writeValueAsString(buildTestConnectionDTO());
+
+        mockMvc.perform(post("/api/data-sources/test-connection")
+                        .contentType(MediaType.APPLICATION_JSON)
+                        .content(body))
                 .andExpect(status().isOk())
-                .andExpect(jsonPath("$.code").value(200));
-
-        verify(dataSourceService).enable("DS001");
+                .andExpect(jsonPath("$.code").value(200))
+                .andExpect(jsonPath("$.data.success").value(true))
+                .andExpect(jsonPath("$.data.message").value("连接成功"));
     }
 
-    // ---- disable ----
     @Test
-    void disable_shouldSucceed() throws Exception {
-        doNothing().when(dataSourceService).disable("DS001");
+    void testConnection_missingRequiredFields_shouldReturn400() throws Exception {
+        mockMvc.perform(post("/api/data-sources/test-connection")
+                        .contentType(MediaType.APPLICATION_JSON)
+                        .content("{}"))
+                .andExpect(status().isBadRequest());
+    }
 
-        mockMvc.perform(put("/api/data-sources/DS001/disable"))
+    // ---- target-options ----
+    @Test
+    void targetOptions_shouldReturnTargets() throws Exception {
+        TargetOptionVO vo = new TargetOptionVO();
+        vo.setDataSourceId("TG001");
+        when(dataSourceService.targetOptions()).thenReturn(Collections.singletonList(vo));
+
+        mockMvc.perform(get("/api/data-sources/target-options"))
+                .andExpect(status().isOk())
+                .andExpect(jsonPath("$.code").value(200))
+                .andExpect(jsonPath("$.data[0].dataSourceId").value("TG001"));
+    }
+
+    // ---- biz-attr ----
+    @Test
+    void getBizAttr_shouldReturnBizAttr() throws Exception {
+        BizAttrVO vo = new BizAttrVO();
+        vo.setDataSourceId("TG001");
+        vo.setBizAttr("{\"a\":1}");
+        when(dataSourceService.getBizAttr("TG001")).thenReturn(vo);
+
+        mockMvc.perform(get("/api/data-sources/TG001/biz-attr"))
+                .andExpect(status().isOk())
+                .andExpect(jsonPath("$.code").value(200))
+                .andExpect(jsonPath("$.data.bizAttr").value("{\"a\":1}"));
+    }
+
+    @Test
+    void saveBizAttr_shouldSucceed() throws Exception {
+        doNothing().when(dataSourceService).saveBizAttr(eq("TG001"), any(BizAttrSaveDTO.class));
+
+        mockMvc.perform(put("/api/data-sources/TG001/biz-attr")
+                        .contentType(MediaType.APPLICATION_JSON)
+                        .content("{\"bizAttr\":\"abc\"}"))
                 .andExpect(status().isOk())
                 .andExpect(jsonPath("$.code").value(200));
 
-        verify(dataSourceService).disable("DS001");
+        verify(dataSourceService).saveBizAttr(eq("TG001"), any(BizAttrSaveDTO.class));
+    }
+
+    // ---- naming strategies ----
+    @Test
+    void listNamingStrategies_shouldReturnStrategies() throws Exception {
+        NamingStrategyVO vo = new NamingStrategyVO();
+        vo.setSourceDataSourceId("SRC001");
+        when(dataSourceService.listNamingStrategies("SRC001"))
+                .thenReturn(Collections.singletonList(vo));
+
+        mockMvc.perform(get("/api/data-sources/SRC001/naming-strategies"))
+                .andExpect(status().isOk())
+                .andExpect(jsonPath("$.code").value(200))
+                .andExpect(jsonPath("$.data[0].sourceDataSourceId").value("SRC001"));
+    }
+
+    @Test
+    void createNamingStrategy_shouldSucceed() throws Exception {
+        doNothing().when(dataSourceService).createNamingStrategy(eq("SRC001"), any(NamingStrategyDTO.class));
+
+        String body = objectMapper.writeValueAsString(buildNamingStrategyDTO());
+
+        mockMvc.perform(post("/api/data-sources/SRC001/naming-strategies")
+                        .contentType(MediaType.APPLICATION_JSON)
+                        .content(body))
+                .andExpect(status().isOk())
+                .andExpect(jsonPath("$.code").value(200));
+
+        verify(dataSourceService).createNamingStrategy(eq("SRC001"), any(NamingStrategyDTO.class));
+    }
+
+    @Test
+    void createNamingStrategy_missingRequiredFields_shouldReturn400() throws Exception {
+        mockMvc.perform(post("/api/data-sources/SRC001/naming-strategies")
+                        .contentType(MediaType.APPLICATION_JSON)
+                        .content("{}"))
+                .andExpect(status().isBadRequest());
+    }
+
+    @Test
+    void updateNamingStrategy_shouldSucceed() throws Exception {
+        doNothing().when(dataSourceService)
+                .updateNamingStrategy(eq("SRC001"), eq("TG001"), any(NamingStrategyDTO.class));
+
+        String body = objectMapper.writeValueAsString(buildNamingStrategyDTO());
+
+        mockMvc.perform(put("/api/data-sources/SRC001/naming-strategies/TG001")
+                        .contentType(MediaType.APPLICATION_JSON)
+                        .content(body))
+                .andExpect(status().isOk())
+                .andExpect(jsonPath("$.code").value(200));
+
+        verify(dataSourceService).updateNamingStrategy(eq("SRC001"), eq("TG001"), any(NamingStrategyDTO.class));
+    }
+
+    @Test
+    void deleteNamingStrategy_shouldSucceed() throws Exception {
+        doNothing().when(dataSourceService).deleteNamingStrategy("SRC001", "TG001");
+
+        mockMvc.perform(delete("/api/data-sources/SRC001/naming-strategies/TG001"))
+                .andExpect(status().isOk())
+                .andExpect(jsonPath("$.code").value(200));
+
+        verify(dataSourceService).deleteNamingStrategy("SRC001", "TG001");
     }
 
     // -- helpers --
 
     private DataSourceCreateDTO buildCreateDTO() {
-        DataSourceExtendDTO ext = new DataSourceExtendDTO();
-        ext.setTableNamingStrategy("TABLE_MERGE");
-
         DataSourceCreateDTO dto = new DataSourceCreateDTO();
         dto.setDataSourceId("DS001");
-        dto.setDataSourceName("测试");
+        dto.setDataSourceName("测试数据源");
         dto.setDataSourceCategory("SOURCE");
         dto.setDataSourceType("ORACLE");
-        dto.setDataSourceOrg("测试机构");
-        dto.setDataSourceHost("192.168.1.1");
-        dto.setDataSourcePort("1521");
-        dto.setDataSourceUserName("user");
-        dto.setDataSourcePassword("pass");
-        dto.setDataSourceServiceName("db");
-        dto.setExtend(ext);
+        dto.setHost("192.168.1.1");
+        dto.setPort(1521);
+        dto.setUserName("testuser");
+        dto.setPassword("testpass");
+        dto.setServiceName("testdb");
         return dto;
     }
 
     private DataSourceUpdateDTO buildUpdateDTO() {
-        DataSourceExtendDTO ext = new DataSourceExtendDTO();
-        ext.setTableNamingStrategy("TABLE_MERGE");
-
         DataSourceUpdateDTO dto = new DataSourceUpdateDTO();
-        dto.setDataSourceName("测试");
+        dto.setDataSourceId("DS001");
+        dto.setDataSourceName("测试数据源");
         dto.setDataSourceCategory("SOURCE");
         dto.setDataSourceType("ORACLE");
-        dto.setDataSourceOrg("测试机构");
-        dto.setDataSourceHost("192.168.1.1");
-        dto.setDataSourcePort("1521");
-        dto.setDataSourceUserName("user");
-        dto.setDataSourceServiceName("db");
-        dto.setExtend(ext);
+        dto.setHost("192.168.1.1");
+        dto.setPort(1521);
+        dto.setUserName("testuser");
+        dto.setServiceName("testdb");
+        return dto;
+    }
+
+    private TestConnectionDTO buildTestConnectionDTO() {
+        TestConnectionDTO dto = new TestConnectionDTO();
+        dto.setDataSourceType("ORACLE");
+        dto.setHost("192.168.1.1");
+        dto.setPort(1521);
+        dto.setUserName("testuser");
+        dto.setPassword("testpass");
+        dto.setServiceName("testdb");
+        return dto;
+    }
+
+    private NamingStrategyDTO buildNamingStrategyDTO() {
+        NamingStrategyDTO dto = new NamingStrategyDTO();
+        dto.setTargetDataSourceId("TG001");
+        dto.setTableNamingStrategy("TABLE_MERGE");
+        dto.setTableNamePrefix("");
+        dto.setTableNameSuffix("");
         return dto;
     }
 }

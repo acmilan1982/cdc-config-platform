@@ -1,31 +1,26 @@
-package com.bsoft.cdcconfig.datasource.entity;
+package com.bsoft.cdcconfig.datasource.vo;
 
-import com.baomidou.mybatisplus.annotation.TableField;
-import com.baomidou.mybatisplus.annotation.TableName;
+public class NamingStrategyVO {
 
-@TableName("CDC_DATA_SOURCE_EXTEND")
-public class DataSourceExtend {
-
-    @TableField("DATA_SOURCE_ID")
-    private String dataSourceId;
-
-    @TableField("TARGET_DATA_SOURCE_ID")
+    private String sourceDataSourceId;
     private String targetDataSourceId;
-
-    @TableField("TABLE_NAMING_STRATEGY")
+    private String targetDataSourceName;
+    private String targetDataSourceType;
     private String tableNamingStrategy;
-
-    @TableField("TABLE_NAME_PREFIX")
     private String tableNamePrefix;
-
-    @TableField("TABLE_NAME_SUFFIX")
     private String tableNameSuffix;
 
-    public String getDataSourceId() { return dataSourceId; }
-    public void setDataSourceId(String dataSourceId) { this.dataSourceId = dataSourceId; }
+    public String getSourceDataSourceId() { return sourceDataSourceId; }
+    public void setSourceDataSourceId(String sourceDataSourceId) { this.sourceDataSourceId = sourceDataSourceId; }
 
     public String getTargetDataSourceId() { return targetDataSourceId; }
     public void setTargetDataSourceId(String targetDataSourceId) { this.targetDataSourceId = targetDataSourceId; }
+
+    public String getTargetDataSourceName() { return targetDataSourceName; }
+    public void setTargetDataSourceName(String targetDataSourceName) { this.targetDataSourceName = targetDataSourceName; }
+
+    public String getTargetDataSourceType() { return targetDataSourceType; }
+    public void setTargetDataSourceType(String targetDataSourceType) { this.targetDataSourceType = targetDataSourceType; }
 
     public String getTableNamingStrategy() { return tableNamingStrategy; }
     public void setTableNamingStrategy(String tableNamingStrategy) { this.tableNamingStrategy = tableNamingStrategy; }

@@ -1,115 +1,82 @@
 package com.bsoft.cdcconfig.datasource.converter;
 
 import com.bsoft.cdcconfig.datasource.dto.DataSourceCreateDTO;
-import com.bsoft.cdcconfig.datasource.dto.DataSourceExtendDTO;
-import com.bsoft.cdcconfig.datasource.dto.DataSourceUpdateDTO;
 import com.bsoft.cdcconfig.datasource.entity.DataSource;
-import com.bsoft.cdcconfig.datasource.entity.DataSourceExtend;
 import com.bsoft.cdcconfig.datasource.enums.DataSourceCategoryEnum;
 import com.bsoft.cdcconfig.datasource.vo.DataSourceDetailVO;
-import com.bsoft.cdcconfig.datasource.vo.DataSourceExtendVO;
 import com.bsoft.cdcconfig.datasource.vo.DataSourceListVO;
+import com.bsoft.cdcconfig.datasource.vo.TargetOptionVO;
+import org.springframework.util.StringUtils;
 
 public class DataSourceConverter {
 
-    public static DataSourceListVO toListVO(DataSource ds, DataSourceExtend extend) {
+    private DataSourceConverter() {
+    }
+
+    public static DataSourceListVO toListVO(DataSource ds) {
         if (ds == null) return null;
         DataSourceListVO vo = new DataSourceListVO();
         vo.setDataSourceId(ds.getDataSourceId());
         vo.setDataSourceName(ds.getDataSourceName());
-        vo.setDataSourceCategory(ds.getDataSourceCategory());
-        vo.setDataSourceType(ds.getDataSourceType());
-        vo.setDataSourceOrg(ds.getDataSourceOrg());
-        vo.setDataSourceHost(ds.getDataSourceHost());
-        vo.setDataSourcePort(ds.getDataSourcePort());
-        vo.setDataSourceUserName(ds.getDataSourceUserName());
-        vo.setDataSourceServiceName(ds.getDataSourceServiceName());
-        vo.setFgActive(ds.getFgActive());
-        vo.setExtendConfigured(extend != null);
+        vo.setDataSourceCategory(DataSourceCategoryEnum.normalize(ds.getDataSourceCategory()));
+        vo.setDataSourceType(normalizeType(ds.getDataSourceType()));
+        vo.setHost(ds.getDataSourceHost());
+        vo.setPort(parsePort(ds.getDataSourcePort()));
+        vo.setUserName(ds.getDataSourceUserName());
+        vo.setServiceName(ds.getDataSourceServiceName());
         return vo;
     }
 
-    public static DataSourceDetailVO toDetailVO(DataSource ds, DataSourceExtend extend) {
+    public static DataSourceDetailVO toDetailVO(DataSource ds) {
         if (ds == null) return null;
         DataSourceDetailVO vo = new DataSourceDetailVO();
         vo.setDataSourceId(ds.getDataSourceId());
         vo.setDataSourceName(ds.getDataSourceName());
-        vo.setDataSourceCategory(ds.getDataSourceCategory());
-        vo.setDataSourceType(ds.getDataSourceType());
-        vo.setDataSourceOrg(ds.getDataSourceOrg());
-        vo.setDataSourceHost(ds.getDataSourceHost());
-        vo.setDataSourcePort(ds.getDataSourcePort());
-        vo.setDataSourceUserName(ds.getDataSourceUserName());
-        vo.setDataSourceServiceName(ds.getDataSourceServiceName());
-        vo.setFgActive(ds.getFgActive());
-        vo.setSourceApp(ds.getSourceApp());
-        vo.setDataSourceBizAttr(ds.getDataSourceBizAttr());
-
-        if (extend != null) {
-            vo.setExtendExists(true);
-            DataSourceExtendVO extendVO = new DataSourceExtendVO();
-            extendVO.setTableNamingStrategy(extend.getTableNamingStrategy());
-            extendVO.setTableNamePrefix(extend.getTableNamePrefix());
-            extendVO.setTableNameSuffix(extend.getTableNameSuffix());
-            vo.setExtend(extendVO);
-        } else {
-            vo.setExtendExists(false);
-            vo.setExtend(null);
-        }
+        vo.setDataSourceCategory(DataSourceCategoryEnum.normalize(ds.getDataSourceCategory()));
+        vo.setDataSourceType(normalizeType(ds.getDataSourceType()));
+        vo.setHost(ds.getDataSourceHost());
+        vo.setPort(parsePort(ds.getDataSourcePort()));
+        vo.setUserName(ds.getDataSourceUserName());
+        vo.setServiceName(ds.getDataSourceServiceName());
         return vo;
     }
 
-    public static DataSource toEntity(DataSourceCreateDTO dto) {
+    public static TargetOptionVO toTargetOptionVO(DataSource ds) {
+        if (ds == null) return null;
+        TargetOptionVO vo = new TargetOptionVO();
+        vo.setDataSourceId(ds.getDataSourceId());
+        vo.setDataSourceName(ds.getDataSourceName());
+        vo.setDataSourceType(normalizeType(ds.getDataSourceType()));
+        return vo;
+    }
+
+    public static DataSource toEntity(DataSourceCreateDTO dto, String dataSourceOrg, String fgActive) {
         if (dto == null) return null;
         DataSource ds = new DataSource();
         ds.setDataSourceId(dto.getDataSourceId());
         ds.setDataSourceName(dto.getDataSourceName());
         ds.setDataSourceCategory(DataSourceCategoryEnum.normalize(dto.getDataSourceCategory()));
-        ds.setDataSourceType(dto.getDataSourceType().toUpperCase());
-        ds.setDataSourceOrg(dto.getDataSourceOrg());
-        ds.setDataSourceHost(dto.getDataSourceHost());
-        ds.setDataSourcePort(dto.getDataSourcePort());
-        ds.setDataSourceUserName(dto.getDataSourceUserName());
-        ds.setDataSourcePassword(dto.getDataSourcePassword());
-        ds.setDataSourceServiceName(dto.getDataSourceServiceName());
-        ds.setSourceApp(dto.getSourceApp());
-        ds.setDataSourceBizAttr(dto.getDataSourceBizAttr());
-        ds.setFgActive("1");
+        ds.setDataSourceType(normalizeType(dto.getDataSourceType()));
+        ds.setDataSourceHost(dto.getHost());
+        ds.setDataSourcePort(dto.getPort() == null ? null : String.valueOf(dto.getPort()));
+        ds.setDataSourceUserName(dto.getUserName());
+        ds.setDataSourcePassword(dto.getPassword());
+        ds.setDataSourceServiceName(dto.getServiceName());
+        ds.setDataSourceOrg(dataSourceOrg);
+        ds.setFgActive(fgActive);
         return ds;
     }
 
-    public static DataSourceExtend toExtendEntity(String dataSourceId, DataSourceExtendDTO dto) {
-        if (dto == null) return null;
-        DataSourceExtend extend = new DataSourceExtend();
-        extend.setDataSourceId(dataSourceId);
-        extend.setTableNamingStrategy(dto.getTableNamingStrategy());
-        extend.setTableNamePrefix(dto.getTableNamePrefix());
-        extend.setTableNameSuffix(dto.getTableNameSuffix());
-        return extend;
-    }
-
-    public static void mergeToEntity(DataSource ds, DataSourceUpdateDTO dto) {
-        if (dto.getDataSourceId() != null && !dto.getDataSourceId().isEmpty()) {
-            ds.setDataSourceId(dto.getDataSourceId());
-        }
-        ds.setDataSourceName(dto.getDataSourceName());
-        ds.setDataSourceCategory(DataSourceCategoryEnum.normalize(dto.getDataSourceCategory()));
-        ds.setDataSourceType(dto.getDataSourceType().toUpperCase());
-        ds.setDataSourceOrg(dto.getDataSourceOrg());
-        ds.setDataSourceHost(dto.getDataSourceHost());
-        ds.setDataSourcePort(dto.getDataSourcePort());
-        ds.setDataSourceUserName(dto.getDataSourceUserName());
-        ds.setDataSourceServiceName(dto.getDataSourceServiceName());
-        ds.setSourceApp(dto.getSourceApp());
-        ds.setDataSourceBizAttr(dto.getDataSourceBizAttr());
-        if (dto.getDataSourcePassword() != null && !dto.getDataSourcePassword().isEmpty()) {
-            ds.setDataSourcePassword(dto.getDataSourcePassword());
+    public static Integer parsePort(String raw) {
+        if (!StringUtils.hasText(raw)) return null;
+        try {
+            return Integer.parseInt(raw.trim());
+        } catch (NumberFormatException e) {
+            return null;
         }
     }
 
-    public static void mergeToExtendEntity(DataSourceExtend extend, DataSourceExtendDTO dto) {
-        extend.setTableNamingStrategy(dto.getTableNamingStrategy());
-        extend.setTableNamePrefix(dto.getTableNamePrefix());
-        extend.setTableNameSuffix(dto.getTableNameSuffix());
+    public static String normalizeType(String raw) {
+        return raw == null ? null : raw.toUpperCase();
     }
 }

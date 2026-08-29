@@ -1,23 +1,17 @@
 package com.bsoft.cdcconfig.datasource.query;
 
-import com.bsoft.cdcconfig.common.page.PageResult;
-
 public class DataSourceQuery {
 
-    private String dataSourceId;
-    private String dataSourceName;
-    private Integer pageNum = 1;
-    private Integer pageSize = 20;
+    private String id;
+    private String name;
+    private String host;
 
-    public String getDataSourceId() { return dataSourceId; }
-    public void setDataSourceId(String dataSourceId) { this.dataSourceId = dataSourceId; }
+    public String getId() { return id; }
+    public void setId(String id) { this.id = id; }
 
-    public String getDataSourceName() { return dataSourceName; }
-    public void setDataSourceName(String dataSourceName) { this.dataSourceName = dataSourceName; }
+    public String getName() { return name; }
+    public void setName(String name) { this.name = name; }
 
-    public Integer getPageNum() { return pageNum; }
-    public void setPageNum(Integer pageNum) { this.pageNum = pageNum; }
-
-    public Integer getPageSize() { return pageSize; }
-    public void setPageSize(Integer pageSize) { this.pageSize = pageSize; }
+    public String getHost() { return host; }
+    public void setHost(String host) { this.host = host; }
 }

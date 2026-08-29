@@ -6,13 +6,10 @@ public class DataSourceListVO {
     private String dataSourceName;
     private String dataSourceCategory;
     private String dataSourceType;
-    private String dataSourceOrg;
-    private String dataSourceHost;
-    private String dataSourcePort;
-    private String dataSourceUserName;
-    private String dataSourceServiceName;
-    private String fgActive;
-    private Boolean extendConfigured;
+    private String host;
+    private Integer port;
+    private String userName;
+    private String serviceName;
 
     public String getDataSourceId() { return dataSourceId; }
     public void setDataSourceId(String dataSourceId) { this.dataSourceId = dataSourceId; }
@@ -26,24 +23,15 @@ public class DataSourceListVO {
     public String getDataSourceType() { return dataSourceType; }
     public void setDataSourceType(String dataSourceType) { this.dataSourceType = dataSourceType; }
 
-    public String getDataSourceOrg() { return dataSourceOrg; }
-    public void setDataSourceOrg(String dataSourceOrg) { this.dataSourceOrg = dataSourceOrg; }
+    public String getHost() { return host; }
+    public void setHost(String host) { this.host = host; }
 
-    public String getDataSourceHost() { return dataSourceHost; }
-    public void setDataSourceHost(String dataSourceHost) { this.dataSourceHost = dataSourceHost; }
+    public Integer getPort() { return port; }
+    public void setPort(Integer port) { this.port = port; }
 
-    public String getDataSourcePort() { return dataSourcePort; }
-    public void setDataSourcePort(String dataSourcePort) { this.dataSourcePort = dataSourcePort; }
+    public String getUserName() { return userName; }
+    public void setUserName(String userName) { this.userName = userName; }
 
-    public String getDataSourceUserName() { return dataSourceUserName; }
-    public void setDataSourceUserName(String dataSourceUserName) { this.dataSourceUserName = dataSourceUserName; }
-
-    public String getDataSourceServiceName() { return dataSourceServiceName; }
-    public void setDataSourceServiceName(String dataSourceServiceName) { this.dataSourceServiceName = dataSourceServiceName; }
-
-    public String getFgActive() { return fgActive; }
-    public void setFgActive(String fgActive) { this.fgActive = fgActive; }
-
-    public Boolean getExtendConfigured() { return extendConfigured; }
-    public void setExtendConfigured(Boolean extendConfigured) { this.extendConfigured = extendConfigured; }
+    public String getServiceName() { return serviceName; }
+    public void setServiceName(String serviceName) { this.serviceName = serviceName; }
 }

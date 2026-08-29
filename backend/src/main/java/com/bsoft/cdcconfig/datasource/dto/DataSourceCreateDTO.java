@@ -1,15 +1,21 @@
 package com.bsoft.cdcconfig.datasource.dto;
 
-import javax.validation.Valid;
+import javax.validation.constraints.Max;
+import javax.validation.constraints.Min;
 import javax.validation.constraints.NotBlank;
 import javax.validation.constraints.NotNull;
+import javax.validation.constraints.Pattern;
+import javax.validation.constraints.Size;
 
 public class DataSourceCreateDTO {
 
     @NotBlank(message = "数据源ID不能为空")
+    @Size(max = 32, message = "数据源ID长度不能超过32")
+    @Pattern(regexp = "[A-Za-z0-9_-]+", message = "数据源ID只能包含字母、数字、下划线和短横线")
     private String dataSourceId;
 
     @NotBlank(message = "数据源名称不能为空")
+    @Size(max = 30, message = "数据源名称长度不能超过30")
     private String dataSourceName;
 
     @NotBlank(message = "数据源类别不能为空")
@@ -18,31 +24,26 @@ public class DataSourceCreateDTO {
     @NotBlank(message = "数据库类型不能为空")
     private String dataSourceType;
 
-    @NotBlank(message = "数据源机构不能为空")
-    private String dataSourceOrg;
-
     @NotBlank(message = "主机地址不能为空")
-    private String dataSourceHost;
+    @Size(max = 64, message = "主机地址长度不能超过64")
+    private String host;
 
-    @NotBlank(message = "端口不能为空")
-    private String dataSourcePort;
+    @NotNull(message = "端口不能为空")
+    @Min(value = 1, message = "端口必须为1-65535之间的整数")
+    @Max(value = 65535, message = "端口必须为1-65535之间的整数")
+    private Integer port;
 
     @NotBlank(message = "用户名不能为空")
-    private String dataSourceUserName;
+    @Size(max = 64, message = "用户名长度不能超过64")
+    private String userName;
 
     @NotBlank(message = "密码不能为空")
-    private String dataSourcePassword;
+    @Size(max = 64, message = "密码长度不能超过64")
+    private String password;
 
     @NotBlank(message = "Service Name不能为空")
-    private String dataSourceServiceName;
-
-    private String sourceApp;
-
-    private String dataSourceBizAttr;
-
-    @Valid
-    @NotNull(message = "扩展配置不能为空")
-    private DataSourceExtendDTO extend;
+    @Size(max = 64, message = "Service Name长度不能超过64")
+    private String serviceName;
 
     public String getDataSourceId() { return dataSourceId; }
     public void setDataSourceId(String dataSourceId) { this.dataSourceId = dataSourceId; }
@@ -56,30 +57,18 @@ public class DataSourceCreateDTO {
     public String getDataSourceType() { return dataSourceType; }
     public void setDataSourceType(String dataSourceType) { this.dataSourceType = dataSourceType; }
 
-    public String getDataSourceOrg() { return dataSourceOrg; }
-    public void setDataSourceOrg(String dataSourceOrg) { this.dataSourceOrg = dataSourceOrg; }
+    public String getHost() { return host; }
+    public void setHost(String host) { this.host = host; }
 
-    public String getDataSourceHost() { return dataSourceHost; }
-    public void setDataSourceHost(String dataSourceHost) { this.dataSourceHost = dataSourceHost; }
+    public Integer getPort() { return port; }
+    public void setPort(Integer port) { this.port = port; }
 
-    public String getDataSourcePort() { return dataSourcePort; }
-    public void setDataSourcePort(String dataSourcePort) { this.dataSourcePort = dataSourcePort; }
+    public String getUserName() { return userName; }
+    public void setUserName(String userName) { this.userName = userName; }
 
-    public String getDataSourceUserName() { return dataSourceUserName; }
-    public void setDataSourceUserName(String dataSourceUserName) { this.dataSourceUserName = dataSourceUserName; }
+    public String getPassword() { return password; }
+    public void setPassword(String password) { this.password = password; }
 
-    public String getDataSourcePassword() { return dataSourcePassword; }
-    public void setDataSourcePassword(String dataSourcePassword) { this.dataSourcePassword = dataSourcePassword; }
-
-    public String getDataSourceServiceName() { return dataSourceServiceName; }
-    public void setDataSourceServiceName(String dataSourceServiceName) { this.dataSourceServiceName = dataSourceServiceName; }
-
-    public String getSourceApp() { return sourceApp; }
-    public void setSourceApp(String sourceApp) { this.sourceApp = sourceApp; }
-
-    public String getDataSourceBizAttr() { return dataSourceBizAttr; }
-    public void setDataSourceBizAttr(String dataSourceBizAttr) { this.dataSourceBizAttr = dataSourceBizAttr; }
-
-    public DataSourceExtendDTO getExtend() { return extend; }
-    public void setExtend(DataSourceExtendDTO extend) { this.extend = extend; }
+    public String getServiceName() { return serviceName; }
+    public void setServiceName(String serviceName) { this.serviceName = serviceName; }
 }

@@ -13,10 +13,13 @@ public final class DataSourceErrorCode {
     public static final int INVALID_CATEGORY = 40001;
     public static final int INVALID_TYPE = 40002;
     public static final int INVALID_NAMING_STRATEGY = 40003;
-    public static final int EXTEND_REQUIRED = 40004;
+    public static final int INVALID_TARGET_DATA_SOURCE = 40005;
+    public static final int ROLE_NOT_APPLICABLE = 40006;
+    public static final int NAMING_STRATEGY_NOT_FOUND = 40401;
+    public static final int NAMING_STRATEGY_DUPLICATE = 40902;
+    public static final int NAMING_STRATEGY_MULTI_CONFLICT = 40903;
     public static final int SAVE_FAILED = 50000;
     public static final int DELETE_FAILED = 50001;
-    public static final int STATUS_FAILED = 50002;
 
     // -- factory methods --
 
@@ -50,8 +53,36 @@ public final class DataSourceErrorCode {
                 "命名策略无效");
     }
 
-    public static BusinessException extendRequired() {
-        return new BusinessException(EXTEND_REQUIRED,
-                "扩展配置不能为空");
+    public static BusinessException invalidTargetDataSource() {
+        return new BusinessException(INVALID_TARGET_DATA_SOURCE,
+                "目标库无效或已停用");
+    }
+
+    public static BusinessException roleNotApplicable() {
+        return new BusinessException(ROLE_NOT_APPLICABLE,
+                "数据源角色不适用于当前操作");
+    }
+
+    public static BusinessException namingStrategyNotFound() {
+        return new BusinessException(NAMING_STRATEGY_NOT_FOUND,
+                "命名策略不存在");
+    }
+
+    public static BusinessException namingStrategyDuplicate() {
+        return new BusinessException(NAMING_STRATEGY_DUPLICATE,
+                "该源库到该目标库的命名策略已存在");
+    }
+
+    public static BusinessException namingStrategyMultiConflict() {
+        return new BusinessException(NAMING_STRATEGY_MULTI_CONFLICT,
+                "检测到重复命名策略数据，保存被阻止");
+    }
+
+    public static BusinessException saveFailed() {
+        return new BusinessException(SAVE_FAILED, "保存失败");
+    }
+
+    public static BusinessException deleteFailed() {
+        return new BusinessException(DELETE_FAILED, "删除失败");
     }
 }

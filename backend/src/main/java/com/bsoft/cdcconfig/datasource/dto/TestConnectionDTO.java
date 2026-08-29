@@ -4,21 +4,15 @@ import javax.validation.constraints.Max;
 import javax.validation.constraints.Min;
 import javax.validation.constraints.NotBlank;
 import javax.validation.constraints.NotNull;
-import javax.validation.constraints.Pattern;
 import javax.validation.constraints.Size;
 
-public class DataSourceUpdateDTO {
+public class TestConnectionDTO {
 
     @Size(max = 32, message = "数据源ID长度不能超过32")
-    @Pattern(regexp = "[A-Za-z0-9_-]+", message = "数据源ID只能包含字母、数字、下划线和短横线")
     private String dataSourceId;
 
-    @NotBlank(message = "数据源名称不能为空")
-    @Size(max = 30, message = "数据源名称长度不能超过30")
-    private String dataSourceName;
-
-    @NotBlank(message = "数据源类别不能为空")
-    private String dataSourceCategory;
+    @Size(max = 32, message = "原数据源ID长度不能超过32")
+    private String originalDataSourceId;
 
     @NotBlank(message = "数据库类型不能为空")
     private String dataSourceType;
@@ -46,11 +40,8 @@ public class DataSourceUpdateDTO {
     public String getDataSourceId() { return dataSourceId; }
     public void setDataSourceId(String dataSourceId) { this.dataSourceId = dataSourceId; }
 
-    public String getDataSourceName() { return dataSourceName; }
-    public void setDataSourceName(String dataSourceName) { this.dataSourceName = dataSourceName; }
-
-    public String getDataSourceCategory() { return dataSourceCategory; }
-    public void setDataSourceCategory(String dataSourceCategory) { this.dataSourceCategory = dataSourceCategory; }
+    public String getOriginalDataSourceId() { return originalDataSourceId; }
+    public void setOriginalDataSourceId(String originalDataSourceId) { this.originalDataSourceId = originalDataSourceId; }
 
     public String getDataSourceType() { return dataSourceType; }
     public void setDataSourceType(String dataSourceType) { this.dataSourceType = dataSourceType; }
