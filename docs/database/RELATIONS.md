@@ -33,7 +33,7 @@
 
 | # | 来源对象.字段 | 目标对象.字段 | 关系类型 | 可空 | 使用场景/关联方式 | 维护方 | 代码证据 | 数据核验（开发库 2026-08-26） |
 |---|---|---|---|---|---|---|---|---|
-| R01 | CDC_DATA_SOURCE_EXTEND.DATA_SOURCE_ID | CDC_DATA_SOURCE.DATA_SOURCE_ID | 目标业务基数：一对一必填（每个数据源应有且仅有一条扩展配置）；当前物理：无唯一约束和外键，数据源到扩展物理上允许 0..N；扩展记录到数据源表现为多对一弱逻辑引用，并可能出现孤立引用 | Y | DataSourceServiceImpl 联操作（create 双 insert，delete 双 delete）；findExtend 通过 selectOne(ROWNUM=1) 查询 | 管理平台 | DataSourceServiceImpl.create/update/delete 均在 @Transactional 内操作两表 | 0 空值；1 组重复（同 ID 共 3 行）、2 条孤立、部分数据源无扩展记录，均为人工构造容错测试场景；行数见 DATA_PROFILE.md §1.1 |
+| R01 | CDC_DATA_SOURCE_EXTEND.DATA_SOURCE_ID | CDC_DATA_SOURCE.DATA_SOURCE_ID | 源库弱逻辑引用（`DATA_SOURCE_ID` 表示源库）：一条策略属于一个源库，反向一个源库 0..N 条命名策略；`(DATA_SOURCE_ID, TARGET_DATA_SOURCE_ID)` 为逻辑联合唯一组合，第一版仅由后端保存前查询校验，无数据库唯一约束/DDL，数据库物理上仍允许 0..N | Y | 旧实现（待改造）：DataSourceServiceImpl 联操作（create 双 insert，delete 双 delete）；findExtend 通过 selectOne(ROWNUM=1) 查询；均未满足已批准 0..N 目标 | 管理平台（旧候选实现） | DataSourceServiceImpl.create/update/delete 均在 @Transactional 内操作两表（旧代码证据） | 10 行 0 空值；1 组重复（同 ID 共 3 行，0..N 下同一源库多行属允许范围）、2 条孤立、13 个数据源无策略记录（符合源库 0 条允许规则），均为人工构造容错测试场景；行数见 DATA_PROFILE.md §1.1 |
 | R02 | CDC_DATA_SUBSCRIBE.DATA_FROM_SOURCE_ID | CDC_DATA_SOURCE.DATA_SOURCE_ID | 多值弱逻辑引用（逗号分隔字符串） | Y | LargeScreenServiceImpl 维度映射 | 人工维护 / 管理平台只读 | 字段注释 + LargeScreenServiceImpl | 12/12 行每行至少一个 token 可匹配（共 12 个 token）；行数见 DATA_PROFILE.md §1.1 |
 | R03 | CDC_DATA_SUBSCRIBE.DATA_TO_SOURCE_ID | CDC_DATA_SOURCE.DATA_SOURCE_ID | 多值弱逻辑引用（逗号分隔字符串） | Y | 同上 | 人工维护 / 管理平台只读 | 同上 | 12/12 行每行至少一个 token 可匹配（共 13 个 token）；行数见 DATA_PROFILE.md §1.1 |
 | R04 | CDC_CLIENT_MULTIPLE.DATA_SOURCE_ID | CDC_DATA_SOURCE.DATA_SOURCE_ID | 多值弱逻辑引用（逗号分隔字符串） | Y | LargeScreenMapper.selectActiveClientDataSources 查询活跃客户端关联的数据源 | 人工维护 / 管理平台只读 | LargeScreenMapper @Select + LargeScreenServiceImpl | 7/7 行每行至少一个 token 可匹配（共 12 个 token）；行数见 DATA_PROFILE.md §1.1 |
@@ -44,7 +44,7 @@
 | R09 | CDC_JOB_FAILURE_EVENT.CLIENT_ID | CDC_CLIENT_MULTIPLE.CLIENT_ID | 多对一 | N | JobFailureServiceImpl 按 clientId 筛选故障事件，并 JOIN 获取 active client 的 dataSourceIds | sync-client 写入 / 管理平台只读 | JobFailureServiceImpl.loadAndAssemble 中 .in(JobFailureEvent::getClientId, clientIds) | 0 空值 0 孤立；行数见 DATA_PROFILE.md §1.1 |
 | R10 | CDC_JOB_FAILURE_EVENT.DATA_SOURCE_ID | CDC_DATA_SOURCE.DATA_SOURCE_ID | 多对一 | N | JobFailureServiceImpl 按 dataSourceId 筛选故障事件，并通过 selectBatchIds 获取数据源名称 | sync-client 写入 / 管理平台只读 | JobFailureServiceImpl.loadAndAssemble 中 .eq(JobFailureEvent::getDataSourceId, dataSourceId)；loadDataSourceNames 中 dataSourceMapper.selectBatchIds | 0 空值 0 孤立；行数见 DATA_PROFILE.md §1.1 |
 | R11 | CDC_JOB_FAILURE_HANDLE_LOG.FAILURE_EVENT_ID | CDC_JOB_FAILURE_EVENT.ID | 多对一（反向：一个故障事件对应多条处理日志） | N | JobFailureServiceImpl 按事件 ID 列表批量获取处理日志 | sync-client 写入 / 管理平台只读 | JobFailureServiceImpl.loadLogsByEventIds 中 .in(JobFailureHandleLog::getFailureEventId, eventIds) | 0 空值 0 孤立；行数见 DATA_PROFILE.md §1.1 |
-| R15 | CDC_DATA_SOURCE_EXTEND.TARGET_DATA_SOURCE_ID | CDC_DATA_SOURCE.DATA_SOURCE_ID | 多对一弱逻辑引用（业务语义目标库，应 DATA_SOURCE_CATEGORY='TARGET'） | Y | 字段含义由项目负责人 2026-08-26 明确确认；当前代码未映射该字段、无代码级 JOIN；无物理外键、无类别约束 | 管理平台（EXTEND 联写维护该行；TARGET_DATA_SOURCE_ID 字段当前代码未映射） | 项目负责人 2026-08-26 明确确认字段含义（目标库）；无代码级 JOIN | 10 行中 2 行非空（2 个不同值），均匹配 category=target，0 孤立（定向核验） |
+| R15 | CDC_DATA_SOURCE_EXTEND.TARGET_DATA_SOURCE_ID | CDC_DATA_SOURCE.DATA_SOURCE_ID | 目标库弱逻辑引用：业务上每条策略的 `TARGET_DATA_SOURCE_ID` 必填（目标库，`DATA_SOURCE_CATEGORY='TARGET'`），一个目标库可被多个源库策略引用；数据库字段仍物理可空且无外键/类别约束 | Y | 字段含义由项目负责人 2026-08-26 明确确认；当前代码未映射该字段、无代码级 JOIN；无物理外键、无类别约束 | 管理平台（EXTEND 联写维护该行；TARGET_DATA_SOURCE_ID 字段当前代码未映射，属待改造） | 项目负责人 2026-08-26 明确确认字段含义（目标库）；无代码级 JOIN | 10 行中 2 行非空（2 个不同值），均匹配 category=target，0 孤立（定向核验） |
 | R16 | CDC_SERVER_CONFIG.SERVER_ID | CDC_SERVER.SERVER_ID | 多对一（反向：一个中心端对应多条配置项） | Y | 负责人确认（`CONFIRMED_BY_OWNER`）；未来 `server-config` Feature 查询全部既有配置并只更新可编辑记录的 `CONFIG_VALUE`，不新增/删除，也不维护 `CDC_SERVER` | 未来 `server-config` Feature（未实现）；当前管理平台不维护两表 | 项目负责人 2026-08-27 明确确认一对多逻辑关系；无代码级 JOIN（当前仓库无生产代码访问两表，仅占位路由/占位页提及表名） | 8 行全部归属 `Server001`，`SERVER_ID` NULL 0、孤立引用 0、同中心端重复 `CONFIG_KEY` 0（定向核验，开发库 2026-08-27） |
 
 ## 4. 高度可信逻辑关系（R12～R14）
@@ -77,9 +77,9 @@ CDC_JOB_FAILURE_EVENT 和 CDC_JOB_FAILURE_HANDLE_LOG 通过 FAILURE_EVENT_ID 和
 
 FAILED_JOB_ID 是 Flink 实际 Job ID，**不保存在 ZooKeeper** 中；ZK 路径中的 jobName 是另一套标识，两者不建立直接逻辑关系。
 
-### 5.3 单值弱逻辑引用（无数据库类别约束）
+### 5.3 源库到目标库命名策略关系（无数据库类别约束）
 
-CDC_DATA_SOURCE_EXTEND.TARGET_DATA_SOURCE_ID 是到 CDC_DATA_SOURCE.DATA_SOURCE_ID 的单值弱逻辑引用，业务语义为目标库（DATA_SOURCE_CATEGORY='TARGET'）。数据库无物理外键、无类别约束；当前生产代码未映射该字段、无代码级 JOIN（R15）。引用方代码须兼容目标缺失、停用或类别不符等情况，容错由业务代码负责。
+`CDC_DATA_SOURCE_EXTEND` 在本 Feature 中为源库到目标库的命名策略：`DATA_SOURCE_ID` 表示源库（R01，反向一个源库 0..N 条策略），`TARGET_DATA_SOURCE_ID` 是到 `CDC_DATA_SOURCE.DATA_SOURCE_ID` 的目标库弱逻辑引用（R15，业务上每条策略的目标库必填）。数据库无物理外键、无类别约束；当前生产代码未映射 `TARGET_DATA_SOURCE_ID` 字段、无代码级 JOIN。`(DATA_SOURCE_ID, TARGET_DATA_SOURCE_ID)` 为逻辑联合唯一组合，第一版仅由后端保存前查询校验，不新增主键、唯一约束、索引或 DDL。引用方代码须兼容目标缺失、停用或类别不符等情况，容错由业务代码负责。
 
 ## 6. 无法确认或已废弃关系
 
@@ -89,8 +89,8 @@ CDC_DATA_SOURCE_EXTEND.TARGET_DATA_SOURCE_ID 是到 CDC_DATA_SOURCE.DATA_SOURCE_
 ## 7. 小型关系图（逻辑引用）
 
 ```
-CDC_DATA_SOURCE ──< R01（一对一必填目标/物理0..N）── CDC_DATA_SOURCE_EXTEND
-CDC_DATA_SOURCE ──< R15（单值弱引用，目标库）──── CDC_DATA_SOURCE_EXTEND
+CDC_DATA_SOURCE ──< R01（源库弱逻辑引用，反向 0..N 条策略）── CDC_DATA_SOURCE_EXTEND
+CDC_DATA_SOURCE ──< R15（目标库弱逻辑引用，单条策略对应一个业务必填目标库）──── CDC_DATA_SOURCE_EXTEND
 CDC_DATA_SOURCE ──< R02/R03（多值弱引用）────────── CDC_DATA_SUBSCRIBE
 CDC_DATA_SOURCE ──< R04（多值弱引用）────────────── CDC_CLIENT_MULTIPLE
 CDC_DATA_SOURCE ──< R05/R06/R07/R08（多对一）────── CDC_LOG_CORRECT / CDC_LOG_ERROR
@@ -114,4 +114,5 @@ CDC_SERVER ──< R16（逻辑一对多，无物理外键）────── 
 | 2026-08-26 | R2：R15 由高度可信调整为已确认逻辑关系（项目负责人确认）；R04 维护方调整为人工维护 / 管理平台只读 | PROJECT-DATABASE-BASELINE-001-R2 修订 |
 | 2026-08-26 | 批准：项目级数据库基线正式批准收口（APPROVED） | PROJECT-DATABASE-BASELINE-APPROVAL-001 批准 |
 | 2026-08-27 | 新增 R16（CDC_SERVER_CONFIG.SERVER_ID→CDC_SERVER.SERVER_ID，逻辑一对多，无物理外键，负责人确认）；已确认关系 12→13、关系总数 15→16；§1 物理外键说明更新为覆盖 16 张已批准表（保留原 14 表核验历史）；§7 关系图补充 R16 | DATABASE-BASELINE-SERVER-CONFIG-001（候选）+ DATABASE-BASELINE-SERVER-CONFIG-APPROVAL-001（批准） |
-| 2026-08-27 | R1：修正文档级变更记录中历史变化计数笔误（批准前已有 R01～R15 共 15 条逻辑关系，新增 R16 后由 15 增至 16，故历史变化计数应为“关系总数 15→16”，原误写为“12→16”）；本修正仅改正历史变化计数，不改变当前关系清单、R16 正文、无物理外键结论与 `APPROVED` 状态 | DATABASE-BASELINE-SERVER-CONFIG-APPROVAL-001-R1 复审修正 |
+| 2026-08-27 | R1：修正文档级变更记录中历史变化计数笔误（批准前已有 R01～R15 共 15 条逻辑关系，新增 R16 后由 15 增至 16，故历史变化计数应为”关系总数 15→16”，原误写为”12→16”）；本修正仅改正历史变化计数，不改变当前关系清单、R16 正文、无物理外键结论与 `APPROVED` 状态 | DATABASE-BASELINE-SERVER-CONFIG-APPROVAL-001-R1 复审修正 |
+| 2026-08-29 | 已批准数据源管理 Feature 规则同步：R01 由“一对一必填目标”更新为源库弱逻辑引用（`DATA_SOURCE_ID` 表示源库，反向一个源库 0..N 条命名策略）；R15 明确每条策略目标库业务必填、一个目标库可被多个源库策略引用、数据库字段仍物理可空且无外键/类别约束；记录 `(DATA_SOURCE_ID, TARGET_DATA_SOURCE_ID)` 为逻辑联合唯一组合、第一版仅由后端保存前查询校验、无数据库唯一约束/DDL；§7 关系图更新；当前旧代码证据保留并标注为待改造；关系数量与确认等级未变化 | DATA-SOURCE-BASELINE-IMPACT-ALIGNMENT-001（已批准业务规则向权威数据库基线同步；纯文档任务，数据库物理结构无变化） |

@@ -120,7 +120,7 @@ src/
 | 表 | 行数 | 读写 | 说明 |
 |---|---|---|---|
 | CDC_DATA_SOURCE | 19 | 读+写（CRUD+启停） | 数据源主表，DATA_SOURCE_ID 为业务主键 |
-| CDC_DATA_SOURCE_EXTEND | 10 | 读+写（随 DataSource 联写） | 数据源扩展配置（表命名策略），目标规则为每数据源一对一必填 |
+| CDC_DATA_SOURCE_EXTEND | 10 | 读+写（随 DataSource 联写，旧候选实现） | 源库到目标库的命名策略（目标表命名策略：前缀/后缀/合并策略）；源库 0..N，第一版由后端保存前校验逻辑联合唯一，不新增 DDL |
 
 **Job 故障监控（3 张）**：
 
@@ -237,7 +237,7 @@ LargeScreenPage.vue (ECharts大屏, 60s轮询, CSS scale自适应)
 
 | # | 来源 → 目标 | 关系类型 | 可空 | 维护方 |
 |---|---|---|---|---|
-| R01 | CDC_DATA_SOURCE_EXTEND.DATA_SOURCE_ID → CDC_DATA_SOURCE.DATA_SOURCE_ID | 目标一对一必填，当前物理 0..N | Y | 管理平台 |
+| R01 | CDC_DATA_SOURCE_EXTEND.DATA_SOURCE_ID → CDC_DATA_SOURCE.DATA_SOURCE_ID | `DATA_SOURCE_ID` 到源库的多对一弱逻辑引用；反向一个源库 0..N 条命名策略；`(DATA_SOURCE_ID, TARGET_DATA_SOURCE_ID)` 为逻辑联合唯一组合，第一版仅由后端保存前校验，不新增 DDL | Y | 管理平台（旧候选实现双表联写，待改造） |
 | R02 | CDC_DATA_SUBSCRIBE.DATA_FROM_SOURCE_ID → CDC_DATA_SOURCE.DATA_SOURCE_ID | 多值弱逻辑引用（逗号分隔） | Y | 同步程序/管理平台只读 |
 | R03 | CDC_DATA_SUBSCRIBE.DATA_TO_SOURCE_ID → CDC_DATA_SOURCE.DATA_SOURCE_ID | 多值弱逻辑引用（逗号分隔） | Y | 同步程序/管理平台只读 |
 | R04 | CDC_CLIENT_MULTIPLE.DATA_SOURCE_ID → CDC_DATA_SOURCE.DATA_SOURCE_ID | 多值弱逻辑引用（逗号分隔） | Y | 同步程序/管理平台只读 |
@@ -248,7 +248,7 @@ LargeScreenPage.vue (ECharts大屏, 60s轮询, CSS scale自适应)
 | R09 | CDC_JOB_FAILURE_EVENT.CLIENT_ID → CDC_CLIENT_MULTIPLE.CLIENT_ID | 多对一 | N | 管理平台只读 |
 | R10 | CDC_JOB_FAILURE_EVENT.DATA_SOURCE_ID → CDC_DATA_SOURCE.DATA_SOURCE_ID | 多对一 | N | 管理平台只读 |
 | R11 | CDC_JOB_FAILURE_HANDLE_LOG.FAILURE_EVENT_ID → CDC_JOB_FAILURE_EVENT.ID | 多对一 | N | 管理平台只读 |
-| R15 | CDC_DATA_SOURCE_EXTEND.TARGET_DATA_SOURCE_ID → CDC_DATA_SOURCE.DATA_SOURCE_ID | 单值弱逻辑引用（业务语义目标库） | Y | 管理平台（EXTEND 联写维护该行；TARGET_DATA_SOURCE_ID 字段当前代码未映射） |
+| R15 | CDC_DATA_SOURCE_EXTEND.TARGET_DATA_SOURCE_ID → CDC_DATA_SOURCE.DATA_SOURCE_ID | 目标库弱逻辑引用：一条策略对应一个业务必填目标库，一个目标库可被多个源库策略引用；数据库仍无外键/类别约束 | Y | 管理平台（EXTEND 联写维护该行；TARGET_DATA_SOURCE_ID 字段当前代码未映射，属待改造） |
 
 **高度可信关系（3 条）**：字段类型和值域一致，数据核验 0 空值 0 孤立，但缺少代码级 JOIN 证据直接证明。
 
@@ -263,7 +263,7 @@ LargeScreenPage.vue (ECharts大屏, 60s轮询, CSS scale自适应)
 - **逗号分隔多值弱逻辑引用**（R02/R03/R04）：以逗号分隔字符串存储多个引用值，代码层通过 `.split(",")` 解析，无法使用标准 SQL JOIN。R1 核验确认每条记录至少存在一个可匹配 token。
 - **失败 Job ID 链**：CDC_JOB_FAILURE_EVENT.FAILED_JOB_ID 是 Flink 实际 Job ID，不保存在 ZooKeeper 中。ZK 路径 `/bsoft-cdc/clients/{clientId}/{jobName}` 中的 `jobName` 是另一套标识，两者不建立直接逻辑关系。FAILED_JOB_ID 与 NEW_JOB_ID 在 algorithm 包中用于构建作业间故障链。
 - **统计水位关系**（R12）：1 个 TASK_CODE 对应 2 条水位记录（CORRECT + ERROR），多对一。
-- **单值弱逻辑引用**（R15）：CDC_DATA_SOURCE_EXTEND.TARGET_DATA_SOURCE_ID 业务语义为目标库（DATA_SOURCE_CATEGORY='TARGET'），数据库无类别约束；当前代码未映射该字段、无代码级 JOIN。
+- **源库到目标库命名策略**（R01/R15）：`CDC_DATA_SOURCE_EXTEND` 为源库到目标库的命名策略；`DATA_SOURCE_ID` 表示源库（一个源库 0..N 条策略），`TARGET_DATA_SOURCE_ID` 表示业务必填目标库（一条策略对应一个目标库，一个目标库可被多个源库策略引用）；数据库无物理外键/类别约束。`(DATA_SOURCE_ID, TARGET_DATA_SOURCE_ID)` 为逻辑联合唯一组合，第一版仅由未来后端保存前查询校验，不新增主键、唯一约束、索引或任何 DDL。目标库选择仅来自 `FG_ACTIVE='1' AND DATA_SOURCE_CATEGORY='TARGET'`（Feature 业务规则，不是数据库物理约束）。当前代码 Entity 未映射 `TARGET_DATA_SOURCE_ID`、无代码级 JOIN、`ROWNUM=1` 取单条，均属待改造旧实现。
 
 > 详细证据：`docs/baseline-work/DATABASE-CODE-MAPPING-001/03_LOGICAL_RELATIONSHIPS.md`
 
@@ -440,7 +440,15 @@ Route Record 清单:
 | XML Mapper 极少 | 仅 mapper/logquery/LogQueryMapper.xml（游标分页），其余 SQL 通过注解/BaseMapper |
 | 部分Entity缺@TableId | DimCumulativeEntity/DimDailyEntity/StatsWatermarkEntity无@TableId，MyBatis-Plus WARN（差异 D06） |
 | CDC_DATA_SUBSCRIBE 无主键 | 目标规则 DATA_SUB_ID 为主键，当前数据库仅 CHECK NOT NULL 约束，代码使用 selectList 不受影响（差异 D01） |
-| CDC_DATA_SOURCE_EXTEND 无约束 | 目标规则一对一必填，当前无主键/唯一约束，代码 ROWNUM=1 结果不确定；重复/孤立/缺失为人工构造容错测试场景（差异 D02） |
+| CDC_DATA_SOURCE_EXTEND 无约束 | 当前物理事实为无主键/唯一约束/索引；已批准第一版明确不新增 DDL（原差异 D02 不再作为“一对一未约束”的高严重度缺陷）；旧后端 `ROWNUM=1` 取单条、未映射 `TARGET_DATA_SOURCE_ID` 属待改造代码差距；重复/孤立/缺失为人工构造容错测试场景 |
 | 无认证机制 | 当前无认证，CORS仅dev profile启用 |
 | ZK连接验证 | 10.19.16.111:2181 已验证 TCP 可达、会话建立成功（ZK-ENV-001）；192.168.174.51:2181 为旧配置不可达 |
 | Curator/ZK依赖兼容性 | pom.xml 已提交 Curator 2.13.0 / ZK 3.4.14，与服务端 3.4.14 的 Java/Curator 层兼容性待应用层独立验证（CLI 只读已验证） |
+
+---
+
+## 10. 文档级变更记录
+
+| 日期 | 变更 | 依据 |
+|---|---|---|
+| 2026-08-29 | 数据源管理 Feature 已批准规则同步：`CDC_DATA_SOURCE_EXTEND` 由“通用扩展配置、一对一必填”更新为“源库到目标库的命名策略，源库 0..N”；R01 更新为 `DATA_SOURCE_ID` 到源库的多对一弱逻辑引用（反向一个源库 0..N 条策略）；R15 明确一条策略对应一个业务必填目标库、一个目标库可被多个源库策略引用；记录逻辑联合唯一组合 `(DATA_SOURCE_ID, TARGET_DATA_SOURCE_ID)` 仅由后端保存前校验、第一版不新增 DDL；§9 D02 不再描述为“一对一未约束”高严重度缺陷；数据库物理事实与当前旧代码事实保留 | DATA-SOURCE-BASELINE-IMPACT-ALIGNMENT-001（已批准业务规则向权威项目基线同步；纯文档任务，数据库物理结构和当前代码无变化） |

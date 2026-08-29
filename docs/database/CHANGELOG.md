@@ -43,9 +43,10 @@
 | 编号 | 对象 | 候选内容 | 当前物理事实 | 状态 |
 |---|---|---|---|---|
 | D01 | CDC_DATA_SUBSCRIBE | 是否将 DATA_SUB_ID 设置为主键 | 无主键、无唯一约束、无索引 | `PENDING_DECISION`（候选物理设计，未经正式批准，不承诺实施或排期） |
-| R01 | CDC_DATA_SOURCE_EXTEND | 是否约束每数据源一条扩展配置（一对一必填目标） | 无唯一约束/外键，物理允许 0..N，存在测试构造的重复/孤立/缺失 | `PENDING_DECISION`（候选物理设计，未经正式批准，不承诺实施或排期） |
 | D03 | CDC_JOB_FAILURE_EVENT | 是否为 CLIENT_ID / DATA_SOURCE_ID / FAILURE_TIME 等查询字段补索引 | 仅主键索引 | `PENDING_DECISION`（候选物理设计，未经正式批准，不承诺实施或排期） |
 | D04 | CDC_JOB_FAILURE_HANDLE_LOG | 是否为 FAILURE_EVENT_ID / CLIENT_ID / DATA_SOURCE_ID 补索引 | 仅主键索引 | `PENDING_DECISION`（候选物理设计，未经正式批准，不承诺实施或排期） |
+
+原 R01（是否约束每数据源一条扩展配置，一对一必填目标）已由已批准数据源管理 Feature 基线关闭：当前决定为第一版不新增主键、唯一约束、索引或任何 DDL；`(DATA_SOURCE_ID, TARGET_DATA_SOURCE_ID)` 逻辑联合唯一由后端保存前查询校验。本关闭仅为文档基线调整，**未改变数据库结构**，不得写成数据库结构已经改变。
 
 ## 4. 文档级变更记录
 
@@ -55,3 +56,4 @@
 | 2026-08-26 | R1：修正结构历史边界（LAST_DDL_TIME 不证变更内容）；SUBSCRIBE 主键冲突关闭为 P4；候选物理设计状态改为 PENDING_DECISION | PROJECT-DATABASE-BASELINE-001-R1 修订 |
 | 2026-08-26 | 批准：项目级数据库基线正式批准收口（APPROVED） | PROJECT-DATABASE-BASELINE-APPROVAL-001 批准 |
 | 2026-08-27 | 只读核验并建立 CDC_SERVER、CDC_SERVER_CONFIG 两张表候选基线（DATABASE-BASELINE-SERVER-CONFIG-001）；本批准任务将两张表纳入已批准物理基线（DATABASE-BASELINE-SERVER-CONFIG-APPROVAL-001，候选事实来源提交 `175558173ce6703542e4b626aace5ceef2841ece`）；本次未执行任何 DDL、DML，未改变数据库结构或数据；此项为文档基线变化，不是数据库物理变化 | DATABASE-BASELINE-SERVER-CONFIG-001（候选）+ DATABASE-BASELINE-SERVER-CONFIG-APPROVAL-001（批准） |
+| 2026-08-29 | 已批准数据源管理 Feature 规则同步：原 R01 候选物理设计（是否约束每数据源一条扩展配置/一对一必填目标）由 `PENDING_DECISION` 关闭，明确旧候选已被已批准 Feature 规则取代；记录当前决定：第一版不新增主键、唯一约束、索引或 DDL，`(DATA_SOURCE_ID, TARGET_DATA_SOURCE_ID)` 逻辑联合唯一由后端查询校验；不改写任何已发生 DDL/DML 历史；数据库结构未改变 | DATA-SOURCE-BASELINE-IMPACT-ALIGNMENT-001（已批准业务规则向权威数据库基线同步；纯文档任务，数据库物理结构无变化） |

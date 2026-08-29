@@ -32,7 +32,7 @@
 | 故障监控（总览/详情/历史） | /monitor/job-failure 及子路由 | 较完整业务实现 | 主要页面与已列调整用户验收通过；统一内部→对外状态映射层（对外 5 种状态）仍开放（GAP-STATUS-001/002/003，见 docs/features/job-failure-monitor/） |
 | 日志查询 | /monitor/log-query | 较完整业务实现 | 功能基线已批准，实现与开发验收已完成 |
 | 数据同步统计大屏 | /large-screen | 较完整业务实现 | 视觉验收通过，standalone路由 |
-| 数据源管理 | /config/data-source | 占位页 | 后端CRUD已完成，前端未对接 |
+| 数据源管理 | /config/data-source | 占位页 | 已有旧后端候选实现（CRUD+启停等，与新批准目标存在冲突），批准的新目标尚未实现，前端未对接 |
 | 客户端配置 | /config/client | 占位页 | PlaceholderPage |
 | 数据订阅 | /config/subscribe | 占位页 | PlaceholderPage |
 | 服务端配置 | /config/server | 占位页 | PlaceholderPage |
@@ -50,7 +50,7 @@
 | common | 完整 | ApiResponse, PageResult, BusinessException, GlobalExceptionHandler |
 | config | 完整 | CORS, MyBatis-Plus, SpringDoc, SpaForwardFilter |
 | health | 完整 | HealthController |
-| datasource | 后端CRUD完整 | DataSourceController完整实现CRUD+启停，前端未对接 |
+| datasource | 后端CRUD完整（旧候选实现） | DataSourceController完整实现CRUD+启停（旧候选，与已批准数据源管理目标存在冲突），批准的新目标尚未实现，前端未对接 |
 | monitor/zookeeper | 较完整业务实现 | ZooKeeperReadOnlyClient只读，代码已完成 |
 | monitor/jobfailure | 较完整业务实现 | 13个算法类完整故障链 |
 | logquery | 较完整业务实现 | 日志查询（游标分页 + XML Mapper），只读接口 |
@@ -206,7 +206,7 @@
 | 分类 | 表数 | 包含的表 | 链路特征 |
 |---|---|---|---|
 | 已闭环 | 9 | CDC_CLIENT_MULTIPLE、CDC_DATA_SUBSCRIBE、CDC_JOB_FAILURE_EVENT、CDC_JOB_FAILURE_HANDLE_LOG、CDC_STATS_CUMULATIVE_OVERVIEW、CDC_STATS_DAILY_OVERVIEW、CDC_STATS_DIM_CUMULATIVE、CDC_STATS_DIM_DAILY、CDC_STATS_WATERMARK | 后端+前端完整（含调度写入与 API 读取双路径） |
-| 后端闭环/前端缺口 | 2 | CDC_DATA_SOURCE、CDC_DATA_SOURCE_EXTEND | 后端 CRUD 完整，数据源管理前端占位页 |
+| 旧后端候选实现/新目标未实现 | 2 | CDC_DATA_SOURCE、CDC_DATA_SOURCE_EXTEND | 已有旧后端候选实现（CRUD+启停、双表联写、一对一读取等，与新批准目标存在冲突）；批准的新目标尚未实现，前端仍占位 |
 | 后端闭环（纯调度配置） | 1 | CDC_STATS_TASK_CONFIG | 仅 StatsTaskConfigLoader 后端读取 |
 | 日志读取（双路径） | 2 | CDC_LOG_CORRECT、CDC_LOG_ERROR | 日志查询页经 MyBatis XML 读取（前端完整）；大屏统计经 JdbcTemplate 读取 |
 
@@ -223,7 +223,7 @@ CDC_DATA_SOURCE 另被日志查询的 selectAllDataSources 读取用于过滤条
 | 待用户确认 | 0 | — |
 
 - 全部为逻辑外键，无物理 FOREIGN KEY 约束（架构决策，非缺陷）。
-- R01：目标一对一必填，当前物理 0..N，现有重复/孤立/缺失为人工构造容错测试场景。
+- R01：已批准为源库 0..N 命名策略关系——`CDC_DATA_SOURCE_EXTEND.DATA_SOURCE_ID → CDC_DATA_SOURCE` 为源库弱逻辑引用，反向一个源库 0..N 条策略；`(DATA_SOURCE_ID, TARGET_DATA_SOURCE_ID)` 为逻辑联合唯一组合，第一版由后端保存前查询校验，无数据库唯一约束/DDL；现有重复/孤立/缺失为人工构造容错测试场景。
 - R02/R03/R04：逗号分隔多值弱逻辑引用，维护方为人工维护 / 管理平台只读。
 - R05～R08：LOG_CORRECT / LOG_ERROR 维护方为 sync-server → Kafka → sync-log 写入。
 - R09～R11：JFE / JHL 维护方为 sync-client 写入，管理平台只读。
@@ -235,9 +235,10 @@ CDC_DATA_SOURCE 另被日志查询的 selectAllDataSources 读取用于过滤条
 | 编号 | 对象 | 候选内容 | 状态 |
 |---|---|---|---|
 | D01 | CDC_DATA_SUBSCRIBE | 是否将 DATA_SUB_ID 设置为主键 | PENDING_DECISION |
-| R01 | CDC_DATA_SOURCE_EXTEND | 是否约束每数据源一条扩展配置 | PENDING_DECISION |
 | D03 | CDC_JOB_FAILURE_EVENT | 是否为查询字段补索引 | PENDING_DECISION |
 | D04 | CDC_JOB_FAILURE_HANDLE_LOG | 是否为查询字段补索引 | PENDING_DECISION |
+
+原 R01（是否约束每数据源一条扩展配置）已由已批准数据源管理 Feature 基线关闭：`CDC_DATA_SOURCE_EXTEND` 为源库 0..N 命名策略，第一版不新增主键、唯一约束、索引或 DDL，逻辑联合唯一 `(DATA_SOURCE_ID, TARGET_DATA_SOURCE_ID)` 由后端保存前查询校验，不再作为待决策项。
 
 另：D06（WATERMARK 等缺 @TableId）为代码层 MyBatis-Plus 注解差异，见 ARCHITECTURE.md §9；数据源前端占位为功能实现状态，见 §1.1。
 
@@ -276,3 +277,11 @@ CDC_DATA_SOURCE 另被日志查询的 selectAllDataSources 读取用于过滤条
 - 基线维护触发条件已在各文件头声明。
 
 来源: 本任务执行记录、已批准数据库基线
+
+---
+
+## 11. 文档级变更记录
+
+| 日期 | 变更 | 依据 |
+|---|---|---|
+| 2026-08-29 | 数据源管理 Feature 已批准规则同步：§9.3 R01 更新为已批准的源库 0..N 命名策略关系；§9.4 原 R01（是否约束每数据源一条扩展配置）`PENDING_DECISION` 关闭；§9.2 数据源两表分类由“后端闭环/前端缺口”调整为“旧后端候选实现/新目标未实现”，明确区分“已有旧后端候选实现”与“批准的新目标尚未实现、前端仍占位”；§1.1/§1.2 数据源行补充“旧候选实现”说明；分类合计与表数自洽不变；数据库物理事实与当前代码事实保留 | DATA-SOURCE-BASELINE-IMPACT-ALIGNMENT-001（已批准业务规则向权威项目基线同步；纯文档任务，数据库物理结构和当前代码无变化） |

@@ -366,9 +366,8 @@
 
 ## 17. 基线影响
 
-- 存在项目/数据库基线影响：已批准数据库文档中可能仍存在“EXTEND 一对一且必填”等旧规则（如 RELATIONS.md R01 的目标规则描述、ARCHITECTURE.md §4.1 中 `CDC_DATA_SOURCE_EXTEND` 的“目标规则为每数据源一对一必填”等）。
-- 本 Feature 需求已经正式批准；`docs/database/**` 或项目级基线中可能受影响的旧规则仍须通过独立维护任务修订，本任务不修改它们，也不得声称它们已经同步完成。
-- 物理表当前没有阻止 0..N 关系的约束，因此本任务不要求 DDL。
+- 已批准项目/数据库基线中“EXTEND 一对一且必填”的旧目标规则已由 `DATA-SOURCE-BASELINE-IMPACT-ALIGNMENT-001` 完成同步：`docs/database/**` 与项目级基线中的相关旧规则描述已更新为本 Feature 的批准规则（`CDC_DATA_SOURCE_EXTEND` 为源库到目标库的命名策略、源库 0..N、逻辑联合唯一由后端校验、第一版无 DDL、删除/改 ID 不级联不同步）。
+- 本次同步为纯文档调整：数据库物理结构和当前代码没有因此变化；物理表当前没有阻止 0..N 关系的约束，本任务不要求 DDL。
 
 ## 18. 依赖与后续工作
 
@@ -377,7 +376,7 @@
 | MySQL/Doris JDBC 驱动 | 当前构建配置仅发现 Oracle JDBC 驱动；设计/实现阶段需评估并加入适用于 MySQL 和 Doris 的 JDBC 驱动依赖（依赖坐标调整，非服务器环境安装）。 |
 | 现有后端候选实现改造 | 现有 `datasource` 包的分页、启停、一对一 EXTEND、ID 同步、级联删除、查询口径等与新目标冲突，需在需求批准后的设计/实现阶段修正（不构成本基线当前范围）。 |
 | 前端占位页替换 | 现有 `/config/data-source` 占位页需替换为正式页面（不构成本基线当前范围）。 |
-| 受影响的已批准基线 | 经用户批准后，通过独立维护任务更新受影响的项目/数据库基线（见 §17）。 |
+| 受影响的已批准基线 | 已通过本任务（`DATA-SOURCE-BASELINE-IMPACT-ALIGNMENT-001`）完成同步，见 §17。 |
 
 ## 19. 开放问题
 
@@ -389,5 +388,6 @@
 |---|---|---|
 | 2026-08-29 | 建立“数据源管理”Feature 需求基线草案（DRAFT_PENDING_USER_REVIEW；实现状态 NOT_STARTED；全部验收用例 NOT_RUN） | DATA-SOURCE-REQUIREMENTS-BASELINE-001（纯文档任务；基于已确认产品决策 + 已批准数据库基线；待 ChatGPT 复审与用户批准） |
 | 2026-08-29 | 需求与验收基线批准收口：文档状态由 `DRAFT_PENDING_USER_REVIEW` 更新为 `APPROVED`；实现状态保持 `NOT_STARTED`；补充批准任务 `DATA-SOURCE-REQUIREMENTS-APPROVAL-CLOSEOUT-001`、批准日期 2026-08-29、批准依据（用户明确回复“认可，继续”）与批准链（初始提交 `07a1792...`、R1 提交 `ca4d87b...`、ChatGPT 复审 `REVIEW_PASS`）；§17 受影响基线说明更新为本 Feature 需求已批准、受影响的已批准基线仍须独立维护任务修订；不改变任何 DS-REQ 编号、文本或语义 | DATA-SOURCE-REQUIREMENTS-APPROVAL-CLOSEOUT-001（项目负责人批准驱动的需求与验收基线批准收口；纯文档任务） |
+| 2026-08-29 | 项目/数据库权威基线一致性调整：将已批准“数据源管理”规则（`CDC_DATA_SOURCE_EXTEND` 为源库到目标库的命名策略、源库 0..N、`(DATA_SOURCE_ID, TARGET_DATA_SOURCE_ID)` 逻辑联合唯一由后端保存前校验、第一版无 DDL、删除/改 ID 不级联不同步）同步至 `docs/database/**` 与项目级基线；本 Feature 需求、验收状态保持 `APPROVED`，实现状态保持 `NOT_STARTED`；§17/§18 更新为本次同步完成；不改变任何 DS-REQ 编号、文本或语义 | DATA-SOURCE-BASELINE-IMPACT-ALIGNMENT-001（已批准业务规则向权威项目/数据库基线的纯文档同步；纯文档任务） |
 
 > 关联文档：验收基线 `docs/features/data-source-management/ACCEPTANCE.md`；执行报告 `docs/features/data-source-management/reports/DATA-SOURCE-REQUIREMENTS-BASELINE-001.md`。

@@ -41,7 +41,7 @@
 | 表 | 用途摘要 | 单表文档 |
 |---|---|---|
 | CDC_DATA_SOURCE | 数据源配置主表（源库/目标库） | [tables/CDC_DATA_SOURCE.md](tables/CDC_DATA_SOURCE.md) |
-| CDC_DATA_SOURCE_EXTEND | 数据源扩展配置（目标表命名策略） | [tables/CDC_DATA_SOURCE_EXTEND.md](tables/CDC_DATA_SOURCE_EXTEND.md) |
+| CDC_DATA_SOURCE_EXTEND | 源库到目标库的命名策略（目标表命名策略） | [tables/CDC_DATA_SOURCE_EXTEND.md](tables/CDC_DATA_SOURCE_EXTEND.md) |
 | CDC_CLIENT_MULTIPLE | 客户端（探针）注册表 | [tables/CDC_CLIENT_MULTIPLE.md](tables/CDC_CLIENT_MULTIPLE.md) |
 | CDC_DATA_SUBSCRIBE | 订阅配置表 | [tables/CDC_DATA_SUBSCRIBE.md](tables/CDC_DATA_SUBSCRIBE.md) |
 | CDC_LOG_CORRECT | 同步正确日志表 | [tables/CDC_LOG_CORRECT.md](tables/CDC_LOG_CORRECT.md) |
@@ -121,7 +121,7 @@
 
 - 数据库结构以真实数据库为准（本目录为已核验快照）；
 - 16 张已批准单表物理基线范围内**均不设置物理外键**（14 张当前访问表为项目确认的架构决策，`CDC_SERVER`、`CDC_SERVER_CONFIG` 亦经只读核验确认无物理外键）；数据库不强制保证引用完整性，各写入方和读取方必须在代码层处理空引用、孤立引用与无效引用（详见 `RELATIONS.md` §1）；
-- 业务规则、Feature 级设计与代码行为以 `docs/features/` 与 `docs/baseline/` 为准；本目录只登记物理结构、代码访问入口与读写边界，不复制 Feature 详细设计；
+- 业务规则、Feature 级设计与代码行为以 `docs/features/` 与 `docs/baseline/` 为准；本目录只登记物理结构、代码访问入口与读写边界，不复制 Feature 详细设计。已批准 Feature 业务规则（如 `CDC_DATA_SOURCE_EXTEND` 为源库到目标库的命名策略、源库 0..N）已同步到本目录对应文档；本次同步未执行任何数据库操作，物理结构无变化；
 - 本目录历史文档（`HISTORICAL_SUPERSEDED`）仅作追溯，不视为当前事实；
 - 本目录的修改必须遵循项目 CLAUDE.md 与任务授权，禁止在本目录记录未经核验的推断。
 
@@ -133,3 +133,4 @@
 | 2026-08-26 | R1：收窄重新读库触发条件；补充无物理外键架构决策；移除 CDC_CLIENT 现行说明；更新关系编号为 R01～R15 | PROJECT-DATABASE-BASELINE-001-R1 修订 |
 | 2026-08-26 | 批准：项目级数据库基线正式批准收口（APPROVED） | PROJECT-DATABASE-BASELINE-APPROVAL-001 批准 |
 | 2026-08-27 | 新增 2 张已批准待实现表（CDC_SERVER、CDC_SERVER_CONFIG）：单表基线由 14 增至 16，14+2 分层；关系编号更新为 R01～R16；无物理外键说明覆盖 16 张 | DATABASE-BASELINE-SERVER-CONFIG-001（候选）+ DATABASE-BASELINE-SERVER-CONFIG-APPROVAL-001（批准） |
+| 2026-08-29 | 已批准数据源管理 Feature 规则同步：`CDC_DATA_SOURCE_EXTEND` 用途由“数据源扩展配置（目标表命名策略）”更新为“源库到目标库的命名策略（目标表命名策略）”，旧“一对一且必填”目标已由已批准数据源管理基线取代；§10 权威边界补充“物理结构以数据库为准、业务规则以批准 Feature 基线为准、本次同步未执行数据库操作” | DATA-SOURCE-BASELINE-IMPACT-ALIGNMENT-001（已批准业务规则向权威数据库基线同步；纯文档任务，数据库物理结构无变化） |

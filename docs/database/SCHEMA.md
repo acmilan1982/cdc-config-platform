@@ -35,7 +35,7 @@
 | # | 表名 | 表注释 | 主键 | 表类型 | 当前用途 | 读写属性 | 数据维护方 | 单表文档 |
 |---|---|---|---|---|---|---|---|---|
 | 1 | CDC_DATA_SOURCE | 数据源，包括源库，目标库 | PK_CDC_DATA_SOURCE（DATA_SOURCE_ID） | 普通堆表 | 数据源配置主表（源库/目标库登记） | 读 + 写 | 管理平台（DataSourceServiceImpl CRUD+启停） | [CDC_DATA_SOURCE.md](tables/CDC_DATA_SOURCE.md) |
-| 2 | CDC_DATA_SOURCE_EXTEND | （无注释） | 无 | 普通堆表 | 数据源扩展配置（目标表命名策略） | 读 + 写 | 管理平台（随 CDC_DATA_SOURCE 联写） | [CDC_DATA_SOURCE_EXTEND.md](tables/CDC_DATA_SOURCE_EXTEND.md) |
+| 2 | CDC_DATA_SOURCE_EXTEND | （无注释） | 无 | 普通堆表 | 源库到目标库的命名策略（目标表命名策略：前缀/后缀/合并策略） | 读 + 写 | 管理平台（旧候选实现随 CDC_DATA_SOURCE 联写；批准目标为源库 0..N，第一版无 DDL） | [CDC_DATA_SOURCE_EXTEND.md](tables/CDC_DATA_SOURCE_EXTEND.md) |
 | 3 | CDC_CLIENT_MULTIPLE | 客户端表 | PK_CDC_CLIENT_MULTIPLE（CLIENT_ID） | 普通堆表 | 客户端（探针）注册表 | 只读 | 人工维护（当前管理平台仅只读；后续计划单独开发 CRUD，尚未实现） | [CDC_CLIENT_MULTIPLE.md](tables/CDC_CLIENT_MULTIPLE.md) |
 | 4 | CDC_DATA_SUBSCRIBE | 订阅表 | 无 | 普通堆表 | 订阅配置（源库→目标库订阅关系） | 只读 | 人工维护（当前管理平台仅只读；后续计划单独开发 CRUD，尚未实现） | [CDC_DATA_SUBSCRIBE.md](tables/CDC_DATA_SUBSCRIBE.md) |
 | 5 | CDC_LOG_CORRECT | 同步正确日志表 | PK_CDC_LOG_CORRECT（CDC_LOG_ID） | 普通堆表 | 同步正确日志（大屏统计源数据/日志查询） | 只读 | 外部 CDC 同步程序写入 | [CDC_LOG_CORRECT.md](tables/CDC_LOG_CORRECT.md) |
@@ -131,7 +131,7 @@
 
 ## 6. 数据维护方与读写边界总则
 
-- **管理平台写入**：CDC_DATA_SOURCE、CDC_DATA_SOURCE_EXTEND（数据源管理 CRUD+启停）；CDC_STATS_CUMULATIVE_OVERVIEW、CDC_STATS_DAILY_OVERVIEW、CDC_STATS_DIM_CUMULATIVE、CDC_STATS_DIM_DAILY、CDC_STATS_WATERMARK（大屏统计调度 MERGE/CAS 写入）。
+- **管理平台写入**：CDC_DATA_SOURCE、CDC_DATA_SOURCE_EXTEND（数据源管理 CRUD+启停——当前为**旧候选实现**，双表联写、一对一读取、`ROWNUM=1` 等，未满足已批准源库 0..N 命名策略目标，批准目标第一版无 DDL）；CDC_STATS_CUMULATIVE_OVERVIEW、CDC_STATS_DAILY_OVERVIEW、CDC_STATS_DIM_CUMULATIVE、CDC_STATS_DIM_DAILY、CDC_STATS_WATERMARK（大屏统计调度 MERGE/CAS 写入）。
 - **外部同步程序写入**：CDC_LOG_CORRECT、CDC_LOG_ERROR（写入链 `sync-server → Kafka → sync-log`，见日志查询 Feature 基线）；CDC_JOB_FAILURE_EVENT、CDC_JOB_FAILURE_HANDLE_LOG 由 `sync-client` 进程写入（项目负责人 2026-08-26 确认）。
 - **人工维护**：CDC_CLIENT_MULTIPLE（客户端登记，当前管理平台仅只读，后续计划单独开发 CRUD，尚未实现）；CDC_DATA_SUBSCRIBE（当前管理平台仅只读，后续计划单独开发 CRUD，尚未实现）；CDC_STATS_TASK_CONFIG（调度配置，启动时读取一次，修改后重启生效）。
 - 管理平台对上述全部 14 张表均只读或按上述写入方边界操作；单表文档 §8 列出代码访问入口。
@@ -156,3 +156,4 @@
 | 2026-08-26 | R2：修正 §3 总体访问边界（14 张使用表访问入口走项目后端代码，部分表由外部进程或人工维护）；CDC_CLIENT_MULTIPLE 维护方调整为人工维护（当前管理平台仅只读，后续计划单独开发 CRUD，尚未实现） | PROJECT-DATABASE-BASELINE-001-R2 修订 |
 | 2026-08-26 | 批准：项目级数据库基线正式批准收口（APPROVED） | PROJECT-DATABASE-BASELINE-APPROVAL-001 批准 |
 | 2026-08-27 | 新增 2 张已批准待实现表（CDC_SERVER、CDC_SERVER_CONFIG）：新增 §2.1 独立小节登记，保持 14+2=16 分层自校验；从 §5.1 排除区移除两表，避免同一对象同时处于批准和排除状态；§4 物理外键总体说明更新为覆盖 16 张已批准表（保留原 14 表核验历史） | DATABASE-BASELINE-SERVER-CONFIG-001（候选）+ DATABASE-BASELINE-SERVER-CONFIG-APPROVAL-001（批准） |
+| 2026-08-29 | 已批准数据源管理 Feature 规则同步：§2 中 `CDC_DATA_SOURCE_EXTEND` 当前用途更新为“源库到目标库的命名策略（目标表命名策略）”；§6 管理平台写入说明区分当前旧候选实现（双表联写、一对一读取、`ROWNUM=1` 等）与批准新目标（源库 0..N、第一版无 DDL），禁止把新目标写成已实现；数据库物理结构（字段/约束/索引/可空性）无变化 | DATA-SOURCE-BASELINE-IMPACT-ALIGNMENT-001（已批准业务规则向权威数据库基线同步；纯文档任务，数据库物理结构无变化） |

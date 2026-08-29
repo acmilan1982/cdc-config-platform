@@ -27,9 +27,14 @@
 来源: 项目名、Oracle CDC表命名约定、CLAUDE.md §1
 
 ### 数据源 (DataSource)
-**源库或目标库的连接配置**。包含主机、端口、Service Name、用户名、密码、分类（DATA_SOURCE_CATEGORY）、类型（DATA_SOURCE_TYPE）等信息。数据库对应 `CDC_DATA_SOURCE` 表，主键为 DATA_SOURCE_ID（VARCHAR2业务主键），扩展信息存储在 `CDC_DATA_SOURCE_EXTEND`（1:1关系）。
+**源库或目标库的连接配置**。包含主机、端口、Service Name、用户名、密码、分类（DATA_SOURCE_CATEGORY）、类型（DATA_SOURCE_TYPE）等信息。数据库对应 `CDC_DATA_SOURCE` 表，主键为 DATA_SOURCE_ID（VARCHAR2业务主键）。源库通过 `CDC_DATA_SOURCE_EXTEND` 表达 0..N 条“目标库命名策略”（见下），不再是“每数据源一条的 1:1 扩展信息”。
 
-来源: DataSource实体、CDC_DATA_SOURCE表、docs/pages/data-source-management.md
+来源: DataSource实体、CDC_DATA_SOURCE表、docs/features/data-source-management/REQUIREMENTS.md
+
+### 目标库命名策略 (Target Naming Strategy)
+**源库到目标库的命名策略**。存储于 `CDC_DATA_SOURCE_EXTEND` 表，每条以 `DATA_SOURCE_ID` 表示源库、以 `TARGET_DATA_SOURCE_ID` 表示目标库。一个源库可有 0..N 条策略；每条策略关联一个业务必填目标库，一个目标库可被多个源库策略引用。`(DATA_SOURCE_ID, TARGET_DATA_SOURCE_ID)` 为逻辑联合唯一组合，第一版仅由后端保存前查询校验，数据库不新增主键、唯一约束、索引或任何 DDL。目标库选择仅来自 `FG_ACTIVE='1' AND DATA_SOURCE_CATEGORY='TARGET'`（Feature 业务规则，不是数据库物理约束）。
+
+来源: docs/features/data-source-management/REQUIREMENTS.md、RELATIONS.md（R01/R15）
 
 ### 客户端 (Client)
 **CDC同步客户端实例**。每个客户端对应一个物理或逻辑同步进程，在ZooKeeper中以 `/bsoft-cdc/clients/{clientId}` 节点表示。当前管理平台生产代码通过 `CDC_CLIENT_MULTIPLE` 表访问客户端信息（DATA_SOURCE_ID 以逗号分隔多值弱逻辑引用存储）。`CDC_CLIENT` 表已废弃，不作为当前有效设计对象。
@@ -268,7 +273,7 @@
 - **目标规则**：已确认的正确业务规则
 - **当前差异**：二者尚未一致的部分
 
-示例：CDC_DATA_SOURCE_EXTEND 的当前事实为"无主键、无唯一约束"，目标规则为"每个数据源应有且仅有一条扩展配置（一对一必填）"，当前差异为 D02（高严重度）。
+示例：CDC_DATA_SOURCE_EXTEND 的当前事实为"无主键、无唯一约束、无索引"，已批准目标规则为"源库到目标库的命名策略，源库 0..N，第一版不新增主键/唯一约束/索引/DDL，逻辑联合唯一 `(DATA_SOURCE_ID, TARGET_DATA_SOURCE_ID)` 由后端保存前查询校验"；因此"无主键/唯一约束"不是未落实一对一的差异，而是已批准边界的一部分（原差异 D02 已关闭）。
 
 来源: DATABASE-CODE-MAPPING-001 §04
 
@@ -344,3 +349,11 @@
 | DEFERRED | 延期（推迟到后续处理） |
 
 来源: PROJECT-BASELINE-AND-DOCUMENTATION-RECOVERY-001 §8.7、docs/features/README.md 状态口径
+
+---
+
+## 文档级变更记录
+
+| 日期 | 变更 | 依据 |
+|---|---|---|
+| 2026-08-29 | 数据源管理 Feature 已批准规则同步：删除“数据源”术语中 EXTEND 为 1:1 扩展信息的描述；新增“目标库命名策略”术语（源库 0..N、每条关联一个业务必填目标库、`(DATA_SOURCE_ID, TARGET_DATA_SOURCE_ID)` 组合逻辑唯一、第一版无 DDL）；“当前事实/目标规则/当前差异”示例更新为已批准规则（无主键/唯一约束不是未落实一对一的差异，第一版无 DDL 为已批准边界） | DATA-SOURCE-BASELINE-IMPACT-ALIGNMENT-001（已批准业务规则向权威项目基线同步；纯文档任务，数据库物理结构和当前代码无变化） |

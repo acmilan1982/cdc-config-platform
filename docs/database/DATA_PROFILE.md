@@ -111,7 +111,7 @@
 
 | 检查项 | 结论 |
 |---|---|
-| CDC_DATA_SOURCE_EXTEND.DATA_SOURCE_ID | 10 行 0 空值；1 组重复（同 ID 3 行）；2 条孤立；13 个数据源无扩展记录——均为人工构造容错测试场景，非待清理异常 |
+| CDC_DATA_SOURCE_EXTEND.DATA_SOURCE_ID | 10 行 0 空值；1 组重复（同 ID 3 行，0..N 规则下同一源库多行属允许范围，不单独视为违反一对一）；2 条孤立（观测到的测试构造弱引用场景）；13 个数据源无策略记录（符合源库 0 条策略允许规则）——均为开发库 2026-08-26 瞬时观测，非待清理异常；本任务不重新读库，未对 `(DATA_SOURCE_ID, TARGET_DATA_SOURCE_ID)` 组合是否无重复作出核验声明 |
 | CDC_DATA_SOURCE_EXTEND.TARGET_DATA_SOURCE_ID | 10 行中 2 行非空（2 个不同值），均匹配 DATA_SOURCE_CATEGORY='TARGET'，0 孤立 |
 | CDC_DATA_SUBSCRIBE.DATA_SUB_ID | 12 行 0 空值 0 重复 |
 | 逗号分隔字段 token 匹配 | CDC_CLIENT_MULTIPLE.DATA_SOURCE_ID（12 token）、DATA_FROM_SOURCE_ID（12 token）、DATA_TO_SOURCE_ID（13 token）均“每行至少一个 token 可匹配”，不证明 token 级完整性 |
@@ -149,9 +149,10 @@
 | 编号 | 对象 | 事项 | 当前物理事实 |
 |---|---|---|---|
 | D01 | CDC_DATA_SUBSCRIBE | 是否将 DATA_SUB_ID 设置为主键 | 无主键、无唯一约束、无索引 |
-| R01 | CDC_DATA_SOURCE_EXTEND | 是否约束每数据源一条扩展配置（一对一必填目标） | 无唯一约束/外键，物理允许 0..N，存在测试构造的重复/孤立/缺失 |
 | D03 | CDC_JOB_FAILURE_EVENT | 是否为 CLIENT_ID / DATA_SOURCE_ID / FAILURE_TIME 等查询字段补索引 | 仅主键索引 |
 | D04 | CDC_JOB_FAILURE_HANDLE_LOG | 是否为 FAILURE_EVENT_ID / CLIENT_ID / DATA_SOURCE_ID 补索引 | 仅主键索引 |
+
+原 R01（是否约束每数据源一条扩展配置/一对一必填目标）已由已批准数据源管理 Feature 基线关闭：`CDC_DATA_SOURCE_EXTEND` 为源库 0..N 命名策略，第一版不新增主键、唯一约束、索引或 DDL，逻辑联合唯一 `(DATA_SOURCE_ID, TARGET_DATA_SOURCE_ID)` 由后端保存前查询校验。
 
 ### 7.3 原 P1～P5 关闭记录（项目负责人 2026-08-26 确认）
 
@@ -178,3 +179,4 @@
 | 2026-08-26 | R1：拆分日志写入链与保留规则；更新数据完整性核验结论（含 R15）；关闭 P1～P5 并新增 PENDING_DECISION | PROJECT-DATABASE-BASELINE-001-R1 修订 |
 | 2026-08-26 | 批准：项目级数据库基线正式批准收口（APPROVED） | PROJECT-DATABASE-BASELINE-APPROVAL-001 批准 |
 | 2026-08-27 | 新增 §1.3 已批准待实现表快照（CDC_SERVER 精确 1 行、CDC_SERVER_CONFIG 精确 8 行，全部归属 Server001；IS_EDITABLE 1=6、0=2；SERVER_ID NULL 0、孤立引用 0、同中心端重复 CONFIG_KEY 0）；明确为开发库瞬时画像，不代表生产常态与数据库允许值全集 | DATABASE-BASELINE-SERVER-CONFIG-001（候选）+ DATABASE-BASELINE-SERVER-CONFIG-APPROVAL-001（批准） |
+| 2026-08-29 | 已批准数据源管理 Feature 规则同步：§5 EXTEND.DATA_SOURCE_ID 完整性结论更新——重复 DATA_SOURCE_ID 在源库 0..N 规则下属允许范围、13 个数据源无策略记录符合 0 条允许规则、2 条孤立仍为测试构造弱引用场景；明确未对 `(DATA_SOURCE_ID, TARGET_DATA_SOURCE_ID)` 组合是否无重复作出核验声明（本任务不重新读库）；§7.2 原 R01 一对一约束候选由 `PENDING_DECISION` 关闭并注明第一版无 DDL；保留全部 2026-08-26 实测数值不变 | DATA-SOURCE-BASELINE-IMPACT-ALIGNMENT-001（已批准业务规则向权威数据库基线同步；纯文档任务，数据库物理结构与数据无变化） |
