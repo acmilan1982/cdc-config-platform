@@ -59,9 +59,12 @@
 
 **编辑时切换目标库的语义**：前端把"原目标库 ID"放在路径 `originalTargetId`，把"新目标库 ID"放在请求体 `targetDataSourceId`。后端先按 `(sourceId, originalTargetId)` 定位当前策略行，再校验"新逻辑键"不与已有其他行冲突（编辑排除当前行）。这满足 `DS-REQ-064`（逻辑键唯一）与 `DS-REQ-041` 同类的"只改目标行、不伪造主键"约束。
 
-**多行异常防护**：任何按逻辑键定位操作（编辑/删除）要求匹配**恰好一行**：
-- 0 行 → `40401` 命名策略不存在；
-- ≥2 行 → `40903` 存量多条异常，阻止操作（与 `DS-REQ-066`/`067` 一致，不清理存量）。
+**计数语义（严格区分新增与编辑/删除）**：
+- **新增**：按**新逻辑键** `(sourceId, targetDataSourceId)` 全量计数：0 行 → 允许执行 `INSERT`；1 行 → `40902` 逻辑键重复；≥2 行 → `40903` 存量多条异常；插入后校验受影响行数=1，否则回滚。新增流程不返回 `40401`。
+- **编辑/删除（按逻辑键定位）**：要求匹配**恰好一行**：
+  - 0 行 → `40401` 命名策略不存在；
+  - ≥2 行 → `40903` 存量多条异常，阻止操作（与 `DS-REQ-066`/`067` 一致，不清理存量）。
+  编辑时若新目标 ID 与原目标 ID 忽略大小写相同，不把当前行误判为重复；若逻辑键变化，按新逻辑键查重并排除原记录（0 行允许更新、1 行 → `40902`、≥2 行 → `40903`）。
 
 ---
 
@@ -152,7 +155,7 @@
 }
 ```
 
-不含真实密码（`DS-REQ-043`）；前端据此初始化为"密码未修改"状态。`port` 为 JSON number；`dataSourceCategory` 为规范化 `SOURCE`/`TARGET`。`id` 不存在 → `40400`。
+不含真实密码（`DS-REQ-043`）；前端据此初始化为"密码未修改"状态。`port` 为 JSON number；`dataSourceCategory` 为规范化 `SOURCE`/`TARGET`。后端按 `DATA_SOURCE_ID=? AND FG_ACTIVE='1'` 定位；`id` 不存在或 `FG_ACTIVE!='1'`（视为不存在）→ `40400`。
 
 ### 4.3 POST /api/data-sources（新增）
 
@@ -196,11 +199,11 @@
 
 请求体：同 §4.3，但 **`password` 可缺席**（未修改时缺席，见 §3）；`dataSourceId` 若改变表示修改 ID；类别只接受 `SOURCE`/`TARGET` 并保存统一大写。
 
-后端：只更新主表当前记录；隐藏字段保留原值（`dataSourceOrg`、`sourceApp`、`dataSourceDomain`、`fgActive`、时间字段）；修改 ID 只改主表、不同步 EXTEND 或其他表（`DS-REQ-038`~`041`）。查重排除当前记录（`DS-REQ-035`）。响应 `data` 为编辑后 `dataSourceId`。
+后端：按原 ID 且 `FG_ACTIVE='1'` 定位主表当前记录；`originalId` 不存在或 `FG_ACTIVE!='1'`（视为不存在）→ `40400`，不更新。UPDATE 的 WHERE 与受影响行数校验保证只操作该有效记录。只更新主表当前记录；隐藏字段保留原值（`dataSourceOrg`、`sourceApp`、`dataSourceDomain`、`fgActive`、时间字段）；修改 ID 只改主表、不同步 EXTEND 或其他表（`DS-REQ-038`~`041`）。查重排除当前记录（`DS-REQ-035`）。响应 `data` 为编辑后 `dataSourceId`。
 
 ### 4.5 DELETE /api/data-sources/{id}（删除）
 
-路径参数 `id` = `DATA_SOURCE_ID`。后端只物理删除主表当前记录，不检查/不级联 EXTEND 或其他表（`DS-REQ-092`~`095`）。响应 `data=null`。
+路径参数 `id` = `DATA_SOURCE_ID`。后端只允许物理删除 `DATA_SOURCE_ID=? AND FG_ACTIVE='1'` 的当前记录；`id` 不存在或 `FG_ACTIVE!='1'`（视为不存在）→ `40400`。这仍是物理删除，不是修改 `FG_ACTIVE`（`DS-REQ-092`/`093`/`097`）。不检查/不级联 EXTEND 或其他表（`DS-REQ-094`/`095`）。响应 `data=null`。
 
 ### 4.6 POST /api/data-sources/test-connection（测试连接）
 
@@ -261,7 +264,7 @@
 ```
 
 - `bizAttr` 原样返回，不 trim、不校验 JSON。
-- 后端先校验该记录 `FG_ACTIVE='1'` 且当前角色为 `TARGET`（按 `UPPER(DATA_SOURCE_CATEGORY)='TARGET'` 识别）；否则返回"数据源角色不适用于当前操作"（§5.2 `40006`）。记录不存在 → `40400`。
+- 后端先按 `DATA_SOURCE_ID=? AND FG_ACTIVE='1'` 定位记录；不存在或 `FG_ACTIVE!='1'`（视为不存在）→ `40400`。记录存在且有效后，再校验当前角色为 `TARGET`（按 `UPPER(DATA_SOURCE_CATEGORY)='TARGET'` 识别）；存在且有效但角色不是 TARGET → `40006`。
 
 ### 4.9 PUT /api/data-sources/{id}/biz-attr（业务属性保存）
 
@@ -274,12 +277,12 @@
 ```
 
 - `bizAttr` 可为空字符串；原样保存，不 trim、不校验 JSON（`DS-REQ-086`/`087`/`088`）。
-- 后端先校验该记录 `FG_ACTIVE='1'` 且当前角色为 `TARGET`（按 `UPPER(DATA_SOURCE_CATEGORY)='TARGET'` 识别）；否则返回"数据源角色不适用于当前操作"（§5.2 `40006`）。记录不存在 → `40400`。
+- 后端先按 `DATA_SOURCE_ID=? AND FG_ACTIVE='1'` 定位记录；不存在或 `FG_ACTIVE!='1'`（视为不存在）→ `40400`。记录存在且有效后，再校验当前角色为 `TARGET`（按 `UPPER(DATA_SOURCE_CATEGORY)='TARGET'` 识别）；存在且有效但角色不是 TARGET → `40006`。
 - 后端只更新主表当前记录 `DATA_SOURCE_BIZ_ATTR` 一列，不触碰其他字段/表（`DS-REQ-109`）。响应 `data=null`。
 
 ### 4.10 GET /api/data-sources/{sourceId}/naming-strategies（命名策略列表）
 
-路径参数 `sourceId` = 源库 `DATA_SOURCE_ID`。后端先校验 `sourceId` 对应记录 `FG_ACTIVE='1'` 且当前角色为 `SOURCE`（按 `UPPER(DATA_SOURCE_CATEGORY)='SOURCE'` 识别）；否则返回"数据源角色不适用于当前操作"（§5.2 `40006`）。响应 `data`（无分页，按目标库 ID 升序）：
+路径参数 `sourceId` = 源库 `DATA_SOURCE_ID`。后端先按 `DATA_SOURCE_ID=? AND FG_ACTIVE='1'` 定位 `sourceId` 记录；不存在或 `FG_ACTIVE!='1'`（视为不存在）→ `40400`。记录存在且有效后，再校验当前角色为 `SOURCE`（按 `UPPER(DATA_SOURCE_CATEGORY)='SOURCE'` 识别）；存在且有效但角色不是 SOURCE → `40006`。响应 `data`（无分页，按目标库 ID 升序）：
 
 ```json
 [
@@ -319,15 +322,15 @@
 | `tableNamePrefix` | 否* | string ≤128 | `TABLE_MERGE` 时清空；`CUSTOM_PREFIX_SUFFIX` 时必填 |
 | `tableNameSuffix` | 否* | string ≤128 | 同上 |
 
-*必填规则按策略联动（`DS-REQ-079`/`080`）；前后缀 trim。后端先校验 `sourceId` 记录 `FG_ACTIVE='1'` 且角色 `SOURCE`，再校验新目标库 `FG_ACTIVE='1'` 且角色 `TARGET`（角色不符 → `40006`）；按新逻辑键 `(sourceId, targetDataSourceId)` 执行计数检查：已存在 1 条 → `40902`；已存在多条 → `40903`。响应 `data=null`。
+*必填规则按策略联动（`DS-REQ-079`/`080`）；前后缀 trim。后端先按 `DATA_SOURCE_ID=? AND FG_ACTIVE='1'` 校验 `sourceId` 记录：不存在或非 `'1'` → `40400`；存在且有效但角色不是 `SOURCE` → `40006`。再校验新目标库 `targetDataSourceId`：不存在、`FG_ACTIVE!='1'` 或不是 `TARGET` 一律 → `40005`（不使用 `40006`）。然后按**新逻辑键** `(sourceId, targetDataSourceId)` 全量计数：0 行允许执行 `INSERT`；已存在 1 条 → `40902`；已存在多条 → `40903`。插入后校验受影响行数=1，否则回滚。新增流程不返回 `40401`。响应 `data=null`。
 
 ### 4.12 PUT /api/data-sources/{sourceId}/naming-strategies/{originalTargetId}（命名策略编辑）
 
-请求体：同 §4.11，其中 `targetDataSourceId` 为**新目标库 ID**（未切换则与原值相同）。后端先校验 `sourceId` 记录 `FG_ACTIVE='1'` 且角色 `SOURCE`、新目标库 `FG_ACTIVE='1'` 且角色 `TARGET`（角色不符 → `40006`；目标库无效 → `40005`）。按原逻辑键 `(sourceId, originalTargetId)` 先执行 `COUNT(*)`：0 行 → `40401`；≥2 行 → `40903`；只有计数恰好为 1 才执行 DML，且 DML 后校验受影响行数=1。新逻辑键查重排除当前行（重复 → `40902`；存量多条 → `40903`）。响应 `data=null`。
+请求体：同 §4.11，其中 `targetDataSourceId` 为**新目标库 ID**（未切换则与原值相同）。后端先按 `DATA_SOURCE_ID=? AND FG_ACTIVE='1'` 校验 `sourceId` 记录：不存在或非 `'1'` → `40400`；存在且有效但角色不是 `SOURCE` → `40006`。新目标库校验失败（不存在、未启用或不是 TARGET）一律 → `40005`。按原逻辑键 `(sourceId, originalTargetId)` 先执行 `COUNT(*)`：0 行 → `40401`；≥2 行 → `40903`；只有计数恰好为 1 才执行 DML，且 DML 后校验受影响行数=1。若新目标 ID 与原目标 ID 忽略大小写相同，不把当前行误判为重复；若逻辑键变化，按新逻辑键 `(sourceId, targetDataSourceId)` 查重并排除原记录（0 行允许更新；1 行 → `40902`；≥2 行 → `40903`）。响应 `data=null`。
 
 ### 4.13 DELETE /api/data-sources/{sourceId}/naming-strategies/{targetId}（命名策略删除）
 
-路径参数为原逻辑键。后端先校验 `sourceId` 记录 `FG_ACTIVE='1'` 且角色 `SOURCE`（角色不符 → `40006`）。按原逻辑键 `(sourceId, targetId)` 先执行 `COUNT(*)`：0 行 → `40401`；≥2 行 → `40903`（不清理存量）；只有计数恰好为 1 才执行 DML，且 DML 后校验受影响行数=1。响应 `data=null`。
+路径参数为原逻辑键。后端先按 `DATA_SOURCE_ID=? AND FG_ACTIVE='1'` 校验 `sourceId` 记录：不存在或非 `'1'` → `40400`；存在且有效但角色不是 `SOURCE` → `40006`。按原逻辑键 `(sourceId, targetId)` 先执行 `COUNT(*)`：0 行 → `40401`；≥2 行 → `40903`（不清理存量）；只有计数恰好为 1 才执行 DML，且 DML 后校验受影响行数=1。响应 `data=null`。
 
 ---
 
@@ -351,10 +354,10 @@
 
 | code | 含义 | 触发 |
 |---|---|---|
-| 40400 | 数据源不存在 | 详情/编辑/删除/业务属性/测试连接（`{id}`/`originalDataSourceId` 定位）找不到记录 |
+| 40400 | 数据源不存在 | 主详情/编辑/删除/业务属性/测试连接/命名策略的 `sourceId`（或 `{id}`/`originalDataSourceId`）对应记录不存在，或该主记录 `FG_ACTIVE!='1'`（按批准规则视为不存在） |
 | 40900 | 数据源 ID 重复 | 新增/编辑 ID 查重冲突（`DS-REQ-032`/`035`） |
 | 40901 | 数据源名称重复 | 新增/编辑名称查重冲突（`DS-REQ-033`/`035`） |
-| 40001 | 角色非法 | `dataSourceCategory` 非 `SOURCE`/`TARGET` |
+| 40001 | 角色非法 | 仅用于新增/编辑主表请求中 `dataSourceCategory` 非 `SOURCE`/`TARGET` |
 | 40002 | 数据库类型非法 | 类型非 `ORACLE`/`MYSQL`/`DORIS` 或与角色不匹配 |
 | 40003 | 命名策略无效 | `tableNamingStrategy` 非 `TABLE_MERGE`/`CUSTOM_PREFIX_SUFFIX` |
 | 50000 | 保存失败 | 新增/编辑/业务属性/命名策略写入异常 |
@@ -364,11 +367,17 @@
 
 | code | 含义 | 触发 |
 |---|---|---|
-| 40005 | 目标库无效 | `targetDataSourceId` 不存在、非 `FG_ACTIVE='1'` 或非 `TARGET` 类别 |
-| 40006 | 数据源角色不适用于当前操作 | 业务属性操作目标库、命名策略操作源库/目标候选时的角色不符（记录 `FG_ACTIVE='1'` 但角色非本次操作所需） |
+| 40005 | 目标库无效 | 命名策略新增/编辑请求中的 `targetDataSourceId` 不存在、`FG_ACTIVE!='1'` 或角色不是 `TARGET`；新目标库校验失败一律使用 `40005`，不得使用 `40006` |
+| 40006 | 数据源角色不适用于当前操作 | 业务属性接口中的主记录存在且有效但角色不是 `TARGET`；命名策略接口中的 `sourceId` 主记录存在且有效但角色不是 `SOURCE`。目标候选列表只是过滤并返回有效 TARGET，不存在"某条目标候选角色不符返回 40006"的场景 |
 | 40401 | 命名策略不存在 | 按逻辑键编辑/删除定位不到记录 |
 | 40902 | 命名策略逻辑键重复 | 新增/编辑使 `(sourceId, targetDataSourceId)` 与已有行重复 |
 | 40903 | 命名策略存量多条异常 | 按逻辑键定位出现 ≥2 行（保存/编辑/删除被阻止，不清理存量） |
+
+**业务码优先级（互斥）**：
+- `40400`：主记录不存在或 `FG_ACTIVE!='1'`（按批准规则视为不存在）——主详情/编辑/删除/业务属性/测试连接/命名策略的 `sourceId`。
+- `40006`：主记录存在且有效，但角色不适用于当前操作——业务属性须 `TARGET`、命名策略入口须 `SOURCE`。
+- `40005`：命名策略新增/编辑的新目标库无效（不存在、未启用或不是 TARGET），一律 `40005`，不使用 `40006`。
+- `40001`：仅用于新增/编辑主表请求中 `dataSourceCategory` 值非法。
 
 **废弃码（旧候选语义随目标需求移除）：**
 
@@ -381,14 +390,14 @@
 
 | 场景 | 结果 |
 |---|---|
-| 数据源不存在（详情/编辑/删除） | HTTP 200，`40400`，消息"数据源不存在: <id>" |
+| 数据源不存在或 inactive（主详情/编辑/删除/业务属性/测试连接/命名策略 `sourceId` 定位） | HTTP 200，`40400`，消息"数据源不存在: <id>" |
 | ID/名称重复 | HTTP 200，`40900`/`40901`，消息"数据源ID已存在: <id>"/"数据源名称已存在: <name>" |
 | 字段校验失败（必填/超长/非法值域） | HTTP 400，`400`，字段级消息 |
 | 角色—类型非法 | HTTP 200，`40001`/`40002`，消息"数据源类别只能为SOURCE或TARGET"/"数据库类型只能为ORACLE、MYSQL或DORIS" |
 | 命名策略逻辑键重复 | HTTP 200，`40902`，消息如"该源库到该目标库的命名策略已存在" |
 | 命名策略存量多条异常 | HTTP 200，`40903`，消息如"检测到重复命名策略数据，保存被阻止" |
-| 目标库无效 | HTTP 200，`40005`，消息"目标库无效或已停用" |
-| 数据源角色不适用于当前操作 | HTTP 200，`40006`，消息"数据源角色不适用于当前操作" |
+| 目标库无效（命名策略新增/编辑的新目标库不存在、未启用或非 TARGET） | HTTP 200，`40005`，消息"目标库无效或已停用" |
+| 数据源角色不适用于当前操作（主记录有效但角色非本次操作所需：业务属性须 TARGET、命名策略入口须 SOURCE） | HTTP 200，`40006`，消息"数据源角色不适用于当前操作" |
 | 保存/删除失败 | HTTP 200，`50000`/`50001`，通用失败消息 |
 | 测试连接失败 | HTTP 200，`data.success=false` + 脱敏消息（不抛业务异常） |
 | 未知异常 | HTTP 500，`500`，"服务器内部错误" |
