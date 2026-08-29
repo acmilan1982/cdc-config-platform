@@ -9,19 +9,15 @@ import com.bsoft.cdcconfig.datasource.connection.ConnectionTester;
 import com.bsoft.cdcconfig.datasource.dto.BizAttrSaveDTO;
 import com.bsoft.cdcconfig.datasource.dto.DataSourceCreateDTO;
 import com.bsoft.cdcconfig.datasource.dto.DataSourceUpdateDTO;
-import com.bsoft.cdcconfig.datasource.dto.NamingStrategyDTO;
 import com.bsoft.cdcconfig.datasource.dto.TestConnectionDTO;
 import com.bsoft.cdcconfig.datasource.entity.DataSource;
-import com.bsoft.cdcconfig.datasource.entity.DataSourceExtend;
 import com.bsoft.cdcconfig.datasource.exception.DataSourceErrorCode;
-import com.bsoft.cdcconfig.datasource.mapper.DataSourceExtendMapper;
 import com.bsoft.cdcconfig.datasource.mapper.DataSourceMapper;
 import com.bsoft.cdcconfig.datasource.query.DataSourceQuery;
 import com.bsoft.cdcconfig.datasource.service.impl.DataSourceServiceImpl;
 import com.bsoft.cdcconfig.datasource.vo.BizAttrVO;
 import com.bsoft.cdcconfig.datasource.vo.DataSourceDetailVO;
 import com.bsoft.cdcconfig.datasource.vo.DataSourceListVO;
-import com.bsoft.cdcconfig.datasource.vo.NamingStrategyVO;
 import com.bsoft.cdcconfig.datasource.vo.TargetOptionVO;
 import com.bsoft.cdcconfig.datasource.vo.TestConnectionResultVO;
 import org.apache.ibatis.builder.MapperBuilderAssistant;
@@ -40,7 +36,6 @@ import java.util.List;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertFalse;
 import static org.junit.jupiter.api.Assertions.assertNotNull;
-import static org.junit.jupiter.api.Assertions.assertNull;
 import static org.junit.jupiter.api.Assertions.assertThrows;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 import static org.mockito.ArgumentMatchers.any;
@@ -54,9 +49,6 @@ class DataSourceServiceTest {
 
     @Mock
     private DataSourceMapper dataSourceMapper;
-
-    @Mock
-    private DataSourceExtendMapper extendMapper;
 
     @Mock
     private ConnectionTester connectionTester;
@@ -74,7 +66,6 @@ class DataSourceServiceTest {
     static void initTableInfo() {
         MapperBuilderAssistant assistant = new MapperBuilderAssistant(new MybatisConfiguration(), "");
         TableInfoHelper.initTableInfo(assistant, DataSource.class);
-        TableInfoHelper.initTableInfo(assistant, DataSourceExtend.class);
     }
 
     @BeforeEach
@@ -106,8 +97,8 @@ class DataSourceServiceTest {
         createDTO = new DataSourceCreateDTO();
         createDTO.setDataSourceId("DS001");
         createDTO.setDataSourceName("测试数据源");
-        createDTO.setDataSourceCategory("source");
-        createDTO.setDataSourceType("oracle");
+        createDTO.setDataSourceCategory("SOURCE");
+        createDTO.setDataSourceType("ORACLE");
         createDTO.setHost("192.168.1.1");
         createDTO.setPort(1521);
         createDTO.setUserName("testuser");
@@ -225,6 +216,24 @@ class DataSourceServiceTest {
     }
 
     @Test
+    void create_lowercaseCategory_shouldThrow40001() {
+        createDTO.setDataSourceCategory("source");
+        when(dataSourceMapper.selectCount(any(LambdaQueryWrapper.class))).thenReturn(0L);
+
+        BusinessException ex = assertThrows(BusinessException.class, () -> service.create(createDTO));
+        assertEquals(DataSourceErrorCode.INVALID_CATEGORY, ex.getCode());
+    }
+
+    @Test
+    void create_lowercaseType_shouldThrow40002() {
+        createDTO.setDataSourceType("oracle");
+        when(dataSourceMapper.selectCount(any(LambdaQueryWrapper.class))).thenReturn(0L);
+
+        BusinessException ex = assertThrows(BusinessException.class, () -> service.create(createDTO));
+        assertEquals(DataSourceErrorCode.INVALID_TYPE, ex.getCode());
+    }
+
+    @Test
     void create_duplicateId_shouldThrow40900() {
         when(dataSourceMapper.selectCount(any(LambdaQueryWrapper.class))).thenReturn(1L);
 
@@ -309,6 +318,31 @@ class DataSourceServiceTest {
     }
 
     @Test
+    void update_caseOnlyChangeId_shouldUpdateId() {
+        updateDTO.setDataSourceId("ds001");
+        when(dataSourceMapper.selectOne(any(LambdaQueryWrapper.class))).thenReturn(sourceDs);
+        when(dataSourceMapper.selectCount(any(LambdaQueryWrapper.class))).thenReturn(0L);
+        when(dataSourceMapper.update(any(), any(LambdaUpdateWrapper.class))).thenReturn(1);
+
+        String id = service.update("DS001", updateDTO);
+
+        assertEquals("ds001", id);
+        ArgumentCaptor<LambdaUpdateWrapper<DataSource>> captor = ArgumentCaptor.forClass(LambdaUpdateWrapper.class);
+        verify(dataSourceMapper).update(eq(null), captor.capture());
+        assertTrue(captor.getValue().getSqlSet().contains("DATA_SOURCE_ID"));
+    }
+
+    @Test
+    void update_missingId_shouldThrowValidationError() {
+        updateDTO.setDataSourceId(null);
+        when(dataSourceMapper.selectOne(any(LambdaQueryWrapper.class))).thenReturn(sourceDs);
+
+        BusinessException ex = assertThrows(BusinessException.class,
+                () -> service.update("DS001", updateDTO));
+        assertEquals(400, ex.getCode());
+    }
+
+    @Test
     void update_changeToExistingId_shouldThrow40900() {
         updateDTO.setDataSourceId("DS002");
         when(dataSourceMapper.selectOne(any(LambdaQueryWrapper.class))).thenReturn(sourceDs);
@@ -327,6 +361,22 @@ class DataSourceServiceTest {
         BusinessException ex = assertThrows(BusinessException.class,
                 () -> service.update("DS001", updateDTO));
         assertEquals(DataSourceErrorCode.DATA_SOURCE_NAME_DUPLICATE, ex.getCode());
+    }
+
+    @Test
+    void update_nameDuplicateAcrossAllRecords_shouldThrow40901() {
+        when(dataSourceMapper.selectOne(any(LambdaQueryWrapper.class))).thenReturn(sourceDs);
+        when(dataSourceMapper.selectCount(any(LambdaQueryWrapper.class))).thenReturn(1L);
+
+        BusinessException ex = assertThrows(BusinessException.class,
+                () -> service.update("DS001", updateDTO));
+        assertEquals(DataSourceErrorCode.DATA_SOURCE_NAME_DUPLICATE, ex.getCode());
+
+        ArgumentCaptor<LambdaQueryWrapper<DataSource>> captor = ArgumentCaptor.forClass(LambdaQueryWrapper.class);
+        verify(dataSourceMapper).selectCount(captor.capture());
+        String sql = captor.getValue().getCustomSqlSegment();
+        assertTrue(sql.contains("UPPER(DATA_SOURCE_NAME)"));
+        assertFalse(sql.contains("FG_ACTIVE"));
     }
 
     @Test
@@ -457,12 +507,12 @@ class DataSourceServiceTest {
     }
 
     @Test
-    void testConnection_withoutPasswordAndOriginalId_shouldThrow40002() {
+    void testConnection_withoutPasswordAndOriginalId_shouldThrowValidationError() {
         testConnDTO.setPassword(null);
 
         BusinessException ex = assertThrows(BusinessException.class,
                 () -> service.testConnection(testConnDTO));
-        assertEquals(DataSourceErrorCode.INVALID_TYPE, ex.getCode());
+        assertEquals(400, ex.getCode());
         assertEquals("密码为空时必须提供原数据源ID", ex.getMessage());
     }
 
@@ -554,289 +604,5 @@ class DataSourceServiceTest {
         BusinessException ex = assertThrows(BusinessException.class,
                 () -> service.saveBizAttr("TG001", new BizAttrSaveDTO()));
         assertEquals(DataSourceErrorCode.SAVE_FAILED, ex.getCode());
-    }
-
-    // ---- listNamingStrategies ----
-    @Test
-    void listNamingStrategies_shouldMapTargetInfo() {
-        DataSourceExtend ext = new DataSourceExtend();
-        ext.setDataSourceId("SRC001");
-        ext.setTargetDataSourceId("TG001");
-        ext.setTableNamingStrategy("TABLE_MERGE");
-        ext.setTableNamePrefix("");
-        ext.setTableNameSuffix("");
-        when(dataSourceMapper.selectOne(any(LambdaQueryWrapper.class))).thenReturn(sourceDs);
-        when(extendMapper.selectList(any(LambdaQueryWrapper.class)))
-                .thenReturn(Collections.singletonList(ext));
-        when(dataSourceMapper.selectList(any(LambdaQueryWrapper.class)))
-                .thenReturn(Collections.singletonList(targetDs));
-
-        List<NamingStrategyVO> vos = service.listNamingStrategies("SRC001");
-
-        assertEquals(1, vos.size());
-        assertEquals("SRC001", vos.get(0).getSourceDataSourceId());
-        assertEquals("TG001", vos.get(0).getTargetDataSourceId());
-        assertEquals("目标库", vos.get(0).getTargetDataSourceName());
-        assertEquals("ORACLE", vos.get(0).getTargetDataSourceType());
-        assertEquals("TABLE_MERGE", vos.get(0).getTableNamingStrategy());
-    }
-
-    @Test
-    void listNamingStrategies_missingTarget_shouldLeaveNull() {
-        DataSourceExtend ext = new DataSourceExtend();
-        ext.setDataSourceId("SRC001");
-        ext.setTargetDataSourceId("MISSING");
-        ext.setTableNamingStrategy("TABLE_MERGE");
-        when(dataSourceMapper.selectOne(any(LambdaQueryWrapper.class))).thenReturn(sourceDs);
-        when(extendMapper.selectList(any(LambdaQueryWrapper.class)))
-                .thenReturn(Collections.singletonList(ext));
-        when(dataSourceMapper.selectList(any(LambdaQueryWrapper.class)))
-                .thenReturn(Collections.emptyList());
-
-        List<NamingStrategyVO> vos = service.listNamingStrategies("SRC001");
-
-        assertEquals(1, vos.size());
-        assertEquals("MISSING", vos.get(0).getTargetDataSourceId());
-        assertNull(vos.get(0).getTargetDataSourceName());
-        assertNull(vos.get(0).getTargetDataSourceType());
-    }
-
-    @Test
-    void listNamingStrategies_sourceNotFound_shouldThrow40400() {
-        when(dataSourceMapper.selectOne(any(LambdaQueryWrapper.class))).thenReturn(null);
-
-        BusinessException ex = assertThrows(BusinessException.class,
-                () -> service.listNamingStrategies("NONEXIST"));
-        assertEquals(DataSourceErrorCode.DATA_SOURCE_NOT_FOUND, ex.getCode());
-    }
-
-    // ---- createNamingStrategy ----
-    @Test
-    void createNamingStrategy_tableMerge_shouldClearPrefixSuffix() {
-        when(dataSourceMapper.selectOne(any(LambdaQueryWrapper.class))).thenReturn(sourceDs, targetDs);
-        when(extendMapper.selectCount(any(LambdaQueryWrapper.class))).thenReturn(0L);
-        when(extendMapper.insert(any(DataSourceExtend.class))).thenReturn(1);
-
-        NamingStrategyDTO dto = buildStrategyDTO("TG001", "TABLE_MERGE", "p_", "_s");
-        service.createNamingStrategy("SRC001", dto);
-
-        ArgumentCaptor<DataSourceExtend> captor = ArgumentCaptor.forClass(DataSourceExtend.class);
-        verify(extendMapper).insert(captor.capture());
-        assertEquals("SRC001", captor.getValue().getDataSourceId());
-        assertEquals("TG001", captor.getValue().getTargetDataSourceId());
-        assertEquals("", captor.getValue().getTableNamePrefix());
-        assertEquals("", captor.getValue().getTableNameSuffix());
-    }
-
-    @Test
-    void createNamingStrategy_customPrefixSuffix_shouldKeepValues() {
-        when(dataSourceMapper.selectOne(any(LambdaQueryWrapper.class))).thenReturn(sourceDs, targetDs);
-        when(extendMapper.selectCount(any(LambdaQueryWrapper.class))).thenReturn(0L);
-        when(extendMapper.insert(any(DataSourceExtend.class))).thenReturn(1);
-
-        NamingStrategyDTO dto = buildStrategyDTO("TG001", "CUSTOM_PREFIX_SUFFIX", "p_", "_s");
-        service.createNamingStrategy("SRC001", dto);
-
-        ArgumentCaptor<DataSourceExtend> captor = ArgumentCaptor.forClass(DataSourceExtend.class);
-        verify(extendMapper).insert(captor.capture());
-        assertEquals("p_", captor.getValue().getTableNamePrefix());
-        assertEquals("_s", captor.getValue().getTableNameSuffix());
-    }
-
-    @Test
-    void createNamingStrategy_duplicate_shouldThrow40902() {
-        when(dataSourceMapper.selectOne(any(LambdaQueryWrapper.class))).thenReturn(sourceDs, targetDs);
-        when(extendMapper.selectCount(any(LambdaQueryWrapper.class))).thenReturn(1L);
-
-        BusinessException ex = assertThrows(BusinessException.class,
-                () -> service.createNamingStrategy("SRC001", buildStrategyDTO("TG001", "TABLE_MERGE", "", "")));
-        assertEquals(DataSourceErrorCode.NAMING_STRATEGY_DUPLICATE, ex.getCode());
-    }
-
-    @Test
-    void createNamingStrategy_multiConflict_shouldThrow40903() {
-        when(dataSourceMapper.selectOne(any(LambdaQueryWrapper.class))).thenReturn(sourceDs, targetDs);
-        when(extendMapper.selectCount(any(LambdaQueryWrapper.class))).thenReturn(2L);
-
-        BusinessException ex = assertThrows(BusinessException.class,
-                () -> service.createNamingStrategy("SRC001", buildStrategyDTO("TG001", "TABLE_MERGE", "", "")));
-        assertEquals(DataSourceErrorCode.NAMING_STRATEGY_MULTI_CONFLICT, ex.getCode());
-    }
-
-    @Test
-    void createNamingStrategy_invalidTarget_shouldThrow40005() {
-        when(dataSourceMapper.selectOne(any(LambdaQueryWrapper.class))).thenReturn(sourceDs, null);
-
-        BusinessException ex = assertThrows(BusinessException.class,
-                () -> service.createNamingStrategy("SRC001", buildStrategyDTO("BAD", "TABLE_MERGE", "", "")));
-        assertEquals(DataSourceErrorCode.INVALID_TARGET_DATA_SOURCE, ex.getCode());
-    }
-
-    @Test
-    void createNamingStrategy_customWithoutPrefix_shouldThrow40003() {
-        when(dataSourceMapper.selectOne(any(LambdaQueryWrapper.class))).thenReturn(sourceDs, targetDs);
-
-        BusinessException ex = assertThrows(BusinessException.class,
-                () -> service.createNamingStrategy("SRC001",
-                        buildStrategyDTO("TG001", "CUSTOM_PREFIX_SUFFIX", null, "_s")));
-        assertEquals(DataSourceErrorCode.INVALID_NAMING_STRATEGY, ex.getCode());
-        assertEquals("自定义命名策略必须填写前缀和后缀", ex.getMessage());
-    }
-
-    @Test
-    void createNamingStrategy_invalidStrategy_shouldThrow40003() {
-        when(dataSourceMapper.selectOne(any(LambdaQueryWrapper.class))).thenReturn(sourceDs, targetDs);
-
-        BusinessException ex = assertThrows(BusinessException.class,
-                () -> service.createNamingStrategy("SRC001", buildStrategyDTO("TG001", "BAD", "", "")));
-        assertEquals(DataSourceErrorCode.INVALID_NAMING_STRATEGY, ex.getCode());
-    }
-
-    @Test
-    void createNamingStrategy_insertFailed_shouldThrow50000() {
-        when(dataSourceMapper.selectOne(any(LambdaQueryWrapper.class))).thenReturn(sourceDs, targetDs);
-        when(extendMapper.selectCount(any(LambdaQueryWrapper.class))).thenReturn(0L);
-        when(extendMapper.insert(any(DataSourceExtend.class))).thenReturn(0);
-
-        BusinessException ex = assertThrows(BusinessException.class,
-                () -> service.createNamingStrategy("SRC001", buildStrategyDTO("TG001", "TABLE_MERGE", "", "")));
-        assertEquals(DataSourceErrorCode.SAVE_FAILED, ex.getCode());
-    }
-
-    // ---- updateNamingStrategy ----
-    @Test
-    void updateNamingStrategy_sameTarget_shouldSucceed() {
-        when(dataSourceMapper.selectOne(any(LambdaQueryWrapper.class))).thenReturn(sourceDs, targetDs);
-        when(extendMapper.selectCount(any(LambdaQueryWrapper.class))).thenReturn(1L);
-        when(extendMapper.update(any(), any(LambdaUpdateWrapper.class))).thenReturn(1);
-
-        service.updateNamingStrategy("SRC001", "TG001",
-                buildStrategyDTO("TG001", "TABLE_MERGE", "", ""));
-
-        verify(extendMapper).update(any(), any(LambdaUpdateWrapper.class));
-    }
-
-    @Test
-    void updateNamingStrategy_changeTarget_shouldSucceed() {
-        when(dataSourceMapper.selectOne(any(LambdaQueryWrapper.class))).thenReturn(sourceDs, targetDs);
-        when(extendMapper.selectCount(any(LambdaQueryWrapper.class))).thenReturn(1L, 0L);
-        when(extendMapper.update(any(), any(LambdaUpdateWrapper.class))).thenReturn(1);
-
-        service.updateNamingStrategy("SRC001", "TG001",
-                buildStrategyDTO("TG002", "TABLE_MERGE", "", ""));
-
-        ArgumentCaptor<LambdaUpdateWrapper<DataSourceExtend>> captor =
-                ArgumentCaptor.forClass(LambdaUpdateWrapper.class);
-        verify(extendMapper).update(eq(null), captor.capture());
-        assertTrue(captor.getValue().getSqlSet().contains("TARGET_DATA_SOURCE_ID"));
-    }
-
-    @Test
-    void updateNamingStrategy_originalNotFound_shouldThrow40401() {
-        when(dataSourceMapper.selectOne(any(LambdaQueryWrapper.class))).thenReturn(sourceDs, targetDs);
-        when(extendMapper.selectCount(any(LambdaQueryWrapper.class))).thenReturn(0L);
-
-        BusinessException ex = assertThrows(BusinessException.class,
-                () -> service.updateNamingStrategy("SRC001", "TG001",
-                        buildStrategyDTO("TG001", "TABLE_MERGE", "", "")));
-        assertEquals(DataSourceErrorCode.NAMING_STRATEGY_NOT_FOUND, ex.getCode());
-    }
-
-    @Test
-    void updateNamingStrategy_originalMulti_shouldThrow40903() {
-        when(dataSourceMapper.selectOne(any(LambdaQueryWrapper.class))).thenReturn(sourceDs, targetDs);
-        when(extendMapper.selectCount(any(LambdaQueryWrapper.class))).thenReturn(2L);
-
-        BusinessException ex = assertThrows(BusinessException.class,
-                () -> service.updateNamingStrategy("SRC001", "TG001",
-                        buildStrategyDTO("TG001", "TABLE_MERGE", "", "")));
-        assertEquals(DataSourceErrorCode.NAMING_STRATEGY_MULTI_CONFLICT, ex.getCode());
-    }
-
-    @Test
-    void updateNamingStrategy_newKeyDuplicate_shouldThrow40902() {
-        when(dataSourceMapper.selectOne(any(LambdaQueryWrapper.class))).thenReturn(sourceDs, targetDs);
-        when(extendMapper.selectCount(any(LambdaQueryWrapper.class))).thenReturn(1L, 1L);
-
-        BusinessException ex = assertThrows(BusinessException.class,
-                () -> service.updateNamingStrategy("SRC001", "TG001",
-                        buildStrategyDTO("TG002", "TABLE_MERGE", "", "")));
-        assertEquals(DataSourceErrorCode.NAMING_STRATEGY_DUPLICATE, ex.getCode());
-    }
-
-    @Test
-    void updateNamingStrategy_newKeyMulti_shouldThrow40903() {
-        when(dataSourceMapper.selectOne(any(LambdaQueryWrapper.class))).thenReturn(sourceDs, targetDs);
-        when(extendMapper.selectCount(any(LambdaQueryWrapper.class))).thenReturn(1L, 2L);
-
-        BusinessException ex = assertThrows(BusinessException.class,
-                () -> service.updateNamingStrategy("SRC001", "TG001",
-                        buildStrategyDTO("TG002", "TABLE_MERGE", "", "")));
-        assertEquals(DataSourceErrorCode.NAMING_STRATEGY_MULTI_CONFLICT, ex.getCode());
-    }
-
-    @Test
-    void updateNamingStrategy_invalidStrategy_shouldThrow40003() {
-        when(dataSourceMapper.selectOne(any(LambdaQueryWrapper.class))).thenReturn(sourceDs, targetDs);
-
-        BusinessException ex = assertThrows(BusinessException.class,
-                () -> service.updateNamingStrategy("SRC001", "TG001",
-                        buildStrategyDTO("TG001", "BAD", "", "")));
-        assertEquals(DataSourceErrorCode.INVALID_NAMING_STRATEGY, ex.getCode());
-    }
-
-    // ---- deleteNamingStrategy ----
-    @Test
-    void deleteNamingStrategy_shouldSucceed() {
-        when(dataSourceMapper.selectOne(any(LambdaQueryWrapper.class))).thenReturn(sourceDs);
-        when(extendMapper.selectCount(any(LambdaQueryWrapper.class))).thenReturn(1L);
-        when(extendMapper.delete(any(LambdaQueryWrapper.class))).thenReturn(1);
-
-        service.deleteNamingStrategy("SRC001", "TG001");
-
-        verify(extendMapper).delete(any(LambdaQueryWrapper.class));
-    }
-
-    @Test
-    void deleteNamingStrategy_notFound_shouldThrow40401() {
-        when(dataSourceMapper.selectOne(any(LambdaQueryWrapper.class))).thenReturn(sourceDs);
-        when(extendMapper.selectCount(any(LambdaQueryWrapper.class))).thenReturn(0L);
-
-        BusinessException ex = assertThrows(BusinessException.class,
-                () -> service.deleteNamingStrategy("SRC001", "TG001"));
-        assertEquals(DataSourceErrorCode.NAMING_STRATEGY_NOT_FOUND, ex.getCode());
-    }
-
-    @Test
-    void deleteNamingStrategy_multi_shouldThrow40903() {
-        when(dataSourceMapper.selectOne(any(LambdaQueryWrapper.class))).thenReturn(sourceDs);
-        when(extendMapper.selectCount(any(LambdaQueryWrapper.class))).thenReturn(2L);
-
-        BusinessException ex = assertThrows(BusinessException.class,
-                () -> service.deleteNamingStrategy("SRC001", "TG001"));
-        assertEquals(DataSourceErrorCode.NAMING_STRATEGY_MULTI_CONFLICT, ex.getCode());
-    }
-
-    @Test
-    void deleteNamingStrategy_deleteFailed_shouldThrow40401() {
-        when(dataSourceMapper.selectOne(any(LambdaQueryWrapper.class))).thenReturn(sourceDs);
-        when(extendMapper.selectCount(any(LambdaQueryWrapper.class))).thenReturn(1L);
-        when(extendMapper.delete(any(LambdaQueryWrapper.class))).thenReturn(0);
-
-        BusinessException ex = assertThrows(BusinessException.class,
-                () -> service.deleteNamingStrategy("SRC001", "TG001"));
-        assertEquals(DataSourceErrorCode.NAMING_STRATEGY_NOT_FOUND, ex.getCode());
-    }
-
-    // -- helpers --
-
-    private NamingStrategyDTO buildStrategyDTO(String targetId, String strategy,
-                                               String prefix, String suffix) {
-        NamingStrategyDTO dto = new NamingStrategyDTO();
-        dto.setTargetDataSourceId(targetId);
-        dto.setTableNamingStrategy(strategy);
-        dto.setTableNamePrefix(prefix);
-        dto.setTableNameSuffix(suffix);
-        return dto;
     }
 }

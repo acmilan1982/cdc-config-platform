@@ -6,6 +6,7 @@ import javax.validation.constraints.NotBlank;
 import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Size;
 
+@RequireOriginalIdWhenNoPassword
 public class TestConnectionDTO {
 
     @Size(max = 32, message = "数据源ID长度不能超过32")

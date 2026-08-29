@@ -7,6 +7,7 @@ import com.bsoft.cdcconfig.datasource.dto.DataSourceUpdateDTO;
 import com.bsoft.cdcconfig.datasource.dto.NamingStrategyDTO;
 import com.bsoft.cdcconfig.datasource.dto.TestConnectionDTO;
 import com.bsoft.cdcconfig.datasource.query.DataSourceQuery;
+import com.bsoft.cdcconfig.datasource.service.DataSourceNamingStrategyService;
 import com.bsoft.cdcconfig.datasource.service.DataSourceService;
 import com.bsoft.cdcconfig.datasource.vo.BizAttrVO;
 import com.bsoft.cdcconfig.datasource.vo.DataSourceDetailVO;
@@ -35,9 +36,12 @@ import java.util.List;
 public class DataSourceController {
 
     private final DataSourceService dataSourceService;
+    private final DataSourceNamingStrategyService namingStrategyService;
 
-    public DataSourceController(DataSourceService dataSourceService) {
+    public DataSourceController(DataSourceService dataSourceService,
+                                DataSourceNamingStrategyService namingStrategyService) {
         this.dataSourceService = dataSourceService;
+        this.namingStrategyService = namingStrategyService;
     }
 
     @Operation(summary = "查询数据源列表", description = "支持按数据源ID、名称、主机模糊匹配，仅返回启用数据源，按ID升序")
@@ -108,7 +112,7 @@ public class DataSourceController {
     @GetMapping("/{sourceId}/naming-strategies")
     public ApiResponse<List<NamingStrategyVO>> listNamingStrategies(
             @Parameter(description = "源库数据源ID") @PathVariable String sourceId) {
-        return ApiResponse.success(dataSourceService.listNamingStrategies(sourceId));
+        return ApiResponse.success(namingStrategyService.list(sourceId));
     }
 
     @Operation(summary = "新增命名策略", description = "同一源库到同一目标库的命名策略不允许重复")
@@ -116,7 +120,7 @@ public class DataSourceController {
     public ApiResponse<Void> createNamingStrategy(
             @Parameter(description = "源库数据源ID") @PathVariable String sourceId,
             @Valid @RequestBody NamingStrategyDTO dto) {
-        dataSourceService.createNamingStrategy(sourceId, dto);
+        namingStrategyService.create(sourceId, dto);
         return ApiResponse.success();
     }
 
@@ -126,7 +130,7 @@ public class DataSourceController {
             @Parameter(description = "源库数据源ID") @PathVariable String sourceId,
             @Parameter(description = "原目标库数据源ID") @PathVariable String originalTargetId,
             @Valid @RequestBody NamingStrategyDTO dto) {
-        dataSourceService.updateNamingStrategy(sourceId, originalTargetId, dto);
+        namingStrategyService.update(sourceId, originalTargetId, dto);
         return ApiResponse.success();
     }
 
@@ -135,7 +139,7 @@ public class DataSourceController {
     public ApiResponse<Void> deleteNamingStrategy(
             @Parameter(description = "源库数据源ID") @PathVariable String sourceId,
             @Parameter(description = "目标库数据源ID") @PathVariable String targetId) {
-        dataSourceService.deleteNamingStrategy(sourceId, targetId);
+        namingStrategyService.delete(sourceId, targetId);
         return ApiResponse.success();
     }
 }

@@ -36,9 +36,9 @@ export interface DataSourceCreateRequest {
   serviceName: string
 }
 
-/** 编辑请求体（API.md §4.4，password 缺席=未修改，dataSourceId 可修改）。 */
+/** 编辑请求体（API.md §4.4，password 缺席=未修改，dataSourceId 必填且可修改）。 */
 export interface DataSourceUpdateRequest {
-  dataSourceId?: string
+  dataSourceId: string
   dataSourceName: string
   dataSourceCategory: string
   dataSourceType: string

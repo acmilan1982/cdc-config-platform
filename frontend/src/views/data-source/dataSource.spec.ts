@@ -12,6 +12,7 @@ import type {
 
 vi.mock('@/api/dataSource', () => ({
   fetchDataSourceList: vi.fn(),
+  fetchDataSourceDetail: vi.fn(),
   createDataSource: vi.fn(),
   updateDataSource: vi.fn(),
   deleteDataSource: vi.fn(),
@@ -23,11 +24,11 @@ vi.mock('@/api/dataSource', () => ({
   createNamingStrategy: vi.fn(),
   updateNamingStrategy: vi.fn(),
   deleteNamingStrategy: vi.fn(),
-  fetchDataSourceDetail: vi.fn(),
 }))
 
 import {
   fetchDataSourceList,
+  fetchDataSourceDetail,
   createDataSource,
   updateDataSource,
   deleteDataSource,
@@ -43,6 +44,7 @@ import {
 import DataSourcePage from '@/views/data-source/DataSourcePage.vue'
 
 const mockedList = vi.mocked(fetchDataSourceList)
+const mockedDetail = vi.mocked(fetchDataSourceDetail)
 const mockedCreate = vi.mocked(createDataSource)
 const mockedUpdate = vi.mocked(updateDataSource)
 const mockedDelete = vi.mocked(deleteDataSource)
@@ -87,6 +89,10 @@ function failList(code: number, message: string): ApiResponse<DataSourceRow[]> {
 
 function okString(value: string): ApiResponse<string> {
   return { code: 200, message: 'success', timestamp: '', data: value }
+}
+
+function okRow(row: DataSourceRow): ApiResponse<DataSourceRow> {
+  return { code: 200, message: 'success', timestamp: '', data: row }
 }
 
 function okNull(): ApiResponse<null> {
@@ -221,6 +227,7 @@ beforeEach(() => {
   elMessageErrorSpy = vi.spyOn(ElMessage, 'error').mockImplementation(() => undefined as never)
   confirmSpy = vi.spyOn(ElMessageBox, 'confirm').mockResolvedValue('confirm' as never)
   mockedList.mockReset()
+  mockedDetail.mockReset()
   mockedCreate.mockReset()
   mockedUpdate.mockReset()
   mockedDelete.mockReset()
@@ -233,6 +240,7 @@ beforeEach(() => {
   mockedUpdateNaming.mockReset()
   mockedDeleteNaming.mockReset()
   mockedList.mockResolvedValue(okList([srcRow, tgtRow]))
+  mockedDetail.mockResolvedValue(okRow(srcRow))
   mockedCreate.mockResolvedValue(okString('TG002'))
   mockedUpdate.mockResolvedValue(okString('SRC001'))
   mockedDelete.mockResolvedValue(okNull())
@@ -395,11 +403,13 @@ describe('新增数据源', () => {
 })
 
 describe('编辑数据源', () => {
-  it('打开编辑显示密码掩码，未改密码保存请求不含 password，路径用原 ID', async () => {
+  it('打开编辑通过详情接口加载并显示密码掩码；未改密码保存请求不含 password，路径用原 ID', async () => {
     const wrapper = await mountPage()
     await buttonByText(wrapper, '编辑')!.trigger('click')
     await flushPromises()
 
+    expect(mockedDetail).toHaveBeenCalledWith('SRC001')
+    expect(editorInput(wrapper, '数据源名称').element.value).toBe('源库A')
     expect(editorInput(wrapper, '密码').element.value).toBe('*********')
 
     await editorInput(wrapper, '数据源名称').setValue('源库A改')
@@ -433,109 +443,192 @@ describe('编辑数据源', () => {
     wrapper.unmount()
   })
 
-  it('双击行打开编辑弹窗', async () => {
+  it('双击行打开编辑弹窗并通过详情接口加载', async () => {
     const wrapper = await mountPage()
     wrapper.findComponent({ name: 'ElTable' }).vm.$emit('row-dblclick', srcRow)
-    await nextTick()
+    await flushPromises()
 
+    expect(mockedDetail).toHaveBeenCalledWith('SRC001')
     expect(wrapper.find('.editor-form').exists()).toBe(true)
     expect(editorInput(wrapper, '密码').element.value).toBe('*********')
+    wrapper.unmount()
+  })
+
+  it('详情业务失败可见且不静默使用列表数据', async () => {
+    mockedDetail.mockResolvedValueOnce({
+      code: 40400,
+      message: '数据源不存在: SRC001',
+      timestamp: '',
+      data: null,
+    } as unknown as ApiResponse<DataSourceRow>)
+    const wrapper = await mountPage()
+    await buttonByText(wrapper, '编辑')!.trigger('click')
+    await flushPromises()
+
+    expect(wrapper.find('.form-error').text()).toContain('数据源不存在')
+    // 列表行数据未被当作权威详情：名称仍为空
+    expect(editorInput(wrapper, '数据源名称').element.value).toBe('')
+    wrapper.unmount()
+  })
+
+  it('详情网络异常显示错误', async () => {
+    mockedDetail.mockRejectedValueOnce(new Error('network down'))
+    const wrapper = await mountPage()
+    await buttonByText(wrapper, '编辑')!.trigger('click')
+    await flushPromises()
+
+    expect(wrapper.find('.form-error').text()).toContain('network down')
+    wrapper.unmount()
+  })
+
+  it('快速切换记录时迟到的详情响应被代次隔离', async () => {
+    let resolveFirst!: (v: ApiResponse<DataSourceRow>) => void
+    mockedDetail
+      .mockImplementationOnce(
+        () => new Promise<ApiResponse<DataSourceRow>>((res) => (resolveFirst = res)),
+      )
+      .mockResolvedValueOnce(okRow(tgtRow))
+    const wrapper = await mountPage()
+
+    wrapper.findComponent({ name: 'ElTable' }).vm.$emit('row-dblclick', srcRow)
+    await nextTick()
+    wrapper.findComponent({ name: 'ElTable' }).vm.$emit('row-dblclick', tgtRow)
+    await flushPromises()
+
+    // TG001 详情先返回，表单显示目标库；SRC001 迟到详情被忽略
+    expect(editorInput(wrapper, '数据源名称').element.value).toBe('目标库B')
+    resolveFirst(okRow(srcRow))
+    await flushPromises()
+    expect(editorInput(wrapper, '数据源名称').element.value).toBe('目标库B')
+
+    // 保存路径使用后一次编辑的 originalDataSourceId
+    await editorInput(wrapper, '数据源名称').setValue('目标库B改')
+    await nextTick()
+    await buttonByText(wrapper, '保存')!.trigger('click')
+    await flushPromises()
+    expect(mockedUpdate.mock.calls[0][0]).toBe('TG001')
     wrapper.unmount()
   })
 })
 
 describe('测试连接', () => {
-  it('成功显示连接成功并进入 10 秒倒计时（fake timers）', async () => {
+  it('发起请求立即显示测试中并逐秒倒计时；提前响应停止计时并显示结果', async () => {
     const wrapper = await mountPage()
     await buttonByText(wrapper, '新增数据源')!.trigger('click')
     await flushPromises()
-    mockedTest.mockResolvedValue(okTest(true, '连接成功'))
+
+    let resolve!: (v: ApiResponse<TestConnectionResult>) => void
+    mockedTest.mockReturnValueOnce(
+      new Promise<ApiResponse<TestConnectionResult>>((res) => (resolve = res)),
+    )
 
     vi.useFakeTimers()
     await buttonByText(wrapper, '测试连接')!.trigger('click')
     await flushFake()
 
-    expect(wrapper.text()).toContain('连接成功')
-    expect(wrapper.text()).toContain('重试（10s）')
+    expect(wrapper.text()).toContain('测试连接中，剩余 10 秒')
+    expect(wrapper.find('.test-bar button').attributes('disabled')).toBeDefined()
 
     await vi.advanceTimersByTimeAsync(1000)
-    expect(wrapper.text()).toContain('重试（9s）')
+    expect(wrapper.text()).toContain('测试连接中，剩余 9 秒')
+    await vi.advanceTimersByTimeAsync(2000)
+    expect(wrapper.text()).toContain('测试连接中，剩余 7 秒')
 
-    await vi.advanceTimersByTimeAsync(9000)
-    expect(wrapper.text()).toContain('测试连接')
+    // 后端提前返回 → 停止倒计时、显示结果、无重试冷却
+    resolve(okTest(true, '连接成功'))
+    await flushFake()
+    expect(wrapper.text()).toContain('连接成功')
+    expect(wrapper.text()).not.toContain('测试连接中')
     expect(wrapper.text()).not.toContain('重试（')
     wrapper.unmount()
   })
 
-  it('失败显示连接失败消息（HTTP 200 业务失败按失败处理）', async () => {
+  it('未决请求到 0 变为连接超时，迟到成功响应被忽略', async () => {
+    const wrapper = await mountPage()
+    await buttonByText(wrapper, '新增数据源')!.trigger('click')
+    await flushPromises()
+
+    let resolve!: (v: ApiResponse<TestConnectionResult>) => void
+    mockedTest.mockReturnValueOnce(
+      new Promise<ApiResponse<TestConnectionResult>>((res) => (resolve = res)),
+    )
+
+    vi.useFakeTimers()
+    await buttonByText(wrapper, '测试连接')!.trigger('click')
+    await flushFake()
+    expect(wrapper.text()).toContain('测试连接中，剩余 10 秒')
+
+    await vi.advanceTimersByTimeAsync(10000)
+    expect(wrapper.text()).toContain('连接超时')
+    expect(wrapper.text()).not.toContain('测试连接中')
+
+    // 迟到响应不得覆盖超时结果
+    resolve(okTest(true, '连接成功'))
+    await flushFake()
+    expect(wrapper.text()).toContain('连接超时')
+    expect(wrapper.text()).not.toContain('连接成功')
+    wrapper.unmount()
+  })
+
+  it('测试中重复点击不会重复发请求', async () => {
+    const wrapper = await mountPage()
+    await buttonByText(wrapper, '新增数据源')!.trigger('click')
+    await flushPromises()
+
+    let resolve!: (v: ApiResponse<TestConnectionResult>) => void
+    mockedTest.mockReturnValueOnce(
+      new Promise<ApiResponse<TestConnectionResult>>((res) => (resolve = res)),
+    )
+
+    await buttonByText(wrapper, '测试连接')!.trigger('click')
+    await flushPromises()
+    await buttonByText(wrapper, '测试连接')!.trigger('click')
+    await flushPromises()
+
+    expect(mockedTest).toHaveBeenCalledTimes(1)
+    resolve(okTest(true, '连接成功'))
+    await flushPromises()
+    wrapper.unmount()
+  })
+
+  it('失败直接展示脱敏消息，不重复拼接“连接失败：”前缀', async () => {
     const wrapper = await mountPage()
     await buttonByText(wrapper, '新增数据源')!.trigger('click')
     await flushPromises()
     mockedTest.mockResolvedValue(okTest(false, '认证失败'))
 
-    vi.useFakeTimers()
     await buttonByText(wrapper, '测试连接')!.trigger('click')
-    await flushFake()
+    await flushPromises()
 
-    expect(wrapper.text()).toContain('连接失败：认证失败')
-    expect(wrapper.text()).toContain('重试（10s）')
+    expect(wrapper.text()).toContain('认证失败')
+    expect(wrapper.text()).not.toContain('连接失败：认证失败')
+    expect(wrapper.text()).not.toContain('重试（')
     wrapper.unmount()
   })
 
-  it('请求代次失效：在途请求期间修改字段，迟到响应被忽略且不启动倒计时', async () => {
+  it('请求期间修改字段使旧请求失效并清理计时器', async () => {
     const wrapper = await mountPage()
     await buttonByText(wrapper, '新增数据源')!.trigger('click')
     await flushPromises()
 
-    let resolveFirst!: (v: ApiResponse<TestConnectionResult>) => void
+    let resolve!: (v: ApiResponse<TestConnectionResult>) => void
     mockedTest.mockReturnValueOnce(
-      new Promise<ApiResponse<TestConnectionResult>>((res) => {
-        resolveFirst = res
-      }),
+      new Promise<ApiResponse<TestConnectionResult>>((res) => (resolve = res)),
     )
-    mockedTest.mockResolvedValue(okTest(true, '连接成功'))
 
+    vi.useFakeTimers()
     await buttonByText(wrapper, '测试连接')!.trigger('click')
-    await flushPromises()
-    expect(wrapper.find('.test-bar button').attributes('disabled')).toBeDefined()
+    await flushFake()
+    expect(wrapper.text()).toContain('测试连接中，剩余 10 秒')
 
-    // 修改字段 → 失效旧请求
     await editorInput(wrapper, '主机').setValue('10.9.9.9')
     await nextTick()
-
-    // 迟到响应到达 → 代次不匹配被忽略
-    resolveFirst(okTest(true, '连接成功'))
-    await flushPromises()
-
-    expect(wrapper.text()).not.toContain('连接成功')
-    expect(wrapper.text()).not.toContain('重试（')
+    expect(wrapper.text()).not.toContain('测试连接中')
     expect(wrapper.find('.test-bar button').attributes('disabled')).toBeUndefined()
 
-    // 再次点击可正常测试
-    await buttonByText(wrapper, '测试连接')!.trigger('click')
-    await flushPromises()
-    expect(wrapper.text()).toContain('连接成功')
-    expect(wrapper.text()).toContain('重试（10s）')
-    wrapper.unmount()
-  })
-
-  it('倒计时期间修改字段清除成功状态并取消倒计时', async () => {
-    const wrapper = await mountPage()
-    await buttonByText(wrapper, '新增数据源')!.trigger('click')
-    await flushPromises()
-    mockedTest.mockResolvedValue(okTest(true, '连接成功'))
-
-    vi.useFakeTimers()
-    await buttonByText(wrapper, '测试连接')!.trigger('click')
+    resolve(okTest(true, '连接成功'))
     await flushFake()
-    expect(wrapper.text()).toContain('连接成功')
-    expect(wrapper.text()).toContain('重试（10s）')
-
-    await editorInput(wrapper, '主机').setValue('10.8.8.8')
-    await nextTick()
-
     expect(wrapper.text()).not.toContain('连接成功')
-    expect(wrapper.text()).not.toContain('重试（')
     wrapper.unmount()
   })
 })
@@ -560,6 +653,107 @@ describe('删除数据源', () => {
     await flushPromises()
 
     expect(mockedDelete).not.toHaveBeenCalled()
+    wrapper.unmount()
+  })
+
+  it('删除进行中重复点击只发一个请求', async () => {
+    let resolve!: (v: ApiResponse<null>) => void
+    mockedDelete.mockReturnValueOnce(new Promise<ApiResponse<null>>((res) => (resolve = res)))
+    const wrapper = await mountPage()
+
+    await buttonByText(wrapper, '删除')!.trigger('click')
+    await flushPromises()
+    await buttonByText(wrapper, '删除')!.trigger('click')
+    await flushPromises()
+
+    expect(mockedDelete).toHaveBeenCalledTimes(1)
+    resolve(okNull())
+    await flushPromises()
+    wrapper.unmount()
+  })
+})
+
+describe('编辑弹窗未保存确认', () => {
+  it('主编辑弹窗脏数据关闭需确认', async () => {
+    const wrapper = await mountPage()
+    await buttonByText(wrapper, '编辑')!.trigger('click')
+    await flushPromises()
+
+    await editorInput(wrapper, '数据源名称').setValue('源库A改')
+    await nextTick()
+    await buttonByText(wrapper, '取消')!.trigger('click')
+    await flushPromises()
+
+    expect(confirmSpy).toHaveBeenCalledTimes(1)
+    wrapper.unmount()
+  })
+
+  it('拒绝确认保持弹窗与表单', async () => {
+    confirmSpy.mockRejectedValueOnce('cancel')
+    const wrapper = await mountPage()
+    await buttonByText(wrapper, '编辑')!.trigger('click')
+    await flushPromises()
+
+    await editorInput(wrapper, '数据源名称').setValue('源库A改')
+    await nextTick()
+    await buttonByText(wrapper, '取消')!.trigger('click')
+    await flushPromises()
+
+    expect(wrapper.find('.editor-form').exists()).toBe(true)
+    expect(editorInput(wrapper, '数据源名称').element.value).toBe('源库A改')
+    wrapper.unmount()
+  })
+
+  it('无修改直接关闭不弹确认', async () => {
+    const wrapper = await mountPage()
+    await buttonByText(wrapper, '编辑')!.trigger('click')
+    await flushPromises()
+
+    await buttonByText(wrapper, '取消')!.trigger('click')
+    await flushPromises()
+
+    expect(confirmSpy).not.toHaveBeenCalled()
+    wrapper.unmount()
+  })
+
+  it('保存成功直接关闭，不弹二次确认', async () => {
+    const wrapper = await mountPage()
+    await buttonByText(wrapper, '新增数据源')!.trigger('click')
+    await flushPromises()
+
+    await editorInput(wrapper, '数据源ID').setValue('TG002')
+    await editorInput(wrapper, '数据源名称').setValue('新库')
+    await editorInput(wrapper, '主机').setValue('10.2.2.2')
+    await editorInput(wrapper, '用户名').setValue('app')
+    await editorInput(wrapper, '密码').setValue('secret')
+    await editorInput(wrapper, 'Service Name').setValue('db')
+    await nextTick()
+    await buttonByText(wrapper, '创建')!.trigger('click')
+    await flushPromises()
+
+    expect(mockedCreate).toHaveBeenCalledTimes(1)
+    expect(confirmSpy).not.toHaveBeenCalled()
+    // 弹窗已关闭：内容可能残留于 DOM（等待 leave 过渡），但整体不可见
+    expect(wrapper.find('.editor-form').isVisible()).toBe(false)
+    wrapper.unmount()
+  })
+
+  it('密码聚焦失焦不误标已修改，星号恢复', async () => {
+    const wrapper = await mountPage()
+    await buttonByText(wrapper, '编辑')!.trigger('click')
+    await flushPromises()
+
+    const pwd = editorInput(wrapper, '密码')
+    expect(pwd.element.value).toBe('*********')
+    await pwd.trigger('focus')
+    expect(editorInput(wrapper, '密码').element.value).toBe('')
+    await pwd.trigger('blur')
+    expect(editorInput(wrapper, '密码').element.value).toBe('*********')
+
+    // 未修改密码：直接关闭不弹确认
+    await buttonByText(wrapper, '取消')!.trigger('click')
+    await flushPromises()
+    expect(confirmSpy).not.toHaveBeenCalled()
     wrapper.unmount()
   })
 })
@@ -612,14 +806,26 @@ describe('业务属性（仅目标库）', () => {
 })
 
 describe('目标库命名策略（仅源库）', () => {
-  it('打开显示策略列表与目标候选', async () => {
+  it('打开显示策略列表与目标候选；标题含源库ID与名称；表格列含数据库类型', async () => {
     const wrapper = await mountPage()
     await buttonByText(wrapper, '目标库命名策略')!.trigger('click')
     await flushPromises()
 
     expect(mockedNaming).toHaveBeenCalledWith('SRC001')
-    expect(wrapper.text()).toContain('TG001')
-    expect(wrapper.text()).toContain('表合并')
+    const title = wrapper
+      .findAll('.el-dialog__title')
+      .map((t) => t.text())
+      .join('')
+    expect(title).toContain('SRC001')
+    expect(title).toContain('源库A')
+
+    const headers = wrapper
+      .findAll('.naming-table .el-table__header-wrapper th')
+      .map((h) => h.text().trim())
+    expect(headers).toEqual(['目标库ID', '目标库名称', '数据库类型', '命名策略', '前缀', '后缀', '操作'])
+
+    const bodyText = wrapper.find('.naming-table .el-table__body-wrapper').text()
+    expect(bodyText).toContain('MYSQL')
     expect(mockedTargetOptions).toHaveBeenCalled()
     wrapper.unmount()
   })
@@ -725,6 +931,108 @@ describe('目标库命名策略（仅源库）', () => {
     expect(mockedDeleteNaming).toHaveBeenCalledWith('SRC001', 'TG001')
     expect(elMessageSuccessSpy).toHaveBeenCalledWith('删除成功')
     expect(mockedNaming).toHaveBeenCalledTimes(2)
+    wrapper.unmount()
+  })
+
+  it('命名策略删除进行中重复点击只发一个请求', async () => {
+    let resolve!: (v: ApiResponse<null>) => void
+    mockedDeleteNaming.mockReturnValueOnce(new Promise<ApiResponse<null>>((res) => (resolve = res)))
+    const wrapper = await mountPage()
+    await buttonByText(wrapper, '目标库命名策略')!.trigger('click')
+    await flushPromises()
+
+    const delBtn = wrapper
+      .findAll('.naming-table button')
+      .find((b) => b.text().includes('删除'))!
+    await delBtn.trigger('click')
+    await flushPromises()
+    await delBtn.trigger('click')
+    await flushPromises()
+
+    expect(mockedDeleteNaming).toHaveBeenCalledTimes(1)
+    resolve(okNull())
+    await flushPromises()
+    wrapper.unmount()
+  })
+
+  it('命名策略保存期间删除不发出冲突请求', async () => {
+    let resolveCreate!: (v: ApiResponse<null>) => void
+    mockedCreateNaming.mockReturnValueOnce(
+      new Promise<ApiResponse<null>>((res) => (resolveCreate = res)),
+    )
+    const wrapper = await mountPage()
+    await buttonByText(wrapper, '目标库命名策略')!.trigger('click')
+    await flushPromises()
+
+    await pickSelect(wrapper, '.naming-form', 0, 'TG002（目标库C）')
+    await exactButton(wrapper, '新增')!.trigger('click')
+    await flushPromises()
+
+    // 保存中，删除被阻断
+    const delBtn = wrapper
+      .findAll('.naming-table button')
+      .find((b) => b.text().includes('删除'))!
+    await delBtn.trigger('click')
+    await flushPromises()
+    expect(mockedDeleteNaming).not.toHaveBeenCalled()
+
+    resolveCreate(okNull())
+    await flushPromises()
+    wrapper.unmount()
+  })
+
+  it('命名策略脏数据关闭需确认；拒绝保持弹窗', async () => {
+    confirmSpy.mockRejectedValueOnce('cancel')
+    const wrapper = await mountPage()
+    await buttonByText(wrapper, '目标库命名策略')!.trigger('click')
+    await flushPromises()
+
+    await pickSelect(wrapper, '.naming-form', 0, 'TG002（目标库C）')
+    await nextTick()
+    await buttonByText(wrapper, '取消')!.trigger('click')
+    await flushPromises()
+
+    expect(confirmSpy).toHaveBeenCalledTimes(1)
+    expect(wrapper.find('.naming-form').exists()).toBe(true)
+    wrapper.unmount()
+  })
+
+  it('命名策略脏数据关闭确认后关闭', async () => {
+    const wrapper = await mountPage()
+    await buttonByText(wrapper, '目标库命名策略')!.trigger('click')
+    await flushPromises()
+
+    await pickSelect(wrapper, '.naming-form', 0, 'TG002（目标库C）')
+    await nextTick()
+    await buttonByText(wrapper, '取消')!.trigger('click')
+    await flushPromises()
+
+    expect(confirmSpy).toHaveBeenCalledTimes(1)
+    // 弹窗已关闭：内容可能残留于 DOM（等待 leave 过渡），但整体不可见
+    expect(wrapper.find('.naming-form').isVisible()).toBe(false)
+    wrapper.unmount()
+  })
+
+  it('编辑切换时脏数据需确认，拒绝后保持当前表单', async () => {
+    confirmSpy.mockRejectedValueOnce('cancel')
+    const wrapper = await mountPage()
+    await buttonByText(wrapper, '目标库命名策略')!.trigger('click')
+    await flushPromises()
+
+    const editBtn = wrapper
+      .findAll('.naming-table button')
+      .find((b) => b.text().includes('编辑'))!
+    await editBtn.trigger('click')
+    await nextTick()
+    await clickRadio(wrapper, '.naming-form', '自定义前后缀')
+    await namingInput(wrapper, '表名前缀').setValue('p_')
+    await nextTick()
+
+    // 再次点击编辑（切换策略）时脏数据需确认
+    await editBtn.trigger('click')
+    await flushPromises()
+    expect(confirmSpy).toHaveBeenCalledTimes(1)
+    expect(namingInput(wrapper, '表名前缀').element.value).toBe('p_')
     wrapper.unmount()
   })
 })

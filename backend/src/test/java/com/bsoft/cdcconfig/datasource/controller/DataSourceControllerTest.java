@@ -5,6 +5,7 @@ import com.bsoft.cdcconfig.datasource.dto.DataSourceCreateDTO;
 import com.bsoft.cdcconfig.datasource.dto.DataSourceUpdateDTO;
 import com.bsoft.cdcconfig.datasource.dto.NamingStrategyDTO;
 import com.bsoft.cdcconfig.datasource.dto.TestConnectionDTO;
+import com.bsoft.cdcconfig.datasource.service.DataSourceNamingStrategyService;
 import com.bsoft.cdcconfig.datasource.service.DataSourceService;
 import com.bsoft.cdcconfig.datasource.vo.BizAttrVO;
 import com.bsoft.cdcconfig.datasource.vo.DataSourceDetailVO;
@@ -45,6 +46,9 @@ class DataSourceControllerTest {
 
     @MockBean
     private DataSourceService dataSourceService;
+
+    @MockBean
+    private DataSourceNamingStrategyService namingStrategyService;
 
     // ---- list ----
     @Test
@@ -170,6 +174,16 @@ class DataSourceControllerTest {
                 .andExpect(status().isBadRequest());
     }
 
+    @Test
+    void testConnection_withoutPasswordAndOriginalId_shouldReturn400() throws Exception {
+        mockMvc.perform(post("/api/data-sources/test-connection")
+                        .contentType(MediaType.APPLICATION_JSON)
+                        .content("{\"dataSourceType\":\"ORACLE\",\"host\":\"192.168.1.1\",\"port\":1521,"
+                                + "\"userName\":\"testuser\",\"serviceName\":\"testdb\"}"))
+                .andExpect(status().isBadRequest())
+                .andExpect(jsonPath("$.code").value(400));
+    }
+
     // ---- target-options ----
     @Test
     void targetOptions_shouldReturnTargets() throws Exception {
@@ -215,7 +229,7 @@ class DataSourceControllerTest {
     void listNamingStrategies_shouldReturnStrategies() throws Exception {
         NamingStrategyVO vo = new NamingStrategyVO();
         vo.setSourceDataSourceId("SRC001");
-        when(dataSourceService.listNamingStrategies("SRC001"))
+        when(namingStrategyService.list("SRC001"))
                 .thenReturn(Collections.singletonList(vo));
 
         mockMvc.perform(get("/api/data-sources/SRC001/naming-strategies"))
@@ -226,7 +240,7 @@ class DataSourceControllerTest {
 
     @Test
     void createNamingStrategy_shouldSucceed() throws Exception {
-        doNothing().when(dataSourceService).createNamingStrategy(eq("SRC001"), any(NamingStrategyDTO.class));
+        doNothing().when(namingStrategyService).create(eq("SRC001"), any(NamingStrategyDTO.class));
 
         String body = objectMapper.writeValueAsString(buildNamingStrategyDTO());
 
@@ -236,7 +250,7 @@ class DataSourceControllerTest {
                 .andExpect(status().isOk())
                 .andExpect(jsonPath("$.code").value(200));
 
-        verify(dataSourceService).createNamingStrategy(eq("SRC001"), any(NamingStrategyDTO.class));
+        verify(namingStrategyService).create(eq("SRC001"), any(NamingStrategyDTO.class));
     }
 
     @Test
@@ -249,8 +263,8 @@ class DataSourceControllerTest {
 
     @Test
     void updateNamingStrategy_shouldSucceed() throws Exception {
-        doNothing().when(dataSourceService)
-                .updateNamingStrategy(eq("SRC001"), eq("TG001"), any(NamingStrategyDTO.class));
+        doNothing().when(namingStrategyService)
+                .update(eq("SRC001"), eq("TG001"), any(NamingStrategyDTO.class));
 
         String body = objectMapper.writeValueAsString(buildNamingStrategyDTO());
 
@@ -260,18 +274,18 @@ class DataSourceControllerTest {
                 .andExpect(status().isOk())
                 .andExpect(jsonPath("$.code").value(200));
 
-        verify(dataSourceService).updateNamingStrategy(eq("SRC001"), eq("TG001"), any(NamingStrategyDTO.class));
+        verify(namingStrategyService).update(eq("SRC001"), eq("TG001"), any(NamingStrategyDTO.class));
     }
 
     @Test
     void deleteNamingStrategy_shouldSucceed() throws Exception {
-        doNothing().when(dataSourceService).deleteNamingStrategy("SRC001", "TG001");
+        doNothing().when(namingStrategyService).delete("SRC001", "TG001");
 
         mockMvc.perform(delete("/api/data-sources/SRC001/naming-strategies/TG001"))
                 .andExpect(status().isOk())
                 .andExpect(jsonPath("$.code").value(200));
 
-        verify(dataSourceService).deleteNamingStrategy("SRC001", "TG001");
+        verify(namingStrategyService).delete("SRC001", "TG001");
     }
 
     // -- helpers --

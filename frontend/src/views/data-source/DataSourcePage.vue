@@ -76,7 +76,13 @@
         <el-table-column label="操作" width="300" fixed="right">
           <template #default="{ row }">
             <el-button link type="primary" @click="openEdit(row)">编辑</el-button>
-            <el-button link type="danger" @click="onDelete(row)">删除</el-button>
+            <el-button
+              link
+              type="danger"
+              :loading="deletingId === row.dataSourceId"
+              :disabled="deletingId !== ''"
+              @click="onDelete(row)"
+            >删除</el-button>
             <el-button
               v-if="row.dataSourceCategory === 'TARGET'"
               link
@@ -105,6 +111,7 @@
       width="620px"
       destroy-on-close
       :close-on-click-modal="false"
+      :before-close="onEditorBeforeClose"
       @closed="onEditorClosed"
     >
       <el-form
@@ -113,6 +120,7 @@
         :rules="editorRules"
         label-width="120px"
         class="editor-form"
+        v-loading="editorLoading"
       >
         <el-form-item label="数据源ID" prop="dataSourceId">
           <el-input v-model="editorForm.dataSourceId" placeholder="请输入数据源ID" maxlength="32" />
@@ -166,6 +174,7 @@
             :placeholder="isEdit ? '不修改请留空' : '请输入密码'"
             maxlength="64"
             @focus="onPasswordFocus"
+            @blur="onPasswordBlur"
             @input="onPasswordInput"
           />
           <div v-if="isEdit && !passwordEdited" class="field-tip">显示掩码表示沿用原密码</div>
@@ -176,24 +185,25 @@
 
       <div class="test-bar">
         <el-button
-          :disabled="testing || countdown > 0"
+          :disabled="testing || editorLoading"
           :loading="testing"
           @click="onTestConnection"
         >
-          {{ countdown > 0 ? `重试（${countdown}s）` : '测试连接' }}
+          测试连接
         </el-button>
+        <span v-if="testing" class="test-result is-testing">测试连接中，剩余 {{ testCountdown }} 秒</span>
         <span
-          v-if="testResult"
+          v-else-if="testResult"
           class="test-result"
           :class="testResult.success ? 'is-ok' : 'is-fail'"
         >
-          {{ testResult.success ? '连接成功' : `连接失败：${testResult.message}` }}
+          {{ testResult.success ? '连接成功' : testResult.message }}
         </span>
       </div>
 
       <template #footer>
-        <el-button @click="editorVisible = false">取消</el-button>
-        <el-button type="primary" :loading="saving" @click="onSaveEditor">
+        <el-button :disabled="saving" @click="requestCloseEditor">取消</el-button>
+        <el-button type="primary" :loading="saving" :disabled="editorLoading" @click="onSaveEditor">
           {{ isEdit ? '保存' : '创建' }}
         </el-button>
       </template>
@@ -229,15 +239,17 @@
     <!-- 目标库命名策略（仅源库） -->
     <el-dialog
       v-model="namingVisible"
-      :title="`目标库命名策略 - ${namingSource?.dataSourceId}`"
+      :title="`目标库命名策略 - ${namingSource?.dataSourceId}（${namingSource?.dataSourceName}）`"
       width="760px"
       destroy-on-close
       :close-on-click-modal="false"
+      :before-close="onNamingBeforeClose"
     >
       <el-table :data="namingRows" v-loading="namingLoading" empty-text="暂无命名策略" class="naming-table">
         <el-table-column prop="targetDataSourceId" label="目标库ID" min-width="120" show-overflow-tooltip />
         <el-table-column prop="targetDataSourceName" label="目标库名称" min-width="120" show-overflow-tooltip />
-        <el-table-column label="表命名策略" width="130">
+        <el-table-column prop="targetDataSourceType" label="数据库类型" min-width="90" show-overflow-tooltip />
+        <el-table-column label="命名策略" width="110">
           <template #default="{ row }">
             {{ strategyLabel(row.tableNamingStrategy) }}
           </template>
@@ -246,8 +258,19 @@
         <el-table-column prop="tableNameSuffix" label="后缀" min-width="90" show-overflow-tooltip />
         <el-table-column label="操作" width="130" fixed="right">
           <template #default="{ row }">
-            <el-button link type="primary" @click="openNamingEdit(row)">编辑</el-button>
-            <el-button link type="danger" @click="onDeleteNaming(row)">删除</el-button>
+            <el-button
+              link
+              type="primary"
+              :disabled="namingSaving"
+              @click="openNamingEdit(row)"
+            >编辑</el-button>
+            <el-button
+              link
+              type="danger"
+              :loading="namingDeletingId === row.targetDataSourceId"
+              :disabled="namingSaving || namingDeletingId !== ''"
+              @click="onDeleteNaming(row)"
+            >删除</el-button>
           </template>
         </el-table-column>
       </el-table>
@@ -302,8 +325,8 @@
       <div v-if="namingFormError" class="form-error" role="alert">{{ namingFormError }}</div>
 
       <template #footer>
-        <el-button @click="namingVisible = false">取消</el-button>
-        <el-button type="primary" :loading="namingSaving" @click="onSaveNaming">
+        <el-button :disabled="namingSaving" @click="requestCloseNaming">取消</el-button>
+        <el-button type="primary" :loading="namingSaving" :disabled="namingSaving" @click="onSaveNaming">
           {{ isNamingEdit ? '保存' : '新增' }}
         </el-button>
       </template>
@@ -322,6 +345,7 @@ import {
   deleteDataSource,
   deleteNamingStrategy,
   fetchBizAttr,
+  fetchDataSourceDetail,
   fetchDataSourceList,
   fetchNamingStrategies,
   fetchTargetOptions,
@@ -397,7 +421,12 @@ function onReset() {
   loadList()
 }
 
+const deletingId = ref('')
+
 async function onDelete(row: DataSourceRow) {
+  if (deletingId.value) {
+    return
+  }
   try {
     await ElMessageBox.confirm(
       `确定删除数据源 ${row.dataSourceId}（${row.dataSourceName}）吗？`,
@@ -407,6 +436,7 @@ async function onDelete(row: DataSourceRow) {
   } catch {
     return
   }
+  deletingId.value = row.dataSourceId
   try {
     const res = await deleteDataSource(row.dataSourceId)
     if (res.code === 200) {
@@ -417,6 +447,8 @@ async function onDelete(row: DataSourceRow) {
     }
   } catch (e) {
     ElMessage.error(resolveHttpMessage(e))
+  } finally {
+    deletingId.value = ''
   }
 }
 
@@ -433,6 +465,11 @@ interface EditorForm {
   serviceName: string
 }
 
+interface EditorSnapshot {
+  form: EditorForm
+  passwordEdited: boolean
+}
+
 const editorVisible = ref(false)
 const editorFormError = ref('')
 const editorMode = ref<'create' | 'edit'>('create')
@@ -442,10 +479,13 @@ const originalDataSourceId = ref('')
 const passwordInput = ref('')
 const passwordEdited = ref(false)
 const saving = ref(false)
+const editorLoading = ref(false)
+const detailToken = ref(0)
+const editorSnapshot = ref<EditorSnapshot | null>(null)
 
 const testResult = ref<TestConnectionResult | null>(null)
 const testing = ref(false)
-const countdown = ref(0)
+const testCountdown = ref(0)
 const testToken = ref(0)
 let testTimer: number | null = null
 
@@ -554,46 +594,116 @@ const editorRules: FormRules = {
   password: [{ validator: validatePassword, trigger: 'blur' }],
 }
 
+function takeEditorSnapshot() {
+  editorSnapshot.value = {
+    form: {
+      ...editorForm.value,
+    },
+    passwordEdited: passwordEdited.value,
+  }
+}
+
+/** 主弹窗未保存判定：任何表单字段或密码编辑状态与规范化快照不一致即为脏。 */
+const editorDirty = computed(() => {
+  const s = editorSnapshot.value
+  if (!s) {
+    return false
+  }
+  const f = editorForm.value
+  return (
+    f.dataSourceId !== s.form.dataSourceId ||
+    f.dataSourceName !== s.form.dataSourceName ||
+    f.dataSourceCategory !== s.form.dataSourceCategory ||
+    f.dataSourceType !== s.form.dataSourceType ||
+    f.host !== s.form.host ||
+    f.port !== s.form.port ||
+    f.userName !== s.form.userName ||
+    f.serviceName !== s.form.serviceName ||
+    passwordEdited.value !== s.passwordEdited
+  )
+})
+
 function openCreate() {
   editorMode.value = 'create'
   originalDataSourceId.value = ''
   editorForm.value = emptyEditorForm()
   passwordInput.value = ''
   passwordEdited.value = false
+  editorLoading.value = false
   resetTestState()
   editorFormError.value = ''
   editorVisible.value = true
   editorFormRef.value?.clearValidate()
+  takeEditorSnapshot()
 }
 
+/** 打开编辑弹窗即加载详情；originalDataSourceId 取自列表行并保持不变。 */
 function openEdit(row: DataSourceRow) {
   editorMode.value = 'edit'
   originalDataSourceId.value = row.dataSourceId
-  editorForm.value = {
-    dataSourceId: row.dataSourceId,
-    dataSourceName: row.dataSourceName,
-    dataSourceCategory: row.dataSourceCategory,
-    dataSourceType: row.dataSourceType,
-    host: row.host,
-    port: row.port,
-    userName: row.userName,
-    serviceName: row.serviceName,
-  }
   passwordInput.value = PASSWORD_MASK
   passwordEdited.value = false
-  resetTestState()
+  editorForm.value = emptyEditorForm()
   editorFormError.value = ''
+  resetTestState()
   editorVisible.value = true
   editorFormRef.value?.clearValidate()
+  loadEditorDetail(row.dataSourceId)
 }
 
 function onRowDoubleClick(row: DataSourceRow) {
   openEdit(row)
 }
 
+async function loadEditorDetail(dataSourceId: string) {
+  const token = ++detailToken.value
+  editorLoading.value = true
+  editorFormError.value = ''
+  try {
+    const res = await fetchDataSourceDetail(dataSourceId)
+    if (token !== detailToken.value) {
+      return
+    }
+    if (res.code === 200) {
+      const d = res.data
+      editorForm.value = {
+        dataSourceId: d.dataSourceId,
+        dataSourceName: d.dataSourceName,
+        dataSourceCategory: d.dataSourceCategory,
+        dataSourceType: d.dataSourceType,
+        host: d.host,
+        port: d.port,
+        userName: d.userName,
+        serviceName: d.serviceName,
+      }
+      passwordInput.value = PASSWORD_MASK
+      passwordEdited.value = false
+    } else {
+      editorFormError.value = res.message || '数据源详情加载失败'
+    }
+  } catch (e) {
+    if (token !== detailToken.value) {
+      return
+    }
+    editorFormError.value = resolveHttpMessage(e)
+  } finally {
+    if (token === detailToken.value) {
+      editorLoading.value = false
+      takeEditorSnapshot()
+    }
+  }
+}
+
 function onPasswordFocus() {
   if (isEdit.value && !passwordEdited.value) {
     passwordInput.value = ''
+  }
+}
+
+function onPasswordBlur() {
+  // 未编辑时失焦恢复固定星号视觉状态，避免误判为已修改
+  if (isEdit.value && !passwordEdited.value) {
+    passwordInput.value = PASSWORD_MASK
   }
 }
 
@@ -606,7 +716,7 @@ function clearTestTimer() {
     window.clearInterval(testTimer)
     testTimer = null
   }
-  countdown.value = 0
+  testCountdown.value = 0
 }
 
 /** 失效当前测试连接状态：代次 +1，使在途请求的迟到响应成为过期响应。 */
@@ -619,6 +729,40 @@ function resetTestState() {
 
 function onEditorClosed() {
   resetTestState()
+}
+
+/** 主弹窗关闭确认：取消按钮、右上角 X、ESC、遮罩均走同一逻辑。 */
+function onEditorBeforeClose(done: () => void) {
+  if (editorDirty.value) {
+    ElMessageBox.confirm('表单有未保存的修改，确定关闭吗？', '提示', {
+      type: 'warning',
+      confirmButtonText: '确定关闭',
+      cancelButtonText: '取消',
+    })
+      .then(() => {
+        done()
+      })
+      .catch(() => {
+        /* 用户拒绝关闭，保持弹窗与表单 */
+      })
+    return
+  }
+  done()
+}
+
+async function requestCloseEditor() {
+  if (editorDirty.value) {
+    try {
+      await ElMessageBox.confirm('表单有未保存的修改，确定关闭吗？', '提示', {
+        type: 'warning',
+        confirmButtonText: '确定关闭',
+        cancelButtonText: '取消',
+      })
+    } catch {
+      return
+    }
+  }
+  editorVisible.value = false
 }
 
 onBeforeUnmount(() => {
@@ -635,7 +779,7 @@ watch(
     passwordInput.value,
   ],
   () => {
-    if (testResult.value || countdown.value > 0 || testing.value) {
+    if (testResult.value || testCountdown.value > 0 || testing.value) {
       resetTestState()
     }
   },
@@ -656,18 +800,22 @@ function buildTestRequest(): TestConnectionRequest {
   return req
 }
 
+/** 发起请求的同时启动 10 秒倒计时；到 0 直接判定超时并使在途响应失效。 */
 async function onTestConnection() {
-  if (testing.value || countdown.value > 0) {
+  if (testing.value || editorLoading.value) {
     return
   }
   resetTestState()
   const token = testToken.value
   testing.value = true
+  startCountdownTimer(token)
   try {
     const res = await testDataSourceConnection(buildTestRequest())
     if (token !== testToken.value) {
       return
     }
+    clearTestTimer()
+    testing.value = false
     if (res.code === 200) {
       testResult.value = res.data
     } else {
@@ -677,28 +825,31 @@ async function onTestConnection() {
     if (token !== testToken.value) {
       return
     }
+    clearTestTimer()
+    testing.value = false
     testResult.value = { success: false, message: resolveHttpMessage(e) }
-  } finally {
-    if (token === testToken.value) {
-      testing.value = false
-      startCountdown()
-    }
   }
 }
 
-function startCountdown() {
+function startCountdownTimer(token: number) {
   clearTestTimer()
-  countdown.value = TEST_COUNTDOWN_SECONDS
+  testCountdown.value = TEST_COUNTDOWN_SECONDS
   testTimer = window.setInterval(() => {
-    countdown.value -= 1
-    if (countdown.value <= 0) {
+    testCountdown.value -= 1
+    if (testCountdown.value <= 0) {
       clearTestTimer()
+      if (token === testToken.value) {
+        // 到 0 结束本次 UI 测试状态，同时 +1 代次，迟到响应不得覆盖超时结果
+        testing.value = false
+        testResult.value = { success: false, message: '连接超时' }
+        testToken.value += 1
+      }
     }
   }, 1000)
 }
 
 async function onSaveEditor() {
-  if (saving.value) {
+  if (saving.value || editorLoading.value) {
     return
   }
   const form = editorFormRef.value
@@ -740,6 +891,7 @@ async function onSaveEditor() {
       const res = await updateDataSource(originalDataSourceId.value, request)
       if (res.code === 200) {
         ElMessage.success('保存成功')
+        takeEditorSnapshot()
         editorVisible.value = false
         await loadList()
       } else {
@@ -754,6 +906,7 @@ async function onSaveEditor() {
       const res = await createDataSource(request)
       if (res.code === 200) {
         ElMessage.success('新增成功')
+        takeEditorSnapshot()
         editorVisible.value = false
         await loadList()
       } else {
@@ -866,14 +1019,35 @@ const namingVisible = ref(false)
 const namingFormError = ref('')
 const namingLoading = ref(false)
 const namingSaving = ref(false)
+const namingDeletingId = ref('')
 const namingSource = ref<DataSourceRow | null>(null)
 const namingRows = ref<NamingStrategyVO[]>([])
 const targetOptions = ref<TargetOptionVO[]>([])
 const namingFormRef = ref<FormInstance>()
 const namingOriginalTargetId = ref('')
 const namingForm = ref<NamingStrategySaveRequest>(emptyNamingForm())
+const namingSnapshot = ref<NamingStrategySaveRequest | null>(null)
 
 const isNamingEdit = computed(() => namingOriginalTargetId.value !== '')
+
+function takeNamingSnapshot() {
+  namingSnapshot.value = { ...namingForm.value }
+}
+
+/** 命名策略表单未保存判定：与规范化快照不一致即为脏。 */
+const namingDirty = computed(() => {
+  const s = namingSnapshot.value
+  if (!s) {
+    return false
+  }
+  const f = namingForm.value
+  return (
+    s.targetDataSourceId !== f.targetDataSourceId ||
+    s.tableNamingStrategy !== f.tableNamingStrategy ||
+    s.tableNamePrefix !== f.tableNamePrefix ||
+    s.tableNameSuffix !== f.tableNameSuffix
+  )
+})
 
 function emptyNamingForm(): NamingStrategySaveRequest {
   return {
@@ -916,17 +1090,35 @@ const namingRules: FormRules = {
 async function openNamingStrategy(row: DataSourceRow) {
   namingSource.value = row
   namingRows.value = []
-  resetNamingForm()
+  doResetNamingForm()
   namingVisible.value = true
   loadTargetOptions()
   await loadNaming(row.dataSourceId)
 }
 
-function resetNamingForm() {
+function doResetNamingForm() {
   namingOriginalTargetId.value = ''
   namingForm.value = emptyNamingForm()
   namingFormError.value = ''
   namingFormRef.value?.clearValidate()
+  takeNamingSnapshot()
+}
+
+/** 切换到新增/清空表单；当前表单已修改时先确认放弃。 */
+async function resetNamingFormWithConfirm() {
+  if (namingDirty.value) {
+    try {
+      await ElMessageBox.confirm('命名策略有未保存的修改，确定放弃吗？', '提示', {
+        type: 'warning',
+        confirmButtonText: '确定放弃',
+        cancelButtonText: '取消',
+      })
+    } catch {
+      return false
+    }
+  }
+  doResetNamingForm()
+  return true
 }
 
 async function loadNaming(sourceId: string) {
@@ -960,7 +1152,21 @@ async function loadTargetOptions() {
   }
 }
 
-function openNamingEdit(row: NamingStrategyVO) {
+async function openNamingEdit(row: NamingStrategyVO) {
+  if (namingSaving.value) {
+    return
+  }
+  if (namingDirty.value) {
+    try {
+      await ElMessageBox.confirm('命名策略有未保存的修改，确定放弃吗？', '提示', {
+        type: 'warning',
+        confirmButtonText: '确定放弃',
+        cancelButtonText: '取消',
+      })
+    } catch {
+      return
+    }
+  }
   namingOriginalTargetId.value = row.targetDataSourceId
   namingForm.value = {
     targetDataSourceId: row.targetDataSourceId,
@@ -969,6 +1175,41 @@ function openNamingEdit(row: NamingStrategyVO) {
     tableNameSuffix: row.tableNameSuffix ?? '',
   }
   namingFormRef.value?.clearValidate()
+  takeNamingSnapshot()
+}
+
+/** 命名策略大弹窗关闭确认：取消、右上角 X、ESC、遮罩统一走同一逻辑。 */
+function onNamingBeforeClose(done: () => void) {
+  if (namingDirty.value) {
+    ElMessageBox.confirm('命名策略有未保存的修改，确定关闭吗？', '提示', {
+      type: 'warning',
+      confirmButtonText: '确定关闭',
+      cancelButtonText: '取消',
+    })
+      .then(() => {
+        done()
+      })
+      .catch(() => {
+        /* 用户拒绝关闭 */
+      })
+    return
+  }
+  done()
+}
+
+async function requestCloseNaming() {
+  if (namingDirty.value) {
+    try {
+      await ElMessageBox.confirm('命名策略有未保存的修改，确定关闭吗？', '提示', {
+        type: 'warning',
+        confirmButtonText: '确定关闭',
+        cancelButtonText: '取消',
+      })
+    } catch {
+      return
+    }
+  }
+  namingVisible.value = false
 }
 
 function onNamingStrategyChange() {
@@ -1017,7 +1258,7 @@ async function onSaveNaming() {
       )
       if (res.code === 200) {
         ElMessage.success('保存成功')
-        resetNamingForm()
+        doResetNamingForm()
         await loadNaming(sourceId)
       } else {
         ElMessage.error(res.message || '保存失败，请稍后重试')
@@ -1026,7 +1267,7 @@ async function onSaveNaming() {
       const res = await createNamingStrategy(sourceId, request)
       if (res.code === 200) {
         ElMessage.success('新增成功')
-        resetNamingForm()
+        doResetNamingForm()
         await loadNaming(sourceId)
       } else {
         ElMessage.error(res.message || '新增失败，请稍后重试')
@@ -1040,7 +1281,7 @@ async function onSaveNaming() {
 }
 
 async function onDeleteNaming(row: NamingStrategyVO) {
-  if (!namingSource.value) {
+  if (namingDeletingId.value || namingSaving.value || !namingSource.value) {
     return
   }
   try {
@@ -1052,6 +1293,7 @@ async function onDeleteNaming(row: NamingStrategyVO) {
   } catch {
     return
   }
+  namingDeletingId.value = row.targetDataSourceId
   try {
     const res = await deleteNamingStrategy(namingSource.value.dataSourceId, row.targetDataSourceId)
     if (res.code === 200) {
@@ -1062,6 +1304,8 @@ async function onDeleteNaming(row: NamingStrategyVO) {
     }
   } catch (e) {
     ElMessage.error(resolveHttpMessage(e))
+  } finally {
+    namingDeletingId.value = ''
   }
 }
 
@@ -1153,6 +1397,10 @@ onMounted(() => {
 
 .test-result.is-fail {
   color: var(--el-color-danger);
+}
+
+.test-result.is-testing {
+  color: var(--el-text-color-secondary);
 }
 
 .biz-attr-body {

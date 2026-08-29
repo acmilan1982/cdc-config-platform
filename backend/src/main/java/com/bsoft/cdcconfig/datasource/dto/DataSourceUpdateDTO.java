@@ -9,6 +9,7 @@ import javax.validation.constraints.Size;
 
 public class DataSourceUpdateDTO {
 
+    @NotBlank(message = "数据源ID不能为空")
     @Size(max = 32, message = "数据源ID长度不能超过32")
     @Pattern(regexp = "[A-Za-z0-9_-]+", message = "数据源ID只能包含字母、数字、下划线和短横线")
     private String dataSourceId;

@@ -10,7 +10,6 @@ public class JdbcConnectionFactory implements ConnectionFactory {
 
     @Override
     public Connection open(String url, String driver, String userName, String password) throws Exception {
-        DriverManager.setLoginTimeout(ConnectionTester.TIMEOUT_SECONDS);
         Class.forName(driver);
         return DriverManager.getConnection(url, userName, password);
     }
