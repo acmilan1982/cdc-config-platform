@@ -1,4 +1,4 @@
-# 数据源管理 —— API 设计基线草案（API.md）
+# 数据源管理 —— API 设计基线（API.md）
 
 > 文档状态：`APPROVED`
 > 需求状态：`APPROVED`

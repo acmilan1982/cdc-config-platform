@@ -1,4 +1,4 @@
-# 数据源管理 —— 数据库设计基线草案（DATABASE.md）
+# 数据源管理 —— 数据库设计基线（DATABASE.md）
 
 > 文档状态：`APPROVED`
 > 需求状态：`APPROVED`

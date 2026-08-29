@@ -1,4 +1,4 @@
-# 数据源管理 —— 设计基线草案（DESIGN.md）
+# 数据源管理 —— 设计基线（DESIGN.md）
 
 > 文档状态：`APPROVED`
 > 需求状态：`APPROVED`

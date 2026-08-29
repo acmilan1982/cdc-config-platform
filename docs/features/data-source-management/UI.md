@@ -1,4 +1,4 @@
-# 数据源管理 —— UI 设计基线草案（UI.md）
+# 数据源管理 —— UI 设计基线（UI.md）
 
 > 文档状态：`APPROVED`
 > 需求状态：`APPROVED`
