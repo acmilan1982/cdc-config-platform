@@ -31,10 +31,10 @@
 |---|---|---|---|---|
 | `DATA_SOURCE_ID` | VARCHAR2(32) | N（主键） | 业务主键 | `dataSourceId` |
 | `DATA_SOURCE_NAME` | VARCHAR2(30) | Y | 名称 | `dataSourceName` |
-| `DATA_SOURCE_CATEGORY` | VARCHAR2(30) | Y | SOURCE/TARGET | `dataSourceCategory` |
+| `DATA_SOURCE_CATEGORY` | VARCHAR2(30) | Y | SOURCE/TARGET；存量存在大小写混用（已批准基线），目标写入统一大写、读取忽略大小写识别 | `dataSourceCategory` |
 | `DATA_SOURCE_TYPE` | VARCHAR2(32) | N | ORACLE/MYSQL/DORIS | `dataSourceType` |
 | `DATA_SOURCE_HOST` | VARCHAR2(64) | N | 主机 | `host` |
-| `DATA_SOURCE_PORT` | VARCHAR2(64) | N | 端口（物理字符串） | `port` |
+| `DATA_SOURCE_PORT` | VARCHAR2(64) | N | 端口（物理字符串；API 层为数值端口，持久化边界做 `Integer ↔ 十进制字符串` 转换，不 DDL） | `port` |
 | `DATA_SOURCE_USER_NAME` | VARCHAR2(64) | N | 用户 | `userName` |
 | `DATA_SOURCE_PASSWORD` | VARCHAR2(64) | N | 密码（明文存储，已批准） | `password`（仅请求/内部） |
 | `DATA_SOURCE_SERVICE_NAME` | VARCHAR2(64) | N | Service Name/数据库名 | `serviceName` |
@@ -64,6 +64,8 @@
 - **本设计不需要 DDL**：不新增/修改主键、唯一约束、索引、外键、字段、注释、触发器、序列（`DS-REQ-108`）。
 - **不清洗存量数据**：存量异常（如同一逻辑键多条）不处理、不清洗（`DS-REQ-066`）。
 - **区分物理可空与业务必填**：`TARGET_DATA_SOURCE_ID` 物理可空，但业务上每条命名策略必填（`DS-REQ-078`）；`DATA_SOURCE_CATEGORY` 物理可空，但页面/后端必填（`DS-REQ-023`）。
+- **端口转换**：API 层 `port` 为 JSON number / Java `Integer`，持久化边界显式执行 `Integer ↔ 十进制字符串` 转换；数据库列 `VARCHAR2(64)` 物理事实不变，不修改字段、不 DDL（`DS-REQ-027`）。
+- **角色大小写兼容**：`DATA_SOURCE_CATEGORY` 存量存在大小写混用；目标写入统一大写，读取/条件查询使用大小写兼容比较（`UPPER(col)=?`），仅兼容既有大小写，不放宽到其他非法值（`DS-REQ-023`）。
 - **列映射与 `API.md`/`UI.md`/`DESIGN.md` 保持一致**（camelCase ↔ 数据库列）。
 
 ---
@@ -77,14 +79,14 @@
 | 新增 | — | `DATA_SOURCE_ID,NAME,CATEGORY,TYPE,HOST,PORT,USER_NAME,PASSWORD,SERVICE_NAME,FG_ACTIVE('1'),ORG(=NAME)` | 插入主表 | `@Transactional` | 不写 EXTEND；不写 SOURCE_APP/DOMAIN/BIZ_ATTR |
 | 编辑 | 当前记录隐藏字段原值 | 主表当前记录编辑字段；`DATA_SOURCE_ID` 可改 | `DATA_SOURCE_ID = originalId`（编辑前原 ID） | `@Transactional` | 不更新 EXTEND/其他表；ORG/SOURCE_APP/DOMAIN/FG_ACTIVE/时间保留；修改 ID 不同步引用 |
 | 删除 | — | 物理删除主表当前记录 | `DATA_SOURCE_ID=?` | `@Transactional` | 不检查/不级联 EXTEND/其他表；不经 `FG_ACTIVE` |
-| 业务属性读 | `DATA_SOURCE_BIZ_ATTR` | 无 | `DATA_SOURCE_ID=?` | 只读 | 其他列不动 |
-| 业务属性保存 | — | `DATA_SOURCE_BIZ_ATTR`（原样） | `DATA_SOURCE_ID=?` | `@Transactional` | 只更新该一列，不触碰其他字段/表 |
-| 目标候选 | 展示列 | 无 | `FG_ACTIVE='1' AND DATA_SOURCE_CATEGORY='TARGET'` | 只读 | — |
-| 策略列表 | EXTEND 全量 + 目标库名称/类型映射 | 无 | `DATA_SOURCE_ID=?`（EXTEND） | 只读 | 不读取/暴露密码 |
-| 策略新增 | — | `DATA_SOURCE_ID, TARGET_DATA_SOURCE_ID, TABLE_NAMING_STRATEGY, PREFIX, SUFFIX` | 插入 EXTEND | `@Transactional` | 不写主表/其他表 |
-| 策略编辑 | 当前行 | 当前行策略字段 + 目标库（可改） | `DATA_SOURCE_ID=? AND TARGET_DATA_SOURCE_ID=?`（原逻辑键） | `@Transactional` | 不写主表/其他表 |
-| 策略删除 | — | 物理删除当前 EXTEND 行 | `DATA_SOURCE_ID=? AND TARGET_DATA_SOURCE_ID=?`（原逻辑键） | `@Transactional` | 不清理存量多条 |
-| 连接测试 | 编辑未改密码时读取持久化密码 | 无（不写业务数据） | 一次性临时连接 | 无事务 | 不写任何业务表；不进入应用连接池 |
+| 业务属性读 | `DATA_SOURCE_BIZ_ATTR` | 无 | `DATA_SOURCE_ID=? AND UPPER(DATA_SOURCE_CATEGORY)='TARGET'`（记录须 `FG_ACTIVE='1'`） | 只读 | 其他列不动；角色不符拒绝（`40006`） |
+| 业务属性保存 | — | `DATA_SOURCE_BIZ_ATTR`（原样） | `DATA_SOURCE_ID=? AND UPPER(DATA_SOURCE_CATEGORY)='TARGET'`（记录须 `FG_ACTIVE='1'`） | `@Transactional` | 只更新该一列，不触碰其他字段/表；角色不符拒绝（`40006`） |
+| 目标候选 | 展示列 | 无 | `FG_ACTIVE='1' AND UPPER(DATA_SOURCE_CATEGORY)='TARGET'` | 只读 | — |
+| 策略列表 | EXTEND 全量 + 目标库名称/类型映射 | 无 | `DATA_SOURCE_ID=?`（EXTEND）；`sourceId` 记录须 `FG_ACTIVE='1' AND UPPER(DATA_SOURCE_CATEGORY)='SOURCE'` | 只读 | 不读取/暴露密码；角色不符拒绝（`40006`） |
+| 策略新增 | — | `DATA_SOURCE_ID, TARGET_DATA_SOURCE_ID, TABLE_NAMING_STRATEGY, PREFIX, SUFFIX` | 插入 EXTEND；`sourceId` 记录须 `FG_ACTIVE='1' AND UPPER(CATEGORY)='SOURCE'`，新目标库须 `FG_ACTIVE='1' AND UPPER(CATEGORY)='TARGET'` | `@Transactional` | 不写主表/其他表；角色不符拒绝（`40006`） |
+| 策略编辑 | 当前行 | 当前行策略字段 + 目标库（可改） | 原逻辑键 `DATA_SOURCE_ID=? AND TARGET_DATA_SOURCE_ID=?`；先 `COUNT(*)` 恰好 1 才 DML，DML 后校验受影响行数=1 | `@Transactional` | 不写主表/其他表；角色不符拒绝（`40006`） |
+| 策略删除 | — | 物理删除当前 EXTEND 行 | 原逻辑键 `DATA_SOURCE_ID=? AND TARGET_DATA_SOURCE_ID=?`；先 `COUNT(*)` 恰好 1 才 DML，DML 后校验受影响行数=1 | `@Transactional` | 不清理存量多条；角色不符拒绝（`40006`） |
+| 连接测试 | 编辑未改密码时按 `originalDataSourceId` 定位 `FG_ACTIVE='1'` 记录读取持久化密码 | 无（不写业务数据） | 一次性临时连接 | 无事务 | 不写任何业务表；不进入应用连接池；表单可编辑 `dataSourceId` 不用于读取旧密码 |
 
 ---
 
@@ -93,7 +95,7 @@
 - **修改主表 ID 不更新任何引用**：`UPDATE CDC_DATA_SOURCE SET DATA_SOURCE_ID=:new WHERE DATA_SOURCE_ID=:originalId`；不更新 `CDC_DATA_SOURCE_EXTEND.DATA_SOURCE_ID`、`TARGET_DATA_SOURCE_ID` 或其他表（`DS-REQ-041`）。
 - **删除数据源不检查、不级联**：`DELETE FROM CDC_DATA_SOURCE WHERE DATA_SOURCE_ID=?`；不检查/不删除/不更新 EXTEND 或其他表关联数据；被目标引用不阻塞（`DS-REQ-092`~`095`）。
 - **删除策略按原始逻辑组合键删除当前 EXTEND 行**：`DELETE FROM CDC_DATA_SOURCE_EXTEND WHERE DATA_SOURCE_ID=? AND TARGET_DATA_SOURCE_ID=?`（`DS-REQ-081`）。
-- **确定性 WHERE 与多行异常防护**：因 `CDC_DATA_SOURCE_EXTEND` 无物理主键，**不使用** MyBatis-Plus 依赖单一主键的不可控单记录更新/删除（`updateById`/`deleteById`）。策略新增/编辑/删除均先以**确定性 WHERE** 定位（返回受影响行数与行数校验），并要求匹配恰好一行；0 行 → `40401`，≥2 行 → `40903` 阻止操作。
+- **确定性 WHERE 与多行异常防护（目标设计不使用 `ROWNUM=1`）**：因 `CDC_DATA_SOURCE_EXTEND` 无物理主键，**不使用** MyBatis-Plus 依赖单一主键的不可控单记录更新/删除（`updateById`/`deleteById`），也**不使用 `ROWNUM=1`** 把多条匹配截断为一行。策略新增/编辑/删除前先按原逻辑组合键执行 `COUNT(*)`（或等价的全量计数）区分 0、1、≥2：0 行 → `40401` 不存在；≥2 行 → `40903` 存量多条异常阻止操作；只有计数**恰好为 1** 才允许 DML；DML 使用完整原逻辑键 WHERE，执行后校验受影响行数恰好为 1，否则抛出业务异常并依赖事务回滚（`DS-REQ-064`/`067`/`081`）。
 - **存量多条不清理**：若同一组合已有多条，保存被阻止并明确提示（`DS-REQ-067`），不清理存量（`DS-REQ-066`）。
 
 ---
@@ -106,7 +108,10 @@
 - **trim 参数**：所有字符串参数在绑定前 trim（唯一例外 `DATA_SOURCE_BIZ_ATTR`）（`DS-REQ-031`/`088`）。
 - **`FG_ACTIVE='1'` 固定过滤**：列表、详情、业务属性、目标候选、命名策略关联查询均只触及 `FG_ACTIVE='1'` 记录（`DS-REQ-002`）。
 - **默认 ID 升序**：列表 `ORDER BY DATA_SOURCE_ID ASC`（`DS-REQ-010`）。
-- **目标候选过滤**：`FG_ACTIVE='1' AND DATA_SOURCE_CATEGORY='TARGET'`（`DS-REQ-076`）。
+- **目标候选过滤**：`FG_ACTIVE='1' AND UPPER(DATA_SOURCE_CATEGORY)='TARGET'`（大小写兼容，`DS-REQ-076`）。
+- **角色大小写兼容**：新增/编辑只接受 `SOURCE`/`TARGET` 并保存统一大写；读取历史记录时对 `DATA_SOURCE_CATEGORY` 忽略大小写识别并向前端返回规范化 `SOURCE`/`TARGET`；角色条件查询统一使用大小写兼容比较（如 `UPPER(DATA_SOURCE_CATEGORY)='TARGET'`），仅为兼容存量大小写，不放宽到其他非法值（`DS-REQ-023`）。
+- **角色限定查询**：业务属性读取/保存仅针对 `FG_ACTIVE='1' AND UPPER(DATA_SOURCE_CATEGORY)='TARGET'` 记录；命名策略列表/新增/编辑/删除仅针对 `sourceId` 对应 `FG_ACTIVE='1' AND UPPER(DATA_SOURCE_CATEGORY)='SOURCE'` 记录，且新目标库须 `FG_ACTIVE='1' AND UPPER(DATA_SOURCE_CATEGORY)='TARGET'`（角色不符 → `40006`，`DS-REQ-069`/`076`/`082`）。
+- **命名策略逻辑键计数检查**：新增/编辑前对新逻辑键执行计数/存在性检查（0、1、≥2）；编辑/删除前按原逻辑键 `COUNT(*)` 恰好为 1 才执行 DML，DML 后校验受影响行数=1（`DS-REQ-064`/`067`）。
 - **不得直接承诺新增索引**：本设计不新增索引/DDL；查询基于现有已批准索引与 ≤100 行小规模数据，性能由表规模与现有结构保证（`DESIGN.md` §8）。
 
 ---
@@ -116,7 +121,7 @@
 - **密码读取/写入/测试边界**：
   - 写入：新增/编辑仅在主表 `DATA_SOURCE_PASSWORD` 列；编辑未改密码时请求体缺席、后端不动该列。
   - 读取：列表/详情/业务属性/命名策略任何响应**不读取、不返回**密码。
-  - 测试：编辑未改密码场景后端在临时连接构建阶段读取持久化密码，仅用于本次临时连接，不入日志/响应/异常（`DS-REQ-051`/`052`）。
+  - 测试：编辑未改密码场景请求携带 `originalDataSourceId`、`password` 缺席；后端只按 `originalDataSourceId` 定位 `FG_ACTIVE='1'` 记录，在临时连接构建阶段读取持久化密码，仅用于本次临时连接，不入日志/响应/异常（`DS-REQ-051`/`052`）。
 - **禁止日志输出**：不输出密码、完整连接串；业务消息/日志不含敏感信息（`DS-REQ-047`/`107`）。
 - **业务属性原样保存**：`DATA_SOURCE_BIZ_ATTR` 原样读写，不 trim、不校验 JSON（`DS-REQ-087`/`088`）。
 - **连接测试无业务 DML**：连接测试只建立临时 JDBC 连接并执行 `SELECT 1 FROM DUAL`/`SELECT 1`，不写任何业务数据、不触发任何业务 DML（`DS-REQ-061`/`109`）。
@@ -141,4 +146,4 @@
 | 策略删除 | 064,081 | 083 | DELETE `/api/data-sources/{sourceId}/naming-strategies/{targetId}` |
 | 连接测试 | 052,053,054,061,109 | 057,058,059,060,101,103,104 | POST `/api/data-sources/test-connection` |
 
-- 字段映射、逻辑组合键、错误码、事务/删除边界与 `DESIGN.md`、`API.md`、`UI.md` 保持一致。
+- 字段映射、逻辑组合键、错误码、角色大小写兼容与限定、事务/删除边界与 `DESIGN.md`、`API.md`、`UI.md` 保持一致。

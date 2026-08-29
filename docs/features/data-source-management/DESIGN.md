@@ -29,7 +29,7 @@
 | 前端页面 | `/config/data-source` 正式页面：无分页主列表、三条件查询、新增/编辑居中大弹窗、测试连接、业务属性弹窗（仅目标库）、命名策略大弹窗（仅源库）、删除交互；全部交互见 `UI.md` |
 | API 层 | 复用 `/api/data-sources` 根路径；无分页列表/详情/新增/编辑/删除/测试连接/业务属性/目标候选/命名策略 CRUD；接口契约见 `API.md` |
 | Service 层 | `DataSourceServiceImpl`（改造）：主数据源 CRUD、查询、测试连接、业务属性、目标候选；命名策略职责拆分到独立 Service（见 §1.4），只操作 `CDC_DATA_SOURCE_EXTEND` |
-| Mapper 层 | `DataSourceMapper`（复用）、`DataSourceExtendMapper`（复用）；扩展以确定性 WHERE + 显式 `ROWNUM=1`/多行防护，不用 MyBatis-Plus 不可控的单记录更新/删除 |
+| Mapper 层 | `DataSourceMapper`（复用）、`DataSourceExtendMapper`（复用）；扩展以确定性 WHERE + 全量计数（区分 0/1/≥2）+ DML 受影响行数校验；目标设计不使用 `ROWNUM=1` 截断多行，不用 MyBatis-Plus 不可控的单记录更新/删除 |
 | 数据层 | 两张已批准物理表：`CDC_DATA_SOURCE`（主数据源）、`CDC_DATA_SOURCE_EXTEND`（源库到目标库的命名策略）；物理结构、约束、索引见 `DATABASE.md` |
 
 ### 1.2 当前实现事实 vs 目标设计（分栏表达）
@@ -58,7 +58,7 @@
 | `datasource/entity/DataSource.java` | 保留，17 列映射不变 |
 | `datasource/entity/DataSourceExtend.java` | 改造：映射 5 列（补 `TARGET_DATA_SOURCE_ID`）；作为命名策略实体，不再当作 1:1 扩展 |
 | `datasource/mapper/DataSourceMapper.java` | 保留；如需确定性查询补充自定义 SQL 方法 |
-| `datasource/mapper/DataSourceExtendMapper.java` | 保留；补充确定性 WHERE 的自定义 SQL（显式 `ROWNUM=1`/无分页全量 + 多行防护） |
+| `datasource/mapper/DataSourceExtendMapper.java` | 保留；补充确定性 WHERE 的自定义 SQL（无分页全量计数 + 多行防护；目标设计不使用 `ROWNUM=1` 截断） |
 | `datasource/exception/DataSourceErrorCode.java` | 改造：保留兼容码，新增命名策略/目标库/测试连接相关业务码（见 `API.md` §7.5） |
 | `datasource/controller/DataSourceController.java` | 改造：收敛到 `/api/data-sources` 目标接口集，删除分页/启停/一对一扩展旧语义 |
 | `common/api/ApiResponse`、`common/exception/BusinessException`、`common/exception/GlobalExceptionHandler`、`common/page/PageResult` | 保留；无分页场景不再使用 `PageResult` |
@@ -92,7 +92,7 @@
 ### 2.1 页面初始化与无分页列表查询
 
 1. 进入 `/config/data-source`，前端调用 `GET /api/data-sources`（无分页参数）。
-2. 后端固定 `FG_ACTIVE='1'` 过滤（`DS-REQ-001`/`002`/`004`），默认 `DATA_SOURCE_ID` 升序（`DS-REQ-010`）；返回全部匹配记录。
+2. 后端固定 `FG_ACTIVE='1'` 过滤（`DS-REQ-001`/`002`/`004`），默认 `DATA_SOURCE_ID` 升序（`DS-REQ-010`）；返回全部匹配记录，其中 `dataSourceCategory` 为后端忽略大小写识别存量后规范化输出的 `SOURCE`/`TARGET`。
 3. 前端渲染列表；加载中、空数据、失败脱敏提示 + 重试状态见 `UI.md`（`DS-REQ-098`~`100`）。
 4. 三条件查询（数据源ID/名称/主机）为空时返回全部；不为空时按忽略大小写模糊匹配且多条件 AND（`DS-REQ-006`~`009`）。
 
@@ -101,19 +101,20 @@
 1. 主列表点"新增"，打开居中大弹窗（`DS-REQ-015`）。
 2. 弹窗字段仅：数据源ID、名称、类别、类型、主机、端口、用户名、密码、Service Name（`DS-REQ-019`/`020`）；类别可选 `SOURCE`|`TARGET`；类型按类别联动（源库仅 ORACLE；目标库 ORACLE/MYSQL/DORIS），角色变化导致类型非法时清空（`DS-REQ-024`/`025`）。
 3. 表单校验：ID/名称/类别/类型/主机/端口/用户/密码/Service Name 必填与长度、格式、范围（`DS-REQ-021`~`030`）；用户输入字符串除业务属性外 trim（`DS-REQ-031`）。
-4. 提交 `POST /api/data-sources`；后端独立校验 + 保存前查重（ID/名称忽略大小写精确比较，`DS-REQ-032`~`036`）。
+4. 提交 `POST /api/data-sources`；后端独立校验 + 保存前查重（ID/名称忽略大小写精确比较，`DS-REQ-032`~`036`）；类别只接受 `SOURCE`/`TARGET` 并保存统一大写（`DS-REQ-023`）。
 5. 插入 `CDC_DATA_SOURCE`：`FG_ACTIVE='1'`、`DATA_SOURCE_ORG=DATA_SOURCE_NAME`（`DS-REQ-004`/`037`）；不写其他表。
 6. 成功提示并刷新列表；防重复提交（`DS-REQ-017`/`018`/`101`/`102`）。
 
 ### 2.3 编辑数据源（含修改 ID、密码未改/已改）
 
 1. 双击行或点"编辑"，打开同一居中大弹窗并加载详情（`DS-REQ-013`/`014`/`103`）。
-2. 详情不含真实密码；密码框显示掩码 `*********`（UI 状态，非后端哨兵值）（`DS-REQ-043`/`044`/`046`）。
-3. 数据源 ID 可自由修改（`DS-REQ-021`）；提交 `PUT /api/data-sources/{originalId}`，`originalId` 为**编辑前原 ID**，用于定位主表当前记录。
-4. 密码未编辑：更新请求**不发送密码字段**（缺席），后端保留原值（`DS-REQ-045`）；密码已编辑：trim 后覆盖（`DS-REQ-045`/`031`）。
-5. 隐藏字段按已批准规则保留：`DATA_SOURCE_ORG` 保持原值、`SOURCE_APP`/`DOMAIN` 保留、`FG_ACTIVE` 不变、时间字段不动（`DS-REQ-037`~`040`）。
-6. 修改 ID 只更新主表当前记录，**不同步** `CDC_DATA_SOURCE_EXTEND.DATA_SOURCE_ID`、`TARGET_DATA_SOURCE_ID` 或其他表（`DS-REQ-041`）。
-7. 类别/类型变化只影响主表当前记录；成功提示并刷新列表。
+2. 前端在打开编辑弹窗时，单独保存**不可编辑的 `originalDataSourceId`**（值为打开弹窗时的原始主键）；表单中的"数据源 ID"仍是用户可自由修改的新值，不得用作"读取持久化旧密码"的定位键。
+3. 详情不含真实密码；密码框显示掩码 `*********`（UI 状态，非后端哨兵值）（`DS-REQ-043`/`044`/`046`）。
+4. 数据源 ID 可自由修改（`DS-REQ-021`）；提交 `PUT /api/data-sources/{originalId}`，`originalId` 即 `originalDataSourceId`（编辑前原 ID），用于定位主表当前记录。
+5. 密码未编辑：更新请求**不发送密码字段**（缺席），后端保留原值（`DS-REQ-045`）；密码已编辑：trim 后覆盖（`DS-REQ-045`/`031`）。
+6. 隐藏字段按已批准规则保留：`DATA_SOURCE_ORG` 保持原值、`SOURCE_APP`/`DOMAIN` 保留、`FG_ACTIVE` 不变、时间字段不动（`DS-REQ-037`~`040`）。
+7. 修改 ID 只更新主表当前记录，**不同步** `CDC_DATA_SOURCE_EXTEND.DATA_SOURCE_ID`、`TARGET_DATA_SOURCE_ID` 或其他表（`DS-REQ-041`）。
+8. 类别/类型变化只影响主表当前记录；成功提示并刷新列表。
 
 ### 2.4 删除数据源
 
@@ -133,9 +134,10 @@
 6. 修改任一连接字段后，已成功的测试结果失效（`DS-REQ-060`）。
 
 编辑弹窗：
-1. 密码未改：测试连接时后端安全读取**持久化原密码**，仅用于本次临时连接，不写日志/响应（`DS-REQ-051`/`052`）。
-2. 密码已改：使用请求中的新密码（`DS-REQ-051`）。
-3. 其余同新增（倒计时、超时、脱敏、非前置条件）。
+1. 密码未改：测试连接请求携带 `originalDataSourceId`（编辑前原主键）、`password` 字段缺席；后端只按 `originalDataSourceId` 定位 `FG_ACTIVE='1'` 记录并读取**持久化原密码**，仅用于本次临时连接，不写日志/响应（`DS-REQ-051`/`052`）。
+2. 密码已改：使用请求中的新密码；可携带 `originalDataSourceId` 表明编辑上下文，但不得读取或混用旧密码（`DS-REQ-051`）。
+3. 修改表单中当前 `dataSourceId` 后测试连接且密码未修改时，仍必须使用原记录密码（按 `originalDataSourceId` 定位）。
+4. 其余同新增（倒计时、超时、脱敏、非前置条件）。
 
 ### 2.6 业务属性读取与保存（仅目标库）
 
@@ -144,6 +146,7 @@
 3. 读取：`GET /api/data-sources/{id}/biz-attr`；保存：`PUT /api/data-sources/{id}/biz-attr`。
 4. 保存**原样传输**，不 trim、不校验 JSON（`DS-REQ-087`/`088`）；只更新主表 `DATA_SOURCE_BIZ_ATTR` 一列（`DS-REQ-109`）。
 5. 成功提示并刷新（`DS-REQ-089`）；未保存修改关闭弹窗需确认（`DS-REQ-090`）。
+6. **角色限定**：后端在读取/保存前必须校验被操作记录 `FG_ACTIVE='1'` 且当前角色为 `TARGET`（按 `UPPER(DATA_SOURCE_CATEGORY)='TARGET'` 识别）；绕过前端直接调用源库业务属性接口时，返回"数据源角色不适用于当前操作"业务码（`API.md` §7.5）并拒绝操作。角色校验只拦截本次操作，不清理、不迁移、不级联其他数据（`DS-REQ-040`）。
 
 ### 2.7 命名策略列表、新增、编辑、删除（仅源库）
 
@@ -154,6 +157,7 @@
 5. 编辑：按原 `(sourceId, targetId)` 定位；切换目标库时请求同时携带原目标 ID 与新目标 ID（`API.md` §7.2）；提交 `PUT /api/data-sources/{sourceId}/naming-strategies/{originalTargetId}`。
 6. 删除：行操作删除，二次确认（`DS-REQ-081`）；`DELETE /api/data-sources/{sourceId}/naming-strategies/{targetId}`，只删除逻辑键定位的当前 EXTEND 行（`DS-REQ-081`）。
 7. 同一弹窗内新增/编辑表单（`DS-REQ-074`）；未保存修改关闭确认（`DS-REQ-075`）；成功反馈（`DS-REQ-102`）。
+8. **角色限定**：后端在列表/新增/编辑/删除前必须校验 `sourceId` 对应记录 `FG_ACTIVE='1'` 且当前角色为 `SOURCE`（按 `UPPER(DATA_SOURCE_CATEGORY)='SOURCE'` 识别）；绕过前端直接调用目标库命名策略接口时返回"数据源角色不适用于当前操作"业务码并拒绝操作（`API.md` §7.5）。新增/编辑的新目标库 `targetDataSourceId` 仍必须校验 `FG_ACTIVE='1'` 且当前角色为 `TARGET`（`DS-REQ-076`）。
 
 ### 2.8 查询、加载、保存、删除、测试失败的统一处理
 
@@ -172,11 +176,12 @@
 | 删除数据源 | 只物理删除主表当前记录 | `@Transactional` | 不检查、不删除、不级联 EXTEND 或其他表；被引用不阻塞 |
 | 业务属性保存 | 只更新主表 `DATA_SOURCE_BIZ_ATTR` 一列 | `@Transactional` | 原样保存，不 trim、不校验 JSON |
 | 命名策略新增/编辑/删除 | 只操作 `CDC_DATA_SOURCE_EXTEND` | `@Transactional` | 与主表保存完全解耦 |
-| 删除命名策略 | 只删除逻辑键定位的当前 EXTEND 行 | `@Transactional` | 确定性 WHERE；多行异常防护 |
-| 目标库候选查询 | 只读 `CDC_DATA_SOURCE` | 只读（无事务写） | `FG_ACTIVE='1' AND DATA_SOURCE_CATEGORY='TARGET'` |
+| 删除命名策略 | 只删除逻辑键定位的当前 EXTEND 行 | `@Transactional` | 先按原逻辑键全量计数，恰好 1 才 DML；DML 后校验受影响行数=1，否则回滚（`DS-REQ-081`/`067`） |
+| 目标库候选查询 | 只读 `CDC_DATA_SOURCE` | 只读（无事务写） | `FG_ACTIVE='1' AND UPPER(DATA_SOURCE_CATEGORY)='TARGET'` |
 | 测试连接 | 无业务表写入 | 无事务 | 一次性临时连接；不进入应用连接池；不保存表单内容 |
 
 - 单表操作失败即回滚该操作；命名策略与主数据源相互独立，互不级联。
+- 命名策略新增/编辑/删除均先按**原逻辑组合键**执行 `COUNT(*)`（或等价的全量计数）：0 行 → `40401` 不存在；≥2 行 → `40903` 存量多条异常；只有计数**恰好为 1** 才允许 DML；DML 使用完整原逻辑键 WHERE，执行后校验受影响行数恰好为 1，否则抛出业务异常并依赖事务回滚，避免误更新/误删多行。目标设计不使用 `ROWNUM=1` 截断（`DS-REQ-064`/`067`/`081`）。
 - 测试连接**不写任何业务数据**，不触发 DML（`DS-REQ-061`/`109`）。
 
 ---
@@ -184,8 +189,9 @@
 ## 4. 逻辑唯一性与并发边界（§6.4）
 
 - ID、名称唯一性：后端**保存前**按忽略大小写的精确比较查重（`DS-REQ-032`/`033`/`034`）；编辑查重排除当前原记录/原逻辑键（`DS-REQ-035`）。
-- 命名策略逻辑键 `(DATA_SOURCE_ID, TARGET_DATA_SOURCE_ID)`：后端保存前逻辑联合查重（`DS-REQ-064`/`065`）；编辑排除原逻辑键。
-- **第一版无数据库唯一约束、索引或任何 DDL**（`DS-REQ-034`/`065`/`108`）。因此"查询后写入"**不宣称**具备数据库级并发唯一保证：并发窗口内两个请求同时通过查重后都写入是可能发生的。这是已批准需求接受的限制。
+- 命名策略逻辑键 `(DATA_SOURCE_ID, TARGET_DATA_SOURCE_ID)`：后端保存前逻辑联合查重（`DS-REQ-064`/`065`）；编辑排除原逻辑键。查重/存在性检查使用明确计数并能区分 0、1、≥2；新增/编辑的重复/存量多条均阻止并提示（`DS-REQ-067`）。
+- 编辑/删除：先按原逻辑组合键执行 `COUNT(*)` 或等价的全量计数，只有计数**恰好为 1** 才允许 DML；DML 后校验受影响行数恰好为 1，否则抛业务异常并依赖事务回滚。目标设计不使用 `ROWNUM=1` 掩盖多行异常。
+- **第一版无数据库唯一约束、索引或任何 DDL**（`DS-REQ-034`/`065`/`108`）。因此"查询后写入"**不宣称**具备数据库级并发唯一保证：无数据库唯一约束、无锁、无 DDL 时并发窗口仍然存在，两个请求同时通过查重后都写入是可能发生的。这是已批准需求接受的限制，不虚假宣称数据库级唯一保证。
 - 本设计**不新增**本地锁、分布式锁或 DDL。若后续实现发现必须新增才能满足需求，停止并报告，由用户决策，不得自行加入（§11）。
 
 ---
@@ -196,7 +202,8 @@
 - 编辑页掩码 `*********` 仅为 **UI 状态**，不是后端哨兵值；后端不识别、不依赖该字符串（`DS-REQ-044`/`046`）。
 - 密码未编辑时，更新请求**不发送密码字段**（字段缺席），后端保留原值（`DS-REQ-045`）。
 - 输入新密码时 trim 后覆盖（`DS-REQ-045`/`031`）。
-- 编辑场景测试连接未改密码时，后端安全读取数据库原密码，**仅用于本次临时连接**，不进入日志/响应/异常（`DS-REQ-051`/`052`）。
+- 编辑场景测试连接未改密码时，请求携带 `originalDataSourceId`（编辑前原主键）、`password` 字段缺席；后端只按 `originalDataSourceId` 定位 `FG_ACTIVE='1'` 记录并安全读取数据库原密码，**仅用于本次临时连接**，不进入日志/响应/异常（`DS-REQ-051`/`052`）。
+- 表单中可编辑的 `dataSourceId` 不得作为读取持久化密码的定位键；不向前端返回真实密码、不以掩码字符串当哨兵、不把原密码/连接串/堆栈写入日志或响应（`DS-REQ-044`/`046`/`047`/`107`）。
 - 密码不进入日志、响应、异常或执行报告（`DS-REQ-047`/`107`）；失败原因脱敏（`DS-REQ-059`）。
 - 当前系统无认证机制；本 Feature **不新增认证**（§11 边界，保持已批准范围）。
 
@@ -222,6 +229,9 @@
 
 - **前后端双重校验**：前端即时提示（Element Plus 表单规则），后端独立校验兜底（`DS-REQ-106`）。
 - 校验字段范围见 `DS-REQ-021`~`030`（ID/名称/类别/类型/主机/端口/用户/密码/Service Name 的必填、长度、格式、值域）；端口 1~65535；ID `[A-Za-z0-9_-]` ≤32。
+- **端口类型契约**：API 请求/响应中 `port` 为 JSON number / Java `Integer`，示例写 `1521` 不加引号；前端表单模型使用数值端口，只接受整数 1..65535；后端 DTO 独立重新校验整数与范围。数据库物理列仍为 `VARCHAR2(64)`（已批准物理事实），持久化边界显式执行 `Integer ↔ 十进制字符串` 转换，不修改数据库字段、不执行 DDL（`DS-REQ-027`）。
+- **角色大小写兼容**：新增/编辑请求只接受 `SOURCE`/`TARGET` 并保存为统一大写；读取历史记录时对 `DATA_SOURCE_CATEGORY` 忽略大小写识别并向前端返回规范化 `SOURCE`/`TARGET`；角色条件查询使用大小写兼容比较（如 `UPPER(DATA_SOURCE_CATEGORY)='TARGET'`），仅为兼容既有存量大小写，不放宽到其他非法值（`DS-REQ-023`）。
+- **新引用 ID 业务长度**：`targetDataSourceId` 的 API 业务长度按主数据源 ID 上限 32 校验；数据库物理列 `VARCHAR2(128)` 为物理事实保留，不得把物理容量误当作新引用 ID 的业务长度（`DS-REQ-078`）。
 - **角色—类型联动**：源库仅 ORACLE；目标库 ORACLE/MYSQL/DORIS；角色变化导致类型非法时清空类型（`DS-REQ-024`/`025`）。
 - **三条件查询**：数据源ID/名称/主机，忽略大小写模糊，多条件 AND，字符串 trim（`DS-REQ-006`~`009`/`031`）。
 - **trim 例外**：所有用户输入字符串均 trim，**唯一例外**为 `DATA_SOURCE_BIZ_ATTR`（原样保存，不 trim、不校验 JSON）（`DS-REQ-031`/`088`）。

@@ -73,12 +73,13 @@
 | 编辑（密码未修改） | `password` **缺席**（请求体不含该字段） | 详情不含真实密码 | 保留数据库原密码 |
 | 编辑（密码已修改） | `password` 为 trim 后新密码 | 详情不含真实密码 | 覆盖原密码 |
 | 测试连接（新增） | 使用请求体中的表单密码 | — | 临时连接使用该密码 |
-| 测试连接（编辑未改密码） | `password` 缺席，携带 `dataSourceId` | — | 后端安全读取持久化原密码，仅本次临时连接使用 |
+| 测试连接（编辑未改密码） | `password` 缺席，携带 `originalDataSourceId`（编辑前原主键） | — | 后端只按 `originalDataSourceId` 定位 `FG_ACTIVE='1'` 记录并读取持久化原密码，仅本次临时连接使用；表单中可编辑的 `dataSourceId` 不得用于读取旧密码 |
 | 测试连接（编辑已改密码） | `password` 为 trim 后新密码 | — | 临时连接使用该密码 |
 
 - 掩码 `*********` 仅为前端 UI 状态；**前端绝不提交该字符串**，后端也不把任何字符串当作"保留旧密码"的魔法哨兵（`DS-REQ-044`/`046`/`045`）。
 - 任何响应（列表、详情、业务属性、命名策略、测试连接）均不含密码或敏感连接串（`DS-REQ-042`/`043`/`047`/`107`）。
 - 测试连接读取持久化密码仅发生在后端临时连接构建阶段，不进入日志、响应、异常（`DS-REQ-051`/`052`）。
+- `originalDataSourceId` 与表单可编辑 `dataSourceId` 语义分离：前者为打开编辑弹窗时的原始主键（只读，用于定位记录与读取持久化密码），后者为用户可修改的新值（用于最终保存）。测试连接未改密码时只按 `originalDataSourceId` 读取旧密码。
 
 ---
 
@@ -124,7 +125,7 @@
     "dataSourceCategory": "SOURCE",
     "dataSourceType": "ORACLE",
     "host": "10.0.0.1",
-    "port": "1521",
+    "port": 1521,
     "serviceName": "prod",
     "userName": "cdc"
   }
@@ -132,6 +133,7 @@
 ```
 
 - 不含密码、`dataSourceOrg`、`bizAttr`、`dataSourceDomain`、`fgActive`、时间字段、`sourceApp`（`DS-REQ-011`/`012`）。
+- `port` 为 JSON number；`dataSourceCategory` 为规范化 `SOURCE`/`TARGET`（后端忽略大小写识别存量后输出）。
 
 ### 4.2 GET /api/data-sources/{id}（详情）
 
@@ -144,13 +146,13 @@
   "dataSourceCategory": "SOURCE",
   "dataSourceType": "ORACLE",
   "host": "10.0.0.1",
-  "port": "1521",
+  "port": 1521,
   "serviceName": "prod",
   "userName": "cdc"
 }
 ```
 
-不含真实密码（`DS-REQ-043`）；前端据此初始化为"密码未修改"状态。`id` 不存在 → `40400`。
+不含真实密码（`DS-REQ-043`）；前端据此初始化为"密码未修改"状态。`port` 为 JSON number；`dataSourceCategory` 为规范化 `SOURCE`/`TARGET`。`id` 不存在 → `40400`。
 
 ### 4.3 POST /api/data-sources（新增）
 
@@ -163,7 +165,7 @@
   "dataSourceCategory": "SOURCE",
   "dataSourceType": "ORACLE",
   "host": "10.0.0.1",
-  "port": "1521",
+  "port": 1521,
   "userName": "cdc",
   "password": "secret",
   "serviceName": "prod"
@@ -184,13 +186,15 @@
 | `password` | 是 | string ≤64 | 新增必填 |
 | `serviceName` | 是 | string ≤64 | — |
 
+- 类别字段只接受 `SOURCE`/`TARGET`，后端保存为统一大写（`DS-REQ-023`）；`port` 为 JSON number / Java `Integer`，后端 DTO 独立校验整数 1..65535，持久化边界做 `Integer ↔ 十进制字符串` 转换（数据库列 `VARCHAR2(64)`，不 DDL，见 `DATABASE.md` §1.1）。
+
 后端：校验必填/长度/值域/角色-类型联动/ID+名称查重；插入 `CDC_DATA_SOURCE` 时写 `FG_ACTIVE='1'`、`DATA_SOURCE_ORG=DATA_SOURCE_NAME`，不写其他表。响应 `data` 为新记录 `dataSourceId`。
 
 ### 4.4 PUT /api/data-sources/{originalId}（编辑）
 
-`originalId` = 编辑前原 `DATA_SOURCE_ID`（用于定位主表当前记录；ID 可修改，见 `DS-REQ-021`）。
+`originalId` = 编辑前原 `DATA_SOURCE_ID`（用于定位主表当前记录；ID 可修改，见 `DS-REQ-021`）。前端在打开编辑弹窗时单独保存不可编辑的 `originalDataSourceId`（即 `originalId`）；表单中的 `dataSourceId` 为可修改的新值，不作为读取持久化旧密码的定位键（测试连接见 §4.6）。
 
-请求体：同 §4.3，但 **`password` 可缺席**（未修改时缺席，见 §3）；`dataSourceId` 若改变表示修改 ID。
+请求体：同 §4.3，但 **`password` 可缺席**（未修改时缺席，见 §3）；`dataSourceId` 若改变表示修改 ID；类别只接受 `SOURCE`/`TARGET` 并保存统一大写。
 
 后端：只更新主表当前记录；隐藏字段保留原值（`dataSourceOrg`、`sourceApp`、`dataSourceDomain`、`fgActive`、时间字段）；修改 ID 只改主表、不同步 EXTEND 或其他表（`DS-REQ-038`~`041`）。查重排除当前记录（`DS-REQ-035`）。响应 `data` 为编辑后 `dataSourceId`。
 
@@ -200,22 +204,23 @@
 
 ### 4.6 POST /api/data-sources/test-connection（测试连接）
 
-请求体：
+请求体（编辑未改密码场景示例：`password` 缺席，携带 `originalDataSourceId`）：
 
 ```json
 {
-  "dataSourceId": "DS01",
+  "originalDataSourceId": "DS01",
   "dataSourceType": "ORACLE",
   "host": "10.0.0.1",
-  "port": "1521",
+  "port": 1521,
   "userName": "cdc",
-  "password": "secret",
   "serviceName": "prod"
 }
 ```
 
-- `dataSourceId` 可缺席（新增场景）；`password` 可缺席（编辑未改密码场景，此时须有 `dataSourceId` 以读取持久化密码）。
-- 字段校验与 §4.3 一致；非法类型 → `40002`。
+- `dataSourceId`：可缺席（新增场景亦可不带，仅为上下文），**不得用作读取持久化密码的定位键**。
+- `originalDataSourceId`：可缺席（新增场景缺席，此时 `password` 必填）；编辑未改密码场景**必填**，后端只按它定位 `FG_ACTIVE='1'` 记录并读取持久化密码（`DS-REQ-051`/`052`）。
+- `password`：可缺席（编辑未改密码场景缺席，此时必须携带 `originalDataSourceId`）；新增场景必填；编辑已改密码场景为 trim 后新密码。
+- `port` 为 JSON number（Java `Integer`），1..65535；字段校验与 §4.3 一致；非法类型 → `40002`；按 `originalDataSourceId` 定位不到 `FG_ACTIVE='1'` 记录 → `40400`。
 
 响应 `data`（连接成功与失败均返回该结构，HTTP 200；**失败不抛业务异常**）：
 
@@ -232,7 +237,7 @@
 
 ### 4.7 GET /api/data-sources/target-options（目标库候选）
 
-响应 `data`（`FG_ACTIVE='1' AND DATA_SOURCE_CATEGORY='TARGET'` 的全部记录）：
+响应 `data`（`FG_ACTIVE='1' AND DATA_SOURCE_CATEGORY='TARGET'` 的大小写兼容查询的全部记录，返回规范化 `SOURCE`/`TARGET`）：
 
 ```json
 [
@@ -255,7 +260,8 @@
 }
 ```
 
-`bizAttr` 原样返回，不 trim、不校验 JSON。
+- `bizAttr` 原样返回，不 trim、不校验 JSON。
+- 后端先校验该记录 `FG_ACTIVE='1'` 且当前角色为 `TARGET`（按 `UPPER(DATA_SOURCE_CATEGORY)='TARGET'` 识别）；否则返回"数据源角色不适用于当前操作"（§5.2 `40006`）。记录不存在 → `40400`。
 
 ### 4.9 PUT /api/data-sources/{id}/biz-attr（业务属性保存）
 
@@ -268,11 +274,12 @@
 ```
 
 - `bizAttr` 可为空字符串；原样保存，不 trim、不校验 JSON（`DS-REQ-086`/`087`/`088`）。
+- 后端先校验该记录 `FG_ACTIVE='1'` 且当前角色为 `TARGET`（按 `UPPER(DATA_SOURCE_CATEGORY)='TARGET'` 识别）；否则返回"数据源角色不适用于当前操作"（§5.2 `40006`）。记录不存在 → `40400`。
 - 后端只更新主表当前记录 `DATA_SOURCE_BIZ_ATTR` 一列，不触碰其他字段/表（`DS-REQ-109`）。响应 `data=null`。
 
 ### 4.10 GET /api/data-sources/{sourceId}/naming-strategies（命名策略列表）
 
-路径参数 `sourceId` = 源库 `DATA_SOURCE_ID`。响应 `data`（无分页，按目标库 ID 升序）：
+路径参数 `sourceId` = 源库 `DATA_SOURCE_ID`。后端先校验 `sourceId` 对应记录 `FG_ACTIVE='1'` 且当前角色为 `SOURCE`（按 `UPPER(DATA_SOURCE_CATEGORY)='SOURCE'` 识别）；否则返回"数据源角色不适用于当前操作"（§5.2 `40006`）。响应 `data`（无分页，按目标库 ID 升序）：
 
 ```json
 [
@@ -307,20 +314,20 @@
 
 | 字段 | 必填 | 类型/长度 | 说明 |
 |---|---|---|---|
-| `targetDataSourceId` | 是 | string ≤128 | 必须为有效目标库（`FG_ACTIVE='1' AND CATEGORY='TARGET'`，否则 `40005`） |
+| `targetDataSourceId` | 是 | string ≤32（业务） | 必须为有效目标库（`FG_ACTIVE='1' AND CATEGORY='TARGET'`，否则 `40005`）；物理列 `VARCHAR2(128)` 事实见 `DATABASE.md` §1.2 |
 | `tableNamingStrategy` | 是 | string | `TABLE_MERGE` / `CUSTOM_PREFIX_SUFFIX` |
 | `tableNamePrefix` | 否* | string ≤128 | `TABLE_MERGE` 时清空；`CUSTOM_PREFIX_SUFFIX` 时必填 |
 | `tableNameSuffix` | 否* | string ≤128 | 同上 |
 
-*必填规则按策略联动（`DS-REQ-079`/`080`）；前后缀 trim。后端按逻辑键 `(sourceId, targetDataSourceId)` 保存前查重：已存在 1 条 → `40902`；已存在多条 → `40903`。响应 `data=null`。
+*必填规则按策略联动（`DS-REQ-079`/`080`）；前后缀 trim。后端先校验 `sourceId` 记录 `FG_ACTIVE='1'` 且角色 `SOURCE`，再校验新目标库 `FG_ACTIVE='1'` 且角色 `TARGET`（角色不符 → `40006`）；按新逻辑键 `(sourceId, targetDataSourceId)` 执行计数检查：已存在 1 条 → `40902`；已存在多条 → `40903`。响应 `data=null`。
 
 ### 4.12 PUT /api/data-sources/{sourceId}/naming-strategies/{originalTargetId}（命名策略编辑）
 
-请求体：同 §4.11，其中 `targetDataSourceId` 为**新目标库 ID**（未切换则与原值相同）。后端按 `(sourceId, originalTargetId)` 定位恰好一行后更新；新逻辑键查重排除当前行（重复 → `40902`；存量多条 → `40903`）。响应 `data=null`。
+请求体：同 §4.11，其中 `targetDataSourceId` 为**新目标库 ID**（未切换则与原值相同）。后端先校验 `sourceId` 记录 `FG_ACTIVE='1'` 且角色 `SOURCE`、新目标库 `FG_ACTIVE='1'` 且角色 `TARGET`（角色不符 → `40006`；目标库无效 → `40005`）。按原逻辑键 `(sourceId, originalTargetId)` 先执行 `COUNT(*)`：0 行 → `40401`；≥2 行 → `40903`；只有计数恰好为 1 才执行 DML，且 DML 后校验受影响行数=1。新逻辑键查重排除当前行（重复 → `40902`；存量多条 → `40903`）。响应 `data=null`。
 
 ### 4.13 DELETE /api/data-sources/{sourceId}/naming-strategies/{targetId}（命名策略删除）
 
-路径参数为原逻辑键。后端按 `(sourceId, targetId)` 定位恰好一行后物理删除该 EXTEND 行；0 行 → `40401`；≥2 行 → `40903`（不清理存量）。响应 `data=null`。
+路径参数为原逻辑键。后端先校验 `sourceId` 记录 `FG_ACTIVE='1'` 且角色 `SOURCE`（角色不符 → `40006`）。按原逻辑键 `(sourceId, targetId)` 先执行 `COUNT(*)`：0 行 → `40401`；≥2 行 → `40903`（不清理存量）；只有计数恰好为 1 才执行 DML，且 DML 后校验受影响行数=1。响应 `data=null`。
 
 ---
 
@@ -344,7 +351,7 @@
 
 | code | 含义 | 触发 |
 |---|---|---|
-| 40400 | 数据源不存在 | 详情/编辑/删除/业务属性/测试连接（`dataSourceId` 定位）找不到记录 |
+| 40400 | 数据源不存在 | 详情/编辑/删除/业务属性/测试连接（`{id}`/`originalDataSourceId` 定位）找不到记录 |
 | 40900 | 数据源 ID 重复 | 新增/编辑 ID 查重冲突（`DS-REQ-032`/`035`） |
 | 40901 | 数据源名称重复 | 新增/编辑名称查重冲突（`DS-REQ-033`/`035`） |
 | 40001 | 角色非法 | `dataSourceCategory` 非 `SOURCE`/`TARGET` |
@@ -358,6 +365,7 @@
 | code | 含义 | 触发 |
 |---|---|---|
 | 40005 | 目标库无效 | `targetDataSourceId` 不存在、非 `FG_ACTIVE='1'` 或非 `TARGET` 类别 |
+| 40006 | 数据源角色不适用于当前操作 | 业务属性操作目标库、命名策略操作源库/目标候选时的角色不符（记录 `FG_ACTIVE='1'` 但角色非本次操作所需） |
 | 40401 | 命名策略不存在 | 按逻辑键编辑/删除定位不到记录 |
 | 40902 | 命名策略逻辑键重复 | 新增/编辑使 `(sourceId, targetDataSourceId)` 与已有行重复 |
 | 40903 | 命名策略存量多条异常 | 按逻辑键定位出现 ≥2 行（保存/编辑/删除被阻止，不清理存量） |
@@ -380,6 +388,7 @@
 | 命名策略逻辑键重复 | HTTP 200，`40902`，消息如"该源库到该目标库的命名策略已存在" |
 | 命名策略存量多条异常 | HTTP 200，`40903`，消息如"检测到重复命名策略数据，保存被阻止" |
 | 目标库无效 | HTTP 200，`40005`，消息"目标库无效或已停用" |
+| 数据源角色不适用于当前操作 | HTTP 200，`40006`，消息"数据源角色不适用于当前操作" |
 | 保存/删除失败 | HTTP 200，`50000`/`50001`，通用失败消息 |
 | 测试连接失败 | HTTP 200，`data.success=false` + 脱敏消息（不抛业务异常） |
 | 未知异常 | HTTP 500，`500`，"服务器内部错误" |
@@ -406,6 +415,12 @@
 - 后端：`DataSourceController` 是 `/api/data-sources` 的**唯一**后端入口；`backend/src/test/.../DataSourceControllerTest.java` 覆盖旧 7 接口（含 enable/disable），实现阶段须同步适配到目标接口（本任务不修改测试）。
 - 前端：当前 `DataSourcePage.vue` 为占位页，路由/菜单保持既有值不变，**无真实调用者**；旧历史候选文档 `docs/api/data-source-api.md` 描述的旧接口将被目标接口取代。
 - 本设计只能陈述**仓库内证据**；不声明外部系统无调用者。兼容策略：旧的分页/启停/一对一 EXTEND 接口语义不再提供；如有仓库外调用者，须由用户评估迁移（不在本任务范围）。
+
+### 6.3 契约调整说明（本草案相对旧候选/历史文档）
+
+- **端口类型**：目标契约 `port` 为 JSON number / Java `Integer`（示例 `1521`）；旧候选/历史文档若以字符串形式返回或存储端口属现状差距，实现阶段在持久化边界做 `Integer ↔ 十进制字符串` 转换（数据库列 `VARCHAR2(64)` 不变，不 DDL）。
+- **测试连接密码读取**：编辑未改密码场景使用独立字段 `originalDataSourceId` 读取持久化密码，不复用表单可编辑 `dataSourceId`。
+- **角色大小写兼容**：写入统一大写、读取忽略大小写规范化为 `SOURCE`/`TARGET`；业务属性/命名策略接口在角色不符时返回 `40006`。
 
 ---
 
