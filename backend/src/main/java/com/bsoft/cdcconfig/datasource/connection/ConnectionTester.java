@@ -5,6 +5,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 import org.springframework.util.StringUtils;
 
+import javax.annotation.PreDestroy;
 import java.net.ConnectException;
 import java.net.SocketTimeoutException;
 import java.net.UnknownHostException;
@@ -13,13 +14,17 @@ import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Statement;
 import java.time.Duration;
+import java.util.Properties;
+import java.util.concurrent.ArrayBlockingQueue;
+import java.util.concurrent.BlockingQueue;
 import java.util.concurrent.ExecutionException;
-import java.util.concurrent.ExecutorService;
-import java.util.concurrent.Executors;
 import java.util.concurrent.Future;
+import java.util.concurrent.RejectedExecutionException;
 import java.util.concurrent.ThreadFactory;
+import java.util.concurrent.ThreadPoolExecutor;
 import java.util.concurrent.TimeUnit;
 import java.util.concurrent.TimeoutException;
+import java.util.concurrent.atomic.AtomicBoolean;
 
 @Component
 public class ConnectionTester {
@@ -29,9 +34,13 @@ public class ConnectionTester {
 
     private static final Duration DEFAULT_DEADLINE = Duration.ofSeconds(TIMEOUT_SECONDS);
 
+    private static final int MAX_CONCURRENT_CONNECTIONS = 2;
+    private static final int MAX_QUEUE_CAPACITY = 2;
+
     private final ConnectionFactory connectionFactory;
     private final Duration deadline;
-    private final ExecutorService executor;
+    private final ThreadPoolExecutor executor;
+    private final AtomicBoolean shuttingDown = new AtomicBoolean(false);
 
     @Autowired
     public ConnectionTester(ConnectionFactory connectionFactory) {
@@ -46,12 +55,44 @@ public class ConnectionTester {
             t.setDaemon(true);
             return t;
         };
-        this.executor = Executors.newFixedThreadPool(2, daemonFactory);
+        // 明确有界：固定 2 个工作线程 + 有界队列，饱和直接拒绝（AbortPolicy）。
+        // 不使用 Executors.newFixedThreadPool 的无界队列，避免两个不可中断的连接尝试
+        // 耗尽线程后让后续请求无限排队。
+        this.executor = new ThreadPoolExecutor(
+                MAX_CONCURRENT_CONNECTIONS,
+                MAX_CONCURRENT_CONNECTIONS,
+                0L, TimeUnit.MILLISECONDS,
+                new ArrayBlockingQueue<Runnable>(MAX_QUEUE_CAPACITY),
+                daemonFactory,
+                new ThreadPoolExecutor.AbortPolicy());
     }
 
-    /** 供单元测试释放受控执行器；生产环境线程为 daemon，随 JVM 退出。 */
+    /** 供单元测试释放受控执行器；生产关闭路径见 {@link #shutdown()}。 */
     void close() {
+        shutdownNowQuietly();
+    }
+
+    /** Spring Bean 销毁时可靠关闭执行器并等待有限时间。 */
+    @PreDestroy
+    public void shutdown() {
+        shutdownNowQuietly();
+    }
+
+    private void shutdownNowQuietly() {
+        if (!shuttingDown.compareAndSet(false, true)) {
+            return;
+        }
         executor.shutdownNow();
+        try {
+            executor.awaitTermination(5, TimeUnit.SECONDS);
+        } catch (InterruptedException e) {
+            Thread.currentThread().interrupt();
+        }
+    }
+
+    /** 仅测试可见：暴露执行器以验证有界队列与生命周期行为。 */
+    ThreadPoolExecutor executor() {
+        return executor;
     }
 
     public TestConnectionResultVO test(String type, String host, Integer port, String userName,
@@ -62,8 +103,7 @@ public class ConnectionTester {
         long timeoutMs = deadline.toMillis();
         if (isMySqlProtocol(type)) {
             driver = "com.mysql.cj.jdbc.Driver";
-            url = "jdbc:mysql://" + host + ":" + port + "/" + serviceName
-                    + "?connectTimeout=" + timeoutMs + "&socketTimeout=" + timeoutMs;
+            url = "jdbc:mysql://" + host + ":" + port + "/" + serviceName;
             probeSql = "SELECT 1";
         } else {
             driver = "oracle.jdbc.OracleDriver";
@@ -71,11 +111,19 @@ public class ConnectionTester {
             probeSql = "SELECT 1 FROM DUAL";
         }
 
+        Properties connectionProperties = buildConnectionProperties(type, timeoutMs);
+
         String finalDriver = driver;
         String finalUrl = url;
         String finalProbeSql = probeSql;
-        Future<TestConnectionResultVO> future = executor.submit(() ->
-                probe(finalDriver, finalUrl, userName, password, finalProbeSql));
+        long submitNanos = System.nanoTime();
+        Future<TestConnectionResultVO> future;
+        try {
+            future = executor.submit(() ->
+                    probe(finalDriver, finalUrl, connectionProperties, userName, password, finalProbeSql, submitNanos));
+        } catch (RejectedExecutionException e) {
+            return new TestConnectionResultVO(false, "连接失败：连接繁忙");
+        }
         try {
             return future.get(timeoutMs, TimeUnit.MILLISECONDS);
         } catch (TimeoutException e) {
@@ -89,11 +137,33 @@ public class ConnectionTester {
         }
     }
 
-    private TestConnectionResultVO probe(String driver, String url, String userName,
-                                         String password, String probeSql) throws Exception {
-        try (Connection connection = connectionFactory.open(url, driver, userName, password)) {
+    /**
+     * 驱动级连接/读取级超时属性，只作用于当前临时连接，不写全局 JDBC 状态。
+     * Oracle：oracle.net.CONNECT_TIMEOUT / oracle.jdbc.ReadTimeout（毫秒）；
+     * MySQL/Doris：connectTimeout / socketTimeout（毫秒）。
+     */
+    private Properties buildConnectionProperties(String type, long timeoutMs) {
+        Properties properties = new Properties();
+        if (isMySqlProtocol(type)) {
+            properties.setProperty("connectTimeout", String.valueOf(timeoutMs));
+            properties.setProperty("socketTimeout", String.valueOf(timeoutMs));
+        } else {
+            properties.setProperty("oracle.net.CONNECT_TIMEOUT", String.valueOf(timeoutMs));
+            properties.setProperty("oracle.jdbc.ReadTimeout", String.valueOf(timeoutMs));
+        }
+        return properties;
+    }
+
+    private TestConnectionResultVO probe(String driver, String url, Properties connectionProperties,
+                                         String userName, String password, String probeSql,
+                                         long submitNanos) throws Exception {
+        try (Connection connection = connectionFactory.open(url, driver, connectionProperties, userName, password)) {
+            // 查询超时基于剩余期限，避免连接 + 查询串联成两段独立超时（共 20 秒）。
+            long elapsedMs = TimeUnit.NANOSECONDS.toMillis(System.nanoTime() - submitNanos);
+            long remainingMs = Math.max(0, deadline.toMillis() - elapsedMs);
+            long queryTimeoutSeconds = Math.max(1, TimeUnit.MILLISECONDS.toSeconds(remainingMs));
             try (Statement statement = connection.createStatement()) {
-                statement.setQueryTimeout(TIMEOUT_SECONDS);
+                statement.setQueryTimeout((int) queryTimeoutSeconds);
                 try (ResultSet resultSet = statement.executeQuery(probeSql)) {
                     resultSet.next();
                 }

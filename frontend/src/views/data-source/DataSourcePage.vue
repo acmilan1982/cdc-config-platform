@@ -289,6 +289,7 @@
             v-model="namingForm.targetDataSourceId"
             placeholder="请选择目标库"
             filterable
+            :disabled="namingSaving"
           >
             <el-option
               v-for="opt in targetOptions"
@@ -299,7 +300,11 @@
           </el-select>
         </el-form-item>
         <el-form-item label="表命名策略" prop="tableNamingStrategy">
-          <el-radio-group v-model="namingForm.tableNamingStrategy" @change="onNamingStrategyChange">
+          <el-radio-group
+            v-model="namingForm.tableNamingStrategy"
+            :disabled="namingSaving"
+            @change="onNamingStrategyChange"
+          >
             <el-radio value="TABLE_MERGE">表合并</el-radio>
             <el-radio value="CUSTOM_PREFIX_SUFFIX">自定义前后缀</el-radio>
           </el-radio-group>
@@ -307,7 +312,7 @@
         <el-form-item label="表名前缀" prop="tableNamePrefix">
           <el-input
             v-model="namingForm.tableNamePrefix"
-            :disabled="namingForm.tableNamingStrategy === 'TABLE_MERGE'"
+            :disabled="namingSaving || namingForm.tableNamingStrategy === 'TABLE_MERGE'"
             placeholder="表合并时无需填写"
             maxlength="128"
           />
@@ -315,7 +320,7 @@
         <el-form-item label="表名后缀" prop="tableNameSuffix">
           <el-input
             v-model="namingForm.tableNameSuffix"
-            :disabled="namingForm.tableNamingStrategy === 'TABLE_MERGE'"
+            :disabled="namingSaving || namingForm.tableNamingStrategy === 'TABLE_MERGE'"
             placeholder="表合并时无需填写"
             maxlength="128"
           />
@@ -427,6 +432,8 @@ async function onDelete(row: DataSourceRow) {
   if (deletingId.value) {
     return
   }
+  // 通过初始 guard 后立即进入“确认/执行中”状态，防止确认未决时再次弹确认
+  deletingId.value = row.dataSourceId
   try {
     await ElMessageBox.confirm(
       `确定删除数据源 ${row.dataSourceId}（${row.dataSourceName}）吗？`,
@@ -434,9 +441,9 @@ async function onDelete(row: DataSourceRow) {
       { type: 'warning', confirmButtonText: '删除', cancelButtonText: '取消' },
     )
   } catch {
+    deletingId.value = ''
     return
   }
-  deletingId.value = row.dataSourceId
   try {
     const res = await deleteDataSource(row.dataSourceId)
     if (res.code === 200) {
@@ -624,6 +631,7 @@ const editorDirty = computed(() => {
 })
 
 function openCreate() {
+  detailToken.value += 1
   editorMode.value = 'create'
   originalDataSourceId.value = ''
   editorForm.value = emptyEditorForm()
@@ -639,12 +647,15 @@ function openCreate() {
 
 /** 打开编辑弹窗即加载详情；originalDataSourceId 取自列表行并保持不变。 */
 function openEdit(row: DataSourceRow) {
+  detailToken.value += 1
   editorMode.value = 'edit'
   originalDataSourceId.value = row.dataSourceId
   passwordInput.value = PASSWORD_MASK
   passwordEdited.value = false
   editorForm.value = emptyEditorForm()
   editorFormError.value = ''
+  // 清除上一弹窗快照与旧详情错误，避免沿用旧脏状态
+  editorSnapshot.value = null
   resetTestState()
   editorVisible.value = true
   editorFormRef.value?.clearValidate()
@@ -728,6 +739,9 @@ function resetTestState() {
 }
 
 function onEditorClosed() {
+  // 实际关闭：使在途详情请求代次失效，并清除快照
+  detailToken.value += 1
+  editorSnapshot.value = null
   resetTestState()
 }
 
@@ -766,6 +780,8 @@ async function requestCloseEditor() {
 }
 
 onBeforeUnmount(() => {
+  // 组件卸载：使在途详情请求代次失效
+  detailToken.value += 1
   clearTestTimer()
 })
 
@@ -839,9 +855,10 @@ function startCountdownTimer(token: number) {
     if (testCountdown.value <= 0) {
       clearTestTimer()
       if (token === testToken.value) {
-        // 到 0 结束本次 UI 测试状态，同时 +1 代次，迟到响应不得覆盖超时结果
+        // 到 0 结束本次 UI 测试状态；结果文案稳定展示“剩余 0 秒 / 连接超时”，
+        // 满足 10,9,...,0 且不延长总期限；同时 +1 代次，迟到响应不得覆盖超时结果
         testing.value = false
-        testResult.value = { success: false, message: '连接超时' }
+        testResult.value = { success: false, message: '剩余 0 秒 / 连接超时' }
         testToken.value += 1
       }
     }
@@ -1284,6 +1301,8 @@ async function onDeleteNaming(row: NamingStrategyVO) {
   if (namingDeletingId.value || namingSaving.value || !namingSource.value) {
     return
   }
+  // 通过初始 guard 后立即进入“确认/执行中”状态，防止确认未决时再次弹确认
+  namingDeletingId.value = row.targetDataSourceId
   try {
     await ElMessageBox.confirm(
       `确定删除目标库 ${row.targetDataSourceId} 的命名策略吗？`,
@@ -1291,9 +1310,9 @@ async function onDeleteNaming(row: NamingStrategyVO) {
       { type: 'warning', confirmButtonText: '删除', cancelButtonText: '取消' },
     )
   } catch {
+    namingDeletingId.value = ''
     return
   }
-  namingDeletingId.value = row.targetDataSourceId
   try {
     const res = await deleteNamingStrategy(namingSource.value.dataSourceId, row.targetDataSourceId)
     if (res.code === 200) {
