@@ -9,20 +9,26 @@
 | 正式菜单 | 数据源管理（配置管理组，路由 `/config/data-source`，菜单项与路由均保持既有值不变） |
 | 既有路由 | `/config/data-source` |
 | 目标文档 | `docs/features/data-source-management/ACCEPTANCE.md` |
-| 文档状态 | `DRAFT_PENDING_USER_REVIEW`（候选验收草案，等待 ChatGPT 复审与用户批准，不构成批准） |
-| 实现状态 | `NOT_STARTED`（新目标功能/调整均未开始实现；现有后端候选实现与新目标存在冲突，不得视为已满足本基线） |
+| 文档状态 | `APPROVED`（已正式批准） |
+| 实现状态 | `NOT_STARTED`（新目标功能/调整均未开始实现；现有后端候选实现与新目标存在冲突，不得视为已满足本基线；批准只代表验收标准基线正式成立，不代表功能已经实现、测试或验收通过） |
 | 验收用例状态 | 全部 `NOT_RUN`（106 例，均未执行） |
 | 初始任务 | `DATA-SOURCE-REQUIREMENTS-BASELINE-001` |
 | 修订任务 | `DATA-SOURCE-REQUIREMENTS-BASELINE-001-R1`（ChatGPT 复审结论 `CHANGES_REQUIRED`；修复逐例状态列与需求追踪缺口） |
 | 授权基线提交 | `eca58e669c8ebad3cf73a1732870d1cfb8388517`（初始任务执行时实际 `origin/develop` 最新提交） |
 | 初始任务结果提交 | `07a17921c025165d846e1ea238bc8c078db3d573` |
+| R1 修订提交 | `ca4d87be367cf69382bb55ab7800c17e0549c924`（验收文档逐例状态与需求追踪缺口修复） |
+| ChatGPT 复审结论 | `REVIEW_PASS`（对 R1 修订提交的复审通过） |
+| 批准任务 | `DATA-SOURCE-REQUIREMENTS-APPROVAL-CLOSEOUT-001` |
+| 批准日期 | 2026-08-29 |
+| 批准人 | 项目负责人（用户） |
+| 批准依据 | 用户于 2026-08-29 明确回复“认可，继续”，正式批准当前 `REQUIREMENTS.md` 与 `ACCEPTANCE.md` |
 | 创建日期 | 2026-08-29 |
 | R1 修订日期 | 2026-08-29 |
-| 依据需求 | `docs/features/data-source-management/REQUIREMENTS.md`（文档状态 `DRAFT_PENDING_USER_REVIEW`，待复审与批准；R1 未修改） |
+| 依据需求 | `docs/features/data-source-management/REQUIREMENTS.md`（文档状态 `APPROVED`，已正式批准） |
 
 重要声明：本文件把所有需求转换为可客观验收的场景，使用唯一、稳定的验收编号。所有用例初始状态为 `NOT_RUN`（未执行）；`PASS / FAIL / BLOCKED` 是执行后状态，任何用例状态只有在执行并取得与步骤匹配的客观证据后才允许更新。对需要构造数据库异常数据的验收场景，本文件只定义期望行为，不授权任何测试数据写入；任何数据库写操作仍需按项目数据库审批规则另行获得授权。
 
-状态含义必须清楚，三者不得混淆：本文件 `DRAFT_PENDING_USER_REVIEW` 表示验收标准尚未正式批准，等待 ChatGPT 复审与用户批准；用例 `NOT_RUN` 表示尚未执行、不能推定通过，`PASS / FAIL / BLOCKED` 表示已执行；实现状态 `NOT_STARTED` 表示目标功能尚未开始实现。当前文档不得被引用为已批准的验收结论，也不得作为已通过功能的验收证据。
+状态含义必须清楚，三者不得混淆：本文件已经正式批准（`APPROVED`），表示验收标准基线成立；用例 `NOT_RUN` 表示尚未执行、不能推定通过，`PASS / FAIL / BLOCKED` 表示已执行；实现状态 `NOT_STARTED` 表示目标功能尚未开始实现。批准验收标准不等于执行功能验收，不得把文档批准当作用例通过证据；所有用例仍为 `NOT_RUN`，未执行任何功能验收，本文件不得作为已通过功能的验收证据。
 
 ## 2. 验收结果状态模型
 
@@ -360,5 +366,6 @@
 |---|---|---|
 | 2026-08-29 | 建立“数据源管理”Feature 验收基线草案（DRAFT_PENDING_USER_REVIEW；实现状态 NOT_STARTED；101 条用例全部 NOT_RUN，关联 DS-REQ-001~109） | DATA-SOURCE-REQUIREMENTS-BASELINE-001（纯文档任务；待 ChatGPT 复审与用户批准） |
 | 2026-08-29 | R1 修订：为全部验收用例增加“状态”列并逐例标注 `NOT_RUN`；修复 11 个原缺失需求编号（DS-REQ-031/052/053/061/062/065/068/073/083/106/108）到实际验收用例引用；DS-AC-004 增加请求/接口契约检查、DS-AC-073 明确列表列；新增 DS-AC-102~106 共 5 条用例；新增需求—验收追踪矩阵；用例总数由 101 更新为 106；未修改任何 DS-REQ 文本或产品语义；文档状态保持 DRAFT_PENDING_USER_REVIEW | DATA-SOURCE-REQUIREMENTS-BASELINE-001-R1（ChatGPT 复审结论 CHANGES_REQUIRED；纯文档任务） |
+| 2026-08-29 | 批准收口：文档状态由 `DRAFT_PENDING_USER_REVIEW` 更新为 `APPROVED`；依据需求同步为 `APPROVED`；补充批准链（R1 修订提交 `ca4d87b...`、ChatGPT 复审结论 `REVIEW_PASS`、批准任务、批准日期、批准人、批准依据）；明确批准验收标准不等于执行功能验收，不得把文档批准当作用例通过证据；106 条用例状态全部保持 `NOT_RUN`，DS-REQ-001~109 追踪矩阵未变；未修改任何用例内容 | DATA-SOURCE-REQUIREMENTS-APPROVAL-CLOSEOUT-001（ChatGPT 复审结论 REVIEW_PASS；用户于 2026-08-29 明确回复“认可，继续”批准；纯文档任务） |
 
 > 关联文档：需求基线 `docs/features/data-source-management/REQUIREMENTS.md`；初始执行报告 `docs/features/data-source-management/reports/DATA-SOURCE-REQUIREMENTS-BASELINE-001.md`；R1 执行报告 `docs/features/data-source-management/reports/DATA-SOURCE-REQUIREMENTS-BASELINE-001-R1.md`。

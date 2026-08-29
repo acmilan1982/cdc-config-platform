@@ -9,16 +9,23 @@
 | 正式菜单 | 数据源管理（配置管理组，路由 `/config/data-source`，菜单项与路由均保持既有值不变） |
 | 既有路由 | `/config/data-source` |
 | 目标文档 | `docs/features/data-source-management/REQUIREMENTS.md` |
-| 文档状态 | `DRAFT_PENDING_USER_REVIEW`（候选需求草案，等待 ChatGPT 复审与用户批准，不构成批准） |
-| 实现状态 | `NOT_STARTED`（新目标功能/调整均未开始实现；现有后端候选实现与新目标存在冲突，不得视为已满足本基线） |
+| 文档状态 | `APPROVED`（已正式批准） |
+| 实现状态 | `NOT_STARTED`（新目标功能/调整均未开始实现；现有后端候选实现与新目标存在冲突，不得视为已满足本基线；批准只代表需求基线正式成立，不代表现有前后端实现符合基线，不代表功能已经实现、测试或验收通过） |
 | 验收用例状态 | 全部 `NOT_RUN`（见 `docs/features/data-source-management/ACCEPTANCE.md`） |
 | 任务编号 | `DATA-SOURCE-REQUIREMENTS-BASELINE-001` |
 | 任务类型 | Feature 需求基线草案落盘、提交与推送（纯文档任务） |
 | 授权基线提交 | `eca58e669c8ebad3cf73a1732870d1cfb8388517`（执行时实际 `origin/develop` 最新提交） |
+| 初始任务结果提交 | `07a17921c025165d846e1ea238bc8c078db3d573`（初始需求与验收基线草案建立） |
+| R1 修订提交 | `ca4d87be367cf69382bb55ab7800c17e0549c924`（验收文档逐例状态与需求追踪缺口修复） |
+| ChatGPT 复审结论 | `REVIEW_PASS`（对 R1 修订提交的复审通过） |
+| 批准任务 | `DATA-SOURCE-REQUIREMENTS-APPROVAL-CLOSEOUT-001` |
+| 批准日期 | 2026-08-29 |
+| 批准人 | 项目负责人（用户） |
+| 批准依据 | 用户于 2026-08-29 明确回复“认可，继续”，正式批准当前 `REQUIREMENTS.md` 与 `ACCEPTANCE.md` |
 | 创建日期 | 2026-08-29 |
 | 需求来源 | 已确认的产品决策（本提示词 §5～§12 记录的产品需求）+ 已批准数据库基线（`docs/database/`） |
 
-说明：本文件把已经确认的产品决策落成 Feature 需求草案。当前文档状态为 `DRAFT_PENDING_USER_REVIEW`：本任务只建立待 ChatGPT 复审、待用户批准的需求草案，不构成批准。本文件不把现有后端代码描述为已经满足本基线（现有后端属于“已存在但不完整、且与新目标需求存在冲突的候选实现”），也不把现有前端描述为功能已经完成（现有前端仅有菜单/路由和占位页）。
+说明：本文件把已经确认的产品决策落成 Feature 需求基线，并已经正式批准（`APPROVED`）。批准链：初始任务建立草案（提交 `07a1792...`）→ R1 修订验收文档（提交 `ca4d87b...`）→ ChatGPT 复审 `REVIEW_PASS` → 项目负责人于 2026-08-29 明确回复“认可，继续”批准。批准只代表需求基线正式成立，不代表现有前后端实现符合基线，不代表功能已经实现、测试或验收通过。本文件不把现有后端代码描述为已经满足本基线（现有后端属于“已存在但不完整、且与新目标需求存在冲突的候选实现”），也不把现有前端描述为功能已经完成（现有前端仅有菜单/路由和占位页）。
 
 ## 2. Feature 定位与术语
 
@@ -70,7 +77,7 @@
 
 ### 3.3 分层约定
 
-- 本文件只建立待 ChatGPT 复审、待用户批准的需求草案，不构成批准；现有实现的一切差距均待后续设计/实现修正，不写进目标需求。
+- 本文件已正式批准（`APPROVED`）；现有实现的一切差距均待后续设计/实现修正，不写进目标需求。
 - 当前开发库数据快照（`CDC_DATA_SOURCE` 当前行数、`CDC_DATA_SOURCE_EXTEND` 当前行数与人工构造的容错测试数据等）属于 `OBSERVED_DATABASE`，不得写成生产常态，也不得写成数据库强制约束。
 
 ## 4. 数据来源与已批准数据库基线引用
@@ -360,9 +367,8 @@
 ## 17. 基线影响
 
 - 存在项目/数据库基线影响：已批准数据库文档中可能仍存在“EXTEND 一对一且必填”等旧规则（如 RELATIONS.md R01 的目标规则描述、ARCHITECTURE.md §4.1 中 `CDC_DATA_SOURCE_EXTEND` 的“目标规则为每数据源一对一必填”等）。
-- 待本 Feature 需求经用户批准后，再通过独立维护任务更新受影响的已批准基线。
+- 本 Feature 需求已经正式批准；`docs/database/**` 或项目级基线中可能受影响的旧规则仍须通过独立维护任务修订，本任务不修改它们，也不得声称它们已经同步完成。
 - 物理表当前没有阻止 0..N 关系的约束，因此本任务不要求 DDL。
-- 当前文档仍为待复审草案，不能反向声称已批准基线已经变更。
 
 ## 18. 依赖与后续工作
 
@@ -375,12 +381,13 @@
 
 ## 19. 开放问题
 
-无。当前已确认事项均已记录，没有阻塞本 Feature 草案的开放问题。MySQL/Doris JDBC 驱动为设计/实现阶段的依赖约束（§18），已批准基线的后续维护为独立任务（§17），均不构成本草案的当前开放问题。
+无。当前已确认事项均已记录，没有阻塞本 Feature 基线的开放问题。MySQL/Doris JDBC 驱动为设计/实现阶段的依赖约束（§18），已批准基线的后续维护为独立任务（§17），均不构成本基线的当前开放问题。
 
 ## 20. 文档级变更记录
 
 | 日期 | 变更 | 依据 |
 |---|---|---|
 | 2026-08-29 | 建立“数据源管理”Feature 需求基线草案（DRAFT_PENDING_USER_REVIEW；实现状态 NOT_STARTED；全部验收用例 NOT_RUN） | DATA-SOURCE-REQUIREMENTS-BASELINE-001（纯文档任务；基于已确认产品决策 + 已批准数据库基线；待 ChatGPT 复审与用户批准） |
+| 2026-08-29 | 需求与验收基线批准收口：文档状态由 `DRAFT_PENDING_USER_REVIEW` 更新为 `APPROVED`；实现状态保持 `NOT_STARTED`；补充批准任务 `DATA-SOURCE-REQUIREMENTS-APPROVAL-CLOSEOUT-001`、批准日期 2026-08-29、批准依据（用户明确回复“认可，继续”）与批准链（初始提交 `07a1792...`、R1 提交 `ca4d87b...`、ChatGPT 复审 `REVIEW_PASS`）；§17 受影响基线说明更新为本 Feature 需求已批准、受影响的已批准基线仍须独立维护任务修订；不改变任何 DS-REQ 编号、文本或语义 | DATA-SOURCE-REQUIREMENTS-APPROVAL-CLOSEOUT-001（项目负责人批准驱动的需求与验收基线批准收口；纯文档任务） |
 
 > 关联文档：验收基线 `docs/features/data-source-management/ACCEPTANCE.md`；执行报告 `docs/features/data-source-management/reports/DATA-SOURCE-REQUIREMENTS-BASELINE-001.md`。
