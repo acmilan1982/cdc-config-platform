@@ -6,11 +6,16 @@
 |---|---|
 | 正式功能标识 | `server-config` |
 | 目标文档 | `docs/features/server-config/UI.md` |
-| 文档状态 | `APPROVED`（原批准 UI 设计基线仍有效；本次验收前两项调整——`CONFIG_DESC` 人工换行与按 `ID_SERVER_CONFIG ASC` 顺序——已获项目负责人批准，代码尚未实现，见 §20 变更记录） |
+| 文档状态 | `APPROVED` |
 | 需求基线状态 | `APPROVED`（原已批准，本次调整已批准） |
 | 验收基线状态 | `APPROVED`（原已批准，本次调整已批准） |
-| 实现状态 | `IMPLEMENTED_ADJUSTMENT_PENDING`（旧批准设计已实现并经过 R1/R2 复审；本次两项已批准调整尚未实现） |
-| 验收用例状态 | `66 条全部 NOT_RUN` |
+| 实现状态 | `IMPLEMENTED_ACCEPTED`（旧批准设计与本次两项已批准调整均已实现并验收接受，见 §20 变更记录） |
+| 验收用例状态/正式验收状态 | `66 PASSED / 0 FAILED（ACCEPTED）` |
+| 收口任务 | `SERVER-CONFIG-FORMAL-ACCEPTANCE-CLOSEOUT-001` |
+| 收口日期 | 2026-08-29 |
+| 验收证据提交 | `b5aeec28eaf29e20a56dd7012e4077dee8b891a4` |
+| 项目负责人最终人工测试 | 保存、刷新、恢复均正常 |
+| PENDING_USER_CONFIRMATION | 0 |
 | 设计任务 | `SERVER-CONFIG-DESIGN-BASELINE-001` |
 | 授权基线提交 | `c1a6d7dc38de261093383d7abf719f0834dd9bb3` |
 | R1 修订任务 | `SERVER-CONFIG-DESIGN-BASELINE-001-R1` |
@@ -29,7 +34,7 @@
 | 候选调整批准人 | 项目负责人 |
 | ChatGPT 最终复审通过提交 | `b1c5349df43c73bc855b5ca8b3ea92acb6faa7ee` |
 
-声明：本文档原为**已批准 UI 详细设计**，由项目负责人于 2026-08-27 正式批准（`SERVER-CONFIG-DESIGN-BASELINE-APPROVAL-001`），ChatGPT 复审通过提交为 `77a8c639911bee78a17f62d2ce8af2db53c44d29`。旧批准设计已实现并经过 R1/R2 复审。本次为负责人在正式验收前提出的两项候选调整（`CONFIG_DESC` 人工换行显示、保持后端 `ID_SERVER_CONFIG ASC` 顺序且不二次排序），已获项目负责人批准（批准任务 `SERVER-CONFIG-PRE-ACCEPTANCE-ADJUSTMENT-BASELINE-APPROVAL-001`，批准日期 2026-08-28，ChatGPT 最终复审通过提交 `b1c5349df43c73bc855b5ca8b3ea92acb6faa7ee`），文档状态为 `APPROVED`，两项已批准调整的代码**尚未实现**（实现状态 `IMPLEMENTED_ADJUSTMENT_PENDING`），正式验收（现 66 条）仍未执行。设计批准不代表代码已实现，不代表验收已执行。本文只描述本 Feature 页面；不引入搜索、分页、卡片大屏风格、Tab、抽屉、中心端选择器或独立详情页（`SC-NONGOAL-01~10`）。
+声明：本文档原为**已批准 UI 详细设计**，由项目负责人于 2026-08-27 正式批准（`SERVER-CONFIG-DESIGN-BASELINE-APPROVAL-001`），ChatGPT 复审通过提交为 `77a8c639911bee78a17f62d2ce8af2db53c44d29`。旧批准设计已实现并经过 R1/R2 复审。本次为负责人在正式验收前提出的两项候选调整（`CONFIG_DESC` 人工换行显示、保持后端 `ID_SERVER_CONFIG ASC` 顺序且不二次排序），已获项目负责人批准（批准任务 `SERVER-CONFIG-PRE-ACCEPTANCE-ADJUSTMENT-BASELINE-APPROVAL-001`，批准日期 2026-08-28，ChatGPT 最终复审通过提交 `b1c5349df43c73bc855b5ca8b3ea92acb6faa7ee`）。当前有效状态：文档状态为 `APPROVED`，实现状态为 `IMPLEMENTED_ACCEPTED`（旧批准设计、两项已批准调整及后续显示缺陷修复均已实现并验收接受），正式验收 `66 PASSED / 0 FAILED / 0 BLOCKED / 0 NOT_RUN`，正式验收状态 `ACCEPTED`（2026-08-29 收口，收口任务 `SERVER-CONFIG-FORMAL-ACCEPTANCE-CLOSEOUT-001`）。设计批准不代表代码已实现，不代表验收已执行，但本 Feature 已完成正式验收收口。本文只描述本 Feature 页面；不引入搜索、分页、卡片大屏风格、Tab、抽屉、中心端选择器或独立详情页（`SC-NONGOAL-01~10`）。
 
 ## 2. 设计依据
 
@@ -45,7 +50,7 @@
 | SC-UI-DESIGN-003 | 菜单显示名称当前已是“中心端配置”，已直接替换既有“服务端配置”占位菜单，不新增第二套菜单（`SC-MENU-01/02`）；`frontend/src/config/menu.ts` 菜单项 `/config/server` title 为“中心端配置”，`frontend/src/router/index.ts` 路由 meta title 亦为“中心端配置”（`IMPLEMENTED_REVIEWED`）。 |
 | SC-UI-DESIGN-004 | 路由复用 `/config/server`（name `ServerConfig`，group“配置管理”），不新建重复路由（`SC-MENU-03`）。 |
 | SC-UI-DESIGN-005 | `views/server-config/ServerConfigPage.vue` 当前已为正式“中心端配置”页面（非占位页 `PlaceholderPage`），已实现两列表格、编辑控件、保存确认与状态处理（`IMPLEMENTED_REVIEWED`）；页面路由已指向该正式组件。 |
-| SC-UI-DESIGN-006 | 当前 UI 已实现旧批准设计：两列表格（配置项说明 + 配置值）、编辑控件、保存确认与状态处理。页面对普通长说明已能自动折行，但尚未显式保留 `CONFIG_DESC` 真实 LF/CRLF 换行（`white-space: pre-line` 行为待本次候选实现，见 `SC-UI-DESIGN-035~038`）；列表当前保持后端返回的旧排序（`CONFIG_KEY ASC NULLS LAST, ID_SERVER_CONFIG ASC`），本次候选目标才是不二次排序并接受 `ID_SERVER_CONFIG ASC`（`SC-UI-DESIGN-045`）。 |
+| SC-UI-DESIGN-006 | 当前 UI 已实现旧批准设计与本次两项已批准调整并验收接受：两列表格（配置项说明 + 配置值）、编辑控件、保存确认与状态处理；页面对普通长说明按列宽自动折行，并已显式保留 `CONFIG_DESC` 真实 LF/CRLF 换行（`white-space: pre-line` 语义已实现，见 `SC-UI-DESIGN-035~038`）；列表展示顺序保持后端 `ORDER BY ID_SERVER_CONFIG ASC` 返回结果，前端不二次排序（`SC-UI-DESIGN-045`）；超宽只读值单行省略并悬停展示完整原文；信息图标悬停显示 `配置Key：{CONFIG_KEY}` Tooltip。以上均经正式验收 `66/0` 通过。 |
 
 ## 4. 页面整体布局与 Element Plus 组件建议
 
@@ -248,3 +253,4 @@
 | 2026-08-28 | 候选调整（预验收）：新增 SC-UI-DESIGN-035~038（`white-space: pre-line` 人工换行、真实 LF/CRLF 语义、`<br>`/字面量 `\n` 不作为协议、禁止 `v-html`、多行下 Key Tooltip 对齐）；新增 SC-UI-DESIGN-045（页面不二次排序，保持后端 `ID_SERVER_CONFIG ASC` 顺序）；修订 SC-UI-DESIGN-030/152；文档状态迁移为 `DRAFT_ADJUSTMENT_PENDING_USER_REVIEW`、实现状态迁移为 `IMPLEMENTED_ADJUSTMENT_PENDING`，66 条验收保持 NOT_RUN | SERVER-CONFIG-PRE-ACCEPTANCE-ADJUSTMENT-BASELINE-001（纯文档候选基线任务；待用户复审） |
 | 2026-08-28 | R1 实现事实修正：SC-UI-DESIGN-003 删除“当前菜单 title 仍为服务端配置”的旧事实，改为菜单/路由 title 当前已是“中心端配置”；SC-UI-DESIGN-005 删除“页面仍为 PlaceholderPage 待替换”的旧事实，改为正式页面已实现；新增 SC-UI-DESIGN-006 记录当前已实现 UI 状态（两列表格/编辑控件/保存确认/状态处理、普通长说明可自动折行、真实 LF/CRLF 换行尚待实现、列表当前保持旧排序）；候选规则 SC-UI-DESIGN-035~038、SC-UI-DESIGN-045 目标语义不变 | SERVER-CONFIG-PRE-ACCEPTANCE-ADJUSTMENT-BASELINE-001-R1（ChatGPT 远程复审发现跨文档实现前旧事实；纯文档 R1 精确修正，待用户复审） |
 | 2026-08-28 | 批准收口（预验收调整基线）：文档状态由 `DRAFT_ADJUSTMENT_PENDING_USER_REVIEW` 迁移为 `APPROVED`；记录候选调整批准任务、批准日期、批准人（项目负责人）与 ChatGPT 最终复审通过提交 `b1c5349df43c73bc855b5ca8b3ea92acb6faa7ee`；两项调整内容不变（`CONFIG_DESC` 人工换行安全显示、页面不二次排序保持后端 `ID_SERVER_CONFIG ASC` 顺序）；实现状态保持 `IMPLEMENTED_ADJUSTMENT_PENDING`（两项已批准调整代码尚未实现），66 条验收保持 `NOT_RUN`；`PENDING_USER_CONFIRMATION=0`；保留初始候选、R1、R2 全部历史 | SERVER-CONFIG-PRE-ACCEPTANCE-ADJUSTMENT-BASELINE-APPROVAL-001（项目负责人批准驱动的验收前调整基线收口；纯文档任务） |
+| 2026-08-29 | 最终收口：实现状态由 `IMPLEMENTED_ADJUSTMENT_PENDING` 迁移为 `IMPLEMENTED_ACCEPTED`；SC-UI-DESIGN-006 当前有效正文同步更新为两项调整已实现并验收接受；新增元数据行（验收用例状态/正式验收状态 = `66 PASSED / 0 FAILED（ACCEPTED）`、收口任务、收口日期、验收证据提交 `b5aeec2...`、项目负责人最终人工测试、`PENDING_USER_CONFIRMATION=0`）。本行仅收口状态，不改动任何 UI 规则、控件语义或编号；历史变更记录中的 `NOT_STARTED`/`DRAFT_*`/`IMPLEMENTED_ADJUSTMENT_PENDING` 等历史状态原样保留 | SERVER-CONFIG-FORMAL-ACCEPTANCE-CLOSEOUT-001（纯文档正式验收收口；不修改代码/测试，不连接数据库，不重新执行验收） |

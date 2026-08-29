@@ -9,8 +9,14 @@
 | 正式菜单 | 中心端配置（直接演进自既有“服务端配置”占位菜单，不新增第二套菜单） |
 | 既有路由 | `/config/server`（保持不变，不另建重复路由） |
 | 目标文档 | `docs/features/server-config/REQUIREMENTS.md` |
-| 文档状态 | `APPROVED`（原批准需求基线仍有效；本次验收前两项调整——`CONFIG_DESC` 人工换行与按 `ID_SERVER_CONFIG ASC` 排序——已获项目负责人批准，代码尚未实现，见 §20 变更记录） |
-| 实现状态 | `IMPLEMENTED_ADJUSTMENT_PENDING`（旧批准需求版本已实现并经过 R1/R2 复审；本次两项候选调整尚未实现） |
+| 文档状态 | `APPROVED` |
+| 实现状态 | `IMPLEMENTED_ACCEPTED`（旧批准需求版本与本次两项已批准调整均已实现并验收接受，见 §20 变更记录） |
+| 验收用例状态/正式验收状态 | `66 PASSED / 0 FAILED（ACCEPTED）` |
+| 收口任务 | `SERVER-CONFIG-FORMAL-ACCEPTANCE-CLOSEOUT-001` |
+| 收口日期 | 2026-08-29 |
+| 验收证据提交 | `b5aeec28eaf29e20a56dd7012e4077dee8b891a4` |
+| 项目负责人最终人工测试 | 保存、刷新、恢复均正常 |
+| PENDING_USER_CONFIRMATION | 0 |
 | 任务编号 | `SERVER-CONFIG-FEATURE-BASELINE-001` |
 | 授权基线提交 | `7ea9d702e831245fbe8f0e84691bf0aea093dbdf` |
 | 候选基线初始任务 | `SERVER-CONFIG-FEATURE-BASELINE-001` |
@@ -29,7 +35,7 @@
 | 创建日期 | 2026-08-27 |
 | 需求来源 | 项目负责人逐项确认的业务需求（本提示词 §6 记录的 12 项负责人确认事实）+ 已批准数据库基线（`docs/database/`） |
 
-说明：本文件把已经完成沟通并由项目负责人确认的业务需求落成 Feature 需求基线，已经 ChatGPT 复审通过，并由项目负责人正式批准（批准任务 `SERVER-CONFIG-FEATURE-BASELINE-APPROVAL-001`）。批准只代表“系统应该做什么、怎样验收”正式生效；不代表设计已完成、代码已实现或原需求批准当时的 65 条验收已经执行通过（本次新增 `SC-AC-066` 后，当前共 66 条，仍全部未执行）。本 Feature 旧批准版本已实现并经过 R1/R2 复审（实现审查基线 `24d8b80340cc691895bed8bc45a4cb2dc2c6b9b6`），只读联调交接完成（授权基线 `c0b9d4973e2b6bdd3e7b02a3748816ffc55362ba`）。本次为负责人在正式验收前提出的两项候选调整（`CONFIG_DESC` 人工换行、按 `ID_SERVER_CONFIG ASC` 排序），已获项目负责人批准（批准任务 `SERVER-CONFIG-PRE-ACCEPTANCE-ADJUSTMENT-BASELINE-APPROVAL-001`，批准日期 2026-08-28，ChatGPT 最终复审通过提交 `b1c5349df43c73bc855b5ca8b3ea92acb6faa7ee`），文档状态为 `APPROVED`，两项已批准调整的代码尚未实现（实现状态 `IMPLEMENTED_ADJUSTMENT_PENDING`）；正式验收（现 66 条）仍未执行。
+说明：本文件把已经完成沟通并由项目负责人确认的业务需求落成 Feature 需求基线，已经 ChatGPT 复审通过，并由项目负责人正式批准（批准任务 `SERVER-CONFIG-FEATURE-BASELINE-APPROVAL-001`），随后验收前两项调整也获批准（批准任务 `SERVER-CONFIG-PRE-ACCEPTANCE-ADJUSTMENT-BASELINE-APPROVAL-001`，批准日期 2026-08-28，ChatGPT 最终复审通过提交 `b1c5349df43c73bc855b5ca8b3ea92acb6faa7ee`）。批准只代表“系统应该做什么、怎样验收”正式生效；不代表设计已完成、代码已实现或验收已经执行。本 Feature 旧批准版本已实现并经过 R1/R2 复审（实现审查基线 `24d8b80340cc691895bed8bc45a4cb2dc2c6b9b6`），只读联调交接完成（授权基线 `c0b9d4973e2b6bdd3e7b02a3748816ffc55362ba`）。本次两项已批准调整（`CONFIG_DESC` 人工换行、按 `ID_SERVER_CONFIG ASC` 排序）已实现（修复提交 `70382a64bfae5ef2ba847fe6c65d2817304042ca`），并经真实浏览器定向重验与 ChatGPT 复审（定向重验提交 `b5aeec28eaf29e20a56dd7012e4077dee8b891a4`）；66 条正式验收最终全部通过（`66 PASSED / 0 FAILED / 0 BLOCKED / 0 NOT_RUN`），正式验收状态 `ACCEPTED`，实现状态 `IMPLEMENTED_ACCEPTED`，项目负责人最终人工测试“保存、刷新、恢复”均正常。
 
 ## 2. Feature 定位与术语
 
@@ -52,11 +58,11 @@
 | 可编辑白名单 | 管理平台明确支持编辑、且已内置专门校验规则的 `CONFIG_KEY` 集合（见 §11）。 |
 | 最近一次成功加载 | 页面保存的原始值来源；进入页面或保存成功后重新查询得到的值即“最近一次成功加载”。 |
 
-## 3. 当前已实现事实与候选调整目标分层
+## 3. 当前已实现事实分层
 
-本文档严格区分“当前已实现事实”“本次候选调整目标”与“已批准数据库基线”，不得混淆。
+本文档区分“当前已实现并验收接受的事实”与“已批准数据库基线”，不再存在未实现的候选调整目标。
 
-### 3.1 当前已实现事实（`IMPLEMENTED_REVIEWED`）
+### 3.1 已实现并验收接受的事实（`IMPLEMENTED_ACCEPTED`）
 
 旧批准需求版本已实现并经过 R1/R2 复审（实现审查基线 `24d8b80340cc691895bed8bc45a4cb2dc2c6b9b6`，初始实现提交 `96aba1e93dd7f8d73d3882c2f757229bdb8fa6d0`），只读联调与视觉交接完成（授权基线 `c0b9d4973e2b6bdd3e7b02a3748816ffc55362ba`）。当前仓库已存在正式的中心端配置实现：
 
@@ -66,21 +72,16 @@
 - 后端 `com.bsoft.cdcconfig.serverconfig` 包：已存在 Entity（`CdcServer`、`CdcServerConfig`）、Mapper（`CdcServerMapper`、`CdcServerConfigMapper`）、Service、Controller、DTO/VO、Validator、Exception 等正式组件。
 - 后端接口：`GET /api/server-config`（查询页面数据）与 `POST /api/server-config/save`（批量保存配置值）均已实现。
 - 数据库访问：旧批准实现已查询 `CDC_SERVER` 识别唯一中心端、查询 `CDC_SERVER_CONFIG` 全部配置并批量更新既有记录的 `CONFIG_VALUE`。已批准数据库基线分层为：14 张当前生产代码实际访问表 + 2 张本 Feature 实现访问表 = 16 张已批准单表物理基线。
-- 当前已实现版本仍采用旧排序 `CONFIG_KEY ASC NULLS LAST, ID_SERVER_CONFIG ASC`；页面对普通长说明已能自动折行，但尚未显式保留 `CONFIG_DESC` 中的真实 LF/CRLF 换行。
+- 配置列表查询排序已由旧顺序改为 `ORDER BY ID_SERVER_CONFIG ASC`（`SC-UI-04`、`SC-DISPLAY-02`，实现提交 `70382a6...`）；
+- 配置项说明已按 `CONFIG_DESC` 中的真实 LF/CRLF 换行按换行位置显示（`SC-UI-23~26`，样式语义 `white-space: pre-line` 等）。
 
-### 3.2 本次候选调整目标（`ADJUSTMENT_TARGET`）
+### 3.2 两项已批准调整已实现并验收接受（原 `ADJUSTMENT_TARGET` → `IMPLEMENTED_ACCEPTED`）
 
-本次仅有两项候选调整尚未实现，均为本文档中标注为候选的规则：
-
-- 配置项说明按 `CONFIG_DESC` 中的真实 LF/CRLF 换行按换行位置显示（`SC-UI-23~26`，目标样式语义 `white-space: pre-line` 等）；
-- 配置列表查询排序由旧顺序改为 `ORDER BY ID_SERVER_CONFIG ASC`（`SC-UI-04`、`SC-DISPLAY-02`）。
-
-除上述两项外，旧批准版本的其他页面与交互规则均已实现；不得把候选调整目标写成已实现。
+原两项候选调整（`CONFIG_DESC` 人工换行显示、`ORDER BY ID_SERVER_CONFIG ASC`）已随缺陷修复实现（修复提交 `70382a64bfae5ef2ba847fe6c65d2817304042ca`），并经真实浏览器定向重验 `SC-AC-009/062` 全部通过（定向重验提交 `b5aeec28eaf29e20a56dd7012e4077dee8b891a4`）后纳入正式验收接受范围，当前实现状态为 `IMPLEMENTED_ACCEPTED`。
 
 ### 3.3 分层约定
 
-- 旧批准版本（正式页面、两个接口、两表访问及全部已批准规则）属于 `IMPLEMENTED_REVIEWED`（已实现并复审）；
-- 本次两项候选调整属于 `ADJUSTMENT_TARGET`（已写入候选基线、尚未实现）；
+- 旧批准版本（正式页面、两个接口、两表访问及全部已批准规则）与本次两项已批准调整共同构成当前 `IMPLEMENTED_ACCEPTED` 实现（全部已实现并验收接受）；
 - 开发库当前数据快照（1 行中心端、8 行配置、`IS_EDITABLE` 分布等）属于 `OBSERVED_DATABASE`，不得写成生产常态，也不得写成数据库强制约束。
 
 ## 4. 数据来源与已批准数据库基线引用
@@ -157,7 +158,7 @@
 | SC-MENU-01 | 菜单显示名称改为“中心端配置”。 |
 | SC-MENU-02 | 直接替换现有“服务端配置”占位功能，不新增第二套菜单。 |
 | SC-MENU-03 | 路由保持 `/config/server`；不得另建重复路由。 |
-| SC-MENU-04 | 旧批准版本已实现并复审（`IMPLEMENTED_REVIEWED`），本次候选调整目标（`ADJUSTMENT_TARGET`）尚未实现；文档与实现不得把候选目标写成已实现。 |
+| SC-MENU-04 | 旧批准版本已实现并复审；本次两项已批准调整（`CONFIG_DESC` 人工换行显示、`ORDER BY ID_SERVER_CONFIG ASC`）已实现并经定向重验与正式验收接受，当前实现状态 `IMPLEMENTED_ACCEPTED`。 |
 
 ### 7.2 页面结构
 
@@ -404,5 +405,6 @@
 | 2026-08-28 | R1 实现事实修正：§3 由“当前代码事实与未来目标分层”改写为“当前已实现事实与候选调整目标分层”，删除“菜单仍为服务端配置”“页面仍为 PlaceholderPage”“无后端接口/数据库访问”“全部读写路径未实现”等实现前旧事实；明确旧批准版本已实现（`IMPLEMENTED_REVIEWED`），本次仅两项候选调整未实现（`ADJUSTMENT_TARGET`）；SC-MENU-04 分层约定同步更新；业务规则、配置校验、接口路径与 66 条验收口径不变 | SERVER-CONFIG-PRE-ACCEPTANCE-ADJUSTMENT-BASELINE-001-R1（ChatGPT 远程复审发现跨文档实现前旧事实；纯文档 R1 精确修正，待用户复审） |
 | 2026-08-28 | R2 口径微修正：§1 说明中“65 条验收”明确为原需求批准时的历史数量，并注明新增 `SC-AC-066` 后当前共 66 条仍全部未执行；§4 权威文档引用表中“16 张（14 当前访问 + 2 已批准待实现）”明确为数据库基线批准时的历史分层，并注明后两张现已由本 Feature 实现访问；不改变业务规则、接口、验证规则、状态或验收数量 | SERVER-CONFIG-PRE-ACCEPTANCE-ADJUSTMENT-BASELINE-001-R2（ChatGPT 复审发现两处当前口径残留；纯文档 R2 微修正，待用户复审） |
 | 2026-08-28 | 批准收口：文档状态由 `DRAFT_ADJUSTMENT_PENDING_USER_REVIEW` 迁移为 `APPROVED`；记录批准任务、批准日期、批准人（项目负责人）与 ChatGPT 最终复审通过提交 `b1c5349...`；两项已批准调整（`CONFIG_DESC` 人工换行、`ORDER BY ID_SERVER_CONFIG ASC`）代码尚未实现，实现状态保持 `IMPLEMENTED_ADJUSTMENT_PENDING`；66 条验收保持 `NOT_RUN`；所有业务规则、编号、接口、字段、错误码、SQL/UI 目标与数据库边界不变 | SERVER-CONFIG-PRE-ACCEPTANCE-ADJUSTMENT-BASELINE-APPROVAL-001（项目负责人批准驱动的验收前调整基线收口；纯文档任务，不连接数据库，不修改代码） |
+| 2026-08-29 | 最终收口：实现状态由 `IMPLEMENTED_ADJUSTMENT_PENDING` 迁移为 `IMPLEMENTED_ACCEPTED`；文档状态保持 `APPROVED`；验收用例状态更新为 `66 PASSED / 0 FAILED（ACCEPTED）`；记录收口任务 `SERVER-CONFIG-FORMAL-ACCEPTANCE-CLOSEOUT-001`、收口日期 2026-08-29、验收证据提交 `b5aeec28...`；两项已批准调整（`CONFIG_DESC` 人工换行、`ORDER BY ID_SERVER_CONFIG ASC`）已实现（修复提交 `70382a6...`）并经真实浏览器定向重验 `SC-AC-009/062` 全部通过（定向重验提交 `b5aeec2...`）；66 条正式验收最终全部通过；项目负责人最终人工测试“保存、刷新、恢复”均正常；`PENDING_USER_CONFIRMATION=0`；业务规则、编号、接口、字段、错误码、SQL/UI 语义与数据库边界不变 | SERVER-CONFIG-FORMAL-ACCEPTANCE-CLOSEOUT-001（正式验收与功能基线最终收口；纯文档任务，不连接数据库，不修改代码） |
 
 > 关联文档：验收基线 `docs/features/server-config/ACCEPTANCE.md`；执行报告 `docs/features/server-config/reports/SERVER-CONFIG-FEATURE-BASELINE-001.md`。

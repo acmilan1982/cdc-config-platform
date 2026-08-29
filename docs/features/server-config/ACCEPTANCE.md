@@ -9,8 +9,14 @@
 | 正式菜单 | 中心端配置（直接演进自既有“服务端配置”占位菜单，不新增第二套菜单） |
 | 既有路由 | `/config/server`（保持不变，不另建重复路由） |
 | 目标文档 | `docs/features/server-config/ACCEPTANCE.md` |
-| 文档状态 | `APPROVED`（原批准验收基线仍有效；本次验收前两项调整——`CONFIG_DESC` 人工换行与按 `ID_SERVER_CONFIG ASC` 排序——已获项目负责人批准，验收用例相应修订并新增 SC-AC-066，代码尚未实现，见 §5 变更记录） |
-| 实现状态 | `IMPLEMENTED_ADJUSTMENT_PENDING`（旧批准需求版本已实现并经过 R1/R2 复审；本次两项候选调整尚未实现） |
+| 文档状态 | `APPROVED` |
+| 实现状态 | `IMPLEMENTED_ACCEPTED`（旧批准需求版本与本次两项已批准调整均已实现并验收接受，见 §5 变更记录） |
+| 验收用例状态/正式验收状态 | `66 PASSED / 0 FAILED（ACCEPTED）` |
+| 收口任务 | `SERVER-CONFIG-FORMAL-ACCEPTANCE-CLOSEOUT-001` |
+| 收口日期 | 2026-08-29 |
+| 验收证据提交 | `b5aeec28eaf29e20a56dd7012e4077dee8b891a4` |
+| 项目负责人最终人工测试 | 保存、刷新、恢复均正常 |
+| PENDING_USER_CONFIRMATION | 0 |
 | 任务编号 | `SERVER-CONFIG-FEATURE-BASELINE-001` |
 | 授权基线提交 | `7ea9d702e831245fbe8f0e84691bf0aea093dbdf` |
 | 候选基线初始任务 | `SERVER-CONFIG-FEATURE-BASELINE-001` |
@@ -28,9 +34,9 @@
 | 候选调整批准人 | 项目负责人 |
 | ChatGPT 最终复审通过提交 | `b1c5349df43c73bc855b5ca8b3ea92acb6faa7ee` |
 
-重要声明：本文件把所有需求转换为可客观验收的场景，使用唯一、稳定的验收编号。所有用例初始状态为 `NOT_RUN`（未执行）。本文档不是已执行的验收报告；任何用例状态只有在执行并取得与步骤匹配的客观证据后才允许更新。对需要构造数据库异常数据的验收场景，本文件只定义期望行为，不授权任何测试数据写入；任何数据库写操作仍需按项目数据库审批规则另行获得授权。
+重要声明：本文件把所有需求转换为可客观验收的场景，使用唯一、稳定的验收编号。所有用例初始状态为 `NOT_RUN`（未执行）；`PASS / FAIL / BLOCKED` 是执行后状态，任何用例状态只有在执行并取得与步骤匹配的客观证据后才允许更新。对需要构造数据库异常数据的验收场景，本文件只定义期望行为，不授权任何测试数据写入；任何数据库写操作仍需按项目数据库审批规则另行获得授权。
 
-状态含义必须清楚，三者不得混淆：本文件 `APPROVED` 表示验收标准已正式批准（含本次验收前两项调整：`CONFIG_DESC` 人工换行、按 `ID_SERVER_CONFIG ASC` 排序）；用例 `NOT_RUN` 表示尚未执行，不能推定通过；实现状态 `IMPLEMENTED_ADJUSTMENT_PENDING` 表示旧批准版本已实现并复审、本次两项已批准调整尚未实现。本文件批准不等于验收用例已经执行通过，也不等于功能已经实现。
+状态含义必须清楚，三者不得混淆：本文件 `APPROVED` 表示验收标准已正式批准（含本次验收前两项调整：`CONFIG_DESC` 人工换行、按 `ID_SERVER_CONFIG ASC` 排序）；用例 `NOT_RUN` 表示尚未执行、不能推定通过，`PASS / FAIL / BLOCKED` 表示已执行；实现状态 `IMPLEMENTED_ACCEPTED` 表示旧批准版本与本次两项已批准调整均已实现并验收接受。本文件当前最终执行结果为 `66 PASSED / 0 FAILED / 0 BLOCKED / 0 NOT_RUN`，正式验收状态 `ACCEPTED`。正式验收的详细证据链见 §6.4 最终验收证据索引及各验收报告。
 
 ## 2. 验收结果状态模型
 
@@ -216,3 +222,20 @@
 | 2026-08-27 | 批准：文档状态由 `DRAFT_PENDING_USER_REVIEW` 改为 `APPROVED`；`依据需求`更新为已批准的 `REQUIREMENTS.md`；记录批准任务、批准日期、批准人（项目负责人）与 ChatGPT 复审通过的候选提交 `4e55493a...`；65 条用例 `SC-AC-001`～`SC-AC-065` 全部保持 `NOT_RUN`，编号连续、唯一且内容不变；不得将需求批准误写为验收执行通过 | SERVER-CONFIG-FEATURE-BASELINE-APPROVAL-001（项目负责人批准驱动的 Feature 需求与验收基线收口；纯文档任务，不连接数据库，不修改代码） |
 | 2026-08-28 | 候选调整（预验收）：SC-AC-017 预期改为 `ID_SERVER_CONFIG ASC`；SC-AC-007 修订为聚焦普通过长文本自动折行；新增 SC-AC-066 人工换行用例（真实 LF/CRLF 分行、`<br>`/字面量 `\n` 不作为协议、HTML 文本转义、无横向溢出、Key Tooltip 可用）；验收合计更新为 66，全部保持 `NOT_RUN`；文档状态迁移为 `DRAFT_ADJUSTMENT_PENDING_USER_REVIEW`、实现状态迁移为 `IMPLEMENTED_ADJUSTMENT_PENDING` | SERVER-CONFIG-PRE-ACCEPTANCE-ADJUSTMENT-BASELINE-001（纯文档候选基线任务；待用户复审） |
 | 2026-08-28 | 批准收口：文档状态由 `DRAFT_ADJUSTMENT_PENDING_USER_REVIEW` 迁移为 `APPROVED`；记录批准任务、批准日期、批准人（项目负责人）与 ChatGPT 最终复审通过提交 `b1c5349...`；`SC-AC-001`～`SC-AC-066` 共 66 条全部保持 `NOT_RUN`，编号连续唯一；实现状态保持 `IMPLEMENTED_ADJUSTMENT_PENDING`；所有用例内容与预期不变 | SERVER-CONFIG-PRE-ACCEPTANCE-ADJUSTMENT-BASELINE-APPROVAL-001（项目负责人批准驱动的验收前调整基线收口；纯文档任务，不连接数据库，不修改代码） |
+| 2026-08-29 | 最终收口：实现状态由 `IMPLEMENTED_ADJUSTMENT_PENDING` 迁移为 `IMPLEMENTED_ACCEPTED`；新增元数据行（验收用例状态/正式验收状态 = `66 PASSED / 0 FAILED（ACCEPTED）`、收口任务、收口日期、验收证据提交 `b5aeec2...`、项目负责人最终人工测试、`PENDING_USER_CONFIRMATION=0`）；明确正式验收最终执行结果 `66 PASSED / 0 FAILED / 0 BLOCKED / 0 NOT_RUN`；新增 §6 最终验收证据索引。本行仅收口状态，不改动任何用例编号、前置条件、步骤或预期结果；历史变更记录中此前的 `DRAFT_*`/`APPROVED`/`NOT_RUN`/`IMPLEMENTED_ADJUSTMENT_PENDING` 等历史状态原样保留 | SERVER-CONFIG-FORMAL-ACCEPTANCE-CLOSEOUT-001（纯文档正式验收收口；不修改代码/测试，不连接数据库，不重新执行验收） |
+
+## 6. 最终验收证据索引
+
+以下为正式验收与收口的完整证据链。`SC-AC-001`～`SC-AC-066` 的编号、前置条件、步骤与预期结果始终未变；本节仅索引执行与收口证据，不构成对用例定义本身的改动。
+
+| # | 证据项 | 说明 | 提交/文件 |
+|---|---|---|---|
+| 1 | 初次正式验收报告 | 66 条初次执行；经 R1 事实修正后历史结果为 `64 PASSED / 2 FAILED`（失败项 `SC-AC-009`、`SC-AC-062`） | `docs/features/server-config/reports/SERVER-CONFIG-FORMAL-ACCEPTANCE-001.md`（R1 事实修正提交 `dea3360...`） |
+| 2 | R1 事实修正 | 修正初次验收报告中的事实性偏差，保留当时 `64/2` 历史 | 提交 `dea3360...` |
+| 3 | 缺陷修复报告 | 修复 `SC-AC-009`/`SC-AC-062` 两项显示缺陷（Key Tooltip 前缀、超宽只读值单行省略与悬停原文） | 提交 `70382a6...`；`docs/features/server-config/reports/SERVER-CONFIG-FORMAL-ACCEPTANCE-DEFECT-FIX-001.md` |
+| 4 | 定向重验报告 | 真实浏览器定向重验 `SC-AC-009`、`SC-AC-062`：`2 PASSED / 0 FAILED`，数据库临时数据已恢复 | 提交 `b5aeec2...`；`docs/features/server-config/reports/SERVER-CONFIG-FORMAL-ACCEPTANCE-TARGETED-RETEST-001.md` |
+| 5 | ChatGPT 最终复审 | 对缺陷修复 `70382a6` 及定向重验 `b5aeec2` 的代码范围、浏览器测量、Tooltip 行为、数据库恢复和报告一致性复审：`PASSED`，无需 R1 | 见定向重验报告与最终收口报告 |
+| 6 | 项目负责人最终人工测试 | 项目负责人（2026-08-29）明确确认“保存、刷新、恢复”都正常 | 见最终收口报告 |
+| 7 | 最终收口报告 | 综合判定 `66 PASSED / 0 FAILED / 0 BLOCKED / 0 NOT_RUN`，`formal_acceptance_status=ACCEPTED`，`implementation_status=IMPLEMENTED_ACCEPTED` | `docs/features/server-config/reports/SERVER-CONFIG-FORMAL-ACCEPTANCE-CLOSEOUT-001.md` |
+
+说明：`SC-AC-014`、`SC-AC-015`（中心端零条/多条等需构造异常数据库状态的场景）始终由后端测试、前端测试与代码证据交叉通过，不作为真实数据库构造验收；本收口不改变该披露口径。

@@ -12,9 +12,9 @@
 | 任务性质 | 真实浏览器定向重验、最小数据库数据构造、证据报告 |
 | 定向重验用例 | `SC-AC-009`、`SC-AC-062` |
 | 执行日期 | 2026-08-28 |
-| 候选综合结果 | `66 PASSED / 0 FAILED`，状态 `TARGETED_RETEST_PASSED_PENDING_CHATGPT_REVIEW` |
+| 候选综合结果 | `66 PASSED / 0 FAILED`，状态 `TARGETED_RETEST_ACCEPTED`（ChatGPT 最终复审与负责人确认见 §14） |
 
-本任务只验证修复后的真实浏览器行为，未修改任何代码、测试、后端或批准文档，未执行其余 64 条验收，未进入最终收口。
+本任务只验证修复后的真实浏览器行为，未修改任何代码、测试、后端或批准文档，未执行其余 64 条验收，未进入最终收口。任务完成时状态为 `TARGETED_RETEST_PASSED_PENDING_CHATGPT_REVIEW`，等待 ChatGPT 复审；ChatGPT 最终复审通过并经项目负责人确认后，当前有效状态收口为 `TARGETED_RETEST_ACCEPTED`（见 §14）。
 
 ## 2. Git 开始现场与无关工作区保护
 
@@ -124,7 +124,7 @@
 
 - `targeted_retest_passed_count=2`，`targeted_retest_failed_count=0`，`targeted_retest_blocked_count=0`。
 - 候选综合结果 `66 PASSED / 0 FAILED`。
-- 状态仅可为 `TARGETED_RETEST_PASSED_PENDING_CHATGPT_REVIEW`。
+- 任务完成时状态为 `TARGETED_RETEST_PASSED_PENDING_CHATGPT_REVIEW`；ChatGPT 最终复审通过并经项目负责人确认后，当前有效状态收口为 `TARGETED_RETEST_ACCEPTED`（见 §14）。
 - 本任务未修改原正式验收报告中的 `64/2`，未修改 `ACCEPTANCE.md`；最终状态迁移由 ChatGPT 复审通过后的单独收口任务完成。等待 ChatGPT 复审，尚未收口。
 
 ## 13. 修改文件、Commit、Push 与 ahead/behind
@@ -137,3 +137,24 @@
 - 无关工作区内容全部原样保留。
 
 （本报告记录 Commit/Push 计划与实际执行结果；最终值见任务完成后的控制台机器块。）
+
+## 14. ChatGPT 最终复审与负责人确认章节（收口）
+
+本节由最终收口任务 `SERVER-CONFIG-FORMAL-ACCEPTANCE-CLOSEOUT-001` 追加，用于记录 ChatGPT 最终复审与项目负责人确认，并把本报告当前有效状态由 `TARGETED_RETEST_PASSED_PENDING_CHATGPT_REVIEW` 收口为 `TARGETED_RETEST_ACCEPTED`。本节为纯文档收口，未重跑任何浏览器测量、数据库恢复或测试数据；**原浏览器测量数据（§5~§8）、数据库恢复结果（§9）与自动化测试数据（§10）均未改变。**
+
+### 14.1 ChatGPT 最终复审
+
+- 复审对象：缺陷修复提交 `70382a64bfae5ef2ba847fe6c65d2817304042ca` 与定向重验提交 `b5aeec28eaf29e20a56dd7012e4077dee8b891a4`。
+- 复审范围：修改范围、真实浏览器测量数据、Key Tooltip / 值 Tooltip 触发与内容、数据库恢复结果、报告与验收基线的一致性。
+- 复审结论：`PASSED`，无需 R1。
+
+### 14.2 项目负责人确认
+
+项目负责人于 2026-08-29 在正式页面完成最终人工修改体验测试，明确确认：**“保存、刷新、恢复”都正常。** 该确认代表最终人工修改体验通过，无待确认业务问题。
+
+### 14.3 收口后状态
+
+- `targeted_retest_status=TARGETED_RETEST_ACCEPTED`。
+- `SC-AC-009`、`SC-AC-062` 定向重验：`2 PASSED / 0 FAILED`。
+- 综合结果 `66 PASSED / 0 FAILED`（正式验收最终收口见 SERVER-CONFIG-FORMAL-ACCEPTANCE-001.md §16 与 SERVER-CONFIG-FORMAL-ACCEPTANCE-CLOSEOUT-001.md）。
+- 原浏览器测量、数据库恢复与测试数据保持本报告 §5~§10 原样不变。

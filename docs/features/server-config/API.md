@@ -6,11 +6,16 @@
 |---|---|
 | 正式功能标识 | `server-config` |
 | 目标文档 | `docs/features/server-config/API.md` |
-| 文档状态 | `APPROVED`（原批准 API 契约基线仍有效；本次验收前两项调整——`configDesc` 人工换行与按 `ID_SERVER_CONFIG ASC` 排序——已获项目负责人批准，代码尚未实现，见 §11 变更记录） |
+| 文档状态 | `APPROVED` |
 | 需求基线状态 | `APPROVED`（原已批准，本次调整已批准） |
 | 验收基线状态 | `APPROVED`（原已批准，本次调整已批准） |
-| 实现状态 | `IMPLEMENTED_ADJUSTMENT_PENDING`（旧批准契约已实现并经过 R1/R2 复审；本次两项已批准调整尚未实现） |
-| 验收用例状态 | `66 条全部 NOT_RUN` |
+| 实现状态 | `IMPLEMENTED_ACCEPTED`（旧批准契约与本次两项已批准调整均已实现并验收接受，见 §11 变更记录） |
+| 验收用例状态/正式验收状态 | `66 PASSED / 0 FAILED（ACCEPTED）` |
+| 收口任务 | `SERVER-CONFIG-FORMAL-ACCEPTANCE-CLOSEOUT-001` |
+| 收口日期 | 2026-08-29 |
+| 验收证据提交 | `b5aeec28eaf29e20a56dd7012e4077dee8b891a4` |
+| 项目负责人最终人工测试 | 保存、刷新、恢复均正常 |
+| PENDING_USER_CONFIRMATION | 0 |
 | 设计任务 | `SERVER-CONFIG-DESIGN-BASELINE-001` |
 | 授权基线提交 | `c1a6d7dc38de261093383d7abf719f0834dd9bb3` |
 | R1 修订任务 | `SERVER-CONFIG-DESIGN-BASELINE-001-R1` |
@@ -31,7 +36,7 @@
 | 候选调整批准人 | 项目负责人 |
 | ChatGPT 最终复审通过提交 | `b1c5349df43c73bc855b5ca8b3ea92acb6faa7ee` |
 
-声明：本文档原为**已批准 API 契约设计**（批准任务 `SERVER-CONFIG-DESIGN-BASELINE-APPROVAL-001`，批准日期 2026-08-27，批准人=项目负责人）。旧批准契约已实现并经过 R1/R2 复审（实现审查基线 `24d8b80340cc691895bed8bc45a4cb2dc2c6b9b6`）。本次为负责人在正式验收前提出的两项候选调整（`configDesc` 原样返回与真实换行传输语义、`items` 按 `ID_SERVER_CONFIG ASC` 返回），已获项目负责人批准（批准任务 `SERVER-CONFIG-PRE-ACCEPTANCE-ADJUSTMENT-BASELINE-APPROVAL-001`，批准日期 2026-08-28，ChatGPT 最终复审通过提交 `b1c5349df43c73bc855b5ca8b3ea92acb6faa7ee`），文档状态为 `APPROVED`，两项已批准调整的代码**尚未实现**（实现状态 `IMPLEMENTED_ADJUSTMENT_PENDING`），正式验收（现 66 条）仍未执行。设计批准不等于实现完成，也不等于验收执行或 PASS。本文档保持接口最少化，唯一确定两套接口，不保留多套备选方案。
+声明：本文档原为**已批准 API 契约设计**（批准任务 `SERVER-CONFIG-DESIGN-BASELINE-APPROVAL-001`，批准日期 2026-08-27，批准人=项目负责人）。旧批准契约已实现并经过 R1/R2 复审（实现审查基线 `24d8b80340cc691895bed8bc45a4cb2dc2c6b9b6`）。本次为负责人在正式验收前提出的两项候选调整（`configDesc` 原样返回与真实换行传输语义、`items` 按 `ID_SERVER_CONFIG ASC` 返回），已获项目负责人批准（批准任务 `SERVER-CONFIG-PRE-ACCEPTANCE-ADJUSTMENT-BASELINE-APPROVAL-001`，批准日期 2026-08-28，ChatGPT 最终复审通过提交 `b1c5349df43c73bc855b5ca8b3ea92acb6faa7ee`）。当前有效状态：文档状态为 `APPROVED`，实现状态为 `IMPLEMENTED_ACCEPTED`（旧批准契约、两项已批准调整及后续显示缺陷修复均已实现并验收接受），正式验收 `66 PASSED / 0 FAILED / 0 BLOCKED / 0 NOT_RUN`，正式验收状态 `ACCEPTED`（2026-08-29 收口，收口任务 `SERVER-CONFIG-FORMAL-ACCEPTANCE-CLOSEOUT-001`）。设计批准不等于实现完成，也不等于验收执行或 PASS，但本 Feature 已完成正式验收收口。本文档保持接口最少化，唯一确定两套接口，不保留多套备选方案。
 
 ## 2. 设计依据与追踪方式
 
@@ -304,3 +309,4 @@
 | 2026-08-27 | 批准：文档状态由 `DRAFT_PENDING_USER_REVIEW` 改为 `APPROVED`；记录批准任务、批准日期、批准人（项目负责人）与 ChatGPT 复审通过提交 `77a8c639...`；同步 `SC-API-052` 两处“否则→则”纯文字逻辑方向修正（ChatGPT R2 复审后确认：① 缺失或 JSON null 则 `VALUE_EMPTY` `40224`、② 非 JSON 字符串类型则 `VALUE_FORMAT_INVALID` `40226`，后续正向条件 trim 非空、原样长度 ≤64、符合 Key 专门规则仍保留“否则”）；设计批准不等于实现完成或验收执行；实现状态保持 `NOT_STARTED`，65 条验收保持 `NOT_RUN` | SERVER-CONFIG-DESIGN-BASELINE-APPROVAL-001（项目负责人批准驱动的设计基线收口；纯文档任务） |
 | 2026-08-28 | 候选调整（预验收）：`items` 按 `ID_SERVER_CONFIG ASC` 返回（SC-API-025/034）；`configKey` 不再承担排序职责（SC-API-027）；新增 SC-API-036 明确 `configDesc` 原样返回、真实换行经 JSON 标准转义传输；不新增接口、请求字段、响应字段或错误码；文档状态迁移为 `DRAFT_ADJUSTMENT_PENDING_USER_REVIEW`、实现状态迁移为 `IMPLEMENTED_ADJUSTMENT_PENDING`，66 条验收保持 NOT_RUN | SERVER-CONFIG-PRE-ACCEPTANCE-ADJUSTMENT-BASELINE-001（纯文档候选基线任务；待用户复审） |
 | 2026-08-28 | 批准收口（预验收调整基线）：文档状态由 `DRAFT_ADJUSTMENT_PENDING_USER_REVIEW` 迁移为 `APPROVED`；记录候选调整批准任务、批准日期、批准人（项目负责人）与 ChatGPT 最终复审通过提交 `b1c5349df43c73bc855b5ca8b3ea92acb6faa7ee`；两项调整内容不变（`configDesc` 真实换行安全显示、`ORDER BY ID_SERVER_CONFIG ASC`）；实现状态保持 `IMPLEMENTED_ADJUSTMENT_PENDING`（两项已批准调整代码尚未实现），66 条验收保持 `NOT_RUN`；`PENDING_USER_CONFIRMATION=0`；保留初始候选、R1、R2 全部历史 | SERVER-CONFIG-PRE-ACCEPTANCE-ADJUSTMENT-BASELINE-APPROVAL-001（项目负责人批准驱动的验收前调整基线收口；纯文档任务） |
+| 2026-08-29 | 最终收口：实现状态由 `IMPLEMENTED_ADJUSTMENT_PENDING` 迁移为 `IMPLEMENTED_ACCEPTED`；新增元数据行（验收用例状态/正式验收状态 = `66 PASSED / 0 FAILED（ACCEPTED）`、收口任务、收口日期、验收证据提交 `b5aeec2...`、项目负责人最终人工测试、`PENDING_USER_CONFIRMATION=0`）；接口契约（URL、请求/响应字段、排序 `ID_SERVER_CONFIG ASC`、`configDesc` 原样返回与换行传输、错误码）保持不变，仅收口实现/验收状态。历史变更记录中的 `NOT_STARTED`/`DRAFT_*`/`IMPLEMENTED_ADJUSTMENT_PENDING` 等历史状态原样保留 | SERVER-CONFIG-FORMAL-ACCEPTANCE-CLOSEOUT-001（纯文档正式验收收口；不修改代码/测试，不连接数据库，不重新执行验收） |

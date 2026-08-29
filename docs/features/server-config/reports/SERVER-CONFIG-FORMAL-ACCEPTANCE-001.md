@@ -1,6 +1,6 @@
 # 中心端配置 66 条正式验收候选结果报告
 
-> **重要声明**：本报告只记录 `SC-AC-001` ~ `SC-AC-066` 共 66 条正式验收的逐条执行结果与证据，**不构成"正式验收通过"结论**。经 ChatGPT 复审，`SC-AC-009` 与 `SC-AC-062` 共 2 条存在与批准基线不一致的显示缺陷，项目负责人已决定按批准基线修复（不接受现状）。当前有效统计为 64 条 `PASSED`、2 条 `FAILED`；`formal_acceptance_status=FAILED_PENDING_FIX_AND_TARGETED_RETEST`。修复后再对 `SC-AC-009`、`SC-AC-062` 定向重验并完成收口。本报告不修改六份批准功能文档，不更新 Feature 状态，不进入最终收口。
+> **重要声明**：本报告记录 `SC-AC-001` ~ `SC-AC-066` 共 66 条正式验收的逐条执行结果与证据。初次正式验收经 R1 事实修正后的**历史中间状态**为 64 条 `PASSED`、2 条 `FAILED`（`SC-AC-009`、`SC-AC-062`；当时 `formal_acceptance_status=FAILED_PENDING_FIX_AND_TARGETED_RETEST`）。两条失败项随后完成缺陷修复（提交 `70382a6...`，补 `配置Key：` 前缀、超宽只读值单行省略+悬停完整原文）并经 ChatGPT 代码复审 `PASSED`；真实浏览器定向重验 `SC-AC-009`、`SC-AC-062` 为 `2 PASSED / 0 FAILED`（提交 `b5aeec2...`，见 SERVER-CONFIG-FORMAL-ACCEPTANCE-TARGETED-RETEST-001.md）；项目负责人最终人工测试“保存、刷新、恢复”均正常。**当前最终有效统计为 66 条 `PASSED`、0 条 `FAILED`、0 条 `BLOCKED`、0 条 `NOT_RUN`**；`formal_acceptance_status=ACCEPTED`、`implementation_status=IMPLEMENTED_ACCEPTED`。本报告 §11 保留原始失败根因、§15 保留 R1 历史 `64/2` 事实作为历史中间状态，不以历史状态冒充最终结果。
 
 ## 1. 任务元数据、基线提交、运行环境与服务版本
 
@@ -51,7 +51,7 @@ docs/features/server-config/reports/SERVER-CONFIG-FORMAL-ACCEPTANCE-001.md
 
 ## 4. 66 条逐条验收结果表
 
-状态含义：`PASSED`=已执行且符合预期；`PASSED_BY_TEST_AND_CODE_EVIDENCE`=因 `CDC_SERVER` 无写权限，仅以自动化测试+静态代码交叉证据通过（归入 `PASSED`，单独披露）；`FAILED`=已执行且不符合预期；`BLOCKED`=受环境阻塞；`NOT_RUN`=未执行。
+状态含义：`PASSED`=已执行且符合预期；`PASSED_BY_TEST_AND_CODE_EVIDENCE`=因 `CDC_SERVER` 无写权限，仅以自动化测试+静态代码交叉证据通过（归入 `PASSED`，单独披露）；`PASSED_AFTER_FIX_AND_TARGETED_RETEST`=初次验收失败，缺陷修复并经 ChatGPT 复审后由真实浏览器定向重验通过（本报告 `SC-AC-009`、`SC-AC-062`）；`FAILED`=已执行且不符合预期（初次验收历史）；`BLOCKED`=受环境阻塞；`NOT_RUN`=未执行。
 
 | 编号 | 执行方式 | 关键证据摘要 | 状态 |
 |---|---|---|---|
@@ -63,7 +63,7 @@ docs/features/server-config/reports/SERVER-CONFIG-FORMAL-ACCEPTANCE-001.md
 | SC-AC-006 | 浏览器 | 无 `ID_SERVER_CONFIG` 列、无 `SERVER_ID` 列 | PASSED |
 | SC-AC-007 | 浏览器 | 说明列占最大可用宽度（min-width 240 无固定 max），普通过长文本按列宽折行多行完整展示，无大段省略；英文 Key 不作为主内容持续展示 | PASSED |
 | SC-AC-008 | 浏览器 + DML 构造 | 两列结构；`CONFIG_DESC=NULL` 时主内容兜底显示 `CONFIG_KEY`（实测 006 显示 "auto-create-table"）；`CONFIG_DESC` 与 `CONFIG_KEY` 均空时显示"未定义配置项"且该行只读、无 Key 图标；兜底不改数据库（DML 前后查询确认） | PASSED |
-| SC-AC-009 | 浏览器 + 静态代码 | **失败**：①信息图标 Tooltip 内容为纯 Key（实测 "snapshotBatchSize"），无要求的 `配置Key：` 前缀；②超宽只读值不省略（64 字符值折行为 3 行，`white-space:normal`、无 `text-overflow:ellipsis` 生效），值本身无 tooltip，悬停只读值不弹出完整原文（悬停显示的是 Key 名而非值）。详见 §11 | **FAILED** |
+| SC-AC-009 | 浏览器 + 静态代码 + 定向重验 | **首次验收失败（历史）**：①信息图标 Tooltip 内容为纯 Key（实测 "snapshotBatchSize"），无要求的 `配置Key：` 前缀；②超宽只读值不省略（64 字符值折行为 3 行，`white-space:normal`、无 `text-overflow:ellipsis` 生效），值本身无 tooltip，悬停只读值不弹出完整原文（悬停显示的是 Key 名而非值）。原始失败根因见 §11、R1 复审见 §15。缺陷已修复（提交 `70382a6...`）并经 ChatGPT 复审 `PASSED`、真实浏览器定向重验通过（提交 `b5aeec2...`，重验报告 SERVER-CONFIG-FORMAL-ACCEPTANCE-TARGETED-RETEST-001），详见 §16 | **PASSED_AFTER_FIX_AND_TARGETED_RETEST** |
 | SC-AC-010 | 浏览器交互 | 枚举/多选/数字编辑控件使用值列宽度，下拉选项完整可读、多选与数字输入正常操作，未被窄列挤压 | PASSED |
 | SC-AC-011 | 浏览器 | 页面无搜索、筛选、分页、自动刷新控件；无新增、复制、删除入口（实测 `no_search/no_pagination/no_add_del_btn` 均 true） | PASSED |
 | SC-AC-012 | 浏览器 | 页面顶部无中心端下拉框或切换器（实测 `no_server_switch` true） | PASSED |
@@ -116,7 +116,7 @@ docs/features/server-config/reports/SERVER-CONFIG-FORMAL-ACCEPTANCE-001.md
 | SC-AC-059 | API + SQL | 两个均合法、值不同的并发请求（`006=true` 与 `006=false`）：均返回 200 无版本/冲突错误，最终 DB `006=true` 与较晚完成请求值一致，证明"最后一次成功保存生效" | PASSED |
 | SC-AC-060 | 浏览器交互 | 保存成功：页面给出成功反馈，并重新查询唯一中心端及全部配置，重载结果成为新的原始值（脏值清空、按钮回禁用） | PASSED |
 | SC-AC-061 | 浏览器 + DML | DML 在确认框打开期间将 003 `IS_EDITABLE='0'`：确认保存被后端 40421 拒绝，页面显示明确错误"保存失败：配置项不可编辑"（不泄露底层堆栈），数据库整批回滚、编辑内容保留；恢复 `IS_EDITABLE` | PASSED |
-| SC-AC-062 | 浏览器 | 正常态所有 `CONFIG_VALUE` 完整展示、不脱敏不掩码、无配置 Key 独立列、Key 仅信息图标 Tooltip 展示等子项均已通过；但"只读值超宽省略并悬停展示完整原文"未实现（与 `SC-AC-009` 同一行为，实测见 §11）。本用例含合取要求，任一必要子项失败即整条失败，不能使用"PASSED（附披露）" | **FAILED** |
+| SC-AC-062 | 浏览器 + 定向重验 | **首次验收失败（历史）**：正常态所有 `CONFIG_VALUE` 完整展示、不脱敏不掩码、无配置 Key 独立列、Key 仅信息图标 Tooltip 展示等子项均已通过；但"只读值超宽省略并悬停展示完整原文"未实现（与 `SC-AC-009` 同一行为，实测见 §11），合取要求任一必要子项失败即整条失败。该行为随 `SC-AC-009` 缺陷一并修复（提交 `70382a6...`）并经真实浏览器定向重验全部合取子项通过（提交 `b5aeec2...`，重验报告 SERVER-CONFIG-FORMAL-ACCEPTANCE-TARGETED-RETEST-001），详见 §16 | **PASSED_AFTER_FIX_AND_TARGETED_RETEST** |
 | SC-AC-063 | 静态代码 + 全程观察 | `server-config` 后端无任何 `sync-server` 重启/通知/生效检测/生效提示调用（唯一 "sync-server" 引用为错误提示文案）；验收全程保存操作未触发、未提示 `sync-server` 重启 | PASSED |
 | SC-AC-064 | 静态代码 + 全程观察 | 后端无任何 DDL 语句；产品页面、正式 API 与 `server-config` 业务代码不提供、不调用 `CDC_SERVER_CONFIG` 新增/删除能力（业务代码仅 select/update）；`CDC_SERVER` 业务代码仍只读（仅 `selectList`）；验收期间确有项目负责人授权的直接 DML `DELETE/INSERT`，仅用于测试数据构造与恢复（见 §6），不属于产品功能行为；最终恢复为原有 8 个配置记录身份并可正常加载；产品能力边界符合批准验收标准 | PASSED |
 | SC-AC-065 | 浏览器 + DML + API | DML 构造 006 非法当前值（不符合布尔规则）：页面显示专用控件与当前值异常提示、不因值异常变只读；未修正前"保存全部"不得提交含非法值的批次；通过 UI 改为合法值 `true` 后进入确认并按正常批量规则保存成功 | PASSED |
@@ -124,13 +124,17 @@ docs/features/server-config/reports/SERVER-CONFIG-FORMAL-ACCEPTANCE-001.md
 
 ### 4.1 结果统计
 
+**当前最终有效统计**：
+
 | 状态 | 数量 |
 |---|---|
-| PASSED | 64（含 `PASSED_BY_TEST_AND_CODE_EVIDENCE` 2 条：SC-AC-014、SC-AC-015） |
-| FAILED | 2（SC-AC-009、SC-AC-062） |
+| PASSED | 66（含 `PASSED_BY_TEST_AND_CODE_EVIDENCE` 2 条：SC-AC-014、SC-AC-015；含 `PASSED_AFTER_FIX_AND_TARGETED_RETEST` 2 条：SC-AC-009、SC-AC-062） |
+| FAILED | 0（初次验收历史为 2：SC-AC-009、SC-AC-062，已修复并经真实浏览器定向重验通过） |
 | BLOCKED | 0 |
 | NOT_RUN | 0 |
 | **合计** | **66** |
+
+历史中间状态（首次验收及 R1 复审后，当时有效）：`64 PASSED / 2 FAILED / 0 BLOCKED / 0 NOT_RUN`，`formal_acceptance_status=FAILED_PENDING_FIX_AND_TARGETED_RETEST`；该历史事实保留于 §11/§15/§16，不视为当前有效口径。
 
 ## 5. 浏览器、API、SQL、测试与构建证据摘要
 
@@ -208,19 +212,29 @@ docs/features/server-config/reports/SERVER-CONFIG-FORMAL-ACCEPTANCE-001.md
 
 ## 10. 数量汇总
 
+**当前最终有效统计**：
+
 | 状态 | 数量 |
 |---|---|
-| PASSED | 64 |
-| FAILED | 2 |
+| PASSED | 66 |
+| FAILED | 0 |
 | BLOCKED | 0 |
 | NOT_RUN | 0 |
 | **合计** | **66** |
 
-其中 `PASSED_BY_TEST_AND_CODE_EVIDENCE` 2 条（SC-AC-014/015）已归入 PASSED 并单独披露。
+其中 `PASSED_BY_TEST_AND_CODE_EVIDENCE` 2 条（SC-AC-014/015）已归入 PASSED 并单独披露；`PASSED_AFTER_FIX_AND_TARGETED_RETEST` 2 条（SC-AC-009、SC-AC-062）为初次验收失败、缺陷修复并经真实浏览器定向重验后通过（历史中间状态为 `64/2`，见 §4.1、§11、§15、§16）。
 
-## 11. 缺陷、阻塞项、残余风险与负责人决定
+## 11. 已解决缺陷、历史问题与负责人决定（保留原始失败根因）
 
-### 11.1 缺陷（FAILED）
+> **当前状态：已全部解决。** 本节保留初次验收的原始失败根因与修复链作为**历史记录**；当前 `open_defect_count=0`、`blocked_count=0`、`pending_user_confirmation_count=0`。
+>
+> - 缺陷修复提交：`70382a64bfae5ef2ba847fe6c65d2817304042ca`（补 Key Tooltip `配置Key：` 前缀；超宽只读值单行省略 + 悬停完整原文 Tooltip）。
+> - ChatGPT 对修复 `70382a6` 的代码复审：`PASSED`。
+> - 真实浏览器定向重验：`SC-AC-009`、`SC-AC-062` 均为 `PASSED`（提交 `b5aeec2...`，见 SERVER-CONFIG-FORMAL-ACCEPTANCE-TARGETED-RETEST-001.md）。
+> - 项目负责人最终人工测试：保存、刷新、恢复均正常。
+> - 当前无开放缺陷、无阻塞、无待确认项。
+
+### 11.1 原始失败根因（历史，2026-08-28 初次验收；FAILED）
 
 **SC-AC-009 —— Key Tooltip 格式与超宽只读值省略/悬停原文，两处与批准基线不符（疑似本 Feature 缺陷）**
 
@@ -235,10 +249,10 @@ docs/features/server-config/reports/SERVER-CONFIG-FORMAL-ACCEPTANCE-001.md
 
 无。
 
-### 11.3 残余风险
+### 11.3 残余风险与披露（当前无开放项）
 
-- `SC-AC-014/015` 未在真实库构造（无 `CDC_SERVER` 写权限），以测试+代码证据替代；若需真实库复核，须另获 `CDC_SERVER` 写授权。
-- `SC-AC-062` 判 `FAILED`：其"只读值超宽省略时悬停展示完整原文"子条款依赖的行为与 `SC-AC-009` 相同，实测失败；正常态不脱敏/不掩码、无 Key 列、Key 仅图标 Tooltip 等子项已通过。修复 `SC-AC-009` 缺陷后该子项即可通过，需与 `SC-AC-009` 一并定向重验。
+- `SC-AC-014/015` 未在真实库构造（无 `CDC_SERVER` 写权限），以测试+代码证据替代并已披露（见 §7）；如需真实库复核，须另获 `CDC_SERVER` 写授权。该披露在最终验收中保持不变，`SC-AC-014/015` 判为 `PASSED_BY_TEST_AND_CODE_EVIDENCE` 并归入 66 条 `PASSED`。
+- `SC-AC-009`/`SC-AC-062` 原失败行为已随缺陷修复（`70382a6...`）消除，并经真实浏览器定向重验全部通过（`b5aeec2...`）；无残余风险。
 - `SC-AC-023` 属于"未来新增 key"场景，当前白名单内 6 个 key 均内置控件与校验规则；白名单外 key 的前后端只读行为已由同机制证据覆盖（DML 构造 + API 40422）。
 
 ## 12. 数据库、DDL、ZooKeeper、服务、接口操作的真实状态
@@ -303,4 +317,71 @@ ChatGPT 已对远程提交 `b5a3a87` 及批准基线、前端代码进行只读�
 
 - `formal_acceptance_status=FAILED_PENDING_FIX_AND_TARGETED_RETEST`。
 - 下一步：小范围前端缺陷修复（补 `配置Key：` 前缀与超宽只读值省略+悬停原文），然后只定向重验 `SC-AC-009`、`SC-AC-062` 及相关回归测试，再进入验收收口。
+
+## 16. 最终收口章节（SERVER-CONFIG-FORMAL-ACCEPTANCE-CLOSEOUT-001，2026-08-29）
+
+本节由最终收口任务新增，用于记录缺陷修复、代码复审、真实浏览器定向重验、项目负责人最终确认及 `66/0 ACCEPTED` 的最终判定。本节为纯文档收口，未重跑验收、自动化测试或构建，未操作服务、接口、数据库或 ZooKeeper。**§15 R1 历史记录与上文 64/2 历史中间状态完整保留，未删除、未改写。**
+
+### 16.1 收口任务与授权基线
+
+- 收口任务：`SERVER-CONFIG-FORMAL-ACCEPTANCE-CLOSEOUT-001`
+- 授权基线（HEAD = origin/develop）：`b5aeec28eaf29e20a56dd7012e4077dee8b891a4`（即定向重验报告提交）
+- 任务性质：纯文档正式验收收口
+
+### 16.2 缺陷修复与 ChatGPT 代码复审
+
+- 缺陷修复提交：`70382a64bfae5ef2ba847fe6c65d2817304042ca`。修复内容：Key Tooltip 补 `配置Key：{CONFIG_KEY}` 前缀；超宽只读值 `.raw-value` 单行省略（`white-space:nowrap` + `overflow:hidden` + `text-overflow:ellipsis`）并悬停展示完整原文 Tooltip。
+- 修复报告：`docs/features/server-config/reports/SERVER-CONFIG-FORMAL-ACCEPTANCE-DEFECT-FIX-001.md`。
+- ChatGPT 代码复审：`code_review_status=PASSED`（已只读复审 `70382a6` 修改范围、实现逻辑、安全文本边界及新增测试），无需 R1。
+
+### 16.3 真实浏览器定向重验
+
+- 真实 Chrome 浏览器定向重验 `SC-AC-009`、`SC-AC-062`：`2 PASSED / 0 FAILED`（全部必要子项与合取子项通过）。
+- 定向重验提交：`b5aeec28eaf29e20a56dd7012e4077dee8b891a4`。
+- 重验报告：`docs/features/server-config/reports/SERVER-CONFIG-FORMAL-ACCEPTANCE-TARGETED-RETEST-001.md`（`SC-AC-009` 11 项必要子项全部通过；`SC-AC-062` 合取子项全部通过；数据库临时 `CONFIG_VALUE` 已恢复，`CDC_SERVER_CONFIG` 最终 8 行、无测试字符串残留）。
+- 定向与 Feature 自动化测试：`ServerConfigPage.spec.ts` 36 tests passed；Feature 三文件 66 tests passed。
+
+### 16.4 项目负责人最终人工测试确认
+
+项目负责人于 2026-08-29 在正式页面完成最终人工修改体验测试，明确确认：**“保存、刷新、恢复”都正常。** 该确认代表最终人工修改体验通过，无待确认业务问题。
+
+### 16.5 最终判定依据与结论
+
+- `SC-AC-009`、`SC-AC-062` 由初次验收 `FAILED` 经缺陷修复、ChatGPT 复审与真实浏览器定向重验后判为 `PASSED_AFTER_FIX_AND_TARGETED_RETEST`。
+- 其余 64 条保持初次验收 `PASSED`（含 `SC-AC-014/015` 的 `PASSED_BY_TEST_AND_CODE_EVIDENCE`）。
+- **最终结论：`66 PASSED / 0 FAILED / 0 BLOCKED / 0 NOT_RUN`**。
+- `formal_acceptance_status=ACCEPTED`；`implementation_status=IMPLEMENTED_ACCEPTED`。
+- `open_defect_count=0`、`blocked_count=0`、`pending_user_confirmation_count=0`。
+
+### 16.6 本报告的收口修改说明
+
+- 顶部重要声明更新为当前最终有效结论（`66/0 ACCEPTED`），同时保留初次验收后 `64/2 FAILED_PENDING_FIX_AND_TARGETED_RETEST` 的历史说明。
+- 逐条结果表 `SC-AC-009`、`SC-AC-062` 状态更新为 `PASSED_AFTER_FIX_AND_TARGETED_RETEST`，保留“首次验收失败”的历史事实与原始失败根因（§11），并引用 §15 R1 与定向重验报告。
+- §4.1 结果统计与 §10 数量汇总更新为当前 `66/0`，同时标注历史中间状态 `64/2`。
+- §11 由“缺陷、阻塞项、残余风险与负责人决定”迁移为“已解决缺陷、历史问题与负责人决定”，原始失败根因与修复链完整保留。
+- §15 R1 历史记录未删除、未篡改。
+
+### 16.7 数据库、接口、服务、ZooKeeper 操作状态（收口任务）
+
+收口任务本身为纯文档任务：未连接数据库、未调用任何接口、未启动/停止/重启任何服务、未操作 ZooKeeper/Kafka、未执行测试/构建；未修改业务代码、测试、数据库项目级基线或任何其他 Feature。定向重验阶段对 `CDC_SERVER_CONFIG` 的临时写操作与恢复已由定向重验报告记录，不属本收口任务。
+
+### 16.8 当前开放缺陷、阻塞、待确认项
+
+当前开放缺陷 `0`、阻塞项 `0`、待确认项 `0`。
+
+### 16.9 状态迁移（前 → 后）
+
+| 项目 | 收口前（2026-08-28 定向重验后） | 收口后（2026-08-29） |
+|---|---|---|
+| `formal_acceptance_status` | `TARGETED_RETEST_PASSED_PENDING_CHATGPT_REVIEW` → 复审通过后 `PASSED_PENDING_CLOSEOUT` | `ACCEPTED` |
+| 有效统计 | `66 PASSED / 0 FAILED`（候选） | `66 PASSED / 0 FAILED / 0 BLOCKED / 0 NOT_RUN` |
+| `implementation_status` | 定向重验通过待收口 | `IMPLEMENTED_ACCEPTED` |
+| 六份批准文档 | `APPROVED` | `APPROVED`（`IMPLEMENTED_ACCEPTED`、`66/0`） |
+| `PENDING_USER_CONFIRMATION` | 0 | 0 |
+
+### 16.10 收口 Commit / Push
+
+- 收口报告文件：`docs/features/server-config/reports/SERVER-CONFIG-FORMAL-ACCEPTANCE-CLOSEOUT-001.md`（本报告 §16 之外的独立收口报告）。
+- 收口 Commit：`docs(server-config): close formal acceptance`；普通 push 到 `origin/develop`（无 force）；推送后 `HEAD == origin/develop`、ahead/behind `0 0`。
+- 任务前无关工作区内容全部原样保留。
 
