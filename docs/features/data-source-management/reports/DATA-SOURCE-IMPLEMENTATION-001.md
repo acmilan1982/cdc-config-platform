@@ -229,9 +229,10 @@ Controller 暴露 API.md §4 定义的 13 个数据源接口，无 enable/disabl
 
 ## 12. 结果 Commit、Push 与远端一致性
 
-- 结果 Commit：`<提交后回填>`
-- Push 状态：`<提交后回填>`
-- 推送后核验：`HEAD == origin/develop == ls-remote develop`，ahead/behind = `0 0`
+- 结果 Commit：`496e6d27280075f185797e6b51790ac9a5773c3d`（feat(data-source-management): implement approved feature [DATA-SOURCE-IMPLEMENTATION-001]）
+- Push 状态：SUCCESS（`9717272..496e6d2  develop -> develop`）
+- 推送后核验：`HEAD == origin/develop == ls-remote develop == 496e6d27280075f185797e6b51790ac9a5773c3d`，ahead/behind = `0 0`
+- 授权基准对比证据：使用授权基准 `9717272` 的临时 detached worktree 以相同环境与命令复现 `mvn clean test`（638 例，3 Failures + 17 Errors），与当前（690 例，3 Failures + 17 Errors）方法级与原因级完全一致，无新增失败；本任务数据源定向测试 100 例全部通过；`mvn clean package -DskipTests` 成功（本次经用户明确授权作为例外）；前端 186 例测试与构建全部通过。
 
 ## 13. 状态与下一步
 
