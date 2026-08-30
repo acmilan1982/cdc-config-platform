@@ -14,7 +14,7 @@
 | 验收用例状态 | 原批准用例 106 例已全部执行（PASS=103，FAIL=2：DS-AC-052/DS-AC-105，BLOCKED=1：DS-AC-104，NOT_RUN=0）；验收后调整用例 `DS-AC-107~115`（9 例）已批准但仍全部 `NOT_RUN`，尚未执行；文档内共 115 例 |
 | 正式验收执行 | `FAIL`（2026-08-30，`DATA-SOURCE-FORMAL-ACCEPTANCE-001`；PASS=103/FAIL=2/BLOCKED=1；失败点 DS-AC-052 与 DS-AC-105 详见 `reports/DATA-SOURCE-FORMAL-ACCEPTANCE-001.md`；实现状态仍未置为 `IMPLEMENTED_ACCEPTED`） |
 | 基础基线状态 | `APPROVED`（原需求 `DS-REQ-001~109`、原验收标准 `DS-AC-001~106`、已批准 UI 设计基线保持已批准） |
-| 验收后调整草案状态 | `APPROVED`（新增 `DS-REQ-110~115`、`DS-AC-107~115` 与 UI §9 已于 2026-08-30 由项目负责人批准；批准不代表实现、测试或验收） |
+| 验收后调整状态 | `APPROVED`（新增 `DS-REQ-110~115`、`DS-AC-107~115` 与 UI §9 已于 2026-08-30 由项目负责人批准；批准不代表实现、测试或验收） |
 | 当前实现状态 | `IMPLEMENTED_PENDING_REVIEW`（与上表“实现状态”一致） |
 | 原正式验收状态 | `FAIL`（与上表“正式验收执行”一致，PASS=103/FAIL=2/BLOCKED=1/NOT_RUN=0） |
 | 调整批准任务 | `DATA-SOURCE-POST-ACCEPTANCE-ADJUSTMENT-APPROVAL-CLOSEOUT-001` |
