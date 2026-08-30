@@ -37,7 +37,7 @@
 | 1 | CDC_DATA_SOURCE | 数据源，包括源库，目标库 | PK_CDC_DATA_SOURCE（DATA_SOURCE_ID） | 普通堆表 | 数据源配置主表（源库/目标库登记） | 读 + 写 | 管理平台（DataSourceServiceImpl CRUD+启停） | [CDC_DATA_SOURCE.md](tables/CDC_DATA_SOURCE.md) |
 | 2 | CDC_DATA_SOURCE_EXTEND | （无注释） | 无 | 普通堆表 | 源库到目标库的命名策略（目标表命名策略：前缀/后缀/合并策略） | 读 + 写 | 管理平台（旧候选实现随 CDC_DATA_SOURCE 联写；批准目标为源库 0..N，第一版无 DDL） | [CDC_DATA_SOURCE_EXTEND.md](tables/CDC_DATA_SOURCE_EXTEND.md) |
 | 3 | CDC_CLIENT_MULTIPLE | 客户端表 | PK_CDC_CLIENT_MULTIPLE（CLIENT_ID） | 普通堆表 | 客户端（探针）注册表 | 只读 | 人工维护（当前管理平台仅只读；后续计划单独开发 CRUD，尚未实现） | [CDC_CLIENT_MULTIPLE.md](tables/CDC_CLIENT_MULTIPLE.md) |
-| 4 | CDC_DATA_SUBSCRIBE | 订阅表 | 无 | 普通堆表 | 订阅配置（源库→目标库订阅关系） | 只读 | 人工维护（当前管理平台仅只读；后续计划单独开发 CRUD，尚未实现） | [CDC_DATA_SUBSCRIBE.md](tables/CDC_DATA_SUBSCRIBE.md) |
+| 4 | CDC_DATA_SUBSCRIBE | 订阅表 | PK_CDC_DATA_SUBSCRIBE（DATA_SUB_ID） | 普通堆表 | 订阅配置（源库→目标库订阅关系） | 只读 | 人工维护（当前管理平台仅只读；后续计划单独开发 CRUD，尚未实现） | [CDC_DATA_SUBSCRIBE.md](tables/CDC_DATA_SUBSCRIBE.md) |
 | 5 | CDC_LOG_CORRECT | 同步正确日志表 | PK_CDC_LOG_CORRECT（CDC_LOG_ID） | 普通堆表 | 同步正确日志（大屏统计源数据/日志查询） | 只读 | 外部 CDC 同步程序写入 | [CDC_LOG_CORRECT.md](tables/CDC_LOG_CORRECT.md) |
 | 6 | CDC_LOG_ERROR | 同步错误日志表 | PK_CDC_LOG_ERROR（CDC_LOG_ID） | 普通堆表 | 同步错误日志（大屏统计源数据/日志查询） | 只读 | 外部 CDC 同步程序写入 | [CDC_LOG_ERROR.md](tables/CDC_LOG_ERROR.md) |
 | 7 | CDC_JOB_FAILURE_EVENT | 作业失败事件表 | PK_CDC_JOB_FAILURE_EVENT（ID） | 普通堆表 | Flink job 失败回调事件记录 | 只读 | sync-client 进程写入（管理平台仅只读） | [CDC_JOB_FAILURE_EVENT.md](tables/CDC_JOB_FAILURE_EVENT.md) |
@@ -159,3 +159,4 @@
 | 2026-08-27 | 新增 2 张已批准待实现表（CDC_SERVER、CDC_SERVER_CONFIG）：新增 §2.1 独立小节登记，保持 14+2=16 分层自校验；从 §5.1 排除区移除两表，避免同一对象同时处于批准和排除状态；§4 物理外键总体说明更新为覆盖 16 张已批准表（保留原 14 表核验历史） | DATABASE-BASELINE-SERVER-CONFIG-001（候选）+ DATABASE-BASELINE-SERVER-CONFIG-APPROVAL-001（批准） |
 | 2026-08-29 | 已批准数据源管理 Feature 规则同步：§2 中 `CDC_DATA_SOURCE_EXTEND` 当前用途更新为“源库到目标库的命名策略（目标表命名策略）”；§6 管理平台写入说明区分当前旧候选实现（双表联写、一对一读取、`ROWNUM=1` 等）与批准新目标（源库 0..N、第一版无 DDL），禁止把新目标写成已实现；数据库物理结构（字段/约束/索引/可空性）无变化 | DATA-SOURCE-BASELINE-IMPACT-ALIGNMENT-001（已批准业务规则向权威数据库基线同步；纯文档任务，数据库物理结构无变化） |
 | 2026-08-29 | R1 修订：§6 补充“数据源管理已批准目标维护边界（尚未实现）”（修改数据源 ID 只改主表当前记录、删除源库/目标库只删主表当前记录且不级联、删除单条命名策略只删对应 `CDC_DATA_SOURCE_EXTEND` 行）；明确这些目标尚未实现、当前旧候选行为（双表联写、ID 同步、级联删除）仍为真实代码事实；字段、主键、约束、索引、表数、读写属性与数据维护方物理事实不变 | DATA-SOURCE-BASELINE-IMPACT-ALIGNMENT-001-R1（ChatGPT 复审 CHANGES_REQUIRED 定向修订；纯文档任务） |
+| 2026-08-30 | 定向核验并修正主键物理基线：`CDC_DATA_SUBSCRIBE` 主键由“无”更新为 `PK_CDC_DATA_SUBSCRIBE`（`DATA_SUB_ID`，只读核验 `DATABASE_VERIFIED`，LAST_DDL_TIME 2026-08-28 17:36:20）；字段、约束、索引、表数、读写属性与数据维护方物理事实不变 | DATA-SUBSCRIPTION-REQUIREMENTS-BASELINE-001（只读核验 `DATABASE_VERIFIED`；纯文档基线修正，未执行任何 DDL） |

@@ -148,11 +148,12 @@
 
 | 编号 | 对象 | 事项 | 当前物理事实 |
 |---|---|---|---|
-| D01 | CDC_DATA_SUBSCRIBE | 是否将 DATA_SUB_ID 设置为主键 | 无主键、无唯一约束、无索引 |
 | D03 | CDC_JOB_FAILURE_EVENT | 是否为 CLIENT_ID / DATA_SOURCE_ID / FAILURE_TIME 等查询字段补索引 | 仅主键索引 |
 | D04 | CDC_JOB_FAILURE_HANDLE_LOG | 是否为 FAILURE_EVENT_ID / CLIENT_ID / DATA_SOURCE_ID 补索引 | 仅主键索引 |
 
 原 R01（是否约束每数据源一条扩展配置/一对一必填目标）已由已批准数据源管理 Feature 基线关闭：`CDC_DATA_SOURCE_EXTEND` 为源库 0..N 命名策略，第一版不新增主键、唯一约束、索引或 DDL，逻辑联合唯一 `(DATA_SOURCE_ID, TARGET_DATA_SOURCE_ID)` 由后端保存前查询校验。
+
+原 D01（是否将 DATA_SUB_ID 设置为主键）已关闭：`CDC_DATA_SUBSCRIBE.DATA_SUB_ID` 已成为数据库真实主键（`PK_CDC_DATA_SUBSCRIBE`，PRIMARY KEY、ENABLED、NOT DEFERRABLE IMMEDIATE，唯一有效索引；2026-08-30 只读核验 `DATABASE_VERIFIED`），不再作为待决策项。
 
 ### 7.3 原 P1～P5 关闭记录（项目负责人 2026-08-26 确认）
 
@@ -161,7 +162,7 @@
 | P1 | SUBSCRIBE / JFE / JHL 写入方 | SUBSCRIBE 人工维护（管理平台仅只读，后续 CRUD 计划尚未实现）；JFE/JHL 由 sync-client 进程写入，管理平台仅只读 |
 | P2 | EXTEND.TARGET_DATA_SOURCE_ID 含义 | 业务语义为目标库（category='TARGET'），为无类别约束的弱逻辑引用；代码未映射该字段 |
 | P3 | STATS_TASK_CONFIG.UPDATED_BY 维护约定 | 可选修改人标识，无固定维护规则 |
-| P4 | SUBSCRIBE 主键历史冲突 | 当前物理事实为无主键；历史“已验证”为旧资料错误；是否增加主键属 D01 独立决策 |
+| P4 | SUBSCRIBE 主键历史冲突 | 曾判定当前物理事实为无主键、历史“已验证”为旧资料错误；2026-08-30 只读核验确认 `PK_CDC_DATA_SUBSCRIBE`（`DATA_SUB_ID`）已于 2026-08-28 建立，主键为当前物理事实，D01 随之关闭 |
 | P5 | SCHEMA §5 对象范围 | 当前基线范围为 14 张使用表；其余对象按 `DOCUMENTED_NOT_USED` / 范围外登记，不阻塞基线批准 |
 
 ## 8. 数据特征对通用设计的影响提示
@@ -180,3 +181,4 @@
 | 2026-08-26 | 批准：项目级数据库基线正式批准收口（APPROVED） | PROJECT-DATABASE-BASELINE-APPROVAL-001 批准 |
 | 2026-08-27 | 新增 §1.3 已批准待实现表快照（CDC_SERVER 精确 1 行、CDC_SERVER_CONFIG 精确 8 行，全部归属 Server001；IS_EDITABLE 1=6、0=2；SERVER_ID NULL 0、孤立引用 0、同中心端重复 CONFIG_KEY 0）；明确为开发库瞬时画像，不代表生产常态与数据库允许值全集 | DATABASE-BASELINE-SERVER-CONFIG-001（候选）+ DATABASE-BASELINE-SERVER-CONFIG-APPROVAL-001（批准） |
 | 2026-08-29 | 已批准数据源管理 Feature 规则同步：§5 EXTEND.DATA_SOURCE_ID 完整性结论更新——重复 DATA_SOURCE_ID 在源库 0..N 规则下属允许范围、13 个数据源无策略记录符合 0 条允许规则、2 条孤立仍为测试构造弱引用场景；明确未对 `(DATA_SOURCE_ID, TARGET_DATA_SOURCE_ID)` 组合是否无重复作出核验声明（本任务不重新读库）；§7.2 原 R01 一对一约束候选由 `PENDING_DECISION` 关闭并注明第一版无 DDL；保留全部 2026-08-26 实测数值不变 | DATA-SOURCE-BASELINE-IMPACT-ALIGNMENT-001（已批准业务规则向权威数据库基线同步；纯文档任务，数据库物理结构与数据无变化） |
+| 2026-08-30 | 定向核验并修正主键物理基线：确认 `CDC_DATA_SUBSCRIBE.DATA_SUB_ID` 已是数据库真实主键（`PK_CDC_DATA_SUBSCRIBE`，2026-08-28 建立，2026-08-30 只读核验 `DATABASE_VERIFIED`）；§7.2 原 D01 由 `PENDING_DECISION` 关闭，§7.3 P4 关闭记录同步更新；§5 完整性结论（12 行 0 空值 0 重复）与行数/码值画像不变 | DATA-SUBSCRIPTION-REQUIREMENTS-BASELINE-001（只读核验 `DATABASE_VERIFIED`；纯文档基线修正，数据库物理结构与数据无变化） |

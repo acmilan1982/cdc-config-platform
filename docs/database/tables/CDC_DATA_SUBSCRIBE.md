@@ -19,7 +19,7 @@
 |---|---|
 | 表用途 | 订阅配置表：登记某个业务库（源库）到目标库的订阅关系，含源表清单、目标表清单、启停标志 |
 | 表类型 | 普通堆表（NON-PARTITIONED） |
-| 主键 | 无（`DATA_SUB_ID` 为程序生成的代理主键，当前无数据库级主键约束） |
+| 主键 | `PK_CDC_DATA_SUBSCRIBE`（`DATA_SUB_ID`，VARCHAR2(32)，NOT NULL；PRIMARY KEY、ENABLED、NOT DEFERRABLE IMMEDIATE） |
 | 外键 | 无 |
 | 分区 | 无 |
 | LOB | 有（4 个 CLOB 字段，见 §6） |
@@ -33,7 +33,7 @@
 
 | # | 字段名 | Oracle类型 | 字符长度 | 精度/小数 | 可空 | 默认值 | 字段注释 |
 |---|---|---|---|---|---|---|---|
-| 1 | DATA_SUB_ID | VARCHAR2 | 32 | — | N | — | 代理主键，程序自动生成，无任何业务含义 |
+| 1 | DATA_SUB_ID | VARCHAR2 | 32 | — | N | — | 代理主键，程序自动生成，无任何业务含义；已为数据库真实主键（`PK_CDC_DATA_SUBSCRIBE`） |
 | 2 | DATA_SUB_DESC | VARCHAR2 | 255 | — | Y | — | 订阅描述 |
 | 3 | DATA_FROM_SOURCE_ID | VARCHAR2 | 1024 | — | Y | — | 源库，即业务库，对应 CDC_DATA_SOURCE 表中 DATA_SOURCE_CATEGORY=source 的记录主键，可以填多个，用英文逗号间隔 |
 | 4 | DATA_TO_SOURCE_ID | VARCHAR2 | 1024 | — | Y | — | 目标库，对应 CDC_DATA_SOURCE 表中 DATA_SOURCE_CATEGORY=target 的记录主键，可以填多个，用英文逗号间隔 |
@@ -52,13 +52,14 @@
 
 | 类型 | 名称 | 字段 | 状态 |
 |---|---|---|---|
+| PRIMARY KEY | PK_CDC_DATA_SUBSCRIBE | DATA_SUB_ID | ENABLED（NOT DEFERRABLE IMMEDIATE） |
 | CHECK (NOT NULL) | SYS_C0041443 | DATA_SUB_ID | ENABLED |
 
-无 PRIMARY KEY、无 UNIQUE、无 FOREIGN KEY 约束。该差异对应既有映射资料中的 D01（SUBSCRIBE 无主键，高严重度）。是否增加主键属 `PENDING_DECISION`（候选物理设计，未经正式批准，不承诺实施或排期）。
+无 UNIQUE（唯一性由主键隐含）、无 FOREIGN KEY 约束。原 D01（SUBSCRIBE 无主键）已关闭：`DATA_SUB_ID` 已成为数据库真实主键（主键约束 `PK_CDC_DATA_SUBSCRIBE` 于 2026-08-28 建立，2026-08-30 只读核验 `DATABASE_VERIFIED`）。
 
 ## 4. 索引
 
-本次核验未发现任何索引。
+主键索引 `PK_CDC_DATA_SUBSCRIBE`（`DATA_SUB_ID`）：NORMAL、UNIQUE、VALID（表空间 USERS）。
 
 ## 5. 分区
 
@@ -96,7 +97,7 @@
 
 ## 9. 已知结构差异、历史兼容与待决策项
 
-- D01：该表无主键、无唯一约束、无索引（当前物理事实）。历史资料声称 DATA_SUB_ID 主键“已验证”经核验为旧资料错误（P4 已关闭）；是否将 DATA_SUB_ID 设置为主键属 `PENDING_DECISION`（候选物理设计，未经正式批准，不承诺实施或排期）。
+- D01 已关闭：`DATA_SUB_ID` 已成为数据库真实主键（`PK_CDC_DATA_SUBSCRIBE`，2026-08-30 只读核验 `DATABASE_VERIFIED`）。历史资料声称 DATA_SUB_ID 主键“已验证”曾被误判为旧资料错误（P4），实际该主键已于 2026-08-28 建立；本任务定向核验确认其为当前物理事实，不再作为待决策项。
 - `DATA_SOURCE_TABLE` 等 4 个 CLOB 字段在代码中如何解析（逗号拆分、表清单解析）由大屏统计模块消费；当前基线仅登记物理结构，解析规则详见对应功能基线。
 - 数据维护：本表由人工维护（当前管理平台仅只读）；后续计划单独开发 CRUD，尚未实现。当前项目后端代码未发现对该表的写入口。
 
@@ -107,3 +108,4 @@
 | 2026-08-26 | 建立单表物理基线（DRAFT_PENDING_USER_REVIEW） | PROJECT-DATABASE-BASELINE-001 只读核验 |
 | 2026-08-26 | R1：数据维护方修订为人工维护；删除“写入方待确认”；D01 状态改为 PENDING_DECISION | PROJECT-DATABASE-BASELINE-001-R1 修订 |
 | 2026-08-26 | 批准：项目级数据库基线正式批准收口（APPROVED） | PROJECT-DATABASE-BASELINE-APPROVAL-001 批准 |
+| 2026-08-30 | 定向核验并修正主键物理基线：`DATA_SUB_ID` 已成为数据库真实主键（`PK_CDC_DATA_SUBSCRIBE`，PRIMARY KEY、ENABLED、NOT DEFERRABLE IMMEDIATE；唯一有效索引；LAST_DDL_TIME 2026-08-28 17:36:20）；关闭 D01；§1/§2/§3/§4 同步更新 | DATA-SUBSCRIPTION-REQUIREMENTS-BASELINE-001（只读核验 `DATABASE_VERIFIED`；纯文档基线修正，未执行任何 DDL） |
