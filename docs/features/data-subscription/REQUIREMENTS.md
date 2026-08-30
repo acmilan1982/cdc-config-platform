@@ -9,7 +9,7 @@
 | 正式菜单 | 数据订阅（配置管理组，路由 `/config/subscribe`，菜单项与路由均保持既有值不变） |
 | 既有路由 | `/config/subscribe` |
 | 目标文档 | `docs/features/data-subscription/REQUIREMENTS.md` |
-| 文档状态 | `DRAFT_PENDING_USER_REVIEW`（需求基线草案，尚未获得项目负责人正式批准） |
+| 文档状态 | `APPROVED`（需求基线已获得项目负责人正式批准，见 §19 批准变更记录） |
 | 实现状态 | `NOT_STARTED`（本任务为纯文档需求基线任务，不涉及任何业务代码实现） |
 | 任务编号 | `DATA-SUBSCRIPTION-REQUIREMENTS-BASELINE-001` |
 | 任务类型 | Feature 需求与验收基线草案落盘、数据库物理事实定向核验、提交与推送（纯文档任务） |
@@ -18,7 +18,7 @@
 | 需求来源 | 已确认的产品决策（本任务提示词 §6～§15 记录的产品需求）+ 已批准数据库基线（`docs/database/`）+ 真实代码只读核验 + 真实数据库只读核验 |
 | 主键核验状态 | `DATABASE_VERIFIED`（`CDC_DATA_SUBSCRIBE.DATA_SUB_ID` 真实主键经只读核验确认，见 §4） |
 
-说明：本文件把已经确认的产品决策落成 Feature 需求基线草案。文档状态为 `DRAFT_PENDING_USER_REVIEW`，实现状态为 `NOT_STARTED`，全部验收用例初始状态为 `NOT_RUN`。本文件不代表业务功能已经实现或验收通过，也不得把“待实现目标”描述为“当前已经实现”。
+说明：本文件把已经确认的产品决策落成 Feature 需求基线，并已获得项目负责人正式批准。文档状态为 `APPROVED`，实现状态仍为 `NOT_STARTED`，全部验收用例初始状态仍为 `NOT_RUN`。需求基线批准不代表业务功能已经实现、部署或验收完成，也不得把“待实现目标”描述为“当前已经实现”。
 
 本文件同时区分历史事实与当前事实：
 
@@ -411,5 +411,6 @@
 |---|---|---|
 | 2026-08-30 | 建立“数据订阅”Feature 需求基线草案（`DRAFT_PENDING_USER_REVIEW`；实现状态 `NOT_STARTED`；全部验收用例 `NOT_RUN`；`DATA_SUB_ID` 主键只读核验 `DATABASE_VERIFIED`） | DATA-SUBSCRIPTION-REQUIREMENTS-BASELINE-001（纯文档任务；基于已确认产品决策 + 已批准数据库基线 + 真实代码与数据库只读核验；待用户复审与批准） |
 | 2026-08-30 | R1 定向修订（ChatGPT 正式复审 `CHANGES_REQUIRED`）：§6 场景 2 修正重置语义——“重置恢复全部启用记录”改为“重置只清空查询表单，不自动重新查询，列表保持上一次已生效的查询结果”；`DSUB-REQ-035` 列顺序由“建议列顺序”改为确定规则“列顺序为”；统一 Feature 文档标识为 `data-subscription` 并关闭 TBD-03；将前序任务已验证的 `DATA_SUB_ID` 主键当前物理事实同步到项目级基线并关闭 TBD-04；文档状态保持 `DRAFT_PENDING_USER_REVIEW`，实现状态保持 `NOT_STARTED`，未批准、未实现、未执行验收 | DATA-SUBSCRIPTION-REQUIREMENTS-BASELINE-001-R1（纯文档定向修订；不改变任何已确认业务规则、需求/验收编号与状态） |
+| 2026-08-30 | 需求基线正式批准收口：文档状态由 `DRAFT_PENDING_USER_REVIEW` 转为 `APPROVED`；批准依据为提交 `b9fb1e955492bef905b3c33acbf9d617bb5a0857` 的 ChatGPT 正式复审结论 `APPROVED`；107 条需求（`DSUB-REQ-001` ~ `DSUB-REQ-107`）编号、数量与业务语义不变；实现状态仍为 `NOT_STARTED`；126 条验收用例仍未执行（`NOT_RUN`）；下一阶段为设计基线建立，不表示功能已实现或验收已通过 | DATA-SUBSCRIPTION-REQUIREMENTS-BASELINE-APPROVAL-001（项目负责人批准驱动的需求与验收基线正式收口；纯文档任务） |
 
-> 关联文档：验收基线 `docs/features/data-subscription/ACCEPTANCE.md`；任务报告 `docs/features/data-subscription/reports/DATA-SUBSCRIPTION-REQUIREMENTS-BASELINE-001.md`。
+> 关联文档：验收基线 `docs/features/data-subscription/ACCEPTANCE.md`；任务报告 `docs/features/data-subscription/reports/DATA-SUBSCRIPTION-REQUIREMENTS-BASELINE-001.md`、`...-001-R1.md`、`...-APPROVAL-001.md`。

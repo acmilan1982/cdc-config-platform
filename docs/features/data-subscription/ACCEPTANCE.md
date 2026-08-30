@@ -9,15 +9,15 @@
 | 正式菜单 | 数据订阅（配置管理组，路由 `/config/subscribe`，菜单项与路由均保持既有值不变） |
 | 既有路由 | `/config/subscribe` |
 | 目标文档 | `docs/features/data-subscription/ACCEPTANCE.md` |
-| 文档状态 | `DRAFT_PENDING_USER_REVIEW`（验收基线草案，尚未获得项目负责人正式批准） |
+| 文档状态 | `APPROVED`（验收标准基线已获得项目负责人正式批准，见 §6 批准变更记录） |
 | 实现状态 | `NOT_STARTED`（本任务为纯文档需求与验收基线任务，不涉及任何业务代码实现） |
 | 任务编号 | `DATA-SUBSCRIPTION-REQUIREMENTS-BASELINE-001` |
 | 创建日期 | 2026-08-30 |
-| 依据需求 | `docs/features/data-subscription/REQUIREMENTS.md`（文档状态 `DRAFT_PENDING_USER_REVIEW`） |
+| 依据需求 | `docs/features/data-subscription/REQUIREMENTS.md`（文档状态 `APPROVED`） |
 
 重要声明：本文件把所有需求转换为可客观验收的场景，使用唯一、稳定的验收编号。所有用例初始状态为 `NOT_RUN`（未执行）；`PASS / FAIL / BLOCKED` 是执行后状态，任何用例状态只有在执行并取得与步骤匹配的客观证据后才允许更新。对需要构造数据库异常数据的验收场景，本文件只定义期望行为，不授权任何测试数据写入；任何数据库写操作仍需按项目数据库审批规则另行获得授权。
 
-状态含义必须清楚：批准验收标准、执行验收、正式验收通过、实现正式接受是不同状态。验收标准文档状态为 `DRAFT_PENDING_USER_REVIEW` 仅表示验收标准基线草案成立，批准验收标准不等于执行功能验收，更不得把文档草案当作用例通过证据。本 Feature 尚未实现，全部用例状态必须保持 `NOT_RUN`，当前本文件不得作为功能已实现的证据。
+状态含义必须清楚：批准验收标准、执行验收、正式验收通过、实现正式接受是不同状态。本次批准的是验收标准基线（文档状态为 `APPROVED`），不代表功能已经实现或验收已通过；批准验收标准不等于执行功能验收，更不得把已批准文档当作用例通过证据。本 Feature 尚未实现（实现状态 `NOT_STARTED`），全部 126 条用例状态必须保持 `NOT_RUN`；只有未来实际执行并取得与步骤匹配的客观证据后，才允许更新为 `PASS / FAIL / BLOCKED`。当前本文件不得作为功能已实现的证据。
 
 ## 2. 验收结果状态模型
 
@@ -254,5 +254,6 @@
 |---|---|---|
 | 2026-08-30 | 建立“数据订阅”Feature 验收基线草案（`DRAFT_PENDING_USER_REVIEW`；实现状态 `NOT_STARTED`；全部 126 条用例 `NOT_RUN`） | DATA-SUBSCRIPTION-REQUIREMENTS-BASELINE-001（纯文档任务；待用户复审与批准） |
 | 2026-08-30 | R1 定向修订（ChatGPT 正式复审 `CHANGES_REQUIRED`）：`DSUB-AC-037` 移除“（或按批准交互保持已查询结果）”候选语义，重置行为唯一确定（保持上一次已生效的查询结果，不自动重新查询、不自动恢复全部记录）；`DSUB-AC-048` 明确异常数据源记录的查看/编辑打开/编辑保存限制与删除边界，避免与 `DSUB-REQ-094` 冲突；`DSUB-AC-085` 修正“无明显的明显卡顿”重复文案；文档状态保持 `DRAFT_PENDING_USER_REVIEW`，全部 126 条用例仍 `NOT_RUN`，未批准、未实现、未执行验收 | DATA-SUBSCRIPTION-REQUIREMENTS-BASELINE-001-R1（纯文档定向修订；不改变编号、数量与状态） |
+| 2026-08-30 | 验收标准基线正式批准收口：文档状态由 `DRAFT_PENDING_USER_REVIEW` 转为 `APPROVED`；批准依据为提交 `b9fb1e955492bef905b3c33acbf9d617bb5a0857` 的 ChatGPT 正式复审结论 `APPROVED`；本次批准的是验收标准基线，不代表功能已实现或验收已通过；126 条用例（`DSUB-AC-001` ~ `DSUB-AC-126`）编号、数量、步骤、前置条件、预期结果与需求映射不变，状态全部保持 `NOT_RUN`；功能实现状态仍为 `NOT_STARTED`；下一阶段为设计基线建立 | DATA-SUBSCRIPTION-REQUIREMENTS-BASELINE-APPROVAL-001（项目负责人批准驱动的需求与验收基线正式收口；纯文档任务） |
 
-> 关联文档：需求基线 `docs/features/data-subscription/REQUIREMENTS.md`；任务报告 `docs/features/data-subscription/reports/DATA-SUBSCRIPTION-REQUIREMENTS-BASELINE-001.md`。
+> 关联文档：需求基线 `docs/features/data-subscription/REQUIREMENTS.md`；任务报告 `docs/features/data-subscription/reports/DATA-SUBSCRIPTION-REQUIREMENTS-BASELINE-001.md`、`...-001-R1.md`、`...-APPROVAL-001.md`。
