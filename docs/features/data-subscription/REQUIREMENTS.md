@@ -9,7 +9,7 @@
 | 正式菜单 | 数据订阅（配置管理组，路由 `/config/subscribe`，菜单项与路由均保持既有值不变） |
 | 既有路由 | `/config/subscribe` |
 | 目标文档 | `docs/features/data-subscription/REQUIREMENTS.md` |
-| 文档状态 | `DRAFT_PENDING_USER_REVIEW`（当前修订版本为“英文句点 `.` 保留分隔符”需求调整草案，等待正式复审；上一正式批准版本提交 `d7560445be1504e6ed9957fa7b31be1fd393ea19`，批准事实见 §19 变更记录） |
+| 文档状态 | `APPROVED`（当前版本为“英文句点 `.` 保留分隔符”需求调整批准版本，已获得 ChatGPT 正式复审 `APPROVED`，批准依据提交 `bb8716c26d5181edf84ba1f07d4e60e8f1c1918a`，见 §19 变更记录） |
 | 实现状态 | `NOT_STARTED`（本任务为纯文档需求基线任务，不涉及任何业务代码实现） |
 | 任务编号 | `DATA-SUBSCRIPTION-REQUIREMENTS-BASELINE-001` |
 | 任务类型 | Feature 需求与验收基线草案落盘、数据库物理事实定向核验、提交与推送（纯文档任务） |
@@ -18,7 +18,7 @@
 | 需求来源 | 已确认的产品决策（本任务提示词 §6～§15 记录的产品需求）+ 已批准数据库基线（`docs/database/`）+ 真实代码只读核验 + 真实数据库只读核验 |
 | 主键核验状态 | `DATABASE_VERIFIED`（`CDC_DATA_SUBSCRIBE.DATA_SUB_ID` 真实主键经只读核验确认，见 §4） |
 
-说明：本文件把已经确认的产品决策落成 Feature 需求基线。上一正式批准版本（提交 `d7560445be1504e6ed9957fa7b31be1fd393ea19`）已获得项目负责人正式批准；当前修订版本在保留上一版全部需求（编号、数量、业务语义不变）基础上，仅新增“英文句点 `.` 为 `DATA_SOURCE_ID.Schema.表名` 三段结构保留分隔符”的定向调整（见 §19 变更记录），仍为待正式复审的调整草案，文档状态为 `DRAFT_PENDING_USER_REVIEW`。实现状态仍为 `NOT_STARTED`，全部验收用例初始状态仍为 `NOT_RUN`。需求基线批准不代表业务功能已经实现、部署或验收完成，也不得把“待实现目标”描述为“当前已经实现”。
+说明：本文件把已经确认的产品决策落成 Feature 需求基线。上一正式批准版本（提交 `d7560445be1504e6ed9957fa7b31be1fd393ea19`）已获得项目负责人正式批准；当前版本在保留上一版全部需求（编号、数量、业务语义不变）基础上，仅新增“英文句点 `.` 为 `DATA_SOURCE_ID.Schema.表名` 三段结构保留分隔符”的定向调整，该调整已获得 ChatGPT 正式复审 `APPROVED`（批准依据提交 `bb8716c26d5181edf84ba1f07d4e60e8f1c1918a`），当前文档状态为 `APPROVED`。实现状态仍为 `NOT_STARTED`，全部验收用例初始状态仍为 `NOT_RUN`。需求基线批准不代表业务功能已经实现、部署或验收完成，也不得把“待实现目标”描述为“当前已经实现”。
 
 本文件同时区分历史事实与当前事实：
 
@@ -421,5 +421,6 @@
 | 2026-08-30 | R1 定向修订（ChatGPT 正式复审 `CHANGES_REQUIRED`）：§6 场景 2 修正重置语义——“重置恢复全部启用记录”改为“重置只清空查询表单，不自动重新查询，列表保持上一次已生效的查询结果”；`DSUB-REQ-035` 列顺序由“建议列顺序”改为确定规则“列顺序为”；统一 Feature 文档标识为 `data-subscription` 并关闭 TBD-03；将前序任务已验证的 `DATA_SUB_ID` 主键当前物理事实同步到项目级基线并关闭 TBD-04；文档状态保持 `DRAFT_PENDING_USER_REVIEW`，实现状态保持 `NOT_STARTED`，未批准、未实现、未执行验收 | DATA-SUBSCRIPTION-REQUIREMENTS-BASELINE-001-R1（纯文档定向修订；不改变任何已确认业务规则、需求/验收编号与状态） |
 | 2026-08-30 | 需求基线正式批准收口：文档状态由 `DRAFT_PENDING_USER_REVIEW` 转为 `APPROVED`；批准依据为提交 `b9fb1e955492bef905b3c33acbf9d617bb5a0857` 的 ChatGPT 正式复审结论 `APPROVED`；107 条需求（`DSUB-REQ-001` ~ `DSUB-REQ-107`）编号、数量与业务语义不变；实现状态仍为 `NOT_STARTED`；126 条验收用例仍未执行（`NOT_RUN`）；下一阶段为设计基线建立，不表示功能已实现或验收已通过 | DATA-SUBSCRIPTION-REQUIREMENTS-BASELINE-APPROVAL-001（项目负责人批准驱动的需求与验收基线正式收口；纯文档任务） |
 | 2026-08-30 | 点号保留分隔符需求调整草案：项目负责人明确选择第一版把英文句点 `.` 定义为三段结构保留分隔符（数据源 ID、Schema 名或表名含英文逗号或句点时，禁止用于新增或编辑订阅）；定向澄清 `DSUB-REQ-016`（两个英文句点为三段结构保留分隔符，无引号/转义符/长度前缀机制，大小写保持源 Oracle 原始大小写）与 `DSUB-REQ-017`（禁止英文逗号与英文句点，第一版无转义协议，新增/编辑不得选择且后端保存必须拒绝，必须说明具体名称与保留字符原因）；明确查询候选、维护候选与历史数据兼容边界；需求数量仍为 107；文档状态由 `APPROVED` 转为 `DRAFT_PENDING_USER_REVIEW`（上一正式批准版本提交 `d7560445be1504e6ed9957fa7b31be1fd393ea19`，历史批准事实保留）；实现状态仍为 `NOT_STARTED`；126 条验收仍全部 `NOT_RUN`；设计草案仍待后续 R1 修订和复审；本调整草案待正式复审 | DATA-SUBSCRIPTION-DOT-DELIMITER-REQUIREMENTS-ADJUSTMENT-001（项目负责人决策驱动的纯文档需求/验收定向调整草案） |
+| 2026-08-30 | 点号保留分隔符需求调整批准收口：ChatGPT 对提交 `bb8716c26d5181edf84ba1f07d4e60e8f1c1918a` 正式复审结论 `APPROVED`；当前需求版本由调整草案收口为 `APPROVED`；107 条需求（`DSUB-REQ-001` ~ `DSUB-REQ-107`）编号、数量与业务内容不变，`DSUB-REQ-016/017` 点号规则逐字保持并正式进入批准基线；实现状态仍为 `NOT_STARTED`；126 条验收仍全部 `NOT_RUN`；设计（DESIGN/API/UI/DATABASE）仍为 `DRAFT_PENDING_USER_REVIEW` 草案且设计复审仍为 `CHANGES_REQUIRED`，待后续设计 R1 修订和重新复审；本次批准只批准点号需求及对应验收标准，不表示设计批准、功能完成或验收通过 | DATA-SUBSCRIPTION-DOT-DELIMITER-REQUIREMENTS-ADJUSTMENT-APPROVAL-001（项目负责人批准驱动的纯文档需求/验收调整批准收口） |
 
-> 关联文档：验收基线 `docs/features/data-subscription/ACCEPTANCE.md`；任务报告 `docs/features/data-subscription/reports/DATA-SUBSCRIPTION-REQUIREMENTS-BASELINE-001.md`、`...-001-R1.md`、`...-APPROVAL-001.md`、`.../DATA-SUBSCRIPTION-DOT-DELIMITER-REQUIREMENTS-ADJUSTMENT-001.md`。
+> 关联文档：验收基线 `docs/features/data-subscription/ACCEPTANCE.md`；任务报告 `docs/features/data-subscription/reports/DATA-SUBSCRIPTION-REQUIREMENTS-BASELINE-001.md`、`...-001-R1.md`、`...-APPROVAL-001.md`、`.../DATA-SUBSCRIPTION-DOT-DELIMITER-REQUIREMENTS-ADJUSTMENT-001.md`、`.../DATA-SUBSCRIPTION-DOT-DELIMITER-REQUIREMENTS-ADJUSTMENT-APPROVAL-001.md`。

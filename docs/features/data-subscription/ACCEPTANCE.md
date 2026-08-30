@@ -9,15 +9,15 @@
 | 正式菜单 | 数据订阅（配置管理组，路由 `/config/subscribe`，菜单项与路由均保持既有值不变） |
 | 既有路由 | `/config/subscribe` |
 | 目标文档 | `docs/features/data-subscription/ACCEPTANCE.md` |
-| 文档状态 | `DRAFT_PENDING_USER_REVIEW`（当前修订版本为“英文句点 `.` 保留分隔符”验收标准调整草案，等待正式复审；上一正式批准版本提交 `d7560445be1504e6ed9957fa7b31be1fd393ea19`，批准事实见 §6 变更记录） |
+| 文档状态 | `APPROVED`（当前版本为“英文句点 `.` 保留分隔符”验收标准调整批准版本，已获得 ChatGPT 正式复审 `APPROVED`，批准依据提交 `bb8716c26d5181edf84ba1f07d4e60e8f1c1918a`，见 §6 变更记录） |
 | 实现状态 | `NOT_STARTED`（本任务为纯文档需求与验收基线任务，不涉及任何业务代码实现） |
 | 任务编号 | `DATA-SUBSCRIPTION-REQUIREMENTS-BASELINE-001` |
 | 创建日期 | 2026-08-30 |
-| 依据需求 | `docs/features/data-subscription/REQUIREMENTS.md`（当前修订版本为点号保留分隔符调整草案，文档状态 `DRAFT_PENDING_USER_REVIEW`；上一正式批准版本提交 `d7560445be1504e6ed9957fa7b31be1fd393ea19`） |
+| 依据需求 | `docs/features/data-subscription/REQUIREMENTS.md`（当前版本为点号保留分隔符调整批准版本，文档状态 `APPROVED`；批准依据提交 `bb8716c26d5181edf84ba1f07d4e60e8f1c1918a`） |
 
 重要声明：本文件把所有需求转换为可客观验收的场景，使用唯一、稳定的验收编号。所有用例初始状态为 `NOT_RUN`（未执行）；`PASS / FAIL / BLOCKED` 是执行后状态，任何用例状态只有在执行并取得与步骤匹配的客观证据后才允许更新。对需要构造数据库异常数据的验收场景，本文件只定义期望行为，不授权任何测试数据写入；任何数据库写操作仍需按项目数据库审批规则另行获得授权。
 
-状态含义必须清楚：批准验收标准、执行验收、正式验收通过、实现正式接受是不同状态。上一正式批准版本（提交 `d7560445be1504e6ed9957fa7b31be1fd393ea19`）已获得项目负责人正式批准；当前修订版本在此基础上仅定向扩展与“英文句点 `.` 保留分隔符”直接相关的既有验收项（不增加、不删除、不重编号），仍为待正式复审的调整草案，文档状态为 `DRAFT_PENDING_USER_REVIEW`。批准验收标准不等于执行功能验收，更不得把已批准文档当作用例通过证据。本 Feature 尚未实现（实现状态 `NOT_STARTED`），全部 126 条用例状态必须保持 `NOT_RUN`；只有未来实际执行并取得与步骤匹配的客观证据后，才允许更新为 `PASS / FAIL / BLOCKED`。当前本文件不得作为功能已实现的证据。
+状态含义必须清楚：批准验收标准、执行验收、正式验收通过、实现正式接受是不同状态。上一正式批准版本（提交 `d7560445be1504e6ed9957fa7b31be1fd393ea19`）已获得项目负责人正式批准；当前版本在此基础上仅定向扩展与“英文句点 `.` 保留分隔符”直接相关的既有验收项（不增加、不删除、不重编号），该调整已获得 ChatGPT 正式复审 `APPROVED`（批准依据提交 `bb8716c26d5181edf84ba1f07d4e60e8f1c1918a`），当前文档状态为 `APPROVED`。批准验收标准不等于执行功能验收，更不得把已批准文档当作用例通过证据。本 Feature 尚未实现（实现状态 `NOT_STARTED`），全部 126 条用例状态必须保持 `NOT_RUN`；只有未来实际执行并取得与步骤匹配的客观证据后，才允许更新为 `PASS / FAIL / BLOCKED`。当前本文件不得作为功能已实现的证据。
 
 ## 2. 验收结果状态模型
 
@@ -256,5 +256,6 @@
 | 2026-08-30 | R1 定向修订（ChatGPT 正式复审 `CHANGES_REQUIRED`）：`DSUB-AC-037` 移除“（或按批准交互保持已查询结果）”候选语义，重置行为唯一确定（保持上一次已生效的查询结果，不自动重新查询、不自动恢复全部记录）；`DSUB-AC-048` 明确异常数据源记录的查看/编辑打开/编辑保存限制与删除边界，避免与 `DSUB-REQ-094` 冲突；`DSUB-AC-085` 修正“无明显的明显卡顿”重复文案；文档状态保持 `DRAFT_PENDING_USER_REVIEW`，全部 126 条用例仍 `NOT_RUN`，未批准、未实现、未执行验收 | DATA-SUBSCRIPTION-REQUIREMENTS-BASELINE-001-R1（纯文档定向修订；不改变编号、数量与状态） |
 | 2026-08-30 | 验收标准基线正式批准收口：文档状态由 `DRAFT_PENDING_USER_REVIEW` 转为 `APPROVED`；批准依据为提交 `b9fb1e955492bef905b3c33acbf9d617bb5a0857` 的 ChatGPT 正式复审结论 `APPROVED`；本次批准的是验收标准基线，不代表功能已实现或验收已通过；126 条用例（`DSUB-AC-001` ~ `DSUB-AC-126`）编号、数量、步骤、前置条件、预期结果与需求映射不变，状态全部保持 `NOT_RUN`；功能实现状态仍为 `NOT_STARTED`；下一阶段为设计基线建立 | DATA-SUBSCRIPTION-REQUIREMENTS-BASELINE-APPROVAL-001（项目负责人批准驱动的需求与验收基线正式收口；纯文档任务） |
 | 2026-08-30 | 点号保留分隔符验收覆盖调整草案：项目负责人明确第一版把英文句点 `.` 定义为三段结构保留分隔符；在不增加编号的前提下定向扩展既有验收项——`DSUB-AC-013`（两个结构句点为正常保留分隔符，大小写规则不变）、`DSUB-AC-014`（从名称含英文逗号扩展为分别验证英文逗号与组件内部英文句点）、`DSUB-AC-032`（查询候选仍能选择协议不兼容的存量数据源以查询历史记录）、`DSUB-AC-063`/`DSUB-AC-071`（新增/编辑候选中协议不兼容数据源显示但禁用并说明原因）、`DSUB-AC-077`（Schema/表名含英文逗号或组件内部句点不可选择并说明原因）、`DSUB-AC-091`（绕过前端提交含保留字符组件时后端拒绝并列出失效项）、`DSUB-AC-055`（正常结构分隔点不误判为异常；组件内部点号造成不可解析时保留原始内容并警告）、`DSUB-AC-104`（编辑回显异常项，修复前禁止保存；删除规则保持不变）；编号保持 126 条连续唯一，全部仍为 `NOT_RUN`；文档状态由 `APPROVED` 转为 `DRAFT_PENDING_USER_REVIEW`（上一正式批准版本提交 `d7560445be1504e6ed9957fa7b31be1fd393ea19`，历史批准事实保留）；实现状态仍为 `NOT_STARTED`；本调整草案待正式复审 | DATA-SUBSCRIPTION-DOT-DELIMITER-REQUIREMENTS-ADJUSTMENT-001（项目负责人决策驱动的纯文档需求/验收定向调整草案） |
+| 2026-08-30 | 点号保留分隔符验收标准批准收口：ChatGPT 对提交 `bb8716c26d5181edf84ba1f07d4e60e8f1c1918a` 正式复审结论 `APPROVED`；当前验收标准版本由调整草案收口为 `APPROVED`；126 条用例（`DSUB-AC-001` ~ `DSUB-AC-126`）编号、需求映射、步骤、前置条件、预期结果不变，状态全部保持 `NOT_RUN`；实现状态仍为 `NOT_STARTED`；设计仍为 `DRAFT_PENDING_USER_REVIEW` 草案且设计复审仍为 `CHANGES_REQUIRED`，待设计 R1 修订和重新复审；本次批准只批准点号需求对应验收标准，不批准设计、不实现功能、不执行验收 | DATA-SUBSCRIPTION-DOT-DELIMITER-REQUIREMENTS-ADJUSTMENT-APPROVAL-001（项目负责人批准驱动的纯文档需求/验收调整批准收口） |
 
-> 关联文档：需求基线 `docs/features/data-subscription/REQUIREMENTS.md`；任务报告 `docs/features/data-subscription/reports/DATA-SUBSCRIPTION-REQUIREMENTS-BASELINE-001.md`、`...-001-R1.md`、`...-APPROVAL-001.md`、`.../DATA-SUBSCRIPTION-DOT-DELIMITER-REQUIREMENTS-ADJUSTMENT-001.md`。
+> 关联文档：需求基线 `docs/features/data-subscription/REQUIREMENTS.md`；任务报告 `docs/features/data-subscription/reports/DATA-SUBSCRIPTION-REQUIREMENTS-BASELINE-001.md`、`...-001-R1.md`、`...-APPROVAL-001.md`、`.../DATA-SUBSCRIPTION-DOT-DELIMITER-REQUIREMENTS-ADJUSTMENT-001.md`、`.../DATA-SUBSCRIPTION-DOT-DELIMITER-REQUIREMENTS-ADJUSTMENT-APPROVAL-001.md`。
