@@ -9,12 +9,14 @@
 | 前序结果提交 | `b9fb1e955492bef905b3c33acbf9d617bb5a0857` |
 | ChatGPT 正式复审结论 | `APPROVED` |
 | 任务性质 | 项目负责人批准驱动的纯文档基线收口（状态收口，不改业务需求/验收语义） |
-| 最终状态 | `SUCCESS`（待提交并推送后回填验证） |
+| 最终状态 | `SUCCESS` |
 | 分支 | `develop` |
 | 基准提交（base_commit_id） | `b9fb1e955492bef905b3c33acbf9d617bb5a0857` |
-| 结果提交（result_commit_id） | 见 §17（提交并推送后由控制台 `AGENT_TASK_RESULT` 输出） |
-| 远程提交（remote_commit_id） | 见 §17 |
-| ahead/behind | 见 §17 |
+| 结果提交（result_commit_id） | `d7560445be1504e6ed9957fa7b31be1fd393ea19` |
+| 远程提交（remote_commit_id） | `d7560445be1504e6ed9957fa7b31be1fd393ea19` |
+| ahead/behind | `0 0` |
+| commit_status | `COMMITTED` |
+| push_status | `PUSHED` |
 
 ## 2. 批准依据
 
@@ -28,11 +30,13 @@
 |---|---|
 | 分支 | `develop` |
 | 基准提交（base_commit_id） | `b9fb1e955492bef905b3c33acbf9d617bb5a0857`（执行时实际 `origin/develop` 最新提交） |
-| 结果提交（result_commit_id） | 见 §17（提交并推送后由控制台 `AGENT_TASK_RESULT` 输出） |
-| 远程提交（remote_commit_id） | 见 §17 |
-| ahead/behind | 见 §17 |
+| 结果提交（result_commit_id） | `d7560445be1504e6ed9957fa7b31be1fd393ea19` |
+| 远程提交（remote_commit_id） | `d7560445be1504e6ed9957fa7b31be1fd393ea19` |
+| ahead/behind | `0 0` |
+| commit_status | `COMMITTED` |
+| push_status | `PUSHED` |
 
-本报告只记录授权基准提交；最终 `result_commit_id`、`remote_commit_id`、`ahead_behind`、`commit_status`、`push_status` 在控制台 `AGENT_TASK_RESULT` 中输出，推送后由人工/ChatGPT 直接核验远程提交一致性。本报告不保留任何伪装成实际值的尖括号占位符。
+本报告记录的是前序批准任务 `DATA-SUBSCRIPTION-REQUIREMENTS-BASELINE-APPROVAL-001` 的真实结果：结果提交与远程提交均为 `d7560445be1504e6ed9957fa7b31be1fd393ea19`，推送后 ahead/behind 为 `0 0`，Commit/Push 状态为 `COMMITTED`/`PUSHED`。本报告不保留任何伪装成实际值的尖括号占位符。
 
 ## 4. 开始前工作区状态与既有修改保护结果
 
@@ -146,18 +150,23 @@
 | 13 空白检查 | `git diff --check` | exit=0 |
 | 14 授权文件范围 | `git diff --name-status` | 仅 3 修改 + 1 新增 |
 | 15 无误改其他 Feature | 逐文件审查 staged diff | 通过 |
-| 16 提交前后 `git status --short` | 提交前后核对 | 见 §17 |
-| 17 推送后一致性 | 推送后 `git rev-parse HEAD`/`origin/develop` | 见 §17 |
-| 18 推送后 ahead/behind | `git rev-list --left-right --count origin/develop...HEAD` | 见 §17 |
+| 16 提交前后 `git status --short` | 提交前后核对 | 前序批准任务已提交，提交后无授权文件残留未暂存/未提交 |
+| 17 推送后一致性 | 推送后 `git rev-parse HEAD`/`origin/develop` | 本地 HEAD 与 `origin/develop` 一致，均为 `d7560445be1504e6ed9957fa7b31be1fd393ea19` |
+| 18 推送后 ahead/behind | `git rev-list --left-right --count origin/develop...HEAD` | `0 0` |
 
 ## 17. Commit 和 Push 证据
 
-- 已获用户明确授权提交并推送 `origin/develop`。
-- 只逐文件暂存本任务实际修改和新增的授权文件（§5 所列 4 个文件），禁止全量暂存。
-- Commit message 体现“数据订阅需求与验收基线批准收口”，不暗示功能已实现。
-- 普通推送至 `origin/develop`，禁止 force push。
-- 推送后核对本地 HEAD 与 `origin/develop` 一致、ahead/behind 为 `0 0`；推送失败不得伪报成功。
-- 最终 `result_commit_id`、`remote_commit_id`、`ahead_behind`、`commit_status`、`push_status` 在控制台 `AGENT_TASK_RESULT` 中输出。
+前序批准任务 `DATA-SUBSCRIPTION-REQUIREMENTS-BASELINE-APPROVAL-001` 的提交与推送结果为已完成事实：
+
+- 提交状态：`COMMITTED`（前序批准任务已创建提交）。
+- 结果提交（result_commit_id）：`d7560445be1504e6ed9957fa7b31be1fd393ea19`。
+- 推送状态：`PUSHED`（已普通推送至 `origin/develop`，未 force push）。
+- 远程提交（remote_commit_id）：`d7560445be1504e6ed9957fa7b31be1fd393ea19`，与结果提交一致。
+- 推送后 ahead/behind：`0 0`（本地 HEAD 与 `origin/develop` 一致）。
+- 前序批准任务仅包含 4 个授权文件（`REQUIREMENTS.md`、`ACCEPTANCE.md`、`docs/features/README.md`、本报告），按 §5 逐文件暂存，未全量暂存。
+- 提交信息体现“数据订阅需求与验收基线批准收口”，不暗示功能已实现。
+
+说明：本报告 §1/§3 记录的是前序批准任务的真实结果；本 R1 自身（`DATA-SUBSCRIPTION-REQUIREMENTS-BASELINE-APPROVAL-001-R1`）的结果提交号、远程提交号、ahead/behind、Commit 与 Push 状态在控制台 `AGENT_TASK_RESULT` 结果块中输出，不在本报告中伪造尚未产生的提交号。
 
 ## 18. 下一阶段
 
@@ -165,4 +174,4 @@
 
 ---
 
-*报告生成：DATA-SUBSCRIPTION-REQUIREMENTS-BASELINE-APPROVAL-001（项目负责人批准驱动的纯文档基线收口）。*
+*报告生成：DATA-SUBSCRIPTION-REQUIREMENTS-BASELINE-APPROVAL-001（项目负责人批准驱动的纯文档基线收口）。报告元数据由 `DATA-SUBSCRIPTION-REQUIREMENTS-BASELINE-APPROVAL-001-R1` 定向收口为前序批准任务真实结果。*
