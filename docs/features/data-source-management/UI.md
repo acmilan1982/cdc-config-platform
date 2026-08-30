@@ -4,9 +4,16 @@
 > 需求状态：`APPROVED`
 > 验收标准状态：`APPROVED`
 > 基础基线状态：`APPROVED`
-> 调整草案状态：`DRAFT_PENDING_USER_REVIEW`
+> 调整草案状态：`APPROVED`
 > 当前实现状态：`IMPLEMENTED_PENDING_REVIEW`
 > 原正式验收状态：`FAIL`（PASS=103/FAIL=2/BLOCKED=1/NOT_RUN=0）
+> 调整批准任务：`DATA-SOURCE-POST-ACCEPTANCE-ADJUSTMENT-APPROVAL-CLOSEOUT-001`
+> 调整批准日期：2026-08-30
+> 调整批准人：项目负责人（用户）
+> 调整批准依据：用户明确回复“认可，批准本次调整草案”
+> 调整 R1 复审提交：`0e79165ab1b8e7d87ff06b753a8770fcd9198afc`
+> 调整 R1 复审结论：`REVIEW_PASS`
+> 新调整实现状态：`NOT_STARTED`
 > 设计任务：`DATA-SOURCE-DESIGN-BASELINE-001`
 > 授权基准提交：`c24bbb826b252f06f75ec05bcac77e94a9871019`
 > 创建日期：2026-08-29
@@ -20,7 +27,7 @@
 
 - 本设计已获用户正式批准（批准任务 `DATA-SOURCE-DESIGN-APPROVAL-CLOSEOUT-001`，批准日期 2026-08-29，批准依据提交 `fdb9ecaf5bc24373e586d853b4174d1a9cd8bbfc`），成为数据源管理 Feature 当前正式设计基线；不再处于"草案等待批准"状态。
 - 设计批准**不代表**代码已实现、构建通过、验收执行或生产可用。
-- 原 106 条验收用例已全部执行（正式验收 `PASS=103/FAIL=2/BLOCKED=1/NOT_RUN=0`，结论 `FAIL`）；新增调整草案用例 `DS-AC-107~115`（9 例）全部为 `NOT_RUN`，尚未批准、尚未执行。
+- 原 106 条验收用例已全部执行（正式验收 `PASS=103/FAIL=2/BLOCKED=1/NOT_RUN=0`，结论 `FAIL`）；新增调整用例 `DS-AC-107~115`（9 例）已批准但仍全部为 `NOT_RUN`，尚未执行。
 - 本设计不改变任何已批准 `DS-REQ`/`DS-AC`；不新增 DDL、锁、权限、认证或自动刷新等未批准能力。
 - 本设计不修改代码、测试、构建文件、配置、菜单、路由、历史候选或任何已批准项目/数据库基线。
 - 本页面替换既有 `/config/data-source` 占位页；菜单项"数据源管理"与路由 `/config/data-source`（name `DataSource`）保持既有值不变（`DS-AC-001`~`003`）。
@@ -30,7 +37,7 @@
 - 用户已正式批准初版、R1、R2 共同形成的完整设计与契约内容；本文件成为数据源管理 Feature 当前正式设计基线。
 - 允许下一阶段基于已批准需求、验收标准和四份设计基线生成实现任务提示词。
 - 批准设计**不代表**：代码已经实现；后端或前端构建已经通过；服务已经启动或联调完成；数据库或 ZooKeeper 已被访问；任何 SQL/DDL 已执行；任何一条验收用例已经执行或通过；功能已经生产可用。
-- 上述为历史批准事实：批准时 106 条验收用例全部为 `NOT_RUN`，实现状态为 `NOT_STARTED`。当前事实：原 106 条用例已全部执行（正式验收 `PASS=103/FAIL=2/BLOCKED=1/NOT_RUN=0`，结论 `FAIL`），实现状态为 `IMPLEMENTED_PENDING_REVIEW`；新增调整草案用例 `DS-AC-107~115`（9 例）全部为 `NOT_RUN`，尚未批准、尚未执行。
+- 上述为历史批准事实：批准时 106 条验收用例全部为 `NOT_RUN`，实现状态为 `NOT_STARTED`。当前事实：原 106 条用例已全部执行（正式验收 `PASS=103/FAIL=2/BLOCKED=1/NOT_RUN=0`，结论 `FAIL`），实现状态为 `IMPLEMENTED_PENDING_REVIEW`；新增调整用例 `DS-AC-107~115`（9 例）已批准但仍全部为 `NOT_RUN`，尚未执行。
 - 第一版仍无数据库 DDL、主键/唯一约束/索引变更；批准本文档不等于批准执行数据库变更。
 
 ### 0.2 批准链
@@ -202,11 +209,11 @@
 
 ---
 
-## 9. 验收后页面调整草案（DRAFT_PENDING_USER_REVIEW）
+## 9. 验收后页面调整（APPROVED）
 
-> 状态：`DRAFT_PENDING_USER_REVIEW`。以下内容严格落实 `DS-REQ-110~115`（需求草案，`REQUIREMENTS.md` §20）与 `DS-AC-107~115`（验收草案，`ACCEPTANCE.md` §4.15），为正式验收后五项页面调整的 UI 设计草案。本草案尚未获得用户正式批准，未进入实现、测试或验收；不得写成已批准、已实现、已测试或已验收。原 UI 设计基线（§0~§8）保持 `APPROVED` 不变，本节不重写已批准设计历史。
+> 状态：`APPROVED`。以下内容严格落实 `DS-REQ-110~115`（已批准需求，`REQUIREMENTS.md` §20）与 `DS-AC-107~115`（已批准验收用例，`ACCEPTANCE.md` §4.15），为正式验收后五项页面调整的 UI 设计。本设计已于 2026-08-30 由项目负责人批准（批准链：调整草案初始提交 `2a47062` → R1 提交 `0e79165` → ChatGPT 调整 R1 复审 `REVIEW_PASS` → 项目负责人明确回复“认可，批准本次调整草案”；批准任务 `DATA-SOURCE-POST-ACCEPTANCE-ADJUSTMENT-APPROVAL-CLOSEOUT-001`）。批准不代表实现、测试或验收：新调整实现状态 `NOT_STARTED`，`DS-AC-107~115` 仍全部 `NOT_RUN`；不得写成已实现、已测试或已验收。原 UI 设计基线（§0~§8）保持 `APPROVED` 不变，本节不重写已批准设计历史。
 >
-> 既有缺陷边界：`DS-AC-052`（密码进入 MyBatis DEBUG 参数日志，违反既有 `DS-REQ-047/107`）与 `DS-AC-105`（`port:"abc"` 返回 HTTP 500 而非批准 API 契约要求的 HTTP 400/code=400）为既有需求/契约实现缺陷；本组调整草案不新增需求、不改判定、不修复。`DS-AC-104` 保持环境阻塞，待 MySQL 授权与 Doris 环境具备后补验。修复方案不得写成已实现事实。
+> 既有缺陷边界：`DS-AC-052`（密码进入 MyBatis DEBUG 参数日志，违反既有 `DS-REQ-047/107`）与 `DS-AC-105`（`port:"abc"` 返回 HTTP 500 而非批准 API 契约要求的 HTTP 400/code=400）为既有需求/契约实现缺陷；本组调整不新增需求、不改判定、不修复。`DS-AC-104` 保持环境阻塞，待 MySQL 授权与 Doris 环境具备后补验。修复方案不得写成已实现事实。
 
 ### 9.1 主列表两类空状态（DS-REQ-110 / DS-REQ-111）
 
@@ -255,3 +262,4 @@
 | 日期 | 变更 | 依据 |
 |---|---|---|
 | 2026-08-30 | 新增“验收后页面调整草案”设计章节（§9），严格落实 `DS-REQ-110~115` 与 `DS-AC-107~115`；头部元数据增加基础基线/调整草案/当前实现/原正式验收分层状态；原 UI 设计基线保持 `APPROVED`、原设计历史不重写；实现状态由 `NOT_STARTED` 更新为 `IMPLEMENTED_PENDING_REVIEW`；原 106 条验收用例状态由“全部 NOT_RUN”更新为正式验收 `PASS=103/FAIL=2/BLOCKED=1/NOT_RUN=0`（结论 `FAIL`） | DATA-SOURCE-POST-ACCEPTANCE-ADJUSTMENT-BASELINE-001（正式验收后五项页面调整的 UI 设计草案；纯文档任务） |
+| 2026-08-30 | 验收后调整批准收口：§9 由“验收后页面调整草案（DRAFT_PENDING_USER_REVIEW）”改为“验收后页面调整（APPROVED）”；头部元数据补充批准任务、批准日期、批准人、批准依据、调整 R1 复审提交 `0e79165` 与复审结论 `REVIEW_PASS`；新调整实现状态 `NOT_STARTED`；`DS-AC-107~115` 仍全部 `NOT_RUN`，批准不代表实现、测试或验收；§9.1~§9.5 设计正文逐字冻结；原草案记录不改写；原 UI 基线 `APPROVED` 与正式验收 `FAIL` 保持 | DATA-SOURCE-POST-ACCEPTANCE-ADJUSTMENT-APPROVAL-CLOSEOUT-001（验收后页面调整批准收口；纯文档任务） |

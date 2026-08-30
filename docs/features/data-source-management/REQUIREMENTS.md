@@ -11,11 +11,17 @@
 | 目标文档 | `docs/features/data-source-management/REQUIREMENTS.md` |
 | 文档状态 | `APPROVED`（已正式批准） |
 | 实现状态 | `IMPLEMENTED_PENDING_REVIEW`（目标功能已实现并完成正式验收执行；正式验收结果 `FAIL`（PASS=103/FAIL=2/BLOCKED=1/NOT_RUN=0）；尚未置为 `IMPLEMENTED_ACCEPTED`；两个失败用例 `DS-AC-052`/`DS-AC-105` 尚待修复并复验，阻塞用例 `DS-AC-104` 尚待环境具备后补验） |
-| 验收用例状态 | 原正式验收 106 例已全部执行（`PASS=103/FAIL=2/BLOCKED=1/NOT_RUN=0`）；验收后调整草案用例 `DS-AC-107~115`（9 例）全部 `NOT_RUN`，尚未批准、尚未执行（见 `docs/features/data-source-management/ACCEPTANCE.md`） |
+| 验收用例状态 | 原正式验收 106 例已全部执行（`PASS=103/FAIL=2/BLOCKED=1/NOT_RUN=0`）；验收后调整用例 `DS-AC-107~115`（9 例）已批准但仍全部 `NOT_RUN`，尚未执行（见 `docs/features/data-source-management/ACCEPTANCE.md`） |
 | 基础基线状态 | `APPROVED`（原需求 `DS-REQ-001~109`、原验收标准 `DS-AC-001~106`、已批准 UI 设计基线保持已批准） |
-| 验收后调整草案状态 | `DRAFT_PENDING_USER_REVIEW`（新增 `DS-REQ-110~115` 与 `DS-AC-107~115` 尚未获得用户正式批准、尚未实现、尚未执行） |
+| 验收后调整草案状态 | `APPROVED`（新增 `DS-REQ-110~115`、`DS-AC-107~115` 与 UI §9 已于 2026-08-30 由项目负责人批准；批准不代表实现、测试或验收） |
 | 当前实现状态 | `IMPLEMENTED_PENDING_REVIEW`（与上表“实现状态”一致） |
 | 原正式验收状态 | `FAIL`（PASS=103/FAIL=2/BLOCKED=1/NOT_RUN=0） |
+| 调整批准任务 | `DATA-SOURCE-POST-ACCEPTANCE-ADJUSTMENT-APPROVAL-CLOSEOUT-001` |
+| 调整批准日期 | 2026-08-30 |
+| 调整批准人 | 项目负责人（用户） |
+| 调整批准依据 | 用户明确回复“认可，批准本次调整草案” |
+| ChatGPT 调整 R1 复审结论 | `REVIEW_PASS` |
+| 新调整实现状态 | `NOT_STARTED`（调整需求/验收/UI 已批准，尚未实现；9 条新验收用例仍全部 `NOT_RUN`） |
 | 任务编号 | `DATA-SOURCE-REQUIREMENTS-BASELINE-001` |
 | 任务类型 | Feature 需求基线草案落盘、提交与推送（纯文档任务） |
 | 授权基线提交 | `eca58e669c8ebad3cf73a1732870d1cfb8388517`（执行时实际 `origin/develop` 最新提交） |
@@ -386,23 +392,23 @@
 |---|---|
 | MySQL/Doris JDBC 驱动 | MySQL JDBC 驱动已在实现任务中加入，Doris 按已批准设计使用兼容连接方式。当前未完成项不是“加入驱动”，而是 MySQL 远程授权未放行、Doris 无可用验收环境，导致 `DS-AC-104` 保持 `BLOCKED`，待环境具备后补验。 |
 | 后端目标实现 | 已由 `DATA-SOURCE-IMPLEMENTATION-001`、R1、R2 完成目标实现。当前仍有 `DS-AC-052`（密码进入 MyBatis DEBUG 参数日志）、`DS-AC-105`（`port:"abc"` 返回 HTTP 500 而非批准 API 契约要求的 HTTP 400/code=400）两个正式验收失败点待修复及复验，因此实现状态为 `IMPLEMENTED_PENDING_REVIEW`、尚未置为 `IMPLEMENTED_ACCEPTED`。 |
-| 前端数据源管理页面 | 已由实现任务替换为正式数据源管理页面，用户对原批准基线内七项视觉功能检查通过。新 `DS-REQ-110~115`（验收后五项页面调整）为待用户审批、待实现、待验收的调整草案（`DRAFT_PENDING_USER_REVIEW`），不得混同为已经实现。 |
+| 前端数据源管理页面 | 已由实现任务替换为正式数据源管理页面，用户对原批准基线内七项视觉功能检查通过。新 `DS-REQ-110~115`（验收后五项页面调整）已于 2026-08-30 批准（`APPROVED`），待实现、待验收（新调整实现 `NOT_STARTED`，`DS-AC-107~115` 仍全部 `NOT_RUN`），不得混同为已经实现。 |
 | 受影响的已批准基线 | 已通过基线影响同步任务（`DATA-SOURCE-BASELINE-IMPACT-ALIGNMENT-001`）完成同步，见 §17。 |
 
 ## 19. 开放问题
 
-以下为当前未闭环事项。这些属于实现/环境/调整审批层面的未闭环事项，不代表原 `DS-REQ-001~109` 存在尚未确认的产品决策：
+以下为当前未闭环事项。这些属于实现/环境/调整实施层面的未闭环事项，不代表原 `DS-REQ-001~109` 存在尚未确认的产品决策：
 
 - `DS-AC-052`：密码进入 MyBatis DEBUG 参数日志，违反既有 `DS-REQ-047/107`，正式验收 `FAIL`，待修复及复验。
 - `DS-AC-105`：`port:"abc"` 返回 HTTP 500，而非批准 API 契约要求的 HTTP 400/code=400，正式验收 `FAIL`，待修复及复验。
 - `DS-AC-104`：MySQL 远程授权和 Doris 环境限制，状态 `BLOCKED`，待环境具备后补验。
-- `DS-REQ-110~115` / `DS-AC-107~115`：状态 `DRAFT_PENDING_USER_REVIEW` / `NOT_RUN`，待 ChatGPT 复审、用户批准、实现与验收。
+- `DS-REQ-110~115` / `DS-AC-107~115`：已由项目负责人于 2026-08-30 批准（ChatGPT 调整 R1 复审 `REVIEW_PASS`），状态 `APPROVED` / `NOT_RUN`，待实现与验收；新调整实现 `NOT_STARTED`，9 条新用例仍全部 `NOT_RUN`。
 
-## 20. 验收后页面调整需求草案（DRAFT_PENDING_USER_REVIEW）
+## 20. 验收后页面调整需求（APPROVED）
 
-> 状态：`DRAFT_PENDING_USER_REVIEW`。以下 `DS-REQ-110~115` 为数据源管理正式验收后确认的五项页面调整（主列表空状态、可拖动业务弹窗、标签对齐、命名策略弹窗宽度、命名策略单选卡片）对应的需求草案。本组需求尚未获得用户正式批准，未进入实现、测试或验收；不得写成已批准、已实现、已测试或已验收。原 `DS-REQ-001~109` 保持 `APPROVED`，编号与正文逐字冻结，不受本组草案影响。
+> 状态：`APPROVED`。以下 `DS-REQ-110~115` 为数据源管理正式验收后确认的五项页面调整（主列表空状态、可拖动业务弹窗、标签对齐、命名策略弹窗宽度、命名策略单选卡片）对应的需求。本组需求已于 2026-08-30 由项目负责人批准（批准链：调整草案初始提交 `2a47062` → R1 提交 `0e79165` → ChatGPT 调整 R1 复审 `REVIEW_PASS` → 项目负责人明确回复“认可，批准本次调整草案”；批准任务 `DATA-SOURCE-POST-ACCEPTANCE-ADJUSTMENT-APPROVAL-CLOSEOUT-001`）。批准仅代表需求成立，不代表实现、测试或验收：新调整实现状态 `NOT_STARTED`，`DS-AC-107~115` 仍全部 `NOT_RUN`，不得写成已实现、已测试或已验收。原 `DS-REQ-001~109` 保持 `APPROVED`，编号与正文逐字冻结，不受本组需求影响。
 >
-> 既有缺陷边界：`DS-AC-052`（密码进入 MyBatis DEBUG 参数日志，违反既有 `DS-REQ-047/107`）与 `DS-AC-105`（`port:"abc"` 返回 HTTP 500 而非批准 API 契约要求的 HTTP 400/code=400）为既有需求/契约实现缺陷；本组调整草案不新增需求、不改判定、不修复。`DS-AC-104` 保持环境阻塞，待 MySQL 授权与 Doris 环境具备后补验。修复方案不得写成已实现事实。
+> 既有缺陷边界：`DS-AC-052`（密码进入 MyBatis DEBUG 参数日志，违反既有 `DS-REQ-047/107`）与 `DS-AC-105`（`port:"abc"` 返回 HTTP 500 而非批准 API 契约要求的 HTTP 400/code=400）为既有需求/契约实现缺陷；本组调整不新增需求、不改判定、不修复。`DS-AC-104` 保持环境阻塞，待 MySQL 授权与 Doris 环境具备后补验。修复方案不得写成已实现事实。
 
 | 编号 | 需求 |
 |---|---|
@@ -423,5 +429,6 @@
 | 2026-08-29 | R1 修订：§19 更新为“项目/数据库权威基线影响同步已完成（`DATA-SOURCE-BASELINE-IMPACT-ALIGNMENT-001`），不再作为后续独立维护事项或开放问题”；MySQL/Doris JDBC 驱动、现有后端候选实现改造与前端占位页替换仍为后续阶段工作；§17/§18 保持正确、未无必要重写；不改变任何 DS-REQ 编号、文本或语义；文档状态保持 `APPROVED`、实现状态保持 `NOT_STARTED` | DATA-SOURCE-BASELINE-IMPACT-ALIGNMENT-001-R1（ChatGPT 复审 CHANGES_REQUIRED 定向修订；纯文档任务） |
 | 2026-08-30 | 验收后调整需求草案落盘：新增 `DS-REQ-110~115` 共 6 条（`DRAFT_PENDING_USER_REVIEW`，尚未获得用户正式批准、尚未实现、尚未执行）；§1 元数据对齐已执行正式验收事实（实现状态 `IMPLEMENTED_PENDING_REVIEW`、原正式验收状态 `FAIL`、原验收用例 `PASS=103/FAIL=2/BLOCKED=1/NOT_RUN=0`，实现未置 `IMPLEMENTED_ACCEPTED`）并增加基础基线/调整草案/当前实现/原正式验收分层状态；§3 明确为需求建立时的历史实施前差距快照；原 `DS-REQ-001~109` 编号与正文逐字保持、追踪行不变；文档状态保持 `APPROVED` | DATA-SOURCE-POST-ACCEPTANCE-ADJUSTMENT-BASELINE-001（正式验收后五项页面调整的需求草案；纯文档任务，未进入实现/测试/验收） |
 | 2026-08-30 | R1 定向修订：ChatGPT 复审为 `CHANGES_REQUIRED`；只修订 §1 说明、§16 末尾、§18、§19 中把已完成的实现工作描述为未来工作、并错误声明“无开放问题”的过期当前状态叙述；`DS-REQ-001~115` 全部需求行未修改；`ACCEPTANCE.md`、`UI.md` 和原任务报告未修改；调整草案（`DS-REQ-110~115`/`DS-AC-107~115`）仍未批准 | DATA-SOURCE-POST-ACCEPTANCE-ADJUSTMENT-BASELINE-001-R1（ChatGPT 复审 CHANGES_REQUIRED 定向修订；纯文档任务） |
+| 2026-08-30 | 验收后调整批准收口：六条调整需求 `DS-REQ-110~115` 由 `DRAFT_PENDING_USER_REVIEW` 转为 `APPROVED`（批准人：项目负责人；批准依据：用户明确回复“认可，批准本次调整草案”；ChatGPT 调整 R1 复审 `REVIEW_PASS`；调整草案初始提交 `2a47062` → R1 提交 `0e79165`）；六条需求正文未变；新调整实现仍 `NOT_STARTED`；原正式验收仍 `FAIL` | DATA-SOURCE-POST-ACCEPTANCE-ADJUSTMENT-APPROVAL-CLOSEOUT-001（验收后页面调整批准收口；纯文档任务） |
 
-> 关联文档：验收基线 `docs/features/data-source-management/ACCEPTANCE.md`；执行报告 `docs/features/data-source-management/reports/DATA-SOURCE-REQUIREMENTS-BASELINE-001.md`；验收后调整草案执行报告 `docs/features/data-source-management/reports/DATA-SOURCE-POST-ACCEPTANCE-ADJUSTMENT-BASELINE-001.md`；验收后调整草案 R1 修订报告 `docs/features/data-source-management/reports/DATA-SOURCE-POST-ACCEPTANCE-ADJUSTMENT-BASELINE-001-R1.md`。
+> 关联文档：验收基线 `docs/features/data-source-management/ACCEPTANCE.md`；执行报告 `docs/features/data-source-management/reports/DATA-SOURCE-REQUIREMENTS-BASELINE-001.md`；验收后调整草案执行报告 `docs/features/data-source-management/reports/DATA-SOURCE-POST-ACCEPTANCE-ADJUSTMENT-BASELINE-001.md`；验收后调整草案 R1 修订报告 `docs/features/data-source-management/reports/DATA-SOURCE-POST-ACCEPTANCE-ADJUSTMENT-BASELINE-001-R1.md`；验收后调整批准收口报告 `docs/features/data-source-management/reports/DATA-SOURCE-POST-ACCEPTANCE-ADJUSTMENT-APPROVAL-CLOSEOUT-001.md`。
