@@ -10,19 +10,19 @@
 | 既有路由 | `/config/data-source` |
 | 目标文档 | `docs/features/data-source-management/ACCEPTANCE.md` |
 | 文档状态 | `APPROVED`（已正式批准） |
-| 实现状态 | `IMPLEMENTED_PENDING_REVIEW`（目标功能已经实现并完成正式验收执行；正式验收结果为 `FAIL`（PASS=103/FAIL=2/BLOCKED=1），尚未置为 `IMPLEMENTED_ACCEPTED`；两个失败用例（DS-AC-052、DS-AC-105）尚待修复并复验，阻塞用例（DS-AC-104）尚待环境具备后补验） |
-| 验收用例状态 | 原批准用例 106 例已全部执行（PASS=103，FAIL=2：DS-AC-052/DS-AC-105，BLOCKED=1：DS-AC-104，NOT_RUN=0）；验收后调整用例 `DS-AC-107~115`（9 例）已批准但仍全部 `NOT_RUN`，尚未执行；文档内共 115 例 |
-| 正式验收执行 | `FAIL`（2026-08-30，`DATA-SOURCE-FORMAL-ACCEPTANCE-001`；PASS=103/FAIL=2/BLOCKED=1；失败点 DS-AC-052 与 DS-AC-105 详见 `reports/DATA-SOURCE-FORMAL-ACCEPTANCE-001.md`；实现状态仍未置为 `IMPLEMENTED_ACCEPTED`） |
+| 实现状态 | `IMPLEMENTED_PENDING_REVIEW`（目标功能已经实现并完成定向正式复验；定向正式复验结果为 `BLOCKED`（PASS=113/FAIL=0/BLOCKED=2/NOT_RUN=0，阻塞 `DS-AC-104`、`DS-AC-108`），尚未置为 `IMPLEMENTED_ACCEPTED`；`DS-AC-104` 尚待环境具备后补验，`DS-AC-108` 受共享开发库无法安全构造空状态限制） |
+| 验收用例状态 | 文档内 115 例已全部执行（PASS=113，FAIL=0，BLOCKED=2：DS-AC-104/DS-AC-108，NOT_RUN=0）；原失败用例 `DS-AC-052`、`DS-AC-105` 与已批准调整用例 `DS-AC-107`、`DS-AC-109~115` 均经定向正式复验转为 `PASS` |
+| 正式验收执行 | `BLOCKED`（2026-08-30 定向正式复验 `DATA-SOURCE-FORMAL-REVERIFICATION-001`：PASS=113/FAIL=0/BLOCKED=2/NOT_RUN=0，阻塞 `DS-AC-104`/`DS-AC-108`；原正式验收 `FAIL`（`DATA-SOURCE-FORMAL-ACCEPTANCE-001`，PASS=103/FAIL=2/BLOCKED=1，失败点 `DS-AC-052`/`DS-AC-105`）已于本任务复验转为 `PASS`；详见 `reports/DATA-SOURCE-FORMAL-REVERIFICATION-001.md`；实现状态仍未置为 `IMPLEMENTED_ACCEPTED`） |
 | 基础基线状态 | `APPROVED`（原需求 `DS-REQ-001~109`、原验收标准 `DS-AC-001~106`、已批准 UI 设计基线保持已批准） |
 | 验收后调整状态 | `APPROVED`（新增 `DS-REQ-110~115`、`DS-AC-107~115` 与 UI §9 已于 2026-08-30 由项目负责人批准；批准不代表实现、测试或验收） |
 | 当前实现状态 | `IMPLEMENTED_PENDING_REVIEW`（与上表“实现状态”一致） |
-| 原正式验收状态 | `FAIL`（与上表“正式验收执行”一致，PASS=103/FAIL=2/BLOCKED=1/NOT_RUN=0） |
+| 原正式验收状态 | `FAIL`（原正式验收 PASS=103/FAIL=2/BLOCKED=1/NOT_RUN=0；经 `DATA-SOURCE-FORMAL-REVERIFICATION-001` 定向复验后当前整体状态为 `BLOCKED`，见上表“正式验收执行”） |
 | 调整批准任务 | `DATA-SOURCE-POST-ACCEPTANCE-ADJUSTMENT-APPROVAL-CLOSEOUT-001` |
 | 调整批准日期 | 2026-08-30 |
 | 调整批准人 | 项目负责人（用户） |
 | 调整批准依据 | 用户明确回复“认可，批准本次调整草案” |
 | ChatGPT 调整 R1 复审结论 | `REVIEW_PASS` |
-| 新调整实现状态 | `NOT_STARTED`（调整需求/验收/UI 已批准，尚未实现；9 条新验收用例仍全部 `NOT_RUN`） |
+| 新调整实现状态 | `IMPLEMENTED_PENDING_REVIEW`（调整需求/验收/UI 已批准并完成实现；`DS-AC-107~115` 已执行：`DS-AC-107`、`DS-AC-109~115` 为 `PASS`，`DS-AC-108` 为 `BLOCKED`；详见 `reports/DATA-SOURCE-FORMAL-REVERIFICATION-001.md`） |
 | 初始任务 | `DATA-SOURCE-REQUIREMENTS-BASELINE-001` |
 | 修订任务 | `DATA-SOURCE-REQUIREMENTS-BASELINE-001-R1`（ChatGPT 复审结论 `CHANGES_REQUIRED`；修复逐例状态列与需求追踪缺口） |
 | 授权基线提交 | `eca58e669c8ebad3cf73a1732870d1cfb8388517`（初始任务执行时实际 `origin/develop` 最新提交） |
@@ -39,7 +39,7 @@
 
 重要声明：本文件把所有需求转换为可客观验收的场景，使用唯一、稳定的验收编号。所有用例初始状态为 `NOT_RUN`（未执行）；`PASS / FAIL / BLOCKED` 是执行后状态，任何用例状态只有在执行并取得与步骤匹配的客观证据后才允许更新。对需要构造数据库异常数据的验收场景，本文件只定义期望行为，不授权任何测试数据写入；任何数据库写操作仍需按项目数据库审批规则另行获得授权。
 
-状态含义必须清楚，状态不得混淆：批准验收标准、执行验收、正式验收通过、实现正式接受是不同状态。验收标准文档状态仍为 `APPROVED`，仅表示验收标准基线成立，批准验收标准不等于执行功能验收，不得把文档批准当作用例通过证据；106 条用例已经全部执行，其中 `PASS=103`、`FAIL=2`（DS-AC-052、DS-AC-105）、`BLOCKED=1`（DS-AC-104）、`NOT_RUN=0`，正式验收结论为 `FAIL`，实现状态尚未置为 `IMPLEMENTED_ACCEPTED`；当前本文件不得作为功能已验收通过的证据。
+状态含义必须清楚，状态不得混淆：批准验收标准、执行验收、正式验收通过、实现正式接受是不同状态。验收标准文档状态仍为 `APPROVED`，仅表示验收标准基线成立，批准验收标准不等于执行功能验收，不得把文档批准当作用例通过证据；115 条用例已经全部执行，其中 `PASS=113`、`FAIL=0`、`BLOCKED=2`（DS-AC-104、DS-AC-108）、`NOT_RUN=0`，定向正式复验结论为 `BLOCKED`，实现状态尚未置为 `IMPLEMENTED_ACCEPTED`；当前本文件不得作为功能已验收通过的证据。
 
 ## 2. 验收结果状态模型
 
@@ -69,12 +69,12 @@
 | 删除数据源 | DS-AC-087 ~ DS-AC-092 | 6 |
 | 通用交互、错误处理与安全 | DS-AC-093 ~ DS-AC-101 | 9 |
 | 补充验收（trim/临时连接/后端独立校验/无 DDL） | DS-AC-102 ~ DS-AC-106 | 5 |
-| 已批准的验收后页面调整（`APPROVED`，9 条全部 `NOT_RUN`） | DS-AC-107 ~ DS-AC-115 | 9 |
-| **合计（原批准 106 + 已批准调整 9）** | DS-AC-001 ~ DS-AC-115 | **115**（原批准 106 例已执行，正式验收 `PASS=103/FAIL=2/BLOCKED=1/NOT_RUN=0`；已批准调整 9 例全部 `NOT_RUN`，不计入原正式验收分母） |
+| 已批准的验收后页面调整（`APPROVED`，已执行：8 条 `PASS`、1 条 `BLOCKED`） | DS-AC-107 ~ DS-AC-115 | 9 |
+| **合计（原批准 106 + 已批准调整 9）** | DS-AC-001 ~ DS-AC-115 | **115**（115 例已全部执行，定向正式复验 `PASS=113/FAIL=0/BLOCKED=2/NOT_RUN=0`，阻塞 `DS-AC-104`/`DS-AC-108`；整体正式验收状态 `BLOCKED`） |
 
 ## 4. 验收用例
 
-> 106 条用例已经全部执行，其中 `PASS=103`、`FAIL=2`（DS-AC-052、DS-AC-105）、`BLOCKED=1`（DS-AC-104）、`NOT_RUN=0`；状态依据正式验收报告 `reports/DATA-SOURCE-FORMAL-ACCEPTANCE-001.md`，每一行“状态”列的含义与更新规则仍见 §2。
+> 115 条用例已经全部执行，其中 `PASS=113`、`FAIL=0`、`BLOCKED=2`（DS-AC-104、DS-AC-108）、`NOT_RUN=0`；状态依据定向正式复验报告 `reports/DATA-SOURCE-FORMAL-REVERIFICATION-001.md`（原失败用例 `DS-AC-052`/`DS-AC-105` 已复验转为 `PASS`，原正式验收报告 `reports/DATA-SOURCE-FORMAL-ACCEPTANCE-001.md` 保持不变），每一行“状态”列的含义与更新规则仍见 §2。
 
 ### 4.1 菜单与路由（对应 REQUIREMENTS §6、§7.1）
 
@@ -166,7 +166,7 @@
 | DS-AC-049 | PASS | DS-REQ-044 | 进入编辑弹窗 | 观察密码输入框 | 显示固定掩码（例如 `*********`）；该掩码不是密码值 |
 | DS-AC-050 | PASS | DS-REQ-045, DS-REQ-046 | 编辑弹窗密码未修改 | 不修改密码并保存 | 保存请求不发送密码字段；后端保留数据库原密码；后端不把 `*********` 等字符串当魔法哨兵处理 |
 | DS-AC-051 | PASS | DS-REQ-045 | 编辑弹窗密码已修改 | 输入新密码（含首尾空格）并保存 | 保存请求发送去除首尾空格后的新密码；后端覆盖原密码 |
-| DS-AC-052 | FAIL | DS-REQ-047 | 执行查询、保存、删除、测试连接等操作 | 检查日志、异常与响应 | 日志、异常、响应中均不出现密码或敏感连接信息 |
+| DS-AC-052 | PASS | DS-REQ-047 | 执行查询、保存、删除、测试连接等操作 | 检查日志、异常与响应 | 日志、异常、响应中均不出现密码或敏感连接信息 |
 
 ### 4.9 测试连接（对应 REQUIREMENTS §10）
 
@@ -249,26 +249,26 @@
 | DS-AC-102 | PASS | DS-REQ-031 | 已进入数据源管理页面并打开新增/编辑弹窗与命名策略弹窗 | 分别在查询框、主数据源表单字段（ID、名称、主机、端口、用户名、密码、Service Name）、命名策略前缀/后缀输入带首尾空格的值并保存/查询 | 除 `DATA_SOURCE_BIZ_ATTR` 外，全部用户输入字符串保存/查询前均去除首尾空格，覆盖查询输入、主数据源表单字段、密码和命名策略前后缀；`DATA_SOURCE_BIZ_ATTR` 例外（见 DS-AC-069） |
 | DS-AC-103 | PASS | DS-REQ-052, DS-REQ-053 | 打开新增或编辑弹窗，数据库类型为 Oracle | 填写 Oracle 连接字段后点击“测试连接” | 后端建立一次性临时 JDBC 连接，不使用应用连接池，不保存表单内容；执行最小查询 `SELECT 1 FROM DUAL`；测试完成立即关闭连接；不修改数据库业务数据 |
 | DS-AC-104 | BLOCKED | DS-REQ-052, DS-REQ-053 | 打开新增或编辑弹窗，数据库类型为 MySQL 或 Doris | 填写 MySQL/Doris 连接字段后点击“测试连接” | 后端建立一次性临时 JDBC 连接，不使用应用连接池，不保存表单内容；执行最小查询 `SELECT 1`；测试完成立即关闭连接；不修改数据库业务数据 |
-| DS-AC-105 | FAIL | DS-REQ-106 | 已进入数据源管理页面 | 绕过前端，直接调用后端接口提交不合法数据（必填缺失、超长、非法值域、非法角色—类型组合、重复 ID/名称、命名策略逻辑联合键重复等） | 后端独立重新校验必填、长度、值域、角色—类型联动、ID/名称唯一性和命名策略逻辑联合键重复，拒绝不合法数据并返回业务提示；不依赖前端校验 |
+| DS-AC-105 | PASS | DS-REQ-106 | 已进入数据源管理页面 | 绕过前端，直接调用后端接口提交不合法数据（必填缺失、超长、非法值域、非法角色—类型组合、重复 ID/名称、命名策略逻辑联合键重复等） | 后端独立重新校验必填、长度、值域、角色—类型联动、ID/名称唯一性和命名策略逻辑联合键重复，拒绝不合法数据并返回业务提示；不依赖前端校验 |
 | DS-AC-106 | PASS | DS-REQ-108 | 代码与数据库结构基线已就绪 | 通过代码、数据库迁移差异及数据库结构只读核对，检查第一版数据库对象 | 第一版未新增主键、唯一约束、索引或任何 DDL；数据源 ID/名称唯一性与命名策略逻辑联合键查重均由后端保存前查询完成 |
 
-### 4.15 验收后页面调整用例（`APPROVED`，已批准、尚未执行）
+### 4.15 验收后页面调整用例（`APPROVED`，已批准并执行）
 
-> 以下 `DS-AC-107~115` 为验收后页面调整用例，全部状态为 `NOT_RUN`，属于已批准、尚未执行的调整；不并入原正式验收 `PASS=103/FAIL=2/BLOCKED=1/NOT_RUN=0` 统计，不构成新的正式验收结论。批准链：调整草案初始提交 `2a47062` → R1 提交 `0e79165` → ChatGPT 调整 R1 复审 `REVIEW_PASS` → 项目负责人于 2026-08-30 明确回复“认可，批准本次调整草案”批准（批准任务 `DATA-SOURCE-POST-ACCEPTANCE-ADJUSTMENT-APPROVAL-CLOSEOUT-001`）。批准验收标准不等于用例通过：9 条用例仍全部 `NOT_RUN`。关联需求见 `DS-REQ-110~115`（`REQUIREMENTS.md` §20）。
+> 以下 `DS-AC-107~115` 为验收后页面调整用例，已由 `DATA-SOURCE-FORMAL-REVERIFICATION-001` 定向正式复验执行：`DS-AC-107`、`DS-AC-109~115` 为 `PASS`，`DS-AC-108` 为 `BLOCKED`。批准链：调整草案初始提交 `2a47062` → R1 提交 `0e79165` → ChatGPT 调整 R1 复审 `REVIEW_PASS` → 项目负责人于 2026-08-30 明确回复“认可，批准本次调整草案”批准（批准任务 `DATA-SOURCE-POST-ACCEPTANCE-ADJUSTMENT-APPROVAL-CLOSEOUT-001`）。批准验收标准不等于用例通过；本次复验结果以真实页面视觉检查与 R1 自动测试证据为依据。关联需求见 `DS-REQ-110~115`（`REQUIREMENTS.md` §20）。
 >
-> 既有缺陷边界：`DS-AC-052`（密码进入 MyBatis DEBUG 参数日志，违反既有 `DS-REQ-047/107`）与 `DS-AC-105`（`port:"abc"` 返回 HTTP 500 而非批准 API 契约要求的 HTTP 400/code=400）为既有需求/契约实现缺陷；本组调整不新增需求、不改判定、不修复。`DS-AC-104` 保持环境阻塞，待 MySQL 授权与 Doris 环境具备后补验。修复方案不得写成已实现事实。
+> 定向修复与复验：`DS-AC-052`（密码进入 MyBatis DEBUG 参数日志，违反既有 `DS-REQ-047/107`）与 `DS-AC-105`（`port:"abc"` 返回 HTTP 500 而非批准 API 契约要求的 HTTP 400/code=400）已分别由 `DATA-SOURCE-POST-ACCEPTANCE-REMEDIATION-001` 及 R1 修复，并于本任务经真实后端/真实 Oracle 开发库复验转为 `PASS`。`DS-AC-104` 保持环境阻塞（MySQL 远程授权与 Doris 环境未变，待具备后补验）；`DS-AC-108` 因共享开发库无法安全构造“系统完全无数据”的空状态而记 `BLOCKED`。
 
 | 编号 | 状态 | 关联需求 | 前置条件 | 操作/输入 | 预期结果 |
 |---|---|---|---|---|---|
-| DS-AC-107 | NOT_RUN | DS-REQ-110 | 已进入数据源管理页面，存在可返回零结果的有效查询条件 | 执行至少一个非空查询条件且无匹配记录，核验两级提示文案；随后只修改查询框但不点击查询，观察空状态 | 空状态依据“最后一次实际执行并生效的查询条件”判断；有生效查询条件且结果为零时主提示为“未找到符合当前查询条件的数据源”，辅助提示为“请调整查询条件后重试，或点击上方‘重置’查看全部数据源”；仅修改查询框未点击查询不改变空状态判定 |
-| DS-AC-108 | NOT_RUN | DS-REQ-110 | 已进入数据源管理页面；实际复验需专用隔离数据或可控环境（构造数据库状态需另行获得写授权） | 重置后形成无生效查询条件且列表确实无数据的状态，观察空状态 | 无生效查询条件且列表为零时主提示为“暂无数据源”，辅助提示引导使用右上角“新增数据源”创建第一条数据源；不得为此删除非专用数据 |
-| DS-AC-109 | NOT_RUN | DS-REQ-111 | 已进入数据源管理页面并处于任一空状态 | 观察空状态 | 空状态无第二个“重置查询”按钮或链接，查询区现有“重置”是唯一重置入口；使用中性灰色信息样式，不使用红色/橙色错误或警告色；主提示字号与字重高于辅助提示，垂直留白合理 |
-| DS-AC-110 | NOT_RUN | DS-REQ-112 | 已进入数据源管理页面 | 分别打开新增/编辑数据源、业务属性、目标库命名策略三个业务弹窗，通过标题栏拖动 | 三个业务弹窗均可通过标题栏非控件区域拖动；关闭按钮、输入控件和操作按钮不触发拖动 |
-| DS-AC-111 | NOT_RUN | DS-REQ-112 | 已打开任一可拖动业务弹窗 | 将弹窗拖向可视区边缘、改变浏览器窗口尺寸、关闭后重新打开；另打开删除确认/未保存确认框 | 弹窗不能被完全拖出可视区域，至少保留可操作标题栏；浏览器尺寸变化后位置可修正；每次重新打开恢复默认居中；删除确认、未保存确认等小型确认框固定居中且不可拖动 |
-| DS-AC-112 | NOT_RUN | DS-REQ-113 | 已进入数据源管理页面 | 分别打开三个业务弹窗，观察表单标签与输入框对齐 | 三个业务弹窗内表单标签统一固定宽度并左对齐；输入控件左边界一致；必填星号位置固定，有无必填标记的标签文字不因星号错位；动态标签 `Service Name/数据库名` 同样遵守 |
-| DS-AC-113 | NOT_RUN | DS-REQ-114 | 已进入数据源管理页面（桌面端） | 打开“目标库命名策略”弹窗，观察宽度与可视区关系；将浏览器窗口变窄后再次观察 | 桌面端默认宽度约 1050px 且不超出浏览器可视宽度，保留左右安全间距；窗口变窄时仍保留安全间距和可用性 |
-| DS-AC-114 | NOT_RUN | DS-REQ-114 | 已进入数据源管理页面；实际复验需构造约 5 条专用命名策略（构造数据库状态需另行获得写授权） | 构造约 5 条专用命名策略后打开弹窗，观察列表 | 列表不分页，约 5 行记录可完整展示；目标库 ID、目标库名称、数据库类型、命名策略、前缀、后缀、操作七列布局不拥挤；长 ID/名称/前后缀内容省略显示，悬停展示完整值 |
-| DS-AC-115 | NOT_RUN | DS-REQ-115, DS-REQ-079, DS-REQ-080 | 已进入“目标库命名策略”弹窗新增/编辑策略 | 核验两张单选卡片的名称、说明、整卡点击与选中视觉；切换 `TABLE_MERGE` 与 `CUSTOM_PREFIX_SUFFIX` | 两张横向单选卡片第一行显示单选按钮与策略名称、第二行显示固定说明；点击整张卡片可选中，选中态为蓝色边框与浅蓝背景；切换为表合并时清空并禁用前后缀，切换为自定义前后缀时启用并按既有规则校验 |
+| DS-AC-107 | PASS | DS-REQ-110 | 已进入数据源管理页面，存在可返回零结果的有效查询条件 | 执行至少一个非空查询条件且无匹配记录，核验两级提示文案；随后只修改查询框但不点击查询，观察空状态 | 空状态依据“最后一次实际执行并生效的查询条件”判断；有生效查询条件且结果为零时主提示为“未找到符合当前查询条件的数据源”，辅助提示为“请调整查询条件后重试，或点击上方‘重置’查看全部数据源”；仅修改查询框未点击查询不改变空状态判定 |
+| DS-AC-108 | BLOCKED | DS-REQ-110 | 已进入数据源管理页面；实际复验需专用隔离数据或可控环境（构造数据库状态需另行获得写授权） | 重置后形成无生效查询条件且列表确实无数据的状态，观察空状态 | 无生效查询条件且列表为零时主提示为“暂无数据源”，辅助提示引导使用右上角“新增数据源”创建第一条数据源；不得为此删除非专用数据 |
+| DS-AC-109 | PASS | DS-REQ-111 | 已进入数据源管理页面并处于任一空状态 | 观察空状态 | 空状态无第二个“重置查询”按钮或链接，查询区现有“重置”是唯一重置入口；使用中性灰色信息样式，不使用红色/橙色错误或警告色；主提示字号与字重高于辅助提示，垂直留白合理 |
+| DS-AC-110 | PASS | DS-REQ-112 | 已进入数据源管理页面 | 分别打开新增/编辑数据源、业务属性、目标库命名策略三个业务弹窗，通过标题栏拖动 | 三个业务弹窗均可通过标题栏非控件区域拖动；关闭按钮、输入控件和操作按钮不触发拖动 |
+| DS-AC-111 | PASS | DS-REQ-112 | 已打开任一可拖动业务弹窗 | 将弹窗拖向可视区边缘、改变浏览器窗口尺寸、关闭后重新打开；另打开删除确认/未保存确认框 | 弹窗不能被完全拖出可视区域，至少保留可操作标题栏；浏览器尺寸变化后位置可修正；每次重新打开恢复默认居中；删除确认、未保存确认等小型确认框固定居中且不可拖动 |
+| DS-AC-112 | PASS | DS-REQ-113 | 已进入数据源管理页面 | 分别打开三个业务弹窗，观察表单标签与输入框对齐 | 三个业务弹窗内表单标签统一固定宽度并左对齐；输入控件左边界一致；必填星号位置固定，有无必填标记的标签文字不因星号错位；动态标签 `Service Name/数据库名` 同样遵守 |
+| DS-AC-113 | PASS | DS-REQ-114 | 已进入数据源管理页面（桌面端） | 打开“目标库命名策略”弹窗，观察宽度与可视区关系；将浏览器窗口变窄后再次观察 | 桌面端默认宽度约 1050px 且不超出浏览器可视宽度，保留左右安全间距；窗口变窄时仍保留安全间距和可用性 |
+| DS-AC-114 | PASS | DS-REQ-114 | 已进入数据源管理页面；实际复验需构造约 5 条专用命名策略（构造数据库状态需另行获得写授权） | 构造约 5 条专用命名策略后打开弹窗，观察列表 | 列表不分页，约 5 行记录可完整展示；目标库 ID、目标库名称、数据库类型、命名策略、前缀、后缀、操作七列布局不拥挤；长 ID/名称/前后缀内容省略显示，悬停展示完整值 |
+| DS-AC-115 | PASS | DS-REQ-115, DS-REQ-079, DS-REQ-080 | 已进入“目标库命名策略”弹窗新增/编辑策略 | 核验两张单选卡片的名称、说明、整卡点击与选中视觉；切换 `TABLE_MERGE` 与 `CUSTOM_PREFIX_SUFFIX` | 两张横向单选卡片第一行显示单选按钮与策略名称、第二行显示固定说明；点击整张卡片可选中，选中态为蓝色边框与浅蓝背景；切换为表合并时清空并禁用前后缀，切换为自定义前后缀时启用并按既有规则校验 |
 
 ## 5. 需求—验收追踪矩阵
 
@@ -406,5 +406,6 @@
 | 2026-08-30 | 正式验收执行：`DATA-SOURCE-FORMAL-ACCEPTANCE-001` 全部 106 条用例执行完毕，`PASS=103`、`FAIL=2`（DS-AC-052、DS-AC-105）、`BLOCKED=1`（DS-AC-104）、`NOT_RUN=0`；正式验收结论为 `FAIL`，实现未置为 `IMPLEMENTED_ACCEPTED`；结果提交 `4d559980c67bede873dffad17a819c1a926d5295`；失败与阻塞详情见原正式验收报告 `reports/DATA-SOURCE-FORMAL-ACCEPTANCE-001.md` | DATA-SOURCE-FORMAL-ACCEPTANCE-001（正式验收执行；纯文档验收执行，失败/阻塞用例不因本记录变为通过） |
 | 2026-08-30 | 验收后调整草案用例落盘：新增 `DS-AC-107~115` 共 9 条（全部 `NOT_RUN`，`DRAFT_PENDING_USER_REVIEW`，尚未批准、尚未执行）；§1 元数据增加基础基线/调整草案/当前实现/原正式验收分层状态；§3 分类数量表增加调整草案分类（合计 115 = 原批准 106 例已执行 + 调整草案 9 例全部 NOT_RUN）；§5 追踪矩阵追加 `DS-REQ-110~115` 行，原 001~109 行不变；原批准 `DS-AC-001~106` 编号、状态、正文与正式验收统计 `PASS=103/FAIL=2/BLOCKED=1/NOT_RUN=0` 逐字保持；正式验收状态保持 `FAIL` | DATA-SOURCE-POST-ACCEPTANCE-ADJUSTMENT-BASELINE-001（正式验收后五项页面调整的验收草案；纯文档任务） |
 | 2026-08-30 | 验收后调整批准收口：新增 9 条调整验收标准 `DS-AC-107~115` 由 `DRAFT_PENDING_USER_REVIEW` 转为 `APPROVED`，状态仍全部 `NOT_RUN`，尚未执行（批准人：项目负责人；批准依据：用户明确回复“认可，批准本次调整草案”；ChatGPT 调整 R1 复审 `REVIEW_PASS`；调整草案初始提交 `2a47062` → R1 提交 `0e79165`）；批准验收标准不等于用例通过；原正式验收结果保持 `PASS=103/FAIL=2/BLOCKED=1/NOT_RUN=0`、结论 `FAIL`；原批准 `DS-AC-001~106` 编号、状态、正文与追踪矩阵逐字保持 | DATA-SOURCE-POST-ACCEPTANCE-ADJUSTMENT-APPROVAL-CLOSEOUT-001（验收后页面调整批准收口；纯文档任务） |
+| 2026-08-30 | 定向正式复验：`DATA-SOURCE-FORMAL-REVERIFICATION-001` 对原失败用例 `DS-AC-052`、`DS-AC-105` 与已批准调整用例 `DS-AC-107~115` 执行真实后端/真实 Oracle 开发库复验（`DS-AC-114` 使用本任务专用数据 1 源库+5 目标库+5 命名策略，复验后已按精确 ID 清理并核验零残留）；`DS-AC-052`、`DS-AC-105` 由 `FAIL` 更新为 `PASS`；`DS-AC-107`、`DS-AC-109~115` 由 `NOT_RUN` 更新为 `PASS`；`DS-AC-108` 由 `NOT_RUN` 更新为 `BLOCKED`（共享开发库无法安全构造无任何数据源的系统空状态）；`DS-AC-104` 保持 `BLOCKED`；总计 `PASS=113/FAIL=0/BLOCKED=2/NOT_RUN=0`，整体正式验收状态 `BLOCKED`，实现状态保持 `IMPLEMENTED_PENDING_REVIEW` 未置 `IMPLEMENTED_ACCEPTED`；用例正文、追踪矩阵、`DESIGN/API/DATABASE` 及既有报告零改动 | DATA-SOURCE-FORMAL-REVERIFICATION-001（定向正式复验；真实 API/数据库/页面视觉证据 + 自动测试与构建辅助证据） |
 
-> 关联文档：需求基线 `docs/features/data-source-management/REQUIREMENTS.md`；初始执行报告 `docs/features/data-source-management/reports/DATA-SOURCE-REQUIREMENTS-BASELINE-001.md`；R1 执行报告 `docs/features/data-source-management/reports/DATA-SOURCE-REQUIREMENTS-BASELINE-001-R1.md`；原正式验收报告 `docs/features/data-source-management/reports/DATA-SOURCE-FORMAL-ACCEPTANCE-001.md`；R1 定向修订报告 `docs/features/data-source-management/reports/DATA-SOURCE-FORMAL-ACCEPTANCE-001-R1.md`；验收后调整草案执行报告 `docs/features/data-source-management/reports/DATA-SOURCE-POST-ACCEPTANCE-ADJUSTMENT-BASELINE-001.md`；验收后调整批准收口报告 `docs/features/data-source-management/reports/DATA-SOURCE-POST-ACCEPTANCE-ADJUSTMENT-APPROVAL-CLOSEOUT-001.md`。
+> 关联文档：需求基线 `docs/features/data-source-management/REQUIREMENTS.md`；初始执行报告 `docs/features/data-source-management/reports/DATA-SOURCE-REQUIREMENTS-BASELINE-001.md`；R1 执行报告 `docs/features/data-source-management/reports/DATA-SOURCE-REQUIREMENTS-BASELINE-001-R1.md`；原正式验收报告 `docs/features/data-source-management/reports/DATA-SOURCE-FORMAL-ACCEPTANCE-001.md`；R1 定向修订报告 `docs/features/data-source-management/reports/DATA-SOURCE-FORMAL-ACCEPTANCE-001-R1.md`；验收后调整草案执行报告 `docs/features/data-source-management/reports/DATA-SOURCE-POST-ACCEPTANCE-ADJUSTMENT-BASELINE-001.md`；验收后调整批准收口报告 `docs/features/data-source-management/reports/DATA-SOURCE-POST-ACCEPTANCE-ADJUSTMENT-APPROVAL-CLOSEOUT-001.md`；定向正式复验报告 `docs/features/data-source-management/reports/DATA-SOURCE-FORMAL-REVERIFICATION-001.md`。
