@@ -9,15 +9,15 @@
 | 正式菜单 | 数据订阅（配置管理组，路由 `/config/subscribe`，菜单项与路由均保持既有值不变） |
 | 既有路由 | `/config/subscribe` |
 | 目标文档 | `docs/features/data-subscription/ACCEPTANCE.md` |
-| 文档状态 | `APPROVED`（当前版本为“英文句点 `.` 保留分隔符”验收标准调整批准版本，已获得 ChatGPT 正式复审 `APPROVED`，批准依据提交 `bb8716c26d5181edf84ba1f07d4e60e8f1c1918a`，见 §6 变更记录） |
+| 文档状态 | `DRAFT_PENDING_USER_REVIEW`（当前版本为“含逗号数据源 ID 查询兼容”验收标准调整草案，尚未获得 ChatGPT 正式复审批准；上一正式批准版本为“英文句点 `.` 保留分隔符”验收标准调整批准版本，批准依据提交 `bb8716c26d5181edf84ba1f07d4e60e8f1c1918a`，见 §6 变更记录） |
 | 实现状态 | `NOT_STARTED`（本任务为纯文档需求与验收基线任务，不涉及任何业务代码实现） |
 | 任务编号 | `DATA-SUBSCRIPTION-REQUIREMENTS-BASELINE-001` |
 | 创建日期 | 2026-08-30 |
-| 依据需求 | `docs/features/data-subscription/REQUIREMENTS.md`（当前版本为点号保留分隔符调整批准版本，文档状态 `APPROVED`；批准依据提交 `bb8716c26d5181edf84ba1f07d4e60e8f1c1918a`） |
+| 依据需求 | `docs/features/data-subscription/REQUIREMENTS.md`（当前版本为含逗号数据源 ID 查询兼容需求调整草案，文档状态 `DRAFT_PENDING_USER_REVIEW`；上一正式批准版本为点号保留分隔符调整批准版本，批准依据提交 `bb8716c26d5181edf84ba1f07d4e60e8f1c1918a`） |
 
 重要声明：本文件把所有需求转换为可客观验收的场景，使用唯一、稳定的验收编号。所有用例初始状态为 `NOT_RUN`（未执行）；`PASS / FAIL / BLOCKED` 是执行后状态，任何用例状态只有在执行并取得与步骤匹配的客观证据后才允许更新。对需要构造数据库异常数据的验收场景，本文件只定义期望行为，不授权任何测试数据写入；任何数据库写操作仍需按项目数据库审批规则另行获得授权。
 
-状态含义必须清楚：批准验收标准、执行验收、正式验收通过、实现正式接受是不同状态。上一正式批准版本（提交 `d7560445be1504e6ed9957fa7b31be1fd393ea19`）已获得项目负责人正式批准；当前版本在此基础上仅定向扩展与“英文句点 `.` 保留分隔符”直接相关的既有验收项（不增加、不删除、不重编号），该调整已获得 ChatGPT 正式复审 `APPROVED`（批准依据提交 `bb8716c26d5181edf84ba1f07d4e60e8f1c1918a`），当前文档状态为 `APPROVED`。批准验收标准不等于执行功能验收，更不得把已批准文档当作用例通过证据。本 Feature 尚未实现（实现状态 `NOT_STARTED`），全部 126 条用例状态必须保持 `NOT_RUN`；只有未来实际执行并取得与步骤匹配的客观证据后，才允许更新为 `PASS / FAIL / BLOCKED`。当前本文件不得作为功能已实现的证据。
+状态含义必须清楚：批准验收标准、执行验收、正式验收通过、实现正式接受是不同状态。上一正式批准版本（提交 `d7560445be1504e6ed9957fa7b31be1fd393ea19`）已获得项目负责人正式批准；其后与“英文句点 `.` 保留分隔符”直接相关的既有验收项定向扩展版本已获得 ChatGPT 正式复审 `APPROVED`（批准依据提交 `bb8716c26d5181edf84ba1f07d4e60e8f1c1918a`），该批准历史保留不变。当前版本在此基础上仅定向调整含英文逗号数据源 ID 的查询兼容验收语义（不增加、不删除、不重编号；`DSUB-AC-032~035` 及紧邻追踪说明），尚未获得 ChatGPT 正式复审批准，当前文档状态为 `DRAFT_PENDING_USER_REVIEW`。批准验收标准不等于执行功能验收，更不得把已批准文档当作用例通过证据。本 Feature 尚未实现（实现状态 `NOT_STARTED`），全部 126 条用例状态必须保持 `NOT_RUN`；只有未来实际执行并取得与步骤匹配的客观证据后，才允许更新为 `PASS / FAIL / BLOCKED`。当前本文件不得作为功能已实现的证据。
 
 ## 2. 验收结果状态模型
 
@@ -97,10 +97,12 @@
 | DSUB-AC-029 | NOT_RUN | DSUB-REQ-030 | 启用订阅记录总数超过单屏可显示 | 进入页面观察列表与接口 | 一次显示全部启用记录；页面无分页控件、无页码、无“加载更多”；查询请求与接口契约不使用分页参数 |
 | DSUB-AC-030 | NOT_RUN | DSUB-REQ-031 | 列表含多条启用记录 | 进入页面或完成查询后观察顺序 | 默认按 `NVL(UPDATE_TIME, INSERT_TIME) DESC` 排序 |
 | DSUB-AC-031 | NOT_RUN | DSUB-REQ-032 | 已进入数据订阅页面 | 观察查询区 | 查询条件严格为两个多选下拉：源库、目标库；无其他查询条件 |
-| DSUB-AC-032 | NOT_RUN | DSUB-REQ-033 | 已进入数据订阅页面 | 展开源库/目标库下拉候选项；对照存量数据源 ID 含英文逗号或句点的记录 | 源库候选项仅含 `FG_ACTIVE=1` 且类别匹配的源库；目标库候选项仅含 `FG_ACTIVE=1` 且类别匹配的目标库；不包含停用或不存在的数据源；存量数据源 ID 即使含保留字符仍允许选用于查询历史订阅，不因保留字符从查询候选移除 |
-| DSUB-AC-033 | NOT_RUN | DSUB-REQ-034 | 主列表含记录 | 在源库条件选择两个源库并点击“查询” | 返回匹配任一选中源库的记录（源库之间为 OR） |
-| DSUB-AC-034 | NOT_RUN | DSUB-REQ-034 | 主列表含记录 | 在目标库条件选择两个目标库并点击“查询” | 返回匹配任一选中目标库的记录（目标库之间为 OR） |
-| DSUB-AC-035 | NOT_RUN | DSUB-REQ-034 | 主列表含记录 | 同时选择源库与目标库条件并点击“查询” | 返回同时满足源库条件组与目标库条件组的记录（两组之间为 AND） |
+| DSUB-AC-032 | NOT_RUN | DSUB-REQ-033 | 已进入数据订阅页面 | 展开源库/目标库下拉候选项；对照存量数据源 ID 含英文逗号或句点的记录 | 源库候选项仅含 `FG_ACTIVE=1` 且类别匹配的源库；目标库候选项仅含 `FG_ACTIVE=1` 且类别匹配的目标库；不包含停用或不存在的数据源；ID 含英文逗号或英文句点的存量候选不因保留字符被静默移除；ID 仅含英文句点（不含英文逗号）的候选保持普通可选并可按完整 token 精确匹配；ID 含英文逗号的候选仍可选，但显示明确歧义警告（如“含逗号，历史兼容查询可能存在歧义”），不得冒充普通精确候选（新增/编辑维护候选的禁用规则不变，本次只涉及列表查询候选） |
+| DSUB-AC-033 | NOT_RUN | DSUB-REQ-034 | 主列表含记录 | 在源库条件选择两个源库并点击“查询” | 两个普通源库 ID 之间为 OR；token 去除首尾空白后精确匹配，`S01` 不误匹配 `S012`，`%`、`_` 等字符按字面值处理；仅含英文句点（不含英文逗号）的源库 ID 可精确匹配；选择含英文逗号的源库候选时，返回“可能匹配记录集合”并显示查询歧义警告——由于无转义 CSV 无法区分单个含逗号 ID 与相邻普通 ID，验收必须承认该歧义无法从当前物理字段消除，不得要求后端伪造精确识别（详见紧邻补充说明） |
+| DSUB-AC-034 | NOT_RUN | DSUB-REQ-034 | 主列表含记录 | 在目标库条件选择两个目标库并点击“查询” | 两个普通目标库 ID 之间为 OR；token 去除首尾空白后精确匹配，`S01` 不误匹配 `S012`，`%`、`_` 等字符按字面值处理；仅含英文句点（不含英文逗号）的目标库 ID 可精确匹配；选择含英文逗号的目标库候选时，返回“可能匹配记录集合”并显示查询歧义警告——由于无转义 CSV 无法区分单个含逗号 ID 与相邻普通 ID，验收必须承认该歧义无法从当前物理字段消除，不得要求后端伪造精确识别（详见紧邻补充说明） |
+| DSUB-AC-035 | NOT_RUN | DSUB-REQ-034 | 主列表含记录 | 同时选择源库与目标库条件并点击“查询” | 返回同时满足源库条件组与目标库条件组的记录（两组之间为 AND）；任一组包含含英文逗号候选时仍按组间 AND 执行；只要查询包含任意含逗号候选，页面持续展示查询歧义警告（详见紧邻补充说明） |
+
+> 查询歧义补充说明：`DATA_FROM_SOURCE_ID`/`DATA_TO_SOURCE_ID` 为无引号、无转义符、无长度前缀的英文逗号分隔协议（第一版未引入关联表或数据迁移）。原始字符串 `A,B` 既可能表示单个含逗号 ID `A,B`，也可能表示两个相邻普通 ID `A` 与 `B`，无法从当前物理字段消除歧义。因此：普通 ID 与仅含句点 ID 按去除首尾空白后的完整 token 字面精确匹配；含逗号候选只能采用“历史兼容可能匹配”语义，返回可能匹配记录集合（可能包含歧义记录），页面必须显示歧义警告；验收不得要求后端把无转义 CSV 中的含逗号 ID 精确识别为单个 token。新增/编辑维护候选的禁用规则不受影响。
 | DSUB-AC-036 | NOT_RUN | DSUB-REQ-034 | 已进入数据订阅页面 | 修改表单条件但不点击“查询” | 列表保持上次查询结果，不因表单变化自动重新查询 |
 | DSUB-AC-037 | NOT_RUN | DSUB-REQ-034 | 已完成一次带条件的查询 | 点击“重置” | 表单条件被清空；列表保持上一次已生效的查询结果，不自动重新查询，也不自动恢复全部记录。 |
 | DSUB-AC-038 | NOT_RUN | DSUB-REQ-034 | 查询结果为空 | 点击“查询” | 显示“暂无符合条件的订阅记录” |
@@ -246,7 +248,7 @@
 ## 5. 需求追踪完整性说明
 
 - 本验收基线共 **126** 条用例（`DSUB-AC-001 ~ DSUB-AC-126`），映射 `REQUIREMENTS.md` 中 **107** 条需求（`DSUB-REQ-001 ~ DSUB-REQ-107`）。
-- 覆盖校验：每条需求至少被一条验收用例引用；强制覆盖清单（§16.2）中全部场景均已有对应用例（只显示 `FG_ACTIVE=1` → DSUB-AC-017；查询多选 OR/AND → DSUB-AC-033~037；多源库异常行无操作 → DSUB-AC-009/010；停用与不存在数据源展示 → DSUB-AC-044~046；详情按 Schema 分组 → DSUB-AC-052；源库搜索排序 → DSUB-AC-064；目标库约 5 个平铺多选 → DSUB-AC-072；Schema 懒加载与缓存 → DSUB-AC-078；120~240 张表选择与状态保持 → DSUB-AC-083/086；无右侧“已选源表”面板 → DSUB-AC-080；汇总数量与 Schema 徽标 → DSUB-AC-087；弹窗拖动边界 → DSUB-AC-059/070；表名大小写与英文逗号/组件内部句点协议 → DSUB-AC-013/014、DSUB-AC-055、DSUB-AC-091；跨行重复订阅允许 → DSUB-AC-016；新增固定 `FG_ACTIVE=1` → DSUB-AC-018；编辑断连有限修改 → DSUB-AC-102/103；失效项拒绝保存 → DSUB-AC-090~093；并发编辑与并发删除 → DSUB-AC-107~110、DSUB-AC-114；物理删除与不可恢复提示 → DSUB-AC-112/113；重启 `sync-client` 后生效 → DSUB-AC-004/005/095；不操作 Kafka/ZooKeeper/进程 → DSUB-AC-120/125；大屏修正延期且不阻断 → DSUB-AC-121/122）。
+- 覆盖校验：每条需求至少被一条验收用例引用；强制覆盖清单（§16.2）中全部场景均已有对应用例（只显示 `FG_ACTIVE=1` → DSUB-AC-017；查询多选 OR/AND → DSUB-AC-033~037；含逗号候选历史兼容可能匹配与歧义警告 → DSUB-AC-032~035；多源库异常行无操作 → DSUB-AC-009/010；停用与不存在数据源展示 → DSUB-AC-044~046；详情按 Schema 分组 → DSUB-AC-052；源库搜索排序 → DSUB-AC-064；目标库约 5 个平铺多选 → DSUB-AC-072；Schema 懒加载与缓存 → DSUB-AC-078；120~240 张表选择与状态保持 → DSUB-AC-083/086；无右侧“已选源表”面板 → DSUB-AC-080；汇总数量与 Schema 徽标 → DSUB-AC-087；弹窗拖动边界 → DSUB-AC-059/070；表名大小写与英文逗号/组件内部句点协议 → DSUB-AC-013/014、DSUB-AC-055、DSUB-AC-091；跨行重复订阅允许 → DSUB-AC-016；新增固定 `FG_ACTIVE=1` → DSUB-AC-018；编辑断连有限修改 → DSUB-AC-102/103；失效项拒绝保存 → DSUB-AC-090~093；并发编辑与并发删除 → DSUB-AC-107~110、DSUB-AC-114；物理删除与不可恢复提示 → DSUB-AC-112/113；重启 `sync-client` 后生效 → DSUB-AC-004/005/095；不操作 Kafka/ZooKeeper/进程 → DSUB-AC-120/125；大屏修正延期且不阻断 → DSUB-AC-121/122）。
 
 ## 6. 文档级变更记录
 
@@ -257,5 +259,6 @@
 | 2026-08-30 | 验收标准基线正式批准收口：文档状态由 `DRAFT_PENDING_USER_REVIEW` 转为 `APPROVED`；批准依据为提交 `b9fb1e955492bef905b3c33acbf9d617bb5a0857` 的 ChatGPT 正式复审结论 `APPROVED`；本次批准的是验收标准基线，不代表功能已实现或验收已通过；126 条用例（`DSUB-AC-001` ~ `DSUB-AC-126`）编号、数量、步骤、前置条件、预期结果与需求映射不变，状态全部保持 `NOT_RUN`；功能实现状态仍为 `NOT_STARTED`；下一阶段为设计基线建立 | DATA-SUBSCRIPTION-REQUIREMENTS-BASELINE-APPROVAL-001（项目负责人批准驱动的需求与验收基线正式收口；纯文档任务） |
 | 2026-08-30 | 点号保留分隔符验收覆盖调整草案：项目负责人明确第一版把英文句点 `.` 定义为三段结构保留分隔符；在不增加编号的前提下定向扩展既有验收项——`DSUB-AC-013`（两个结构句点为正常保留分隔符，大小写规则不变）、`DSUB-AC-014`（从名称含英文逗号扩展为分别验证英文逗号与组件内部英文句点）、`DSUB-AC-032`（查询候选仍能选择协议不兼容的存量数据源以查询历史记录）、`DSUB-AC-063`/`DSUB-AC-071`（新增/编辑候选中协议不兼容数据源显示但禁用并说明原因）、`DSUB-AC-077`（Schema/表名含英文逗号或组件内部句点不可选择并说明原因）、`DSUB-AC-091`（绕过前端提交含保留字符组件时后端拒绝并列出失效项）、`DSUB-AC-055`（正常结构分隔点不误判为异常；组件内部点号造成不可解析时保留原始内容并警告）、`DSUB-AC-104`（编辑回显异常项，修复前禁止保存；删除规则保持不变）；编号保持 126 条连续唯一，全部仍为 `NOT_RUN`；文档状态由 `APPROVED` 转为 `DRAFT_PENDING_USER_REVIEW`（上一正式批准版本提交 `d7560445be1504e6ed9957fa7b31be1fd393ea19`，历史批准事实保留）；实现状态仍为 `NOT_STARTED`；本调整草案待正式复审 | DATA-SUBSCRIPTION-DOT-DELIMITER-REQUIREMENTS-ADJUSTMENT-001（项目负责人决策驱动的纯文档需求/验收定向调整草案） |
 | 2026-08-30 | 点号保留分隔符验收标准批准收口：ChatGPT 对提交 `bb8716c26d5181edf84ba1f07d4e60e8f1c1918a` 正式复审结论 `APPROVED`；当前验收标准版本由调整草案收口为 `APPROVED`；126 条用例（`DSUB-AC-001` ~ `DSUB-AC-126`）编号、需求映射、步骤、前置条件、预期结果不变，状态全部保持 `NOT_RUN`；实现状态仍为 `NOT_STARTED`；设计仍为 `DRAFT_PENDING_USER_REVIEW` 草案且设计复审仍为 `CHANGES_REQUIRED`，待设计 R1 修订和重新复审；本次批准只批准点号需求对应验收标准，不批准设计、不实现功能、不执行验收 | DATA-SUBSCRIPTION-DOT-DELIMITER-REQUIREMENTS-ADJUSTMENT-APPROVAL-001（项目负责人批准驱动的纯文档需求/验收调整批准收口） |
+| 2026-08-30 | 含逗号数据源 ID 查询兼容验收标准调整草案：正式复审发现无转义英文逗号分隔协议无法精确识别含逗号 ID；在不增加编号的前提下定向调整 `DSUB-AC-032`（候选仅含启用且类别匹配数据源、含逗号/句点 ID 不静默移除、仅含句点候选保持普通可选、含逗号候选可选但显示明确歧义警告）、`DSUB-AC-033`/`DSUB-AC-034`（源库组/目标库组分别覆盖：两个普通 ID 之间 OR、token 去首尾空白后精确匹配、`S01` 不误匹配 `S012`、`%`/`_` 按字面值处理、仅含句点 ID 可精确匹配、选择含逗号候选时返回可能匹配集合并显示歧义警告、验收承认 `A,B` 歧义无法从当前物理字段消除）、`DSUB-AC-035`（组间 AND 不变、任一组含逗号候选仍按 AND 执行、页面持续展示歧义警告），并增加紧邻“查询歧义补充说明”；编号保持 126 条连续唯一，全部仍为 `NOT_RUN`；文档状态与依据需求状态由 `APPROVED` 转为 `DRAFT_PENDING_USER_REVIEW`（上一正式批准版本为点号保留分隔符批准版本，批准依据提交 `bb8716c26d5181edf84ba1f07d4e60e8f1c1918a`，历史批准事实保留）；实现状态仍为 `NOT_STARTED`；本调整草案待正式复审 | DATA-SUBSCRIPTION-COMMA-ID-QUERY-REQUIREMENTS-ADJUSTMENT-001（正式复审发现驱动的纯文档需求/验收定向调整草案） |
 
-> 关联文档：需求基线 `docs/features/data-subscription/REQUIREMENTS.md`；任务报告 `docs/features/data-subscription/reports/DATA-SUBSCRIPTION-REQUIREMENTS-BASELINE-001.md`、`...-001-R1.md`、`...-APPROVAL-001.md`、`.../DATA-SUBSCRIPTION-DOT-DELIMITER-REQUIREMENTS-ADJUSTMENT-001.md`、`.../DATA-SUBSCRIPTION-DOT-DELIMITER-REQUIREMENTS-ADJUSTMENT-APPROVAL-001.md`。
+> 关联文档：需求基线 `docs/features/data-subscription/REQUIREMENTS.md`；任务报告 `docs/features/data-subscription/reports/DATA-SUBSCRIPTION-REQUIREMENTS-BASELINE-001.md`、`...-001-R1.md`、`...-APPROVAL-001.md`、`.../DATA-SUBSCRIPTION-DOT-DELIMITER-REQUIREMENTS-ADJUSTMENT-001.md`、`.../DATA-SUBSCRIPTION-DOT-DELIMITER-REQUIREMENTS-ADJUSTMENT-APPROVAL-001.md`、`.../DATA-SUBSCRIPTION-COMMA-ID-QUERY-REQUIREMENTS-ADJUSTMENT-001.md`。
