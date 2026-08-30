@@ -1388,6 +1388,162 @@ describe('列表空状态（DS-REQ-110/111）', () => {
   })
 })
 
+describe('生效查询快照与自动刷新（R1）', () => {
+  it('新增成功自动刷新用生效快照而非未点击的草稿：初始无条件、草稿 NOPE、空状态系统空', async () => {
+    mockedList.mockResolvedValue(okList([]))
+    const wrapper = await mountPage()
+
+    // 用户在查询框输入 NOPE，但不点击“查询”
+    await setQueryInput(wrapper, '数据源ID', 'NOPE')
+
+    // 新增一条目标库成功
+    await buttonByText(wrapper, '新增数据源')!.trigger('click')
+    await flushPromises()
+    await pickSelect(wrapper, '.editor-form', 0, '目标库（TARGET）')
+    await pickSelect(wrapper, '.editor-form', 1, 'MYSQL')
+    await editorInput(wrapper, '数据源ID').setValue('TG002')
+    await editorInput(wrapper, '数据源名称').setValue('新目标库')
+    await editorInput(wrapper, '主机').setValue('10.2.2.2')
+    await editorInput(wrapper, '用户名').setValue('app')
+    await editorInput(wrapper, '密码').setValue('secret')
+    await editorInput(wrapper, '数据库名').setValue('newdb')
+    await nextTick()
+    await buttonByText(wrapper, '创建')!.trigger('click')
+    await flushPromises()
+
+    expect(mockedCreate).toHaveBeenCalledTimes(1)
+    // 自动刷新仍为无条件快照，而非草稿 NOPE
+    expect(mockedList).toHaveBeenCalledTimes(2)
+    expect(mockedList).toHaveBeenLastCalledWith({})
+    // 空状态为系统空状态，而非查询零结果状态
+    expect(wrapper.find('.empty-state').text()).toContain('暂无数据源')
+    expect(wrapper.find('.empty-state').text()).not.toContain('未找到符合当前查询条件')
+    wrapper.unmount()
+  })
+
+  it('编辑成功自动刷新用已生效快照 A，而非改后的草稿 B', async () => {
+    const wrapper = await mountPage()
+
+    // 生效条件 A = 数据源ID=SRC
+    await setQueryInput(wrapper, '数据源ID', 'SRC')
+    await buttonByText(wrapper, '查询')!.trigger('click')
+    await flushPromises()
+    expect(mockedList).toHaveBeenLastCalledWith({ id: 'SRC' })
+
+    // 只把查询框改为 B = NOPE，不点击查询
+    await setQueryInput(wrapper, '数据源ID', 'NOPE')
+
+    // 编辑成功后的自动刷新仍使用 A
+    await buttonByText(wrapper, '编辑')!.trigger('click')
+    await flushPromises()
+    await editorInput(wrapper, '数据源名称').setValue('源库A改')
+    await nextTick()
+    await buttonByText(wrapper, '保存')!.trigger('click')
+    await flushPromises()
+
+    expect(mockedUpdate).toHaveBeenCalledTimes(1)
+    expect(mockedList).toHaveBeenLastCalledWith({ id: 'SRC' })
+    expect(mockedList).not.toHaveBeenLastCalledWith({ id: 'NOPE' })
+    wrapper.unmount()
+  })
+
+  it('删除成功自动刷新用已生效快照 A，而非改后的草稿 B', async () => {
+    const wrapper = await mountPage()
+
+    // 生效条件 A = 数据源ID=SRC
+    await setQueryInput(wrapper, '数据源ID', 'SRC')
+    await buttonByText(wrapper, '查询')!.trigger('click')
+    await flushPromises()
+    expect(mockedList).toHaveBeenLastCalledWith({ id: 'SRC' })
+
+    // 只把查询框改为 B = NOPE，不点击查询
+    await setQueryInput(wrapper, '数据源ID', 'NOPE')
+
+    // 删除成功后的自动刷新仍使用 A
+    await buttonByText(wrapper, '删除')!.trigger('click')
+    await flushPromises()
+
+    expect(mockedDelete).toHaveBeenCalledWith('SRC001')
+    expect(elMessageSuccessSpy).toHaveBeenCalledWith('删除成功')
+    expect(mockedList).toHaveBeenLastCalledWith({ id: 'SRC' })
+    expect(mockedList).not.toHaveBeenLastCalledWith({ id: 'NOPE' })
+    wrapper.unmount()
+  })
+
+  it('点击“查询”使用 trim 后独立快照；继续编辑表单不改变该快照', async () => {
+    mockedList.mockResolvedValue(okList([]))
+    const wrapper = await mountPage()
+
+    // 带空格输入并点击查询：trim 为独立快照
+    await setQueryInput(wrapper, '数据源ID', ' NOPE ')
+    await buttonByText(wrapper, '查询')!.trigger('click')
+    await flushPromises()
+    expect(mockedList).toHaveBeenLastCalledWith({ id: 'NOPE' })
+    expect(wrapper.find('.empty-state').text()).toContain('未找到符合当前查询条件的数据源')
+
+    // 继续编辑表单（不点击查询）：不新增请求，生效快照不被反向修改
+    const callsBefore = mockedList.mock.calls.length
+    await setQueryInput(wrapper, '数据源ID', 'OTHER')
+    await nextTick()
+    expect(mockedList).toHaveBeenCalledTimes(callsBefore)
+    expect(wrapper.find('.empty-state').text()).toContain('未找到符合当前查询条件的数据源')
+    wrapper.unmount()
+  })
+
+  it('点击“重置”后生效条件为无条件，自动刷新使用无条件快照', async () => {
+    const wrapper = await mountPage()
+
+    await setQueryInput(wrapper, '数据源ID', 'SRC')
+    await buttonByText(wrapper, '查询')!.trigger('click')
+    await flushPromises()
+    expect(mockedList).toHaveBeenLastCalledWith({ id: 'SRC' })
+
+    await buttonByText(wrapper, '重置')!.trigger('click')
+    await flushPromises()
+    expect(mockedList).toHaveBeenLastCalledWith({})
+
+    // 重置后的自动刷新（删除成功）仍使用无条件快照
+    await buttonByText(wrapper, '删除')!.trigger('click')
+    await flushPromises()
+    expect(mockedDelete).toHaveBeenCalledWith('SRC001')
+    expect(mockedList).toHaveBeenLastCalledWith({})
+    wrapper.unmount()
+  })
+
+  it('自动刷新并发：迟到旧代次响应不得覆盖最终生效请求', async () => {
+    let resolveStale!: (v: ApiResponse<DataSourceRow[]>) => void
+    mockedList
+      .mockResolvedValueOnce(okList([srcRow, tgtRow])) // mount 无条件
+      .mockResolvedValueOnce(okList([srcRow, tgtRow])) // 查询 SRC
+      .mockImplementationOnce(
+        () => new Promise<ApiResponse<DataSourceRow[]>>((res) => (resolveStale = res)),
+      ) // 删除自动刷新挂起（旧代次）
+      .mockResolvedValueOnce(okList([])) // 重置无条件立即返回空
+    const wrapper = await mountPage()
+
+    await setQueryInput(wrapper, '数据源ID', 'SRC')
+    await buttonByText(wrapper, '查询')!.trigger('click')
+    await flushPromises()
+
+    // 删除成功触发自动刷新（用生效快照 SRC）→ 请求挂起
+    await buttonByText(wrapper, '删除')!.trigger('click')
+    await flushPromises()
+    expect(mockedDelete).toHaveBeenCalledWith('SRC001')
+
+    // 随后重置：无条件请求立即返回空 → 系统空状态
+    await buttonByText(wrapper, '重置')!.trigger('click')
+    await flushPromises()
+    expect(wrapper.find('.empty-state').text()).toContain('暂无数据源')
+
+    // 迟到的自动刷新响应：代次失效，不得覆盖最终生效请求的空状态
+    resolveStale(okList([]))
+    await flushPromises()
+    expect(wrapper.find('.empty-state').text()).toContain('暂无数据源')
+    expect(wrapper.find('.empty-state').text()).not.toContain('未找到符合当前查询条件')
+    wrapper.unmount()
+  })
+})
+
 describe('三个业务弹窗标题栏拖动（DS-REQ-112）', () => {
   it('新增/编辑弹窗：仅标题栏拖动改变位置', async () => {
     const wrapper = await mountPage()
@@ -1541,6 +1697,105 @@ describe('三个业务弹窗标题栏拖动（DS-REQ-112）', () => {
     ) as HTMLElement
     cancelBtn.click()
     await flushPromises()
+    wrapper.unmount()
+  })
+})
+
+describe('拖动监听生命周期清理（R1）', () => {
+  it('拖动未结束即卸载组件：window 级监听被清理，卸载后 mousemove 不再移动旧弹窗且不抛异常', async () => {
+    const wrapper = await mountPage()
+    await buttonByText(wrapper, '新增数据源')!.trigger('click')
+    await flushPromises()
+
+    const el = document.querySelector('.editor-dialog') as HTMLElement
+    const header = document.querySelector('.editor-dialog .el-dialog__header') as HTMLElement
+    header.dispatchEvent(new MouseEvent('mousedown', { clientX: 100, clientY: 100, bubbles: true }))
+    window.dispatchEvent(new MouseEvent('mousemove', { clientX: 200, clientY: 180 }))
+    expect(el.style.transform).toContain('translate(100px, 80px)')
+
+    // 拖动未松开就卸载组件
+    wrapper.unmount()
+    // 卸载后向 window 发 mousemove：不得抛异常，旧弹窗位置不得继续变化
+    expect(() =>
+      window.dispatchEvent(new MouseEvent('mousemove', { clientX: 300, clientY: 280 })),
+    ).not.toThrow()
+    expect(el.style.transform).toContain('translate(100px, 80px)')
+  })
+
+  it('拖动未结束即关闭弹窗：重新打开后拖动正常且不重复绑定', async () => {
+    const wrapper = await mountPage()
+    await buttonByText(wrapper, '新增数据源')!.trigger('click')
+    await flushPromises()
+
+    // 开始拖动但不松开
+    const header = document.querySelector('.editor-dialog .el-dialog__header') as HTMLElement
+    header.dispatchEvent(new MouseEvent('mousedown', { clientX: 100, clientY: 100, bubbles: true }))
+    window.dispatchEvent(new MouseEvent('mousemove', { clientX: 200, clientY: 180 }))
+
+    // 关闭弹窗（无脏数据直接关闭），销毁未结束的拖动
+    await buttonByText(wrapper, '取消')!.trigger('click')
+    await flushPromises()
+
+    // 重新打开：默认居中
+    await buttonByText(wrapper, '新增数据源')!.trigger('click')
+    await flushPromises()
+    const el2 = document.querySelector('.editor-dialog') as HTMLElement
+    expect(el2.style.transform).toBe('translate(0px, 0px)')
+
+    // 重新拖动：位移精确等于拖动差值，证明无重复绑定
+    const header2 = document.querySelector('.editor-dialog .el-dialog__header') as HTMLElement
+    header2.dispatchEvent(new MouseEvent('mousedown', { clientX: 10, clientY: 10, bubbles: true }))
+    window.dispatchEvent(new MouseEvent('mousemove', { clientX: 60, clientY: 50 }))
+    window.dispatchEvent(new MouseEvent('mouseup', {}))
+    expect(el2.style.transform).toContain('translate(50px, 40px)')
+    wrapper.unmount()
+  })
+
+  it('正常 mouseup 后继续 mousemove 不再改变位置', async () => {
+    const wrapper = await mountPage()
+    await buttonByText(wrapper, '新增数据源')!.trigger('click')
+    await flushPromises()
+
+    const el = document.querySelector('.editor-dialog') as HTMLElement
+    const header = document.querySelector('.editor-dialog .el-dialog__header') as HTMLElement
+    header.dispatchEvent(new MouseEvent('mousedown', { clientX: 100, clientY: 100, bubbles: true }))
+    window.dispatchEvent(new MouseEvent('mousemove', { clientX: 200, clientY: 180 }))
+    window.dispatchEvent(new MouseEvent('mouseup', {}))
+    expect(el.style.transform).toContain('translate(100px, 80px)')
+
+    // mouseup 后继续移动：位置不再变化
+    window.dispatchEvent(new MouseEvent('mousemove', { clientX: 300, clientY: 280 }))
+    expect(el.style.transform).toContain('translate(100px, 80px)')
+    wrapper.unmount()
+  })
+
+  it('非主键 mousedown 不发起拖动', async () => {
+    const wrapper = await mountPage()
+    await buttonByText(wrapper, '新增数据源')!.trigger('click')
+    await flushPromises()
+
+    const el = document.querySelector('.editor-dialog') as HTMLElement
+    const header = document.querySelector('.editor-dialog .el-dialog__header') as HTMLElement
+    header.dispatchEvent(
+      new MouseEvent('mousedown', { clientX: 100, clientY: 100, bubbles: true, button: 2 }),
+    )
+    window.dispatchEvent(new MouseEvent('mousemove', { clientX: 200, clientY: 200 }))
+    expect(el.style.transform).toBe('translate(0px, 0px)')
+    wrapper.unmount()
+  })
+
+  it('命名策略弹窗标题栏同样可拖动（三个业务弹窗全覆盖）', async () => {
+    const wrapper = await mountPage()
+    await buttonByText(wrapper, '目标库命名策略')!.trigger('click')
+    await flushPromises()
+
+    const el = document.querySelector('.naming-dialog') as HTMLElement
+    const header = document.querySelector('.naming-dialog .el-dialog__header') as HTMLElement
+    expect(header).toBeTruthy()
+    header.dispatchEvent(new MouseEvent('mousedown', { clientX: 100, clientY: 100, bubbles: true }))
+    window.dispatchEvent(new MouseEvent('mousemove', { clientX: 180, clientY: 160 }))
+    window.dispatchEvent(new MouseEvent('mouseup', {}))
+    expect(el.style.transform).toContain('translate(80px, 60px)')
     wrapper.unmount()
   })
 })

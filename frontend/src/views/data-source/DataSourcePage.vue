@@ -436,12 +436,20 @@ function strategyLabel(strategy: string): string {
   return strategy === 'TABLE_MERGE' ? '表合并' : '自定义前后缀'
 }
 
-async function loadList() {
+/**
+ * 最近一次实际执行并生效的查询条件快照（独立副本）；无条件时为空快照。
+ * 所有列表请求都使用该快照，绝不读取查询表单草稿，保证自动刷新与空状态文案一致。
+ */
+function effectiveSnapshot(): DataSourceListQuery {
+  return effectiveQuery.value ? { ...effectiveQuery.value } : {}
+}
+
+async function loadList(querySnapshot: DataSourceListQuery = {}) {
   const token = ++listToken.value
   loading.value = true
   loadError.value = ''
   try {
-    const res = await fetchDataSourceList(normalizeQuery())
+    const res = await fetchDataSourceList({ ...querySnapshot })
     if (token !== listToken.value) {
       return
     }
@@ -478,13 +486,13 @@ function normalizeQuery(): DataSourceListQuery {
 function onQuery() {
   const q = normalizeQuery()
   effectiveQuery.value = Object.keys(q).length > 0 ? q : null
-  loadList()
+  loadList(effectiveSnapshot())
 }
 
 function onReset() {
   query.value = { id: '', name: '', host: '' }
   effectiveQuery.value = null
-  loadList()
+  loadList(effectiveSnapshot())
 }
 
 const deletingId = ref('')
@@ -509,7 +517,7 @@ async function onDelete(row: DataSourceRow) {
     const res = await deleteDataSource(row.dataSourceId)
     if (res.code === 200) {
       ElMessage.success('删除成功')
-      await loadList()
+      await loadList(effectiveSnapshot())
     } else {
       ElMessage.error(res.message || '删除失败，请稍后重试')
     }
@@ -972,7 +980,7 @@ async function onSaveEditor() {
         ElMessage.success('保存成功')
         takeEditorSnapshot()
         editorVisible.value = false
-        await loadList()
+        await loadList(effectiveSnapshot())
       } else {
         ElMessage.error(res.message || '保存失败，请稍后重试')
       }
@@ -987,7 +995,7 @@ async function onSaveEditor() {
         ElMessage.success('新增成功')
         takeEditorSnapshot()
         editorVisible.value = false
-        await loadList()
+        await loadList(effectiveSnapshot())
       } else {
         ElMessage.error(res.message || '新增失败，请稍后重试')
       }
@@ -1455,7 +1463,7 @@ const dragCleanups = [
 ]
 
 onMounted(() => {
-  loadList()
+  loadList(effectiveSnapshot())
 })
 </script>
 
