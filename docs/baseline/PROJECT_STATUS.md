@@ -234,11 +234,12 @@ CDC_DATA_SOURCE 另被日志查询的 selectAllDataSources 读取用于过滤条
 
 | 编号 | 对象 | 候选内容 | 状态 |
 |---|---|---|---|
-| D01 | CDC_DATA_SUBSCRIBE | 是否将 DATA_SUB_ID 设置为主键 | PENDING_DECISION |
 | D03 | CDC_JOB_FAILURE_EVENT | 是否为查询字段补索引 | PENDING_DECISION |
 | D04 | CDC_JOB_FAILURE_HANDLE_LOG | 是否为查询字段补索引 | PENDING_DECISION |
 
 原 R01（是否约束每数据源一条扩展配置）已由已批准数据源管理 Feature 基线关闭：`CDC_DATA_SOURCE_EXTEND` 为源库 0..N 命名策略，第一版不新增主键、唯一约束、索引或 DDL，逻辑联合唯一 `(DATA_SOURCE_ID, TARGET_DATA_SOURCE_ID)` 由后端保存前查询校验，不再作为待决策项。
+
+原 D01（是否将 `CDC_DATA_SUBSCRIBE.DATA_SUB_ID` 设置为主键）已关闭：DATA_SUB_ID 已为数据库真实主键（约束 `PK_CDC_DATA_SUBSCRIBE`，PRIMARY KEY、ENABLED、NOT DEFERRABLE IMMEDIATE，唯一索引 NORMAL/UNIQUE/VALID，LAST_DDL_TIME 2026-08-28 17:36:20，`DATABASE_VERIFIED`），无需再作待决策项。此为当前数据库物理事实（只读核验），非新增 DDL，本 R1 未访问数据库、未执行 DDL、未改变数据库结构。
 
 另：D06（WATERMARK 等缺 @TableId）为代码层 MyBatis-Plus 注解差异，见 ARCHITECTURE.md §9；数据源前端占位为功能实现状态，见 §1.1。
 
@@ -285,3 +286,4 @@ CDC_DATA_SOURCE 另被日志查询的 selectAllDataSources 读取用于过滤条
 | 日期 | 变更 | 依据 |
 |---|---|---|
 | 2026-08-29 | 数据源管理 Feature 已批准规则同步：§9.3 R01 更新为已批准的源库 0..N 命名策略关系；§9.4 原 R01（是否约束每数据源一条扩展配置）`PENDING_DECISION` 关闭；§9.2 数据源两表分类由“后端闭环/前端缺口”调整为“旧后端候选实现/新目标未实现”，明确区分“已有旧后端候选实现”与“批准的新目标尚未实现、前端仍占位”；§1.1/§1.2 数据源行补充“旧候选实现”说明；分类合计与表数自洽不变；数据库物理事实与当前代码事实保留 | DATA-SOURCE-BASELINE-IMPACT-ALIGNMENT-001（已批准业务规则向权威项目基线同步；纯文档任务，数据库物理结构和当前代码无变化） |
+| 2026-08-30 | R1 修订：§9.4 原 D01（是否将 `CDC_DATA_SUBSCRIBE.DATA_SUB_ID` 设置为主键）关闭——DATA_SUB_ID 已为数据库真实主键（`PK_CDC_DATA_SUBSCRIBE`，`DATABASE_VERIFIED`），从 PENDING_DECISION 候选表移除并记录关闭原因；订阅 CRUD 未实现、管理平台只读、订阅记录人工维护等当前实现事实保留 | DATA-SUBSCRIPTION-REQUIREMENTS-BASELINE-001-R1（ChatGPT 复审 CHANGES_REQUIRED 定向修订；纯文档任务，未访问数据库、未执行 DDL） |

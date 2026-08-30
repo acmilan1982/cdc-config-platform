@@ -278,9 +278,9 @@
 来源: DATABASE-CODE-MAPPING-001 §04
 
 ### DATA_SUB_ID
-**订阅标识符**。CDC_DATA_SUBSCRIBE 表的业务主键字段（VARCHAR2）。目标规则为应设置为主键，当前数据库仅存在 CHECK NOT NULL 约束，尚未设置 PRIMARY KEY 约束。该差异记为 D01（PENDING_DECISION，处理方式待用户决定）。数据核验时 12 行 0 空值 0 重复。
+**订阅标识符**。CDC_DATA_SUBSCRIBE 表的主键字段（VARCHAR2）。已只读核验为数据库真实主键：约束 `PK_CDC_DATA_SUBSCRIBE`（PRIMARY KEY、ENABLED、NOT DEFERRABLE IMMEDIATE），对应唯一索引 NORMAL/UNIQUE/VALID，LAST_DDL_TIME 2026-08-28 17:36:20，状态 `DATABASE_VERIFIED`。原 D01（PENDING_DECISION，是否设置主键）已关闭。数据核验时 12 行 0 空值 0 重复。
 
-来源: DATABASE-CODE-MAPPING-001 §01、§05 结论一、已批准数据库基线（差异 D01）
+来源: DATABASE-CODE-MAPPING-001 §01、§05 结论一、已批准数据库基线（原差异 D01 已关闭，DATA-SUBSCRIPTION-REQUIREMENTS-BASELINE-001 只读核验）
 
 ### Flink Job ID / ZK jobName
 **两套独立的 Job 标识体系**：
@@ -357,3 +357,4 @@
 | 日期 | 变更 | 依据 |
 |---|---|---|
 | 2026-08-29 | 数据源管理 Feature 已批准规则同步：删除“数据源”术语中 EXTEND 为 1:1 扩展信息的描述；新增“目标库命名策略”术语（源库 0..N、每条关联一个业务必填目标库、`(DATA_SOURCE_ID, TARGET_DATA_SOURCE_ID)` 组合逻辑唯一、第一版无 DDL）；“当前事实/目标规则/当前差异”示例更新为已批准规则（无主键/唯一约束不是未落实一对一的差异，第一版无 DDL 为已批准边界） | DATA-SOURCE-BASELINE-IMPACT-ALIGNMENT-001（已批准业务规则向权威项目基线同步；纯文档任务，数据库物理结构和当前代码无变化） |
+| 2026-08-30 | R1 修订：`DATA_SUB_ID` 术语主键事实同步——已只读核验为数据库真实主键（`PK_CDC_DATA_SUBSCRIBE`，`DATABASE_VERIFIED`），原 D01（PENDING_DECISION）关闭；未改写订阅 CRUD 未实现、管理平台只读、订阅记录人工维护等当前实现事实 | DATA-SUBSCRIPTION-REQUIREMENTS-BASELINE-001-R1（ChatGPT 复审 CHANGES_REQUIRED 定向修订；纯文档任务，未访问数据库、未执行 DDL） |

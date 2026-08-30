@@ -133,7 +133,7 @@
 主要使用场景：
 
 1. 进入“配置管理 > 数据订阅”，首次进入自动展示全部启用订阅记录；
-2. 按源库/目标库多选查询，或重置恢复全部启用记录；
+2. 按源库/目标库多选查询；重置只清空查询表单，不自动重新查询，列表保持上一次已生效的查询结果；
 3. 查看订阅详情（只读弹窗，按 Schema 分组的源表清单）；
 4. 新增订阅：选择源库 → 加载并选择 Schema 与源表 → 选择目标库 → 保存；
 5. 编辑订阅：回显原配置并修改，源库断连时进行有限编辑；
@@ -221,7 +221,7 @@
 
 | 编号 | 需求 |
 |---|---|
-| DSUB-REQ-035 | 建议列顺序：订阅描述、源库、源表、目标库、更新时间、操作。 |
+| DSUB-REQ-035 | 列顺序为：订阅描述、源库、源表、目标库、更新时间、操作。 |
 | DSUB-REQ-036 | `DATA_SUB_ID` 不在第一层列表单独占列。 |
 | DSUB-REQ-037 | 源库和目标库主要显示 `DATA_SOURCE_ORG`，悬停显示 `DATA_SOURCE_ID`。 |
 | DSUB-REQ-038 | 源表列只显示“共 N 张”；悬停逐行显示全部 `Schema.表名`，悬停层限高并内部滚动。 |
@@ -397,13 +397,19 @@
 |---|---|---|
 | TBD-01 | `DATA_SUB_ID` 新增时的具体生成格式（依据现有代码、字段长度和项目 ID 规范） | 后续设计阶段确定，本需求阶段不虚构 |
 | TBD-02 | 源库/目标库类别匹配的真实代码规则与大小写（当前代码事实：后端查询目标库使用 `UPPER(DATA_SOURCE_CATEGORY) = 'TARGET'`，见 `DataSourceServiceImpl`；源库匹配规则与完整列表查询需设计阶段只读核验确认） | 技术待核验 |
-| TBD-03 | 数据订阅 Feature 标识在 `docs/features/README.md` 中使用 `data-subscribe`，而本 Feature 目录按任务提示词采用 `data-subscription`，两者不一致 | 现状差异，需项目负责人确认后续统一口径 |
-| TBD-04 | 项目级基线（`docs/baseline/ARCHITECTURE.md`、`PROJECT_STATUS.md`、`DOMAIN_GLOSSARY.md` 等）中仍残留 `CDC_DATA_SUBSCRIBE`“无主键/D01 PENDING_DECISION”的过期描述；本任务范围外，需独立授权的基线维护任务处理 | 范围外现状差异 |
+
+### 18.1 已关闭事项
+
+| 编号 | 事项 | 关闭方式 |
+|---|---|---|
+| TBD-03 | 数据订阅 Feature 文档标识统一 | `CLOSED_R1`：R1 已通过 `docs/features/README.md` 定向修正将 Feature 标识统一为 `data-subscription`，索引与文档链接指向 `docs/features/data-subscription/`；前端实现目录 `views/data-subscribe/`、路由 `/config/subscribe`、路由 name、菜单 path 与代码包名均保持不变（文档目录标识与前端实现目录允许不同，已在 `docs/features/README.md` 注明）。本编号不再用于其他事项。 |
+| TBD-04 | 项目级主键事实同步 | `CLOSED_R1`：前序任务已只读核验 `DATA_SUB_ID` 为数据库真实主键（`PK_CDC_DATA_SUBSCRIBE`），R1 已将该当前物理事实同步到 `docs/baseline/ARCHITECTURE.md`、`PROJECT_STATUS.md`、`DOMAIN_GLOSSARY.md`，清理残留的“无主键/D01 PENDING_DECISION”过期描述，并关闭原 D01。本 R1 未访问数据库、未执行 DDL、未改变数据库结构；`cdc-config` 当前仍未实现订阅 CRUD 写入，管理平台当前仍为只读/占位，订阅记录仍由人工维护（这些当前实现事实保持不变）。本编号不再用于其他事项。 |
 
 ## 19. 文档级变更记录
 
 | 日期 | 变更 | 依据 |
 |---|---|---|
 | 2026-08-30 | 建立“数据订阅”Feature 需求基线草案（`DRAFT_PENDING_USER_REVIEW`；实现状态 `NOT_STARTED`；全部验收用例 `NOT_RUN`；`DATA_SUB_ID` 主键只读核验 `DATABASE_VERIFIED`） | DATA-SUBSCRIPTION-REQUIREMENTS-BASELINE-001（纯文档任务；基于已确认产品决策 + 已批准数据库基线 + 真实代码与数据库只读核验；待用户复审与批准） |
+| 2026-08-30 | R1 定向修订（ChatGPT 正式复审 `CHANGES_REQUIRED`）：§6 场景 2 修正重置语义——“重置恢复全部启用记录”改为“重置只清空查询表单，不自动重新查询，列表保持上一次已生效的查询结果”；`DSUB-REQ-035` 列顺序由“建议列顺序”改为确定规则“列顺序为”；统一 Feature 文档标识为 `data-subscription` 并关闭 TBD-03；将前序任务已验证的 `DATA_SUB_ID` 主键当前物理事实同步到项目级基线并关闭 TBD-04；文档状态保持 `DRAFT_PENDING_USER_REVIEW`，实现状态保持 `NOT_STARTED`，未批准、未实现、未执行验收 | DATA-SUBSCRIPTION-REQUIREMENTS-BASELINE-001-R1（纯文档定向修订；不改变任何已确认业务规则、需求/验收编号与状态） |
 
 > 关联文档：验收基线 `docs/features/data-subscription/ACCEPTANCE.md`；任务报告 `docs/features/data-subscription/reports/DATA-SUBSCRIPTION-REQUIREMENTS-BASELINE-001.md`。

@@ -153,7 +153,7 @@ src/
 
 | 表 | 行数 | 读写 | 说明 |
 |---|---|---|---|
-| CDC_DATA_SUBSCRIBE | 12 | 只读 | 订阅配置，用于大屏维度映射。目标规则 DATA_SUB_ID 应为主键，当前未设置 |
+| CDC_DATA_SUBSCRIBE | 12 | 只读 | 订阅配置，用于大屏维度映射。DATA_SUB_ID 已为数据库真实主键（约束 `PK_CDC_DATA_SUBSCRIBE`，状态 `DATABASE_VERIFIED`） |
 
 **任务配置（1 张，纯后端调度）**：
 
@@ -439,7 +439,7 @@ Route Record 清单:
 | 前端chunk过大 | LargeScreenPage 1.14MB, index 1.04MB（内网可接受） |
 | XML Mapper 极少 | 仅 mapper/logquery/LogQueryMapper.xml（游标分页），其余 SQL 通过注解/BaseMapper |
 | 部分Entity缺@TableId | DimCumulativeEntity/DimDailyEntity/StatsWatermarkEntity无@TableId，MyBatis-Plus WARN（差异 D06） |
-| CDC_DATA_SUBSCRIBE 无主键 | 目标规则 DATA_SUB_ID 为主键，当前数据库仅 CHECK NOT NULL 约束，代码使用 selectList 不受影响（差异 D01） |
+| CDC_DATA_SUBSCRIBE 主键已核验 | DATA_SUB_ID 已为数据库真实主键（`PK_CDC_DATA_SUBSCRIBE`，PRIMARY KEY、ENABLED、NOT DEFERRABLE IMMEDIATE，唯一索引 NORMAL/UNIQUE/VALID，LAST_DDL_TIME 2026-08-28 17:36:20，`DATABASE_VERIFIED`），原差异 D01 已关闭 |
 | CDC_DATA_SOURCE_EXTEND 无约束 | 当前物理事实为无主键/唯一约束/索引；已批准第一版明确不新增 DDL（原差异 D02 不再作为“一对一未约束”的高严重度缺陷）；旧后端 `ROWNUM=1` 取单条、未映射 `TARGET_DATA_SOURCE_ID` 属待改造代码差距；重复/孤立/缺失为人工构造容错测试场景 |
 | 无认证机制 | 当前无认证，CORS仅dev profile启用 |
 | ZK连接验证 | 10.19.16.111:2181 已验证 TCP 可达、会话建立成功（ZK-ENV-001）；192.168.174.51:2181 为旧配置不可达 |
@@ -453,3 +453,4 @@ Route Record 清单:
 |---|---|---|
 | 2026-08-29 | 数据源管理 Feature 已批准规则同步：`CDC_DATA_SOURCE_EXTEND` 由“通用扩展配置、一对一必填”更新为“源库到目标库的命名策略，源库 0..N”；R01 更新为 `DATA_SOURCE_ID` 到源库的多对一弱逻辑引用（反向一个源库 0..N 条策略）；R15 明确一条策略对应一个业务必填目标库、一个目标库可被多个源库策略引用；记录逻辑联合唯一组合 `(DATA_SOURCE_ID, TARGET_DATA_SOURCE_ID)` 仅由后端保存前校验、第一版不新增 DDL；§9 D02 不再描述为“一对一未约束”高严重度缺陷；数据库物理事实与当前旧代码事实保留 | DATA-SOURCE-BASELINE-IMPACT-ALIGNMENT-001（已批准业务规则向权威项目基线同步；纯文档任务，数据库物理结构和当前代码无变化） |
 | 2026-08-29 | R1 修订：§4.7“源库到目标库命名策略”补充已批准目标维护边界（修改数据源 ID 只改 `CDC_DATA_SOURCE` 主表当前记录、删除源库/目标库只删主表当前记录且不级联、删除单条命名策略只删对应 `CDC_DATA_SOURCE_EXTEND` 行）；明确上述边界尚未实现、当前 ID 同步/双表联写/级联删除仍为旧候选实现（待改造）；§4.1/§4.7/§9 数据库物理事实与表数、关系数不变 | DATA-SOURCE-BASELINE-IMPACT-ALIGNMENT-001-R1（ChatGPT 复审 CHANGES_REQUIRED 定向修订；纯文档任务） |
+| 2026-08-30 | R1 修订：`CDC_DATA_SUBSCRIBE` 主键事实同步——`DATA_SUB_ID` 已为数据库真实主键（`PK_CDC_DATA_SUBSCRIBE`，`DATABASE_VERIFIED`），清理 §4.1/§9 残留的“无主键/CHECK NOT NULL/目标规则应为主键”过期描述，原差异 D01 关闭；当前订阅 CRUD 未实现、管理平台只读、订阅记录人工维护等当前实现事实保留 | DATA-SUBSCRIPTION-REQUIREMENTS-BASELINE-001-R1（ChatGPT 复审 CHANGES_REQUIRED 定向修订；纯文档任务，未访问数据库、未执行 DDL） |

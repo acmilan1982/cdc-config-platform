@@ -102,7 +102,7 @@
 | DSUB-AC-034 | NOT_RUN | DSUB-REQ-034 | 主列表含记录 | 在目标库条件选择两个目标库并点击“查询” | 返回匹配任一选中目标库的记录（目标库之间为 OR） |
 | DSUB-AC-035 | NOT_RUN | DSUB-REQ-034 | 主列表含记录 | 同时选择源库与目标库条件并点击“查询” | 返回同时满足源库条件组与目标库条件组的记录（两组之间为 AND） |
 | DSUB-AC-036 | NOT_RUN | DSUB-REQ-034 | 已进入数据订阅页面 | 修改表单条件但不点击“查询” | 列表保持上次查询结果，不因表单变化自动重新查询 |
-| DSUB-AC-037 | NOT_RUN | DSUB-REQ-034 | 已完成一次带条件的查询 | 点击“重置” | 表单条件被清空；列表不自动重新查询（或按批准交互保持已查询结果） |
+| DSUB-AC-037 | NOT_RUN | DSUB-REQ-034 | 已完成一次带条件的查询 | 点击“重置” | 表单条件被清空；列表保持上一次已生效的查询结果，不自动重新查询，也不自动恢复全部记录。 |
 | DSUB-AC-038 | NOT_RUN | DSUB-REQ-034 | 查询结果为空 | 点击“查询” | 显示“暂无符合条件的订阅记录” |
 | DSUB-AC-039 | NOT_RUN | DSUB-REQ-035, DSUB-REQ-036 | 已进入数据订阅页面 | 观察列表列 | 列顺序为：订阅描述、源库、源表、目标库、更新时间、操作；`DATA_SUB_ID` 不在第一层列表单独占列 |
 | DSUB-AC-040 | NOT_RUN | DSUB-REQ-037 | 主列表含记录 | 观察源库列与目标库列，悬停 | 主要显示 `DATA_SOURCE_ORG`；悬停显示 `DATA_SOURCE_ID` |
@@ -118,7 +118,7 @@
 | DSUB-AC-045 | NOT_RUN | DSUB-REQ-042 | 订阅引用的源库不存在 | 进入列表页观察该行源库 | 显示原始 `DATA_SOURCE_ID` 并标记“不存在” |
 | DSUB-AC-046 | NOT_RUN | DSUB-REQ-042 | 订阅引用的目标库已停用或不存在 | 进入列表页观察该行目标库 | 对应目标库标记“已停用”或“不存在” |
 | DSUB-AC-047 | NOT_RUN | DSUB-REQ-043 | 数据库存在多源库异常记录 | 进入列表页 | 该行整行使用警示色并显示明确异常提示 |
-| DSUB-AC-048 | NOT_RUN | DSUB-REQ-042 | 引用已停用数据源的记录 | 尝试对其执行查看/编辑/删除 | 记录仍显示并可正常操作（异常仅标记展示，不阻断单源库正常操作） |
+| DSUB-AC-048 | NOT_RUN | DSUB-REQ-042, DSUB-REQ-094 | 订阅引用的源库或目标库已停用或不存在，且该记录为正常单源库记录 | 对该记录执行查看、编辑、删除 | 该记录仍显示查看、编辑、删除入口；查看可正常打开并展示异常标记；编辑可打开并回显原值及异常状态，但若源库或目标库已停用或不存在、未替换或修复异常数据源时禁止编辑保存；删除仍按既定物理删除、二次确认和并发保护规则执行。 |
 
 ### 4.5 查看详情（对应 REQUIREMENTS §10）
 
@@ -175,7 +175,7 @@
 | DSUB-AC-082 | NOT_RUN | DSUB-REQ-073 | 当前 Schema 当前搜索结果含多张表 | 执行“全选当前搜索结果”“取消当前搜索结果选择”“只看已选”“清空当前 Schema” | 各操作按预期生效；清空当前 Schema 前二次确认 |
 | DSUB-AC-083 | NOT_RUN | DSUB-REQ-074 | 已在 Schema A 勾选若干表 | 切到 Schema B 后再切回 A，或改变搜索条件 | 全部已选表保留，不丢失 |
 | DSUB-AC-084 | NOT_RUN | DSUB-REQ-075 | 当前 Schema 含已选表 | 观察表格行样式 | 已选表通过复选框勾选和整行浅蓝背景突出；不存在重复的“选择状态”列 |
-| DSUB-AC-085 | NOT_RUN | DSUB-REQ-076 | 当前 Schema 表较多 | 滚动表格、观察表头 | 表头固定，内容区内部滚动；无明显的明显卡顿（建议虚拟滚动） |
+| DSUB-AC-085 | NOT_RUN | DSUB-REQ-076 | 当前 Schema 表较多 | 滚动表格、观察表头 | 表头固定，内容区内部滚动；无明显卡顿（建议虚拟滚动） |
 | DSUB-AC-086 | NOT_RUN | DSUB-REQ-077 | 源库含约 120～240 张可选表（1～2 个 Schema，每 Schema 约 120 张） | 完成选择 | 支持典型规模约 120～240 张表的选择；无明显卡顿、弹窗不无限增高 |
 | DSUB-AC-087 | NOT_RUN | DSUB-REQ-078, DSUB-REQ-079 | 已选 1 个源库、2 个 Schema、若干表、2 个目标库 | 观察汇总区与 Schema 徽标 | 汇总显示“已选择：1 个源库 · 2 个 Schema · N 个表 · 2 个目标库”（Schema 数只统计至少选中一张表的 Schema）；左侧每个 Schema 显示“已选 N 张”；中间当前 Schema 显示“共 N 张，已选 N 张” |
 | DSUB-AC-088 | NOT_RUN | DSUB-REQ-080 | 已选约 240 张表 | 观察弹窗 | 不产生大量标签、弹窗无限增高或明显卡顿 |
@@ -253,5 +253,6 @@
 | 日期 | 变更 | 依据 |
 |---|---|---|
 | 2026-08-30 | 建立“数据订阅”Feature 验收基线草案（`DRAFT_PENDING_USER_REVIEW`；实现状态 `NOT_STARTED`；全部 126 条用例 `NOT_RUN`） | DATA-SUBSCRIPTION-REQUIREMENTS-BASELINE-001（纯文档任务；待用户复审与批准） |
+| 2026-08-30 | R1 定向修订（ChatGPT 正式复审 `CHANGES_REQUIRED`）：`DSUB-AC-037` 移除“（或按批准交互保持已查询结果）”候选语义，重置行为唯一确定（保持上一次已生效的查询结果，不自动重新查询、不自动恢复全部记录）；`DSUB-AC-048` 明确异常数据源记录的查看/编辑打开/编辑保存限制与删除边界，避免与 `DSUB-REQ-094` 冲突；`DSUB-AC-085` 修正“无明显的明显卡顿”重复文案；文档状态保持 `DRAFT_PENDING_USER_REVIEW`，全部 126 条用例仍 `NOT_RUN`，未批准、未实现、未执行验收 | DATA-SUBSCRIPTION-REQUIREMENTS-BASELINE-001-R1（纯文档定向修订；不改变编号、数量与状态） |
 
 > 关联文档：需求基线 `docs/features/data-subscription/REQUIREMENTS.md`；任务报告 `docs/features/data-subscription/reports/DATA-SUBSCRIPTION-REQUIREMENTS-BASELINE-001.md`。
