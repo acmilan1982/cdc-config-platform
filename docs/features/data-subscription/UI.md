@@ -6,11 +6,16 @@
 |---|---|
 | Feature 中文名称 | 数据订阅 |
 | Feature 标识 | `data-subscription` |
-| 文档状态 | `DRAFT_PENDING_USER_REVIEW`（界面设计草案，尚未获正式复审批准） |
-| 实现状态 | `NOT_STARTED` |
+| 文档状态 | `DRAFT_PENDING_USER_REVIEW`（界面设计草案，尚未获得项目负责人或 ChatGPT 正式复审批准） |
+| 实现状态 | `NOT_STARTED`（本任务为纯文档设计基线 R1 定向修订，不涉及任何业务代码实现） |
 | 验收执行状态 | 126 条全部 `NOT_RUN` |
-| 任务编号 | `DATA-SUBSCRIPTION-DESIGN-BASELINE-001` |
+| 任务编号 | `DATA-SUBSCRIPTION-DESIGN-BASELINE-001-R1`（R1 定向修订；首版任务 `DATA-SUBSCRIPTION-DESIGN-BASELINE-001` 结果提交 `610401575938ba32f13fa635493f991bdfae81b6`） |
+| 依据的已批准需求基线 | `docs/features/data-subscription/REQUIREMENTS.md`（`APPROVED`，107 条，当前版本为点号保留分隔符调整批准版本，批准依据提交 `bb8716c26d5181edf84ba1f07d4e60e8f1c1918a`） |
+| 依据的已批准验收基线 | `docs/features/data-subscription/ACCEPTANCE.md`（`APPROVED`，126 条，全部 `NOT_RUN`） |
 | 创建日期 | 2026-08-30 |
+| R1 修订日期 | 2026-08-30 |
+
+说明：本文件是界面设计草案，**不是正式批准的设计基线**。R1 只修正 ChatGPT 正式复审（`CHANGES_REQUIRED`）发现的问题并把已批准点号规则同步进来；本文件不表示设计已批准、功能已实现、部署或验收完成。
 
 - 技术栈：Vue 3 + TypeScript + Element Plus（^2.5.0）+ Pinia + vue-router 4 + axios（沿用项目既有前端栈）。
 - 视觉：使用项目现有设计令牌与 Element Plus 组件（Tag、Tooltip、Table、Dialog、Select、MessageBox、Loading 等），不凭空建立另一套视觉系统。
@@ -22,7 +27,10 @@
 ### 2.1 查询区
 
 - 上方只有两个查询条件：**源库（多选下拉）**、**目标库（多选下拉）**（`DSUB-REQ-032`）。
-- 候选项来自 `GET /api/subscriptions/options`：`FG_ACTIVE=1` 且类别匹配；候选项显示以 `DATA_SOURCE_ORG` 为主要文字，`DATA_SOURCE_ID` 为辅助文字（悬停或辅助信息显示 ID）（`DSUB-REQ-033/037`）。
+- 候选项来自 `GET /api/subscriptions/options`（API §4.1）：`FG_ACTIVE=1` 且类别匹配；候选项显示以 `DATA_SOURCE_ORG` 为主要文字，`DATA_SOURCE_ID` 为辅助文字（悬停或辅助信息显示 ID）（`DSUB-REQ-033/037`）。
+- **查询候选与维护候选的保留字符处理不同**：
+  - 查询候选（本查询区）：即使存量数据源 ID 含保留字符（英文逗号或英文句点），仍允许选择用于查询历史订阅，不得因保留字符导致无法定位历史记录（`DSUB-REQ-033`）；不显示禁用、不显示保留字符提示。
+  - 维护候选（新增/编辑弹窗的源库/目标库下拉）：ID 含保留字符（英文逗号或英文句点）的数据源显示为禁用项并标注“名称含协议保留字符，不能用于订阅配置”，不得静默隐藏（`DSUB-REQ-017`；见 §5）。
 - 交互：选择条件后点击“**查询**”才执行过滤；点击“**重置**”只清空表单条件，**不自动重新查询**，列表保持上一次已生效的查询结果（`DSUB-REQ-034`）。
 - 无结果时显示空状态“暂无符合条件的订阅记录”（`DSUB-REQ-034`）。
 - 首次进入自动查询并展示全部 `FG_ACTIVE=1` 记录（`DSUB-REQ-029`）。
@@ -38,19 +46,19 @@
 |---|---|---|
 | 订阅描述 | 文本 | 截断省略，悬停显示完整描述 |
 | 源库 | `DATA_SOURCE_ORG`（主）+ 悬停 `DATA_SOURCE_ID`（`DSUB-REQ-037`） | 已停用：显示 ORG + “已停用”标记；不存在：显示原始 ID + “不存在”标记（`DSUB-REQ-042`） |
-| 源表 | “共 N 张”（`DSUB-REQ-038`） | 悬停逐行显示全部 `Schema.表名`；悬停层限高并内部滚动（`DSUB-REQ-038`） |
+| 源表 | “共 N 张”（`DSUB-REQ-038`） | N 按 `DATA_SOURCE_TABLE` 非空 token 总数统计（含不可解析历史 token，口径见 DESIGN §4.5）；悬停逐行显示全部可解析 `Schema.表名`；无法解析的 token 在悬停区以警示样式单独列出；悬停层限高并内部滚动（`DSUB-REQ-038`） |
 | 目标库 | 独立标签（Tag）展示机构名称（`DSUB-REQ-039`） | 空间不足显示前几个标签和 `+N`，悬停查看全部（`DSUB-REQ-039`） |
 | 更新时间 | 文本（`DSUB-REQ-040`） | `UPDATE_TIME` 非空显示更新时间；为空回退显示 `INSERT_TIME` 并明确标记“创建时间”（`DSUB-REQ-040`） |
 | 操作 | 查看、编辑、删除 | 仅正常单源库记录（`DSUB-REQ-041`） |
 
-- 多源库异常记录（`anomalyMultiSource=true`）：整行使用警示色，并显示明确异常提示“配置异常：该记录包含多个源库，请直接维护数据库”（`DSUB-REQ-011/043`）；**不提供**查看、编辑、删除等任何操作（`DSUB-REQ-012`）。
+- 多源库异常记录（`anomalyMultiSource=true`）：整行使用警示色，并显示明确异常提示“配置异常：该记录包含多个源库，请直接维护数据库”（`DSUB-REQ-011/043`）；**不提供**查看、编辑、删除、删除预览等任何操作（`DSUB-REQ-012`）。
 - 状态：加载中（表格 loading）、空状态、查询无结果、接口失败（脱敏错误提示，含重试）。
 
 ## 3. 查看详情
 
 - 触发：点击正常单源库记录的“查看”按钮（`DSUB-REQ-041`）。
 - 形态：**居中只读弹窗**（`DSUB-REQ-044`）；多源库异常记录无查看入口（`DSUB-REQ-046`）。
-- 数据来源：`GET /api/subscriptions/{dataSubId}`，**不连接源 Oracle**（`DSUB-REQ-045`）。
+- 数据来源：`GET /api/subscriptions/{dataSubId}`（API §4.3），**不连接源 Oracle**（`DSUB-REQ-045`）。
 - 内容（`DSUB-REQ-047`）：
   - 订阅描述；
   - 订阅 ID（`dataSubId`）；
@@ -61,7 +69,7 @@
   - 创建时间；更新时间。
 - 警告（`DSUB-REQ-048`）：数据源已停用、不存在、字段格式异常等，以警告样式展示。
 - 源表清单区域**限高并内部滚动**（`DSUB-REQ-049`）。
-- 若 `DATA_SOURCE_TABLE` 有无法解析的内容：展示可解析项，并**单独分区**展示原始异常内容和警告，不得静默丢弃（`DSUB-REQ-050`）。
+- 若 `DATA_SOURCE_TABLE` 有无法解析的内容：展示可解析项，并**单独分区**展示原始异常内容和警告，不得静默丢弃（`DSUB-REQ-050`）。正常三段格式（含两个结构句点）不被误判为异常；只有组件内部额外英文句点造成无法可靠解析时才进入原始异常区（DESIGN §4.2/§4.4）。
 - 不展示 `DATA_SOURCE_COMMENT`、`DATA_TARGET_TABLE`、`DATA_TARGET_COMMENT`（`DSUB-REQ-051`）。
 
 ## 4. 新增/编辑弹窗总体布局
@@ -83,27 +91,33 @@
   - 搜索同时匹配 `DATA_SOURCE_ID` 与 `DATA_SOURCE_ORG`，排序优先级：① `DATA_SOURCE_ID` 完全匹配；② `DATA_SOURCE_ID` 前缀匹配；③ `DATA_SOURCE_ID` 模糊包含；④ `DATA_SOURCE_ORG` 模糊包含（`DSUB-REQ-060`）。
   - ID 搜索不区分大小写；机构名称模糊匹配；输入自动去除首尾空格；高亮命中文字；输入为空显示全部启用源库；无结果显示“未找到匹配的源库”（`DSUB-REQ-061`）。
   - 选中状态：明显的蓝色选中状态、勾选标记和“已选择”提示（`DSUB-REQ-062`）。
+  - **维护候选禁用规则**：ID 含保留字符（英文逗号或英文句点）的源库在本下拉中显示为禁用项，标注“名称含协议保留字符，不能用于订阅配置”，不得静默隐藏（`DSUB-REQ-017`）。
   - 已选择源表后更换源库：二次确认；确认后清空 Schema 缓存和全部已选表（`DSUB-REQ-063`）。
 - 目标库：多选，至少选择一个（`DSUB-REQ-064/057`）。
   - 通常不超过 5 个，全部以**紧凑复选卡片平铺**展示，不需要“查看更多”或独立搜索（`DSUB-REQ-065`）。
   - 选中卡片：蓝色边框、浅蓝背景、勾选图标；同时显示机构名称和 ID（`DSUB-REQ-066`）。
+  - 目标库 ID 虽不参与 `DATA_SOURCE_ID.Schema.表名` 拼接，但保留字符规则同样适用：ID 含英文逗号或英文句点的目标库显示为禁用项并说明原因（`DSUB-REQ-017`）。
+- **`sourceSelectionMode` 的前端状态语义**：表单始终以结构化 `sourceTables`（`SourceTableInput[]`，每项 `{schemaName, tableName}`）维护已选源表，不维护“Schema.表名”字符串数组。保存时前端计算模式：
+  - **新增**：恒为 `REPLACE`（无编辑基线；提交 `sourceTables`）。
+  - **编辑**：打开时记录基线 =（`dataFromSourceId` + 已选 `(schemaName, tableName)` 集合）。保存时若源库未变且已选源表与基线完全一致 → `PRESERVE`（不提交 `sourceTables`）；若源库或源表集合发生变化 → `REPLACE`（提交 `sourceTables`）。有限编辑（源 Oracle 断连，见 §7.3）下源库/源表控件禁用，只能保存 `PRESERVE`。
+  - 该语义与后端一致（API §4.8 / DESIGN §3.4）；前端不得在未提交源表变化的情况下误用 `PRESERVE`。
 
 ## 6. Schema 与表选择区
 
 - 布局：**左侧 Schema 列表，右侧当前 Schema 的普通表表格**（`DSUB-REQ-071`）。
-- 选择源库后**自动加载 Schema**；点击某 Schema 时首次加载该 Schema 的普通表，并在本次弹窗会话内缓存；不得每次切换都重复查询（`DSUB-REQ-070`）。
+- 选择源库后**自动加载 Schema**（`GET /api/subscriptions/metadata/{dataSourceId}/schemas`，API §4.4）；点击某 Schema 时首次加载该 Schema 的普通表（`GET /api/subscriptions/metadata/{dataSourceId}/schemas/{schema}/tables`，API §4.5），并在本次弹窗会话内缓存；不得每次切换都重复查询（`DSUB-REQ-070`）。
 - 加载失败：显示明确错误并提供“重试加载”（`DSUB-REQ-070`）。
 - 表名搜索：当前 Schema 内不区分大小写模糊搜索（`DSUB-REQ-072`）。
 - 操作（`DSUB-REQ-073`）：全选当前 Schema 当前搜索结果；取消当前搜索结果的选择；“只看已选”开关；清空当前 Schema（二次确认）。
 - 切换 Schema 或改变搜索条件时，**全部已选表必须保留**（`DSUB-REQ-074`）。
 - 已选表：复选框勾选 + 整行浅蓝背景突出，不设置重复的“选择状态”列（`DSUB-REQ-075`）。
 - 表格：表头固定，内容区内部滚动；建议使用虚拟滚动以兼容更大规模（`DSUB-REQ-076`）。
+- **保留字符禁选**：Schema 名或表名含英文逗号或组件内部英文句点的对象，仍由元数据接口返回，但前端渲染为**不可选择**（禁用复选框/灰显行），并明确说明协议保留字符原因（如“表名含英文句点，不能用于订阅配置”），不得静默隐藏（`DSUB-REQ-017`）。正常表名含字母/数字/下划线等不受影响。
 - 数量展示：
   - 左侧每个 Schema 显示“已选 N 张”（`DSUB-REQ-079`）；
   - 中间当前 Schema 显示“共 N 张，已选 N 张”（`DSUB-REQ-079`）；
   - 汇总固定显示：“已选择：X 个源库 · X 个 Schema · X 个表 · X 个目标库”；Schema 数只统计至少选中一张表的 Schema（`DSUB-REQ-078`）。
 - 规模：典型 1 个源库、1～2 个 Schema、每个 Schema 约 120 张表、总选择量约 120～240 张表（`DSUB-REQ-077`）；不得因 240 张已选表产生大量标签、弹窗无限增高或明显卡顿（`DSUB-REQ-080`）。
-- 协议限制：数据源 ID、Schema 名、表名含英文逗号的对象不得允许选择，并明确说明协议限制（`DSUB-REQ-017`）。
 
 ## 7. 编辑和删除状态
 
@@ -111,29 +125,35 @@
 
 - 编辑与新增使用同一界面；自动回显描述、源库、目标库、全部 Schema 和源表选择（`DSUB-REQ-088`）。
 - 自动加载原记录涉及的全部已选 Schema，并恢复表格勾选和浅蓝背景；左侧 Schema 数量、当前 Schema 数量和总汇总必须准确（`DSUB-REQ-089`）。
+- 数据来源：`GET /api/subscriptions/{dataSubId}/edit`（API §4.7），返回 `tablesBySchema`（恢复勾选与浅蓝背景）、`rawUnparseableTables`（不可解析 token 分区回显并带警告）、`invalidTables`（异常已选表）、`sourceReachable` / `sourceTableCheck`（决定是否进入有限编辑）与 `versionToken`（保存回传）。
+- 前端将 `tablesBySchema` 扁平化为表单 `sourceTables`（`SourceTableInput[]`，仅 `(schemaName, tableName)` 组合，供保存使用；DESIGN §4.2）。
 
 ### 7.2 源库与源表修改
 
 - 更换源库：二次确认；确认后清空原 Schema 和全部源表选择（`DSUB-REQ-090`）。
 - 原选择中的表已删除或不可访问：不得静默取消；显示“异常已选表”警告（`DSUB-REQ-091`）。
-- 修改源库或源表后：必须成功连接源 Oracle 并完成保存前有效性校验（`DSUB-REQ-092`）。
+- 修改源库或源表后：必须成功连接源 Oracle 并完成保存前有效性校验（`DSUB-REQ-092`）；此时保存模式为 `REPLACE`（提交结构化 `sourceTables`）。
 
 ### 7.3 源库无法连接时的有限编辑
 
 - 源 Oracle 暂时无法连接：只要源库和 `DATA_SOURCE_TABLE` 完全未变，允许修改订阅描述和目标库；**不允许**新增、删除或更换源表；不允许更换源库后绕过源表重新选择（`DSUB-REQ-093`）。
+- 有限编辑模式下源库下拉与源表选择控件**禁用**，前端只允许以 `sourceSelectionMode=PRESERVE` 保存（不提交 `sourceTables`；API §4.8 / DESIGN §3.5）。
 - 页面必须明确说明当前使用的是已保存源表配置，未完成源库实时校验（`DSUB-REQ-093`）。
 
 ### 7.4 异常数据源与并发
 
-- 原订阅引用的源库或目标库已停用或不存在：仍需回显原值并标记异常；编辑保存前必须替换或修复异常数据源，不得原样保存或强制保存（`DSUB-REQ-094`）。
+- 原订阅引用的源库或目标库已停用或不存在：仍需回显原值并标记异常；编辑保存前必须替换或修复异常数据源，不得原样保存或强制保存（`DSUB-REQ-094`）。**不能借 `PRESERVE` 模式绕过**：即使源表未变，原源库已停用/不存在或原配置含保留字符无效项，仍必须先修复后才能保存。
 - 多源库异常记录不提供编辑入口（`DSUB-REQ-095`）。
 - 并发冲突：保存时后端返回 `40910`，提示“记录已被他人或人工数据库操作修改，请刷新后重新编辑”（`DSUB-REQ-098`）。
 
 ### 7.5 删除确认与并发
 
 - 只允许正常单源库记录删除；多源库异常记录无删除入口（`DSUB-REQ-100`）。
-- 删除二次确认弹窗展示（`DSUB-REQ-102`）：订阅描述；源库；Schema 数；源表数量；目标库；明确提示“数据库记录物理删除且无法恢复”；说明“当前运行中的同步任务不会立即停止，需要重启相关 sync-client 后生效”。
-- 删除并发冲突：确认后发现记录已被修改 → 拒绝删除并刷新列表（`DSUB-REQ-103`）。
+- **删除两步闭环**（DESIGN §3.7，API §4.9/§4.10）：
+  1. 点击列表“删除”→ 先调用 `GET /api/subscriptions/{dataSubId}/delete-preview`（API §4.9）获取删除确认所需最新信息（描述、源库、Schema 数、表数、目标库、异常提示）与 `versionToken`；本接口只读配置库、不连接源 Oracle。
+  2. 删除预览成功后才展示二次确认弹窗（`DSUB-REQ-102`）：订阅描述；源库；Schema 数；源表数量；目标库；明确提示“数据库记录物理删除且无法恢复”；说明“当前运行中的同步任务不会立即停止，需要重启相关 sync-client 后生效”。
+  3. 用户确认后调用 `DELETE /api/subscriptions/{dataSubId}`（API §4.10），以 JSON 请求体回传删除预览得到的 `versionToken`（`axios.delete(url, { data: { versionToken } })`）。
+- 删除并发冲突：确认后发现记录已被修改（后端 `40910`）→ 拒绝删除并刷新列表（`DSUB-REQ-103`）。
 - 记录不存在：提示“记录不存在或已被删除”（`DSUB-REQ-104`）。
 - 删除成功：刷新列表，并提示重启后生效（`DSUB-REQ-105`）。
 
@@ -144,16 +164,16 @@
 | 状态 | 规格 |
 |---|---|
 | 默认 | Element Plus 默认主题（表格行、输入框、按钮） |
-| 悬停 | 表格行悬停高亮；源表悬停 Tooltip 展示完整清单（限高滚动）；目标库悬停查看全部标签 |
+| 悬停 | 表格行悬停高亮；源表悬停 Tooltip 展示完整清单（限高滚动，可解析项与原始异常项分区）；目标库悬停查看全部标签 |
 | 选中 | 源库下拉蓝色选中态 + 勾选 + “已选择”；目标库卡片蓝色边框/浅蓝背景/勾选；表格复选框 + 整行浅蓝背景 |
-| 禁用 | 保存中按钮 loading 禁用；断连有限编辑模式下源库/源表控件禁用 |
+| 禁用 | 保存中按钮 loading 禁用；断连有限编辑模式下源库/源表控件禁用；维护候选中含保留字符的数据源与含保留字符的 Schema/表对象灰显禁用并附原因 |
 | 加载 | 列表 loading、Schema/表加载 loading（可重试） |
-| 错误 | 脱敏业务错误提示（不暴露密码/连接串/堆栈）；接口失败含重试 |
-| 警告 | 多源库异常整行警示色 + 提示文案；已停用/不存在数据源标记；异常已选表警告；不可解析内容分区警告 |
+| 错误 | 脱敏业务错误提示（不暴露密码/连接串/堆栈）；接口失败含重试；批量校验失败逐条展示 `validationErrors`（API §4.6） |
+| 警告 | 多源库异常整行警示色 + 提示文案；已停用/不存在数据源标记；异常已选表警告；不可解析内容分区警告；含保留字符对象禁用提示 |
 | 空状态 | 查询无结果“暂无符合条件的订阅记录”；源库搜索无结果“未找到匹配的源库”；空 Schema 不展示 |
 
-通用交互（`DSUB-REQ-106`）：查询、保存、删除、加载 Schema/表等请求处理中对应按钮禁用，防止重复提交；请求失败展示清晰、可展示、脱敏的业务提示。
+通用交互（`DSUB-REQ-106`）：查询、保存、删除预览、删除、加载 Schema/表等请求处理中对应按钮禁用，防止重复提交；请求失败展示清晰、可展示、脱敏的业务提示。
 
 ---
 
-*文档状态：`DRAFT_PENDING_USER_REVIEW`。本文件为界面设计基线草案，未获正式复审批准。*
+*文档状态：`DRAFT_PENDING_USER_REVIEW`。本文件为界面设计基线草案（R1 定向修订版），未获正式复审批准，不代表设计已批准、功能已实现或验收通过。*
