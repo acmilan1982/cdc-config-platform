@@ -29,7 +29,12 @@
 | 创建日期 | 2026-08-29 |
 | 需求来源 | 已确认的产品决策（本提示词 §5～§12 记录的产品需求）+ 已批准数据库基线（`docs/database/`） |
 
-说明：本文件把已经确认的产品决策落成 Feature 需求基线，并已经正式批准（`APPROVED`）。批准链：初始任务建立草案（提交 `07a1792...`）→ R1 修订验收文档（提交 `ca4d87b...`）→ ChatGPT 复审 `REVIEW_PASS` → 项目负责人于 2026-08-29 明确回复“认可，继续”批准。批准只代表需求基线正式成立，不代表现有前后端实现符合基线，不代表功能已经实现、测试或验收通过。本文件不把现有后端代码描述为已经满足本基线（现有后端属于“已存在但不完整、且与新目标需求存在冲突的候选实现”），也不把现有前端描述为功能已经完成（现有前端仅有菜单/路由和占位页）。
+说明：本文件把已经确认的产品决策落成 Feature 需求基线，并已经正式批准（`APPROVED`）。批准链：初始任务建立草案（提交 `07a1792...`）→ R1 修订验收文档（提交 `ca4d87b...`）→ ChatGPT 复审 `REVIEW_PASS` → 项目负责人于 2026-08-29 明确回复“认可，继续”批准。批准只代表需求基线正式成立，不代表现有前后端实现符合基线，不代表功能已经实现、测试或验收通过。
+
+本说明同时区分历史事实与当前事实：
+
+- **历史事实（2026-08-29 需求建立与批准时）**：现有后端属于“已存在但不完整、且与新目标需求存在冲突的候选实现”，现有前端仅有菜单/路由和占位页。
+- **当前事实**：目标功能已由 `DATA-SOURCE-IMPLEMENTATION-001`、R1、R2 完成实现；实现状态 `IMPLEMENTED_PENDING_REVIEW`；正式验收结论 `FAIL`（`PASS=103/FAIL=2/BLOCKED=1/NOT_RUN=0`）；尚未置为 `IMPLEMENTED_ACCEPTED`。功能未验收通过、未视为生产可用。
 
 ## 2. Feature 定位与术语
 
@@ -263,7 +268,7 @@
 | DS-REQ-060 | 任意连接字段发生修改后，之前的测试成功状态立即失效。 |
 | DS-REQ-061 | 连接测试不得修改数据库中的业务数据。 |
 
-> 依赖约束：当前构建配置仅发现 Oracle JDBC 驱动。设计/实现阶段需要评估并加入适用于 MySQL 和 Doris 的 JDBC 驱动依赖；这不是服务器环境安装事项。本基线只把该约束写入需求/验收，不修改构建文件。
+> 依赖约束：MySQL JDBC 驱动已在实现任务中加入，Doris 按已批准设计使用兼容连接方式；这不是服务器环境安装事项。本基线只把该约束写入需求/验收，不修改构建文件。
 
 ## 11. 目标库命名策略弹窗
 
@@ -368,7 +373,7 @@
 | BIZ_ATTR 做 JSON 校验 | 第一版不做任何校验，原样保存 |
 | 目标库仅 MYSQL/DORIS | 目标库允许 ORACLE/MYSQL/DORIS |
 
-现有后端中的分页、启停、一对一 EXTEND、ID 同步或其他冲突逻辑，只能记录为待后续设计/实现修正的现状差距（见 §3.1），不能写进目标需求。
+上述分页、启停、一对一 EXTEND、ID 同步等冲突逻辑，是需求建立时（2026-08-29）观察到的历史候选差异；这些差异已经由实现任务（`DATA-SOURCE-IMPLEMENTATION-001`、R1、R2）完成改造，不再是“待后续设计/实现修正”的当前事项。本节差异表作为历史决策依据保留，不用于描述当前实现现状。当前是否接受实现，以正式验收与后续复验结果为准：原正式验收结果 `PASS=103/FAIL=2/BLOCKED=1/NOT_RUN=0`，`DS-AC-052`、`DS-AC-105` 两个失败用例不得隐去。
 
 ## 17. 基线影响
 
@@ -379,14 +384,19 @@
 
 | 项 | 说明 |
 |---|---|
-| MySQL/Doris JDBC 驱动 | 当前构建配置仅发现 Oracle JDBC 驱动；设计/实现阶段需评估并加入适用于 MySQL 和 Doris 的 JDBC 驱动依赖（依赖坐标调整，非服务器环境安装）。 |
-| 现有后端候选实现改造 | 现有 `datasource` 包的分页、启停、一对一 EXTEND、ID 同步、级联删除、查询口径等与新目标冲突，需在需求批准后的设计/实现阶段修正（不构成本基线当前范围）。 |
-| 前端占位页替换 | 现有 `/config/data-source` 占位页需替换为正式页面（不构成本基线当前范围）。 |
-| 受影响的已批准基线 | 已通过本任务（`DATA-SOURCE-BASELINE-IMPACT-ALIGNMENT-001`）完成同步，见 §17。 |
+| MySQL/Doris JDBC 驱动 | MySQL JDBC 驱动已在实现任务中加入，Doris 按已批准设计使用兼容连接方式。当前未完成项不是“加入驱动”，而是 MySQL 远程授权未放行、Doris 无可用验收环境，导致 `DS-AC-104` 保持 `BLOCKED`，待环境具备后补验。 |
+| 后端目标实现 | 已由 `DATA-SOURCE-IMPLEMENTATION-001`、R1、R2 完成目标实现。当前仍有 `DS-AC-052`（密码进入 MyBatis DEBUG 参数日志）、`DS-AC-105`（`port:"abc"` 返回 HTTP 500 而非批准 API 契约要求的 HTTP 400/code=400）两个正式验收失败点待修复及复验，因此实现状态为 `IMPLEMENTED_PENDING_REVIEW`、尚未置为 `IMPLEMENTED_ACCEPTED`。 |
+| 前端数据源管理页面 | 已由实现任务替换为正式数据源管理页面，用户对原批准基线内七项视觉功能检查通过。新 `DS-REQ-110~115`（验收后五项页面调整）为待用户审批、待实现、待验收的调整草案（`DRAFT_PENDING_USER_REVIEW`），不得混同为已经实现。 |
+| 受影响的已批准基线 | 已通过基线影响同步任务（`DATA-SOURCE-BASELINE-IMPACT-ALIGNMENT-001`）完成同步，见 §17。 |
 
 ## 19. 开放问题
 
-无。当前已确认事项均已记录，没有阻塞本 Feature 基线的开放问题。项目/数据库权威基线的“数据源管理”规则影响已由 `DATA-SOURCE-BASELINE-IMPACT-ALIGNMENT-001` 完成同步（见 §17），不再作为后续独立维护事项或开放问题。MySQL/Doris JDBC 驱动为设计/实现阶段的依赖约束（§18），现有后端候选实现改造与前端占位页替换仍是后续阶段工作（§18），均不构成本基线的当前开放问题。
+以下为当前未闭环事项。这些属于实现/环境/调整审批层面的未闭环事项，不代表原 `DS-REQ-001~109` 存在尚未确认的产品决策：
+
+- `DS-AC-052`：密码进入 MyBatis DEBUG 参数日志，违反既有 `DS-REQ-047/107`，正式验收 `FAIL`，待修复及复验。
+- `DS-AC-105`：`port:"abc"` 返回 HTTP 500，而非批准 API 契约要求的 HTTP 400/code=400，正式验收 `FAIL`，待修复及复验。
+- `DS-AC-104`：MySQL 远程授权和 Doris 环境限制，状态 `BLOCKED`，待环境具备后补验。
+- `DS-REQ-110~115` / `DS-AC-107~115`：状态 `DRAFT_PENDING_USER_REVIEW` / `NOT_RUN`，待 ChatGPT 复审、用户批准、实现与验收。
 
 ## 20. 验收后页面调整需求草案（DRAFT_PENDING_USER_REVIEW）
 
@@ -412,5 +422,6 @@
 | 2026-08-29 | 项目/数据库权威基线一致性调整：将已批准“数据源管理”规则（`CDC_DATA_SOURCE_EXTEND` 为源库到目标库的命名策略、源库 0..N、`(DATA_SOURCE_ID, TARGET_DATA_SOURCE_ID)` 逻辑联合唯一由后端保存前校验、第一版无 DDL、删除/改 ID 不级联不同步）同步至 `docs/database/**` 与项目级基线；本 Feature 需求、验收状态保持 `APPROVED`，实现状态保持 `NOT_STARTED`；§17/§18 更新为本次同步完成；不改变任何 DS-REQ 编号、文本或语义 | DATA-SOURCE-BASELINE-IMPACT-ALIGNMENT-001（已批准业务规则向权威项目/数据库基线的纯文档同步；纯文档任务） |
 | 2026-08-29 | R1 修订：§19 更新为“项目/数据库权威基线影响同步已完成（`DATA-SOURCE-BASELINE-IMPACT-ALIGNMENT-001`），不再作为后续独立维护事项或开放问题”；MySQL/Doris JDBC 驱动、现有后端候选实现改造与前端占位页替换仍为后续阶段工作；§17/§18 保持正确、未无必要重写；不改变任何 DS-REQ 编号、文本或语义；文档状态保持 `APPROVED`、实现状态保持 `NOT_STARTED` | DATA-SOURCE-BASELINE-IMPACT-ALIGNMENT-001-R1（ChatGPT 复审 CHANGES_REQUIRED 定向修订；纯文档任务） |
 | 2026-08-30 | 验收后调整需求草案落盘：新增 `DS-REQ-110~115` 共 6 条（`DRAFT_PENDING_USER_REVIEW`，尚未获得用户正式批准、尚未实现、尚未执行）；§1 元数据对齐已执行正式验收事实（实现状态 `IMPLEMENTED_PENDING_REVIEW`、原正式验收状态 `FAIL`、原验收用例 `PASS=103/FAIL=2/BLOCKED=1/NOT_RUN=0`，实现未置 `IMPLEMENTED_ACCEPTED`）并增加基础基线/调整草案/当前实现/原正式验收分层状态；§3 明确为需求建立时的历史实施前差距快照；原 `DS-REQ-001~109` 编号与正文逐字保持、追踪行不变；文档状态保持 `APPROVED` | DATA-SOURCE-POST-ACCEPTANCE-ADJUSTMENT-BASELINE-001（正式验收后五项页面调整的需求草案；纯文档任务，未进入实现/测试/验收） |
+| 2026-08-30 | R1 定向修订：ChatGPT 复审为 `CHANGES_REQUIRED`；只修订 §1 说明、§16 末尾、§18、§19 中把已完成的实现工作描述为未来工作、并错误声明“无开放问题”的过期当前状态叙述；`DS-REQ-001~115` 全部需求行未修改；`ACCEPTANCE.md`、`UI.md` 和原任务报告未修改；调整草案（`DS-REQ-110~115`/`DS-AC-107~115`）仍未批准 | DATA-SOURCE-POST-ACCEPTANCE-ADJUSTMENT-BASELINE-001-R1（ChatGPT 复审 CHANGES_REQUIRED 定向修订；纯文档任务） |
 
-> 关联文档：验收基线 `docs/features/data-source-management/ACCEPTANCE.md`；执行报告 `docs/features/data-source-management/reports/DATA-SOURCE-REQUIREMENTS-BASELINE-001.md`；验收后调整草案执行报告 `docs/features/data-source-management/reports/DATA-SOURCE-POST-ACCEPTANCE-ADJUSTMENT-BASELINE-001.md`。
+> 关联文档：验收基线 `docs/features/data-source-management/ACCEPTANCE.md`；执行报告 `docs/features/data-source-management/reports/DATA-SOURCE-REQUIREMENTS-BASELINE-001.md`；验收后调整草案执行报告 `docs/features/data-source-management/reports/DATA-SOURCE-POST-ACCEPTANCE-ADJUSTMENT-BASELINE-001.md`；验收后调整草案 R1 修订报告 `docs/features/data-source-management/reports/DATA-SOURCE-POST-ACCEPTANCE-ADJUSTMENT-BASELINE-001-R1.md`。
