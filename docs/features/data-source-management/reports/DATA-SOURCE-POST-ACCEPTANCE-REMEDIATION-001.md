@@ -5,8 +5,9 @@
 - 任务：`DATA-SOURCE-POST-ACCEPTANCE-REMEDIATION-001`
 - 分支：`develop`
 - 授权基准：`c93f562ba0c3bd9a525382e8c93fbe4e4d956f88`
-- 结果提交：见文末结果块 `result_commit_id`
-- Push：普通推送至 `origin develop`（无 force）
+- 结果提交：`b5145a7cf466f9f4da872986caec6e0725b50cf4`（fix(data-source-management): remediate acceptance findings and UI adjustments [DATA-SOURCE-POST-ACCEPTANCE-REMEDIATION-001]）
+- Push：SUCCESS（`c93f562..b5145a7  develop -> develop`，无 force）
+- 推送后核验：`HEAD == origin/develop == ls-remote develop == b5145a7cf466f9f4da872986caec6e0725b50cf4`，ahead/behind = `0 0`
 - 状态口径：仅记录实现状态 `IMPLEMENTED_PENDING_REVIEW`，不更新正式验收状态，不进入正式复验
 
 ## 2. 实际修改文件清单（无通配符）
@@ -135,7 +136,7 @@ status=SUCCESS
 task_code=DATA-SOURCE-POST-ACCEPTANCE-REMEDIATION-001
 branch=develop
 base_commit_id=c93f562ba0c3bd9a525382e8c93fbe4e4d956f88
-result_commit_id=<见提交记录>
+result_commit_id=b5145a7cf466f9f4da872986caec6e0725b50cf4
 requirements_status=APPROVED
 acceptance_status=APPROVED
 ui_status=APPROVED
@@ -169,8 +170,8 @@ zookeeper_write_status=NONE
 service_operation_status=STARTED_FOR_VISUAL_CHECK_THEN_STOPPED
 business_code_change_status=CHANGED
 test_code_change_status=CHANGED
-push_status=<待推送后回填>
-ahead_behind=<待推送后回填>
+push_status=SUCCESS
+ahead_behind=0 0
 changed_files=backend/src/main/resources/application-dev.yml,backend/src/main/java/com/bsoft/cdcconfig/datasource/controller/DataSourceController.java,backend/src/test/java/com/bsoft/cdcconfig/datasource/controller/DataSourceControllerTest.java,backend/src/test/java/com/bsoft/cdcconfig/datasource/DataSourcePasswordLogSecurityTest.java,frontend/src/views/data-source/DataSourcePage.vue,frontend/src/views/data-source/dataSource.spec.ts,frontend/src/views/data-source/draggableDialog.ts,docs/features/data-source-management/reports/DATA-SOURCE-POST-ACCEPTANCE-REMEDIATION-001.md
 next=CHATGPT_CODE_REVIEW_POST_ACCEPTANCE_REMEDIATION
 error=
