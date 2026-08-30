@@ -288,7 +288,92 @@ class DataSourceControllerTest {
         verify(namingStrategyService).delete("SRC001", "TG001");
     }
 
+    // ---- 请求体类型错误（DS-AC-105） ----
+
+    @Test
+    void create_portAsString_shouldReturn400TypeError() throws Exception {
+        mockMvc.perform(post("/api/data-sources")
+                        .contentType(MediaType.APPLICATION_JSON)
+                        .content(createBodyWithPort("\"abc\"")))
+                .andExpect(status().isBadRequest())
+                .andExpect(jsonPath("$.code").value(400))
+                .andExpect(jsonPath("$.message").value("参数类型错误: port"));
+    }
+
+    @Test
+    void update_portAsString_shouldReturn400TypeError() throws Exception {
+        mockMvc.perform(put("/api/data-sources/DS001")
+                        .contentType(MediaType.APPLICATION_JSON)
+                        .content(createBodyWithPort("\"abc\"")))
+                .andExpect(status().isBadRequest())
+                .andExpect(jsonPath("$.code").value(400))
+                .andExpect(jsonPath("$.message").value("参数类型错误: port"));
+    }
+
+    @Test
+    void saveBizAttr_objectValue_shouldReturnActualFieldName() throws Exception {
+        mockMvc.perform(put("/api/data-sources/TG001/biz-attr")
+                        .contentType(MediaType.APPLICATION_JSON)
+                        .content("{\"bizAttr\":{\"a\":1}}"))
+                .andExpect(status().isBadRequest())
+                .andExpect(jsonPath("$.code").value(400))
+                .andExpect(jsonPath("$.message").value("参数类型错误: bizAttr"));
+    }
+
+    @Test
+    void malformedJson_shouldReturn400GenericMessage() throws Exception {
+        mockMvc.perform(post("/api/data-sources")
+                        .contentType(MediaType.APPLICATION_JSON)
+                        .content("{"))
+                .andExpect(status().isBadRequest())
+                .andExpect(jsonPath("$.code").value(400))
+                .andExpect(jsonPath("$.message").value("请求体格式错误"));
+    }
+
+    @Test
+    void typeErrorResponse_shouldNotLeakPasswordOrRawContent() throws Exception {
+        String body = "{\"dataSourceId\":\"DS001\",\"dataSourceName\":\"测试数据源\","
+                + "\"dataSourceCategory\":\"SOURCE\",\"dataSourceType\":\"ORACLE\","
+                + "\"host\":\"192.168.1.1\",\"port\":\"abc\",\"userName\":\"testuser\","
+                + "\"password\":\"supersecret\",\"serviceName\":\"testdb\"}";
+        String response = mockMvc.perform(post("/api/data-sources")
+                        .contentType(MediaType.APPLICATION_JSON)
+                        .content(body))
+                .andExpect(status().isBadRequest())
+                .andExpect(jsonPath("$.code").value(400))
+                .andExpect(jsonPath("$.message").value("参数类型错误: port"))
+                .andReturn()
+                .getResponse()
+                .getContentAsString();
+
+        org.assertj.core.api.Assertions.assertThat(response)
+                .doesNotContain("supersecret")
+                .doesNotContain("abc")
+                .doesNotContain("Cannot deserialize")
+                .doesNotContain("Exception");
+    }
+
+    @Test
+    void create_validNumericPort_shouldRemainOk() throws Exception {
+        when(dataSourceService.create(any(DataSourceCreateDTO.class))).thenReturn("DS001");
+
+        String body = createBodyWithPort("1521");
+
+        mockMvc.perform(post("/api/data-sources")
+                        .contentType(MediaType.APPLICATION_JSON)
+                        .content(body))
+                .andExpect(status().isOk())
+                .andExpect(jsonPath("$.code").value(200));
+    }
+
     // -- helpers --
+
+    private String createBodyWithPort(String portLiteral) {
+        return "{\"dataSourceId\":\"DS001\",\"dataSourceName\":\"测试数据源\","
+                + "\"dataSourceCategory\":\"SOURCE\",\"dataSourceType\":\"ORACLE\","
+                + "\"host\":\"192.168.1.1\",\"port\":" + portLiteral + ",\"userName\":\"testuser\","
+                + "\"password\":\"testpass\",\"serviceName\":\"testdb\"}";
+    }
 
     private DataSourceCreateDTO buildCreateDTO() {
         DataSourceCreateDTO dto = new DataSourceCreateDTO();

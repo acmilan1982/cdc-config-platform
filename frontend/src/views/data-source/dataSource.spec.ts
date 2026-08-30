@@ -114,7 +114,10 @@ const strategyRow: NamingStrategyVO = {
 }
 
 async function mountPage() {
+  // attachTo 使组件树挂载进 document，弹窗/查询等 document.querySelector 才能命中，
+  // 也让 DataSourcePage 的弹窗拖动 watch（内部用 document.querySelector）真正生效。
   const wrapper = mount(DataSourcePage, {
+    attachTo: document.body,
     global: { plugins: [ElementPlus] },
   })
   await flushPromises()
@@ -198,15 +201,25 @@ async function pickSelect(
   await nextTick()
 }
 
-/** 真实勾选 el-radio（label 点击在 jsdom 不会转发到原生 input，需直接勾选 input）。 */
-async function clickRadio(w: PageWrapper, container: string, label: string) {
-  const radios = w.findAll(`${container} .el-radio`)
-  const target = radios.find((r) => r.text().includes(label))
+/** 真实点击命名策略单选卡片（DS-REQ-115 自绘卡片，非 el-radio）。 */
+async function clickStrategyCard(w: PageWrapper, name: string) {
+  const cards = w.findAll('.naming-form .strategy-card')
+  const target = cards.find((c) => c.text().includes(name))
   if (!target) {
-    throw new Error(`radio not found: ${label}`)
+    throw new Error(`strategy card not found: ${name}`)
   }
-  await target.find('input').setValue(true)
+  await target.trigger('click')
   await nextTick()
+}
+
+/** 设置查询区输入框。 */
+async function setQueryInput(w: PageWrapper, label: string, value: string) {
+  const qItems = w.findAll('.query-form .el-form-item')
+  const item = qItems.find((i) => i.text().includes(label))
+  if (!item) {
+    throw new Error(`query form-item not found for label: ${label}`)
+  }
+  await item.find('input').setValue(value)
 }
 
 /** fake timers 下冲刷微任务（flushPromises 依赖 setTimeout 会挂起）。 */
@@ -994,7 +1007,7 @@ describe('目标库命名策略（仅源库）', () => {
 
     // 切换到 CUSTOM：前缀后缀必填，空提交被阻止
     // 新增成功后表单已重置，需重新选择目标库
-    await clickRadio(wrapper, '.naming-form', '自定义前后缀')
+    await clickStrategyCard(wrapper, '自定义前后缀')
     await pickSelect(wrapper, '.naming-form', 0, 'TG002（目标库C）')
     await exactButton(wrapper, '新增')!.trigger('click')
     await flushPromises()
@@ -1022,12 +1035,12 @@ describe('目标库命名策略（仅源库）', () => {
     await buttonByText(wrapper, '目标库命名策略')!.trigger('click')
     await flushPromises()
 
-    await clickRadio(wrapper, '.naming-form', '自定义前后缀')
+    await clickStrategyCard(wrapper, '自定义前后缀')
     await namingInput(wrapper, '表名前缀').setValue('pre')
     await namingInput(wrapper, '表名后缀').setValue('suf')
     await nextTick()
 
-    await clickRadio(wrapper, '.naming-form', '表合并')
+    await clickStrategyCard(wrapper, '表合并')
     await nextTick()
 
     expect(namingInput(wrapper, '表名前缀').element.value).toBe('')
@@ -1140,7 +1153,7 @@ describe('目标库命名策略（仅源库）', () => {
     await flushPromises()
 
     // CUSTOM 策略下前后缀在非保存期可编辑
-    await clickRadio(wrapper, '.naming-form', '自定义前后缀')
+    await clickStrategyCard(wrapper, '自定义前后缀')
     await namingInput(wrapper, '表名前缀').setValue('pre')
     await namingInput(wrapper, '表名后缀').setValue('suf')
     await nextTick()
@@ -1148,12 +1161,17 @@ describe('目标库命名策略（仅源库）', () => {
     await exactButton(wrapper, '新增')!.trigger('click')
     await flushPromises()
 
-    // 保存中：目标库选择、策略单选、前缀/后缀输入全部禁用
+    // 保存中：目标库选择、策略卡片、前缀/后缀输入全部禁用
     expect(wrapper.find('.naming-form .el-select__wrapper').classes()).toContain('is-disabled')
-    const radioInputs = wrapper.findAll('.naming-form .el-radio input')
-    for (const r of radioInputs) {
-      expect((r.element as HTMLInputElement).disabled).toBe(true)
+    const cards = wrapper.findAll('.naming-form .strategy-card')
+    expect(cards.length).toBe(2)
+    for (const c of cards) {
+      expect(c.attributes('aria-disabled')).toBe('true')
+      expect(c.classes()).toContain('is-disabled')
     }
+    // 保存中点击卡片不改变策略（保持当前已选的自定义前后缀）
+    await clickStrategyCard(wrapper, '表合并')
+    expect(wrapper.find('.naming-form .strategy-card.is-selected').text()).toContain('自定义前后缀')
     expect(namingInput(wrapper, '表名前缀').element.disabled).toBe(true)
     expect(namingInput(wrapper, '表名后缀').element.disabled).toBe(true)
 
@@ -1235,7 +1253,7 @@ describe('目标库命名策略（仅源库）', () => {
       .find((b) => b.text().includes('编辑'))!
     await editBtn.trigger('click')
     await nextTick()
-    await clickRadio(wrapper, '.naming-form', '自定义前后缀')
+    await clickStrategyCard(wrapper, '自定义前后缀')
     await namingInput(wrapper, '表名前缀').setValue('p_')
     await nextTick()
 
@@ -1244,6 +1262,407 @@ describe('目标库命名策略（仅源库）', () => {
     await flushPromises()
     expect(confirmSpy).toHaveBeenCalledTimes(1)
     expect(namingInput(wrapper, '表名前缀').element.value).toBe('p_')
+    wrapper.unmount()
+  })
+})
+
+describe('列表空状态（DS-REQ-110/111）', () => {
+  it('有生效查询条件且零结果显示两级文案，无额外重置按钮或链接', async () => {
+    mockedList.mockResolvedValue(okList([]))
+    const wrapper = await mountPage()
+
+    await setQueryInput(wrapper, '数据源ID', 'NOPE')
+    await buttonByText(wrapper, '查询')!.trigger('click')
+    await flushPromises()
+
+    const empty = wrapper.find('.empty-state')
+    expect(empty.exists()).toBe(true)
+    expect(empty.text()).toContain('未找到符合当前查询条件的数据源')
+    expect(empty.text()).toContain('请调整查询条件后重试，或点击上方“重置”查看全部数据源')
+    expect(empty.text()).not.toContain('暂无数据源')
+    expect(empty.find('button').exists()).toBe(false)
+    expect(empty.find('a').exists()).toBe(false)
+    wrapper.unmount()
+  })
+
+  it('查询后只编辑表单不查询，空状态仍依据最后生效条件', async () => {
+    mockedList.mockResolvedValue(okList([]))
+    const wrapper = await mountPage()
+
+    await setQueryInput(wrapper, '数据源ID', 'NOPE')
+    await buttonByText(wrapper, '查询')!.trigger('click')
+    await flushPromises()
+    expect(wrapper.find('.empty-state').text()).toContain('未找到符合当前查询条件的数据源')
+
+    // 打开新增弹窗修改表单再关闭，不触发查询：生效条件与空状态不变
+    await buttonByText(wrapper, '新增数据源')!.trigger('click')
+    await flushPromises()
+    await editorInput(wrapper, '数据源名称').setValue('改')
+    await nextTick()
+    await buttonByText(wrapper, '取消')!.trigger('click')
+    await flushPromises()
+
+    expect(mockedList).toHaveBeenCalledTimes(2)
+    expect(wrapper.find('.empty-state').text()).toContain('未找到符合当前查询条件的数据源')
+    wrapper.unmount()
+  })
+
+  it('无生效查询条件且零结果显示系统空状态与新增引导', async () => {
+    mockedList.mockResolvedValue(okList([]))
+    const wrapper = await mountPage()
+
+    const empty = wrapper.find('.empty-state')
+    expect(empty.exists()).toBe(true)
+    expect(empty.text()).toContain('暂无数据源')
+    expect(empty.text()).toContain('点击右上角“新增数据源”创建第一条数据源')
+    expect(empty.find('button').exists()).toBe(false)
+    expect(empty.find('a').exists()).toBe(false)
+    wrapper.unmount()
+  })
+
+  it('重置清空生效条件，列表为空时回退系统空状态', async () => {
+    mockedList.mockResolvedValue(okList([]))
+    const wrapper = await mountPage()
+
+    await setQueryInput(wrapper, '数据源ID', 'NOPE')
+    await buttonByText(wrapper, '查询')!.trigger('click')
+    await flushPromises()
+    expect(wrapper.find('.empty-state').text()).toContain('未找到符合当前查询条件的数据源')
+
+    await buttonByText(wrapper, '重置')!.trigger('click')
+    await flushPromises()
+    expect(wrapper.find('.empty-state').text()).toContain('暂无数据源')
+    expect(wrapper.find('.empty-state').text()).not.toContain('未找到符合当前查询条件')
+    wrapper.unmount()
+  })
+
+  it('加载中与加载失败时不误显示普通空状态', async () => {
+    let resolve!: (v: ApiResponse<DataSourceRow[]>) => void
+    mockedList.mockImplementationOnce(
+      () => new Promise<ApiResponse<DataSourceRow[]>>((res) => (resolve = res)),
+    )
+    const wrapper = await mountPage()
+
+    // 初始加载挂起：不得显示普通空状态
+    expect(wrapper.find('.empty-state').exists()).toBe(false)
+
+    resolve(okList([]))
+    await flushPromises()
+    expect(wrapper.find('.empty-state').text()).toContain('暂无数据源')
+
+    // 加载失败：展示错误，不得显示普通空状态
+    mockedList.mockRejectedValueOnce(new Error('network down'))
+    await buttonByText(wrapper, '重置')!.trigger('click')
+    await flushPromises()
+    expect(wrapper.find('.load-error').exists()).toBe(true)
+    expect(wrapper.find('.empty-state').exists()).toBe(false)
+    wrapper.unmount()
+  })
+
+  it('并发查询只有最终生效请求更新列表与空状态，旧响应不得覆盖', async () => {
+    let resolveFirst!: (v: ApiResponse<DataSourceRow[]>) => void
+    mockedList
+      .mockImplementationOnce(
+        () => new Promise<ApiResponse<DataSourceRow[]>>((res) => (resolveFirst = res)),
+      )
+      .mockResolvedValueOnce(okList([]))
+      .mockResolvedValueOnce(okList([]))
+    const wrapper = await mountPage()
+
+    // 第一次查询（NOPE）挂起
+    await setQueryInput(wrapper, '数据源ID', 'NOPE')
+    await buttonByText(wrapper, '查询')!.trigger('click')
+    await flushPromises()
+
+    // 重置（无条件）立即返回空 → 系统空状态
+    await buttonByText(wrapper, '重置')!.trigger('click')
+    await flushPromises()
+    expect(wrapper.find('.empty-state').text()).toContain('暂无数据源')
+
+    // 第一次查询迟到返回：代次失效，不得覆盖生效条件与空状态
+    resolveFirst(okList([]))
+    await flushPromises()
+    expect(wrapper.find('.empty-state').text()).toContain('暂无数据源')
+    expect(wrapper.find('.empty-state').text()).not.toContain('未找到符合当前查询条件')
+    wrapper.unmount()
+  })
+})
+
+describe('三个业务弹窗标题栏拖动（DS-REQ-112）', () => {
+  it('新增/编辑弹窗：仅标题栏拖动改变位置', async () => {
+    const wrapper = await mountPage()
+    await buttonByText(wrapper, '新增数据源')!.trigger('click')
+    await flushPromises()
+
+    const el = document.querySelector('.editor-dialog') as HTMLElement
+    const header = document.querySelector('.editor-dialog .el-dialog__header') as HTMLElement
+    expect(header).toBeTruthy()
+
+    header.dispatchEvent(new MouseEvent('mousedown', { clientX: 100, clientY: 100, bubbles: true }))
+    window.dispatchEvent(new MouseEvent('mousemove', { clientX: 180, clientY: 160 }))
+    window.dispatchEvent(new MouseEvent('mouseup', {}))
+    expect(el.style.transform).toContain('translate(80px, 60px)')
+    wrapper.unmount()
+  })
+
+  it('关闭按钮不触发拖动', async () => {
+    const wrapper = await mountPage()
+    await buttonByText(wrapper, '新增数据源')!.trigger('click')
+    await flushPromises()
+
+    const el = document.querySelector('.editor-dialog') as HTMLElement
+    const closeBtn = document.querySelector('.editor-dialog .el-dialog__headerbtn') as HTMLElement
+    expect(closeBtn).toBeTruthy()
+    closeBtn.dispatchEvent(new MouseEvent('mousedown', { clientX: 100, clientY: 100, bubbles: true }))
+    window.dispatchEvent(new MouseEvent('mousemove', { clientX: 200, clientY: 200 }))
+    expect(el.style.transform).toBe('translate(0px, 0px)')
+    wrapper.unmount()
+  })
+
+  it('内容区输入控件不触发拖动', async () => {
+    const wrapper = await mountPage()
+    await buttonByText(wrapper, '新增数据源')!.trigger('click')
+    await flushPromises()
+
+    const el = document.querySelector('.editor-dialog') as HTMLElement
+    const input = document.querySelector('.editor-dialog .editor-form input') as HTMLElement
+    expect(input).toBeTruthy()
+    input.dispatchEvent(new MouseEvent('mousedown', { clientX: 100, clientY: 100, bubbles: true }))
+    window.dispatchEvent(new MouseEvent('mousemove', { clientX: 200, clientY: 200 }))
+    expect(el.style.transform).toBe('translate(0px, 0px)')
+    wrapper.unmount()
+  })
+
+  it('拖动受 viewport 边界约束，标题栏不被拖出', async () => {
+    const wrapper = await mountPage()
+    await buttonByText(wrapper, '新增数据源')!.trigger('click')
+    await flushPromises()
+
+    const el = document.querySelector('.editor-dialog') as HTMLElement
+    const header = document.querySelector('.editor-dialog .el-dialog__header') as HTMLElement
+    header.dispatchEvent(new MouseEvent('mousedown', { clientX: 100, clientY: 100, bubbles: true }))
+    // 向左/上大幅拖动：clamp 到非负
+    window.dispatchEvent(new MouseEvent('mousemove', { clientX: -400, clientY: -400 }))
+    window.dispatchEvent(new MouseEvent('mouseup', {}))
+    const m = el.style.transform.match(/translate\(([-\d.]+)px, ([-\d.]+)px\)/)
+    expect(m).toBeTruthy()
+    expect(Number(m![1])).toBeGreaterThanOrEqual(0)
+    expect(Number(m![2])).toBeGreaterThanOrEqual(0)
+    wrapper.unmount()
+  })
+
+  it('浏览器尺寸变化后自动修正回可操作范围', async () => {
+    const wrapper = await mountPage()
+    await buttonByText(wrapper, '新增数据源')!.trigger('click')
+    await flushPromises()
+
+    const el = document.querySelector('.editor-dialog') as HTMLElement
+    const header = document.querySelector('.editor-dialog .el-dialog__header') as HTMLElement
+    // 模拟弹窗被拖到左/上越界
+    el.getBoundingClientRect = () =>
+      ({
+        left: -100,
+        top: -60,
+        right: 520,
+        bottom: 370,
+        width: 620,
+        height: 430,
+        x: -100,
+        y: -60,
+        toJSON: () => ({}),
+      }) as DOMRect
+    header.getBoundingClientRect = () =>
+      ({
+        left: -100,
+        top: -60,
+        right: 520,
+        bottom: 4,
+        width: 620,
+        height: 64,
+        x: -100,
+        y: -60,
+        toJSON: () => ({}),
+      }) as DOMRect
+    window.dispatchEvent(new Event('resize'))
+    await nextTick()
+    expect(el.style.transform).toContain('translate(100px, 60px)')
+    wrapper.unmount()
+  })
+
+  it('关闭再打开恢复默认居中；组件卸载清理拖动监听', async () => {
+    const wrapper = await mountPage()
+    await buttonByText(wrapper, '新增数据源')!.trigger('click')
+    await flushPromises()
+
+    const header = document.querySelector('.editor-dialog .el-dialog__header') as HTMLElement
+    header.dispatchEvent(new MouseEvent('mousedown', { clientX: 100, clientY: 100, bubbles: true }))
+    window.dispatchEvent(new MouseEvent('mousemove', { clientX: 200, clientY: 180 }))
+    window.dispatchEvent(new MouseEvent('mouseup', {}))
+    expect((document.querySelector('.editor-dialog') as HTMLElement).style.transform).not.toBe('')
+
+    // 关闭（无脏数据不弹确认）→ 重开：transform 复位为默认居中
+    await buttonByText(wrapper, '取消')!.trigger('click')
+    await flushPromises()
+    await buttonByText(wrapper, '新增数据源')!.trigger('click')
+    await flushPromises()
+    const el2 = document.querySelector('.editor-dialog') as HTMLElement
+    // 重开即复位到默认居中位置
+    expect(el2.style.transform).toBe('translate(0px, 0px)')
+
+    // 重开后重新绑定，拖动仍生效
+    const header2 = document.querySelector('.editor-dialog .el-dialog__header') as HTMLElement
+    header2.dispatchEvent(new MouseEvent('mousedown', { clientX: 10, clientY: 10, bubbles: true }))
+    window.dispatchEvent(new MouseEvent('mousemove', { clientX: 60, clientY: 50 }))
+    window.dispatchEvent(new MouseEvent('mouseup', {}))
+    expect(el2.style.transform).toContain('translate(50px, 40px)')
+
+    // 卸载：弹窗 DOM 移除，且清理过程不抛错
+    expect(() => wrapper.unmount()).not.toThrow()
+    expect(document.querySelector('.editor-dialog')).toBeNull()
+  })
+
+  it('删除确认框固定居中，不具备业务弹窗拖动能力', async () => {
+    const wrapper = await mountPage()
+    confirmSpy.mockRestore()
+    await buttonByText(wrapper, '删除')!.trigger('click')
+    await flushPromises()
+
+    const box = document.querySelector('.el-message-box') as HTMLElement
+    expect(box).toBeTruthy()
+    const boxHeader = box.querySelector('.el-message-box__header') as HTMLElement
+    boxHeader.dispatchEvent(new MouseEvent('mousedown', { clientX: 100, clientY: 100, bubbles: true }))
+    window.dispatchEvent(new MouseEvent('mousemove', { clientX: 220, clientY: 200 }))
+    window.dispatchEvent(new MouseEvent('mouseup', {}))
+    expect(box.style.transform).toBe('')
+
+    // 关闭确认框，避免遗留弹层
+    const cancelBtn = Array.from(box.querySelectorAll('button')).find((b) =>
+      b.textContent?.includes('取消'),
+    ) as HTMLElement
+    cancelBtn.click()
+    await flushPromises()
+    wrapper.unmount()
+  })
+})
+
+describe('表单标签左对齐与固定列宽（DS-REQ-113）', () => {
+  it('三个业务弹窗：标签左对齐、固定列宽、必填星号稳定', async () => {
+    const wrapper = await mountPage()
+
+    // 新增/编辑弹窗
+    await buttonByText(wrapper, '新增数据源')!.trigger('click')
+    await flushPromises()
+    const editorForm = wrapper.find('.editor-form')
+    expect(editorForm.classes()).toContain('el-form--label-left')
+    const editorLabel = editorForm.find('.el-form-item__label')
+    expect(editorLabel.exists()).toBe(true)
+    expect(editorLabel.attributes('style') ?? '').toContain('width: 120px')
+    await buttonByText(wrapper, '取消')!.trigger('click')
+    await flushPromises()
+
+    // 命名策略弹窗
+    await buttonByText(wrapper, '目标库命名策略')!.trigger('click')
+    await flushPromises()
+    const namingForm = wrapper.find('.naming-form')
+    expect(namingForm.classes()).toContain('el-form--label-left')
+    const namingLabel = namingForm.find('.el-form-item__label')
+    expect(namingLabel.attributes('style') ?? '').toContain('width: 110px')
+    await buttonByText(wrapper, '取消')!.trigger('click')
+    await flushPromises()
+
+    // 业务属性弹窗存在（textarea 无表单标签），具备 biz-attr-dialog 类
+    await buttonByText(wrapper, '业务属性')!.trigger('click')
+    await flushPromises()
+    expect(wrapper.find('.biz-attr-dialog').exists()).toBe(true)
+    await buttonByText(wrapper, '取消')!.trigger('click')
+    await flushPromises()
+    wrapper.unmount()
+  })
+})
+
+describe('命名策略弹窗布局（DS-REQ-114）', () => {
+  it('桌面宽约1050px、七列、无分页、五行空间与 Tooltip', async () => {
+    const wrapper = await mountPage()
+    await buttonByText(wrapper, '目标库命名策略')!.trigger('click')
+    await flushPromises()
+
+    const dialog = wrapper.find('.naming-dialog')
+    expect(dialog.exists()).toBe(true)
+    expect(dialog.attributes('style') ?? '').toContain('--el-dialog-width: 1050px')
+    // viewport 约束通过 scoped 样式 max-width 生效（视觉检查复核）
+
+    // 七列固定
+    const headers = wrapper.findAll('.naming-table .el-table__header-wrapper th')
+    expect(headers.map((h) => h.text().trim())).toEqual([
+      '目标库ID',
+      '目标库名称',
+      '数据库类型',
+      '命名策略',
+      '前缀',
+      '后缀',
+      '操作',
+    ])
+    // 无分页
+    expect(wrapper.find('.naming-table .el-pagination').exists()).toBe(false)
+    // 五行空间：max-height 约束 → el-table--fluid-height
+    expect(wrapper.find('.naming-table').classes()).toContain('el-table--fluid-height')
+    // Tooltip：show-overflow-tooltip 列渲染 el-tooltip
+    expect(
+      document.querySelectorAll('.naming-table .el-table__body .el-tooltip').length,
+    ).toBeGreaterThanOrEqual(1)
+    wrapper.unmount()
+  })
+})
+
+describe('命名策略单选卡片（DS-REQ-115）', () => {
+  it('两张卡片固定文案、整卡点击选中态与键盘操作', async () => {
+    const wrapper = await mountPage()
+    await buttonByText(wrapper, '目标库命名策略')!.trigger('click')
+    await flushPromises()
+
+    const cards = wrapper.findAll('.naming-form .strategy-card')
+    expect(cards.length).toBe(2)
+    const mergeCard = cards.find((c) => c.text().includes('表合并'))!
+    const customCard = cards.find((c) => c.text().includes('自定义前后缀'))!
+
+    expect(mergeCard.text()).toContain('按表合并规则生成目标表名，无需填写前缀和后缀。')
+    expect(customCard.text()).toContain('在源表名基础上添加指定前缀和后缀，生成目标表名。')
+
+    // 默认 TABLE_MERGE 选中
+    expect(mergeCard.classes()).toContain('is-selected')
+    expect(mergeCard.attributes('aria-checked')).toBe('true')
+
+    // 整卡点击选中自定义
+    await customCard.trigger('click')
+    await nextTick()
+    expect(customCard.classes()).toContain('is-selected')
+    expect(customCard.attributes('aria-checked')).toBe('true')
+    expect(mergeCard.classes()).not.toContain('is-selected')
+
+    // 键盘 Enter 选中回表合并
+    await mergeCard.trigger('keydown.enter')
+    await nextTick()
+    expect(mergeCard.attributes('aria-checked')).toBe('true')
+    wrapper.unmount()
+  })
+
+  it('策略切换时前后缀联动：表合并清空并禁用前后缀', async () => {
+    const wrapper = await mountPage()
+    await buttonByText(wrapper, '目标库命名策略')!.trigger('click')
+    await flushPromises()
+
+    await clickStrategyCard(wrapper, '自定义前后缀')
+    await namingInput(wrapper, '表名前缀').setValue('pre')
+    await namingInput(wrapper, '表名后缀').setValue('suf')
+    await nextTick()
+    expect(namingInput(wrapper, '表名前缀').element.disabled).toBe(false)
+
+    await clickStrategyCard(wrapper, '表合并')
+    await nextTick()
+    expect(namingInput(wrapper, '表名前缀').element.value).toBe('')
+    expect(namingInput(wrapper, '表名后缀').element.value).toBe('')
+    expect(namingInput(wrapper, '表名前缀').element.disabled).toBe(true)
+    expect(namingInput(wrapper, '表名后缀').element.disabled).toBe(true)
     wrapper.unmount()
   })
 })

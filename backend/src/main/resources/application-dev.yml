@@ -29,3 +29,6 @@ logging:
     root: INFO
     com.bsoft.cdcconfig: DEBUG
     com.bsoft.cdcconfig.**.mapper: DEBUG
+    # 数据源 Mapper 精确覆盖为 INFO：MyBatis 绑定参数日志为 DEBUG 级，
+    # 阻止数据源 INSERT/UPDATE 的绑定参数（含密码）进入 dev 运行日志（DS-AC-052）。
+    com.bsoft.cdcconfig.datasource.mapper: INFO

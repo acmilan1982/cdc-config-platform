@@ -15,16 +15,24 @@ import com.bsoft.cdcconfig.datasource.vo.DataSourceListVO;
 import com.bsoft.cdcconfig.datasource.vo.NamingStrategyVO;
 import com.bsoft.cdcconfig.datasource.vo.TargetOptionVO;
 import com.bsoft.cdcconfig.datasource.vo.TestConnectionResultVO;
+import com.fasterxml.jackson.databind.JsonMappingException;
+import com.fasterxml.jackson.databind.exc.MismatchedInputException;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.Parameter;
 import io.swagger.v3.oas.annotations.tags.Tag;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.converter.HttpMessageNotReadableException;
 import org.springframework.web.bind.annotation.DeleteMapping;
+import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.ResponseStatus;
 import org.springframework.web.bind.annotation.RestController;
 
 import javax.validation.Valid;
@@ -34,6 +42,8 @@ import java.util.List;
 @RestController
 @RequestMapping("/api/data-sources")
 public class DataSourceController {
+
+    private static final Logger log = LoggerFactory.getLogger(DataSourceController.class);
 
     private final DataSourceService dataSourceService;
     private final DataSourceNamingStrategyService namingStrategyService;
@@ -141,5 +151,30 @@ public class DataSourceController {
             @Parameter(description = "目标库数据源ID") @PathVariable String targetId) {
         namingStrategyService.delete(sourceId, targetId);
         return ApiResponse.success();
+    }
+
+    /**
+     * 请求体字段类型不匹配（如 port:"abc"）：按批准契约返回 HTTP 400 / code=400，
+     * 可定位字段时消息为"参数类型错误: 字段名"，无法定位字段名的畸形 JSON 返回脱敏通用消息。
+     * 只提取 Jackson 路径中的字段名，不输出输入值、请求体全文、异常堆栈或敏感内容（DS-AC-105）。
+     */
+    @ExceptionHandler(HttpMessageNotReadableException.class)
+    @ResponseStatus(HttpStatus.BAD_REQUEST)
+    public ApiResponse<Void> handleUnreadableRequestBody(HttpMessageNotReadableException e) {
+        String field = resolveTypeErrorField(e);
+        log.warn("Invalid data source request body: {}", field != null ? "field=" + field : "malformed");
+        String message = field != null ? "参数类型错误: " + field : "请求体格式错误";
+        return ApiResponse.fail(400, message);
+    }
+
+    private static String resolveTypeErrorField(HttpMessageNotReadableException e) {
+        Throwable cause = e.getCause();
+        if (cause instanceof MismatchedInputException) {
+            List<JsonMappingException.Reference> path = ((MismatchedInputException) cause).getPath();
+            if (path != null && !path.isEmpty() && path.get(0).getFieldName() != null) {
+                return path.get(0).getFieldName();
+            }
+        }
+        return null;
     }
 }

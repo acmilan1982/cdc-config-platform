@@ -56,9 +56,22 @@
       <el-table
         :data="rows"
         class="data-table"
-        empty-text="暂无数据源"
         @row-dblclick="onRowDoubleClick"
       >
+        <template #empty>
+          <div v-if="!loading && !loadError" class="empty-state">
+            <p class="empty-main">
+              {{ effectiveQuery ? '未找到符合当前查询条件的数据源' : '暂无数据源' }}
+            </p>
+            <p class="empty-sub">
+              {{
+                effectiveQuery
+                  ? '请调整查询条件后重试，或点击上方“重置”查看全部数据源'
+                  : '点击右上角“新增数据源”创建第一条数据源'
+              }}
+            </p>
+          </div>
+        </template>
         <el-table-column prop="dataSourceId" label="数据源ID" min-width="120" show-overflow-tooltip />
         <el-table-column prop="dataSourceName" label="数据源名称" min-width="140" show-overflow-tooltip />
         <el-table-column label="角色" width="90">
@@ -112,6 +125,7 @@
       destroy-on-close
       :close-on-click-modal="false"
       :before-close="onEditorBeforeClose"
+      class="editor-dialog"
       @closed="onEditorClosed"
     >
       <el-form
@@ -119,6 +133,7 @@
         :model="editorForm"
         :rules="editorRules"
         label-width="120px"
+        label-position="left"
         class="editor-form"
         v-loading="editorLoading"
       >
@@ -217,6 +232,7 @@
       destroy-on-close
       :close-on-click-modal="false"
       :before-close="onBizAttrBeforeClose"
+      class="biz-attr-dialog"
     >
       <div v-loading="bizAttrLoading" class="biz-attr-body">
         <div class="biz-attr-target">
@@ -240,22 +256,29 @@
     <el-dialog
       v-model="namingVisible"
       :title="`目标库命名策略 - ${namingSource?.dataSourceId}（${namingSource?.dataSourceName}）`"
-      width="760px"
+      width="1050px"
       destroy-on-close
       :close-on-click-modal="false"
       :before-close="onNamingBeforeClose"
+      class="naming-dialog"
     >
-      <el-table :data="namingRows" v-loading="namingLoading" empty-text="暂无命名策略" class="naming-table">
-        <el-table-column prop="targetDataSourceId" label="目标库ID" min-width="120" show-overflow-tooltip />
-        <el-table-column prop="targetDataSourceName" label="目标库名称" min-width="120" show-overflow-tooltip />
-        <el-table-column prop="targetDataSourceType" label="数据库类型" min-width="90" show-overflow-tooltip />
-        <el-table-column label="命名策略" width="110">
+      <el-table
+        :data="namingRows"
+        v-loading="namingLoading"
+        empty-text="暂无命名策略"
+        class="naming-table"
+        :max-height="300"
+      >
+        <el-table-column prop="targetDataSourceId" label="目标库ID" width="140" show-overflow-tooltip />
+        <el-table-column prop="targetDataSourceName" label="目标库名称" width="160" show-overflow-tooltip />
+        <el-table-column prop="targetDataSourceType" label="数据库类型" width="110" show-overflow-tooltip />
+        <el-table-column label="命名策略" width="140" show-overflow-tooltip>
           <template #default="{ row }">
             {{ strategyLabel(row.tableNamingStrategy) }}
           </template>
         </el-table-column>
-        <el-table-column prop="tableNamePrefix" label="前缀" min-width="90" show-overflow-tooltip />
-        <el-table-column prop="tableNameSuffix" label="后缀" min-width="90" show-overflow-tooltip />
+        <el-table-column prop="tableNamePrefix" label="前缀" width="140" show-overflow-tooltip />
+        <el-table-column prop="tableNameSuffix" label="后缀" width="140" show-overflow-tooltip />
         <el-table-column label="操作" width="130" fixed="right">
           <template #default="{ row }">
             <el-button
@@ -282,6 +305,7 @@
         :model="namingForm"
         :rules="namingRules"
         label-width="110px"
+        label-position="left"
         class="naming-form"
       >
         <el-form-item label="目标库" prop="targetDataSourceId">
@@ -300,14 +324,32 @@
           </el-select>
         </el-form-item>
         <el-form-item label="表命名策略" prop="tableNamingStrategy">
-          <el-radio-group
-            v-model="namingForm.tableNamingStrategy"
-            :disabled="namingSaving"
-            @change="onNamingStrategyChange"
-          >
-            <el-radio value="TABLE_MERGE">表合并</el-radio>
-            <el-radio value="CUSTOM_PREFIX_SUFFIX">自定义前后缀</el-radio>
-          </el-radio-group>
+          <div class="strategy-cards" role="radiogroup" aria-label="表命名策略">
+            <div
+              v-for="card in strategyCards"
+              :key="card.value"
+              class="strategy-card"
+              :class="{
+                'is-selected': namingForm.tableNamingStrategy === card.value,
+                'is-disabled': namingSaving,
+              }"
+              role="radio"
+              :aria-checked="namingForm.tableNamingStrategy === card.value"
+              :aria-disabled="namingSaving"
+              :tabindex="namingSaving ? -1 : 0"
+              @click="selectNamingStrategy(card.value)"
+              @keydown.enter.prevent="selectNamingStrategy(card.value)"
+              @keydown.space.prevent="selectNamingStrategy(card.value)"
+            >
+              <div class="strategy-card-row">
+                <span class="strategy-radio" aria-hidden="true">
+                  <span v-if="namingForm.tableNamingStrategy === card.value" class="strategy-radio-dot" />
+                </span>
+                <span class="strategy-card-name">{{ card.name }}</span>
+              </div>
+              <div class="strategy-card-desc">{{ card.desc }}</div>
+            </div>
+          </div>
         </el-form-item>
         <el-form-item label="表名前缀" prop="tableNamePrefix">
           <el-input
@@ -340,10 +382,12 @@
 </template>
 
 <script setup lang="ts">
-import { computed, onBeforeUnmount, onMounted, ref, watch } from 'vue'
+import { computed, nextTick, onBeforeUnmount, onMounted, ref, watch } from 'vue'
+import type { Ref } from 'vue'
 import { ElMessage, ElMessageBox } from 'element-plus'
 import type { FormInstance, FormRules } from 'element-plus'
 import Schema from 'async-validator'
+import { enableDialogDrag, type DialogDragController } from './draggableDialog'
 import {
   createDataSource,
   createNamingStrategy,
@@ -379,6 +423,11 @@ const loading = ref(false)
 const loadError = ref('')
 const query = ref<DataSourceListQuery>({ id: '', name: '', host: '' })
 
+/** 最后一次实际执行并生效的查询条件快照；仅用于空状态两级文案判断（DS-REQ-110/111）。 */
+const effectiveQuery = ref<DataSourceListQuery | null>(null)
+/** 列表请求代次：只有最终生效的请求可更新列表与空状态，旧响应不得覆盖。 */
+const listToken = ref(0)
+
 function categoryLabel(category: string): string {
   return category === 'SOURCE' ? '源库' : '目标库'
 }
@@ -388,10 +437,14 @@ function strategyLabel(strategy: string): string {
 }
 
 async function loadList() {
+  const token = ++listToken.value
   loading.value = true
   loadError.value = ''
   try {
     const res = await fetchDataSourceList(normalizeQuery())
+    if (token !== listToken.value) {
+      return
+    }
     if (res.code === 200) {
       rows.value = res.data ?? []
     } else {
@@ -399,10 +452,15 @@ async function loadList() {
       rows.value = []
     }
   } catch (e) {
+    if (token !== listToken.value) {
+      return
+    }
     loadError.value = resolveHttpMessage(e)
     rows.value = []
   } finally {
-    loading.value = false
+    if (token === listToken.value) {
+      loading.value = false
+    }
   }
 }
 
@@ -418,11 +476,14 @@ function normalizeQuery(): DataSourceListQuery {
 }
 
 function onQuery() {
+  const q = normalizeQuery()
+  effectiveQuery.value = Object.keys(q).length > 0 ? q : null
   loadList()
 }
 
 function onReset() {
   query.value = { id: '', name: '', host: '' }
+  effectiveQuery.value = null
   loadList()
 }
 
@@ -780,9 +841,10 @@ async function requestCloseEditor() {
 }
 
 onBeforeUnmount(() => {
-  // 组件卸载：使在途详情请求代次失效
+  // 组件卸载：使在途详情请求代次失效，并清理弹窗拖动监听
   detailToken.value += 1
   clearTestTimer()
+  dragCleanups.forEach((destroy) => destroy())
 })
 
 watch(
@@ -1237,6 +1299,32 @@ function onNamingStrategyChange() {
   namingFormRef.value?.clearValidate(['tableNamePrefix', 'tableNameSuffix'])
 }
 
+const strategyCards = computed<Array<{
+  value: NamingStrategySaveRequest['tableNamingStrategy']
+  name: string
+  desc: string
+}>>(() => [
+  {
+    value: 'TABLE_MERGE',
+    name: '表合并',
+    desc: '按表合并规则生成目标表名，无需填写前缀和后缀。',
+  },
+  {
+    value: 'CUSTOM_PREFIX_SUFFIX',
+    name: '自定义前后缀',
+    desc: '在源表名基础上添加指定前缀和后缀，生成目标表名。',
+  },
+])
+
+/** 点击/键盘选中策略卡片；保存中锁定，仅在值变化时联动前后缀（DS-REQ-115）。 */
+function selectNamingStrategy(value: NamingStrategySaveRequest['tableNamingStrategy']) {
+  if (namingSaving.value || namingForm.value.tableNamingStrategy === value) {
+    return
+  }
+  namingForm.value.tableNamingStrategy = value
+  onNamingStrategyChange()
+}
+
 async function onSaveNaming() {
   if (namingSaving.value || !namingSource.value) {
     return
@@ -1331,6 +1419,40 @@ async function onDeleteNaming(row: NamingStrategyVO) {
 function resolveHttpMessage(e: unknown): string {
   return e instanceof Error && e.message ? e.message : '网络请求失败'
 }
+
+// ---- 三个业务弹窗标题栏拖动（DS-REQ-112） ----
+
+/** 弹窗可见时绑定拖动，关闭时销毁控制器；返回清理函数。 */
+function bindDialogDrag(visible: Ref<boolean>, dialogClass: string): () => void {
+  let controller: DialogDragController | null = null
+  const stop = watch(visible, async (value) => {
+    if (value) {
+      let el: HTMLElement | null = null
+      for (let i = 0; i < 5 && !el; i++) {
+        await nextTick()
+        el = document.querySelector<HTMLElement>(`.${dialogClass}`)
+      }
+      if (el) {
+        controller?.destroy()
+        controller = enableDialogDrag(el)
+      }
+    } else {
+      controller?.destroy()
+      controller = null
+    }
+  })
+  return () => {
+    stop()
+    controller?.destroy()
+    controller = null
+  }
+}
+
+const dragCleanups = [
+  bindDialogDrag(editorVisible, 'editor-dialog'),
+  bindDialogDrag(bizAttrVisible, 'biz-attr-dialog'),
+  bindDialogDrag(namingVisible, 'naming-dialog'),
+]
 
 onMounted(() => {
   loadList()
@@ -1434,5 +1556,106 @@ onMounted(() => {
 
 .naming-table {
   margin-bottom: 4px;
+}
+
+/* 两类空状态：中性灰信息样式，无红色/橙色，不额外增加重置按钮或链接 */
+.empty-state {
+  padding: 32px 0;
+}
+
+.empty-state .empty-main {
+  margin: 0 0 8px;
+  font-size: 15px;
+  font-weight: 600;
+  color: var(--el-text-color-regular);
+}
+
+.empty-state .empty-sub {
+  margin: 0;
+  font-size: 13px;
+  font-weight: 400;
+  color: var(--el-text-color-secondary);
+}
+
+/* 命名策略弹窗：桌面宽度 1050px，受 viewport 约束且保留左右安全间距（DS-REQ-114） */
+:deep(.naming-dialog) {
+  max-width: calc(100vw - 48px);
+}
+
+/* 命名策略单选卡片（DS-REQ-115） */
+.strategy-cards {
+  display: flex;
+  gap: 12px;
+  width: 100%;
+}
+
+.strategy-card {
+  flex: 1;
+  border: 1px solid var(--el-border-color);
+  border-radius: 6px;
+  padding: 10px 12px;
+  cursor: pointer;
+  transition:
+    border-color 0.2s,
+    background-color 0.2s;
+}
+
+.strategy-card:hover {
+  border-color: var(--el-color-primary);
+}
+
+.strategy-card.is-selected {
+  border-color: var(--el-color-primary);
+  background: var(--el-color-primary-light-9);
+}
+
+.strategy-card.is-disabled {
+  cursor: not-allowed;
+  opacity: 0.6;
+}
+
+.strategy-card:focus-visible {
+  outline: 2px solid var(--el-color-primary);
+  outline-offset: 1px;
+}
+
+.strategy-card-row {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.strategy-radio {
+  width: 14px;
+  height: 14px;
+  border: 1px solid var(--el-border-color);
+  border-radius: 50%;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  flex-shrink: 0;
+}
+
+.strategy-card.is-selected .strategy-radio {
+  border-color: var(--el-color-primary);
+}
+
+.strategy-radio-dot {
+  width: 6px;
+  height: 6px;
+  border-radius: 50%;
+  background: var(--el-color-primary);
+}
+
+.strategy-card-name {
+  font-size: 14px;
+  color: var(--el-text-color-primary);
+}
+
+.strategy-card-desc {
+  margin-top: 4px;
+  font-size: 12px;
+  line-height: 1.5;
+  color: var(--el-text-color-secondary);
 }
 </style>
