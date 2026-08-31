@@ -165,7 +165,7 @@ class SubscriptionControllerTest {
 
     // ---- create ----
     @Test
-    void create_shouldReturnNewId() throws Exception {
+    void create_shouldReturnDataSubIdAsObject() throws Exception {
         when(subscriptionService.create(any(SubscriptionSaveDTO.class))).thenReturn("uuid32...");
         String body = "{\"dataSubDesc\":\"订阅\",\"dataFromSourceId\":\"S01\","
                 + "\"dataToSourceIds\":[\"T01\"],\"sourceSelectionMode\":\"REPLACE\","
@@ -176,7 +176,8 @@ class SubscriptionControllerTest {
                         .content(body))
                 .andExpect(status().isOk())
                 .andExpect(jsonPath("$.code").value(200))
-                .andExpect(jsonPath("$.data").value("uuid32..."));
+                .andExpect(jsonPath("$.data").isMap())
+                .andExpect(jsonPath("$.data.dataSubId").value("uuid32..."));
 
         verify(subscriptionService).create(any(SubscriptionSaveDTO.class));
     }

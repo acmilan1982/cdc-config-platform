@@ -397,11 +397,9 @@ public class SubscriptionServiceImpl implements SubscriptionService {
         if (source == null || source.trim().isEmpty()) {
             errors.add(errorItem("40312", "dataFromSourceId", null, "必须且只能选择一个源库"));
         } else {
-            List<String> tokens = SubscriptionCsvHelper.splitTrimDropEmpty(source);
-            if (tokens.size() != 1) {
-                errors.add(errorItem("40312", "dataFromSourceId", source, "必须且只能选择一个源库"));
-            } else if (SubscriptionCsvHelper.containsComma(tokens.get(0)) || tokens.get(0).indexOf('.') >= 0) {
-                errors.add(errorItem("40316", "dataFromSourceId", tokens.get(0),
+            String trimmed = source.trim();
+            if (SubscriptionCsvHelper.containsComma(trimmed) || trimmed.indexOf('.') >= 0) {
+                errors.add(errorItem("40316", "dataFromSourceId", trimmed,
                         "名称含协议保留字符（英文逗号或英文句点），不能用于订阅配置"));
             }
         }

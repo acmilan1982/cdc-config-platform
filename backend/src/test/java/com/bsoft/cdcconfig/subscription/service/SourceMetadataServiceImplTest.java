@@ -26,6 +26,7 @@ import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Statement;
+import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collections;
 import java.util.List;
@@ -36,10 +37,12 @@ import static org.junit.jupiter.api.Assertions.assertFalse;
 import static org.junit.jupiter.api.Assertions.assertThrows;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 import static org.mockito.ArgumentMatchers.any;
+import static org.mockito.ArgumentMatchers.anyInt;
 import static org.mockito.ArgumentMatchers.anyString;
 import static org.mockito.ArgumentMatchers.contains;
 import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.never;
+import static org.mockito.Mockito.times;
 import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
 
@@ -252,6 +255,83 @@ class SourceMetadataServiceImplTest {
                 anyString(), anyString());
     }
 
+    @Test
+    void validateTables_dedupsSchemasAndBindsOnceInFirstOccurrenceOrder() throws Exception {
+        when(dataSourceMapper.selectOne(any())).thenReturn(activeSource());
+        Connection conn = mock(Connection.class);
+        PreparedStatement normalPs = mock(PreparedStatement.class);
+        PreparedStatement mviewPs = mock(PreparedStatement.class);
+        ResultSet normalRs = mock(ResultSet.class);
+        ResultSet mviewRs = mock(ResultSet.class);
+        when(connectionFactory.open(anyString(), anyString(), any(Properties.class), anyString(), anyString()))
+                .thenReturn(conn);
+        when(conn.prepareStatement(anyString())).thenReturn(normalPs, mviewPs);
+        when(normalPs.executeQuery()).thenReturn(normalRs);
+        when(mviewPs.executeQuery()).thenReturn(mviewRs);
+        when(normalRs.next()).thenReturn(false);
+        when(mviewRs.next()).thenReturn(false);
+
+        service.validateTables("S01", Arrays.asList(
+                new SourceTableInput("SCHEMA_B", "T1"),
+                new SourceTableInput("SCHEMA_A", "T2"),
+                new SourceTableInput("SCHEMA_B", "T3"),
+                new SourceTableInput("SCHEMA_C", "T4"),
+                new SourceTableInput("SCHEMA_A", "T5")));
+
+        ArgumentCaptor<String> sqlCaptor = ArgumentCaptor.forClass(String.class);
+        verify(conn, times(2)).prepareStatement(sqlCaptor.capture());
+        assertEquals(3, countQuestionMarks(sqlCaptor.getAllValues().get(0)), "普通表批量 SQL 占位符=唯一 Schema 数");
+        assertEquals(3, countQuestionMarks(sqlCaptor.getAllValues().get(1)), "物化视图批量 SQL 占位符=唯一 Schema 数");
+
+        ArgumentCaptor<Integer> normalIdx = ArgumentCaptor.forClass(Integer.class);
+        ArgumentCaptor<String> normalVal = ArgumentCaptor.forClass(String.class);
+        verify(normalPs, times(3)).setString(normalIdx.capture(), normalVal.capture());
+        assertEquals(Arrays.asList(1, 2, 3), normalIdx.getAllValues());
+        assertEquals(Arrays.asList("SCHEMA_B", "SCHEMA_A", "SCHEMA_C"), normalVal.getAllValues(),
+                "普通表绑定按首次出现顺序，每 Schema 一次");
+
+        ArgumentCaptor<Integer> mviewIdx = ArgumentCaptor.forClass(Integer.class);
+        ArgumentCaptor<String> mviewVal = ArgumentCaptor.forClass(String.class);
+        verify(mviewPs, times(3)).setString(mviewIdx.capture(), mviewVal.capture());
+        assertEquals(Arrays.asList(1, 2, 3), mviewIdx.getAllValues());
+        assertEquals(Arrays.asList("SCHEMA_B", "SCHEMA_A", "SCHEMA_C"), mviewVal.getAllValues(),
+                "物化视图绑定按首次出现顺序，每 Schema 一次");
+    }
+
+    @Test
+    void validateTables_oneSchemaManyTables_generatesSingleSchemaPlaceholder() throws Exception {
+        when(dataSourceMapper.selectOne(any())).thenReturn(activeSource());
+        Connection conn = mock(Connection.class);
+        PreparedStatement normalPs = mock(PreparedStatement.class);
+        PreparedStatement mviewPs = mock(PreparedStatement.class);
+        ResultSet normalRs = mock(ResultSet.class);
+        ResultSet mviewRs = mock(ResultSet.class);
+        when(connectionFactory.open(anyString(), anyString(), any(Properties.class), anyString(), anyString()))
+                .thenReturn(conn);
+        when(conn.prepareStatement(anyString())).thenReturn(normalPs, mviewPs);
+        when(normalPs.executeQuery()).thenReturn(normalRs);
+        when(mviewPs.executeQuery()).thenReturn(mviewRs);
+        when(normalRs.next()).thenReturn(false);
+        when(mviewRs.next()).thenReturn(false);
+
+        List<SourceTableInput> inputs = new ArrayList<>(120);
+        for (int i = 0; i < 120; i++) {
+            inputs.add(new SourceTableInput("SCHEMA_A", "T" + i));
+        }
+        service.validateTables("S01", inputs);
+
+        ArgumentCaptor<String> sqlCaptor = ArgumentCaptor.forClass(String.class);
+        verify(conn, times(2)).prepareStatement(sqlCaptor.capture());
+        assertEquals(1, countQuestionMarks(sqlCaptor.getAllValues().get(0)),
+                "同一 Schema 120 张表不得生成 120 个重复 Schema 参数");
+        assertEquals(1, countQuestionMarks(sqlCaptor.getAllValues().get(1)));
+
+        verify(normalPs, times(1)).setString(anyInt(), anyString());
+        verify(mviewPs, times(1)).setString(anyInt(), anyString());
+        verify(normalPs).setString(1, "SCHEMA_A");
+        verify(mviewPs).setString(1, "SCHEMA_A");
+    }
+
     // ---- best-effort 可达性探测 ---- //
 
     @Test
@@ -331,6 +411,16 @@ class SourceMetadataServiceImplTest {
         Field field = SourceMetadataServiceImpl.class.getDeclaredField(name);
         field.setAccessible(true);
         return (String) field.get(null);
+    }
+
+    private static int countQuestionMarks(String sql) {
+        int count = 0;
+        for (int i = 0; i < sql.length(); i++) {
+            if (sql.charAt(i) == '?') {
+                count++;
+            }
+        }
+        return count;
     }
 
     private static boolean hasError(List<ValidationErrorVO> errors, String code, String name) {

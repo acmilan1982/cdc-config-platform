@@ -164,10 +164,11 @@ public class SourceMetadataServiceImpl implements SourceMetadataService {
      */
     private List<ValidationErrorVO> validateAgainstSource(Connection conn,
                                                           List<SourceTableInput> sourceTables) throws SQLException {
-        List<String> schemas = new ArrayList<>(new LinkedHashSet<>());
+        Set<String> schemaSet = new LinkedHashSet<>();
         for (SourceTableInput input : sourceTables) {
-            schemas.add(input.getSchemaName());
+            schemaSet.add(input.getSchemaName());
         }
+        List<String> schemas = new ArrayList<>(schemaSet);
         Set<String> normalTables = new HashSet<>();
         try (PreparedStatement ps = conn.prepareStatement(buildBatchNormalSql(schemas))) {
             bindSchemas(ps, schemas);

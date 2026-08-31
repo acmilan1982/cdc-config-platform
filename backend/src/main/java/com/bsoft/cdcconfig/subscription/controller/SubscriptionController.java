@@ -9,6 +9,7 @@ import com.bsoft.cdcconfig.subscription.service.SourceMetadataService;
 import com.bsoft.cdcconfig.subscription.service.SubscriptionService;
 import com.bsoft.cdcconfig.subscription.vo.OptionsVO;
 import com.bsoft.cdcconfig.subscription.vo.SchemaVO;
+import com.bsoft.cdcconfig.subscription.vo.SubscriptionCreateVO;
 import com.bsoft.cdcconfig.subscription.vo.SubscriptionDeletePreviewVO;
 import com.bsoft.cdcconfig.subscription.vo.SubscriptionDetailVO;
 import com.bsoft.cdcconfig.subscription.vo.SubscriptionEditOpenVO;
@@ -98,8 +99,8 @@ public class SubscriptionController {
 
     @Operation(summary = "新增订阅", description = "恒为 REPLACE 语义；返回后端生成的订阅ID")
     @PostMapping
-    public ApiResponse<String> create(@RequestBody SubscriptionSaveDTO dto) {
-        return ApiResponse.success(subscriptionService.create(dto));
+    public ApiResponse<SubscriptionCreateVO> create(@RequestBody SubscriptionSaveDTO dto) {
+        return ApiResponse.success(new SubscriptionCreateVO(subscriptionService.create(dto)));
     }
 
     @Operation(summary = "编辑打开", description = "回显原配置与已选 Schema/表；best-effort 源表有效性核对")

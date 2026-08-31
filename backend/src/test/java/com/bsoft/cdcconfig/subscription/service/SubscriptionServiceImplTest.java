@@ -331,7 +331,7 @@ class SubscriptionServiceImplTest {
     void create_structuralErrors_collectItems() {
         SubscriptionSaveDTO dto = validDto();
         dto.setDataSubDesc("   ");
-        dto.setDataFromSourceId("S01,S02");
+        dto.setDataFromSourceId("");
         dto.setDataToSourceIds(Arrays.asList("T01", "T01"));
         dto.setSourceTables(Arrays.asList(
                 new SourceTableInput("SCHEMA_A", "T1"),
@@ -342,7 +342,7 @@ class SubscriptionServiceImplTest {
                 assertThrows(SubscriptionValidationException.class, () -> service.create(dto));
 
         assertNotNull(errorByCode(e, "40310"));
-        assertNotNull(errorByCode(e, "40312"), "多源库只能选一个源库");
+        assertNotNull(errorByCode(e, "40312"), "空源库必须且只能选择一个源库");
         assertNotNull(errorByCode(e, "40318"), "记录内重复目标库");
         assertNotNull(errorByCode(e, "40317"), "记录内重复源表");
         assertNotNull(errorByCode(e, "40316"), "表名含英文句点");
@@ -366,7 +366,30 @@ class SubscriptionServiceImplTest {
 
         SubscriptionValidationException e =
                 assertThrows(SubscriptionValidationException.class, () -> service.create(dto));
-        assertNotNull(errorByCode(e, "40316"));
+        assertReservedChar40316(e, "S.01");
+    }
+
+    @Test
+    void create_sourceContainsComma_returns40316Not40312() {
+        SubscriptionSaveDTO dto = validDto();
+        dto.setDataFromSourceId("A,B");
+
+        SubscriptionValidationException e =
+                assertThrows(SubscriptionValidationException.class, () -> service.create(dto));
+        assertReservedChar40316(e, "A,B");
+        assertNull(errorByCode(e, "40312"), "含逗号源库 ID 不得错报 40312");
+    }
+
+    @Test
+    void create_emptySourceId_returns40312() {
+        SubscriptionSaveDTO dto = validDto();
+        dto.setDataFromSourceId("   ");
+
+        SubscriptionValidationException e =
+                assertThrows(SubscriptionValidationException.class, () -> service.create(dto));
+        ValidationErrorVO item = errorByCode(e, "40312");
+        assertNotNull(item);
+        assertEquals("dataFromSourceId", item.getField());
     }
 
     @Test
@@ -636,6 +659,34 @@ class SubscriptionServiceImplTest {
         assertEquals("请求体不能为空", e.getMessage());
     }
 
+    @Test
+    void update_sourceContainsComma_returns40316() {
+        SubscriptionSaveDTO dto = validDto();
+        dto.setSourceSelectionMode("PRESERVE");
+        dto.setSourceTables(null);
+        dto.setDataFromSourceId("A,B");
+        when(dataSubscribeMapper.selectOne(any())).thenReturn(row);
+
+        SubscriptionValidationException e =
+                assertThrows(SubscriptionValidationException.class, () -> service.update("SUB001", dto));
+        assertReservedChar40316(e, "A,B");
+        verify(dataSubscribeMapper, never()).update(eq(null), any());
+    }
+
+    @Test
+    void update_sourceContainsDot_returns40316() {
+        SubscriptionSaveDTO dto = validDto();
+        dto.setSourceSelectionMode("PRESERVE");
+        dto.setSourceTables(null);
+        dto.setDataFromSourceId("A.B");
+        when(dataSubscribeMapper.selectOne(any())).thenReturn(row);
+
+        SubscriptionValidationException e =
+                assertThrows(SubscriptionValidationException.class, () -> service.update("SUB001", dto));
+        assertReservedChar40316(e, "A.B");
+        verify(dataSubscribeMapper, never()).update(eq(null), any());
+    }
+
     // ---- 删除预览 ---- //
 
     @Test
@@ -795,6 +846,14 @@ class SubscriptionServiceImplTest {
             }
         }
         return null;
+    }
+
+    private static void assertReservedChar40316(SubscriptionValidationException e, String expectedName) {
+        ValidationErrorVO item = errorByCode(e, "40316");
+        assertNotNull(item);
+        assertEquals("dataFromSourceId", item.getField());
+        assertEquals(expectedName, item.getName(), "name 必须保留完整 trim 后源库 ID");
+        assertTrue(item.getMessage().contains("协议保留字符"));
     }
 
     private static void assertNoConcurrencyField(Class<?> type) throws Exception {
