@@ -7,17 +7,18 @@
 | Feature 中文名称 | 数据订阅 |
 | Feature 标识 | `data-subscription` |
 | 文档状态 | `DRAFT_PENDING_USER_REVIEW`（接口设计草案，尚未获得项目负责人或 ChatGPT 正式复审批准） |
-| 设计正式复审状态 | `PENDING_R2_REVIEW`（R1 正式复审结论 `CHANGES_REQUIRED`；本 R2 定向修订已完成，尚未获得 ChatGPT 正式设计复审批准） |
-| 实现状态 | `NOT_STARTED`（本任务为纯文档设计基线 R2 定向修订，不涉及任何业务代码实现） |
+| 设计正式复审状态 | `PENDING_R3_REVIEW`（R1 正式复审结论 `CHANGES_REQUIRED`；R2 定向修订已完成且四项修订目标通过正式复核；本 R3 已按已批准“取消并发保护”需求统一删除版本令牌与并发错误码并完成定向修订，尚未获得 ChatGPT 正式设计复审批准） |
+| 实现状态 | `NOT_STARTED`（本任务为纯文档设计基线 R3 定向修订，不涉及任何业务代码实现） |
 | 验收执行状态 | 126 条全部 `NOT_RUN` |
-| 任务编号 | `DATA-SUBSCRIPTION-DESIGN-BASELINE-001-R2`（R2 定向修订；前序 R1 任务 `DATA-SUBSCRIPTION-DESIGN-BASELINE-001-R1` 结果提交 `3609548238c9fede745f5291e258469ab7b78167`；首版任务 `DATA-SUBSCRIPTION-DESIGN-BASELINE-001` 结果提交 `610401575938ba32f13fa635493f991bdfae81b6`） |
-| 依据的已批准需求基线 | `docs/features/data-subscription/REQUIREMENTS.md`（`APPROVED`，107 条，当前版本为含逗号数据源 ID 查询兼容调整批准版本，批准依据提交 `afc5765956cac3c8f66d8857ff17565472d0c746`） |
-| 依据的已批准验收基线 | `docs/features/data-subscription/ACCEPTANCE.md`（`APPROVED`，126 条，全部 `NOT_RUN`） |
+| 任务编号 | `DATA-SUBSCRIPTION-DESIGN-BASELINE-001-R3`（R3 定向修订；前序 R2 任务 `DATA-SUBSCRIPTION-DESIGN-BASELINE-001-R2` 结果提交 `026417e7e907b0fd23e8812024a260f119c993cc`；R1 任务 `DATA-SUBSCRIPTION-DESIGN-BASELINE-001-R1` 结果提交 `3609548238c9fede745f5291e258469ab7b78167`；首版任务 `DATA-SUBSCRIPTION-DESIGN-BASELINE-001` 结果提交 `610401575938ba32f13fa635493f991bdfae81b6`） |
+| 依据的已批准需求基线 | `docs/features/data-subscription/REQUIREMENTS.md`（`APPROVED`，107 条 `DSUB-REQ-001` ~ `DSUB-REQ-107`，当前正式批准版本为“取消并发保护”需求调整版本，Git 基线提交 `8331fbb6e17b8e2165b788d972f651aa980bf227`） |
+| 依据的已批准验收基线 | `docs/features/data-subscription/ACCEPTANCE.md`（`APPROVED`，126 条 `DSUB-AC-001` ~ `DSUB-AC-126`，全部 `NOT_RUN`；当前版本为“取消并发保护”验收标准调整版本，Git 基线提交 `8331fbb6e17b8e2165b788d972f651aa980bf227`） |
 | 创建日期 | 2026-08-30 |
 | R1 修订日期 | 2026-08-30 |
 | R2 修订日期 | 2026-08-31 |
+| R3 修订日期 | 2026-08-31 |
 
-说明：本文件是接口设计草案，**不是正式批准的设计基线**。R1 已修正 ChatGPT 正式复审（`CHANGES_REQUIRED`）发现的主要问题并同步已批准点号规则；R2 统一修正剩余四项（三类查询语义、元数据 API query 参数、物化视图显式排除、`DSUB-FP-V1` 字节级指纹）并同步含逗号查询批准基线。R2 定向修订已完成，但本文件尚未获得 ChatGPT 正式设计复审批准，不表示设计已批准、功能已实现、部署或验收完成。
+说明：本文件是接口设计草案，**不是正式批准的设计基线**。R1 已修正 ChatGPT 正式复审（`CHANGES_REQUIRED`）发现的主要问题并同步已批准点号规则；R2 统一修正剩余四项（三类查询语义、元数据 API query 参数、物化视图显式排除、`DSUB-FP-V1` 字节级指纹）并同步含逗号查询批准基线；R3 按已正式批准并收口的“取消并发保护”需求（`DSUB-REQ-097/098/099/103`）删除编辑打开/删除预览响应与 PUT/DELETE 请求中的 `versionToken`、删除指纹算法引用与锁内比较、删除 `40910 CONCURRENT_MODIFIED` 错误码，编辑保存与物理删除改为普通主键更新/删除。删除 `DSUB-FP-V1` 相关接口契约不是否定 R2 的技术正确性，而是同步新的正式需求。R3 定向修订已完成，但本文件尚未获得 ChatGPT 正式设计复审批准，不表示设计已批准、功能已实现、部署或验收完成。
 
 ### 1.1 设计依据
 
@@ -36,12 +37,12 @@
 | 4 | GET | `/api/subscriptions/metadata/schemas?dataSourceId=<原始字符串>` | 查询源库可访问且含普通表的非系统 Schema |
 | 5 | GET | `/api/subscriptions/metadata/tables?dataSourceId=<原始字符串>&schema=<原始字符串>` | 按源库与 Schema 查询普通表 |
 | 6 | POST | `/api/subscriptions` | 新增订阅 |
-| 7 | GET | `/api/subscriptions/{dataSubId}/edit` | 打开编辑所需数据与已选 Schema/表回显（含版本令牌） |
+| 7 | GET | `/api/subscriptions/{dataSubId}/edit` | 打开编辑所需数据与已选 Schema/表回显 |
 | 8 | PUT | `/api/subscriptions/{dataSubId}` | 编辑保存 |
-| 9 | GET | `/api/subscriptions/{dataSubId}/delete-preview` | 删除预览（删除确认所需最新信息 + 版本令牌） |
+| 9 | GET | `/api/subscriptions/{dataSubId}/delete-preview` | 删除预览（删除确认所需最新信息） |
 | 10 | DELETE | `/api/subscriptions/{dataSubId}` | 物理删除 |
 
-合并说明：源库/目标库候选合并为单个 `options` 接口（第 1 个），因为列表页查询区与新增/编辑弹窗都需要两类候选，一次返回避免两次往返；列表不分页（第 2 个）；元数据两个接口（第 4、5 个）在 R2 改用 query 参数承载 `dataSourceId`/`schema`（原 `GET /metadata/{dataSourceId}/schemas/{schema}/tables` 路径变量草案无法可靠承载含 `/`、`#`、`?`、空格等合法特殊字符的 Oracle quoted identifier，即使 `encodeURIComponent`，`%2F` 也可能被 Servlet 容器或反向代理拒绝或提前解码；R2 只保留 query 参数版本，不设计兼容双路径）；`{dataSubId}` 仍可作为路径变量，因为订阅主键为 32 位十六进制 UUID（见 §8.1），恒为安全的 32 位十六进制字符。删除采用“删除预览 + 物理删除”两步闭环：列表点击“删除”先调 `delete-preview` 获取最新删除确认信息与版本令牌，确认后 DELETE 回传该令牌（DESIGN §3.7，令牌链路见 §4.9/§4.10）。
+合并说明：源库/目标库候选合并为单个 `options` 接口（第 1 个），因为列表页查询区与新增/编辑弹窗都需要两类候选，一次返回避免两次往返；列表不分页（第 2 个）；元数据两个接口（第 4、5 个）在 R2 改用 query 参数承载 `dataSourceId`/`schema`（原 `GET /metadata/{dataSourceId}/schemas/{schema}/tables` 路径变量草案无法可靠承载含 `/`、`#`、`?`、空格等合法特殊字符的 Oracle quoted identifier，即使 `encodeURIComponent`，`%2F` 也可能被 Servlet 容器或反向代理拒绝或提前解码；R2 只保留 query 参数版本，不设计兼容双路径）；`{dataSubId}` 仍可作为路径变量，因为订阅主键为 32 位十六进制 UUID（见 §8.1），恒为安全的 32 位十六进制字符。删除采用“删除预览 + 物理删除”两步闭环：列表点击“删除”先调 `delete-preview` 获取最新删除确认信息，确认后 DELETE 按主键直接物理删除（DESIGN §3.7，流程见 §4.9/§4.10）。
 
 ## 3. 通用约定
 
@@ -120,10 +121,10 @@
 - 数据库只执行单一查询读取全部 `FG_ACTIVE='1'` 订阅，按 `NVL(UPDATE_TIME, INSERT_TIME) DESC` 排序（SQL 见 DATABASE.md §4.1）；源库组、目标库组的过滤在**服务层 Java** 完成：源库条件之间 `OR`、目标库条件之间 `OR`、两组之间 `AND`，过滤后保持数据库排序的相对顺序（`DSUB-REQ-034`；算法见 DESIGN §7.1）。不得把源库组与目标库组放入同一个 `OR` 容器。
 - 无条件时返回全部启用订阅（`DSUB-REQ-029`）。
 - 无分页（`DSUB-REQ-030`），一次返回全部。
-- **三类匹配语义（`DSUB-REQ-034`，已批准）**：
-  - **不含英文逗号的查询 ID（普通/仅含句点）**：按 CSV 拆分 token 去除首尾空白后完整字面精确匹配（Java `String.equals`，大小写敏感；`%`、`_`、反斜杠、句点、正则字符按字面处理；禁止 `%ID%` 子串匹配；`S01` 不匹配 `S012`）。仅含英文句点（不含英文逗号）的 ID 适用本精确规则。
-  - **含英文逗号的查询 ID**：定义为“历史兼容可能匹配”——无法识别逗号归属，只能在原始 CSV 字段中查找与候选字面值相同、分隔边界完整的连续片段（`queryAtomic` 是 `storedAtomic` 的连续子序列），返回“可能匹配记录集合”，允许不可消除的假阳性，不得为消除假阳性而静默丢弃可能相关的历史记录。
-  - 候选按逗号拆分后若没有任何非空原子片段，后端拒绝该查询参数并返回参数校验错误（HTTP 400），不得退化为匹配全部。
+- **三类匹配语义（`DSUB-REQ-034`，已批准；统一 null-safe 契约见 DESIGN §4.9 / DATABASE §4.1）**：
+  - **不含英文逗号的查询 ID（普通/仅含句点）**：存储值经 `splitTrimDropEmpty` 归一化后，按完整 token 字面精确匹配（`matchCsvNormal`；Java `String.equals`，大小写敏感；`%`、`_`、反斜杠、句点、正则字符按字面处理；禁止 `%ID%` 子串匹配；`S01` 不匹配 `S012`）。仅含英文句点（不含英文逗号）的 ID 适用本精确规则。存储值 `NULL`/空白解析为空集合，与任意查询 ID 都不匹配。
+  - **含英文逗号的查询 ID**：定义为“历史兼容可能匹配”（`matchCsvComma`）——无法识别逗号归属，只能在原始 CSV 字段中查找与候选字面值相同、分隔边界完整的连续片段（`queryAtomic` 是 `storedAtomic` 的连续子序列），返回“可能匹配记录集合”，允许不可消除的假阳性，不得为消除假阳性而静默丢弃可能相关的历史记录。
+  - 候选经 `splitTrimDropEmpty` 拆分后若没有任何非空原子片段（`NULL`/空白），后端拒绝该查询参数并返回参数校验错误（HTTP 400），不得退化为匹配全部。
 - 一次查询包含任意含逗号候选时，响应 `queryWarnings` 返回歧义条件；无歧义条件时 `queryWarnings=[]`。警告不是错误，不阻断查询。
 - 默认排序：`NVL(UPDATE_TIME, INSERT_TIME) DESC`（`DSUB-REQ-028/031`）。
 
@@ -373,11 +374,11 @@
 
 - `dataSubId`：后端生成（§8.1 TBD-01 结论）：`@TableId(value = "DATA_SUB_ID", type = IdType.INPUT)` 专用实体 + Service 在 INSERT 前执行 `UUID.randomUUID().toString().replace("-", "")`（32 位无连字符 UUID，`VARCHAR2(32)` 容纳）；前端不感知、不生成（`DSUB-REQ-007`）。
 - 事务：`@Transactional`；`INSERT` 受影响行数 = 1，否则 `50040`。
-- 重复提交：前端按钮 loading（`DSUB-REQ-086`）；文档边界为“防止用户界面重复点击，但网络重试可能形成允许的重复记录；首期未设计请求幂等键”（DESIGN §5.4）。后端不得虚假声明新增天然幂等。
+- 重复提交：前端按钮 loading（`DSUB-REQ-086`）；文档边界为“防止用户界面重复点击，但网络重试可能形成允许的重复记录；首期未设计请求幂等键”（DESIGN §5.5）。后端不得虚假声明新增天然幂等。
 
-### 4.7 `GET /api/subscriptions/{dataSubId}/edit` — 编辑打开（回显 + 版本令牌）
+### 4.7 `GET /api/subscriptions/{dataSubId}/edit` — 编辑打开（回显）
 
-用途：编辑回显原配置与已选 Schema/表，并返回并发版本令牌（`DSUB-REQ-088/089/097`）。
+用途：编辑回显原配置与已选 Schema/表（`DSUB-REQ-088/089/097`）；响应不包含 `versionToken`、指纹、快照版本或等效字段（`DSUB-REQ-097`，DESIGN §5.1）。
 
 请求：`{dataSubId}` 路径参数。
 
@@ -388,7 +389,6 @@
   "code": 200,
   "message": "success",
   "data": {
-    "versionToken": "3f9b2c...sha256-hex-64",
     "dataSubId": "9f3f...32hex",
     "dataSubDesc": "机构A到机构B全量订阅",
     "source": { "dataSourceId": "S01", "dataSourceOrg": "机构A", "status": "NORMAL" },
@@ -411,7 +411,6 @@
 
 | 字段 | 类型 | 说明 |
 |---|---|---|
-| versionToken | string | `DSUB-FP-V1` 内容指纹版本令牌（对固定 10 字段字节流做 SHA-256，小写十六进制 64 字符）；保存必须回传（`DSUB-REQ-097`；指纹规范 DESIGN §5.1） |
 | dataSubId / dataSubDesc / source / targets / tablesBySchema / rawUnparseableTables | — | 回显内容；`source`/`targets` 的 `status` 标记停用/不存在（`DSUB-REQ-094`）；`tablesBySchema` 供前端恢复勾选与浅蓝背景（`DSUB-REQ-089`）；不可解析 token 分区回显并带警告 |
 | sourceReachable | boolean | 编辑打开时源 Oracle 是否可达（best-effort 探测；断连时 false） |
 | sourceTableCheck | enum | `CHECKED` / `UNREACHABLE` / `SKIPPED`：已与源 Oracle 核对表有效性 / 源库不可达 / 未核对 |
@@ -437,8 +436,7 @@
   "sourceTables": [
     { "schemaName": "SCHEMA_A", "tableName": "TABLE_1" },
     { "schemaName": "SCHEMA_A", "tableName": "TABLE_2" }
-  ],
-  "versionToken": "3f9b2c...sha256-hex-64"
+  ]
 }
 ```
 
@@ -447,21 +445,20 @@
 | 字段 | 类型 | 必填 | 说明 |
 |---|---|---|---|
 | dataSubDesc | string | 是 | 同新增校验 |
-| dataFromSourceId | string | 是 | 同新增校验；`PRESERVE` 模式要求与锁定后的当前记录完全一致 |
+| dataFromSourceId | string | 是 | 同新增校验；`PRESERVE` 模式要求与当前记录完全一致 |
 | dataToSourceIds | string[] | 是 | 同新增校验 |
 | sourceSelectionMode | enum | 是 | `PRESERVE` / `REPLACE`（语义见下，四份文档一致） |
 | sourceTables | SourceTableInput[] | REPLACE 必填 / PRESERVE 不提交 | `REPLACE` 必须提交结构化 `SourceTableInput[]`；`PRESERVE` 不提交也不使用该字段 |
-| versionToken | string | 是 | 编辑打开时返回的版本令牌（`DSUB-REQ-097/098`） |
 
 `sourceSelectionMode` 语义（DESIGN §3.4，四份文档一致）：
 
-- `PRESERVE`（有限编辑，源表未变）：不提交 `sourceTables`；后端要求请求 `dataFromSourceId` 与锁定后的当前记录完全一致；UPDATE **不设置 `DATA_SOURCE_TABLE`**，原始 CLOB 逐字保留（DATABASE.md §4.4）。仅允许修改订阅描述与目标库（`DSUB-REQ-093`）。
+- `PRESERVE`（有限编辑，源表未变）：不提交 `sourceTables`；后端要求请求 `dataFromSourceId` 与当前记录完全一致；UPDATE **不设置 `DATA_SOURCE_TABLE`**，原始 CLOB 逐字保留（DATABASE.md §4.4）。仅允许修改订阅描述与目标库（`DSUB-REQ-093`）。
 - `REPLACE`（源表变更）：必须提交结构化 `sourceTables`；必须成功连接源 Oracle 并按 Schema 批量校验（`DSUB-REQ-092`）；UPDATE 写入重新构造的完整表清单。
-- 后端不能只相信前端模式：锁行后必须结合当前记录、版本令牌和请求字段验证模式合法性（DESIGN §5.2）。
+- 后端不能只相信前端模式：必须结合当前记录和请求字段验证模式合法性（DESIGN §5.2）。
 - 如果原源库已停用/不存在或原配置含保留字符无效项，仍必须按已批准需求修复后才能保存，不能借 `PRESERVE` 绕过（`DSUB-REQ-094`）。
 - 断连且 `PRESERVE` 时仅允许描述和目标库变化；`DATA_SOURCE_TABLE` 原始内容不因解析/排序被意外重写（DESIGN §3.5）。
 
-- 并发：后端在事务内按 `{dataSubId}` 执行 `SELECT ... FOR UPDATE` 锁当前行 → 计算内容指纹与 `versionToken` 比较 → 不匹配返回 `40910`（`DSUB-REQ-098`）；匹配则写入（DESIGN §5.2）。
+- 保存流程：普通读取当前记录完成业务校验（**不锁行**、不比较打开时与保存时的内容）→ 按 `DATA_SUB_ID` 普通 `UPDATE`（DESIGN §5.2）。多个页面用户或人工数据库操作交叉时不提供并发冲突检测，最后一次成功写入生效（`DSUB-REQ-098/099`）。
 - 写入语义：`DATA_SUB_ID`、`INSERT_TIME` 保持不变；`UPDATE_TIME` 更新为数据库当前时间；遗留字段保持原值不主动清空（`DSUB-REQ-096`；DATABASE.md §4.4）。
 - 事务：`@Transactional`；`UPDATE` 受影响行数必须 = 1（0 行 → `40430`）。
 - 响应：`data` 为 `null`，成功 `code=200`。
@@ -469,7 +466,7 @@
 
 ### 4.9 `GET /api/subscriptions/{dataSubId}/delete-preview` — 删除预览
 
-用途：列表点击“删除”后，先获取删除确认所需的最新信息与版本令牌（`DSUB-REQ-102/103`；DESIGN §3.7）。
+用途：列表点击“删除”后，先获取删除确认所需的普通只读确认信息（`DSUB-REQ-102`；DESIGN §3.7）。
 
 请求：`{dataSubId}` 路径参数。
 
@@ -488,8 +485,7 @@
     "targets": [
       { "dataSourceId": "T01", "dataSourceOrg": "机构B", "status": "NORMAL" }
     ],
-    "warnings": [],
-    "versionToken": "3f9b2c...sha256-hex-64"
+    "warnings": []
   },
   "timestamp": "2026-08-30T10:00:00"
 }
@@ -505,29 +501,21 @@
 | tableCount | number | 源表数量：`DATA_SOURCE_TABLE` 非空 token 总数（含不可解析历史 token，与列表“共 N 张”口径一致，DESIGN §4.5） |
 | targets | TargetRefVO[] | 目标库展示 |
 | warnings | string[] | 异常提示（已停用/不存在数据源等） |
-| versionToken | string | 基于当前完整记录按 `DSUB-FP-V1`（DESIGN §5.1）生成的内容指纹令牌，用户确认后 DELETE 必须回传 |
 
-- 本接口**只读取配置库，不连接源 Oracle**（`DSUB-REQ-045/068`）；不复用会连接源 Oracle 的“编辑打开”接口获取删除令牌。
+- 本接口**只读取配置库，不连接源 Oracle**（`DSUB-REQ-045/068`）；**不锁行、不返回版本令牌**；预览结果不构成删除时的一致性保证（`DSUB-REQ-103`，DESIGN §5.1/§5.3）。
 - 多源库异常记录拒绝预览（`DSUB-REQ-100`；后端返回 `40353`）。
 - 记录不存在 → `40430`。
-- 删除流程闭环：点击列表“删除”先调本接口，成功后再展示确认弹窗；用户确认后 `DELETE` 回传本接口返回的 `versionToken`；如果预览后记录被修改，DELETE 锁行后指纹不匹配并拒绝（`DSUB-REQ-103`；UI §7.5，DESIGN §3.7）。
+- 删除流程闭环：点击列表“删除”先调本接口，成功后再展示确认弹窗；用户确认后 `DELETE /api/subscriptions/{dataSubId}` 按 `DATA_SUB_ID` 主键直接物理删除，不比较预览后记录是否变化（`DSUB-REQ-103`；UI §7.5，DESIGN §3.7）。
 
 ### 4.10 `DELETE /api/subscriptions/{dataSubId}` — 物理删除
 
 用途：按主键物理删除（`DSUB-REQ-100~105`）。
 
-请求：`{dataSubId}` 路径参数 + JSON 请求体承载 `versionToken`：
+请求：仅路径参数 `{dataSubId}`，**无 JSON 请求体**，不携带版本令牌或其他并发字段（`DSUB-REQ-103`；前端不得再使用 `axios.delete(url, { data: { versionToken } })`）。
 
-```json
-{
-  "versionToken": "3f9b2c...sha256-hex-64"
-}
-```
-
-- **令牌回传方式唯一约定**：DELETE 使用 JSON 请求体承载 `versionToken`（项目 axios 可靠支持 DELETE body，前端调用方式为 `axios.delete(url, { data: { versionToken } })`）。不把版本令牌放入 URL query 或代理日志（令牌不是敏感凭证，但避免不必要暴露；DESIGN §5.1）。
 - 只允许正常单源库记录删除；多源库异常记录无删除入口（`DSUB-REQ-100`；后端对异常记录返回 `40351`）。
 - 物理删除：`DELETE WHERE DATA_SUB_ID = ?`，不得把 `FG_ACTIVE` 更新为 `0`（`DSUB-REQ-021/101`；DATABASE.md §4.5）。
-- 并发：事务内 `SELECT ... FOR UPDATE` 锁当前行 → 指纹比较 → 不匹配 `40910`（`DSUB-REQ-103`）；匹配则删除（DESIGN §5.2）。
+- 删除流程：普通读取当前记录完成业务防护（记录存在、非多源库异常；**不锁行**）→ 按 `DATA_SUB_ID` 普通 `DELETE`（DESIGN §5.3）。预览后记录被其他页面或人工修改，确认删除仍直接按主键删除，不比较、不拒绝（`DSUB-REQ-103`）。
 - 事务：`@Transactional`；受影响行数必须 = 1；0 行 → `40430`（“订阅记录不存在或已被删除”，`DSUB-REQ-104`）。
 - 响应：`data` 为 `null`，成功 `code=200`。
 - 前端：删除前二次确认（展示描述/源库/Schema 数/表数/目标库/不可恢复/重启生效，`DSUB-REQ-102`）；成功后刷新列表并提示重启后生效（`DSUB-REQ-105`）。
@@ -559,7 +547,6 @@
 | tablesBySchema / rawUnparseableTables | `DATA_SOURCE_TABLE`（解析后返回） | 读 |
 | source.dataSourceOrg / targets[].dataSourceOrg | `CDC_DATA_SOURCE.DATA_SOURCE_ORG` | 读（映射；最小字段投影见 DATABASE.md §4.6） |
 | sourceSelectionMode | 非数据库字段 | 仅请求语义：`PRESERVE` 决定不写 `DATA_SOURCE_TABLE` |
-| versionToken | 非数据库字段 | 内容指纹（DESIGN §5.1），无版本列 |
 | insertTime / updateTime | `INSERT_TIME` / `UPDATE_TIME` | 读写（规则见 DATABASE.md §3） |
 | —（遗留字段不暴露） | `DATA_SOURCE_COMMENT` / `DATA_TARGET_TABLE` / `DATA_TARGET_COMMENT` | 新增写 NULL；编辑保持原值 |
 | —（启用标志不暴露） | `FG_ACTIVE` | 新增固定写 `'1'`；列表只查 `'1'`；不提供启停 |
@@ -570,7 +557,7 @@
 
 使用项目 `BusinessException(code, message)`，HTTP 200 + `fail(code, message)`。错误码集中在 `subscription/exception/SubscriptionErrorCode.java`，独立于 `DataSourceErrorCode` / `ServerConfigErrorCode`。
 
-共 **26 个**业务错误码：
+共 **25 个**业务错误码：
 
 | 错误码 | 名称 | 用户可见消息 | 触发 |
 |---|---|---|---|
@@ -597,7 +584,6 @@
 | 40352 | ANOMALY_NOT_VIEWABLE | 多源库异常记录不支持查看 | 对异常记录查看详情 |
 | 40353 | ANOMALY_NOT_PREVIEWABLE | 多源库异常记录不支持删除预览 | 对异常记录删除预览 |
 | 40430 | SUBSCRIPTION_NOT_FOUND | 订阅记录不存在或已被删除 | 详情/编辑/删除预览/保存/删除时记录不存在（`DSUB-REQ-104`） |
-| 40910 | CONCURRENT_MODIFIED | 记录已被他人或人工数据库操作修改，请刷新后重新编辑 | 保存/删除指纹不匹配（`DSUB-REQ-098/103`） |
 | 50040 | SAVE_FAILED | 保存失败 | INSERT/UPDATE 受影响行数异常 |
 | 50041 | DELETE_FAILED | 删除失败 | DELETE 受影响行数异常 |
 
@@ -624,7 +610,7 @@
   - 前端不感知、不生成 ID（`DSUB-REQ-007`）；
   - 不新增数据库序列、触发器或默认值。
 - 测试方式：单元测试断言 ID 长度为 32、为十六进制格式、同一调用不重复；集成/异常路径测试构造已存在 ID 验证主键冲突被正确拒绝（设计阶段仅定义测试边界，不运行测试）。
-- 引用：DATABASE.md §4.3、DESIGN.md §5.1。
+- 引用：DATABASE.md §4.3、DESIGN.md §2.2。
 
 ### 8.2 TBD-02：源库/目标库类别匹配规则（设计草案结论，R1 收紧）
 
@@ -639,4 +625,4 @@
 
 ---
 
-*文档状态：`DRAFT_PENDING_USER_REVIEW`。本文件为接口设计基线草案（R2 定向修订版），未获正式复审批准，不代表设计已批准、功能已实现或验收通过；R2 定向修订已完成，等待 ChatGPT 正式设计 R2 复审；接口尚未实现。*
+*文档状态：`DRAFT_PENDING_USER_REVIEW`。本文件为接口设计基线草案（R3 定向修订版），未获正式复审批准，不代表设计已批准、功能已实现或验收通过；R3 已按已批准“取消并发保护”需求完成定向修订，等待 ChatGPT 正式设计 R3 复审；接口尚未实现。*

@@ -7,17 +7,18 @@
 | Feature 中文名称 | 数据订阅 |
 | Feature 标识 | `data-subscription` |
 | 文档状态 | `DRAFT_PENDING_USER_REVIEW`（界面设计草案，尚未获得项目负责人或 ChatGPT 正式复审批准） |
-| 设计正式复审状态 | `PENDING_R2_REVIEW`（R1 正式复审结论 `CHANGES_REQUIRED`；本 R2 定向修订已完成，尚未获得 ChatGPT 正式设计复审批准） |
-| 实现状态 | `NOT_STARTED`（本任务为纯文档设计基线 R2 定向修订，不涉及任何业务代码实现） |
+| 设计正式复审状态 | `PENDING_R3_REVIEW`（R1 正式复审结论 `CHANGES_REQUIRED`；R2 定向修订已完成且四项修订目标通过正式复核；本 R3 已按已批准“取消并发保护”需求统一删除并发界面流程并完成定向修订，尚未获得 ChatGPT 正式设计复审批准） |
+| 实现状态 | `NOT_STARTED`（本任务为纯文档设计基线 R3 定向修订，不涉及任何业务代码实现） |
 | 验收执行状态 | 126 条全部 `NOT_RUN` |
-| 任务编号 | `DATA-SUBSCRIPTION-DESIGN-BASELINE-001-R2`（R2 定向修订；前序 R1 任务 `DATA-SUBSCRIPTION-DESIGN-BASELINE-001-R1` 结果提交 `3609548238c9fede745f5291e258469ab7b78167`；首版任务 `DATA-SUBSCRIPTION-DESIGN-BASELINE-001` 结果提交 `610401575938ba32f13fa635493f991bdfae81b6`） |
-| 依据的已批准需求基线 | `docs/features/data-subscription/REQUIREMENTS.md`（`APPROVED`，107 条，当前版本为含逗号数据源 ID 查询兼容调整批准版本，批准依据提交 `afc5765956cac3c8f66d8857ff17565472d0c746`） |
-| 依据的已批准验收基线 | `docs/features/data-subscription/ACCEPTANCE.md`（`APPROVED`，126 条，全部 `NOT_RUN`） |
+| 任务编号 | `DATA-SUBSCRIPTION-DESIGN-BASELINE-001-R3`（R3 定向修订；前序 R2 任务 `DATA-SUBSCRIPTION-DESIGN-BASELINE-001-R2` 结果提交 `026417e7e907b0fd23e8812024a260f119c993cc`；R1 任务 `DATA-SUBSCRIPTION-DESIGN-BASELINE-001-R1` 结果提交 `3609548238c9fede745f5291e258469ab7b78167`；首版任务 `DATA-SUBSCRIPTION-DESIGN-BASELINE-001` 结果提交 `610401575938ba32f13fa635493f991bdfae81b6`） |
+| 依据的已批准需求基线 | `docs/features/data-subscription/REQUIREMENTS.md`（`APPROVED`，107 条 `DSUB-REQ-001` ~ `DSUB-REQ-107`，当前正式批准版本为“取消并发保护”需求调整版本，Git 基线提交 `8331fbb6e17b8e2165b788d972f651aa980bf227`） |
+| 依据的已批准验收基线 | `docs/features/data-subscription/ACCEPTANCE.md`（`APPROVED`，126 条 `DSUB-AC-001` ~ `DSUB-AC-126`，全部 `NOT_RUN`；当前版本为“取消并发保护”验收标准调整版本，Git 基线提交 `8331fbb6e17b8e2165b788d972f651aa980bf227`） |
 | 创建日期 | 2026-08-30 |
 | R1 修订日期 | 2026-08-30 |
 | R2 修订日期 | 2026-08-31 |
+| R3 修订日期 | 2026-08-31 |
 
-说明：本文件是界面设计草案，**不是正式批准的设计基线**。R1 已修正 ChatGPT 正式复审（`CHANGES_REQUIRED`）发现的主要问题并同步已批准点号规则；R2 统一修正剩余四项（三类查询语义、元数据 API query 参数、物化视图显式排除、`DSUB-FP-V1` 字节级指纹）并同步含逗号查询批准基线。R2 定向修订已完成，但本文件尚未获得 ChatGPT 正式设计复审批准，不表示设计已批准、功能已实现、部署或验收完成。
+说明：本文件是界面设计草案，**不是正式批准的设计基线**。R1 已修正 ChatGPT 正式复审（`CHANGES_REQUIRED`）发现的主要问题并同步已批准点号规则；R2 统一修正剩余四项（三类查询语义、元数据 API query 参数、物化视图显式排除、`DSUB-FP-V1` 字节级指纹）并同步含逗号查询批准基线；R3 按已正式批准并收口的“取消并发保护”需求（`DSUB-REQ-097/098/099/103`）删除编辑回显与删除预览中的版本令牌前端流程、删除 `40910` 并发冲突界面，把编辑保存、删除预览和删除改为普通界面流程。删除 `DSUB-FP-V1` 相关前端流程不是否定 R2 的技术正确性，而是同步新的正式需求。R3 定向修订已完成，但本文件尚未获得 ChatGPT 正式设计复审批准，不表示设计已批准、功能已实现、部署或验收完成。
 
 - 技术栈：Vue 3 + TypeScript + Element Plus（^2.5.0）+ Pinia + vue-router 4 + axios（沿用项目既有前端栈）。
 - 视觉：使用项目现有设计令牌与 Element Plus 组件（Tag、Tooltip、Table、Dialog、Select、MessageBox、Loading 等），不凭空建立另一套视觉系统。
@@ -130,7 +131,7 @@
 
 - 编辑与新增使用同一界面；自动回显描述、源库、目标库、全部 Schema 和源表选择（`DSUB-REQ-088`）。
 - 自动加载原记录涉及的全部已选 Schema，并恢复表格勾选和浅蓝背景；左侧 Schema 数量、当前 Schema 数量和总汇总必须准确（`DSUB-REQ-089`）。
-- 数据来源：`GET /api/subscriptions/{dataSubId}/edit`（API §4.7），返回 `tablesBySchema`（恢复勾选与浅蓝背景）、`rawUnparseableTables`（不可解析 token 分区回显并带警告）、`invalidTables`（异常已选表）、`sourceReachable` / `sourceTableCheck`（决定是否进入有限编辑）与 `versionToken`（保存回传）。
+- 数据来源：`GET /api/subscriptions/{dataSubId}/edit`（API §4.7），返回 `tablesBySchema`（恢复勾选与浅蓝背景）、`rawUnparseableTables`（不可解析 token 分区回显并带警告）、`invalidTables`（异常已选表）、`sourceReachable` / `sourceTableCheck`（决定是否进入有限编辑）。编辑打开不返回版本令牌，编辑保存请求也不携带令牌（`DSUB-REQ-097`，DESIGN §5.1）。
 - 前端将 `tablesBySchema` 扁平化为表单 `sourceTables`（`SourceTableInput[]`，仅 `(schemaName, tableName)` 组合，供保存使用；DESIGN §4.2）。
 
 ### 7.2 源库与源表修改
@@ -145,20 +146,20 @@
 - 有限编辑模式下源库下拉与源表选择控件**禁用**，前端只允许以 `sourceSelectionMode=PRESERVE` 保存（不提交 `sourceTables`；API §4.8 / DESIGN §3.5）。
 - 页面必须明确说明当前使用的是已保存源表配置，未完成源库实时校验（`DSUB-REQ-093`）。
 
-### 7.4 异常数据源与并发
+### 7.4 异常数据源
 
 - 原订阅引用的源库或目标库已停用或不存在：仍需回显原值并标记异常；编辑保存前必须替换或修复异常数据源，不得原样保存或强制保存（`DSUB-REQ-094`）。**不能借 `PRESERVE` 模式绕过**：即使源表未变，原源库已停用/不存在或原配置含保留字符无效项，仍必须先修复后才能保存。
 - 多源库异常记录不提供编辑入口（`DSUB-REQ-095`）。
-- 并发冲突：保存时后端返回 `40910`，提示“记录已被他人或人工数据库操作修改，请刷新后重新编辑”（`DSUB-REQ-098`）。
+- 编辑保存不提供并发冲突检测：不生成/回传版本令牌，不提示“记录已被他人或人工数据库操作修改”，页面打开期间的数据与最终写入之间不提供快照一致性保证（`DSUB-REQ-098/099`，DESIGN §5.1）。
 
-### 7.5 删除确认与并发
+### 7.5 删除确认
 
 - 只允许正常单源库记录删除；多源库异常记录无删除入口（`DSUB-REQ-100`）。
 - **删除两步闭环**（DESIGN §3.7，API §4.9/§4.10）：
-  1. 点击列表“删除”→ 先调用 `GET /api/subscriptions/{dataSubId}/delete-preview`（API §4.9）获取删除确认所需最新信息（描述、源库、Schema 数、表数、目标库、异常提示）与 `versionToken`；本接口只读配置库、不连接源 Oracle。
+  1. 点击列表“删除”→ 先调用 `GET /api/subscriptions/{dataSubId}/delete-preview`（API §4.9）获取删除确认所需的普通只读确认信息（描述、源库、Schema 数、表数、目标库、异常提示）；本接口只读配置库、不连接源 Oracle、不锁行、不返回版本令牌。
   2. 删除预览成功后才展示二次确认弹窗（`DSUB-REQ-102`）：订阅描述；源库；Schema 数；源表数量；目标库；明确提示“数据库记录物理删除且无法恢复”；说明“当前运行中的同步任务不会立即停止，需要重启相关 sync-client 后生效”。
-  3. 用户确认后调用 `DELETE /api/subscriptions/{dataSubId}`（API §4.10），以 JSON 请求体回传删除预览得到的 `versionToken`（`axios.delete(url, { data: { versionToken } })`）。
-- 删除并发冲突：确认后发现记录已被修改（后端 `40910`）→ 拒绝删除并刷新列表（`DSUB-REQ-103`）。
+  3. 用户确认后调用 `DELETE /api/subscriptions/{dataSubId}`（API §4.10），无请求体（不携带版本令牌）；后端按 `DATA_SUB_ID` 主键直接物理删除。
+- 删除不提供并发冲突检测：不返回/不校验版本令牌，不因预览后记录被修改而拒绝删除（`DSUB-REQ-103`，DESIGN §5.1/§5.3）。
 - 记录不存在：提示“记录不存在或已被删除”（`DSUB-REQ-104`）。
 - 删除成功：刷新列表，并提示重启后生效（`DSUB-REQ-105`）。
 
@@ -177,8 +178,8 @@
 | 警告 | 多源库异常整行警示色 + 提示文案；已停用/不存在数据源标记；异常已选表警告；不可解析内容分区警告；含保留字符对象禁用提示 |
 | 空状态 | 查询无结果“暂无符合条件的订阅记录”；源库搜索无结果“未找到匹配的源库”；空 Schema 不展示 |
 
-通用交互（`DSUB-REQ-106`）：查询、保存、删除预览、删除、加载 Schema/表等请求处理中对应按钮禁用，防止重复提交；请求失败展示清晰、可展示、脱敏的业务提示。
+通用交互（`DSUB-REQ-106`）：查询、保存、删除预览、删除、加载 Schema/表等请求处理中对应按钮禁用，防止用户界面重复点击；按钮 loading 仅防重复提交，**不属于并发控制**，不提供“最后一次成功写入生效”之外的任何冲突检测保证（DESIGN §5.5）；请求失败展示清晰、可展示、脱敏的业务提示。
 
 ---
 
-*文档状态：`DRAFT_PENDING_USER_REVIEW`。本文件为界面设计基线草案（R2 定向修订版），未获正式复审批准，不代表设计已批准、功能已实现或验收通过；R2 定向修订已完成，等待 ChatGPT 正式设计 R2 复审。*
+*文档状态：`DRAFT_PENDING_USER_REVIEW`。本文件为界面设计基线草案（R3 定向修订版），未获正式复审批准，不代表设计已批准、功能已实现或验收通过；R3 已按已批准“取消并发保护”需求完成定向修订，等待 ChatGPT 正式设计 R3 复审。*
