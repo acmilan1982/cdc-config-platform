@@ -7,20 +7,21 @@
 | Feature 中文名称 | 数据订阅 |
 | Feature 标识 | `data-subscription` |
 | 文档状态 | `DRAFT_PENDING_USER_REVIEW`（设计基线草案，尚未获得项目负责人或 ChatGPT 正式复审批准） |
-| 设计正式复审状态 | `PENDING_R3_REVIEW`（R1 正式复审结论 `CHANGES_REQUIRED`；R2 定向修订已完成且四项修订目标通过正式复核；本 R3 已按已批准“取消并发保护”需求统一删除并发设计并完成定向修订，尚未获得 ChatGPT 正式设计复审批准） |
-| 实现状态 | `NOT_STARTED`（本任务为纯文档设计基线 R3 定向修订，不涉及任何业务代码实现） |
+| 设计正式复审状态 | `PENDING_R4_REVIEW`（R1 正式复审结论 `CHANGES_REQUIRED`；R2 定向修订已完成且四项修订目标通过正式复核；R3 已按已批准“取消并发保护”需求完成定向修订，ChatGPT 对 R3 结果提交 `ac4954401b79e04c56a8bbf9daec871fd194f19c` 正式复审结论 `CHANGES_REQUIRED`；本 R4 按正式复审发现定向修正三个确定问题（DELETE 影响多行错误码统一为 `50041`；DELETE 接口删除前多源库异常后端防护统一为强制普通读取→存在性与异常判定→普通 DELETE；修正“NULL 被 split 成 `['']`”的 Java 语义错误为“对 null 调用 split 抛 `NullPointerException`”），尚未获得 ChatGPT 正式设计复审批准） |
+| 实现状态 | `NOT_STARTED`（本任务为纯文档设计基线 R4 定向修订，不涉及任何业务代码实现） |
 | 验收执行状态 | 126 条全部 `NOT_RUN` |
-| 任务编号 | `DATA-SUBSCRIPTION-DESIGN-BASELINE-001-R3`（R3 定向修订；前序 R2 任务 `DATA-SUBSCRIPTION-DESIGN-BASELINE-001-R2` 结果提交 `026417e7e907b0fd23e8812024a260f119c993cc`；R1 任务 `DATA-SUBSCRIPTION-DESIGN-BASELINE-001-R1` 结果提交 `3609548238c9fede745f5291e258469ab7b78167`；首版任务 `DATA-SUBSCRIPTION-DESIGN-BASELINE-001` 结果提交 `610401575938ba32f13fa635493f991bdfae81b6`） |
-| 任务类型 | 纯文档设计基线 R3 定向修订（按已批准“取消并发保护”需求统一删除版本令牌/内容指纹/行锁/并发字段比较/`40910`，编辑与删除改为普通主键更新/物理删除，修正多源库空 token 判定，补充 nullable CSV 的 null-safe 契约；保留 R2 已通过的三类查询语义、元数据 query 参数、物化视图显式排除等设计） |
+| 任务编号 | `DATA-SUBSCRIPTION-DESIGN-BASELINE-001-R4`（R4 定向修订；前序 R3 任务 `DATA-SUBSCRIPTION-DESIGN-BASELINE-001-R3` 结果提交 `ac4954401b79e04c56a8bbf9daec871fd194f19c`，ChatGPT 对 R3 正式复审结论 `CHANGES_REQUIRED`；R2 任务 `DATA-SUBSCRIPTION-DESIGN-BASELINE-001-R2` 结果提交 `026417e7e907b0fd23e8812024a260f119c993cc`；R1 任务 `DATA-SUBSCRIPTION-DESIGN-BASELINE-001-R1` 结果提交 `3609548238c9fede745f5291e258469ab7b78167`；首版任务 `DATA-SUBSCRIPTION-DESIGN-BASELINE-001` 结果提交 `610401575938ba32f13fa635493f991bdfae81b6`） |
+| 任务类型 | 纯文档设计基线 R4 定向修订（按 ChatGPT 对 R3 正式复审 `CHANGES_REQUIRED` 的三个确定发现项定向修正：DELETE 影响多行错误码统一为 `50041 DELETE_FAILED` 且不映射 `50040`；DELETE 接口删除前多源库异常后端防护统一为强制普通读取→存在性与异常判定→普通 DELETE，删除预览不替代 DELETE 自身防护；修正“NULL 被 split 成 `['']`”的 Java 语义错误为“对 null 调用 split 抛 `NullPointerException`”；保留 R3 已正确删除的并发机制与 R2 已通过设计不回退） |
 | 依据的已批准需求基线 | `docs/features/data-subscription/REQUIREMENTS.md`（`APPROVED`，107 条 `DSUB-REQ-001` ~ `DSUB-REQ-107`，当前正式批准版本为“取消并发保护”需求调整版本，“取消并发保护”正式复审依据提交 `43a909773aec63fe8c4de2957074f113910f4686`，当前 Git 基线提交 `8331fbb6e17b8e2165b788d972f651aa980bf227`；前序含逗号数据源 ID 查询兼容批准版本批准依据提交 `afc5765956cac3c8f66d8857ff17565472d0c746`、英文句点保留分隔符批准版本批准依据提交 `bb8716c26d5181edf84ba1f07d4e60e8f1c1918a` 作为历史事实保留） |
 | 依据的已批准验收基线 | `docs/features/data-subscription/ACCEPTANCE.md`（`APPROVED`，126 条 `DSUB-AC-001` ~ `DSUB-AC-126`，全部 `NOT_RUN`；当前版本为“取消并发保护”验收标准调整版本，Git 基线提交 `8331fbb6e17b8e2165b788d972f651aa980bf227`） |
 | 创建日期 | 2026-08-30 |
 | R1 修订日期 | 2026-08-30 |
 | R2 修订日期 | 2026-08-31 |
 | R3 修订日期 | 2026-08-31 |
+| R4 修订日期 | 2026-08-31 |
 | 设计依据 | 已批准需求/验收基线（“取消并发保护”批准版本，前序含逗号/点号批准版本作为历史事实保留）+ 已批准数据库物理基线（`docs/database/`）+ 真实代码只读核验 + 项目既有实现模式 + ChatGPT 正式设计复审发现项 |
 
-说明：本文件是设计草案，**不是正式批准的设计基线**。R1 已修正 ChatGPT 正式复审（`CHANGES_REQUIRED`）发现的主要问题并同步已批准点号规则；R2 统一修正剩余四项（三类查询语义、元数据 API query 参数、物化视图显式排除、`DSUB-FP-V1` 字节级指纹）并同步含逗号查询批准基线；R3 按已正式批准并收口的“取消并发保护”需求（`DSUB-REQ-097/098/099/103`）统一删除版本令牌、内容指纹（`DSUB-FP-V1`）、黄金向量、行锁、并发字段比较、`40910 CONCURRENT_MODIFIED` 及相关前端流程，把编辑保存、删除预览和物理删除改为普通读写流程，修正多源库异常判定中的空 token 问题，并为可空 CSV 字段建立统一 null-safe 解析与查询匹配契约。删除 `DSUB-FP-V1` 不是否定 R2 的技术正确性，而是同步新的正式需求。R3 定向修订已完成，但本文件尚未获得 ChatGPT 正式设计复审批准，不表示设计已批准、功能已实现、部署或验收完成。
+说明：本文件是设计草案，**不是正式批准的设计基线**。R1 已修正 ChatGPT 正式复审（`CHANGES_REQUIRED`）发现的主要问题并同步已批准点号规则；R2 统一修正剩余四项（三类查询语义、元数据 API query 参数、物化视图显式排除、`DSUB-FP-V1` 字节级指纹）并同步含逗号查询批准基线；R3 按已正式批准并收口的“取消并发保护”需求（`DSUB-REQ-097/098/099/103`）统一删除版本令牌、内容指纹（`DSUB-FP-V1`）、黄金向量、行锁、并发字段比较、`40910 CONCURRENT_MODIFIED` 及相关前端流程，把编辑保存、删除预览和物理删除改为普通读写流程，修正多源库异常判定中的空 token 问题，并为可空 CSV 字段建立统一 null-safe 解析与查询匹配契约。删除 `DSUB-FP-V1` 不是否定 R2 的技术正确性，而是同步新的正式需求。R3 定向修订已完成，ChatGPT 对 R3 结果提交 `ac4954401b79e04c56a8bbf9daec871fd194f19c` 正式复审结论 `CHANGES_REQUIRED`；本 R4 按复审发现定向修正三个确定问题（DELETE 影响多行错误码统一为 `50041`；DELETE 接口删除前多源库异常后端防护统一为强制普通读取→存在性与异常判定→普通 DELETE，删除预览不替代 DELETE 自身防护；修正“NULL 被 split 成 `['']`”的 Java 语义错误为“对 null 调用 split 抛 `NullPointerException`”），并保持 R3 已正确内容不回退。R4 定向修订已完成，但本文件尚未获得 ChatGPT 正式设计复审批准，不表示设计已批准、功能已实现、部署或验收完成。
 
 ## 2. 当前事实与目标架构
 
@@ -150,7 +151,7 @@ frontend/src/types/subscription.ts      # 类型定义
 
 1. 正常单源库记录提供“删除”入口；多源库异常记录无删除入口（`DSUB-REQ-100`）。
 2. 点击列表“删除”：先调用 `GET /api/subscriptions/{dataSubId}/delete-preview` 获取删除确认所需的普通只读确认信息；成功后再展示确认弹窗（订阅描述、源库、Schema 数、源表数量、目标库、“数据库记录物理删除且无法恢复”、“当前运行中的同步任务不会立即停止，需要重启相关 sync-client 后生效”）（`DSUB-REQ-102`）。
-3. 用户确认后 `DELETE /api/subscriptions/{dataSubId}` 按 `DATA_SUB_ID` 主键直接物理删除，不返回、不校验版本令牌，不比较预览后记录是否发生变化（`DSUB-REQ-103`；见 §5.3）。
+3. 用户确认后 `DELETE /api/subscriptions/{dataSubId}`：DELETE 接口在事务内自行按 `DATA_SUB_ID` 普通读取当前记录并完成后端业务防护（记录存在、非多源库异常），防护通过后按 `DATA_SUB_ID` 主键直接物理删除；**删除预览不替代 DELETE 接口自身的后端防护**（接口可被直接调用，且预览结果不是一致性快照），不返回、不校验版本令牌，不比较预览后记录是否发生变化（`DSUB-REQ-103`；见 §5.3）。
 4. 记录不存在时提示“记录不存在或已被删除”（`DSUB-REQ-104`）。
 5. 删除成功刷新列表并提示重启后生效（`DSUB-REQ-105`）。
 6. 删除预览只读取配置库，不连接源 Oracle；不复用会连接源 Oracle 的“编辑打开”接口。
@@ -212,7 +213,7 @@ frontend/src/types/subscription.ts      # 类型定义
 
 - `DATA_FROM_SOURCE_ID` 经统一 null-safe CSV 解析（§4.9 `splitTrimDropEmpty`）后非空 token 数量 ≥ 2 且记录 `FG_ACTIVE=1` → 多源库异常记录（`DSUB-REQ-010`）。
 - 识别由后端完成，前端仅展示；异常记录整行警示，无任何操作（`DSUB-REQ-011/012`）。
-- 判定必须统一走 §4.9 的 null-safe 解析：`NULL`/空白解析为空 token 集合（大小 0 → 非异常）；带逗号前缀/后缀/连续逗号但最终仅 1 个非空 token → 非异常；非空 token 数量 ≥ 2 → 异常。禁止使用原始 `split(",", -1)` 直接按 `.length >= 2` 判定（`NULL`/空白会被拆成非预期的 token 数）。
+- 判定必须统一走 §4.9 的 null-safe 解析：`NULL`/空白解析为空 token 集合（大小 0 → 非异常）；带逗号前缀/后缀/连续逗号但最终仅 1 个非空 token → 非异常；非空 token 数量 ≥ 2 → 异常。禁止使用原始 `split(",", -1)` 直接按 `.length >= 2` 判定：对 `null` 直接调用实例方法 `split` 会抛 `NullPointerException`；对空字符串、仅空白、连续分隔符等输入，原始 `split` 得到的数组长度与有效非空 token 数不一致，判定失真。
 - 列表、详情、编辑打开、删除预览、删除各环节的多源库异常判定复用同一解析方法，不得出现多处不一致的分割逻辑。
 
 ### 4.8 已停用/不存在数据源映射
@@ -225,7 +226,7 @@ frontend/src/types/subscription.ts      # 类型定义
 
 ### 4.9 统一 null-safe CSV 解析与查询匹配契约
 
-对 `DATA_TO_SOURCE_ID`、`DATA_SOURCE_TABLE`、`DATA_FROM_SOURCE_ID` 及查询候选 ID 的 CSV 处理，全部统一走以下 null-safe 契约（R3 权威定义；API.md、DATABASE.md 引用并重复必要契约，四份文档不得出现矛盾版本）。核心动机：三个 CSV 字段均可为 `NULL`/空白，若直接用 `split(",", -1)` 处理，`NULL` 会被拆成 `[""]`，无法与“空 token 集合”正确区分，多源库异常判定会失真。
+对 `DATA_TO_SOURCE_ID`、`DATA_SOURCE_TABLE`、`DATA_FROM_SOURCE_ID` 及查询候选 ID 的 CSV 处理，全部统一走以下 null-safe 契约（R3 权威定义；API.md、DATABASE.md 引用并重复必要契约，四份文档不得出现矛盾版本）。核心动机：三个 CSV 字段均可为 `NULL`/空白，若直接用 `split(",", -1)` 处理，对 `null` 调用实例方法 `split` 会抛 `NullPointerException`；对空字符串、仅空白、连续分隔符等输入，原始 `split` 得到的数组长度与有效非空 token 数不一致，无法与“空 token 集合”正确区分，多源库异常判定会失真。
 
 **解析函数（保存、展示、统计、异常判定的统一入口）：**
 
@@ -301,17 +302,19 @@ isMultiSourceAnomaly(csv) = (splitTrimDropEmpty(csv).size >= 2)
 
 ### 5.3 删除预览与普通删除流程
 
-1. 删除预览：按 `DATA_SUB_ID` 普通只读查询当前记录，返回删除确认所需信息（订阅描述、源库、Schema 数、源表数量、目标库），**不锁行、不返回版本令牌**（`DSUB-REQ-102`）；
-2. 记录不存在返回 `40430`（`DSUB-REQ-104`）；
-3. 用户确认后 `DELETE /api/subscriptions/{dataSubId}`：进入 `@Transactional`，按 `DATA_SUB_ID` 执行普通 `DELETE`，**不比较预览后记录是否发生变化**；
-4. `DELETE` 受影响行数必须为 1（0 行 → `40430`，多行异常 → `50040`）；
-5. 提交事务；删除成功刷新列表并提示重启后生效（`DSUB-REQ-105`）。
+1. 删除预览：按 `DATA_SUB_ID` 普通只读查询当前记录，返回删除确认所需信息（订阅描述、源库、Schema 数、源表数量、目标库），**不锁行、不返回版本令牌**（`DSUB-REQ-102`）；记录不存在返回 `40430`（`DSUB-REQ-104`）。
+2. 用户确认后 `DELETE /api/subscriptions/{dataSubId}`：进入 `@Transactional`，**DELETE 接口自身重复执行删除前防护，删除预览不能替代**（接口可被直接调用，且预览结果不是一致性快照）：
+   1. 按 `DATA_SUB_ID` 普通 `SELECT` 当前记录，**不使用 `FOR UPDATE`、不加锁、不比较预览结果、不检查并发变化**；查询不到返回 `40430`；
+   2. 复用统一 `isMultiSourceAnomaly`/`splitTrimDropEmpty` 判定（§4.7/§4.9）；当前读取结果为多源库异常时返回 `40351 ANOMALY_NOT_DELETABLE`，**不得执行 DELETE**；
+   3. 校验通过后按 `DATA_SUB_ID` 执行普通物理 `DELETE`；普通 `SELECT` 与 `DELETE` 之间若被其他页面或人工数据库操作修改，不检测、不拒绝，仍符合已批准“无并发保护、最后一次成功写入生效”边界；
+   4. `DELETE` 影响 0 行返回 `40430`，影响多行返回 `50041 DELETE_FAILED`；
+3. 提交事务；删除成功刷新列表并提示重启后生效（`DSUB-REQ-105`）。
 
 ### 5.4 事务边界与受影响行数检查
 
 - 新增：`@Transactional`；`INSERT` 后校验受影响行数 = 1，否则 `50040 SAVE_FAILED`。
-- 编辑：`@Transactional`；事务内普通读取当前记录完成业务校验（§5.2）→ 按 `DATA_SUB_ID` 普通 `UPDATE`（受影响行数必须 = 1，0 行表示记录不存在 → `40430`）。
-- 删除：`@Transactional`；按 `DATA_SUB_ID` 普通 `DELETE`（受影响行数必须 = 1，0 行 → `40430`）。
+- 编辑：`@Transactional`；事务内普通读取当前记录完成业务校验（§5.2）→ 按 `DATA_SUB_ID` 普通 `UPDATE`（受影响行数必须 = 1；0 行表示记录不存在 → `40430`，多行异常 → `50040`）。
+- 删除：`@Transactional`；事务内按 `DATA_SUB_ID` 普通读取当前记录并完成后端业务防护（查不到 → `40430`；多源库异常 → `40351`，不得执行 DELETE），防护通过后按 `DATA_SUB_ID` 普通 `DELETE`（受影响行数必须 = 1；0 行 → `40430`，多行 → `50041`）。
 - 数据源/表校验（源库连接）与配置库写入不在同一数据库事务（源库为外部 Oracle，配置库为 CDC）；校验通过后才进入 CDC 配置库事务写入，二者之间不构成跨库事务。
 
 ### 5.5 重复提交边界

@@ -7,18 +7,19 @@
 | Feature 中文名称 | 数据订阅 |
 | Feature 标识 | `data-subscription` |
 | 文档状态 | `DRAFT_PENDING_USER_REVIEW`（数据库设计草案，尚未获得项目负责人或 ChatGPT 正式复审批准） |
-| 设计正式复审状态 | `PENDING_R3_REVIEW`（R1 正式复审结论 `CHANGES_REQUIRED`；R2 定向修订已完成且四项修订目标通过正式复核；本 R3 已按已批准“取消并发保护”需求统一删除指纹字段/行锁并完成定向修订，尚未获得 ChatGPT 正式设计复审批准） |
-| 实现状态 | `NOT_STARTED`（本任务为纯文档设计基线 R3 定向修订，不涉及任何业务代码实现） |
+| 设计正式复审状态 | `PENDING_R4_REVIEW`（R1 正式复审结论 `CHANGES_REQUIRED`；R2 定向修订已完成且四项修订目标通过正式复核；R3 已按已批准“取消并发保护”需求完成定向修订，ChatGPT 对 R3 结果提交 `ac4954401b79e04c56a8bbf9daec871fd194f19c` 正式复审结论 `CHANGES_REQUIRED`；本 R4 按正式复审发现定向修正三个确定问题（DELETE 影响多行错误码统一为 `50041`；DELETE 接口删除前多源库异常后端防护统一为强制普通读取→存在性与异常判定→普通 DELETE；修正“NULL 被 split 成 `['']`”的 Java 语义错误为“对 null 调用 split 抛 `NullPointerException`”），尚未获得 ChatGPT 正式设计复审批准） |
+| 实现状态 | `NOT_STARTED`（本任务为纯文档设计基线 R4 定向修订，不涉及任何业务代码实现） |
 | 验收执行状态 | 126 条全部 `NOT_RUN` |
-| 任务编号 | `DATA-SUBSCRIPTION-DESIGN-BASELINE-001-R3`（R3 定向修订；前序 R2 任务 `DATA-SUBSCRIPTION-DESIGN-BASELINE-001-R2` 结果提交 `026417e7e907b0fd23e8812024a260f119c993cc`；R1 任务 `DATA-SUBSCRIPTION-DESIGN-BASELINE-001-R1` 结果提交 `3609548238c9fede745f5291e258469ab7b78167`；首版任务 `DATA-SUBSCRIPTION-DESIGN-BASELINE-001` 结果提交 `610401575938ba32f13fa635493f991bdfae81b6`） |
+| 任务编号 | `DATA-SUBSCRIPTION-DESIGN-BASELINE-001-R4`（R4 定向修订；前序 R3 任务 `DATA-SUBSCRIPTION-DESIGN-BASELINE-001-R3` 结果提交 `ac4954401b79e04c56a8bbf9daec871fd194f19c`，ChatGPT 对 R3 正式复审结论 `CHANGES_REQUIRED`；R2 任务 `DATA-SUBSCRIPTION-DESIGN-BASELINE-001-R2` 结果提交 `026417e7e907b0fd23e8812024a260f119c993cc`；R1 任务 `DATA-SUBSCRIPTION-DESIGN-BASELINE-001-R1` 结果提交 `3609548238c9fede745f5291e258469ab7b78167`；首版任务 `DATA-SUBSCRIPTION-DESIGN-BASELINE-001` 结果提交 `610401575938ba32f13fa635493f991bdfae81b6`） |
 | 依据的已批准需求基线 | `docs/features/data-subscription/REQUIREMENTS.md`（`APPROVED`，107 条 `DSUB-REQ-001` ~ `DSUB-REQ-107`，当前正式批准版本为“取消并发保护”需求调整版本，Git 基线提交 `8331fbb6e17b8e2165b788d972f651aa980bf227`） |
 | 依据的已批准验收基线 | `docs/features/data-subscription/ACCEPTANCE.md`（`APPROVED`，126 条 `DSUB-AC-001` ~ `DSUB-AC-126`，全部 `NOT_RUN`；当前版本为“取消并发保护”验收标准调整版本，Git 基线提交 `8331fbb6e17b8e2165b788d972f651aa980bf227`） |
 | 创建日期 | 2026-08-30 |
 | R1 修订日期 | 2026-08-30 |
 | R2 修订日期 | 2026-08-31 |
 | R3 修订日期 | 2026-08-31 |
+| R4 修订日期 | 2026-08-31 |
 
-说明：本文件是数据库设计草案，**不是正式批准的设计基线**。R1 已修正 ChatGPT 正式复审（`CHANGES_REQUIRED`）发现的主要问题并同步已批准点号规则；R2 统一修正剩余四项（三类查询语义、元数据 API query 参数、物化视图显式排除、`DSUB-FP-V1` 字节级指纹）并同步含逗号查询批准基线；R3 按已正式批准并收口的“取消并发保护”需求（`DSUB-REQ-097/098/099/103`）删除指纹字段/日期指纹 SQL/黄金向量/指纹工具、删除全部 `SELECT ... FOR UPDATE` 与行锁流程，编辑与删除改为普通主键 UPDATE/DELETE，多源库异常判定改为统一 null-safe 非空 token 数量判定，查询匹配使用 null-safe helper。删除 `DSUB-FP-V1` 相关数据库设计不是否定 R2 的技术正确性，而是同步新的正式需求。R3 定向修订已完成，但本文件尚未获得 ChatGPT 正式设计复审批准，不表示设计已批准、功能已实现、部署或验收完成。本 Feature **不执行也不授权任何 DDL**。
+说明：本文件是数据库设计草案，**不是正式批准的设计基线**。R1 已修正 ChatGPT 正式复审（`CHANGES_REQUIRED`）发现的主要问题并同步已批准点号规则；R2 统一修正剩余四项（三类查询语义、元数据 API query 参数、物化视图显式排除、`DSUB-FP-V1` 字节级指纹）并同步含逗号查询批准基线；R3 按已正式批准并收口的“取消并发保护”需求（`DSUB-REQ-097/098/099/103`）删除指纹字段/日期指纹 SQL/黄金向量/指纹工具、删除全部 `SELECT ... FOR UPDATE` 与行锁流程，编辑与删除改为普通主键 UPDATE/DELETE，多源库异常判定改为统一 null-safe 非空 token 数量判定，查询匹配使用 null-safe helper。删除 `DSUB-FP-V1` 相关数据库设计不是否定 R2 的技术正确性，而是同步新的正式需求。R3 定向修订已完成，ChatGPT 对 R3 结果提交 `ac4954401b79e04c56a8bbf9daec871fd194f19c` 正式复审结论 `CHANGES_REQUIRED`；本 R4 按复审发现定向修正三个确定问题（DELETE 影响多行错误码统一为 `50041`；DELETE 接口删除前多源库异常后端防护统一为强制普通读取→存在性与异常判定→普通 DELETE，删除预览不替代 DELETE 自身防护；修正“NULL 被 split 成 `['']`”的 Java 语义错误为“对 null 调用 split 抛 `NullPointerException`”），并保持 R3 已正确内容不回退。R4 定向修订已完成，但本文件尚未获得 ChatGPT 正式设计复审批准，不表示设计已批准、功能已实现、部署或验收完成。本 Feature **不执行也不授权任何 DDL**。
 
 ## 2. 物理现状
 
@@ -280,15 +281,21 @@ SELECT DATA_SUB_ID, DATA_SUB_DESC, DATA_FROM_SOURCE_ID, DATA_TO_SOURCE_ID,
 FROM CDC_DATA_SUBSCRIBE
 WHERE DATA_SUB_ID = ? AND FG_ACTIVE = '1';
 
+-- 删除后端防护（DELETE 接口事务内强制步骤）：普通读取，不加锁、不比较预览
+SELECT DATA_SUB_ID, DATA_FROM_SOURCE_ID, FG_ACTIVE
+FROM CDC_DATA_SUBSCRIBE
+WHERE DATA_SUB_ID = ? AND FG_ACTIVE = '1';
+
 -- 物理删除（DELETE）：普通主键删除，不加锁、不比较预览后记录是否变化
 DELETE FROM CDC_DATA_SUBSCRIBE WHERE DATA_SUB_ID = ?;
 ```
 
 - 物理删除，不更新 `FG_ACTIVE`（`DSUB-REQ-021/101`）。
 - 删除预览不锁行、不返回版本令牌；预览结果不构成删除时的一致性保证。预览后记录被其他页面或人工修改，确认删除仍直接按主键删除，不比较、不拒绝（`DSUB-REQ-103`，DESIGN §5.1/§5.3）。
-- 如删除前需要当前记录（记录存在、非多源库异常业务防护），使用普通 SELECT，不带 `FOR UPDATE`；普通 SELECT 与 DELETE 之间的变化不检测、不拒绝，属于已批准无并发保证边界。
-- 受影响行数必须 = 1；0 行 → `40430`（“订阅记录不存在或已被删除”，`DSUB-REQ-104`）。
+- **DELETE 接口自身的事务内删除前防护为强制步骤，删除预览不能替代**（接口可被直接调用，预览结果不是一致性快照）：事务内按 `DATA_SUB_ID` 普通 `SELECT` 当前记录（**不使用 `FOR UPDATE`，不加锁，不比较预览结果，不检查并发变化**）→ 查不到返回 `40430` → 复用统一 `isMultiSourceAnomaly`/`splitTrimDropEmpty` 判定（§4.7，DESIGN §4.7/§4.9），当前读取结果为多源库异常时返回 `40351` 且**不得执行 DELETE** → 校验通过后按 `DATA_SUB_ID` 执行普通物理 `DELETE` → 检查受影响行数。
+- 受影响行数必须 = 1；0 行 → `40430`（“订阅记录不存在或已被删除”，`DSUB-REQ-104`）；> 1 行 → `50041 DELETE_FAILED`（API §7；**不得映射为 `50040 SAVE_FAILED`**）。
 - 多源库异常记录无删除入口，DELETE 对异常记录返回 `40351`（API §7）。
+- 普通 `SELECT` 与 `DELETE` 之间若被其他页面或人工数据库操作修改，不检测、不拒绝，属于已批准“无并发保护、最后一次成功写入生效”边界。
 
 ### 4.6 数据源候选与引用映射（最小字段投影）
 
@@ -321,7 +328,7 @@ boolean isMultiSourceAnomaly(String dataFromSourceId) {
 }
 ```
 
-- 禁止使用原始 `split(DATA_FROM_SOURCE_ID, ',').length >= 2`：`NULL`/空白会被拆成非预期的 token 数，判定失真。
+- 禁止使用原始 `split(DATA_FROM_SOURCE_ID, ',').length >= 2`：对 `null` 直接调用实例方法 `split` 会抛 `NullPointerException`；对空字符串、仅空白、连续分隔符等输入，原始 `split` 得到的数组长度与有效非空 token 数不一致，判定失真。
 - `NULL`、空字符串、仅空白 → 空 token 集合（大小 0 → 非异常）；带逗号前缀/后缀/连续逗号但仅 1 个非空 token → 非异常；非空 token ≥ 2 → 异常（边界示例见 DESIGN §4.9）。
 - 列表、详情、编辑、删除预览、删除后端防护必须复用同一判定方法。
 
@@ -420,7 +427,7 @@ WHERE t.OWNER IN (:schemaA, :schemaB, ...)
 ### 5.2 编辑与删除的普通读写流程
 
 - 编辑：普通读取当前记录（不加锁）→ 完成业务校验 → 按 `DATA_SUB_ID` 普通 `UPDATE` → 检查受影响行数（0 行 → `40430`；异常 → `50040`）（§4.4，DESIGN §5.2）。
-- 删除：如需要当前记录则普通读取（不加锁）→ 校验记录存在且非多源库异常 → `DELETE ... WHERE DATA_SUB_ID = ?` → 检查受影响行数（0 行 → `40430`；异常 → `50041`）（§4.5，DESIGN §5.3）。
+- 删除：事务内普通读取当前记录（不加锁）→ 校验记录存在（否则 `40430`）且非多源库异常（否则 `40351`，不得 DELETE）→ `DELETE ... WHERE DATA_SUB_ID = ?` → 检查受影响行数（0 行 → `40430`；> 1 行 → `50041`）（§4.5，DESIGN §5.3）。
 - 普通 SELECT 与 DML 之间无并发保证；不检测、不拒绝并发变化（DESIGN §5.1）。
 
 ### 5.3 无 DDL 结论
