@@ -9,15 +9,15 @@
 | 正式菜单 | 数据订阅（配置管理组，路由 `/config/subscribe`，菜单项与路由均保持既有值不变） |
 | 既有路由 | `/config/subscribe` |
 | 目标文档 | `docs/features/data-subscription/ACCEPTANCE.md` |
-| 文档状态 | `APPROVED`（当前版本为“含逗号数据源 ID 查询兼容”验收标准调整正式批准版本，已获得 ChatGPT 正式复审 `APPROVED`，批准依据提交 `5d5b5f4606da14f160e9db43068f114d35501db8`；上一“英文句点 `.` 保留分隔符”批准版本（批准依据提交 `bb8716c26d5181edf84ba1f07d4e60e8f1c1918a`）作为历史事实保留，见 §6 变更记录） |
+| 文档状态 | `DRAFT_PENDING_USER_REVIEW`（当前版本为“取消并发保护”验收标准调整草案，尚未获得 ChatGPT 正式复审批准；上一正式批准验收标准版本为“含逗号数据源 ID 查询兼容”版本，批准依据提交 `5d5b5f4606da14f160e9db43068f114d35501db8`，该批准历史保留；更早“英文句点 `.` 保留分隔符”批准版本（批准依据提交 `bb8716c26d5181edf84ba1f07d4e60e8f1c1918a`）同样作为历史事实保留，见 §6 变更记录） |
 | 实现状态 | `NOT_STARTED`（本任务为纯文档需求与验收基线任务，不涉及任何业务代码实现） |
 | 任务编号 | `DATA-SUBSCRIPTION-REQUIREMENTS-BASELINE-001` |
 | 创建日期 | 2026-08-30 |
-| 依据需求 | `docs/features/data-subscription/REQUIREMENTS.md`（当前版本为含逗号数据源 ID 查询兼容需求调整批准版本，文档状态 `APPROVED`，批准依据提交 `5d5b5f4606da14f160e9db43068f114d35501db8`；上一正式批准版本为点号保留分隔符调整批准版本，批准依据提交 `bb8716c26d5181edf84ba1f07d4e60e8f1c1918a`） |
+| 依据需求 | `docs/features/data-subscription/REQUIREMENTS.md`（当前版本为“取消并发保护”需求调整草案，文档状态 `DRAFT_PENDING_USER_REVIEW`；上一正式批准需求版本为含逗号数据源 ID 查询兼容调整批准版本，批准依据提交 `5d5b5f4606da14f160e9db43068f114d35501db8`，历史批准事实保留） |
 
 重要声明：本文件把所有需求转换为可客观验收的场景，使用唯一、稳定的验收编号。所有用例初始状态为 `NOT_RUN`（未执行）；`PASS / FAIL / BLOCKED` 是执行后状态，任何用例状态只有在执行并取得与步骤匹配的客观证据后才允许更新。对需要构造数据库异常数据的验收场景，本文件只定义期望行为，不授权任何测试数据写入；任何数据库写操作仍需按项目数据库审批规则另行获得授权。
 
-状态含义必须清楚：批准验收标准、执行验收、正式验收通过、实现正式接受是不同状态。上一正式批准版本（提交 `d7560445be1504e6ed9957fa7b31be1fd393ea19`）已获得项目负责人正式批准；其后与“英文句点 `.` 保留分隔符”直接相关的既有验收项定向扩展版本已获得 ChatGPT 正式复审 `APPROVED`（批准依据提交 `bb8716c26d5181edf84ba1f07d4e60e8f1c1918a`），该批准历史保留不变；再后含英文逗号数据源 ID 查询兼容验收语义的定向调整版本已获得 ChatGPT 正式复审 `APPROVED`（批准依据提交 `5d5b5f4606da14f160e9db43068f114d35501db8`），当前文档状态为 `APPROVED`。验收标准基线获得批准不等于验收用例已执行；本 Feature 尚未实现（实现状态 `NOT_STARTED`），全部 126 条用例状态必须保持 `NOT_RUN`；只有未来实际执行并取得与步骤匹配的客观证据后，才允许更新为 `PASS / FAIL / BLOCKED`。当前本文件不得作为功能已实现或验收已通过的证据。
+状态含义必须清楚：批准验收标准、执行验收、正式验收通过、实现正式接受是不同状态。上一正式批准版本（提交 `d7560445be1504e6ed9957fa7b31be1fd393ea19`）已获得项目负责人正式批准；其后与“英文句点 `.` 保留分隔符”直接相关的既有验收项定向扩展版本已获得 ChatGPT 正式复审 `APPROVED`（批准依据提交 `bb8716c26d5181edf84ba1f07d4e60e8f1c1918a`），该批准历史保留不变；再后含英文逗号数据源 ID 查询兼容验收语义的定向调整版本已获得 ChatGPT 正式复审 `APPROVED`（批准依据提交 `5d5b5f4606da14f160e9db43068f114d35501db8`）；项目负责人随后明确“数据订阅页面的新增、编辑、删除完全不处理并发操作，不考虑其他页面用户或人工直接修改数据库造成的并发冲突”，本文件据此定向调整 `DSUB-AC-107/108/109/110/114/117` 与 §4.11，形成“取消并发保护”验收标准调整草案，当前文档状态为 `DRAFT_PENDING_USER_REVIEW`，尚未获得 ChatGPT 正式复审批准。验收标准基线获得批准不等于验收用例已执行；本 Feature 尚未实现（实现状态 `NOT_STARTED`），全部 126 条用例状态必须保持 `NOT_RUN`；只有未来实际执行并取得与步骤匹配的客观证据后，才允许更新为 `PASS / FAIL / BLOCKED`。当前本文件不得作为功能已实现或验收已通过的证据。
 
 ## 2. 验收结果状态模型
 
@@ -43,7 +43,7 @@
 | Schema 与表选择 | DSUB-AC-075 ~ DSUB-AC-088 | 14 |
 | 新增保存规则 | DSUB-AC-089 ~ DSUB-AC-096 | 8 |
 | 编辑规则 | DSUB-AC-097 ~ DSUB-AC-106 | 10 |
-| 并发保护 | DSUB-AC-107 ~ DSUB-AC-110 | 4 |
+| 无并发保护边界 | DSUB-AC-107 ~ DSUB-AC-110 | 4 |
 | 删除规则 | DSUB-AC-111 ~ DSUB-AC-117 | 7 |
 | 通用交互、安全与延期项 | DSUB-AC-118 ~ DSUB-AC-126 | 9 |
 | **合计** | DSUB-AC-001 ~ DSUB-AC-126 | **126** |
@@ -210,14 +210,14 @@
 | DSUB-AC-105 | NOT_RUN | DSUB-REQ-095 | 数据库存在多源库异常记录 | 尝试编辑该记录 | 该行不提供编辑入口 |
 | DSUB-AC-106 | NOT_RUN | DSUB-REQ-096 | 编辑并保存成功 | 检查字段 | `DATA_SUB_ID`、`INSERT_TIME` 保持不变；`UPDATE_TIME` 更新为数据库当前时间；遗留字段保持原值 |
 
-### 4.11 并发保护（对应 REQUIREMENTS §14）
+### 4.11 无并发保护边界（对应 REQUIREMENTS §14）
 
 | 编号 | 状态 | 关联需求 | 前置条件 | 操作/输入 | 预期结果 |
 |---|---|---|---|---|---|
-| DSUB-AC-107 | NOT_RUN | DSUB-REQ-097 | 打开编辑弹窗 | 观察请求 | 编辑打开时获取后端生成的版本令牌或等效原始快照标识 |
-| DSUB-AC-108 | NOT_RUN | DSUB-REQ-098 | 编辑弹窗打开期间记录被他人或人工修改 | 保存 | 保存前后端重新读取当前记录并比较业务字段，发现被修改则拒绝覆盖并提示刷新后重新编辑 |
-| DSUB-AC-109 | NOT_RUN | DSUB-REQ-099 | 人工直接修改数据库但未同步 `UPDATE_TIME` | 打开编辑并保存 | 不依赖 `UPDATE_TIME` 判断并发；仍能识别记录已被修改并拒绝覆盖 |
-| DSUB-AC-110 | NOT_RUN | DSUB-REQ-098 | 并发修改被拒绝 | 观察提示 | 返回清晰、可展示的业务提示，提示刷新后重新编辑 |
+| DSUB-AC-107 | NOT_RUN | DSUB-REQ-097 | 打开编辑弹窗 | 观察请求 | 编辑打开响应中不包含 `versionToken`、内容指纹或等效快照字段；编辑保存请求也不携带此类字段 |
+| DSUB-AC-108 | NOT_RUN | DSUB-REQ-098 | 编辑弹窗打开期间记录被他人或人工修改 | 由原页面保存 | 系统不执行并发比较、不返回并发冲突，按普通保存规则处理，最后一次成功写入的内容生效 |
+| DSUB-AC-109 | NOT_RUN | DSUB-REQ-099 | 人工直接修改数据库但未同步 `UPDATE_TIME` | 打开编辑并保存 | 系统不使用 `UPDATE_TIME` 或其他字段判断并发，正常按普通保存规则处理 |
+| DSUB-AC-110 | NOT_RUN | DSUB-REQ-098 | 保存过程中记录已被他人或人工修改 | 观察保存接口与页面 | 保存接口和页面不存在 `40910 CONCURRENT_MODIFIED`、“记录已被修改”或“刷新后重新编辑”等并发处理流程 |
 
 ### 4.12 删除规则（对应 REQUIREMENTS §15）
 
@@ -226,10 +226,10 @@
 | DSUB-AC-111 | NOT_RUN | DSUB-REQ-100 | 数据库存在多源库异常记录 | 尝试在该行寻找“删除”入口 | 该行不提供删除入口 |
 | DSUB-AC-112 | NOT_RUN | DSUB-REQ-100, DSUB-REQ-101 | 存在正常单源库记录 | 点击“删除”并确认 | 按 `DATA_SUB_ID` 主键执行物理删除 |
 | DSUB-AC-113 | NOT_RUN | DSUB-REQ-102 | 点击正常记录“删除” | 观察二次确认内容 | 展示订阅描述、源库、Schema 数、源表数量、目标库、“数据库记录物理删除且无法恢复”提示、“当前运行中的同步任务不会立即停止，需要重启相关 sync-client 后生效”说明 |
-| DSUB-AC-114 | NOT_RUN | DSUB-REQ-103 | 删除确认前记录被修改 | 确认删除 | 删除请求携带版本令牌或等效并发标识；发现记录已被修改则拒绝删除并刷新列表，避免误删新配置 |
+| DSUB-AC-114 | NOT_RUN | DSUB-REQ-103 | 删除确认前记录被人工或其他页面修改 | 确认删除 | 删除预览/确认请求不返回、不携带版本令牌；预览后记录被修改时，用户确认仍按 `DATA_SUB_ID` 直接物理删除，不执行并发比较 |
 | DSUB-AC-115 | NOT_RUN | DSUB-REQ-104 | 删除一个已不存在的记录 | 发起删除 | 提示“记录不存在或已被删除” |
 | DSUB-AC-116 | NOT_RUN | DSUB-REQ-105 | 删除成功 | 观察删除后行为 | 刷新列表，并提示重启 `sync-client` 后生效 |
-| DSUB-AC-117 | NOT_RUN | DSUB-REQ-102, DSUB-REQ-103 | 删除确认二次确认未通过 | 取消删除 | 不执行删除，记录保持不变 |
+| DSUB-AC-117 | NOT_RUN | DSUB-REQ-102 | 删除确认二次确认未通过 | 取消删除 | 不执行删除，记录保持不变 |
 
 ### 4.13 通用交互、安全与延期项（对应 REQUIREMENTS §16、§17）
 
@@ -248,7 +248,7 @@
 ## 5. 需求追踪完整性说明
 
 - 本验收基线共 **126** 条用例（`DSUB-AC-001 ~ DSUB-AC-126`），映射 `REQUIREMENTS.md` 中 **107** 条需求（`DSUB-REQ-001 ~ DSUB-REQ-107`）。
-- 覆盖校验：每条需求至少被一条验收用例引用；强制覆盖清单（§16.2）中全部场景均已有对应用例（只显示 `FG_ACTIVE=1` → DSUB-AC-017；查询多选 OR/AND → DSUB-AC-033~037；含逗号候选历史兼容可能匹配与歧义警告 → DSUB-AC-032~035；多源库异常行无操作 → DSUB-AC-009/010；停用与不存在数据源展示 → DSUB-AC-044~046；详情按 Schema 分组 → DSUB-AC-052；源库搜索排序 → DSUB-AC-064；目标库约 5 个平铺多选 → DSUB-AC-072；Schema 懒加载与缓存 → DSUB-AC-078；120~240 张表选择与状态保持 → DSUB-AC-083/086；无右侧“已选源表”面板 → DSUB-AC-080；汇总数量与 Schema 徽标 → DSUB-AC-087；弹窗拖动边界 → DSUB-AC-059/070；表名大小写与英文逗号/组件内部句点协议 → DSUB-AC-013/014、DSUB-AC-055、DSUB-AC-091；跨行重复订阅允许 → DSUB-AC-016；新增固定 `FG_ACTIVE=1` → DSUB-AC-018；编辑断连有限修改 → DSUB-AC-102/103；失效项拒绝保存 → DSUB-AC-090~093；并发编辑与并发删除 → DSUB-AC-107~110、DSUB-AC-114；物理删除与不可恢复提示 → DSUB-AC-112/113；重启 `sync-client` 后生效 → DSUB-AC-004/005/095；不操作 Kafka/ZooKeeper/进程 → DSUB-AC-120/125；大屏修正延期且不阻断 → DSUB-AC-121/122）。
+- 覆盖校验：每条需求至少被一条验收用例引用；强制覆盖清单（§16.2）中全部场景均已有对应用例（只显示 `FG_ACTIVE=1` → DSUB-AC-017；查询多选 OR/AND → DSUB-AC-033~037；含逗号候选历史兼容可能匹配与歧义警告 → DSUB-AC-032~035；多源库异常行无操作 → DSUB-AC-009/010；停用与不存在数据源展示 → DSUB-AC-044~046；详情按 Schema 分组 → DSUB-AC-052；源库搜索排序 → DSUB-AC-064；目标库约 5 个平铺多选 → DSUB-AC-072；Schema 懒加载与缓存 → DSUB-AC-078；120~240 张表选择与状态保持 → DSUB-AC-083/086；无右侧“已选源表”面板 → DSUB-AC-080；汇总数量与 Schema 徽标 → DSUB-AC-087；弹窗拖动边界 → DSUB-AC-059/070；表名大小写与英文逗号/组件内部句点协议 → DSUB-AC-013/014、DSUB-AC-055、DSUB-AC-091；跨行重复订阅允许 → DSUB-AC-016；新增固定 `FG_ACTIVE=1` → DSUB-AC-018；编辑断连有限修改 → DSUB-AC-102/103；失效项拒绝保存 → DSUB-AC-090~093；无并发保护边界（编辑/删除不比较、不拒绝覆盖、直接按主键更新/物理删除、最后一次成功写入生效）→ DSUB-AC-107~110、DSUB-AC-114；物理删除与不可恢复提示 → DSUB-AC-112/113；重启 `sync-client` 后生效 → DSUB-AC-004/005/095；不操作 Kafka/ZooKeeper/进程 → DSUB-AC-120/125；大屏修正延期且不阻断 → DSUB-AC-121/122）。
 
 ## 6. 文档级变更记录
 
@@ -261,5 +261,6 @@
 | 2026-08-30 | 点号保留分隔符验收标准批准收口：ChatGPT 对提交 `bb8716c26d5181edf84ba1f07d4e60e8f1c1918a` 正式复审结论 `APPROVED`；当前验收标准版本由调整草案收口为 `APPROVED`；126 条用例（`DSUB-AC-001` ~ `DSUB-AC-126`）编号、需求映射、步骤、前置条件、预期结果不变，状态全部保持 `NOT_RUN`；实现状态仍为 `NOT_STARTED`；设计仍为 `DRAFT_PENDING_USER_REVIEW` 草案且设计复审仍为 `CHANGES_REQUIRED`，待设计 R1 修订和重新复审；本次批准只批准点号需求对应验收标准，不批准设计、不实现功能、不执行验收 | DATA-SUBSCRIPTION-DOT-DELIMITER-REQUIREMENTS-ADJUSTMENT-APPROVAL-001（项目负责人批准驱动的纯文档需求/验收调整批准收口） |
 | 2026-08-30 | 含逗号数据源 ID 查询兼容验收标准调整草案：正式复审发现无转义英文逗号分隔协议无法精确识别含逗号 ID；在不增加编号的前提下定向调整 `DSUB-AC-032`（候选仅含启用且类别匹配数据源、含逗号/句点 ID 不静默移除、仅含句点候选保持普通可选、含逗号候选可选但显示明确歧义警告）、`DSUB-AC-033`/`DSUB-AC-034`（源库组/目标库组分别覆盖：两个普通 ID 之间 OR、token 去首尾空白后精确匹配、`S01` 不误匹配 `S012`、`%`/`_` 按字面值处理、仅含句点 ID 可精确匹配、选择含逗号候选时返回可能匹配集合并显示歧义警告、验收承认 `A,B` 歧义无法从当前物理字段消除）、`DSUB-AC-035`（组间 AND 不变、任一组含逗号候选仍按 AND 执行、页面持续展示歧义警告），并增加紧邻“查询歧义补充说明”；编号保持 126 条连续唯一，全部仍为 `NOT_RUN`；文档状态与依据需求状态由 `APPROVED` 转为 `DRAFT_PENDING_USER_REVIEW`（上一正式批准版本为点号保留分隔符批准版本，批准依据提交 `bb8716c26d5181edf84ba1f07d4e60e8f1c1918a`，历史批准事实保留）；实现状态仍为 `NOT_STARTED`；本调整草案待正式复审 | DATA-SUBSCRIPTION-COMMA-ID-QUERY-REQUIREMENTS-ADJUSTMENT-001（正式复审发现驱动的纯文档需求/验收定向调整草案） |
 | 2026-08-30 | 含逗号数据源 ID 查询兼容验收标准批准收口：ChatGPT 对提交 `5d5b5f4606da14f160e9db43068f114d35501db8` 正式复审结论 `APPROVED`；当前验收标准版本由调整草案收口为 `APPROVED`；126 条用例（`DSUB-AC-001` ~ `DSUB-AC-126`）编号、需求映射、步骤、前置条件、预期结果不变，`DSUB-AC-032~035` 及紧邻“查询歧义补充说明”逐字保持，状态全部保持 `NOT_RUN`；本次批准的是含逗号查询调整对应的验收标准，未批准设计、未实现功能、未执行验收；实现状态仍为 `NOT_STARTED`；设计（DESIGN/API/UI/DATABASE）仍为 `DRAFT_PENDING_USER_REVIEW` 草案且设计复审仍为 `CHANGES_REQUIRED`，下一阶段为设计 R2 定向修订 | DATA-SUBSCRIPTION-COMMA-ID-QUERY-REQUIREMENTS-ADJUSTMENT-APPROVAL-001（项目负责人批准驱动的纯文档需求/验收调整批准收口） |
+| 2026-08-31 | 取消并发保护验收标准调整草案：项目负责人明确“数据订阅页面的新增、编辑、删除完全不处理并发操作，不考虑其他页面用户或人工直接修改数据库造成的并发冲突”；定向调整 `DSUB-AC-107`（编辑打开响应不包含 `versionToken`、内容指纹或等效快照字段，保存请求不携带此类字段）、`DSUB-AC-108`（编辑打开后记录被他人或人工修改，原页面保存时系统不执行并发比较、不返回并发冲突、按普通保存规则处理、最后一次成功写入生效）、`DSUB-AC-109`（人工修改未同步 `UPDATE_TIME` 时系统不使用 `UPDATE_TIME` 或其他字段判断并发、正常按普通保存处理）、`DSUB-AC-110`（保存接口和页面不存在 `40910 CONCURRENT_MODIFIED`、“记录已被修改”或“刷新后重新编辑”等并发处理流程）、`DSUB-AC-114`（删除预览/确认请求不返回、不携带版本令牌，预览后记录被修改时确认仍按 `DATA_SUB_ID` 直接物理删除、不执行并发比较）、`DSUB-AC-117`（取消二次确认时不执行删除，关联需求由 `DSUB-REQ-102, DSUB-REQ-103` 修正为仅 `DSUB-REQ-102`，不再依赖旧版并发语义）；§4.11 标题由“并发保护”改为“无并发保护边界”，§3 分类表同步；§5 需求追踪完整性说明删除“并发编辑与并发删除”旧覆盖描述、改为“无并发保护边界”由 `DSUB-AC-107~110/114` 覆盖；验收编号保持 126 条连续唯一，状态全部仍为 `NOT_RUN`；文档状态与依据需求状态由 `APPROVED` 转为 `DRAFT_PENDING_USER_REVIEW`（上一正式批准版本为含逗号查询验收批准版本，批准依据提交 `5d5b5f4606da14f160e9db43068f114d35501db8`，历史批准事实保留）；实现状态仍为 `NOT_STARTED`；设计仍为 `DRAFT_PENDING_USER_REVIEW` 草案且设计复审仍为 `CHANGES_REQUIRED`，因本需求决策，设计 R3 将整体删除指纹/令牌/行锁方案；本调整草案待正式复审 | DATA-SUBSCRIPTION-NO-CONCURRENCY-REQUIREMENTS-ADJUSTMENT-001（项目负责人决策驱动的纯文档需求/验收定向调整草案） |
 
 > 关联文档：需求基线 `docs/features/data-subscription/REQUIREMENTS.md`；任务报告 `docs/features/data-subscription/reports/DATA-SUBSCRIPTION-REQUIREMENTS-BASELINE-001.md`、`...-001-R1.md`、`...-APPROVAL-001.md`、`.../DATA-SUBSCRIPTION-DOT-DELIMITER-REQUIREMENTS-ADJUSTMENT-001.md`、`.../DATA-SUBSCRIPTION-DOT-DELIMITER-REQUIREMENTS-ADJUSTMENT-APPROVAL-001.md`、`.../DATA-SUBSCRIPTION-COMMA-ID-QUERY-REQUIREMENTS-ADJUSTMENT-001.md`、`.../DATA-SUBSCRIPTION-COMMA-ID-QUERY-REQUIREMENTS-ADJUSTMENT-APPROVAL-001.md`。
