@@ -6,8 +6,8 @@
 |---|---|
 | Feature 中文名称 | 数据订阅 |
 | Feature 标识 | `data-subscription` |
-| 文档状态 | `DRAFT_PENDING_USER_REVIEW`（设计基线草案，尚未获得项目负责人或 ChatGPT 正式复审批准） |
-| 设计正式复审状态 | `PENDING_R4_REVIEW`（R1 正式复审结论 `CHANGES_REQUIRED`；R2 定向修订已完成且四项修订目标通过正式复核；R3 已按已批准“取消并发保护”需求完成定向修订，ChatGPT 对 R3 结果提交 `ac4954401b79e04c56a8bbf9daec871fd194f19c` 正式复审结论 `CHANGES_REQUIRED`；本 R4 按正式复审发现定向修正三个确定问题（DELETE 影响多行错误码统一为 `50041`；DELETE 接口删除前多源库异常后端防护统一为强制普通读取→存在性与异常判定→普通 DELETE；修正“NULL 被 split 成 `['']`”的 Java 语义错误为“对 null 调用 split 抛 `NullPointerException`”），尚未获得 ChatGPT 正式设计复审批准） |
+| 文档状态 | `APPROVED`（设计基线已正式批准，ChatGPT 对 R4-R1 结果提交 `ba7feddff426e369e1e73791b8d75e2ab62934e9` 正式复审结论 `APPROVED`；批准不代表功能已实现或验收已通过） |
+| 设计正式复审状态 | `APPROVED`（R1 正式复审结论 `CHANGES_REQUIRED`；R2 定向修订已完成且四项修订目标通过正式复核；R3 已按已批准“取消并发保护”需求完成定向修订，ChatGPT 对 R3 结果提交 `ac4954401b79e04c56a8bbf9daec871fd194f19c` 正式复审结论 `CHANGES_REQUIRED`；本 R4 按正式复审发现定向修正三个确定问题（DELETE 影响多行错误码统一为 `50041`；DELETE 接口删除前多源库异常后端防护统一为强制普通读取→存在性与异常判定→普通 DELETE；修正“NULL 被 split 成 `['']`”的 Java 语义错误为“对 null 调用 split 抛 `NullPointerException`”）；ChatGPT 对 R4-R1 结果提交 `ba7feddff426e369e1e73791b8d75e2ab62934e9` 正式复审结论 `APPROVED`，当前正式批准设计版本为 R4，R4-R1 仅完成状态元数据收口；批准不代表实现或验收通过） |
 | 实现状态 | `NOT_STARTED`（本任务为纯文档设计基线 R4 定向修订，不涉及任何业务代码实现） |
 | 验收执行状态 | 126 条全部 `NOT_RUN` |
 | 任务编号 | `DATA-SUBSCRIPTION-DESIGN-BASELINE-001-R4`（R4 定向修订；前序 R3 任务 `DATA-SUBSCRIPTION-DESIGN-BASELINE-001-R3` 结果提交 `ac4954401b79e04c56a8bbf9daec871fd194f19c`，ChatGPT 对 R3 正式复审结论 `CHANGES_REQUIRED`；R2 任务 `DATA-SUBSCRIPTION-DESIGN-BASELINE-001-R2` 结果提交 `026417e7e907b0fd23e8812024a260f119c993cc`；R1 任务 `DATA-SUBSCRIPTION-DESIGN-BASELINE-001-R1` 结果提交 `3609548238c9fede745f5291e258469ab7b78167`；首版任务 `DATA-SUBSCRIPTION-DESIGN-BASELINE-001` 结果提交 `610401575938ba32f13fa635493f991bdfae81b6`） |
@@ -21,7 +21,7 @@
 | R4 修订日期 | 2026-08-31 |
 | 设计依据 | 已批准需求/验收基线（“取消并发保护”批准版本，前序含逗号/点号批准版本作为历史事实保留）+ 已批准数据库物理基线（`docs/database/`）+ 真实代码只读核验 + 项目既有实现模式 + ChatGPT 正式设计复审发现项 |
 
-说明：本文件是设计草案，**不是正式批准的设计基线**。R1 已修正 ChatGPT 正式复审（`CHANGES_REQUIRED`）发现的主要问题并同步已批准点号规则；R2 统一修正剩余四项（三类查询语义、元数据 API query 参数、物化视图显式排除、`DSUB-FP-V1` 字节级指纹）并同步含逗号查询批准基线；R3 按已正式批准并收口的“取消并发保护”需求（`DSUB-REQ-097/098/099/103`）统一删除版本令牌、内容指纹（`DSUB-FP-V1`）、黄金向量、行锁、并发字段比较、`40910 CONCURRENT_MODIFIED` 及相关前端流程，把编辑保存、删除预览和物理删除改为普通读写流程，修正多源库异常判定中的空 token 问题，并为可空 CSV 字段建立统一 null-safe 解析与查询匹配契约。删除 `DSUB-FP-V1` 不是否定 R2 的技术正确性，而是同步新的正式需求。R3 定向修订已完成，ChatGPT 对 R3 结果提交 `ac4954401b79e04c56a8bbf9daec871fd194f19c` 正式复审结论 `CHANGES_REQUIRED`；本 R4 按复审发现定向修正三个确定问题（DELETE 影响多行错误码统一为 `50041`；DELETE 接口删除前多源库异常后端防护统一为强制普通读取→存在性与异常判定→普通 DELETE，删除预览不替代 DELETE 自身防护；修正“NULL 被 split 成 `['']`”的 Java 语义错误为“对 null 调用 split 抛 `NullPointerException`”），并保持 R3 已正确内容不回退。R4 定向修订已完成，但本文件尚未获得 ChatGPT 正式设计复审批准，不表示设计已批准、功能已实现、部署或验收完成。
+说明：本文件为数据订阅 Feature 设计基线，**已正式批准**。R1 已修正 ChatGPT 正式复审（`CHANGES_REQUIRED`）发现的主要问题并同步已批准点号规则；R2 统一修正剩余四项（三类查询语义、元数据 API query 参数、物化视图显式排除、`DSUB-FP-V1` 字节级指纹）并同步含逗号查询批准基线；R3 按已正式批准并收口的“取消并发保护”需求（`DSUB-REQ-097/098/099/103`）统一删除版本令牌、内容指纹（`DSUB-FP-V1`）、黄金向量、行锁、并发字段比较、`40910 CONCURRENT_MODIFIED` 及相关前端流程，把编辑保存、删除预览和物理删除改为普通读写流程，修正多源库异常判定中的空 token 问题，并为可空 CSV 字段建立统一 null-safe 解析与查询匹配契约。删除 `DSUB-FP-V1` 不是否定 R2 的技术正确性，而是同步新的正式需求。R3 定向修订已完成，ChatGPT 对 R3 结果提交 `ac4954401b79e04c56a8bbf9daec871fd194f19c` 正式复审结论 `CHANGES_REQUIRED`；本 R4 按复审发现定向修正三个确定问题（DELETE 影响多行错误码统一为 `50041`；DELETE 接口删除前多源库异常后端防护统一为强制普通读取→存在性与异常判定→普通 DELETE，删除预览不替代 DELETE 自身防护；修正“NULL 被 split 成 `['']`”的 Java 语义错误为“对 null 调用 split 抛 `NullPointerException`”），并保持 R3 已正确内容不回退。R4 定向修订已完成，ChatGPT 对 R4-R1 结果提交 `ba7feddff426e369e1e73791b8d75e2ab62934e9` 正式复审结论 `APPROVED`；批准不代表功能已实现、部署或验收完成。
 
 ## 2. 当前事实与目标架构
 
@@ -640,4 +640,4 @@ matched = matchCsvComma(storedCsv, queryId)
 
 ---
 
-*文档状态：`DRAFT_PENDING_USER_REVIEW`。本文件为设计基线草案（R4 定向修订版，R4-R1 完成状态元数据定向收口），未获正式复审批准，不代表设计已批准、功能已实现或验收通过；R3 已按已批准“取消并发保护”需求完成定向修订，R4 已按 ChatGPT 对 R3 正式复审 `CHANGES_REQUIRED` 定向修正 DELETE 错误码、DELETE 删除前多源库异常后端防护与 Java null/split 语义三个确定问题；ChatGPT 对 R4 结果提交正式复审为业务设计通过、状态元数据 `CHANGES_REQUIRED`，R4-R1 已统一本文件顶部/页尾复审状态，等待 ChatGPT 对 R4-R1 结果提交正式复审。*
+*文档状态：`APPROVED`。本文件为数据订阅 Feature 正式设计基线（批准版本 R4，R4-R1 完成状态元数据收口），ChatGPT 对 R4-R1 结果提交 `ba7feddff426e369e1e73791b8d75e2ab62934e9` 正式复审结论 `APPROVED`；批准不代表功能已实现或验收已通过。R3 已按已批准“取消并发保护”需求完成定向修订，R4 已按 ChatGPT 对 R3 正式复审 `CHANGES_REQUIRED` 定向修正 DELETE 错误码、DELETE 删除前多源库异常后端防护与 Java null/split 语义三个确定问题。*
