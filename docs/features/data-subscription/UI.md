@@ -7,15 +7,17 @@
 | Feature 中文名称 | 数据订阅 |
 | Feature 标识 | `data-subscription` |
 | 文档状态 | `DRAFT_PENDING_USER_REVIEW`（界面设计草案，尚未获得项目负责人或 ChatGPT 正式复审批准） |
-| 实现状态 | `NOT_STARTED`（本任务为纯文档设计基线 R1 定向修订，不涉及任何业务代码实现） |
+| 设计正式复审状态 | `PENDING_R2_REVIEW`（R1 正式复审结论 `CHANGES_REQUIRED`；本 R2 定向修订已完成，尚未获得 ChatGPT 正式设计复审批准） |
+| 实现状态 | `NOT_STARTED`（本任务为纯文档设计基线 R2 定向修订，不涉及任何业务代码实现） |
 | 验收执行状态 | 126 条全部 `NOT_RUN` |
-| 任务编号 | `DATA-SUBSCRIPTION-DESIGN-BASELINE-001-R1`（R1 定向修订；首版任务 `DATA-SUBSCRIPTION-DESIGN-BASELINE-001` 结果提交 `610401575938ba32f13fa635493f991bdfae81b6`） |
-| 依据的已批准需求基线 | `docs/features/data-subscription/REQUIREMENTS.md`（`APPROVED`，107 条，当前版本为点号保留分隔符调整批准版本，批准依据提交 `bb8716c26d5181edf84ba1f07d4e60e8f1c1918a`） |
+| 任务编号 | `DATA-SUBSCRIPTION-DESIGN-BASELINE-001-R2`（R2 定向修订；前序 R1 任务 `DATA-SUBSCRIPTION-DESIGN-BASELINE-001-R1` 结果提交 `3609548238c9fede745f5291e258469ab7b78167`；首版任务 `DATA-SUBSCRIPTION-DESIGN-BASELINE-001` 结果提交 `610401575938ba32f13fa635493f991bdfae81b6`） |
+| 依据的已批准需求基线 | `docs/features/data-subscription/REQUIREMENTS.md`（`APPROVED`，107 条，当前版本为含逗号数据源 ID 查询兼容调整批准版本，批准依据提交 `afc5765956cac3c8f66d8857ff17565472d0c746`） |
 | 依据的已批准验收基线 | `docs/features/data-subscription/ACCEPTANCE.md`（`APPROVED`，126 条，全部 `NOT_RUN`） |
 | 创建日期 | 2026-08-30 |
 | R1 修订日期 | 2026-08-30 |
+| R2 修订日期 | 2026-08-31 |
 
-说明：本文件是界面设计草案，**不是正式批准的设计基线**。R1 只修正 ChatGPT 正式复审（`CHANGES_REQUIRED`）发现的问题并把已批准点号规则同步进来；本文件不表示设计已批准、功能已实现、部署或验收完成。
+说明：本文件是界面设计草案，**不是正式批准的设计基线**。R1 已修正 ChatGPT 正式复审（`CHANGES_REQUIRED`）发现的主要问题并同步已批准点号规则；R2 统一修正剩余四项（三类查询语义、元数据 API query 参数、物化视图显式排除、`DSUB-FP-V1` 字节级指纹）并同步含逗号查询批准基线。R2 定向修订已完成，但本文件尚未获得 ChatGPT 正式设计复审批准，不表示设计已批准、功能已实现、部署或验收完成。
 
 - 技术栈：Vue 3 + TypeScript + Element Plus（^2.5.0）+ Pinia + vue-router 4 + axios（沿用项目既有前端栈）。
 - 视觉：使用项目现有设计令牌与 Element Plus 组件（Tag、Tooltip、Table、Dialog、Select、MessageBox、Loading 等），不凭空建立另一套视觉系统。
@@ -28,9 +30,12 @@
 
 - 上方只有两个查询条件：**源库（多选下拉）**、**目标库（多选下拉）**（`DSUB-REQ-032`）。
 - 候选项来自 `GET /api/subscriptions/options`（API §4.1）：`FG_ACTIVE=1` 且类别匹配；候选项显示以 `DATA_SOURCE_ORG` 为主要文字，`DATA_SOURCE_ID` 为辅助文字（悬停或辅助信息显示 ID）（`DSUB-REQ-033/037`）。
-- **查询候选与维护候选的保留字符处理不同**：
-  - 查询候选（本查询区）：即使存量数据源 ID 含保留字符（英文逗号或英文句点），仍允许选择用于查询历史订阅，不得因保留字符导致无法定位历史记录（`DSUB-REQ-033`）；不显示禁用、不显示保留字符提示。
-  - 维护候选（新增/编辑弹窗的源库/目标库下拉）：ID 含保留字符（英文逗号或英文句点）的数据源显示为禁用项并标注“名称含协议保留字符，不能用于订阅配置”，不得静默隐藏（`DSUB-REQ-017`；见 §5）。
+- **查询候选三类语义（`DSUB-REQ-033`，已批准）**：
+  - **不含英文逗号**：普通候选，可选；
+  - **含英文句点但不含英文逗号**：仍为普通候选，可选，可按完整 token 精确匹配；
+  - **含英文逗号**：仍可选，但候选项显示警告标记“含逗号，历史兼容查询可能存在歧义”，不得冒充普通精确候选。
+  - 查询候选（本查询区）不因 ID 含保留字符（英文逗号或英文句点）被静默隐藏或禁用；维护候选（新增/编辑弹窗的源库/目标库下拉）的禁用规则不变：ID 含保留字符（英文逗号或英文句点）的数据源显示为禁用项并标注“名称含协议保留字符，不能用于订阅配置”，不得静默隐藏（`DSUB-REQ-017`；见 §5）。
+- **列表响应与歧义警告**：列表接口 `GET /api/subscriptions`（API §4.2）返回对象 `{ items, queryWarnings }`，前端按 `data.items` 渲染列表行，**不得把 `data` 当数组**；一次查询包含任意含逗号候选时，前端在查询条件区域和结果区域持续显示歧义警告（逐条取自 `queryWarnings`，文案“含逗号的数据源 ID 只能进行历史兼容可能匹配，结果可能包含歧义记录”）；无歧义条件时 `queryWarnings=[]`，不显示警告。警告不是错误，不阻断查询。
 - 交互：选择条件后点击“**查询**”才执行过滤；点击“**重置**”只清空表单条件，**不自动重新查询**，列表保持上一次已生效的查询结果（`DSUB-REQ-034`）。
 - 无结果时显示空状态“暂无符合条件的订阅记录”（`DSUB-REQ-034`）。
 - 首次进入自动查询并展示全部 `FG_ACTIVE=1` 记录（`DSUB-REQ-029`）。
@@ -105,7 +110,7 @@
 ## 6. Schema 与表选择区
 
 - 布局：**左侧 Schema 列表，右侧当前 Schema 的普通表表格**（`DSUB-REQ-071`）。
-- 选择源库后**自动加载 Schema**（`GET /api/subscriptions/metadata/{dataSourceId}/schemas`，API §4.4）；点击某 Schema 时首次加载该 Schema 的普通表（`GET /api/subscriptions/metadata/{dataSourceId}/schemas/{schema}/tables`，API §4.5），并在本次弹窗会话内缓存；不得每次切换都重复查询（`DSUB-REQ-070`）。
+- 选择源库后**自动加载 Schema**（`GET /api/subscriptions/metadata/schemas?dataSourceId=<原始字符串>`，API §4.4）；点击某 Schema 时首次加载该 Schema 的普通表（`GET /api/subscriptions/metadata/tables?dataSourceId=<原始字符串>&schema=<原始字符串>`，API §4.5），并在本次弹窗会话内缓存；不得每次切换都重复查询（`DSUB-REQ-070`）。前端用 axios `params` 对象传参、不手工拼接 query string，`dataSourceId`/`schema` 均按原始字符串传输、保持大小写、不做 URL 路径段拆分。
 - 加载失败：显示明确错误并提供“重试加载”（`DSUB-REQ-070`）。
 - 表名搜索：当前 Schema 内不区分大小写模糊搜索（`DSUB-REQ-072`）。
 - 操作（`DSUB-REQ-073`）：全选当前 Schema 当前搜索结果；取消当前搜索结果的选择；“只看已选”开关；清空当前 Schema（二次确认）。
@@ -176,4 +181,4 @@
 
 ---
 
-*文档状态：`DRAFT_PENDING_USER_REVIEW`。本文件为界面设计基线草案（R1 定向修订版），未获正式复审批准，不代表设计已批准、功能已实现或验收通过。*
+*文档状态：`DRAFT_PENDING_USER_REVIEW`。本文件为界面设计基线草案（R2 定向修订版），未获正式复审批准，不代表设计已批准、功能已实现或验收通过；R2 定向修订已完成，等待 ChatGPT 正式设计 R2 复审。*

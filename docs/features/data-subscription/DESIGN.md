@@ -7,17 +7,19 @@
 | Feature 中文名称 | 数据订阅 |
 | Feature 标识 | `data-subscription` |
 | 文档状态 | `DRAFT_PENDING_USER_REVIEW`（设计基线草案，尚未获得项目负责人或 ChatGPT 正式复审批准） |
-| 实现状态 | `NOT_STARTED`（本任务为纯文档设计基线 R1 定向修订，不涉及任何业务代码实现） |
+| 设计正式复审状态 | `PENDING_R2_REVIEW`（R1 正式复审结论 `CHANGES_REQUIRED`；本 R2 定向修订已完成，尚未获得 ChatGPT 正式设计复审批准） |
+| 实现状态 | `NOT_STARTED`（本任务为纯文档设计基线 R2 定向修订，不涉及任何业务代码实现） |
 | 验收执行状态 | 126 条全部 `NOT_RUN` |
-| 任务编号 | `DATA-SUBSCRIPTION-DESIGN-BASELINE-001-R1`（R1 定向修订；首版任务 `DATA-SUBSCRIPTION-DESIGN-BASELINE-001` 结果提交 `610401575938ba32f13fa635493f991bdfae81b6`） |
-| 任务类型 | 纯文档设计基线 R1 定向修订（修正 ChatGPT 正式设计复审 `CHANGES_REQUIRED` 发现项，并同步已批准点号规则） |
-| 依据的已批准需求基线 | `docs/features/data-subscription/REQUIREMENTS.md`（`APPROVED`，107 条 `DSUB-REQ-001` ~ `DSUB-REQ-107`，当前版本为点号保留分隔符调整批准版本，批准依据提交 `bb8716c26d5181edf84ba1f07d4e60e8f1c1918a`） |
+| 任务编号 | `DATA-SUBSCRIPTION-DESIGN-BASELINE-001-R2`（R2 定向修订；前序 R1 任务 `DATA-SUBSCRIPTION-DESIGN-BASELINE-001-R1` 结果提交 `3609548238c9fede745f5291e258469ab7b78167`；首版任务 `DATA-SUBSCRIPTION-DESIGN-BASELINE-001` 结果提交 `610401575938ba32f13fa635493f991bdfae81b6`） |
+| 任务类型 | 纯文档设计基线 R2 定向修订（统一修正 R1 正式复审 `CHANGES_REQUIRED` 剩余四项：三类查询语义、元数据 API query 参数、物化视图显式排除、`DSUB-FP-V1` 字节级指纹） |
+| 依据的已批准需求基线 | `docs/features/data-subscription/REQUIREMENTS.md`（`APPROVED`，107 条 `DSUB-REQ-001` ~ `DSUB-REQ-107`，当前版本为含逗号数据源 ID 查询兼容调整批准版本，批准依据提交 `afc5765956cac3c8f66d8857ff17565472d0c746`） |
 | 依据的已批准验收基线 | `docs/features/data-subscription/ACCEPTANCE.md`（`APPROVED`，126 条 `DSUB-AC-001` ~ `DSUB-AC-126`，全部 `NOT_RUN`） |
 | 创建日期 | 2026-08-30 |
 | R1 修订日期 | 2026-08-30 |
-| 设计依据 | 已批准需求/验收基线（含点号批准版本）+ 已批准数据库物理基线（`docs/database/`）+ 真实代码只读核验 + 项目既有实现模式 + ChatGPT 正式设计复审发现项 |
+| R2 修订日期 | 2026-08-31 |
+| 设计依据 | 已批准需求/验收基线（含逗号查询批准版本，前序点号批准版本作为历史事实保留）+ 已批准数据库物理基线（`docs/database/`）+ 真实代码只读核验 + 项目既有实现模式 + ChatGPT 正式设计复审发现项 |
 
-说明：本文件是设计草案，**不是正式批准的设计基线**。R1 只修正 ChatGPT 正式复审（`CHANGES_REQUIRED`）发现的问题并把已批准点号规则同步进四份设计文档；本文件不表示设计已批准、功能已实现、部署或验收完成。R1 完成后必须再次交由 ChatGPT 正式设计复审。
+说明：本文件是设计草案，**不是正式批准的设计基线**。R1 已修正 ChatGPT 正式复审（`CHANGES_REQUIRED`）发现的主要问题并同步已批准点号规则；R2 统一修正剩余四项（三类查询语义、元数据 API query 参数、物化视图显式排除、`DSUB-FP-V1` 字节级指纹）并同步含逗号查询批准基线。R2 定向修订已完成，但本文件尚未获得 ChatGPT 正式设计复审批准，不表示设计已批准、功能已实现、部署或验收完成。
 
 ## 2. 当前事实与目标架构
 
@@ -87,10 +89,14 @@ frontend/src/types/subscription.ts      # 类型定义
 
 1. 点击菜单“数据订阅”进入列表页（路由 `/config/subscribe`）。
 2. 首次进入自动调用列表查询（无条件）展示全部 `FG_ACTIVE=1` 记录，按 `NVL(UPDATE_TIME, INSERT_TIME) DESC` 排序（`DSUB-REQ-029/030/031`）。
-3. 用户在查询区选择源库（多选）与/或目标库（多选），点击“查询”触发过滤；源库条件之间 `OR`、目标库条件之间 `OR`、源库组与目标库组之间 `AND`（`DSUB-REQ-034`；SQL 见 DATABASE.md §4.1）。
+3. 用户在查询区选择源库（多选）与/或目标库（多选），点击“查询”触发过滤。数据库只执行单一查询读取全部启用订阅（SQL 见 DATABASE.md §4.1）；源库组、目标库组的过滤在服务层（Java）完成：源库条件之间 `OR`、目标库条件之间 `OR`、源库组与目标库组之间 `AND`，过滤后保持数据库排序的相对顺序（`DSUB-REQ-034`；算法见 §7.1）。
 4. “重置”只清空查询表单，不自动重新查询，列表保持上一次已生效的查询结果（`DSUB-REQ-034`）。
 5. 无结果时显示“暂无符合条件的订阅记录”（`DSUB-REQ-034`）。
-6. 查询候选边界：查询区的源库/目标库候选仍按 `FG_ACTIVE=1` 且类别匹配返回；即使某个存量数据源 ID 含保留字符（英文逗号或英文句点），仍允许选用于查询历史订阅，不得因保留字符导致无法定位历史记录（`DSUB-REQ-033`）。
+6. 查询候选三类语义（`DSUB-REQ-033`，已批准）：查询区源库/目标库候选仍按 `FG_ACTIVE=1` 且类别匹配返回，不因 ID 含保留字符（英文逗号或英文句点）静默隐藏：
+   - **不含英文逗号**：普通候选，可选；
+   - **含英文句点但不含英文逗号**：仍为普通候选，英文句点不是 `DATA_FROM_SOURCE_ID`/`DATA_TO_SOURCE_ID` 这两个 CSV 字段的分隔符，可按完整 token 精确匹配；
+   - **含英文逗号**：仍返回并允许选择，但候选项必须显示警告标记（“含逗号，历史兼容查询可能存在歧义”），不得冒充普通精确候选。
+7. 查询结果歧义警告：一次查询包含任意含逗号候选时，页面在查询条件和结果区域持续显示歧义警告；列表 API 以 `items + queryWarnings` 返回（API.md §4.2）；警告不是错误，不阻断查询。
 
 ### 3.2 查看详情
 
@@ -105,8 +111,8 @@ frontend/src/types/subscription.ts      # 类型定义
 1. 点击“新增”，打开近全屏弹窗（默认居中，标题栏可拖动）。
 2. 后端加载候选：`GET /api/subscriptions/options` 一次返回源库/目标库启用候选（`FG_ACTIVE=1` 且类别匹配）（`DSUB-REQ-033/058/064`）。维护候选边界：新增/编辑候选中 ID 含保留字符（英文逗号或英文句点）的数据源显示为禁用项并标注“名称含协议保留字符，不能用于订阅配置”，不得静默隐藏（`DSUB-REQ-017`；目标库 ID 虽不参与三段拼接，同样禁止句点）。
 3. 选择源库（可搜索单选下拉，候选显示 ORG 为主、ID 为辅）。
-4. 自动加载源库 Schema 列表（`GET /api/subscriptions/metadata/{dataSourceId}/schemas`）。
-5. 点击某 Schema 时首次加载该 Schema 的普通表（`GET /api/subscriptions/metadata/{dataSourceId}/schemas/{schema}/tables`），并在本次弹窗会话内缓存；切换不重复查询（`DSUB-REQ-070`）。
+4. 自动加载源库 Schema 列表（`GET /api/subscriptions/metadata/schemas?dataSourceId=<原始字符串>`，API §4.4）；`dataSourceId` 以 query 参数承载，按原始字符串传输、保持大小写，不做 URL 路径段拆分。
+5. 点击某 Schema 时首次加载该 Schema 的普通表（`GET /api/subscriptions/metadata/tables?dataSourceId=<原始字符串>&schema=<原始字符串>`，API §4.5），并在本次弹窗会话内缓存；切换不重复查询（`DSUB-REQ-070`）。`schema` 同样以 query 参数承载，避免 `encodeURIComponent` 后 `%2F` 等被 Servlet 容器或反向代理拒绝或提前解码的路径变量问题（API §2 合并说明）。
 6. 用户选择源表（左侧 Schema 列表 + 中间表格，无右侧“已选源表”面板）。Schema 或表名含保留字符（英文逗号或组件内部英文句点）的对象显示为不可选择并明确说明原因（协议保留字符），不得静默隐藏（`DSUB-REQ-017`）。
 7. 选择目标库（1～5 个紧凑复选卡片）。
 8. 点击“保存”：前端做基础必填/格式校验并组装结构化 `sourceTables`（`SourceTableInput[]`，每项仅 `schemaName` + `tableName`）；后端做最终校验（源库/目标库存在、启用、类别正确；Schema/表存在且可访问；格式正确；名称不含保留字符；不重复），保存校验使用一次源库连接按 Schema 批量复核（`DSUB-REQ-081~085`）。后端以 `dataFromSourceId` 为唯一源库，校验后拼成数据库格式 `DATA_SOURCE_ID.Schema.表名` 持久化（`sourceTables` 契约见 §4.2 与 API.md §4.6）。
@@ -164,7 +170,7 @@ frontend/src/types/subscription.ts      # 类型定义
   2. 空 token（连续逗号产生）丢弃；
   3. 去重：同一记录内不允许重复表标识、不允许重复目标库 ID（`DSUB-REQ-018`；目标库重复见 `DSUB-REQ-083`）；结构化 `SourceTableInput` 按 `(schemaName, tableName)` 精确组合去重；
   4. 保存时按稳定顺序拼回英文逗号分隔（保留用户顺序的稳定版本，去重后保持首次出现顺序）。
-- 查询匹配使用完整 token 精确匹配，禁止 `%ID%` 子串匹配；优先采用不受 `%`、`_` 等 LIKE 通配符影响的 Oracle 字面匹配（`INSTR(',' || col || ',', ',' || #{token} || ',') > 0`），见 §7.1 与 DATABASE.md §4.1。
+- 查询匹配（列表过滤）采用三类语义（`DSUB-REQ-034`）：普通 ID（不含英文逗号）按 CSV 拆分 token 去除首尾空白后完整字面精确匹配（Java `String.equals`，`%`、`_`、反斜杠、句点、正则字符按字面处理，禁止 `%ID%` 子串匹配，`S01` 不匹配 `S012`）；仅含句点 ID 适用同一精确规则；含逗号 ID 定义为“历史兼容可能匹配”（连续分隔边界完整片段匹配，返回可能匹配集合并给出歧义警告）。查询过滤在服务层 Java 完成，算法见 §7.1，SQL 见 DATABASE.md §4.1。
 - 存量记录解析容错：解析失败或异常内容不得静默丢弃，在详情/编辑中按 §4.4 处理。
 
 ### 4.2 `DATA_SOURCE_TABLE` 单表格式与点号保留分隔符
@@ -216,18 +222,101 @@ frontend/src/types/subscription.ts      # 类型定义
 
 ## 5. 并发与幂等
 
-### 5.1 版本令牌（内容指纹，无需新增数据库列）
+### 5.1 版本令牌（`DSUB-FP-V1` 内容指纹，无需新增数据库列）
 
 - 采用**内容指纹版本令牌**：编辑打开或删除预览时，后端基于记录当前完整业务内容计算一个指纹，作为并发标识返回前端；保存/删除时前端回传该令牌，后端在行锁内重新读取当前完整记录计算指纹并比较。
-- 指纹规范（四份文档统一口径）：
-  - 指纹基于完整当前记录中会影响编辑/删除判断的字段：`DATA_SUB_ID`、`DATA_SUB_DESC`、`DATA_FROM_SOURCE_ID`、`DATA_TO_SOURCE_ID`、`DATA_SOURCE_TABLE`、`DATA_SOURCE_COMMENT`、`DATA_TARGET_TABLE`、`DATA_TARGET_COMMENT`、`INSERT_TIME`、`UPDATE_TIME`；
-  - 每个字段采用“字段名 + null 标记 + UTF-8 字节长度 + UTF-8 内容”的无歧义编码，不允许简单字符串拼接造成字段边界碰撞（例如 `A`+`BC` 与 `AB`+`C` 不得产生相同指纹）；
-  - CLOB 字段读取完整内容参与指纹；
-  - DATE 字段统一转换为明确的时间值表示（epoch millis），四处文档口径一致；
-  - 对规范化字节串做 SHA-256，输出小写十六进制 64 字符；
-  - 令牌只用于并发检测，不是安全凭证；
-  - 人工只改时间字段（`INSERT_TIME`/`UPDATE_TIME`）导致指纹变化并触发一次保守冲突，属于可接受的保守误报（提示刷新后重新编辑），不是漏报。
+- 指纹规范统一为字节级确定、可复现的 **`DSUB-FP-V1`** 算法（本文件为权威定义；API.md §4.7/§4.9、DATABASE.md §5.2 准确引用并重复必要契约，四份文档不得出现矛盾版本）。
+
+**指纹字段顺序（固定且不可改变，10 个字段，均取自当前完整记录）：**
+
+| # | 字段 | 类型 |
+|---|---|---|
+| 1 | `DATA_SUB_ID` | VARCHAR2 |
+| 2 | `DATA_SUB_DESC` | VARCHAR2 |
+| 3 | `DATA_FROM_SOURCE_ID` | VARCHAR2 |
+| 4 | `DATA_TO_SOURCE_ID` | VARCHAR2 |
+| 5 | `DATA_SOURCE_TABLE` | CLOB |
+| 6 | `DATA_SOURCE_COMMENT` | CLOB |
+| 7 | `DATA_TARGET_TABLE` | CLOB |
+| 8 | `DATA_TARGET_COMMENT` | CLOB |
+| 9 | `INSERT_TIME` | DATE |
+| 10 | `UPDATE_TIME` | DATE |
+
+- `DELETE_TIME`、`FG_ACTIVE` 不参与指纹（现有决定，四份文档一致）：`DELETE_TIME` 未维护（物理删除，无删除时间可参与）；`FG_ACTIVE` 本 Feature 恒为 `'1'`，不参与编辑/删除并发判断。不得将其悄悄加入或遗漏上述十个字段。
+
+**输入值规范：**
+
+- 字符串字段：使用数据库读取到的原始 Java 字符序列，不 trim、不大小写转换、不 CSV 规范化；
+- CLOB：读取完整字符内容，不截断，再按 UTF-8 编码；
+- 空字符串与 NULL 必须不同（见编码）；
+- Oracle `DATE` 不含时区且精度到秒，**禁止使用依赖 JVM 默认时区的 epoch millis 规则**。编辑打开、删除预览和锁行重读的 Mapper SQL 必须使用同一表达式取得日期指纹值：
+
+```sql
+TO_CHAR(INSERT_TIME, 'YYYY-MM-DD"T"HH24:MI:SS',
+        'NLS_DATE_LANGUAGE=American NLS_CALENDAR=GREGORIAN') AS INSERT_TIME_FP,
+TO_CHAR(UPDATE_TIME, 'YYYY-MM-DD"T"HH24:MI:SS',
+        'NLS_DATE_LANGUAGE=American NLS_CALENDAR=GREGORIAN') AS UPDATE_TIME_FP
+```
+
+- DATE 为 NULL 时规范值为 NULL；非空时为固定 19 个 ASCII 字符；指纹计算使用上述 `*_TIME_FP` 字符串，不使用 JVM 默认时区转换。
+
+**二进制帧规范（使用 Java `DataOutputStream` 等价的大端序写入）：**
+
+```text
+固定头：ASCII 10 字节 "DSUB-FP-V1"
+随后按上述固定字段顺序写入 10 个 FieldFrame
+```
+
+每个 `FieldFrame`：
+
+```text
+nameLength   : 4 字节 signed int32，大端序，值为字段名 UTF-8 字节数
+nameBytes    : nameLength 字节，字段名 UTF-8（字段名均为 ASCII）
+nullFlag     : 1 字节；0x00 表示 NULL，0x01 表示非 NULL
+若 nullFlag=0x00：本字段结束，不写 valueLength/valueBytes
+若 nullFlag=0x01：
+  valueLength: 8 字节 signed int64，大端序，值为 valueBytes 长度，允许 0
+  valueBytes : valueLength 字节，规范值 UTF-8
+```
+
+约束：
+
+- 任何其他 nullFlag 值均属内部实现错误；
+- 字段名、字段顺序、固定头、字节序和长度宽度不得由实现自行选择；
+- 空字符串编码为 `0x01 + int64(0)`，与 NULL 的 `0x00` 明确不同；
+- 对完整字节流执行 SHA-256；
+- `versionToken` 输出固定 64 个小写十六进制字符；
+- 使用一个后端共享工具方法（如 `SubscriptionFingerprintV1`），编辑打开、删除预览、编辑保存锁内比较、删除锁内比较必须复用同一实现；
+- 令牌只用于并发检测，不是认证或安全凭证；
+- 不新增版本列、触发器或 DDL。
+
+**黄金测试向量（`DSUB-FP-V1`）：**
+
+十个字段示例值（规范输入，不做任何 trim/转换；`NULL` 表示 NULL，`""` 表示空字符串）：
+
+| # | 字段 | 规范值 |
+|---|---|---|
+| 1 | `DATA_SUB_ID` | `sub-000000000000000000000001` |
+| 2 | `DATA_SUB_DESC` | `订阅：源A同步到目标B`（中文，UTF-8 29 字节） |
+| 3 | `DATA_FROM_SOURCE_ID` | `SRC-001` |
+| 4 | `DATA_TO_SOURCE_ID` | `TGT-001,TGT-002` |
+| 5 | `DATA_SOURCE_TABLE` | `SRC-001.APP.ORDERS,SRC-001.APP.PAYMENTS`（非空 CLOB，UTF-8 39 字节） |
+| 6 | `DATA_SOURCE_COMMENT` | `""`（空字符串，编码为 `0x01 + int64(0)`） |
+| 7 | `DATA_TARGET_TABLE` | `NULL` |
+| 8 | `DATA_TARGET_COMMENT` | `NULL` |
+| 9 | `INSERT_TIME` | `2026-08-30T10:15:00`（非空 DATE，固定 19 ASCII 字符） |
+| 10 | `UPDATE_TIME` | `NULL`（空 DATE） |
+
+该黄金向量包含：至少一个 NULL（`DATA_TARGET_TABLE`/`DATA_TARGET_COMMENT`/`UPDATE_TIME`）、一个空字符串（`DATA_SOURCE_COMMENT`）、一个中文字符串（`DATA_SUB_DESC`）、一个非空 CLOB（`DATA_SOURCE_TABLE`）、一个非空 DATE 与一个空 DATE（`INSERT_TIME`/`UPDATE_TIME`）。按上述算法生成的完整字节流长度 **407 字节**，SHA-256 小写十六进制 64 字符：
+
+```text
+bc1e643aa5154798030a7523d08dd7348d0e5186b508a0e67bba4e0c7de547dd
+```
+
+该黄金向量在纯文档任务中用临时本地脚本按规范编码计算，并用独立临时脚本第二次计算复核一致（复核方式见 R2 报告 §10）。四份设计文档对算法、字段顺序和黄金值必须完全一致。
+
 - 该方案**不新增版本列、不依赖 `UPDATE_TIME` 单独判断**（人工直接维护数据库时不一定同步更新时间，`DSUB-REQ-099`）。
+- 人工只改时间字段（`INSERT_TIME`/`UPDATE_TIME`）导致指纹变化并触发一次保守冲突，属于可接受的保守误报（提示刷新后重新编辑），不是漏报。
 
 ### 5.2 原子行锁并发（SELECT ... FOR UPDATE）
 
@@ -297,10 +386,31 @@ FOR UPDATE
 - 失败处理：连接失败/Schema/表加载失败转换为脱敏业务错误（`40340 SOURCE_CONNECTION_FAILED` / `40341 SCHEMA_LOAD_FAILED`，用户可见消息不含密码、连接串、堆栈），前端提供“重试加载”（`DSUB-REQ-070`）。
 - 并发控制：交互式元数据加载限制单源库并发连接数（复用 `ConnectionTester` 有界执行器模式或等效约束），避免无界连接。
 
-### 6.3 Schema 范围（能力分层过滤）
+### 6.3 Schema 范围（能力分层过滤 + 物化视图显式排除）
 
 - Schema 范围：当前账号可访问、包含普通表的非系统 Schema；不展示空 Schema、系统 Schema、视图、物化视图或同义词（`DSUB-REQ-069`）。
-- 静态黑名单无法保证完整排除 Oracle 系统 Schema。R1 采用**能力分层方案**：
+- **统一“可订阅普通表集合”谓词（R2）**：`ALL_TABLES` 并不会天然排除物化视图，必须显式排除。统一核心谓词（用于 Schema 列表、指定 Schema 表清单、保存前批量复核三处，DATABASE.md §4.8 给出完整参数化示例）：
+
+  ```sql
+  FROM ALL_TABLES t
+  WHERE NOT EXISTS (
+      SELECT 1
+      FROM ALL_MVIEWS mv
+      WHERE mv.OWNER = t.OWNER
+        AND (
+             mv.MVIEW_NAME = t.TABLE_NAME
+          OR mv.CONTAINER_NAME = t.TABLE_NAME
+        )
+  )
+  ```
+
+  - `ALL_MVIEWS.MVIEW_NAME` 是物化视图名；
+  - `ALL_MVIEWS.CONTAINER_NAME` 是保存物化视图数据的容器名，通常与物化视图名相同，但不能假设永远相同；
+  - 因此同时按 `MVIEW_NAME` 与 `CONTAINER_NAME` 排除；
+  - `ALL_MVIEWS` 与 `ALL_TABLES` 都以当前连接账号可访问对象为边界；
+  - 视图、同义词本来不来自 `ALL_TABLES`，但物化视图必须通过上述谓词显式排除；
+  - 不得写成“`ALL_TABLES` 天然排除物化视图”。
+- 静态黑名单无法保证完整排除 Oracle 系统 Schema。R1/R2 采用**能力分层方案**：
   1. **Oracle 支持 `ORACLE_MAINTAINED` 时（优先）**：
 
   ```sql
@@ -308,6 +418,12 @@ FOR UPDATE
   FROM ALL_TABLES t
   JOIN ALL_USERS u ON u.USERNAME = t.OWNER
   WHERE u.ORACLE_MAINTAINED = 'N'
+    AND NOT EXISTS (
+        SELECT 1
+        FROM ALL_MVIEWS mv
+        WHERE mv.OWNER = t.OWNER
+          AND (mv.MVIEW_NAME = t.TABLE_NAME OR mv.CONTAINER_NAME = t.TABLE_NAME)
+    )
   ORDER BY t.OWNER
   ```
 
@@ -317,21 +433,45 @@ FOR UPDATE
   - 回退不是“保证完整”的事实，文档必须说明限制；
   - 不允许 SQL 失败后静默返回全部 Schema；
   - 后端记录不含敏感信息的兼容回退日志；
-  - Schema 仍必须来自 `ALL_TABLES`，因此天然只保留至少含一张普通表的可访问 Schema。
+  - 回退模式同样叠加同一个物化视图排除谓词：
+
+  ```sql
+  SELECT DISTINCT t.OWNER
+  FROM ALL_TABLES t
+  WHERE t.OWNER NOT IN (/* 系统 Schema 排除清单 */)
+    AND NOT EXISTS (
+        SELECT 1
+        FROM ALL_MVIEWS mv
+        WHERE mv.OWNER = t.OWNER
+          AND (mv.MVIEW_NAME = t.TABLE_NAME OR mv.CONTAINER_NAME = t.TABLE_NAME)
+    )
+  ORDER BY t.OWNER
+  ```
+
+  - Schema 仍必须来自 `ALL_TABLES`，并显式排除物化视图；因此只保留至少含一张可订阅普通表的可访问 Schema。
 - 过滤方式选择：后端在响应中返回 `filterMode=ORACLE_MAINTAINED|FALLBACK_EXCLUSION_LIST`（见 API.md §4.4），不把无意义技术信息展示给普通用户，但保留可核验标识。
 - 不得仅保留静态黑名单并宣称完全满足“非系统 Schema”。
 
 ### 6.4 表范围与批量加载
 
-- 点击 Schema 后按该 Schema 批量加载普通表：
+- 点击 Schema 后按该 Schema 批量加载普通表（显式排除物化视图，统一谓词见 §6.3）：
 
 ```sql
-SELECT TABLE_NAME FROM ALL_TABLES WHERE OWNER = :schema ORDER BY TABLE_NAME
+SELECT TABLE_NAME
+FROM ALL_TABLES t
+WHERE t.OWNER = :schema
+  AND NOT EXISTS (
+      SELECT 1
+      FROM ALL_MVIEWS mv
+      WHERE mv.OWNER = t.OWNER
+        AND (mv.MVIEW_NAME = t.TABLE_NAME OR mv.CONTAINER_NAME = t.TABLE_NAME)
+  )
+ORDER BY TABLE_NAME
 ```
 
 - 一次 Schema 加载使用一次查询（同一连接内），结果在弹窗会话内缓存（前端缓存或后端按会话缓存均可，设计建议前端缓存 + 后端每次加载单次查询，避免跨会话陈旧数据）。
-- 保存前有效性校验：**一次源库连接、按 Schema 批量复核**，禁止逐表建立连接或约 240 次查询（`DSUB-REQ-084`）。设计：打开 1 个源库连接，执行一次批量查询（`SELECT OWNER, TABLE_NAME FROM ALL_TABLES WHERE OWNER IN (:schemas…)`，或按 Schema 复用同一连接分次查询），将提交的表标识集合与返回集合比对，标记失效项。
-- 表范围：普通表；不含视图、物化视图、同义词（`ALL_TABLES` 天然排除）；若需排除 IOT 溢出段可补充过滤条件（设计草案不强制）。
+- 保存前有效性校验：**一次源库连接、按 Schema 批量复核**，禁止逐表建立连接或约 240 次查询（`DSUB-REQ-084`）。设计：打开 1 个源库连接，执行一次批量查询（`SELECT OWNER, TABLE_NAME FROM ALL_TABLES t WHERE t.OWNER IN (:schemas…) AND NOT EXISTS (…统一物化视图排除谓词…)`，完整示例见 DATABASE.md §4.8），将提交的表标识集合与返回集合比对，标记失效项。
+- 表范围：普通表；不含视图、物化视图、同义词；物化视图必须按 §6.3 统一谓词显式排除（`ALL_TABLES` 不会天然排除物化视图）；若需排除 IOT 溢出段可补充过滤条件（设计草案不强制）。
 
 ### 6.5 目标库
 
@@ -339,17 +479,40 @@ SELECT TABLE_NAME FROM ALL_TABLES WHERE OWNER = :schema ORDER BY TABLE_NAME
 
 ## 7. 安全、性能和可观测性
 
-### 7.1 SQL 与动态条件安全
+### 7.1 SQL 与查询过滤安全
 
 - 所有查询使用 MyBatis-Plus `LambdaQueryWrapper` / `LambdaUpdateWrapper` 或参数化 SQL（`?`/`#{}`/`{0}` 绑定），禁止字符串拼接生成 SQL。
-- 多值 CSV 条件匹配按完整 token 精确匹配，**优先采用不受 `%`、`_` 等 LIKE 通配符影响的 Oracle 字面匹配**：
+- **列表查询过滤在服务层 Java 完成**（订阅规模小、列表不分页、需读取全部 `FG_ACTIVE='1'` 记录并解析 `DATA_SOURCE_TABLE`/数据源映射）。数据库只执行单一查询读取全部启用订阅并按 `NVL(UPDATE_TIME, INSERT_TIME) DESC` 排序（SQL 见 DATABASE.md §4.1）；服务层对源库组、目标库组分别做 OR 过滤，两组之间 AND，过滤后保持数据库排序的相对顺序。
 
-```sql
-INSTR(',' || DATA_TO_SOURCE_ID || ',', ',' || #{targetId} || ',') > 0
+**普通候选（查询 ID 不含英文逗号）——完整 token 字面精确匹配：**
+
+```text
+storedSegments = storedCsv.split(",", -1)
+                 .map(trim)
+                 .filter(nonEmpty)
+matched = storedSegments.any(segment -> segment.equals(queryId))
 ```
 
-- 源库字段（`DATA_FROM_SOURCE_ID`）同理。不得使用未转义的 `LIKE` 导致 ID 中 `%`、`_` 被当成通配符。
-- 查询条件分组：源库条件非空时建立一个独立 `and(sourceGroup)`；目标库条件非空时建立另一个独立 `and(targetGroup)`；两组不得放入同一个 OR 容器；只有源库条件时只生成源库组；只有目标库条件时只生成目标库组；两者都为空时不生成过滤组，返回全部启用记录（SQL 见 DATABASE.md §4.1，含四种组合示例）。
+- Java `String.equals`，大小写敏感；
+- `%`、`_`、反斜杠、句点、正则字符全部按普通字面字符处理；
+- 不使用 `LIKE`、正则或 `%ID%`；`S01` 不匹配 `S012`；
+- 查询 ID 的候选值来自数据库，不擅自 trim 或改变其内部字符；前端回传原始 ID 字符串；
+- 仅含英文句点（不含英文逗号）的 ID 适用本精确规则（句点不是这两个 CSV 字段的分隔符）。
+
+**含逗号候选（查询 ID 含英文逗号）——历史兼容可能匹配：**
+
+```text
+storedAtomic = split storedCsv by comma, trim each atomic segment, drop empty
+queryAtomic  = split queryId   by comma, trim each atomic segment, drop empty
+matched = queryAtomic is a contiguous subsequence of storedAtomic
+```
+
+- 由于无法识别逗号归属，只能按“可能匹配”处理。例如查询候选 `A,B`：存储 `A,B` → 可能匹配；存储 `X,A,B,Y` → 可能匹配；存储 `A,X,B` → 不匹配；结果不能断言 `A,B` 是一个 ID，可能是相邻的 `A` 和 `B`；
+- 比较仍使用 Java `String.equals`；
+- 候选按逗号拆分后若没有任何非空原子片段，后端拒绝该查询参数并返回参数校验错误，不得退化为匹配全部；
+- 一个条件组中任意一个候选命中即为组内 OR；两个条件组都存在时必须分别计算，再执行 AND；
+- 不得为了消除假阳性而丢弃可能匹配记录；
+- 一次查询包含任意含逗号候选时，API 列表响应在 `queryWarnings` 中明确返回歧义条件，页面在查询条件和结果区域持续显示歧义警告（API.md §4.2）。
 - 模糊搜索（源库候选搜索、Schema 内表名搜索）使用参数化 `UPPER(...) LIKE UPPER('%'||?||'%') ESCAPE '\'`，并对 `%`、`_`、`\` 转义（复用 `DataSourceServiceImpl.escapeLike` 模式）。
 
 ### 7.2 口令、连接串与堆栈脱敏
@@ -384,7 +547,7 @@ INSTR(',' || DATA_TO_SOURCE_ID || ',', ',' || #{targetId} || ',') > 0
 
 ## 8. 需求追踪
 
-> 下表保证 `DSUB-REQ-001` ~ `DSUB-REQ-107` 每条至少映射到一个 R1 修订后真实存在的设计章节（DESIGN=本文，API=API.md，UI=UI.md，DATABASE=DATABASE.md）。映射为“设计覆盖”，表示该需求已在本设计草案中得到实现层决策；是否验收通过由 126 条验收用例另行判定（当前全部 `NOT_RUN`）。所有引用章节均为 R1 修订后的真实标题编号，无未来不存在的章节号。
+> 下表保证 `DSUB-REQ-001` ~ `DSUB-REQ-107` 每条至少映射到一个 R2 修订后真实存在的设计章节（DESIGN=本文，API=API.md，UI=UI.md，DATABASE=DATABASE.md）。映射为“设计覆盖”，表示该需求已在本设计草案中得到实现层决策；是否验收通过由 126 条验收用例另行判定（当前全部 `NOT_RUN`）。所有引用章节均为 R2 修订后的真实标题编号，无未来不存在的章节号。
 
 | 需求 | 设计覆盖 |
 |---|---|
@@ -420,8 +583,8 @@ INSTR(',' || DATA_TO_SOURCE_ID || ',', ',' || #{targetId} || ',') > 0
 | DSUB-REQ-030 | API §4.2、DATABASE §4.1 |
 | DSUB-REQ-031 | API §4.2、DATABASE §4.1 |
 | DSUB-REQ-032 | UI §2.1、API §4.2 |
-| DSUB-REQ-033 | API §4.1、DATABASE §4.6 |
-| DSUB-REQ-034 | API §4.2、UI §2.1 |
+| DSUB-REQ-033 | DESIGN §3.1、API §4.1 |
+| DSUB-REQ-034 | DESIGN §3.1/§7.1、API §4.2、UI §2.1 |
 | DSUB-REQ-035 | UI §2.2 |
 | DSUB-REQ-036 | UI §2.2 |
 | DSUB-REQ-037 | UI §2.2 |
@@ -498,4 +661,4 @@ INSTR(',' || DATA_TO_SOURCE_ID || ',', ',' || #{targetId} || ',') > 0
 
 ---
 
-*文档状态：`DRAFT_PENDING_USER_REVIEW`。本文件为设计基线草案（R1 定向修订版），未获正式复审批准，不代表设计已批准、功能已实现或验收通过。*
+*文档状态：`DRAFT_PENDING_USER_REVIEW`。本文件为设计基线草案（R2 定向修订版），未获正式复审批准，不代表设计已批准、功能已实现或验收通过；R2 定向修订已完成，等待 ChatGPT 正式设计 R2 复审。*

@@ -7,15 +7,17 @@
 | Feature 中文名称 | 数据订阅 |
 | Feature 标识 | `data-subscription` |
 | 文档状态 | `DRAFT_PENDING_USER_REVIEW`（接口设计草案，尚未获得项目负责人或 ChatGPT 正式复审批准） |
-| 实现状态 | `NOT_STARTED`（本任务为纯文档设计基线 R1 定向修订，不涉及任何业务代码实现） |
+| 设计正式复审状态 | `PENDING_R2_REVIEW`（R1 正式复审结论 `CHANGES_REQUIRED`；本 R2 定向修订已完成，尚未获得 ChatGPT 正式设计复审批准） |
+| 实现状态 | `NOT_STARTED`（本任务为纯文档设计基线 R2 定向修订，不涉及任何业务代码实现） |
 | 验收执行状态 | 126 条全部 `NOT_RUN` |
-| 任务编号 | `DATA-SUBSCRIPTION-DESIGN-BASELINE-001-R1`（R1 定向修订；首版任务 `DATA-SUBSCRIPTION-DESIGN-BASELINE-001` 结果提交 `610401575938ba32f13fa635493f991bdfae81b6`） |
-| 依据的已批准需求基线 | `docs/features/data-subscription/REQUIREMENTS.md`（`APPROVED`，107 条，当前版本为点号保留分隔符调整批准版本，批准依据提交 `bb8716c26d5181edf84ba1f07d4e60e8f1c1918a`） |
+| 任务编号 | `DATA-SUBSCRIPTION-DESIGN-BASELINE-001-R2`（R2 定向修订；前序 R1 任务 `DATA-SUBSCRIPTION-DESIGN-BASELINE-001-R1` 结果提交 `3609548238c9fede745f5291e258469ab7b78167`；首版任务 `DATA-SUBSCRIPTION-DESIGN-BASELINE-001` 结果提交 `610401575938ba32f13fa635493f991bdfae81b6`） |
+| 依据的已批准需求基线 | `docs/features/data-subscription/REQUIREMENTS.md`（`APPROVED`，107 条，当前版本为含逗号数据源 ID 查询兼容调整批准版本，批准依据提交 `afc5765956cac3c8f66d8857ff17565472d0c746`） |
 | 依据的已批准验收基线 | `docs/features/data-subscription/ACCEPTANCE.md`（`APPROVED`，126 条，全部 `NOT_RUN`） |
 | 创建日期 | 2026-08-30 |
 | R1 修订日期 | 2026-08-30 |
+| R2 修订日期 | 2026-08-31 |
 
-说明：本文件是接口设计草案，**不是正式批准的设计基线**。R1 只修正 ChatGPT 正式复审（`CHANGES_REQUIRED`）发现的问题并把已批准点号规则同步进来；本文件不表示设计已批准、功能已实现、部署或验收完成。
+说明：本文件是接口设计草案，**不是正式批准的设计基线**。R1 已修正 ChatGPT 正式复审（`CHANGES_REQUIRED`）发现的主要问题并同步已批准点号规则；R2 统一修正剩余四项（三类查询语义、元数据 API query 参数、物化视图显式排除、`DSUB-FP-V1` 字节级指纹）并同步含逗号查询批准基线。R2 定向修订已完成，但本文件尚未获得 ChatGPT 正式设计复审批准，不表示设计已批准、功能已实现、部署或验收完成。
 
 ### 1.1 设计依据
 
@@ -31,22 +33,22 @@
 | 1 | GET | `/api/subscriptions/options` | 查询源库/目标库启用候选（一次返回两类） |
 | 2 | GET | `/api/subscriptions` | 查询全部启用订阅（可带源库/目标库多选条件，无分页） |
 | 3 | GET | `/api/subscriptions/{dataSubId}` | 查询订阅详情 |
-| 4 | GET | `/api/subscriptions/metadata/{dataSourceId}/schemas` | 查询源库可访问且含普通表的非系统 Schema |
-| 5 | GET | `/api/subscriptions/metadata/{dataSourceId}/schemas/{schema}/tables` | 按源库与 Schema 查询普通表 |
+| 4 | GET | `/api/subscriptions/metadata/schemas?dataSourceId=<原始字符串>` | 查询源库可访问且含普通表的非系统 Schema |
+| 5 | GET | `/api/subscriptions/metadata/tables?dataSourceId=<原始字符串>&schema=<原始字符串>` | 按源库与 Schema 查询普通表 |
 | 6 | POST | `/api/subscriptions` | 新增订阅 |
 | 7 | GET | `/api/subscriptions/{dataSubId}/edit` | 打开编辑所需数据与已选 Schema/表回显（含版本令牌） |
 | 8 | PUT | `/api/subscriptions/{dataSubId}` | 编辑保存 |
 | 9 | GET | `/api/subscriptions/{dataSubId}/delete-preview` | 删除预览（删除确认所需最新信息 + 版本令牌） |
 | 10 | DELETE | `/api/subscriptions/{dataSubId}` | 物理删除 |
 
-合并说明：源库/目标库候选合并为单个 `options` 接口（第 1 个），因为列表页查询区与新增/编辑弹窗都需要两类候选，一次返回避免两次往返；列表不分页（第 2 个）；`{dataSubId}` 与 `metadata` 前缀不会冲突——订阅主键为 32 位十六进制 UUID（见 §8.1），恒为字面 `metadata` 以外的值，Spring 对字面路径段优先于路径变量匹配。删除采用“删除预览 + 物理删除”两步闭环：列表点击“删除”先调 `delete-preview` 获取最新删除确认信息与版本令牌，确认后 DELETE 回传该令牌（DESIGN §3.7，令牌链路见 §4.9/§4.10）。
+合并说明：源库/目标库候选合并为单个 `options` 接口（第 1 个），因为列表页查询区与新增/编辑弹窗都需要两类候选，一次返回避免两次往返；列表不分页（第 2 个）；元数据两个接口（第 4、5 个）在 R2 改用 query 参数承载 `dataSourceId`/`schema`（原 `GET /metadata/{dataSourceId}/schemas/{schema}/tables` 路径变量草案无法可靠承载含 `/`、`#`、`?`、空格等合法特殊字符的 Oracle quoted identifier，即使 `encodeURIComponent`，`%2F` 也可能被 Servlet 容器或反向代理拒绝或提前解码；R2 只保留 query 参数版本，不设计兼容双路径）；`{dataSubId}` 仍可作为路径变量，因为订阅主键为 32 位十六进制 UUID（见 §8.1），恒为安全的 32 位十六进制字符。删除采用“删除预览 + 物理删除”两步闭环：列表点击“删除”先调 `delete-preview` 获取最新删除确认信息与版本令牌，确认后 DELETE 回传该令牌（DESIGN §3.7，令牌链路见 §4.9/§4.10）。
 
 ## 3. 通用约定
 
 ### 3.1 字符串 ID
 
 - 所有 ID（`dataSubId`、`dataSourceId`、schema、table 名）按字符串传输，前端不得做数字转换；Oracle `NUMBER` 不在本 Feature 中出现，但统一遵守“字符串 ID”规则，避免 JS 安全整数问题（见 DESIGN §6）。
-- URL 中的 `{dataSubId}`、`{dataSourceId}`、`{schema}`、`{table}` 使用 `encodeURIComponent` 编码（schema/表名区分大小写、可能含特殊字符）。
+- URL 路径中仅 `{dataSubId}` 是路径变量（后端生成的 32 位十六进制 UUID，安全字符，无需编码）。元数据接口的 `dataSourceId` 与 `schema` 使用 query 参数（Spring `@RequestParam String`），前端用 axios `params` 对象传参、不手工拼接 query string，前后端均按原始字符串传输、保持大小写、不做 URL 路径段拆分；schema/表名区分大小写、可能含特殊字符，query 参数比路径变量更能可靠承载（见 §2 合并说明）。
 - 保留字符边界：数据源 ID、Schema 名、表名含英文逗号 `,` 或组件内部英文句点 `.` 的对象不允许用于新增/编辑订阅（已批准点号规则，见 §4.6 与 DESIGN §4.2）；新增/编辑候选在 UI 层显示为禁用并说明原因（UI §5/§6）。查询候选仍允许选择含保留字符的存量数据源用于查询历史订阅（UI §2.1）。
 
 ### 3.2 时间格式
@@ -115,36 +117,45 @@
 | sourceIds | string[] | 否 | 源库 ID 多选，之间 `OR` |
 | targetIds | string[] | 否 | 目标库 ID 多选，之间 `OR` |
 
-- 条件分组：源库条件非空时建立一个独立 `and(sourceGroup)`；目标库条件非空时建立另一个独立 `and(targetGroup)`；两组之间 `AND`（`DSUB-REQ-034`；SQL 见 DATABASE.md §4.1，含四种组合）。不得把源库组与目标库组放入同一个 `OR` 容器。
+- 数据库只执行单一查询读取全部 `FG_ACTIVE='1'` 订阅，按 `NVL(UPDATE_TIME, INSERT_TIME) DESC` 排序（SQL 见 DATABASE.md §4.1）；源库组、目标库组的过滤在**服务层 Java** 完成：源库条件之间 `OR`、目标库条件之间 `OR`、两组之间 `AND`，过滤后保持数据库排序的相对顺序（`DSUB-REQ-034`；算法见 DESIGN §7.1）。不得把源库组与目标库组放入同一个 `OR` 容器。
 - 无条件时返回全部启用订阅（`DSUB-REQ-029`）。
 - 无分页（`DSUB-REQ-030`），一次返回全部。
-- CSV 匹配规则：`DATA_FROM_SOURCE_ID` / `DATA_TO_SOURCE_ID` 按完整 token 精确匹配，**优先采用不受 `%`、`_` 等 LIKE 通配符影响的 Oracle 字面匹配** `INSTR(',' || col || ',', ',' || #{token} || ',') > 0`，禁止 `%ID%` 子串匹配（`DSUB-REQ-034`，SQL 见 DATABASE.md §4.1）。
+- **三类匹配语义（`DSUB-REQ-034`，已批准）**：
+  - **不含英文逗号的查询 ID（普通/仅含句点）**：按 CSV 拆分 token 去除首尾空白后完整字面精确匹配（Java `String.equals`，大小写敏感；`%`、`_`、反斜杠、句点、正则字符按字面处理；禁止 `%ID%` 子串匹配；`S01` 不匹配 `S012`）。仅含英文句点（不含英文逗号）的 ID 适用本精确规则。
+  - **含英文逗号的查询 ID**：定义为“历史兼容可能匹配”——无法识别逗号归属，只能在原始 CSV 字段中查找与候选字面值相同、分隔边界完整的连续片段（`queryAtomic` 是 `storedAtomic` 的连续子序列），返回“可能匹配记录集合”，允许不可消除的假阳性，不得为消除假阳性而静默丢弃可能相关的历史记录。
+  - 候选按逗号拆分后若没有任何非空原子片段，后端拒绝该查询参数并返回参数校验错误（HTTP 400），不得退化为匹配全部。
+- 一次查询包含任意含逗号候选时，响应 `queryWarnings` 返回歧义条件；无歧义条件时 `queryWarnings=[]`。警告不是错误，不阻断查询。
 - 默认排序：`NVL(UPDATE_TIME, INSERT_TIME) DESC`（`DSUB-REQ-028/031`）。
 
-响应：
+响应（`data` 为对象，含 `items` 与 `queryWarnings`；**本接口唯一响应类型**，UI 不得再把 `data` 当数组）：
 
 ```json
 {
   "code": 200,
   "message": "success",
-  "data": [
-    {
-      "dataSubId": "9f3f...32hex",
-      "dataSubDesc": "机构A到机构B全量订阅",
-      "anomalyMultiSource": false,
-      "source": { "dataSourceId": "S01", "dataSourceOrg": "机构A", "status": "NORMAL" },
-      "sourceTableCount": 128,
-      "tablesBySchema": [
-        { "schema": "SCHEMA_A", "tables": ["TABLE_1", "TABLE_2"] }
-      ],
-      "rawUnparseableTables": [],
-      "targets": [
-        { "dataSourceId": "T01", "dataSourceOrg": "机构B", "status": "NORMAL" }
-      ],
-      "updateTime": "2026-08-30T10:00:00",
-      "insertTime": "2026-08-29T09:00:00"
-    }
-  ],
+  "data": {
+    "items": [
+      {
+        "dataSubId": "9f3f...32hex",
+        "dataSubDesc": "机构A到机构B全量订阅",
+        "anomalyMultiSource": false,
+        "source": { "dataSourceId": "S01", "dataSourceOrg": "机构A", "status": "NORMAL" },
+        "sourceTableCount": 128,
+        "tablesBySchema": [
+          { "schema": "SCHEMA_A", "tables": ["TABLE_1", "TABLE_2"] }
+        ],
+        "rawUnparseableTables": [],
+        "targets": [
+          { "dataSourceId": "T01", "dataSourceOrg": "机构B", "status": "NORMAL" }
+        ],
+        "updateTime": "2026-08-30T10:00:00",
+        "insertTime": "2026-08-29T09:00:00"
+      }
+    ],
+    "queryWarnings": [
+      { "type": "AMBIGUOUS_COMMA_ID", "field": "sourceIds", "value": "A,B", "message": "含逗号的数据源 ID 只能进行历史兼容可能匹配，结果可能包含歧义记录" }
+    ]
+  },
   "timestamp": "2026-08-30T10:00:00"
 }
 ```
@@ -153,20 +164,26 @@
 
 | 字段 | 类型 | 说明 |
 |---|---|---|
-| dataSubId | string | 订阅 ID（字符串，`DSUB-REQ-036` 不在首层列表单独占列，但供详情/编辑/删除使用） |
-| dataSubDesc | string | 订阅描述 |
-| anomalyMultiSource | boolean | 多源库异常记录标志（`DSUB-REQ-010`；异常记录整行警示且无操作） |
-| source | SourceRefVO \| null | 主源库展示；异常记录时为 null（不承诺首个源库） |
-| source.dataSourceOrg | string \| null | 机构名称；已停用显示 ORG 并标记“已停用”，不存在显示原始 ID 并标记“不存在”（`DSUB-REQ-042`） |
-| source.status | enum | `NORMAL` / `INACTIVE` / `NOT_FOUND` |
-| sourceTableCount | number | 源表数量“共 N 张”：按英文逗号拆分、trim、丢弃空 token 后统计**所有非空 token**（含当前无法解析的历史 token），不访问源 Oracle（`DSUB-REQ-038`；DESIGN §4.5） |
-| tablesBySchema | SchemaTableGroup[] | 按 Schema 分组的可解析表清单，供悬停逐行显示与行内渲染；一次返回避免悬停 N+1（订阅记录规模小） |
-| rawUnparseableTables | string[] | `DATA_SOURCE_TABLE` 无法解析的原始 token，行内警示展示；空数组表示全部可解析 |
-| targets | TargetRefVO[] | 目标库展示（独立标签；机构名称为主、ID 悬停，`DSUB-REQ-037/039/042`） |
-| updateTime / insertTime | string \| null | 更新时间 / 创建时间；`updateTime` 为 null 时前端回退展示 `insertTime` 并标记“创建时间”（`DSUB-REQ-040`） |
+| data.items | SubscriptionRowVO[] | 过滤后的订阅行（数据库排序后的相对顺序） |
+| data.queryWarnings | QueryWarning[] | 本次查询的歧义条件清单；无歧义条件时为 `[]` |
+| queryWarnings[].type | enum | 歧义类型，当前唯一值 `AMBIGUOUS_COMMA_ID`（含逗号数据源 ID 历史兼容可能匹配） |
+| queryWarnings[].field | string | 歧义条件所属参数名：`sourceIds` / `targetIds` |
+| queryWarnings[].value | string | 含逗号的原始候选 ID |
+| queryWarnings[].message | string | 用户可见警告文案（“含逗号的数据源 ID 只能进行历史兼容可能匹配，结果可能包含歧义记录”） |
+| data.items[].dataSubId | string | 订阅 ID（字符串，`DSUB-REQ-036` 不在首层列表单独占列，但供详情/编辑/删除使用） |
+| data.items[].dataSubDesc | string | 订阅描述 |
+| data.items[].anomalyMultiSource | boolean | 多源库异常记录标志（`DSUB-REQ-010`；异常记录整行警示且无操作） |
+| data.items[].source | SourceRefVO \| null | 主源库展示；异常记录时为 null（不承诺首个源库） |
+| data.items[].source.dataSourceOrg | string \| null | 机构名称；已停用显示 ORG 并标记“已停用”，不存在显示原始 ID 并标记“不存在”（`DSUB-REQ-042`） |
+| data.items[].source.status | enum | `NORMAL` / `INACTIVE` / `NOT_FOUND` |
+| data.items[].sourceTableCount | number | 源表数量“共 N 张”：按英文逗号拆分、trim、丢弃空 token 后统计**所有非空 token**（含当前无法解析的历史 token），不访问源 Oracle（`DSUB-REQ-038`；DESIGN §4.5） |
+| data.items[].tablesBySchema | SchemaTableGroup[] | 按 Schema 分组的可解析表清单，供悬停逐行显示与行内渲染；一次返回避免悬停 N+1（订阅记录规模小） |
+| data.items[].rawUnparseableTables | string[] | `DATA_SOURCE_TABLE` 无法解析的原始 token，行内警示展示；空数组表示全部可解析 |
+| data.items[].targets | TargetRefVO[] | 目标库展示（独立标签；机构名称为主、ID 悬停，`DSUB-REQ-037/039/042`） |
+| data.items[].updateTime / insertTime | string \| null | 更新时间 / 创建时间；`updateTime` 为 null 时前端回退展示 `insertTime` 并标记“创建时间”（`DSUB-REQ-040`） |
 
 - 每行目标库数量通常 1～5（`DSUB-REQ-065`）。
-- 空结果：`data` 返回空数组，前端显示“暂无符合条件的订阅记录”（`DSUB-REQ-034`）。
+- 空结果：`data.items` 返回空数组，前端显示“暂无符合条件的订阅记录”（`DSUB-REQ-034`）。
 - 错误：数据库查询失败按 §7 通用错误处理；本接口不连接源 Oracle。
 
 ### 4.3 `GET /api/subscriptions/{dataSubId}` — 订阅详情
@@ -217,11 +234,15 @@
 - 不展示 `DATA_SOURCE_COMMENT`、`DATA_TARGET_TABLE`、`DATA_TARGET_COMMENT`（`DSUB-REQ-051`）。
 - 错误：记录不存在 → `40430`；多源库异常 → `40352`。
 
-### 4.4 `GET /api/subscriptions/metadata/{dataSourceId}/schemas` — 源库 Schema 列表
+### 4.4 `GET /api/subscriptions/metadata/schemas` — 源库 Schema 列表
 
 用途：新增/编辑弹窗中选择源库后自动加载 Schema（`DSUB-REQ-069/070`）。
 
-请求：`{dataSourceId}` 路径参数（源库 ID）。
+请求参数（query）：
+
+| 参数 | 类型 | 必填 | 说明 |
+|---|---|---|---|
+| dataSourceId | string | 是 | 源库 ID（原始字符串，Spring `@RequestParam String`，前端 axios `params` 对象传参、不手工拼接 query string，不做 URL 路径段拆分） |
 
 响应：
 
@@ -246,15 +267,20 @@
 | filterMode | enum | 本次 Schema 过滤实际采用的模式：`ORACLE_MAINTAINED`（`ALL_USERS.ORACLE_MAINTAINED='N'` 优先模式）或 `FALLBACK_EXCLUSION_LIST`（系统 Schema 排除清单兼容回退）。该标识用于可核验性，不展示给普通用户（DESIGN §6.3） |
 | schemas | string[] | 非系统 Schema 列表（当前账号可访问、包含普通表） |
 
-- Schema 范围：当前账号可访问、包含普通表、非系统 Schema；不展示空 Schema、系统 Schema、视图、物化视图、同义词（`DSUB-REQ-069`；能力分层过滤方案见 DESIGN §6.3）。
+- Schema 范围：当前账号可访问、包含普通表、非系统 Schema；不展示空 Schema、系统 Schema、视图、物化视图、同义词（`DSUB-REQ-069`；能力分层过滤 + 物化视图显式排除方案见 DESIGN §6.3）。
 - 目标库只选择、不连接；本接口只接受源库 ID（类别为 SOURCE 且 `FG_ACTIVE=1` 的记录，后端校验，否则 `40322`/`40320`）。
 - 错误：源库不存在/停用 → `40320`；类别不符 → `40322`；源库连接失败 → `40340`（脱敏）；Schema 加载失败 → `40341`。
 
-### 4.5 `GET /api/subscriptions/metadata/{dataSourceId}/schemas/{schema}/tables` — 按 Schema 查询普通表
+### 4.5 `GET /api/subscriptions/metadata/tables` — 按 Schema 查询普通表
 
 用途：点击 Schema 后加载该 Schema 的普通表（`DSUB-REQ-070/072`）。
 
-请求：`{dataSourceId}`、`{schema}` 路径参数（均区分大小写，URL 编码）。
+请求参数（query）：
+
+| 参数 | 类型 | 必填 | 说明 |
+|---|---|---|---|
+| dataSourceId | string | 是 | 源库 ID（原始字符串，区分大小写） |
+| schema | string | 是 | Schema 名（原始字符串，区分大小写，可能含特殊字符；query 参数比路径变量更能可靠承载） |
 
 响应：
 
@@ -267,7 +293,7 @@
 }
 ```
 
-- 表范围：普通表，不含视图、物化视图、同义词（`DSUB-REQ-069`；`ALL_TABLES` 天然满足）。
+- 表范围：普通表，不含视图、物化视图、同义词（`DSUB-REQ-069`）；物化视图必须按 DESIGN §6.3 统一谓词显式排除（`ALL_TABLES` 不会天然排除物化视图）。
 - 表名保持源 Oracle 原始大小写（`DSUB-REQ-016`）。
 - 保留字符处理：Schema/表名含英文逗号或组件内部英文句点的对象仍由本接口返回，但前端渲染为不可选择并明确说明协议保留字符原因，不得静默隐藏（`DSUB-REQ-017`；UI §6）。
 - 缓存：前端在弹窗会话内缓存本接口结果，切换 Schema 不重复请求；加载失败显示明确错误并提供“重试加载”（`DSUB-REQ-070`）。
@@ -324,7 +350,7 @@
   "message": "存在 2 个校验失败项，请修正后重试",
   "data": {
     "validationErrors": [
-      { "errorCode": "40315", "field": "sourceTables", "name": "SCHEMA_A.TABLE_X", "message": "源表标识格式非法" },
+      { "errorCode": "40315", "field": "sourceTables", "name": "SCHEMA_A.TABLE_X", "message": "源表输入结构或 Schema/表名格式非法" },
       { "errorCode": "40316", "field": "sourceTables", "name": "SCHEMA_A.TABLE_1", "message": "名称含协议保留字符（英文逗号或英文句点），不能用于订阅配置" }
     ]
   },
@@ -385,7 +411,7 @@
 
 | 字段 | 类型 | 说明 |
 |---|---|---|
-| versionToken | string | 内容指纹版本令牌（SHA-256 十六进制 64 字符）；保存必须回传（`DSUB-REQ-097`；指纹规范 DESIGN §5.1） |
+| versionToken | string | `DSUB-FP-V1` 内容指纹版本令牌（对固定 10 字段字节流做 SHA-256，小写十六进制 64 字符）；保存必须回传（`DSUB-REQ-097`；指纹规范 DESIGN §5.1） |
 | dataSubId / dataSubDesc / source / targets / tablesBySchema / rawUnparseableTables | — | 回显内容；`source`/`targets` 的 `status` 标记停用/不存在（`DSUB-REQ-094`）；`tablesBySchema` 供前端恢复勾选与浅蓝背景（`DSUB-REQ-089`）；不可解析 token 分区回显并带警告 |
 | sourceReachable | boolean | 编辑打开时源 Oracle 是否可达（best-effort 探测；断连时 false） |
 | sourceTableCheck | enum | `CHECKED` / `UNREACHABLE` / `SKIPPED`：已与源 Oracle 核对表有效性 / 源库不可达 / 未核对 |
@@ -479,7 +505,7 @@
 | tableCount | number | 源表数量：`DATA_SOURCE_TABLE` 非空 token 总数（含不可解析历史 token，与列表“共 N 张”口径一致，DESIGN §4.5） |
 | targets | TargetRefVO[] | 目标库展示 |
 | warnings | string[] | 异常提示（已停用/不存在数据源等） |
-| versionToken | string | 基于当前完整记录生成的内容指纹令牌（DESIGN §5.1），用户确认后 DELETE 必须回传 |
+| versionToken | string | 基于当前完整记录按 `DSUB-FP-V1`（DESIGN §5.1）生成的内容指纹令牌，用户确认后 DELETE 必须回传 |
 
 - 本接口**只读取配置库，不连接源 Oracle**（`DSUB-REQ-045/068`）；不复用会连接源 Oracle 的“编辑打开”接口获取删除令牌。
 - 多源库异常记录拒绝预览（`DSUB-REQ-100`；后端返回 `40353`）。
@@ -511,14 +537,15 @@
 | 规则 | 接口 | 实现 |
 |---|---|---|
 | 候选仅 `FG_ACTIVE=1` 且类别匹配 | §4.1 | `UPPER(DATA_SOURCE_CATEGORY)` 匹配（§8 TBD-02） |
-| 多个源库条件之间 `OR` | §4.2 | `DATA_FROM_SOURCE_ID` token 精确匹配，任一命中 |
-| 多个目标库条件之间 `OR` | §4.2 | `DATA_TO_SOURCE_ID` token 精确匹配，任一命中 |
-| 源库组与目标库组之间 `AND` | §4.2 | 两个独立 `and(sourceGroup)` / `and(targetGroup)`，见 DATABASE.md §4.1（含四种组合） |
+| 多个源库条件之间 `OR` | §4.2 | 服务层 Java：`DATA_FROM_SOURCE_ID` token 匹配，任一命中 |
+| 多个目标库条件之间 `OR` | §4.2 | 服务层 Java：`DATA_TO_SOURCE_ID` token 匹配，任一命中 |
+| 源库组与目标库组之间 `AND` | §4.2 | 服务层先分别计算源库组/目标库组 OR，再组间 AND，见 DATABASE.md §4.1 |
 | 首次进入无条件查询全部启用订阅 | §4.2 | 无 `sourceIds`/`targetIds` |
 | 查询不分页 | §4.2 | 一次返回全部 |
 | “重置”是纯前端清空表单，不调用查询 API | §4.2 | 无后端接口 |
-| CSV 字段按完整 token 匹配，禁止 `%ID%` | §4.2 | `INSTR(',' || col || ',', ',' || #{token} || ',') > 0`，见 DATABASE.md §4.1 |
-| 默认按 `NVL(UPDATE_TIME, INSERT_TIME) DESC` | §4.2 | 见 DATABASE.md §4.1 |
+| 普通 ID（不含逗号）完整 token 字面精确匹配 | §4.2 | Java `String.equals`，禁止 `%ID%`/LIKE/正则，见 DATABASE.md §4.1 |
+| 含逗号 ID 历史兼容可能匹配 | §4.2 | `queryAtomic` 是 `storedAtomic` 的连续子序列，返回可能匹配集合并给出 `queryWarnings`，见 DATABASE.md §4.1 |
+| 默认按 `NVL(UPDATE_TIME, INSERT_TIME) DESC` | §4.2 | 单一 SQL `ORDER BY NVL(...) DESC`，见 DATABASE.md §4.1 |
 
 ## 6. 与数据库字段映射
 
@@ -553,7 +580,7 @@
 | 40312 | SOURCE_REQUIRED | 必须且只能选择一个源库 | 源库缺失/多个 |
 | 40313 | TARGET_REQUIRED | 必须至少选择一个目标库 | 目标库为空 |
 | 40314 | SOURCE_TABLE_REQUIRED | 必须至少选择一张源表 | 源表为空 |
-| 40315 | INVALID_TABLE_FORMAT | 源表标识格式非法（应为 源库ID.Schema.表名） | 表标识格式错误 |
+| 40315 | INVALID_TABLE_FORMAT | 源表输入结构或 Schema/表名格式非法 | 源表输入结构或 Schema/表名格式非法（保存请求唯一契约是结构化 `SourceTableInput{schemaName,tableName}`，完整 `DATA_SOURCE_ID.Schema.表名` 由后端以 `dataFromSourceId` 拼装，不得提示请求应为完整源库ID.Schema.表名） |
 | 40316 | NAME_CONTAINS_COMMA_OR_DOT | 数据源ID、Schema名或表名不能包含英文逗号或组件内部英文句点 | 标识含协议保留字符 |
 | 40317 | DUPLICATE_TABLE_WITHIN_RECORD | 记录内存在重复源表 | 同一记录重复表标识（`(schemaName, tableName)` 组合重复） |
 | 40318 | DUPLICATE_TARGET_WITHIN_RECORD | 记录内存在重复目标库 | 同一记录重复目标库 |
@@ -612,4 +639,4 @@
 
 ---
 
-*文档状态：`DRAFT_PENDING_USER_REVIEW`。本文件为接口设计基线草案（R1 定向修订版），未获正式复审批准，不代表设计已批准、功能已实现或验收通过；接口尚未实现。*
+*文档状态：`DRAFT_PENDING_USER_REVIEW`。本文件为接口设计基线草案（R2 定向修订版），未获正式复审批准，不代表设计已批准、功能已实现或验收通过；R2 定向修订已完成，等待 ChatGPT 正式设计 R2 复审；接口尚未实现。*
