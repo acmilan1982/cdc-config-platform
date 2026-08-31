@@ -7,7 +7,7 @@
 | Feature 中文名称 | 数据订阅 |
 | Feature 标识 | `data-subscription` |
 | 文档状态 | `DRAFT_PENDING_USER_REVIEW`（接口设计草案，尚未获得项目负责人或 ChatGPT 正式复审批准） |
-| 设计正式复审状态 | `PENDING_R3_REVIEW`（R1 正式复审结论 `CHANGES_REQUIRED`；R2 定向修订已完成且四项修订目标通过正式复核；本 R3 已按已批准“取消并发保护”需求统一删除版本令牌与并发错误码并完成定向修订，尚未获得 ChatGPT 正式设计复审批准） |
+| 设计正式复审状态 | `PENDING_R4_REVIEW`（R1 正式复审结论 `CHANGES_REQUIRED`；R2 定向修订已完成且四项修订目标通过正式复核；R3 已按已批准“取消并发保护”需求统一删除版本令牌与并发错误码并完成定向修订；R4 为四文档设计基线统一执行状态元数据定向收口，本文件 API 业务设计在 R4 中零语义变化，但作为四文档设计基线的一部分，当前统一等待 ChatGPT 对 R4-R1 结果提交正式复审） |
 | 实现状态 | `NOT_STARTED`（本任务为纯文档设计基线 R3 定向修订，不涉及任何业务代码实现） |
 | 验收执行状态 | 126 条全部 `NOT_RUN` |
 | 任务编号 | `DATA-SUBSCRIPTION-DESIGN-BASELINE-001-R3`（R3 定向修订；前序 R2 任务 `DATA-SUBSCRIPTION-DESIGN-BASELINE-001-R2` 结果提交 `026417e7e907b0fd23e8812024a260f119c993cc`；R1 任务 `DATA-SUBSCRIPTION-DESIGN-BASELINE-001-R1` 结果提交 `3609548238c9fede745f5291e258469ab7b78167`；首版任务 `DATA-SUBSCRIPTION-DESIGN-BASELINE-001` 结果提交 `610401575938ba32f13fa635493f991bdfae81b6`） |
@@ -625,4 +625,4 @@
 
 ---
 
-*文档状态：`DRAFT_PENDING_USER_REVIEW`。本文件为接口设计基线草案（R3 定向修订版），未获正式复审批准，不代表设计已批准、功能已实现或验收通过；R3 已按已批准“取消并发保护”需求完成定向修订，等待 ChatGPT 正式设计 R3 复审；接口尚未实现。*
+*文档状态：`DRAFT_PENDING_USER_REVIEW`。本文件为接口设计基线草案（R4 定向修订版，R4-R1 完成状态元数据定向收口），未获正式复审批准，不代表设计已批准、功能已实现或验收通过；本文件 API 业务设计在 R4 中零语义变化，但作为四文档设计基线的一部分，当前统一等待 ChatGPT 对 R4-R1 结果提交正式复审；接口尚未实现。*

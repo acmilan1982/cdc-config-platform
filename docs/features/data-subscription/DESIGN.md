@@ -640,4 +640,4 @@ matched = matchCsvComma(storedCsv, queryId)
 
 ---
 
-*文档状态：`DRAFT_PENDING_USER_REVIEW`。本文件为设计基线草案（R3 定向修订版），未获正式复审批准，不代表设计已批准、功能已实现或验收通过；R3 已按已批准“取消并发保护”需求完成定向修订，等待 ChatGPT 正式设计 R3 复审。*
+*文档状态：`DRAFT_PENDING_USER_REVIEW`。本文件为设计基线草案（R4 定向修订版，R4-R1 完成状态元数据定向收口），未获正式复审批准，不代表设计已批准、功能已实现或验收通过；R3 已按已批准“取消并发保护”需求完成定向修订，R4 已按 ChatGPT 对 R3 正式复审 `CHANGES_REQUIRED` 定向修正 DELETE 错误码、DELETE 删除前多源库异常后端防护与 Java null/split 语义三个确定问题；ChatGPT 对 R4 结果提交正式复审为业务设计通过、状态元数据 `CHANGES_REQUIRED`，R4-R1 已统一本文件顶部/页尾复审状态，等待 ChatGPT 对 R4-R1 结果提交正式复审。*
