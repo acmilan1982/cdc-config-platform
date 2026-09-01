@@ -6,7 +6,7 @@
 |---|---|
 | Feature 中文名称 | 数据订阅 |
 | Feature 标识 | `data-subscription` |
-| 文档状态 | `DRAFT_PENDING_USER_REVIEW`（正式验收前 UI 交互基线对齐草案；上一正式批准界面设计版本为 R4（R4-R1 完成状态元数据收口），ChatGPT 对 R4-R1 结果提交 `ba7feddff426e369e1e73791b8d75e2ab62934e9` 正式复审结论 `APPROVED`，该批准历史保留；本草案把最终弹窗尺寸与视口约束、单行描述、源库/目标库同行与统一水平中轴、目标库卡片白色主体四态与 Shift 连选同步为待正式复审的界面规格，不新增后端接口；草案待 ChatGPT 正式复审，不代表正式验收通过） |
+| 文档状态 | `APPROVED`（正式验收前 UI 交互基线对齐内容已经获得 ChatGPT 对结果提交 `26094c6b6d8f9b8d5971ef38648851611799adee` 的正式复审 `APPROVED`，批准收口完成，已纳入当前批准界面设计基线；上一正式批准界面设计版本为 R4（R4-R1 完成状态元数据收口），ChatGPT 对 R4-R1 结果提交 `ba7feddff426e369e1e73791b8d75e2ab62934e9` 正式复审结论 `APPROVED`，该批准历史保留；本次 UI 交互基线对齐把最终弹窗尺寸与视口约束、单行描述、源库/目标库同行与统一水平中轴、目标库卡片白色主体四态与 Shift 连选同步为正式批准界面规格，不新增后端接口；批准不代表实现或验收通过） |
 | 设计正式复审状态 | `APPROVED`（R1 正式复审结论 `CHANGES_REQUIRED`；R2 定向修订已完成且四项修订目标通过正式复核；R3 已按已批准“取消并发保护”需求统一删除并发界面流程并完成定向修订；R4 为四文档设计基线统一执行状态元数据定向收口，本文件 UI 业务设计在 R4 中零语义变化；ChatGPT 对 R4-R1 结果提交 `ba7feddff426e369e1e73791b8d75e2ab62934e9` 正式复审结论 `APPROVED`，当前正式批准设计版本为 R4，R4-R1 仅完成状态元数据收口；批准不代表实现或验收通过） |
 | 实现状态 | `IMPLEMENTED_REVIEW_APPROVED_PENDING_FORMAL_ACCEPTANCE`（后端实现及真实数据库集成验证、前端 R3 代码与视觉、R3-R1 报告元数据收口均已获 ChatGPT 正式批准；126 条正式验收尚未执行；本任务为正式验收前纯文档 UI 基线对齐草案，不代表正式验收通过） |
 | 验收执行状态 | 126 条全部 `NOT_RUN` |
@@ -18,7 +18,7 @@
 | R2 修订日期 | 2026-08-31 |
 | R3 修订日期 | 2026-08-31 |
 
-说明：本文件为数据订阅 Feature 界面设计基线，**已正式批准**。R1 已修正 ChatGPT 正式复审（`CHANGES_REQUIRED`）发现的主要问题并同步已批准点号规则；R2 统一修正剩余四项（三类查询语义、元数据 API query 参数、物化视图显式排除、`DSUB-FP-V1` 字节级指纹）并同步含逗号查询批准基线；R3 按已正式批准并收口的“取消并发保护”需求（`DSUB-REQ-097/098/099/103`）删除编辑回显与删除预览中的版本令牌前端流程、删除 `40910` 并发冲突界面，把编辑保存、删除预览和删除改为普通界面流程。删除 `DSUB-FP-V1` 相关前端流程不是否定 R2 的技术正确性，而是同步新的正式需求。R3 定向修订已完成，ChatGPT 对 R4-R1 结果提交 `ba7feddff426e369e1e73791b8d75e2ab62934e9` 正式复审结论 `APPROVED`；批准不代表功能已实现、部署或验收完成。随后，在既有后端实现及真实数据库集成验证、前端 R3 代码与视觉、R3-R1 报告元数据收口均已获 ChatGPT 正式批准的前提下，本文件随正式验收前 UI 交互基线对齐草案（`DATA-SUBSCRIPTION-PRE-ACCEPTANCE-UI-BASELINE-ALIGNMENT-001`）同步最终视觉规格：弹窗 `1280px`/`82vh` 及视口约束、描述单行输入、源库/目标库桌面同行与小屏换行及统一水平中轴、目标库卡片约 `200×48px` 两行与唯一左侧复选框、目标库白色主体四态（禁止浅蓝整块背景，仅针对目标库卡片，源表选中行浅蓝背景保持不变）、源表区占主要空间与 Schema 约 `240~260px`、Shift 连选完整交互与低干扰提示、不恢复最右侧“已选源表”面板；文档状态由 `APPROVED` 转为 `DRAFT_PENDING_USER_REVIEW`，实现状态更新为 `IMPLEMENTED_REVIEW_APPROVED_PENDING_FORMAL_ACCEPTANCE`（待正式验收，非 `IMPLEMENTED_ACCEPTED`）；本草案待 ChatGPT 正式复审，不代表正式验收通过。
+说明：本文件为数据订阅 Feature 界面设计基线，**已正式批准**。R1 已修正 ChatGPT 正式复审（`CHANGES_REQUIRED`）发现的主要问题并同步已批准点号规则；R2 统一修正剩余四项（三类查询语义、元数据 API query 参数、物化视图显式排除、`DSUB-FP-V1` 字节级指纹）并同步含逗号查询批准基线；R3 按已正式批准并收口的“取消并发保护”需求（`DSUB-REQ-097/098/099/103`）删除编辑回显与删除预览中的版本令牌前端流程、删除 `40910` 并发冲突界面，把编辑保存、删除预览和删除改为普通界面流程。删除 `DSUB-FP-V1` 相关前端流程不是否定 R2 的技术正确性，而是同步新的正式需求。R3 定向修订已完成，ChatGPT 对 R4-R1 结果提交 `ba7feddff426e369e1e73791b8d75e2ab62934e9` 正式复审结论 `APPROVED`；批准不代表功能已实现、部署或验收完成。随后，在既有后端实现及真实数据库集成验证、前端 R3 代码与视觉、R3-R1 报告元数据收口均已获 ChatGPT 正式批准的前提下，本文件随正式验收前 UI 交互基线对齐草案（`DATA-SUBSCRIPTION-PRE-ACCEPTANCE-UI-BASELINE-ALIGNMENT-001`）同步最终视觉规格：弹窗 `1280px`/`82vh` 及视口约束、描述单行输入、源库/目标库桌面同行与小屏换行及统一水平中轴、目标库卡片约 `200×48px` 两行与唯一左侧复选框、目标库白色主体四态（禁止浅蓝整块背景，仅针对目标库卡片，源表选中行浅蓝背景保持不变）、源表区占主要空间与 Schema 约 `240~260px`、Shift 连选完整交互与低干扰提示、不恢复最右侧“已选源表”面板；实现状态更新为 `IMPLEMENTED_REVIEW_APPROVED_PENDING_FORMAL_ACCEPTANCE`（待正式验收，非 `IMPLEMENTED_ACCEPTED`）。该 UI 交互基线对齐草案及 R1 状态文字修订已获得 ChatGPT 对结果提交 `26094c6b6d8f9b8d5971ef38648851611799adee` 的正式复审 `APPROVED`，本文件文档状态收口为 `APPROVED`，最终 UI 交互规格已纳入当前批准界面设计基线；批准不代表实现或正式验收通过，126 条验收仍全部 `NOT_RUN`。
 
 - 技术栈：Vue 3 + TypeScript + Element Plus（^2.5.0）+ Pinia + vue-router 4 + axios（沿用项目既有前端栈）。
 - 视觉：使用项目现有设计令牌与 Element Plus 组件（Tag、Tooltip、Table、Dialog、Select、MessageBox、Loading 等），不凭空建立另一套视觉系统。
@@ -193,4 +193,4 @@
 
 ---
 
-*文档状态：`DRAFT_PENDING_USER_REVIEW`。本文件为数据订阅 Feature 正式界面设计基线（上一批准版本 R4，R4-R1 完成状态元数据收口，批准依据提交 `ba7feddff426e369e1e73791b8d75e2ab62934e9`，该批准历史保留）；正式验收前 UI 交互基线对齐草案（`DATA-SUBSCRIPTION-PRE-ACCEPTANCE-UI-BASELINE-ALIGNMENT-001`）同步最终视觉规格：弹窗 `1280px`/`82vh` 及视口约束、描述单行输入、源库/目标库桌面同行与小屏换行及统一水平中轴、目标库卡片约 `200×48px` 两行与唯一左侧复选框、目标库白色主体四态（禁止浅蓝整块背景，仅针对目标库卡片，源表选中行浅蓝背景保持不变）、源表区占主要空间与 Schema 约 `240~260px`、Shift 连选完整交互与低干扰提示、不恢复最右侧“已选源表”面板；实现状态更新为 `IMPLEMENTED_REVIEW_APPROVED_PENDING_FORMAL_ACCEPTANCE`；本草案待 ChatGPT 正式复审，不代表正式验收通过。*
+*文档状态：`APPROVED`。本文件为数据订阅 Feature 正式界面设计基线（上一批准版本 R4，R4-R1 完成状态元数据收口，批准依据提交 `ba7feddff426e369e1e73791b8d75e2ab62934e9`，该批准历史保留）；正式验收前 UI 交互基线对齐草案（`DATA-SUBSCRIPTION-PRE-ACCEPTANCE-UI-BASELINE-ALIGNMENT-001`）及 R1 状态文字修订已获得 ChatGPT 对结果提交 `26094c6b6d8f9b8d5971ef38648851611799adee` 正式复审结论 `APPROVED`，最终视觉规格（弹窗 `1280px`/`82vh` 及视口约束、描述单行输入、源库/目标库桌面同行与小屏换行及统一水平中轴、目标库卡片约 `200×48px` 两行与唯一左侧复选框、目标库白色主体四态（禁止浅蓝整块背景，仅针对目标库卡片，源表选中行浅蓝背景保持不变）、源表区占主要空间与 Schema 约 `240~260px`、Shift 连选完整交互与低干扰提示、不恢复最右侧“已选源表”面板）已纳入当前批准界面设计基线；实现状态保持 `IMPLEMENTED_REVIEW_APPROVED_PENDING_FORMAL_ACCEPTANCE`；批准不代表实现或正式验收通过，126 条验收仍全部 `NOT_RUN`。*
