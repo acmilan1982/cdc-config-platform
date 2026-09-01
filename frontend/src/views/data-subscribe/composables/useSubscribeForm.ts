@@ -42,6 +42,7 @@ export function useSubscribeForm() {
   let baselineDesc = ''
   let baselineSourceId: string | null = null
   let baselineTableKeys: string[] = []
+  let baselineTargetIds: string[] = []
 
   const sourceChanged = computed(() => form.dataFromSourceId !== baselineSourceId)
   const tablesChanged = computed(
@@ -49,10 +50,18 @@ export function useSubscribeForm() {
   )
   const descChanged = computed(() => form.dataSubDesc !== baselineDesc)
 
+  /**
+   * 目标库按集合语义比较：仅顺序变化不得误判为业务变化；
+   * 仅新增、删除或替换目标库时返回 true。
+   */
+  const targetsChanged = computed(
+    () => !sameKeys([...form.dataToSourceIds].sort(), [...baselineTargetIds].sort()),
+  )
+
   /** 编辑：任一字段相对基线变化即脏；新增：表单有任意输入即脏（关闭需确认）。 */
   const isDirty = computed(() =>
     isEditMode.value
-      ? sourceChanged.value || tablesChanged.value || descChanged.value
+      ? sourceChanged.value || tablesChanged.value || descChanged.value || targetsChanged.value
       : form.dataSubDesc !== '' ||
         form.dataFromSourceId !== null ||
         form.dataToSourceIds.length > 0 ||
@@ -68,6 +77,7 @@ export function useSubscribeForm() {
     baselineDesc = ''
     baselineSourceId = null
     baselineTableKeys = []
+    baselineTargetIds = []
   }
 
   /** 编辑打开回显：回填表单并以回显内容建立基线。 */
@@ -86,6 +96,7 @@ export function useSubscribeForm() {
     baselineDesc = echo.dataSubDesc
     baselineSourceId = echo.source.dataSourceId
     baselineTableKeys = tableKeys(tables)
+    baselineTargetIds = echo.targets.map((t) => t.dataSourceId)
   }
 
   /** 新增恒为 REPLACE，提交完整结构化源表。 */
@@ -122,6 +133,7 @@ export function useSubscribeForm() {
     isEditMode,
     sourceChanged,
     tablesChanged,
+    targetsChanged,
     isDirty,
     reset,
     applyEcho,

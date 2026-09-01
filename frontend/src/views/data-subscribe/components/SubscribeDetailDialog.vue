@@ -27,11 +27,11 @@
         </el-descriptions-item>
       </el-descriptions>
 
-      <div class="sd-section-title">源表</div>
+      <div class="sd-section-title">源表（共 {{ sourceTableTotal }} 张）</div>
       <div class="sd-table-zone">
         <div class="sd-table-group" v-for="group in detail.tablesBySchema" :key="group.schema">
           <div class="sd-table-schema">{{ group.schema }}</div>
-          <div class="sd-table-tables">{{ group.tables.join('、') }}</div>
+          <div v-for="t in group.tables" :key="t" class="sd-table-tables">{{ t }}</div>
         </div>
         <div v-if="detail.rawUnparseableTables.length > 0" class="sd-unparseable">
           <div class="sd-unparseable-title">以下源表片段无法解析，可能存在历史格式异常：</div>
@@ -71,7 +71,7 @@
 import { computed, ref, watch } from 'vue'
 import { fetchSubscriptionDetail } from '@/api/subscription'
 import type { SubscriptionDetailVO } from '@/types/subscription'
-import { describeRef, refStatusLabel } from '../utils/subscriptionFormat'
+import { describeRef, refStatusLabel, sourceTableTotalCount } from '../utils/subscriptionFormat'
 
 const props = defineProps<{
   modelValue: boolean
@@ -90,6 +90,11 @@ const visible = computed({
 const detail = ref<SubscriptionDetailVO | null>(null)
 const loading = ref(false)
 const error = ref<string | null>(null)
+
+/** 源表总数：可解析分组表 + 无法解析历史 token（R1 §5.3.1，口径与列表 sourceTableCount 一致）。 */
+const sourceTableTotal = computed(() =>
+  detail.value ? sourceTableTotalCount(detail.value.tablesBySchema, detail.value.rawUnparseableTables) : 0,
+)
 
 async function load() {
   if (!props.dataSubId) return

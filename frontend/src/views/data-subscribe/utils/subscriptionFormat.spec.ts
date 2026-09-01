@@ -10,6 +10,7 @@ import {
   refStatusLabel,
   resolveUpdateTime,
   sameTableSet,
+  sourceTableTotalCount,
   splitTrimDropEmpty,
   summarizeSelection,
   tableKey,
@@ -183,5 +184,28 @@ describe('highlightParts 搜索命中高亮（无注入）', () => {
       { text: 'AB', match: true },
       { text: 'AB', match: true },
     ])
+  })
+})
+
+describe('sourceTableTotalCount 源表总数（含无法解析历史 token）', () => {
+  it('可解析分组表 + 非空无法解析 token 计数，与列表 sourceTableCount 口径一致', () => {
+    expect(
+      sourceTableTotalCount(
+        [
+          { schema: 'SCHEMA_A', tables: ['T1', 'T2'] },
+          { schema: 'SCHEMA_B', tables: ['T3'] },
+        ],
+        ['LEGACY_FRAG'],
+      ),
+    ).toBe(4)
+  })
+
+  it('无法解析 token 内部含逗号时按逗号拆分统计非空 token', () => {
+    expect(sourceTableTotalCount([{ schema: 'SCHEMA_A', tables: ['T1'] }], ['FRAG1,FRAG2'])).toBe(3)
+    expect(sourceTableTotalCount([{ schema: 'SCHEMA_A', tables: ['T1'] }], ['  , '])).toBe(1)
+  })
+
+  it('无可解析表且无异常 token 返回 0', () => {
+    expect(sourceTableTotalCount([], [])).toBe(0)
   })
 })

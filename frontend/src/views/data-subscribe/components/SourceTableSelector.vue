@@ -1,7 +1,10 @@
 <template>
   <div class="source-table-selector" :class="{ disabled }">
     <div class="st-schemas-pane">
-      <div class="st-pane-header">Schema</div>
+      <div class="st-pane-header">
+        <span>Schema</span>
+        <span v-if="schemas.length > 0" class="st-schemas-summary">{{ schemas.length }} 个</span>
+      </div>
       <div class="st-pane-body">
         <div v-if="schemasLoading" class="st-loading">
           <el-icon class="is-loading"><Loading /></el-icon>
@@ -17,11 +20,13 @@
             v-for="schema in schemas"
             :key="schema"
             class="st-schema-item"
-            :class="{ active: schema === currentSchema }"
+            :class="{ active: schema === currentSchema, failed: tableErrors.has(schema) }"
+            :title="tableErrors.has(schema) ? `该 Schema 表清单加载失败：${tableErrors.get(schema)}` : ''"
             @click="selectSchema(schema)"
           >
-            <span class="st-schema-name" :title="schema">{{ schema }}</span>
-            <span class="st-schema-count">已选 {{ selectedCountOf(schema) }} 张</span>
+            <span class="st-schema-name">{{ schema }}</span>
+            <span v-if="tableErrors.has(schema)" class="st-schema-error">加载失败</span>
+            <span v-else class="st-schema-count">已选 {{ selectedCountOf(schema) }} 张</span>
           </div>
         </div>
       </div>
@@ -43,19 +48,28 @@
           class="st-search"
         />
         <el-button size="small" @click="selectAllSearch">全选当前筛选</el-button>
-        <el-button size="small" @click="tableSearch = ''">清除搜索</el-button>
-        <el-button size="small" :type="onlySelectedView ? 'primary' : 'default'" @click="onlySelectedView = !onlySelectedView">
+        <el-button size="small" @click="deselectFiltered">取消当前筛选</el-button>
+        <el-button size="small" @click="clearSearch">清除搜索</el-button>
+        <el-button
+          size="small"
+          :type="onlySelectedView ? 'primary' : 'default'"
+          @click="onlySelectedView = !onlySelectedView"
+        >
           仅看已选
         </el-button>
         <el-button size="small" @click="clearCurrentSchema">清空当前 Schema</el-button>
       </div>
-      <div class="st-pane-body">
-        <div v-if="tableLoadingSchema === currentSchema && !currentTables" class="st-loading">
+      <div class="st-pane-body st-table-viewport">
+        <div class="st-table-head">
+          <span class="st-col-check"></span>
+          <span class="st-col-name">表名</span>
+        </div>
+        <div v-if="currentSchemaLoading && !currentTables" class="st-loading">
           <el-icon class="is-loading"><Loading /></el-icon>
           <span>加载表中…</span>
         </div>
-        <div v-else-if="tableError && tableError.schema === currentSchema" class="st-error">
-          <div class="st-error-msg">{{ tableError.message }}</div>
+        <div v-else-if="currentSchemaError" class="st-error">
+          <div class="st-error-msg">{{ currentSchemaError }}</div>
           <el-button size="small" @click="retryTables">重试加载</el-button>
         </div>
         <div v-else-if="currentSchema && currentTables && currentTables.length === 0" class="st-empty">
@@ -76,7 +90,7 @@
               :disabled="disabled || isReserved(currentSchema, table)"
               @change="toggleTable(currentSchema, table)"
             />
-            <span class="st-table-name" :title="reservedReason(currentSchema, table)">{{ table }}</span>
+            <span class="st-table-name" :title="reservedReason(currentSchema, table) || table">{{ table }}</span>
           </label>
         </div>
       </div>
@@ -85,7 +99,7 @@
 </template>
 
 <script setup lang="ts">
-import { computed, ref, watch } from 'vue'
+import { computed, reactive, ref, watch } from 'vue'
 import { ElMessageBox } from 'element-plus'
 import { Loading } from '@element-plus/icons-vue'
 import { fetchSourceSchemas, fetchSourceTables } from '@/api/subscription'
@@ -106,20 +120,23 @@ const emit = defineEmits<{
 
 // 请求代际防护：切换源库时 sourceGen 自增，使旧源库在途响应失效，防止串扰（UI.md §7.2）。
 let sourceGen = 0
-let schemaSeq = 0
-let tableSeq = 0
 
 const schemas = ref<string[]>([])
 const schemasLoading = ref(false)
 const schemasError = ref<string | null>(null)
 const currentSchema = ref<string | null>(null)
-const currentTables = ref<string[] | null>(null)
-const tableLoadingSchema = ref<string | null>(null)
-const tableError = ref<{ schema: string; message: string } | null>(null)
 const tableSearch = ref('')
 const onlySelectedView = ref(false)
 // 弹窗会话内缓存：键为 `${sourceId}::${schema}`，切换 Schema/源库不重复请求。
-const tableCache = new Map<string, string[]>()
+// 必须用响应式 Map，currentTables 派生计算才能感知缓存填充。
+const tableCache = reactive(new Map<string, string[]>())
+// 每个 Schema 独立的失败状态：一个 Schema 加载失败不影响其他 Schema（R1 §3.3）。
+const tableErrors = reactive(new Map<string, string>())
+const tableLoading = reactive(new Set<string>())
+
+function cacheKeyOf(schema: string): string {
+  return `${props.sourceId}::${schema}`
+}
 
 function messageOf(e: unknown): string {
   if (e && typeof e === 'object' && 'message' in e) {
@@ -147,31 +164,50 @@ function reservedReason(schema: string, table: string): string {
   return ''
 }
 
+const currentTables = computed(() => {
+  if (!currentSchema.value) return null
+  return tableCache.get(cacheKeyOf(currentSchema.value)) ?? null
+})
+
+const currentSchemaLoading = computed(() => {
+  return currentSchema.value !== null && tableLoading.has(currentSchema.value)
+})
+
+const currentSchemaError = computed(() => {
+  return currentSchema.value ? tableErrors.get(currentSchema.value) ?? null : null
+})
+
 async function loadTables(schema: string) {
   const sourceId = props.sourceId
   if (!sourceId) return
-  const cacheKey = `${sourceId}::${schema}`
-  const cached = tableCache.get(cacheKey)
-  if (cached !== undefined) {
-    currentTables.value = cached
-    return
-  }
+  const key = cacheKeyOf(schema)
+  if (tableCache.has(key)) return
+  if (tableLoading.has(schema)) return
   const gen = sourceGen
-  const seq = ++tableSeq
-  tableLoadingSchema.value = schema
-  tableError.value = null
+  tableLoading.add(schema)
+  tableErrors.delete(schema)
   try {
     const res = await fetchSourceTables(sourceId, schema)
-    if (gen !== sourceGen || seq !== tableSeq) return
+    if (gen !== sourceGen) return
     const tables = res.code === 200 ? (res.data?.tables ?? []) : []
-    tableCache.set(cacheKey, tables)
-    currentTables.value = tables
+    tableCache.set(key, tables)
+    tableErrors.delete(schema)
   } catch (e) {
-    if (gen !== sourceGen || seq !== tableSeq) return
-    tableError.value = { schema, message: messageOf(e) }
-    currentTables.value = null
+    if (gen !== sourceGen) return
+    tableErrors.set(schema, messageOf(e))
   } finally {
-    if (gen === sourceGen && seq === tableSeq) tableLoadingSchema.value = null
+    if (gen === sourceGen) tableLoading.delete(schema)
+  }
+}
+
+/** 自动加载并缓存全部已选 Schema 的表清单（R1 §3.3），受控并发避免串行阻塞。 */
+async function preloadAllTables() {
+  const sourceId = props.sourceId
+  if (!sourceId) return
+  const schemasToLoad = (props.preloadSchemas ?? []).filter((s) => !tableCache.has(cacheKeyOf(s)))
+  const BATCH = 4
+  for (let i = 0; i < schemasToLoad.length; i += BATCH) {
+    await Promise.all(schemasToLoad.slice(i, i + BATCH).map((s) => loadTables(s)))
   }
 }
 
@@ -179,12 +215,11 @@ async function loadSchemas() {
   const sourceId = props.sourceId
   if (!sourceId) return
   const gen = sourceGen
-  const seq = ++schemaSeq
   schemasLoading.value = true
   schemasError.value = null
   try {
     const res = await fetchSourceSchemas(sourceId)
-    if (gen !== sourceGen || seq !== schemaSeq) return
+    if (gen !== sourceGen) return
     if (res.code !== 200) {
       schemasError.value = res.message
       schemas.value = []
@@ -196,13 +231,15 @@ async function loadSchemas() {
     }
     if (currentSchema.value === null) {
       const preferred = props.preloadSchemas ?? []
+      // 编辑回显默认定位到第一个已选 Schema（R1 §3.3）。
       currentSchema.value = preferred.length > 0 ? preferred[0] : schemas.value[0] ?? null
     }
     if (currentSchema.value) {
-      loadTables(currentSchema.value)
+      void loadTables(currentSchema.value)
+      void preloadAllTables()
     }
   } catch (e) {
-    if (gen !== sourceGen || seq !== schemaSeq) return
+    if (gen !== sourceGen) return
     schemasError.value = messageOf(e)
     schemas.value = []
   } finally {
@@ -215,11 +252,11 @@ function selectSchema(schema: string) {
   if (schema === currentSchema.value) return
   currentSchema.value = schema
   tableSearch.value = ''
-  loadTables(schema)
+  void loadTables(schema)
 }
 
 function retryTables() {
-  if (currentSchema.value) loadTables(currentSchema.value)
+  if (currentSchema.value) void loadTables(currentSchema.value)
 }
 
 function toggleTable(schema: string, table: string) {
@@ -261,6 +298,27 @@ function selectAllSearch() {
   emit('update:modelValue', selected)
 }
 
+/**
+ * 取消当前 Schema 下当前过滤结果的选择（R1 §3.4）：
+ * 只移除“当前 Schema 且命中当前筛选”的已选表，不得误删其他搜索结果或其他 Schema。
+ */
+function deselectFiltered() {
+  if (props.disabled || !currentSchema.value) return
+  const schema = currentSchema.value
+  const filteredKeys = new Set(filteredTables.value.map((t) => tableKey(schema, t)))
+  emit(
+    'update:modelValue',
+    props.modelValue.filter(
+      (t) => !(t.schemaName === schema && filteredKeys.has(tableKey(t.schemaName, t.tableName))),
+    ),
+  )
+}
+
+/** 清除搜索关键字：仅清空搜索词，不等于取消当前搜索结果的勾选（R1 §3.4）。 */
+function clearSearch() {
+  tableSearch.value = ''
+}
+
 function clearCurrentSchema() {
   if (props.disabled || !currentSchema.value) return
   const schema = currentSchema.value
@@ -273,21 +331,32 @@ function clearCurrentSchema() {
     .catch(() => undefined)
 }
 
+function resetForSourceChange() {
+  schemas.value = []
+  currentSchema.value = null
+  tableSearch.value = ''
+  onlySelectedView.value = false
+  tableErrors.clear()
+  tableLoading.clear()
+}
+
 watch(
   () => props.sourceId,
   (sourceId) => {
     sourceGen++
-    schemaSeq = 0
-    tableSeq = 0
-    schemas.value = []
-    currentSchema.value = null
-    currentTables.value = null
-    tableError.value = null
-    tableSearch.value = ''
-    onlySelectedView.value = false
-    if (sourceId) loadSchemas()
+    resetForSourceChange()
+    if (sourceId) void loadSchemas()
   },
   { immediate: true },
+)
+
+// preloadSchemas 在编辑打开时一次性传入；若其后变化，确保已选 Schema 仍被加载缓存。
+watch(
+  () => props.preloadSchemas,
+  (preload) => {
+    if (!preload || preload.length === 0 || schemas.value.length === 0) return
+    void preloadAllTables()
+  },
 )
 </script>
 
@@ -295,7 +364,8 @@ watch(
 .source-table-selector {
   display: flex;
   gap: 8px;
-  height: 360px;
+  height: 100%;
+  min-height: 240px;
   border: 1px solid var(--el-border-color-light);
   border-radius: 6px;
   padding: 8px;
@@ -312,12 +382,14 @@ watch(
   min-width: 0;
 }
 .st-schemas-pane {
-  width: 42%;
+  width: 250px;
+  flex-shrink: 0;
   border-right: 1px solid var(--el-border-color-lighter);
   padding-right: 8px;
 }
 .st-tables-pane {
   flex: 1;
+  min-width: 0;
   padding-left: 8px;
 }
 .st-pane-header {
@@ -331,6 +403,7 @@ watch(
   padding: 0 2px 8px;
   flex-shrink: 0;
 }
+.st-schemas-summary,
 .st-tables-summary {
   font-weight: 400;
   color: var(--el-text-color-secondary);
@@ -352,6 +425,30 @@ watch(
 .st-search {
   width: 150px;
 }
+/* 右侧以表格形态呈现：固定表头 + 内容内部滚动（R1 §4.5）。 */
+.st-table-head,
+.st-table-item {
+  display: grid;
+  grid-template-columns: 28px 1fr;
+  align-items: center;
+  gap: 6px;
+}
+.st-table-head {
+  position: sticky;
+  top: 0;
+  z-index: 2;
+  background: var(--el-fill-color-blank, #fff);
+  border-bottom: 1px solid var(--el-border-color-lighter);
+  padding: 4px 8px;
+  font-size: 12px;
+  font-weight: 600;
+  color: var(--el-text-color-secondary);
+}
+.st-col-name {
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
 .st-loading,
 .st-empty,
 .st-error {
@@ -359,7 +456,6 @@ watch(
   align-items: center;
   justify-content: center;
   gap: 8px;
-  height: 100%;
   color: var(--el-text-color-secondary);
   font-size: 12px;
 }
@@ -397,20 +493,24 @@ watch(
   color: var(--el-color-primary);
   font-weight: 600;
 }
+.st-schema-item.failed .st-schema-name {
+  color: var(--el-color-danger);
+}
 .st-schema-name {
   overflow: hidden;
   text-overflow: ellipsis;
   white-space: nowrap;
 }
-.st-schema-count {
+.st-schema-count,
+.st-schema-error {
   flex-shrink: 0;
   font-size: 12px;
   color: var(--el-text-color-secondary);
 }
+.st-schema-error {
+  color: var(--el-color-danger);
+}
 .st-table-item {
-  display: flex;
-  align-items: center;
-  gap: 6px;
   padding: 3px 8px;
   border-radius: 4px;
   cursor: pointer;

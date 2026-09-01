@@ -78,6 +78,18 @@ export function tableKey(schemaName: string, tableName: string): string {
   return `${schemaName}.${tableName}`
 }
 
+/**
+ * 源表总数（详情弹窗使用）：可解析分组表数 + 无法解析历史 token 数。
+ * 口径与列表 sourceTableCount 一致（API.md §4.2/§4.3）：按英文逗号拆分、trim、丢弃空 token 后统计所有非空 token。
+ */
+export function sourceTableTotalCount(
+  tablesBySchema: SchemaTableGroup[],
+  rawUnparseableTables: string[],
+): number {
+  const parsed = tablesBySchema.reduce((sum, g) => sum + g.tables.length, 0)
+  return parsed + countNonEmptyTokens(rawUnparseableTables.join(','))
+}
+
 /** 将选中表按 Schema 分组，保持 Schema 首次出现顺序、组内保持原始顺序。 */
 export function groupSourceTablesBySchema(tables: SourceTableInput[]): SchemaTableGroup[] {
   const groups: SchemaTableGroup[] = []
@@ -121,16 +133,16 @@ export function resolveUpdateTime(
  * ①ID 精确（忽略大小写）②ID 前缀 ③ID 模糊 ④机构模糊；先 trim。
  * 空关键字返回全部候选（下拉未输入时展示全部）。
  */
-export function filterSourceOptions(
-  options: SourceOptionVO[],
+export function filterSourceOptions<T extends SourceOptionVO>(
+  options: T[],
   rawKeyword: string | undefined,
-): SourceOptionVO[] {
+): T[] {
   const keyword = (rawKeyword ?? '').trim().toLowerCase()
   if (!keyword) return options
-  const exact: SourceOptionVO[] = []
-  const prefix: SourceOptionVO[] = []
-  const idFuzzy: SourceOptionVO[] = []
-  const orgFuzzy: SourceOptionVO[] = []
+  const exact: T[] = []
+  const prefix: T[] = []
+  const idFuzzy: T[] = []
+  const orgFuzzy: T[] = []
   for (const opt of options) {
     const id = opt.dataSourceId.toLowerCase()
     const org = (opt.dataSourceOrg ?? '').toLowerCase()
@@ -167,4 +179,15 @@ export function summarizeSelection(
 
 export function formatSelectionSummary(summary: SelectionSummary): string {
   return `已选择：${summary.sourceCount} 个源库 · ${summary.schemaCount} 个 Schema · ${summary.tableCount} 个表 · ${summary.targetCount} 个目标库`
+}
+
+/**
+ * 列表“目标库 +N”展示容量（UI.md §5 / R1 §5.2.8）：
+ * 依据实际列宽决定能在一行内完整展示的紧凑目标标签个数，不硬编码“永远两个”。
+ * 每个紧凑标签按约 96px（机构名截断）估算，宽度不足时至少展示 1 个。
+ * 无法获取布局宽度（<=0）时回退 2，保证 jsdom 测试稳定且仍留出 +N 位。
+ */
+export function computeTargetCapacity(width: number): number {
+  if (!Number.isFinite(width) || width <= 0) return 2
+  return Math.max(1, Math.floor((width - 4) / 96))
 }

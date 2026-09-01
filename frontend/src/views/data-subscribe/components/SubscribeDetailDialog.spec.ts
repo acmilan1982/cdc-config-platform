@@ -71,12 +71,16 @@ describe('SubscribeDetailDialog 详情展示', () => {
     expect(text).toContain('机构A')
     expect(text).toContain('S01')
     expect(text).toContain('已停用')
-    // 源表按 Schema 分组
+    // 源表按 Schema 分组且每张表逐行显示（R1 §5.3.2）
     expect(text).toContain('SCHEMA_A')
-    expect(text).toContain('T1、T2')
+    expect(text).toContain('T1')
+    expect(text).toContain('T2')
     expect(text).toContain('SCHEMA_B')
     expect(text).toContain('T3')
-    // 不可解析片段独立分区
+    expect(text).not.toContain('T1、T2')
+    // 源表总数包含无法解析的非空历史 token（3 可解析 + 1 不可解析 = 4，R1 §5.3.1）
+    expect(text).toContain('源表（共 4 张）')
+    // 不可解析片段独立警示分区
     expect(text).toContain('LEGACY_FRAG')
     // 目标库机构与 ID
     expect(text).toContain('机构B')
@@ -86,6 +90,19 @@ describe('SubscribeDetailDialog 详情展示', () => {
     expect(text).toContain('2026-08-02T11:00:00')
     // 警告
     expect(text).toContain('源库 S01 已停用')
+  })
+
+  it('源表总数对无法解析 token 按逗号拆分统计非空 token（R1 §5.3.1）', async () => {
+    mockedDetail.mockResolvedValue(
+      okDetail({
+        ...detail,
+        tablesBySchema: [{ schema: 'SCHEMA_A', tables: ['T1'] }],
+        rawUnparseableTables: ['FRAG1,FRAG2'],
+      }),
+    )
+    await openDialog('id1')
+    // 1 可解析 + 2 非空无法解析 token = 3
+    expect(bodyText()).toContain('源表（共 3 张）')
   })
 
   it('加载失败显示错误并可重试', async () => {

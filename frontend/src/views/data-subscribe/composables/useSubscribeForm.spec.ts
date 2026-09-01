@@ -50,6 +50,40 @@ describe('useSubscribeForm 表单语义', () => {
     expect(isDirty.value).toBe(false)
   })
 
+  it('编辑只修改目标库→isDirty=true（不借助同时改描述间接覆盖）', async () => {
+    const { form, isDirty, applyEcho, reset } = useSubscribeForm()
+    reset('edit')
+    applyEcho(editEcho())
+    expect(isDirty.value).toBe(false)
+    // 仅新增目标库，描述、源库、源表全部不动
+    form.dataToSourceIds.push('T02')
+    await nextTick()
+    expect(isDirty.value).toBe(true)
+  })
+
+  it('编辑目标库仅顺序变化→isDirty=false，不误判为业务变化', async () => {
+    const { form, isDirty, applyEcho, reset } = useSubscribeForm()
+    reset('edit')
+    applyEcho(
+      editEcho({
+        targets: [
+          { dataSourceId: 'T01', dataSourceOrg: '机构B', status: 'NORMAL' },
+          { dataSourceId: 'T02', dataSourceOrg: '机构C', status: 'NORMAL' },
+        ],
+      }),
+    )
+    expect(form.dataToSourceIds).toEqual(['T01', 'T02'])
+    expect(isDirty.value).toBe(false)
+    // 只调整顺序
+    form.dataToSourceIds = ['T02', 'T01']
+    await nextTick()
+    expect(isDirty.value).toBe(false)
+    // 真正替换目标库
+    form.dataToSourceIds = ['T01', 'T03']
+    await nextTick()
+    expect(isDirty.value).toBe(true)
+  })
+
   it('编辑仅改描述/目标库→源库与源表未变→不脏且保存为 PRESERVE（不提交 sourceTables）', async () => {
     const { form, isDirty, applyEcho, reset, buildUpdatePayload } = useSubscribeForm()
     reset('edit')

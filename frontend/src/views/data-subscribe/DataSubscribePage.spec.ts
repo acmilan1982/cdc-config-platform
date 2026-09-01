@@ -4,6 +4,7 @@ import { mount, flushPromises } from '@vue/test-utils'
 import ElementPlus, { ElMessage } from 'element-plus'
 import type { ApiResponse } from '@/types/monitor'
 import type {
+  SubscriptionDetailVO,
   SubscriptionListVO,
   SubscriptionOptionsVO,
   SubscriptionRowVO,
@@ -25,6 +26,7 @@ vi.mock('@/api/subscription', () => ({
 import {
   fetchSubscriptionList,
   fetchSubscriptionOptions,
+  fetchSubscriptionDetail,
   fetchSubscriptionDeletePreview,
 } from '@/api/subscription'
 import DataSubscribePage from './DataSubscribePage.vue'
@@ -32,6 +34,7 @@ import SubscribeFormDialog from './components/SubscribeFormDialog.vue'
 
 const mockedList = vi.mocked(fetchSubscriptionList)
 const mockedOptions = vi.mocked(fetchSubscriptionOptions)
+const mockedDetail = vi.mocked(fetchSubscriptionDetail)
 const mockedDeletePreview = vi.mocked(fetchSubscriptionDeletePreview)
 
 const options: SubscriptionOptionsVO = {
@@ -45,12 +48,16 @@ const options: SubscriptionOptionsVO = {
   ],
 }
 
-function okOptions(): ApiResponse<SubscriptionOptionsVO> {
-  return { code: 200, message: 'success', timestamp: '', data: options }
+function okOptions(data: SubscriptionOptionsVO = options): ApiResponse<SubscriptionOptionsVO> {
+  return { code: 200, message: 'success', timestamp: '', data }
 }
 
 function okList(items: SubscriptionRowVO[], queryWarnings: unknown[] = []): ApiResponse<SubscriptionListVO> {
   return { code: 200, message: 'success', timestamp: '', data: { items, queryWarnings: queryWarnings as never[] } }
+}
+
+function okDetail(data: SubscriptionDetailVO): ApiResponse<SubscriptionDetailVO> {
+  return { code: 200, message: 'success', timestamp: '', data }
 }
 
 const normalRow: SubscriptionRowVO = {
@@ -89,21 +96,32 @@ function bodyText(): string {
   return document.body.textContent ?? ''
 }
 
-/** 真实点击第 index 个查询下拉（源库=0，目标库=1），选中含指定文本的选项。 */
-async function pickQueryOption(wrapper: ReturnType<typeof mount>, index: number, optionLabel: string) {
-  const selects = wrapper.findAll('.query-select')
-  await selects[index].find('.el-select__wrapper').trigger('click')
-  await nextTick()
-  const dropdown = Array.from(document.body.querySelectorAll('.el-select-dropdown'))
+/** 当前可见（未被 display:none 过滤）的 el-select 下拉。 */
+function visibleDropdowns(): HTMLElement[] {
+  return Array.from(document.body.querySelectorAll('.el-select-dropdown'))
     .filter((d) => {
       const popper = d.parentElement
       return !!popper && !(popper.getAttribute('style') || '').includes('display: none')
     })
-    .find((d) =>
-      Array.from(d.querySelectorAll('.el-select-dropdown__item')).some((it) =>
-        it.textContent?.includes(optionLabel),
-      ),
-    )
+    .filter((d) => d.querySelectorAll('.el-select-dropdown__item').length > 0) as HTMLElement[]
+}
+
+/** 打开第 index 个查询下拉（源库=0，目标库=1），返回当前可见下拉元素。 */
+async function openQueryDropdown(wrapper: ReturnType<typeof mount>, index: number): Promise<HTMLElement> {
+  const selects = wrapper.findAll('.query-select')
+  await selects[index].find('.el-select__wrapper').trigger('click')
+  await nextTick()
+  return visibleDropdowns()[0]
+}
+
+/** 真实点击第 index 个查询下拉，选中含指定文本的选项。 */
+async function pickQueryOption(wrapper: ReturnType<typeof mount>, index: number, optionLabel: string) {
+  await openQueryDropdown(wrapper, index)
+  const dropdown = visibleDropdowns().find((d) =>
+    Array.from(d.querySelectorAll('.el-select-dropdown__item')).some((it) =>
+      it.textContent?.includes(optionLabel),
+    ),
+  )
   const item = Array.from(dropdown!.querySelectorAll('.el-select-dropdown__item')).find((it) =>
     it.textContent?.includes(optionLabel),
   ) as HTMLElement
@@ -127,9 +145,35 @@ function rowButtonByText(wrapper: ReturnType<typeof mount>, text: string) {
   )
 }
 
+/** 递归提取 VNode 树的纯文本（el-tooltip #content 插槽在 jsdom 不 teleport，需走 $slots）。 */
+function vnodeText(vnodes: unknown): string {
+  let out = ''
+  const arr = Array.isArray(vnodes) ? vnodes : [vnodes]
+  for (const v of arr) {
+    if (v == null) continue
+    if (typeof v === 'string') out += v
+    else if (Array.isArray((v as { children?: unknown }).children)) out += vnodeText((v as { children: unknown[] }).children)
+    else if ((v as { children?: unknown }).children != null) out += String((v as { children: unknown }).children)
+  }
+  return out
+}
+
+/** 查找 #content 插槽文本包含 matcher 的 el-tooltip 的插槽全文。 */
+function tooltipSlotText(wrapper: ReturnType<typeof mount>, matcher: string): string {
+  for (const tip of wrapper.findAllComponents({ name: 'ElTooltip' })) {
+    const vm = tip.vm as unknown as { $slots?: Record<string, (() => unknown) | undefined> }
+    const content = vm.$slots?.content?.()
+    if (!content) continue
+    const text = vnodeText(content)
+    if (text.includes(matcher)) return text
+  }
+  return ''
+}
+
 beforeEach(() => {
   mockedList.mockReset()
   mockedOptions.mockReset()
+  mockedDetail.mockReset()
   mockedDeletePreview.mockReset()
   mockedOptions.mockResolvedValue(okOptions())
 })
@@ -140,26 +184,49 @@ afterEach(() => {
 })
 
 describe('DataSubscribePage 首查与查询/重置语义', () => {
-  it('挂载自动查询空条件；列表渲染列、源表 Tooltip 分区、目标折叠与更新时间', async () => {
+  it('挂载自动查询空条件；列表列、源表悬停分区、目标 +N 悬停与更新时间', async () => {
     mockedList.mockResolvedValue(okList([normalRow], [{ type: 'AMBIGUOUS_COMMA_ID', field: 'sourceIds', message: '源库名含逗号，已按模糊匹配' }]))
     const wrapper = await mountPage()
 
     // 首次自动查询空条件
     expect(mockedList).toHaveBeenCalledWith({})
 
-    // 列表列
+    // 订阅描述单行省略（title 承载完整内容，R1 §5.2.1）；限定真实行避免 hidden-columns 影子副本
+    const desc = wrapper.find('.el-table__row .desc-cell')
+    expect(desc.exists()).toBe(true)
+    expect(desc.attributes('title')).toBe('机构A到机构B全量订阅')
     expect(wrapper.text()).toContain('机构A到机构B全量订阅')
-    expect(wrapper.text()).toContain('机构A')
-    expect(wrapper.text()).toContain('S01')
-    expect(wrapper.text()).toContain('共 2 张')
-    // 不可解析分区
-    expect(wrapper.text()).toContain('以下片段无法解析：')
-    expect(wrapper.text()).toContain('FRAG1')
-    // 目标库折叠：>2 个只展示前 2 个 +N，T03（已停用）被折叠
+
+    // 源库：正常只显示机构名，数据源 ID 仅通过悬停 title 查看（R1 §5.2.2/5.2.3）
+    const sourceMain = wrapper.find('.el-table__row .ref-main')
+    expect(sourceMain.text()).toBe('机构A')
+    expect(sourceMain.attributes('title')).toBe('S01')
+    expect(wrapper.find('.ref-id').exists()).toBe(false)
+    expect(wrapper.text()).not.toContain('S01')
+
+    // 源表单元格主体只能显示“共 N 张”（R1 §5.2.4）
+    const sourceCell = wrapper.find('.el-table__row .cell-source-tables')
+    expect(sourceCell.text()).toBe('共 2 张')
+    expect(sourceCell.find('.unparseable-zone').exists()).toBe(false)
+    expect(sourceCell.text()).not.toContain('FRAG1')
+    // 无法解析 token 在同一悬停层内以警示分区展示（R1 §5.2.5/5.2.6）
+    const tableTip = tooltipSlotText(wrapper, 'FRAG1')
+    expect(tableTip).toContain('SCHEMA_A')
+    expect(tableTip).toContain('T1')
+    expect(tableTip).toContain('T2')
+    expect(tableTip).toContain('以下片段无法解析，可能存在历史格式异常')
+    expect(tableTip).toContain('FRAG1')
+
+    // 目标库 +N 悬停展示全部（R1 §5.2.7/5.2.8）：可见前 2 个，+1 悬停含 T03（已停用）
     expect(wrapper.text()).toContain('机构B')
     expect(wrapper.text()).toContain('机构C')
-    expect(wrapper.text()).toContain('+1')
+    expect(wrapper.find('.more-tag').text()).toBe('+1')
     expect(wrapper.text()).not.toContain('机构D')
+    const moreTip = tooltipSlotText(wrapper, '机构D')
+    expect(moreTip).toContain('机构D')
+    expect(moreTip).toContain('已停用')
+    expect(wrapper.findAll('.fold-tag').length).toBe(0)
+
     // 更新时间
     expect(wrapper.text()).toContain('2026-08-02T11:00:00')
     // 查询警告 banner
@@ -167,18 +234,48 @@ describe('DataSubscribePage 首查与查询/重置语义', () => {
     wrapper.unmount()
   })
 
-  it('点击目标折叠 +N 展开全部目标', async () => {
+  it('目标 +N 悬停查看全部，不提供行内展开/收起（点击不改变展示）', async () => {
     mockedList.mockResolvedValue(okList([normalRow]))
     const wrapper = await mountPage()
     expect(wrapper.text()).not.toContain('机构D')
+    expect(tooltipSlotText(wrapper, '机构D')).toContain('机构D')
 
-    // 测试环境下 transition 被 stub 成 <transition-stub>，.fold-tag 落在外层 stub；
-    // 点击内部 .el-tag__content 才能触发绑在 el-tag 根上的 @click。
-    const foldTag = wrapper.find('.fold-tag .el-tag__content')
-    expect(foldTag.text()).toContain('+1')
-    await foldTag.trigger('click')
+    // 点击 +N 不得展开行内目标（R1 §5.2.7）
+    await wrapper.find('.more-tag').trigger('click')
     await nextTick()
-    expect(wrapper.text()).toContain('机构D')
+    expect(wrapper.text()).not.toContain('机构D')
+    expect(wrapper.findAll('.target-tags').length).toBeGreaterThanOrEqual(1)
+    wrapper.unmount()
+  })
+
+  it('查询候选以机构为主文字、ID 为辅助文字；含逗号候选仍可选但显示歧义警告（R1 §5.1）', async () => {
+    mockedOptions.mockResolvedValue(
+      okOptions({
+        sources: [
+          { dataSourceId: 'S,01', dataSourceOrg: '机构A' },
+          { dataSourceId: 'DOT.01', dataSourceOrg: '机构B' },
+        ],
+        targets: options.targets,
+      }),
+    )
+    mockedList.mockResolvedValue(okList([]))
+    const wrapper = await mountPage()
+
+    const dropdown = await openQueryDropdown(wrapper, 0)
+    const items = Array.from(dropdown.querySelectorAll('.el-select-dropdown__item'))
+    const commaItem = items.find((it) => it.textContent?.includes('S,01')) as HTMLElement
+    const dotItem = items.find((it) => it.textContent?.includes('DOT.01')) as HTMLElement
+    // 机构名为主文字、ID 为辅助文字
+    expect(commaItem.querySelector('.q-opt-main')?.textContent).toBe('机构A')
+    expect(commaItem.querySelector('.q-opt-sub')?.textContent).toBe('S,01')
+    // 含逗号候选显示歧义警告
+    expect(commaItem.textContent).toContain('含逗号，历史兼容查询可能存在歧义')
+    // 仅含句点候选为普通候选，无警告
+    expect(dotItem.textContent).not.toContain('含逗号')
+    // 含逗号候选仍可选择
+    commaItem.click()
+    await nextTick()
+    expect(wrapper.findAll('.query-select')[0].text()).toContain('机构A')
     wrapper.unmount()
   })
 
@@ -255,6 +352,30 @@ describe('DataSubscribePage 弹窗入口与保存/删除反馈', () => {
     await nextTick()
     // 表单弹窗非 append-to-body，标题在组件内而非 document.body
     expect(wrapper.text()).toContain('新增订阅')
+    wrapper.unmount()
+  })
+
+  it('操作文字为“查看”，点击打开详情弹窗并加载（R1 §5.2.9）', async () => {
+    mockedList.mockResolvedValue(okList([normalRow]))
+    mockedDetail.mockResolvedValue(
+      okDetail({
+        dataSubId: 'id1',
+        dataSubDesc: '机构A到机构B全量订阅',
+        source: { dataSourceId: 'S01', dataSourceOrg: '机构A', status: 'NORMAL' },
+        tablesBySchema: [{ schema: 'SCHEMA_A', tables: ['T1', 'T2'] }],
+        rawUnparseableTables: ['FRAG1'],
+        targets: [{ dataSourceId: 'T01', dataSourceOrg: '机构B', status: 'NORMAL' }],
+        insertTime: '2026-08-01T10:00:00',
+        updateTime: '2026-08-02T11:00:00',
+        warnings: [],
+      }),
+    )
+    const wrapper = await mountPage()
+    expect(rowButtonByText(wrapper, '详情')).toBeNull() // 不得使用“详情”
+    await rowButtonByText(wrapper, '查看')!.trigger('click')
+    await flushPromises()
+    expect(bodyText()).toContain('订阅详情')
+    expect(mockedDetail).toHaveBeenCalledWith('id1')
     wrapper.unmount()
   })
 

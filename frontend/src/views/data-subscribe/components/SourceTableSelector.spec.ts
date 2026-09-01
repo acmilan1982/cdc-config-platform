@@ -58,9 +58,9 @@ async function clickTable(w: VueWrapper, tableName: string) {
   await nextTick()
 }
 
-async function mountSelector(sourceId: string, modelValue: SourceTableInput[] = []) {
+async function mountSelector(sourceId: string, modelValue: SourceTableInput[] = [], preloadSchemas: string[] = []) {
   const wrapper = mount(SourceTableSelector, {
-    props: { sourceId, modelValue },
+    props: { sourceId, modelValue, preloadSchemas },
     global: { plugins: [ElementPlus] },
   })
   await flushPromises()
@@ -87,9 +87,8 @@ describe('SourceTableSelector Schema/表加载与缓存', () => {
     const schemaNames = wrapper.findAll('.st-schema-item').map((i) => i.text())
     expect(schemaNames.join()).toContain('SCHEMA_A')
 
-    await clickSchema(wrapper, 'SCHEMA_A')
-    expect(mockedTables).toHaveBeenCalledTimes(1)
-    expect(mockedTables).toHaveBeenLastCalledWith('S01', 'SCHEMA_A')
+    // 默认定位第一个 Schema 并自动加载其表清单
+    expect(mockedTables).toHaveBeenCalledWith('S01', 'SCHEMA_A')
     expect(wrapper.findAll('.st-table-item').length).toBe(2)
 
     // 切换 Schema 再切回：走会话内缓存，不重复请求
@@ -146,7 +145,6 @@ describe('SourceTableSelector Schema/表加载与缓存', () => {
     mockedSchemas.mockResolvedValue(okSchemas('S01', ['SCHEMA_A']))
     mockedTables.mockRejectedValueOnce(new Error('表加载失败'))
     const wrapper = await mountSelector('S01')
-    await clickSchema(wrapper, 'SCHEMA_A')
     expect(wrapper.text()).toContain('表加载失败')
     expect(buttonByText(wrapper, '重试加载')).toBeTruthy()
 
@@ -156,6 +154,50 @@ describe('SourceTableSelector Schema/表加载与缓存', () => {
     expect(wrapper.findAll('.st-table-item').length).toBe(1)
     wrapper.unmount()
   })
+
+  it('编辑回显自动加载并缓存全部已选 Schema；单个 Schema 失败不影响其他（R1 §3.3）', async () => {
+    mockedSchemas.mockResolvedValue(okSchemas('S01', ['SCHEMA_A', 'SCHEMA_B']))
+    mockedTables.mockImplementation((sourceId: string, schema: string) => {
+      if (schema === 'SCHEMA_A') return Promise.resolve(okTables('S01', 'SCHEMA_A', ['TA1', 'TA2']))
+      if (schema === 'SCHEMA_B') return Promise.reject(new Error('SCHEMA_B 表加载失败'))
+      return Promise.resolve(okTables('S01', schema, ['TC1']))
+    })
+    const wrapper = await mountSelector(
+      'S01',
+      [
+        { schemaName: 'SCHEMA_A', tableName: 'TA1' },
+        { schemaName: 'SCHEMA_B', tableName: 'TB1' },
+      ],
+      ['SCHEMA_A', 'SCHEMA_B'],
+    )
+
+    // 默认定位第一个已选 Schema，且其表清单已加载缓存并回显勾选
+    const active = wrapper.findAll('.st-schema-item').find((i) => i.classes().includes('active'))
+    expect(active?.text()).toContain('SCHEMA_A')
+    expect(wrapper.findAll('.st-table-item').length).toBe(2)
+    expect(wrapper.findAll('.st-table-item.selected').length).toBe(1)
+
+    // SCHEMA_B 加载失败：当前查看显示错误并可重试；左侧带失败标记
+    await clickSchema(wrapper, 'SCHEMA_B')
+    expect(wrapper.text()).toContain('SCHEMA_B 表加载失败')
+    expect(buttonByText(wrapper, '重试加载')).toBeTruthy()
+    expect(wrapper.findAll('.st-schema-item').some((i) => i.classes().includes('failed'))).toBe(true)
+
+    // 重试 SCHEMA_B：仅 B 的表清单重新加载并缓存
+    mockedTables.mockImplementation((sourceId: string, schema: string) => {
+      if (schema === 'SCHEMA_B') return Promise.resolve(okTables('S01', 'SCHEMA_B', ['TB1']))
+      return Promise.resolve(okTables('S01', schema, []))
+    })
+    await buttonByText(wrapper, '重试加载')!.trigger('click')
+    await flushPromises()
+    expect(wrapper.findAll('.st-table-item').length).toBe(1)
+
+    // 回到 SCHEMA_A：已成功缓存，不受 B 失败影响，选择仍在
+    await clickSchema(wrapper, 'SCHEMA_A')
+    expect(wrapper.findAll('.st-table-item').length).toBe(2)
+    expect(wrapper.findAll('.st-table-item.selected').length).toBe(1)
+    wrapper.unmount()
+  })
 })
 
 describe('SourceTableSelector 选择与批量操作', () => {
@@ -163,9 +205,8 @@ describe('SourceTableSelector 选择与批量操作', () => {
     mockedSchemas.mockResolvedValue(okSchemas('S01', ['SCHEMA_A']))
     mockedTables.mockResolvedValue(okTables('S01', 'SCHEMA_A', ['T1', 'T2']))
     const wrapper = await mountSelector('S01')
-    await clickSchema(wrapper, 'SCHEMA_A')
-
     await clickTable(wrapper, 'T1')
+
     let emitted = wrapper.emitted('update:modelValue')!
     expect(emitted[emitted.length - 1]).toEqual([[{ schemaName: 'SCHEMA_A', tableName: 'T1' }]])
 
@@ -182,7 +223,6 @@ describe('SourceTableSelector 选择与批量操作', () => {
     mockedSchemas.mockResolvedValue(okSchemas('S01', ['SCHEMA_A']))
     mockedTables.mockResolvedValue(okTables('S01', 'SCHEMA_A', ['T1', 'T2', 'T3']))
     const wrapper = await mountSelector('S01')
-    await clickSchema(wrapper, 'SCHEMA_A')
 
     await buttonByText(wrapper, '全选当前筛选')!.trigger('click')
     await nextTick()
@@ -197,6 +237,31 @@ describe('SourceTableSelector 选择与批量操作', () => {
     wrapper.unmount()
   })
 
+  it('取消当前筛选仅取消当前 Schema 当前过滤结果的勾选，不影响其他 Schema（R1 §3.4）', async () => {
+    mockedSchemas.mockResolvedValue(okSchemas('S01', ['SCHEMA_A']))
+    mockedTables.mockResolvedValue(okTables('S01', 'SCHEMA_A', ['TALPHA', 'TBETA', 'TCALPHA']))
+    const wrapper = await mountSelector('S01', [
+      { schemaName: 'SCHEMA_A', tableName: 'TALPHA' },
+      { schemaName: 'SCHEMA_A', tableName: 'TBETA' },
+      { schemaName: 'SCHEMA_B', tableName: 'T9' },
+    ])
+
+    // 搜索命中 ALPHA：当前过滤结果为 TALPHA、TCALPHA
+    await wrapper.find('.st-search input').setValue('ALPHA')
+    await nextTick()
+    // 取消当前筛选：仅取消命中过滤且已选中的 TALPHA；TBETA（未命中）与 SCHEMA_B.T9 保留
+    await buttonByText(wrapper, '取消当前筛选')!.trigger('click')
+    await nextTick()
+    const emitted = wrapper.emitted('update:modelValue')!
+    expect(emitted[emitted.length - 1]).toEqual([
+      [
+        { schemaName: 'SCHEMA_A', tableName: 'TBETA' },
+        { schemaName: 'SCHEMA_B', tableName: 'T9' },
+      ],
+    ])
+    wrapper.unmount()
+  })
+
   it('清空当前 Schema 需二次确认，确认后仅清除该 Schema 的选中表', async () => {
     const confirmSpy = vi.spyOn(ElMessageBox, 'confirm').mockResolvedValue('confirm' as never)
     mockedSchemas.mockResolvedValue(okSchemas('S01', ['SCHEMA_A', 'SCHEMA_B']))
@@ -205,7 +270,6 @@ describe('SourceTableSelector 选择与批量操作', () => {
       { schemaName: 'SCHEMA_A', tableName: 'T1' },
       { schemaName: 'SCHEMA_B', tableName: 'T9' },
     ])
-    await clickSchema(wrapper, 'SCHEMA_A')
 
     await buttonByText(wrapper, '清空当前 Schema')!.trigger('click')
     await flushPromises()
@@ -219,7 +283,6 @@ describe('SourceTableSelector 选择与批量操作', () => {
     mockedSchemas.mockResolvedValue(okSchemas('S01', ['SCHEMA_A']))
     mockedTables.mockResolvedValue(okTables('S01', 'SCHEMA_A', ['TALPHA', 'TBETA']))
     const wrapper = await mountSelector('S01', [{ schemaName: 'SCHEMA_A', tableName: 'TALPHA' }])
-    await clickSchema(wrapper, 'SCHEMA_A')
 
     await buttonByText(wrapper, '仅看已选')!.trigger('click')
     await nextTick()
@@ -247,7 +310,6 @@ describe('SourceTableSelector 保留字符与规模', () => {
     expect(reservedTables.every((i) => i.classes().includes('reserved'))).toBe(true)
     // 保留字符表复选框禁用，触发 change 也不发射选择
     const reservedInput = reservedTables[0].find('input[type="checkbox"]')
-    // VTU 2.4 中 isDisabled 为 protected，直接断言 DOM 属性
     expect((reservedInput.element as HTMLInputElement).disabled).toBe(true)
     await reservedInput.trigger('change')
     await nextTick()
@@ -260,13 +322,26 @@ describe('SourceTableSelector 保留字符与规模', () => {
     mockedSchemas.mockResolvedValue(okSchemas('S01', ['SCHEMA_A']))
     mockedTables.mockResolvedValue(okTables('S01', 'SCHEMA_A', big))
     const wrapper = await mountSelector('S01')
-    await clickSchema(wrapper, 'SCHEMA_A')
     expect(wrapper.findAll('.st-table-item').length).toBe(240)
     // 全选当前筛选覆盖全部 240 张
     await buttonByText(wrapper, '全选当前筛选')!.trigger('click')
     await nextTick()
     const emitted = wrapper.emitted('update:modelValue')!
     expect((emitted[emitted.length - 1] as [SourceTableInput[]])[0].length).toBe(240)
+    wrapper.unmount()
+  })
+
+  it('右侧以带固定表头（st-table-head）的表格形态渲染并支持内部滚动（R1 §4.5）', async () => {
+    const big = Array.from({ length: 240 }, (_, i) => `TABLE_${i + 1}`)
+    mockedSchemas.mockResolvedValue(okSchemas('S01', ['SCHEMA_A']))
+    mockedTables.mockResolvedValue(okTables('S01', 'SCHEMA_A', big))
+    const wrapper = await mountSelector('S01')
+    expect(wrapper.find('.st-table-viewport').exists()).toBe(true)
+    expect(wrapper.find('.st-table-head').exists()).toBe(true)
+    expect(wrapper.find('.st-col-name').text()).toBe('表名')
+    expect(wrapper.findAll('.st-table-item').length).toBe(240)
+    // Schema 区固定宽度由类承担（jsdom 无法计算计算样式，校验关键 class 结构）
+    expect(wrapper.find('.st-schemas-pane').exists()).toBe(true)
     wrapper.unmount()
   })
 })

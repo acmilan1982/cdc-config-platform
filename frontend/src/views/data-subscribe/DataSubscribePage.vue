@@ -16,8 +16,16 @@
               v-for="s in options.sources"
               :key="s.dataSourceId"
               :value="s.dataSourceId"
-              :label="`${s.dataSourceId}（${s.dataSourceOrg}）`"
-            />
+              :label="queryOptionLabel(s)"
+            >
+              <div class="q-opt">
+                <span class="q-opt-main">{{ s.dataSourceOrg ?? s.dataSourceId }}</span>
+                <span class="q-opt-sub">{{ s.dataSourceId }}</span>
+              </div>
+              <div v-if="s.dataSourceId.includes(',')" class="q-opt-warn">
+                含逗号，历史兼容查询可能存在歧义
+              </div>
+            </el-option>
           </el-select>
         </div>
         <div class="query-field">
@@ -34,8 +42,16 @@
               v-for="t in options.targets"
               :key="t.dataSourceId"
               :value="t.dataSourceId"
-              :label="`${t.dataSourceId}（${t.dataSourceOrg}）`"
-            />
+              :label="queryOptionLabel(t)"
+            >
+              <div class="q-opt">
+                <span class="q-opt-main">{{ t.dataSourceOrg ?? t.dataSourceId }}</span>
+                <span class="q-opt-sub">{{ t.dataSourceId }}</span>
+              </div>
+              <div v-if="t.dataSourceId.includes(',')" class="q-opt-warn">
+                含逗号，历史兼容查询可能存在歧义
+              </div>
+            </el-option>
           </el-select>
         </div>
         <div class="query-actions">
@@ -80,14 +96,13 @@
             <span v-if="row.anomalyMultiSource" class="anomaly-msg">
               配置异常：该记录包含多个源库，请直接维护数据库
             </span>
-            <span v-else>{{ row.dataSubDesc }}</span>
+            <span v-else class="desc-cell" :title="row.dataSubDesc">{{ row.dataSubDesc }}</span>
           </template>
         </el-table-column>
         <el-table-column label="源库" min-width="140">
           <template #default="{ row }">
             <template v-if="row.source">
-              <span>{{ describeRef(row.source) }}</span>
-              <span class="ref-id" :title="row.source.dataSourceId">{{ row.source.dataSourceId }}</span>
+              <span class="ref-main" :title="row.source.dataSourceId">{{ describeRef(row.source) }}</span>
               <el-tag v-if="refStatusLabel(row.source.status)" size="small" type="warning">
                 {{ refStatusLabel(row.source.status) }}
               </el-tag>
@@ -97,50 +112,50 @@
         </el-table-column>
         <el-table-column label="源表" min-width="160">
           <template #default="{ row }">
-            <template v-if="!row.anomalyMultiSource">
+            <div v-if="!row.anomalyMultiSource" class="cell-source-tables">
               <el-tooltip placement="top">
                 <template #content>
                   <div class="tooltip-content">
                     <div v-for="group in row.tablesBySchema" :key="group.schema" class="tooltip-group">
                       <div class="tooltip-schema">{{ group.schema }}</div>
-                      <div class="tooltip-tables">{{ group.tables.join('、') }}</div>
+                      <div v-for="t in group.tables" :key="t" class="tooltip-table">{{ t }}</div>
+                    </div>
+                    <div v-if="row.rawUnparseableTables.length > 0" class="tooltip-unparseable">
+                      <div class="tooltip-unparseable-title">以下片段无法解析，可能存在历史格式异常：</div>
+                      <div class="tooltip-unparseable-list">{{ row.rawUnparseableTables.join('、') }}</div>
                     </div>
                   </div>
                 </template>
                 <span class="table-count">共 {{ row.sourceTableCount }} 张</span>
               </el-tooltip>
-              <div v-if="row.rawUnparseableTables.length > 0" class="unparseable-zone">
-                <div class="unparseable-title">以下片段无法解析：</div>
-                <div class="unparseable-list">{{ row.rawUnparseableTables.join('、') }}</div>
-              </div>
-            </template>
+            </div>
             <span v-else>—</span>
           </template>
         </el-table-column>
         <el-table-column label="目标库" min-width="160">
           <template #default="{ row }">
-            <template v-if="row.targets.length > 0">
-              <div class="target-tags">
-                <el-tooltip
-                  v-for="t in visibleTargets(row)"
-                  :key="t.dataSourceId"
-                  placement="top"
-                  :content="`${t.dataSourceId}${refStatusLabel(t.status) ? '（' + refStatusLabel(t.status) + '）' : ''}`"
-                >
-                  <el-tag size="small" :type="t.status === 'NORMAL' ? 'info' : 'warning'">
-                    {{ describeRef(t) }}
-                  </el-tag>
-                </el-tooltip>
-                <el-tag
-                  v-if="row.targets.length > TARGET_FOLD_THRESHOLD"
-                  size="small"
-                  class="fold-tag"
-                  @click="toggleTargets(row.dataSubId)"
-                >
-                  {{ isTargetsExpanded(row.dataSubId) ? '收起' : `+${row.targets.length - TARGET_FOLD_THRESHOLD}` }}
+            <div v-if="row.targets.length > 0" class="target-tags target-cell">
+              <el-tooltip
+                v-for="t in visibleTargets(row)"
+                :key="t.dataSourceId"
+                placement="top"
+                :content="`${t.dataSourceId}${refStatusLabel(t.status) ? '（' + refStatusLabel(t.status) + '）' : ''}`"
+              >
+                <el-tag size="small" :type="t.status === 'NORMAL' ? 'info' : 'warning'">
+                  {{ describeRef(t) }}
                 </el-tag>
-              </div>
-            </template>
+              </el-tooltip>
+              <el-tooltip v-if="hiddenTargetCount(row) > 0" placement="top">
+                <template #content>
+                  <div class="target-tooltip-list">
+                    <div v-for="t in row.targets" :key="t.dataSourceId" class="target-tooltip-item">
+                      {{ describeRef(t) }}{{ refStatusLabel(t.status) ? '（' + refStatusLabel(t.status) + '）' : '' }}
+                    </div>
+                  </div>
+                </template>
+                <el-tag size="small" class="more-tag">+{{ hiddenTargetCount(row) }}</el-tag>
+              </el-tooltip>
+            </div>
             <span v-else>—</span>
           </template>
         </el-table-column>
@@ -163,7 +178,7 @@
         <el-table-column label="操作" width="160" fixed="right">
           <template #default="{ row }">
             <template v-if="!row.anomalyMultiSource">
-              <el-button link type="primary" @click="openDetail(row)">详情</el-button>
+              <el-button link type="primary" @click="openDetail(row)">查看</el-button>
               <el-button link type="primary" @click="openEdit(row)">编辑</el-button>
               <el-button link type="danger" @click="openDelete(row)">删除</el-button>
             </template>
@@ -185,7 +200,7 @@
 </template>
 
 <script setup lang="ts">
-import { onMounted, reactive, ref } from 'vue'
+import { computed, nextTick, onBeforeUnmount, onMounted, reactive, ref, watch } from 'vue'
 import { ElMessage } from 'element-plus'
 import {
   fetchSubscriptionList,
@@ -193,18 +208,19 @@ import {
 } from '@/api/subscription'
 import type {
   QueryWarningVO,
+  SourceOptionVO,
   SubscriptionListQuery,
   SubscriptionOptionsVO,
   SubscriptionRowVO,
+  TargetOptionVO,
   TargetRefVO,
 } from '@/types/subscription'
-import { describeRef, refStatusLabel, resolveUpdateTime } from './utils/subscriptionFormat'
+import { computeTargetCapacity, describeRef, refStatusLabel, resolveUpdateTime } from './utils/subscriptionFormat'
 import SubscribeDetailDialog from './components/SubscribeDetailDialog.vue'
 import SubscribeDeleteDialog from './components/SubscribeDeleteDialog.vue'
 import SubscribeFormDialog from './components/SubscribeFormDialog.vue'
 
-/** 目标库标签折叠阈值（紧凑展示，命名常量而非散落数字）。 */
-const TARGET_FOLD_THRESHOLD = 2
+type CandidateLike = SourceOptionVO | TargetOptionVO
 
 const options = reactive<SubscriptionOptionsVO>({ sources: [], targets: [] })
 const queryForm = reactive<{ sourceIds: string[]; targetIds: string[] }>({
@@ -226,13 +242,43 @@ const detailDataSubId = ref<string | null>(null)
 const deleteVisible = ref(false)
 const deleteDataSubId = ref<string | null>(null)
 
-// 普通 Set 的 add/delete 不会触发 Vue 重渲染，必须用 reactive 集合才能让折叠开关生效。
-const expandedTargetRows = reactive(new Set<string>())
+/**
+ * 目标库标签展示容量：依据目标库列实际宽度计算（R1 §5.2.8），
+ * 不得硬编码“永远只显示两个”。jsdom 无 ResizeObserver 时回退 2，保证测试稳定。
+ */
+const targetCellWidth = ref(0)
+let targetResizeObserver: ResizeObserver | null = null
+const targetCapacity = computed(() => computeTargetCapacity(targetCellWidth.value))
+
+function initTargetWidthObserver() {
+  targetResizeObserver?.disconnect()
+  targetResizeObserver = null
+  if (typeof ResizeObserver === 'undefined') return
+  const el = document.querySelector('.target-cell')
+  if (!el) return
+  targetResizeObserver = new ResizeObserver(() => {
+    targetCellWidth.value = (el as HTMLElement).clientWidth
+  })
+  targetResizeObserver.observe(el)
+}
 
 function messageOf(e: unknown): string {
   return e && typeof e === 'object' && 'message' in e
     ? ((e as { message?: string }).message ?? '查询失败')
     : '查询失败'
+}
+
+/** 查询候选标签：机构名为主文字，完整 ID 随标签展示，保证过滤仍可命中 ID 与机构（R1 §5.1.1）。 */
+function queryOptionLabel(opt: CandidateLike): string {
+  return opt.dataSourceOrg ? `${opt.dataSourceOrg}（${opt.dataSourceId}）` : opt.dataSourceId
+}
+
+function visibleTargets(row: SubscriptionRowVO): TargetRefVO[] {
+  return row.targets.slice(0, targetCapacity.value)
+}
+
+function hiddenTargetCount(row: SubscriptionRowVO): number {
+  return Math.max(0, row.targets.length - targetCapacity.value)
 }
 
 async function fetchList(query: SubscriptionListQuery) {
@@ -276,25 +322,6 @@ function tableRowClassName({ row }: { row: SubscriptionRowVO }) {
   return row.anomalyMultiSource ? 'anomaly-row' : ''
 }
 
-function visibleTargets(row: SubscriptionRowVO): TargetRefVO[] {
-  if (row.targets.length <= TARGET_FOLD_THRESHOLD || isTargetsExpanded(row.dataSubId)) {
-    return row.targets
-  }
-  return row.targets.slice(0, TARGET_FOLD_THRESHOLD)
-}
-
-function isTargetsExpanded(dataSubId: string): boolean {
-  return expandedTargetRows.has(dataSubId)
-}
-
-function toggleTargets(dataSubId: string) {
-  if (expandedTargetRows.has(dataSubId)) {
-    expandedTargetRows.delete(dataSubId)
-  } else {
-    expandedTargetRows.add(dataSubId)
-  }
-}
-
 function openCreate() {
   formMode.value = 'create'
   formDataSubId.value = null
@@ -331,6 +358,11 @@ function onDeleted(success: boolean) {
   refresh()
 }
 
+watch(list, async () => {
+  await nextTick()
+  initTargetWidthObserver()
+})
+
 onMounted(async () => {
   try {
     const res = await fetchSubscriptionOptions()
@@ -342,6 +374,10 @@ onMounted(async () => {
     // 候选加载失败不阻断列表查询
   }
   runQuery()
+})
+
+onBeforeUnmount(() => {
+  targetResizeObserver?.disconnect()
 })
 </script>
 
@@ -368,7 +404,7 @@ onMounted(async () => {
   white-space: nowrap;
 }
 .query-select {
-  width: 260px;
+  width: 280px;
 }
 .query-actions {
   display: flex;
@@ -395,15 +431,37 @@ onMounted(async () => {
   color: var(--el-color-danger);
   font-size: 13px;
 }
-.ref-id {
-  margin-left: 6px;
+/* 查询候选：机构名主文字 + ID 辅助文字；含逗号候选可选择但附加歧义警告（R1 §5.1）。 */
+.q-opt {
+  display: flex;
+  align-items: baseline;
+  gap: 8px;
+}
+.q-opt-main {
+  color: var(--el-text-color-primary);
+}
+.q-opt-sub {
   color: var(--el-text-color-secondary);
   font-size: 12px;
+}
+.q-opt-warn {
+  font-size: 12px;
+  color: var(--el-color-warning);
+}
+/* 订阅描述：单行省略，悬停 title 展示完整内容（R1 §5.2.1）。 */
+.desc-cell {
+  display: block;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+/* 源库：正常只显示机构名，数据源 ID 通过悬停 title 查看（R1 §5.2.2）。 */
+.ref-main {
+  cursor: default;
 }
 .table-count {
   color: var(--el-color-primary);
   font-weight: 600;
-  cursor: pointer;
 }
 .tooltip-content {
   max-height: 220px;
@@ -416,33 +474,41 @@ onMounted(async () => {
 .tooltip-schema {
   font-weight: 600;
 }
-.tooltip-tables {
+.tooltip-table {
+  padding-left: 10px;
+  line-height: 1.6;
   word-break: break-all;
 }
-.unparseable-zone {
-  margin-top: 4px;
-  padding: 4px 6px;
+.tooltip-unparseable {
+  margin-top: 8px;
+  padding: 6px 8px;
   background: var(--el-color-warning-light-9);
   border-radius: 4px;
   font-size: 12px;
   color: var(--el-color-warning-dark-2);
-  max-height: 72px;
-  overflow: auto;
 }
-.unparseable-title {
+.tooltip-unparseable-title {
   font-weight: 600;
 }
-.unparseable-list {
+.tooltip-unparseable-list {
+  margin-top: 4px;
   word-break: break-all;
 }
 .target-tags {
   display: flex;
   align-items: center;
   gap: 4px;
-  flex-wrap: wrap;
+  flex-wrap: nowrap;
 }
-.fold-tag {
-  cursor: pointer;
+.more-tag {
+  cursor: default;
+}
+.target-tooltip-list {
+  max-height: 220px;
+  overflow: auto;
+}
+.target-tooltip-item {
+  line-height: 1.6;
 }
 .create-tag {
   margin-left: 6px;
