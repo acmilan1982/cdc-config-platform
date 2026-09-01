@@ -679,20 +679,25 @@ watch(
 .sf-desc-input {
   width: 100%;
 }
-/* 源库 30%~35% + 目标库 65%~70% 同一行（R1 §4.3），放不下自动换行 */
+/* 源库 30%~35% + 目标库 65%~70% 同一行（R1 §4.3），放不下自动换行。
+   公共控制行（R3 §4）：align-items:center 让源库组/目标库组在同一水平中轴垂直居中，
+   源库下拉框保持 Element Plus 正常紧凑高度，不被强行拉高到卡片高度。 */
 .sf-top-row {
   display: flex;
   gap: 16px;
   flex-wrap: wrap;
   flex-shrink: 0;
+  align-items: center;
 }
 .sf-source-item {
   flex: 0 0 34%;
   min-width: 260px;
+  align-items: center;
 }
 .sf-target-item {
   flex: 1 1 0;
   min-width: 0;
+  align-items: center;
 }
 @media (max-width: 900px) {
   .sf-source-item,
@@ -756,8 +761,9 @@ watch(
   color: var(--el-text-color-secondary);
   margin-top: 4px;
 }
-/* 目标库轻量紧凑选择卡片（R2 §5）：约 200×48、圆角 8、间距 8、两行左对齐，
-   唯一勾选控件为左侧复选框；默认白底浅灰边框极轻阴影，悬停浅蓝边框，选中主题蓝边框+极浅蓝背景 */
+/* 目标库轻量紧凑选择卡片（R2 §5 + R3 §5 中性白色主体）：
+   约 200×48、圆角 8、间距 8、两行左对齐，唯一勾选控件为左侧复选框。
+   R3 §5：主体恒为白色/近白色，状态由边框、复选框与轻阴影表达，不使用大面积浅蓝整块背景。 */
 .sf-target-grid {
   display: flex;
   flex-wrap: wrap;
@@ -772,26 +778,36 @@ watch(
   width: 200px;
   height: 48px;
   padding: 4px 10px;
-  border: 1px solid var(--el-border-color-lighter);
+  border: 1px solid #dcdfe6;
   border-radius: 8px;
   cursor: pointer;
   box-sizing: border-box;
   min-width: 0;
   background: #fff;
-  box-shadow: 0 1px 2px rgba(0, 0, 0, 0.03);
+  box-shadow: 0 1px 2px rgba(0, 0, 0, 0.04);
   transition: border-color 0.2s, background 0.2s, box-shadow 0.2s;
 }
 .sf-target-card:hover {
   border-color: var(--el-color-primary-light-5);
-  box-shadow: 0 2px 6px rgba(0, 0, 0, 0.06);
+  box-shadow: 0 2px 6px rgba(0, 0, 0, 0.07);
 }
 .sf-target-card.selected {
   border-color: var(--el-color-primary);
-  background: var(--el-color-primary-light-9);
+  background: #fff;
+  box-shadow: 0 1px 3px rgba(64, 158, 255, 0.16);
 }
 .sf-target-card.disabled {
-  opacity: 0.55;
+  background: #f7f8fa;
+  border-color: #e4e7ed;
+  box-shadow: none;
   cursor: not-allowed;
+}
+.sf-target-card.disabled .sf-target-org,
+.sf-target-card.disabled .sf-target-id {
+  color: var(--el-text-color-placeholder);
+}
+.sf-target-card.disabled .el-checkbox {
+  opacity: 0.6;
 }
 .sf-target-info {
   display: flex;

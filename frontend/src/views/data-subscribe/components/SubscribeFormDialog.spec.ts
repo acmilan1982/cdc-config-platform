@@ -1,4 +1,6 @@
 import { describe, it, expect, vi, beforeEach, afterEach } from 'vitest'
+import { readFileSync } from 'node:fs'
+import { join } from 'node:path'
 import { nextTick } from 'vue'
 import { mount, flushPromises } from '@vue/test-utils'
 import ElementPlus, { ElMessage, ElMessageBox } from 'element-plus'
@@ -42,6 +44,21 @@ import {
 } from '@/api/subscription'
 import { enableDialogDrag } from '@/views/data-source/draggableDialog'
 import SubscribeFormDialog from './SubscribeFormDialog.vue'
+
+// R3 §4/§5：jsdom 不注入 SFC scoped 样式（vitest 默认 stub CSS），无法用 getComputedStyle 断言。
+// 因此 R3 新增测试以“组件源码 scoped CSS 契约” + “稳定 class/DOM/交互” 双层验证；
+// 具体视觉色值（白底、蓝边框、灰禁用）由真实浏览器复核补充。
+const subscribeFormSource = readFileSync(join(process.cwd(), 'src/views/data-subscribe/components/SubscribeFormDialog.vue'), 'utf-8')
+const scopedCss = subscribeFormSource.match(/<style scoped>([\s\S]*?)<\/style>/)?.[1] ?? ''
+
+/** 提取指定选择器（例如 sf-target-card 或 sf-target-card.selected）在 scoped 样式中的声明块文本。 */
+function scopedRule(selector: string): string {
+  const re = new RegExp(`\\.${selector}\\s*\\{([^}]*)\\}`, 'g')
+  const blocks: string[] = []
+  let m: RegExpExecArray | null
+  while ((m = re.exec(scopedCss)) !== null) blocks.push(m[1])
+  return blocks.join('\n')
+}
 
 const mockedEdit = vi.mocked(fetchSubscriptionEdit)
 const mockedCreate = vi.mocked(createSubscription)
@@ -441,6 +458,69 @@ describe('SubscribeFormDialog 目标库两行紧凑卡片（R2 §5）', () => {
     // 源库/目标库仍为同行结构
     expect(wrapper.find('.sf-top-row .sf-source-item').exists()).toBe(true)
     expect(wrapper.find('.sf-top-row .sf-target-item').exists()).toBe(true)
+    wrapper.unmount()
+  })
+})
+
+describe('SubscribeFormDialog 公共控制行对齐与目标卡片中性白色主体（R3 §4 §5）', () => {
+  it('公共控制行采用 flex 垂直居中语义，不依赖负 margin/绝对定位（R3 §4）', () => {
+    for (const sel of ['sf-top-row', 'sf-source-item', 'sf-target-item']) {
+      const rule = scopedRule(sel)
+      expect(rule).toMatch(/align-items:\s*center/)
+      expect(rule).not.toMatch(/position:\s*absolute/)
+      expect(rule).not.toMatch(/margin[^:]*:\s*-/)
+    }
+  })
+
+  it('源库下拉框保持紧凑高度，未被强行拉高到目标库卡片高度（R3 §4）', () => {
+    const srcRule = scopedRule('sf-source-select')
+    expect(srcRule).toContain('width: 100%')
+    expect(srcRule).not.toContain('height')
+    // 目标库卡片自身高度仍为 48px，而源库选择框无对应强制高度
+    expect(scopedRule('sf-target-card')).toContain('height: 48px')
+  })
+
+  it('未选中卡片主体为中性白色、浅灰边框（R3 §5）', () => {
+    const rule = scopedRule('sf-target-card')
+    expect(rule).toContain('background: #fff')
+    expect(rule).toMatch(/border:\s*1px solid #dcdfe6/)
+  })
+
+  it('悬停态保持白色主体，仅边框转浅主题蓝（R3 §5）', () => {
+    const hoverRule = scopedRule('sf-target-card:hover')
+    expect(hoverRule).not.toContain('background')
+    expect(hoverRule).toContain('border-color: var(--el-color-primary-light-5)')
+  })
+
+  it('选中态由主题边框与复选框表达，不存在大面积浅蓝整块背景（R3 §5）', async () => {
+    const selRule = scopedRule('sf-target-card.selected')
+    expect(selRule).toContain('background: #fff')
+    expect(selRule).toContain('border-color: var(--el-color-primary)')
+    expect(selRule).not.toContain('primary-light-9')
+    expect(selRule).not.toContain('primary-light-8')
+    // DOM：选中卡片内唯一勾选控件仍为左侧复选框
+    const wrapper = await mountForm('create')
+    await clickTargetCard(wrapper, 'T01')
+    const selected = wrapper.findAll('.sf-target-card.selected')
+    expect(selected.length).toBe(1)
+    expect(selected[0].findAll('input[type="checkbox"]').length).toBe(1)
+    wrapper.unmount()
+  })
+
+  it('禁用卡片浅灰主体、not-allowed，且不可选择（R3 §5）', async () => {
+    const disRule = scopedRule('sf-target-card.disabled')
+    expect(disRule).toContain('background: #f7f8fa')
+    expect(disRule).toContain('cursor: not-allowed')
+    const wrapper = await mountForm('create')
+    const reserved = wrapper.findAll('.sf-target-card').find((c) => c.text().includes('BAD.TGT'))!
+    expect(reserved.classes()).toContain('disabled')
+    expect((reserved.find('input[type="checkbox"]').element as HTMLInputElement).disabled).toBe(true)
+    // 强制 change 也不选中
+    const rInput = reserved.find('input[type="checkbox"]')
+    ;(rInput.element as HTMLInputElement).checked = true
+    await rInput.trigger('change')
+    await nextTick()
+    expect(wrapper.text()).toContain('已选择：0 个源库 · 0 个 Schema · 0 个表 · 0 个目标库')
     wrapper.unmount()
   })
 })
