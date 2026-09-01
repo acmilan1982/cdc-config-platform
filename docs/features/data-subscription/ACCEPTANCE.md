@@ -9,15 +9,15 @@
 | 正式菜单 | 数据订阅（配置管理组，路由 `/config/subscribe`，菜单项与路由均保持既有值不变） |
 | 既有路由 | `/config/subscribe` |
 | 目标文档 | `docs/features/data-subscription/ACCEPTANCE.md` |
-| 文档状态 | `APPROVED`（当前正式批准验收标准版本为“取消并发保护”验收标准调整版本，已获得 ChatGPT 对 R1 结果提交 `43a909773aec63fe8c4de2957074f113910f4686` 的正式复审 `APPROVED`；当前批准的是验收标准基线，不是验收执行结果；上一正式批准验收标准版本为“含逗号数据源 ID 查询兼容”版本，批准依据提交 `5d5b5f4606da14f160e9db43068f114d35501db8`，该批准历史保留；更早“英文句点 `.` 保留分隔符”批准版本（批准依据提交 `bb8716c26d5181edf84ba1f07d4e60e8f1c1918a`）同样作为历史事实保留，见 §6 变更记录） |
-| 实现状态 | `NOT_STARTED`（本任务为纯文档需求与验收基线任务，不涉及任何业务代码实现） |
+| 文档状态 | `DRAFT_PENDING_USER_REVIEW`（正式验收前 UI 交互基线对齐草案；上一正式批准验收标准版本为“取消并发保护”验收标准调整版本，已获得 ChatGPT 对 R1 结果提交 `43a909773aec63fe8c4de2957074f113910f4686` 的正式复审 `APPROVED`，该批准历史保留；更早“含逗号数据源 ID 查询兼容”批准版本（批准依据提交 `5d5b5f4606da14f160e9db43068f114d35501db8`）与“英文句点 `.` 保留分隔符”批准版本（批准依据提交 `bb8716c26d5181edf84ba1f07d4e60e8f1c1918a`）同样作为历史事实保留，见 §6 变更记录；本次仅定向调整 `DSUB-AC-058/061/069/072/073/082` 与 §4.6/§4.7/§4.8 相关追踪说明，把已确认、已实现、已复审通过的最终交互事实（弹窗尺寸、目标库卡片白色主体四态、Shift 连选）同步为待正式复审的文档草案；验收编号仍为 126 条连续唯一，全部仍 `NOT_RUN`；草案待 ChatGPT 正式复审，不代表正式验收通过） |
+| 实现状态 | `IMPLEMENTED_REVIEW_APPROVED_PENDING_FORMAL_ACCEPTANCE`（后端实现及真实数据库集成验证、前端 R3 代码与视觉、R3-R1 报告元数据收口均已获 ChatGPT 正式批准；126 条正式验收尚未执行；本任务为正式验收前纯文档 UI 基线对齐草案，不代表正式验收通过） |
 | 任务编号 | `DATA-SUBSCRIPTION-REQUIREMENTS-BASELINE-001` |
 | 创建日期 | 2026-08-30 |
-| 依据需求 | `docs/features/data-subscription/REQUIREMENTS.md`（当前版本为“取消并发保护”需求调整版本，文档状态 `APPROVED`，批准依据提交 `43a909773aec63fe8c4de2957074f113910f4686`；上一正式批准需求版本为含逗号数据源 ID 查询兼容调整批准版本，批准依据提交 `5d5b5f4606da14f160e9db43068f114d35501db8`，历史批准事实保留） |
+| 依据需求 | `docs/features/data-subscription/REQUIREMENTS.md`（当前版本为“取消并发保护”需求调整版本基础上追加正式验收前 UI 交互基线对齐草案，文档状态 `DRAFT_PENDING_USER_REVIEW`；上一正式批准需求版本批准依据提交 `43a909773aec63fe8c4de2957074f113910f4686`，该批准历史保留；更早含逗号数据源 ID 查询兼容调整批准版本（批准依据提交 `5d5b5f4606da14f160e9db43068f114d35501db8`）同样作为历史事实保留） |
 
 重要声明：本文件把所有需求转换为可客观验收的场景，使用唯一、稳定的验收编号。所有用例初始状态为 `NOT_RUN`（未执行）；`PASS / FAIL / BLOCKED` 是执行后状态，任何用例状态只有在执行并取得与步骤匹配的客观证据后才允许更新。对需要构造数据库异常数据的验收场景，本文件只定义期望行为，不授权任何测试数据写入；任何数据库写操作仍需按项目数据库审批规则另行获得授权。
 
-状态含义必须清楚：批准验收标准、执行验收、正式验收通过、实现正式接受是不同状态。上一正式批准版本（提交 `d7560445be1504e6ed9957fa7b31be1fd393ea19`）已获得项目负责人正式批准；其后与“英文句点 `.` 保留分隔符”直接相关的既有验收项定向扩展版本已获得 ChatGPT 正式复审 `APPROVED`（批准依据提交 `bb8716c26d5181edf84ba1f07d4e60e8f1c1918a`），该批准历史保留不变；再后含英文逗号数据源 ID 查询兼容验收语义的定向调整版本已获得 ChatGPT 正式复审 `APPROVED`（批准依据提交 `5d5b5f4606da14f160e9db43068f114d35501db8`）；项目负责人随后明确“数据订阅页面的新增、编辑、删除完全不处理并发操作，不考虑其他页面用户或人工直接修改数据库造成的并发冲突”，本文件据此定向调整 `DSUB-AC-107/108/109/110/114/117` 与 §4.11，形成“取消并发保护”验收标准调整草案；该草案（含 R1 对 `DSUB-AC-048` 的定向修正）已获得 ChatGPT 对结果提交 `43a909773aec63fe8c4de2957074f113910f4686` 的正式复审 `APPROVED`，当前验收标准版本已正式批准。验收标准基线获得批准不等于验收用例已执行；本 Feature 尚未实现（实现状态 `NOT_STARTED`），全部 126 条用例状态必须保持 `NOT_RUN`；只有未来实际执行并取得与步骤匹配的客观证据后，才允许更新为 `PASS / FAIL / BLOCKED`。当前本文件不得作为功能已实现或验收已通过的证据。
+状态含义必须清楚：批准验收标准、执行验收、正式验收通过、实现正式接受是不同状态。上一正式批准版本（提交 `d7560445be1504e6ed9957fa7b31be1fd393ea19`）已获得项目负责人正式批准；其后与“英文句点 `.` 保留分隔符”直接相关的既有验收项定向扩展版本已获得 ChatGPT 正式复审 `APPROVED`（批准依据提交 `bb8716c26d5181edf84ba1f07d4e60e8f1c1918a`），该批准历史保留不变；再后含英文逗号数据源 ID 查询兼容验收语义的定向调整版本已获得 ChatGPT 正式复审 `APPROVED`（批准依据提交 `5d5b5f4606da14f160e9db43068f114d35501db8`）；项目负责人随后明确“数据订阅页面的新增、编辑、删除完全不处理并发操作，不考虑其他页面用户或人工直接修改数据库造成的并发冲突”，本文件据此定向调整 `DSUB-AC-107/108/109/110/114/117` 与 §4.11，形成“取消并发保护”验收标准调整草案；该草案（含 R1 对 `DSUB-AC-048` 的定向修正）已获得 ChatGPT 对结果提交 `43a909773aec63fe8c4de2957074f113910f4686` 的正式复审 `APPROVED`，当前验收标准版本已正式批准。验收标准基线获得批准不等于验收用例已执行；本 Feature 尚未实现（实现状态 `NOT_STARTED`），全部 126 条用例状态必须保持 `NOT_RUN`；只有未来实际执行并取得与步骤匹配的客观证据后，才允许更新为 `PASS / FAIL / BLOCKED`。后续正式验收前 UI 交互基线对齐草案（`DATA-SUBSCRIPTION-PRE-ACCEPTANCE-UI-BASELINE-ALIGNMENT-001`）在既有后端实现及真实数据库集成验证、前端 R3 代码与视觉、R3-R1 报告元数据收口均已获 ChatGPT 正式批准的前提下，把实现状态更新为 `IMPLEMENTED_REVIEW_APPROVED_PENDING_FORMAL_ACCEPTANCE`（代码已实现并复审通过，待正式验收，非 `IMPLEMENTED_ACCEPTED`），并把已确认、已实现、已复审通过的最终交互事实（弹窗尺寸、目标库卡片白色主体四态、Shift 连选）同步为待正式复审的文档草案；126 条用例仍全部为 `NOT_RUN`，本草案不代表正式验收通过，当前本文件不得作为功能已实现或验收已通过的证据。
 
 ## 2. 验收结果状态模型
 
@@ -140,10 +140,10 @@
 | 编号 | 状态 | 关联需求 | 前置条件 | 操作/输入 | 预期结果 |
 |---|---|---|---|---|---|
 | DSUB-AC-057 | NOT_RUN | DSUB-REQ-052 | 已进入数据订阅页面 | 点击“新增”或“编辑” | 打开同一近全屏大尺寸居中弹窗与选表组件；不使用抽屉、新页面或新标签页 |
-| DSUB-AC-058 | NOT_RUN | DSUB-REQ-053 | 打开新增/编辑弹窗 | 观察弹窗尺寸 | 弹窗尺寸约 `94vw × 92vh`，最大宽度由 UI 设计结合项目约束确定；标题栏与底部按钮固定，中间内容区使用剩余高度 |
+| DSUB-AC-058 | NOT_RUN | DSUB-REQ-053 | 打开新增/编辑弹窗 | 观察弹窗尺寸 | 弹窗尺寸为最终批准实现事实：桌面默认宽度 `1280px`，宽度上限 `calc(100vw - 64px)`，小屏宽度退化为 `calc(100vw - 32px)`；高度 `82vh`，受 `calc(100vh - 48px)` 约束；弹窗不得超出浏览器可视区域；标题栏与底部按钮固定，中间内容区使用剩余高度并滚动 |
 | DSUB-AC-059 | NOT_RUN | DSUB-REQ-055 | 打开新增/编辑弹窗 | 拖动标题栏、表单区、表格区；缩放浏览器；关闭后重开 | 仅标题栏可拖动，表单/表格区域不触发拖动；不得拖出浏览器可视区域；首期不支持手动缩放；关闭后不记忆位置；每次打开默认居中 |
 | DSUB-AC-060 | NOT_RUN | DSUB-REQ-056 | 编辑弹窗存在未保存修改 | 关闭或取消弹窗 | 二次确认是否放弃修改；确认后放弃，取消则保留编辑状态 |
-| DSUB-AC-061 | NOT_RUN | DSUB-REQ-057 | 打开新增弹窗 | 订阅描述留空、未选源库、未选源表或未选目标库并点击保存 | 保存被阻止；提示满足必填：订阅描述非空、恰好一个源库、至少一张源表、至少一个目标库 |
+| DSUB-AC-061 | NOT_RUN | DSUB-REQ-057 | 打开新增弹窗 | 订阅描述留空、未选源库、未选源表或未选目标库并点击保存 | 保存被阻止；提示满足必填：订阅描述非空、恰好一个源库、至少一张源表、至少一个目标库；订阅描述使用单行输入框、不使用 textarea、最大 255 字符 |
 | DSUB-AC-062 | NOT_RUN | DSUB-REQ-058 | 打开新增弹窗 | 观察源库选择控件 | 源库为可搜索单选下拉框，不把约 50～100 个候选平铺成卡片 |
 | DSUB-AC-063 | NOT_RUN | DSUB-REQ-059 | 打开新增弹窗展开源库下拉 | 观察候选项；对照 ID 含英文逗号或句点的候选 | 候选仅含 `FG_ACTIVE=1` 且类别匹配的源库；显示以 `DATA_SOURCE_ORG` 为主、`DATA_SOURCE_ID` 为辅；ID 含英文逗号或句点的候选显示为禁用项并标注“名称含协议保留字符，不能用于订阅配置”，不静默隐藏 |
 | DSUB-AC-064 | NOT_RUN | DSUB-REQ-060 | 源库下拉含 ID 完全匹配/前缀匹配/模糊包含的记录 | 输入源库 ID 的完全值、前缀与子串 | 结果依次按“ID 完全匹配 > ID 前缀匹配 > ID 模糊包含 > ORG 模糊包含”排序 |
@@ -151,7 +151,7 @@
 | DSUB-AC-066 | NOT_RUN | DSUB-REQ-061 | 源库下拉搜索框为空 | 观察候选项 | 显示全部启用源库 |
 | DSUB-AC-067 | NOT_RUN | DSUB-REQ-062 | 源库下拉含记录 | 选中一个源库 | 使用明显的蓝色选中状态、勾选标记和“已选择”提示 |
 | DSUB-AC-068 | NOT_RUN | DSUB-REQ-063 | 已选择源表后更改源库 | 选择新的源库 | 弹窗二次确认；确认后清空 Schema 缓存和全部已选表 |
-| DSUB-AC-069 | NOT_RUN | DSUB-REQ-054 | 打开新增/编辑弹窗 | 观察弹窗布局 | 标题栏和底部按钮固定，中间内容区使用剩余高度 |
+| DSUB-AC-069 | NOT_RUN | DSUB-REQ-054 | 打开新增/编辑弹窗 | 观察弹窗布局 | 标题栏和底部按钮固定，中间内容区使用剩余高度；桌面下源库与目标库处于同一行，小屏空间不足时整组换行；源库标签、源库选择框、目标库标签与目标库卡片按同一水平中轴垂直居中；源表选择区获得中间区域主要空间；Schema 区约 `240~260px`，普通表区使用剩余宽度 |
 | DSUB-AC-070 | NOT_RUN | DSUB-REQ-053, DSUB-REQ-055 | 弹窗尺寸超出浏览器可视范围 | 观察 | 弹窗受浏览器可视范围约束，不超出可视区域 |
 
 ### 4.7 目标库选择（对应 REQUIREMENTS §11.4）
@@ -159,8 +159,8 @@
 | 编号 | 状态 | 关联需求 | 前置条件 | 操作/输入 | 预期结果 |
 |---|---|---|---|---|---|
 | DSUB-AC-071 | NOT_RUN | DSUB-REQ-064 | 打开新增弹窗 | 展开目标库选择区；对照 ID 含英文逗号或句点的候选 | 候选仅含 `FG_ACTIVE=1` 且类别匹配的目标库；多选，至少选择一个；ID 含英文逗号或句点的候选显示为禁用项并标注“名称含协议保留字符，不能用于订阅配置”，不静默隐藏（目标库 ID 虽不参与三段拼接，同样禁止句点） |
-| DSUB-AC-072 | NOT_RUN | DSUB-REQ-065 | 目标库候选约 5 个 | 观察目标库选择区 | 全部以紧凑复选卡片平铺展示，无需“查看更多”或独立搜索 |
-| DSUB-AC-073 | NOT_RUN | DSUB-REQ-066 | 选择目标库 | 选中一个目标库卡片 | 卡片使用蓝色边框、浅蓝背景和勾选图标；同时显示机构名称和 ID |
+| DSUB-AC-072 | NOT_RUN | DSUB-REQ-065 | 目标库候选约 5 个 | 观察目标库选择区 | 全部以紧凑复选卡片平铺展示，卡片约 `200×48px`（允许在不破坏布局的合理范围微调）、两行紧凑显示（第一行机构名称、第二行数据源 ID），左侧复选框为唯一勾选控件，长 ID 单行省略并可悬停查看完整值；常见 3 个目标库在 1K、2K 下保持同一行；最多 5 个、空间确实不足时才换行；无需“查看更多”、独立搜索、右侧重复对勾或折叠 |
+| DSUB-AC-073 | NOT_RUN | DSUB-REQ-066 | 选择目标库 | 选中一个目标库卡片 | 卡片选中态保持白色主体、主题蓝边框、左侧主题蓝复选框与克制的淡蓝灰轻阴影，不使用大面积浅蓝或蓝色渐变背景；同时显示机构名称和 ID 两行；未选中态为白色主体、浅灰边框、极轻阴影；悬停态保持白色主体、浅主题蓝边框与轻阴影；禁用态为浅灰背景、灰色文字、不可选择并展示原因；不使用绿色、红色、黄色等健康/告警语义色 |
 | DSUB-AC-074 | NOT_RUN | DSUB-REQ-064 | 已选 3 个目标库 | 观察已选状态 | 三个目标库均保持选中状态，保存后写入逗号分隔的目标库 ID |
 
 ### 4.8 Schema 与表选择（对应 REQUIREMENTS §11.5、§11.6、§11.7）
@@ -174,7 +174,7 @@
 | DSUB-AC-079 | NOT_RUN | DSUB-REQ-070 | Schema 加载失败 | 观察错误与重试入口 | 显示明确错误并提供“重试加载” |
 | DSUB-AC-080 | NOT_RUN | DSUB-REQ-071 | 新增弹窗已加载 Schema 与表 | 观察布局 | 左侧为 Schema 列表，右侧为当前 Schema 的普通表表格；不存在独立的“已选源表”右侧面板；用户在中间表格中选表和取消选表 |
 | DSUB-AC-081 | NOT_RUN | DSUB-REQ-072 | 当前 Schema 表较多 | 输入表名字符串（含大小写不一致） | 当前 Schema 表名支持不区分大小写的模糊搜索 |
-| DSUB-AC-082 | NOT_RUN | DSUB-REQ-073 | 当前 Schema 当前搜索结果含多张表 | 执行“全选当前搜索结果”“取消当前搜索结果选择”“只看已选”“清空当前 Schema” | 各操作按预期生效；清空当前 Schema 前二次确认 |
+| DSUB-AC-082 | NOT_RUN | DSUB-REQ-073 | 当前 Schema 当前搜索结果含多张表 | 执行“全选当前搜索结果”“取消当前搜索结果选择”“只看已选”“清空当前 Schema”；并执行 Shift 连选 | 各操作按预期生效；清空当前 Schema 前二次确认。Shift 连选：普通点击一张可选表切换状态并记录该表为起点及点击后的目标状态；按住 Shift 点击另一张当前可见可选表，按当前页面可见顺序将起点与终点之间（含首尾）的可选表统一设为起点记录的目标状态（起点选中则范围全部选中，起点取消则范围全部取消）；连续 Shift 点击不同终点时起点不移动，下一次普通点击才更新起点；仅作用于当前 Schema 当前可见结果，搜索后只作用于当前搜索结果，“只看已选”后按当前可见结果计算；保留字符禁选表和 disabled 表跳过；无有效起点或起点已不可见时 Shift 点击退化为普通单表点击并建立新起点；切换 Schema、切换源库、改变搜索、切换只看已选、表清单重载/重试、执行全选/取消筛选/清空 Schema 后清除起点；一次范围操作只生成一次选中集合并只触发一次状态提交、不逐表发请求；120~240 张表场景下无明显卡顿 |
 | DSUB-AC-083 | NOT_RUN | DSUB-REQ-074 | 已在 Schema A 勾选若干表 | 切到 Schema B 后再切回 A，或改变搜索条件 | 全部已选表保留，不丢失 |
 | DSUB-AC-084 | NOT_RUN | DSUB-REQ-075 | 当前 Schema 含已选表 | 观察表格行样式 | 已选表通过复选框勾选和整行浅蓝背景突出；不存在重复的“选择状态”列 |
 | DSUB-AC-085 | NOT_RUN | DSUB-REQ-076 | 当前 Schema 表较多 | 滚动表格、观察表头 | 表头固定，内容区内部滚动；无明显卡顿（建议虚拟滚动） |
@@ -249,6 +249,7 @@
 
 - 本验收基线共 **126** 条用例（`DSUB-AC-001 ~ DSUB-AC-126`），映射 `REQUIREMENTS.md` 中 **107** 条需求（`DSUB-REQ-001 ~ DSUB-REQ-107`）。
 - 覆盖校验：每条需求至少被一条验收用例引用；强制覆盖清单（§16.2）中全部场景均已有对应用例（只显示 `FG_ACTIVE=1` → DSUB-AC-017；查询多选 OR/AND → DSUB-AC-033~037；含逗号候选历史兼容可能匹配与歧义警告 → DSUB-AC-032~035；多源库异常行无操作 → DSUB-AC-009/010；停用与不存在数据源展示 → DSUB-AC-044~046；详情按 Schema 分组 → DSUB-AC-052；源库搜索排序 → DSUB-AC-064；目标库约 5 个平铺多选 → DSUB-AC-072；Schema 懒加载与缓存 → DSUB-AC-078；120~240 张表选择与状态保持 → DSUB-AC-083/086；无右侧“已选源表”面板 → DSUB-AC-080；汇总数量与 Schema 徽标 → DSUB-AC-087；弹窗拖动边界 → DSUB-AC-059/070；表名大小写与英文逗号/组件内部句点协议 → DSUB-AC-013/014、DSUB-AC-055、DSUB-AC-091；跨行重复订阅允许 → DSUB-AC-016；新增固定 `FG_ACTIVE=1` → DSUB-AC-018；编辑断连有限修改 → DSUB-AC-102/103；失效项拒绝保存 → DSUB-AC-090~093；无并发保护边界（编辑/删除不比较、不拒绝覆盖、直接按主键更新/物理删除、最后一次成功写入生效）→ DSUB-AC-107~110、DSUB-AC-114；物理删除与不可恢复提示 → DSUB-AC-112/113；重启 `sync-client` 后生效 → DSUB-AC-004/005/095；不操作 Kafka/ZooKeeper/进程 → DSUB-AC-120/125；大屏修正延期且不阻断 → DSUB-AC-121/122）。
+- 正式验收前 UI 基线对齐映射：DSUB-AC-058 对应 DSUB-REQ-053（最终弹窗尺寸）；DSUB-AC-061 对应 DSUB-REQ-057（描述单行必填最大 255）；DSUB-AC-069 对应 DSUB-REQ-054（空间优先级与顶部布局）；DSUB-AC-072/073 对应 DSUB-REQ-065/066（紧凑两行卡片与白色主体四态）；DSUB-AC-082 对应扩展后的 DSUB-REQ-073（含 Shift 连选）。
 
 ## 6. 文档级变更记录
 
@@ -264,5 +265,6 @@
 | 2026-08-31 | 取消并发保护验收标准调整草案：项目负责人明确“数据订阅页面的新增、编辑、删除完全不处理并发操作，不考虑其他页面用户或人工直接修改数据库造成的并发冲突”；定向调整 `DSUB-AC-107`（编辑打开响应不包含 `versionToken`、内容指纹或等效快照字段，保存请求不携带此类字段）、`DSUB-AC-108`（编辑打开后记录被他人或人工修改，原页面保存时系统不执行并发比较、不返回并发冲突、按普通保存规则处理、最后一次成功写入生效）、`DSUB-AC-109`（人工修改未同步 `UPDATE_TIME` 时系统不使用 `UPDATE_TIME` 或其他字段判断并发、正常按普通保存处理）、`DSUB-AC-110`（保存接口和页面不存在 `40910 CONCURRENT_MODIFIED`、“记录已被修改”或“刷新后重新编辑”等并发处理流程）、`DSUB-AC-114`（删除预览/确认请求不返回、不携带版本令牌，预览后记录被修改时确认仍按 `DATA_SUB_ID` 直接物理删除、不执行并发比较）、`DSUB-AC-117`（取消二次确认时不执行删除，关联需求由 `DSUB-REQ-102, DSUB-REQ-103` 修正为仅 `DSUB-REQ-102`，不再依赖旧版并发语义）；§4.11 标题由“并发保护”改为“无并发保护边界”，§3 分类表同步；§5 需求追踪完整性说明删除“并发编辑与并发删除”旧覆盖描述、改为“无并发保护边界”由 `DSUB-AC-107~110/114` 覆盖；验收编号保持 126 条连续唯一，状态全部仍为 `NOT_RUN`；文档状态与依据需求状态由 `APPROVED` 转为 `DRAFT_PENDING_USER_REVIEW`（上一正式批准版本为含逗号查询验收批准版本，批准依据提交 `5d5b5f4606da14f160e9db43068f114d35501db8`，历史批准事实保留）；实现状态仍为 `NOT_STARTED`；设计仍为 `DRAFT_PENDING_USER_REVIEW` 草案且设计复审仍为 `CHANGES_REQUIRED`，因本需求决策，设计 R3 将整体删除指纹/令牌/行锁方案；本调整草案待正式复审 | DATA-SUBSCRIPTION-NO-CONCURRENCY-REQUIREMENTS-ADJUSTMENT-001（项目负责人决策驱动的纯文档需求/验收定向调整草案） |
 | 2026-08-31 | 取消并发保护验收标准 R1 定向修订（ChatGPT 对提交 `27a27e3de22cf2ea03c378bf6d39f58549c0c6fa` 正式复审结论 `CHANGES_REQUIRED`）：仅修正 `DSUB-AC-048` 结尾“删除仍按既定物理删除、二次确认和并发保护规则执行”的并发保护残留，改为“删除仍按既定物理删除和二次确认规则执行，不做并发保护”，该行的编号、状态、关联需求、前置条件、查看行为和编辑行为全部保持不变；相对 R1 基准 `27a27e3...` 仅 `DSUB-AC-048` 一条验收业务行变化，`DSUB-AC-107/108/109/110/114/117` 相对 `27a27e3...` 零变化；相对原始设计 R2 基准 `026417e7...`，本轮“取消并发保护”调整累计承载的验收业务行为 7 条（`DSUB-AC-048/107/108/109/110/114/117`），其余 119 条验收业务行保持不变；验收编号保持 126 条连续唯一，状态全部仍为 `NOT_RUN`；文档状态与依据需求状态继续为 `DRAFT_PENDING_USER_REVIEW`；需求未修改，设计未修改，实现未开始，验收未执行；当前仍待 ChatGPT 重新正式复审 | DATA-SUBSCRIPTION-NO-CONCURRENCY-REQUIREMENTS-ADJUSTMENT-001-R1（ChatGPT 复审 CHANGES_REQUIRED 驱动的纯文档定向修订） |
 | 2026-08-31 | 取消并发保护验收标准批准收口：ChatGPT 对 R1 结果提交 `43a909773aec63fe8c4de2957074f113910f4686` 正式复审结论 `APPROVED`；当前验收标准版本由“取消并发保护”验收标准调整草案收口为 `APPROVED`；126 条用例（`DSUB-AC-001` ~ `DSUB-AC-126`）编号、需求映射、步骤、前置条件、预期结果相对复审提交零变化，`DSUB-AC-048/107/108/109/110/114/117` 逐字保持，状态全部保持 `NOT_RUN`；批准验收标准不等于验收已执行或通过；设计未批准（仍为 `DRAFT_PENDING_USER_REVIEW` 草案且设计复审仍为 `CHANGES_REQUIRED`），功能未实现（实现状态仍为 `NOT_STARTED`）；下一阶段为设计 R3 | DATA-SUBSCRIPTION-NO-CONCURRENCY-REQUIREMENTS-ADJUSTMENT-APPROVAL-001（项目负责人批准驱动的纯文档需求/验收调整批准收口） |
+| 2026-09-01 | 正式验收前 UI 交互基线对齐草案：在既有后端实现及真实数据库集成验证、前端 R3 代码与视觉、R3-R1 报告元数据收口均已获 ChatGPT 正式批准的前提下，把已确认、已实现、已复审通过的最终交互事实同步为待正式复审的文档草案，解决三个确定冲突——(1) 弹窗尺寸由 `94vw × 92vh` 对齐为桌面默认宽 `1280px`、高 `82vh` 及视口约束（`DSUB-AC-058`）；(2) 目标库选中卡片由“浅蓝背景”对齐为白色主体 + 主题蓝边框 + 左侧蓝复选框 + 克制轻阴影四态（`DSUB-AC-073`）；(3) 将 R2 已实现并复审通过的 Shift 连续范围选择写入 `DSUB-AC-082` 与 §7.6；另补充 `DSUB-AC-061`（描述单行无 textarea 最大 255）、`DSUB-AC-069`（桌面源库/目标库同行、统一水平中轴、源表区占主要空间、Schema 区 240~260px）、`DSUB-AC-072`（紧凑两行卡片、唯一左侧复选框、3 卡同排、最多 5 个）；§5 追踪说明同步对应关系；文档状态由 `APPROVED` 转为 `DRAFT_PENDING_USER_REVIEW`（上一正式批准验收标准版本批准依据提交 `43a909773aec63fe8c4de2957074f113910f4686`，历史批准事实保留）；实现状态更新为 `IMPLEMENTED_REVIEW_APPROVED_PENDING_FORMAL_ACCEPTANCE`（代码已实现并复审通过，待正式验收，非 `IMPLEMENTED_ACCEPTED`）；验收编号保持 126 条连续唯一，状态全部仍 `NOT_RUN`；本草案待 ChatGPT 正式复审，不代表正式验收通过 | DATA-SUBSCRIPTION-PRE-ACCEPTANCE-UI-BASELINE-ALIGNMENT-001（纯文档任务；待正式复审） |
 
-> 关联文档：需求基线 `docs/features/data-subscription/REQUIREMENTS.md`；任务报告 `docs/features/data-subscription/reports/DATA-SUBSCRIPTION-REQUIREMENTS-BASELINE-001.md`、`...-001-R1.md`、`...-APPROVAL-001.md`、`.../DATA-SUBSCRIPTION-DOT-DELIMITER-REQUIREMENTS-ADJUSTMENT-001.md`、`.../DATA-SUBSCRIPTION-DOT-DELIMITER-REQUIREMENTS-ADJUSTMENT-APPROVAL-001.md`、`.../DATA-SUBSCRIPTION-COMMA-ID-QUERY-REQUIREMENTS-ADJUSTMENT-001.md`、`.../DATA-SUBSCRIPTION-COMMA-ID-QUERY-REQUIREMENTS-ADJUSTMENT-APPROVAL-001.md`、`.../DATA-SUBSCRIPTION-NO-CONCURRENCY-REQUIREMENTS-ADJUSTMENT-001.md`、`.../DATA-SUBSCRIPTION-NO-CONCURRENCY-REQUIREMENTS-ADJUSTMENT-001-R1.md`、`.../DATA-SUBSCRIPTION-NO-CONCURRENCY-REQUIREMENTS-ADJUSTMENT-APPROVAL-001.md`。
+> 关联文档：需求基线 `docs/features/data-subscription/REQUIREMENTS.md`；任务报告 `docs/features/data-subscription/reports/DATA-SUBSCRIPTION-REQUIREMENTS-BASELINE-001.md`、`...-001-R1.md`、`...-APPROVAL-001.md`、`.../DATA-SUBSCRIPTION-DOT-DELIMITER-REQUIREMENTS-ADJUSTMENT-001.md`、`.../DATA-SUBSCRIPTION-DOT-DELIMITER-REQUIREMENTS-ADJUSTMENT-APPROVAL-001.md`、`.../DATA-SUBSCRIPTION-COMMA-ID-QUERY-REQUIREMENTS-ADJUSTMENT-001.md`、`.../DATA-SUBSCRIPTION-COMMA-ID-QUERY-REQUIREMENTS-ADJUSTMENT-APPROVAL-001.md`、`.../DATA-SUBSCRIPTION-NO-CONCURRENCY-REQUIREMENTS-ADJUSTMENT-001.md`、`.../DATA-SUBSCRIPTION-NO-CONCURRENCY-REQUIREMENTS-ADJUSTMENT-001-R1.md`、`.../DATA-SUBSCRIPTION-NO-CONCURRENCY-REQUIREMENTS-ADJUSTMENT-APPROVAL-001.md`、`.../DATA-SUBSCRIPTION-PRE-ACCEPTANCE-UI-BASELINE-ALIGNMENT-001.md`。

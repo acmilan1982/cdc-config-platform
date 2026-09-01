@@ -6,14 +6,14 @@
 |---|---|
 | Feature 中文名称 | 数据订阅 |
 | Feature 标识 | `data-subscription` |
-| 文档状态 | `APPROVED`（设计基线已正式批准，ChatGPT 对 R4-R1 结果提交 `ba7feddff426e369e1e73791b8d75e2ab62934e9` 正式复审结论 `APPROVED`；批准不代表功能已实现或验收已通过） |
+| 文档状态 | `DRAFT_PENDING_USER_REVIEW`（正式验收前 UI 交互基线对齐草案；上一正式批准设计版本为 R4（R4-R1 完成状态元数据收口），ChatGPT 对 R4-R1 结果提交 `ba7feddff426e369e1e73791b8d75e2ab62934e9` 正式复审结论 `APPROVED`，该批准历史保留；本草案在已实现并经 ChatGPT 正式复审通过的前端最终交互事实基础上，把弹窗尺寸、空间优先级、目标库卡片白色主体四态与 Shift 连选同步为待正式复审的文档草案，不新增后端接口、不修改 API 契约；草案待 ChatGPT 正式复审，不代表正式验收通过） |
 | 设计正式复审状态 | `APPROVED`（R1 正式复审结论 `CHANGES_REQUIRED`；R2 定向修订已完成且四项修订目标通过正式复核；R3 已按已批准“取消并发保护”需求完成定向修订，ChatGPT 对 R3 结果提交 `ac4954401b79e04c56a8bbf9daec871fd194f19c` 正式复审结论 `CHANGES_REQUIRED`；本 R4 按正式复审发现定向修正三个确定问题（DELETE 影响多行错误码统一为 `50041`；DELETE 接口删除前多源库异常后端防护统一为强制普通读取→存在性与异常判定→普通 DELETE；修正“NULL 被 split 成 `['']`”的 Java 语义错误为“对 null 调用 split 抛 `NullPointerException`”）；ChatGPT 对 R4-R1 结果提交 `ba7feddff426e369e1e73791b8d75e2ab62934e9` 正式复审结论 `APPROVED`，当前正式批准设计版本为 R4，R4-R1 仅完成状态元数据收口；批准不代表实现或验收通过） |
-| 实现状态 | `NOT_STARTED`（本任务为纯文档设计基线 R4 定向修订，不涉及任何业务代码实现） |
+| 实现状态 | `IMPLEMENTED_REVIEW_APPROVED_PENDING_FORMAL_ACCEPTANCE`（后端实现及真实数据库集成验证、前端 R3 代码与视觉、R3-R1 报告元数据收口均已获 ChatGPT 正式批准；126 条正式验收尚未执行；本任务为正式验收前纯文档 UI 基线对齐草案，不代表正式验收通过） |
 | 验收执行状态 | 126 条全部 `NOT_RUN` |
 | 任务编号 | `DATA-SUBSCRIPTION-DESIGN-BASELINE-001-R4`（R4 定向修订；前序 R3 任务 `DATA-SUBSCRIPTION-DESIGN-BASELINE-001-R3` 结果提交 `ac4954401b79e04c56a8bbf9daec871fd194f19c`，ChatGPT 对 R3 正式复审结论 `CHANGES_REQUIRED`；R2 任务 `DATA-SUBSCRIPTION-DESIGN-BASELINE-001-R2` 结果提交 `026417e7e907b0fd23e8812024a260f119c993cc`；R1 任务 `DATA-SUBSCRIPTION-DESIGN-BASELINE-001-R1` 结果提交 `3609548238c9fede745f5291e258469ab7b78167`；首版任务 `DATA-SUBSCRIPTION-DESIGN-BASELINE-001` 结果提交 `610401575938ba32f13fa635493f991bdfae81b6`） |
 | 任务类型 | 纯文档设计基线 R4 定向修订（按 ChatGPT 对 R3 正式复审 `CHANGES_REQUIRED` 的三个确定发现项定向修正：DELETE 影响多行错误码统一为 `50041 DELETE_FAILED` 且不映射 `50040`；DELETE 接口删除前多源库异常后端防护统一为强制普通读取→存在性与异常判定→普通 DELETE，删除预览不替代 DELETE 自身防护；修正“NULL 被 split 成 `['']`”的 Java 语义错误为“对 null 调用 split 抛 `NullPointerException`”；保留 R3 已正确删除的并发机制与 R2 已通过设计不回退） |
-| 依据的已批准需求基线 | `docs/features/data-subscription/REQUIREMENTS.md`（`APPROVED`，107 条 `DSUB-REQ-001` ~ `DSUB-REQ-107`，当前正式批准版本为“取消并发保护”需求调整版本，“取消并发保护”正式复审依据提交 `43a909773aec63fe8c4de2957074f113910f4686`，当前 Git 基线提交 `8331fbb6e17b8e2165b788d972f651aa980bf227`；前序含逗号数据源 ID 查询兼容批准版本批准依据提交 `afc5765956cac3c8f66d8857ff17565472d0c746`、英文句点保留分隔符批准版本批准依据提交 `bb8716c26d5181edf84ba1f07d4e60e8f1c1918a` 作为历史事实保留） |
-| 依据的已批准验收基线 | `docs/features/data-subscription/ACCEPTANCE.md`（`APPROVED`，126 条 `DSUB-AC-001` ~ `DSUB-AC-126`，全部 `NOT_RUN`；当前版本为“取消并发保护”验收标准调整版本，Git 基线提交 `8331fbb6e17b8e2165b788d972f651aa980bf227`） |
+| 依据的已批准需求基线 | `docs/features/data-subscription/REQUIREMENTS.md`（`DRAFT_PENDING_USER_REVIEW`（正式验收前 UI 交互基线对齐草案；上一正式批准需求版本为“取消并发保护”需求调整版本，107 条 `DSUB-REQ-001` ~ `DSUB-REQ-107`，“取消并发保护”正式复审依据提交 `43a909773aec63fe8c4de2957074f113910f4686`，当前 Git 基线提交 `8331fbb6e17b8e2165b788d972f651aa980bf227`；前序含逗号数据源 ID 查询兼容批准版本批准依据提交 `afc5765956cac3c8f66d8857ff17565472d0c746`、英文句点保留分隔符批准版本批准依据提交 `bb8716c26d5181edf84ba1f07d4e60e8f1c1918a` 作为历史事实保留） |
+| 依据的已批准验收基线 | `docs/features/data-subscription/ACCEPTANCE.md`（`DRAFT_PENDING_USER_REVIEW`（正式验收前 UI 交互基线对齐草案；上一正式批准验收标准版本为“取消并发保护”验收标准调整版本，126 条 `DSUB-AC-001` ~ `DSUB-AC-126`，全部 `NOT_RUN`，Git 基线提交 `8331fbb6e17b8e2165b788d972f651aa980bf227`） |
 | 创建日期 | 2026-08-30 |
 | R1 修订日期 | 2026-08-30 |
 | R2 修订日期 | 2026-08-31 |
@@ -21,7 +21,7 @@
 | R4 修订日期 | 2026-08-31 |
 | 设计依据 | 已批准需求/验收基线（“取消并发保护”批准版本，前序含逗号/点号批准版本作为历史事实保留）+ 已批准数据库物理基线（`docs/database/`）+ 真实代码只读核验 + 项目既有实现模式 + ChatGPT 正式设计复审发现项 |
 
-说明：本文件为数据订阅 Feature 设计基线，**已正式批准**。R1 已修正 ChatGPT 正式复审（`CHANGES_REQUIRED`）发现的主要问题并同步已批准点号规则；R2 统一修正剩余四项（三类查询语义、元数据 API query 参数、物化视图显式排除、`DSUB-FP-V1` 字节级指纹）并同步含逗号查询批准基线；R3 按已正式批准并收口的“取消并发保护”需求（`DSUB-REQ-097/098/099/103`）统一删除版本令牌、内容指纹（`DSUB-FP-V1`）、黄金向量、行锁、并发字段比较、`40910 CONCURRENT_MODIFIED` 及相关前端流程，把编辑保存、删除预览和物理删除改为普通读写流程，修正多源库异常判定中的空 token 问题，并为可空 CSV 字段建立统一 null-safe 解析与查询匹配契约。删除 `DSUB-FP-V1` 不是否定 R2 的技术正确性，而是同步新的正式需求。R3 定向修订已完成，ChatGPT 对 R3 结果提交 `ac4954401b79e04c56a8bbf9daec871fd194f19c` 正式复审结论 `CHANGES_REQUIRED`；本 R4 按复审发现定向修正三个确定问题（DELETE 影响多行错误码统一为 `50041`；DELETE 接口删除前多源库异常后端防护统一为强制普通读取→存在性与异常判定→普通 DELETE，删除预览不替代 DELETE 自身防护；修正“NULL 被 split 成 `['']`”的 Java 语义错误为“对 null 调用 split 抛 `NullPointerException`”），并保持 R3 已正确内容不回退。R4 定向修订已完成，ChatGPT 对 R4-R1 结果提交 `ba7feddff426e369e1e73791b8d75e2ab62934e9` 正式复审结论 `APPROVED`；批准不代表功能已实现、部署或验收完成。
+说明：本文件为数据订阅 Feature 设计基线，**已正式批准**。R1 已修正 ChatGPT 正式复审（`CHANGES_REQUIRED`）发现的主要问题并同步已批准点号规则；R2 统一修正剩余四项（三类查询语义、元数据 API query 参数、物化视图显式排除、`DSUB-FP-V1` 字节级指纹）并同步含逗号查询批准基线；R3 按已正式批准并收口的“取消并发保护”需求（`DSUB-REQ-097/098/099/103`）统一删除版本令牌、内容指纹（`DSUB-FP-V1`）、黄金向量、行锁、并发字段比较、`40910 CONCURRENT_MODIFIED` 及相关前端流程，把编辑保存、删除预览和物理删除改为普通读写流程，修正多源库异常判定中的空 token 问题，并为可空 CSV 字段建立统一 null-safe 解析与查询匹配契约。删除 `DSUB-FP-V1` 不是否定 R2 的技术正确性，而是同步新的正式需求。R3 定向修订已完成，ChatGPT 对 R3 结果提交 `ac4954401b79e04c56a8bbf9daec871fd194f19c` 正式复审结论 `CHANGES_REQUIRED`；本 R4 按复审发现定向修正三个确定问题（DELETE 影响多行错误码统一为 `50041`；DELETE 接口删除前多源库异常后端防护统一为强制普通读取→存在性与异常判定→普通 DELETE，删除预览不替代 DELETE 自身防护；修正“NULL 被 split 成 `['']`”的 Java 语义错误为“对 null 调用 split 抛 `NullPointerException`”），并保持 R3 已正确内容不回退。R4 定向修订已完成，ChatGPT 对 R4-R1 结果提交 `ba7feddff426e369e1e73791b8d75e2ab62934e9` 正式复审结论 `APPROVED`；批准不代表功能已实现、部署或验收完成。随后，在既有后端实现及真实数据库集成验证、前端 R3 代码与视觉、R3-R1 报告元数据收口均已获 ChatGPT 正式批准的前提下，本文件随正式验收前 UI 交互基线对齐草案（`DATA-SUBSCRIPTION-PRE-ACCEPTANCE-UI-BASELINE-ALIGNMENT-001`）把最终弹窗尺寸、空间优先级、目标库卡片白色主体四态与 Shift 连选等已实现、已复审通过的最终交互事实记录为 §7.7，文档状态由 `APPROVED` 转为 `DRAFT_PENDING_USER_REVIEW`，实现状态更新为 `IMPLEMENTED_REVIEW_APPROVED_PENDING_FORMAL_ACCEPTANCE`（待正式验收，非 `IMPLEMENTED_ACCEPTED`）；本草案待 ChatGPT 正式复审，不代表正式验收通过。
 
 ## 2. 当前事实与目标架构
 
@@ -501,6 +501,26 @@ matched = matchCsvComma(storedCsv, queryId)
 - Schema 过滤兼容回退日志只记录回退原因与过滤模式，不含敏感信息（见 §6.3）。
 - 不虚构当前项目不存在的监控平台；本 Feature 不新增监控、告警或埋点设施，仅使用项目现有日志能力。
 
+### 7.7 正式验收前 UI 交互基线对齐（最终实现事实）
+
+记录数据订阅前端已实现并经 ChatGPT 正式复审通过、本次正式验收前 UI 基线对齐草案同步的最终交互事实（无新业务功能、无新后端接口、不修改 API 契约）：
+
+- **最终弹窗尺寸与源表空间优先级**：新增/编辑共用弹窗桌面默认宽度 `1280px`，宽度上限 `calc(100vw - 64px)`，小屏宽度退化为 `calc(100vw - 32px)`；高度 `82vh`，受 `calc(100vh - 48px)` 约束；弹窗不得超出浏览器可视区域；标题栏与底部操作区固定，中间区域使用剩余空间并滚动（`DSUB-REQ-053`）。源表选择区获得弹窗中间区域主要空间：Schema 区约 `240~260px`，普通表区使用剩余宽度；不恢复最右侧“已选源表”面板（`DSUB-REQ-054`）。
+- **桌面源库/目标库同行与统一水平中轴**：桌面下源库与目标库处于同一行（源库区域约 34%，目标库区域占剩余空间），小屏空间不足时整组换行；源库标签、源库下拉框、目标库标签与目标库卡片按同一水平中轴垂直居中（采用标准弹性布局 `align-items: center`，不使用负 margin、绝对定位或截图特定像素偏移）（`DSUB-REQ-054`）。
+- **订阅描述单行输入**：`DATA_SUB_DESC` 由用户维护，使用单行输入框、必填、最大 255 字符、不使用 textarea；其他源库/源表/目标库必填规则不变（`DSUB-REQ-057`）。
+- **目标库卡片白色主体四态**：目标库卡片约 `200×48px`、圆角 8、两行紧凑（第一行机构名称 13px/600，第二行数据源 ID 11px/灰），左侧复选框为唯一勾选控件，长 ID 单行省略并可悬停查看完整值，常见 3 个目标库在 1K、2K 下保持同一行，最多 5 个、空间确实不足时才换行，不增加右侧重复对勾、搜索、“查看更多”或折叠（`DSUB-REQ-065`）。选中态保持白色主体、主题蓝边框、左侧主题蓝复选框与克制的淡蓝灰轻阴影，不使用大面积浅蓝或蓝色渐变背景；未选中态为白色主体、浅灰边框、极轻阴影；悬停态保持白色主体、浅主题蓝边框与轻阴影；禁用态为浅灰背景、灰色文字、不可选择并展示原因；不使用绿色、红色、黄色等健康/告警语义色；同时显示机构名称和数据源 ID（`DSUB-REQ-066`）。该白色主体规则只针对目标库卡片；源表选中行仍保持“复选框 + 整行浅蓝背景”的既有视觉（`DSUB-REQ-075`），不得误改。
+- **Shift 连续范围选择状态模型与范围边界**：源表选择支持按住 Shift 连选（`DSUB-REQ-073`）：
+  1. 普通点击一张可选表：切换该表选中状态，并把该表记录为“起点”，同时记录点击后的目标状态（选中或取消）；
+  2. 按住 Shift 点击另一张当前可见可选表：按当前页面可见顺序，把起点与终点之间（含首尾）的可选表统一设置为起点记录的目标状态（起点选中则范围全部选中，起点取消则范围全部取消）；
+  3. 连续 Shift 点击不同终点时起点不移动，下一次普通点击才更新起点；
+  4. 范围仅作用于当前 Schema 当前可见结果；搜索后只作用于当前搜索结果；“只看已选”后按当前可见结果计算；
+  5. 保留字符禁选表与 disabled 表跳过；
+  6. 无有效起点或起点已不可见时，Shift 点击退化为普通单表点击并建立新起点；
+  7. 切换 Schema、切换源库、改变搜索、切换只看已选、表清单重载/重试、执行全选/取消筛选/清空 Schema 后清除起点；
+  8. **Shift 操作只在前端内存中一次更新选中集合并只触发一次状态提交，不产生逐表网络请求**；120~240 张表场景无明显卡顿；
+  9. 提示文字为低干扰说明，不得挤占源表主体空间。
+- **既有契约与规则保持不变**：`SourceTableInput[]`（结构化源表输入，仅 `schemaName` + `tableName`）、`sourceSelectionMode = PRESERVE | REPLACE`、现有元数据加载与当前弹窗会话缓存规则（选择源库加载 Schema、点击/回显 Schema 时加载并缓存表清单）、null-safe CSV 解析契约（§4.9）、无并发保护边界（§5）均保持不变；**不新增任何后端接口，不修改 API 契约**。
+
 ## 8. 需求追踪
 
 > 下表保证 `DSUB-REQ-001` ~ `DSUB-REQ-107` 每条至少映射到一个 R3 修订后真实存在的设计章节（DESIGN=本文，API=API.md，UI=UI.md，DATABASE=DATABASE.md）。映射为“设计覆盖”，表示该需求已在本设计草案中得到实现层决策；是否验收通过由 126 条验收用例另行判定（当前全部 `NOT_RUN`）。所有引用章节均为 R3 修订后的真实标题编号，无未来不存在的章节号。
@@ -559,11 +579,11 @@ matched = matchCsvComma(storedCsv, queryId)
 | DSUB-REQ-050 | DESIGN §4.4、UI §3 |
 | DSUB-REQ-051 | UI §3 |
 | DSUB-REQ-052 | UI §4 |
-| DSUB-REQ-053 | UI §4 |
-| DSUB-REQ-054 | UI §4 |
+| DSUB-REQ-053 | DESIGN §7.7、UI §4 |
+| DSUB-REQ-054 | DESIGN §7.7、UI §4 |
 | DSUB-REQ-055 | UI §4 |
 | DSUB-REQ-056 | UI §4 |
-| DSUB-REQ-057 | API §4.6、UI §5 |
+| DSUB-REQ-057 | DESIGN §7.7、API §4.6、UI §5 |
 | DSUB-REQ-058 | UI §5、API §4.1 |
 | DSUB-REQ-059 | UI §5、API §4.1 |
 | DSUB-REQ-060 | UI §5 |
@@ -571,15 +591,15 @@ matched = matchCsvComma(storedCsv, queryId)
 | DSUB-REQ-062 | UI §5 |
 | DSUB-REQ-063 | UI §5、UI §7.2 |
 | DSUB-REQ-064 | UI §5、API §4.1 |
-| DSUB-REQ-065 | UI §5 |
-| DSUB-REQ-066 | UI §5 |
+| DSUB-REQ-065 | DESIGN §7.7、UI §5 |
+| DSUB-REQ-066 | DESIGN §7.7、UI §5 |
 | DSUB-REQ-067 | DESIGN §6.1、API §4.4 |
 | DSUB-REQ-068 | DESIGN §6.5、API §4.4 |
 | DSUB-REQ-069 | DESIGN §6.3、API §4.4 |
 | DSUB-REQ-070 | DESIGN §6.2/6.4、UI §6、API §4.5 |
 | DSUB-REQ-071 | UI §6 |
 | DSUB-REQ-072 | UI §6、API §4.5 |
-| DSUB-REQ-073 | UI §6 |
+| DSUB-REQ-073 | DESIGN §7.7、UI §6 |
 | DSUB-REQ-074 | UI §6 |
 | DSUB-REQ-075 | UI §6 |
 | DSUB-REQ-076 | UI §6 |
@@ -640,4 +660,4 @@ matched = matchCsvComma(storedCsv, queryId)
 
 ---
 
-*文档状态：`APPROVED`。本文件为数据订阅 Feature 正式设计基线（批准版本 R4，R4-R1 完成状态元数据收口），ChatGPT 对 R4-R1 结果提交 `ba7feddff426e369e1e73791b8d75e2ab62934e9` 正式复审结论 `APPROVED`；批准不代表功能已实现或验收已通过。R3 已按已批准“取消并发保护”需求完成定向修订，R4 已按 ChatGPT 对 R3 正式复审 `CHANGES_REQUIRED` 定向修正 DELETE 错误码、DELETE 删除前多源库异常后端防护与 Java null/split 语义三个确定问题。*
+*文档状态：`DRAFT_PENDING_USER_REVIEW`。本文件为数据订阅 Feature 正式设计基线（上一批准版本 R4，R4-R1 完成状态元数据收口，批准依据提交 `ba7feddff426e369e1e73791b8d75e2ab62934e9`，该批准历史保留）；正式验收前 UI 交互基线对齐草案（`DATA-SUBSCRIPTION-PRE-ACCEPTANCE-UI-BASELINE-ALIGNMENT-001`）把最终弹窗尺寸、空间优先级、目标库卡片白色主体四态与 Shift 连选同步为 §7.7，实现状态更新为 `IMPLEMENTED_REVIEW_APPROVED_PENDING_FORMAL_ACCEPTANCE`；本草案待 ChatGPT 正式复审，不代表正式验收通过。R3 已按已批准“取消并发保护”需求完成定向修订，R4 已按 ChatGPT 对 R3 正式复审 `CHANGES_REQUIRED` 定向修正 DELETE 错误码、DELETE 删除前多源库异常后端防护与 Java null/split 语义三个确定问题。*
