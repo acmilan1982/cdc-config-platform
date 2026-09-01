@@ -25,6 +25,11 @@ function okTables(sourceId: string, schema: string, tables: string[]): ApiRespon
   return { code: 200, message: 'success', timestamp: '', data: { dataSourceId: sourceId, schema, tables } }
 }
 
+/** 表清单接口业务非 200 的响应（data 为 null，仅业务码与 message 有意义）。 */
+function failTables(code: number, message: string): ApiResponse<TableListVO> {
+  return { code, message, timestamp: '', data: null } as unknown as ApiResponse<TableListVO>
+}
+
 function deferred<T>() {
   let resolve!: (v: T) => void
   let reject!: (e: unknown) => void
@@ -47,15 +52,26 @@ async function clickSchema(w: VueWrapper, name: string) {
   await flushPromises()
 }
 
-async function clickTable(w: VueWrapper, tableName: string) {
+async function clickTable(w: VueWrapper, tableName: string, opts: { shift?: boolean } = {}) {
   const items = w.findAll('.st-table-item')
   const item = items.find((i) => i.text().includes(tableName))
   expect(item).toBeTruthy()
-  // Element Plus 复选框在非 form-item 下点击 label 不触发切换，必须派发隐藏 input 的原生 change。
-  const input = item!.find('input[type="checkbox"]')
-  ;(input.element as HTMLInputElement).checked = !(input.element as HTMLInputElement).checked
-  await input.trigger('change')
+  // R2 §6：表行点击统一处理，shiftKey 从点击事件读取，不再依赖复选框 change。
+  await item!.trigger('click', { shiftKey: !!opts.shift })
   await nextTick()
+}
+
+/** 把最近一次发射的选中集写回 props，模拟父组件 v-model 双向绑定。 */
+async function syncModel(w: VueWrapper) {
+  const e = w.emitted('update:modelValue')
+  if (!e || e.length === 0) return
+  const last = (e[e.length - 1] as [SourceTableInput[]])[0]
+  await w.setProps({ modelValue: last })
+}
+
+function lastEmit(w: VueWrapper): SourceTableInput[] {
+  const e = w.emitted('update:modelValue')!
+  return (e[e.length - 1] as [SourceTableInput[]])[0]
 }
 
 async function mountSelector(sourceId: string, modelValue: SourceTableInput[] = [], preloadSchemas: string[] = []) {
@@ -308,10 +324,10 @@ describe('SourceTableSelector 保留字符与规模', () => {
     const reservedTables = wrapper.findAll('.st-table-item').filter((i) => i.text().includes('T.1') || i.text().includes('T,2'))
     expect(reservedTables.length).toBe(2)
     expect(reservedTables.every((i) => i.classes().includes('reserved'))).toBe(true)
-    // 保留字符表复选框禁用，触发 change 也不发射选择
+    // 保留字符表复选框禁用，行点击也不发射选择
     const reservedInput = reservedTables[0].find('input[type="checkbox"]')
     expect((reservedInput.element as HTMLInputElement).disabled).toBe(true)
-    await reservedInput.trigger('change')
+    await reservedTables[0].trigger('click', { shiftKey: false })
     await nextTick()
     expect(wrapper.emitted('update:modelValue')).toBeUndefined()
     wrapper.unmount()
@@ -342,6 +358,324 @@ describe('SourceTableSelector 保留字符与规模', () => {
     expect(wrapper.findAll('.st-table-item').length).toBe(240)
     // Schema 区固定宽度由类承担（jsdom 无法计算计算样式，校验关键 class 结构）
     expect(wrapper.find('.st-schemas-pane').exists()).toBe(true)
+    wrapper.unmount()
+  })
+})
+
+describe('SourceTableSelector 表清单业务非 200（R2 §4）', () => {
+  it('表清单接口业务 code 非 200：显示 res.message 与“重试加载”，不写成功缓存', async () => {
+    mockedSchemas.mockResolvedValue(okSchemas('S01', ['SCHEMA_A']))
+    mockedTables.mockResolvedValueOnce(failTables(40320, '业务失败：表清单获取失败'))
+    const wrapper = await mountSelector('S01')
+    expect(wrapper.text()).toContain('业务失败：表清单获取失败')
+    expect(buttonByText(wrapper, '重试加载')).toBeTruthy()
+    // 不得把业务失败伪装成空状态
+    expect(wrapper.text()).not.toContain('该 Schema 下没有可订阅的普通表')
+
+    // 重试成功后显示表清单并清除失败状态
+    mockedTables.mockResolvedValue(okTables('S01', 'SCHEMA_A', ['T1', 'T2']))
+    await buttonByText(wrapper, '重试加载')!.trigger('click')
+    await flushPromises()
+    expect(wrapper.findAll('.st-table-item').length).toBe(2)
+    expect(wrapper.text()).not.toContain('业务失败：表清单获取失败')
+    wrapper.unmount()
+  })
+
+  it('多 Schema 预加载中一个业务失败、另一个成功：互不影响，失败 Schema 可重试', async () => {
+    mockedSchemas.mockResolvedValue(okSchemas('S01', ['SCHEMA_A', 'SCHEMA_B']))
+    mockedTables.mockImplementation((sourceId: string, schema: string) => {
+      if (schema === 'SCHEMA_A') {
+        return Promise.resolve(failTables(40322, 'SCHEMA_A 业务失败'))
+      }
+      return Promise.resolve(okTables('S01', 'SCHEMA_B', ['TB1']))
+    })
+    const wrapper = await mountSelector('S01', [], ['SCHEMA_A', 'SCHEMA_B'])
+    // 默认定位第一个已选 Schema（SCHEMA_A），显示业务失败
+    expect(wrapper.text()).toContain('SCHEMA_A 业务失败')
+    // SCHEMA_B 成功加载不受影响
+    await clickSchema(wrapper, 'SCHEMA_B')
+    expect(wrapper.findAll('.st-table-item').length).toBe(1)
+    // 切回 SCHEMA_A 仍为失败（未缓存为空数组，会再次请求）
+    await clickSchema(wrapper, 'SCHEMA_A')
+    expect(wrapper.text()).toContain('SCHEMA_A 业务失败')
+    // 重试后成功
+    mockedTables.mockImplementation((sourceId: string, schema: string) => {
+      if (schema === 'SCHEMA_A') return Promise.resolve(okTables('S01', 'SCHEMA_A', ['TA1']))
+      return Promise.resolve(okTables('S01', 'SCHEMA_B', ['TB1']))
+    })
+    await buttonByText(wrapper, '重试加载')!.trigger('click')
+    await flushPromises()
+    expect(wrapper.findAll('.st-table-item').length).toBe(1)
+    expect(wrapper.text()).toContain('TA1')
+    wrapper.unmount()
+  })
+
+  it('code=200 且 tables=[] 仍显示合法空状态', async () => {
+    mockedSchemas.mockResolvedValue(okSchemas('S01', ['SCHEMA_A']))
+    mockedTables.mockResolvedValue(okTables('S01', 'SCHEMA_A', []))
+    const wrapper = await mountSelector('S01')
+    expect(wrapper.text()).toContain('该 Schema 下没有可订阅的普通表')
+    expect(buttonByText(wrapper, '重试加载')).toBeNull()
+    wrapper.unmount()
+  })
+})
+
+describe('SourceTableSelector Shift 连选（R2 §6）', () => {
+  async function mountBig() {
+    mockedSchemas.mockResolvedValue(okSchemas('S01', ['SCHEMA_A']))
+    mockedTables.mockResolvedValue(okTables('S01', 'SCHEMA_A', ['T1', 'T2', 'T3', 'T4', 'T5', 'T6']))
+    return mountSelector('S01')
+  }
+
+  it('普通点击建立选中起点，Shift 正向范围包含首尾', async () => {
+    const wrapper = await mountBig()
+    await clickTable(wrapper, 'T1')
+    await syncModel(wrapper)
+    await clickTable(wrapper, 'T3', { shift: true })
+    expect(lastEmit(wrapper).map((s) => s.tableName).sort()).toEqual(['T1', 'T2', 'T3'])
+    wrapper.unmount()
+  })
+
+  it('Shift 反向范围同样包含首尾', async () => {
+    const wrapper = await mountBig()
+    await clickTable(wrapper, 'T3')
+    await syncModel(wrapper)
+    await clickTable(wrapper, 'T1', { shift: true })
+    expect(lastEmit(wrapper).map((s) => s.tableName).sort()).toEqual(['T1', 'T2', 'T3'])
+    wrapper.unmount()
+  })
+
+  it('普通取消后 Shift 范围全部取消', async () => {
+    const wrapper = await mountBig()
+    await clickTable(wrapper, 'T1')
+    await syncModel(wrapper)
+    await clickTable(wrapper, 'T3', { shift: true })
+    await syncModel(wrapper)
+    // 普通点击 T1 取消它（起点=T1、目标状态=取消）
+    await clickTable(wrapper, 'T1')
+    await syncModel(wrapper)
+    // Shift T3：范围 T1..T3 全部取消
+    await clickTable(wrapper, 'T3', { shift: true })
+    expect(lastEmit(wrapper).length).toBe(0)
+    wrapper.unmount()
+  })
+
+  it('连续多个 Shift 终点保持原起点', async () => {
+    const wrapper = await mountBig()
+    await clickTable(wrapper, 'T1')
+    await syncModel(wrapper)
+    await clickTable(wrapper, 'T2', { shift: true })
+    await syncModel(wrapper)
+    // 起点仍是 T1，Shift 到 T4 → 范围 T1..T4
+    await clickTable(wrapper, 'T4', { shift: true })
+    expect(lastEmit(wrapper).map((s) => s.tableName).sort()).toEqual(['T1', 'T2', 'T3', 'T4'])
+    wrapper.unmount()
+  })
+
+  it('下一次普通点击更新起点', async () => {
+    const wrapper = await mountBig()
+    await clickTable(wrapper, 'T1')
+    await syncModel(wrapper)
+    await clickTable(wrapper, 'T3', { shift: true })
+    await syncModel(wrapper)
+    // 新起点 T4
+    await clickTable(wrapper, 'T4')
+    await syncModel(wrapper)
+    // 起点已更新为 T4，Shift T6 → 范围 T4..T6
+    await clickTable(wrapper, 'T6', { shift: true })
+    expect(lastEmit(wrapper).map((s) => s.tableName).sort()).toEqual(['T1', 'T2', 'T3', 'T4', 'T5', 'T6'])
+    wrapper.unmount()
+  })
+
+  it('搜索结果内 Shift 范围只作用于当前搜索结果，不影响未命中的当前 Schema 表', async () => {
+    mockedSchemas.mockResolvedValue(okSchemas('S01', ['SCHEMA_A']))
+    mockedTables.mockResolvedValue(okTables('S01', 'SCHEMA_A', ['TALPHA', 'TBETA', 'TCALPHA', 'XDATA']))
+    const wrapper = await mountSelector('S01')
+    await wrapper.find('.st-search input').setValue('ALPHA')
+    await nextTick()
+    await clickTable(wrapper, 'TALPHA')
+    await syncModel(wrapper)
+    await clickTable(wrapper, 'TCALPHA', { shift: true })
+    expect(lastEmit(wrapper).map((s) => s.tableName).sort()).toEqual(['TALPHA', 'TCALPHA'])
+    wrapper.unmount()
+  })
+
+  it('Shift 范围不影响其他 Schema 已选表', async () => {
+    mockedSchemas.mockResolvedValue(okSchemas('S01', ['SCHEMA_A', 'SCHEMA_B']))
+    mockedTables.mockImplementation((sourceId: string, schema: string) => {
+      if (schema === 'SCHEMA_A') return Promise.resolve(okTables('S01', 'SCHEMA_A', ['T1', 'T2', 'T3']))
+      return Promise.resolve(okTables('S01', 'SCHEMA_B', ['B1', 'B2', 'B3']))
+    })
+    const wrapper = await mountSelector('S01', [{ schemaName: 'SCHEMA_B', tableName: 'B1' }])
+    await clickSchema(wrapper, 'SCHEMA_A')
+    await clickTable(wrapper, 'T1')
+    await syncModel(wrapper)
+    await clickTable(wrapper, 'T3', { shift: true })
+    expect(lastEmit(wrapper)).toEqual([
+      { schemaName: 'SCHEMA_B', tableName: 'B1' },
+      { schemaName: 'SCHEMA_A', tableName: 'T1' },
+      { schemaName: 'SCHEMA_A', tableName: 'T2' },
+      { schemaName: 'SCHEMA_A', tableName: 'T3' },
+    ])
+    wrapper.unmount()
+  })
+
+  it('Shift 范围跳过含保留字符的禁选表', async () => {
+    mockedSchemas.mockResolvedValue(okSchemas('S01', ['SCHEMA_A']))
+    mockedTables.mockResolvedValue(okTables('S01', 'SCHEMA_A', ['T1', 'T,2', 'T3']))
+    const wrapper = await mountSelector('S01')
+    await clickTable(wrapper, 'T1')
+    await syncModel(wrapper)
+    await clickTable(wrapper, 'T3', { shift: true })
+    expect(lastEmit(wrapper).map((s) => s.tableName).sort()).toEqual(['T1', 'T3'])
+    wrapper.unmount()
+  })
+
+  it('没有起点时 Shift 退化为普通点击并建立新起点', async () => {
+    const wrapper = await mountBig()
+    await clickTable(wrapper, 'T2', { shift: true })
+    expect(lastEmit(wrapper)).toEqual([{ schemaName: 'SCHEMA_A', tableName: 'T2' }])
+    // 已建立新起点：再次 Shift T4 → 范围 T2..T4
+    await syncModel(wrapper)
+    await clickTable(wrapper, 'T4', { shift: true })
+    expect(lastEmit(wrapper).map((s) => s.tableName).sort()).toEqual(['T2', 'T3', 'T4'])
+    wrapper.unmount()
+  })
+
+  it('起点不可见时 Shift 退化为普通点击', async () => {
+    const wrapper = await mountBig()
+    await clickTable(wrapper, 'T1')
+    await syncModel(wrapper)
+    // 搜索使起点 T1 不可见（同时清除起点）
+    await wrapper.find('.st-search input').setValue('T3')
+    await nextTick()
+    // 退化为普通切换：仅追加 T3，不出现范围 T1..T3 中的 T2
+    await clickTable(wrapper, 'T3', { shift: true })
+    expect(lastEmit(wrapper).map((s) => s.tableName).sort()).toEqual(['T1', 'T3'])
+    wrapper.unmount()
+  })
+
+  it('切换 Schema 清除起点', async () => {
+    mockedSchemas.mockResolvedValue(okSchemas('S01', ['SCHEMA_A', 'SCHEMA_B']))
+    mockedTables.mockImplementation((sourceId: string, schema: string) => {
+      if (schema === 'SCHEMA_A') return Promise.resolve(okTables('S01', 'SCHEMA_A', ['T1', 'T2', 'T3']))
+      return Promise.resolve(okTables('S01', 'SCHEMA_B', ['B1', 'B2', 'B3']))
+    })
+    const wrapper = await mountSelector('S01')
+    await clickTable(wrapper, 'T1')
+    await syncModel(wrapper)
+    await clickSchema(wrapper, 'SCHEMA_B')
+    // 起点已清：Shift 点击 B3 退化为普通切换，仅 B3 被选中（范围 B1..B3 未生效）
+    await clickTable(wrapper, 'B3', { shift: true })
+    const bSelected = lastEmit(wrapper).filter((s) => s.schemaName === 'SCHEMA_B')
+    expect(bSelected).toEqual([{ schemaName: 'SCHEMA_B', tableName: 'B3' }])
+    wrapper.unmount()
+  })
+
+  it('切换源库清除起点', async () => {
+    const wrapper = await mountBig()
+    await clickTable(wrapper, 'T1')
+    await syncModel(wrapper)
+    mockedSchemas.mockResolvedValue(okSchemas('S02', ['S02_A']))
+    mockedTables.mockResolvedValue(okTables('S02', 'S02_A', ['X1', 'X2', 'X3']))
+    await wrapper.setProps({ sourceId: 'S02' })
+    await flushPromises()
+    // 起点已清：Shift 点击 X3 退化为普通切换，仅 X3 被选中（范围 X1..X3 未生效）
+    await clickTable(wrapper, 'X3', { shift: true })
+    const xSelected = lastEmit(wrapper).filter((s) => s.schemaName === 'S02_A')
+    expect(xSelected).toEqual([{ schemaName: 'S02_A', tableName: 'X3' }])
+    wrapper.unmount()
+  })
+
+  it('搜索条件变化清除起点', async () => {
+    const wrapper = await mountBig()
+    await clickTable(wrapper, 'T1')
+    await syncModel(wrapper)
+    await wrapper.find('.st-search input').setValue('T2')
+    await nextTick()
+    // 起点已清：Shift 点击 T2 退化为普通切换，仅追加 T2（范围 T1..T2 未连带 T1 之外的表）
+    await clickTable(wrapper, 'T2', { shift: true })
+    expect(lastEmit(wrapper).map((s) => s.tableName).sort()).toEqual(['T1', 'T2'])
+    wrapper.unmount()
+  })
+
+  it('切换“仅看已选”清除起点', async () => {
+    const wrapper = await mountBig()
+    await clickTable(wrapper, 'T1')
+    await syncModel(wrapper)
+    await buttonByText(wrapper, '仅看已选')!.trigger('click')
+    await nextTick()
+    // 起点已清：Shift 点击 T1 退化为普通点击（T1 已选中 → 取消）
+    await clickTable(wrapper, 'T1', { shift: true })
+    expect(lastEmit(wrapper)).toEqual([])
+    wrapper.unmount()
+  })
+
+  it('全选/取消筛选/清空 Schema 后清除起点', async () => {
+    // 全选当前筛选后清除起点：Shift 点击退化为普通切换（T3 已选中 → 取消）
+    const w1 = await mountBig()
+    await clickTable(w1, 'T1')
+    await syncModel(w1)
+    await buttonByText(w1, '全选当前筛选')!.trigger('click')
+    await syncModel(w1)
+    await clickTable(w1, 'T3', { shift: true })
+    expect(lastEmit(w1).some((s) => s.tableName === 'T3')).toBe(false)
+    w1.unmount()
+
+    // 取消当前筛选后清除起点：Shift 点击 T3 退化为普通切换（仅 T3，不连带上 T2）
+    const w2 = await mountBig()
+    await clickTable(w2, 'T1')
+    await syncModel(w2)
+    await buttonByText(w2, '取消当前筛选')!.trigger('click')
+    await syncModel(w2)
+    await clickTable(w2, 'T3', { shift: true })
+    expect(lastEmit(w2)).toEqual([{ schemaName: 'SCHEMA_A', tableName: 'T3' }])
+    w2.unmount()
+
+    // 清空当前 Schema 后清除起点：Shift 点击 T4 退化为普通切换（仅 T4 选中）
+    const confirmSpy = vi.spyOn(ElMessageBox, 'confirm').mockResolvedValue('confirm' as never)
+    const w3 = await mountBig()
+    await clickTable(w3, 'T1')
+    await syncModel(w3)
+    await buttonByText(w3, '清空当前 Schema')!.trigger('click')
+    await flushPromises()
+    await syncModel(w3)
+    await clickTable(w3, 'T4', { shift: true })
+    expect(lastEmit(w3)).toEqual([{ schemaName: 'SCHEMA_A', tableName: 'T4' }])
+    w3.unmount()
+  })
+
+  it('disabled 状态下普通点击与 Shift 均不响应', async () => {
+    const wrapper = await mountBig()
+    await wrapper.setProps({ disabled: true })
+    const items = wrapper.findAll('.st-table-item')
+    await items[0].trigger('click', { shiftKey: false })
+    await items[1].trigger('click', { shiftKey: true })
+    await nextTick()
+    expect(wrapper.emitted('update:modelValue')).toBeUndefined()
+    wrapper.unmount()
+  })
+
+  it('单次 Shift 范围操作只 emit 一次', async () => {
+    const wrapper = await mountBig()
+    await clickTable(wrapper, 'T1')
+    await syncModel(wrapper)
+    const before = wrapper.emitted('update:modelValue')!.length
+    await clickTable(wrapper, 'T6', { shift: true })
+    const after = wrapper.emitted('update:modelValue')!.length
+    expect(after - before).toBe(1)
+    wrapper.unmount()
+  })
+
+  it('120~240 张表范围选择一次完成（高容量无卡顿）', async () => {
+    const big = Array.from({ length: 240 }, (_, i) => `TABLE_${String(i + 1).padStart(3, '0')}`)
+    mockedSchemas.mockResolvedValue(okSchemas('S01', ['SCHEMA_A']))
+    mockedTables.mockResolvedValue(okTables('S01', 'SCHEMA_A', big))
+    const wrapper = await mountSelector('S01')
+    await clickTable(wrapper, 'TABLE_001')
+    await syncModel(wrapper)
+    await clickTable(wrapper, 'TABLE_240', { shift: true })
+    expect(lastEmit(wrapper).length).toBe(240)
     wrapper.unmount()
   })
 })

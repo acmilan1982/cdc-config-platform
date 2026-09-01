@@ -756,7 +756,8 @@ watch(
   color: var(--el-text-color-secondary);
   margin-top: 4px;
 }
-/* 目标库紧凑小卡片：高 44px、宽度自适应、间距 8px、唯一勾选控件为左侧复选框（R1 §4.4） */
+/* 目标库轻量紧凑选择卡片（R2 §5）：约 200×48、圆角 8、间距 8、两行左对齐，
+   唯一勾选控件为左侧复选框；默认白底浅灰边框极轻阴影，悬停浅蓝边框，选中主题蓝边框+极浅蓝背景 */
 .sf-target-grid {
   display: flex;
   flex-wrap: wrap;
@@ -767,16 +768,22 @@ watch(
   position: relative;
   display: flex;
   align-items: center;
-  gap: 6px;
-  height: 44px;
-  padding: 0 10px;
-  border: 1px solid var(--el-border-color);
-  border-radius: 6px;
+  gap: 8px;
+  width: 200px;
+  height: 48px;
+  padding: 4px 10px;
+  border: 1px solid var(--el-border-color-lighter);
+  border-radius: 8px;
   cursor: pointer;
   box-sizing: border-box;
   min-width: 0;
-  max-width: 220px;
-  transition: border-color 0.2s, background 0.2s;
+  background: #fff;
+  box-shadow: 0 1px 2px rgba(0, 0, 0, 0.03);
+  transition: border-color 0.2s, background 0.2s, box-shadow 0.2s;
+}
+.sf-target-card:hover {
+  border-color: var(--el-color-primary-light-5);
+  box-shadow: 0 2px 6px rgba(0, 0, 0, 0.06);
 }
 .sf-target-card.selected {
   border-color: var(--el-color-primary);
@@ -789,12 +796,14 @@ watch(
 .sf-target-info {
   display: flex;
   flex-direction: column;
+  gap: 1px;
   min-width: 0;
+  flex: 1;
 }
 .sf-target-org {
   font-size: 13px;
   font-weight: 600;
-  max-width: 130px;
+  line-height: 16px;
   overflow: hidden;
   text-overflow: ellipsis;
   white-space: nowrap;
@@ -802,7 +811,7 @@ watch(
 .sf-target-id {
   font-size: 11px;
   color: var(--el-text-color-secondary);
-  max-width: 130px;
+  line-height: 14px;
   overflow: hidden;
   text-overflow: ellipsis;
   white-space: nowrap;

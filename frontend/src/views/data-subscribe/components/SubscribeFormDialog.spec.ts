@@ -141,9 +141,8 @@ async function clickSchema(w: VueWrapper, name: string) {
 async function clickTable(w: VueWrapper, tableName: string) {
   const item = w.findAll('.st-table-item').find((i) => i.text().includes(tableName))
   expect(item).toBeTruthy()
-  const input = item!.find('input[type="checkbox"]')
-  ;(input.element as HTMLInputElement).checked = !(input.element as HTMLInputElement).checked
-  await input.trigger('change')
+  // R2 §6：表行点击统一处理，复选框为受控展示。
+  await item!.trigger('click')
   await nextTick()
 }
 
@@ -383,6 +382,65 @@ describe('SubscribeFormDialog 布局（产品负责人批准）', () => {
     expect(wrapper.find('.sf-tables-item').exists()).toBe(true)
     expect(wrapper.find('.sf-tables-wrap').exists()).toBe(true)
     expect(wrapper.find('.sf-source-table-selector').exists()).toBe(true)
+    wrapper.unmount()
+  })
+})
+
+describe('SubscribeFormDialog 目标库两行紧凑卡片（R2 §5）', () => {
+  it('目标卡片：机构名称与数据源 ID 各占一行（org 在 id 之前、各自独立元素），ID 悬停 title 可查看完整值', async () => {
+    const wrapper = await mountForm('create')
+    const cards = wrapper.findAll('.sf-target-card')
+    expect(cards.length).toBe(3)
+    for (const card of cards) {
+      const org = card.find('.sf-target-org')
+      const id = card.find('.sf-target-id')
+      expect(org.exists()).toBe(true)
+      expect(id.exists()).toBe(true)
+      // 两行结构：org 元素在 id 元素之前（DOM 顺序）
+      expect(org.element.compareDocumentPosition(id.element) & Node.DOCUMENT_POSITION_FOLLOWING).toBeTruthy()
+    }
+    // 数据源 ID 过长可悬停查看完整值
+    const first = options.targets[0]
+    expect(cards[0].find('.sf-target-org').text()).toBe(first.dataSourceOrg)
+    expect(cards[0].find('.sf-target-id').attributes('title')).toBe(first.dataSourceId)
+    wrapper.unmount()
+  })
+
+  it('三张目标卡片在目标网格中作为同一批直接子级展示（同排布局结构不回退）', async () => {
+    const wrapper = await mountForm('create')
+    const grid = wrapper.find('.sf-target-grid')
+    expect(grid.exists()).toBe(true)
+    const cards = grid.findAll(':scope > .sf-target-card')
+    expect(cards.length).toBe(3)
+    // 不增加“查看更多”折叠控件，也不出现右侧重复勾选图标
+    expect(wrapper.text()).not.toContain('查看更多')
+    expect(wrapper.findAll('.sf-target-check, .sf-right-check').length).toBe(0)
+    wrapper.unmount()
+  })
+
+  it('目标卡片选中态：仅左侧复选框为勾选控件，选中 class 保持', async () => {
+    const wrapper = await mountForm('create')
+    await clickTargetCard(wrapper, 'T01')
+    expect(wrapper.findAll('.sf-target-card.selected').length).toBe(1)
+    const selected = wrapper.findAll('.sf-target-card.selected')[0]
+    expect(selected.findAll('input[type="checkbox"]').length).toBe(1)
+    await clickTargetCard(wrapper, 'T01')
+    expect(wrapper.findAll('.sf-target-card.selected').length).toBe(0)
+    wrapper.unmount()
+  })
+
+  it('禁用候选仍灰显不可选择，且源库/目标库同行结构保持（R2 §5 不破坏 R1）', async () => {
+    const wrapper = await mountForm('create')
+    const reserved = wrapper.findAll('.sf-target-card').find((c) => c.text().includes('BAD.TGT'))!
+    expect(reserved.classes()).toContain('disabled')
+    const rInput = reserved.find('input[type="checkbox"]')
+    ;(rInput.element as HTMLInputElement).checked = true
+    await rInput.trigger('change')
+    await nextTick()
+    expect(wrapper.text()).toContain('已选择：0 个源库 · 0 个 Schema · 0 个表 · 0 个目标库')
+    // 源库/目标库仍为同行结构
+    expect(wrapper.find('.sf-top-row .sf-source-item').exists()).toBe(true)
+    expect(wrapper.find('.sf-top-row .sf-target-item').exists()).toBe(true)
     wrapper.unmount()
   })
 })

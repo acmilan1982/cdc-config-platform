@@ -58,6 +58,7 @@
           仅看已选
         </el-button>
         <el-button size="small" @click="clearCurrentSchema">清空当前 Schema</el-button>
+        <span class="st-shift-hint">提示：先选择一张表，再按住 Shift 选择另一张，可连续多选</span>
       </div>
       <div class="st-pane-body st-table-viewport">
         <div class="st-table-head">
@@ -79,19 +80,20 @@
           没有匹配当前搜索的源表
         </div>
         <div v-else-if="currentSchema" class="st-table-list">
-          <label
+          <div
             v-for="table in filteredTables"
             :key="table"
             class="st-table-item"
             :class="{ selected: isSelected(currentSchema, table), reserved: isReserved(currentSchema, table) }"
+            @click.prevent="onTableClick(currentSchema, table, $event)"
           >
             <el-checkbox
               :model-value="isSelected(currentSchema, table)"
               :disabled="disabled || isReserved(currentSchema, table)"
-              @change="toggleTable(currentSchema, table)"
+              class="st-table-check"
             />
             <span class="st-table-name" :title="reservedReason(currentSchema, table) || table">{{ table }}</span>
-          </label>
+          </div>
         </div>
       </div>
     </div>
@@ -133,6 +135,10 @@ const tableCache = reactive(new Map<string, string[]>())
 // 每个 Schema 独立的失败状态：一个 Schema 加载失败不影响其他 Schema（R1 §3.3）。
 const tableErrors = reactive(new Map<string, string>())
 const tableLoading = reactive(new Set<string>())
+// Shift 连选锚点（R2 §6）：最近一次普通点击的表及其记录的目标状态（选中/取消）。
+const anchorSchema = ref<string | null>(null)
+const anchorTable = ref<string | null>(null)
+const anchorTargetState = ref(false)
 
 function cacheKeyOf(schema: string): string {
   return `${props.sourceId}::${schema}`
@@ -186,11 +192,17 @@ async function loadTables(schema: string) {
   const gen = sourceGen
   tableLoading.add(schema)
   tableErrors.delete(schema)
+  // 表清单重新加载/重试后清除 Shift 起点，避免旧锚点误操作（R2 §6.3）。
+  clearAnchor()
   try {
     const res = await fetchSourceTables(sourceId, schema)
     if (gen !== sourceGen) return
-    const tables = res.code === 200 ? (res.data?.tables ?? []) : []
-    tableCache.set(key, tables)
+    if (res.code !== 200) {
+      // 业务非 200：不写入成功缓存，写入该 Schema 独立失败状态并显示“重试加载”（R2 §4）。
+      tableErrors.set(schema, res.message || '表清单加载失败')
+      return
+    }
+    tableCache.set(key, res.data?.tables ?? [])
     tableErrors.delete(schema)
   } catch (e) {
     if (gen !== sourceGen) return
@@ -259,15 +271,79 @@ function retryTables() {
   if (currentSchema.value) void loadTables(currentSchema.value)
 }
 
-function toggleTable(schema: string, table: string) {
+function clearAnchor() {
+  anchorSchema.value = null
+  anchorTable.value = null
+  anchorTargetState.value = false
+}
+
+/**
+ * 表行点击统一入口（R2 §6.4）：直接从当前点击事件读取 shiftKey，
+ * 避免依赖 el-checkbox 的 change（不携带 shiftKey）或全局键盘监听。
+ */
+function onTableClick(schema: string, table: string, event: MouseEvent) {
   if (props.disabled || isReserved(schema, table)) return
-  const key = tableKey(schema, table)
+  if (event.shiftKey) {
+    applyShiftRange(schema, table)
+  } else {
+    applyPlainToggle(schema, table)
+  }
+}
+
+/** 普通点击：切换勾选，并记录该表为范围起点及其点击后的目标状态（选中/取消）。 */
+function applyPlainToggle(schema: string, table: string) {
+  const wasSelected = isSelected(schema, table)
   const selected = [...props.modelValue]
+  const key = tableKey(schema, table)
   const idx = selected.findIndex((t) => tableKey(t.schemaName, t.tableName) === key)
   if (idx >= 0) {
     selected.splice(idx, 1)
   } else {
     selected.push({ schemaName: schema, tableName: table })
+  }
+  anchorSchema.value = schema
+  anchorTable.value = table
+  anchorTargetState.value = !wasSelected
+  emit('update:modelValue', selected)
+}
+
+/**
+ * Shift 连选（R2 §6）：以最近一次普通点击的表为起点、当前 Shift 点击的表为终点，
+ * 按当前可见顺序对范围内所有可选表统一应用起点记录的目标状态。只 emit 一次。
+ */
+function applyShiftRange(schema: string, table: string) {
+  // 无有效起点（未建立、跨 Schema、起点不在当前可见结果）→ 退化为普通单表切换并建立新起点。
+  if (anchorSchema.value !== schema || anchorTable.value === null || anchorTable.value === '') {
+    applyPlainToggle(schema, table)
+    return
+  }
+  const list = filteredTables.value
+  const startIdx = list.indexOf(anchorTable.value)
+  const endIdx = list.indexOf(table)
+  if (startIdx < 0) {
+    applyPlainToggle(schema, table)
+    return
+  }
+  const [from, to] = startIdx <= endIdx ? [startIdx, endIdx] : [endIdx, startIdx]
+  const range = list.slice(from, to + 1)
+  const targetState = anchorTargetState.value
+  const keySet = new Set(props.modelValue.map((t) => tableKey(t.schemaName, t.tableName)))
+  const selected = [...props.modelValue]
+  for (const t of range) {
+    if (isReserved(schema, t)) continue
+    const key = tableKey(schema, t)
+    if (targetState) {
+      if (!keySet.has(key)) {
+        selected.push({ schemaName: schema, tableName: t })
+        keySet.add(key)
+      }
+    } else {
+      const rmIdx = selected.findIndex((s) => tableKey(s.schemaName, s.tableName) === key)
+      if (rmIdx >= 0) {
+        selected.splice(rmIdx, 1)
+        keySet.delete(key)
+      }
+    }
   }
   emit('update:modelValue', selected)
 }
@@ -284,6 +360,7 @@ const filteredTables = computed(() => {
 
 function selectAllSearch() {
   if (props.disabled || !currentSchema.value) return
+  clearAnchor()
   const schema = currentSchema.value
   const selected = [...props.modelValue]
   const existingKeys = new Set(selected.map((t) => tableKey(t.schemaName, t.tableName)))
@@ -304,6 +381,7 @@ function selectAllSearch() {
  */
 function deselectFiltered() {
   if (props.disabled || !currentSchema.value) return
+  clearAnchor()
   const schema = currentSchema.value
   const filteredKeys = new Set(filteredTables.value.map((t) => tableKey(schema, t)))
   emit(
@@ -321,6 +399,7 @@ function clearSearch() {
 
 function clearCurrentSchema() {
   if (props.disabled || !currentSchema.value) return
+  clearAnchor()
   const schema = currentSchema.value
   ElMessageBox.confirm(`确定清空当前 Schema（${schema}）下已选择的源表吗？`, '提示', {
     type: 'warning',
@@ -338,7 +417,13 @@ function resetForSourceChange() {
   onlySelectedView.value = false
   tableErrors.clear()
   tableLoading.clear()
+  clearAnchor()
 }
+
+// 切换 Schema、表名搜索条件变化、切换“仅看已选”后清除 Shift 起点（R2 §6.3）。
+watch(currentSchema, () => clearAnchor())
+watch(tableSearch, () => clearAnchor())
+watch(onlySelectedView, () => clearAnchor())
 
 watch(
   () => props.sourceId,
@@ -424,6 +509,16 @@ watch(
 }
 .st-search {
   width: 150px;
+}
+.st-shift-hint {
+  font-size: 12px;
+  color: var(--el-text-color-secondary);
+  margin-left: auto;
+  flex-shrink: 0;
+}
+/* Shift 连选（R2 §6）：复选框为受控展示，行点击统一处理，避免 checkbox 与行双重切换 */
+.st-table-check {
+  pointer-events: none;
 }
 /* 右侧以表格形态呈现：固定表头 + 内容内部滚动（R1 §4.5）。 */
 .st-table-head,
