@@ -1,0 +1,9 @@
+数据订阅正式验收前端构建结果
+任务：DATA-SUBSCRIPTION-FORMAL-ACCEPTANCE-001
+命令：npm run build（frontend）
+结果：✓ built in 23.34s（BUILD SUCCESS）
+产物：frontend/dist/（index.html + assets/index-B2V97cUT.js 1048.04 kB / gzip 346.64 kB 等）
+
+补充说明：
+- 构建仅提示部分 chunk > 500 kB 的体积警告，不影响构建成功与功能。
+- 前端定向测试、全量测试结果见 targeted-tests-summary 与 full-tests-summary。

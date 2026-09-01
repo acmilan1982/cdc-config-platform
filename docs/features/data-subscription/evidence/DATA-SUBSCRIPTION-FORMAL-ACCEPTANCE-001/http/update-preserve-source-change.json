@@ -1,0 +1,2 @@
+{"code":40300,"message":"存在 1 个校验失败项，请修正后重试","data":{"validationErrors":[{"errorCode":"40312","field":"dataFromSourceId","name":"my-19c","message":"有限编辑模式下源库不能变更，如需更换源库请使用完整编辑模式"}]},"timestamp":"2026-09-02T00:08:01.134"}
+HTTP_STATUS:200

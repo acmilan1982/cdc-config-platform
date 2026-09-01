@@ -1,0 +1,20 @@
+{
+  "title": "新增订阅",
+  "labels": [
+    "订阅描述",
+    "源库",
+    "目标库",
+    "源表"
+  ],
+  "targetCards": [
+    "doirs库\nDSUB-FA-001-TARGET-01",
+    "doirs库\nDSUB-FA-001-TARGET-02",
+    "doirs库\nDSUB-FA-001-TGT.DOT\n保留字符",
+    "doirs库\ncompany-target-doris-v4",
+    "doirs库\nmy-target-doris-v4",
+    "doirs库\ntarget-doris-v4"
+  ],
+  "hasSchemaSelector": true,
+  "hasTableSearch": false,
+  "hasSave": true
+}

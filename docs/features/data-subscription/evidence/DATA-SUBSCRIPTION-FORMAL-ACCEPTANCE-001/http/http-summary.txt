@@ -1,0 +1,87 @@
+数据订阅正式验收真实 HTTP API 验收结果
+任务：DATA-SUBSCRIPTION-FORMAL-ACCEPTANCE-001
+后端：http://127.0.0.1:8080（spring-boot:run，PID 2725）
+证据文件：evidence/DATA-SUBSCRIPTION-FORMAL-ACCEPTANCE-001/http/*.json（脱敏，不含口令/完整连接串）
+
+一、10 项能力全部通过（成功 + 关键失败场景）
+
+1. 查询候选 GET /api/subscriptions/options
+   - 源库候选仅 FG_ACTIVE=1 且类别 SOURCE：112-source-19c、5905f1ce...(杭州市第一人民医院)、my-19c；
+     停用源 199-source 不出现（AC-032）。
+   - 目标库候选仅 FG_ACTIVE=1 且类别 TARGET：DSUB-FA-001-TARGET-01/02、company-target-doris-v4、
+     my-target-doris-v4、target-doris-v4；停用目标 DSUB-FA-001-TARGET-03 不出现。
+   - 句点 ID 目标 DSUB-FA-001-TGT.DOT 正常出现在候选（AC-032）。
+
+2. 订阅列表 GET /api/subscriptions
+   - 空条件：10 条启用记录，按 NVL(UPDATE_TIME,INSERT_TIME) DESC（AC-027/030）；FG_ACTIVE=0 的
+     DSUB-FA-001-AC017 不出现（AC-017）；响应为 items + queryWarnings（AC-029）。
+   - 源库过滤 sourceIds=112-source-19c：返回 9 条（排除 AC045 源不存在、AC044 源停用、AC017 停用）。
+   - 目标库过滤 targetIds=DSUB-FA-001-TARGET-01：返回 8 条（排除 AC046 目标停用等）。
+   - 源 OR：sourceIds=112-source-19c&sourceIds=my-19c → 9 条（组内 OR）（AC-033）。
+   - 源×目标 AND：sourceIds=112-source-19c&targetIds=DSUB-FA-001-TARGET-01 → 6 条（AC-035）。
+   - 句点 ID 精确匹配：targetIds=DSUB-FA-001-TGT.DOT → 1 条（AC-034）；前缀 DSUB-FA-001-TGT → 0 条
+     （完整 token 精确匹配，不误前缀）（AC-033）。
+   - 逗号候选：sourceIds=112-source-19c,my-19c → 1 条（ANOM，连续子序列可能匹配）+ queryWarnings
+     [AMBIGUOUS_COMMA_ID]（AC-033/035）。
+   - 前缀不匹配：sourceIds=112 → 0 条（S01 不误匹配 S012 类精确语义）。
+   - 列表 VO 无遗留字段、无并发令牌（AC-002/107）。
+
+3. 订阅详情 GET /api/subscriptions/{id}
+   - 正常记录 AC008A：source NORMAL、3 个目标 NORMAL、tablesBySchema=[His/his/VSM] 大小写保持
+     （AC-013/052/074）。
+   - AC044 源停用：source INACTIVE + 警告"源库已停用（199-source）"（AC-044）。
+   - AC045 源不存在：source NOT_FOUND + 警告"源库不存在"（AC-045）。
+   - AC046 目标停用：target INACTIVE + 警告"目标库已停用"（AC-046）。
+   - 多源异常 ANOM 详情：code=40352"多源库异常记录不支持查看"（AC-049/051）。
+   - 详情 VO 无遗留字段（AC-056）。
+
+4. Schema 元数据 GET /api/subscriptions/metadata/schemas?dataSourceId=112-source-19c
+   - 返回 dataSourceId、filterMode=ORACLE_MAINTAINED、schemas=[CDC_USER, SPT_HIS_2023]（真实源库，
+     过滤系统 Schema）（AC-075/077）。
+
+5. 表清单元数据 GET /api/subscriptions/metadata/tables?dataSourceId=112-source-19c&schema=...
+   - CDC_USER → 1 表（LOG_MINING_FLUSH）；SPT_HIS_2023 → 9 表（OPT_FEE 等），仅普通表
+     （AC-075/077/092）。
+
+6. 新增订阅 POST /api/subscriptions
+   - 成功：dataSubId=6a70dba954d4495b9c6545552cc8ba17（32 位无连字符十六进制 UUID）（AC-006）；
+     DB 核对 DATA_TO_SOURCE_ID=两个目标逗号连接（AC-011）、DATA_SOURCE_TABLE=两表逗号连接无换行
+     （AC-012）、FG_ACTIVE=1（AC-018）、INSERT_TIME=SYSDATE 且 UPDATE_TIME 空（AC-025）、
+     DATA_SOURCE_COMMENT/DATA_TARGET_TABLE/DATA_TARGET_COMMENT=NULL（AC-021/023/024）。
+   - 跨行完全重复新增成功：dataSubId=1f6182ec3d0647cfa69d153ef29eafe0（AC-016）。
+   - 失败批次（HTTP 200 + code=40300 + 结构化 validationErrors；请求契约错误 HTTP 400）：
+     emptySource→"必须且只能选择一个源库"（AC-007）、commaSource→保留字符（AC-014/091）、
+     commaTableName/dotTableName→保留字符（AC-014/091）、dupTable→"记录内存在重复源表"（AC-015/091）、
+     dupTarget→"记录内存在重复目标库"（AC-091）、srcNotFound/srcInactive→"源库不存在或已停用"（AC-090）、
+     tgtNotFound/tgtInactive→"目标库不存在或已停用"（AC-090）、categoryMismatch→"源库类别不正确"（AC-090）、
+     tableNotFound/schemaNotFound→"源表中存在当前源库不存在的表"（AC-091）、emptyDesc→"订阅描述不能为空"
+     （AC-020）、descTooLong→"超过 255 字符上限"（AC-020）、noTables→"必须至少选择一张源表"（AC-020）、
+     emptySchema→"源表输入结构或 Schema/表名格式非法"（AC-091）、invalidMode(PRESERVE on POST)→HTTP 400
+     （AC-090）。
+
+7. 编辑打开 GET /api/subscriptions/{id}/edit
+   - 回显 desc、source NORMAL、targets、tablesBySchema（SPT_HIS_2023: OPT_FEE/OPT_FEEDETAIL）、
+     sourceReachable=True、sourceTableCheck=CHECKED、invalidTables=[]（AC-097/100/102/103）。
+
+8. 编辑保存 PUT /api/subscriptions/{id}
+   - REPLACE：DATA_SOURCE_TABLE 被重写为新表；INSERT_TIME 不变；UPDATE_TIME=SYSDATE（AC-101/106/026）。
+   - PRESERVE：DATA_SOURCE_TABLE 不被重写（发送不同表仍保持原表）（AC-101/022）。
+   - 遗留字段保持：LEGACY 行编辑后 DATA_SOURCE_COMMENT/TARGET_TABLE/TARGET_COMMENT 原值不变
+     （AC-022/023/024）；UPDATE SET 不含遗留字段（SC）。
+   - 有限编辑（PRESERVE）改源被拒：code=40300 errorCode=40312"有限编辑模式下源库不能变更"（AC-102）。
+   - 多源异常编辑：code=40350"多源库异常记录不支持编辑"（AC-105）。
+
+9. 删除预览 GET /api/subscriptions/{id}/delete-preview
+   - 返回 dataSubId/desc/source/schemaCount=1/tableCount=2/targets/warnings，无并发令牌（AC-114）。
+   - 多源异常预览：code=40353"不支持删除预览"；不存在：40430（AC-115）。
+
+10. 物理删除 DELETE /api/subscriptions/{id}
+   - 成功：无 body；删除后 GET → 40430"订阅记录不存在或已被删除"（AC-112/115）。
+   - 多源异常删除：code=40351"多源库异常记录不支持删除"（AC-111）；不存在：40430（AC-115）。
+
+二、列表响应中的多源异常标记
+   - ANOM：anomalyMultiSource=True，source=null，前端据此整行警示并禁用操作（AC-009/010/047）。
+
+三、说明
+   - 所有新增记录 desc 均带 DSUB-FA-001- 前缀，DATA_SUB_ID 为 32 位 UUID；全部由备份恢复清除。
+   - 请求/响应已脱敏，未记录数据库口令或完整连接串。

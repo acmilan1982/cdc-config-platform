@@ -1,0 +1,19 @@
+数据订阅正式验收前端全量测试结果
+任务：DATA-SUBSCRIPTION-FORMAL-ACCEPTANCE-001
+命令：npx vitest run（frontend 全量）
+结果：Test Files 23 passed (23)；Tests 376 passed (376)
+
+分文件（含数据订阅相关与全仓既有测试）：
+- DataSubscribePage.spec.ts:           13
+- subscription.spec.ts (api):          17
+- useSubscribeForm.spec.ts:             9
+- SubscribeFormDialog.spec.ts:         33
+- SourceTableSelector.spec.ts:         34
+- SubscribeDetailDialog.spec.ts:        5
+- SubscribeDeleteDialog.spec.ts:        7
+- subscriptionFormat.spec.ts:          23
+- 其余非数据订阅 spec：              235（ServerConfig/LogQuery/dataSource 等，全绿，无回归）
+
+补充说明：
+- 数据订阅定向测试结果见 targeted-tests-summary。
+- 后端打包结果见 backend-tests/package-summary.txt。

@@ -1,0 +1,2 @@
+{"code":200,"message":"success","data":{"dataSubId":"DSUB-FA-001-AC044","dataSubDesc":"正式验收-源库已停用","source":{"dataSourceId":"199-source","dataSourceOrg":"业务库","status":"INACTIVE"},"tablesBySchema":[],"rawUnparseableTables":["his.src_off"],"targets":[{"dataSourceId":"DSUB-FA-001-TARGET-01","dataSourceOrg":"doirs库","status":"NORMAL"}],"insertTime":"2026-08-28T10:00:00","warnings":["源库已停用（199-source）","源表配置存在无法解析的内容（1 项），请查看原始表清单"]},"timestamp":"2026-09-02T00:05:47.873"}
+HTTP_STATUS:200

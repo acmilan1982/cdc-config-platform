@@ -1,0 +1,2 @@
+{"code":40300,"message":"存在 1 个校验失败项，请修正后重试","data":{"validationErrors":[{"errorCode":"40330","field":"sourceTables","name":"NO_SUCH_SCHEMA.OPT_FEE","message":"源表中存在当前源库不存在的表"}]},"timestamp":"2026-09-02T00:07:26.037"}
+HTTP_STATUS:200

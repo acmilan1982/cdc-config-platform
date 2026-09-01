@@ -1,0 +1,2 @@
+{"code":40300,"message":"存在 1 个校验失败项，请修正后重试","data":{"validationErrors":[{"errorCode":"40315","field":"sourceTables","name":".OPT_FEE","message":"源表输入结构或 Schema/表名格式非法"}]},"timestamp":"2026-09-02T00:07:26.080"}
+HTTP_STATUS:200

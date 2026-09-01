@@ -1,0 +1,16 @@
+{
+  "rowCount": 10,
+  "hasXiaoganOnly": true,
+  "rows": [
+    "DSUB-FA-001-http-update-replace\n\t\n孝感市第一人",
+    "DSUB-FA-001-legacy-edited\n\t\n孝感市第一人民医院\n\t\n",
+    "正式验收-目标库已停用\n\t\n孝感市第一人民医院\n\t\n共 1 张\n\t\ndoirs库",
+    "配置异常：该记录包含多个源库，请直接维护数据库\n\t\n—\n\t\n—\n\t\ndoirs库",
+    "正式验收-同源第二条\n\t\n孝感市第一人民医院\n\t\n共 1 张\n\t\ndoirs库\n",
+    "正式验收-同源第一条\n\t\n孝感市第一人民医院\n\t\n共 3 张\n\t\ndoirs库\n",
+    "正式验收-跨行完全重复\n\t\n孝感市第一人民医院\n\t\n共 3 张\n\t\ndoirs库",
+    "正式验收-句点ID目标精确匹配\n\t\n孝感市第一人民医院\n\t\n共 1 张\n\t\ndo",
+    "正式验收-时间回退显示\n\t\n孝感市第一人民医院\n\t\n共 1 张\n\t\ndoirs库",
+    "\t\n孝感市第一人民医院\n\t\n共 9 张\n\t\ndoirs库\n\t\n2025-09-1"
+  ]
+}

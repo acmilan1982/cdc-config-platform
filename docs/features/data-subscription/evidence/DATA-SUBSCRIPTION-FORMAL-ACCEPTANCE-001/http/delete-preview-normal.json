@@ -1,0 +1,2 @@
+{"code":200,"message":"success","data":{"dataSubId":"1f6182ec3d0647cfa69d153ef29eafe0","dataSubDesc":"DSUB-FA-001-preserve-keeps-table","source":{"dataSourceId":"112-source-19c","dataSourceOrg":"孝感市第一人民医院","status":"NORMAL"},"schemaCount":1,"tableCount":2,"targets":[{"dataSourceId":"DSUB-FA-001-TARGET-01","dataSourceOrg":"doirs库","status":"NORMAL"}],"warnings":[]},"timestamp":"2026-09-02T00:08:34.415"}
+HTTP_STATUS:200

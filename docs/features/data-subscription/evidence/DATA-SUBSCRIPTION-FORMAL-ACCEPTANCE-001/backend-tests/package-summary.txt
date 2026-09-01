@@ -1,0 +1,6 @@
+数据订阅正式验收后端打包结果
+任务：DATA-SUBSCRIPTION-FORMAL-ACCEPTANCE-001
+命令：mvn clean package -DskipTests（后端目录 backend）
+结果：BUILD SUCCESS
+产物：target/cdc-config-platform-backend-1.0.0-SNAPSHOT.jar（47644987 字节）
+校验：jar 内包含 com/bsoft/cdcconfig/subscription/controller/SubscriptionController.class（数据订阅后端代码已编入）

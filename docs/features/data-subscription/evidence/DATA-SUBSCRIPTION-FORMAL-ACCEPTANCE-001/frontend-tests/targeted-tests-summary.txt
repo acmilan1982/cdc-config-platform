@@ -1,0 +1,17 @@
+数据订阅正式验收前端定向测试结果
+任务：DATA-SUBSCRIPTION-FORMAL-ACCEPTANCE-001
+命令：npx vitest run src/views/data-subscribe src/api/subscription.spec.ts
+结果：Test Files 8 passed (8)；Tests 141 passed (141)
+
+分文件：
+- SubscribeFormDialog.spec.ts:      33
+- SourceTableSelector.spec.ts:      34
+- DataSubscribePage.spec.ts:        13
+- api/subscription.spec.ts:         17
+- utils/subscriptionFormat.spec.ts: 23
+- SubscribeDeleteDialog.spec.ts:     7
+- composables/useSubscribeForm.spec.ts: 9
+- SubscribeDetailDialog.spec.ts:     5
+
+补充说明：
+- 前端全量测试与 npm run build 结果见 full-tests-summary 与 build-summary（npm test / npm run build）。

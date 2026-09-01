@@ -1,0 +1,2 @@
+{"code":40300,"message":"存在 1 个校验失败项，请修正后重试","data":{"validationErrors":[{"errorCode":"40322","field":"dataFromSourceId","name":"DSUB-FA-001-TARGET-01","message":"源库类别不正确"}]},"timestamp":"2026-09-02T00:07:25.575"}
+HTTP_STATUS:200

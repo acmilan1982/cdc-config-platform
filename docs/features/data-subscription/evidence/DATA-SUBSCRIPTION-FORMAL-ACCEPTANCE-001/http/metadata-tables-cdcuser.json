@@ -1,0 +1,2 @@
+{"code":200,"message":"success","data":{"dataSourceId":"112-source-19c","schema":"CDC_USER","tables":["LOG_MINING_FLUSH"]},"timestamp":"2026-09-02T00:06:49.267"}
+HTTP_STATUS:200

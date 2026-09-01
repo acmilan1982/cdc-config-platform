@@ -1,0 +1,36 @@
+数据订阅正式验收数据库测试数据执行与备份恢复结果
+任务：DATA-SUBSCRIPTION-FORMAL-ACCEPTANCE-001
+数据库：内网开发库 Oracle 19c（CDC schema）；写操作经人工明确审批后执行（CLAUDE.md §12.2）
+备份表：CDC_DATA_SUBSCRIBE_2026_08_31（只读，永不修改）
+审批状态：APPROVED_AND_EXECUTED
+
+一、已执行写操作
+1. 临时目标库（CDC_DATA_SOURCE，任务前缀 DSUB-FA-001-TARGET-* / DSUB-FA-001-TGT.DOT，共 4 条）：
+   - DSUB-FA-001-TARGET-01（FG_ACTIVE=1）、-02（FG_ACTIVE=1）、-03（FG_ACTIVE=0，供 AC-046/071）、
+     DSUB-FA-001-TGT.DOT（FG_ACTIVE=1，句点 ID，供 AC-032/034）。
+   - 全部按 target-doris-v4 列模板创建，密码为占位符（不真实连接）。
+2. CDC_DATA_SUBSCRIBE 种子 11 条（前缀 DSUB-FA-001-*）：AC008A/AC008B/AC016/ANOM/AC044/AC045/AC046/
+   LEGACY/TIME/AC017/DOTID，覆盖同源并存、跨行完全重复、多源异常、停用/不存在源、停用目标、
+   遗留字段保持、时间回退、停用不可见、句点 ID 精确匹配。AC008A/AC016 扩展为 3 目标 + 3 表（大小写
+   保持）；TIME 保留两段表名演示"无法解析"展示。
+3. HTTP 流程写入：POST 新增 2 条（32 位 UUID，desc 带 DSUB-FA-001- 前缀）；PUT 编辑多条（PRESERVE/
+   REPLACE）；DELETE 物理删除 1 条。全部经备份恢复清除。
+
+二、数据库写入字段核验（HTTP 新增后只读核对）
+- DATA_SUB_ID=32 位无连字符十六进制 UUID（AC-006）；主键唯一。
+- DATA_TO_SOURCE_ID=两目标逗号连接（AC-011）；DATA_SOURCE_TABLE=两表逗号连接无换行（AC-012）。
+- FG_ACTIVE=1（AC-018）；INSERT_TIME=SYSDATE、UPDATE_TIME=NULL（AC-025）。
+- DATA_SOURCE_COMMENT / DATA_TARGET_TABLE / DATA_TARGET_COMMENT = NULL（AC-021/023/024）。
+- 编辑（REPLACE）：DATA_SOURCE_TABLE 重写、INSERT_TIME 不变、UPDATE_TIME=SYSDATE（AC-026/101/106）。
+- 编辑（PRESERVE）：DATA_SOURCE_TABLE 不重写（AC-101/022）。
+- 遗留字段行编辑后 DATA_SOURCE_COMMENT/TARGET_TABLE/TARGET_COMMENT 原值保持（AC-022/023/024）。
+
+三、备份恢复（单事务：DELETE ALL → INSERT SELECT 显式 12 列清单 → 核验 12 行 → COMMIT）
+- DELETE 24 行（种子 + HTTP 记录 + 原 12 行）；INSERT SELECT 12 行；COMMIT。
+- 恢复后核验（只读）：
+  - 当前表行数 12 = 备份表行数 12；
+  - 标量列双向 MINUS 均 0；
+  - 主键集合双向差异均 0；
+  - 4 个 CLOB 列 DBMS_LOB.COMPARE + 长度 不一致数 0；
+  - 本任务测试 ID 残留（DATA_SUB_ID / DATA_SUB_DESC 含 DSUB-FA-001-）0；
+  - 临时目标库剩余 0。

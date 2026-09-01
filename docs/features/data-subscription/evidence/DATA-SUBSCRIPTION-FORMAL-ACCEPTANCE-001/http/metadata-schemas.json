@@ -1,0 +1,2 @@
+{"code":200,"message":"success","data":{"dataSourceId":"112-source-19c","filterMode":"ORACLE_MAINTAINED","schemas":["CDC_USER","SPT_HIS_2023"]},"timestamp":"2026-09-02T00:06:42.969"}
+HTTP_STATUS:200

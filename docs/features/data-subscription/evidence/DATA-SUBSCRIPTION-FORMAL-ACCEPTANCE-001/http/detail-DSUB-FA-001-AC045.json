@@ -1,0 +1,2 @@
+{"code":200,"message":"success","data":{"dataSubId":"DSUB-FA-001-AC045","dataSubDesc":"正式验收-源库不存在","source":{"dataSourceId":"DSUB-FA-001-NOSUCH","status":"NOT_FOUND"},"tablesBySchema":[],"rawUnparseableTables":["his.src_miss"],"targets":[{"dataSourceId":"DSUB-FA-001-TARGET-01","dataSourceOrg":"doirs库","status":"NORMAL"}],"insertTime":"2026-08-29T10:00:00","warnings":["源库不存在（DSUB-FA-001-NOSUCH）","源表配置存在无法解析的内容（1 项），请查看原始表清单"]},"timestamp":"2026-09-02T00:05:47.895"}
+HTTP_STATUS:200

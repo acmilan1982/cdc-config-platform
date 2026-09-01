@@ -1,0 +1,17 @@
+数据订阅正式验收后端定向测试结果
+任务：DATA-SUBSCRIPTION-FORMAL-ACCEPTANCE-001
+命令：mvn test -Dtest='SubscriptionServiceImplTest,SubscriptionControllerTest,SourceMetadataServiceImplTest,SubscriptionCsvHelperTest,DataSourceTableParserTest,SubscriptionConverterTest,SubscriptionErrorCodeTest' -Dsurefire.failIfNoSpecifiedTests=false
+结果：BUILD SUCCESS；Tests run: 138, Failures: 0, Errors: 0, Skipped: 0
+
+分测试类：
+- SubscriptionServiceImplTest: Tests run: 53, Failures: 0, Errors: 0, Skipped: 0
+- SubscriptionControllerTest:  Tests run: 16, Failures: 0, Errors: 0, Skipped: 0
+- SourceMetadataServiceImplTest: Tests run: 17, Failures: 0, Errors: 0, Skipped: 0
+- SubscriptionCsvHelperTest:    Tests run: 25, Failures: 0, Errors: 0, Skipped: 0
+- DataSourceTableParserTest:     Tests run: 11, Failures: 0, Errors: 0, Skipped: 0
+- SubscriptionConverterTest:     Tests run: 12, Failures: 0, Errors: 0, Skipped: 0
+- SubscriptionErrorCodeTest:     Tests run: 4,  Failures: 0, Errors: 0, Skipped: 0
+
+补充说明：
+- 未执行完整 mvn test（按任务 Prompt §8：仅数据订阅定向测试；完整测试中的 JobFailureServiceTest/OracleDateMappingTest 为依赖开发库实时数据/运行态的既有环境性失败，与本次验收无关）。
+- 后端打包结果见 package-summary（mvn clean package -DskipTests）。

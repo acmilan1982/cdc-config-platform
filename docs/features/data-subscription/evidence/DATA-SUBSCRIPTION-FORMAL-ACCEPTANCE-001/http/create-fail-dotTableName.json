@@ -1,0 +1,2 @@
+{"code":40300,"message":"存在 1 个校验失败项，请修正后重试","data":{"validationErrors":[{"errorCode":"40316","field":"sourceTables","name":"SPT_HIS_2023.OPT.FEE","message":"名称含协议保留字符（英文逗号或英文句点），不能用于订阅配置"}]},"timestamp":"2026-09-02T00:07:25.445"}
+HTTP_STATUS:200

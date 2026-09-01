@@ -1,0 +1,2 @@
+{"code":200,"message":"success","data":{"dataSubId":"DSUB-FA-001-AC046","dataSubDesc":"正式验收-目标库已停用","source":{"dataSourceId":"112-source-19c","dataSourceOrg":"孝感市第一人民医院","status":"NORMAL"},"tablesBySchema":[],"rawUnparseableTables":["his.tgt_off"],"targets":[{"dataSourceId":"DSUB-FA-001-TARGET-03","dataSourceOrg":"doirs库","status":"INACTIVE"}],"insertTime":"2026-08-30T10:00:00","warnings":["目标库已停用（DSUB-FA-001-TARGET-03）","源表配置存在无法解析的内容（1 项），请查看原始表清单"]},"timestamp":"2026-09-02T00:05:47.919"}
+HTTP_STATUS:200

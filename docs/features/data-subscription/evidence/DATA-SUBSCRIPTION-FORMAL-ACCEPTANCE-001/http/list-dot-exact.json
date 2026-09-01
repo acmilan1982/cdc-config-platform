@@ -1,0 +1,2 @@
+{"code":200,"message":"success","data":{"items":[{"dataSubId":"DSUB-FA-001-DOTID","dataSubDesc":"正式验收-句点ID目标精确匹配","anomalyMultiSource":false,"source":{"dataSourceId":"112-source-19c","dataSourceOrg":"孝感市第一人民医院","status":"NORMAL"},"sourceTableCount":1,"tablesBySchema":[],"rawUnparseableTables":["his.dot_t"],"targets":[{"dataSourceId":"DSUB-FA-001-TGT.DOT","dataSourceOrg":"doirs库","status":"NORMAL"}],"insertTime":"2026-08-22T10:00:00"}],"queryWarnings":[]},"timestamp":"2026-09-02T00:05:32.458"}
+HTTP_STATUS:200

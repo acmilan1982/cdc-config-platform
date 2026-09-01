@@ -1,0 +1,2 @@
+{"code":200,"message":"success","data":{"items":[{"dataSubId":"DSUB-FA-001-ANOM","dataSubDesc":"正式验收-多源库异常","anomalyMultiSource":true,"sourceTableCount":1,"tablesBySchema":[],"rawUnparseableTables":["his.anom_t"],"targets":[{"dataSourceId":"DSUB-FA-001-TARGET-01","dataSourceOrg":"doirs库","status":"NORMAL"}],"insertTime":"2026-08-27T10:00:00"}],"queryWarnings":[{"type":"AMBIGUOUS_COMMA_ID","field":"sourceIds","value":"112-source-19c,my-19c","message":"含逗号的数据源 ID 只能进行历史兼容可能匹配，结果可能包含歧义记录"}]},"timestamp":"2026-09-02T00:05:32.506"}
+HTTP_STATUS:200

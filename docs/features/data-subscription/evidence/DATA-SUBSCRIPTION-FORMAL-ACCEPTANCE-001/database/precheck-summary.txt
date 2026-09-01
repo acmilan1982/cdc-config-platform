@@ -1,0 +1,30 @@
+数据订阅正式验收数据库前置核验结果（只读）
+任务：DATA-SUBSCRIPTION-FORMAL-ACCEPTANCE-001
+连接：内网开发库 CDC（Oracle 19c），仅执行只读查询，无任何 DML/DDL。
+
+1. CDC_DATA_SUBSCRIBE 行数 = 12
+2. 备份表 CDC_DATA_SUBSCRIBE_2026_08_31 行数 = 12（备份存在且可查询，行数与当前一致）
+3. 两表物理列清单一致（12 列，按 column_id 顺序）：
+   DATA_SUB_ID VARCHAR2(32) NOT NULL
+   DATA_SUB_DESC VARCHAR2(255)
+   DATA_FROM_SOURCE_ID VARCHAR2(1024)
+   DATA_TO_SOURCE_ID VARCHAR2(1024)
+   DATA_SOURCE_TABLE CLOB
+   DATA_SOURCE_COMMENT CLOB
+   DATA_TARGET_TABLE CLOB
+   DATA_TARGET_COMMENT CLOB
+   INSERT_TIME DATE
+   UPDATE_TIME DATE
+   DELETE_TIME DATE
+   FG_ACTIVE VARCHAR2(1)
+4. CDC_DATA_SUBSCRIBE 主键 = DATA_SUB_ID（真实主键，与 DATABASE.md DATA_SUB_ID 主键基线 DATABASE_VERIFIED 一致）
+5. 源库 112-source-19c 存在：category=source，fg_active=1，org=孝感市第一人民医院
+6. 启用且类别匹配的 SOURCE 候选：5905f1ce83024410836b40ca0ebfc446(杭州市第一人民医院)、my-19c(本机的oracle)、112-source-19c(孝感市第一人民医院)
+7. 启用且类别匹配的 TARGET 候选：target-doris-v4、my-target-doris-v4、company-target-doris-v4
+8. DSUB-FA-001-TARGET-* 临时目标库残留 = 0
+9. CDC_DATA_SUBSCRIBE 中 DSUB-FA-001-* 测试 ID 残留 = 0
+
+当前数据观察（只读）：
+- 12 行中仅 1 行 FG_ACTIVE=1（DATA_SUB_ID=3000，112-source-19c → company-target-doris-v4），其余 11 行 FG_ACTIVE=0（历史 mock/测试数据，列表页不可见）。
+- 既有行 111/444/555/fail-db/mock7/mock8/mock9 的 DATA_FROM_SOURCE_ID 指向停用或不存在的源（199-source、fail-db、mock*），但均为 FG_ACTIVE=0。
+- 结论：真实列表页当前仅显示 1 条启用记录；OR/OR/AND、异常展示、编辑/删除等验收需要按授权创建临时测试记录，结束后恢复备份。

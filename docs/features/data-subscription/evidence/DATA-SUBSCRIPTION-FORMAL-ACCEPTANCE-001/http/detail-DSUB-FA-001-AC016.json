@@ -1,0 +1,2 @@
+{"code":200,"message":"success","data":{"dataSubId":"DSUB-FA-001-AC016","dataSubDesc":"正式验收-跨行完全重复","source":{"dataSourceId":"112-source-19c","dataSourceOrg":"孝感市第一人民医院","status":"NORMAL"},"tablesBySchema":[],"rawUnparseableTables":["his.t01"],"targets":[{"dataSourceId":"DSUB-FA-001-TARGET-01","dataSourceOrg":"doirs库","status":"NORMAL"}],"insertTime":"2026-08-25T10:00:00","warnings":["源表配置存在无法解析的内容（1 项），请查看原始表清单"]},"timestamp":"2026-09-02T00:05:47.947"}
+HTTP_STATUS:200
