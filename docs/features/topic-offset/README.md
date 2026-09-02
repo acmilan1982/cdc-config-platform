@@ -39,16 +39,16 @@
 
 ## 6. 当前阶段
 
-当前处于**功能级基线第一阶段**：需求与验收标准基线已批准，设计、实现与验收执行尚未开始。
+当前处于**功能级基线第一阶段（设计草案待复审）**：需求、验收标准与数据库物理只读复核已批准；功能设计草案（`DESIGN.md`/`API.md`/`UI.md`）已形成，等待 ChatGPT/用户复审；设计获批前不进入实现。
 
 - 需求状态：`APPROVED`（`REQUIREMENTS.md` 需求基线已正式批准）
 - 验收标准状态：`APPROVED`（`ACCEPTANCE.md` 验收标准基线已正式批准）
-- 设计状态：`NOT_STARTED`（DESIGN.md / API.md / UI.md 及数据库**设计**基线均未建立；已建 `DATABASE.md` 仅为物理只读复核文档，非设计基线）
+- 设计状态：`DRAFT_PENDING_USER_REVIEW`（`DESIGN.md`/`API.md`/`UI.md` 设计草案已形成，等待 ChatGPT/用户复审；数据库**设计**基线未单独批准，已建 `DATABASE.md` 仅为物理只读复核文档，非设计基线）
 - `implementation_status`：`NOT_STARTED`
 - 验收执行状态：`NOT_RUN`（尚未执行正式验收；100 条 `TOFF-AC-xxx` 保持 `NOT_RUN`）
 - 数据库只读复核：`APPROVED`（`CDC_TOPIC_OFFSET` 及页面映射配置表的物理事实只读复核结果已于 2026-09-02 经 ChatGPT 复审批准，见 [DATABASE.md](DATABASE.md)；批准针对已复核数据库事实，不代表数据库设计或项目级物理基线批准，也不表示设计或实现已开始）
 
-状态批准**不代表功能已实现、已验收通过或已正式交付**；设计、实现与验收执行均未开始。
+状态批准**不代表功能已实现、已验收通过或已正式交付**；设计草案获批前，实现与验收执行均不开始。
 
 ## 7. 文档导航（本次创建）
 
@@ -58,6 +58,9 @@
 | [REQUIREMENTS.md](REQUIREMENTS.md) | 需求基线（`APPROVED`）：定位、术语、业务规则、页面与查询交互要求、边界与依赖 |
 | [ACCEPTANCE.md](ACCEPTANCE.md) | 验收标准基线（`APPROVED`）：`TOFF-AC-001`～`TOFF-AC-100`，全部 `NOT_RUN`（未执行验收） |
 | [DATABASE.md](DATABASE.md) | 数据库物理只读复核（`APPROVED`）：`CDC_TOPIC_OFFSET` 结构/约束/索引/分区、数据质量与规模、设计前置事实结论（非设计基线） |
+| [DESIGN.md](DESIGN.md) | 功能设计说明（`DRAFT_PENDING_USER_REVIEW`）：目标与范围、代码盘点、总体架构与调用链、后端分层与算法、前端状态与生命周期、刷新并发、只读/精度/性能、测试策略、决策与风险 |
+| [API.md](API.md) | 接口契约（`DRAFT_PENDING_USER_REVIEW`）：2 个只读 GET 接口、请求/响应/字段字典、JSON 示例、错误码、只读与字符串精度追踪 |
+| [UI.md](UI.md) | 页面与交互规范（`DRAFT_PENDING_USER_REVIEW`）：页面 IA、查询区、工具栏、8 列表格与列宽、同步对象、分页、刷新生命周期、加载/空/错误状态 |
 
 ## 8. 页面与路由现状
 
@@ -70,12 +73,10 @@
 
 ## 9. 当前未建立 / 未批准事项（基线边界）
 
-本功能的需求基线（`REQUIREMENTS.md`）与验收标准基线（`ACCEPTANCE.md`）已获正式批准。以下设计/实现层面的内容均**未建立 / 未批准**，不得据当前文档宣称其存在：
+本功能的需求基线（`REQUIREMENTS.md`）与验收标准基线（`ACCEPTANCE.md`）已获正式批准。以下设计/实现层面的内容均**未批准**，不得据当前草案宣称其已获批、可实施或已交付：
 
-- 未建立 `DESIGN.md`（功能设计说明）；
-- 未建立 `API.md`（接口契约）；当前未批准任何接口结构；
-- 未建立 `UI.md`（页面与交互规范）；
-- 未建立数据库**设计**基线（设计用途的 DATABASE 设计文档）；未批准任何数据模型变更；已建 `DATABASE.md` 仅为物理只读复核文档（`APPROVED`），不是设计基线；
+- `DESIGN.md`（功能设计说明）、`API.md`（接口契约）、`UI.md`（页面与交互规范）已以**草案**状态 `DRAFT_PENDING_USER_REVIEW` 建立，等待 ChatGPT/用户复审；复审批准前不进入实现任务，任何接口结构、页面交互与设计决策均未获批；
+- 未批准数据库**设计**基线（设计用途的 DATABASE 设计文档）；未批准任何数据模型变更；已建 `DATABASE.md` 仅为物理只读复核文档（`APPROVED`），不是设计基线；
 - 无任何后端 / 前端实现，未设计或编写 Java / Vue / TS 等代码；
 - 占位页 `PlaceholderPage` 与"Topic 偏移量"菜单标题仅作为 AS-IS 现状记录，**不等于**最终页面、UI 或菜单基线。
 
@@ -88,7 +89,7 @@
 
 ## 11. 下一步
 
-需求与验收标准基线已获正式批准（`APPROVED`），数据库物理只读复核结果已获 ChatGPT 复审批准（`APPROVED`）。下一步可另起任务 `TOPIC-OFFSET-DESIGN-001` 进入设计阶段（建立功能设计基线，含 DESIGN.md / API.md / UI.md 及数据库设计基线，并可在设计中引用本 DATABASE.md 物理事实）。
+需求与验收标准基线已获正式批准（`APPROVED`），数据库物理只读复核结果已获 ChatGPT 复审批准（`APPROVED`）。功能设计草案 `DESIGN.md` / `API.md` / `UI.md` 已形成（状态 `DRAFT_PENDING_USER_REVIEW`，由 `TOPIC-OFFSET-DESIGN-001` 产出，可在设计中引用 `DATABASE.md` 物理事实）。下一步由 ChatGPT/用户对三份设计草案进行正式复审；设计获批后可另起后续实现任务。
 
-- 设计任务未完成并获批前，不进入编码、数据库写访问或服务运行阶段；
+- 设计草案未获复审批准前，不进入编码、数据库写访问或服务运行阶段；
 - 正式验收须在实现完成并满足环境条件后，另行发起验收任务执行。
