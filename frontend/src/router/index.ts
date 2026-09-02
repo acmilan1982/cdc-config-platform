@@ -46,7 +46,7 @@ const routes: RouteRecordRaw[] = [
     path: '/monitor/topic-offset',
     name: 'TopicOffset',
     component: () => import('@/views/topic-offset/TopicOffsetPage.vue'),
-    meta: { title: 'Topic 偏移量', group: '运行监控' }
+    meta: { title: '数据同步进度', group: '运行监控' }
   },
   {
     path: '/monitor/log-query',

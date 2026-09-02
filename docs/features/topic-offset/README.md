@@ -4,7 +4,7 @@
 
 **数据同步进度**（Feature 内部标识 `topic-offset`，路由 `/monitor/topic-offset`）。
 
-> AS-IS 事实：当前 Git 已提交菜单项标题仍为"Topic 偏移量"（`frontend/src/config/menu.ts`）；本需求要求页面/菜单名称在实现阶段统一为"数据同步进度"并保持路由不变。本任务为纯文档任务，不改动任何前后端文件。
+> 历史 AS-IS：README 建立时（需求/验收文档阶段）Git 已提交菜单项标题仍为"Topic 偏移量"（`frontend/src/config/menu.ts`），该需求要求页面/菜单名称在实现阶段统一为"数据同步进度"并保持路由不变；该名称统一已在实现任务 `TOPIC-OFFSET-IMPLEMENTATION-001` 中落地（菜单与路由标题现均为"数据同步进度"，路由 `/monitor/topic-offset` 不变）。
 
 ## 2. 功能定位
 
@@ -39,16 +39,20 @@
 
 ## 6. 当前阶段
 
-当前处于**功能级基线第二阶段（设计基线已正式批准）**：需求、验收标准、数据库物理只读复核与功能设计（`DESIGN.md`/`API.md`/`UI.md`）均已批准；设计获批后**可另起 topic-offset 实现任务**，本阶段未开始实现、未执行验收。
+当前处于**功能级实现完成、等待用户人工测试与正式验收阶段**：需求、验收标准、数据库物理只读复核与功能设计基线均已批准；实现任务 `TOPIC-OFFSET-IMPLEMENTATION-001`（起点基线提交 `5f3760f77c13fc0f290bd3360cce5dc7b0b95040`）已完成后端/前端实现，通过自动化测试与前后端构建，启动开发环境完成接口联调与接口验证，并将代码与测试推送至 `origin/develop`。正式验收未执行。
 
-- 需求状态：`APPROVED`（`REQUIREMENTS.md` 需求基线已正式批准）
-- 验收标准状态：`APPROVED`（`ACCEPTANCE.md` 验收标准基线已正式批准）
-- 设计状态：`APPROVED`（`DESIGN.md`/`API.md`/`UI.md` 功能设计基线已于 2026-09-02 经 ChatGPT 对提交 `68779649e673da7ee95079c4724b346ea441c5f6` 正式复审批准；数据库**设计**基线未单独批准，已建 `DATABASE.md` 仅为物理只读复核文档，非设计基线）
-- `implementation_status`：`NOT_STARTED`
+- 需求状态：`APPROVED`（`REQUIREMENTS.md` 需求基线已正式批准，本阶段零变化）
+- 验收标准状态：`APPROVED`（`ACCEPTANCE.md` 验收标准基线已正式批准，本阶段零变化；100 条 `TOFF-AC-xxx` 仍全部 `NOT_RUN`）
+- 设计状态：`APPROVED`（`DESIGN.md`/`API.md`/`UI.md` 功能设计基线已于 2026-09-02 经 ChatGPT 对提交 `68779649e673da7ee95079c4724b346ea441c5f6` 正式复审批准，本阶段零变化；数据库**设计**基线未单独批准，已建 `DATABASE.md` 仅为物理只读复核文档，非设计基线）
+- `implementation_status`：`IMPLEMENTED_PENDING_USER_ACCEPTANCE`
+  - 后端：新增 `com.bsoft.cdcconfig.monitor.topicoffset` 只读模块，仅暴露两个 GET 接口（`GET /api/monitor/topic-offset/offsets`、`GET /api/monitor/topic-offset/candidates`），Mapper 显式列投影且不读取 `DATA_SOURCE_PASSWORD`，`NEXT_OFFSET` 以字符串透传，无任何写/DML/DDL/Kafka 访问；
+  - 前端：替换占位页为"数据同步进度"页面（查询区、结果/解析失败数量与刷新工具栏、8 列表格、分页、60 秒自动刷新与会话恢复）；菜单与路由标题由"Topic 偏移量"统一为"数据同步进度"；
+  - 自动化测试与构建：后端 topic-offset 定向 44 条全通过、前端 topic-offset 定向 56 条全通过；后端/前端完整测试与构建在本任务完成时通过或仅存在任务开始前既有的基线失败（见任务最终报告）；
+  - 开发环境联调：两个只读 GET 接口已对开发库返回真实配置候选与断点记录，`http://192.168.174.70:5173/monitor/topic-offset` 可供用户从 Windows 浏览器人工测试。
 - 验收执行状态：`NOT_RUN`（尚未执行正式验收；100 条 `TOFF-AC-xxx` 保持 `NOT_RUN`）
-- 数据库只读复核：`APPROVED`（`CDC_TOPIC_OFFSET` 及页面映射配置表的物理事实只读复核结果已于 2026-09-02 经 ChatGPT 复审批准，见 [DATABASE.md](DATABASE.md)；批准针对已复核数据库事实，不代表数据库设计或项目级物理基线批准，也不表示设计或实现已开始）
+- 数据库只读复核：`APPROVED`（`CDC_TOPIC_OFFSET` 及页面映射配置表的物理事实只读复核结果已于 2026-09-02 经 ChatGPT 复审批准，见 [DATABASE.md](DATABASE.md)；批准针对已复核数据库事实，不代表数据库设计或项目级物理基线批准）
 
-状态批准**不代表功能已实现、已验收通过或已正式交付**；设计基线已批准但实现与验收执行均未开始，须在后续独立实现任务中编码，并在完成后另行执行正式验收。
+本阶段实现完成**不代表功能已验收通过或已正式交付**：实现结果尚未交回 ChatGPT 做代码与实现复审，尚未经用户人工页面测试，正式验收尚未执行；须在用户人工测试通过后另行发起正式验收任务。
 
 ## 7. 文档导航（本次创建）
 
@@ -66,19 +70,19 @@
 
 | 项目 | 值 |
 |---|---|
-| 页面/菜单名称（目标规则） | 数据同步进度（运行监控组） |
-| 既有路由 | `/monitor/topic-offset`（保持既有值不变） |
-| 前端现状 | `frontend/src/views/topic-offset/TopicOffsetPage.vue` 为 `PlaceholderPage` 占位页（AS-IS 事实） |
-| 菜单现状 | `frontend/src/config/menu.ts` 标题为"Topic 偏移量"（AS-IS 事实；实现阶段统一为"数据同步进度"） |
+| 页面/菜单名称（实现后现状） | 数据同步进度（运行监控组） |
+| 既有路由 | `/monitor/topic-offset`（保持不变） |
+| 前端现状 | `frontend/src/views/topic-offset/TopicOffsetPage.vue` 已由实现任务替换占位页，为真实"数据同步进度"页面（历史 AS-IS：README 建立时此处为 `PlaceholderPage` 占位页） |
+| 菜单现状 | `frontend/src/config/menu.ts` 标题已统一为"数据同步进度"（历史 AS-IS：README 建立时为"Topic 偏移量"） |
 
-## 9. 当前未建立 / 未批准事项（基线边界）
+## 9. 当前未批准 / 尚未完成事项（基线边界）
 
-本功能的需求基线（`REQUIREMENTS.md`）、验收标准基线（`ACCEPTANCE.md`）与功能设计基线（`DESIGN.md`/`API.md`/`UI.md`）均已获正式批准。以下实现/数据库层面的内容仍**未批准**，不得据此宣称功能已实现、可实施或已交付：
+本功能的需求基线（`REQUIREMENTS.md`）、验收标准基线（`ACCEPTANCE.md`）与功能设计基线（`DESIGN.md`/`API.md`/`UI.md`）均已获正式批准；实现任务已完成并推送（实现状态 `IMPLEMENTED_PENDING_USER_ACCEPTANCE`）。以下实现/数据库层面的内容仍**未批准或未完成**，不得据此宣称功能已验收通过或已正式交付：
 
-- 设计文档获批仅确立实现设计依据，未产生任何代码或可运行功能；任何接口结构、页面交互与设计决策是否真正落地，取决于尚未开始的实现任务，并以实际实现与验收结果为准；
-- 未批准数据库**设计**基线（设计用途的 DATABASE 设计文档）；未批准任何数据模型变更；已建 `DATABASE.md` 仅为物理只读复核文档（`APPROVED`），不是设计基线；
-- 无任何后端 / 前端实现，未设计或编写 Java / Vue / TS 等代码；
-- 占位页 `PlaceholderPage` 与"Topic 偏移量"菜单标题仅作为 AS-IS 现状记录，**不等于**最终页面、UI 或菜单基线。
+- 本次实现已按批准设计落地，但其是否符合批准设计，须经 ChatGPT 对实现结果提交的代码与实现复审、用户人工页面测试以及正式验收确认，并以实际复审与验收结果为准；
+- 未批准数据库**设计**基线（设计用途的 DATABASE 设计文档）；未批准任何数据模型变更；已建 `DATABASE.md` 仅为物理只读复核文档（`APPROVED`），不是设计基线；本次实现仅对 `CDC_TOPIC_OFFSET` 与两张配置表做只读 SELECT，未执行任何 DDL/DML；
+- 正式验收未执行（100 条 `TOFF-AC-xxx` 全部 `NOT_RUN`）；尚未获得 ChatGPT 对实现结果提交的复审结论；
+- 占位页 `PlaceholderPage` 与"Topic 偏移量"菜单标题为历史 AS-IS 记录；实现任务已用"数据同步进度"页面替换占位页、并将菜单与路由标题统一为"数据同步进度"（路由 `/monitor/topic-offset` 不变），最终页面/UI 基线以人工测试与正式验收结果为准。
 
 ## 10. CDC_TOPIC_OFFSET 物理只读复核状态与项目级基线边界
 
@@ -89,7 +93,7 @@
 
 ## 11. 下一步
 
-需求、验收标准、数据库物理只读复核与功能设计基线（`DESIGN.md`/`API.md`/`UI.md`）均已获正式批准（`APPROVED`；设计基线于 2026-09-02 经 ChatGPT 对提交 `68779649e673da7ee95079c4724b346ea441c5f6` 复审批准，可在设计中引用 `DATABASE.md` 物理事实）。下一步**可另起 topic-offset 实现任务**：按已批准设计基线统一页面/菜单名称、实现后端只读查询与前端页面、联调；实现完成并满足环境条件后，再另行发起正式验收任务执行。
+需求、验收标准、数据库物理只读复核与功能设计基线（`DESIGN.md`/`API.md`/`UI.md`）均已获正式批准（`APPROVED`；设计基线于 2026-09-02 经 ChatGPT 对提交 `68779649e673da7ee95079c4724b346ea441c5f6` 复审批准，实现中引用了 `DATABASE.md` 物理事实）。实现任务 `TOPIC-OFFSET-IMPLEMENTATION-001` 已完成实现、自动化测试与构建、开发环境联调与接口验证并推送（实现状态 `IMPLEMENTED_PENDING_USER_ACCEPTANCE`）。下一步：实现结果先交回 ChatGPT 做代码与实现复审；随后由用户对已启动的开发环境页面做人工测试；用户人工测试通过后再另行发起正式验收任务执行 100 条 `TOFF-AC-xxx`。
 
-- 设计基线已批准但本阶段未进入编码、数据库写访问或服务运行；相关操作须在后续独立实现任务并在满足环境条件下进行；
-- 正式验收须在实现完成并满足环境条件后，另行发起验收任务执行。
+- 实现与联调只读访问 `CDC_TOPIC_OFFSET` 与两张配置表，不执行任何数据库 DDL/DML；
+- 正式验收须在用户完成人工页面测试后另行发起执行；验收执行状态保持 `NOT_RUN`。
