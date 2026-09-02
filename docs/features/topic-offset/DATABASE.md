@@ -8,7 +8,7 @@
 | Feature 标识 | `topic-offset` |
 | 路由 | `/monitor/topic-offset` |
 | 目标文档 | `docs/features/topic-offset/DATABASE.md` |
-| 文档状态 | `VERIFIED_PENDING_USER_REVIEW`（Oracle 物理事实只读复核完成，待用户/ChatGPT 审阅；未批准） |
+| 文档状态 | `APPROVED`（ChatGPT 已于 2026-09-02 复审批准只读复核结果；本状态由 `VERIFIED_PENDING_USER_REVIEW` 收口而来，详见收口说明与 §12 变更记录） |
 | 文档性质 | 数据库物理事实只读复核记录；**不是** DESIGN.md 功能设计基线，不构成任何建表/改表/加索引/加约束方案 |
 | 任务编号 | `TOPIC-OFFSET-DATABASE-READONLY-VERIFICATION-001` |
 | 复核时间 | 2026-09-02 |
@@ -27,6 +27,14 @@
 - implementation_status：`NOT_STARTED`
 
 只读边界声明：本任务只执行无副作用 `SELECT`；未执行也不授权任何 `INSERT/UPDATE/DELETE/MERGE`、`CREATE/ALTER/DROP/TRUNCATE/COMMENT/GRANT/REVOKE`、PL/SQL、`COMMIT/ROLLBACK`、统计收集、锁表及任何会话/Schema 对象修改；未访问 Kafka、ZooKeeper；未启动服务。
+
+### 收口说明（TOPIC-OFFSET-DATABASE-APPROVAL-CLOSEOUT-001）
+
+ChatGPT 已复审批准只读复核提交 `d63e6e51cfa8a8c4a4c5bde38421f6c808d97600` 的数据库物理事实复核结果，结论 `APPROVED`。本收口任务仅将文档状态由 `VERIFIED_PENDING_USER_REVIEW` 更新为 `APPROVED`：
+
+- 数据库结构、约束、索引、分区、统计、样本、风险结论与未能核实事项零变化；
+- 本次批准的是数据库物理事实只读复核结果（功能级复核基线），不等于授权本任务或本功能修改数据库（含原表 `CDC_TOPIC_OFFSET`），也未改变任何已批准项目级基线；
+- 数据库事实基线获批不代表设计或实现已经开始；设计（DESIGN.md / API.md / UI.md 及数据库设计基线）与实现仍为 `NOT_STARTED`，验收执行仍为 `NOT_RUN`。
 
 ## 2. 复核范围、环境、时间与只读边界
 
@@ -251,3 +259,4 @@ Owner/Schema：`CDC`；普通堆表（`IOT_TYPE=N`），非临时表（`TEMPORAR
 | 日期 | 变更 | 依据 |
 |---|---|---|
 | 2026-09-02 | 建立 `CDC_TOPIC_OFFSET` 及其页面映射配置表物理事实只读复核文档（`VERIFIED_PENDING_USER_REVIEW`；未批准、未授权建表/改表/索引/约束变更；不进入设计、实现或验收） | TOPIC-OFFSET-DATABASE-READONLY-VERIFICATION-001（只读复核任务；待用户/ChatGPT 审阅后进入 DESIGN-001） |
+| 2026-09-02 | 收口：ChatGPT 复审批准只读复核结果（`APPROVED`，复审提交 `d63e6e51...`）；文档状态由 `VERIFIED_PENDING_USER_REVIEW` 更新为 `APPROVED`；数据库结构/约束/索引/分区/统计/样本/风险/未能核实事项零变化；批准仅为功能级数据库事实复核基线，不授权修改数据库，也不表示设计或实现已开始 | TOPIC-OFFSET-DATABASE-APPROVAL-CLOSEOUT-001（数据库复核文档正式批准收口任务） |
