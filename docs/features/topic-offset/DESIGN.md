@@ -8,7 +8,7 @@
 | Feature 标识 | `topic-offset` |
 | 既有路由 | `/monitor/topic-offset` |
 | 目标文档 | `docs/features/topic-offset/DESIGN.md` |
-| 文档状态 | `DRAFT_PENDING_USER_REVIEW`（设计草案已形成，等待 ChatGPT/用户复审；未经批准不得进入实现任务） |
+| 文档状态 | `APPROVED`（本功能设计基线已获 ChatGPT 正式复审批准，可另起实现任务；见 §1.1） |
 | 文档性质 | 功能设计基线草案（第一版只读查询设计；**不包含**编码、DDL、DML、测试执行） |
 | 设计任务编号 | `TOPIC-OFFSET-DESIGN-001` |
 | 设计依据 | `docs/features/topic-offset/REQUIREMENTS.md`（`APPROVED`）、`ACCEPTANCE.md`（`APPROVED`、100 条 `TOFF-AC-xxx` 全部 `NOT_RUN`）、`DATABASE.md`（`APPROVED`）、`README.md` |
@@ -21,10 +21,16 @@
 - acceptance_status：`APPROVED`
 - database_document_status：`APPROVED`
 - acceptance_execution_status：`NOT_RUN`（本任务不执行任何验收；100 条 `TOFF-AC-xxx` 保持 `NOT_RUN`，设计不得把任一验收状态改为 `PASS`）
-- design_status：`DRAFT_PENDING_USER_REVIEW`（本草案）
+- design_status：`APPROVED`（本设计基线已获 ChatGPT 正式复审批准，见 §1.1）
 - implementation_status：`NOT_STARTED`
 
 本任务只设计，不编码、不测试、不修改数据库、不访问 Oracle/Kafka/ZooKeeper、不启停服务。发现的任何与已批准需求冲突将立即停止报告，不静默选边。
+
+### 1.1 批准收口说明
+
+- ChatGPT 已于 2026-09-02 对提交 `68779649e673da7ee95079c4724b346ea441c5f6`（本设计基线草案及 `TOPIC-OFFSET-DESIGN-001-R1` 定向修订）完成正式复审，结论 `APPROVED`。
+- 批准范围：`DESIGN.md`（本文件）、`API.md`、`UI.md` 作为 topic-offset 功能实现设计基线，已确认无阻断实现的设计矛盾；Topic 五段解析、pending/applied 两阶段提交、JSON null 局部序列化、`NEXT_OFFSET` 确定格式模型、三表只读次数与非 SCN 快照边界等均已确认。
+- 本收口任务未开始实现：`implementation_status=NOT_STARTED`、`acceptance_execution_status=NOT_RUN`（100 条 `TOFF-AC-xxx` 保持 `NOT_RUN`）。设计基线获批后**可另起 topic-offset 实现任务**；本任务未进行任何编码、测试、验收或数据库访问。
 
 ## 2. 目标、范围与非目标
 
@@ -471,3 +477,4 @@ ORDER  BY KAFKA_TOPIC ASC, SERVER_ID ASC
 |---|---|---|
 | 2026-09-02 | 建立本功能设计草案（`DRAFT_PENDING_USER_REVIEW`）：总体架构、后端查询/解析/过滤/映射/分页设计、前端状态与刷新并发、数据库结论（无需 DDL）、测试策略、实施清单；未编码、未执行测试或验收 | TOPIC-OFFSET-DESIGN-001（纯文档设计任务；等待 ChatGPT/用户复审后进入实现任务） |
 | 2026-09-02 | R1 定向修订（状态保持 `DRAFT_PENDING_USER_REVIEW`）：Topic 解析仅“恰好 5 段”，去除非空段/正则规则并补含空段边界；生效条件改为仅在查询/分页/刷新成功且仍为当前请求时原子提交；明确 null 与全局 `non_null` 冲突的唯一方案（`TopicOffsetItemVO` 字段级 `@JsonInclude(ALWAYS)`）；`NEXT_OFFSET` 采用显式格式模型 + 固定数字字符并列出验证样例；offsets 读取三次只读 SELECT、candidates 两次，明确非跨表 SCN 一致快照 | TOPIC-OFFSET-DESIGN-001-R1（ChatGPT 正式复审 `CHANGES_REQUIRED` 定向修订） |
+| 2026-09-02 | 设计基线正式批准收口（状态 `DRAFT_PENDING_USER_REVIEW`→`APPROVED`）：ChatGPT 对提交 `68779649e673da7ee95079c4724b346ea441c5f6` 正式复审 `APPROVED`；更新文档状态与 design_status，未改动任何设计正文；批准后可另起实现任务，本任务未开始实现 | TOPIC-OFFSET-DESIGN-APPROVAL-CLOSEOUT-001（ChatGPT 正式复审批准收口） |

@@ -8,13 +8,15 @@
 | Feature 标识 | `topic-offset` |
 | 既有路由 | `/monitor/topic-offset` |
 | 目标文档 | `docs/features/topic-offset/UI.md` |
-| 文档状态 | `DRAFT_PENDING_USER_REVIEW`（页面/交互规范草案，等待 ChatGPT/用户复审） |
+| 文档状态 | `APPROVED`（本页面与交互规范已获 ChatGPT 正式复审批准，作为实现 UI 基线） |
 | 设计任务编号 | `TOPIC-OFFSET-DESIGN-001` |
 | 依据 | `REQUIREMENTS.md`（`APPROVED`）、`ACCEPTANCE.md`（`APPROVED`）、`DESIGN.md`（本套草案） |
 | 起始基线提交 | `a9916eaabc3187e4273d336343fe687c2e55fabf` |
 | 创建日期 | 2026-09-02 |
 
 页面视觉遵循：企业管理后台浅色风格，与现有 app-shell 和 Element Plus 体系一致（TOFF-REQ-118、TOFF-REQ-121）；本文件固化可复核规则，不依赖未入库效果图作为唯一证据（TOFF-AC-076）。
+
+> 批准收口说明：ChatGPT 于 2026-09-02 对提交 `68779649e673da7ee95079c4724b346ea441c5f6` 完成正式复审并批准本页面与交互规范（`APPROVED`）。本收口任务仅更新状态并记录批准，未改动任何布局、8 列表格、列宽、查询交互、刷新规则、错误态或显示文案；未开始实现（`implementation_status=NOT_STARTED`）。
 
 ## 2. 页面信息架构（自上而下固定，TOFF-REQ-117）
 
@@ -175,3 +177,4 @@
 |---|---|---|
 | 2026-09-02 | 建立本功能页面与交互规范草案（`DRAFT_PENDING_USER_REVIEW`）：页面 IA、查询区、工具栏、8 列表格与列宽、同步对象、分页、刷新生命周期、加载/空/错误/配置状态、响应式与 Tooltip；未实现、未做视觉验收 | TOPIC-OFFSET-DESIGN-001（纯文档设计任务） |
 | 2026-09-02 | R1 定向修订（状态保持 `DRAFT_PENDING_USER_REVIEW`）：Kafka 三列读取接口 `null` 时显示 `—`，明确绝不转 `0` 或字符串 `"null"`，与 API.md §3.1 的 JSON `null` 显式规则保持一致 | TOPIC-OFFSET-DESIGN-001-R1（ChatGPT 正式复审 `CHANGES_REQUIRED` 定向修订） |
+| 2026-09-02 | 页面与交互规范正式批准收口（状态 `DRAFT_PENDING_USER_REVIEW`→`APPROVED`）：ChatGPT 对提交 `68779649e673da7ee95079c4724b346ea441c5f6` 正式复审 `APPROVED`；更新文档状态，未改动任何页面与交互正文 | TOPIC-OFFSET-DESIGN-APPROVAL-CLOSEOUT-001（ChatGPT 正式复审批准收口） |

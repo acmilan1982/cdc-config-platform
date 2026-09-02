@@ -7,13 +7,15 @@
 | Feature 中文名称 | 数据同步进度 |
 | Feature 标识 | `topic-offset` |
 | 目标文档 | `docs/features/topic-offset/API.md` |
-| 文档状态 | `DRAFT_PENDING_USER_REVIEW`（接口契约草案，等待 ChatGPT/用户复审） |
+| 文档状态 | `APPROVED`（本接口契约已获 ChatGPT 正式复审批准，作为实现契约基线） |
 | 设计任务编号 | `TOPIC-OFFSET-DESIGN-001` |
 | 依据 | `REQUIREMENTS.md`（`APPROVED`）、`ACCEPTANCE.md`（`APPROVED`）、`DATABASE.md`（`APPROVED`）、`DESIGN.md`（本套草案） |
 | 起始基线提交 | `a9916eaabc3187e4273d336343fe687c2e55fabf` |
 | 创建日期 | 2026-09-02 |
 
 本契约只定义**只读查询接口**；不包含任何新增/编辑/删除/Offset 重置/重新消费/跳过/从头消费/导出/Kafka 写接口（TOFF-REQ-008/011/122）。
+
+> 批准收口说明：ChatGPT 于 2026-09-02 对提交 `68779649e673da7ee95079c4724b346ea441c5f6` 完成正式复审并批准本接口契约（`APPROVED`）。本收口任务仅更新状态并记录批准，未改动任何接口路径、方法、参数、字段、JSON 示例、错误码、查询次数或序列化规则；未开始实现（`implementation_status=NOT_STARTED`）。
 
 ## 2. 接口总览
 
@@ -266,3 +268,4 @@
 |---|---|---|
 | 2026-09-02 | 建立本功能接口契约草案（`DRAFT_PENDING_USER_REVIEW`）：2 个只读 GET 接口、请求/响应/字段字典、查询语义、错误码、只读追踪；未实现、未联调、未验收 | TOPIC-OFFSET-DESIGN-001（纯文档设计任务） |
 | 2026-09-02 | R1 定向修订（状态保持 `DRAFT_PENDING_USER_REVIEW`）：null 与全局 `non_null` 冲突唯一方案（Kafka 三列与失败行 `parsed`/`mapping` 以 `TopicOffsetItemVO` 字段级 `@JsonInclude(ALWAYS)` 显式输出）；`parseable` 明确“恰好 5 段即可、不要求非空”；`NEXT_OFFSET` 注明显式格式模型与验证样例；只读次数更正为 `/offsets` 三次、`/candidates` 两次 SELECT，明确非跨表 SCN 快照 | TOPIC-OFFSET-DESIGN-001-R1（ChatGPT 正式复审 `CHANGES_REQUIRED` 定向修订） |
+| 2026-09-02 | 接口契约正式批准收口（状态 `DRAFT_PENDING_USER_REVIEW`→`APPROVED`）：ChatGPT 对提交 `68779649e673da7ee95079c4724b346ea441c5f6` 正式复审 `APPROVED`；更新文档状态，未改动任何接口契约正文 | TOPIC-OFFSET-DESIGN-APPROVAL-CLOSEOUT-001（ChatGPT 正式复审批准收口） |
