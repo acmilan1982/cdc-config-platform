@@ -1,0 +1,29 @@
+{
+  "putPreserve": {
+    "dataSubDesc": "S5-4 PRESERVE 描述改",
+    "dataFromSourceId": "112-source-19c",
+    "dataToSourceIds": [
+      "R1TGT01"
+    ],
+    "sourceSelectionMode": "PRESERVE"
+  },
+  "putReplace": {
+    "dataSubDesc": "R1验收-e2e-浏览器闭环-0902-新",
+    "dataFromSourceId": "112-source-19c",
+    "dataToSourceIds": [
+      "R1TGT01"
+    ],
+    "sourceSelectionMode": "REPLACE",
+    "sourceTables": [
+      {
+        "schemaName": "CDC_USER",
+        "tableName": "LOG_MINING_FLUSH"
+      },
+      {
+        "schemaName": "SPT_HIS_2023",
+        "tableName": "OPT_FEE"
+      }
+    ]
+  },
+  "sumReplace": "已选择：1 个源库 · 2 个 Schema · 2 个表 · 1 个目标库"
+}

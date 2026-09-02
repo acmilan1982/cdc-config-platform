@@ -1,0 +1,50 @@
+{
+  "d1440": {
+    "title": "新增订阅",
+    "w": 1280,
+    "h": 738,
+    "x": 73,
+    "y": 135,
+    "saveDisabled": false,
+    "saveLoading": false,
+    "banner": null,
+    "summary": "已选择：0 个源库 · 0 个 Schema · 0 个表 · 0 个目标库",
+    "text": "新增订阅 | 订阅描述 | 0 / 255 | 源库 | 选择源库 | 目标库 | R1禁用目标库-点号 | R1TGT.DOT | 保留字符 | R1临时目标库01 | R1TGT01 | doirs库 | company-target-doris-v4 | doirs库 | my-target-doris-v4 | doirs库 | target-doris-v4 | 已选择：0 个源库 · 0 个 Schema · 0 个表 · 0 个目标库 | 源表 | Schema | 该源库无可订阅的普通表 Schema | 请选择 Schema | 表名 | 取消 | 保存"
+  },
+  "d1024": {
+    "title": "新增订阅",
+    "w": 960,
+    "h": 630,
+    "x": 25,
+    "y": 115,
+    "saveDisabled": false,
+    "saveLoading": false,
+    "banner": null,
+    "summary": "已选择：0 个源库 · 0 个 Schema · 0 个表 · 0 个目标库",
+    "text": "新增订阅 | 订阅描述 | 0 / 255 | 源库 | 选择源库 | 目标库 | R1禁用目标库-点号 | R1TGT.DOT | 保留字符 | R1临时目标库01 | R1TGT01 | doirs库 | company-target-doris-v4 | doirs库 | my-target-doris-v4 | doirs库 | target-doris-v4 | 已选择：0 个源库 · 0 个 Schema · 0 个表 · 0 个目标库 | 源表 | Schema | 该源库无可订阅的普通表 Schema | 请选择 Schema | 表名 | 取消 | 保存"
+  },
+  "d1920": {
+    "title": "新增订阅",
+    "w": 1280,
+    "h": 886,
+    "x": 313,
+    "y": 162,
+    "saveDisabled": false,
+    "saveLoading": false,
+    "banner": null,
+    "summary": "已选择：0 个源库 · 0 个 Schema · 0 个表 · 0 个目标库",
+    "text": "新增订阅 | 订阅描述 | 0 / 255 | 源库 | 选择源库 | 目标库 | R1禁用目标库-点号 | R1TGT.DOT | 保留字符 | R1临时目标库01 | R1TGT01 | doirs库 | company-target-doris-v4 | doirs库 | my-target-doris-v4 | doirs库 | target-doris-v4 | 已选择：0 个源库 · 0 个 Schema · 0 个表 · 0 个目标库 | 源表 | Schema | 该源库无可订阅的普通表 Schema | 请选择 Schema | 表名 | 取消 | 保存"
+  },
+  "d1920_reopen": {
+    "title": "新增订阅",
+    "w": 1280,
+    "h": 886,
+    "x": 313,
+    "y": 162,
+    "saveDisabled": false,
+    "saveLoading": false,
+    "banner": null,
+    "summary": "已选择：0 个源库 · 0 个 Schema · 0 个表 · 0 个目标库",
+    "text": "新增订阅 | 订阅描述 | 0 / 255 | 源库 | 选择源库 | 目标库 | R1禁用目标库-点号 | R1TGT.DOT | 保留字符 | R1临时目标库01 | R1TGT01 | doirs库 | company-target-doris-v4 | doirs库 | my-target-doris-v4 | doirs库 | target-doris-v4 | 已选择：0 个源库 · 0 个 Schema · 0 个表 · 0 个目标库 | 源表 | Schema | 该源库无可订阅的普通表 Schema | 请选择 Schema | 表名 | 取消 | 保存"
+  }
+}

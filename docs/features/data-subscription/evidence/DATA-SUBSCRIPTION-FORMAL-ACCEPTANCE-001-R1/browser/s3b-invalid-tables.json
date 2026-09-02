@@ -1,0 +1,25 @@
+{
+  "warnState": {
+    "title": "编辑订阅",
+    "saveDisabled": true,
+    "banners": [
+      "存在 2 个已失效的已选源表，请移除异常已选表后保存",
+      "以下已选源表在当前源库中已不存在或不可访问，保存前必须移除： |  | SPT_HIS_2023.OPT_FEE、SPT_HIS_2023.OPT_RECORD | 移除异常已选表"
+    ],
+    "sfList": "SPT_HIS_2023.OPT_FEE、SPT_HIS_2023.OPT_RECORD",
+    "summary": "已选择：1 个源库 · 1 个 Schema · 3 个表 · 3 个目标库"
+  },
+  "fixClicked": true,
+  "afterFix": {
+    "title": "编辑订阅",
+    "saveDisabled": false,
+    "banners": [],
+    "sfList": null,
+    "summary": "已选择：1 个源库 · 1 个 Schema · 1 个表 · 3 个目标库"
+  },
+  "afterFixTables": [
+    "PT_EXAMINATION_RECORD"
+  ],
+  "putCalls": 0,
+  "postCalls": 0
+}

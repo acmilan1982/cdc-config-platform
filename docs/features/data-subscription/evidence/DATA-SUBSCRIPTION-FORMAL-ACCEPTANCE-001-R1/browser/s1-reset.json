@@ -1,0 +1,8 @@
+{
+  "tagsAfterReset": [
+    "选择源库（可多选，组内 OR）",
+    "选择目标库（可多选，组内 OR）"
+  ],
+  "rowsAfterReset": 4,
+  "reqDelta": 0
+}

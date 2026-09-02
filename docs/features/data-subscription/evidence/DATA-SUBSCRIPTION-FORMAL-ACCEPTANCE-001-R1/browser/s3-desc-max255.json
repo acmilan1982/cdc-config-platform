@@ -1,0 +1,14 @@
+{
+  "before": {
+    "value": "",
+    "maxLength": 255,
+    "placeholder": "请输入订阅描述（必填，最多 255 字符）",
+    "wordLimit": "0 / 255"
+  },
+  "after": {
+    "value": "aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa",
+    "maxLength": 255,
+    "placeholder": "请输入订阅描述（必填，最多 255 字符）",
+    "wordLimit": "255 / 255"
+  }
+}

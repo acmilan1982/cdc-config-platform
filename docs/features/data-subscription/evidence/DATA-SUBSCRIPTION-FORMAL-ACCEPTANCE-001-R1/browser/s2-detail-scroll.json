@@ -1,0 +1,20 @@
+{
+  "d3": {
+    "title": "订阅详情",
+    "text": "订阅详情 | 基本信息 | 订阅描述\tR1验收-正常订阅-多目标多表 | 订阅ID\tR1ACNORMAL01 | 源库\t孝感市第一人民医院112-source-19c | 源表（共 41 张） | SPT_HIS_2023 | T00 | T01 | T02 | T03 | T04 | T05 | T06 | T07 | T08 | T09 | T10 | T11 | T12 | T13 | T14 | T15 | T16 | T17 | T18 | T19 | T20 | T21 | T22 | T23 | T24 | T25 | T26 | T27 | T28 | T29 | T30 | T31 | T32 | T33 | T34 | T35 | T36 | T37 | T38 | T39 | CDC_USER | LOG_MINING_FLUSH | 目标库 | R1临时目标库01 | R1TGT01 | doirs库 | company-target-doris-v4 | 时间 | 创建时间\t2026-09-02 12:00:00\t更新时间\t— | 关闭",
+    "cls": "el-dialog subscribe-detail-dialog",
+    "w": 680,
+    "h": 660
+  },
+  "scroll": {
+    "zone": {
+      "ch": 218,
+      "sh": 930
+    },
+    "body": {
+      "ch": 540,
+      "sh": 588
+    },
+    "rows": 41
+  }
+}

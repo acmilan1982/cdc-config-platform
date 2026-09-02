@@ -1,0 +1,44 @@
+{
+  "before": {
+    "src": "源库 | 孝感市第一人民医院",
+    "tables": [
+      "OPT_FEE",
+      "OPT_RECORD",
+      "PT_EXAMINATION_RECORD"
+    ],
+    "summary": "已选择：1 个源库 · 1 个 Schema · 3 个表 · 3 个目标库"
+  },
+  "mb1": {
+    "title": "提示",
+    "message": "切换源库将清空当前已选择的源表，是否继续？",
+    "text": "提示 |  | 切换源库将清空当前已选择的源表，是否继续？ |  | 取消 | 确定",
+    "buttons": [
+      "取消",
+      "确定"
+    ]
+  },
+  "afterCancel": {
+    "src": "源库 | 孝感市第一人民医院",
+    "tables": [
+      "OPT_FEE",
+      "OPT_RECORD",
+      "PT_EXAMINATION_RECORD"
+    ]
+  },
+  "mb2": {
+    "title": "提示",
+    "message": "切换源库将清空当前已选择的源表，是否继续？",
+    "text": "提示 |  | 切换源库将清空当前已选择的源表，是否继续？ |  | 取消 | 确定",
+    "buttons": [
+      "取消",
+      "确定"
+    ]
+  },
+  "afterConfirm": {
+    "src": "源库 | 本机的oracle",
+    "tables": [],
+    "summary": "已选择：1 个源库 · 0 个 Schema · 0 个表 · 3 个目标库"
+  },
+  "putCalls": 0,
+  "closeConfirmMessage": "表单有未保存的修改，确定关闭吗？"
+}

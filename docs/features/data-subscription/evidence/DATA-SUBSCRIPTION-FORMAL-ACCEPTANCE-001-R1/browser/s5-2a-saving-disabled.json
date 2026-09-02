@@ -1,0 +1,13 @@
+{
+  "savingState": {
+    "disabled": true,
+    "loading": true,
+    "cls": "el-button el-button--primary is-loading"
+  },
+  "afterState": {
+    "disabled": false,
+    "loading": false,
+    "cls": "el-button el-button--primary"
+  },
+  "stillOpen": true
+}

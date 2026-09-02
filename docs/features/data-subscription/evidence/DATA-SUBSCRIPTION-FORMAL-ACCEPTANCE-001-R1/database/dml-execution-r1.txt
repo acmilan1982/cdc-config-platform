@@ -1,0 +1,115 @@
+=== R1 DML EXECUTION (APPROVED 2026-09-02) ===
+run date: 2026-09-02 12:26:20
+2 temp targets (R1TGT01, R1TGT.DOT) + 6 seed subscriptions (R1 prefix) inserted into CDC
+
+1 row created.
+
+
+1 row created.
+
+
+1 row created.
+
+
+1 row created.
+
+
+1 row created.
+
+
+1 row created.
+
+
+1 row created.
+
+
+1 row created.
+
+
+Commit complete.
+
+
+SUBSCRIBE_TOTAL
+---------------
+	     18
+
+1 row selected.
+
+
+SUBSCRIBE_ACTIVE
+----------------
+	       7
+
+1 row selected.
+
+
+TARGET_TOTAL
+------------
+	  12
+
+1 row selected.
+
+
+TARGET_ACTIVE
+-------------
+	    5
+
+1 row selected.
+
+
+DATA_SUB_ID
+--------------------------------
+DATA_SUB_DESC
+--------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
+DATA_FROM_SOURCE_ID
+--------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
+DATA_TO_SOURCE_ID
+--------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
+F
+-
+R1ACANOMALY01
+R1验收-多源库异常记录
+112-source-19c,my-19c
+R1TGT01
+1
+
+R1ACINACTIVE01
+R1验收-源库已停用
+199-source
+R1TGT01
+1
+
+R1ACNORMAL01
+R1验收-正常订阅-多目标多表
+112-source-19c
+R1TGT01,company-target-doris-v4,target-doris-v4
+1
+
+R1ACNORMAL02
+R1验收-多Schema订阅
+112-source-19c
+R1TGT01
+1
+
+R1ACNOTFOUND01
+R1验收-源库不存在
+R1-NOT-EXIST-SRC
+R1TGT01
+1
+
+R1ACUNPARSE01
+R1验收-无法解析源表
+112-source-19c
+R1TGT01
+1
+
+
+6 rows selected.
+
+
+DATA_SOURCE_ID			 DATA_SOURCE_ORG						  DATA_SOURCE_CATEGORY		 F
+-------------------------------- ---------------------------------------------------------------- ------------------------------ -
+R1TGT.DOT                        R1禁用目标库-点号                                                target                         1
+R1TGT01                          R1临时目标库01                                                   target                         1
+
+2 rows selected.

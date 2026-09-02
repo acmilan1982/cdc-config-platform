@@ -1,0 +1,243 @@
+[
+  {
+    "id": "S3-1",
+    "ac": [
+      "DSUB-AC-057"
+    ],
+    "viewport": "1440x900",
+    "pre": "无",
+    "steps": [
+      "新增订阅 打开",
+      "对 R1ACNORMAL01 点编辑"
+    ],
+    "result": "新增 title=新增订阅，编辑 title=编辑订阅；两者同一弹窗类 subscribe-form-dialog，字段结构一致（描述/源库/目标库/源表 footer 取消/保存）",
+    "intercept": false,
+    "evidence": [
+      "browser/s3-form-create.png",
+      "browser/s3-shared-dialog.json"
+    ]
+  },
+  {
+    "id": "S3-2",
+    "ac": [
+      "DSUB-AC-061"
+    ],
+    "viewport": "1440x900",
+    "pre": "新增弹窗",
+    "steps": [
+      "输入 300 个 a 到描述框"
+    ],
+    "result": "输入前 value=0，maxlength 属性=255，输入 300 字符后 value.length=255（浏览器 maxlength 截断到 255），字数=255 / 255，placeholder=请输入订阅描述（必填，最多 255 字符）",
+    "intercept": false,
+    "evidence": [
+      "browser/s3-desc-max255.json"
+    ]
+  },
+  {
+    "id": "S3-3",
+    "ac": [
+      "DSUB-AC-058",
+      "DSUB-AC-070"
+    ],
+    "viewport": "1440/1024/1920",
+    "pre": "无",
+    "steps": [
+      "三种视口打开新增弹窗并测量",
+      "1920 下重开对比位置"
+    ],
+    "result": "1440:1280x738@(73,135)；1024:960x630@(25,115)（宽收窄到 960<1280）；1920:1280x886@(313,162)；1920 重开=1280x886@(313,162)（重开后水平居中 x≈320）",
+    "intercept": false,
+    "evidence": [
+      "browser/s3-size.json"
+    ]
+  },
+  {
+    "id": "S3-4",
+    "ac": [
+      "DSUB-AC-059",
+      "DSUB-AC-070"
+    ],
+    "viewport": "1440x900",
+    "pre": "新增弹窗",
+    "steps": [
+      "拖动标题栏到左上角与右下角",
+      "关闭后重开"
+    ],
+    "result": "初始=(73,135) 拖后=(176,848)（发生位移=true）；标题栏仍完整在视口内=true（hx=192 hw=1248 hy=864 hh=36）；重开后 x=73（居中=true）",
+    "intercept": false,
+    "evidence": [
+      "browser/s3-drag-boundary.png",
+      "browser/s3-drag.json"
+    ]
+  },
+  {
+    "id": "S3-5",
+    "ac": [
+      "DSUB-AC-060"
+    ],
+    "viewport": "1440x900",
+    "pre": "描述框已输入字符(脏)",
+    "steps": [
+      "脏状态下点取消 → 二次确认",
+      "取消确认仍停留",
+      "再次取消 → 确定关闭"
+    ],
+    "result": "二次确认弹窗=\"提示 |  | 表单有未保存的修改，确定关闭吗？ |  | 取消 | 确定\"；第一次取消后弹窗仍开=true；确定后关闭=true",
+    "intercept": false,
+    "evidence": [
+      "browser/s3-dirty-close.json"
+    ]
+  },
+  {
+    "id": "S3-6",
+    "ac": [
+      "DSUB-AC-069"
+    ],
+    "viewport": "1440x900",
+    "pre": "新增弹窗",
+    "steps": [
+      "测量源库/目标库 form-item 布局"
+    ],
+    "result": "源库 cy=305 top=289，目标库 cy=305 top=253，同行=true，中轴差=0px",
+    "intercept": false,
+    "evidence": [
+      "browser/s3-axis.json",
+      "browser/s3-form-create.png"
+    ]
+  },
+  {
+    "id": "S3-7",
+    "ac": [
+      "DSUB-AC-071",
+      "DSUB-AC-072",
+      "DSUB-AC-073"
+    ],
+    "viewport": "1440x900",
+    "pre": "5 目标候选含禁用 R1TGT.DOT",
+    "steps": [
+      "截图 + DOM 测量",
+      "悬停第一张可用卡",
+      "勾选 R1TGT01"
+    ],
+    "result": "卡片数=5，首行=3 张/行、次行=2 张；卡尺寸 200x48；禁用=R1TGT.DOT（bg=rgb(247, 248, 250) border=rgb(228, 231, 237) disabled=true）；勾选后 R1TGT01 checked=true selected=true border=rgb(37, 99, 235)；悬停后 company-target-doris-v4 border=rgb(220, 223, 230)（vs 未悬停 rgb(228, 231, 237)）",
+    "intercept": false,
+    "evidence": [
+      "browser/s3-target-cards.png",
+      "browser/s3-target-cards.json"
+    ]
+  },
+  {
+    "id": "S3-8",
+    "ac": [
+      "DSUB-AC-062",
+      "DSUB-AC-064",
+      "DSUB-AC-065",
+      "DSUB-AC-066",
+      "DSUB-AC-067"
+    ],
+    "viewport": "1440x900",
+    "pre": "启用源库 3 个",
+    "steps": [
+      "空搜索看全部",
+      "输入 my-19",
+      "输入 MY-19C（大写）",
+      "输入 本机",
+      "输入 source-19",
+      "点选 my-19c"
+    ],
+    "result": "空=全部 3 项(孝感市第一人民医院 | 112-source-19c;杭州市第一人民医院 | 5905f1ce83024410836b40ca0ebfc446;本机的oracle | my-19c)；'my-19'→本机的oracle | my-19c；'MY-19C'(大小写不敏感)→本机的oracle | my-19c；'本机'(机构)→本机 | 的oracle | my-19c；'source-19'(ID模糊优先)→孝感市第一人民医院 | 112-source-19c；选中后源库区=源库 | 本机的oracle",
+    "intercept": false,
+    "evidence": [
+      "browser/s3-source-search.json"
+    ]
+  },
+  {
+    "id": "S3-9",
+    "ac": [
+      "DSUB-AC-068"
+    ],
+    "viewport": "1440x900",
+    "pre": "先选 112-source-19c + SPT_HIS_2023 下勾选 OPT_FEE",
+    "steps": [
+      "切到 my-19c → 二次确认",
+      "取消确认观察",
+      "再切 → 确定"
+    ],
+    "result": "Schemas=[\"CDC_USER\",\"SPT_HIS_2023\"]，选表后摘要=已选择：1 个源库 · 1 个 Schema · 1 个表 · 0 个目标库；切换确认弹窗=\"提示 |  | 切换源库将清空当前已选择的源表，是否继续？ |  | 取消 | 确定\"；取消后仍=源库 | 孝感市第一人民医院，摘要=已选择：1 个源库 · 1 个 Schema · 1 个表 · 0 个目标库（未清空）；确定后摘要=已选择：1 个源库 · 0 个 Schema · 0 个表 · 0 个目标库（源表清空）",
+    "intercept": false,
+    "evidence": [
+      "browser/s3-switch-source.json"
+    ]
+  },
+  {
+    "id": "S3-10",
+    "ac": [
+      "DSUB-AC-097",
+      "DSUB-AC-098"
+    ],
+    "viewport": "1440x900",
+    "pre": "R1ACNORMAL01 3表/1Schema/3目标",
+    "steps": [
+      "列表点编辑，读回显"
+    ],
+    "result": "描述回显=\"R1验收-正常订阅-多目标多表\"，源库=源库 | 孝感市第一人民医院，已选目标=[\"R1TGT01\",\"company-target-doris-v4\",\"target-doris-v4\"]，激活Schema=SPT_HIS_2023，已选表=[\"OPT_FEE\",\"OPT_RECORD\",\"PT_EXAMINATION_RECORD\"]，摘要=已选择：1 个源库 · 1 个 Schema · 3 个表 · 3 个目标库",
+    "intercept": false,
+    "evidence": [
+      "browser/s3-edit-echo.png",
+      "browser/s3-edit-echo.json"
+    ]
+  },
+  {
+    "id": "S3-11",
+    "ac": [
+      "DSUB-AC-048",
+      "DSUB-AC-104",
+      "DSUB-AC-105"
+    ],
+    "viewport": "1440x900",
+    "pre": "R1ACINACTIVE01 源库 199-source 已停用",
+    "steps": [
+      "列表点编辑"
+    ],
+    "result": "弹窗 banner=\"源库 业务库 已停用，请更换源库后保存\"，源库=源库 | 业务库，保存按钮 disabled=true",
+    "intercept": false,
+    "evidence": [
+      "browser/s3-edit-inactive-blocked.png",
+      "browser/s3-edit-blocked.json"
+    ]
+  },
+  {
+    "id": "S3-12",
+    "ac": [
+      "DSUB-AC-102",
+      "DSUB-AC-103"
+    ],
+    "viewport": "1440x900",
+    "pre": "截获 /edit 返回 sourceReachable=false",
+    "steps": [
+      "BROWSER_INTERCEPTED_UI_SCENARIO 编辑 R1ACNORMAL01"
+    ],
+    "result": "banner=\"当前使用已保存源表配置，源库暂不可连接，仅可修改描述与正常目标库\"，源库下拉 disabled=true，表选择器 disabled=true opacity=0.6",
+    "intercept": true,
+    "interceptNote": "纯前端 UI：有限编辑边界（BROWSER_INTERCEPTED_UI_SCENARIO）",
+    "evidence": [
+      "browser/s3-limited-edit.png",
+      "browser/s3-limited-edit.json"
+    ]
+  },
+  {
+    "id": "S3-CONSOLE",
+    "ac": [
+      "DSUB-AC-118"
+    ],
+    "viewport": "1440x900",
+    "steps": [
+      "全程收集"
+    ],
+    "result": "控制台新增 error 数=0",
+    "intercept": false,
+    "evidence": [
+      "browser/s3-console-errors.json"
+    ]
+  }
+]

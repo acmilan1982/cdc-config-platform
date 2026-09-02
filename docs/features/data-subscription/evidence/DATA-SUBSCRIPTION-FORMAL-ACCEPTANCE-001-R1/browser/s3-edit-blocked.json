@@ -1,0 +1,15 @@
+{
+  "edInactive": {
+    "title": "编辑订阅",
+    "w": 1280,
+    "h": 738,
+    "x": 73,
+    "y": 135,
+    "saveDisabled": true,
+    "saveLoading": false,
+    "banner": "源库 业务库 已停用，请更换源库后保存",
+    "summary": "已选择：1 个源库 · 1 个 Schema · 1 个表 · 1 个目标库",
+    "text": "编辑订阅 | 源库 业务库 已停用，请更换源库后保存 | 订阅描述 | 10 / 255 | 源库 | 业务库 | 目标库 | R1禁用目标库-点号 | R1TGT.DOT | 保留字符 | R1临时目标库01 | R1TGT01 | doirs库 | company-target-doris-v4 | doirs库 | my-target-doris-v4 | doirs库 | target-doris-v4 | 已选择：1 个源库 · 1 个 Schema · 1 个表 · 1 个目标库 | 源表 | Schema | 源库不存在或已停用 | 重试加载 | 请选择 Schema | 表名 | 取消 | 保存"
+  },
+  "selSrcInactive": "源库 | 业务库"
+}

@@ -1,0 +1,15 @@
+{
+  "sumBefore": "已选择：1 个源库 · 0 个 Schema · 0 个表 · 0 个目标库",
+  "sumFilled": "已选择：1 个源库 · 1 个 Schema · 1 个表 · 1 个目标库",
+  "p0": 2,
+  "pMid": 1,
+  "pFinal": 1,
+  "disabledMid": {
+    "disabled": false,
+    "loading": false,
+    "cls": "el-button el-button--primary"
+  },
+  "msgCreated": "操作成功。配置将在相关 sync-client 重启后生效。",
+  "rowInList": true,
+  "rowDupCount": 1
+}

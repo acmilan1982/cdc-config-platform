@@ -1,0 +1,58 @@
+{
+  "seq": [
+    {
+      "label": "plain OPT_RECORD",
+      "selected": [
+        "OPT_RECORD"
+      ],
+      "summary": "已选择：1 个源库 · 1 个 Schema · 1 个表 · 0 个目标库"
+    },
+    {
+      "label": "shift->PT_EXAMINATION_SUMMARY",
+      "selected": [
+        "OPT_RECORD",
+        "OPT_REGISTER",
+        "PT_EXAMINATION_DETAIL",
+        "PT_EXAMINATION_RECORD",
+        "PT_EXAMINATION_SUMMARY"
+      ],
+      "summary": "已选择：1 个源库 · 1 个 Schema · 5 个表 · 0 个目标库"
+    },
+    {
+      "label": "shift reverse->OPT_FEEDETAIL",
+      "selected": [
+        "OPT_FEEDETAIL",
+        "OPT_HANDLEDETAIL",
+        "OPT_HANDLEDETAIL_EXE",
+        "OPT_RECORD",
+        "OPT_REGISTER",
+        "PT_EXAMINATION_DETAIL",
+        "PT_EXAMINATION_RECORD",
+        "PT_EXAMINATION_SUMMARY"
+      ],
+      "summary": "已选择：1 个源库 · 1 个 Schema · 8 个表 · 0 个目标库"
+    },
+    {
+      "label": "plain PT_EXAMINATION_SUMMARY(取消)",
+      "selected": [
+        "OPT_FEEDETAIL",
+        "OPT_HANDLEDETAIL",
+        "OPT_HANDLEDETAIL_EXE",
+        "OPT_RECORD",
+        "OPT_REGISTER",
+        "PT_EXAMINATION_DETAIL",
+        "PT_EXAMINATION_RECORD"
+      ],
+      "summary": "已选择：1 个源库 · 1 个 Schema · 7 个表 · 0 个目标库"
+    },
+    {
+      "label": "shift range-cancel->OPT_RECORD",
+      "selected": [
+        "OPT_FEEDETAIL",
+        "OPT_HANDLEDETAIL",
+        "OPT_HANDLEDETAIL_EXE"
+      ],
+      "summary": "已选择：1 个源库 · 1 个 Schema · 3 个表 · 0 个目标库"
+    }
+  ]
+}

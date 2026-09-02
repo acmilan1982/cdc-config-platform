@@ -1,0 +1,8 @@
+{
+  "banner": "当前使用已保存源表配置，源库暂不可连接，仅可修改描述与正常目标库",
+  "limitedState": {
+    "srcSelectDisabled": true,
+    "selectorDisabled": true,
+    "selectorOpacity": "0.6"
+  }
+}

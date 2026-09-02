@@ -1,0 +1,148 @@
+{
+  "descEcho": {
+    "value": "R1验收-正常订阅-多目标多表",
+    "maxLength": 255,
+    "placeholder": "请输入订阅描述（必填，最多 255 字符）",
+    "wordLimit": "15 / 255"
+  },
+  "srcEcho": "源库 | 孝感市第一人民医院",
+  "cardsEcho": [
+    {
+      "org": "R1禁用目标库-点号",
+      "id": "R1TGT.DOT",
+      "cls": "sf-target-card disabled",
+      "checked": false,
+      "disabled": true,
+      "top": 253,
+      "x": 599,
+      "w": 200,
+      "h": 48,
+      "borderColor": "rgb(228, 231, 237)",
+      "bg": "rgb(247, 248, 250)"
+    },
+    {
+      "org": "R1临时目标库01",
+      "id": "R1TGT01",
+      "cls": "sf-target-card selected",
+      "checked": true,
+      "disabled": false,
+      "top": 253,
+      "x": 807,
+      "w": 200,
+      "h": 48,
+      "borderColor": "rgb(37, 99, 235)",
+      "bg": "rgb(255, 255, 255)"
+    },
+    {
+      "org": "doirs库",
+      "id": "company-target-doris-v4",
+      "cls": "sf-target-card selected",
+      "checked": true,
+      "disabled": false,
+      "top": 253,
+      "x": 1015,
+      "w": 200,
+      "h": 48,
+      "borderColor": "rgb(37, 99, 235)",
+      "bg": "rgb(255, 255, 255)"
+    },
+    {
+      "org": "doirs库",
+      "id": "my-target-doris-v4",
+      "cls": "sf-target-card",
+      "checked": false,
+      "disabled": false,
+      "top": 309,
+      "x": 599,
+      "w": 200,
+      "h": 48,
+      "borderColor": "rgb(220, 223, 230)",
+      "bg": "rgb(255, 255, 255)"
+    },
+    {
+      "org": "doirs库",
+      "id": "target-doris-v4",
+      "cls": "sf-target-card selected",
+      "checked": true,
+      "disabled": false,
+      "top": 309,
+      "x": 807,
+      "w": 200,
+      "h": 48,
+      "borderColor": "rgb(37, 99, 235)",
+      "bg": "rgb(255, 255, 255)"
+    }
+  ],
+  "schemasEcho": [
+    {
+      "name": "CDC_USER",
+      "cls": "st-schema-item",
+      "count": "已选 0 张",
+      "err": null
+    },
+    {
+      "name": "SPT_HIS_2023",
+      "cls": "st-schema-item active",
+      "count": "已选 3 张",
+      "err": null
+    }
+  ],
+  "tablesEcho": [
+    {
+      "name": "OPT_FEE",
+      "cls": "st-table-item selected",
+      "txt": "OPT_FEE"
+    },
+    {
+      "name": "OPT_FEEDETAIL",
+      "cls": "st-table-item",
+      "txt": "OPT_FEEDETAIL"
+    },
+    {
+      "name": "OPT_HANDLEDETAIL",
+      "cls": "st-table-item",
+      "txt": "OPT_HANDLEDETAIL"
+    },
+    {
+      "name": "OPT_HANDLEDETAIL_EXE",
+      "cls": "st-table-item",
+      "txt": "OPT_HANDLEDETAIL_EXE"
+    },
+    {
+      "name": "OPT_RECORD",
+      "cls": "st-table-item selected",
+      "txt": "OPT_RECORD"
+    },
+    {
+      "name": "OPT_REGISTER",
+      "cls": "st-table-item",
+      "txt": "OPT_REGISTER"
+    },
+    {
+      "name": "PT_EXAMINATION_DETAIL",
+      "cls": "st-table-item",
+      "txt": "PT_EXAMINATION_DETAIL"
+    },
+    {
+      "name": "PT_EXAMINATION_RECORD",
+      "cls": "st-table-item selected",
+      "txt": "PT_EXAMINATION_RECORD"
+    },
+    {
+      "name": "PT_EXAMINATION_SUMMARY",
+      "cls": "st-table-item",
+      "txt": "PT_EXAMINATION_SUMMARY"
+    }
+  ],
+  "selectedCards": [
+    "R1TGT01",
+    "company-target-doris-v4",
+    "target-doris-v4"
+  ],
+  "selectedTables": [
+    "OPT_FEE",
+    "OPT_RECORD",
+    "PT_EXAMINATION_RECORD"
+  ],
+  "activeSchema": "SPT_HIS_2023"
+}

@@ -180,3 +180,18 @@ headless Google Chrome（CDP 自动化，真实渲染），前端 `http://127.0.
   - 若存在 FAIL：先生成独立缺陷修复任务，修复并复审后只重验受影响用例及必要回归；
   - 若存在 BLOCKED：先解除阻塞，再执行定向补验；
   - 大屏逻辑修正仍等待数据订阅 Feature 正式验收接受后另行执行。
+
+## 21. R1 补验追加说明（本报告被 R1 修正/取代的部分）
+
+本报告及 `evidence/.../DATA-SUBSCRIPTION-FORMAL-ACCEPTANCE-001/coverage-matrix.md` 为正式验收 R0 执行事实，本追加不改写上文任何历史事实。
+
+ChatGPT 对正式验收结果提交的正式复审结论为 `CHANGES_REQUIRED`，问题包括：① R0 覆盖矩阵多处 `BR`（真实浏览器）标注缺少对应真实浏览器场景；② R0 前端测试计数（定向 141、全量 376）依赖未跟踪文件 `frontend/src/api/subscription.spec.ts`。
+
+`DATA-SUBSCRIPTION-FORMAL-ACCEPTANCE-001-R1` 已定向回应并修正：
+
+- 以真实 Chrome headless 补验 §5 全段共 **54 个浏览器场景**（含明确 `BROWSER_INTERCEPTED_UI_SCENARIO` 的拦截 UI 场景），证据归档于 `evidence/.../DATA-SUBSCRIPTION-FORMAL-ACCEPTANCE-001-R1/browser/`（索引 `browser-scenario-index.md`）；
+- 在干净 worktree 重跑前端定向/全量/构建（7 文件/124、22 文件/359、BUILD PASS），未跟踪 `frontend/src/api/subscription.spec.ts` 未带入、未执行、未计数；
+- 逐条复核 126 条用例全部保持 `PASS`；`evidence/.../DATA-SUBSCRIPTION-FORMAL-ACCEPTANCE-001-R1/coverage-matrix-r1.md` **取代**本任务 `coverage-matrix.md` 的证据标注并纠正不准确的 `BR` 声明，作为当前覆盖结论；
+- `CDC_DATA_SUBSCRIBE` 恢复至备份状态并核验（`database/restore-r1.txt`）。
+
+当前有效结论以 R1 证据与 R1 报告（`reports/DATA-SUBSCRIPTION-FORMAL-ACCEPTANCE-001-R1.md`）为准；验收执行状态保持 `EXECUTED_PENDING_REVIEW`，实现状态保持 `IMPLEMENTED_FORMAL_ACCEPTANCE_EXECUTED_PENDING_REVIEW`，待 ChatGPT 对 R1 结果提交正式复审。

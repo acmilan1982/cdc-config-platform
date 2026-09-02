@@ -1,0 +1,17 @@
+{
+  "d3": {
+    "title": "订阅详情",
+    "text": "订阅详情 | 基本信息 | 订阅描述\tR1验收-e2e-浏览器闭环-0902-新 | 订阅ID\t2236945157674024a482c47371b0d659 | 源库\t孝感市第一人民医院112-source-19c | 源表（共 1 张） | CDC_USER | LOG_MINING_FLUSH | 目标库 | R1临时目标库01 | R1TGT01 | 时间 | 创建时间\t2026-09-02T13:36:11\t更新时间\t— | 关闭"
+  },
+  "groups": [
+    {
+      "schema": "CDC_USER",
+      "tables": [
+        "LOG_MINING_FLUSH"
+      ]
+    }
+  ],
+  "targets": [
+    "R1临时目标库01 R1TGT01"
+  ]
+}

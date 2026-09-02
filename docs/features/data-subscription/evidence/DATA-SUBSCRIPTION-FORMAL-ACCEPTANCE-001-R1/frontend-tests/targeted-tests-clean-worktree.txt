@@ -1,0 +1,21 @@
+=== CLEAN WORKTREE TARGETED DATA-SUBSCRIBE TESTS ===
+worktree HEAD: 49eb778cb24b4f6d26a192d5441b0476099cf68d
+run date: 2026-09-02 12:19:39
+target: src/views/data-subscribe (7 tracked spec files)
+untracked frontend/src/api/subscription.spec.ts: NOT PRESENT in worktree, NOT counted
+---
+
+ RUN  v1.6.1 /tmp/cdc-r1-worktree/frontend
+
+ ✓ src/views/data-subscribe/components/SubscribeFormDialog.spec.ts  (33 tests) 3492ms
+ ✓ src/views/data-subscribe/components/SourceTableSelector.spec.ts  (34 tests) 1437ms
+ ✓ src/views/data-subscribe/DataSubscribePage.spec.ts  (13 tests) 2187ms
+ ✓ src/views/data-subscribe/utils/subscriptionFormat.spec.ts  (23 tests) 8ms
+ ✓ src/views/data-subscribe/components/SubscribeDeleteDialog.spec.ts  (7 tests) 339ms
+ ✓ src/views/data-subscribe/composables/useSubscribeForm.spec.ts  (9 tests) 10ms
+ ✓ src/views/data-subscribe/components/SubscribeDetailDialog.spec.ts  (5 tests) 304ms
+
+ Test Files  7 passed (7)
+      Tests  124 passed (124)
+   Start at  12:19:40
+   Duration  17.52s (transform 1.08s, setup 26ms, collect 5.20s, tests 7.78s, environment 2.93s, prepare 570ms)

@@ -1,0 +1,11 @@
+{
+  "create": {
+    "title": "新增订阅",
+    "saveDisabled": false,
+    "hasFooter": true
+  },
+  "edit": {
+    "title": "编辑订阅",
+    "hasFooter": true
+  }
+}

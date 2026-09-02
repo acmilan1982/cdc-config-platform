@@ -1,0 +1,35 @@
+{
+  "optNames": [
+    "OPT_FEE",
+    "OPT_FEEDETAIL",
+    "OPT_HANDLEDETAIL",
+    "OPT_HANDLEDETAIL_EXE",
+    "OPT_RECORD",
+    "OPT_REGISTER"
+  ],
+  "lowerNames": [
+    "OPT_FEE",
+    "OPT_FEEDETAIL",
+    "OPT_HANDLEDETAIL",
+    "OPT_HANDLEDETAIL_EXE",
+    "OPT_RECORD",
+    "OPT_REGISTER"
+  ],
+  "recordNames": [
+    "OPT_RECORD",
+    "PT_EXAMINATION_RECORD"
+  ],
+  "zzzEmpty": "没有匹配当前搜索的源表",
+  "allAfter": [
+    "OPT_FEE",
+    "OPT_FEEDETAIL",
+    "OPT_HANDLEDETAIL",
+    "OPT_HANDLEDETAIL_EXE",
+    "OPT_RECORD",
+    "OPT_REGISTER",
+    "PT_EXAMINATION_DETAIL",
+    "PT_EXAMINATION_RECORD",
+    "PT_EXAMINATION_SUMMARY"
+  ],
+  "caseInsensitiveEqual": true
+}

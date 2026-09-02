@@ -1,0 +1,45 @@
+=== CLEAN WORKTREE FULL FRONTEND TESTS ===
+worktree HEAD: 49eb778cb24b4f6d26a192d5441b0476099cf68d
+run date: 2026-09-02 12:20:03
+scope: all 22 tracked spec files (untracked subscription.spec.ts absent)
+---
+
+ RUN  v1.6.1 /tmp/cdc-r1-worktree/frontend
+
+stderr | src/views/data-source/dataSource.spec.ts > 新增数据源 > 源库仅 ORACLE：切回源库后非法 MYSQL 类型被清空（创建被类型校验阻断）
+async-validator: [ 'dataSourceType is required' ]
+
+stderr | src/views/data-source/dataSource.spec.ts > 新增数据源 > 缺少必填字段阻止创建
+async-validator: [ 'dataSourceId is required' ]
+async-validator: [ 'dataSourceName is required' ]
+async-validator: [ 'host is required' ]
+async-validator: [ 'userName is required' ]
+async-validator: [ 'serviceName is required' ]
+
+ ✓ src/views/data-source/dataSource.spec.ts  (73 tests) 14907ms
+ ✓ src/views/data-subscribe/components/SubscribeFormDialog.spec.ts  (33 tests) 3369ms
+ ✓ src/views/data-subscribe/components/SourceTableSelector.spec.ts  (34 tests) 1713ms
+ ✓ src/views/log-query/LogQueryPage.spec.ts  (27 tests) 687ms
+ ✓ src/views/server-config/ServerConfigPage.spec.ts  (36 tests) 3497ms
+ ✓ src/views/data-subscribe/DataSubscribePage.spec.ts  (13 tests) 2260ms
+ ✓ src/views/log-query/composables/useLogQueryTab.spec.ts  (21 tests) 25ms
+ ✓ src/views/log-query/components/LogQueryFilter.spec.ts  (13 tests) 2072ms
+ ✓ src/api/dataSource.spec.ts  (10 tests) 12ms
+ ✓ src/views/data-subscribe/utils/subscriptionFormat.spec.ts  (23 tests) 11ms
+ ✓ src/views/server-config/configRules.spec.ts  (28 tests) 9ms
+ ✓ src/views/data-subscribe/components/SubscribeDeleteDialog.spec.ts  (7 tests) 462ms
+ ✓ src/views/log-query/components/LogQueryTable.spec.ts  (8 tests) 467ms
+ ✓ src/views/data-subscribe/composables/useSubscribeForm.spec.ts  (9 tests) 10ms
+ ✓ src/views/data-subscribe/components/SubscribeDetailDialog.spec.ts  (5 tests) 307ms
+ ✓ src/views/log-query/components/LogDialogOldResponse.spec.ts  (3 tests) 193ms
+ ✓ src/api/logQuery.spec.ts  (2 tests) 14ms
+ ✓ src/views/log-query/SidebarReinit.spec.ts  (4 tests) 135ms
+ ✓ src/views/log-query/components/CursorPagination.spec.ts  (4 tests) 101ms
+ ✓ src/views/log-query/components/dsDisplay.spec.ts  (3 tests) 3ms
+ ✓ src/api/serverConfig.spec.ts  (2 tests) 6ms
+ ✓ src/views/log-query/components/RawMessageDialogSafety.spec.ts  (1 test) 3ms
+
+ Test Files  22 passed (22)
+      Tests  359 passed (359)
+   Start at  12:20:04
+   Duration  59.35s (transform 1.81s, setup 44ms, collect 14.97s, tests 30.26s, environment 9.03s, prepare 1.79s)

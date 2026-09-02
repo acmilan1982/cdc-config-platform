@@ -1,0 +1,203 @@
+{
+  "cards0": [
+    {
+      "org": "R1禁用目标库-点号",
+      "id": "R1TGT.DOT",
+      "cls": "sf-target-card disabled",
+      "checked": false,
+      "disabled": true,
+      "top": 253,
+      "x": 599,
+      "w": 200,
+      "h": 48,
+      "borderColor": "rgb(228, 231, 237)",
+      "bg": "rgb(247, 248, 250)"
+    },
+    {
+      "org": "R1临时目标库01",
+      "id": "R1TGT01",
+      "cls": "sf-target-card",
+      "checked": false,
+      "disabled": false,
+      "top": 253,
+      "x": 807,
+      "w": 200,
+      "h": 48,
+      "borderColor": "rgb(220, 223, 230)",
+      "bg": "rgb(255, 255, 255)"
+    },
+    {
+      "org": "doirs库",
+      "id": "company-target-doris-v4",
+      "cls": "sf-target-card",
+      "checked": false,
+      "disabled": false,
+      "top": 253,
+      "x": 1015,
+      "w": 200,
+      "h": 48,
+      "borderColor": "rgb(220, 223, 230)",
+      "bg": "rgb(255, 255, 255)"
+    },
+    {
+      "org": "doirs库",
+      "id": "my-target-doris-v4",
+      "cls": "sf-target-card",
+      "checked": false,
+      "disabled": false,
+      "top": 309,
+      "x": 599,
+      "w": 200,
+      "h": 48,
+      "borderColor": "rgb(220, 223, 230)",
+      "bg": "rgb(255, 255, 255)"
+    },
+    {
+      "org": "doirs库",
+      "id": "target-doris-v4",
+      "cls": "sf-target-card",
+      "checked": false,
+      "disabled": false,
+      "top": 309,
+      "x": 807,
+      "w": 200,
+      "h": 48,
+      "borderColor": "rgb(220, 223, 230)",
+      "bg": "rgb(255, 255, 255)"
+    }
+  ],
+  "cardsHover": [
+    {
+      "org": "R1禁用目标库-点号",
+      "id": "R1TGT.DOT",
+      "cls": "sf-target-card disabled",
+      "checked": false,
+      "disabled": true,
+      "top": 253,
+      "x": 599,
+      "w": 200,
+      "h": 48,
+      "borderColor": "rgb(228, 231, 237)",
+      "bg": "rgb(247, 248, 250)"
+    },
+    {
+      "org": "R1临时目标库01",
+      "id": "R1TGT01",
+      "cls": "sf-target-card",
+      "checked": false,
+      "disabled": false,
+      "top": 253,
+      "x": 807,
+      "w": 200,
+      "h": 48,
+      "borderColor": "rgb(146, 181, 245)",
+      "bg": "rgb(255, 255, 255)"
+    },
+    {
+      "org": "doirs库",
+      "id": "company-target-doris-v4",
+      "cls": "sf-target-card",
+      "checked": false,
+      "disabled": false,
+      "top": 253,
+      "x": 1015,
+      "w": 200,
+      "h": 48,
+      "borderColor": "rgb(220, 223, 230)",
+      "bg": "rgb(255, 255, 255)"
+    },
+    {
+      "org": "doirs库",
+      "id": "my-target-doris-v4",
+      "cls": "sf-target-card",
+      "checked": false,
+      "disabled": false,
+      "top": 309,
+      "x": 599,
+      "w": 200,
+      "h": 48,
+      "borderColor": "rgb(220, 223, 230)",
+      "bg": "rgb(255, 255, 255)"
+    },
+    {
+      "org": "doirs库",
+      "id": "target-doris-v4",
+      "cls": "sf-target-card",
+      "checked": false,
+      "disabled": false,
+      "top": 309,
+      "x": 807,
+      "w": 200,
+      "h": 48,
+      "borderColor": "rgb(220, 223, 230)",
+      "bg": "rgb(255, 255, 255)"
+    }
+  ],
+  "cardsSel": [
+    {
+      "org": "R1禁用目标库-点号",
+      "id": "R1TGT.DOT",
+      "cls": "sf-target-card disabled",
+      "checked": false,
+      "disabled": true,
+      "top": 253,
+      "x": 599,
+      "w": 200,
+      "h": 48,
+      "borderColor": "rgb(228, 231, 237)",
+      "bg": "rgb(247, 248, 250)"
+    },
+    {
+      "org": "R1临时目标库01",
+      "id": "R1TGT01",
+      "cls": "sf-target-card selected",
+      "checked": true,
+      "disabled": false,
+      "top": 253,
+      "x": 807,
+      "w": 200,
+      "h": 48,
+      "borderColor": "rgb(37, 99, 235)",
+      "bg": "rgb(255, 255, 255)"
+    },
+    {
+      "org": "doirs库",
+      "id": "company-target-doris-v4",
+      "cls": "sf-target-card",
+      "checked": false,
+      "disabled": false,
+      "top": 253,
+      "x": 1015,
+      "w": 200,
+      "h": 48,
+      "borderColor": "rgb(220, 223, 230)",
+      "bg": "rgb(255, 255, 255)"
+    },
+    {
+      "org": "doirs库",
+      "id": "my-target-doris-v4",
+      "cls": "sf-target-card",
+      "checked": false,
+      "disabled": false,
+      "top": 309,
+      "x": 599,
+      "w": 200,
+      "h": 48,
+      "borderColor": "rgb(220, 223, 230)",
+      "bg": "rgb(255, 255, 255)"
+    },
+    {
+      "org": "doirs库",
+      "id": "target-doris-v4",
+      "cls": "sf-target-card",
+      "checked": false,
+      "disabled": false,
+      "top": 309,
+      "x": 807,
+      "w": 200,
+      "h": 48,
+      "borderColor": "rgb(220, 223, 230)",
+      "bg": "rgb(255, 255, 255)"
+    }
+  ]
+}

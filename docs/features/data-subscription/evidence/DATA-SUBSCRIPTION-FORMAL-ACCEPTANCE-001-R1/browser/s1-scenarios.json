@@ -1,0 +1,193 @@
+[
+  {
+    "id": "S1-1",
+    "ac": [
+      "DSUB-AC-028",
+      "DSUB-AC-029",
+      "DSUB-AC-030",
+      "DSUB-AC-031"
+    ],
+    "viewport": "1440x900",
+    "pre": "空条件进入",
+    "steps": [
+      "导航到 /config/subscribe",
+      "等待列表渲染"
+    ],
+    "result": "进入自动加载 7 条启用订阅（预期 7），自动列表请求次数=2",
+    "reqs": {
+      "listCalls": 2
+    },
+    "intercept": false,
+    "evidence": [
+      "browser/s1-list-initial.png",
+      "browser/s1-list-initial.json"
+    ]
+  },
+  {
+    "id": "S1-2",
+    "ac": [
+      "DSUB-AC-032",
+      "DSUB-AC-033",
+      "DSUB-AC-034",
+      "DSUB-AC-035",
+      "DSUB-AC-036"
+    ],
+    "viewport": "1440x900",
+    "pre": "种子订阅含 112-source-19c 与 my-19c",
+    "steps": [
+      "源库多选: 孝感市第一人民医院 + 本机的oracle",
+      "点击查询"
+    ],
+    "result": "组内 OR 后 5 行（源=112或my，含多源异常记录 token 匹配），新增列表请求 1 次",
+    "reqs": {
+      "listDelta": 1
+    },
+    "intercept": false,
+    "evidence": [
+      "browser/s1-multisource-or.json"
+    ]
+  },
+  {
+    "id": "S1-3",
+    "ac": [
+      "DSUB-AC-033",
+      "DSUB-AC-034",
+      "DSUB-AC-035",
+      "DSUB-AC-036"
+    ],
+    "viewport": "1440x900",
+    "pre": "源=112-source-19c AND 目标=R1TGT01",
+    "steps": [
+      "源库选 孝感市第一人民医院",
+      "目标库选 R1临时目标库01",
+      "点击查询"
+    ],
+    "result": "组间 AND 后 4 行（仅同时含该源与该目标），行=[\"R1验收-正常订阅-多目标多表 | \\t | 孝感市第一人民医院 | \\t | 共 3 张 | \\t | R1临时目标库01 | +2 | \\t |\",\"R1验收-多Schema订阅 | \\t | 孝感市第一人民医院 | \\t | 共 3 张 | \\t | R1临时目标库01 | \\t | 2026-\",\"配置异常：该记录包含多个源库，请直接维护数据库 | \\t | — | \\t | — | \\t | R1临时目标库01 | \\t | 2026-09-\",\"R1验收-无法解析源表 | \\t | 孝感市第一人民医院 | \\t | 共 2 张 | \\t | R1临时目标库01 | \\t | 2026-09-\"]",
+    "intercept": false,
+    "evidence": [
+      "browser/s1-and.json"
+    ]
+  },
+  {
+    "id": "S1-5",
+    "ac": [
+      "DSUB-AC-037"
+    ],
+    "viewport": "1440x900",
+    "pre": "查询条件已生效",
+    "steps": [
+      "点击重置"
+    ],
+    "result": "重置后查询区已选=[\"选择源库（可多选，组内 OR）\",\"选择目标库（可多选，组内 OR）\"]（应均无已选值），未触发列表请求（delta=0），列表仍保持 4 行",
+    "reqs": {
+      "listDelta": 0
+    },
+    "intercept": false,
+    "evidence": [
+      "browser/s1-reset.json"
+    ]
+  },
+  {
+    "id": "S1-6",
+    "ac": [
+      "DSUB-AC-038"
+    ],
+    "viewport": "1440x900",
+    "pre": "源=112-source-19c AND 目标=my-target-doris-v4（无活动订阅同时引用）",
+    "steps": [
+      "设置源与目标",
+      "点击查询"
+    ],
+    "result": "行数=0，空状态=\"暂无符合条件的订阅记录\"",
+    "intercept": false,
+    "evidence": [
+      "browser/s1-empty.png",
+      "browser/s1-empty.json"
+    ]
+  },
+  {
+    "id": "S1-7",
+    "ac": [
+      "DSUB-AC-041"
+    ],
+    "viewport": "1440x900",
+    "pre": "R1ACNORMAL01 共 3 张（1 Schema 3 表）",
+    "steps": [
+      "关闭下拉后悬停“共 3 张”"
+    ],
+    "result": "悬停新增 tooltip=[\"SPT_HIS_2023 | OPT_FEE | OPT_RECORD | PT_EXAMINATION_RECORD\"]（预期含 SPT_HIS_2023 + OPT_FEE/OPT_RECORD/PT_EXAMINATION_RECORD）",
+    "intercept": false,
+    "evidence": [
+      "browser/s1-hover-tables.png",
+      "browser/s1-hover-tables.json"
+    ]
+  },
+  {
+    "id": "S1-8",
+    "ac": [
+      "DSUB-AC-042"
+    ],
+    "viewport": "1440x900",
+    "pre": "R1ACNORMAL01 3 目标库（+2）",
+    "steps": [
+      "关闭下拉后悬停“+2”"
+    ],
+    "result": "+N 悬停新增 tooltip=[\"R1临时目标库01 | doirs库 | doirs库\"]（预期含全部 3 个目标描述）",
+    "intercept": false,
+    "evidence": [
+      "browser/s1-hover-n.png",
+      "browser/s1-hover-n.json"
+    ]
+  },
+  {
+    "id": "S1-9",
+    "ac": [
+      "DSUB-AC-009",
+      "DSUB-AC-010",
+      "DSUB-AC-044"
+    ],
+    "viewport": "1440x900",
+    "pre": "种子 R1ACANOMALY01",
+    "steps": [
+      "查看列表异常行"
+    ],
+    "result": "异常行=1，操作按钮数=[0]（应为0）",
+    "intercept": false,
+    "evidence": [
+      "browser/s1-list-initial.png"
+    ]
+  },
+  {
+    "id": "S1-10",
+    "ac": [
+      "DSUB-AC-044",
+      "DSUB-AC-045"
+    ],
+    "viewport": "1440x900",
+    "pre": "种子 R1ACINACTIVE01/R1ACNOTFOUND01",
+    "steps": [
+      "查看列表展示"
+    ],
+    "result": "已停用行=[\"R1验收-源库已停用 | \\t | 业务库 | 已停用 | \\t | 共 1 张 | \\t | R1临时目标库01 | \\t | 2026-09-02T12:27:18 | 创建时间 | \"]；不存在行=[\"R1验收-源库不存在 | \\t | R1-NOT-EXIST-SRC | 不存在 | \\t | 共 1 张 | \\t | R1临时目标库01 | \\t | 2026-09-02T12:27\"]",
+    "intercept": false,
+    "evidence": [
+      "browser/s1-list-initial.png"
+    ]
+  },
+  {
+    "id": "S1-CONSOLE",
+    "ac": [
+      "DSUB-AC-118",
+      "DSUB-AC-126"
+    ],
+    "viewport": "1440x900",
+    "steps": [
+      "全程收集"
+    ],
+    "result": "控制台新增 error 数=0",
+    "intercept": false,
+    "evidence": [
+      "browser/s1-console-errors.json"
+    ]
+  }
+]

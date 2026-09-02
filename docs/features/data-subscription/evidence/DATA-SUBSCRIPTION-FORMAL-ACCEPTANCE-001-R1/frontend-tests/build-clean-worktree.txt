@@ -1,0 +1,74 @@
+=== CLEAN WORKTREE FRONTEND BUILD ===
+worktree HEAD: 49eb778cb24b4f6d26a192d5441b0476099cf68d
+run date: 2026-09-02 12:21:15
+command: npm run build  (vue-tsc --noEmit && vite build)
+---
+
+> cdc-config-platform-frontend@1.0.0 build
+> vue-tsc --noEmit && vite build
+
+vite v5.4.21 building for production...
+transforming...
+node_modules/@vueuse/core/dist/index.js (3362:0): A comment
+
+"/* #__PURE__ */"
+
+in "node_modules/@vueuse/core/dist/index.js" contains an annotation that Rollup cannot interpret due to the position of the comment. The comment will be removed to avoid issues.
+node_modules/@vueuse/core/dist/index.js (5780:22): A comment
+
+"/* #__PURE__ */"
+
+in "node_modules/@vueuse/core/dist/index.js" contains an annotation that Rollup cannot interpret due to the position of the comment. The comment will be removed to avoid issues.
+✓ 2382 modules transformed.
+rendering chunks...
+computing gzip size...
+dist/index.html                                     0.46 kB │ gzip:   0.34 kB
+dist/assets/Rectangle194522x-C5RZqDtD.png           7.71 kB
+dist/assets/icon_3-BmAdEeOr.png                    37.68 kB
+dist/assets/icon_1-weQjqjGq.png                    38.23 kB
+dist/assets/icon_4-uiW2f7Jy.png                    38.63 kB
+dist/assets/icon_2-BS6_FFsQ.png                    39.45 kB
+dist/assets/panel_bg-Sx3WbgQ7.png                  44.79 kB
+dist/assets/icon_title-hOkHOw68.png                63.25 kB
+dist/assets/bg-bottom2x-Bm7FKIko.png               70.24 kB
+dist/assets/panel_bg_large-B0Nuy6Tu.png            94.42 kB
+dist/assets/bg_nav2x-B721AeAv.png                 409.12 kB
+dist/assets/icon_center-DSVXIAWh.png              561.92 kB
+dist/assets/DataSourceDisplay-BXJEnPFa.css          0.26 kB │ gzip:   0.19 kB
+dist/assets/PlaceholderPage-BGovSTcN.css            0.28 kB │ gzip:   0.19 kB
+dist/assets/history-list-CtgyUP08.css               1.48 kB │ gzip:   0.54 kB
+dist/assets/history-BlTPmUFp.css                    2.04 kB │ gzip:   0.77 kB
+dist/assets/ServerConfigPage-G8DTJLJH.css           2.48 kB │ gzip:   0.77 kB
+dist/assets/DataSourcePage-BflpTARt.css             3.05 kB │ gzip:   0.84 kB
+dist/assets/index-CHIzxvtY.css                      4.30 kB │ gzip:   1.33 kB
+dist/assets/LogQueryPage-BfEBZVSj.css               5.43 kB │ gzip:   1.39 kB
+dist/assets/detail-evvFm-j9.css                     5.61 kB │ gzip:   1.41 kB
+dist/assets/CdcNodeStatusPage-BGh94WWN.css          9.06 kB │ gzip:   2.40 kB
+dist/assets/LargeScreenPage-BjTIXoEd.css           11.41 kB │ gzip:   2.51 kB
+dist/assets/DataSubscribePage-BcnIXqvR.css         13.03 kB │ gzip:   2.50 kB
+dist/assets/index-C8YGJU9R.css                    359.53 kB │ gzip:  48.43 kB
+dist/assets/monitor-BmakT1kI.js                     0.22 kB │ gzip:   0.16 kB
+dist/assets/ClientConfigPage-USgBJFvs.js            0.35 kB │ gzip:   0.38 kB
+dist/assets/TopicOffsetPage-BR4RCkrI.js             0.36 kB │ gzip:   0.40 kB
+dist/assets/DataSourceRunStatePage-Ci1snzFW.js      0.38 kB │ gzip:   0.45 kB
+dist/assets/draggableDialog-CvmWkPI5.js             1.17 kB │ gzip:   0.57 kB
+dist/assets/PlaceholderPage-DBZJHv1W.js             1.33 kB │ gzip:   0.78 kB
+dist/assets/DataSourceDisplay-BM4AA-xw.js           1.57 kB │ gzip:   0.81 kB
+dist/assets/history-QJnHjA9F.js                     5.27 kB │ gzip:   2.35 kB
+dist/assets/history-list-5lHivcE3.js                5.67 kB │ gzip:   2.62 kB
+dist/assets/CdcNodeStatusPage-h8ONBB0D.js           8.48 kB │ gzip:   3.53 kB
+dist/assets/ServerConfigPage-7K1nvecD.js           11.26 kB │ gzip:   4.47 kB
+dist/assets/index-j-OSCFRL.js                      12.51 kB │ gzip:   5.11 kB
+dist/assets/detail-ByNjP6QB.js                     18.70 kB │ gzip:   6.63 kB
+dist/assets/DataSourcePage-D-nnaF_3.js             26.43 kB │ gzip:   7.89 kB
+dist/assets/LogQueryPage-BPU2JlMY.js               27.69 kB │ gzip:   8.73 kB
+dist/assets/DataSubscribePage-doShMeQv.js          39.29 kB │ gzip:  12.53 kB
+dist/assets/http-BLJr390e.js                       46.39 kB │ gzip:  17.95 kB
+dist/assets/index-3HA0S-Ey.js                   1,047.17 kB │ gzip: 346.80 kB
+dist/assets/LargeScreenPage-BNM8eY1f.js         1,141.31 kB │ gzip: 384.10 kB
+
+(!) Some chunks are larger than 500 kB after minification. Consider:
+- Using dynamic import() to code-split the application
+- Use build.rollupOptions.output.manualChunks to improve chunking: https://rollupjs.org/configuration-options/#output-manualchunks
+- Adjust chunk size limit for this warning via build.chunkSizeWarningLimit.
+✓ built in 15.57s

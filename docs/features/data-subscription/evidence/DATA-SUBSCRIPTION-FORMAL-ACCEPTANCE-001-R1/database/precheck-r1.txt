@@ -1,0 +1,49 @@
+=== R1 DB PRECHECK (before any DML) ===
+run date: 2026-09-02 12:26:05
+target: CDC schema @ 192.168.174.65:1521/prod.enmotech.com
+backup table: CDC_DATA_SUBSCRIBE_2026_08_31 (READ-ONLY, never modified)
+
+BACKUP_ROW_COUNT
+----------------
+	      12
+
+CURRENT_ROW_COUNT
+-----------------
+	       12
+
+CHK			      N
+-------------------- ----------
+PK_CURR_MINUS_BACKUP	      0
+PK_BACKUP_MINUS_CURR	      0
+
+CHK				   N
+------------------------- ----------
+NONCLOB_CURR_MINUS_BACKUP	   0
+NONCLOB_BACKUP_MINUS_CURR	   0
+
+CLOB_MISMATCH
+-------------
+	    0
+
+COLUMN_NAME
+--------------------------------------------------------------------------------------------------------------------------------
+DATA_SUB_ID
+DATA_SUB_DESC
+DATA_FROM_SOURCE_ID
+DATA_TO_SOURCE_ID
+DATA_SOURCE_TABLE
+DATA_SOURCE_COMMENT
+DATA_TARGET_TABLE
+DATA_TARGET_COMMENT
+INSERT_TIME
+UPDATE_TIME
+DELETE_TIME
+FG_ACTIVE
+
+R1_SUBSCRIBE_RESIDUE
+--------------------
+		   0
+
+R1_TARGET_RESIDUE
+-----------------
+		0

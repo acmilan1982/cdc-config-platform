@@ -1,0 +1,123 @@
+[
+  {
+    "id": "S4-5",
+    "ac": [
+      "DSUB-AC-086",
+      "DSUB-AC-088",
+      "DSUB-AC-085"
+    ],
+    "viewport": "1440x900",
+    "pre": "BROWSER_INTERCEPTED_UI_SCENARIO SCHEMA_A 240 表（238 普通 + HIS.DOT/BAD,COM 保留字符）",
+    "steps": [
+      "拦截 metadata 后新建选源",
+      "读 DOM 行数与滚动",
+      "读弹窗高度"
+    ],
+    "result": "渲染行数=240（240）；表视口 211/9639（内部滚动=true）弹窗高=738px（有界）；表头=共 240 张，已选 0 张；Schemas=[\"SCHEMA_A | 已选 0 张\",\"SCHEMA_B | 已选 0 张\",\"SCHEMA_ERR | 已选 0 张\"]；徽标=[\"已选 0 张\",\"已选 0 张\",\"已选 0 张\"]",
+    "intercept": true,
+    "interceptNote": "纯前端高容量 UI（BROWSER_INTERCEPTED_UI_SCENARIO）",
+    "evidence": [
+      "browser/s4b-240cap.png",
+      "browser/s4b-240cap.json"
+    ]
+  },
+  {
+    "id": "S4-6",
+    "ac": [
+      "DSUB-AC-082"
+    ],
+    "viewport": "1440x900",
+    "pre": "BROWSER_INTERCEPTED_UI_SCENARIO SCHEMA_A 240",
+    "steps": [
+      "筛选 TAB1(100)→全选当前筛选→清除搜索→仅看已选↕→取消当前筛选→全量全选(238,保留字符跳过)→取消"
+    ],
+    "result": "filter TAB1=100 → selectAll TAB1=100(已选择：1 个源库 · 1 个 Schema · 100 个表 · 0 个目标库) → clearSearch= HIS.DOT.sel=false BAD,COM.sel=false → onlySelected ON count=100 已选含保留=false → cancel current filter=0(已选择：1 个源库 · 0 个 Schema · 0 个表 · 0 个目标库) → selectAll full list=238 保留被选= → cancel full list=0",
+    "intercept": true,
+    "interceptNote": "纯前端高容量 UI（BROWSER_INTERCEPTED_UI_SCENARIO）",
+    "evidence": [
+      "browser/s4b-toolbar240.png",
+      "browser/s4b-toolbar240.json"
+    ]
+  },
+  {
+    "id": "S4-7a",
+    "ac": [
+      "DSUB-AC-082"
+    ],
+    "viewport": "1440x900",
+    "pre": "BROWSER_INTERCEPTED_UI_SCENARIO SCHEMA_A 240（从 0 开始）",
+    "steps": [
+      "普通 TAB015",
+      "Shift TAB030(正向 16)",
+      "Shift TAB010(反向)",
+      "普通 TAB055",
+      "Shift TAB065(跨保留字符 idx59)"
+    ],
+    "result": "plain TAB015=1(期望1) → shift TAB030(fwd)=16(期望16) → shift TAB010(reverse)=21(期望21) → plain TAB055=22(期望22) → shift TAB065(cross-reserved)=32(期望32)；全部与期望一致=true；保留字符被选= 或 无=true（单次 Shift 一次性提交整段=true）",
+    "intercept": true,
+    "interceptNote": "纯前端高容量 UI（BROWSER_INTERCEPTED_UI_SCENARIO）",
+    "evidence": [
+      "browser/s4b-shift240.png",
+      "browser/s4b-shift240.json"
+    ]
+  },
+  {
+    "id": "S4-7b",
+    "ac": [
+      "DSUB-AC-082",
+      "DSUB-AC-084"
+    ],
+    "viewport": "1440x900",
+    "pre": "BROWSER_INTERCEPTED_UI_SCENARIO；R2§6.3 搜索变化清除锚点",
+    "steps": [
+      "搜索 TAB2 后 Shift TAB230(应为单表)",
+      "清除搜索→普通 TAB220→Shift TAB228(新锚点正向)",
+      "普通 TAB224(取消)→Shift TAB220(范围取消)"
+    ],
+    "result": "搜索 TAB2 后（筛选内起点 0）Shift TAB230 后筛选内=1（增量 1，期望 1 → 锚点已清=true，搜索前全量 32）；plain TAB220(new anchor)=34(期望34) → shift TAB228(fwd fresh)=42(期望42) → plain TAB224(取消锚点)=41(期望41) → shift TAB220(range cancel)=37(期望37)（一致=true）；最终=37；选中集合含保留字符=true",
+    "intercept": true,
+    "interceptNote": "纯前端高容量 UI（BROWSER_INTERCEPTED_UI_SCENARIO）",
+    "evidence": [
+      "browser/s4b-anchor240.json"
+    ]
+  },
+  {
+    "id": "S4-8",
+    "ac": [
+      "DSUB-AC-079",
+      "DSUB-AC-083"
+    ],
+    "viewport": "1440x900",
+    "pre": "BROWSER_INTERCEPTED_UI_SCENARIO SCHEMA_ERR 首次失败→重试成功；跨 Schema 保留",
+    "steps": [
+      "进 SCHEMA_ERR(失败)",
+      "切走再切回(再次请求未缓存空)",
+      "成功重试",
+      "SCHEMA_A 保留",
+      "SCHEMA_B 选 1",
+      "回 A/回 ERR(缓存命中)"
+    ],
+    "result": "首次失败:msg=BROWSER_INTERCEPTED_UI_SCENARIO 模拟：该 Schema 表清单加载失 retry按钮=true（徽标=[\"已选 37 张\",\"已选 0 张\"]）；切走再切回仍报错=true（失败请求共 2 次 → 失败未被缓存为空列表）；重试成功后表=E_ONE,E_TWO,E_THREE（failed 标记清除=true）；回 SCHEMA_A 请求 +0（缓存命中）徽标=SCHEMA_A | 已选 37 张；SCHEMA_B 选后汇总=已选择：1 个源库 · 2 个 Schema · 38 个表 · 0 个目标库；回 SCHEMA_ERR 请求 +0（缓存命中）表=E_ONE,E_TWO,E_THREE；最终汇总=已选择：1 个源库 · 2 个 Schema · 38 个表 · 0 个目标库",
+    "intercept": true,
+    "interceptNote": "失败/重试/跨 Schema 保留为纯前端 UI（BROWSER_INTERCEPTED_UI_SCENARIO）",
+    "evidence": [
+      "browser/s4b-fail-retry.json",
+      "browser/s4b-fail-retry.png"
+    ]
+  },
+  {
+    "id": "S4-CONSOLE-B",
+    "ac": [
+      "DSUB-AC-118"
+    ],
+    "viewport": "1440x900",
+    "steps": [
+      "全程收集"
+    ],
+    "result": "控制台新增 error 数=0",
+    "intercept": false,
+    "evidence": [
+      "browser/s4b-console-errors.json"
+    ]
+  }
+]

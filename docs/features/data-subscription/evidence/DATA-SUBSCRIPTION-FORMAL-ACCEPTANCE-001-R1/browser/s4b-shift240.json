@@ -1,0 +1,57 @@
+{
+  "seq": [
+    {
+      "label": "plain TAB015",
+      "count": 1,
+      "names": [
+        "TAB015"
+      ],
+      "summary": "已选择：1 个源库 · 1 个 Schema · 1 个表 · 0 个目标库"
+    },
+    {
+      "label": "shift TAB030(fwd)",
+      "count": 16,
+      "names": [
+        "TAB015",
+        "TAB016",
+        "TAB017",
+        "TAB018"
+      ],
+      "summary": "已选择：1 个源库 · 1 个 Schema · 16 个表 · 0 个目标库"
+    },
+    {
+      "label": "shift TAB010(reverse)",
+      "count": 21,
+      "names": [
+        "TAB010",
+        "TAB011",
+        "TAB012",
+        "TAB013"
+      ],
+      "summary": "已选择：1 个源库 · 1 个 Schema · 21 个表 · 0 个目标库"
+    },
+    {
+      "label": "plain TAB055",
+      "count": 22,
+      "names": [
+        "TAB010",
+        "TAB011",
+        "TAB012",
+        "TAB013"
+      ],
+      "summary": "已选择：1 个源库 · 1 个 Schema · 22 个表 · 0 个目标库"
+    },
+    {
+      "label": "shift TAB065(cross-reserved)",
+      "count": 32,
+      "names": [
+        "TAB010",
+        "TAB011",
+        "TAB012",
+        "TAB013"
+      ],
+      "summary": "已选择：1 个源库 · 1 个 Schema · 32 个表 · 0 个目标库"
+    }
+  ],
+  "reservedSelected": []
+}

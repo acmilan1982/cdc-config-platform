@@ -1,0 +1,14 @@
+{
+  "delFired": 1,
+  "msgDel": "操作成功。配置将在相关 sync-client 重启后生效。",
+  "rowGone": true,
+  "prev2": {
+    "irrecoverable": "数据库记录物理删除且无法恢复",
+    "desc": "R1验收-e2e-浏览器闭环-0902-编辑后",
+    "source": "孝感市第一人民医院112-source-19c",
+    "schemaCount": "2",
+    "tableCount": "2",
+    "targets": "R1临时目标库01R1TGT01",
+    "restart": "当前运行中的同步任务不会立即停止，需要重启相关 sync-client 后生效。"
+  }
+}

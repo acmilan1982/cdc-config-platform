@@ -1,0 +1,100 @@
+[
+  {
+    "id": "S4-1",
+    "ac": [
+      "DSUB-AC-078",
+      "DSUB-AC-080",
+      "DSUB-AC-085"
+    ],
+    "viewport": "1440x900",
+    "pre": "真实源 112-source-19c（CDC_USER 1 表 / SPT_HIS_2023 9 表）",
+    "steps": [
+      "选源→首 Schema 自动加载",
+      "切 SPT_HIS_2023",
+      "回 CDC_USER",
+      "再回 SPT_HIS_2023",
+      "DOM 布局测量",
+      "勾选行样式"
+    ],
+    "result": "Schemas=[\"CDC_USER | 已选 0 张\",\"SPT_HIS_2023 | 已选 0 张\"]；首 Schema=LOG_MINING_FLUSH（CDC_USER 请求 +1）；SPT_HIS_2023 请求 +1 表数=9(OPT_FEE,OPT_FEEDETAIL,OPT_HANDLEDETAIL,OPT_HANDLEDETAIL_EXE,OPT_RECORD,OPT_REGISTER,PT_EXAMINATION_DETAIL,PT_EXAMINATION_RECORD,PT_EXAMINATION_SUMMARY)；回 CDC_USER +0；再回 SPT +0（会话缓存命中）；布局 schemaPaneW=250 tablesPaneW=932 表视口 211/399 弹窗高=738；独立已选面板=false；勾选行 bg=rgb(237, 242, 254)",
+    "intercept": false,
+    "evidence": [
+      "browser/s4a-cache-layout.png",
+      "browser/s4a-cache-layout.json"
+    ]
+  },
+  {
+    "id": "S4-2",
+    "ac": [
+      "DSUB-AC-081"
+    ],
+    "viewport": "1440x900",
+    "pre": "SPT_HIS_2023 共 9 表",
+    "steps": [
+      "搜索 'OPT'",
+      "搜索 'opt'(小写)",
+      "搜索 'RECORD'",
+      "搜索 'zzz_nomatch'",
+      "清除搜索"
+    ],
+    "result": "'OPT'→6 项(OPT_FEE,OPT_FEEDETAIL,OPT_HANDLEDETAIL,OPT_HANDLEDETAIL_EXE,OPT_RECORD,OPT_REGISTER)；'opt'→6 项（大小写不敏感=true）；'RECORD'→OPT_RECORD,PT_EXAMINATION_RECORD；'zzz_nomatch'→空提示“没有匹配当前搜索的源表”；清除后 9 项",
+    "intercept": false,
+    "evidence": [
+      "browser/s4a-search.json"
+    ]
+  },
+  {
+    "id": "S4-3",
+    "ac": [
+      "DSUB-AC-082"
+    ],
+    "viewport": "1440x900",
+    "pre": "SPT_HIS_2023 9 表（真实）",
+    "steps": [
+      "筛选 OPT→全选当前筛选→取消当前筛选→仅看已选↕→清空当前Schema(取消/确定)"
+    ],
+    "result": "全选后=6（徽标=SPT_HIS_2023 | 已选 6 张）→取消当前筛选后=0→单选2张→仅看已选可见=2(OPT_FEE,OPT_RECORD)→关闭仅看已选可见=9；清空确认弹窗“提示 | 确定清空当前 Schema（SPT_HIS_2023）下已选择的源表吗？”；取消后保留 2 张；二次确定后清空 0 张；汇总=已选择：1 个源库 · 0 个 Schema · 0 个表 · 0 个目标库",
+    "intercept": false,
+    "evidence": [
+      "browser/s4a-toolbar.png",
+      "browser/s4a-toolbar.json"
+    ]
+  },
+  {
+    "id": "S4-4",
+    "ac": [
+      "DSUB-AC-082",
+      "DSUB-AC-084"
+    ],
+    "viewport": "1440x900",
+    "pre": "SPT_HIS_2023（已清空）",
+    "steps": [
+      "普通点 OPT_RECORD",
+      "Shift 点 PT_EXAMINATION_SUMMARY(正向)",
+      "Shift 点 OPT_FEEDETAIL(反向)",
+      "普通点 PT_EXAMINATION_SUMMARY(取消锚点)",
+      "Shift 点 OPT_RECORD(范围取消)"
+    ],
+    "result": "plain OPT_RECORD=[OPT_RECORD](1) → shift->PT_EXAMINATION_SUMMARY=[OPT_RECORD,OPT_REGISTER,PT_EXAMINATION_DETAIL,PT_EXAMINATION_RECORD,PT_EXAMINATION_SUMMARY](5) → shift reverse->OPT_FEEDETAIL=[OPT_FEEDETAIL,OPT_HANDLEDETAIL,OPT_HANDLEDETAIL_EXE,OPT_RECORD,OPT_REGISTER,PT_EXAMINATION_DETAIL,PT_EXAMINATION_RECORD,PT_EXAMINATION_SUMMARY](8) → plain PT_EXAMINATION_SUMMARY(取消)=[OPT_FEEDETAIL,OPT_HANDLEDETAIL,OPT_HANDLEDETAIL_EXE,OPT_RECORD,OPT_REGISTER,PT_EXAMINATION_DETAIL,PT_EXAMINATION_RECORD](7) → shift range-cancel->OPT_RECORD=[OPT_FEEDETAIL,OPT_HANDLEDETAIL,OPT_HANDLEDETAIL_EXE](3)；最终=OPT_FEEDETAIL,OPT_HANDLEDETAIL,OPT_HANDLEDETAIL_EXE（期望 OPT_FEEDETAIL,OPT_HANDLEDETAIL,OPT_HANDLEDETAIL_EXE，一致=true）",
+    "intercept": false,
+    "evidence": [
+      "browser/s4a-shift.png",
+      "browser/s4a-shift.json"
+    ]
+  },
+  {
+    "id": "S4-CONSOLE-A",
+    "ac": [
+      "DSUB-AC-118"
+    ],
+    "viewport": "1440x900",
+    "steps": [
+      "全程收集"
+    ],
+    "result": "控制台新增 error 数=0",
+    "intercept": false,
+    "evidence": [
+      "browser/s4a-console-errors.json"
+    ]
+  }
+]

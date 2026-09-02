@@ -1,0 +1,47 @@
+{
+  "schemas": [
+    {
+      "text": "CDC_USER | 已选 0 张",
+      "active": true,
+      "failed": false,
+      "cls": "st-schema-item active"
+    },
+    {
+      "text": "SPT_HIS_2023 | 已选 0 张",
+      "active": false,
+      "failed": false,
+      "cls": "st-schema-item"
+    }
+  ],
+  "cdc": [
+    "LOG_MINING_FLUSH"
+  ],
+  "cdcReq0": 1,
+  "sptReq1": 1,
+  "sptRows": [
+    "OPT_FEE",
+    "OPT_FEEDETAIL",
+    "OPT_HANDLEDETAIL",
+    "OPT_HANDLEDETAIL_EXE",
+    "OPT_RECORD",
+    "OPT_REGISTER",
+    "PT_EXAMINATION_DETAIL",
+    "PT_EXAMINATION_RECORD",
+    "PT_EXAMINATION_SUMMARY"
+  ],
+  "cdcReqAfterBack": 1,
+  "sptReqAfterBack": 1,
+  "layout": {
+    "schemaPaneW": 250,
+    "schemaPaneH": 319,
+    "tablesPaneW": 932,
+    "vpClientH": 211,
+    "vpScrollH": 399,
+    "dialogH": 738,
+    "hasSeparateSelectedPanel": false
+  },
+  "selectedBgAfter": "rgb(237, 242, 254)",
+  "hasSeparateSelectedPanel": {
+    "hasSelectedPanelWord": false
+  }
+}

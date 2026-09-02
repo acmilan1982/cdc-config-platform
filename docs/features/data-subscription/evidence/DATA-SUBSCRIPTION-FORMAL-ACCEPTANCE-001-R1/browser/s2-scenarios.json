@@ -1,0 +1,106 @@
+[
+  {
+    "id": "S2-1",
+    "ac": [
+      "DSUB-AC-049",
+      "DSUB-AC-050",
+      "DSUB-AC-052"
+    ],
+    "viewport": "1440x900",
+    "pre": "R1ACNORMAL01 3表/1Schema/3目标",
+    "steps": [
+      "列表点击“查看”"
+    ],
+    "result": "详情弹窗打开 title=订阅详情，宽 680px，详情请求 +1 次，分组=[{\"schema\":\"SPT_HIS_2023\",\"tables\":[\"OPT_FEE\",\"OPT_RECORD\",\"PT_EXAMINATION_RECORD\"]}]，目标=[\"R1临时目标库01 | R1TGT01\",\"doirs库 | company-target-doris-v4\",\"doirs库 | target-doris-v4\"]",
+    "intercept": false,
+    "evidence": [
+      "browser/s2-detail-normal.png",
+      "browser/s2-detail-normal.json"
+    ]
+  },
+  {
+    "id": "S2-2",
+    "ac": [
+      "DSUB-AC-052"
+    ],
+    "viewport": "1440x900",
+    "pre": "R1ACNORMAL02 CDC_USER+SPT_HIS_2023 两 Schema",
+    "steps": [
+      "列表点击“查看”"
+    ],
+    "result": "分组=[{\"schema\":\"CDC_USER\",\"tables\":[\"LOG_MINING_FLUSH\"]},{\"schema\":\"SPT_HIS_2023\",\"tables\":[\"OPT_FEEDETAIL\",\"OPT_HANDLEDETAIL\"]}]，源表共 3 张，标题=订阅详情",
+    "intercept": false,
+    "evidence": [
+      "browser/s2-detail-multischema.png",
+      "browser/s2-detail-multischema.json"
+    ]
+  },
+  {
+    "id": "S2-3",
+    "ac": [
+      "DSUB-AC-054"
+    ],
+    "viewport": "1440x900",
+    "pre": "截获详情返回 41 张表（40+1）以验证内部滚动",
+    "steps": [
+      "BROWSER_INTERCEPTED_UI_SCENARIO 查看 R1ACNORMAL01"
+    ],
+    "result": "源表区 rows=41，表区 clientH=218 scrollH=930（内部滚动=true），弹窗体 clientH=540 scrollH=588，拦截命中=1",
+    "intercept": true,
+    "interceptNote": "纯前端 UI 行为：内部滚动（BROWSER_INTERCEPTED_UI_SCENARIO）",
+    "evidence": [
+      "browser/s2-detail-scroll.png",
+      "browser/s2-detail-scroll.json"
+    ]
+  },
+  {
+    "id": "S2-4",
+    "ac": [
+      "DSUB-AC-053",
+      "DSUB-AC-055"
+    ],
+    "viewport": "1440x900",
+    "pre": "R1ACUNPARSE01 含 THIS.IS.NOT.A.VALID.TOKEN",
+    "steps": [
+      "列表点击“查看”"
+    ],
+    "result": "无法解析区={\"title\":\"以下源表片段无法解析，可能存在历史格式异常：\",\"list\":\"THIS.IS.NOT.A.VALID.TOKEN\",\"warnings\":[\"警告：源表配置存在无法解析的内容（1 项），请查看原始表清单\"]}，弹窗文本片段=订阅详情 | 基本信息 | 订阅描述\tR1验收-无法解析源表 | 订阅ID\tR1ACUNPARSE01 | 源库\t孝感市第一人民医院112-source-19c | 源表（共 2 张） | SPT_HIS_2023 | OPT_FEE | ",
+    "intercept": false,
+    "evidence": [
+      "browser/s2-detail-unparseable.png",
+      "browser/s2-detail-unparseable.json"
+    ]
+  },
+  {
+    "id": "S2-5",
+    "ac": [
+      "DSUB-AC-051"
+    ],
+    "viewport": "1440x900",
+    "pre": "R1ACANOMALY01 多源异常",
+    "steps": [
+      "查看列表异常行按钮"
+    ],
+    "result": "异常行操作按钮=[]（不应含查看/编辑/删除），警示文字=配置异常：该记录包含多个源库，请直接维护数据库",
+    "intercept": false,
+    "evidence": [
+      "browser/s1-list-initial.png",
+      "browser/s2-anomaly-noview.json"
+    ]
+  },
+  {
+    "id": "S2-CONSOLE",
+    "ac": [
+      "DSUB-AC-118"
+    ],
+    "viewport": "1440x900",
+    "steps": [
+      "全程收集"
+    ],
+    "result": "控制台新增 error 数=0",
+    "intercept": false,
+    "evidence": [
+      "browser/s2-console-errors.json"
+    ]
+  }
+]

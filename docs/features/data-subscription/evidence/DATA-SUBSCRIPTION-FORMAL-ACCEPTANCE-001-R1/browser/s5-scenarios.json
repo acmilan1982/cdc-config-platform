@@ -1,0 +1,206 @@
+[
+  {
+    "id": "S5-1",
+    "ac": [
+      "DSUB-AC-089",
+      "DSUB-AC-093"
+    ],
+    "viewport": "1440x900",
+    "pre": "新增弹窗",
+    "steps": [
+      "空表单点保存(前端校验)",
+      "填合法→拦截 POST 返回 40300(3 项)→点保存"
+    ],
+    "result": "前端本地校验 4 条：[dataSubDesc] dataSubDesc：订阅描述不能为空 | [dataFromSourceId] dataFromSourceId：必须且只能选择一个源库 | [dataToSourceIds] dataToSourceIds：必须至少选择一个目标库 | [sourceTables] sourceTables：必须至少选择一张源表；40300 结构化失效项 3 条：[sourceTables] OPT_NOPE：源表不存在或不可订阅 | [dataToSourceIds] R1-NOT-EXIST-TGT：目标库引用不存在 | [dataSubDesc] dataSubDesc：订阅描述超过 255 字符上限（截获 POST 1 次，UI 逐条展示纯前端行为）",
+    "intercept": true,
+    "interceptNote": "40300 后端失效项在页面逐条渲染为 UI 行为（BROWSER_INTERCEPTED_UI_SCENARIO），实际保存走真实请求见 S5-2/5",
+    "evidence": [
+      "browser/s5-1-validation.png",
+      "browser/s5-1-validation.json"
+    ]
+  },
+  {
+    "id": "S5-2a",
+    "ac": [
+      "DSUB-AC-094"
+    ],
+    "viewport": "1440x900",
+    "pre": "拦截 POST 延迟 1000ms 观察保存中状态",
+    "steps": [
+      "点保存",
+      "350ms 读取按钮",
+      "请求完成后读取"
+    ],
+    "result": "保存中按钮 disabled=true loading=true（el-button is-disabled/is-loading 生效）；请求结束后 disabled=false（恢复可点）；弹窗仍开=true",
+    "intercept": true,
+    "interceptNote": "按钮保存中禁用为纯前端 UI（BROWSER_INTERCEPTED_UI_SCENARIO）",
+    "evidence": [
+      "browser/s5-2a-saving-disabled.png",
+      "browser/s5-2a-saving-disabled.json"
+    ]
+  },
+  {
+    "id": "S5-2b",
+    "ac": [
+      "DSUB-AC-094",
+      "DSUB-AC-095"
+    ],
+    "viewport": "1440x900",
+    "pre": "真实后端（已批准 e2e DML），描述=R1验收-e2e-浏览器闭环-0902-新",
+    "steps": [
+      "填描述/源/表/目标",
+      "同步双击保存",
+      "等关闭+刷新"
+    ],
+    "result": "双击后创建 POST 提交数=1（双击瞬间=1，快速重复点击未重复提交=true，按钮中 disabled=false）；弹窗关闭=true；成功提示=操作成功。配置将在相关 sync-client 重启后生效。；列表出现行=true（重复行=1）",
+    "intercept": false,
+    "evidence": [
+      "browser/s5-2b-create.png",
+      "browser/s5-2b-create.json"
+    ]
+  },
+  {
+    "id": "S5-3",
+    "ac": [
+      "DSUB-AC-095"
+    ],
+    "viewport": "1440x900",
+    "pre": "新增后列表点击查看",
+    "steps": [
+      "点查看→详情"
+    ],
+    "result": "详情标题=订阅详情；分组=[{\"schema\":\"CDC_USER\",\"tables\":[\"LOG_MINING_FLUSH\"]}]；目标=[\"R1临时目标库01 R1TGT01\"]；含描述=true",
+    "intercept": false,
+    "evidence": [
+      "browser/s5-3-detail.png",
+      "browser/s5-3-detail.json"
+    ]
+  },
+  {
+    "id": "S5-4",
+    "ac": [
+      "DSUB-AC-101",
+      "DSUB-AC-102",
+      "DSUB-AC-103"
+    ],
+    "viewport": "1440x900",
+    "pre": "拦截 PUT 采集载荷（不写库）",
+    "steps": [
+      "编辑仅改描述→PUT",
+      "编辑新增表→PUT"
+    ],
+    "result": "PRESERVE 载荷={\"mode\":\"PRESERVE\",\"hasSourceTables\":false,\"desc\":\"S5-4 PRESERVE 描述改\"}；REPLACE 载荷={\"mode\":\"REPLACE\",\"sourceTables\":[\"CDC_USER.LOG_MINING_FLUSH\",\"SPT_HIS_2023.OPT_FEE\"],\"hasSourceTables\":true,\"desc\":\"R1验收-e2e-浏览器闭环-0902-新\"}（新增表后汇总=已选择：1 个源库 · 2 个 Schema · 2 个表 · 1 个目标库）",
+    "intercept": true,
+    "interceptNote": "PRESERVE/REPLACE PUT 载荷形态为 UI 行为（BROWSER_INTERCEPTED_UI_SCENARIO），真实编辑保存见 S5-5",
+    "evidence": [
+      "browser/s5-4-mode.json"
+    ]
+  },
+  {
+    "id": "S5-5",
+    "ac": [
+      "DSUB-AC-097",
+      "DSUB-AC-098",
+      "DSUB-AC-101"
+    ],
+    "viewport": "1440x900",
+    "pre": "真实后端编辑（已批准），描述 R1验收-e2e-浏览器闭环-0902-新→R1验收-e2e-浏览器闭环-0902-编辑后 且新增 SPT_HIS_2023.OPT_FEE（REPLACE 真实写库）",
+    "steps": [
+      "编辑回显读旧描述",
+      "改描述+加表",
+      "保存→详情校验"
+    ],
+    "result": "回显描述=R1验收-e2e-浏览器闭环-0902-新；编辑前汇总=编辑后关闭=true 成功提示=操作成功。配置将在相关 sync-client 重启后生效。 列表出现新描述=true；详情分组=[{\"schema\":\"CDC_USER\",\"tables\":[\"LOG_MINING_FLUSH\"]},{\"schema\":\"SPT_HIS_2023\",\"tables\":[\"OPT_FEE\"]}]（共 2 张，含 LOG_MINING_FLUSH+OPT_FEE=true）",
+    "intercept": false,
+    "evidence": [
+      "browser/s5-5-edit.png",
+      "browser/s5-5-edit.json"
+    ]
+  },
+  {
+    "id": "S5-6",
+    "ac": [
+      "DSUB-AC-113",
+      "DSUB-AC-114"
+    ],
+    "viewport": "1440x900",
+    "pre": "真实删除预览 R1验收-e2e-浏览器闭环-0902-编辑后",
+    "steps": [
+      "列表点删除→预览"
+    ],
+    "result": "不可恢复提示=数据库记录物理删除且无法恢复；订阅描述=R1验收-e2e-浏览器闭环-0902-编辑后；源库=孝感市第一人民医院112-source-19c；Schema 数=2；表数=2；目标库=R1临时目标库01R1TGT01；重启说明=当前运行中的同步任务不会立即停止，需要重启相关 sync-client 后生效。",
+    "intercept": false,
+    "evidence": [
+      "browser/s5-6-delete-preview.png",
+      "browser/s5-6-delete-preview.json"
+    ]
+  },
+  {
+    "id": "S5-7",
+    "ac": [
+      "DSUB-AC-117"
+    ],
+    "viewport": "1440x900",
+    "pre": "删除弹窗已打开",
+    "steps": [
+      "点取消"
+    ],
+    "result": "DELETE 请求增量=0（取消不发 DELETE=true）；行仍在列表=true",
+    "intercept": false,
+    "evidence": [
+      "browser/s5-7-cancel-delete.json"
+    ]
+  },
+  {
+    "id": "S5-8",
+    "ac": [
+      "DSUB-AC-112",
+      "DSUB-AC-116"
+    ],
+    "viewport": "1440x900",
+    "pre": "真实后端删除（已批准），行 R1验收-e2e-浏览器闭环-0902-编辑后",
+    "steps": [
+      "再次点删除预览",
+      "点确认删除"
+    ],
+    "result": "DELETE 增量=1（=1 物理删除）；删除成功提示=操作成功。配置将在相关 sync-client 重启后生效。；行从列表消失=true；预览再次加载=true",
+    "intercept": false,
+    "evidence": [
+      "browser/s5-8-delete.png",
+      "browser/s5-8-delete.json"
+    ]
+  },
+  {
+    "id": "S5-9",
+    "ac": [
+      "DSUB-AC-095",
+      "DSUB-AC-112",
+      "DSUB-AC-117"
+    ],
+    "viewport": "1440x900",
+    "pre": "完整闭环 新增→列表→详情→编辑→删除预览→取消→再次预览→确认删除",
+    "steps": [
+      "串联 S5-2b/3/5/6/7/8"
+    ],
+    "result": "闭环=PASS：{\"createDesc\":\"R1验收-e2e-浏览器闭环-0902-新\",\"editedDesc\":\"R1验收-e2e-浏览器闭环-0902-编辑后\",\"created\":true,\"detailShown\":true,\"editedPersisted\":true,\"previewShown\":true,\"cancelNoDelete\":true,\"confirmDelete\":true,\"goneAfterDelete\":true}",
+    "intercept": false,
+    "evidence": [
+      "browser/s5-9-e2e.json"
+    ]
+  },
+  {
+    "id": "S5-CONSOLE",
+    "ac": [
+      "DSUB-AC-118"
+    ],
+    "viewport": "1440x900",
+    "steps": [
+      "全程收集"
+    ],
+    "result": "控制台新增 error 数=0",
+    "intercept": false,
+    "evidence": [
+      "browser/s5-console-errors.json"
+    ]
+  }
+]

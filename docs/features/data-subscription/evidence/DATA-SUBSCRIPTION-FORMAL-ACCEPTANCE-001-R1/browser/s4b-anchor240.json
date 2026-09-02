@@ -1,0 +1,55 @@
+{
+  "fullBeforeSearch": 32,
+  "inFilterBefore": 0,
+  "inFilterAfter": 1,
+  "anchorDiff": 1,
+  "tail": [
+    {
+      "label": "plain TAB220(new anchor)",
+      "count": 34,
+      "names": [
+        "TAB010",
+        "TAB011",
+        "TAB012",
+        "TAB013"
+      ],
+      "summary": "已选择：1 个源库 · 1 个 Schema · 34 个表 · 0 个目标库"
+    },
+    {
+      "label": "shift TAB228(fwd fresh)",
+      "count": 42,
+      "names": [
+        "TAB010",
+        "TAB011",
+        "TAB012",
+        "TAB013"
+      ],
+      "summary": "已选择：1 个源库 · 1 个 Schema · 42 个表 · 0 个目标库"
+    },
+    {
+      "label": "plain TAB224(取消锚点)",
+      "count": 41,
+      "names": [
+        "TAB010",
+        "TAB011",
+        "TAB012",
+        "TAB013"
+      ],
+      "summary": "已选择：1 个源库 · 1 个 Schema · 41 个表 · 0 个目标库"
+    },
+    {
+      "label": "shift TAB220(range cancel)",
+      "count": 37,
+      "names": [
+        "TAB010",
+        "TAB011",
+        "TAB012",
+        "TAB013"
+      ],
+      "summary": "已选择：1 个源库 · 1 个 Schema · 37 个表 · 0 个目标库"
+    }
+  ],
+  "finalCount": 37,
+  "reservedFinal": [],
+  "tailOk": true
+}

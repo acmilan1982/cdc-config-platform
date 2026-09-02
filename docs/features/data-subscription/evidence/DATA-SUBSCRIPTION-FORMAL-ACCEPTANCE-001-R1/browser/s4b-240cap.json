@@ -1,0 +1,34 @@
+{
+  "rowCount": 240,
+  "scroll": {
+    "clientH": 211,
+    "scrollH": 9639,
+    "dialogH": 738,
+    "tablesPaneH": 319
+  },
+  "header": "共 240 张，已选 0 张",
+  "schemas": [
+    {
+      "text": "SCHEMA_A | 已选 0 张",
+      "active": true,
+      "failed": false
+    },
+    {
+      "text": "SCHEMA_B | 已选 0 张",
+      "active": false,
+      "failed": false
+    },
+    {
+      "text": "SCHEMA_ERR | 已选 0 张",
+      "active": false,
+      "failed": false
+    }
+  ],
+  "badges": [
+    "已选 0 张",
+    "已选 0 张",
+    "已选 0 张"
+  ],
+  "totalInFixture": 240,
+  "normalInFixture": 238
+}

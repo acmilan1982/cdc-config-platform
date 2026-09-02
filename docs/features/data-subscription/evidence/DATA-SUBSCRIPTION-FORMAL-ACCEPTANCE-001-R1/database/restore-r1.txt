@@ -1,0 +1,41 @@
+=== R1 DB RESTORE + VERIFY (APPROVED 2026-09-02, single transaction) ===
+run date: 2026-09-02
+target: CDC schema @ 192.168.174.65:1521/prod.enmotech.com
+backup table: CDC_DATA_SUBSCRIBE_2026_08_31 (READ-ONLY, never modified; NO DDL)
+
+Column inventory (dict read): 4 CLOB (DATA_SOURCE_TABLE, DATA_SOURCE_COMMENT,
+DATA_TARGET_TABLE, DATA_TARGET_COMMENT); 8 non-CLOB (DATA_SUB_ID, DATA_SUB_DESC,
+DATA_FROM_SOURCE_ID, DATA_TO_SOURCE_ID, INSERT_TIME, UPDATE_TIME, DELETE_TIME, FG_ACTIVE).
+NONCLOB MINUS therefore compares the 8 non-CLOB columns; CLOB columns compared via
+DBMS_LOB.COMPARE per PK.
+
+--- 1. PRE-RESTORE READ-ONLY SNAPSHOT ---
+CURRENT_ROW_COUNT            18   (12 baseline + 6 R1 seeds)
+BACKUP_ROW_COUNT             12
+R1_SUBSCRIBE_RESIDUE          6
+R1_TARGET_PRESENT             2   (R1TGT01, R1TGT.DOT)
+
+--- 2. DELETE R1 TEMP TARGETS (approved scope) ---
+DELETE FROM CDC_DATA_SOURCE WHERE DATA_SOURCE_ID IN ('R1TGT01','R1TGT.DOT');
+rows deleted = 2
+R1_TARGET_AFTER_DELETE       0
+COMMIT;
+
+--- 3. RESTORE CDC_DATA_SUBSCRIBE FROM BACKUP (single transaction, explicit 12-col list) ---
+DELETE FROM CDC_DATA_SUBSCRIBE;                 (18 rows deleted)
+INSERT INTO CDC_DATA_SUBSCRIBE (12 explicit cols)
+SELECT 12 explicit cols FROM CDC_DATA_SUBSCRIBE_2026_08_31;   (12 rows created)
+COMMIT;
+
+--- 4. POST-RESTORE VERIFY (read-only) ---
+CURRENT_ROW_COUNT            12
+BACKUP_ROW_COUNT             12
+PK_CURR_MINUS_BACKUP          0
+PK_BACKUP_MINUS_CURR          0
+NONCLOB_CURR_MINUS_BACKUP     0
+NONCLOB_BACKUP_MINUS_CURR     0
+CLOB_MISMATCH                 0   (4 CLOB columns, DBMS_LOB.COMPARE)
+R1_SUBSCRIBE_RESIDUE          0
+R1_TARGET_RESIDUE             0
+
+RESULT: PASS  (restored to backup state; no R1 residue; no DDL; backup table untouched)

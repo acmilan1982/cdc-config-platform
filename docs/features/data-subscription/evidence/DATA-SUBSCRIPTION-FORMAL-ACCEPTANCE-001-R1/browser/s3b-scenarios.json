@@ -1,0 +1,61 @@
+[
+  {
+    "id": "S3-13",
+    "ac": [
+      "DSUB-AC-099",
+      "DSUB-AC-068"
+    ],
+    "viewport": "1440x900",
+    "pre": "R1ACNORMAL01 编辑已回显（3 表 SPT_HIS_2023 / 源 112-source-19c）",
+    "steps": [
+      "编辑→源库改选 my-19c",
+      "取消确认观察",
+      "再改选→确定清空",
+      "不保存取消关闭"
+    ],
+    "result": "回显：源=源库 | 孝感市第一人民医院，已选表=3(OPT_FEE,OPT_RECORD,PT_EXAMINATION_RECORD)；确认弹窗1=\"切换源库将清空当前已选择的源表，是否继续？\"（按钮 [\"取消\",\"确定\"]）；取消后仍源=源库 | 孝感市第一人民医院，表=3（未清空=true）；确定后源=源库 | 本机的oracle，表=0，摘要=已选择：1 个源库 · 0 个 Schema · 0 个表 · 3 个目标库（清空=true）；关闭弹窗确认=\"表单有未保存的修改，确定关闭吗？\"；PUT 请求=0（未写库=true）",
+    "intercept": false,
+    "evidence": [
+      "browser/s3b-source-switch-edit.png",
+      "browser/s3b-source-switch-edit.json"
+    ]
+  },
+  {
+    "id": "S3-14",
+    "ac": [
+      "DSUB-AC-100",
+      "DSUB-AC-093"
+    ],
+    "viewport": "1440x900",
+    "pre": "截获 /edit 注入 invalidTables=[SPT_HIS_2023.OPT_FEE, SPT_HIS_2023.OPT_RECORD]",
+    "steps": [
+      "BROWSER_INTERCEPTED_UI_SCENARIO 编辑 R1ACNORMAL01",
+      "读警告",
+      "读保存禁用",
+      "移除异常已选表",
+      "读解除状态"
+    ],
+    "result": "警告 banner=[\"存在 2 个已失效的已选源表，请移除异常已选表后保存\",\"以下已选源表在当前源库中已不存在或不可访问，保存前必须移除： |  | SPT_HIS_2023.OPT_FEE、SPT_HIS_2023.OPT_RECORD | 移除异常已选表\"]；sf-list=SPT_HIS_2023.OPT_FEE、SPT_HIS_2023.OPT_RECORD；保存 disabled=true（失效期间禁止保存）；移除按钮点击=true；移除后 banner 残留=0，保存 disabled=false，摘要=已选择：1 个源库 · 1 个 Schema · 1 个表 · 3 个目标库，剩余已选表=1(PT_EXAMINATION_RECORD)；全程未发 PUT=true POST=true",
+    "intercept": true,
+    "interceptNote": "纯前端 UI：已失效已选表警告与保存阻断（BROWSER_INTERCEPTED_UI_SCENARIO）",
+    "evidence": [
+      "browser/s3b-invalid-tables.png",
+      "browser/s3b-invalid-tables.json"
+    ]
+  },
+  {
+    "id": "S3-CONSOLE-B",
+    "ac": [
+      "DSUB-AC-118"
+    ],
+    "viewport": "1440x900",
+    "steps": [
+      "S3-13/S3-14 全程收集"
+    ],
+    "result": "控制台新增 error 数=0",
+    "intercept": false,
+    "evidence": [
+      "browser/s3b-console-errors.json"
+    ]
+  }
+]

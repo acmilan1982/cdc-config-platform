@@ -1,0 +1,25 @@
+{
+  "d1": {
+    "title": "订阅详情",
+    "text": "订阅详情 | 基本信息 | 订阅描述\tR1验收-正常订阅-多目标多表 | 订阅ID\tR1ACNORMAL01 | 源库\t孝感市第一人民医院112-source-19c | 源表（共 3 张） | SPT_HIS_2023 | OPT_FEE | OPT_RECORD | PT_EXAMINATION_RECORD | 目标库 | R1临时目标库01 | R1TGT01 | doirs库 | company-target-doris-v4 | doirs库 | target-doris-v4 | 时间 | 创建时间\t2026-09-02T12:27:18\t更新时间\t— | 关闭",
+    "cls": "el-dialog subscribe-detail-dialog",
+    "w": 680,
+    "h": 628
+  },
+  "groups": [
+    {
+      "schema": "SPT_HIS_2023",
+      "tables": [
+        "OPT_FEE",
+        "OPT_RECORD",
+        "PT_EXAMINATION_RECORD"
+      ]
+    }
+  ],
+  "targets": [
+    "R1临时目标库01 | R1TGT01",
+    "doirs库 | company-target-doris-v4",
+    "doirs库 | target-doris-v4"
+  ],
+  "reqDelta": 1
+}

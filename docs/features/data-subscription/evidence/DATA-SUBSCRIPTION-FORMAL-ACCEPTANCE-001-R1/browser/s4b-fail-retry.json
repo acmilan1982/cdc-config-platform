@@ -1,0 +1,48 @@
+{
+  "err1": {
+    "msg": "BROWSER_INTERCEPTED_UI_SCENARIO 模拟：该 Schema 表清单加载失败",
+    "hasRetry": true
+  },
+  "err2": {
+    "msg": "BROWSER_INTERCEPTED_UI_SCENARIO 模拟：该 Schema 表清单加载失败",
+    "hasRetry": true
+  },
+  "failTotal": 2,
+  "eRows": [
+    "E_ONE",
+    "E_TWO",
+    "E_THREE"
+  ],
+  "schemasAfterRetry": [
+    {
+      "text": "SCHEMA_A | 已选 37 张",
+      "active": false,
+      "failed": false
+    },
+    {
+      "text": "SCHEMA_B | 已选 0 张",
+      "active": false,
+      "failed": false
+    },
+    {
+      "text": "SCHEMA_ERR | 已选 0 张",
+      "active": true,
+      "failed": false
+    }
+  ],
+  "aReqAfter": 1,
+  "aReqDelta2": 0,
+  "badgeA": "SCHEMA_A | 已选 37 张",
+  "sumA": "已选择：1 个源库 · 1 个 Schema · 37 个表 · 0 个目标库",
+  "sumB": "已选择：1 个源库 · 2 个 Schema · 38 个表 · 0 个目标库",
+  "badgeB": "SCHEMA_B | 已选 1 张",
+  "badgeA2": "SCHEMA_A | 已选 37 张",
+  "errRetryReq": 3,
+  "errReqDelta": 0,
+  "eRowsCached": [
+    "E_ONE",
+    "E_TWO",
+    "E_THREE"
+  ],
+  "sumFinal": "已选择：1 个源库 · 2 个 Schema · 38 个表 · 0 个目标库"
+}

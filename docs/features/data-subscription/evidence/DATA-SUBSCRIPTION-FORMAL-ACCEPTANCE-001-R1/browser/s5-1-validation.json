@@ -1,0 +1,30 @@
+{
+  "localItems": [
+    "[dataSubDesc] dataSubDesc：订阅描述不能为空",
+    "[dataFromSourceId] dataFromSourceId：必须且只能选择一个源库",
+    "[dataToSourceIds] dataToSourceIds：必须至少选择一个目标库",
+    "[sourceTables] sourceTables：必须至少选择一张源表"
+  ],
+  "localSummary": "已选择：0 个源库 · 0 个 Schema · 0 个表 · 0 个目标库",
+  "backendItems": [
+    "[sourceTables] OPT_NOPE：源表不存在或不可订阅",
+    "[dataToSourceIds] R1-NOT-EXIST-TGT：目标库引用不存在",
+    "[dataSubDesc] dataSubDesc：订阅描述超过 255 字符上限"
+  ],
+  "capturedPosts": [
+    {
+      "dataSubDesc": "S5-1 校验展示",
+      "dataFromSourceId": "112-source-19c",
+      "dataToSourceIds": [
+        "R1TGT01"
+      ],
+      "sourceSelectionMode": "REPLACE",
+      "sourceTables": [
+        {
+          "schemaName": "CDC_USER",
+          "tableName": "LOG_MINING_FLUSH"
+        }
+      ]
+    }
+  ]
+}

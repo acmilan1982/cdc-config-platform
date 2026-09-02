@@ -1,0 +1,38 @@
+{
+  "st6": [
+    {
+      "step": "filter TAB1",
+      "visible": 100
+    },
+    {
+      "step": "selectAll TAB1",
+      "selected": 100,
+      "summary": "已选择：1 个源库 · 1 个 Schema · 100 个表 · 0 个目标库"
+    },
+    {
+      "step": "clearSearch",
+      "selectedVisible": 100,
+      "hisDotSelected": false,
+      "badComSelected": false
+    },
+    {
+      "step": "onlySelected ON count",
+      "count": 100,
+      "hasReserved": false
+    },
+    {
+      "step": "cancel current filter",
+      "selected": 0,
+      "summary": "已选择：1 个源库 · 0 个 Schema · 0 个表 · 0 个目标库"
+    },
+    {
+      "step": "selectAll full list",
+      "selected": 238,
+      "reservedSelected": []
+    },
+    {
+      "step": "cancel full list",
+      "selected": 0
+    }
+  ]
+}
