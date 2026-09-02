@@ -8,7 +8,9 @@
       placeholder="全部"
       @change="(val: string[]) => onChange('clients', val)"
     >
-      <el-option v-for="opt in clientOptions" :key="opt.value" :label="opt.label" :value="opt.value" />
+      <el-option v-for="opt in clientOptions" :key="opt.value" :label="opt.label" :value="opt.value">
+        <div class="toff-opt" :title="opt.label">{{ opt.label }}</div>
+      </el-option>
     </el-select>
     <el-select
       :model-value="draft.sources"
@@ -18,7 +20,9 @@
       placeholder="全部"
       @change="(val: string[]) => onChange('sources', val)"
     >
-      <el-option v-for="opt in sourceOptions" :key="opt.value" :label="opt.label" :value="opt.value" />
+      <el-option v-for="opt in sourceOptions" :key="opt.value" :label="opt.label" :value="opt.value">
+        <div class="toff-opt" :title="opt.label">{{ opt.label }}</div>
+      </el-option>
     </el-select>
     <el-select
       :model-value="draft.targets"
@@ -28,7 +32,9 @@
       placeholder="全部"
       @change="(val: string[]) => onChange('targets', val)"
     >
-      <el-option v-for="opt in targetOptions" :key="opt.value" :label="opt.label" :value="opt.value" />
+      <el-option v-for="opt in targetOptions" :key="opt.value" :label="opt.label" :value="opt.value">
+        <div class="toff-opt" :title="opt.label">{{ opt.label }}</div>
+      </el-option>
     </el-select>
     <el-input
       :model-value="draft.tableName"
@@ -159,5 +165,15 @@ defineExpose({ reset: onReset, draft })
 }
 .toff-table-input {
   width: 200px;
+}
+</style>
+
+<!-- 候选下拉项（teleport 到 body）：长描述/标签省略，悬浮显示完整内容（TOFF-REQ-047，R1 §4.5） -->
+<style>
+.toff-opt {
+  max-width: 220px;
+  overflow: hidden;
+  white-space: nowrap;
+  text-overflow: ellipsis;
 }
 </style>

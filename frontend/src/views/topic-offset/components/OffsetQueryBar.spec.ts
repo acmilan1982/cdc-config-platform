@@ -153,3 +153,73 @@ describe('OffsetQueryBar 查询区“全部”互斥与查询/重置（TOFF-REQ-
     wrapper.unmount()
   })
 })
+
+describe('OffsetQueryBar 客户端候选省略与悬浮完整内容（TOFF-REQ-041/047，R1 §4.5）', () => {
+  const LONG = `客户端描述-${'很长很长很长'.repeat(40)}`
+
+  it('长描述候选项省略且悬浮 title 携带完整标签', async () => {
+    const wrapper = mount(OffsetQueryBar, {
+      props: { clients: [{ id: 'CLX', desc: LONG, active: true }], sources: [], targets: [], initial: null },
+      global: { plugins: [ElementPlus] },
+    })
+    await flushPromises()
+    await openSelect(wrapper, 0)
+    const dropdown = dropdownByText('CLX')
+    const item = Array.from(dropdown.querySelectorAll('.el-select-dropdown__item')).find((it) =>
+      it.textContent?.includes('CLX'),
+    )!
+    expect(item).toBeTruthy()
+    const opt = item.querySelector('.toff-opt')
+    expect(opt?.getAttribute('title')).toBe(`CLX（${LONG}）`)
+    // DOM 文本仍为完整标签（省略仅视觉），悬浮可查看完整客户端描述
+    expect(item.textContent).toContain(LONG)
+    wrapper.unmount()
+  })
+
+  it('空描述候选只显示 ID、停用仍带标记、空括号不回归', async () => {
+    const wrapper = mount(OffsetQueryBar, {
+      props: {
+        clients: [
+          { id: 'ND', desc: null, active: true },
+          { id: 'OFF', desc: null, active: false },
+        ],
+        sources: [],
+        targets: [],
+        initial: null,
+      },
+      global: { plugins: [ElementPlus] },
+    })
+    await flushPromises()
+    await openSelect(wrapper, 0)
+    const dropdown = dropdownByText('ND')
+    const items = Array.from(dropdown.querySelectorAll('.el-select-dropdown__item')) as HTMLElement[]
+    const nd = items.find((it) => it.textContent?.trim() === 'ND')
+    expect(nd).toBeTruthy()
+    expect(nd!.querySelector('.toff-opt')?.getAttribute('title')).toBe('ND')
+    const off = items.find((it) => it.textContent?.trim() === 'OFF（已停用）')
+    expect(off).toBeTruthy()
+    // 不应出现空括号占位（如 ID（））
+    expect(items.some((it) => it.textContent?.includes('（）'))).toBe(false)
+    wrapper.unmount()
+  })
+
+  it('配置不存在临时项保留并悬浮完整', async () => {
+    const wrapper = mount(OffsetQueryBar, {
+      props: {
+        clients: [{ id: 'CL1', desc: '客户端一', active: true }],
+        sources: [],
+        targets: [],
+        initial: { clientIds: ['gone'], sourceIds: [], targetIds: [], tableName: '' },
+      },
+      global: { plugins: [ElementPlus] },
+    })
+    await flushPromises()
+    await openSelect(wrapper, 0)
+    const dropdown = dropdownByText('gone（配置不存在）')
+    const item = Array.from(dropdown.querySelectorAll('.el-select-dropdown__item')).find((it) =>
+      it.textContent?.includes('gone（配置不存在）'),
+    )!
+    expect(item.querySelector('.toff-opt')?.getAttribute('title')).toBe('gone（配置不存在）')
+    wrapper.unmount()
+  })
+})

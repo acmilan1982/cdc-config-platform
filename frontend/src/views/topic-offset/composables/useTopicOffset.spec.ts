@@ -348,3 +348,342 @@ describe('useTopicOffset 请求并发（单飞行 + 用户操作排队）', () =
     expect(mockedOffsets).toHaveBeenCalledTimes(2)
   })
 })
+
+/** 构造成功分页数据（供 gate release 使用）。 */
+function okData(pageNum: number, total = 160): ApiResponse<TopicOffsetPageResult> {
+  return {
+    code: 200,
+    message: 'success',
+    timestamp: '',
+    data: {
+      pageNum,
+      pageSize: 150,
+      total,
+      pages: total > 0 ? Math.ceil(total / 150) : 0,
+      unparseableTotal: 0,
+      records: total > 0 ? [row()] : [],
+    },
+  }
+}
+
+describe('useTopicOffset 大态/轻量可视区分（TOPIC-OFFSET-R1 §4.2）', () => {
+  it('用户条件查询（建立性）进行中：loading=true 整表大态、refreshing=false', async () => {
+    mockedOffsets.mockImplementation(echoOk(160))
+    const { ctl, store } = setup()
+    ctl.onPageMounted()
+    await settle()
+    expect(store.hasSuccess).toBe(true)
+
+    let releaseOff!: (v: ApiResponse<TopicOffsetPageResult>) => void
+    const gate = new Promise<ApiResponse<TopicOffsetPageResult>>((resolve) => { releaseOff = resolve })
+    mockedOffsets.mockImplementationOnce(() => gate)
+    ctl.submitQuery(['C1'], [], [], 'x')
+    await settle()
+    expect(ctl.loading.value).toBe(true)
+    expect(ctl.refreshing.value).toBe(false)
+    expect(ctl.busy.value).toBe(true)
+
+    releaseOff(okData(1))
+    await settle()
+    expect(ctl.loading.value).toBe(false)
+    expect(ctl.busy.value).toBe(false)
+  })
+
+  it('手工刷新（轻量）进行中：loading=false 不遮罩表格、仅 refreshing 轻量态', async () => {
+    mockedOffsets.mockImplementation(echoOk(160))
+    const { ctl } = setup()
+    ctl.onPageMounted()
+    await settle()
+
+    let releaseOff!: (v: ApiResponse<TopicOffsetPageResult>) => void
+    const gate = new Promise<ApiResponse<TopicOffsetPageResult>>((resolve) => { releaseOff = resolve })
+    mockedOffsets.mockImplementationOnce(() => gate)
+    ctl.manualRefresh()
+    await settle()
+    expect(ctl.loading.value).toBe(false)
+    expect(ctl.refreshing.value).toBe(true)
+    expect(ctl.busy.value).toBe(true)
+
+    releaseOff(okData(1))
+    await settle()
+    expect(ctl.refreshing.value).toBe(false)
+  })
+
+  it('返回页面恢复刷新（restore）进行中：不清表、不遮罩（仅 refreshing 轻量态）', async () => {
+    const { ctl, store } = setup()
+    store.commitSuccess(
+      { clientIds: ['C1'], sourceIds: [], targetIds: [], tableName: 't' },
+      1,
+      { pageNum: 1, pageSize: 150, total: 160, pages: 2, unparseableTotal: 0, records: [row()] },
+      Date.now(),
+    )
+    let releaseOff!: (v: ApiResponse<TopicOffsetPageResult>) => void
+    const gate = new Promise<ApiResponse<TopicOffsetPageResult>>((resolve) => { releaseOff = resolve })
+    mockedOffsets.mockImplementationOnce(() => gate)
+    ctl.onPageMounted()
+    await settle()
+    expect(ctl.loading.value).toBe(false)
+    expect(ctl.refreshing.value).toBe(true)
+    expect(store.records).toHaveLength(1)
+
+    releaseOff(okData(1))
+    await settle()
+    expect(store.hasSuccess).toBe(true)
+  })
+})
+
+describe('useTopicOffset 候选纳入单飞行生命周期（TOPIC-OFFSET-R1 §4.3）', () => {
+  it('同一操作内 offsets 先串行成功，candidates 才在同一 busy 内发起', async () => {
+    mockedOffsets.mockImplementation(echoOk(160))
+    const { ctl } = setup()
+    ctl.onPageMounted()
+    await settle()
+    expect(mockedCandidates).toHaveBeenCalledTimes(1)
+
+    let releaseOff!: (v: ApiResponse<TopicOffsetPageResult>) => void
+    const gate = new Promise<ApiResponse<TopicOffsetPageResult>>((resolve) => { releaseOff = resolve })
+    mockedOffsets.mockImplementationOnce(() => gate)
+    ctl.manualRefresh()
+    await settle()
+    // offsets 挂起期间候选不得先行发起
+    expect(mockedOffsets).toHaveBeenCalledTimes(2)
+    expect(mockedCandidates).toHaveBeenCalledTimes(1)
+
+    releaseOff(okData(1))
+    await settle()
+    // offsets 成功提交后，同一 busy 内串行刷新候选
+    expect(mockedCandidates).toHaveBeenCalledTimes(2)
+  })
+
+  it('候选请求未结束时 busy 不释放，下一用户操作不得与候选重叠', async () => {
+    mockedOffsets.mockImplementation(echoOk(160))
+    const { ctl } = setup()
+    ctl.onPageMounted()
+    await settle()
+    expect(mockedOffsets).toHaveBeenCalledTimes(1)
+
+    let releaseCand!: (v: ApiResponse<CandidateGroup>) => void
+    const candGate = new Promise<ApiResponse<CandidateGroup>>((resolve) => { releaseCand = resolve })
+    mockedCandidates.mockImplementationOnce(() => candGate)
+    ctl.manualRefresh()
+    await settle()
+    // offsets 已提交、进入候选等待；busy 仍为 true
+    expect(mockedOffsets).toHaveBeenCalledTimes(2)
+    expect(ctl.busy.value).toBe(true)
+
+    // 忙态再次手工刷新 → 仅记入最新意图槽位，不实际发起（无请求重叠）
+    ctl.manualRefresh()
+    await settle()
+    expect(mockedOffsets).toHaveBeenCalledTimes(2)
+
+    releaseCand(candidatesRes())
+    await settle()
+    expect(ctl.busy.value).toBe(false)
+    // 槽位操作随后执行，全程请求不重叠
+    expect(mockedOffsets).toHaveBeenCalledTimes(3)
+  })
+
+  it('offsets 失败时不发起候选；手工失败仅一次轻提示、保留上次成功现场', async () => {
+    mockedOffsets.mockImplementation(echoOk(160))
+    const { ctl, store, notify } = setup()
+    ctl.onPageMounted()
+    await settle()
+    expect(mockedCandidates).toHaveBeenCalledTimes(1)
+
+    mockedOffsets.mockRejectedValueOnce(new Error('network'))
+    ctl.manualRefresh()
+    await settle()
+    expect(mockedOffsets).toHaveBeenCalledTimes(2)
+    expect(mockedCandidates).toHaveBeenCalledTimes(1)
+    expect(notify).toHaveBeenCalledTimes(1)
+    expect(notify).toHaveBeenCalledWith('数据加载失败')
+    expect(store.records).toHaveLength(1)
+  })
+
+  it('候选刷新失败保留上一次成功候选，列表仍按 offsets 成功提交', async () => {
+    mockedOffsets.mockImplementation(echoOk(160))
+    const { ctl, store } = setup()
+    ctl.onPageMounted()
+    await settle()
+    // 已成功加载候选（含 OLD 客户端）
+    store.setCandidates({ clients: [{ id: 'OLD', desc: null, active: true }], sources: [], targets: [] })
+    const before = store.candidates!.clients[0].id
+
+    mockedCandidates.mockRejectedValueOnce(new Error('candidate down'))
+    ctl.manualRefresh()
+    await settle()
+
+    // offsets 成功提交列表；候选失败静默保留旧候选；busy 释放
+    expect(store.records).toHaveLength(1)
+    expect(store.candidates!.clients[0].id).toBe(before)
+    expect(ctl.busy.value).toBe(false)
+  })
+
+  it('页面销毁后迟到的 offsets 与候选响应不覆盖新现场', async () => {
+    // 迟到 offsets：冷启动首次请求销毁后返回 → 不得提交成功现场
+    let releaseOff!: (v: ApiResponse<TopicOffsetPageResult>) => void
+    const gate = new Promise<ApiResponse<TopicOffsetPageResult>>((resolve) => { releaseOff = resolve })
+    mockedOffsets.mockImplementationOnce(() => gate)
+    const { ctl, store } = setup()
+    ctl.onPageMounted()
+    await settle()
+    expect(mockedOffsets).toHaveBeenCalledTimes(1)
+
+    ctl.destroy()
+    releaseOff(okData(1))
+    await settle()
+    expect(store.hasSuccess).toBe(false)
+    expect(store.records).toEqual([])
+    // 销毁后用户操作不再发起请求
+    ctl.submitQuery(['C1'], [], [], 'x')
+    await settle()
+    expect(mockedOffsets).toHaveBeenCalledTimes(1)
+
+    // 迟到候选：销毁前已有旧候选，销毁后迟到的候选不得覆盖
+    mockedOffsets.mockImplementation(echoOk(160))
+    const second = setup()
+    second.ctl.onPageMounted()
+    await settle()
+    second.store.setCandidates({ clients: [{ id: 'OLD', desc: null, active: true }], sources: [], targets: [] })
+    let releaseCand!: (v: ApiResponse<CandidateGroup>) => void
+    const candGate = new Promise<ApiResponse<CandidateGroup>>((resolve) => { releaseCand = resolve })
+    mockedCandidates.mockImplementationOnce(() => candGate)
+    second.ctl.manualRefresh()
+    await settle()
+    expect(second.ctl.busy.value).toBe(true)
+    second.ctl.destroy()
+    releaseCand(candidatesRes())
+    await settle()
+    expect(second.store.candidates!.clients[0].id).toBe('OLD')
+  })
+})
+
+describe('useTopicOffset 最新用户意图槽位（替换 FIFO，TOPIC-OFFSET-R1 §4.4）', () => {
+  it('查询 Y 进行中触发旧条件 X 翻页：翻页被判定陈旧丢弃，最终保持 Y', async () => {
+    mockedOffsets.mockImplementation(echoOk(160))
+    const { ctl, store } = setup()
+    ctl.onPageMounted()
+    await settle() // X（缺省）已生效第 1 页
+    expect(store.hasSuccess).toBe(true)
+
+    let releaseY!: (v: ApiResponse<TopicOffsetPageResult>) => void
+    const gateY = new Promise<ApiResponse<TopicOffsetPageResult>>((resolve) => { releaseY = resolve })
+    mockedOffsets.mockImplementationOnce(() => gateY)
+    ctl.submitQuery(['Y'], [], [], 'y') // 查询 Y 进行中
+    await settle()
+    expect(mockedOffsets).toHaveBeenCalledTimes(2)
+
+    ctl.changePage(2) // 基于旧 X 的第 2 页：不应排队也不应发起
+    await settle()
+    expect(mockedOffsets).toHaveBeenCalledTimes(2)
+
+    releaseY(okData(1))
+    await settle()
+    // 最终保持 Y 第 1 页，X 第 2 页未覆盖
+    expect(store.appliedCriteria).toEqual({ clientIds: ['Y'], sourceIds: [], targetIds: [], tableName: 'y' })
+    expect(store.pageNum).toBe(1)
+    expect(mockedOffsets).toHaveBeenCalledTimes(2)
+  })
+
+  it('连续查询 Y、Z（Y 挂起中提交 Z）：Y 被取代不提交，最终只提交 Z', async () => {
+    mockedOffsets.mockImplementation(echoOk(160))
+    const { ctl, store } = setup()
+    ctl.onPageMounted()
+    await settle()
+
+    let releaseY!: (v: ApiResponse<TopicOffsetPageResult>) => void
+    const gateY = new Promise<ApiResponse<TopicOffsetPageResult>>((resolve) => { releaseY = resolve })
+    mockedOffsets.mockImplementationOnce(() => gateY)
+    ctl.submitQuery(['Y'], [], [], 'y')
+    await settle()
+    ctl.submitQuery(['Z'], [], [], 'z') // 覆盖等待槽位
+    await settle()
+    expect(mockedOffsets).toHaveBeenCalledTimes(2) // Z 未提前发起
+
+    releaseY(okData(1))
+    await settle()
+    expect(store.appliedCriteria).toEqual({ clientIds: ['Z'], sourceIds: [], targetIds: [], tableName: 'z' })
+    expect(store.pageNum).toBe(1)
+    expect(mockedOffsets).toHaveBeenCalledTimes(3) // X、Y、Z 各一次，无重复
+  })
+
+  it('第 2 页等待中又翻第 3 页：最终只提交第 3 页', async () => {
+    // total=500 → pages=4，保证第 3 页有效且不触发越界收敛
+    mockedOffsets.mockImplementation(echoOk(500))
+    const { ctl, store } = setup()
+    ctl.onPageMounted()
+    await settle()
+    expect(store.pageNum).toBe(1)
+
+    let releaseP2!: (v: ApiResponse<TopicOffsetPageResult>) => void
+    const gateP2 = new Promise<ApiResponse<TopicOffsetPageResult>>((resolve) => { releaseP2 = resolve })
+    mockedOffsets.mockImplementationOnce(() => gateP2)
+    ctl.changePage(2)
+    await settle()
+    expect(mockedOffsets).toHaveBeenCalledTimes(2)
+
+    ctl.changePage(3) // 最新意图覆盖等待中的第 2 页
+    await settle()
+    expect(mockedOffsets).toHaveBeenCalledTimes(2)
+
+    releaseP2(okData(2))
+    await settle()
+    expect(store.pageNum).toBe(3)
+    const lastCall = mockedOffsets.mock.calls[mockedOffsets.mock.calls.length - 1]
+    expect(lastCall[0].pageNum).toBe(3)
+  })
+
+  it('自动刷新与用户查询碰撞：自动刷新被取代，用户查询不丢失', async () => {
+    vi.useFakeTimers()
+    mockedOffsets.mockImplementation(echoOk(1))
+    const { ctl, store } = setup()
+    ctl.onPageMounted()
+    await settle()
+    expect(mockedOffsets).toHaveBeenCalledTimes(1)
+
+    let releaseAuto!: (v: ApiResponse<TopicOffsetPageResult>) => void
+    const gateAuto = new Promise<ApiResponse<TopicOffsetPageResult>>((resolve) => { releaseAuto = resolve })
+    mockedOffsets.mockImplementationOnce(() => gateAuto)
+    await vi.advanceTimersByTimeAsync(AUTO_REFRESH_INTERVAL_MS) // 自动刷新发起
+    await settle()
+    expect(mockedOffsets).toHaveBeenCalledTimes(2)
+    expect(ctl.loading.value).toBe(false) // 自动刷新为轻量态，不遮罩表格
+
+    ctl.submitQuery(['Z'], [], [], 'z') // 忙中提交用户查询 → 槽位
+    await settle()
+    expect(mockedOffsets).toHaveBeenCalledTimes(2)
+
+    releaseAuto(okData(1))
+    await settle()
+    expect(store.appliedCriteria).toEqual({ clientIds: ['Z'], sourceIds: [], targetIds: [], tableName: 'z' })
+    expect(store.pageNum).toBe(1)
+    expect(mockedOffsets).toHaveBeenCalledTimes(3)
+  })
+
+  it('新查询成功后，旧条件的等待翻页/刷新不得再次提交（旧意图不覆盖最新成功）', async () => {
+    mockedOffsets.mockImplementation(echoOk(160))
+    const { ctl, store } = setup()
+    ctl.onPageMounted()
+    await settle() // X 已生效第 1 页
+
+    // 手工刷新 X 进行中 → 产生基于 X 的等待翻页意图
+    let releaseManual!: (v: ApiResponse<TopicOffsetPageResult>) => void
+    const gateManual = new Promise<ApiResponse<TopicOffsetPageResult>>((resolve) => { releaseManual = resolve })
+    mockedOffsets.mockImplementationOnce(() => gateManual)
+    ctl.manualRefresh()
+    await settle()
+    ctl.changePage(2) // 有效（运行中仍为 X）→ 进入等待槽位
+    await settle()
+    // 新查询 Z 覆盖该等待翻页意图
+    ctl.submitQuery(['Z'], [], [], 'z')
+    await settle()
+    expect(mockedOffsets).toHaveBeenCalledTimes(2)
+
+    releaseManual(okData(2))
+    await settle()
+    // Z 提交，旧 X 第 2 页等待意图被丢弃，未再发起
+    expect(store.appliedCriteria).toEqual({ clientIds: ['Z'], sourceIds: [], targetIds: [], tableName: 'z' })
+    expect(store.pageNum).toBe(1)
+    expect(mockedOffsets).toHaveBeenCalledTimes(3)
+  })
+})

@@ -6,7 +6,7 @@
     border
     class="toff-table"
     :empty-text="props.emptyText"
-    row-key="toffKey"
+    :row-key="rowKey"
   >
     <el-table-column label="序号" width="70" align="center" fixed="left">
       <template #default="{ $index }">
@@ -73,6 +73,7 @@
 
 <script setup lang="ts">
 import type { TopicMappingRef, TopicOffsetItem } from '@/types/topicOffset'
+import { rowKey } from '@/views/topic-offset/utils/rowKey'
 
 interface Seg {
   text: string

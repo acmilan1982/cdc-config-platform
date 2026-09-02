@@ -141,3 +141,45 @@ describe('OffsetTable 固定 8 列（TOFF-REQ-081/094/095）', () => {
     wrapper.unmount()
   })
 })
+
+describe('OffsetTable 稳定行唯一键多行渲染（TOPIC-OFFSET-R1 §4.1）', () => {
+  it('不同 serverId 相同 Topic、相同 serverId 不同 Topic 各行均渲染，行 key 无 undefined/重复丢行', async () => {
+    const rows = [
+      parseableRow({ serverId: 'SVR-A' }), // topic cliA.srcA.scm.tblX.tgtA
+      parseableRow({ serverId: 'SVR-B' }), // 同 topic、不同 serverId
+      parseableRow({ serverId: 'SVR-A', rawTopic: 'cliA.srcA.scm.tblY.tgtA' }), // 同 serverId、不同 topic
+    ]
+    const wrapper = await mountTable(rows)
+    const text = wrapper.text()
+    // 3 行全部渲染且无丢行：中心端列应同时含 SVR-A 与 SVR-B（不同行键未互相覆盖）
+    expect(text).toContain('SVR-A')
+    expect(text).toContain('SVR-B')
+    expect(wrapper.findAll('.el-table__body tr')).toHaveLength(3)
+    wrapper.unmount()
+  })
+})
+
+describe('OffsetTable loading 只表达大态，轻量刷新不遮罩表格（TOPIC-OFFSET-R1 §4.2）', () => {
+  it('loading=true 时表格出现整表 loading 遮罩', async () => {
+    const wrapper = mount(OffsetTable, {
+      props: { records: [parseableRow()], loading: true, startIndex: 1 },
+      global: { plugins: [ElementPlus] },
+    })
+    await flushPromises()
+    expect(wrapper.find('.el-loading-mask').exists()).toBe(true)
+    wrapper.unmount()
+  })
+
+  it('loading=false（轻量刷新期）表格不出现 loading 遮罩，旧 records 照常渲染', async () => {
+    const wrapper = mount(OffsetTable, {
+      props: { records: [parseableRow()], loading: false, startIndex: 1 },
+      global: { plugins: [ElementPlus] },
+    })
+    await flushPromises()
+    expect(wrapper.find('.el-loading-mask').exists()).toBe(false)
+    // 刷新期间不清表：旧数据仍在渲染
+    expect(wrapper.text()).toContain('cliA')
+    expect(wrapper.text()).toContain('9007199254740993')
+    wrapper.unmount()
+  })
+})

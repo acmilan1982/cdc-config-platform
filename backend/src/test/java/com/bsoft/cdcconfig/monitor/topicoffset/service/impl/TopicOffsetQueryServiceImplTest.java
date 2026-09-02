@@ -350,11 +350,54 @@ class TopicOffsetQueryServiceImplTest {
         TopicOffsetItemVO item = vo.getRecords().get(0);
         assertEquals(TopicOffsetConstants.MAPPING_STATE_ACTIVE, item.getMapping().getClient().getState());
         assertEquals("hosp-001", item.getMapping().getClient().getId());
+        // 客户端配置存在 → desc 携带真实描述，不置 null（TOPIC-OFFSET-R1 §4.5）
+        assertEquals("市一医院HIS", item.getMapping().getClient().getDesc());
         assertEquals(TopicOffsetConstants.MAPPING_STATE_ACTIVE, item.getMapping().getSource().getState());
         assertEquals("源库112", item.getMapping().getSource().getOrg());
         assertEquals(TopicOffsetConstants.MAPPING_STATE_INACTIVE, item.getMapping().getTarget().getState());
         assertEquals("company-trg", item.getMapping().getTarget().getId());
         assertEquals("Doris目标库", item.getMapping().getTarget().getOrg());
+    }
+
+    @Test
+    void clientMappingShouldCarryDescForActiveAndInactiveButNullForNotFound() {
+        when(topicOffsetMapper.selectAll()).thenReturn(Arrays.asList(
+                row("cli-active.src.sch.tab.trg", "1"),
+                row("cli-inactive.src.sch.tab.trg", "2"),
+                row("cli-ghost.src.sch.tab.trg", "3")));
+
+        ClientConfigRow active = new ClientConfigRow();
+        active.setClientId("cli-active");
+        active.setClientDesc("活动客户端描述");
+        active.setFgActive("1");
+        ClientConfigRow inactive = new ClientConfigRow();
+        inactive.setClientId("cli-inactive");
+        inactive.setClientDesc("停用客户端描述");
+        inactive.setFgActive("0");
+        when(clientConfigMapper.selectAll()).thenReturn(Arrays.asList(active, inactive));
+
+        DataSourceConfigRow source = new DataSourceConfigRow();
+        source.setDataSourceId("src");
+        source.setDataSourceOrg("源库");
+        source.setDataSourceCategory("SOURCE");
+        source.setFgActive("1");
+        DataSourceConfigRow target = new DataSourceConfigRow();
+        target.setDataSourceId("trg");
+        target.setDataSourceOrg("目标库");
+        target.setDataSourceCategory("TARGET");
+        target.setFgActive("1");
+        when(dataSourceConfigMapper.selectAll()).thenReturn(Arrays.asList(source, target));
+
+        TopicOffsetPageVO vo = service.queryOffsets(query());
+        List<TopicOffsetItemVO> records = vo.getRecords();
+        assertEquals(3, records.size());
+
+        assertEquals(TopicOffsetConstants.MAPPING_STATE_ACTIVE, records.get(0).getMapping().getClient().getState());
+        assertEquals("活动客户端描述", records.get(0).getMapping().getClient().getDesc());
+        assertEquals(TopicOffsetConstants.MAPPING_STATE_INACTIVE, records.get(1).getMapping().getClient().getState());
+        assertEquals("停用客户端描述", records.get(1).getMapping().getClient().getDesc());
+        assertEquals(TopicOffsetConstants.MAPPING_STATE_NOT_FOUND, records.get(2).getMapping().getClient().getState());
+        assertNull(records.get(2).getMapping().getClient().getDesc());
     }
 
     @Test
@@ -374,6 +417,8 @@ class TopicOffsetQueryServiceImplTest {
 
         assertEquals(TopicOffsetConstants.MAPPING_STATE_NOT_FOUND, item.getMapping().getClient().getState());
         assertEquals("ghost", item.getMapping().getClient().getId());
+        // 客户端配置不存在 → NOT_FOUND 且 desc 为 null（TOPIC-OFFSET-R1 §4.5）
+        assertNull(item.getMapping().getClient().getDesc());
         assertEquals(TopicOffsetConstants.MAPPING_STATE_NOT_FOUND, item.getMapping().getTarget().getState());
         assertEquals("ghost-trg", item.getMapping().getTarget().getId());
         // 源库段 "src" 存在但 ORG 为空 → ACTIVE 且 org 为 null

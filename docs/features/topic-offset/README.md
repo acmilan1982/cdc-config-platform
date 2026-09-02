@@ -97,3 +97,24 @@
 
 - 实现与联调只读访问 `CDC_TOPIC_OFFSET` 与两张配置表，不执行任何数据库 DDL/DML；
 - 正式验收须在用户完成人工页面测试后另行发起执行；验收执行状态保持 `NOT_RUN`。
+
+## 12. R1 实现复审修复记录（TOPIC-OFFSET-IMPLEMENTATION-001-R1）
+
+实现任务 `TOPIC-OFFSET-IMPLEMENTATION-001` 的提交 `899769cff1f2e34de0a2786301714e7f4fe93408` 交回 ChatGPT 做代码与实现复审，结论为 `CHANGES_REQUIRED`，本 R1 任务只修复复审发现的 5 项问题，不扩大功能范围，不修改六份已批准基线（REQUIREMENTS/ACCEPTANCE/DATABASE/DESIGN/API/UI 均为零改动），正式验收未执行（100 条 `TOFF-AC-xxx` 保持 `NOT_RUN`）。
+
+已修复的 5 项问题：
+
+- 表格行唯一键：`OffsetTable.vue` 原 `row-key="toffKey"` 无对应字段，改为基于批准唯一键 `SERVER_ID + KAFKA_TOPIC` 的稳定行键函数（`rowKey`，NUL 分隔避免拼接歧义），模板以 `:row-key="rowKey"` 绑定；新增 `frontend/src/views/topic-offset/utils/rowKey.ts` 及其测试（不同 serverId/同 topic、同 serverId/不同 topic 均区分；刷新后 key 稳定；多行无 undefined/重复 key）。
+- 轻量刷新不再遮罩表格：表格 `loading` 只接收首次加载/条件查询的大态；`refreshing` 仅在工具栏附近显示轻量状态；自动/手工/页面恢复刷新不清表、不遮罩、不闪烁；`busy` 仅用于禁用会产生并发的控件。
+- candidates 纳入完整单飞行生命周期：`offsets` 与候选刷新在同一个 `busy` 生命周期内按明确顺序串行 `await`（无 fire-and-forget、无 `Promise.all`），`busy` 在候选结束后才释放；候选刷新失败静默保留上一次成功候选（决策：不新增非阻断弱提示 UI 文案，保持已批准页面文案精确不变），offsets 成功即提交列表；首挂载不重复/不重叠；页面销毁后的迟到候选响应不覆盖新实例状态。
+- 以"最新用户意图槽位"替换旧 FIFO 队列：自动刷新碰 busy 直接跳过；用户查询/翻页/手工刷新忙时只保留最后一个仍有效意图（新覆盖旧）；基于旧 `appliedCriteria` 的等待翻页/刷新被丢弃，新查询成功后旧条件等待操作不再提交；响应提交前校验意图序号，旧响应/旧等待意图不覆盖最新成功状态。
+- 客户端描述契约与下拉 Tooltip：后端 `mapClient()` 在配置存在时返回真实 `desc`（不 trim/改写），配置不存在才为 `null`；行内仍只显示客户端 ID，不因返回 desc 改变已批准 UI。前端查询候选下拉项以默认插槽渲染省略样式（`.toff-opt`，teleport 到 body 故用全局样式），悬浮 `title` 携带完整标签；空描述只显示 ID，停用/配置不存在临时项显示不回归。
+
+实现状态保持 `IMPLEMENTED_PENDING_USER_ACCEPTANCE`，验收执行状态保持 `NOT_RUN`；R1 通过仅表示修复完成并推送，仍须 ChatGPT 对结果提交做代码复审，通过后再进入用户人工页面测试。
+
+结果提交与验证摘要：
+
+- 结果提交：`fix(topic-offset): resolve implementation review findings`（见下方提交记录）；
+- 后端 topic-offset 定向测试与新增定向用例全部通过；后端完整测试套件仅出现 4 个已确认的任务前既有数据库集成失败（`BASELINE_FAILURES_ONLY`，非本模块新增）；后端 `mvn -o package` 通过；
+- 前端 topic-offset 定向测试与新增定向用例全部通过；前端完整测试套件全部通过；前端生产构建通过；`git diff --check` 通过；
+- 联调：R1 最新代码后端已在开发环境重启（只读 GET 接口对开发库返回真实候选与断点记录），页面 URL 与前端模块可访问；浏览器控制台目测未执行（`NOT_RUN`，无浏览器能力），联调检查不构成正式验收 PASS。

@@ -221,7 +221,8 @@ public class TopicOffsetQueryServiceImpl implements TopicOffsetQueryService {
         String state = active(config.getFgActive())
                 ? TopicOffsetConstants.MAPPING_STATE_ACTIVE
                 : TopicOffsetConstants.MAPPING_STATE_INACTIVE;
-        return new TopicEndpointMappingVO(state, id, null, null);
+        // API 映射契约：配置存在则 desc 携带真实客户端描述（不 trim/改写），配置不存在才为 null。
+        return new TopicEndpointMappingVO(state, id, null, config.getClientDesc());
     }
 
     private static TopicEndpointMappingVO mapDataSource(String id, Map<String, DataSourceConfigRow> byId) {

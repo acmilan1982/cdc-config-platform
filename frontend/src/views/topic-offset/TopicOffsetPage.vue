@@ -31,15 +31,16 @@
         :total="store.total"
         :unparseable-total="store.unparseableTotal"
         :refreshing="refreshing"
-        :busy="requesting"
+        :busy="busy"
         :last-refresh-text="store.lastRefreshText"
         :refresh-error="refreshError"
         @refresh="onManualRefresh"
       />
 
+      <!-- 表格只接“大态”loading（首次/条件查询）；轻量刷新不清表、不遮罩（TOPIC-OFFSET-R1 §4.2） -->
       <OffsetTable
         :records="store.records"
-        :loading="requesting"
+        :loading="loading"
         :start-index="startIndex"
         empty-text="暂无符合条件的数据"
       />
@@ -81,10 +82,7 @@ function notify(message: string): void {
 }
 
 const ctl = useTopicOffset(notify)
-const { loading, refreshing, refreshError, firstLoadError } = ctl
-
-/** 任一请求进行中即禁用“立即刷新”，保证请求不重叠（TOFF-REQ-109）。 */
-const requesting = computed(() => loading.value || refreshing.value)
+const { loading, refreshing, refreshError, firstLoadError, busy } = ctl
 
 const candidates = computed(() => store.candidates)
 const clients = computed(() => candidates.value?.clients ?? [])
