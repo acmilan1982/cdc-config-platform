@@ -39,23 +39,23 @@
 
 ## 6. 当前阶段
 
-当前处于**功能级基线第一阶段**，且为**草案待审批**状态：
+当前处于**功能级基线第一阶段**：需求与验收标准基线已批准，设计、实现与验收执行尚未开始。
 
-- 文档状态：`DRAFT_PENDING_USER_REVIEW`（需求与验收草案，待用户审阅）
-- `baseline_status`：`DRAFT_PENDING_USER_REVIEW`
-- `implementation_status`：`NOT_STARTED`
+- 需求状态：`APPROVED`（`REQUIREMENTS.md` 需求基线已正式批准）
+- 验收标准状态：`APPROVED`（`ACCEPTANCE.md` 验收标准基线已正式批准）
 - 设计状态：`NOT_STARTED`（DESIGN.md / API.md / UI.md / DATABASE.md 均未建立）
-- 验收状态：全部 `TOFF-AC-xxx` 为 `NOT_RUN`（本次只起草验收标准，不执行验收）
+- `implementation_status`：`NOT_STARTED`
+- 验收执行状态：`NOT_RUN`（尚未执行正式验收；100 条 `TOFF-AC-xxx` 保持 `NOT_RUN`）
 
-本任务完成**不代表需求获批**，也不授权后续设计或实现。
+状态批准**不代表功能已实现、已验收通过或已正式交付**；设计、实现与验收执行均未开始。
 
 ## 7. 文档导航（本次创建）
 
 | 文档 | 说明 |
 |---|---|
 | `README.md`（本文件） | 功能入口、定位、业务背景、只读边界、当前阶段 |
-| [REQUIREMENTS.md](REQUIREMENTS.md) | 需求草案：定位、术语、业务规则、页面与查询交互要求、边界与依赖 |
-| [ACCEPTANCE.md](ACCEPTANCE.md) | 验收草案：`TOFF-AC-001`～`TOFF-AC-100`，全部 `NOT_RUN`（不执行验收） |
+| [REQUIREMENTS.md](REQUIREMENTS.md) | 需求基线（`APPROVED`）：定位、术语、业务规则、页面与查询交互要求、边界与依赖 |
+| [ACCEPTANCE.md](ACCEPTANCE.md) | 验收标准基线（`APPROVED`）：`TOFF-AC-001`～`TOFF-AC-100`，全部 `NOT_RUN`（未执行验收） |
 
 ## 8. 页面与路由现状
 
@@ -68,7 +68,7 @@
 
 ## 9. 当前未建立 / 未批准事项（基线边界）
 
-本功能**当前不存在**任何已批准的功能级正式基线。以下内容均**未建立 / 未批准**，不得据本批文档宣称其存在：
+本功能的需求基线（`REQUIREMENTS.md`）与验收标准基线（`ACCEPTANCE.md`）已获正式批准。以下设计/实现层面的内容均**未建立 / 未批准**，不得据当前文档宣称其存在：
 
 - 未建立 `DESIGN.md`（功能设计说明）；
 - 未建立 `API.md`（接口契约）；当前未批准任何接口结构；
@@ -80,13 +80,12 @@
 ## 10. CDC_TOPIC_OFFSET 物理结构待复核
 
 - `CDC_TOPIC_OFFSET` **不在**已批准数据库物理基线（`docs/database/`，16 张已批准单表基线）之内；已批准 `SCHEMA.md` 仅将其列为"历史提及、当前代码无访问"。
-- 本批草案中出现的 `KAFKA_TOPIC`、`SERVER_ID`、`NEXT_OFFSET`、`UPDATED_AT` 等字段名属于用户已确认的业务字段语义与历史候选，**不得**据此宣称其当前物理结构（字段类型、可空性、约束、索引）已经只读复核或批准。
+- 已批准文档（`REQUIREMENTS.md` / `ACCEPTANCE.md`）中出现的 `KAFKA_TOPIC`、`SERVER_ID`、`NEXT_OFFSET`、`UPDATED_AT` 等字段名属于用户已确认的业务字段语义与历史候选，**不得**据此宣称其当前物理结构（字段类型、可空性、约束、索引）已经只读复核或批准。
 - `CDC_TOPIC_OFFSET` 物理表结构的只读复核与批准，需后续作为**单独只读复核事项**处理。
 
 ## 11. 下一步
 
-下一步只能是用户审阅并批准或退回 `REQUIREMENTS.md` 与 `ACCEPTANCE.md`。
+需求与验收标准基线已获正式批准（`APPROVED`）。下一步可**另起任务进入设计阶段**（需先建立 DESIGN.md / API.md / UI.md / DATABASE.md 的功能设计基线）。
 
-- 用户批准后，方可进入后续设计 / 实现任务（另立任务）；
-- 用户退回并给出意见后，按意见修订草案；
-- 在此之前，不进入设计、编码、数据库写访问或服务运行阶段。
+- 设计任务未完成并获批前，不进入编码、数据库写访问或服务运行阶段；
+- 正式验收须在实现完成并满足环境条件后，另行发起验收任务执行。

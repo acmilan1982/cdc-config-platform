@@ -8,15 +8,17 @@
 | Feature 标识 | `topic-offset` |
 | 既有路由 | `/monitor/topic-offset` |
 | 目标文档 | `docs/features/topic-offset/ACCEPTANCE.md` |
-| 文档状态 | `DRAFT_PENDING_USER_REVIEW`（验收草案，待用户审阅） |
-| baseline_status | `DRAFT_PENDING_USER_REVIEW` |
+| 文档状态 | `APPROVED`（验收标准基线已正式批准） |
+| baseline_status | `APPROVED` |
+| acceptance_status | `APPROVED`（验收标准基线已正式批准；经 ChatGPT 对提交 `1c7003126f4940d8c4a9e82b9c974d940d6956e3` 最终复审批准） |
+| acceptance_execution_status | `NOT_RUN`（验收标准获批不代表已执行正式验收；尚未执行任何验收） |
 | 实现状态 | `NOT_STARTED` |
 | 设计状态 | `NOT_STARTED`（DESIGN/API/UI/DATABASE 未建立） |
-| 验收用例状态 | 文档内 100 例初始全部 `NOT_RUN`（本次只编写验收标准，不执行验收，不写 PASS/FAIL 结果） |
+| 验收用例状态 | 文档内 100 例状态全部保持 `NOT_RUN`（尚未执行正式验收；不写 PASS/FAIL/ACCEPTED/IMPLEMENTED_ACCEPTED 结果） |
 | 任务编号 | `TOPIC-OFFSET-REQUIREMENTS-001` |
 | 授权基线提交 | `b26b789410de3eaf777e920abdb96cf888454c04` |
 | 创建日期 | 2026-09-02 |
-| 依据需求 | `docs/features/topic-offset/REQUIREMENTS.md`（文档状态 `DRAFT_PENDING_USER_REVIEW`） |
+| 依据需求 | `docs/features/topic-offset/REQUIREMENTS.md`（文档状态 `APPROVED`） |
 | 本轮修订任务 | TOPIC-OFFSET-REQUIREMENTS-001-R1（对提交 `e2c19cbcbb9226b0cb91b0ac1185afea02ce7516` 正式复审 `CHANGES_REQUIRED` 后的纯文档定向修订） |
 | 修订说明 | R1 仅回应正式复审的五项批准阻断项：①需求—验收追踪缺口（本文件为 11 条需求补齐验收引用）；②无效来源路径（由 `REQUIREMENTS.md` 删除并改为可核验表述，本文件不涉及）；③消费延迟口径过度简化（本文件 TOFF-AC-086 同步精确口径及第一版边界）；④绝对只读验收证据强度不足（本文件 TOFF-AC-004/005 强化）；⑤“断点更新时间原样展示”与格式化要求歧义（本文件 TOFF-AC-008 消除）。不改变 100 条编号与 `NOT_RUN` 状态；不代表验收标准获批或验收通过 |
 
@@ -26,7 +28,7 @@
 - 所有用例初始状态为 `NOT_RUN`（未执行）；`PASS / FAIL / BLOCKED` 是执行后状态，任何用例只有在执行并取得与步骤匹配的客观证据后才允许更新。
 - 本文件只定义期望行为，**不授权任何数据库写操作、Kafka 写操作或测试数据写入**；执行验收时仍需遵守项目数据库/Kafka 只读与审批规则。
 - 对需要构造数据库异常数据的验收场景，本文件只定义期望行为，不授权任何测试数据写入；任何数据库写操作仍需按项目审批规则另行获得授权。
-- 验收标准文档获批不等于执行验收、正式验收通过或实现正式接受。本次任务不代表需求获批，也不授权后续设计或实现。
+- 验收标准文档获批不等于执行验收、正式验收通过或实现正式接受。本次收口仅表示需求与验收标准基线获批（`APPROVED`），未执行任何验收；100 条用例保持 `NOT_RUN`，不代表功能已实现、已验收通过或已正式交付。下一步可另起任务进入设计，但本任务未启动设计。
 
 ## 2. 验收结果状态模型
 
@@ -229,7 +231,7 @@
 ## 5. 未执行说明与后续执行边界
 
 - 本文件 100 条验收用例全部为 `NOT_RUN`，本次不执行任何验收。
-- 执行验收前，需求与验收标准必须先获得用户批准；执行验收须在功能实现完成并满足环境条件后开展。
+- 需求与验收标准基线已获批准（`APPROVED`）。执行验收须在功能实现完成并满足环境条件后开展；本文件当前不执行任何验收。
 - 涉及数据库只读比对、构造断点数据的用例，执行时需遵守项目数据库只读/审批规则。
 - Kafka 相关“后续口径”用例（如 TOFF-AC-086）仅在 Kafka 接入设计批准并实现后具备执行条件，届时状态标记为 `DEFERRED_UNTIL_KAFKA_ACCESS` 而非 PASS/FAIL。
 
@@ -240,5 +242,6 @@
 | 2026-09-02 | 建立“数据同步进度”Feature 验收草案：100 条 `TOFF-AC-001~100` 用例全部 `NOT_RUN`，建立需求 ID 与验收 ID 映射（关联需求列），覆盖提示词 §18 全部要求领域；只编写验收标准，不执行验收，不写 PASS/FAIL 结果 | TOPIC-OFFSET-REQUIREMENTS-001（纯文档任务；待用户审阅） |
 | 2026-09-02 | R1 定向修订（对提交 `e2c19cb...` 正式复审 `CHANGES_REQUIRED` 的回应，修正五项批准阻断项，完整五项主题如下，其中无效来源路径由关联的 `REQUIREMENTS.md` 修正）：①需求—验收追踪缺口——按复审缺失清单为 11 条需求（TOFF-REQ-005/006/007/068/069/070/117/118/119/120/121）在既有验收行补齐“关联需求”，保持 100 条编号不变，不新增、不删除、不重排验收行，并同步 §3 分类映射表；②无效来源路径——由关联的 `REQUIREMENTS.md` 删除对远端不存在的提示词路径引用并改为可核验表述，本文件不涉及；③消费延迟口径——在 TOFF-AC-086 补充三个 Kafka 未来指标的精确业务口径（含消费延迟 = Kafka 最新一条消息时间戳 −（NEXT_OFFSET − 1）前一条消息时间戳）及第一版不实现边界；④绝对只读验收证据强度——把 TOFF-AC-005 强化为完整后端调用链与 SQL/DML 客观证据、TOFF-AC-004 去除 HTTP 方法等同数据库写语义的表述；⑤“断点更新时间原样展示”与格式化歧义——在 TOFF-AC-008 拆分 `NEXT_OFFSET`/`SERVER_ID`/`UPDATED_AT` 展示口径。100 条用例全部保持 `NOT_RUN` | TOPIC-OFFSET-REQUIREMENTS-001-R1（纯文档定向修订；仅回应正式复审五项，不代表验收标准获批或验收通过；下一步由 ChatGPT 对 R1 结果提交正式复审） |
 | 2026-09-02 | R2 元数据文字定向修订（对提交 `26064ed...` 正式复审 `CHANGES_REQUIRED_METADATA_ONLY` 的回应）：ChatGPT 复审确认 R1 的五项业务修订全部通过、124 条需求与 100 条验收追踪已闭合；R2 只统一“R1 修正五项”修订摘要的计数与列举，补全元数据“修订说明”遗漏的“无效来源路径”并注明由 `REQUIREMENTS.md` 完成。100 条验收表格行与 124 条需求表格行逐字零变化；文档状态保持 `DRAFT_PENDING_USER_REVIEW`；不代表验收标准获批或验收通过 | TOPIC-OFFSET-REQUIREMENTS-001-R2（纯文档元数据文字定向修订；下一步由 ChatGPT 对 R2 结果提交正式复审） |
+| 2026-09-02 | 验收标准基线正式批准收口：ChatGPT 已对 R2 结果提交 `1c7003126f4940d8c4a9e82b9c974d940d6956e3` 完成最终复审并批准（`APPROVED`），验收标准基线正式批准。本文件文档状态/`baseline_status`/新增 `acceptance_status` 更新为 `APPROVED`，新增 `acceptance_execution_status=NOT_RUN` 明确“验收标准获批”与“已执行验收”的区分。100 条验收表格行、关联需求列、状态与 §3 分类映射逐字零变化；100 条用例全部保持 `NOT_RUN`；本次未执行任何验收，不写 PASS/ACCEPTED/IMPLEMENTED_ACCEPTED | TOPIC-OFFSET-REQUIREMENTS-APPROVAL-CLOSEOUT-001（纯文档状态收口；验收标准基线正式批准） |
 
 > 关联文档：需求草案 `docs/features/topic-offset/REQUIREMENTS.md`；功能入口与状态 `docs/features/topic-offset/README.md`。

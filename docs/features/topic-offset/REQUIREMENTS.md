@@ -10,12 +10,12 @@
 | 既有路由 | `/monitor/topic-offset`（保持既有值不变） |
 | 前端现状 | `frontend/src/views/topic-offset/TopicOffsetPage.vue` 为 `PlaceholderPage` 占位页（AS-IS 事实） |
 | 目标文档 | `docs/features/topic-offset/REQUIREMENTS.md` |
-| 文档状态 | `DRAFT_PENDING_USER_REVIEW`（需求与验收草案，待用户审阅） |
-| baseline_status | `DRAFT_PENDING_USER_REVIEW` |
+| 文档状态 | `APPROVED`（需求基线已正式批准；验收标准基线亦已批准，见 `ACCEPTANCE.md`） |
+| baseline_status | `APPROVED` |
 | 实现状态 | `NOT_STARTED` |
 | implementation_status | `NOT_STARTED` |
 | 设计状态 | `NOT_STARTED`（DESIGN.md / API.md / UI.md / DATABASE.md 均未建立） |
-| 验收状态 | 全部 `TOFF-AC-xxx` 为 `NOT_RUN`（本次只起草验收标准，不执行验收） |
+| 验收状态 | 验收标准基线已批准（`APPROVED`，见 `ACCEPTANCE.md`）；正式验收尚未执行，全部 `TOFF-AC-xxx` 单条状态保持 `NOT_RUN` |
 | 任务编号 | `TOPIC-OFFSET-REQUIREMENTS-001` |
 | 任务类型 | 纯文档——需求与验收草案（只建立功能级文档并提交、推送；严禁进入设计、编码、数据库访问或运行服务阶段） |
 | 授权基线提交 | `b26b789410de3eaf777e920abdb96cf888454c04`（任务开始时 `origin/develop` 最新提交，本地 HEAD 与其一致，ahead/behind=0/0） |
@@ -24,7 +24,7 @@
 | 本轮修订任务 | TOPIC-OFFSET-REQUIREMENTS-001-R1（对提交 `e2c19cbcbb9226b0cb91b0ac1185afea02ce7516` 正式复审 `CHANGES_REQUIRED` 后的纯文档定向修订） |
 | 修订说明 | R1 仅回应正式复审的五项批准阻断项（需求—验收追踪缺口、无效来源路径、消费延迟口径、绝对只读验收强度、原样展示与时间格式歧义），不改变文档状态与业务主体；不代表需求批准 |
 
-说明：本次任务只建立“数据同步进度”功能的需求与验收草案（`DRAFT_PENDING_USER_REVIEW`）。**本次任务完成不代表需求获批，也不授权后续设计或实现。** 下一步只能是用户审阅并批准或退回 `REQUIREMENTS.md` 与 `ACCEPTANCE.md`。
+说明：ChatGPT 已对 R2 结果提交 `1c7003126f4940d8c4a9e82b9c974d940d6956e3` 完成最终复审并批准（`APPROVED`）：需求基线正式批准，验收标准基线正式批准。本次批准收口仅更新状态，未修改任何需求业务语义；设计、实现与验收执行均未开始。下一步可另起任务进入设计阶段，本任务本身未开始设计。
 
 文档事实边界声明：
 
@@ -395,7 +395,7 @@ Schema.表名
 |---|---|
 | `CDC_TOPIC_OFFSET` 物理结构复核 | 当前物理结构未批准。后续需单独只读复核字段类型、可空性、主键/约束、索引与真实样例，复核通过前不得据此实现 SQL/接口。 |
 | Kafka 接入 | 第一版不接入。末端位置、待消费数量、消费延迟及其读取/计算设计属后续阶段，本任务不定义。 |
-| 需求与验收批准 | 下一步只能是用户审阅并批准或退回 `REQUIREMENTS.md` 与 `ACCEPTANCE.md`；批准前不进入设计、实现、验收执行或基线批准阶段。 |
+| 需求与验收批准 | 需求与验收标准基线已于 2026-09-02 获正式批准（提交 `1c7003126f4940d8c4a9e82b9c974d940d6956e3`）。可另起任务进入设计阶段；设计、实现与验收执行尚未开始。 |
 | 菜单标题统一 | 实现阶段需将菜单项标题由“Topic 偏移量”统一为“数据同步进度”（本任务不改动菜单）。 |
 
 ## 19. 文档级变更记录
@@ -405,5 +405,6 @@ Schema.表名
 | 2026-09-02 | 建立“数据同步进度”Feature 需求与验收草案（`DRAFT_PENDING_USER_REVIEW`；实现状态 `NOT_STARTED`；全部验收用例 `NOT_RUN`；DESIGN/API/UI/DATABASE 未建立；`CDC_TOPIC_OFFSET` 物理结构标为待复核） | TOPIC-OFFSET-REQUIREMENTS-001（纯文档任务；基于用户已确认产品决策 + 已批准项目级与数据库基线；待用户审阅） |
 | 2026-09-02 | R1 定向修订（对提交 `e2c19cb...` 正式复审 `CHANGES_REQUIRED` 的回应，修正五项批准阻断项，完整五项主题如下，改动分布于本文件与 `ACCEPTANCE.md`，部分主题跨文档完成）：①补齐 11 条需求—验收引用（在 `ACCEPTANCE.md` 为 TOFF-REQ-005/006/007/068/069/070/117/118/119/120/121 补齐验收引用；本文件 124 条需求编号与主体不变）；②删除对远端不存在的提示词来源路径（本文件 §1“需求来源”改为可核验表述）；③恢复“消费延迟”精确业务口径（本文件术语表、§11 进度字段表与 TOFF-REQ-070 写入精确公式及基于已保存断点估算的边界，验收侧由 `ACCEPTANCE.md` TOFF-AC-086 承担）；④加强“绝对只读”验收（由 `ACCEPTANCE.md` TOFF-AC-004/005 承担）；⑤消除断点更新时间“原样展示”与格式化歧义（本文件 TOFF-REQ-124 定向改写为“不得篡改业务值、允许按 TOFF-REQ-084 显示格式化”，验收侧由 `ACCEPTANCE.md` TOFF-AC-008 承担）。文档状态保持 `DRAFT_PENDING_USER_REVIEW`，实现/设计状态 `NOT_STARTED`；124 条需求编号与主体业务语义不变；R1 不代表需求批准 | TOPIC-OFFSET-REQUIREMENTS-001-R1（纯文档定向修订；下一步由 ChatGPT 对 R1 结果提交正式复审） |
 | 2026-09-02 | R2 元数据文字定向修订（对提交 `26064ed...` 正式复审 `CHANGES_REQUIRED_METADATA_ONLY` 的回应）：ChatGPT 复审确认 R1 的五项业务修订全部通过、124 条需求与 100 条验收追踪已闭合；R2 只统一“R1 修正五项”修订摘要的计数与列举，使本文件与 `ACCEPTANCE.md` 的 R1 摘要五项口径一致。124 条需求表格行与 100 条验收表格行逐字零变化；文档状态保持 `DRAFT_PENDING_USER_REVIEW`；不代表需求或验收获批 | TOPIC-OFFSET-REQUIREMENTS-001-R2（纯文档元数据文字定向修订；下一步由 ChatGPT 对 R2 结果提交正式复审） |
+| 2026-09-02 | 需求与验收基线正式批准收口：ChatGPT 已对 R2 结果提交 `1c7003126f4940d8c4a9e82b9c974d940d6956e3` 完成最终复审并批准（`APPROVED`），需求基线正式批准。本文件文档状态与 `baseline_status` 由 `DRAFT_PENDING_USER_REVIEW` 更新为 `APPROVED`。本次收口仅做状态更新，未修改任何需求业务语义、编号或引用；124 条需求表格行逐字零变化。设计、实现与验收执行均未开始；可另起任务进入设计阶段，但本任务本身未启动设计 | TOPIC-OFFSET-REQUIREMENTS-APPROVAL-CLOSEOUT-001（纯文档状态收口；需求基线正式批准） |
 
 > 关联文档：验收草案 `docs/features/topic-offset/ACCEPTANCE.md`；功能入口与状态 `docs/features/topic-offset/README.md`；Feature 总索引 `docs/features/README.md`。
