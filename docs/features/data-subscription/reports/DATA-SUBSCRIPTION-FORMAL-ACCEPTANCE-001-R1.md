@@ -129,3 +129,7 @@
   3. S5-9 场景机读 `ac` 数组与 `browser-scenario-index.md` 验收 ID 漏列 `DSUB-AC-126`（与 `coverage-matrix-r1.md` 不一致）。
 - 三处已由 `DATA-SUBSCRIPTION-FORMAL-ACCEPTANCE-001-R1-R1` 定向修订完成，修订明细见新报告 `reports/DATA-SUBSCRIPTION-FORMAL-ACCEPTANCE-001-R1-R1.md`。本追加仅记录元数据修订，业务语义与验收结论零变化；本报告 §1~§13 的 R1 执行事实（54 场景、124/359 前端测试、DB 恢复、126 条全部 `PASS`、`EXECUTED_PENDING_REVIEW` 状态）不回退。
 - 当前仍等待 ChatGPT 对 R1-R1 结果提交正式复审；复审通过前不更新为 `IMPLEMENTED_ACCEPTED`。
+
+## 15. 最终接受收口说明（DATA-SUBSCRIPTION-FORMAL-ACCEPTANCE-CLOSEOUT-001）
+
+ChatGPT 已对 R1-R1 结果提交 `ae66d90e4415ce51be54f8be2523bb44b55b78a2` 的正式复审结论为 `APPROVED`，任务 `DATA-SUBSCRIPTION-FORMAL-ACCEPTANCE-CLOSEOUT-001` 完成最终接受收口。本报告 §1~§14 的 R1 执行事实与元数据修订记录不回退；数据订阅 Feature 当前实现状态收口为 `IMPLEMENTED_ACCEPTED`、正式验收状态为 `ACCEPTED`、验收执行状态为 `PASS`（126 条全部 `PASS`，0 `FAIL`/0 `BLOCKED`/0 `NOT_RUN`），本 Feature 不再有待验收复审入口；§13 的“下一入口：ChatGPT 对本 R1 提交进行正式复审”及上文“等待正式复审、不更新为 `IMPLEMENTED_ACCEPTED`”等表述为当时状态，不代表当前。详见 `reports/DATA-SUBSCRIPTION-FORMAL-ACCEPTANCE-CLOSEOUT-001.md`。

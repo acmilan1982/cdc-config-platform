@@ -6,26 +6,27 @@
 |---|---|
 | Feature 中文名称 | 数据订阅 |
 | Feature 标识 | `data-subscription` |
-| 文档状态 | `APPROVED`（接口设计基线已正式批准，ChatGPT 对 R4-R1 结果提交 `ba7feddff426e369e1e73791b8d75e2ab62934e9` 正式复审结论 `APPROVED`；批准不代表功能已实现或验收已通过） |
-| 设计正式复审状态 | `APPROVED`（R1 正式复审结论 `CHANGES_REQUIRED`；R2 定向修订已完成且四项修订目标通过正式复核；R3 已按已批准“取消并发保护”需求统一删除版本令牌与并发错误码并完成定向修订；R4 为四文档设计基线统一执行状态元数据定向收口，本文件 API 业务设计在 R4 中零语义变化；ChatGPT 对 R4-R1 结果提交 `ba7feddff426e369e1e73791b8d75e2ab62934e9` 正式复审结论 `APPROVED`，当前正式批准设计版本为 R4，R4-R1 仅完成状态元数据收口；批准不代表实现或验收通过） |
-| 实现状态 | `NOT_STARTED`（本任务为纯文档设计基线 R3 定向修订，不涉及任何业务代码实现） |
-| 验收执行状态 | 126 条全部 `NOT_RUN` |
+| 文档状态 | `APPROVED`（接口设计基线已正式批准，ChatGPT 对 R4-R1 结果提交 `ba7feddff426e369e1e73791b8d75e2ab62934e9` 正式复审结论 `APPROVED`；“批准不代表功能已实现或验收已通过”表述设计批准当时的历史含义；其后本 Feature 已完成实现并正式验收，当前实现状态 `IMPLEMENTED_ACCEPTED`、正式验收状态 `ACCEPTED`、验收执行状态 `PASS`，见“实现状态”/“正式验收状态”行） |
+| 设计正式复审状态 | `APPROVED`（R1 正式复审结论 `CHANGES_REQUIRED`；R2 定向修订已完成且四项修订目标通过正式复核；R3 已按已批准“取消并发保护”需求统一删除版本令牌与并发错误码并完成定向修订；R4 为四文档设计基线统一执行状态元数据定向收口，本文件 API 业务设计在 R4 中零语义变化；ChatGPT 对 R4-R1 结果提交 `ba7feddff426e369e1e73791b8d75e2ab62934e9` 正式复审结论 `APPROVED`，当前正式批准设计版本为 R4，R4-R1 仅完成状态元数据收口；“批准不代表实现或验收通过”表述设计批准当时的历史含义；其后本 Feature 已完成实现并正式验收，当前实现状态 `IMPLEMENTED_ACCEPTED`、正式验收状态 `ACCEPTED`） |
+| 实现状态 | `IMPLEMENTED_ACCEPTED`（数据订阅 Feature 已实现并完成正式验收与最终接受收口：后端实现及真实数据库集成验证、前端 R3 代码与视觉、R3-R1 报告元数据收口均已获 ChatGPT 正式批准；其后正式验收 `DATA-SUBSCRIPTION-FORMAL-ACCEPTANCE-001` 已执行、R1（`DATA-SUBSCRIPTION-FORMAL-ACCEPTANCE-001-R1`）真实浏览器补验与证据定向修订及 R1-R1（`DATA-SUBSCRIPTION-FORMAL-ACCEPTANCE-001-R1-R1`）元数据修订已执行并经 ChatGPT 正式复审，126 条正式验收用例全部 `PASS`（0 `FAIL`/0 `BLOCKED`/0 `NOT_RUN`）；正式验收结果已经 ChatGPT 对结果提交 `ae66d90e4415ce51be54f8be2523bb44b55b78a2` 的正式复审 `APPROVED`，任务 `DATA-SUBSCRIPTION-FORMAL-ACCEPTANCE-CLOSEOUT-001` 完成最终接受收口。当前实现状态收口为 `IMPLEMENTED_ACCEPTED`、正式验收状态 `ACCEPTED`、验收执行状态 `PASS`；收口前各阶段状态（如 `NOT_STARTED`、`IMPLEMENTED_REVIEW_APPROVED_PENDING_FORMAL_ACCEPTANCE`）为当时状态，仅作历史保留；本 Feature 不再有待验收复审入口） |
+| 验收执行状态 | `PASS`（正式验收已执行并经 ChatGPT 正式复审批准：126 条全部 `PASS`（0 `FAIL`/0 `BLOCKED`/0 `NOT_RUN`），证据见 `reports/DATA-SUBSCRIPTION-FORMAL-ACCEPTANCE-001.md`、`...-001-R1.md`、`...-001-R1-R1.md` 与 `evidence/DATA-SUBSCRIPTION-FORMAL-ACCEPTANCE-001-R1/`） |
+| 正式验收状态 | `ACCEPTED`（正式验收结果已经 ChatGPT 对结果提交 `ae66d90e4415ce51be54f8be2523bb44b55b78a2` 的正式复审 `APPROVED`，最终接受收口由任务 `DATA-SUBSCRIPTION-FORMAL-ACCEPTANCE-CLOSEOUT-001` 完成；126 条正式验收用例全部 `PASS`，本 Feature 不再有待验收复审入口） |
 | 任务编号 | `DATA-SUBSCRIPTION-DESIGN-BASELINE-001-R3`（R3 定向修订；前序 R2 任务 `DATA-SUBSCRIPTION-DESIGN-BASELINE-001-R2` 结果提交 `026417e7e907b0fd23e8812024a260f119c993cc`；R1 任务 `DATA-SUBSCRIPTION-DESIGN-BASELINE-001-R1` 结果提交 `3609548238c9fede745f5291e258469ab7b78167`；首版任务 `DATA-SUBSCRIPTION-DESIGN-BASELINE-001` 结果提交 `610401575938ba32f13fa635493f991bdfae81b6`） |
 | 依据的已批准需求基线 | `docs/features/data-subscription/REQUIREMENTS.md`（`APPROVED`，107 条 `DSUB-REQ-001` ~ `DSUB-REQ-107`，当前正式批准版本为“取消并发保护”需求调整版本，Git 基线提交 `8331fbb6e17b8e2165b788d972f651aa980bf227`） |
-| 依据的已批准验收基线 | `docs/features/data-subscription/ACCEPTANCE.md`（`APPROVED`，126 条 `DSUB-AC-001` ~ `DSUB-AC-126`，全部 `NOT_RUN`；当前版本为“取消并发保护”验收标准调整版本，Git 基线提交 `8331fbb6e17b8e2165b788d972f651aa980bf227`） |
+| 依据的已批准验收基线 | `docs/features/data-subscription/ACCEPTANCE.md`（`APPROVED`，126 条 `DSUB-AC-001` ~ `DSUB-AC-126`（接口设计基线引用当时全部 `NOT_RUN`，为当时历史状态；其后正式验收已执行并经 ChatGPT 正式复审批准，当前 126 条全部 `PASS`、验收执行状态 `PASS`、正式验收状态 `ACCEPTED`）；当前版本为“取消并发保护”验收标准调整版本，Git 基线提交 `8331fbb6e17b8e2165b788d972f651aa980bf227`） |
 | 创建日期 | 2026-08-30 |
 | R1 修订日期 | 2026-08-30 |
 | R2 修订日期 | 2026-08-31 |
 | R3 修订日期 | 2026-08-31 |
 
-说明：本文件为数据订阅 Feature 接口设计基线，**已正式批准**。R1 已修正 ChatGPT 正式复审（`CHANGES_REQUIRED`）发现的主要问题并同步已批准点号规则；R2 统一修正剩余四项（三类查询语义、元数据 API query 参数、物化视图显式排除、`DSUB-FP-V1` 字节级指纹）并同步含逗号查询批准基线；R3 按已正式批准并收口的“取消并发保护”需求（`DSUB-REQ-097/098/099/103`）删除编辑打开/删除预览响应与 PUT/DELETE 请求中的 `versionToken`、删除指纹算法引用与锁内比较、删除 `40910 CONCURRENT_MODIFIED` 错误码，编辑保存与物理删除改为普通主键更新/删除。删除 `DSUB-FP-V1` 相关接口契约不是否定 R2 的技术正确性，而是同步新的正式需求。R3 定向修订已完成，ChatGPT 对 R4-R1 结果提交 `ba7feddff426e369e1e73791b8d75e2ab62934e9` 正式复审结论 `APPROVED`；批准不代表功能已实现、部署或验收完成。
+说明：本文件为数据订阅 Feature 接口设计基线，**已正式批准**。R1 已修正 ChatGPT 正式复审（`CHANGES_REQUIRED`）发现的主要问题并同步已批准点号规则；R2 统一修正剩余四项（三类查询语义、元数据 API query 参数、物化视图显式排除、`DSUB-FP-V1` 字节级指纹）并同步含逗号查询批准基线；R3 按已正式批准并收口的“取消并发保护”需求（`DSUB-REQ-097/098/099/103`）删除编辑打开/删除预览响应与 PUT/DELETE 请求中的 `versionToken`、删除指纹算法引用与锁内比较、删除 `40910 CONCURRENT_MODIFIED` 错误码，编辑保存与物理删除改为普通主键更新/删除。删除 `DSUB-FP-V1` 相关接口契约不是否定 R2 的技术正确性，而是同步新的正式需求。R3 定向修订已完成，ChatGPT 对 R4-R1 结果提交 `ba7feddff426e369e1e73791b8d75e2ab62934e9` 正式复审结论 `APPROVED`；“批准不代表功能已实现、部署或验收完成”表述设计批准当时的历史含义。其后本 Feature 后端/前端实现及真实数据库集成验证已获 ChatGPT 正式批准，正式验收 `DATA-SUBSCRIPTION-FORMAL-ACCEPTANCE-001` 已执行、R1（`DATA-SUBSCRIPTION-FORMAL-ACCEPTANCE-001-R1`）真实浏览器补验与证据定向修订及 R1-R1（`DATA-SUBSCRIPTION-FORMAL-ACCEPTANCE-001-R1-R1`）状态与证据元数据定向修订均已执行并完成，126 条正式验收用例全部 `PASS`（0 `FAIL`/0 `BLOCKED`/0 `NOT_RUN`）；ChatGPT 对最终结果提交 `ae66d90e4415ce51be54f8be2523bb44b55b78a2` 的正式复审结论为 `APPROVED`，任务 `DATA-SUBSCRIPTION-FORMAL-ACCEPTANCE-CLOSEOUT-001` 完成最终接受收口：当前实现状态收口为 `IMPLEMENTED_ACCEPTED`、正式验收状态为 `ACCEPTED`、验收执行状态为 `PASS`，本 Feature 不再有待验收复审入口。
 
 ### 1.1 设计依据
 
 - 统一响应结构：`ApiResponse<T>`（`code` / `message` / `data` / `timestamp`；`code=200` 表示成功，失败时 `code` 为业务错误码，HTTP 状态为 200，见 §7）。该结构来自项目既有 `common/api/ApiResponse.java`，本 Feature 沿用。
 - 异常处理：`BusinessException(code, message)`（项目既有 `common/exception/BusinessException.java` / `GlobalExceptionHandler.java`）：业务异常以 HTTP 200 + `fail(code, message)` 返回；参数校验失败（`@Validated` 等）返回 HTTP 400；未捕获异常返回 HTTP 500（内部堆栈不会暴露给前端）。批量失效项的结构化返回使用 `SubscriptionValidationException`（继承 `BusinessException`），以 `data` 携带 `validationErrors`（见 §4.6/§7）。
 - 路径风格：`@RestController` + `@RequestMapping("/api/subscriptions")` + SpringDoc `@Operation`/`@Tag`，与 `DataSourceController`（`/api/data-sources`）、`ServerConfigController`（`/api/server-config`）一致。
-- **本 Feature API 尚未实现**，本文件为设计草案；实现阶段按正式复审结论落地，不得直接照搬其他项目接口。
+- 本文件为已正式批准的接口设计基线。形成设计基线当时本 Feature API 尚未实现（该表述为设计批准当时的历史状态，不代表当前）；其后已按正式批准设计基线完成后端实现并经真实数据库集成验证（ChatGPT 正式复审 `APPROVED`），再经正式验收接受收口，当前实现状态 `IMPLEMENTED_ACCEPTED`、正式验收状态 `ACCEPTED`（见 §1 元数据）。实现阶段按正式复审结论落地，不得直接照搬其他项目接口。
 
 ## 2. 接口总览
 
@@ -625,4 +626,4 @@
 
 ---
 
-*文档状态：`APPROVED`。本文件为数据订阅 Feature 正式接口设计基线（批准版本 R4，R4-R1 完成状态元数据收口），ChatGPT 对 R4-R1 结果提交 `ba7feddff426e369e1e73791b8d75e2ab62934e9` 正式复审结论 `APPROVED`；本文件 API 业务设计在 R4 中零语义变化；批准不代表功能已实现或验收已通过；接口尚未实现。*
+*文档状态：`APPROVED`。本文件为数据订阅 Feature 正式接口设计基线（批准版本 R4，R4-R1 完成状态元数据收口），ChatGPT 对 R4-R1 结果提交 `ba7feddff426e369e1e73791b8d75e2ab62934e9` 正式复审结论 `APPROVED`；本文件 API 业务设计在 R4 中零语义变化。“批准不代表功能已实现或验收已通过”“接口尚未实现”为设计批准当时的历史状态，不代表当前。其后本 Feature 已按批准设计基线完成后端实现并经真实数据库集成验证，正式验收 `DATA-SUBSCRIPTION-FORMAL-ACCEPTANCE-001` 及 R1、R1-R1 补验已执行并经 ChatGPT 正式复审：126 条验收用例全部 `PASS`（0 `FAIL`/0 `BLOCKED`/0 `NOT_RUN`），ChatGPT 对最终结果提交 `ae66d90e4415ce51be54f8be2523bb44b55b78a2` 的正式复审结论为 `APPROVED`，任务 `DATA-SUBSCRIPTION-FORMAL-ACCEPTANCE-CLOSEOUT-001` 完成最终接受收口，当前实现状态 `IMPLEMENTED_ACCEPTED`、正式验收状态 `ACCEPTED`、验收执行状态 `PASS`，本 Feature 不再有待验收复审入口。*

@@ -195,3 +195,7 @@ ChatGPT 对正式验收结果提交的正式复审结论为 `CHANGES_REQUIRED`�
 - `CDC_DATA_SUBSCRIBE` 恢复至备份状态并核验（`database/restore-r1.txt`）。
 
 当前有效结论以 R1 证据与 R1 报告（`reports/DATA-SUBSCRIPTION-FORMAL-ACCEPTANCE-001-R1.md`）为准；验收执行状态保持 `EXECUTED_PENDING_REVIEW`，实现状态保持 `IMPLEMENTED_FORMAL_ACCEPTANCE_EXECUTED_PENDING_REVIEW`，待 ChatGPT 对 R1 结果提交正式复审。
+
+## 22. 最终接受收口说明（DATA-SUBSCRIPTION-FORMAL-ACCEPTANCE-CLOSEOUT-001）
+
+ChatGPT 已对正式验收 R1-R1 结果提交 `ae66d90e4415ce51be54f8be2523bb44b55b78a2` 的正式复审结论为 `APPROVED`，任务 `DATA-SUBSCRIPTION-FORMAL-ACCEPTANCE-CLOSEOUT-001` 完成最终接受收口。本报告 R0 执行事实与 §21 所述 R1 证据关系不回退；数据订阅 Feature 当前实现状态收口为 `IMPLEMENTED_ACCEPTED`、正式验收状态为 `ACCEPTED`、验收执行状态为 `PASS`（126 条全部 `PASS`，0 `FAIL`/0 `BLOCKED`/0 `NOT_RUN`），本 Feature 不再有待验收复审入口；上文“待 ChatGPT 正式复审”“保持 EXECUTED_PENDING_REVIEW”等表述为当时状态，不代表当前。详见 `reports/DATA-SUBSCRIPTION-FORMAL-ACCEPTANCE-CLOSEOUT-001.md`。

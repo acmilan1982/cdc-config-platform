@@ -119,3 +119,7 @@
   - 复审通过后才允许执行最终验收接受收口并更新为 `IMPLEMENTED_ACCEPTED`；
   - 正式接受前不得执行延期的大屏调整；
   - 若仍存在 FAIL/BLOCKED：按真实数量更新状态，不得写成正式验收通过。
+
+## 9. 最终接受收口说明（DATA-SUBSCRIPTION-FORMAL-ACCEPTANCE-CLOSEOUT-001）
+
+ChatGPT 已对本 R1-R1 结果提交 `ae66d90e4415ce51be54f8be2523bb44b55b78a2` 的正式复审结论为 `APPROVED`，任务 `DATA-SUBSCRIPTION-FORMAL-ACCEPTANCE-CLOSEOUT-001` 完成最终接受收口。本报告 §1~§8 的三处元数据定向修订记录与 126 条全部 `PASS` 结论不回退；数据订阅 Feature 当前实现状态收口为 `IMPLEMENTED_ACCEPTED`、正式验收状态为 `ACCEPTED`、验收执行状态为 `PASS`（126 条全部 `PASS`，0 `FAIL`/0 `BLOCKED`/0 `NOT_RUN`），本 Feature 不再有待验收复审入口；§8 的“下一入口：ChatGPT 对本 R1-R1 结果提交进行正式复审”及上文 `IMPLEMENTED_FORMAL_ACCEPTANCE_EXECUTED_PENDING_REVIEW`、`EXECUTED_PENDING_REVIEW` 为复审通过前的当时状态，不代表当前。大屏调整已具备独立任务前置条件但未在本收口任务中执行（状态 `READY_FOR_SEPARATE_TASK`）。详见 `reports/DATA-SUBSCRIPTION-FORMAL-ACCEPTANCE-CLOSEOUT-001.md`。
