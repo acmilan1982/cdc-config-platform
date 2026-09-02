@@ -80,6 +80,7 @@
 - 无任何表头排序/排序箭头（TOFF-REQ-086）；无分页规格选择器（TOFF-REQ-089）。
 - 表格固定为上述 8 列，不单独增加状态列（TOFF-REQ-072）。
 - 表格 `size="small" border`，沿用项目既有表格惯例。
+- Kafka 三列（Kafka 末端位置/待消费数量/消费延迟）对应接口字段 `kafkaEndOffset/pendingCount/consumeLag`，前端类型为 `string\|null`；值为 `null` 时该单元格显示 `—`。渲染分支**只把 `null` 映射为 `—`**，绝不转成 `0` 或字符串 `"null"`（TOFF-REQ-066；与 API.md §3.1 的 JSON `null` 显式规则一致）。
 
 ## 6. 同步对象单元格
 
@@ -173,3 +174,4 @@
 | 日期 | 变更 | 依据 |
 |---|---|---|
 | 2026-09-02 | 建立本功能页面与交互规范草案（`DRAFT_PENDING_USER_REVIEW`）：页面 IA、查询区、工具栏、8 列表格与列宽、同步对象、分页、刷新生命周期、加载/空/错误/配置状态、响应式与 Tooltip；未实现、未做视觉验收 | TOPIC-OFFSET-DESIGN-001（纯文档设计任务） |
+| 2026-09-02 | R1 定向修订（状态保持 `DRAFT_PENDING_USER_REVIEW`）：Kafka 三列读取接口 `null` 时显示 `—`，明确绝不转 `0` 或字符串 `"null"`，与 API.md §3.1 的 JSON `null` 显式规则保持一致 | TOPIC-OFFSET-DESIGN-001-R1（ChatGPT 正式复审 `CHANGES_REQUIRED` 定向修订） |

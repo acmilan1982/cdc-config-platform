@@ -23,7 +23,7 @@
 | 2 | GET | `/api/monitor/topic-offset/candidates` | 读取最新候选配置（客户端/源库/目标库，含停用） | 下拉候选与最新配置映射 |
 
 - 前缀遵循仓库既有 Controller 直写 `/api/...` 惯例（如 `/api/job-failure`）。
-- 断点表唯一访问在接口 1 的只读 SQL；配置表唯一访问在接口 1（行映射）与接口 2（候选）。均只 `SELECT`。
+- 只读 SQL 次数：接口 1（`/offsets`）一次请求执行**三次只读 SELECT**（`CDC_TOPIC_OFFSET`、`CDC_CLIENT_MULTIPLE`、`CDC_DATA_SOURCE`）；接口 2（`/candidates`）一次请求执行**两次只读 SELECT**（仅两张配置表）。均只 `SELECT`，无任何 DML；不构成跨三张表的事务/同一 SCN 一致快照（详见 DESIGN §4/§5.5）。
 
 ## 3. 通用约定
 
@@ -34,11 +34,12 @@
 ```
 
 - `code=200` 表示成功；业务错误 HTTP 仍为 200，`code` 取非 200 业务码，`message` 为可展示消息（沿用 `GlobalExceptionHandler`/`BusinessException`）。错误码见 §7。
-- 全字段默认 `non_null` 序列化：第一版无值的字段以 `null` 明确表达（Kafka 三列），不输出 0（TOFF-REQ-066）。
+- null 与全局 `non_null` 的序列化规则：项目全局 Jackson 为 `default-property-inclusion=non_null`，只靠全局配置**不会**输出 `null` 字段。本契约要求第一版**始终存在且显式为 JSON `null`** 的字段（Kafka 三列 `kafkaEndOffset/pendingCount/consumeLag`，以及不可解析行的 `parsed`/`mapping`），在承载 VO `TopicOffsetItemVO` 上以**字段级 `@JsonInclude(JsonInclude.Include.ALWAYS)`** 强制输出，不输出 0（TOFF-REQ-066），**不改变全局序列化配置**；其余字段保持全局 `non_null` 语义。
 
 ### 3.2 数值与时间均为字符串
 
 - `NEXT_OFFSET`、未来 Kafka 末端位置、待消费数量在**接口链路必须为 JSON 字符串**（TOFF-REQ-076、TOFF-REQ-078、TOFF-REQ-080），禁止作为 JSON number 输出；示例见 §4 与 §6。
+- `NEXT_OFFSET` 字符串由 SQL `TO_CHAR(NEXT_OFFSET,'FM99999999999999999990','NLS_NUMERIC_CHARACTERS=''.,''')` 确定性产出（DESIGN §5.8）：无科学计数、无千分位、无前后空格、不受会话 NLS 数字字符影响、不丢精度、覆盖 `NUMBER(19,0)` 全范围（含负号与 19 位边界）；设计验证样例 `0/1/-1/9007199254740993/±19 位边界` 列为后续 Mapper/接口测试必测（见 §8）。
 - 断点更新时间输出 `yyyy-MM-dd HH:mm:ss` 字符串，值为 Oracle `DATE` 的存库钟面时间，不做时区换算（TOFF-REQ-084、TOFF-REQ-124）。
 - 行唯一标识：`SERVER_ID + KAFKA_TOPIC`（TOFF-REQ-083），由两个字段共同表达；接口不提供“序号”业务键。
 
@@ -147,14 +148,14 @@
 |---|---|---|
 | `serverId` | string | 原样 `SERVER_ID`（TOFF-REQ-085） |
 | `rawTopic` | string | 原样 `KAFKA_TOPIC`（权威原值，用于悬浮，TOFF-REQ-012/018） |
-| `nextOffset` | **string** | `NEXT_OFFSET` 十进制字符串（TOFF-REQ-076、TOFF-REQ-080；无千分位） |
+| `nextOffset` | **string** | `NEXT_OFFSET` 十进制字符串（TOFF-REQ-076、TOFF-REQ-080；无千分位、无科学计数；DESIGN §5.8 显式格式模型产出，验证样例见 §8） |
 | `updatedAt` | string | `yyyy-MM-dd HH:mm:ss`（TOFF-REQ-084；DB 钟面时间，无时区换算） |
-| `kafkaEndOffset` | string\|null | 第一版恒 `null`（Kafka 未接入；未来为字符串，绝不显示 0，TOFF-REQ-064/066/068/076） |
-| `pendingCount` | string\|null | 第一版恒 `null`（待消费数量未来口径；TOFF-REQ-069、TOFF-REQ-073、TOFF-REQ-074、TOFF-REQ-078） |
-| `consumeLag` | string\|null | 第一版恒 `null`（消费延迟未来口径；TOFF-REQ-070、TOFF-REQ-075） |
-| `parseable` | boolean | Topic 是否严格 5 段解析成功 |
-| `parsed` | object\|null | 成功时为五段对象（字段见下）；失败为 `null` |
-| `mapping` | object\|null | 成功时为三端映射；失败为 `null` |
+| `kafkaEndOffset` | string\|null | 第一版**始终存在且为 JSON `null`**（字段级 `@JsonInclude(ALWAYS)`，绕开全局 `non_null`；Kafka 未接入；未来为字符串，绝不显示 0，TOFF-REQ-064/066/068/076） |
+| `pendingCount` | string\|null | 第一版**始终存在且为 JSON `null`**（同 Kafka 三列字段级 `@JsonInclude(ALWAYS)`；待消费数量未来口径；TOFF-REQ-069、TOFF-REQ-073、TOFF-REQ-074、TOFF-REQ-078） |
+| `consumeLag` | string\|null | 第一版**始终存在且为 JSON `null`**（同 Kafka 三列字段级 `@JsonInclude(ALWAYS)`；消费延迟未来口径；TOFF-REQ-070、TOFF-REQ-075） |
+| `parseable` | boolean | 按英文句点拆分是否**恰好 5 段**解析成功（不要求各段非空，TOFF-REQ-014/015；含前导/尾/连续点但恰 5 段的 Topic 判成功，见 DESIGN §5.3） |
+| `parsed` | object\|null | 成功时为五段对象（字段见下）；失败行**始终存在且为 JSON `null`**（字段级 `@JsonInclude(ALWAYS)`） |
+| `mapping` | object\|null | 成功时为三端映射；失败行**始终存在且为 JSON `null`**（字段级 `@JsonInclude(ALWAYS)`） |
 
 `parsed` 对象（可解析行，TOFF-REQ-014/054）：`clientId`/`sourceId`/`schema`/`table`/`targetId` 均为 string，分别对应第 1/2/3/4/5 段。`parsed.table` 是表名过滤的判定段（TOFF-REQ-028）。失败行 `parsed=null` 表示**不猜测任何客户端/源库/Schema/表名/目标库**（TOFF-REQ-015/017/062）。
 
@@ -223,7 +224,7 @@
 1. **先筛选**（TOFF-REQ-090）：无结构化条件保留全部（含无法解析）；有结构化条件仅匹配可解析行（TOFF-REQ-032/033）；同维“或”、跨维“且”（TOFF-REQ-026）；客户端/源库/目标库精确匹配不转大小写（TOFF-REQ-027）；表名不区分大小写包含第 4 段、首尾空格已去除（TOFF-REQ-028、TOFF-REQ-029、TOFF-REQ-030）；`%`/`_`/`\` 按字面（TOFF-REQ-031）。
 2. **再固定排序**：`KAFKA_TOPIC ASC, SERVER_ID ASC`（TOFF-REQ-087/088）。
 3. **再分页**：每页 150（TOFF-REQ-089），`total`/`unparseableTotal` 基于过滤后全集（TOFF-REQ-020/092）。
-4. 只读：一次请求 = 一次断点表 `SELECT` + 配置表 `SELECT`，无任何 DML（TOFF-REQ-009/011/122）。
+4. 只读：一次 `/offsets` 请求执行 **三次只读 SELECT**（`CDC_TOPIC_OFFSET`、`CDC_CLIENT_MULTIPLE`、`CDC_DATA_SOURCE` 各一次），无任何 DML（TOFF-REQ-009/011/122）；一次 `/candidates` 请求执行 **两次只读 SELECT**（仅两张配置表）。三张表是依次独立的只读查询，不构成跨三表的事务/同一 SCN 一致快照；映射一致性由一次请求内依次读取后形成的内存映射保证（DESIGN §4/§5.5）。
 
 ## 6. 字段字典与数据库映射
 
@@ -231,7 +232,7 @@
 |---|---|---|
 | `serverId` | `CDC_TOPIC_OFFSET.SERVER_ID` | VARCHAR2 原样 |
 | `rawTopic` | `CDC_TOPIC_OFFSET.KAFKA_TOPIC` | VARCHAR2 原样 |
-| `nextOffset` | `CDC_TOPIC_OFFSET.NEXT_OFFSET` | NUMBER(19,0) → `TO_CHAR` 字符串 |
+| `nextOffset` | `CDC_TOPIC_OFFSET.NEXT_OFFSET` | NUMBER(19,0) → `TO_CHAR(NEXT_OFFSET,'FM99999999999999999990','NLS_NUMERIC_CHARACTERS=''.,''')` 字符串（DESIGN §5.8） |
 | `updatedAt` | `CDC_TOPIC_OFFSET.UPDATED_AT` | DATE → `TO_CHAR(...,'YYYY-MM-DD HH24:MI:SS')` |
 | `clientId`（parsed） | 由 `rawTopic` 第 1 段解析 | 纯函数解析，不写库 |
 | `sourceId`/`schema`/`table`/`targetId` | 第 2/3/4/5 段 | 同上 |
@@ -254,6 +255,8 @@
 ## 8. 只读约束与追踪
 
 - 无任何写接口；断点/配置 Mapper 无写方法面（TOFF-REQ-011/122、TOFF-AC-005）；本契约不定义 Offset 重置/Kafka 接口（TOFF-REQ-123）。
+- 只读 SELECT 次数：`/offsets`=3（断点表 + 两张配置表）、`/candidates`=2（两张配置表）；均为显式列投影，绝不含 `DATA_SOURCE_PASSWORD`。
+- `NEXT_OFFSET` 字符串化样例（DESIGN §5.8）列为后续 Mapper/接口测试必测：`0`→`"0"`、`1`→`"1"`、`-1`→`"-1"`、`9007199254740993`→`"9007199254740993"`、`9999999999999999999`→`"9999999999999999999"`、`-9999999999999999999`→`"-9999999999999999999"`。本任务不连接数据库，不在本任务内验证。
 - 覆盖验收要点：TOFF-AC-003/004/005/006（只读与第一版边界）、TOFF-AC-008（字符串 Offset/SERVER_ID 原样/时间仅格式化）、TOFF-AC-025~042（查询区与过滤）、TOFF-AC-043~053（候选与映射）、TOFF-AC-064/065（序号/行唯一）、TOFF-AC-077~081（Offset 字符串）、TOFF-AC-098（最近刷新时间为前端时间，本接口不返回该值）。
 - 接口示例不包含任何数据库密码、连接串、Token 等敏感信息。
 
@@ -262,3 +265,4 @@
 | 日期 | 变更 | 依据 |
 |---|---|---|
 | 2026-09-02 | 建立本功能接口契约草案（`DRAFT_PENDING_USER_REVIEW`）：2 个只读 GET 接口、请求/响应/字段字典、查询语义、错误码、只读追踪；未实现、未联调、未验收 | TOPIC-OFFSET-DESIGN-001（纯文档设计任务） |
+| 2026-09-02 | R1 定向修订（状态保持 `DRAFT_PENDING_USER_REVIEW`）：null 与全局 `non_null` 冲突唯一方案（Kafka 三列与失败行 `parsed`/`mapping` 以 `TopicOffsetItemVO` 字段级 `@JsonInclude(ALWAYS)` 显式输出）；`parseable` 明确“恰好 5 段即可、不要求非空”；`NEXT_OFFSET` 注明显式格式模型与验证样例；只读次数更正为 `/offsets` 三次、`/candidates` 两次 SELECT，明确非跨表 SCN 快照 | TOPIC-OFFSET-DESIGN-001-R1（ChatGPT 正式复审 `CHANGES_REQUIRED` 定向修订） |

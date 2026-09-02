@@ -114,19 +114,21 @@ TopicOffsetQueryService(interface)+Impl
 ApiResponse<TopicOffsetPageVO|CandidateGroupVO>
 ```
 
-调用链（offset 查询一次请求内完成，避免多次往返造成的不一致）：
+调用链：一次 `/offsets` 请求内按固定顺序依次执行 **三次只读 SELECT**（配置两表 + 断点表各一次），结果在内存汇总；全程无 DML、不开数据库事务，**不存在跨三张表的 Oracle 同一 SCN 一致快照**——三次 SELECT 依次独立返回，配置与断点只在 Java 内存映射层面对齐。
 
 1. Controller 接收并校验查询参数；
-2. Service 读取**当次最新**配置快照（客户端全量 + 数据源安全列全量）用于映射；
-3. Mapper 以 `ORDER BY KAFKA_TOPIC ASC, SERVER_ID ASC` 取 `CDC_TOPIC_OFFSET` 全量（≤6000）；
-4. 逐行严格解析 Topic（`TopicNameParser`）；可解析取 5 段，否则标记无法解析且不猜测（TOFF-REQ-014/015/017/019）；
-5. 应用结构化过滤：无任何结构化条件 → 保留全部（含无法解析，TOFF-REQ-032）；任一结构化条件生效 → 无法解析行不参与匹配（TOFF-REQ-033），仅保留命中的可解析行；
-6. 计算 `total`（过滤后全集行数）与 `unparseableTotal`（过滤后全集中无法解析行数，TOFF-REQ-020）；
-7. 按 `(pageNum-1)*150` 切片当前页（保持 SQL 既定排序，不做二次排序）；
-8. 每行映射客户端/源库/目标库显示状态并格式化 Offset/时间为字符串，组装 `TopicOffsetItemVO`；
-9. 返回 `ApiResponse`。
+2. 只读 SELECT ①（配置表一）：`CDC_CLIENT_MULTIPLE` 显式列投影（CLIENT_ID/CLIENT_DESC/FG_ACTIVE）全部行，用于客户端映射；
+3. 只读 SELECT ②（配置表二）：`CDC_DATA_SOURCE` 显式列投影（DATA_SOURCE_ID/DATA_SOURCE_ORG/DATA_SOURCE_CATEGORY/FG_ACTIVE，**列清单不含密码**）全部行，用于源库/目标库映射；
+4. 只读 SELECT ③（断点表）：`TopicOffsetMapper` 以 `ORDER BY KAFKA_TOPIC ASC, SERVER_ID ASC` 取 `CDC_TOPIC_OFFSET` 全量（≤6000）；
+5. 在 Java 内存将两张配置表结果构造为 `clientById`/`dataSourceById` 映射（本设计中“配置快照”仅指**同一次请求内依次读取后形成的内存映射**，不是 Oracle SCN 一致快照；见 5.5）；
+6. 逐行严格解析 Topic（`TopicNameParser`）；可解析取 5 段，否则标记无法解析且不猜测（TOFF-REQ-014/015/017/019）；
+7. 应用结构化过滤：无任何结构化条件 → 保留全部（含无法解析，TOFF-REQ-032）；任一结构化条件生效 → 无法解析行不参与匹配（TOFF-REQ-033），仅保留命中的可解析行；
+8. 计算 `total`（过滤后全集行数）与 `unparseableTotal`（过滤后全集中无法解析行数，TOFF-REQ-020）；
+9. 按 `(pageNum-1)*150` 切片当前页（保持 SQL 既定排序，不做二次排序）；
+10. 每行映射客户端/源库/目标库显示状态并格式化 Offset/时间为字符串，组装 `TopicOffsetItemVO`；
+11. 返回 `ApiResponse`。
 
-候选查询调用链：读取同一次最新配置快照 → 按规则排序/分类（SOURCE/TARGET 大小写不敏感）→ 组装候选 VO。
+候选查询调用链：一次 `/candidates` 请求执行 **两次只读 SELECT**（仅两张配置表：`CDC_CLIENT_MULTIPLE` + `CDC_DATA_SOURCE`），在内存构造映射后按规则排序/分类（SOURCE/TARGET 大小写不敏感）→ 组装候选 VO。
 
 ## 5. 后端设计
 
@@ -138,7 +140,7 @@ ApiResponse<TopicOffsetPageVO|CandidateGroupVO>
 |---|---|
 | `controller/TopicOffsetController.java` | 两个只读 GET：`/offsets`、`/candidates`；仅参数解析与委托 |
 | `query/TopicOffsetQuery.java` | offsets 查询参数载体（`List<String> clientId/sourceId/targetId`、`String tableName`、`Integer pageNum`） |
-| `service/TopicOffsetQueryService.java` + `service/impl/TopicOffsetQueryServiceImpl.java` | 查询编排：配置快照、解析、过滤、分片、映射 |
+| `service/TopicOffsetQueryService.java` + `service/impl/TopicOffsetQueryServiceImpl.java` | 查询编排：只读 SELECT 读两张配置表 + 断点表（offsets 共三次、candidates 共两次），内存映射、解析、过滤、分片 |
 | `parser/TopicNameParser.java` | 纯函数：严格五段解析；无状态、可单测 |
 | `mapper/TopicOffsetMapper.java` | 断点表**只读 Mapper（不继承 BaseMapper）**，`@Select` 固定排序 + `TO_CHAR` 字符串化 |
 | `mapper/ClientConfigMapper.java` | `CDC_CLIENT_MULTIPLE` 显式列投影（CLIENT_ID/CLIENT_DESC/FG_ACTIVE），全部行 |
@@ -162,11 +164,12 @@ ApiResponse<TopicOffsetPageVO|CandidateGroupVO>
 规则（TOFF-REQ-012~019）：
 
 - 解析对象是数据库原样 `KAFKA_TOPIC` 原始值；任何地方都不重新拼接/替换/写回（TOFF-REQ-012、TOFF-REQ-013、TOFF-REQ-124）。
-- 成功条件：按英文句点 `.` 拆分**恰好 5 个非空段**；等价于正则 `^[^.]+(\.[^.]+){4}$`（与 `DATABASE.md` §7 已核实口径一致）。
-- 实现要点：用编译正则校验并切分；**禁止**使用默认 `String.split("\\.")`（会吞掉尾部空段，导致“尾点 5 段”被误判成功）。解析后 `parts[0]=clientId`、`parts[1]=sourceId`、`parts[2]=schema`、`parts[3]=table`、`parts[4]=targetId`。
-- 非 5 段（含段内含句点、空段、前导/结尾句点）→ 无法解析；返回 `parseable=false`，不猜测、不部分解析、不从配置反向推断（TOFF-REQ-015/017/019/062）。
+- 成功条件（TOFF-REQ-014/015）：按英文句点 `.` 拆分，**恰好得到 5 段即解析成功**；多于或少于 5 段均视为无法解析。已批准需求**没有**规定“段必须非空”，故本设计**不引入“非空段/空段一律失败”规则**，也不用正则做段校验；`DATABASE.md` §7 “各段非空、无前导/结尾/连续句点”是对当前 8 条样本的**数据事实观察**（样本恰好全部为 5 段非空），是复核记录，不是解析规则，不得作为解析判定依据。
+- 实现要点：使用能保留尾部空段的拆分方式 `topic.split("\\.", -1)`（`limit=-1` 时尾部空串被保留，不会因默认 split 吞尾串而改变段数），拆分结果数组长度恰好为 5 即 `parseable=true`；解析后 `parts[0]=clientId`、`parts[1]=sourceId`、`parts[2]=schema`、`parts[3]=table`、`parts[4]=targetId`。**不 trim、不改写、不重组**原始 Topic（TOFF-REQ-013/124）。
+- 空段语义：若真实存在由前导点、尾点或连续点产生的空段，只要拆分长度恰好为 5，该行仍解析成功；空段按**原值（空串）**参与展示、精确筛选与配置映射，**不自行添加任何占位业务文案**（不把空段猜成客户端/源库/Schema/表名/目标库含义）。配置表主键不可能为空串，空段在配置映射中无匹配 → 该端映射 `NOT_FOUND`（UI 按其规则标记“配置不存在”，TOFF-REQ-058）；空段精确筛选只在用户显式传入空值时才会命中，候选下拉不提供空选项，实际不会被选中。当前开发样本无此类形态（`DATABASE.md` §7），由单元测试构造覆盖（§11）。
+- 无法解析（拆分后多于 5 段或少于 5 段，含段内含句点导致多段）：返回 `parseable=false`，不猜测、不部分解析、不从配置反向推断（TOFF-REQ-015/017/019/062）；原始 Topic 仍原样返回用于悬浮，Offset/断点时间/中心端等其余字段照常展示（TOFF-REQ-016/018）。
 - 解析结果只用于“展示”与“查询”，`KAFKA_TOPIC` 原值始终随响应返回用于悬浮（TOFF-REQ-018/061）。
-- 开发库当前无异常样本（`DATABASE.md`），异常分支由单元测试构造覆盖（§11）。
+- 开发库当前无异常样本（`DATABASE.md` §7），异常分支由单元测试构造覆盖（§11）。
 
 ### 5.4 过滤算法（先筛选 → 再固定排序 → 再分页，TOFF-REQ-090）
 
@@ -192,7 +195,8 @@ ApiResponse<TopicOffsetPageVO|CandidateGroupVO>
 
 ### 5.5 配置最新映射与候选（TOFF-REQ-040~053）
 
-- 每次 `/offsets` 与 `/candidates` 请求都重新从 `CDC_CLIENT_MULTIPLE`、`CDC_DATA_SOURCE` 读取**最新全部配置**用于名称与状态映射（TOFF-REQ-052），不存在复用上一条数据的缓存。
+- 每次 `/offsets` 请求共执行 **三次只读 SELECT**：`CDC_CLIENT_MULTIPLE`、`CDC_DATA_SOURCE`（本小节，映射用）与 `CDC_TOPIC_OFFSET`（断点表，见 5.2/5.8）；每次 `/candidates` 请求执行 **两次只读 SELECT**（仅两张配置表）。两张配置表每次请求都重新读取**最新全部配置**用于名称与状态映射（TOFF-REQ-052），不存在复用上一条数据的缓存。
+- 配置表与断点表是**三次独立依次执行**的只读查询，无数据库事务包裹；这里所述的映射只在**同一次请求内按顺序读取后**于 Java 内存中构造，**不构成跨三张表的 Oracle 同一 SCN 一致快照**（若保留“配置快照”一词，仅指上述内存映射，不是数据库快照）。
 - `ClientConfigMapper`：`SELECT CLIENT_ID, CLIENT_DESC, FG_ACTIVE FROM CDC_CLIENT_MULTIPLE`（全部行，不过滤启用）。
 - `DataSourceConfigMapper`：`SELECT DATA_SOURCE_ID, DATA_SOURCE_ORG, DATA_SOURCE_CATEGORY, FG_ACTIVE FROM CDC_DATA_SOURCE`（全部行，不过滤启用；列清单固定，**绝不**读取 `DATA_SOURCE_PASSWORD`，参照 `subscription/entity/DataSourceRef` 安全投影先例）。
 - 内存快照结构：
@@ -223,21 +227,38 @@ ApiResponse<TopicOffsetPageVO|CandidateGroupVO>
 
 ### 5.8 NEXT_OFFSET 字符串链路与 UPDATED_AT 格式化
 
-单一明确选择：在 Mapper 的 `@Select` 内用 Oracle 函数把数值与时间直接转字符串，Java/JSON 全程字符串（TOFF-REQ-076、TOFF-REQ-080、TOFF-AC-077/081）。
+单一明确选择：在 Mapper 的 `@Select` 内用 Oracle 函数把数值与时间直接转字符串，Java/JSON 全程字符串（TOFF-REQ-076、TOFF-REQ-080、TOFF-AC-077/081）。`NEXT_OFFSET` 采用**显式格式模型 + 固定数字字符设置**，不依赖会话 NLS，消除无格式 `TO_CHAR` 的表示不确定性。
 
 ```sql
-SELECT SERVER_ID                          AS serverId
-      ,KAFKA_TOPIC                        AS kafkaTopic
-      ,TO_CHAR(NEXT_OFFSET)               AS nextOffsetStr   -- NUMBER(19,0) → 纯数字串，无科学计数、无千分位
-      ,TO_CHAR(UPDATED_AT,'YYYY-MM-DD HH24:MI:SS') AS updatedAtStr -- Oracle DATE 秒级、无时区 → 原样钟面时间
+SELECT SERVER_ID                                        AS serverId
+      ,KAFKA_TOPIC                                      AS kafkaTopic
+      ,TO_CHAR(NEXT_OFFSET
+              ,'FM99999999999999999990'
+              ,'NLS_NUMERIC_CHARACTERS=''.,''')         AS nextOffsetStr   -- NUMBER(19,0) → 确定性十进制整数字符串
+      ,TO_CHAR(UPDATED_AT,'YYYY-MM-DD HH24:MI:SS')      AS updatedAtStr    -- Oracle DATE 秒级、无时区 → 原样钟面时间
 FROM   CDC.CDC_TOPIC_OFFSET
 ORDER  BY KAFKA_TOPIC ASC, SERVER_ID ASC
 ```
 
-理由与保证：
+格式要点（Oracle 19c、`NUMBER(19,0)`）：
 
-- `NEXT_OFFSET NUMBER(19,0)` 上限远超 JS 安全整数（`DATABASE.md` §8-3）；用 `TO_CHAR(NEXT_OFFSET)` 在数据库侧产出精确整数字符串，Java 只透传，**永不转 `double/BigInteger` 或 Jackson 数值序列化**，杜绝精度丢失（TOFF-REQ-076、TOFF-REQ-080、TOFF-AC-008/077/081）。
-- `UPDATED_AT DATE` 为秒级、无时区（`DATABASE.md` §9-i）；`TO_CHAR` 输出的是数据库存储钟面时间，**不做任何隐式时区换算**，符合 TOFF-REQ-084、TOFF-REQ-124（只允许按 `YYYY-MM-DD HH:mm:ss` 显示格式化，不得篡改业务时间值）与 TOFF-AC-008/066。
+- 格式模型为 `FM` + 20 个整数数字位（示例 `99999999999999999990` 为 19 个 `9` + 末位强制 `0`），至少提供 19 个整数位，**完整容纳 `NUMBER(19,0)` 的全部合法值**（绝对值最大 19 位：`±9999999999999999999`）；末位 `0` 保证整数值至少显示一位（`0 → '0'`），`FM` 抑制前导/尾随空格与多余 `9` 空位。
+- `NLS_NUMERIC_CHARACTERS=''.,''` 固定小数点 `.`、组分隔符 `,`，配合不含 `G`/`D` 的格式：**不产生千分位、不受会话 NLS 数字字符影响**。
+- 结果恒为普通十进制整数字符串：**无科学计数、无千分位、无前后空格、不丢精度**；Java 只透传，**永不转 `double/BigInteger` 或 Jackson 数值序列化**（TOFF-REQ-076、TOFF-REQ-080、TOFF-AC-008/077/081）。
+- 设计验证样例（后续 Mapper/接口测试必测；本任务不连接数据库验证）：
+
+| 输入值（NUMBER(19,0)） | 期望输出字符串 |
+|---|---|
+| `0` | `"0"` |
+| `1` | `"1"` |
+| `-1` | `"-1"` |
+| `9007199254740993`（超 JS 安全整数） | `"9007199254740993"` |
+| `9999999999999999999`（19 位正边界） | `"9999999999999999999"` |
+| `-9999999999999999999`（19 位负边界） | `"-9999999999999999999"` |
+
+其余说明：
+
+- `UPDATED_AT DATE` 为秒级、无时区（`DATABASE.md` §9-i）；`TO_CHAR(UPDATED_AT,'YYYY-MM-DD HH24:MI:SS')` 输出的是数据库存储钟面时间，**不做任何隐式时区换算**，符合 TOFF-REQ-084、TOFF-REQ-124（只允许按 `YYYY-MM-DD HH:mm:ss` 显示格式化，不得篡改业务时间值）与 TOFF-AC-008/066。
 - 项目全局 Jackson `date-format/time-zone` 不作用于本 VO（本 VO 字段本身是 `String`），因此不存在“JDK 默认时区把 DATE 平移”的风险。
 - VO 中 `nextOffset`/`updatedAt` 类型为 `String`（见 API.md 字段字典）。`rawTopic` 原样返回（TOFF-REQ-012/018）。
 
@@ -258,10 +279,17 @@ ORDER  BY KAFKA_TOPIC ASC, SERVER_ID ASC
 | `serverId` | 原样 `SERVER_ID`（TOFF-REQ-085） |
 | `rawTopic` | 原样 `KAFKA_TOPIC`（悬浮完整原始 Topic，TOFF-REQ-018/061） |
 | `nextOffset`/`updatedAt` | 字符串（5.8） |
-| `kafkaEndOffset/pendingCount/consumeLag` | 恒为 `null`（第一版三列 `—`；未来值为字符串口径，TOFF-REQ-063~070/076；禁止设计为 0） |
+| `kafkaEndOffset/pendingCount/consumeLag` | 恒为 JSON 显式 `null`（第一版三列 `—`；未来值为字符串口径，TOFF-REQ-063~070/076；禁止设计为 0）。这三列在 `TopicOffsetItemVO` 上以字段级 `@JsonInclude(ALWAYS)` 显式输出，见下 |
 | `parseable` | 是否解析成功 |
-| `parsed` | 成功时 `{clientId,sourceId,schema,table,targetId}`（TOFF-REQ-054 二行、28 表名过滤来源）；失败时 `null` |
-| `mapping` | 成功时 `{client:{state,id,desc?}, source:{state,id,org?}, target:{state,id,org?}}`；`state ∈ ACTIVE/INACTIVE/NOT_FOUND`（5.5）；失败时 `null` |
+| `parsed` | 成功时 `{clientId,sourceId,schema,table,targetId}`（TOFF-REQ-054 二行、28 表名过滤来源）；失败行 JSON 显式 `null`（字段级 `@JsonInclude(ALWAYS)`，见下） |
+| `mapping` | 成功时 `{client:{state,id,desc?}, source:{state,id,org?}, target:{state,id,org?}}`；`state ∈ ACTIVE/INACTIVE/NOT_FOUND`（5.5）；失败行 JSON 显式 `null`（字段级 `@JsonInclude(ALWAYS)`，见下） |
+
+**Jackson 序列化包含规则（null 与全局 `non_null` 冲突的唯一实现方案，与 API.md §3.1 一致）**：
+
+- 项目全局 `default-property-inclusion=non_null`（§3.2），**只靠全局配置不会输出 `null` 字段**——不能在响应中呈现 Kafka 三列 `null`、失败行 `parsed`/`mapping` 为 `null` 的契约。
+- 唯一方案：在承载 VO `TopicOffsetItemVO` 上，对**必须显式 `null`** 的五个字段（`kafkaEndOffset/pendingCount/consumeLag` 与不可解析行的 `parsed/mapping`）使用**字段级** `@JsonInclude(JsonInclude.Include.ALWAYS)`，仅覆盖这些字段/VO，**不改变全局序列化配置**；其余字段保持全局 `non_null`。
+- `parsed`/`mapping` 为成功（非 null）时本就正常输出；其内部子对象字段（如 `org/desc` 可空）保持 VO 内普通字段默认规则（非 null 才输出）。
+- 前端类型与 UI 规则保持：接口字段类型为 `string\|null`，`null` → 页面显示 `—`/空位规则，**绝不转成 `0` 或字符串 `"null"`**（见 UI.md §5；TOFF-REQ-066）。
 
 ## 6. 前端设计
 
@@ -283,14 +311,15 @@ ORDER  BY KAFKA_TOPIC ASC, SERVER_ID ASC
 | 状态 | 载体 | 生命周期 |
 |---|---|---|
 | 表单草稿 `draft` | 组件本地 `reactive{clients,sources,targets,tableName}` | 仅组件存活期；未提交草稿不保留（TOFF-REQ-100） |
-| 生效条件 `applied` | store（`appliedCriteria`） | 查询成功后写入；跨页面停留保留（TOFF-REQ-099） |
-| 当前页码 `pageNum` | store | 与生效条件同生命周期；查询成功回到 1（TOFF-REQ-035/091），刷新保持（TOFF-REQ-110） |
+| 待提交条件 `pendingCriteria` | 组件本地（不可变快照） | 点“查询”时由草稿规范化生成、目标页 1；**只用于本次请求**，成功提交前不写入 store（见 6.5） |
+| 生效条件 `applied`（store `appliedCriteria`） | store | **仅在查询/分页/刷新成功且仍是当前请求时原子提交**；失败不改写；跨页面停留保留（TOFF-REQ-099） |
+| 当前页码 `pageNum` | store | 仅“成功且仍是当前请求”时提交：查询成功回到 1（TOFF-REQ-035/091），刷新保持、翻页成功才更新（TOFF-REQ-110） |
 | 候选配置 `candidates` | 组件本地（每次数据操作刷新） | 每次首次/条件查询/翻页/刷新/返回都读取最新（TOFF-REQ-052） |
 | 最近成功结果 `records/total/unparseableTotal` | store | 查询失败保留上一次（TOFF-REQ-039/111）；初始 `null` |
 | 最近成功刷新时间 `lastRefreshAt` | store | 页面成功取得数据时刻（TOFF-REQ-114；非 `UPDATED_AT`） |
 | 请求令牌/加载态 | 组件本地 | 防旧覆盖 + 轻量刷新指示 |
 
-组件本地暂态：`loading`（首次/查询大态）、`refreshing`（自动/手工轻量刷新）、`requestSeq`、`requestInFlight`、`lastError`、store 未初始化标志。
+组件本地暂态：`loading`（首次/查询大态）、`refreshing`（自动/手工轻量刷新）、`pendingCriteria`（点查询后至成功提交间的一次性条件快照）、`requestSeq`、`requestInFlight`、`lastError`、store 未初始化标志。
 
 ### 6.3 会话恢复机制（TOFF-REQ-099、TOFF-REQ-100、TOFF-REQ-101、TOFF-REQ-102）
 
@@ -302,11 +331,26 @@ ORDER  BY KAFKA_TOPIC ASC, SERVER_ID ASC
 
 ### 6.4 组件行为约定（详细交互见 UI.md）
 
-- `OffsetQueryBar` 持有草稿；点“查询”= 提交草稿 → `applied=草稿规范化结果`、`pageNum=1`、查询（TOFF-REQ-035/038）。点“重置”= 草稿恢复缺省、**不查询**、不改 applied/页码（TOFF-REQ-037）。
+- `OffsetQueryBar` 持有草稿；点“查询”= 由草稿规范化生成一次性 `pendingCriteria`、目标页 1 并发起请求；**请求成功（且仍是当前请求）后才原子提交**为 `appliedCriteria+pageNum=1`（两阶段提交，见 6.5；TOFF-REQ-035/038）。点“重置”= 草稿恢复缺省、**不查询**、不改 pending/applied/页码（TOFF-REQ-037）。
 - “全部”互斥：选择具体项自动取消“全部”，选“全部”清空具体项，清空具体项恢复“全部”；哨兵 `__ALL__` 仅在表单层存在，从不作为真实值请求（TOFF-REQ-023、TOFF-REQ-024、TOFF-REQ-025）。
-- 自动/手工刷新使用 store 的 `applied` 与 `pageNum`，不使用草稿（TOFF-REQ-038/110）。
+- 自动/手工刷新使用 store 的 `appliedCriteria` 与已提交 `pageNum`，不使用草稿、也不使用未提交的 `pendingCriteria`（TOFF-REQ-038/110）。
 - 最近成功刷新时间用前端成功返回时刻（`lastRefreshAt`），随成功刷新更新；与数据库 `UPDATED_AT` 无关（TOFF-REQ-114、TOFF-AC-098）。
-- 表名输入在提交为 applied 前去除首尾空格（TOFF-REQ-030）。
+- 表名输入在生成 `pendingCriteria`（提交请求）前去除首尾空格（TOFF-REQ-030）。
+
+### 6.5 生效条件两阶段提交模型（查询/翻页/刷新统一）
+
+单一明确选择：**`appliedCriteria` 与 `pageNum` 只在请求成功且仍是当前有效请求时原子提交**，任何失败请求都不得改写“上一次成功生效条件/页码/结果”。流程如下：
+
+1. 用户点击“查询”：用当前草稿规范化生成**不可变** `pendingCriteria`（三“全部”归一为空、表名去首尾空格），目标页 `1`；
+2. 发起请求 `fetchOffsets(pendingCriteria, pageNum=1)`（同次一并刷新候选配置，TOFF-REQ-052）；
+3. 响应成功**且 `seq === requestSeq`（仍是当前有效请求）**时，一次性原子提交：
+   - `appliedCriteria = pendingCriteria`；
+   - `pageNum = 1`；
+   - `records/total/unparseableTotal = 本次结果`；
+   - `lastRefreshAt = 前端成功时刻`；
+4. 响应失败或已过期（非当前请求）：`appliedCriteria`、`pageNum`、最近成功结果与刷新时间**全部保持不变**；本次 `pendingCriteria` 仍留在组件中供用户继续修改或重试，但自动刷新、手工刷新与菜单返回恢复**只能使用上一次成功 `appliedCriteria`**（TOFF-REQ-038/099/110）。
+
+分页与刷新同此原则：翻页以 `appliedCriteria + 目标页` 发起请求，成功且仍为当前请求才提交新 `pageNum` 与对应结果；请求新页失败时保留原成功页码与结果。**全文档不存在“失败请求覆盖上一次成功生效条件”的路径**。
 
 ## 7. 刷新并发与生命周期
 
@@ -314,11 +358,12 @@ ORDER  BY KAFKA_TOPIC ASC, SERVER_ID ASC
 
 | 事件 | 行为 |
 |---|---|
-| 首次进入 | 无上次成功 → 缺省 applied+page1，自动查询；有上次成功 → 恢复后立即查询一次（6.3） |
-| 点击查询 | 草稿→applied，page=1，查询（重置计时） |
-| 点击重置 | 仅改草稿为缺省；不查询、不动列表/页码（TOFF-REQ-037） |
-| 翻页 | page=目标页，按 applied 查询（不改草稿），读取最新映射 |
-| 手工刷新 | 按 applied+当前页轻量刷新；成功重计 60s（TOFF-REQ-108） |
+| 首次进入 | 无上次成功 → 以缺省条件（三“全部”+空表名）生成 pending、目标页 1 自动查询（成功才提交）；有上次成功 → 恢复后立即按 `appliedCriteria` 刷新一次（6.3） |
+| 点击查询 | 草稿→pendingCriteria（目标页 1）请求；成功且仍当前才提交 applied+page1（6.5；重置计时） |
+| 点击重置 | 仅改草稿为缺省；不查询、不动 pending/applied/列表/页码（TOFF-REQ-037） |
+| 翻页 | 以 `appliedCriteria`+目标页请求（不改草稿）；成功且仍当前才提交新页码与结果；失败保留原页码/结果（6.5） |
+| 手工刷新 | 按已提交 applied+当前页轻量刷新；成功才更新时间/重计 60s（TOFF-REQ-108） |
+| 查询/翻页失败 | 保留上一次成功 applied/页码/结果；未提交 pending 留草稿供修改/重试（见 7.4） |
 | 60s 自动刷新 | 见 7.3 |
 | 页面隐藏 | 停止计时与自动刷新请求（TOFF-REQ-106） |
 | 重新可见 | 立即轻量刷新一次并重计（TOFF-REQ-107/101 语义同源） |
@@ -329,7 +374,7 @@ ORDER  BY KAFKA_TOPIC ASC, SERVER_ID ASC
 
 ### 7.2 请求并发与旧覆盖（单一方案：请求序号令牌）
 
-- 选择项目既有“请求序号/结果令牌”方案：每次发起查询 `const seq=++requestSeq`；响应回来若 `seq !== requestSeq` 则丢弃，避免旧请求覆盖新结果（先例 `useLogQueryTab.ts`）。
+- 选择项目既有“请求序号/结果令牌”方案：每次发起查询 `const seq=++requestSeq`；响应回来若 `seq !== requestSeq` 则丢弃，避免旧请求覆盖新结果（先例 `useLogQueryTab.ts`）。**只有 `seq===requestSeq` 且成功时才允许提交生效条件/页码/结果**（两阶段提交，见 6.5），从机制上杜绝过期/失败请求改写“上一次成功生效条件”。
 - 另设 `requestInFlight`：任一请求进行中，跳过同一时刻的自动刷新触发与重复点击，保证不重叠（TOFF-REQ-109）。
 - 首次/条件查询用整表 `loading`；自动/手工刷新用轻量 `refreshing`（表格不空、不清空、不整页闪烁，TOFF-REQ-112；旧数据保留至新数据替换）。
 
@@ -341,8 +386,8 @@ ORDER  BY KAFKA_TOPIC ASC, SERVER_ID ASC
 
 ### 7.4 失败处理与提示抑制
 
-- 查询失败：保留 store 中上一次成功结果与生效条件，不清空列表（TOFF-REQ-039/111）。
-- 首次加载失败（从未成功，`records===null`）：整区错误态 + “重新加载”按钮，点击按当前 applied 重试（TOFF-REQ-115）。
+- 查询失败：保留 store 中上一次成功结果、`appliedCriteria`、`pageNum` 与最近成功刷新时间，全部不改写，不清空列表（TOFF-REQ-039/111）。
+- 首次加载失败（从未成功，`records===null`）：整区错误态 + “重新加载”按钮，点击用当前 `pendingCriteria`（缺省时为缺省条件）重试（TOFF-REQ-115）。
 - 查询成功但空结果：空态文案“暂无符合条件的数据”，不是接口错误（TOFF-REQ-116）。
 - 自动刷新连续失败：**只更新工具栏内联错误文本，不逐 60s 弹 `ElMessage`**，避免提示堆叠（TOFF-REQ-113/097）；仅手工动作可用一次轻提示，且失败时不打断周期。
 
@@ -358,11 +403,11 @@ ORDER  BY KAFKA_TOPIC ASC, SERVER_ID ASC
 - 不读取敏感列：本模块任何 SQL 列清单不含 `CDC_DATA_SOURCE.DATA_SOURCE_PASSWORD`；文档、日志、响应不输出任何凭据。
 - Offset 精度：DB 侧 `TO_CHAR` 字符串化 → Java/JSON 字符串 → 前端字符串渲染，全程不落 JS `Number`（TOFF-REQ-076、TOFF-REQ-077、TOFF-REQ-080）。
 - 时间语义：Oracle `DATE` 秒级无时区，输出存库钟面时间、不做隐式时区换算（TOFF-REQ-084、TOFF-REQ-124）。
-- Kafka 三列字段在 JSON 中为 `null`（不可为 0），UI 显示 `—`（TOFF-REQ-066；质量门槛“不设计成 0”）。
+- Kafka 三列字段（`kafkaEndOffset/pendingCount/consumeLag`）第一版在 JSON 中**始终存在且显式为 `null`**（不可为 0）；因全局 Jackson 为 `non_null`，用 `TopicOffsetItemVO` 字段级 `@JsonInclude(Include.ALWAYS)` 显式输出，不改变全局配置（见 5.10）；UI 显示 `—`（TOFF-REQ-066；质量门槛“不设计成 0”）。
 
 ## 10. 性能判断
 
-- 断点表 ≤6000 行：单次 `/offsets` 一次全表只读扫描 + 内存解析/过滤/切片，60s 一次量级下开销可忽略（`DATABASE.md` §9-g）。
+- 单次 `/offsets` 请求执行三次只读 SELECT（`CDC_CLIENT_MULTIPLE`、`CDC_DATA_SOURCE` 两张小配置表 + `CDC_TOPIC_OFFSET` 断点表一次全表只读扫描），随后在内存解析/过滤/切片；断点表 ≤6000 行、配置表几十行级，60s 一次量级下开销可忽略（`DATABASE.md` §9-g）。
 - 配置表为小表：每次请求全量读取映射，几十行级，无缓存复杂度；避免引入与规模不匹配的优化（质量门槛）。
 - 分页在内存完成，不产生 Oracle `LIMIT`/多层嵌套 SQL；无需额外索引（§8）。
 
@@ -370,8 +415,8 @@ ORDER  BY KAFKA_TOPIC ASC, SERVER_ID ASC
 
 ### 11.1 分层测试组织
 
-- 单元（后端 `src/test/java/.../monitor/topicoffset/`）：`TopicNameParserTest`（恰好 5 段/少 5 段/多 5 段/段内句点/空段/尾点/前导点）；`TopicOffsetQueryServiceTest`（Mockito 注入 Mapper）：过滤组合、全部→含无法解析、结构条件→剔除无法解析、大小写不敏感表名包含、`%`/`_`/反斜杠字面、排序保持、`unparseableTotal`/`total` 口径、内存切片、越界页码、TO_CHAR 字符串透传、配置映射 ACTIVE/INACTIVE/NOT_FOUND/空名、同 ID 去重。
-- 组件/前端：状态机（draft/applied 隔离、重置不查询、会话恢复、刷新保持页、请求防重叠、越界收敛、失败保留旧数据、连续失败不堆提示）。
+- 单元（后端 `src/test/java/.../monitor/topicoffset/`）：`TopicNameParserTest`（恰好 5 段=成功；少 5 段、多 5 段（含段内含句点导致多段）=无法解析；**恰好 5 段但含空段**边界：前导点如 `.a.b.c.d`、尾点如 `a.b.c.d.`、连续点如 `a..b.c.d` 均按长度=5 判成功、空段原样保留并按 `NOT_FOUND` 参与映射，不判失败）；`TopicOffsetQueryServiceTest`（Mockito 注入 Mapper）：过滤组合、全部→含无法解析、结构条件→剔除无法解析、大小写不敏感表名包含、`%`/`_`/反斜杠字面、排序保持、`unparseableTotal`/`total` 口径、内存切片、越界页码、TO_CHAR 字符串透传、配置映射 ACTIVE/INACTIVE/NOT_FOUND/空名、同 ID 去重。
+- 组件/前端：状态机（draft/pending/applied 三态隔离、**查询成功才提交生效条件与页码**、查询/翻页失败不改写上一次成功条件/页码/结果、重置不查询、会话恢复、刷新保持页、请求防重叠、越界收敛、失败保留旧数据、连续失败不堆提示）。
 - 接口：`/offsets`、`/candidates` 的契约/校验/错误码用例；`TOFF-AC-077/081`（字符串 Offset）通过接口 JSON 断言。
 - 人工验收：100 条 `TOFF-AC-001~100` 在实现与环境就绪后另行执行；本任务不执行，不改任何验收状态为 `PASS`。
 
@@ -405,7 +450,7 @@ ORDER  BY KAFKA_TOPIC ASC, SERVER_ID ASC
 | F | 自动/手工刷新用轻量 `refreshing`，不动草稿、保持旧数据 | TOFF-REQ-110/111/112 |
 | G | 分页/总数/无法解析总数内存计算，不做 SQL 分页 | ≤6000 条；实现简单可测 |
 | H | API 用 `GET` + 重复参数传多值 | 只读语义、仓库已有 `paramsSerializer` 先例；不以 HTTP 方法判定写库（TOFF-AC-004） |
-| I | 未解析 Topic 的 `mapping=null`、Kafka 三列 `null` | 避免任何猜测值/0 值进入展示（TOFF-REQ-062/066） |
+| I | 未解析 Topic 的 `parsed`/`mapping` 显式 `null`、Kafka 三列显式 `null`：在 `TopicOffsetItemVO` 相应字段上用**字段级 `@JsonInclude(JsonInclude.Include.ALWAYS)`** 输出，不改变全局 `non_null` 配置 | 契约要求这些字段第一版始终存在且为 JSON `null`，仅靠全局 `non_null` 会被省略；同时避免任何猜测值/0 值进入展示（TOFF-REQ-062/066；R1 复审 4.3） |
 | J | 参数防御上限：单维候选 ≤50、表名 ≤200 | 防异常输入；业务量纲内不会误伤 |
 
 ## 14. 风险与限制
@@ -425,3 +470,4 @@ ORDER  BY KAFKA_TOPIC ASC, SERVER_ID ASC
 | 日期 | 变更 | 依据 |
 |---|---|---|
 | 2026-09-02 | 建立本功能设计草案（`DRAFT_PENDING_USER_REVIEW`）：总体架构、后端查询/解析/过滤/映射/分页设计、前端状态与刷新并发、数据库结论（无需 DDL）、测试策略、实施清单；未编码、未执行测试或验收 | TOPIC-OFFSET-DESIGN-001（纯文档设计任务；等待 ChatGPT/用户复审后进入实现任务） |
+| 2026-09-02 | R1 定向修订（状态保持 `DRAFT_PENDING_USER_REVIEW`）：Topic 解析仅“恰好 5 段”，去除非空段/正则规则并补含空段边界；生效条件改为仅在查询/分页/刷新成功且仍为当前请求时原子提交；明确 null 与全局 `non_null` 冲突的唯一方案（`TopicOffsetItemVO` 字段级 `@JsonInclude(ALWAYS)`）；`NEXT_OFFSET` 采用显式格式模型 + 固定数字字符并列出验证样例；offsets 读取三次只读 SELECT、candidates 两次，明确非跨表 SCN 一致快照 | TOPIC-OFFSET-DESIGN-001-R1（ChatGPT 正式复审 `CHANGES_REQUIRED` 定向修订） |
