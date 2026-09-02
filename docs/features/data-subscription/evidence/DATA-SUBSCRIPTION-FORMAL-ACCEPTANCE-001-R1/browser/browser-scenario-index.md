@@ -374,7 +374,7 @@
 - 视口：1440x900
 - 前置数据：BROWSER_INTERCEPTED_UI_SCENARIO SCHEMA_A 240（从 0 开始）
 - 操作步骤：普通 TAB015；Shift TAB030(正向 16)；Shift TAB010(反向)；普通 TAB055；Shift TAB065(跨保留字符 idx59)
-- 实际结果：plain TAB015=1(期望1) → shift TAB030(fwd)=16(期望16) → shift TAB010(reverse)=21(期望21) → plain TAB055=22(期望22) → shift TAB065(cross-reserved)=32(期望32)；全部与期望一致=true；保留字符被选= 或 无=true（单次 Shift 一次性提交整段=true）
+- 实际结果：plain TAB015=1(期望1) → shift TAB030(fwd)=16(期望16) → shift TAB010(reverse)=21(期望21) → plain TAB055=22(期望22) → shift TAB065(cross-reserved)=32(期望32)；全部与期望一致=true；reservedSelected=[]，保留字符被选中=false，跳过规则通过（单次 Shift 一次性提交整段=true）
 - 证据：`s4b-shift240.png`、`s4b-shift240.json`
 
 ### S4-7b — 拦截(UI)
@@ -383,7 +383,7 @@
 - 视口：1440x900
 - 前置数据：BROWSER_INTERCEPTED_UI_SCENARIO；R2§6.3 搜索变化清除锚点
 - 操作步骤：搜索 TAB2 后 Shift TAB230(应为单表)；清除搜索→普通 TAB220→Shift TAB228(新锚点正向)；普通 TAB224(取消)→Shift TAB220(范围取消)
-- 实际结果：搜索 TAB2 后（筛选内起点 0）Shift TAB230 后筛选内=1（增量 1，期望 1 → 锚点已清=true，搜索前全量 32）；plain TAB220(new anchor)=34(期望34) → shift TAB228(fwd fresh)=42(期望42) → plain TAB224(取消锚点)=41(期望41) → shift TAB220(range cancel)=37(期望37)（一致=true）；最终=37；选中集合含保留字符=true
+- 实际结果：搜索 TAB2 后（筛选内起点 0）Shift TAB230 后筛选内=1（增量 1，期望 1 → 锚点已清=true，搜索前全量 32）；plain TAB220(new anchor)=34(期望34) → shift TAB228(fwd fresh)=42(期望42) → plain TAB224(取消锚点)=41(期望41) → shift TAB220(range cancel)=37(期望37)（一致=true）；最终=37；reservedFinal=[]，最终选中集合不含保留字符
 - 证据：`s4b-anchor240.json`
 
 ### S4-8 — 拦截(UI)
@@ -488,7 +488,7 @@
 
 ### S5-9 — 真实
 
-- 验收 ID：DSUB-AC-095、DSUB-AC-112、DSUB-AC-117
+- 验收 ID：DSUB-AC-095、DSUB-AC-112、DSUB-AC-117、DSUB-AC-126
 - 视口：1440x900
 - 前置数据：完整闭环 新增→列表→详情→编辑→删除预览→取消→再次预览→确认删除
 - 操作步骤：串联 S5-2b/3/5/6/7/8

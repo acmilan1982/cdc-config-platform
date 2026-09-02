@@ -120,3 +120,12 @@
 - 下一入口：**ChatGPT 对本 R1 提交进行正式复审**。
   - 复审通过后才允许最终验收接受收口并更新为 `IMPLEMENTED_ACCEPTED`；
   - 若仍存在 FAIL/BLOCKED：按真实数量更新状态，不得写成正式验收通过。
+
+## 14. R1-R1 元数据定向修订追加说明（2026-09-02）
+
+- ChatGPT 对本 R1 结果提交 `f76239bdec7c6900bf4776118d7128f8792e5d11` 正式复审结论 `CHANGES_REQUIRED`：R1 的真实浏览器补验（54 场景）、干净 worktree 前端定向 124/全量 359 测试、`npm run build`、数据库恢复（12=12、双向 MINUS 0、CLOB 一致 0、R1 残留 0）以及 126 条证据映射本身全部通过复审；仅三处状态/证据元数据矛盾待定向修正：
+  1. `ACCEPTANCE.md` 顶部“文档状态”元数据行与 §1 长状态说明仍以当前语气写 126 条 `NOT_RUN`，与 126 条 `PASS`、执行汇总和实现状态冲突；
+  2. S4-7a/S4-7b 场景汇总文字与明细 JSON（`browser/s4b-shift240.json reservedSelected=[]`、`browser/s4b-anchor240.json reservedFinal=[]`）相反/残缺；
+  3. S5-9 场景机读 `ac` 数组与 `browser-scenario-index.md` 验收 ID 漏列 `DSUB-AC-126`（与 `coverage-matrix-r1.md` 不一致）。
+- 三处已由 `DATA-SUBSCRIPTION-FORMAL-ACCEPTANCE-001-R1-R1` 定向修订完成，修订明细见新报告 `reports/DATA-SUBSCRIPTION-FORMAL-ACCEPTANCE-001-R1-R1.md`。本追加仅记录元数据修订，业务语义与验收结论零变化；本报告 §1~§13 的 R1 执行事实（54 场景、124/359 前端测试、DB 恢复、126 条全部 `PASS`、`EXECUTED_PENDING_REVIEW` 状态）不回退。
+- 当前仍等待 ChatGPT 对 R1-R1 结果提交正式复审；复审通过前不更新为 `IMPLEMENTED_ACCEPTED`。
