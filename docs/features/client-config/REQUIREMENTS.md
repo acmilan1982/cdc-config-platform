@@ -8,16 +8,28 @@
 | Feature 标识 | `client-config` |
 | 既有路由 | `/config/client`（保持不变） |
 | 目标文档 | `docs/features/client-config/REQUIREMENTS.md` |
-| 文档状态 | `DRAFT_PENDING_USER_REVIEW`（第一版正式需求草案经 ChatGPT 正式复审，结论 `CHANGES_REQUIRED`；本文件已按 R1 定向修订两项确定性语义，仍未批准、仍待 ChatGPT 对 R1 结果复审） |
-| 实现状态 | `NOT_STARTED`（本草案只落盘已确认业务规则，不代表页面、接口或写库能力已经实现） |
-| 任务编号 | `CLIENT-CONFIG-REQUIREMENTS-BASELINE-001`（首版建基线）；`CLIENT-CONFIG-REQUIREMENTS-BASELINE-001-R1`（正式复审驱动定向修订） |
-| 任务类型 | 全新 Feature 需求与验收标准建基线（纯文档）+ 正式复审驱动的定向修订（纯文档） |
+| 文档状态 | `APPROVED`（ChatGPT 对 R1 结果正式复审结论 `APPROVED`，项目负责人于 2026-09-03 明确回复“批准”；本文件为已批准的需求基线。本次批准仅表示需求基线获批：实现仍为 `NOT_STARTED`、验收用例仍未执行） |
+| 实现状态 | `NOT_STARTED`（本需求基线只落盘已确认业务规则，不代表页面、接口或写库能力已经实现） |
+| 任务编号 | `CLIENT-CONFIG-REQUIREMENTS-BASELINE-001`（首版建基线）；`CLIENT-CONFIG-REQUIREMENTS-BASELINE-001-R1`（正式复审驱动定向修订）；`CLIENT-CONFIG-REQUIREMENTS-BASELINE-APPROVAL-001`（批准收口） |
+| 任务类型 | 全新 Feature 需求与验收标准建基线（纯文档）+ 正式复审驱动的定向修订（纯文档）+ 批准收口（纯文档） |
 | 授权基线提交 | `dc7dcbe600638d7ba979c8d598115b19f7141400`（执行时实际 `origin/develop` 最新提交，与本地 HEAD 一致，ahead/behind = 0 0） |
 | 创建日期 | 2026-09-03 |
 | 需求来源 | 已确认的产品决策（任务提示词 §6～§7 记录的产品需求）+ 已批准数据库基线（`docs/database/`）+ 当前实现只读核验 |
 | 主键事实来源 | `docs/database/tables/CDC_CLIENT_MULTIPLE.md`：`CLIENT_ID` 为主键，`VARCHAR2(32)`（只读引用已批准数据库基线，本任务不查询数据库、不执行 DDL/DML） |
 
-说明：本文件把项目负责人已确认的业务决定写成无歧义的需求规则（`CCFG-REQ-001~090`）。需求编号前缀 `CCFG-REQ-`，编号连续、唯一、不可复用。本文件为待复审草案：未批准、未实现、未执行任何验收用例。ChatGPT 对首版草案（提交 `abf2f400f168164473866aba391f57cadfcb8fea`）的正式复审结论为 `CHANGES_REQUIRED`，仅两项确定性修正：探针 ID 不区分大小写唯一、`CLIENT_DESC` 为真实 Oracle `VARCHAR2(1024 BYTE)` 语义；本 R1 修订仅定向处理这两项，未重新设计 Feature、未改动其他已通过复审的业务规则。下一入口是 ChatGPT 对本 R1 修订结果进行正式复审，复审通过后才进入设计阶段；本轮不创建设计文档、不实现代码、不自行批准。
+### 1.1 批准信息
+
+| 项目 | 值 |
+|---|---|
+| 批准日期 | 2026-09-03 |
+| 批准人角色 | 项目负责人 |
+| 批准依据 | ChatGPT 对 R1 结果正式复审结论为 `APPROVED`；项目负责人明确回复“批准” |
+| 批准对象 | `CCFG-REQ-001~090`（90 条）需求基线；对应的 `CCFG-AC-001~076`（76 条）验收标准（见 `ACCEPTANCE.md`） |
+| 基线提交 | `9b31893c7e1b31ee95874f94a55cdb9c23017a68`（R1 定向修订提交；首版草案提交 `abf2f400f168164473866aba391f57cadfcb8fea` 作为历史依据保留） |
+| 收口任务编号 | `CLIENT-CONFIG-REQUIREMENTS-BASELINE-APPROVAL-001` |
+| 批准边界 | 本次批准仅表示需求基线获批，不代表功能已实现、不代表验收已执行或通过；实现状态仍为 `NOT_STARTED`，76 条验收用例仍全部为 `NOT_RUN` |
+
+说明：本文件把项目负责人已确认的业务决定写成无歧义的需求规则（`CCFG-REQ-001~090`）。需求编号前缀 `CCFG-REQ-`，编号连续、唯一、不可复用。本需求基线已经正式批准：ChatGPT 对首版草案（提交 `abf2f400f168164473866aba391f57cadfcb8fea`）正式复审结论为 `CHANGES_REQUIRED`，发现两项确定性修正（探针 ID 不区分大小写唯一、`CLIENT_DESC` 为真实 Oracle `VARCHAR2(1024 BYTE)` 语义）；R1 定向修订（提交 `9b31893c7e1b31ee95874f94a55cdb9c23017a68`）完成这两项修正后，ChatGPT 对 R1 结果正式复审结论为 `APPROVED`，项目负责人于 2026-09-03 明确回复“批准”。批准仅表示需求基线获批：实现状态仍为 `NOT_STARTED`、验收用例仍全部 `NOT_RUN`，尚未进行正式验收，不得写成“验收通过”。下一入口为设计基线（`CLIENT_CONFIG_DESIGN_BASELINE`）；本文件不建立或宣称任何设计文档。
 
 本文件区分以下分层，避免把“当前事实”“本 Feature 目标”“批准后待同步项”混淆：
 
@@ -300,3 +312,4 @@
 |---|---|---|
 | 2026-09-03 | 首版需求草案落盘：新建 `docs/features/client-config/REQUIREMENTS.md`，需求 `CCFG-REQ-001~090`（90 条），文档状态 `DRAFT_PENDING_USER_REVIEW`，实现状态 `NOT_STARTED`；同步建立 `ACCEPTANCE.md` 草案与 Feature `README.md` 导航；本文件记录基线影响项（§9） | CLIENT-CONFIG-REQUIREMENTS-BASELINE-001（全新 Feature 需求与验收基线建基线；纯文档任务，未批准、未实现、未执行验收） |
 | 2026-09-03 | R1 定向修订两项确定性语义（需求编号与数量 90 条保持不变）：① 探针 ID 唯一性由模糊口径改为 ASCII 大小写不敏感唯一确定规则（`CCFG-REQ-038`，并最小一致性补充 `CCFG-REQ-043/048`）；② `CLIENT_DESC` 限制由“最多 1024 字符”改为真实 Oracle `VARCHAR2(1024 BYTE)` 的 UTF-8 字节语义（§2.2、§4、`CCFG-REQ-039/059/060`、§9 `BI-CFG-004`）。文档状态仍为 `DRAFT_PENDING_USER_REVIEW`、实现状态仍为 `NOT_STARTED`，未批准、未实现、未执行验收 | CLIENT-CONFIG-REQUIREMENTS-BASELINE-001-R1（ChatGPT 正式复审 `CHANGES_REQUIRED` 驱动的定向修订；纯文档任务，未改其他业务规则、未重新设计 Feature） |
+| 2026-09-03 | 批准收口：ChatGPT 对 R1 结果正式复审结论 `APPROVED`，项目负责人于 2026-09-03 明确回复“批准”；本需求文档状态由 `DRAFT_PENDING_USER_REVIEW` 调整为 `APPROVED`，追加 §1.1 批准信息（批准日期、批准人角色、批准依据、基线提交 `9b31893...`、收口任务编号 `CLIENT-CONFIG-REQUIREMENTS-BASELINE-APPROVAL-001`）。需求编号与数量 90 条保持不变，需求业务语义/正文/编号/顺序/数量零变更；实现状态保持 `NOT_STARTED`，76 条验收用例保持全部 `NOT_RUN`；本次批准仅表示需求基线获批，不代表功能已实现或验收已通过；历史首版与 R1 记录未改写 | CLIENT-CONFIG-REQUIREMENTS-BASELINE-APPROVAL-001（项目负责人批准驱动的需求与验收基线批准收口；纯文档任务，未实现、未执行验收） |

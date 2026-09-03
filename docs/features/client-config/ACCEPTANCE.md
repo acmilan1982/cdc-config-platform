@@ -8,22 +8,34 @@
 | Feature 标识 | `client-config` |
 | 既有路由 | `/config/client`（保持不变） |
 | 目标文档 | `docs/features/client-config/ACCEPTANCE.md` |
-| 文档状态 | `DRAFT_PENDING_USER_REVIEW`（第一版验收标准草案经 ChatGPT 正式复审，结论 `CHANGES_REQUIRED`；本文件已按 R1 定向修订对应验收场景，仍未批准、仍待 ChatGPT 对 R1 结果复审） |
-| 实现状态 | `NOT_STARTED`（本草案不代表页面、接口或写库能力已经实现） |
+| 文档状态 | `APPROVED`（ChatGPT 对 R1 结果正式复审结论 `APPROVED`，项目负责人于 2026-09-03 明确回复“批准”。本次批准的是“验收标准”，不是“验收执行结果”：76 条验收用例仍全部 `NOT_RUN`，尚未执行正式验收，不得写成“验收通过”） |
+| 实现状态 | `NOT_STARTED`（本验收标准只定义目标行为，不代表页面、接口或写库能力已经实现） |
 | 验收用例状态 | 文档内 `CCFG-AC-001~076` 共 76 例全部为 `NOT_RUN`（未执行，不得推定通过） |
-| 任务编号 | `CLIENT-CONFIG-REQUIREMENTS-BASELINE-001`（首版建基线）；`CLIENT-CONFIG-REQUIREMENTS-BASELINE-001-R1`（正式复审驱动定向修订，仅修订 `CCFG-AC-030/033/039/048` 场景与文字，不新增验收编号） |
+| 任务编号 | `CLIENT-CONFIG-REQUIREMENTS-BASELINE-001`（首版建基线）；`CLIENT-CONFIG-REQUIREMENTS-BASELINE-001-R1`（正式复审驱动定向修订，仅修订 `CCFG-AC-030/033/039/048` 场景与文字，不新增验收编号）；`CLIENT-CONFIG-REQUIREMENTS-BASELINE-APPROVAL-001`（批准收口） |
 | 授权基线提交 | `dc7dcbe600638d7ba979c8d598115b19f7141400` |
 | 创建日期 | 2026-09-03 |
-| 依据需求 | `docs/features/client-config/REQUIREMENTS.md`（`CCFG-REQ-001~090`，文档状态 `DRAFT_PENDING_USER_REVIEW`） |
+| 依据需求 | `docs/features/client-config/REQUIREMENTS.md`（`CCFG-REQ-001~090`，需求基线文档状态 `APPROVED`） |
+
+### 1.1 批准信息
+
+| 项目 | 值 |
+|---|---|
+| 批准日期 | 2026-09-03 |
+| 批准人角色 | 项目负责人 |
+| 批准依据 | ChatGPT 对 R1 结果正式复审结论为 `APPROVED`；项目负责人明确回复“批准” |
+| 批准对象 | `CCFG-AC-001~076`（76 条）验收标准；对应需求基线 `CCFG-REQ-001~090`（90 条，见 `REQUIREMENTS.md`） |
+| 基线提交 | `9b31893c7e1b31ee95874f94a55cdb9c23017a68`（R1 定向修订提交；首版草案提交 `abf2f400f168164473866aba391f57cadfcb8fea` 作为历史依据保留） |
+| 收口任务编号 | `CLIENT-CONFIG-REQUIREMENTS-BASELINE-APPROVAL-001` |
+| 批准边界 | 本次批准的是“验收标准”，不是“验收执行结果”；76 条验收用例仍全部为 `NOT_RUN`，尚未执行正式验收；实现状态仍为 `NOT_STARTED`，不得写成“验收通过” |
 
 ## 2. 状态口径与重要声明
 
 本文件把所有目标需求转换为可客观验收的场景，使用唯一、稳定的验收编号 `CCFG-AC-001~076`。编号连续、唯一、不可复用。
 
-- 所有用例初始状态必须为 `NOT_RUN`（未执行）。执行后状态（通过 / 失败 / 被阻塞）属于执行阶段才允许填写的结果状态；只有在执行并取得与操作步骤匹配的客观证据后，才允许把某一用例从 `NOT_RUN` 更新为结果状态，且更新必须留下证据。本草案阶段没有任何用例被执行，不得把任一用例标记为通过，也不得把验收标准文档状态当作用例已通过的证据。
+- 所有用例初始状态必须为 `NOT_RUN`（未执行）。执行后状态（通过 / 失败 / 被阻塞）属于执行阶段才允许填写的结果状态；只有在执行并取得与操作步骤匹配的客观证据后，才允许把某一用例从 `NOT_RUN` 更新为结果状态，且更新必须留下证据。截至本批准收口，没有任何用例被执行，不得把任一用例标记为通过，也不得把验收标准文档状态当作用例已通过的证据。
 - 对需要构造异常历史数据（停用/不存在/含逗号/重复分配的数据源、非 `0/1` 状态等）或并发条件的用例，本文件只在操作与预期中定义期望行为和未来取证方式，不授权任何测试数据写入。本任务（`CLIENT-CONFIG-REQUIREMENTS-BASELINE-001`）及其 R1 定向修订（`CLIENT-CONFIG-REQUIREMENTS-BASELINE-001-R1`）均为纯文档任务，不连接数据库、不构造数据、不执行 DDL/DML；正式验收阶段需要构造数据时，必须另行按项目数据库写操作审批规则获得授权，且只能在不影响共享开发库既有数据的前提下进行。
 - 不得因为本轮无法执行就省略需要异常数据或并发条件的用例；这些用例必须保留为 `NOT_RUN`，待具备取证条件后执行。
-- 状态不得混淆：批准验收标准文档、执行验收用例、正式验收通过、实现被正式接受是不同状态。本文件当前为待复审草案：验收标准未批准、功能未实现、用例未执行。
+- 状态不得混淆：批准验收标准文档、执行验收用例、正式验收通过、实现被正式接受是不同状态。本文件当前状态为：验收标准已 `APPROVED`（批准的是“验收标准”本身，不是“验收执行结果”）；功能仍为 `NOT_STARTED` 未实现；76 条验收用例仍全部为 `NOT_RUN`，尚未执行正式验收。
 
 ## 3. 验收领域分类与数量
 
@@ -227,3 +239,11 @@
 | CCFG-REQ-088 | CCFG-AC-074 |
 | CCFG-REQ-089 | CCFG-AC-075 |
 | CCFG-REQ-090 | CCFG-AC-076 |
+
+## 6. 批准信息与变更记录
+
+| 日期 | 变更 | 依据 |
+|---|---|---|
+| 2026-09-03 | 首版验收标准草案落盘：新建 `docs/features/client-config/ACCEPTANCE.md`，验收 `CCFG-AC-001~076`（76 条），全部 `NOT_RUN`；文档状态 `DRAFT_PENDING_USER_REVIEW`，实现状态 `NOT_STARTED` | CLIENT-CONFIG-REQUIREMENTS-BASELINE-001（全新 Feature 需求与验收基线建基线；纯文档任务，未批准、未实现、未执行验收） |
+| 2026-09-03 | R1 定向修订对应验收场景（验收编号与数量 76 条保持不变）：`CCFG-AC-030/039` 补充探针 ID ASCII 大小写不敏感唯一子场景；`CCFG-AC-033/048` 改为 `VARCHAR2(1024 BYTE)` 的 UTF-8 字节语义子场景。文档状态仍为 `DRAFT_PENDING_USER_REVIEW`、实现状态仍为 `NOT_STARTED`，76 条验收仍全部 `NOT_RUN` | CLIENT-CONFIG-REQUIREMENTS-BASELINE-001-R1（ChatGPT 正式复审 `CHANGES_REQUIRED` 驱动的定向修订；纯文档任务） |
+| 2026-09-03 | 批准收口：ChatGPT 对 R1 结果正式复审结论 `APPROVED`，项目负责人于 2026-09-03 明确回复“批准”；本验收标准文档状态由 `DRAFT_PENDING_USER_REVIEW` 调整为 `APPROVED`，追加 §1.1 批准信息（批准日期、批准人角色、批准依据、基线提交 `9b31893...`、收口任务编号 `CLIENT-CONFIG-REQUIREMENTS-BASELINE-APPROVAL-001`）。验收编号与数量 76 条保持不变，验收业务语义/预期结果/追踪关系/编号/顺序/数量/执行状态零变更；76 条验收用例保持全部 `NOT_RUN`，实现状态保持 `NOT_STARTED`；本次批准的是“验收标准”，不是“验收执行结果”，不代表功能已实现或验收已通过；历史首版与 R1 记录未改写 | CLIENT-CONFIG-REQUIREMENTS-BASELINE-APPROVAL-001（项目负责人批准驱动的需求与验收基线批准收口；纯文档任务，未实现、未执行验收） |
