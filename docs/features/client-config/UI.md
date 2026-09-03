@@ -10,14 +10,21 @@
 | 目标文档 | `docs/features/client-config/UI.md` |
 | 文档状态 | `DRAFT_PENDING_USER_REVIEW`（设计草案，尚未经 ChatGPT 正式复审与项目负责人批准；不得写成已批准基线） |
 | 实现状态 | `NOT_STARTED`（本设计只定义目标界面与交互，不代表任何页面已经实现） |
-| 任务编号 | `CLIENT-CONFIG-DESIGN-BASELINE-001`（阶段 4 设计基线，纯文档） |
+| 初版任务 | `CLIENT-CONFIG-DESIGN-BASELINE-001`（阶段 4 设计基线，纯文档） |
+| 初版基线提交 | `cecfdd5478df8b82ba39c083553ea8dd7ead48e8` |
+| 初版设计提交 | `21f4729c43d146426e8d4f1b2d6b667cfcf160ff` |
+| R1 任务 | `CLIENT-CONFIG-DESIGN-BASELINE-001-R1`（正式设计复审驱动的定向修订，纯文档） |
+| R1 复审结论 | ChatGPT 正式复审：`CHANGES_REQUIRED`（R1-01~R1-09；本文件落实 R1-02/R1-06/R1-07/R1-08 界面与交互修订） |
+| R1 基线提交 | `21f4729c43d146426e8d4f1b2d6b667cfcf160ff` |
 | 依据需求 | `CCFG-REQ-001~090`（`APPROVED`） |
 | 依据验收 | `CCFG-AC-001~076`（全部 `NOT_RUN`） |
-| 基线提交 | `cecfdd5478df8b82ba39c083553ea8dd7ead48e8` |
 | 创建日期 | 2026-09-03 |
-| 设计编号 | `CCFG-UI-001 ~ CCFG-UI-024`，连续、唯一、不可复用 |
+| R1 日期 | 2026-09-04 |
+| 设计编号 | `CCFG-UI-001 ~ CCFG-UI-026`，连续、唯一、不可复用；每个设计编号恰有一个定义行 |
 | PENDING_USER_CONFIRMATION | `0` |
 | 配套文档 | `DESIGN.md`、`API.md`、`DATABASE.md` |
+
+R1 界面修订目标（不改已批准 90 条需求与 76 条验收、不进入代码实现、不做设计批准收口）：采集数据源列“直接显示前三项”明确为非持久化投影且不原地修改接口数组（`R1-02`）；红色历史异常标签与编辑回显覆盖 `CATEGORY_MISMATCH`/`TYPE_MISMATCH`（`R1-06`）；新增含逗号歧义行与历史 NULL 描述的展示/编辑契约（`R1-07/R1-08`）。
 
 ## 2. 页面布局
 
@@ -25,7 +32,8 @@
 |---|---|---|---|
 | CCFG-UI-001 | 页面标题、菜单名称、面包屑可见名称统一为“探针端管理”，不再向用户显示“客户端配置”；既有路由 `/config/client` 与 Feature 目录标识 `client-config` 保持不变。实现阶段同步修改 `frontend/src/router/index.ts`（`meta.title`）、`frontend/src/config/menu.ts` 与页面标题，收口需求基线 `BI-CFG-001`（本设计只落盘界面规则，不创建代码）。 | CCFG-REQ-001 | CCFG-AC-001 |
 | CCFG-UI-002 | 页面主体自上而下：查询区（§3）→ 工具栏（§4）→ 数据表格（§5~§11），另含页面级加载与空状态（§12）。首次进入自动触发一次列表查询（读全部记录），不做自动刷新。 | CCFG-REQ-002、CCFG-REQ-009 | CCFG-AC-002、CCFG-AC-008 |
-| CCFG-UI-005 | 列表列固定为：探针 ID｜探针描述｜采集数据源｜数据源数量｜状态，无独立“操作”列，行内不放编辑/删除按钮。单击行单选并高亮，任一时刻最多选中一条；双击行打开编辑弹窗；页面显示弱提示“双击记录可编辑”。列表不分页、无“加载更多”。 | CCFG-REQ-003、CCFG-REQ-011、CCFG-REQ-020、CCFG-REQ-023、CCFG-REQ-024 | CCFG-AC-003、CCFG-AC-009、CCFG-AC-016、CCFG-AC-018 |
+| CCFG-UI-005 | 列表列固定为：探针 ID｜探针描述｜采集数据源｜数据源数量｜状态，无独立“操作”列，行内不放编辑/删除按钮。单击行单选并高亮，任一时刻最多选中一条；双击行打开编辑弹窗；页面显示弱提示“双击记录可编辑”。列表不分页、无“加载更多”。探针描述列对历史 `clientDesc` 为 NULL 或去除首尾空白后为空的记录按 CCFG-UI-025 展示占位符，不得把缺失描述渲染为空白格。 | CCFG-REQ-003、CCFG-REQ-011、CCFG-REQ-020、CCFG-REQ-023、CCFG-REQ-024 | CCFG-AC-003、CCFG-AC-009、CCFG-AC-016、CCFG-AC-018 |
+| CCFG-UI-025 | 历史 `CLIENT_DESC` 为 NULL/空白的界面契约（R1-08）：列表中该行“探针描述”列显示确定占位符 `—`；悬停占位符的 Tooltip 说明“未填写探针描述”。双击打开编辑弹窗时：`clientDesc` 为 NULL 映射为空白输入框；非 NULL 值（含首尾空白）原样回显，不 Trim、不改写。该历史状态不阻止打开编辑、删除、停用或按既有规则启用；编辑保存时前端仍要求补齐为“去除首尾空白后非空且原文 UTF-8 `<=1024 BYTE`”的描述（字节按实际输入原文计，Trim 仅判空），保存前按 TextEncoder 对原文预校验。不自动写回、不自动生成、不把 NULL 自动持久化为空串。 | CCFG-REQ-011、CCFG-REQ-039、CCFG-REQ-058、CCFG-REQ-059 | CCFG-AC-009、CCFG-AC-028、CCFG-AC-033、CCFG-AC-047 |
 
 ## 3. 查询区
 
@@ -45,7 +53,7 @@
 | 设计编号 | 设计决定 | 覆盖需求 | 覆盖验收 |
 |---|---|---|---|
 | CCFG-UI-006 | 状态列在同一格内展示状态标签并提供“启用/停用”文字操作（不新增操作列）。分类：`fgActive='1'` → 绿色标签“启用”；`'0'` → 灰色/默认标签“停用”；其余 → 红色标签“异常（原始值=xxx）”，必须显示原始状态值。非 `0/1` 行状态列不提供“启用”操作，仅提供“停用”与删除。启停操作按钮带独立防重复提交（见 §12/§15）。 | CCFG-REQ-029、CCFG-REQ-033、CCFG-REQ-034 | CCFG-AC-022、CCFG-AC-025、CCFG-AC-026 |
-| CCFG-UI-018 | 停用：弹二次确认（正文含探针 ID，文案见 §14）；确认后调 E7，成功提示“停用成功”。启用：一般免确认，点击直接调 E6，成功提示“启用成功”。停用/启用不弹“进程已停止/已启动”等措辞。异常历史数据源不阻断停用/启用交互（重复分配冲突由后端在启用时拒绝并展示提示）。 | CCFG-REQ-030、CCFG-REQ-031、CCFG-REQ-032、CCFG-REQ-035 | CCFG-AC-023、CCFG-AC-024、CCFG-AC-027 |
+| CCFG-UI-018 | 停用：弹二次确认（正文含探针 ID，文案见 CCFG-UI-020）；确认后调 E7，成功提示“停用成功”。启用：一般免确认，点击直接调 E6，成功提示“启用成功”。停用/启用不弹“进程已停止/已启动”等措辞。数据源历史异常（停用/不存在/类别不符/类型不符/含逗号/行级歧义）及历史 NULL/空白描述均不阻断停用/启用交互；跨探针重复分配冲突由后端在启用时拒绝并展示提示（见 CCFG-UI-021）。 | CCFG-REQ-030、CCFG-REQ-031、CCFG-REQ-032、CCFG-REQ-035 | CCFG-AC-023、CCFG-AC-024、CCFG-AC-027 |
 
 ## 6. 采集数据源列（紧凑展示）
 
@@ -54,33 +62,34 @@
 | CCFG-UI-007 | “采集数据源”列按约 330~360px 紧凑单行布局，以机构名称 `DATA_SOURCE_ORG` 为主文本；默认只直接显示前 3 个标签，其余以“+N”标签汇总。行内标签单行、不撑高整行；一般一个探针约 6~7 个数据源时仍保持单行视觉。 | CCFG-REQ-012、CCFG-REQ-013、CCFG-REQ-014 | CCFG-AC-009、CCFG-AC-010、CCFG-AC-011 |
 | CCFG-UI-008 | 单个机构名称标签超长时以省略号截断；悬停标签（Tooltip）显示完整机构名称、数据源名称与数据源 ID。 | CCFG-REQ-012、CCFG-REQ-015 | CCFG-AC-009、CCFG-AC-012 |
 | CCFG-UI-009 | `+N` 使用 Popover：点击或悬停展示完整清单，清单设置最大高度（详见 §14 交互参数）并在内部滚动；清单按规范化去重后的原存储顺序展示。 | CCFG-REQ-016 | CCFG-AC-011 |
-| CCFG-UI-010 | 异常数据源（`INACTIVE`/`NOT_FOUND`/`COMMA_IN_ID`/`DUPLICATE_IN_ROW`/`ASSIGNED_TO_MULTIPLE_CLIENTS`）以红色异常标签展示，标签能区分具体原因（文案见 §14），并稳定优先进入直接显示的前三项；该投影不改变持久化顺序。完整清单（Tooltip/Popover/编辑回显）仍按去重后原顺序给出，异常项不被隐藏。 | CCFG-REQ-017、CCFG-REQ-078 | CCFG-AC-013、CCFG-AC-065 |
-| CCFG-UI-011 | “数据源数量”列显示该行去重后的非空数据源 ID 数量（与列表标签展示同口径）；同一行历史重复 ID 不计重复。 | CCFG-REQ-018、CCFG-REQ-019 | CCFG-AC-015 |
+| CCFG-UI-010 | 异常数据源（项级 `INACTIVE`/`NOT_FOUND`/`CATEGORY_MISMATCH`/`TYPE_MISMATCH`/`COMMA_IN_ID`/`DUPLICATE_IN_ROW`/`ASSIGNED_TO_MULTIPLE_CLIENTS`；行级 `COMMA_PROTOCOL_AMBIGUOUS` 见 CCFG-UI-026）以红色异常标签展示，标签能区分具体原因（含原数据源 ID、当前类别/类型与原因，文案见 §14）。列表“直接显示的前三项”采用前端非持久化投影：稳定地把异常项排在正常项前、组内保持接口原顺序，再取前三项；`+N` 的 N = 接口完整数组数量 − 直接显示数量；该投影不原地修改接口数组，不改变持久化顺序、选择顺序或保存顺序。完整清单（Tooltip/Popover/编辑回显）按接口原顺序（规范化去重后原存储顺序）给出，异常项不被隐藏。 | CCFG-REQ-017、CCFG-REQ-078 | CCFG-AC-013、CCFG-AC-065 |
+| CCFG-UI-011 | “数据源数量”列显示该行按普通 CSV 解析、去空、去重后的非空数据源 ID 数量（与列表标签展示同口径）；同一行历史重复 ID 不计重复。行级含逗号歧义（`COMMA_PROTOCOL_AMBIGUOUS`）时，该数量与标签明确标注为“普通 CSV 解析的展示结果”，不计为已确定的分配，见 CCFG-UI-026。 | CCFG-REQ-018、CCFG-REQ-019 | CCFG-AC-015 |
+| CCFG-UI-026 | 行级含逗号歧义（`COMMA_PROTOCOL_AMBIGUOUS`，R1-07）的界面契约：当一行原始 `DATA_SOURCE_ID` 中存在可与“已知含英文逗号数据源 ID”匹配的可能而无法无损还原时，列表行以整行级红色歧义标识展示，显示原始完整字符串 `rawDataSourceIds`、可能的含逗号数据源 ID 集合（`possibleCommaDataSourceIds`）与原因文案“英文逗号既可能是分隔符、也可能属于数据源 ID，无法精确还原实际分配关系”。该行的机构标签与数据源数量均为普通 CSV 解析的展示结果，悬停/Popover 也据此标注，不宣称已恢复实际分配。双击可打开编辑弹窗，但在用户清除原始歧义配置并重新选择合法候选前禁止保存（不得静默拆分后直接覆盖）；若含逗号数据源已从 `CDC_DATA_SOURCE` 删除，普通 CSV 解析的对应 token 以 `NOT_FOUND` 展示，不猜测不存在的含逗号 ID。 | CCFG-REQ-010、CCFG-REQ-064、CCFG-REQ-078、CCFG-REQ-080、CCFG-REQ-081、CCFG-REQ-084 | CCFG-AC-052、CCFG-AC-065、CCFG-AC-067、CCFG-AC-068、CCFG-AC-070 |
 
 ## 7. 新增/编辑弹窗
 
 | 设计编号 | 设计决定 | 覆盖需求 | 覆盖验收 |
 |---|---|---|---|
-| CCFG-UI-013 | 新增弹窗字段固定三项：探针 ID（可编辑）、探针描述（含右侧“自动生成”）、采集数据源；不提供状态字段与启停控件。新增校验：三项必填；探针 ID 满足长度与 `^[A-Za-z0-9][A-Za-z0-9._-]{0,31}$`；描述去除首尾空白后按 UTF-8 预校验 `<=1024 BYTE`；数据源至少 1 个。保存成功提示“新增成功”并关闭刷新。 | CCFG-REQ-036、CCFG-REQ-037、CCFG-REQ-039、CCFG-REQ-040、CCFG-REQ-041、CCFG-REQ-052 | CCFG-AC-028、CCFG-AC-029、CCFG-AC-031、CCFG-AC-033、CCFG-AC-034 |
-| CCFG-UI-014 | 编辑弹窗字段同新增（探针 ID、探针描述、采集数据源），不含状态字段与启停控件。探针 ID 默认只读并显示锁定图标/文案；点击明确入口“修改探针 ID”解除只读（不弹修改前警告），入口随即变为“取消修改”；点击“取消修改”恢复原探针 ID 并回到只读。已选数据源中处于停用/不存在/含逗号/重复分配的历史异常项以红色标签完整回显（含原始数据源 ID 与原因），不得静默丢弃；编辑打开时只原样回显已保存 `CLIENT_DESC`，不自动生成/覆盖。自身已选且健康的项按“原探针 ID”自排除，不因“已分配”被禁用。保存整体成功或整体失败，见 §8/§15。 | CCFG-REQ-042、CCFG-REQ-044、CCFG-REQ-045、CCFG-REQ-046、CCFG-REQ-058、CCFG-REQ-066、CCFG-REQ-079、CCFG-REQ-080 | CCFG-AC-032、CCFG-AC-035、CCFG-AC-036、CCFG-AC-037、CCFG-AC-047、CCFG-AC-054、CCFG-AC-066、CCFG-AC-067 |
+| CCFG-UI-013 | 新增弹窗字段固定三项：探针 ID（可编辑）、探针描述（含右侧“自动生成”）、采集数据源；不提供状态字段与启停控件。新增校验：三项必填；探针 ID 满足长度与 `^[A-Za-z0-9][A-Za-z0-9._-]{0,31}$`；描述必填以“去除首尾空白后非空”判定，UTF-8 字节预校验按**实际输入原文（含首尾空白）**以 `TextEncoder` 计算 `<=1024 BYTE`（Trim 仅判空，不改变提交文本）；数据源至少 1 个。保存成功提示“新增成功”并关闭刷新。 | CCFG-REQ-036、CCFG-REQ-037、CCFG-REQ-039、CCFG-REQ-040、CCFG-REQ-041、CCFG-REQ-052 | CCFG-AC-028、CCFG-AC-029、CCFG-AC-031、CCFG-AC-033、CCFG-AC-034 |
+| CCFG-UI-014 | 编辑弹窗字段同新增（探针 ID、探针描述、采集数据源），不含状态字段与启停控件。探针 ID 默认只读并显示锁定图标/文案；点击明确入口“修改探针 ID”解除只读（不弹修改前警告），入口随即变为“取消修改”；点击“取消修改”恢复原探针 ID 并回到只读。已选数据源中处于停用、不存在、类别非 SOURCE、类型非 ORACLE、含逗号或与其他探针重复分配等历史异常项以红色标签完整回显（含原始数据源 ID、当前类别/类型与原因），不得静默丢弃；行级含逗号歧义（`COMMA_PROTOCOL_AMBIGUOUS`）按 CCFG-UI-026 完整展示原始串与原因。编辑打开时：`clientDesc` 为 NULL 映射为空白输入框、非 NULL 值（含首尾空白）原样回显，只回显已保存内容、不自动生成/覆盖（见 CCFG-UI-025）。自身已选且健康的项按“原探针 ID”自排除，不因“已分配”被禁用。保存整体成功或整体失败，异常项未清除前禁止保存（见 CCFG-UI-017）。 | CCFG-REQ-042、CCFG-REQ-044、CCFG-REQ-045、CCFG-REQ-046、CCFG-REQ-058、CCFG-REQ-066、CCFG-REQ-079、CCFG-REQ-080 | CCFG-AC-032、CCFG-AC-035、CCFG-AC-036、CCFG-AC-037、CCFG-AC-047、CCFG-AC-054、CCFG-AC-066、CCFG-AC-067 |
 
 ## 8. 自动生成按钮
 
 | 设计编号 | 设计决定 | 覆盖需求 | 覆盖验收 |
 |---|---|---|---|
-| CCFG-UI-015 | “自动生成”位于“探针描述”输入框右侧，任何表单状态下保持可点击外观（不因未选数据源/编辑历史/自定义描述而禁用）。语义：一次性文本填充工具，不保存/不提交任何“生成模式”，不新增字段。点击行为：① 无已选数据源 → 严格无动作（不清空、不修改描述、不弹确认、不报错、不改任何表单状态）；② 有已选 → 不弹二次确认，清空当前描述，按当前选择顺序读取每个数据源 `DATA_SOURCE_ORG`，单逗号连接写入（逗号前后无空格），不排序、不因机构名称相同去重、每项只 Trim 不改内部字符；③ 任一已选无法取得非空机构名称（明确指出该数据源 ID），或完整结果去空白后为空，或 UTF-8 字节数超过 1024 → 生成失败并明确提示，保持原描述不变，不静默截断；④ 成功写入后输入框立即恢复为普通可编辑文本，之后增删数据源不联动更新描述（用户可再次点击“自动生成”覆盖）。前端按 TextEncoder 预校验字节，后端保存时仍按最终文本权威校验。 | CCFG-REQ-050、CCFG-REQ-051、CCFG-REQ-052、CCFG-REQ-053、CCFG-REQ-054、CCFG-REQ-055、CCFG-REQ-056、CCFG-REQ-057、CCFG-REQ-058、CCFG-REQ-060 | CCFG-AC-041、CCFG-AC-042、CCFG-AC-043、CCFG-AC-044、CCFG-AC-045、CCFG-AC-046、CCFG-AC-047、CCFG-AC-048 |
+| CCFG-UI-015 | “自动生成”位于“探针描述”输入框右侧，任何表单状态下保持可点击外观（不因未选数据源/编辑历史/自定义描述而禁用）。语义：一次性文本填充工具，不保存/不提交任何“生成模式”，不新增字段。点击行为：① 无已选数据源 → 严格无动作（不清空、不修改描述、不弹确认、不报错、不改任何表单状态）；② 有已选 → 不弹二次确认，清空当前描述，按当前选择顺序读取每个数据源 `DATA_SOURCE_ORG`，单逗号连接写入（逗号前后无空格），不排序、不因机构名称相同去重、每项只 Trim 不改内部字符；③ 任一已选无法取得非空机构名称（明确指出该数据源 ID），或完整结果去空白后为空，或 UTF-8 字节数超过 1024 → 生成失败并明确提示，保持原描述不变，不静默截断；④ 成功写入后输入框立即恢复为普通可编辑文本，之后增删数据源不联动更新描述（用户可再次点击“自动生成”覆盖）。自动生成只对每个 `DATA_SOURCE_ORG` 片段 Trim；生成及用户后续编辑所得文本即最终提交原文，提交保存时原文保存（Trim 仅判空），前端按 `TextEncoder` 对原文（含首尾空白）预校验字节，后端保存时仍按最终提交原文权威校验。 | CCFG-REQ-050、CCFG-REQ-051、CCFG-REQ-052、CCFG-REQ-053、CCFG-REQ-054、CCFG-REQ-055、CCFG-REQ-056、CCFG-REQ-057、CCFG-REQ-058、CCFG-REQ-060 | CCFG-AC-041、CCFG-AC-042、CCFG-AC-043、CCFG-AC-044、CCFG-AC-045、CCFG-AC-046、CCFG-AC-047、CCFG-AC-048 |
 
 ## 9. 数据源多选（采集数据源控件）
 
 | 设计编号 | 设计决定 | 覆盖需求 | 覆盖验收 |
 |---|---|---|---|
-| CCFG-UI-016 | 候选来源为 E2 返回的可选项与不可选项：主文本显示机构名称 `DATA_SOURCE_ORG`，同时可悬停/可见数据源名称与完整数据源 ID；支持按机构名称、数据源名称、数据源 ID 不区分大小写本地搜索。规则：含英文逗号的候选（`COMMA_IN_ID`）仍展示但置灰禁止选择，提示“ID 含英文逗号，不可选择”；已被其他探针分配的候选（`OCCUPIED`）仍展示但置灰禁止选择，标注“已分配给：{探针ID}”；编辑时自身已选健康项按 `excludeClientId`（原探针 ID）自排除而不被禁用。候选无可用项（空数组）、搜索无结果、候选加载失败三态各有明确提示。已选的历史异常项以红色标签显示在“已选”区域并保留原 ID 与原因（不进入可选池）。 | CCFG-REQ-061、CCFG-REQ-062、CCFG-REQ-063、CCFG-REQ-064、CCFG-REQ-065、CCFG-REQ-066、CCFG-REQ-067、CCFG-REQ-079、CCFG-REQ-080 | CCFG-AC-049、CCFG-AC-050、CCFG-AC-051、CCFG-AC-052、CCFG-AC-053、CCFG-AC-054、CCFG-AC-055、CCFG-AC-066、CCFG-AC-067 |
+| CCFG-UI-016 | 候选来源为 E2 返回的可选项与不可选项：主文本显示机构名称 `DATA_SOURCE_ORG`，同时可悬停/可见数据源名称与完整数据源 ID；支持按机构名称、数据源名称、数据源 ID 不区分大小写本地搜索。规则：含英文逗号的候选（`COMMA_IN_ID`）仍展示但置灰禁止选择，提示“ID 含英文逗号，不可选择”；已被其他探针分配的候选（`OCCUPIED`）仍展示但置灰禁止选择，标注“已分配给：{探针ID}”；编辑时自身已选健康项按 `excludeClientId`（原探针 ID）自排除而不被禁用。候选无可用项（空数组）、搜索无结果、候选加载失败三态各有明确提示。已选的历史异常项（含 `INACTIVE`/`NOT_FOUND`/`CATEGORY_MISMATCH`/`TYPE_MISMATCH`/`COMMA_IN_ID`/`DUPLICATE_IN_ROW`/`ASSIGNED_TO_MULTIPLE_CLIENTS`）以红色标签显示在“已选”区域并保留原数据源 ID 与原因（不进入可选池）。 | CCFG-REQ-061、CCFG-REQ-062、CCFG-REQ-063、CCFG-REQ-064、CCFG-REQ-065、CCFG-REQ-066、CCFG-REQ-067、CCFG-REQ-079、CCFG-REQ-080 | CCFG-AC-049、CCFG-AC-050、CCFG-AC-051、CCFG-AC-052、CCFG-AC-053、CCFG-AC-054、CCFG-AC-055、CCFG-AC-066、CCFG-AC-067 |
 
 ## 10. 保存阻断与提交
 
 | 设计编号 | 设计决定 | 覆盖需求 | 覆盖验收 |
 |---|---|---|---|
-| CCFG-UI-017 | 新增/编辑提交前前端检查：数据源为 0 → 禁止保存（提示“至少选择 1 个数据源”）；编辑存在任一异常项 → 禁止保存（提示需先移除异常项），用户移除异常项并选择合法项后方可保存；保存按钮在提交中禁用（`SUBMITTING`）防重复。新增/编辑成功（`code=200`）后关闭弹窗并刷新列表；失败按后端业务 `message`/`code` 展示可读错误（§14）。 | CCFG-REQ-081、CCFG-REQ-082、CCFG-REQ-085 | CCFG-AC-068、CCFG-AC-069、CCFG-AC-071 |
+| CCFG-UI-017 | 新增/编辑提交前前端检查：数据源为 0 → 禁止保存（提示“至少选择 1 个数据源”）；编辑存在任一历史异常项（含 `INACTIVE`/`NOT_FOUND`/`CATEGORY_MISMATCH`/`TYPE_MISMATCH`/`COMMA_IN_ID`/`DUPLICATE_IN_ROW`/`ASSIGNED_TO_MULTIPLE_CLIENTS`）或行级 `COMMA_PROTOCOL_AMBIGUOUS` 歧义 → 禁止保存（提示需先移除异常项 / 清除原始歧义配置并重新选择合法候选），用户处理后且描述补齐为“去除首尾空白后非空”方可保存；保存按钮在提交中禁用（`SUBMITTING`）防重复。新增/编辑成功（`code=200`）后关闭弹窗并刷新列表；失败按后端业务 `message`/`code` 展示可读错误（文案见 CCFG-UI-020）。 | CCFG-REQ-081、CCFG-REQ-082、CCFG-REQ-085 | CCFG-AC-068、CCFG-AC-069、CCFG-AC-071 |
 
 ## 11. 加载、空状态与失败
 
@@ -113,3 +122,4 @@
 | 日期 | 变更 | 依据 |
 |---|---|---|
 | 2026-09-03 | 新建 `docs/features/client-config/UI.md`：页面布局、查询/工具栏/列表、状态与启停、采集数据源紧凑展示、新增/编辑弹窗、自动生成、候选控件、保存阻断、文案表、响应式与可访问性（`CCFG-UI-001~024`），文档状态 `DRAFT_PENDING_USER_REVIEW`，`PENDING_USER_CONFIRMATION=0` | CLIENT-CONFIG-DESIGN-BASELINE-001（阶段 4 设计基线；纯文档任务，未实现、未执行验收） |
+| 2026-09-04 | R1 定向修订（界面设计编号扩为 `CCFG-UI-001~026`，共 26 条，仍连续唯一）：`CCFG-UI-010` 明确非持久化前三项投影与完整清单原顺序（R1-02）并补 `CATEGORY_MISMATCH`/`TYPE_MISMATCH` 红色标签（R1-06）；`CCFG-UI-013/014/015` 固定描述原文保存/Trim 仅判空/按原文计字节，编辑回显覆盖类别/类型异常与 NULL 描述；`CCFG-UI-016/017/018` 同步异常范围、保存阻断与启停不受阻语义；新增 `CCFG-UI-025`（历史 NULL/空白描述占位与编辑映射，R1-08）、`CCFG-UI-026`（含逗号歧义行展示与编辑阻断，R1-07）。文档状态保持 `DRAFT_PENDING_USER_REVIEW`，`PENDING_USER_CONFIRMATION=0` | CLIENT-CONFIG-DESIGN-BASELINE-001-R1（正式复审 `CHANGES_REQUIRED` 定向修订；纯文档任务，未实现、未执行验收） |
