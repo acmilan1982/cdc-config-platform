@@ -106,7 +106,7 @@ describe('OffsetQueryBar 查询区“全部”互斥与查询/重置（TOFF-REQ-
 
   it('表名原样进入草稿（去空格在提交阶段完成，不在本组件）', async () => {
     const wrapper = await mountBar()
-    const input = wrapper.find('input[placeholder="表名"]')
+    const input = wrapper.find('input[placeholder="请输入表名"]')
     await input.setValue('  orders ')
     await queryButton(wrapper).trigger('click')
     const emitted = wrapper.emitted('query')!
@@ -150,6 +150,37 @@ describe('OffsetQueryBar 查询区“全部”互斥与查询/重置（TOFF-REQ-
       targets: [ALL_OPTION],
       tableName: 'orders',
     })
+    wrapper.unmount()
+  })
+})
+
+describe('OffsetQueryBar 查询区固定名称始终可见（R2 §4.1）', () => {
+  it('渲染 客户端/源库/目标库/表名 四个固定名称，不以 placeholder/选中值代替', async () => {
+    const wrapper = await mountBar()
+    const labels = wrapper.findAll('.toff-q-label').map((el) => el.text().trim())
+    expect(labels).toEqual(['客户端', '源库', '目标库', '表名'])
+    // 表名输入框 placeholder 为“请输入表名”，名称由独立标签承担
+    expect(wrapper.find('input[placeholder="请输入表名"]').exists()).toBe(true)
+    // 名称与四个查询控件一一对应、始终可见，不存在“全部”代替字段名的情形
+    expect(wrapper.findAll('.toff-q-label')).toHaveLength(4)
+    expect(wrapper.findAll('.el-select')).toHaveLength(3)
+    wrapper.unmount()
+  })
+
+  it('固定名称与默认“全部”同时存在，互不混淆', async () => {
+    const wrapper = await mountBar()
+    const text = wrapper.text()
+    expect(text).toContain('客户端')
+    expect(text).toContain('源库')
+    expect(text).toContain('目标库')
+    expect(text).toContain('表名')
+    // 未选择时每个下拉 placeholder 仍为“全部”（查询语义不变）
+    await queryButton(wrapper).trigger('click')
+    const emitted = wrapper.emitted('query')!
+    const payload = emitted[0][0] as { clients: string[]; sources: string[]; targets: string[] }
+    expect(payload.clients).toEqual([ALL_OPTION])
+    expect(payload.sources).toEqual([ALL_OPTION])
+    expect(payload.targets).toEqual([ALL_OPTION])
     wrapper.unmount()
   })
 })

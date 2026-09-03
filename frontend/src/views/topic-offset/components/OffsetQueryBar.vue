@@ -1,52 +1,66 @@
 <template>
   <div class="toff-query-bar">
-    <el-select
-      :model-value="draft.clients"
-      multiple
-      collapse-tags
-      class="toff-select"
-      placeholder="全部"
-      @change="(val: string[]) => onChange('clients', val)"
-    >
-      <el-option v-for="opt in clientOptions" :key="opt.value" :label="opt.label" :value="opt.value">
-        <div class="toff-opt" :title="opt.label">{{ opt.label }}</div>
-      </el-option>
-    </el-select>
-    <el-select
-      :model-value="draft.sources"
-      multiple
-      collapse-tags
-      class="toff-select"
-      placeholder="全部"
-      @change="(val: string[]) => onChange('sources', val)"
-    >
-      <el-option v-for="opt in sourceOptions" :key="opt.value" :label="opt.label" :value="opt.value">
-        <div class="toff-opt" :title="opt.label">{{ opt.label }}</div>
-      </el-option>
-    </el-select>
-    <el-select
-      :model-value="draft.targets"
-      multiple
-      collapse-tags
-      class="toff-select"
-      placeholder="全部"
-      @change="(val: string[]) => onChange('targets', val)"
-    >
-      <el-option v-for="opt in targetOptions" :key="opt.value" :label="opt.label" :value="opt.value">
-        <div class="toff-opt" :title="opt.label">{{ opt.label }}</div>
-      </el-option>
-    </el-select>
-    <el-input
-      :model-value="draft.tableName"
-      class="toff-table-input"
-      placeholder="表名"
-      clearable
-      @update:model-value="(v: string) => (draft.tableName = v ?? '')"
-      @clear="draft.tableName = ''"
-      @keyup.enter="onQuery"
-    />
-    <el-button type="primary" @click="onQuery">查询</el-button>
-    <el-button @click="onReset">重置</el-button>
+    <div class="toff-q-group">
+      <span class="toff-q-label">客户端</span>
+      <el-select
+        :model-value="draft.clients"
+        multiple
+        collapse-tags
+        class="toff-select"
+        placeholder="全部"
+        @change="(val: string[]) => onChange('clients', val)"
+      >
+        <el-option v-for="opt in clientOptions" :key="opt.value" :label="opt.label" :value="opt.value">
+          <div class="toff-opt" :title="opt.label">{{ opt.label }}</div>
+        </el-option>
+      </el-select>
+    </div>
+    <div class="toff-q-group">
+      <span class="toff-q-label">源库</span>
+      <el-select
+        :model-value="draft.sources"
+        multiple
+        collapse-tags
+        class="toff-select"
+        placeholder="全部"
+        @change="(val: string[]) => onChange('sources', val)"
+      >
+        <el-option v-for="opt in sourceOptions" :key="opt.value" :label="opt.label" :value="opt.value">
+          <div class="toff-opt" :title="opt.label">{{ opt.label }}</div>
+        </el-option>
+      </el-select>
+    </div>
+    <div class="toff-q-group">
+      <span class="toff-q-label">目标库</span>
+      <el-select
+        :model-value="draft.targets"
+        multiple
+        collapse-tags
+        class="toff-select"
+        placeholder="全部"
+        @change="(val: string[]) => onChange('targets', val)"
+      >
+        <el-option v-for="opt in targetOptions" :key="opt.value" :label="opt.label" :value="opt.value">
+          <div class="toff-opt" :title="opt.label">{{ opt.label }}</div>
+        </el-option>
+      </el-select>
+    </div>
+    <div class="toff-q-group">
+      <span class="toff-q-label">表名</span>
+      <el-input
+        :model-value="draft.tableName"
+        class="toff-table-input"
+        placeholder="请输入表名"
+        clearable
+        @update:model-value="(v: string) => (draft.tableName = v ?? '')"
+        @clear="draft.tableName = ''"
+        @keyup.enter="onQuery"
+      />
+    </div>
+    <div class="toff-q-actions">
+      <el-button type="primary" @click="onQuery">查询</el-button>
+      <el-button @click="onReset">重置</el-button>
+    </div>
   </div>
 </template>
 
@@ -158,13 +172,32 @@ defineExpose({ reset: onReset, draft })
   display: flex;
   flex-wrap: wrap;
   align-items: center;
-  gap: 8px;
+  gap: 8px 14px;
+}
+.toff-q-group {
+  display: inline-flex;
+  align-items: center;
+  gap: 4px;
+  flex: 0 0 auto;
+}
+.toff-q-label {
+  flex: 0 0 auto;
+  font-size: 14px;
+  font-weight: 500;
+  color: #303133;
+  white-space: nowrap;
 }
 .toff-select {
-  width: 210px;
+  width: 200px;
 }
 .toff-table-input {
   width: 200px;
+}
+.toff-q-actions {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  flex: 0 0 auto;
 }
 </style>
 

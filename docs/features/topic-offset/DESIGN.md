@@ -41,7 +41,7 @@
 ### 2.2 范围内（第一版）
 
 - 页面“数据同步进度”，路由保持 `/monitor/topic-offset`（TOFF-REQ-001、TOFF-REQ-002、TOFF-REQ-003）；
-- 固定 8 列只读列表：序号、同步对象、已保存消费位置、Kafka 末端位置、待消费数量、消费延迟、断点更新时间、中心端（TOFF-REQ-081）；
+- 固定 8 列只读列表：序号、同步对象、已保存消费位置、最新数据位置（用户可见列名；底层 API/VO 字段仍为 `kafkaEndOffset`，见 5.10）、待消费数量、消费延迟、断点更新时间、中心端（TOFF-REQ-081）；
 - 固定 `KAFKA_TOPIC ASC, SERVER_ID ASC` 排序、固定每页 150 条、序号跨页连续（TOFF-REQ-087/089/082/092）；
 - 查询区四个条件：客户端、源库、目标库（均含“全部”的多选下拉）、表名（TOFF-REQ-021、TOFF-REQ-022）；
 - Topic 严格五段解析、原值权威保留、无法解析不猜测（TOFF-REQ-012~019）；
@@ -49,7 +49,7 @@
 - 首次进入自动缺省查询、同一登录会话返回恢复已生效条件与页码、返回后立即刷新一次（TOFF-REQ-034、TOFF-REQ-099、TOFF-REQ-101）；
 - 60 秒自动刷新 + 立即刷新 + 页面不可见暂停 + 重新可见立即刷新 + 请求不重叠（TOFF-REQ-103~113）；
 - 断点时间按 `YYYY-MM-DD HH:mm:ss` 展示、Offset 全链路字符串（TOFF-REQ-084、TOFF-REQ-076、TOFF-REQ-080）；
-- Kafka 末端位置、待消费数量、消费延迟第一版统一显示 `—`（TOFF-REQ-064/066/067）。
+- 最新数据位置（API/VO 字段 `kafkaEndOffset`）、待消费数量、消费延迟第一版统一显示 `—`（TOFF-REQ-064/066/067）。
 
 ### 2.3 非目标（第一版明确不做）
 
@@ -309,8 +309,8 @@ ORDER  BY KAFKA_TOPIC ASC, SERVER_ID ASC
 | `src/views/topic-offset/TopicOffsetPage.vue` | 替换现有占位页内容；页面编排 + 计时/可见性 + 错误/空态 |
 | `src/views/topic-offset/utils/selection.ts` | “全部/具体项”互斥（哨兵 `__ALL__`，语义同 `log-query/selection.ts`） |
 | `src/views/topic-offset/components/OffsetQueryBar.vue` | 查询区：客户端/源库/目标库多选（含“全部”）+ 表名 + 查询/重置 |
-| `src/views/topic-offset/components/OffsetToolbar.vue` | 工具栏：总数、无法解析数、60s 刷新状态、最近成功刷新时间、立即刷新 |
-| `src/views/topic-offset/components/OffsetTable.vue` | 8 列表格 + 同步对象两行/悬浮 + 空/加载态 |
+| `src/views/topic-offset/components/OffsetToolbar.vue` | 工具栏：左组（总数、无法解析警示文案）、右组（60s 刷新状态、最近成功刷新时间、立即刷新）；字号层级见 UI.md §12.1 |
+| `src/views/topic-offset/components/OffsetTable.vue` | 8 列表格（含“最新数据位置”用户表头，数据字段 `kafkaEndOffset`）+ 同步对象两行格式/悬浮（受控单实例延迟 Tooltip：激活行键 + 350ms 计时、离开/结果替换/翻页/刷新提交/卸载即关闭、非 enterable、长 Topic 换行）+ 空/加载态 |
 
 ### 6.2 状态模型（区分并设计）
 
@@ -478,3 +478,4 @@ ORDER  BY KAFKA_TOPIC ASC, SERVER_ID ASC
 | 2026-09-02 | 建立本功能设计草案（`DRAFT_PENDING_USER_REVIEW`）：总体架构、后端查询/解析/过滤/映射/分页设计、前端状态与刷新并发、数据库结论（无需 DDL）、测试策略、实施清单；未编码、未执行测试或验收 | TOPIC-OFFSET-DESIGN-001（纯文档设计任务；等待 ChatGPT/用户复审后进入实现任务） |
 | 2026-09-02 | R1 定向修订（状态保持 `DRAFT_PENDING_USER_REVIEW`）：Topic 解析仅“恰好 5 段”，去除非空段/正则规则并补含空段边界；生效条件改为仅在查询/分页/刷新成功且仍为当前请求时原子提交；明确 null 与全局 `non_null` 冲突的唯一方案（`TopicOffsetItemVO` 字段级 `@JsonInclude(ALWAYS)`）；`NEXT_OFFSET` 采用显式格式模型 + 固定数字字符并列出验证样例；offsets 读取三次只读 SELECT、candidates 两次，明确非跨表 SCN 一致快照 | TOPIC-OFFSET-DESIGN-001-R1（ChatGPT 正式复审 `CHANGES_REQUIRED` 定向修订） |
 | 2026-09-02 | 设计基线正式批准收口（状态 `DRAFT_PENDING_USER_REVIEW`→`APPROVED`）：ChatGPT 对提交 `68779649e673da7ee95079c4724b346ea441c5f6` 正式复审 `APPROVED`；更新文档状态与 design_status，未改动任何设计正文；批准后可另起实现任务，本任务未开始实现 | TOPIC-OFFSET-DESIGN-APPROVAL-CLOSEOUT-001（ChatGPT 正式复审批准收口） |
+| 2026-09-03 | R2 用户人工页面视觉检查调整的最小技术映射同步（状态保持 `APPROVED`，仅技术说明同步，不改后端架构/SQL/接口数量/数据库读取次数/Topic 解析/请求单飞行/两阶段提交/候选刷新设计）：第 2.2 范围内 8 列清单的 UI 表头按 R2 改为“最新数据位置”并保留底层 API/VO 字段 `kafkaEndOffset` 不变（5.10、API.md 契约、技术 Kafka Log End Offset 口径均不改）；同步对象 Tooltip 明确为受控单实例延迟模型（激活行键 + 350ms 计时、离开/结果替换/翻页/刷新提交/卸载立即关闭、非 enterable、长 Topic 换行，见 6.1 OffsetTable 职责与 §11 测试点）；同步 §6.1 组件职责与字号层级归属（UI.md §12.1）。API 字段、后端架构与数据库事实零变化 | TOPIC-OFFSET-IMPLEMENTATION-001-R2（用户人工页面视觉检查确认的显示/交互调整；不代表正式验收已执行，100 条 `TOFF-AC-*` 保持 `NOT_RUN`） |

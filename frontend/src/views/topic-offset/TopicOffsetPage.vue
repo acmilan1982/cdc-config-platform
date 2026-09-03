@@ -1,11 +1,11 @@
 <template>
   <div class="toff-page">
-    <!-- 页面标题 + Kafka 提示（UI §2，TOFF-REQ-067） -->
+    <!-- 页面标题 + 实时进度提示（UI §2，TOFF-REQ-067，R2 §4.6） -->
     <header class="toff-header">
       <h2 class="toff-title">数据同步进度</h2>
-      <div class="toff-kafka-notice" role="note">
-        <el-icon class="toff-kafka-icon"><InfoFilled /></el-icon>
-        <span class="toff-kafka-text">Kafka 实时数据尚未接入。Kafka 末端位置、待消费数量和消费延迟暂不计算。</span>
+      <div class="toff-progress-notice" role="note">
+        <el-icon class="toff-notice-icon"><InfoFilled /></el-icon>
+        <span class="toff-notice-text">实时进度数据尚未接入。最新数据位置、待消费数量和消费延迟暂不计算。</span>
       </div>
     </header>
 
@@ -14,7 +14,7 @@
       <el-icon class="toff-state-icon toff-state-icon--error"><WarningFilled /></el-icon>
       <p class="toff-state-title">数据加载失败</p>
       <p class="toff-state-desc">暂时无法获取同步进度数据，请重新加载或稍后重试。</p>
-      <el-button size="small" type="primary" plain :loading="loading" @click="onRetry">重新加载</el-button>
+      <el-button type="primary" plain :loading="loading" @click="onRetry">重新加载</el-button>
     </div>
 
     <!-- 正常内容区 -->
@@ -137,12 +137,12 @@ onUnmounted(() => {
 
 .toff-title {
   margin: 0;
-  font-size: 18px;
+  font-size: 20px;
   font-weight: 600;
   color: #303133;
 }
 
-.toff-kafka-notice {
+.toff-progress-notice {
   display: flex;
   align-items: flex-start;
   gap: 6px;
@@ -153,14 +153,14 @@ onUnmounted(() => {
   line-height: 1.5;
 }
 
-.toff-kafka-icon {
+.toff-notice-icon {
   flex-shrink: 0;
   margin-top: 2px;
   color: var(--el-color-info, #909399);
   font-size: 14px;
 }
 
-.toff-kafka-text {
+.toff-notice-text {
   font-size: 13px;
   color: #606266;
 }
@@ -205,7 +205,7 @@ onUnmounted(() => {
 }
 
 .toff-page-text {
-  font-size: 13px;
+  font-size: 14px;
   color: #606266;
 }
 </style>

@@ -1,22 +1,30 @@
 <template>
   <div class="toff-toolbar">
-    <div class="toff-toolbar-stats">
-      <span class="toff-stat">共 {{ total }} 条</span>
-      <span v-if="unparseableTotal > 0" class="toff-stat toff-stat--warn">无法解析 {{ unparseableTotal }} 条</span>
+    <div class="toff-toolbar-left">
+      <span class="toff-stat toff-total">共 {{ total }} 条</span>
+      <span v-if="unparseableTotal > 0" class="toff-stat toff-warn">
+        <el-icon class="toff-warn-icon"><WarningFilled /></el-icon>
+        <span>其中 {{ unparseableTotal }} 条 Topic 格式无法解析</span>
+      </span>
+    </div>
+    <div class="toff-toolbar-right">
       <span class="toff-stat toff-auto">
         <span class="toff-dot" :class="{ 'is-refreshing': refreshing }" />
         60 秒自动刷新
       </span>
-      <span v-if="lastRefreshText" class="toff-stat toff-last">最近成功刷新 {{ lastRefreshText }}</span>
+      <span v-if="lastRefreshText" class="toff-sep">|</span>
+      <span v-if="lastRefreshText" class="toff-stat toff-last">最近成功刷新：{{ lastRefreshText }}</span>
       <span v-if="refreshError" class="toff-stat toff-error">{{ refreshError }}</span>
+      <el-button type="primary" plain :loading="refreshing" :disabled="busy || refreshing" @click="$emit('refresh')">
+        立即刷新
+      </el-button>
     </div>
-    <el-button size="small" type="primary" plain :loading="refreshing" :disabled="busy || refreshing" @click="$emit('refresh')">
-      立即刷新
-    </el-button>
   </div>
 </template>
 
 <script setup lang="ts">
+import { WarningFilled } from '@element-plus/icons-vue'
+
 defineProps<{
   total: number
   unparseableTotal: number
@@ -38,41 +46,54 @@ defineEmits<{
   justify-content: space-between;
   align-items: center;
   flex-wrap: wrap;
-  gap: 8px;
+  gap: 8px 12px;
   margin: 8px 0;
 }
-.toff-toolbar-stats {
-  display: flex;
+.toff-toolbar-left,
+.toff-toolbar-right {
+  display: inline-flex;
   align-items: center;
-  gap: 16px;
   flex-wrap: wrap;
-  font-size: 13px;
-  color: #475467;
+  gap: 14px;
 }
 .toff-stat {
+  display: inline-flex;
+  align-items: center;
   white-space: nowrap;
+  font-size: 14px;
+  font-weight: 400;
+  color: #606266;
 }
-.toff-stat--warn {
+.toff-warn {
   color: #b45309;
+  font-weight: 500;
+}
+.toff-warn-icon {
+  font-size: 15px;
+  color: #f79009;
+  margin-right: 4px;
+}
+.toff-sep {
+  color: #c0c4cc;
+  font-size: 14px;
+  line-height: 1;
+  flex: 0 0 auto;
 }
 .toff-auto {
   display: inline-flex;
   align-items: center;
   gap: 6px;
-  color: #344054;
 }
 .toff-dot {
   width: 8px;
   height: 8px;
   border-radius: 50%;
   background: #98a2b3;
+  flex: 0 0 auto;
 }
 .toff-dot.is-refreshing {
   background: #2e90fa;
   animation: toff-blink 1s ease-in-out infinite;
-}
-.toff-last {
-  color: #98a2b3;
 }
 .toff-error {
   color: #d92d20;

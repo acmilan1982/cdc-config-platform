@@ -81,9 +81,11 @@ describe('TopicOffsetPage 页面编排 smoke', () => {
     await flushPromises()
 
     const text = wrapper.text()
-    // 页面标题与 Kafka 提示（TOFF-REQ-067）
+    // 页面标题与提示（TOFF-REQ-067，R2 §4.6）
     expect(text).toContain('数据同步进度')
-    expect(text).toContain('Kafka 实时数据尚未接入。Kafka 末端位置、待消费数量和消费延迟暂不计算。')
+    expect(text).toContain('实时进度数据尚未接入。最新数据位置、待消费数量和消费延迟暂不计算。')
+    // 用户可见区域不再暴露 Kafka 或旧列名
+    expect(text).not.toContain('Kafka')
 
     const store = useTopicOffsetStore(pinia)
     expect(store.hasSuccess).toBe(true)

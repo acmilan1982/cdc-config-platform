@@ -39,7 +39,7 @@
 
 ## 6. 当前阶段
 
-当前处于**功能级实现完成、等待用户人工测试与正式验收阶段**：需求、验收标准、数据库物理只读复核与功能设计基线均已批准；实现任务 `TOPIC-OFFSET-IMPLEMENTATION-001`（起点基线提交 `5f3760f77c13fc0f290bd3360cce5dc7b0b95040`）已完成后端/前端实现，通过自动化测试与前后端构建，启动开发环境完成接口联调与接口验证，并将代码与测试推送至 `origin/develop`。正式验收未执行。
+当前处于**功能级实现完成、等待用户人工测试与正式验收阶段**：需求、验收标准、数据库物理只读复核与功能设计基线均已批准；实现任务 `TOPIC-OFFSET-IMPLEMENTATION-001`（起点基线提交 `5f3760f77c13fc0f290bd3360cce5dc7b0b95040`）已完成后端/前端实现，通过自动化测试与前后端构建，启动开发环境完成接口联调与接口验证；其后完成 R1 代码复审修复（见 §12）与 R2 用户人工页面视觉检查七项调整（见 §13），并将代码与测试推送至 `origin/develop`。正式验收未执行。
 
 - 需求状态：`APPROVED`（`REQUIREMENTS.md` 需求基线已正式批准，本阶段零变化）
 - 验收标准状态：`APPROVED`（`ACCEPTANCE.md` 验收标准基线已正式批准，本阶段零变化；100 条 `TOFF-AC-xxx` 仍全部 `NOT_RUN`）
@@ -93,7 +93,7 @@
 
 ## 11. 下一步
 
-需求、验收标准、数据库物理只读复核与功能设计基线（`DESIGN.md`/`API.md`/`UI.md`）均已获正式批准（`APPROVED`；设计基线于 2026-09-02 经 ChatGPT 对提交 `68779649e673da7ee95079c4724b346ea441c5f6` 复审批准，实现中引用了 `DATABASE.md` 物理事实）。实现任务 `TOPIC-OFFSET-IMPLEMENTATION-001` 已完成实现、自动化测试与构建、开发环境联调与接口验证并推送（实现状态 `IMPLEMENTED_PENDING_USER_ACCEPTANCE`）。下一步：实现结果先交回 ChatGPT 做代码与实现复审；随后由用户对已启动的开发环境页面做人工测试；用户人工测试通过后再另行发起正式验收任务执行 100 条 `TOFF-AC-xxx`。
+需求、验收标准、数据库物理只读复核与功能设计基线（`DESIGN.md`/`API.md`/`UI.md`）均已获正式批准（`APPROVED`；设计基线于 2026-09-02 经 ChatGPT 对提交 `68779649e673da7ee95079c4724b346ea441c5f6` 复审批准，实现中引用了 `DATABASE.md` 物理事实）。实现任务 `TOPIC-OFFSET-IMPLEMENTATION-001` 已完成实现、自动化测试与构建、开发环境联调与接口验证并推送，并相继完成 R1 代码复审修复（§12）与 R2 用户人工页面视觉检查七项调整（§13），实现状态 `IMPLEMENTED_PENDING_USER_ACCEPTANCE`。下一步：R2 结果提交（`fix(topic-offset): align page with user visual review`）先交回 ChatGPT 做代码与实现复审；随后由用户对已启动的开发环境页面重新做人工视觉检查；用户人工检查通过后再另行发起正式验收任务执行 100 条 `TOFF-AC-xxx`。
 
 - 实现与联调只读访问 `CDC_TOPIC_OFFSET` 与两张配置表，不执行任何数据库 DDL/DML；
 - 正式验收须在用户完成人工页面测试后另行发起执行；验收执行状态保持 `NOT_RUN`。
@@ -118,3 +118,25 @@
 - 后端 topic-offset 定向测试与新增定向用例全部通过；后端完整测试套件仅出现 4 个已确认的任务前既有数据库集成失败（`BASELINE_FAILURES_ONLY`，非本模块新增）；后端 `mvn -o package` 通过；
 - 前端 topic-offset 定向测试与新增定向用例全部通过；前端完整测试套件全部通过；前端生产构建通过；`git diff --check` 通过；
 - 联调：R1 最新代码后端已在开发环境重启（只读 GET 接口对开发库返回真实候选与断点记录），页面 URL 与前端模块可访问；浏览器控制台目测未执行（`NOT_RUN`，无浏览器能力），联调检查不构成正式验收 PASS。
+
+## 13. R2 用户人工页面视觉检查调整记录（TOPIC-OFFSET-IMPLEMENTATION-001-R2）
+
+ChatGPT 已从 GitHub 正式复审 R1 提交 `014b9c0853f39ffda666834900d103a5b141a2da`，确认 R1 的五项代码修复通过。随后用户在开发环境进行真实浏览器人工检查，逐项确认七项页面显示与交互调整；本 R2 任务（复审目标提交 `014b9c0853f39ffda666834900d103a5b141a2da`）只实现这七项页面调整并按最小化原则同步一致性修订文档（UI/REQUIREMENTS/ACCEPTANCE/DESIGN 状态保持 `APPROVED`；README 追加本记录），不扩大功能范围；后端、`API.md`、`DATABASE.md` 与前端 API 层/类型/Store/`useTopicOffset.ts`/其他页面均为零改动。
+
+七项用户人工页面视觉检查调整：
+
+- 查询区四个固定名称：`客户端`、`源库`、`目标库`、`表名` 始终紧随控件可见，不以 placeholder/当前选中值/Tooltip 代替；表名输入框 placeholder 为 `请输入表名`。
+- 工具栏无法解析警示文案：改为精确文案“其中 {N} 条 Topic 格式无法解析”，前置橙色三角警示图标（Element Plus `WarningFilled`），`N` 取完整查询结果 `unparseableTotal` 而非当前页；`N=0` 时图标与整段文案均不显示。
+- 工具栏左右分组：左组固定结果总数与无法解析警示；右组固定 `60 秒自动刷新`、`最近成功刷新：HH:mm:ss`、`立即刷新`（同一逻辑组不漂移；最近成功刷新时间为空时其与自动刷新状态间的细分隔线不显示）。
+- 同步对象两行格式：第一行 `{CLIENT_ID} · {SOURCE_ORG} → {TARGET_ORG}`（唯一 `·` 中性关联分隔符、唯一 `→` 表示源库到目标库流向，不含“客户端/源库/目标库”行内文字标签）；第二行 `{SCHEMA}.{TABLE}`。
+- 同步对象 Tooltip 单实例延迟：受控“激活行 + 350ms 计时”模型，快速扫过多行不堆叠、任意时刻最多一个、离开立即隐藏、非 enterable、结果替换/翻页/刷新提交/组件卸载即关闭、长 Topic 允许安全换行且不溢出视口。
+- 用户可见列名“最新数据位置”：表头由“Kafka 末端位置”改为“最新数据位置”，表头悬浮说明为“同步通道中下一条新数据将写入的位置，用于计算待消费数量。”；页面提示改为“实时进度数据尚未接入。最新数据位置、待消费数量和消费延迟暂不计算。”；API/VO 字段 `kafkaEndOffset`、后端与 `API.md` 技术口径零变化。
+- 字号/字重/控件尺寸提升：页面标题 20px/600、查询项名称 14px/500、查询控件内容 14px/400、结果统计与刷新信息 14px/400、表头 14px/600、同步对象第一行 14px/400、第二行 13px/400、Offset/时间/中心端 14px/400、次要提示 13px/400、警告文字 14px/500 橙色；表格与查询控件不再使用 `size="small"`；样式作用域仅限 topic-offset 页面。
+
+实现状态保持 `IMPLEMENTED_PENDING_USER_ACCEPTANCE`，验收执行状态保持 `NOT_RUN`；R2 完成仅表示七项页面调整与文档最小同步已提交，仍需 ChatGPT 从 GitHub 复审结果提交，并由用户重新进行真实浏览器人工检查；不得将功能标记为正式验收通过或已交付。
+
+结果提交与验证摘要：
+
+- 结果提交：`fix(topic-offset): align page with user visual review`（见提交记录）；
+- 前端 topic-offset 定向测试与完整测试套件、前端生产构建、`git diff --check` 全部通过；后端零改动不重跑后端门禁；
+- 只读联调：对开发库 `CDC_TOPIC_OFFSET` 5000 多条模拟数据核对接口总数与固定 150 条/页，未执行任何 DML/DDL/TRUNCATE，未访问备份表 `CDC_TOPIC_OFFSET_2026_09_02`，未访问 Kafka/ZooKeeper/TongZK；浏览器控制台目测未执行（`NOT_RUN`，无浏览器能力），不构成正式验收 PASS。
