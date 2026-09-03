@@ -49,12 +49,20 @@ defineEmits<{
   gap: 8px 12px;
   margin: 8px 0;
 }
-.toff-toolbar-left,
-.toff-toolbar-right {
+.toff-toolbar-left {
   display: inline-flex;
   align-items: center;
   flex-wrap: wrap;
   gap: 14px;
+}
+/* 右组作为一个完整逻辑组：内部禁止换行，必要时整组随外层工具栏换到下一行，不得把“立即刷新”单独挤到下一行。 */
+.toff-toolbar-right {
+  display: inline-flex;
+  align-items: center;
+  flex-wrap: nowrap;
+  gap: 14px;
+  flex-shrink: 0;
+  min-width: 0;
 }
 .toff-stat {
   display: inline-flex;

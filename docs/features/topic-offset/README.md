@@ -140,3 +140,20 @@ ChatGPT 已从 GitHub 正式复审 R1 提交 `014b9c0853f39ffda666834900d103a5b1
 - 结果提交：`fix(topic-offset): align page with user visual review`（见提交记录）；
 - 前端 topic-offset 定向测试与完整测试套件、前端生产构建、`git diff --check` 全部通过；后端零改动不重跑后端门禁；
 - 只读联调：对开发库 `CDC_TOPIC_OFFSET` 5000 多条模拟数据核对接口总数与固定 150 条/页，未执行任何 DML/DDL/TRUNCATE，未访问备份表 `CDC_TOPIC_OFFSET_2026_09_02`，未访问 Kafka/ZooKeeper/TongZK；浏览器控制台目测未执行（`NOT_RUN`，无浏览器能力），不构成正式验收 PASS。
+
+## 14. R3 ChatGPT 代码复审遗留项修复记录（TOPIC-OFFSET-IMPLEMENTATION-001-R3）
+
+ChatGPT 已从 GitHub 正式复审 R2 提交 `ac40c8d9114755ece8eaca4cff065bbb7dc00dbc`，结论为 `CHANGES_REQUIRED_CODE_ONLY`，仅指出两个前端代码细节需修正；本 R3 任务只修正这两项，不重新设计，不扩大调整范围。R2 已确认的七项业务与视觉方案内容零变化；REQUIREMENTS/ACCEPTANCE/DESIGN/UI/API/DATABASE 六份已批准基线相对 `ac40c8d` 逐字零 diff，后端与前端 API 层/类型/Store/`useTopicOffset.ts`/其他页面零改动；README 追加本记录。正式验收未执行（100 条 `TOFF-AC-xxx` 保持 `NOT_RUN`）。
+
+R3 修复的两项代码复审遗留问题：
+
+- 工具栏右组禁止内部换行：右组（`60 秒自动刷新`、细分隔线、`最近成功刷新：HH:mm:ss`、失败弱提示、`立即刷新`）整体保持单行不换行，必要时整组随外层工具栏换到下一行，不再允许把“立即刷新”按钮单独掉到下一行；左组与右组仍可作为两个完整逻辑组上下排列，顺序与 `refreshError`/空刷新时间语义均不变。
+- Tooltip 补齐上下左右视口边界定位：新增纯函数 `frontend/src/views/topic-offset/utils/tooltipPosition.ts`（`computeTooltipPosition`），Tooltip 显示后读取真实渲染宽高，水平优先指针右侧、不足切左侧并收拢，垂直优先下方、不足切上方、上方也不足则钳到安全上边，最终对四边均保留 ≥8px 安全边距；窄视口下最大宽度收窄为 `min(340px, calc(100vw - 16px))`；页面滚动/视口变化/记录替换/翻页/刷新提交/组件卸载均不遗留孤立 Tooltip。单实例、350ms 延迟、快速扫过不弹、离开立即隐藏、非 enterable、长 Topic 安全换行等 R2 已通过行为不回归。
+
+实现状态保持 `IMPLEMENTED_PENDING_USER_ACCEPTANCE`，验收执行状态保持 `NOT_RUN`；R3 完成仅表示两个 R2 代码复审遗留问题已修正并推送，仍需 ChatGPT 从 GitHub 复审结果提交，复审通过后再由用户统一进行真实浏览器人工视觉检查；不得将功能标记为正式验收通过或已交付。
+
+结果提交与验证摘要：
+
+- 结果提交：`fix(topic-offset): clamp tooltip and keep toolbar group intact`（见提交记录）；
+- 前端 topic-offset 定向测试与完整测试套件、前端生产构建、`git diff --check` 全部通过；六份已批准基线及后端相对 `ac40c8d` 逐字零 diff；124 个需求 ID 与 100 个验收 ID 仍连续且全部 `NOT_RUN`；
+- 本 R3 不需要任何数据库、Kafka/ZooKeeper/TongZK 访问，未连接数据库、未启停后端服务；浏览器控制台目测未执行（`NOT_RUN`，无浏览器能力），不构成正式验收 PASS。

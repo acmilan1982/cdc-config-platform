@@ -397,3 +397,86 @@ describe('OffsetTable 同步对象悬浮 Tooltip（R2 §4.5 单实例 + 350ms �
     wrapper.unmount()
   })
 })
+
+describe('OffsetTable Tooltip 真实尺寸定位与视口四边钳制（R3 §4/§7.2）', () => {
+  const originalRect = Element.prototype.getBoundingClientRect
+
+  afterEach(() => {
+    Element.prototype.getBoundingClientRect = originalRect
+    vi.useRealTimers()
+    document.body.innerHTML = ''
+  })
+
+  /** 组件测量路径依赖真实 DOM 布局；jsdom 无布局，故在此仅对 .toff-tip 桩出可用的渲染宽高。 */
+  function stubTipRect(width: number, height: number): void {
+    Element.prototype.getBoundingClientRect = function (this: Element) {
+      if (this.classList && this.classList.contains('toff-tip')) {
+        const rect = { x: 0, y: 0, width, height, top: 0, left: 0, right: width, bottom: height, toJSON: () => ({}) }
+        return rect as DOMRect
+      }
+      return originalRect.call(this)
+    }
+  }
+
+  it('显示后读取真实宽高并用其定位：右侧/下方不足时移到指针左上方，满足四边安全边距', async () => {
+    vi.useFakeTimers({ toFake: ['setTimeout', 'clearTimeout'] })
+    stubTipRect(220, 60)
+    const wrapper = await mountTable([parseableRow()])
+    await wrapper.find('.toff-sync-cell').trigger('mouseenter', { clientX: 1000, clientY: 740 })
+    await vi.advanceTimersByTimeAsync(400)
+    await flushPromises()
+    const tip = document.querySelector('.toff-tip') as HTMLElement | null
+    expect(tip).not.toBeNull()
+    // 真实尺寸就绪后才显示（is-placed），否则保持隐藏态定位
+    expect(tip!.classList.contains('is-placed')).toBe(true)
+    const left = parseFloat(tip!.style.left)
+    const top = parseFloat(tip!.style.top)
+    // 220x60 为真实测得：右侧、下方放不下 → 移到指针左上方；若按未测量(0)猜测会落在右下
+    expect(left).toBeLessThan(1000)
+    expect(top).toBeLessThan(740)
+    const vw = window.innerWidth
+    const vh = window.innerHeight
+    expect(left).toBeGreaterThanOrEqual(8)
+    expect(top).toBeGreaterThanOrEqual(8)
+    expect(left + 220).toBeLessThanOrEqual(vw - 8)
+    expect(top + 60).toBeLessThanOrEqual(vh - 8)
+    wrapper.unmount()
+  })
+
+  it('指针在单元格内移动时用已测得尺寸重算，Tooltip 保持视口内', async () => {
+    vi.useFakeTimers({ toFake: ['setTimeout', 'clearTimeout'] })
+    stubTipRect(220, 60)
+    const wrapper = await mountTable([parseableRow()])
+    const cell = wrapper.find('.toff-sync-cell')
+    await cell.trigger('mouseenter', { clientX: 300, clientY: 200 })
+    await vi.advanceTimersByTimeAsync(400)
+    await flushPromises()
+    // 移到靠近右下角：重算后仍在视口安全区内
+    await cell.trigger('mousemove', { clientX: 1005, clientY: 760 })
+    await flushPromises()
+    const tip = document.querySelector('.toff-tip') as HTMLElement | null
+    expect(tip).not.toBeNull()
+    const left = parseFloat(tip!.style.left)
+    const top = parseFloat(tip!.style.top)
+    const vw = window.innerWidth
+    const vh = window.innerHeight
+    expect(left).toBeGreaterThanOrEqual(8)
+    expect(top).toBeGreaterThanOrEqual(8)
+    expect(left + 220).toBeLessThanOrEqual(vw - 8)
+    expect(top + 60).toBeLessThanOrEqual(vh - 8)
+    wrapper.unmount()
+  })
+
+  it('页面滚动（捕获阶段监听）立即关闭已显示 Tooltip，不遗留孤立提示', async () => {
+    vi.useFakeTimers({ toFake: ['setTimeout', 'clearTimeout'] })
+    const wrapper = await mountTable([parseableRow()])
+    await wrapper.find('.toff-sync-cell').trigger('mouseenter', { clientX: 300, clientY: 200 })
+    await vi.advanceTimersByTimeAsync(400)
+    await flushPromises()
+    expect(document.querySelector('.toff-tip')).not.toBeNull()
+    window.dispatchEvent(new Event('scroll'))
+    await flushPromises()
+    expect(document.querySelector('.toff-tip')).toBeNull()
+    wrapper.unmount()
+  })
+})

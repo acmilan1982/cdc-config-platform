@@ -94,7 +94,9 @@
   <teleport to="body">
     <div
       v-if="tip.visible"
+      ref="tipRef"
       class="toff-tip"
+      :class="{ 'is-placed': tip.placed }"
       role="tooltip"
       :style="tipStyle"
     >
@@ -107,9 +109,10 @@
 </template>
 
 <script setup lang="ts">
-import { computed, onUnmounted, reactive, watch } from 'vue'
+import { computed, nextTick, onMounted, onUnmounted, reactive, ref, watch } from 'vue'
 import type { TopicMappingRef, TopicOffsetItem } from '@/types/topicOffset'
 import { rowKey } from '@/views/topic-offset/utils/rowKey'
+import { computeTooltipPosition } from '@/views/topic-offset/utils/tooltipPosition'
 
 interface Seg {
   text: string
@@ -131,16 +134,32 @@ const props = withDefaults(
 const DASH = '—'
 /** 同步对象 Tooltip 延迟（R2 §4.5：同一固定值，代码注释与测试保持一致）。 */
 const TIP_DELAY_MS = 350
-const TIP_MAX_WIDTH = 340
 
 interface TipModel {
   visible: boolean
   x: number
   y: number
+  left: number
+  top: number
+  width: number
+  height: number
+  placed: boolean
   rawTopic: string
   hasNote: boolean
 }
-const tip = reactive<TipModel>({ visible: false, x: 0, y: 0, rawTopic: '', hasNote: false })
+const tip = reactive<TipModel>({
+  visible: false,
+  x: 0,
+  y: 0,
+  left: 0,
+  top: 0,
+  width: 0,
+  height: 0,
+  placed: false,
+  rawTopic: '',
+  hasNote: false,
+})
+const tipRef = ref<HTMLElement | null>(null)
 let pendingKey: string | null = null
 let openTimer: ReturnType<typeof setTimeout> | null = null
 
@@ -151,15 +170,41 @@ function clearOpenTimer(): void {
   }
 }
 
-/** 只在最右侧不足显示时向左收拢，避免长 Topic 溢出视口（R2 §4.5）。 */
-const tipStyle = computed(() => {
-  const gap = 14
-  let left = tip.x + gap
-  if (typeof window !== 'undefined' && left + TIP_MAX_WIDTH > window.innerWidth - 8) {
-    left = Math.max(8, window.innerWidth - TIP_MAX_WIDTH - 8)
-  }
-  return { left: `${left}px`, top: `${tip.y + gap}px` }
-})
+const tipStyle = computed(() => ({ left: `${tip.left}px`, top: `${tip.top}px` }))
+
+/** 用当前指针 + 已测得真实尺寸重算 fixed 定位，并对视口四边做安全边距钳制（R3 §4）。 */
+function applyTipPosition(): void {
+  if (typeof window === 'undefined') return
+  const pos = computeTooltipPosition(
+    { x: tip.x, y: tip.y },
+    { width: tip.width, height: tip.height },
+    { width: window.innerWidth, height: window.innerHeight },
+  )
+  tip.left = pos.left
+  tip.top = pos.top
+}
+
+/** 显示后读取 Tooltip 真实渲染宽高再定位；jsdom 无布局时 rect 为 0，保持隐藏但仍在 DOM。 */
+function measureAndPlaceTip(): void {
+  if (!tip.visible || tipRef.value === null) return
+  const rect = tipRef.value.getBoundingClientRect()
+  tip.width = rect.width
+  tip.height = rect.height
+  applyTipPosition()
+  tip.placed = rect.width > 0 && rect.height > 0
+}
+
+// 显示瞬间先回到隐藏态并清空旧尺寸，用本行真实尺寸定位后再显示，避免沿用上一行尺寸闪跳
+watch(
+  () => tip.visible,
+  (visible) => {
+    if (!visible) return
+    tip.placed = false
+    tip.width = 0
+    tip.height = 0
+    void nextTick(measureAndPlaceTip)
+  },
+)
 
 function scheduleTip(row: TopicOffsetItem, x: number, y: number): void {
   clearOpenTimer()
@@ -181,10 +226,11 @@ function onSyncEnter(row: TopicOffsetItem, e: MouseEvent): void {
 }
 
 function onSyncMove(e: MouseEvent): void {
-  // 等待期或已显示时跟随指针，保证停在单元格内可自由查看
+  // 等待期或已显示时跟随指针；已显示后用已测得尺寸重新钳制，停在单元格内也不越界、不遮挡
   if (pendingKey !== null || tip.visible) {
     if (Number.isFinite(e.clientX)) tip.x = e.clientX
     if (Number.isFinite(e.clientY)) tip.y = e.clientY
+    if (tip.visible) applyTipPosition()
   }
 }
 
@@ -192,6 +238,11 @@ function onSyncLeave(): void {
   clearOpenTimer()
   pendingKey = null
   tip.visible = false
+}
+
+/** 页面滚动、视口变化都可能使 fixed Tooltip 漂移离开锚点，直接关闭避免遗留孤立提示。 */
+function onViewportChange(): void {
+  onSyncLeave()
 }
 
 function textOrDash(value: string | null | undefined): string {
@@ -234,9 +285,18 @@ function targetSeg(row: TopicOffsetItem): Seg {
   return m ? sourceTargetLabel(m.target) : { text: '' }
 }
 
-// 查询结果替换/翻页/刷新提交时立即关闭 Tooltip；组件卸载时清理计时
+// 查询结果替换/翻页/刷新提交时立即关闭 Tooltip
 watch(() => props.records, onSyncLeave)
-onUnmounted(onSyncLeave)
+// 捕获阶段监听滚动（含表格内部滚动）与视口 resize，避免遗留孤立 Tooltip
+onMounted(() => {
+  window.addEventListener('scroll', onViewportChange, true)
+  window.addEventListener('resize', onViewportChange)
+})
+onUnmounted(() => {
+  window.removeEventListener('scroll', onViewportChange, true)
+  window.removeEventListener('resize', onViewportChange)
+  onSyncLeave()
+})
 </script>
 
 <style scoped>
@@ -337,7 +397,8 @@ onUnmounted(onSyncLeave)
 .toff-tip {
   position: fixed;
   z-index: 3000;
-  max-width: 340px;
+  /* 窄视口下两侧各保留 8px 安全边距（R3 §4：与 tooltipPosition.ts 的 tooltipMaxWidth 一致） */
+  max-width: min(340px, calc(100vw - 16px));
   padding: 8px 10px;
   border-radius: 6px;
   background: #303133;
@@ -346,6 +407,11 @@ onUnmounted(onSyncLeave)
   line-height: 1.5;
   box-shadow: 0 6px 16px rgba(0, 0, 0, 0.2);
   pointer-events: none;
+  /* 先以真实尺寸定位后再显示（is-placed），避免位置跳动 */
+  visibility: hidden;
+}
+.toff-tip.is-placed {
+  visibility: visible;
 }
 .toff-tip-topic {
   white-space: normal;
