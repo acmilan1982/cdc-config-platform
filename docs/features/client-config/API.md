@@ -18,6 +18,8 @@
 | R1 基线提交 | `21f4729c43d146426e8d4f1b2d6b667cfcf160ff` |
 | 创建日期 | 2026-09-03 |
 | R1 日期 | 2026-09-04 |
+| 并发调整任务 | `CLIENT-CONFIG-DESIGN-CONCURRENCY-ADJUSTMENT-001`（依据重新批准的需求/验收并发口径，定向清除过时显式表锁设计的纯文档任务） |
+| 并发调整日期 | 2026-09-04 |
 | 依据需求 | `CCFG-REQ-001~090`（`APPROVED`） |
 | 依据验收 | `CCFG-AC-001~076`（全部 `NOT_RUN`） |
 | 设计编号 | `CCFG-API-001 ~ CCFG-API-020`，连续、唯一、不可复用；每个设计编号恰有一个定义行，其余同编号出现一律视为引用而非定义 |
@@ -25,6 +27,8 @@
 | 配套文档 | `DESIGN.md`（逻辑与数据流）、`UI.md`（交互）、`DATABASE.md`（SQL 与事务） |
 
 R1 修订目标（不改已批准 90 条需求与 76 条验收、不进入代码实现、不做设计批准收口）：修正 API 设计编号重复定义行并重排为连续唯一编号（`R1-01`）；统一“数据源数组恒按原存储顺序返回、前端仅计算非持久化前三项投影”的单一顺序契约（`R1-02`）；固定 `CLIENT_DESC` 原文保存、Trim 仅判空、按原文计字节（`R1-03`）；删除未批准的数据源 ID“其他非法字符”限制（`R1-05`）；补齐历史候选资格变化异常与歧义/历史 NULL 描述契约（`R1-06/R1-07/R1-08`）。
+
+并发口径定向调整（2026-09-04，`CLIENT-CONFIG-DESIGN-CONCURRENCY-ADJUSTMENT-001`，纯文档）：写接口 E3/E4/E6 由“短事务 + 表级互斥锁 + 锁内全量权威校验”改为“普通短事务 → 目标 DML 前重新读取全表 → 当次应用层校验 → 无冲突立即 DML → 行数校验与提交/回滚”，明确不执行显式表锁、不保证并发最多一笔成功（见 CCFG-API-008/009/011）；从错误码表删除 `50050 LOCK_WAIT_TIMEOUT` 行并从 `CCFG-API-017` 删除 `ORA-30006 → 50050` 触发路径（表锁/锁等待方案已过时且未获批准）；只读接口与既有错误码契约不变。原表锁方案为设计草案内容，未获项目负责人批准；本调整后接口契约仍为 `DRAFT_PENDING_USER_REVIEW`，待 ChatGPT 正式设计调整复审与项目负责人批准。
 
 ## 2. 统一调用规约
 
@@ -36,14 +40,14 @@ R1 修订目标（不改已批准 90 条需求与 76 条验收、不进入代码
 
 ### 接口清单（E1~E7）
 
-| 编号 | 方法与路径 | 用途 | 写库 | 需表级互斥锁 |
+| 编号 | 方法与路径 | 用途 | 写库 | 写前全量重读+当次检查 |
 |---|---|---|---|---|
-| E1 | `GET /api/clients` | 列表查询 | 否 | 否 |
-| E2 | `GET /api/clients/data-source-options` | 新增/编辑的数据源候选与占用 | 否 | 否 |
-| E3 | `POST /api/clients` | 新增 | 是（INSERT，`FG_ACTIVE='1'`） | 是 |
-| E4 | `PUT /api/clients/{originalClientId}` | 编辑 | 是（原子 UPDATE） | 是 |
+| E1 | `GET /api/clients` | 列表查询 | 否 | 否（只读） |
+| E2 | `GET /api/clients/data-source-options` | 新增/编辑的数据源候选与占用 | 否 | 否（只读） |
+| E3 | `POST /api/clients` | 新增 | 是（INSERT，`FG_ACTIVE='1'`） | 是（`INSERT` 前重读全表） |
+| E4 | `PUT /api/clients/{originalClientId}` | 编辑 | 是（原子 UPDATE） | 是（`UPDATE` 前重读全表） |
 | E5 | `DELETE /api/clients/{clientId}` | 删除 | 是（物理 DELETE） | 否 |
-| E6 | `PUT /api/clients/{clientId}/enable` | 启用 | 是（UPDATE `FG_ACTIVE='1'`） | 是 |
+| E6 | `PUT /api/clients/{clientId}/enable` | 启用 | 是（UPDATE `FG_ACTIVE='1'`） | 是（`UPDATE` 前重读目标与全表） |
 | E7 | `PUT /api/clients/{clientId}/disable` | 停用 | 是（UPDATE `FG_ACTIVE='0'`） | 否 |
 
 > 静态路径 `data-source-options` 与 `{clientId}` 动态段不冲突：二者方法不同（E2 为 GET），仓库映射按“方法+路径”解析；`clientId` 因格式约束不含 `/`，可直接作为路径段。
@@ -126,7 +130,7 @@ R1 修订目标（不改已批准 90 条需求与 76 条验收、不进入代码
 
 | 设计编号 | 设计决定 | 覆盖需求 | 覆盖验收 |
 |---|---|---|---|
-| CCFG-API-008 | `POST /api/clients`。Body：`CreateClientRequest { clientId:string(必填); clientDesc:string(必填); dataSourceIds:string[](必填,≥1) }`。后端处理：`clientId`/`clientDesc`/每个 `dataSourceIds` 元素做 Trim；`dataSourceIds` 去空项、按规范化结果去重（保留首次出现顺序），随后序列化为单逗号无空格字符串待写。`clientDesc` 的 Trim 只用于判空，保存对象为请求原始最终文本（含其首尾空白），原文按 UTF-8 字节校验 `<=1024`（见 CCFG-API-015）。写入边界：单个短事务 + 表级互斥锁 + 锁内全量权威校验（探针 ID ASCII 大小写不敏感唯一；全部拟保存数据源唯一分配且均为可用候选）→ `INSERT` 且 `FG_ACTIVE='1'`，行数必须为 1。成功 `code=200`、`message="success"`（`data=null`）；失败按错误码表返回。重复提交语义：不提供幂等键；同一 `clientId` 二次成功提交会被 ID 唯一校验拒绝（`40940`），天然避免重复行。 | CCFG-REQ-037、CCFG-REQ-038、CCFG-REQ-039、CCFG-REQ-040、CCFG-REQ-041、CCFG-REQ-043、CCFG-REQ-071、CCFG-REQ-085 | CCFG-AC-028、CCFG-AC-029、CCFG-AC-030、CCFG-AC-031、CCFG-AC-033、CCFG-AC-034、CCFG-AC-058、CCFG-AC-071 |
+| CCFG-API-008 | `POST /api/clients`。Body：`CreateClientRequest { clientId:string(必填); clientDesc:string(必填); dataSourceIds:string[](必填,≥1) }`。后端处理：`clientId`/`clientDesc`/每个 `dataSourceIds` 元素做 Trim；`dataSourceIds` 去空项、按规范化结果去重（保留首次出现顺序），随后序列化为单逗号无空格字符串待写。`clientDesc` 的 Trim 只用于判空，保存对象为请求原始最终文本（含其首尾空白），原文按 UTF-8 字节校验 `<=1024`（见 CCFG-API-015）。写入边界：开启普通短事务 → 在目标 `INSERT` 前重新读取 `CDC_CLIENT_MULTIPLE` 全表并执行当次应用层校验（探针 ID ASCII 大小写不敏感唯一；全部拟保存数据源唯一分配且均为可用候选）→ 发现冲突则不执行 DML 并返回业务冲突 → 无冲突则立即 `INSERT` 且 `FG_ACTIVE='1'`，行数必须为 1；任一步失败整笔回滚。该流程不消除检查与写入之间的竞态、不保证并发最多一笔成功。成功 `code=200`、`message="success"`（`data=null`）；失败按错误码表返回。重复提交语义：不提供幂等键；同一 `clientId` 二次成功提交会被 ID 唯一校验拒绝（`40940`），天然避免重复行。 | CCFG-REQ-037、CCFG-REQ-038、CCFG-REQ-039、CCFG-REQ-040、CCFG-REQ-041、CCFG-REQ-043、CCFG-REQ-071、CCFG-REQ-085 | CCFG-AC-028、CCFG-AC-029、CCFG-AC-030、CCFG-AC-031、CCFG-AC-033、CCFG-AC-034、CCFG-AC-058、CCFG-AC-071 |
 
 ### 5.1 请求与成功响应示例
 
@@ -146,7 +150,7 @@ R1 修订目标（不改已批准 90 条需求与 76 条验收、不进入代码
 
 | 设计编号 | 设计决定 | 覆盖需求 | 覆盖验收 |
 |---|---|---|---|
-| CCFG-API-009 | `PUT /api/clients/{originalClientId}`。Path：`originalClientId`（当前记录**原探针 ID**，Trim 后用于定位与自排除）。Body：`UpdateClientRequest { clientId:string(必填,最终值); clientDesc:string(必填); dataSourceIds:string[](必填,≥1) }`。写入边界：同一短事务 + 表级互斥锁；先按 `originalClientId` 定位原记录（找不到 → `40440`），在锁内按最终 `clientId` 执行格式与 ASCII 大小写不敏感唯一校验（自排除 `originalClientId`，允许自身仅大小写调整），按全部拟保存数据源做唯一分配与可用性校验（自排除 `originalClientId`），随后一次性原子 `UPDATE`（探针 ID、描述、数据源序列化值），行数必须为 1，失败整笔回滚。不级联其他表/进程/ZK/Kafka。描述契约：保存提交最终 `clientDesc` 原文（用户最终输入即保存文本），Trim 仅判空，原文按 UTF-8 字节 `<=1024`（`CCFG-REQ-039/059` 口径），不重新生成、不比较其是否等于机构组合、不自动删除首尾空白（见 CCFG-API-015 与 R1-03）。重复/幂等语义：重复提交同一最终状态按同一事务规则再次执行（若最终状态与原状态一致仍允许，若与已有他行冲突则拒绝）。 | CCFG-REQ-044、CCFG-REQ-045、CCFG-REQ-046、CCFG-REQ-047、CCFG-REQ-048、CCFG-REQ-049、CCFG-REQ-059、CCFG-REQ-066、CCFG-REQ-073 | CCFG-AC-035、CCFG-AC-036、CCFG-AC-037、CCFG-AC-038、CCFG-AC-039、CCFG-AC-040、CCFG-AC-054、CCFG-AC-060、CCFG-AC-033 |
+| CCFG-API-009 | `PUT /api/clients/{originalClientId}`。Path：`originalClientId`（当前记录**原探针 ID**，Trim 后用于定位与自排除）。Body：`UpdateClientRequest { clientId:string(必填,最终值); clientDesc:string(必填); dataSourceIds:string[](必填,≥1) }`。写入边界：开启普通短事务 → 在目标 `UPDATE` 前重新读取 `CDC_CLIENT_MULTIPLE` 全表并执行当次应用层校验：先按 `originalClientId` 定位原记录（找不到 → `40440`），按最终 `clientId` 执行格式与 ASCII 大小写不敏感唯一校验（自排除 `originalClientId`，允许自身仅大小写调整），按全部拟保存数据源做唯一分配与可用性校验（自排除 `originalClientId`）→ 发现冲突则不执行 DML 并返回业务冲突 → 无冲突则立即一次性原子 `UPDATE`（探针 ID、描述、数据源序列化值），行数必须为 1，任一步失败整笔回滚。该流程不消除检查与写入之间的竞态、不保证并发最多一笔成功。不级联其他表/进程/ZK/Kafka。描述契约：保存提交最终 `clientDesc` 原文（用户最终输入即保存文本），Trim 仅判空，原文按 UTF-8 字节 `<=1024`（`CCFG-REQ-039/059` 口径），不重新生成、不比较其是否等于机构组合、不自动删除首尾空白（见 CCFG-API-015 与 R1-03）。重复/幂等语义：重复提交同一最终状态按同一事务规则再次执行（若最终状态与原状态一致仍允许，若与已有他行冲突则拒绝）。 | CCFG-REQ-044、CCFG-REQ-045、CCFG-REQ-046、CCFG-REQ-047、CCFG-REQ-048、CCFG-REQ-049、CCFG-REQ-059、CCFG-REQ-066、CCFG-REQ-073 | CCFG-AC-035、CCFG-AC-036、CCFG-AC-037、CCFG-AC-038、CCFG-AC-039、CCFG-AC-040、CCFG-AC-054、CCFG-AC-060、CCFG-AC-033 |
 
 ### 6.1 请求与成功响应示例
 
@@ -171,7 +175,7 @@ PUT /api/clients/probe-001
 | 设计编号 | 设计决定 | 覆盖需求 | 覆盖验收 |
 |---|---|---|---|
 | CCFG-API-010 | `DELETE /api/clients/{clientId}`。Path：`clientId`（待删探针 ID）。写入边界：短事务内物理 `DELETE` 该记录，不做任何关联检查，行数必须为 1；重复删除第二次定位不到 → `40440`。删除成功后前端刷新列表并清空选中。 | CCFG-REQ-026、CCFG-REQ-027、CCFG-REQ-028 | CCFG-AC-020、CCFG-AC-021 |
-| CCFG-API-011 | `PUT /api/clients/{clientId}/enable`。Path：`clientId`。写入边界：单个短事务 + 表级互斥锁；锁内重读目标记录，若 `fgActive` 非 `0/1` → `40240`；执行与新增/编辑相同的全部数据源唯一分配校验（自排除目标记录自身），仅重复分配冲突阻断（`40941`），其他数据源历史异常（停用/不存在/类别不符/类型不符/含逗号歧义）本身不阻断启用；成功后仅把 `FG_ACTIVE` 更新为 `1`，行数必须为 1。不弹确认由前端处理。 | CCFG-REQ-031、CCFG-REQ-032、CCFG-REQ-034、CCFG-REQ-035、CCFG-REQ-072、CCFG-REQ-083 | CCFG-AC-022、CCFG-AC-024、CCFG-AC-026、CCFG-AC-027、CCFG-AC-059 |
+| CCFG-API-011 | `PUT /api/clients/{clientId}/enable`。Path：`clientId`。写入边界：开启普通短事务 → 在目标 `UPDATE` 前重新读取 `CDC_CLIENT_MULTIPLE` 全表：读取目标记录，若 `fgActive` 非 `0/1` → `40240`；执行与新增/编辑相同的当次数据源唯一分配校验（自排除目标记录自身），仅重复分配冲突阻断（`40941`），其他数据源历史异常（停用/不存在/类别不符/类型不符/含逗号歧义）本身不阻断启用 → 未发现阻断则仅把 `FG_ACTIVE` 更新为 `1`，行数必须为 1，任一步失败整笔回滚。该流程不消除检查与写入之间的竞态、不保证并发最多一笔成功。不弹确认由前端处理。 | CCFG-REQ-031、CCFG-REQ-032、CCFG-REQ-034、CCFG-REQ-035、CCFG-REQ-072、CCFG-REQ-083 | CCFG-AC-022、CCFG-AC-024、CCFG-AC-026、CCFG-AC-027、CCFG-AC-059 |
 | CCFG-API-012 | `PUT /api/clients/{clientId}/disable`。Path：`clientId`。写入边界：短事务内仅把目标记录 `FG_ACTIVE` 更新为 `0`，行数必须为 1；非 `0/1` 记录允许停用；历史数据源异常不阻断。二次确认由前端负责。 | CCFG-REQ-030、CCFG-REQ-032、CCFG-REQ-035、CCFG-REQ-083 | CCFG-AC-023、CCFG-AC-024、CCFG-AC-027 |
 
 ### 7.1 成功响应示例（三者同形）
@@ -185,9 +189,9 @@ PUT /api/clients/probe-001
 | 设计编号 | 设计决定 | 覆盖需求 | 覆盖验收 |
 |---|---|---|---|
 | CCFG-API-013 | 请求模型固定为：`CreateClientRequest { clientId:string(必填); clientDesc:string(必填); dataSourceIds:string[](必填,≥1) }`（新增 E3）；`UpdateClientRequest { clientId:string(必填,最终值); clientDesc:string(必填); dataSourceIds:string[](必填,≥1) }`（编辑 E4，`originalClientId` 走 E4 路径参数，不入 body）。`dataSourceIds` 传有序数组，Trim/去空/去重/序列化为 CSV 由后端完成。两个请求模型均不含状态字段、启停控件、描述生成模式或其他业务字段；表单/编辑打开所需最新数据由 E1 行 + E2 候选共同完成，不设详情 GET。 | CCFG-REQ-036、CCFG-REQ-041、CCFG-REQ-042、CCFG-REQ-051 | CCFG-AC-028、CCFG-AC-031、CCFG-AC-032、CCFG-AC-042 |
-| CCFG-API-014 | 探针 ID：Trim 后非空；长度与格式由正则 `^[A-Za-z0-9][A-Za-z0-9._-]{0,31}$`（隐含 1~32 位）一次性判定；ASCII 大小写不敏感唯一性（编辑按 `originalClientId` 排除自身；仅自身大小写调整且无其他冲突时允许）。后端保存前为最终权威，前端可提前预校验。 | CCFG-REQ-037、CCFG-REQ-038 | CCFG-AC-029、CCFG-AC-030 |
+| CCFG-API-014 | 探针 ID：Trim 后非空；长度与格式由正则 `^[A-Za-z0-9][A-Za-z0-9._-]{0,31}$`（隐含 1~32 位）一次性判定；ASCII 大小写不敏感唯一性（编辑按 `originalClientId` 排除自身；仅自身大小写调整且无其他冲突时允许）。后端在目标 DML 前全量重读并执行当次检查，是最终应用层校验，但不是并发强一致唯一保证（竞态边界见 DESIGN.md §7）；前端可提前预校验。 | CCFG-REQ-037、CCFG-REQ-038 | CCFG-AC-029、CCFG-AC-030 |
 | CCFG-API-015 | 探针描述（`clientDesc`）契约：Trim 结果**只用于判断是否为空**；Trim 不覆盖、不替换请求中的原始最终文本；UTF-8 字节数 `<=1024` 必须针对**实际准备保存的原始最终文本**计算（首尾空白也计入字节数），后端用 `StandardCharsets.UTF_8` 计字节为最终防线，前端 `TextEncoder` 预校验（同一口径）。数据库存储用户最终提交的原始文本，不自动删除首尾空白、不改写内部字符；前端表单回显与编辑保持数据库值原样。自动生成描述仍按批准规则对每个 `DATA_SOURCE_ORG` 片段 Trim（见 DESIGN.md/UI.md），生成后用户的进一步编辑原样保存。未来测试至少覆盖：仅空白文本拒绝；带首尾空白但 Trim 后非空时允许并原样保存；原文恰好 1024 BYTE 允许；Trim 后文本不超限但含首尾空白的原文超过 1024 BYTE 时拒绝。 | CCFG-REQ-039、CCFG-REQ-059 | CCFG-AC-033 |
-| CCFG-API-016 | 数据源校验：`dataSourceIds` 至少 1 个；每个元素 Trim、去空；同一请求内去重（保留首次出现）；按规范化 ID 精确比较做跨记录唯一分配（不折叠大小写）；序列化结果 `<=1000 BYTE`。数据源 ID 只依据以下已批准事实校验：Trim 后非空；不含英文逗号；精确存在于允许候选（存在、`FG_ACTIVE='1'`、`UPPER(DATA_SOURCE_CATEGORY)='SOURCE'`、`UPPER(DATA_SOURCE_TYPE)='ORACLE'`），否则 `40441`；已由他人占用则 `40941`。**不新增任何数据源 ID 字符白名单或正则**，不存在“其他非法字符”限制（R1-05）；数据源 ID 与数据库主键匹配区分大小写并精确匹配，不做大小写折叠。 | CCFG-REQ-040、CCFG-REQ-068、CCFG-REQ-071、CCFG-REQ-074 | CCFG-AC-034、CCFG-AC-056、CCFG-AC-058、CCFG-AC-061 |
+| CCFG-API-016 | 数据源校验：`dataSourceIds` 至少 1 个；每个元素 Trim、去空；同一请求内去重（保留首次出现）；按规范化 ID 精确比较做跨记录唯一分配（不折叠大小写）；序列化结果 `<=1000 BYTE`。数据源 ID 只依据以下已批准事实校验：Trim 后非空；不含英文逗号；精确存在于允许候选（存在、`FG_ACTIVE='1'`、`UPPER(DATA_SOURCE_CATEGORY)='SOURCE'`、`UPPER(DATA_SOURCE_TYPE)='ORACLE'`），否则 `40441`；已由他人占用则 `40941`。**不新增任何数据源 ID 字符白名单或正则**，不存在“其他非法字符”限制（R1-05）；数据源 ID 与数据库主键匹配区分大小写并精确匹配，不做大小写折叠。上述唯一分配检查在目标 DML 前全量重读后当次执行，是最终应用层校验，但不是并发强一致唯一保证；极端并发边界与批准需求一致（见 DESIGN.md §7）。 | CCFG-REQ-040、CCFG-REQ-068、CCFG-REQ-071、CCFG-REQ-074 | CCFG-AC-034、CCFG-AC-056、CCFG-AC-058、CCFG-AC-061 |
 
 ## 9. 错误码表
 
@@ -208,13 +212,12 @@ PUT /api/clients/probe-001
 | 40940 | `CLIENT_ID_CONFLICT` | 200 | 探针 ID | 探针 ID 已存在冲突（不区分大小写），请更换探针 ID。 |
 | 40941 | `DATA_SOURCE_OCCUPIED` | 200 | 数据源 | 数据源“{机构名称}（{数据源ID}）”已分配给探针：{冲突探针ID，顿号分隔，全部列出}，不能重复分配。（无法取得机构名称时省略“机构名称（”部分，形如：数据源（{数据源ID}）已分配给探针：{...}） |
 | 40942 | `ANOMALOUS_SELECTION_BLOCKED` | 200 | 历史异常 | 存在异常数据源，编辑保存被阻断，请先移除异常数据源后再保存（消息须列出异常数据源 ID 与原因）。 |
-| 50050 | `LOCK_WAIT_TIMEOUT` | 200 | 并发 | 系统繁忙，等待配置数据锁超时，请稍后重试。 |
 | 50051 | `SAVE_FAILED` | 200 | 写入 | 保存失败，请稍后重试。 |
 | 50052 | `DELETE_FAILED` | 200 | 写入 | 删除失败，请稍后重试。 |
 
 | 设计编号 | 设计决定 | 覆盖需求 | 覆盖验收 |
 |---|---|---|---|
-| CCFG-API-017 | 错误触发归类（错误码表触发顺序与契约）：结构/字段缺失或类型不符 → HTTP 400 `code=400`；`clientId` 空 → `40100`；格式不符 → `40101`；描述仅空白/去除首尾空白为空，或去除首尾空白后的原文超过 1024 BYTE → `40102`；数据源为空 → `40103`；数据源 ID 含英文逗号 → `40104`（不存在“其他非法字符”触发）；序列化超 1000 BYTE → `40105`；非 `0/1` 状态被请求启用等非法状态操作 → `40240`；定位不到 → `40440`；数据源不存在/停用/类别或类型不符 → `40441`；ID 大小写不敏感冲突 → `40940`；数据源已被其他探针占用（携带全部冲突探针 ID，满足 `CCFG-REQ-075/076` 的可解析信息）→ `40941`；编辑保存因历史异常被阻断 → `40942`；锁等待超时（`ORA-30006`）→ `50050` 并回滚；写行数异常/其他保存失败 → `50051`/删除 → `50052`。 | CCFG-REQ-075、CCFG-REQ-076、CCFG-REQ-081、CCFG-REQ-082、CCFG-REQ-086 | CCFG-AC-062、CCFG-AC-063、CCFG-AC-068、CCFG-AC-069、CCFG-AC-072 |
+| CCFG-API-017 | 错误触发归类（错误码表触发顺序与契约）：结构/字段缺失或类型不符 → HTTP 400 `code=400`；`clientId` 空 → `40100`；格式不符 → `40101`；描述仅空白/去除首尾空白为空，或去除首尾空白后的原文超过 1024 BYTE → `40102`；数据源为空 → `40103`；数据源 ID 含英文逗号 → `40104`（不存在“其他非法字符”触发）；序列化超 1000 BYTE → `40105`；非 `0/1` 状态被请求启用等非法状态操作 → `40240`；定位不到 → `40440`；数据源不存在/停用/类别或类型不符 → `40441`；ID 大小写不敏感冲突 → `40940`；数据源已被其他探针占用（携带全部冲突探针 ID，满足 `CCFG-REQ-075/076` 的可解析信息）→ `40941`；编辑保存因历史异常被阻断 → `40942`；写行数异常/其他保存失败 → `50051`/删除 → `50052`。本 Feature 不产生 `50050 LOCK_WAIT_TIMEOUT`：不存在 `ORA-30006` 锁等待专用触发路径（已随并发口径调整删除，见 CCFG-API-008/009/011 与 DESIGN.md §7）；未捕获数据库异常按既有全局异常边界处理。 | CCFG-REQ-075、CCFG-REQ-076、CCFG-REQ-081、CCFG-REQ-082、CCFG-REQ-086 | CCFG-AC-062、CCFG-AC-063、CCFG-AC-068、CCFG-AC-069、CCFG-AC-072 |
 | CCFG-API-018 | 历史异常阻断与不可用消息的可定位契约：当保存被历史异常阻断、候选/已选不可用、类别或类型不符时，返回的 message 必须指出具体数据源 ID（含其机构名称可取时一并给出）及不合格原因，例如“数据源（ds_oracle_099）：已停用”“数据源（legacy_01）：类别非 SOURCE”“数据源（mysql_02）：类型非 ORACLE”，不得只返回无法定位对象的笼统文案（如无任何数据源 ID 的“存在异常”）。该契约覆盖新增/编辑保存时对不可用数据源与历史异常的反馈。 | CCFG-REQ-080、CCFG-REQ-081、CCFG-REQ-082 | CCFG-AC-067、CCFG-AC-068、CCFG-AC-069 |
 
 ### 9.1 失败响应示例
@@ -252,3 +255,4 @@ PUT /api/clients/probe-001
 |---|---|---|
 | 2026-09-03 | 新建 `docs/features/client-config/API.md`：接口 E1~E7、响应/请求模型、校验规则与错误码表 | CLIENT-CONFIG-DESIGN-BASELINE-001（阶段 4 设计基线；纯文档任务，未实现、未执行验收） |
 | 2026-09-04 | R1 定向修订：消除 `CCFG-API-*` 重复定义行，重排为连续唯一编号 `CCFG-API-001~020`（错误码明细表去掉“设计编号”列）；统一数据源数组原顺序 + 前端前三项投影契约（R1-02）；固定 `clientDesc` 原文保存/Trim 仅判空/按原文计字节（R1-03）；删除数据源 ID“其他非法字符”限制（R1-05）；补齐 `CATEGORY_MISMATCH`/`TYPE_MISMATCH` 历史异常与可定位消息（R1-06）；补齐 `COMMA_PROTOCOL_AMBIGUOUS`/`rawDataSourceIds`/`possibleCommaDataSourceIds` 歧义契约（R1-07）；`clientDesc` 允许 `string\|null` 并定义 NULL/空白历史契约（R1-08） | CLIENT-CONFIG-DESIGN-BASELINE-001-R1（正式复审 `CHANGES_REQUIRED` 定向修订；纯文档任务，未实现、未执行验收） |
+| 2026-09-04 | 并发口径定向调整（`CLIENT-CONFIG-DESIGN-CONCURRENCY-ADJUSTMENT-001`，纯文档）：`CCFG-API-008/009/011` 新增/编辑/启用写入边界由“表级互斥锁 + 锁内全量权威校验”改为“普通短事务 → DML 前重读全表 → 当次应用层校验 → 无冲突立即 DML”，并明确不消除竞态、不保证并发最多一笔成功；接口清单表“需表级互斥锁”列改为“写前全量重读+当次检查”；`CCFG-API-014/016` 补充写前检查为最终应用层校验而非并发强一致唯一；从错误码表删除 `50050 LOCK_WAIT_TIMEOUT` 行，并从 `CCFG-API-017` 删除 `ORA-30006 → 50050` 触发路径（表锁/锁等待方案已过时且未获批准）；`50051/50052` 等其他错误码不变。文档状态保持 `DRAFT_PENDING_USER_REVIEW`，`PENDING_USER_CONFIRMATION=0`；不新增/删除/重排接口编号 | CLIENT-CONFIG-DESIGN-CONCURRENCY-ADJUSTMENT-001（设计草案并发口径定向调整；纯文档任务，未实现、未执行验收） |
