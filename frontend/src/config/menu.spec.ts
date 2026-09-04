@@ -14,3 +14,18 @@ describe('数据同步进度页面命名（TOFF-REQ-001/003）', () => {
     expect(route?.meta.title).toBe('数据同步进度')
   })
 })
+
+describe('探针端管理页面命名（CCFG-UI-001 / CCFG-REQ-001）', () => {
+  it('菜单“配置管理”下 /config/client 标题统一为“探针端管理”，不再显示“客户端配置”', () => {
+    const config = menuGroups.find((g) => g.title === '配置管理')!
+    const item = config.items.find((i) => i.path === '/config/client')
+    expect(item?.title).toBe('探针端管理')
+    expect(menuGroups.some((g) => g.items.some((i) => i.title.includes('客户端配置')))).toBe(false)
+  })
+
+  it('路由 /config/client meta.title 统一为“探针端管理”且路径保持不变', () => {
+    const route = router.getRoutes().find((r) => r.path === '/config/client')
+    expect(route?.meta.title).toBe('探针端管理')
+    expect(route?.path).toBe('/config/client')
+  })
+})

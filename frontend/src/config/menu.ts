@@ -14,7 +14,7 @@ export const menuGroups: MenuGroup[] = [
     title: '配置管理',
     items: [
       { path: '/config/data-source', title: '数据源管理', icon: 'DataAnalysis' },
-      { path: '/config/client', title: '客户端配置', icon: 'Monitor' },
+      { path: '/config/client', title: '探针端管理', icon: 'Monitor' },
       { path: '/config/subscribe', title: '数据订阅', icon: 'Connection' },
       { path: '/config/server', title: '中心端配置', icon: 'Setting' }
     ]

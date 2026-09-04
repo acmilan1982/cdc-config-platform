@@ -16,7 +16,7 @@ const routes: RouteRecordRaw[] = [
     path: '/config/client',
     name: 'ClientConfig',
     component: () => import('@/views/client-config/ClientConfigPage.vue'),
-    meta: { title: '客户端配置', group: '配置管理' }
+    meta: { title: '探针端管理', group: '配置管理' }
   },
   {
     path: '/config/subscribe',
