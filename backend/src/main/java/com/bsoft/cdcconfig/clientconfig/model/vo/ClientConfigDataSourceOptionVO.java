@@ -7,7 +7,7 @@ import java.util.List;
  * E2 数据源候选项（CCFG-API-006）。notSelectableReason 取值 COMMA_IN_ID / OCCUPIED / null。
  * occupiedByClientIds 为占用该候选的全部探针 ID（已按 excludeClientId 自排除）。
  */
-public class DataSourceOptionVO {
+public class ClientConfigDataSourceOptionVO {
 
     private String dataSourceId;
 

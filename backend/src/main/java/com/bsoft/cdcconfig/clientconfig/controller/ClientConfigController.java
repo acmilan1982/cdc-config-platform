@@ -4,7 +4,7 @@ import com.bsoft.cdcconfig.clientconfig.model.dto.CreateClientRequest;
 import com.bsoft.cdcconfig.clientconfig.model.dto.UpdateClientRequest;
 import com.bsoft.cdcconfig.clientconfig.model.query.ClientStatus;
 import com.bsoft.cdcconfig.clientconfig.model.vo.ClientListVO;
-import com.bsoft.cdcconfig.clientconfig.model.vo.DataSourceOptionVO;
+import com.bsoft.cdcconfig.clientconfig.model.vo.ClientConfigDataSourceOptionVO;
 import com.bsoft.cdcconfig.clientconfig.service.ClientConfigService;
 import com.bsoft.cdcconfig.common.api.ApiResponse;
 import com.fasterxml.jackson.databind.JsonMappingException;
@@ -57,7 +57,7 @@ public class ClientConfigController {
 
     @Operation(summary = "查询数据源候选", description = "新增/编辑用候选数据源与占用标记（编辑时传原探针 ID 自排除）")
     @GetMapping("/data-source-options")
-    public ApiResponse<List<DataSourceOptionVO>> dataSourceOptions(
+    public ApiResponse<List<ClientConfigDataSourceOptionVO>> dataSourceOptions(
             @Parameter(description = "编辑时当前记录原探针 ID，可选")
             @RequestParam(required = false) String excludeClientId) {
         return ApiResponse.success(clientConfigService.dataSourceOptions(excludeClientId));

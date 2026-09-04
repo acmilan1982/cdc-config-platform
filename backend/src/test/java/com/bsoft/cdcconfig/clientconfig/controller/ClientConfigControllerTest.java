@@ -5,7 +5,7 @@ import com.bsoft.cdcconfig.clientconfig.model.dto.UpdateClientRequest;
 import com.bsoft.cdcconfig.clientconfig.model.query.ClientStatus;
 import com.bsoft.cdcconfig.clientconfig.model.vo.ClientListItemVO;
 import com.bsoft.cdcconfig.clientconfig.model.vo.ClientListVO;
-import com.bsoft.cdcconfig.clientconfig.model.vo.DataSourceOptionVO;
+import com.bsoft.cdcconfig.clientconfig.model.vo.ClientConfigDataSourceOptionVO;
 import com.bsoft.cdcconfig.clientconfig.service.ClientConfigService;
 import com.bsoft.cdcconfig.common.exception.BusinessException;
 import com.fasterxml.jackson.databind.ObjectMapper;
@@ -95,7 +95,7 @@ class ClientConfigControllerTest {
 
     @Test
     void dataSourceOptions_shouldPassExcludeAndReturnOptions() throws Exception {
-        DataSourceOptionVO option = new DataSourceOptionVO();
+        ClientConfigDataSourceOptionVO option = new ClientConfigDataSourceOptionVO();
         option.setDataSourceId("DS-A");
         option.setSelectable(false);
         option.setNotSelectableReason("OCCUPIED");
@@ -116,7 +116,7 @@ class ClientConfigControllerTest {
 
     @Test
     void dataSourceOptions_response_shouldNotExposePasswordField() throws Exception {
-        DataSourceOptionVO option = new DataSourceOptionVO();
+        ClientConfigDataSourceOptionVO option = new ClientConfigDataSourceOptionVO();
         option.setDataSourceId("DS-A");
         option.setDataSourceName("测试源");
         option.setSelectable(true);

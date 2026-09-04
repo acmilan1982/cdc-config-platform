@@ -8,7 +8,7 @@ import com.bsoft.cdcconfig.clientconfig.mapper.CdcClientConfigMapper;
 import com.bsoft.cdcconfig.clientconfig.mapper.CdcDataSourceMapper;
 import com.bsoft.cdcconfig.clientconfig.model.vo.ClientListItemVO;
 import com.bsoft.cdcconfig.clientconfig.model.vo.ClientListVO;
-import com.bsoft.cdcconfig.clientconfig.model.vo.DataSourceOptionVO;
+import com.bsoft.cdcconfig.clientconfig.model.vo.ClientConfigDataSourceOptionVO;
 import com.bsoft.cdcconfig.clientconfig.model.vo.DataSourceViewItemVO;
 import org.apache.ibatis.annotations.Select;
 import org.junit.jupiter.api.Test;
@@ -188,7 +188,7 @@ class ClientConfigStaticContractTest {
     void responseModels_shouldNotCarryPasswordField() {
         List<Class<?>> classes = Arrays.asList(
                 ClientListVO.class, ClientListItemVO.class,
-                DataSourceOptionVO.class, DataSourceViewItemVO.class,
+                ClientConfigDataSourceOptionVO.class, DataSourceViewItemVO.class,
                 CdcClientConfig.class, CdcDataSource.class);
         for (Class<?> clazz : classes) {
             for (Field field : clazz.getDeclaredFields()) {

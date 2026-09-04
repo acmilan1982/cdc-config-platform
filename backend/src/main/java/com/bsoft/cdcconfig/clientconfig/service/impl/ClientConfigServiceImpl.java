@@ -13,7 +13,7 @@ import com.bsoft.cdcconfig.clientconfig.model.dto.UpdateClientRequest;
 import com.bsoft.cdcconfig.clientconfig.model.query.ClientStatus;
 import com.bsoft.cdcconfig.clientconfig.model.vo.ClientListItemVO;
 import com.bsoft.cdcconfig.clientconfig.model.vo.ClientListVO;
-import com.bsoft.cdcconfig.clientconfig.model.vo.DataSourceOptionVO;
+import com.bsoft.cdcconfig.clientconfig.model.vo.ClientConfigDataSourceOptionVO;
 import com.bsoft.cdcconfig.clientconfig.model.vo.DataSourceViewItemVO;
 import com.bsoft.cdcconfig.clientconfig.service.ClientConfigService;
 import com.bsoft.cdcconfig.common.exception.BusinessException;
@@ -150,18 +150,18 @@ public class ClientConfigServiceImpl implements ClientConfigService {
     // ---------------------------------------------------------------- E2 候选
 
     @Override
-    public List<DataSourceOptionVO> dataSourceOptions(String excludeClientId) {
+    public List<ClientConfigDataSourceOptionVO> dataSourceOptions(String excludeClientId) {
         String exclude = (excludeClientId == null) ? null : excludeClientId.trim();
         List<CdcClientConfig> clients = clientConfigMapper.selectFullScan();
         List<CdcDataSource> dataSources = dataSourceMapper.selectSafeAll();
         Map<String, List<String>> occupancy = buildOccupancy(clients);
 
-        List<DataSourceOptionVO> result = new ArrayList<>();
+        List<ClientConfigDataSourceOptionVO> result = new ArrayList<>();
         for (CdcDataSource ds : dataSources) {
             if (!isCandidate(ds)) {
                 continue;
             }
-            DataSourceOptionVO vo = new DataSourceOptionVO();
+            ClientConfigDataSourceOptionVO vo = new ClientConfigDataSourceOptionVO();
             vo.setDataSourceId(ds.getDataSourceId());
             vo.setOrg(normalizeNullable(ds.getDataSourceOrg()));
             vo.setDataSourceName(normalizeNullable(ds.getDataSourceName()));

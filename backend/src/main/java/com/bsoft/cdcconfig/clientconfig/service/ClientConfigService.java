@@ -4,7 +4,7 @@ import com.bsoft.cdcconfig.clientconfig.model.dto.CreateClientRequest;
 import com.bsoft.cdcconfig.clientconfig.model.dto.UpdateClientRequest;
 import com.bsoft.cdcconfig.clientconfig.model.query.ClientStatus;
 import com.bsoft.cdcconfig.clientconfig.model.vo.ClientListVO;
-import com.bsoft.cdcconfig.clientconfig.model.vo.DataSourceOptionVO;
+import com.bsoft.cdcconfig.clientconfig.model.vo.ClientConfigDataSourceOptionVO;
 
 import java.util.List;
 
@@ -13,7 +13,7 @@ public interface ClientConfigService {
 
     ClientListVO list(String keyword, ClientStatus status);
 
-    List<DataSourceOptionVO> dataSourceOptions(String excludeClientId);
+    List<ClientConfigDataSourceOptionVO> dataSourceOptions(String excludeClientId);
 
     void create(CreateClientRequest request);
 

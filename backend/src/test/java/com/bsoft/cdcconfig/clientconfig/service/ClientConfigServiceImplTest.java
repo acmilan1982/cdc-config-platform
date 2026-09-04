@@ -13,7 +13,7 @@ import com.bsoft.cdcconfig.clientconfig.model.dto.UpdateClientRequest;
 import com.bsoft.cdcconfig.clientconfig.model.query.ClientStatus;
 import com.bsoft.cdcconfig.clientconfig.model.vo.ClientListItemVO;
 import com.bsoft.cdcconfig.clientconfig.model.vo.ClientListVO;
-import com.bsoft.cdcconfig.clientconfig.model.vo.DataSourceOptionVO;
+import com.bsoft.cdcconfig.clientconfig.model.vo.ClientConfigDataSourceOptionVO;
 import com.bsoft.cdcconfig.clientconfig.model.vo.DataSourceViewItemVO;
 import com.bsoft.cdcconfig.clientconfig.service.impl.ClientConfigServiceImpl;
 import com.bsoft.cdcconfig.common.exception.BusinessException;
@@ -372,22 +372,22 @@ class ClientConfigServiceImplTest {
                 ds("DS-MYSQL", "SOURCE", "MYSQL", "org", "1"));
         when(dataSourceMapper.selectSafeAll()).thenReturn(dataSources);
 
-        List<DataSourceOptionVO> options = service.dataSourceOptions("editor");
+        List<ClientConfigDataSourceOptionVO> options = service.dataSourceOptions("editor");
 
         assertEquals(3, options.size());
-        DataSourceOptionVO free = options.get(0);
+        ClientConfigDataSourceOptionVO free = options.get(0);
         assertTrue(free.isSelectable());
         assertNull(free.getNotSelectableReason());
         assertEquals("DS-FREE1", free.getDataSourceId());
 
         // 已占用，自排除 editor 后仍被 clientA/clientB 占用
-        DataSourceOptionVO owned = options.get(1);
+        ClientConfigDataSourceOptionVO owned = options.get(1);
         assertFalse(owned.isSelectable());
         assertEquals("OCCUPIED", owned.getNotSelectableReason());
         assertEquals(Arrays.asList("clientA", "clientB"), owned.getOccupiedByClientIds());
 
         // 含逗号 ID 恒禁选
-        DataSourceOptionVO comma = options.get(2);
+        ClientConfigDataSourceOptionVO comma = options.get(2);
         assertFalse(comma.isSelectable());
         assertEquals("COMMA_IN_ID", comma.getNotSelectableReason());
         assertTrue(comma.getOccupiedByClientIds().isEmpty());
@@ -401,13 +401,13 @@ class ClientConfigServiceImplTest {
                 Collections.singletonList(ds("DS-OWNED", "SOURCE", "ORACLE", "org", "1")));
 
         // 自排除使用原探针 ID（exclude=editor 且占用者即 editor）→ 恢复可选
-        List<DataSourceOptionVO> options = service.dataSourceOptions("editor");
+        List<ClientConfigDataSourceOptionVO> options = service.dataSourceOptions("editor");
         assertEquals(1, options.size());
         assertTrue(options.get(0).isSelectable());
         assertTrue(options.get(0).getOccupiedByClientIds().isEmpty());
 
         // 换一个非占用者 exclude → 仍标记占用
-        List<DataSourceOptionVO> options2 = service.dataSourceOptions("stranger");
+        List<ClientConfigDataSourceOptionVO> options2 = service.dataSourceOptions("stranger");
         assertEquals(1, options2.size());
         assertFalse(options2.get(0).isSelectable());
         assertEquals("OCCUPIED", options2.get(0).getNotSelectableReason());
