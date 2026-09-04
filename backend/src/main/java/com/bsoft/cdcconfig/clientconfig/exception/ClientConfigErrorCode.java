@@ -91,6 +91,40 @@ public final class ClientConfigErrorCode {
                 "数据源（" + dataSourceId + "）已分配给探针：" + owner + "，不能重复分配。");
     }
 
+    /**
+     * 40942 明细描述：原记录历史保留的跨探针重复项（只拼可定位文案、不抛异常，供聚合进 40942 消息）。
+     * org 为空时使用省略机构名称的形态。conflictClientIds 需为有序、完整冲突探针 ID 列表。
+     */
+    public static String occupiedDescriptor(String org, String dataSourceId, List<String> conflictClientIds) {
+        String owner = String.join("、", conflictClientIds);
+        if (org != null && !org.trim().isEmpty()) {
+            return "数据源“" + org.trim() + "（" + dataSourceId + "）”已分配给探针："
+                    + owner + "，不能重复分配";
+        }
+        return "数据源（" + dataSourceId + "）已分配给探针：" + owner + "，不能重复分配";
+    }
+
+    /**
+     * 编辑保存因“原记录历史异常项仍被最终提交保留”而被阻断（40942）。
+     * itemProblems 为已聚合的具体数据源 ID + 异常原因明细（如 “数据源（DS-A）：已停用”）。
+     */
+    public static BusinessException anomalousSelectionBlocked(List<String> itemProblems) {
+        return new BusinessException(ANOMALOUS_SELECTION_BLOCKED,
+                "存在异常数据源，编辑保存被阻断：请先移除异常数据源后再保存。异常明细："
+                        + String.join("；", itemProblems) + "。");
+    }
+
+    /**
+     * 行级含逗号歧义未清除（最终规范化选择仍与原普通 CSV 解析结果完全一致）被阻断（40942）。
+     * raw 为原始存储串；possibleCommaIds 为全部可能匹配的已知含逗号数据源 ID。
+     */
+    public static BusinessException anomalousSelectionRowAmbiguous(String raw, List<String> possibleCommaIds) {
+        return new BusinessException(ANOMALOUS_SELECTION_BLOCKED,
+                "存在异常数据源，编辑保存被阻断：原始配置含英文逗号歧义，原始串为“" + raw + "”，疑似包含数据源："
+                        + String.join("、", possibleCommaIds)
+                        + "。请移除歧义展示项并重新选择合法候选后再保存。");
+    }
+
     public static BusinessException saveFailed() {
         return new BusinessException(SAVE_FAILED, "保存失败，请稍后重试。");
     }

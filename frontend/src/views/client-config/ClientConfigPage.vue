@@ -6,9 +6,9 @@
     </header>
 
     <!-- 首次查询失败且从未成功：整区错误态 + 重试（CCFG-UI-012） -->
-    <div v-if="firstLoadFailed" class="cc-state cc-state--error" role="alert">
-      <p class="cc-state-title">列表加载失败</p>
-      <p class="cc-state-desc">暂时无法获取探针列表，请重新加载或稍后重试。</p>
+    <div v-if="firstLoadFailed" class="cc-page-state cc-page-state--error" role="alert">
+      <p class="cc-page-state-title">列表加载失败</p>
+      <p class="cc-page-state-desc">暂时无法获取探针列表，请重新加载或稍后重试。</p>
       <el-button type="primary" plain :loading="listLoading" @click="loadList">重新加载</el-button>
     </div>
 
@@ -43,6 +43,12 @@
         <span class="cc-hint">双击记录可编辑</span>
       </div>
 
+      <!-- 已有成功结果后的刷新失败：非遮挡提示 + 按已生效条件重试（R1-05） -->
+      <div v-if="refreshFailed" class="cc-refresh-warn" role="status">
+        <span class="cc-refresh-text">刷新失败：当前仍展示上一次成功结果，请点击“重试”重新加载。</span>
+        <el-button size="small" :loading="listLoading" @click="loadList">重试</el-button>
+      </div>
+
       <!-- 数据表格（CCFG-UI-005，无操作列/无分页/无自动刷新） -->
       <el-table
         v-loading="listLoading"
@@ -55,13 +61,21 @@
       >
         <el-table-column label="探针 ID" min-width="140">
           <template #default="{ row }">
-            <span class="cc-id">{{ row.clientId }}</span>
+            <span
+              class="cc-id"
+              tabindex="0"
+              role="button"
+              :aria-label="`编辑探针 ${row.clientId}`"
+              @keydown="onRowKeyEdit($event, row)"
+            >{{ row.clientId }}</span>
           </template>
         </el-table-column>
 
         <el-table-column label="探针描述" min-width="200">
           <template #default="{ row }">
-            <span v-if="isBlankDesc(row)" class="cc-desc cc-desc--empty">—</span>
+            <el-tooltip v-if="isBlankDesc(row)" content="未填写探针描述" placement="top">
+              <span class="cc-desc cc-desc--empty">—</span>
+            </el-tooltip>
             <el-tooltip v-else :content="String(row.clientDesc)" placement="top">
               <span class="cc-desc">{{ row.clientDesc }}</span>
             </el-tooltip>
@@ -158,7 +172,7 @@
 
         <el-table-column label="状态" min-width="140">
           <template #default="{ row }">
-            <span class="cc-state">
+            <span class="cc-status-cell">
               <el-tag size="small" :type="statusType(row)" class="cc-state-tag">
                 {{ statusText(row) }}
               </el-tag>
@@ -234,7 +248,7 @@
               placeholder="探针用途描述（UTF-8 原文不超过 1024 字节）"
               :disabled="submitting"
             />
-            <el-button class="cc-autogen" :disabled="submitting" @click="onAutoGenerate">
+            <el-button class="cc-autogen" @click="onAutoGenerate">
               自动生成
             </el-button>
           </div>
@@ -441,6 +455,9 @@ const firstLoadFailed = computed(
   () => listFailed.value && !listLoadedOnce.value && listRows.value.length === 0,
 )
 
+/** 已有成功结果后再次查询/刷新失败：保留旧列表，在表格上方给出非遮挡提示（R1-05）。 */
+const refreshFailed = computed(() => listFailed.value && listLoadedOnce.value)
+
 const rowClassName = ({ row }: { row: ClientListItemVO }) =>
   selectedClientId.value === row.clientId ? 'cc-row--selected' : ''
 
@@ -449,6 +466,14 @@ function onRowClick(row: ClientListItemVO): void {
 }
 
 function onRowDblClick(row: ClientListItemVO): void {
+  openEdit(row)
+}
+
+/** 探针 ID 单元格键盘编辑入口：Enter / Space 打开编辑，阻止 Space 页面滚动（R1-06）。 */
+function onRowKeyEdit(event: KeyboardEvent, row: ClientListItemVO): void {
+  if (event.key !== 'Enter' && event.key !== ' ') return
+  event.preventDefault()
+  if (dialogOpen.value) return
   openEdit(row)
 }
 
@@ -522,6 +547,8 @@ async function onDelete(): Promise<void> {
     } else {
       ElMessage.error(res.message || '删除失败')
     }
+  } catch (e) {
+    ElMessage.error('删除失败，请检查网络后重试。')
   } finally {
     deleteBusy.value = false
   }
@@ -543,6 +570,8 @@ async function onEnable(row: ClientListItemVO): Promise<void> {
     } else {
       ElMessage.error(res.message || '启用失败')
     }
+  } catch (e) {
+    ElMessage.error('启用失败，请检查网络后重试。')
   } finally {
     opBusy.value = null
   }
@@ -573,6 +602,8 @@ async function onDisable(row: ClientListItemVO): Promise<void> {
     } else {
       ElMessage.error(res.message || '停用失败')
     }
+  } catch (e) {
+    ElMessage.error('停用失败，请检查网络后重试。')
   } finally {
     opBusy.value = null
   }
@@ -738,7 +769,6 @@ const saveBlockReason = computed<string | null>(() => {
 })
 
 function onAutoGenerate(): void {
-  if (submitting.value) return
   if (chosen.value.length === 0) {
     // 无已选数据源 → 严格无动作：不清空、不改写、不提示（CCFG-UI-015）
     return
@@ -786,22 +816,25 @@ async function submitDialog(): Promise<void> {
     dataSourceIds: chosen.value.map((c) => c.dataSourceId),
   }
   const originalClientId = editRow.value?.clientId
+  const isEdit = mode.value === 'edit'
   submitting.value = true
   try {
     const res =
-      mode.value === 'edit' && originalClientId
+      isEdit && originalClientId
         ? await updateClient(originalClientId, request)
         : await createClient(request)
     if (res.code === 200) {
-      ElMessage.success(mode.value === 'edit' ? '编辑成功' : '新增成功')
+      ElMessage.success(isEdit ? '编辑成功' : '新增成功')
       dialogOpen.value = false
-      if (mode.value === 'edit' && selectedClientId.value === originalClientId) {
+      if (isEdit && selectedClientId.value === originalClientId) {
         selectedClientId.value = request.clientId
       }
       await loadList()
     } else {
-      ElMessage.error(res.message || (mode.value === 'edit' ? '编辑失败' : '新增失败'))
+      ElMessage.error(res.message || (isEdit ? '编辑失败' : '新增失败'))
     }
+  } catch (e) {
+    ElMessage.error(isEdit ? '编辑失败，请检查网络后重试。' : '新增失败，请检查网络后重试。')
   } finally {
     submitting.value = false
   }
@@ -830,7 +863,7 @@ onMounted(() => {
   color: #303133;
 }
 
-.cc-state {
+.cc-page-state {
   display: flex;
   flex-direction: column;
   align-items: center;
@@ -839,18 +872,18 @@ onMounted(() => {
   padding: 40px 0;
 }
 
-.cc-state--error {
+.cc-page-state--error {
   color: #909399;
 }
 
-.cc-state-title {
+.cc-page-state-title {
   margin: 0;
   font-size: 15px;
   font-weight: 600;
   color: #303133;
 }
 
-.cc-state-desc {
+.cc-page-state-desc {
   margin: 0 0 6px;
   font-size: 13px;
   color: #909399;
@@ -892,6 +925,23 @@ onMounted(() => {
 .cc-hint {
   font-size: 13px;
   color: #909399;
+}
+
+.cc-refresh-warn {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  padding: 6px 10px;
+  border: 1px solid #e6a23c;
+  border-radius: 6px;
+  background: #fdf6ec;
+  font-size: 13px;
+  color: #b88230;
+}
+
+.cc-refresh-text {
+  flex: 1;
+  min-width: 0;
 }
 
 .cc-row--selected :deep(td) {
@@ -973,6 +1023,11 @@ onMounted(() => {
   color: #c0c4cc;
 }
 
+.cc-full-list {
+  max-height: 320px;
+  overflow-y: auto;
+}
+
 .cc-full-list ul {
   margin: 4px 0;
   padding-left: 16px;
@@ -1008,7 +1063,7 @@ onMounted(() => {
   color: #e6a23c;
 }
 
-.cc-state {
+.cc-status-cell {
   display: inline-flex;
   align-items: center;
   gap: 8px;
@@ -1026,6 +1081,9 @@ onMounted(() => {
   display: flex;
   flex-direction: column;
   gap: 14px;
+  /* CCFG-UI-024：内容区相对视口安全高度，超出内部纵向滚动 */
+  max-height: calc(100vh - 240px);
+  overflow-y: auto;
 }
 
 .cc-form-item {

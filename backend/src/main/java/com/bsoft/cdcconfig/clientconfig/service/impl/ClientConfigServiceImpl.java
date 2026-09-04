@@ -16,6 +16,7 @@ import com.bsoft.cdcconfig.clientconfig.model.vo.ClientListVO;
 import com.bsoft.cdcconfig.clientconfig.model.vo.DataSourceOptionVO;
 import com.bsoft.cdcconfig.clientconfig.model.vo.DataSourceViewItemVO;
 import com.bsoft.cdcconfig.clientconfig.service.ClientConfigService;
+import com.bsoft.cdcconfig.common.exception.BusinessException;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -227,7 +228,7 @@ public class ClientConfigServiceImpl implements ClientConfigService {
         }
         List<CdcDataSource> dataSources = dataSourceMapper.selectSafeAll();
         assertClientIdUnique(clients, original, payload.clientId);
-        assertSourcesAllocatable(clients, dataSources, original, payload.dataSourceIds, true);
+        assertUpdateAllowed(clients, dataSources, originalRow, payload.dataSourceIds);
 
         int rows = clientConfigMapper.update(null,
                 new LambdaUpdateWrapper<CdcClientConfig>()
@@ -341,6 +342,64 @@ public class ClientConfigServiceImpl implements ClientConfigService {
                         dsById.containsKey(token) ? dsById.get(token).getDataSourceOrg() : null);
                 throw ClientConfigErrorCode.dataSourceOccupied(org, token, others);
             }
+        }
+    }
+
+    /**
+     * 编辑（E4）当次写前数据源校验：在同一事务内 DML 前重读的原记录、数据源安全字段与全表占用之上，
+     * 区分“原记录历史异常仍被最终提交保留”→ 40942 与“新注入的不可用/普通占用”→ 40441/40941。
+     * 判定口径：保留以“最终规范化 token 是否属于原记录普通 CSV 解析结果”为准；原行含重复 token 时
+     * 请求数组规范化去重即可修复，DUPLICATE_IN_ROW 不构成 40942 阻断；行级含逗号歧义在最终规范化
+     * 选择与原普通 CSV 解析结果完全一致时视为未清除（40942）。发现任一保留异常即整体阻断，不执行 DML。
+     */
+    private void assertUpdateAllowed(List<CdcClientConfig> clients,
+                                     List<CdcDataSource> dataSources,
+                                     CdcClientConfig originalRow,
+                                     List<String> finalTokens) {
+        Map<String, CdcDataSource> dsById = indexDataSources(dataSources);
+        Set<String> commaIds = collectCommaContainingIds(dataSources);
+        Map<String, List<String>> occupancy = buildOccupancy(clients);
+        String originalClientId = originalRow.getClientId();
+        String originalRaw = originalRow.getDataSourceId();
+        List<String> originalTokens = ClientConfigDataUtil.parseCsv(originalRaw).getDistinctTokens();
+        List<String> commaMatches =
+                ClientConfigDataUtil.findPossibleCommaDataSourceIds(originalRaw, commaIds);
+
+        if (!commaMatches.isEmpty() && finalTokens.equals(originalTokens)) {
+            throw ClientConfigErrorCode.anomalousSelectionRowAmbiguous(originalRaw, commaMatches);
+        }
+
+        List<String> retainedProblems = new ArrayList<>();
+        BusinessException firstNewProblem = null;
+        for (String token : finalTokens) {
+            boolean retained = originalTokens.contains(token);
+            CdcDataSource ds = dsById.get(token);
+            String healthReason = resolveCandidateProblem(token, ds);
+            List<String> others = ownersExcluding(occupancy.get(token), originalClientId);
+            if (retained) {
+                if (healthReason != null) {
+                    retainedProblems.add("数据源（" + token + "）：" + healthReason);
+                }
+                if (!others.isEmpty()) {
+                    retainedProblems.add(ClientConfigErrorCode.occupiedDescriptor(
+                            normalizeNullable(ds == null ? null : ds.getDataSourceOrg()), token, others));
+                }
+            } else if (healthReason != null) {
+                if (firstNewProblem == null) {
+                    firstNewProblem = ClientConfigErrorCode.dataSourceUnavailable(token, healthReason);
+                }
+            } else if (!others.isEmpty()) {
+                if (firstNewProblem == null) {
+                    firstNewProblem = ClientConfigErrorCode.dataSourceOccupied(
+                            normalizeNullable(ds == null ? null : ds.getDataSourceOrg()), token, others);
+                }
+            }
+        }
+        if (!retainedProblems.isEmpty()) {
+            throw ClientConfigErrorCode.anomalousSelectionBlocked(retainedProblems);
+        }
+        if (firstNewProblem != null) {
+            throw firstNewProblem;
         }
     }
 

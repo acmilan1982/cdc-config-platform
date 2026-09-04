@@ -647,6 +647,150 @@ class ClientConfigServiceImplTest {
                 () -> service.update("probe-001", updateReq("probe-001", "d", "DS-A")));
     }
 
+    // ------------------------------------------------------------- E4 编辑：历史异常保留 → 40942（R1-01）
+
+    @Test
+    void update_retainedInactiveSource_shouldBlock40942AndNotUpdate() {
+        when(clientConfigMapper.selectFullScan()).thenReturn(
+                Collections.singletonList(row("probe-001", "self", "DS-A,INAC", "1")));
+        when(dataSourceMapper.selectSafeAll()).thenReturn(Arrays.asList(
+                ds("DS-A", "SOURCE", "ORACLE", "org", "1"),
+                ds("INAC", "SOURCE", "ORACLE", "org", "0")));
+
+        BusinessException ex = assertThrows(BusinessException.class,
+                () -> service.update("probe-001", updateReq("probe-001", "self", "DS-A", "INAC")));
+        assertEquals(ClientConfigErrorCode.ANOMALOUS_SELECTION_BLOCKED, ex.getCode());
+        assertTrue(ex.getMessage().contains("INAC"));
+        assertTrue(ex.getMessage().contains("已停用"));
+        verify(clientConfigMapper, never()).update(eq(null), any(LambdaUpdateWrapper.class));
+    }
+
+    @Test
+    void update_retainedMissingSource_shouldBlock40942AndNotUpdate() {
+        when(clientConfigMapper.selectFullScan()).thenReturn(
+                Collections.singletonList(row("probe-001", "self", "GHOST", "1")));
+        when(dataSourceMapper.selectSafeAll()).thenReturn(Collections.emptyList());
+
+        BusinessException ex = assertThrows(BusinessException.class,
+                () -> service.update("probe-001", updateReq("probe-001", "self", "GHOST")));
+        assertEquals(ClientConfigErrorCode.ANOMALOUS_SELECTION_BLOCKED, ex.getCode());
+        assertTrue(ex.getMessage().contains("GHOST"));
+        assertTrue(ex.getMessage().contains("不存在"));
+        verify(clientConfigMapper, never()).update(eq(null), any(LambdaUpdateWrapper.class));
+    }
+
+    @Test
+    void update_retainedCategoryAndTypeMismatch_shouldBlock40942WithAccumulatedMessage() {
+        when(clientConfigMapper.selectFullScan()).thenReturn(
+                Collections.singletonList(row("probe-001", "self", "CATX,TYX", "1")));
+        when(dataSourceMapper.selectSafeAll()).thenReturn(Arrays.asList(
+                ds("CATX", "TARGET", "ORACLE", "org", "1"),
+                ds("TYX", "SOURCE", "MYSQL", "org", "1")));
+
+        BusinessException ex = assertThrows(BusinessException.class,
+                () -> service.update("probe-001", updateReq("probe-001", "self", "CATX", "TYX")));
+        assertEquals(ClientConfigErrorCode.ANOMALOUS_SELECTION_BLOCKED, ex.getCode());
+        assertTrue(ex.getMessage().contains("CATX"));
+        assertTrue(ex.getMessage().contains("类别非 SOURCE"));
+        assertTrue(ex.getMessage().contains("TYX"));
+        assertTrue(ex.getMessage().contains("类型非 ORACLE"));
+        verify(clientConfigMapper, never()).update(eq(null), any(LambdaUpdateWrapper.class));
+    }
+
+    @Test
+    void update_retainedCrossProbeAssignment_shouldBlock40942WithLocatableMessage() {
+        List<CdcClientConfig> clients = Arrays.asList(
+                row("probe-001", "self", "DS-X", "1"),
+                row("clientB", "占用者", "DS-X", "1"));
+        when(clientConfigMapper.selectFullScan()).thenReturn(clients);
+        when(dataSourceMapper.selectSafeAll()).thenReturn(
+                Collections.singletonList(ds("DS-X", "SOURCE", "ORACLE", "orgX", "1")));
+
+        BusinessException ex = assertThrows(BusinessException.class,
+                () -> service.update("probe-001", updateReq("probe-001", "self", "DS-X")));
+        assertEquals(ClientConfigErrorCode.ANOMALOUS_SELECTION_BLOCKED, ex.getCode());
+        assertTrue(ex.getMessage().contains("DS-X"));
+        assertTrue(ex.getMessage().contains("orgX"));
+        assertTrue(ex.getMessage().contains("clientB"));
+        verify(clientConfigMapper, never()).update(eq(null), any(LambdaUpdateWrapper.class));
+    }
+
+    @Test
+    void update_unclearedRowCommaAmbiguity_shouldBlock40942AndNotUpdate() {
+        when(clientConfigMapper.selectFullScan()).thenReturn(
+                Collections.singletonList(row("probe-001", "self", "B,2", "1")));
+        when(dataSourceMapper.selectSafeAll()).thenReturn(
+                Collections.singletonList(ds("B,2", "SOURCE", "ORACLE", "org", "1")));
+
+        BusinessException ex = assertThrows(BusinessException.class,
+                () -> service.update("probe-001", updateReq("probe-001", "self", "B", "2")));
+        assertEquals(ClientConfigErrorCode.ANOMALOUS_SELECTION_BLOCKED, ex.getCode());
+        assertTrue(ex.getMessage().contains("B,2"));
+        verify(clientConfigMapper, never()).update(eq(null), any(LambdaUpdateWrapper.class));
+    }
+
+    @Test
+    void update_removeAnomalyAndReselectLegal_shouldSucceed() {
+        when(clientConfigMapper.selectFullScan()).thenReturn(
+                Collections.singletonList(row("probe-001", "self", "INAC,DS-A", "1")));
+        when(dataSourceMapper.selectSafeAll()).thenReturn(Arrays.asList(
+                ds("INAC", "SOURCE", "ORACLE", "org", "0"),
+                ds("DS-A", "SOURCE", "ORACLE", "org", "1"),
+                ds("DS-B", "SOURCE", "ORACLE", "org", "1")));
+        when(clientConfigMapper.update(eq(null), any(LambdaUpdateWrapper.class))).thenReturn(1);
+
+        service.update("probe-001", updateReq("probe-001", "self", "DS-A", "DS-B"));
+
+        verify(clientConfigMapper, times(1)).update(eq(null), any(LambdaUpdateWrapper.class));
+    }
+
+    @Test
+    void update_normalizedDuplicateTokens_shouldNotPermanentlyLock() {
+        when(clientConfigMapper.selectFullScan()).thenReturn(
+                Collections.singletonList(row("probe-001", "self", "DS-A,DS-A", "1")));
+        when(dataSourceMapper.selectSafeAll()).thenReturn(
+                Collections.singletonList(ds("DS-A", "SOURCE", "ORACLE", "org", "1")));
+        when(clientConfigMapper.update(eq(null), any(LambdaUpdateWrapper.class))).thenReturn(1);
+
+        service.update("probe-001", updateReq("probe-001", "self", "DS-A"));
+
+        verify(clientConfigMapper, times(1)).update(eq(null), any(LambdaUpdateWrapper.class));
+    }
+
+    @Test
+    void update_newInjectedUnavailableSource_shouldThrow40441AndNotUpdate() {
+        when(clientConfigMapper.selectFullScan()).thenReturn(
+                Collections.singletonList(row("probe-001", "self", "DS-A", "1")));
+        when(dataSourceMapper.selectSafeAll()).thenReturn(
+                Collections.singletonList(ds("DS-A", "SOURCE", "ORACLE", "org", "1")));
+
+        BusinessException ex = assertThrows(BusinessException.class,
+                () -> service.update("probe-001", updateReq("probe-001", "self", "DS-A", "GHOST")));
+        assertEquals(ClientConfigErrorCode.DATA_SOURCE_UNAVAILABLE, ex.getCode());
+        assertTrue(ex.getMessage().contains("GHOST"));
+        assertTrue(ex.getMessage().contains("不存在"));
+        verify(clientConfigMapper, never()).update(eq(null), any(LambdaUpdateWrapper.class));
+    }
+
+    @Test
+    void update_newOccupiedConflict_shouldThrow40941AndNotUpdate() {
+        List<CdcClientConfig> clients = Arrays.asList(
+                row("probe-001", "self", "DS-A", "1"),
+                row("clientB", "占用者", "DS-X", "1"));
+        when(clientConfigMapper.selectFullScan()).thenReturn(clients);
+        when(dataSourceMapper.selectSafeAll()).thenReturn(Arrays.asList(
+                ds("DS-A", "SOURCE", "ORACLE", "org", "1"),
+                ds("DS-X", "SOURCE", "ORACLE", "orgX", "1")));
+
+        BusinessException ex = assertThrows(BusinessException.class,
+                () -> service.update("probe-001", updateReq("probe-001", "self", "DS-A", "DS-X")));
+        assertEquals(ClientConfigErrorCode.DATA_SOURCE_OCCUPIED, ex.getCode());
+        assertTrue(ex.getMessage().contains("DS-X"));
+        assertTrue(ex.getMessage().contains("orgX"));
+        assertTrue(ex.getMessage().contains("clientB"));
+        verify(clientConfigMapper, never()).update(eq(null), any(LambdaUpdateWrapper.class));
+    }
+
     // ------------------------------------------------------------- E5/E7 删除与停用（§8.1 第 10 项）
 
     @Test

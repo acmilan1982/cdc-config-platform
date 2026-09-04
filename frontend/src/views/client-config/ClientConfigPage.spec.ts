@@ -2,6 +2,8 @@ import { describe, it, expect, vi, beforeEach, afterEach } from 'vitest'
 import type { MockInstance } from 'vitest'
 import { nextTick } from 'vue'
 import { mount, flushPromises } from '@vue/test-utils'
+import { readFileSync } from 'node:fs'
+import { resolve } from 'node:path'
 import ElementPlus, { ElMessage, ElMessageBox } from 'element-plus'
 import type { ApiResponse } from '@/types/monitor'
 import type { ClientListItemVO, ClientListVO, DataSourceOptionVO } from '@/types/clientConfig'
@@ -106,6 +108,10 @@ const baseOptions: DataSourceOptionVO[] = [
 
 function okList(data: ClientListItemVO[]): ApiResponse<ClientListVO> {
   return { code: 200, message: 'success', timestamp: '', data: { items: data } }
+}
+
+function failList(code: number, message: string): ApiResponse<ClientListVO> {
+  return { code, message, timestamp: '', data: { items: [] } }
 }
 
 function failOptions(code: number, message: string): ApiResponse<DataSourceOptionVO[]> {
@@ -544,6 +550,367 @@ describe('写操作防重复与状态提示（CCFG-UI-023）', () => {
       dataSourceIds: ['ds-ok1'],
     })
     expect(messageSpy.success).toHaveBeenCalledWith('新增成功')
+    wrapper.unmount()
+  })
+})
+
+describe('写操作网络异常反馈与安全复位（R1-02）', () => {
+  it('新增：网络异常时弹窗保持打开、输入/已选/描述保留、submitting 复位并提示', async () => {
+    const wrapper = await mountPage()
+    await openCreate(wrapper)
+    await wrapper.find('.cc-id-control input').setValue('probe-new')
+    await wrapper.find('.cc-desc-row textarea').setValue('新探针')
+    await optionByText(wrapper, '中心医院')!.trigger('click')
+    await nextTick()
+    mockedCreate.mockRejectedValueOnce(new Error('network down'))
+    await exactButton(wrapper, '创建')!.trigger('click')
+    await flushPromises()
+    expect(messageSpy.error).toHaveBeenCalledWith('新增失败，请检查网络后重试。')
+    expect(messageSpy.success).not.toHaveBeenCalledWith('新增成功')
+    expect(wrapper.find('.cc-dialog').text()).toContain('新增探针')
+    expect((wrapper.find('.cc-id-control input').element as HTMLInputElement).value).toBe('probe-new')
+    expect((wrapper.find('.cc-desc-row textarea').element as HTMLTextAreaElement).value).toBe('新探针')
+    expect(wrapper.find('.cc-pane--chosen').text()).toContain('中心医院')
+    expect(exactButton(wrapper, '创建')!.attributes('disabled')).toBeUndefined()
+    wrapper.unmount()
+  })
+
+  it('编辑：网络异常时弹窗保持打开、原描述/已选保留、submitting 复位并提示', async () => {
+    const wrapper = await mountPage([disabledRow])
+    await openEdit(wrapper, disabledRow)
+    expect(exactButton(wrapper, '保存')!.attributes('disabled')).toBeUndefined()
+    mockedUpdate.mockRejectedValueOnce(new Error('network down'))
+    await exactButton(wrapper, '保存')!.trigger('click')
+    await flushPromises()
+    expect(messageSpy.error).toHaveBeenCalledWith('编辑失败，请检查网络后重试。')
+    expect(messageSpy.success).not.toHaveBeenCalledWith('编辑成功')
+    expect(wrapper.find('.cc-dialog').text()).toContain('编辑探针')
+    expect((wrapper.find('.cc-desc-row textarea').element as HTMLTextAreaElement).value).toBe('停用探针')
+    expect(wrapper.find('.cc-pane--chosen').text()).toContain('B 机构')
+    expect(exactButton(wrapper, '保存')!.attributes('disabled')).toBeUndefined()
+    wrapper.unmount()
+  })
+
+  it('删除：网络异常时提示、当前选中行保持不变、busy 复位且不刷新', async () => {
+    const wrapper = await mountPage()
+    await selectRow(wrapper, enabledRow)
+    mockedDelete.mockRejectedValueOnce(new Error('network down'))
+    await exactButton(wrapper, '删除所选')!.trigger('click')
+    await flushPromises()
+    expect(messageSpy.error).toHaveBeenCalledWith('删除失败，请检查网络后重试。')
+    expect(messageSpy.success).not.toHaveBeenCalledWith('删除成功')
+    expect(wrapper.text()).toContain('已选择：probe-a')
+    expect(mockedList).toHaveBeenCalledTimes(1)
+    expect(exactButton(wrapper, '删除所选')!.attributes('disabled')).toBeUndefined()
+    wrapper.unmount()
+  })
+
+  it('启用：网络异常时提示、busy 复位、保留当前列表', async () => {
+    const wrapper = await mountPage([disabledRow])
+    mockedEnable.mockRejectedValueOnce(new Error('network down'))
+    const op = wrapper.findAll('.cc-op').find((b) => b.text().includes('启用'))!
+    await op.trigger('click')
+    await flushPromises()
+    expect(messageSpy.error).toHaveBeenCalledWith('启用失败，请检查网络后重试。')
+    expect(messageSpy.success).not.toHaveBeenCalledWith('启用成功')
+    expect(mockedList).toHaveBeenCalledTimes(1)
+    const opAfter = wrapper.findAll('.cc-op').find((b) => b.text().includes('启用'))!
+    expect(opAfter.attributes('disabled')).toBeUndefined()
+    expect(opAfter.text()).toBe('启用')
+    wrapper.unmount()
+  })
+
+  it('停用：二次确认后网络异常时提示、busy 复位、保留当前列表', async () => {
+    const wrapper = await mountPage([enabledRow])
+    mockedDisable.mockRejectedValueOnce(new Error('network down'))
+    const op = wrapper.findAll('.cc-op').find((b) => b.text().includes('停用'))!
+    await op.trigger('click')
+    await flushPromises()
+    expect(confirmSpy).toHaveBeenCalledTimes(1)
+    expect(messageSpy.error).toHaveBeenCalledWith('停用失败，请检查网络后重试。')
+    expect(messageSpy.success).not.toHaveBeenCalledWith('停用成功')
+    expect(mockedList).toHaveBeenCalledTimes(1)
+    const opAfter = wrapper.findAll('.cc-op').find((b) => b.text().includes('停用'))!
+    expect(opAfter.attributes('disabled')).toBeUndefined()
+    expect(opAfter.text()).toBe('停用')
+    wrapper.unmount()
+  })
+})
+
+describe('自动生成在提交挂起期间始终可点击（R1-03）', () => {
+  it('提交 Promise 挂起期间“自动生成”无 disabled/aria-disabled，点击仍执行且不二次保存', async () => {
+    const wrapper = await mountPage()
+    await openCreate(wrapper)
+    await wrapper.find('.cc-id-control input').setValue('probe-x')
+    await wrapper.find('.cc-desc-row textarea').setValue('旧描述')
+    await optionByText(wrapper, '中心医院')!.trigger('click')
+    await nextTick()
+    mockedCreate.mockReturnValue(new Promise<ApiResponse<null>>(() => {}))
+    await exactButton(wrapper, '创建')!.trigger('click')
+    await nextTick()
+    // 前提确认：提交确实处于挂起（创建按钮被 loading/disabled）
+    expect(exactButton(wrapper, '创建')!.attributes('disabled')).toBeDefined()
+    const gen = exactButton(wrapper, '自动生成')!
+    expect(gen.attributes('disabled')).toBeUndefined()
+    expect(gen.attributes('aria-disabled')).toBe('false')
+    await gen.trigger('click')
+    await nextTick()
+    expect((wrapper.find('.cc-desc-row textarea').element as HTMLTextAreaElement).value).toBe('中心医院')
+    expect(mockedCreate).toHaveBeenCalledTimes(1)
+    wrapper.unmount()
+  })
+
+  it('提交挂起期间移除全部已选（无选择）时点击自动生成严格无动作', async () => {
+    const wrapper = await mountPage()
+    await openCreate(wrapper)
+    await wrapper.find('.cc-id-control input').setValue('probe-x')
+    await wrapper.find('.cc-desc-row textarea').setValue('旧描述')
+    await optionByText(wrapper, '中心医院')!.trigger('click')
+    await nextTick()
+    mockedCreate.mockReturnValue(new Promise<ApiResponse<null>>(() => {}))
+    await exactButton(wrapper, '创建')!.trigger('click')
+    await nextTick()
+    await wrapper.find('.cc-pane--chosen .cc-chip .el-tag__close').trigger('click')
+    await nextTick()
+    const gen = exactButton(wrapper, '自动生成')!
+    expect(gen.attributes('disabled')).toBeUndefined()
+    await gen.trigger('click')
+    await nextTick()
+    expect((wrapper.find('.cc-desc-row textarea').element as HTMLTextAreaElement).value).toBe('旧描述')
+    expect(messageSpy.warning).not.toHaveBeenCalled()
+    expect(mockedCreate).toHaveBeenCalledTimes(1)
+    wrapper.unmount()
+  })
+})
+
+describe('状态列与页面错误区 CSS 类名分离（R1-04）', () => {
+  const SFC_SOURCE = readFileSync(
+    resolve(process.cwd(), 'src/views/client-config/ClientConfigPage.vue'),
+    'utf-8',
+  )
+
+  function cssBlock(selector: string): string {
+    const m = SFC_SOURCE.match(new RegExp(`${selector}\\s*\\{([^}]*)\\}`, 'm'))
+    return m ? m[1] : ''
+  }
+
+  it('静态：页面错误容器与状态单元格类名不同，模板不再存在裸 .cc-state 元素', () => {
+    expect(SFC_SOURCE).toContain('cc-page-state cc-page-state--error')
+    expect(SFC_SOURCE).toContain('<span class="cc-status-cell">')
+    expect(SFC_SOURCE).not.toMatch(/class="cc-state[\s"]/)
+    expect(SFC_SOURCE).not.toMatch(/\.cc-state\s*\{/)
+  })
+
+  it('静态：cc-page-state 保留纵向布局与内边距；cc-status-cell 不再命中 column/padding 规则', () => {
+    const pageCss = cssBlock('.cc-page-state')
+    expect(pageCss).toContain('flex-direction: column')
+    expect(pageCss).toContain('padding: 40px 0')
+    const statusCss = cssBlock('.cc-status-cell')
+    expect(statusCss).toContain('inline-flex')
+    expect(statusCss).not.toContain('flex-direction')
+    expect(statusCss).not.toContain('padding')
+  })
+
+  it('组件：正常列表状态单元格使用 cc-status-cell，紧凑单行并保留启停操作', async () => {
+    const wrapper = await mountPage([enabledRow, disabledRow])
+    const cells = wrapper.findAll('.cc-status-cell')
+    expect(cells).toHaveLength(2)
+    for (const c of cells) {
+      expect(c.classes()).not.toContain('cc-page-state')
+      expect(c.classes()).not.toContain('cc-state')
+    }
+    expect(wrapper.findAll('.cc-state')).toHaveLength(0)
+    expect(wrapper.find('.cc-status-cell').text()).toContain('启用')
+    expect(wrapper.findAll('.cc-op').some((b) => b.text().includes('停用'))).toBe(true)
+    expect(wrapper.findAll('.cc-op').some((b) => b.text().includes('启用'))).toBe(true)
+    wrapper.unmount()
+  })
+
+  it('组件：首次加载失败整区使用 cc-page-state 错误态，不命中状态单元格类', async () => {
+    mockedList.mockRejectedValueOnce(new Error('network'))
+    const wrapper = mount(ClientConfigPage, {
+      attachTo: document.body,
+      global: { plugins: [ElementPlus] },
+    })
+    await flushPromises()
+    const err = wrapper.find('.cc-page-state')
+    expect(err.exists()).toBe(true)
+    expect(err.attributes('role')).toBe('alert')
+    expect(err.classes()).toContain('cc-page-state--error')
+    expect(err.classes()).not.toContain('cc-status-cell')
+    expect(err.text()).toContain('重新加载')
+    wrapper.unmount()
+  })
+})
+
+describe('首次成功后的刷新失败提示与重试（R1-05）', () => {
+  it('首次成功后的下一次业务失败：旧列表保留、非遮挡提示出现', async () => {
+    const wrapper = await mountPage([enabledRow])
+    expect(wrapper.text()).toContain('probe-a')
+    mockedList.mockResolvedValueOnce(failList(500, 'boom'))
+    await exactButton(wrapper, '查询')!.trigger('click')
+    await flushPromises()
+    expect(wrapper.text()).toContain('probe-a')
+    const warn = wrapper.find('.cc-refresh-warn')
+    expect(warn.exists()).toBe(true)
+    expect(warn.text()).toContain('刷新失败')
+    expect(warn.text()).toContain('上一次成功结果')
+    expect(exactButton(wrapper, '重试')).toBeTruthy()
+    wrapper.unmount()
+  })
+
+  it('首次成功后的 Promise rejection：提示出现；重试用已生效条件，成功后提示消失并更新列表', async () => {
+    const wrapper = await mountPage([enabledRow])
+    await wrapper.find('.cc-query-keyword input').setValue('probe')
+    await exactButton(wrapper, '查询')!.trigger('click')
+    await flushPromises()
+    expect(mockedList.mock.calls[1][0]).toEqual({ keyword: 'probe', status: 'ALL' })
+    mockedList.mockRejectedValueOnce(new Error('network'))
+    await exactButton(wrapper, '查询')!.trigger('click')
+    await flushPromises()
+    expect(wrapper.text()).toContain('probe-a')
+    expect(wrapper.find('.cc-refresh-warn').exists()).toBe(true)
+    // 输入框改为未提交的新词：重试必须使用已生效条件 probe，而不是当前输入
+    await wrapper.find('.cc-query-keyword input').setValue('未提交词')
+    mockedList.mockResolvedValueOnce(okList([disabledRow]))
+    await exactButton(wrapper, '重试')!.trigger('click')
+    await flushPromises()
+    expect(wrapper.find('.cc-refresh-warn').exists()).toBe(false)
+    expect(wrapper.text()).toContain('probe-b')
+    expect(wrapper.text()).not.toContain('probe-a')
+    const lastCall = mockedList.mock.calls[mockedList.mock.calls.length - 1][0]
+    expect(lastCall).toEqual({ keyword: 'probe', status: 'ALL' })
+    wrapper.unmount()
+  })
+
+  it('迟到旧失败不覆盖更新请求的成功结果（listSeq 守卫）', async () => {
+    const wrapper = await mountPage([enabledRow])
+    let rejectLate!: (e: Error) => void
+    mockedList.mockImplementationOnce(
+      () =>
+        new Promise<ApiResponse<ClientListVO>>((_resolve, reject) => {
+          rejectLate = reject
+        }),
+    )
+    await exactButton(wrapper, '查询')!.trigger('click')
+    await flushPromises()
+    mockedList.mockResolvedValueOnce(okList([disabledRow]))
+    await exactButton(wrapper, '查询')!.trigger('click')
+    await flushPromises()
+    expect(wrapper.text()).toContain('probe-b')
+    rejectLate!(new Error('network'))
+    await flushPromises()
+    expect(wrapper.text()).toContain('probe-b')
+    expect(wrapper.text()).not.toContain('probe-a')
+    expect(wrapper.find('.cc-refresh-warn').exists()).toBe(false)
+    wrapper.unmount()
+  })
+})
+
+describe('空描述 Tooltip、滚动边界与键盘编辑入口（R1-06）', () => {
+  const SFC_SOURCE = readFileSync(
+    resolve(process.cwd(), 'src/views/client-config/ClientConfigPage.vue'),
+    'utf-8',
+  )
+  const blankDescRow = row('probe-blank', '   ', '1', [])
+
+  function cssBlock(selector: string): string {
+    const m = SFC_SOURCE.match(new RegExp(`${selector}\\s*\\{([^}]*)\\}`, 'm'))
+    return m ? m[1] : ''
+  }
+
+  // ---- 9.1 空描述 Tooltip ----
+  it('静态：空描述占位符“—”被 Tooltip 包裹且文案固定为“未填写探针描述”', () => {
+    expect(SFC_SOURCE).toContain('content="未填写探针描述"')
+    expect(SFC_SOURCE).toContain('<span class="cc-desc cc-desc--empty">—</span>')
+    const emptySpan = SFC_SOURCE.indexOf('<span class="cc-desc cc-desc--empty">—</span>')
+    const contentPos = SFC_SOURCE.indexOf('content="未填写探针描述"')
+    expect(contentPos).toBeGreaterThan(-1)
+    expect(emptySpan).toBeGreaterThan(contentPos)
+  })
+
+  it('组件：NULL 描述与仅空白描述都渲染可悬停的“未填写探针描述” Tooltip', async () => {
+    const wrapper = await mountPage([nullDescRow, blankDescRow])
+    const empties = wrapper.findAll('.cc-desc--empty')
+    expect(empties).toHaveLength(2)
+    for (const e of empties) expect(e.text()).toBe('—')
+    // 真实悬停：Tooltip 内容以 popper 形式出现
+    await empties[0].trigger('mouseenter')
+    await new Promise((r) => setTimeout(r, 30))
+    expect(document.body.textContent).toContain('未填写探针描述')
+    await empties[0].trigger('mouseleave')
+    await new Promise((r) => setTimeout(r, 30))
+    wrapper.unmount()
+  })
+
+  // ---- 9.2 滚动边界 ----
+  it('静态：弹窗内容区与 +N 完整清单设置视口安全最大高度与内部纵向滚动', () => {
+    const formCss = cssBlock('.cc-form')
+    expect(formCss).toContain('overflow-y: auto')
+    expect(formCss).toMatch(/max-height:\s*calc\(100vh/)
+    const fullListCss = cssBlock('.cc-full-list')
+    expect(fullListCss).toContain('max-height: 320px')
+    expect(fullListCss).toContain('overflow-y: auto')
+  })
+
+  it('组件：+N Popover 打开后完整清单保留全部项且异常标记不隐藏', async () => {
+    const wrapper = await mountPage([multiRow])
+    await wrapper.find('.cc-more').trigger('click')
+    await flushPromises()
+    await new Promise((r) => setTimeout(r, 30))
+    const items = Array.from(document.querySelectorAll('.cc-full-item'))
+    expect(items.length).toBe(multiSources.length)
+    expect(document.body.textContent).toContain('ds-ab（不存在）')
+    wrapper.unmount()
+  })
+
+  // ---- 9.3 键盘编辑入口 ----
+  it('组件：探针 ID 单元格具备 tabindex/role；单击选中、双击编辑不受破坏', async () => {
+    const wrapper = await mountPage([enabledRow, disabledRow])
+    const idCell = wrapper.findAll('.cc-id').find((s) => s.text() === 'probe-a')!
+    expect(idCell.attributes('tabindex')).toBe('0')
+    expect(idCell.attributes('role')).toBe('button')
+    expect(idCell.attributes('aria-label')).toBe('编辑探针 probe-a')
+    // 双击行仍打开编辑
+    wrapper.findComponent({ name: 'ElTable' }).vm.$emit('row-dblclick', enabledRow)
+    await flushPromises()
+    expect(wrapper.find('.cc-dialog').text()).toContain('编辑探针')
+    await exactButton(wrapper, '取消')!.trigger('click')
+    await flushPromises()
+    // 单击行选择仍有效
+    await selectRow(wrapper, enabledRow)
+    expect(wrapper.text()).toContain('已选择：probe-a')
+    wrapper.unmount()
+  })
+
+  it('组件：Enter 真实键盘事件打开编辑弹窗', async () => {
+    const wrapper = await mountPage([enabledRow])
+    const idCell = wrapper.findAll('.cc-id').find((s) => s.text() === 'probe-a')!
+    await idCell.trigger('keydown', { key: 'Enter' })
+    await flushPromises()
+    expect(wrapper.find('.cc-dialog').text()).toContain('编辑探针')
+    expect(mockedOptions).toHaveBeenCalledWith('probe-a')
+    wrapper.unmount()
+  })
+
+  it('组件：Space 真实键盘事件打开编辑弹窗且不触发提交', async () => {
+    const wrapper = await mountPage([enabledRow])
+    const idCell = wrapper.findAll('.cc-id').find((s) => s.text() === 'probe-a')!
+    await idCell.trigger('keydown', { key: ' ', code: 'Space' })
+    await flushPromises()
+    expect(wrapper.find('.cc-dialog').text()).toContain('编辑探针')
+    expect(mockedUpdate).not.toHaveBeenCalled()
+    expect(mockedCreate).not.toHaveBeenCalled()
+    wrapper.unmount()
+  })
+
+  it('组件：非编辑键（箭头键）不打开编辑、不产生副作用', async () => {
+    const wrapper = await mountPage([enabledRow])
+    const idCell = wrapper.findAll('.cc-id').find((s) => s.text() === 'probe-a')!
+    await idCell.trigger('keydown', { key: 'ArrowDown' })
+    await flushPromises()
+    expect(wrapper.find('.cc-dialog').exists()).toBe(false)
+    expect(mockedOptions).not.toHaveBeenCalled()
     wrapper.unmount()
   })
 })
