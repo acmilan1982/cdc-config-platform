@@ -8,13 +8,13 @@
 | Feature 标识 | `client-config` |
 | 既有路由 | `/config/client`（保持不变） |
 | 目标文档 | `docs/features/client-config/ACCEPTANCE.md` |
-| 文档状态 | `DRAFT_PENDING_USER_REVIEW`（2026-09-03 已批准的验收标准因并发口径调整于 2026-09-04 进入本轮待复审草案：取消“并发最多一个成功”强保证、不依赖 Oracle 显式表锁、改为“普通/非并发写前检查 + 已接受极端并发边界”。调整前批准历史见 §1.1；本轮并发口径调整首版结果经 ChatGPT 正式复审结论为 `CHANGES_REQUIRED`（R1-01~R1-04），R1 定向修订已完成，当前仍为待复审草案，尚未经 R1 正式复审通过与项目负责人重新批准；76 条验收用例仍全部 `NOT_RUN`，不得写成“验收通过”） |
+| 文档状态 | `APPROVED`（2026-09-03 曾批准的旧口径验收标准因并发口径调整于 2026-09-04 进入本轮待复审草案：取消“并发最多一个成功”强保证、不依赖 Oracle 显式表锁、改为“普通/非并发写前检查 + 已接受极端并发边界”。首版调整结果经 ChatGPT 正式复审结论为 `CHANGES_REQUIRED`（R1-01~R1-04）并完成 R1 定向修订后，ChatGPT 对 R1 结果提交 `f2a4d7d...` 正式复审结论为 `APPROVED`，项目负责人于 2026-09-04 明确回复“批准”，本验收标准文档经本轮批准收口为 `APPROVED`。调整前批准历史见 §1.1；本轮批准信息见 §1.2；本次批准的是“验收标准”，不是“验收执行结果”；76 条验收用例仍全部 `NOT_RUN`，不得写成“验收通过”） |
 | 实现状态 | `NOT_STARTED`（本验收标准只定义目标行为，不代表页面、接口或写库能力已经实现） |
 | 验收用例状态 | 文档内 `CCFG-AC-001~076` 共 76 例全部为 `NOT_RUN`（未执行，不得推定通过） |
-| 任务编号 | `CLIENT-CONFIG-REQUIREMENTS-BASELINE-001`（首版建基线）；`CLIENT-CONFIG-REQUIREMENTS-BASELINE-001-R1`（正式复审驱动定向修订，仅修订 `CCFG-AC-030/033/039/048` 场景与文字，不新增验收编号）；`CLIENT-CONFIG-REQUIREMENTS-BASELINE-APPROVAL-001`（批准收口）；`CLIENT-CONFIG-CONCURRENCY-REQUIREMENTS-ADJUSTMENT-001`（并发口径定向调整草案，2026-09-04，仅修订 `CCFG-AC-030/056/058/059/061/064` 场景与文字，不新增验收编号）；`CLIENT-CONFIG-CONCURRENCY-REQUIREMENTS-ADJUSTMENT-001-R1`（并发口径调整草案正式复审 `CHANGES_REQUIRED` 驱动的 R1 定向修订，2026-09-04，仅修订 `CCFG-AC-030/058` 场景与文字，不新增验收编号） |
+| 任务编号 | `CLIENT-CONFIG-REQUIREMENTS-BASELINE-001`（首版建基线）；`CLIENT-CONFIG-REQUIREMENTS-BASELINE-001-R1`（正式复审驱动定向修订，仅修订 `CCFG-AC-030/033/039/048` 场景与文字，不新增验收编号）；`CLIENT-CONFIG-REQUIREMENTS-BASELINE-APPROVAL-001`（批准收口）；`CLIENT-CONFIG-CONCURRENCY-REQUIREMENTS-ADJUSTMENT-001`（并发口径定向调整草案，2026-09-04，仅修订 `CCFG-AC-030/056/058/059/061/064` 场景与文字，不新增验收编号）；`CLIENT-CONFIG-CONCURRENCY-REQUIREMENTS-ADJUSTMENT-001-R1`（并发口径调整草案正式复审 `CHANGES_REQUIRED` 驱动的 R1 定向修订，2026-09-04，仅修订 `CCFG-AC-030/058` 场景与文字，不新增验收编号）；`CLIENT-CONFIG-CONCURRENCY-REQUIREMENTS-ADJUSTMENT-APPROVAL-001`（并发口径调整后验收标准批准收口，2026-09-04） |
 | 授权基线提交 | `dc7dcbe600638d7ba979c8d598115b19f7141400` |
 | 创建日期 | 2026-09-03 |
-| 依据需求 | `docs/features/client-config/REQUIREMENTS.md`（`CCFG-REQ-001~090`；该文档原为 `APPROVED`，因并发口径调整于 2026-09-04 转为 `DRAFT_PENDING_USER_REVIEW` 待复审草案） |
+| 依据需求 | `docs/features/client-config/REQUIREMENTS.md`（`CCFG-REQ-001~090`；该文档 2026-09-03 旧口径为 `APPROVED`，因并发口径调整于 2026-09-04 转为待复审草案，本轮经 ChatGPT 对 R1 结果正式复审 `APPROVED` 与项目负责人于 2026-09-04 批准后重新收口为 `APPROVED`） |
 
 ### 1.1 批准信息（2026-09-03 旧口径批准历史；本轮并发口径调整不在该次批准范围内，见 §1.2）
 
@@ -28,9 +28,19 @@
 | 收口任务编号 | `CLIENT-CONFIG-REQUIREMENTS-BASELINE-APPROVAL-001` |
 | 批准边界 | 本次批准的是“验收标准”，不是“验收执行结果”；76 条验收用例仍全部为 `NOT_RUN`，尚未执行正式验收；实现状态仍为 `NOT_STARTED`，不得写成“验收通过” |
 
-### 1.2 本轮并发口径调整（2026-09-04 草案；首版调整结果经 ChatGPT 正式复审 `CHANGES_REQUIRED`，R1 定向修订完成，待 R1 正式复审与项目负责人批准）
+### 1.2 本轮并发口径调整与批准信息（2026-09-04 已批准）
 
-项目负责人于 2026-09-04 明确决定并确认本 Feature 的并发口径：新增、编辑、启用在写入前重新读取当前配置并执行数据源占用检查，发现冲突仍拒绝并明确提示；不再为保证数据源唯一分配执行 Oracle 显式表锁；接受极端并发下两个请求同时通过检查并都写入成功的边界，配置平台不再承诺并发“最多一个成功”。受影响验收为 `CCFG-AC-030/056/058/059/061/064`，其场景/预期按“普通（非并发）写前检查 + 已接受极端并发边界”口径改写；验收编号与数量 76 条保持不变，76 条执行状态保持全部 `NOT_RUN`。2026-09-03 的批准作为历史保留，不自动批准本轮调整。ChatGPT 对首版调整结果（提交 `6071d7aff31cb36321831fcd455c298d379551f3`）的正式复审结论为 `CHANGES_REQUIRED`，提出 R1-01~R1-04 定向修订项；R1 定向修订（任务 `CLIENT-CONFIG-CONCURRENCY-REQUIREMENTS-ADJUSTMENT-001-R1`，2026-09-04，仅修订 `CCFG-AC-030/058` 场景与文字）已逐项完成。本文件当前等待 ChatGPT 对 R1 结果的正式复审（`CHATGPT_FORMAL_REQUIREMENTS_ADJUSTMENT_R1_REVIEW`）与项目负责人批准，不得自行批准、不得执行验收。
+| 项目 | 值 |
+|---|---|
+| 批准日期 | 2026-09-04 |
+| 批准人角色 | 项目负责人 |
+| 批准依据 | ChatGPT 对并发口径调整 R1 结果提交 `f2a4d7db7fa63aaf834fbed73ad7a69f45621dcf` 正式复审结论为 `APPROVED`（`CHATGPT_FORMAL_REQUIREMENTS_ADJUSTMENT_R1_REVIEW`）；项目负责人于 2026-09-04 明确回复“批准” |
+| 批准对象 | 并发口径调整后的 `CCFG-AC-001~076`（76 条）验收标准；对应并发口径调整后 `CCFG-REQ-001~090`（90 条）需求（见 `REQUIREMENTS.md`） |
+| 批准提交 | `f2a4d7db7fa63aaf834fbed73ad7a69f45621dcf`（并发口径调整 R1 定向修订提交；首版调整提交 `6071d7aff31cb36321831fcd455c298d379551f3` 作为历史依据保留） |
+| 收口任务编号 | `CLIENT-CONFIG-CONCURRENCY-REQUIREMENTS-ADJUSTMENT-APPROVAL-001` |
+| 批准边界 | 本次批准的是“验收标准”，不是“验收执行结果”；76 条验收用例仍全部为 `NOT_RUN`，尚未执行正式验收；功能仍为 `NOT_STARTED` 未实现，不得写成“验收通过” |
+
+项目负责人于 2026-09-04 明确决定并确认本 Feature 的并发口径：新增、编辑、启用在写入前重新读取当前配置并执行数据源占用检查，发现冲突仍拒绝并明确提示；不再为保证数据源唯一分配执行 Oracle 显式表锁；接受极端并发下两个请求同时通过检查并都写入成功的边界，配置平台不再承诺并发“最多一个成功”。受影响验收为 `CCFG-AC-030/056/058/059/061/064`，其场景/预期按“普通（非并发）写前检查 + 已接受极端并发边界”口径改写；验收编号与数量 76 条保持不变，76 条执行状态保持全部 `NOT_RUN`。2026-09-03 的批准作为历史保留，不自动批准本轮调整。ChatGPT 对首版调整结果（提交 `6071d7aff31cb36321831fcd455c298d379551f3`）的正式复审结论为 `CHANGES_REQUIRED`，提出 R1-01~R1-04 定向修订项；R1 定向修订（任务 `CLIENT-CONFIG-CONCURRENCY-REQUIREMENTS-ADJUSTMENT-001-R1`，2026-09-04，仅修订 `CCFG-AC-030/058` 场景与文字）已逐项完成。随后 ChatGPT 对 R1 结果提交 `f2a4d7db7fa63aaf834fbed73ad7a69f45621dcf` 正式复审结论为 `APPROVED`（`CHATGPT_FORMAL_REQUIREMENTS_ADJUSTMENT_R1_REVIEW`），项目负责人于 2026-09-04 明确回复“批准”，本轮并发口径调整后的验收标准经批准收口任务 `CLIENT-CONFIG-CONCURRENCY-REQUIREMENTS-ADJUSTMENT-APPROVAL-001` 收口为 `APPROVED`（本轮批准信息见 §1.2 批准表）；本次批准的是“验收标准”，76 条用例仍全部 `NOT_RUN` 未执行。下一入口为 `CLIENT_CONFIG_DESIGN_CONCURRENCY_ADJUSTMENT`，不再是需求调整复审。
 
 ## 2. 状态口径与重要声明
 
@@ -39,7 +49,7 @@
 - 所有用例初始状态必须为 `NOT_RUN`（未执行）。执行后状态（通过 / 失败 / 被阻塞）属于执行阶段才允许填写的结果状态；只有在执行并取得与操作步骤匹配的客观证据后，才允许把某一用例从 `NOT_RUN` 更新为结果状态，且更新必须留下证据。截至当前草案，没有任何用例被执行（2026-09-03 旧口径批准只批准“验收标准”，不改变这一结论），不得把任一用例标记为通过，也不得把验收标准文档状态当作用例已通过的证据。
 - 对需要构造异常历史数据（停用/不存在/含逗号/重复分配的数据源、非 `0/1` 状态等）或并发条件的用例，本文件只在操作与预期中定义期望行为和未来取证方式，不授权任何测试数据写入。本 Feature 建基线任务（`CLIENT-CONFIG-REQUIREMENTS-BASELINE-001`）及其 R1 定向修订（`CLIENT-CONFIG-REQUIREMENTS-BASELINE-001-R1`）、并发口径调整及其 R1 定向修订（`CLIENT-CONFIG-CONCURRENCY-REQUIREMENTS-ADJUSTMENT-001` / `-R1`）均为纯文档任务，不连接数据库、不构造数据、不执行 DDL/DML；正式验收阶段需要构造数据时，必须另行按项目数据库写操作审批规则获得授权，且只能在不影响共享开发库既有数据的前提下进行。
 - 不得因为本轮无法执行就省略需要异常数据或并发条件的用例；这些用例必须保留为 `NOT_RUN`，待具备取证条件后执行。
-- 状态不得混淆：批准验收标准文档、执行验收用例、正式验收通过、实现被正式接受是不同状态。本文件当前状态为：验收标准文档状态为 `DRAFT_PENDING_USER_REVIEW`（2026-09-03 批准属旧口径历史；本轮并发口径调整后进入待复审草案状态，首版调整结果经 ChatGPT 正式复审 `CHANGES_REQUIRED`，R1 定向修订完成，待 R1 正式复审与项目负责人重新批准；批准的是“验收标准”本身，不是“验收执行结果”）；功能仍为 `NOT_STARTED` 未实现；76 条验收用例仍全部为 `NOT_RUN`，尚未执行正式验收。
+- 状态不得混淆：批准验收标准文档、执行验收用例、正式验收通过、实现被正式接受是不同状态。本文件当前状态为：验收标准文档状态为 `APPROVED`（2026-09-03 批准属旧口径历史；本轮并发口径调整后进入待复审草案状态，首版调整结果经 ChatGPT 正式复审 `CHANGES_REQUIRED`、R1 定向修订完成后，ChatGPT 对 R1 结果提交 `f2a4d7d...` 正式复审结论为 `APPROVED`、项目负责人于 2026-09-04 明确回复“批准”，本轮批准收口任务 `CLIENT-CONFIG-CONCURRENCY-REQUIREMENTS-ADJUSTMENT-APPROVAL-001` 已把验收标准文档收口为 `APPROVED`；批准的是“验收标准”本身，不是“验收执行结果”）；功能仍为 `NOT_STARTED` 未实现；76 条验收用例仍全部为 `NOT_RUN`，尚未执行正式验收。
 
 ## 3. 验收领域分类与数量
 
@@ -253,3 +263,4 @@
 | 2026-09-03 | 批准收口：ChatGPT 对 R1 结果正式复审结论 `APPROVED`，项目负责人于 2026-09-03 明确回复“批准”；本验收标准文档状态由 `DRAFT_PENDING_USER_REVIEW` 调整为 `APPROVED`，追加 §1.1 批准信息（批准日期、批准人角色、批准依据、基线提交 `9b31893...`、收口任务编号 `CLIENT-CONFIG-REQUIREMENTS-BASELINE-APPROVAL-001`）。验收编号与数量 76 条保持不变，验收业务语义/预期结果/追踪关系/编号/顺序/数量/执行状态零变更；76 条验收用例保持全部 `NOT_RUN`，实现状态保持 `NOT_STARTED`；本次批准的是“验收标准”，不是“验收执行结果”，不代表功能已实现或验收已通过；历史首版与 R1 记录未改写 | CLIENT-CONFIG-REQUIREMENTS-BASELINE-APPROVAL-001（项目负责人批准驱动的需求与验收基线批准收口；纯文档任务，未实现、未执行验收） |
 | 2026-09-04 | 并发口径定向调整草案：按项目负责人明确决定，取消“并发最多一个成功”强保证与 `LOCK TABLE` 依赖，改写并发边界验收。受影响验收 `CCFG-AC-030/056/058/059/061/064`（对应需求另见 `REQUIREMENTS.md` §10）；验收编号与数量 76 条保持不变，76 条执行状态全部保持 `NOT_RUN`（标准修订不写成验收已通过）；文档状态由 `APPROVED` 调整为 `DRAFT_PENDING_USER_REVIEW`，2026-09-03 批准保留为历史且不自动批准本轮调整（§1.1/§1.2）；实现状态保持 `NOT_STARTED`；需求→验收追踪关系零改动，覆盖仍为 90/90 | CLIENT-CONFIG-CONCURRENCY-REQUIREMENTS-ADJUSTMENT-001（项目负责人决策驱动的需求/验收并发口径定向调整；纯文档任务，不修改设计文档、不实现、不执行验收） |
 | 2026-09-04 | R1 定向修订（正式复审 `CHANGES_REQUIRED`）：按 R1-01~R1-04 逐项修订。① 状态一致性：§1.1/§1.2 与 §2 明确 2026-09-03 批准仅为旧口径历史、当前为并发口径调整后待复审草案、下一入口为 `CHATGPT_FORMAL_REQUIREMENTS_ADJUSTMENT_R1_REVIEW`，“截至本批准收口”改为“截至当前草案”（不改变“全部用例未执行”结论）；② 批准链纠正：未把并发调整前的设计草案表锁方案误写为已批准内容（`ACCEPTANCE.md` 无批准链误写，仅同步状态表述）；③ `CCFG-AC-030` 并发子场景改用库内原本不存在、不受既有 `probe-001` 前置影响的新 ID 对 `race-001`/`RACE-001`，明确两个请求各自执行写前检查、允许一笔或两笔竞态成功、不得出现显式表锁锁等待超时业务错误、`probe-001` 只服务顺序①与绕过前端③；④ `CCFG-AC-058` 改为可由一次针对另一探针的新增/编辑请求实际执行的顺序场景（`ds-x` 已被 `probe-a` 占用 → 前端标为不可选 → 绕过前端直接调用探针 B 新增/编辑提交 `ds-x` → 后端 DML 前重新读表拒绝）。验收编号与数量 76 条保持不变、未改并发主体业务口径、未动 `CCFG-AC-056/059/061/064` 新主体语义；76 条执行状态全部保持 `NOT_RUN`；实现状态保持 `NOT_STARTED`；需求→验收追踪关系零改动，覆盖仍为 90/90 | CLIENT-CONFIG-CONCURRENCY-REQUIREMENTS-ADJUSTMENT-001-R1（ChatGPT 正式复审 `CHANGES_REQUIRED` 驱动的 R1 定向修订；纯文档任务，未实现、未执行验收） |
+| 2026-09-04 | 批准收口：ChatGPT 对并发口径调整 R1 结果提交 `f2a4d7d...` 正式复审结论为 `APPROVED`（确认 R1-01~R1-04 全部正确完成、`CCFG-AC-030` 用独立 `race-001`/`RACE-001` 并发数据、`CCFG-AC-058` 已成为可实际执行的单条记录写前检查场景、需求 90/验收 76 连续唯一且全部 `NOT_RUN`、需求覆盖 90/90、业务行差异仅 `CCFG-REQ-038`/`CCFG-AC-030`/`CCFG-AC-058`、四份设计文档零修改、实现 `NOT_STARTED`），项目负责人于 2026-09-04 明确回复“批准”；本验收标准文档状态由 `DRAFT_PENDING_USER_REVIEW` 调整为 `APPROVED`，追加 §1.2 本轮批准信息（批准日期、批准人角色、批准依据、批准提交 `f2a4d7d...`、收口任务编号 `CLIENT-CONFIG-CONCURRENCY-REQUIREMENTS-ADJUSTMENT-APPROVAL-001`、批准边界）。验收编号与数量 76 条保持不变，验收业务语义/预期结果/追踪关系/编号/顺序/数量/执行状态零变更；76 条验收用例保持全部 `NOT_RUN`，实现状态保持 `NOT_STARTED`；2026-09-03 旧口径批准保留为历史；需求→验收追踪关系零改动，覆盖仍为 90/90；本次批准的是“验收标准”，不是“验收执行结果”，不代表功能已实现或验收已通过；历史报告未改写 | CLIENT-CONFIG-CONCURRENCY-REQUIREMENTS-ADJUSTMENT-APPROVAL-001（项目负责人批准驱动的需求与验收标准批准收口；纯文档任务，不修改设计文档、未实现、未执行验收） |
