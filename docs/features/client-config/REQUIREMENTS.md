@@ -8,9 +8,9 @@
 | Feature 标识 | `client-config` |
 | 既有路由 | `/config/client`（保持不变） |
 | 目标文档 | `docs/features/client-config/REQUIREMENTS.md` |
-| 文档状态 | `DRAFT_PENDING_USER_REVIEW`（2026-09-03 已批准的需求基线因并发口径调整于 2026-09-04 进入本轮待复审草案：不再保证数据源唯一分配执行 Oracle 显式表锁、取消“并发最多一个成功”强保证、改为“DML 前重新读取 + 尽力写前检查 + 已接受并发边界”。调整前批准历史见 §1.1，本轮并发口径调整尚未经 ChatGPT 正式复审与项目负责人批准） |
+| 文档状态 | `DRAFT_PENDING_USER_REVIEW`（2026-09-03 已批准的需求基线因并发口径调整于 2026-09-04 进入本轮待复审草案：不再保证数据源唯一分配执行 Oracle 显式表锁、取消“并发最多一个成功”强保证、改为“DML 前重新读取 + 尽力写前检查 + 已接受并发边界”。调整前批准历史见 §1.1；本轮并发口径调整首版结果经 ChatGPT 正式复审结论为 `CHANGES_REQUIRED`（R1-01~R1-04），R1 定向修订已完成，当前仍为待复审草案，尚未经 R1 正式复审通过与项目负责人重新批准） |
 | 实现状态 | `NOT_STARTED`（本需求基线只落盘已确认业务规则，不代表页面、接口或写库能力已经实现） |
-| 任务编号 | `CLIENT-CONFIG-REQUIREMENTS-BASELINE-001`（首版建基线）；`CLIENT-CONFIG-REQUIREMENTS-BASELINE-001-R1`（正式复审驱动定向修订）；`CLIENT-CONFIG-REQUIREMENTS-BASELINE-APPROVAL-001`（批准收口）；`CLIENT-CONFIG-CONCURRENCY-REQUIREMENTS-ADJUSTMENT-001`（并发口径定向调整草案，2026-09-04） |
+| 任务编号 | `CLIENT-CONFIG-REQUIREMENTS-BASELINE-001`（首版建基线）；`CLIENT-CONFIG-REQUIREMENTS-BASELINE-001-R1`（正式复审驱动定向修订）；`CLIENT-CONFIG-REQUIREMENTS-BASELINE-APPROVAL-001`（批准收口）；`CLIENT-CONFIG-CONCURRENCY-REQUIREMENTS-ADJUSTMENT-001`（并发口径定向调整草案，2026-09-04）；`CLIENT-CONFIG-CONCURRENCY-REQUIREMENTS-ADJUSTMENT-001-R1`（并发口径调整草案正式复审 `CHANGES_REQUIRED` 驱动的 R1 定向修订，2026-09-04） |
 | 任务类型 | 全新 Feature 需求与验收标准建基线（纯文档）+ 正式复审驱动的定向修订（纯文档）+ 批准收口（纯文档）+ 项目负责人决策驱动的需求/验收并发口径定向调整（纯文档） |
 | 授权基线提交 | `dc7dcbe600638d7ba979c8d598115b19f7141400`（执行时实际 `origin/develop` 最新提交，与本地 HEAD 一致，ahead/behind = 0 0） |
 | 创建日期 | 2026-09-03 |
@@ -29,13 +29,13 @@
 | 收口任务编号 | `CLIENT-CONFIG-REQUIREMENTS-BASELINE-APPROVAL-001` |
 | 批准边界 | 本次批准仅表示需求基线获批，不代表功能已实现、不代表验收已执行或通过；实现状态仍为 `NOT_STARTED`，76 条验收用例仍全部为 `NOT_RUN` |
 
-说明：本文件把项目负责人已确认的业务决定写成无歧义的需求规则（`CCFG-REQ-001~090`）。需求编号前缀 `CCFG-REQ-`，编号连续、唯一、不可复用。本需求基线已经正式批准：ChatGPT 对首版草案（提交 `abf2f400f168164473866aba391f57cadfcb8fea`）正式复审结论为 `CHANGES_REQUIRED`，发现两项确定性修正（探针 ID 不区分大小写唯一、`CLIENT_DESC` 为真实 Oracle `VARCHAR2(1024 BYTE)` 语义）；R1 定向修订（提交 `9b31893c7e1b31ee95874f94a55cdb9c23017a68`）完成这两项修正后，ChatGPT 对 R1 结果正式复审结论为 `APPROVED`，项目负责人于 2026-09-03 明确回复“批准”。批准仅表示需求基线获批：实现状态仍为 `NOT_STARTED`、验收用例仍全部 `NOT_RUN`，尚未进行正式验收，不得写成“验收通过”。下一入口为设计基线（`CLIENT_CONFIG_DESIGN_BASELINE`）；本文件不建立或宣称任何设计文档。
+说明：本文件把项目负责人已确认的业务决定写成无歧义的需求规则（`CCFG-REQ-001~090`）。需求编号前缀 `CCFG-REQ-`，编号连续、唯一、不可复用。本需求基线曾于 2026-09-03 获得旧口径正式批准：ChatGPT 对首版草案（提交 `abf2f400f168164473866aba391f57cadfcb8fea`）正式复审结论为 `CHANGES_REQUIRED`，发现两项确定性修正（探针 ID 不区分大小写唯一、`CLIENT_DESC` 为真实 Oracle `VARCHAR2(1024 BYTE)` 语义）；R1 定向修订（提交 `9b31893c7e1b31ee95874f94a55cdb9c23017a68`）完成这两项修正后，ChatGPT 对 R1 结果正式复审结论为 `APPROVED`，项目负责人于 2026-09-03 明确回复“批准”。该次批准属 §1.1 的 2026-09-03 旧口径批准历史：批准对象是含并发“最多一个成功”强保证的旧口径需求基线（当时需求只要求后续设计确定事务/锁/原子方案，并未批准任何具体表锁语句），不代表功能已实现或验收已通过（实现状态仍为 `NOT_STARTED`、验收用例仍全部 `NOT_RUN`）。本文件当前状态：因 2026-09-04 并发口径调整（§1.2）已转为 `DRAFT_PENDING_USER_REVIEW` 草案，尚未经本轮正式复审通过和项目负责人重新批准，2026-09-03 批准不自动批准本轮调整。当前下一入口为 `CHATGPT_FORMAL_REQUIREMENTS_ADJUSTMENT_R1_REVIEW`，不是设计基线。四份设计文档（`DESIGN.md`/`API.md`/`UI.md`/`DATABASE.md`）已经存在，但均为设计草案且仍含已过时的 `LOCK TABLE ... WAIT 5` 表锁方案（`STALE_LOCK_DESIGN_PENDING_REQUIREMENTS_APPROVAL`）；本文件不建立设计文档，本调整及其 R1 修订也不修改既有设计草案。
 
-### 1.2 本轮并发口径调整（2026-09-04 草案，待 ChatGPT 正式复审与项目负责人批准）
+### 1.2 本轮并发口径调整（2026-09-04 草案；首版调整结果经 ChatGPT 正式复审 `CHANGES_REQUIRED`，R1 定向修订完成，待 R1 正式复审与项目负责人批准）
 
 项目负责人于 2026-09-04 明确决定并确认本 Feature 的并发口径：① 配置平台不再为了保证数据源唯一分配执行 Oracle 显式表锁；② 新增、编辑、启用在写入前重新读取当前配置并检查数据源是否已被其他探针分配，发现冲突仍拒绝并明确提示；③ 接受极端并发下两个请求同时通过检查并都写入成功的边界，不再承诺并发“最多一个成功”；④ 探针 ID ASCII 大小写不敏感唯一仍为普通新增/编辑校验规则，同样不再承诺极端并发下最多一个成功；⑤ `sync-client`、`sync-server` 在使用配置时会执行数据源重复分配检查，作为运行侧最终防线，但不属本 Feature 实现/调用/通知范围；⑥ 普通事务仍可用于单次 DML 失败回滚，但不得宣称消除“检查后写入”的并发竞态；⑦ 前端候选占用标记、后端写前二次检查、历史重复分配异常展示、停用不释放数据源等既有规则继续保留。
 
-本调整属已批准需求的实质口径调整，受影响需求为 `CCFG-REQ-038/068/071/072/074/077`（对应验收见 `ACCEPTANCE.md`）；2026-09-03 的批准作为历史保留，不自动批准本轮调整。受影响文档状态调整为 `DRAFT_PENDING_USER_REVIEW`，等待 ChatGPT 对本次调整的正式复审（`CHATGPT_FORMAL_REQUIREMENTS_ADJUSTMENT_REVIEW`）与项目负责人批准，不得自行批准、不得执行验收。现有 `DESIGN.md`/`API.md`/`UI.md`/`DATABASE.md` 仍含已过时的 `LOCK TABLE ... WAIT 5` 表锁方案，标记为 `STALE_LOCK_DESIGN_PENDING_REQUIREMENTS_APPROVAL`，暂不可批准、不可用于实现，须待本轮需求调整重新批准后定向修订；本任务不改写任何设计文档。
+本调整属已批准需求的实质口径调整，受影响需求为 `CCFG-REQ-038/068/071/072/074/077`（对应验收见 `ACCEPTANCE.md`）；2026-09-03 的批准作为历史保留，不自动批准本轮调整。受影响文档状态调整为 `DRAFT_PENDING_USER_REVIEW`。ChatGPT 对首版调整结果（提交 `6071d7aff31cb36321831fcd455c298d379551f3`）的正式复审结论为 `CHANGES_REQUIRED`，提出 R1-01~R1-04 定向修订项；R1 定向修订（任务 `CLIENT-CONFIG-CONCURRENCY-REQUIREMENTS-ADJUSTMENT-001-R1`，2026-09-04）已逐项完成，当前等待 ChatGPT 对 R1 结果的正式复审（`CHATGPT_FORMAL_REQUIREMENTS_ADJUSTMENT_R1_REVIEW`）与项目负责人批准，不得自行批准、不得执行验收。现有 `DESIGN.md`/`API.md`/`UI.md`/`DATABASE.md` 仍含已过时的 `LOCK TABLE ... WAIT 5` 表锁方案，标记为 `STALE_LOCK_DESIGN_PENDING_REQUIREMENTS_APPROVAL`，暂不可批准、不可用于实现，须待本轮需求调整重新批准后定向修订；本任务不改写任何设计文档。
 
 本文件区分以下分层，避免把“当前事实”“本 Feature 目标”“批准后待同步项”混淆：
 
@@ -131,7 +131,7 @@
 - 不处理与 `CDC_JOB_FAILURE_EVENT`、`CDC_JOB_FAILURE_HANDLE_LOG`、ZK 节点、统计表或其他进程的级联关系。
 - 不新增物理外键、唯一索引、关联表或迁移脚本；多值关系是否未来规范化不属于本轮范围。
 - 不在本 Feature 中自动清理或修复历史异常数据。
-- 本任务只建立需求与验收草案，不建立 DESIGN/API/UI/DATABASE，不实现任何代码。
+- 本任务（并发口径需求调整及其 R1 定向修订）只修订需求与验收草案，不建立 DESIGN/API/UI/DATABASE（四份设计文档已作为既有草案存在，本调整及其 R1 修订不修改它们），不实现任何代码。
 
 ## 6. 统一解析与序列化约定（本 Feature 多值弱逻辑引用基础规则）
 
@@ -211,7 +211,7 @@
 |---|---|
 | CCFG-REQ-036 | 新增与编辑表单字段必须为三项：探针 ID、探针描述、采集数据源；不得增加其他业务字段。 |
 | CCFG-REQ-037 | 探针 ID：必填；去除首尾空白后长度必须为 1～32 字符；格式必须满足 `^[A-Za-z0-9][A-Za-z0-9._-]{0,31}$`。 |
-| CCFG-REQ-038 | 探针 ID 去除首尾空白后，必须在全部 `CDC_CLIENT_MULTIPLE.CLIENT_ID` 中按 ASCII 大小写不敏感比较保持唯一。因 CCFG-REQ-037 已限定探针 ID 只能由英文字母、数字、句点、下划线与连字符组成，大小写折叠只涉及英文字母，不引入中文或区域化大小写规则。`probe-001`、`Probe-001`、`PROBE-001` 必须视为同一个唯一键，不能属于三条不同记录。保存时必须保留用户最终输入的大小写形式，不得强制转大写或转小写。新增时只要已存在仅大小写不同的探针 ID，必须拒绝保存并提示冲突。编辑时以“原探针 ID”排除当前记录后再校验：当前记录仅调整自身 ID 大小写（如 `probe-001` 改为 `PROBE-001`）且无其他冲突记录时允许保存并保留新大小写，相当于当前记录自身的大小写调整；改成与另一条记录仅大小写不同的 ID 时必须拒绝。前端可提前校验，但后端保存前必须执行最终校验。并发语义：本规则属于写入前应用校验规则，只约束普通顺序操作下探针 ID 唯一，不通过 Oracle 显式表锁把校验与写入串行化；极端并发下两个请求可能同时通过检查并先后写入成功，配置平台不再承诺“最多一个成功”，作为已接受并发边界（见 CCFG-REQ-077）。Oracle 主键只保证数据库自身的精确值唯一，不得把它当作已提供不区分大小写唯一的物理约束；本规则是本 Feature 的应用层目标业务约束，不得新增函数索引、约束或执行任何 DDL。 |
+| CCFG-REQ-038 | 探针 ID 去除首尾空白后，在普通顺序新增/编辑及当次写前检查的目标规则下，必须在全部 `CDC_CLIENT_MULTIPLE.CLIENT_ID` 中按 ASCII 大小写不敏感比较保持唯一：当次检查能够看到既有冲突时必须拒绝保存，`probe-001`、`Probe-001`、`PROBE-001` 必须视为同一个唯一键，不能属于三条不同记录。因 CCFG-REQ-037 已限定探针 ID 只能由英文字母、数字、句点、下划线与连字符组成，大小写折叠只涉及英文字母，不引入中文或区域化大小写规则。保存时必须保留用户最终输入的大小写形式，不得强制转大写或转小写。新增时当次检查只要看到已存在仅大小写不同的探针 ID，必须拒绝保存并提示冲突。编辑时以“原探针 ID”排除当前记录后再校验：当前记录仅调整自身 ID 大小写（如 `probe-001` 改为 `PROBE-001`）且无其他冲突记录时允许保存并保留新大小写，相当于当前记录自身的大小写调整；当次检查看到另一条与目标 ID 仅大小写不同的记录时必须拒绝。前端可提前校验，但后端保存前必须执行最终校验，不得因下述并发例外弱化普通操作或绕过前端直接调用时的后端检查。并发语义：本规则属于写入前应用校验规则，只约束普通顺序新增/编辑及当次写前检查；不通过 Oracle 显式表锁把校验与写入串行化。极端并发竞态是明确例外：当次检查通过后、写入完成前另一请求可能已先写入，两个请求可能先后都成功并产生仅大小写不同的多条记录；配置平台不再承诺并发下“最多一个成功”，这种并发结果作为已接受并发边界（见 CCFG-REQ-077），不属于本 Feature 验收失败。Oracle 主键只保证数据库自身的精确值唯一，不得把它当作已提供不区分大小写唯一的物理约束；本规则是本 Feature 的应用层目标业务约束，不得新增函数索引、约束或执行任何 DDL。 |
 | CCFG-REQ-039 | 探针描述：必填；去除首尾空白后必须非空。最终保存值按 Oracle 数据库字符集 AL32UTF8 对应的 UTF-8 编码计算，字节长度不得超过 1024，即物理容量 `CLIENT_DESC = VARCHAR2(1024 BYTE)`。限制对象是编码后的字节数，不是 Java `String.length()`、JavaScript 字符数、Unicode 码点数或页面肉眼字符数：纯 ASCII 1024 个字符为 1024 字节可以通过，纯 ASCII 1025 个字符必须拒绝；常用中文在 AL32UTF8 下通常占 3 字节，即使字符数远小于 1024，只要 UTF-8 字节数超过 1024 也必须拒绝；Emoji 等补充字符通常占 4 字节，必须按真实 UTF-8 编码长度计数，不得按 Java UTF-16 code unit 或 JavaScript `.length` 误判。前端提示与预校验、后端最终校验必须使用同一 UTF-8 字节口径，后端必须作为最终防线；具体公共字节计算工具与测试方式留待设计阶段，本需求只固定口径。 |
 | CCFG-REQ-040 | 采集数据源：必填，至少选择 1 个；不设置数量硬上限；序列化结果不得超过 `DATA_SOURCE_ID` 的 `VARCHAR2(1000)` 物理容量。 |
 | CCFG-REQ-041 | 新增保存时 `FG_ACTIVE` 必须固定写入 `1`；新增表单不得提供状态字段。 |
@@ -320,3 +320,4 @@
 | 2026-09-03 | R1 定向修订两项确定性语义（需求编号与数量 90 条保持不变）：① 探针 ID 唯一性由模糊口径改为 ASCII 大小写不敏感唯一确定规则（`CCFG-REQ-038`，并最小一致性补充 `CCFG-REQ-043/048`）；② `CLIENT_DESC` 限制由“最多 1024 字符”改为真实 Oracle `VARCHAR2(1024 BYTE)` 的 UTF-8 字节语义（§2.2、§4、`CCFG-REQ-039/059/060`、§9 `BI-CFG-004`）。文档状态仍为 `DRAFT_PENDING_USER_REVIEW`、实现状态仍为 `NOT_STARTED`，未批准、未实现、未执行验收 | CLIENT-CONFIG-REQUIREMENTS-BASELINE-001-R1（ChatGPT 正式复审 `CHANGES_REQUIRED` 驱动的定向修订；纯文档任务，未改其他业务规则、未重新设计 Feature） |
 | 2026-09-03 | 批准收口：ChatGPT 对 R1 结果正式复审结论 `APPROVED`，项目负责人于 2026-09-03 明确回复“批准”；本需求文档状态由 `DRAFT_PENDING_USER_REVIEW` 调整为 `APPROVED`，追加 §1.1 批准信息（批准日期、批准人角色、批准依据、基线提交 `9b31893...`、收口任务编号 `CLIENT-CONFIG-REQUIREMENTS-BASELINE-APPROVAL-001`）。需求编号与数量 90 条保持不变，需求业务语义/正文/编号/顺序/数量零变更；实现状态保持 `NOT_STARTED`，76 条验收用例保持全部 `NOT_RUN`；本次批准仅表示需求基线获批，不代表功能已实现或验收已通过；历史首版与 R1 记录未改写 | CLIENT-CONFIG-REQUIREMENTS-BASELINE-APPROVAL-001（项目负责人批准驱动的需求与验收基线批准收口；纯文档任务，未实现、未执行验收） |
 | 2026-09-04 | 并发口径定向调整草案：按项目负责人明确决定，不再为保证数据源唯一分配执行 Oracle 显式表锁，取消并发“最多一个成功”强承诺，改为“DML 前重新读取 + 尽力写前检查 + 已接受极端并发双成功边界”。受影响需求 `CCFG-REQ-038/068/071/072/074/077`（对应验收见 `ACCEPTANCE.md` §10），同步最小修订摘要、约束表述、变更记录；文档状态由 `APPROVED` 调整为 `DRAFT_PENDING_USER_REVIEW`，2026-09-03 批准保留为历史且不自动批准本轮调整（§1.1/§1.2）；实现状态保持 `NOT_STARTED`、76 条验收保持全部 `NOT_RUN`；四份设计文档本轮零改动，仍含已过时 `LOCK TABLE ... WAIT 5` 方案，标记 `STALE_LOCK_DESIGN_PENDING_REQUIREMENTS_APPROVAL`，待本轮需求重新批准后定向修订 | CLIENT-CONFIG-CONCURRENCY-REQUIREMENTS-ADJUSTMENT-001（项目负责人决策驱动的需求/验收并发口径定向调整；纯文档任务，不修改设计文档、不实现、不执行验收） |
+| 2026-09-04 | R1 定向修订（正式复审 `CHANGES_REQUIRED`）：ChatGPT 对首版调整结果（提交 `6071d7a...`）正式复审结论为 `CHANGES_REQUIRED`（R1-01~R1-04）。逐项修订：① 清除当前状态残留，明确 2026-09-03 批准仅为旧口径历史、当前为并发口径调整后待复审草案、下一入口为 `CHATGPT_FORMAL_REQUIREMENTS_ADJUSTMENT_R1_REVIEW`、四份设计文档已存在但本轮零改动（§1.1 说明、§1.2、§5.2、元数据）；② 纠正批准链归属，明确旧批准只覆盖并发“最多一个成功”目标、`LOCK TABLE` 是后续未批准设计草案（见 `CCFG-REQ-038` 尾注，未写表锁为已批准）；③ 消除 `CCFG-REQ-038` 探针 ID 并发规则内部矛盾：唯一性限定为普通顺序新增/编辑及当次写前检查的目标规则，当次检查看到既有冲突必须拒绝，极端并发竞态为明确例外（可能产生仅大小写不同多条记录、不作为验收失败），不弱化普通操作与绕过前端时的后端检查（验收并发场景同步调整见 `ACCEPTANCE.md` §10）；需求编号与数量 90 条保持不变、未改并发主体业务口径、未动 `CCFG-REQ-068/071/072/074/077` 与设计文档；实现状态保持 `NOT_STARTED`、76 条验收保持全部 `NOT_RUN` | CLIENT-CONFIG-CONCURRENCY-REQUIREMENTS-ADJUSTMENT-001-R1（ChatGPT 正式复审 `CHANGES_REQUIRED` 驱动的 R1 定向修订；纯文档任务，未实现、未执行验收） |
