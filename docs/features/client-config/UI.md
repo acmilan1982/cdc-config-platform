@@ -8,7 +8,7 @@
 | Feature 标识 | `client-config` |
 | 既有路由 | `/config/client`（保持不变） |
 | 目标文档 | `docs/features/client-config/UI.md` |
-| 文档状态 | `DRAFT_PENDING_USER_REVIEW`（设计草案，尚未经 ChatGPT 正式复审与项目负责人批准；不得写成已批准基线） |
+| 文档状态 | `APPROVED`（界面设计正式批准：ChatGPT 对提交 `ba7c5e9...` 的设计并发口径调整结果正式复审 `APPROVED`，项目负责人于 2026-09-04 明确回复“批准”，经批准收口任务 `CLIENT-CONFIG-DESIGN-CONCURRENCY-ADJUSTMENT-APPROVAL-001` 收口为 `APPROVED`，可用于后续实现；批准的是设计基线，不代表代码已实现、已测试或验收已执行通过） |
 | 实现状态 | `NOT_STARTED`（本设计只定义目标界面与交互，不代表任何页面已经实现） |
 | 初版任务 | `CLIENT-CONFIG-DESIGN-BASELINE-001`（阶段 4 设计基线，纯文档） |
 | 初版基线提交 | `cecfdd5478df8b82ba39c083553ea8dd7ead48e8` |
@@ -22,13 +22,21 @@
 | R1 日期 | 2026-09-04 |
 | 并发调整任务 | `CLIENT-CONFIG-DESIGN-CONCURRENCY-ADJUSTMENT-001`（依据重新批准的需求/验收并发口径，定向清除过时显式表锁设计的纯文档任务） |
 | 并发调整日期 | 2026-09-04 |
+| 批准日期 | 2026-09-04 |
+| 批准人角色 | 项目负责人 |
+| ChatGPT 复审入口 | `CHATGPT_FORMAL_DESIGN_CONCURRENCY_ADJUSTMENT_REVIEW` |
+| ChatGPT 复审结论 | `APPROVED`（对提交 `ba7c5e917b1b9d08208c3e1ceb31285407f5fd5e` 下的设计并发口径调整结果） |
+| 项目负责人回复 | 明确回复“批准”（2026-09-04） |
+| 批准对象 | 提交 `ba7c5e917b1b9d08208c3e1ceb31285407f5fd5e` 下的本文件及其全部界面设计定义 |
+| 批准收口任务 | `CLIENT-CONFIG-DESIGN-CONCURRENCY-ADJUSTMENT-APPROVAL-001` |
+| 批准边界 | 设计获批不代表代码已实现、已测试或验收已执行通过 |
 | 设计编号 | `CCFG-UI-001 ~ CCFG-UI-026`，连续、唯一、不可复用；每个设计编号恰有一个定义行 |
 | PENDING_USER_CONFIRMATION | `0` |
 | 配套文档 | `DESIGN.md`、`API.md`、`DATABASE.md` |
 
 R1 界面修订目标（不改已批准 90 条需求与 76 条验收、不进入代码实现、不做设计批准收口）：采集数据源列“直接显示前三项”明确为非持久化投影且不原地修改接口数组（`R1-02`）；红色历史异常标签与编辑回显覆盖 `CATEGORY_MISMATCH`/`TYPE_MISMATCH`（`R1-06`）；新增含逗号歧义行与历史 NULL 描述的展示/编辑契约（`R1-07/R1-08`）。
 
-并发口径定向调整（2026-09-04，`CLIENT-CONFIG-DESIGN-CONCURRENCY-ADJUSTMENT-001`，纯文档）：本轮 UI 业务交互总体不变，仅从 `CCFG-UI-020` 用户可见文案表删除“锁等待超时取 `50050` message”项（`50050 LOCK_WAIT_TIMEOUT` 已随设计并发口径调整从错误码契约删除，见 API.md）；保留 `40940` ID 冲突、`40941` 数据源占用冲突、`40942` 历史异常阻断及其他既有文案；不新增“并发双成功”用户提示或模式开关。原表锁/锁等待方案为设计草案内容，未获项目负责人批准；本调整后界面设计仍为 `DRAFT_PENDING_USER_REVIEW`，待 ChatGPT 正式设计调整复审与项目负责人批准。
+并发口径定向调整（2026-09-04，`CLIENT-CONFIG-DESIGN-CONCURRENCY-ADJUSTMENT-001`，纯文档）：本轮 UI 业务交互总体不变，仅从 `CCFG-UI-020` 用户可见文案表删除“锁等待超时取 `50050` message”项（`50050 LOCK_WAIT_TIMEOUT` 已随设计并发口径调整从错误码契约删除，见 API.md）；保留 `40940` ID 冲突、`40941` 数据源占用冲突、`40942` 历史异常阻断及其他既有文案；不新增“并发双成功”用户提示或模式开关。原表锁/锁等待方案为设计草案内容，未获项目负责人批准，已整体标记为过时。本调整后界面设计经 ChatGPT 对提交 `ba7c5e9...`（`ba7c5e917b1b9d08208c3e1ceb31285407f5fd5e`）下的设计并发口径调整结果正式复审（`CHATGPT_FORMAL_DESIGN_CONCURRENCY_ADJUSTMENT_REVIEW`）结论 `APPROVED`，项目负责人于 2026-09-04 明确回复“批准”，经批准收口任务 `CLIENT-CONFIG-DESIGN-CONCURRENCY-ADJUSTMENT-APPROVAL-001` 收口为 `APPROVED`（批准的是设计基线，不代表代码已实现、已测试或验收已执行通过）。
 
 ## 2. 页面布局
 
@@ -128,3 +136,4 @@ R1 界面修订目标（不改已批准 90 条需求与 76 条验收、不进入
 | 2026-09-03 | 新建 `docs/features/client-config/UI.md`：页面布局、查询/工具栏/列表、状态与启停、采集数据源紧凑展示、新增/编辑弹窗、自动生成、候选控件、保存阻断、文案表、响应式与可访问性（`CCFG-UI-001~024`），文档状态 `DRAFT_PENDING_USER_REVIEW`，`PENDING_USER_CONFIRMATION=0` | CLIENT-CONFIG-DESIGN-BASELINE-001（阶段 4 设计基线；纯文档任务，未实现、未执行验收） |
 | 2026-09-04 | R1 定向修订（界面设计编号扩为 `CCFG-UI-001~026`，共 26 条，仍连续唯一）：`CCFG-UI-010` 明确非持久化前三项投影与完整清单原顺序（R1-02）并补 `CATEGORY_MISMATCH`/`TYPE_MISMATCH` 红色标签（R1-06）；`CCFG-UI-013/014/015` 固定描述原文保存/Trim 仅判空/按原文计字节，编辑回显覆盖类别/类型异常与 NULL 描述；`CCFG-UI-016/017/018` 同步异常范围、保存阻断与启停不受阻语义；新增 `CCFG-UI-025`（历史 NULL/空白描述占位与编辑映射，R1-08）、`CCFG-UI-026`（含逗号歧义行展示与编辑阻断，R1-07）。文档状态保持 `DRAFT_PENDING_USER_REVIEW`，`PENDING_USER_CONFIRMATION=0` | CLIENT-CONFIG-DESIGN-BASELINE-001-R1（正式复审 `CHANGES_REQUIRED` 定向修订；纯文档任务，未实现、未执行验收） |
 | 2026-09-04 | 并发口径定向调整（`CLIENT-CONFIG-DESIGN-CONCURRENCY-ADJUSTMENT-001`，纯文档）：`CCFG-UI-020` 从用户可见文案表删除“锁等待超时取 `50050` message”并明确本 Feature 无锁等待超时文案（`50050` 已从错误码契约删除）；其余 UI 业务交互与文案不变，不新增“并发双成功”用户提示或模式开关。文档状态保持 `DRAFT_PENDING_USER_REVIEW`，`PENDING_USER_CONFIRMATION=0`；不新增/删除/重排界面编号 | CLIENT-CONFIG-DESIGN-CONCURRENCY-ADJUSTMENT-001（设计草案并发口径定向调整；纯文档任务，未实现、未执行验收） |
+| 2026-09-04 | 批准收口（`CLIENT-CONFIG-DESIGN-CONCURRENCY-ADJUSTMENT-APPROVAL-001`，纯文档）：文档状态由 `DRAFT_PENDING_USER_REVIEW` 收口为 `APPROVED`，`PENDING_USER_CONFIRMATION=0`；批准对象为提交 `ba7c5e917b1b9d08208c3e1ceb31285407f5fd5e` 下的本文件及其全部界面设计定义。26 条 `CCFG-UI-*` 业务定义行相对批准提交逐字零差异，仅状态与批准元数据变化；批准的是设计基线，不代表代码已实现、已测试或验收已执行通过（实现状态仍 `NOT_STARTED`，76 条验收仍全部 `NOT_RUN`） | ChatGPT 正式复审 `CHATGPT_FORMAL_DESIGN_CONCURRENCY_ADJUSTMENT_REVIEW` 结论 `APPROVED`（提交 `ba7c5e9...`），项目负责人于 2026-09-04 明确回复“批准” |

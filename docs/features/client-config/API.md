@@ -8,7 +8,7 @@
 | Feature 标识 | `client-config` |
 | 既有路由 | `/config/client`（保持不变） |
 | 目标文档 | `docs/features/client-config/API.md` |
-| 文档状态 | `DRAFT_PENDING_USER_REVIEW`（设计草案，尚未经 ChatGPT 正式复审通过与项目负责人批准；不得写成已批准基线） |
+| 文档状态 | `APPROVED`（接口契约正式批准：ChatGPT 对提交 `ba7c5e9...` 的设计并发口径调整结果正式复审 `APPROVED`，项目负责人于 2026-09-04 明确回复“批准”，经批准收口任务 `CLIENT-CONFIG-DESIGN-CONCURRENCY-ADJUSTMENT-APPROVAL-001` 收口为 `APPROVED`，可用于后续实现；批准的是设计基线，不代表代码已实现、已测试或验收已执行通过） |
 | 实现状态 | `NOT_STARTED`（本契约只定义目标接口，不代表任何接口已经实现） |
 | 初版任务 | `CLIENT-CONFIG-DESIGN-BASELINE-001`（阶段 4 设计基线，纯文档） |
 | 初版基线提交 | `cecfdd5478df8b82ba39c083553ea8dd7ead48e8` |
@@ -20,6 +20,14 @@
 | R1 日期 | 2026-09-04 |
 | 并发调整任务 | `CLIENT-CONFIG-DESIGN-CONCURRENCY-ADJUSTMENT-001`（依据重新批准的需求/验收并发口径，定向清除过时显式表锁设计的纯文档任务） |
 | 并发调整日期 | 2026-09-04 |
+| 批准日期 | 2026-09-04 |
+| 批准人角色 | 项目负责人 |
+| ChatGPT 复审入口 | `CHATGPT_FORMAL_DESIGN_CONCURRENCY_ADJUSTMENT_REVIEW` |
+| ChatGPT 复审结论 | `APPROVED`（对提交 `ba7c5e917b1b9d08208c3e1ceb31285407f5fd5e` 下的设计并发口径调整结果） |
+| 项目负责人回复 | 明确回复“批准”（2026-09-04） |
+| 批准对象 | 提交 `ba7c5e917b1b9d08208c3e1ceb31285407f5fd5e` 下的本文件及其全部接口契约定义 |
+| 批准收口任务 | `CLIENT-CONFIG-DESIGN-CONCURRENCY-ADJUSTMENT-APPROVAL-001` |
+| 批准边界 | 设计获批不代表代码已实现、已测试或验收已执行通过 |
 | 依据需求 | `CCFG-REQ-001~090`（`APPROVED`） |
 | 依据验收 | `CCFG-AC-001~076`（全部 `NOT_RUN`） |
 | 设计编号 | `CCFG-API-001 ~ CCFG-API-020`，连续、唯一、不可复用；每个设计编号恰有一个定义行，其余同编号出现一律视为引用而非定义 |
@@ -28,7 +36,7 @@
 
 R1 修订目标（不改已批准 90 条需求与 76 条验收、不进入代码实现、不做设计批准收口）：修正 API 设计编号重复定义行并重排为连续唯一编号（`R1-01`）；统一“数据源数组恒按原存储顺序返回、前端仅计算非持久化前三项投影”的单一顺序契约（`R1-02`）；固定 `CLIENT_DESC` 原文保存、Trim 仅判空、按原文计字节（`R1-03`）；删除未批准的数据源 ID“其他非法字符”限制（`R1-05`）；补齐历史候选资格变化异常与歧义/历史 NULL 描述契约（`R1-06/R1-07/R1-08`）。
 
-并发口径定向调整（2026-09-04，`CLIENT-CONFIG-DESIGN-CONCURRENCY-ADJUSTMENT-001`，纯文档）：写接口 E3/E4/E6 由“短事务 + 表级互斥锁 + 锁内全量权威校验”改为“普通短事务 → 目标 DML 前重新读取全表 → 当次应用层校验 → 无冲突立即 DML → 行数校验与提交/回滚”，明确不执行显式表锁、不保证并发最多一笔成功（见 CCFG-API-008/009/011）；从错误码表删除 `50050 LOCK_WAIT_TIMEOUT` 行并从 `CCFG-API-017` 删除 `ORA-30006 → 50050` 触发路径（表锁/锁等待方案已过时且未获批准）；只读接口与既有错误码契约不变。原表锁方案为设计草案内容，未获项目负责人批准；本调整后接口契约仍为 `DRAFT_PENDING_USER_REVIEW`，待 ChatGPT 正式设计调整复审与项目负责人批准。
+并发口径定向调整（2026-09-04，`CLIENT-CONFIG-DESIGN-CONCURRENCY-ADJUSTMENT-001`，纯文档）：写接口 E3/E4/E6 由“短事务 + 表级互斥锁 + 锁内全量权威校验”改为“普通短事务 → 目标 DML 前重新读取全表 → 当次应用层校验 → 无冲突立即 DML → 行数校验与提交/回滚”，明确不执行显式表锁、不保证并发最多一笔成功（见 CCFG-API-008/009/011）；从错误码表删除 `50050 LOCK_WAIT_TIMEOUT` 行并从 `CCFG-API-017` 删除 `ORA-30006 → 50050` 触发路径（表锁/锁等待方案已过时且未获批准）；只读接口与既有错误码契约不变。原表锁方案为设计草案内容，未获项目负责人批准，已整体标记为过时。本调整后接口契约经 ChatGPT 对提交 `ba7c5e9...`（`ba7c5e917b1b9d08208c3e1ceb31285407f5fd5e`）下的设计并发口径调整结果正式复审（`CHATGPT_FORMAL_DESIGN_CONCURRENCY_ADJUSTMENT_REVIEW`）结论 `APPROVED`，项目负责人于 2026-09-04 明确回复“批准”，经批准收口任务 `CLIENT-CONFIG-DESIGN-CONCURRENCY-ADJUSTMENT-APPROVAL-001` 收口为 `APPROVED`（批准的是设计基线，不代表代码已实现、已测试或验收已执行通过）。
 
 ## 2. 统一调用规约
 
@@ -256,3 +264,4 @@ PUT /api/clients/probe-001
 | 2026-09-03 | 新建 `docs/features/client-config/API.md`：接口 E1~E7、响应/请求模型、校验规则与错误码表 | CLIENT-CONFIG-DESIGN-BASELINE-001（阶段 4 设计基线；纯文档任务，未实现、未执行验收） |
 | 2026-09-04 | R1 定向修订：消除 `CCFG-API-*` 重复定义行，重排为连续唯一编号 `CCFG-API-001~020`（错误码明细表去掉“设计编号”列）；统一数据源数组原顺序 + 前端前三项投影契约（R1-02）；固定 `clientDesc` 原文保存/Trim 仅判空/按原文计字节（R1-03）；删除数据源 ID“其他非法字符”限制（R1-05）；补齐 `CATEGORY_MISMATCH`/`TYPE_MISMATCH` 历史异常与可定位消息（R1-06）；补齐 `COMMA_PROTOCOL_AMBIGUOUS`/`rawDataSourceIds`/`possibleCommaDataSourceIds` 歧义契约（R1-07）；`clientDesc` 允许 `string\|null` 并定义 NULL/空白历史契约（R1-08） | CLIENT-CONFIG-DESIGN-BASELINE-001-R1（正式复审 `CHANGES_REQUIRED` 定向修订；纯文档任务，未实现、未执行验收） |
 | 2026-09-04 | 并发口径定向调整（`CLIENT-CONFIG-DESIGN-CONCURRENCY-ADJUSTMENT-001`，纯文档）：`CCFG-API-008/009/011` 新增/编辑/启用写入边界由“表级互斥锁 + 锁内全量权威校验”改为“普通短事务 → DML 前重读全表 → 当次应用层校验 → 无冲突立即 DML”，并明确不消除竞态、不保证并发最多一笔成功；接口清单表“需表级互斥锁”列改为“写前全量重读+当次检查”；`CCFG-API-014/016` 补充写前检查为最终应用层校验而非并发强一致唯一；从错误码表删除 `50050 LOCK_WAIT_TIMEOUT` 行，并从 `CCFG-API-017` 删除 `ORA-30006 → 50050` 触发路径（表锁/锁等待方案已过时且未获批准）；`50051/50052` 等其他错误码不变。文档状态保持 `DRAFT_PENDING_USER_REVIEW`，`PENDING_USER_CONFIRMATION=0`；不新增/删除/重排接口编号 | CLIENT-CONFIG-DESIGN-CONCURRENCY-ADJUSTMENT-001（设计草案并发口径定向调整；纯文档任务，未实现、未执行验收） |
+| 2026-09-04 | 批准收口（`CLIENT-CONFIG-DESIGN-CONCURRENCY-ADJUSTMENT-APPROVAL-001`，纯文档）：文档状态由 `DRAFT_PENDING_USER_REVIEW` 收口为 `APPROVED`，`PENDING_USER_CONFIRMATION=0`；批准对象为提交 `ba7c5e917b1b9d08208c3e1ceb31285407f5fd5e` 下的本文件及其全部接口契约定义。20 条 `CCFG-API-*` 业务定义行相对批准提交逐字零差异，仅状态与批准元数据变化；批准的是设计基线，不代表代码已实现、已测试或验收已执行通过（实现状态仍 `NOT_STARTED`，76 条验收仍全部 `NOT_RUN`） | ChatGPT 正式复审 `CHATGPT_FORMAL_DESIGN_CONCURRENCY_ADJUSTMENT_REVIEW` 结论 `APPROVED`（提交 `ba7c5e9...`），项目负责人于 2026-09-04 明确回复“批准” |

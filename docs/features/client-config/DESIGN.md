@@ -8,7 +8,7 @@
 | Feature 标识 | `client-config` |
 | 既有路由 | `/config/client`（保持不变） |
 | 目标文档 | `docs/features/client-config/DESIGN.md` |
-| 文档状态 | `DRAFT_PENDING_USER_REVIEW`（设计草案，尚未经 ChatGPT 正式复审与项目负责人批准；不得写成已批准基线） |
+| 文档状态 | `APPROVED`（设计基线正式批准：ChatGPT 对提交 `ba7c5e9...` 的设计并发口径调整结果正式复审 `APPROVED`，项目负责人于 2026-09-04 明确回复“批准”，经批准收口任务 `CLIENT-CONFIG-DESIGN-CONCURRENCY-ADJUSTMENT-APPROVAL-001` 收口为 `APPROVED`，可用于后续实现；批准的是设计基线，不代表代码已实现、已测试或验收已执行通过） |
 | 实现状态 | `NOT_STARTED`（本设计只落盘目标逻辑方案，不代表任何代码、页面或接口已经实现） |
 | 初版任务 | `CLIENT-CONFIG-DESIGN-BASELINE-001`（阶段 4 设计基线，纯文档） |
 | 初版基线提交 | `cecfdd5478df8b82ba39c083553ea8dd7ead48e8`（初版设计任务开始前 `origin/develop` 与本地 HEAD 一致的实际起点） |
@@ -22,13 +22,21 @@
 | R1 日期 | 2026-09-04 |
 | 并发调整任务 | `CLIENT-CONFIG-DESIGN-CONCURRENCY-ADJUSTMENT-001`（依据重新批准的需求/验收并发口径，定向清除过时显式表锁设计的纯文档任务） |
 | 并发调整日期 | 2026-09-04 |
+| 批准日期 | 2026-09-04 |
+| 批准人角色 | 项目负责人 |
+| ChatGPT 复审入口 | `CHATGPT_FORMAL_DESIGN_CONCURRENCY_ADJUSTMENT_REVIEW` |
+| ChatGPT 复审结论 | `APPROVED`（对提交 `ba7c5e917b1b9d08208c3e1ceb31285407f5fd5e` 下的设计并发口径调整结果） |
+| 项目负责人回复 | 明确回复“批准”（2026-09-04） |
+| 批准对象 | 提交 `ba7c5e917b1b9d08208c3e1ceb31285407f5fd5e` 下的本文件及其全部设计定义 |
+| 批准收口任务 | `CLIENT-CONFIG-DESIGN-CONCURRENCY-ADJUSTMENT-APPROVAL-001` |
+| 批准边界 | 设计获批不代表代码已实现、已测试或验收已执行通过 |
 | 设计编号 | `CCFG-DESIGN-001 ~ CCFG-DESIGN-037`，连续、唯一、不可复用；每个设计编号恰有一个定义行，其余同编号出现一律视为引用而非定义 |
 | PENDING_USER_CONFIRMATION | `0`（本设计不存在由已批准需求无法推导、必须由项目负责人另行决定的业务或用户可见语义；R1 确定性修订全部落实且未发现新的业务歧义；2026-09-04 并发口径定向调整亦未引入需另行决定的新语义） |
 | 配套文档 | `API.md`（`CCFG-API-*`）、`UI.md`（`CCFG-UI-*`）、`DATABASE.md`（`CCFG-DB-*`），与本文件状态相同，接口路径、字段名、状态值、错误码、事务边界与本文件一致 |
 
 R1 修订目标（不改已批准 90 条需求与 76 条验收、不进入代码实现、不做设计批准收口）：在 §12 追踪矩阵改为全称编号并修正初版 API 重复定义统计口径（`R1-01`）；固定“E1 `dataSources` 恒按原存储顺序返回、前端仅计算非持久化前三项投影”的单一顺序契约（`R1-02`，见 CCFG-DESIGN-014）；固定 `CLIENT_DESC` 原文保存、Trim 仅判空、按实际保存原文计 UTF-8 字节（`R1-03`，见 CCFG-DESIGN-028/030）；补齐关键词字面量 LIKE 转义（`R1-04`，见 CCFG-DESIGN-007 与 DATABASE.md）；删除未批准的数据源 ID“其他非法字符”限制（`R1-05`）；补齐 `CATEGORY_MISMATCH`/`TYPE_MISMATCH` 历史候选资格变化异常（`R1-06`，见 CCFG-DESIGN-035）；补齐含逗号历史配置的不可逆歧义处理（`R1-07`，见 CCFG-DESIGN-036）；补齐历史 `CLIENT_DESC` 为 NULL/空白的契约（`R1-08`，见 CCFG-DESIGN-037）。
 
-并发口径定向调整（2026-09-04，`CLIENT-CONFIG-DESIGN-CONCURRENCY-ADJUSTMENT-001`，纯文档）：依据 2026-09-04 重新批准的需求/验收并发口径（`CCFG-REQ-038/068/071/072/074/077`、`CCFG-AC-030/056/058/059/061/064` 相关，`REQUIREMENTS.md`/`ACCEPTANCE.md` 为 `APPROVED`），清除本设计把 `LOCK TABLE CDC_CLIENT_MULTIPLE IN EXCLUSIVE MODE WAIT 5` 作为唯一性保证手段的现行设计：新增/编辑/启用改为“普通短事务 + 目标 DML 前全量重读 + 当次尽力写前检查 + 立即 DML”，明确不采用显式表锁、`SELECT ... FOR UPDATE`、JVM 锁、分布式锁或 DDL 串行化，接受极端并发下两笔都成功的已接受边界；删除 `ORA-30006 → 50050 LOCK_WAIT_TIMEOUT` 专用错误路径与前端锁等待超时文案。受影响的现行设计定义：`CCFG-DESIGN-001/016/017/020/022/023/024/025/026/027/033`（见 §6/§7/§10 与 §13 变更记录）。原表锁/锁等待方案为设计草案内容，未获项目负责人批准，已整体标记为过时；本调整后设计仍为 `DRAFT_PENDING_USER_REVIEW`，待 ChatGPT 正式设计调整复审与项目负责人批准。
+并发口径定向调整（2026-09-04，`CLIENT-CONFIG-DESIGN-CONCURRENCY-ADJUSTMENT-001`，纯文档）：依据 2026-09-04 重新批准的需求/验收并发口径（`CCFG-REQ-038/068/071/072/074/077`、`CCFG-AC-030/056/058/059/061/064` 相关，`REQUIREMENTS.md`/`ACCEPTANCE.md` 为 `APPROVED`），清除本设计把 `LOCK TABLE CDC_CLIENT_MULTIPLE IN EXCLUSIVE MODE WAIT 5` 作为唯一性保证手段的现行设计：新增/编辑/启用改为“普通短事务 + 目标 DML 前全量重读 + 当次尽力写前检查 + 立即 DML”，明确不采用显式表锁、`SELECT ... FOR UPDATE`、JVM 锁、分布式锁或 DDL 串行化，接受极端并发下两笔都成功的已接受边界；删除 `ORA-30006 → 50050 LOCK_WAIT_TIMEOUT` 专用错误路径与前端锁等待超时文案。受影响的现行设计定义：`CCFG-DESIGN-001/016/017/020/022/023/024/025/026/027/033`（见 §6/§7/§10 与 §13 变更记录）。原表锁/锁等待方案为设计草案内容，未获项目负责人批准，已整体标记为过时。本调整后设计经 ChatGPT 对提交 `ba7c5e9...`（`ba7c5e917b1b9d08208c3e1ceb31285407f5fd5e`）下的设计并发口径调整结果正式复审（`CHATGPT_FORMAL_DESIGN_CONCURRENCY_ADJUSTMENT_REVIEW`）结论 `APPROVED`，项目负责人于 2026-09-04 明确回复“批准”，经批准收口任务 `CLIENT-CONFIG-DESIGN-CONCURRENCY-ADJUSTMENT-APPROVAL-001` 收口为 `APPROVED`（批准的是设计基线，不代表代码已实现、已测试或验收已执行通过）。
 
 ## 2. 范围与状态边界
 
@@ -313,3 +321,4 @@ R1 修订目标（不改已批准 90 条需求与 76 条验收、不进入代码
 | 2026-09-03 | 新建 `docs/features/client-config/DESIGN.md`：设计 `CCFG-DESIGN-001~034`（34 条），文档状态 `DRAFT_PENDING_USER_REVIEW`，`PENDING_USER_CONFIRMATION=0`；与 `API.md`/`UI.md`/`DATABASE.md` 共用一套接口路径、字段、错误码与事务边界 | CLIENT-CONFIG-DESIGN-BASELINE-001（阶段 4 设计基线；纯文档任务，未批准、未实现、未执行验收） |
 | 2026-09-04 | R1 定向修订（设计编号扩为 `CCFG-DESIGN-001~037`，共 37 条，仍连续唯一）：`CCFG-DESIGN-007` 补关键词字面量 LIKE 转义（R1-04）；`CCFG-DESIGN-010/011` 扩展 CSV 歧义与 `CATEGORY_MISMATCH`/`TYPE_MISMATCH`/行级 `COMMA_PROTOCOL_AMBIGUOUS` 异常模型；`CCFG-DESIGN-014` 统一“接口原顺序 + 前端非持久化前三项投影”单一顺序契约（R1-02）；`CCFG-DESIGN-028/030` 固定 `CLIENT_DESC` 原文保存/Trim 仅判空/按原文计字节（R1-03）；新增 `CCFG-DESIGN-035/036/037`（历史候选资格变化异常、含逗号不可逆歧义、历史 NULL 描述契约）；`CCFG-DESIGN-033` 补 R1 测试场景。文档状态保持 `DRAFT_PENDING_USER_REVIEW`，`PENDING_USER_CONFIRMATION=0`；§12 追踪矩阵改用全称编号并按其逐行覆盖重建 | CLIENT-CONFIG-DESIGN-BASELINE-001-R1（正式复审 `CHANGES_REQUIRED` 定向修订；纯文档任务，未实现、未执行验收） |
 | 2026-09-04 | 并发口径定向调整（`CLIENT-CONFIG-DESIGN-CONCURRENCY-ADJUSTMENT-001`，纯文档）：依据重新批准的需求/验收并发口径清除过时显式表锁设计。`CCFG-DESIGN-001` Service 职责去掉表级锁编排；`CCFG-DESIGN-016/017/020` 新增/编辑/启用改为“普通短事务 + DML 前全量重读 + 当次尽力写前检查 + 立即 DML”；`CCFG-DESIGN-022` 删除“锁等待超时”失败分支；§7 整体重写为“并发边界与写前检查”：`CCFG-DESIGN-023` 权威写前检查流程、`024` 明确不执行显式表锁/无专用锁等待错误、`025` 技术取舍（不用 JVM/分布式/行锁/表锁/DDL 串行化）、`026` 无主动锁无 DDL 边界、`027` 接受极端并发双成功边界；`CCFG-DESIGN-033` 删除表锁超时 `50050` 测试并改并发测试口径。原表锁/`ORA-30006→50050`/“并发最多一个成功”方案已过时且未获批准。文档状态保持 `DRAFT_PENDING_USER_REVIEW`，`PENDING_USER_CONFIRMATION=0`；不新增/删除/重排设计编号，覆盖保持 90/90 与 76/76 | CLIENT-CONFIG-DESIGN-CONCURRENCY-ADJUSTMENT-001（设计草案并发口径定向调整；纯文档任务，未实现、未执行验收） |
+| 2026-09-04 | 批准收口（`CLIENT-CONFIG-DESIGN-CONCURRENCY-ADJUSTMENT-APPROVAL-001`，纯文档）：文档状态由 `DRAFT_PENDING_USER_REVIEW` 收口为 `APPROVED`，`PENDING_USER_CONFIRMATION=0`；批准对象为提交 `ba7c5e917b1b9d08208c3e1ceb31285407f5fd5e` 下的本文件及其全部设计定义。37 条 `CCFG-DESIGN-*` 业务定义行相对批准提交逐字零差异，仅状态与批准元数据变化；批准的是设计基线，不代表代码已实现、已测试或验收已执行通过（实现状态仍 `NOT_STARTED`，76 条验收仍全部 `NOT_RUN`） | ChatGPT 正式复审 `CHATGPT_FORMAL_DESIGN_CONCURRENCY_ADJUSTMENT_REVIEW` 结论 `APPROVED`（提交 `ba7c5e9...`），项目负责人于 2026-09-04 明确回复“批准” |

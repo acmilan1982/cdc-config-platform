@@ -8,7 +8,7 @@
 | Feature 标识 | `client-config` |
 | 既有路由 | `/config/client`（保持不变） |
 | 目标文档 | `docs/features/client-config/DATABASE.md` |
-| 文档状态 | `DRAFT_PENDING_USER_REVIEW`（设计草案，尚未经 ChatGPT 正式复审与项目负责人批准；不得写成已批准基线） |
+| 文档状态 | `APPROVED`（数据库使用设计正式批准：ChatGPT 对提交 `ba7c5e9...` 的设计并发口径调整结果正式复审 `APPROVED`，项目负责人于 2026-09-04 明确回复“批准”，经批准收口任务 `CLIENT-CONFIG-DESIGN-CONCURRENCY-ADJUSTMENT-APPROVAL-001` 收口为 `APPROVED`，可用于后续实现；批准的是设计基线，不代表代码已实现、已测试或验收已执行通过） |
 | 实现状态 | `NOT_STARTED` |
 | 初版任务 | `CLIENT-CONFIG-DESIGN-BASELINE-001`（阶段 4 设计基线，纯文档） |
 | 初版基线提交 | `cecfdd5478df8b82ba39c083553ea8dd7ead48e8` |
@@ -22,6 +22,14 @@
 | R1 日期 | 2026-09-04 |
 | 并发调整任务 | `CLIENT-CONFIG-DESIGN-CONCURRENCY-ADJUSTMENT-001`（依据重新批准的需求/验收并发口径，定向清除过时显式表锁设计的纯文档任务） |
 | 并发调整日期 | 2026-09-04 |
+| 批准日期 | 2026-09-04 |
+| 批准人角色 | 项目负责人 |
+| ChatGPT 复审入口 | `CHATGPT_FORMAL_DESIGN_CONCURRENCY_ADJUSTMENT_REVIEW` |
+| ChatGPT 复审结论 | `APPROVED`（对提交 `ba7c5e917b1b9d08208c3e1ceb31285407f5fd5e` 下的设计并发口径调整结果） |
+| 项目负责人回复 | 明确回复“批准”（2026-09-04） |
+| 批准对象 | 提交 `ba7c5e917b1b9d08208c3e1ceb31285407f5fd5e` 下的本文件及其全部数据库使用设计定义 |
+| 批准收口任务 | `CLIENT-CONFIG-DESIGN-CONCURRENCY-ADJUSTMENT-APPROVAL-001` |
+| 批准边界 | 设计获批不代表代码已实现、已测试或验收已执行通过 |
 | 设计编号 | `CCFG-DB-001 ~ CCFG-DB-022`，连续、唯一、不可复用；每个设计编号恰有一个定义行 |
 | PENDING_USER_CONFIRMATION | `0` |
 | 数据库访问授权状态 | `NOT_RUN_NOT_AUTHORIZED`（本任务不连接数据库，全部元数据来自已批准数据库基线或项目负责人正式复审提供） |
@@ -30,7 +38,7 @@
 
 R1 数据库侧修订目标（不改已批准 90 条需求与 76 条验收、不进入代码实现、不做设计批准收口）：`CLIENT_DESC` 保存/Trim/字节口径固定为原文保存、Trim 仅判空、按实际保存原文计字节（`R1-03`，见 CCFG-DB-003）；关键词 LIKE 增加 `\` 转义与 `ESCAPE '\'`，`%`/`_`/`\` 按字面量（`R1-04`，见 CCFG-DB-008 与新增 CCFG-DB-021）；列表/映射读取覆盖类别/类型资格判定、已知含英文逗号数据源 ID 集合与歧义行判定、历史 `CLIENT_DESC` 原样含空白/NULL 读取（`R1-06/R1-07/R1-08`，见新增 CCFG-DB-022）。
 
-并发口径定向调整（2026-09-04，`CLIENT-CONFIG-DESIGN-CONCURRENCY-ADJUSTMENT-001`，纯文档）：删除把 `LOCK TABLE CDC_CLIENT_MULTIPLE IN EXCLUSIVE MODE WAIT 5` 作为唯一性保证手段的数据库现行设计：`CCFG-DB-007` 改依托 DML 前全量重读 + 当次检查、不依托表锁/物理强一致唯一约束；`CCFG-DB-009` 由定义可执行 `LOCK TABLE` SQL 改为显式禁止主动表锁与专用锁超时路径的数据库边界；`CCFG-DB-010` 由“锁内检查读取”改为“DML 前全量检查读取”（普通一致性读，不阻止其他会话写入）；§5 事务与锁矩阵改列并删除锁获取顺序/`WAIT 5`/超时分支；`CCFG-DB-016/017/018` 改写普通短事务 + 竞态边界口径。`ORA-30006 → 50050` 已删除（见 API.md）；本任务不连接数据库、不执行任何 DML/DDL，`DDL_STATUS=NONE`。原表锁方案为设计草案内容，未获项目负责人批准；本调整后数据库设计仍为 `DRAFT_PENDING_USER_REVIEW`，待 ChatGPT 正式设计调整复审与项目负责人批准。
+并发口径定向调整（2026-09-04，`CLIENT-CONFIG-DESIGN-CONCURRENCY-ADJUSTMENT-001`，纯文档）：删除把 `LOCK TABLE CDC_CLIENT_MULTIPLE IN EXCLUSIVE MODE WAIT 5` 作为唯一性保证手段的数据库现行设计：`CCFG-DB-007` 改依托 DML 前全量重读 + 当次检查、不依托表锁/物理强一致唯一约束；`CCFG-DB-009` 由定义可执行 `LOCK TABLE` SQL 改为显式禁止主动表锁与专用锁超时路径的数据库边界；`CCFG-DB-010` 由“锁内检查读取”改为“DML 前全量检查读取”（普通一致性读，不阻止其他会话写入）；§5 事务与锁矩阵改列并删除锁获取顺序/`WAIT 5`/超时分支；`CCFG-DB-016/017/018` 改写普通短事务 + 竞态边界口径。`ORA-30006 → 50050` 已删除（见 API.md）；本任务不连接数据库、不执行任何 DML/DDL，`DDL_STATUS=NONE`。原表锁方案为设计草案内容，未获项目负责人批准，已整体标记为过时。本调整后数据库设计经 ChatGPT 对提交 `ba7c5e9...`（`ba7c5e917b1b9d08208c3e1ceb31285407f5fd5e`）下的设计并发口径调整结果正式复审（`CHATGPT_FORMAL_DESIGN_CONCURRENCY_ADJUSTMENT_REVIEW`）结论 `APPROVED`，项目负责人于 2026-09-04 明确回复“批准”，经批准收口任务 `CLIENT-CONFIG-DESIGN-CONCURRENCY-ADJUSTMENT-APPROVAL-001` 收口为 `APPROVED`（批准的是设计基线，不代表代码已实现、已测试或验收已执行通过）。
 
 ## 2. 事实分层（256 历史基线 / 真实 1024 元数据 / 本 Feature 目标）
 
@@ -103,3 +111,4 @@ R1 数据库侧修订目标（不改已批准 90 条需求与 76 条验收、不
 | 2026-09-03 | 新建 `docs/features/client-config/DATABASE.md`：事实分层、字段使用矩阵、参数化 SQL 逻辑形态、事务与锁矩阵、性能前提与 DDL 边界（`CCFG-DB-001~020`），文档状态 `DRAFT_PENDING_USER_REVIEW`，`PENDING_USER_CONFIRMATION=0`；`DDL_STATUS=NONE`、`DATABASE_ACCESS=NOT_RUN_NOT_AUTHORIZED`、`DML=NONE`，不改写 `docs/database/` | CLIENT-CONFIG-DESIGN-BASELINE-001（阶段 4 设计基线；纯文档任务，未连接数据库、未执行 DDL/DML） |
 | 2026-09-04 | R1 定向修订（数据库设计编号扩为 `CCFG-DB-001~022`，共 22 条，仍连续唯一）：`CCFG-DB-003` 固定 `CLIENT_DESC` 原文保存/Trim 仅判空/按原文计字节并保留历史 NULL（R1-03）；`CCFG-DB-008` 列表关键词改字面量包含并读取类别/类型/含逗号集合（R1-04/R1-06/R1-07）；新增 `CCFG-DB-021`（LIKE 转义 `ESCAPE '\'`）、`CCFG-DB-022`（历史资格/歧义判定与 `CLIENT_DESC`/`DATA_SOURCE_ID` 原样读取）。文档状态保持 `DRAFT_PENDING_USER_REVIEW`，`PENDING_USER_CONFIRMATION=0`；`DDL_STATUS=NONE`、`DATABASE_ACCESS=NOT_RUN_NOT_AUTHORIZED`、`DML=NONE`，不改写 `docs/database/` | CLIENT-CONFIG-DESIGN-BASELINE-001-R1（正式复审 `CHANGES_REQUIRED` 定向修订；纯文档任务，未连接数据库、未执行 DDL/DML） |
 | 2026-09-04 | 并发口径定向调整（`CLIENT-CONFIG-DESIGN-CONCURRENCY-ADJUSTMENT-001`，纯文档）：`CCFG-DB-007` 应用层唯一规则改依托 DML 前全量重读 + 当次检查、不依托表锁/物理强一致唯一约束；`CCFG-DB-009` 由定义 `LOCK TABLE CDC_CLIENT_MULTIPLE IN EXCLUSIVE MODE WAIT 5` SQL 改为显式禁止主动表锁/`SELECT ... FOR UPDATE`/`DBMS_LOCK` 与专用锁超时路径的边界；`CCFG-DB-010` 改“DML 前全量检查读取”（普通一致性读）；§5 标题与事务矩阵改“事务与并发边界矩阵”，删除锁获取顺序/`WAIT 5`/超时分支；`CCFG-DB-016/017/018` 改写普通短事务、Oracle 一致性读竞态边界与小表开销前提。`ORA-30006→50050` 已删除（见 API.md）。文档状态保持 `DRAFT_PENDING_USER_REVIEW`，`PENDING_USER_CONFIRMATION=0`；`DDL_STATUS=NONE`、`DATABASE_ACCESS=NOT_RUN_NOT_AUTHORIZED`、`DML=NONE`，不改写 `docs/database/` | CLIENT-CONFIG-DESIGN-CONCURRENCY-ADJUSTMENT-001（设计草案并发口径定向调整；纯文档任务，未连接数据库、未执行 DDL/DML） |
+| 2026-09-04 | 批准收口（`CLIENT-CONFIG-DESIGN-CONCURRENCY-ADJUSTMENT-APPROVAL-001`，纯文档）：文档状态由 `DRAFT_PENDING_USER_REVIEW` 收口为 `APPROVED`，`PENDING_USER_CONFIRMATION=0`；批准对象为提交 `ba7c5e917b1b9d08208c3e1ceb31285407f5fd5e` 下的本文件及其全部数据库使用设计定义。22 条 `CCFG-DB-*` 业务定义行相对批准提交逐字零差异，仅状态与批准元数据变化；批准的是设计基线，不代表代码已实现、已测试或验收已执行通过（实现状态仍 `NOT_STARTED`，76 条验收仍全部 `NOT_RUN`）；`DDL_STATUS=NONE`、`DATABASE_ACCESS=NOT_RUN_NOT_AUTHORIZED`、`DML=NONE` 保持不变，未连接数据库、未执行 DDL/DML | ChatGPT 正式复审 `CHATGPT_FORMAL_DESIGN_CONCURRENCY_ADJUSTMENT_REVIEW` 结论 `APPROVED`（提交 `ba7c5e9...`），项目负责人于 2026-09-04 明确回复“批准” |
