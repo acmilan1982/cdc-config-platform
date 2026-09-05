@@ -19,18 +19,21 @@
 | 验收执行状态 | `NOT_RUN`（acceptance_execution_status=NOT_RUN） |
 | 设计状态 | `NOT_STARTED`（design_status=NOT_STARTED；DESIGN.md / API.md / UI.md / DATABASE.md 均未建立） |
 | pending_user_review | `YES` |
-| 任务编号 | `DATA-SOURCE-SNAPSHOT-STATUS-REQUIREMENTS-BASELINE-001` |
-| 任务类型 | 纯文档——需求与验收草案（只建立功能级文档并提交、推送；严禁进入设计、编码、数据库访问或运行服务阶段） |
-| 授权基线提交 | `72b305a8e4134d10f514920c215b9647fb7d9e3b`（任务开始时 `origin/develop` 最新提交，本地 HEAD 与其一致，ahead/behind=0/0） |
-| 创建日期 | 2026-09-05 |
-| 需求来源 | 项目负责人已确认的产品决策（任务提示词 §6）+ 已核验数据库只读复核报告（`docs/database/reports/DATA-SOURCE-SNAPSHOT-STATUS-DATABASE-VERIFICATION-001.md`）+ 既有 Feature 文档结构/术语约定（`topic-offset`、`client-config` 等仅作结构参考，不复制其业务规则） |
+| 初版任务编号 | `DATA-SOURCE-SNAPSHOT-STATUS-REQUIREMENTS-BASELINE-001`（初版需求与验收草案建立） |
+| 本版（R1）任务编号 | `DATA-SOURCE-SNAPSHOT-STATUS-REQUIREMENTS-BASELINE-001-R1`（ChatGPT 正式复审 `CHANGES_REQUIRED` 后的纯文档定向修订；本版为修订后草案） |
+| 任务类型 | 纯文档——需求与验收草案及 R1 定向修订（只修订功能级文档并提交、推送；严禁进入设计、编码、数据库访问或运行服务阶段） |
+| 初版授权基线提交 | `72b305a8e4134d10f514920c215b9647fb7d9e3b`（初版任务开始时 `origin/develop` 最新提交） |
+| 本版（R1）授权基线提交 | `91eb2209a99a65ef1d433c2fb1c815a1abcd5bd5`（R1 任务开始时 `origin/develop` 最新提交，本地 HEAD 与其一致，ahead/behind=0/0） |
+| 文档版本 | R1 定向修订版（2026-09-05；吸收项目负责人已确认的 8 项交互方案，落实“重置不立即查询”，修正 R1-01~R1-03；`pending_user_confirmation_count=0`；仍为未批准草案，待 ChatGPT 对 R1 结果正式复审） |
+| 创建日期 | 2026-09-05（初版）；本版 R1 修订同日 |
+| 需求来源 | 项目负责人已确认的产品决策（任务提示词 §6）+ 已核验数据库只读复核报告（`docs/database/reports/DATA-SOURCE-SNAPSHOT-STATUS-DATABASE-VERIFICATION-001.md`）+ 既有 Feature 文档结构/术语约定（`topic-offset`、`client-config` 等仅作结构参考，不复制其业务规则）；本版 R1 依据 ChatGPT 正式复审意见（`CHANGES_REQUIRED`，R1-01~R1-03）与项目负责人已确认的 8 项交互方案、刷新工具栏稳定性要求、最新“重置不查询”决定（任务提示词 §5~§7）定向修订 |
 
 文档事实边界声明：
 
 - 用户已确认的业务规则在本文件中作为需求事实记录（`DSS-REQ-*`）。
 - 仓库现状（路由、菜单标题、占位页、无后端访问链路）作为 AS-IS 事实记录，并标注来源。
 - `CDC_DATA_SOURCE_RUN_STATE` 数据库物理事实全部引用已提交数据库只读复核报告（见 §3），本文件不重新查询数据库。
-- 项目负责人尚未单独决定、本文件依据平台一致性提出推荐方案的细节，一律标记为 `DRAFT_PROPOSAL_PENDING_USER_REVIEW` 并集中列入 §11，不伪装成已确认事实。
+- 本文件 R1 版已取消全部 `DRAFT_PROPOSAL_PENDING_USER_REVIEW` 草案建议（原 `DSS-PROP-001~008`）：8 项交互方案已由项目负责人确认并吸收到相应 `DSS-REQ-*` / `DSS-AC-*`，`pending_user_confirmation_count=0`；本文件仍是未批准草案，待 ChatGPT 对 R1 结果正式复审（`pending_user_confirmation_count=0` 不等于 `APPROVED`）。
 - 本文件不得自行增加 sync-client 控制、写能力、时间区间分析、Kafka/ZooKeeper 接入等超出已确认范围的实现；不得把“后续可扩展”写成第一版必须实现。
 
 ## 2. Feature 定位与术语
@@ -52,6 +55,8 @@
 | 未知状态 | 数据库 `SNAPSHOT_STATUS` 取值不在已确认集合内的状态；宽容展示、不报错、不丢弃。 |
 | sync-client | 同步探针进程，从源库读取数据并写入 Kafka 业务 Topic；按 `CDC_DATA_SOURCE_RUN_STATE` 决定是否执行初始快照。本仓库不含其源码。 |
 | 虚拟状态 | “未开始”“待快照”“尚无快照记录”等由本页面推断生成的状态；本 Feature 不生成。 |
+| 界面选择条件 | 查询区控件当前显示的值；用户修改或重置时可变化，不代表已生效的查询。 |
+| 已应用查询条件 | 最近一次由首次自动查询或用户点击“查询”成功提交给查询流程的条件；当前表格、自动刷新与“立即刷新”均使用它，不使用尚未提交的界面选择条件。 |
 
 ## 3. 数据来源与已核验数据库事实
 
@@ -93,7 +98,8 @@ docs/database/reports/DATA-SOURCE-SNAPSHOT-STATUS-DATABASE-VERIFICATION-001.md
 - 时间范围、在线状态、健康状态、关键字等未批准查询条件；
 - 操作列、详情、编辑、删除、跳转或任何写操作入口；
 - 依据任何时间字段计算“超时/异常/离线/长期运行”；
-- 连接或调用 sync-client、Kafka、ZooKeeper/TongZK；访问本表之外的数据或执行 DDL/DML；
+- 连接或调用 sync-client、Kafka、ZooKeeper/TongZK；
+- 除本 Feature 明确允许的只读访问（`CDC_DATA_SOURCE_RUN_STATE`）与只读关联（`CDC_CLIENT_MULTIPLE`、`CDC_DATA_SOURCE` 补充展示与关联异常判断）之外的任何数据访问，以及任何 DDL/DML 或其他表写行为；
 - 修改现有菜单、路由、占位页或前后端代码（本任务不改动任何前后端文件）；
 - 创建 DESIGN.md / API.md / UI.md / DATABASE.md；
 - 访问或操作数据库（本任务不连接数据库）。
@@ -126,7 +132,7 @@ docs/database/reports/DATA-SOURCE-SNAPSHOT-STATUS-DATABASE-VERIFICATION-001.md
 | DSS-REQ-012 | 页面和后端只提供查询；不提供新增、修改、删除、重置、重新快照、重试或批量操作。 |
 | DSS-REQ-013 | 不增加任何写接口、写按钮或隐式写行为；后端不得提供任何针对该表的写能力。 |
 | DSS-REQ-014 | 页面刷新（自动或手工）只重新查询数据库，不改变任何数据。 |
-| DSS-REQ-015 | 允许使用 LEFT JOIN 补充探针端描述和源库 ORG 等展示信息；JOIN 只补充展示信息，绝不能改变 RUN_STATE 驱动的数据行集合，也不产生任何写副作用。 |
+| DSS-REQ-015 | 允许使用 LEFT JOIN 补充探针端描述和源库 ORG 等展示信息；JOIN 只补充展示信息，绝不能改变 RUN_STATE 驱动的数据行集合，也不产生任何写副作用。本功能不访问与本功能无关的数据；允许只读访问 `CDC_DATA_SOURCE_RUN_STATE`，并允许只读关联 `CDC_CLIENT_MULTIPLE`、`CDC_DATA_SOURCE` 补充展示与关联异常判断。关联表绝对只读，且不得改变以 RUN_STATE 为驱动的行集合；不得扩大到任何其他表。 |
 
 ## 8. 页面数据集边界
 
@@ -148,12 +154,12 @@ docs/database/reports/DATA-SOURCE-SNAPSHOT-STATUS-DATABASE-VERIFICATION-001.md
 
 | 编号 | 需求 |
 |---|---|
-| DSS-REQ-022 | 查询区只保留三个条件：探针端、源库、快照状态；不提供时间范围、在线状态、健康状态、关键字或其他未批准条件。 |
-| DSS-REQ-023 | 首次进入页面自动查询全部，无需点击“查询”按钮。 |
-| DSS-REQ-024 | 三个查询条件的候选仅来源于当前 RUN_STATE 实际记录及其可选展示信息；不把没有 RUN_STATE 记录的探针端或源库加入候选。 |
-| DSS-REQ-025 | 查询不得因为关联配置缺失或停用而排除 RUN_STATE 行；条件命中只作用于 RUN_STATE 原始记录及其可解析/可展示的补充信息。 |
+| DSS-REQ-022 | 查询区只保留三个条件：探针端、源库、快照状态；不提供时间范围、在线状态、健康状态、关键字或其他未批准条件。三个控件均为多选控件，每项默认选中显式“全部”；每个条件都提供显式“全部”选项，“全部”与该条件的任一具体候选互斥（由“全部”切换为任一具体候选即自动清除“全部”；改选“全部”即清除该条件已选具体候选）。同一条件内选择多个具体候选时为“或”；不同条件之间为“且”。 |
+| DSS-REQ-023 | 首次进入页面仍自动以三项均为“全部”查询一次，无需点击“查询”，并把该组条件作为初始“已应用查询条件”。此后用户修改任一界面选择条件时不自动发起查询，当前表格保持不变；只有用户点击“查询”后，才按界面当前三项条件发起查询，并把该组条件更新为新的“已应用查询条件”。 |
+| DSS-REQ-024 | 三个查询条件的候选仅来源于当前 RUN_STATE 实际记录及其可选展示信息；探针端、源库候选只取 RUN_STATE 中真实出现者，未在 RUN_STATE 中出现的探针端或源库不得加入候选。快照状态候选为“快照进行中”“快照已完成”；只有当前候选数据中真实存在未知 `SNAPSHOT_STATUS` 时，状态条件才出现“未知状态”。选择“未知状态”筛选所有不属于 `SNAPSHOT_RUNNING`、`SNAPSHOT_COMPLETED` 的原始状态；未知状态记录仍保留并可查看数据库原始值。 |
+| DSS-REQ-025 | 查询不得因为关联配置缺失或停用而排除 RUN_STATE 行；条件命中只作用于 RUN_STATE 原始记录及其可解析/可展示的补充信息。查询区的“重置”按钮与对 RUN_STATE 数据执行“重置状态/重新快照”是两种不同操作：前者是允许的纯前端条件复位（把三个界面选择条件恢复为“全部”，不发起查询、不清空或替换当前表格、不改变已应用查询条件）；后者仍是明确禁止的产品写操作（见 §7）。 |
 
-> 三个查询控件是单选还是多选、是否包含显式“全部”、快照状态候选如何归并未知状态，尚未由项目负责人指定；草案建议见 §11 `DSS-PROP-001/002`，不写入已确认需求。
+> 三个查询控件采用多选＋显式“全部”、“全部”互斥、同条件内“或”与条件间“且”、未知状态候选动态出现、以及“界面选择条件 / 已应用查询条件”双状态与“重置不查询”规则，均属项目负责人已确认方案，已并入上表 `DSS-REQ-022~025`（R1 决策落地），不再作为待复审草案建议保留。
 
 ## 11. 列表字段
 
@@ -162,7 +168,7 @@ docs/database/reports/DATA-SOURCE-SNAPSHOT-STATUS-DATABASE-VERIFICATION-001.md
 | DSS-REQ-026 | 序号为当前完整结果集内的稳定显示序号，不是业务主键；行的唯一标识为 `CLIENT_ID + DATA_SOURCE_ID`。 |
 | DSS-REQ-027 | 列表固定七列，顺序为：序号、探针端、源库、快照状态、快照启动时间、快照完成时间、记录更新时间。 |
 | DSS-REQ-028 | “探针端”列必须展示原始 `CLIENT_ID`；关联成功时可补充展示 `CLIENT_DESC`。 |
-| DSS-REQ-029 | “源库”列优先展示关联的源库 ORG；同时必须保证用户能够查看原始 `DATA_SOURCE_ID`。 |
+| DSS-REQ-029 | “源库”列单行展示：关联成功时优先显示源库 `ORG`，原始 `DATA_SOURCE_ID` 通过 Tooltip 展示；关联不到源库时直接显示原始 `DATA_SOURCE_ID`，并提供轻量异常提示（异常提示形式见 §13 `DSS-REQ-045`）。不采用两行 ORG＋ID 布局。 |
 | DSS-REQ-030 | “快照状态”列以中文状态标签展示，同时必须保证用户能够查看数据库原始状态值（如 `SNAPSHOT_RUNNING`）。 |
 | DSS-REQ-031 | “快照启动时间”展示 `SNAPSHOT_LAST_SEEN_AT`；值为 NULL 时显示 `--`。 |
 | DSS-REQ-032 | “快照完成时间”展示 `SNAPSHOT_COMPLETED_AT`；值为 NULL 时显示 `--`。 |
@@ -173,10 +179,10 @@ docs/database/reports/DATA-SOURCE-SNAPSHOT-STATUS-DATABASE-VERIFICATION-001.md
 
 | 编号 | 需求 |
 |---|---|
-| DSS-REQ-035 | `SNAPSHOT_RUNNING` 状态展示为“快照进行中”。 |
-| DSS-REQ-036 | `SNAPSHOT_COMPLETED` 状态展示为“快照已完成”。 |
+| DSS-REQ-035 | `SNAPSHOT_RUNNING` 状态展示为“快照进行中”，蓝色状态标签。 |
+| DSS-REQ-036 | `SNAPSHOT_COMPLETED` 状态展示为“快照已完成”，绿色状态标签。 |
 | DSS-REQ-037 | 数据库对 `SNAPSHOT_STATUS` 没有建立封闭取值 Check 约束（已核验数据库事实）；实现必须宽容处理未知状态。 |
-| DSS-REQ-038 | 未知状态的记录仍然展示；以与两种已知状态清晰区分的“未知状态”视觉标签呈现，并展示数据库原始状态值；未知标签最终采用灰色或橙色属于后续 UI 设计决策，需求只要求与已知状态清晰区分。 |
+| DSS-REQ-038 | 未知状态的记录仍然展示；以橙色“未知状态”标签呈现，并展示数据库原始状态值；颜色必须与两种已知状态清晰区分。状态与未知信息不能只靠颜色表达，必须同时有文字（中文标签或数据库原始值，见 §18 `DSS-REQ-063`）。 |
 | DSS-REQ-039 | 未知状态不得造成整个接口或页面报错，也不得被丢弃或改写为已知状态。 |
 | DSS-REQ-040 | 当前开发库没有 `SNAPSHOT_COMPLETED` 真实样例；需求与验收不依赖开发库天然存在该样例，`SNAPSHOT_COMPLETED` 场景通过受控测试数据构造（构造授权见 §20）。 |
 
@@ -188,7 +194,7 @@ docs/database/reports/DATA-SOURCE-SNAPSHOT-STATUS-DATABASE-VERIFICATION-001.md
 | DSS-REQ-042 | `DATA_SOURCE_ID` 找不到对应数据源时，仍展示原始 `DATA_SOURCE_ID`，并提供轻量异常提示。 |
 | DSS-REQ-043 | 关联的探针端或源库已停用时，RUN_STATE 行仍展示，并可标识“配置已停用”。 |
 | DSS-REQ-044 | 关联源库类别不是 SOURCE、类别大小写异常或其他配置异常时，RUN_STATE 行仍展示并提供轻量提示。 |
-| DSS-REQ-045 | 上述异常提示只描述配置关联事实；不把快照状态改判为失败，也不触发任何数据库修复或写行为。 |
+| DSS-REQ-045 | 关联异常提示采用单元格内小图标或弱提示文字呈现，并通过 Tooltip 解释；不新增专门的异常列。提示只描述配置关联事实，不把快照状态改判成失败，也不触发任何数据库修复或写行为。 |
 
 ## 14. 排序
 
@@ -203,17 +209,17 @@ docs/database/reports/DATA-SOURCE-SNAPSHOT-STATUS-DATABASE-VERIFICATION-001.md
 
 | 编号 | 需求 |
 |---|---|
-| DSS-REQ-050 | 页面提供“60 秒自动刷新＋立即刷新”。 |
-| DSS-REQ-051 | 页面不可见时暂停自动刷新；页面重新可见后恢复自动刷新。 |
+| DSS-REQ-050 | 页面提供“60 秒自动刷新＋立即刷新”。自动刷新与“立即刷新”始终沿用“已应用查询条件”，不使用尚未点击“查询”的界面选择条件；即使用户已经修改或重置界面条件也一样。刷新工具栏“立即刷新”按钮采用稳定宽度：刷新在途时可显示加载图标，但图标出现/消失不得改变按钮宽度，不得造成按钮前“60 秒自动刷新｜最近成功刷新：…”等文字位置移动，工具栏整体不得因刷新在途状态发生明显水平位移。 |
+| DSS-REQ-051 | 页面不可见时暂停自动刷新，该期间不计入 60 秒周期；页面重新可见后立即按“已应用查询条件”刷新一次，并在该次请求结束后重新开始 60 秒计时（见 `DSS-REQ-054`）。 |
 | DSS-REQ-052 | 自动刷新和手工刷新只重新读取数据库；不写数据库，不改变任何数据。 |
 | DSS-REQ-053 | 前一次刷新请求未结束时不得发起下一次重叠请求。 |
-| DSS-REQ-054 | 自动刷新周期固定为 60 秒；计时的起点、页面不可见时的计时处理、恢复可见后是否立即刷新一次等细节见 §11 `DSS-PROP-006/008`（草案建议）。 |
+| DSS-REQ-054 | 自动刷新周期固定为 60 秒，计时起点为最近一次成功查询/刷新请求结束；刷新在途时不另起计时、不发起重叠请求。页面不可见期间暂停并保留计时状态；恢复可见后立即按“已应用查询条件”刷新一次，该次请求结束后重新开始完整 60 秒计时。 |
 
 ## 16. 时间字段边界
 
 | 编号 | 需求 |
 |---|---|
-| DSS-REQ-055 | 三个时间字段（`SNAPSHOT_LAST_SEEN_AT`、`SNAPSHOT_COMPLETED_AT`、`UPDATED_AT`）按数据库值展示；展示格式/时区/NULL 处理遵循 §11 草案建议与后续设计决定，格式化不得改变其业务时间值。 |
+| DSS-REQ-055 | 三个时间字段（`SNAPSHOT_LAST_SEEN_AT`、`SNAPSHOT_COMPLETED_AT`、`UPDATED_AT`）统一展示为 `YYYY-MM-DD HH:mm:ss`；空值显示 `--`（NULL 展示另见 `DSS-REQ-031/032`）；展示格式化不得改变其业务时间值。 |
 | DSS-REQ-056 | 不根据任何时间字段计算或呈现“超时”“异常”“离线”“长期运行”等状态。 |
 | DSS-REQ-057 | 不因为 `SNAPSHOT_RUNNING` 持续时间长而自动显示为错误或警告。 |
 
@@ -221,10 +227,10 @@ docs/database/reports/DATA-SOURCE-SNAPSHOT-STATUS-DATABASE-VERIFICATION-001.md
 
 | 编号 | 需求 |
 |---|---|
-| DSS-REQ-058 | 首次加载在途时提供加载反馈（具体控件形式见 §11 草案建议）。 |
+| DSS-REQ-058 | 首次加载在途时提供加载反馈，进行中不造成表格明显闪烁。 |
 | DSS-REQ-059 | 首次加载失败时展示错误状态和“重新加载”入口；不得把失败展示成空数据或成功状态。 |
 | DSS-REQ-060 | 查询结果为零时展示空数据提示；不得展示成接口错误。 |
-| DSS-REQ-061 | 页面必须区分“加载成功、加载失败、空结果、进行中”等状态，失败与空结果不得互相伪装；查询/刷新失败时给出可理解的脱敏失败提示（保留旧结果、连续失败提示收敛、最近成功刷新时间等展示细节见 §11 草案建议）。 |
+| DSS-REQ-061 | 页面必须区分“加载成功、加载失败、空结果、进行中”等状态，失败与空结果不得互相伪装。已有成功结果时，查询或刷新失败保留最近一次成功数据，不清空表格；失败提示必须收敛，不得连续堆叠相同失败消息；页面展示最近一次成功刷新时间；失败信息必须脱敏（见 §19 `DSS-REQ-064`）；刷新在途不得造成表格明显闪烁。 |
 
 ## 18. 可访问性与基础视觉
 
@@ -256,36 +262,39 @@ docs/database/reports/DATA-SOURCE-SNAPSHOT-STATUS-DATABASE-VERIFICATION-001.md
 - 从配置表补行、生成“未开始/待快照”等虚拟状态；
 - 分页、时间范围、在线/健康/关键字等未批准查询；
 - 依据时间字段计算超时/异常/离线/长期运行；
-- 访问本表以外的数据或对象，执行 DDL/DML（本任务不访问数据库）；
+- 除明确允许的只读访问（`CDC_DATA_SOURCE_RUN_STATE`）与只读关联（`CDC_CLIENT_MULTIPLE`、`CDC_DATA_SOURCE`）之外的其他数据访问；执行任何 DDL/DML 或其他表写行为（本任务不访问数据库）；
 - 本草案任务不进入设计、不实现代码、不执行验收。
 
-## 22. 待用户复审的草案建议
+## 22. 草案建议处置（R1：原 DSS-PROP-001~008 已全部决策并吸收）
 
-以下实现或交互细节尚未由项目负责人决定，依据现有平台一致性提出推荐草案。统一标记 `DRAFT_PROPOSAL_PENDING_USER_REVIEW`；每一项给出推荐方案、理由与备选影响。凡现有已批准平台规范已明确的可直接继承项，未重复列为问题。
+R0 初版 §22“待用户复审的草案建议”所列 8 项 `DSS-PROP-*` 已在 R1 中全部由项目负责人确认并吸收为正式需求/验收行，本版不再保留任何待用户复审草案建议（`pending_user_confirmation_count=0`）。`pending_user_confirmation_count=0` 不等于 `APPROVED`：本版仍是草案，需求/验收整体待 ChatGPT 对 R1 结果正式复审，复审后由项目负责人审阅/批准。
 
-| 编号 | 主题 | 推荐方案 | 理由 | 备选影响 |
-|---|---|---|---|---|
-| DSS-PROP-001 | 三个查询控件形态 | 探针端、源库、快照状态均采用单选下拉，并包含显式“全部”特殊选项；默认“全部”＝查询不含该条件。 | 本功能一次展示 ≤100 条且候选源于 RUN_STATE 实际记录，单选＋“全部”已满足筛选诉求，与同属运行监控的轻量只读页交互一致、实现简单。 | 若改多选，需处理“或”语义、候选去重与“全部”切换规则，交互与验收用例增加。 |
-| DSS-PROP-002 | 快照状态条件候选 | 候选为“快照进行中”“快照已完成”与“未知状态”三项（未知状态仅在存在未知状态记录时出现），选中“未知状态”筛出 `SNAPSHOT_STATUS` 不属于已确认集合的行。 | 保证未知状态可被用户主动查看与筛出，与宽容未知状态规则一致。 | 若不允许按未知状态筛选，则用户无法只看未知记录，需另行设计查看途径。 |
-| DSS-PROP-003 | “源库”列保证查看原始 ID 的展示形式 | 采用两行单元格：第一行展示源库 ORG（无 ORG 时显示“未定义名称”），第二行展示原始 `DATA_SOURCE_ID`；整列仍归于一列“源库”。 | 需求要求“优先展示 ORG，同时保证可查看原始 ID”，两行固定结构比悬浮更直接、不依赖交互发现。 | 若采用悬浮 Tooltip，长列表下查看原始 ID 需逐行悬浮，发现性弱。 |
-| DSS-PROP-004 | 状态标签颜色方案 | 快照进行中＝处理色（蓝），快照已完成＝中性（绿或灰），未知状态＝橙色警示弱标签；最终色值由 UI 设计阶段确定。 | 与运行监控浅色体系一致，未知状态需与已知状态清晰区分（DSS-REQ-038）。 | 颜色属于 UI 设计决策，本草案只固化“区分且不唯一依赖颜色”。 |
-| DSS-PROP-005 | 时间展示格式 | 三个时间字段展示为 `YYYY-MM-DD HH:mm:ss`（本地时间、到秒），NULL 按 DSS-REQ-031/032 显示 `--`。 | 与已批准运行监控只读页（topic-offset 断点更新时间）格式一致，符合平台公共规范。 | 若平台另有统一时区规范，应以设计阶段决定为准。 |
-| DSS-PROP-006 | 加载态与刷新失败展示 | 继承已批准 topic-offset 刷新交互：自动/手工刷新失败保留上一次成功结果，不清空数据；刷新提示收敛，连续失败不逐周期堆叠重复提示；刷新进行中不造成表格明显闪烁。 | topic-offset 同属运行监控只读自动刷新页，交互已被批准，复用可保持平台一致。 | 若要求失败即清空，会失去已有数据，需更多确认。 |
-| DSS-PROP-007 | 轻量异常提示与原始值查看形式 | 探针端/源库单元格在配置缺失、停用或类别异常时，以行内弱提示文字或小图标＋悬浮解释呈现；快照状态原始值通过悬浮展示；探针端原始 ID 直接展示。 | 需求要求“轻量异常提示”，行内弱提示/悬浮不打断浏览。 | 悬浮与 Tooltip 具体形态（单实例、延迟、不可驻留）如需要，可复用 topic-offset 已批准 Tooltip 规则。 |
-| DSS-PROP-008 | 恢复可见后的刷新行为 | 页面从不可见恢复可见后立即刷新一次并重新开始 60 秒计时。 | 与 topic-offset 已批准行为（TOFF-REQ-107 语义）一致，保证返回页面即拿到较新数据。 | 若恢复可见不立即刷新，数据可能最多滞后 60 秒。 |
+| 原草案建议 | 决策结果与去向（需求 / 验收） |
+|---|---|
+| DSS-PROP-001（三查询控件单选或全部） | 已确认改为“三项多选＋显式全部＋全部与具体候选互斥＋同条件内或/条件间且”，并入 `DSS-REQ-022`；验收 `DSS-AC-020`、`DSS-AC-023` |
+| DSS-PROP-002（未知状态候选） | 已确认“未知状态”候选仅在真实存在未知记录时出现，选中后筛出非已确认状态；并入 `DSS-REQ-024`；验收 `DSS-AC-022` |
+| DSS-PROP-003（源库列展示原始 ID） | 已确认改为“单行：关联成功优先显示 ORG、Tooltip 展示原始 `DATA_SOURCE_ID`；关联不到直接显示原始 ID 并弱提示”，不采用两行 ORG＋ID 布局；并入 `DSS-REQ-029`；验收 `DSS-AC-027` |
+| DSS-PROP-004（状态标签颜色） | 已确认颜色映射：RUNNING 蓝“快照进行中”、COMPLETED 绿“快照已完成”、未知橙“未知状态”并可查看原始值，且不能只靠颜色；并入 `DSS-REQ-035/036/038`；验收 `DSS-AC-032/033/035/037` |
+| DSS-PROP-005（时间展示格式） | 已确认统一 `YYYY-MM-DD HH:mm:ss`、空值 `--`、不改变业务时间值；并入 `DSS-REQ-055`；验收 `DSS-AC-052` |
+| DSS-PROP-006（加载态与刷新失败） | 已确认刷新失败保留最近一次成功数据、提示收敛、最近成功刷新时间、失败脱敏、刷新在途不闪烁；并入 `DSS-REQ-061`（并 `DSS-REQ-064`）；验收 `DSS-AC-058` |
+| DSS-PROP-007（轻量异常提示形式） | 已确认单元格内小图标或弱提示文字＋Tooltip、不新增专门异常列、只描述配置关联事实；并入 `DSS-REQ-045`；验收 `DSS-AC-038~042` |
+| DSS-PROP-008（恢复可见立即刷新） | 已确认恢复可见后立即按“已应用查询条件”刷新一次并重启 60 秒计时；并入 `DSS-REQ-051/054`；验收 `DSS-AC-048/051` |
+
+另：刷新工具栏稳定宽度（“立即刷新”稳定宽度、加载图标出现/消失不改变按钮宽度、按钮前文字不位移、工具栏不因刷新在途水平移动）为本 Feature 已确认交互要求，并入 `DSS-REQ-050`，验收 `DSS-AC-068`；不再作为草案建议表述。
 
 ## 23. 需求数量与编号核验
 
 - 需求编号：`DSS-REQ-001`～`DSS-REQ-065`，共 **65** 条，编号连续唯一。
-- 验收编号：`DSS-AC-001`～`DSS-AC-067`，共 **67** 条，全部 `NOT_RUN`（见 `ACCEPTANCE.md`）。
+- 验收编号：`DSS-AC-001`～`DSS-AC-068`，共 **68** 条，全部 `NOT_RUN`（见 `ACCEPTANCE.md`；R1 新增 `DSS-AC-068` 覆盖刷新工具栏稳定宽度，无既有可折叠验收用例，编号连续唯一）。
 - 每条需求至少被一个验收用例覆盖，每条验收用例引用已存在需求编号（见 `ACCEPTANCE.md` 验收表格“关联需求”列与 §6 追踪矩阵）。
 - 文档状态 `DRAFT_PENDING_USER_REVIEW`，不存在 `APPROVED`、`IMPLEMENTED`、验收 `PASS/ACCEPTED` 等越权状态。
-- 待用户复审草案建议：`DSS-PROP-001`～`DSS-PROP-008`，共 **8** 项（`pending_user_confirmation_count=8`）。
+- 待用户复审草案建议：**0** 项（`pending_user_confirmation_count=0`；原 `DSS-PROP-001~008` 已全部决策并吸收，见 §22）。
 
 ## 24. 文档级变更记录
 
 | 日期 | 变更 | 依据 |
 |---|---|---|
 | 2026-09-05 | 建立“源库快照状态”Feature 需求草案（`DRAFT_PENDING_USER_REVIEW`；requirements_status/acceptance_status=`DRAFT_PENDING_USER_REVIEW`；实现状态 `NOT_STARTED`；验收执行状态 `NOT_RUN`；设计状态 `NOT_STARTED`；`DSS-REQ-001~065` 共 65 条；草案建议 `DSS-PROP-001~008`；全部数据库事实引用已提交数据库只读复核报告 `docs/database/reports/DATA-SOURCE-SNAPSHOT-STATUS-DATABASE-VERIFICATION-001.md`） | DATA-SOURCE-SNAPSHOT-STATUS-REQUIREMENTS-BASELINE-001（纯文档任务；基于项目负责人已确认产品决策 + 已核验数据库只读复核报告；待用户审阅与 ChatGPT 正式复审） |
+| 2026-09-05 | R1 定向修订需求草案：修正 R1-01（统一“只读访问 RUN_STATE＋只读关联两张配置表”边界，消除“访问本表之外”自相矛盾）与 R1-03 相关需求（建立“界面选择条件/已应用查询条件”双状态与“重置不查询”，并入 `DSS-REQ-022~025`、`DSS-REQ-050~054`）；吸收项目负责人已确认的 8 项交互方案（并入 `DSS-REQ-022/023/024/029/035/036/038/045/051/054/055/061` 等）与刷新工具栏稳定宽度（`DSS-REQ-050`）；删除 `DSS-PROP-001~008` 待复审草案建议（`pending_user_confirmation_count=0`）；验收计数随 `ACCEPTANCE.md` 更新为 68 条；仍为 `DRAFT_PENDING_USER_REVIEW` 未批准草案，待 ChatGPT 对 R1 结果正式复审 | DATA-SOURCE-SNAPSHOT-STATUS-REQUIREMENTS-BASELINE-001-R1（ChatGPT 正式复审 `CHANGES_REQUIRED` 驱动的纯文档定向修订；草案未批准、功能未实现、验收未执行） |
 
 > 关联文档：验收草案 `docs/features/data-source-snapshot-status/ACCEPTANCE.md`；功能入口与状态 `docs/features/data-source-snapshot-status/README.md`；Feature 总索引 `docs/features/README.md`。
