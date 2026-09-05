@@ -18,6 +18,14 @@ vi.mock('@/api/clientConfig', () => ({
   disableClient: vi.fn(),
 }))
 
+// listLayout 的离屏测量依赖真实布局，jsdom 返回 0；按标签文本注入测量宽度，
+// 以便在组件层复现“两行放不下才 +N / 宽度变化重算”等确定性断言（真实几何另行浏览器目测）。
+const { chipWidthRegistry } = vi.hoisted(() => ({ chipWidthRegistry: new Map<string, number>() }))
+vi.mock('@/views/client-config/listLayout', async (importOriginal) => {
+  const actual = await importOriginal<typeof import('@/views/client-config/listLayout')>()
+  return { ...actual, measureChipWidth: (text: string) => chipWidthRegistry.get(text) ?? 0 }
+})
+
 import {
   createClient,
   deleteClient,
@@ -144,6 +152,38 @@ const exactButton = (w: PageWrapper, text: string) =>
 const optionByText = (w: PageWrapper, text: string) =>
   w.findAll('.cc-opt').find((o) => !o.attributes('disabled') && o.text().includes(text))
 
+function sleep(ms: number): Promise<void> {
+  return new Promise((r) => setTimeout(r, ms))
+}
+
+/** 驱动 ResizeObserver 回调，让组件两行/+N 决策可在 jsdom 下复现（真实几何另行浏览器目测）。 */
+let lastFakeRO: { emit: (width: number) => void } | null = null
+class FakeResizeObserver {
+  private readonly cb: (entries: unknown[], observer: unknown) => void
+  private readonly els = new Set<Element>()
+  constructor(cb: (entries: unknown[], observer: unknown) => void) {
+    this.cb = cb
+  }
+  observe(el: Element): void {
+    this.els.add(el)
+    // 仅列表“采集数据源”单元格（带 data-client-id）视为组件布局目标；
+    // 避免把 EP 内部其他 ResizeObserver 实例误当作可注入实例。
+    if (el instanceof HTMLElement && el.hasAttribute('data-client-id')) {
+      lastFakeRO = this
+    }
+  }
+  unobserve(el: Element): void {
+    this.els.delete(el)
+  }
+  disconnect(): void {
+    this.els.clear()
+  }
+  emit(width: number): void {
+    const entries = [...this.els].map((target) => ({ target, contentRect: { width } }))
+    if (entries.length) this.cb(entries, this)
+  }
+}
+
 async function openCreate(w: PageWrapper) {
   await exactButton(w, '新增探针')!.trigger('click')
   await flushPromises()
@@ -189,10 +229,12 @@ describe('首次加载 / 查询 / 重置（CCFG-UI-002/003/012）', () => {
     expect(mockedList).toHaveBeenCalledTimes(1)
     expect(mockedList.mock.calls[0][0]).toEqual({ keyword: undefined, status: 'ALL' })
     expect(wrapper.text()).toContain('探针端管理')
+    expect(wrapper.text()).toContain('维护 sync-client 探针及其采集数据源配置')
     expect(wrapper.text()).toContain('probe-a')
     expect(wrapper.text()).toContain('probe-null')
     expect(wrapper.findComponent({ name: 'ElPagination' }).exists()).toBe(false)
-    expect(wrapper.text()).toContain('双击记录可编辑')
+    // CCFG-UI-005：页面不再展示“双击记录可编辑”弱提示，但双击/键盘编辑能力保留（R1-06 覆盖）
+    expect(wrapper.text()).not.toContain('双击记录可编辑')
     wrapper.unmount()
   })
 
@@ -476,16 +518,103 @@ describe('编辑弹窗与历史异常回显（CCFG-UI-014/017/025）', () => {
   })
 })
 
-describe('数据源紧凑列投影与 +N（CCFG-UI-007~010）', () => {
-  it('异常项优先投影前三项、其余 +N；完整清单按接口原顺序回显', async () => {
-    const wrapper = await mountPage([multiRow])
-    const tags = wrapper.findAll('.cc-dstag')
-    expect(tags).toHaveLength(3)
-    expect(tags[0].classes()).toContain('cc-dstag--bad')
-    expect(wrapper.findAll('.cc-more')).toHaveLength(1)
-    expect(wrapper.find('.cc-more').text()).toBe('+2')
+describe('数据源两行自适应与动态 +N（CCFG-UI-004/007~010）', () => {
+  // 这些用例以注入测量宽度 + 模拟 ResizeObserver 驱动“真实”两行打包；真实几何另行浏览器目测。
+  const savedRO = (globalThis as { ResizeObserver?: unknown }).ResizeObserver
+  beforeEach(() => {
+    ;(globalThis as { ResizeObserver: unknown }).ResizeObserver = FakeResizeObserver as never
+    chipWidthRegistry.clear()
+  })
+  afterEach(() => {
+    ;(globalThis as unknown as { ResizeObserver?: unknown }).ResizeObserver = savedRO
+    chipWidthRegistry.clear()
+    lastFakeRO = null
+  })
 
-    // 编辑回显：按接口原顺序（非异常优先投影）
+  function setTagWidths(width: number, moreWidth = 30): void {
+    const tags = ['机构Ab', '机构N1', '机构N2', '机构N3', '机构N4']
+    tags.forEach((t) => chipWidthRegistry.set(t, width))
+    chipWidthRegistry.set('+88', moreWidth)
+  }
+
+  const visibleTags = (w: PageWrapper) =>
+    w.findAll('.cc-dstag').filter((t) => !(t.attributes('style') ?? '').includes('display: none'))
+
+  it('两行能容纳时不显示 +N，全部直接展示', async () => {
+    setTagWidths(40)
+    const wrapper = await mountPage([multiRow])
+    lastFakeRO!.emit(260)
+    await nextTick()
+    expect(wrapper.find('.cc-more').exists()).toBe(false)
+    expect(visibleTags(wrapper).map((t) => t.text())).toEqual([
+      '机构Ab',
+      '机构N1',
+      '机构N2',
+      '机构N3',
+      '机构N4',
+    ])
+    wrapper.unmount()
+  })
+
+  it('两行放不下时显示精确 +N；标签正文仅机构名；完整清单按接口原顺序', async () => {
+    setTagWidths(40)
+    const wrapper = await mountPage([multiRow])
+    lastFakeRO!.emit(120)
+    await nextTick()
+    const visible = visibleTags(wrapper)
+    // 异常优先展示顺序：[机构Ab(异常), 机构N1, 机构N2] 可见，+2 隐藏
+    expect(visible.map((t) => t.text())).toEqual(['机构Ab', '机构N1', '机构N2'])
+    expect(visible[0].classes()).toContain('cc-dstag--bad')
+    expect(wrapper.find('.cc-more').text()).toBe('+2')
+    const hidden = wrapper
+      .findAll('.cc-dstag')
+      .filter((t) => (t.attributes('style') ?? '').includes('display: none'))
+    expect(hidden.map((t) => t.text())).toEqual(['机构N3', '机构N4'])
+    // 标签正文不得拼接数据源名称或 ID（见 Tooltip describe 的文档断言，此处再校验无名称）
+    expect(wrapper.find('.cc-src').text()).not.toContain('名N')
+
+    // 点击 +N：完整清单保留全部项且保持接口原顺序
+    await wrapper.find('.cc-more').trigger('click')
+    await flushPromises()
+    await sleep(60)
+    const items = Array.from(document.querySelectorAll('.cc-full-item'))
+    expect(items).toHaveLength(5)
+    const orgSeq = items.map((el) => el.querySelector('.cc-full-org')?.textContent ?? '')
+    expect(orgSeq).toEqual(['机构N1', '机构N2', '机构Ab', '机构N3', '机构N4'])
+    wrapper.unmount()
+  })
+
+  it('异常项优先进入可见两行：异常项在接口第 3 位仍最先可见', async () => {
+    setTagWidths(40)
+    const wrapper = await mountPage([multiRow])
+    lastFakeRO!.emit(46)
+    await nextTick()
+    const visible = visibleTags(wrapper)
+    expect(visible.map((t) => t.text())).toEqual(['机构Ab'])
+    expect(visible[0].classes()).toContain('cc-dstag--bad')
+    expect(wrapper.find('.cc-more').text()).toBe('+4')
+    wrapper.unmount()
+  })
+
+  it('列宽变化触发重算：由可容纳变为溢出后 +N 出现并更新', async () => {
+    setTagWidths(40)
+    const wrapper = await mountPage([multiRow])
+    lastFakeRO!.emit(260)
+    await nextTick()
+    expect(wrapper.find('.cc-more').exists()).toBe(false)
+    lastFakeRO!.emit(120)
+    await nextTick()
+    expect(wrapper.find('.cc-more').exists()).toBe(true)
+    expect(wrapper.find('.cc-more').text()).toBe('+2')
+    expect(visibleTags(wrapper)).toHaveLength(3)
+    lastFakeRO!.emit(260)
+    await nextTick()
+    expect(wrapper.find('.cc-more').exists()).toBe(false)
+    wrapper.unmount()
+  })
+
+  it('编辑弹窗回显仍按接口原顺序（列表两行投影不改变弹窗选择集）', async () => {
+    const wrapper = await mountPage([multiRow])
     await openEdit(wrapper, multiRow)
     const chips = wrapper.findAll('.cc-chip')
     // 异常项 chip 文案为“数据源ID（原因）”，正常项为机构名；顺序保持接口原顺序
@@ -820,26 +949,29 @@ describe('空描述 Tooltip、滚动边界与键盘编辑入口（R1-06）', () 
   }
 
   // ---- 9.1 空描述 Tooltip ----
-  it('静态：空描述占位符“—”被 Tooltip 包裹且文案固定为“未填写探针描述”', () => {
-    expect(SFC_SOURCE).toContain('content="未填写探针描述"')
-    expect(SFC_SOURCE).toContain('<span class="cc-desc cc-desc--empty">—</span>')
-    const emptySpan = SFC_SOURCE.indexOf('<span class="cc-desc cc-desc--empty">—</span>')
-    const contentPos = SFC_SOURCE.indexOf('content="未填写探针描述"')
-    expect(contentPos).toBeGreaterThan(-1)
-    expect(emptySpan).toBeGreaterThan(contentPos)
+  it('静态：不再使用 Element Tooltip；空描述占位与悬停统一交给单实例 Tooltip 管理器', () => {
+    expect(SFC_SOURCE).not.toContain('el-tooltip')
+    expect(SFC_SOURCE).not.toContain('content="未填写探针描述"')
+    expect(SFC_SOURCE).toContain(`isBlankDesc(row) ? '—' : row.clientDesc`)
+    expect(SFC_SOURCE).toContain('cc-single-tip')
+    expect(SFC_SOURCE).toContain('onDescEnter')
   })
 
-  it('组件：NULL 描述与仅空白描述都渲染可悬停的“未填写探针描述” Tooltip', async () => {
+  it('组件：NULL 描述与仅空白描述渲染“—”占位；悬停（约 240ms 延迟）显示固定文案、离开立即隐藏', async () => {
     const wrapper = await mountPage([nullDescRow, blankDescRow])
     const empties = wrapper.findAll('.cc-desc--empty')
     expect(empties).toHaveLength(2)
     for (const e of empties) expect(e.text()).toBe('—')
-    // 真实悬停：Tooltip 内容以 popper 形式出现
+    // 悬停延迟未到：不得出现（避免快速扫过连续弹出）
     await empties[0].trigger('mouseenter')
-    await new Promise((r) => setTimeout(r, 30))
+    await sleep(60)
+    expect(document.body.textContent).not.toContain('未填写探针描述')
+    await sleep(220)
     expect(document.body.textContent).toContain('未填写探针描述')
+    // 鼠标离开立即隐藏
     await empties[0].trigger('mouseleave')
-    await new Promise((r) => setTimeout(r, 30))
+    await sleep(10)
+    expect(document.body.textContent).not.toContain('未填写探针描述')
     wrapper.unmount()
   })
 
@@ -853,17 +985,7 @@ describe('空描述 Tooltip、滚动边界与键盘编辑入口（R1-06）', () 
     expect(fullListCss).toContain('overflow-y: auto')
   })
 
-  it('组件：+N Popover 打开后完整清单保留全部项且异常标记不隐藏', async () => {
-    const wrapper = await mountPage([multiRow])
-    await wrapper.find('.cc-more').trigger('click')
-    await flushPromises()
-    await new Promise((r) => setTimeout(r, 30))
-    const items = Array.from(document.querySelectorAll('.cc-full-item'))
-    expect(items.length).toBe(multiSources.length)
-    expect(document.body.textContent).toContain('ds-ab（不存在）')
-    wrapper.unmount()
-  })
-
+  // +N 点击完整清单的数量与顺序在“数据源两行自适应与动态 +N” describe 中覆盖（需注入测量宽度）。
   // ---- 9.3 键盘编辑入口 ----
   it('组件：探针 ID 单元格具备 tabindex/role；单击选中、双击编辑不受破坏', async () => {
     const wrapper = await mountPage([enabledRow, disabledRow])
@@ -911,6 +1033,169 @@ describe('空描述 Tooltip、滚动边界与键盘编辑入口（R1-06）', () 
     await flushPromises()
     expect(wrapper.find('.cc-dialog').exists()).toBe(false)
     expect(mockedOptions).not.toHaveBeenCalled()
+    wrapper.unmount()
+  })
+})
+
+describe('列表页面层级、查询区与工具栏（CCFG-UI-001~005）', () => {
+  const SFC_SOURCE = readFileSync(
+    resolve(process.cwd(), 'src/views/client-config/ClientConfigPage.vue'),
+    'utf-8',
+  )
+
+  it('组件：页面标题/说明、查询区外部标签与占位、查询项一致结构', async () => {
+    const wrapper = await mountPage([enabledRow])
+    expect(wrapper.find('.cc-title').text()).toBe('探针端管理')
+    expect(wrapper.find('.cc-subtitle').text()).toBe('维护 sync-client 探针及其采集数据源配置')
+    expect(wrapper.findAll('.cc-query-label').map((l) => l.text())).toEqual(['探针信息', '探针状态'])
+    expect(wrapper.find('.cc-query-keyword input').attributes('placeholder')).toBe(
+      '请输入探针 ID 或探针描述',
+    )
+    // 两个查询项结构一致：外部标签 + 控件位于同一 .cc-query-item
+    const items = wrapper.findAll('.cc-query-item')
+    expect(items).toHaveLength(2)
+    for (const item of items) expect(item.find('.cc-query-label').exists()).toBe(true)
+    wrapper.unmount()
+  })
+
+  it('静态：查询输入框无搜索图标；新增/删除按钮带 Plus/Delete 图标且图标后紧跟可读文字', () => {
+    expect(SFC_SOURCE).not.toMatch(/\bSearch\b/)
+    expect(SFC_SOURCE).toContain('<Plus />')
+    expect(SFC_SOURCE).toContain('<Delete />')
+    // 图标元素闭合后同一行紧跟按钮文字：保留可识别文字，非纯图标按钮
+    expect(SFC_SOURCE).toContain('</el-icon>新增探针')
+    expect(SFC_SOURCE).toContain('</el-icon>删除所选')
+  })
+
+  it('组件：新增/删除按钮均含图标；删除未选中禁用、选中后启用且显示选中提示', async () => {
+    const wrapper = await mountPage()
+    expect(wrapper.find('.cc-btn-add .cc-btn-icon').exists()).toBe(true)
+    expect(wrapper.find('.cc-btn-delete .cc-btn-icon').exists()).toBe(true)
+    expect(exactButton(wrapper, '删除所选')!.attributes('disabled')).toBeDefined()
+    await selectRow(wrapper, enabledRow)
+    expect(exactButton(wrapper, '删除所选')!.attributes('disabled')).toBeUndefined()
+    expect(wrapper.text()).toContain('已选择：probe-a')
+    wrapper.unmount()
+  })
+
+  it('静态：删除危险态为红描边而非大面积红填充；未选中态保持默认灰', () => {
+    const m = SFC_SOURCE.match(/\.cc-btn-delete--armed\s*\{([^}]*)\}/)
+    expect(m).toBeTruthy()
+    expect(m![1]).toContain('color: #f56c6c')
+    expect(m![1]).toContain('border-color: #f56c6c')
+    expect(m![1]).toContain('background: #fff')
+    // 表格卡片独立于查询区存在（查询区不再与工具栏/表格同卡）
+    expect(SFC_SOURCE).toContain('class="cc-table-card"')
+  })
+})
+
+describe('状态胶囊与启停操作视觉分离（CCFG-UI-006/011）', () => {
+  it('组件：状态为不可点击胶囊（span），启停为文字按钮；两类元素与类名分离', async () => {
+    const wrapper = await mountPage([enabledRow, disabledRow])
+    const pills = wrapper.findAll('.cc-state-tag')
+    expect(pills).toHaveLength(2)
+    for (const p of pills) expect(p.element.tagName).toBe('SPAN')
+    const ops = wrapper.findAll('.cc-op')
+    expect(ops.some((b) => b.text().includes('停用'))).toBe(true)
+    expect(ops.some((b) => b.text().includes('启用'))).toBe(true)
+    for (const o of ops) expect(o.element.tagName).toBe('BUTTON')
+    expect(wrapper.findAll('.cc-state-tag').some((p) => p.classes().includes('cc-op'))).toBe(false)
+    wrapper.unmount()
+  })
+})
+
+describe('数据源与描述 Tooltip：单实例与内容（CCFG-UI-005/008/009）', () => {
+  const clearHosts = () => {
+    document.querySelectorAll('.cc-single-tip').forEach((n) => n.remove())
+  }
+  beforeEach(clearHosts)
+  afterEach(clearHosts)
+
+  const hoverChip = async (w: PageWrapper, text: string) => {
+    const chip = w.findAll('.cc-dstag').find((t) => t.text() === text)!
+    await chip.trigger('mouseenter')
+  }
+
+  it('组件：标签正文仅机构名；悬停 Tooltip 含完整机构名 + 数据源 ID + 异常，不含数据源名称', async () => {
+    const wrapper = await mountPage([enabledRow])
+    const tags = wrapper.findAll('.cc-dstag')
+    // 异常项优先：inactiveDs(停用机构) 在前，健康项(中心医院) 在后；正文均为机构名，无 ID/名称拼接
+    expect(tags.map((t) => t.text())).toEqual(['停用机构', '中心医院'])
+    expect(wrapper.find('.cc-src').text()).not.toContain('HIS 主库')
+
+    await hoverChip(wrapper, '中心医院')
+    await sleep(280)
+    let body = document.body.textContent ?? ''
+    expect(body).toContain('数据源 ID：ds-ok1')
+    expect(body).not.toContain('HIS 主库')
+    const healthy = wrapper.findAll('.cc-dstag').find((t) => t.text() === '中心医院')!
+    await healthy.trigger('mouseleave')
+    await sleep(10)
+
+    await hoverChip(wrapper, '停用机构')
+    await sleep(280)
+    body = document.body.textContent ?? ''
+    expect(body).toContain('数据源 ID：ds-old')
+    expect(body).toContain('异常原因：已停用')
+    expect(body).not.toContain('旧库')
+    wrapper.unmount()
+  })
+
+  it('组件：进入新目标立即关闭上一个，稳定悬停后仅新目标内容（任意时刻最多一个）', async () => {
+    const wrapper = await mountPage([enabledRow])
+    await hoverChip(wrapper, '中心医院')
+    await sleep(280)
+    expect(document.body.textContent).toContain('数据源 ID：ds-ok1')
+    // 进入新目标：上一个 Tooltip 立即关闭（延迟未到，两个都不出现）
+    await hoverChip(wrapper, '停用机构')
+    await sleep(10)
+    expect(document.body.textContent).not.toContain('数据源 ID：ds-ok1')
+    expect(document.body.textContent).not.toContain('数据源 ID：ds-old')
+    await sleep(280)
+    expect(document.body.textContent).toContain('数据源 ID：ds-old')
+    expect(document.body.textContent).not.toContain('数据源 ID：ds-ok1')
+    wrapper.unmount()
+  })
+
+  it('组件：描述仅在文本被截断时显示 Tooltip，离开立即隐藏', async () => {
+    const wrapper = await mountPage([enabledRow])
+    const desc = wrapper.findAll('.cc-desc').find((s) => s.text() === '中心探针')!
+    // jsdom 无布局：注入截断尺寸以驱动“确实被截断”分支
+    Object.defineProperty(desc.element, 'clientWidth', { configurable: true, value: 90 })
+    Object.defineProperty(desc.element, 'scrollWidth', { configurable: true, value: 200 })
+    await desc.trigger('mouseenter')
+    await sleep(280)
+    const host = document.querySelector('.cc-single-tip') as HTMLElement | null
+    expect(host).toBeTruthy()
+    expect(host!.textContent).toContain('中心探针')
+    await desc.trigger('mouseleave')
+    await sleep(10)
+    expect(host!.textContent ?? '').toBe('')
+    wrapper.unmount()
+  })
+
+  it('组件：未截断描述悬停不弹 Tooltip（单实例宿主保持为空）', async () => {
+    const wrapper = await mountPage([enabledRow])
+    const desc = wrapper.findAll('.cc-desc').find((s) => s.text() === '中心探针')!
+    // 不注入尺寸：jsdom clientWidth === scrollWidth（0）→ 视为未截断
+    await desc.trigger('mouseenter')
+    await sleep(280)
+    const host = document.querySelector('.cc-single-tip') as HTMLElement | null
+    expect(host).toBeTruthy()
+    expect(host!.textContent ?? '').toBe('')
+    wrapper.unmount()
+  })
+
+  it('组件：行级歧义标签与（展示）计数备注悬停给出行级说明（单实例内容）', async () => {
+    const wrapper = await mountPage([ambiguousRow])
+    const rowbad = wrapper.findAll('.cc-rowbad').find((t) => t.text().includes('含逗号歧义'))!
+    await rowbad.trigger('mouseenter')
+    await sleep(280)
+    const body = document.body.textContent ?? ''
+    expect(body).toContain('英文逗号歧义')
+    expect(body).toContain('普通 CSV 解析')
+    await rowbad.trigger('mouseleave')
+    await sleep(10)
     wrapper.unmount()
   })
 })

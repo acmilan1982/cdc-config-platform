@@ -1,8 +1,9 @@
 <template>
   <div class="cc-page">
-    <!-- 页面标题（CCFG-UI-001：统一“探针端管理”） -->
+    <!-- 页面标题与说明（CCFG-UI-001/002：统一“探针端管理”） -->
     <header class="cc-header">
       <h2 class="cc-title">探针端管理</h2>
+      <p class="cc-subtitle">维护 sync-client 探针及其采集数据源配置</p>
     </header>
 
     <!-- 首次查询失败且从未成功：整区错误态 + 重试（CCFG-UI-012） -->
@@ -13,43 +14,60 @@
     </div>
 
     <template v-else>
-      <!-- 查询区（CCFG-UI-003） -->
+      <!-- 独立查询区（CCFG-UI-002/003：外部标签 + 控件，无搜索图标） -->
       <div class="cc-query">
-        <el-input
-          v-model="queryKeyword"
-          class="cc-query-keyword"
-          placeholder="探针 ID / 探针描述"
-          clearable
-          @keyup.enter="onQuery"
-        />
-        <el-select v-model="queryStatus" class="cc-query-status">
-          <el-option label="全部" value="ALL" />
-          <el-option label="启用" value="ENABLED" />
-          <el-option label="停用" value="DISABLED" />
-        </el-select>
-        <el-button type="primary" @click="onQuery">查询</el-button>
-        <el-button @click="onReset">重置</el-button>
-      </div>
-
-      <!-- 工具栏（CCFG-UI-004：新增 + 唯一删除所选 + 弱提示） -->
-      <div class="cc-toolbar">
-        <div class="cc-toolbar-left">
-          <el-button type="primary" @click="openCreate">新增探针</el-button>
-          <el-button :disabled="selectedClientId === null" :loading="deleteBusy" @click="onDelete">
-            删除所选
-          </el-button>
-          <span v-if="selectedClientId !== null" class="cc-selected">已选择：{{ selectedClientId }}</span>
+        <div class="cc-query-item">
+          <span class="cc-query-label">探针信息</span>
+          <el-input
+            v-model="queryKeyword"
+            class="cc-query-keyword"
+            placeholder="请输入探针 ID 或探针描述"
+            clearable
+            @keyup.enter="onQuery"
+          />
         </div>
-        <span class="cc-hint">双击记录可编辑</span>
+        <div class="cc-query-item">
+          <span class="cc-query-label">探针状态</span>
+          <el-select v-model="queryStatus" class="cc-query-status">
+            <el-option label="全部" value="ALL" />
+            <el-option label="启用" value="ENABLED" />
+            <el-option label="停用" value="DISABLED" />
+          </el-select>
+        </div>
+        <div class="cc-query-actions">
+          <el-button type="primary" class="cc-query-btn" @click="onQuery">查询</el-button>
+          <el-button class="cc-query-btn" @click="onReset">重置</el-button>
+        </div>
       </div>
 
-      <!-- 已有成功结果后的刷新失败：非遮挡提示 + 按已生效条件重试（R1-05） -->
-      <div v-if="refreshFailed" class="cc-refresh-warn" role="status">
-        <span class="cc-refresh-text">刷新失败：当前仍展示上一次成功结果，请点击“重试”重新加载。</span>
-        <el-button size="small" :loading="listLoading" @click="loadList">重试</el-button>
-      </div>
+      <!-- 独立表格卡片：工具栏 + 数据表格（CCFG-UI-002/004/005） -->
+      <div class="cc-table-card">
+        <div class="cc-toolbar">
+          <div class="cc-toolbar-left">
+            <el-button type="primary" class="cc-btn-add" @click="openCreate">
+              <el-icon class="cc-btn-icon"><Plus /></el-icon>新增探针
+            </el-button>
+            <el-button
+              class="cc-btn-delete"
+              :class="{ 'cc-btn-delete--armed': selectedClientId !== null }"
+              :disabled="selectedClientId === null"
+              :loading="deleteBusy"
+              @click="onDelete"
+            >
+              <el-icon class="cc-btn-icon"><Delete /></el-icon>删除所选
+            </el-button>
+            <span v-if="selectedClientId !== null" class="cc-selected">已选择：{{ selectedClientId }}</span>
+          </div>
+        </div>
 
-      <!-- 数据表格（CCFG-UI-005，无操作列/无分页/无自动刷新） -->
+        <!-- 已有成功结果后的刷新失败：非遮挡提示 + 按已生效条件重试（R1-05） -->
+        <div v-if="refreshFailed" class="cc-refresh-warn" role="status">
+          <span class="cc-refresh-text">刷新失败：当前仍展示上一次成功结果，请点击“重试”重新加载。</span>
+          <el-button size="small" :loading="listLoading" @click="loadList">重试</el-button>
+        </div>
+
+
+      <!-- 数据表格（CCFG-UI-005/022，无操作列/无分页/无自动刷新） -->
       <el-table
         v-loading="listLoading"
         class="cc-table"
@@ -59,7 +77,7 @@
         @row-click="onRowClick"
         @row-dblclick="onRowDblClick"
       >
-        <el-table-column label="探针 ID" min-width="140">
+        <el-table-column label="探针 ID" width="176" class-name="cc-col-id">
           <template #default="{ row }">
             <span
               class="cc-id"
@@ -67,72 +85,56 @@
               role="button"
               :aria-label="`编辑探针 ${row.clientId}`"
               @keydown="onRowKeyEdit($event, row)"
+              @mouseenter="onIdEnter($event, row)"
+              @mouseleave="onTipLeave"
             >{{ row.clientId }}</span>
           </template>
         </el-table-column>
 
-        <el-table-column label="探针描述" min-width="200">
+        <el-table-column label="探针描述" width="300">
           <template #default="{ row }">
-            <el-tooltip v-if="isBlankDesc(row)" content="未填写探针描述" placement="top">
-              <span class="cc-desc cc-desc--empty">—</span>
-            </el-tooltip>
-            <el-tooltip v-else :content="String(row.clientDesc)" placement="top">
-              <span class="cc-desc">{{ row.clientDesc }}</span>
-            </el-tooltip>
+            <span
+              class="cc-desc"
+              :class="{ 'cc-desc--empty': isBlankDesc(row) }"
+              @mouseenter="onDescEnter($event, row)"
+              @mouseleave="onTipLeave"
+            >{{ isBlankDesc(row) ? '—' : row.clientDesc }}</span>
           </template>
         </el-table-column>
 
-        <el-table-column label="采集数据源" min-width="340">
+        <el-table-column label="采集数据源" min-width="260">
           <template #default="{ row }">
-            <div class="cc-src">
-              <el-tooltip v-if="isRowAmbiguous(row)" class="box-item" effect="dark" placement="top">
-                <template #content>
-                  <div class="cc-amb-tip">
-                    <p class="cc-amb-reason">英文逗号既可能是分隔符、也可能属于数据源 ID，无法精确还原实际分配关系。</p>
-                    <p class="cc-amb-raw">原始串：{{ row.rawDataSourceIds ?? '—' }}</p>
-                    <p v-if="row.possibleCommaDataSourceIds.length" class="cc-amb-possible">
-                      可能含逗号数据源 ID：{{ row.possibleCommaDataSourceIds.join('、') }}
-                    </p>
-                    <p class="cc-amb-note">本行机构标签与数据源数量为普通 CSV 解析的展示结果。</p>
-                  </div>
-                </template>
-                <el-tag type="danger" size="small" class="cc-rowbad">含逗号歧义</el-tag>
-              </el-tooltip>
+            <div
+              class="cc-src"
+              :data-client-id="row.clientId"
+              :ref="(el) => setSrcEl(el as HTMLElement | null, row.clientId)"
+            >
+              <span
+                v-if="isRowAmbiguous(row)"
+                class="cc-rowbad"
+                @mouseenter="onTipEnter($event, tipForRowbad(row))"
+                @mouseleave="onTipLeave"
+              >含逗号歧义</span>
 
-              <el-tooltip
-                v-for="ds in projectedShown(row)"
-                :key="`${row.clientId}-${ds.dataSourceId}`"
-                class="box-item"
-                effect="dark"
-                placement="top"
-              >
-                <template #content>
-                  <div class="cc-ds-tip">
-                    <div>{{ ds.org || ds.dataSourceId }}</div>
-                    <div v-if="ds.dataSourceName">{{ ds.dataSourceName }}</div>
-                    <div>数据源 ID：{{ ds.dataSourceId }}</div>
-                    <div v-if="ds.anomalies.length" class="cc-ds-tip-bad">
-                      {{ anomalyText(ds.anomalies, ds.conflictClientIds) }}
-                    </div>
-                  </div>
-                </template>
-                <el-tag
-                  size="small"
-                  :type="ds.anomalies.length ? 'danger' : 'info'"
-                  :class="['cc-dstag', { 'cc-dstag--bad': ds.anomalies.length }]"
-                >
-                  {{ dsTagText(ds) }}
-                </el-tag>
-              </el-tooltip>
+              <span
+                v-for="(ds, idx) in orderedSources(row)"
+                :key="`${row.clientId}-${ds.dataSourceId}-${idx}`"
+                v-show="idx < shownCount(row)"
+                class="cc-dstag"
+                :class="{ 'cc-dstag--bad': ds.anomalies.length }"
+                @mouseenter="onTipEnter($event, tipForDs(ds))"
+                @mouseleave="onTipLeave"
+              >{{ dsBodyText(ds) }}</span>
 
               <el-popover
-                v-if="row.dataSources.length > DIRECT_COUNT"
+                v-if="hiddenCount(row) > 0"
                 placement="top"
-                :width="340"
+                :width="380"
                 trigger="click"
+                @show="clearTip"
               >
                 <template #reference>
-                  <el-tag size="small" class="cc-more">+{{ row.dataSources.length - DIRECT_COUNT }}</el-tag>
+                  <span class="cc-more">+{{ hiddenCount(row) }}</span>
                 </template>
                 <div class="cc-full-list">
                   <p v-if="isRowAmbiguous(row)" class="cc-full-note">
@@ -144,11 +146,12 @@
                       :key="`${row.clientId}-full-${ds.dataSourceId}`"
                       class="cc-full-item"
                     >
-                      <span class="cc-full-org">{{ ds.org || ds.dataSourceId }}</span>
+                      <span v-if="hasOrg(ds)" class="cc-full-org">{{ ds.org }}</span>
+                      <span v-if="hasOrg(ds)" class="cc-full-id">{{ ds.dataSourceId }}</span>
                       <span v-if="ds.anomalies.length" class="cc-full-bad">
-                        [{{ anomalyText(ds.anomalies, ds.conflictClientIds) }}]
+                        {{ anomalyText(ds.anomalies, ds.conflictClientIds) }}
                       </span>
-                      <span class="cc-full-id">{{ ds.dataSourceId }}</span>
+                      <span v-if="!hasOrg(ds)" class="cc-full-org">{{ ds.dataSourceId }}</span>
                     </li>
                   </ul>
                 </div>
@@ -157,29 +160,28 @@
           </template>
         </el-table-column>
 
-        <el-table-column label="数据源数量" min-width="100">
+        <el-table-column label="数据源数量" width="110" align="center">
           <template #default="{ row }">
             <span class="cc-count">{{ row.dataSourceCount }}</span>
-            <el-tooltip
+            <span
               v-if="isRowAmbiguous(row)"
-              content="普通 CSV 解析的展示结果（行级含逗号歧义，非已确定分配）"
-              placement="top"
-            >
-              <span class="cc-count-note">（展示）</span>
-            </el-tooltip>
+              class="cc-count-note"
+              @mouseenter="onTipEnter($event, { lines: [{ text: '普通 CSV 解析的展示结果（行级含逗号歧义，非已确定分配）', tone: 'muted' }] })"
+              @mouseleave="onTipLeave"
+            >（展示）</span>
           </template>
         </el-table-column>
 
-        <el-table-column label="状态" min-width="140">
+        <el-table-column label="状态" width="160">
           <template #default="{ row }">
             <span class="cc-status-cell">
-              <el-tag size="small" :type="statusType(row)" class="cc-state-tag">
+              <el-tag size="small" :type="statusType(row)" class="cc-state-tag" :disable-transitions="true">
                 {{ statusText(row) }}
               </el-tag>
               <el-button
                 v-if="canToggle(row, 'disable')"
                 link
-                type="primary"
+                type="danger"
                 class="cc-op"
                 :disabled="opBusy === `disable:${row.clientId}`"
                 @click="onDisable(row)"
@@ -200,6 +202,7 @@
           </template>
         </el-table-column>
       </el-table>
+      </div>
     </template>
 
     <!-- 新增/编辑弹窗（CCFG-UI-013/014/015/016/017） -->
@@ -341,12 +344,33 @@
         </el-button>
       </template>
     </el-dialog>
+
+    <!-- 页面级单实例悬停 Tooltip（CCFG-UI-005/008）：Teleport 到 body，任意时刻最多一个 -->
+    <Teleport to="body">
+      <div
+        v-show="tipVisible"
+        ref="tipHostRef"
+        class="cc-single-tip"
+        :class="{ 'cc-single-tip--below': tipBelow }"
+        :style="{ left: `${tipPos.x}px`, top: `${tipPos.y}px` }"
+        role="tooltip"
+        aria-live="polite"
+      >
+        <p
+          v-for="(ln, i) in tipLines"
+          :key="i"
+          :class="`cc-single-line cc-single-line--${ln.tone ?? 'normal'}`"
+        >{{ ln.text }}</p>
+      </div>
+    </Teleport>
   </div>
 </template>
 
 <script setup lang="ts">
-import { computed, onMounted, ref } from 'vue'
+import { computed, nextTick, onBeforeUnmount, onMounted, reactive, ref } from 'vue'
 import { ElMessage, ElMessageBox } from 'element-plus'
+import { Delete, Plus } from '@element-plus/icons-vue'
+import { descNeedsTip, measureChipWidth, packTwoLines } from './listLayout'
 import {
   createClient,
   deleteClient,
@@ -358,7 +382,12 @@ import {
 } from '@/api/clientConfig'
 import type { ClientListItemVO, ClientStatusFilter, DataSourceOptionVO } from '@/types/clientConfig'
 
-const DIRECT_COUNT = 3
+type DataSourceViewItem = ClientListItemVO['dataSources'][number]
+
+const DS_GAP = 6
+const DS_MAX_LINES = 2
+const MORE_SLOT_TEXT = '+88'
+const TIP_DELAY_MS = 240
 
 const ID_PATTERN = /^[A-Za-z0-9][A-Za-z0-9._-]{0,31}$/
 
@@ -398,26 +427,30 @@ function anomalyText(anomalies: string[], conflictClientIds: string[]): string {
 }
 
 function isBlankDesc(row: ClientListItemVO): boolean {
-  return row.clientDesc === null || javaTrim(row.clientDesc).length === 0
+  // 后端 JSON 序列化省略 null 字段时 clientDesc 为 undefined，须与 null 一视同仁。
+  const desc = row.clientDesc
+  return desc == null || javaTrim(desc).length === 0
 }
 
 function isRowAmbiguous(row: ClientListItemVO): boolean {
   return row.rowAnomalies.includes('COMMA_PROTOCOL_AMBIGUOUS')
 }
 
-/** 项级异常优先、组内保持接口原顺序的非持久化前三项投影（CCFG-UI-010，不改原数组）。 */
-function projectedShown(row: ClientListItemVO): ClientListItemVO['dataSources'] {
+/** 采集数据源展示顺序：异常优先、组内保持接口原顺序（CCFG-UI-010，不改原数组）。 */
+function orderedSources(row: ClientListItemVO): DataSourceViewItem[] {
   const abnormal = row.dataSources.filter((d) => d.anomalies.length > 0)
   const normal = row.dataSources.filter((d) => d.anomalies.length === 0)
-  return [...abnormal, ...normal].slice(0, DIRECT_COUNT)
+  return [...abnormal, ...normal]
 }
 
-function dsTagText(ds: ClientListItemVO['dataSources'][number]): string {
-  if (ds.anomalies.length) {
-    return `${ds.dataSourceId}（${anomalyText(ds.anomalies, ds.conflictClientIds)}）`
-  }
+/** 标签正文：优先机构名称；数据源不存在且无法取得机构名称时才显示原始 ID（CCFG-UI-009）。 */
+function dsBodyText(ds: DataSourceViewItem): string {
   const org = (ds.org ?? '').trim()
   return org.length ? org : ds.dataSourceId
+}
+
+function hasOrg(ds: DataSourceViewItem): boolean {
+  return (ds.org ?? '').trim().length > 0
 }
 
 function statusText(row: ClientListItemVO): string {
@@ -485,12 +518,14 @@ function onQuery(): void {
 }
 
 function onReset(): void {
+  clearTip()
   queryKeyword.value = ''
   queryStatus.value = 'ALL'
   // 恢复默认条件；不自动触发查询、不覆盖当前已生效列表（CCFG-UI-003）
 }
 
 async function loadList(): Promise<void> {
+  clearTip()
   const seq = ++listSeq
   listLoading.value = true
   listFailed.value = false
@@ -499,12 +534,20 @@ async function loadList(): Promise<void> {
     if (seq !== listSeq) return
     if (res.code === 200) {
       listRows.value = res.data?.items ?? []
+      shownMap.clear()
       listLoadedOnce.value = true
       if (
         selectedClientId.value !== null &&
         !listRows.value.some((r) => r.clientId === selectedClientId.value)
       ) {
         selectedClientId.value = null
+      }
+      // 数据渲染并完成真实布局后，按各容器实际宽度重新打包两行布局；
+      // 不依赖 ResizeObserver 是否恰好再触发（行元素复用且宽度不变时 RO 不再回调，
+      // 否则会退回“全部直接展示”，窄列下既无 +N 又撑/截到第三行）。
+      if (seq === listSeq) {
+        await settleTwoLineLayout()
+        if (seq === listSeq) recomputeAllRows()
       }
     } else {
       listFailed.value = true
@@ -674,6 +717,7 @@ const filteredOptions = computed(() => {
 })
 
 function openCreate(): void {
+  clearTip()
   resetDialog()
   mode.value = 'create'
   clientIdLocked.value = false
@@ -682,6 +726,7 @@ function openCreate(): void {
 }
 
 function openEdit(row: ClientListItemVO): void {
+  clearTip()
   resetDialog()
   mode.value = 'edit'
   editRow.value = row
@@ -840,8 +885,247 @@ async function submitDialog(): Promise<void> {
   }
 }
 
+// ------------------------------------------------- 两行动态 +N 布局
+// 决策依赖真实元素尺寸：用 ResizeObserver 观察每个采集数据源单元格，取到容器宽度后
+// 用与标签一致的盒模型离屏测量各标签宽度，再交给纯函数 packTwoLines 决定直接展示数与 +N。
+// jsdom 无布局：不安装/触发 ResizeObserver 时按“全部直接展示”兜底（配合真机目测）。
+
+const shownMap = reactive(new Map<string, number>())
+const srcEls = reactive(new Map<string, HTMLElement>())
+let rowObserver: ResizeObserver | null = null
+let resizeHandler: (() => void) | null = null
+
+function shownCount(row: ClientListItemVO): number {
+  return shownMap.get(row.clientId) ?? orderedSources(row).length
+}
+
+function hiddenCount(row: ClientListItemVO): number {
+  return Math.max(0, orderedSources(row).length - shownCount(row))
+}
+
+function setSrcEl(el: HTMLElement | null, clientId: string): void {
+  const prev = srcEls.get(clientId)
+  if (prev && prev !== el) rowObserver?.unobserve(prev)
+  if (el === null) {
+    srcEls.delete(clientId)
+    return
+  }
+  srcEls.set(clientId, el)
+  rowObserver?.observe(el)
+}
+
+function recomputeRow(clientId: string, containerWidth: number, srcEl?: HTMLElement | null): void {
+  if (!Number.isFinite(containerWidth) || containerWidth <= 0) return
+  const row = listRows.value.find((r) => r.clientId === clientId)
+  if (!row) return
+  const dss = orderedSources(row)
+  const total = dss.length
+  if (total === 0) {
+    shownMap.set(clientId, 0)
+    return
+  }
+  // 行级歧义标签与标签同行流动，先扣除其宽度 + 间距，避免把可展示标签挤进 +N。
+  let avail = containerWidth
+  const el = srcEl || srcEls.get(clientId)
+  if (el) {
+    const rb = el.querySelector<HTMLElement>('.cc-rowbad')
+    if (rb && rb.offsetWidth > 0) avail = Math.max(0, avail - rb.offsetWidth - DS_GAP)
+  }
+  const widths = dss.map((ds) => measureChipWidth(dsBodyText(ds)))
+  const moreWidth = measureChipWidth(MORE_SLOT_TEXT) || 40
+  const { shown } = packTwoLines({
+    widths,
+    containerWidth: avail,
+    gap: DS_GAP,
+    moreWidth,
+    maxLines: DS_MAX_LINES,
+  })
+  shownMap.set(clientId, shown)
+}
+
+/** 依当前 DOM（data-client-id）逐行打包。el-table 数据变化时会复用行 DOM 节点且不重建 ref，
+ * 按渲染期捕获的 clientId 维护的 srcEls 会过期，故直接读当前渲染结果，而非信任 ref 映射。 */
+function recomputeAllRows(): void {
+  if (typeof document === 'undefined') return
+  document.querySelectorAll<HTMLElement>('.cc-src[data-client-id]').forEach((el) => {
+    const clientId = el.getAttribute('data-client-id')
+    if (!clientId || !listRows.value.some((r) => r.clientId === clientId)) return
+    const width = el.clientWidth || el.getBoundingClientRect().width
+    recomputeRow(clientId, width, el)
+  })
+}
+
+/** 等 el-table 完成真实布局（nextTick 之后再过两帧）再按真实容器宽度打包，供 loadList 成功后调用。 */
+function settleTwoLineLayout(): Promise<void> {
+  return new Promise((resolve) => {
+    if (typeof requestAnimationFrame === 'undefined') {
+      resolve()
+      return
+    }
+    requestAnimationFrame(() => requestAnimationFrame(() => resolve(undefined)))
+  })
+}
+
+// ------------------------------------------------- 单实例悬停 Tooltip
+// 整个列表任意时刻最多一个悬停 Tooltip（CCFG-UI-005/007/008）：进入新目标立即关闭上一个，
+// 稳定悬停约 240ms 后显示，鼠标离开立即隐藏；查询/重置/重载/弹窗/卸载时清除。
+
+type TipTone = 'main' | 'bad' | 'muted'
+interface TipLine {
+  text: string
+  tone?: TipTone
+}
+interface TipContent {
+  lines: TipLine[]
+}
+
+const tipVisible = ref(false)
+const tipBelow = ref(false)
+const tipPos = reactive({ x: 0, y: 0 })
+const tipLines = ref<TipLine[]>([])
+const tipHostRef = ref<HTMLElement | null>(null)
+let tipTimer: ReturnType<typeof setTimeout> | undefined
+let tipTarget: HTMLElement | null = null
+
+function clearTip(): void {
+  if (tipTimer !== undefined) {
+    clearTimeout(tipTimer)
+    tipTimer = undefined
+  }
+  tipTarget = null
+  tipVisible.value = false
+  tipLines.value = []
+}
+
+function positionTip(): void {
+  const host = tipHostRef.value
+  if (!host) return
+  const hw = host.offsetWidth || 0
+  const hh = host.offsetHeight || 0
+  const vw = window.innerWidth || 0
+  const vh = window.innerHeight || 0
+  const half = hw / 2
+  let x = tipPos.x
+  if (vw > 0) x = Math.min(Math.max(x, half + 8), Math.max(half + 8, vw - half - 8))
+  let y = tipPos.y
+  if (!tipBelow.value && tipTarget && y - hh < 8) {
+    const r = tipTarget.getBoundingClientRect()
+    y = r.bottom + 8
+    tipBelow.value = true
+  }
+  if (vh > 0 && y + hh > vh - 8) y = vh - hh - 8
+  y = Math.max(y, 8)
+  tipPos.x = Math.round(Math.max(x, 8))
+  tipPos.y = Math.round(y)
+}
+
+function showTip(target: HTMLElement, lines: TipLine[]): void {
+  clearTip()
+  tipTarget = target
+  tipLines.value = lines
+  tipBelow.value = false
+  const rect = target.getBoundingClientRect()
+  tipPos.x = rect.left + rect.width / 2
+  tipPos.y = rect.top - 8
+  tipVisible.value = true
+  void nextTick(() => positionTip())
+}
+
+function scheduleTip(target: HTMLElement, lines: TipLine[]): void {
+  clearTip()
+  tipTimer = setTimeout(() => {
+    tipTimer = undefined
+    showTip(target, lines)
+  }, TIP_DELAY_MS)
+}
+
+function onTipEnter(event: MouseEvent, content: TipContent): void {
+  const el = event.currentTarget
+  if (!(el instanceof HTMLElement)) return
+  scheduleTip(el, content.lines)
+}
+
+function onTipLeave(): void {
+  clearTip()
+}
+
+function tipForDs(ds: DataSourceViewItem): TipContent {
+  const lines: TipLine[] = []
+  if (hasOrg(ds)) {
+    lines.push({ text: (ds.org ?? '').trim(), tone: 'main' })
+    lines.push({ text: `数据源 ID：${ds.dataSourceId}`, tone: 'muted' })
+  } else {
+    lines.push({ text: ds.dataSourceId, tone: 'main' })
+  }
+  ds.anomalies.forEach((a) => {
+    lines.push({ text: `异常原因：${ANOMALY_TEXT[a] ?? a}`, tone: 'bad' })
+  })
+  if (ds.anomalies.includes('ASSIGNED_TO_MULTIPLE_CLIENTS') && ds.conflictClientIds.length) {
+    lines.push({ text: `冲突探针：${ds.conflictClientIds.join('、')}`, tone: 'bad' })
+  }
+  return { lines }
+}
+
+function tipForRowbad(row: ClientListItemVO): TipContent {
+  void row
+  return {
+    lines: [
+      { text: '行级存在英文逗号歧义（历史 CSV），非已确定分配', tone: 'bad' },
+      { text: '列表按普通 CSV 解析展示，请进入编辑确认实际分配', tone: 'muted' },
+    ],
+  }
+}
+
+function onDescEnter(event: MouseEvent, row: ClientListItemVO): void {
+  const el = event.currentTarget
+  if (!(el instanceof HTMLElement)) return
+  if (isBlankDesc(row)) {
+    scheduleTip(el, [{ text: '未填写探针描述', tone: 'muted' }])
+    return
+  }
+  if (descNeedsTip(el.clientWidth, el.scrollWidth)) {
+    scheduleTip(el, [{ text: row.clientDesc ?? '', tone: 'main' }])
+  } else {
+    clearTip()
+  }
+}
+
+function onIdEnter(event: MouseEvent, row: ClientListItemVO): void {
+  const el = event.currentTarget
+  if (!(el instanceof HTMLElement)) return
+  if (descNeedsTip(el.clientWidth, el.scrollWidth)) {
+    scheduleTip(el, [{ text: row.clientId, tone: 'main' }])
+  } else {
+    clearTip()
+  }
+}
+
 onMounted(() => {
+  if (typeof ResizeObserver !== 'undefined') {
+    rowObserver = new ResizeObserver((entries) => {
+      for (const entry of entries) {
+        const el = entry.target
+        if (!(el instanceof HTMLElement)) continue
+        const clientId = el.getAttribute('data-client-id')
+        if (!clientId) continue
+        const width = entry.contentRect ? entry.contentRect.width : el.clientWidth
+        recomputeRow(clientId, width, el)
+      }
+    })
+    srcEls.forEach((el) => rowObserver?.observe(el))
+    resizeHandler = recomputeAllRows
+    window.addEventListener('resize', resizeHandler)
+  }
   void loadList()
+})
+
+onBeforeUnmount(() => {
+  clearTip()
+  if (resizeHandler) window.removeEventListener('resize', resizeHandler)
+  rowObserver?.disconnect()
+  rowObserver = null
+  srcEls.clear()
+  shownMap.clear()
 })
 </script>
 
@@ -849,7 +1133,7 @@ onMounted(() => {
 .cc-page {
   display: flex;
   flex-direction: column;
-  gap: 8px;
+  gap: 12px;
 }
 
 .cc-header {
@@ -858,9 +1142,15 @@ onMounted(() => {
 
 .cc-title {
   margin: 0;
-  font-size: 20px;
+  font-size: 22px;
   font-weight: 600;
   color: #303133;
+}
+
+.cc-subtitle {
+  margin: 4px 0 0;
+  font-size: 13px;
+  color: #909399;
 }
 
 .cc-page-state {
@@ -889,18 +1179,63 @@ onMounted(() => {
   color: #909399;
 }
 
+/* 查询区：独立卡片，外部标签 + 控件（CCFG-UI-002/003，无搜索图标） */
 .cc-query {
   display: flex;
+  align-items: center;
+  flex-wrap: wrap;
+  gap: 12px 16px;
+  padding: 14px 16px;
+  border: 1px solid #e4e7ed;
+  border-radius: 8px;
+  background: #fff;
+}
+
+.cc-query-item {
+  display: inline-flex;
   align-items: center;
   gap: 8px;
 }
 
+.cc-query-label {
+  flex-shrink: 0;
+  font-size: 14px;
+  font-weight: 500;
+  color: #303133;
+}
+
 .cc-query-keyword {
-  width: 240px;
+  width: 300px;
+}
+
+.cc-query-keyword :deep(.el-input__wrapper) {
+  height: 36px;
 }
 
 .cc-query-status {
-  width: 120px;
+  width: 150px;
+}
+
+.cc-query-status :deep(.el-select__wrapper) {
+  min-height: 36px;
+}
+
+.cc-query-actions {
+  display: inline-flex;
+  align-items: center;
+  gap: 10px;
+  margin-left: 4px;
+}
+
+.cc-query-btn {
+  height: 36px;
+}
+
+/* 独立表格卡片：工具栏 + 表格（CCFG-UI-002/004/005） */
+.cc-table-card {
+  border: 1px solid #e4e7ed;
+  border-radius: 8px;
+  background: #fff;
 }
 
 .cc-toolbar {
@@ -908,23 +1243,38 @@ onMounted(() => {
   align-items: center;
   justify-content: space-between;
   gap: 8px;
+  padding: 10px 16px;
+  border-bottom: 1px solid #e4e7ed;
 }
 
 .cc-toolbar-left {
   display: flex;
   align-items: center;
-  gap: 8px;
+  gap: 10px;
+}
+
+.cc-btn-icon {
+  margin-right: 2px;
+  font-size: 14px;
+}
+
+.cc-btn-delete--armed {
+  color: #f56c6c;
+  border-color: #f56c6c;
+  background: #fff;
+}
+
+.cc-btn-delete--armed:hover,
+.cc-btn-delete--armed:focus {
+  color: #fff;
+  background: #f56c6c;
+  border-color: #f56c6c;
 }
 
 .cc-selected {
   margin-left: 4px;
   font-size: 13px;
   color: #606266;
-}
-
-.cc-hint {
-  font-size: 13px;
-  color: #909399;
 }
 
 .cc-refresh-warn {
@@ -948,6 +1298,21 @@ onMounted(() => {
   background-color: #f0f7ff;
 }
 
+.cc-id {
+  display: inline-block;
+  max-width: 100%;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+  vertical-align: bottom;
+  cursor: pointer;
+}
+
+.cc-id:focus-visible {
+  outline: 1px solid var(--el-color-primary);
+  outline-offset: 1px;
+}
+
 .cc-desc {
   display: inline-block;
   max-width: 100%;
@@ -961,66 +1326,108 @@ onMounted(() => {
   color: #909399;
 }
 
+/* 采集数据源：固定预留两行高度，永不因 +N 前瞬间的多标签换行而撑成第三行（CCFG-UI-004/007） */
 .cc-src {
   display: flex;
-  align-items: center;
-  flex-wrap: nowrap;
-  gap: 4px;
+  flex-wrap: wrap;
+  align-content: flex-start;
+  gap: 6px;
   min-width: 0;
+  height: 50px;
   overflow: hidden;
 }
 
+.cc-rowbad {
+  flex-shrink: 0;
+  box-sizing: border-box;
+  height: 22px;
+  padding: 0 8px;
+  border: 1px solid #f1a7a7;
+  border-radius: 4px;
+  background: #fef0f0;
+  font-size: 12px;
+  line-height: 20px;
+  color: #d54949;
+}
+
 .cc-dstag {
-  max-width: 120px;
+  display: inline-flex;
+  align-items: center;
+  box-sizing: border-box;
+  height: 22px;
+  max-width: 10em;
+  padding: 0 8px;
+  border: 1px solid #d9dee7;
+  border-radius: 4px;
+  background: #fff;
+  font-size: 12px;
+  line-height: 1;
+  color: #303133;
+  white-space: nowrap;
   overflow: hidden;
   text-overflow: ellipsis;
 }
 
 .cc-dstag--bad {
-  border-color: var(--el-color-danger);
-  color: var(--el-color-danger);
+  border-color: #f1a7a7;
+  background: #fef0f0;
+  color: #d54949;
 }
 
 .cc-more {
+  display: inline-flex;
+  align-items: center;
+  box-sizing: border-box;
+  height: 22px;
+  padding: 0 8px;
+  border: 1px solid #b3d8ff;
+  border-radius: 4px;
   background: #ecf5ff;
-  border-color: #b3d8ff;
+  font-size: 12px;
   color: #409eff;
+  white-space: nowrap;
   cursor: pointer;
 }
 
-.cc-rowbad {
-  flex-shrink: 0;
+.cc-more:hover {
+  background: #d9ecff;
 }
 
-.cc-ds-tip {
-  max-width: 300px;
+/* 页面级单实例悬停 Tooltip：Teleport 到 body，pointer-events:none（CCFG-UI-005/008） */
+.cc-single-tip {
+  position: fixed;
+  z-index: 3000;
+  max-width: 380px;
+  padding: 6px 10px;
+  border-radius: 6px;
+  background: #303133;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.18);
   font-size: 12px;
   line-height: 1.5;
+  color: #fff;
+  pointer-events: none;
+  transform: translate(-50%, -100%);
 }
 
-.cc-ds-tip-bad {
-  color: #f56c6c;
+.cc-single-tip--below {
+  transform: translate(-50%, 0);
 }
 
-.cc-amb-tip {
-  max-width: 320px;
-  font-size: 12px;
-  line-height: 1.5;
+.cc-single-line {
+  margin: 0;
+  word-break: break-word;
 }
 
-.cc-amb-reason {
-  margin: 0 0 4px;
+.cc-single-line--main {
+  font-weight: 600;
 }
 
-.cc-amb-raw,
-.cc-amb-possible,
-.cc-amb-note {
-  margin: 2px 0;
-  word-break: break-all;
+.cc-single-line--bad {
+  color: #ffb8b8;
 }
 
-.cc-amb-note {
-  color: #c0c4cc;
+.cc-single-line--muted {
+  color: #d4d7dd;
 }
 
 .cc-full-list {
@@ -1066,7 +1473,11 @@ onMounted(() => {
 .cc-status-cell {
   display: inline-flex;
   align-items: center;
-  gap: 8px;
+  gap: 10px;
+}
+
+.cc-state-tag {
+  cursor: default;
 }
 
 .cc-op {
