@@ -10,13 +10,13 @@
 | 既有路由 | `/monitor/data-source-state`（保持既有值不变，不因功能更名改 URL） |
 | 前端源码目录 | `frontend/src/views/data-source-run-state/`（保留既有目录名，不做无业务价值的目录重命名；命名映射见 §6） |
 | 当前实现 | 占位（`frontend/src/views/data-source-run-state/DataSourceRunStatePage.vue` 为 `PlaceholderPage` 占位页，标题“数据源运行状态”；路由已存在；后端当前没有针对 `CDC_DATA_SOURCE_RUN_STATE` 的访问链路） |
-| 需求基线 | `DRAFT_PENDING_USER_REVIEW`（需求草案经 R1、R2 定向修订；R3 只修验收文字、不改需求业务语义，见 `REQUIREMENTS.md`；未批准） |
-| 验收标准 | `DRAFT_PENDING_USER_REVIEW`（验收标准草案经 R1、R2、R3 定向修订；R3 极小定向修正 `DSS-AC-024` 成功刷新更新时间的验收矛盾，见 `ACCEPTANCE.md`；全部 `DSS-AC-001~068` 状态为 `NOT_RUN`） |
+| 需求基线 | `APPROVED`（需求与验收基线已批准，正式批准版本 `DATA-SOURCE-SNAPSHOT-STATUS-REQUIREMENTS-BASELINE-APPROVAL-001`，批准内容基准提交 `4234af73db2190098f3dcd219319a4281fdabafd`；不代表功能已实现、验收已执行或通过） |
+| 验收标准 | `APPROVED`（验收标准基线经 R0、R1、R2、R3 定向修订后已批准；`DSS-AC-024` 成功刷新更新时间的验收矛盾已修正，见 `ACCEPTANCE.md`；全部 `DSS-AC-001~068` 状态为 `NOT_RUN`，验收标准获批不代表已执行正式验收） |
 | 实现状态 | `NOT_STARTED` |
 | 验收执行状态 | `NOT_RUN` |
 | 设计状态 | `NOT_STARTED`（DESIGN.md / API.md / UI.md / DATABASE.md 均未建立） |
-| 待确认草案建议 | 0（`pending_user_confirmation_count=0`；原 `DSS-PROP-001~008` 已全部决策吸收，不等于已批准） |
-| 当前阶段 | 需求与验收草案（R3 极小定向修订版）待 ChatGPT 正式复审与用户审阅/批准，未进入设计、实现或验收执行 |
+| 待确认草案建议 | 0（`pending_user_confirmation_count=0`；原 `DSS-PROP-001~008` 已全部决策吸收并批准） |
+| 当前阶段 | 需求与验收基线已批准（正式批准版本 `DATA-SOURCE-SNAPSHOT-STATUS-REQUIREMENTS-BASELINE-APPROVAL-001`），设计尚未开始，未实现、未执行验收 |
 
 ## 2. Feature 定位
 
@@ -45,14 +45,15 @@
 
 | 文档 | 职责 | 状态 |
 |---|---|---|
-| `README.md`（本文件） | Feature 定位、命名映射、文档导航与状态 | 已建立（2026-09-05）；随 R1、R2、R3 修订同步 |
-| `REQUIREMENTS.md` | 需求草案（`DSS-REQ-001~065`，R3 极小定向修订版；65 条业务行不变） | `DRAFT_PENDING_USER_REVIEW`（未批准、未实现） |
-| `ACCEPTANCE.md` | 验收标准草案（`DSS-AC-001~068`，全部 `NOT_RUN`，R3 极小定向修订版） | `DRAFT_PENDING_USER_REVIEW`（未批准、未执行） |
+| `README.md`（本文件） | Feature 定位、命名映射、文档导航与状态 | 已建立（2026-09-05）；随 R1、R2、R3 修订及批准收口同步 |
+| `REQUIREMENTS.md` | 需求基线（`DSS-REQ-001~065`，R3 极小定向修订版，65 条业务行不变） | `APPROVED`（需求与验收基线已批准，未实现） |
+| `ACCEPTANCE.md` | 验收标准基线（`DSS-AC-001~068`，全部 `NOT_RUN`，R3 极小定向修订版） | `APPROVED`（需求与验收基线已批准，未执行验收） |
 | `DESIGN.md` / `API.md` / `UI.md` / `DATABASE.md` | 设计基线 | 未建立（`NOT_STARTED`） |
 | `reports/DATA-SOURCE-SNAPSHOT-STATUS-REQUIREMENTS-BASELINE-001.md` | 本任务（需求与验收草案建立）执行报告 | 已建立（初版） |
 | `reports/DATA-SOURCE-SNAPSHOT-STATUS-REQUIREMENTS-BASELINE-001-R1.md` | 本任务（R1 定向修订）执行报告 | 已建立（R1） |
 | `reports/DATA-SOURCE-SNAPSHOT-STATUS-REQUIREMENTS-BASELINE-001-R2.md` | 本任务（R2 最小定向修订）执行报告 | 已建立（R2） |
 | `reports/DATA-SOURCE-SNAPSHOT-STATUS-REQUIREMENTS-BASELINE-001-R3.md` | 本任务（R3 极小定向修订）执行报告 | 已建立（R3） |
+| `reports/DATA-SOURCE-SNAPSHOT-STATUS-REQUIREMENTS-BASELINE-APPROVAL-001.md` | 本任务（需求与验收基线批准收口）批准报告 | 已建立（批准收口，2026-09-05） |
 | `docs/database/reports/DATA-SOURCE-SNAPSHOT-STATUS-DATABASE-VERIFICATION-001.md` | `CDC_DATA_SOURCE_RUN_STATE` 数据库只读复核报告（已提交，提交 `72b305a`） | 已建立；本 Feature 的数据库事实一律以该报告为依据 |
 
 ## 6. 页面与路由现状（AS-IS 事实）
@@ -80,17 +81,17 @@
 - 原 8 项 `DRAFT_PROPOSAL_PENDING_USER_REVIEW` 草案建议（`DSS-PROP-001~008`）已全部由项目负责人确认并吸收为正式需求/验收，`pending_user_confirmation_count=0`；处置映射见 `REQUIREMENTS.md` §22。
 - R2 最小定向修订（ChatGPT 对 R1 结果正式复审 `CHANGES_REQUIRED` 后）已在既有需求/验收行内消除两个剩余歧义（未增号、未改数）：①“新条件查询失败”：保留上一次成功结果与上一次“已应用查询条件”，新条件不升级、界面控件保留新选择、后续自动/立即刷新仍用旧已应用条件，仅查询成功（含成功返回 0 条空结果）才把点击瞬间捕获的请求快照升级为“已应用查询条件”，首次失败仍保持初始三项“全部”；②“失败后的 60 秒计时”：页面可见时每次实际请求结束（无论成功失败）都从请求结束重新开始完整 60 秒周期，刷新失败约 60 秒后按已应用条件正常自动重试（不停止、不立即无间隔重试），被抑制触发不视为实际请求、不单独重置计时，页面不可见停止计时且不保留剩余秒数复用，恢复可见立即刷新后重启完整周期，“最近成功刷新时间”仅成功后更新。
 - R3 极小定向修订（ChatGPT 对 R2 结果正式复审 `CHANGES_REQUIRED` 后）只修正验收草案 `DSS-AC-024` 的一处验收矛盾（未增号、未改数）：按旧“已应用条件”触发的自动/立即刷新成功返回时，必须把“最近成功刷新时间”更新为本次成功刷新完成时间并按本次成功结果更新表格，不得再写作“成功刷新也不更新时间”；同时明确成功刷新不得替换“已应用查询条件”，只有用户点击“查询”且查询成功（含成功返回 0 条空结果）才允许用该次请求快照替换；其余 67 条验收业务行与 65 条 `DSS-REQ-*` 业务行相对授权基线 `5c58af6` 逐字节不变。
-- 需求与验收草案（R3 极小定向修订版）仍未批准：待 ChatGPT 对 R3 结果正式复审，复审后由项目负责人审阅/批准；`pending_user_confirmation_count=0` 不等于已批准。
+- 需求与验收基线已批准（ChatGPT 对 R3 结果提交 `4234af73db2190098f3dcd219319a4281fdabafd` 正式复审 `APPROVED`，项目负责人随后明确回复“批准”，正式批准版本 `DATA-SOURCE-SNAPSHOT-STATUS-REQUIREMENTS-BASELINE-APPROVAL-001`，批准日期 2026-09-05）：批准的是需求与验收标准基线，不代表设计已完成、功能已实现、验收已执行或通过，也不代表 `IMPLEMENTED_ACCEPTED`；`pending_user_confirmation_count=0`。
 - 数据库对 `CDC_DATA_SOURCE_RUN_STATE` 测试数据 DML 的未来授权（仅限开发库、仅本表、备份/恢复、禁 DDL/其他表/生产）已精确记录于 `REQUIREMENTS.md`；本草案任务不访问数据库。
 
 ## 9. 当前阶段与声明
 
-- 本 Feature 当前状态：`requirements_status=DRAFT_PENDING_USER_REVIEW`、`acceptance_status=DRAFT_PENDING_USER_REVIEW`、`implementation_status=NOT_STARTED`、`acceptance_execution_status=NOT_RUN`、`design_status=NOT_STARTED`、`pending_user_review=YES`、`pending_user_confirmation_count=0`。
-- 需求草案与验收标准草案**均未批准**：不代表功能已实现、不代表验收已执行或通过；`pending_user_confirmation_count=0` 不等于已批准。
+- 本 Feature 当前状态：`baseline_status=APPROVED`、`requirements_status=APPROVED`、`acceptance_status=APPROVED`、`implementation_status=NOT_STARTED`、`acceptance_execution_status=NOT_RUN`、`design_status=NOT_STARTED`、`pending_user_review=NO`、`pending_user_confirmation_count=0`。
+- 需求与验收标准基线**已批准**（正式批准版本 `DATA-SOURCE-SNAPSHOT-STATUS-REQUIREMENTS-BASELINE-APPROVAL-001`）：不代表设计已完成、不代表功能已实现、不代表验收已执行或通过；批准的是需求与验收标准基线，不等于 `IMPLEMENTED_ACCEPTED`。
 - 功能**未实现**：页面仍为占位，后端无访问链路。
 - 验收**未执行**：`DSS-AC-001~068` 全部 `NOT_RUN`。
-- 不得把本 README 中“目标/后续实现阶段”描述为当前已实现事实，不得写成 `APPROVED`、`IMPLEMENTED`、`PASS`、`ACCEPTED` 或验收通过。
+- 不得把本 README 中“目标/后续实现阶段”描述为当前已实现事实，不得写成 `IMPLEMENTED`、`PASS`、`ACCEPTED` 或验收通过。
 
 ## 10. 下一流程入口
 
-下一入口为 **ChatGPT 对 R3 极小定向修订结果（即 `REQUIREMENTS.md` 与 `ACCEPTANCE.md` R3 极小定向修订版草案）进行正式复审**，随后由项目负责人审阅/批准需求与验收草案；批准后再进入设计阶段（DESIGN/API/UI/DATABASE）。本任务（R3）本身不进入设计，不实现代码，不执行验收。
+下一入口为 **建立设计基线阶段**：进入设计任务，产出 `DESIGN.md / API.md / UI.md / DATABASE.md` 设计基线文档。本批准收口任务（`DATA-SOURCE-SNAPSHOT-STATUS-REQUIREMENTS-BASELINE-APPROVAL-001`）本身不进入设计，不实现代码，不执行验收。

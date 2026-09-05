@@ -8,31 +8,35 @@
 | Feature 标识 | `data-source-snapshot-status` |
 | 既有路由 | `/monitor/data-source-state` |
 | 目标文档 | `docs/features/data-source-snapshot-status/ACCEPTANCE.md` |
-| 文档状态 | `DRAFT_PENDING_USER_REVIEW`（验收标准草案，未批准、未执行） |
-| baseline_status | `DRAFT_PENDING_USER_REVIEW` |
-| acceptance_status | `DRAFT_PENDING_USER_REVIEW` |
+| 文档状态 | `APPROVED`（需求与验收标准基线已批准；不代表设计已完成、功能已实现、验收已执行或通过，也不代表 `IMPLEMENTED_ACCEPTED`） |
+| baseline_status | `APPROVED` |
+| acceptance_status | `APPROVED`（见 `REQUIREMENTS.md`，需求基线同样已批准） |
 | acceptance_execution_status | `NOT_RUN`（验收标准获批不代表已执行正式验收） |
 | 实现状态 | `NOT_STARTED` |
 | 设计状态 | `NOT_STARTED`（DESIGN/API/UI/DATABASE 未建立） |
 | 验收用例状态 | 文档内全部 `DSS-AC-*` 状态为 `NOT_RUN`（尚未执行正式验收；不写 PASS/FAIL/ACCEPTED/IMPLEMENTED_ACCEPTED） |
+| 正式批准版本 | `DATA-SOURCE-SNAPSHOT-STATUS-REQUIREMENTS-BASELINE-APPROVAL-001`（项目负责人明确“批准”驱动的需求与验收基线批准收口） |
+| 批准链 | R0 需求与验收草案建立 → R1 定向修订 → R2 最小定向修订 → R3 极小定向修订 → ChatGPT 对 R3 结果正式复审 `APPROVED`（R3 结果提交 `4234af73db2190098f3dcd219319a4281fdabafd`）→ 项目负责人随后明确回复“批准” |
+| 批准依据提交 | `4234af73db2190098f3dcd219319a4281fdabafd`（ChatGPT 对 R3 结果正式复审 `APPROVED` 的 R3 结果提交；本批准收口以该提交为批准内容基准） |
+| 批准日期 | 2026-09-05 |
 | 初版任务编号 | `DATA-SOURCE-SNAPSHOT-STATUS-REQUIREMENTS-BASELINE-001`（初版需求与验收草案建立） |
 | R1 任务编号 | `DATA-SOURCE-SNAPSHOT-STATUS-REQUIREMENTS-BASELINE-001-R1`（ChatGPT 正式复审 `CHANGES_REQUIRED` 后的纯文档定向修订；历史版） |
 | R2 任务编号 | `DATA-SOURCE-SNAPSHOT-STATUS-REQUIREMENTS-BASELINE-001-R2`（ChatGPT 对 R1 结果正式复审 `CHANGES_REQUIRED` 后的纯文档最小定向修订；历史版） |
-| 本版（R3）任务编号 | `DATA-SOURCE-SNAPSHOT-STATUS-REQUIREMENTS-BASELINE-001-R3`（ChatGPT 对 R2 结果正式复审 `CHANGES_REQUIRED` 后的纯文档极小定向修订；本版为修订后草案） |
-| 初版授权基线提交 | `72b305a8e4134d10f514920c215b9647fb7d9e3b` |
-| R1 授权基线提交 | `91eb2209a99a65ef1d433c2fb1c815a1abcd5bd5` |
+| 本版（R3）任务编号 | `DATA-SOURCE-SNAPSHOT-STATUS-REQUIREMENTS-BASELINE-001-R3`（ChatGPT 对 R2 结果正式复审 `CHANGES_REQUIRED` 后的纯文档极小定向修订；历史版本，其后经批准收口为 `APPROVED`） |
+| 初版授权基线提交 | `72b305a8e4134d10f514920c215b9647fb7d9e3b`（初版任务开始时 `origin/develop` 最新提交；历史基线） |
+| R1 授权基线提交 | `91eb2209a99a65ef1d433c2fb1c815a1abcd5bd5`（R1 任务开始时 `origin/develop` 最新提交；历史基线） |
 | R2 授权基线提交 | `0476c40a49f1a7aa6d48fe58194c92982276fd60`（历史基线） |
-| 本版（R3）授权基线提交 | `5c58af6b0a378c8534ebc0b76eaa7bc75b6a847a` |
-| 文档版本 | R3 极小定向修订版（2026-09-05；仅修正 `DSS-AC-024` 中“成功刷新却不更新最近成功刷新时间”的验收矛盾，并明确刷新成功不得替换“已应用查询条件”——只有用户点击“查询”且查询成功才允许替换；其余 67 条验收业务行相对 R2 逐字节不变；`DSS-AC-001~068` 全部 `NOT_RUN`） |
-| 创建日期 | 2026-09-05（初版）；R1、R2、R3 修订同日 |
-| 依据需求 | `docs/features/data-source-snapshot-status/REQUIREMENTS.md`（`DSS-REQ-001~065`，R3 定向修订版，文档状态 `DRAFT_PENDING_USER_REVIEW`） |
+| 本版（R3）授权基线提交 | `5c58af6b0a378c8534ebc0b76eaa7bc75b6a847a`（R3 任务开始时 `origin/develop` 最新提交；历史基线） |
+| 文档版本 | 批准收口版（2026-09-05；在 R3 极小定向修订版基础上，ChatGPT 对 R3 结果正式复审 `APPROVED`（R3 结果提交 `4234af73db2190098f3dcd219319a4281fdabafd`）、项目负责人随后明确“批准”，需求与验收基线状态收口为 `APPROVED`，正式批准版本 `DATA-SOURCE-SNAPSHOT-STATUS-REQUIREMENTS-BASELINE-APPROVAL-001`；业务零变化——`DSS-AC-001~068` 仍 68 条且全部 `NOT_RUN`；批准的是需求与验收标准基线，不代表功能已实现、验收已执行或通过） |
+| 创建日期 | 2026-09-05（初版）；R1、R2、R3 修订及批准收口同日 |
+| 依据需求 | `docs/features/data-source-snapshot-status/REQUIREMENTS.md`（`DSS-REQ-001~065`，R3 极小定向修订版，文档状态 `APPROVED`） |
 
 重要声明：
 
 - 本文件把所有需求转换为可客观验收的场景，使用唯一、稳定的验收编号 `DSS-AC-xxx`。
 - 所有用例初始状态为 `NOT_RUN`；`PASS / FAIL / BLOCKED` 是执行后状态，任何用例只有在执行并取得与步骤匹配的客观证据后才允许更新。
 - 本文件只定义期望行为，**不授权任何数据库写操作或测试数据写入**；对需要构造数据库异常数据的验收场景，只有后续任务提示词显式包含该授权时才可执行，且测试数据写授权只适用于 `CDC_DATA_SOURCE_RUN_STATE`，绝不授权修改 `CDC_CLIENT_MULTIPLE`、`CDC_DATA_SOURCE` 或其他表（授权边界与可构造场景见 `REQUIREMENTS.md` §20 `DSS-REQ-065` 与本文件 `DSS-AC-063/065`）。
-- 验收标准文档获批不等于执行验收、正式验收通过或实现正式接受。本文件不执行任何验收；`DSS-AC-*` 全部保持 `NOT_RUN`，不代表功能已实现、已验收通过或已正式交付。
+- 本文件验收标准基线已批准（2026-09-05，正式批准版本与批准链见 §1），但验收标准获批不等于执行验收、正式验收通过或实现正式接受。本文件不执行任何验收；`DSS-AC-*` 全部保持 `NOT_RUN`，不代表功能已实现、已验收通过或已正式交付。
 
 ## 2. 验收结果状态模型
 
@@ -266,7 +270,7 @@
 ## 6. 未执行说明与后续执行边界
 
 - 本文件全部 `DSS-AC-*` 为 `NOT_RUN`，本次不执行任何验收。
-- 验收标准草案待用户审阅与 ChatGPT 正式复审；执行验收须在功能实现完成并满足环境条件后开展。
+- 验收标准基线已批准（需求与验收基线批准收口任务 `DATA-SOURCE-SNAPSHOT-STATUS-REQUIREMENTS-BASELINE-APPROVAL-001`，2026-09-05），下一入口为设计基线建立；执行验收须在功能实现完成并满足环境条件后开展。
 - 依赖数据库只读比对或受控测试数据构造的用例，执行时必须遵守项目数据库只读/审批规则；测试数据 DML 仅在后续任务提示词显式纳入 `DSS-REQ-065` 授权时执行。
 - 本文件不授权任何数据库写操作或测试数据写入；验收标准获批不等于执行验收、验收通过或实现正式接受。
 
@@ -278,5 +282,6 @@
 | 2026-09-05 | R1 定向修订验收草案：新增 `DSS-AC-068`（刷新工具栏稳定宽度），验收计数为 `DSS-AC-001~068` 共 68 条、全部 `NOT_RUN`；重写 `DSS-AC-020/022/023/024`（多选“或/且”、“全部”互斥、未知状态候选动态出现与筛选、修改不查询/点击查询才应用/重置不查询的完整“双状态”序列验证，落实 R1-03）、`DSS-AC-027`（源库单行 Tooltip）、`DSS-AC-032/033/035/037`（状态标签颜色＋文字）、`DSS-AC-048/051`（恢复可见立即按已应用条件刷新）、`DSS-AC-052`（`YYYY-MM-DD HH:mm:ss` 时间格式）、`DSS-AC-058`（失败保留旧结果）、`DSS-AC-042`（异常弱提示形式）；重写 `DSS-AC-065` 限定测试数据 DML 仅可操作 RUN_STATE、其余场景按既有配置或自动化/Mock（落实 R1-02）；删除对 `DSS-PROP-*` 的引用并同步 §5 追踪矩阵；仍为 `DRAFT_PENDING_USER_REVIEW`，全部 `NOT_RUN`，待 ChatGPT 对 R1 结果正式复审 | DATA-SOURCE-SNAPSHOT-STATUS-REQUIREMENTS-BASELINE-001-R1（ChatGPT 正式复审 `CHANGES_REQUIRED` 驱动的纯文档定向修订；草案未批准、功能未实现、验收未执行） |
 | 2026-09-05 | R2 最小定向修订验收草案：不新增/删除/重编号任何 `DSS-AC-*`，验收计数仍为 68、全部 `NOT_RUN`；在既有用例内消除两个剩余歧义——R2-01 扩展 `DSS-AC-021`（首次自动查询失败仍保持初始“全部”已应用条件）、`DSS-AC-024`（新条件查询失败不升级已应用条件/保留旧结果/刷新仍旧/界面保留新条件、请求快照与在途改条件语义、空结果视为成功）、`DSS-AC-056`（首次加载失败“已应用查询条件”仍为三项“全部”）、`DSS-AC-057`（成功返回 0 条属成功并升级条件与更新时间）、`DSS-AC-058`（刷新失败保留已应用条件与数据、最近成功刷新时间不更新）；R2-02 扩展 `DSS-AC-048/051`（每次实际请求结束无论成败重启完整 60 秒周期、失败后约 60 秒自动重试、被抑制触发不视为实际请求不单独重置计时、不可见停止且不保留剩余秒数复用）、`DSS-AC-050`、`DSS-AC-068`；`DSS-AC-024` 关联需求增补 `DSS-REQ-061` 并同步 §5 追踪矩阵；仍为 `DRAFT_PENDING_USER_REVIEW`，全部 `NOT_RUN`，待 ChatGPT 对 R2 结果正式复审 | DATA-SOURCE-SNAPSHOT-STATUS-REQUIREMENTS-BASELINE-001-R2（ChatGPT 对 R1 结果正式复审 `CHANGES_REQUIRED` 驱动的纯文档最小定向修订；草案未批准、功能未实现、验收未执行） |
 | 2026-09-05 | R3 极小定向修订验收草案：不新增/删除/重编号任何 `DSS-AC-*`，验收计数仍为 68、全部 `NOT_RUN`；只定向修正 `DSS-AC-024` 的验收矛盾——该用例第⑤步“自动/立即刷新按旧“已应用条件”成功返回”不再写作“也不更新“最近成功刷新时间””，统一为“成功刷新必须把“最近成功刷新时间”更新为本次成功刷新完成时间、但不替换、不改变“已应用查询条件””；并按同一口径同步该用例第②、⑧步等明确成功的刷新步骤（成功刷新更新表格与最近成功刷新时间，永不替换“已应用查询条件”）；把该用例末句替换为无歧义结论：只有用户点击“查询”且查询成功，才允许用该次请求快照替换“已应用查询条件”；自动刷新和“立即刷新”无论成功或失败都不得改变“已应用查询条件”。除 `DSS-AC-024` 外，其余 67 条验收业务行相对本版授权基线 `5c58af6` 逐字节不变；§5 追踪矩阵与编号计数未变；仍为 `DRAFT_PENDING_USER_REVIEW`，全部 `NOT_RUN`，待 ChatGPT 对 R3 结果正式复审 | DATA-SOURCE-SNAPSHOT-STATUS-REQUIREMENTS-BASELINE-001-R3（ChatGPT 对 R2 结果正式复审 `CHANGES_REQUIRED` 驱动的纯文档极小定向修订；草案未批准、功能未实现、验收未执行） |
+| 2026-09-05 | 需求与验收基线批准收口：ChatGPT 对 R3 结果（提交 `4234af73db2190098f3dcd219319a4281fdabafd`）正式复审结论 `APPROVED`，项目负责人随后明确回复“批准”；本文件基线状态由 `DRAFT_PENDING_USER_REVIEW` 收口为 `APPROVED`（正式批准版本 `DATA-SOURCE-SNAPSHOT-STATUS-REQUIREMENTS-BASELINE-APPROVAL-001`，批准内容基准提交 `4234af73db2190098f3dcd219319a4281fdabafd`）；业务零变化——`DSS-AC-001~068` 仍 68 条、全部 `NOT_RUN`、§5 需求—验收追踪矩阵零差异、65 条 `DSS-REQ-*`（见 `REQUIREMENTS.md`）零差异；实现状态保持 `NOT_STARTED`、设计状态保持 `NOT_STARTED`、验收执行状态保持 `NOT_RUN`；验收标准获批不等于执行验收、验收通过或实现正式接受；下一入口更新为设计基线建立 | DATA-SOURCE-SNAPSHOT-STATUS-REQUIREMENTS-BASELINE-APPROVAL-001（项目负责人明确批准驱动的需求与验收基线批准收口；纯文档任务，未设计、未实现、未执行验收） |
 
 > 关联文档：需求草案 `docs/features/data-source-snapshot-status/REQUIREMENTS.md`；功能入口与状态 `docs/features/data-source-snapshot-status/README.md`。
