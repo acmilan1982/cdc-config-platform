@@ -21,21 +21,23 @@
 | pending_user_review | `YES` |
 | 初版任务编号 | `DATA-SOURCE-SNAPSHOT-STATUS-REQUIREMENTS-BASELINE-001`（初版需求与验收草案建立） |
 | 本版（R1）任务编号 | `DATA-SOURCE-SNAPSHOT-STATUS-REQUIREMENTS-BASELINE-001-R1`（ChatGPT 正式复审 `CHANGES_REQUIRED` 后的纯文档定向修订；历史版本） |
-| 本版（R2）任务编号 | `DATA-SOURCE-SNAPSHOT-STATUS-REQUIREMENTS-BASELINE-001-R2`（ChatGPT 对 R1 正式复审 `CHANGES_REQUIRED` 后的纯文档最小定向修订；本版为最新修订后草案） |
-| 任务类型 | 纯文档——需求与验收草案及 R1/R2 定向修订（只修订功能级文档并提交、推送；严禁进入设计、编码、数据库访问或运行服务阶段） |
+| 本版（R2）任务编号 | `DATA-SOURCE-SNAPSHOT-STATUS-REQUIREMENTS-BASELINE-001-R2`（ChatGPT 对 R1 结果正式复审 `CHANGES_REQUIRED` 后的纯文档最小定向修订；历史版本） |
+| 本版（R3）任务编号 | `DATA-SOURCE-SNAPSHOT-STATUS-REQUIREMENTS-BASELINE-001-R3`（ChatGPT 对 R2 结果正式复审 `CHANGES_REQUIRED` 后的纯文档极小定向修订：只修正验收草案 `DSS-AC-024` 文字、不改任何需求业务语义；本版为最新修订后草案） |
+| 任务类型 | 纯文档——需求与验收草案及 R1/R2/R3 定向修订（只修订功能级文档并提交、推送；严禁进入设计、编码、数据库访问或运行服务阶段） |
 | 初版授权基线提交 | `72b305a8e4134d10f514920c215b9647fb7d9e3b`（初版任务开始时 `origin/develop` 最新提交） |
 | 本版（R1）授权基线提交 | `91eb2209a99a65ef1d433c2fb1c815a1abcd5bd5`（R1 任务开始时 `origin/develop` 最新提交，本地 HEAD 与其一致，ahead/behind=0/0；历史基线） |
-| 本版（R2）授权基线提交 | `0476c40a49f1a7aa6d48fe58194c92982276fd60`（R2 任务开始时 `origin/develop` 最新提交，本地 HEAD 与其一致，ahead/behind=0/0） |
-| 文档版本 | R2 定向修订版（2026-09-05；在 R1 基础上消除两个剩余歧义：新条件查询失败后“已应用查询条件”的处理，与查询/刷新失败后的 60 秒计时与自动重试；编号与计数不变——需求仍 65 条、验收仍 68 条；`pending_user_confirmation_count=0`；仍为未批准草案，待 ChatGPT 对 R2 结果正式复审） |
-| 创建日期 | 2026-09-05（初版）；本版 R1、R2 修订同日 |
-| 需求来源 | 项目负责人已确认的产品决策（任务提示词 §6）+ 已核验数据库只读复核报告（`docs/database/reports/DATA-SOURCE-SNAPSHOT-STATUS-DATABASE-VERIFICATION-001.md`）+ 既有 Feature 文档结构/术语约定（`topic-offset`、`client-config` 等仅作结构参考，不复制其业务规则）；本版 R1 依据 ChatGPT 正式复审意见（`CHANGES_REQUIRED`，R1-01~R1-03）与项目负责人已确认的 8 项交互方案、刷新工具栏稳定性要求、最新“重置不查询”决定（任务提示词 §5~§7）定向修订；本版 R2 依据 ChatGPT 对 R1 结果正式复审意见（`CHANGES_REQUIRED`，R2-01/R2-02）定向消除两个剩余歧义（任务提示词 §5~§6） |
+| 本版（R2）授权基线提交 | `0476c40a49f1a7aa6d48fe58194c92982276fd60`（R2 任务开始时 `origin/develop` 最新提交，本地 HEAD 与其一致，ahead/behind=0/0；历史基线） |
+| 本版（R3）授权基线提交 | `5c58af6b0a378c8534ebc0b76eaa7bc75b6a847a`（R3 任务开始时 `origin/develop` 最新提交，本地 HEAD 与其一致，ahead/behind=0/0） |
+| 文档版本 | R3 极小定向修订版（2026-09-05；本版为纯文档极小定向修订：只修正验收草案 `DSS-AC-024` 中“成功刷新却不更新最近成功刷新时间”的文字矛盾，并明确刷新成功不得替换“已应用查询条件”——只有用户点击“查询”且查询成功才允许替换；不改变任何需求业务语义；编号与计数不变——需求仍 65 条、验收仍 68 条、全部 `NOT_RUN`；`pending_user_confirmation_count=0`；仍为未批准草案，待 ChatGPT 对 R3 结果正式复审） |
+| 创建日期 | 2026-09-05（初版）；本版 R1、R2、R3 修订同日 |
+| 需求来源 | 项目负责人已确认的产品决策（任务提示词 §6）+ 已核验数据库只读复核报告（`docs/database/reports/DATA-SOURCE-SNAPSHOT-STATUS-DATABASE-VERIFICATION-001.md`）+ 既有 Feature 文档结构/术语约定（`topic-offset`、`client-config` 等仅作结构参考，不复制其业务规则）；本版 R1 依据 ChatGPT 正式复审意见（`CHANGES_REQUIRED`，R1-01~R1-03）与项目负责人已确认的 8 项交互方案、刷新工具栏稳定性要求、最新“重置不查询”决定（任务提示词 §5~§7）定向修订；本版 R2 依据 ChatGPT 对 R1 结果正式复审意见（`CHANGES_REQUIRED`，R2-01/R2-02）定向消除两个剩余歧义（任务提示词 §5~§6）；本版 R3 依据 ChatGPT 对 R2 结果正式复审意见（`CHANGES_REQUIRED`）极小定向修订验收草案 `DSS-AC-024` 文字（只指向“成功刷新却不更新最近成功刷新时间”的验收矛盾，任务提示词 §4~§6），不改变任何需求业务语义 |
 
 文档事实边界声明：
 
 - 用户已确认的业务规则在本文件中作为需求事实记录（`DSS-REQ-*`）。
 - 仓库现状（路由、菜单标题、占位页、无后端访问链路）作为 AS-IS 事实记录，并标注来源。
 - `CDC_DATA_SOURCE_RUN_STATE` 数据库物理事实全部引用已提交数据库只读复核报告（见 §3），本文件不重新查询数据库。
-- 本文件 R1 版已取消全部 `DRAFT_PROPOSAL_PENDING_USER_REVIEW` 草案建议（原 `DSS-PROP-001~008`）：8 项交互方案已由项目负责人确认并吸收到相应 `DSS-REQ-*` / `DSS-AC-*`，`pending_user_confirmation_count=0`；本文件仍是未批准草案（最新为 R2 修订版），待 ChatGPT 对 R2 结果正式复审（`pending_user_confirmation_count=0` 不等于 `APPROVED`）。
+- 本文件 R1 版已取消全部 `DRAFT_PROPOSAL_PENDING_USER_REVIEW` 草案建议（原 `DSS-PROP-001~008`）：8 项交互方案已由项目负责人确认并吸收到相应 `DSS-REQ-*` / `DSS-AC-*`，`pending_user_confirmation_count=0`；本文件仍是未批准草案（最新为 R3 修订版），待 ChatGPT 对 R3 结果正式复审（`pending_user_confirmation_count=0` 不等于 `APPROVED`）。
 - 本文件不得自行增加 sync-client 控制、写能力、时间区间分析、Kafka/ZooKeeper 接入等超出已确认范围的实现；不得把“后续可扩展”写成第一版必须实现。
 
 ## 2. Feature 定位与术语
@@ -270,7 +272,7 @@ docs/database/reports/DATA-SOURCE-SNAPSHOT-STATUS-DATABASE-VERIFICATION-001.md
 
 ## 22. 草案建议处置（R1：原 DSS-PROP-001~008 已全部决策并吸收）
 
-R0 初版 §22“待用户复审的草案建议”所列 8 项 `DSS-PROP-*` 已在 R1 中全部由项目负责人确认并吸收为正式需求/验收行，本版不再保留任何待用户复审草案建议（`pending_user_confirmation_count=0`）。`pending_user_confirmation_count=0` 不等于 `APPROVED`：本版（R2 修订版）仍是草案，需求/验收整体待 ChatGPT 对 R2 结果正式复审，复审后由项目负责人审阅/批准。
+R0 初版 §22“待用户复审的草案建议”所列 8 项 `DSS-PROP-*` 已在 R1 中全部由项目负责人确认并吸收为正式需求/验收行，本版不再保留任何待用户复审草案建议（`pending_user_confirmation_count=0`）。`pending_user_confirmation_count=0` 不等于 `APPROVED`：本版（R3 修订版）仍是草案，需求/验收整体待 ChatGPT 对 R3 结果正式复审，复审后由项目负责人审阅/批准。
 
 | 原草案建议 | 决策结果与去向（需求 / 验收） |
 |---|---|
@@ -300,5 +302,6 @@ R0 初版 §22“待用户复审的草案建议”所列 8 项 `DSS-PROP-*` 已�
 | 2026-09-05 | 建立“源库快照状态”Feature 需求草案（`DRAFT_PENDING_USER_REVIEW`；requirements_status/acceptance_status=`DRAFT_PENDING_USER_REVIEW`；实现状态 `NOT_STARTED`；验收执行状态 `NOT_RUN`；设计状态 `NOT_STARTED`；`DSS-REQ-001~065` 共 65 条；草案建议 `DSS-PROP-001~008`；全部数据库事实引用已提交数据库只读复核报告 `docs/database/reports/DATA-SOURCE-SNAPSHOT-STATUS-DATABASE-VERIFICATION-001.md`） | DATA-SOURCE-SNAPSHOT-STATUS-REQUIREMENTS-BASELINE-001（纯文档任务；基于项目负责人已确认产品决策 + 已核验数据库只读复核报告；待用户审阅与 ChatGPT 正式复审） |
 | 2026-09-05 | R1 定向修订需求草案：修正 R1-01（统一“只读访问 RUN_STATE＋只读关联两张配置表”边界，消除“访问本表之外”自相矛盾）与 R1-03 相关需求（建立“界面选择条件/已应用查询条件”双状态与“重置不查询”，并入 `DSS-REQ-022~025`、`DSS-REQ-050~054`）；吸收项目负责人已确认的 8 项交互方案（并入 `DSS-REQ-022/023/024/029/035/036/038/045/051/054/055/061` 等）与刷新工具栏稳定宽度（`DSS-REQ-050`）；删除 `DSS-PROP-001~008` 待复审草案建议（`pending_user_confirmation_count=0`）；验收计数随 `ACCEPTANCE.md` 更新为 68 条；仍为 `DRAFT_PENDING_USER_REVIEW` 未批准草案，待 ChatGPT 对 R1 结果正式复审 | DATA-SOURCE-SNAPSHOT-STATUS-REQUIREMENTS-BASELINE-001-R1（ChatGPT 正式复审 `CHANGES_REQUIRED` 驱动的纯文档定向修订；草案未批准、功能未实现、验收未执行） |
 | 2026-09-05 | R2 最小定向修订需求草案（ChatGPT 对 R1 结果正式复审 `CHANGES_REQUIRED`）：R2-01 明确“点击查询用请求快照、仅成功（含成功返回 0 条空结果）才升级已应用查询条件；按新条件查询失败保留旧结果/旧已应用条件/界面保留新条件/后续自动与立即刷新用旧条件/不更新最近成功刷新时间；请求在途再改控件成功升级的是请求开始时的快照”（并入术语与 `DSS-REQ-023/025/050/059/060/061`）；R2-02 明确“页面可见时每次实际请求结束（无论成功/失败）都从请求结束重启完整 60 秒周期；失败后 60 秒按已应用条件自动重试、不停止不立即无间隔；成功空结果同样属成功并重启计时；在途被抑制触发不视为实际请求、不单独重置计时；页面不可见停止计时且不保留剩余秒数、不可见期间不启动新计时；恢复可见立即刷新后无论成败重启完整 60 秒；最近成功刷新时间仅成功后更新”（并入 `DSS-REQ-050/051/053/054/061`）；编号与计数不变（需求 65、验收 68、全部 `NOT_RUN`）；仍为 `DRAFT_PENDING_USER_REVIEW` 未批准草案，待 ChatGPT 对 R2 结果正式复审 | DATA-SOURCE-SNAPSHOT-STATUS-REQUIREMENTS-BASELINE-001-R2（ChatGPT 对 R1 正式复审 `CHANGES_REQUIRED` 驱动的纯文档最小定向修订；草案未批准、功能未实现、验收未执行） |
+| 2026-09-05 | R3 极小定向修订需求草案（ChatGPT 对 R2 结果正式复审 `CHANGES_REQUIRED`）：本版不改变任何需求业务规则，只把修订范围限定到验收草案 `DSS-AC-024`——修正该用例“成功刷新却不更新最近成功刷新时间”的验收矛盾，统一为“成功刷新更新‘最近成功刷新时间’但不替换‘已应用查询条件’，只有用户点击‘查询’且查询成功才允许替换”；因此 65 条 `DSS-REQ-*` 业务行相对本版授权基线 `5c58af6` 逐字节不变；编号与计数不变（需求 65、验收 68、全部 `NOT_RUN`）；仍为 `DRAFT_PENDING_USER_REVIEW` 未批准草案，待 ChatGPT 对 R3 结果正式复审 | DATA-SOURCE-SNAPSHOT-STATUS-REQUIREMENTS-BASELINE-001-R3（ChatGPT 对 R2 结果正式复审 `CHANGES_REQUIRED` 驱动的纯文档极小定向修订；草案未批准、功能未实现、验收未执行） |
 
 > 关联文档：验收草案 `docs/features/data-source-snapshot-status/ACCEPTANCE.md`；功能入口与状态 `docs/features/data-source-snapshot-status/README.md`；Feature 总索引 `docs/features/README.md`。
