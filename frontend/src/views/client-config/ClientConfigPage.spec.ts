@@ -2,6 +2,7 @@ import { describe, it, expect, vi, beforeEach, afterEach } from 'vitest'
 import type { MockInstance } from 'vitest'
 import { nextTick } from 'vue'
 import { mount, flushPromises } from '@vue/test-utils'
+import type { DOMWrapper } from '@vue/test-utils'
 import { readFileSync } from 'node:fs'
 import { resolve } from 'node:path'
 import ElementPlus, { ElMessage, ElMessageBox } from 'element-plus'
@@ -484,6 +485,129 @@ describe('选中行视觉、切换与空白点击取消选择（R1 §5.2/§5.3�
       box.remove()
     }
     wrapper.unmount()
+  })
+})
+
+describe('标签文字水平/垂直居中与统一承载（R2 §3/§6）', () => {
+  const SFC_SOURCE = readFileSync(
+    resolve(process.cwd(), 'src/views/client-config/ClientConfigPage.vue'),
+    'utf-8',
+  )
+  const cssBlock = (selector: string) => {
+    const m = SFC_SOURCE.match(new RegExp(`${selector.replace(/\./g, '\\.')}\\s*\\{([^}]*)\\}`, 'm'))
+    return m ? m[1] : ''
+  }
+  // 标签内层唯一文字承载元素：必须恰好一个 .cc-txt，且标签自身无游离裸文本（R2 §3.1/§3.2）
+  const textCarrier = (host: HTMLElement) => {
+    const kids = Array.from(host.children) as HTMLElement[]
+    const carriers = kids.filter((k) => k.classList.contains('cc-txt'))
+    const ownText = Array.from(host.childNodes)
+      .filter((n) => n.nodeType === 3)
+      .map((n) => (n.textContent ?? '').trim())
+      .filter(Boolean)
+      .join('')
+    return { carriers, ownText }
+  }
+
+  it('静态：正常/异常/原始ID/`+N` 四类标签统一为 flex 双向居中，模板正文统一装入 .cc-txt', () => {
+    for (const sel of ['.cc-dstag', '.cc-rowbad', '.cc-more']) {
+      const css = cssBlock(sel)
+      expect(css).toContain('display: inline-flex')
+      expect(css).toContain('align-items: center')
+      expect(css).toContain('justify-content: center')
+      expect(css).toContain('padding: 0 10px')
+    }
+    // 模板：行级歧义标识、数据源标签正文、动态 +N 的文字都包进内层 .cc-txt
+    expect(SFC_SOURCE).toContain('class="cc-txt">含逗号歧义')
+    expect(SFC_SOURCE).toContain('<span class="cc-txt">{{ dsBodyText(ds) }}</span>')
+    expect(SFC_SOURCE).toContain('class="cc-more"><span class="cc-txt">+{{ hiddenCount(row) }}')
+  })
+
+  it('静态：内层 .cc-txt 是统一块级文字载体（单行+统一行高）；省略交给 .cc-dstag > .cc-txt；居中不是位置偏移补丁', () => {
+    const txtCss = cssBlock('.cc-txt')
+    expect(txtCss).toContain('display: block')
+    expect(txtCss).toContain('min-width: 0')
+    expect(txtCss).toContain('line-height: 1')
+    expect(txtCss).toContain('white-space: nowrap')
+    const carrier = cssBlock('.cc-dstag > .cc-txt')
+    expect(carrier).toContain('overflow: hidden')
+    expect(carrier).toContain('text-overflow: ellipsis')
+    // 外层标签仍保留裁切/限宽防线
+    expect(cssBlock('.cc-dstag')).toContain('overflow: hidden')
+    expect(cssBlock('.cc-dstag')).toContain('max-width: 10em')
+    // 禁止脆弱位移凑居中：无 transform/translate/负 margin/单独 padding-top
+    for (const sel of ['.cc-dstag', '.cc-rowbad', '.cc-more', '.cc-txt']) {
+      const css = cssBlock(sel)
+      expect(css).not.toMatch(/transform|translate|margin-top|padding-top|\btop\s*:/)
+    }
+  })
+
+  it('组件：正常与异常标签正文均由唯一内层 .cc-txt 承载，标签无游离裸文本', async () => {
+    const wrapper = await mountPage([enabledRow])
+    const tags = wrapper.findAll('.cc-dstag')
+    const normal = tags.find((t) => !t.classes().includes('cc-dstag--bad'))
+    const bad = tags.find((t) => t.classes().includes('cc-dstag--bad'))
+    expect(normal).toBeDefined()
+    expect(bad).toBeDefined()
+    const cases: Array<{ w: DOMWrapper<Element>; expected: string }> = [
+      { w: normal!, expected: '中心医院' },
+      { w: bad!, expected: '停用机构' },
+    ]
+    for (const { w, expected } of cases) {
+      const { carriers, ownText } = textCarrier(w.element as HTMLElement)
+      expect(carriers).toHaveLength(1)
+      expect((carriers[0].textContent ?? '').trim()).toBe(expected)
+      expect(ownText).toBe('')
+      expect(w.text().trim()).toBe(expected)
+    }
+    wrapper.unmount()
+  })
+
+  it('组件：原始数据源 ID（拉丁/数字/下划线混合正文）与行级歧义标识同样经唯一 .cc-txt 承载', async () => {
+    const wrapper = await mountPage([ambiguousRow])
+    const raw = wrapper.findAll('.cc-dstag').filter((t) => ['ds_a', 'legacy_b'].includes(t.text().trim()))
+    expect(raw).toHaveLength(2)
+    for (const w of raw) {
+      const { carriers, ownText } = textCarrier(w.element as HTMLElement)
+      expect(carriers).toHaveLength(1)
+      expect((carriers[0].textContent ?? '').trim()).toBe(w.text().trim())
+      expect(ownText).toBe('')
+      expect(w.classes()).toContain('cc-dstag--bad')
+    }
+    const { carriers, ownText } = textCarrier(wrapper.find('.cc-rowbad').element as HTMLElement)
+    expect(carriers).toHaveLength(1)
+    expect((carriers[0].textContent ?? '').trim()).toBe('含逗号歧义')
+    expect(ownText).toBe('')
+    wrapper.unmount()
+  })
+
+  it('组件：动态 +N 文字同样经 .cc-more 内层 .cc-txt 承载（宽度重算后仍为点击目标）', async () => {
+    const savedRO = (globalThis as { ResizeObserver?: unknown }).ResizeObserver
+    ;(globalThis as { ResizeObserver: unknown }).ResizeObserver = FakeResizeObserver as never
+    try {
+      chipWidthRegistry.clear()
+      for (const t of ['机构M1', '机构M2', '机构M3', '机构M4', '机构M5', '机构M6', '机构M7']) {
+        chipWidthRegistry.set(t, 40)
+      }
+      chipWidthRegistry.set('+88', 30)
+      const wrapper = await mountPage([overflowRow])
+      lastFakeRO!.emit(260)
+      await nextTick()
+      const more = wrapper.find('.cc-more')
+      expect(more.exists()).toBe(true)
+      expect(more.text().trim()).toBe('+3')
+      const { carriers, ownText } = textCarrier(more.element as HTMLElement)
+      expect(carriers).toHaveLength(1)
+      expect((carriers[0].textContent ?? '').trim()).toBe('+3')
+      expect(ownText).toBe('')
+      // +N 仍为可点击交互元素（点击区域不因居中结构而缩小）
+      expect(more.attributes('class')).toContain('cc-more')
+      wrapper.unmount()
+    } finally {
+      ;(globalThis as unknown as { ResizeObserver?: unknown }).ResizeObserver = savedRO
+      chipWidthRegistry.clear()
+      lastFakeRO = null
+    }
   })
 })
 

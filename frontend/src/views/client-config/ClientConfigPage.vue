@@ -114,7 +114,7 @@
                 class="cc-rowbad"
                 @mouseenter="onTipEnter($event, tipForRowbad(row))"
                 @mouseleave="onTipLeave"
-              >含逗号歧义</span>
+              ><span class="cc-txt">含逗号歧义</span></span>
 
               <span
                 v-for="(ds, idx) in orderedSources(row)"
@@ -124,7 +124,7 @@
                 :class="{ 'cc-dstag--bad': ds.anomalies.length }"
                 @mouseenter="onTipEnter($event, tipForDs(ds))"
                 @mouseleave="onTipLeave"
-              >{{ dsBodyText(ds) }}</span>
+              ><span class="cc-txt">{{ dsBodyText(ds) }}</span></span>
 
               <el-popover
                 v-if="hiddenCount(row) > 0"
@@ -134,7 +134,7 @@
                 @show="clearTip"
               >
                 <template #reference>
-                  <span class="cc-more">+{{ hiddenCount(row) }}</span>
+                  <span class="cc-more"><span class="cc-txt">+{{ hiddenCount(row) }}</span></span>
                 </template>
                 <div class="cc-full-list">
                   <p v-if="isRowAmbiguous(row)" class="cc-full-note">
@@ -1390,6 +1390,7 @@ onBeforeUnmount(() => {
 .cc-rowbad {
   display: inline-flex;
   align-items: center;
+  justify-content: center;
   flex-shrink: 0;
   box-sizing: border-box;
   height: 27px;
@@ -1398,13 +1399,28 @@ onBeforeUnmount(() => {
   border-radius: 4px;
   background: #fef0f0;
   font-size: 14px;
-  line-height: 1;
   color: #d54949;
+}
+
+/* 标签文字统一承载元素：block 容器使 nowrap/省略号稳定生效（对 flex 容器的匿名文本节点
+   text-overflow 不可靠），水平居中由外层 justify-content、垂直居中由 align-items 承担；
+   不依赖字体基线，不使用 translate/负 margin/padding-top 等脆弱偏移（R2 §3） */
+.cc-txt {
+  display: block;
+  min-width: 0;
+  line-height: 1;
+  white-space: nowrap;
+}
+
+.cc-dstag > .cc-txt {
+  overflow: hidden;
+  text-overflow: ellipsis;
 }
 
 .cc-dstag {
   display: inline-flex;
   align-items: center;
+  justify-content: center;
   box-sizing: border-box;
   height: 27px;
   max-width: 10em;
@@ -1413,11 +1429,8 @@ onBeforeUnmount(() => {
   border-radius: 4px;
   background: #fff;
   font-size: 14px;
-  line-height: 1;
   color: #303133;
-  white-space: nowrap;
   overflow: hidden;
-  text-overflow: ellipsis;
   flex-shrink: 0;
 }
 
@@ -1430,6 +1443,7 @@ onBeforeUnmount(() => {
 .cc-more {
   display: inline-flex;
   align-items: center;
+  justify-content: center;
   box-sizing: border-box;
   height: 27px;
   padding: 0 10px;
