@@ -19,7 +19,7 @@ vi.mock('@/api/clientConfig', () => ({
 }))
 
 // listLayout 的离屏测量依赖真实布局，jsdom 返回 0；按标签文本注入测量宽度，
-// 以便在组件层复现“两行放不下才 +N / 宽度变化重算”等确定性断言（真实几何另行浏览器目测）。
+// 以便在组件层复现“单行放不下/超 6 才 +N / 宽度变化重算”等确定性断言（真实几何另行浏览器目测）。
 const { chipWidthRegistry } = vi.hoisted(() => ({ chipWidthRegistry: new Map<string, number>() }))
 vi.mock('@/views/client-config/listLayout', async (importOriginal) => {
   const actual = await importOriginal<typeof import('@/views/client-config/listLayout')>()
@@ -105,6 +105,22 @@ const ambiguousRow = row(
   },
 )
 
+// 与其他探针重复分配（ASSIGNED_TO_MULTIPLE_CLIENTS）：列表标签 Tooltip 展示新文案（R1 §5.1）
+const assignedDs = view(
+  'ds-occ2',
+  '分院',
+  '分院库',
+  ['ASSIGNED_TO_MULTIPLE_CLIENTS'],
+  ['hosp-007'],
+)
+const assignedRow = row('probe-occ', '占用探针', '1', [assignedDs])
+
+// 单行数量上限（6）与 7+ 溢出场景：7 个正常源
+const overflowSources = Array.from({ length: 7 }, (_, i) =>
+  view(`ds-m${i + 1}`, `机构M${i + 1}`, `名M${i + 1}`),
+)
+const overflowRow = row('probe-overflow', '七源探针', '1', overflowSources)
+
 const baseOptions: DataSourceOptionVO[] = [
   { dataSourceId: 'ds-ok1', org: '中心医院', dataSourceName: 'HIS 主库', selectable: true, notSelectableReason: null, occupiedByClientIds: [] },
   { dataSourceId: 'ds-new', org: '新建机构', dataSourceName: '新库', selectable: true, notSelectableReason: null, occupiedByClientIds: [] },
@@ -156,7 +172,7 @@ function sleep(ms: number): Promise<void> {
   return new Promise((r) => setTimeout(r, ms))
 }
 
-/** 驱动 ResizeObserver 回调，让组件两行/+N 决策可在 jsdom 下复现（真实几何另行浏览器目测）。 */
+/** 驱动 ResizeObserver 回调，让组件单行/+N 决策可在 jsdom 下复现（真实几何另行浏览器目测）。 */
 let lastFakeRO: { emit: (width: number) => void } | null = null
 class FakeResizeObserver {
   private readonly cb: (entries: unknown[], observer: unknown) => void
@@ -316,6 +332,157 @@ describe('行选择与删除（CCFG-UI-004/005/019）', () => {
     const wrapper = await mountPage()
     const deleteButtons = wrapper.findAll('button').filter((b) => b.text().includes('删除'))
     expect(deleteButtons).toHaveLength(1)
+    wrapper.unmount()
+  })
+})
+
+describe('选中行视觉、切换与空白点击取消选择（R1 §5.2/§5.3）', () => {
+  const SFC_SOURCE = readFileSync(
+    resolve(process.cwd(), 'src/views/client-config/ClientConfigPage.vue'),
+    'utf-8',
+  )
+  const selectedTrs = (w: PageWrapper) => w.findAll('.el-table__row.cc-row--selected')
+  const cssBlock = (selector: string) => {
+    const m = SFC_SOURCE.match(new RegExp(`${selector.replace(/\./g, '\\.')}\\s*\\{([^}]*)\\}`, 'm'))
+    return m ? m[1] : ''
+  }
+
+  it('静态：选中行有独立于 hover 的浅蓝背景、3px 左侧强调线与“悬停不覆盖”规则', () => {
+    expect(SFC_SOURCE).toContain('tr.el-table__row.cc-row--selected > td.el-table__cell')
+    expect(SFC_SOURCE).toContain('background-color: #ecf5ff')
+    expect(SFC_SOURCE).toContain('box-shadow: inset 3px 0 0 #409eff')
+    // 选中行继续悬停仍保持选中视觉；普通行悬停使用更淡浅蓝；无旧过淡规则残留
+    expect(SFC_SOURCE).toContain('tr.el-table__row.cc-row--selected:hover > td.el-table__cell')
+    expect(SFC_SOURCE).toContain(':not(.cc-row--selected):hover > td.el-table__cell')
+    expect(SFC_SOURCE).not.toContain('background-color: #f0f7ff')
+  })
+
+  it('静态：“采集数据源”严格单行 + 放大标签 + 约 60px 行高（不再固定预留两行）', () => {
+    const srcCss = cssBlock('.cc-src')
+    expect(srcCss).toContain('flex-wrap: nowrap')
+    expect(srcCss).not.toContain('flex-wrap: wrap')
+    expect(srcCss).toContain('overflow: hidden')
+    expect(srcCss).not.toContain('height: 50px')
+    // :deep 选择器含正则特殊字符，直接对源码断言存在性与行高值
+    expect(SFC_SOURCE).toContain('.cc-table :deep(.el-table__row)')
+    expect(SFC_SOURCE).toContain('height: 60px')
+    const dstagCss = cssBlock('.cc-dstag')
+    expect(dstagCss).toContain('height: 27px')
+    expect(dstagCss).toContain('font-size: 14px')
+    expect(dstagCss).toContain('padding: 0 10px')
+    const moreCss = cssBlock('.cc-more')
+    expect(moreCss).toContain('font-size: 14px')
+  })
+
+  it('静态：空白点击保护集覆盖 EP Teleport 浮层与控件；窗口监听在挂载注册/卸载移除', () => {
+    expect(SFC_SOURCE).toContain('.el-overlay,.el-dialog,.el-message-box')
+    expect(SFC_SOURCE).toContain('.el-popper,.el-popover')
+    expect(SFC_SOURCE).toContain('.el-select-dropdown')
+    expect(SFC_SOURCE).toContain("window.addEventListener('click', onPageBlankClick)")
+    expect(SFC_SOURCE).toContain("window.removeEventListener('click', onPageBlankClick)")
+  })
+
+  it('组件：单击行单选高亮；再点另一行切换并同步“已选择”，任一时刻仅一条选中', async () => {
+    const wrapper = await mountPage([enabledRow, disabledRow])
+    await selectRow(wrapper, enabledRow)
+    await nextTick()
+    expect(wrapper.text()).toContain('已选择：probe-a')
+    expect(selectedTrs(wrapper)).toHaveLength(1)
+    expect(selectedTrs(wrapper)[0].text()).toContain('probe-a')
+    await selectRow(wrapper, disabledRow)
+    await nextTick()
+    expect(wrapper.text()).toContain('已选择：probe-b')
+    expect(selectedTrs(wrapper)).toHaveLength(1)
+    expect(selectedTrs(wrapper)[0].text()).toContain('probe-b')
+    expect(exactButton(wrapper, '删除所选')!.attributes('disabled')).toBeUndefined()
+    wrapper.unmount()
+  })
+
+  it('组件：点击页面非交互空白区域 → 清除行选中视觉、“已选择”文字并使删除恢复禁用', async () => {
+    const wrapper = await mountPage()
+    await selectRow(wrapper, enabledRow)
+    await nextTick()
+    expect(wrapper.text()).toContain('已选择：probe-a')
+    await wrapper.find('.cc-subtitle').trigger('click')
+    await nextTick()
+    expect(wrapper.text()).not.toContain('已选择：')
+    expect(selectedTrs(wrapper)).toHaveLength(0)
+    expect(exactButton(wrapper, '删除所选')!.attributes('disabled')).toBeDefined()
+    wrapper.unmount()
+  })
+
+  it('组件：查询与重置后清除选择', async () => {
+    const wrapper = await mountPage()
+    await selectRow(wrapper, enabledRow)
+    await exactButton(wrapper, '查询')!.trigger('click')
+    await flushPromises()
+    expect(wrapper.text()).not.toContain('已选择：')
+    await selectRow(wrapper, enabledRow)
+    await exactButton(wrapper, '重置')!.trigger('click')
+    await flushPromises()
+    expect(wrapper.text()).not.toContain('已选择：')
+    wrapper.unmount()
+  })
+
+  it('组件：取消删除确认后保留原选中行（删除按钮点击不提前清除）', async () => {
+    confirmSpy.mockRejectedValueOnce('cancel')
+    const wrapper = await mountPage()
+    await selectRow(wrapper, enabledRow)
+    await exactButton(wrapper, '删除所选')!.trigger('click')
+    await flushPromises()
+    expect(mockedDelete).not.toHaveBeenCalled()
+    expect(wrapper.text()).toContain('已选择：probe-a')
+    expect(selectedTrs(wrapper)).toHaveLength(1)
+    wrapper.unmount()
+  })
+
+  it('组件：行内状态操作点击不因“空白”语义误清除选择（操作失败不重载时选择保留）', async () => {
+    const wrapper = await mountPage([enabledRow, disabledRow])
+    await selectRow(wrapper, enabledRow)
+    mockedEnable.mockRejectedValueOnce(new Error('network down'))
+    const op = wrapper.findAll('.cc-op').find((b) => b.text().includes('启用'))!
+    await op.trigger('click')
+    await flushPromises()
+    // 点击本身不应作为空白清除；行内操作/EP 行点击最多切换选中到该行，不会清空
+    expect(wrapper.text()).toContain('已选择：')
+    wrapper.unmount()
+  })
+
+  it('组件：数据源标签与行点击不误清除选择', async () => {
+    const wrapper = await mountPage([enabledRow])
+    await selectRow(wrapper, enabledRow)
+    const tag = wrapper.findAll('.cc-dstag').find((t) => t.text() === '停用机构')!
+    await tag.trigger('click')
+    await nextTick()
+    expect(wrapper.text()).toContain('已选择：probe-a')
+    wrapper.unmount()
+  })
+
+  it('组件：新增/编辑弹窗内部点击不误清除选择', async () => {
+    const wrapper = await mountPage([enabledRow])
+    await selectRow(wrapper, enabledRow)
+    await openEdit(wrapper, enabledRow)
+    expect(wrapper.find('.cc-dialog').exists()).toBe(true)
+    await wrapper.find('.cc-dialog').trigger('click')
+    await nextTick()
+    expect(wrapper.text()).toContain('已选择：probe-a')
+    wrapper.unmount()
+  })
+
+  it('组件：Teleport 浮层内部目标命中保护集，不当作页面空白（.el-dialog/.el-message-box/.el-popper）', async () => {
+    const wrapper = await mountPage([enabledRow])
+    await selectRow(wrapper, enabledRow)
+    for (const cls of ['.el-dialog', '.el-message-box', '.el-popper']) {
+      const box = document.createElement('div')
+      box.className = cls
+      const inner = document.createElement('span')
+      inner.textContent = 'overlay-inner'
+      box.appendChild(inner)
+      document.body.appendChild(box)
+      inner.dispatchEvent(new MouseEvent('click', { bubbles: true, cancelable: true }))
+      expect(wrapper.text()).toContain('已选择：probe-a')
+      box.remove()
+    }
     wrapper.unmount()
   })
 })
@@ -518,8 +685,8 @@ describe('编辑弹窗与历史异常回显（CCFG-UI-014/017/025）', () => {
   })
 })
 
-describe('数据源两行自适应与动态 +N（CCFG-UI-004/007~010）', () => {
-  // 这些用例以注入测量宽度 + 模拟 ResizeObserver 驱动“真实”两行打包；真实几何另行浏览器目测。
+describe('数据源单行自适应与动态 +N（CCFG-UI-004/007~010，R1 §5.4/§5.6）', () => {
+  // 这些用例以注入测量宽度 + 模拟 ResizeObserver 驱动“真实”单行打包；真实几何另行浏览器目测。
   const savedRO = (globalThis as { ResizeObserver?: unknown }).ResizeObserver
   beforeEach(() => {
     ;(globalThis as { ResizeObserver: unknown }).ResizeObserver = FakeResizeObserver as never
@@ -534,13 +701,17 @@ describe('数据源两行自适应与动态 +N（CCFG-UI-004/007~010）', () => 
   function setTagWidths(width: number, moreWidth = 30): void {
     const tags = ['机构Ab', '机构N1', '机构N2', '机构N3', '机构N4']
     tags.forEach((t) => chipWidthRegistry.set(t, width))
+    // 7 源溢出/数据集替换行：机构M1..机构M7 同宽
+    Array.from({ length: 7 }, (_, i) => `机构M${i + 1}`).forEach((t) =>
+      chipWidthRegistry.set(t, width),
+    )
     chipWidthRegistry.set('+88', moreWidth)
   }
 
   const visibleTags = (w: PageWrapper) =>
     w.findAll('.cc-dstag').filter((t) => !(t.attributes('style') ?? '').includes('display: none'))
 
-  it('两行能容纳时不显示 +N，全部直接展示', async () => {
+  it('单行能容纳且总数 ≤6：不显示 +N，全部直接展示', async () => {
     setTagWidths(40)
     const wrapper = await mountPage([multiRow])
     lastFakeRO!.emit(260)
@@ -556,13 +727,13 @@ describe('数据源两行自适应与动态 +N（CCFG-UI-004/007~010）', () => 
     wrapper.unmount()
   })
 
-  it('两行放不下时显示精确 +N；标签正文仅机构名；完整清单按接口原顺序', async () => {
+  it('单行放不下：显示实际可容纳项与准确 +N；异常项优先；完整清单按接口原顺序', async () => {
     setTagWidths(40)
     const wrapper = await mountPage([multiRow])
-    lastFakeRO!.emit(120)
+    lastFakeRO!.emit(210)
     await nextTick()
     const visible = visibleTags(wrapper)
-    // 异常优先展示顺序：[机构Ab(异常), 机构N1, 机构N2] 可见，+2 隐藏
+    // 可用 210-(30+8)=172：40/88/136/184>172 → 直接展示 3；异常项（机构Ab）不在接口首位仍最先可见
     expect(visible.map((t) => t.text())).toEqual(['机构Ab', '机构N1', '机构N2'])
     expect(visible[0].classes()).toContain('cc-dstag--bad')
     expect(wrapper.find('.cc-more').text()).toBe('+2')
@@ -573,7 +744,7 @@ describe('数据源两行自适应与动态 +N（CCFG-UI-004/007~010）', () => 
     // 标签正文不得拼接数据源名称或 ID（见 Tooltip describe 的文档断言，此处再校验无名称）
     expect(wrapper.find('.cc-src').text()).not.toContain('名N')
 
-    // 点击 +N：完整清单保留全部项且保持接口原顺序
+    // 点击 +N：完整清单保留全部项且保持接口原顺序（点击式，非悬停）
     await wrapper.find('.cc-more').trigger('click')
     await flushPromises()
     await sleep(60)
@@ -584,25 +755,44 @@ describe('数据源两行自适应与动态 +N（CCFG-UI-004/007~010）', () => 
     wrapper.unmount()
   })
 
-  it('异常项优先进入可见两行：异常项在接口第 3 位仍最先可见', async () => {
+  it('总数 ≥7：宽容器也只直接展示 6，其余进准确 +N', async () => {
     setTagWidths(40)
-    const wrapper = await mountPage([multiRow])
-    lastFakeRO!.emit(46)
+    const wrapper = await mountPage([overflowRow])
+    lastFakeRO!.emit(1000)
     await nextTick()
     const visible = visibleTags(wrapper)
-    expect(visible.map((t) => t.text())).toEqual(['机构Ab'])
-    expect(visible[0].classes()).toContain('cc-dstag--bad')
-    expect(wrapper.find('.cc-more').text()).toBe('+4')
+    expect(visible).toHaveLength(6)
+    expect(visible.map((t) => t.text())).toEqual([
+      '机构M1',
+      '机构M2',
+      '机构M3',
+      '机构M4',
+      '机构M5',
+      '机构M6',
+    ])
+    expect(wrapper.find('.cc-more').text()).toBe('+1')
     wrapper.unmount()
   })
 
-  it('列宽变化触发重算：由可容纳变为溢出后 +N 出现并更新', async () => {
+  it('空间不足：显示少于 6 项与准确 +N，不越界塞入', async () => {
+    setTagWidths(40)
+    const wrapper = await mountPage([overflowRow])
+    lastFakeRO!.emit(260)
+    await nextTick()
+    const visible = visibleTags(wrapper)
+    expect(visible.length).toBeLessThan(6)
+    expect(visible.map((t) => t.text())).toEqual(['机构M1', '机构M2', '机构M3', '机构M4'])
+    expect(wrapper.find('.cc-more').text()).toBe('+3')
+    wrapper.unmount()
+  })
+
+  it('列宽变化触发重算：由可容纳变溢出再恢复，无需刷新页面', async () => {
     setTagWidths(40)
     const wrapper = await mountPage([multiRow])
     lastFakeRO!.emit(260)
     await nextTick()
     expect(wrapper.find('.cc-more').exists()).toBe(false)
-    lastFakeRO!.emit(120)
+    lastFakeRO!.emit(210)
     await nextTick()
     expect(wrapper.find('.cc-more').exists()).toBe(true)
     expect(wrapper.find('.cc-more').text()).toBe('+2')
@@ -613,13 +803,62 @@ describe('数据源两行自适应与动态 +N（CCFG-UI-004/007~010）', () => 
     wrapper.unmount()
   })
 
-  it('编辑弹窗回显仍按接口原顺序（列表两行投影不改变弹窗选择集）', async () => {
+  it('数据集替换后不产生 stale 测量：同一行重载后按新数据源总数重算', async () => {
+    setTagWidths(40)
+    mockedList.mockResolvedValueOnce(okList([multiRow]))
+    mockedList.mockResolvedValueOnce(okList([row('probe-multi', '多源探针', '1', overflowSources)]))
+    const wrapper = await mountPage([multiRow])
+    lastFakeRO!.emit(1000)
+    await nextTick()
+    expect(wrapper.find('.cc-more').exists()).toBe(false)
+    expect(visibleTags(wrapper)).toHaveLength(5)
+    await exactButton(wrapper, '查询')!.trigger('click')
+    await flushPromises()
+    await nextTick()
+    lastFakeRO!.emit(1000)
+    await nextTick()
+    expect(visibleTags(wrapper)).toHaveLength(6)
+    expect(wrapper.find('.cc-more').text()).toBe('+1')
+    wrapper.unmount()
+  })
+
+  it('编辑弹窗回显仍按接口原顺序（列表单行投影不改变弹窗选择集）', async () => {
     const wrapper = await mountPage([multiRow])
     await openEdit(wrapper, multiRow)
     const chips = wrapper.findAll('.cc-chip')
     // 异常项 chip 文案为“数据源ID（原因）”，正常项为机构名；顺序保持接口原顺序
     const expectedChipTexts = ['机构N1', '机构N2', 'ds-ab（不存在）', '机构N3', '机构N4']
     expect(chips.map((c) => c.text())).toEqual(expectedChipTexts)
+    wrapper.unmount()
+  })
+
+  it('+N 为点击交互：完整清单展示全部 7 项，不改变表格行高', async () => {
+    setTagWidths(40)
+    const wrapper = await mountPage([overflowRow])
+    lastFakeRO!.emit(1000)
+    await nextTick()
+    await wrapper.find('.cc-more').trigger('click')
+    await flushPromises()
+    await sleep(60)
+    expect(document.querySelectorAll('.cc-full-item')).toHaveLength(7)
+    wrapper.unmount()
+  })
+
+  it('点击 +N 完整清单不误清除行选择（Popover 属 Teleport 浮层保护集）', async () => {
+    setTagWidths(40)
+    const wrapper = await mountPage([multiRow])
+    lastFakeRO!.emit(210)
+    await nextTick()
+    await selectRow(wrapper, multiRow)
+    await nextTick()
+    await wrapper.find('.cc-more').trigger('click')
+    await flushPromises()
+    await sleep(60)
+    const item = Array.from(document.querySelectorAll('.cc-full-item'))[0]
+    expect(item).toBeTruthy()
+    ;(item as HTMLElement).dispatchEvent(new MouseEvent('click', { bubbles: true, cancelable: true }))
+    await nextTick()
+    expect(wrapper.text()).toContain('已选择：probe-multi')
     wrapper.unmount()
   })
 })
@@ -985,7 +1224,7 @@ describe('空描述 Tooltip、滚动边界与键盘编辑入口（R1-06）', () 
     expect(fullListCss).toContain('overflow-y: auto')
   })
 
-  // +N 点击完整清单的数量与顺序在“数据源两行自适应与动态 +N” describe 中覆盖（需注入测量宽度）。
+  // +N 点击完整清单的数量与顺序在“数据源单行自适应与动态 +N” describe 中覆盖（需注入测量宽度）。
   // ---- 9.3 键盘编辑入口 ----
   it('组件：探针 ID 单元格具备 tabindex/role；单击选中、双击编辑不受破坏', async () => {
     const wrapper = await mountPage([enabledRow, disabledRow])
@@ -1195,6 +1434,21 @@ describe('数据源与描述 Tooltip：单实例与内容（CCFG-UI-005/008/009�
     expect(body).toContain('英文逗号歧义')
     expect(body).toContain('普通 CSV 解析')
     await rowbad.trigger('mouseleave')
+    await sleep(10)
+    wrapper.unmount()
+  })
+
+  it('组件：重复分配标签 Tooltip 异常原因显示“已分配给其他探针”，不再出现“已分配给他人”，冲突探针清单保留', async () => {
+    const wrapper = await mountPage([assignedRow])
+    const tag = wrapper.findAll('.cc-dstag').find((t) => t.text() === '分院')!
+    expect(tag.classes()).toContain('cc-dstag--bad')
+    await tag.trigger('mouseenter')
+    await sleep(280)
+    const body = document.body.textContent ?? ''
+    expect(body).toContain('异常原因：已分配给其他探针')
+    expect(body).not.toContain('已分配给他人')
+    expect(body).toContain('冲突探针：hosp-007')
+    await tag.trigger('mouseleave')
     await sleep(10)
     wrapper.unmount()
   })

@@ -370,7 +370,7 @@
 import { computed, nextTick, onBeforeUnmount, onMounted, reactive, ref } from 'vue'
 import { ElMessage, ElMessageBox } from 'element-plus'
 import { Delete, Plus } from '@element-plus/icons-vue'
-import { descNeedsTip, measureChipWidth, packTwoLines } from './listLayout'
+import { descNeedsTip, measureChipWidth, packChips } from './listLayout'
 import {
   createClient,
   deleteClient,
@@ -384,10 +384,21 @@ import type { ClientListItemVO, ClientStatusFilter, DataSourceOptionVO } from '@
 
 type DataSourceViewItem = ClientListItemVO['dataSources'][number]
 
-const DS_GAP = 6
-const DS_MAX_LINES = 2
+const DS_GAP = 8
+const DS_MAX_VISIBLE = 6
 const MORE_SLOT_TEXT = '+88'
 const TIP_DELAY_MS = 240
+
+/** 空白点击取消选择的保护集：命中其中任一（含祖先）的点击不取消当前选择（R1 §5.3）。
+ * 覆盖 Element Plus Teleport 浮层（对话框/确认框/下拉/浮层）、原生与 EP 控件、
+ * 整张表格（行点击语义自行切换选择）与数据源标签/`+N`/行级歧义所在的行区域。 */
+const BLANK_CLEAR_PROTECTED =
+  '.el-overlay,.el-dialog,.el-message-box,.el-message,.el-popper,.el-popover,' +
+  '.el-select-dropdown,.el-dropdown-menu,.el-notification,' +
+  'button,input,select,textarea,a,[contenteditable="true"],' +
+  '.el-button,.el-input,.el-textarea,.el-select,.el-radio,.el-checkbox,.el-switch,' +
+  '.el-radio-button,.el-checkbox-button,' +
+  '.cc-table,.cc-single-tip'
 
 const ID_PATTERN = /^[A-Za-z0-9][A-Za-z0-9._-]{0,31}$/
 
@@ -398,7 +409,7 @@ const ANOMALY_TEXT: Record<string, string> = {
   TYPE_MISMATCH: '类型非 ORACLE',
   COMMA_IN_ID: 'ID 含英文逗号',
   DUPLICATE_IN_ROW: '行内重复',
-  ASSIGNED_TO_MULTIPLE_CLIENTS: '已分配给他人',
+  ASSIGNED_TO_MULTIPLE_CLIENTS: '已分配给其他探针',
 }
 
 /** 与后端 String.trim() 一致的空白判定（移除两端 charCode <= 0x20 字符）。 */
@@ -494,8 +505,23 @@ const refreshFailed = computed(() => listFailed.value && listLoadedOnce.value)
 const rowClassName = ({ row }: { row: ClientListItemVO }) =>
   selectedClientId.value === row.clientId ? 'cc-row--selected' : ''
 
+function clearSelection(): void {
+  selectedClientId.value = null
+}
+
 function onRowClick(row: ClientListItemVO): void {
+  // 单击行：选中该行（另一行直接切换）。同一样在“空白点击”语义下由 clearSelection 显式清除，
+  // 点击行内空白也按“切换/保持选中”处理，不在行点击里做二次清除（R1 §5.3）。
   selectedClientId.value = row.clientId
+}
+
+/** 点击页面非交互空白区域（不在保护集内）时取消当前选择（R1 §5.3）。 */
+function onPageBlankClick(event: MouseEvent): void {
+  if (selectedClientId.value === null) return
+  const target = event.target
+  if (!(target instanceof Element)) return
+  if (target.closest(BLANK_CLEAR_PROTECTED)) return
+  clearSelection()
 }
 
 function onRowDblClick(row: ClientListItemVO): void {
@@ -521,6 +547,7 @@ function onReset(): void {
   clearTip()
   queryKeyword.value = ''
   queryStatus.value = 'ALL'
+  clearSelection()
   // 恢复默认条件；不自动触发查询、不覆盖当前已生效列表（CCFG-UI-003）
 }
 
@@ -536,17 +563,14 @@ async function loadList(): Promise<void> {
       listRows.value = res.data?.items ?? []
       shownMap.clear()
       listLoadedOnce.value = true
-      if (
-        selectedClientId.value !== null &&
-        !listRows.value.some((r) => r.clientId === selectedClientId.value)
-      ) {
-        selectedClientId.value = null
-      }
-      // 数据渲染并完成真实布局后，按各容器实际宽度重新打包两行布局；
+      // 查询、列表重新加载或数据集替换后清除选择（R1 §5.3/§5.6；删除与新增/编辑保存
+      // 后经 loadList 复用同一入口清除，避免残留指向已变化数据的选中行）。
+      clearSelection()
+      // 数据渲染并完成真实布局后，按各容器实际宽度重新打包单行布局；
       // 不依赖 ResizeObserver 是否恰好再触发（行元素复用且宽度不变时 RO 不再回调，
-      // 否则会退回“全部直接展示”，窄列下既无 +N 又撑/截到第三行）。
+      // 否则会退回“全部直接展示”，窄列下既无 +N 又溢出被裁切）。
       if (seq === listSeq) {
-        await settleTwoLineLayout()
+        await settleListLayout()
         if (seq === listSeq) recomputeAllRows()
       }
     } else {
@@ -585,7 +609,7 @@ async function onDelete(): Promise<void> {
     const res = await deleteClient(clientId)
     if (res.code === 200) {
       ElMessage.success('删除成功')
-      selectedClientId.value = null
+      clearSelection()
       await loadList()
     } else {
       ElMessage.error(res.message || '删除失败')
@@ -871,9 +895,7 @@ async function submitDialog(): Promise<void> {
     if (res.code === 200) {
       ElMessage.success(isEdit ? '编辑成功' : '新增成功')
       dialogOpen.value = false
-      if (isEdit && selectedClientId.value === originalClientId) {
-        selectedClientId.value = request.clientId
-      }
+      // 保存即数据集替换：loadList 成功入口统一清除选择（R1 §5.3）。
       await loadList()
     } else {
       ElMessage.error(res.message || (isEdit ? '编辑失败' : '新增失败'))
@@ -885,10 +907,11 @@ async function submitDialog(): Promise<void> {
   }
 }
 
-// ------------------------------------------------- 两行动态 +N 布局
+// ------------------------------------------------- 单行动态 +N 布局
 // 决策依赖真实元素尺寸：用 ResizeObserver 观察每个采集数据源单元格，取到容器宽度后
-// 用与标签一致的盒模型离屏测量各标签宽度，再交给纯函数 packTwoLines 决定直接展示数与 +N。
-// jsdom 无布局：不安装/触发 ResizeObserver 时按“全部直接展示”兜底（配合真机目测）。
+// 用与标签一致的盒模型离屏测量各标签宽度，再交给纯函数 packChips 决定直接展示数与 +N
+// （可见数量 = min(单行实际可容纳数, 6)，见 R1 §5.4/§5.6）。
+// jsdom 无布局：不安装/触发 ResizeObserver 时按“单行前 6 项”兜底（配合真机目测）。
 
 const shownMap = reactive(new Map<string, number>())
 const srcEls = reactive(new Map<string, HTMLElement>())
@@ -896,7 +919,7 @@ let rowObserver: ResizeObserver | null = null
 let resizeHandler: (() => void) | null = null
 
 function shownCount(row: ClientListItemVO): number {
-  return shownMap.get(row.clientId) ?? orderedSources(row).length
+  return shownMap.get(row.clientId) ?? Math.min(orderedSources(row).length, DS_MAX_VISIBLE)
 }
 
 function hiddenCount(row: ClientListItemVO): number {
@@ -933,12 +956,12 @@ function recomputeRow(clientId: string, containerWidth: number, srcEl?: HTMLElem
   }
   const widths = dss.map((ds) => measureChipWidth(dsBodyText(ds)))
   const moreWidth = measureChipWidth(MORE_SLOT_TEXT) || 40
-  const { shown } = packTwoLines({
+  const { shown } = packChips({
     widths,
     containerWidth: avail,
     gap: DS_GAP,
     moreWidth,
-    maxLines: DS_MAX_LINES,
+    maxVisible: DS_MAX_VISIBLE,
   })
   shownMap.set(clientId, shown)
 }
@@ -956,7 +979,7 @@ function recomputeAllRows(): void {
 }
 
 /** 等 el-table 完成真实布局（nextTick 之后再过两帧）再按真实容器宽度打包，供 loadList 成功后调用。 */
-function settleTwoLineLayout(): Promise<void> {
+function settleListLayout(): Promise<void> {
   return new Promise((resolve) => {
     if (typeof requestAnimationFrame === 'undefined') {
       resolve()
@@ -1101,6 +1124,9 @@ function onIdEnter(event: MouseEvent, row: ClientListItemVO): void {
 }
 
 onMounted(() => {
+  // 空白点击取消选择：单个窗口级 click 监听（冒泡阶段），仅对保护集之外的非交互空白生效，
+  // 卸载时移除（R1 §5.3）。
+  window.addEventListener('click', onPageBlankClick)
   if (typeof ResizeObserver !== 'undefined') {
     rowObserver = new ResizeObserver((entries) => {
       for (const entry of entries) {
@@ -1121,6 +1147,7 @@ onMounted(() => {
 
 onBeforeUnmount(() => {
   clearTip()
+  window.removeEventListener('click', onPageBlankClick)
   if (resizeHandler) window.removeEventListener('resize', resizeHandler)
   rowObserver?.disconnect()
   rowObserver = null
@@ -1294,8 +1321,30 @@ onBeforeUnmount(() => {
   min-width: 0;
 }
 
-.cc-row--selected :deep(td) {
-  background-color: #f0f7ff;
+/* 选中行视觉：明显但克制的浅蓝背景 + 首单元格左侧约 3px 蓝色强调线（inset box-shadow，
+   不改布局）；选中态不被普通悬停覆盖，普通悬停比选中更淡；键盘聚焦不吞（R1 §5.2） */
+.cc-table :deep(.el-table__row) {
+  height: 60px;
+}
+
+.cc-table :deep(.el-table__body tr.el-table__row.cc-row--selected > td.el-table__cell) {
+  background-color: #ecf5ff;
+}
+
+.cc-table :deep(.el-table__body tr.el-table__row.cc-row--selected:hover > td.el-table__cell) {
+  background-color: #ecf5ff;
+}
+
+.cc-table :deep(
+  .el-table__body tr.el-table__row.cc-row--selected > td.el-table__cell:first-child
+) {
+  box-shadow: inset 3px 0 0 #409eff;
+}
+
+.cc-table :deep(
+  .el-table__body tr.el-table__row:not(.cc-row--selected):hover > td.el-table__cell
+) {
+  background-color: #f2f6ff;
 }
 
 .cc-id {
@@ -1326,27 +1375,30 @@ onBeforeUnmount(() => {
   color: #909399;
 }
 
-/* 采集数据源：固定预留两行高度，永不因 +N 前瞬间的多标签换行而撑成第三行（CCFG-UI-004/007） */
+/* 采集数据源：单行展示，行高约 60px、标签高约 27px；永不折行/换第二行，
+   超出单行实际可容纳数与数量上限（6）的以动态 `+N` 表示（CCFG-UI-004/007，R1 §5.4/§5.6） */
 .cc-src {
   display: flex;
-  flex-wrap: wrap;
-  align-content: flex-start;
-  gap: 6px;
+  align-items: center;
+  flex-wrap: nowrap;
+  gap: 8px;
   min-width: 0;
-  height: 50px;
+  height: 30px;
   overflow: hidden;
 }
 
 .cc-rowbad {
+  display: inline-flex;
+  align-items: center;
   flex-shrink: 0;
   box-sizing: border-box;
-  height: 22px;
-  padding: 0 8px;
+  height: 27px;
+  padding: 0 10px;
   border: 1px solid #f1a7a7;
   border-radius: 4px;
   background: #fef0f0;
-  font-size: 12px;
-  line-height: 20px;
+  font-size: 14px;
+  line-height: 1;
   color: #d54949;
 }
 
@@ -1354,18 +1406,19 @@ onBeforeUnmount(() => {
   display: inline-flex;
   align-items: center;
   box-sizing: border-box;
-  height: 22px;
+  height: 27px;
   max-width: 10em;
-  padding: 0 8px;
+  padding: 0 10px;
   border: 1px solid #d9dee7;
   border-radius: 4px;
   background: #fff;
-  font-size: 12px;
+  font-size: 14px;
   line-height: 1;
   color: #303133;
   white-space: nowrap;
   overflow: hidden;
   text-overflow: ellipsis;
+  flex-shrink: 0;
 }
 
 .cc-dstag--bad {
@@ -1378,15 +1431,16 @@ onBeforeUnmount(() => {
   display: inline-flex;
   align-items: center;
   box-sizing: border-box;
-  height: 22px;
-  padding: 0 8px;
+  height: 27px;
+  padding: 0 10px;
   border: 1px solid #b3d8ff;
   border-radius: 4px;
   background: #ecf5ff;
-  font-size: 12px;
+  font-size: 14px;
   color: #409eff;
   white-space: nowrap;
   cursor: pointer;
+  flex-shrink: 0;
 }
 
 .cc-more:hover {
