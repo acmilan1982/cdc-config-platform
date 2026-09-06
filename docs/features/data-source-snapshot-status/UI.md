@@ -11,10 +11,10 @@
 | 前端源码目录 | `frontend/src/views/data-source-run-state/`（保留既有目录名，UI §10） |
 | 目标文档 | `docs/features/data-source-snapshot-status/UI.md`（界面设计草案） |
 | 配套设计文档 | `DESIGN.md`（总设计入口）、`API.md`（接口设计草案）、`DATABASE.md`（数据库查询设计草案） |
-| 文档状态 | `DRAFT_PENDING_USER_REVIEW`（设计草案，尚未批准） |
+| 文档状态 | `APPROVED`（界面设计基线已批准，批准日期 2026-09-06；批准版本与批准内容基准见 DESIGN §1/§17 与 Feature README §5） |
 | requirements_status | `APPROVED`（`DSS-REQ-001~065` 共 65 条） |
 | acceptance_status | `APPROVED`（`DSS-AC-001~068` 共 68 条，全部 `NOT_RUN`） |
-| design_status | `DRAFT_PENDING_USER_REVIEW`（本文件与 DESIGN.md / API.md / DATABASE.md 均为草案，未批准） |
+| design_status | `APPROVED`（四份设计文档 DESIGN.md / UI.md / API.md / DATABASE.md 均已批准，见 DESIGN §1/§17） |
 | implementation_status | `NOT_STARTED`（本设计不编码；页面当前仍为占位页，见 DESIGN §3.1） |
 | acceptance_execution_status | `NOT_RUN`（本设计不执行验收；68 条 `DSS-AC-*` 全部保持 `NOT_RUN`） |
 | pending_user_confirmation_count | `0`（与 DESIGN.md §15.2 一致） |

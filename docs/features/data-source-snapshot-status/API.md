@@ -10,10 +10,10 @@
 | 既有路由 | `/monitor/data-source-state`（保持既有值不变；仅前端路由，与后端接口路径无关） |
 | 目标文档 | `docs/features/data-source-snapshot-status/API.md`（接口设计草案） |
 | 配套设计文档 | `DESIGN.md`（总设计入口）、`UI.md`（界面设计草案）、`DATABASE.md`（数据库查询设计草案） |
-| 文档状态 | `DRAFT_PENDING_USER_REVIEW`（设计草案，尚未批准） |
+| 文档状态 | `APPROVED`（接口设计基线已批准，批准日期 2026-09-06；批准版本与批准内容基准见 DESIGN §1/§17 与 Feature README §5） |
 | requirements_status | `APPROVED`（`docs/features/data-source-snapshot-status/REQUIREMENTS.md`，`DSS-REQ-001~065` 共 65 条） |
 | acceptance_status | `APPROVED`（`docs/features/data-source-snapshot-status/ACCEPTANCE.md`，`DSS-AC-001~068` 共 68 条，全部 `NOT_RUN`） |
-| design_status | `DRAFT_PENDING_USER_REVIEW`（本文件与 DESIGN.md / UI.md / DATABASE.md 均为草案，未批准） |
+| design_status | `APPROVED`（四份设计文档 DESIGN.md / API.md / UI.md / DATABASE.md 均已批准，见 DESIGN §1/§17） |
 | implementation_status | `NOT_STARTED`（本设计不编码；当前仓库不存在下述任何接口实现，见 DESIGN §3） |
 | acceptance_execution_status | `NOT_RUN`（本设计不执行验收；68 条 `DSS-AC-*` 全部保持 `NOT_RUN`） |
 | pending_user_confirmation_count | `0`（与 DESIGN.md §15.2 一致；无待确认接口设计项） |

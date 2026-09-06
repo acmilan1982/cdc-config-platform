@@ -11,16 +11,18 @@
 | 前端源码目录 | `frontend/src/views/data-source-run-state/`（保留既有目录名，不做无业务价值目录重命名；命名映射见 UI §10） |
 | 目标文档 | `docs/features/data-source-snapshot-status/DESIGN.md`（总设计入口） |
 | 配套设计文档 | `API.md`（接口设计草案）、`UI.md`（界面设计草案）、`DATABASE.md`（数据库查询设计草案） |
-| 文档状态 | `DRAFT_PENDING_USER_REVIEW`（设计草案，尚未批准） |
+| 文档状态 | `APPROVED`（设计基线已批准；批准版本 `DATA-SOURCE-SNAPSHOT-STATUS-DESIGN-BASELINE-APPROVAL-001`、批准日期 2026-09-06，见 §17） |
 | requirements_status | `APPROVED`（`docs/features/data-source-snapshot-status/REQUIREMENTS.md`，`DSS-REQ-001~065` 共 65 条） |
 | acceptance_status | `APPROVED`（`docs/features/data-source-snapshot-status/ACCEPTANCE.md`，`DSS-AC-001~068` 共 68 条，全部 `NOT_RUN`） |
-| design_status | `DRAFT_PENDING_USER_REVIEW`（本文件与 API.md / UI.md / DATABASE.md 均为草案，未批准） |
+| design_status | `APPROVED`（四份设计文档 DESIGN.md / API.md / UI.md / DATABASE.md 均已批准，见 §17） |
 | implementation_status | `NOT_STARTED`（本设计不编码；页面仍为占位、后端仍无 RUN_STATE 访问链路） |
 | acceptance_execution_status | `NOT_RUN`（本设计不执行验收；68 条 `DSS-AC-*` 全部保持 `NOT_RUN`） |
-| pending_user_confirmation_count | `0`（本草案无必须由项目负责人决策的待确认设计项，见 §15） |
-| pending_user_review | `YES`（本设计草案待 ChatGPT 正式复审；R1 极小定向修订已完成，仍待对 R1 结果复审，见 §16） |
+| pending_user_confirmation_count | `0`（本设计无必须由项目负责人决策的待确认设计项，见 §15） |
+| pending_user_review | `NO`（设计已批准；R1 极小定向修订已通过 ChatGPT 正式复审 `APPROVED` 并由项目负责人明确批准，见 §16/§17） |
 | 设计任务编号 | `DATA-SOURCE-SNAPSHOT-STATUS-DESIGN-BASELINE-001`（纯文档设计草案建立） |
 | 设计 R1 修订任务 | `DATA-SOURCE-SNAPSHOT-STATUS-DESIGN-BASELINE-001-R1`（ChatGPT 正式设计复审 `CHANGES_REQUIRED` 驱动的极小定向修订，见 §16） |
+| 设计批准版本 | `DATA-SOURCE-SNAPSHOT-STATUS-DESIGN-BASELINE-APPROVAL-001`（设计批准收口任务；批准日期 2026-09-06，见 §17） |
+| 设计批准内容基准 | `61117a62f44d39f7c548ebcb650891abf91b9b8c`（R1 结果提交；ChatGPT 对 R1 正式复审 `APPROVED` 并获项目负责人批准的内容基准，见 §17） |
 | 设计任务授权基线提交 | `38da355f16438ad0d9156acdd667e9258fe89141`（本任务开始时 `origin/develop` 最新提交；本地 HEAD 与其一致） |
 | R1 修订基准提交 | `31aa9f5beec7ded3cd798b3af617fd79a1606ed0`（R1 修订开始时 `origin/develop` 最新提交，即上一结果提交） |
 | 批准内容基准 | `4234af73db2190098f3dcd219319a4281fdabafd`（已批准需求/验收的批准内容基准） |
@@ -32,8 +34,8 @@
 任务边界声明：
 
 - 本文件只把已批准需求与验收转换为**可复审、可实现、可测试的四份设计草案**，不改变任何已批准业务规则，不编码，不执行测试或验收，不访问或操作数据库/ZooKeeper/Kafka/sync-client，不启停服务。
-- 设计状态只能是 `DRAFT_PENDING_USER_REVIEW`，不得写成 `APPROVED`；功能不得写成 `IMPLEMENTED`、`IMPLEMENTED_PENDING_REVIEW` 或 `IMPLEMENTED_ACCEPTED`；68 条验收不得改为 `PASS/FAIL/BLOCKED`，必须全部保持 `NOT_RUN`。
-- “设计文档已建立”不等于“设计已批准”；下一入口为 **ChatGPT 对 R1 修订结果提交进行正式复审**（见 README）。
+- 本文件已作为正式设计基线批准（批准版本 `DATA-SOURCE-SNAPSHOT-STATUS-DESIGN-BASELINE-APPROVAL-001`，批准日期 2026-09-06，见 §17）；草案阶段“设计状态保持 `DRAFT_PENDING_USER_REVIEW`、不得写成 `APPROVED`”的限制已由批准收口解除（该阶段历史见 §16 R1-04）。设计批准不代表功能已实现：功能仍不得写成 `IMPLEMENTED`、`IMPLEMENTED_PENDING_REVIEW` 或 `IMPLEMENTED_ACCEPTED`；68 条验收仍全部保持 `NOT_RUN`，不得改为 `PASS/FAIL/BLOCKED`。
+- “设计文档已建立/已批准”不等于“功能已实现、验收已执行或通过”，也不等于 `IMPLEMENTED_ACCEPTED`；下一入口为**另立实现任务**（见 README §10）。
 - 本文件建议的类名/包名/文件路径用于后续实现阶段，**不代表当前仓库已存在这些实现**（现状盘点见 §3）。
 
 ## 2. 设计目标与边界
@@ -608,7 +610,7 @@ onRequestFinally:
 
 ### 15.2 待确认设计项
 
-**0 项**（`pending_user_confirmation_count=0`）。本草案已把可依据批准需求、既有代码惯例与已核验数据库事实解决的方案全部落定（§15.1）；未发现必须在项目负责人层决策的设计分叉。R1 极小定向修订（R1-01 页面实例生命周期、R1-02 统一忙碌抑制、R1-03 恢复可见延后单次刷新、R1-04 状态元数据，见 §16）未引入新的待确认设计项。设计草案仍待 **ChatGPT 对 R1 结果提交正式复审**；批准前不进入实现，68 条验收保持 `NOT_RUN`。
+**0 项**（`pending_user_confirmation_count=0`）。本草案已把可依据批准需求、既有代码惯例与已核验数据库事实解决的方案全部落定（§15.1）；未发现必须在项目负责人层决策的设计分叉。R1 极小定向修订（R1-01 页面实例生命周期、R1-02 统一忙碌抑制、R1-03 恢复可见延后单次刷新、R1-04 状态元数据，见 §16）未引入新的待确认设计项。设计草案已由 ChatGPT 对 R1 结果提交（`61117a62f44d39f7c548ebcb650891abf91b9b8c`）正式复审 `APPROVED` 并经项目负责人批准（见 §17）；批准不改变本节“0 项”结论。设计批准不代表功能已实现：68 条验收保持 `NOT_RUN`。
 
 ## 16. R1 极小定向修订记录（`DATA-SOURCE-SNAPSHOT-STATUS-DESIGN-BASELINE-001-R1`）
 
@@ -619,3 +621,13 @@ ChatGPT 对上一结果提交（`31aa9f5beec7ded3cd798b3af617fd79a1606ed0`）进
 - **R1-03 恢复可见的单次延后刷新（唯一例外）**：新增 §7.7——空闲恢复可见立即按当时最新已应用条件发起 restore，结束（无论成败）重启完整 60s；在途恢复可见不并发、仅置一次性 `pendingVisibilityRefresh`（多次可见事件合并为一次），当前请求结束后按**届时最新**已应用条件补发一次 restore（不得用可见事件发生时旧条件），补发结束才重启完整 60s；再次隐藏/卸载清标志不补发；含 `onRequestFinally` 伪代码与场景覆盖清单（§7.7/§8/§9/§15.1 第 14 项）。
 - **R1-04 纠正当前复审状态元数据**：`pending_user_review` 统一为 `YES`、`pending_user_confirmation_count=0`；四份设计文档保持 `design_status=DRAFT_PENDING_USER_REVIEW`，本 R1 不批准设计（§1/README/原设计报告）。
 - 已同步 UI.md、Feature README、原设计报告元数据纠错与 docs/features/README（详见对应文件 §变更记录）。完整修订前后与自检见执行报告 `reports/DATA-SOURCE-SNAPSHOT-STATUS-DESIGN-BASELINE-001-R1.md`。
+
+## 17. 设计基线批准收口记录（`DATA-SOURCE-SNAPSHOT-STATUS-DESIGN-BASELINE-APPROVAL-001`）
+
+批准链：初版设计提交 `31aa9f5beec7ded3cd798b3af617fd79a1606ed0` → ChatGPT 正式复审 `CHANGES_REQUIRED` → R1 修订提交 `61117a62f44d39f7c548ebcb650891abf91b9b8c` → ChatGPT 对 R1 正式复审 `APPROVED` → 项目负责人随后明确回复“批准”。
+
+- 批准版本：`DATA-SOURCE-SNAPSHOT-STATUS-DESIGN-BASELINE-APPROVAL-001`（纯文档批准收口）。
+- 批准内容基准：完整提交 SHA `61117a62f44d39f7c548ebcb650891abf91b9b8c`（R1 结果提交）。
+- 批准日期：2026-09-06。
+- 本次仅做纯文档批准收口：四份设计“文档状态”/`design_status` 由 `DRAFT_PENDING_USER_REVIEW` 更新为 `APPROVED`、`pending_user_review` 由 `YES` 更新为 `NO`，并记录批准链与批准日期；相对批准内容基准，四份设计的接口/参数/响应字段/SQL/状态映射/排序/候选范围/时间与 null/行键/错误码/组件职责/生命周期/请求快照/忙碌抑制/可见性补发/计时器/测试设计与追踪矩阵**业务内容零差异**。
+- 设计批准不代表功能已实现：`implementation_status=NOT_STARTED`、`acceptance_execution_status=NOT_RUN`（68 条 `DSS-AC-*` 全部 `NOT_RUN`）。完整自检见批准收口报告 `reports/DATA-SOURCE-SNAPSHOT-STATUS-DESIGN-BASELINE-APPROVAL-001.md`；下一入口为另立实现任务（README §10）。
