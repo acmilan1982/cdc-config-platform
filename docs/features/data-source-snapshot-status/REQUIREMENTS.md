@@ -262,6 +262,16 @@ docs/database/reports/DATA-SOURCE-SNAPSHOT-STATUS-DATABASE-VERIFICATION-001.md
 |---|---|
 | DSS-REQ-065 | 未来对 `CDC_DATA_SOURCE_RUN_STATE` 执行测试数据 `INSERT/UPDATE/DELETE` 的边界：①仅限项目配置的 Oracle 开发库；②仅在后续任务提示词显式纳入该授权时，Agent 方可对 `CDC_DATA_SOURCE_RUN_STATE` 执行 `INSERT/UPDATE/DELETE`，无需逐条再次确认；③操作前必须完整备份原始数据；④操作后必须恢复到任务开始前状态并验证逐行一致；⑤报告必须记录操作目的、执行范围、备份与恢复证据；⑥不授权 `TRUNCATE`、`ALTER`、`DROP` 或其他 DDL；⑦不授权操作其他数据库表；⑧不授权生产数据库；⑨这只是 Agent 测试数据权限，不是 `cdc-config` 产品写能力。 |
 
+### 20.1 R1 本次测试数据授权例外（任务级，2026-09-06）
+
+在实现修复任务 `DATA-SOURCE-SNAPSHOT-STATUS-IMPLEMENTATION-001-R1` 的本会话中，项目负责人明确授权：对负责人所指数据库（经只读证据核验为本项目内网库：`DB_NAME=prod`、数据库主机 `snoopy-linux`、Schema=`CDC`，仅此一个含 `CDC_DATA_SOURCE_RUN_STATE` 的连接）执行测试 `INSERT` 并 `COMMIT`，测试后**保留不还原**；不再逐条申请。授权只覆盖以下三表：
+
+- `CDC_DATA_SOURCE_RUN_STATE`（新增 29 条合成运行态）
+- `CDC_CLIENT_MULTIPLE`（新增 5 条停用探针配置）
+- `CDC_DATA_SOURCE`（新增 5 条停用源配置）
+
+数据使用本任务独立前缀 `dssr1-0906-`，全部独立合成主键；只新增、不 `UPDATE/DELETE` 已有记录，不 `TRUNCATE`、不 DDL、不授权其它表、无触发器写入；新增配置均 `FG_ACTIVE='0'`、描述含“快照页测试，请勿启用”、连接字段为不可用合成值且绝不连接。此为**本任务 Agent 测试数据权限记录，不是产品写能力**；本页后端/前端仍严格只读。该例外不扩散到其它任务或其它表；§20 其它历史约束仍适用。执行证据见实现报告 `reports/DATA-SOURCE-SNAPSHOT-STATUS-IMPLEMENTATION-001-R1.md` 与 `evidence/DATA-SOURCE-SNAPSHOT-STATUS-IMPLEMENTATION-001-R1/db/`。
+
 ## 21. 明确非目标
 
 下列内容属于本 Feature 明确不实现或不推断的范围（作为范围边界记录；凡可判定的“禁止”行为已编码进 §5~§20 相应 `DSS-REQ-*`）：
@@ -309,5 +319,6 @@ R0 初版 §22“待用户复审的草案建议”所列 8 项 `DSS-PROP-*` 已�
 | 2026-09-05 | R3 极小定向修订需求草案（ChatGPT 对 R2 结果正式复审 `CHANGES_REQUIRED`）：本版不改变任何需求业务规则，只把修订范围限定到验收草案 `DSS-AC-024`——修正该用例“成功刷新却不更新最近成功刷新时间”的验收矛盾，统一为“成功刷新更新‘最近成功刷新时间’但不替换‘已应用查询条件’，只有用户点击‘查询’且查询成功才允许替换”；因此 65 条 `DSS-REQ-*` 业务行相对本版授权基线 `5c58af6` 逐字节不变；编号与计数不变（需求 65、验收 68、全部 `NOT_RUN`）；仍为 `DRAFT_PENDING_USER_REVIEW` 未批准草案，待 ChatGPT 对 R3 结果正式复审 | DATA-SOURCE-SNAPSHOT-STATUS-REQUIREMENTS-BASELINE-001-R3（ChatGPT 对 R2 结果正式复审 `CHANGES_REQUIRED` 驱动的纯文档极小定向修订；草案未批准、功能未实现、验收未执行） |
 | 2026-09-05 | 需求与验收基线批准收口：ChatGPT 对 R3 结果（提交 `4234af73db2190098f3dcd219319a4281fdabafd`）正式复审结论 `APPROVED`，项目负责人随后明确回复“批准”；`REQUIREMENTS.md`/`ACCEPTANCE.md` 基线状态由 `DRAFT_PENDING_USER_REVIEW` 收口为 `APPROVED`（正式批准版本 `DATA-SOURCE-SNAPSHOT-STATUS-REQUIREMENTS-BASELINE-APPROVAL-001`，批准内容基准提交 `4234af73db2190098f3dcd219319a4281fdabafd`）；业务零变化——需求仍 65 条 `DSS-REQ-001~065`、验收仍 68 条 `DSS-AC-001~068` 全部 `NOT_RUN`、需求—验收追踪矩阵零差异；实现状态保持 `NOT_STARTED`、设计状态保持 `NOT_STARTED`、验收执行状态保持 `NOT_RUN`；批准的是需求与验收标准基线，不代表设计已完成、功能已实现、验收已执行或通过、也不代表 `IMPLEMENTED_ACCEPTED`；下一入口更新为设计基线建立 | DATA-SOURCE-SNAPSHOT-STATUS-REQUIREMENTS-BASELINE-APPROVAL-001（项目负责人明确批准驱动的需求与验收基线批准收口；纯文档任务，未设计、未实现、未执行验收） |
 | 2026-09-06 | 本文件仅同步实现任务 `DATA-SOURCE-SNAPSHOT-STATUS-IMPLEMENTATION-001` 完成后的**当前实现状态与文档级实现记录**（文档级状态同步，不新增/删除/修改任何 `DSS-REQ-*` 需求业务行，相对批准内容基准 `4234af7...` 业务零变化，追踪矩阵零差异）：元数据“前端现状/后端现状/实现状态/设计状态”行更新为已实现（`IMPLEMENTED_PENDING_REVIEW`）与设计已批准事实；实现任务完成占位页替换为正式页、后端新增只读 GET 链路、三多选/七列/60 秒自动刷新等全部按批准需求与设计落地（开发测试 27+62、前端全量 663、构建、真实浏览器联调见实现报告与证据）；需求/验收批准状态不变（`APPROVED`）、68 条验收保持 `NOT_RUN`、正式验收未执行 | DATA-SOURCE-SNAPSHOT-STATUS-IMPLEMENTATION-001（前后端实现；纯文档记录，不改需求业务行、不执行正式验收） |
+| 2026-09-06 | 实现修复任务 `DATA-SOURCE-SNAPSHOT-STATUS-IMPLEMENTATION-001-R1` 完成：本文件仅新增 §20.1 任务级测试数据授权例外说明（本行不含任何 `DSS-REQ-*` 业务行变更，65 条 `DSS-REQ-*`/68 条 `DSS-AC-*` 业务行与追踪矩阵相对基准 `d125397` 零差异）；R1-01 在公共 `http.ts` 增加请求级 `skipGlobalErrorPopup` 开关（默认未开启的其它页面错误弹窗行为不变、未删公共拦截器），本页 `fetchSnapshotStatusList` 开启该开关由页面统一脱敏/收敛失败反馈，真实拦截链测试（HTTP500/超时断网/业务码非 200/默认行为不变/60 秒恢复）6 用例通过，前端全量 669/669、构建成功；R1-02 按负责人授权对所指生产库三表执行测试 INSERT＋COMMIT 并保留（RUN_STATE +29、CLIENT_MULTIPLE +5、DATA_SOURCE +5，前缀 `dssr1-0906-`，FG_ACTIVE='0'、连接值不可用绝不连接、不 UPDATE/DELETE 已有行、无 TRUNCATE/DDL/其它表/触发器写入，运行中只读接口读回 30 条），授权例外仅限本任务不扩散；R1-03 补齐 1440×900/1920×1080 浏览器证据（七列/状态标签/三时间/三多选/成功 0 条/重置不请求/真实 HTTP500 保留与恢复/60 秒自动刷新/隐藏暂停/恢复可见/工具栏稳定宽度/边缘 Tooltip，错误仅在 CDP Fetch 层注入）与后端全量测试澄清（`cd backend && mvn clean test`，默认 profile、无筛选/排除/跳过，退出码 1，Tests 1022、Failures 3、Errors 17、Skipped 0，非通过全部集中在既存 `monitor.jobfailure` 模块的 ZooKeeper 不可达与日期映射环境性失败，详见报告与 `evidence/...R1/`）；实现状态保持 `IMPLEMENTED_PENDING_REVIEW`、需求/验收/设计批准状态不变、68 条验收保持 `NOT_RUN`、正式验收未执行 | DATA-SOURCE-SNAPSHOT-STATUS-IMPLEMENTATION-001-R1（复审问题修复与证据补齐；纯文档记录，不改需求业务行、不执行正式验收） |
 
 > 关联文档：验收草案 `docs/features/data-source-snapshot-status/ACCEPTANCE.md`；功能入口与状态 `docs/features/data-source-snapshot-status/README.md`；Feature 总索引 `docs/features/README.md`。

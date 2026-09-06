@@ -1,0 +1,26 @@
+DATA-SOURCE-SNAPSHOT-STATUS-IMPLEMENTATION-001-R1 / R1-03 后端全量测试结论澄清（Surefire 脱敏汇总）
+任务基准提交：d125397b828825f7d081d7296103e96265b1a3ae
+执行环境：开发/测试专用环境（未连接生产库；本 Feature 无后端写测试，生产数据仅经前述授权独立 INSERT 脚本写入）
+
+命令：cd /agent/cdc-config-platform/backend && mvn clean test
+执行时间：2026-09-06 23:18 起，约 2 分 25 秒结束（完成于 2026-09-06 23:21:19+08:00）
+Profile：默认（未加 -P，未指定额外 profile）
+筛选/排除：NONE（未用 -Dtest / -DexcludedTests / -DskipTests / -DtestFailureIgnore / surefire excludes）
+退出码：1（BUILD FAILURE，surefire MojoFailureException：存在测试失败）
+
+Surefire 汇总：
+  Tests run: 1022, Failures: 3, Errors: 17, Skipped: 0
+  测试类总数：69（target/surefire-reports/*.txt 计数）
+
+失败分布（全部集中在既存 monitor.jobfailure 模块，与本 Feature 无关，本 Feature 无后端代码改动）：
+- com.bsoft.cdcconfig.monitor.jobfailure.service.JobFailureServiceTest：28 用例，2 Failures + 17 Errors
+    Errors 为 BusinessException "ZooKeeper 连接失败，将在 60 秒重试"（测试环境不可达配置地址 10.19.16.111:2181，环境性）；
+    Failures 为既有断言/数据漂移（例如 latestFaultShouldHaveCorrectRestartCount 等）。
+- com.bsoft.cdcconfig.monitor.jobfailure.compat.OracleDateMappingTest：2 用例，1 Failure
+    日期映射断言 expected:<27> but was:<30>（环境/时区相关，与 git 历史一致的环境性失败）。
+
+说明：
+- 最终运行并非全部通过；未使用 skipTests/testFailureIgnore/excludes 掩盖。
+- 上述 20 例非通过（3F+17E）与本 Feature 无因果：本 Feature 只改动前端与文档，
+  git diff 不触及 jobfailure 后端代码；此失败在实现基线前已存在（见原实现报告所述环境性失败）。
+- 命令成功产 jar 不等于测试全通过：本次采用 mvn clean test 独立判定，明确记录 Failures/Errors。

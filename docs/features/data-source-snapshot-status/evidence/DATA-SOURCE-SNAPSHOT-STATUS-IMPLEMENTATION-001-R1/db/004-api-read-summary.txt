@@ -1,0 +1,16 @@
+DATA-SOURCE-SNAPSHOT-STATUS-IMPLEMENTATION-001-R1 / R1-02 运行中只读后端接口读回复核
+命令：curl --noproxy '*' http://127.0.0.1:8080/api/monitor/data-source-run-state/list
+http_code=200
+code=200 total_records=30 prefix_records=29 prefix_client_candidates=7 prefix_source_candidates=8
+
+样例 a/s-1（停用探针 + 停用 SOURCE 源，RUNNING，长描述已透传）：
+{"clientId":"c-dssr1-0906-a","clientRef":{"state":"INACTIVE","desc":"快照页测试探针A，请勿启用。长描述…（截断展示）"},
+ "sourceId":"s-dssr1-0906-1","sourceRef":{"state":"INACTIVE","org":"SNAPSHOT-TEST-某市一院信息中心源库-DONOTUSE","category":"SOURCE","sourceRole":true},
+ "snapshotStatus":"SNAPSHOT_RUNNING","statusCategory":"RUNNING",
+ "snapshotLastSeenAt":"2026-09-06 11:02:00","snapshotCompletedAt":null,"updatedAt":"2026-09-06 11:02:00"}
+
+样例 miss1/s-3（缺失探针 NOT_FOUND + 停用 SOURCE 源，UNKNOWN_MODE 归 UNKNOWN，双时间 null）：
+{"clientId":"c-dssr1-0906-miss1","clientRef":{"state":"NOT_FOUND","desc":null},
+ "sourceId":"s-dssr1-0906-3","sourceRef":{"state":"INACTIVE","org":"SNAPSHOT-TEST-某市二院信息中心源库-DONOTUSE","category":"SOURCE","sourceRole":true},
+ "snapshotStatus":"UNKNOWN_MODE","statusCategory":"UNKNOWN","snapshotLastSeenAt":null,"snapshotCompletedAt":null,
+ "updatedAt":"2026-09-06 10:45:00"}

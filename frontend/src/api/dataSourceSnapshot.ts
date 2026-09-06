@@ -37,6 +37,8 @@ export async function fetchSnapshotStatusList(
       params,
       paramsSerializer: (raw) => serializeDataSourceSnapshotParams(raw as DataSourceSnapshotQueryParams),
       timeout: QUERY_TIMEOUT,
+      // 本页统一做脱敏/收敛失败反馈，请求级关闭公共拦截器的全局错误弹窗（R1-01）。
+      skipGlobalErrorPopup: true,
     },
   )
   return res.data
