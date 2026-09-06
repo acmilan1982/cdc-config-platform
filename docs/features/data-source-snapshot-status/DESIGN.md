@@ -18,8 +18,11 @@
 | implementation_status | `NOT_STARTED`（本设计不编码；页面仍为占位、后端仍无 RUN_STATE 访问链路） |
 | acceptance_execution_status | `NOT_RUN`（本设计不执行验收；68 条 `DSS-AC-*` 全部保持 `NOT_RUN`） |
 | pending_user_confirmation_count | `0`（本草案无必须由项目负责人决策的待确认设计项，见 §15） |
+| pending_user_review | `YES`（本设计草案待 ChatGPT 正式复审；R1 极小定向修订已完成，仍待对 R1 结果复审，见 §16） |
 | 设计任务编号 | `DATA-SOURCE-SNAPSHOT-STATUS-DESIGN-BASELINE-001`（纯文档设计草案建立） |
+| 设计 R1 修订任务 | `DATA-SOURCE-SNAPSHOT-STATUS-DESIGN-BASELINE-001-R1`（ChatGPT 正式设计复审 `CHANGES_REQUIRED` 驱动的极小定向修订，见 §16） |
 | 设计任务授权基线提交 | `38da355f16438ad0d9156acdd667e9258fe89141`（本任务开始时 `origin/develop` 最新提交；本地 HEAD 与其一致） |
+| R1 修订基准提交 | `31aa9f5beec7ded3cd798b3af617fd79a1606ed0`（R1 修订开始时 `origin/develop` 最新提交，即上一结果提交） |
 | 批准内容基准 | `4234af73db2190098f3dcd219319a4281fdabafd`（已批准需求/验收的批准内容基准） |
 | 创建日期 | 2026-09-05 |
 | 依据需求 | `REQUIREMENTS.md`（`DSS-REQ-001~065`，已批准，批准版本 `DATA-SOURCE-SNAPSHOT-STATUS-REQUIREMENTS-BASELINE-APPROVAL-001`） |
@@ -30,7 +33,7 @@
 
 - 本文件只把已批准需求与验收转换为**可复审、可实现、可测试的四份设计草案**，不改变任何已批准业务规则，不编码，不执行测试或验收，不访问或操作数据库/ZooKeeper/Kafka/sync-client，不启停服务。
 - 设计状态只能是 `DRAFT_PENDING_USER_REVIEW`，不得写成 `APPROVED`；功能不得写成 `IMPLEMENTED`、`IMPLEMENTED_PENDING_REVIEW` 或 `IMPLEMENTED_ACCEPTED`；68 条验收不得改为 `PASS/FAIL/BLOCKED`，必须全部保持 `NOT_RUN`。
-- “设计文档已建立”不等于“设计已批准”；下一入口为 **ChatGPT 对设计草案进行正式复审**（见 README）。
+- “设计文档已建立”不等于“设计已批准”；下一入口为 **ChatGPT 对 R1 修订结果提交进行正式复审**（见 README）。
 - 本文件建议的类名/包名/文件路径用于后续实现阶段，**不代表当前仓库已存在这些实现**（现状盘点见 §3）。
 
 ## 2. 设计目标与边界
@@ -79,6 +82,8 @@
 - 选择工具惯例：`frontend/src/views/topic-offset/utils/selection.ts`——`ALL_OPTION='__ALL__'` 哨兵只存在于草稿层、绝不作为真实值请求；`normalizeDimension` 实现“全部”与具体候选互斥、清空回到“全部”；`rowKey.ts` 用 NUL 分隔复合键避免字符串拼接歧义。
 - 测试：`frontend/src/views/topic-offset/*.spec.ts`（vitest，含组件与 composable 测试）。
 
+> 上述 topic-offset 的“路由级会话 store（跨路由恢复现场）”与“最新用户意图槽位/覆盖补发”并发语义**仅为 AS-IS 只读盘点，不复用于本 Feature**：本 Feature 采用页面/composable 实例内状态（不新增 Pinia store、不跨路由恢复现场，R1-01）＋统一忙碌抑制（不排队，R1-02）＋一次性恢复可见延后刷新标志（R1-03），见 §7/§9。
+
 ### 3.2 后端现状
 
 - 分层：`Controller(@RestController) → Service → Mapper`，公共组件 `common/api/ApiResponse`、`common/page/PageResult`、`common/exception/BusinessException`、`common/exception/GlobalExceptionHandler`。
@@ -106,8 +111,7 @@
 浏览器（Vue 3 SPA）
   页 DataSourceRunStatePage.vue（替换占位页；UI §2）
    ├─ components/ DataSourceSnapshotQueryBar.vue / DataSourceSnapshotTable.vue / DataSourceSnapshotToolbar.vue / DataSourceSnapshotStatusTag.vue
-   ├─ composables/ useDataSourceSnapshot.ts（编排：两阶段条件 + 单飞行 + 60s 计时 + 失败保留）
-   ├─ stores/ dataSourceSnapshot.ts（Pinia 路由级会话 store：已应用条件/records/最近成功刷新时间/候选）
+   ├─ composables/ useDataSourceSnapshot.ts（编排：页面实例内状态 + 两阶段条件 + 单飞行 + 60s 计时 + 失败保留 + 恢复可见延后刷新；无 Pinia store）
    ├─ api/ dataSourceSnapshot.ts（GET /api/monitor/data-source-run-state/list，重复参数序列化 + 查询级超时）
    ├─ types/ dataSourceSnapshot.ts（ApiResponse 派生 + 查询/候选/行/映射 VO 类型）
    └─ utils/ selection.ts（ALL_OPTION/互斥/两阶段换算）、rowKey.ts、format.ts、format.spec.ts...
@@ -142,8 +146,7 @@ Spring Boot（Tomcat :8080）
 |---|---|
 | 页面 | `frontend/src/views/data-source-run-state/DataSourceRunStatePage.vue`（由占位页替换为正式页） |
 | 子组件 | `.../components/DataSourceSnapshotQueryBar.vue`、`DataSourceSnapshotTable.vue`、`DataSourceSnapshotToolbar.vue`、`DataSourceSnapshotStatusTag.vue` |
-| composable | `.../composables/useDataSourceSnapshot.ts` |
-| store | `frontend/src/stores/dataSourceSnapshot.ts` |
+| composable | `.../composables/useDataSourceSnapshot.ts`（承载页面实例内全部查询现场状态；**不新增 Pinia store**） |
 | api | `frontend/src/api/dataSourceSnapshot.ts` |
 | types | `frontend/src/types/dataSourceSnapshot.ts` |
 | utils | `.../utils/selection.ts`、`rowKey.ts`、`format.ts`（可含 `*.spec.ts`） |
@@ -159,9 +162,9 @@ Spring Boot（Tomcat :8080）
 | Service | ① 归一校验；② 三次全量只读（RUN_STATE + 两张配置投影）；③ 计算候选（RUN_STATE 全量，与筛选无关）；④ 按条件过滤；⑤ 固定排序；⑥ 映射 VO（含关联异常标志、状态分类、NULL 时间）。 | 服务层不调用任何写方法；不拼字符串 SQL；不改任何行。 |
 | 只读 Mapper | 纯 `@Select` 注解、显式列别名；无 `BaseMapper`；无写方法。 | 不 `SELECT *`；配置投影不含 `DATA_SOURCE_PASSWORD`。 |
 | VO/枚举/常量 | 承载接口契约、映射状态词、常量。 | JSON null 语义字段用 `@JsonInclude(ALWAYS)`。 |
-| 前端 store | 保存“上一次成功”的已应用条件、records、最近成功刷新时间（前端成功时刻 epoch）、候选；`hasSuccess`。 | 失败不写入；不落 localStorage。 |
-| 前端 composable | 请求编排：初始/查询/重试/手工/自动/恢复可见、单飞行、60s 计时、失败保留、最新意图。 | 见 §7~§9 状态机。 |
-| 前端组件 | 查询区草稿、表格展示、工具栏稳定宽度、状态/异常视觉。 | 颜色非唯一通道；稳定宽度。 |
+| 页面/composable 实例状态 | 每次路由进入新建页面实例：界面草稿与已应用条件初始为三项“全部”、无最近成功现场，随即自动首次查询；实例内保存“上一次成功”的已应用条件、records/candidates、最近成功刷新时间（前端成功时刻 epoch）、`hasSuccess` 与错误态。 | 失败不写入；不新增 Pinia store；不用 localStorage/sessionStorage；路由离开即销毁、现场不跨路由保留（R1-01）。 |
+| 前端 composable | 请求编排：初始/查询/重试/手工/自动/恢复可见、单飞行统一忙碌抑制、60s 计时、失败保留、恢复可见延后单次刷新（`pendingVisibilityRefresh`）。 | 见 §7~§9 状态机；不设通用用户意图槽位（R1-02）；恢复可见延后是唯一例外（R1-03）。 |
+| 前端组件 | 查询区草稿、表格展示、工具栏稳定宽度、状态/异常视觉。 | 颜色非唯一通道；稳定宽度；busy 时“查询/立即刷新”按钮禁用。 |
 
 ## 5. 后端读取流程设计
 
@@ -281,10 +284,10 @@ Spring Boot（Tomcat :8080）
 
 ### 6.2 更新时机
 
-- **首次进入/条件查询/自动刷新/手工刷新/恢复可见**：每次成功的 `list` 请求都携带与列表同一快照的 `candidates`；成功后前端把 records 与 candidates **一并**提交到 store（`commitSuccess`，§7.3），因此候选随每次成功刷新更新。
+- **首次进入/条件查询/自动刷新/手工刷新/恢复可见**：每次成功的 `list` 请求都携带与列表同一快照的 `candidates`；成功后前端把 records 与 candidates **一并**提交到页面实例（`commitSuccess`，§7.3），因此候选随每次成功刷新更新。
 - **未知状态出现/消失**：因候选与列表同快照，一旦新数据出现未知行，下一次成功刷新返回的 `statuses` 即含 `UNKNOWN`；若未知行消失，下一次成功刷新返回的 `statuses` 不再含 `UNKNOWN`（UI 对已选但不再提供的 token 按“ghost 保留”处理，UI §3.5）。
 - **过滤不得收窄候选**：因为候选在过滤前从全量行计算，即便当前只筛到“运行中”，探针/源库候选仍含全量出现的其他行；不会出现“选了某条件后其它候选消失”的收窄。
-- **查询失败**：候选不更新（store 保留上一次成功候选与列表，§7.4）。空结果成功：records=[] 但 candidates 仍是全量派生（非空子集可能为空？空结果代表全量本身就为空或筛空；若全量为空，candidates 亦为空——这本身是合法空态，AC-057）。
+- **查询失败**：候选不更新（页面实例保留上一次成功候选与列表，§7.4）。空结果成功：records=[] 但 candidates 仍是全量派生（candidates 为全量真实出现项；若全量本身为空则 candidates 亦为空）；空 records 属合法空态（AC-057），不是错误。
 
 ### 6.3 一致性证明
 
@@ -292,16 +295,20 @@ Spring Boot（Tomcat :8080）
 
 ## 7. 前端状态机设计
 
-### 7.1 状态存放（结论）
+### 7.1 状态存放与页面实例生命周期（结论，R1-01）
 
-- **界面选择条件（草稿）**：页面实例内 `reactive` 草稿（三个控件数组，含 `__ALL__` 哨兵），不进入 store（刷新/卸载即还原为初始“全部”或最近成功条件，见 UI §3.3）。topic-offset 以 `initial` prop 从已应用条件还原草稿——本 Feature 相同：组件内只保留本地草稿；页面卸载重建时用 store 的已应用条件还原草稿。
-- **已应用查询条件**：Pinia store（路由级会话）`dataSourceSnapshot`。仅“用户点击查询且成功（含成功空结果）”时由该次**请求快照**替换（DSS-REQ-023/AC-024）；自动/手工刷新、失败、重置都不改它。
-- **请求快照**：composable 在用户点击“查询”瞬间 `Object.freeze` 式复制草稿去哨兵得到不可变 `AppliedCriteria`，随请求携带；在途修改控件不影响本次成功升级用的是哪组条件（DSS-REQ-023）。
-- **最近成功数据**：store `records`（上一次成功结果）。查询成功以本次结果替换；刷新成功以本次结果替换；失败/空态区分见下。
-- **最近成功刷新时间**：store `lastSuccessAt`（**前端成功收到响应并判为成功的时刻**，epoch ms），仅成功后更新；格式化为 `HH:mm:ss` 展示。
-- **页面可见性**：由页面生命周期/`visibilitychange` 事件驱动 composable（onMounted/onUnmounted/onActivated/onDeactivated 及 `document.hidden`），与 topic-offset 的 `visibilityChanged(hidden)` 一致。
-- **60 秒计时器**：composable 内部 `setTimeout`（非 store），页面可见才运行。
-- **请求在途与防旧覆盖**：composable 内部“单飞行＋最新意图槽位＋seq”，见 §8/§9。
+前端状态一律用**页面/composable 实例内 `reactive/ref`**：**不新增 Pinia store，不使用 localStorage/sessionStorage，不跨路由保留现场**。
+
+- **界面选择条件（草稿）**：页面实例内 `reactive` 草稿（三个控件数组，含 `__ALL__` 哨兵）。**每次路由进入/页面实例创建**初始为三项“全部”（探针端=全部、源库=全部、快照状态=全部）；用户修改控件只改草稿、不发请求（E2）；点击“重置”只把草稿复位为三项“全部”（E7）。仅“点击查询且成功”才可能把该次请求快照升级为已应用条件（DSS-REQ-022/023/025）。
+- **已应用查询条件**：页面实例内保存的“上一次成功现场”（`appliedCriteria`）。**每次路由进入/页面实例创建**初始为三项“全部”；随即**自动按三项“全部”发起首次查询**（DSS-REQ-023/AC-021）。仅“用户点击查询且成功（含成功空结果）”时由该次**请求快照**替换（DSS-REQ-023/AC-024）；自动/手工刷新、失败、重置、恢复可见刷新都不改它。
+- **请求快照**：composable 在点击“查询”瞬间复制草稿去哨兵得到不可变 `AppliedCriteria`，随该次请求携带；在途修改控件不影响本次成功升级用的是哪组条件（DSS-REQ-023/AC-024 ③）。请求结束后该次快照使命即完成，下一次查询重新取当时草稿。
+- **最近成功数据**：页面实例 `records`（上一次成功结果）。查询成功以本次结果替换；刷新成功以本次结果替换；失败保留上一次成功结果、不清表（§7.4）。
+- **最近成功刷新时间**：页面实例 `lastSuccessAt`（**前端成功收到响应并判为成功的时刻**，epoch ms），仅成功后更新；初始为无（无现场），格式化为 `HH:mm:ss` 展示（UI §6）。
+- **hasSuccess 与错误态**：页面实例内 `hasSuccess`（是否已有过一次成功）与 `firstLoadError/refreshError`。**每次路由进入/页面实例创建**均取实例初始值（`hasSuccess=false`、无错误），不继承上一次会话/上一次实例的任何现场。
+- **页面可见性**：浏览器标签页**隐藏→再恢复**属**同一个仍挂载的页面实例**：期间保留已应用条件与最近成功现场，恢复时按 §7.7 执行恢复刷新；这与“路由离开→重新进入需初始化三项‘全部’并自动查询”是两种严格区分的生命周期（见 §7.7 起、UI §7.4）。
+- **60 秒计时器**：composable 内部 `setTimeout`（非任何 store），仅页面实例可见才运行。
+- **页面实例销毁（路由离开/组件卸载）**：清除计时器、可见性监听与 `pendingVisibilityRefresh` 待执行恢复标志；置 `disposed=true` 杜绝迟到响应写入；当前实例的查询现场**不跨路由保留**。再次进入路由创建全新页面实例，重新初始化三项“全部”并自动查询。
+- **请求在途与防旧覆盖**：单飞行统一忙碌抑制（busy 时“查询/立即刷新”按钮禁用、自动触发被抑制，见 §7.6/§9）＋一个仅用于**防卸载迟写与防旧响应覆盖**的简单请求实例令牌（单调递增 seq，无任何用户意图排队/补发语义，见 §9）。
 
 ### 7.2 条件模型
 
@@ -309,81 +316,137 @@ Spring Boot（Tomcat :8080）
 
 草稿层 `{ clients: string[]; sources: string[]; statuses: string[] }` 用 `__ALL__` 哨兵表示“全部”；`selection.ts` 提供 `ALL_OPTION`、`normalizeDimension`、`concreteIds`、`draftFromCriteria`、`buildCriteriaFromDraft`、`criteriaEqual`（复用 topic-offset 已验证的纯函数模式，逻辑不变）。
 
-### 7.3 成功提交（两阶段提交，结论）
+### 7.3 成功提交（两阶段提交，结论，R1-02）
 
-composable 持有 `store` 作为“上一次成功现场”权威；成功路径为：
+页面/composable 实例持有“上一次成功现场”权威；每次实际请求携带一个单调递增的**请求实例令牌 `seq`**，仅用于防止组件卸载后的迟到响应写入与防御异常情况下的旧响应覆盖，**不承担任何用户意图排队/补发语义**（见 §9）。成功路径为：
 
 ```
-请求结束且 op.seq===acceptedSeq 且 code===200：
-    store.commitSuccess(op.criteria, res.data.records, res.data.candidates, nowEpoch)
+请求结束且 !disposed 且 op.seq===latestSeq（该次为当前实例最新一次实际请求，未被更新的实际请求取代）且 code===200：
+    instance.commitSuccess(op.criteria, res.data.records, res.data.candidates, nowEpoch)
     说明：
       - op.kind ∈ {initial,retry,query}（建立性）：op.criteria 即本次点击快照 → 该次快照升级为已应用条件（仅在“点击查询且成功”才替换，含成功空结果）。
-      - op.kind ∈ {manual,restore,auto}（刷新性）：op.criteria 恒等于 store 当前已应用条件（进链前取自 store.appliedCriteria），提交后条件不变，只更新 records/candidates/lastSuccessAt。
+      - op.kind ∈ {manual,restore,auto}（刷新性）：op.criteria 恒等于实例当前已应用条件（发起该次实际请求前取自 instance.appliedCriteria），提交后条件不变，只更新 records/candidates/lastSuccessAt。
     lastSuccessAt 更新为本次成功刷新完成时刻。
     清除刷新错误；关闭首次加载错误态。
 ```
 
-> 边界（与 DSS-REQ-023/AC-024 完全一致）：自动/手工/恢复刷新**无论成功失败都不得改变已应用条件**；只有成功点击“查询”才替换。
+> 边界（与 DSS-REQ-023/AC-024 完全一致）：自动/手工/恢复刷新**无论成功失败都不得改变已应用条件**；只有成功点击“查询”才替换。单飞行下同一时刻至多一个实际请求在途，`latestSeq` 只在**本次实际请求自身结束后用户再次发起新的实际请求**时才推进——不存在“被排队但尚未发出的意图提前作废响应”的语义（R1-02）。
 
 ### 7.4 失败/空态处理（结论）
 
-- `!store.hasSuccess` 时的失败（首次加载失败，kind=initial/retry）：进入**首次加载失败态**（整区错误 + “重新加载”入口），`firstLoadError=true`；已应用条件仍为初始三项“全部”；重试仍按“全部”发起（DSS-REQ-059/AC-056）。
-- `store.hasSuccess` 时的失败（查询新条件失败或刷新失败）：**保留**上一次成功 records/appliedCriteria/candidates/lastSuccessAt；`refreshError` 显示**收敛的脱敏**短提示（不堆叠相同消息）；不清表、不伪装空态（DSS-REQ-061/AC-058）。
+- `!hasSuccess` 时的失败（首次尚无任何成功，`firstLoadError` 分支，请求种类不定为 initial/retry/query/restore 之一）：进入**首次加载失败态**（整区错误 + “重新加载”入口），`firstLoadError=true`；已应用条件仍为初始三项“全部”；重试仍按“全部”发起（DSS-REQ-059/AC-056）。
+- `hasSuccess` 时的失败（查询新条件失败或刷新失败）：**保留**上一次成功 records/appliedCriteria/candidates/lastSuccessAt；`refreshError` 显示**收敛的脱敏**短提示（不堆叠相同消息）；不清表、不伪装空态（DSS-REQ-061/AC-058）。
 - 成功返回 0 条：**成功**；records=[]；按 kind 规则处理条件（刷新性则条件不变；查询性则快照升级）；空态提示“暂无数据”，非错误（DSS-REQ-060/AC-057）。
 
-### 7.5 计时器规则（结论，严格对照 DSS-REQ-051/054）
+### 7.5 计时器规则（结论，严格对照 DSS-REQ-051/054，R1-02）
 
-- 页面可见时：**每一次实际发出并结束的请求（无论成功失败）**，在请求结束时**重新开始完整 60 秒**（`scheduleNext()`：先清再设 60s 后触发自动刷新）。
-- 请求在途时收到自动触发/手工触发 ⇒ 抑制（不发起新请求，见 §9）；被抑制触发**不视为实际请求、不单独重置计时**——只有真正结束一次实际请求才重启周期。
-- 页面隐藏：`stopTimer()` 取消计时、不保留剩余秒数；隐藏前已在途请求允许正常结束并按成败规则处理，但**隐藏期间不启动新计时**（结束回调检查 hidden）。
-- 页面恢复可见：若 `hasSuccess` → 立即按已应用条件发起一次 `restore` 刷新；该请求结束（无论成败）→ 重启完整 60 秒；若从未成功（无 store 现场）→ 发起 `initial`（按“全部”）。
-- 最近成功刷新时间**仅成功更新**；失败或被抑制触发绝不更新。
+- 页面实例可见时：**每一次实际发出并结束的请求（无论成功失败）**，在请求结束时**重新开始完整 60 秒**（`scheduleNext()`：先清再设 60s 后触发自动刷新）。唯一例外是 §7.7 的恢复可见延后补发：补发前的那次在途请求结束**不**直接启动 60s，而是先补发 restore，待 restore 结束（无论成败）才重启完整 60 秒。
+- 请求在途时（`busy`）：**“查询”按钮禁用、“立即刷新”按钮禁用**——再次点击不接受、不排队、不补发（R1-02 §5.2）；自动刷新触发被抑制、不排队。被抑制/禁用的触发**不视为实际请求、不更新最近成功时间、不单独重置计时、不产生错误提示**——只有真正结束一次实际请求才重启周期（DSS-REQ-053/054、AC-050/051）。
+- 请求在途时用户仍可修改三个查询控件：当前请求继续使用其请求开始时捕获的不可变条件快照；在途修改只停留在界面草稿，须待请求结束后用户再次点击“查询”才可能生效（DSS-REQ-023/AC-024 ③）。
+- 页面隐藏：`stopTimer()` 取消计时、不保留剩余秒数复用；隐藏前已在途请求允许正常结束并按成败规则处理，但**隐藏期间不启动新计时**（`onRequestFinally` 检查 hidden，见 §7.7）。
+- 页面恢复可见：**统一见 §7.7**（空闲：立即 restore/initial 并发起；在途：设一次性 `pendingVisibilityRefresh`，请求结束后按届时最新已应用条件补发一次；再次隐藏/卸载清除标志）。
+- 最近成功刷新时间**仅成功更新**；失败、被抑制触发或被禁用按钮的点击绝不更新。
 
 ### 7.6 视觉状态（结论）
 
 - `loading`（整表）：kind=initial/retry/query 在途。
 - `refreshing`（工具栏轻量，表格不遮罩、不闪烁）：kind=manual/restore/auto 在途。
+- **busy（任意实际请求在途）**：“查询”与“立即刷新”按钮均**禁用**，点击不接受、不排队、不补发（R1-02）；仅“重新加载”入口与自动触发相应走各自的忙碌抑制/禁用路径。
 - 首次加载失败：整区错误态 + 重新加载（`firstLoadError`）。
 - 有数据时的刷新失败：工具栏内联收敛提示 `refreshError`（不清表）。
 - 空态：`records.length===0 && hasSuccess` 显示空数据占位。
 - 工具栏：固定宽度“立即刷新” + 左侧“60 秒自动刷新｜最近成功刷新：…”（UI §6）。
 
+### 7.7 页面恢复可见刷新规则（结论，R1-03，对照 DSS-REQ-051/054、AC-048/051）
+
+浏览器标签页**隐藏→再恢复**属于**同一个仍挂载的页面实例**。恢复可见的统一规则如下；它是“在途时不发起重叠请求”的**唯一例外**，不是 query/manual/auto 的通用排队机制（R1-03）。
+
+**情形 A：恢复可见且当前空闲（无实际请求在途）**
+
+- 立即按**当时最新已应用查询条件**发起一次 `restore` 刷新（`hasSuccess=true` 时 kind=restore；若从未成功——已应用条件仍为三项“全部”——则等价于按“全部”的首次重试，成功前失败仍按 §7.4 `!hasSuccess` 走首次加载失败处理）。
+- 该次实际请求结束后，无论成功失败，**重新开始完整 60 秒周期**。
+
+**情形 B：恢复可见但当前已有请求在途（busy=true，任意 kind：initial/retry/query/manual/auto/restore）**
+
+1. 不发起并发的 restore 请求。
+2. 设**一次性布尔标志 `pendingVisibilityRefresh=true`**；多次可见事件**合并**为一次待执行恢复刷新，不累积队列。
+3. 当在途请求结束后（`onRequestFinally`）：
+   - 若页面仍可见、组件未卸载且标志仍为 `true`：先清除标志；
+   - **不为刚结束的该次请求启动 60 秒计时器**；
+   - 立即读取**届时最新的已应用查询条件**并发起一次 `restore` 刷新；**不得**使用恢复可见事件发生时捕获的旧条件。若刚结束的是成功查询，其成功提交已先于 `finally` 完成，故此处读到的是升级后的新已应用条件（R1-03 §6.2 第 6 点）；若刚结束的请求失败，已应用条件保持旧值，restore 用旧值。
+4. 该次补发 restore 结束后，无论成功失败，才**重新开始完整 60 秒周期**。
+5. 待执行期间页面再次隐藏或组件卸载：**清除 `pendingVisibilityRefresh`，不补发**；隐藏期间不启动计时器。
+6. 本次补发的 restore 是恢复可见规则要求的**实际请求**，走与其它实际请求一致的提交/错误/计时语义（成功更新最近成功刷新时间；`!hasSuccess` 失败走首次加载失败分支）。
+
+**计时器统一收口伪代码（composable `onRequestFinally`）：**
+
+```
+onRequestFinally:
+  busy = false
+  if disposed or hidden:
+    return
+  if pendingVisibilityRefresh:
+    pendingVisibilityRefresh = false
+    startRestoreWithCurrentAppliedCriteria()   // 读取届时最新已应用条件，立即发起一次 restore
+    return
+  scheduleNextAfter60Seconds()                  // 重新开始完整 60 秒
+```
+
+- 页面隐藏/组件卸载时：`stopTimer()` 并清除 `pendingVisibilityRefresh`（隐藏/卸载处理）；隐藏期间在途请求结束的 `finally` 因 `hidden||disposed` 直接返回，不调度计时、不补发。
+- 补发 restore 自身结束后再次进入 `onRequestFinally`：此时 `pendingVisibilityRefresh` 已为 `false` → 走 `scheduleNextAfter60Seconds()` 重启完整 60 秒。
+
+**R1-03 场景覆盖清单（§12 前端 composable 测试 / §14 落点复用）：**
+
+- 恢复可见时空闲（有现场）→ 立即 restore，结束重启 60s（E12）。
+- 恢复可见时空闲（无现场/从未成功）→ 立即按“全部”重试，成功前失败走首次加载失败（E13）。
+- 恢复可见时 query/manual/auto/initial/retry/restore 任一种在途 → 只设一次 `pendingVisibilityRefresh`，不并发（E12/E13 忙碌分支）。
+- 在途查询成功改变已应用条件后补发 → restore 用升级后的新条件。
+- 在途查询/请求失败后补发 → restore 用保持的旧已应用条件。
+- 多次可见事件 → 合并为一次待执行恢复刷新。
+- 补发前再次隐藏/卸载 → 清除 `pendingVisibilityRefresh`，不补发。
+- 补发请求成功/失败后 → 均从请求结束重启完整 60 秒。
+
 ## 8. 事件—状态转移表
 
-约定：`A=已应用条件`、`D=界面草稿(含哨兵)`、`S=请求快照`、`R=最近成功数据/候选`、`T=最近成功刷新时间`、`Tm=60s 计时器`。`·`表示该项不变。kind：`initial`首次、`query`点击查询、`manual`立即刷新、`auto`自动刷新、`retry`重新加载、`restore`恢复可见。抑制=在途时放弃本次触发。
+约定：`A=已应用条件`、`D=界面草稿(含哨兵)`、`S=请求快照`、`R=最近成功数据/候选`、`T=最近成功刷新时间`、`Tm=60s 计时器`。`·`表示该项不变。kind：`initial`首次、`query`点击查询、`manual`立即刷新、`auto`自动刷新、`retry`重新加载、`restore`恢复可见。**busy=有任一实际请求在途**：busy 时“查询/立即刷新”按钮禁用（点击不接受、不排队、不补发）、自动触发被抑制（不排队）；被禁用/被抑制的触发不视为实际请求、不更新 T、不单独重置计时、不产生错误提示（R1-02）。恢复可见的延后补发（§7.7）是**唯一例外**，不属于通用排队。
 
 | # | 事件 | 前置状态 | 请求参数 | 成功结果 | 失败结果 | 计时器结果 |
 |---|---|---|---|---|---|---|
 | E1 | 首次进入（mount，无现场） | A=全部(初始)、D=全部、无 R | kind=initial，按“全部” | A=全部(保持)；R=本次结果；T=本次成功时刻；候选更新 | `firstLoadError=true`；A 仍全部；R 无 | 请求结束起重启完整 60s |
 | E2 | 修改任一控件 | A 任意、D 变 | 不发起请求 | —（不发） | — | 不变 |
 | E3 | 点击“查询”（空闲） | A0、D0 | kind=query，S=点击瞬间去哨兵快照 | A=S；R=本次；T=更新；候选更新 | A 保持 A0；R 保持；D 保留新选择 | 请求结束重启完整 60s |
-| E4 | 查询在途再次改控件 | S 已锁定 | （同一次请求） | 升级的是 S（非结束时控件值） | 同 E3 失败 | 同 E3 |
-| E5 | 点击“查询”（在途/有待执行意图） | 上一请求未结束 | 抑制或置入最新意图槽位（query 覆盖旧意图） | 依实际发起者为准 | 依实际发起者为准 | 被抑制的触发不重置计时 |
-| E6 | 查询失败（已有成功现场） | A0、R0 | kind=query 新条件 | — | A 保持 A0；R 保持 R0；D 保留新条件；收敛脱敏提示；T 不更新 | 请求结束重启完整 60s（失败后 60s 按 A 自动重试，不立即重试） |
+| E4 | 查询在途再次改控件 | S 已锁定、busy | （同一次请求；改动只入 D 草稿） | 升级的是 S（非结束时控件值）；控件保留新草稿 | 同 E3 失败 | 同 E3 |
+| E5 | 点击“查询”（busy，上一请求未结束） | busy | 按钮禁用：点击不接受、不排队、不补发 | —（未发起） | —（未发起） | 被禁用触发不重置计时 |
+| E6 | 查询失败（已有成功现场） | A0、R0、hasSuccess | kind=query 新条件 | — | A 保持 A0；R 保持 R0；D 保留新条件；收敛脱敏提示；T 不更新 | 请求结束重启完整 60s（失败后 60s 按 A 自动重试，不立即重试） |
 | E7 | 重置（不点击查询） | D 任意、A0 | 不发请求 | D=三项“全部”；A/R/T/表格不变 | — | 不变 |
 | E8 | 立即刷新（空闲） | A0、R0 | kind=manual，参数=A0（恒非 D） | R=本次成功结果；候选更新；**A 保持 A0**；T=本次成功时刻 | R/A/T 保持；收敛脱敏提示 | 请求结束重启完整 60s |
 | E9 | 自动刷新触发（空闲且可见） | A0、R0 | kind=auto，参数=A0 | 同 E8 成功 | 同 E8 失败（约 60s 后按 A0 自动重试） | 请求结束重启完整 60s |
-| E10 | 请求在途时手动/自动触发 | 在途 | 抑制（manual 不排队等待？manual 属于用户意图，忙时**保留最新 manual/query 意图槽位**，见 §9；auto 直接丢弃） | — | — | 被抑制触发不重置计时 |
-| E11 | 页面隐藏 | Tm 运行中 | — | — | — | stopTimer，不保留剩余秒数；在途请求允许结束但不启动新计时 |
-| E12 | 恢复可见（有现场） | A0、R0 | kind=restore，参数=A0 | R=本次；T=更新；A 保持 A0 | R/A/T 保持；收敛提示 | 请求结束重启完整 60s |
-| E13 | 恢复可见（无现场/从未成功） | 无 R | kind=initial/retry 按“全部” | 同 E1 成功 | 同 E1 失败 | 同 E1 |
-| E14 | 点击“重新加载”（首次失败态） | A=全部 | kind=retry 按“全部” | 同 E1 成功 | `firstLoadError` 保持 | 请求结束重启完整 60s |
+| E10 | “立即刷新”点击/自动触发（busy） | busy | “立即刷新”按钮禁用（不接受/不排队/不补发）；自动触发被抑制（不排队） | —（未发起） | —（未发起） | 被禁用/被抑制触发不重置计时 |
+| E11 | 页面隐藏 | Tm 运行中或 busy | — | — | — | stopTimer、清除 `pendingVisibilityRefresh`，不保留剩余秒数；在途请求允许结束但不启动新计时、不补发（结束回调检查 hidden） |
+| E12 | 恢复可见（有现场，hasSuccess） | A0、R0 | 空闲→立即 kind=restore，参数=A0；busy→不并发，仅设一次性 `pendingVisibilityRefresh`（§7.7） | R=本次；T=更新；A 保持 A0 | R/A/T 保持；收敛提示 | 空闲 restore 结束重启完整 60s；busy 时当前请求结束先补发一次 restore（按届时最新 A），补发结束才重启完整 60s |
+| E13 | 恢复可见（无现场/从未成功，!hasSuccess） | A=全部、无 R | 空闲→立即按“全部”重试（首次加载语义）；busy→不并发，仅设一次性 `pendingVisibilityRefresh`（§7.7） | 同 E1 成功 | 同 E1 失败（走 `firstLoadError` 分支） | 同 E12：空闲请求结束或补发结束才重启完整 60s |
+| E14 | 点击“重新加载”（首次失败态，空闲） | A=全部 | kind=retry 按“全部” | 同 E1 成功 | `firstLoadError` 保持 | 请求结束重启完整 60s |
 | E15 | 成功返回 0 条（空态） | A0 | 按 kind 规则 | 属成功：records=[]（空态）；查询性则 A=S；T=更新；候选=全量派生 | — | 请求结束重启完整 60s |
-| E16 | 卸载（路由离开） | 任意 | — | — | — | 清计时器、置 disposed，杜绝迟到响应写入 |
+| E16 | 卸载（路由离开） | 任意（含 busy） | — | — | — | 清计时器、置 disposed、清 `pendingVisibilityRefresh`，杜绝迟到响应写入 |
 
-> E8/E9/E12：无论 kind，刷新成功的请求参数都取 **A（已应用条件）**，永不取 D；这正是 AC-024 第②/⑤/⑧步“未点击查询的界面变化不影响刷新”的机制保证。
+> E8/E9/E12（含 §7.7 补发的 restore）：无论 kind，刷新成功的请求参数都取 **A（已应用条件）**，永不取 D；这正是 AC-024 第②/⑤/⑧步“未点击查询的界面变化不影响刷新”的机制保证。
 
-## 9. 并发与竞态设计
+## 9. 并发与竞态设计（结论，R1-02/R1-03）
 
-结论：复用 topic-offset 的**“单飞行（single-flight）＋最新用户意图槽位”＋意图序号（seq）**模型（已实现并被 topic-offset-R1 采纳），去掉其分页维度，并按其约定强化 DSS 的计时语义：
+结论：本 Feature 采用**“单飞行（single-flight）＋统一忙碌抑制（不排队、不补发）＋仅防迟写/防旧响应覆盖的请求实例令牌 `seq`”**模型；不复用 topic-offset 的“最新用户意图槽位/覆盖补发/`preserveValidFor`/被排队意图提前作废的 `acceptedSeq`”语义（§3.1 盘点块已声明不复用于本 Feature）。恢复可见的延后补发（§7.7）是唯一例外，不是通用排队。
 
-1. **单飞行**：任意时刻至多一个受控请求在链；`busy` 为真时其它请求不得并发（DSS-REQ-053）。
-2. **意图序号 `acceptedSeq`**：每次接受最新用户意图（建立性 query/retry，或条件兼容的 manual）自增并赋给该 op；响应提交前校验 `op.seq===acceptedSeq && !disposed`，**旧响应、旧等待意图、卸载后的迟到响应一律不得覆盖**最新成功现场（防竞态）。
-3. **抑制**：`busy` 时 `auto`/`restore` 直接丢弃（不排队、不计时）；`query`/`manual` 等用户意图在条件仍有效时**覆盖进槽位**（最新意图胜出），从而在请求结束后按最新意图补发；被抑制的触发不视为实际请求、不重置计时。
-4. **条件判陈**：进入槽位前用 `criteriaEqual` 判断“保留性刷新”是否与在途/槽位中建立性条件冲突，旧条件意图丢弃（topic-offset `preserveValidFor` 思路），避免基于旧 A 的刷新覆盖新条件查询。
-5. **计时**：`scheduleNext()` 只在**一次真实请求的 finally 且 visible && !disposed** 时调用（成功失败皆重启完整 60s）；`stopTimer` 于隐藏/卸载；隐藏期间 finally 不重启（检查 hidden）。
-6. **卸载**：`destroy()` 置 `disposed=true`、清计时器、清槽位；所有提交/回调先判 `disposed`。
-7. **组件 onMounted/onUnmounted/onActivated/onDeactivated + visibilitychange** 对接 `visibilityChanged`，与 timer/store 生命周期一致。
+1. **单飞行（single-flight）**：任意时刻至多一个实际请求在途；`busy` 为真时不得再发起任何并发请求（DSS-REQ-053、AC-050/051）。
+2. **统一忙碌抑制（busy 抑制）**：`busy` 期间——
+   - “查询”按钮禁用：点击不接受、不排队、不补发（R1-02 §5.2）；
+   - “立即刷新”按钮禁用：点击不接受、不排队、不补发；
+   - 自动刷新触发被抑制：不排队、不发起新请求；
+   - 被禁用/被抑制的触发**不产生实际请求、不更新最近成功刷新时间、不单独重置 60 秒计时、不产生错误提示**（DSS-REQ-053/054、AC-050）。
+   - 不存在“最新用户意图槽位”“latest intent”“覆盖补发”“`preserveValidFor`”等概念，也不存在“一个尚未真正发出的排队意图提前使当前响应失效”的语义（R1-02 §5.1）。
+3. **请求实例令牌 `seq`**：每次**实际发起**请求时自增并赋给该 op（单调递增，仅用于**防止组件卸载后的迟到响应写入**与**防御异常情况下的旧响应覆盖**）；成功提交前校验 `op.seq===latestSeq && !disposed`。因单飞行下同一时刻至多一个实际请求在途，`latestSeq` 只在该请求自身结束后用户再次发起新的实际请求时推进；该令牌**不承担任何用户意图排队/补发语义**（R1-02）。
+4. **在途允许编辑控件**：`busy` 时用户仍可修改三个查询控件，但改动只停留在界面草稿 D；当前在途请求继续使用其请求开始时的不可变条件快照 S（E4）。当前请求结束后，须用户再次点击“查询”才可能把新的草稿快照升级为已应用条件（DSS-REQ-023/AC-024 ③）。
+5. **恢复可见延后补发（唯一例外，R1-03）**：恢复可见且 `busy` → 不并发，仅置一次性 `pendingVisibilityRefresh=true`（多次可见事件合并为一次）；当前请求结束后在 `onRequestFinally` 中按**届时最新已应用条件**补发一次 `restore`，补发结束（无论成败）才重启完整 60s；期间再次隐藏/卸载则清除标志、不补发。这不是 query/manual/auto 的通用排队机制（见 §7.7）。
+6. **计时统一收口**：`onRequestFinally`（§7.7 伪代码）——`busy=false`；`disposed||hidden` 直接返回；`pendingVisibilityRefresh` 为真则清标志→按届时最新 A 补发 restore→return；否则 `scheduleNextAfter60Seconds()` 重启完整 60 秒。`stopTimer` 于隐藏/卸载；隐藏期间 finally 不重启、不补发。
+7. **页面实例销毁**：`destroy()` 置 `disposed=true`、清计时器、清 `pendingVisibilityRefresh`、清可见性监听（E16）；所有提交/回调先判 `disposed`。组件 onMounted/onUnmounted/onActivated/onDeactivated + `visibilitychange` 对接页面实例可见性；生命周期仅存在于**单页面实例**内，路由离开即销毁、现场不跨路由保留（R1-01）。
 
 ## 10. 未知状态、关联缺失/停用/类别异常、NULL 兼容设计
 
@@ -416,7 +479,7 @@ composable 持有 `store` 作为“上一次成功现场”权威；成功路径
 | 后端单测：映射 | 探针/源库 ACTIVE/INACTIVE/NOT_FOUND、sourceRole、类别归一 | DSS-REQ-028/029/041~045 → AC-026/027/038~042 |
 | Mapper SQL 审计 | 仅 SELECT、显式列、无 PASSWORD、无 DML 关键字 | DSS-REQ-011~015 → AC-010/013 |
 | JSON/时间契约 | 时间串格式、显式 null、无分页字段 | DSS-REQ-026~034/055 → AC-025/029/030/052 |
-| 前端 composable 测试 | 两阶段条件、请求快照、失败保留、计时器(隐藏/恢复/抑制/重启)、seq 防旧 | DSS-REQ-023/050~054/058~061 → AC-021/024/047~051/055~058/068 |
+| 前端 composable 测试 | 页面实例生命周期（每次进入初始化三项“全部”并自动查询、路由离开销毁不跨路由保留现场）、两阶段条件与请求快照、失败保留、busy 禁用/抑制不排队不补发、计时器（隐藏/恢复/重启）、恢复可见延后单次刷新（§7.7 R1-03 场景清单）、请求实例令牌仅防迟写/防旧覆盖 | DSS-REQ-023/050~054/058~061 → AC-021/024/047~051/055~058/068 |
 | 前端组件测试 | 多选互斥、空值 `--`、颜色非唯一、稳定宽度工具栏 | DSS-REQ-022/029/055/062/063 → AC-020/027/052/060/061/068 |
 | 浏览器人工只读目测 | 页面标题、七列、只读、无 console 错误 | DSS-REQ-001/027/050/062 → AC-001/005/067 |
 
@@ -534,13 +597,25 @@ composable 持有 `store` 作为“上一次成功现场”权威；成功路径
 4. **状态分类 `classify`**（RUNNING/COMPLETED/UNKNOWN）统一用于过滤/展示/候选（§5.5）。
 5. **关联异常标志**：client 3 态、source 4 态（state+sourceRole），源库类别**大小写不敏感归一**、非 SOURCE 仅提示不丢行（§5.6）。
 6. **状态候选**恒含 RUNNING/COMPLETED，未知仅在确有未知行时追加（§6.1，符合 AC-022 语义）。
-7. **前端 store 持“上次成功现场”**、composable 持“单飞行+seq+计时器瞬态”，两阶段条件用哨兵草稿模型（§7）。
-8. **计时器在每次真实请求结束后重启完整 60s（成败皆然）**，抑制/隐藏不重置（§7.5/§8）。
+7. **前端状态存放**：页面/composable 实例内保存“上次成功现场”（已应用条件/records/candidates/lastSuccessAt/hasSuccess/错误态）＋ composable 持“单飞行统一忙碌抑制＋仅防迟写/防旧响应的请求实例令牌 seq＋计时器瞬态＋一次性 `pendingVisibilityRefresh`”；两阶段条件用哨兵草稿模型；**不新增 Pinia store、不使用 localStorage/sessionStorage、不跨路由恢复现场**（§7，R1-01/R1-02/R1-03）。
+8. **计时器在每次真实请求结束后重启完整 60s（成败皆然）**；被禁用/被抑制触发不重置、隐藏不重置；唯一例外是恢复可见延后补发（§7.7）：补发结束才重启 60s（§7.5/§8/§9）。
 9. **包/类名**避开既有类撞名，置于 `monitor/datasourcerunstate`（§4.2）。
 10. **错误码** `41xxx` 段（`41001/41002`），当前无模块占用（§4.1/API §8）。
 11. **行键** = `clientId + '\x00' + dataSourceId`（NUL 分隔，同 topic-offset rowKey 方案）；序号前端按排序结果生成（API §6）。
 12. **不分页**：不出现 pageNum/pageSize/pages/total 字段（API §6）。
+13. **统一忙碌抑制（busy 单飞行、不排队不补发）**：请求在途时“查询/立即刷新”按钮禁用（点击不接受/不排队/不补发）、自动刷新触发被抑制；被禁用/被抑制触发不视为实际请求、不更新最近成功刷新时间、不重置计时、不报错；在途仍可改控件但只停留在草稿（§7.5/§8/§9，R1-02）。
+14. **恢复可见延后单次刷新（唯一例外，非通用排队）**：恢复可见且空闲→立即按当时最新已应用条件发起 restore，结束（无论成败）重启完整 60s；恢复可见但在途→不并发，仅置一次性 `pendingVisibilityRefresh`，当前请求结束后在 `onRequestFinally` 按届时最新已应用条件补发一次 restore（不得用可见事件发生时的旧条件），补发结束才重启 60s；再次隐藏/卸载清标志不补发（§7.7/§8/§9，R1-03）。
 
 ### 15.2 待确认设计项
 
-**0 项**（`pending_user_confirmation_count=0`）。本草案已把可依据批准需求、既有代码惯例与已核验数据库事实解决的方案全部落定（§15.1）；未发现必须在项目负责人层决策的设计分叉。设计草案仍待 **ChatGPT 正式复审**；批准前不进入实现，68 条验收保持 `NOT_RUN`。
+**0 项**（`pending_user_confirmation_count=0`）。本草案已把可依据批准需求、既有代码惯例与已核验数据库事实解决的方案全部落定（§15.1）；未发现必须在项目负责人层决策的设计分叉。R1 极小定向修订（R1-01 页面实例生命周期、R1-02 统一忙碌抑制、R1-03 恢复可见延后单次刷新、R1-04 状态元数据，见 §16）未引入新的待确认设计项。设计草案仍待 **ChatGPT 对 R1 结果提交正式复审**；批准前不进入实现，68 条验收保持 `NOT_RUN`。
+
+## 16. R1 极小定向修订记录（`DATA-SOURCE-SNAPSHOT-STATUS-DESIGN-BASELINE-001-R1`）
+
+ChatGPT 对上一结果提交（`31aa9f5beec7ded3cd798b3af617fd79a1606ed0`）进行独立正式复审，结论 `CHANGES_REQUIRED`。本 R1 仅修正以下四项，未改动已通过复审的 API/数据库/展示字段/状态映射/排序/候选范围等业务设计（R1 任务 §2/§8）：
+
+- **R1-01 页面生命周期统一为每次进入默认“全部”**：本设计从“Pinia 路由级会话 store（跨路由恢复现场）”改为**页面/composable 实例内 `reactive/ref`**；每次路由进入/页面实例创建初始化界面条件=三项“全部”、已应用条件=三项“全部”、records/candidates/lastSuccessAt/hasSuccess/错误态=实例初始值，并随即自动按三项“全部”发起首次查询；路由离开即销毁实例（清计时器/可见性监听/`pendingVisibilityRefresh`、置 disposed），现场不跨路由保留；不使用 localStorage/sessionStorage；架构与建议文件清单已移除 `frontend/src/stores/dataSourceSnapshot.ts`（§1/§4/§7.1/§9）。
+- **R1-02 统一请求在途规则**：删除“最新用户意图槽位 / slot / latest intent / `preserveValidFor` / 覆盖补发 / acceptedSeq 被排队意图提前作废”语义；改为统一忙碌抑制——`busy` 时“查询/立即刷新”按钮禁用（点击不接受、不排队、不补发）、自动刷新触发被抑制；被禁用/被抑制触发不视为实际请求、不更新最近成功刷新时间、不单独重置计时、不报错；在途仍可编辑三个控件但只停留在草稿，须请求结束后再次点击“查询”才生效；`seq` 仅作防卸载迟写/防旧响应覆盖的请求实例令牌（§7.3/§7.5/§8/§9/§15.1 第 13 项）。
+- **R1-03 恢复可见的单次延后刷新（唯一例外）**：新增 §7.7——空闲恢复可见立即按当时最新已应用条件发起 restore，结束（无论成败）重启完整 60s；在途恢复可见不并发、仅置一次性 `pendingVisibilityRefresh`（多次可见事件合并为一次），当前请求结束后按**届时最新**已应用条件补发一次 restore（不得用可见事件发生时旧条件），补发结束才重启完整 60s；再次隐藏/卸载清标志不补发；含 `onRequestFinally` 伪代码与场景覆盖清单（§7.7/§8/§9/§15.1 第 14 项）。
+- **R1-04 纠正当前复审状态元数据**：`pending_user_review` 统一为 `YES`、`pending_user_confirmation_count=0`；四份设计文档保持 `design_status=DRAFT_PENDING_USER_REVIEW`，本 R1 不批准设计（§1/README/原设计报告）。
+- 已同步 UI.md、Feature README、原设计报告元数据纠错与 docs/features/README（详见对应文件 §变更记录）。完整修订前后与自检见执行报告 `reports/DATA-SOURCE-SNAPSHOT-STATUS-DESIGN-BASELINE-001-R1.md`。

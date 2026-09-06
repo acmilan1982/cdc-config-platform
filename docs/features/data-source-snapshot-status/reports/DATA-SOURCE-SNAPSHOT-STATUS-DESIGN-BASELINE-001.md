@@ -106,7 +106,7 @@
 | design_status | `DRAFT_PENDING_USER_REVIEW`（四份设计草案已建立、未批准） |
 | implementation_status | `NOT_STARTED`（页面仍为占位，后端仍无 RUN_STATE 访问链路） |
 | acceptance_execution_status | `NOT_RUN`（保持） |
-| pending_user_review | `NO` |
+| pending_user_review | `YES` |
 | pending_user_confirmation_count | `0`（DESIGN §15.2：0 项待确认设计项） |
 | requirements_design_coverage | 65/65（DESIGN §14.2） |
 | acceptance_design_coverage | 68/68（DESIGN §14.3） |
@@ -117,6 +117,8 @@
 必须反复明确：
 
 > 设计草案已建立不等于设计已批准；本任务不批准设计、不实现代码、不执行验收。功能仍为占位（`NOT_STARTED`），68 条验收仍全部 `NOT_RUN`。当前状态不是 `IMPLEMENTED`/`PASS`/`ACCEPTED`/`IMPLEMENTED_ACCEPTED`，也未把“设计草案已建立”写成“设计已批准”。
+
+> R1 元数据纠正注记（`DATA-SOURCE-SNAPSHOT-STATUS-DESIGN-BASELINE-001-R1`）：本报告 §6 的 `pending_user_review` 原误记为 `NO`，已纠正为 `YES`（四份设计为 `DRAFT_PENDING_USER_REVIEW`、待 ChatGPT 正式复审）；此为状态元数据笔误纠正，不改变本 R0 设计草案建立的业务内容、范围或其他执行事实。
 
 ## 7. 各文件落地
 
