@@ -14,7 +14,7 @@
 | requirements_status | `APPROVED`（`docs/features/data-source-snapshot-status/REQUIREMENTS.md`，`DSS-REQ-001~065` 共 65 条） |
 | acceptance_status | `APPROVED`（`docs/features/data-source-snapshot-status/ACCEPTANCE.md`，`DSS-AC-001~068` 共 68 条，全部 `NOT_RUN`） |
 | design_status | `APPROVED`（四份设计文档 DESIGN.md / API.md / UI.md / DATABASE.md 均已批准，见 DESIGN §1/§17） |
-| implementation_status | `NOT_STARTED`（本设计不编码；当前仓库不存在下述任何接口实现，见 DESIGN §3） |
+| implementation_status | `IMPLEMENTED_PENDING_REVIEW`（本设计不编码；实现任务 `DATA-SOURCE-SNAPSHOT-STATUS-IMPLEMENTATION-001` 已实现下述接口，待代码复审与人工页面验收，见 Feature README §9） |
 | acceptance_execution_status | `NOT_RUN`（本设计不执行验收；68 条 `DSS-AC-*` 全部保持 `NOT_RUN`） |
 | pending_user_confirmation_count | `0`（与 DESIGN.md §15.2 一致；无待确认接口设计项） |
 | 设计任务编号 | `DATA-SOURCE-SNAPSHOT-STATUS-DESIGN-BASELINE-001`（纯文档设计草案建立） |
@@ -317,3 +317,5 @@ GET /api/monitor/data-source-run-state/list?status=RUNNING&status=FORBIDDEN_STAT
 | §8 错误码与脱敏 | REQ-064 | AC-062 |
 
 > 一致性声明：本文件与 DESIGN.md/UI.md/DATABASE.md 统一使用接口路径 `GET /api/monitor/data-source-run-state/list`、参数 `clientId`/`sourceId`/`status`、状态 token `RUNNING`/`COMPLETED`/`UNKNOWN`、原始值 `SNAPSHOT_RUNNING`/`SNAPSHOT_COMPLETED`、映射状态 `ACTIVE`/`INACTIVE`/`NOT_FOUND`、错误码 `41001/41002`、时间格式 `YYYY-MM-DD HH:mm:ss` 与 JSON 显式 null（DESIGN §14.1）。本文件不虚构任何已存在实现；待确认设计项为 0。
+
+> 实现记录（2026-09-06）：本文件仅同步实现任务 `DATA-SOURCE-SNAPSHOT-STATUS-IMPLEMENTATION-001` 完成后的元数据 `implementation_status` 为 `IMPLEMENTED_PENDING_REVIEW`；接口/参数/响应字段/错误码/映射等契约相对设计批准内容基准 `61117a62...` **业务内容零差异**。完整实现与验证见实现报告与 Feature README §8/§9。

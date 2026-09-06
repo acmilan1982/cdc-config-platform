@@ -12,8 +12,8 @@
 | baseline_status | `APPROVED` |
 | acceptance_status | `APPROVED`（见 `REQUIREMENTS.md`，需求基线同样已批准） |
 | acceptance_execution_status | `NOT_RUN`（验收标准获批不代表已执行正式验收） |
-| 实现状态 | `NOT_STARTED` |
-| 设计状态 | `NOT_STARTED`（DESIGN/API/UI/DATABASE 未建立） |
+| 实现状态 | `IMPLEMENTED_PENDING_REVIEW`（实现任务 `DATA-SOURCE-SNAPSHOT-STATUS-IMPLEMENTATION-001` 已完成，待代码复审与人工页面验收，见 Feature README §9） |
+| 设计状态 | `APPROVED`（DESIGN/API/UI/DATABASE 四份设计基线已批准，见 Feature README §5） |
 | 验收用例状态 | 文档内全部 `DSS-AC-*` 状态为 `NOT_RUN`（尚未执行正式验收；不写 PASS/FAIL/ACCEPTED/IMPLEMENTED_ACCEPTED） |
 | 正式批准版本 | `DATA-SOURCE-SNAPSHOT-STATUS-REQUIREMENTS-BASELINE-APPROVAL-001`（项目负责人明确“批准”驱动的需求与验收基线批准收口） |
 | 批准链 | R0 需求与验收草案建立 → R1 定向修订 → R2 最小定向修订 → R3 极小定向修订 → ChatGPT 对 R3 结果正式复审 `APPROVED`（R3 结果提交 `4234af73db2190098f3dcd219319a4281fdabafd`）→ 项目负责人随后明确回复“批准” |
@@ -269,8 +269,8 @@
 
 ## 6. 未执行说明与后续执行边界
 
-- 本文件全部 `DSS-AC-*` 为 `NOT_RUN`，本次不执行任何验收。
-- 验收标准基线已批准（需求与验收基线批准收口任务 `DATA-SOURCE-SNAPSHOT-STATUS-REQUIREMENTS-BASELINE-APPROVAL-001`，2026-09-05），下一入口为设计基线建立；执行验收须在功能实现完成并满足环境条件后开展。
+- 本文件全部 `DSS-AC-*` 为 `NOT_RUN`，本实现任务不执行任何正式验收、不把开发自测写成 PASS。
+- 验收标准基线已批准（需求与验收基线批准收口任务 `DATA-SOURCE-SNAPSHOT-STATUS-REQUIREMENTS-BASELINE-APPROVAL-001`，2026-09-05），设计基线已批准（`DATA-SOURCE-SNAPSHOT-STATUS-DESIGN-BASELINE-APPROVAL-001`，2026-09-06），功能已由实现任务 `DATA-SOURCE-SNAPSHOT-STATUS-IMPLEMENTATION-001` 完成（`IMPLEMENTED_PENDING_REVIEW`，待 ChatGPT 代码复审与项目负责人人工页面验收）；正式执行验收须由后续独立正式验收任务在功能满足环境条件后开展，验收结果只能由正式验收任务写入。
 - 依赖数据库只读比对或受控测试数据构造的用例，执行时必须遵守项目数据库只读/审批规则；测试数据 DML 仅在后续任务提示词显式纳入 `DSS-REQ-065` 授权时执行。
 - 本文件不授权任何数据库写操作或测试数据写入；验收标准获批不等于执行验收、验收通过或实现正式接受。
 
@@ -283,5 +283,6 @@
 | 2026-09-05 | R2 最小定向修订验收草案：不新增/删除/重编号任何 `DSS-AC-*`，验收计数仍为 68、全部 `NOT_RUN`；在既有用例内消除两个剩余歧义——R2-01 扩展 `DSS-AC-021`（首次自动查询失败仍保持初始“全部”已应用条件）、`DSS-AC-024`（新条件查询失败不升级已应用条件/保留旧结果/刷新仍旧/界面保留新条件、请求快照与在途改条件语义、空结果视为成功）、`DSS-AC-056`（首次加载失败“已应用查询条件”仍为三项“全部”）、`DSS-AC-057`（成功返回 0 条属成功并升级条件与更新时间）、`DSS-AC-058`（刷新失败保留已应用条件与数据、最近成功刷新时间不更新）；R2-02 扩展 `DSS-AC-048/051`（每次实际请求结束无论成败重启完整 60 秒周期、失败后约 60 秒自动重试、被抑制触发不视为实际请求不单独重置计时、不可见停止且不保留剩余秒数复用）、`DSS-AC-050`、`DSS-AC-068`；`DSS-AC-024` 关联需求增补 `DSS-REQ-061` 并同步 §5 追踪矩阵；仍为 `DRAFT_PENDING_USER_REVIEW`，全部 `NOT_RUN`，待 ChatGPT 对 R2 结果正式复审 | DATA-SOURCE-SNAPSHOT-STATUS-REQUIREMENTS-BASELINE-001-R2（ChatGPT 对 R1 结果正式复审 `CHANGES_REQUIRED` 驱动的纯文档最小定向修订；草案未批准、功能未实现、验收未执行） |
 | 2026-09-05 | R3 极小定向修订验收草案：不新增/删除/重编号任何 `DSS-AC-*`，验收计数仍为 68、全部 `NOT_RUN`；只定向修正 `DSS-AC-024` 的验收矛盾——该用例第⑤步“自动/立即刷新按旧“已应用条件”成功返回”不再写作“也不更新“最近成功刷新时间””，统一为“成功刷新必须把“最近成功刷新时间”更新为本次成功刷新完成时间、但不替换、不改变“已应用查询条件””；并按同一口径同步该用例第②、⑧步等明确成功的刷新步骤（成功刷新更新表格与最近成功刷新时间，永不替换“已应用查询条件”）；把该用例末句替换为无歧义结论：只有用户点击“查询”且查询成功，才允许用该次请求快照替换“已应用查询条件”；自动刷新和“立即刷新”无论成功或失败都不得改变“已应用查询条件”。除 `DSS-AC-024` 外，其余 67 条验收业务行相对本版授权基线 `5c58af6` 逐字节不变；§5 追踪矩阵与编号计数未变；仍为 `DRAFT_PENDING_USER_REVIEW`，全部 `NOT_RUN`，待 ChatGPT 对 R3 结果正式复审 | DATA-SOURCE-SNAPSHOT-STATUS-REQUIREMENTS-BASELINE-001-R3（ChatGPT 对 R2 结果正式复审 `CHANGES_REQUIRED` 驱动的纯文档极小定向修订；草案未批准、功能未实现、验收未执行） |
 | 2026-09-05 | 需求与验收基线批准收口：ChatGPT 对 R3 结果（提交 `4234af73db2190098f3dcd219319a4281fdabafd`）正式复审结论 `APPROVED`，项目负责人随后明确回复“批准”；本文件基线状态由 `DRAFT_PENDING_USER_REVIEW` 收口为 `APPROVED`（正式批准版本 `DATA-SOURCE-SNAPSHOT-STATUS-REQUIREMENTS-BASELINE-APPROVAL-001`，批准内容基准提交 `4234af73db2190098f3dcd219319a4281fdabafd`）；业务零变化——`DSS-AC-001~068` 仍 68 条、全部 `NOT_RUN`、§5 需求—验收追踪矩阵零差异、65 条 `DSS-REQ-*`（见 `REQUIREMENTS.md`）零差异；实现状态保持 `NOT_STARTED`、设计状态保持 `NOT_STARTED`、验收执行状态保持 `NOT_RUN`；验收标准获批不等于执行验收、验收通过或实现正式接受；下一入口更新为设计基线建立 | DATA-SOURCE-SNAPSHOT-STATUS-REQUIREMENTS-BASELINE-APPROVAL-001（项目负责人明确批准驱动的需求与验收基线批准收口；纯文档任务，未设计、未实现、未执行验收） |
+| 2026-09-06 | 本文件仅同步实现任务 `DATA-SOURCE-SNAPSHOT-STATUS-IMPLEMENTATION-001` 完成后的**当前实现状态与文档级实现记录**（文档级状态同步，不新增/删除/重编号/修改任何 `DSS-AC-*` 用例、不写任何 PASS/FAIL、相对批准内容基准 `4234af7...` 业务零变化、§5 追踪矩阵零差异）：元数据“实现状态/设计状态”行更新为 `IMPLEMENTED_PENDING_REVIEW`/`APPROVED`；68 条 `DSS-AC-001~068` 全部保持 `NOT_RUN`、`acceptance_not_run_count=68`、`formal_acceptance_execution_status=NOT_RUN`、`human_visual_acceptance_status=NOT_RUN`；正式验收由后续独立任务执行 | DATA-SOURCE-SNAPSHOT-STATUS-IMPLEMENTATION-001（前后端实现；纯文档记录，不改验收用例、不执行正式验收） |
 
 > 关联文档：需求草案 `docs/features/data-source-snapshot-status/REQUIREMENTS.md`；功能入口与状态 `docs/features/data-source-snapshot-status/README.md`。

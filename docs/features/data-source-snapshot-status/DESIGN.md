@@ -15,7 +15,7 @@
 | requirements_status | `APPROVED`（`docs/features/data-source-snapshot-status/REQUIREMENTS.md`，`DSS-REQ-001~065` 共 65 条） |
 | acceptance_status | `APPROVED`（`docs/features/data-source-snapshot-status/ACCEPTANCE.md`，`DSS-AC-001~068` 共 68 条，全部 `NOT_RUN`） |
 | design_status | `APPROVED`（四份设计文档 DESIGN.md / API.md / UI.md / DATABASE.md 均已批准，见 §17） |
-| implementation_status | `NOT_STARTED`（本设计不编码；页面仍为占位、后端仍无 RUN_STATE 访问链路） |
+| implementation_status | `IMPLEMENTED_PENDING_REVIEW`（本设计本身不编码；实现任务 `DATA-SOURCE-SNAPSHOT-STATUS-IMPLEMENTATION-001` 已按本设计完成前后端只读功能并完成开发验证，待代码复审与人工页面验收，见 Feature README §9 与本实现报告 §18） |
 | acceptance_execution_status | `NOT_RUN`（本设计不执行验收；68 条 `DSS-AC-*` 全部保持 `NOT_RUN`） |
 | pending_user_confirmation_count | `0`（本设计无必须由项目负责人决策的待确认设计项，见 §15） |
 | pending_user_review | `NO`（设计已批准；R1 极小定向修订已通过 ChatGPT 正式复审 `APPROVED` 并由项目负责人明确批准，见 §16/§17） |
@@ -631,3 +631,9 @@ ChatGPT 对上一结果提交（`31aa9f5beec7ded3cd798b3af617fd79a1606ed0`）进
 - 批准日期：2026-09-06。
 - 本次仅做纯文档批准收口：四份设计“文档状态”/`design_status` 由 `DRAFT_PENDING_USER_REVIEW` 更新为 `APPROVED`、`pending_user_review` 由 `YES` 更新为 `NO`，并记录批准链与批准日期；相对批准内容基准，四份设计的接口/参数/响应字段/SQL/状态映射/排序/候选范围/时间与 null/行键/错误码/组件职责/生命周期/请求快照/忙碌抑制/可见性补发/计时器/测试设计与追踪矩阵**业务内容零差异**。
 - 设计批准不代表功能已实现：`implementation_status=NOT_STARTED`、`acceptance_execution_status=NOT_RUN`（68 条 `DSS-AC-*` 全部 `NOT_RUN`）。完整自检见批准收口报告 `reports/DATA-SOURCE-SNAPSHOT-STATUS-DESIGN-BASELINE-APPROVAL-001.md`；下一入口为另立实现任务（README §10）。
+
+## 18. 实现任务完成记录（`DATA-SOURCE-SNAPSHOT-STATUS-IMPLEMENTATION-001`）
+
+- 2026-09-06，实现任务（基准提交 `98fe66e4f406f7d58531b76a5534d04130e5aab5`）已按本四份设计基线完成并提交：占位页替换为正式“源库快照状态”实现页；后端新增只读链路 `GET /api/monitor/data-source-run-state/list`（`monitor/datasourcerunstate` 包）；三多选/两阶段条件/请求快照/忙碌单飞行/60 秒自动刷新与恢复可见延后刷新/七列/状态与异常弱提示/稳定宽度工具栏等均按 §5~§13 落地。
+- 本节仅作文档级实现记录：相对设计批准内容基准 `61117a62f44d39f7c548ebcb650891abf91b9b8c`，本设计的接口/参数/响应字段/SQL/状态映射/排序/候选范围/时间与 null/行键/错误码/组件职责/生命周期/请求快照/忙碌抑制/可见性补发/计时器/测试设计与追踪矩阵**业务内容零差异**（§1/§16/§17 中“功能仍 NOT_STARTED”等表述是设计批准阶段事实，已被本实现任务推进为 `implementation_status=IMPLEMENTED_PENDING_REVIEW`，见 Feature README §8/§9）。
+- 实现状态当前 `IMPLEMENTED_PENDING_REVIEW`、正式验收 `NOT_RUN`、68 条 `DSS-AC-*` 保持 `NOT_RUN`、人工页面验收 `NOT_RUN`。完整实现落点/开发测试/构建/浏览器证据见实现报告 `reports/DATA-SOURCE-SNAPSHOT-STATUS-IMPLEMENTATION-001.md` 与 Feature README；下一入口为 ChatGPT 代码复审与项目负责人人工页面验收，正式验收另立任务执行。

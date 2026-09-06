@@ -40,7 +40,7 @@ const routes: RouteRecordRaw[] = [
     path: '/monitor/data-source-state',
     name: 'DataSourceRunState',
     component: () => import('@/views/data-source-run-state/DataSourceRunStatePage.vue'),
-    meta: { title: '数据源运行状态', group: '运行监控' }
+    meta: { title: '源库快照状态', group: '运行监控' }
   },
   {
     path: '/monitor/topic-offset',

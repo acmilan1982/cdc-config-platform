@@ -23,7 +23,7 @@ export const menuGroups: MenuGroup[] = [
     title: '运行监控',
     items: [
       { path: '/monitor/cdc-node', title: 'CDC 节点状态', icon: 'Odometer' },
-      { path: '/monitor/data-source-state', title: '数据源运行状态', icon: 'DataLine' },
+      { path: '/monitor/data-source-state', title: '源库快照状态', icon: 'DataLine' },
       { path: '/monitor/topic-offset', title: '数据同步进度', icon: 'TrendCharts' },
       { path: '/monitor/log-query', title: '日志查询', icon: 'Document' },
       { path: '/monitor/job-failure/history', title: '故障历史', icon: 'Document' },

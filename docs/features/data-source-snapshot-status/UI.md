@@ -15,7 +15,7 @@
 | requirements_status | `APPROVED`（`DSS-REQ-001~065` 共 65 条） |
 | acceptance_status | `APPROVED`（`DSS-AC-001~068` 共 68 条，全部 `NOT_RUN`） |
 | design_status | `APPROVED`（四份设计文档 DESIGN.md / UI.md / API.md / DATABASE.md 均已批准，见 DESIGN §1/§17） |
-| implementation_status | `NOT_STARTED`（本设计不编码；页面当前仍为占位页，见 DESIGN §3.1） |
+| implementation_status | `IMPLEMENTED_PENDING_REVIEW`（本设计不编码；实现任务 `DATA-SOURCE-SNAPSHOT-STATUS-IMPLEMENTATION-001` 已按本设计替换占位页并实现界面，待代码复审与人工页面验收，见 Feature README §9） |
 | acceptance_execution_status | `NOT_RUN`（本设计不执行验收；68 条 `DSS-AC-*` 全部保持 `NOT_RUN`） |
 | pending_user_confirmation_count | `0`（与 DESIGN.md §15.2 一致） |
 | 设计任务编号 | `DATA-SOURCE-SNAPSHOT-STATUS-DESIGN-BASELINE-001` |
@@ -340,3 +340,7 @@ ChatGPT 对上一结果提交（`31aa9f5beec7ded3cd798b3af617fd79a1606ed0`）正
 - **R1-02 请求在途统一禁用/抑制**：任一实际请求在途时“查询”与“立即刷新”按钮禁用（点击不接受、不排队、不补发），自动触发被抑制；被禁用/被抑制触发不视为实际请求、不重置计时、不提示；在途仍可修改三个条件（§3.6/§6.2/§6.4）。
 - **R1-03 恢复可见延后单次刷新**：§7.4 重写——空闲恢复可见立即按当前已应用条件刷新并结束后重启 60s；在途仅置一次性 `pendingVisibilityRefresh`，当前请求结束后按届时最新已应用条件补发一次，补发结束才重启 60s；再次隐藏/卸载清除标志不补发；补充可测试场景清单（§7.4/§9）。
 - **R1-04 状态元数据**：本文件与四份设计文档保持 `design_status=DRAFT_PENDING_USER_REVIEW`，未批准设计；`pending_user_review=YES`（见 DESIGN §1 与 Feature README）。未改动 API/DATABASE 契约与任何展示字段/映射/排序等业务设计。
+
+## 12. 实现任务完成记录（`DATA-SOURCE-SNAPSHOT-STATUS-IMPLEMENTATION-001`）
+
+2026-09-06 实现任务已按本界面设计完成（§1 元数据 `implementation_status` 同步为 `IMPLEMENTED_PENDING_REVIEW`）：`DataSourceRunStatePage.vue` 已替换占位页为正式“源库快照状态”页；`DataSourceSnapshotQueryBar/Table/Toolbar/StatusTag.vue`、`composables/useDataSourceSnapshot.ts`、`utils/` 与 `api/dataSourceSnapshot.ts`/`types/dataSourceSnapshot.ts` 落地；§10 变更清单中“路由元数据标题/菜单标题/页面标题/面包屑”四处用户可见名已统一为“源库快照状态”（`menu.ts` 本页标题行与 `router/index.ts` 本页标题元数据随实现提交，path 与目录名不变）。界面展示字段/颜色语义/状态与异常弱提示/空态/失败保留/稳定宽度等**业务设计零变化**（相对设计批准内容基准 `61117a62...`）；完整实现与真实浏览器证据见实现报告与 `evidence/DATA-SOURCE-SNAPSHOT-STATUS-IMPLEMENTATION-001/`；正式验收 68 条保持 `NOT_RUN`、人工页面验收 `NOT_RUN`。

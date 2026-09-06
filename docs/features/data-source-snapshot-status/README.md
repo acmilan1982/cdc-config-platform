@@ -4,19 +4,20 @@
 
 | 项目 | 值 |
 |---|---|
-| 用户可见名称 | 源库快照状态（页面、菜单、路由元数据标题、面包屑最终统一使用的名称；当前 Git 已提交与工作区菜单、路由元数据、占位页标题仍为“数据源运行状态”，更名尚未实施，见 §6） |
+| 用户可见名称 | 源库快照状态（页面标题、菜单项标题、路由元数据标题、面包屑统一使用的名称；本实现任务已将 `frontend/src/config/menu.ts` 本页标题行与 `frontend/src/router/index.ts` 本页标题元数据更新为“源库快照状态”，占位页已替换为正式实现页，见 §6） |
 | Feature 内部标识 | `data-source-snapshot-status`（Feature 文档目录标识；任务代码前缀 `DATA-SOURCE-SNAPSHOT-STATUS`） |
 | 所属模块 | 运行监控 |
 | 既有路由 | `/monitor/data-source-state`（保持既有值不变，不因功能更名改 URL） |
 | 前端源码目录 | `frontend/src/views/data-source-run-state/`（保留既有目录名，不做无业务价值的目录重命名；命名映射见 §6） |
-| 当前实现 | 占位（`frontend/src/views/data-source-run-state/DataSourceRunStatePage.vue` 为 `PlaceholderPage` 占位页，标题“数据源运行状态”；路由已存在；后端当前没有针对 `CDC_DATA_SOURCE_RUN_STATE` 的访问链路） |
+| 当前实现 | 已实现（`IMPLEMENTED_PENDING_REVIEW`）：占位页已替换为正式“源库快照状态”实现页（标题/描述见 §6）；后端新增绝对只读访问链路 `GET /api/monitor/data-source-run-state/list`，只读查询 `CDC_DATA_SOURCE_RUN_STATE` 并只读关联 `CDC_CLIENT_MULTIPLE`/`CDC_DATA_SOURCE`（见 §6/§9 与本实现报告） |
 | 需求基线 | `APPROVED`（需求与验收基线已批准，正式批准版本 `DATA-SOURCE-SNAPSHOT-STATUS-REQUIREMENTS-BASELINE-APPROVAL-001`，批准内容基准提交 `4234af73db2190098f3dcd219319a4281fdabafd`；不代表功能已实现、验收已执行或通过） |
 | 验收标准 | `APPROVED`（验收标准基线经 R0、R1、R2、R3 定向修订后已批准；`DSS-AC-024` 成功刷新更新时间的验收矛盾已修正，见 `ACCEPTANCE.md`；全部 `DSS-AC-001~068` 状态为 `NOT_RUN`，验收标准获批不代表已执行正式验收） |
-| 实现状态 | `NOT_STARTED` |
-| 验收执行状态 | `NOT_RUN` |
+| 实现状态 | `IMPLEMENTED_PENDING_REVIEW`（实现已完成并经开发测试/构建/浏览器验证，待 ChatGPT 代码复审与项目负责人人工页面验收；不代表正式验收已执行或通过） |
+| 验收执行状态 | `NOT_RUN`（正式验收未执行：`formal_acceptance_execution_status=NOT_RUN`；68 条 `DSS-AC-*` 全部 `NOT_RUN`） |
+| 人工视觉验收状态 | `NOT_RUN`（`human_visual_acceptance_status=NOT_RUN`，须由项目负责人人工目测提供，Agent 不得代填） |
 | 设计状态 | `APPROVED`（DESIGN.md / API.md / UI.md / DATABASE.md 四份设计基线已批准，正式批准版本 `DATA-SOURCE-SNAPSHOT-STATUS-DESIGN-BASELINE-APPROVAL-001`，批准内容基准提交 `61117a62f44d39f7c548ebcb650891abf91b9b8c`，批准日期 2026-09-06；设计已批准不代表功能已实现、验收已执行或通过，见 §5/§8/§9） |
 | 待确认草案建议 | 0（`pending_user_confirmation_count=0`；原 `DSS-PROP-001~008` 已全部决策吸收并批准） |
-| 当前阶段 | 需求与验收基线已批准（正式批准版本 `DATA-SOURCE-SNAPSHOT-STATUS-REQUIREMENTS-BASELINE-APPROVAL-001`）；设计基线草案已建立（`DATA-SOURCE-SNAPSHOT-STATUS-DESIGN-BASELINE-001`，2026-09-05）并完成 R1 极小定向修订（`DATA-SOURCE-SNAPSHOT-STATUS-DESIGN-BASELINE-001-R1`，2026-09-06，ChatGPT 对 R0 结果正式复审 `CHANGES_REQUIRED` 驱动，R1-01 页面实例生命周期 / R1-02 统一忙碌抑制 / R1-03 恢复可见延后单次刷新 / R1-04 复审状态元数据，见 §8/§9）；ChatGPT 对 R1 结果提交（`61117a62f44d39f7c548ebcb650891abf91b9b8c`）正式复审 `APPROVED`，项目负责人随后明确批准，四份设计基线已批准（正式批准版本 `DATA-SOURCE-SNAPSHOT-STATUS-DESIGN-BASELINE-APPROVAL-001`，批准日期 2026-09-06，`design_status=APPROVED`、`pending_user_review=NO`）；设计批准不代表功能已实现：功能仍未实现、68 条验收仍未执行 |
+| 当前阶段 | 需求与验收基线已批准、设计基线已批准，实现任务 `DATA-SOURCE-SNAPSHOT-STATUS-IMPLEMENTATION-001`（基准提交 `98fe66e4f406f7d58531b76a5534d04130e5aab5`）已完成：占位页替换为正式“源库快照状态”页面、后端新增只读接口链路、三多选查询/重置、七列展示、60 秒自动刷新/立即刷新/失败与空态反馈均按批准设计落地；`implementation_status=IMPLEMENTED_PENDING_REVIEW`、`formal_acceptance_execution_status=NOT_RUN`、`human_visual_acceptance_status=NOT_RUN`、68 条 `DSS-AC-*` 全部保持 `NOT_RUN`（详见 §8 末、§9 与本实现报告）；下一步为 ChatGPT 代码复审与项目负责人人工页面验收，正式验收另立任务执行 |
 
 ## 2. Feature 定位
 
@@ -46,8 +47,8 @@
 | 文档 | 职责 | 状态 |
 |---|---|---|
 | `README.md`（本文件） | Feature 定位、命名映射、文档导航与状态 | 已建立（2026-09-05）；随 R1、R2、R3 修订及批准收口同步 |
-| `REQUIREMENTS.md` | 需求基线（`DSS-REQ-001~065`，R3 极小定向修订版，65 条业务行不变） | `APPROVED`（需求与验收基线已批准，未实现） |
-| `ACCEPTANCE.md` | 验收标准基线（`DSS-AC-001~068`，全部 `NOT_RUN`，R3 极小定向修订版） | `APPROVED`（需求与验收基线已批准，未执行验收） |
+| `REQUIREMENTS.md` | 需求基线（`DSS-REQ-001~065`，R3 极小定向修订版，65 条业务行不变） | `APPROVED`（需求与验收基线已批准；功能已实现待复审与人工验收，正式验收未执行） |
+| `ACCEPTANCE.md` | 验收标准基线（`DSS-AC-001~068`，全部 `NOT_RUN`，R3 极小定向修订版） | `APPROVED`（需求与验收基线已批准；68 条 `DSS-AC-*` 全部 `NOT_RUN`，正式验收未执行） |
 | `DESIGN.md` | 设计基线（总设计入口：架构、读取流程、状态机、并发、追踪矩阵、设计决策） | 已批准（`APPROVED`；2026-09-05 初版，2026-09-06 R1 极小定向修订，2026-09-06 批准收口 `DATA-SOURCE-SNAPSHOT-STATUS-DESIGN-BASELINE-APPROVAL-001`） |
 | `API.md` | 设计基线（接口设计：只读 GET、参数、响应模型、错误码、映射） | 已批准（`APPROVED`，2026-09-05；R1 整文件零差异，2026-09-06 批准收口） |
 | `UI.md` | 设计基线（界面设计：查询区、七列、状态/异常视觉、工具栏、可访问性） | 已批准（`APPROVED`；2026-09-05 初版，2026-09-06 R1 极小定向修订，2026-09-06 批准收口） |
@@ -60,21 +61,22 @@
 | `reports/DATA-SOURCE-SNAPSHOT-STATUS-DESIGN-BASELINE-001.md` | 本任务（设计基线草案建立）执行报告 | 已建立（设计草案建立，2026-09-05） |
 | `reports/DATA-SOURCE-SNAPSHOT-STATUS-DESIGN-BASELINE-001-R1.md` | 本任务（设计基线 R1 极小定向修订，ChatGPT `CHANGES_REQUIRED` 驱动）执行报告 | 已建立（R1 修订，2026-09-06；R1 结果已复审 `APPROVED` 并于 2026-09-06 批准收口） |
 | `reports/DATA-SOURCE-SNAPSHOT-STATUS-DESIGN-BASELINE-APPROVAL-001.md` | 本任务（设计基线批准收口，ChatGPT 对 R1 结果正式复审 `APPROVED` 且项目负责人明确批准）批准报告 | 已建立（批准收口，2026-09-06） |
+| `reports/DATA-SOURCE-SNAPSHOT-STATUS-IMPLEMENTATION-001.md` | 本任务（前后端实现 + 开发测试/构建/浏览器验证）执行报告 | 已建立（2026-09-06） |
 | `docs/database/reports/DATA-SOURCE-SNAPSHOT-STATUS-DATABASE-VERIFICATION-001.md` | `CDC_DATA_SOURCE_RUN_STATE` 数据库只读复核报告（已提交，提交 `72b305a`） | 已建立；本 Feature 的数据库事实一律以该报告为依据 |
 
-## 6. 页面与路由现状（AS-IS 事实）
+## 6. 页面与路由现状（本实现任务后事实）
 
-| 项 | 当前事实 | 目标（后续实现阶段） |
-|---|---|---|
-| 路由 | `/monitor/data-source-state`（`frontend/src/router/index.ts`，name `DataSourceRunState`） | 保持 `/monitor/data-source-state` 不变 |
-| 前端源码目录 | `frontend/src/views/data-source-run-state/DataSourceRunStatePage.vue`（`PlaceholderPage` 占位页） | 目录名保留；页面替换为正式实现 |
-| 菜单项 | `frontend/src/config/menu.ts` 中“运行监控”组下“数据源运行状态”（path `/monitor/data-source-state`） | 标题更新为“源库快照状态” |
-| 页面标题 | 占位页标题“数据源运行状态”（group 运行监控） | 更新为“源库快照状态” |
-| 面包屑/路由元数据 | “数据源运行状态” | 更新为“源库快照状态” |
+| 项 | 当前事实（本实现任务后，2026-09-06） |
+|---|---|
+| 路由 | `/monitor/data-source-state`（`frontend/src/router/index.ts`，name `DataSourceRunState`）保持既有值不变；本页路由元数据标题已由“数据源运行状态”更新为“源库快照状态” |
+| 前端源码目录 | `frontend/src/views/data-source-run-state/` 保留既有目录名；`DataSourceRunStatePage.vue` 已由 `PlaceholderPage` 占位页替换为正式实现页（`useDataSourceSnapshot` 编排 + `components/DataSourceSnapshotQueryBar/Table/Toolbar/StatusTag.vue`），页面标题“源库快照状态”、定位说明“展示各探针端与源库组合的初始快照阶段状态；页面只读。” |
+| 菜单项 | `frontend/src/config/menu.ts`“运行监控”组下本页标题已由“数据源运行状态”更新为“源库快照状态”（path 不变） |
+| 页面标题 | 实现页标题“源库快照状态”（group 运行监控） |
+| 面包屑/路由元数据 | 路由元数据标题为“源库快照状态” |
 
 命名映射（保持既有值，供实现与文档对齐）：路由 `/monitor/data-source-state` ↔ 代码目录 `frontend/src/views/data-source-run-state/` ↔ Feature slug `data-source-snapshot-status` ↔ 用户可见名“源库快照状态”。
 
-当前 `menu.ts`、`HeaderBar.vue`、`MainLayout.vue`、`Sidebar.vue`、`router/index.ts` 等存在工作区未提交修改（用户既有内容），本 Feature 文档不修改、不提交这些文件。
+本任务仅暂存并提交 `menu.ts` 的“本页标题”行与 `router/index.ts` 的“本页标题元数据”行；`menu.ts`/`HeaderBar.vue`/`MainLayout.vue`/`Sidebar.vue`/`app.ts`/`global.css` 等文件上存在的用户其他未提交修改（如故障监控图标、`/large-screen` 入口、布局主题等）不属于本 Feature，本任务不修改、不暂存、不提交，保持用户现场原样。
 
 ## 7. 数据规模假设
 
@@ -92,16 +94,18 @@
 - 设计草案已完成 R1 极小定向修订（`DATA-SOURCE-SNAPSHOT-STATUS-DESIGN-BASELINE-001-R1`，2026-09-06，ChatGPT 对 R0 结果提交 `31aa9f5` 正式复审 `CHANGES_REQUIRED` 驱动，详见执行报告）：① **R1-01** 页面生命周期统一——每次路由进入/页面实例创建初始化三项“全部”并自动查询，离开后重新进入不恢复上次会话现场，页面/composable 实例内 `reactive/ref` 状态，**不新增 Pinia store、不用 localStorage/sessionStorage、不跨路由恢复现场**（已从架构与建议文件清单移除 `frontend/src/stores/dataSourceSnapshot.ts`）；② **R1-02** 统一请求在途规则——busy 时“查询/立即刷新”按钮禁用（点击不接受/不排队/不补发）、自动触发被抑制，删除“最新用户意图槽位/覆盖补发”等不唯一并发语义，`seq` 仅作防迟写/防旧响应覆盖的请求实例令牌；③ **R1-03** 恢复可见延后单次刷新（唯一例外、非通用排队）——空闲恢复可见立即按当时最新已应用条件刷新并结束后重启完整 60s；在途不并发、仅置一次性 `pendingVisibilityRefresh`，当前请求结束后按**届时最新**已应用条件补发一次 restore，补发结束才重启 60s，再次隐藏/卸载清标志不补发；④ **R1-04** `pending_user_review=YES`、`pending_user_confirmation_count=0`。`DESIGN.md`/`UI.md` 已同步修订；`API.md`/`DATABASE.md`/`REQUIREMENTS.md`/`ACCEPTANCE.md` 相对 R1 基准**整文件零差异**。四份设计仍 `DRAFT_PENDING_USER_REVIEW`（未批准），**仍待 ChatGPT 对 R1 结果提交正式复审**：不是设计已批准、功能未实现（`NOT_STARTED`）、68 条验收未执行（`NOT_RUN`）。
 - 设计基线已批准收口（`DATA-SOURCE-SNAPSHOT-STATUS-DESIGN-BASELINE-APPROVAL-001`，2026-09-06）：ChatGPT 对设计 R1 结果提交 `61117a62f44d39f7c548ebcb650891abf91b9b8c` 正式复审 `APPROVED`，项目负责人随后明确回复“批准”；四份设计“文档状态”/`design_status` 由 `DRAFT_PENDING_USER_REVIEW` 更新为 `APPROVED`、`pending_user_review` 由 `YES` 更新为 `NO`（批准报告见 §5 报告导航）。设计批准只代表四份设计基线已批准：不代表功能已实现（功能仍 `NOT_STARTED`，页面为占位、后端无 RUN_STATE 访问链路），不代表验收已执行或通过（68 条验收仍全部 `NOT_RUN`），更不等于 `IMPLEMENTED_ACCEPTED`。
 - 数据库对 `CDC_DATA_SOURCE_RUN_STATE` 测试数据 DML 的未来授权（仅限开发库、仅本表、备份/恢复、禁 DDL/其他表/生产）已精确记录于 `REQUIREMENTS.md`；本草案任务不访问数据库。
+- 实现任务已完成（`DATA-SOURCE-SNAPSHOT-STATUS-IMPLEMENTATION-001`，基准提交 `98fe66e4f406f7d58531b76a5534d04130e5aab5`，2026-09-06）：占位页替换为正式“源库快照状态”实现页；后端新增绝对只读链路 `GET /api/monitor/data-source-run-state/list`（`monitor/datasourcerunstate`：Controller/Query/Service/只读 Mapper/Row/VO/枚举/错误码，三固定 SELECT、主表驱动内存关联保行、状态分类宽容未知、候选全量派生、TO_CHAR 透传＋JSON 显式 null、无分页、错误码 `41001/41002`）；前端三多选（“全部”互斥、同维 OR 跨维 AND）、两阶段条件、请求快照、忙碌单飞行、60 秒自动刷新/立即刷新、隐藏停止计时/恢复可见延后单次刷新、成功/空/失败/首次失败四态区分、失败保留旧现场与最近成功时间、稳定宽度刷新按钮、七列无操作列；`menu.ts` 本页标题与 `router/index.ts` 本页标题元数据更新为“源库快照状态”；业务范围严格只读（产品零 DML/DDL，测试数据 DML 授权留待后续正式验收任务）。开发验证：后端定向 27 例通过、前端本模块定向 62 例通过、前端全量 663/663 通过、前端 `vue-tsc`＋`vite build` 成功、真实浏览器联调通过（真实只读接口 RUNNING 行、重置不请求、COMPLETED 空态、刷新、稳定宽度、控制台零异常），首载失败态经路由拦截 Mock 验证并标注；既有 jobfailure 模块 20 例环境性失败（ZooKeeper `10.19.16.111:2181` 不可达＋开发库数据漂移）与本任务无因果（git diff 无相关文件改动）。`implementation_status=IMPLEMENTED_PENDING_REVIEW`、`formal_acceptance_execution_status=NOT_RUN`、`human_visual_acceptance_status=NOT_RUN`、68 条 `DSS-AC-*` 保持 `NOT_RUN`（本任务不执行正式验收、不把自测写成 PASS）。实现落点/测试/构建/浏览器证据详见本实现报告 `reports/DATA-SOURCE-SNAPSHOT-STATUS-IMPLEMENTATION-001.md` 与 `evidence/DATA-SOURCE-SNAPSHOT-STATUS-IMPLEMENTATION-001/`。
 
 ## 9. 当前阶段与声明
 
-- 本 Feature 当前状态：`baseline_status=APPROVED`、`requirements_status=APPROVED`、`acceptance_status=APPROVED`、`implementation_status=NOT_STARTED`、`acceptance_execution_status=NOT_RUN`、`design_status=APPROVED`、`pending_user_review=NO`、`pending_user_confirmation_count=0`。
-- 需求与验收标准基线**已批准**（正式批准版本 `DATA-SOURCE-SNAPSHOT-STATUS-REQUIREMENTS-BASELINE-APPROVAL-001`）：不代表设计已完成、不代表功能已实现、不代表验收已执行或通过；批准的是需求与验收标准基线，不等于 `IMPLEMENTED_ACCEPTED`。
-- 功能**未实现**：页面仍为占位，后端无访问链路。
-- 验收**未执行**：`DSS-AC-001~068` 全部 `NOT_RUN`。
-- 设计**已批准**：`DESIGN.md`/`API.md`/`UI.md`/`DATABASE.md` 状态为 `APPROVED`（正式批准版本 `DATA-SOURCE-SNAPSHOT-STATUS-DESIGN-BASELINE-APPROVAL-001`，批准内容基准提交 `61117a62f44d39f7c548ebcb650891abf91b9b8c`，批准日期 2026-09-06；设计草案建立后曾按 ChatGPT 正式复审 `CHANGES_REQUIRED` 完成 R1 极小定向修订（R1-01~R1-04，见 §8），后经 ChatGPT 对 R1 结果 `APPROVED` 复审并由项目负责人明确批准）。设计已批准不代表功能已实现、验收已执行或通过，也不等于 `IMPLEMENTED_ACCEPTED`；进入实现阶段需另立实现任务（见 §10）。
-- 不得把本 README 中“目标/后续实现阶段”描述为当前已实现事实，不得写成 `IMPLEMENTED`、`PASS`、`ACCEPTED` 或验收通过。
+- 本 Feature 当前状态：`baseline_status=APPROVED`、`requirements_status=APPROVED`、`acceptance_status=APPROVED`、`design_status=APPROVED`、`implementation_status=IMPLEMENTED_PENDING_REVIEW`、`formal_acceptance_execution_status=NOT_RUN`、`human_visual_acceptance_status=NOT_RUN`、`acceptance_not_run_count=68`、`pending_user_review=NO`、`pending_user_confirmation_count=0`。
+- 需求与验收标准基线**已批准**（正式批准版本 `DATA-SOURCE-SNAPSHOT-STATUS-REQUIREMENTS-BASELINE-APPROVAL-001`）：批准的是需求与验收标准基线，不代表正式验收已执行或通过，不等于 `IMPLEMENTED_ACCEPTED`。
+- 功能**已实现（待复审与人工验收）**：实现任务 `DATA-SOURCE-SNAPSHOT-STATUS-IMPLEMENTATION-001` 已完成前后端只读查询功能与开发验证，`implementation_status=IMPLEMENTED_PENDING_REVIEW`；不代表代码复审通过、不代表正式验收已执行或通过，不等于 `IMPLEMENTED_ACCEPTED`。
+- 验收**未执行**：`formal_acceptance_execution_status=NOT_RUN`；`DSS-AC-001~068` 全部 `NOT_RUN`（`acceptance_not_run_count=68`），本实现任务不把任何开发自测写成 PASS。
+- 人工视觉验收**未执行**：`human_visual_acceptance_status=NOT_RUN`，须由项目负责人对预览地址人工目测后提供，Agent 不得代填接受。
+- 设计**已批准**：`DESIGN.md`/`API.md`/`UI.md`/`DATABASE.md` 状态为 `APPROVED`（正式批准版本 `DATA-SOURCE-SNAPSHOT-STATUS-DESIGN-BASELINE-APPROVAL-001`，批准内容基准提交 `61117a62f44d39f7c548ebcb650891abf91b9b8c`，批准日期 2026-09-06；设计草案建立后曾按 ChatGPT 正式复审 `CHANGES_REQUIRED` 完成 R1 极小定向修订（R1-01~R1-04，见 §8），后经 ChatGPT 对 R1 结果 `APPROVED` 复审并由项目负责人明确批准）。
+- 不得把开发自测、浏览器验证或实现完成写成正式验收 `PASS`、`ACCEPTED`、`IMPLEMENTED_ACCEPTED` 或人工验收通过；人工目测结果只能由项目负责人提供。
 
 ## 10. 下一流程入口
 
-设计基线已批准（`DATA-SOURCE-SNAPSHOT-STATUS-DESIGN-BASELINE-APPROVAL-001`，批准内容基准提交 `61117a62f44d39f7c548ebcb650891abf91b9b8c`，批准日期 2026-09-06；批准链：初版设计 `31aa9f5...` → ChatGPT 正式复审 `CHANGES_REQUIRED` → R1 修订 `61117a62...` → ChatGPT 对 R1 正式复审 `APPROVED` → 项目负责人批准，见 §8/§9）。下一入口为**另立实现任务**：按已批准 DESIGN.md / API.md / UI.md / DATABASE.md 四份设计基线开始编码。本批准收口任务不实现代码、不执行验收；`REQUIREMENTS.md`/`ACCEPTANCE.md` 保持 `APPROVED`、`pending_user_review=NO`、68 条验收保持 `NOT_RUN`。
+实现任务 `DATA-SOURCE-SNAPSHOT-STATUS-IMPLEMENTATION-001`（基准提交 `98fe66e4f406f7d58531b76a5534d04130e5aab5`，2026-09-06）已完成提交并普通推送 `origin/develop`。下一入口为**待 ChatGPT 代码复审与项目负责人人工页面验收**：项目负责人可打开预览地址 `http://192.168.174.70:5173/monitor/data-source-state` 人工目测（见 §8 末与本实现报告）；正式验收（68 条 `DSS-AC-001~068`）须由后续独立正式验收任务执行，本实现任务不执行、不自动接受、不把开发自测写成 PASS。`REQUIREMENTS.md`/`ACCEPTANCE.md` 保持 `APPROVED`、`pending_user_review=NO`、68 条验收保持 `NOT_RUN`；提交并推送后停止，等待 ChatGPT 代码复审及项目负责人页面目测。

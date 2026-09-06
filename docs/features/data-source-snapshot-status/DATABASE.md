@@ -13,7 +13,7 @@
 | requirements_status | `APPROVED`（`DSS-REQ-001~065` 共 65 条） |
 | acceptance_status | `APPROVED`（`DSS-AC-001~068` 共 68 条，全部 `NOT_RUN`） |
 | design_status | `APPROVED`（四份设计文档 DESIGN.md / API.md / UI.md / DATABASE.md 均已批准，见 DESIGN §1/§17） |
-| implementation_status | `NOT_STARTED`（本设计不编码；当前后端无 RUN_STATE 访问链路，见 DESIGN §3） |
+| implementation_status | `IMPLEMENTED_PENDING_REVIEW`（本设计不编码；实现任务 `DATA-SOURCE-SNAPSHOT-STATUS-IMPLEMENTATION-001` 已实现基于本设计的只读查询，待代码复审与人工页面验收，见 Feature README §9） |
 | acceptance_execution_status | `NOT_RUN`（本设计不执行验收；68 条 `DSS-AC-*` 全部保持 `NOT_RUN`） |
 | pending_user_confirmation_count | `0`（与 DESIGN.md §15.2 一致） |
 | 设计任务编号 | `DATA-SOURCE-SNAPSHOT-STATUS-DESIGN-BASELINE-001` |
@@ -209,3 +209,5 @@ FROM CDC_DATA_SOURCE
 | §13 产品只读 vs 测试 DML 授权分离 | REQ-011/065 | AC-010/012/063/065 |
 
 > 一致性：本文件与 DESIGN.md/API.md/UI.md 统一使用接口 `GET /api/monitor/data-source-run-state/list`、字段/枚举/原始值、时间格式与显式 null、映射状态、错误码与刷新状态机（DESIGN §14.1）。本文件不输出数据库凭据、不声称重新验证实时数据；待确认设计项为 0。
+
+> 实现记录（2026-09-06）：本文件仅同步实现任务 `DATA-SOURCE-SNAPSHOT-STATUS-IMPLEMENTATION-001` 完成后的元数据 `implementation_status` 为 `IMPLEMENTED_PENDING_REVIEW`；本查询设计（三表投影/保行/分类/排序/只读契约）相对设计批准内容基准 `61117a62...` **业务内容零差异**。本实现任务仅以批准只读方式访问 `CDC_DATA_SOURCE_RUN_STATE`/`CDC_CLIENT_MULTIPLE`/`CDC_DATA_SOURCE`（开发验证用只读 SELECT/浏览器联调），未执行任何 DML/DDL；完整实现与数据库只读证据见实现报告与 `evidence/DATA-SOURCE-SNAPSHOT-STATUS-IMPLEMENTATION-001/`。
