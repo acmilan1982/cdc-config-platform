@@ -1,0 +1,392 @@
+{
+  "evidenceFile": "refresh-geometry.json",
+  "scenario": "刷新几何稳定性",
+  "sequences": [
+    {
+      "name": "idle -> manual(立即刷新) loading -> success",
+      "samples": {
+        "idle": {
+          "group": {
+            "x": 989,
+            "y": 240,
+            "w": 393,
+            "h": 32,
+            "bottom": 272
+          },
+          "text": {
+            "x": 1005,
+            "y": 244,
+            "w": 89,
+            "h": 22,
+            "bottom": 267
+          },
+          "sep": {
+            "x": 1103,
+            "y": 249,
+            "w": 1,
+            "h": 14,
+            "bottom": 263
+          },
+          "time": {
+            "x": 1112,
+            "y": 244,
+            "w": 153,
+            "h": 22,
+            "bottom": 267
+          },
+          "refreshBtn": {
+            "x": 1272,
+            "y": 240,
+            "w": 110,
+            "h": 32,
+            "bottom": 272,
+            "loading": false
+          },
+          "errorSlot": {
+            "x": 262,
+            "y": 276,
+            "w": 1136,
+            "h": 22,
+            "bottom": 298
+          },
+          "bodyTop": {
+            "x": 262,
+            "y": 299,
+            "w": 1136,
+            "h": 1268,
+            "bottom": 1567
+          },
+          "inlineErrorText": null,
+          "summary": "共 30 条其中 6 条未知状态"
+        },
+        "manualLoading": {
+          "group": {
+            "x": 989,
+            "y": 240,
+            "w": 393,
+            "h": 32,
+            "bottom": 272
+          },
+          "text": {
+            "x": 1005,
+            "y": 244,
+            "w": 89,
+            "h": 22,
+            "bottom": 267
+          },
+          "sep": {
+            "x": 1103,
+            "y": 249,
+            "w": 1,
+            "h": 14,
+            "bottom": 263
+          },
+          "time": {
+            "x": 1112,
+            "y": 244,
+            "w": 153,
+            "h": 22,
+            "bottom": 267
+          },
+          "refreshBtn": {
+            "x": 1272,
+            "y": 240,
+            "w": 110,
+            "h": 32,
+            "bottom": 272,
+            "loading": true
+          },
+          "errorSlot": {
+            "x": 262,
+            "y": 276,
+            "w": 1136,
+            "h": 22,
+            "bottom": 298
+          },
+          "bodyTop": {
+            "x": 262,
+            "y": 299,
+            "w": 1136,
+            "h": 1268,
+            "bottom": 1567
+          },
+          "inlineErrorText": null,
+          "summary": "共 30 条其中 6 条未知状态"
+        },
+        "success": {
+          "group": {
+            "x": 989,
+            "y": 240,
+            "w": 393,
+            "h": 32,
+            "bottom": 272
+          },
+          "text": {
+            "x": 1005,
+            "y": 244,
+            "w": 89,
+            "h": 22,
+            "bottom": 267
+          },
+          "sep": {
+            "x": 1103,
+            "y": 249,
+            "w": 1,
+            "h": 14,
+            "bottom": 263
+          },
+          "time": {
+            "x": 1112,
+            "y": 244,
+            "w": 153,
+            "h": 22,
+            "bottom": 267
+          },
+          "refreshBtn": {
+            "x": 1272,
+            "y": 240,
+            "w": 110,
+            "h": 32,
+            "bottom": 272,
+            "loading": false
+          },
+          "errorSlot": {
+            "x": 262,
+            "y": 276,
+            "w": 1136,
+            "h": 22,
+            "bottom": 298
+          },
+          "bodyTop": {
+            "x": 262,
+            "y": 299,
+            "w": 1136,
+            "h": 1268,
+            "bottom": 1567
+          },
+          "inlineErrorText": null,
+          "summary": "共 30 条其中 6 条未知状态"
+        }
+      },
+      "deltas": {
+        "idle_vs_manualLoading": {
+          "group": 0,
+          "text": 0,
+          "sep": 0,
+          "time": 0,
+          "refreshBtn": 0,
+          "errorSlot": 0,
+          "bodyTop": 0
+        },
+        "manualLoading_vs_success": {
+          "group": 0,
+          "text": 0,
+          "sep": 0,
+          "time": 0,
+          "refreshBtn": 0,
+          "errorSlot": 0,
+          "bodyTop": 0
+        },
+        "idle_vs_success": {
+          "group": 0,
+          "text": 0,
+          "sep": 0,
+          "time": 0,
+          "refreshBtn": 0,
+          "errorSlot": 0,
+          "bodyTop": 0
+        }
+      },
+      "conclusion": "刷新按钮 loading 图标显隐前后，刷新逻辑组/按钮/前方文字/最近成功时间 rect 关键 x/y/w/h 不跳动（delta<=1px 视为亚像素稳定）；失败内联提示本序列不出现。"
+    },
+    {
+      "name": "idle -> manual(立即刷新) loading -> failure(HTTP 500 内联提示)",
+      "samples": {
+        "idle": {
+          "group": {
+            "x": 989,
+            "y": 240,
+            "w": 393,
+            "h": 32,
+            "bottom": 272
+          },
+          "text": {
+            "x": 1005,
+            "y": 244,
+            "w": 89,
+            "h": 22,
+            "bottom": 267
+          },
+          "sep": {
+            "x": 1103,
+            "y": 249,
+            "w": 1,
+            "h": 14,
+            "bottom": 263
+          },
+          "time": {
+            "x": 1112,
+            "y": 244,
+            "w": 153,
+            "h": 22,
+            "bottom": 267
+          },
+          "refreshBtn": {
+            "x": 1272,
+            "y": 240,
+            "w": 110,
+            "h": 32,
+            "bottom": 272,
+            "loading": false
+          },
+          "errorSlot": {
+            "x": 262,
+            "y": 276,
+            "w": 1136,
+            "h": 22,
+            "bottom": 298
+          },
+          "bodyTop": {
+            "x": 262,
+            "y": 299,
+            "w": 1136,
+            "h": 1268,
+            "bottom": 1567
+          },
+          "inlineErrorText": null,
+          "summary": "共 30 条其中 6 条未知状态"
+        },
+        "manualLoading": {
+          "group": {
+            "x": 989,
+            "y": 240,
+            "w": 393,
+            "h": 32,
+            "bottom": 272
+          },
+          "text": {
+            "x": 1005,
+            "y": 244,
+            "w": 89,
+            "h": 22,
+            "bottom": 267
+          },
+          "sep": {
+            "x": 1103,
+            "y": 249,
+            "w": 1,
+            "h": 14,
+            "bottom": 263
+          },
+          "time": {
+            "x": 1112,
+            "y": 244,
+            "w": 153,
+            "h": 22,
+            "bottom": 267
+          },
+          "refreshBtn": {
+            "x": 1272,
+            "y": 240,
+            "w": 110,
+            "h": 32,
+            "bottom": 272,
+            "loading": true
+          },
+          "errorSlot": {
+            "x": 262,
+            "y": 276,
+            "w": 1136,
+            "h": 22,
+            "bottom": 298
+          },
+          "bodyTop": {
+            "x": 262,
+            "y": 299,
+            "w": 1136,
+            "h": 1268,
+            "bottom": 1567
+          },
+          "inlineErrorText": null,
+          "summary": "共 30 条其中 6 条未知状态"
+        },
+        "failure": {
+          "group": {
+            "x": 989,
+            "y": 240,
+            "w": 393,
+            "h": 32,
+            "bottom": 272
+          },
+          "text": {
+            "x": 1005,
+            "y": 244,
+            "w": 89,
+            "h": 22,
+            "bottom": 267
+          },
+          "sep": {
+            "x": 1103,
+            "y": 249,
+            "w": 1,
+            "h": 14,
+            "bottom": 263
+          },
+          "time": {
+            "x": 1112,
+            "y": 244,
+            "w": 153,
+            "h": 22,
+            "bottom": 267
+          },
+          "refreshBtn": {
+            "x": 1272,
+            "y": 240,
+            "w": 110,
+            "h": 32,
+            "bottom": 272,
+            "loading": false
+          },
+          "errorSlot": {
+            "x": 262,
+            "y": 276,
+            "w": 1136,
+            "h": 22,
+            "bottom": 298
+          },
+          "bodyTop": {
+            "x": 262,
+            "y": 299,
+            "w": 1136,
+            "h": 1268,
+            "bottom": 1567
+          },
+          "inlineErrorText": "刷新失败，将在约 60 秒后自动重试",
+          "summary": "共 30 条其中 6 条未知状态"
+        }
+      },
+      "deltas": {
+        "idle_vs_manualLoading": {
+          "group": 0,
+          "text": 0,
+          "sep": 0,
+          "time": 0,
+          "refreshBtn": 0,
+          "errorSlot": 0,
+          "bodyTop": 0
+        },
+        "idle_vs_failure": {
+          "group": 0,
+          "text": 0,
+          "sep": 0,
+          "time": 0,
+          "refreshBtn": 0,
+          "errorSlot": 0,
+          "bodyTop": 0
+        }
+      },
+      "failurePromptVisible": true,
+      "conclusion": "manual 刷新失败后内联提示（.dss-result-error）在固定高度错误槽内出现；刷新逻辑组与“最近成功刷新”节点 y/x 不因失败提示被推动；表格正文区顶部不因提示出现而位移。"
+    }
+  ]
+}

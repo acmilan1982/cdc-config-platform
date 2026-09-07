@@ -1,0 +1,22 @@
+
+ RUN  v1.6.1 /agent/cdc-config-platform/frontend
+
+ ✓ src/views/data-source-run-state/composables/useDataSourceSnapshot.spec.ts  (20 tests) 28ms
+ ✓ src/views/data-source-run-state/components/DataSourceSnapshotTable.spec.ts  (21 tests) 1337ms
+ ✓ src/views/data-source-run-state/DataSourceRunStatePage.spec.ts  (9 tests) 2667ms
+ ✓ src/views/data-source-run-state/components/DataSourceSnapshotQueryBar.spec.ts  (13 tests) 2605ms
+ ✓ src/views/data-source-run-state/composables/useDataSourceSnapshot.errorChain.spec.ts  (6 tests) 30ms
+ ✓ src/views/data-source-run-state/tooltip/useSnapshotTooltip.spec.ts  (14 tests) 45ms
+ ✓ src/views/data-source-run-state/components/DataSourceSnapshotToolbar.spec.ts  (10 tests) 151ms
+ ✓ src/views/data-source-run-state/tooltip/SnapshotTooltipHost.spec.ts  (4 tests) 61ms
+ ✓ src/views/data-source-run-state/tooltip/tooltipPosition.spec.ts  (10 tests) 6ms
+ ✓ src/views/data-source-run-state/utils/selection.spec.ts  (7 tests) 10ms
+ ✓ src/views/data-source-run-state/components/DataSourceSnapshotStatusTag.spec.ts  (5 tests) 85ms
+ ✓ src/views/data-source-run-state/utils/rowKey.spec.ts  (3 tests) 4ms
+ ✓ src/views/data-source-run-state/utils/format.spec.ts  (4 tests) 4ms
+
+ Test Files  13 passed (13)
+      Tests  126 passed (126)
+   Start at  22:44:57
+   Duration  25.65s (transform 1.19s, setup 74ms, collect 8.05s, tests 7.03s, environment 6.78s, prepare 1.31s)
+

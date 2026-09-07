@@ -1,0 +1,57 @@
+{
+  "evidenceFile": "console-network-summary.json",
+  "scenario": "浏览器 console / 未处理 Promise 错误 / 目标接口请求与状态汇总（R1-02 §6.2 #10）；临时拦截产生的预期错误单独标记，不与真实缺陷混淆",
+  "page": "http://127.0.0.1:5173/monitor/data-source-state",
+  "viewport": "1440x900",
+  "sequence": [
+    "页面加载 initial(真实后端 200)",
+    "点击立即刷新 manual(真实后端 200)",
+    "点击立即刷新 manual→HTTP 500（浏览器层注入一次，预期收敛错误）",
+    "点击查询 query(真实后端 200，用于确认收敛错误随成功被清除且无累积异常)"
+  ],
+  "listResponseStatusesBySegment": {
+    "initialLoad": [
+      200
+    ],
+    "manualSuccess": [
+      200
+    ],
+    "manualInjected500": [
+      500
+    ],
+    "query": [
+      200
+    ]
+  },
+  "consoleEntries": [
+    {
+      "type": "debug",
+      "text": "[vite] connecting..."
+    },
+    {
+      "type": "debug",
+      "text": "[vite] connected."
+    },
+    {
+      "type": "error",
+      "text": "Failed to load resource: the server responded with a status of 500 (Internal Server Error)"
+    }
+  ],
+  "pageErrors": [],
+  "productFeedbackAfterInjected500": {
+    "inlineError": "刷新失败，将在约 60 秒后自动重试",
+    "globalMessagePopups": []
+  },
+  "finalState": {
+    "inlineErrorAfterQuery": null,
+    "summary": "共 30 条其中 6 条未知状态"
+  },
+  "classification": {
+    "injectedExpected500Count": 1,
+    "consoleErrors": 1,
+    "realPageErrors": 0,
+    "globalMessagePopupsAfterInjectedFailure": [],
+    "inlineConvergedErrorShownAfter500": true,
+    "note": "浏览器层临时注入的唯一 HTTP 500 归类为 expected（非缺陷）：其产生 1 条浏览器“Failed to load resource … 500”console error 属预期。其余 console debug 为 Vite dev HMR 环境噪音。真实页面无 console error、无未处理 Promise 错误。"
+  }
+}

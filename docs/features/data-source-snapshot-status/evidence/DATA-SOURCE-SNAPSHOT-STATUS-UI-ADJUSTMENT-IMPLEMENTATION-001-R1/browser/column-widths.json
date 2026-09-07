@@ -1,0 +1,138 @@
+{
+  "title": "七列表头实测像素宽度（el-table 固定列宽 70/170/280/130/165/165/165）",
+  "page": "http://127.0.0.1:5173/monitor/data-source-state",
+  "method": "Headless Chrome 148 @ deviceScaleFactor=1",
+  "target": [
+    70,
+    170,
+    280,
+    130,
+    165,
+    165,
+    165
+  ],
+  "viewports": [
+    {
+      "viewport": "1440x900",
+      "measuredColumns": [
+        {
+          "index": 0,
+          "label": "序号",
+          "measured": 70,
+          "target": 70,
+          "delta": 0
+        },
+        {
+          "index": 1,
+          "label": "探针端",
+          "measured": 170,
+          "target": 170,
+          "delta": 0
+        },
+        {
+          "index": 2,
+          "label": "源库",
+          "measured": 280,
+          "target": 280,
+          "delta": 0
+        },
+        {
+          "index": 3,
+          "label": "快照状态",
+          "measured": 130,
+          "target": 130,
+          "delta": 0
+        },
+        {
+          "index": 4,
+          "label": "快照启动时间",
+          "measured": 165,
+          "target": 165,
+          "delta": 0
+        },
+        {
+          "index": 5,
+          "label": "快照完成时间",
+          "measured": 165,
+          "target": 165,
+          "delta": 0
+        },
+        {
+          "index": 6,
+          "label": "记录更新时间",
+          "measured": 165,
+          "target": 165,
+          "delta": 0
+        }
+      ],
+      "colCount": 7,
+      "tableWidth": 1145,
+      "tableScrollWidth": 1145,
+      "wrapScrollWidth": 1145,
+      "wrapClientWidth": 1104,
+      "bodyWidth": 1136,
+      "hasHScroll": true
+    },
+    {
+      "viewport": "1920x1080",
+      "measuredColumns": [
+        {
+          "index": 0,
+          "label": "序号",
+          "measured": 70,
+          "target": 70,
+          "delta": 0
+        },
+        {
+          "index": 1,
+          "label": "探针端",
+          "measured": 170,
+          "target": 170,
+          "delta": 0
+        },
+        {
+          "index": 2,
+          "label": "源库",
+          "measured": 280,
+          "target": 280,
+          "delta": 0
+        },
+        {
+          "index": 3,
+          "label": "快照状态",
+          "measured": 130,
+          "target": 130,
+          "delta": 0
+        },
+        {
+          "index": 4,
+          "label": "快照启动时间",
+          "measured": 165,
+          "target": 165,
+          "delta": 0
+        },
+        {
+          "index": 5,
+          "label": "快照完成时间",
+          "measured": 165,
+          "target": 165,
+          "delta": 0
+        },
+        {
+          "index": 6,
+          "label": "记录更新时间",
+          "measured": 165,
+          "target": 165,
+          "delta": 0
+        }
+      ],
+      "colCount": 7,
+      "tableWidth": 1145,
+      "tableScrollWidth": 1145,
+      "wrapScrollWidth": 1584,
+      "wrapClientWidth": 1584,
+      "bodyWidth": 1616,
+      "hasHScroll": false
+    }
+  ]
+}

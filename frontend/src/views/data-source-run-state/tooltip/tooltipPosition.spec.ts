@@ -65,3 +65,25 @@ describe('computeTooltipPlacement 视口四边避让（DSS-REQ-070⑧，AC-077�
     expect(p.left).toBeGreaterThanOrEqual(0)
   })
 })
+
+describe('computeTooltipPlacement 单行优先宽 Tooltip 不越界（R1-01：去掉固定 420px 上限）', () => {
+  it('自然宽度超过 420px 但低于安全视口：按真实宽度整体定位，不截断到 420', () => {
+    // 宽屏下自然单行宽 900px > 旧 420 上限，但仍远小于安全视口 → 整体不越界
+    const wide: ViewportSize = { width: 1920, height: 1080 }
+    const big = { width: 900, height: 40 }
+    const p = computeTooltipPlacement(anchor(800, 500), big, wide)
+    // 不因任何 420 常量被截断：left/right 按 900px 计算且落入视口
+    expect(p.left).toBeGreaterThanOrEqual(8)
+    expect(p.left + 900).toBeLessThanOrEqual(1920 - 8)
+    expect(p.placement).toBe('top')
+  })
+
+  it('宽度逼近安全视口上限（border-box 含 padding/border）仍不横向越界', () => {
+    // 安全视口 = 1000 - 16（左右各留 8），测量宽度按 border-box 传入（含 padding/border）
+    const vp: ViewportSize = { width: 1000, height: 600 }
+    const maxWidth = 1000 - 16 // 984，视作已含 padding/border 的实际宽度
+    const p = computeTooltipPlacement(anchor(300, 400), { width: maxWidth, height: 60 }, vp)
+    expect(p.left).toBeGreaterThanOrEqual(8)
+    expect(p.left + maxWidth).toBeLessThanOrEqual(1000 - 8)
+  })
+})

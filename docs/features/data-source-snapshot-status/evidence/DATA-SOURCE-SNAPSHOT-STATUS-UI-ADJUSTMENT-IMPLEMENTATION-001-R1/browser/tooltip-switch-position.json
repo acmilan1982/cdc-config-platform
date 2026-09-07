@@ -1,0 +1,217 @@
+{
+  "scenario": "tooltip A->B rapid switch: DOM/visual single instance, no stale A-coordinate ghost",
+  "viewport": "1920x1080",
+  "page": "http://127.0.0.1:5173/monitor/data-source-state",
+  "triggerA": {
+    "kind": "client-desc idx0",
+    "center": {
+      "x": 407,
+      "y": 370,
+      "top": 360,
+      "left": 360
+    },
+    "contentPrefix": "快照页测试探针A，请勿启用。长描述用"
+  },
+  "triggerB": {
+    "kind": "status idx8",
+    "center": {
+      "x": 862,
+      "y": 690,
+      "top": 679,
+      "left": 824
+    }
+  },
+  "baselineAtA": {
+    "count": 1,
+    "left": 8,
+    "top": 389,
+    "content": "快照页测试探针A，请勿启用。长描述用"
+  },
+  "rapidSwitchTimeline": [
+    {
+      "label": "toB",
+      "t": 1788791410479,
+      "count": 0,
+      "left": null,
+      "top": null,
+      "content": null
+    },
+    {
+      "label": "toA",
+      "t": 1788791410525,
+      "count": 0,
+      "left": null,
+      "top": null,
+      "content": null
+    },
+    {
+      "label": "toB~",
+      "t": 1788791410558,
+      "count": 0,
+      "left": null,
+      "top": null,
+      "content": null
+    },
+    {
+      "label": "toB",
+      "t": 1788791410593,
+      "count": 0,
+      "left": null,
+      "top": null,
+      "content": null
+    },
+    {
+      "label": "toA",
+      "t": 1788791410624,
+      "count": 0,
+      "left": null,
+      "top": null,
+      "content": null
+    },
+    {
+      "label": "toB~",
+      "t": 1788791410658,
+      "count": 0,
+      "left": null,
+      "top": null,
+      "content": null
+    },
+    {
+      "label": "toB",
+      "t": 1788791410699,
+      "count": 0,
+      "left": null,
+      "top": null,
+      "content": null
+    },
+    {
+      "label": "toA",
+      "t": 1788791410741,
+      "count": 0,
+      "left": null,
+      "top": null,
+      "content": null
+    },
+    {
+      "label": "toB~",
+      "t": 1788791410774,
+      "count": 0,
+      "left": null,
+      "top": null,
+      "content": null
+    },
+    {
+      "label": "toB",
+      "t": 1788791410808,
+      "count": 0,
+      "left": null,
+      "top": null,
+      "content": null
+    },
+    {
+      "label": "toA",
+      "t": 1788791410841,
+      "count": 0,
+      "left": null,
+      "top": null,
+      "content": null
+    },
+    {
+      "label": "toB~",
+      "t": 1788791410875,
+      "count": 0,
+      "left": null,
+      "top": null,
+      "content": null
+    },
+    {
+      "label": "toB",
+      "t": 1788791410906,
+      "count": 0,
+      "left": null,
+      "top": null,
+      "content": null
+    },
+    {
+      "label": "toA",
+      "t": 1788791410941,
+      "count": 0,
+      "left": null,
+      "top": null,
+      "content": null
+    },
+    {
+      "label": "toB~",
+      "t": 1788791410976,
+      "count": 0,
+      "left": null,
+      "top": null,
+      "content": null
+    },
+    {
+      "label": "toB",
+      "t": 1788791411006,
+      "count": 0,
+      "left": null,
+      "top": null,
+      "content": null
+    },
+    {
+      "label": "toA",
+      "t": 1788791411042,
+      "count": 0,
+      "left": null,
+      "top": null,
+      "content": null
+    },
+    {
+      "label": "toB~",
+      "t": 1788791411076,
+      "count": 0,
+      "left": null,
+      "top": null,
+      "content": null
+    }
+  ],
+  "afterSettleAtB": {
+    "count": 1,
+    "left": 749,
+    "top": 637,
+    "content": "原始状态：SNAPSHOT_RUNN"
+  },
+  "conclusions": {
+    "maxConcurrentHosts": 1,
+    "anySampleHad2Hosts": false,
+    "settledOnlyAtB": true,
+    "staleGhostDuringSwitch": false
+  },
+  "analysis": "快速在 A(长描述) 与 B(状态原始值) 之间扫动：任意采样时刻 body 中 Host 数量 <=1；切换到 B 后其 reveal 前无 Host、reveal 后仅出现在 B 锚点位置；未观察到 A 旧坐标与新内容并存（<=1 单实例 + 隐藏先于测量）。",
+  "s1": {
+    "count": 1,
+    "w": 1832,
+    "h": 34,
+    "left": 8,
+    "top": 389,
+    "right": 1840,
+    "bottom": 423,
+    "lines": 1,
+    "contentText": "快照页测试探针A，请勿启用。长描述用于验证页面 Tooltip 与列宽截断：某市第一人民医院信息中心CDC采集探针（专用快照页测试实例，请勿启用其进行任何真实数据同步）。继续追加说明文字以拉长描述，确认列表单元格超长时显示省略号并可由 Tooltip 完整阅读；本条仅供源库快照状态只读页面视觉验证使用。",
+    "contentLen": 152,
+    "overflowH": false,
+    "inVp": true
+  },
+  "s2": {
+    "count": 1,
+    "w": 1264,
+    "h": 53,
+    "left": 8,
+    "top": 389,
+    "right": 1272,
+    "bottom": 442,
+    "lines": 2,
+    "contentText": "快照页测试探针A，请勿启用。长描述用于验证页面 Tooltip 与列宽截断：某市第一人民医院信息中心CDC采集探针（专用快照页测试实例，请勿启用其进行任何真实数据同步）。继续追加说明文字以拉长描述，确认列表单元格超长时显示省略号并可由 Tooltip 完整阅读；本条仅供源库快照状态只读页面视觉验证使用。",
+    "contentLen": 152,
+    "overflowH": false,
+    "inVp": true
+  }
+}

@@ -1,0 +1,152 @@
+{
+  "evidenceFile": "manual-refresh-single-request.json",
+  "scenario": "点击一次“立即刷新”：网络层恰好新增一个按已应用条件发出的列表请求；无额外查询/取消偷换/排队补发；“查询”按钮文字颜色尺寸位置不闪动（DSS-REQ-053/071，AC-078；R1-02 §6.2 #6）",
+  "page": "http://127.0.0.1:5173/monitor/data-source-state",
+  "viewport": "1440x900",
+  "backend": "真实后端只读接口 GET /api/monitor/data-source-run-state/list（经 Vite 代理）；浏览器层仅对本列表 GET 做 1300ms 延迟放行以便观察在途状态，无生产代码改动",
+  "appliedCriteriaAtClick": "三项“全部”（页面加载默认已应用条件 → manualRefresh 按 appliedCriteria 取数）",
+  "requestCounts": {
+    "listRequestDeltaAfterClick": 1,
+    "triggeredRequestUrl": [
+      "http://127.0.0.1:5173/api/monitor/data-source-run-state/list"
+    ],
+    "queryButtonRequestsDuringWindow": 0,
+    "triggeredRequests": 1
+  },
+  "samples": {
+    "idleBeforeClick": {
+      "queryBtn": {
+        "text": "查询",
+        "loading": false,
+        "ariaDisabled": null,
+        "color": "rgb(255, 255, 255)",
+        "bg": "rgb(37, 99, 235)",
+        "border": "rgb(37, 99, 235)",
+        "x": 1058,
+        "y": 168,
+        "w": 60,
+        "h": 32
+      },
+      "refreshBtn": {
+        "text": "立即刷新",
+        "loading": false,
+        "ariaDisabled": null,
+        "color": "rgb(37, 99, 235)",
+        "bg": "rgb(237, 242, 254)",
+        "border": "rgb(146, 181, 245)",
+        "x": 1272,
+        "y": 240,
+        "w": 110,
+        "h": 32
+      },
+      "resetBtn": {
+        "text": "重置",
+        "loading": false,
+        "ariaDisabled": "false",
+        "color": "rgb(51, 65, 85)",
+        "bg": "rgb(255, 255, 255)",
+        "border": "rgb(226, 232, 240)",
+        "x": 1138,
+        "y": 168,
+        "w": 60,
+        "h": 32
+      },
+      "dotActive": false,
+      "lastRefreshText": "最近成功刷新：22:40:49",
+      "rows": 30
+    },
+    "inflightManual": {
+      "queryBtn": {
+        "text": "查询",
+        "loading": false,
+        "ariaDisabled": "true",
+        "color": "rgb(255, 255, 255)",
+        "bg": "rgb(37, 99, 235)",
+        "border": "rgb(37, 99, 235)",
+        "x": 1058,
+        "y": 168,
+        "w": 60,
+        "h": 32
+      },
+      "refreshBtn": {
+        "text": "立即刷新",
+        "loading": true,
+        "ariaDisabled": "true",
+        "color": "rgb(37, 99, 235)",
+        "bg": "rgb(237, 242, 254)",
+        "border": "rgb(146, 181, 245)",
+        "x": 1272,
+        "y": 240,
+        "w": 110,
+        "h": 32
+      },
+      "resetBtn": {
+        "text": "重置",
+        "loading": false,
+        "ariaDisabled": "false",
+        "color": "rgb(51, 65, 85)",
+        "bg": "rgb(255, 255, 255)",
+        "border": "rgb(226, 232, 240)",
+        "x": 1138,
+        "y": 168,
+        "w": 60,
+        "h": 32
+      },
+      "dotActive": true,
+      "lastRefreshText": "最近成功刷新：22:40:49",
+      "rows": 30
+    },
+    "afterSuccess": {
+      "queryBtn": {
+        "text": "查询",
+        "loading": false,
+        "ariaDisabled": null,
+        "color": "rgb(255, 255, 255)",
+        "bg": "rgb(37, 99, 235)",
+        "border": "rgb(37, 99, 235)",
+        "x": 1058,
+        "y": 168,
+        "w": 60,
+        "h": 32
+      },
+      "refreshBtn": {
+        "text": "立即刷新",
+        "loading": false,
+        "ariaDisabled": null,
+        "color": "rgb(255, 255, 255)",
+        "bg": "rgb(37, 99, 235)",
+        "border": "rgb(37, 99, 235)",
+        "x": 1272,
+        "y": 240,
+        "w": 110,
+        "h": 32
+      },
+      "resetBtn": {
+        "text": "重置",
+        "loading": false,
+        "ariaDisabled": "false",
+        "color": "rgb(51, 65, 85)",
+        "bg": "rgb(255, 255, 255)",
+        "border": "rgb(226, 232, 240)",
+        "x": 1138,
+        "y": 168,
+        "w": 60,
+        "h": 32
+      },
+      "dotActive": false,
+      "lastRefreshText": "最近成功刷新：22:40:52",
+      "rows": 30
+    }
+  },
+  "conclusions": {
+    "exactlyOneListRequest": true,
+    "queryButtonNoLoadingDuringRefresh": true,
+    "queryButtonAppearanceStable": true,
+    "queryButtonTextColorSizePositionUnchanged": true,
+    "queryButtonAriaDisabledBusyMarkerOnly": true,
+    "queryButtonNeverFlickered": true,
+    "requestUrlCarriesAppliedCriteria": true,
+    "refreshDotActiveDuringManual": true,
+    "refreshButtonLoadingOnlyDuringManual": true
+  }
+}

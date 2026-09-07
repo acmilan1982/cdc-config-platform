@@ -1,0 +1,748 @@
+{
+  "evidenceFile": "request-visual-mapping.json",
+  "scenario": "六类请求（initial/retry/query/manual/restore/auto）唯一视觉映射的真实浏览器逐项记录（DSS-REQ-071，AC-078；R1-02 §6.2 #5）",
+  "page": "http://127.0.0.1:5173/monitor/data-source-state",
+  "backend": "http://127.0.0.1:8080（真实后端只读接口 GET /api/monitor/data-source-run-state/list，经 Vite 代理）",
+  "method": "Puppeteer-core + Headless Chrome 148；page.setRequestInterception 仅对列表 GET 做 hold(延迟放行以截获在途视觉)或 500(制造失败)；拦截在取证后即随脚本退出撤销，无任何生产代码/数据改动",
+  "visualMeaning": {
+    "tableMask": "表格整表 loading（v-loading=initialLoading，仅 initial 出现）",
+    "queryBtnLoading": "“查询”按钮 loading（queryLoading）",
+    "retryBtnLoading": "错误卡“重新加载”按钮 loading（retryLoading）",
+    "refreshBtnLoading": "“立即刷新”按钮 loading（manualLoading，仅 manual）",
+    "refreshDotActive": "刷新圆点 is-active（refreshActive = manual/restore/auto）"
+  },
+  "results": [
+    {
+      "kind": "initial",
+      "trigger": "页面挂载自动首次查询（onPageMounted → launch(default,\"initial\")）",
+      "actualRequest": {
+        "method": "GET",
+        "urlSample": "http://127.0.0.1:5173/api/monitor/data-source-run-state/list",
+        "count": 1,
+        "triggeredCount": 1
+      },
+      "inflightVisual": {
+        "queryBtn": {
+          "text": "查询",
+          "loading": false,
+          "ariaDisabled": "true",
+          "disabled": false,
+          "x": 1058,
+          "y": 168,
+          "w": 60,
+          "h": 32
+        },
+        "resetBtn": {
+          "text": "重置",
+          "loading": false,
+          "ariaDisabled": "false",
+          "disabled": false,
+          "x": 1138,
+          "y": 168,
+          "w": 60,
+          "h": 32
+        },
+        "refreshBtn": {
+          "text": "立即刷新",
+          "loading": false,
+          "ariaDisabled": "true",
+          "disabled": false,
+          "x": 1272,
+          "y": 240,
+          "w": 110,
+          "h": 32
+        },
+        "retryBtn": null,
+        "tableMaskCount": 1,
+        "anyMask": 1,
+        "refreshDotActive": false,
+        "errorCard": null,
+        "inlineRefreshError": null,
+        "resultSummary": "共 0 条",
+        "rows": 0,
+        "lastRefreshTime": "最近成功刷新：--"
+      },
+      "postVisual": {
+        "queryBtn": {
+          "text": "查询",
+          "loading": false,
+          "ariaDisabled": null,
+          "disabled": false,
+          "x": 1058,
+          "y": 168,
+          "w": 60,
+          "h": 32
+        },
+        "resetBtn": {
+          "text": "重置",
+          "loading": false,
+          "ariaDisabled": "false",
+          "disabled": false,
+          "x": 1138,
+          "y": 168,
+          "w": 60,
+          "h": 32
+        },
+        "refreshBtn": {
+          "text": "立即刷新",
+          "loading": false,
+          "ariaDisabled": null,
+          "disabled": false,
+          "x": 1272,
+          "y": 240,
+          "w": 110,
+          "h": 32
+        },
+        "retryBtn": null,
+        "tableMaskCount": 0,
+        "anyMask": 0,
+        "refreshDotActive": false,
+        "errorCard": null,
+        "inlineRefreshError": null,
+        "resultSummary": "共 30 条其中 6 条未知状态",
+        "rows": 30,
+        "lastRefreshTime": "最近成功刷新：22:35:38"
+      },
+      "conclusion": "initial 在途唯一遮罩表格(el-table v-loading=initialLoading)；查询/重置/立即刷新按钮不 loading、圆点不激活。表格遮罩仅出现在 initial（整表大态加载）。"
+    },
+    {
+      "kind": "retry",
+      "trigger": "首次加载 HTTP 500 → 整区错误卡；点击“重新加载”（launch(applied,\"retry\")）",
+      "actualRequest": {
+        "method": "GET",
+        "urlSample": "http://127.0.0.1:5173/api/monitor/data-source-run-state/list",
+        "count": 2,
+        "triggeredCount": 1
+      },
+      "initialFailVisual": {
+        "queryBtn": null,
+        "resetBtn": null,
+        "refreshBtn": null,
+        "retryBtn": {
+          "text": "重新加载",
+          "loading": false,
+          "ariaDisabled": "false",
+          "disabled": false,
+          "x": 786,
+          "y": 294,
+          "w": 88,
+          "h": 32
+        },
+        "tableMaskCount": 0,
+        "anyMask": 0,
+        "refreshDotActive": false,
+        "errorCard": "数据加载失败暂时无法获取快照状态数据，请重新加载或稍后自动重试。重新加载",
+        "inlineRefreshError": null,
+        "resultSummary": null,
+        "rows": 0,
+        "lastRefreshTime": null
+      },
+      "inflightVisual": {
+        "queryBtn": null,
+        "resetBtn": null,
+        "refreshBtn": null,
+        "retryBtn": {
+          "text": "重新加载",
+          "loading": true,
+          "ariaDisabled": "true",
+          "disabled": true,
+          "x": 776,
+          "y": 294,
+          "w": 108,
+          "h": 32
+        },
+        "tableMaskCount": 0,
+        "anyMask": 0,
+        "refreshDotActive": false,
+        "errorCard": "数据加载失败暂时无法获取快照状态数据，请重新加载或稍后自动重试。重新加载",
+        "inlineRefreshError": null,
+        "resultSummary": null,
+        "rows": 0,
+        "lastRefreshTime": null
+      },
+      "postVisual": {
+        "queryBtn": {
+          "text": "查询",
+          "loading": false,
+          "ariaDisabled": null,
+          "disabled": false,
+          "x": 1058,
+          "y": 168,
+          "w": 60,
+          "h": 32
+        },
+        "resetBtn": {
+          "text": "重置",
+          "loading": false,
+          "ariaDisabled": "false",
+          "disabled": false,
+          "x": 1138,
+          "y": 168,
+          "w": 60,
+          "h": 32
+        },
+        "refreshBtn": {
+          "text": "立即刷新",
+          "loading": false,
+          "ariaDisabled": null,
+          "disabled": false,
+          "x": 1272,
+          "y": 240,
+          "w": 110,
+          "h": 32
+        },
+        "retryBtn": null,
+        "tableMaskCount": 0,
+        "anyMask": 0,
+        "refreshDotActive": false,
+        "errorCard": null,
+        "inlineRefreshError": null,
+        "resultSummary": "共 30 条其中 6 条未知状态",
+        "rows": 30,
+        "lastRefreshTime": "最近成功刷新：22:35:44"
+      },
+      "conclusion": "仅 retry 在途“重新加载”按钮 loading（retryLoading）；此时错误卡仍在、无表格/无查询/无刷新按钮 loading、圆点不激活。"
+    },
+    {
+      "kind": "query",
+      "trigger": "点击“查询”（submitQuery → launch(draft,\"query\")）——本次草稿三项全“全部”，与已应用一致",
+      "actualRequest": {
+        "method": "GET",
+        "urlSample": "http://127.0.0.1:5173/api/monitor/data-source-run-state/list",
+        "count": 2,
+        "triggeredCount": 1
+      },
+      "idleVisual": {
+        "queryBtn": {
+          "text": "查询",
+          "loading": false,
+          "ariaDisabled": null,
+          "disabled": false,
+          "x": 1058,
+          "y": 168,
+          "w": 60,
+          "h": 32
+        },
+        "resetBtn": {
+          "text": "重置",
+          "loading": false,
+          "ariaDisabled": "false",
+          "disabled": false,
+          "x": 1138,
+          "y": 168,
+          "w": 60,
+          "h": 32
+        },
+        "refreshBtn": {
+          "text": "立即刷新",
+          "loading": false,
+          "ariaDisabled": null,
+          "disabled": false,
+          "x": 1272,
+          "y": 240,
+          "w": 110,
+          "h": 32
+        },
+        "retryBtn": null,
+        "tableMaskCount": 0,
+        "anyMask": 0,
+        "refreshDotActive": false,
+        "errorCard": null,
+        "inlineRefreshError": null,
+        "resultSummary": "共 30 条其中 6 条未知状态",
+        "rows": 30,
+        "lastRefreshTime": "最近成功刷新：22:35:46"
+      },
+      "inflightVisual": {
+        "queryBtn": {
+          "text": "查询",
+          "loading": true,
+          "ariaDisabled": "true",
+          "disabled": true,
+          "x": 1058,
+          "y": 168,
+          "w": 80,
+          "h": 32
+        },
+        "resetBtn": {
+          "text": "重置",
+          "loading": false,
+          "ariaDisabled": "false",
+          "disabled": false,
+          "x": 1158,
+          "y": 168,
+          "w": 60,
+          "h": 32
+        },
+        "refreshBtn": {
+          "text": "立即刷新",
+          "loading": false,
+          "ariaDisabled": "true",
+          "disabled": false,
+          "x": 1272,
+          "y": 240,
+          "w": 110,
+          "h": 32
+        },
+        "retryBtn": null,
+        "tableMaskCount": 0,
+        "anyMask": 0,
+        "refreshDotActive": false,
+        "errorCard": null,
+        "inlineRefreshError": null,
+        "resultSummary": "共 30 条其中 6 条未知状态",
+        "rows": 30,
+        "lastRefreshTime": "最近成功刷新：22:35:46"
+      },
+      "postVisual": {
+        "queryBtn": {
+          "text": "查询",
+          "loading": false,
+          "ariaDisabled": null,
+          "disabled": false,
+          "x": 1058,
+          "y": 168,
+          "w": 60,
+          "h": 32
+        },
+        "resetBtn": {
+          "text": "重置",
+          "loading": false,
+          "ariaDisabled": "false",
+          "disabled": false,
+          "x": 1138,
+          "y": 168,
+          "w": 60,
+          "h": 32
+        },
+        "refreshBtn": {
+          "text": "立即刷新",
+          "loading": false,
+          "ariaDisabled": null,
+          "disabled": false,
+          "x": 1272,
+          "y": 240,
+          "w": 110,
+          "h": 32
+        },
+        "retryBtn": null,
+        "tableMaskCount": 0,
+        "anyMask": 0,
+        "refreshDotActive": false,
+        "errorCard": null,
+        "inlineRefreshError": null,
+        "resultSummary": "共 30 条其中 6 条未知状态",
+        "rows": 30,
+        "lastRefreshTime": "最近成功刷新：22:35:50"
+      },
+      "conclusion": "仅 query 在途“查询”按钮 loading（queryLoading）；表格不被遮罩（query 不遮罩表格）、重置/立即刷新不 loading、圆点不激活。"
+    },
+    {
+      "kind": "manual",
+      "trigger": "点击“立即刷新”（manualRefresh → launch(applied,\"manual\")）",
+      "actualRequest": {
+        "method": "GET",
+        "urlSample": "http://127.0.0.1:5173/api/monitor/data-source-run-state/list",
+        "count": 2,
+        "triggeredCount": 1
+      },
+      "idleVisual": {
+        "queryBtn": {
+          "text": "查询",
+          "loading": false,
+          "ariaDisabled": null,
+          "disabled": false,
+          "x": 1058,
+          "y": 168,
+          "w": 60,
+          "h": 32
+        },
+        "resetBtn": {
+          "text": "重置",
+          "loading": false,
+          "ariaDisabled": "false",
+          "disabled": false,
+          "x": 1138,
+          "y": 168,
+          "w": 60,
+          "h": 32
+        },
+        "refreshBtn": {
+          "text": "立即刷新",
+          "loading": false,
+          "ariaDisabled": null,
+          "disabled": false,
+          "x": 1272,
+          "y": 240,
+          "w": 110,
+          "h": 32
+        },
+        "retryBtn": null,
+        "tableMaskCount": 0,
+        "anyMask": 0,
+        "refreshDotActive": false,
+        "errorCard": null,
+        "inlineRefreshError": null,
+        "resultSummary": "共 30 条其中 6 条未知状态",
+        "rows": 30,
+        "lastRefreshTime": "最近成功刷新：22:35:52"
+      },
+      "inflightVisual": {
+        "queryBtn": {
+          "text": "查询",
+          "loading": false,
+          "ariaDisabled": "true",
+          "disabled": false,
+          "x": 1058,
+          "y": 168,
+          "w": 60,
+          "h": 32
+        },
+        "resetBtn": {
+          "text": "重置",
+          "loading": false,
+          "ariaDisabled": "false",
+          "disabled": false,
+          "x": 1138,
+          "y": 168,
+          "w": 60,
+          "h": 32
+        },
+        "refreshBtn": {
+          "text": "立即刷新",
+          "loading": true,
+          "ariaDisabled": "true",
+          "disabled": true,
+          "x": 1272,
+          "y": 240,
+          "w": 110,
+          "h": 32
+        },
+        "retryBtn": null,
+        "tableMaskCount": 0,
+        "anyMask": 0,
+        "refreshDotActive": true,
+        "errorCard": null,
+        "inlineRefreshError": null,
+        "resultSummary": "共 30 条其中 6 条未知状态",
+        "rows": 30,
+        "lastRefreshTime": "最近成功刷新：22:35:52"
+      },
+      "postVisual": {
+        "queryBtn": {
+          "text": "查询",
+          "loading": false,
+          "ariaDisabled": null,
+          "disabled": false,
+          "x": 1058,
+          "y": 168,
+          "w": 60,
+          "h": 32
+        },
+        "resetBtn": {
+          "text": "重置",
+          "loading": false,
+          "ariaDisabled": "false",
+          "disabled": false,
+          "x": 1138,
+          "y": 168,
+          "w": 60,
+          "h": 32
+        },
+        "refreshBtn": {
+          "text": "立即刷新",
+          "loading": false,
+          "ariaDisabled": null,
+          "disabled": false,
+          "x": 1272,
+          "y": 240,
+          "w": 110,
+          "h": 32
+        },
+        "retryBtn": null,
+        "tableMaskCount": 0,
+        "anyMask": 0,
+        "refreshDotActive": false,
+        "errorCard": null,
+        "inlineRefreshError": null,
+        "resultSummary": "共 30 条其中 6 条未知状态",
+        "rows": 30,
+        "lastRefreshTime": "最近成功刷新：22:35:56"
+      },
+      "conclusion": "仅 manual 在途“立即刷新”按钮 loading（manualLoading）＋刷新圆点激活（refreshActive）；表格不遮罩、查询按钮不 loading、外观稳定。"
+    },
+    {
+      "kind": "restore",
+      "trigger": "页面隐藏(第二标签页覆盖)→恢复可见：visibilityChanged(true) 空闲 → launch(applied,\"restore\")（真实浏览器生命周期，非篡改 Vue ref）",
+      "actualRequest": {
+        "method": "GET",
+        "urlSample": "http://127.0.0.1:5173/api/monitor/data-source-run-state/list",
+        "count": 2,
+        "triggeredCount": 1
+      },
+      "idleVisual": {
+        "queryBtn": {
+          "text": "查询",
+          "loading": false,
+          "ariaDisabled": null,
+          "disabled": false,
+          "x": 1058,
+          "y": 168,
+          "w": 60,
+          "h": 32
+        },
+        "resetBtn": {
+          "text": "重置",
+          "loading": false,
+          "ariaDisabled": "false",
+          "disabled": false,
+          "x": 1138,
+          "y": 168,
+          "w": 60,
+          "h": 32
+        },
+        "refreshBtn": {
+          "text": "立即刷新",
+          "loading": false,
+          "ariaDisabled": null,
+          "disabled": false,
+          "x": 1272,
+          "y": 240,
+          "w": 110,
+          "h": 32
+        },
+        "retryBtn": null,
+        "tableMaskCount": 0,
+        "anyMask": 0,
+        "refreshDotActive": false,
+        "errorCard": null,
+        "inlineRefreshError": null,
+        "resultSummary": "共 30 条其中 6 条未知状态",
+        "rows": 30,
+        "lastRefreshTime": "最近成功刷新：22:35:59"
+      },
+      "hiddenVisibility": {
+        "vis": "hidden",
+        "hidden": true
+      },
+      "inflightVisual": {
+        "queryBtn": {
+          "text": "查询",
+          "loading": false,
+          "ariaDisabled": "true",
+          "disabled": false,
+          "x": 1058,
+          "y": 168,
+          "w": 60,
+          "h": 32
+        },
+        "resetBtn": {
+          "text": "重置",
+          "loading": false,
+          "ariaDisabled": "false",
+          "disabled": false,
+          "x": 1138,
+          "y": 168,
+          "w": 60,
+          "h": 32
+        },
+        "refreshBtn": {
+          "text": "立即刷新",
+          "loading": false,
+          "ariaDisabled": "true",
+          "disabled": false,
+          "x": 1272,
+          "y": 240,
+          "w": 110,
+          "h": 32
+        },
+        "retryBtn": null,
+        "tableMaskCount": 0,
+        "anyMask": 0,
+        "refreshDotActive": true,
+        "errorCard": null,
+        "inlineRefreshError": null,
+        "resultSummary": "共 30 条其中 6 条未知状态",
+        "rows": 30,
+        "lastRefreshTime": "最近成功刷新：22:35:59"
+      },
+      "postVisual": {
+        "queryBtn": {
+          "text": "查询",
+          "loading": false,
+          "ariaDisabled": null,
+          "disabled": false,
+          "x": 1058,
+          "y": 168,
+          "w": 60,
+          "h": 32
+        },
+        "resetBtn": {
+          "text": "重置",
+          "loading": false,
+          "ariaDisabled": "false",
+          "disabled": false,
+          "x": 1138,
+          "y": 168,
+          "w": 60,
+          "h": 32
+        },
+        "refreshBtn": {
+          "text": "立即刷新",
+          "loading": false,
+          "ariaDisabled": null,
+          "disabled": false,
+          "x": 1272,
+          "y": 240,
+          "w": 110,
+          "h": 32
+        },
+        "retryBtn": null,
+        "tableMaskCount": 0,
+        "anyMask": 0,
+        "refreshDotActive": false,
+        "errorCard": null,
+        "inlineRefreshError": null,
+        "resultSummary": "共 30 条其中 6 条未知状态",
+        "rows": 30,
+        "lastRefreshTime": "最近成功刷新：22:36:03"
+      },
+      "conclusion": "restore 在途仅刷新圆点激活（refreshActive）；立即刷新按钮不 loading（区别于 manual）、查询按钮不 loading、表格不遮罩。"
+    },
+    {
+      "kind": "auto",
+      "trigger": "空闲等待完整 60 秒自动刷新周期（AUTO_REFRESH_INTERVAL_MS=60000）后定时器触发 launch(applied,\"auto\")；实测等待毫秒数记录于 actualRequest",
+      "actualRequest": {
+        "method": "GET",
+        "urlSample": "http://127.0.0.1:5173/api/monitor/data-source-run-state/list",
+        "count": 1,
+        "autoWaitMs": 57851,
+        "triggeredCount": 1
+      },
+      "idleVisual": {
+        "queryBtn": {
+          "text": "查询",
+          "loading": false,
+          "ariaDisabled": null,
+          "disabled": false,
+          "x": 1058,
+          "y": 168,
+          "w": 60,
+          "h": 32
+        },
+        "resetBtn": {
+          "text": "重置",
+          "loading": false,
+          "ariaDisabled": "false",
+          "disabled": false,
+          "x": 1138,
+          "y": 168,
+          "w": 60,
+          "h": 32
+        },
+        "refreshBtn": {
+          "text": "立即刷新",
+          "loading": false,
+          "ariaDisabled": null,
+          "disabled": false,
+          "x": 1272,
+          "y": 240,
+          "w": 110,
+          "h": 32
+        },
+        "retryBtn": null,
+        "tableMaskCount": 0,
+        "anyMask": 0,
+        "refreshDotActive": false,
+        "errorCard": null,
+        "inlineRefreshError": null,
+        "resultSummary": "共 30 条其中 6 条未知状态",
+        "rows": 30,
+        "lastRefreshTime": "最近成功刷新：22:36:06"
+      },
+      "inflightVisual": {
+        "queryBtn": {
+          "text": "查询",
+          "loading": false,
+          "ariaDisabled": "true",
+          "disabled": false,
+          "x": 1058,
+          "y": 168,
+          "w": 60,
+          "h": 32
+        },
+        "resetBtn": {
+          "text": "重置",
+          "loading": false,
+          "ariaDisabled": "false",
+          "disabled": false,
+          "x": 1138,
+          "y": 168,
+          "w": 60,
+          "h": 32
+        },
+        "refreshBtn": {
+          "text": "立即刷新",
+          "loading": false,
+          "ariaDisabled": "true",
+          "disabled": false,
+          "x": 1272,
+          "y": 240,
+          "w": 110,
+          "h": 32
+        },
+        "retryBtn": null,
+        "tableMaskCount": 0,
+        "anyMask": 0,
+        "refreshDotActive": true,
+        "errorCard": null,
+        "inlineRefreshError": null,
+        "resultSummary": "共 30 条其中 6 条未知状态",
+        "rows": 30,
+        "lastRefreshTime": "最近成功刷新：22:36:06"
+      },
+      "postVisual": {
+        "queryBtn": {
+          "text": "查询",
+          "loading": false,
+          "ariaDisabled": null,
+          "disabled": false,
+          "x": 1058,
+          "y": 168,
+          "w": 60,
+          "h": 32
+        },
+        "resetBtn": {
+          "text": "重置",
+          "loading": false,
+          "ariaDisabled": "false",
+          "disabled": false,
+          "x": 1138,
+          "y": 168,
+          "w": 60,
+          "h": 32
+        },
+        "refreshBtn": {
+          "text": "立即刷新",
+          "loading": false,
+          "ariaDisabled": null,
+          "disabled": false,
+          "x": 1272,
+          "y": 240,
+          "w": 110,
+          "h": 32
+        },
+        "retryBtn": null,
+        "tableMaskCount": 0,
+        "anyMask": 0,
+        "refreshDotActive": false,
+        "errorCard": null,
+        "inlineRefreshError": null,
+        "resultSummary": "共 30 条其中 6 条未知状态",
+        "rows": 30,
+        "lastRefreshTime": "最近成功刷新：22:37:08"
+      },
+      "conclusion": "auto 在途仅刷新圆点激活（refreshActive）；立即刷新按钮不 loading（区别于 manual）、查询按钮不 loading、表格不遮罩。"
+    }
+  ]
+}

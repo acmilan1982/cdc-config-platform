@@ -1,0 +1,84 @@
+{
+  "evidenceFile": "reset-no-request.json",
+  "scenario": "先形成非“全部”界面条件并应用，再点击“重置”：仅恢复草稿三项“全部”，不发请求、不替换已应用条件与当前结果（DESIGN §8 E7，DSS-REQ-025；R1-02 §6.2 #8）",
+  "page": "http://127.0.0.1:5173/monitor/data-source-state",
+  "viewport": "1440x900",
+  "backend": "真实后端只读接口 GET /api/monitor/data-source-run-state/list（经 Vite 代理）",
+  "method": "Puppeteer-core + Headless Chrome；仅统计网络层列表请求次数，浏览器层未做拦截/延迟/失败注入（reset 场景零注入）",
+  "steps": [
+    "加载页面：初始已应用条件=三项“全部”，结果 30 行",
+    "快照状态下拉选“未知状态（UNKNOWN）”（仅改草稿，此时不发请求）",
+    "点击“查询”应用条件（发出 1 次列表请求，按该条件取数）",
+    "点击“重置”"
+  ],
+  "initialTags": [
+    {
+      "label": "探针端",
+      "selected": "全部"
+    },
+    {
+      "label": "源库",
+      "selected": "全部"
+    },
+    {
+      "label": "快照状态",
+      "selected": "全部"
+    }
+  ],
+  "tagsAfterNonAllDraft": [
+    {
+      "label": "探针端",
+      "selected": "全部"
+    },
+    {
+      "label": "源库",
+      "selected": "全部"
+    },
+    {
+      "label": "快照状态",
+      "selected": "未知状态（UNKNOWN）"
+    }
+  ],
+  "appliedQueryRequestCount": 1,
+  "resultAfterApply": {
+    "summary": "共 6 条其中 6 条未知状态",
+    "rows": 6,
+    "lastRefresh": "最近成功刷新：22:38:40"
+  },
+  "resetBoundary": {
+    "requestCountBeforeReset": 2,
+    "requestCountAfterReset": 2,
+    "resetTriggeredRequestDelta": 0,
+    "resultBeforeReset": {
+      "summary": "共 6 条其中 6 条未知状态",
+      "rows": 6,
+      "lastRefresh": "最近成功刷新：22:38:40"
+    },
+    "resultAfterReset": {
+      "summary": "共 6 条其中 6 条未知状态",
+      "rows": 6,
+      "lastRefresh": "最近成功刷新：22:38:40"
+    },
+    "tagsAfterReset": [
+      {
+        "label": "探针端",
+        "selected": "全部"
+      },
+      {
+        "label": "源库",
+        "selected": "全部"
+      },
+      {
+        "label": "快照状态",
+        "selected": "全部"
+      }
+    ]
+  },
+  "conclusions": {
+    "nonAllConditionFormed": true,
+    "resetRestoredThreeAll": true,
+    "resetFiredZeroRequests": true,
+    "appliedCriteriaAndResultsNotReplacedByReset": true,
+    "lastRefreshPreserved": true
+  }
+}
