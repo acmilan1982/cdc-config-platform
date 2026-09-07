@@ -250,41 +250,184 @@ describe('useDataSourceSnapshot 单飞行统一忙碌抑制（R1-02，AC-050/051
     expect(ctl.busy.value).toBe(false)
   })
 
-  it('视觉分级：建立性（查询）整表 loading；轻量（立即刷新）工具栏 refreshing', async () => {
-    mockedFetch.mockResolvedValue(okRes([row()]))
-    const ctl = setup()
+})
 
-    let releaseFirst!: (v: ApiResponse<SnapshotStatusListResult>) => void
-    const gateFirst = new Promise<ApiResponse<SnapshotStatusListResult>>((resolve) => {
-      releaseFirst = resolve
+describe('useDataSourceSnapshot 六类请求唯一视觉映射（DSS-REQ-071，DESIGN §19.6/UI §13.6）', () => {
+  function deferred() {
+    let release!: (v: ApiResponse<SnapshotStatusListResult>) => void
+    const promise = new Promise<ApiResponse<SnapshotStatusListResult>>((resolve) => {
+      release = resolve
     })
-    mockedFetch.mockImplementationOnce(() => gateFirst)
+    return { promise, release }
+  }
+
+  it('initial：仅整表 loading；查询/立即刷新不 loading；刷新圆点不激活', async () => {
+    mockedFetch.mockResolvedValue(okRes([row()]))
+    const gate = deferred()
+    mockedFetch.mockImplementationOnce(() => gate.promise)
+    const ctl = setup()
     ctl.onPageMounted()
     await settle()
-    expect(ctl.loading.value).toBe(true)
-    expect(ctl.refreshing.value).toBe(false)
+
+    expect(ctl.requestKind.value).toBe('initial')
+    expect(ctl.initialLoading.value).toBe(true)
+    expect(ctl.retryLoading.value).toBe(false)
+    expect(ctl.queryLoading.value).toBe(false)
+    expect(ctl.manualLoading.value).toBe(false)
+    expect(ctl.refreshActive.value).toBe(false)
     expect(ctl.busy.value).toBe(true)
 
-    releaseFirst(okRes([row()]))
+    gate.release(okRes([row()]))
     await settle()
-    expect(ctl.loading.value).toBe(false)
+    expect(ctl.initialLoading.value).toBe(false)
     expect(ctl.busy.value).toBe(false)
+  })
 
-    let releaseRefresh!: (v: ApiResponse<SnapshotStatusListResult>) => void
-    const gateRefresh = new Promise<ApiResponse<SnapshotStatusListResult>>((resolve) => {
-      releaseRefresh = resolve
-    })
-    mockedFetch.mockImplementationOnce(() => gateRefresh)
+  it('retry：仅错误区“重新加载”按钮 loading；查询/立即刷新不 loading；圆点不激活', async () => {
+    mockedFetch.mockRejectedValue(new Error('network'))
+    const ctl = setup()
+    ctl.onPageMounted()
+    await settle()
+    expect(ctl.firstLoadError.value).toBe(true)
+
+    const gate = deferred()
+    mockedFetch.mockImplementationOnce(() => gate.promise)
+    ctl.retry()
+    await settle()
+    expect(ctl.requestKind.value).toBe('retry')
+    expect(ctl.retryLoading.value).toBe(true)
+    expect(ctl.initialLoading.value).toBe(false)
+    expect(ctl.queryLoading.value).toBe(false)
+    expect(ctl.manualLoading.value).toBe(false)
+    expect(ctl.refreshActive.value).toBe(false)
+
+    gate.release(okRes([row()]))
+    await settle()
+    expect(ctl.firstLoadError.value).toBe(false)
+  })
+
+  it('query：仅“查询”按钮 loading；不整表 loading（query 不遮罩表格）；圆点不激活', async () => {
+    mockedFetch.mockResolvedValue(okRes([row()]))
+    const ctl = setup()
+    ctl.onPageMounted()
+    await settle()
+
+    const gate = deferred()
+    mockedFetch.mockImplementationOnce(() => gate.promise)
+    ctl.submitQuery(['hosp-012'], [], [])
+    await settle()
+
+    expect(ctl.requestKind.value).toBe('query')
+    expect(ctl.queryLoading.value).toBe(true)
+    expect(ctl.initialLoading.value).toBe(false) // 不整表遮罩
+    expect(ctl.retryLoading.value).toBe(false)
+    expect(ctl.manualLoading.value).toBe(false)
+    expect(ctl.refreshActive.value).toBe(false)
+
+    gate.release(okRes([row('Q')]))
+    await settle()
+    expect(ctl.appliedCriteria.value.clientIds).toEqual(['hosp-012'])
+    expect(ctl.busy.value).toBe(false)
+  })
+
+  it('manual：仅“立即刷新”按钮 loading 且刷新圆点激活', async () => {
+    mockedFetch.mockResolvedValue(okRes([row()]))
+    const ctl = setup()
+    ctl.onPageMounted()
+    await settle()
+
+    const gate = deferred()
+    mockedFetch.mockImplementationOnce(() => gate.promise)
     ctl.manualRefresh()
     await settle()
-    expect(ctl.loading.value).toBe(false)
-    expect(ctl.refreshing.value).toBe(true)
-    expect(ctl.busy.value).toBe(true)
 
-    releaseRefresh(okRes([row()]))
+    expect(ctl.requestKind.value).toBe('manual')
+    expect(ctl.manualLoading.value).toBe(true)
+    expect(ctl.refreshActive.value).toBe(true)
+    expect(ctl.queryLoading.value).toBe(false)
+    expect(ctl.initialLoading.value).toBe(false)
+    expect(ctl.retryLoading.value).toBe(false)
+
+    gate.release(okRes([row()]))
     await settle()
-    expect(ctl.refreshing.value).toBe(false)
+    expect(ctl.manualLoading.value).toBe(false)
+    expect(ctl.refreshActive.value).toBe(false)
     expect(ctl.busy.value).toBe(false)
+  })
+
+  it('auto：仅刷新圆点激活；查询/立即刷新按钮均不 loading（不遮罩表格）', async () => {
+    vi.useFakeTimers()
+    mockedFetch.mockResolvedValue(okRes([row()]))
+    const ctl = setup()
+    ctl.onPageMounted()
+    await settle()
+    expect(mockedFetch).toHaveBeenCalledTimes(1)
+
+    const gate = deferred()
+    mockedFetch.mockImplementationOnce(() => gate.promise)
+    await vi.advanceTimersByTimeAsync(AUTO_REFRESH_INTERVAL_MS)
+    await settle()
+
+    expect(ctl.requestKind.value).toBe('auto')
+    expect(ctl.refreshActive.value).toBe(true)
+    expect(ctl.manualLoading.value).toBe(false)
+    expect(ctl.queryLoading.value).toBe(false)
+    expect(ctl.initialLoading.value).toBe(false)
+    expect(ctl.retryLoading.value).toBe(false)
+
+    gate.release(okRes([row('A2')]))
+    await settle()
+    expect(ctl.busy.value).toBe(false)
+  })
+
+  it('restore：恢复可见刷新仅圆点激活；查询/立即刷新按钮均不 loading', async () => {
+    mockedFetch.mockResolvedValue(okRes([row()]))
+    const ctl = setup()
+    ctl.onPageMounted()
+    await settle()
+
+    ctl.visibilityChanged(true) // 隐藏：停表
+    const gate = deferred()
+    mockedFetch.mockImplementationOnce(() => gate.promise)
+    ctl.visibilityChanged(false) // 恢复可见（空闲）→ restore
+    await settle()
+
+    expect(ctl.requestKind.value).toBe('restore')
+    expect(ctl.refreshActive.value).toBe(true)
+    expect(ctl.manualLoading.value).toBe(false)
+    expect(ctl.queryLoading.value).toBe(false)
+    expect(ctl.initialLoading.value).toBe(false)
+
+    gate.release(okRes([row('R')]))
+    await settle()
+    expect(ctl.busy.value).toBe(false)
+    expect(ctl.records.value[0].clientId).toBe('R')
+  })
+})
+
+describe('useDataSourceSnapshot 六类请求语义与单请求约束（DSS-REQ-071 b，AC-050/051/078）', () => {
+  it('点击“立即刷新”只发起一次按当前已应用条件的刷新请求，不额外触发查询', async () => {
+    mockedFetch.mockResolvedValue(okRes([row('A')]))
+    const ctl = setup()
+    ctl.onPageMounted()
+    await settle()
+    // 先建立具体已应用条件（clientIds=hosp-012），区分“按已应用刷新”与“新查询全部”
+    mockedFetch.mockResolvedValue(okRes([row('B')]))
+    ctl.submitQuery(['hosp-012'], [], [])
+    await settle()
+    expect(mockedFetch).toHaveBeenCalledTimes(2)
+    const appliedBefore = ctl.appliedCriteria.value
+
+    mockedFetch.mockResolvedValue(okRes([row('B2')]))
+    ctl.manualRefresh()
+    await settle()
+
+    // 恰好新增 1 次请求，无第二个查询
+    expect(mockedFetch).toHaveBeenCalledTimes(3)
+    const lastParams = mockedFetch.mock.calls[2][0]
+    expect(paramsToCriteria(lastParams)).toEqual(appliedBefore)
+    expect(ctl.appliedCriteria.value).toEqual(appliedBefore)
+    expect(ctl.records.value[0].clientId).toBe('B2')
   })
 })
 

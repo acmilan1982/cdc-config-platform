@@ -17,20 +17,15 @@ export const AUTO_REFRESH_INTERVAL_MS = 60_000
 /** 有数据时刷新/查询失败的内联收敛提示（UI §6.4/§7.3，DSS-REQ-061，AC-058）。 */
 export const REFRESH_FAIL_MESSAGE = '刷新失败，将在约 60 秒后自动重试'
 
-type RequestKind = 'initial' | 'retry' | 'query' | 'manual' | 'restore' | 'auto'
+export type RequestKind = 'initial' | 'retry' | 'query' | 'manual' | 'restore' | 'auto'
 
-/** 建立性（整表 loading）：成功把本次请求快照升级为“已应用查询条件”。 */
+/** 建立性请求（整表大态）：成功把本次请求快照升级为“已应用查询条件”。 */
 const ESTABLISHING: ReadonlySet<RequestKind> = new Set(['initial', 'retry', 'query'])
-/** 刷新性（工具栏轻量态）：成功只更新结果/最近成功时间，条件不变（DESIGN §7.3/§8）。 */
+/** 刷新类请求：视觉上只点亮刷新状态圆点，不遮罩表格。 */
 const REFRESHING: ReadonlySet<RequestKind> = new Set(['manual', 'restore', 'auto'])
 
 function isEstablishing(kind: RequestKind): boolean {
   return ESTABLISHING.has(kind)
-}
-
-interface RequestOp {
-  criteria: AppliedCriteria
-  kind: RequestKind
 }
 
 function toQueryParams(criteria: AppliedCriteria): DataSourceSnapshotQueryParams {
@@ -38,8 +33,12 @@ function toQueryParams(criteria: AppliedCriteria): DataSourceSnapshotQueryParams
 }
 
 /**
- * 页面实例内编排（DESIGN §7/§8/§9，R1-01/R1-02/R1-03）：
- * 单飞行统一忙碌抑制（busy 时“查询/立即刷新”按钮禁用、自动触发被抑制，不排队不补发）；
+ * 页面实例内编排（DESIGN §7/§8/§9，UI §13.6）：
+ * 单飞行统一忙碌抑制（busy 时“查询/立即刷新”按钮功能被阻断、自动触发被抑制，不排队不补发）；
+ * 以唯一在途请求来源 requestKind 派生六类请求的页面视觉（DSS-REQ-071）——
+ * initial=表格 loading、retry=错误区“重新加载”loading、query=仅“查询”按钮 loading、
+ * manual=仅“立即刷新”按钮 loading＋刷新圆点、auto/restore=仅刷新圆点；
+ * 非发起控件视觉稳定（变灰/按压由按钮层以 aria-disabled＋事件防御实现，不在本编排层）。
  * 请求实例令牌 seq 仅防卸载迟写/防旧响应覆盖；每次真实请求结束后重启完整 60s；
  * 恢复可见延后单次补发（pendingVisibilityRefresh，唯一例外）按届时最新已应用条件执行。
  * 不新增 Pinia store，状态为页面/composable 实例内 ref；路由离开即销毁、现场不跨路由保留。
@@ -52,12 +51,10 @@ export function useDataSourceSnapshot() {
   const hasSuccess = ref(false)
   /** 最近成功刷新时刻（前端成功收到并判成功，epoch ms）；失败/被抑制不更新（UI §6.3）。 */
   const lastSuccessAt = ref<number | null>(null)
-  /** 整表大态 loading：kind=initial/retry/query 在途。 */
-  const loading = ref(false)
-  /** 工具栏轻量态：kind=manual/restore/auto 在途（表格不遮罩，DESIGN §7.6）。 */
-  const refreshing = ref(false)
-  /** 任一实际请求在途；busy 时“查询/立即刷新”禁用、自动触发被抑制（R1-02）。 */
-  const busy = ref(false)
+  /** 当前在途实际请求来源；空闲为 null。所有请求视觉由它派生（DSS-REQ-071）。 */
+  const requestKind = ref<RequestKind | null>(null)
+  /** 任一实际请求在途（requestKind!==null）；busy 时查询/刷新被功能阻断、自动触发被抑制。 */
+  const busy = computed(() => requestKind.value !== null)
   /** 从未成功时的首次加载失败 → 整区错误态 + 重新加载（UI §7.2）。 */
   const firstLoadError = ref(false)
   /** 有成功现场后的刷新失败内联收敛提示（不清表，UI §6.4/§7.3）。 */
@@ -72,8 +69,18 @@ export function useDataSourceSnapshot() {
   const candidateClients = computed(() => candidates.value?.clients ?? [])
   const candidateSources = computed(() => candidates.value?.sources ?? [])
   const candidateStatuses = computed(() => candidates.value?.statuses ?? [])
-  /** 工具栏“最近成功刷新：HH:mm:ss”；从未成功显示 --（UI §6.1）。 */
+  /** 结果头部“最近成功刷新：HH:mm:ss”；从未成功显示 --（UI §13.3）。 */
   const lastRefreshText = computed(() => formatEpochToHms(lastSuccessAt.value))
+
+  /** 六类请求唯一视觉映射（DSS-REQ-071 / DESIGN §19.6 / UI §13.6）。 */
+  const initialLoading = computed(() => requestKind.value === 'initial')
+  const retryLoading = computed(() => requestKind.value === 'retry')
+  const queryLoading = computed(() => requestKind.value === 'query')
+  const manualLoading = computed(() => requestKind.value === 'manual')
+  const refreshActive = computed(() => {
+    const kind = requestKind.value
+    return kind === 'manual' || kind === 'restore' || kind === 'auto'
+  })
 
   function stopTimer(): void {
     if (timer !== null) {
@@ -92,14 +99,6 @@ export function useDataSourceSnapshot() {
     }, AUTO_REFRESH_INTERVAL_MS)
   }
 
-  function setVisual(kind: RequestKind, on: boolean): void {
-    if (REFRESHING.has(kind)) {
-      refreshing.value = on
-    } else {
-      loading.value = on
-    }
-  }
-
   /** 唯一入链口：busy/卸载/隐藏时一律拒绝（被禁用/被抑制触发不视为实际请求，R1-02）。 */
   function launch(criteria: AppliedCriteria, kind: RequestKind): void {
     if (disposed || busy.value || hidden) return
@@ -108,8 +107,7 @@ export function useDataSourceSnapshot() {
 
   async function run(criteria: AppliedCriteria, kind: RequestKind): Promise<void> {
     const seq = ++latestSeq
-    busy.value = true
-    setVisual(kind, true)
+    requestKind.value = kind
     try {
       const res: ApiResponse<SnapshotStatusListResult> = await fetchSnapshotStatusList(toQueryParams(criteria))
       if (disposed || seq !== latestSeq) return
@@ -122,8 +120,7 @@ export function useDataSourceSnapshot() {
       if (disposed || seq !== latestSeq) return
       handleFailure()
     } finally {
-      setVisual(kind, false)
-      busy.value = false
+      requestKind.value = null
       onRequestFinally()
     }
   }
@@ -158,7 +155,7 @@ export function useDataSourceSnapshot() {
 
   /**
    * 计时统一收口（DESIGN §7.7 伪代码）：
-   * busy 已复位；disposed/hidden 直接返回；待补发恢复刷新则清标志并立即按届时最新已应用条件补发
+   * requestKind 已复位（busy=false）；disposed/hidden 直接返回；待补发恢复刷新则清标志并立即按届时最新已应用条件补发
    * （该次补发结束才重启 60s）；否则重启完整 60 秒。
    */
   function onRequestFinally(): void {
@@ -217,6 +214,7 @@ export function useDataSourceSnapshot() {
     disposed = true
     stopTimer()
     pendingVisibilityRefresh = false
+    requestKind.value = null
   }
 
   return {
@@ -225,8 +223,7 @@ export function useDataSourceSnapshot() {
     appliedCriteria,
     hasSuccess,
     lastSuccessAt,
-    loading,
-    refreshing,
+    requestKind,
     busy,
     firstLoadError,
     refreshError,
@@ -234,6 +231,11 @@ export function useDataSourceSnapshot() {
     candidateClients,
     candidateSources,
     candidateStatuses,
+    initialLoading,
+    retryLoading,
+    queryLoading,
+    manualLoading,
+    refreshActive,
     onPageMounted,
     submitQuery,
     manualRefresh,

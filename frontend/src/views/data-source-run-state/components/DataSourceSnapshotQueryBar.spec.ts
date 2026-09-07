@@ -20,6 +20,7 @@ async function mountBar(props: Record<string, unknown> = {}) {
       sources: SOURCES,
       statuses: STATUSES,
       busy: false,
+      queryLoading: false,
       ...props,
     },
     global: { plugins: [ElementPlus] },
@@ -160,10 +161,49 @@ describe('DataSourceSnapshotQueryBar 重置/忙碌禁用（DESIGN §8 E7，R1-02
     wrapper.unmount()
   })
 
-  it('busy（任一实际请求在途）时“查询”按钮禁用', async () => {
+  it('busy（任一实际请求在途）时“查询”功能被阻断：不原生禁用、不闪动，以 aria-disabled 标记（AC-072）', async () => {
     const wrapper = await mountBar({ busy: true })
     const btn = queryButton(wrapper)
+    expect(btn.attributes('aria-disabled')).toBe('true')
+    // 非发起按钮不得因全局 busy 出现变灰/按压视觉：不原生禁用、不显示 loading
+    expect((btn.element as HTMLButtonElement).disabled).toBe(false)
+    expect(btn.classes()).not.toContain('is-loading')
+    wrapper.unmount()
+  })
+
+  it('busy 时点击“查询”被事件防御直接返回：鼠标与键盘同一入口均不产生第二请求（DSS-REQ-071 a）', async () => {
+    const wrapper = await mountBar({ busy: true })
+    const btn = queryButton(wrapper)
+    await btn.trigger('click')
+    btn.element.click()
+    expect(wrapper.emitted('query')).toBeUndefined()
+    wrapper.unmount()
+  })
+
+  it('空闲时“查询”无 aria-disabled，点击发出一次查询草稿', async () => {
+    const wrapper = await mountBar()
+    const btn = queryButton(wrapper)
+    expect(btn.attributes('aria-disabled')).toBeUndefined()
+    await btn.trigger('click')
+    expect(wrapper.emitted('query')).toHaveLength(1)
+    wrapper.unmount()
+  })
+})
+
+describe('DataSourceSnapshotQueryBar 六类请求查询按钮视觉映射（DSS-REQ-071④，AC-078）', () => {
+  it('仅 query 在途（queryLoading）时“查询”按钮显示 loading（is-loading 且原生禁用）', async () => {
+    const wrapper = await mountBar({ queryLoading: true, busy: true })
+    const btn = queryButton(wrapper)
+    expect(btn.classes()).toContain('is-loading')
     expect((btn.element as HTMLButtonElement).disabled).toBe(true)
+    wrapper.unmount()
+  })
+
+  it('initial/retry/auto/restore 在途不使“查询”按钮 loading：queryLoading=false 时按钮外观稳定', async () => {
+    const wrapper = await mountBar({ busy: true }) // 模拟其它请求在途
+    const btn = queryButton(wrapper)
+    expect(btn.classes()).not.toContain('is-loading')
+    expect((btn.element as HTMLButtonElement).disabled).toBe(false)
     wrapper.unmount()
   })
 })

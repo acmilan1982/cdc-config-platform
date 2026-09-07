@@ -1,0 +1,292 @@
+import { describe, it, expect, vi, beforeEach, afterEach } from 'vitest'
+import { mount, flushPromises, type VueWrapper } from '@vue/test-utils'
+import ElementPlus from 'element-plus'
+import DataSourceRunStatePage from './DataSourceRunStatePage.vue'
+import DataSourceSnapshotTable from './components/DataSourceSnapshotTable.vue'
+import { REFRESH_FAIL_MESSAGE } from './composables/useDataSourceSnapshot'
+import type { ApiResponse } from '@/types/monitor'
+import type {
+  CandidateGroup,
+  SnapshotStatusItem,
+  SnapshotStatusListResult,
+  StatusToken,
+} from '@/types/dataSourceSnapshot'
+
+/**
+ * 页面级结构/交互测试（UI §13，DESIGN §20）：真实组装三个功能区块，
+ * 断言三块分区、结果头部左右布局、总数与未知计数、错误稳定槽位，以及六类请求中
+ * query 不遮罩表格、manual 才点亮立即刷新、点击刷新只新增一次刷新请求等页面级视觉事实。
+ * Tooltip 延迟与像素几何由专测与浏览器验证覆盖。
+ */
+
+vi.mock('@/api/dataSourceSnapshot', () => ({
+  fetchSnapshotStatusList: vi.fn(),
+}))
+
+import { fetchSnapshotStatusList } from '@/api/dataSourceSnapshot'
+
+const mockedFetch = vi.mocked(fetchSnapshotStatusList)
+
+type RefState = 'ACTIVE' | 'INACTIVE' | 'NOT_FOUND'
+
+function row(clientId: string, category: StatusToken, raw: string): SnapshotStatusItem {
+  return {
+    clientId,
+    clientRef: { state: 'ACTIVE' as RefState, desc: `${clientId} 探针描述` },
+    sourceId: 'src-1',
+    sourceRef: { state: 'ACTIVE' as RefState, org: '源库一', category: 'SOURCE', sourceRole: true },
+    snapshotStatus: raw,
+    statusCategory: category,
+    snapshotLastSeenAt: '2026-08-17 17:28:46',
+    snapshotCompletedAt: category === 'COMPLETED' ? '2026-08-17 17:30:00' : null,
+    updatedAt: '2026-08-17 17:28:46',
+  }
+}
+
+function cand(): CandidateGroup {
+  return {
+    clients: [{ id: 'c1', desc: '端1', active: true }],
+    sources: [{ id: 'src-1', org: '源库一', active: true }],
+    statuses: ['RUNNING', 'COMPLETED'],
+  }
+}
+
+function okRes(records: SnapshotStatusItem[]): ApiResponse<SnapshotStatusListResult> {
+  const data: SnapshotStatusListResult = { records, candidates: cand() }
+  return { code: 200, message: 'success', timestamp: '', data }
+}
+
+function deferred() {
+  let release!: (v: ApiResponse<SnapshotStatusListResult>) => void
+  const promise = new Promise<ApiResponse<SnapshotStatusListResult>>((resolve) => {
+    release = resolve
+  })
+  return { promise, release }
+}
+
+async function settle(): Promise<void> {
+  for (let i = 0; i < 16; i++) await Promise.resolve()
+}
+
+/**
+ * EP v-loading 关闭走 leave 过渡，jsdom 无真实 transitionend/rAF，需放行真实宏任务
+ * 让关闭后清理（否则初始加载的 .el-loading-mask 节点残留，干扰“query/manual 不遮罩表格”DOM 断言）。
+ */
+async function flushMacro(): Promise<void> {
+  for (let i = 0; i < 3; i++) await new Promise<void>((resolve) => setTimeout(resolve, 0))
+}
+
+const mounts: VueWrapper[] = []
+
+async function mountPage() {
+  const wrapper = mount(DataSourceRunStatePage, { global: { plugins: [ElementPlus] } })
+  mounts.push(wrapper)
+  await flushPromises()
+  await settle()
+  await flushMacro()
+  return wrapper
+}
+
+function findButton(wrapper: VueWrapper, text: string) {
+  const btn = wrapper.findAll('button').find((b) => b.text().trim() === text)
+  if (!btn) throw new Error(`未找到按钮“${text}”`)
+  return btn
+}
+
+/**
+ * 表格“是否整表遮罩”经 loading 属性断言：jsdom 下 EP v-loading 关闭走 leave 过渡，
+ * 无真实 transitionend/rAF 会残留 .el-loading-mask 节点，DOM 存在性不可信；fresh-mount 的
+ * loading→mask/无 mask 视觉由 DataSourceSnapshotTable.spec 覆盖。
+ */
+function tableLoading(wrapper: VueWrapper): boolean {
+  const t = wrapper.findComponent(DataSourceSnapshotTable)
+  if (!t.exists()) throw new Error('未找到 DataSourceSnapshotTable')
+  return t.props('loading') as boolean
+}
+
+beforeEach(() => {
+  mockedFetch.mockReset()
+})
+
+afterEach(() => {
+  for (const w of mounts.splice(0)) {
+    if (w.exists()) w.unmount()
+  }
+  vi.clearAllMocks()
+})
+
+describe('DataSourceRunStatePage 三块清晰分区（UI §13.1，DSS-REQ-066，AC-069）', () => {
+  it('自上而下渲染：页头语义区 + 独立查询卡片 + 独立结果卡片', async () => {
+    mockedFetch.mockResolvedValue(okRes([row('A', 'RUNNING', 'SNAPSHOT_RUNNING')]))
+    const wrapper = await mountPage()
+
+    // 1. 页头语义区
+    const header = wrapper.find('.dss-page-header')
+    expect(header.exists()).toBe(true)
+    expect(header.find('h2').text()).toBe('源库快照状态')
+    expect(header.find('.dss-desc').text()).toContain('只读')
+
+    // 2. 独立查询卡片
+    const queryCard = wrapper.find('.dss-query-card')
+    expect(queryCard.exists()).toBe(true)
+    expect(queryCard.find('.dss-q-label').exists()).toBe(true)
+    expect(queryCard.text()).toContain('查询')
+    expect(queryCard.text()).toContain('重置')
+
+    // 3. 独立结果卡片（内部头部 + 表格主体，卡片间有上下间距容器）
+    const resultCard = wrapper.find('.dss-result-card')
+    expect(resultCard.exists()).toBe(true)
+    expect(resultCard.find('.el-table').exists()).toBe(true)
+    expect(wrapper.find('.dss-page').element.children.length).toBeGreaterThanOrEqual(3)
+    wrapper.unmount()
+  })
+
+  it('结果头部左=总数/未知计数，右=不可拆散刷新组（同一头部仅两个直接子组）', async () => {
+    mockedFetch.mockResolvedValue(okRes([row('A', 'RUNNING', 'SNAPSHOT_RUNNING')]))
+    const wrapper = await mountPage()
+
+    const header = wrapper.find('.dss-result-card__header')
+    const children = Array.from(header.element.children) as HTMLElement[]
+    const groups = children.filter((c) => c.classList.contains('dss-result-summary') || c.classList.contains('dss-refresh-group'))
+    expect(groups).toHaveLength(2)
+    // 左组仅总数（该数据无未知）；右组为刷新组整体（含“立即刷新”）
+    expect(children.find((c) => c.classList.contains('dss-result-summary'))?.textContent).toContain('共 1 条')
+    const rg = children.find((c) => c.classList.contains('dss-refresh-group'))
+    expect(rg?.textContent).toContain('60 秒自动刷新')
+    expect(rg?.textContent).toContain('立即刷新')
+    wrapper.unmount()
+  })
+})
+
+describe('DataSourceRunStatePage 结果头部总数与未知计数（DSS-REQ-067，AC-070）', () => {
+  it('显示“共 N 条”；UNKNOWN>0 时显示橙色“其中 N 条未知状态”', async () => {
+    mockedFetch.mockResolvedValue(
+      okRes([
+        row('A', 'RUNNING', 'SNAPSHOT_RUNNING'),
+        row('B', 'COMPLETED', 'SNAPSHOT_COMPLETED'),
+        row('C', 'UNKNOWN', 'WEIRD_VALUE'),
+      ]),
+    )
+    const wrapper = await mountPage()
+    expect(wrapper.find('.dss-summary-count').text()).toBe('共 3 条')
+    expect(wrapper.find('.dss-summary-unknown').exists()).toBe(true)
+    expect(wrapper.find('.dss-summary-unknown').text()).toBe('其中 1 条未知状态')
+    wrapper.unmount()
+  })
+
+  it('UNKNOWN=0 时不显示未知状态提示，只保留总数', async () => {
+    mockedFetch.mockResolvedValue(
+      okRes([
+        row('A', 'RUNNING', 'SNAPSHOT_RUNNING'),
+        row('B', 'COMPLETED', 'SNAPSHOT_COMPLETED'),
+      ]),
+    )
+    const wrapper = await mountPage()
+    expect(wrapper.find('.dss-summary-count').text()).toBe('共 2 条')
+    expect(wrapper.find('.dss-summary-unknown').exists()).toBe(false)
+    wrapper.unmount()
+  })
+})
+
+describe('DataSourceRunStatePage 六类请求页面级视觉（DSS-REQ-071）', () => {
+  it('query 在途：仅“查询”按钮 loading，表格不遮罩、立即刷新不 loading', async () => {
+    mockedFetch.mockResolvedValue(okRes([row('A', 'RUNNING', 'SNAPSHOT_RUNNING')]))
+    const wrapper = await mountPage()
+
+    const gate = deferred()
+    mockedFetch.mockImplementationOnce(() => gate.promise)
+    await findButton(wrapper, '查询').trigger('click')
+    await settle()
+
+    // 表格不被整表遮罩：仅 initial 首载点亮整表 loading，query 在途表格 loading 为 false（query 不遮罩表格，DSS-REQ-071③）
+    expect(tableLoading(wrapper)).toBe(false)
+    // 仅查询按钮显示 loading；立即刷新不 loading
+    const q = findButton(wrapper, '查询')
+    expect(q.classes()).toContain('is-loading')
+    const r = findButton(wrapper, '立即刷新')
+    expect(r.classes()).not.toContain('is-loading')
+
+    gate.release(okRes([row('A', 'RUNNING', 'SNAPSHOT_RUNNING'), row('B', 'COMPLETED', 'SNAPSHOT_COMPLETED')]))
+    await settle()
+    expect(wrapper.find('.dss-summary-count').text()).toBe('共 2 条')
+    expect(findButton(wrapper, '查询').classes()).not.toContain('is-loading')
+    wrapper.unmount()
+  })
+
+  it('manual 在途：仅“立即刷新”按钮 loading；查询按钮外观稳定（不闪动/不变灰）；表格不遮罩', async () => {
+    mockedFetch.mockResolvedValue(okRes([row('A', 'RUNNING', 'SNAPSHOT_RUNNING')]))
+    const wrapper = await mountPage()
+
+    const gate = deferred()
+    mockedFetch.mockImplementationOnce(() => gate.promise)
+    await findButton(wrapper, '立即刷新').trigger('click')
+    await settle()
+
+    expect(findButton(wrapper, '立即刷新').classes()).toContain('is-loading')
+    const q = findButton(wrapper, '查询')
+    expect(q.classes()).not.toContain('is-loading')
+    expect((q.element as HTMLButtonElement).disabled).toBe(false)
+    expect(q.attributes('aria-disabled')).toBe('true')
+    // 表格不遮罩：manual 在途表格 loading 为 false（仅 initial 点亮整表 loading）
+    expect(tableLoading(wrapper)).toBe(false)
+
+    gate.release(okRes([row('A2', 'RUNNING', 'SNAPSHOT_RUNNING')]))
+    await settle()
+    expect(findButton(wrapper, '立即刷新').classes()).not.toContain('is-loading')
+    wrapper.unmount()
+  })
+
+  it('点击“立即刷新”只新增一次刷新请求，不触发额外查询', async () => {
+    mockedFetch.mockResolvedValue(okRes([row('A', 'RUNNING', 'SNAPSHOT_RUNNING')]))
+    const wrapper = await mountPage()
+    expect(mockedFetch).toHaveBeenCalledTimes(1)
+
+    mockedFetch.mockResolvedValue(okRes([row('A2', 'COMPLETED', 'SNAPSHOT_COMPLETED')]))
+    await findButton(wrapper, '立即刷新').trigger('click')
+    await settle()
+
+    // 恰好 +1 次（manual 一次），无第二个查询请求
+    expect(mockedFetch).toHaveBeenCalledTimes(2)
+    wrapper.unmount()
+  })
+})
+
+describe('DataSourceRunStatePage 重置不发请求 + 失败稳定槽位（DESIGN §8 E7，DSS-REQ-068，AC-072）', () => {
+  it('“重置”只恢复三项“全部”且不发请求；随后点“查询”才查询（发 1 次）', async () => {
+    mockedFetch.mockResolvedValue(okRes([row('A', 'RUNNING', 'SNAPSHOT_RUNNING')]))
+    const wrapper = await mountPage()
+    expect(mockedFetch).toHaveBeenCalledTimes(1)
+
+    await findButton(wrapper, '重置').trigger('click')
+    await settle()
+    expect(mockedFetch).toHaveBeenCalledTimes(1) // 重置不发请求
+
+    await findButton(wrapper, '查询').trigger('click')
+    await settle()
+    expect(mockedFetch).toHaveBeenCalledTimes(2)
+    wrapper.unmount()
+  })
+
+  it('失败提示出现在稳定槽位，出现/消失不改变结果头部刷新组关键元素', async () => {
+    mockedFetch.mockResolvedValue(okRes([row('A', 'RUNNING', 'SNAPSHOT_RUNNING')]))
+    const wrapper = await mountPage()
+
+    const headerBefore = wrapper.find('.dss-result-card__header').element.children.length
+    mockedFetch.mockRejectedValue(new Error('network'))
+    await findButton(wrapper, '立即刷新').trigger('click')
+    await settle()
+
+    // 槽位常驻（min-height 预留行），失败时渲染 role=status 收敛提示
+    const slot = wrapper.find('.dss-result-error-slot')
+    expect(slot.exists()).toBe(true)
+    const err = wrapper.find('.dss-result-error')
+    expect(err.exists()).toBe(true)
+    expect(err.attributes('role')).toBe('status')
+    expect(err.text()).toBe(REFRESH_FAIL_MESSAGE)
+    // 失败保留上一次成功记录（不清表）
+    expect(wrapper.find('.dss-summary-count').text()).toBe('共 1 条')
+    // 结果头部仍只有左右两个直接子组（几何稳定）
+    expect(wrapper.find('.dss-result-card__header').element.children.length).toBe(headerBefore)
+    wrapper.unmount()
+  })
+})

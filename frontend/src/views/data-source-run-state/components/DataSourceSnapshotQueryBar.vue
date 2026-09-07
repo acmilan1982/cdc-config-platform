@@ -58,7 +58,13 @@
       </el-select>
     </div>
     <div class="dss-q-actions">
-      <el-button type="primary" :disabled="busy" @click="onQuery">查询</el-button>
+      <!-- 查询按钮：仅 kind=query 显示 loading；被功能阻断时视觉稳定，以 aria-disabled + 事件防御阻止鼠标/键盘二次请求 -->
+      <el-button
+        type="primary"
+        :loading="queryLoading"
+        :aria-disabled="ariaBlocked || undefined"
+        @click="onQuery"
+      >查询</el-button>
       <el-button @click="onReset">重置</el-button>
     </div>
   </div>
@@ -79,9 +85,14 @@ const props = defineProps<{
   clients: ClientCandidate[]
   sources: SourceCandidate[]
   statuses: StatusToken[]
-  /** 任一实际请求在途时“查询”按钮禁用（DESIGN §7.6，R1-02；AC-050）。 */
+  /** 任一实际请求在途：查询被功能阻断（事件防御），视觉保持稳定（DSS-REQ-071④）。 */
   busy: boolean
+  /** 仅 kind=query 在途：查询按钮显示 loading（DSS-REQ-071③，AC-078）。 */
+  queryLoading: boolean
 }>()
+
+/** busy 期间查询功能被阻断：以 aria-disabled 语义标记，不改变外观。 */
+const ariaBlocked = computed(() => props.busy)
 
 const emit = defineEmits<{
   (e: 'query', draft: QueryDraft): void
@@ -156,7 +167,9 @@ function onChange(key: DraftKey, next: string[]): void {
   draft[key] = normalizeDimension(prev, next)
 }
 
+/** 任一实际请求在途时点击“查询”直接返回（鼠标/键盘均不会产生第二个请求，DSS-REQ-071 a）。 */
 function onQuery(): void {
+  if (props.busy) return
   emit('query', { clients: [...draft.clients], sources: [...draft.sources], statuses: [...draft.statuses] })
 }
 
