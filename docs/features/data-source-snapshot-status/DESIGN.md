@@ -11,34 +11,38 @@
 | 前端源码目录 | `frontend/src/views/data-source-run-state/`（保留既有目录名，不做无业务价值目录重命名；命名映射见 UI §10） |
 | 目标文档 | `docs/features/data-source-snapshot-status/DESIGN.md`（总设计入口） |
 | 配套设计文档 | `API.md`（接口设计草案）、`UI.md`（界面设计草案）、`DATABASE.md`（数据库查询设计草案） |
-| 文档状态 | `DRAFT_ADJUSTMENT_PENDING_USER_REVIEW`（当前版为验收前 UI 调整草案 `DATA-SOURCE-SNAPSHOT-STATUS-UI-ADJUSTMENT-BASELINE-001`，建立在已批准设计基线之上；已批准设计基线保留为历史，**批准基线不自动批准本轮调整草案**，见本表“调整草案关系”与任务边界声明） |
-| requirements_status | `DRAFT_ADJUSTMENT_PENDING_USER_REVIEW`（当前调整版本，见 `REQUIREMENTS.md` `DSS-REQ-001~071` 共 71 条；已批准版本保留为历史） |
-| acceptance_status | `DRAFT_ADJUSTMENT_PENDING_USER_REVIEW`（当前调整版本，见 `ACCEPTANCE.md` `DSS-AC-001~080` 共 80 条，全部 `NOT_RUN`；已批准版本保留为历史） |
-| design_status | `DESIGN.md`/`UI.md` 当前调整版本为 `DRAFT_ADJUSTMENT_PENDING_USER_REVIEW`（本轮 UI 调整草案，见 §19）；`API.md`/`DATABASE.md` 保持已批准（`APPROVED`）且本轮**整文件零差异**（本轮不改接口、SQL、表结构、数据库访问与产品只读边界） |
-| implementation_status | `IMPLEMENTED_ADJUSTMENT_PENDING`（implementation_status=IMPLEMENTED_ADJUSTMENT_PENDING；既有实现 `DATA-SOURCE-SNAPSHOT-STATUS-IMPLEMENTATION-001`/`-R1` 已完成，但**本轮 UI 调整尚未实现**，待 ChatGPT 对本调整草案正式复审且项目负责人批准后另立实现） |
+| 文档状态 | `APPROVED`（当前版为 2026-09-07 验收前 UI 调整草案 `DATA-SOURCE-SNAPSHOT-STATUS-UI-ADJUSTMENT-BASELINE-001` 及同日 R1 极小定向修订 `...-001-R1` 收口后的当前 UI 调整版本：ChatGPT 对 R1 结果提交 `575723711ca39d7761df308c1c99b1e6e957cf70` 独立正式复审 `APPROVED`、项目负责人明确回复“批准”，正式批准版本 `DATA-SOURCE-SNAPSHOT-STATUS-UI-ADJUSTMENT-BASELINE-APPROVAL-001`（批准日期 2026-09-07，批准内容基准提交 `5757237...`），本调整版本状态由 `DRAFT_ADJUSTMENT_PENDING_USER_REVIEW` 收口为 `APPROVED`。批准的是本轮 UI 调整设计（DESIGN/UI），不代表本轮调整已实现、正式验收已执行或通过，不等于 `IMPLEMENTED_ACCEPTED`，见本表“本轮（UI 调整版本）批准链”与任务边界声明） |
+| requirements_status | `APPROVED`（当前 UI 调整版本已批准，见 `REQUIREMENTS.md` `DSS-REQ-001~071` 共 71 条；正式批准版本 `DATA-SOURCE-SNAPSHOT-STATUS-UI-ADJUSTMENT-BASELINE-APPROVAL-001`，2026-09-07；既有批准版本保留为历史） |
+| acceptance_status | `APPROVED`（当前 UI 调整版本已批准，见 `ACCEPTANCE.md` `DSS-AC-001~080` 共 80 条，全部 `NOT_RUN`；正式批准版本 `DATA-SOURCE-SNAPSHOT-STATUS-UI-ADJUSTMENT-BASELINE-APPROVAL-001`，2026-09-07；既有批准版本保留为历史） |
+| design_status | `DESIGN.md`/`UI.md` 当前调整版本为 `APPROVED`（本轮 UI 调整草案已随本轮批准收口，见 §19/§20）；`API.md`/`DATABASE.md` 保持已批准（`APPROVED`）且本轮**整文件零差异**（本轮不改接口、SQL、表结构、数据库访问与产品只读边界） |
+| implementation_status | `IMPLEMENTED_ADJUSTMENT_PENDING`（implementation_status=IMPLEMENTED_ADJUSTMENT_PENDING；既有实现 `DATA-SOURCE-SNAPSHOT-STATUS-IMPLEMENTATION-001`/`-R1` 已完成，但**本轮 UI 调整尚未实现**；本轮调整草案已批准（正式批准版本 `DATA-SOURCE-SNAPSHOT-STATUS-UI-ADJUSTMENT-BASELINE-APPROVAL-001`，2026-09-07），将另立实现任务落地） |
 | acceptance_execution_status | `NOT_RUN`（本设计不执行验收；既有 68 条 `DSS-AC-001~068` 与本调整新增 `DSS-AC-069~080` 全部保持 `NOT_RUN`） |
 | pending_user_confirmation_count | `0`（本轮调整无必须由项目负责人补充决策的待确认项） |
-| pending_user_review | `YES`（本轮为验收前 UI 调整草案，待 ChatGPT 对本调整草案正式复审与项目负责人审阅，pending_user_review=YES） |
+| pending_user_review | `NO`（本轮 UI 调整版本已由 ChatGPT 对 R1 结果独立正式复审 `APPROVED` 并经项目负责人明确批准，pending_user_review=NO） |
 | 设计任务编号 | `DATA-SOURCE-SNAPSHOT-STATUS-DESIGN-BASELINE-001`（纯文档设计草案建立；历史） |
 | 设计 R1 修订任务 | `DATA-SOURCE-SNAPSHOT-STATUS-DESIGN-BASELINE-001-R1`（ChatGPT 正式设计复审 `CHANGES_REQUIRED` 驱动的极小定向修订，见 §16；历史） |
 | 设计批准版本 | `DATA-SOURCE-SNAPSHOT-STATUS-DESIGN-BASELINE-APPROVAL-001`（设计批准收口任务；批准日期 2026-09-06，见 §17；历史批准版本，本轮 UI 调整草案在其之上建立，批准不自动延伸到本轮调整） |
 | 设计批准内容基准 | `61117a62f44d39f7c548ebcb650891abf91b9b8c`（R1 结果提交；ChatGPT 对 R1 正式复审 `APPROVED` 并获项目负责人批准的内容基准，见 §17；历史基准） |
-| 本版（UI 调整草案）任务编号 | `DATA-SOURCE-SNAPSHOT-STATUS-UI-ADJUSTMENT-BASELINE-001`（验收前 UI 调整草案建立；ChatGPT 对实现 R1 提交 `37825272c25c8a2d8a595ff0d5c25c6349186663` 代码复审 `CHANGES_REQUIRED` 后，项目负责人提出更完整的 UI 调整，本轮在已批准设计基线之上建立**纯文档调整草案**；未实现、未执行正式验收、未批准，设计落点见 §19） |
+| 本轮（UI 调整版本）正式批准版本 | `DATA-SOURCE-SNAPSHOT-STATUS-UI-ADJUSTMENT-BASELINE-APPROVAL-001`（本轮 UI 调整需求/验收/设计批准收口；项目负责人明确“批准”驱动，见 §20） |
+| 本轮（UI 调整版本）批准链 | R0 验收前 UI 调整草案提交 `dc1d5285a541dd799521a778e5d00996ea0b4222` → ChatGPT 正式复审 `CHANGES_REQUIRED`（唯一问题：`auto`/`restore` 刷新在途时“立即刷新”按钮 loading 语义不明确）→ 项目负责人确认 `initial/retry/query/manual/auto/restore` 六类请求唯一视觉映射 → R1 极小定向修订提交 `575723711ca39d7761df308c1c99b1e6e957cf70` → ChatGPT 对 R1 结果独立正式复审 `APPROVED` → 项目负责人明确回复“批准” |
+| 本轮（UI 调整版本）批准依据提交 | `575723711ca39d7761df308c1c99b1e6e957cf70`（ChatGPT 对 UI 调整 R1 结果独立正式复审 `APPROVED` 的 R1 结果提交；本批准收口以该提交为批准内容基准） |
+| 本轮（UI 调整版本）批准日期 | 2026-09-07 |
+| 本版（UI 调整草案）任务编号 | `DATA-SOURCE-SNAPSHOT-STATUS-UI-ADJUSTMENT-BASELINE-001`（验收前 UI 调整草案建立；ChatGPT 对实现 R1 提交 `37825272c25c8a2d8a595ff0d5c25c6349186663` 代码复审 `CHANGES_REQUIRED` 后，项目负责人提出更完整的 UI 调整，本轮在已批准设计基线之上建立**纯文档调整草案**；未实现、未执行正式验收、未批准，设计落点见 §19；该草案后于 2026-09-07 经批准收口，见 §20） |
 | 本版（UI 调整草案）授权基线提交 | `37825272c25c8a2d8a595ff0d5c25c6349186663`（本任务开始时 `origin/develop` 最新提交，本地 HEAD 与其一致，ahead/behind=0/0） |
-| 调整草案关系 | 已批准需求/验收基线（正式批准版本 `DATA-SOURCE-SNAPSHOT-STATUS-REQUIREMENTS-BASELINE-APPROVAL-001`，批准内容基准 `4234af73db2190098f3dcd219319a4281fdabafd`）与已批准设计基线（`DATA-SOURCE-SNAPSHOT-STATUS-DESIGN-BASELINE-APPROVAL-001`，批准内容基准 `61117a62f44d39f7c548ebcb650891abf91b9b8c`）保留为历史；**批准基线不自动批准本轮调整草案**——本调整草案须经 ChatGPT 对本调整基线草案正式复审 `APPROVED` 且项目负责人明确回复“批准”后方能成为新基线。本轮只调整展示内容/Tooltip/刷新布局/busy 视觉状态相关设计（DESIGN.md/UI.md），不改接口、SQL、表结构、数据库访问与产品只读边界（API.md/DATABASE.md 整文件零差异）。下一入口为 ChatGPT 对本调整草案正式复审（不是直接实现） |
+| 调整草案关系 | 既有已批准需求/验收基线（正式批准版本 `DATA-SOURCE-SNAPSHOT-STATUS-REQUIREMENTS-BASELINE-APPROVAL-001`，批准内容基准 `4234af73db2190098f3dcd219319a4281fdabafd`）与已批准设计基线（`DATA-SOURCE-SNAPSHOT-STATUS-DESIGN-BASELINE-APPROVAL-001`，批准内容基准 `61117a62f44d39f7c548ebcb650891abf91b9b8c`）保留为历史。本轮验收前 UI 调整草案（R0 `...-001`）及 R1 定向修订（`...-001-R1`）经 ChatGPT 对 R1 结果提交 `5757237...` 独立正式复审 `APPROVED` 且项目负责人明确回复“批准”，已由 `DRAFT_ADJUSTMENT_PENDING_USER_REVIEW` 收口为 `APPROVED`（正式批准版本 `DATA-SOURCE-SNAPSHOT-STATUS-UI-ADJUSTMENT-BASELINE-APPROVAL-001`，批准日期 2026-09-07，见 §20）。本轮只调整展示内容/Tooltip/刷新布局/busy 视觉状态相关设计（DESIGN.md/UI.md），不改接口、SQL、表结构、数据库访问与产品只读边界（API.md/DATABASE.md 整文件零差异）。下一入口为另立 UI 调整实现任务（不是在本任务直接实现） |
 | 设计任务授权基线提交 | `38da355f16438ad0d9156acdd667e9258fe89141`（本任务开始时 `origin/develop` 最新提交；本地 HEAD 与其一致；历史基线） |
 | R1 修订基准提交 | `31aa9f5beec7ded3cd798b3af617fd79a1606ed0`（R1 修订开始时 `origin/develop` 最新提交，即上一结果提交；历史基线） |
 | 批准内容基准 | `4234af73db2190098f3dcd219319a4281fdabafd`（已批准需求/验收的批准内容基准） |
 | 创建日期 | 2026-09-05；2026-09-06 设计批准收口；2026-09-07 建立验收前 UI 调整草案 |
-| 依据需求 | `REQUIREMENTS.md`（`DSS-REQ-001~065` 已批准基线 + 本轮草案新增 `DSS-REQ-066~071`，共 `DSS-REQ-001~071` 71 条；当前调整版本文档状态 `DRAFT_ADJUSTMENT_PENDING_USER_REVIEW`） |
-| 依据验收 | `ACCEPTANCE.md`（`DSS-AC-001~080` 共 80 条，全部 `NOT_RUN`；当前调整版本 `DRAFT_ADJUSTMENT_PENDING_USER_REVIEW`） |
+| 依据需求 | `REQUIREMENTS.md`（`DSS-REQ-001~065` 已批准基线 + 本轮 UI 调整版本新增 `DSS-REQ-066~071`，共 `DSS-REQ-001~071` 71 条；当前 UI 调整版本文档状态 `APPROVED`（正式批准版本 `DATA-SOURCE-SNAPSHOT-STATUS-UI-ADJUSTMENT-BASELINE-APPROVAL-001`，2026-09-07）） |
+| 依据验收 | `ACCEPTANCE.md`（`DSS-AC-001~080` 共 80 条，全部 `NOT_RUN`；当前 UI 调整版本 `APPROVED`（正式批准版本 `DATA-SOURCE-SNAPSHOT-STATUS-UI-ADJUSTMENT-BASELINE-APPROVAL-001`，2026-09-07）） |
 | 数据库事实依据 | `docs/database/reports/DATA-SOURCE-SNAPSHOT-STATUS-DATABASE-VERIFICATION-001.md`（已提交数据库只读复核报告；本设计任务未连接数据库，见 DATABASE §2） |
 
 任务边界声明：
 
 - 本文件只把已批准需求与验收转换为**可复审、可实现、可测试的四份设计草案**，不改变任何已批准业务规则，不编码，不执行测试或验收，不访问或操作数据库/ZooKeeper/Kafka/sync-client，不启停服务。
 - 本文件已作为正式设计基线批准（批准版本 `DATA-SOURCE-SNAPSHOT-STATUS-DESIGN-BASELINE-APPROVAL-001`，批准日期 2026-09-06，见 §17）；草案阶段“设计状态保持 `DRAFT_PENDING_USER_REVIEW`、不得写成 `APPROVED`”的限制已由批准收口解除（该阶段历史见 §16 R1-04）。设计批准不代表功能已实现：功能仍不得写成 `IMPLEMENTED`、`IMPLEMENTED_PENDING_REVIEW` 或 `IMPLEMENTED_ACCEPTED`；验收用例仍全部保持 `NOT_RUN`，不得改为 `PASS/FAIL/BLOCKED`。
-- 本版为验收前 UI 调整草案（`DATA-SOURCE-SNAPSHOT-STATUS-UI-ADJUSTMENT-BASELINE-001`，2026-09-07）：只在展示内容/Tooltip/刷新布局/busy 视觉状态相关设计（§19）上补充设计落点，不改变 API/DATABASE 契约；本轮 `DESIGN.md`/`UI.md` 当前调整版本为 `DRAFT_ADJUSTMENT_PENDING_USER_REVIEW`、实现状态 `IMPLEMENTED_ADJUSTMENT_PENDING`、`pending_user_review=YES`、`pending_user_confirmation_count=0`；需求 `DSS-REQ-001~071`、验收 `DSS-AC-001~080` 全部 `NOT_RUN`（见 REQUIREMENTS/ACCEPTANCE 调整版本）；已批准基线保留为历史，批准旧基线不自动批准本轮调整草案。本轮调整草案尚未经 ChatGPT 正式复审与项目负责人批准，不得把本轮调整写成已批准、已实现或已验收。
+- 本版为 2026-09-07 验收前 UI 调整草案（`DATA-SOURCE-SNAPSHOT-STATUS-UI-ADJUSTMENT-BASELINE-001`）及其 R1 定向修订（`...-001-R1`）收口后的当前 UI 调整版本：只在展示内容/Tooltip/刷新布局/busy 视觉状态相关设计（§19）上补充设计落点，不改变 API/DATABASE 契约；该版本已经 ChatGPT 对 R1 结果提交 `5757237...` 独立正式复审 `APPROVED` 与项目负责人明确“批准”，`DESIGN.md`/`UI.md` 当前调整版本收口为 `APPROVED`（正式批准版本 `DATA-SOURCE-SNAPSHOT-STATUS-UI-ADJUSTMENT-BASELINE-APPROVAL-001`，批准内容基准提交 `5757237...`，2026-09-07，见 §20）、实现状态 `IMPLEMENTED_ADJUSTMENT_PENDING`、`pending_user_review=NO`、`pending_user_confirmation_count=0`；需求 `DSS-REQ-001~071`、验收 `DSS-AC-001~080` 全部 `NOT_RUN`（见 REQUIREMENTS/ACCEPTANCE 当前调整版本）。批准的是本轮 UI 调整设计：不代表本轮调整已实现、正式验收已执行或通过，不得把本轮批准写成功能已实现、验收已执行或通过（`IMPLEMENTED_ACCEPTED`/`PASS`/`ACCEPTED`）；既有批准基线保留为历史。
 - “设计文档已建立/已批准”不等于“功能已实现、验收已执行或通过”，也不等于 `IMPLEMENTED_ACCEPTED`；下一入口为**另立实现任务**（见 README §10）。
 - 本文件建议的类名/包名/文件路径用于后续实现阶段，**不代表当前仓库已存在这些实现**（现状盘点见 §3）。
 
@@ -663,12 +667,12 @@ ChatGPT 对上一结果提交（`31aa9f5beec7ded3cd798b3af617fd79a1606ed0`）进
 
 ### 19.1 范围与不变契约
 
-本版为**验收前 UI 调整草案**（2026-09-07，纯文档；未实现、未执行正式验收、未批准）。ChatGPT 对实现 R1 提交 `37825272c25c8a2d8a595ff0d5c25c6349186663` 代码复审 `CHANGES_REQUIRED`（表格长文本可读性、浏览器证据不足），项目负责人随后提出更完整的 UI 调整。本轮只调整前端**展示层**设计（§19.2~§19.6），在已批准设计 §5~§13 与 UI §1~§12 之上补充展示规则（界面细则见 UI §13）：
+本版为**验收前 UI 调整草案**（2026-09-07，纯文档；未实现、未执行正式验收；草案阶段未批准，已于 2026-09-07 经 ChatGPT 对 R1 结果独立正式复审 `APPROVED` 与项目负责人明确批准，收口为 `APPROVED`，见 §20）。ChatGPT 对实现 R1 提交 `37825272c25c8a2d8a595ff0d5c25c6349186663` 代码复审 `CHANGES_REQUIRED`（表格长文本可读性、浏览器证据不足），项目负责人随后提出更完整的 UI 调整。本轮只调整前端**展示层**设计（§19.2~§19.6），在已批准设计 §5~§13 与 UI §1~§12 之上补充展示规则（界面细则见 UI §13）：
 
 - **不改**：接口 `GET /api/monitor/data-source-run-state/list` 与请求/响应字段、`statusCategory`/原始状态值映射、排序、候选、时间格式与 null、行键、错误码；单飞行忙碌业务抑制、请求快照/两阶段条件、计时器、恢复可见补发、读取边界；`API.md`/`DATABASE.md` 整文件零差异；后端代码不改。
 - **对应需求**：新增 `DSS-REQ-066~071`（REQUIREMENTS §21），定向修订 `DSS-REQ-028/029/050`。
 - **对应验收**：新增 `DSS-AC-069~080`（ACCEPTANCE §4.18，全部 `NOT_RUN`），定向修订 `DSS-AC-026/027/068`。
-- 状态：`design_status(DESIGN/UI)` 当前调整版本 `DRAFT_ADJUSTMENT_PENDING_USER_REVIEW`、实现 `IMPLEMENTED_ADJUSTMENT_PENDING`、验收执行 `NOT_RUN`、人工页面验收 `NOT_RUN`、`pending_user_review=YES`、`pending_user_confirmation_count=0`。已批准基线保留为历史，批准旧基线不自动批准本轮草案。下一入口为 ChatGPT 对本调整草案正式复审（不是直接实现）。
+- 状态：本轮 UI 调整草案（§19）已经 ChatGPT 对 R1 结果提交 `5757237...` 独立正式复审 `APPROVED` 且项目负责人明确批准，`design_status(DESIGN/UI)` 当前调整版本由 `DRAFT_ADJUSTMENT_PENDING_USER_REVIEW` 收口为 `APPROVED`（正式批准版本 `DATA-SOURCE-SNAPSHOT-STATUS-UI-ADJUSTMENT-BASELINE-APPROVAL-001`，批准内容基准提交 `5757237...`，2026-09-07，见 §20）、实现 `IMPLEMENTED_ADJUSTMENT_PENDING`、验收执行 `NOT_RUN`、人工页面验收 `NOT_RUN`、`pending_user_review=NO`、`pending_user_confirmation_count=0`。既有批准基线保留为历史。下一入口为另立 UI 调整实现任务（不是在本任务直接实现）。
 
 ### 19.2 页面三块分区与结果卡片结构（UI §13.2）
 
@@ -732,3 +736,7 @@ ChatGPT 对上一结果提交（`31aa9f5beec7ded3cd798b3af617fd79a1606ed0`）进
 - §14.2 需求 → 设计落点 71/71；§14.3 验收 → 设计落点 80/80；无悬空。
 - `pending_user_confirmation_count=0`；本轮草案无待负责人补充决策项。
 - 状态迁移见 §1；`API.md`/`DATABASE.md` 整文件零差异；源码/测试/配置/既有证据零差异；本任务不执行数据库/构建/测试/浏览器/正式验收。完整调整落点与自检见执行报告 `reports/DATA-SOURCE-SNAPSHOT-STATUS-UI-ADJUSTMENT-BASELINE-001.md`。
+
+## 20. 本轮 UI 调整版本批准收口记录（`DATA-SOURCE-SNAPSHOT-STATUS-UI-ADJUSTMENT-BASELINE-APPROVAL-001`）
+
+- 本轮验收前 UI 调整草案（`DATA-SOURCE-SNAPSHOT-STATUS-UI-ADJUSTMENT-BASELINE-001`，§19）及其 R1 定向修订（`...-001-R1`）已批准收口：ChatGPT 对 R1 结果提交 `575723711ca39d7761df308c1c99b1e6e957cf70` 独立正式复审 `APPROVED`，项目负责人随后明确回复“批准”（批准日期 2026-09-07）。本批准只更新 `DESIGN.md`/`UI.md`/`REQUIREMENTS.md`/`ACCEPTANCE.md` 当前 UI 调整版本状态为 `APPROVED`（正式批准版本 `DATA-SOURCE-SNAPSHOT-STATUS-UI-ADJUSTMENT-BASELINE-APPROVAL-001`，批准内容基准提交 `5757237...`）并作文档级收口记录；相对批准内容基准，本设计 §19 全部设计内容与 §14.2/§14.3 追踪矩阵（需求 71/71、验收 80/80）业务内容零差异，UI §13 全部界面细则零差异；`API.md`/`DATABASE.md` 整文件零差异。实现状态保持 `IMPLEMENTED_ADJUSTMENT_PENDING`（本轮调整未实现）、验收执行 `NOT_RUN`、人工页面验收 `NOT_RUN`、`pending_user_review=NO`、`pending_user_confirmation_count=0`。批准的是本轮 UI 调整设计基线，不代表本轮调整已实现、正式验收已执行或通过，不等于 `IMPLEMENTED_ACCEPTED`。下一入口为另立 UI 调整实现任务（按 §19/UI §13 落地）。完整批准收口自检见报告 `reports/DATA-SOURCE-SNAPSHOT-STATUS-UI-ADJUSTMENT-BASELINE-APPROVAL-001.md`。
