@@ -11,33 +11,38 @@
 | 前端源码目录 | `frontend/src/views/data-source-run-state/`（保留既有目录名，UI §10） |
 | 目标文档 | `docs/features/data-source-snapshot-status/UI.md`（界面设计草案） |
 | 配套设计文档 | `DESIGN.md`（总设计入口）、`API.md`（接口设计草案）、`DATABASE.md`（数据库查询设计草案） |
-| 文档状态 | `APPROVED`（界面设计基线已批准，批准日期 2026-09-06；批准版本与批准内容基准见 DESIGN §1/§17 与 Feature README §5） |
-| requirements_status | `APPROVED`（`DSS-REQ-001~065` 共 65 条） |
-| acceptance_status | `APPROVED`（`DSS-AC-001~068` 共 68 条，全部 `NOT_RUN`） |
-| design_status | `APPROVED`（四份设计文档 DESIGN.md / UI.md / API.md / DATABASE.md 均已批准，见 DESIGN §1/§17） |
-| implementation_status | `IMPLEMENTED_PENDING_REVIEW`（本设计不编码；实现任务 `DATA-SOURCE-SNAPSHOT-STATUS-IMPLEMENTATION-001` 已按本设计替换占位页并实现界面，待代码复审与人工页面验收，见 Feature README §9） |
-| acceptance_execution_status | `NOT_RUN`（本设计不执行验收；68 条 `DSS-AC-*` 全部保持 `NOT_RUN`） |
-| pending_user_confirmation_count | `0`（与 DESIGN.md §15.2 一致） |
-| 设计任务编号 | `DATA-SOURCE-SNAPSHOT-STATUS-DESIGN-BASELINE-001` |
-| 创建日期 | 2026-09-05 |
+| 文档状态 | `DRAFT_ADJUSTMENT_PENDING_USER_REVIEW`（当前版为验收前 UI 调整草案 `DATA-SOURCE-SNAPSHOT-STATUS-UI-ADJUSTMENT-BASELINE-001`，建立在已批准界面设计基线之上；已批准基线保留为历史，**批准基线不自动批准本轮调整草案**，见本表“本版（UI 调整草案）任务编号/授权基线提交”与 §13 范围声明） |
+| requirements_status | `DRAFT_ADJUSTMENT_PENDING_USER_REVIEW`（当前调整版本，见 `REQUIREMENTS.md` `DSS-REQ-001~071` 共 71 条；已批准版本保留为历史） |
+| acceptance_status | `DRAFT_ADJUSTMENT_PENDING_USER_REVIEW`（当前调整版本，见 `ACCEPTANCE.md` `DSS-AC-001~080` 共 80 条，全部 `NOT_RUN`；已批准版本保留为历史） |
+| design_status | `DESIGN.md`/`UI.md` 当前调整版本为 `DRAFT_ADJUSTMENT_PENDING_USER_REVIEW`（本轮 UI 调整草案，见 §13）；`API.md`/`DATABASE.md` 保持已批准（`APPROVED`）且本轮**整文件零差异**（本轮不改接口、SQL、表结构、数据库访问与产品只读边界） |
+| implementation_status | `IMPLEMENTED_ADJUSTMENT_PENDING`（implementation_status=IMPLEMENTED_ADJUSTMENT_PENDING；既有实现 `DATA-SOURCE-SNAPSHOT-STATUS-IMPLEMENTATION-001`/`-R1` 已完成，但**本轮 UI 调整尚未实现**，待 ChatGPT 对本调整草案正式复审且项目负责人批准后另立实现） |
+| acceptance_execution_status | `NOT_RUN`（本设计不执行验收；既有 68 条 `DSS-AC-001~068` 与本调整新增 `DSS-AC-069~080` 全部保持 `NOT_RUN`） |
+| pending_user_confirmation_count | `0`（本轮调整无必须由项目负责人补充决策的待确认项） |
+| pending_user_review | `YES`（本轮为验收前 UI 调整草案，待 ChatGPT 对本调整草案正式复审与项目负责人审阅，pending_user_review=YES） |
+| 设计任务编号 | `DATA-SOURCE-SNAPSHOT-STATUS-DESIGN-BASELINE-001`（纯文档设计草案建立；历史） |
+| 本版（UI 调整草案）任务编号 | `DATA-SOURCE-SNAPSHOT-STATUS-UI-ADJUSTMENT-BASELINE-001`（验收前 UI 调整草案建立；ChatGPT 对实现 R1 提交 `37825272c25c8a2d8a595ff0d5c25c6349186663` 代码复审 `CHANGES_REQUIRED` 后，项目负责人提出更完整的 UI 调整，本轮在已批准界面设计基线之上建立**纯文档调整草案**；未实现、未执行正式验收、未批准，本文件规则落点见 §13） |
+| 本版（UI 调整草案）授权基线提交 | `37825272c25c8a2d8a595ff0d5c25c6349186663`（本任务开始时 `origin/develop` 最新提交，本地 HEAD 与其一致，ahead/behind=0/0） |
+| 创建日期 | 2026-09-05；2026-09-06 设计批准收口；2026-09-07 建立验收前 UI 调整草案 |
 
 **界面基调（整体）**：本页面采用与现有 app-shell 及 Element Plus 体系一致的企业管理后台**浅色**风格，不引入新视觉体系、不硬编码无依据的色彩（DSS-REQ-062/AC-060）。颜色一律沿用项目/Element Plus 既有语义令牌（见 §5.3），并保证**颜色不是唯一信息载体**（DSS-REQ-063/AC-061）。
 
-本任务只产出可实现的文字设计，不生成截图、不创建视觉资产。页面当前为占位页（`DataSourceRunStatePage.vue` 渲染 `PlaceholderPage`）；下述为**待实现页面设计**，不是当前已实现事实（DESIGN §3）。
+本任务只产出可实现的文字设计，不生成截图、不创建视觉资产。原“页面当前为占位页、下述为待实现页面设计”是设计草案阶段事实：实现任务 `DATA-SOURCE-SNAPSHOT-STATUS-IMPLEMENTATION-001`/`-R1` 已替换占位页为正式“源库快照状态”实现页（见 §12 与 Feature README §8/§9）。本节与 §2~§8 的展示布局描述为已批准界面设计基线；**2026-09-07 验收前 UI 调整草案（§13）对其中页面整体结构、结果卡片头部与刷新组、固定列宽与单元格内容、单实例 Tooltip、busy 视觉隔离作出定向调整**，实现阶段以当前版本（§2 结合 §13 及其“取代/修订”清单）为准。
 
 ## 2. 页面整体结构与定位声明
 
-页面替换既有占位页 `frontend/src/views/data-source-run-state/DataSourceRunStatePage.vue`（DESIGN §4.2），自上而下由固定区组成：
+页面为正式“源库快照状态”实现页 `frontend/src/views/data-source-run-state/DataSourceRunStatePage.vue`（DESIGN §4.2）。已批准设计把页面自上而下按“标题行/查询区/刷新工具栏/列表区”平铺；**本轮 UI 调整草案（§13）改为三块有清晰视觉分隔的分区**：①页头语义区（标题＋功能说明）、②独立查询卡片、③独立结果卡片（头部＝结果摘要＋右侧刷新逻辑组；主体＝七列表格）。目标结构（本轮调整草案，见 §13.2）：
 
 ```
 DataSourceRunStatePage.vue
-├─ 标题行：页面标题“源库快照状态”（§10）；下方一行简短只读定位说明（示例文案：“展示各探针端与源库组合的初始快照阶段状态；页面只读。”）
-├─ 查询区 DataSourceSnapshotQueryBar   （§3）
-├─ 刷新工具栏 DataSourceSnapshotToolbar（§6）
-├─ 列表区 DataSourceSnapshotTable      （§4/§5；加载/空/失败/错误覆盖见 §7）
+└─ 页面容器（浅色企业后台卡片分层，沿用项目现有设计令牌）
+   ├─ ① 页头语义区：标题“源库快照状态”（§10）＋ 一行简短只读定位功能说明（示例：“展示各探针端与源库组合的初始快照阶段状态；页面只读。”）
+   ├─ ② 查询卡片 DataSourceSnapshotQueryBar（独立白色容器，§3/§13.2）
+   └─ ③ 结果卡片（独立白色容器）
+       ├─ 头部 .dss-result-card__header：左侧结果摘要（共 N 条＋未知状态提示）＋右侧不可拆散刷新逻辑组（§13.2/§13.3）
+       └─ 主体 DataSourceSnapshotTable（§4/§5/§13.4；加载/空/失败/错误覆盖见 §7）
 ```
 
-- 组件划分（DESIGN §4.2）：`components/DataSourceSnapshotQueryBar.vue`、`components/DataSourceSnapshotTable.vue`、`components/DataSourceSnapshotToolbar.vue`、`components/DataSourceSnapshotStatusTag.vue`；编排由 `composables/useDataSourceSnapshot.ts` 承担（页面/composable 实例内状态；**不新增 Pinia store**，DESIGN §7，R1-01）。
+- 组件划分（DESIGN §4.2）：`components/DataSourceSnapshotQueryBar.vue`、`components/DataSourceSnapshotTable.vue`、`components/DataSourceSnapshotToolbar.vue`（本轮调整草案中其刷新内容归入结果卡片头部右侧“刷新逻辑组”，见 §13.3）、`components/DataSourceSnapshotStatusTag.vue`；编排由 `composables/useDataSourceSnapshot.ts` 承担（页面/composable 实例内状态；**不新增 Pinia store**，DESIGN §7，R1-01）。
 - **整页只呈现初始快照状态信息**：不得出现 sync-client 在线/健康/失联判定、增量采集是否正常、同步进度等语义，不得加“心跳/最后在线”等健康文案；对长时间 `SNAPSHOT_RUNNING` 行不得按运行时长给错误/警告色（DSS-REQ-007/056/057/010，AC-007/009/053/054）。
 - 不出现“未开始/待快照/尚无快照记录”等推断虚拟状态（DSS-REQ-018，AC-016，见 §4.2）；不提供任何写按钮、操作入口（DSS-REQ-012/034，AC-011/031，见 §4.6）。
 - 页面不显示分页条/每页条数/翻页控件（DSS-REQ-021，见 §4.7）。
@@ -99,19 +104,19 @@ DataSourceRunStatePage.vue
 
 表头固定七列，顺序为：**序号、探针端、源库、快照状态、快照启动时间、快照完成时间、记录更新时间**；无第八列“操作”或其它业务列（DSS-REQ-027，AC-025）。
 
-整体表现规则：表格一次渲染全部返回行，**不分页**（§4.7）；列宽建议与对齐见下表；内容单行 ellipsis，过长用 Tooltip 展示全文（Tooltip 规则见 §8）；单元格内不放编辑/跳转等可操作元素。
+整体表现规则：表格一次渲染全部返回行，**不分页**（§4.7）；本轮 UI 调整草案把列宽改为**目标固定列宽**（下表，取代原“建议最小宽度”，见 §13.4），对齐与内容规则如下；内容单行 ellipsis，过长用**页面级单实例 Tooltip** 展示全文（Tooltip 规则见 §8.1 与 §13.5）；单元格内不放编辑/跳转等可操作元素。
 
-| 列 | 建议最小宽度 | 对齐 | 说明 |
+| 列 | 目标固定列宽（本轮调整草案） | 对齐 | 说明 |
 |---|---|---|---|
-| 序号 | 56px | 居中 | §4.1 |
-| 探针端 | 160px | 左 | §4.3 |
-| 源库 | 200px | 左 | §4.4 |
-| 快照状态 | 130px | 居中 | §5.1/§5.2 |
-| 快照启动时间 | 170px | 左 | §4.5 |
-| 快照完成时间 | 170px | 左 | §4.5 |
-| 记录更新时间 | 170px | 左 | §4.5 |
+| 序号 | `70px` | 居中 | §4.1/§13.4 |
+| 探针端 | `170px` | 左 | §4.3/§13.4 |
+| 源库 | `280px`（明显宽于探针端列） | 左 | §4.4/§13.4 |
+| 快照状态 | `130px` | 居中 | §5.1/§5.2/§13.4 |
+| 快照启动时间 | `165px` | 左 | §4.5/§13.4 |
+| 快照完成时间 | `165px` | 左 | §4.5/§13.4 |
+| 记录更新时间 | `165px` | 左 | §4.5/§13.4 |
 
-窄屏/响应式：横向内容必要时允许出现容器滚动，不做换行挤列；表格最小宽度优先于挤压。
+窄屏/响应式：三个时间列使用固定列宽、长度固定，不把多余空间平均摊给时间列；表格内容过宽时允许表格容器横向滚动，不通过换行挤压时间或主要文本（§13.4）。
 
 ### 4.1 序号列与行键
 
@@ -125,16 +130,17 @@ DataSourceRunStatePage.vue
 
 ### 4.3 探针端列
 
-- 单元格内容：**原始 `CLIENT_ID` 恒展示**（主文本）；关联成功（`clientRef.state=ACTIVE`）且配置 `CLIENT_DESC` 非空时，可在主文本旁或次行以弱化次要文本补充展示描述（DSS-REQ-028，AC-026）。
-- 关联缺失（`NOT_FOUND`）或停用（`INACTIVE`）时主文本仍为原始 `CLIENT_ID`，并按 §5.4 加轻量异常提示（DSS-REQ-041/043，AC-038/040）。
+- **本轮 UI 调整草案（§13.4）单元格内容：表格内只显示原始 `CLIENT_ID`，单行、超出 `170px` 列宽省略号；不再把 `CLIENT_DESC` 同行或次行内联展示**（DSS-REQ-028 修订，AC-026/074）。
+- 关联成功（`clientRef.state=ACTIVE`）且配置 `CLIENT_DESC` 非空时：完整 `CLIENT_DESC` 经**悬停页面级单实例 Tooltip** 展示（§13.5）；描述为空时不弹空 Tooltip。
+- 关联缺失（`NOT_FOUND`）时主文本仍为原始 `CLIENT_ID`，并按 §5.4 加轻量异常提示，其 Tooltip/文字说明能表达“探针端配置缺失”；停用（`INACTIVE`）时保留轻量异常说明（DSS-REQ-028 修订/041/043，AC-026/038/040/074）。
 - 探针端不做类别判断，只判存在/停用（DESIGN §5.6）。
 
 ### 4.4 源库列
 
 - **单行展示，不采用两行 ORG＋ID 布局**（DSS-REQ-029，AC-027）。
-- 关联成功（`sourceRef.state=ACTIVE`）且存在 ORG：主文本显示**源库 `ORG`**，原始 `DATA_SOURCE_ID` 通过 Tooltip（悬浮）展示（AC-027）。
-- 关联不到源库（`NOT_FOUND`）：主文本直接显示原始 `DATA_SOURCE_ID`，并按 §5.4 加轻量异常提示（DSS-REQ-042，AC-039）。
-- 停用（`INACTIVE`）/类别非 SOURCE：主文本仍按 ORG 或 ID 展示（行保留），辅以 §5.4 提示（DSS-REQ-043/044，AC-040/041）。
+- **本轮 UI 调整草案（§13.4）**：正常关联（`sourceRef.state=ACTIVE`）且 ORG（`DATA_SOURCE_ORG`）非空时，主文本只显示**源库 ORG**，单行、超出 `280px` 列宽省略号；悬停以页面级单实例 Tooltip 展示**完整 ORG**，**不再以原始 `DATA_SOURCE_ID` 作为正常行 Tooltip 的默认内容**（DSS-REQ-029 修订，AC-027/075）。
+- 源库配置缺失（`NOT_FOUND`）**或 ORG 为空**：主文本回退显示原始 `DATA_SOURCE_ID`（不得显示空白），Tooltip 显示完整原始 ID 及对应异常说明，并按 §5.4 加轻量异常提示（DSS-REQ-029 修订/042，AC-027/039/075）。
+- 停用（`INACTIVE`）/类别非 SOURCE（含类别大小写不敏感归一）：行保留，主文本仍按 ORG 或回退 ID 展示，辅以 §5.4 提示（DSS-REQ-043/044，AC-040/041；展示取舍见 §13.4）。
 
 ### 4.5 三个时间列
 
@@ -199,23 +205,28 @@ DataSourceRunStatePage.vue
 
 ### 6.1 工具栏构成与只读说明
 
-刷新工具栏位于查询区与表格之间，左侧为说明文案，右侧为“立即刷新”按钮（AC-047）。
+已批准设计把刷新工具栏置于查询区与表格之间；**本轮 UI 调整草案（§13.3）把刷新控件收敛为结果卡片头部右侧的不可拆散“刷新逻辑组”**：灰色状态圆点＋`60 秒自动刷新`＋分隔符＋`最近成功刷新：HH:mm:ss`＋“立即刷新”按钮，整组靠右（AC-047/071）。
 
 ```
-[60 秒自动刷新｜最近成功刷新：14:20:33]               [ 立即刷新 ]
+结果卡片头部 .dss-result-card__header
+├─ 左：共 {records.length} 条〔其中 {unknownCount} 条未知状态，为 0 不显示〕（§13.2/§13.3）
+└─ 右：刷新逻辑组（整体靠右、窄宽度整体换行）
+     [● 60 秒自动刷新｜最近成功刷新：14:20:33]   [ 立即刷新 ]
 ```
 
-- 说明文案固定形如“60 秒自动刷新｜最近成功刷新：`HH:mm:ss`”；自动刷新与“立即刷新”**始终按“已应用查询条件”取数**，即使用户修改/重置界面条件或按新条件查询失败也一样（DSS-REQ-050/023，AC-047/024）。
+- 刷新逻辑组内容与语义沿用已批准设计（自动刷新与“立即刷新”**始终按“已应用查询条件”取数**，即使用户修改/重置界面条件或按新条件查询失败也一样；DSS-REQ-050/023，AC-047/024）。
 - 工具栏不含任何写入口；点击刷新只触发只读重查（DSS-REQ-014/052，AC-012/049）。
-- “最近成功刷新：”后无成功值时（从未成功）不显示时间或显示占位（如 `--`），首次成功后显示首次成功时刻（DESIGN §7.1 `lastSuccessAt`）。
+- “最近成功刷新：”后无成功值时（从未成功）显示 `--`，首次成功后显示首次成功时刻（DESIGN §7.1 `lastSuccessAt`）。
+- 宽度不足时刷新逻辑组**整体换行**，不得只把“立即刷新”按钮单独挤到下一行（§13.3，AC-071）。
 
-### 6.2 “立即刷新”按钮稳定宽度（AC-068 核心）
+### 6.2 “立即刷新”按钮稳定宽度与三态几何稳定（AC-068/072 核心）
 
 - 按钮**宽度恒定**：给定固定最小宽度且按钮内文字恒定（“立即刷新”），不随状态改变。
-- **刷新在途加载图标出现/消失不改变按钮宽度、不改变按钮文字内容**：加载态图标使用与按钮内固定占位同尺寸的方案（固定尺寸 loading 图标，出现时替换占位、消失时复原占位，或使用固定宽高 loading 使其不改变内容盒 intrinsic 宽度），避免图标显隐造成按钮水平跳动（DSS-REQ-050，AC-068）。
-- 按钮前的“60 秒自动刷新｜最近成功刷新：…”文案位于独立左侧区块，其与按钮的相对位置恒定；加载图标显隐、按钮在途状态**不得导致说明文案水平移动**、工具栏整体不因刷新在途发生明显水平位移（DSS-REQ-050，AC-068）。
+- **刷新在途加载图标出现/消失不改变按钮宽度、不改变按钮文字内容**：加载态图标使用与按钮内固定占位同尺寸的方案（固定尺寸 loading 图标，出现时替换占位、消失时复原占位，或使用固定宽高 loading 使其不改变内容盒 intrinsic 宽度），避免图标显隐造成按钮水平跳动（DSS-REQ-050/068，AC-068/072）。
+- 刷新逻辑组 idle/loading(在途)/failure 三态**几何稳定**：加载图标出现/消失不得移动“立即刷新”按钮本身、前方文案与“最近成功刷新”时间；整组在结果卡片头部右侧，其相对位置恒定；刷新失败提示置于不会推动刷新组关键元素的稳定槽位，出现/消失不造成工具栏明显水平跳动（DSS-REQ-068，AC-072）。
 - 说明文案本身不因刷新/失败改变宽度或换行。
 - **任一实际请求在途（busy）时“立即刷新”按钮禁用**：点击不接受、不排队、不补发（R1-02；DSS-REQ-053，AC-050）；禁用态变化同样不改变按钮宽度与文案（保持上述稳定宽度约束，AC-068）。
+- **busy 视觉隔离（§13.6）**：只有真正发起当前请求的操作呈现对应加载反馈；手工立即刷新在途时仅“立即刷新”显示 loading，条件查询不得让“立即刷新”出现虚假 loading；“查询”在刷新在途保持 disabled＋`aria-disabled` 且文字/颜色/尺寸/位置不闪动（DSS-REQ-071，AC-078/079）。
 
 ### 6.3 “最近成功刷新时间”与自动刷新说明
 
@@ -281,8 +292,11 @@ DataSourceRunStatePage.vue
 
 ### 8.1 Tooltip 规则
 
-- 用途限定：源库原始 `DATA_SOURCE_ID`、任意行原始 `SNAPSHOT_STATUS`、关联异常解释（§4.4/§5.2/§5.4）、单元格超长全文（§4）。
-- 文字简洁、单行为主；确需换行时使用短句；出现位置贴近目标单元格并做**边界避让**（不超出可视区/被裁切）；无必要不引入新组件库（沿用 Element Plus `el-tooltip` 及项目既有封装）。
+**本轮 UI 调整草案（§13.5）把 Tooltip 收敛为页面级单实例受控模型**：任意时刻整页最多 1 个 Tooltip，用单一 Tooltip Host 渲染“当前 Tooltip 内容槽”（受控触发键/内容/锚点/定位），不再由多个独立 Element Plus Tooltip 各自持有可并存的显示状态。
+
+- 用途限定（覆盖本页全部表格 Tooltip）：完整 `CLIENT_DESC`（探针端列，§4.3）、完整源库 ORG（正常行，§4.4）、回退显示的原始 `DATA_SOURCE_ID` 及异常说明（源库缺失/ORG 空，§4.4）、任意行原始 `SNAPSHOT_STATUS`（§5.2）、关联异常解释（缺失/停用/类别异常图标，§5.4）、单元格超长全文（§4）。源库正常行 Tooltip 内容为完整 ORG，不以原始 `DATA_SOURCE_ID` 作为默认内容（§13.5）。
+- 单实例与关闭（§13.5）：触发新项前先即时关闭旧项；离开触发区域、滚动、窗口缩放、表格数据替换、页面隐藏或卸载即关闭；快速横向/纵向扫过多行始终最多一个。
+- 展示（§13.5）：统一短暂显示延迟约 300~350ms 并即时关闭；不可交互（pointer-events none / 非 enterable）；文字简洁、单行为主，仅在完整内容物理宽度超过安全视口时于该极端情况换行保证全文可读与不越界；出现位置贴近目标单元格并对视口四边做**边界避让**（不超出可视区/不被表格容器裁切）；本页表格不混用原生 `title` 浏览器提示；可沿用 Element Plus Tooltip 底层实现，但显示/关闭由页面级受控层统一调度（§13.5）。
 
 ### 8.2 可访问性基础
 
@@ -315,6 +329,15 @@ DataSourceRunStatePage.vue
 | 浅色企业后台风格（§1/§2） | REQ-062 | AC-060 |
 | 文字非颜色唯一、色弱可读（§5.3/§8） | REQ-063 | AC-061 |
 | 浏览器只读目测：标题/七列/查询/刷新/无写/浅色/无 console 错误（§2~§7） | REQ-001/027/050/062 | AC-067 |
+| 页面三块清晰分区、结果卡片头部左侧摘要＋右侧刷新组（§2/§13.2） | REQ-066 | AC-069/080 |
+| 结果头部左侧 `共 N 条`＋`其中 N 条未知状态`（>0 才显示）（§13.2/§13.3） | REQ-067 | AC-070 |
+| 刷新逻辑组整体右对齐、窄宽度整体换行、idle/loading/failure 三态几何稳定（§6.1/§6.2/§13.3） | REQ-068 | AC-071/072 |
+| 七列固定列宽、源库列宽>探针端、三时间固定宽度、单行省略（§4/§13.4） | REQ-069 | AC-073/080 |
+| 探针端只显 CLIENT_ID＋Tooltip 完整描述＋配置缺失表达（§4.3/§13.4） | REQ-028 | AC-026/074 |
+| 源库 ORG 单行省略＋Tooltip 完整 ORG＋缺失/ORG 空回退原始 ID（§4.4/§13.4） | REQ-029 | AC-027/075 |
+| 页面级单实例受控 Tooltip：最多一个/即时关闭/不越界/无原生 title（§8.1/§13.5） | REQ-070 | AC-076/077 |
+| busy 视觉隔离：仅发起操作 loading、“查询”在刷新在途不闪动且 aria-disabled、无第二请求（§6.2/§13.6） | REQ-071 | AC-078/079 |
+| 1440×900 与 1920×1080 视口下三块/七列固定列宽/刷新组/单实例 Tooltip 正常（§2~§13） | REQ-066/069 | AC-080 |
 
 ## 10. 页面名称、菜单、路由元数据标题与面包屑统一更新
 
@@ -344,3 +367,74 @@ ChatGPT 对上一结果提交（`31aa9f5beec7ded3cd798b3af617fd79a1606ed0`）正
 ## 12. 实现任务完成记录（`DATA-SOURCE-SNAPSHOT-STATUS-IMPLEMENTATION-001`）
 
 2026-09-06 实现任务已按本界面设计完成（§1 元数据 `implementation_status` 同步为 `IMPLEMENTED_PENDING_REVIEW`）：`DataSourceRunStatePage.vue` 已替换占位页为正式“源库快照状态”页；`DataSourceSnapshotQueryBar/Table/Toolbar/StatusTag.vue`、`composables/useDataSourceSnapshot.ts`、`utils/` 与 `api/dataSourceSnapshot.ts`/`types/dataSourceSnapshot.ts` 落地；§10 变更清单中“路由元数据标题/菜单标题/页面标题/面包屑”四处用户可见名已统一为“源库快照状态”（`menu.ts` 本页标题行与 `router/index.ts` 本页标题元数据随实现提交，path 与目录名不变）。界面展示字段/颜色语义/状态与异常弱提示/空态/失败保留/稳定宽度等**业务设计零变化**（相对设计批准内容基准 `61117a62...`）；完整实现与真实浏览器证据见实现报告与 `evidence/DATA-SOURCE-SNAPSHOT-STATUS-IMPLEMENTATION-001/`；正式验收 68 条保持 `NOT_RUN`、人工页面验收 `NOT_RUN`。
+
+## 13. 本轮 UI 调整草案（`DATA-SOURCE-SNAPSHOT-STATUS-UI-ADJUSTMENT-BASELINE-001`）
+
+### 13.1 范围声明与取代/修订清单
+
+本版为**验收前 UI 调整草案**（2026-09-07，纯文档；未实现、未执行正式验收、未批准）。ChatGPT 对实现 R1 提交 `37825272c25c8a2d8a595ff0d5c25c6349186663` 代码复审 `CHANGES_REQUIRED`（表格长文本可读性、浏览器证据不足），项目负责人随后提出更完整的 UI 调整（页面分区、结果卡片头部、刷新组、固定列宽、单实例 Tooltip、busy 视觉隔离）。本轮只调整**展示层**：不改接口、SQL、表结构、数据库访问与产品只读边界（API.md/DATABASE.md 整文件零差异）；不改业务语义（排序/状态映射/序号/行键/空值/不补行/单飞行 busy 抑制/计时器/可见性补发等）。已批准界面设计基线保留为历史，批准旧基线不自动批准本轮调整草案。
+
+对本文件既定小节的取代/修订清单（实现阶段以本节 + 被修订小节为准）：
+
+| 影响小节 | 本轮调整 | 对应新增需求/验收 |
+|---|---|---|
+| §2 页面整体结构 | 三块清晰分区；标题与功能说明同一页头语义区；查询/结果各为独立卡片 | DSS-REQ-066，AC-069 |
+| §6 刷新工具栏 | 刷新控件收敛为结果卡片头部右侧不可拆散“刷新逻辑组”，整组靠右、窄宽度整体换行 | DSS-REQ-068，AC-071/072 |
+| §4 列宽与 §4.3/§4.4 单元格 | 目标固定列宽（源库宽于探针端、三时间固定宽）；探针端只显 CLIENT_ID、源库正常只显 ORG；Tooltip 全文；缺失/ORG 空回退原始 ID | DSS-REQ-069 + REQ-028/029 修订，AC-073/074/075 |
+| §8.1 Tooltip | 页面级单实例受控模型 | DSS-REQ-070，AC-076/077 |
+| §6.2 与刷新 busy | busy 视觉隔离（仅发起操作 loading、“查询”不闪动且 aria-disabled、无第二请求） | DSS-REQ-071，AC-078/079 |
+| 头部左侧 | 结果摘要 `共 N 条`＋`其中 N 条未知状态`（>0 才显示） | DSS-REQ-067，AC-070 |
+
+### 13.2 页面三块结构与结果卡片头部（DSS-REQ-066/067）
+
+- **三块分区**：页面自上而下为 ① 页头语义区（标题“源库快照状态”＋功能说明；功能说明表达“探针端与源库组合的初始快照阶段状态、页面只读”，不得加在线/健康/同步进度等推断；清楚但不过度抢眼的信息提示表现）、② 查询卡片（独立白色容器、边框/圆角、合理内边距与上下间距；含探针端/源库/快照状态三多选与查询、重置）、③ 结果卡片（独立白色容器；头部与主体之间清晰轻量分隔）。背景/边框/圆角/阴影/间距与 app-shell 及 Element Plus 浅色企业后台一致，不引入另一套视觉体系。
+- **结果卡片头部**：左侧放结果摘要，右侧放刷新逻辑组（§13.3）。
+- **头部左侧结果摘要**：展示当前成功结果总数 `共 {records.length} 条`；当 `records` 中含 `statusCategory=UNKNOWN`（计数 `unknownCount`>0）时其后追加轻量橙色提示 `其中 {unknownCount} 条未知状态`（只统计接口返回 `statusCategory=UNKNOWN`，不推断健康/错误）；为 0 时不显示。既有行内关联异常提示保留，头部不做复杂多类别汇总。
+- 本 Feature 最多约 100 行继续不分页；参考图若含分页，本页不因此增加分页。
+
+### 13.3 结果卡片头部右侧不可拆散刷新逻辑组（DSS-REQ-068）
+
+- 刷新逻辑组为**不可拆散单一逻辑组**，靠右排列，按序含：灰色状态圆点（刷新在途变蓝色动态；圆点只是伴随状态，文字是主要信息载体）→ `60 秒自动刷新` → 分隔符 → `最近成功刷新：HH:mm:ss`（从未成功为 `--`）→ “立即刷新”按钮。
+- 不以“说明文案靠左、按钮单独靠右”的方式拆散；宽度不足时**整组换行**，禁止只把“立即刷新”按钮单独挤到下一行。
+- **三态几何稳定**：刷新组在 idle / loading(在途) / failure 三态下，“立即刷新”按钮宽度恒定，加载图标出现/消失不改变按钮宽度、不移动按钮本身、前方文案与“最近成功刷新”时间；刷新失败提示置于不会推动刷新组关键元素的稳定槽位（固定高度/替换性文本槽），出现/消失不造成工具栏明显水平跳动。
+- 语义沿用已批准设计（§6）：自动/立即刷新均按“已应用查询条件”取数；最近成功刷新时间仅成功刷新后更新；失败约 60 秒自动重试；在途抑制/禁用不提示不补发。
+
+### 13.4 七列固定列宽与单元格展示（DSS-REQ-069，修订 REQ-028/029）
+
+七列顺序与状态/时间排序、状态映射、序号规则、行键、空值规则和“不补行”边界**不变**；目标固定列宽（§4 表格）：
+
+- 序号 `70px` 居中；探针端 `170px` 左、单行；源库 `280px` 左、单行（**必须明显宽于探针端列**）；快照状态 `130px` 居中；快照启动时间/快照完成时间/记录更新时间各 `165px` 左（固定格式 `YYYY-MM-DD HH:mm:ss`，空值 `--`）。
+- 三个时间列长度固定、使用固定列宽，不把多余空间平均摊给时间列；表格过宽时允许**表格容器横向滚动**，不通过换行挤压时间或主要文本。
+- **探针端列**：只显示原始 `CLIENT_ID`（单行、超出列宽省略号）；完整 `CLIENT_DESC` 经悬停单实例 Tooltip（§13.5）展示；描述为空时不弹空 Tooltip；探针配置缺失仍显示原始 `CLIENT_ID` 且 Tooltip/异常提示能表达“探针端配置缺失”；停用保留轻量异常说明。
+- **源库列**：正常关联且 ORG 非空时只显示 `DATA_SOURCE_ORG`（单行、超出列宽省略号），悬停 Tooltip 显示完整 ORG，**不以原始 `DATA_SOURCE_ID` 作为正常行 Tooltip 默认内容**；源库配置缺失或 ORG 为空时**回退显示原始 `DATA_SOURCE_ID`（不得空白）**，Tooltip 显示完整原始 ID 及对应异常说明；停用、类别非 SOURCE（大小写不敏感归一）等既有轻量异常语义保留。
+- 表格内不使用与受控 Tooltip 并存的原生 `title`。
+
+### 13.5 页面级单实例受控 Tooltip（DSS-REQ-070）
+
+- 页面任意时刻最多显示 **1 个 Tooltip**，覆盖本页全部表格 Tooltip（探针端描述、完整源库 ORG、未知状态原始值、探针/源库缺失/停用/类别异常图标说明等）。
+- **状态模型**：页面/composable 持一个受控“当前 Tooltip 内容槽” `currentTooltip = { key, content, anchor, placement } | null`，由单一 Tooltip Host 渲染；key 为稳定触发键（cell 定位或异常图标定位），key 相同不重复弹出。
+- 触发新 key 前先置 `currentTooltip=null`（即时关闭旧项），不允许旧项与新项同时残留；快速横向/纵向扫过多行始终最多一个。
+- **显示延迟统一约 300~350ms**，离开触发区在延迟窗内即取消，随后即时关闭；不依赖多个独立 Element Plus Tooltip 各自延迟并存。
+- **关闭事件**：离开触发元素/触发 key 变化、滚动（页面或表格容器）、窗口缩放（resize）、表格数据替换（records 变化）、页面隐藏（visibilitychange）、组件卸载（unmount）均置空并清除延迟/定位定时器。
+- **不可交互**：pointer-events none / 非 enterable，避免鼠标进入 Tooltip 本体遗留。
+- **边界定位**：对视口四边做边界避让，不超出可视区、不被表格容器 overflow 裁切（Teleport 到合适层）；内容优先单行，仅当完整内容物理宽度超安全视口时于该极端情况换行保证全文可读与不越界。
+- **混用禁止**：表格不使用原生 `title` 浏览器提示，展示来源唯一为受控 Tooltip。
+
+### 13.6 busy 视觉隔离（DSS-REQ-071）
+
+- **业务规则不变**：单飞行、忙碌抑制、不并发、不排队、不补发（已批准 §3.6/§6.2/§6.4 与 DESIGN §7.5/§9）。
+- **加载反馈只出现在真正发起当前请求的操作元素上**：手工立即刷新在途 → 仅“立即刷新”显示 loading；条件查询在途 → 仅“查询”显示 loading；不得让非发起按钮（如刷新在途的“查询”）出现虚假 loading/被点击错觉。
+- **“查询”在刷新在途不闪动**：其文字/颜色/尺寸/位置不变；保持不可发起（禁用）且鼠标与键盘均阻断，并具正确 `aria-disabled` 语义。
+- 点击“立即刷新”时网络层只有一次按当前已应用条件发出的刷新请求、无额外查询请求（证明目标见 AC-078）。
+- 不能通过允许并发、取消当前请求后偷换为查询、排队查询或静默补发来解决视觉问题。
+
+### 13.7 预计受影响实现文件（仅列示，本任务为纯文档一律零修改）
+
+预计（最终以实现任务为准）：`frontend/src/views/data-source-run-state/DataSourceRunStatePage.vue`（三块分区/结果卡片容器与头部布局）；`components/DataSourceSnapshotToolbar.vue`（刷新逻辑组布局、三态几何稳定、失败提示稳定槽位、busy 视觉隔离配合）；`components/DataSourceSnapshotTable.vue`（固定列宽、单行省略、CLIENT_ID/ORG 与回退展示、受控 Tooltip 触发点、去掉原生 title）；`components/DataSourceSnapshotQueryBar.vue`（如需配合“查询”不闪动）；`composables/useDataSourceSnapshot.ts`（受控 Tooltip 当前槽与独立 querying/refreshing 标志等，最终随实现确定）。不改：后端代码、`API.md`/`DATABASE.md` 契约、既有证据、`topic-offset` 或其它页面（本 Feature 调整经实现与复审通过后才提炼项目级列表页标准，另立任务）。
+
+### 13.8 状态与自检摘要
+
+- 对应需求：`DSS-REQ-066~071`（新增，见 REQUIREMENTS §21）；定向修订 `DSS-REQ-028/029/050`。
+- 对应验收：`DSS-AC-069~080`（新增，见 ACCEPTANCE §4.18，全部 `NOT_RUN`）；定向修订 `DSS-AC-026/027/068`。
+- 状态：`design_status(DESIGN/UI)` 当前调整版本 `DRAFT_ADJUSTMENT_PENDING_USER_REVIEW`；实现状态 `IMPLEMENTED_ADJUSTMENT_PENDING`；验收执行 `NOT_RUN`；人工页面验收 `NOT_RUN`；`pending_user_review=YES`；`pending_user_confirmation_count=0`。
+- 设计补充/一致性：DESIGN §19（本轮 UI 调整草案设计记录与 §14.2/§14.3 追踪更新）。API/DATABASE 契约零变化。下一入口为 ChatGPT 对本 UI 调整基线草案的正式复审（不是直接实现）。
