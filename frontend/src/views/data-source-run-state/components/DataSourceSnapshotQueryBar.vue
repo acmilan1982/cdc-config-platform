@@ -6,7 +6,8 @@
         :model-value="draft.clients"
         multiple
         collapse-tags
-        class="dss-select"
+        class="dss-select dss-client-select"
+        popper-class="dss-client-popper"
         placeholder="全部"
         @change="(val: string[]) => onChange('clients', val)"
       >
@@ -25,7 +26,8 @@
         :model-value="draft.sources"
         multiple
         collapse-tags
-        class="dss-select"
+        class="dss-select dss-source-select"
+        popper-class="dss-source-popper"
         placeholder="全部"
         @change="(val: string[]) => onChange('sources', val)"
       >
@@ -44,7 +46,8 @@
         :model-value="draft.statuses"
         multiple
         collapse-tags
-        class="dss-select"
+        class="dss-select dss-status-select"
+        popper-class="dss-status-popper"
         placeholder="全部"
         @change="(val: string[]) => onChange('statuses', val)"
       >
@@ -113,9 +116,18 @@ const STATUS_LABELS: Record<StatusToken, string> = {
   UNKNOWN: '未知状态',
 }
 
+/** 展示截断：按 Unicode code point（等价 code-point 安全）截取前 max 个，超出追加英文 "..."；只影响展示，不改变完整 value（DSS-REQ-075，AC-084）。 */
+function truncateCodePoints(text: string, max: number): string {
+  const points = Array.from(text)
+  if (points.length <= max) return text
+  return `${points.slice(0, max).join('')}...`
+}
+
 function clientLabel(c: ClientCandidate): string {
   const desc = c.desc == null ? '' : c.desc.trim()
-  return desc.length > 0 ? `${c.id}（${c.desc}）` : c.id
+  const idPart = truncateCodePoints(c.id, 20)
+  if (desc.length === 0) return idPart
+  return `${idPart}（${truncateCodePoints(desc, 20)}）`
 }
 
 function sourceLabel(s: SourceCandidate): string {
@@ -146,7 +158,7 @@ function withGhost(
 const clientOptions = computed<Opt[]>(() => {
   const known = props.clients.map((c) => c.id)
   const knownOptions = props.clients.map((c) => ({ value: c.id, label: clientLabel(c) }))
-  return [{ value: ALL_OPTION, label: '全部' }, ...withGhost(draft.clients, known, knownOptions, (id) => `${id}（不在候选内）`)]
+  return [{ value: ALL_OPTION, label: '全部' }, ...withGhost(draft.clients, known, knownOptions, (id) => `${truncateCodePoints(id, 20)}（不在候选内）`)]
 })
 
 const sourceOptions = computed<Opt[]>(() => {
@@ -207,6 +219,38 @@ defineExpose({ reset: onReset })
 .dss-select {
   width: 200px;
 }
+/* 控件宽度约束（DSS-REQ-075，AC-085）：探针端 240px < 源库 300px，延续“探针端列表短于源库”约束；快照状态维持约 200px */
+.dss-client-select {
+  width: 240px;
+}
+.dss-source-select {
+  width: 300px;
+}
+.dss-status-select {
+  width: 200px;
+}
+/* 选中标签宽度约束与 ellipsis：超长 ID/描述不撑大选择框、不换行推高、不推动其后条件与按钮；底层选中值仍为完整 ID */
+.dss-client-select :deep(.el-select__selected-item),
+.dss-source-select :deep(.el-select__selected-item),
+.dss-status-select :deep(.el-select__selected-item) {
+  max-width: 100%;
+  overflow: hidden;
+}
+.dss-client-select :deep(.el-select__selected-item .el-tag),
+.dss-source-select :deep(.el-select__selected-item .el-tag),
+.dss-status-select :deep(.el-select__selected-item .el-tag) {
+  max-width: 100%;
+  overflow: hidden;
+}
+.dss-client-select :deep(.el-select__tags-text),
+.dss-source-select :deep(.el-select__tags-text),
+.dss-status-select :deep(.el-select__tags-text) {
+  display: inline-block;
+  max-width: 100%;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
 .dss-q-actions {
   display: inline-flex;
   align-items: center;
@@ -220,5 +264,22 @@ defineExpose({ reset: onReset })
 .dss-ghost .el-select-dropdown__item {
   color: #c0c4cc;
   font-style: italic;
+}
+
+/* 下拉面板宽度上限（DSS-REQ-075，AC-084）：探针端 ≤480px、源库 ≤560px，均不超过安全视口 calc(100vw - 16px)；
+   探针端/源库/快照状态专属 popper-class 均使用本 Feature 命名空间，不污染全局选择器 */
+.dss-client-popper {
+  max-width: min(480px, calc(100vw - 16px));
+}
+.dss-source-popper {
+  max-width: min(560px, calc(100vw - 16px));
+}
+/* 下拉项保持单行：逻辑截断（20 字符）为主，text-overflow:ellipsis 作为面板极窄或字体差异下的最终保护 */
+.dss-client-popper .el-select-dropdown__item,
+.dss-source-popper .el-select-dropdown__item,
+.dss-status-popper .el-select-dropdown__item {
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
 }
 </style>

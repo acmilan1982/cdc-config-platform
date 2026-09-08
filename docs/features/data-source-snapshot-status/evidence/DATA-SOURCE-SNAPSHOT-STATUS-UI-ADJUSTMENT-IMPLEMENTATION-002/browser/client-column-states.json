@@ -1,0 +1,158 @@
+{
+  "scenario": "M1 ACTIVE/INACTIVE/NOT_FOUND/empty-desc client states (browser-layer temporary interception)",
+  "rows": [
+    {
+      "seq": "1",
+      "mainText": "PROBE-ACTIVE-01",
+      "hasInactiveMark": false,
+      "inactiveText": null,
+      "markTag": null,
+      "markIconEl": false,
+      "yellowIconInRow": false
+    },
+    {
+      "seq": "2",
+      "mainText": "PROBE-INACT-01",
+      "hasInactiveMark": true,
+      "inactiveText": "停用",
+      "markTag": "SPAN",
+      "markIconEl": false,
+      "yellowIconInRow": false
+    },
+    {
+      "seq": "3",
+      "mainText": "PROBE-INACT-02",
+      "hasInactiveMark": true,
+      "inactiveText": "停用",
+      "markTag": "SPAN",
+      "markIconEl": false,
+      "yellowIconInRow": false
+    },
+    {
+      "seq": "4",
+      "mainText": "PROBE-NOTF-01",
+      "hasInactiveMark": false,
+      "inactiveText": null,
+      "markTag": null,
+      "markIconEl": false,
+      "yellowIconInRow": false
+    },
+    {
+      "seq": "5",
+      "mainText": "PROBE-EMPTY-01",
+      "hasInactiveMark": false,
+      "inactiveText": null,
+      "markTag": null,
+      "markIconEl": false,
+      "yellowIconInRow": false
+    }
+  ],
+  "yellowHintIconsTotal": 0,
+  "markIsPlainTextSpan": true,
+  "inactiveMarkRows": [
+    "2",
+    "3"
+  ],
+  "tooltipFacts": [
+    {
+      "row": 0,
+      "label": "ACTIVE desc",
+      "anchor": {
+        "x": 422.2421875,
+        "y": 370,
+        "row": 0,
+        "text": "PROBE-ACTIVE-01",
+        "kind": "client-desc-PROBE-ACTIVE-01\u0000SRC-ORA-0001",
+        "w": 124
+      },
+      "tooltip": {
+        "visible": true,
+        "count": 1,
+        "content": "正常运行探针描述甲",
+        "inViewport": true,
+        "top": 389,
+        "left": 353,
+        "w": 139,
+        "h": 34
+      }
+    },
+    {
+      "row": 1,
+      "label": "INACTIVE desc",
+      "anchor": {
+        "x": 415.5,
+        "y": 410,
+        "row": 1,
+        "text": "PROBE-INACT-01",
+        "kind": "client-desc-PROBE-INACT-01\u0000SRC-ORA-0002",
+        "w": 111
+      },
+      "tooltip": {
+        "visible": true,
+        "count": 1,
+        "content": "已停用探针的说明文字",
+        "inViewport": true,
+        "top": 429,
+        "left": 340,
+        "w": 152,
+        "h": 34
+      }
+    },
+    {
+      "row": 2,
+      "label": "INACTIVE empty",
+      "anchor": {
+        "x": 415.5,
+        "y": 450,
+        "row": 2,
+        "text": "PROBE-INACT-02",
+        "kind": "client-desc-PROBE-INACT-02\u0000SRC-MYSQL-0001",
+        "w": 111
+      },
+      "tooltip": {
+        "visible": false,
+        "count": 0
+      }
+    },
+    {
+      "row": 3,
+      "label": "NOT_FOUND desc",
+      "anchor": {
+        "x": 416.0078125,
+        "y": 490,
+        "row": 3,
+        "text": "PROBE-NOTF-01",
+        "kind": "client-desc-PROBE-NOTF-01\u0000SRC-KAFKA-0001",
+        "w": 112
+      },
+      "tooltip": {
+        "visible": true,
+        "count": 1,
+        "content": "配置未映射仍保留的说明",
+        "inViewport": true,
+        "top": 438,
+        "left": 334,
+        "w": 165,
+        "h": 34
+      }
+    },
+    {
+      "row": 4,
+      "label": "ACTIVE empty",
+      "anchor": {
+        "x": 420.4296875,
+        "y": 530,
+        "row": 4,
+        "text": "PROBE-EMPTY-01",
+        "kind": "client-desc-PROBE-EMPTY-01\u0000SRC-ORA-0003",
+        "w": 121
+      },
+      "tooltip": {
+        "visible": false,
+        "count": 0
+      }
+    }
+  ],
+  "listRequestCount": 1,
+  "sinkErr": null
+}

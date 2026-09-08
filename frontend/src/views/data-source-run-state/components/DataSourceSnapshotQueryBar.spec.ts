@@ -1,5 +1,7 @@
 import { describe, it, expect } from 'vitest'
 import { mount, flushPromises, type VueWrapper } from '@vue/test-utils'
+import { readFileSync } from 'node:fs'
+import { resolve } from 'node:path'
 import { nextTick } from 'vue'
 import ElementPlus from 'element-plus'
 import DataSourceSnapshotQueryBar from './DataSourceSnapshotQueryBar.vue'
@@ -230,6 +232,115 @@ describe('DataSourceSnapshotQueryBar 候选下拉幽灵项（UI §3.5）', () =>
     await queryButton(wrapper).trigger('click')
     const emitted = wrapper.emitted('query')!
     expect((emitted[0][0] as { clients: string[] }).clients).toEqual(['CL1'])
+    wrapper.unmount()
+  })
+})
+
+describe('DataSourceSnapshotQueryBar 探针端下拉长度与文本截断（UI §16.5，DSS-REQ-075，AC-084）', () => {
+  const LONG_ID = 'X'.repeat(25)
+  const LONG_DESC = 'Y'.repeat(25)
+
+  async function mountProbe(desc: string | null) {
+    return mountBar({ clients: [{ id: LONG_ID, desc, active: true }] })
+  }
+
+  function dropdownItems(): HTMLElement[] {
+    const popper = document.body.querySelector('.el-select-dropdown.dss-client-popper') as HTMLElement | null
+    if (!popper) throw new Error('未找到 dss-client-popper 下拉面板')
+    return Array.from(popper.querySelectorAll('.el-select-dropdown__item')) as HTMLElement[]
+  }
+
+  it('ID/描述各截断到前 20 个 Unicode 字符并追加英文 ...；完整 value 不截断，点击查询提交完整 ID', async () => {
+    const wrapper = await mountProbe(LONG_DESC)
+    await openSelect(wrapper, 0)
+    const items = dropdownItems()
+    // 第一项“全部”完整显示
+    expect(items[0]!.textContent!.trim()).toBe('全部')
+    // 长 ID/描述显示：20 + "..."
+    const longItem = items[1]!
+    expect(longItem.textContent!.trim()).toMatch(/^X{20}\.\.\.（Y{20}\.\.\.）$/)
+    longItem.click()
+    await nextTick()
+    await nextTick()
+
+    await queryButton(wrapper).trigger('click')
+    const emitted = wrapper.emitted('query')!
+    expect((emitted[0][0] as { clients: string[] }).clients).toEqual([LONG_ID])
+    wrapper.unmount()
+  })
+
+  it('描述为空时只显示截断后的 ID，不显示空括号', async () => {
+    const wrapper = await mountProbe(null)
+    await openSelect(wrapper, 0)
+    const item = dropdownItems()[1]!
+    expect(item.textContent!.trim()).toMatch(/^X{20}\.\.\.$/)
+    expect(item.textContent).not.toContain('（')
+    wrapper.unmount()
+  })
+
+  it('码点安全：截断按 Unicode code point，不拆开代理对（emoji 超出 20 码点正常截断）', async () => {
+    const emojiId = '😀'.repeat(25)
+    const wrapper = await mountBar({ clients: [{ id: emojiId, desc: null, active: true }] })
+    await openSelect(wrapper, 0)
+    const item = dropdownItems()[1]!
+    // 恰好 20 个完整 emoji + "..."
+    expect(item.textContent!.trim()).toMatch(/^(?:😀){20}\.\.\.$/)
+    item.click()
+    await nextTick()
+    await nextTick()
+    await queryButton(wrapper).trigger('click')
+    const emitted = wrapper.emitted('query')!
+    expect((emitted[0][0] as { clients: string[] }).clients).toEqual([emojiId])
+    wrapper.unmount()
+  })
+
+  it('ghost（不在候选内）候选按相同 ID 截断规则展示，且保留“不在候选内”语义；提交仍用完整值', async () => {
+    const wrapper = await mountProbe(null)
+    await openSelect(wrapper, 0)
+    dropdownItems()[1]!.click()
+    await nextTick()
+    await nextTick()
+
+    // 候选列表变化：长 ID 已不存在（候选为空）
+    await wrapper.setProps({ clients: [] })
+    await nextTick()
+
+    await openSelect(wrapper, 0)
+    const popper = document.body.querySelector('.el-select-dropdown.dss-client-popper') as HTMLElement
+    const item = Array.from(popper.querySelectorAll('.el-select-dropdown__item')).find((it) =>
+      it.textContent?.includes('不在候选内'),
+    ) as HTMLElement
+    expect(item.textContent!.trim()).toMatch(/^X{20}\.\.\.（不在候选内）$/)
+    expect(item.classList.contains('dss-ghost')).toBe(true)
+
+    await queryButton(wrapper).trigger('click')
+    const emitted = wrapper.emitted('query')!
+    expect((emitted[0][0] as { clients: string[] }).clients).toEqual([LONG_ID])
+    wrapper.unmount()
+  })
+})
+
+describe('DataSourceSnapshotQueryBar 控件宽度与下拉面板宽度约束（UI §16.5，DSS-REQ-075，AC-085）', () => {
+  it('源码字面量契约：控件宽度 探针端 240 / 源库 300 / 快照状态 200，popper-class 使用 Feature 命名空间', () => {
+    const src = readFileSync(resolve(process.cwd(), 'src/views/data-source-run-state/components/DataSourceSnapshotQueryBar.vue'), 'utf8')
+    expect(src).toMatch(/\.dss-client-select\s*\{\s*width:\s*240px;\s*\}/s)
+    expect(src).toMatch(/\.dss-source-select\s*\{\s*width:\s*300px;\s*\}/s)
+    expect(src).toMatch(/\.dss-status-select\s*\{\s*width:\s*200px;\s*\}/s)
+    expect(src).toContain('popper-class="dss-client-popper"')
+    expect(src).toContain('popper-class="dss-source-popper"')
+    expect(src).toContain('popper-class="dss-status-popper"')
+  })
+
+  it('源码字面量契约：下拉面板上限 探针端 ≤480px、源库 ≤560px，均不超过安全视口 calc(100vw - 16px)', () => {
+    const src = readFileSync(resolve(process.cwd(), 'src/views/data-source-run-state/components/DataSourceSnapshotQueryBar.vue'), 'utf8')
+    expect(src).toMatch(/\.dss-client-popper\s*\{\s*max-width:\s*min\(480px,\s*calc\(100vw - 16px\)\);\s*\}/s)
+    expect(src).toMatch(/\.dss-source-popper\s*\{\s*max-width:\s*min\(560px,\s*calc\(100vw - 16px\)\);\s*\}/s)
+  })
+
+  it('打开探针端下拉时挂载专属 popper-class（命名空间化，不污染全局下拉样式）', async () => {
+    const wrapper = await mountBar()
+    await openSelect(wrapper, 0)
+    expect(document.body.querySelector('.el-select-dropdown.dss-client-popper')).toBeTruthy()
     wrapper.unmount()
   })
 })

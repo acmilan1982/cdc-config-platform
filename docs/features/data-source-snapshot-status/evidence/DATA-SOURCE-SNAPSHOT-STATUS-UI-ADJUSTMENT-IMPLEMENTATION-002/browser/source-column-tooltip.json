@@ -1,0 +1,69 @@
+{
+  "scenario": "M2 source col: normal ORG row and fallback (org null / NOT_FOUND) row; tooltip always full raw DATA_SOURCE_ID (never ORG)",
+  "cells": [
+    {
+      "seq": "1",
+      "sourceMainText": "订单中心业务源库（MYSQL 主库）",
+      "hasRedStopInSourceCol": false,
+      "hasYellowInSourceCol": false
+    },
+    {
+      "seq": "2",
+      "sourceMainText": "SRC-ORA-LGD-7766",
+      "hasRedStopInSourceCol": false,
+      "hasYellowInSourceCol": false
+    }
+  ],
+  "normalRow": {
+    "sourceMainText": "订单中心业务源库（MYSQL 主库）",
+    "tooltip": {
+      "anchor": {
+        "x": 640.1953125,
+        "y": 370,
+        "row": 0,
+        "text": "订单中心业务源库（MYSQL 主库）",
+        "kind": "source-main-P-CLIENT-001\u0000SRC-MYSQL-BIZ-8801",
+        "w": 220
+      },
+      "tooltip": {
+        "visible": true,
+        "count": 1,
+        "content": "SRC-MYSQL-BIZ-8801",
+        "inViewport": true,
+        "top": 389,
+        "left": 562,
+        "w": 157,
+        "h": 34
+      }
+    }
+  },
+  "fallbackRow": {
+    "sourceMainText": "SRC-ORA-LGD-7766",
+    "tooltip": {
+      "anchor": {
+        "x": 596.9140625,
+        "y": 410,
+        "row": 1,
+        "text": "SRC-ORA-LGD-7766",
+        "kind": "source-main-P-CLIENT-002\u0000SRC-ORA-LGD-7766",
+        "w": 134
+      },
+      "tooltip": {
+        "visible": true,
+        "count": 1,
+        "content": "SRC-ORA-LGD-7766",
+        "inViewport": true,
+        "top": 429,
+        "left": 524,
+        "w": 146,
+        "h": 34
+      }
+    }
+  },
+  "bothTooltipEqualRawId": true,
+  "tooltipNotOrg": true,
+  "noYellowInSource": true,
+  "noRedStopInSource": true,
+  "listRequestCount": 1,
+  "sinkErr": null
+}

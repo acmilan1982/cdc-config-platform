@@ -1,0 +1,143 @@
+{
+  "scenario": "click 立即刷新 once => exactly +1 list GET; geometry/query-button stable; query with UNKNOWN applied; 重置 => +0 requests; dropdowns return to 全部",
+  "requestBeforeRefresh": 6,
+  "requestDuringRefreshSample": 7,
+  "requestAfterRefresh": 7,
+  "manualDelta": 1,
+  "idle": {
+    "group": {
+      "x": 974,
+      "y": 240,
+      "w": 393,
+      "h": 32
+    },
+    "dot": {
+      "x": 974,
+      "y": 252,
+      "w": 8,
+      "h": 8
+    },
+    "text": "60 秒自动刷新",
+    "time": "最近成功刷新：23:08:51",
+    "btn": {
+      "x": 1257,
+      "y": 240,
+      "w": 110,
+      "h": 32
+    },
+    "btnInnerText": "立即刷新",
+    "summaryCount": "共 30 条",
+    "queryBtnText": [
+      "",
+      "",
+      "",
+      "查询",
+      "重置"
+    ],
+    "queryBtnLoading": false,
+    "queryBtnDisabled": false,
+    "headerTop": 311,
+    "headerWrapRect": {
+      "x": 278,
+      "y": 311,
+      "w": 1089,
+      "h": 1255
+    }
+  },
+  "inflightSample": {
+    "group": {
+      "x": 974,
+      "y": 240,
+      "w": 393,
+      "h": 32
+    },
+    "dot": {
+      "x": 974,
+      "y": 252,
+      "w": 8,
+      "h": 8
+    },
+    "text": "60 秒自动刷新",
+    "time": "最近成功刷新：23:09:21",
+    "btn": {
+      "x": 1257,
+      "y": 240,
+      "w": 110,
+      "h": 32
+    },
+    "btnInnerText": "立即刷新",
+    "summaryCount": "共 30 条",
+    "queryBtnText": [
+      "",
+      "",
+      "",
+      "查询",
+      "重置"
+    ],
+    "queryBtnLoading": false,
+    "queryBtnDisabled": false,
+    "headerTop": 311,
+    "headerWrapRect": {
+      "x": 278,
+      "y": 311,
+      "w": 1089,
+      "h": 1255
+    }
+  },
+  "postSuccess": {
+    "group": {
+      "x": 974,
+      "y": 240,
+      "w": 393,
+      "h": 32
+    },
+    "dot": {
+      "x": 974,
+      "y": 252,
+      "w": 8,
+      "h": 8
+    },
+    "text": "60 秒自动刷新",
+    "time": "最近成功刷新：23:09:21",
+    "btn": {
+      "x": 1257,
+      "y": 240,
+      "w": 110,
+      "h": 32
+    },
+    "btnInnerText": "立即刷新",
+    "summaryCount": "共 30 条",
+    "queryBtnText": [
+      "",
+      "",
+      "",
+      "查询",
+      "重置"
+    ],
+    "queryBtnLoading": false,
+    "queryBtnDisabled": false,
+    "headerTop": 311,
+    "headerWrapRect": {
+      "x": 278,
+      "y": 311,
+      "w": 1089,
+      "h": 1255
+    }
+  },
+  "geometryStableAfterRefresh": true,
+  "queryButtonStable": true,
+  "refreshSuccessTimeUpdated": true,
+  "resetSection": {
+    "requestsBeforeResetPhase": 7,
+    "queryRequestCountDelta": 1,
+    "appliedRowsAfterUnknownQuery": 6,
+    "statusTagBeforeReset": "未知状态（UNKNOWN）",
+    "requestsAfterReset": 8,
+    "resetDelta": 0,
+    "tagsAfterReset": {
+      "client": "全部",
+      "source": "全部",
+      "status": "全部"
+    }
+  }
+}

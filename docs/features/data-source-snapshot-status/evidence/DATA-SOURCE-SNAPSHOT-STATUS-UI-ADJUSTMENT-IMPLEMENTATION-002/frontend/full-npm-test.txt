@@ -1,0 +1,74 @@
+
+> cdc-config-platform-frontend@1.0.0 test
+> vitest run
+
+
+ RUN  v1.6.1 /agent/cdc-config-platform/frontend
+
+stderr | src/views/data-source/dataSource.spec.ts > 新增数据源 > 源库仅 ORACLE：切回源库后非法 MYSQL 类型被清空（创建被类型校验阻断）
+async-validator: [ 'dataSourceType is required' ]
+
+stderr | src/views/data-source/dataSource.spec.ts > 新增数据源 > 缺少必填字段阻止创建
+async-validator: [ 'dataSourceId is required' ]
+async-validator: [ 'dataSourceName is required' ]
+async-validator: [ 'host is required' ]
+async-validator: [ 'userName is required' ]
+async-validator: [ 'serviceName is required' ]
+
+ ✓ src/views/data-source/dataSource.spec.ts  (73 tests) 20278ms
+ ✓ src/views/client-config/ClientConfigPage.spec.ts  (83 tests) 13366ms
+ ✓ src/views/data-subscribe/components/SubscribeFormDialog.spec.ts  (33 tests) 4488ms
+ ✓ src/views/data-subscribe/components/SourceTableSelector.spec.ts  (34 tests) 2037ms
+ ✓ src/views/log-query/LogQueryPage.spec.ts  (27 tests) 1049ms
+ ✓ src/views/server-config/ServerConfigPage.spec.ts  (36 tests) 4723ms
+ ✓ src/views/topic-offset/composables/useTopicOffset.spec.ts  (25 tests) 66ms
+ ✓ src/views/topic-offset/components/OffsetTable.spec.ts  (28 tests) 1949ms
+ ✓ src/views/data-source-run-state/composables/useDataSourceSnapshot.spec.ts  (20 tests) 39ms
+ ✓ src/views/data-source-run-state/components/DataSourceSnapshotTable.spec.ts  (24 tests) 1342ms
+ ✓ src/views/data-subscribe/DataSubscribePage.spec.ts  (13 tests) 3108ms
+ ✓ src/views/log-query/composables/useLogQueryTab.spec.ts  (21 tests) 36ms
+ ✓ src/views/data-source-run-state/components/DataSourceSnapshotQueryBar.spec.ts  (20 tests) 3423ms
+ ✓ src/api/subscription.spec.ts  (17 tests) 48ms
+ ✓ src/views/data-source-run-state/DataSourceRunStatePage.spec.ts  (9 tests) 2594ms
+ ✓ src/views/topic-offset/components/OffsetQueryBar.spec.ts  (11 tests) 2199ms
+ ✓ src/views/data-source-run-state/composables/useDataSourceSnapshot.errorChain.spec.ts  (6 tests) 36ms
+ ✓ src/views/log-query/components/LogQueryFilter.spec.ts  (13 tests) 3078ms
+ ✓ src/views/topic-offset/components/OffsetToolbar.spec.ts  (12 tests) 157ms
+ ✓ src/api/dataSource.spec.ts  (10 tests) 16ms
+ ✓ src/views/data-subscribe/utils/subscriptionFormat.spec.ts  (23 tests) 12ms
+ ✓ src/views/server-config/configRules.spec.ts  (28 tests) 15ms
+ ✓ src/views/data-source-run-state/tooltip/useSnapshotTooltip.spec.ts  (14 tests) 49ms
+ ✓ src/views/data-source-run-state/components/DataSourceSnapshotToolbar.spec.ts  (10 tests) 168ms
+ ✓ src/views/data-subscribe/components/SubscribeDeleteDialog.spec.ts  (7 tests) 570ms
+ ✓ src/views/log-query/components/LogQueryTable.spec.ts  (8 tests) 629ms
+ ✓ src/views/data-source-run-state/tooltip/SnapshotTooltipHost.spec.ts  (4 tests) 65ms
+ ✓ src/views/data-subscribe/composables/useSubscribeForm.spec.ts  (9 tests) 17ms
+ ✓ src/api/clientConfig.spec.ts  (10 tests) 10ms
+ ✓ src/views/data-subscribe/components/SubscribeDetailDialog.spec.ts  (5 tests) 452ms
+ ✓ src/views/topic-offset/utils/tooltipPosition.spec.ts  (9 tests) 38ms
+ ✓ src/views/client-config/listLayout.spec.ts  (14 tests) 39ms
+ ✓ src/api/topicOffset.spec.ts  (6 tests) 12ms
+ ✓ src/views/log-query/components/LogDialogOldResponse.spec.ts  (3 tests) 283ms
+ ✓ src/views/data-source-run-state/tooltip/tooltipPosition.spec.ts  (10 tests) 5ms
+ ✓ src/api/dataSourceSnapshot.spec.ts  (5 tests) 8ms
+ ✓ src/views/topic-offset/utils/selection.spec.ts  (13 tests) 8ms
+ ✓ src/views/topic-offset/TopicOffsetPage.spec.ts  (1 test) 549ms
+ ✓ src/api/logQuery.spec.ts  (2 tests) 20ms
+ ✓ src/views/data-source-run-state/utils/selection.spec.ts  (7 tests) 9ms
+ ✓ src/views/log-query/SidebarReinit.spec.ts  (4 tests) 258ms
+ ✓ src/views/log-query/components/CursorPagination.spec.ts  (4 tests) 158ms
+ ✓ src/stores/topicOffset.spec.ts  (4 tests) 16ms
+ ✓ src/views/data-source-run-state/components/DataSourceSnapshotStatusTag.spec.ts  (5 tests) 82ms
+ ✓ src/views/log-query/components/dsDisplay.spec.ts  (3 tests) 4ms
+ ✓ src/views/topic-offset/utils/rowKey.spec.ts  (5 tests) 9ms
+ ✓ src/api/serverConfig.spec.ts  (2 tests) 7ms
+ ✓ src/config/menu.spec.ts  (4 tests) 4ms
+ ✓ src/views/data-source-run-state/utils/rowKey.spec.ts  (3 tests) 4ms
+ ✓ src/views/data-source-run-state/utils/format.spec.ts  (4 tests) 4ms
+ ✓ src/views/log-query/components/RawMessageDialogSafety.spec.ts  (1 test) 4ms
+
+ Test Files  51 passed (51)
+      Tests  742 passed (742)
+   Start at  22:52:29
+   Duration  146.70s (transform 3.68s, setup 149ms, collect 37.21s, tests 67.54s, environment 26.95s, prepare 5.20s)
+

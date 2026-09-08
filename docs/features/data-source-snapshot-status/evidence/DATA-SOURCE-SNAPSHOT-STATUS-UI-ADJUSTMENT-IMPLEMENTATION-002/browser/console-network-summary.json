@@ -1,0 +1,48 @@
+{
+  "scenario": "consolidated console/network summary over the full round-2 browser evidence session",
+  "phases": {
+    "realBackend": {
+      "apiRequests": 8,
+      "listGETs": 8,
+      "responseStatuses": {
+        "200": 8
+      },
+      "writeRequests": [],
+      "consoleEntries": [
+        { "type": "debug", "text": "[vite] connecting..." },
+        { "type": "debug", "text": "[vite] connected." },
+        { "type": "debug", "text": "[vite] connecting..." },
+        { "type": "debug", "text": "[vite] connected." },
+        { "type": "debug", "text": "[vite] connecting..." },
+        { "type": "debug", "text": "[vite] connected." },
+        { "type": "debug", "text": "[vite] connecting..." },
+        { "type": "debug", "text": "[vite] connected." },
+        { "type": "debug", "text": "[vite] connecting..." },
+        { "type": "debug", "text": "[vite] connected." },
+        { "type": "debug", "text": "[vite] connecting..." },
+        { "type": "debug", "text": "[vite] connected." }
+      ],
+      "exceptions": []
+    },
+    "mockInterception": {
+      "interceptedListRequests": 2,
+      "requests": [
+        "/api/monitor/data-source-run-state/list",
+        "/api/monitor/data-source-run-state/list?clientId=XXXXXXXXXXXXXXXXXXXXXXXXX"
+      ],
+      "consoleEntries": []
+    }
+  },
+  "console": {
+    "error": 0,
+    "warning": 0,
+    "exception": 0
+  },
+  "pageWriteRequests": 0,
+  "notes": [
+    "All list GETs answered HTTP 200 (real backend) or fulfilled 200 (browser-layer temporary mock); every entry flagged expected.",
+    "No POST/PUT/DELETE/PATCH or any write to /api across the session (page is read-only; no database/config writes).",
+    "No unexpected console error/warning/exception; only expected vite HMR debug lines [vite] connecting/connected on the real phase.",
+    "Mock interception confined to GET /api/monitor/data-source-run-state/list and auto-reverted when the capture process exited; production code, Vue state and DB untouched."
+  ]
+}

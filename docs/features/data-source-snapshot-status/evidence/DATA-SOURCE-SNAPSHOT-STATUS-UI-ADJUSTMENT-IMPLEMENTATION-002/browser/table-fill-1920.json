@@ -1,0 +1,40 @@
+{
+  "viewport": [
+    1920,
+    1080
+  ],
+  "cardLeft": 262,
+  "cardWidth": 1601,
+  "bodyContentW": 1569,
+  "wrapClientW": 1569,
+  "wrapScrollW": 1569,
+  "elTableW": 1569,
+  "headerTitles": [
+    "序号",
+    "探针端",
+    "源库",
+    "快照状态",
+    "快照启动时间",
+    "快照完成时间",
+    "记录更新时间"
+  ],
+  "headerWidths": [
+    70,
+    331,
+    543,
+    130,
+    165,
+    165,
+    165
+  ],
+  "hasHScroll": false,
+  "rightBlank": 0,
+  "tableRightFlushWrap": true,
+  "headerCellH": 40,
+  "headerSingleLine": true,
+  "rowCount": 30,
+  "inactiveMarks": 24,
+  "nativeTitleInTable": 0,
+  "emptyDash": 32,
+  "scenario": "table-fill-1920 real backend: fixed cols constant, probe/source absorb all extra (source widest), right blank ~0, no h-scroll"
+}

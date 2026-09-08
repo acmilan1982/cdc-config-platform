@@ -1,0 +1,40 @@
+{
+  "viewport": [
+    1440,
+    900
+  ],
+  "cardLeft": 262,
+  "cardWidth": 1121,
+  "bodyContentW": 1089,
+  "wrapClientW": 1089,
+  "wrapScrollW": 1145,
+  "elTableW": 1145,
+  "headerTitles": [
+    "序号",
+    "探针端",
+    "源库",
+    "快照状态",
+    "快照启动时间",
+    "快照完成时间",
+    "记录更新时间"
+  ],
+  "headerWidths": [
+    70,
+    170,
+    280,
+    130,
+    165,
+    165,
+    165
+  ],
+  "hasHScroll": true,
+  "rightBlank": 0,
+  "tableRightFlushWrap": false,
+  "headerCellH": 40,
+  "headerSingleLine": true,
+  "rowCount": 30,
+  "inactiveMarks": 24,
+  "nativeTitleInTable": 0,
+  "emptyDash": 32,
+  "scenario": "table-fill-1440 real backend (app-shell content at this viewport is 1089px < 1145px min => table at min width; scroll regime)"
+}

@@ -14,8 +14,8 @@
         </template>
       </el-table-column>
 
-      <!-- 探针端列：只显示原始 CLIENT_ID，单行省略；完整 CLIENT_DESC 走页面级单实例 Tooltip -->
-      <el-table-column label="探针端" width="170" align="left">
+      <!-- 探针端列（弹性列，min-width:170）：始终显示原始 CLIENT_ID；非启用(FG_ACTIVE≠'1')追加红字“停用”；完整非空 CLIENT_DESC 走页面级单实例 Tooltip -->
+      <el-table-column label="探针端" min-width="170" align="left">
         <template #default="{ row }">
           <div class="dss-cell">
             <span
@@ -24,22 +24,13 @@
               @mouseenter="onProbeMainEnter(row, $event)"
               @mouseleave="tooltip.hide()"
             >{{ row.clientId }}</span>
-            <span
-              v-for="h in clientHintTriggers(row)"
-              :key="h.key"
-              class="dss-tt dss-hint"
-              :data-tt-kind="h.key"
-              @mouseenter="onHintEnter(h, $event)"
-              @mouseleave="tooltip.hide()"
-            >
-              <el-icon class="dss-hint-icon" role="img" :aria-label="h.text"><WarningFilled /></el-icon>
-            </span>
+            <span v-if="isProbeInactive(row)" class="dss-inactive-mark">停用</span>
           </div>
         </template>
       </el-table-column>
 
-      <!-- 源库列：正常 ORG 非空只显示 ORG；ORG 空/配置缺失回退原始 DATA_SOURCE_ID -->
-      <el-table-column label="源库" width="280" align="left">
+      <!-- 源库列（弹性列，min-width:280）：正常 ORG 非空只显示 ORG；ORG 空/配置缺失回退原始 DATA_SOURCE_ID；Tooltip 恒为完整原始 DATA_SOURCE_ID -->
+      <el-table-column label="源库" min-width="280" align="left">
         <template #default="{ row }">
           <div class="dss-cell">
             <span
@@ -48,16 +39,6 @@
               @mouseenter="onSourceMainEnter(row, $event)"
               @mouseleave="tooltip.hide()"
             >{{ sourceMainText(row) }}</span>
-            <span
-              v-for="h in sourceHintTriggers(row)"
-              :key="h.key"
-              class="dss-tt dss-hint"
-              :data-tt-kind="h.key"
-              @mouseenter="onHintEnter(h, $event)"
-              @mouseleave="tooltip.hide()"
-            >
-              <el-icon class="dss-hint-icon" role="img" :aria-label="h.text"><WarningFilled /></el-icon>
-            </span>
           </div>
         </template>
       </el-table-column>
@@ -107,7 +88,6 @@
 
 <script setup lang="ts">
 import { onMounted, onUnmounted, watch } from 'vue'
-import { WarningFilled } from '@element-plus/icons-vue'
 import type { SnapshotStatusItem } from '@/types/dataSourceSnapshot'
 import { rowKey } from '@/views/data-source-run-state/utils/rowKey'
 import { formatTimeOrDash } from '@/views/data-source-run-state/utils/format'
@@ -115,15 +95,6 @@ import DataSourceSnapshotStatusTag from './DataSourceSnapshotStatusTag.vue'
 import SnapshotTooltipHost from '../tooltip/SnapshotTooltipHost.vue'
 import { useSnapshotTooltip } from '../tooltip/useSnapshotTooltip'
 import type { ShowTooltipOptions } from '../tooltip/useSnapshotTooltip'
-
-interface Hint {
-  text: string
-}
-
-interface HintTrigger {
-  text: string
-  key: string
-}
 
 const props = withDefaults(
   defineProps<{
@@ -147,16 +118,14 @@ function isDash(value: string | null): boolean {
   return value === null || value === undefined || value === ''
 }
 
+/** 探针端非启用（FG_ACTIVE≠'1'）时在 CLIENT_ID 后追加红字"停用"（DSS-REQ-073，AC-082）。 */
+function isProbeInactive(row: SnapshotStatusItem): boolean {
+  return row.clientRef.state === 'INACTIVE'
+}
+
 function clientDescText(row: SnapshotStatusItem): string {
   const desc = row.clientRef.desc
   return desc === null || desc === undefined ? '' : desc.trim()
-}
-
-function clientHints(row: SnapshotStatusItem): Hint[] {
-  const state = row.clientRef.state
-  if (state === 'NOT_FOUND') return [{ text: '探针端配置缺失' }]
-  if (state === 'INACTIVE') return [{ text: '配置已停用' }]
-  return []
 }
 
 function sourceOrgText(row: SnapshotStatusItem): string {
@@ -172,28 +141,6 @@ function sourceMainText(row: SnapshotStatusItem): string {
   return sourceShowsOrg(row) ? sourceOrgText(row) : row.sourceId
 }
 
-function sourceHints(row: SnapshotStatusItem): Hint[] {
-  const ref = row.sourceRef
-  const hints: Hint[] = []
-  if (ref.state === 'NOT_FOUND') {
-    hints.push({ text: '源库配置缺失' })
-  } else if (ref.state === 'INACTIVE') {
-    hints.push({ text: '配置已停用' })
-  }
-  if (ref.state !== 'NOT_FOUND' && !ref.sourceRole) {
-    hints.push({ text: '类别非 SOURCE' })
-  }
-  return hints
-}
-
-/** 源库列 Tooltip：正常行只展示完整 ORG；回退行展示完整原始 ID 与对应异常说明（DSS-REQ-069⑤⑥，AC-075）。 */
-function sourceMainContent(row: SnapshotStatusItem): string {
-  if (sourceShowsOrg(row)) return sourceOrgText(row)
-  const lines = [row.sourceId]
-  for (const h of sourceHints(row)) lines.push(h.text)
-  return lines.join('\n')
-}
-
 function openTooltip(opts: ShowTooltipOptions): void {
   tooltip.show(opts)
 }
@@ -202,8 +149,9 @@ function onProbeMainEnter(row: SnapshotStatusItem, e: MouseEvent): void {
   openTooltip({ key: `client-${rowKey(row)}`, content: clientDescText(row), el: e.currentTarget as HTMLElement })
 }
 
+/** 源库列 Tooltip 恒为完整原始 DATA_SOURCE_ID（正常行与回退行同源，DSS-REQ-074，AC-075）。 */
 function onSourceMainEnter(row: SnapshotStatusItem, e: MouseEvent): void {
-  openTooltip({ key: `source-${rowKey(row)}`, content: sourceMainContent(row), el: e.currentTarget as HTMLElement })
+  openTooltip({ key: `source-${rowKey(row)}`, content: row.sourceId, el: e.currentTarget as HTMLElement })
 }
 
 function onStatusEnter(row: SnapshotStatusItem, e: MouseEvent): void {
@@ -212,18 +160,6 @@ function onStatusEnter(row: SnapshotStatusItem, e: MouseEvent): void {
     content: `原始状态：${row.snapshotStatus}`,
     el: e.currentTarget as HTMLElement,
   })
-}
-
-function onHintEnter(h: HintTrigger, e: MouseEvent): void {
-  openTooltip({ key: h.key, content: h.text, el: e.currentTarget as HTMLElement })
-}
-
-function clientHintTriggers(row: SnapshotStatusItem): HintTrigger[] {
-  return clientHints(row).map((h, i) => ({ text: h.text, key: `client-hint-${rowKey(row)}-${i}` }))
-}
-
-function sourceHintTriggers(row: SnapshotStatusItem): HintTrigger[] {
-  return sourceHints(row).map((h, i) => ({ text: h.text, key: `source-hint-${rowKey(row)}-${i}` }))
 }
 
 let unbindGlobalClose: (() => void) | null = null
@@ -249,10 +185,10 @@ watch(
   width: 100%;
   overflow-x: auto;
 }
-/* 七列固定列宽（DSS-REQ-069/AC-073）：70+170+280+130+165+165+165=1145 */
+/* 弹性表格（DSS-REQ-069/AC-073）：五固定列（70/130/165/165/165）＋探针端 min-width 170/源库 min-width 280 两弹性列吸收剩余宽度铺满结果卡片；取消固定总宽，最小总宽 1145、窄屏容器横向滚动 */
 .dss-table {
-  width: 1145px !important;
-  min-width: 1145px !important;
+  width: 100%;
+  min-width: 1145px;
 }
 .dss-seq {
   font-size: 14px;
@@ -278,14 +214,11 @@ watch(
 .dss-tt {
   outline: none;
 }
-.dss-hint {
+.dss-inactive-mark {
   flex: 0 0 auto;
-  display: inline-flex;
-  align-items: center;
-}
-.dss-hint-icon {
   font-size: 14px;
-  color: #e6a23c;
+  color: var(--el-color-danger, #f56c6c);
+  white-space: nowrap;
 }
 .dss-status-trigger {
   display: inline-block;

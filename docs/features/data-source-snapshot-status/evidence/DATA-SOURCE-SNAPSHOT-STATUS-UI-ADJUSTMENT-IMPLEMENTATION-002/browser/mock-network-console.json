@@ -1,0 +1,15 @@
+{
+  "scenario": "mock-interception phases (M1 client states, M2 source tooltip, M3 dropdown/full-value/ghost)",
+  "listRequestsPerPhase": [
+    {
+      "idx": 0,
+      "url": "http://127.0.0.1:5173/api/monitor/data-source-run-state/list"
+    },
+    {
+      "idx": 1,
+      "url": "http://127.0.0.1:5173/api/monitor/data-source-run-state/list?clientId=XXXXXXXXXXXXXXXXXXXXXXXXX"
+    }
+  ],
+  "consoleEntries": [],
+  "sinkErr": null
+}

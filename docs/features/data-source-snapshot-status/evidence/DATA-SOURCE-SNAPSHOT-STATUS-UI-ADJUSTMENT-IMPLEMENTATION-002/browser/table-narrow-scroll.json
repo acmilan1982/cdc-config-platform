@@ -1,0 +1,68 @@
+{
+  "real1280": {
+    "viewport": [
+      1280,
+      900
+    ],
+    "cardLeft": 262,
+    "cardWidth": 961,
+    "bodyContentW": 929,
+    "wrapClientW": 929,
+    "wrapScrollW": 1145,
+    "elTableW": 1145,
+    "headerTitles": [
+      "序号",
+      "探针端",
+      "源库",
+      "快照状态",
+      "快照启动时间",
+      "快照完成时间",
+      "记录更新时间"
+    ],
+    "headerWidths": [
+      70,
+      170,
+      280,
+      130,
+      165,
+      165,
+      165
+    ],
+    "hasHScroll": true,
+    "rightBlank": 0,
+    "tableRightFlushWrap": false,
+    "headerCellH": 40,
+    "headerSingleLine": true,
+    "rowCount": 30,
+    "inactiveMarks": 24,
+    "nativeTitleInTable": 0,
+    "emptyDash": 32,
+    "scenario": "table-narrow-scroll real viewport 1280: body content <1145 => table keeps min 1145, wrapper horizontal-scrolls; fixed time cols not compressed"
+  },
+  "forcedInvariant": {
+    "forcedBodyW": 1040,
+    "wrapClientW": 1008,
+    "wrapScrollW": 1145,
+    "hasHScroll": true,
+    "headerWidths": [
+      70,
+      210,
+      344,
+      130,
+      165,
+      165,
+      165
+    ],
+    "headerTitles": [
+      "序号",
+      "探针端",
+      "源库",
+      "快照状态",
+      "快照启动时间",
+      "快照完成时间",
+      "记录更新时间"
+    ],
+    "tableMinHeld": 1145,
+    "scenario": "forced body content <1145 (1040px card inner, wrap ~1008px) at 1600 viewport => min 1145 held, wrapper scrolls, fixed time cols 165 unchanged"
+  }
+}

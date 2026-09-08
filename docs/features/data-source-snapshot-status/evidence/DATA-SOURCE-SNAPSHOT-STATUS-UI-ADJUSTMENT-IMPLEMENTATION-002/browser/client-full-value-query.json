@@ -1,0 +1,15 @@
+{
+  "scenario": "M3 full-value query: truncated display vs full value sent + request count + ghost (browser-layer temporary interception)",
+  "chosenTruncatedDisplayText": "XXXXXXXXXXXXXXXXXXXX...（YYYYYYYYYYYYYYYYYYYY...）",
+  "queryRequestCountDelta": 1,
+  "totalListRequests": 2,
+  "sentClientIdParams": [
+    "XXXXXXXXXXXXXXXXXXXXXXXXX"
+  ],
+  "fullIdSent": true,
+  "ghost": {
+    "text": "XXXXXXXXXXXXXXXXXXXX...（不在候选内）",
+    "hasGhostClass": true,
+    "singleLine": true
+  }
+}

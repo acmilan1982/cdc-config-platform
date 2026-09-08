@@ -1,0 +1,40 @@
+{
+  "viewport": [
+    1600,
+    900
+  ],
+  "cardLeft": 262,
+  "cardWidth": 1281,
+  "bodyContentW": 1249,
+  "wrapClientW": 1249,
+  "wrapScrollW": 1249,
+  "elTableW": 1249,
+  "headerTitles": [
+    "序号",
+    "探针端",
+    "源库",
+    "快照状态",
+    "快照启动时间",
+    "快照完成时间",
+    "记录更新时间"
+  ],
+  "headerWidths": [
+    70,
+    210,
+    344,
+    130,
+    165,
+    165,
+    165
+  ],
+  "hasHScroll": false,
+  "rightBlank": 0,
+  "tableRightFlushWrap": true,
+  "headerCellH": 40,
+  "headerSingleLine": true,
+  "rowCount": 30,
+  "inactiveMarks": 24,
+  "nativeTitleInTable": 0,
+  "emptyDash": 32,
+  "scenario": "table-fill-1600 supplement: body content 1249px > 1145px => probe/source absorb extra, right edge flush"
+}

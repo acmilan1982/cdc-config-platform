@@ -1,0 +1,39 @@
+{
+  "scenario": "M3 client dropdown truncation + width compare (base response)",
+  "clientItemTexts": [
+    {
+      "text": "全部",
+      "singleLineHeight": 34
+    },
+    {
+      "text": "XXXXXXXXXXXXXXXXXXXX...（YYYYYYYYYYYYYYYYYYYY...）",
+      "singleLineHeight": 34
+    },
+    {
+      "text": "😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀...（表情探针）",
+      "singleLineHeight": 34
+    },
+    {
+      "text": "NNNNNNNNNNNNNNNNNNNN...",
+      "singleLineHeight": 34
+    },
+    {
+      "text": "CL-NORM-01（普通短名探针）",
+      "singleLineHeight": 34
+    }
+  ],
+  "clientItemsSingleLine": true,
+  "clientPanelWidth": 478,
+  "sourcePanelWidth": 558,
+  "clientPanelNarrowerThanSource": true,
+  "sourceLongTextNotTruncated": "超长源库机构组织名超长源库机构组织名超长源库机构组织名超长源库机构组织名超长源库机构组织名超长源库机构组织名（DS-SRC-BIG-001）",
+  "chosenTruncatedDisplayText": "XXXXXXXXXXXXXXXXXXXX...（YYYYYYYYYYYYYYYYYYYY...）",
+  "selectedCollapsedTag": {
+    "controlW": 240,
+    "controlH": 32,
+    "tagText": "XXXXXXXXXXXXXXXXXXXX...（YYYYYYYYYYYYYYYYYYYY...）",
+    "tagOverflows": false,
+    "tagsTextEllipsisApplied": true
+  },
+  "listRequestCount": 1
+}

@@ -1,0 +1,132 @@
+{
+  "scenario": "real-backend phases (1440/1600/1920/1280 loads, tooltip sweep, refresh/query/reset)",
+  "apiRequests": [
+    {
+      "method": "GET",
+      "url": "http://127.0.0.1:5173/api/monitor/data-source-run-state/list",
+      "reqId": "63631.55"
+    },
+    {
+      "method": "GET",
+      "url": "http://127.0.0.1:5173/api/monitor/data-source-run-state/list",
+      "reqId": "63631.110"
+    },
+    {
+      "method": "GET",
+      "url": "http://127.0.0.1:5173/api/monitor/data-source-run-state/list",
+      "reqId": "63631.165"
+    },
+    {
+      "method": "GET",
+      "url": "http://127.0.0.1:5173/api/monitor/data-source-run-state/list",
+      "reqId": "63631.220"
+    },
+    {
+      "method": "GET",
+      "url": "http://127.0.0.1:5173/api/monitor/data-source-run-state/list",
+      "reqId": "63631.275"
+    },
+    {
+      "method": "GET",
+      "url": "http://127.0.0.1:5173/api/monitor/data-source-run-state/list",
+      "reqId": "63631.330"
+    },
+    {
+      "method": "GET",
+      "url": "http://127.0.0.1:5173/api/monitor/data-source-run-state/list",
+      "reqId": "63631.331"
+    },
+    {
+      "method": "GET",
+      "url": "http://127.0.0.1:5173/api/monitor/data-source-run-state/list?status=UNKNOWN",
+      "reqId": "63631.333"
+    }
+  ],
+  "apiResponses": [
+    {
+      "status": 200,
+      "url": "http://127.0.0.1:5173/api/monitor/data-source-run-state/list"
+    },
+    {
+      "status": 200,
+      "url": "http://127.0.0.1:5173/api/monitor/data-source-run-state/list"
+    },
+    {
+      "status": 200,
+      "url": "http://127.0.0.1:5173/api/monitor/data-source-run-state/list"
+    },
+    {
+      "status": 200,
+      "url": "http://127.0.0.1:5173/api/monitor/data-source-run-state/list"
+    },
+    {
+      "status": 200,
+      "url": "http://127.0.0.1:5173/api/monitor/data-source-run-state/list"
+    },
+    {
+      "status": 200,
+      "url": "http://127.0.0.1:5173/api/monitor/data-source-run-state/list"
+    },
+    {
+      "status": 200,
+      "url": "http://127.0.0.1:5173/api/monitor/data-source-run-state/list"
+    },
+    {
+      "status": 200,
+      "url": "http://127.0.0.1:5173/api/monitor/data-source-run-state/list?status=UNKNOWN"
+    }
+  ],
+  "writeRequests": [],
+  "consoleEntries": [
+    {
+      "type": "debug",
+      "text": "[vite] connecting..."
+    },
+    {
+      "type": "debug",
+      "text": "[vite] connected."
+    },
+    {
+      "type": "debug",
+      "text": "[vite] connecting..."
+    },
+    {
+      "type": "debug",
+      "text": "[vite] connected."
+    },
+    {
+      "type": "debug",
+      "text": "[vite] connecting..."
+    },
+    {
+      "type": "debug",
+      "text": "[vite] connected."
+    },
+    {
+      "type": "debug",
+      "text": "[vite] connecting..."
+    },
+    {
+      "type": "debug",
+      "text": "[vite] connected."
+    },
+    {
+      "type": "debug",
+      "text": "[vite] connecting..."
+    },
+    {
+      "type": "debug",
+      "text": "[vite] connected."
+    },
+    {
+      "type": "debug",
+      "text": "[vite] connecting..."
+    },
+    {
+      "type": "debug",
+      "text": "[vite] connected."
+    }
+  ],
+  "exceptions": [],
+  "sinkErr": null
+}
