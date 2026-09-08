@@ -11,38 +11,42 @@
 | 前端源码目录 | `frontend/src/views/data-source-run-state/`（保留既有目录名，不做无业务价值目录重命名；命名映射见 UI §10） |
 | 目标文档 | `docs/features/data-source-snapshot-status/DESIGN.md`（总设计入口） |
 | 配套设计文档 | `API.md`（接口设计草案）、`UI.md`（界面设计草案）、`DATABASE.md`（数据库查询设计草案） |
-| 文档状态 | `APPROVED`（当前版为 2026-09-07 验收前 UI 调整草案 `DATA-SOURCE-SNAPSHOT-STATUS-UI-ADJUSTMENT-BASELINE-001` 及同日 R1 极小定向修订 `...-001-R1` 收口后的当前 UI 调整版本：ChatGPT 对 R1 结果提交 `575723711ca39d7761df308c1c99b1e6e957cf70` 独立正式复审 `APPROVED`、项目负责人明确回复“批准”，正式批准版本 `DATA-SOURCE-SNAPSHOT-STATUS-UI-ADJUSTMENT-BASELINE-APPROVAL-001`（批准日期 2026-09-07，批准内容基准提交 `5757237...`），本调整版本状态由 `DRAFT_ADJUSTMENT_PENDING_USER_REVIEW` 收口为 `APPROVED`。批准的是本轮 UI 调整设计（DESIGN/UI），不代表本轮调整已实现、正式验收已执行或通过，不等于 `IMPLEMENTED_ACCEPTED`，见本表“本轮（UI 调整版本）批准链”与任务边界声明） |
-| requirements_status | `APPROVED`（当前 UI 调整版本已批准，见 `REQUIREMENTS.md` `DSS-REQ-001~071` 共 71 条；正式批准版本 `DATA-SOURCE-SNAPSHOT-STATUS-UI-ADJUSTMENT-BASELINE-APPROVAL-001`，2026-09-07；既有批准版本保留为历史） |
-| acceptance_status | `APPROVED`（当前 UI 调整版本已批准，见 `ACCEPTANCE.md` `DSS-AC-001~080` 共 80 条，全部 `NOT_RUN`；正式批准版本 `DATA-SOURCE-SNAPSHOT-STATUS-UI-ADJUSTMENT-BASELINE-APPROVAL-001`，2026-09-07；既有批准版本保留为历史） |
-| design_status | `DESIGN.md`/`UI.md` 当前调整版本为 `APPROVED`（本轮 UI 调整草案已随本轮批准收口，见 §19/§20）；`API.md`/`DATABASE.md` 保持已批准（`APPROVED`）且本轮**整文件零差异**（本轮不改接口、SQL、表结构、数据库访问与产品只读边界） |
-| implementation_status | `IMPLEMENTED_ADJUSTMENT_PENDING_REVIEW`（implementation_status=IMPLEMENTED_ADJUSTMENT_PENDING_REVIEW；既有实现 `DATA-SOURCE-SNAPSHOT-STATUS-IMPLEMENTATION-001`/`-R1` 已完成，本轮 UI 调整也已由实现任务 `DATA-SOURCE-SNAPSHOT-STATUS-UI-ADJUSTMENT-IMPLEMENTATION-001`（2026-09-07）按批准内容基准提交 `5757237...` 落地并归档实现报告/证据，见 Feature README §5/§8/§9/§10 与本文件 §21；实现完成待 ChatGPT 独立代码与证据复审与项目负责人人工页面验收，不代表代码复审通过、不代表正式验收或人工验收已执行或通过，不等于 `IMPLEMENTED_ACCEPTED`） |
-| acceptance_execution_status | `NOT_RUN`（本设计不执行验收；既有 68 条 `DSS-AC-001~068` 与本调整新增 `DSS-AC-069~080` 全部保持 `NOT_RUN`） |
-| pending_user_confirmation_count | `0`（本轮调整无必须由项目负责人补充决策的待确认项） |
-| pending_user_review | `NO`（本轮 UI 调整版本已由 ChatGPT 对 R1 结果独立正式复审 `APPROVED` 并经项目负责人明确批准，pending_user_review=NO） |
+| 文档状态 | `DRAFT_ADJUSTMENT_PENDING_USER_REVIEW`（当前版为 2026-09-08 第二轮验收前 UI 调整草案 `DATA-SOURCE-SNAPSHOT-STATUS-UI-ADJUSTMENT-BASELINE-002`。驱动：项目负责人对第一轮 UI 调整实现 R1（提交 `5933ec2...`）对应的当前预览页面进行人工检查，结论为需要继续调整（human_visual_review_status=CHANGES_REQUIRED）。第一轮 UI 调整批准版本（正式批准版本 `DATA-SOURCE-SNAPSHOT-STATUS-UI-ADJUSTMENT-BASELINE-APPROVAL-001`，批准内容基准提交 `5757237...`，2026-09-07；实现 R1 提交 `5933ec2...` 经 ChatGPT 独立代码与证据复审 `APPROVED`、实现状态收口为 `IMPLEMENTED_ADJUSTMENT_PENDING_REVIEW`）保留为历史。本轮在第一轮批准版本之上建立**第二轮纯文档调整草案**，只围绕四类已确认调整范围（表格铺满结果卡片、探针端列展示简化、源库列展示简化、探针端查询下拉框长度与文本截断，见本文件 §22 与 REQUIREMENTS §21.2/§21.3）定向修订既有设计落点并新增 `DSS-REQ-072~075` 对应设计落点；本轮不改接口、SQL、表结构、数据库访问与产品只读边界（API.md/DATABASE.md 整文件零差异）。本草案未批准、第二轮调整未实现、正式验收未执行，不等于 `IMPLEMENTED_ACCEPTED`；`pending_user_review=YES`，见本表“本轮（第二轮 UI 调整草案）任务编号/授权基线/驱动来源”、任务边界声明与本文件 §22） |
+| requirements_status | `DRAFT_ADJUSTMENT_PENDING_USER_REVIEW`（当前第二轮 UI 调整草案 `...-002` 未批准；`DSS-REQ-001~075` 共 75 条，见 `REQUIREMENTS.md`；第一轮 UI 调整批准版本 `DATA-SOURCE-SNAPSHOT-STATUS-UI-ADJUSTMENT-BASELINE-APPROVAL-001`（批准内容基准提交 `5757237...`，2026-09-07）保留为历史） |
+| acceptance_status | `DRAFT_ADJUSTMENT_PENDING_USER_REVIEW`（当前第二轮 UI 调整草案 `...-002` 未批准；`DSS-AC-001~086` 共 86 条全部 `NOT_RUN`，见 `ACCEPTANCE.md`；第一轮批准版本保留为历史） |
+| design_status | `DESIGN.md`/`UI.md` 当前第二轮调整版本为 `DRAFT_ADJUSTMENT_PENDING_USER_REVIEW`（第二轮设计落点见本文件 §22 与 `UI.md` 本轮专章）；`API.md`/`DATABASE.md` 保持已批准（`APPROVED`）且本轮**整文件零差异**（本轮不改接口、SQL、表结构、数据库访问与产品只读边界） |
+| implementation_status | `IMPLEMENTED_ADJUSTMENT_PENDING`（implementation_status=IMPLEMENTED_ADJUSTMENT_PENDING：第二轮 UI 调整尚未实现。第一轮 UI 调整已由实现任务 `DATA-SOURCE-SNAPSHOT-STATUS-UI-ADJUSTMENT-IMPLEMENTATION-001`（2026-09-07）按批准内容基准提交 `5757237...` 落地、实现 R1 提交 `5933ec2...` 经 ChatGPT 独立代码与证据复审 `APPROVED`、实现状态收口为 `IMPLEMENTED_ADJUSTMENT_PENDING_REVIEW`（见本文件 §21），作为历史保留；不代表代码复审通过、不代表正式验收或人工验收已执行或通过，不等于 `IMPLEMENTED_ACCEPTED`） |
+| acceptance_execution_status | `NOT_RUN`（acceptance_execution_status=NOT_RUN；`DSS-AC-001~086` 共 86 条全部 `NOT_RUN`、acceptance_not_run_count=86，正式验收未执行，见 `ACCEPTANCE.md`） |
+| pending_user_confirmation_count | `0`（本轮第二轮调整无必须由项目负责人补充决策的待确认项） |
+| pending_user_review | `YES`（当前第二轮 UI 调整草案待复审，pending_user_review=YES；本轮无待人工决策项、`pending_user_confirmation_count=0`。第一轮 UI 调整版本的 `pending_user_review=NO` 已收口，作为历史） |
 | 设计任务编号 | `DATA-SOURCE-SNAPSHOT-STATUS-DESIGN-BASELINE-001`（纯文档设计草案建立；历史） |
 | 设计 R1 修订任务 | `DATA-SOURCE-SNAPSHOT-STATUS-DESIGN-BASELINE-001-R1`（ChatGPT 正式设计复审 `CHANGES_REQUIRED` 驱动的极小定向修订，见 §16；历史） |
 | 设计批准版本 | `DATA-SOURCE-SNAPSHOT-STATUS-DESIGN-BASELINE-APPROVAL-001`（设计批准收口任务；批准日期 2026-09-06，见 §17；历史批准版本，本轮 UI 调整草案在其之上建立，批准不自动延伸到本轮调整） |
 | 设计批准内容基准 | `61117a62f44d39f7c548ebcb650891abf91b9b8c`（R1 结果提交；ChatGPT 对 R1 正式复审 `APPROVED` 并获项目负责人批准的内容基准，见 §17；历史基准） |
-| 本轮（UI 调整版本）正式批准版本 | `DATA-SOURCE-SNAPSHOT-STATUS-UI-ADJUSTMENT-BASELINE-APPROVAL-001`（本轮 UI 调整需求/验收/设计批准收口；项目负责人明确“批准”驱动，见 §20） |
-| 本轮（UI 调整版本）批准链 | R0 验收前 UI 调整草案提交 `dc1d5285a541dd799521a778e5d00996ea0b4222` → ChatGPT 正式复审 `CHANGES_REQUIRED`（唯一问题：`auto`/`restore` 刷新在途时“立即刷新”按钮 loading 语义不明确）→ 项目负责人确认 `initial/retry/query/manual/auto/restore` 六类请求唯一视觉映射 → R1 极小定向修订提交 `575723711ca39d7761df308c1c99b1e6e957cf70` → ChatGPT 对 R1 结果独立正式复审 `APPROVED` → 项目负责人明确回复“批准” |
-| 本轮（UI 调整版本）批准依据提交 | `575723711ca39d7761df308c1c99b1e6e957cf70`（ChatGPT 对 UI 调整 R1 结果独立正式复审 `APPROVED` 的 R1 结果提交；本批准收口以该提交为批准内容基准） |
-| 本轮（UI 调整版本）批准日期 | 2026-09-07 |
-| 本版（UI 调整草案）任务编号 | `DATA-SOURCE-SNAPSHOT-STATUS-UI-ADJUSTMENT-BASELINE-001`（验收前 UI 调整草案建立；ChatGPT 对实现 R1 提交 `37825272c25c8a2d8a595ff0d5c25c6349186663` 代码复审 `CHANGES_REQUIRED` 后，项目负责人提出更完整的 UI 调整，本轮在已批准设计基线之上建立**纯文档调整草案**；未实现、未执行正式验收、未批准，设计落点见 §19；该草案后于 2026-09-07 经批准收口，见 §20） |
-| 本版（UI 调整草案）授权基线提交 | `37825272c25c8a2d8a595ff0d5c25c6349186663`（本任务开始时 `origin/develop` 最新提交，本地 HEAD 与其一致，ahead/behind=0/0） |
-| 调整草案关系 | 既有已批准需求/验收基线（正式批准版本 `DATA-SOURCE-SNAPSHOT-STATUS-REQUIREMENTS-BASELINE-APPROVAL-001`，批准内容基准 `4234af73db2190098f3dcd219319a4281fdabafd`）与已批准设计基线（`DATA-SOURCE-SNAPSHOT-STATUS-DESIGN-BASELINE-APPROVAL-001`，批准内容基准 `61117a62f44d39f7c548ebcb650891abf91b9b8c`）保留为历史。本轮验收前 UI 调整草案（R0 `...-001`）及 R1 定向修订（`...-001-R1`）经 ChatGPT 对 R1 结果提交 `5757237...` 独立正式复审 `APPROVED` 且项目负责人明确回复“批准”，已由 `DRAFT_ADJUSTMENT_PENDING_USER_REVIEW` 收口为 `APPROVED`（正式批准版本 `DATA-SOURCE-SNAPSHOT-STATUS-UI-ADJUSTMENT-BASELINE-APPROVAL-001`，批准日期 2026-09-07，见 §20）。本轮只调整展示内容/Tooltip/刷新布局/busy 视觉状态相关设计（DESIGN.md/UI.md），不改接口、SQL、表结构、数据库访问与产品只读边界（API.md/DATABASE.md 整文件零差异）。本轮 UI 调整实现任务 `DATA-SOURCE-SNAPSHOT-STATUS-UI-ADJUSTMENT-IMPLEMENTATION-001`（2026-09-07）已按批准内容基准提交 `5757237...` 完成落地（实现记录见本文件 §21、实现报告与 Feature README §5 关联行）；下一入口为 ChatGPT 独立代码与证据复审，然后由项目负责人人工查看页面 |
+| 第一轮（UI 调整版本）正式批准版本 | `DATA-SOURCE-SNAPSHOT-STATUS-UI-ADJUSTMENT-BASELINE-APPROVAL-001`（第一轮 UI 调整需求/验收/设计批准收口；项目负责人明确“批准”驱动，见 §20） |
+| 第一轮（UI 调整版本）批准链 | R0 验收前 UI 调整草案提交 `dc1d5285a541dd799521a778e5d00996ea0b4222` → ChatGPT 正式复审 `CHANGES_REQUIRED`（唯一问题：`auto`/`restore` 刷新在途时“立即刷新”按钮 loading 语义不明确）→ 项目负责人确认 `initial/retry/query/manual/auto/restore` 六类请求唯一视觉映射 → R1 极小定向修订提交 `575723711ca39d7761df308c1c99b1e6e957cf70` → ChatGPT 对 R1 结果独立正式复审 `APPROVED` → 项目负责人明确回复“批准” |
+| 第一轮（UI 调整版本）批准依据提交 | `575723711ca39d7761df308c1c99b1e6e957cf70`（ChatGPT 对 UI 调整 R1 结果独立正式复审 `APPROVED` 的 R1 结果提交；该批准收口以该提交为批准内容基准） |
+| 第一轮（UI 调整版本）批准日期 | 2026-09-07 |
+| 第一轮（UI 调整草案）任务编号 | `DATA-SOURCE-SNAPSHOT-STATUS-UI-ADJUSTMENT-BASELINE-001`（验收前 UI 调整草案建立；ChatGPT 对实现 R1 提交 `37825272c25c8a2d8a595ff0d5c25c6349186663` 代码复审 `CHANGES_REQUIRED` 后，项目负责人提出更完整的 UI 调整，该轮在已批准设计基线之上建立**纯文档调整草案**，设计落点见 §19；该草案后于 2026-09-07 经批准收口，见 §20；历史） |
+| 第一轮（UI 调整草案）授权基线提交 | `37825272c25c8a2d8a595ff0d5c25c6349186663`（该轮开始时 `origin/develop` 最新提交，本地 HEAD 与其一致，ahead/behind=0/0；历史） |
+| 本轮（第二轮 UI 调整草案）任务编号 | `DATA-SOURCE-SNAPSHOT-STATUS-UI-ADJUSTMENT-BASELINE-002`（第二轮验收前 UI 调整草案建立；项目负责人对第一轮 UI 调整实现 R1 对应预览页人工检查结论 `CHANGES_REQUIRED` 驱动；**纯文档草案**，未批准、第二轮调整未实现、正式验收未执行，设计落点见 §22） |
+| 本轮（第二轮 UI 调整草案）授权基线提交 | `5933ec29dce5f20b3d34aa101de4c8f9a884b93a`（本任务开始时 `origin/develop` 最新提交，本地 HEAD 与其一致，ahead/behind=0/0；第一轮 UI 调整实现 R1 结果提交同为此提交） |
+| 本轮（第二轮 UI 调整草案）驱动来源 | 项目负责人人工页面检查结论（任务提示词 §4，无待人工决策项）：① 表格必须铺满结果卡片（去除固定 `1145px`，五固定列＋探针端/源库两弹性列）；② 探针端列展示简化（仅原始 `CLIENT_ID`、Tooltip 仅完整 `CLIENT_DESC`、删除黄色图标、非启用红字“停用”、缺失静默）；③ 源库列展示简化（删除黄色图标、ORG/原始 ID 回退 Tooltip）；④ 探针端查询下拉框长度与文本截断（ID/描述各 20 Unicode 字符＋`...`、控件/面板宽度上限、完整 value 不变） |
+| 调整草案关系 | 历史基线：已批准需求/验收基线（正式批准版本 `DATA-SOURCE-SNAPSHOT-STATUS-REQUIREMENTS-BASELINE-APPROVAL-001`，批准内容基准 `4234af73db2190098f3dcd219319a4281fdabafd`）、已批准设计基线（`DATA-SOURCE-SNAPSHOT-STATUS-DESIGN-BASELINE-APPROVAL-001`，批准内容基准 `61117a62f44d39f7c548ebcb650891abf91b9b8c`，见 §17）与第一轮 UI 调整批准版本（正式批准版本 `DATA-SOURCE-SNAPSHOT-STATUS-UI-ADJUSTMENT-BASELINE-APPROVAL-001`，批准内容基准提交 `5757237...`，2026-09-07，见 §20；已由实现任务 `...-UI-ADJUSTMENT-IMPLEMENTATION-001` 落地、实现 R1 提交 `5933ec2...` 经 ChatGPT 独立代码与证据复审 `APPROVED`、实现状态 `IMPLEMENTED_ADJUSTMENT_PENDING_REVIEW`，实现记录见本文件 §21）全部保留为历史。当前（第二轮）草案 `DATA-SOURCE-SNAPSHOT-STATUS-UI-ADJUSTMENT-BASELINE-002` 在以上历史之上建立，只围绕四类已确认调整范围（表格铺满结果卡片、探针端列展示简化、源库列展示简化、探针端查询下拉框长度与文本截断，见本文件 §22 与 REQUIREMENTS §21.2/§21.3）定向修订既有展示规则设计落点并新增 `DSS-REQ-072~075` 对应设计落点，不改接口、SQL、表结构、数据库访问与产品只读边界（API.md/DATABASE.md 整文件零差异）。本草案未批准、第二轮调整未实现、正式验收未执行；下一入口为 ChatGPT 对本第二轮 UI 调整草案独立正式复审 |
 | 设计任务授权基线提交 | `38da355f16438ad0d9156acdd667e9258fe89141`（本任务开始时 `origin/develop` 最新提交；本地 HEAD 与其一致；历史基线） |
 | R1 修订基准提交 | `31aa9f5beec7ded3cd798b3af617fd79a1606ed0`（R1 修订开始时 `origin/develop` 最新提交，即上一结果提交；历史基线） |
 | 批准内容基准 | `4234af73db2190098f3dcd219319a4281fdabafd`（已批准需求/验收的批准内容基准） |
-| 创建日期 | 2026-09-05；2026-09-06 设计批准收口；2026-09-07 建立验收前 UI 调整草案 |
-| 依据需求 | `REQUIREMENTS.md`（`DSS-REQ-001~065` 已批准基线 + 本轮 UI 调整版本新增 `DSS-REQ-066~071`，共 `DSS-REQ-001~071` 71 条；当前 UI 调整版本文档状态 `APPROVED`（正式批准版本 `DATA-SOURCE-SNAPSHOT-STATUS-UI-ADJUSTMENT-BASELINE-APPROVAL-001`，2026-09-07）） |
-| 依据验收 | `ACCEPTANCE.md`（`DSS-AC-001~080` 共 80 条，全部 `NOT_RUN`；当前 UI 调整版本 `APPROVED`（正式批准版本 `DATA-SOURCE-SNAPSHOT-STATUS-UI-ADJUSTMENT-BASELINE-APPROVAL-001`，2026-09-07）） |
+| 创建日期 | 2026-09-05；2026-09-06 设计批准收口；2026-09-07 建立第一轮验收前 UI 调整草案并批准/实现；2026-09-08 建立第二轮 UI 调整草案 |
+| 依据需求 | `REQUIREMENTS.md`（`DSS-REQ-001~075` 共 75 条：`DSS-REQ-001~071` 承接已批准/第一轮 UI 调整历史基线 + 本轮第二轮新增 `DSS-REQ-072~075`；当前第二轮 UI 调整草案 `...-002`，文档状态 `DRAFT_ADJUSTMENT_PENDING_USER_REVIEW`，未批准） |
+| 依据验收 | `ACCEPTANCE.md`（`DSS-AC-001~086` 共 86 条全部 `NOT_RUN`；当前第二轮 UI 调整草案 `...-002`，文档状态 `DRAFT_ADJUSTMENT_PENDING_USER_REVIEW`，未批准） |
 | 数据库事实依据 | `docs/database/reports/DATA-SOURCE-SNAPSHOT-STATUS-DATABASE-VERIFICATION-001.md`（已提交数据库只读复核报告；本设计任务未连接数据库，见 DATABASE §2） |
 
 任务边界声明：
 
 - 本文件只把已批准需求与验收转换为**可复审、可实现、可测试的四份设计草案**，不改变任何已批准业务规则，不编码，不执行测试或验收，不访问或操作数据库/ZooKeeper/Kafka/sync-client，不启停服务。
 - 本文件已作为正式设计基线批准（批准版本 `DATA-SOURCE-SNAPSHOT-STATUS-DESIGN-BASELINE-APPROVAL-001`，批准日期 2026-09-06，见 §17）；草案阶段“设计状态保持 `DRAFT_PENDING_USER_REVIEW`、不得写成 `APPROVED`”的限制已由批准收口解除（该阶段历史见 §16 R1-04）。设计批准不代表功能已实现：功能仍不得写成 `IMPLEMENTED`、`IMPLEMENTED_PENDING_REVIEW` 或 `IMPLEMENTED_ACCEPTED`；验收用例仍全部保持 `NOT_RUN`，不得改为 `PASS/FAIL/BLOCKED`。
-- 本版为 2026-09-07 验收前 UI 调整草案（`DATA-SOURCE-SNAPSHOT-STATUS-UI-ADJUSTMENT-BASELINE-001`）及其 R1 定向修订（`...-001-R1`）收口后的当前 UI 调整版本：只在展示内容/Tooltip/刷新布局/busy 视觉状态相关设计（§19）上补充设计落点，不改变 API/DATABASE 契约；该版本已经 ChatGPT 对 R1 结果提交 `5757237...` 独立正式复审 `APPROVED` 与项目负责人明确“批准”，`DESIGN.md`/`UI.md` 当前调整版本收口为 `APPROVED`（正式批准版本 `DATA-SOURCE-SNAPSHOT-STATUS-UI-ADJUSTMENT-BASELINE-APPROVAL-001`，批准内容基准提交 `5757237...`，2026-09-07，见 §20）、本轮 UI 调整已由实现任务 `DATA-SOURCE-SNAPSHOT-STATUS-UI-ADJUSTMENT-IMPLEMENTATION-001`（2026-09-07）按批准内容基准提交 `5757237...` 落地、实现状态收口为 `IMPLEMENTED_ADJUSTMENT_PENDING_REVIEW`（见本文件 §21）、`pending_user_review=NO`、`pending_user_confirmation_count=0`；需求 `DSS-REQ-001~071`、验收 `DSS-AC-001~080` 全部 `NOT_RUN`（见 REQUIREMENTS/ACCEPTANCE 当前调整版本）。本轮 UI 调整已实现完成待复审，不代表代码复审通过、不代表正式验收或人工验收已执行或通过，不得把本轮实现写成代码复审通过、验收已执行或通过（`IMPLEMENTED_ACCEPTED`/`PASS`/`ACCEPTED`）；既有批准基线保留为历史。
+- 本文件第一轮 UI 调整记录（2026-09-07 验收前 UI 调整草案 `DATA-SOURCE-SNAPSHOT-STATUS-UI-ADJUSTMENT-BASELINE-001` 及其 R1 定向修订 `...-001-R1` 收口并实现的版本；其中设计落点凡被第二轮草案取代处，现行以 §22 为准）：只在展示内容/Tooltip/刷新布局/busy 视觉状态相关设计（§19）上补充设计落点，不改变 API/DATABASE 契约；该版本已经 ChatGPT 对 R1 结果提交 `5757237...` 独立正式复审 `APPROVED` 与项目负责人明确“批准”，`DESIGN.md`/`UI.md` 调整版本收口为 `APPROVED`（正式批准版本 `DATA-SOURCE-SNAPSHOT-STATUS-UI-ADJUSTMENT-BASELINE-APPROVAL-001`，批准内容基准提交 `5757237...`，2026-09-07，见 §20）、第一轮 UI 调整已由实现任务 `DATA-SOURCE-SNAPSHOT-STATUS-UI-ADJUSTMENT-IMPLEMENTATION-001`（2026-09-07）按批准内容基准提交 `5757237...` 落地、实现状态收口为 `IMPLEMENTED_ADJUSTMENT_PENDING_REVIEW`（见本文件 §21）、`pending_user_review=NO`、`pending_user_confirmation_count=0`；需求 `DSS-REQ-001~071`、验收 `DSS-AC-001~080` 全部 `NOT_RUN`。批准并实现完成不代表代码复审通过、不代表正式验收或人工验收已执行或通过，不等于 `IMPLEMENTED_ACCEPTED`；既有批准基线保留为历史。本轮不改接口、SQL、表结构、数据库访问与产品只读边界（API.md/DATABASE.md 整文件零差异）。
+- 本版（2026-09-08）为第二轮验收前 UI 调整草案（`DATA-SOURCE-SNAPSHOT-STATUS-UI-ADJUSTMENT-BASELINE-002`）：项目负责人对第一轮 UI 调整实现 R1（提交 `5933ec2...`）对应预览页人工检查结论 `CHANGES_REQUIRED`，故在第一轮批准版本之上，只围绕四类已确认调整范围（表格铺满结果卡片、探针端列展示简化、源库列展示简化、探针端查询下拉框长度与文本截断）定向修订既有展示规则设计落点并新增 `DSS-REQ-072~075` 对应设计落点（见 §22；对应 REQUIREMENTS §21.2/§21.3 的 `DSS-REQ-072~075` 与 ACCEPTANCE 新增 `DSS-AC-081~086`）。本草案 `requirements_status`/`acceptance_status`/`design_status(DESIGN/UI)`=`DRAFT_ADJUSTMENT_PENDING_USER_REVIEW`、实现状态 `IMPLEMENTED_ADJUSTMENT_PENDING`、正式验收执行 `NOT_RUN`（`DSS-AC-001~086` 全部 `NOT_RUN`、`acceptance_not_run_count=86`）、人工页面验收 `NOT_RUN`、human_visual_review_status=`CHANGES_REQUIRED`、`pending_user_review=YES`、`pending_user_confirmation_count=0`。第一轮批准并实现完成的版本保留为历史；不得把本草案写成 `APPROVED`/`IMPLEMENTED`/`PASS`/`ACCEPTED`/`IMPLEMENTED_ACCEPTED`。本轮不改接口、SQL、表结构、数据库访问与产品只读边界（API.md/DATABASE.md 整文件零差异）。
 - “设计文档已建立/已批准”不等于“功能已实现、验收已执行或通过”，也不等于 `IMPLEMENTED_ACCEPTED`；下一入口为**另立实现任务**（见 README §10）。
 - 本文件建议的类名/包名/文件路径用于后续实现阶段，**不代表当前仓库已存在这些实现**（现状盘点见 §3）。
 
@@ -514,7 +518,7 @@ onRequestFinally:
 
 四份设计文档（DESIGN/API/UI/DATABASE）在本设计中统一使用：接口 `GET /api/monitor/data-source-run-state/list`；查询参数 `clientId`/`sourceId`/`status`；状态 token `RUNNING`/`COMPLETED`/`UNKNOWN`；原始状态值 `SNAPSHOT_RUNNING`/`SNAPSHOT_COMPLETED`；中文标签 快照进行中/快照已完成/未知状态；时间格式 `YYYY-MM-DD HH:mm:ss`、JSON null、UI `--`；映射状态 `ACTIVE`/`INACTIVE`/`NOT_FOUND`；错误码 `41001/41002`；行键 `clientId+'\x00'+dataSourceId`；排序常量；候选不随筛选收窄。任何偏差视为设计不一致。
 
-### 14.2 需求 → 设计落点矩阵（71/71）
+### 14.2 需求 → 设计落点矩阵（75/75）
 
 落点记号：D=DESIGN §、A=API §、U=UI §、DB=DATABASE §。
 
@@ -527,11 +531,11 @@ onRequestFinally:
 | DSS-REQ-005 | U§10 | DSS-REQ-038 | D§5.5/§10、U§5.2 |
 | DSS-REQ-006 | DB§3/§5、U§5 | DSS-REQ-039 | D§10、A§5/§7、U§5.2 |
 | DSS-REQ-007 | D§2.3/§10、U§2 | DSS-REQ-040 | DB§12、D§13 |
-| DSS-REQ-008 | D§2.4、DB§3（跨程序事实） | DSS-REQ-041 | D§5.6、U§5.4 |
-| DSS-REQ-009 | D§2.3 | DSS-REQ-042 | D§5.6、U§5.4 |
-| DSS-REQ-010 | D§5.7、U§4.5、DB§9 | DSS-REQ-043 | D§5.6、U§5.4 |
-| DSS-REQ-011 | D§11、DB§13 | DSS-REQ-044 | D§5.6、U§5.4、DB§3 |
-| DSS-REQ-012 | A§3、U§4.6 | DSS-REQ-045 | D§5.6、U§5.5 |
+| DSS-REQ-008 | D§2.4、DB§3（跨程序事实） | DSS-REQ-041 | D§5.6/§22.3、U§5.4/§16.3 |
+| DSS-REQ-009 | D§2.3 | DSS-REQ-042 | D§5.6/§22.4、U§5.4/§16.4 |
+| DSS-REQ-010 | D§5.7、U§4.5、DB§9 | DSS-REQ-043 | D§5.6/§22.3/§22.4、U§5.4/§16.3/§16.4 |
+| DSS-REQ-011 | D§11、DB§13 | DSS-REQ-044 | D§5.6/§22.4、U§5.4/§16.4、DB§3 |
+| DSS-REQ-012 | A§3、U§4.6 | DSS-REQ-045 | D§5.6/§22.3/§22.4、U§5.5/§16.3/§16.4 |
 | DSS-REQ-013 | D§11、A§3 | DSS-REQ-046 | D§5.4、U§4.7、DB§8 |
 | DSS-REQ-014 | D§5.1、DB§4 | DSS-REQ-047 | D§5.4、U§4.7、DB§8 |
 | DSS-REQ-015 | D§5.1/§5.6、DB§4 | DSS-REQ-048 | D§5.4、U§4.7、DB§8 |
@@ -541,38 +545,42 @@ onRequestFinally:
 | DSS-REQ-019 | DB§4、D§5.6 | DSS-REQ-052 | D§11、A§3 |
 | DSS-REQ-020 | A§5、DB§11、D§5.1 | DSS-REQ-053 | D§8/§9、U§7.3 |
 | DSS-REQ-021 | A§6、U§4.7、D§2.3 | DSS-REQ-054 | D§7.5/§9、U§6.4/§7.3 |
-| DSS-REQ-022 | D§5.3/§7.2、U§3、A§4 | DSS-REQ-055 | D§5.7、A§5、U§4.5、DB§9 |
+| DSS-REQ-022 | D§5.3/§7.2/§22.5、U§3/§16.5、A§4 | DSS-REQ-055 | D§5.7、A§5、U§4.5、DB§9 |
 | DSS-REQ-023 | D§7/§8、U§3.6、A§4 | DSS-REQ-056 | D§5.7/§10、DB§9 |
-| DSS-REQ-024 | D§6、U§3.2/§3.5、A§5 | DSS-REQ-057 | U§4.5、D§10 |
+| DSS-REQ-024 | D§6/§22.5、U§3.2/§3.5/§16.5、A§5 | DSS-REQ-057 | U§4.5、D§10 |
 | DSS-REQ-025 | D§5.3/§8(E7)、U§3.4/§3.6 | DSS-REQ-058 | D§7.6、U§7.1 |
 | DSS-REQ-026 | A§6、U§4.1 | DSS-REQ-059 | D§7.4、U§7.2 |
 | DSS-REQ-027 | A§5/§6、U§4 | DSS-REQ-060 | D§7.4、U§7.2 |
-| DSS-REQ-028 | D§5.6/§19.4、U§4.3/§13.4 | DSS-REQ-061 | D§7.4/§7.6、U§6.4/§7.3 |
-| DSS-REQ-029 | D§5.6/§19.4、U§4.4/§13.4 | DSS-REQ-062 | U§1/§2、D§3.1 |
+| DSS-REQ-028 | D§5.6/§19.4/§22.3、U§4.3/§13.4/§16.3 | DSS-REQ-061 | D§7.4/§7.6、U§6.4/§7.3 |
+| DSS-REQ-029 | D§5.6/§19.4/§22.4、U§4.4/§13.4/§16.4 | DSS-REQ-062 | U§1/§2、D§3.1 |
 | DSS-REQ-030 | D§5.5、U§5.2/§5.3 | DSS-REQ-063 | U§5/§8、D§10 |
 | DSS-REQ-031 | D§5.7、U§4.5 | DSS-REQ-064 | A§8、U§7.3、D§11 |
 | DSS-REQ-032 | D§5.7、U§4.5 | DSS-REQ-065 | DB§13、D§11 |
 | DSS-REQ-033 | D§5.7、U§4.5 | DSS-REQ-066 | D§19.2、U§13.2 |
 | DSS-REQ-067 | D§19.2、U§13.2/§13.3 | | |
 | DSS-REQ-068 | D§19.3、U§13.3 | | |
-| DSS-REQ-069 | D§19.4、U§13.4 | | |
-| DSS-REQ-070 | D§19.5、U§13.5 | | |
+| DSS-REQ-069 | D§19.4/§22.2、U§13.4/§16.2 | | |
+| DSS-REQ-070 | D§19.5/§22.6/§22.7、U§13.5/§16.6/§16.7 | | |
 | DSS-REQ-071 | D§19.6、U§13.6 | | |
+| DSS-REQ-072 | D§22.2、U§16.2 | | |
+| DSS-REQ-073 | D§22.3、U§16.3 | | |
+| DSS-REQ-074 | D§22.4、U§16.4 | | |
+| DSS-REQ-075 | D§22.5、U§16.5 | | |
 
-覆盖：71/71；无悬空需求。
+覆盖：75/75；无悬空需求。第二轮（§22）在已批准基线之上定向修订的既有需求行 `DSS-REQ-022/024/028/029/041/042/043/044/045/069/070` 其现行设计落点亦以 §22 对应小节为准（`022/024`→§22.5、`028/041/043(探针端停用)`→§22.3、`029/042/044/043(源库停用)`→§22.4、`045`→§22.3/§22.4、`069`→§22.2、`070`→§22.6/§22.7）。
 
-### 14.3 验收 → 设计落点矩阵（80/80）
+### 14.3 验收 → 设计落点矩阵（86/86）
 
 | 验收 | 设计落点 | 验收 | 设计落点 |
 |---|---|---|---|
 | DSS-AC-001 | U§10、A§2 | DSS-AC-035 | U§5.2/§5.3、DB§5 |
 | DSS-AC-002 | D§1、U§10 | DSS-AC-036 | DB§12、D§13 |
 | DSS-AC-003 | U§10、A§2 | DSS-AC-037 | D§5.5/§6、U§5.2、DB§5 |
-| DSS-AC-004 | U§10、D§4.2 | DSS-AC-038 | D§5.6、U§5.4 |
-| DSS-AC-005 | U§10 | DSS-AC-039 | D§5.6、U§5.4 |
-| DSS-AC-006 | DB§3/§5、U§5.1 | DSS-AC-040 | D§5.6、U§5.4 |
-| DSS-AC-007 | D§2.3/§10、U§2 | DSS-AC-041 | D§5.6、U§5.4、DB§3 |
-| DSS-AC-008 | D§2.4、U§10 | DSS-AC-042 | D§5.6、U§5.5 |
+| DSS-AC-004 | U§10、D§4.2 | DSS-AC-038 | D§5.6/§22.3、U§5.4/§16.3 |
+| DSS-AC-005 | U§10 | DSS-AC-039 | D§5.6/§22.4、U§5.4/§16.4 |
+| DSS-AC-006 | DB§3/§5、U§5.1 | DSS-AC-040 | D§5.6/§22.3/§22.4、U§5.4/§16.3/§16.4 |
+| DSS-AC-007 | D§2.3/§10、U§2 | DSS-AC-041 | D§5.6/§22.4、U§5.4/§16.4、DB§3 |
+| DSS-AC-008 | D§2.4、U§10 | DSS-AC-042 | D§5.6/§22.3/§22.4、U§5.5/§16.3/§16.4 |
 | DSS-AC-009 | D§5.7、DB§9 | DSS-AC-043 | D§5.4、U§4.7 |
 | DSS-AC-010 | D§11、A§3、DB§10/§13 | DSS-AC-044 | D§5.4、U§4.7 |
 | DSS-AC-011 | A§3、U§4.6 | DSS-AC-045 | D§5.4、U§4.7 |
@@ -584,14 +592,14 @@ onRequestFinally:
 | DSS-AC-017 | DB§4、D§5.6 | DSS-AC-051 | D§7.5/§8/§9、U§6.4/§7.3 |
 | DSS-AC-018 | A§6、DB§11 | DSS-AC-052 | D§5.7、U§4.5、DB§9 |
 | DSS-AC-019 | A§6、U§4.1 | DSS-AC-053 | D§10、DB§9 |
-| DSS-AC-020 | D§5.3/§7.2、U§3 | DSS-AC-054 | U§4.5、D§10 |
+| DSS-AC-020 | D§5.3/§7.2/§22.5、U§3/§16.5 | DSS-AC-054 | U§4.5、D§10 |
 | DSS-AC-021 | D§7.4/§8、U§3.6 | DSS-AC-055 | D§7.6、U§7.1 |
-| DSS-AC-022 | D§6、U§3.2/§3.5、DB§6 | DSS-AC-056 | D§7.4、U§7.2 |
+| DSS-AC-022 | D§6/§22.5、U§3.2/§3.5/§16.5、DB§6 | DSS-AC-056 | D§7.4、U§7.2 |
 | DSS-AC-023 | D§5.3、A§4、DB§7 | DSS-AC-057 | D§7.4、U§7.2 |
 | DSS-AC-024 | D§7.3/§7.5/§8、U§3.6/§6 | DSS-AC-058 | D§7.4/§7.6、U§6.4/§7.3 |
 | DSS-AC-025 | A§5/§6、U§4 | DSS-AC-059 | D§7.3、U§6.3 |
-| DSS-AC-026 | D§5.6/§19.4、U§4.3/§13.4 | DSS-AC-060 | U§1/§2 |
-| DSS-AC-027 | D§5.6/§19.4、U§4.4/§13.4 | DSS-AC-061 | U§5/§8 |
+| DSS-AC-026 | D§5.6/§19.4/§22.3、U§4.3/§13.4/§16.3 | DSS-AC-060 | U§1/§2 |
+| DSS-AC-027 | D§5.6/§19.4/§22.4、U§4.4/§13.4/§16.4 | DSS-AC-061 | U§5/§8 |
 | DSS-AC-028 | D§5.5、U§5.3 | DSS-AC-062 | A§8、U§7.3、D§11 |
 | DSS-AC-029 | D§5.7、U§4.5 | DSS-AC-063 | DB§13、D§11 |
 | DSS-AC-030 | D§5.7、U§4.5、DB§9 | DSS-AC-064 | DB§3、U§5.1 |
@@ -600,19 +608,27 @@ onRequestFinally:
 | DSS-AC-033 | U§5.1、DB§5 | DSS-AC-067 | U§2/§10、D§3.1 |
 | DSS-AC-034 | D§10、A§7、DB§5 | DSS-AC-068 | D§7.6/§8/§19.3/§19.6、U§6.2/§13.3/§13.6 |
 
-覆盖：80/80；无悬空验收；反向引用均在 `DSS-REQ-001~071` 内。以下为验收前 UI 调整草案新增（对应 REQUIREMENTS §21、ACCEPTANCE §4.18）：
+覆盖：86/86；无悬空验收；反向引用均在 `DSS-REQ-001~075` 内。以下为第一轮验收前 UI 调整草案新增（历史批准内容，对应 REQUIREMENTS §21 第一轮、ACCEPTANCE §4.18）：
 | DSS-AC-069 | D§19.2、U§13.2 | | |
 | DSS-AC-070 | D§19.2/§19.3、U§13.2/§13.3 | | |
 | DSS-AC-071 | D§19.3、U§13.3 | | |
 | DSS-AC-072 | D§19.3、U§13.3 | | |
-| DSS-AC-073 | D§19.4、U§13.4 | | |
-| DSS-AC-074 | D§19.4/§19.5、U§13.4/§13.5 | | |
-| DSS-AC-075 | D§19.4/§19.5、U§13.4/§13.5 | | |
-| DSS-AC-076 | D§19.5、U§13.5 | | |
-| DSS-AC-077 | D§19.5、U§13.5 | | |
+| DSS-AC-073 | D§19.4/§22.2、U§13.4/§16.2 | | |
+| DSS-AC-074 | D§19.4/§19.5/§22.3、U§13.4/§13.5/§16.3 | | |
+| DSS-AC-075 | D§19.4/§19.5/§22.4、U§13.4/§13.5/§16.4 | | |
+| DSS-AC-076 | D§19.5/§22.7、U§13.5/§16.7 | | |
+| DSS-AC-077 | D§19.5/§22.7、U§13.5/§16.7 | | |
 | DSS-AC-078 | D§19.6、U§13.6 | | |
 | DSS-AC-079 | D§19.6、U§13.6 | | |
-| DSS-AC-080 | D§19.2/§19.3/§19.4/§19.5、U§13.2~§13.5 | | |
+| DSS-AC-080 | D§19.2/§19.3/§19.4/§19.5/§22.2/§22.3/§22.4/§22.7、U§13.2~§13.5/§16.2~§16.4/§16.7 | | |
+
+以下为第二轮验收前 UI 调整草案新增（对应 REQUIREMENTS §21.2、ACCEPTANCE §4.19；全部 `NOT_RUN`）：
+| DSS-AC-081 | D§22.2、U§16.2 | | |
+| DSS-AC-082 | D§22.3、U§16.3 | | |
+| DSS-AC-083 | D§22.4、U§16.4 | | |
+| DSS-AC-084 | D§22.5、U§16.5 | | |
+| DSS-AC-085 | D§22.5、U§16.5 | | |
+| DSS-AC-086 | D§22.7、U§16.7 | | |
 
 ## 15. 设计决策与待确认设计项
 
@@ -635,7 +651,7 @@ onRequestFinally:
 
 ### 15.2 待确认设计项
 
-**0 项**（`pending_user_confirmation_count=0`）。本草案已把可依据批准需求、既有代码惯例与已核验数据库事实解决的方案全部落定（§15.1）；未发现必须在项目负责人层决策的设计分叉。R1 极小定向修订（R1-01 页面实例生命周期、R1-02 统一忙碌抑制、R1-03 恢复可见延后单次刷新、R1-04 状态元数据，见 §16）未引入新的待确认设计项。设计草案已由 ChatGPT 对 R1 结果提交（`61117a62f44d39f7c548ebcb650891abf91b9b8c`）正式复审 `APPROVED` 并经项目负责人批准（见 §17）；批准不改变本节“0 项”结论。设计批准不代表功能已实现：验收用例保持 `NOT_RUN`（既有 68 条 `DSS-AC-001~068` 与本轮 UI 调整草案新增 `DSS-AC-069~080` 全部 `NOT_RUN`）。2026-09-07 验收前 UI 调整草案（§19）在已批准设计之上仅调整展示层设计，同样无待负责人补充决策项（`pending_user_confirmation_count=0`）。
+**0 项**（`pending_user_confirmation_count=0`）。本草案已把可依据批准需求、既有代码惯例与已核验数据库事实解决的方案全部落定（§15.1）；未发现必须在项目负责人层决策的设计分叉。R1 极小定向修订（R1-01 页面实例生命周期、R1-02 统一忙碌抑制、R1-03 恢复可见延后单次刷新、R1-04 状态元数据，见 §16）未引入新的待确认设计项。设计草案已由 ChatGPT 对 R1 结果提交（`61117a62f44d39f7c548ebcb650891abf91b9b8c`）正式复审 `APPROVED` 并经项目负责人批准（见 §17）；批准不改变本节“0 项”结论。设计批准不代表功能已实现：验收用例保持 `NOT_RUN`（既有 68 条 `DSS-AC-001~068` 与第一轮 UI 调整草案新增 `DSS-AC-069~080`、第二轮 UI 调整草案新增 `DSS-AC-081~086` 全部 `NOT_RUN`）。2026-09-07 第一轮验收前 UI 调整草案（§19）在已批准设计之上仅调整展示层设计，同样无待负责人补充决策项（`pending_user_confirmation_count=0`）。2026-09-08 第二轮验收前 UI 调整草案（§22）由项目负责人对第一轮实现 R1 对应预览页人工检查结论（`CHANGES_REQUIRED`）驱动，四类调整范围均为已确认输入，同样无待负责人补充决策项（`pending_user_confirmation_count=0`）。
 
 ## 16. R1 极小定向修订记录（`DATA-SOURCE-SNAPSHOT-STATUS-DESIGN-BASELINE-001-R1`）
 
@@ -663,7 +679,9 @@ ChatGPT 对上一结果提交（`31aa9f5beec7ded3cd798b3af617fd79a1606ed0`）进
 - 本节仅作文档级实现记录：相对设计批准内容基准 `61117a62f44d39f7c548ebcb650891abf91b9b8c`，本设计的接口/参数/响应字段/SQL/状态映射/排序/候选范围/时间与 null/行键/错误码/组件职责/生命周期/请求快照/忙碌抑制/可见性补发/计时器/测试设计与追踪矩阵**业务内容零差异**（§1/§16/§17 中“功能仍 NOT_STARTED”等表述是设计批准阶段事实，已被本实现任务推进为 `implementation_status=IMPLEMENTED_PENDING_REVIEW`，见 Feature README §8/§9）。
 - 实现状态当前 `IMPLEMENTED_PENDING_REVIEW`、正式验收 `NOT_RUN`、68 条 `DSS-AC-*` 保持 `NOT_RUN`、人工页面验收 `NOT_RUN`。完整实现落点/开发测试/构建/浏览器证据见实现报告 `reports/DATA-SOURCE-SNAPSHOT-STATUS-IMPLEMENTATION-001.md` 与 Feature README；下一入口为 ChatGPT 代码复审与项目负责人人工页面验收，正式验收另立任务执行。
 
-## 19. 本轮 UI 调整草案设计记录（`DATA-SOURCE-SNAPSHOT-STATUS-UI-ADJUSTMENT-BASELINE-001`）
+## 19. 第一轮 UI 调整草案设计记录（`DATA-SOURCE-SNAPSHOT-STATUS-UI-ADJUSTMENT-BASELINE-001`）
+
+> 本节为**第一轮**验收前 UI 调整草案设计记录（2026-09-07 已批准并实现，历史）。其中凡与第二轮草案冲突处，本轮现行规则以 §22 为准：表格固定总宽 `1145px`、七列全固定、宽屏右侧留白等 §19.4 内容已被 §22.2 表格铺满＋五固定列＋探针端/源库两弹性列取代；探针端/源库黄色异常图标与 Tooltip 异常说明等 §19.4/§19.5 内容已被 §22.3/§22.4/§22.6 删除图标、Tooltip 仅展示真实内容取代；页面级单实例 Tooltip 状态模型不变部分（§19.5）保留，覆盖范围按 §22.7 复核。不冲突的其余第一轮规则继续有效。
 
 ### 19.1 范围与不变契约
 
@@ -688,14 +706,18 @@ ChatGPT 对上一结果提交（`31aa9f5beec7ded3cd798b3af617fd79a1606ed0`）进
 - 语义与已批准一致：自动/立即刷新按已应用条件取数；最近成功刷新时间仅成功后更新；失败约 60 秒自动重试；在途禁用/抑制不提示不补发（§7.5/§8）。
 - 刷新状态圆点表示**所有刷新类请求**（`manual/auto/restore`）在途，变蓝动态只是伴随状态、颜色不是唯一信息载体；刷新类请求的按钮 loading 映射（完整六类请求视觉映射见 §19.6）：`manual`（点击“立即刷新”）→ 仅“立即刷新”按钮显示 loading，且刷新状态圆点变蓝并呈刷新动态；`auto`（60 秒自动刷新）与 `restore`（恢复可见刷新）→ **只让刷新状态圆点变蓝并呈刷新动态**，“立即刷新”与“查询”按钮外观稳定、均不显示 loading。
 
-### 19.4 七列固定列宽与单元格展示设计（DSS-REQ-069，修订 REQ-028/029；UI §13.4）
+### 19.4 第一轮：七列固定列宽与单元格展示设计（DSS-REQ-069，修订 REQ-028/029；UI §13.4）
+
+> **第二轮取代声明（历史章节内已批准事实，非现行规则）**：本小节“表头目标固定列宽：序号 `70`/探针端 `170`/源库 `280`/快照状态 `130`/三个时间列各 `165`”曾作为固定列宽与“表格铺满可用宽度后右侧留白由 `1145px` 固定总宽造成”的描述；第二轮现行规则见 §22.2（表格必须铺满结果卡片正文、探针端/源库改弹性列吸收剩余宽度、取消固定总宽）。探针端“图标/文字可表达‘探针端配置缺失’”（本小节第二项）与源库“回退 Tooltip 显示完整原始 ID＋异常说明、INACTIVE/类别异常轻量异常语义保留”（本小节第三项）等黄色图标/异常语义已被第二轮 §22.3/§22.4 删除（缺失/停用/类别异常不再以黄色图标或异常文字提示）。本节其余内容为第一轮已批准并实现的历史事实，保留备查；不冲突处继续有效。
 
 - 表头目标固定列宽：序号 `70` 中、探针端 `170` 左、源库 `280`（明显宽于探针端）、快照状态 `130` 中、三个时间列各 `165` 左（固定格式）。时间列长度固定、不摊平均；表格容器允许横向滚动，不换行挤压时间/文本。
 - 探针端单元格：只渲染原始 `CLIENT_ID`（单行 ellipsis）；`CLIENT_DESC` 仅作为悬停 Tooltip 内容（描述为空不触发）；关联异常（NOT_FOUND/INACTIVE）沿用 §5.6 标志，图标/文字可表达“探针端配置缺失”（修订 REQ-028）。
 - 源库单元格：正常关联且 ORG 非空 → 渲染 `DATA_SOURCE_ORG`（单行 ellipsis），Tooltip 内容为完整 ORG（不以原始 `DATA_SOURCE_ID` 作默认 Tooltip）；ORG 空或 NOT_FOUND → 回退渲染原始 `DATA_SOURCE_ID`（不空白），Tooltip 显示完整原始 ID＋异常说明；INACTIVE/类别非 SOURCE（含大小写不敏感归一）轻量异常语义保留（修订 REQ-029）。
 - 状态列/时间列/排序/序号/行键/空值/不补行规则不变；表格不使用原生 `title`（混用禁止）。
 
-### 19.5 页面级单实例受控 Tooltip 状态模型（DSS-REQ-070，UI §13.5）
+### 19.5 第一轮：页面级单实例受控 Tooltip 状态模型（DSS-REQ-070，UI §13.5）
+
+> **第二轮取代声明（历史章节内已批准事实，非现行规则）**：本小节“覆盖范围”（本小节末尾）所列“缺失/停用/类别异常图标说明”等异常说明项已被第二轮 §22.6/§22.7 删除——第二轮现行规则下本页表格 Tooltip 只展示真实内容：探针端列完整 `CLIENT_DESC`（非空才弹）、源库列完整 ORG 或完整回退原始 `DATA_SOURCE_ID`、未知快照状态列完整原始值；不存在异常图标，也无异常说明 Tooltip。单实例受控 Tooltip 状态模型（key/统一延迟/关闭事件/不可交互/边界定位/生命周期）本身不受影响，保留为现行设计（§22.7 复核不变）。
 
 - **问题**：多个独立 Element Plus Tooltip 各自持有显示状态与各自延迟，可同时残留多个；快速扫行重叠；Tooltip 可交互时鼠标进入后遗留；无统一关闭/边界机制。
 - **状态模型**：页面/composable 持受控“当前 Tooltip 内容槽”：`currentTooltip = { key, content, anchor, placement } | null`；单一 Tooltip Host（单一 popper/Teleport 实例）渲染，任意时刻最多 1 个。
@@ -705,7 +727,7 @@ ChatGPT 对上一结果提交（`31aa9f5beec7ded3cd798b3af617fd79a1606ed0`）进
   - **不可交互**：pointer-events none / non-enterable，避免进入 Tooltip 本体遗留。
   - **边界定位**：对四边避让，不超出可视区、不被表格容器 overflow 裁切（Teleport 到 body/合适层）；内容优先单行，仅当完整内容物理宽度超安全视口（极端长内容）允许换行保全文不越界。
   - **生命周期**：滚动/resize/visibilitychange/卸载监听随页面实例（§7.1 composable）创建与销毁；不与原生 `title` 混用。
-- 覆盖范围：探针端描述、完整源库 ORG、回退原始 ID＋异常、未知状态原始值、缺失/停用/类别异常图标说明等本页全部表格 Tooltip。
+- 覆盖范围（第一轮已批准内容，异常图标相关部分已被 §22.6/§22.7 取代）：探针端描述、完整源库 ORG、回退原始 ID＋异常、未知状态原始值、缺失/停用/类别异常图标说明等本页全部表格 Tooltip。
 
 ### 19.6 busy 视觉隔离与请求类型视觉映射设计（DSS-REQ-071，UI §13.6）
 
@@ -733,17 +755,108 @@ ChatGPT 对上一结果提交（`31aa9f5beec7ded3cd798b3af617fd79a1606ed0`）进
 
 ### 19.8 追踪与自检
 
-- §14.2 需求 → 设计落点 71/71；§14.3 验收 → 设计落点 80/80；无悬空。
+- §14.2 需求 → 设计落点 71/71、§14.3 验收 → 设计落点 80/80 为第一轮批准/实现时点数值（历史）；当前第二轮草案下 §14.2 为 75/75、§14.3 为 86/86（见 §22.9）。
 - `pending_user_confirmation_count=0`；本轮草案无待负责人补充决策项。
 - 状态迁移见 §1；`API.md`/`DATABASE.md` 整文件零差异；源码/测试/配置/既有证据零差异；本任务不执行数据库/构建/测试/浏览器/正式验收。完整调整落点与自检见执行报告 `reports/DATA-SOURCE-SNAPSHOT-STATUS-UI-ADJUSTMENT-BASELINE-001.md`。
 
-## 20. 本轮 UI 调整版本批准收口记录（`DATA-SOURCE-SNAPSHOT-STATUS-UI-ADJUSTMENT-BASELINE-APPROVAL-001`）
+## 20. 第一轮 UI 调整版本批准收口记录（`DATA-SOURCE-SNAPSHOT-STATUS-UI-ADJUSTMENT-BASELINE-APPROVAL-001`）
 
-- 本轮验收前 UI 调整草案（`DATA-SOURCE-SNAPSHOT-STATUS-UI-ADJUSTMENT-BASELINE-001`，§19）及其 R1 定向修订（`...-001-R1`）已批准收口：ChatGPT 对 R1 结果提交 `575723711ca39d7761df308c1c99b1e6e957cf70` 独立正式复审 `APPROVED`，项目负责人随后明确回复“批准”（批准日期 2026-09-07）。本批准只更新 `DESIGN.md`/`UI.md`/`REQUIREMENTS.md`/`ACCEPTANCE.md` 当前 UI 调整版本状态为 `APPROVED`（正式批准版本 `DATA-SOURCE-SNAPSHOT-STATUS-UI-ADJUSTMENT-BASELINE-APPROVAL-001`，批准内容基准提交 `5757237...`）并作文档级收口记录；相对批准内容基准，本设计 §19 全部设计内容与 §14.2/§14.3 追踪矩阵（需求 71/71、验收 80/80）业务内容零差异，UI §13 全部界面细则零差异；`API.md`/`DATABASE.md` 整文件零差异。实现状态保持 `IMPLEMENTED_ADJUSTMENT_PENDING`（本轮调整未实现）、验收执行 `NOT_RUN`、人工页面验收 `NOT_RUN`、`pending_user_review=NO`、`pending_user_confirmation_count=0`。批准的是本轮 UI 调整设计基线，不代表本轮调整已实现、正式验收已执行或通过，不等于 `IMPLEMENTED_ACCEPTED`。下一入口为另立 UI 调整实现任务（按 §19/UI §13 落地）。完整批准收口自检见报告 `reports/DATA-SOURCE-SNAPSHOT-STATUS-UI-ADJUSTMENT-BASELINE-APPROVAL-001.md`。
+- 本轮验收前 UI 调整草案（`DATA-SOURCE-SNAPSHOT-STATUS-UI-ADJUSTMENT-BASELINE-001`，§19）及其 R1 定向修订（`...-001-R1`）已批准收口：ChatGPT 对 R1 结果提交 `575723711ca39d7761df308c1c99b1e6e957cf70` 独立正式复审 `APPROVED`，项目负责人随后明确回复“批准”（批准日期 2026-09-07）。本批准只更新 `DESIGN.md`/`UI.md`/`REQUIREMENTS.md`/`ACCEPTANCE.md` 当前 UI 调整版本状态为 `APPROVED`（正式批准版本 `DATA-SOURCE-SNAPSHOT-STATUS-UI-ADJUSTMENT-BASELINE-APPROVAL-001`，批准内容基准提交 `5757237...`）并作文档级收口记录；相对批准内容基准，本设计 §19 全部设计内容与 §14.2/§14.3 追踪矩阵（需求 71/71、验收 80/80）业务内容零差异，UI §13 全部界面细则零差异；`API.md`/`DATABASE.md` 整文件零差异。实现状态保持 `IMPLEMENTED_ADJUSTMENT_PENDING`（本轮调整未实现）、验收执行 `NOT_RUN`、人工页面验收 `NOT_RUN`、`pending_user_review=NO`、`pending_user_confirmation_count=0`。批准的是本轮 UI 调整设计基线，不代表本轮调整已实现、正式验收已执行或通过，不等于 `IMPLEMENTED_ACCEPTED`。下一入口为另立 UI 调整实现任务（按 §19/UI §13 落地）。完整批准收口自检见报告 `reports/DATA-SOURCE-SNAPSHOT-STATUS-UI-ADJUSTMENT-BASELINE-APPROVAL-001.md`。（本记录为第一轮批准收口时点描述，其中需求 71/71、验收 80/80 与实现状态 `IMPLEMENTED_ADJUSTMENT_PENDING` 均为当时状态；当前为第二轮草案，§14 数值与各状态见 §1/§22.9。）
 
-## 21. 本轮 UI 调整版本实现任务完成记录（`DATA-SOURCE-SNAPSHOT-STATUS-UI-ADJUSTMENT-IMPLEMENTATION-001`）
+## 21. 第一轮 UI 调整版本实现任务完成记录（`DATA-SOURCE-SNAPSHOT-STATUS-UI-ADJUSTMENT-IMPLEMENTATION-001`）
 
 - 2026-09-07，本轮 UI 调整实现任务（前端只读 UI 调整，授权基线提交 `19e405bc2c88b091abe1c04229daa37a7d4175d1`）已按批准内容基准提交 `5757237...`（§19/UI §13）完成落地并提交：查询卡片与结果卡片拆分为两个独立卡片、结果卡片头部左侧“共 N 条/其中 N 条未知状态”摘要与右侧不可拆散刷新逻辑组（三态几何稳定）、七列固定列宽、探针端单行省略＋悬停 Tooltip、源库 ORG/回退原始 ID 展示、页面级单实例受控 Tooltip（探针端描述/完整 ORG/回退原始 ID＋异常/未知状态原始值等，统一显示/关闭与生命周期）、六类请求（`initial/retry/query/manual/auto/restore`）唯一视觉映射与 busy 视觉隔离（按 §19.5/§19.6 落地）。
-- 本节仅作文档级实现记录：相对本轮批准内容基准 `5757237...`，本设计 §19 全部设计内容与 §14.2/§14.3 追踪矩阵（需求 71/71、验收 80/80）业务内容零差异，UI §13 全部界面细则零差异，`API.md`/`DATABASE.md` 整文件零差异；改动源码限定在实现任务白名单（`frontend/src/views/data-source-run-state/**` 等，见实现报告）。
+- 本节仅作文档级实现记录（需求 71/71、验收 80/80 为第一轮实现时点数值，历史）：相对本轮批准内容基准 `5757237...`，本设计 §19 全部设计内容与 §14.2/§14.3 追踪矩阵（需求 71/71、验收 80/80）业务内容零差异，UI §13 全部界面细则零差异，`API.md`/`DATABASE.md` 整文件零差异；改动源码限定在实现任务白名单（`frontend/src/views/data-source-run-state/**` 等，见实现报告）。
 - 验证：专项前端测试 120 通过、前端全量 726/726、`vue-tsc`＋Vite 构建成功、1440×900 与 1920×1080 真实浏览器视觉验证（截图见实现任务证据目录）；未执行正式验收、未把开发自测写成 PASS。完整实现落点/测试/构建/浏览器证据见实现报告 `reports/DATA-SOURCE-SNAPSHOT-STATUS-UI-ADJUSTMENT-IMPLEMENTATION-001.md`。
-- 实现状态当前 `IMPLEMENTED_ADJUSTMENT_PENDING_REVIEW`（本轮 UI 调整已实现、待 ChatGPT 独立代码与证据复审与人工页面验收）、正式验收执行 `NOT_RUN`、80 条 `DSS-AC-*` 保持 `NOT_RUN`、人工页面验收 `NOT_RUN`；下一入口为 ChatGPT 独立代码与证据复审，然后由项目负责人人工查看页面，正式验收另立任务执行。
+- 实现状态当前 `IMPLEMENTED_ADJUSTMENT_PENDING_REVIEW`（第一轮 UI 调整已实现、待 ChatGPT 独立代码与证据复审与人工页面验收）、正式验收执行 `NOT_RUN`、当时 80 条 `DSS-AC-*` 保持 `NOT_RUN`、人工页面验收 `NOT_RUN`（第一轮时点状态，历史；当前为第二轮草案，验收 `DSS-AC-001~086` 共 86 条全部 `NOT_RUN`，见 §1/§22.9）；下一入口为 ChatGPT 独立代码与证据复审，然后由项目负责人人工查看页面，正式验收另立任务执行。
+
+## 22. 第二轮 UI 调整草案设计记录（`DATA-SOURCE-SNAPSHOT-STATUS-UI-ADJUSTMENT-BASELINE-002`）
+
+### 22.1 范围与不变契约
+
+本版为**第二轮验收前 UI 调整草案**（2026-09-08，纯文档；未批准、第二轮调整未实现、正式验收未执行）。驱动：项目负责人对第一轮 UI 调整实现 R1（提交 `5933ec2...`）对应的当前预览页面进行人工检查，结论为需要继续调整（human_visual_review_status=`CHANGES_REQUIRED`）。本轮只围绕任务提示词 §4 四类已确认调整范围在**前端展示层**（§22.2~§22.5）定向修订设计，界面细则见 UI §16 对应小节：
+
+- **不改**：接口 `GET /api/monitor/data-source-run-state/list` 请求/响应、`clientRef.state`、`sourceRef.state`、`sourceRole`、`statusCategory`/原始状态值映射、候选生成与去重（含 ghost 保留）、排序、时间格式与 null、行键、错误码、计时器/恢复可见/单飞行 busy 业务抑制与读取边界；后端与数据库零改动；`API.md`/`DATABASE.md` 整文件零差异。
+- **对应需求**：新增 `DSS-REQ-072~075`（REQUIREMENTS §21.2），定向修订 `DSS-REQ-022/024/028/029/041/042/043/044/045/069/070`（REQUIREMENTS §21.3）。
+- **对应验收**：新增 `DSS-AC-081~086`（ACCEPTANCE §4.19，全部 `NOT_RUN`），定向修订 `DSS-AC-020/022/026/027/038/039/040/041/042/073/074/075/076/077/080`。
+- 状态：`design_status(DESIGN/UI)`=`DRAFT_ADJUSTMENT_PENDING_USER_REVIEW`、`requirements_status`/`acceptance_status` 同（见 §1 与 REQUIREMENTS/ACCEPTANCE）、实现状态 `IMPLEMENTED_ADJUSTMENT_PENDING`（第二轮调整尚未实现）、正式验收执行 `NOT_RUN`（`DSS-AC-001~086` 全部 `NOT_RUN`）、人工页面验收 `NOT_RUN`、`pending_user_review=YES`、`pending_user_confirmation_count=0`。第一轮批准并实现的版本保留为历史（§19/§20/§21）。本草案不得写成 `APPROVED`/`IMPLEMENTED`/`PASS`/`ACCEPTED`/`IMPLEMENTED_ACCEPTED`。
+
+### 22.2 表格铺满结果卡片与列弹性设计（DSS-REQ-072）
+
+- 现行规则取消第一轮实现残留的表格容器固定 `width:1145px`（不得保留），表格必须在结果卡片正文可用宽度上**铺满**，右边缘贴合卡片正文右侧边界，不留截图所示大块空白，且不引起结果卡片头部（左摘要/右刷新逻辑组）位移（DSS-REQ-072；验收 `DSS-AC-073/080/081`）。
+- 七列顺序保持不变（`DSS-REQ-027`）。列宽模型从“七列全固定”改为**五列固定＋探针端/源库两列弹性**：
+  - 固定列（不参与宽屏剩余空间分配）：序号 `70px` 居中；快照状态 `130px` 居中；快照启动时间/快照完成时间/记录更新时间各 `165px` 左对齐（固定格式与空值规则不变，见 `DSS-REQ-055`；长度固定、不把多余空间平均摊给时间列）。
+  - 弹性列（当结果卡片正文宽度大于最小总宽时吸收全部剩余宽度）：探针端最小宽度 `170px`；源库最小宽度 `280px`（源库明显宽于探针端，延续“源库列宽于探针端”约束）；单行。
+  - 五固定列合计 `70+130+165+165+165=695px`，加两弹性列最小宽度 `170+280=450px`，表格**最小总宽度 `1145px`** 不变。
+- 宽屏分配：卡片正文宽度 > `1145px` 时，剩余宽度 `extra = 卡片正文宽 − 1145px` 全部在探针端/源库两弹性列之间按 `170:280` 相对权重分配（等价实现可按 Element Plus 弹性列 `min-width`＋table layout：固定列给确定宽度、探针端/源库 `min-width` 取 `170px`/`280px` 并允许增长）；固定列不得参与剩余空间分配。
+- 窄屏：卡片正文宽度 < `1145px` 时允许表格容器横向滚动（h-scroll），不压缩固定时间列、不换行挤压主要文本；单元格仍为单行 ellipsis。
+- 目标视口：约 `1440×900`、`1920×1080` 及项目负责人当前截图对应宽度下，表格右边缘贴合结果卡片正文右侧可用边界、无右侧大块空白，头部布局不位移。
+- 只改变前端布局；不改排序、序号生成、行键、空值、状态标签与时间格式。
+
+### 22.3 探针端列展示简化设计（DSS-REQ-073）
+
+- 主内容：始终渲染原始 `CLIENT_ID`，单行、超出弹性列宽省略号。
+- Tooltip：仅当关联探针存在完整 `CLIENT_DESC` 且非空时悬停显示完整 `CLIENT_DESC`；描述为空/探针配置不存在/无法取得描述时不弹 Tooltip（不弹空 Tooltip）；Tooltip 内不得出现“配置已经停用”“探针端配置缺失”或任何异常说明文字。
+- 删除探针端列全部黄色异常图标：启用/非启用/`NOT_FOUND`/描述为空等任意行均不得出现黄色符号（原 `DSS-REQ-045` 黄色图标语义在本列删除）。
+- 展示层只额外判断关联探针 `FG_ACTIVE`（不改变接口已有 `clientRef.state`、后端映射与数据库读取规则）：
+  - `FG_ACTIVE='1'`（启用）：仅显示 `CLIENT_ID`；
+  - 非 `'1'`（含 `'0'` 及数据库宽容归一后判为非启用的值）：显示 `CLIENT_ID`＋一个空格＋红色普通文字“停用”（红字普通文本，非图标、非按钮/链接/可操作标签、不新增列）；
+  - 找不到探针配置（`NOT_FOUND`）：仅显示原始 `CLIENT_ID`（缺失静默，无“缺失”文字、无黄色图标、无异常说明）。
+- 验收 `DSS-AC-026/038/040/074/082`。
+
+### 22.4 源库列展示简化设计（DSS-REQ-074）
+
+- 正常有关联且 `DATA_SOURCE_ORG` 非空：主内容只显示 `DATA_SOURCE_ORG`（单行 ellipsis），悬停 Tooltip 只显示完整 `DATA_SOURCE_ORG`。
+- 配置不存在或 `DATA_SOURCE_ORG` 为空：主内容回退显示完整原始 `DATA_SOURCE_ID` 的单行 ellipsis（不显示空白），悬停 Tooltip 显示完整原始 `DATA_SOURCE_ID`。
+- 删除源库列全部黄色异常图标。
+- Tooltip 不得追加“配置缺失”“配置停用”“类别非 SOURCE”等异常说明文字。
+- 源库停用/类别异常/配置缺失时仍保留 RUN_STATE 行并按 ORG/回退原始 ID 展示；源库列不出现红色“停用”（红色“停用”仅用于探针端非启用 `FG_ACTIVE`，见 §22.3）。
+- 只改变前端展示；不改 `sourceRef.state`、`sourceRole`、后端映射、候选来源或数据库读取规则。
+- 验收 `DSS-AC-027/039/040/041/075/083`。
+
+### 22.5 探针端查询下拉框长度与文本截断设计（DSS-REQ-075）
+
+- 候选 option 展示为 `CLIENT_ID（CLIENT_DESC）` 组合，两段均确定性截断且**只影响展示**：
+  - `CLIENT_ID` 最多展示前 20 个 Unicode 字符，超出追加英文 `...`；`CLIENT_DESC` 最多展示前 20 个 Unicode 字符，超出追加 `...`；
+  - 截断按 Unicode code point（或等价 code-point 安全方式）处理，禁止按 JavaScript UTF-16 code unit 切分拆开代理对；
+  - 描述为空时只显示截断后的 ID，不显示空括号。
+- option 的 `value` 仍是完整原始 `CLIENT_ID`；点击查询提交完整 `CLIENT_ID`；API、响应对象、候选去重、已应用条件与 ghost 保留均使用完整值；不修改、不截断后端数据。当前控件未开启可输入过滤，本轮**不得新增** `filterable`、远程搜索或其他查询能力。
+- 闭合后已选标签做宽度约束与 ellipsis，不得因超长 ID/描述撑大选择框或推动其后条件与按钮；底层选中值仍为完整 ID。
+- 下拉项保持单行：先执行 ID/描述各 20 字符逻辑截断，再以 CSS `text-overflow:ellipsis` 作为面板极窄或字体差异下的最终保护。
+- 宽度约束（延续“探针端列表/控件短于源库”的既有约束）：
+  - 探针端选择控件建议宽度 `240px`、下拉面板目标最大宽度 `480px`，且不超过 `calc(100vw - 16px)` 安全视口宽度；需专属 `popper-class` 时使用本 Feature 命名空间，禁止污染全局选择器。
+  - 源库选择控件建议宽度 `300px`、下拉面板目标最大宽度 `560px`，也不得超过安全视口宽度。
+  - 快照状态选择控件维持约 `200px`。
+- “全部”选项完整显示；ghost（不在候选内）候选应用相同 ID 截断规则，但“不在候选内”的既有语义不得丢失。
+- 验收 `DSS-AC-020/022/084/085`。
+
+### 22.6 展示矩阵与 Tooltip 内容来源汇总（第二轮现行）
+
+| 行/控件 | 主内容 | 追加文字/标记 | Tooltip（完整内容） |
+|---|---|---|---|
+| 探针端·启用 | 原始 `CLIENT_ID`（单行 ellipsis） | 无 | 完整 `CLIENT_DESC`（非空才弹） |
+| 探针端·非启用（`FG_ACTIVE`≠`'1'`） | 原始 `CLIENT_ID`＋一个空格＋红字“停用” | 红字“停用”（普通文本，非图标/按钮） | 完整 `CLIENT_DESC`（非空才弹） |
+| 探针端·`NOT_FOUND` | 原始 `CLIENT_ID` | 无（缺失静默） | 无（描述不可得时不弹） |
+| 源库·正常且 ORG 非空 | `DATA_SOURCE_ORG`（单行 ellipsis） | 无 | 完整 `DATA_SOURCE_ORG` |
+| 源库·`ORG` 空/`NOT_FOUND` | 完整原始 `DATA_SOURCE_ID`（单行 ellipsis，回退） | 无 | 完整原始 `DATA_SOURCE_ID` |
+| 源库·`INACTIVE`/类别非 SOURCE | 按上两行规则（ORG 或原始 ID 回退）正常展示，保留行 | 无黄色图标、无红字“停用”、无异常文字 | 同上（无异常说明追加） |
+| 快照状态（已知/未知） | 标签（不变） | 未知标签样式不变 | 未知快照状态完整原始状态值（不变） |
+
+- 本页任何表格 Tooltip 均不承载“配置缺失/配置停用/类别非 SOURCE/配置已经停用/探针端配置缺失”等异常说明。
+- 黄色异常图标在探针端/源库列表格中全部取消（本 Feature 全部表格不再以黄色图标表达关联异常）。
+
+### 22.7 页面级单实例 Tooltip 不变契约复核（第二轮现行）
+
+- §19.5 的页面级单实例受控 Tooltip 状态模型（当前 Tooltip 内容槽 `{key,content,anchor,placement}`、单 Host、key 变化先关后开、统一延迟约 300~350ms、延迟窗内离开取消、统一关闭事件集、不可交互 pointer-events:none、边界定位、随页面实例生命周期）继续为现行规则，第二轮不改变该状态模型。
+- 覆盖范围按 §22.6 收窄：探针端列完整 `CLIENT_DESC`、源库列完整 `ORG` 或完整回退原始 `DATA_SOURCE_ID`、未知快照状态完整原始值；删除异常图标与异常说明类触发项后，页面 Tooltip 仍满足“任意采样时刻至多 1 个”，未知原始值 Tooltip 不回退（`DSS-AC-086`）。
+- Tooltip 内容源只取真实数据（`CLIENT_DESC`、`DATA_SOURCE_ORG`、原始 `DATA_SOURCE_ID`、未知原始状态值），不拼接任何异常语义文本。
+
+### 22.8 预计受影响实现文件（仅列示，本任务为纯文档一律零修改）
+
+前端（预计，最终以实现任务为准）：`frontend/src/views/data-source-run-state/DataSourceRunStatePage.vue`（结果卡片表格容器宽度由固定改铺满/弹性）；`components/DataSourceSnapshotTable.vue`（列宽模型改五固定＋两弹性、探针端/源库单元格展示与 Tooltip 触发、删除黄色图标）；`components/DataSourceSnapshotQueryBar.vue`（探针端下拉 option 文本截断与控件/面板宽度约束）；`composables/useDataSourceSnapshot.ts`（受控 Tooltip 当前槽/内容源、下拉展示截断与完整 value 隔离）。不改：后端代码、`API.md`/`DATABASE.md`、既有证据、候选来源与去重逻辑、其它页面。
+
+### 22.9 追踪与自检
+
+- §14.2 需求 → 设计落点 75/75；§14.3 验收 → 设计落点 86/86；无悬空。
+- `pending_user_confirmation_count=0`；本轮无待负责人补充决策项；`pending_user_review=YES`，待 ChatGPT 对本第二轮草案独立正式复审与项目负责人批准。
+- 状态迁移见 §1；`API.md`/`DATABASE.md` 整文件零差异；源码/测试/配置/既有证据零差异；本任务不执行数据库/构建/测试/浏览器/正式验收。完整调整落点与自检见执行报告 `reports/DATA-SOURCE-SNAPSHOT-STATUS-UI-ADJUSTMENT-BASELINE-002.md`。
