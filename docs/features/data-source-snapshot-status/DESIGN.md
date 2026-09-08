@@ -108,7 +108,7 @@
   - `TopicOffsetQueryServiceImpl`——全量只读 `selectAll()` 后在服务层做过滤/映射/切片（本 Feature 复用其“**全量加载→服务层过滤**”骨架，但因 DSS 不分页且候选必须来自 RUN_STATE 全量，做 DSS 特有调整，见 §5/§6）。
   - `TopicOffsetMapper`——**纯注解 `@Select`、显式列别名、不继承 BaseMapper、无写方法**；`DATE` 字段用 Oracle `TO_CHAR(..., 'YYYY-MM-DD HH24:MI:SS')` 确定性字符串化后 Java 只透传（本 Feature 的 3 个 DATE 列沿用同一方案）。
   - `ClientConfigMapper` / `DataSourceConfigMapper`——显式列投影；`DataSourceConfigMapper` 列清单**绝不包含 `DATA_SOURCE_PASSWORD`**。
-  - 映射模型 `TopicEndpointMappingVO(state=ACTIVE/INACTIVE/NOT_FOUND, id, org/desc)` 表达“配置存在/停用/不存在”，本 Feature 的关联异常标志模型（§5.5）沿用同风格但按 DSS-REQ-043/044 扩展 source 维度。
+  - 映射模型 `TopicEndpointMappingVO(state=ACTIVE/INACTIVE/NOT_FOUND, id, org/desc)` 表达“配置存在/停用/不存在”，本 Feature 的关联引用状态模型（§5.6）沿用同风格但按 DSS-REQ-043/044 扩展 source 维度。
   - 错误码枚举风格：`enum XxxErrorCode { NAME(code, message) }`；常量类 `XxxConstants` 承载 `FG_ACTIVE_ENABLED="1"`、`MAX_FILTER_IDS`、映射状态词等。
 - Jackson（`backend/src/main/resources/application.yml`）：`date-format: yyyy-MM-dd HH:mm:ss`、`time-zone: GMT+8`、`default-property-inclusion: non_null`。因此**需要 JSON 显式 null 的字段必须在 VO 上用字段级 `@JsonInclude(Include.ALWAYS)`**（topic-offset 的 `TopicOffsetItemVO` 即如此，不改全局配置）。
 - MyBatis-Plus：`@MapperScan("com.bsoft.cdcconfig.**.mapper")`。**注意 bean 名冲突**：simple class name 默认去重，因此本 Feature 新增 Mapper/Service 的类名不得与既有类撞名（尤其不得再建 `ClientConfigMapper`/`DataSourceConfigMapper`/`DataSourceMapper`，本设计选用唯一名，见 §4.2）。
@@ -173,7 +173,7 @@ Spring Boot（Tomcat :8080）
 |---|---|---|
 | Controller | 只暴露 `GET /api/monitor/data-source-run-state/list`；把多值请求参数绑定到 Query；不出现任何 POST/PUT/PATCH/DELETE。 | 无写能力；不直接访问 Mapper/DB。 |
 | Query/参数归一 | `clientId`/`sourceId`/`status` 多值；trim、去空、去重、数量与取值校验。 | “全部”=参数缺失/空，不传哨兵；status 只允许 `RUNNING/COMPLETED/UNKNOWN`。 |
-| Service | ① 归一校验；② 三次全量只读（RUN_STATE + 两张配置投影）；③ 计算候选（RUN_STATE 全量，与筛选无关）；④ 按条件过滤；⑤ 固定排序；⑥ 映射 VO（含关联异常标志、状态分类、NULL 时间）。 | 服务层不调用任何写方法；不拼字符串 SQL；不改任何行。 |
+| Service | ① 归一校验；② 三次全量只读（RUN_STATE + 两张配置投影）；③ 计算候选（RUN_STATE 全量，与筛选无关）；④ 按条件过滤；⑤ 固定排序；⑥ 映射 VO（含关联引用状态、状态分类、NULL 时间）。 | 服务层不调用任何写方法；不拼字符串 SQL；不改任何行。 |
 | 只读 Mapper | 纯 `@Select` 注解、显式列别名；无 `BaseMapper`；无写方法。 | 不 `SELECT *`；配置投影不含 `DATA_SOURCE_PASSWORD`。 |
 | VO/枚举/常量 | 承载接口契约、映射状态词、常量。 | JSON null 语义字段用 `@JsonInclude(ALWAYS)`。 |
 | 页面/composable 实例状态 | 每次路由进入新建页面实例：界面草稿与已应用条件初始为三项“全部”、无最近成功现场，随即自动首次查询；实例内保存“上一次成功”的已应用条件、records/candidates、最近成功刷新时间（前端成功时刻 epoch）、`hasSuccess` 与错误态。 | 失败不写入；不新增 Pinia store；不用 localStorage/sessionStorage；路由离开即销毁、现场不跨路由保留（R1-01）。 |
@@ -195,7 +195,7 @@ Spring Boot（Tomcat :8080）
 4. 基于 **RUN_STATE 全量行**计算候选（§6）——候选与当前筛选无关。
 5. 基于同一全量行按“同条件 OR、跨条件 AND”过滤出展示集合（§5.3）。
 6. 对展示集合做固定确定性排序（§5.4）。
-7. 逐行映射 `SnapshotStatusItemVO`（状态分类 §5.5；关联异常标志 §5.6；时间透传 §5.7）。
+7. 逐行映射 `SnapshotStatusItemVO`（状态分类 §5.5；关联引用状态 §5.6；时间透传 §5.7）。
 8. 返回 `SnapshotStatusListVO{records, candidates}`（§5.8）。
 
 **决策理由**：全量集 ≤ ~100 行，一次全读开销极小；候选与列表来自**同一份读取快照**，天然满足“候选不被当前筛选收窄”（DSS-REQ-024 与 prompt §6）且消除多请求间的候选/列表时序不一致；筛选逻辑集中在服务层，可单元测试、可审计；Mapper SQL 恒为固定只读 `SELECT`，杜绝任何字符串拼接注入面。**否决**“动态 WHERE 下推 SQL + 独立候选查询”：会引入两份结果集的快照不一致风险，且候选需第二份未过滤查询或额外的 WHERE 复杂度。
@@ -247,9 +247,9 @@ Spring Boot（Tomcat :8080）
 - 分类是**只读推导**，不是数据库写操作；数据库无封闭 Check（DSS-REQ-037），必须宽容未知值。
 - 该函数同时用于过滤、展示、候选三处，保证语义一致。
 
-### 5.6 关联异常标志模型（结论）
+### 5.6 关联引用状态模型（结论）
 
-探针端与源库的配置关联各自产出一个小映射对象（风格同 topic-offset `TopicEndpointMappingVO`，但按 DSS 需要扩展），**不新增专门异常列**（DSS-REQ-045），前端据此渲染单元格内图标/弱提示与 Tooltip。
+探针端与源库的配置关联各自产出一个小映射对象（风格同 topic-offset `TopicEndpointMappingVO`，但按 DSS 需要扩展），**不新增专门异常列**（DSS-REQ-045）。关联结果作为**只读引用状态**保留在响应中，前端不渲染单元格内异常图标/弱提示或异常 Tooltip，只按下述第二轮现行展示语义使用（展示落点见 UI §16.3/§16.4、DESIGN §22.6）：`clientRef.state` 为 `ACTIVE` 时只显示 `CLIENT_ID`；为 `INACTIVE` 时显示 `CLIENT_ID`＋空格＋红色普通文字“停用”；为 `NOT_FOUND` 时只显示原始 `CLIENT_ID`（静默）；Tooltip 只取非空完整 `clientRef.desc`，不得拼接状态或异常说明。`sourceRef.state/category/sourceRole` 仅用于源库 ORG/原始 ID 的展示回退，不产生黄色图标、红字、异常文字或异常 Tooltip。
 
 `clientRef: ClientRefVO { state, desc }`
 
@@ -267,8 +267,8 @@ Spring Boot（Tomcat :8080）
 | `INACTIVE` | 命中但 `FG_ACTIVE!='1'` | 同上 | 同上 | 同上 |
 | `NOT_FOUND` | 未命中 | `null` | `null` | `false` |
 
-- 类别归一：对 `DATA_SOURCE_CATEGORY` 做 `trim().toUpperCase()`（当前开发库存储小写 `source`，必须大小写不敏感判定；DSS-REQ-044 的“类别大小写异常”指**无法归一为有效类别**的情形，即归一后不等于 `SOURCE`/`TARGET` 之外的畸形值或空——本 Feature 只关心是否为 SOURCE 展示前提，非 SOURCE 且非 TARGET 的空/畸形值统一归为 `sourceRole=false`）。**决策**：任何大小写写法只要 `upper=='SOURCE'` 即视为正常源库关联，不产生告警；`upper!='SOURCE'`（含 `TARGET`、空、畸形）产生“类别非 SOURCE”轻提示。
-- 源库**展示/候选并不要求 `sourceRole=true`**：RUN_STATE 行存在即展示（可能是一个类别异常的源库），类别异常只加提示、绝不影响行保留（DSS-REQ-044/045）。
+- 类别归一：对 `DATA_SOURCE_CATEGORY` 做 `trim().toUpperCase()`（当前开发库存储小写 `source`，必须大小写不敏感判定；DSS-REQ-044 的“类别大小写异常”指**无法归一为有效类别**的情形，即归一后不等于 `SOURCE`/`TARGET` 之外的畸形值或空——本 Feature 只关心归一类别是否为 `SOURCE` 以得出 `sourceRole`，非 SOURCE 且非 TARGET 的空/畸形值统一归为 `sourceRole=false`）。**决策**：任何大小写写法只要 `upper=='SOURCE'` 即视为正常源库关联；`upper!='SOURCE'`（含 `TARGET`、空、畸形）归一为 `sourceRole=false`，这是**只读数据语义、不是页面告警条件**——前端不产生“类别非 SOURCE”提示、无黄色图标、无异常文字（DSS-REQ-044/074）。
+- 源库**展示/候选并不要求 `sourceRole=true`**：RUN_STATE 行始终展示（可能是一个 `sourceRole=false` 的源库），`sourceRole=false` 只是只读数据语义、不是页面告警条件；不得因任何关联状态（源库缺失/停用/类别非 `SOURCE`）过滤或丢弃行，仍按 ORG/原始 ID 回退展示（DSS-REQ-042/044/045/074）。
 - 客户端“探针端”同样只判断存在/停用（`ACTIVE/INACTIVE/NOT_FOUND`），不做类别判断。
 
 ### 5.7 时间透传（结论）
@@ -638,7 +638,7 @@ onRequestFinally:
 2. **全量读取 + 服务层过滤**（非动态 SQL WHERE），保证候选不被筛选收窄与同快照（§5.1/§6）。
 3. **时间以 SQL `TO_CHAR` 字符串透传**，JSON 显式 null，UI `--`（§5.7/API §5）。
 4. **状态分类 `classify`**（RUNNING/COMPLETED/UNKNOWN）统一用于过滤/展示/候选（§5.5）。
-5. **关联异常标志**：client 3 态、source 4 态（state+sourceRole），源库类别**大小写不敏感归一**、非 SOURCE 仅提示不丢行（§5.6）。
+5. **关联引用状态**：clientRef 3 态（`ACTIVE/INACTIVE/NOT_FOUND`）、sourceRef 4 态（state＋`sourceRole`），源库类别**大小写不敏感归一**；非 `SOURCE` 归 `sourceRole=false` 是只读数据语义、不产生页面告警，RUN_STATE 行始终保留、不因关联状态过滤或丢行（§5.6）。
 6. **状态候选**恒含 RUNNING/COMPLETED，未知仅在确有未知行时追加（§6.1，符合 AC-022 语义）。
 7. **前端状态存放**：页面/composable 实例内保存“上次成功现场”（已应用条件/records/candidates/lastSuccessAt/hasSuccess/错误态）＋ composable 持“单飞行统一忙碌抑制＋仅防迟写/防旧响应的请求实例令牌 seq＋计时器瞬态＋一次性 `pendingVisibilityRefresh`”；两阶段条件用哨兵草稿模型；**不新增 Pinia store、不使用 localStorage/sessionStorage、不跨路由恢复现场**（§7，R1-01/R1-02/R1-03）。
 8. **计时器在每次真实请求结束后重启完整 60s（成败皆然）**；被禁用/被抑制触发不重置、隐藏不重置；唯一例外是恢复可见延后补发（§7.7）：补发结束才重启 60s（§7.5/§8/§9）。
@@ -853,7 +853,7 @@ ChatGPT 对上一结果提交（`31aa9f5beec7ded3cd798b3af617fd79a1606ed0`）进
 
 ### 22.8 预计受影响实现文件（仅列示，本任务为纯文档一律零修改）
 
-前端（预计，最终以实现任务为准）：`frontend/src/views/data-source-run-state/DataSourceRunStatePage.vue`（结果卡片表格容器宽度由固定改铺满/弹性）；`components/DataSourceSnapshotTable.vue`（列宽模型改五固定＋两弹性、探针端/源库单元格展示与 Tooltip 触发、删除黄色图标）；`components/DataSourceSnapshotQueryBar.vue`（探针端下拉 option 文本截断与控件/面板宽度约束）；`composables/useDataSourceSnapshot.ts`（受控 Tooltip 当前槽/内容源、下拉展示截断与完整 value 隔离）。不改：后端代码、`API.md`/`DATABASE.md`、既有证据、候选来源与去重逻辑、其它页面。
+前端（预计，最终以实现任务为准）：`frontend/src/views/data-source-run-state/DataSourceRunStatePage.vue`（结果卡片/表格容器铺满与页面组合）；`components/DataSourceSnapshotTable.vue`（列宽模型改五固定＋两弹性、探针端/源库单元格内容与 Tooltip 触发内容、删除黄色图标）；`components/DataSourceSnapshotQueryBar.vue`（探针端下拉 option label 的 Unicode 安全截断、selected tag 视觉约束、控件与 popper 宽度）；`tooltip/useSnapshotTooltip.ts`（仅在实现确有必要时调整页面级单实例 Tooltip 状态或内容切换；若现有通用状态逻辑已满足则保持不变）；`composables/useDataSourceSnapshot.ts`（**不属于本轮预计修改文件**；查询、已应用条件、刷新、单飞行与计时器状态机必须保持不变）。不改：后端代码、`API.md`/`DATABASE.md`、既有证据、候选来源与去重逻辑、其它页面。
 
 ### 22.9 追踪与自检
 

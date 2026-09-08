@@ -310,9 +310,9 @@ DataSourceRunStatePage.vue
 
 ### 8.2 可访问性基础
 
-- 状态与异常信息均有文字（§5.3），颜色不作唯一表达。
+- 快照状态标签具有明确文字（§5.1/§5.2），未知状态保留数据库原始值（§5.2）；探针端非启用红字“停用”是有明确含义的可读文字（§16.3）；状态与页面请求错误信息均有文字表达，颜色不作唯一信息载体（§5.3）。
 - 控件可键盘操作、可 Tab 聚焦，有可读标签（“探针端”“源库”“快照状态”“查询”“重置”“立即刷新”“重新加载”）；按钮有 `aria`/title 说明。
-- 状态标签、异常图标对辅助技术可读（文本优先）。
+- 快照状态标签对辅助技术可读（文本优先）；探针端红字“停用”具有可读文字语义；不只依赖颜色传达状态。本页探针端与源库列**不存在关联异常图标**，因而没有需向辅助技术传达的关联异常图标或异常说明（第二轮现行规则，§5.4/§16.6）。
 - 表格区域只读：无可聚焦的操作列元素（§4.6），符合“监控只读”语义。
 
 ## 9. UI 状态/事件可测试矩阵与需求/验收映射
@@ -486,7 +486,7 @@ ChatGPT 对上一结果提交（`31aa9f5beec7ded3cd798b3af617fd79a1606ed0`）正
   - §13.4“七列全部固定列宽”与表格容器固定 `width:1145px` → 五固定列＋探针端/源库两弹性列＋表格铺满结果卡片（§16.2）。
   - §13.4/§4.3 历史中“探针端配置缺失/配置已停用”黄色异常图标与异常弱提示 → 全部删除；探针端只判存在/`FG_ACTIVE`（§16.3）。
   - §13.4/§4.4 历史中“源库配置缺失/配置已停用/类别非 SOURCE”黄色异常图标与 Tooltip 异常说明 → 全部删除；源库按 ORG 或回退原始 ID 展示（§16.4）。
-  - §13.4 源库正常行 Tooltip 用原始 `DATA_SOURCE_ID` 的旧表述 → 正常行 Tooltip 只用完整 `DATA_SOURCE_ORG`（§16.4）。
+  - §13.4 源库行 Tooltip 历史准确说明（第二轮不制造不存在的差异）：正常源库行 Tooltip 一直显示完整 `DATA_SOURCE_ORG`、不以原始 `DATA_SOURCE_ID` 作为正常行 Tooltip 默认内容（§13.4 历史即如此），第二轮没有改变该正常行规则，仍显示完整 ORG（§16.4）；第二轮只改变**回退行**（源库配置缺失或 ORG 为空）Tooltip——不再追加“配置缺失”等异常说明，只显示完整原始 `DATA_SOURCE_ID`（§16.4，对应 `DSS-REQ-029` 修订）。
   - 第一轮曾纳入单实例 Tooltip 覆盖范围的关联异常图标说明 → 随黄色图标删除取消，不再属于覆盖范围（§16.6/§16.7）。
   - §3.1/§3.2 探针端候选 option 展示边界 → 增补 ID/描述各 20 Unicode 字符截断与控件/面板宽度上限（§16.5）。
 - **对应需求**：新增 `DSS-REQ-072~075`（REQUIREMENTS §21.2），定向修订 `DSS-REQ-022/024/028/029/041/042/043/044/045/069/070`（REQUIREMENTS §21.3）。
@@ -564,7 +564,7 @@ ChatGPT 对上一结果提交（`31aa9f5beec7ded3cd798b3af617fd79a1606ed0`）正
 
 ### 16.8 预计受影响实现文件（仅列示，本任务为纯文档一律零修改）
 
-前端（预计，最终以实现任务为准）：`frontend/src/views/data-source-run-state/DataSourceRunStatePage.vue`（结果卡片表格容器宽度由固定改铺满/弹性）；`components/DataSourceSnapshotTable.vue`（列宽模型改五固定＋两弹性、探针端/源库单元格展示与 Tooltip 触发、删除黄色图标）；`components/DataSourceSnapshotQueryBar.vue`（探针端下拉 option 文本截断与控件/面板宽度约束）；`composables/useDataSourceSnapshot.ts`（受控 Tooltip 当前槽/内容源、下拉展示截断与完整 value 隔离）。不改：后端代码、`API.md`/`DATABASE.md`、既有证据、候选来源与去重逻辑、其它页面。
+前端（预计，最终以实现任务为准）：`frontend/src/views/data-source-run-state/DataSourceRunStatePage.vue`（结果卡片/表格容器铺满与页面组合）；`components/DataSourceSnapshotTable.vue`（列宽模型改五固定＋两弹性、探针端/源库单元格内容与 Tooltip 触发内容、删除黄色图标）；`components/DataSourceSnapshotQueryBar.vue`（探针端下拉 option label 的 Unicode 安全截断、selected tag 视觉约束、控件与 popper 宽度）；`tooltip/useSnapshotTooltip.ts`（仅在实现确有必要时调整页面级单实例 Tooltip 状态或内容切换；若现有通用状态逻辑已满足则保持不变）；`composables/useDataSourceSnapshot.ts`（**不属于本轮预计修改文件**；查询、已应用条件、刷新、单飞行与计时器状态机必须保持不变）。不改：后端代码、`API.md`/`DATABASE.md`、既有证据、候选来源与去重逻辑、其它页面。
 
 ### 16.9 状态与自检摘要
 

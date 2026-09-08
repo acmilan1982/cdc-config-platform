@@ -213,3 +213,12 @@
 | error | 无 |
 
 下一入口：**ChatGPT 对本第二轮验收前 UI 调整草案（`DATA-SOURCE-SNAPSHOT-STATUS-UI-ADJUSTMENT-BASELINE-002`，DRAFT）进行独立正式复审（`pending_user_review=YES`，不是直接实现）**；复审 `APPROVED` 且项目负责人明确批准后，再另立第二轮 UI 调整实现任务按 DESIGN §22/UI §16 落地本轮展示调整；正式验收（`DSS-AC-001~086` 共 86 条）另立独立正式验收任务执行。本任务完成后立即停止，不继续批准或实现。
+
+## 14. R1 复审注记（2026-09-08，追加）
+
+本注记由 R1 任务（`DATA-SOURCE-SNAPSHOT-STATUS-UI-ADJUSTMENT-BASELINE-002-R1`，纯文档）追加，不改写本报告 §1~§13 的初版任务结果。
+
+- ChatGPT 对本报告对应的初版提交（`0889cec1a67b6e0be654f6cb1f771b71df19677d`）独立正式复审结论为 `CHANGES_REQUIRED`：初版提交范围、75 条需求、86 条验收与第二轮四项核心调整（表格铺满、五固定＋两弹性列、探针端/源库展示规则、下拉截断与宽度）均通过，仅要求定向修订四处残留冲突（`DSS-REQ-067` 的“既有行内关联异常提示继续保留”、DESIGN §5.6 现行展示冲突、UI §8.2 可访问性表述、UI §16.1 错误历史说明）与预计实现文件职责（Tooltip/下拉职责不应归 `composables/useDataSourceSnapshot.ts`）。
+- 本报告 §13 的 `conflict_residual_scan_status=COMPLETE` 仅代表初版 Agent 当时的自检结果，**不代表独立复审通过**；R1 据 ChatGPT 复审结论做了定向修订。
+- R1 定向修订落点：`REQUIREMENTS.md` `DSS-REQ-067`（唯一允许改变的需求业务行）；`DESIGN.md` §5.6（标题改“关联引用状态模型”、改写现行展示语义、同步锚点）与 §22.8（预计实现文件职责）；`UI.md` §8.2（可访问性口径）、§16.1（纠正错误历史说明）、§16.8（预计实现文件职责）。详见 R1 执行报告 `reports/DATA-SOURCE-SNAPSHOT-STATUS-UI-ADJUSTMENT-BASELINE-002-R1.md`。
+- 本报告初版提交与其余历史内容保持不变；本注记只追加不修改。R1 结果提交后，下一入口为 ChatGPT 对 R1 结果提交独立正式复审。
