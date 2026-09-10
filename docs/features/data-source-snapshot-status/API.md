@@ -24,7 +24,7 @@
 
 接口身份：后端接口资源路径使用与前端源码目录一致的命名 `data-source-run-state`（`GET /api/monitor/data-source-run-state/list`），与用户可见名称“源库快照状态”解耦——后者只用于页面/菜单/路由元数据标题/面包屑（UI §10）；接口路径不是用户可见文案。
 
-任务边界声明：本文件只定义**只读查询接口设计**，不定义任何写接口；不编码、不执行测试或验收、不访问数据库；接口与 JSON 契约是“待实现契约”，不是当前已实现的事实（DESIGN §3 已盘点当前后端无 RUN_STATE 访问链路）。
+当前边界声明：本文件是**已批准并已由既有实现落地**的只读查询接口设计基线；`GET /api/monitor/data-source-run-state/list` 已存在。本文件不定义任何**写接口**。本次 R2 为纯文档事实一致性修订，不编码、不执行测试或验收、不访问数据库，不改变任何 API 契约。当前分层实现状态以 §1 与 Feature README 为准；DESIGN §3 中“后端无 RUN_STATE 访问链路”是设计建立前的**历史盘点**，不代表当前状态。
 
 ## 2. API 设计状态与通用约定
 
@@ -305,7 +305,7 @@ GET /api/monitor/data-source-run-state/list?status=RUNNING&status=FORBIDDEN_STAT
 
 ## 9. API 与需求/验收映射
 
-本接口是唯一数据通道，全部 65 条需求与 68 条验收的“可复核接口行为”最终都以 `GET /api/monitor/data-source-run-state/list` 的请求/响应契约为载体；下列给出 API 各设计要素对需求/验收的主要承担关系（完整落点矩阵见 DESIGN §14）。
+当前 Feature 共 `DSS-REQ-001~083` 83 条需求、`DSS-AC-001~095` 95 条验收。本接口是唯一数据通道；其中与数据获取、过滤、映射、候选、只读及错误处理相关的可复核接口行为由 `GET /api/monitor/data-source-run-state/list` 的请求/响应契约承载。R2～R7 新增的 `DSS-REQ-076~083` / `DSS-AC-087~095` 主要为前端视觉与交互呈现规则，不新增 API 路径、参数、响应字段或错误码。下表仅列 API 各设计要素的主要承担关系；完整追踪以 DESIGN §14、REQUIREMENTS 与 ACCEPTANCE 为准。
 
 | API 要素（本节） | 主要承担需求 | 主要承担验收 |
 |---|---|---|
@@ -322,4 +322,6 @@ GET /api/monitor/data-source-run-state/list?status=RUNNING&status=FORBIDDEN_STAT
 
 > 实现记录（2026-09-06）：本文件仅同步实现任务 `DATA-SOURCE-SNAPSHOT-STATUS-IMPLEMENTATION-001` 完成后的元数据 `implementation_status` 为 `IMPLEMENTED_PENDING_REVIEW`；接口/参数/响应字段/错误码/映射等契约相对设计批准内容基准 `61117a62...` **业务内容零差异**。完整实现与验证见实现报告与 Feature README §8/§9。
 
-> 元数据同步记录（2026-09-10，`DATA-SOURCE-SNAPSHOT-STATUS-PROTOTYPE-DESIGN-FREEZE-001-R1`）：本文件仅把 §1 顶部**当前**状态元数据由旧时点的“需求 65 条 / 验收 68 条 / `IMPLEMENTED_PENDING_REVIEW`”同步为当前口径——需求 `DSS-REQ-001~083` 共 **83 条**（`DSS-REQ-001~075` 已批准基线、`DSS-REQ-076~083` R2～R7 设计固化新增且 `DRAFT_PENDING_USER_REVIEW`）、验收 `DSS-AC-001~095` 共 **95 条全部 `NOT_RUN`**（`acceptance_not_run_count=95`）、实现状态分层记录（初始只读实现已存在、第二轮 UI 调整已进 `5173` 为 `IMPLEMENTED_ADJUSTMENT_PENDING_REVIEW`、R2～R7 为 `PENDING_FORMAL_IMPLEMENTATION_ON_5173`）、正式验收 `NOT_RUN`。**接口路径、HTTP 方法、查询参数、响应模型、字段清单、示例、错误码、脱敏规则、只读语义与 §9 映射表全部零变化**；本文件设计基线自身仍为 `APPROVED`（批准日期 2026-09-06）不变；历史记录中的时点计数（如 65/68）保留为历史。**边界说明**：§9 开头一句“全部 65 条需求与 68 条验收……”为映射关系的概括性描述句，属本次授权修改范围（§1 元数据＋本同步说明）之外的正文，按“不扩大修改范围”原则**未改动**；该句不构成接口契约，其计数以本文件 §1 当前元数据（83/95）与 `REQUIREMENTS.md`/`ACCEPTANCE.md` 为准，留待后续维护。**R2～R7 为纯前端视觉/交互呈现调整，本次元数据同步不改变 API 业务契约。** 下一入口为 ChatGPT 从 Git 重新复审。
+> 元数据同步记录（2026-09-10，`DATA-SOURCE-SNAPSHOT-STATUS-PROTOTYPE-DESIGN-FREEZE-001-R1`）：本文件仅把 §1 顶部**当前**状态元数据由旧时点的“需求 65 条 / 验收 68 条 / `IMPLEMENTED_PENDING_REVIEW`”同步为当前口径——需求 `DSS-REQ-001~083` 共 **83 条**（`DSS-REQ-001~075` 已批准基线、`DSS-REQ-076~083` R2～R7 设计固化新增且 `DRAFT_PENDING_USER_REVIEW`）、验收 `DSS-AC-001~095` 共 **95 条全部 `NOT_RUN`**（`acceptance_not_run_count=95`）、实现状态分层记录（初始只读实现已存在、第二轮 UI 调整已进 `5173` 为 `IMPLEMENTED_ADJUSTMENT_PENDING_REVIEW`、R2～R7 为 `PENDING_FORMAL_IMPLEMENTATION_ON_5173`）、正式验收 `NOT_RUN`。**接口路径、HTTP 方法、查询参数、响应模型、字段清单、示例、错误码、脱敏规则、只读语义与 §9 映射表全部零变化**；本文件设计基线自身仍为 `APPROVED`（批准日期 2026-09-06）不变；历史记录中的时点计数（如 65/68）保留为历史。**R2～R7 为纯前端视觉/交互呈现调整，本次元数据同步不改变 API 业务契约。** 下一入口为 ChatGPT 从 Git 重新复审。
+
+> 变更记录（2026-09-10，`DATA-SOURCE-SNAPSHOT-STATUS-PROTOTYPE-DESIGN-FREEZE-001-R2`）：ChatGPT 对本文件 R1 提交 `85a522e492e34b2e168bb32b9f638bbb41afd76b` 复审发现两处**现行事实**仍过期——§1 后的任务边界声明（称接口契约为“待实现契约”“不是当前已实现的事实”、后端无 `RUN_STATE` 访问链路）与 §9 开头概括句（写成“全部 65 条需求与 68 条验收”）。本 R2 仅：(1) 将 §1 后边界声明改为“当前边界声明”，明确本文件为**已批准且已由既有实现落地**的只读接口设计基线、`GET /api/monitor/data-source-run-state/list` 已存在、本文件不定义写接口、DESIGN §3 的“无 RUN_STATE 访问链路”仅为设计建立前的历史盘点；(2) 将 §9 开头概括句改为当前 **83 条需求 / 95 条验收**，并说明该 GET 承载数据获取/过滤/映射/候选/只读/错误处理相关接口行为，R2～R7 新增 `DSS-REQ-076~083`/`DSS-AC-087~095` 主要为前端视觉与交互呈现规则、不新增 API 路径/参数/响应字段/错误码；(3) 删除 R1 元数据同步记录中针对 §9 的“边界说明/留待后续维护”豁免句。**API 业务契约、§9 映射表各行、需求/验收编号与状态均未改变**；本文件仍为 `DRAFT_PENDING_USER_REVIEW`，等待 ChatGPT 最终复审与项目负责人批准。
