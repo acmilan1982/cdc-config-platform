@@ -69,7 +69,7 @@
 | 本轮（查询控件交互调整草案）设计状态 | `DRAFT_PENDING_USER_REVIEW`（`query_control_interaction_adjustment_status=DRAFT_PENDING_USER_REVIEW`：本文件 §26 与 `REQUIREMENTS.md` §21.6/`ACCEPTANCE.md` §4.21 均为**草案**，待 ChatGPT 从 Git 复审与项目负责人明确批准；**不得**写成 `APPROVED`/`IMPLEMENTED`/`PASS`/`ACCEPTED`/`COMPLETED`） |
 | 本轮（查询控件交互调整草案）实现状态 | `PENDING_APPROVAL_AND_IMPLEMENTATION`（`query_control_interaction_adjustment_implementation_status=PENDING_APPROVAL_AND_IMPLEMENTATION`：本轮调整尚未实现；草案经复审与批准后须另立实现任务） |
 | 本轮（查询控件交互调整草案）追踪计数 | 需求 → 设计落点 **86/86**（§14.2）、验收 → 设计落点 **103/103**（§14.3）；新增 `DSS-AC-096~103` 全部 `NOT_RUN` |
-| 下一入口（本轮调整草案） | `CHATGPT_BASELINE_R2_REVIEW_FROM_GIT_THEN_PROJECT_OWNER_APPROVAL`（本轮草案基线 R2 的下一入口只能是 ChatGPT 从远程 Git 复审本草案 R2，再由项目负责人明确决定是否批准；**不得**直接进入实现、不得执行正式验收、不得替项目负责人批准草案） |
+| 下一入口（本轮调整草案） | `CHATGPT_BASELINE_R3_REVIEW_FROM_GIT_THEN_PROJECT_OWNER_APPROVAL`（本轮草案基线 R3 的下一入口只能是 ChatGPT 从远程 Git 复审本草案 R3，再由项目负责人明确决定是否批准；**不得**直接进入实现、不得执行正式验收、不得替项目负责人批准草案） |
 | 数据库事实依据 | `docs/database/reports/DATA-SOURCE-SNAPSHOT-STATUS-DATABASE-VERIFICATION-001.md`（已提交数据库只读复核报告；本设计任务未连接数据库，见 DATABASE §2） |
 
 任务边界声明：
@@ -1061,4 +1061,4 @@ ChatGPT 对上一结果提交（`31aa9f5beec7ded3cd798b3af617fd79a1606ed0`）进
 - 验收状态：`DSS-AC-001~103` 共 103 条**全部 `NOT_RUN`**、`acceptance_not_run_count=103`；禁止把本轮草案写成 `PASS`/`APPROVED`/`IMPLEMENTED`/`ACCEPTED`/`COMPLETED`。
 - 代码零差异：本轮不产生 `frontend/`/`backend/`/SQL/配置差异；`API.md`/`DATABASE.md` 与既有历史报告整文件逐字节不变；不提交 runtime logs/截图/构建产物/依赖目录/临时文件。
 - 分层状态：`query_control_interaction_adjustment_status=DRAFT_PENDING_USER_REVIEW`、`..._implementation_status=PENDING_APPROVAL_AND_IMPLEMENTATION`、`project_owner_visual_review_status=CHANGES_REQUIRED`、`formal_acceptance_status=NOT_RUN`、`pending_user_review=YES`、`pending_user_confirmation_count=0`。
-- 下一入口：`CHATGPT_BASELINE_R2_REVIEW_FROM_GIT_THEN_PROJECT_OWNER_APPROVAL`（ChatGPT 从 Git 复审本草案基线 R2，再由项目负责人决定是否批准；批准前不得开始实现）。
+- 下一入口：`CHATGPT_BASELINE_R3_REVIEW_FROM_GIT_THEN_PROJECT_OWNER_APPROVAL`（ChatGPT 从 Git 复审本草案基线 R3，再由项目负责人决定是否批准；批准前不得开始实现）。

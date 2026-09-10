@@ -58,7 +58,7 @@
 | 本轮（查询控件交互调整草案）状态 | `DRAFT_PENDING_USER_REVIEW`（`query_control_interaction_adjustment_status=DRAFT_PENDING_USER_REVIEW`；未批准） |
 | 本轮（查询控件交互调整草案）实现状态 | `PENDING_APPROVAL_AND_IMPLEMENTATION`（`query_control_interaction_adjustment_implementation_status=PENDING_APPROVAL_AND_IMPLEMENTATION`；本轮为纯文档草案，未落地 `5173`） |
 | 本轮（查询控件交互调整草案）需求/验收计数 | 需求 `DSS-REQ-084~086` 共 3 条（累计 `DSS-REQ-001~086` 共 86 条）、验收 `DSS-AC-096~103` 共 8 条（累计 `DSS-AC-001~103` 共 103 条全部 `NOT_RUN`、`acceptance_not_run_count=103`），追踪矩阵 86/86 与 103/103，见本文件 §20、`REQUIREMENTS.md` §21.6/§21.7、`ACCEPTANCE.md` §4.21/§5 |
-| 本轮（查询控件交互调整草案）下一入口 | `CHATGPT_BASELINE_R2_REVIEW_FROM_GIT_THEN_PROJECT_OWNER_APPROVAL`（本轮草案基线 R2 的下一入口只能是 ChatGPT 从远程 Git 复审本草案 R2，再由项目负责人明确决定是否批准；批准前不得开始实现） |
+| 本轮（查询控件交互调整草案）下一入口 | `CHATGPT_BASELINE_R3_REVIEW_FROM_GIT_THEN_PROJECT_OWNER_APPROVAL`（本轮草案基线 R3 的下一入口只能是 ChatGPT 从远程 Git 复审本草案 R3，再由项目负责人明确决定是否批准；批准前不得开始实现） |
 | 通用查询列表页 UI 基线状态 | `NOT_CREATED_BY_DESIGN`（通用 `QUERY-LIST-PAGE-UI-PATTERN` 须待本页正式实现并验收通过后再独立评估建立，本任务**不创建、不批准**） |
 | 创建日期 | 2026-09-05；2026-09-06 设计批准收口；2026-09-07 建立第一轮验收前 UI 调整草案并批准/实现；2026-09-08 建立第二轮 UI 调整草案（R0/R1）并批准收口为 `DATA-SOURCE-SNAPSHOT-STATUS-UI-ADJUSTMENT-BASELINE-APPROVAL-002`，同日以 `...-002-R2` 纯文档纠正源库 Tooltip 内容并重新进入复审，再以 `...-002-R3` 记录纠正，ChatGPT 对 R3 结果提交独立正式复审 `APPROVED`、项目负责人明确“批准”，同日重新批准收口为 `DATA-SOURCE-SNAPSHOT-STATUS-UI-ADJUSTMENT-BASELINE-APPROVAL-002-R1`（批准内容基准提交 `cf40b5d...`）；2026-09-10 隔离视觉原型 R2～R7 设计固化（`DATA-SOURCE-SNAPSHOT-STATUS-PROTOTYPE-DESIGN-FREEZE-001`，见 §19） |
 
@@ -722,4 +722,4 @@ ChatGPT 对上一结果提交（`31aa9f5beec7ded3cd798b3af617fd79a1606ed0`）正
 - 编号与追踪：`DSS-REQ-084~086`（累计 86 条）、`DSS-AC-096~103`（累计 103 条全部 `NOT_RUN`、`acceptance_not_run_count=103`）；矩阵 86/86 与 103/103 双向无悬空；禁止把本轮草案写成 `PASS`/`APPROVED`/`IMPLEMENTED`/`ACCEPTED`/`COMPLETED`。
 - 代码零差异：本轮不产生 `frontend/`/`backend/`/SQL/配置差异；`API.md`/`DATABASE.md` 与既有历史报告整文件逐字节不变。
 - 分层状态：`query_control_interaction_adjustment_status=DRAFT_PENDING_USER_REVIEW`、`..._implementation_status=PENDING_APPROVAL_AND_IMPLEMENTATION`、`project_owner_visual_review_status=CHANGES_REQUIRED`、`formal_acceptance_status=NOT_RUN`、`pending_user_review=YES`、`pending_user_confirmation_count=0`。
-- 变更记录：2026-09-10，新增 §20 并更新 §1 元数据（新增本轮草案相关状态行）；R1 只定向纠正了其当时的当前状态残留与下一入口（不修改 §20 界面业务规则，作为历史保留）。下一入口：`CHATGPT_BASELINE_R2_REVIEW_FROM_GIT_THEN_PROJECT_OWNER_APPROVAL`。
+- 变更记录：2026-09-10，新增 §20 并更新 §1 元数据（新增本轮草案相关状态行）；R1 只定向纠正了其当时的当前状态残留与下一入口（不修改 §20 界面业务规则，作为历史保留）。下一入口：`CHATGPT_BASELINE_R3_REVIEW_FROM_GIT_THEN_PROJECT_OWNER_APPROVAL`。
