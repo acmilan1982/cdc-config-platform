@@ -344,3 +344,138 @@ describe('DataSourceSnapshotQueryBar 控件宽度与下拉面板宽度约束（U
     wrapper.unmount()
   })
 })
+
+describe('DataSourceSnapshotQueryBar R5 已选值去灰底（§4）', () => {
+  it('源码字面量契约：已选标签底色透明、去边框，仅保留文字与清除 ×；不改变盒模型（高度/内边距/圆角不变）', () => {
+    const src = readFileSync(resolve(process.cwd(), 'src/views/data-source-run-state/components/DataSourceSnapshotQueryBar.vue'), 'utf8')
+    const rule = src.match(/\.dss-select :deep\(\.el-select__wrapper \.el-tag\)\s*\{[^}]*\}/)?.[0] ?? ''
+    expect(rule).toMatch(/background:\s*transparent/)
+    expect(rule).toMatch(/border:\s*none/)
+    // 去灰底不引入盒模型变化：不覆写 height / padding / line-height，下拉框尺寸与布局保持
+    expect(rule).not.toMatch(/(?<!-)\bheight\s*:/)
+    expect(rule).not.toMatch(/\bpadding\s*:/)
+    expect(rule).not.toMatch(/line-height\s*:/)
+    // 旧的灰色块底色已彻底移除
+    expect(src).not.toMatch(/rgba\(9, 9, 11, 0\.06\)/)
+  })
+
+  it('三个下拉框均渲染可清除的已选标签（× 保留）；清除 × 未被隐藏', async () => {
+    const wrapper = await mountBar()
+    const selects = wrapper.findAll('.el-select')
+    expect(selects).toHaveLength(3)
+    for (const sel of selects) {
+      const tag = sel.find('.el-tag')
+      expect(tag.exists()).toBe(true)
+      // Element Plus 的清除 × 即标签内的 el-tag__close；R5 不得移除
+      expect(tag.find('.el-tag__close').exists()).toBe(true)
+    }
+    wrapper.unmount()
+  })
+})
+
+describe('DataSourceSnapshotQueryBar R6 查询字段标签视觉层级（R6 §1）', () => {
+  const queryBarSrc = () =>
+    readFileSync(resolve(process.cwd(), 'src/views/data-source-run-state/components/DataSourceSnapshotQueryBar.vue'), 'utf8')
+
+  /** 提取唯一 .dss-q-label 规则体，用于字面量契约校验。 */
+  function labelRule(): string {
+    return queryBarSrc().match(/\.dss-q-label\s*\{[^}]*\}/)?.[0] ?? ''
+  }
+
+  it('三个字段标签（探针端/源库/快照状态）均存在，且共用唯一 dss-q-label 类与唯一规则（样式完全统一）', async () => {
+    const wrapper = await mountBar()
+
+    const labels = wrapper.findAll('.dss-q-label')
+    expect(labels).toHaveLength(3)
+    expect(labels.map((el) => el.text().trim())).toEqual(['探针端', '源库', '快照状态'])
+
+    // 三个标签均只带 dss-q-label 单一类 → 字号/字重/颜色/行高由同一条规则决定，必然一致
+    for (const label of labels) {
+      expect(label.classes()).toEqual(['dss-q-label'])
+    }
+
+    // 源码中只存在一处 .dss-q-label 声明：不存在覆盖式第二条规则导致三者不一致
+    const declarations = queryBarSrc().match(/\.dss-q-label\s*\{/g) ?? []
+    expect(declarations).toHaveLength(1)
+
+    wrapper.unmount()
+  })
+
+  it('源码字面量契约：字号 14px、字重 600、颜色 #3F3F46（提升为明确字段标签）', () => {
+    const rule = labelRule()
+    expect(rule).not.toBe('')
+    expect(rule).toMatch(/font-size:\s*14px/)
+    expect(rule).toMatch(/font-weight:\s*600/)
+    expect(rule).toMatch(/color:\s*var\(--dss-text-secondary,\s*#3f3f46\)/)
+    // R5 偏小的辅助文字层级（13px/500）不得保留
+    expect(rule).not.toMatch(/font-size:\s*13px/)
+    expect(rule).not.toMatch(/font-weight:\s*500/)
+  })
+
+  it('源码字面量契约：无背景、无边框、无阴影（保持纯文字标签）', () => {
+    const rule = labelRule()
+    expect(rule).not.toMatch(/background/)
+    expect(rule).not.toMatch(/border/)
+    expect(rule).not.toMatch(/box-shadow/)
+    expect(rule).not.toMatch(/outline/)
+  })
+
+  it('源码字面量契约：保持单行（nowrap）且不覆写盒模型（不设 padding / height / line-height）', () => {
+    const rule = labelRule()
+    expect(rule).toMatch(/white-space:\s*nowrap/)
+    expect(rule).not.toMatch(/\bpadding\s*:/)
+    expect(rule).not.toMatch(/(?<!-)\bheight\s*:/)
+    expect(rule).not.toMatch(/line-height\s*:/)
+  })
+
+  it('垂直居中：每个标签与其下拉框同处一个 inline-flex + align-items:center 的 .dss-q-group', async () => {
+    const wrapper = await mountBar()
+    const groups = wrapper.findAll('.dss-q-group')
+    expect(groups).toHaveLength(3)
+    for (const group of groups) {
+      expect(group.find('.dss-q-label').exists()).toBe(true)
+      expect(group.find('.el-select').exists()).toBe(true)
+      // 标签在控件之前，符合“字段名 + 控件”的阅读顺序
+      expect(group.element.firstElementChild?.classList.contains('dss-q-label')).toBe(true)
+    }
+    // 组容器对齐方式决定垂直居中
+    expect(queryBarSrc()).toMatch(/\.dss-q-group\s*\{[^}]*align-items:\s*center/s)
+    wrapper.unmount()
+  })
+
+  it('不影响三个下拉框原有尺寸：控件宽度字面量 240 / 300 / 200 与 wrapper 最小高度保持 R5', () => {
+    const src = queryBarSrc()
+    expect(src).toMatch(/\.dss-client-select\s*\{\s*width:\s*240px;\s*\}/s)
+    expect(src).toMatch(/\.dss-source-select\s*\{\s*width:\s*300px;\s*\}/s)
+    expect(src).toMatch(/\.dss-status-select\s*\{\s*width:\s*200px;\s*\}/s)
+    expect(src).toMatch(/\.dss-select :deep\(\.el-select__wrapper\)\s*\{[^}]*min-height:\s*30px/s)
+  })
+
+  it('不影响查询按钮：仍为黑色主按钮，文案与类名不变', async () => {
+    const wrapper = await mountBar()
+    const btn = queryButton(wrapper)
+    expect(btn.classes()).toContain('dss-query-btn')
+    expect(btn.text().trim()).toBe('查询')
+    // 黑色主按钮语义（R5 已确认）不被本轮标签调整触碰
+    expect(queryBarSrc()).toMatch(/\.dss-q-actions \.dss-query-btn\s*\{[^}]*background:\s*var\(--dss-primary,\s*#09090b\)/s)
+    wrapper.unmount()
+  })
+
+  it('不产生额外请求：渲染与点击标签均不发查询；仅点击“查询”发出一次草稿', async () => {
+    const wrapper = await mountBar()
+    // 渲染本身不产生任何查询
+    expect(wrapper.emitted('query')).toBeUndefined()
+
+    // 标签为非交互纯文本，点击不触发查询
+    const label = wrapper.findAll('.dss-q-label')[0]!
+    expect(label.element.tagName).toBe('SPAN')
+    await label.trigger('click')
+    expect(wrapper.emitted('query')).toBeUndefined()
+
+    // 仍然只有显式“查询”才发出草稿，且恰好一次
+    await queryButton(wrapper).trigger('click')
+    expect(wrapper.emitted('query')).toHaveLength(1)
+
+    wrapper.unmount()
+  })
+})

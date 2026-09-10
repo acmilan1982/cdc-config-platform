@@ -35,7 +35,8 @@
           </div>
           <DataSourceSnapshotToolbar
             :last-refresh-text="lastRefreshText"
-            :refresh-active="refreshActive"
+            :countdown-seconds="autoRefreshRemainingSeconds"
+            :countdown-progress="autoRefreshProgress"
             :manual-loading="manualLoading"
             :busy="busy"
             @refresh="onManualRefresh"
@@ -77,7 +78,8 @@ const {
   retryLoading,
   queryLoading,
   manualLoading,
-  refreshActive,
+  autoRefreshRemainingSeconds,
+  autoRefreshProgress,
   busy,
   firstLoadError,
   refreshError,
@@ -115,10 +117,29 @@ onUnmounted(() => {
 </script>
 
 <style scoped>
+/* Linear / Notion 极简视觉隔离试验：仅本页面局部令牌与样式，不影响其它路由页面。
+   命名空间保持 .dss-*；不覆写 :root 上的 --el-*，不改 global.css，不引入外部样式。 */
 .dss-page {
   display: flex;
   flex-direction: column;
   gap: 12px;
+  /* R7：本页直接承接外层白色内容区，不再叠加第二重页面级近白底色 */
+  background: transparent;
+  border-radius: 10px;
+  padding: 14px 16px;
+  /* 局部继承令牌（只在此画布子树生效） */
+  --dss-surface: #ffffff;
+  --dss-embedded: #f4f4f5;
+  --dss-divider: #f0f0f1;
+  --dss-border-soft: #e6e6e8;
+  --dss-text: #09090b;
+  --dss-text-secondary: #3f3f46;
+  --dss-text-muted: #71717a;
+  --dss-text-faint: #a1a1aa;
+  --dss-primary: #09090b;
+  --dss-accent: #2563eb;
+  --dss-danger: #991b1b;
+  --dss-warning: #b45309;
 }
 .dss-page-header {
   flex-shrink: 0;
@@ -126,24 +147,28 @@ onUnmounted(() => {
 .dss-title {
   margin: 0;
   font-size: 20px;
-  font-weight: 600;
-  color: #303133;
+  font-weight: 650;
+  letter-spacing: -0.01em;
+  color: var(--dss-text, #09090b);
 }
 .dss-desc {
   margin: 4px 0 0;
   font-size: 13px;
-  color: #909399;
+  color: var(--dss-text-muted, #71717a);
   line-height: 1.5;
 }
-/* 与 app-shell / Element Plus 浅色企业后台一致的独立白色卡片（DSS-REQ-066②③，AC-069） */
+/* 卡片底座：无硬边框、极弱阴影（Linear 面板）；查询筛选条在其上叠加嵌入式色块 */
 .dss-card {
-  background: #ffffff;
-  border: 1px solid var(--el-border-color-lighter, #ebeef5);
-  border-radius: var(--el-border-radius-base, 4px);
-  box-shadow: var(--el-box-shadow-light, 0 2px 12px 0 rgba(0, 0, 0, 0.05));
+  background: var(--dss-surface, #ffffff);
+  border: none;
+  border-radius: 10px;
+  box-shadow: 0 1px 2px rgba(9, 9, 11, 0.04), 0 1px 3px rgba(9, 9, 11, 0.03);
 }
 .dss-query-card {
-  padding: 14px 16px;
+  background: var(--dss-embedded, #f4f4f5);
+  border-radius: 8px;
+  box-shadow: none;
+  padding: 10px 16px;
 }
 .dss-result-card {
   display: flex;
@@ -155,7 +180,7 @@ onUnmounted(() => {
   justify-content: space-between;
   gap: 12px 16px;
   flex-wrap: wrap;
-  padding: 12px 16px 4px;
+  padding: 12px 16px 2px;
 }
 .dss-result-summary {
   display: inline-flex;
@@ -163,15 +188,24 @@ onUnmounted(() => {
   gap: 10px;
   min-width: 0;
 }
+/* '共 N 条'（R5 §3 放大）：16px/700/#09090B，头部主层级；不设行高，避免推动头部整行高度 */
 .dss-summary-count {
-  font-size: 15px;
-  font-weight: 600;
-  color: #303133;
+  font-size: 16px;
+  font-weight: 700;
+  color: var(--dss-text, #09090b);
   font-variant-numeric: tabular-nums;
 }
+/* '其中 N 条未知状态'＝小号暖黄胶囊（R5 §3）：12px/700，line-height 22px 使胶囊总高≈22px，
+   在字号与字重上都明显低于 16px 主计数，保持"共 N 条 > 未知状态胶囊"的层级；两段经 flex align-items:center 垂直居中 */
 .dss-summary-unknown {
-  font-size: 13px;
-  color: #e6a23c;
+  display: inline-block;
+  background: #fef3c7;
+  color: var(--dss-warning, #b45309);
+  border-radius: 999px;
+  font-size: 12px;
+  font-weight: 700;
+  line-height: 22px;
+  padding: 0 8px;
   white-space: nowrap;
 }
 /* 稳定槽位：恒占固定高度一行，失败提示出现/消失不改变上方刷新组与下方表格的几何 */
@@ -183,16 +217,16 @@ onUnmounted(() => {
 }
 .dss-result-error {
   font-size: 13px;
-  color: #d92d20;
+  color: var(--dss-danger, #991b1b);
   white-space: nowrap;
 }
 .dss-result-card__divider {
   height: 1px;
-  background: var(--el-border-color-lighter, #ebeef5);
+  background: var(--dss-divider, #f0f0f1);
   margin: 0 16px;
 }
 .dss-result-card__body {
-  padding: 12px 16px 16px;
+  padding: 10px 16px 14px;
   min-width: 0;
 }
 /* 首次失败错误态 */
@@ -205,17 +239,17 @@ onUnmounted(() => {
 }
 .dss-error-icon {
   font-size: 26px;
-  color: var(--el-color-danger, #f56c6c);
+  color: var(--dss-danger, #991b1b);
 }
 .dss-error-title {
   margin: 0;
   font-size: 16px;
   font-weight: 600;
-  color: #303133;
+  color: var(--dss-text, #09090b);
 }
 .dss-error-desc {
   margin: 0 0 4px;
   font-size: 13px;
-  color: #909399;
+  color: var(--dss-text-muted, #71717a);
 }
 </style>

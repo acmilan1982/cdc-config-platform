@@ -561,3 +561,157 @@ describe('useDataSourceSnapshot 隐藏/恢复可见（DESIGN §7.7，R1-03，AC-
     expect(mockedFetch).toHaveBeenCalledTimes(1)
   })
 })
+
+describe('useDataSourceSnapshot R2 真实自动刷新倒计时投影（R2 §9，假时钟专项）', () => {
+  it('初始调度显示 60；每秒精确 -1；推进至到期仅触发一次 auto，请求完成后下一周期与显示同步重置 60', async () => {
+    vi.useFakeTimers()
+    mockedFetch.mockResolvedValue(okRes([row('A')]))
+    const ctl = setup()
+    ctl.onPageMounted()
+    await settle()
+
+    // 初始调度即 60（真实 setTimeout 与显示同源同步）
+    expect(mockedFetch).toHaveBeenCalledTimes(1)
+    expect(ctl.autoRefreshRemainingSeconds.value).toBe(60)
+    expect(ctl.autoRefreshProgress.value).toBe(1)
+    expect(ctl.autoRefreshPaused.value).toBe(false)
+
+    await vi.advanceTimersByTimeAsync(1000)
+    await settle()
+    expect(ctl.autoRefreshRemainingSeconds.value).toBe(59)
+    expect(ctl.autoRefreshProgress.value).toBeLessThan(1)
+
+    await vi.advanceTimersByTimeAsync(1000)
+    await settle()
+    expect(ctl.autoRefreshRemainingSeconds.value).toBe(58)
+
+    // 推进到 60s 到期：只新增 1 次 auto GET
+    await vi.advanceTimersByTimeAsync(AUTO_REFRESH_INTERVAL_MS - 2000)
+    await settle()
+    expect(mockedFetch).toHaveBeenCalledTimes(2)
+
+    // 请求完成后：新 60s 周期与显示同步重置
+    expect(ctl.autoRefreshRemainingSeconds.value).toBe(60)
+    expect(ctl.autoRefreshProgress.value).toBe(1)
+  })
+
+  it('推进 1 秒连续递减 60→59→58→…→9，每次恰减 1、不经该显示计时触发请求', async () => {
+    vi.useFakeTimers()
+    mockedFetch.mockResolvedValue(okRes([row('A')]))
+    const ctl = setup()
+    ctl.onPageMounted()
+    await settle()
+    expect(ctl.autoRefreshRemainingSeconds.value).toBe(60)
+
+    for (let expected = 59; expected >= 9; expected--) {
+      await vi.advanceTimersByTimeAsync(1000)
+      await settle()
+      expect(ctl.autoRefreshRemainingSeconds.value).toBe(expected)
+    }
+    // 期间没有任何请求（仅初始一次）
+    expect(mockedFetch).toHaveBeenCalledTimes(1)
+  })
+
+  it('页面隐藏：推进时间不触发请求、显示冻结不假走；恢复照常一次恢复刷新并同步重置', async () => {
+    vi.useFakeTimers()
+    mockedFetch.mockResolvedValue(okRes([row('A')]))
+    const ctl = setup()
+    ctl.onPageMounted()
+    await settle()
+    expect(ctl.autoRefreshRemainingSeconds.value).toBe(60)
+
+    await vi.advanceTimersByTimeAsync(1000)
+    await settle()
+    expect(ctl.autoRefreshRemainingSeconds.value).toBe(59)
+
+    // 隐藏 → 倒计时与真实调度一起暂停
+    ctl.visibilityChanged(true)
+    expect(ctl.autoRefreshPaused.value).toBe(true)
+    const frozen = ctl.autoRefreshRemainingSeconds.value
+    await vi.advanceTimersByTimeAsync(AUTO_REFRESH_INTERVAL_MS * 3)
+    await settle()
+    expect(mockedFetch).toHaveBeenCalledTimes(1)
+    expect(ctl.autoRefreshRemainingSeconds.value).toBe(frozen)
+    expect(ctl.autoRefreshPaused.value).toBe(true)
+
+    // 恢复可见 → 空闲立即一次 restore，随后重启 60s 且不重复触发
+    ctl.visibilityChanged(false)
+    await settle()
+    expect(mockedFetch).toHaveBeenCalledTimes(2)
+    expect(ctl.autoRefreshPaused.value).toBe(false)
+    expect(ctl.autoRefreshRemainingSeconds.value).toBe(60)
+
+    await vi.advanceTimersByTimeAsync(AUTO_REFRESH_INTERVAL_MS)
+    await settle()
+    expect(mockedFetch).toHaveBeenCalledTimes(3)
+  })
+
+  it('busy 期间到期不产生并发请求；挂起结束后单次重置下一周期', async () => {
+    vi.useFakeTimers()
+    let release!: (v: ApiResponse<SnapshotStatusListResult>) => void
+    const gate = new Promise<ApiResponse<SnapshotStatusListResult>>((resolve) => {
+      release = resolve
+    })
+    mockedFetch.mockResolvedValue(okRes([row('A')]))
+    const ctl = setup()
+    ctl.onPageMounted()
+    await settle()
+
+    // 下一轮 auto 挂起在途（busy）
+    mockedFetch.mockImplementationOnce(() => gate)
+    await vi.advanceTimersByTimeAsync(AUTO_REFRESH_INTERVAL_MS)
+    await settle()
+    expect(mockedFetch).toHaveBeenCalledTimes(2)
+    expect(ctl.busy.value).toBe(true)
+
+    // busy 期间再推进多个周期：到期被抑制，不新增请求
+    await vi.advanceTimersByTimeAsync(AUTO_REFRESH_INTERVAL_MS * 3)
+    await settle()
+    expect(mockedFetch).toHaveBeenCalledTimes(2)
+
+    release(okRes([row('A2')]))
+    await settle()
+    expect(mockedFetch).toHaveBeenCalledTimes(2)
+    expect(ctl.busy.value).toBe(false)
+    expect(ctl.autoRefreshRemainingSeconds.value).toBe(60)
+  })
+
+  it('手工刷新只新增 1 次 GET（不因倒计时附加 auto），完成后与真实调度同步重置为 60', async () => {
+    vi.useFakeTimers()
+    mockedFetch.mockResolvedValue(okRes([row('A')]))
+    const ctl = setup()
+    ctl.onPageMounted()
+    await settle()
+    expect(ctl.autoRefreshRemainingSeconds.value).toBe(60)
+
+    await vi.advanceTimersByTimeAsync(1000)
+    await settle()
+    expect(ctl.autoRefreshRemainingSeconds.value).toBe(59)
+
+    mockedFetch.mockResolvedValue(okRes([row('A2')]))
+    ctl.manualRefresh()
+    await settle()
+    // initial + manual，共 2 次；不额外 auto
+    expect(mockedFetch).toHaveBeenCalledTimes(2)
+    // 手工完成 → 真实下一周期从 60 重新安排，显示同步重置（不残留旧 59 周期）
+    expect(ctl.autoRefreshRemainingSeconds.value).toBe(60)
+
+    // 重置后的完整周期到期：只多 1 次 auto
+    await vi.advanceTimersByTimeAsync(AUTO_REFRESH_INTERVAL_MS)
+    await settle()
+    expect(mockedFetch).toHaveBeenCalledTimes(3)
+  })
+
+  it('destroy 卸载清理：不再遗留 auto timeout 与倒计时 interval', async () => {
+    vi.useFakeTimers()
+    mockedFetch.mockResolvedValue(okRes([row('A')]))
+    const ctl = setup()
+    ctl.onPageMounted()
+    await settle()
+    expect(vi.getTimerCount()).toBeGreaterThanOrEqual(2) // 60s timeout + 1s 投影 interval
+
+    ctl.destroy()
+    expect(vi.getTimerCount()).toBe(0)
+    expect(ctl.autoRefreshPaused.value).toBe(false)
+  })
+})

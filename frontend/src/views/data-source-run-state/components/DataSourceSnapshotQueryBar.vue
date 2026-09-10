@@ -64,11 +64,12 @@
       <!-- 查询按钮：仅 kind=query 显示 loading；被功能阻断时视觉稳定，以 aria-disabled + 事件防御阻止鼠标/键盘二次请求 -->
       <el-button
         type="primary"
+        class="dss-query-btn"
         :loading="queryLoading"
         :aria-disabled="ariaBlocked || undefined"
         @click="onQuery"
       >查询</el-button>
-      <el-button @click="onReset">重置</el-button>
+      <el-button class="dss-reset-btn" @click="onReset">重置</el-button>
     </div>
   </div>
 </template>
@@ -206,14 +207,17 @@ defineExpose({ reset: onReset })
 .dss-q-group {
   display: inline-flex;
   align-items: center;
-  gap: 4px;
+  gap: 6px;
   flex: 0 0 auto;
 }
+/* R6 §1：三个查询字段标签提升为明确字段标签层级（14px / 600 / #3F3F46），
+   与下拉框形成自然视觉层级；仍为无背景、无边框的单行文字，垂直居中由 .dss-q-group 的 align-items 保证。
+   三个标签共用本规则 → 字体/字号/字重/颜色/行高完全一致；不改盒模型，因此控件尺寸与查询区域布局不变 */
 .dss-q-label {
   flex: 0 0 auto;
   font-size: 14px;
-  font-weight: 500;
-  color: #303133;
+  font-weight: 600;
+  color: var(--dss-text-secondary, #3f3f46);
   white-space: nowrap;
 }
 .dss-select {
@@ -228,6 +232,30 @@ defineExpose({ reset: onReset })
 }
 .dss-status-select {
   width: 200px;
+}
+/* 下拉框 wrapper：白底、无硬边框、6px 圆角、极弱阴影；聚焦＝局部 1px 深色焦点环，不出现厚重蓝色外框 */
+.dss-select :deep(.el-select__wrapper) {
+  background: var(--dss-surface, #ffffff);
+  border-radius: 6px;
+  min-height: 30px;
+  padding-left: 10px;
+  padding-right: 8px;
+  box-shadow: 0 1px 2px rgba(9, 9, 11, 0.05);
+  transition: box-shadow 0.12s ease;
+}
+.dss-select :deep(.el-select__wrapper:hover) {
+  box-shadow: 0 1px 2px rgba(9, 9, 11, 0.08);
+}
+.dss-select :deep(.el-select__wrapper.is-focused) {
+  box-shadow: 0 0 0 1px rgba(9, 9, 11, 0.7) inset;
+}
+/* 已选值轻量化（R5 §4）：去掉"全部"/具体选中项的灰色块背景与边框，只留文字 + 清除 ×；
+   仅改标签底色，不触碰盒模型（高度/内边距/宽度不变），下拉框尺寸与布局保持不变 */
+.dss-select :deep(.el-select__wrapper .el-tag) {
+  background: transparent;
+  border: none;
+  color: var(--dss-text-secondary, #3f3f46);
+  border-radius: 4px;
 }
 /* 选中标签宽度约束与 ellipsis：超长 ID/描述不撑大选择框、不换行推高、不推动其后条件与按钮；底层选中值仍为完整 ID */
 .dss-client-select :deep(.el-select__selected-item),
@@ -257,6 +285,37 @@ defineExpose({ reset: onReset })
   gap: 8px;
   flex: 0 0 auto;
 }
+/* 查询：黑色主按钮；重置：浅灰底深灰字次按钮（Linear 单一主视觉） */
+.dss-q-actions .dss-query-btn {
+  background: var(--dss-primary, #09090b);
+  border-color: var(--dss-primary, #09090b);
+  color: #ffffff;
+  font-weight: 500;
+  border-radius: 6px;
+  height: 30px;
+  padding: 0 16px;
+}
+.dss-q-actions .dss-query-btn:hover,
+.dss-q-actions .dss-query-btn:focus {
+  background: #27272a;
+  border-color: #27272a;
+  color: #ffffff;
+}
+.dss-q-actions .dss-reset-btn {
+  background: #e4e4e7;
+  border-color: transparent;
+  color: var(--dss-text-secondary, #3f3f46);
+  font-weight: 500;
+  border-radius: 6px;
+  height: 30px;
+  padding: 0 14px;
+}
+.dss-q-actions .dss-reset-btn:hover,
+.dss-q-actions .dss-reset-btn:focus {
+  background: #d9d9dd;
+  border-color: transparent;
+  color: var(--dss-text-secondary, #3f3f46);
+}
 </style>
 
 <!-- 候选下拉幽灵项（teleport 到 body）：以弱化样式提示该值当前不在候选内（UI §3.5） -->
@@ -281,5 +340,19 @@ defineExpose({ reset: onReset })
   white-space: nowrap;
   overflow: hidden;
   text-overflow: ellipsis;
+}
+
+/* 下拉面板 Linear 化（仅本 Feature 专属 popper-class）：白底、8px 圆角、无硬边框、柔和阴影 */
+.el-select-dropdown.dss-client-popper,
+.el-select-dropdown.dss-source-popper,
+.el-select-dropdown.dss-status-popper {
+  border: none;
+  border-radius: 8px;
+  box-shadow: 0 6px 20px rgba(9, 9, 11, 0.12);
+}
+.el-select-dropdown.dss-client-popper .el-select-dropdown__item.is-hovering,
+.el-select-dropdown.dss-source-popper .el-select-dropdown__item.is-hovering,
+.el-select-dropdown.dss-status-popper .el-select-dropdown__item.is-hovering {
+  background-color: rgba(9, 9, 11, 0.05);
 }
 </style>

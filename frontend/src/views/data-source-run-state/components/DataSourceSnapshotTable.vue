@@ -3,10 +3,10 @@
     <el-table
       :data="records"
       v-loading="loading"
-      border
       class="dss-table"
       :empty-text="emptyText"
       :row-key="rowKey"
+      :row-class-name="rowClassName"
     >
       <el-table-column label="序号" width="70" align="center">
         <template #default="{ $index }">
@@ -14,12 +14,12 @@
         </template>
       </el-table-column>
 
-      <!-- 探针端列（弹性列，min-width:170）：始终显示原始 CLIENT_ID；非启用(FG_ACTIVE≠'1')追加红字“停用”；完整非空 CLIENT_DESC 走页面级单实例 Tooltip -->
+      <!-- 探针端列（弹性列，min-width:170，R5）：始终显示原始 CLIENT_ID（600 字重）；非启用(FG_ACTIVE≠'1')在 ID 后追加浅红微型"停用"Badge；完整非空 CLIENT_DESC 走页面级单实例 Tooltip -->
       <el-table-column label="探针端" min-width="170" align="left">
         <template #default="{ row }">
           <div class="dss-cell">
             <span
-              class="dss-cell-main dss-tt"
+              class="dss-cell-main dss-probe-main dss-tt dss-mono"
               :data-tt-kind="`client-desc-${rowKey(row)}`"
               @mouseenter="onProbeMainEnter(row, $event)"
               @mouseleave="tooltip.hide()"
@@ -29,8 +29,8 @@
         </template>
       </el-table-column>
 
-      <!-- 源库列（弹性列，min-width:280）：正常 ORG 非空只显示 ORG；ORG 空/配置缺失回退原始 DATA_SOURCE_ID；Tooltip 恒为完整原始 DATA_SOURCE_ID -->
-      <el-table-column label="源库" min-width="280" align="left">
+      <!-- 源库列（弹性列，min-width:285，R5；始终明显宽于探针端）：正常 ORG 非空只显示 ORG；ORG 空/配置缺失回退原始 DATA_SOURCE_ID；Tooltip 恒为完整原始 DATA_SOURCE_ID -->
+      <el-table-column label="源库" min-width="285" align="left">
         <template #default="{ row }">
           <div class="dss-cell">
             <span
@@ -43,7 +43,7 @@
         </template>
       </el-table-column>
 
-      <el-table-column label="快照状态" width="130" align="center">
+      <el-table-column label="快照状态" width="140" align="center">
         <template #default="{ row }">
           <span
             class="dss-tt dss-status-trigger"
@@ -56,7 +56,8 @@
         </template>
       </el-table-column>
 
-      <el-table-column label="快照启动时间" width="165" align="left">
+      <!-- 三时间列（弹性列，min-width:170，R5）：与探针端/源库同为 min-width 弹性列；三列等宽并在宽屏吸收富余，但不无限吞掉空间（探针端/源库亦同步拉宽） -->
+      <el-table-column label="快照启动时间" min-width="170" align="left">
         <template #default="{ row }">
           <span class="dss-time" :class="{ 'dss-time-dash': isDash(row.snapshotLastSeenAt) }">
             {{ formatTime(row.snapshotLastSeenAt) }}
@@ -64,7 +65,7 @@
         </template>
       </el-table-column>
 
-      <el-table-column label="快照完成时间" width="165" align="left">
+      <el-table-column label="快照完成时间" min-width="170" align="left">
         <template #default="{ row }">
           <span class="dss-time" :class="{ 'dss-time-dash': isDash(row.snapshotCompletedAt) }">
             {{ formatTime(row.snapshotCompletedAt) }}
@@ -72,7 +73,7 @@
         </template>
       </el-table-column>
 
-      <el-table-column label="记录更新时间" width="165" align="left">
+      <el-table-column label="记录更新时间" min-width="170" align="left">
         <template #default="{ row }">
           <span class="dss-time" :class="{ 'dss-time-dash': isDash(row.updatedAt) }">
             {{ formatTime(row.updatedAt) }}
@@ -109,6 +110,11 @@ const props = withDefaults(
 const tooltip = useSnapshotTooltip()
 // 顶层 ref 绑定在模板自动解包：将 tooltip.current 解出为顶层 ref，Host :target 才收到真实状态（而非 Ref 本体）
 const ttCurrent = tooltip.current
+
+/** 仅 statusCategory=UNKNOWN 的行追加浅黄整行背景（纯视觉试验类，DSS-AC-070；不改变行数据与任何事件）。 */
+function rowClassName({ row }: { row: SnapshotStatusItem; rowIndex: number }): string {
+  return row.statusCategory === 'UNKNOWN' ? 'dss-warning-row' : ''
+}
 
 function formatTime(value: string | null): string {
   return formatTimeOrDash(value)
@@ -181,18 +187,25 @@ watch(
 </script>
 
 <style scoped>
+/* Linear 原型（纯视觉试验）：仅在本表格子树内收紧 EP 表观感；不改全局 --el-*、不改业务结构。
+   表已移除 border（模板层），EP 默认即无垂直网格，仅每行 1px 水平分隔线，其颜色经表根自定义属性局部收紧到 #f4f4f5。 */
 .dss-table-wrap {
   width: 100%;
   overflow-x: auto;
 }
-/* 弹性表格（DSS-REQ-069/AC-073）：五固定列（70/130/165/165/165）＋探针端 min-width 170/源库 min-width 280 两弹性列吸收剩余宽度铺满结果卡片；取消固定总宽，最小总宽 1145、窄屏容器横向滚动 */
+/* 弹性表格（DSS-REQ-069/AC-073，R5 列宽模型）：固定列 序号70＋快照状态140；弹性列（min-width）探针端170/源库285/三时间列各170，
+   按 min-width 成比例吸收宽屏富余并铺满结果卡片（源库增量最大、始终明显宽于探针端）；最小总宽 70+170+285+140+170×3=1175、窄屏容器横向滚动 */
 .dss-table {
   width: 100%;
-  min-width: 1145px;
+  min-width: 1175px;
+  /* 局部收紧 EP 表令牌：scoped 属性选择器将根类抬到 (0,2,0)，稳定覆盖 .el-table 单类默认（作用仅限本表） */
+  --el-table-border-color: #f4f4f5;
+  --el-table-header-text-color: #71717a;
+  --el-table-header-bg-color: #ffffff;
 }
 .dss-seq {
-  font-size: 14px;
-  color: #606266;
+  font-size: 13px;
+  color: #71717a;
   font-variant-numeric: tabular-nums;
 }
 .dss-cell {
@@ -208,33 +221,89 @@ watch(
   overflow: hidden;
   text-overflow: ellipsis;
   white-space: nowrap;
-  color: #303133;
+  color: #3f3f46;
   font-size: 14px;
+}
+/* 探针端主文本（R3）：600 字重 / 最深深色 #09090B；本规则位于 .dss-cell-main 之后，同等特异性下覆盖其 400/#3f3f46 */
+.dss-probe-main {
+  font-weight: 600;
+  color: var(--dss-text-strong, #09090b);
+}
+/* 探针端 ID / 时间列统一等宽字体：数字纵向对齐（Linear 数据表观感） */
+.dss-mono,
+.dss-time {
+  font-family: "SF Mono", "JetBrains Mono", Menlo, Consolas, "Liberation Mono", monospace;
+  font-variant-numeric: tabular-nums;
 }
 .dss-tt {
   outline: none;
 }
+/* 非启用微型 Badge（R4 §8）：浅红胶囊 #FEE2E2 底 / #991B1B 字，11px/700，radius 4，高 20px；UI 无衬线字体（不继承探针 ID 等宽字体）；
+   inline-flex 内居中，line-height 用无单位 1（保持 R2 行高契约：全 CSS 无 px line-height/min-height）；
+   flex:0 0 auto 保证不收缩；与 ID 间距沿用 .dss-cell gap 6px；Badge 不改变行内容高度（ID 14px 行高更大，行高仍由单元格文本驱动） */
 .dss-inactive-mark {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
   flex: 0 0 auto;
-  font-size: 14px;
-  color: var(--el-color-danger, #f56c6c);
+  box-sizing: border-box;
+  padding: 0 6px;
+  height: 20px;
+  border-radius: 4px;
+  background: #fee2e2;
+  color: #991b1b;
+  font-size: 11px;
+  font-weight: 700;
+  line-height: 1;
+  letter-spacing: 0;
+  font-family: var(
+    --el-font-family,
+    -apple-system,
+    BlinkMacSystemFont,
+    "Segoe UI",
+    "Microsoft YaHei",
+    "Noto Sans CJK SC",
+    sans-serif
+  );
   white-space: nowrap;
 }
 .dss-status-trigger {
   display: inline-block;
 }
+/* R5 §2 时间完整（1280 最小列宽下的硬性要求）：三个时间列（第 5/6/7 列）单元格水平内边距 12→8px，
+   使 19 字符 yyyy-MM-dd HH:mm:ss 在 170px 最小列宽下仍完整（内容区 146→154px，等宽字体栈下需 ≈148px）。
+   仅收紧水平内边距：垂直 padding 与行高（49px）不变，列宽与表格最小宽度亦不变；表头同列同步左移 4px 保持对齐。 */
+.dss-table :deep(th.el-table__cell:nth-child(n + 5) .cell),
+.dss-table :deep(td.el-table__cell:nth-child(n + 5) .cell) {
+  padding-left: 8px;
+  padding-right: 8px;
+}
 .dss-time {
-  font-size: 14px;
-  color: #303133;
+  font-size: 13px;
+  color: #3f3f46;
   white-space: nowrap;
-  font-variant-numeric: tabular-nums;
 }
 .dss-time-dash {
   color: #c0c4cc;
 }
-:deep(.el-table__header th .cell) {
-  font-size: 14px;
+/* 表头次标题化：12px/600/#71717A，正文单元行高加大到约 45px（td 垂直 padding 12px ×2 ＋ 内容行高） */
+.dss-table :deep(.el-table__header th .cell) {
+  font-size: 12px;
   font-weight: 600;
-  color: #303133;
+  color: var(--dss-text-muted, #71717a);
+  letter-spacing: 0.01em;
+}
+.dss-table :deep(td.el-table__cell) {
+  padding: 12px 0;
+}
+.dss-table :deep(th.el-table__cell) {
+  padding: 11px 0;
+}
+/* UNKNOWN 行浅黄整行背景（纯视觉试验类，DSS-AC-070）：不改行数据与任何事件；非悬停 0.42，悬停加深 0.66 */
+.dss-table :deep(.el-table__body tr.dss-warning-row > td.el-table__cell) {
+  background-color: rgba(254, 243, 199, 0.42);
+}
+.dss-table :deep(.el-table__body tr.dss-warning-row:hover > td.el-table__cell) {
+  background-color: rgba(254, 243, 199, 0.66);
 }
 </style>

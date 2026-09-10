@@ -59,12 +59,21 @@ export function useDataSourceSnapshot() {
   const firstLoadError = ref(false)
   /** 有成功现场后的刷新失败内联收敛提示（不清表，UI §6.4/§7.3）。 */
   const refreshError = ref('')
+  /** 下一轮真实自动刷新剩余秒数显示投影（60→0 上舍入整数；无已安排周期为 null）。 */
+  const autoRefreshRemainingSeconds = ref<number | null>(null)
+  /** 下一轮真实自动刷新剩余比例显示投影（1=刚安排 →0=到期；无已安排周期为 null）。 */
+  const autoRefreshProgress = ref<number | null>(null)
+  /** 页面隐藏时真实自动刷新暂停，倒计时一并冻结、不假走（仅状态投影）。 */
+  const autoRefreshPaused = ref(false)
 
   let disposed = false
   let hidden = false
   let latestSeq = 0
   let timer: ReturnType<typeof setTimeout> | null = null
   let pendingVisibilityRefresh = false
+  let countdownTimer: ReturnType<typeof setInterval> | null = null
+  /** 当前真实 auto setTimeout 的到期时刻（epoch ms）；仅在已安排周期期间有意义。 */
+  let nextFireDeadline: number | null = null
 
   const candidateClients = computed(() => candidates.value?.clients ?? [])
   const candidateSources = computed(() => candidates.value?.sources ?? [])
@@ -89,14 +98,52 @@ export function useDataSourceSnapshot() {
     }
   }
 
-  /** 完整 60 秒周期：先清再设，仅页面实例可见才运行（DESIGN §7.5）。 */
+  function stopCountdownTicker(): void {
+    if (countdownTimer !== null) {
+      clearInterval(countdownTimer)
+      countdownTimer = null
+    }
+  }
+
+  /** 展示投影冻结收口：停本地秒表并丢弃 deadline（remaining/progress 保留现值，不假走）。 */
+  function freezeCountdown(): void {
+    stopCountdownTicker()
+    nextFireDeadline = null
+  }
+
+  /**
+   * 本地 1s 投影刷新：从真实 deadline 推算剩余秒/比例，绝不触发请求、绝不安排真实周期。
+   * 真实到期仍唯一由 scheduleNext 里的 setTimeout 负责（§9.2 单一事实来源）。
+   */
+  function refreshCountdownDisplay(): void {
+    if (nextFireDeadline === null) {
+      autoRefreshRemainingSeconds.value = null
+      autoRefreshProgress.value = null
+      return
+    }
+    const msLeft = Math.max(0, nextFireDeadline - Date.now())
+    autoRefreshRemainingSeconds.value = Math.ceil(msLeft / 1000)
+    autoRefreshProgress.value = Math.min(1, msLeft / AUTO_REFRESH_INTERVAL_MS)
+  }
+
+  /**
+   * 完整 60 秒周期：先清再设，仅页面实例可见才运行（DESIGN §7.5）。
+   * 每次安排真实 setTimeout 的同时记录同一 deadline，并启动本地 1s 投影秒表；
+   * 到期触发、手工/自动请求完成后的下一周期都只经此入口与真实时钟同步复位到 60。
+   */
   function scheduleNext(): void {
     stopTimer()
     if (disposed || hidden) return
+    const deadline = Date.now() + AUTO_REFRESH_INTERVAL_MS
+    stopCountdownTicker()
+    nextFireDeadline = deadline
+    autoRefreshPaused.value = false
+    refreshCountdownDisplay()
     timer = setTimeout(() => {
       timer = null
       launch(appliedCriteria.value, 'auto')
     }, AUTO_REFRESH_INTERVAL_MS)
+    countdownTimer = setInterval(refreshCountdownDisplay, 1000)
   }
 
   /** 唯一入链口：busy/卸载/隐藏时一律拒绝（被禁用/被抑制触发不视为实际请求，R1-02）。 */
@@ -199,6 +246,8 @@ export function useDataSourceSnapshot() {
     hidden = isHidden
     if (isHidden) {
       stopTimer()
+      freezeCountdown()
+      autoRefreshPaused.value = true
       pendingVisibilityRefresh = false
       return
     }
@@ -213,6 +262,8 @@ export function useDataSourceSnapshot() {
   function destroy(): void {
     disposed = true
     stopTimer()
+    freezeCountdown()
+    autoRefreshPaused.value = false
     pendingVisibilityRefresh = false
     requestKind.value = null
   }
@@ -236,6 +287,9 @@ export function useDataSourceSnapshot() {
     queryLoading,
     manualLoading,
     refreshActive,
+    autoRefreshRemainingSeconds,
+    autoRefreshProgress,
+    autoRefreshPaused,
     onPageMounted,
     submitQuery,
     manualRefresh,

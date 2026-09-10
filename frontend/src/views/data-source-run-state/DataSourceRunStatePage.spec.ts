@@ -1,4 +1,6 @@
 import { describe, it, expect, vi, beforeEach, afterEach } from 'vitest'
+import { readFileSync } from 'node:fs'
+import { resolve } from 'node:path'
 import { mount, flushPromises, type VueWrapper } from '@vue/test-utils'
 import ElementPlus from 'element-plus'
 import DataSourceRunStatePage from './DataSourceRunStatePage.vue'
@@ -152,7 +154,8 @@ describe('DataSourceRunStatePage 三块清晰分区（UI §13.1，DSS-REQ-066，
     // 左组仅总数（该数据无未知）；右组为刷新组整体（含“立即刷新”）
     expect(children.find((c) => c.classList.contains('dss-result-summary'))?.textContent).toContain('共 1 条')
     const rg = children.find((c) => c.classList.contains('dss-refresh-group'))
-    expect(rg?.textContent).toContain('60 秒自动刷新')
+    // R2 §9.1：真实自动刷新剩余秒数文案（首载完成后即同步重置为 60）
+    expect(rg?.textContent).toContain('60 秒后自动刷新')
     expect(rg?.textContent).toContain('立即刷新')
     wrapper.unmount()
   })
@@ -185,6 +188,144 @@ describe('DataSourceRunStatePage 结果头部总数与未知计数（DSS-REQ-067
     expect(wrapper.find('.dss-summary-count').text()).toBe('共 2 条')
     expect(wrapper.find('.dss-summary-unknown').exists()).toBe(false)
     wrapper.unmount()
+  })
+})
+
+describe('DataSourceRunStatePage R5 汇总栏样式字面量契约（§3，jsdom 不计算样式）', () => {
+  it("'共 N 条'为16px/700/#09090B；未知状态胶囊=12px/700、浅黄 #fef3c7 底/暖橙字/999 圆角/总高≈22px（line-height 22px）/水平 padding≈8px/无边框；层级 16px > 12px", () => {
+    const src = readFileSync(resolve(process.cwd(), 'src/views/data-source-run-state/DataSourceRunStatePage.vue'), 'utf8')
+    const css = src.split('<style scoped>')[1] ?? ''
+    const count = css.match(/\.dss-summary-count\s*\{[^}]*\}/)?.[0] ?? ''
+    expect(count).toMatch(/font-size:\s*16px/)
+    expect(count).toMatch(/font-weight:\s*700/)
+    expect(count).toMatch(/color:\s*var\(--dss-text,\s*#09090b\)/)
+    const capsule = css.match(/\.dss-summary-unknown\s*\{[^}]*\}/)?.[0] ?? ''
+    expect(capsule).toMatch(/font-size:\s*12px/)
+    expect(capsule).toMatch(/font-weight:\s*700/)
+    expect(capsule).toMatch(/line-height:\s*22px/)
+    expect(capsule).toMatch(/padding:\s*0 8px/)
+    expect(capsule).toMatch(/background:\s*#fef3c7/)
+    expect(capsule).toMatch(/color:\s*var\(--dss-warning,\s*#b45309\)/)
+    expect(capsule).toMatch(/border-radius:\s*999px/)
+    expect(capsule).not.toMatch(/border\s*:/)
+    // 主计数 16px 严格大于胶囊 12px（视觉层级 共 N 条 > 未知状态胶囊）
+    const countFs = Number(count.match(/font-size:\s*(\d+)px/)?.[1])
+    const capsuleFs = Number(capsule.match(/font-size:\s*(\d+)px/)?.[1])
+    expect(countFs).toBeGreaterThan(capsuleFs)
+  })
+
+  it('汇总栏两段仍在 .dss-result-summary 内（flex 垂直居中）；条件渲染逻辑与文案不变（R3 §7）', async () => {
+    mockedFetch.mockResolvedValue(
+      okRes([row('A', 'RUNNING', 'SNAPSHOT_RUNNING'), row('B', 'UNKNOWN', 'WEIRD_VALUE')]),
+    )
+    const wrapper = await mountPage()
+    const summary = wrapper.find('.dss-result-summary')
+    expect(summary.exists()).toBe(true)
+    expect(summary.find('.dss-summary-count').text()).toBe('共 2 条')
+    expect(summary.find('.dss-summary-unknown').text()).toBe('其中 1 条未知状态')
+    // 未放大为整栏 Banner：仍只是头部左侧的两个小节点，非 h1/h2 标题语义
+    expect(summary.element.children.length).toBe(2)
+    expect(summary.find('h1,h2').exists()).toBe(false)
+    wrapper.unmount()
+  })
+
+  it('右侧刷新组结构与 props/事件管道零改动（R3 §7/§12.3）：Toolbar 承接倒计时与手动刷新并发出 refresh', () => {
+    const src = readFileSync(resolve(process.cwd(), 'src/views/data-source-run-state/DataSourceRunStatePage.vue'), 'utf8')
+    expect(src).toMatch(/<DataSourceSnapshotToolbar/)
+    expect(src).toMatch(/:last-refresh-text=/)
+    expect(src).toMatch(/:countdown-seconds=/)
+    expect(src).toMatch(/:countdown-progress=/)
+    expect(src).toMatch(/:manual-loading=/)
+    expect(src).toMatch(/:busy=/)
+    expect(src).toMatch(/@refresh=/)
+  })
+})
+
+describe('DataSourceRunStatePage R7 页面级中间背景透明化（R7 §4/§7，jsdom 不计算样式）', () => {
+  const pageSrc = (): string =>
+    readFileSync(resolve(process.cwd(), 'src/views/data-source-run-state/DataSourceRunStatePage.vue'), 'utf8')
+
+  it('页面根容器背景已改为 transparent，不再有第二重近白/浅灰页面底色（#fafafa 消失）', () => {
+    const src = pageSrc()
+    const css = src.split('<style scoped>')[1] ?? ''
+    // 只取 .dss-page 规则块（.dss-page-header 以 -header 紧随，不会误匹配）
+    const page = css.match(/\.dss-page\s*\{[^}]*\}/)?.[0] ?? ''
+    expect(page).not.toBe('')
+    expect(page).toMatch(/background:\s*transparent/)
+    // 既不回到 #fafafa，也不复用卡片白底令牌（背景必须完全透明）
+    expect(page).not.toMatch(/#fafafa/)
+    expect(page).not.toMatch(/background:\s*var\(--dss-surface/)
+    expect(page).not.toMatch(/background-color\s*:/)
+  })
+
+  it('页面根容器盒模型零改动：仍在 .dss-page 之外只改 background；display/flex-direction/gap/padding/radius/margin 保持 R6', () => {
+    const src = pageSrc()
+    const css = src.split('<style scoped>')[1] ?? ''
+    const page = css.match(/\.dss-page\s*\{[^}]*\}/)?.[0] ?? ''
+    expect(page).toMatch(/display:\s*flex/)
+    expect(page).toMatch(/flex-direction:\s*column/)
+    expect(page).toMatch(/gap:\s*12px/)
+    expect(page).toMatch(/padding:\s*14px 16px/)
+    expect(page).toMatch(/border-radius:\s*10px/)
+    // 透明化不得通过新增 margin / 定位 / 尺寸来抵消
+    expect(page).not.toMatch(/margin\s*:/)
+    expect(page).not.toMatch(/position\s*:/)
+    expect(page).not.toMatch(/(?<!min-)width\s*:/)
+    expect(page).not.toMatch(/(?<!min-)height\s*:/)
+    // 局部令牌未因本轮被改写
+    expect(page).toMatch(/--dss-surface:\s*#ffffff/)
+    expect(page).toMatch(/--dss-embedded:\s*#f4f4f5/)
+  })
+
+  it('查询栏浅灰底未被波及：.dss-query-card 仍为 var(--dss-embedded, #f4f4f5)，尺寸与去阴影保持 R6（R7 §5.1）', () => {
+    const src = pageSrc()
+    const css = src.split('<style scoped>')[1] ?? ''
+    const queryCard = css.match(/\.dss-query-card\s*\{[^}]*\}/)?.[0] ?? ''
+    expect(queryCard).not.toBe('')
+    expect(queryCard).toMatch(/background:\s*var\(--dss-embedded,\s*#f4f4f5\)/)
+    expect(queryCard).not.toMatch(/transparent/)
+    expect(queryCard).toMatch(/border-radius:\s*8px/)
+    expect(queryCard).toMatch(/padding:\s*10px 16px/)
+    expect(queryCard).toMatch(/box-shadow:\s*none/)
+  })
+
+  it('结果区域底座未被波及：.dss-card 仍为 var(--dss-surface, #ffffff)，无硬边框 + 10px 圆角 + 极弱阴影（R7 §5.3）', () => {
+    const src = pageSrc()
+    const css = src.split('<style scoped>')[1] ?? ''
+    const card = css.match(/\.dss-card\s*\{[^}]*\}/)?.[0] ?? ''
+    expect(card).not.toBe('')
+    expect(card).toMatch(/background:\s*var\(--dss-surface,\s*#ffffff\)/)
+    expect(card).not.toMatch(/transparent/)
+    expect(card).toMatch(/border:\s*none/)
+    expect(card).toMatch(/border-radius:\s*10px/)
+    expect(card).toMatch(/box-shadow:\s*0 1px 2px rgba\(9,\s*9,\s*11,\s*0\.04\),\s*0 1px 3px rgba\(9,\s*9,\s*11,\s*0\.03\)/)
+    // 结果卡片仍是白底而不是承接页面底色
+    expect(css.match(/\.dss-result-card\s*\{[^}]*\}/)?.[0] ?? '').not.toMatch(/background\s*:/)
+  })
+
+  it('DOM 结构未为透明化而重构：.dss-page 仍直接包裹页头 + 查询卡片 + 结果卡片（R7 §4 禁止改 DOM）', async () => {
+    mockedFetch.mockResolvedValue(okRes([row('A', 'RUNNING', 'SNAPSHOT_RUNNING')]))
+    const wrapper = await mountPage()
+    const page = wrapper.find('.dss-page')
+    expect(page.exists()).toBe(true)
+    const childClasses = Array.from(page.element.children).map((c) => c.className)
+    expect(childClasses).toContain('dss-page-header')
+    expect(childClasses).toContain('dss-card dss-query-card')
+    expect(childClasses).toContain('dss-card dss-result-card')
+    // 中间没有插入额外的占位/包装层
+    expect(page.element.children.length).toBe(3)
+    wrapper.unmount()
+  })
+
+  it('样式作用域未放宽：仍为 <style scoped>，无 :root / --el-* 覆写，不产生跨路由页面样式泄漏（R7 §5.4/§7.9）', () => {
+    const src = pageSrc()
+    expect(src).toMatch(/<style scoped>/)
+    // 去掉注释后再断言选择器，避免块首说明文字里的 ":root / --el-*" 字样造成假失败
+    const css = (src.split('<style scoped>')[1] ?? '').replace(/\/\*[\s\S]*?\*\//g, '')
+    expect(css).not.toMatch(/:root\s*[{,]/)
+    expect(css).not.toMatch(/--el-[a-z-]+\s*:/)
+    expect(css).not.toMatch(/^\s*(body|html)\s*[,{]/m)
+    expect(css).not.toMatch(/^\s*\.el-[a-z-]+\s*(,|\{)/m)
   })
 })
 

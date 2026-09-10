@@ -101,18 +101,59 @@ describe('DataSourceSnapshotTable 七列顺序与列弹性宽度契约（UI §16
     wrapper.unmount()
   })
 
-  it('列宽字面量契约：五固定列 width=70/130/165/165/165，探针端/源库弹性列 min-width=170/280', () => {
+  it('列宽字面量契约（R5 §2）：固定列 width=70/140（序号/快照状态），弹性列 min-width=170/285/170/170/170（探针端/源库/三时间列），最小总宽 70+170+285+140+170×3=1175', () => {
     const src = readFileSync(resolve(process.cwd(), 'src/views/data-source-run-state/components/DataSourceSnapshotTable.vue'), 'utf8')
     const widths = [...src.matchAll(/(?<!min-)width="(\d+)"/g)].map((m) => m[1])
-    expect(widths).toEqual(['70', '130', '165', '165', '165'])
+    expect(widths).toEqual(['70', '140'])
     const minWidths = [...src.matchAll(/min-width="(\d+)"/g)].map((m) => m[1])
-    expect(minWidths).toEqual(['170', '280'])
+    expect(minWidths).toEqual(['170', '285', '170', '170', '170'])
+    // 最小总宽 = 70+170+285+140+170×3 = 1175
+    expect(70 + Number(minWidths[0]) + Number(minWidths[1]) + 140 + 170 * 3).toBe(1175)
+    // 源库弹性起点明显高于探针端（源库始终明显更宽）
+    expect(Number(minWidths[1])).toBeGreaterThan(Number(minWidths[0]))
   })
 
-  it('表格铺满：取消固定 width:1145px，仅保留最小总宽 min-width:1145px 与 width:100%', () => {
+  it('行高零改动契约（R2 §7）：单元格垂直 padding 保持 12px 0，无新增 px line-height / min-height 覆盖', () => {
     const src = readFileSync(resolve(process.cwd(), 'src/views/data-source-run-state/components/DataSourceSnapshotTable.vue'), 'utf8')
-    expect(src).not.toMatch(/(?<!min-)width\s*:\s*1145px/)
-    expect(src).toMatch(/min-width\s*:\s*1145px/)
+    const css = src.split('<style scoped>')[1] ?? ''
+    const tdBlock = css.match(/td\.el-table__cell\)\s*\{[^}]*\}/)?.[0] ?? ''
+    expect(tdBlock).toContain('padding: 12px 0')
+    expect(css).not.toMatch(/min-height\s*:\s*[0-9]+px/)
+    expect(css).not.toMatch(/line-height\s*:\s*[0-9]+px/)
+  })
+
+  it('时间列内容区宽契约（R5 §2）：三个时间列（第 5/6/7 列）单元格水平内边距 12→8px，仅水平、垂直 padding 与行高不变', () => {
+    const src = readFileSync(resolve(process.cwd(), 'src/views/data-source-run-state/components/DataSourceSnapshotTable.vue'), 'utf8')
+    const css = src.split('<style scoped>')[1] ?? ''
+    // 规则精确限定到时间列（nth-child(n + 5)），不波及其它列的水平内边距
+    const rule = css.match(/\.dss-table :deep\([^)]*nth-child\(n \+ 5\) \.cell\)[\s\S]*?\{[^}]*\}/)?.[0] ?? ''
+    expect(rule).not.toBe('')
+    expect(rule).toMatch(/padding-left:\s*8px/)
+    expect(rule).toMatch(/padding-right:\s*8px/)
+    // 只收紧水平内边距，不引入垂直 padding / 行高改动
+    expect(rule).not.toMatch(/padding-top|padding-bottom/)
+    expect(rule).not.toMatch(/padding:\s*[^;]*\d+px\s+\d+px/)
+    // 表头与 body 单元格同步，保持列内文本与表头对齐
+    expect(rule).toMatch(/th\.el-table__cell/)
+    expect(rule).toMatch(/td\.el-table__cell/)
+    // 既有行高契约（td 垂直 padding 12px 0）不受影响
+    expect(css).toMatch(/td\.el-table__cell\)\s*\{[^}]*padding:\s*12px 0/)
+  })
+
+  it('时间完整契约（R2 §6）：时间仍经 formatTimeOrDash，单元格主内容完整到秒、无换行结构', async () => {
+    const src = readFileSync(resolve(process.cwd(), 'src/views/data-source-run-state/components/DataSourceSnapshotTable.vue'), 'utf8')
+    expect(src).toMatch(/formatTimeOrDash/)
+    const wrapper = await mountTable([item({ snapshotLastSeenAt: '2026-09-06 11:02:00' })])
+    const timeCells = wrapper.findAll('.dss-time')
+    expect(timeCells[0].text()).toBe('2026-09-06 11:02:00')
+    expect(wrapper.findAll('br')).toHaveLength(0)
+    wrapper.unmount()
+  })
+
+  it('表格铺满：取消固定 width:1175px，仅保留最小总宽 min-width:1175px 与 width:100%', () => {
+    const src = readFileSync(resolve(process.cwd(), 'src/views/data-source-run-state/components/DataSourceSnapshotTable.vue'), 'utf8')
+    expect(src).not.toMatch(/(?<!min-)width\s*:\s*1175px/)
+    expect(src).toMatch(/min-width\s*:\s*1175px/)
     expect(src).toMatch(/(?<!min-)width\s*:\s*100%/)
   })
 
@@ -162,16 +203,20 @@ describe('DataSourceSnapshotTable 探针端/源库展示简化（UI §16.3/§16.
     wrapper.unmount()
   })
 
-  it('探针端非启用(FG_ACTIVE≠1)追加红字“停用”普通文本，不在描述空时内联展示', async () => {
+  it('探针端非启用(INACTIVE)追加单个浅红微型"停用"Badge（R3 §9.2），与 CLIENT_ID 同格并列', async () => {
     const wrapper = await mountTable([
       item({ clientId: 'IN', clientRef: { state: 'INACTIVE' as RefState, desc: null } }),
     ])
     const marks = wrapper.findAll('.dss-inactive-mark')
     expect(marks).toHaveLength(1)
     expect(marks[0].text()).toBe('停用')
-    // 普通文本 span（非图标/非可操作标签）
+    // Badge 为本地 <span>（非 el-tag / el-badge / 图标 / 可操作标签）；不承载 Tooltip。
+    // 注：同一行快照状态格内的 DataSourceSnapshotStatusTag 本身是 el-tag，故只断言 Badge 自身不是 el-tag。
     expect(marks[0].element.tagName).toBe('SPAN')
+    expect(marks[0].classes().includes('el-tag')).toBe(false)
+    expect(wrapper.findAll('.el-badge')).toHaveLength(0)
     expect(marks[0].classes().some((c) => c === 'el-icon')).toBe(false)
+    expect(marks[0].find('[data-tt-kind]').exists()).toBe(false)
     // 与 CLIENT_ID 同单元格并列
     expect(rowCells(wrapper, 0)[0].text()).toContain('IN')
     expect(rowCells(wrapper, 0)[0].text()).toContain('停用')
@@ -201,6 +246,42 @@ describe('DataSourceSnapshotTable 探针端/源库展示简化（UI §16.3/§16.
     expect(wrapper.findAll('.dss-inactive-mark')).toHaveLength(0)
     expect(wrapper.findAll('.dss-hint-icon')).toHaveLength(0)
     wrapper.unmount()
+  })
+})
+
+describe('DataSourceSnapshotTable R4 源码契约：探针 ID 字重与停用 Badge 外观（§8/§11.1，jsdom 不计算样式）', () => {
+  it('探针 ID 600 字重 / #09090B；ID 等宽字体栈保持（R3 §9.1 不变）', () => {
+    const src = readFileSync(resolve(process.cwd(), 'src/views/data-source-run-state/components/DataSourceSnapshotTable.vue'), 'utf8')
+    const probeBlock = src.match(/\.dss-probe-main\s*\{[^}]*\}/)?.[0] ?? ''
+    expect(probeBlock).toMatch(/font-weight:\s*600/)
+    expect(probeBlock).toMatch(/color:\s*var\(--dss-text-strong,\s*#09090b\)/)
+    // ID 主 span 仍挂等宽字体类（字体栈保持）：dss-mono 类在模板上仍与 dss-probe-main 同现
+    expect(src).toMatch(/class="dss-cell-main dss-probe-main dss-tt dss-mono"/)
+  })
+
+  it('停用 Badge 外观字面量契约（R4 §8）：浅红底 #fee2e2 / 深红字 #991b1b / 11px / 700 / radius 4 / 高 20px / 高 20 / padding 0 6 / inline-flex / 不可压缩 / UI 无衬线首选字体 / 无边框', () => {
+    const src = readFileSync(resolve(process.cwd(), 'src/views/data-source-run-state/components/DataSourceSnapshotTable.vue'), 'utf8')
+    const css = src.split('<style scoped>')[1] ?? ''
+    const badge = css.match(/\.dss-inactive-mark\s*\{[^}]*\}/)?.[0] ?? ''
+    expect(badge).toMatch(/background:\s*#fee2e2/)
+    expect(badge).toMatch(/color:\s*#991b1b/)
+    expect(badge).toMatch(/font-size:\s*11px/)
+    expect(badge).toMatch(/font-weight:\s*700/)
+    expect(badge).toMatch(/border-radius:\s*4px/)
+    expect(badge).toMatch(/height:\s*20px/)
+    expect(badge).toMatch(/padding:\s*0 6px/)
+    expect(badge).toMatch(/display:\s*inline-flex/)
+    expect(badge).toMatch(/flex:\s*0 0 auto/)
+    expect(badge).toMatch(/align-items:\s*center/)
+    expect(badge).toMatch(/justify-content:\s*center/)
+    expect(badge).toMatch(/line-height:\s*1\s*;/)
+    expect(badge).toMatch(/letter-spacing:\s*0/)
+    expect(badge).not.toMatch(/border\s*:/)
+    // UI 无衬线首选字体：以 --el-font-family + 系统无衬线回退为首选，不把等宽字体放首选
+    expect(badge).toMatch(/font-family:\s*var\(\s*--el-font-family/)
+    expect(badge).not.toMatch(/SF Mono/)
+    expect(badge).not.toMatch(/JetBrains Mono/)
+    expect(badge).not.toMatch(/monospace/)
   })
 })
 

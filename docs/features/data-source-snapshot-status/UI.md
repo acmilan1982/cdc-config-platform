@@ -46,7 +46,7 @@
 | 隔离视觉原型工作区（5174） | 独立隔离视觉 prototype worktree（如 `/agent/dss-linear-style-prototype-001.*`，detached HEAD，**非正式前端工程**）；R2～R7 视觉方向经项目负责人认可（“视觉原型已经相当 OK”），但**不是** `5173` 正式前端，也不能替代 `5173` 正式实现与正式验收，见本文件 §19、`DESIGN.md` §25 |
 | 设计固化文档状态（隔离视觉原型 R2～R7） | `APPROVED`（本任务更新后的 `UI.md` 等固化内容原为 `DRAFT_PENDING_USER_REVIEW`，经 ChatGPT 对批准内容基准提交 `e67b2ecc3897c3e83597126e259ee4c19349a66a` 最终复审 `APPROVED`、项目负责人 2026-09-10 明确回复“批准”，已由 `DATA-SOURCE-SNAPSHOT-STATUS-PROTOTYPE-DESIGN-FREEZE-APPROVAL-001` 收口为 `APPROVED`） |
 | 隔离视觉原型 R2～R7 视觉方向状态 | `APPROVED_BY_PROJECT_OWNER`（项目负责人明确认可 R2～R7 最终视觉方向） |
-| `5173` 正式实现状态（隔离视觉原型 R2～R7 视觉方案） | `PENDING_FORMAL_IMPLEMENTATION`（R2～R7 视觉方案**尚未**应用到 `5173` 正式前端；下一入口 `PENDING_FORMAL_IMPLEMENTATION_ON_5173`） |
+| `5173` 正式实现状态（隔离视觉原型 R2～R7 视觉方案） | `IMPLEMENTED_ADJUSTMENT_PENDING_REVIEW`（`formal_5173_implementation_status=IMPLEMENTED_ADJUSTMENT_PENDING_REVIEW`：R2～R7 视觉方案已由实现任务 `DATA-SOURCE-SNAPSHOT-STATUS-PROTOTYPE-TO-FORMAL-IMPLEMENTATION-001`（2026-09-10）应用到 `5173` 正式前端并完成开发自测（`browser_verification_status=DEV_SELF_TEST_DONE`）；待 ChatGPT 从 Git 独立复审与项目负责人人工查看；正式验收 `NOT_RUN`、95 条 `DSS-AC-001~095` 全部 `NOT_RUN`；本节界面规则未变） |
 | `5173` 正式验收状态（隔离视觉原型 R2～R7 视觉方案） | `NOT_RUN`（`5173` 未做正式验收；`5174` 原型浏览器/测试/构建结果仅作设计验证证据，不得写成正式验收 `PASS`） |
 | 文档总体状态（隔离视觉原型 R2～R7 视觉固化） | `PROTOTYPE_VISUALLY_APPROVED_PENDING_DOCUMENT_REVIEW_AND_FORMAL_IMPLEMENTATION`（禁止写为 `FORMALLY_ACCEPTED`/`IMPLEMENTATION_APPROVED`/`ACCEPTANCE_PASSED`/`COMPLETED`） |
 | 通用查询列表页 UI 基线状态 | `NOT_CREATED_BY_DESIGN`（通用 `QUERY-LIST-PAGE-UI-PATTERN` 须待本页正式实现并验收通过后再独立评估建立，本任务**不创建、不批准**） |
