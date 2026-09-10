@@ -49,8 +49,8 @@
 | R1 修订基准提交 | `31aa9f5beec7ded3cd798b3af617fd79a1606ed0`（R1 修订开始时 `origin/develop` 最新提交，即上一结果提交；历史基线） |
 | 批准内容基准 | `4234af73db2190098f3dcd219319a4281fdabafd`（已批准需求/验收的批准内容基准） |
 | 创建日期 | 2026-09-05；2026-09-06 设计批准收口；2026-09-07 建立第一轮验收前 UI 调整草案并批准/实现；2026-09-08 建立第二轮 UI 调整草案（R0/R1）并批准收口为 `DATA-SOURCE-SNAPSHOT-STATUS-UI-ADJUSTMENT-BASELINE-APPROVAL-002`，同日以 `...-002-R2` 纯文档纠正源库 Tooltip 内容并重新进入复审，再以 `...-002-R3` 记录纠正，ChatGPT 对 R3 结果提交独立正式复审 `APPROVED`、项目负责人明确“批准”，同日重新批准收口为 `DATA-SOURCE-SNAPSHOT-STATUS-UI-ADJUSTMENT-BASELINE-APPROVAL-002-R1`（批准内容基准提交 `cf40b5d...`） |
-| 依据需求 | `REQUIREMENTS.md`（`DSS-REQ-001~083` 共 83 条（含隔离视觉原型 R2～R7 设计固化新增 `DSS-REQ-076~083`，本任务新增，见 `REQUIREMENTS.md` §21.4/§24 与本文件 §25；设计固化内容已由 `DATA-SOURCE-SNAPSHOT-STATUS-PROTOTYPE-DESIGN-FREEZE-APPROVAL-001`（2026-09-10，批准内容基准提交 `e67b2ecc...`）批准收口为 `APPROVED`）；此前 `DSS-REQ-001~075` 共 75 条：`DSS-REQ-001~071` 承接已批准/第一轮 UI 调整历史基线 + 本轮第二轮新增 `DSS-REQ-072~075`；当前第二轮 UI 调整版本文档状态 `APPROVED`（经 R2 极小纠正、R3 记录纠正后重新批准收口；曾收口为 `APPROVED`：正式批准版本 `DATA-SOURCE-SNAPSHOT-STATUS-UI-ADJUSTMENT-BASELINE-APPROVAL-002`，批准内容基准提交 `5da9b17...`，2026-09-08，作为历史批准事实保留；R3 记录纠正后重新批准收口为 `...-APPROVAL-002-R1`，批准内容基准提交 `cf40b5d...`，2026-09-08），既有批准版本保留为历史） |
-| 依据验收 | `ACCEPTANCE.md`（`DSS-AC-001~095` 共 95 条全部 `NOT_RUN`（含隔离视觉原型 R2～R7 设计固化新增 `DSS-AC-087~095`，本任务新增，见 `ACCEPTANCE.md` §4.20/§6 与本文件 §25；全部 `NOT_RUN`，设计固化内容已由 `DATA-SOURCE-SNAPSHOT-STATUS-PROTOTYPE-DESIGN-FREEZE-APPROVAL-001`（2026-09-10，批准内容基准提交 `e67b2ecc...`）批准收口为 `APPROVED`）；此前 `DSS-AC-001~086` 共 86 条全部 `NOT_RUN`；当前第二轮 UI 调整版本文档状态 `APPROVED`（经 R2 极小纠正、R3 记录纠正后重新批准收口；曾收口为 `APPROVED`：正式批准版本 `DATA-SOURCE-SNAPSHOT-STATUS-UI-ADJUSTMENT-BASELINE-APPROVAL-002`，批准内容基准提交 `5da9b17...`，2026-09-08，作为历史批准事实保留；R3 记录纠正后重新批准收口为 `...-APPROVAL-002-R1`，批准内容基准提交 `cf40b5d...`，2026-09-08），既有批准版本保留为历史） |
+| 依据需求 | `REQUIREMENTS.md`（`DSS-REQ-001~083` 共 83 条（含隔离视觉原型 R2～R7 设计固化新增 `DSS-REQ-076~083`，本任务新增，见 `REQUIREMENTS.md` §21.4/§24 与本文件 §25；设计固化内容已由 `DATA-SOURCE-SNAPSHOT-STATUS-PROTOTYPE-DESIGN-FREEZE-APPROVAL-001`（2026-09-10，批准内容基准提交 `e67b2ecc...`）批准收口为 `APPROVED`）；此前 `DSS-REQ-001~075` 共 75 条：`DSS-REQ-001~071` 承接已批准/第一轮 UI 调整历史基线 + 本轮第二轮新增 `DSS-REQ-072~075`；当前第二轮 UI 调整版本文档状态 `APPROVED`（经 R2 极小纠正、R3 记录纠正后重新批准收口；曾收口为 `APPROVED`：正式批准版本 `DATA-SOURCE-SNAPSHOT-STATUS-UI-ADJUSTMENT-BASELINE-APPROVAL-002`，批准内容基准提交 `5da9b17...`，2026-09-08，作为历史批准事实保留；R3 记录纠正后重新批准收口为 `...-APPROVAL-002-R1`，批准内容基准提交 `cf40b5d...`，2026-09-08），既有批准版本保留为历史）。**本轮（2026-09-10 查询控件交互调整草案）在已批准 83 条之上新增草案 `DSS-REQ-084~086` 共 3 条，调整后当前编号合计 `DSS-REQ-001~086` 共 86 条，其中 `DSS-REQ-084~086` 为 `DRAFT_PENDING_USER_REVIEW`（未批准，见 `REQUIREMENTS.md` §21.6 与本文件 §26）** |
+| 依据验收 | `ACCEPTANCE.md`（`DSS-AC-001~095` 共 95 条全部 `NOT_RUN`（含隔离视觉原型 R2～R7 设计固化新增 `DSS-AC-087~095`，本任务新增，见 `ACCEPTANCE.md` §4.20/§6 与本文件 §25；全部 `NOT_RUN`，设计固化内容已由 `DATA-SOURCE-SNAPSHOT-STATUS-PROTOTYPE-DESIGN-FREEZE-APPROVAL-001`（2026-09-10，批准内容基准提交 `e67b2ecc...`）批准收口为 `APPROVED`）；此前 `DSS-AC-001~086` 共 86 条全部 `NOT_RUN`；当前第二轮 UI 调整版本文档状态 `APPROVED`（经 R2 极小纠正、R3 记录纠正后重新批准收口；曾收口为 `APPROVED`：正式批准版本 `DATA-SOURCE-SNAPSHOT-STATUS-UI-ADJUSTMENT-BASELINE-APPROVAL-002`，批准内容基准提交 `5da9b17...`，2026-09-08，作为历史批准事实保留；R3 记录纠正后重新批准收口为 `...-APPROVAL-002-R1`，批准内容基准提交 `cf40b5d...`，2026-09-08），既有批准版本保留为历史）；本轮（2026-09-10 查询控件交互调整草案）在已批准 95 条之上新增草案 `DSS-AC-096~103` 共 8 条（均为 `NOT_RUN`），调整后当前编号合计 `DSS-AC-001~103` 共 103 条全部 `NOT_RUN`、`acceptance_not_run_count=103`，其中 `DSS-AC-096~103` 为 `DRAFT_PENDING_USER_REVIEW`（未批准，见 `ACCEPTANCE.md` §4.21/§7 与本文件 §26）；正式验收仍未执行） |
 | 隔离视觉原型设计固化任务编号 | `DATA-SOURCE-SNAPSHOT-STATUS-PROTOTYPE-DESIGN-FREEZE-001`（2026-09-10 纯文档设计固化任务：把项目负责人认可的隔离视觉原型 R2～R7 最终视觉方案固化为正式文档口径；不实现、不执行验收，见本文件 §25） |
 | 隔离视觉原型设计固化授权基线提交 | `4222b0a24b927aca6f62ff348fd8549b73d4156c`（本任务开始时 `origin/develop` 最新提交，本地 HEAD 与其一致，ahead/behind=0/0；`5174` 隔离视觉 prototype worktree 亦基于该提交） |
 | 隔离视觉原型工作区（5174） | 独立隔离视觉 prototype worktree（如 `/agent/dss-linear-style-prototype-001.*`，detached HEAD，**非正式前端工程**）；R2～R7 视觉方向经项目负责人认可（“视觉原型已经相当 OK”），但**不是** `5173` 正式前端，也不能替代 `5173` 正式实现与正式验收，见本文件 §25、`README.md` |
@@ -60,6 +60,16 @@
 | `5173` 正式验收状态（隔离视觉原型 R2～R7 视觉方案） | `NOT_RUN`（`5173` 未做正式验收；`5174` 原型浏览器/测试/构建结果仅作设计验证证据，不得写成正式验收 `PASS`） |
 | 文档总体状态（隔离视觉原型 R2～R7 视觉固化） | `PROTOTYPE_DESIGN_APPROVED_AND_IMPLEMENTED_ON_5173_PENDING_REVIEW`（说明：设计固化已经批准（`DATA-SOURCE-SNAPSHOT-STATUS-PROTOTYPE-DESIGN-FREEZE-APPROVAL-001`，2026-09-10）；R2～R7 视觉方案已由实现任务 `DATA-SOURCE-SNAPSHOT-STATUS-PROTOTYPE-TO-FORMAL-IMPLEMENTATION-001` 应用到 `5173` 并完成开发自测；ChatGPT 已完成本次正式实现代码复审且代码结论为 `APPROVED`；下一步为项目负责人在 `5173` 人工视觉检查；正式验收与人工视觉验收仍为 `NOT_RUN`。禁止写为 `FORMALLY_ACCEPTED`/`IMPLEMENTATION_APPROVED`/`ACCEPTANCE_PASSED`/`COMPLETED`） |
 | 通用查询列表页 UI 基线状态 | `NOT_CREATED_BY_DESIGN`（通用 `QUERY-LIST-PAGE-UI-PATTERN` 须待本页正式实现并验收通过后再独立评估建立，本任务**不创建、不批准**） |
+| 本轮（查询控件交互调整草案）任务编号 | `DATA-SOURCE-SNAPSHOT-STATUS-QUERY-CONTROL-INTERACTION-ADJUSTMENT-BASELINE-001`（正式实现人工检查后发现问题的纯文档调整基线建立；**只建立文档草案，不修改代码、不批准草案、不执行正式验收**，设计落点见 §26） |
+| 本轮（查询控件交互调整草案）授权基线提交 | `ba309ea8b469e3796ab08ed87c6ccb8c6d5bb253`（本任务开始时 `origin/develop` 最新提交，本地 HEAD 与其一致，ahead/behind=0/0；原正式实现 R1 文档纠正提交同为此提交） |
+| 本轮（查询控件交互调整草案）原正式实现提交 | `3ec9cbf6487eacff004212fb3aca3064c3bd18cc`（R2～R7 视觉方案应用到 `5173` 正式前端的原正式实现提交） |
+| 本轮（查询控件交互调整草案）已批准视觉内容基准 | `e67b2ecc3897c3e83597126e259ee4c19349a66a`（已获批准收口的 R2～R7 视觉内容基准；本轮草案只在其之上做查询控件交互与字段截断的定向设计） |
+| `5173` 正式实现代码复审状态（本轮草案时点） | `APPROVED`（`formal_5173_code_review_status=APPROVED`：ChatGPT 已从远程 Git 对 `5173` 正式实现完成代码复审并判定 `APPROVED`；**不代表**正式验收或人工视觉验收已执行或通过） |
+| 项目负责人人工页面检查状态（本轮草案驱动） | `CHANGES_REQUIRED`（`project_owner_visual_review_status=CHANGES_REQUIRED`：项目负责人对 `5173` 正式实现人工页面检查，认为整体视觉基本可接受，但实际操作查询控件后发现一组互相关联的交互问题，故当前不能进入正式验收） |
+| 本轮（查询控件交互调整草案）设计状态 | `DRAFT_PENDING_USER_REVIEW`（`query_control_interaction_adjustment_status=DRAFT_PENDING_USER_REVIEW`：本文件 §26 与 `REQUIREMENTS.md` §21.6/`ACCEPTANCE.md` §4.21 均为**草案**，待 ChatGPT 从 Git 复审与项目负责人明确批准；**不得**写成 `APPROVED`/`IMPLEMENTED`/`PASS`/`ACCEPTED`/`COMPLETED`） |
+| 本轮（查询控件交互调整草案）实现状态 | `PENDING_APPROVAL_AND_IMPLEMENTATION`（`query_control_interaction_adjustment_implementation_status=PENDING_APPROVAL_AND_IMPLEMENTATION`：本轮调整尚未实现；草案经复审与批准后须另立实现任务） |
+| 本轮（查询控件交互调整草案）追踪计数 | 需求 → 设计落点 **86/86**（§14.2）、验收 → 设计落点 **103/103**（§14.3）；新增 `DSS-AC-096~103` 全部 `NOT_RUN` |
+| 下一入口（本轮调整草案） | `CHATGPT_BASELINE_REVIEW_FROM_GIT_THEN_PROJECT_OWNER_APPROVAL`（本轮草案的下一入口只能是 ChatGPT 从远程 Git 复审本草案，再由项目负责人明确批准；**不得**直接进入实现、不得执行正式验收、不得替项目负责人批准草案） |
 | 数据库事实依据 | `docs/database/reports/DATA-SOURCE-SNAPSHOT-STATUS-DATABASE-VERIFICATION-001.md`（已提交数据库只读复核报告；本设计任务未连接数据库，见 DATABASE §2） |
 
 任务边界声明：
@@ -540,7 +550,7 @@ onRequestFinally:
 
 四份设计文档（DESIGN/API/UI/DATABASE）在本设计中统一使用：接口 `GET /api/monitor/data-source-run-state/list`；查询参数 `clientId`/`sourceId`/`status`；状态 token `RUNNING`/`COMPLETED`/`UNKNOWN`；原始状态值 `SNAPSHOT_RUNNING`/`SNAPSHOT_COMPLETED`；中文标签 快照进行中/快照已完成/未知状态；时间格式 `YYYY-MM-DD HH:mm:ss`、JSON null、UI `--`；映射状态 `ACTIVE`/`INACTIVE`/`NOT_FOUND`；错误码 `41001/41002`；行键 `clientId+'\x00'+dataSourceId`；排序常量；候选不随筛选收窄。任何偏差视为设计不一致。
 
-### 14.2 需求 → 设计落点矩阵（83/83）
+### 14.2 需求 → 设计落点矩阵（86/86）
 
 落点记号：D=DESIGN §、A=API §、U=UI §、DB=DATABASE §。
 
@@ -592,10 +602,12 @@ onRequestFinally:
 | DSS-REQ-077 | D§25.3(b)、U§19.3 | DSS-REQ-081 | D§25.3(e)、U§19.4/§19.6 |
 | DSS-REQ-078 | D§25.3(c)、U§19.4 | DSS-REQ-082 | D§25.3(f)、U§19.5 |
 | DSS-REQ-079 | D§25.3(d)、U§19.5 | DSS-REQ-083 | D§25.3(g)、U§19.7 |
+| DSS-REQ-084 | D§26、U§20 | DSS-REQ-086 | D§26、U§20 |
+| DSS-REQ-085 | D§26、U§20 | | |
 
-覆盖：83/83；无悬空需求。第二轮（§22）在已批准基线之上定向修订的既有需求行 `DSS-REQ-022/024/028/029/041/042/043/044/045/069/070` 其现行设计落点亦以 §22 对应小节为准（`022/024`→§22.5、`028/041/043(探针端停用)`→§22.3、`029/042/044/043(源库停用)`→§22.4、`045`→§22.3/§22.4、`069`→§22.2、`070`→§22.6/§22.7）。隔离视觉原型 R2～R7 设计固化新增需求 `DSS-REQ-076~083` 的设计落点为本文件 §25.3 各小节与 UI §19 对应小节（本任务纯文档固化，`5173` 正式实现待后续任务）；其中 `DSS-REQ-076` 取代 `DSS-REQ-066②`、`DSS-REQ-079` 取代 `DSS-REQ-069/072` 的列宽模型，取代关系见 REQUIREMENTS §21.5。
+覆盖：86/86；无悬空需求。本轮（2026-09-10 查询控件交互调整草案）新增需求 `DSS-REQ-084~086`（均为 `DRAFT_PENDING_USER_REVIEW`）的设计落点统一为本文件 §26 与 UI §20（对应 `DSS-AC-096~103`）；其中 `DSS-REQ-084`/`DSS-REQ-085` 对既有 `DSS-REQ-075` 探针下拉截断口径、既有 `DSS-REQ-022/024` 候选截断与控件宽度口径做定向取代/扩展，`DSS-REQ-086` 对既有 `DSS-REQ-028`/`DSS-REQ-070` 的 Tooltip 口径做定向扩展，取代关系见 REQUIREMENTS §21.7。第二轮（§22）在已批准基线之上定向修订的既有需求行 `DSS-REQ-022/024/028/029/041/042/043/044/045/069/070` 其现行设计落点亦以 §22 对应小节为准（`022/024`→§22.5、`028/041/043(探针端停用)`→§22.3、`029/042/044/043(源库停用)`→§22.4、`045`→§22.3/§22.4、`069`→§22.2、`070`→§22.6/§22.7）。隔离视觉原型 R2～R7 设计固化新增需求 `DSS-REQ-076~083` 的设计落点为本文件 §25.3 各小节与 UI §19 对应小节（本任务纯文档固化，`5173` 正式实现待后续任务）；其中 `DSS-REQ-076` 取代 `DSS-REQ-066②`、`DSS-REQ-079` 取代 `DSS-REQ-069/072` 的列宽模型，取代关系见 REQUIREMENTS §21.5。
 
-### 14.3 验收 → 设计落点矩阵（95/95）
+### 14.3 验收 → 设计落点矩阵（103/103）
 
 | 验收 | 设计落点 | 验收 | 设计落点 |
 |---|---|---|---|
@@ -662,6 +674,14 @@ onRequestFinally:
 | DSS-AC-089 | D§25.3(c)、U§19.4 | DSS-AC-094 | D§25.3(g)、U§19.7 |
 | DSS-AC-090 | D§25.3(d)、U§19.5 | DSS-AC-095 | D§25.4、U§19.8 |
 | DSS-AC-091 | D§25.3(d)、U§19.5 | | |
+
+以下为本轮查询控件交互调整草案新增（对应 REQUIREMENTS §21.6、ACCEPTANCE §4.21；全部 `NOT_RUN`，`5173` 正式实现待后续任务）：
+| DSS-AC-096 | D§26、U§20 | DSS-AC-100 | D§26、U§20 |
+| DSS-AC-097 | D§26、U§20 | DSS-AC-101 | D§26、U§20 |
+| DSS-AC-098 | D§26、U§20 | DSS-AC-102 | D§26、U§20 |
+| DSS-AC-099 | D§26、U§20 | DSS-AC-103 | D§26、U§20 |
+
+覆盖：103/103；无悬空验收。本轮新增 `DSS-AC-096~103` 共 8 条（均为 `NOT_RUN`、`DRAFT_PENDING_USER_REVIEW`）反向映射到 `DSS-REQ-084`/`DSS-REQ-085`/`DSS-REQ-086`（映射矩阵见 `ACCEPTANCE.md` §5，双向 86/86 与 103/103），设计落点统一为本文件 §26 与 UI §20；正式验收仍未执行、`acceptance_not_run_count=103`。
 
 ## 15. 设计决策与待确认设计项
 
@@ -991,3 +1011,54 @@ ChatGPT 对上一结果提交（`31aa9f5beec7ded3cd798b3af617fd79a1606ed0`）进
 - 自检：`DSS-REQ-076~083`、`DSS-AC-087~095` 编号连续、无重号、无复用；§14.2 覆盖 83/83、§14.3 覆盖 95/95、无悬空；`DSS-AC-087~095` 全部 `NOT_RUN`；本轮不产生 `frontend/`/`backend/`/SQL/配置差异，不提交 runtime logs/截图/构建产物/依赖目录/临时文件。
 - R1 极小定向修订变更记录（`DATA-SOURCE-SNAPSHOT-STATUS-PROTOTYPE-DESIGN-FREEZE-001-R1`，2026-09-10，纯文档，未批准/未实现 5173/未执行验收）：ChatGPT 对固化任务结果提交 `899803491427a6a7e6b6295f43ef49a11ed56037` 正式复审结论 `CHANGES_REQUIRED` 驱动的定向修订。本文件只把 §25.3(f) 中歧义的“源库 Tooltip 展示完整值”改写为明确口径——源库主内容 `ORG`（`ORG` 为空/空白/配置缺失回退原始 `DATA_SOURCE_ID`，判定逻辑与 `DSS-REQ-074` 一致）、**无论显示 ORG 还是回退 ID，源库 Tooltip 始终只显示完整原始 `DATA_SOURCE_ID`**，不显示 `ORG`、不拼接 `ORG＋DATA_SOURCE_ID`、不追加“配置缺失/配置停用/类别非 SOURCE”等异常说明，内容源直接取自行记录的原始 `sourceId`/`DATA_SOURCE_ID`、不得从 `sourceRef.org` 或展示文本反推；并同步 `API.md`/`DATABASE.md` §1 当前元数据（65/68 → 83/95、95 条全部 `NOT_RUN`、分层实现状态、R2～R7 待 5173 正式实现），接口/数据库业务契约零变化。§25.3 其余视觉数值、§25.4 交互状态机、§25.5 状态分离与 §14.2/§14.3 追踪矩阵（83/83、95/95）均零变化；`DSS-REQ-001~083` 仍 83 条、`DSS-AC-001~095` 仍 95 条全部 `NOT_RUN`；探针端 `CLIENT_ID`＋完整非空 `CLIENT_DESC` Tooltip 未误改。状态不变：R2～R7 原型视觉方向 `APPROVED_BY_PROJECT_OWNER`、本轮文档 `DRAFT_PENDING_USER_REVIEW`、`5173` 正式实现 `PENDING_FORMAL_IMPLEMENTATION`、正式验收 `NOT_RUN`。下一入口为 ChatGPT 从 Git 重新复审（`CHATGPT_REVIEW_FROM_GIT_THEN_USER_APPROVAL`）。
 - 批准收口记录（2026-09-10，`DATA-SOURCE-SNAPSHOT-STATUS-PROTOTYPE-DESIGN-FREEZE-APPROVAL-001`，纯文档）：ChatGPT 已从 Git 对批准内容基准提交 `e67b2ecc3897c3e83597126e259ee4c19349a66a` 完成最终复审 `APPROVED`，项目负责人于 2026-09-10 明确回复“批准”。据此把 §1 中 R2～R7 设计固化内容当前状态由 `DRAFT_PENDING_USER_REVIEW` 收口为 `APPROVED`（`design_status` 自身继续 `APPROVED`；`requirements_status`/`acceptance_status` 收口为 `APPROVED`，83 条需求、95 条验收全部纳入批准基线且 95 条验收全部保持 `NOT_RUN`），文档总体状态更新为 `PROTOTYPE_DESIGN_APPROVED_READY_FOR_FORMAL_5173_IMPLEMENTATION`。**业务零变化**：§25 视觉数值/结构/交互状态机、§14.2/§14.3 追踪矩阵（83/83、95/95）、`DSS-REQ-076~083` 与 `DSS-AC-087~095` 业务行、源库 Tooltip 口径（完整原始 `DATA_SOURCE_ID` only）均逐字节不变；`API.md`/`DATABASE.md` 契约零差异。分层实现状态不变（既有只读实现已存在、第二轮 UI 调整已进 `5173`、R2～R7 仍 `PENDING_FORMAL_IMPLEMENTATION_ON_5173`）；正式验收与 `5173` 人工视觉验收继续 `NOT_RUN`；`pending_user_review=NO`、`pending_user_confirmation_count=0`。下一入口为独立正式实现任务 `DATA-SOURCE-SNAPSHOT-STATUS-PROTOTYPE-TO-FORMAL-IMPLEMENTATION-001`。
+
+## 26. 查询控件交互调整草案设计记录（`DATA-SOURCE-SNAPSHOT-STATUS-QUERY-CONTROL-INTERACTION-ADJUSTMENT-BASELINE-001`）
+
+### 26.1 任务与状态边界
+
+- 任务编号：`DATA-SOURCE-SNAPSHOT-STATUS-QUERY-CONTROL-INTERACTION-ADJUSTMENT-BASELINE-001`；授权基线提交 `ba309ea8b469e3796ab08ed87c6ccb8c6d5bb253`；原正式实现提交 `3ec9cbf6487eacff004212fb3aca3064c3bd18cc`；已批准视觉内容基准 `e67b2ecc3897c3e83597126e259ee4c19349a66a`。
+- 本轮为**纯文档查询控件交互调整草案**：新增草案需求 `DSS-REQ-084~086`（`DRAFT_PENDING_USER_REVIEW`）与草案验收 `DSS-AC-096~103`（`NOT_RUN`），**不出实现代码、不执行正式验收、不代替项目负责人批准草案**。
+- 分层状态保留：`formal_5173_code_review_status=APPROVED`、`project_owner_visual_review_status=CHANGES_REQUIRED`、`formal_acceptance_status=NOT_RUN`、`formal_acceptance_not_run_count=103`、`query_control_interaction_adjustment_implementation_status=PENDING_APPROVAL_AND_IMPLEMENTATION`。既有 R2～R7 已批准视觉内容、已进 `5173` 的第二轮 UI 调整实现事实均**不回退**为“未实现”。
+- 本轮不动接口请求语义与状态机：接口 `GET /api/monitor/data-source-run-state/list`、参数 `clientId`/`sourceId`/`status`、单飞行请求状态机、`60` 秒自动刷新、隐藏冻结/恢复补发、行键与排序常量均**零变化**（对应 `DSS-REQ-023/025/050~054/071`）。本轮不动表格、背景、状态标签与源库表格 Tooltip 业务设计。
+
+### 26.2 三个问题为何必须统一处理
+
+项目负责人确认的三个问题属于**同一处查询区几何与文本呈现的耦合问题**，拆开单改会互相抵消，必须以同一口径一次落地：
+
+1. **下拉宽度随所选内容变化** → 查询区几何不稳定。若只锁宽而不统一文本截断，长候选/长选中文本仍会把内部 `flex` 子项撑开或换行，导致宽度锁在中途被破坏；反之若只截断文本而不锁外部几何，元素仍可能因 `Element Plus` 内部 `inline-block` 收缩行为而抖动。故须“外部几何锁定 + 内部文本约束”成对设计（`DSS-REQ-084`＋`DSS-REQ-085`）。
+2. **四个展示字段缺少统一字段级截断** → 探针端 `CLIENT_ID`/`CLIENT_DESC`、源库端 `DATA_SOURCE_ORG`/`DATA_SOURCE_ID` 无统一上限，候选与选中项文本长度不可控，直接构成问题 1 的输入源。故截断须对四个字段统一，且候选与可见选中项显示结果一致（`DSS-REQ-085`）。
+3. **`CLIENT_DESC` 截断后需可读回全文** → 截断是显示降级，全量信息必须以 Tooltip 补偿；Tooltip 的边界（仅在原始超 20 码点时出现、内容只取完整原始 `CLIENT_DESC`、不污染表格 Tooltip）又直接依赖问题 2 的“是否被截断”判定。故 Tooltip 与截断同批定义（`DSS-REQ-086`）。
+
+三者共享同一前提——**“以码点为单位判定是否超限、以固定像素锁定外部几何”**——因此设计上作为一个整体（§26.3～§26.5），落点为 `D§26、U§20`。
+
+### 26.3 字段级截断设计落点建议（`DSS-REQ-085`）
+
+- 统一函数 `truncate(value, 20)`：按 **Unicode 码点**（非 UTF-16 码元）计数；`≤20` 返回原始值；`>20` 返回前 `20` 个码点 + `...`（英文省略号，非单个 `…` 字符）；不得在代理对（surrogate pair）中间截断，`CJK`/emoji 各计 1 个码点。
+- 探针端展示：`truncate(CLIENT_ID, 20)（truncate(CLIENT_DESC, 20)）`；源库端展示：`truncate(DATA_SOURCE_ORG, 20)（truncate(DATA_SOURCE_ID, 20)）`。
+- 空值规则：`CLIENT_DESC` 为 `null`/空串/纯空白时不产生空括号，探针端退化为 `truncate(CLIENT_ID, 20)`；源库端 `ORG` 为空/空白/配置缺失时按既有 `DSS-REQ-074` 回退口径先用原始 `DATA_SOURCE_ID`，再对回退结果套 `truncate(...,20)`，同样不产生空括号。
+- 边界：恰好 `20` 码点 → 显示完整、不追加 `...`；`≥21` 码点 → 前 `20` 码点 + `...`。
+- 一致性：候选下拉项与可见选中项使用同一 `truncate` 结果，同一原始值在两处显示完全相同。
+- **仅显示态**：选项 `value`、查询参数、已应用查询条件、请求语义一律保留完整原始 ID，截断不得回流到数据层。
+- `CSS text-overflow` 作为最后兜底保留，不作为主手段。
+
+### 26.4 外部几何锁定与内部 flex 收缩设计落点建议（`DSS-REQ-084`）
+
+- 固定宽度：探针端 `240px`、源库端 `300px`、快照状态 `200px`。下列状态宽度与后续字段组、`查询`/`重置` 按钮 `x` 坐标均不得变化：初始“全部”、选中项最短、最长、短↔长切换、多选并 `collapse-tags`、取消最长选项、清空回“全部”、重置、面板开/关、Tooltip 显示/隐藏。
+- **实现前必须先做真实浏览器定位测量**（不得凭猜测写全局 CSS）：在真实浏览器中测量 `.dss-select`、`.el-select__wrapper`、`.el-select__selection`、`.el-select__selected-item`、`.dss-q-group` 以及动作按钮的 `getBoundingClientRect()` 在改动前后的几何。
+- 修复范围限定在 Feature 命名空间（`.dss-*` + `<style scoped>`），不改通用查询列表页基线、不改全局 `Element Plus` 主题；典型做法是外层锁定 `width`/`min-width`/`max-width`/`flex-basis`，内层 `min-width: 0` 允许 `flex` 子项收缩；不靠加长文案或换行掩盖问题，候选变长不得引入额外换行。
+
+### 26.5 `CLIENT_DESC` Tooltip 单实例与安全宽度设计落点建议（`DSS-REQ-086`）
+
+- 触发条件：仅当原始 `CLIENT_DESC` 码点长度 `> 20` 时；作用于候选悬停与可见选中项悬停两处；原始值 `null`/空/纯空白或 `≤20` 码点时不出现 Tooltip。
+- 内容：仅显示**完整未截断的原始 `CLIENT_DESC`**；不显示 `CLIENT_ID`、不显示拼接串、不为源库端字段（`DATA_SOURCE_ORG`/`DATA_SOURCE_ID`）提供该 Tooltip。表格 Tooltip 与既有已批准源库表格 Tooltip 规则（完整原始 `DATA_SOURCE_ID` only）**不变**。
+- 安全宽度：`max-width` 取 `480px` 或 `min(480px, calc(100vw - 16px))`，自然换行；同一时刻至多一个可见实例、不堆叠、离开即隐藏；`+N` 的 `collapse-tags` 继续沿用 `Element Plus` 既有语义。
+- 几何无副作用：Tooltip 显示/隐藏不得改变下拉宽度、查询区高度或其他控件位置。
+
+### 26.6 追踪与自检
+
+- 编号：`DSS-REQ-084~086` 连续、无重号、无复用；`DSS-AC-096~103` 连续、无重号、无复用；既有 `DSS-REQ-001~083`、`DSS-AC-001~095` 编号与业务行**不变**。
+- 矩阵：§14.2 需求 → 设计落点 86/86、§14.3 验收 → 设计落点 103/103，双向映射无悬空（映射矩阵见 `ACCEPTANCE.md` §5：`DSS-REQ-084`↔`DSS-AC-096/097/103`、`DSS-REQ-085`↔`DSS-AC-098/099/103`、`DSS-REQ-086`↔`DSS-AC-100/101/102/103`）。
+- 验收状态：`DSS-AC-001~103` 共 103 条**全部 `NOT_RUN`**、`acceptance_not_run_count=103`；禁止把本轮草案写成 `PASS`/`APPROVED`/`IMPLEMENTED`/`ACCEPTED`/`COMPLETED`。
+- 代码零差异：本轮不产生 `frontend/`/`backend/`/SQL/配置差异；`API.md`/`DATABASE.md` 与既有历史报告整文件逐字节不变；不提交 runtime logs/截图/构建产物/依赖目录/临时文件。
+- 分层状态：`query_control_interaction_adjustment_status=DRAFT_PENDING_USER_REVIEW`、`..._implementation_status=PENDING_APPROVAL_AND_IMPLEMENTATION`、`project_owner_visual_review_status=CHANGES_REQUIRED`、`formal_acceptance_status=NOT_RUN`、`pending_user_review=YES`、`pending_user_confirmation_count=0`。
+- 下一入口：`CHATGPT_BASELINE_REVIEW_FROM_GIT_THEN_PROJECT_OWNER_APPROVAL`（ChatGPT 从 Git 复审本草案基线，再由项目负责人决定是否批准；批准前不得开始实现）。

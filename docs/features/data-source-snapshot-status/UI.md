@@ -49,6 +49,16 @@
 | `5173` 正式实现状态（隔离视觉原型 R2～R7 视觉方案） | `IMPLEMENTED_ADJUSTMENT_PENDING_REVIEW`（`formal_5173_implementation_status=IMPLEMENTED_ADJUSTMENT_PENDING_REVIEW`：R2～R7 视觉方案已由实现任务 `DATA-SOURCE-SNAPSHOT-STATUS-PROTOTYPE-TO-FORMAL-IMPLEMENTATION-001`（2026-09-10）应用到 `5173` 正式前端并完成开发自测（`browser_verification_status=DEV_SELF_TEST_DONE`）；待 ChatGPT 从 Git 独立复审与项目负责人人工查看；正式验收 `NOT_RUN`、95 条 `DSS-AC-001~095` 全部 `NOT_RUN`；本节界面规则未变） |
 | `5173` 正式验收状态（隔离视觉原型 R2～R7 视觉方案） | `NOT_RUN`（`5173` 未做正式验收；`5174` 原型浏览器/测试/构建结果仅作设计验证证据，不得写成正式验收 `PASS`） |
 | 文档总体状态（隔离视觉原型 R2～R7 视觉固化） | `PROTOTYPE_DESIGN_APPROVED_AND_IMPLEMENTED_ON_5173_PENDING_REVIEW`（说明：设计固化已经批准（`DATA-SOURCE-SNAPSHOT-STATUS-PROTOTYPE-DESIGN-FREEZE-APPROVAL-001`，2026-09-10）；R2～R7 视觉方案已由实现任务 `DATA-SOURCE-SNAPSHOT-STATUS-PROTOTYPE-TO-FORMAL-IMPLEMENTATION-001` 应用到 `5173` 并完成开发自测；ChatGPT 已完成本次正式实现代码复审且代码结论为 `APPROVED`；下一步为项目负责人在 `5173` 人工视觉检查；正式验收与人工视觉验收仍为 `NOT_RUN`。禁止写为 `FORMALLY_ACCEPTED`/`IMPLEMENTATION_APPROVED`/`ACCEPTANCE_PASSED`/`COMPLETED`） |
+| 本轮（查询控件交互调整草案）任务编号 | `DATA-SOURCE-SNAPSHOT-STATUS-QUERY-CONTROL-INTERACTION-ADJUSTMENT-BASELINE-001`（纯文档查询控件交互调整草案：把项目负责人确认的三类查询控件交互问题固化为草案界面规则，见本文件 §20；不实现、不执行正式验收、不代替项目负责人批准草案） |
+| 本轮（查询控件交互调整草案）授权基线提交 | `ba309ea8b469e3796ab08ed87c6ccb8c6d5bb253`（本任务开始时 `origin/develop` 最新提交，本地 HEAD 与其一致，ahead/behind=0/0） |
+| 本轮（查询控件交互调整草案）原正式实现提交 | `3ec9cbf6487eacff004212fb3aca3064c3bd18cc`（R2～R7 视觉方案应用到 `5173` 的原正式实现结果提交，作为既有实现事实保留，不回退为“未实现”） |
+| 本轮（查询控件交互调整草案）已批准视觉内容基准 | `e67b2ecc3897c3e83597126e259ee4c19349a66a`（R2～R7 隔离视觉原型设计固化批准内容基准提交，本轮只在其上做草案增量） |
+| 本轮（查询控件交互调整草案）`5173` 正式实现代码复审状态 | `APPROVED`（`formal_5173_code_review_status=APPROVED`；ChatGPT 已从 Git 对 R2～R7 正式实现代码独立复审通过） |
+| 本轮（查询控件交互调整草案）项目负责人人工页面检查状态 | `CHANGES_REQUIRED`（`project_owner_visual_review_status=CHANGES_REQUIRED`；项目负责人确认查询区下拉宽度随内容变化、四个展示字段缺少统一字段级截断、`CLIENT_DESC` 截断后需 Tooltip 三类问题） |
+| 本轮（查询控件交互调整草案）状态 | `DRAFT_PENDING_USER_REVIEW`（`query_control_interaction_adjustment_status=DRAFT_PENDING_USER_REVIEW`；未批准） |
+| 本轮（查询控件交互调整草案）实现状态 | `PENDING_APPROVAL_AND_IMPLEMENTATION`（`query_control_interaction_adjustment_implementation_status=PENDING_APPROVAL_AND_IMPLEMENTATION`；本轮为纯文档草案，未落地 `5173`） |
+| 本轮（查询控件交互调整草案）需求/验收计数 | 需求 `DSS-REQ-084~086` 共 3 条（累计 `DSS-REQ-001~086` 共 86 条）、验收 `DSS-AC-096~103` 共 8 条（累计 `DSS-AC-001~103` 共 103 条全部 `NOT_RUN`、`acceptance_not_run_count=103`），追踪矩阵 86/86 与 103/103，见本文件 §20、`REQUIREMENTS.md` §21.6/§21.7、`ACCEPTANCE.md` §4.21/§5 |
+| 本轮（查询控件交互调整草案）下一入口 | `CHATGPT_BASELINE_REVIEW_FROM_GIT_THEN_PROJECT_OWNER_APPROVAL`（批准前不得开始实现） |
 | 通用查询列表页 UI 基线状态 | `NOT_CREATED_BY_DESIGN`（通用 `QUERY-LIST-PAGE-UI-PATTERN` 须待本页正式实现并验收通过后再独立评估建立，本任务**不创建、不批准**） |
 | 创建日期 | 2026-09-05；2026-09-06 设计批准收口；2026-09-07 建立第一轮验收前 UI 调整草案并批准/实现；2026-09-08 建立第二轮 UI 调整草案（R0/R1）并批准收口为 `DATA-SOURCE-SNAPSHOT-STATUS-UI-ADJUSTMENT-BASELINE-APPROVAL-002`，同日以 `...-002-R2` 纯文档纠正源库 Tooltip 内容并重新进入复审，再以 `...-002-R3` 记录纠正，ChatGPT 对 R3 结果提交独立正式复审 `APPROVED`、项目负责人明确“批准”，同日重新批准收口为 `DATA-SOURCE-SNAPSHOT-STATUS-UI-ADJUSTMENT-BASELINE-APPROVAL-002-R1`（批准内容基准提交 `cf40b5d...`）；2026-09-10 隔离视觉原型 R2～R7 设计固化（`DATA-SOURCE-SNAPSHOT-STATUS-PROTOTYPE-DESIGN-FREEZE-001`，见 §19） |
 
@@ -659,3 +669,57 @@ ChatGPT 对上一结果提交（`31aa9f5beec7ded3cd798b3af617fd79a1606ed0`）正
 - 自检：`DSS-REQ-076~083`、`DSS-AC-087~095` 编号连续、无重号、无复用；DESIGN §14.2 覆盖 83/83、§14.3 覆盖 95/95、无悬空；`DSS-AC-087~095` 全部 `NOT_RUN`；本轮不产生 `frontend/`/`backend/`/SQL/配置差异，不提交 runtime logs/截图/构建产物/依赖目录/临时文件。
 - R1 极小定向修订变更记录（`DATA-SOURCE-SNAPSHOT-STATUS-PROTOTYPE-DESIGN-FREEZE-001-R1`，2026-09-10，纯文档，未批准/未实现 5173/未执行验收）：ChatGPT 对固化任务结果提交 `899803491427a6a7e6b6295f43ef49a11ed56037` 正式复审结论 `CHANGES_REQUIRED` 驱动的定向修订。本文件只把 §19.5 中歧义的“源库 Tooltip 展示完整值”改写为明确口径——源库主内容 `ORG`（`ORG` 为空/空白/配置缺失回退原始 `DATA_SOURCE_ID`，判定逻辑与 §16.4 一致）、**无论显示 ORG 还是回退 ID，源库 Tooltip 始终只显示完整原始 `DATA_SOURCE_ID`**，不显示 `ORG`、不拼接 `ORG＋DATA_SOURCE_ID`、不追加“配置缺失/配置停用/类别非 SOURCE”等异常说明，内容源直接取自行记录的原始 `sourceId`/`DATA_SOURCE_ID`、不得从 `sourceRef.org` 或展示文本反推；同时明确探针端为完整**非空** `CLIENT_DESC`（未误改）。§19 其余视觉数值、§19.6 倒计时、§19.7 响应式口径、§19.8 交互状态机与取代清单均零变化；§16.4/§16.7 既有单实例 Tooltip 契约不变。状态不变：R2～R7 原型视觉方向 `APPROVED_BY_PROJECT_OWNER`、本轮文档 `DRAFT_PENDING_USER_REVIEW`、`5173` 正式实现 `PENDING_FORMAL_IMPLEMENTATION`、正式验收 `NOT_RUN`。下一入口为 ChatGPT 从 Git 重新复审（`CHATGPT_REVIEW_FROM_GIT_THEN_USER_APPROVAL`）。
 - 批准收口记录（2026-09-10，`DATA-SOURCE-SNAPSHOT-STATUS-PROTOTYPE-DESIGN-FREEZE-APPROVAL-001`，纯文档）：ChatGPT 已从 Git 对批准内容基准提交 `e67b2ecc3897c3e83597126e259ee4c19349a66a` 完成最终复审 `APPROVED`，项目负责人于 2026-09-10 明确回复“批准”。据此把 §1 中 R2～R7 设计固化内容当前状态由 `DRAFT_PENDING_USER_REVIEW` 收口为 `APPROVED`，`5173` 对 R2～R7 的正式实现仍为 `PENDING_FORMAL_IMPLEMENTATION_ON_5173`、正式验收与 `5173` 人工视觉验收仍 `NOT_RUN`；`pending_user_review=NO`、`pending_user_confirmation_count=0`。**业务零变化**：§19 界面数值/布局/Tooltip/响应式/交互规则、AI 计数（83/95）、`DSS-REQ-076~083` 与 `DSS-AC-087~095` 业务行、源库 Tooltip 口径（完整原始 `DATA_SOURCE_ID` only）均逐字节不变；`API.md`/`DATABASE.md` 契约零差异。**批准不代表 R2～R7 已应用到 `5173`、正式实现已完成或验收已通过，不等于 `IMPLEMENTED_ACCEPTED`**；下一入口为独立正式实现任务 `DATA-SOURCE-SNAPSHOT-STATUS-PROTOTYPE-TO-FORMAL-IMPLEMENTATION-001`。
+
+## 20. 查询控件交互调整草案界面规则（`DATA-SOURCE-SNAPSHOT-STATUS-QUERY-CONTROL-INTERACTION-ADJUSTMENT-BASELINE-001`）
+
+### 20.1 任务与范围
+
+- 任务编号 `DATA-SOURCE-SNAPSHOT-STATUS-QUERY-CONTROL-INTERACTION-ADJUSTMENT-BASELINE-001`，授权基线提交 `ba309ea8b469e3796ab08ed87c6ccb8c6d5bb253`，原正式实现提交 `3ec9cbf6487eacff004212fb3aca3064c3bd18cc`，已批准视觉内容基准 `e67b2ecc3897c3e83597126e259ee4c19349a66a`。
+- 本轮为**纯文档界面草案**（`DRAFT_PENDING_USER_REVIEW`，实现状态 `PENDING_APPROVAL_AND_IMPLEMENTATION`）：新增草案界面规则对应 `DSS-REQ-084~086`、`DSS-AC-096~103`（全部 `NOT_RUN`）；不实现、不执行正式验收、不代替项目负责人批准。
+- 本轮不改变已批准的整体视觉方案、页面结构、背景分层、结果卡片、表格列宽模型、刷新工具栏、状态标签与页面级单实例 Tooltip 业务设计；请求/状态机零变化（见 §20.7）。
+
+### 20.2 三个问题为何统一处理
+
+项目负责人确认三类问题（下拉宽度随内容变化、四个展示字段缺少统一字段级截断、`CLIENT_DESC` 截断后需 Tooltip）同属查询区几何与文本呈现的耦合问题：只锁宽不截断则内部 `flex` 子项仍被撑开，只截断不锁外部几何则控件仍可能抖动，Tooltip 的显隐又依赖截断判定。故以一个统一口径（“按码点判定超限 + 固定像素锁定外部几何”）一次落地，落点为 §20.3～§20.5。
+
+### 20.3 下拉固定宽度与内部收缩界面规则（`DSS-REQ-084`；取代/扩展 §16.5 宽度约束）
+
+- 固定宽度：探针端 `240px`、源库端 `300px`、快照状态 `200px`。下列各状态下宽度均不变，且其后字段组与 `查询`/`重置` 按钮的 `x` 坐标不得移动：初始“全部”、选中项最短、选中项最长、短↔长切换、多选并 `collapse-tags`、取消最长选项、清空回“全部”、重置、面板开/关、Tooltip 显示/隐藏。
+- 候选文本变长不得引入额外换行或撑开外层容器。
+- 实现前**必须先在真实浏览器定位测量**（禁止猜测式全局 CSS）：测量 `.dss-select`、`.el-select__wrapper`、`.el-select__selection`、`.el-select__selected-item`、`.dss-q-group` 以及动作按钮的几何前后差异。
+- 修复范围限定在 Feature 命名空间（`.dss-*` + `<style scoped>`），不改通用查询列表页基线、不改全局 `Element Plus` 主题；典型做法为外层锁定 `width`/`min-width`/`max-width`/`flex-basis`、内层 `min-width: 0`，不靠换行或加长文案掩盖。
+- 面板最大宽度与安全视口约束仍沿用 §16.5（探针端面板 `480px`、源库端面板 `560px`，均不得超过安全视口宽度；专属 `popper-class` 须用本 Feature 命名空间）。
+- 验收 `DSS-AC-096`/`097`/`103`。
+
+### 20.4 四个展示字段统一字段级截断界面规则（`DSS-REQ-085`；扩展 §16.3/§16.4/§16.5）
+
+- 统一 `truncate(value, 20)`：按 **Unicode 码点**计数（`CJK`/emoji 各计 1 个码点，禁止拆开代理对）；`≤20` 返回原始值；`>20` 返回前 `20` 个码点 + 英文 `...`。
+- 探针端展示 `truncate(CLIENT_ID, 20)（truncate(CLIENT_DESC, 20)）`；源库端展示 `truncate(DATA_SOURCE_ORG, 20)（truncate(DATA_SOURCE_ID, 20)）`。
+- 空值规则：`CLIENT_DESC` 为 `null`/空/纯空白时不产生空括号，探针端退化为 `truncate(CLIENT_ID, 20)`；源库端 `ORG` 为空/空白/配置缺失时按 §16.4 先用原始 `DATA_SOURCE_ID` 回退、再套 `truncate(...,20)`，同样不产生空括号。
+- 边界：恰好 `20` 码点显示完整、不追加 `...`；`≥21` 码点显示前 `20` 码点 + `...`。
+- 候选下拉项与可见选中项使用同一 `truncate` 结果，同一原始值两处显示完全一致。
+- **仅显示态**：选项 `value`、查询参数、已应用查询条件、请求语义一律保留完整原始 ID；截断不回流数据层；`CSS text-overflow` 仅作最后兜底。
+- 验收 `DSS-AC-098`/`099`/`103`。
+
+### 20.5 `CLIENT_DESC` Tooltip 界面规则（`DSS-REQ-086`）
+
+- 仅当原始 `CLIENT_DESC` 码点长度 `> 20` 时出现；作用于候选悬停与可见选中项悬停两处。
+- 内容仅显示**完整未截断的原始 `CLIENT_DESC`**；不显示 `CLIENT_ID`、不显示拼接串、不为源库端字段提供该 Tooltip；表格 Tooltip 与既有已批准源库表格 Tooltip（完整原始 `DATA_SOURCE_ID` only，§16.6/§16.7、§19.5）不变。
+- 原始值 `null`/空/纯空白或 `≤20` 码点时不出现。
+- 安全最大宽度 `480px` 或 `min(480px, calc(100vw - 16px))`，自然换行；同一时刻至多一个可见实例、不堆叠、离开即隐藏；`+N` 沿用 `Element Plus` 既有语义。
+- 显示/隐藏不得改变下拉宽度、查询区高度或其他控件位置。
+- 验收 `DSS-AC-100`/`101`/`102`/`103`。
+
+### 20.6 四档视口与几何验证要求
+
+- 实现任务须在四档视口 `1280`/`1700`/`1920`/`2560` 下验证上述规则（宽度稳定、无额外换行、后续字段与按钮不位移、Tooltip 单实例且安全宽度生效）。
+- `1280` 为最窄口径，须重点核验查询区不溢出、不换行、不推动动作按钮。
+
+### 20.7 不变契约、取代关系与自检
+
+- 取代/扩展关系：§20.3 取代/扩展 §16.5 的宽度与截断口径；§20.4 扩展 §16.3/§16.4/§16.5 的字段级截断口径；§20.5 扩展 §16.6 探针端 Tooltip 触发口径。完整取代说明见 `REQUIREMENTS.md` §21.7 与 `DESIGN.md` §26.2。
+- 请求/状态机零变化：接口 `GET /api/monitor/data-source-run-state/list`、参数 `clientId`/`sourceId`/`status`、单飞行请求状态机、`60` 秒自动刷新、隐藏冻结/恢复补发、行键与排序常量、只读边界均不变（对应 `DSS-REQ-023/025/050~054/071`）；不改表格、背景、状态标签与源库表格 Tooltip 业务设计。
+- 编号与追踪：`DSS-REQ-084~086`（累计 86 条）、`DSS-AC-096~103`（累计 103 条全部 `NOT_RUN`、`acceptance_not_run_count=103`）；矩阵 86/86 与 103/103 双向无悬空；禁止把本轮草案写成 `PASS`/`APPROVED`/`IMPLEMENTED`/`ACCEPTED`/`COMPLETED`。
+- 代码零差异：本轮不产生 `frontend/`/`backend/`/SQL/配置差异；`API.md`/`DATABASE.md` 与既有历史报告整文件逐字节不变。
+- 分层状态：`query_control_interaction_adjustment_status=DRAFT_PENDING_USER_REVIEW`、`..._implementation_status=PENDING_APPROVAL_AND_IMPLEMENTATION`、`project_owner_visual_review_status=CHANGES_REQUIRED`、`formal_acceptance_status=NOT_RUN`、`pending_user_review=YES`、`pending_user_confirmation_count=0`。
+- 变更记录：2026-09-10，新增 §20 并更新 §1 元数据（新增本轮草案相关状态行）。下一入口：`CHATGPT_BASELINE_REVIEW_FROM_GIT_THEN_PROJECT_OWNER_APPROVAL`。
