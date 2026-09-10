@@ -10,14 +10,16 @@
 | 目标文档 | `docs/features/data-source-snapshot-status/DATABASE.md`（数据库查询设计草案） |
 | 配套设计文档 | `DESIGN.md`（总设计入口）、`API.md`（接口设计草案）、`UI.md`（界面设计草案） |
 | 文档状态 | `APPROVED`（数据库查询设计基线已批准，批准日期 2026-09-06；批准版本与批准内容基准见 DESIGN §1/§17 与 Feature README §5） |
-| requirements_status | `APPROVED`（`DSS-REQ-001~065` 共 65 条） |
-| acceptance_status | `APPROVED`（`DSS-AC-001~068` 共 68 条，全部 `NOT_RUN`） |
-| design_status | `APPROVED`（四份设计文档 DESIGN.md / API.md / UI.md / DATABASE.md 均已批准，见 DESIGN §1/§17） |
-| implementation_status | `IMPLEMENTED_PENDING_REVIEW`（本设计不编码；实现任务 `DATA-SOURCE-SNAPSHOT-STATUS-IMPLEMENTATION-001` 已实现基于本设计的只读查询，待代码复审与人工页面验收，见 Feature README §9） |
-| acceptance_execution_status | `NOT_RUN`（本设计不执行验收；68 条 `DSS-AC-*` 全部保持 `NOT_RUN`） |
+| requirements_status | `APPROVED_BASELINE_WITH_DRAFT_PROTOTYPE_EXTENSION_PENDING_USER_REVIEW`（`docs/features/data-source-snapshot-status/REQUIREMENTS.md`：当前共 `DSS-REQ-001~083` **83 条**；其中 `DSS-REQ-001~075` 属既有已批准基线，`DSS-REQ-076~083` 属 R2～R7 prototype 设计固化新增内容、当前为 `DRAFT_PENDING_USER_REVIEW`——**不得**笼统写成 83 条全部 `APPROVED`） |
+| acceptance_status | `APPROVED_BASELINE_WITH_DRAFT_PROTOTYPE_EXTENSION_PENDING_USER_REVIEW`（`docs/features/data-source-snapshot-status/ACCEPTANCE.md`：当前共 `DSS-AC-001~095` **95 条**、**全部 `NOT_RUN`**；其中 `DSS-AC-001~086` 属既有已批准验收基线，`DSS-AC-087~095` 属本轮设计固化新增验收、当前待用户复审） |
+| design_status | `APPROVED`（本文件数据库查询设计基线已批准；四份设计文档 DESIGN.md / API.md / UI.md / DATABASE.md 设计基线均已批准，见 DESIGN §1/§17；本轮 R2～R7 新增的 UI/DESIGN 固化内容本身为 `DRAFT_PENDING_USER_REVIEW`） |
+| implementation_status | 分层记录：① 初始只读全栈实现已存在（`DATA-SOURCE-SNAPSHOT-STATUS-IMPLEMENTATION-001`，已实现基于本设计的只读查询）；② 第二轮 UI 调整 `DATA-SOURCE-SNAPSHOT-STATUS-UI-ADJUSTMENT-IMPLEMENTATION-002` 已进入 `5173`，实现状态 `IMPLEMENTED_ADJUSTMENT_PENDING_REVIEW`（与 Feature README §9 一致）；③ R2～R7 新视觉方案尚未进入 `5173`，状态 `PENDING_FORMAL_IMPLEMENTATION_ON_5173` |
+| acceptance_execution_status | `NOT_RUN`（本设计不执行验收；`DSS-AC-001~095` 共 95 条全部保持 `NOT_RUN`，`acceptance_not_run_count=95`；`5174` prototype 的测试/构建/浏览器验证不得写成正式验收 `PASS`） |
 | pending_user_confirmation_count | `0`（与 DESIGN.md §15.2 一致） |
 | 设计任务编号 | `DATA-SOURCE-SNAPSHOT-STATUS-DESIGN-BASELINE-001` |
 | 创建日期 | 2026-09-05 |
+
+> 状态同步说明（2026-09-10，`DATA-SOURCE-SNAPSHOT-STATUS-PROTOTYPE-DESIGN-FREEZE-001-R1`）：上表当前元数据已由设计固化/实现阶段更新为需求 83 条（`DSS-REQ-001~083`）、验收 95 条（`DSS-AC-001~095`）且全部 `NOT_RUN`，并按分层记录实现状态。**R2～R7 为纯前端视觉/交互呈现调整，本次元数据同步不改变 API/DATABASE 业务契约**——三表投影、只读边界、字段/主键/索引/约束、SQL 与查询语义、既有批准日期/批准内容基准均不变。
 
 ## 2. 事实依据与本任务数据库边界
 
@@ -211,3 +213,5 @@ FROM CDC_DATA_SOURCE
 > 一致性：本文件与 DESIGN.md/API.md/UI.md 统一使用接口 `GET /api/monitor/data-source-run-state/list`、字段/枚举/原始值、时间格式与显式 null、映射状态、错误码与刷新状态机（DESIGN §14.1）。本文件不输出数据库凭据、不声称重新验证实时数据；待确认设计项为 0。
 
 > 实现记录（2026-09-06）：本文件仅同步实现任务 `DATA-SOURCE-SNAPSHOT-STATUS-IMPLEMENTATION-001` 完成后的元数据 `implementation_status` 为 `IMPLEMENTED_PENDING_REVIEW`；本查询设计（三表投影/保行/分类/排序/只读契约）相对设计批准内容基准 `61117a62...` **业务内容零差异**。本实现任务仅以批准只读方式访问 `CDC_DATA_SOURCE_RUN_STATE`/`CDC_CLIENT_MULTIPLE`/`CDC_DATA_SOURCE`（开发验证用只读 SELECT/浏览器联调），未执行任何 DML/DDL；完整实现与数据库只读证据见实现报告与 `evidence/DATA-SOURCE-SNAPSHOT-STATUS-IMPLEMENTATION-001/`。
+
+> 元数据同步记录（2026-09-10，`DATA-SOURCE-SNAPSHOT-STATUS-PROTOTYPE-DESIGN-FREEZE-001-R1`）：本文件仅把 §1 顶部**当前**状态元数据由旧时点的“需求 65 条 / 验收 68 条 / `IMPLEMENTED_PENDING_REVIEW`”同步为当前口径——需求 `DSS-REQ-001~083` 共 **83 条**（`DSS-REQ-001~075` 已批准基线、`DSS-REQ-076~083` R2～R7 设计固化新增且 `DRAFT_PENDING_USER_REVIEW`）、验收 `DSS-AC-001~095` 共 **95 条全部 `NOT_RUN`**（`acceptance_not_run_count=95`）、实现状态分层记录（初始只读实现已存在、第二轮 UI 调整已进 `5173` 为 `IMPLEMENTED_ADJUSTMENT_PENDING_REVIEW`、R2～R7 为 `PENDING_FORMAL_IMPLEMENTATION_ON_5173`）、正式验收 `NOT_RUN`。**SQL、表结构、字段、主键、索引、约束、查询语义、关联逻辑、只读边界、脱敏日志规则与 §14 映射表全部零变化**；本文件设计基线自身仍为 `APPROVED`（批准日期 2026-09-06）不变；历史记录中的时点计数（如 65/68）保留为历史。**R2～R7 为纯前端视觉/交互呈现调整，本次元数据同步不改变 DATABASE 业务契约。** 下一入口为 ChatGPT 从 Git 重新复审。

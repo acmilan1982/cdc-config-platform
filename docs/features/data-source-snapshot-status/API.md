@@ -11,14 +11,16 @@
 | 目标文档 | `docs/features/data-source-snapshot-status/API.md`（接口设计草案） |
 | 配套设计文档 | `DESIGN.md`（总设计入口）、`UI.md`（界面设计草案）、`DATABASE.md`（数据库查询设计草案） |
 | 文档状态 | `APPROVED`（接口设计基线已批准，批准日期 2026-09-06；批准版本与批准内容基准见 DESIGN §1/§17 与 Feature README §5） |
-| requirements_status | `APPROVED`（`docs/features/data-source-snapshot-status/REQUIREMENTS.md`，`DSS-REQ-001~065` 共 65 条） |
-| acceptance_status | `APPROVED`（`docs/features/data-source-snapshot-status/ACCEPTANCE.md`，`DSS-AC-001~068` 共 68 条，全部 `NOT_RUN`） |
-| design_status | `APPROVED`（四份设计文档 DESIGN.md / API.md / UI.md / DATABASE.md 均已批准，见 DESIGN §1/§17） |
-| implementation_status | `IMPLEMENTED_PENDING_REVIEW`（本设计不编码；实现任务 `DATA-SOURCE-SNAPSHOT-STATUS-IMPLEMENTATION-001` 已实现下述接口，待代码复审与人工页面验收，见 Feature README §9） |
-| acceptance_execution_status | `NOT_RUN`（本设计不执行验收；68 条 `DSS-AC-*` 全部保持 `NOT_RUN`） |
+| requirements_status | `APPROVED_BASELINE_WITH_DRAFT_PROTOTYPE_EXTENSION_PENDING_USER_REVIEW`（`docs/features/data-source-snapshot-status/REQUIREMENTS.md`：当前共 `DSS-REQ-001~083` **83 条**；其中 `DSS-REQ-001~075` 属既有已批准基线，`DSS-REQ-076~083` 属 R2～R7 prototype 设计固化新增内容、当前为 `DRAFT_PENDING_USER_REVIEW`——**不得**笼统写成 83 条全部 `APPROVED`） |
+| acceptance_status | `APPROVED_BASELINE_WITH_DRAFT_PROTOTYPE_EXTENSION_PENDING_USER_REVIEW`（`docs/features/data-source-snapshot-status/ACCEPTANCE.md`：当前共 `DSS-AC-001~095` **95 条**、**全部 `NOT_RUN`**；其中 `DSS-AC-001~086` 属既有已批准验收基线，`DSS-AC-087~095` 属本轮设计固化新增验收、当前待用户复审） |
+| design_status | `APPROVED`（本文件接口设计基线已批准；四份设计文档 DESIGN.md / API.md / UI.md / DATABASE.md 设计基线均已批准，见 DESIGN §1/§17；本轮 R2～R7 新增的 UI/DESIGN 固化内容本身为 `DRAFT_PENDING_USER_REVIEW`） |
+| implementation_status | 分层记录：① 初始只读全栈实现已存在（`DATA-SOURCE-SNAPSHOT-STATUS-IMPLEMENTATION-001`，已实现下述只读接口）；② 第二轮 UI 调整 `DATA-SOURCE-SNAPSHOT-STATUS-UI-ADJUSTMENT-IMPLEMENTATION-002` 已进入 `5173`，实现状态 `IMPLEMENTED_ADJUSTMENT_PENDING_REVIEW`（与 Feature README §9 一致）；③ R2～R7 新视觉方案尚未进入 `5173`，状态 `PENDING_FORMAL_IMPLEMENTATION_ON_5173` |
+| acceptance_execution_status | `NOT_RUN`（本设计不执行验收；`DSS-AC-001~095` 共 95 条全部保持 `NOT_RUN`，`acceptance_not_run_count=95`；`5174` prototype 的测试/构建/浏览器验证不得写成正式验收 `PASS`） |
 | pending_user_confirmation_count | `0`（与 DESIGN.md §15.2 一致；无待确认接口设计项） |
 | 设计任务编号 | `DATA-SOURCE-SNAPSHOT-STATUS-DESIGN-BASELINE-001`（纯文档设计草案建立） |
 | 创建日期 | 2026-09-05 |
+
+> 状态同步说明（2026-09-10，`DATA-SOURCE-SNAPSHOT-STATUS-PROTOTYPE-DESIGN-FREEZE-001-R1`）：上表当前元数据已由设计固化/实现阶段更新为需求 83 条（`DSS-REQ-001~083`）、验收 95 条（`DSS-AC-001~095`）且全部 `NOT_RUN`，并按分层记录实现状态。**R2～R7 为纯前端视觉/交互呈现调整，本次元数据同步不改变 API/DATABASE 业务契约**——接口路径、HTTP 方法、参数、响应、错误码、DTO/VO 契约、只读边界与既有批准日期/批准内容基准均不变。
 
 接口身份：后端接口资源路径使用与前端源码目录一致的命名 `data-source-run-state`（`GET /api/monitor/data-source-run-state/list`），与用户可见名称“源库快照状态”解耦——后者只用于页面/菜单/路由元数据标题/面包屑（UI §10）；接口路径不是用户可见文案。
 
@@ -319,3 +321,5 @@ GET /api/monitor/data-source-run-state/list?status=RUNNING&status=FORBIDDEN_STAT
 > 一致性声明：本文件与 DESIGN.md/UI.md/DATABASE.md 统一使用接口路径 `GET /api/monitor/data-source-run-state/list`、参数 `clientId`/`sourceId`/`status`、状态 token `RUNNING`/`COMPLETED`/`UNKNOWN`、原始值 `SNAPSHOT_RUNNING`/`SNAPSHOT_COMPLETED`、映射状态 `ACTIVE`/`INACTIVE`/`NOT_FOUND`、错误码 `41001/41002`、时间格式 `YYYY-MM-DD HH:mm:ss` 与 JSON 显式 null（DESIGN §14.1）。本文件不虚构任何已存在实现；待确认设计项为 0。
 
 > 实现记录（2026-09-06）：本文件仅同步实现任务 `DATA-SOURCE-SNAPSHOT-STATUS-IMPLEMENTATION-001` 完成后的元数据 `implementation_status` 为 `IMPLEMENTED_PENDING_REVIEW`；接口/参数/响应字段/错误码/映射等契约相对设计批准内容基准 `61117a62...` **业务内容零差异**。完整实现与验证见实现报告与 Feature README §8/§9。
+
+> 元数据同步记录（2026-09-10，`DATA-SOURCE-SNAPSHOT-STATUS-PROTOTYPE-DESIGN-FREEZE-001-R1`）：本文件仅把 §1 顶部**当前**状态元数据由旧时点的“需求 65 条 / 验收 68 条 / `IMPLEMENTED_PENDING_REVIEW`”同步为当前口径——需求 `DSS-REQ-001~083` 共 **83 条**（`DSS-REQ-001~075` 已批准基线、`DSS-REQ-076~083` R2～R7 设计固化新增且 `DRAFT_PENDING_USER_REVIEW`）、验收 `DSS-AC-001~095` 共 **95 条全部 `NOT_RUN`**（`acceptance_not_run_count=95`）、实现状态分层记录（初始只读实现已存在、第二轮 UI 调整已进 `5173` 为 `IMPLEMENTED_ADJUSTMENT_PENDING_REVIEW`、R2～R7 为 `PENDING_FORMAL_IMPLEMENTATION_ON_5173`）、正式验收 `NOT_RUN`。**接口路径、HTTP 方法、查询参数、响应模型、字段清单、示例、错误码、脱敏规则、只读语义与 §9 映射表全部零变化**；本文件设计基线自身仍为 `APPROVED`（批准日期 2026-09-06）不变；历史记录中的时点计数（如 65/68）保留为历史。**边界说明**：§9 开头一句“全部 65 条需求与 68 条验收……”为映射关系的概括性描述句，属本次授权修改范围（§1 元数据＋本同步说明）之外的正文，按“不扩大修改范围”原则**未改动**；该句不构成接口契约，其计数以本文件 §1 当前元数据（83/95）与 `REQUIREMENTS.md`/`ACCEPTANCE.md` 为准，留待后续维护。**R2～R7 为纯前端视觉/交互呈现调整，本次元数据同步不改变 API 业务契约。** 下一入口为 ChatGPT 从 Git 重新复审。
