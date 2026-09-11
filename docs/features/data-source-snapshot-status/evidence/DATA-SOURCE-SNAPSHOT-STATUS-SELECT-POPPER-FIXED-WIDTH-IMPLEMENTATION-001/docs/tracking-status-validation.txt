@@ -1,0 +1,26 @@
+# §12 编号/状态/追踪自检 (生成 2026-09-11T21:46:47+08:00)
+
+## 编号连续性（集合完整性）
+requirements_count=87
+requirements_first=001 requirements_last=087
+requirements_unique=87
+requirements_set_equals_001_087=YES
+requirements_file_order_monotonic=YES
+acceptance_count=107
+acceptance_first=001 acceptance_last=107
+acceptance_unique=107
+acceptance_set_equals_001_107=YES
+acceptance_file_order_monotonic=NO
+  # 说明：验收行在源文件中并非严格升序（DSS-AC-068 位于 051 之后、052 之前），
+  # 该排列在基线提交 485be09 中已存在、非本任务引入；107 条业务行与基线逐字节相同（见下）。
+
+## 验收状态列（第 3 列）
+    107 NOT_RUN
+acceptance_not_run_count=107
+
+## 与基线 485be09 的字节比较
+REQUIREMENTS_BUSINESS_ROWS=IDENTICAL_BYTE_FOR_BYTE (87 行)
+ACCEPTANCE_BUSINESS_ROWS=IDENTICAL_BYTE_FOR_BYTE (107 行)
+
+## 追踪矩阵（§5 映射，DSS-REQ-087 行）
+| DSS-REQ-087 | DSS-AC-104, DSS-AC-105, DSS-AC-106, DSS-AC-107 | | |

@@ -1,0 +1,153 @@
+# Per-worktree HEAD + status (task start)
+=== /agent/cdc-config-platform ===
+HEAD=4222b0a24b927aca6f62ff348fd8549b73d4156c
+BRANCH=develop
+STATUS:
+ M .claude/settings.local.json
+ M agent-env.sh
+ D docs/database/TASK3_FINAL_REVISION_REPORT_20260806.md
+ D docs/database/TASK4_EXECUTION_REPORT_20260807.md
+ D docs/database/TASK4_WARN_TEST_FINAL_REPORT_20260807.md
+ M frontend/index.html
+ M frontend/src/config/menu.ts
+ M frontend/src/layouts/HeaderBar.vue
+ M frontend/src/layouts/MainLayout.vue
+ M frontend/src/layouts/Sidebar.vue
+ M frontend/src/stores/app.ts
+ M frontend/src/styles/global.css
+?? docs/agent-prompts/004-claude-code-global-product-design-prompt.md
+?? docs/agent-prompts/005-claude-code-finalize-product-design-prompt.md
+?? docs/agent-prompts/006-claude-code-backend-app-shell-prompt.md
+?? docs/agent-prompts/007-claude-code-frontend-app-shell-prompt.md
+?? docs/agent-prompts/008-claude-code-frontend-main-layout-prompt.md
+?? docs/agent-prompts/009-claude-code-data-source-page-design-prompt.md
+?? docs/agent-prompts/010-claude-code-data-source-backend-crud-prompt.md
+?? docs/agent-prompts/011-zk-monitor-analysis-prompt.md
+?? docs/agent-prompts/012-zk-monitor-analysis-confirmation-prompt.md
+?? docs/agent-prompts/013-zk-client-monitor-design-candidates-prompt.md
+?? docs/agent-prompts/015-zk-client-monitor-backend-prompt.md
+?? docs/agent-prompts/016-zk-client-monitor-frontend-prompt.md
+?? docs/agent-prompts/017-zk-client-monitor-frontend-ui-refinement-prompt.md
+=== /agent/cdc-docs-freeze-001 ===
+HEAD=899803491427a6a7e6b6295f43ef49a11ed56037
+BRANCH=HEAD
+STATUS:
+=== /agent/dss-formal-impl-001 ===
+HEAD=3ec9cbf6487eacff004212fb3aca3064c3bd18cc
+BRANCH=HEAD
+STATUS:
+?? runtime-logs/
+=== /agent/dss-formal-impl-001-r1 ===
+HEAD=ba309ea8b469e3796ab08ed87c6ccb8c6d5bb253
+BRANCH=HEAD
+STATUS:
+=== /agent/dss-linear-style-original-001.R1 ===
+HEAD=4222b0a24b927aca6f62ff348fd8549b73d4156c
+BRANCH=HEAD
+STATUS:
+=== /agent/dss-linear-style-prototype-001.BfGw0Z ===
+HEAD=4222b0a24b927aca6f62ff348fd8549b73d4156c
+BRANCH=HEAD
+STATUS:
+ M frontend/src/views/data-source-run-state/DataSourceRunStatePage.spec.ts
+ M frontend/src/views/data-source-run-state/DataSourceRunStatePage.vue
+ M frontend/src/views/data-source-run-state/components/DataSourceSnapshotQueryBar.spec.ts
+ M frontend/src/views/data-source-run-state/components/DataSourceSnapshotQueryBar.vue
+ M frontend/src/views/data-source-run-state/components/DataSourceSnapshotStatusTag.spec.ts
+ M frontend/src/views/data-source-run-state/components/DataSourceSnapshotStatusTag.vue
+ M frontend/src/views/data-source-run-state/components/DataSourceSnapshotTable.spec.ts
+ M frontend/src/views/data-source-run-state/components/DataSourceSnapshotTable.vue
+ M frontend/src/views/data-source-run-state/components/DataSourceSnapshotToolbar.spec.ts
+ M frontend/src/views/data-source-run-state/components/DataSourceSnapshotToolbar.vue
+ M frontend/src/views/data-source-run-state/composables/useDataSourceSnapshot.spec.ts
+ M frontend/src/views/data-source-run-state/composables/useDataSourceSnapshot.ts
+?? prototype-output/
+=== /agent/dss-popper-width-baseline-001 ===
+HEAD=6cd197d23a75cd9e0686c473ab27c45a6661e517
+BRANCH=HEAD
+STATUS:
+=== /agent/dss-popper-width-baseline-001-r1 ===
+HEAD=f74dd725682b745f1b8ac6a1b9358eff10aaddc2
+BRANCH=HEAD
+STATUS:
+=== /agent/dss-popper-width-baseline-approval-001 ===
+HEAD=5649a8a8040b67bec0dc23b10596281cd5706bb3
+BRANCH=HEAD
+STATUS:
+=== /agent/dss-popper-width-impl-001 ===
+HEAD=485be09db758e4ba6f543fcc88a399cc5a46d384
+BRANCH=HEAD
+STATUS:
+?? docs/features/data-source-snapshot-status/evidence/DATA-SOURCE-SNAPSHOT-STATUS-SELECT-POPPER-FIXED-WIDTH-IMPLEMENTATION-001/
+=== /agent/dss-query-ctl-001 ===
+HEAD=29379e78f455f923d1095823322dc77c19f07e33
+BRANCH=HEAD
+STATUS:
+=== /agent/dss-query-ctl-001-r1 ===
+HEAD=d6322cfb50b6cb43a0c38dd9a42f85d037c24da1
+BRANCH=HEAD
+STATUS:
+=== /agent/dss-query-ctl-001-r2 ===
+HEAD=6c43d1ee7dce3bb0b7583b4c38b367a4be64ba6f
+BRANCH=HEAD
+STATUS:
+=== /agent/dss-query-ctl-001-r3 ===
+HEAD=cf9f9eb0240f275cd50eb37546e6d6256892a9f4
+BRANCH=HEAD
+STATUS:
+=== /agent/dss-query-ctl-appr-001 ===
+HEAD=548e16147675cdc6013a4d166bf60d7b1b8bda36
+BRANCH=HEAD
+STATUS:
+ M .claude/settings.local.json
+=== /agent/dss-query-ctl-impl-001 ===
+HEAD=a47988820c797ff60bd7244b2d0f899bd8fc3be5
+BRANCH=HEAD
+STATUS:
+=== /agent/dss-query-ctl-impl-001-r1 ===
+HEAD=edba7c891884d0f000a7c9edc196b2bffb95e0b0
+BRANCH=HEAD
+STATUS:
+?? frontend/node_modules
+=== /agent/dss-query-ctl-impl-001-r2 ===
+HEAD=2a9a271690bfdc68b16772268e84928a33abdeda
+BRANCH=HEAD
+STATUS:
+=== /agent/dss-select-popper-fixed-width-proto-001 ===
+HEAD=2a9a271690bfdc68b16772268e84928a33abdeda
+BRANCH=HEAD
+STATUS:
+ M frontend/src/views/data-source-run-state/components/DataSourceSnapshotQueryBar.vue
+?? runtime-logs/
+=== /agent/dss-select-width-diag-001 ===
+HEAD=2a9a271690bfdc68b16772268e84928a33abdeda
+BRANCH=HEAD
+STATUS:
+=== /tmp/cdc-approval-r1-worktree ===
+HEAD=c568df1f7b0be14b7decdf59f2ef9116ff0bf403
+BRANCH=HEAD
+STATUS:
+=== /tmp/cdc-approval-worktree ===
+HEAD=b753bec563f9cec7cfb9278eb40098d5f59b1634
+BRANCH=HEAD
+STATUS:
+=== /tmp/cdc-freeze-r1-worktree ===
+HEAD=85a522e492e34b2e168bb32b9f638bbb41afd76b
+BRANCH=HEAD
+STATUS:
+=== /tmp/cdc-freeze-r2-worktree ===
+HEAD=9b0aa9254f75e03f7b1eb52ee7454d970b76af4c
+BRANCH=HEAD
+STATUS:
+=== /tmp/cdc-freeze-r3-worktree ===
+HEAD=e67b2ecc3897c3e83597126e259ee4c19349a66a
+BRANCH=HEAD
+STATUS:
+=== /tmp/cdc-popper-appr-r1-worktree ===
+HEAD=485be09db758e4ba6f543fcc88a399cc5a46d384
+BRANCH=HEAD
+STATUS:
+=== /tmp/cdc-r1-worktree ===
+HEAD=49eb778cb24b4f6d26a192d5441b0476099cf68d
+BRANCH=HEAD
+STATUS:

@@ -1,0 +1,41 @@
+{
+  "mode": "failure",
+  "route": "http://127.0.0.1:5173/monitor/data-source-state",
+  "viewport": "1700x920",
+  "afterSuccess": {
+    "rows": 5,
+    "summaryCount": "共 5 条",
+    "resultError": null,
+    "draftDisplay": {
+      "client": "c-dssr1-0906-d（快照页测试探针D，请勿启用（含超长描述演...）|c-dssr1-0906-d（快照页测试探针D，请勿启用（含超长描述演...）|c-dssr1-0906-d（快照页测试探针D，请勿启用（含超长描述演...）",
+      "source": "全部|全部|全部",
+      "status": "全部|全部|全部"
+    }
+  },
+  "appliedQueryUrl": "http://127.0.0.1:5173/api/monitor/data-source-run-state/list?clientId=c-dssr1-0906-d",
+  "failedQueryRequests": 1,
+  "afterFailure": {
+    "rows": 5,
+    "summaryCount": "共 5 条",
+    "resultError": "刷新失败，将在约 60 秒后自动重试",
+    "draftDisplay": {
+      "client": "c-dssr1-0906-d（快照页测试探针D，请勿启用（含超长描述演...）|c-dssr1-0906-d（快照页测试探针D，请勿启用（含超长描述演...）|c-dssr1-0906-d（快照页测试探针D，请勿启用（含超长描述演...）|+ 1|+ 1|+ 1",
+      "source": "全部|全部|全部",
+      "status": "全部|全部|全部"
+    }
+  },
+  "manualRefreshRequests": 1,
+  "manualRefreshUrl": "http://127.0.0.1:5173/api/monitor/data-source-run-state/list?clientId=c-dssr1-0906-d",
+  "assertions": {
+    "rowsRetained": true,
+    "summaryRetained": true,
+    "failureSurfaced": true,
+    "exactlyOneFailedRequest": true,
+    "manualRefreshUsesPreviousAppliedCriteria": true
+  },
+  "consoleErrors": [
+    "Failed to load resource: the server responded with a status of 500 (Internal Server Error)"
+  ],
+  "consoleErrorsNote": "forced 500 from harness route interception is expected",
+  "nonGetRequests": []
+}

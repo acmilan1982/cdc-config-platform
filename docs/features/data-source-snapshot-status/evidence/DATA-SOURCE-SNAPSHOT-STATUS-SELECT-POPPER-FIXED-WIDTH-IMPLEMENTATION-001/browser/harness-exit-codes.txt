@@ -1,0 +1,26 @@
+# 浏览器几何验证脚本：退出码来源与原始日志命名说明
+
+- 说明：本项目 `.gitignore:30` 忽略全部 `*.log`，按任务提示 §12 “若 `.log` 被忽略，应保存为明确命名的 `.txt` 原始日志”，
+  所有原始日志均以 `.txt` 命名保存在本目录；内容与采集时逐字节一致（复制后 SHA-256 相同，复制后已删除同名 `.log`）。
+
+## 退出码来源
+
+| 模式 | 原始日志（`.txt`） | 退出码证据 |
+|---|---|---|
+| `matrix` | `browser/matrix.txt` | 该日志仅为 stdout 重定向，只含 `wrote .../matrix.json` 一行，**未写入 `# EXIT` 标记**；成功依据为：`matrix.json` 可被 `JSON.parse` 完整解析（4 视口 × 3 维度 × 5 次重复 = 60 组状态采样，每组含 A_INIT/B_SHORT/…/M_REOPEN 等状态），且 `reduce-matrix.cjs` 正常生成 `matrix-summary.json` / `matrix-summary.txt`（见下复核命令）。 |
+| `narrow` | `browser/narrow.txt` | `# EXIT=0` |
+| `regression` | `browser/regression.txt` | `# EXIT=0` |
+| `singleflight` | `browser/singleflight.txt` | `# EXIT=0` |
+| `timer` | `browser/timer.txt` | `# EXIT=0` |
+| `failure` | `browser/failure.txt` | `# EXIT=0` |
+| `shots` | `browser/shots.txt` | `# EXIT=0` |
+| `before` | `browser/before.json` | 一次性探针采集（修复前根因事实），无独立日志；原始数据见 `before.json` |
+
+## 复核命令（在 evidence 目录下执行）
+
+```bash
+grep -Hn 'EXIT' browser/*.txt
+node -e 'const m=JSON.parse(require("fs").readFileSync("browser/matrix.json","utf8"));console.log("matrix.json OK viewports="+m.viewports.length+" reps="+m.reps)'
+```
+
+> 本文件仅说明证据的退出码来源与命名约定，不构成任何正式验收结论；`DSS-AC-001~107` 全部仍为 `NOT_RUN`。

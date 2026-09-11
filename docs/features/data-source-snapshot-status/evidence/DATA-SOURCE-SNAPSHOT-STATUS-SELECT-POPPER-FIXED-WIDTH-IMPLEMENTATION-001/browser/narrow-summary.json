@@ -1,0 +1,191 @@
+{
+  "source": "narrow.json",
+  "mode": "narrow",
+  "route": "http://127.0.0.1:5173/monitor/data-source-state",
+  "cases": [
+    {
+      "label": "client_lt_496",
+      "viewportW": 480,
+      "sidebarOverlay": {
+        "covered": false,
+        "topClass": ""
+      },
+      "consoleErrors": [],
+      "nonGet": [],
+      "dims": {
+        "client": {
+          "target": 480,
+          "viewportW": 480,
+          "expect": 464,
+          "outerW": 464,
+          "outerL": 16,
+          "outerR": 480,
+          "outOfViewport": false,
+          "innerW": 462,
+          "innerMinWidthCss": "238px",
+          "innerInline": "min-width: 238px;",
+          "innerOverflowsOuter": -1,
+          "wrapHOverflow": null,
+          "hOverflow": 0,
+          "vScroll": true
+        },
+        "source": {
+          "target": 400,
+          "viewportW": 480,
+          "expect": 400,
+          "outerW": 400,
+          "outerL": 80,
+          "outerR": 480,
+          "outOfViewport": false,
+          "innerW": 398,
+          "innerMinWidthCss": "298px",
+          "innerInline": "min-width: 298px;",
+          "innerOverflowsOuter": -1,
+          "wrapHOverflow": null,
+          "hOverflow": 0,
+          "vScroll": true
+        },
+        "status": {
+          "target": 240,
+          "viewportW": 480,
+          "expect": 240,
+          "outerW": 240,
+          "outerL": 240,
+          "outerR": 480,
+          "outOfViewport": false,
+          "innerW": 238,
+          "innerMinWidthCss": "198px",
+          "innerInline": "min-width: 198px;",
+          "innerOverflowsOuter": -1,
+          "wrapHOverflow": null,
+          "hOverflow": 0,
+          "vScroll": false
+        }
+      }
+    },
+    {
+      "label": "source_lt_416",
+      "viewportW": 400,
+      "sidebarOverlay": {
+        "covered": false,
+        "topClass": ""
+      },
+      "consoleErrors": [],
+      "nonGet": [],
+      "dims": {
+        "client": {
+          "target": 480,
+          "viewportW": 400,
+          "expect": 384,
+          "outerW": 384,
+          "outerL": 16,
+          "outerR": 400,
+          "outOfViewport": false,
+          "innerW": 382,
+          "innerMinWidthCss": "238px",
+          "innerInline": "min-width: 238px;",
+          "innerOverflowsOuter": -1,
+          "wrapHOverflow": null,
+          "hOverflow": 0,
+          "vScroll": true
+        },
+        "source": {
+          "target": 400,
+          "viewportW": 400,
+          "expect": 384,
+          "outerW": 384,
+          "outerL": 16,
+          "outerR": 400,
+          "outOfViewport": false,
+          "innerW": 382,
+          "innerMinWidthCss": "298px",
+          "innerInline": "min-width: 298px;",
+          "innerOverflowsOuter": -1,
+          "wrapHOverflow": null,
+          "hOverflow": 0,
+          "vScroll": true
+        },
+        "status": {
+          "target": 240,
+          "viewportW": 400,
+          "expect": 240,
+          "outerW": 240,
+          "outerL": 160,
+          "outerR": 400,
+          "outOfViewport": false,
+          "innerW": 238,
+          "innerMinWidthCss": "198px",
+          "innerInline": "min-width: 198px;",
+          "innerOverflowsOuter": -1,
+          "wrapHOverflow": null,
+          "hOverflow": 0,
+          "vScroll": false
+        }
+      }
+    },
+    {
+      "label": "status_lt_256",
+      "viewportW": 240,
+      "sidebarOverlay": {
+        "covered": true,
+        "topClass": "brand"
+      },
+      "consoleErrors": [],
+      "nonGet": [],
+      "dims": {
+        "client": {
+          "target": 480,
+          "viewportW": 240,
+          "expect": 224,
+          "outerW": 224,
+          "outerL": 16,
+          "outerR": 240,
+          "outOfViewport": false,
+          "innerW": 238,
+          "innerMinWidthCss": "238px",
+          "innerInline": "min-width: 238px;",
+          "innerOverflowsOuter": 15,
+          "wrapHOverflow": null,
+          "hOverflow": 0,
+          "vScroll": true
+        },
+        "source": {
+          "target": 400,
+          "viewportW": 240,
+          "expect": 224,
+          "outerW": 224,
+          "outerL": 16,
+          "outerR": 240,
+          "outOfViewport": false,
+          "innerW": 298,
+          "innerMinWidthCss": "298px",
+          "innerInline": "min-width: 298px;",
+          "innerOverflowsOuter": 75,
+          "wrapHOverflow": null,
+          "hOverflow": 0,
+          "vScroll": true
+        },
+        "status": {
+          "target": 240,
+          "viewportW": 240,
+          "expect": 224,
+          "outerW": 224,
+          "outerL": 16,
+          "outerR": 240,
+          "outOfViewport": false,
+          "innerW": 222,
+          "innerMinWidthCss": "198px",
+          "innerInline": "min-width: 198px;",
+          "innerOverflowsOuter": -1,
+          "wrapHOverflow": null,
+          "hOverflow": 0,
+          "vScroll": false
+        }
+      }
+    }
+  ],
+  "global": {
+    "consoleErrors": [],
+    "nonGet": []
+  }
+}

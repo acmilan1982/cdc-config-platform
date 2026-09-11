@@ -528,13 +528,28 @@ defineExpose({ reset: onReset })
   font-style: italic;
 }
 
-/* 下拉面板宽度上限（DSS-REQ-075，AC-084）：探针端 ≤480px、源库 ≤560px，均不超过安全视口 calc(100vw - 16px)；
-   探针端/源库/快照状态专属 popper-class 均使用本 Feature 命名空间，不污染全局选择器 */
-.dss-client-popper {
+/* 下拉弹层外层固定外部宽度（DSS-REQ-087，AC-104~107）：固定对象是携带 Feature 私有 popper class 的
+   外层可见边界 `.el-popper.el-select__popper`（Teleport 到 body），不是其内部 `.el-select-dropdown` 内容盒，
+   也不是查询栏 trigger。Element Plus 会把 `popper-class` 同时落到外层 popper 与内层 dropdown（实测裸 class 命中
+   2 个元素），故必须使用 `.el-popper.<class>` 精确选择器，避免把内外两层按同一 border-box 宽度同时写死。
+   实测外层无 inline width/min-width/max-width（仅 z-index/position/inset），三值同写即可决定 used width，
+   因此无需 important 提升，也不依赖 resize 事件、尺寸观察器或轮询等任何脚本尺寸监听。
+   内层 `.el-select-dropdown` 保持自适应、由内容盒填满外层，本规则不写其宽度。
+   小视口上界统一为 min(目标宽度, calc(100vw - 16px))。 */
+.el-popper.dss-client-popper {
+  width: min(480px, calc(100vw - 16px));
+  min-width: min(480px, calc(100vw - 16px));
   max-width: min(480px, calc(100vw - 16px));
 }
-.dss-source-popper {
-  max-width: min(560px, calc(100vw - 16px));
+.el-popper.dss-source-popper {
+  width: min(400px, calc(100vw - 16px));
+  min-width: min(400px, calc(100vw - 16px));
+  max-width: min(400px, calc(100vw - 16px));
+}
+.el-popper.dss-status-popper {
+  width: min(240px, calc(100vw - 16px));
+  min-width: min(240px, calc(100vw - 16px));
+  max-width: min(240px, calc(100vw - 16px));
 }
 /* 下拉项保持单行：逻辑截断（20 字符）为主，text-overflow:ellipsis 作为面板极窄或字体差异下的最终保护 */
 .dss-client-popper .el-select-dropdown__item,

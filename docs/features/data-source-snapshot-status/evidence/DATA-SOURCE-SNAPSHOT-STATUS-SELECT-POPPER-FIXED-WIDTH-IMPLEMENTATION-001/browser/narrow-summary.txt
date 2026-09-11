@@ -1,0 +1,16 @@
+## client_lt_496 (viewportW=480)  sidebarOverlay={"covered":false,"topClass":""}
+  client  target=480 expect=464 outerW=464 [L=16 R=480] outOfViewport=false  innerW=462 innerMinWidth= 238px innerOverflowsOuter=-1  hOverflow=0 vScroll=true
+  source  target=400 expect=400 outerW=400 [L=80 R=480] outOfViewport=false  innerW=398 innerMinWidth= 298px innerOverflowsOuter=-1  hOverflow=0 vScroll=true
+  status  target=240 expect=240 outerW=240 [L=240 R=480] outOfViewport=false  innerW=238 innerMinWidth= 198px innerOverflowsOuter=-1  hOverflow=0 vScroll=false
+  consoleErrors=[] nonGet=[]
+## source_lt_416 (viewportW=400)  sidebarOverlay={"covered":false,"topClass":""}
+  client  target=480 expect=384 outerW=384 [L=16 R=400] outOfViewport=false  innerW=382 innerMinWidth= 238px innerOverflowsOuter=-1  hOverflow=0 vScroll=true
+  source  target=400 expect=384 outerW=384 [L=16 R=400] outOfViewport=false  innerW=382 innerMinWidth= 298px innerOverflowsOuter=-1  hOverflow=0 vScroll=true
+  status  target=240 expect=240 outerW=240 [L=160 R=400] outOfViewport=false  innerW=238 innerMinWidth= 198px innerOverflowsOuter=-1  hOverflow=0 vScroll=false
+  consoleErrors=[] nonGet=[]
+## status_lt_256 (viewportW=240)  sidebarOverlay={"covered":true,"topClass":"brand"}
+  client  target=480 expect=224 outerW=224 [L=16 R=240] outOfViewport=false  innerW=238 innerMinWidth= 238px innerOverflowsOuter=15  hOverflow=0 vScroll=true
+  source  target=400 expect=224 outerW=224 [L=16 R=240] outOfViewport=false  innerW=298 innerMinWidth= 298px innerOverflowsOuter=75  hOverflow=0 vScroll=true
+  status  target=240 expect=224 outerW=224 [L=16 R=240] outOfViewport=false  innerW=222 innerMinWidth= 198px innerOverflowsOuter=-1  hOverflow=0 vScroll=false
+  consoleErrors=[] nonGet=[]
+## global consoleErrors=[] nonGet=[]

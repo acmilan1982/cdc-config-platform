@@ -1,0 +1,11 @@
+
+> cdc-config-platform-frontend@1.0.0 dev
+> vite --host 0.0.0.0 --port 5173 --strictPort
+
+
+  VITE v5.4.21  ready in 455 ms
+
+  ➜  Local:   http://localhost:5173/
+  ➜  Network: http://192.168.174.70:5173/
+9:25:30 PM [vite] hmr update /src/views/data-source-run-state/components/DataSourceSnapshotQueryBar.vue?vue&type=style&index=1&lang.css
+9:28:17 PM [vite] hmr update /src/views/data-source-run-state/components/DataSourceSnapshotQueryBar.vue?vue&type=style&index=1&lang.css

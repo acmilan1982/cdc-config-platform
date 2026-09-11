@@ -1,0 +1,40 @@
+# Backend read-only integration - DB statement classification
+# 后端: java -jar cdc-config-platform-backend-1.0.0-SNAPSHOT.jar (pid 8537, :8080)
+# 日志: /agent/cdc-config-platform/runtime-logs/DATA-SOURCE-SNAPSHOT-STATUS-QUERY-CONTROL-INTERACTION-ADJUSTMENT-IMPLEMENTATION-001/backend-8080.log
+# 全程只读操作; 本任务未执行任何 DML/DDL, 未修改任何业务表.
+
+## 1) 受控 Feature GET (curl, 2 次)  @21:51:19
+#   GET /api/monitor/data-source-run-state/list            -> http 200, time_total 0.0088s
+#   GET /api/monitor/data-source-run-state/list?clientId=hosp-012&status=RUNNING -> http 200, time_total 0.0119s
+#   每次请求固定产生 3 条 SELECT:
+#           2 FROM CDC_CLIENT_MULTIPLE
+#           2 FROM CDC_DATA_SOURCE
+#           2 FROM CDC_DATA_SOURCE_RUN_STATE
+#   窗口行数: 18; 其中 Preparing 语句数: 6
+
+## 2) 100s 观察窗口 (21:51:28 ~ 21:53:08) 全库语句分类
+#   总 DEBUG 行: 54
+#   语句类型统计:
+#          18 Preparing: SELECT
+#   涉及表:
+#           6 FROM CDC_STATS_DIM_CUMULATIVE
+#           2 FROM CDC_STATS_DIM_DAILY
+#           2 FROM CDC_STATS_DAILY_OVERVIEW
+#           2 FROM CDC_DATA_SUBSCRIBE
+#           2 FROM CDC_CLIENT_MULTIPLE
+#           1 FROM CDC_STATS_WATERMARK
+#           1 FROM CDC_STATS_CUMULATIVE_OVERVIEW
+#           1 FROM CDC_DATA_SOURCE_RUN_STATE
+#           1 FROM CDC_DATA_SOURCE
+#   执行线程:
+#           9 [io-8080-exec-10]
+#          45 [nio-8080-exec-9]
+
+## 3) 全量日志写入语句扫描 (行数 10922)
+#   Preparing: INSERT/UPDATE/DELETE/MERGE/TRUNCATE 计数 = 0
+
+## 结论
+#   - 本 Feature GET 查询: 3 条 SELECT / 请求 (只读, 白名单三表)
+#   - 既有大屏统计接口自然触发: 仅 SELECT CDC_STATS_* / CDC_DATA_SUBSCRIBE (HTTP 线程, 只读)
+#   - 手工数据库写入: 0
+#   - 观测窗口与全量日志内均未见 INSERT/UPDATE/DELETE/MERGE; 未观察到统计调度器写入本 Feature 业务表

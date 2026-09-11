@@ -1,0 +1,27 @@
+{
+  "mode": "regression",
+  "route": "http://127.0.0.1:5173/monitor/data-source-state",
+  "delta_openClose": 0,
+  "delta_select": 0,
+  "delta_clear": 0,
+  "delta_reset": 0,
+  "delta_tooltip": 0,
+  "delta_query": 1,
+  "selectedVisibleLabel": "c-dssr1-0906-d（快照页测试探针D，请勿启用（含超长描述演...）",
+  "delta_singleFlight": 2,
+  "otherRoute": {
+    "width": "22px",
+    "minWidth": "10px",
+    "maxWidth": "none",
+    "position": "absolute"
+  },
+  "consoleErrors": [],
+  "nonGetRequests": [],
+  "apiCallDetails": [
+    "GET http://127.0.0.1:5173/api/monitor/data-source-run-state/list?clientId=c-dssr1-0906-d",
+    "GET http://127.0.0.1:5173/api/monitor/data-source-run-state/list?clientId=c-dssr1-0906-d",
+    "GET http://127.0.0.1:5173/api/monitor/data-source-run-state/list?clientId=c-dssr1-0906-d",
+    "GET http://127.0.0.1:5173/src/api/dataSource.ts",
+    "GET http://127.0.0.1:5173/api/data-sources"
+  ]
+}

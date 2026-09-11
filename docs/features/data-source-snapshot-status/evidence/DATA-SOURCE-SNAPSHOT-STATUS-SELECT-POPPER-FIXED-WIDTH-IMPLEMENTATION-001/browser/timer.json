@@ -1,0 +1,42 @@
+{
+  "mode": "timer",
+  "route": "http://127.0.0.1:5173/monitor/data-source-state",
+  "viewport": "1700x920",
+  "intervalMs": 60000,
+  "initialRequests": 0,
+  "countdownTicks": {
+    "windowMs": 8000,
+    "secondsStart": "57",
+    "secondsEnd": "49",
+    "requestsAdded": 0,
+    "expectedRequestsAdded": 0,
+    "countdownAdvanced": true
+  },
+  "autoRefresh": {
+    "elapsedMsSinceWindowStart": 63013,
+    "requestsAdded": 1,
+    "expectedRequestsAdded": 1,
+    "urls": [
+      "http://127.0.0.1:5173/api/monitor/data-source-run-state/list"
+    ]
+  },
+  "hiddenFreeze": {
+    "windowMs": 8000,
+    "requestsAdded": 0,
+    "expectedRequestsAdded": 0,
+    "secondsBeforeHide": "54",
+    "secondsAtHideStart": "54",
+    "secondsAtHideEnd": "54",
+    "countdownFrozen": true
+  },
+  "visibilityRestore": {
+    "requestsAdded": 1,
+    "expectedRequestsAdded": 1,
+    "urls": [
+      "http://127.0.0.1:5173/api/monitor/data-source-run-state/list"
+    ]
+  },
+  "totalRequests": 2,
+  "consoleErrors": [],
+  "nonGetRequests": []
+}

@@ -1,0 +1,18 @@
+2026-09-11 21:51:19.848 DEBUG 8537 --- [nio-8080-exec-5] c.b.c.m.d.m.R.selectAll                  : ==>  Preparing: SELECT CLIENT_ID AS clientId, CLIENT_DESC AS clientDesc, FG_ACTIVE AS fgActive FROM CDC_CLIENT_MULTIPLE
+2026-09-11 21:51:19.848 DEBUG 8537 --- [nio-8080-exec-5] c.b.c.m.d.m.R.selectAll                  : ==> Parameters: 
+2026-09-11 21:51:19.849 DEBUG 8537 --- [nio-8080-exec-5] c.b.c.m.d.m.R.selectAll                  : <==      Total: 16
+2026-09-11 21:51:19.849 DEBUG 8537 --- [nio-8080-exec-5] c.b.c.m.d.m.R.selectAll                  : ==>  Preparing: SELECT DATA_SOURCE_ID AS dataSourceId, DATA_SOURCE_ORG AS dataSourceOrg, DATA_SOURCE_CATEGORY AS dataSourceCategory, FG_ACTIVE AS fgActive FROM CDC_DATA_SOURCE
+2026-09-11 21:51:19.849 DEBUG 8537 --- [nio-8080-exec-5] c.b.c.m.d.m.R.selectAll                  : ==> Parameters: 
+2026-09-11 21:51:19.851 DEBUG 8537 --- [nio-8080-exec-5] c.b.c.m.d.m.R.selectAll                  : <==      Total: 34
+2026-09-11 21:51:19.851 DEBUG 8537 --- [nio-8080-exec-5] c.b.c.m.d.m.D.selectAll                  : ==>  Preparing: SELECT CLIENT_ID AS clientId, DATA_SOURCE_ID AS dataSourceId, SNAPSHOT_STATUS AS snapshotStatus, TO_CHAR(SNAPSHOT_LAST_SEEN_AT, 'YYYY-MM-DD HH24:MI:SS') AS snapshotLastSeenAt, TO_CHAR(SNAPSHOT_COMPLETED_AT, 'YYYY-MM-DD HH24:MI:SS') AS snapshotCompletedAt, TO_CHAR(UPDATED_AT, 'YYYY-MM-DD HH24:MI:SS') AS updatedAt FROM CDC_DATA_SOURCE_RUN_STATE
+2026-09-11 21:51:19.851 DEBUG 8537 --- [nio-8080-exec-5] c.b.c.m.d.m.D.selectAll                  : ==> Parameters: 
+2026-09-11 21:51:19.853 DEBUG 8537 --- [nio-8080-exec-5] c.b.c.m.d.m.D.selectAll                  : <==      Total: 30
+2026-09-11 21:51:19.868 DEBUG 8537 --- [nio-8080-exec-7] c.b.c.m.d.m.R.selectAll                  : ==>  Preparing: SELECT CLIENT_ID AS clientId, CLIENT_DESC AS clientDesc, FG_ACTIVE AS fgActive FROM CDC_CLIENT_MULTIPLE
+2026-09-11 21:51:19.869 DEBUG 8537 --- [nio-8080-exec-7] c.b.c.m.d.m.R.selectAll                  : ==> Parameters: 
+2026-09-11 21:51:19.870 DEBUG 8537 --- [nio-8080-exec-7] c.b.c.m.d.m.R.selectAll                  : <==      Total: 16
+2026-09-11 21:51:19.870 DEBUG 8537 --- [nio-8080-exec-7] c.b.c.m.d.m.R.selectAll                  : ==>  Preparing: SELECT DATA_SOURCE_ID AS dataSourceId, DATA_SOURCE_ORG AS dataSourceOrg, DATA_SOURCE_CATEGORY AS dataSourceCategory, FG_ACTIVE AS fgActive FROM CDC_DATA_SOURCE
+2026-09-11 21:51:19.870 DEBUG 8537 --- [nio-8080-exec-7] c.b.c.m.d.m.R.selectAll                  : ==> Parameters: 
+2026-09-11 21:51:19.871 DEBUG 8537 --- [nio-8080-exec-7] c.b.c.m.d.m.R.selectAll                  : <==      Total: 34
+2026-09-11 21:51:19.872 DEBUG 8537 --- [nio-8080-exec-7] c.b.c.m.d.m.D.selectAll                  : ==>  Preparing: SELECT CLIENT_ID AS clientId, DATA_SOURCE_ID AS dataSourceId, SNAPSHOT_STATUS AS snapshotStatus, TO_CHAR(SNAPSHOT_LAST_SEEN_AT, 'YYYY-MM-DD HH24:MI:SS') AS snapshotLastSeenAt, TO_CHAR(SNAPSHOT_COMPLETED_AT, 'YYYY-MM-DD HH24:MI:SS') AS snapshotCompletedAt, TO_CHAR(UPDATED_AT, 'YYYY-MM-DD HH24:MI:SS') AS updatedAt FROM CDC_DATA_SOURCE_RUN_STATE
+2026-09-11 21:51:19.872 DEBUG 8537 --- [nio-8080-exec-7] c.b.c.m.d.m.D.selectAll                  : ==> Parameters: 
+2026-09-11 21:51:19.873 DEBUG 8537 --- [nio-8080-exec-7] c.b.c.m.d.m.D.selectAll                  : <==      Total: 30

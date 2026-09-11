@@ -1,0 +1,30 @@
+# §13 提交前强制校验（生成 2026-09-11T22:05:00+08:00）
+
+1) git diff --check = CLEAN
+2) 变更文件严格位于 §7 白名单 = YES（8 个已跟踪文档 + 2 个前端文件 + 1 新增报告 + 1 新增证据目录）
+3) 真实代码仅围绕 popper 外层宽度与对应测试，无无关格式化 = YES（.vue 仅改 3 条 popper 规则与注释；.spec.ts 仅新增/替换固定宽度断言）
+4) 三个 trigger 根节点及 wrapper 几何恒为 240/300/200×32 = YES（matrix 640 采样 + narrow 9 采样，violations=0）
+5) 外层 popper 正常视口恒为 480/400/240px = YES（4 档视口 × 5 重复 × 全状态 spread=0）
+6) 窄视口 = min(target, viewportWidth-16px) 且外层不越界、无水平滚动 = YES（480/400/240 三档）
+7) 各状态外层宽度 delta = 0 = YES（maxAdjacentDelta=0；open/close/reopen delta=0）
+8) 外层选择器精确到 `.el-popper.<class>`、内层自适应、无 !important、无全局 EP 泄漏、无 JS 尺寸监听 = YES
+   - `grep -c '!important' DataSourceSnapshotQueryBar.vue = 0`
+   - 裸 `.dss-{client,source,status}-popper {` 规则数 = 0（均为 `.el-popper.<class>`）
+9) 四字段 trim/截断、Tooltip 稳定身份、完整 value/query 语义无回退 = YES（定向 spec 85 用例通过）
+10) 状态机与表格视觉冻结项无回退 = YES（regression/timer/failure 全通过；表格列宽/行高未改动）
+11) 定向 85 / Feature 245 / 前端全量 834 测试与 build 全部成功 = YES（exit 全 0）
+12) Console error 0、页面写请求 0、其他路由无样式泄漏 = YES
+13) 需求 87/87、验收 107/107 相对基准逐字节一致；107 条全部 NOT_RUN = YES
+    - `grep -cE '^\|\s*DSS-AC-[0-9]+' ACCEPTANCE.md = 107`；其中含 `NOT_RUN` 者 = 107；非 `NOT_RUN` 者 = 0
+    - 无任何 AC 行含 PASS / IMPLEMENTED / IMPLEMENTED_ACCEPTED / FORMALLY_ACCEPTED / COMPLETED
+14) DESIGN §27 业务规则/§14.2-§14.3、UI §21 业务规则、API 契约、DATABASE 业务正文未被改写 = YES
+    - 8 份文档改动仅落在 §1 元数据/状态行与变更记录追加行；API.md/DATABASE.md 各仅 1 处 §1 状态行
+15) 主工作区与所有既有 worktree 原样保留 = YES
+16) 原始日志按 §12 以明确命名 `.txt` 保存 = YES
+    - `.gitignore:30` 忽略 `*.log`：暂存区 `.log` 数 = 0，`.txt` 数 = 36
+    - backend/feature-get-window.txt、backend/scheduler-window.txt 与 7 个 browser 模式日志、vite-5173.txt 均为逐字节复制（复制后 SHA-256 与源同一）
+
+结论：16/16 通过。
+
+> 说明：条目 1-15 对应任务提示 §13 的 15 项强制校验；条目 16 为 §12 日志命名要求的补充校验。
+> 本文件为开发自测证据，不构成任何正式验收结论；`DSS-AC-001~107` 全部仍为 `NOT_RUN`。

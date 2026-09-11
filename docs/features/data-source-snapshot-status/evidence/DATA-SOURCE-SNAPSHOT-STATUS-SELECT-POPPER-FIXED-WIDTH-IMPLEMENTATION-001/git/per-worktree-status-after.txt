@@ -1,0 +1,84 @@
+# Per-worktree status @ task end (2026-09-11T21:55:06+08:00)
+---- /agent/cdc-config-platform
+HEAD=4222b0a24b927aca6f62ff348fd8549b73d4156c BRANCH=develop
+ M .claude/settings.local.json
+ M agent-env.sh
+ D docs/database/TASK3_FINAL_REVISION_REPORT_20260806.md
+ D docs/database/TASK4_EXECUTION_REPORT_20260807.md
+ D docs/database/TASK4_WARN_TEST_FINAL_REPORT_20260807.md
+ M frontend/index.html
+ M frontend/src/config/menu.ts
+ M frontend/src/layouts/HeaderBar.vue
+---- /agent/cdc-docs-freeze-001
+HEAD=899803491427a6a7e6b6295f43ef49a11ed56037 BRANCH=
+---- /agent/dss-formal-impl-001
+HEAD=3ec9cbf6487eacff004212fb3aca3064c3bd18cc BRANCH=
+?? runtime-logs/
+---- /agent/dss-formal-impl-001-r1
+HEAD=ba309ea8b469e3796ab08ed87c6ccb8c6d5bb253 BRANCH=
+---- /agent/dss-linear-style-original-001.R1
+HEAD=4222b0a24b927aca6f62ff348fd8549b73d4156c BRANCH=
+---- /agent/dss-linear-style-prototype-001.BfGw0Z
+HEAD=4222b0a24b927aca6f62ff348fd8549b73d4156c BRANCH=
+ M frontend/src/views/data-source-run-state/DataSourceRunStatePage.spec.ts
+ M frontend/src/views/data-source-run-state/DataSourceRunStatePage.vue
+ M frontend/src/views/data-source-run-state/components/DataSourceSnapshotQueryBar.spec.ts
+ M frontend/src/views/data-source-run-state/components/DataSourceSnapshotQueryBar.vue
+ M frontend/src/views/data-source-run-state/components/DataSourceSnapshotStatusTag.spec.ts
+ M frontend/src/views/data-source-run-state/components/DataSourceSnapshotStatusTag.vue
+ M frontend/src/views/data-source-run-state/components/DataSourceSnapshotTable.spec.ts
+ M frontend/src/views/data-source-run-state/components/DataSourceSnapshotTable.vue
+---- /agent/dss-popper-width-baseline-001
+HEAD=6cd197d23a75cd9e0686c473ab27c45a6661e517 BRANCH=
+---- /agent/dss-popper-width-baseline-001-r1
+HEAD=f74dd725682b745f1b8ac6a1b9358eff10aaddc2 BRANCH=
+---- /agent/dss-popper-width-baseline-approval-001
+HEAD=5649a8a8040b67bec0dc23b10596281cd5706bb3 BRANCH=
+---- /agent/dss-popper-width-impl-001
+HEAD=485be09db758e4ba6f543fcc88a399cc5a46d384 BRANCH=
+ M docs/features/README.md
+ M docs/features/data-source-snapshot-status/ACCEPTANCE.md
+ M docs/features/data-source-snapshot-status/API.md
+ M docs/features/data-source-snapshot-status/DATABASE.md
+ M docs/features/data-source-snapshot-status/DESIGN.md
+ M docs/features/data-source-snapshot-status/README.md
+ M docs/features/data-source-snapshot-status/REQUIREMENTS.md
+ M docs/features/data-source-snapshot-status/UI.md
+---- /agent/dss-query-ctl-001
+HEAD=29379e78f455f923d1095823322dc77c19f07e33 BRANCH=
+---- /agent/dss-query-ctl-001-r1
+HEAD=d6322cfb50b6cb43a0c38dd9a42f85d037c24da1 BRANCH=
+---- /agent/dss-query-ctl-001-r2
+HEAD=6c43d1ee7dce3bb0b7583b4c38b367a4be64ba6f BRANCH=
+---- /agent/dss-query-ctl-001-r3
+HEAD=cf9f9eb0240f275cd50eb37546e6d6256892a9f4 BRANCH=
+---- /agent/dss-query-ctl-appr-001
+HEAD=548e16147675cdc6013a4d166bf60d7b1b8bda36 BRANCH=
+ M .claude/settings.local.json
+---- /agent/dss-query-ctl-impl-001
+HEAD=a47988820c797ff60bd7244b2d0f899bd8fc3be5 BRANCH=
+---- /agent/dss-query-ctl-impl-001-r1
+HEAD=edba7c891884d0f000a7c9edc196b2bffb95e0b0 BRANCH=
+?? frontend/node_modules
+---- /agent/dss-query-ctl-impl-001-r2
+HEAD=2a9a271690bfdc68b16772268e84928a33abdeda BRANCH=
+---- /agent/dss-select-popper-fixed-width-proto-001
+HEAD=2a9a271690bfdc68b16772268e84928a33abdeda BRANCH=
+ M frontend/src/views/data-source-run-state/components/DataSourceSnapshotQueryBar.vue
+?? runtime-logs/
+---- /agent/dss-select-width-diag-001
+HEAD=2a9a271690bfdc68b16772268e84928a33abdeda BRANCH=
+---- /tmp/cdc-approval-r1-worktree
+HEAD=c568df1f7b0be14b7decdf59f2ef9116ff0bf403 BRANCH=
+---- /tmp/cdc-approval-worktree
+HEAD=b753bec563f9cec7cfb9278eb40098d5f59b1634 BRANCH=
+---- /tmp/cdc-freeze-r1-worktree
+HEAD=85a522e492e34b2e168bb32b9f638bbb41afd76b BRANCH=
+---- /tmp/cdc-freeze-r2-worktree
+HEAD=9b0aa9254f75e03f7b1eb52ee7454d970b76af4c BRANCH=
+---- /tmp/cdc-freeze-r3-worktree
+HEAD=e67b2ecc3897c3e83597126e259ee4c19349a66a BRANCH=
+---- /tmp/cdc-popper-appr-r1-worktree
+HEAD=485be09db758e4ba6f543fcc88a399cc5a46d384 BRANCH=
+---- /tmp/cdc-r1-worktree
+HEAD=49eb778cb24b4f6d26a192d5441b0476099cf68d BRANCH=

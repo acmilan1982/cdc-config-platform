@@ -1,0 +1,54 @@
+2026-09-11 21:52:14.272 DEBUG 8537 --- [nio-8080-exec-9] c.b.c.l.s.m.L.selectCumulativeOverview   : ==>  Preparing: SELECT TASK_CODE, SUCCESS_COUNT, ERROR_COUNT, TOTAL_COUNT, LAST_BATCH_ID, CREATE_TIME, UPDATE_TIME FROM CDC_STATS_CUMULATIVE_OVERVIEW WHERE TASK_CODE = ?
+2026-09-11 21:52:14.272 DEBUG 8537 --- [nio-8080-exec-9] c.b.c.l.s.m.L.selectCumulativeOverview   : ==> Parameters: LARGE_SCREEN_STATS(String)
+2026-09-11 21:52:14.273 DEBUG 8537 --- [nio-8080-exec-9] c.b.c.l.s.m.L.selectCumulativeOverview   : <==      Total: 1
+2026-09-11 21:52:14.273 DEBUG 8537 --- [nio-8080-exec-9] c.b.c.l.s.m.L.selectDailyOverview        : ==>  Preparing: SELECT TASK_CODE, STAT_DATE, SUCCESS_COUNT, ERROR_COUNT, TOTAL_COUNT, LAST_BATCH_ID, CREATE_TIME, UPDATE_TIME FROM CDC_STATS_DAILY_OVERVIEW WHERE TASK_CODE = ? AND STAT_DATE = ?
+2026-09-11 21:52:14.273 DEBUG 8537 --- [nio-8080-exec-9] c.b.c.l.s.m.L.selectDailyOverview        : ==> Parameters: LARGE_SCREEN_STATS(String), 2026-09-11(Date)
+2026-09-11 21:52:14.274 DEBUG 8537 --- [nio-8080-exec-9] c.b.c.l.s.m.L.selectDailyOverview        : <==      Total: 0
+2026-09-11 21:52:14.274 DEBUG 8537 --- [nio-8080-exec-9] c.b.c.l.s.m.L.selectDailyRange           : ==>  Preparing: SELECT TASK_CODE, STAT_DATE, SUCCESS_COUNT, ERROR_COUNT, TOTAL_COUNT, LAST_BATCH_ID, CREATE_TIME, UPDATE_TIME FROM CDC_STATS_DAILY_OVERVIEW WHERE TASK_CODE = ? AND STAT_DATE >= ? AND STAT_DATE <= ? ORDER BY STAT_DATE ASC
+2026-09-11 21:52:14.274 DEBUG 8537 --- [nio-8080-exec-9] c.b.c.l.s.m.L.selectDailyRange           : ==> Parameters: LARGE_SCREEN_STATS(String), 2026-09-05(Date), 2026-09-11(Date)
+2026-09-11 21:52:14.275 DEBUG 8537 --- [nio-8080-exec-9] c.b.c.l.s.m.L.selectDailyRange           : <==      Total: 0
+2026-09-11 21:52:14.275 DEBUG 8537 --- [nio-8080-exec-9] c.b.c.l.s.m.L.selectWatermarks           : ==>  Preparing: SELECT TASK_CODE, LOG_TYPE, LAST_LOG_ID, LAST_BATCH_ID, LAST_BATCH_TIME, TOTAL_PROCESSED, CREATE_TIME, UPDATE_TIME FROM CDC_STATS_WATERMARK WHERE TASK_CODE = ?
+2026-09-11 21:52:14.275 DEBUG 8537 --- [nio-8080-exec-9] c.b.c.l.s.m.L.selectWatermarks           : ==> Parameters: LARGE_SCREEN_STATS(String)
+2026-09-11 21:52:14.276 DEBUG 8537 --- [nio-8080-exec-9] c.b.c.l.s.m.L.selectWatermarks           : <==      Total: 2
+2026-09-11 21:52:14.276 DEBUG 8537 --- [nio-8080-exec-9] l.s.m.L.selectMinDimCumulativeUpdateTime : ==>  Preparing: SELECT MIN(UPDATE_TIME) FROM CDC_STATS_DIM_CUMULATIVE WHERE TASK_CODE = ?
+2026-09-11 21:52:14.277 DEBUG 8537 --- [nio-8080-exec-9] l.s.m.L.selectMinDimCumulativeUpdateTime : ==> Parameters: LARGE_SCREEN_STATS(String)
+2026-09-11 21:52:14.277 DEBUG 8537 --- [nio-8080-exec-9] l.s.m.L.selectMinDimCumulativeUpdateTime : <==      Total: 1
+2026-09-11 21:52:14.277 DEBUG 8537 --- [nio-8080-exec-9] .b.c.l.s.m.L.selectMinDimDailyUpdateTime : ==>  Preparing: SELECT MIN(UPDATE_TIME) FROM CDC_STATS_DIM_DAILY WHERE TASK_CODE = ?
+2026-09-11 21:52:14.277 DEBUG 8537 --- [nio-8080-exec-9] .b.c.l.s.m.L.selectMinDimDailyUpdateTime : ==> Parameters: LARGE_SCREEN_STATS(String)
+2026-09-11 21:52:14.278 DEBUG 8537 --- [nio-8080-exec-9] .b.c.l.s.m.L.selectMinDimDailyUpdateTime : <==      Total: 1
+2026-09-11 21:52:14.278 DEBUG 8537 --- [nio-8080-exec-9] .c.l.s.m.L.selectActiveClientDataSources : ==>  Preparing: SELECT CLIENT_ID, DATA_SOURCE_ID FROM CDC_CLIENT_MULTIPLE WHERE FG_ACTIVE = '1'
+2026-09-11 21:52:14.278 DEBUG 8537 --- [nio-8080-exec-9] .c.l.s.m.L.selectActiveClientDataSources : ==> Parameters: 
+2026-09-11 21:52:14.279 DEBUG 8537 --- [nio-8080-exec-9] .c.l.s.m.L.selectActiveClientDataSources : <==      Total: 5
+2026-09-11 21:52:14.282 DEBUG 8537 --- [nio-8080-exec-9] c.b.c.l.s.m.D.selectList                 : ==>  Preparing: SELECT DATA_SUB_ID,DATA_SUB_DESC,DATA_FROM_SOURCE_ID,DATA_TO_SOURCE_ID,DATA_SOURCE_TABLE,DATA_SOURCE_COMMENT,DATA_TARGET_TABLE,DATA_TARGET_COMMENT,INSERT_TIME,UPDATE_TIME,DELETE_TIME,FG_ACTIVE FROM CDC_DATA_SUBSCRIBE WHERE (FG_ACTIVE = ?)
+2026-09-11 21:52:14.282 DEBUG 8537 --- [nio-8080-exec-9] c.b.c.l.s.m.D.selectList                 : ==> Parameters: 1(String)
+2026-09-11 21:52:14.284 DEBUG 8537 --- [nio-8080-exec-9] c.b.c.l.s.m.D.selectList                 : <==      Total: 1
+2026-09-11 21:52:14.284 DEBUG 8537 --- [nio-8080-exec-9] c.b.c.l.s.m.L.selectDimCumulativeByType  : ==>  Preparing: SELECT DIM_VALUE, SUCCESS_COUNT, ERROR_COUNT, TOTAL_COUNT, UPDATE_TIME FROM CDC_STATS_DIM_CUMULATIVE WHERE TASK_CODE = ? AND DIM_TYPE = ?
+2026-09-11 21:52:14.284 DEBUG 8537 --- [nio-8080-exec-9] c.b.c.l.s.m.L.selectDimCumulativeByType  : ==> Parameters: LARGE_SCREEN_STATS(String), TARGET_DB(String)
+2026-09-11 21:52:14.285 DEBUG 8537 --- [nio-8080-exec-9] c.b.c.l.s.m.L.selectDimCumulativeByType  : <==      Total: 2
+2026-09-11 21:52:14.285 DEBUG 8537 --- [nio-8080-exec-9] c.b.c.l.s.m.L.selectTop10SourceDatabases : ==>  Preparing: SELECT DIM_VALUE, SUCCESS_COUNT, ERROR_COUNT, TOTAL_COUNT FROM CDC_STATS_DIM_CUMULATIVE WHERE TASK_CODE = ? AND DIM_TYPE = 'SOURCE_DATA_SOURCE' ORDER BY TOTAL_COUNT DESC, DIM_VALUE ASC FETCH FIRST 10 ROWS ONLY
+2026-09-11 21:52:14.285 DEBUG 8537 --- [nio-8080-exec-9] c.b.c.l.s.m.L.selectTop10SourceDatabases : ==> Parameters: LARGE_SCREEN_STATS(String)
+2026-09-11 21:52:14.286 DEBUG 8537 --- [nio-8080-exec-9] c.b.c.l.s.m.L.selectTop10SourceDatabases : <==      Total: 2
+2026-09-11 21:52:14.287 DEBUG 8537 --- [nio-8080-exec-9] c.b.c.l.s.m.L.selectTop10TargetDatabases : ==>  Preparing: SELECT DIM_VALUE, SUCCESS_COUNT, ERROR_COUNT, TOTAL_COUNT FROM CDC_STATS_DIM_CUMULATIVE WHERE TASK_CODE = ? AND DIM_TYPE = 'TARGET_DB' ORDER BY TOTAL_COUNT DESC, DIM_VALUE ASC FETCH FIRST 10 ROWS ONLY
+2026-09-11 21:52:14.287 DEBUG 8537 --- [nio-8080-exec-9] c.b.c.l.s.m.L.selectTop10TargetDatabases : ==> Parameters: LARGE_SCREEN_STATS(String)
+2026-09-11 21:52:14.288 DEBUG 8537 --- [nio-8080-exec-9] c.b.c.l.s.m.L.selectTop10TargetDatabases : <==      Total: 2
+2026-09-11 21:52:14.289 DEBUG 8537 --- [nio-8080-exec-9] c.b.c.l.s.m.L.selectTop10Tables          : ==>  Preparing: SELECT DIM_VALUE, SUCCESS_COUNT, ERROR_COUNT, TOTAL_COUNT FROM CDC_STATS_DIM_CUMULATIVE WHERE TASK_CODE = ? AND DIM_TYPE = 'TABLE' ORDER BY TOTAL_COUNT DESC, DIM_VALUE ASC FETCH FIRST 10 ROWS ONLY
+2026-09-11 21:52:14.289 DEBUG 8537 --- [nio-8080-exec-9] c.b.c.l.s.m.L.selectTop10Tables          : ==> Parameters: LARGE_SCREEN_STATS(String)
+2026-09-11 21:52:14.290 DEBUG 8537 --- [nio-8080-exec-9] c.b.c.l.s.m.L.selectTop10Tables          : <==      Total: 9
+2026-09-11 21:52:14.291 DEBUG 8537 --- [nio-8080-exec-9] c.b.c.l.s.m.L.selectDimCumulativeByType  : ==>  Preparing: SELECT DIM_VALUE, SUCCESS_COUNT, ERROR_COUNT, TOTAL_COUNT, UPDATE_TIME FROM CDC_STATS_DIM_CUMULATIVE WHERE TASK_CODE = ? AND DIM_TYPE = ?
+2026-09-11 21:52:14.291 DEBUG 8537 --- [nio-8080-exec-9] c.b.c.l.s.m.L.selectDimCumulativeByType  : ==> Parameters: LARGE_SCREEN_STATS(String), SOURCE_DATA_SOURCE(String)
+2026-09-11 21:52:14.292 DEBUG 8537 --- [nio-8080-exec-9] c.b.c.l.s.m.L.selectDimCumulativeByType  : <==      Total: 2
+2026-09-11 21:52:14.292 DEBUG 8537 --- [nio-8080-exec-9] c.b.c.l.s.m.L.selectDimDailyByType       : ==>  Preparing: SELECT DIM_VALUE, SUCCESS_COUNT, ERROR_COUNT, TOTAL_COUNT, UPDATE_TIME FROM CDC_STATS_DIM_DAILY WHERE TASK_CODE = ? AND DIM_TYPE = ? AND STAT_DATE = ?
+2026-09-11 21:52:14.292 DEBUG 8537 --- [nio-8080-exec-9] c.b.c.l.s.m.L.selectDimDailyByType       : ==> Parameters: LARGE_SCREEN_STATS(String), SOURCE_DATA_SOURCE(String), 2026-09-11(Date)
+2026-09-11 21:52:14.294 DEBUG 8537 --- [nio-8080-exec-9] c.b.c.l.s.m.L.selectDimDailyByType       : <==      Total: 0
+2026-09-11 21:52:14.296 DEBUG 8537 --- [nio-8080-exec-9] c.b.c.l.s.m.D.selectList                 : ==>  Preparing: SELECT DATA_SUB_ID,DATA_SUB_DESC,DATA_FROM_SOURCE_ID,DATA_TO_SOURCE_ID,DATA_SOURCE_TABLE,DATA_SOURCE_COMMENT,DATA_TARGET_TABLE,DATA_TARGET_COMMENT,INSERT_TIME,UPDATE_TIME,DELETE_TIME,FG_ACTIVE FROM CDC_DATA_SUBSCRIBE WHERE (FG_ACTIVE = ?)
+2026-09-11 21:52:14.296 DEBUG 8537 --- [nio-8080-exec-9] c.b.c.l.s.m.D.selectList                 : ==> Parameters: 1(String)
+2026-09-11 21:52:14.297 DEBUG 8537 --- [nio-8080-exec-9] c.b.c.l.s.m.D.selectList                 : <==      Total: 1
+2026-09-11 21:52:32.669 DEBUG 8537 --- [io-8080-exec-10] c.b.c.m.d.m.R.selectAll                  : ==>  Preparing: SELECT CLIENT_ID AS clientId, CLIENT_DESC AS clientDesc, FG_ACTIVE AS fgActive FROM CDC_CLIENT_MULTIPLE
+2026-09-11 21:52:32.669 DEBUG 8537 --- [io-8080-exec-10] c.b.c.m.d.m.R.selectAll                  : ==> Parameters: 
+2026-09-11 21:52:32.670 DEBUG 8537 --- [io-8080-exec-10] c.b.c.m.d.m.R.selectAll                  : <==      Total: 16
+2026-09-11 21:52:32.671 DEBUG 8537 --- [io-8080-exec-10] c.b.c.m.d.m.R.selectAll                  : ==>  Preparing: SELECT DATA_SOURCE_ID AS dataSourceId, DATA_SOURCE_ORG AS dataSourceOrg, DATA_SOURCE_CATEGORY AS dataSourceCategory, FG_ACTIVE AS fgActive FROM CDC_DATA_SOURCE
+2026-09-11 21:52:32.671 DEBUG 8537 --- [io-8080-exec-10] c.b.c.m.d.m.R.selectAll                  : ==> Parameters: 
+2026-09-11 21:52:32.672 DEBUG 8537 --- [io-8080-exec-10] c.b.c.m.d.m.R.selectAll                  : <==      Total: 34
+2026-09-11 21:52:32.672 DEBUG 8537 --- [io-8080-exec-10] c.b.c.m.d.m.D.selectAll                  : ==>  Preparing: SELECT CLIENT_ID AS clientId, DATA_SOURCE_ID AS dataSourceId, SNAPSHOT_STATUS AS snapshotStatus, TO_CHAR(SNAPSHOT_LAST_SEEN_AT, 'YYYY-MM-DD HH24:MI:SS') AS snapshotLastSeenAt, TO_CHAR(SNAPSHOT_COMPLETED_AT, 'YYYY-MM-DD HH24:MI:SS') AS snapshotCompletedAt, TO_CHAR(UPDATED_AT, 'YYYY-MM-DD HH24:MI:SS') AS updatedAt FROM CDC_DATA_SOURCE_RUN_STATE
+2026-09-11 21:52:32.672 DEBUG 8537 --- [io-8080-exec-10] c.b.c.m.d.m.D.selectAll                  : ==> Parameters: 
+2026-09-11 21:52:32.674 DEBUG 8537 --- [io-8080-exec-10] c.b.c.m.d.m.D.selectAll                  : <==      Total: 30

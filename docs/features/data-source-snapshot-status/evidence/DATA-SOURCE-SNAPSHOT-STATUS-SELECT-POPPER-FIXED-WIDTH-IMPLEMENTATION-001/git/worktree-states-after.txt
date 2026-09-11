@@ -1,0 +1,44 @@
+# Worktree states @ task end (2026-09-11T21:55:01+08:00)
+## git worktree list
+/agent/cdc-config-platform                      4222b0a [develop]
+/agent/cdc-docs-freeze-001                      8998034 (detached HEAD)
+/agent/dss-formal-impl-001                      3ec9cbf (detached HEAD)
+/agent/dss-formal-impl-001-r1                   ba309ea (detached HEAD)
+/agent/dss-linear-style-original-001.R1         4222b0a (detached HEAD)
+/agent/dss-linear-style-prototype-001.BfGw0Z    4222b0a (detached HEAD)
+/agent/dss-popper-width-baseline-001            6cd197d (detached HEAD)
+/agent/dss-popper-width-baseline-001-r1         f74dd72 (detached HEAD)
+/agent/dss-popper-width-baseline-approval-001   5649a8a (detached HEAD)
+/agent/dss-popper-width-impl-001                485be09 (detached HEAD)
+/agent/dss-query-ctl-001                        29379e7 (detached HEAD)
+/agent/dss-query-ctl-001-r1                     d6322cf (detached HEAD)
+/agent/dss-query-ctl-001-r2                     6c43d1e (detached HEAD)
+/agent/dss-query-ctl-001-r3                     cf9f9eb (detached HEAD)
+/agent/dss-query-ctl-appr-001                   548e161 (detached HEAD)
+/agent/dss-query-ctl-impl-001                   a479888 (detached HEAD)
+/agent/dss-query-ctl-impl-001-r1                edba7c8 (detached HEAD)
+/agent/dss-query-ctl-impl-001-r2                2a9a271 (detached HEAD)
+/agent/dss-select-popper-fixed-width-proto-001  2a9a271 (detached HEAD)
+/agent/dss-select-width-diag-001                2a9a271 (detached HEAD)
+/tmp/cdc-approval-r1-worktree                   c568df1 (detached HEAD)
+/tmp/cdc-approval-worktree                      b753bec (detached HEAD)
+/tmp/cdc-freeze-r1-worktree                     85a522e (detached HEAD)
+/tmp/cdc-freeze-r2-worktree                     9b0aa92 (detached HEAD)
+/tmp/cdc-freeze-r3-worktree                     e67b2ec (detached HEAD)
+/tmp/cdc-popper-appr-r1-worktree                485be09 (detached HEAD)
+/tmp/cdc-r1-worktree                            49eb778 (detached HEAD)
+
+## 本任务 worktree
+/agent/dss-popper-width-impl-001
+485be09db758e4ba6f543fcc88a399cc5a46d384
+ M docs/features/README.md
+ M docs/features/data-source-snapshot-status/ACCEPTANCE.md
+ M docs/features/data-source-snapshot-status/API.md
+ M docs/features/data-source-snapshot-status/DATABASE.md
+ M docs/features/data-source-snapshot-status/DESIGN.md
+ M docs/features/data-source-snapshot-status/README.md
+ M docs/features/data-source-snapshot-status/REQUIREMENTS.md
+ M docs/features/data-source-snapshot-status/UI.md
+ M frontend/src/views/data-source-run-state/components/DataSourceSnapshotQueryBar.spec.ts
+ M frontend/src/views/data-source-run-state/components/DataSourceSnapshotQueryBar.vue
+?? docs/features/data-source-snapshot-status/evidence/DATA-SOURCE-SNAPSHOT-STATUS-SELECT-POPPER-FIXED-WIDTH-IMPLEMENTATION-001/

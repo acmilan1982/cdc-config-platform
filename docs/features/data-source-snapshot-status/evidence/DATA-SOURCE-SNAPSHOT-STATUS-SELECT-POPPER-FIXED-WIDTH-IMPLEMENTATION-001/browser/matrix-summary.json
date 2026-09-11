@@ -1,0 +1,2585 @@
+{
+  "source": "matrix.json",
+  "mode": "matrix",
+  "route": "http://127.0.0.1:5173/monitor/data-source-state",
+  "reps": 5,
+  "expectedWidths": {
+    "client": 480,
+    "source": 400,
+    "status": 240
+  },
+  "viewports": [
+    {
+      "viewport": "1280x800",
+      "dims": {
+        "client": {
+          "outer": {
+            "crossRep": {
+              "states": [
+                {
+                  "state": "A_INIT",
+                  "n": 5,
+                  "min": 480,
+                  "max": 480,
+                  "spread": 0
+                },
+                {
+                  "state": "B_SHORT",
+                  "n": 5,
+                  "min": 480,
+                  "max": 480,
+                  "spread": 0
+                },
+                {
+                  "state": "C_LONG",
+                  "n": 5,
+                  "min": 480,
+                  "max": 480,
+                  "spread": 0
+                },
+                {
+                  "state": "F_LONG2SHORT",
+                  "n": 5,
+                  "min": 480,
+                  "max": 480,
+                  "spread": 0
+                },
+                {
+                  "state": "E_SHORT2LONG",
+                  "n": 5,
+                  "min": 480,
+                  "max": 480,
+                  "spread": 0
+                },
+                {
+                  "state": "G_MULTI_COLLAPSE",
+                  "n": 5,
+                  "min": 480,
+                  "max": 480,
+                  "spread": 0
+                },
+                {
+                  "state": "H_CANCEL_LONG",
+                  "n": 5,
+                  "min": 480,
+                  "max": 480,
+                  "spread": 0
+                },
+                {
+                  "state": "K1_TOOLTIP_SHOWN",
+                  "n": 5,
+                  "min": 480,
+                  "max": 480,
+                  "spread": 0
+                },
+                {
+                  "state": "K2_TOOLTIP_HIDDEN",
+                  "n": 5,
+                  "min": 480,
+                  "max": 480,
+                  "spread": 0
+                },
+                {
+                  "state": "L_SCROLL_NOW",
+                  "n": 5,
+                  "min": 480,
+                  "max": 480,
+                  "spread": 0
+                },
+                {
+                  "state": "J_RESET",
+                  "n": 5,
+                  "min": 480,
+                  "max": 480,
+                  "spread": 0
+                },
+                {
+                  "state": "M_REOPEN",
+                  "n": 5,
+                  "min": 480,
+                  "max": 480,
+                  "spread": 0
+                }
+              ],
+              "globalMin": 480,
+              "globalMax": 480,
+              "globalSpread": 0,
+              "maxStateSpread": 0
+            },
+            "maxSpreadAcrossReps": 0,
+            "maxAdjacentDeltaAcrossReps": 0,
+            "perRep": [
+              {
+                "min": 480,
+                "max": 480,
+                "spread": 0,
+                "maxAdjacentDelta": 0,
+                "n": 12
+              },
+              {
+                "min": 480,
+                "max": 480,
+                "spread": 0,
+                "maxAdjacentDelta": 0,
+                "n": 12
+              },
+              {
+                "min": 480,
+                "max": 480,
+                "spread": 0,
+                "maxAdjacentDelta": 0,
+                "n": 12
+              },
+              {
+                "min": 480,
+                "max": 480,
+                "spread": 0,
+                "maxAdjacentDelta": 0,
+                "n": 12
+              },
+              {
+                "min": 480,
+                "max": 480,
+                "spread": 0,
+                "maxAdjacentDelta": 0,
+                "n": 12
+              }
+            ]
+          },
+          "inner": {
+            "crossRep": {
+              "states": [
+                {
+                  "state": "A_INIT",
+                  "n": 5,
+                  "min": 478,
+                  "max": 478,
+                  "spread": 0
+                },
+                {
+                  "state": "B_SHORT",
+                  "n": 5,
+                  "min": 478,
+                  "max": 478,
+                  "spread": 0
+                },
+                {
+                  "state": "C_LONG",
+                  "n": 5,
+                  "min": 478,
+                  "max": 478,
+                  "spread": 0
+                },
+                {
+                  "state": "F_LONG2SHORT",
+                  "n": 5,
+                  "min": 478,
+                  "max": 478,
+                  "spread": 0
+                },
+                {
+                  "state": "E_SHORT2LONG",
+                  "n": 5,
+                  "min": 478,
+                  "max": 478,
+                  "spread": 0
+                },
+                {
+                  "state": "G_MULTI_COLLAPSE",
+                  "n": 5,
+                  "min": 478,
+                  "max": 478,
+                  "spread": 0
+                },
+                {
+                  "state": "H_CANCEL_LONG",
+                  "n": 5,
+                  "min": 478,
+                  "max": 478,
+                  "spread": 0
+                },
+                {
+                  "state": "K1_TOOLTIP_SHOWN",
+                  "n": 5,
+                  "min": 478,
+                  "max": 478,
+                  "spread": 0
+                },
+                {
+                  "state": "K2_TOOLTIP_HIDDEN",
+                  "n": 5,
+                  "min": 478,
+                  "max": 478,
+                  "spread": 0
+                },
+                {
+                  "state": "L_SCROLL_NOW",
+                  "n": 5,
+                  "min": 478,
+                  "max": 478,
+                  "spread": 0
+                },
+                {
+                  "state": "J_RESET",
+                  "n": 5,
+                  "min": 478,
+                  "max": 478,
+                  "spread": 0
+                },
+                {
+                  "state": "M_REOPEN",
+                  "n": 5,
+                  "min": 478,
+                  "max": 478,
+                  "spread": 0
+                }
+              ],
+              "globalMin": 478,
+              "globalMax": 478,
+              "globalSpread": 0,
+              "maxStateSpread": 0
+            },
+            "maxSpreadAcrossReps": 0
+          },
+          "measuredStates": 12
+        },
+        "source": {
+          "outer": {
+            "crossRep": {
+              "states": [
+                {
+                  "state": "A_INIT",
+                  "n": 5,
+                  "min": 400,
+                  "max": 400,
+                  "spread": 0
+                },
+                {
+                  "state": "B_SHORT",
+                  "n": 5,
+                  "min": 400,
+                  "max": 400,
+                  "spread": 0
+                },
+                {
+                  "state": "C_LONG",
+                  "n": 5,
+                  "min": 400,
+                  "max": 400,
+                  "spread": 0
+                },
+                {
+                  "state": "F_LONG2SHORT",
+                  "n": 5,
+                  "min": 400,
+                  "max": 400,
+                  "spread": 0
+                },
+                {
+                  "state": "E_SHORT2LONG",
+                  "n": 5,
+                  "min": 400,
+                  "max": 400,
+                  "spread": 0
+                },
+                {
+                  "state": "G_MULTI_COLLAPSE",
+                  "n": 5,
+                  "min": 400,
+                  "max": 400,
+                  "spread": 0
+                },
+                {
+                  "state": "H_CANCEL_LONG",
+                  "n": 5,
+                  "min": 400,
+                  "max": 400,
+                  "spread": 0
+                },
+                {
+                  "state": "L_SCROLL_NOW",
+                  "n": 5,
+                  "min": 400,
+                  "max": 400,
+                  "spread": 0
+                },
+                {
+                  "state": "J_RESET",
+                  "n": 5,
+                  "min": 400,
+                  "max": 400,
+                  "spread": 0
+                },
+                {
+                  "state": "M_REOPEN",
+                  "n": 5,
+                  "min": 400,
+                  "max": 400,
+                  "spread": 0
+                }
+              ],
+              "globalMin": 400,
+              "globalMax": 400,
+              "globalSpread": 0,
+              "maxStateSpread": 0
+            },
+            "maxSpreadAcrossReps": 0,
+            "maxAdjacentDeltaAcrossReps": 0,
+            "perRep": [
+              {
+                "min": 400,
+                "max": 400,
+                "spread": 0,
+                "maxAdjacentDelta": 0,
+                "n": 10
+              },
+              {
+                "min": 400,
+                "max": 400,
+                "spread": 0,
+                "maxAdjacentDelta": 0,
+                "n": 10
+              },
+              {
+                "min": 400,
+                "max": 400,
+                "spread": 0,
+                "maxAdjacentDelta": 0,
+                "n": 10
+              },
+              {
+                "min": 400,
+                "max": 400,
+                "spread": 0,
+                "maxAdjacentDelta": 0,
+                "n": 10
+              },
+              {
+                "min": 400,
+                "max": 400,
+                "spread": 0,
+                "maxAdjacentDelta": 0,
+                "n": 10
+              }
+            ]
+          },
+          "inner": {
+            "crossRep": {
+              "states": [
+                {
+                  "state": "A_INIT",
+                  "n": 5,
+                  "min": 398,
+                  "max": 398,
+                  "spread": 0
+                },
+                {
+                  "state": "B_SHORT",
+                  "n": 5,
+                  "min": 398,
+                  "max": 398,
+                  "spread": 0
+                },
+                {
+                  "state": "C_LONG",
+                  "n": 5,
+                  "min": 398,
+                  "max": 398,
+                  "spread": 0
+                },
+                {
+                  "state": "F_LONG2SHORT",
+                  "n": 5,
+                  "min": 398,
+                  "max": 398,
+                  "spread": 0
+                },
+                {
+                  "state": "E_SHORT2LONG",
+                  "n": 5,
+                  "min": 398,
+                  "max": 398,
+                  "spread": 0
+                },
+                {
+                  "state": "G_MULTI_COLLAPSE",
+                  "n": 5,
+                  "min": 398,
+                  "max": 398,
+                  "spread": 0
+                },
+                {
+                  "state": "H_CANCEL_LONG",
+                  "n": 5,
+                  "min": 398,
+                  "max": 398,
+                  "spread": 0
+                },
+                {
+                  "state": "L_SCROLL_NOW",
+                  "n": 5,
+                  "min": 398,
+                  "max": 398,
+                  "spread": 0
+                },
+                {
+                  "state": "J_RESET",
+                  "n": 5,
+                  "min": 398,
+                  "max": 398,
+                  "spread": 0
+                },
+                {
+                  "state": "M_REOPEN",
+                  "n": 5,
+                  "min": 398,
+                  "max": 398,
+                  "spread": 0
+                }
+              ],
+              "globalMin": 398,
+              "globalMax": 398,
+              "globalSpread": 0,
+              "maxStateSpread": 0
+            },
+            "maxSpreadAcrossReps": 0
+          },
+          "measuredStates": 10
+        },
+        "status": {
+          "outer": {
+            "crossRep": {
+              "states": [
+                {
+                  "state": "A_INIT",
+                  "n": 5,
+                  "min": 240,
+                  "max": 240,
+                  "spread": 0
+                },
+                {
+                  "state": "B_SHORT",
+                  "n": 5,
+                  "min": 240,
+                  "max": 240,
+                  "spread": 0
+                },
+                {
+                  "state": "C_LONG",
+                  "n": 5,
+                  "min": 240,
+                  "max": 240,
+                  "spread": 0
+                },
+                {
+                  "state": "F_LONG2SHORT",
+                  "n": 5,
+                  "min": 240,
+                  "max": 240,
+                  "spread": 0
+                },
+                {
+                  "state": "E_SHORT2LONG",
+                  "n": 5,
+                  "min": 240,
+                  "max": 240,
+                  "spread": 0
+                },
+                {
+                  "state": "G_MULTI_COLLAPSE",
+                  "n": 5,
+                  "min": 240,
+                  "max": 240,
+                  "spread": 0
+                },
+                {
+                  "state": "H_CANCEL_LONG",
+                  "n": 5,
+                  "min": 240,
+                  "max": 240,
+                  "spread": 0
+                },
+                {
+                  "state": "L_SCROLL_NOW",
+                  "n": 5,
+                  "min": 240,
+                  "max": 240,
+                  "spread": 0
+                },
+                {
+                  "state": "J_RESET",
+                  "n": 5,
+                  "min": 240,
+                  "max": 240,
+                  "spread": 0
+                },
+                {
+                  "state": "M_REOPEN",
+                  "n": 5,
+                  "min": 240,
+                  "max": 240,
+                  "spread": 0
+                }
+              ],
+              "globalMin": 240,
+              "globalMax": 240,
+              "globalSpread": 0,
+              "maxStateSpread": 0
+            },
+            "maxSpreadAcrossReps": 0,
+            "maxAdjacentDeltaAcrossReps": 0,
+            "perRep": [
+              {
+                "min": 240,
+                "max": 240,
+                "spread": 0,
+                "maxAdjacentDelta": 0,
+                "n": 10
+              },
+              {
+                "min": 240,
+                "max": 240,
+                "spread": 0,
+                "maxAdjacentDelta": 0,
+                "n": 10
+              },
+              {
+                "min": 240,
+                "max": 240,
+                "spread": 0,
+                "maxAdjacentDelta": 0,
+                "n": 10
+              },
+              {
+                "min": 240,
+                "max": 240,
+                "spread": 0,
+                "maxAdjacentDelta": 0,
+                "n": 10
+              },
+              {
+                "min": 240,
+                "max": 240,
+                "spread": 0,
+                "maxAdjacentDelta": 0,
+                "n": 10
+              }
+            ]
+          },
+          "inner": {
+            "crossRep": {
+              "states": [
+                {
+                  "state": "A_INIT",
+                  "n": 5,
+                  "min": 238,
+                  "max": 238,
+                  "spread": 0
+                },
+                {
+                  "state": "B_SHORT",
+                  "n": 5,
+                  "min": 238,
+                  "max": 238,
+                  "spread": 0
+                },
+                {
+                  "state": "C_LONG",
+                  "n": 5,
+                  "min": 238,
+                  "max": 238,
+                  "spread": 0
+                },
+                {
+                  "state": "F_LONG2SHORT",
+                  "n": 5,
+                  "min": 238,
+                  "max": 238,
+                  "spread": 0
+                },
+                {
+                  "state": "E_SHORT2LONG",
+                  "n": 5,
+                  "min": 238,
+                  "max": 238,
+                  "spread": 0
+                },
+                {
+                  "state": "G_MULTI_COLLAPSE",
+                  "n": 5,
+                  "min": 238,
+                  "max": 238,
+                  "spread": 0
+                },
+                {
+                  "state": "H_CANCEL_LONG",
+                  "n": 5,
+                  "min": 238,
+                  "max": 238,
+                  "spread": 0
+                },
+                {
+                  "state": "L_SCROLL_NOW",
+                  "n": 5,
+                  "min": 238,
+                  "max": 238,
+                  "spread": 0
+                },
+                {
+                  "state": "J_RESET",
+                  "n": 5,
+                  "min": 238,
+                  "max": 238,
+                  "spread": 0
+                },
+                {
+                  "state": "M_REOPEN",
+                  "n": 5,
+                  "min": 238,
+                  "max": 238,
+                  "spread": 0
+                }
+              ],
+              "globalMin": 238,
+              "globalMax": 238,
+              "globalSpread": 0,
+              "maxStateSpread": 0
+            },
+            "maxSpreadAcrossReps": 0
+          },
+          "measuredStates": 10
+        }
+      }
+    },
+    {
+      "viewport": "1700x920",
+      "dims": {
+        "client": {
+          "outer": {
+            "crossRep": {
+              "states": [
+                {
+                  "state": "A_INIT",
+                  "n": 5,
+                  "min": 480,
+                  "max": 480,
+                  "spread": 0
+                },
+                {
+                  "state": "B_SHORT",
+                  "n": 5,
+                  "min": 480,
+                  "max": 480,
+                  "spread": 0
+                },
+                {
+                  "state": "C_LONG",
+                  "n": 5,
+                  "min": 480,
+                  "max": 480,
+                  "spread": 0
+                },
+                {
+                  "state": "F_LONG2SHORT",
+                  "n": 5,
+                  "min": 480,
+                  "max": 480,
+                  "spread": 0
+                },
+                {
+                  "state": "E_SHORT2LONG",
+                  "n": 5,
+                  "min": 480,
+                  "max": 480,
+                  "spread": 0
+                },
+                {
+                  "state": "G_MULTI_COLLAPSE",
+                  "n": 5,
+                  "min": 480,
+                  "max": 480,
+                  "spread": 0
+                },
+                {
+                  "state": "H_CANCEL_LONG",
+                  "n": 5,
+                  "min": 480,
+                  "max": 480,
+                  "spread": 0
+                },
+                {
+                  "state": "K1_TOOLTIP_SHOWN",
+                  "n": 5,
+                  "min": 480,
+                  "max": 480,
+                  "spread": 0
+                },
+                {
+                  "state": "K2_TOOLTIP_HIDDEN",
+                  "n": 5,
+                  "min": 480,
+                  "max": 480,
+                  "spread": 0
+                },
+                {
+                  "state": "L_SCROLL_NOW",
+                  "n": 5,
+                  "min": 480,
+                  "max": 480,
+                  "spread": 0
+                },
+                {
+                  "state": "J_RESET",
+                  "n": 5,
+                  "min": 480,
+                  "max": 480,
+                  "spread": 0
+                },
+                {
+                  "state": "M_REOPEN",
+                  "n": 5,
+                  "min": 480,
+                  "max": 480,
+                  "spread": 0
+                }
+              ],
+              "globalMin": 480,
+              "globalMax": 480,
+              "globalSpread": 0,
+              "maxStateSpread": 0
+            },
+            "maxSpreadAcrossReps": 0,
+            "maxAdjacentDeltaAcrossReps": 0,
+            "perRep": [
+              {
+                "min": 480,
+                "max": 480,
+                "spread": 0,
+                "maxAdjacentDelta": 0,
+                "n": 12
+              },
+              {
+                "min": 480,
+                "max": 480,
+                "spread": 0,
+                "maxAdjacentDelta": 0,
+                "n": 12
+              },
+              {
+                "min": 480,
+                "max": 480,
+                "spread": 0,
+                "maxAdjacentDelta": 0,
+                "n": 12
+              },
+              {
+                "min": 480,
+                "max": 480,
+                "spread": 0,
+                "maxAdjacentDelta": 0,
+                "n": 12
+              },
+              {
+                "min": 480,
+                "max": 480,
+                "spread": 0,
+                "maxAdjacentDelta": 0,
+                "n": 12
+              }
+            ]
+          },
+          "inner": {
+            "crossRep": {
+              "states": [
+                {
+                  "state": "A_INIT",
+                  "n": 5,
+                  "min": 478,
+                  "max": 478,
+                  "spread": 0
+                },
+                {
+                  "state": "B_SHORT",
+                  "n": 5,
+                  "min": 478,
+                  "max": 478,
+                  "spread": 0
+                },
+                {
+                  "state": "C_LONG",
+                  "n": 5,
+                  "min": 478,
+                  "max": 478,
+                  "spread": 0
+                },
+                {
+                  "state": "F_LONG2SHORT",
+                  "n": 5,
+                  "min": 478,
+                  "max": 478,
+                  "spread": 0
+                },
+                {
+                  "state": "E_SHORT2LONG",
+                  "n": 5,
+                  "min": 478,
+                  "max": 478,
+                  "spread": 0
+                },
+                {
+                  "state": "G_MULTI_COLLAPSE",
+                  "n": 5,
+                  "min": 478,
+                  "max": 478,
+                  "spread": 0
+                },
+                {
+                  "state": "H_CANCEL_LONG",
+                  "n": 5,
+                  "min": 478,
+                  "max": 478,
+                  "spread": 0
+                },
+                {
+                  "state": "K1_TOOLTIP_SHOWN",
+                  "n": 5,
+                  "min": 478,
+                  "max": 478,
+                  "spread": 0
+                },
+                {
+                  "state": "K2_TOOLTIP_HIDDEN",
+                  "n": 5,
+                  "min": 478,
+                  "max": 478,
+                  "spread": 0
+                },
+                {
+                  "state": "L_SCROLL_NOW",
+                  "n": 5,
+                  "min": 478,
+                  "max": 478,
+                  "spread": 0
+                },
+                {
+                  "state": "J_RESET",
+                  "n": 5,
+                  "min": 478,
+                  "max": 478,
+                  "spread": 0
+                },
+                {
+                  "state": "M_REOPEN",
+                  "n": 5,
+                  "min": 478,
+                  "max": 478,
+                  "spread": 0
+                }
+              ],
+              "globalMin": 478,
+              "globalMax": 478,
+              "globalSpread": 0,
+              "maxStateSpread": 0
+            },
+            "maxSpreadAcrossReps": 0
+          },
+          "measuredStates": 12
+        },
+        "source": {
+          "outer": {
+            "crossRep": {
+              "states": [
+                {
+                  "state": "A_INIT",
+                  "n": 5,
+                  "min": 400,
+                  "max": 400,
+                  "spread": 0
+                },
+                {
+                  "state": "B_SHORT",
+                  "n": 5,
+                  "min": 400,
+                  "max": 400,
+                  "spread": 0
+                },
+                {
+                  "state": "C_LONG",
+                  "n": 5,
+                  "min": 400,
+                  "max": 400,
+                  "spread": 0
+                },
+                {
+                  "state": "F_LONG2SHORT",
+                  "n": 5,
+                  "min": 400,
+                  "max": 400,
+                  "spread": 0
+                },
+                {
+                  "state": "E_SHORT2LONG",
+                  "n": 5,
+                  "min": 400,
+                  "max": 400,
+                  "spread": 0
+                },
+                {
+                  "state": "G_MULTI_COLLAPSE",
+                  "n": 5,
+                  "min": 400,
+                  "max": 400,
+                  "spread": 0
+                },
+                {
+                  "state": "H_CANCEL_LONG",
+                  "n": 5,
+                  "min": 400,
+                  "max": 400,
+                  "spread": 0
+                },
+                {
+                  "state": "L_SCROLL_NOW",
+                  "n": 5,
+                  "min": 400,
+                  "max": 400,
+                  "spread": 0
+                },
+                {
+                  "state": "J_RESET",
+                  "n": 5,
+                  "min": 400,
+                  "max": 400,
+                  "spread": 0
+                },
+                {
+                  "state": "M_REOPEN",
+                  "n": 5,
+                  "min": 400,
+                  "max": 400,
+                  "spread": 0
+                }
+              ],
+              "globalMin": 400,
+              "globalMax": 400,
+              "globalSpread": 0,
+              "maxStateSpread": 0
+            },
+            "maxSpreadAcrossReps": 0,
+            "maxAdjacentDeltaAcrossReps": 0,
+            "perRep": [
+              {
+                "min": 400,
+                "max": 400,
+                "spread": 0,
+                "maxAdjacentDelta": 0,
+                "n": 10
+              },
+              {
+                "min": 400,
+                "max": 400,
+                "spread": 0,
+                "maxAdjacentDelta": 0,
+                "n": 10
+              },
+              {
+                "min": 400,
+                "max": 400,
+                "spread": 0,
+                "maxAdjacentDelta": 0,
+                "n": 10
+              },
+              {
+                "min": 400,
+                "max": 400,
+                "spread": 0,
+                "maxAdjacentDelta": 0,
+                "n": 10
+              },
+              {
+                "min": 400,
+                "max": 400,
+                "spread": 0,
+                "maxAdjacentDelta": 0,
+                "n": 10
+              }
+            ]
+          },
+          "inner": {
+            "crossRep": {
+              "states": [
+                {
+                  "state": "A_INIT",
+                  "n": 5,
+                  "min": 398,
+                  "max": 398,
+                  "spread": 0
+                },
+                {
+                  "state": "B_SHORT",
+                  "n": 5,
+                  "min": 398,
+                  "max": 398,
+                  "spread": 0
+                },
+                {
+                  "state": "C_LONG",
+                  "n": 5,
+                  "min": 398,
+                  "max": 398,
+                  "spread": 0
+                },
+                {
+                  "state": "F_LONG2SHORT",
+                  "n": 5,
+                  "min": 398,
+                  "max": 398,
+                  "spread": 0
+                },
+                {
+                  "state": "E_SHORT2LONG",
+                  "n": 5,
+                  "min": 398,
+                  "max": 398,
+                  "spread": 0
+                },
+                {
+                  "state": "G_MULTI_COLLAPSE",
+                  "n": 5,
+                  "min": 398,
+                  "max": 398,
+                  "spread": 0
+                },
+                {
+                  "state": "H_CANCEL_LONG",
+                  "n": 5,
+                  "min": 398,
+                  "max": 398,
+                  "spread": 0
+                },
+                {
+                  "state": "L_SCROLL_NOW",
+                  "n": 5,
+                  "min": 398,
+                  "max": 398,
+                  "spread": 0
+                },
+                {
+                  "state": "J_RESET",
+                  "n": 5,
+                  "min": 398,
+                  "max": 398,
+                  "spread": 0
+                },
+                {
+                  "state": "M_REOPEN",
+                  "n": 5,
+                  "min": 398,
+                  "max": 398,
+                  "spread": 0
+                }
+              ],
+              "globalMin": 398,
+              "globalMax": 398,
+              "globalSpread": 0,
+              "maxStateSpread": 0
+            },
+            "maxSpreadAcrossReps": 0
+          },
+          "measuredStates": 10
+        },
+        "status": {
+          "outer": {
+            "crossRep": {
+              "states": [
+                {
+                  "state": "A_INIT",
+                  "n": 5,
+                  "min": 240,
+                  "max": 240,
+                  "spread": 0
+                },
+                {
+                  "state": "B_SHORT",
+                  "n": 5,
+                  "min": 240,
+                  "max": 240,
+                  "spread": 0
+                },
+                {
+                  "state": "C_LONG",
+                  "n": 5,
+                  "min": 240,
+                  "max": 240,
+                  "spread": 0
+                },
+                {
+                  "state": "F_LONG2SHORT",
+                  "n": 5,
+                  "min": 240,
+                  "max": 240,
+                  "spread": 0
+                },
+                {
+                  "state": "E_SHORT2LONG",
+                  "n": 5,
+                  "min": 240,
+                  "max": 240,
+                  "spread": 0
+                },
+                {
+                  "state": "G_MULTI_COLLAPSE",
+                  "n": 5,
+                  "min": 240,
+                  "max": 240,
+                  "spread": 0
+                },
+                {
+                  "state": "H_CANCEL_LONG",
+                  "n": 5,
+                  "min": 240,
+                  "max": 240,
+                  "spread": 0
+                },
+                {
+                  "state": "L_SCROLL_NOW",
+                  "n": 5,
+                  "min": 240,
+                  "max": 240,
+                  "spread": 0
+                },
+                {
+                  "state": "J_RESET",
+                  "n": 5,
+                  "min": 240,
+                  "max": 240,
+                  "spread": 0
+                },
+                {
+                  "state": "M_REOPEN",
+                  "n": 5,
+                  "min": 240,
+                  "max": 240,
+                  "spread": 0
+                }
+              ],
+              "globalMin": 240,
+              "globalMax": 240,
+              "globalSpread": 0,
+              "maxStateSpread": 0
+            },
+            "maxSpreadAcrossReps": 0,
+            "maxAdjacentDeltaAcrossReps": 0,
+            "perRep": [
+              {
+                "min": 240,
+                "max": 240,
+                "spread": 0,
+                "maxAdjacentDelta": 0,
+                "n": 10
+              },
+              {
+                "min": 240,
+                "max": 240,
+                "spread": 0,
+                "maxAdjacentDelta": 0,
+                "n": 10
+              },
+              {
+                "min": 240,
+                "max": 240,
+                "spread": 0,
+                "maxAdjacentDelta": 0,
+                "n": 10
+              },
+              {
+                "min": 240,
+                "max": 240,
+                "spread": 0,
+                "maxAdjacentDelta": 0,
+                "n": 10
+              },
+              {
+                "min": 240,
+                "max": 240,
+                "spread": 0,
+                "maxAdjacentDelta": 0,
+                "n": 10
+              }
+            ]
+          },
+          "inner": {
+            "crossRep": {
+              "states": [
+                {
+                  "state": "A_INIT",
+                  "n": 5,
+                  "min": 238,
+                  "max": 238,
+                  "spread": 0
+                },
+                {
+                  "state": "B_SHORT",
+                  "n": 5,
+                  "min": 238,
+                  "max": 238,
+                  "spread": 0
+                },
+                {
+                  "state": "C_LONG",
+                  "n": 5,
+                  "min": 238,
+                  "max": 238,
+                  "spread": 0
+                },
+                {
+                  "state": "F_LONG2SHORT",
+                  "n": 5,
+                  "min": 238,
+                  "max": 238,
+                  "spread": 0
+                },
+                {
+                  "state": "E_SHORT2LONG",
+                  "n": 5,
+                  "min": 238,
+                  "max": 238,
+                  "spread": 0
+                },
+                {
+                  "state": "G_MULTI_COLLAPSE",
+                  "n": 5,
+                  "min": 238,
+                  "max": 238,
+                  "spread": 0
+                },
+                {
+                  "state": "H_CANCEL_LONG",
+                  "n": 5,
+                  "min": 238,
+                  "max": 238,
+                  "spread": 0
+                },
+                {
+                  "state": "L_SCROLL_NOW",
+                  "n": 5,
+                  "min": 238,
+                  "max": 238,
+                  "spread": 0
+                },
+                {
+                  "state": "J_RESET",
+                  "n": 5,
+                  "min": 238,
+                  "max": 238,
+                  "spread": 0
+                },
+                {
+                  "state": "M_REOPEN",
+                  "n": 5,
+                  "min": 238,
+                  "max": 238,
+                  "spread": 0
+                }
+              ],
+              "globalMin": 238,
+              "globalMax": 238,
+              "globalSpread": 0,
+              "maxStateSpread": 0
+            },
+            "maxSpreadAcrossReps": 0
+          },
+          "measuredStates": 10
+        }
+      }
+    },
+    {
+      "viewport": "1920x1080",
+      "dims": {
+        "client": {
+          "outer": {
+            "crossRep": {
+              "states": [
+                {
+                  "state": "A_INIT",
+                  "n": 5,
+                  "min": 480,
+                  "max": 480,
+                  "spread": 0
+                },
+                {
+                  "state": "B_SHORT",
+                  "n": 5,
+                  "min": 480,
+                  "max": 480,
+                  "spread": 0
+                },
+                {
+                  "state": "C_LONG",
+                  "n": 5,
+                  "min": 480,
+                  "max": 480,
+                  "spread": 0
+                },
+                {
+                  "state": "F_LONG2SHORT",
+                  "n": 5,
+                  "min": 480,
+                  "max": 480,
+                  "spread": 0
+                },
+                {
+                  "state": "E_SHORT2LONG",
+                  "n": 5,
+                  "min": 480,
+                  "max": 480,
+                  "spread": 0
+                },
+                {
+                  "state": "G_MULTI_COLLAPSE",
+                  "n": 5,
+                  "min": 480,
+                  "max": 480,
+                  "spread": 0
+                },
+                {
+                  "state": "H_CANCEL_LONG",
+                  "n": 5,
+                  "min": 480,
+                  "max": 480,
+                  "spread": 0
+                },
+                {
+                  "state": "K1_TOOLTIP_SHOWN",
+                  "n": 5,
+                  "min": 480,
+                  "max": 480,
+                  "spread": 0
+                },
+                {
+                  "state": "K2_TOOLTIP_HIDDEN",
+                  "n": 5,
+                  "min": 480,
+                  "max": 480,
+                  "spread": 0
+                },
+                {
+                  "state": "L_SCROLL_NOW",
+                  "n": 5,
+                  "min": 480,
+                  "max": 480,
+                  "spread": 0
+                },
+                {
+                  "state": "J_RESET",
+                  "n": 5,
+                  "min": 480,
+                  "max": 480,
+                  "spread": 0
+                },
+                {
+                  "state": "M_REOPEN",
+                  "n": 5,
+                  "min": 480,
+                  "max": 480,
+                  "spread": 0
+                }
+              ],
+              "globalMin": 480,
+              "globalMax": 480,
+              "globalSpread": 0,
+              "maxStateSpread": 0
+            },
+            "maxSpreadAcrossReps": 0,
+            "maxAdjacentDeltaAcrossReps": 0,
+            "perRep": [
+              {
+                "min": 480,
+                "max": 480,
+                "spread": 0,
+                "maxAdjacentDelta": 0,
+                "n": 12
+              },
+              {
+                "min": 480,
+                "max": 480,
+                "spread": 0,
+                "maxAdjacentDelta": 0,
+                "n": 12
+              },
+              {
+                "min": 480,
+                "max": 480,
+                "spread": 0,
+                "maxAdjacentDelta": 0,
+                "n": 12
+              },
+              {
+                "min": 480,
+                "max": 480,
+                "spread": 0,
+                "maxAdjacentDelta": 0,
+                "n": 12
+              },
+              {
+                "min": 480,
+                "max": 480,
+                "spread": 0,
+                "maxAdjacentDelta": 0,
+                "n": 12
+              }
+            ]
+          },
+          "inner": {
+            "crossRep": {
+              "states": [
+                {
+                  "state": "A_INIT",
+                  "n": 5,
+                  "min": 478,
+                  "max": 478,
+                  "spread": 0
+                },
+                {
+                  "state": "B_SHORT",
+                  "n": 5,
+                  "min": 478,
+                  "max": 478,
+                  "spread": 0
+                },
+                {
+                  "state": "C_LONG",
+                  "n": 5,
+                  "min": 478,
+                  "max": 478,
+                  "spread": 0
+                },
+                {
+                  "state": "F_LONG2SHORT",
+                  "n": 5,
+                  "min": 478,
+                  "max": 478,
+                  "spread": 0
+                },
+                {
+                  "state": "E_SHORT2LONG",
+                  "n": 5,
+                  "min": 478,
+                  "max": 478,
+                  "spread": 0
+                },
+                {
+                  "state": "G_MULTI_COLLAPSE",
+                  "n": 5,
+                  "min": 478,
+                  "max": 478,
+                  "spread": 0
+                },
+                {
+                  "state": "H_CANCEL_LONG",
+                  "n": 5,
+                  "min": 478,
+                  "max": 478,
+                  "spread": 0
+                },
+                {
+                  "state": "K1_TOOLTIP_SHOWN",
+                  "n": 5,
+                  "min": 478,
+                  "max": 478,
+                  "spread": 0
+                },
+                {
+                  "state": "K2_TOOLTIP_HIDDEN",
+                  "n": 5,
+                  "min": 478,
+                  "max": 478,
+                  "spread": 0
+                },
+                {
+                  "state": "L_SCROLL_NOW",
+                  "n": 5,
+                  "min": 478,
+                  "max": 478,
+                  "spread": 0
+                },
+                {
+                  "state": "J_RESET",
+                  "n": 5,
+                  "min": 478,
+                  "max": 478,
+                  "spread": 0
+                },
+                {
+                  "state": "M_REOPEN",
+                  "n": 5,
+                  "min": 478,
+                  "max": 478,
+                  "spread": 0
+                }
+              ],
+              "globalMin": 478,
+              "globalMax": 478,
+              "globalSpread": 0,
+              "maxStateSpread": 0
+            },
+            "maxSpreadAcrossReps": 0
+          },
+          "measuredStates": 12
+        },
+        "source": {
+          "outer": {
+            "crossRep": {
+              "states": [
+                {
+                  "state": "A_INIT",
+                  "n": 5,
+                  "min": 400,
+                  "max": 400,
+                  "spread": 0
+                },
+                {
+                  "state": "B_SHORT",
+                  "n": 5,
+                  "min": 400,
+                  "max": 400,
+                  "spread": 0
+                },
+                {
+                  "state": "C_LONG",
+                  "n": 5,
+                  "min": 400,
+                  "max": 400,
+                  "spread": 0
+                },
+                {
+                  "state": "F_LONG2SHORT",
+                  "n": 5,
+                  "min": 400,
+                  "max": 400,
+                  "spread": 0
+                },
+                {
+                  "state": "E_SHORT2LONG",
+                  "n": 5,
+                  "min": 400,
+                  "max": 400,
+                  "spread": 0
+                },
+                {
+                  "state": "G_MULTI_COLLAPSE",
+                  "n": 5,
+                  "min": 400,
+                  "max": 400,
+                  "spread": 0
+                },
+                {
+                  "state": "H_CANCEL_LONG",
+                  "n": 5,
+                  "min": 400,
+                  "max": 400,
+                  "spread": 0
+                },
+                {
+                  "state": "L_SCROLL_NOW",
+                  "n": 5,
+                  "min": 400,
+                  "max": 400,
+                  "spread": 0
+                },
+                {
+                  "state": "J_RESET",
+                  "n": 5,
+                  "min": 400,
+                  "max": 400,
+                  "spread": 0
+                },
+                {
+                  "state": "M_REOPEN",
+                  "n": 5,
+                  "min": 400,
+                  "max": 400,
+                  "spread": 0
+                }
+              ],
+              "globalMin": 400,
+              "globalMax": 400,
+              "globalSpread": 0,
+              "maxStateSpread": 0
+            },
+            "maxSpreadAcrossReps": 0,
+            "maxAdjacentDeltaAcrossReps": 0,
+            "perRep": [
+              {
+                "min": 400,
+                "max": 400,
+                "spread": 0,
+                "maxAdjacentDelta": 0,
+                "n": 10
+              },
+              {
+                "min": 400,
+                "max": 400,
+                "spread": 0,
+                "maxAdjacentDelta": 0,
+                "n": 10
+              },
+              {
+                "min": 400,
+                "max": 400,
+                "spread": 0,
+                "maxAdjacentDelta": 0,
+                "n": 10
+              },
+              {
+                "min": 400,
+                "max": 400,
+                "spread": 0,
+                "maxAdjacentDelta": 0,
+                "n": 10
+              },
+              {
+                "min": 400,
+                "max": 400,
+                "spread": 0,
+                "maxAdjacentDelta": 0,
+                "n": 10
+              }
+            ]
+          },
+          "inner": {
+            "crossRep": {
+              "states": [
+                {
+                  "state": "A_INIT",
+                  "n": 5,
+                  "min": 398,
+                  "max": 398,
+                  "spread": 0
+                },
+                {
+                  "state": "B_SHORT",
+                  "n": 5,
+                  "min": 398,
+                  "max": 398,
+                  "spread": 0
+                },
+                {
+                  "state": "C_LONG",
+                  "n": 5,
+                  "min": 398,
+                  "max": 398,
+                  "spread": 0
+                },
+                {
+                  "state": "F_LONG2SHORT",
+                  "n": 5,
+                  "min": 398,
+                  "max": 398,
+                  "spread": 0
+                },
+                {
+                  "state": "E_SHORT2LONG",
+                  "n": 5,
+                  "min": 398,
+                  "max": 398,
+                  "spread": 0
+                },
+                {
+                  "state": "G_MULTI_COLLAPSE",
+                  "n": 5,
+                  "min": 398,
+                  "max": 398,
+                  "spread": 0
+                },
+                {
+                  "state": "H_CANCEL_LONG",
+                  "n": 5,
+                  "min": 398,
+                  "max": 398,
+                  "spread": 0
+                },
+                {
+                  "state": "L_SCROLL_NOW",
+                  "n": 5,
+                  "min": 398,
+                  "max": 398,
+                  "spread": 0
+                },
+                {
+                  "state": "J_RESET",
+                  "n": 5,
+                  "min": 398,
+                  "max": 398,
+                  "spread": 0
+                },
+                {
+                  "state": "M_REOPEN",
+                  "n": 5,
+                  "min": 398,
+                  "max": 398,
+                  "spread": 0
+                }
+              ],
+              "globalMin": 398,
+              "globalMax": 398,
+              "globalSpread": 0,
+              "maxStateSpread": 0
+            },
+            "maxSpreadAcrossReps": 0
+          },
+          "measuredStates": 10
+        },
+        "status": {
+          "outer": {
+            "crossRep": {
+              "states": [
+                {
+                  "state": "A_INIT",
+                  "n": 5,
+                  "min": 240,
+                  "max": 240,
+                  "spread": 0
+                },
+                {
+                  "state": "B_SHORT",
+                  "n": 5,
+                  "min": 240,
+                  "max": 240,
+                  "spread": 0
+                },
+                {
+                  "state": "C_LONG",
+                  "n": 5,
+                  "min": 240,
+                  "max": 240,
+                  "spread": 0
+                },
+                {
+                  "state": "F_LONG2SHORT",
+                  "n": 5,
+                  "min": 240,
+                  "max": 240,
+                  "spread": 0
+                },
+                {
+                  "state": "E_SHORT2LONG",
+                  "n": 5,
+                  "min": 240,
+                  "max": 240,
+                  "spread": 0
+                },
+                {
+                  "state": "G_MULTI_COLLAPSE",
+                  "n": 5,
+                  "min": 240,
+                  "max": 240,
+                  "spread": 0
+                },
+                {
+                  "state": "H_CANCEL_LONG",
+                  "n": 5,
+                  "min": 240,
+                  "max": 240,
+                  "spread": 0
+                },
+                {
+                  "state": "L_SCROLL_NOW",
+                  "n": 5,
+                  "min": 240,
+                  "max": 240,
+                  "spread": 0
+                },
+                {
+                  "state": "J_RESET",
+                  "n": 5,
+                  "min": 240,
+                  "max": 240,
+                  "spread": 0
+                },
+                {
+                  "state": "M_REOPEN",
+                  "n": 5,
+                  "min": 240,
+                  "max": 240,
+                  "spread": 0
+                }
+              ],
+              "globalMin": 240,
+              "globalMax": 240,
+              "globalSpread": 0,
+              "maxStateSpread": 0
+            },
+            "maxSpreadAcrossReps": 0,
+            "maxAdjacentDeltaAcrossReps": 0,
+            "perRep": [
+              {
+                "min": 240,
+                "max": 240,
+                "spread": 0,
+                "maxAdjacentDelta": 0,
+                "n": 10
+              },
+              {
+                "min": 240,
+                "max": 240,
+                "spread": 0,
+                "maxAdjacentDelta": 0,
+                "n": 10
+              },
+              {
+                "min": 240,
+                "max": 240,
+                "spread": 0,
+                "maxAdjacentDelta": 0,
+                "n": 10
+              },
+              {
+                "min": 240,
+                "max": 240,
+                "spread": 0,
+                "maxAdjacentDelta": 0,
+                "n": 10
+              },
+              {
+                "min": 240,
+                "max": 240,
+                "spread": 0,
+                "maxAdjacentDelta": 0,
+                "n": 10
+              }
+            ]
+          },
+          "inner": {
+            "crossRep": {
+              "states": [
+                {
+                  "state": "A_INIT",
+                  "n": 5,
+                  "min": 238,
+                  "max": 238,
+                  "spread": 0
+                },
+                {
+                  "state": "B_SHORT",
+                  "n": 5,
+                  "min": 238,
+                  "max": 238,
+                  "spread": 0
+                },
+                {
+                  "state": "C_LONG",
+                  "n": 5,
+                  "min": 238,
+                  "max": 238,
+                  "spread": 0
+                },
+                {
+                  "state": "F_LONG2SHORT",
+                  "n": 5,
+                  "min": 238,
+                  "max": 238,
+                  "spread": 0
+                },
+                {
+                  "state": "E_SHORT2LONG",
+                  "n": 5,
+                  "min": 238,
+                  "max": 238,
+                  "spread": 0
+                },
+                {
+                  "state": "G_MULTI_COLLAPSE",
+                  "n": 5,
+                  "min": 238,
+                  "max": 238,
+                  "spread": 0
+                },
+                {
+                  "state": "H_CANCEL_LONG",
+                  "n": 5,
+                  "min": 238,
+                  "max": 238,
+                  "spread": 0
+                },
+                {
+                  "state": "L_SCROLL_NOW",
+                  "n": 5,
+                  "min": 238,
+                  "max": 238,
+                  "spread": 0
+                },
+                {
+                  "state": "J_RESET",
+                  "n": 5,
+                  "min": 238,
+                  "max": 238,
+                  "spread": 0
+                },
+                {
+                  "state": "M_REOPEN",
+                  "n": 5,
+                  "min": 238,
+                  "max": 238,
+                  "spread": 0
+                }
+              ],
+              "globalMin": 238,
+              "globalMax": 238,
+              "globalSpread": 0,
+              "maxStateSpread": 0
+            },
+            "maxSpreadAcrossReps": 0
+          },
+          "measuredStates": 10
+        }
+      }
+    },
+    {
+      "viewport": "2560x1440",
+      "dims": {
+        "client": {
+          "outer": {
+            "crossRep": {
+              "states": [
+                {
+                  "state": "A_INIT",
+                  "n": 5,
+                  "min": 480,
+                  "max": 480,
+                  "spread": 0
+                },
+                {
+                  "state": "B_SHORT",
+                  "n": 5,
+                  "min": 480,
+                  "max": 480,
+                  "spread": 0
+                },
+                {
+                  "state": "C_LONG",
+                  "n": 5,
+                  "min": 480,
+                  "max": 480,
+                  "spread": 0
+                },
+                {
+                  "state": "F_LONG2SHORT",
+                  "n": 5,
+                  "min": 480,
+                  "max": 480,
+                  "spread": 0
+                },
+                {
+                  "state": "E_SHORT2LONG",
+                  "n": 5,
+                  "min": 480,
+                  "max": 480,
+                  "spread": 0
+                },
+                {
+                  "state": "G_MULTI_COLLAPSE",
+                  "n": 5,
+                  "min": 480,
+                  "max": 480,
+                  "spread": 0
+                },
+                {
+                  "state": "H_CANCEL_LONG",
+                  "n": 5,
+                  "min": 480,
+                  "max": 480,
+                  "spread": 0
+                },
+                {
+                  "state": "K1_TOOLTIP_SHOWN",
+                  "n": 5,
+                  "min": 480,
+                  "max": 480,
+                  "spread": 0
+                },
+                {
+                  "state": "K2_TOOLTIP_HIDDEN",
+                  "n": 5,
+                  "min": 480,
+                  "max": 480,
+                  "spread": 0
+                },
+                {
+                  "state": "L_SCROLL_NOW",
+                  "n": 5,
+                  "min": 480,
+                  "max": 480,
+                  "spread": 0
+                },
+                {
+                  "state": "J_RESET",
+                  "n": 5,
+                  "min": 480,
+                  "max": 480,
+                  "spread": 0
+                },
+                {
+                  "state": "M_REOPEN",
+                  "n": 5,
+                  "min": 480,
+                  "max": 480,
+                  "spread": 0
+                }
+              ],
+              "globalMin": 480,
+              "globalMax": 480,
+              "globalSpread": 0,
+              "maxStateSpread": 0
+            },
+            "maxSpreadAcrossReps": 0,
+            "maxAdjacentDeltaAcrossReps": 0,
+            "perRep": [
+              {
+                "min": 480,
+                "max": 480,
+                "spread": 0,
+                "maxAdjacentDelta": 0,
+                "n": 12
+              },
+              {
+                "min": 480,
+                "max": 480,
+                "spread": 0,
+                "maxAdjacentDelta": 0,
+                "n": 12
+              },
+              {
+                "min": 480,
+                "max": 480,
+                "spread": 0,
+                "maxAdjacentDelta": 0,
+                "n": 12
+              },
+              {
+                "min": 480,
+                "max": 480,
+                "spread": 0,
+                "maxAdjacentDelta": 0,
+                "n": 12
+              },
+              {
+                "min": 480,
+                "max": 480,
+                "spread": 0,
+                "maxAdjacentDelta": 0,
+                "n": 12
+              }
+            ]
+          },
+          "inner": {
+            "crossRep": {
+              "states": [
+                {
+                  "state": "A_INIT",
+                  "n": 5,
+                  "min": 478,
+                  "max": 478,
+                  "spread": 0
+                },
+                {
+                  "state": "B_SHORT",
+                  "n": 5,
+                  "min": 478,
+                  "max": 478,
+                  "spread": 0
+                },
+                {
+                  "state": "C_LONG",
+                  "n": 5,
+                  "min": 478,
+                  "max": 478,
+                  "spread": 0
+                },
+                {
+                  "state": "F_LONG2SHORT",
+                  "n": 5,
+                  "min": 478,
+                  "max": 478,
+                  "spread": 0
+                },
+                {
+                  "state": "E_SHORT2LONG",
+                  "n": 5,
+                  "min": 478,
+                  "max": 478,
+                  "spread": 0
+                },
+                {
+                  "state": "G_MULTI_COLLAPSE",
+                  "n": 5,
+                  "min": 478,
+                  "max": 478,
+                  "spread": 0
+                },
+                {
+                  "state": "H_CANCEL_LONG",
+                  "n": 5,
+                  "min": 478,
+                  "max": 478,
+                  "spread": 0
+                },
+                {
+                  "state": "K1_TOOLTIP_SHOWN",
+                  "n": 5,
+                  "min": 478,
+                  "max": 478,
+                  "spread": 0
+                },
+                {
+                  "state": "K2_TOOLTIP_HIDDEN",
+                  "n": 5,
+                  "min": 478,
+                  "max": 478,
+                  "spread": 0
+                },
+                {
+                  "state": "L_SCROLL_NOW",
+                  "n": 5,
+                  "min": 478,
+                  "max": 478,
+                  "spread": 0
+                },
+                {
+                  "state": "J_RESET",
+                  "n": 5,
+                  "min": 478,
+                  "max": 478,
+                  "spread": 0
+                },
+                {
+                  "state": "M_REOPEN",
+                  "n": 5,
+                  "min": 478,
+                  "max": 478,
+                  "spread": 0
+                }
+              ],
+              "globalMin": 478,
+              "globalMax": 478,
+              "globalSpread": 0,
+              "maxStateSpread": 0
+            },
+            "maxSpreadAcrossReps": 0
+          },
+          "measuredStates": 12
+        },
+        "source": {
+          "outer": {
+            "crossRep": {
+              "states": [
+                {
+                  "state": "A_INIT",
+                  "n": 5,
+                  "min": 400,
+                  "max": 400,
+                  "spread": 0
+                },
+                {
+                  "state": "B_SHORT",
+                  "n": 5,
+                  "min": 400,
+                  "max": 400,
+                  "spread": 0
+                },
+                {
+                  "state": "C_LONG",
+                  "n": 5,
+                  "min": 400,
+                  "max": 400,
+                  "spread": 0
+                },
+                {
+                  "state": "F_LONG2SHORT",
+                  "n": 5,
+                  "min": 400,
+                  "max": 400,
+                  "spread": 0
+                },
+                {
+                  "state": "E_SHORT2LONG",
+                  "n": 5,
+                  "min": 400,
+                  "max": 400,
+                  "spread": 0
+                },
+                {
+                  "state": "G_MULTI_COLLAPSE",
+                  "n": 5,
+                  "min": 400,
+                  "max": 400,
+                  "spread": 0
+                },
+                {
+                  "state": "H_CANCEL_LONG",
+                  "n": 5,
+                  "min": 400,
+                  "max": 400,
+                  "spread": 0
+                },
+                {
+                  "state": "L_SCROLL_NOW",
+                  "n": 5,
+                  "min": 400,
+                  "max": 400,
+                  "spread": 0
+                },
+                {
+                  "state": "J_RESET",
+                  "n": 5,
+                  "min": 400,
+                  "max": 400,
+                  "spread": 0
+                },
+                {
+                  "state": "M_REOPEN",
+                  "n": 5,
+                  "min": 400,
+                  "max": 400,
+                  "spread": 0
+                }
+              ],
+              "globalMin": 400,
+              "globalMax": 400,
+              "globalSpread": 0,
+              "maxStateSpread": 0
+            },
+            "maxSpreadAcrossReps": 0,
+            "maxAdjacentDeltaAcrossReps": 0,
+            "perRep": [
+              {
+                "min": 400,
+                "max": 400,
+                "spread": 0,
+                "maxAdjacentDelta": 0,
+                "n": 10
+              },
+              {
+                "min": 400,
+                "max": 400,
+                "spread": 0,
+                "maxAdjacentDelta": 0,
+                "n": 10
+              },
+              {
+                "min": 400,
+                "max": 400,
+                "spread": 0,
+                "maxAdjacentDelta": 0,
+                "n": 10
+              },
+              {
+                "min": 400,
+                "max": 400,
+                "spread": 0,
+                "maxAdjacentDelta": 0,
+                "n": 10
+              },
+              {
+                "min": 400,
+                "max": 400,
+                "spread": 0,
+                "maxAdjacentDelta": 0,
+                "n": 10
+              }
+            ]
+          },
+          "inner": {
+            "crossRep": {
+              "states": [
+                {
+                  "state": "A_INIT",
+                  "n": 5,
+                  "min": 398,
+                  "max": 398,
+                  "spread": 0
+                },
+                {
+                  "state": "B_SHORT",
+                  "n": 5,
+                  "min": 398,
+                  "max": 398,
+                  "spread": 0
+                },
+                {
+                  "state": "C_LONG",
+                  "n": 5,
+                  "min": 398,
+                  "max": 398,
+                  "spread": 0
+                },
+                {
+                  "state": "F_LONG2SHORT",
+                  "n": 5,
+                  "min": 398,
+                  "max": 398,
+                  "spread": 0
+                },
+                {
+                  "state": "E_SHORT2LONG",
+                  "n": 5,
+                  "min": 398,
+                  "max": 398,
+                  "spread": 0
+                },
+                {
+                  "state": "G_MULTI_COLLAPSE",
+                  "n": 5,
+                  "min": 398,
+                  "max": 398,
+                  "spread": 0
+                },
+                {
+                  "state": "H_CANCEL_LONG",
+                  "n": 5,
+                  "min": 398,
+                  "max": 398,
+                  "spread": 0
+                },
+                {
+                  "state": "L_SCROLL_NOW",
+                  "n": 5,
+                  "min": 398,
+                  "max": 398,
+                  "spread": 0
+                },
+                {
+                  "state": "J_RESET",
+                  "n": 5,
+                  "min": 398,
+                  "max": 398,
+                  "spread": 0
+                },
+                {
+                  "state": "M_REOPEN",
+                  "n": 5,
+                  "min": 398,
+                  "max": 398,
+                  "spread": 0
+                }
+              ],
+              "globalMin": 398,
+              "globalMax": 398,
+              "globalSpread": 0,
+              "maxStateSpread": 0
+            },
+            "maxSpreadAcrossReps": 0
+          },
+          "measuredStates": 10
+        },
+        "status": {
+          "outer": {
+            "crossRep": {
+              "states": [
+                {
+                  "state": "A_INIT",
+                  "n": 5,
+                  "min": 240,
+                  "max": 240,
+                  "spread": 0
+                },
+                {
+                  "state": "B_SHORT",
+                  "n": 5,
+                  "min": 240,
+                  "max": 240,
+                  "spread": 0
+                },
+                {
+                  "state": "C_LONG",
+                  "n": 5,
+                  "min": 240,
+                  "max": 240,
+                  "spread": 0
+                },
+                {
+                  "state": "F_LONG2SHORT",
+                  "n": 5,
+                  "min": 240,
+                  "max": 240,
+                  "spread": 0
+                },
+                {
+                  "state": "E_SHORT2LONG",
+                  "n": 5,
+                  "min": 240,
+                  "max": 240,
+                  "spread": 0
+                },
+                {
+                  "state": "G_MULTI_COLLAPSE",
+                  "n": 5,
+                  "min": 240,
+                  "max": 240,
+                  "spread": 0
+                },
+                {
+                  "state": "H_CANCEL_LONG",
+                  "n": 5,
+                  "min": 240,
+                  "max": 240,
+                  "spread": 0
+                },
+                {
+                  "state": "L_SCROLL_NOW",
+                  "n": 5,
+                  "min": 240,
+                  "max": 240,
+                  "spread": 0
+                },
+                {
+                  "state": "J_RESET",
+                  "n": 5,
+                  "min": 240,
+                  "max": 240,
+                  "spread": 0
+                },
+                {
+                  "state": "M_REOPEN",
+                  "n": 5,
+                  "min": 240,
+                  "max": 240,
+                  "spread": 0
+                }
+              ],
+              "globalMin": 240,
+              "globalMax": 240,
+              "globalSpread": 0,
+              "maxStateSpread": 0
+            },
+            "maxSpreadAcrossReps": 0,
+            "maxAdjacentDeltaAcrossReps": 0,
+            "perRep": [
+              {
+                "min": 240,
+                "max": 240,
+                "spread": 0,
+                "maxAdjacentDelta": 0,
+                "n": 10
+              },
+              {
+                "min": 240,
+                "max": 240,
+                "spread": 0,
+                "maxAdjacentDelta": 0,
+                "n": 10
+              },
+              {
+                "min": 240,
+                "max": 240,
+                "spread": 0,
+                "maxAdjacentDelta": 0,
+                "n": 10
+              },
+              {
+                "min": 240,
+                "max": 240,
+                "spread": 0,
+                "maxAdjacentDelta": 0,
+                "n": 10
+              },
+              {
+                "min": 240,
+                "max": 240,
+                "spread": 0,
+                "maxAdjacentDelta": 0,
+                "n": 10
+              }
+            ]
+          },
+          "inner": {
+            "crossRep": {
+              "states": [
+                {
+                  "state": "A_INIT",
+                  "n": 5,
+                  "min": 238,
+                  "max": 238,
+                  "spread": 0
+                },
+                {
+                  "state": "B_SHORT",
+                  "n": 5,
+                  "min": 238,
+                  "max": 238,
+                  "spread": 0
+                },
+                {
+                  "state": "C_LONG",
+                  "n": 5,
+                  "min": 238,
+                  "max": 238,
+                  "spread": 0
+                },
+                {
+                  "state": "F_LONG2SHORT",
+                  "n": 5,
+                  "min": 238,
+                  "max": 238,
+                  "spread": 0
+                },
+                {
+                  "state": "E_SHORT2LONG",
+                  "n": 5,
+                  "min": 238,
+                  "max": 238,
+                  "spread": 0
+                },
+                {
+                  "state": "G_MULTI_COLLAPSE",
+                  "n": 5,
+                  "min": 238,
+                  "max": 238,
+                  "spread": 0
+                },
+                {
+                  "state": "H_CANCEL_LONG",
+                  "n": 5,
+                  "min": 238,
+                  "max": 238,
+                  "spread": 0
+                },
+                {
+                  "state": "L_SCROLL_NOW",
+                  "n": 5,
+                  "min": 238,
+                  "max": 238,
+                  "spread": 0
+                },
+                {
+                  "state": "J_RESET",
+                  "n": 5,
+                  "min": 238,
+                  "max": 238,
+                  "spread": 0
+                },
+                {
+                  "state": "M_REOPEN",
+                  "n": 5,
+                  "min": 238,
+                  "max": 238,
+                  "spread": 0
+                }
+              ],
+              "globalMin": 238,
+              "globalMax": 238,
+              "globalSpread": 0,
+              "maxStateSpread": 0
+            },
+            "maxSpreadAcrossReps": 0
+          },
+          "measuredStates": 10
+        }
+      }
+    }
+  ],
+  "global": {
+    "consoleErrors": [],
+    "nonGet": []
+  }
+}

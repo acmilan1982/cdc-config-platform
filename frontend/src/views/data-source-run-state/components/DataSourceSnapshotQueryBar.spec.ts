@@ -332,10 +332,36 @@ describe('DataSourceSnapshotQueryBar 控件宽度与下拉面板宽度约束（U
     expect(src).toContain('popper-class="dss-status-popper"')
   })
 
-  it('源码字面量契约：下拉面板上限 探针端 ≤480px、源库 ≤560px，均不超过安全视口 calc(100vw - 16px)', () => {
-    const src = readFileSync(resolve(process.cwd(), 'src/views/data-source-run-state/components/DataSourceSnapshotQueryBar.vue'), 'utf8')
-    expect(src).toMatch(/\.dss-client-popper\s*\{\s*max-width:\s*min\(480px,\s*calc\(100vw - 16px\)\);\s*\}/s)
-    expect(src).toMatch(/\.dss-source-popper\s*\{\s*max-width:\s*min\(560px,\s*calc\(100vw - 16px\)\);\s*\}/s)
+  it('源码字面量契约：下拉弹层外层固定宽度 探针端 480 / 源库 400 / 快照状态 240（DSS-REQ-087，AC-104~107）', () => {
+    const css = queryBarCss()
+    for (const [cls, w] of [
+      ['client', 480],
+      ['source', 400],
+      ['status', 240],
+    ] as const) {
+      const rule = css.match(new RegExp(`\\.el-popper\\.dss-${cls}-popper\\s*\\{([^}]*)\\}`))?.[1] ?? ''
+      expect(rule).not.toBe('')
+      for (const prop of ['width', 'min-width', 'max-width']) {
+        expect(rule).toMatch(new RegExp(`${prop}:\\s*min\\(${w}px,\\s*calc\\(100vw - 16px\\)\\);`))
+      }
+    }
+  })
+
+  it('外层选择器必须精确到 .el-popper.<class>：裸 class 不再锁死宽度，内层 dropdown 保持自适应（DSS-REQ-087②③）', () => {
+    const css = queryBarCss()
+    for (const cls of ['client', 'source', 'status'] as const) {
+      const bare = css.match(new RegExp(`(^|\\n)\\.dss-${cls}-popper\\s*\\{([^}]*)\\}`))?.[2] ?? ''
+      expect(bare).not.toMatch(/\b(width|min-width|max-width):/)
+      const inner = css.match(new RegExp(`\\.el-select-dropdown\\.dss-${cls}-popper\\s*\\{([^}]*)\\}`))?.[1] ?? ''
+      expect(inner).not.toMatch(/(^|\s)(width|min-width|max-width):/)
+    }
+  })
+
+  it('固定宽度实现不引入 !important、不新增全局 Element Plus 覆写（DSS-REQ-087⑤）', () => {
+    const css = queryBarCss()
+    expect(css).not.toMatch(/!important/)
+    expect(css).not.toMatch(/(^|\n)\s*\.el-popper\s*\{/)
+    expect(css).not.toMatch(/(^|\n)\s*\.el-select-dropdown\s*\{/)
   })
 
   it('打开探针端下拉时挂载专属 popper-class（命名空间化，不污染全局下拉样式）', async () => {
@@ -343,6 +369,27 @@ describe('DataSourceSnapshotQueryBar 控件宽度与下拉面板宽度约束（U
     await openSelect(wrapper, 0)
     expect(document.body.querySelector('.el-select-dropdown.dss-client-popper')).toBeTruthy()
     wrapper.unmount()
+  })
+})
+
+describe('DataSourceSnapshotQueryBar 下拉弹层外层固定宽度（DSS-REQ-087，AC-104~107）', () => {
+  it('popper-class 同时落在外层 .el-popper 与内层 .el-select-dropdown：固定宽度必须精确命中外层', async () => {
+    const wrapper = await mountBar()
+    await openSelect(wrapper, 0)
+    const outer = document.body.querySelectorAll('.el-popper.dss-client-popper')
+    const bare = document.body.querySelectorAll('.dss-client-popper')
+    expect(outer).toHaveLength(1)
+    // 裸 class 会同时命中外层 popper 与内层 dropdown（命中数 > 外层数），故不得用裸 class 锁死宽度
+    expect(bare.length).toBeGreaterThan(outer.length)
+    expect((outer[0] as HTMLElement).classList.contains('el-select-dropdown')).toBe(false)
+    wrapper.unmount()
+  })
+
+  it('三个下拉各自携带 Feature 私有 popper-class：外层选择器三档独立、不共用', () => {
+    const css = queryBarCss()
+    for (const cls of ['dss-client-popper', 'dss-source-popper', 'dss-status-popper'] as const) {
+      expect(css).toContain(`.el-popper.${cls}`)
+    }
   })
 })
 
@@ -497,6 +544,11 @@ function queryBarSource(): string {
     resolve(process.cwd(), 'src/views/data-source-run-state/components/DataSourceSnapshotQueryBar.vue'),
     'utf8',
   )
+}
+
+/** 去掉 CSS/模板注释后的源码：契约断言只看真实声明，不受注释文本影响。 */
+function queryBarCss(): string {
+  return queryBarSource().replace(/\/\*[\s\S]*?\*\//g, '')
 }
 
 function optionRow(popper: HTMLElement, label: string): HTMLElement {

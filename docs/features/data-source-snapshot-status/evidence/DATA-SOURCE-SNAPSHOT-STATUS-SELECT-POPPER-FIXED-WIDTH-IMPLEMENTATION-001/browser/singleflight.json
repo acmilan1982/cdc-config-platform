@@ -1,0 +1,55 @@
+{
+  "mode": "singleflight",
+  "route": "http://127.0.0.1:5173/monitor/data-source-state",
+  "viewport": "1700x920",
+  "cases": [
+    {
+      "name": "idle-sync-triple-click",
+      "clicks": 3,
+      "expectedRequests": 1,
+      "requests": 1,
+      "maxConcurrent": 1,
+      "durationsMs": [
+        52
+      ],
+      "anyOverlap": false
+    },
+    {
+      "name": "idle-sync-five-click",
+      "clicks": 5,
+      "expectedRequests": 1,
+      "requests": 1,
+      "maxConcurrent": 1,
+      "durationsMs": [
+        52
+      ],
+      "anyOverlap": false
+    },
+    {
+      "name": "click-then-two-more-inflight-10ms",
+      "clicks": 3,
+      "expectedRequests": 1,
+      "requests": 1,
+      "maxConcurrent": 1,
+      "durationsMs": [
+        76
+      ],
+      "anyOverlap": false
+    },
+    {
+      "name": "post-settle-single-click",
+      "clicks": 1,
+      "expectedRequests": 1,
+      "requests": 1,
+      "maxConcurrent": 1,
+      "durationsMs": [
+        43
+      ],
+      "anyOverlap": false
+    }
+  ],
+  "totalRequests": 4,
+  "maxConcurrentOverall": 1,
+  "consoleErrors": [],
+  "nonGetRequests": []
+}

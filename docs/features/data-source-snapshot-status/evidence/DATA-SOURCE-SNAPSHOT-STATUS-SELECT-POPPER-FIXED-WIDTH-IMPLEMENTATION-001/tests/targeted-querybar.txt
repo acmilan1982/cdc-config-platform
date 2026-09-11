@@ -1,0 +1,15 @@
+# 命令: npx vitest run src/views/data-source-run-state/components/DataSourceSnapshotQueryBar.spec.ts
+# 工作目录: /agent/dss-popper-width-impl-001/frontend
+# 时间: 2026-09-11T21:36:57+08:00
+# ---- 原始输出 ----
+
+ RUN  v1.6.1 /agent/dss-popper-width-impl-001/frontend
+
+ ✓ src/views/data-source-run-state/components/DataSourceSnapshotQueryBar.spec.ts  (85 tests) 18119ms
+
+ Test Files  1 passed (1)
+      Tests  85 passed (85)
+   Start at  21:36:59
+   Duration  21.63s (transform 625ms, setup 91ms, collect 1.89s, tests 18.12s, environment 849ms, prepare 301ms)
+
+# ---- exit_code=0 ----

@@ -1,0 +1,17 @@
+## 1280x800
+  client  target=480  states=12  outer[min=480 max=480 spread=0 maxAdjacentDelta=0]  inner[min=478 max=478 spread=0]
+  source  target=400  states=10  outer[min=400 max=400 spread=0 maxAdjacentDelta=0]  inner[min=398 max=398 spread=0]
+  status  target=240  states=10  outer[min=240 max=240 spread=0 maxAdjacentDelta=0]  inner[min=238 max=238 spread=0]
+## 1700x920
+  client  target=480  states=12  outer[min=480 max=480 spread=0 maxAdjacentDelta=0]  inner[min=478 max=478 spread=0]
+  source  target=400  states=10  outer[min=400 max=400 spread=0 maxAdjacentDelta=0]  inner[min=398 max=398 spread=0]
+  status  target=240  states=10  outer[min=240 max=240 spread=0 maxAdjacentDelta=0]  inner[min=238 max=238 spread=0]
+## 1920x1080
+  client  target=480  states=12  outer[min=480 max=480 spread=0 maxAdjacentDelta=0]  inner[min=478 max=478 spread=0]
+  source  target=400  states=10  outer[min=400 max=400 spread=0 maxAdjacentDelta=0]  inner[min=398 max=398 spread=0]
+  status  target=240  states=10  outer[min=240 max=240 spread=0 maxAdjacentDelta=0]  inner[min=238 max=238 spread=0]
+## 2560x1440
+  client  target=480  states=12  outer[min=480 max=480 spread=0 maxAdjacentDelta=0]  inner[min=478 max=478 spread=0]
+  source  target=400  states=10  outer[min=400 max=400 spread=0 maxAdjacentDelta=0]  inner[min=398 max=398 spread=0]
+  status  target=240  states=10  outer[min=240 max=240 spread=0 maxAdjacentDelta=0]  inner[min=238 max=238 spread=0]
+## global consoleErrors=[] nonGet=[]
