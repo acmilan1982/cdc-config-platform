@@ -59,7 +59,7 @@
 /tmp/cdc-r1-worktree                           49eb778cb24b4f6d26a192d5441b0476099cf68d
 ```
 
-主工作区任务开始前既有修改数量：`git status --short` 共 11 项已跟踪修改（`.claude/settings.local.json`、`agent-env.sh`、3 个 `docs/database/` 已删除报告、`frontend/index.html`、`frontend/src/config/menu.ts`、`frontend/src/layouts/HeaderBar.vue`、`frontend/src/layouts/MainLayout.vue`、`frontend/src/layouts/Sidebar.vue`、`frontend/src/stores/app.ts`、`frontend/src/styles/global.css`）＋大量未跟踪文件。上述修改与未跟踪文件均与本任务无关，**全部保持原样，未修改、未暂存、未提交**。
+主工作区任务开始前既有修改数量：`git status --short` 共 12 项已跟踪修改（`.claude/settings.local.json`、`agent-env.sh`、3 个 `docs/database/` 已删除报告、`frontend/index.html`、`frontend/src/config/menu.ts`、`frontend/src/layouts/HeaderBar.vue`、`frontend/src/layouts/MainLayout.vue`、`frontend/src/layouts/Sidebar.vue`、`frontend/src/stores/app.ts`、`frontend/src/styles/global.css`）＋大量未跟踪文件。上述修改与未跟踪文件均与本任务无关，**全部保持原样，未修改、未暂存、未提交**。
 
 ## 2. §14.2 修改前后原句对照
 
@@ -246,7 +246,7 @@ docs/features/data-source-snapshot-status/reports/DATA-SOURCE-SNAPSHOT-STATUS-DE
 ## 10. 主工作区和既有 worktree 保留证明
 
 - 全部编辑在隔离 worktree `/agent/dss-design-traceability-corr-001` 内进行，其 HEAD 起始与结束均为 `cacfb7040bb32ad837985534a56d8ed5dcc00075`（本地提交前）。
-- 未对主工作区 `/agent/cdc-config-platform` 执行任何 `pull`/`fetch`（fetch 仅更新远程引用，不改工作区）/`merge`/`rebase`/`reset`/`checkout`/`stash`/`clean`；主工作区既有 11 项已跟踪修改与全部未跟踪文件保持原样。
+- 未对主工作区 `/agent/cdc-config-platform` 执行任何 `pull`/`fetch`（fetch 仅更新远程引用，不改工作区）/`merge`/`rebase`/`reset`/`checkout`/`stash`/`clean`；主工作区既有 12 项已跟踪修改与全部未跟踪文件保持原样。
 - §1.2 列出的全部既有 worktree 未进入、未清理、未修改、未提交，路径与 HEAD 保持不变。
 - 隔离 worktree 未切换任何既有分支，未创建新分支（detached HEAD）。
 
