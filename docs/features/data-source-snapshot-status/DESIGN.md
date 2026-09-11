@@ -70,6 +70,15 @@
 | 本轮（查询控件交互调整基线）实现状态 | `IMPLEMENTED_ADJUSTMENT_PENDING_REVIEW`（`query_control_interaction_adjustment_implementation_status=IMPLEMENTED_ADJUSTMENT_PENDING_REVIEW`：本轮调整已由独立正式实现任务 `DATA-SOURCE-SNAPSHOT-STATUS-QUERY-CONTROL-INTERACTION-ADJUSTMENT-IMPLEMENTATION-001` 于 2026-09-11 落地、待 ChatGPT 独立复审） |
 | 本轮（查询控件交互调整基线）追踪计数 | 需求 → 设计落点 **86/86**（§14.2）、验收 → 设计落点 **103/103**（§14.3）；新增 `DSS-AC-096~103` 全部 `NOT_RUN` |
 | 下一入口（本轮调整实现 R1 复审） | `CHATGPT_R1_IMPLEMENTATION_REVIEW_FROM_GIT_THEN_PROJECT_OWNER_VISUAL_INTERACTION_REVIEW`（本轮查询控件交互调整已由独立正式实现任务 `DATA-SOURCE-SNAPSHOT-STATUS-QUERY-CONTROL-INTERACTION-ADJUSTMENT-IMPLEMENTATION-001` 在 `5173` 正式前端按批准内容基准提交 `cf9f9eb0240f275cd50eb37546e6d6256892a9f4` 落地（结果提交 `a47988820c797ff60bd7244b2d0f899bd8fc3be5`），ChatGPT 对该提交独立代码复审结论为 `CHANGES_REQUIRED`；R1 修正任务 `…-IMPLEMENTATION-001-R1` 已按复审意见完成 Tooltip 稳定身份、四字段 trim＋Unicode 截断、Git 可复核证据补交与文档冲突消解，`query_control_interaction_adjustment_code_review_status=PENDING_CHATGPT_REVIEW`，下一入口为 ChatGPT 从 Git 复审 R1 结果、随后项目负责人进行视觉/交互复审；正式验收与人工视觉验收仍 `NOT_RUN`，须由后续独立正式验收任务执行） |
+| 本轮（查询下拉固定宽度基线草案）任务编号 | `DATA-SOURCE-SNAPSHOT-STATUS-SELECT-POPPER-FIXED-WIDTH-BASELINE-001`（把项目负责人已在 `5174` 隔离固定宽度 prototype 中人工确认“没有问题”并明确批准执行的三个查询下拉弹层固定宽度方案固化为 Feature 文档规则；**纯文档草案，只建立文档草案，不修改代码、不批准草案、不执行正式验收**，设计落点见 §27） |
+| 本轮（查询下拉固定宽度基线草案）授权基线提交 | `2a9a271690bfdc68b16772268e84928a33abdeda`（本任务开始时 `origin/develop` 最新提交，且等于 `git ls-remote origin refs/heads/develop`；本任务在独立文档 worktree 的该提交上工作） |
+| 本轮（查询下拉固定宽度基线草案）驱动来源 | 项目负责人对“查询下拉框固定宽度”隔离视觉 prototype（独立 worktree，探针端 `480px`、源库 `400px`、快照状态 `240px`）进行真实浏览器多视口/多状态人工查看后明确回复“我检查过了，没有问题”“批准，按照你的方案执行吧”（`prototype_width_decision_status=APPROVED_BY_PROJECT_OWNER`） |
+| 本轮（查询下拉固定宽度基线草案）设计内容状态 | `DRAFT_PENDING_CHATGPT_REVIEW_AND_PROJECT_OWNER_APPROVAL`（`popper_width_document_status=DRAFT_PENDING_CHATGPT_REVIEW_AND_PROJECT_OWNER_APPROVAL`：本文件 §27 新增设计记录与 `REQUIREMENTS.md` §21.8 `DSS-REQ-087`、`ACCEPTANCE.md` §4.22 `DSS-AC-104~107` 均为**草案内容**，须待 ChatGPT 从 Git 复审后再由项目负责人批准；**不得**写成 `APPROVED`/`IMPLEMENTED`/`PASS`/`ACCEPTED`） |
+| 本轮（查询下拉固定宽度基线草案）popper 固定宽度数值 | 探针端 `480px`、源库 `400px`、快照状态 `240px`；小视口安全上界统一为 `min(目标宽度, calc(100vw - 16px))`（`client_popper_width_px=480`、`source_popper_width_px=400`、`status_popper_width_px=240`、`viewport_safe_width_rule=MIN_TARGET_OR_100VW_MINUS_16PX`） |
+| 本轮（查询下拉固定宽度基线草案）原型决策状态 | `APPROVED_BY_PROJECT_OWNER`（`prototype_width_decision_status=APPROVED_BY_PROJECT_OWNER`：项目负责人已在隔离固定宽度 prototype 上人工确认三档宽度无问题并批准按该方案执行；该认可只针对 prototype 宽度方案本身，**不代表** `5173` 正式实现已完成、**不代表**本草案已批准、**不代表**正式验收已执行或通过） |
+| 本轮（查询下拉固定宽度基线草案）正式实现状态 | `PENDING_FORMAL_IMPLEMENTATION_ON_5173`（`popper_width_formal_5173_implementation_status=PENDING_FORMAL_IMPLEMENTATION_ON_5173`、`popper_width_formal_code_review_status=NOT_RUN`；本轮只固化文档规则，**不得**把 prototype 代码拷入 `5173`、**不得**对 `frontend/**`/`backend/**` 做任何修改） |
+| 本轮（查询下拉固定宽度基线草案）追踪计数 | 需求 → 设计落点 **87/87**（§14.2）、验收 → 设计落点 **107/107**（§14.3）；新增 `DSS-AC-104~107` 全部 `NOT_RUN` |
+| 本轮（查询下拉固定宽度基线草案）下一入口 | `CHATGPT_POPPER_WIDTH_BASELINE_REVIEW_FROM_GIT_THEN_PROJECT_OWNER_DOCUMENT_APPROVAL`（ChatGPT 从远程 Git 复审本草案，随后项目负责人对文档批准；**不得**在本任务执行正式验收、**不得**在 `5173` 正式前端实现本轮规则、107 条验收保持 `NOT_RUN`） |
 | 数据库事实依据 | `docs/database/reports/DATA-SOURCE-SNAPSHOT-STATUS-DATABASE-VERIFICATION-001.md`（已提交数据库只读复核报告；本设计任务未连接数据库，见 DATABASE §2） |
 
 任务边界声明：
@@ -550,7 +559,7 @@ onRequestFinally:
 
 四份设计文档（DESIGN/API/UI/DATABASE）在本设计中统一使用：接口 `GET /api/monitor/data-source-run-state/list`；查询参数 `clientId`/`sourceId`/`status`；状态 token `RUNNING`/`COMPLETED`/`UNKNOWN`；原始状态值 `SNAPSHOT_RUNNING`/`SNAPSHOT_COMPLETED`；中文标签 快照进行中/快照已完成/未知状态；时间格式 `YYYY-MM-DD HH:mm:ss`、JSON null、UI `--`；映射状态 `ACTIVE`/`INACTIVE`/`NOT_FOUND`；错误码 `41001/41002`；行键 `clientId+'\x00'+dataSourceId`；排序常量；候选不随筛选收窄。任何偏差视为设计不一致。
 
-### 14.2 需求 → 设计落点矩阵（86/86）
+### 14.2 需求 → 设计落点矩阵（87/87）
 
 落点记号：D=DESIGN §、A=API §、U=UI §、DB=DATABASE §。
 
@@ -603,11 +612,11 @@ onRequestFinally:
 | DSS-REQ-078 | D§25.3(c)、U§19.4 | DSS-REQ-082 | D§25.3(f)、U§19.5 |
 | DSS-REQ-079 | D§25.3(d)、U§19.5 | DSS-REQ-083 | D§25.3(g)、U§19.7 |
 | DSS-REQ-084 | D§26、U§20 | DSS-REQ-086 | D§26、U§20 |
-| DSS-REQ-085 | D§26、U§20 | | |
+| DSS-REQ-085 | D§26、U§20 | DSS-REQ-087 | D§27、U§21 |
 
-覆盖：86/86；无悬空需求。本轮（2026-09-10 查询控件交互调整草案）新增需求 `DSS-REQ-084~086`（均为 `DRAFT_PENDING_USER_REVIEW`）的设计落点统一为本文件 §26 与 UI §20（对应 `DSS-AC-096~103`）；其中 `DSS-REQ-084`/`DSS-REQ-085` 对既有 `DSS-REQ-075` 探针下拉截断口径、既有 `DSS-REQ-022/024` 候选截断与控件宽度口径做定向取代/扩展，`DSS-REQ-086` 对既有 `DSS-REQ-028`/`DSS-REQ-070` 的 Tooltip 口径做定向扩展，取代关系见 REQUIREMENTS §21.7。第二轮（§22）在已批准基线之上定向修订的既有需求行 `DSS-REQ-022/024/028/029/041/042/043/044/045/069/070` 其现行设计落点亦以 §22 对应小节为准（`022/024`→§22.5、`028/041/043(探针端停用)`→§22.3、`029/042/044/043(源库停用)`→§22.4、`045`→§22.3/§22.4、`069`→§22.2、`070`→§22.6/§22.7）。隔离视觉原型 R2～R7 设计固化新增需求 `DSS-REQ-076~083` 的设计落点为本文件 §25.3 各小节与 UI §19 对应小节（本任务纯文档固化，`5173` 正式实现待后续任务）；其中 `DSS-REQ-076` 取代 `DSS-REQ-066②`、`DSS-REQ-079` 取代 `DSS-REQ-069/072` 的列宽模型，取代关系见 REQUIREMENTS §21.5。
+覆盖：87/87；无悬空需求。本轮（2026-09-10 查询控件交互调整草案）新增需求 `DSS-REQ-084~086`（均为 `DRAFT_PENDING_USER_REVIEW`）的设计落点统一为本文件 §26 与 UI §20（对应 `DSS-AC-096~103`）；其中 `DSS-REQ-084`/`DSS-REQ-085` 对既有 `DSS-REQ-075` 探针下拉截断口径、既有 `DSS-REQ-022/024` 候选截断与控件宽度口径做定向取代/扩展，`DSS-REQ-086` 对既有 `DSS-REQ-028`/`DSS-REQ-070` 的 Tooltip 口径做定向扩展，取代关系见 REQUIREMENTS §21.7。本轮（2026-09-11 查询下拉固定宽度基线草案）新增需求 `DSS-REQ-087`（`DRAFT_PENDING_CHATGPT_REVIEW_AND_PROJECT_OWNER_APPROVAL`）的设计落点为本文件 §27 与 UI §21（对应 `DSS-AC-104~107`）：它把 `DSS-REQ-084` 已确立的“固定外部几何”口径从触发控件（trigger）扩展到 Teleport 到 `body` 的下拉弹层（popper）外层 `.el-popper`，**不重写** `DSS-REQ-084`（取代/扩展关系见 REQUIREMENTS §21.8）。第二轮（§22）在已批准基线之上定向修订的既有需求行 `DSS-REQ-022/024/028/029/041/042/043/044/045/069/070` 其现行设计落点亦以 §22 对应小节为准（`022/024`→§22.5、`028/041/043(探针端停用)`→§22.3、`029/042/044/043(源库停用)`→§22.4、`045`→§22.3/§22.4、`069`→§22.2、`070`→§22.6/§22.7）。隔离视觉原型 R2～R7 设计固化新增需求 `DSS-REQ-076~083` 的设计落点为本文件 §25.3 各小节与 UI §19 对应小节（本任务纯文档固化，`5173` 正式实现待后续任务）；其中 `DSS-REQ-076` 取代 `DSS-REQ-066②`、`DSS-REQ-079` 取代 `DSS-REQ-069/072` 的列宽模型，取代关系见 REQUIREMENTS §21.5。
 
-### 14.3 验收 → 设计落点矩阵（103/103）
+### 14.3 验收 → 设计落点矩阵（107/107）
 
 | 验收 | 设计落点 | 验收 | 设计落点 |
 |---|---|---|---|
@@ -681,7 +690,11 @@ onRequestFinally:
 | DSS-AC-098 | D§26、U§20 | DSS-AC-102 | D§26、U§20 |
 | DSS-AC-099 | D§26、U§20 | DSS-AC-103 | D§26、U§20 |
 
-覆盖：103/103；无悬空验收。本轮新增 `DSS-AC-096~103` 共 8 条（均为 `NOT_RUN`、`DRAFT_PENDING_USER_REVIEW`）反向映射到 `DSS-REQ-084`/`DSS-REQ-085`/`DSS-REQ-086`（映射矩阵见 `ACCEPTANCE.md` §5，双向 86/86 与 103/103），设计落点统一为本文件 §26 与 UI §20；正式验收仍未执行、`acceptance_not_run_count=103`。
+以下为本轮查询下拉固定宽度基线草案新增（对应 REQUIREMENTS §21.8、ACCEPTANCE §4.22；全部 `NOT_RUN`，`5173` 正式实现待后续任务）：
+| DSS-AC-104 | D§27、U§21 | DSS-AC-106 | D§27、U§21 |
+| DSS-AC-105 | D§27、U§21 | DSS-AC-107 | D§27、U§21 |
+
+覆盖：107/107；无悬空验收。本轮新增 `DSS-AC-096~103` 共 8 条（均为 `NOT_RUN`、`DRAFT_PENDING_USER_REVIEW`）反向映射到 `DSS-REQ-084`/`DSS-REQ-085`/`DSS-REQ-086`（映射矩阵见 `ACCEPTANCE.md` §5，双向 86/86 与 103/103），设计落点统一为本文件 §26 与 UI §20；正式验收仍未执行、`acceptance_not_run_count=103`。本轮（2026-09-11 查询下拉固定宽度基线草案）新增 `DSS-AC-104~107` 共 4 条（均为 `NOT_RUN`、`DRAFT_PENDING_CHATGPT_REVIEW_AND_PROJECT_OWNER_APPROVAL`）反向映射到 `DSS-REQ-087`（映射矩阵见 `ACCEPTANCE.md` §5），设计落点统一为本文件 §27 与 UI §21；据此矩阵整体更新为需求 87/87、验收 107/107，双向引用无悬空；本轮为纯文档草案、`5173` 正式实现尚未开始（`popper_width_formal_5173_implementation_status=PENDING_FORMAL_IMPLEMENTATION_ON_5173`）、正式验收仍未执行、`acceptance_not_run_count=107`。
 
 ## 15. 设计决策与待确认设计项
 
@@ -1064,3 +1077,77 @@ ChatGPT 对上一结果提交（`31aa9f5beec7ded3cd798b3af617fd79a1606ed0`）进
 - 代码零差异：本轮不产生 `frontend/`/`backend/`/SQL/配置差异；`API.md`/`DATABASE.md` 与既有历史报告整文件逐字节不变；不提交 runtime logs/截图/构建产物/依赖目录/临时文件。
 - 分层状态：`query_control_interaction_adjustment_status=APPROVED`、`..._implementation_status=IMPLEMENTED_ADJUSTMENT_PENDING_REVIEW`、`project_owner_visual_review_status=CHANGES_REQUIRED`、`formal_acceptance_status=NOT_RUN`、`human_visual_acceptance_status=NOT_RUN`、`pending_user_review=NO`、`pending_user_confirmation_count=0`。
 - 下一入口：`CHATGPT_R1_IMPLEMENTATION_REVIEW_FROM_GIT_THEN_PROJECT_OWNER_VISUAL_INTERACTION_REVIEW`（本轮查询控件交互调整已由实现任务 `DATA-SOURCE-SNAPSHOT-STATUS-QUERY-CONTROL-INTERACTION-ADJUSTMENT-IMPLEMENTATION-001` 在 `5173` 正式前端按批准内容基准提交 `cf9f9eb0240f275cd50eb37546e6d6256892a9f4` 落地（结果提交 `a47988820c797ff60bd7244b2d0f899bd8fc3be5`），ChatGPT 该提交代码复审结论 `CHANGES_REQUIRED`；R1 修正任务 `…-IMPLEMENTATION-001-R1` 已完成 Tooltip 稳定身份、四字段 trim＋Unicode 截断、Git 可复核证据补交与本文档 `1280` 冲突消解（§26.2/§26.3/§26.5），`query_control_interaction_adjustment_code_review_status=PENDING_CHATGPT_REVIEW`；下一入口为 ChatGPT 从 Git 复审 R1、随后项目负责人视觉/交互复审；正式验收与人工视觉验收仍 `NOT_RUN`）。
+
+## 27. 查询下拉弹层（popper）固定宽度基线草案设计记录（`DSS-REQ-087`）
+
+> 本节为 2026-09-11 任务 `DATA-SOURCE-SNAPSHOT-STATUS-SELECT-POPPER-FIXED-WIDTH-BASELINE-001` 新增的独立设计记录，对应 `REQUIREMENTS.md` §21.8 新增草案需求 `DSS-REQ-087` 与 `ACCEPTANCE.md` §4.22 新增草案验收 `DSS-AC-104~107`。本设计落点为 `D§27、U§21`。本节内容为**待复审草案**（`popper_width_document_status=DRAFT_PENDING_CHATGPT_REVIEW_AND_PROJECT_OWNER_APPROVAL`），**不得**写成 `APPROVED`；`5173` 正式前端尚未应用本规则（`popper_width_formal_5173_implementation_status=PENDING_FORMAL_IMPLEMENTATION_ON_5173`）。
+
+### 27.1 任务与状态边界
+
+- 任务编号：`DATA-SOURCE-SNAPSHOT-STATUS-SELECT-POPPER-FIXED-WIDTH-BASELINE-001`；授权基线提交 `2a9a271690bfdc68b16772268e84928a33abdeda`（等于本任务开始时的 `origin/develop` 与 `git ls-remote origin refs/heads/develop`）。
+- 驱动：项目负责人对“查询下拉框固定宽度”隔离视觉 prototype（独立 worktree，只改动 `DataSourceSnapshotQueryBar.vue` 与 Feature 私有 CSS，未进入 `5173`）进行真实浏览器多视口/多状态人工查看后明确回复“我检查过了，没有问题”“批准，按照你的方案执行吧”，即 `prototype_width_decision_status=APPROVED_BY_PROJECT_OWNER`。
+- 本任务为**纯文档草案建立**：不产生 `frontend/`/`backend/`/SQL/配置差异、不把 prototype 代码拷入 `5173`、不执行正式验收（`formal_acceptance_status=NOT_RUN`、`acceptance_not_run_count=107`）、不代替项目负责人批准草案。
+- prototype 的浏览器几何测量、截图与自测结果属**设计验证证据**，**不得**写成任何 `DSS-AC-*` 的 `PASS`。
+
+### 27.2 popper 与 trigger 是两个不同的几何对象
+
+`DSS-REQ-084`（§26.4）固定的是查询控件（trigger）自身的外部几何（`240/300/200px`）；本节 `DSS-REQ-087` 固定的是 `el-select` 展开后 **Teleport 到 `body` 的下拉弹层（popper）外部几何**。二者是**两个不同的几何对象**，必须分别约束、不可混为一谈：
+
+- trigger 固定在查询栏内参与 `flex` 排布，其宽度影响相邻字段组与操作按钮的横坐标；
+- popper 由 Element Plus Teleport 到 `body`，脱离查询栏文档流，其宽度不影响查询栏布局，但决定下拉面板的可见宽度与是否溢出视口。
+
+因此 `DSS-REQ-087` **不重写** `DSS-REQ-084`，而是在其之上把“固定外部几何”的思路扩展到新的对象；两者共同保证查询区几何稳定（trigger 不抖、popper 不随内容变宽）。
+
+### 27.3 固定对象界定与 `popper-class` 双层落点（实现易错点）
+
+- 固定的是 Feature 私有 popper class 所在的**外层 `div.el-popper` 可见边界**（该元素携带 1px 边框），**不是**其内部 `.el-select-dropdown` 内容盒子，也**不是** trigger。
+- **关键约束**：Element Plus 会把 `popper-class` 同时落到**外层 `.el-popper` 与内部 `.el-select-dropdown` 两层**元素上。实现必须**精确**约束外层 `.el-popper`（例如限定 `.el-popper.<Feature 私有 class>`），**不得**只按裸 class 名匹配，否则会同时命中内层、或误伤同页其它未带 Feature 私有 class 的 `.el-popper`。
+- 由于 dss-* popper 只在 `el-select` 展开、Teleport 到 `body` 时存在，其余路由/组件不应出现带 Feature 私有 class 的 `.el-popper`；Feature 私有选择器不得泄漏为跨 Feature 的全局 Element Plus 覆盖。
+
+### 27.4 三档宽度与视口安全上界
+
+- 固定宽度：探针端 `480px`、源库 `400px`、快照状态 `240px`。
+- 小视口安全上界：统一取 `min(目标宽度, calc(100vw - 16px))`；即 `width`/`min-width`/`max-width` 一致按该 `min()` 表达式取值，使弹层在窄视口下不越出视口、不产生水平滚动或内容溢出。
+
+### 27.5 宽度不变性（不依赖内容、选中字重与滚动条）
+
+弹层外层宽度必须在下列全部状态中保持不变（相邻状态宽度差为 `0`）：初始“全部”、选中最短候选、选中最长候选、短↔长切换、多选并 `collapse-tags`、取消最长候选、清空/重置、打开/关闭面板、Tooltip 显示/隐藏、纵向滚动条出现/消失。具体不得作为宽度输入的因素：
+
+- 候选项文本长度与内容；
+- 已选项的 `font-weight`——`DSS-REQ-036` 相关选中项 `is-selected` 默认 `font-weight: 700` **保留**，但因固定了外层 `width/min-width/max-width`，不得再改变弹层宽度（此为 `DSS-REQ-087` 相对既有选中强调规则的几何不变性补充）；
+- 纵向滚动条出现/消失对弹层外侧宽度的挤占。
+
+### 27.6 内外层关系与实现边界
+
+- **内部自适应填充、不双层同宽写死**：内部 `.el-select-dropdown` 应自适应填充外层 `.el-popper`；**不得**把内外两层同时按同一 `border-box` 宽度写死——外层边框与内层内边距叠加会导致内容溢出或出现水平滚动。
+- **Feature 私有最小特异性**：实现必须限定在本 Feature 命名空间（Feature 私有 popper class），采用最小特异性的 Feature 私有样式处理。
+- **禁止项**：**不得**使用 `!important`；**不得**新增全局 Element Plus 样式覆盖（不修改 `Element Plus` 主题或全局 dropdown/popper 规则）。
+- 触发控件尺寸（`240/300/200px`（宽）× `32px`（高））**保持不变**；本节只固定 popper，不改 trigger（`DSS-REQ-084`/`DSS-REQ-085` 不变）。
+
+### 27.7 四档视口稳定性矩阵（设计验证口径）
+
+| 视口 | 探针端 popper | 源库 popper | 快照状态 popper | 约束 |
+|---|---|---|---|---|
+| `1280×800` | `480px` | `400px` | `240px` | 三档均为目标宽度；不产生水平滚动/溢出；既有查询区换行遵循既有 `flex-wrap`，不由弹层触发 |
+| `1700×920` | `480px` | `400px` | `240px` | 同上 |
+| `1920×1080` | `480px` | `400px` | `240px` | 同上 |
+| `2560×1440` | `480px` | `400px` | `240px` | 同上 |
+| 窄视口（`< 目标宽度 + 16px`） | `min(480px, calc(100vw - 16px))` | `min(400px, calc(100vw - 16px))` | `min(240px, calc(100vw - 16px))` | 弹层不越出视口；无水平滚动/溢出 |
+
+> 表中数值为设计口径；正式验收须在 `5173` 正式实现后用真实浏览器几何测量（`getBoundingClientRect()`）客观复核，见 `ACCEPTANCE.md` §4.22 `DSS-AC-104~107`。prototype 自测结果仅为设计验证证据。
+
+### 27.8 与既有查询状态机 / Tooltip / 表格的边界
+
+- **状态机不变**：选择、取消、清空、重置、打开/关闭只修改查询草稿、不发送请求；只有点击“查询”才按草稿发起查询；自动刷新、立即刷新继续使用已应用条件；单飞行、busy、失败保留旧结果、页面不可见冻结与恢复规则不变（与 `DSS-REQ-023/025/050~054` 一致）。
+- **截断与 Tooltip 不变**：四字段 20 Unicode code point 截断（`DSS-REQ-085`）与 `CLIENT_DESC` 完整 Tooltip（`DSS-REQ-086`）逻辑、内容与单实例语义不变；完整原始 ID/`value` 与查询参数不变；表格级 Tooltip（含源库表格只显示完整原始 `DATA_SOURCE_ID`）不变。
+- **表格与页面视觉不变**：本规则只固定下拉弹层宽度，不改表格列宽模型、行高、时间展示、状态标签、未知行背景、刷新按钮宽度等既有已批准视觉。
+- **接口/数据库不变**：不改 API 路径/方法/参数/响应字段、不改 SQL/表结构/索引/约束/只读边界（`API.md`/`DATABASE.md` 整文件零差异）。
+
+### 27.9 追踪与自检
+
+- 编号：`DSS-REQ-087` 连续、无重号、无复用；`DSS-AC-104~107` 连续、无重号、无复用；既有 `DSS-REQ-001~086`、`DSS-AC-001~103` 编号与业务行**不变**（`existing_requirements_business_row_change_status=ZERO`、`existing_acceptance_business_row_change_status=ZERO`）。
+- 矩阵：§14.2 需求 → 设计落点 **87/87**、§14.3 验收 → 设计落点 **107/107**，双向映射无悬空（映射矩阵见 `ACCEPTANCE.md` §5：`DSS-REQ-087`↔`DSS-AC-104/105/106/107`）。
+- 验收状态：`DSS-AC-001~107` 共 107 条**全部 `NOT_RUN`**、`acceptance_not_run_count=107`；本轮草案**未批准**，禁止把草案写成 `APPROVED`/`IMPLEMENTED`/`ACCEPTED`/`COMPLETED`，也不得把任何验收写成 `PASS`。
+- 代码零差异：本轮不产生 `frontend/`/`backend/`/SQL/配置差异（`frontend_code_diff=ZERO`、`backend_code_diff=ZERO`）；`API.md`/`DATABASE.md` 与既有历史报告整文件逐字节不变；不提交 runtime logs/截图/构建产物/依赖目录/临时文件。
+- 分层状态：`prototype_width_decision_status=APPROVED_BY_PROJECT_OWNER`、`popper_width_document_status=DRAFT_PENDING_CHATGPT_REVIEW_AND_PROJECT_OWNER_APPROVAL`、`popper_width_formal_5173_implementation_status=PENDING_FORMAL_IMPLEMENTATION_ON_5173`、`popper_width_formal_code_review_status=NOT_RUN`、`formal_acceptance_status=NOT_RUN`。
+- 下一入口：`CHATGPT_POPPER_WIDTH_BASELINE_REVIEW_FROM_GIT_THEN_PROJECT_OWNER_DOCUMENT_APPROVAL`（ChatGPT 从远程 Git 复审本草案，随后项目负责人对文档批准；**不得**在本任务执行正式验收、**不得**在 `5173` 正式前端实现本轮规则）。
