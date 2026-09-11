@@ -17,7 +17,7 @@
 2026-09-11 21:52:14.277 DEBUG 8537 --- [nio-8080-exec-9] .b.c.l.s.m.L.selectMinDimDailyUpdateTime : ==> Parameters: LARGE_SCREEN_STATS(String)
 2026-09-11 21:52:14.278 DEBUG 8537 --- [nio-8080-exec-9] .b.c.l.s.m.L.selectMinDimDailyUpdateTime : <==      Total: 1
 2026-09-11 21:52:14.278 DEBUG 8537 --- [nio-8080-exec-9] .c.l.s.m.L.selectActiveClientDataSources : ==>  Preparing: SELECT CLIENT_ID, DATA_SOURCE_ID FROM CDC_CLIENT_MULTIPLE WHERE FG_ACTIVE = '1'
-2026-09-11 21:52:14.278 DEBUG 8537 --- [nio-8080-exec-9] .c.l.s.m.L.selectActiveClientDataSources : ==> Parameters: 
+2026-09-11 21:52:14.278 DEBUG 8537 --- [nio-8080-exec-9] .c.l.s.m.L.selectActiveClientDataSources : ==> Parameters:
 2026-09-11 21:52:14.279 DEBUG 8537 --- [nio-8080-exec-9] .c.l.s.m.L.selectActiveClientDataSources : <==      Total: 5
 2026-09-11 21:52:14.282 DEBUG 8537 --- [nio-8080-exec-9] c.b.c.l.s.m.D.selectList                 : ==>  Preparing: SELECT DATA_SUB_ID,DATA_SUB_DESC,DATA_FROM_SOURCE_ID,DATA_TO_SOURCE_ID,DATA_SOURCE_TABLE,DATA_SOURCE_COMMENT,DATA_TARGET_TABLE,DATA_TARGET_COMMENT,INSERT_TIME,UPDATE_TIME,DELETE_TIME,FG_ACTIVE FROM CDC_DATA_SUBSCRIBE WHERE (FG_ACTIVE = ?)
 2026-09-11 21:52:14.282 DEBUG 8537 --- [nio-8080-exec-9] c.b.c.l.s.m.D.selectList                 : ==> Parameters: 1(String)
@@ -44,11 +44,11 @@
 2026-09-11 21:52:14.296 DEBUG 8537 --- [nio-8080-exec-9] c.b.c.l.s.m.D.selectList                 : ==> Parameters: 1(String)
 2026-09-11 21:52:14.297 DEBUG 8537 --- [nio-8080-exec-9] c.b.c.l.s.m.D.selectList                 : <==      Total: 1
 2026-09-11 21:52:32.669 DEBUG 8537 --- [io-8080-exec-10] c.b.c.m.d.m.R.selectAll                  : ==>  Preparing: SELECT CLIENT_ID AS clientId, CLIENT_DESC AS clientDesc, FG_ACTIVE AS fgActive FROM CDC_CLIENT_MULTIPLE
-2026-09-11 21:52:32.669 DEBUG 8537 --- [io-8080-exec-10] c.b.c.m.d.m.R.selectAll                  : ==> Parameters: 
+2026-09-11 21:52:32.669 DEBUG 8537 --- [io-8080-exec-10] c.b.c.m.d.m.R.selectAll                  : ==> Parameters:
 2026-09-11 21:52:32.670 DEBUG 8537 --- [io-8080-exec-10] c.b.c.m.d.m.R.selectAll                  : <==      Total: 16
 2026-09-11 21:52:32.671 DEBUG 8537 --- [io-8080-exec-10] c.b.c.m.d.m.R.selectAll                  : ==>  Preparing: SELECT DATA_SOURCE_ID AS dataSourceId, DATA_SOURCE_ORG AS dataSourceOrg, DATA_SOURCE_CATEGORY AS dataSourceCategory, FG_ACTIVE AS fgActive FROM CDC_DATA_SOURCE
-2026-09-11 21:52:32.671 DEBUG 8537 --- [io-8080-exec-10] c.b.c.m.d.m.R.selectAll                  : ==> Parameters: 
+2026-09-11 21:52:32.671 DEBUG 8537 --- [io-8080-exec-10] c.b.c.m.d.m.R.selectAll                  : ==> Parameters:
 2026-09-11 21:52:32.672 DEBUG 8537 --- [io-8080-exec-10] c.b.c.m.d.m.R.selectAll                  : <==      Total: 34
 2026-09-11 21:52:32.672 DEBUG 8537 --- [io-8080-exec-10] c.b.c.m.d.m.D.selectAll                  : ==>  Preparing: SELECT CLIENT_ID AS clientId, DATA_SOURCE_ID AS dataSourceId, SNAPSHOT_STATUS AS snapshotStatus, TO_CHAR(SNAPSHOT_LAST_SEEN_AT, 'YYYY-MM-DD HH24:MI:SS') AS snapshotLastSeenAt, TO_CHAR(SNAPSHOT_COMPLETED_AT, 'YYYY-MM-DD HH24:MI:SS') AS snapshotCompletedAt, TO_CHAR(UPDATED_AT, 'YYYY-MM-DD HH24:MI:SS') AS updatedAt FROM CDC_DATA_SOURCE_RUN_STATE
-2026-09-11 21:52:32.672 DEBUG 8537 --- [io-8080-exec-10] c.b.c.m.d.m.D.selectAll                  : ==> Parameters: 
+2026-09-11 21:52:32.672 DEBUG 8537 --- [io-8080-exec-10] c.b.c.m.d.m.D.selectAll                  : ==> Parameters:
 2026-09-11 21:52:32.674 DEBUG 8537 --- [io-8080-exec-10] c.b.c.m.d.m.D.selectAll                  : <==      Total: 30

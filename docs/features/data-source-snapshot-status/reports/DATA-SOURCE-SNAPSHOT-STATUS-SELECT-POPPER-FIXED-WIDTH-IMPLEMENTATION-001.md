@@ -289,3 +289,25 @@ AGENT_TASK_RESULT_END
 ```
 
 > 说明：`result_commit_id` / `remote_commit_id` / `commit_status` / `push_status` 在提交前无法得知，故本文件内留空；其实际值见任务最终会话报告。`changed_files` 末尾的证据目录为新增目录（含其下全部文件）。
+
+---
+
+## ChatGPT 复审纠正记录（2026-09-12，追加章节，不修改以上任何原始历史）
+
+> 本章节由 R2 支持边界修正任务 `DATA-SOURCE-SNAPSHOT-STATUS-SELECT-POPPER-FIXED-WIDTH-BASELINE-001-R2` **追加**于本报告末尾，用于记录 ChatGPT 从远程 Git 对本实现提交的独立代码复审结论及其对原报告若干断言的纠正。**本章节不删除、不改写、不覆盖本报告以上任何原始章节与原始机器可读结论块**；以上原始内容作为实现任务当轮的历史记录保留。
+
+1. **复审结论 `CHANGES_REQUIRED`**。ChatGPT 从远程 Git 对本固定宽度实现的提交完成独立代码/证据复审，结论为 `popper_width_formal_code_review_status=CHANGES_REQUIRED`（2026-09-11）。原报告 §13 结论与机器可读块中记录的 `popper_width_formal_code_review_status=PENDING_CHATGPT_REVIEW` 为**复审前**状态；复审后实际结论为 `CHANGES_REQUIRED`。
+
+2. **桌面正式范围内宽度稳定性成立（复审确认正确）**。四档桌面视口（`1280×800`/`1700×920`/`1920×1080`/`2560×1440`）下外层 `.el-popper` 宽度恒定：探针端 `480px`、源库 `400px`、快照状态 `240px`，跨视口与状态 spread 为 0；触发控件 `240/300/200 × 32px`；四字段 trim＋20 Unicode 码点截断；`CLIENT_DESC` Tooltip 规则未变。以上为复审确认正确的部分，本 R2 不修改。
+
+3. **`240px` 视口证据暴露外层与内层不一致（复审确认的冲突）**。在 `240px` 视口下，外层 `.el-popper` 被 `min(目标宽度, calc(100vw - 16px))` 收缩为 `224px`，而 Element Plus 内层 `.el-select-dropdown` 的内联 `min-width` 仍为探针端 `238px`（超外层 **+15**）、源库 `298px`（超外层 **+75**）、快照状态 `222px`（差值为 0）。即原报告 §6“窄视口”观察到的内层溢出属于**外层收缩而内层内联 `min-width` 未随之收缩**的现象。
+
+4. **原基线的极端窄视口要求与禁止手段不可同时满足（复审确认的不可调和组合）**。原基线同时要求：(a) 在 `<496px`/`<416px`/`<256px` 下内外层均无横向滚动/越界/溢出；(b) 不使用 `!important`；(c) 不引入 JS 尺寸监听；(d) 不侵入 Element Plus 内部实现。由于内层 `min-width` 由 Element Plus 在打开时以内联样式写入，在不使用 `!important`、不引入 JS 监听、不覆盖 EP 内部的前提下无法让内层随外层一同收缩——该四项要求在极端窄视口下**不可同时满足**。
+
+5. **项目负责人划定正式支持边界，但 R2 文档仍为草案**。基于上述实现证据，项目负责人把本规则的**正式支持视口下限修正为 `viewport width >= 1280px`**（`supported_viewport_min_width_px=1280`），`<1280px` 仅保留防御性收缩、不计入正式验收、不再要求 `<496/<416/<256px` 必须正式通过。但该修正的文档（`popper_width_r2_document_status=DRAFT_PENDING_CHATGPT_REVIEW_AND_PROJECT_OWNER_APPROVAL`）**仍是待复审草案**，须经 ChatGPT 从远程 Git 复审并由项目负责人批准后方可收口；在此之前不得写成 `APPROVED`。
+
+6. **原报告 `git diff --check` CLEAN 声明不代表最终提交事实（复审纠正）**。原报告机器可读块记录的 `git_diff_check_status=CLEAN` 与其证据索引 `evidence/.../README.md` 中 `diff-check.txt/.exit` 记为“干净，exit 0”的声明，**与最终提交事实不符**：最终提交中证据文件 `evidence/.../backend/feature-get-window.txt`（第 2/5/8/11/14/17 行）与 `evidence/.../backend/scheduler-window.txt`（第 20/47/50/53 行）存在行尾空白。原报告该 CLEAN 声明仅代表当轮自测时点、不代表最终提交静态检查结果为干净；本次 R2 已机械清理上述行尾空白（清理后内容除行尾空白外逐字节一致），并在证据索引追加纠正说明。
+
+7. **正式验收状态仍为 `NOT_RUN`**。`formal_acceptance_status=NOT_RUN`（`DSS-AC-001~107` 共 107 条全部 `NOT_RUN`）；人工视觉/交互复审 `human_visual_interaction_review_status=NOT_PASSED`。本实现报告不构成正式验收或人工验收通过的证据，不得写成 `IMPLEMENTED_ACCEPTED`/`FORMALLY_ACCEPTED`/`ACCEPTANCE_PASSED`/`COMPLETED`，也不得把任何 `DSS-AC-*` 改为 `PASS`。
+
+8. **入口更新**。本实现任务的复审出口为 ChatGPT 从远程 Git 复审 `CHANGES_REQUIRED` 并触发 R2 支持边界修正草案；统一下一入口为 `CHATGPT_POPPER_WIDTH_BASELINE_R2_REVIEW_FROM_GIT_THEN_PROJECT_OWNER_DOCUMENT_APPROVAL`。
