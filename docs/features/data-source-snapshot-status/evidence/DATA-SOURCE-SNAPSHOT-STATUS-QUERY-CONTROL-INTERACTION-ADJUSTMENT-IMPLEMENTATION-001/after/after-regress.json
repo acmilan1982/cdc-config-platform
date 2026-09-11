@@ -1,0 +1,140 @@
+{
+  "viewport": {
+    "w": 1700,
+    "h": 920
+  },
+  "steps": [
+    {
+      "label": "initial_load",
+      "listReqs": 1,
+      "totalReqs": 54,
+      "rows": 6
+    },
+    {
+      "label": "select_longest_client_and_source",
+      "listReqs": 1,
+      "totalReqs": 55,
+      "rows": 6
+    },
+    {
+      "label": "tooltip_show_hide",
+      "listReqs": 1,
+      "totalReqs": 55,
+      "rows": 6
+    },
+    {
+      "label": "remove_longest_client",
+      "listReqs": 1,
+      "totalReqs": 55,
+      "rows": 6
+    },
+    {
+      "label": "clear_to_all_source",
+      "listReqs": 1,
+      "totalReqs": 55,
+      "rows": 6
+    },
+    {
+      "label": "reset",
+      "listReqs": 1,
+      "totalReqs": 55,
+      "rows": 6
+    }
+  ],
+  "params": {
+    "query": {
+      "delta": 1,
+      "keys": [
+        "clientId",
+        "sourceId"
+      ],
+      "raw": {
+        "clientId": "very-long-client-id-XXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXX",
+        "sourceId": "src-wide-org"
+      }
+    },
+    "expectation": {
+      "fullClientId": "very-long-client-id-XXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXX",
+      "fullSourceId": "src-wide-org",
+      "clientIdPresent": true,
+      "clientIdNotTruncated": true,
+      "sourceIdPresent": true
+    }
+  },
+  "stateMachine": {
+    "queryBarTooltipText": "长描述长描述长描述长描述长描述长描述长描述长描述长描述长描述长描述长描述长描述长描述长描述长描述长描述长描述长描述长描述长描述长描述长描述长描述长描述长描述长描述长描述长描述长描述长描述长描述长描述长描述长描述长描述长描述长描述长描述长描述长描述长描述长描述长描述长描述长描述长描述长描述长描述长描述长描述长描述长描述长描述长描述长描述长描述长描述长描述长描述长描述长描述长描述长描述长描述长描述长描述长描述长描述长描述长描述长描述长描述长描述长描述长描述长描述长描述长描述长描述长描述长描述长描述长描述长描述长描述长描述长描述长描述长描述长描述长描述长描述长描述长描述长描述长描述长描述长描述长描述",
+    "queryBarTooltipAfterLeave": 0,
+    "doubleClickDelta": 1,
+    "countdownTicksDelta": 0,
+    "countdownTextSample": null,
+    "autoRefreshDelta": 1,
+    "hiddenDelta": 0,
+    "hiddenFlag": true,
+    "resumeDelta": 1,
+    "rowsBeforeFail": 6,
+    "rowsAfterFail": 6
+  },
+  "visual": {
+    "tableMinWidth": "1175px",
+    "colWidths": [
+      70,
+      200,
+      332,
+      140,
+      198,
+      198,
+      198
+    ],
+    "rowHeights": [
+      49,
+      49,
+      49
+    ],
+    "timeCellCount": 18,
+    "timeCellTruncated": 0,
+    "label": {
+      "fontSize": "14px",
+      "fontWeight": "600",
+      "color": "rgb(63, 63, 70)"
+    },
+    "queryBtnW": 62,
+    "resetBtnW": 58,
+    "immediateBtnW": 110,
+    "pageBg": "rgba(0, 0, 0, 0)",
+    "barBg": "rgba(0, 0, 0, 0)",
+    "epPrimary": "#409eff",
+    "dssSelectCount": 3
+  },
+  "tableTooltip": {
+    "probe": {
+      "count": 1,
+      "text": "ddddddddddddddddddd"
+    },
+    "probeAfterLeave": 0,
+    "source": {
+      "count": 1,
+      "text": "src19-AAAAAAAAAAAAA",
+      "expectedFullId": "src19-AAAAAAAAAAAAA",
+      "matchesFullId": true,
+      "visibleCellText": "ooooooooooooooooooo"
+    },
+    "sourceAfterLeave": 0,
+    "queryBarTtCount": 0
+  },
+  "console": {
+    "errors": []
+  },
+  "otherRoute": {
+    "dssElements": 0,
+    "dssQtt": 0,
+    "elSelectCount": 0,
+    "epPrimary": "#409eff",
+    "path": "/config/data-source",
+    "consoleErrors": []
+  },
+  "requests": {
+    "total": 60,
+    "listTotal": 6,
+    "nonGet": []
+  }
+}

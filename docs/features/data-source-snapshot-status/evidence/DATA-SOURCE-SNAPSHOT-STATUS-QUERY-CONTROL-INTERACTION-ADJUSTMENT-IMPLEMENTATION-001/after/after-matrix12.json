@@ -1,0 +1,8062 @@
+[
+  {
+    "viewport": {
+      "w": 1280,
+      "h": 800
+    },
+    "widths": {
+      "client": 240,
+      "source": 300,
+      "status": 200,
+      "clientWrap": 240,
+      "sourceWrap": 300,
+      "statusWrap": 200
+    },
+    "maxAdjacentDelta": {
+      "client": 0,
+      "source": 0,
+      "status": 0,
+      "clientWrap": 0,
+      "sourceWrap": 0,
+      "statusWrap": 0,
+      "qBtnX": 0,
+      "barH": 0,
+      "groups": 0
+    },
+    "maxDeltaVsInitial": {
+      "client": 0,
+      "source": 0,
+      "status": 0,
+      "clientWrap": 0,
+      "sourceWrap": 0,
+      "statusWrap": 0,
+      "qBtnX": 0,
+      "barH": 0
+    },
+    "stateTags": [
+      "initial_all",
+      "short_selected",
+      "long_selected",
+      "short_to_long",
+      "long_to_short",
+      "multi_collapse_tags",
+      "remove_longest",
+      "clear_to_all",
+      "reset",
+      "panel_open",
+      "panel_close",
+      "tooltip_visible",
+      "tooltip_hidden",
+      "status_selected",
+      "source_longest",
+      "source_cleared"
+    ],
+    "clientEnums": {
+      "selection": {
+        "x": 342,
+        "y": 179.5,
+        "w": 210,
+        "h": 24
+      },
+      "selectedItem": {
+        "x": 342,
+        "y": 179.5,
+        "w": 58.02,
+        "h": 24
+      },
+      "tagsText": {
+        "x": 351,
+        "y": 182,
+        "w": 24.02,
+        "h": 17
+      }
+    },
+    "maxHorizontalOverflow": 0,
+    "tooltip": {
+      "closedCount": 0,
+      "openCount": 1,
+      "afterLeaveCount": 0
+    },
+    "groupsY": [
+      175.5,
+      175.5,
+      175.5
+    ],
+    "barH": 70,
+    "adjacent": [
+      {
+        "from": "initial_all",
+        "to": "short_selected",
+        "dClient": 0,
+        "dSource": 0,
+        "dStatus": 0,
+        "dClientWrap": 0,
+        "dSourceWrap": 0,
+        "dStatusWrap": 0,
+        "dQBtnX": 0,
+        "dBarH": 0,
+        "dGroups": [
+          [
+            0,
+            0
+          ],
+          [
+            0,
+            0
+          ],
+          [
+            0,
+            0
+          ]
+        ]
+      },
+      {
+        "from": "short_selected",
+        "to": "long_selected",
+        "dClient": 0,
+        "dSource": 0,
+        "dStatus": 0,
+        "dClientWrap": 0,
+        "dSourceWrap": 0,
+        "dStatusWrap": 0,
+        "dQBtnX": 0,
+        "dBarH": 0,
+        "dGroups": [
+          [
+            0,
+            0
+          ],
+          [
+            0,
+            0
+          ],
+          [
+            0,
+            0
+          ]
+        ]
+      },
+      {
+        "from": "long_selected",
+        "to": "short_to_long",
+        "dClient": 0,
+        "dSource": 0,
+        "dStatus": 0,
+        "dClientWrap": 0,
+        "dSourceWrap": 0,
+        "dStatusWrap": 0,
+        "dQBtnX": 0,
+        "dBarH": 0,
+        "dGroups": [
+          [
+            0,
+            0
+          ],
+          [
+            0,
+            0
+          ],
+          [
+            0,
+            0
+          ]
+        ]
+      },
+      {
+        "from": "short_to_long",
+        "to": "long_to_short",
+        "dClient": 0,
+        "dSource": 0,
+        "dStatus": 0,
+        "dClientWrap": 0,
+        "dSourceWrap": 0,
+        "dStatusWrap": 0,
+        "dQBtnX": 0,
+        "dBarH": 0,
+        "dGroups": [
+          [
+            0,
+            0
+          ],
+          [
+            0,
+            0
+          ],
+          [
+            0,
+            0
+          ]
+        ]
+      },
+      {
+        "from": "long_to_short",
+        "to": "multi_collapse_tags",
+        "dClient": 0,
+        "dSource": 0,
+        "dStatus": 0,
+        "dClientWrap": 0,
+        "dSourceWrap": 0,
+        "dStatusWrap": 0,
+        "dQBtnX": 0,
+        "dBarH": 0,
+        "dGroups": [
+          [
+            0,
+            0
+          ],
+          [
+            0,
+            0
+          ],
+          [
+            0,
+            0
+          ]
+        ]
+      },
+      {
+        "from": "multi_collapse_tags",
+        "to": "remove_longest",
+        "dClient": 0,
+        "dSource": 0,
+        "dStatus": 0,
+        "dClientWrap": 0,
+        "dSourceWrap": 0,
+        "dStatusWrap": 0,
+        "dQBtnX": 0,
+        "dBarH": 0,
+        "dGroups": [
+          [
+            0,
+            0
+          ],
+          [
+            0,
+            0
+          ],
+          [
+            0,
+            0
+          ]
+        ]
+      },
+      {
+        "from": "remove_longest",
+        "to": "clear_to_all",
+        "dClient": 0,
+        "dSource": 0,
+        "dStatus": 0,
+        "dClientWrap": 0,
+        "dSourceWrap": 0,
+        "dStatusWrap": 0,
+        "dQBtnX": 0,
+        "dBarH": 0,
+        "dGroups": [
+          [
+            0,
+            0
+          ],
+          [
+            0,
+            0
+          ],
+          [
+            0,
+            0
+          ]
+        ]
+      },
+      {
+        "from": "clear_to_all",
+        "to": "reset",
+        "dClient": 0,
+        "dSource": 0,
+        "dStatus": 0,
+        "dClientWrap": 0,
+        "dSourceWrap": 0,
+        "dStatusWrap": 0,
+        "dQBtnX": 0,
+        "dBarH": 0,
+        "dGroups": [
+          [
+            0,
+            0
+          ],
+          [
+            0,
+            0
+          ],
+          [
+            0,
+            0
+          ]
+        ]
+      },
+      {
+        "from": "reset",
+        "to": "panel_open",
+        "dClient": 0,
+        "dSource": 0,
+        "dStatus": 0,
+        "dClientWrap": 0,
+        "dSourceWrap": 0,
+        "dStatusWrap": 0,
+        "dQBtnX": 0,
+        "dBarH": 0,
+        "dGroups": [
+          [
+            0,
+            0
+          ],
+          [
+            0,
+            0
+          ],
+          [
+            0,
+            0
+          ]
+        ]
+      },
+      {
+        "from": "panel_open",
+        "to": "panel_close",
+        "dClient": 0,
+        "dSource": 0,
+        "dStatus": 0,
+        "dClientWrap": 0,
+        "dSourceWrap": 0,
+        "dStatusWrap": 0,
+        "dQBtnX": 0,
+        "dBarH": 0,
+        "dGroups": [
+          [
+            0,
+            0
+          ],
+          [
+            0,
+            0
+          ],
+          [
+            0,
+            0
+          ]
+        ]
+      },
+      {
+        "from": "panel_close",
+        "to": "tooltip_visible",
+        "dClient": 0,
+        "dSource": 0,
+        "dStatus": 0,
+        "dClientWrap": 0,
+        "dSourceWrap": 0,
+        "dStatusWrap": 0,
+        "dQBtnX": 0,
+        "dBarH": 0,
+        "dGroups": [
+          [
+            0,
+            0
+          ],
+          [
+            0,
+            0
+          ],
+          [
+            0,
+            0
+          ]
+        ]
+      },
+      {
+        "from": "tooltip_visible",
+        "to": "tooltip_hidden",
+        "dClient": 0,
+        "dSource": 0,
+        "dStatus": 0,
+        "dClientWrap": 0,
+        "dSourceWrap": 0,
+        "dStatusWrap": 0,
+        "dQBtnX": 0,
+        "dBarH": 0,
+        "dGroups": [
+          [
+            0,
+            0
+          ],
+          [
+            0,
+            0
+          ],
+          [
+            0,
+            0
+          ]
+        ]
+      },
+      {
+        "from": "tooltip_hidden",
+        "to": "status_selected",
+        "dClient": 0,
+        "dSource": 0,
+        "dStatus": 0,
+        "dClientWrap": 0,
+        "dSourceWrap": 0,
+        "dStatusWrap": 0,
+        "dQBtnX": 0,
+        "dBarH": 0,
+        "dGroups": [
+          [
+            0,
+            0
+          ],
+          [
+            0,
+            0
+          ],
+          [
+            0,
+            0
+          ]
+        ]
+      },
+      {
+        "from": "status_selected",
+        "to": "source_longest",
+        "dClient": 0,
+        "dSource": 0,
+        "dStatus": 0,
+        "dClientWrap": 0,
+        "dSourceWrap": 0,
+        "dStatusWrap": 0,
+        "dQBtnX": 0,
+        "dBarH": 0,
+        "dGroups": [
+          [
+            0,
+            0
+          ],
+          [
+            0,
+            0
+          ],
+          [
+            0,
+            0
+          ]
+        ]
+      },
+      {
+        "from": "source_longest",
+        "to": "source_cleared",
+        "dClient": 0,
+        "dSource": 0,
+        "dStatus": 0,
+        "dClientWrap": 0,
+        "dSourceWrap": 0,
+        "dStatusWrap": 0,
+        "dQBtnX": 0,
+        "dBarH": 0,
+        "dGroups": [
+          [
+            0,
+            0
+          ],
+          [
+            0,
+            0
+          ],
+          [
+            0,
+            0
+          ]
+        ]
+      }
+    ],
+    "states": [
+      {
+        "tag": "initial_all",
+        "client": {
+          "x": 340,
+          "y": 175.5,
+          "w": 240,
+          "h": 32
+        },
+        "source": {
+          "x": 628,
+          "y": 175.5,
+          "w": 300,
+          "h": 32
+        },
+        "status": {
+          "x": 1004,
+          "y": 175.5,
+          "w": 200,
+          "h": 32
+        },
+        "clientWrap": {
+          "x": 340,
+          "y": 175.5,
+          "w": 240,
+          "h": 32
+        },
+        "sourceWrap": {
+          "x": 628,
+          "y": 175.5,
+          "w": 300,
+          "h": 32
+        },
+        "statusWrap": {
+          "x": 1004,
+          "y": 175.5,
+          "w": 200,
+          "h": 32
+        },
+        "selection": {
+          "x": 342,
+          "y": 179.5,
+          "w": 210,
+          "h": 24
+        },
+        "selectedItem": {
+          "x": 342,
+          "y": 179.5,
+          "w": 58.02,
+          "h": 24
+        },
+        "tagsText": {
+          "x": 351,
+          "y": 182,
+          "w": 24.02,
+          "h": 17
+        },
+        "groups": [
+          {
+            "x": 292,
+            "y": 175.5,
+            "w": 288,
+            "h": 32
+          },
+          {
+            "x": 594,
+            "y": 175.5,
+            "w": 334,
+            "h": 32
+          },
+          {
+            "x": 942,
+            "y": 175.5,
+            "w": 262,
+            "h": 32
+          }
+        ],
+        "qBtn": {
+          "x": 292,
+          "y": 215.5,
+          "w": 62,
+          "h": 30
+        },
+        "resetBtn": {
+          "x": 374,
+          "y": 215.5,
+          "w": 58,
+          "h": 30
+        },
+        "bar": {
+          "x": 292,
+          "y": 175.5,
+          "w": 916,
+          "h": 70
+        },
+        "overflowX": 0
+      },
+      {
+        "tag": "short_selected",
+        "client": {
+          "x": 340,
+          "y": 175.5,
+          "w": 240,
+          "h": 32
+        },
+        "source": {
+          "x": 628,
+          "y": 175.5,
+          "w": 300,
+          "h": 32
+        },
+        "status": {
+          "x": 1004,
+          "y": 175.5,
+          "w": 200,
+          "h": 32
+        },
+        "clientWrap": {
+          "x": 340,
+          "y": 175.5,
+          "w": 240,
+          "h": 32
+        },
+        "sourceWrap": {
+          "x": 628,
+          "y": 175.5,
+          "w": 300,
+          "h": 32
+        },
+        "statusWrap": {
+          "x": 1004,
+          "y": 175.5,
+          "w": 200,
+          "h": 32
+        },
+        "selection": {
+          "x": 342,
+          "y": 179.5,
+          "w": 210,
+          "h": 24
+        },
+        "selectedItem": {
+          "x": 342,
+          "y": 179.5,
+          "w": 210,
+          "h": 24
+        },
+        "tagsText": {
+          "x": 351,
+          "y": 182,
+          "w": 176,
+          "h": 17
+        },
+        "groups": [
+          {
+            "x": 292,
+            "y": 175.5,
+            "w": 288,
+            "h": 32
+          },
+          {
+            "x": 594,
+            "y": 175.5,
+            "w": 334,
+            "h": 32
+          },
+          {
+            "x": 942,
+            "y": 175.5,
+            "w": 262,
+            "h": 32
+          }
+        ],
+        "qBtn": {
+          "x": 292,
+          "y": 215.5,
+          "w": 62,
+          "h": 30
+        },
+        "resetBtn": {
+          "x": 374,
+          "y": 215.5,
+          "w": 58,
+          "h": 30
+        },
+        "bar": {
+          "x": 292,
+          "y": 175.5,
+          "w": 916,
+          "h": 70
+        },
+        "overflowX": 0
+      },
+      {
+        "tag": "long_selected",
+        "client": {
+          "x": 340,
+          "y": 175.5,
+          "w": 240,
+          "h": 32
+        },
+        "source": {
+          "x": 628,
+          "y": 175.5,
+          "w": 300,
+          "h": 32
+        },
+        "status": {
+          "x": 1004,
+          "y": 175.5,
+          "w": 200,
+          "h": 32
+        },
+        "clientWrap": {
+          "x": 340,
+          "y": 175.5,
+          "w": 240,
+          "h": 32
+        },
+        "sourceWrap": {
+          "x": 628,
+          "y": 175.5,
+          "w": 300,
+          "h": 32
+        },
+        "statusWrap": {
+          "x": 1004,
+          "y": 175.5,
+          "w": 200,
+          "h": 32
+        },
+        "selection": {
+          "x": 342,
+          "y": 179.5,
+          "w": 210,
+          "h": 24
+        },
+        "selectedItem": {
+          "x": 342,
+          "y": 179.5,
+          "w": 142.7,
+          "h": 24
+        },
+        "tagsText": {
+          "x": 351,
+          "y": 183.5,
+          "w": 108.7,
+          "h": 14
+        },
+        "groups": [
+          {
+            "x": 292,
+            "y": 175.5,
+            "w": 288,
+            "h": 32
+          },
+          {
+            "x": 594,
+            "y": 175.5,
+            "w": 334,
+            "h": 32
+          },
+          {
+            "x": 942,
+            "y": 175.5,
+            "w": 262,
+            "h": 32
+          }
+        ],
+        "qBtn": {
+          "x": 292,
+          "y": 215.5,
+          "w": 62,
+          "h": 30
+        },
+        "resetBtn": {
+          "x": 374,
+          "y": 215.5,
+          "w": 58,
+          "h": 30
+        },
+        "bar": {
+          "x": 292,
+          "y": 175.5,
+          "w": 916,
+          "h": 70
+        },
+        "overflowX": 0
+      },
+      {
+        "tag": "short_to_long",
+        "client": {
+          "x": 340,
+          "y": 175.5,
+          "w": 240,
+          "h": 32
+        },
+        "source": {
+          "x": 628,
+          "y": 175.5,
+          "w": 300,
+          "h": 32
+        },
+        "status": {
+          "x": 1004,
+          "y": 175.5,
+          "w": 200,
+          "h": 32
+        },
+        "clientWrap": {
+          "x": 340,
+          "y": 175.5,
+          "w": 240,
+          "h": 32
+        },
+        "sourceWrap": {
+          "x": 628,
+          "y": 175.5,
+          "w": 300,
+          "h": 32
+        },
+        "statusWrap": {
+          "x": 1004,
+          "y": 175.5,
+          "w": 200,
+          "h": 32
+        },
+        "selection": {
+          "x": 342,
+          "y": 179.5,
+          "w": 210,
+          "h": 24
+        },
+        "selectedItem": {
+          "x": 342,
+          "y": 179.5,
+          "w": 142.7,
+          "h": 24
+        },
+        "tagsText": {
+          "x": 351,
+          "y": 183.5,
+          "w": 108.7,
+          "h": 14
+        },
+        "groups": [
+          {
+            "x": 292,
+            "y": 175.5,
+            "w": 288,
+            "h": 32
+          },
+          {
+            "x": 594,
+            "y": 175.5,
+            "w": 334,
+            "h": 32
+          },
+          {
+            "x": 942,
+            "y": 175.5,
+            "w": 262,
+            "h": 32
+          }
+        ],
+        "qBtn": {
+          "x": 292,
+          "y": 215.5,
+          "w": 62,
+          "h": 30
+        },
+        "resetBtn": {
+          "x": 374,
+          "y": 215.5,
+          "w": 58,
+          "h": 30
+        },
+        "bar": {
+          "x": 292,
+          "y": 175.5,
+          "w": 916,
+          "h": 70
+        },
+        "overflowX": 0
+      },
+      {
+        "tag": "long_to_short",
+        "client": {
+          "x": 340,
+          "y": 175.5,
+          "w": 240,
+          "h": 32
+        },
+        "source": {
+          "x": 628,
+          "y": 175.5,
+          "w": 300,
+          "h": 32
+        },
+        "status": {
+          "x": 1004,
+          "y": 175.5,
+          "w": 200,
+          "h": 32
+        },
+        "clientWrap": {
+          "x": 340,
+          "y": 175.5,
+          "w": 240,
+          "h": 32
+        },
+        "sourceWrap": {
+          "x": 628,
+          "y": 175.5,
+          "w": 300,
+          "h": 32
+        },
+        "statusWrap": {
+          "x": 1004,
+          "y": 175.5,
+          "w": 200,
+          "h": 32
+        },
+        "selection": {
+          "x": 342,
+          "y": 179.5,
+          "w": 210,
+          "h": 24
+        },
+        "selectedItem": {
+          "x": 342,
+          "y": 179.5,
+          "w": 210,
+          "h": 24
+        },
+        "tagsText": {
+          "x": 351,
+          "y": 182,
+          "w": 176,
+          "h": 17
+        },
+        "groups": [
+          {
+            "x": 292,
+            "y": 175.5,
+            "w": 288,
+            "h": 32
+          },
+          {
+            "x": 594,
+            "y": 175.5,
+            "w": 334,
+            "h": 32
+          },
+          {
+            "x": 942,
+            "y": 175.5,
+            "w": 262,
+            "h": 32
+          }
+        ],
+        "qBtn": {
+          "x": 292,
+          "y": 215.5,
+          "w": 62,
+          "h": 30
+        },
+        "resetBtn": {
+          "x": 374,
+          "y": 215.5,
+          "w": 58,
+          "h": 30
+        },
+        "bar": {
+          "x": 292,
+          "y": 175.5,
+          "w": 916,
+          "h": 70
+        },
+        "overflowX": 0
+      },
+      {
+        "tag": "multi_collapse_tags",
+        "client": {
+          "x": 340,
+          "y": 175.5,
+          "w": 240,
+          "h": 32
+        },
+        "source": {
+          "x": 628,
+          "y": 175.5,
+          "w": 300,
+          "h": 32
+        },
+        "status": {
+          "x": 1004,
+          "y": 175.5,
+          "w": 200,
+          "h": 32
+        },
+        "clientWrap": {
+          "x": 340,
+          "y": 175.5,
+          "w": 240,
+          "h": 32
+        },
+        "sourceWrap": {
+          "x": 628,
+          "y": 175.5,
+          "w": 300,
+          "h": 32
+        },
+        "statusWrap": {
+          "x": 1004,
+          "y": 175.5,
+          "w": 200,
+          "h": 32
+        },
+        "selection": {
+          "x": 342,
+          "y": 179.5,
+          "w": 210,
+          "h": 24
+        },
+        "selectedItem": {
+          "x": 342,
+          "y": 179.5,
+          "w": 168.98,
+          "h": 24
+        },
+        "tagsText": {
+          "x": 351,
+          "y": 182,
+          "w": 134.98,
+          "h": 17
+        },
+        "groups": [
+          {
+            "x": 292,
+            "y": 175.5,
+            "w": 288,
+            "h": 32
+          },
+          {
+            "x": 594,
+            "y": 175.5,
+            "w": 334,
+            "h": 32
+          },
+          {
+            "x": 942,
+            "y": 175.5,
+            "w": 262,
+            "h": 32
+          }
+        ],
+        "qBtn": {
+          "x": 292,
+          "y": 215.5,
+          "w": 62,
+          "h": 30
+        },
+        "resetBtn": {
+          "x": 374,
+          "y": 215.5,
+          "w": 58,
+          "h": 30
+        },
+        "bar": {
+          "x": 292,
+          "y": 175.5,
+          "w": 916,
+          "h": 70
+        },
+        "overflowX": 0
+      },
+      {
+        "tag": "remove_longest",
+        "client": {
+          "x": 340,
+          "y": 175.5,
+          "w": 240,
+          "h": 32
+        },
+        "source": {
+          "x": 628,
+          "y": 175.5,
+          "w": 300,
+          "h": 32
+        },
+        "status": {
+          "x": 1004,
+          "y": 175.5,
+          "w": 200,
+          "h": 32
+        },
+        "clientWrap": {
+          "x": 340,
+          "y": 175.5,
+          "w": 240,
+          "h": 32
+        },
+        "sourceWrap": {
+          "x": 628,
+          "y": 175.5,
+          "w": 300,
+          "h": 32
+        },
+        "statusWrap": {
+          "x": 1004,
+          "y": 175.5,
+          "w": 200,
+          "h": 32
+        },
+        "selection": {
+          "x": 342,
+          "y": 179.5,
+          "w": 210,
+          "h": 24
+        },
+        "selectedItem": {
+          "x": 342,
+          "y": 179.5,
+          "w": 168.98,
+          "h": 24
+        },
+        "tagsText": {
+          "x": 351,
+          "y": 182,
+          "w": 134.98,
+          "h": 17
+        },
+        "groups": [
+          {
+            "x": 292,
+            "y": 175.5,
+            "w": 288,
+            "h": 32
+          },
+          {
+            "x": 594,
+            "y": 175.5,
+            "w": 334,
+            "h": 32
+          },
+          {
+            "x": 942,
+            "y": 175.5,
+            "w": 262,
+            "h": 32
+          }
+        ],
+        "qBtn": {
+          "x": 292,
+          "y": 215.5,
+          "w": 62,
+          "h": 30
+        },
+        "resetBtn": {
+          "x": 374,
+          "y": 215.5,
+          "w": 58,
+          "h": 30
+        },
+        "bar": {
+          "x": 292,
+          "y": 175.5,
+          "w": 916,
+          "h": 70
+        },
+        "overflowX": 0
+      },
+      {
+        "tag": "clear_to_all",
+        "client": {
+          "x": 340,
+          "y": 175.5,
+          "w": 240,
+          "h": 32
+        },
+        "source": {
+          "x": 628,
+          "y": 175.5,
+          "w": 300,
+          "h": 32
+        },
+        "status": {
+          "x": 1004,
+          "y": 175.5,
+          "w": 200,
+          "h": 32
+        },
+        "clientWrap": {
+          "x": 340,
+          "y": 175.5,
+          "w": 240,
+          "h": 32
+        },
+        "sourceWrap": {
+          "x": 628,
+          "y": 175.5,
+          "w": 300,
+          "h": 32
+        },
+        "statusWrap": {
+          "x": 1004,
+          "y": 175.5,
+          "w": 200,
+          "h": 32
+        },
+        "selection": {
+          "x": 342,
+          "y": 179.5,
+          "w": 210,
+          "h": 24
+        },
+        "selectedItem": {
+          "x": 342,
+          "y": 179.5,
+          "w": 58.02,
+          "h": 24
+        },
+        "tagsText": {
+          "x": 351,
+          "y": 182,
+          "w": 24.02,
+          "h": 17
+        },
+        "groups": [
+          {
+            "x": 292,
+            "y": 175.5,
+            "w": 288,
+            "h": 32
+          },
+          {
+            "x": 594,
+            "y": 175.5,
+            "w": 334,
+            "h": 32
+          },
+          {
+            "x": 942,
+            "y": 175.5,
+            "w": 262,
+            "h": 32
+          }
+        ],
+        "qBtn": {
+          "x": 292,
+          "y": 215.5,
+          "w": 62,
+          "h": 30
+        },
+        "resetBtn": {
+          "x": 374,
+          "y": 215.5,
+          "w": 58,
+          "h": 30
+        },
+        "bar": {
+          "x": 292,
+          "y": 175.5,
+          "w": 916,
+          "h": 70
+        },
+        "overflowX": 0
+      },
+      {
+        "tag": "reset",
+        "client": {
+          "x": 340,
+          "y": 175.5,
+          "w": 240,
+          "h": 32
+        },
+        "source": {
+          "x": 628,
+          "y": 175.5,
+          "w": 300,
+          "h": 32
+        },
+        "status": {
+          "x": 1004,
+          "y": 175.5,
+          "w": 200,
+          "h": 32
+        },
+        "clientWrap": {
+          "x": 340,
+          "y": 175.5,
+          "w": 240,
+          "h": 32
+        },
+        "sourceWrap": {
+          "x": 628,
+          "y": 175.5,
+          "w": 300,
+          "h": 32
+        },
+        "statusWrap": {
+          "x": 1004,
+          "y": 175.5,
+          "w": 200,
+          "h": 32
+        },
+        "selection": {
+          "x": 342,
+          "y": 179.5,
+          "w": 210,
+          "h": 24
+        },
+        "selectedItem": {
+          "x": 342,
+          "y": 179.5,
+          "w": 58.02,
+          "h": 24
+        },
+        "tagsText": {
+          "x": 351,
+          "y": 182,
+          "w": 24.02,
+          "h": 17
+        },
+        "groups": [
+          {
+            "x": 292,
+            "y": 175.5,
+            "w": 288,
+            "h": 32
+          },
+          {
+            "x": 594,
+            "y": 175.5,
+            "w": 334,
+            "h": 32
+          },
+          {
+            "x": 942,
+            "y": 175.5,
+            "w": 262,
+            "h": 32
+          }
+        ],
+        "qBtn": {
+          "x": 292,
+          "y": 215.5,
+          "w": 62,
+          "h": 30
+        },
+        "resetBtn": {
+          "x": 374,
+          "y": 215.5,
+          "w": 58,
+          "h": 30
+        },
+        "bar": {
+          "x": 292,
+          "y": 175.5,
+          "w": 916,
+          "h": 70
+        },
+        "overflowX": 0
+      },
+      {
+        "tag": "panel_open",
+        "client": {
+          "x": 340,
+          "y": 175.5,
+          "w": 240,
+          "h": 32
+        },
+        "source": {
+          "x": 628,
+          "y": 175.5,
+          "w": 300,
+          "h": 32
+        },
+        "status": {
+          "x": 1004,
+          "y": 175.5,
+          "w": 200,
+          "h": 32
+        },
+        "clientWrap": {
+          "x": 340,
+          "y": 175.5,
+          "w": 240,
+          "h": 32
+        },
+        "sourceWrap": {
+          "x": 628,
+          "y": 175.5,
+          "w": 300,
+          "h": 32
+        },
+        "statusWrap": {
+          "x": 1004,
+          "y": 175.5,
+          "w": 200,
+          "h": 32
+        },
+        "selection": {
+          "x": 342,
+          "y": 179.5,
+          "w": 210,
+          "h": 24
+        },
+        "selectedItem": {
+          "x": 342,
+          "y": 179.5,
+          "w": 58.02,
+          "h": 24
+        },
+        "tagsText": {
+          "x": 351,
+          "y": 182,
+          "w": 24.02,
+          "h": 17
+        },
+        "groups": [
+          {
+            "x": 292,
+            "y": 175.5,
+            "w": 288,
+            "h": 32
+          },
+          {
+            "x": 594,
+            "y": 175.5,
+            "w": 334,
+            "h": 32
+          },
+          {
+            "x": 942,
+            "y": 175.5,
+            "w": 262,
+            "h": 32
+          }
+        ],
+        "qBtn": {
+          "x": 292,
+          "y": 215.5,
+          "w": 62,
+          "h": 30
+        },
+        "resetBtn": {
+          "x": 374,
+          "y": 215.5,
+          "w": 58,
+          "h": 30
+        },
+        "bar": {
+          "x": 292,
+          "y": 175.5,
+          "w": 916,
+          "h": 70
+        },
+        "overflowX": 0
+      },
+      {
+        "tag": "panel_close",
+        "client": {
+          "x": 340,
+          "y": 175.5,
+          "w": 240,
+          "h": 32
+        },
+        "source": {
+          "x": 628,
+          "y": 175.5,
+          "w": 300,
+          "h": 32
+        },
+        "status": {
+          "x": 1004,
+          "y": 175.5,
+          "w": 200,
+          "h": 32
+        },
+        "clientWrap": {
+          "x": 340,
+          "y": 175.5,
+          "w": 240,
+          "h": 32
+        },
+        "sourceWrap": {
+          "x": 628,
+          "y": 175.5,
+          "w": 300,
+          "h": 32
+        },
+        "statusWrap": {
+          "x": 1004,
+          "y": 175.5,
+          "w": 200,
+          "h": 32
+        },
+        "selection": {
+          "x": 342,
+          "y": 179.5,
+          "w": 210,
+          "h": 24
+        },
+        "selectedItem": {
+          "x": 342,
+          "y": 179.5,
+          "w": 58.02,
+          "h": 24
+        },
+        "tagsText": {
+          "x": 351,
+          "y": 182,
+          "w": 24.02,
+          "h": 17
+        },
+        "groups": [
+          {
+            "x": 292,
+            "y": 175.5,
+            "w": 288,
+            "h": 32
+          },
+          {
+            "x": 594,
+            "y": 175.5,
+            "w": 334,
+            "h": 32
+          },
+          {
+            "x": 942,
+            "y": 175.5,
+            "w": 262,
+            "h": 32
+          }
+        ],
+        "qBtn": {
+          "x": 292,
+          "y": 215.5,
+          "w": 62,
+          "h": 30
+        },
+        "resetBtn": {
+          "x": 374,
+          "y": 215.5,
+          "w": 58,
+          "h": 30
+        },
+        "bar": {
+          "x": 292,
+          "y": 175.5,
+          "w": 916,
+          "h": 70
+        },
+        "overflowX": 0
+      },
+      {
+        "tag": "tooltip_visible",
+        "client": {
+          "x": 340,
+          "y": 175.5,
+          "w": 240,
+          "h": 32
+        },
+        "source": {
+          "x": 628,
+          "y": 175.5,
+          "w": 300,
+          "h": 32
+        },
+        "status": {
+          "x": 1004,
+          "y": 175.5,
+          "w": 200,
+          "h": 32
+        },
+        "clientWrap": {
+          "x": 340,
+          "y": 175.5,
+          "w": 240,
+          "h": 32
+        },
+        "sourceWrap": {
+          "x": 628,
+          "y": 175.5,
+          "w": 300,
+          "h": 32
+        },
+        "statusWrap": {
+          "x": 1004,
+          "y": 175.5,
+          "w": 200,
+          "h": 32
+        },
+        "selection": {
+          "x": 342,
+          "y": 179.5,
+          "w": 210,
+          "h": 24
+        },
+        "selectedItem": {
+          "x": 342,
+          "y": 179.5,
+          "w": 58.02,
+          "h": 24
+        },
+        "tagsText": {
+          "x": 351,
+          "y": 182,
+          "w": 24.02,
+          "h": 17
+        },
+        "groups": [
+          {
+            "x": 292,
+            "y": 175.5,
+            "w": 288,
+            "h": 32
+          },
+          {
+            "x": 594,
+            "y": 175.5,
+            "w": 334,
+            "h": 32
+          },
+          {
+            "x": 942,
+            "y": 175.5,
+            "w": 262,
+            "h": 32
+          }
+        ],
+        "qBtn": {
+          "x": 292,
+          "y": 215.5,
+          "w": 62,
+          "h": 30
+        },
+        "resetBtn": {
+          "x": 374,
+          "y": 215.5,
+          "w": 58,
+          "h": 30
+        },
+        "bar": {
+          "x": 292,
+          "y": 175.5,
+          "w": 916,
+          "h": 70
+        },
+        "overflowX": 0
+      },
+      {
+        "tag": "tooltip_hidden",
+        "client": {
+          "x": 340,
+          "y": 175.5,
+          "w": 240,
+          "h": 32
+        },
+        "source": {
+          "x": 628,
+          "y": 175.5,
+          "w": 300,
+          "h": 32
+        },
+        "status": {
+          "x": 1004,
+          "y": 175.5,
+          "w": 200,
+          "h": 32
+        },
+        "clientWrap": {
+          "x": 340,
+          "y": 175.5,
+          "w": 240,
+          "h": 32
+        },
+        "sourceWrap": {
+          "x": 628,
+          "y": 175.5,
+          "w": 300,
+          "h": 32
+        },
+        "statusWrap": {
+          "x": 1004,
+          "y": 175.5,
+          "w": 200,
+          "h": 32
+        },
+        "selection": {
+          "x": 342,
+          "y": 179.5,
+          "w": 210,
+          "h": 24
+        },
+        "selectedItem": {
+          "x": 342,
+          "y": 179.5,
+          "w": 58.02,
+          "h": 24
+        },
+        "tagsText": {
+          "x": 351,
+          "y": 182,
+          "w": 24.02,
+          "h": 17
+        },
+        "groups": [
+          {
+            "x": 292,
+            "y": 175.5,
+            "w": 288,
+            "h": 32
+          },
+          {
+            "x": 594,
+            "y": 175.5,
+            "w": 334,
+            "h": 32
+          },
+          {
+            "x": 942,
+            "y": 175.5,
+            "w": 262,
+            "h": 32
+          }
+        ],
+        "qBtn": {
+          "x": 292,
+          "y": 215.5,
+          "w": 62,
+          "h": 30
+        },
+        "resetBtn": {
+          "x": 374,
+          "y": 215.5,
+          "w": 58,
+          "h": 30
+        },
+        "bar": {
+          "x": 292,
+          "y": 175.5,
+          "w": 916,
+          "h": 70
+        },
+        "overflowX": 0
+      },
+      {
+        "tag": "status_selected",
+        "client": {
+          "x": 340,
+          "y": 175.5,
+          "w": 240,
+          "h": 32
+        },
+        "source": {
+          "x": 628,
+          "y": 175.5,
+          "w": 300,
+          "h": 32
+        },
+        "status": {
+          "x": 1004,
+          "y": 175.5,
+          "w": 200,
+          "h": 32
+        },
+        "clientWrap": {
+          "x": 340,
+          "y": 175.5,
+          "w": 240,
+          "h": 32
+        },
+        "sourceWrap": {
+          "x": 628,
+          "y": 175.5,
+          "w": 300,
+          "h": 32
+        },
+        "statusWrap": {
+          "x": 1004,
+          "y": 175.5,
+          "w": 200,
+          "h": 32
+        },
+        "selection": {
+          "x": 342,
+          "y": 179.5,
+          "w": 210,
+          "h": 24
+        },
+        "selectedItem": {
+          "x": 342,
+          "y": 179.5,
+          "w": 58.02,
+          "h": 24
+        },
+        "tagsText": {
+          "x": 351,
+          "y": 182,
+          "w": 24.02,
+          "h": 17
+        },
+        "groups": [
+          {
+            "x": 292,
+            "y": 175.5,
+            "w": 288,
+            "h": 32
+          },
+          {
+            "x": 594,
+            "y": 175.5,
+            "w": 334,
+            "h": 32
+          },
+          {
+            "x": 942,
+            "y": 175.5,
+            "w": 262,
+            "h": 32
+          }
+        ],
+        "qBtn": {
+          "x": 292,
+          "y": 215.5,
+          "w": 62,
+          "h": 30
+        },
+        "resetBtn": {
+          "x": 374,
+          "y": 215.5,
+          "w": 58,
+          "h": 30
+        },
+        "bar": {
+          "x": 292,
+          "y": 175.5,
+          "w": 916,
+          "h": 70
+        },
+        "overflowX": 0
+      },
+      {
+        "tag": "source_longest",
+        "client": {
+          "x": 340,
+          "y": 175.5,
+          "w": 240,
+          "h": 32
+        },
+        "source": {
+          "x": 628,
+          "y": 175.5,
+          "w": 300,
+          "h": 32
+        },
+        "status": {
+          "x": 1004,
+          "y": 175.5,
+          "w": 200,
+          "h": 32
+        },
+        "clientWrap": {
+          "x": 340,
+          "y": 175.5,
+          "w": 240,
+          "h": 32
+        },
+        "sourceWrap": {
+          "x": 628,
+          "y": 175.5,
+          "w": 300,
+          "h": 32
+        },
+        "statusWrap": {
+          "x": 1004,
+          "y": 175.5,
+          "w": 200,
+          "h": 32
+        },
+        "selection": {
+          "x": 342,
+          "y": 179.5,
+          "w": 210,
+          "h": 24
+        },
+        "selectedItem": {
+          "x": 342,
+          "y": 179.5,
+          "w": 58.02,
+          "h": 24
+        },
+        "tagsText": {
+          "x": 351,
+          "y": 182,
+          "w": 24.02,
+          "h": 17
+        },
+        "groups": [
+          {
+            "x": 292,
+            "y": 175.5,
+            "w": 288,
+            "h": 32
+          },
+          {
+            "x": 594,
+            "y": 175.5,
+            "w": 334,
+            "h": 32
+          },
+          {
+            "x": 942,
+            "y": 175.5,
+            "w": 262,
+            "h": 32
+          }
+        ],
+        "qBtn": {
+          "x": 292,
+          "y": 215.5,
+          "w": 62,
+          "h": 30
+        },
+        "resetBtn": {
+          "x": 374,
+          "y": 215.5,
+          "w": 58,
+          "h": 30
+        },
+        "bar": {
+          "x": 292,
+          "y": 175.5,
+          "w": 916,
+          "h": 70
+        },
+        "overflowX": 0
+      },
+      {
+        "tag": "source_cleared",
+        "client": {
+          "x": 340,
+          "y": 175.5,
+          "w": 240,
+          "h": 32
+        },
+        "source": {
+          "x": 628,
+          "y": 175.5,
+          "w": 300,
+          "h": 32
+        },
+        "status": {
+          "x": 1004,
+          "y": 175.5,
+          "w": 200,
+          "h": 32
+        },
+        "clientWrap": {
+          "x": 340,
+          "y": 175.5,
+          "w": 240,
+          "h": 32
+        },
+        "sourceWrap": {
+          "x": 628,
+          "y": 175.5,
+          "w": 300,
+          "h": 32
+        },
+        "statusWrap": {
+          "x": 1004,
+          "y": 175.5,
+          "w": 200,
+          "h": 32
+        },
+        "selection": {
+          "x": 342,
+          "y": 179.5,
+          "w": 210,
+          "h": 24
+        },
+        "selectedItem": {
+          "x": 342,
+          "y": 179.5,
+          "w": 58.02,
+          "h": 24
+        },
+        "tagsText": {
+          "x": 351,
+          "y": 182,
+          "w": 24.02,
+          "h": 17
+        },
+        "groups": [
+          {
+            "x": 292,
+            "y": 175.5,
+            "w": 288,
+            "h": 32
+          },
+          {
+            "x": 594,
+            "y": 175.5,
+            "w": 334,
+            "h": 32
+          },
+          {
+            "x": 942,
+            "y": 175.5,
+            "w": 262,
+            "h": 32
+          }
+        ],
+        "qBtn": {
+          "x": 292,
+          "y": 215.5,
+          "w": 62,
+          "h": 30
+        },
+        "resetBtn": {
+          "x": 374,
+          "y": 215.5,
+          "w": 58,
+          "h": 30
+        },
+        "bar": {
+          "x": 292,
+          "y": 175.5,
+          "w": 916,
+          "h": 70
+        },
+        "overflowX": 0
+      }
+    ]
+  },
+  {
+    "viewport": {
+      "w": 1700,
+      "h": 920
+    },
+    "widths": {
+      "client": 240,
+      "source": 300,
+      "status": 200,
+      "clientWrap": 240,
+      "sourceWrap": 300,
+      "statusWrap": 200
+    },
+    "maxAdjacentDelta": {
+      "client": 0,
+      "source": 0,
+      "status": 0,
+      "clientWrap": 0,
+      "sourceWrap": 0,
+      "statusWrap": 0,
+      "qBtnX": 0,
+      "barH": 0,
+      "groups": 0
+    },
+    "maxDeltaVsInitial": {
+      "client": 0,
+      "source": 0,
+      "status": 0,
+      "clientWrap": 0,
+      "sourceWrap": 0,
+      "statusWrap": 0,
+      "qBtnX": 0,
+      "barH": 0
+    },
+    "stateTags": [
+      "initial_all",
+      "short_selected",
+      "long_selected",
+      "short_to_long",
+      "long_to_short",
+      "multi_collapse_tags",
+      "remove_longest",
+      "clear_to_all",
+      "reset",
+      "panel_open",
+      "panel_close",
+      "tooltip_visible",
+      "tooltip_hidden",
+      "status_selected",
+      "source_longest",
+      "source_cleared"
+    ],
+    "clientEnums": {
+      "selection": {
+        "x": 342,
+        "y": 179.5,
+        "w": 210,
+        "h": 24
+      },
+      "selectedItem": {
+        "x": 342,
+        "y": 179.5,
+        "w": 58.02,
+        "h": 24
+      },
+      "tagsText": {
+        "x": 351,
+        "y": 182,
+        "w": 24.02,
+        "h": 17
+      }
+    },
+    "maxHorizontalOverflow": 0,
+    "tooltip": {
+      "closedCount": 0,
+      "openCount": 1,
+      "afterLeaveCount": 0
+    },
+    "groupsY": [
+      175.5,
+      175.5,
+      175.5
+    ],
+    "barH": 32,
+    "adjacent": [
+      {
+        "from": "initial_all",
+        "to": "short_selected",
+        "dClient": 0,
+        "dSource": 0,
+        "dStatus": 0,
+        "dClientWrap": 0,
+        "dSourceWrap": 0,
+        "dStatusWrap": 0,
+        "dQBtnX": 0,
+        "dBarH": 0,
+        "dGroups": [
+          [
+            0,
+            0
+          ],
+          [
+            0,
+            0
+          ],
+          [
+            0,
+            0
+          ]
+        ]
+      },
+      {
+        "from": "short_selected",
+        "to": "long_selected",
+        "dClient": 0,
+        "dSource": 0,
+        "dStatus": 0,
+        "dClientWrap": 0,
+        "dSourceWrap": 0,
+        "dStatusWrap": 0,
+        "dQBtnX": 0,
+        "dBarH": 0,
+        "dGroups": [
+          [
+            0,
+            0
+          ],
+          [
+            0,
+            0
+          ],
+          [
+            0,
+            0
+          ]
+        ]
+      },
+      {
+        "from": "long_selected",
+        "to": "short_to_long",
+        "dClient": 0,
+        "dSource": 0,
+        "dStatus": 0,
+        "dClientWrap": 0,
+        "dSourceWrap": 0,
+        "dStatusWrap": 0,
+        "dQBtnX": 0,
+        "dBarH": 0,
+        "dGroups": [
+          [
+            0,
+            0
+          ],
+          [
+            0,
+            0
+          ],
+          [
+            0,
+            0
+          ]
+        ]
+      },
+      {
+        "from": "short_to_long",
+        "to": "long_to_short",
+        "dClient": 0,
+        "dSource": 0,
+        "dStatus": 0,
+        "dClientWrap": 0,
+        "dSourceWrap": 0,
+        "dStatusWrap": 0,
+        "dQBtnX": 0,
+        "dBarH": 0,
+        "dGroups": [
+          [
+            0,
+            0
+          ],
+          [
+            0,
+            0
+          ],
+          [
+            0,
+            0
+          ]
+        ]
+      },
+      {
+        "from": "long_to_short",
+        "to": "multi_collapse_tags",
+        "dClient": 0,
+        "dSource": 0,
+        "dStatus": 0,
+        "dClientWrap": 0,
+        "dSourceWrap": 0,
+        "dStatusWrap": 0,
+        "dQBtnX": 0,
+        "dBarH": 0,
+        "dGroups": [
+          [
+            0,
+            0
+          ],
+          [
+            0,
+            0
+          ],
+          [
+            0,
+            0
+          ]
+        ]
+      },
+      {
+        "from": "multi_collapse_tags",
+        "to": "remove_longest",
+        "dClient": 0,
+        "dSource": 0,
+        "dStatus": 0,
+        "dClientWrap": 0,
+        "dSourceWrap": 0,
+        "dStatusWrap": 0,
+        "dQBtnX": 0,
+        "dBarH": 0,
+        "dGroups": [
+          [
+            0,
+            0
+          ],
+          [
+            0,
+            0
+          ],
+          [
+            0,
+            0
+          ]
+        ]
+      },
+      {
+        "from": "remove_longest",
+        "to": "clear_to_all",
+        "dClient": 0,
+        "dSource": 0,
+        "dStatus": 0,
+        "dClientWrap": 0,
+        "dSourceWrap": 0,
+        "dStatusWrap": 0,
+        "dQBtnX": 0,
+        "dBarH": 0,
+        "dGroups": [
+          [
+            0,
+            0
+          ],
+          [
+            0,
+            0
+          ],
+          [
+            0,
+            0
+          ]
+        ]
+      },
+      {
+        "from": "clear_to_all",
+        "to": "reset",
+        "dClient": 0,
+        "dSource": 0,
+        "dStatus": 0,
+        "dClientWrap": 0,
+        "dSourceWrap": 0,
+        "dStatusWrap": 0,
+        "dQBtnX": 0,
+        "dBarH": 0,
+        "dGroups": [
+          [
+            0,
+            0
+          ],
+          [
+            0,
+            0
+          ],
+          [
+            0,
+            0
+          ]
+        ]
+      },
+      {
+        "from": "reset",
+        "to": "panel_open",
+        "dClient": 0,
+        "dSource": 0,
+        "dStatus": 0,
+        "dClientWrap": 0,
+        "dSourceWrap": 0,
+        "dStatusWrap": 0,
+        "dQBtnX": 0,
+        "dBarH": 0,
+        "dGroups": [
+          [
+            0,
+            0
+          ],
+          [
+            0,
+            0
+          ],
+          [
+            0,
+            0
+          ]
+        ]
+      },
+      {
+        "from": "panel_open",
+        "to": "panel_close",
+        "dClient": 0,
+        "dSource": 0,
+        "dStatus": 0,
+        "dClientWrap": 0,
+        "dSourceWrap": 0,
+        "dStatusWrap": 0,
+        "dQBtnX": 0,
+        "dBarH": 0,
+        "dGroups": [
+          [
+            0,
+            0
+          ],
+          [
+            0,
+            0
+          ],
+          [
+            0,
+            0
+          ]
+        ]
+      },
+      {
+        "from": "panel_close",
+        "to": "tooltip_visible",
+        "dClient": 0,
+        "dSource": 0,
+        "dStatus": 0,
+        "dClientWrap": 0,
+        "dSourceWrap": 0,
+        "dStatusWrap": 0,
+        "dQBtnX": 0,
+        "dBarH": 0,
+        "dGroups": [
+          [
+            0,
+            0
+          ],
+          [
+            0,
+            0
+          ],
+          [
+            0,
+            0
+          ]
+        ]
+      },
+      {
+        "from": "tooltip_visible",
+        "to": "tooltip_hidden",
+        "dClient": 0,
+        "dSource": 0,
+        "dStatus": 0,
+        "dClientWrap": 0,
+        "dSourceWrap": 0,
+        "dStatusWrap": 0,
+        "dQBtnX": 0,
+        "dBarH": 0,
+        "dGroups": [
+          [
+            0,
+            0
+          ],
+          [
+            0,
+            0
+          ],
+          [
+            0,
+            0
+          ]
+        ]
+      },
+      {
+        "from": "tooltip_hidden",
+        "to": "status_selected",
+        "dClient": 0,
+        "dSource": 0,
+        "dStatus": 0,
+        "dClientWrap": 0,
+        "dSourceWrap": 0,
+        "dStatusWrap": 0,
+        "dQBtnX": 0,
+        "dBarH": 0,
+        "dGroups": [
+          [
+            0,
+            0
+          ],
+          [
+            0,
+            0
+          ],
+          [
+            0,
+            0
+          ]
+        ]
+      },
+      {
+        "from": "status_selected",
+        "to": "source_longest",
+        "dClient": 0,
+        "dSource": 0,
+        "dStatus": 0,
+        "dClientWrap": 0,
+        "dSourceWrap": 0,
+        "dStatusWrap": 0,
+        "dQBtnX": 0,
+        "dBarH": 0,
+        "dGroups": [
+          [
+            0,
+            0
+          ],
+          [
+            0,
+            0
+          ],
+          [
+            0,
+            0
+          ]
+        ]
+      },
+      {
+        "from": "source_longest",
+        "to": "source_cleared",
+        "dClient": 0,
+        "dSource": 0,
+        "dStatus": 0,
+        "dClientWrap": 0,
+        "dSourceWrap": 0,
+        "dStatusWrap": 0,
+        "dQBtnX": 0,
+        "dBarH": 0,
+        "dGroups": [
+          [
+            0,
+            0
+          ],
+          [
+            0,
+            0
+          ],
+          [
+            0,
+            0
+          ]
+        ]
+      }
+    ],
+    "states": [
+      {
+        "tag": "initial_all",
+        "client": {
+          "x": 340,
+          "y": 175.5,
+          "w": 240,
+          "h": 32
+        },
+        "source": {
+          "x": 628,
+          "y": 175.5,
+          "w": 300,
+          "h": 32
+        },
+        "status": {
+          "x": 1004,
+          "y": 175.5,
+          "w": 200,
+          "h": 32
+        },
+        "clientWrap": {
+          "x": 340,
+          "y": 175.5,
+          "w": 240,
+          "h": 32
+        },
+        "sourceWrap": {
+          "x": 628,
+          "y": 175.5,
+          "w": 300,
+          "h": 32
+        },
+        "statusWrap": {
+          "x": 1004,
+          "y": 175.5,
+          "w": 200,
+          "h": 32
+        },
+        "selection": {
+          "x": 342,
+          "y": 179.5,
+          "w": 210,
+          "h": 24
+        },
+        "selectedItem": {
+          "x": 342,
+          "y": 179.5,
+          "w": 58.02,
+          "h": 24
+        },
+        "tagsText": {
+          "x": 351,
+          "y": 182,
+          "w": 24.02,
+          "h": 17
+        },
+        "groups": [
+          {
+            "x": 292,
+            "y": 175.5,
+            "w": 288,
+            "h": 32
+          },
+          {
+            "x": 594,
+            "y": 175.5,
+            "w": 334,
+            "h": 32
+          },
+          {
+            "x": 942,
+            "y": 175.5,
+            "w": 262,
+            "h": 32
+          }
+        ],
+        "qBtn": {
+          "x": 1218,
+          "y": 176.5,
+          "w": 62,
+          "h": 30
+        },
+        "resetBtn": {
+          "x": 1300,
+          "y": 176.5,
+          "w": 58,
+          "h": 30
+        },
+        "bar": {
+          "x": 292,
+          "y": 175.5,
+          "w": 1336,
+          "h": 32
+        },
+        "overflowX": 0
+      },
+      {
+        "tag": "short_selected",
+        "client": {
+          "x": 340,
+          "y": 175.5,
+          "w": 240,
+          "h": 32
+        },
+        "source": {
+          "x": 628,
+          "y": 175.5,
+          "w": 300,
+          "h": 32
+        },
+        "status": {
+          "x": 1004,
+          "y": 175.5,
+          "w": 200,
+          "h": 32
+        },
+        "clientWrap": {
+          "x": 340,
+          "y": 175.5,
+          "w": 240,
+          "h": 32
+        },
+        "sourceWrap": {
+          "x": 628,
+          "y": 175.5,
+          "w": 300,
+          "h": 32
+        },
+        "statusWrap": {
+          "x": 1004,
+          "y": 175.5,
+          "w": 200,
+          "h": 32
+        },
+        "selection": {
+          "x": 342,
+          "y": 179.5,
+          "w": 210,
+          "h": 24
+        },
+        "selectedItem": {
+          "x": 342,
+          "y": 179.5,
+          "w": 210,
+          "h": 24
+        },
+        "tagsText": {
+          "x": 351,
+          "y": 182,
+          "w": 176,
+          "h": 17
+        },
+        "groups": [
+          {
+            "x": 292,
+            "y": 175.5,
+            "w": 288,
+            "h": 32
+          },
+          {
+            "x": 594,
+            "y": 175.5,
+            "w": 334,
+            "h": 32
+          },
+          {
+            "x": 942,
+            "y": 175.5,
+            "w": 262,
+            "h": 32
+          }
+        ],
+        "qBtn": {
+          "x": 1218,
+          "y": 176.5,
+          "w": 62,
+          "h": 30
+        },
+        "resetBtn": {
+          "x": 1300,
+          "y": 176.5,
+          "w": 58,
+          "h": 30
+        },
+        "bar": {
+          "x": 292,
+          "y": 175.5,
+          "w": 1336,
+          "h": 32
+        },
+        "overflowX": 0
+      },
+      {
+        "tag": "long_selected",
+        "client": {
+          "x": 340,
+          "y": 175.5,
+          "w": 240,
+          "h": 32
+        },
+        "source": {
+          "x": 628,
+          "y": 175.5,
+          "w": 300,
+          "h": 32
+        },
+        "status": {
+          "x": 1004,
+          "y": 175.5,
+          "w": 200,
+          "h": 32
+        },
+        "clientWrap": {
+          "x": 340,
+          "y": 175.5,
+          "w": 240,
+          "h": 32
+        },
+        "sourceWrap": {
+          "x": 628,
+          "y": 175.5,
+          "w": 300,
+          "h": 32
+        },
+        "statusWrap": {
+          "x": 1004,
+          "y": 175.5,
+          "w": 200,
+          "h": 32
+        },
+        "selection": {
+          "x": 342,
+          "y": 179.5,
+          "w": 210,
+          "h": 24
+        },
+        "selectedItem": {
+          "x": 342,
+          "y": 179.5,
+          "w": 142.7,
+          "h": 24
+        },
+        "tagsText": {
+          "x": 351,
+          "y": 183.5,
+          "w": 108.7,
+          "h": 14
+        },
+        "groups": [
+          {
+            "x": 292,
+            "y": 175.5,
+            "w": 288,
+            "h": 32
+          },
+          {
+            "x": 594,
+            "y": 175.5,
+            "w": 334,
+            "h": 32
+          },
+          {
+            "x": 942,
+            "y": 175.5,
+            "w": 262,
+            "h": 32
+          }
+        ],
+        "qBtn": {
+          "x": 1218,
+          "y": 176.5,
+          "w": 62,
+          "h": 30
+        },
+        "resetBtn": {
+          "x": 1300,
+          "y": 176.5,
+          "w": 58,
+          "h": 30
+        },
+        "bar": {
+          "x": 292,
+          "y": 175.5,
+          "w": 1336,
+          "h": 32
+        },
+        "overflowX": 0
+      },
+      {
+        "tag": "short_to_long",
+        "client": {
+          "x": 340,
+          "y": 175.5,
+          "w": 240,
+          "h": 32
+        },
+        "source": {
+          "x": 628,
+          "y": 175.5,
+          "w": 300,
+          "h": 32
+        },
+        "status": {
+          "x": 1004,
+          "y": 175.5,
+          "w": 200,
+          "h": 32
+        },
+        "clientWrap": {
+          "x": 340,
+          "y": 175.5,
+          "w": 240,
+          "h": 32
+        },
+        "sourceWrap": {
+          "x": 628,
+          "y": 175.5,
+          "w": 300,
+          "h": 32
+        },
+        "statusWrap": {
+          "x": 1004,
+          "y": 175.5,
+          "w": 200,
+          "h": 32
+        },
+        "selection": {
+          "x": 342,
+          "y": 179.5,
+          "w": 210,
+          "h": 24
+        },
+        "selectedItem": {
+          "x": 342,
+          "y": 179.5,
+          "w": 142.7,
+          "h": 24
+        },
+        "tagsText": {
+          "x": 351,
+          "y": 183.5,
+          "w": 108.7,
+          "h": 14
+        },
+        "groups": [
+          {
+            "x": 292,
+            "y": 175.5,
+            "w": 288,
+            "h": 32
+          },
+          {
+            "x": 594,
+            "y": 175.5,
+            "w": 334,
+            "h": 32
+          },
+          {
+            "x": 942,
+            "y": 175.5,
+            "w": 262,
+            "h": 32
+          }
+        ],
+        "qBtn": {
+          "x": 1218,
+          "y": 176.5,
+          "w": 62,
+          "h": 30
+        },
+        "resetBtn": {
+          "x": 1300,
+          "y": 176.5,
+          "w": 58,
+          "h": 30
+        },
+        "bar": {
+          "x": 292,
+          "y": 175.5,
+          "w": 1336,
+          "h": 32
+        },
+        "overflowX": 0
+      },
+      {
+        "tag": "long_to_short",
+        "client": {
+          "x": 340,
+          "y": 175.5,
+          "w": 240,
+          "h": 32
+        },
+        "source": {
+          "x": 628,
+          "y": 175.5,
+          "w": 300,
+          "h": 32
+        },
+        "status": {
+          "x": 1004,
+          "y": 175.5,
+          "w": 200,
+          "h": 32
+        },
+        "clientWrap": {
+          "x": 340,
+          "y": 175.5,
+          "w": 240,
+          "h": 32
+        },
+        "sourceWrap": {
+          "x": 628,
+          "y": 175.5,
+          "w": 300,
+          "h": 32
+        },
+        "statusWrap": {
+          "x": 1004,
+          "y": 175.5,
+          "w": 200,
+          "h": 32
+        },
+        "selection": {
+          "x": 342,
+          "y": 179.5,
+          "w": 210,
+          "h": 24
+        },
+        "selectedItem": {
+          "x": 342,
+          "y": 179.5,
+          "w": 210,
+          "h": 24
+        },
+        "tagsText": {
+          "x": 351,
+          "y": 182,
+          "w": 176,
+          "h": 17
+        },
+        "groups": [
+          {
+            "x": 292,
+            "y": 175.5,
+            "w": 288,
+            "h": 32
+          },
+          {
+            "x": 594,
+            "y": 175.5,
+            "w": 334,
+            "h": 32
+          },
+          {
+            "x": 942,
+            "y": 175.5,
+            "w": 262,
+            "h": 32
+          }
+        ],
+        "qBtn": {
+          "x": 1218,
+          "y": 176.5,
+          "w": 62,
+          "h": 30
+        },
+        "resetBtn": {
+          "x": 1300,
+          "y": 176.5,
+          "w": 58,
+          "h": 30
+        },
+        "bar": {
+          "x": 292,
+          "y": 175.5,
+          "w": 1336,
+          "h": 32
+        },
+        "overflowX": 0
+      },
+      {
+        "tag": "multi_collapse_tags",
+        "client": {
+          "x": 340,
+          "y": 175.5,
+          "w": 240,
+          "h": 32
+        },
+        "source": {
+          "x": 628,
+          "y": 175.5,
+          "w": 300,
+          "h": 32
+        },
+        "status": {
+          "x": 1004,
+          "y": 175.5,
+          "w": 200,
+          "h": 32
+        },
+        "clientWrap": {
+          "x": 340,
+          "y": 175.5,
+          "w": 240,
+          "h": 32
+        },
+        "sourceWrap": {
+          "x": 628,
+          "y": 175.5,
+          "w": 300,
+          "h": 32
+        },
+        "statusWrap": {
+          "x": 1004,
+          "y": 175.5,
+          "w": 200,
+          "h": 32
+        },
+        "selection": {
+          "x": 342,
+          "y": 179.5,
+          "w": 210,
+          "h": 24
+        },
+        "selectedItem": {
+          "x": 342,
+          "y": 179.5,
+          "w": 168.98,
+          "h": 24
+        },
+        "tagsText": {
+          "x": 351,
+          "y": 182,
+          "w": 134.98,
+          "h": 17
+        },
+        "groups": [
+          {
+            "x": 292,
+            "y": 175.5,
+            "w": 288,
+            "h": 32
+          },
+          {
+            "x": 594,
+            "y": 175.5,
+            "w": 334,
+            "h": 32
+          },
+          {
+            "x": 942,
+            "y": 175.5,
+            "w": 262,
+            "h": 32
+          }
+        ],
+        "qBtn": {
+          "x": 1218,
+          "y": 176.5,
+          "w": 62,
+          "h": 30
+        },
+        "resetBtn": {
+          "x": 1300,
+          "y": 176.5,
+          "w": 58,
+          "h": 30
+        },
+        "bar": {
+          "x": 292,
+          "y": 175.5,
+          "w": 1336,
+          "h": 32
+        },
+        "overflowX": 0
+      },
+      {
+        "tag": "remove_longest",
+        "client": {
+          "x": 340,
+          "y": 175.5,
+          "w": 240,
+          "h": 32
+        },
+        "source": {
+          "x": 628,
+          "y": 175.5,
+          "w": 300,
+          "h": 32
+        },
+        "status": {
+          "x": 1004,
+          "y": 175.5,
+          "w": 200,
+          "h": 32
+        },
+        "clientWrap": {
+          "x": 340,
+          "y": 175.5,
+          "w": 240,
+          "h": 32
+        },
+        "sourceWrap": {
+          "x": 628,
+          "y": 175.5,
+          "w": 300,
+          "h": 32
+        },
+        "statusWrap": {
+          "x": 1004,
+          "y": 175.5,
+          "w": 200,
+          "h": 32
+        },
+        "selection": {
+          "x": 342,
+          "y": 179.5,
+          "w": 210,
+          "h": 24
+        },
+        "selectedItem": {
+          "x": 342,
+          "y": 179.5,
+          "w": 168.98,
+          "h": 24
+        },
+        "tagsText": {
+          "x": 351,
+          "y": 182,
+          "w": 134.98,
+          "h": 17
+        },
+        "groups": [
+          {
+            "x": 292,
+            "y": 175.5,
+            "w": 288,
+            "h": 32
+          },
+          {
+            "x": 594,
+            "y": 175.5,
+            "w": 334,
+            "h": 32
+          },
+          {
+            "x": 942,
+            "y": 175.5,
+            "w": 262,
+            "h": 32
+          }
+        ],
+        "qBtn": {
+          "x": 1218,
+          "y": 176.5,
+          "w": 62,
+          "h": 30
+        },
+        "resetBtn": {
+          "x": 1300,
+          "y": 176.5,
+          "w": 58,
+          "h": 30
+        },
+        "bar": {
+          "x": 292,
+          "y": 175.5,
+          "w": 1336,
+          "h": 32
+        },
+        "overflowX": 0
+      },
+      {
+        "tag": "clear_to_all",
+        "client": {
+          "x": 340,
+          "y": 175.5,
+          "w": 240,
+          "h": 32
+        },
+        "source": {
+          "x": 628,
+          "y": 175.5,
+          "w": 300,
+          "h": 32
+        },
+        "status": {
+          "x": 1004,
+          "y": 175.5,
+          "w": 200,
+          "h": 32
+        },
+        "clientWrap": {
+          "x": 340,
+          "y": 175.5,
+          "w": 240,
+          "h": 32
+        },
+        "sourceWrap": {
+          "x": 628,
+          "y": 175.5,
+          "w": 300,
+          "h": 32
+        },
+        "statusWrap": {
+          "x": 1004,
+          "y": 175.5,
+          "w": 200,
+          "h": 32
+        },
+        "selection": {
+          "x": 342,
+          "y": 179.5,
+          "w": 210,
+          "h": 24
+        },
+        "selectedItem": {
+          "x": 342,
+          "y": 179.5,
+          "w": 58.02,
+          "h": 24
+        },
+        "tagsText": {
+          "x": 351,
+          "y": 182,
+          "w": 24.02,
+          "h": 17
+        },
+        "groups": [
+          {
+            "x": 292,
+            "y": 175.5,
+            "w": 288,
+            "h": 32
+          },
+          {
+            "x": 594,
+            "y": 175.5,
+            "w": 334,
+            "h": 32
+          },
+          {
+            "x": 942,
+            "y": 175.5,
+            "w": 262,
+            "h": 32
+          }
+        ],
+        "qBtn": {
+          "x": 1218,
+          "y": 176.5,
+          "w": 62,
+          "h": 30
+        },
+        "resetBtn": {
+          "x": 1300,
+          "y": 176.5,
+          "w": 58,
+          "h": 30
+        },
+        "bar": {
+          "x": 292,
+          "y": 175.5,
+          "w": 1336,
+          "h": 32
+        },
+        "overflowX": 0
+      },
+      {
+        "tag": "reset",
+        "client": {
+          "x": 340,
+          "y": 175.5,
+          "w": 240,
+          "h": 32
+        },
+        "source": {
+          "x": 628,
+          "y": 175.5,
+          "w": 300,
+          "h": 32
+        },
+        "status": {
+          "x": 1004,
+          "y": 175.5,
+          "w": 200,
+          "h": 32
+        },
+        "clientWrap": {
+          "x": 340,
+          "y": 175.5,
+          "w": 240,
+          "h": 32
+        },
+        "sourceWrap": {
+          "x": 628,
+          "y": 175.5,
+          "w": 300,
+          "h": 32
+        },
+        "statusWrap": {
+          "x": 1004,
+          "y": 175.5,
+          "w": 200,
+          "h": 32
+        },
+        "selection": {
+          "x": 342,
+          "y": 179.5,
+          "w": 210,
+          "h": 24
+        },
+        "selectedItem": {
+          "x": 342,
+          "y": 179.5,
+          "w": 58.02,
+          "h": 24
+        },
+        "tagsText": {
+          "x": 351,
+          "y": 182,
+          "w": 24.02,
+          "h": 17
+        },
+        "groups": [
+          {
+            "x": 292,
+            "y": 175.5,
+            "w": 288,
+            "h": 32
+          },
+          {
+            "x": 594,
+            "y": 175.5,
+            "w": 334,
+            "h": 32
+          },
+          {
+            "x": 942,
+            "y": 175.5,
+            "w": 262,
+            "h": 32
+          }
+        ],
+        "qBtn": {
+          "x": 1218,
+          "y": 176.5,
+          "w": 62,
+          "h": 30
+        },
+        "resetBtn": {
+          "x": 1300,
+          "y": 176.5,
+          "w": 58,
+          "h": 30
+        },
+        "bar": {
+          "x": 292,
+          "y": 175.5,
+          "w": 1336,
+          "h": 32
+        },
+        "overflowX": 0
+      },
+      {
+        "tag": "panel_open",
+        "client": {
+          "x": 340,
+          "y": 175.5,
+          "w": 240,
+          "h": 32
+        },
+        "source": {
+          "x": 628,
+          "y": 175.5,
+          "w": 300,
+          "h": 32
+        },
+        "status": {
+          "x": 1004,
+          "y": 175.5,
+          "w": 200,
+          "h": 32
+        },
+        "clientWrap": {
+          "x": 340,
+          "y": 175.5,
+          "w": 240,
+          "h": 32
+        },
+        "sourceWrap": {
+          "x": 628,
+          "y": 175.5,
+          "w": 300,
+          "h": 32
+        },
+        "statusWrap": {
+          "x": 1004,
+          "y": 175.5,
+          "w": 200,
+          "h": 32
+        },
+        "selection": {
+          "x": 342,
+          "y": 179.5,
+          "w": 210,
+          "h": 24
+        },
+        "selectedItem": {
+          "x": 342,
+          "y": 179.5,
+          "w": 58.02,
+          "h": 24
+        },
+        "tagsText": {
+          "x": 351,
+          "y": 182,
+          "w": 24.02,
+          "h": 17
+        },
+        "groups": [
+          {
+            "x": 292,
+            "y": 175.5,
+            "w": 288,
+            "h": 32
+          },
+          {
+            "x": 594,
+            "y": 175.5,
+            "w": 334,
+            "h": 32
+          },
+          {
+            "x": 942,
+            "y": 175.5,
+            "w": 262,
+            "h": 32
+          }
+        ],
+        "qBtn": {
+          "x": 1218,
+          "y": 176.5,
+          "w": 62,
+          "h": 30
+        },
+        "resetBtn": {
+          "x": 1300,
+          "y": 176.5,
+          "w": 58,
+          "h": 30
+        },
+        "bar": {
+          "x": 292,
+          "y": 175.5,
+          "w": 1336,
+          "h": 32
+        },
+        "overflowX": 0
+      },
+      {
+        "tag": "panel_close",
+        "client": {
+          "x": 340,
+          "y": 175.5,
+          "w": 240,
+          "h": 32
+        },
+        "source": {
+          "x": 628,
+          "y": 175.5,
+          "w": 300,
+          "h": 32
+        },
+        "status": {
+          "x": 1004,
+          "y": 175.5,
+          "w": 200,
+          "h": 32
+        },
+        "clientWrap": {
+          "x": 340,
+          "y": 175.5,
+          "w": 240,
+          "h": 32
+        },
+        "sourceWrap": {
+          "x": 628,
+          "y": 175.5,
+          "w": 300,
+          "h": 32
+        },
+        "statusWrap": {
+          "x": 1004,
+          "y": 175.5,
+          "w": 200,
+          "h": 32
+        },
+        "selection": {
+          "x": 342,
+          "y": 179.5,
+          "w": 210,
+          "h": 24
+        },
+        "selectedItem": {
+          "x": 342,
+          "y": 179.5,
+          "w": 58.02,
+          "h": 24
+        },
+        "tagsText": {
+          "x": 351,
+          "y": 182,
+          "w": 24.02,
+          "h": 17
+        },
+        "groups": [
+          {
+            "x": 292,
+            "y": 175.5,
+            "w": 288,
+            "h": 32
+          },
+          {
+            "x": 594,
+            "y": 175.5,
+            "w": 334,
+            "h": 32
+          },
+          {
+            "x": 942,
+            "y": 175.5,
+            "w": 262,
+            "h": 32
+          }
+        ],
+        "qBtn": {
+          "x": 1218,
+          "y": 176.5,
+          "w": 62,
+          "h": 30
+        },
+        "resetBtn": {
+          "x": 1300,
+          "y": 176.5,
+          "w": 58,
+          "h": 30
+        },
+        "bar": {
+          "x": 292,
+          "y": 175.5,
+          "w": 1336,
+          "h": 32
+        },
+        "overflowX": 0
+      },
+      {
+        "tag": "tooltip_visible",
+        "client": {
+          "x": 340,
+          "y": 175.5,
+          "w": 240,
+          "h": 32
+        },
+        "source": {
+          "x": 628,
+          "y": 175.5,
+          "w": 300,
+          "h": 32
+        },
+        "status": {
+          "x": 1004,
+          "y": 175.5,
+          "w": 200,
+          "h": 32
+        },
+        "clientWrap": {
+          "x": 340,
+          "y": 175.5,
+          "w": 240,
+          "h": 32
+        },
+        "sourceWrap": {
+          "x": 628,
+          "y": 175.5,
+          "w": 300,
+          "h": 32
+        },
+        "statusWrap": {
+          "x": 1004,
+          "y": 175.5,
+          "w": 200,
+          "h": 32
+        },
+        "selection": {
+          "x": 342,
+          "y": 179.5,
+          "w": 210,
+          "h": 24
+        },
+        "selectedItem": {
+          "x": 342,
+          "y": 179.5,
+          "w": 58.02,
+          "h": 24
+        },
+        "tagsText": {
+          "x": 351,
+          "y": 182,
+          "w": 24.02,
+          "h": 17
+        },
+        "groups": [
+          {
+            "x": 292,
+            "y": 175.5,
+            "w": 288,
+            "h": 32
+          },
+          {
+            "x": 594,
+            "y": 175.5,
+            "w": 334,
+            "h": 32
+          },
+          {
+            "x": 942,
+            "y": 175.5,
+            "w": 262,
+            "h": 32
+          }
+        ],
+        "qBtn": {
+          "x": 1218,
+          "y": 176.5,
+          "w": 62,
+          "h": 30
+        },
+        "resetBtn": {
+          "x": 1300,
+          "y": 176.5,
+          "w": 58,
+          "h": 30
+        },
+        "bar": {
+          "x": 292,
+          "y": 175.5,
+          "w": 1336,
+          "h": 32
+        },
+        "overflowX": 0
+      },
+      {
+        "tag": "tooltip_hidden",
+        "client": {
+          "x": 340,
+          "y": 175.5,
+          "w": 240,
+          "h": 32
+        },
+        "source": {
+          "x": 628,
+          "y": 175.5,
+          "w": 300,
+          "h": 32
+        },
+        "status": {
+          "x": 1004,
+          "y": 175.5,
+          "w": 200,
+          "h": 32
+        },
+        "clientWrap": {
+          "x": 340,
+          "y": 175.5,
+          "w": 240,
+          "h": 32
+        },
+        "sourceWrap": {
+          "x": 628,
+          "y": 175.5,
+          "w": 300,
+          "h": 32
+        },
+        "statusWrap": {
+          "x": 1004,
+          "y": 175.5,
+          "w": 200,
+          "h": 32
+        },
+        "selection": {
+          "x": 342,
+          "y": 179.5,
+          "w": 210,
+          "h": 24
+        },
+        "selectedItem": {
+          "x": 342,
+          "y": 179.5,
+          "w": 58.02,
+          "h": 24
+        },
+        "tagsText": {
+          "x": 351,
+          "y": 182,
+          "w": 24.02,
+          "h": 17
+        },
+        "groups": [
+          {
+            "x": 292,
+            "y": 175.5,
+            "w": 288,
+            "h": 32
+          },
+          {
+            "x": 594,
+            "y": 175.5,
+            "w": 334,
+            "h": 32
+          },
+          {
+            "x": 942,
+            "y": 175.5,
+            "w": 262,
+            "h": 32
+          }
+        ],
+        "qBtn": {
+          "x": 1218,
+          "y": 176.5,
+          "w": 62,
+          "h": 30
+        },
+        "resetBtn": {
+          "x": 1300,
+          "y": 176.5,
+          "w": 58,
+          "h": 30
+        },
+        "bar": {
+          "x": 292,
+          "y": 175.5,
+          "w": 1336,
+          "h": 32
+        },
+        "overflowX": 0
+      },
+      {
+        "tag": "status_selected",
+        "client": {
+          "x": 340,
+          "y": 175.5,
+          "w": 240,
+          "h": 32
+        },
+        "source": {
+          "x": 628,
+          "y": 175.5,
+          "w": 300,
+          "h": 32
+        },
+        "status": {
+          "x": 1004,
+          "y": 175.5,
+          "w": 200,
+          "h": 32
+        },
+        "clientWrap": {
+          "x": 340,
+          "y": 175.5,
+          "w": 240,
+          "h": 32
+        },
+        "sourceWrap": {
+          "x": 628,
+          "y": 175.5,
+          "w": 300,
+          "h": 32
+        },
+        "statusWrap": {
+          "x": 1004,
+          "y": 175.5,
+          "w": 200,
+          "h": 32
+        },
+        "selection": {
+          "x": 342,
+          "y": 179.5,
+          "w": 210,
+          "h": 24
+        },
+        "selectedItem": {
+          "x": 342,
+          "y": 179.5,
+          "w": 58.02,
+          "h": 24
+        },
+        "tagsText": {
+          "x": 351,
+          "y": 182,
+          "w": 24.02,
+          "h": 17
+        },
+        "groups": [
+          {
+            "x": 292,
+            "y": 175.5,
+            "w": 288,
+            "h": 32
+          },
+          {
+            "x": 594,
+            "y": 175.5,
+            "w": 334,
+            "h": 32
+          },
+          {
+            "x": 942,
+            "y": 175.5,
+            "w": 262,
+            "h": 32
+          }
+        ],
+        "qBtn": {
+          "x": 1218,
+          "y": 176.5,
+          "w": 62,
+          "h": 30
+        },
+        "resetBtn": {
+          "x": 1300,
+          "y": 176.5,
+          "w": 58,
+          "h": 30
+        },
+        "bar": {
+          "x": 292,
+          "y": 175.5,
+          "w": 1336,
+          "h": 32
+        },
+        "overflowX": 0
+      },
+      {
+        "tag": "source_longest",
+        "client": {
+          "x": 340,
+          "y": 175.5,
+          "w": 240,
+          "h": 32
+        },
+        "source": {
+          "x": 628,
+          "y": 175.5,
+          "w": 300,
+          "h": 32
+        },
+        "status": {
+          "x": 1004,
+          "y": 175.5,
+          "w": 200,
+          "h": 32
+        },
+        "clientWrap": {
+          "x": 340,
+          "y": 175.5,
+          "w": 240,
+          "h": 32
+        },
+        "sourceWrap": {
+          "x": 628,
+          "y": 175.5,
+          "w": 300,
+          "h": 32
+        },
+        "statusWrap": {
+          "x": 1004,
+          "y": 175.5,
+          "w": 200,
+          "h": 32
+        },
+        "selection": {
+          "x": 342,
+          "y": 179.5,
+          "w": 210,
+          "h": 24
+        },
+        "selectedItem": {
+          "x": 342,
+          "y": 179.5,
+          "w": 58.02,
+          "h": 24
+        },
+        "tagsText": {
+          "x": 351,
+          "y": 182,
+          "w": 24.02,
+          "h": 17
+        },
+        "groups": [
+          {
+            "x": 292,
+            "y": 175.5,
+            "w": 288,
+            "h": 32
+          },
+          {
+            "x": 594,
+            "y": 175.5,
+            "w": 334,
+            "h": 32
+          },
+          {
+            "x": 942,
+            "y": 175.5,
+            "w": 262,
+            "h": 32
+          }
+        ],
+        "qBtn": {
+          "x": 1218,
+          "y": 176.5,
+          "w": 62,
+          "h": 30
+        },
+        "resetBtn": {
+          "x": 1300,
+          "y": 176.5,
+          "w": 58,
+          "h": 30
+        },
+        "bar": {
+          "x": 292,
+          "y": 175.5,
+          "w": 1336,
+          "h": 32
+        },
+        "overflowX": 0
+      },
+      {
+        "tag": "source_cleared",
+        "client": {
+          "x": 340,
+          "y": 175.5,
+          "w": 240,
+          "h": 32
+        },
+        "source": {
+          "x": 628,
+          "y": 175.5,
+          "w": 300,
+          "h": 32
+        },
+        "status": {
+          "x": 1004,
+          "y": 175.5,
+          "w": 200,
+          "h": 32
+        },
+        "clientWrap": {
+          "x": 340,
+          "y": 175.5,
+          "w": 240,
+          "h": 32
+        },
+        "sourceWrap": {
+          "x": 628,
+          "y": 175.5,
+          "w": 300,
+          "h": 32
+        },
+        "statusWrap": {
+          "x": 1004,
+          "y": 175.5,
+          "w": 200,
+          "h": 32
+        },
+        "selection": {
+          "x": 342,
+          "y": 179.5,
+          "w": 210,
+          "h": 24
+        },
+        "selectedItem": {
+          "x": 342,
+          "y": 179.5,
+          "w": 58.02,
+          "h": 24
+        },
+        "tagsText": {
+          "x": 351,
+          "y": 182,
+          "w": 24.02,
+          "h": 17
+        },
+        "groups": [
+          {
+            "x": 292,
+            "y": 175.5,
+            "w": 288,
+            "h": 32
+          },
+          {
+            "x": 594,
+            "y": 175.5,
+            "w": 334,
+            "h": 32
+          },
+          {
+            "x": 942,
+            "y": 175.5,
+            "w": 262,
+            "h": 32
+          }
+        ],
+        "qBtn": {
+          "x": 1218,
+          "y": 176.5,
+          "w": 62,
+          "h": 30
+        },
+        "resetBtn": {
+          "x": 1300,
+          "y": 176.5,
+          "w": 58,
+          "h": 30
+        },
+        "bar": {
+          "x": 292,
+          "y": 175.5,
+          "w": 1336,
+          "h": 32
+        },
+        "overflowX": 0
+      }
+    ]
+  },
+  {
+    "viewport": {
+      "w": 1920,
+      "h": 1080
+    },
+    "widths": {
+      "client": 240,
+      "source": 300,
+      "status": 200,
+      "clientWrap": 240,
+      "sourceWrap": 300,
+      "statusWrap": 200
+    },
+    "maxAdjacentDelta": {
+      "client": 0,
+      "source": 0,
+      "status": 0,
+      "clientWrap": 0,
+      "sourceWrap": 0,
+      "statusWrap": 0,
+      "qBtnX": 0,
+      "barH": 0,
+      "groups": 0
+    },
+    "maxDeltaVsInitial": {
+      "client": 0,
+      "source": 0,
+      "status": 0,
+      "clientWrap": 0,
+      "sourceWrap": 0,
+      "statusWrap": 0,
+      "qBtnX": 0,
+      "barH": 0
+    },
+    "stateTags": [
+      "initial_all",
+      "short_selected",
+      "long_selected",
+      "short_to_long",
+      "long_to_short",
+      "multi_collapse_tags",
+      "remove_longest",
+      "clear_to_all",
+      "reset",
+      "panel_open",
+      "panel_close",
+      "tooltip_visible",
+      "tooltip_hidden",
+      "status_selected",
+      "source_longest",
+      "source_cleared"
+    ],
+    "clientEnums": {
+      "selection": {
+        "x": 342,
+        "y": 179.5,
+        "w": 210,
+        "h": 24
+      },
+      "selectedItem": {
+        "x": 342,
+        "y": 179.5,
+        "w": 58.02,
+        "h": 24
+      },
+      "tagsText": {
+        "x": 351,
+        "y": 182,
+        "w": 24.02,
+        "h": 17
+      }
+    },
+    "maxHorizontalOverflow": 0,
+    "tooltip": {
+      "closedCount": 0,
+      "openCount": 1,
+      "afterLeaveCount": 0
+    },
+    "groupsY": [
+      175.5,
+      175.5,
+      175.5
+    ],
+    "barH": 32,
+    "adjacent": [
+      {
+        "from": "initial_all",
+        "to": "short_selected",
+        "dClient": 0,
+        "dSource": 0,
+        "dStatus": 0,
+        "dClientWrap": 0,
+        "dSourceWrap": 0,
+        "dStatusWrap": 0,
+        "dQBtnX": 0,
+        "dBarH": 0,
+        "dGroups": [
+          [
+            0,
+            0
+          ],
+          [
+            0,
+            0
+          ],
+          [
+            0,
+            0
+          ]
+        ]
+      },
+      {
+        "from": "short_selected",
+        "to": "long_selected",
+        "dClient": 0,
+        "dSource": 0,
+        "dStatus": 0,
+        "dClientWrap": 0,
+        "dSourceWrap": 0,
+        "dStatusWrap": 0,
+        "dQBtnX": 0,
+        "dBarH": 0,
+        "dGroups": [
+          [
+            0,
+            0
+          ],
+          [
+            0,
+            0
+          ],
+          [
+            0,
+            0
+          ]
+        ]
+      },
+      {
+        "from": "long_selected",
+        "to": "short_to_long",
+        "dClient": 0,
+        "dSource": 0,
+        "dStatus": 0,
+        "dClientWrap": 0,
+        "dSourceWrap": 0,
+        "dStatusWrap": 0,
+        "dQBtnX": 0,
+        "dBarH": 0,
+        "dGroups": [
+          [
+            0,
+            0
+          ],
+          [
+            0,
+            0
+          ],
+          [
+            0,
+            0
+          ]
+        ]
+      },
+      {
+        "from": "short_to_long",
+        "to": "long_to_short",
+        "dClient": 0,
+        "dSource": 0,
+        "dStatus": 0,
+        "dClientWrap": 0,
+        "dSourceWrap": 0,
+        "dStatusWrap": 0,
+        "dQBtnX": 0,
+        "dBarH": 0,
+        "dGroups": [
+          [
+            0,
+            0
+          ],
+          [
+            0,
+            0
+          ],
+          [
+            0,
+            0
+          ]
+        ]
+      },
+      {
+        "from": "long_to_short",
+        "to": "multi_collapse_tags",
+        "dClient": 0,
+        "dSource": 0,
+        "dStatus": 0,
+        "dClientWrap": 0,
+        "dSourceWrap": 0,
+        "dStatusWrap": 0,
+        "dQBtnX": 0,
+        "dBarH": 0,
+        "dGroups": [
+          [
+            0,
+            0
+          ],
+          [
+            0,
+            0
+          ],
+          [
+            0,
+            0
+          ]
+        ]
+      },
+      {
+        "from": "multi_collapse_tags",
+        "to": "remove_longest",
+        "dClient": 0,
+        "dSource": 0,
+        "dStatus": 0,
+        "dClientWrap": 0,
+        "dSourceWrap": 0,
+        "dStatusWrap": 0,
+        "dQBtnX": 0,
+        "dBarH": 0,
+        "dGroups": [
+          [
+            0,
+            0
+          ],
+          [
+            0,
+            0
+          ],
+          [
+            0,
+            0
+          ]
+        ]
+      },
+      {
+        "from": "remove_longest",
+        "to": "clear_to_all",
+        "dClient": 0,
+        "dSource": 0,
+        "dStatus": 0,
+        "dClientWrap": 0,
+        "dSourceWrap": 0,
+        "dStatusWrap": 0,
+        "dQBtnX": 0,
+        "dBarH": 0,
+        "dGroups": [
+          [
+            0,
+            0
+          ],
+          [
+            0,
+            0
+          ],
+          [
+            0,
+            0
+          ]
+        ]
+      },
+      {
+        "from": "clear_to_all",
+        "to": "reset",
+        "dClient": 0,
+        "dSource": 0,
+        "dStatus": 0,
+        "dClientWrap": 0,
+        "dSourceWrap": 0,
+        "dStatusWrap": 0,
+        "dQBtnX": 0,
+        "dBarH": 0,
+        "dGroups": [
+          [
+            0,
+            0
+          ],
+          [
+            0,
+            0
+          ],
+          [
+            0,
+            0
+          ]
+        ]
+      },
+      {
+        "from": "reset",
+        "to": "panel_open",
+        "dClient": 0,
+        "dSource": 0,
+        "dStatus": 0,
+        "dClientWrap": 0,
+        "dSourceWrap": 0,
+        "dStatusWrap": 0,
+        "dQBtnX": 0,
+        "dBarH": 0,
+        "dGroups": [
+          [
+            0,
+            0
+          ],
+          [
+            0,
+            0
+          ],
+          [
+            0,
+            0
+          ]
+        ]
+      },
+      {
+        "from": "panel_open",
+        "to": "panel_close",
+        "dClient": 0,
+        "dSource": 0,
+        "dStatus": 0,
+        "dClientWrap": 0,
+        "dSourceWrap": 0,
+        "dStatusWrap": 0,
+        "dQBtnX": 0,
+        "dBarH": 0,
+        "dGroups": [
+          [
+            0,
+            0
+          ],
+          [
+            0,
+            0
+          ],
+          [
+            0,
+            0
+          ]
+        ]
+      },
+      {
+        "from": "panel_close",
+        "to": "tooltip_visible",
+        "dClient": 0,
+        "dSource": 0,
+        "dStatus": 0,
+        "dClientWrap": 0,
+        "dSourceWrap": 0,
+        "dStatusWrap": 0,
+        "dQBtnX": 0,
+        "dBarH": 0,
+        "dGroups": [
+          [
+            0,
+            0
+          ],
+          [
+            0,
+            0
+          ],
+          [
+            0,
+            0
+          ]
+        ]
+      },
+      {
+        "from": "tooltip_visible",
+        "to": "tooltip_hidden",
+        "dClient": 0,
+        "dSource": 0,
+        "dStatus": 0,
+        "dClientWrap": 0,
+        "dSourceWrap": 0,
+        "dStatusWrap": 0,
+        "dQBtnX": 0,
+        "dBarH": 0,
+        "dGroups": [
+          [
+            0,
+            0
+          ],
+          [
+            0,
+            0
+          ],
+          [
+            0,
+            0
+          ]
+        ]
+      },
+      {
+        "from": "tooltip_hidden",
+        "to": "status_selected",
+        "dClient": 0,
+        "dSource": 0,
+        "dStatus": 0,
+        "dClientWrap": 0,
+        "dSourceWrap": 0,
+        "dStatusWrap": 0,
+        "dQBtnX": 0,
+        "dBarH": 0,
+        "dGroups": [
+          [
+            0,
+            0
+          ],
+          [
+            0,
+            0
+          ],
+          [
+            0,
+            0
+          ]
+        ]
+      },
+      {
+        "from": "status_selected",
+        "to": "source_longest",
+        "dClient": 0,
+        "dSource": 0,
+        "dStatus": 0,
+        "dClientWrap": 0,
+        "dSourceWrap": 0,
+        "dStatusWrap": 0,
+        "dQBtnX": 0,
+        "dBarH": 0,
+        "dGroups": [
+          [
+            0,
+            0
+          ],
+          [
+            0,
+            0
+          ],
+          [
+            0,
+            0
+          ]
+        ]
+      },
+      {
+        "from": "source_longest",
+        "to": "source_cleared",
+        "dClient": 0,
+        "dSource": 0,
+        "dStatus": 0,
+        "dClientWrap": 0,
+        "dSourceWrap": 0,
+        "dStatusWrap": 0,
+        "dQBtnX": 0,
+        "dBarH": 0,
+        "dGroups": [
+          [
+            0,
+            0
+          ],
+          [
+            0,
+            0
+          ],
+          [
+            0,
+            0
+          ]
+        ]
+      }
+    ],
+    "states": [
+      {
+        "tag": "initial_all",
+        "client": {
+          "x": 340,
+          "y": 175.5,
+          "w": 240,
+          "h": 32
+        },
+        "source": {
+          "x": 628,
+          "y": 175.5,
+          "w": 300,
+          "h": 32
+        },
+        "status": {
+          "x": 1004,
+          "y": 175.5,
+          "w": 200,
+          "h": 32
+        },
+        "clientWrap": {
+          "x": 340,
+          "y": 175.5,
+          "w": 240,
+          "h": 32
+        },
+        "sourceWrap": {
+          "x": 628,
+          "y": 175.5,
+          "w": 300,
+          "h": 32
+        },
+        "statusWrap": {
+          "x": 1004,
+          "y": 175.5,
+          "w": 200,
+          "h": 32
+        },
+        "selection": {
+          "x": 342,
+          "y": 179.5,
+          "w": 210,
+          "h": 24
+        },
+        "selectedItem": {
+          "x": 342,
+          "y": 179.5,
+          "w": 58.02,
+          "h": 24
+        },
+        "tagsText": {
+          "x": 351,
+          "y": 182,
+          "w": 24.02,
+          "h": 17
+        },
+        "groups": [
+          {
+            "x": 292,
+            "y": 175.5,
+            "w": 288,
+            "h": 32
+          },
+          {
+            "x": 594,
+            "y": 175.5,
+            "w": 334,
+            "h": 32
+          },
+          {
+            "x": 942,
+            "y": 175.5,
+            "w": 262,
+            "h": 32
+          }
+        ],
+        "qBtn": {
+          "x": 1218,
+          "y": 176.5,
+          "w": 62,
+          "h": 30
+        },
+        "resetBtn": {
+          "x": 1300,
+          "y": 176.5,
+          "w": 58,
+          "h": 30
+        },
+        "bar": {
+          "x": 292,
+          "y": 175.5,
+          "w": 1556,
+          "h": 32
+        },
+        "overflowX": 0
+      },
+      {
+        "tag": "short_selected",
+        "client": {
+          "x": 340,
+          "y": 175.5,
+          "w": 240,
+          "h": 32
+        },
+        "source": {
+          "x": 628,
+          "y": 175.5,
+          "w": 300,
+          "h": 32
+        },
+        "status": {
+          "x": 1004,
+          "y": 175.5,
+          "w": 200,
+          "h": 32
+        },
+        "clientWrap": {
+          "x": 340,
+          "y": 175.5,
+          "w": 240,
+          "h": 32
+        },
+        "sourceWrap": {
+          "x": 628,
+          "y": 175.5,
+          "w": 300,
+          "h": 32
+        },
+        "statusWrap": {
+          "x": 1004,
+          "y": 175.5,
+          "w": 200,
+          "h": 32
+        },
+        "selection": {
+          "x": 342,
+          "y": 179.5,
+          "w": 210,
+          "h": 24
+        },
+        "selectedItem": {
+          "x": 342,
+          "y": 179.5,
+          "w": 210,
+          "h": 24
+        },
+        "tagsText": {
+          "x": 351,
+          "y": 182,
+          "w": 176,
+          "h": 17
+        },
+        "groups": [
+          {
+            "x": 292,
+            "y": 175.5,
+            "w": 288,
+            "h": 32
+          },
+          {
+            "x": 594,
+            "y": 175.5,
+            "w": 334,
+            "h": 32
+          },
+          {
+            "x": 942,
+            "y": 175.5,
+            "w": 262,
+            "h": 32
+          }
+        ],
+        "qBtn": {
+          "x": 1218,
+          "y": 176.5,
+          "w": 62,
+          "h": 30
+        },
+        "resetBtn": {
+          "x": 1300,
+          "y": 176.5,
+          "w": 58,
+          "h": 30
+        },
+        "bar": {
+          "x": 292,
+          "y": 175.5,
+          "w": 1556,
+          "h": 32
+        },
+        "overflowX": 0
+      },
+      {
+        "tag": "long_selected",
+        "client": {
+          "x": 340,
+          "y": 175.5,
+          "w": 240,
+          "h": 32
+        },
+        "source": {
+          "x": 628,
+          "y": 175.5,
+          "w": 300,
+          "h": 32
+        },
+        "status": {
+          "x": 1004,
+          "y": 175.5,
+          "w": 200,
+          "h": 32
+        },
+        "clientWrap": {
+          "x": 340,
+          "y": 175.5,
+          "w": 240,
+          "h": 32
+        },
+        "sourceWrap": {
+          "x": 628,
+          "y": 175.5,
+          "w": 300,
+          "h": 32
+        },
+        "statusWrap": {
+          "x": 1004,
+          "y": 175.5,
+          "w": 200,
+          "h": 32
+        },
+        "selection": {
+          "x": 342,
+          "y": 179.5,
+          "w": 210,
+          "h": 24
+        },
+        "selectedItem": {
+          "x": 342,
+          "y": 179.5,
+          "w": 142.7,
+          "h": 24
+        },
+        "tagsText": {
+          "x": 351,
+          "y": 183.5,
+          "w": 108.7,
+          "h": 14
+        },
+        "groups": [
+          {
+            "x": 292,
+            "y": 175.5,
+            "w": 288,
+            "h": 32
+          },
+          {
+            "x": 594,
+            "y": 175.5,
+            "w": 334,
+            "h": 32
+          },
+          {
+            "x": 942,
+            "y": 175.5,
+            "w": 262,
+            "h": 32
+          }
+        ],
+        "qBtn": {
+          "x": 1218,
+          "y": 176.5,
+          "w": 62,
+          "h": 30
+        },
+        "resetBtn": {
+          "x": 1300,
+          "y": 176.5,
+          "w": 58,
+          "h": 30
+        },
+        "bar": {
+          "x": 292,
+          "y": 175.5,
+          "w": 1556,
+          "h": 32
+        },
+        "overflowX": 0
+      },
+      {
+        "tag": "short_to_long",
+        "client": {
+          "x": 340,
+          "y": 175.5,
+          "w": 240,
+          "h": 32
+        },
+        "source": {
+          "x": 628,
+          "y": 175.5,
+          "w": 300,
+          "h": 32
+        },
+        "status": {
+          "x": 1004,
+          "y": 175.5,
+          "w": 200,
+          "h": 32
+        },
+        "clientWrap": {
+          "x": 340,
+          "y": 175.5,
+          "w": 240,
+          "h": 32
+        },
+        "sourceWrap": {
+          "x": 628,
+          "y": 175.5,
+          "w": 300,
+          "h": 32
+        },
+        "statusWrap": {
+          "x": 1004,
+          "y": 175.5,
+          "w": 200,
+          "h": 32
+        },
+        "selection": {
+          "x": 342,
+          "y": 179.5,
+          "w": 210,
+          "h": 24
+        },
+        "selectedItem": {
+          "x": 342,
+          "y": 179.5,
+          "w": 142.7,
+          "h": 24
+        },
+        "tagsText": {
+          "x": 351,
+          "y": 183.5,
+          "w": 108.7,
+          "h": 14
+        },
+        "groups": [
+          {
+            "x": 292,
+            "y": 175.5,
+            "w": 288,
+            "h": 32
+          },
+          {
+            "x": 594,
+            "y": 175.5,
+            "w": 334,
+            "h": 32
+          },
+          {
+            "x": 942,
+            "y": 175.5,
+            "w": 262,
+            "h": 32
+          }
+        ],
+        "qBtn": {
+          "x": 1218,
+          "y": 176.5,
+          "w": 62,
+          "h": 30
+        },
+        "resetBtn": {
+          "x": 1300,
+          "y": 176.5,
+          "w": 58,
+          "h": 30
+        },
+        "bar": {
+          "x": 292,
+          "y": 175.5,
+          "w": 1556,
+          "h": 32
+        },
+        "overflowX": 0
+      },
+      {
+        "tag": "long_to_short",
+        "client": {
+          "x": 340,
+          "y": 175.5,
+          "w": 240,
+          "h": 32
+        },
+        "source": {
+          "x": 628,
+          "y": 175.5,
+          "w": 300,
+          "h": 32
+        },
+        "status": {
+          "x": 1004,
+          "y": 175.5,
+          "w": 200,
+          "h": 32
+        },
+        "clientWrap": {
+          "x": 340,
+          "y": 175.5,
+          "w": 240,
+          "h": 32
+        },
+        "sourceWrap": {
+          "x": 628,
+          "y": 175.5,
+          "w": 300,
+          "h": 32
+        },
+        "statusWrap": {
+          "x": 1004,
+          "y": 175.5,
+          "w": 200,
+          "h": 32
+        },
+        "selection": {
+          "x": 342,
+          "y": 179.5,
+          "w": 210,
+          "h": 24
+        },
+        "selectedItem": {
+          "x": 342,
+          "y": 179.5,
+          "w": 210,
+          "h": 24
+        },
+        "tagsText": {
+          "x": 351,
+          "y": 182,
+          "w": 176,
+          "h": 17
+        },
+        "groups": [
+          {
+            "x": 292,
+            "y": 175.5,
+            "w": 288,
+            "h": 32
+          },
+          {
+            "x": 594,
+            "y": 175.5,
+            "w": 334,
+            "h": 32
+          },
+          {
+            "x": 942,
+            "y": 175.5,
+            "w": 262,
+            "h": 32
+          }
+        ],
+        "qBtn": {
+          "x": 1218,
+          "y": 176.5,
+          "w": 62,
+          "h": 30
+        },
+        "resetBtn": {
+          "x": 1300,
+          "y": 176.5,
+          "w": 58,
+          "h": 30
+        },
+        "bar": {
+          "x": 292,
+          "y": 175.5,
+          "w": 1556,
+          "h": 32
+        },
+        "overflowX": 0
+      },
+      {
+        "tag": "multi_collapse_tags",
+        "client": {
+          "x": 340,
+          "y": 175.5,
+          "w": 240,
+          "h": 32
+        },
+        "source": {
+          "x": 628,
+          "y": 175.5,
+          "w": 300,
+          "h": 32
+        },
+        "status": {
+          "x": 1004,
+          "y": 175.5,
+          "w": 200,
+          "h": 32
+        },
+        "clientWrap": {
+          "x": 340,
+          "y": 175.5,
+          "w": 240,
+          "h": 32
+        },
+        "sourceWrap": {
+          "x": 628,
+          "y": 175.5,
+          "w": 300,
+          "h": 32
+        },
+        "statusWrap": {
+          "x": 1004,
+          "y": 175.5,
+          "w": 200,
+          "h": 32
+        },
+        "selection": {
+          "x": 342,
+          "y": 179.5,
+          "w": 210,
+          "h": 24
+        },
+        "selectedItem": {
+          "x": 342,
+          "y": 179.5,
+          "w": 168.98,
+          "h": 24
+        },
+        "tagsText": {
+          "x": 351,
+          "y": 182,
+          "w": 134.98,
+          "h": 17
+        },
+        "groups": [
+          {
+            "x": 292,
+            "y": 175.5,
+            "w": 288,
+            "h": 32
+          },
+          {
+            "x": 594,
+            "y": 175.5,
+            "w": 334,
+            "h": 32
+          },
+          {
+            "x": 942,
+            "y": 175.5,
+            "w": 262,
+            "h": 32
+          }
+        ],
+        "qBtn": {
+          "x": 1218,
+          "y": 176.5,
+          "w": 62,
+          "h": 30
+        },
+        "resetBtn": {
+          "x": 1300,
+          "y": 176.5,
+          "w": 58,
+          "h": 30
+        },
+        "bar": {
+          "x": 292,
+          "y": 175.5,
+          "w": 1556,
+          "h": 32
+        },
+        "overflowX": 0
+      },
+      {
+        "tag": "remove_longest",
+        "client": {
+          "x": 340,
+          "y": 175.5,
+          "w": 240,
+          "h": 32
+        },
+        "source": {
+          "x": 628,
+          "y": 175.5,
+          "w": 300,
+          "h": 32
+        },
+        "status": {
+          "x": 1004,
+          "y": 175.5,
+          "w": 200,
+          "h": 32
+        },
+        "clientWrap": {
+          "x": 340,
+          "y": 175.5,
+          "w": 240,
+          "h": 32
+        },
+        "sourceWrap": {
+          "x": 628,
+          "y": 175.5,
+          "w": 300,
+          "h": 32
+        },
+        "statusWrap": {
+          "x": 1004,
+          "y": 175.5,
+          "w": 200,
+          "h": 32
+        },
+        "selection": {
+          "x": 342,
+          "y": 179.5,
+          "w": 210,
+          "h": 24
+        },
+        "selectedItem": {
+          "x": 342,
+          "y": 179.5,
+          "w": 168.98,
+          "h": 24
+        },
+        "tagsText": {
+          "x": 351,
+          "y": 182,
+          "w": 134.98,
+          "h": 17
+        },
+        "groups": [
+          {
+            "x": 292,
+            "y": 175.5,
+            "w": 288,
+            "h": 32
+          },
+          {
+            "x": 594,
+            "y": 175.5,
+            "w": 334,
+            "h": 32
+          },
+          {
+            "x": 942,
+            "y": 175.5,
+            "w": 262,
+            "h": 32
+          }
+        ],
+        "qBtn": {
+          "x": 1218,
+          "y": 176.5,
+          "w": 62,
+          "h": 30
+        },
+        "resetBtn": {
+          "x": 1300,
+          "y": 176.5,
+          "w": 58,
+          "h": 30
+        },
+        "bar": {
+          "x": 292,
+          "y": 175.5,
+          "w": 1556,
+          "h": 32
+        },
+        "overflowX": 0
+      },
+      {
+        "tag": "clear_to_all",
+        "client": {
+          "x": 340,
+          "y": 175.5,
+          "w": 240,
+          "h": 32
+        },
+        "source": {
+          "x": 628,
+          "y": 175.5,
+          "w": 300,
+          "h": 32
+        },
+        "status": {
+          "x": 1004,
+          "y": 175.5,
+          "w": 200,
+          "h": 32
+        },
+        "clientWrap": {
+          "x": 340,
+          "y": 175.5,
+          "w": 240,
+          "h": 32
+        },
+        "sourceWrap": {
+          "x": 628,
+          "y": 175.5,
+          "w": 300,
+          "h": 32
+        },
+        "statusWrap": {
+          "x": 1004,
+          "y": 175.5,
+          "w": 200,
+          "h": 32
+        },
+        "selection": {
+          "x": 342,
+          "y": 179.5,
+          "w": 210,
+          "h": 24
+        },
+        "selectedItem": {
+          "x": 342,
+          "y": 179.5,
+          "w": 58.02,
+          "h": 24
+        },
+        "tagsText": {
+          "x": 351,
+          "y": 182,
+          "w": 24.02,
+          "h": 17
+        },
+        "groups": [
+          {
+            "x": 292,
+            "y": 175.5,
+            "w": 288,
+            "h": 32
+          },
+          {
+            "x": 594,
+            "y": 175.5,
+            "w": 334,
+            "h": 32
+          },
+          {
+            "x": 942,
+            "y": 175.5,
+            "w": 262,
+            "h": 32
+          }
+        ],
+        "qBtn": {
+          "x": 1218,
+          "y": 176.5,
+          "w": 62,
+          "h": 30
+        },
+        "resetBtn": {
+          "x": 1300,
+          "y": 176.5,
+          "w": 58,
+          "h": 30
+        },
+        "bar": {
+          "x": 292,
+          "y": 175.5,
+          "w": 1556,
+          "h": 32
+        },
+        "overflowX": 0
+      },
+      {
+        "tag": "reset",
+        "client": {
+          "x": 340,
+          "y": 175.5,
+          "w": 240,
+          "h": 32
+        },
+        "source": {
+          "x": 628,
+          "y": 175.5,
+          "w": 300,
+          "h": 32
+        },
+        "status": {
+          "x": 1004,
+          "y": 175.5,
+          "w": 200,
+          "h": 32
+        },
+        "clientWrap": {
+          "x": 340,
+          "y": 175.5,
+          "w": 240,
+          "h": 32
+        },
+        "sourceWrap": {
+          "x": 628,
+          "y": 175.5,
+          "w": 300,
+          "h": 32
+        },
+        "statusWrap": {
+          "x": 1004,
+          "y": 175.5,
+          "w": 200,
+          "h": 32
+        },
+        "selection": {
+          "x": 342,
+          "y": 179.5,
+          "w": 210,
+          "h": 24
+        },
+        "selectedItem": {
+          "x": 342,
+          "y": 179.5,
+          "w": 58.02,
+          "h": 24
+        },
+        "tagsText": {
+          "x": 351,
+          "y": 182,
+          "w": 24.02,
+          "h": 17
+        },
+        "groups": [
+          {
+            "x": 292,
+            "y": 175.5,
+            "w": 288,
+            "h": 32
+          },
+          {
+            "x": 594,
+            "y": 175.5,
+            "w": 334,
+            "h": 32
+          },
+          {
+            "x": 942,
+            "y": 175.5,
+            "w": 262,
+            "h": 32
+          }
+        ],
+        "qBtn": {
+          "x": 1218,
+          "y": 176.5,
+          "w": 62,
+          "h": 30
+        },
+        "resetBtn": {
+          "x": 1300,
+          "y": 176.5,
+          "w": 58,
+          "h": 30
+        },
+        "bar": {
+          "x": 292,
+          "y": 175.5,
+          "w": 1556,
+          "h": 32
+        },
+        "overflowX": 0
+      },
+      {
+        "tag": "panel_open",
+        "client": {
+          "x": 340,
+          "y": 175.5,
+          "w": 240,
+          "h": 32
+        },
+        "source": {
+          "x": 628,
+          "y": 175.5,
+          "w": 300,
+          "h": 32
+        },
+        "status": {
+          "x": 1004,
+          "y": 175.5,
+          "w": 200,
+          "h": 32
+        },
+        "clientWrap": {
+          "x": 340,
+          "y": 175.5,
+          "w": 240,
+          "h": 32
+        },
+        "sourceWrap": {
+          "x": 628,
+          "y": 175.5,
+          "w": 300,
+          "h": 32
+        },
+        "statusWrap": {
+          "x": 1004,
+          "y": 175.5,
+          "w": 200,
+          "h": 32
+        },
+        "selection": {
+          "x": 342,
+          "y": 179.5,
+          "w": 210,
+          "h": 24
+        },
+        "selectedItem": {
+          "x": 342,
+          "y": 179.5,
+          "w": 58.02,
+          "h": 24
+        },
+        "tagsText": {
+          "x": 351,
+          "y": 182,
+          "w": 24.02,
+          "h": 17
+        },
+        "groups": [
+          {
+            "x": 292,
+            "y": 175.5,
+            "w": 288,
+            "h": 32
+          },
+          {
+            "x": 594,
+            "y": 175.5,
+            "w": 334,
+            "h": 32
+          },
+          {
+            "x": 942,
+            "y": 175.5,
+            "w": 262,
+            "h": 32
+          }
+        ],
+        "qBtn": {
+          "x": 1218,
+          "y": 176.5,
+          "w": 62,
+          "h": 30
+        },
+        "resetBtn": {
+          "x": 1300,
+          "y": 176.5,
+          "w": 58,
+          "h": 30
+        },
+        "bar": {
+          "x": 292,
+          "y": 175.5,
+          "w": 1556,
+          "h": 32
+        },
+        "overflowX": 0
+      },
+      {
+        "tag": "panel_close",
+        "client": {
+          "x": 340,
+          "y": 175.5,
+          "w": 240,
+          "h": 32
+        },
+        "source": {
+          "x": 628,
+          "y": 175.5,
+          "w": 300,
+          "h": 32
+        },
+        "status": {
+          "x": 1004,
+          "y": 175.5,
+          "w": 200,
+          "h": 32
+        },
+        "clientWrap": {
+          "x": 340,
+          "y": 175.5,
+          "w": 240,
+          "h": 32
+        },
+        "sourceWrap": {
+          "x": 628,
+          "y": 175.5,
+          "w": 300,
+          "h": 32
+        },
+        "statusWrap": {
+          "x": 1004,
+          "y": 175.5,
+          "w": 200,
+          "h": 32
+        },
+        "selection": {
+          "x": 342,
+          "y": 179.5,
+          "w": 210,
+          "h": 24
+        },
+        "selectedItem": {
+          "x": 342,
+          "y": 179.5,
+          "w": 58.02,
+          "h": 24
+        },
+        "tagsText": {
+          "x": 351,
+          "y": 182,
+          "w": 24.02,
+          "h": 17
+        },
+        "groups": [
+          {
+            "x": 292,
+            "y": 175.5,
+            "w": 288,
+            "h": 32
+          },
+          {
+            "x": 594,
+            "y": 175.5,
+            "w": 334,
+            "h": 32
+          },
+          {
+            "x": 942,
+            "y": 175.5,
+            "w": 262,
+            "h": 32
+          }
+        ],
+        "qBtn": {
+          "x": 1218,
+          "y": 176.5,
+          "w": 62,
+          "h": 30
+        },
+        "resetBtn": {
+          "x": 1300,
+          "y": 176.5,
+          "w": 58,
+          "h": 30
+        },
+        "bar": {
+          "x": 292,
+          "y": 175.5,
+          "w": 1556,
+          "h": 32
+        },
+        "overflowX": 0
+      },
+      {
+        "tag": "tooltip_visible",
+        "client": {
+          "x": 340,
+          "y": 175.5,
+          "w": 240,
+          "h": 32
+        },
+        "source": {
+          "x": 628,
+          "y": 175.5,
+          "w": 300,
+          "h": 32
+        },
+        "status": {
+          "x": 1004,
+          "y": 175.5,
+          "w": 200,
+          "h": 32
+        },
+        "clientWrap": {
+          "x": 340,
+          "y": 175.5,
+          "w": 240,
+          "h": 32
+        },
+        "sourceWrap": {
+          "x": 628,
+          "y": 175.5,
+          "w": 300,
+          "h": 32
+        },
+        "statusWrap": {
+          "x": 1004,
+          "y": 175.5,
+          "w": 200,
+          "h": 32
+        },
+        "selection": {
+          "x": 342,
+          "y": 179.5,
+          "w": 210,
+          "h": 24
+        },
+        "selectedItem": {
+          "x": 342,
+          "y": 179.5,
+          "w": 58.02,
+          "h": 24
+        },
+        "tagsText": {
+          "x": 351,
+          "y": 182,
+          "w": 24.02,
+          "h": 17
+        },
+        "groups": [
+          {
+            "x": 292,
+            "y": 175.5,
+            "w": 288,
+            "h": 32
+          },
+          {
+            "x": 594,
+            "y": 175.5,
+            "w": 334,
+            "h": 32
+          },
+          {
+            "x": 942,
+            "y": 175.5,
+            "w": 262,
+            "h": 32
+          }
+        ],
+        "qBtn": {
+          "x": 1218,
+          "y": 176.5,
+          "w": 62,
+          "h": 30
+        },
+        "resetBtn": {
+          "x": 1300,
+          "y": 176.5,
+          "w": 58,
+          "h": 30
+        },
+        "bar": {
+          "x": 292,
+          "y": 175.5,
+          "w": 1556,
+          "h": 32
+        },
+        "overflowX": 0
+      },
+      {
+        "tag": "tooltip_hidden",
+        "client": {
+          "x": 340,
+          "y": 175.5,
+          "w": 240,
+          "h": 32
+        },
+        "source": {
+          "x": 628,
+          "y": 175.5,
+          "w": 300,
+          "h": 32
+        },
+        "status": {
+          "x": 1004,
+          "y": 175.5,
+          "w": 200,
+          "h": 32
+        },
+        "clientWrap": {
+          "x": 340,
+          "y": 175.5,
+          "w": 240,
+          "h": 32
+        },
+        "sourceWrap": {
+          "x": 628,
+          "y": 175.5,
+          "w": 300,
+          "h": 32
+        },
+        "statusWrap": {
+          "x": 1004,
+          "y": 175.5,
+          "w": 200,
+          "h": 32
+        },
+        "selection": {
+          "x": 342,
+          "y": 179.5,
+          "w": 210,
+          "h": 24
+        },
+        "selectedItem": {
+          "x": 342,
+          "y": 179.5,
+          "w": 58.02,
+          "h": 24
+        },
+        "tagsText": {
+          "x": 351,
+          "y": 182,
+          "w": 24.02,
+          "h": 17
+        },
+        "groups": [
+          {
+            "x": 292,
+            "y": 175.5,
+            "w": 288,
+            "h": 32
+          },
+          {
+            "x": 594,
+            "y": 175.5,
+            "w": 334,
+            "h": 32
+          },
+          {
+            "x": 942,
+            "y": 175.5,
+            "w": 262,
+            "h": 32
+          }
+        ],
+        "qBtn": {
+          "x": 1218,
+          "y": 176.5,
+          "w": 62,
+          "h": 30
+        },
+        "resetBtn": {
+          "x": 1300,
+          "y": 176.5,
+          "w": 58,
+          "h": 30
+        },
+        "bar": {
+          "x": 292,
+          "y": 175.5,
+          "w": 1556,
+          "h": 32
+        },
+        "overflowX": 0
+      },
+      {
+        "tag": "status_selected",
+        "client": {
+          "x": 340,
+          "y": 175.5,
+          "w": 240,
+          "h": 32
+        },
+        "source": {
+          "x": 628,
+          "y": 175.5,
+          "w": 300,
+          "h": 32
+        },
+        "status": {
+          "x": 1004,
+          "y": 175.5,
+          "w": 200,
+          "h": 32
+        },
+        "clientWrap": {
+          "x": 340,
+          "y": 175.5,
+          "w": 240,
+          "h": 32
+        },
+        "sourceWrap": {
+          "x": 628,
+          "y": 175.5,
+          "w": 300,
+          "h": 32
+        },
+        "statusWrap": {
+          "x": 1004,
+          "y": 175.5,
+          "w": 200,
+          "h": 32
+        },
+        "selection": {
+          "x": 342,
+          "y": 179.5,
+          "w": 210,
+          "h": 24
+        },
+        "selectedItem": {
+          "x": 342,
+          "y": 179.5,
+          "w": 58.02,
+          "h": 24
+        },
+        "tagsText": {
+          "x": 351,
+          "y": 182,
+          "w": 24.02,
+          "h": 17
+        },
+        "groups": [
+          {
+            "x": 292,
+            "y": 175.5,
+            "w": 288,
+            "h": 32
+          },
+          {
+            "x": 594,
+            "y": 175.5,
+            "w": 334,
+            "h": 32
+          },
+          {
+            "x": 942,
+            "y": 175.5,
+            "w": 262,
+            "h": 32
+          }
+        ],
+        "qBtn": {
+          "x": 1218,
+          "y": 176.5,
+          "w": 62,
+          "h": 30
+        },
+        "resetBtn": {
+          "x": 1300,
+          "y": 176.5,
+          "w": 58,
+          "h": 30
+        },
+        "bar": {
+          "x": 292,
+          "y": 175.5,
+          "w": 1556,
+          "h": 32
+        },
+        "overflowX": 0
+      },
+      {
+        "tag": "source_longest",
+        "client": {
+          "x": 340,
+          "y": 175.5,
+          "w": 240,
+          "h": 32
+        },
+        "source": {
+          "x": 628,
+          "y": 175.5,
+          "w": 300,
+          "h": 32
+        },
+        "status": {
+          "x": 1004,
+          "y": 175.5,
+          "w": 200,
+          "h": 32
+        },
+        "clientWrap": {
+          "x": 340,
+          "y": 175.5,
+          "w": 240,
+          "h": 32
+        },
+        "sourceWrap": {
+          "x": 628,
+          "y": 175.5,
+          "w": 300,
+          "h": 32
+        },
+        "statusWrap": {
+          "x": 1004,
+          "y": 175.5,
+          "w": 200,
+          "h": 32
+        },
+        "selection": {
+          "x": 342,
+          "y": 179.5,
+          "w": 210,
+          "h": 24
+        },
+        "selectedItem": {
+          "x": 342,
+          "y": 179.5,
+          "w": 58.02,
+          "h": 24
+        },
+        "tagsText": {
+          "x": 351,
+          "y": 182,
+          "w": 24.02,
+          "h": 17
+        },
+        "groups": [
+          {
+            "x": 292,
+            "y": 175.5,
+            "w": 288,
+            "h": 32
+          },
+          {
+            "x": 594,
+            "y": 175.5,
+            "w": 334,
+            "h": 32
+          },
+          {
+            "x": 942,
+            "y": 175.5,
+            "w": 262,
+            "h": 32
+          }
+        ],
+        "qBtn": {
+          "x": 1218,
+          "y": 176.5,
+          "w": 62,
+          "h": 30
+        },
+        "resetBtn": {
+          "x": 1300,
+          "y": 176.5,
+          "w": 58,
+          "h": 30
+        },
+        "bar": {
+          "x": 292,
+          "y": 175.5,
+          "w": 1556,
+          "h": 32
+        },
+        "overflowX": 0
+      },
+      {
+        "tag": "source_cleared",
+        "client": {
+          "x": 340,
+          "y": 175.5,
+          "w": 240,
+          "h": 32
+        },
+        "source": {
+          "x": 628,
+          "y": 175.5,
+          "w": 300,
+          "h": 32
+        },
+        "status": {
+          "x": 1004,
+          "y": 175.5,
+          "w": 200,
+          "h": 32
+        },
+        "clientWrap": {
+          "x": 340,
+          "y": 175.5,
+          "w": 240,
+          "h": 32
+        },
+        "sourceWrap": {
+          "x": 628,
+          "y": 175.5,
+          "w": 300,
+          "h": 32
+        },
+        "statusWrap": {
+          "x": 1004,
+          "y": 175.5,
+          "w": 200,
+          "h": 32
+        },
+        "selection": {
+          "x": 342,
+          "y": 179.5,
+          "w": 210,
+          "h": 24
+        },
+        "selectedItem": {
+          "x": 342,
+          "y": 179.5,
+          "w": 58.02,
+          "h": 24
+        },
+        "tagsText": {
+          "x": 351,
+          "y": 182,
+          "w": 24.02,
+          "h": 17
+        },
+        "groups": [
+          {
+            "x": 292,
+            "y": 175.5,
+            "w": 288,
+            "h": 32
+          },
+          {
+            "x": 594,
+            "y": 175.5,
+            "w": 334,
+            "h": 32
+          },
+          {
+            "x": 942,
+            "y": 175.5,
+            "w": 262,
+            "h": 32
+          }
+        ],
+        "qBtn": {
+          "x": 1218,
+          "y": 176.5,
+          "w": 62,
+          "h": 30
+        },
+        "resetBtn": {
+          "x": 1300,
+          "y": 176.5,
+          "w": 58,
+          "h": 30
+        },
+        "bar": {
+          "x": 292,
+          "y": 175.5,
+          "w": 1556,
+          "h": 32
+        },
+        "overflowX": 0
+      }
+    ]
+  },
+  {
+    "viewport": {
+      "w": 2560,
+      "h": 1440
+    },
+    "widths": {
+      "client": 240,
+      "source": 300,
+      "status": 200,
+      "clientWrap": 240,
+      "sourceWrap": 300,
+      "statusWrap": 200
+    },
+    "maxAdjacentDelta": {
+      "client": 0,
+      "source": 0,
+      "status": 0,
+      "clientWrap": 0,
+      "sourceWrap": 0,
+      "statusWrap": 0,
+      "qBtnX": 0,
+      "barH": 0,
+      "groups": 0
+    },
+    "maxDeltaVsInitial": {
+      "client": 0,
+      "source": 0,
+      "status": 0,
+      "clientWrap": 0,
+      "sourceWrap": 0,
+      "statusWrap": 0,
+      "qBtnX": 0,
+      "barH": 0
+    },
+    "stateTags": [
+      "initial_all",
+      "short_selected",
+      "long_selected",
+      "short_to_long",
+      "long_to_short",
+      "multi_collapse_tags",
+      "remove_longest",
+      "clear_to_all",
+      "reset",
+      "panel_open",
+      "panel_close",
+      "tooltip_visible",
+      "tooltip_hidden",
+      "status_selected",
+      "source_longest",
+      "source_cleared"
+    ],
+    "clientEnums": {
+      "selection": {
+        "x": 342,
+        "y": 179.5,
+        "w": 210,
+        "h": 24
+      },
+      "selectedItem": {
+        "x": 342,
+        "y": 179.5,
+        "w": 58.02,
+        "h": 24
+      },
+      "tagsText": {
+        "x": 351,
+        "y": 182,
+        "w": 24.02,
+        "h": 17
+      }
+    },
+    "maxHorizontalOverflow": 0,
+    "tooltip": {
+      "closedCount": 0,
+      "openCount": 1,
+      "afterLeaveCount": 0
+    },
+    "groupsY": [
+      175.5,
+      175.5,
+      175.5
+    ],
+    "barH": 32,
+    "adjacent": [
+      {
+        "from": "initial_all",
+        "to": "short_selected",
+        "dClient": 0,
+        "dSource": 0,
+        "dStatus": 0,
+        "dClientWrap": 0,
+        "dSourceWrap": 0,
+        "dStatusWrap": 0,
+        "dQBtnX": 0,
+        "dBarH": 0,
+        "dGroups": [
+          [
+            0,
+            0
+          ],
+          [
+            0,
+            0
+          ],
+          [
+            0,
+            0
+          ]
+        ]
+      },
+      {
+        "from": "short_selected",
+        "to": "long_selected",
+        "dClient": 0,
+        "dSource": 0,
+        "dStatus": 0,
+        "dClientWrap": 0,
+        "dSourceWrap": 0,
+        "dStatusWrap": 0,
+        "dQBtnX": 0,
+        "dBarH": 0,
+        "dGroups": [
+          [
+            0,
+            0
+          ],
+          [
+            0,
+            0
+          ],
+          [
+            0,
+            0
+          ]
+        ]
+      },
+      {
+        "from": "long_selected",
+        "to": "short_to_long",
+        "dClient": 0,
+        "dSource": 0,
+        "dStatus": 0,
+        "dClientWrap": 0,
+        "dSourceWrap": 0,
+        "dStatusWrap": 0,
+        "dQBtnX": 0,
+        "dBarH": 0,
+        "dGroups": [
+          [
+            0,
+            0
+          ],
+          [
+            0,
+            0
+          ],
+          [
+            0,
+            0
+          ]
+        ]
+      },
+      {
+        "from": "short_to_long",
+        "to": "long_to_short",
+        "dClient": 0,
+        "dSource": 0,
+        "dStatus": 0,
+        "dClientWrap": 0,
+        "dSourceWrap": 0,
+        "dStatusWrap": 0,
+        "dQBtnX": 0,
+        "dBarH": 0,
+        "dGroups": [
+          [
+            0,
+            0
+          ],
+          [
+            0,
+            0
+          ],
+          [
+            0,
+            0
+          ]
+        ]
+      },
+      {
+        "from": "long_to_short",
+        "to": "multi_collapse_tags",
+        "dClient": 0,
+        "dSource": 0,
+        "dStatus": 0,
+        "dClientWrap": 0,
+        "dSourceWrap": 0,
+        "dStatusWrap": 0,
+        "dQBtnX": 0,
+        "dBarH": 0,
+        "dGroups": [
+          [
+            0,
+            0
+          ],
+          [
+            0,
+            0
+          ],
+          [
+            0,
+            0
+          ]
+        ]
+      },
+      {
+        "from": "multi_collapse_tags",
+        "to": "remove_longest",
+        "dClient": 0,
+        "dSource": 0,
+        "dStatus": 0,
+        "dClientWrap": 0,
+        "dSourceWrap": 0,
+        "dStatusWrap": 0,
+        "dQBtnX": 0,
+        "dBarH": 0,
+        "dGroups": [
+          [
+            0,
+            0
+          ],
+          [
+            0,
+            0
+          ],
+          [
+            0,
+            0
+          ]
+        ]
+      },
+      {
+        "from": "remove_longest",
+        "to": "clear_to_all",
+        "dClient": 0,
+        "dSource": 0,
+        "dStatus": 0,
+        "dClientWrap": 0,
+        "dSourceWrap": 0,
+        "dStatusWrap": 0,
+        "dQBtnX": 0,
+        "dBarH": 0,
+        "dGroups": [
+          [
+            0,
+            0
+          ],
+          [
+            0,
+            0
+          ],
+          [
+            0,
+            0
+          ]
+        ]
+      },
+      {
+        "from": "clear_to_all",
+        "to": "reset",
+        "dClient": 0,
+        "dSource": 0,
+        "dStatus": 0,
+        "dClientWrap": 0,
+        "dSourceWrap": 0,
+        "dStatusWrap": 0,
+        "dQBtnX": 0,
+        "dBarH": 0,
+        "dGroups": [
+          [
+            0,
+            0
+          ],
+          [
+            0,
+            0
+          ],
+          [
+            0,
+            0
+          ]
+        ]
+      },
+      {
+        "from": "reset",
+        "to": "panel_open",
+        "dClient": 0,
+        "dSource": 0,
+        "dStatus": 0,
+        "dClientWrap": 0,
+        "dSourceWrap": 0,
+        "dStatusWrap": 0,
+        "dQBtnX": 0,
+        "dBarH": 0,
+        "dGroups": [
+          [
+            0,
+            0
+          ],
+          [
+            0,
+            0
+          ],
+          [
+            0,
+            0
+          ]
+        ]
+      },
+      {
+        "from": "panel_open",
+        "to": "panel_close",
+        "dClient": 0,
+        "dSource": 0,
+        "dStatus": 0,
+        "dClientWrap": 0,
+        "dSourceWrap": 0,
+        "dStatusWrap": 0,
+        "dQBtnX": 0,
+        "dBarH": 0,
+        "dGroups": [
+          [
+            0,
+            0
+          ],
+          [
+            0,
+            0
+          ],
+          [
+            0,
+            0
+          ]
+        ]
+      },
+      {
+        "from": "panel_close",
+        "to": "tooltip_visible",
+        "dClient": 0,
+        "dSource": 0,
+        "dStatus": 0,
+        "dClientWrap": 0,
+        "dSourceWrap": 0,
+        "dStatusWrap": 0,
+        "dQBtnX": 0,
+        "dBarH": 0,
+        "dGroups": [
+          [
+            0,
+            0
+          ],
+          [
+            0,
+            0
+          ],
+          [
+            0,
+            0
+          ]
+        ]
+      },
+      {
+        "from": "tooltip_visible",
+        "to": "tooltip_hidden",
+        "dClient": 0,
+        "dSource": 0,
+        "dStatus": 0,
+        "dClientWrap": 0,
+        "dSourceWrap": 0,
+        "dStatusWrap": 0,
+        "dQBtnX": 0,
+        "dBarH": 0,
+        "dGroups": [
+          [
+            0,
+            0
+          ],
+          [
+            0,
+            0
+          ],
+          [
+            0,
+            0
+          ]
+        ]
+      },
+      {
+        "from": "tooltip_hidden",
+        "to": "status_selected",
+        "dClient": 0,
+        "dSource": 0,
+        "dStatus": 0,
+        "dClientWrap": 0,
+        "dSourceWrap": 0,
+        "dStatusWrap": 0,
+        "dQBtnX": 0,
+        "dBarH": 0,
+        "dGroups": [
+          [
+            0,
+            0
+          ],
+          [
+            0,
+            0
+          ],
+          [
+            0,
+            0
+          ]
+        ]
+      },
+      {
+        "from": "status_selected",
+        "to": "source_longest",
+        "dClient": 0,
+        "dSource": 0,
+        "dStatus": 0,
+        "dClientWrap": 0,
+        "dSourceWrap": 0,
+        "dStatusWrap": 0,
+        "dQBtnX": 0,
+        "dBarH": 0,
+        "dGroups": [
+          [
+            0,
+            0
+          ],
+          [
+            0,
+            0
+          ],
+          [
+            0,
+            0
+          ]
+        ]
+      },
+      {
+        "from": "source_longest",
+        "to": "source_cleared",
+        "dClient": 0,
+        "dSource": 0,
+        "dStatus": 0,
+        "dClientWrap": 0,
+        "dSourceWrap": 0,
+        "dStatusWrap": 0,
+        "dQBtnX": 0,
+        "dBarH": 0,
+        "dGroups": [
+          [
+            0,
+            0
+          ],
+          [
+            0,
+            0
+          ],
+          [
+            0,
+            0
+          ]
+        ]
+      }
+    ],
+    "states": [
+      {
+        "tag": "initial_all",
+        "client": {
+          "x": 340,
+          "y": 175.5,
+          "w": 240,
+          "h": 32
+        },
+        "source": {
+          "x": 628,
+          "y": 175.5,
+          "w": 300,
+          "h": 32
+        },
+        "status": {
+          "x": 1004,
+          "y": 175.5,
+          "w": 200,
+          "h": 32
+        },
+        "clientWrap": {
+          "x": 340,
+          "y": 175.5,
+          "w": 240,
+          "h": 32
+        },
+        "sourceWrap": {
+          "x": 628,
+          "y": 175.5,
+          "w": 300,
+          "h": 32
+        },
+        "statusWrap": {
+          "x": 1004,
+          "y": 175.5,
+          "w": 200,
+          "h": 32
+        },
+        "selection": {
+          "x": 342,
+          "y": 179.5,
+          "w": 210,
+          "h": 24
+        },
+        "selectedItem": {
+          "x": 342,
+          "y": 179.5,
+          "w": 58.02,
+          "h": 24
+        },
+        "tagsText": {
+          "x": 351,
+          "y": 182,
+          "w": 24.02,
+          "h": 17
+        },
+        "groups": [
+          {
+            "x": 292,
+            "y": 175.5,
+            "w": 288,
+            "h": 32
+          },
+          {
+            "x": 594,
+            "y": 175.5,
+            "w": 334,
+            "h": 32
+          },
+          {
+            "x": 942,
+            "y": 175.5,
+            "w": 262,
+            "h": 32
+          }
+        ],
+        "qBtn": {
+          "x": 1218,
+          "y": 176.5,
+          "w": 62,
+          "h": 30
+        },
+        "resetBtn": {
+          "x": 1300,
+          "y": 176.5,
+          "w": 58,
+          "h": 30
+        },
+        "bar": {
+          "x": 292,
+          "y": 175.5,
+          "w": 2196,
+          "h": 32
+        },
+        "overflowX": 0
+      },
+      {
+        "tag": "short_selected",
+        "client": {
+          "x": 340,
+          "y": 175.5,
+          "w": 240,
+          "h": 32
+        },
+        "source": {
+          "x": 628,
+          "y": 175.5,
+          "w": 300,
+          "h": 32
+        },
+        "status": {
+          "x": 1004,
+          "y": 175.5,
+          "w": 200,
+          "h": 32
+        },
+        "clientWrap": {
+          "x": 340,
+          "y": 175.5,
+          "w": 240,
+          "h": 32
+        },
+        "sourceWrap": {
+          "x": 628,
+          "y": 175.5,
+          "w": 300,
+          "h": 32
+        },
+        "statusWrap": {
+          "x": 1004,
+          "y": 175.5,
+          "w": 200,
+          "h": 32
+        },
+        "selection": {
+          "x": 342,
+          "y": 179.5,
+          "w": 210,
+          "h": 24
+        },
+        "selectedItem": {
+          "x": 342,
+          "y": 179.5,
+          "w": 210,
+          "h": 24
+        },
+        "tagsText": {
+          "x": 351,
+          "y": 182,
+          "w": 176,
+          "h": 17
+        },
+        "groups": [
+          {
+            "x": 292,
+            "y": 175.5,
+            "w": 288,
+            "h": 32
+          },
+          {
+            "x": 594,
+            "y": 175.5,
+            "w": 334,
+            "h": 32
+          },
+          {
+            "x": 942,
+            "y": 175.5,
+            "w": 262,
+            "h": 32
+          }
+        ],
+        "qBtn": {
+          "x": 1218,
+          "y": 176.5,
+          "w": 62,
+          "h": 30
+        },
+        "resetBtn": {
+          "x": 1300,
+          "y": 176.5,
+          "w": 58,
+          "h": 30
+        },
+        "bar": {
+          "x": 292,
+          "y": 175.5,
+          "w": 2196,
+          "h": 32
+        },
+        "overflowX": 0
+      },
+      {
+        "tag": "long_selected",
+        "client": {
+          "x": 340,
+          "y": 175.5,
+          "w": 240,
+          "h": 32
+        },
+        "source": {
+          "x": 628,
+          "y": 175.5,
+          "w": 300,
+          "h": 32
+        },
+        "status": {
+          "x": 1004,
+          "y": 175.5,
+          "w": 200,
+          "h": 32
+        },
+        "clientWrap": {
+          "x": 340,
+          "y": 175.5,
+          "w": 240,
+          "h": 32
+        },
+        "sourceWrap": {
+          "x": 628,
+          "y": 175.5,
+          "w": 300,
+          "h": 32
+        },
+        "statusWrap": {
+          "x": 1004,
+          "y": 175.5,
+          "w": 200,
+          "h": 32
+        },
+        "selection": {
+          "x": 342,
+          "y": 179.5,
+          "w": 210,
+          "h": 24
+        },
+        "selectedItem": {
+          "x": 342,
+          "y": 179.5,
+          "w": 142.7,
+          "h": 24
+        },
+        "tagsText": {
+          "x": 351,
+          "y": 183.5,
+          "w": 108.7,
+          "h": 14
+        },
+        "groups": [
+          {
+            "x": 292,
+            "y": 175.5,
+            "w": 288,
+            "h": 32
+          },
+          {
+            "x": 594,
+            "y": 175.5,
+            "w": 334,
+            "h": 32
+          },
+          {
+            "x": 942,
+            "y": 175.5,
+            "w": 262,
+            "h": 32
+          }
+        ],
+        "qBtn": {
+          "x": 1218,
+          "y": 176.5,
+          "w": 62,
+          "h": 30
+        },
+        "resetBtn": {
+          "x": 1300,
+          "y": 176.5,
+          "w": 58,
+          "h": 30
+        },
+        "bar": {
+          "x": 292,
+          "y": 175.5,
+          "w": 2196,
+          "h": 32
+        },
+        "overflowX": 0
+      },
+      {
+        "tag": "short_to_long",
+        "client": {
+          "x": 340,
+          "y": 175.5,
+          "w": 240,
+          "h": 32
+        },
+        "source": {
+          "x": 628,
+          "y": 175.5,
+          "w": 300,
+          "h": 32
+        },
+        "status": {
+          "x": 1004,
+          "y": 175.5,
+          "w": 200,
+          "h": 32
+        },
+        "clientWrap": {
+          "x": 340,
+          "y": 175.5,
+          "w": 240,
+          "h": 32
+        },
+        "sourceWrap": {
+          "x": 628,
+          "y": 175.5,
+          "w": 300,
+          "h": 32
+        },
+        "statusWrap": {
+          "x": 1004,
+          "y": 175.5,
+          "w": 200,
+          "h": 32
+        },
+        "selection": {
+          "x": 342,
+          "y": 179.5,
+          "w": 210,
+          "h": 24
+        },
+        "selectedItem": {
+          "x": 342,
+          "y": 179.5,
+          "w": 142.7,
+          "h": 24
+        },
+        "tagsText": {
+          "x": 351,
+          "y": 183.5,
+          "w": 108.7,
+          "h": 14
+        },
+        "groups": [
+          {
+            "x": 292,
+            "y": 175.5,
+            "w": 288,
+            "h": 32
+          },
+          {
+            "x": 594,
+            "y": 175.5,
+            "w": 334,
+            "h": 32
+          },
+          {
+            "x": 942,
+            "y": 175.5,
+            "w": 262,
+            "h": 32
+          }
+        ],
+        "qBtn": {
+          "x": 1218,
+          "y": 176.5,
+          "w": 62,
+          "h": 30
+        },
+        "resetBtn": {
+          "x": 1300,
+          "y": 176.5,
+          "w": 58,
+          "h": 30
+        },
+        "bar": {
+          "x": 292,
+          "y": 175.5,
+          "w": 2196,
+          "h": 32
+        },
+        "overflowX": 0
+      },
+      {
+        "tag": "long_to_short",
+        "client": {
+          "x": 340,
+          "y": 175.5,
+          "w": 240,
+          "h": 32
+        },
+        "source": {
+          "x": 628,
+          "y": 175.5,
+          "w": 300,
+          "h": 32
+        },
+        "status": {
+          "x": 1004,
+          "y": 175.5,
+          "w": 200,
+          "h": 32
+        },
+        "clientWrap": {
+          "x": 340,
+          "y": 175.5,
+          "w": 240,
+          "h": 32
+        },
+        "sourceWrap": {
+          "x": 628,
+          "y": 175.5,
+          "w": 300,
+          "h": 32
+        },
+        "statusWrap": {
+          "x": 1004,
+          "y": 175.5,
+          "w": 200,
+          "h": 32
+        },
+        "selection": {
+          "x": 342,
+          "y": 179.5,
+          "w": 210,
+          "h": 24
+        },
+        "selectedItem": {
+          "x": 342,
+          "y": 179.5,
+          "w": 210,
+          "h": 24
+        },
+        "tagsText": {
+          "x": 351,
+          "y": 182,
+          "w": 176,
+          "h": 17
+        },
+        "groups": [
+          {
+            "x": 292,
+            "y": 175.5,
+            "w": 288,
+            "h": 32
+          },
+          {
+            "x": 594,
+            "y": 175.5,
+            "w": 334,
+            "h": 32
+          },
+          {
+            "x": 942,
+            "y": 175.5,
+            "w": 262,
+            "h": 32
+          }
+        ],
+        "qBtn": {
+          "x": 1218,
+          "y": 176.5,
+          "w": 62,
+          "h": 30
+        },
+        "resetBtn": {
+          "x": 1300,
+          "y": 176.5,
+          "w": 58,
+          "h": 30
+        },
+        "bar": {
+          "x": 292,
+          "y": 175.5,
+          "w": 2196,
+          "h": 32
+        },
+        "overflowX": 0
+      },
+      {
+        "tag": "multi_collapse_tags",
+        "client": {
+          "x": 340,
+          "y": 175.5,
+          "w": 240,
+          "h": 32
+        },
+        "source": {
+          "x": 628,
+          "y": 175.5,
+          "w": 300,
+          "h": 32
+        },
+        "status": {
+          "x": 1004,
+          "y": 175.5,
+          "w": 200,
+          "h": 32
+        },
+        "clientWrap": {
+          "x": 340,
+          "y": 175.5,
+          "w": 240,
+          "h": 32
+        },
+        "sourceWrap": {
+          "x": 628,
+          "y": 175.5,
+          "w": 300,
+          "h": 32
+        },
+        "statusWrap": {
+          "x": 1004,
+          "y": 175.5,
+          "w": 200,
+          "h": 32
+        },
+        "selection": {
+          "x": 342,
+          "y": 179.5,
+          "w": 210,
+          "h": 24
+        },
+        "selectedItem": {
+          "x": 342,
+          "y": 179.5,
+          "w": 168.98,
+          "h": 24
+        },
+        "tagsText": {
+          "x": 351,
+          "y": 182,
+          "w": 134.98,
+          "h": 17
+        },
+        "groups": [
+          {
+            "x": 292,
+            "y": 175.5,
+            "w": 288,
+            "h": 32
+          },
+          {
+            "x": 594,
+            "y": 175.5,
+            "w": 334,
+            "h": 32
+          },
+          {
+            "x": 942,
+            "y": 175.5,
+            "w": 262,
+            "h": 32
+          }
+        ],
+        "qBtn": {
+          "x": 1218,
+          "y": 176.5,
+          "w": 62,
+          "h": 30
+        },
+        "resetBtn": {
+          "x": 1300,
+          "y": 176.5,
+          "w": 58,
+          "h": 30
+        },
+        "bar": {
+          "x": 292,
+          "y": 175.5,
+          "w": 2196,
+          "h": 32
+        },
+        "overflowX": 0
+      },
+      {
+        "tag": "remove_longest",
+        "client": {
+          "x": 340,
+          "y": 175.5,
+          "w": 240,
+          "h": 32
+        },
+        "source": {
+          "x": 628,
+          "y": 175.5,
+          "w": 300,
+          "h": 32
+        },
+        "status": {
+          "x": 1004,
+          "y": 175.5,
+          "w": 200,
+          "h": 32
+        },
+        "clientWrap": {
+          "x": 340,
+          "y": 175.5,
+          "w": 240,
+          "h": 32
+        },
+        "sourceWrap": {
+          "x": 628,
+          "y": 175.5,
+          "w": 300,
+          "h": 32
+        },
+        "statusWrap": {
+          "x": 1004,
+          "y": 175.5,
+          "w": 200,
+          "h": 32
+        },
+        "selection": {
+          "x": 342,
+          "y": 179.5,
+          "w": 210,
+          "h": 24
+        },
+        "selectedItem": {
+          "x": 342,
+          "y": 179.5,
+          "w": 168.98,
+          "h": 24
+        },
+        "tagsText": {
+          "x": 351,
+          "y": 182,
+          "w": 134.98,
+          "h": 17
+        },
+        "groups": [
+          {
+            "x": 292,
+            "y": 175.5,
+            "w": 288,
+            "h": 32
+          },
+          {
+            "x": 594,
+            "y": 175.5,
+            "w": 334,
+            "h": 32
+          },
+          {
+            "x": 942,
+            "y": 175.5,
+            "w": 262,
+            "h": 32
+          }
+        ],
+        "qBtn": {
+          "x": 1218,
+          "y": 176.5,
+          "w": 62,
+          "h": 30
+        },
+        "resetBtn": {
+          "x": 1300,
+          "y": 176.5,
+          "w": 58,
+          "h": 30
+        },
+        "bar": {
+          "x": 292,
+          "y": 175.5,
+          "w": 2196,
+          "h": 32
+        },
+        "overflowX": 0
+      },
+      {
+        "tag": "clear_to_all",
+        "client": {
+          "x": 340,
+          "y": 175.5,
+          "w": 240,
+          "h": 32
+        },
+        "source": {
+          "x": 628,
+          "y": 175.5,
+          "w": 300,
+          "h": 32
+        },
+        "status": {
+          "x": 1004,
+          "y": 175.5,
+          "w": 200,
+          "h": 32
+        },
+        "clientWrap": {
+          "x": 340,
+          "y": 175.5,
+          "w": 240,
+          "h": 32
+        },
+        "sourceWrap": {
+          "x": 628,
+          "y": 175.5,
+          "w": 300,
+          "h": 32
+        },
+        "statusWrap": {
+          "x": 1004,
+          "y": 175.5,
+          "w": 200,
+          "h": 32
+        },
+        "selection": {
+          "x": 342,
+          "y": 179.5,
+          "w": 210,
+          "h": 24
+        },
+        "selectedItem": {
+          "x": 342,
+          "y": 179.5,
+          "w": 58.02,
+          "h": 24
+        },
+        "tagsText": {
+          "x": 351,
+          "y": 182,
+          "w": 24.02,
+          "h": 17
+        },
+        "groups": [
+          {
+            "x": 292,
+            "y": 175.5,
+            "w": 288,
+            "h": 32
+          },
+          {
+            "x": 594,
+            "y": 175.5,
+            "w": 334,
+            "h": 32
+          },
+          {
+            "x": 942,
+            "y": 175.5,
+            "w": 262,
+            "h": 32
+          }
+        ],
+        "qBtn": {
+          "x": 1218,
+          "y": 176.5,
+          "w": 62,
+          "h": 30
+        },
+        "resetBtn": {
+          "x": 1300,
+          "y": 176.5,
+          "w": 58,
+          "h": 30
+        },
+        "bar": {
+          "x": 292,
+          "y": 175.5,
+          "w": 2196,
+          "h": 32
+        },
+        "overflowX": 0
+      },
+      {
+        "tag": "reset",
+        "client": {
+          "x": 340,
+          "y": 175.5,
+          "w": 240,
+          "h": 32
+        },
+        "source": {
+          "x": 628,
+          "y": 175.5,
+          "w": 300,
+          "h": 32
+        },
+        "status": {
+          "x": 1004,
+          "y": 175.5,
+          "w": 200,
+          "h": 32
+        },
+        "clientWrap": {
+          "x": 340,
+          "y": 175.5,
+          "w": 240,
+          "h": 32
+        },
+        "sourceWrap": {
+          "x": 628,
+          "y": 175.5,
+          "w": 300,
+          "h": 32
+        },
+        "statusWrap": {
+          "x": 1004,
+          "y": 175.5,
+          "w": 200,
+          "h": 32
+        },
+        "selection": {
+          "x": 342,
+          "y": 179.5,
+          "w": 210,
+          "h": 24
+        },
+        "selectedItem": {
+          "x": 342,
+          "y": 179.5,
+          "w": 58.02,
+          "h": 24
+        },
+        "tagsText": {
+          "x": 351,
+          "y": 182,
+          "w": 24.02,
+          "h": 17
+        },
+        "groups": [
+          {
+            "x": 292,
+            "y": 175.5,
+            "w": 288,
+            "h": 32
+          },
+          {
+            "x": 594,
+            "y": 175.5,
+            "w": 334,
+            "h": 32
+          },
+          {
+            "x": 942,
+            "y": 175.5,
+            "w": 262,
+            "h": 32
+          }
+        ],
+        "qBtn": {
+          "x": 1218,
+          "y": 176.5,
+          "w": 62,
+          "h": 30
+        },
+        "resetBtn": {
+          "x": 1300,
+          "y": 176.5,
+          "w": 58,
+          "h": 30
+        },
+        "bar": {
+          "x": 292,
+          "y": 175.5,
+          "w": 2196,
+          "h": 32
+        },
+        "overflowX": 0
+      },
+      {
+        "tag": "panel_open",
+        "client": {
+          "x": 340,
+          "y": 175.5,
+          "w": 240,
+          "h": 32
+        },
+        "source": {
+          "x": 628,
+          "y": 175.5,
+          "w": 300,
+          "h": 32
+        },
+        "status": {
+          "x": 1004,
+          "y": 175.5,
+          "w": 200,
+          "h": 32
+        },
+        "clientWrap": {
+          "x": 340,
+          "y": 175.5,
+          "w": 240,
+          "h": 32
+        },
+        "sourceWrap": {
+          "x": 628,
+          "y": 175.5,
+          "w": 300,
+          "h": 32
+        },
+        "statusWrap": {
+          "x": 1004,
+          "y": 175.5,
+          "w": 200,
+          "h": 32
+        },
+        "selection": {
+          "x": 342,
+          "y": 179.5,
+          "w": 210,
+          "h": 24
+        },
+        "selectedItem": {
+          "x": 342,
+          "y": 179.5,
+          "w": 58.02,
+          "h": 24
+        },
+        "tagsText": {
+          "x": 351,
+          "y": 182,
+          "w": 24.02,
+          "h": 17
+        },
+        "groups": [
+          {
+            "x": 292,
+            "y": 175.5,
+            "w": 288,
+            "h": 32
+          },
+          {
+            "x": 594,
+            "y": 175.5,
+            "w": 334,
+            "h": 32
+          },
+          {
+            "x": 942,
+            "y": 175.5,
+            "w": 262,
+            "h": 32
+          }
+        ],
+        "qBtn": {
+          "x": 1218,
+          "y": 176.5,
+          "w": 62,
+          "h": 30
+        },
+        "resetBtn": {
+          "x": 1300,
+          "y": 176.5,
+          "w": 58,
+          "h": 30
+        },
+        "bar": {
+          "x": 292,
+          "y": 175.5,
+          "w": 2196,
+          "h": 32
+        },
+        "overflowX": 0
+      },
+      {
+        "tag": "panel_close",
+        "client": {
+          "x": 340,
+          "y": 175.5,
+          "w": 240,
+          "h": 32
+        },
+        "source": {
+          "x": 628,
+          "y": 175.5,
+          "w": 300,
+          "h": 32
+        },
+        "status": {
+          "x": 1004,
+          "y": 175.5,
+          "w": 200,
+          "h": 32
+        },
+        "clientWrap": {
+          "x": 340,
+          "y": 175.5,
+          "w": 240,
+          "h": 32
+        },
+        "sourceWrap": {
+          "x": 628,
+          "y": 175.5,
+          "w": 300,
+          "h": 32
+        },
+        "statusWrap": {
+          "x": 1004,
+          "y": 175.5,
+          "w": 200,
+          "h": 32
+        },
+        "selection": {
+          "x": 342,
+          "y": 179.5,
+          "w": 210,
+          "h": 24
+        },
+        "selectedItem": {
+          "x": 342,
+          "y": 179.5,
+          "w": 58.02,
+          "h": 24
+        },
+        "tagsText": {
+          "x": 351,
+          "y": 182,
+          "w": 24.02,
+          "h": 17
+        },
+        "groups": [
+          {
+            "x": 292,
+            "y": 175.5,
+            "w": 288,
+            "h": 32
+          },
+          {
+            "x": 594,
+            "y": 175.5,
+            "w": 334,
+            "h": 32
+          },
+          {
+            "x": 942,
+            "y": 175.5,
+            "w": 262,
+            "h": 32
+          }
+        ],
+        "qBtn": {
+          "x": 1218,
+          "y": 176.5,
+          "w": 62,
+          "h": 30
+        },
+        "resetBtn": {
+          "x": 1300,
+          "y": 176.5,
+          "w": 58,
+          "h": 30
+        },
+        "bar": {
+          "x": 292,
+          "y": 175.5,
+          "w": 2196,
+          "h": 32
+        },
+        "overflowX": 0
+      },
+      {
+        "tag": "tooltip_visible",
+        "client": {
+          "x": 340,
+          "y": 175.5,
+          "w": 240,
+          "h": 32
+        },
+        "source": {
+          "x": 628,
+          "y": 175.5,
+          "w": 300,
+          "h": 32
+        },
+        "status": {
+          "x": 1004,
+          "y": 175.5,
+          "w": 200,
+          "h": 32
+        },
+        "clientWrap": {
+          "x": 340,
+          "y": 175.5,
+          "w": 240,
+          "h": 32
+        },
+        "sourceWrap": {
+          "x": 628,
+          "y": 175.5,
+          "w": 300,
+          "h": 32
+        },
+        "statusWrap": {
+          "x": 1004,
+          "y": 175.5,
+          "w": 200,
+          "h": 32
+        },
+        "selection": {
+          "x": 342,
+          "y": 179.5,
+          "w": 210,
+          "h": 24
+        },
+        "selectedItem": {
+          "x": 342,
+          "y": 179.5,
+          "w": 58.02,
+          "h": 24
+        },
+        "tagsText": {
+          "x": 351,
+          "y": 182,
+          "w": 24.02,
+          "h": 17
+        },
+        "groups": [
+          {
+            "x": 292,
+            "y": 175.5,
+            "w": 288,
+            "h": 32
+          },
+          {
+            "x": 594,
+            "y": 175.5,
+            "w": 334,
+            "h": 32
+          },
+          {
+            "x": 942,
+            "y": 175.5,
+            "w": 262,
+            "h": 32
+          }
+        ],
+        "qBtn": {
+          "x": 1218,
+          "y": 176.5,
+          "w": 62,
+          "h": 30
+        },
+        "resetBtn": {
+          "x": 1300,
+          "y": 176.5,
+          "w": 58,
+          "h": 30
+        },
+        "bar": {
+          "x": 292,
+          "y": 175.5,
+          "w": 2196,
+          "h": 32
+        },
+        "overflowX": 0
+      },
+      {
+        "tag": "tooltip_hidden",
+        "client": {
+          "x": 340,
+          "y": 175.5,
+          "w": 240,
+          "h": 32
+        },
+        "source": {
+          "x": 628,
+          "y": 175.5,
+          "w": 300,
+          "h": 32
+        },
+        "status": {
+          "x": 1004,
+          "y": 175.5,
+          "w": 200,
+          "h": 32
+        },
+        "clientWrap": {
+          "x": 340,
+          "y": 175.5,
+          "w": 240,
+          "h": 32
+        },
+        "sourceWrap": {
+          "x": 628,
+          "y": 175.5,
+          "w": 300,
+          "h": 32
+        },
+        "statusWrap": {
+          "x": 1004,
+          "y": 175.5,
+          "w": 200,
+          "h": 32
+        },
+        "selection": {
+          "x": 342,
+          "y": 179.5,
+          "w": 210,
+          "h": 24
+        },
+        "selectedItem": {
+          "x": 342,
+          "y": 179.5,
+          "w": 58.02,
+          "h": 24
+        },
+        "tagsText": {
+          "x": 351,
+          "y": 182,
+          "w": 24.02,
+          "h": 17
+        },
+        "groups": [
+          {
+            "x": 292,
+            "y": 175.5,
+            "w": 288,
+            "h": 32
+          },
+          {
+            "x": 594,
+            "y": 175.5,
+            "w": 334,
+            "h": 32
+          },
+          {
+            "x": 942,
+            "y": 175.5,
+            "w": 262,
+            "h": 32
+          }
+        ],
+        "qBtn": {
+          "x": 1218,
+          "y": 176.5,
+          "w": 62,
+          "h": 30
+        },
+        "resetBtn": {
+          "x": 1300,
+          "y": 176.5,
+          "w": 58,
+          "h": 30
+        },
+        "bar": {
+          "x": 292,
+          "y": 175.5,
+          "w": 2196,
+          "h": 32
+        },
+        "overflowX": 0
+      },
+      {
+        "tag": "status_selected",
+        "client": {
+          "x": 340,
+          "y": 175.5,
+          "w": 240,
+          "h": 32
+        },
+        "source": {
+          "x": 628,
+          "y": 175.5,
+          "w": 300,
+          "h": 32
+        },
+        "status": {
+          "x": 1004,
+          "y": 175.5,
+          "w": 200,
+          "h": 32
+        },
+        "clientWrap": {
+          "x": 340,
+          "y": 175.5,
+          "w": 240,
+          "h": 32
+        },
+        "sourceWrap": {
+          "x": 628,
+          "y": 175.5,
+          "w": 300,
+          "h": 32
+        },
+        "statusWrap": {
+          "x": 1004,
+          "y": 175.5,
+          "w": 200,
+          "h": 32
+        },
+        "selection": {
+          "x": 342,
+          "y": 179.5,
+          "w": 210,
+          "h": 24
+        },
+        "selectedItem": {
+          "x": 342,
+          "y": 179.5,
+          "w": 58.02,
+          "h": 24
+        },
+        "tagsText": {
+          "x": 351,
+          "y": 182,
+          "w": 24.02,
+          "h": 17
+        },
+        "groups": [
+          {
+            "x": 292,
+            "y": 175.5,
+            "w": 288,
+            "h": 32
+          },
+          {
+            "x": 594,
+            "y": 175.5,
+            "w": 334,
+            "h": 32
+          },
+          {
+            "x": 942,
+            "y": 175.5,
+            "w": 262,
+            "h": 32
+          }
+        ],
+        "qBtn": {
+          "x": 1218,
+          "y": 176.5,
+          "w": 62,
+          "h": 30
+        },
+        "resetBtn": {
+          "x": 1300,
+          "y": 176.5,
+          "w": 58,
+          "h": 30
+        },
+        "bar": {
+          "x": 292,
+          "y": 175.5,
+          "w": 2196,
+          "h": 32
+        },
+        "overflowX": 0
+      },
+      {
+        "tag": "source_longest",
+        "client": {
+          "x": 340,
+          "y": 175.5,
+          "w": 240,
+          "h": 32
+        },
+        "source": {
+          "x": 628,
+          "y": 175.5,
+          "w": 300,
+          "h": 32
+        },
+        "status": {
+          "x": 1004,
+          "y": 175.5,
+          "w": 200,
+          "h": 32
+        },
+        "clientWrap": {
+          "x": 340,
+          "y": 175.5,
+          "w": 240,
+          "h": 32
+        },
+        "sourceWrap": {
+          "x": 628,
+          "y": 175.5,
+          "w": 300,
+          "h": 32
+        },
+        "statusWrap": {
+          "x": 1004,
+          "y": 175.5,
+          "w": 200,
+          "h": 32
+        },
+        "selection": {
+          "x": 342,
+          "y": 179.5,
+          "w": 210,
+          "h": 24
+        },
+        "selectedItem": {
+          "x": 342,
+          "y": 179.5,
+          "w": 58.02,
+          "h": 24
+        },
+        "tagsText": {
+          "x": 351,
+          "y": 182,
+          "w": 24.02,
+          "h": 17
+        },
+        "groups": [
+          {
+            "x": 292,
+            "y": 175.5,
+            "w": 288,
+            "h": 32
+          },
+          {
+            "x": 594,
+            "y": 175.5,
+            "w": 334,
+            "h": 32
+          },
+          {
+            "x": 942,
+            "y": 175.5,
+            "w": 262,
+            "h": 32
+          }
+        ],
+        "qBtn": {
+          "x": 1218,
+          "y": 176.5,
+          "w": 62,
+          "h": 30
+        },
+        "resetBtn": {
+          "x": 1300,
+          "y": 176.5,
+          "w": 58,
+          "h": 30
+        },
+        "bar": {
+          "x": 292,
+          "y": 175.5,
+          "w": 2196,
+          "h": 32
+        },
+        "overflowX": 0
+      },
+      {
+        "tag": "source_cleared",
+        "client": {
+          "x": 340,
+          "y": 175.5,
+          "w": 240,
+          "h": 32
+        },
+        "source": {
+          "x": 628,
+          "y": 175.5,
+          "w": 300,
+          "h": 32
+        },
+        "status": {
+          "x": 1004,
+          "y": 175.5,
+          "w": 200,
+          "h": 32
+        },
+        "clientWrap": {
+          "x": 340,
+          "y": 175.5,
+          "w": 240,
+          "h": 32
+        },
+        "sourceWrap": {
+          "x": 628,
+          "y": 175.5,
+          "w": 300,
+          "h": 32
+        },
+        "statusWrap": {
+          "x": 1004,
+          "y": 175.5,
+          "w": 200,
+          "h": 32
+        },
+        "selection": {
+          "x": 342,
+          "y": 179.5,
+          "w": 210,
+          "h": 24
+        },
+        "selectedItem": {
+          "x": 342,
+          "y": 179.5,
+          "w": 58.02,
+          "h": 24
+        },
+        "tagsText": {
+          "x": 351,
+          "y": 182,
+          "w": 24.02,
+          "h": 17
+        },
+        "groups": [
+          {
+            "x": 292,
+            "y": 175.5,
+            "w": 288,
+            "h": 32
+          },
+          {
+            "x": 594,
+            "y": 175.5,
+            "w": 334,
+            "h": 32
+          },
+          {
+            "x": 942,
+            "y": 175.5,
+            "w": 262,
+            "h": 32
+          }
+        ],
+        "qBtn": {
+          "x": 1218,
+          "y": 176.5,
+          "w": 62,
+          "h": 30
+        },
+        "resetBtn": {
+          "x": 1300,
+          "y": 176.5,
+          "w": 58,
+          "h": 30
+        },
+        "bar": {
+          "x": 292,
+          "y": 175.5,
+          "w": 2196,
+          "h": 32
+        },
+        "overflowX": 0
+      }
+    ]
+  }
+]

@@ -1,0 +1,9 @@
+$ git diff --check
+exit=0
+
+$ git diff --stat
+ .../components/DataSourceSnapshotQueryBar.spec.ts  | 507 ++++++++++++++++++++-
+ .../components/DataSourceSnapshotQueryBar.vue      | 221 ++++++++-
+ .../data-source-run-state/utils/format.spec.ts     |  61 ++-
+ .../views/data-source-run-state/utils/format.ts    |  21 +
+ 4 files changed, 793 insertions(+), 17 deletions(-)

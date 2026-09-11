@@ -1,0 +1,1558 @@
+{
+  "viewport": {
+    "w": 1700,
+    "h": 920
+  },
+  "mode": "real",
+  "trail": [
+    "ok:initial_all",
+    "ERR:client_short_selected :: item not found; visible=9 texts=[\"全部\",\"c-dssr1-0906-a（快照页测试探针A，请勿启用。长\",\"c-dssr1-0906-b（快照页测试探针B，请勿启用）\",\"c-dssr1-0906-c（快照页测试探针C，请勿启用（其\",\"c-dssr1-0906-d（快照页测试探针D，请勿启用（含\",\"c-dssr1-0906-e（快照页测试探针E，请勿启用）\",\"c-dssr1-0906-miss1\",\"c-dssr1-0906-miss2\",\"hosp-012（总部测试 IP: 192.168.0.9.\"]",
+    "ERR:client_20_selected :: item not found; visible=9 texts=[\"全部\",\"c-dssr1-0906-a（快照页测试探针A，请勿启用。长\",\"c-dssr1-0906-b（快照页测试探针B，请勿启用）\",\"c-dssr1-0906-c（快照页测试探针C，请勿启用（其\",\"c-dssr1-0906-d（快照页测试探针D，请勿启用（含\",\"c-dssr1-0906-e（快照页测试探针E，请勿启用）\",\"c-dssr1-0906-miss1\",\"c-dssr1-0906-miss2\",\"hosp-012（总部测试 IP: 192.168.0.9.\"]",
+    "ERR:client_21_selected :: item not found; visible=9 texts=[\"全部\",\"c-dssr1-0906-a（快照页测试探针A，请勿启用。长\",\"c-dssr1-0906-b（快照页测试探针B，请勿启用）\",\"c-dssr1-0906-c（快照页测试探针C，请勿启用（其\",\"c-dssr1-0906-d（快照页测试探针D，请勿启用（含\",\"c-dssr1-0906-e（快照页测试探针E，请勿启用）\",\"c-dssr1-0906-miss1\",\"c-dssr1-0906-miss2\",\"hosp-012（总部测试 IP: 192.168.0.9.\"]",
+    "ERR:client_22_selected :: item not found; visible=9 texts=[\"全部\",\"c-dssr1-0906-a（快照页测试探针A，请勿启用。长\",\"c-dssr1-0906-b（快照页测试探针B，请勿启用）\",\"c-dssr1-0906-c（快照页测试探针C，请勿启用（其\",\"c-dssr1-0906-d（快照页测试探针D，请勿启用（含\",\"c-dssr1-0906-e（快照页测试探针E，请勿启用）\",\"c-dssr1-0906-miss1\",\"c-dssr1-0906-miss2\",\"hosp-012（总部测试 IP: 192.168.0.9.\"]",
+    "ERR:client_longest_selected :: item not found; visible=9 texts=[\"全部\",\"c-dssr1-0906-a（快照页测试探针A，请勿启用。长\",\"c-dssr1-0906-b（快照页测试探针B，请勿启用）\",\"c-dssr1-0906-c（快照页测试探针C，请勿启用（其\",\"c-dssr1-0906-d（快照页测试探针D，请勿启用（含\",\"c-dssr1-0906-e（快照页测试探针E，请勿启用）\",\"c-dssr1-0906-miss1\",\"c-dssr1-0906-miss2\",\"hosp-012（总部测试 IP: 192.168.0.9.\"]",
+    "ERR:client_desc300_selected :: item not found; visible=9 texts=[\"全部\",\"c-dssr1-0906-a（快照页测试探针A，请勿启用。长\",\"c-dssr1-0906-b（快照页测试探针B，请勿启用）\",\"c-dssr1-0906-c（快照页测试探针C，请勿启用（其\",\"c-dssr1-0906-d（快照页测试探针D，请勿启用（含\",\"c-dssr1-0906-e（快照页测试探针E，请勿启用）\",\"c-dssr1-0906-miss1\",\"c-dssr1-0906-miss2\",\"hosp-012（总部测试 IP: 192.168.0.9.\"]",
+    "ERR:client_short_to_long :: item not found; visible=9 texts=[\"全部\",\"c-dssr1-0906-a（快照页测试探针A，请勿启用。长\",\"c-dssr1-0906-b（快照页测试探针B，请勿启用）\",\"c-dssr1-0906-c（快照页测试探针C，请勿启用（其\",\"c-dssr1-0906-d（快照页测试探针D，请勿启用（含\",\"c-dssr1-0906-e（快照页测试探针E，请勿启用）\",\"c-dssr1-0906-miss1\",\"c-dssr1-0906-miss2\",\"hosp-012（总部测试 IP: 192.168.0.9.\"]",
+    "ERR:client_long_to_short :: item not found; visible=9 texts=[\"全部\",\"c-dssr1-0906-a（快照页测试探针A，请勿启用。长\",\"c-dssr1-0906-b（快照页测试探针B，请勿启用）\",\"c-dssr1-0906-c（快照页测试探针C，请勿启用（其\",\"c-dssr1-0906-d（快照页测试探针D，请勿启用（含\",\"c-dssr1-0906-e（快照页测试探针E，请勿启用）\",\"c-dssr1-0906-miss1\",\"c-dssr1-0906-miss2\",\"hosp-012（总部测试 IP: 192.168.0.9.\"]",
+    "ERR:multi_collapse_tags :: item not found; visible=9 texts=[\"全部\",\"c-dssr1-0906-a（快照页测试探针A，请勿启用。长\",\"c-dssr1-0906-b（快照页测试探针B，请勿启用）\",\"c-dssr1-0906-c（快照页测试探针C，请勿启用（其\",\"c-dssr1-0906-d（快照页测试探针D，请勿启用（含\",\"c-dssr1-0906-e（快照页测试探针E，请勿启用）\",\"c-dssr1-0906-miss1\",\"c-dssr1-0906-miss2\",\"hosp-012（总部测试 IP: 192.168.0.9.\"]",
+    "ERR:remove_longest :: item not found; visible=9 texts=[\"全部\",\"c-dssr1-0906-a（快照页测试探针A，请勿启用。长\",\"c-dssr1-0906-b（快照页测试探针B，请勿启用）\",\"c-dssr1-0906-c（快照页测试探针C，请勿启用（其\",\"c-dssr1-0906-d（快照页测试探针D，请勿启用（含\",\"c-dssr1-0906-e（快照页测试探针E，请勿启用）\",\"c-dssr1-0906-miss1\",\"c-dssr1-0906-miss2\",\"hosp-012（总部测试 IP: 192.168.0.9.\"]",
+    "ok:clear_to_all",
+    "ok:reset",
+    "ERR:source_19_selected :: item not found; visible=10 texts=[\"全部\",\"SNAPSHOT-TEST-某市一院信息中心源库-DONOT\",\"SNAPSHOT-TEST-某市一院信息中心源库-DONOT\",\"SNAPSHOT-TEST-某市二院信息中心源库-DONOT\",\"SNAPSHOT-TEST-目标侧某中心源库-DONOTUS\",\"SNAPSHOT-TEST-第三方平台源库-DONOTUSE\",\"孝感市第一人民医院（112-source-19c）\",\"s-dssr1-0906-m1\",\"s-dssr1-0906-m2\",\"s-dssr1-0906-m3\"]",
+    "ERR:source_22_selected :: item not found; visible=10 texts=[\"全部\",\"SNAPSHOT-TEST-某市一院信息中心源库-DONOT\",\"SNAPSHOT-TEST-某市一院信息中心源库-DONOT\",\"SNAPSHOT-TEST-某市二院信息中心源库-DONOT\",\"SNAPSHOT-TEST-目标侧某中心源库-DONOTUS\",\"SNAPSHOT-TEST-第三方平台源库-DONOTUSE\",\"孝感市第一人民医院（112-source-19c）\",\"s-dssr1-0906-m1\",\"s-dssr1-0906-m2\",\"s-dssr1-0906-m3\"]",
+    "ERR:source_widest_selected :: item not found; visible=10 texts=[\"全部\",\"SNAPSHOT-TEST-某市一院信息中心源库-DONOT\",\"SNAPSHOT-TEST-某市一院信息中心源库-DONOT\",\"SNAPSHOT-TEST-某市二院信息中心源库-DONOT\",\"SNAPSHOT-TEST-目标侧某中心源库-DONOTUS\",\"SNAPSHOT-TEST-第三方平台源库-DONOTUSE\",\"孝感市第一人民医院（112-source-19c）\",\"s-dssr1-0906-m1\",\"s-dssr1-0906-m2\",\"s-dssr1-0906-m3\"]",
+    "ERR:source_longid_selected :: item not found; visible=10 texts=[\"全部\",\"SNAPSHOT-TEST-某市一院信息中心源库-DONOT\",\"SNAPSHOT-TEST-某市一院信息中心源库-DONOT\",\"SNAPSHOT-TEST-某市二院信息中心源库-DONOT\",\"SNAPSHOT-TEST-目标侧某中心源库-DONOTUS\",\"SNAPSHOT-TEST-第三方平台源库-DONOTUSE\",\"孝感市第一人民医院（112-source-19c）\",\"s-dssr1-0906-m1\",\"s-dssr1-0906-m2\",\"s-dssr1-0906-m3\"]",
+    "ok:status_selected",
+    "ok:tooltip_candidate_long",
+    "ok:tooltip_candidate_leave",
+    "ERR:tooltip_selected :: item not found; visible=9 texts=[\"全部\",\"c-dssr1-0906-a（快照页测试探针A，请勿启用。长\",\"c-dssr1-0906-b（快照页测试探针B，请勿启用）\",\"c-dssr1-0906-c（快照页测试探针C，请勿启用（其\",\"c-dssr1-0906-d（快照页测试探针D，请勿启用（含\",\"c-dssr1-0906-e（快照页测试探针E，请勿启用）\",\"c-dssr1-0906-miss1\",\"c-dssr1-0906-miss2\",\"hosp-012（总部测试 IP: 192.168.0.9.\"]"
+  ],
+  "states": [
+    {
+      "name": "initial_all",
+      "geom": {
+        "client": {
+          "root": {
+            "x": 340,
+            "y": 175.5,
+            "w": 240,
+            "h": 32,
+            "right": 580,
+            "bottom": 207.5
+          },
+          "wrapper": {
+            "x": 340,
+            "y": 175.5,
+            "w": 240,
+            "h": 32,
+            "right": 580,
+            "bottom": 207.5
+          },
+          "selection": {
+            "x": 342,
+            "y": 179.5,
+            "w": 210,
+            "h": 24,
+            "right": 552,
+            "bottom": 203.5
+          },
+          "selectedItem": {
+            "x": 342,
+            "y": 179.5,
+            "w": 58.02,
+            "h": 24,
+            "right": 400.02,
+            "bottom": 203.5
+          },
+          "tagsText": {
+            "x": 351,
+            "y": 182,
+            "w": 24.02,
+            "h": 17,
+            "right": 375.02,
+            "bottom": 199
+          }
+        },
+        "source": {
+          "root": {
+            "x": 628,
+            "y": 175.5,
+            "w": 300,
+            "h": 32,
+            "right": 928,
+            "bottom": 207.5
+          },
+          "wrapper": {
+            "x": 628,
+            "y": 175.5,
+            "w": 300,
+            "h": 32,
+            "right": 928,
+            "bottom": 207.5
+          },
+          "selection": {
+            "x": 630,
+            "y": 179.5,
+            "w": 270,
+            "h": 24,
+            "right": 900,
+            "bottom": 203.5
+          },
+          "selectedItem": {
+            "x": 630,
+            "y": 179.5,
+            "w": 58.02,
+            "h": 24,
+            "right": 688.02,
+            "bottom": 203.5
+          },
+          "tagsText": {
+            "x": 639,
+            "y": 182,
+            "w": 24.02,
+            "h": 17,
+            "right": 663.02,
+            "bottom": 199
+          }
+        },
+        "status": {
+          "root": {
+            "x": 1004,
+            "y": 175.5,
+            "w": 200,
+            "h": 32,
+            "right": 1204,
+            "bottom": 207.5
+          },
+          "wrapper": {
+            "x": 1004,
+            "y": 175.5,
+            "w": 200,
+            "h": 32,
+            "right": 1204,
+            "bottom": 207.5
+          },
+          "selection": {
+            "x": 1006,
+            "y": 179.5,
+            "w": 170,
+            "h": 24,
+            "right": 1176,
+            "bottom": 203.5
+          },
+          "selectedItem": {
+            "x": 1006,
+            "y": 179.5,
+            "w": 58.02,
+            "h": 24,
+            "right": 1064.02,
+            "bottom": 203.5
+          },
+          "tagsText": {
+            "x": 1015,
+            "y": 182,
+            "w": 24.02,
+            "h": 17,
+            "right": 1039.02,
+            "bottom": 199
+          }
+        },
+        "groups": [
+          {
+            "x": 292,
+            "y": 175.5,
+            "w": 288,
+            "h": 32,
+            "right": 580,
+            "bottom": 207.5
+          },
+          {
+            "x": 594,
+            "y": 175.5,
+            "w": 334,
+            "h": 32,
+            "right": 928,
+            "bottom": 207.5
+          },
+          {
+            "x": 942,
+            "y": 175.5,
+            "w": 262,
+            "h": 32,
+            "right": 1204,
+            "bottom": 207.5
+          }
+        ],
+        "queryBtn": {
+          "x": 1218,
+          "y": 176.5,
+          "w": 62,
+          "h": 30,
+          "right": 1280,
+          "bottom": 206.5
+        },
+        "resetBtn": {
+          "x": 1300,
+          "y": 176.5,
+          "w": 58,
+          "h": 30,
+          "right": 1358,
+          "bottom": 206.5
+        },
+        "bar": {
+          "x": 292,
+          "y": 175.5,
+          "w": 1321,
+          "h": 32,
+          "right": 1613,
+          "bottom": 207.5
+        }
+      },
+      "selected": {
+        "client": [
+          "全部"
+        ],
+        "source": [
+          "全部"
+        ],
+        "status": [
+          "全部"
+        ]
+      },
+      "tooltips": 0
+    },
+    {
+      "name": "clear_to_all",
+      "geom": {
+        "client": {
+          "root": {
+            "x": 340,
+            "y": 175.5,
+            "w": 240,
+            "h": 32,
+            "right": 580,
+            "bottom": 207.5
+          },
+          "wrapper": {
+            "x": 340,
+            "y": 175.5,
+            "w": 240,
+            "h": 32,
+            "right": 580,
+            "bottom": 207.5
+          },
+          "selection": {
+            "x": 342,
+            "y": 179.5,
+            "w": 210,
+            "h": 24,
+            "right": 552,
+            "bottom": 203.5
+          },
+          "selectedItem": {
+            "x": 342,
+            "y": 179.5,
+            "w": 58.02,
+            "h": 24,
+            "right": 400.02,
+            "bottom": 203.5
+          },
+          "tagsText": {
+            "x": 351,
+            "y": 182,
+            "w": 24.02,
+            "h": 17,
+            "right": 375.02,
+            "bottom": 199
+          }
+        },
+        "source": {
+          "root": {
+            "x": 628,
+            "y": 175.5,
+            "w": 300,
+            "h": 32,
+            "right": 928,
+            "bottom": 207.5
+          },
+          "wrapper": {
+            "x": 628,
+            "y": 175.5,
+            "w": 300,
+            "h": 32,
+            "right": 928,
+            "bottom": 207.5
+          },
+          "selection": {
+            "x": 630,
+            "y": 179.5,
+            "w": 270,
+            "h": 24,
+            "right": 900,
+            "bottom": 203.5
+          },
+          "selectedItem": {
+            "x": 630,
+            "y": 179.5,
+            "w": 58.02,
+            "h": 24,
+            "right": 688.02,
+            "bottom": 203.5
+          },
+          "tagsText": {
+            "x": 639,
+            "y": 182,
+            "w": 24.02,
+            "h": 17,
+            "right": 663.02,
+            "bottom": 199
+          }
+        },
+        "status": {
+          "root": {
+            "x": 1004,
+            "y": 175.5,
+            "w": 200,
+            "h": 32,
+            "right": 1204,
+            "bottom": 207.5
+          },
+          "wrapper": {
+            "x": 1004,
+            "y": 175.5,
+            "w": 200,
+            "h": 32,
+            "right": 1204,
+            "bottom": 207.5
+          },
+          "selection": {
+            "x": 1006,
+            "y": 179.5,
+            "w": 170,
+            "h": 24,
+            "right": 1176,
+            "bottom": 203.5
+          },
+          "selectedItem": {
+            "x": 1006,
+            "y": 179.5,
+            "w": 58.02,
+            "h": 24,
+            "right": 1064.02,
+            "bottom": 203.5
+          },
+          "tagsText": {
+            "x": 1015,
+            "y": 182,
+            "w": 24.02,
+            "h": 17,
+            "right": 1039.02,
+            "bottom": 199
+          }
+        },
+        "groups": [
+          {
+            "x": 292,
+            "y": 175.5,
+            "w": 288,
+            "h": 32,
+            "right": 580,
+            "bottom": 207.5
+          },
+          {
+            "x": 594,
+            "y": 175.5,
+            "w": 334,
+            "h": 32,
+            "right": 928,
+            "bottom": 207.5
+          },
+          {
+            "x": 942,
+            "y": 175.5,
+            "w": 262,
+            "h": 32,
+            "right": 1204,
+            "bottom": 207.5
+          }
+        ],
+        "queryBtn": {
+          "x": 1218,
+          "y": 176.5,
+          "w": 62,
+          "h": 30,
+          "right": 1280,
+          "bottom": 206.5
+        },
+        "resetBtn": {
+          "x": 1300,
+          "y": 176.5,
+          "w": 58,
+          "h": 30,
+          "right": 1358,
+          "bottom": 206.5
+        },
+        "bar": {
+          "x": 292,
+          "y": 175.5,
+          "w": 1321,
+          "h": 32,
+          "right": 1613,
+          "bottom": 207.5
+        }
+      },
+      "selected": {
+        "client": [
+          "全部"
+        ],
+        "source": [
+          "全部"
+        ],
+        "status": [
+          "全部"
+        ]
+      },
+      "tooltips": 0
+    },
+    {
+      "name": "reset",
+      "geom": {
+        "client": {
+          "root": {
+            "x": 340,
+            "y": 175.5,
+            "w": 240,
+            "h": 32,
+            "right": 580,
+            "bottom": 207.5
+          },
+          "wrapper": {
+            "x": 340,
+            "y": 175.5,
+            "w": 240,
+            "h": 32,
+            "right": 580,
+            "bottom": 207.5
+          },
+          "selection": {
+            "x": 342,
+            "y": 179.5,
+            "w": 210,
+            "h": 24,
+            "right": 552,
+            "bottom": 203.5
+          },
+          "selectedItem": {
+            "x": 342,
+            "y": 179.5,
+            "w": 58.02,
+            "h": 24,
+            "right": 400.02,
+            "bottom": 203.5
+          },
+          "tagsText": {
+            "x": 351,
+            "y": 182,
+            "w": 24.02,
+            "h": 17,
+            "right": 375.02,
+            "bottom": 199
+          }
+        },
+        "source": {
+          "root": {
+            "x": 628,
+            "y": 175.5,
+            "w": 300,
+            "h": 32,
+            "right": 928,
+            "bottom": 207.5
+          },
+          "wrapper": {
+            "x": 628,
+            "y": 175.5,
+            "w": 300,
+            "h": 32,
+            "right": 928,
+            "bottom": 207.5
+          },
+          "selection": {
+            "x": 630,
+            "y": 179.5,
+            "w": 270,
+            "h": 24,
+            "right": 900,
+            "bottom": 203.5
+          },
+          "selectedItem": {
+            "x": 630,
+            "y": 179.5,
+            "w": 58.02,
+            "h": 24,
+            "right": 688.02,
+            "bottom": 203.5
+          },
+          "tagsText": {
+            "x": 639,
+            "y": 182,
+            "w": 24.02,
+            "h": 17,
+            "right": 663.02,
+            "bottom": 199
+          }
+        },
+        "status": {
+          "root": {
+            "x": 1004,
+            "y": 175.5,
+            "w": 200,
+            "h": 32,
+            "right": 1204,
+            "bottom": 207.5
+          },
+          "wrapper": {
+            "x": 1004,
+            "y": 175.5,
+            "w": 200,
+            "h": 32,
+            "right": 1204,
+            "bottom": 207.5
+          },
+          "selection": {
+            "x": 1006,
+            "y": 179.5,
+            "w": 170,
+            "h": 24,
+            "right": 1176,
+            "bottom": 203.5
+          },
+          "selectedItem": {
+            "x": 1006,
+            "y": 179.5,
+            "w": 58.02,
+            "h": 24,
+            "right": 1064.02,
+            "bottom": 203.5
+          },
+          "tagsText": {
+            "x": 1015,
+            "y": 182,
+            "w": 24.02,
+            "h": 17,
+            "right": 1039.02,
+            "bottom": 199
+          }
+        },
+        "groups": [
+          {
+            "x": 292,
+            "y": 175.5,
+            "w": 288,
+            "h": 32,
+            "right": 580,
+            "bottom": 207.5
+          },
+          {
+            "x": 594,
+            "y": 175.5,
+            "w": 334,
+            "h": 32,
+            "right": 928,
+            "bottom": 207.5
+          },
+          {
+            "x": 942,
+            "y": 175.5,
+            "w": 262,
+            "h": 32,
+            "right": 1204,
+            "bottom": 207.5
+          }
+        ],
+        "queryBtn": {
+          "x": 1218,
+          "y": 176.5,
+          "w": 62,
+          "h": 30,
+          "right": 1280,
+          "bottom": 206.5
+        },
+        "resetBtn": {
+          "x": 1300,
+          "y": 176.5,
+          "w": 58,
+          "h": 30,
+          "right": 1358,
+          "bottom": 206.5
+        },
+        "bar": {
+          "x": 292,
+          "y": 175.5,
+          "w": 1321,
+          "h": 32,
+          "right": 1613,
+          "bottom": 207.5
+        }
+      },
+      "selected": {
+        "client": [
+          "全部"
+        ],
+        "source": [
+          "全部"
+        ],
+        "status": [
+          "全部"
+        ]
+      },
+      "tooltips": 0
+    },
+    {
+      "name": "panel_open",
+      "geom": {
+        "client": {
+          "root": {
+            "x": 340,
+            "y": 175.5,
+            "w": 240,
+            "h": 32,
+            "right": 580,
+            "bottom": 207.5
+          },
+          "wrapper": {
+            "x": 340,
+            "y": 175.5,
+            "w": 240,
+            "h": 32,
+            "right": 580,
+            "bottom": 207.5
+          },
+          "selection": {
+            "x": 342,
+            "y": 179.5,
+            "w": 210,
+            "h": 24,
+            "right": 552,
+            "bottom": 203.5
+          },
+          "selectedItem": {
+            "x": 342,
+            "y": 179.5,
+            "w": 58.02,
+            "h": 24,
+            "right": 400.02,
+            "bottom": 203.5
+          },
+          "tagsText": {
+            "x": 351,
+            "y": 182,
+            "w": 24.02,
+            "h": 17,
+            "right": 375.02,
+            "bottom": 199
+          }
+        },
+        "source": {
+          "root": {
+            "x": 628,
+            "y": 175.5,
+            "w": 300,
+            "h": 32,
+            "right": 928,
+            "bottom": 207.5
+          },
+          "wrapper": {
+            "x": 628,
+            "y": 175.5,
+            "w": 300,
+            "h": 32,
+            "right": 928,
+            "bottom": 207.5
+          },
+          "selection": {
+            "x": 630,
+            "y": 179.5,
+            "w": 270,
+            "h": 24,
+            "right": 900,
+            "bottom": 203.5
+          },
+          "selectedItem": {
+            "x": 630,
+            "y": 179.5,
+            "w": 58.02,
+            "h": 24,
+            "right": 688.02,
+            "bottom": 203.5
+          },
+          "tagsText": {
+            "x": 639,
+            "y": 182,
+            "w": 24.02,
+            "h": 17,
+            "right": 663.02,
+            "bottom": 199
+          }
+        },
+        "status": {
+          "root": {
+            "x": 1004,
+            "y": 175.5,
+            "w": 200,
+            "h": 32,
+            "right": 1204,
+            "bottom": 207.5
+          },
+          "wrapper": {
+            "x": 1004,
+            "y": 175.5,
+            "w": 200,
+            "h": 32,
+            "right": 1204,
+            "bottom": 207.5
+          },
+          "selection": {
+            "x": 1006,
+            "y": 179.5,
+            "w": 170,
+            "h": 24,
+            "right": 1176,
+            "bottom": 203.5
+          },
+          "selectedItem": {
+            "x": 1006,
+            "y": 179.5,
+            "w": 58.02,
+            "h": 24,
+            "right": 1064.02,
+            "bottom": 203.5
+          },
+          "tagsText": {
+            "x": 1015,
+            "y": 182,
+            "w": 24.02,
+            "h": 17,
+            "right": 1039.02,
+            "bottom": 199
+          }
+        },
+        "groups": [
+          {
+            "x": 292,
+            "y": 175.5,
+            "w": 288,
+            "h": 32,
+            "right": 580,
+            "bottom": 207.5
+          },
+          {
+            "x": 594,
+            "y": 175.5,
+            "w": 334,
+            "h": 32,
+            "right": 928,
+            "bottom": 207.5
+          },
+          {
+            "x": 942,
+            "y": 175.5,
+            "w": 262,
+            "h": 32,
+            "right": 1204,
+            "bottom": 207.5
+          }
+        ],
+        "queryBtn": {
+          "x": 1218,
+          "y": 176.5,
+          "w": 62,
+          "h": 30,
+          "right": 1280,
+          "bottom": 206.5
+        },
+        "resetBtn": {
+          "x": 1300,
+          "y": 176.5,
+          "w": 58,
+          "h": 30,
+          "right": 1358,
+          "bottom": 206.5
+        },
+        "bar": {
+          "x": 292,
+          "y": 175.5,
+          "w": 1321,
+          "h": 32,
+          "right": 1613,
+          "bottom": 207.5
+        }
+      },
+      "tooltips": 0
+    },
+    {
+      "name": "panel_closed",
+      "geom": {
+        "client": {
+          "root": {
+            "x": 340,
+            "y": 175.5,
+            "w": 240,
+            "h": 32,
+            "right": 580,
+            "bottom": 207.5
+          },
+          "wrapper": {
+            "x": 340,
+            "y": 175.5,
+            "w": 240,
+            "h": 32,
+            "right": 580,
+            "bottom": 207.5
+          },
+          "selection": {
+            "x": 342,
+            "y": 179.5,
+            "w": 210,
+            "h": 24,
+            "right": 552,
+            "bottom": 203.5
+          },
+          "selectedItem": {
+            "x": 342,
+            "y": 179.5,
+            "w": 58.02,
+            "h": 24,
+            "right": 400.02,
+            "bottom": 203.5
+          },
+          "tagsText": {
+            "x": 351,
+            "y": 182,
+            "w": 24.02,
+            "h": 17,
+            "right": 375.02,
+            "bottom": 199
+          }
+        },
+        "source": {
+          "root": {
+            "x": 628,
+            "y": 175.5,
+            "w": 300,
+            "h": 32,
+            "right": 928,
+            "bottom": 207.5
+          },
+          "wrapper": {
+            "x": 628,
+            "y": 175.5,
+            "w": 300,
+            "h": 32,
+            "right": 928,
+            "bottom": 207.5
+          },
+          "selection": {
+            "x": 630,
+            "y": 179.5,
+            "w": 270,
+            "h": 24,
+            "right": 900,
+            "bottom": 203.5
+          },
+          "selectedItem": {
+            "x": 630,
+            "y": 179.5,
+            "w": 58.02,
+            "h": 24,
+            "right": 688.02,
+            "bottom": 203.5
+          },
+          "tagsText": {
+            "x": 639,
+            "y": 182,
+            "w": 24.02,
+            "h": 17,
+            "right": 663.02,
+            "bottom": 199
+          }
+        },
+        "status": {
+          "root": {
+            "x": 1004,
+            "y": 175.5,
+            "w": 200,
+            "h": 32,
+            "right": 1204,
+            "bottom": 207.5
+          },
+          "wrapper": {
+            "x": 1004,
+            "y": 175.5,
+            "w": 200,
+            "h": 32,
+            "right": 1204,
+            "bottom": 207.5
+          },
+          "selection": {
+            "x": 1006,
+            "y": 179.5,
+            "w": 170,
+            "h": 24,
+            "right": 1176,
+            "bottom": 203.5
+          },
+          "selectedItem": {
+            "x": 1006,
+            "y": 179.5,
+            "w": 58.02,
+            "h": 24,
+            "right": 1064.02,
+            "bottom": 203.5
+          },
+          "tagsText": {
+            "x": 1015,
+            "y": 182,
+            "w": 24.02,
+            "h": 17,
+            "right": 1039.02,
+            "bottom": 199
+          }
+        },
+        "groups": [
+          {
+            "x": 292,
+            "y": 175.5,
+            "w": 288,
+            "h": 32,
+            "right": 580,
+            "bottom": 207.5
+          },
+          {
+            "x": 594,
+            "y": 175.5,
+            "w": 334,
+            "h": 32,
+            "right": 928,
+            "bottom": 207.5
+          },
+          {
+            "x": 942,
+            "y": 175.5,
+            "w": 262,
+            "h": 32,
+            "right": 1204,
+            "bottom": 207.5
+          }
+        ],
+        "queryBtn": {
+          "x": 1218,
+          "y": 176.5,
+          "w": 62,
+          "h": 30,
+          "right": 1280,
+          "bottom": 206.5
+        },
+        "resetBtn": {
+          "x": 1300,
+          "y": 176.5,
+          "w": 58,
+          "h": 30,
+          "right": 1358,
+          "bottom": 206.5
+        },
+        "bar": {
+          "x": 292,
+          "y": 175.5,
+          "w": 1321,
+          "h": 32,
+          "right": 1613,
+          "bottom": 207.5
+        }
+      },
+      "tooltips": 0
+    },
+    {
+      "name": "status_selected",
+      "geom": {
+        "client": {
+          "root": {
+            "x": 340,
+            "y": 175.5,
+            "w": 240,
+            "h": 32,
+            "right": 580,
+            "bottom": 207.5
+          },
+          "wrapper": {
+            "x": 340,
+            "y": 175.5,
+            "w": 240,
+            "h": 32,
+            "right": 580,
+            "bottom": 207.5
+          },
+          "selection": {
+            "x": 342,
+            "y": 179.5,
+            "w": 210,
+            "h": 24,
+            "right": 552,
+            "bottom": 203.5
+          },
+          "selectedItem": {
+            "x": 342,
+            "y": 179.5,
+            "w": 58.02,
+            "h": 24,
+            "right": 400.02,
+            "bottom": 203.5
+          },
+          "tagsText": {
+            "x": 351,
+            "y": 182,
+            "w": 24.02,
+            "h": 17,
+            "right": 375.02,
+            "bottom": 199
+          }
+        },
+        "source": {
+          "root": {
+            "x": 628,
+            "y": 175.5,
+            "w": 300,
+            "h": 32,
+            "right": 928,
+            "bottom": 207.5
+          },
+          "wrapper": {
+            "x": 628,
+            "y": 175.5,
+            "w": 300,
+            "h": 32,
+            "right": 928,
+            "bottom": 207.5
+          },
+          "selection": {
+            "x": 630,
+            "y": 179.5,
+            "w": 270,
+            "h": 24,
+            "right": 900,
+            "bottom": 203.5
+          },
+          "selectedItem": {
+            "x": 630,
+            "y": 179.5,
+            "w": 58.02,
+            "h": 24,
+            "right": 688.02,
+            "bottom": 203.5
+          },
+          "tagsText": {
+            "x": 639,
+            "y": 182,
+            "w": 24.02,
+            "h": 17,
+            "right": 663.02,
+            "bottom": 199
+          }
+        },
+        "status": {
+          "root": {
+            "x": 1004,
+            "y": 175.5,
+            "w": 200,
+            "h": 32,
+            "right": 1204,
+            "bottom": 207.5
+          },
+          "wrapper": {
+            "x": 1004,
+            "y": 175.5,
+            "w": 200,
+            "h": 32,
+            "right": 1204,
+            "bottom": 207.5
+          },
+          "selection": {
+            "x": 1006,
+            "y": 179.5,
+            "w": 170,
+            "h": 24,
+            "right": 1176,
+            "bottom": 203.5
+          },
+          "selectedItem": {
+            "x": 1006,
+            "y": 179.5,
+            "w": 170,
+            "h": 24,
+            "right": 1176,
+            "bottom": 203.5
+          },
+          "tagsText": {
+            "x": 1015,
+            "y": 182,
+            "w": 136,
+            "h": 17,
+            "right": 1151,
+            "bottom": 199
+          }
+        },
+        "groups": [
+          {
+            "x": 292,
+            "y": 175.5,
+            "w": 288,
+            "h": 32,
+            "right": 580,
+            "bottom": 207.5
+          },
+          {
+            "x": 594,
+            "y": 175.5,
+            "w": 334,
+            "h": 32,
+            "right": 928,
+            "bottom": 207.5
+          },
+          {
+            "x": 942,
+            "y": 175.5,
+            "w": 262,
+            "h": 32,
+            "right": 1204,
+            "bottom": 207.5
+          }
+        ],
+        "queryBtn": {
+          "x": 1218,
+          "y": 176.5,
+          "w": 62,
+          "h": 30,
+          "right": 1280,
+          "bottom": 206.5
+        },
+        "resetBtn": {
+          "x": 1300,
+          "y": 176.5,
+          "w": 58,
+          "h": 30,
+          "right": 1358,
+          "bottom": 206.5
+        },
+        "bar": {
+          "x": 292,
+          "y": 175.5,
+          "w": 1321,
+          "h": 32,
+          "right": 1613,
+          "bottom": 207.5
+        }
+      },
+      "selected": {
+        "client": [
+          "全部"
+        ],
+        "source": [
+          "全部"
+        ],
+        "status": [
+          "快照进行中（RUNNING）"
+        ]
+      },
+      "tooltips": 0
+    },
+    {
+      "name": "tooltip_candidate_long",
+      "geom": {
+        "client": {
+          "root": {
+            "x": 340,
+            "y": 175.5,
+            "w": 240,
+            "h": 32,
+            "right": 580,
+            "bottom": 207.5
+          },
+          "wrapper": {
+            "x": 340,
+            "y": 175.5,
+            "w": 240,
+            "h": 32,
+            "right": 580,
+            "bottom": 207.5
+          },
+          "selection": {
+            "x": 342,
+            "y": 179.5,
+            "w": 210,
+            "h": 24,
+            "right": 552,
+            "bottom": 203.5
+          },
+          "selectedItem": {
+            "x": 342,
+            "y": 179.5,
+            "w": 58.02,
+            "h": 24,
+            "right": 400.02,
+            "bottom": 203.5
+          },
+          "tagsText": {
+            "x": 351,
+            "y": 182,
+            "w": 24.02,
+            "h": 17,
+            "right": 375.02,
+            "bottom": 199
+          }
+        },
+        "source": {
+          "root": {
+            "x": 628,
+            "y": 175.5,
+            "w": 300,
+            "h": 32,
+            "right": 928,
+            "bottom": 207.5
+          },
+          "wrapper": {
+            "x": 628,
+            "y": 175.5,
+            "w": 300,
+            "h": 32,
+            "right": 928,
+            "bottom": 207.5
+          },
+          "selection": {
+            "x": 630,
+            "y": 179.5,
+            "w": 270,
+            "h": 24,
+            "right": 900,
+            "bottom": 203.5
+          },
+          "selectedItem": {
+            "x": 630,
+            "y": 179.5,
+            "w": 58.02,
+            "h": 24,
+            "right": 688.02,
+            "bottom": 203.5
+          },
+          "tagsText": {
+            "x": 639,
+            "y": 182,
+            "w": 24.02,
+            "h": 17,
+            "right": 663.02,
+            "bottom": 199
+          }
+        },
+        "status": {
+          "root": {
+            "x": 1004,
+            "y": 175.5,
+            "w": 200,
+            "h": 32,
+            "right": 1204,
+            "bottom": 207.5
+          },
+          "wrapper": {
+            "x": 1004,
+            "y": 175.5,
+            "w": 200,
+            "h": 32,
+            "right": 1204,
+            "bottom": 207.5
+          },
+          "selection": {
+            "x": 1006,
+            "y": 179.5,
+            "w": 170,
+            "h": 24,
+            "right": 1176,
+            "bottom": 203.5
+          },
+          "selectedItem": {
+            "x": 1006,
+            "y": 179.5,
+            "w": 170,
+            "h": 24,
+            "right": 1176,
+            "bottom": 203.5
+          },
+          "tagsText": {
+            "x": 1015,
+            "y": 182,
+            "w": 136,
+            "h": 17,
+            "right": 1151,
+            "bottom": 199
+          }
+        },
+        "groups": [
+          {
+            "x": 292,
+            "y": 175.5,
+            "w": 288,
+            "h": 32,
+            "right": 580,
+            "bottom": 207.5
+          },
+          {
+            "x": 594,
+            "y": 175.5,
+            "w": 334,
+            "h": 32,
+            "right": 928,
+            "bottom": 207.5
+          },
+          {
+            "x": 942,
+            "y": 175.5,
+            "w": 262,
+            "h": 32,
+            "right": 1204,
+            "bottom": 207.5
+          }
+        ],
+        "queryBtn": {
+          "x": 1218,
+          "y": 176.5,
+          "w": 62,
+          "h": 30,
+          "right": 1280,
+          "bottom": 206.5
+        },
+        "resetBtn": {
+          "x": 1300,
+          "y": 176.5,
+          "w": 58,
+          "h": 30,
+          "right": 1358,
+          "bottom": 206.5
+        },
+        "bar": {
+          "x": 292,
+          "y": 175.5,
+          "w": 1321,
+          "h": 32,
+          "right": 1613,
+          "bottom": 207.5
+        }
+      },
+      "selected": {
+        "client": [
+          "全部"
+        ],
+        "source": [
+          "全部"
+        ],
+        "status": [
+          "快照进行中（RUNNING）"
+        ]
+      },
+      "tooltips": 0,
+      "ttCount": 0,
+      "ttText": [],
+      "ttRect": []
+    },
+    {
+      "name": "tooltip_candidate_leave",
+      "geom": {
+        "client": {
+          "root": {
+            "x": 340,
+            "y": 175.5,
+            "w": 240,
+            "h": 32,
+            "right": 580,
+            "bottom": 207.5
+          },
+          "wrapper": {
+            "x": 340,
+            "y": 175.5,
+            "w": 240,
+            "h": 32,
+            "right": 580,
+            "bottom": 207.5
+          },
+          "selection": {
+            "x": 342,
+            "y": 179.5,
+            "w": 210,
+            "h": 24,
+            "right": 552,
+            "bottom": 203.5
+          },
+          "selectedItem": {
+            "x": 342,
+            "y": 179.5,
+            "w": 58.02,
+            "h": 24,
+            "right": 400.02,
+            "bottom": 203.5
+          },
+          "tagsText": {
+            "x": 351,
+            "y": 182,
+            "w": 24.02,
+            "h": 17,
+            "right": 375.02,
+            "bottom": 199
+          }
+        },
+        "source": {
+          "root": {
+            "x": 628,
+            "y": 175.5,
+            "w": 300,
+            "h": 32,
+            "right": 928,
+            "bottom": 207.5
+          },
+          "wrapper": {
+            "x": 628,
+            "y": 175.5,
+            "w": 300,
+            "h": 32,
+            "right": 928,
+            "bottom": 207.5
+          },
+          "selection": {
+            "x": 630,
+            "y": 179.5,
+            "w": 270,
+            "h": 24,
+            "right": 900,
+            "bottom": 203.5
+          },
+          "selectedItem": {
+            "x": 630,
+            "y": 179.5,
+            "w": 58.02,
+            "h": 24,
+            "right": 688.02,
+            "bottom": 203.5
+          },
+          "tagsText": {
+            "x": 639,
+            "y": 182,
+            "w": 24.02,
+            "h": 17,
+            "right": 663.02,
+            "bottom": 199
+          }
+        },
+        "status": {
+          "root": {
+            "x": 1004,
+            "y": 175.5,
+            "w": 200,
+            "h": 32,
+            "right": 1204,
+            "bottom": 207.5
+          },
+          "wrapper": {
+            "x": 1004,
+            "y": 175.5,
+            "w": 200,
+            "h": 32,
+            "right": 1204,
+            "bottom": 207.5
+          },
+          "selection": {
+            "x": 1006,
+            "y": 179.5,
+            "w": 170,
+            "h": 24,
+            "right": 1176,
+            "bottom": 203.5
+          },
+          "selectedItem": {
+            "x": 1006,
+            "y": 179.5,
+            "w": 170,
+            "h": 24,
+            "right": 1176,
+            "bottom": 203.5
+          },
+          "tagsText": {
+            "x": 1015,
+            "y": 182,
+            "w": 136,
+            "h": 17,
+            "right": 1151,
+            "bottom": 199
+          }
+        },
+        "groups": [
+          {
+            "x": 292,
+            "y": 175.5,
+            "w": 288,
+            "h": 32,
+            "right": 580,
+            "bottom": 207.5
+          },
+          {
+            "x": 594,
+            "y": 175.5,
+            "w": 334,
+            "h": 32,
+            "right": 928,
+            "bottom": 207.5
+          },
+          {
+            "x": 942,
+            "y": 175.5,
+            "w": 262,
+            "h": 32,
+            "right": 1204,
+            "bottom": 207.5
+          }
+        ],
+        "queryBtn": {
+          "x": 1218,
+          "y": 176.5,
+          "w": 62,
+          "h": 30,
+          "right": 1280,
+          "bottom": 206.5
+        },
+        "resetBtn": {
+          "x": 1300,
+          "y": 176.5,
+          "w": 58,
+          "h": 30,
+          "right": 1358,
+          "bottom": 206.5
+        },
+        "bar": {
+          "x": 292,
+          "y": 175.5,
+          "w": 1321,
+          "h": 32,
+          "right": 1613,
+          "bottom": 207.5
+        }
+      },
+      "selected": {
+        "client": [
+          "全部"
+        ],
+        "source": [
+          "全部"
+        ],
+        "status": [
+          "快照进行中（RUNNING）"
+        ]
+      },
+      "tooltips": 0,
+      "ttCount": 0
+    }
+  ]
+}

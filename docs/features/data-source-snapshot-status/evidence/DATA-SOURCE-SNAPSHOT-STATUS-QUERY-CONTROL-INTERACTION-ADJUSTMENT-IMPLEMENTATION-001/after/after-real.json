@@ -1,0 +1,1386 @@
+[
+  {
+    "viewport": {
+      "w": 1280,
+      "h": 800
+    },
+    "clientRows": [
+      {
+        "text": "c-dssr1-0906-a（快照页测试探针A，请勿启用。长描述用于验...）",
+        "cp": 39,
+        "hasEllipsis": true,
+        "ellipsisCount": 1,
+        "hasCjkParen": true
+      },
+      {
+        "text": "c-dssr1-0906-b（快照页测试探针B，请勿启用）",
+        "cp": 29,
+        "hasEllipsis": false,
+        "ellipsisCount": 0,
+        "hasCjkParen": true
+      },
+      {
+        "text": "c-dssr1-0906-c（快照页测试探针C，请勿启用（其源库配置缺...）",
+        "cp": 39,
+        "hasEllipsis": true,
+        "ellipsisCount": 1,
+        "hasCjkParen": true
+      },
+      {
+        "text": "c-dssr1-0906-d（快照页测试探针D，请勿启用（含超长描述演...）",
+        "cp": 39,
+        "hasEllipsis": true,
+        "ellipsisCount": 1,
+        "hasCjkParen": true
+      },
+      {
+        "text": "c-dssr1-0906-e（快照页测试探针E，请勿启用）",
+        "cp": 29,
+        "hasEllipsis": false,
+        "ellipsisCount": 0,
+        "hasCjkParen": true
+      },
+      {
+        "text": "c-dssr1-0906-miss1",
+        "cp": 18,
+        "hasEllipsis": false,
+        "ellipsisCount": 0,
+        "hasCjkParen": false
+      },
+      {
+        "text": "c-dssr1-0906-miss2",
+        "cp": 18,
+        "hasEllipsis": false,
+        "ellipsisCount": 0,
+        "hasCjkParen": false
+      },
+      {
+        "text": "hosp-012（总部测试 IP: 192.168.0.9...）",
+        "cp": 33,
+        "hasEllipsis": true,
+        "ellipsisCount": 1,
+        "hasCjkParen": true
+      }
+    ],
+    "clientRaw": [
+      {
+        "text": "全部",
+        "inner": "<span>全部</span>"
+      },
+      {
+        "text": "c-dssr1-0906-a（快照页测试探针A，请勿启用。长描述用于验...）",
+        "inner": "<span>c-dssr1-0906-a（快照页测试探针A，请勿启用。长描述用于验...）</span>"
+      },
+      {
+        "text": "c-dssr1-0906-b（快照页测试探针B，请勿启用）",
+        "inner": "<span>c-dssr1-0906-b（快照页测试探针B，请勿启用）</span>"
+      },
+      {
+        "text": "c-dssr1-0906-c（快照页测试探针C，请勿启用（其源库配置缺...）",
+        "inner": "<span>c-dssr1-0906-c（快照页测试探针C，请勿启用（其源库配置缺...）</span>"
+      },
+      {
+        "text": "c-dssr1-0906-d（快照页测试探针D，请勿启用（含超长描述演...）",
+        "inner": "<span>c-dssr1-0906-d（快照页测试探针D，请勿启用（含超长描述演...）</span>"
+      },
+      {
+        "text": "c-dssr1-0906-e（快照页测试探针E，请勿启用）",
+        "inner": "<span>c-dssr1-0906-e（快照页测试探针E，请勿启用）</span>"
+      },
+      {
+        "text": "c-dssr1-0906-miss1",
+        "inner": "<span>c-dssr1-0906-miss1</span>"
+      },
+      {
+        "text": "c-dssr1-0906-miss2",
+        "inner": "<span>c-dssr1-0906-miss2</span>"
+      },
+      {
+        "text": "hosp-012（总部测试 IP: 192.168.0.9...）",
+        "inner": "<span>hosp-012（总部测试 IP: 192.168.0.9...）</span>"
+      }
+    ],
+    "clientHover": [
+      {
+        "idx": 1,
+        "rendered": "c-dssr1-0906-a（快照页测试探针A，请勿启用。长描述用于验...）",
+        "tooltip": "快照页测试探针A，请勿启用。长描述用于验证页面 Tooltip 与列宽截断：某市第一人民医院信息中心CDC采集探针（专用快照页测试实例，请勿启用其进行任何真实数据同步）。继续追加说明文字以拉长描述，确认列表单元格超长时显示省略号并可由 Tooltip 完整阅读；本条仅供源库快照状态只读页面视觉验证使用。",
+        "tooltipCp": 152,
+        "tooltipGoneAfterLeave": true
+      },
+      {
+        "idx": 2,
+        "rendered": "c-dssr1-0906-b（快照页测试探针B，请勿启用）",
+        "tooltip": null,
+        "tooltipCp": null,
+        "tooltipGoneAfterLeave": true
+      },
+      {
+        "idx": 3,
+        "rendered": "c-dssr1-0906-c（快照页测试探针C，请勿启用（其源库配置缺...）",
+        "tooltip": "快照页测试探针C，请勿启用（其源库配置缺失）",
+        "tooltipCp": 22,
+        "tooltipGoneAfterLeave": true
+      },
+      {
+        "idx": 4,
+        "rendered": "c-dssr1-0906-d（快照页测试探针D，请勿启用（含超长描述演...）",
+        "tooltip": "快照页测试探针D，请勿启用（含超长描述演示：覆盖同源不同状态与并列时间排序）",
+        "tooltipCp": 38,
+        "tooltipGoneAfterLeave": true
+      },
+      {
+        "idx": 5,
+        "rendered": "c-dssr1-0906-e（快照页测试探针E，请勿启用）",
+        "tooltip": null,
+        "tooltipCp": null,
+        "tooltipGoneAfterLeave": true
+      },
+      {
+        "idx": 6,
+        "rendered": "c-dssr1-0906-miss1",
+        "tooltip": null,
+        "tooltipCp": null,
+        "tooltipGoneAfterLeave": true
+      },
+      {
+        "idx": 7,
+        "rendered": "c-dssr1-0906-miss2",
+        "tooltip": null,
+        "tooltipCp": null,
+        "tooltipGoneAfterLeave": true
+      },
+      {
+        "idx": 8,
+        "rendered": "hosp-012（总部测试 IP: 192.168.0.9...）",
+        "tooltip": "总部测试 IP: 192.168.0.94, 192.168.174.1, 3.3.0.192, 192.168.100.1",
+        "tooltipCp": 62,
+        "tooltipGoneAfterLeave": true
+      }
+    ],
+    "sourceRows": [
+      {
+        "text": "SNAPSHOT-TEST-某市一院信息...（s-dssr1-0906-1）",
+        "cp": 39,
+        "hasEllipsis": true,
+        "ellipsisCount": 1,
+        "hasCjkParen": true
+      },
+      {
+        "text": "SNAPSHOT-TEST-某市一院信息...（s-dssr1-0906-2）",
+        "cp": 39,
+        "hasEllipsis": true,
+        "ellipsisCount": 1,
+        "hasCjkParen": true
+      },
+      {
+        "text": "SNAPSHOT-TEST-某市二院信息...（s-dssr1-0906-3）",
+        "cp": 39,
+        "hasEllipsis": true,
+        "ellipsisCount": 1,
+        "hasCjkParen": true
+      },
+      {
+        "text": "SNAPSHOT-TEST-目标侧某中心...（s-dssr1-0906-4）",
+        "cp": 39,
+        "hasEllipsis": true,
+        "ellipsisCount": 1,
+        "hasCjkParen": true
+      },
+      {
+        "text": "SNAPSHOT-TEST-第三方平台源...（s-dssr1-0906-5）",
+        "cp": 39,
+        "hasEllipsis": true,
+        "ellipsisCount": 1,
+        "hasCjkParen": true
+      },
+      {
+        "text": "孝感市第一人民医院（112-source-19c）",
+        "cp": 25,
+        "hasEllipsis": false,
+        "ellipsisCount": 0,
+        "hasCjkParen": true
+      },
+      {
+        "text": "s-dssr1-0906-m1",
+        "cp": 15,
+        "hasEllipsis": false,
+        "ellipsisCount": 0,
+        "hasCjkParen": false
+      },
+      {
+        "text": "s-dssr1-0906-m2",
+        "cp": 15,
+        "hasEllipsis": false,
+        "ellipsisCount": 0,
+        "hasCjkParen": false
+      },
+      {
+        "text": "s-dssr1-0906-m3",
+        "cp": 15,
+        "hasEllipsis": false,
+        "ellipsisCount": 0,
+        "hasCjkParen": false
+      }
+    ],
+    "sourceRaw": [
+      {
+        "text": "全部",
+        "inner": "<span>全部</span>"
+      },
+      {
+        "text": "SNAPSHOT-TEST-某市一院信息...（s-dssr1-0906-1）",
+        "inner": "<span>SNAPSHOT-TEST-某市一院信息...（s-dssr1-0906-1）</span>"
+      },
+      {
+        "text": "SNAPSHOT-TEST-某市一院信息...（s-dssr1-0906-2）",
+        "inner": "<span>SNAPSHOT-TEST-某市一院信息...（s-dssr1-0906-2）</span>"
+      },
+      {
+        "text": "SNAPSHOT-TEST-某市二院信息...（s-dssr1-0906-3）",
+        "inner": "<span>SNAPSHOT-TEST-某市二院信息...（s-dssr1-0906-3）</span>"
+      },
+      {
+        "text": "SNAPSHOT-TEST-目标侧某中心...（s-dssr1-0906-4）",
+        "inner": "<span>SNAPSHOT-TEST-目标侧某中心...（s-dssr1-0906-4）</span>"
+      },
+      {
+        "text": "SNAPSHOT-TEST-第三方平台源...（s-dssr1-0906-5）",
+        "inner": "<span>SNAPSHOT-TEST-第三方平台源...（s-dssr1-0906-5）</span>"
+      },
+      {
+        "text": "孝感市第一人民医院（112-source-19c）",
+        "inner": "<span>孝感市第一人民医院（112-source-19c）</span>"
+      },
+      {
+        "text": "s-dssr1-0906-m1",
+        "inner": "<span>s-dssr1-0906-m1</span>"
+      },
+      {
+        "text": "s-dssr1-0906-m2",
+        "inner": "<span>s-dssr1-0906-m2</span>"
+      },
+      {
+        "text": "s-dssr1-0906-m3",
+        "inner": "<span>s-dssr1-0906-m3</span>"
+      }
+    ],
+    "sourceHover": [
+      {
+        "idx": 1,
+        "rendered": "SNAPSHOT-TEST-某市一院信息...（s-dssr1-0906-1）",
+        "tooltip": null
+      },
+      {
+        "idx": 2,
+        "rendered": "SNAPSHOT-TEST-某市一院信息...（s-dssr1-0906-2）",
+        "tooltip": null
+      },
+      {
+        "idx": 3,
+        "rendered": "SNAPSHOT-TEST-某市二院信息...（s-dssr1-0906-3）",
+        "tooltip": null
+      },
+      {
+        "idx": 4,
+        "rendered": "SNAPSHOT-TEST-目标侧某中心...（s-dssr1-0906-4）",
+        "tooltip": null
+      },
+      {
+        "idx": 5,
+        "rendered": "SNAPSHOT-TEST-第三方平台源...（s-dssr1-0906-5）",
+        "tooltip": null
+      },
+      {
+        "idx": 6,
+        "rendered": "孝感市第一人民医院（112-source-19c）",
+        "tooltip": null
+      },
+      {
+        "idx": 7,
+        "rendered": "s-dssr1-0906-m1",
+        "tooltip": null
+      },
+      {
+        "idx": 8,
+        "rendered": "s-dssr1-0906-m2",
+        "tooltip": null
+      },
+      {
+        "idx": 9,
+        "rendered": "s-dssr1-0906-m3",
+        "tooltip": null
+      }
+    ],
+    "singleTooltips": 0,
+    "tableCells": [
+      "1 | c-dssr1-0906-a停用 | SNAPSHOT-TEST-某市一院信息中心源库-DONOTUSE | ●快照进行中 | 2026-09-06 11:02:00 | -- | 2026-09-06 11:02:00",
+      "2 | c-dssr1-0906-a停用 | SNAPSHOT-TEST-某市一院信息中心源库-DONOTUSE | ●快照进行中 | 2026-09-06 11:01:30 | -- | 2026-09-06 11:01:30",
+      "3 | c-dssr1-0906-b停用 | SNAPSHOT-TEST-某市一院信息中心源库-DONOTUSE | ●快照进行中 | 2026-09-06 10:57:00 | -- | 2026-09-06 10:57:00"
+    ],
+    "deltaDuringPanels": {
+      "client": {
+        "client": 0,
+        "source": 0,
+        "status": 0,
+        "clientWrap": 0,
+        "sourceWrap": 0,
+        "statusWrap": 0,
+        "qBtnX": 0,
+        "barH": 0
+      },
+      "source": {
+        "client": 0,
+        "source": 0,
+        "status": 0,
+        "clientWrap": 0,
+        "sourceWrap": 0,
+        "statusWrap": 0,
+        "qBtnX": 0,
+        "barH": 0
+      }
+    },
+    "requests": {
+      "total": 55,
+      "nonGet": []
+    }
+  },
+  {
+    "viewport": {
+      "w": 1700,
+      "h": 920
+    },
+    "clientRows": [
+      {
+        "text": "c-dssr1-0906-a（快照页测试探针A，请勿启用。长描述用于验...）",
+        "cp": 39,
+        "hasEllipsis": true,
+        "ellipsisCount": 1,
+        "hasCjkParen": true
+      },
+      {
+        "text": "c-dssr1-0906-b（快照页测试探针B，请勿启用）",
+        "cp": 29,
+        "hasEllipsis": false,
+        "ellipsisCount": 0,
+        "hasCjkParen": true
+      },
+      {
+        "text": "c-dssr1-0906-c（快照页测试探针C，请勿启用（其源库配置缺...）",
+        "cp": 39,
+        "hasEllipsis": true,
+        "ellipsisCount": 1,
+        "hasCjkParen": true
+      },
+      {
+        "text": "c-dssr1-0906-d（快照页测试探针D，请勿启用（含超长描述演...）",
+        "cp": 39,
+        "hasEllipsis": true,
+        "ellipsisCount": 1,
+        "hasCjkParen": true
+      },
+      {
+        "text": "c-dssr1-0906-e（快照页测试探针E，请勿启用）",
+        "cp": 29,
+        "hasEllipsis": false,
+        "ellipsisCount": 0,
+        "hasCjkParen": true
+      },
+      {
+        "text": "c-dssr1-0906-miss1",
+        "cp": 18,
+        "hasEllipsis": false,
+        "ellipsisCount": 0,
+        "hasCjkParen": false
+      },
+      {
+        "text": "c-dssr1-0906-miss2",
+        "cp": 18,
+        "hasEllipsis": false,
+        "ellipsisCount": 0,
+        "hasCjkParen": false
+      },
+      {
+        "text": "hosp-012（总部测试 IP: 192.168.0.9...）",
+        "cp": 33,
+        "hasEllipsis": true,
+        "ellipsisCount": 1,
+        "hasCjkParen": true
+      }
+    ],
+    "clientRaw": [
+      {
+        "text": "全部",
+        "inner": "<span>全部</span>"
+      },
+      {
+        "text": "c-dssr1-0906-a（快照页测试探针A，请勿启用。长描述用于验...）",
+        "inner": "<span>c-dssr1-0906-a（快照页测试探针A，请勿启用。长描述用于验...）</span>"
+      },
+      {
+        "text": "c-dssr1-0906-b（快照页测试探针B，请勿启用）",
+        "inner": "<span>c-dssr1-0906-b（快照页测试探针B，请勿启用）</span>"
+      },
+      {
+        "text": "c-dssr1-0906-c（快照页测试探针C，请勿启用（其源库配置缺...）",
+        "inner": "<span>c-dssr1-0906-c（快照页测试探针C，请勿启用（其源库配置缺...）</span>"
+      },
+      {
+        "text": "c-dssr1-0906-d（快照页测试探针D，请勿启用（含超长描述演...）",
+        "inner": "<span>c-dssr1-0906-d（快照页测试探针D，请勿启用（含超长描述演...）</span>"
+      },
+      {
+        "text": "c-dssr1-0906-e（快照页测试探针E，请勿启用）",
+        "inner": "<span>c-dssr1-0906-e（快照页测试探针E，请勿启用）</span>"
+      },
+      {
+        "text": "c-dssr1-0906-miss1",
+        "inner": "<span>c-dssr1-0906-miss1</span>"
+      },
+      {
+        "text": "c-dssr1-0906-miss2",
+        "inner": "<span>c-dssr1-0906-miss2</span>"
+      },
+      {
+        "text": "hosp-012（总部测试 IP: 192.168.0.9...）",
+        "inner": "<span>hosp-012（总部测试 IP: 192.168.0.9...）</span>"
+      }
+    ],
+    "clientHover": [
+      {
+        "idx": 1,
+        "rendered": "c-dssr1-0906-a（快照页测试探针A，请勿启用。长描述用于验...）",
+        "tooltip": "快照页测试探针A，请勿启用。长描述用于验证页面 Tooltip 与列宽截断：某市第一人民医院信息中心CDC采集探针（专用快照页测试实例，请勿启用其进行任何真实数据同步）。继续追加说明文字以拉长描述，确认列表单元格超长时显示省略号并可由 Tooltip 完整阅读；本条仅供源库快照状态只读页面视觉验证使用。",
+        "tooltipCp": 152,
+        "tooltipGoneAfterLeave": true
+      },
+      {
+        "idx": 2,
+        "rendered": "c-dssr1-0906-b（快照页测试探针B，请勿启用）",
+        "tooltip": null,
+        "tooltipCp": null,
+        "tooltipGoneAfterLeave": true
+      },
+      {
+        "idx": 3,
+        "rendered": "c-dssr1-0906-c（快照页测试探针C，请勿启用（其源库配置缺...）",
+        "tooltip": "快照页测试探针C，请勿启用（其源库配置缺失）",
+        "tooltipCp": 22,
+        "tooltipGoneAfterLeave": true
+      },
+      {
+        "idx": 4,
+        "rendered": "c-dssr1-0906-d（快照页测试探针D，请勿启用（含超长描述演...）",
+        "tooltip": "快照页测试探针D，请勿启用（含超长描述演示：覆盖同源不同状态与并列时间排序）",
+        "tooltipCp": 38,
+        "tooltipGoneAfterLeave": true
+      },
+      {
+        "idx": 5,
+        "rendered": "c-dssr1-0906-e（快照页测试探针E，请勿启用）",
+        "tooltip": null,
+        "tooltipCp": null,
+        "tooltipGoneAfterLeave": true
+      },
+      {
+        "idx": 6,
+        "rendered": "c-dssr1-0906-miss1",
+        "tooltip": null,
+        "tooltipCp": null,
+        "tooltipGoneAfterLeave": true
+      },
+      {
+        "idx": 7,
+        "rendered": "c-dssr1-0906-miss2",
+        "tooltip": null,
+        "tooltipCp": null,
+        "tooltipGoneAfterLeave": true
+      },
+      {
+        "idx": 8,
+        "rendered": "hosp-012（总部测试 IP: 192.168.0.9...）",
+        "tooltip": "总部测试 IP: 192.168.0.94, 192.168.174.1, 3.3.0.192, 192.168.100.1",
+        "tooltipCp": 62,
+        "tooltipGoneAfterLeave": true
+      }
+    ],
+    "sourceRows": [
+      {
+        "text": "SNAPSHOT-TEST-某市一院信息...（s-dssr1-0906-1）",
+        "cp": 39,
+        "hasEllipsis": true,
+        "ellipsisCount": 1,
+        "hasCjkParen": true
+      },
+      {
+        "text": "SNAPSHOT-TEST-某市一院信息...（s-dssr1-0906-2）",
+        "cp": 39,
+        "hasEllipsis": true,
+        "ellipsisCount": 1,
+        "hasCjkParen": true
+      },
+      {
+        "text": "SNAPSHOT-TEST-某市二院信息...（s-dssr1-0906-3）",
+        "cp": 39,
+        "hasEllipsis": true,
+        "ellipsisCount": 1,
+        "hasCjkParen": true
+      },
+      {
+        "text": "SNAPSHOT-TEST-目标侧某中心...（s-dssr1-0906-4）",
+        "cp": 39,
+        "hasEllipsis": true,
+        "ellipsisCount": 1,
+        "hasCjkParen": true
+      },
+      {
+        "text": "SNAPSHOT-TEST-第三方平台源...（s-dssr1-0906-5）",
+        "cp": 39,
+        "hasEllipsis": true,
+        "ellipsisCount": 1,
+        "hasCjkParen": true
+      },
+      {
+        "text": "孝感市第一人民医院（112-source-19c）",
+        "cp": 25,
+        "hasEllipsis": false,
+        "ellipsisCount": 0,
+        "hasCjkParen": true
+      },
+      {
+        "text": "s-dssr1-0906-m1",
+        "cp": 15,
+        "hasEllipsis": false,
+        "ellipsisCount": 0,
+        "hasCjkParen": false
+      },
+      {
+        "text": "s-dssr1-0906-m2",
+        "cp": 15,
+        "hasEllipsis": false,
+        "ellipsisCount": 0,
+        "hasCjkParen": false
+      },
+      {
+        "text": "s-dssr1-0906-m3",
+        "cp": 15,
+        "hasEllipsis": false,
+        "ellipsisCount": 0,
+        "hasCjkParen": false
+      }
+    ],
+    "sourceRaw": [
+      {
+        "text": "全部",
+        "inner": "<span>全部</span>"
+      },
+      {
+        "text": "SNAPSHOT-TEST-某市一院信息...（s-dssr1-0906-1）",
+        "inner": "<span>SNAPSHOT-TEST-某市一院信息...（s-dssr1-0906-1）</span>"
+      },
+      {
+        "text": "SNAPSHOT-TEST-某市一院信息...（s-dssr1-0906-2）",
+        "inner": "<span>SNAPSHOT-TEST-某市一院信息...（s-dssr1-0906-2）</span>"
+      },
+      {
+        "text": "SNAPSHOT-TEST-某市二院信息...（s-dssr1-0906-3）",
+        "inner": "<span>SNAPSHOT-TEST-某市二院信息...（s-dssr1-0906-3）</span>"
+      },
+      {
+        "text": "SNAPSHOT-TEST-目标侧某中心...（s-dssr1-0906-4）",
+        "inner": "<span>SNAPSHOT-TEST-目标侧某中心...（s-dssr1-0906-4）</span>"
+      },
+      {
+        "text": "SNAPSHOT-TEST-第三方平台源...（s-dssr1-0906-5）",
+        "inner": "<span>SNAPSHOT-TEST-第三方平台源...（s-dssr1-0906-5）</span>"
+      },
+      {
+        "text": "孝感市第一人民医院（112-source-19c）",
+        "inner": "<span>孝感市第一人民医院（112-source-19c）</span>"
+      },
+      {
+        "text": "s-dssr1-0906-m1",
+        "inner": "<span>s-dssr1-0906-m1</span>"
+      },
+      {
+        "text": "s-dssr1-0906-m2",
+        "inner": "<span>s-dssr1-0906-m2</span>"
+      },
+      {
+        "text": "s-dssr1-0906-m3",
+        "inner": "<span>s-dssr1-0906-m3</span>"
+      }
+    ],
+    "sourceHover": [
+      {
+        "idx": 1,
+        "rendered": "SNAPSHOT-TEST-某市一院信息...（s-dssr1-0906-1）",
+        "tooltip": null
+      },
+      {
+        "idx": 2,
+        "rendered": "SNAPSHOT-TEST-某市一院信息...（s-dssr1-0906-2）",
+        "tooltip": null
+      },
+      {
+        "idx": 3,
+        "rendered": "SNAPSHOT-TEST-某市二院信息...（s-dssr1-0906-3）",
+        "tooltip": null
+      },
+      {
+        "idx": 4,
+        "rendered": "SNAPSHOT-TEST-目标侧某中心...（s-dssr1-0906-4）",
+        "tooltip": null
+      },
+      {
+        "idx": 5,
+        "rendered": "SNAPSHOT-TEST-第三方平台源...（s-dssr1-0906-5）",
+        "tooltip": null
+      },
+      {
+        "idx": 6,
+        "rendered": "孝感市第一人民医院（112-source-19c）",
+        "tooltip": null
+      },
+      {
+        "idx": 7,
+        "rendered": "s-dssr1-0906-m1",
+        "tooltip": null
+      },
+      {
+        "idx": 8,
+        "rendered": "s-dssr1-0906-m2",
+        "tooltip": null
+      },
+      {
+        "idx": 9,
+        "rendered": "s-dssr1-0906-m3",
+        "tooltip": null
+      }
+    ],
+    "singleTooltips": 0,
+    "tableCells": [
+      "1 | c-dssr1-0906-a停用 | SNAPSHOT-TEST-某市一院信息中心源库-DONOTUSE | ●快照进行中 | 2026-09-06 11:02:00 | -- | 2026-09-06 11:02:00",
+      "2 | c-dssr1-0906-a停用 | SNAPSHOT-TEST-某市一院信息中心源库-DONOTUSE | ●快照进行中 | 2026-09-06 11:01:30 | -- | 2026-09-06 11:01:30",
+      "3 | c-dssr1-0906-b停用 | SNAPSHOT-TEST-某市一院信息中心源库-DONOTUSE | ●快照进行中 | 2026-09-06 10:57:00 | -- | 2026-09-06 10:57:00"
+    ],
+    "deltaDuringPanels": {
+      "client": {
+        "client": 0,
+        "source": 0,
+        "status": 0,
+        "clientWrap": 0,
+        "sourceWrap": 0,
+        "statusWrap": 0,
+        "qBtnX": 0,
+        "barH": 0
+      },
+      "source": {
+        "client": 0,
+        "source": 0,
+        "status": 0,
+        "clientWrap": 0,
+        "sourceWrap": 0,
+        "statusWrap": 0,
+        "qBtnX": 0,
+        "barH": 0
+      }
+    },
+    "requests": {
+      "total": 55,
+      "nonGet": []
+    }
+  },
+  {
+    "viewport": {
+      "w": 1920,
+      "h": 1080
+    },
+    "clientRows": [
+      {
+        "text": "c-dssr1-0906-a（快照页测试探针A，请勿启用。长描述用于验...）",
+        "cp": 39,
+        "hasEllipsis": true,
+        "ellipsisCount": 1,
+        "hasCjkParen": true
+      },
+      {
+        "text": "c-dssr1-0906-b（快照页测试探针B，请勿启用）",
+        "cp": 29,
+        "hasEllipsis": false,
+        "ellipsisCount": 0,
+        "hasCjkParen": true
+      },
+      {
+        "text": "c-dssr1-0906-c（快照页测试探针C，请勿启用（其源库配置缺...）",
+        "cp": 39,
+        "hasEllipsis": true,
+        "ellipsisCount": 1,
+        "hasCjkParen": true
+      },
+      {
+        "text": "c-dssr1-0906-d（快照页测试探针D，请勿启用（含超长描述演...）",
+        "cp": 39,
+        "hasEllipsis": true,
+        "ellipsisCount": 1,
+        "hasCjkParen": true
+      },
+      {
+        "text": "c-dssr1-0906-e（快照页测试探针E，请勿启用）",
+        "cp": 29,
+        "hasEllipsis": false,
+        "ellipsisCount": 0,
+        "hasCjkParen": true
+      },
+      {
+        "text": "c-dssr1-0906-miss1",
+        "cp": 18,
+        "hasEllipsis": false,
+        "ellipsisCount": 0,
+        "hasCjkParen": false
+      },
+      {
+        "text": "c-dssr1-0906-miss2",
+        "cp": 18,
+        "hasEllipsis": false,
+        "ellipsisCount": 0,
+        "hasCjkParen": false
+      },
+      {
+        "text": "hosp-012（总部测试 IP: 192.168.0.9...）",
+        "cp": 33,
+        "hasEllipsis": true,
+        "ellipsisCount": 1,
+        "hasCjkParen": true
+      }
+    ],
+    "clientRaw": [
+      {
+        "text": "全部",
+        "inner": "<span>全部</span>"
+      },
+      {
+        "text": "c-dssr1-0906-a（快照页测试探针A，请勿启用。长描述用于验...）",
+        "inner": "<span>c-dssr1-0906-a（快照页测试探针A，请勿启用。长描述用于验...）</span>"
+      },
+      {
+        "text": "c-dssr1-0906-b（快照页测试探针B，请勿启用）",
+        "inner": "<span>c-dssr1-0906-b（快照页测试探针B，请勿启用）</span>"
+      },
+      {
+        "text": "c-dssr1-0906-c（快照页测试探针C，请勿启用（其源库配置缺...）",
+        "inner": "<span>c-dssr1-0906-c（快照页测试探针C，请勿启用（其源库配置缺...）</span>"
+      },
+      {
+        "text": "c-dssr1-0906-d（快照页测试探针D，请勿启用（含超长描述演...）",
+        "inner": "<span>c-dssr1-0906-d（快照页测试探针D，请勿启用（含超长描述演...）</span>"
+      },
+      {
+        "text": "c-dssr1-0906-e（快照页测试探针E，请勿启用）",
+        "inner": "<span>c-dssr1-0906-e（快照页测试探针E，请勿启用）</span>"
+      },
+      {
+        "text": "c-dssr1-0906-miss1",
+        "inner": "<span>c-dssr1-0906-miss1</span>"
+      },
+      {
+        "text": "c-dssr1-0906-miss2",
+        "inner": "<span>c-dssr1-0906-miss2</span>"
+      },
+      {
+        "text": "hosp-012（总部测试 IP: 192.168.0.9...）",
+        "inner": "<span>hosp-012（总部测试 IP: 192.168.0.9...）</span>"
+      }
+    ],
+    "clientHover": [
+      {
+        "idx": 1,
+        "rendered": "c-dssr1-0906-a（快照页测试探针A，请勿启用。长描述用于验...）",
+        "tooltip": "快照页测试探针A，请勿启用。长描述用于验证页面 Tooltip 与列宽截断：某市第一人民医院信息中心CDC采集探针（专用快照页测试实例，请勿启用其进行任何真实数据同步）。继续追加说明文字以拉长描述，确认列表单元格超长时显示省略号并可由 Tooltip 完整阅读；本条仅供源库快照状态只读页面视觉验证使用。",
+        "tooltipCp": 152,
+        "tooltipGoneAfterLeave": true
+      },
+      {
+        "idx": 2,
+        "rendered": "c-dssr1-0906-b（快照页测试探针B，请勿启用）",
+        "tooltip": null,
+        "tooltipCp": null,
+        "tooltipGoneAfterLeave": true
+      },
+      {
+        "idx": 3,
+        "rendered": "c-dssr1-0906-c（快照页测试探针C，请勿启用（其源库配置缺...）",
+        "tooltip": "快照页测试探针C，请勿启用（其源库配置缺失）",
+        "tooltipCp": 22,
+        "tooltipGoneAfterLeave": true
+      },
+      {
+        "idx": 4,
+        "rendered": "c-dssr1-0906-d（快照页测试探针D，请勿启用（含超长描述演...）",
+        "tooltip": "快照页测试探针D，请勿启用（含超长描述演示：覆盖同源不同状态与并列时间排序）",
+        "tooltipCp": 38,
+        "tooltipGoneAfterLeave": true
+      },
+      {
+        "idx": 5,
+        "rendered": "c-dssr1-0906-e（快照页测试探针E，请勿启用）",
+        "tooltip": null,
+        "tooltipCp": null,
+        "tooltipGoneAfterLeave": true
+      },
+      {
+        "idx": 6,
+        "rendered": "c-dssr1-0906-miss1",
+        "tooltip": null,
+        "tooltipCp": null,
+        "tooltipGoneAfterLeave": true
+      },
+      {
+        "idx": 7,
+        "rendered": "c-dssr1-0906-miss2",
+        "tooltip": null,
+        "tooltipCp": null,
+        "tooltipGoneAfterLeave": true
+      },
+      {
+        "idx": 8,
+        "rendered": "hosp-012（总部测试 IP: 192.168.0.9...）",
+        "tooltip": "总部测试 IP: 192.168.0.94, 192.168.174.1, 3.3.0.192, 192.168.100.1",
+        "tooltipCp": 62,
+        "tooltipGoneAfterLeave": true
+      }
+    ],
+    "sourceRows": [
+      {
+        "text": "SNAPSHOT-TEST-某市一院信息...（s-dssr1-0906-1）",
+        "cp": 39,
+        "hasEllipsis": true,
+        "ellipsisCount": 1,
+        "hasCjkParen": true
+      },
+      {
+        "text": "SNAPSHOT-TEST-某市一院信息...（s-dssr1-0906-2）",
+        "cp": 39,
+        "hasEllipsis": true,
+        "ellipsisCount": 1,
+        "hasCjkParen": true
+      },
+      {
+        "text": "SNAPSHOT-TEST-某市二院信息...（s-dssr1-0906-3）",
+        "cp": 39,
+        "hasEllipsis": true,
+        "ellipsisCount": 1,
+        "hasCjkParen": true
+      },
+      {
+        "text": "SNAPSHOT-TEST-目标侧某中心...（s-dssr1-0906-4）",
+        "cp": 39,
+        "hasEllipsis": true,
+        "ellipsisCount": 1,
+        "hasCjkParen": true
+      },
+      {
+        "text": "SNAPSHOT-TEST-第三方平台源...（s-dssr1-0906-5）",
+        "cp": 39,
+        "hasEllipsis": true,
+        "ellipsisCount": 1,
+        "hasCjkParen": true
+      },
+      {
+        "text": "孝感市第一人民医院（112-source-19c）",
+        "cp": 25,
+        "hasEllipsis": false,
+        "ellipsisCount": 0,
+        "hasCjkParen": true
+      },
+      {
+        "text": "s-dssr1-0906-m1",
+        "cp": 15,
+        "hasEllipsis": false,
+        "ellipsisCount": 0,
+        "hasCjkParen": false
+      },
+      {
+        "text": "s-dssr1-0906-m2",
+        "cp": 15,
+        "hasEllipsis": false,
+        "ellipsisCount": 0,
+        "hasCjkParen": false
+      },
+      {
+        "text": "s-dssr1-0906-m3",
+        "cp": 15,
+        "hasEllipsis": false,
+        "ellipsisCount": 0,
+        "hasCjkParen": false
+      }
+    ],
+    "sourceRaw": [
+      {
+        "text": "全部",
+        "inner": "<span>全部</span>"
+      },
+      {
+        "text": "SNAPSHOT-TEST-某市一院信息...（s-dssr1-0906-1）",
+        "inner": "<span>SNAPSHOT-TEST-某市一院信息...（s-dssr1-0906-1）</span>"
+      },
+      {
+        "text": "SNAPSHOT-TEST-某市一院信息...（s-dssr1-0906-2）",
+        "inner": "<span>SNAPSHOT-TEST-某市一院信息...（s-dssr1-0906-2）</span>"
+      },
+      {
+        "text": "SNAPSHOT-TEST-某市二院信息...（s-dssr1-0906-3）",
+        "inner": "<span>SNAPSHOT-TEST-某市二院信息...（s-dssr1-0906-3）</span>"
+      },
+      {
+        "text": "SNAPSHOT-TEST-目标侧某中心...（s-dssr1-0906-4）",
+        "inner": "<span>SNAPSHOT-TEST-目标侧某中心...（s-dssr1-0906-4）</span>"
+      },
+      {
+        "text": "SNAPSHOT-TEST-第三方平台源...（s-dssr1-0906-5）",
+        "inner": "<span>SNAPSHOT-TEST-第三方平台源...（s-dssr1-0906-5）</span>"
+      },
+      {
+        "text": "孝感市第一人民医院（112-source-19c）",
+        "inner": "<span>孝感市第一人民医院（112-source-19c）</span>"
+      },
+      {
+        "text": "s-dssr1-0906-m1",
+        "inner": "<span>s-dssr1-0906-m1</span>"
+      },
+      {
+        "text": "s-dssr1-0906-m2",
+        "inner": "<span>s-dssr1-0906-m2</span>"
+      },
+      {
+        "text": "s-dssr1-0906-m3",
+        "inner": "<span>s-dssr1-0906-m3</span>"
+      }
+    ],
+    "sourceHover": [
+      {
+        "idx": 1,
+        "rendered": "SNAPSHOT-TEST-某市一院信息...（s-dssr1-0906-1）",
+        "tooltip": null
+      },
+      {
+        "idx": 2,
+        "rendered": "SNAPSHOT-TEST-某市一院信息...（s-dssr1-0906-2）",
+        "tooltip": null
+      },
+      {
+        "idx": 3,
+        "rendered": "SNAPSHOT-TEST-某市二院信息...（s-dssr1-0906-3）",
+        "tooltip": null
+      },
+      {
+        "idx": 4,
+        "rendered": "SNAPSHOT-TEST-目标侧某中心...（s-dssr1-0906-4）",
+        "tooltip": null
+      },
+      {
+        "idx": 5,
+        "rendered": "SNAPSHOT-TEST-第三方平台源...（s-dssr1-0906-5）",
+        "tooltip": null
+      },
+      {
+        "idx": 6,
+        "rendered": "孝感市第一人民医院（112-source-19c）",
+        "tooltip": null
+      },
+      {
+        "idx": 7,
+        "rendered": "s-dssr1-0906-m1",
+        "tooltip": null
+      },
+      {
+        "idx": 8,
+        "rendered": "s-dssr1-0906-m2",
+        "tooltip": null
+      },
+      {
+        "idx": 9,
+        "rendered": "s-dssr1-0906-m3",
+        "tooltip": null
+      }
+    ],
+    "singleTooltips": 0,
+    "tableCells": [
+      "1 | c-dssr1-0906-a停用 | SNAPSHOT-TEST-某市一院信息中心源库-DONOTUSE | ●快照进行中 | 2026-09-06 11:02:00 | -- | 2026-09-06 11:02:00",
+      "2 | c-dssr1-0906-a停用 | SNAPSHOT-TEST-某市一院信息中心源库-DONOTUSE | ●快照进行中 | 2026-09-06 11:01:30 | -- | 2026-09-06 11:01:30",
+      "3 | c-dssr1-0906-b停用 | SNAPSHOT-TEST-某市一院信息中心源库-DONOTUSE | ●快照进行中 | 2026-09-06 10:57:00 | -- | 2026-09-06 10:57:00"
+    ],
+    "deltaDuringPanels": {
+      "client": {
+        "client": 0,
+        "source": 0,
+        "status": 0,
+        "clientWrap": 0,
+        "sourceWrap": 0,
+        "statusWrap": 0,
+        "qBtnX": 0,
+        "barH": 0
+      },
+      "source": {
+        "client": 0,
+        "source": 0,
+        "status": 0,
+        "clientWrap": 0,
+        "sourceWrap": 0,
+        "statusWrap": 0,
+        "qBtnX": 0,
+        "barH": 0
+      }
+    },
+    "requests": {
+      "total": 55,
+      "nonGet": []
+    }
+  },
+  {
+    "viewport": {
+      "w": 2560,
+      "h": 1440
+    },
+    "clientRows": [
+      {
+        "text": "c-dssr1-0906-a（快照页测试探针A，请勿启用。长描述用于验...）",
+        "cp": 39,
+        "hasEllipsis": true,
+        "ellipsisCount": 1,
+        "hasCjkParen": true
+      },
+      {
+        "text": "c-dssr1-0906-b（快照页测试探针B，请勿启用）",
+        "cp": 29,
+        "hasEllipsis": false,
+        "ellipsisCount": 0,
+        "hasCjkParen": true
+      },
+      {
+        "text": "c-dssr1-0906-c（快照页测试探针C，请勿启用（其源库配置缺...）",
+        "cp": 39,
+        "hasEllipsis": true,
+        "ellipsisCount": 1,
+        "hasCjkParen": true
+      },
+      {
+        "text": "c-dssr1-0906-d（快照页测试探针D，请勿启用（含超长描述演...）",
+        "cp": 39,
+        "hasEllipsis": true,
+        "ellipsisCount": 1,
+        "hasCjkParen": true
+      },
+      {
+        "text": "c-dssr1-0906-e（快照页测试探针E，请勿启用）",
+        "cp": 29,
+        "hasEllipsis": false,
+        "ellipsisCount": 0,
+        "hasCjkParen": true
+      },
+      {
+        "text": "c-dssr1-0906-miss1",
+        "cp": 18,
+        "hasEllipsis": false,
+        "ellipsisCount": 0,
+        "hasCjkParen": false
+      },
+      {
+        "text": "c-dssr1-0906-miss2",
+        "cp": 18,
+        "hasEllipsis": false,
+        "ellipsisCount": 0,
+        "hasCjkParen": false
+      },
+      {
+        "text": "hosp-012（总部测试 IP: 192.168.0.9...）",
+        "cp": 33,
+        "hasEllipsis": true,
+        "ellipsisCount": 1,
+        "hasCjkParen": true
+      }
+    ],
+    "clientRaw": [
+      {
+        "text": "全部",
+        "inner": "<span>全部</span>"
+      },
+      {
+        "text": "c-dssr1-0906-a（快照页测试探针A，请勿启用。长描述用于验...）",
+        "inner": "<span>c-dssr1-0906-a（快照页测试探针A，请勿启用。长描述用于验...）</span>"
+      },
+      {
+        "text": "c-dssr1-0906-b（快照页测试探针B，请勿启用）",
+        "inner": "<span>c-dssr1-0906-b（快照页测试探针B，请勿启用）</span>"
+      },
+      {
+        "text": "c-dssr1-0906-c（快照页测试探针C，请勿启用（其源库配置缺...）",
+        "inner": "<span>c-dssr1-0906-c（快照页测试探针C，请勿启用（其源库配置缺...）</span>"
+      },
+      {
+        "text": "c-dssr1-0906-d（快照页测试探针D，请勿启用（含超长描述演...）",
+        "inner": "<span>c-dssr1-0906-d（快照页测试探针D，请勿启用（含超长描述演...）</span>"
+      },
+      {
+        "text": "c-dssr1-0906-e（快照页测试探针E，请勿启用）",
+        "inner": "<span>c-dssr1-0906-e（快照页测试探针E，请勿启用）</span>"
+      },
+      {
+        "text": "c-dssr1-0906-miss1",
+        "inner": "<span>c-dssr1-0906-miss1</span>"
+      },
+      {
+        "text": "c-dssr1-0906-miss2",
+        "inner": "<span>c-dssr1-0906-miss2</span>"
+      },
+      {
+        "text": "hosp-012（总部测试 IP: 192.168.0.9...）",
+        "inner": "<span>hosp-012（总部测试 IP: 192.168.0.9...）</span>"
+      }
+    ],
+    "clientHover": [
+      {
+        "idx": 1,
+        "rendered": "c-dssr1-0906-a（快照页测试探针A，请勿启用。长描述用于验...）",
+        "tooltip": "快照页测试探针A，请勿启用。长描述用于验证页面 Tooltip 与列宽截断：某市第一人民医院信息中心CDC采集探针（专用快照页测试实例，请勿启用其进行任何真实数据同步）。继续追加说明文字以拉长描述，确认列表单元格超长时显示省略号并可由 Tooltip 完整阅读；本条仅供源库快照状态只读页面视觉验证使用。",
+        "tooltipCp": 152,
+        "tooltipGoneAfterLeave": true
+      },
+      {
+        "idx": 2,
+        "rendered": "c-dssr1-0906-b（快照页测试探针B，请勿启用）",
+        "tooltip": null,
+        "tooltipCp": null,
+        "tooltipGoneAfterLeave": true
+      },
+      {
+        "idx": 3,
+        "rendered": "c-dssr1-0906-c（快照页测试探针C，请勿启用（其源库配置缺...）",
+        "tooltip": "快照页测试探针C，请勿启用（其源库配置缺失）",
+        "tooltipCp": 22,
+        "tooltipGoneAfterLeave": true
+      },
+      {
+        "idx": 4,
+        "rendered": "c-dssr1-0906-d（快照页测试探针D，请勿启用（含超长描述演...）",
+        "tooltip": "快照页测试探针D，请勿启用（含超长描述演示：覆盖同源不同状态与并列时间排序）",
+        "tooltipCp": 38,
+        "tooltipGoneAfterLeave": true
+      },
+      {
+        "idx": 5,
+        "rendered": "c-dssr1-0906-e（快照页测试探针E，请勿启用）",
+        "tooltip": null,
+        "tooltipCp": null,
+        "tooltipGoneAfterLeave": true
+      },
+      {
+        "idx": 6,
+        "rendered": "c-dssr1-0906-miss1",
+        "tooltip": null,
+        "tooltipCp": null,
+        "tooltipGoneAfterLeave": true
+      },
+      {
+        "idx": 7,
+        "rendered": "c-dssr1-0906-miss2",
+        "tooltip": null,
+        "tooltipCp": null,
+        "tooltipGoneAfterLeave": true
+      },
+      {
+        "idx": 8,
+        "rendered": "hosp-012（总部测试 IP: 192.168.0.9...）",
+        "tooltip": "总部测试 IP: 192.168.0.94, 192.168.174.1, 3.3.0.192, 192.168.100.1",
+        "tooltipCp": 62,
+        "tooltipGoneAfterLeave": true
+      }
+    ],
+    "sourceRows": [
+      {
+        "text": "SNAPSHOT-TEST-某市一院信息...（s-dssr1-0906-1）",
+        "cp": 39,
+        "hasEllipsis": true,
+        "ellipsisCount": 1,
+        "hasCjkParen": true
+      },
+      {
+        "text": "SNAPSHOT-TEST-某市一院信息...（s-dssr1-0906-2）",
+        "cp": 39,
+        "hasEllipsis": true,
+        "ellipsisCount": 1,
+        "hasCjkParen": true
+      },
+      {
+        "text": "SNAPSHOT-TEST-某市二院信息...（s-dssr1-0906-3）",
+        "cp": 39,
+        "hasEllipsis": true,
+        "ellipsisCount": 1,
+        "hasCjkParen": true
+      },
+      {
+        "text": "SNAPSHOT-TEST-目标侧某中心...（s-dssr1-0906-4）",
+        "cp": 39,
+        "hasEllipsis": true,
+        "ellipsisCount": 1,
+        "hasCjkParen": true
+      },
+      {
+        "text": "SNAPSHOT-TEST-第三方平台源...（s-dssr1-0906-5）",
+        "cp": 39,
+        "hasEllipsis": true,
+        "ellipsisCount": 1,
+        "hasCjkParen": true
+      },
+      {
+        "text": "孝感市第一人民医院（112-source-19c）",
+        "cp": 25,
+        "hasEllipsis": false,
+        "ellipsisCount": 0,
+        "hasCjkParen": true
+      },
+      {
+        "text": "s-dssr1-0906-m1",
+        "cp": 15,
+        "hasEllipsis": false,
+        "ellipsisCount": 0,
+        "hasCjkParen": false
+      },
+      {
+        "text": "s-dssr1-0906-m2",
+        "cp": 15,
+        "hasEllipsis": false,
+        "ellipsisCount": 0,
+        "hasCjkParen": false
+      },
+      {
+        "text": "s-dssr1-0906-m3",
+        "cp": 15,
+        "hasEllipsis": false,
+        "ellipsisCount": 0,
+        "hasCjkParen": false
+      }
+    ],
+    "sourceRaw": [
+      {
+        "text": "全部",
+        "inner": "<span>全部</span>"
+      },
+      {
+        "text": "SNAPSHOT-TEST-某市一院信息...（s-dssr1-0906-1）",
+        "inner": "<span>SNAPSHOT-TEST-某市一院信息...（s-dssr1-0906-1）</span>"
+      },
+      {
+        "text": "SNAPSHOT-TEST-某市一院信息...（s-dssr1-0906-2）",
+        "inner": "<span>SNAPSHOT-TEST-某市一院信息...（s-dssr1-0906-2）</span>"
+      },
+      {
+        "text": "SNAPSHOT-TEST-某市二院信息...（s-dssr1-0906-3）",
+        "inner": "<span>SNAPSHOT-TEST-某市二院信息...（s-dssr1-0906-3）</span>"
+      },
+      {
+        "text": "SNAPSHOT-TEST-目标侧某中心...（s-dssr1-0906-4）",
+        "inner": "<span>SNAPSHOT-TEST-目标侧某中心...（s-dssr1-0906-4）</span>"
+      },
+      {
+        "text": "SNAPSHOT-TEST-第三方平台源...（s-dssr1-0906-5）",
+        "inner": "<span>SNAPSHOT-TEST-第三方平台源...（s-dssr1-0906-5）</span>"
+      },
+      {
+        "text": "孝感市第一人民医院（112-source-19c）",
+        "inner": "<span>孝感市第一人民医院（112-source-19c）</span>"
+      },
+      {
+        "text": "s-dssr1-0906-m1",
+        "inner": "<span>s-dssr1-0906-m1</span>"
+      },
+      {
+        "text": "s-dssr1-0906-m2",
+        "inner": "<span>s-dssr1-0906-m2</span>"
+      },
+      {
+        "text": "s-dssr1-0906-m3",
+        "inner": "<span>s-dssr1-0906-m3</span>"
+      }
+    ],
+    "sourceHover": [
+      {
+        "idx": 1,
+        "rendered": "SNAPSHOT-TEST-某市一院信息...（s-dssr1-0906-1）",
+        "tooltip": null
+      },
+      {
+        "idx": 2,
+        "rendered": "SNAPSHOT-TEST-某市一院信息...（s-dssr1-0906-2）",
+        "tooltip": null
+      },
+      {
+        "idx": 3,
+        "rendered": "SNAPSHOT-TEST-某市二院信息...（s-dssr1-0906-3）",
+        "tooltip": null
+      },
+      {
+        "idx": 4,
+        "rendered": "SNAPSHOT-TEST-目标侧某中心...（s-dssr1-0906-4）",
+        "tooltip": null
+      },
+      {
+        "idx": 5,
+        "rendered": "SNAPSHOT-TEST-第三方平台源...（s-dssr1-0906-5）",
+        "tooltip": null
+      },
+      {
+        "idx": 6,
+        "rendered": "孝感市第一人民医院（112-source-19c）",
+        "tooltip": null
+      },
+      {
+        "idx": 7,
+        "rendered": "s-dssr1-0906-m1",
+        "tooltip": null
+      },
+      {
+        "idx": 8,
+        "rendered": "s-dssr1-0906-m2",
+        "tooltip": null
+      },
+      {
+        "idx": 9,
+        "rendered": "s-dssr1-0906-m3",
+        "tooltip": null
+      }
+    ],
+    "singleTooltips": 0,
+    "tableCells": [
+      "1 | c-dssr1-0906-a停用 | SNAPSHOT-TEST-某市一院信息中心源库-DONOTUSE | ●快照进行中 | 2026-09-06 11:02:00 | -- | 2026-09-06 11:02:00",
+      "2 | c-dssr1-0906-a停用 | SNAPSHOT-TEST-某市一院信息中心源库-DONOTUSE | ●快照进行中 | 2026-09-06 11:01:30 | -- | 2026-09-06 11:01:30",
+      "3 | c-dssr1-0906-b停用 | SNAPSHOT-TEST-某市一院信息中心源库-DONOTUSE | ●快照进行中 | 2026-09-06 10:57:00 | -- | 2026-09-06 10:57:00"
+    ],
+    "deltaDuringPanels": {
+      "client": {
+        "client": 0,
+        "source": 0,
+        "status": 0,
+        "clientWrap": 0,
+        "sourceWrap": 0,
+        "statusWrap": 0,
+        "qBtnX": 0,
+        "barH": 0
+      },
+      "source": {
+        "client": 0,
+        "source": 0,
+        "status": 0,
+        "clientWrap": 0,
+        "sourceWrap": 0,
+        "statusWrap": 0,
+        "qBtnX": 0,
+        "barH": 0
+      }
+    },
+    "requests": {
+      "total": 55,
+      "nonGet": []
+    }
+  }
+]

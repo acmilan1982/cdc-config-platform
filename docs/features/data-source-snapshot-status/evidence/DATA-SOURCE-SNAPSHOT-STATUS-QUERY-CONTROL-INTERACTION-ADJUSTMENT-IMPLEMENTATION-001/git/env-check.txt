@@ -1,0 +1,48 @@
+# 环境预检（前端任务）与被测 Git 现场
+date=2026-09-11T14:11:34+08:00
+
+## 通用必检
+$ command -v git claude
+git=/usr/bin/git
+claude=/root/.local/bin/claude
+
+$ git --version
+git version 2.47.3
+$ claude --version
+2.1.143 (Claude Code)
+
+## 前端任务必检
+$ command -v node npm
+node=/opt/node/bin/node
+npm=/opt/node/bin/npm
+$ node -v
+v24.17.0
+$ npm -v
+11.13.0
+
+## Java/Maven（本任务后端仅只读运行，不构建）
+java=/usr/java/latest/bin/java
+java version "1.8.0_202"
+mvn=/usr/local/maven/bin/mvn
+
+## Git 现场
+cwd=/agent/dss-query-ctl-impl-001
+worktree_is_git=$(git rev-parse --is-inside-work-tree)
+true
+branch_or_HEAD=HEAD
+HEAD=548e16147675cdc6013a4d166bf60d7b1b8bda36
+base_commit_id=548e16147675cdc6013a4d166bf60d7b1b8bda36
+approved_content_commit_id=cf9f9eb0240f275cd50eb37546e6d6256892a9f4
+
+$ git status --short
+ M frontend/src/views/data-source-run-state/components/DataSourceSnapshotQueryBar.spec.ts
+ M frontend/src/views/data-source-run-state/components/DataSourceSnapshotQueryBar.vue
+ M frontend/src/views/data-source-run-state/utils/format.spec.ts
+ M frontend/src/views/data-source-run-state/utils/format.ts
+?? docs/features/data-source-snapshot-status/evidence/DATA-SOURCE-SNAPSHOT-STATUS-QUERY-CONTROL-INTERACTION-ADJUSTMENT-IMPLEMENTATION-001/
+
+$ git ls-remote origin develop
+548e16147675cdc6013a4d166bf60d7b1b8bda36	refs/heads/develop
+
+$ git merge-base --is-ancestor 4222b0a 548e161 (main worktree develop is ancestor => no divergence)
+YES

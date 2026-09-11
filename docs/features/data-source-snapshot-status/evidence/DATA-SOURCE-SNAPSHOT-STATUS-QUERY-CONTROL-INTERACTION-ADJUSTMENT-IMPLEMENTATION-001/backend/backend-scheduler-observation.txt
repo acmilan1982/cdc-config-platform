@@ -1,0 +1,27 @@
+# 后端 / 统计调度器 / 数据库写入 观察记录（脱敏）
+observed_at=2026-09-11T14:12:36+08:00
+
+## 进程
+java  PID 8537 start: Fri Sep 11 13:18:46 2026
+vite  PID 8455 start: Fri Sep 11 13:18:33 2026
+backend log: /agent/cdc-config-platform/runtime-logs/DATA-SOURCE-SNAPSHOT-STATUS-QUERY-CONTROL-INTERACTION-ADJUSTMENT-IMPLEMENTATION-001/backend-8080.log (50994 bytes)
+frontend log: /agent/cdc-config-platform/runtime-logs/DATA-SOURCE-SNAPSHOT-STATUS-QUERY-CONTROL-INTERACTION-ADJUSTMENT-IMPLEMENTATION-001/frontend-5173.log (1511 bytes)
+
+## 调度器启动与触发（仅截取调度器相关行，已脱敏）
+70: 2026-09-11 13:18:59.610 StatsScheduler   : Stats scheduler started: initialDelayMs=600000, intervalMs=3600000
+173: 2026-09-11 13:28:59.839 StatsRoundRunner     : Round START | task=LARGE_SCREEN_STATS | correctSafeUpper=345105064429543426 | errorSafeUpper=343663503049216441 | correctMaxLogId=345105064429543426 | errorMaxLogId=343
+184:2026-09-11 13:28:59.902 DEBUG 8537 --- [    cdc-stats-1] c.b.c.l.s.e.BatchTransactionExecutor     : Caught up: LARGE_SCREEN_STATS CORRECT, lastId=345105064429543426, safeUpper=345105064429543426
+188:2026-09-11 13:28:59.910 DEBUG 8537 --- [    cdc-stats-1] c.b.c.l.s.e.BatchTransactionExecutor     : Caught up: LARGE_SCREEN_STATS ERROR, lastId=343663503049216441, safeUpper=343663503049216441
+196: 2026-09-11 13:28:59.926 StatsRoundRunner     : Round RESULT | correctBatches=1 | errorBatches=1 | correctProcessed=0 | errorProcessed=0 | stopReason=all_caught_up | duration=72ms | newCorrectBatchSize=200000 | newEr
+
+## 写入观察（在完整后端日志中检索 DML）
+pattern INSERT INTO   : 0
+pattern UPDATE         : 0
+pattern MERGE INTO     : 0
+pattern DELETE FROM    : 0
+
+## 只读证据（SELECT 计数）
+SELECT lines: 70
+
+## 说明
+本任务未执行任何手工 DML/DDL；未修改调度器配置；未构造测试数据；ZooKeeper/Kafka 未访问。

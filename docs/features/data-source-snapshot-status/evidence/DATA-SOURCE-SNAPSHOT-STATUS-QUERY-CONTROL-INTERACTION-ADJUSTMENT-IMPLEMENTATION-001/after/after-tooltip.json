@@ -1,0 +1,1698 @@
+[
+  {
+    "viewport": {
+      "w": 1280,
+      "h": 800
+    },
+    "clientRendered": [
+      "全部",
+      "id19-AAAAAAAAAAAAAA（ddddddddddddddddddd）",
+      "id20-BBBBBBBBBBBBBBB（eeeeeeeeeeeeeeeeeeee）",
+      "id21-CCCCCCCCCCCCCCC...（ffffffffffffffffffff...）",
+      "id22-DDDDDDDDDDDDDDD...（gggggggggggggggggggg...）",
+      "中中中中中中中中中中中中中中中中中中中中...（中中中中中中中中中中中中中中中中中中中中...）",
+      "😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀...（😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀...）",
+      "very-long-client-id-...",
+      "short-desc（长描述长描述长描述长描述长描述长描述长描...）",
+      "desc-empty-str",
+      "desc-20（22222222222222222222）"
+    ],
+    "clientRaw": [
+      "全部",
+      "id19-AAAAAAAAAAAAAA（ddddddddddddddddddd）",
+      "id20-BBBBBBBBBBBBBBB（eeeeeeeeeeeeeeeeeeee）",
+      "id21-CCCCCCCCCCCCCCC...（ffffffffffffffffffff...）",
+      "id22-DDDDDDDDDDDDDDD...（gggggggggggggggggggg...）",
+      "中中中中中中中中中中中中中中中中中中中中...（中中中中中中中中中中中中中中中中中中中中...）",
+      "😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀...（😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀...）",
+      "very-long-client-id-...",
+      "short-desc（长描述长描述长描述长描述长描述长描述长描...）",
+      "desc-empty-str",
+      "desc-20（22222222222222222222）"
+    ],
+    "clientProbe": [
+      {
+        "want": "id19-AAAAAAAAAAAAAA（ddddddddddddddddddd）",
+        "found": true,
+        "rendered": "id19-AAAAAAAAAAAAAA（ddddddddddddddddddd）",
+        "hitAnchor": {
+          "tag": "SPAN",
+          "cls": "",
+          "inRow": true
+        },
+        "renderedCodePoints": 40,
+        "expectTooltip": false,
+        "gotTooltip": false,
+        "tooltipText": null,
+        "expectTooltipText": null,
+        "tooltipCountDuringHover": 0,
+        "tooltipCountAfterLeave": 0,
+        "ctrlDelta": {
+          "client": 0,
+          "source": 0,
+          "status": 0,
+          "qBtnX": 0,
+          "barH": 0
+        }
+      },
+      {
+        "want": "id20-BBBBBBBBBBBBBBB（eeeeeeeeeeeeeeeeeeee）",
+        "found": true,
+        "rendered": "id20-BBBBBBBBBBBBBBB（eeeeeeeeeeeeeeeeeeee）",
+        "hitAnchor": {
+          "tag": "SPAN",
+          "cls": "",
+          "inRow": true
+        },
+        "renderedCodePoints": 42,
+        "expectTooltip": false,
+        "gotTooltip": false,
+        "tooltipText": null,
+        "expectTooltipText": null,
+        "tooltipCountDuringHover": 0,
+        "tooltipCountAfterLeave": 0,
+        "ctrlDelta": {
+          "client": 0,
+          "source": 0,
+          "status": 0,
+          "qBtnX": 0,
+          "barH": 0
+        }
+      },
+      {
+        "want": "id21-CCCCCCCCCCCCCCC...（ffffffffffffffffffff...）",
+        "found": true,
+        "rendered": "id21-CCCCCCCCCCCCCCC...（ffffffffffffffffffff...）",
+        "hitAnchor": {
+          "tag": "SPAN",
+          "cls": "",
+          "inRow": true
+        },
+        "renderedCodePoints": 48,
+        "expectTooltip": true,
+        "gotTooltip": true,
+        "tooltipText": "fffffffffffffffffffff",
+        "expectTooltipText": "fffffffffffffffffffff",
+        "tooltipCountDuringHover": 1,
+        "tooltipCountAfterLeave": 0,
+        "ctrlDelta": {
+          "client": 0,
+          "source": 0,
+          "status": 0,
+          "qBtnX": 0,
+          "barH": 0
+        }
+      },
+      {
+        "want": "id22-DDDDDDDDDDDDDDD...（gggggggggggggggggggg...）",
+        "found": true,
+        "rendered": "id22-DDDDDDDDDDDDDDD...（gggggggggggggggggggg...）",
+        "hitAnchor": {
+          "tag": "SPAN",
+          "cls": "",
+          "inRow": true
+        },
+        "renderedCodePoints": 48,
+        "expectTooltip": true,
+        "gotTooltip": true,
+        "tooltipText": "gggggggggggggggggggggg",
+        "expectTooltipText": "gggggggggggggggggggggg",
+        "tooltipCountDuringHover": 1,
+        "tooltipCountAfterLeave": 0,
+        "ctrlDelta": {
+          "client": 0,
+          "source": 0,
+          "status": 0,
+          "qBtnX": 0,
+          "barH": 0
+        }
+      },
+      {
+        "want": "中中中中中中中中中中中中中中中中中中中中...（中中中中中中中中中中中中中中中中中中中中...）",
+        "found": true,
+        "rendered": "中中中中中中中中中中中中中中中中中中中中...（中中中中中中中中中中中中中中中中中中中中...）",
+        "hitAnchor": {
+          "tag": "SPAN",
+          "cls": "",
+          "inRow": true
+        },
+        "renderedCodePoints": 48,
+        "expectTooltip": true,
+        "gotTooltip": true,
+        "tooltipText": "中中中中中中中中中中中中中中中中中中中中中中中中",
+        "expectTooltipText": "中中中中中中中中中中中中中中中中中中中中中中中中",
+        "tooltipCountDuringHover": 1,
+        "tooltipCountAfterLeave": 0,
+        "ctrlDelta": {
+          "client": 0,
+          "source": 0,
+          "status": 0,
+          "qBtnX": 0,
+          "barH": 0
+        }
+      },
+      {
+        "want": "😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀...（😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀...）",
+        "found": true,
+        "rendered": "😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀...（😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀...）",
+        "hitAnchor": {
+          "tag": "SPAN",
+          "cls": "",
+          "inRow": true
+        },
+        "renderedCodePoints": 48,
+        "expectTooltip": true,
+        "gotTooltip": true,
+        "tooltipText": "😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀",
+        "expectTooltipText": "😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀",
+        "tooltipCountDuringHover": 1,
+        "tooltipCountAfterLeave": 0,
+        "ctrlDelta": {
+          "client": 0,
+          "source": 0,
+          "status": 0,
+          "qBtnX": 0,
+          "barH": 0
+        }
+      },
+      {
+        "want": "very-long-client-id-...",
+        "found": true,
+        "rendered": "very-long-client-id-...",
+        "hitAnchor": {
+          "tag": "LI",
+          "cls": "el-select-dropdown__item is-hovering",
+          "inRow": true
+        },
+        "renderedCodePoints": 20,
+        "expectTooltip": false,
+        "gotTooltip": false,
+        "tooltipText": null,
+        "expectTooltipText": null,
+        "tooltipCountDuringHover": 0,
+        "tooltipCountAfterLeave": 0,
+        "ctrlDelta": {
+          "client": 0,
+          "source": 0,
+          "status": 0,
+          "qBtnX": 0,
+          "barH": 0
+        }
+      },
+      {
+        "want": "short-desc（长描述长描述长描述长描述长描述长描述长描...）",
+        "found": true,
+        "rendered": "short-desc（长描述长描述长描述长描述长描述长描述长描...）",
+        "hitAnchor": {
+          "tag": "SPAN",
+          "cls": "",
+          "inRow": true
+        },
+        "renderedCodePoints": 35,
+        "expectTooltip": true,
+        "gotTooltip": true,
+        "tooltipText": "长描述长描述长描述长描述长描述长描述长描述长描述长描述长描述长描述长描述长描述长描述长描述长描述长描述长描述长描述长描述长描述长描述长描述长描述长描述长描述长描述长描述长描述长描述长描述长描述长描述长描述长描述长描述长描述长描述长描述长描述长描述长描述长描述长描述长描述长描述长描述长描述长描述长描述长描述长描述长描述长描述长描述长描述长描述长描述长描述长描述长描述长描述长描述长描述长描述长描述长描述长描述长描述长描述长描述长描述长描述长描述长描述长描述长描述长描述长描述长描述长描述长描述长描述长描述长描述长描述长描述长描述长描述长描述长描述长描述长描述长描述长描述长描述长描述长描述长描述长描述",
+        "expectTooltipText": "长描述长描述长描述长描述长描述长描述长描述长描述长描述长描述长描述长描述长描述长描述长描述长描述长描述长描述长描述长描述长描述长描述长描述长描述长描述长描述长描述长描述长描述长描述长描述长描述长描述长描述长描述长描述长描述长描述长描述长描述长描述长描述长描述长描述长描述长描述长描述长描述长描述长描述长描述长描述长描述长描述长描述长描述长描述长描述长描述长描述长描述长描述长描述长描述长描述长描述长描述长描述长描述长描述长描述长描述长描述长描述长描述长描述长描述长描述长描述长描述长描述长描述长描述长描述长描述长描述长描述长描述长描述长描述长描述长描述长描述长描述长描述长描述长描述长描述长描述长描述",
+        "tooltipCountDuringHover": 1,
+        "tooltipCountAfterLeave": 0,
+        "ctrlDelta": {
+          "client": 0,
+          "source": 0,
+          "status": 0,
+          "qBtnX": 0,
+          "barH": 0
+        }
+      },
+      {
+        "want": "desc-empty-str",
+        "found": true,
+        "rendered": "desc-empty-str",
+        "hitAnchor": {
+          "tag": "LI",
+          "cls": "el-select-dropdown__item is-hovering",
+          "inRow": true
+        },
+        "renderedCodePoints": 14,
+        "expectTooltip": false,
+        "gotTooltip": false,
+        "tooltipText": null,
+        "expectTooltipText": null,
+        "tooltipCountDuringHover": 0,
+        "tooltipCountAfterLeave": 0,
+        "ctrlDelta": {
+          "client": 0,
+          "source": 0,
+          "status": 0,
+          "qBtnX": 0,
+          "barH": 0
+        }
+      },
+      {
+        "want": "desc-20（22222222222222222222）",
+        "found": true,
+        "rendered": "desc-20（22222222222222222222）",
+        "hitAnchor": {
+          "tag": "SPAN",
+          "cls": "",
+          "inRow": true
+        },
+        "renderedCodePoints": 29,
+        "expectTooltip": false,
+        "gotTooltip": false,
+        "tooltipText": null,
+        "expectTooltipText": null,
+        "tooltipCountDuringHover": 0,
+        "tooltipCountAfterLeave": 0,
+        "ctrlDelta": {
+          "client": 0,
+          "source": 0,
+          "status": 0,
+          "qBtnX": 0,
+          "barH": 0
+        }
+      }
+    ],
+    "sourceRendered": [
+      "全部",
+      "ooooooooooooooooooo（src19-AAAAAAAAAAAAA）",
+      "pppppppppppppppppppp（src20-BBBBBBBBBBBBBB）",
+      "qqqqqqqqqqqqqqqqqqqq...（src21-CCCCCCCCCCCCCC...）",
+      "rrrrrrrrrrrrrrrrrrrr...（src22-DDDDDDDDDDDDDD...）",
+      "中中中中中中中中中中中中中中中中中中中中...（中中中中中中中中中中中中中中中中中中中中...）",
+      "😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀...",
+      "src-very-long-YYYYYY...",
+      "宽宽宽宽宽宽宽宽宽宽宽宽宽宽宽宽宽宽宽宽...（src-wide-org）"
+    ],
+    "sourceProbe": [
+      {
+        "want": "ooooooooooooooooooo（src19-AAAAAAAAAAAAA）",
+        "found": true,
+        "rendered": "ooooooooooooooooooo（src19-AAAAAAAAAAAAA）",
+        "gotTooltip": false,
+        "tooltipText": null
+      },
+      {
+        "want": "pppppppppppppppppppp（src20-BBBBBBBBBBBBBB）",
+        "found": true,
+        "rendered": "pppppppppppppppppppp（src20-BBBBBBBBBBBBBB）",
+        "gotTooltip": false,
+        "tooltipText": null
+      },
+      {
+        "want": "qqqqqqqqqqqqqqqqqqqq...（src21-CCCCCCCCCCCCCC...）",
+        "found": true,
+        "rendered": "qqqqqqqqqqqqqqqqqqqq...（src21-CCCCCCCCCCCCCC...）",
+        "gotTooltip": false,
+        "tooltipText": null
+      },
+      {
+        "want": "rrrrrrrrrrrrrrrrrrrr...（src22-DDDDDDDDDDDDDD...）",
+        "found": true,
+        "rendered": "rrrrrrrrrrrrrrrrrrrr...（src22-DDDDDDDDDDDDDD...）",
+        "gotTooltip": false,
+        "tooltipText": null
+      },
+      {
+        "want": "中中中中中中中中中中中中中中中中中中中中...（中中中中中中中中中中中中中中中中中中中中...）",
+        "found": true,
+        "rendered": "中中中中中中中中中中中中中中中中中中中中...（中中中中中中中中中中中中中中中中中中中中...）",
+        "gotTooltip": false,
+        "tooltipText": null
+      },
+      {
+        "want": "😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀...",
+        "found": true,
+        "rendered": "😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀...",
+        "gotTooltip": false,
+        "tooltipText": null
+      },
+      {
+        "want": "src-very-long-YYYYYY...",
+        "found": true,
+        "rendered": "src-very-long-YYYYYY...",
+        "gotTooltip": false,
+        "tooltipText": null
+      },
+      {
+        "want": "宽宽宽宽宽宽宽宽宽宽宽宽宽宽宽宽宽宽宽宽...（src-wide-org）",
+        "found": true,
+        "rendered": "宽宽宽宽宽宽宽宽宽宽宽宽宽宽宽宽宽宽宽宽...（src-wide-org）",
+        "gotTooltip": false,
+        "tooltipText": null
+      }
+    ],
+    "singleTooltips": 0,
+    "multi": {
+      "collapseSetup": [
+        {
+          "needle": "short-desc",
+          "clicked": true
+        },
+        {
+          "needle": "id22-",
+          "clicked": true
+        },
+        {
+          "needle": "very-long-client-id-",
+          "clicked": true
+        }
+      ],
+      "tagsAfterMulti": [
+        "short-desc（长描述长描述长描述长描述长描述长描述长描...）",
+        "+ 2"
+      ],
+      "visibleTag": {
+        "x": 426.4921875,
+        "y": 191.5,
+        "text": "short-desc（长描述长描述长描述长描述长描述长描述长描...）",
+        "closable": true,
+        "rect": {
+          "x": 342,
+          "y": 179.5,
+          "w": 168.98,
+          "h": 24,
+          "right": 510.98,
+          "bottom": 203.5
+        }
+      },
+      "tagHover": {
+        "count": 1,
+        "text": "长描述长描述长描述长描述长描述长描述长描述长描述长描述长描述长描述长描述长描述长描述长描述长描述长描述长描述长描述长描述长描述长描述长描述长描述长描述长描述长描述长描述长描述长描述长描述长描述长描述长描述长描述长描述长描述长描述长描述长描述长描述长描述长描述长描述长描述长描述长描述长描述长描述长描述长描述长描述长描述长描述长描述长描述长描述长描述长描述长描述长描述长描述长描述长描述长描述长描述长描述长描述长描述长描述长描述长描述长描述长描述长描述长描述长描述长描述长描述长描述长描述长描述长描述长描述长描述长描述长描述长描述长描述长描述长描述长描述长描述长描述长描述长描述长描述长描述长描述长描述",
+        "cls": "dss-q-tt",
+        "parentIsBody": true,
+        "style": {
+          "maxWidth": "480px",
+          "position": "fixed",
+          "pointerEvents": "none",
+          "whiteSpace": "pre-line",
+          "overflowWrap": "anywhere",
+          "zIndex": "3000"
+        }
+      },
+      "collapseTag": {
+        "x": 534.4921875,
+        "y": 191.5,
+        "text": " + 2",
+        "closable": false,
+        "rect": {
+          "x": 516.98,
+          "y": 179.5,
+          "w": 35.02,
+          "h": 24,
+          "right": 552,
+          "bottom": 203.5
+        }
+      },
+      "collapseHover": {
+        "count": 0,
+        "text": null,
+        "style": null,
+        "parentIsBody": null,
+        "cls": null
+      },
+      "tagCtrlDelta": {
+        "client": 0,
+        "source": 0,
+        "status": 0,
+        "qBtnX": 0,
+        "barH": 0
+      }
+    },
+    "requests": {
+      "total": 55,
+      "nonGet": []
+    }
+  },
+  {
+    "viewport": {
+      "w": 1700,
+      "h": 920
+    },
+    "clientRendered": [
+      "全部",
+      "id19-AAAAAAAAAAAAAA（ddddddddddddddddddd）",
+      "id20-BBBBBBBBBBBBBBB（eeeeeeeeeeeeeeeeeeee）",
+      "id21-CCCCCCCCCCCCCCC...（ffffffffffffffffffff...）",
+      "id22-DDDDDDDDDDDDDDD...（gggggggggggggggggggg...）",
+      "中中中中中中中中中中中中中中中中中中中中...（中中中中中中中中中中中中中中中中中中中中...）",
+      "😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀...（😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀...）",
+      "very-long-client-id-...",
+      "short-desc（长描述长描述长描述长描述长描述长描述长描...）",
+      "desc-empty-str",
+      "desc-20（22222222222222222222）"
+    ],
+    "clientRaw": [
+      "全部",
+      "id19-AAAAAAAAAAAAAA（ddddddddddddddddddd）",
+      "id20-BBBBBBBBBBBBBBB（eeeeeeeeeeeeeeeeeeee）",
+      "id21-CCCCCCCCCCCCCCC...（ffffffffffffffffffff...）",
+      "id22-DDDDDDDDDDDDDDD...（gggggggggggggggggggg...）",
+      "中中中中中中中中中中中中中中中中中中中中...（中中中中中中中中中中中中中中中中中中中中...）",
+      "😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀...（😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀...）",
+      "very-long-client-id-...",
+      "short-desc（长描述长描述长描述长描述长描述长描述长描...）",
+      "desc-empty-str",
+      "desc-20（22222222222222222222）"
+    ],
+    "clientProbe": [
+      {
+        "want": "id19-AAAAAAAAAAAAAA（ddddddddddddddddddd）",
+        "found": true,
+        "rendered": "id19-AAAAAAAAAAAAAA（ddddddddddddddddddd）",
+        "hitAnchor": {
+          "tag": "SPAN",
+          "cls": "",
+          "inRow": true
+        },
+        "renderedCodePoints": 40,
+        "expectTooltip": false,
+        "gotTooltip": false,
+        "tooltipText": null,
+        "expectTooltipText": null,
+        "tooltipCountDuringHover": 0,
+        "tooltipCountAfterLeave": 0,
+        "ctrlDelta": {
+          "client": 0,
+          "source": 0,
+          "status": 0,
+          "qBtnX": 0,
+          "barH": 0
+        }
+      },
+      {
+        "want": "id20-BBBBBBBBBBBBBBB（eeeeeeeeeeeeeeeeeeee）",
+        "found": true,
+        "rendered": "id20-BBBBBBBBBBBBBBB（eeeeeeeeeeeeeeeeeeee）",
+        "hitAnchor": {
+          "tag": "SPAN",
+          "cls": "",
+          "inRow": true
+        },
+        "renderedCodePoints": 42,
+        "expectTooltip": false,
+        "gotTooltip": false,
+        "tooltipText": null,
+        "expectTooltipText": null,
+        "tooltipCountDuringHover": 0,
+        "tooltipCountAfterLeave": 0,
+        "ctrlDelta": {
+          "client": 0,
+          "source": 0,
+          "status": 0,
+          "qBtnX": 0,
+          "barH": 0
+        }
+      },
+      {
+        "want": "id21-CCCCCCCCCCCCCCC...（ffffffffffffffffffff...）",
+        "found": true,
+        "rendered": "id21-CCCCCCCCCCCCCCC...（ffffffffffffffffffff...）",
+        "hitAnchor": {
+          "tag": "SPAN",
+          "cls": "",
+          "inRow": true
+        },
+        "renderedCodePoints": 48,
+        "expectTooltip": true,
+        "gotTooltip": true,
+        "tooltipText": "fffffffffffffffffffff",
+        "expectTooltipText": "fffffffffffffffffffff",
+        "tooltipCountDuringHover": 1,
+        "tooltipCountAfterLeave": 0,
+        "ctrlDelta": {
+          "client": 0,
+          "source": 0,
+          "status": 0,
+          "qBtnX": 0,
+          "barH": 0
+        }
+      },
+      {
+        "want": "id22-DDDDDDDDDDDDDDD...（gggggggggggggggggggg...）",
+        "found": true,
+        "rendered": "id22-DDDDDDDDDDDDDDD...（gggggggggggggggggggg...）",
+        "hitAnchor": {
+          "tag": "SPAN",
+          "cls": "",
+          "inRow": true
+        },
+        "renderedCodePoints": 48,
+        "expectTooltip": true,
+        "gotTooltip": true,
+        "tooltipText": "gggggggggggggggggggggg",
+        "expectTooltipText": "gggggggggggggggggggggg",
+        "tooltipCountDuringHover": 1,
+        "tooltipCountAfterLeave": 0,
+        "ctrlDelta": {
+          "client": 0,
+          "source": 0,
+          "status": 0,
+          "qBtnX": 0,
+          "barH": 0
+        }
+      },
+      {
+        "want": "中中中中中中中中中中中中中中中中中中中中...（中中中中中中中中中中中中中中中中中中中中...）",
+        "found": true,
+        "rendered": "中中中中中中中中中中中中中中中中中中中中...（中中中中中中中中中中中中中中中中中中中中...）",
+        "hitAnchor": {
+          "tag": "SPAN",
+          "cls": "",
+          "inRow": true
+        },
+        "renderedCodePoints": 48,
+        "expectTooltip": true,
+        "gotTooltip": true,
+        "tooltipText": "中中中中中中中中中中中中中中中中中中中中中中中中",
+        "expectTooltipText": "中中中中中中中中中中中中中中中中中中中中中中中中",
+        "tooltipCountDuringHover": 1,
+        "tooltipCountAfterLeave": 0,
+        "ctrlDelta": {
+          "client": 0,
+          "source": 0,
+          "status": 0,
+          "qBtnX": 0,
+          "barH": 0
+        }
+      },
+      {
+        "want": "😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀...（😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀...）",
+        "found": true,
+        "rendered": "😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀...（😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀...）",
+        "hitAnchor": {
+          "tag": "SPAN",
+          "cls": "",
+          "inRow": true
+        },
+        "renderedCodePoints": 48,
+        "expectTooltip": true,
+        "gotTooltip": true,
+        "tooltipText": "😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀",
+        "expectTooltipText": "😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀",
+        "tooltipCountDuringHover": 1,
+        "tooltipCountAfterLeave": 0,
+        "ctrlDelta": {
+          "client": 0,
+          "source": 0,
+          "status": 0,
+          "qBtnX": 0,
+          "barH": 0
+        }
+      },
+      {
+        "want": "very-long-client-id-...",
+        "found": true,
+        "rendered": "very-long-client-id-...",
+        "hitAnchor": {
+          "tag": "LI",
+          "cls": "el-select-dropdown__item is-hovering",
+          "inRow": true
+        },
+        "renderedCodePoints": 20,
+        "expectTooltip": false,
+        "gotTooltip": false,
+        "tooltipText": null,
+        "expectTooltipText": null,
+        "tooltipCountDuringHover": 0,
+        "tooltipCountAfterLeave": 0,
+        "ctrlDelta": {
+          "client": 0,
+          "source": 0,
+          "status": 0,
+          "qBtnX": 0,
+          "barH": 0
+        }
+      },
+      {
+        "want": "short-desc（长描述长描述长描述长描述长描述长描述长描...）",
+        "found": true,
+        "rendered": "short-desc（长描述长描述长描述长描述长描述长描述长描...）",
+        "hitAnchor": {
+          "tag": "SPAN",
+          "cls": "",
+          "inRow": true
+        },
+        "renderedCodePoints": 35,
+        "expectTooltip": true,
+        "gotTooltip": true,
+        "tooltipText": "长描述长描述长描述长描述长描述长描述长描述长描述长描述长描述长描述长描述长描述长描述长描述长描述长描述长描述长描述长描述长描述长描述长描述长描述长描述长描述长描述长描述长描述长描述长描述长描述长描述长描述长描述长描述长描述长描述长描述长描述长描述长描述长描述长描述长描述长描述长描述长描述长描述长描述长描述长描述长描述长描述长描述长描述长描述长描述长描述长描述长描述长描述长描述长描述长描述长描述长描述长描述长描述长描述长描述长描述长描述长描述长描述长描述长描述长描述长描述长描述长描述长描述长描述长描述长描述长描述长描述长描述长描述长描述长描述长描述长描述长描述长描述长描述长描述长描述长描述长描述",
+        "expectTooltipText": "长描述长描述长描述长描述长描述长描述长描述长描述长描述长描述长描述长描述长描述长描述长描述长描述长描述长描述长描述长描述长描述长描述长描述长描述长描述长描述长描述长描述长描述长描述长描述长描述长描述长描述长描述长描述长描述长描述长描述长描述长描述长描述长描述长描述长描述长描述长描述长描述长描述长描述长描述长描述长描述长描述长描述长描述长描述长描述长描述长描述长描述长描述长描述长描述长描述长描述长描述长描述长描述长描述长描述长描述长描述长描述长描述长描述长描述长描述长描述长描述长描述长描述长描述长描述长描述长描述长描述长描述长描述长描述长描述长描述长描述长描述长描述长描述长描述长描述长描述长描述",
+        "tooltipCountDuringHover": 1,
+        "tooltipCountAfterLeave": 0,
+        "ctrlDelta": {
+          "client": 0,
+          "source": 0,
+          "status": 0,
+          "qBtnX": 0,
+          "barH": 0
+        }
+      },
+      {
+        "want": "desc-empty-str",
+        "found": true,
+        "rendered": "desc-empty-str",
+        "hitAnchor": {
+          "tag": "LI",
+          "cls": "el-select-dropdown__item is-hovering",
+          "inRow": true
+        },
+        "renderedCodePoints": 14,
+        "expectTooltip": false,
+        "gotTooltip": false,
+        "tooltipText": null,
+        "expectTooltipText": null,
+        "tooltipCountDuringHover": 0,
+        "tooltipCountAfterLeave": 0,
+        "ctrlDelta": {
+          "client": 0,
+          "source": 0,
+          "status": 0,
+          "qBtnX": 0,
+          "barH": 0
+        }
+      },
+      {
+        "want": "desc-20（22222222222222222222）",
+        "found": true,
+        "rendered": "desc-20（22222222222222222222）",
+        "hitAnchor": {
+          "tag": "SPAN",
+          "cls": "",
+          "inRow": true
+        },
+        "renderedCodePoints": 29,
+        "expectTooltip": false,
+        "gotTooltip": false,
+        "tooltipText": null,
+        "expectTooltipText": null,
+        "tooltipCountDuringHover": 0,
+        "tooltipCountAfterLeave": 0,
+        "ctrlDelta": {
+          "client": 0,
+          "source": 0,
+          "status": 0,
+          "qBtnX": 0,
+          "barH": 0
+        }
+      }
+    ],
+    "sourceRendered": [
+      "全部",
+      "ooooooooooooooooooo（src19-AAAAAAAAAAAAA）",
+      "pppppppppppppppppppp（src20-BBBBBBBBBBBBBB）",
+      "qqqqqqqqqqqqqqqqqqqq...（src21-CCCCCCCCCCCCCC...）",
+      "rrrrrrrrrrrrrrrrrrrr...（src22-DDDDDDDDDDDDDD...）",
+      "中中中中中中中中中中中中中中中中中中中中...（中中中中中中中中中中中中中中中中中中中中...）",
+      "😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀...",
+      "src-very-long-YYYYYY...",
+      "宽宽宽宽宽宽宽宽宽宽宽宽宽宽宽宽宽宽宽宽...（src-wide-org）"
+    ],
+    "sourceProbe": [
+      {
+        "want": "ooooooooooooooooooo（src19-AAAAAAAAAAAAA）",
+        "found": true,
+        "rendered": "ooooooooooooooooooo（src19-AAAAAAAAAAAAA）",
+        "gotTooltip": false,
+        "tooltipText": null
+      },
+      {
+        "want": "pppppppppppppppppppp（src20-BBBBBBBBBBBBBB）",
+        "found": true,
+        "rendered": "pppppppppppppppppppp（src20-BBBBBBBBBBBBBB）",
+        "gotTooltip": false,
+        "tooltipText": null
+      },
+      {
+        "want": "qqqqqqqqqqqqqqqqqqqq...（src21-CCCCCCCCCCCCCC...）",
+        "found": true,
+        "rendered": "qqqqqqqqqqqqqqqqqqqq...（src21-CCCCCCCCCCCCCC...）",
+        "gotTooltip": false,
+        "tooltipText": null
+      },
+      {
+        "want": "rrrrrrrrrrrrrrrrrrrr...（src22-DDDDDDDDDDDDDD...）",
+        "found": true,
+        "rendered": "rrrrrrrrrrrrrrrrrrrr...（src22-DDDDDDDDDDDDDD...）",
+        "gotTooltip": false,
+        "tooltipText": null
+      },
+      {
+        "want": "中中中中中中中中中中中中中中中中中中中中...（中中中中中中中中中中中中中中中中中中中中...）",
+        "found": true,
+        "rendered": "中中中中中中中中中中中中中中中中中中中中...（中中中中中中中中中中中中中中中中中中中中...）",
+        "gotTooltip": false,
+        "tooltipText": null
+      },
+      {
+        "want": "😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀...",
+        "found": true,
+        "rendered": "😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀...",
+        "gotTooltip": false,
+        "tooltipText": null
+      },
+      {
+        "want": "src-very-long-YYYYYY...",
+        "found": true,
+        "rendered": "src-very-long-YYYYYY...",
+        "gotTooltip": false,
+        "tooltipText": null
+      },
+      {
+        "want": "宽宽宽宽宽宽宽宽宽宽宽宽宽宽宽宽宽宽宽宽...（src-wide-org）",
+        "found": true,
+        "rendered": "宽宽宽宽宽宽宽宽宽宽宽宽宽宽宽宽宽宽宽宽...（src-wide-org）",
+        "gotTooltip": false,
+        "tooltipText": null
+      }
+    ],
+    "singleTooltips": 0,
+    "multi": {
+      "collapseSetup": [
+        {
+          "needle": "short-desc",
+          "clicked": true
+        },
+        {
+          "needle": "id22-",
+          "clicked": true
+        },
+        {
+          "needle": "very-long-client-id-",
+          "clicked": true
+        }
+      ],
+      "tagsAfterMulti": [
+        "short-desc（长描述长描述长描述长描述长描述长描述长描...）",
+        "+ 2"
+      ],
+      "visibleTag": {
+        "x": 426.4921875,
+        "y": 191.5,
+        "text": "short-desc（长描述长描述长描述长描述长描述长描述长描...）",
+        "closable": true,
+        "rect": {
+          "x": 342,
+          "y": 179.5,
+          "w": 168.98,
+          "h": 24,
+          "right": 510.98,
+          "bottom": 203.5
+        }
+      },
+      "tagHover": {
+        "count": 1,
+        "text": "长描述长描述长描述长描述长描述长描述长描述长描述长描述长描述长描述长描述长描述长描述长描述长描述长描述长描述长描述长描述长描述长描述长描述长描述长描述长描述长描述长描述长描述长描述长描述长描述长描述长描述长描述长描述长描述长描述长描述长描述长描述长描述长描述长描述长描述长描述长描述长描述长描述长描述长描述长描述长描述长描述长描述长描述长描述长描述长描述长描述长描述长描述长描述长描述长描述长描述长描述长描述长描述长描述长描述长描述长描述长描述长描述长描述长描述长描述长描述长描述长描述长描述长描述长描述长描述长描述长描述长描述长描述长描述长描述长描述长描述长描述长描述长描述长描述长描述长描述长描述",
+        "cls": "dss-q-tt",
+        "parentIsBody": true,
+        "style": {
+          "maxWidth": "480px",
+          "position": "fixed",
+          "pointerEvents": "none",
+          "whiteSpace": "pre-line",
+          "overflowWrap": "anywhere",
+          "zIndex": "3000"
+        }
+      },
+      "collapseTag": {
+        "x": 534.4921875,
+        "y": 191.5,
+        "text": " + 2",
+        "closable": false,
+        "rect": {
+          "x": 516.98,
+          "y": 179.5,
+          "w": 35.02,
+          "h": 24,
+          "right": 552,
+          "bottom": 203.5
+        }
+      },
+      "collapseHover": {
+        "count": 0,
+        "text": null,
+        "style": null,
+        "parentIsBody": null,
+        "cls": null
+      },
+      "tagCtrlDelta": {
+        "client": 0,
+        "source": 0,
+        "status": 0,
+        "qBtnX": 0,
+        "barH": 0
+      }
+    },
+    "requests": {
+      "total": 55,
+      "nonGet": []
+    }
+  },
+  {
+    "viewport": {
+      "w": 1920,
+      "h": 1080
+    },
+    "clientRendered": [
+      "全部",
+      "id19-AAAAAAAAAAAAAA（ddddddddddddddddddd）",
+      "id20-BBBBBBBBBBBBBBB（eeeeeeeeeeeeeeeeeeee）",
+      "id21-CCCCCCCCCCCCCCC...（ffffffffffffffffffff...）",
+      "id22-DDDDDDDDDDDDDDD...（gggggggggggggggggggg...）",
+      "中中中中中中中中中中中中中中中中中中中中...（中中中中中中中中中中中中中中中中中中中中...）",
+      "😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀...（😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀...）",
+      "very-long-client-id-...",
+      "short-desc（长描述长描述长描述长描述长描述长描述长描...）",
+      "desc-empty-str",
+      "desc-20（22222222222222222222）"
+    ],
+    "clientRaw": [
+      "全部",
+      "id19-AAAAAAAAAAAAAA（ddddddddddddddddddd）",
+      "id20-BBBBBBBBBBBBBBB（eeeeeeeeeeeeeeeeeeee）",
+      "id21-CCCCCCCCCCCCCCC...（ffffffffffffffffffff...）",
+      "id22-DDDDDDDDDDDDDDD...（gggggggggggggggggggg...）",
+      "中中中中中中中中中中中中中中中中中中中中...（中中中中中中中中中中中中中中中中中中中中...）",
+      "😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀...（😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀...）",
+      "very-long-client-id-...",
+      "short-desc（长描述长描述长描述长描述长描述长描述长描...）",
+      "desc-empty-str",
+      "desc-20（22222222222222222222）"
+    ],
+    "clientProbe": [
+      {
+        "want": "id19-AAAAAAAAAAAAAA（ddddddddddddddddddd）",
+        "found": true,
+        "rendered": "id19-AAAAAAAAAAAAAA（ddddddddddddddddddd）",
+        "hitAnchor": {
+          "tag": "SPAN",
+          "cls": "",
+          "inRow": true
+        },
+        "renderedCodePoints": 40,
+        "expectTooltip": false,
+        "gotTooltip": false,
+        "tooltipText": null,
+        "expectTooltipText": null,
+        "tooltipCountDuringHover": 0,
+        "tooltipCountAfterLeave": 0,
+        "ctrlDelta": {
+          "client": 0,
+          "source": 0,
+          "status": 0,
+          "qBtnX": 0,
+          "barH": 0
+        }
+      },
+      {
+        "want": "id20-BBBBBBBBBBBBBBB（eeeeeeeeeeeeeeeeeeee）",
+        "found": true,
+        "rendered": "id20-BBBBBBBBBBBBBBB（eeeeeeeeeeeeeeeeeeee）",
+        "hitAnchor": {
+          "tag": "SPAN",
+          "cls": "",
+          "inRow": true
+        },
+        "renderedCodePoints": 42,
+        "expectTooltip": false,
+        "gotTooltip": false,
+        "tooltipText": null,
+        "expectTooltipText": null,
+        "tooltipCountDuringHover": 0,
+        "tooltipCountAfterLeave": 0,
+        "ctrlDelta": {
+          "client": 0,
+          "source": 0,
+          "status": 0,
+          "qBtnX": 0,
+          "barH": 0
+        }
+      },
+      {
+        "want": "id21-CCCCCCCCCCCCCCC...（ffffffffffffffffffff...）",
+        "found": true,
+        "rendered": "id21-CCCCCCCCCCCCCCC...（ffffffffffffffffffff...）",
+        "hitAnchor": {
+          "tag": "SPAN",
+          "cls": "",
+          "inRow": true
+        },
+        "renderedCodePoints": 48,
+        "expectTooltip": true,
+        "gotTooltip": true,
+        "tooltipText": "fffffffffffffffffffff",
+        "expectTooltipText": "fffffffffffffffffffff",
+        "tooltipCountDuringHover": 1,
+        "tooltipCountAfterLeave": 0,
+        "ctrlDelta": {
+          "client": 0,
+          "source": 0,
+          "status": 0,
+          "qBtnX": 0,
+          "barH": 0
+        }
+      },
+      {
+        "want": "id22-DDDDDDDDDDDDDDD...（gggggggggggggggggggg...）",
+        "found": true,
+        "rendered": "id22-DDDDDDDDDDDDDDD...（gggggggggggggggggggg...）",
+        "hitAnchor": {
+          "tag": "SPAN",
+          "cls": "",
+          "inRow": true
+        },
+        "renderedCodePoints": 48,
+        "expectTooltip": true,
+        "gotTooltip": true,
+        "tooltipText": "gggggggggggggggggggggg",
+        "expectTooltipText": "gggggggggggggggggggggg",
+        "tooltipCountDuringHover": 1,
+        "tooltipCountAfterLeave": 0,
+        "ctrlDelta": {
+          "client": 0,
+          "source": 0,
+          "status": 0,
+          "qBtnX": 0,
+          "barH": 0
+        }
+      },
+      {
+        "want": "中中中中中中中中中中中中中中中中中中中中...（中中中中中中中中中中中中中中中中中中中中...）",
+        "found": true,
+        "rendered": "中中中中中中中中中中中中中中中中中中中中...（中中中中中中中中中中中中中中中中中中中中...）",
+        "hitAnchor": {
+          "tag": "SPAN",
+          "cls": "",
+          "inRow": true
+        },
+        "renderedCodePoints": 48,
+        "expectTooltip": true,
+        "gotTooltip": true,
+        "tooltipText": "中中中中中中中中中中中中中中中中中中中中中中中中",
+        "expectTooltipText": "中中中中中中中中中中中中中中中中中中中中中中中中",
+        "tooltipCountDuringHover": 1,
+        "tooltipCountAfterLeave": 0,
+        "ctrlDelta": {
+          "client": 0,
+          "source": 0,
+          "status": 0,
+          "qBtnX": 0,
+          "barH": 0
+        }
+      },
+      {
+        "want": "😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀...（😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀...）",
+        "found": true,
+        "rendered": "😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀...（😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀...）",
+        "hitAnchor": {
+          "tag": "SPAN",
+          "cls": "",
+          "inRow": true
+        },
+        "renderedCodePoints": 48,
+        "expectTooltip": true,
+        "gotTooltip": true,
+        "tooltipText": "😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀",
+        "expectTooltipText": "😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀",
+        "tooltipCountDuringHover": 1,
+        "tooltipCountAfterLeave": 0,
+        "ctrlDelta": {
+          "client": 0,
+          "source": 0,
+          "status": 0,
+          "qBtnX": 0,
+          "barH": 0
+        }
+      },
+      {
+        "want": "very-long-client-id-...",
+        "found": true,
+        "rendered": "very-long-client-id-...",
+        "hitAnchor": {
+          "tag": "LI",
+          "cls": "el-select-dropdown__item is-hovering",
+          "inRow": true
+        },
+        "renderedCodePoints": 20,
+        "expectTooltip": false,
+        "gotTooltip": false,
+        "tooltipText": null,
+        "expectTooltipText": null,
+        "tooltipCountDuringHover": 0,
+        "tooltipCountAfterLeave": 0,
+        "ctrlDelta": {
+          "client": 0,
+          "source": 0,
+          "status": 0,
+          "qBtnX": 0,
+          "barH": 0
+        }
+      },
+      {
+        "want": "short-desc（长描述长描述长描述长描述长描述长描述长描...）",
+        "found": true,
+        "rendered": "short-desc（长描述长描述长描述长描述长描述长描述长描...）",
+        "hitAnchor": {
+          "tag": "SPAN",
+          "cls": "",
+          "inRow": true
+        },
+        "renderedCodePoints": 35,
+        "expectTooltip": true,
+        "gotTooltip": true,
+        "tooltipText": "长描述长描述长描述长描述长描述长描述长描述长描述长描述长描述长描述长描述长描述长描述长描述长描述长描述长描述长描述长描述长描述长描述长描述长描述长描述长描述长描述长描述长描述长描述长描述长描述长描述长描述长描述长描述长描述长描述长描述长描述长描述长描述长描述长描述长描述长描述长描述长描述长描述长描述长描述长描述长描述长描述长描述长描述长描述长描述长描述长描述长描述长描述长描述长描述长描述长描述长描述长描述长描述长描述长描述长描述长描述长描述长描述长描述长描述长描述长描述长描述长描述长描述长描述长描述长描述长描述长描述长描述长描述长描述长描述长描述长描述长描述长描述长描述长描述长描述长描述长描述",
+        "expectTooltipText": "长描述长描述长描述长描述长描述长描述长描述长描述长描述长描述长描述长描述长描述长描述长描述长描述长描述长描述长描述长描述长描述长描述长描述长描述长描述长描述长描述长描述长描述长描述长描述长描述长描述长描述长描述长描述长描述长描述长描述长描述长描述长描述长描述长描述长描述长描述长描述长描述长描述长描述长描述长描述长描述长描述长描述长描述长描述长描述长描述长描述长描述长描述长描述长描述长描述长描述长描述长描述长描述长描述长描述长描述长描述长描述长描述长描述长描述长描述长描述长描述长描述长描述长描述长描述长描述长描述长描述长描述长描述长描述长描述长描述长描述长描述长描述长描述长描述长描述长描述长描述",
+        "tooltipCountDuringHover": 1,
+        "tooltipCountAfterLeave": 0,
+        "ctrlDelta": {
+          "client": 0,
+          "source": 0,
+          "status": 0,
+          "qBtnX": 0,
+          "barH": 0
+        }
+      },
+      {
+        "want": "desc-empty-str",
+        "found": true,
+        "rendered": "desc-empty-str",
+        "hitAnchor": {
+          "tag": "LI",
+          "cls": "el-select-dropdown__item is-hovering",
+          "inRow": true
+        },
+        "renderedCodePoints": 14,
+        "expectTooltip": false,
+        "gotTooltip": false,
+        "tooltipText": null,
+        "expectTooltipText": null,
+        "tooltipCountDuringHover": 0,
+        "tooltipCountAfterLeave": 0,
+        "ctrlDelta": {
+          "client": 0,
+          "source": 0,
+          "status": 0,
+          "qBtnX": 0,
+          "barH": 0
+        }
+      },
+      {
+        "want": "desc-20（22222222222222222222）",
+        "found": true,
+        "rendered": "desc-20（22222222222222222222）",
+        "hitAnchor": {
+          "tag": "SPAN",
+          "cls": "",
+          "inRow": true
+        },
+        "renderedCodePoints": 29,
+        "expectTooltip": false,
+        "gotTooltip": false,
+        "tooltipText": null,
+        "expectTooltipText": null,
+        "tooltipCountDuringHover": 0,
+        "tooltipCountAfterLeave": 0,
+        "ctrlDelta": {
+          "client": 0,
+          "source": 0,
+          "status": 0,
+          "qBtnX": 0,
+          "barH": 0
+        }
+      }
+    ],
+    "sourceRendered": [
+      "全部",
+      "ooooooooooooooooooo（src19-AAAAAAAAAAAAA）",
+      "pppppppppppppppppppp（src20-BBBBBBBBBBBBBB）",
+      "qqqqqqqqqqqqqqqqqqqq...（src21-CCCCCCCCCCCCCC...）",
+      "rrrrrrrrrrrrrrrrrrrr...（src22-DDDDDDDDDDDDDD...）",
+      "中中中中中中中中中中中中中中中中中中中中...（中中中中中中中中中中中中中中中中中中中中...）",
+      "😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀...",
+      "src-very-long-YYYYYY...",
+      "宽宽宽宽宽宽宽宽宽宽宽宽宽宽宽宽宽宽宽宽...（src-wide-org）"
+    ],
+    "sourceProbe": [
+      {
+        "want": "ooooooooooooooooooo（src19-AAAAAAAAAAAAA）",
+        "found": true,
+        "rendered": "ooooooooooooooooooo（src19-AAAAAAAAAAAAA）",
+        "gotTooltip": false,
+        "tooltipText": null
+      },
+      {
+        "want": "pppppppppppppppppppp（src20-BBBBBBBBBBBBBB）",
+        "found": true,
+        "rendered": "pppppppppppppppppppp（src20-BBBBBBBBBBBBBB）",
+        "gotTooltip": false,
+        "tooltipText": null
+      },
+      {
+        "want": "qqqqqqqqqqqqqqqqqqqq...（src21-CCCCCCCCCCCCCC...）",
+        "found": true,
+        "rendered": "qqqqqqqqqqqqqqqqqqqq...（src21-CCCCCCCCCCCCCC...）",
+        "gotTooltip": false,
+        "tooltipText": null
+      },
+      {
+        "want": "rrrrrrrrrrrrrrrrrrrr...（src22-DDDDDDDDDDDDDD...）",
+        "found": true,
+        "rendered": "rrrrrrrrrrrrrrrrrrrr...（src22-DDDDDDDDDDDDDD...）",
+        "gotTooltip": false,
+        "tooltipText": null
+      },
+      {
+        "want": "中中中中中中中中中中中中中中中中中中中中...（中中中中中中中中中中中中中中中中中中中中...）",
+        "found": true,
+        "rendered": "中中中中中中中中中中中中中中中中中中中中...（中中中中中中中中中中中中中中中中中中中中...）",
+        "gotTooltip": false,
+        "tooltipText": null
+      },
+      {
+        "want": "😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀...",
+        "found": true,
+        "rendered": "😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀...",
+        "gotTooltip": false,
+        "tooltipText": null
+      },
+      {
+        "want": "src-very-long-YYYYYY...",
+        "found": true,
+        "rendered": "src-very-long-YYYYYY...",
+        "gotTooltip": false,
+        "tooltipText": null
+      },
+      {
+        "want": "宽宽宽宽宽宽宽宽宽宽宽宽宽宽宽宽宽宽宽宽...（src-wide-org）",
+        "found": true,
+        "rendered": "宽宽宽宽宽宽宽宽宽宽宽宽宽宽宽宽宽宽宽宽...（src-wide-org）",
+        "gotTooltip": false,
+        "tooltipText": null
+      }
+    ],
+    "singleTooltips": 0,
+    "multi": {
+      "collapseSetup": [
+        {
+          "needle": "short-desc",
+          "clicked": true
+        },
+        {
+          "needle": "id22-",
+          "clicked": true
+        },
+        {
+          "needle": "very-long-client-id-",
+          "clicked": true
+        }
+      ],
+      "tagsAfterMulti": [
+        "short-desc（长描述长描述长描述长描述长描述长描述长描...）",
+        "+ 2"
+      ],
+      "visibleTag": {
+        "x": 426.4921875,
+        "y": 191.5,
+        "text": "short-desc（长描述长描述长描述长描述长描述长描述长描...）",
+        "closable": true,
+        "rect": {
+          "x": 342,
+          "y": 179.5,
+          "w": 168.98,
+          "h": 24,
+          "right": 510.98,
+          "bottom": 203.5
+        }
+      },
+      "tagHover": {
+        "count": 1,
+        "text": "长描述长描述长描述长描述长描述长描述长描述长描述长描述长描述长描述长描述长描述长描述长描述长描述长描述长描述长描述长描述长描述长描述长描述长描述长描述长描述长描述长描述长描述长描述长描述长描述长描述长描述长描述长描述长描述长描述长描述长描述长描述长描述长描述长描述长描述长描述长描述长描述长描述长描述长描述长描述长描述长描述长描述长描述长描述长描述长描述长描述长描述长描述长描述长描述长描述长描述长描述长描述长描述长描述长描述长描述长描述长描述长描述长描述长描述长描述长描述长描述长描述长描述长描述长描述长描述长描述长描述长描述长描述长描述长描述长描述长描述长描述长描述长描述长描述长描述长描述长描述",
+        "cls": "dss-q-tt",
+        "parentIsBody": true,
+        "style": {
+          "maxWidth": "480px",
+          "position": "fixed",
+          "pointerEvents": "none",
+          "whiteSpace": "pre-line",
+          "overflowWrap": "anywhere",
+          "zIndex": "3000"
+        }
+      },
+      "collapseTag": {
+        "x": 534.4921875,
+        "y": 191.5,
+        "text": " + 2",
+        "closable": false,
+        "rect": {
+          "x": 516.98,
+          "y": 179.5,
+          "w": 35.02,
+          "h": 24,
+          "right": 552,
+          "bottom": 203.5
+        }
+      },
+      "collapseHover": {
+        "count": 0,
+        "text": null,
+        "style": null,
+        "parentIsBody": null,
+        "cls": null
+      },
+      "tagCtrlDelta": {
+        "client": 0,
+        "source": 0,
+        "status": 0,
+        "qBtnX": 0,
+        "barH": 0
+      }
+    },
+    "requests": {
+      "total": 55,
+      "nonGet": []
+    }
+  },
+  {
+    "viewport": {
+      "w": 2560,
+      "h": 1440
+    },
+    "clientRendered": [
+      "全部",
+      "id19-AAAAAAAAAAAAAA（ddddddddddddddddddd）",
+      "id20-BBBBBBBBBBBBBBB（eeeeeeeeeeeeeeeeeeee）",
+      "id21-CCCCCCCCCCCCCCC...（ffffffffffffffffffff...）",
+      "id22-DDDDDDDDDDDDDDD...（gggggggggggggggggggg...）",
+      "中中中中中中中中中中中中中中中中中中中中...（中中中中中中中中中中中中中中中中中中中中...）",
+      "😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀...（😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀...）",
+      "very-long-client-id-...",
+      "short-desc（长描述长描述长描述长描述长描述长描述长描...）",
+      "desc-empty-str",
+      "desc-20（22222222222222222222）"
+    ],
+    "clientRaw": [
+      "全部",
+      "id19-AAAAAAAAAAAAAA（ddddddddddddddddddd）",
+      "id20-BBBBBBBBBBBBBBB（eeeeeeeeeeeeeeeeeeee）",
+      "id21-CCCCCCCCCCCCCCC...（ffffffffffffffffffff...）",
+      "id22-DDDDDDDDDDDDDDD...（gggggggggggggggggggg...）",
+      "中中中中中中中中中中中中中中中中中中中中...（中中中中中中中中中中中中中中中中中中中中...）",
+      "😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀...（😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀...）",
+      "very-long-client-id-...",
+      "short-desc（长描述长描述长描述长描述长描述长描述长描...）",
+      "desc-empty-str",
+      "desc-20（22222222222222222222）"
+    ],
+    "clientProbe": [
+      {
+        "want": "id19-AAAAAAAAAAAAAA（ddddddddddddddddddd）",
+        "found": true,
+        "rendered": "id19-AAAAAAAAAAAAAA（ddddddddddddddddddd）",
+        "hitAnchor": {
+          "tag": "SPAN",
+          "cls": "",
+          "inRow": true
+        },
+        "renderedCodePoints": 40,
+        "expectTooltip": false,
+        "gotTooltip": false,
+        "tooltipText": null,
+        "expectTooltipText": null,
+        "tooltipCountDuringHover": 0,
+        "tooltipCountAfterLeave": 0,
+        "ctrlDelta": {
+          "client": 0,
+          "source": 0,
+          "status": 0,
+          "qBtnX": 0,
+          "barH": 0
+        }
+      },
+      {
+        "want": "id20-BBBBBBBBBBBBBBB（eeeeeeeeeeeeeeeeeeee）",
+        "found": true,
+        "rendered": "id20-BBBBBBBBBBBBBBB（eeeeeeeeeeeeeeeeeeee）",
+        "hitAnchor": {
+          "tag": "SPAN",
+          "cls": "",
+          "inRow": true
+        },
+        "renderedCodePoints": 42,
+        "expectTooltip": false,
+        "gotTooltip": false,
+        "tooltipText": null,
+        "expectTooltipText": null,
+        "tooltipCountDuringHover": 0,
+        "tooltipCountAfterLeave": 0,
+        "ctrlDelta": {
+          "client": 0,
+          "source": 0,
+          "status": 0,
+          "qBtnX": 0,
+          "barH": 0
+        }
+      },
+      {
+        "want": "id21-CCCCCCCCCCCCCCC...（ffffffffffffffffffff...）",
+        "found": true,
+        "rendered": "id21-CCCCCCCCCCCCCCC...（ffffffffffffffffffff...）",
+        "hitAnchor": {
+          "tag": "SPAN",
+          "cls": "",
+          "inRow": true
+        },
+        "renderedCodePoints": 48,
+        "expectTooltip": true,
+        "gotTooltip": true,
+        "tooltipText": "fffffffffffffffffffff",
+        "expectTooltipText": "fffffffffffffffffffff",
+        "tooltipCountDuringHover": 1,
+        "tooltipCountAfterLeave": 0,
+        "ctrlDelta": {
+          "client": 0,
+          "source": 0,
+          "status": 0,
+          "qBtnX": 0,
+          "barH": 0
+        }
+      },
+      {
+        "want": "id22-DDDDDDDDDDDDDDD...（gggggggggggggggggggg...）",
+        "found": true,
+        "rendered": "id22-DDDDDDDDDDDDDDD...（gggggggggggggggggggg...）",
+        "hitAnchor": {
+          "tag": "SPAN",
+          "cls": "",
+          "inRow": true
+        },
+        "renderedCodePoints": 48,
+        "expectTooltip": true,
+        "gotTooltip": true,
+        "tooltipText": "gggggggggggggggggggggg",
+        "expectTooltipText": "gggggggggggggggggggggg",
+        "tooltipCountDuringHover": 1,
+        "tooltipCountAfterLeave": 0,
+        "ctrlDelta": {
+          "client": 0,
+          "source": 0,
+          "status": 0,
+          "qBtnX": 0,
+          "barH": 0
+        }
+      },
+      {
+        "want": "中中中中中中中中中中中中中中中中中中中中...（中中中中中中中中中中中中中中中中中中中中...）",
+        "found": true,
+        "rendered": "中中中中中中中中中中中中中中中中中中中中...（中中中中中中中中中中中中中中中中中中中中...）",
+        "hitAnchor": {
+          "tag": "SPAN",
+          "cls": "",
+          "inRow": true
+        },
+        "renderedCodePoints": 48,
+        "expectTooltip": true,
+        "gotTooltip": true,
+        "tooltipText": "中中中中中中中中中中中中中中中中中中中中中中中中",
+        "expectTooltipText": "中中中中中中中中中中中中中中中中中中中中中中中中",
+        "tooltipCountDuringHover": 1,
+        "tooltipCountAfterLeave": 0,
+        "ctrlDelta": {
+          "client": 0,
+          "source": 0,
+          "status": 0,
+          "qBtnX": 0,
+          "barH": 0
+        }
+      },
+      {
+        "want": "😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀...（😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀...）",
+        "found": true,
+        "rendered": "😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀...（😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀...）",
+        "hitAnchor": {
+          "tag": "SPAN",
+          "cls": "",
+          "inRow": true
+        },
+        "renderedCodePoints": 48,
+        "expectTooltip": true,
+        "gotTooltip": true,
+        "tooltipText": "😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀",
+        "expectTooltipText": "😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀",
+        "tooltipCountDuringHover": 1,
+        "tooltipCountAfterLeave": 0,
+        "ctrlDelta": {
+          "client": 0,
+          "source": 0,
+          "status": 0,
+          "qBtnX": 0,
+          "barH": 0
+        }
+      },
+      {
+        "want": "very-long-client-id-...",
+        "found": true,
+        "rendered": "very-long-client-id-...",
+        "hitAnchor": {
+          "tag": "LI",
+          "cls": "el-select-dropdown__item is-hovering",
+          "inRow": true
+        },
+        "renderedCodePoints": 20,
+        "expectTooltip": false,
+        "gotTooltip": false,
+        "tooltipText": null,
+        "expectTooltipText": null,
+        "tooltipCountDuringHover": 0,
+        "tooltipCountAfterLeave": 0,
+        "ctrlDelta": {
+          "client": 0,
+          "source": 0,
+          "status": 0,
+          "qBtnX": 0,
+          "barH": 0
+        }
+      },
+      {
+        "want": "short-desc（长描述长描述长描述长描述长描述长描述长描...）",
+        "found": true,
+        "rendered": "short-desc（长描述长描述长描述长描述长描述长描述长描...）",
+        "hitAnchor": {
+          "tag": "SPAN",
+          "cls": "",
+          "inRow": true
+        },
+        "renderedCodePoints": 35,
+        "expectTooltip": true,
+        "gotTooltip": true,
+        "tooltipText": "长描述长描述长描述长描述长描述长描述长描述长描述长描述长描述长描述长描述长描述长描述长描述长描述长描述长描述长描述长描述长描述长描述长描述长描述长描述长描述长描述长描述长描述长描述长描述长描述长描述长描述长描述长描述长描述长描述长描述长描述长描述长描述长描述长描述长描述长描述长描述长描述长描述长描述长描述长描述长描述长描述长描述长描述长描述长描述长描述长描述长描述长描述长描述长描述长描述长描述长描述长描述长描述长描述长描述长描述长描述长描述长描述长描述长描述长描述长描述长描述长描述长描述长描述长描述长描述长描述长描述长描述长描述长描述长描述长描述长描述长描述长描述长描述长描述长描述长描述长描述",
+        "expectTooltipText": "长描述长描述长描述长描述长描述长描述长描述长描述长描述长描述长描述长描述长描述长描述长描述长描述长描述长描述长描述长描述长描述长描述长描述长描述长描述长描述长描述长描述长描述长描述长描述长描述长描述长描述长描述长描述长描述长描述长描述长描述长描述长描述长描述长描述长描述长描述长描述长描述长描述长描述长描述长描述长描述长描述长描述长描述长描述长描述长描述长描述长描述长描述长描述长描述长描述长描述长描述长描述长描述长描述长描述长描述长描述长描述长描述长描述长描述长描述长描述长描述长描述长描述长描述长描述长描述长描述长描述长描述长描述长描述长描述长描述长描述长描述长描述长描述长描述长描述长描述长描述",
+        "tooltipCountDuringHover": 1,
+        "tooltipCountAfterLeave": 0,
+        "ctrlDelta": {
+          "client": 0,
+          "source": 0,
+          "status": 0,
+          "qBtnX": 0,
+          "barH": 0
+        }
+      },
+      {
+        "want": "desc-empty-str",
+        "found": true,
+        "rendered": "desc-empty-str",
+        "hitAnchor": {
+          "tag": "LI",
+          "cls": "el-select-dropdown__item is-hovering",
+          "inRow": true
+        },
+        "renderedCodePoints": 14,
+        "expectTooltip": false,
+        "gotTooltip": false,
+        "tooltipText": null,
+        "expectTooltipText": null,
+        "tooltipCountDuringHover": 0,
+        "tooltipCountAfterLeave": 0,
+        "ctrlDelta": {
+          "client": 0,
+          "source": 0,
+          "status": 0,
+          "qBtnX": 0,
+          "barH": 0
+        }
+      },
+      {
+        "want": "desc-20（22222222222222222222）",
+        "found": true,
+        "rendered": "desc-20（22222222222222222222）",
+        "hitAnchor": {
+          "tag": "SPAN",
+          "cls": "",
+          "inRow": true
+        },
+        "renderedCodePoints": 29,
+        "expectTooltip": false,
+        "gotTooltip": false,
+        "tooltipText": null,
+        "expectTooltipText": null,
+        "tooltipCountDuringHover": 0,
+        "tooltipCountAfterLeave": 0,
+        "ctrlDelta": {
+          "client": 0,
+          "source": 0,
+          "status": 0,
+          "qBtnX": 0,
+          "barH": 0
+        }
+      }
+    ],
+    "sourceRendered": [
+      "全部",
+      "ooooooooooooooooooo（src19-AAAAAAAAAAAAA）",
+      "pppppppppppppppppppp（src20-BBBBBBBBBBBBBB）",
+      "qqqqqqqqqqqqqqqqqqqq...（src21-CCCCCCCCCCCCCC...）",
+      "rrrrrrrrrrrrrrrrrrrr...（src22-DDDDDDDDDDDDDD...）",
+      "中中中中中中中中中中中中中中中中中中中中...（中中中中中中中中中中中中中中中中中中中中...）",
+      "😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀...",
+      "src-very-long-YYYYYY...",
+      "宽宽宽宽宽宽宽宽宽宽宽宽宽宽宽宽宽宽宽宽...（src-wide-org）"
+    ],
+    "sourceProbe": [
+      {
+        "want": "ooooooooooooooooooo（src19-AAAAAAAAAAAAA）",
+        "found": true,
+        "rendered": "ooooooooooooooooooo（src19-AAAAAAAAAAAAA）",
+        "gotTooltip": false,
+        "tooltipText": null
+      },
+      {
+        "want": "pppppppppppppppppppp（src20-BBBBBBBBBBBBBB）",
+        "found": true,
+        "rendered": "pppppppppppppppppppp（src20-BBBBBBBBBBBBBB）",
+        "gotTooltip": false,
+        "tooltipText": null
+      },
+      {
+        "want": "qqqqqqqqqqqqqqqqqqqq...（src21-CCCCCCCCCCCCCC...）",
+        "found": true,
+        "rendered": "qqqqqqqqqqqqqqqqqqqq...（src21-CCCCCCCCCCCCCC...）",
+        "gotTooltip": false,
+        "tooltipText": null
+      },
+      {
+        "want": "rrrrrrrrrrrrrrrrrrrr...（src22-DDDDDDDDDDDDDD...）",
+        "found": true,
+        "rendered": "rrrrrrrrrrrrrrrrrrrr...（src22-DDDDDDDDDDDDDD...）",
+        "gotTooltip": false,
+        "tooltipText": null
+      },
+      {
+        "want": "中中中中中中中中中中中中中中中中中中中中...（中中中中中中中中中中中中中中中中中中中中...）",
+        "found": true,
+        "rendered": "中中中中中中中中中中中中中中中中中中中中...（中中中中中中中中中中中中中中中中中中中中...）",
+        "gotTooltip": false,
+        "tooltipText": null
+      },
+      {
+        "want": "😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀...",
+        "found": true,
+        "rendered": "😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀...",
+        "gotTooltip": false,
+        "tooltipText": null
+      },
+      {
+        "want": "src-very-long-YYYYYY...",
+        "found": true,
+        "rendered": "src-very-long-YYYYYY...",
+        "gotTooltip": false,
+        "tooltipText": null
+      },
+      {
+        "want": "宽宽宽宽宽宽宽宽宽宽宽宽宽宽宽宽宽宽宽宽...（src-wide-org）",
+        "found": true,
+        "rendered": "宽宽宽宽宽宽宽宽宽宽宽宽宽宽宽宽宽宽宽宽...（src-wide-org）",
+        "gotTooltip": false,
+        "tooltipText": null
+      }
+    ],
+    "singleTooltips": 0,
+    "multi": {
+      "collapseSetup": [
+        {
+          "needle": "short-desc",
+          "clicked": true
+        },
+        {
+          "needle": "id22-",
+          "clicked": true
+        },
+        {
+          "needle": "very-long-client-id-",
+          "clicked": true
+        }
+      ],
+      "tagsAfterMulti": [
+        "short-desc（长描述长描述长描述长描述长描述长描述长描...）",
+        "+ 2"
+      ],
+      "visibleTag": {
+        "x": 426.4921875,
+        "y": 191.5,
+        "text": "short-desc（长描述长描述长描述长描述长描述长描述长描...）",
+        "closable": true,
+        "rect": {
+          "x": 342,
+          "y": 179.5,
+          "w": 168.98,
+          "h": 24,
+          "right": 510.98,
+          "bottom": 203.5
+        }
+      },
+      "tagHover": {
+        "count": 1,
+        "text": "长描述长描述长描述长描述长描述长描述长描述长描述长描述长描述长描述长描述长描述长描述长描述长描述长描述长描述长描述长描述长描述长描述长描述长描述长描述长描述长描述长描述长描述长描述长描述长描述长描述长描述长描述长描述长描述长描述长描述长描述长描述长描述长描述长描述长描述长描述长描述长描述长描述长描述长描述长描述长描述长描述长描述长描述长描述长描述长描述长描述长描述长描述长描述长描述长描述长描述长描述长描述长描述长描述长描述长描述长描述长描述长描述长描述长描述长描述长描述长描述长描述长描述长描述长描述长描述长描述长描述长描述长描述长描述长描述长描述长描述长描述长描述长描述长描述长描述长描述长描述",
+        "cls": "dss-q-tt",
+        "parentIsBody": true,
+        "style": {
+          "maxWidth": "480px",
+          "position": "fixed",
+          "pointerEvents": "none",
+          "whiteSpace": "pre-line",
+          "overflowWrap": "anywhere",
+          "zIndex": "3000"
+        }
+      },
+      "collapseTag": {
+        "x": 534.4921875,
+        "y": 191.5,
+        "text": " + 2",
+        "closable": false,
+        "rect": {
+          "x": 516.98,
+          "y": 179.5,
+          "w": 35.02,
+          "h": 24,
+          "right": 552,
+          "bottom": 203.5
+        }
+      },
+      "collapseHover": {
+        "count": 0,
+        "text": null,
+        "style": null,
+        "parentIsBody": null,
+        "cls": null
+      },
+      "tagCtrlDelta": {
+        "client": 0,
+        "source": 0,
+        "status": 0,
+        "qBtnX": 0,
+        "barH": 0
+      }
+    },
+    "requests": {
+      "total": 55,
+      "nonGet": []
+    }
+  }
+]

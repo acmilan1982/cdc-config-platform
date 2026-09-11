@@ -71,13 +71,29 @@
       >查询</el-button>
       <el-button class="dss-reset-btn" @click="onReset">重置</el-button>
     </div>
+    <!-- CLIENT_DESC 完整 Tooltip（DSS-REQ-086，AC-100~102）：查询控件内隔离的最小单实例实现。
+         与页面级表格 Tooltip（.dss-single-tooltip + useSnapshotTooltip 控制器）互相独立：不复用其控制器、
+         不复用其类名，因此不会污染表格既有 Tooltip 与源库表格 Tooltip 的批准规则。
+         position:fixed + Teleport 到 body → 全程不参与查询栏布局，显隐不改变任何控件几何。 -->
+    <Teleport to="body">
+      <div
+        v-if="tt.visible"
+        ref="ttEl"
+        class="dss-q-tt"
+        role="tooltip"
+        :style="ttStyle"
+      >{{ tt.content }}</div>
+    </Teleport>
   </div>
 </template>
 
 <script setup lang="ts">
-import { computed, reactive } from 'vue'
+import { computed, nextTick, onBeforeUnmount, onMounted, reactive, ref, watch } from 'vue'
 import type { ClientCandidate, QueryDraft, SourceCandidate, StatusToken } from '@/types/dataSourceSnapshot'
 import { ALL_OPTION, concreteIds, normalizeDimension } from '@/views/data-source-run-state/utils/selection'
+import { FIELD_TRUNCATE_CODE_POINTS, codePointLength, truncateCodePoints } from '@/views/data-source-run-state/utils/format'
+import { computeTooltipPlacement } from '@/views/data-source-run-state/tooltip/tooltipPosition'
+import type { TooltipAnchor } from '@/views/data-source-run-state/tooltip/tooltipPosition'
 
 interface Opt {
   value: string
@@ -117,23 +133,20 @@ const STATUS_LABELS: Record<StatusToken, string> = {
   UNKNOWN: '未知状态',
 }
 
-/** 展示截断：按 Unicode code point（等价 code-point 安全）截取前 max 个，超出追加英文 "..."；只影响展示，不改变完整 value（DSS-REQ-075，AC-084）。 */
-function truncateCodePoints(text: string, max: number): string {
-  const points = Array.from(text)
-  if (points.length <= max) return text
-  return `${points.slice(0, max).join('')}...`
-}
-
+/** 探针端展示：truncate(CLIENT_ID,20)（truncate(CLIENT_DESC,20)）；描述 null/空/纯空白时不产生空括号（DSS-REQ-085，AC-098）。 */
 function clientLabel(c: ClientCandidate): string {
   const desc = c.desc == null ? '' : c.desc.trim()
-  const idPart = truncateCodePoints(c.id, 20)
+  const idPart = truncateCodePoints(c.id, FIELD_TRUNCATE_CODE_POINTS)
   if (desc.length === 0) return idPart
-  return `${idPart}（${truncateCodePoints(desc, 20)}）`
+  return `${idPart}（${truncateCodePoints(desc, FIELD_TRUNCATE_CODE_POINTS)}）`
 }
 
+/** 源库展示：truncate(DATA_SOURCE_ORG,20)（truncate(DATA_SOURCE_ID,20)）；ORG 空/纯空白时回退截断后的原始 ID、不产生空括号（DSS-REQ-085，AC-098）。 */
 function sourceLabel(s: SourceCandidate): string {
   const org = s.org == null ? '' : s.org.trim()
-  return org.length > 0 ? `${s.org}（${s.id}）` : s.id
+  const idPart = truncateCodePoints(s.id, FIELD_TRUNCATE_CODE_POINTS)
+  if (org.length === 0) return idPart
+  return `${truncateCodePoints(org, FIELD_TRUNCATE_CODE_POINTS)}（${idPart}）`
 }
 
 function statusLabel(token: string): string {
@@ -159,19 +172,148 @@ function withGhost(
 const clientOptions = computed<Opt[]>(() => {
   const known = props.clients.map((c) => c.id)
   const knownOptions = props.clients.map((c) => ({ value: c.id, label: clientLabel(c) }))
-  return [{ value: ALL_OPTION, label: '全部' }, ...withGhost(draft.clients, known, knownOptions, (id) => `${truncateCodePoints(id, 20)}（不在候选内）`)]
+  return [{ value: ALL_OPTION, label: '全部' }, ...withGhost(draft.clients, known, knownOptions, (id) => `${truncateCodePoints(id, FIELD_TRUNCATE_CODE_POINTS)}（不在候选内）`)]
 })
 
 const sourceOptions = computed<Opt[]>(() => {
   const known = props.sources.map((s) => s.id)
   const knownOptions = props.sources.map((s) => ({ value: s.id, label: sourceLabel(s) }))
-  return [{ value: ALL_OPTION, label: '全部' }, ...withGhost(draft.sources, known, knownOptions, (id) => `${id}（不在候选内）`)]
+  return [{ value: ALL_OPTION, label: '全部' }, ...withGhost(draft.sources, known, knownOptions, (id) => `${truncateCodePoints(id, FIELD_TRUNCATE_CODE_POINTS)}（不在候选内）`)]
 })
 
 const statusOptions = computed<Opt[]>(() => {
   const known = props.statuses.map((s) => s as string)
   const knownOptions = props.statuses.map((s) => ({ value: s, label: statusLabel(s) }))
   return [{ value: ALL_OPTION, label: '全部' }, ...withGhost(draft.statuses, known, knownOptions, (t) => `${statusLabel(t)}（不在候选内）`)]
+})
+
+// ---------------------------------------------------------------- 查询控件内 CLIENT_DESC 完整 Tooltip
+// DSS-REQ-086 / AC-100~102：仅当原始 CLIENT_DESC code point 长度 > 20 时，为①探针端下拉候选项与
+// ②探针端控件中可见的选中项提供“完整未截断原始描述”单实例 Tooltip。源库字段/状态/超长 CLIENT_ID/
+// 折叠 `+N` 一律不提供。仅在截断确实丢失信息时才出现，故判定与内容都取 trim 后的描述（与展示、与
+// 表格既有 clientDescText 口径一致；§26.3 把 trim 视为展示管线的一部分，截断作用于 trim 后的值）。
+
+/** 判定 + 内容：返回需要显示的完整原始 CLIENT_DESC；不需要 Tooltip 时返回 null。 */
+function clientDescTooltip(c: ClientCandidate): string | null {
+  const raw = c.desc
+  if (raw == null) return null
+  const desc = raw.trim()
+  if (desc.length === 0) return null
+  return codePointLength(desc) > FIELD_TRUNCATE_CODE_POINTS ? desc : null
+}
+
+/**
+ * 把一段展示文案反查回唯一探针候选：候选与可见选中项使用同一套 clientLabel，
+ * 因此“该文案是否可明确对应单个既有候选”等价于标签等值且命中唯一。
+ * 命中 0 个（“全部”、幽灵项、折叠 `+N` 聚合文案）或多个时一律不作为 Tooltip 锚点。
+ */
+function matchClientByLabel(label: string): ClientCandidate | null {
+  const hits = props.clients.filter((c) => clientLabel(c) === label)
+  return hits.length === 1 ? hits[0]! : null
+}
+
+const tt = reactive<{ visible: boolean; content: string; anchor: TooltipAnchor | null; seq: number }>({
+  visible: false,
+  content: '',
+  anchor: null,
+  seq: 0,
+})
+const ttEl = ref<HTMLElement | null>(null)
+/** 定位态样式：先置不可见、测量新内容尺寸后再一次性显示（与页面级 Tooltip 同策略，无旧坐标残影）。 */
+const ttStyle = ref('visibility:hidden')
+
+function hideTt(): void {
+  hoveredEl = null
+  tt.visible = false
+  ttStyle.value = 'visibility:hidden'
+}
+
+function showTt(el: HTMLElement, content: string): void {
+  const r = el.getBoundingClientRect()
+  tt.content = content
+  tt.anchor = { top: r.top, left: r.left, width: r.width, height: r.height, bottom: r.bottom, right: r.right }
+  tt.seq += 1
+  tt.visible = true
+}
+
+watch(
+  () => tt.seq,
+  async () => {
+    ttStyle.value = 'visibility:hidden'
+    await nextTick()
+    const el = ttEl.value
+    if (!tt.visible || !el || !tt.anchor) return
+    const p = computeTooltipPlacement(
+      tt.anchor,
+      { width: el.offsetWidth || 0, height: el.offsetHeight || 0 },
+      { width: window.innerWidth || 0, height: window.innerHeight || 0 },
+    )
+    ttStyle.value = `left:${Math.round(p.left)}px;top:${Math.round(p.top)}px`
+  },
+  { flush: 'post' },
+)
+
+/** 命中的悬停元素；用于同一锚点内移动时不重算、不重复显示。 */
+let hoveredEl: HTMLElement | null = null
+
+/**
+ * 锚点解析（只依赖 Element Plus 公开的面板/标签类名，不改动其内部 DOM 与盒模型）：
+ * ① 探针端下拉候选项 → 该行的 `.el-select-dropdown__item`；
+ * ② 探针端控件中可见的选中项 → 可关闭标签 `.el-tag`（折叠 `+N` 标签无 is-closable，被排除）。
+ */
+function resolveTooltipAnchor(target: HTMLElement): { el: HTMLElement; content: string } | null {
+  const row = target.closest('.dss-client-popper .el-select-dropdown__item')
+  if (row) {
+    const c = matchClientByLabel((row.textContent ?? '').trim())
+    const content = c ? clientDescTooltip(c) : null
+    return content === null ? null : { el: row as HTMLElement, content }
+  }
+  const tag = target.closest('.dss-client-select .el-tag')
+  if (tag) {
+    if (!tag.classList.contains('is-closable')) return null
+    const text = tag.querySelector('.el-select__tags-text')?.textContent ?? ''
+    const c = matchClientByLabel(text.trim())
+    const content = c ? clientDescTooltip(c) : null
+    return content === null ? null : { el: tag as HTMLElement, content }
+  }
+  return null
+}
+
+function isElement(node: unknown): node is HTMLElement {
+  return !!node && typeof (node as HTMLElement).closest === 'function'
+}
+
+function onDocMouseOver(e: MouseEvent): void {
+  const target = e.target
+  if (!isElement(target)) return
+  const hit = resolveTooltipAnchor(target)
+  if (!hit) {
+    hideTt()
+    return
+  }
+  if (hit.el === hoveredEl) return
+  hoveredEl = hit.el
+  showTt(hit.el, hit.content)
+}
+
+function onDocMouseOut(e: MouseEvent): void {
+  const target = e.target
+  if (!isElement(target)) return
+  if (!resolveTooltipAnchor(target)) return
+  const to = e.relatedTarget
+  if (isElement(to) && hoveredEl && hoveredEl.contains(to)) return
+  hideTt()
+}
+
+// 下拉面板被 Teleport 到 body，不在组件子树内，故用捕获阶段的文档级委托统一覆盖“候选 + 可见选中项”两处锚点。
+onMounted(() => {
+  document.addEventListener('mouseover', onDocMouseOver, true)
+  document.addEventListener('mouseout', onDocMouseOut, true)
+})
+onBeforeUnmount(() => {
+  document.removeEventListener('mouseover', onDocMouseOver, true)
+  document.removeEventListener('mouseout', onDocMouseOut, true)
+  hoveredEl = null
 })
 
 /** 多选互斥：选“全部”清空具体、选具体去“全部”、清空回“全部”；只改草稿，不发请求（DSS-REQ-022/023）。 */
@@ -233,6 +375,26 @@ defineExpose({ reset: onReset })
 .dss-status-select {
   width: 200px;
 }
+/* 外部几何锁（DSS-REQ-084，AC-096/097）：在上方 width 之上补齐 min-width / max-width / flex-basis，
+   把 240 / 300 / 200 从“取自 Element Plus 内部收缩行为的结果”升级为本 Feature 命名空间的显式契约。
+   三者共同作用：min-width + max-width 夹住宽度，flex: 0 0 <w> 阻止作为 .dss-q-group 的 flex 子项
+   被内容撑开（flex-grow）或被过窄的查询栏压缩（flex-shrink）；因此宽度不随选中内容长度、多选、
+   折叠 tags、清空、重置、面板开合或 Tooltip 显隐变化。真实浏览器 before/after 测量见实现报告。 */
+.dss-client-select {
+  min-width: 240px;
+  max-width: 240px;
+  flex: 0 0 240px;
+}
+.dss-source-select {
+  min-width: 300px;
+  max-width: 300px;
+  flex: 0 0 300px;
+}
+.dss-status-select {
+  min-width: 200px;
+  max-width: 200px;
+  flex: 0 0 200px;
+}
 /* 下拉框 wrapper：白底、无硬边框、6px 圆角、极弱阴影；聚焦＝局部 1px 深色焦点环，不出现厚重蓝色外框 */
 .dss-select :deep(.el-select__wrapper) {
   background: var(--dss-surface, #ffffff);
@@ -257,7 +419,16 @@ defineExpose({ reset: onReset })
   color: var(--dss-text-secondary, #3f3f46);
   border-radius: 4px;
 }
-/* 选中标签宽度约束与 ellipsis：超长 ID/描述不撑大选择框、不换行推高、不推动其后条件与按钮；底层选中值仍为完整 ID */
+/* 内部可收缩区域显式 min-width: 0（DSS-REQ-084）：selection 是 wrapper 的 flex:1 1 0% 子项，
+   显式归零其自动最小尺寸（automatic minimum size），使长候选/长选中文本只能被裁切而不能把外框顶宽。
+   Element Plus 自身已给同样的值，此处再声明一次使契约落在本 Feature 命名空间内、不依赖 EP 内部实现。 */
+.dss-client-select :deep(.el-select__selection),
+.dss-source-select :deep(.el-select__selection),
+.dss-status-select :deep(.el-select__selection) {
+  min-width: 0;
+}
+/* 选中标签宽度约束与 ellipsis：超长 ID/描述不撑大选择框、不换行推高、不推动其后条件与按钮；底层选中值仍为完整 ID。
+   DSS-REQ-085 统一字段级截断为主手段，text-overflow 仅作组合文本超出实际可用像素宽度时的最后保护（DSS-REQ-084④）。 */
 .dss-client-select :deep(.el-select__selected-item),
 .dss-source-select :deep(.el-select__selected-item),
 .dss-status-select :deep(.el-select__selected-item) {
@@ -315,6 +486,28 @@ defineExpose({ reset: onReset })
   background: #d9d9dd;
   border-color: transparent;
   color: var(--dss-text-secondary, #3f3f46);
+}
+/* 查询控件内 CLIENT_DESC 完整 Tooltip（DSS-REQ-086，AC-100~102）：
+   安全最大宽度 min(480px, calc(100vw - 16px))，width:max-content → 在安全宽度内单行、超出才自然换行、不越出视口；
+   单实例（同一时刻至多一个 DOM 节点）、不可交互、position:fixed 不参与查询栏布局。
+   类名 dss-q-tt 独立于页面级表格 Tooltip 的 .dss-single-tooltip，两者互不干扰。 */
+.dss-q-tt {
+  position: fixed;
+  z-index: 3000;
+  box-sizing: border-box;
+  max-width: min(480px, calc(100vw - 16px));
+  width: max-content;
+  padding: 6px 10px;
+  border: 1px solid #dcdfe6;
+  border-radius: 4px;
+  background: #ffffff;
+  box-shadow: 0 2px 12px rgba(0, 0, 0, 0.12);
+  color: #303133;
+  font-size: 13px;
+  line-height: 1.5;
+  white-space: pre-line;
+  overflow-wrap: anywhere;
+  pointer-events: none;
 }
 </style>
 

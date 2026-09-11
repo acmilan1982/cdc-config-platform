@@ -1,4 +1,4 @@
-import { describe, it, expect } from 'vitest'
+import { afterEach, beforeEach, describe, it, expect } from 'vitest'
 import { mount, flushPromises, type VueWrapper } from '@vue/test-utils'
 import { readFileSync } from 'node:fs'
 import { resolve } from 'node:path'
@@ -15,7 +15,7 @@ const CLIENTS: ClientCandidate[] = [
 const SOURCES: SourceCandidate[] = [{ id: 'DS1', org: '源库A', active: true }]
 const STATUSES: StatusToken[] = ['RUNNING', 'COMPLETED']
 
-async function mountBar(props: Record<string, unknown> = {}) {
+async function mountBar(props: Record<string, unknown> = {}, attachTo?: Element) {
   const wrapper = mount(DataSourceSnapshotQueryBar, {
     props: {
       clients: CLIENTS,
@@ -26,6 +26,7 @@ async function mountBar(props: Record<string, unknown> = {}) {
       ...props,
     },
     global: { plugins: [ElementPlus] },
+    ...(attachTo ? { attachTo } : {}),
   })
   await flushPromises()
   return wrapper
@@ -476,6 +477,508 @@ describe('DataSourceSnapshotQueryBar R6 查询字段标签视觉层级（R6 §1�
     await queryButton(wrapper).trigger('click')
     expect(wrapper.emitted('query')).toHaveLength(1)
 
+    wrapper.unmount()
+  })
+})
+
+// ---------------------------------------------------------------------------
+// DSS-REQ-084 / DSS-REQ-085 / DSS-REQ-086（AC-096~103）本轮查询控件交互调整
+// ---------------------------------------------------------------------------
+
+/** 20 个字符：恰好等于截断上限，必须完整显示、不追加省略号。 */
+const CP20 = 'A'.repeat(20)
+/** 21 个字符：只显示前 20 个并追加 "..."。 */
+const CP21 = 'B'.repeat(21)
+/** 25 个 code point 的长描述：>20 → 展示被截断、Tooltip 应出现。 */
+const LONG_DESC = '长'.repeat(25)
+
+function queryBarSource(): string {
+  return readFileSync(
+    resolve(process.cwd(), 'src/views/data-source-run-state/components/DataSourceSnapshotQueryBar.vue'),
+    'utf8',
+  )
+}
+
+function optionRow(popper: HTMLElement, label: string): HTMLElement {
+  const row = Array.from(popper.querySelectorAll('.el-select-dropdown__item')).find(
+    (it) => it.textContent?.trim() === label,
+  )
+  if (!row) throw new Error(`未找到候选行 "${label}"`)
+  return row as HTMLElement
+}
+
+function popperByClass(cls: string): HTMLElement {
+  const all = document.body.querySelectorAll(`.el-select-dropdown.${cls}`)
+  const p = all.length ? (all[all.length - 1] as HTMLElement) : null
+  if (!p) throw new Error(`未找到 .${cls} 下拉面板`)
+  return p
+}
+
+/**
+ * Tooltip 锚点解析走 document 级委托，只有挂在 document 上的子树才能触发；
+ * 而下拉面板被 Teleport 到 body、选中项标签留在组件子树内，故需要把组件挂到 body 再悬停。
+ */
+const hosts: HTMLElement[] = []
+async function mountTtBar(props: Record<string, unknown> = {}) {
+  const host = document.createElement('div')
+  document.body.appendChild(host)
+  hosts.push(host)
+  return mountBar(props, host)
+}
+
+function clientPopper(): HTMLElement {
+  return popperByClass('dss-client-popper')
+}
+
+function sourcePopper(): HTMLElement {
+  return popperByClass('dss-source-popper')
+}
+
+function hover(el: Element) {
+  el.dispatchEvent(new MouseEvent('mouseover', { bubbles: true }))
+}
+
+function unhover(el: Element, to?: Element) {
+  el.dispatchEvent(new MouseEvent('mouseout', { bubbles: true, relatedTarget: to ?? null }))
+}
+
+async function settleTooltip() {
+  await nextTick()
+  await nextTick()
+  await nextTick()
+}
+
+function tooltipEl(): HTMLElement | null {
+  const all = document.body.querySelectorAll('.dss-q-tt')
+  return all.length ? (all[all.length - 1] as HTMLElement) : null
+}
+
+describe('DataSourceSnapshotQueryBar 四字段统一字段级截断（DSS-REQ-085，AC-098/099/103）', () => {
+  it('边界 19/20 显示原文不追加省略号；21/22 只显示前 20 个 code point + 英文 ...', async () => {
+    const wrapper = await mountBar({
+      clients: [
+        { id: 'A'.repeat(19), desc: null, active: true },
+        { id: CP20, desc: null, active: true },
+        { id: CP21, desc: null, active: true },
+        { id: 'C'.repeat(22), desc: null, active: true },
+      ],
+    })
+    await openSelect(wrapper, 0)
+    const popper = clientPopper()
+    expect(optionRow(popper, 'A'.repeat(19)).textContent!.trim()).toBe('A'.repeat(19))
+    expect(optionRow(popper, CP20).textContent!.trim()).toBe(CP20)
+    expect(optionRow(popper, 'B'.repeat(20) + '...').textContent!.trim()).toBe('B'.repeat(20) + '...')
+    expect(optionRow(popper, 'C'.repeat(20) + '...').textContent!.trim()).toBe('C'.repeat(20) + '...')
+    wrapper.unmount()
+  })
+
+  it('探针端组合展示为 truncate(ID,20)（truncate(DESC,20)）：ID 与描述各自独立截断', async () => {
+    const wrapper = await mountBar({ clients: [{ id: CP21, desc: 'D'.repeat(22), active: true }] })
+    await openSelect(wrapper, 0)
+    const label = `${'B'.repeat(20)}...（${'D'.repeat(20)}...）`
+    expect(optionRow(clientPopper(), label).textContent!.trim()).toBe(label)
+    wrapper.unmount()
+  })
+
+  it('源库端组合展示为 truncate(ORG,20)（truncate(ID,20)）——本轮新增 ORG/ID 两侧字段级截断', async () => {
+    const wrapper = await mountBar({
+      sources: [{ id: 'S'.repeat(22), org: '源'.repeat(22), active: true }],
+    })
+    await openSelect(wrapper, 1)
+    const label = `${'源'.repeat(20)}...（${'S'.repeat(20)}...）`
+    expect(optionRow(sourcePopper(), label).textContent!.trim()).toBe(label)
+    wrapper.unmount()
+  })
+
+  it('源库 ORG 为 null/空/纯空白时只显示截断后的 ID，不出现空括号', async () => {
+    for (const org of [null, '', '   ']) {
+      const wrapper = await mountBar({ sources: [{ id: 'S'.repeat(22), org, active: true }] })
+      await openSelect(wrapper, 1)
+      const row = Array.from(sourcePopper().querySelectorAll('.el-select-dropdown__item')).find(
+        (it) => it.textContent?.includes('...'),
+      ) as HTMLElement
+      expect(row.textContent!.trim()).toBe('S'.repeat(20) + '...')
+      expect(row.textContent).not.toContain('（')
+      wrapper.unmount()
+    }
+  })
+
+  it('CLIENT_DESC 为 null/空/纯空白时只显示截断后的 ID，不出现空括号', async () => {
+    for (const desc of [null, '', '   ']) {
+      const wrapper = await mountBar({ clients: [{ id: CP21, desc, active: true }] })
+      await openSelect(wrapper, 0)
+      const row = optionRow(clientPopper(), 'B'.repeat(20) + '...')
+      expect(row.textContent!.trim()).toBe('B'.repeat(20) + '...')
+      expect(row.textContent).not.toContain('（')
+      wrapper.unmount()
+    }
+  })
+
+  it('候选下拉项与可见选中项采用同一套显示结果（同一原始值两处逐字一致）', async () => {
+    const wrapper = await mountBar({ clients: [{ id: CP21, desc: 'D'.repeat(22), active: true }] })
+    const label = `${'B'.repeat(20)}...（${'D'.repeat(20)}...）`
+    await openSelect(wrapper, 0)
+    const rowLabel = optionRow(clientPopper(), label).textContent!.trim()
+    await clickOption(clientPopper(), label)
+    const tagLabel = wrapper.find('.dss-client-select .el-select__tags-text').text().trim()
+    expect(tagLabel).toBe(rowLabel)
+    expect(tagLabel).toBe(label)
+    wrapper.unmount()
+  })
+
+  it('代理对不被拆断：emoji 超 20 code point 时按 code point 截断（下拉与选中项一致）', async () => {
+    const emojiId = '😀'.repeat(25)
+    const wrapper = await mountBar({ clients: [{ id: emojiId, desc: null, active: true }] })
+    await openSelect(wrapper, 0)
+    const label = '😀'.repeat(20) + '...'
+    expect(optionRow(clientPopper(), label).textContent!.trim()).toBe(label)
+    await clickOption(clientPopper(), label)
+    expect(wrapper.find('.dss-client-select .el-select__tags-text').text().trim()).toBe(label)
+    wrapper.unmount()
+  })
+
+  it('截断只影响显示：选项 value / 查询参数仍为完整原始 ID（超长 ID 与超长 ORG 均不回填截断值）', async () => {
+    const wrapper = await mountBar({
+      clients: [{ id: CP21, desc: 'D'.repeat(22), active: true }],
+      sources: [{ id: 'S'.repeat(22), org: '源'.repeat(22), active: true }],
+    })
+    await openSelect(wrapper, 0)
+    await clickOption(clientPopper(), `${'B'.repeat(20)}...（${'D'.repeat(20)}...）`)
+    await openSelect(wrapper, 1)
+    await clickOption(sourcePopper(), `${'源'.repeat(20)}...（${'S'.repeat(20)}...）`)
+
+    await queryButton(wrapper).trigger('click')
+    const draft = wrapper.emitted('query')![0]![0] as { clients: string[]; sources: string[] }
+    expect(draft.clients).toEqual([CP21])
+    expect(draft.sources).toEqual(['S'.repeat(22)])
+    wrapper.unmount()
+  })
+
+  it('源库幽灵项（不在候选内）超长 ID 同样按 20 code point 截断', async () => {
+    const wrapper = await mountBar({ sources: [{ id: 'S'.repeat(22), org: null, active: true }] })
+    await openSelect(wrapper, 1)
+    await clickOption(sourcePopper(), 'S'.repeat(20) + '...')
+    await wrapper.setProps({ sources: [] })
+    await nextTick()
+    await openSelect(wrapper, 1)
+    const ghost = Array.from(sourcePopper().querySelectorAll('.el-select-dropdown__item')).find(
+      (it) => it.textContent?.includes('不在候选内'),
+    ) as HTMLElement
+    expect(ghost.textContent!.trim()).toBe('S'.repeat(20) + '...（不在候选内）')
+    await queryButton(wrapper).trigger('click')
+    expect((wrapper.emitted('query')![0]![0] as { sources: string[] }).sources).toEqual(['S'.repeat(22)])
+    wrapper.unmount()
+  })
+})
+
+describe('DataSourceSnapshotQueryBar CLIENT_DESC 完整 Tooltip（DSS-REQ-086，AC-100/101/102/103）', () => {
+  // Tooltip 宿主 Teleport 到 body：每个用例前清掉可能残留的实例，避免跨用例误判“至多一个”。
+  beforeEach(() => {
+    document.body.querySelectorAll('.dss-q-tt').forEach((n) => n.remove())
+  })
+  afterEach(() => {
+    while (hosts.length) hosts.pop()!.remove()
+  })
+
+  it('仅当原始 CLIENT_DESC code point 长度 > 20 时，候选项悬停显示完整未截断原文', async () => {
+    const wrapper = await mountTtBar({
+      clients: [{ id: 'C1', desc: LONG_DESC, active: true }],
+    })
+    await openSelect(wrapper, 0)
+    const row = optionRow(clientPopper(), `C1（${'长'.repeat(20)}...）`)
+    hover(row)
+    await settleTooltip()
+    const tt = tooltipEl()
+    expect(tt).toBeTruthy()
+    // 内容 = 完整原始描述：不含 CLIENT_ID、不含组合文本、不含截断文本、不追加说明
+    expect(tt!.textContent).toBe(LONG_DESC)
+    expect(tt!.textContent).not.toContain('C1')
+    expect(tt!.textContent).not.toContain('...')
+    expect(tt!.textContent).not.toContain('不在候选内')
+    unhover(row)
+    await settleTooltip()
+    expect(tooltipEl()).toBeNull()
+    wrapper.unmount()
+  })
+
+  it('长度恰好 20（不被截断）时无 Tooltip；19 亦无', async () => {
+    for (const desc of ['长'.repeat(20), '长'.repeat(19)]) {
+      const wrapper = await mountTtBar({ clients: [{ id: 'C1', desc, active: true }] })
+      await openSelect(wrapper, 0)
+      hover(optionRow(clientPopper(), `C1（${desc}）`))
+      await settleTooltip()
+      expect(tooltipEl()).toBeNull()
+      wrapper.unmount()
+    }
+  })
+
+  it('CLIENT_DESC 为 null/空串/纯空白时无 Tooltip', async () => {
+    for (const desc of [null, '', '   ']) {
+      const wrapper = await mountTtBar({ clients: [{ id: 'C1', desc, active: true }] })
+      await openSelect(wrapper, 0)
+      hover(optionRow(clientPopper(), 'C1'))
+      await settleTooltip()
+      expect(tooltipEl()).toBeNull()
+      wrapper.unmount()
+    }
+  })
+
+  it('超长 CLIENT_ID 自身不产生 Tooltip（本轮不为 ID 新增 Tooltip）', async () => {
+    const wrapper = await mountTtBar({ clients: [{ id: CP21, desc: null, active: true }] })
+    await openSelect(wrapper, 0)
+    hover(optionRow(clientPopper(), 'B'.repeat(20) + '...'))
+    await settleTooltip()
+    expect(tooltipEl()).toBeNull()
+    wrapper.unmount()
+  })
+
+  it('源库候选（ORG/ID 超 20）悬停不产生 Tooltip（本轮不为源库新增 Tooltip）', async () => {
+    const wrapper = await mountTtBar({
+      sources: [{ id: 'S'.repeat(22), org: '源'.repeat(22), active: true }],
+    })
+    await openSelect(wrapper, 1)
+    hover(optionRow(sourcePopper(), `${'源'.repeat(20)}...（${'S'.repeat(20)}...）`))
+    await settleTooltip()
+    expect(tooltipEl()).toBeNull()
+    wrapper.unmount()
+  })
+
+  it('“全部”候选悬停不产生 Tooltip', async () => {
+    const wrapper = await mountTtBar()
+    await openSelect(wrapper, 0)
+    hover(optionRow(clientPopper(), '全部'))
+    await settleTooltip()
+    expect(tooltipEl()).toBeNull()
+    wrapper.unmount()
+  })
+
+  it('控件中可见选中项悬停同样显示完整原文；内容与候选一致', async () => {
+    const wrapper = await mountTtBar({ clients: [{ id: 'C1', desc: LONG_DESC, active: true }] })
+    await openSelect(wrapper, 0)
+    await clickOption(clientPopper(), `C1（${'长'.repeat(20)}...）`)
+    const tag = wrapper.find('.dss-client-select .el-tag').element
+    hover(tag)
+    await settleTooltip()
+    const tt = tooltipEl()
+    expect(tt).toBeTruthy()
+    expect(tt!.textContent).toBe(LONG_DESC)
+    unhover(tag)
+    await settleTooltip()
+    expect(tooltipEl()).toBeNull()
+    wrapper.unmount()
+  })
+
+  it('已选但描述 ≤20 的选中项悬停无 Tooltip', async () => {
+    const wrapper = await mountTtBar({ clients: [{ id: 'C1', desc: '短描述', active: true }] })
+    await openSelect(wrapper, 0)
+    await clickOption(clientPopper(), 'C1（短描述）')
+    hover(wrapper.find('.dss-client-select .el-tag').element)
+    await settleTooltip()
+    expect(tooltipEl()).toBeNull()
+    wrapper.unmount()
+  })
+
+  it('多选折叠 +N：悬停可见标签显示其自身描述，悬停 +N 不聚合、不显示任何 Tooltip', async () => {
+    const wrapper = await mountTtBar({
+      clients: [
+        { id: 'C1', desc: LONG_DESC, active: true },
+        { id: 'C2', desc: 'D'.repeat(23), active: true },
+        { id: 'C3', desc: '第三个描述', active: true },
+      ],
+    })
+    await openSelect(wrapper, 0)
+    await clickOption(clientPopper(), `C1（${'长'.repeat(20)}...）`)
+    await openSelect(wrapper, 0)
+    await clickOption(clientPopper(), `C2（${'D'.repeat(20)}...）`)
+    await openSelect(wrapper, 0)
+    await clickOption(clientPopper(), 'C3（第三个描述）')
+
+    // 可见标签 = 第一个选中项（C1），Tooltip 只显示它自己的完整描述
+    const visibleTag = wrapper.findAll('.dss-client-select .el-tag').find((t) =>
+      t.classes().includes('is-closable'),
+    )!
+    hover(visibleTag.element)
+    await settleTooltip()
+    expect(tooltipEl()!.textContent).toBe(LONG_DESC)
+    unhover(visibleTag.element)
+    await settleTooltip()
+
+    // +N 折叠标签：无 is-closable，且其文案不对应任何单个探针候选 → 不产生 Tooltip
+    const collapseTag = wrapper
+      .findAll('.dss-client-select .el-tag')
+      .find((t) => /^\s*\+\s*\d+\s*$/.test(t.text()))!
+    expect(collapseTag.classes()).not.toContain('is-closable')
+    hover(collapseTag.element)
+    await settleTooltip()
+    expect(tooltipEl()).toBeNull()
+    wrapper.unmount()
+  })
+
+  it('快速在两个候选间移动：任意时刻至多一个可见实例（不叠加）', async () => {
+    const wrapper = await mountTtBar({
+      clients: [
+        { id: 'C1', desc: LONG_DESC, active: true },
+        { id: 'C2', desc: 'D'.repeat(23), active: true },
+      ],
+    })
+    await openSelect(wrapper, 0)
+    const first = optionRow(clientPopper(), `C1（${'长'.repeat(20)}...）`)
+    const second = optionRow(clientPopper(), `C2（${'D'.repeat(20)}...）`)
+    hover(first)
+    await settleTooltip()
+    expect(document.body.querySelectorAll('.dss-q-tt')).toHaveLength(1)
+    hover(second)
+    await settleTooltip()
+    expect(document.body.querySelectorAll('.dss-q-tt')).toHaveLength(1)
+    expect(tooltipEl()!.textContent).toBe('D'.repeat(23))
+    wrapper.unmount()
+  })
+
+  it('鼠标移出锚点即隐藏；移出到同一锚点内部不隐藏', async () => {
+    const wrapper = await mountTtBar({ clients: [{ id: 'C1', desc: LONG_DESC, active: true }] })
+    await openSelect(wrapper, 0)
+    const row = optionRow(clientPopper(), `C1（${'长'.repeat(20)}...）`)
+    hover(row)
+    await settleTooltip()
+    expect(tooltipEl()).toBeTruthy()
+    // 在同一锚点内部移动：仍保持可见
+    unhover(row, row)
+    await settleTooltip()
+    expect(tooltipEl()).toBeTruthy()
+    // 移出锚点：隐藏
+    unhover(row, document.body)
+    await settleTooltip()
+    expect(tooltipEl()).toBeNull()
+    wrapper.unmount()
+  })
+
+  it('卸载后不再响应文档级悬停事件（不残留监听器）', async () => {
+    const wrapper = await mountTtBar({ clients: [{ id: 'C1', desc: LONG_DESC, active: true }] })
+    await openSelect(wrapper, 0)
+    const row = optionRow(clientPopper(), `C1（${'长'.repeat(20)}...）`)
+    hover(row)
+    await settleTooltip()
+    expect(tooltipEl()).toBeTruthy()
+    wrapper.unmount()
+    // Teleport 宿主随组件卸载移除
+    expect(tooltipEl()).toBeNull()
+    // 卸载后再出现“结构上命中锚点选择器”的节点：若文档级监听器未移除，会重新弹出 Tooltip
+    const zombie = document.createElement('div')
+    zombie.className = 'dss-client-popper'
+    const zombieRow = document.createElement('div')
+    zombieRow.className = 'el-select-dropdown__item'
+    zombieRow.textContent = `C1（${'长'.repeat(20)}...）`
+    zombie.appendChild(zombieRow)
+    document.body.appendChild(zombie)
+    hover(zombieRow)
+    await settleTooltip()
+    expect(tooltipEl()).toBeNull()
+    zombie.remove()
+  })
+
+  it('不产生额外请求：悬停/隐藏 Tooltip 全程 0 次 query 事件', async () => {
+    const wrapper = await mountTtBar({ clients: [{ id: 'C1', desc: LONG_DESC, active: true }] })
+    await openSelect(wrapper, 0)
+    const row = optionRow(clientPopper(), `C1（${'长'.repeat(20)}...）`)
+    hover(row)
+    await settleTooltip()
+    unhover(row)
+    await settleTooltip()
+    expect(wrapper.emitted('query')).toBeUndefined()
+    wrapper.unmount()
+  })
+
+  it('Tooltip 宿主 Teleport 到 body、不在查询栏子树内（position:fixed 不参与查询栏布局）', async () => {
+    const wrapper = await mountTtBar({ clients: [{ id: 'C1', desc: LONG_DESC, active: true }] })
+    await openSelect(wrapper, 0)
+    hover(optionRow(clientPopper(), `C1（${'长'.repeat(20)}...）`))
+    await settleTooltip()
+    const tt = tooltipEl()!
+    expect(wrapper.find('.dss-q-tt').exists()).toBe(false)
+    expect(tt.closest('.dss-query-bar')).toBeNull()
+    wrapper.unmount()
+  })
+
+  it('类名与页面级表格 Tooltip 独立：不使用 dss-single-tooltip（不污染表格 Tooltip 规则）', async () => {
+    const wrapper = await mountTtBar({ clients: [{ id: 'C1', desc: LONG_DESC, active: true }] })
+    await openSelect(wrapper, 0)
+    hover(optionRow(clientPopper(), `C1（${'长'.repeat(20)}...）`))
+    await settleTooltip()
+    expect(document.body.querySelector('.dss-single-tooltip')).toBeNull()
+    expect(tooltipEl()!.classList.contains('dss-q-tt')).toBe(true)
+    wrapper.unmount()
+  })
+})
+
+describe('DataSourceSnapshotQueryBar 查询控件外部几何锁（DSS-REQ-084，AC-096/097/103）', () => {
+  it('源码字面量契约：三个下拉框锁定 width/min-width/max-width/flex-basis 为 240/300/200', () => {
+    const src = queryBarSource()
+    for (const [cls, w] of [
+      ['dss-client-select', 240],
+      ['dss-source-select', 300],
+      ['dss-status-select', 200],
+    ] as const) {
+      // 既有 width 契约保持不变
+      expect(src).toMatch(new RegExp(`\\.${cls}\\s*\\{\\s*width:\\s*${w}px;\\s*\\}`, 's'))
+      // 本轮新增外部几何锁
+      expect(src).toMatch(
+        new RegExp(`\\.${cls}\\s*\\{\\s*min-width:\\s*${w}px;\\s*max-width:\\s*${w}px;\\s*flex:\\s*0 0 ${w}px;\\s*\\}`, 's'),
+      )
+    }
+  })
+
+  it('源码字面量契约：内部可收缩区域显式 min-width: 0（三个下拉框的 selection）', () => {
+    const src = queryBarSource()
+    const block = src.match(
+      /\.dss-client-select :deep\(\.el-select__selection\),[\s\S]*?\.dss-status-select :deep\(\.el-select__selection\)\s*\{[^}]*\}/,
+    )?.[0]
+    expect(block).toBeTruthy()
+    expect(block).toMatch(/min-width:\s*0/)
+  })
+
+  it('不使用 JS 尺寸监听、不按内容长度动态改宽度（不靠脚本维持稳定）', () => {
+    const src = queryBarSource()
+    expect(src).not.toMatch(/ResizeObserver/)
+    expect(src).not.toMatch(/window\.addEventListener\(\s*['"]resize/)
+    expect(src).not.toMatch(/style\.width\s*=/)
+    expect(src).not.toMatch(/offsetWidth\s*[=+]/)
+  })
+
+  it('三个控件保留 Feature 专属 popper-class，不引入全局 Element Plus 覆写', () => {
+    const src = queryBarSource()
+    expect(src).toContain('popper-class="dss-client-popper"')
+    expect(src).toContain('popper-class="dss-source-popper"')
+    expect(src).toContain('popper-class="dss-status-popper"')
+    // 非 scoped 样式块中不得出现裸 .el-select / .el-select__wrapper 覆写（必须挂在本 Feature 命名空间下）
+    expect(src).not.toMatch(/^\s*\.el-select\s*\{/m)
+    expect(src).not.toMatch(/^\s*\.el-select__wrapper/m)
+  })
+
+  it('文本兜底仍在：三个控件的 tags-text 保留 text-overflow:ellipsis 作为最后保护（DSS-REQ-084④）', () => {
+    const src = queryBarSource()
+    const block = src.match(
+      /\.dss-client-select :deep\(\.el-select__tags-text\),[\s\S]*?\.dss-status-select :deep\(\.el-select__tags-text\)\s*\{[^}]*\}/,
+    )?.[0]
+    expect(block).toBeTruthy()
+    expect(block).toMatch(/text-overflow:\s*ellipsis/)
+  })
+
+  it('Tooltip 安全最大宽度契约：min(480px, calc(100vw - 16px)) 且自然换行、不可交互、fixed 定位', () => {
+    const src = queryBarSource()
+    const block = src.match(/\.dss-q-tt\s*\{[^}]*\}/s)?.[0]
+    expect(block).toBeTruthy()
+    expect(block).toMatch(/max-width:\s*min\(480px,\s*calc\(100vw - 16px\)\)/)
+    expect(block).toMatch(/position:\s*fixed/)
+    expect(block).toMatch(/pointer-events:\s*none/)
+    expect(block).toMatch(/overflow-wrap:\s*anywhere/)
+  })
+
+  it('内容长度不同不改变 query 草稿语义：三个字段的“全部”默认态仍为 ALL_OPTION', async () => {
+    const wrapper = await mountBar()
+    expect(wrapper.findAll('.dss-client-select')).toHaveLength(1)
+    await queryButton(wrapper).trigger('click')
+    const draft = wrapper.emitted('query')![0]![0] as { clients: string[]; sources: string[]; statuses: string[] }
+    expect(draft).toEqual({ clients: [ALL_OPTION], sources: [ALL_OPTION], statuses: [ALL_OPTION] })
     wrapper.unmount()
   })
 })
