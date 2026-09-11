@@ -73,12 +73,12 @@
 | 本轮（查询下拉固定宽度基线草案）任务编号 | `DATA-SOURCE-SNAPSHOT-STATUS-SELECT-POPPER-FIXED-WIDTH-BASELINE-001`（把项目负责人已在 `5174` 隔离固定宽度 prototype 中人工确认“没有问题”并明确批准执行的三个查询下拉弹层固定宽度方案固化为 Feature 文档规则；**纯文档草案，只建立文档草案，不修改代码、不批准草案、不执行正式验收**，设计落点见 §27） |
 | 本轮（查询下拉固定宽度基线草案）授权基线提交 | `2a9a271690bfdc68b16772268e84928a33abdeda`（本任务开始时 `origin/develop` 最新提交，且等于 `git ls-remote origin refs/heads/develop`；本任务在独立文档 worktree 的该提交上工作） |
 | 本轮（查询下拉固定宽度基线草案）驱动来源 | 项目负责人对“查询下拉框固定宽度”隔离视觉 prototype（独立 worktree，探针端 `480px`、源库 `400px`、快照状态 `240px`）进行真实浏览器多视口/多状态人工查看后明确回复“我检查过了，没有问题”“批准，按照你的方案执行吧”（`prototype_width_decision_status=APPROVED_BY_PROJECT_OWNER`） |
-| 本轮（查询下拉固定宽度基线草案）设计内容状态 | `DRAFT_PENDING_CHATGPT_REVIEW_AND_PROJECT_OWNER_APPROVAL`（`popper_width_document_status=DRAFT_PENDING_CHATGPT_REVIEW_AND_PROJECT_OWNER_APPROVAL`：本文件 §27 新增设计记录与 `REQUIREMENTS.md` §21.8 `DSS-REQ-087`、`ACCEPTANCE.md` §4.22 `DSS-AC-104~107` 均为**草案内容**，须待 ChatGPT 从 Git 复审后再由项目负责人批准；**不得**写成 `APPROVED`/`IMPLEMENTED`/`PASS`/`ACCEPTED`） |
+| 本轮（查询下拉固定宽度基线草案）设计内容状态 | `DRAFT_PENDING_CHATGPT_REVIEW_AND_PROJECT_OWNER_APPROVAL`（`popper_width_document_status=DRAFT_PENDING_CHATGPT_REVIEW_AND_PROJECT_OWNER_APPROVAL`：本文件 §27 新增设计记录与 `REQUIREMENTS.md` §21.8 `DSS-REQ-087`、`ACCEPTANCE.md` §4.22 `DSS-AC-104~107` 均为**草案内容**，须待 ChatGPT 从 Git 复审后再由项目负责人批准，本草案当前 `pending_user_review=YES`、`pending_user_confirmation_count=0`、`human_formal_5173_review_status=NOT_RUN_FOR_THIS_ADJUSTMENT`（`YES` 表示文档批准动作仍待项目负责人完成、`0` 表示无待澄清业务选项，二者不冲突）；**不得**写成 `APPROVED`/`IMPLEMENTED`/`PASS`/`ACCEPTED`） |
 | 本轮（查询下拉固定宽度基线草案）popper 固定宽度数值 | 探针端 `480px`、源库 `400px`、快照状态 `240px`；小视口安全上界统一为 `min(目标宽度, calc(100vw - 16px))`（`client_popper_width_px=480`、`source_popper_width_px=400`、`status_popper_width_px=240`、`viewport_safe_width_rule=MIN_TARGET_OR_100VW_MINUS_16PX`） |
 | 本轮（查询下拉固定宽度基线草案）原型决策状态 | `APPROVED_BY_PROJECT_OWNER`（`prototype_width_decision_status=APPROVED_BY_PROJECT_OWNER`：项目负责人已在隔离固定宽度 prototype 上人工确认三档宽度无问题并批准按该方案执行；该认可只针对 prototype 宽度方案本身，**不代表** `5173` 正式实现已完成、**不代表**本草案已批准、**不代表**正式验收已执行或通过） |
 | 本轮（查询下拉固定宽度基线草案）正式实现状态 | `PENDING_FORMAL_IMPLEMENTATION_ON_5173`（`popper_width_formal_5173_implementation_status=PENDING_FORMAL_IMPLEMENTATION_ON_5173`、`popper_width_formal_code_review_status=NOT_RUN`；本轮只固化文档规则，**不得**把 prototype 代码拷入 `5173`、**不得**对 `frontend/**`/`backend/**` 做任何修改） |
 | 本轮（查询下拉固定宽度基线草案）追踪计数 | 需求 → 设计落点 **87/87**（§14.2）、验收 → 设计落点 **107/107**（§14.3）；新增 `DSS-AC-104~107` 全部 `NOT_RUN` |
-| 本轮（查询下拉固定宽度基线草案）下一入口 | `CHATGPT_POPPER_WIDTH_BASELINE_REVIEW_FROM_GIT_THEN_PROJECT_OWNER_DOCUMENT_APPROVAL`（ChatGPT 从远程 Git 复审本草案，随后项目负责人对文档批准；**不得**在本任务执行正式验收、**不得**在 `5173` 正式前端实现本轮规则、107 条验收保持 `NOT_RUN`） |
+| 本轮（查询下拉固定宽度基线草案）下一入口 | `CHATGPT_POPPER_WIDTH_BASELINE_R1_REVIEW_FROM_GIT_THEN_PROJECT_OWNER_DOCUMENT_APPROVAL`（ChatGPT 从远程 Git 复审本草案，随后项目负责人对文档批准；**不得**在本任务执行正式验收、**不得**在 `5173` 正式前端实现本轮规则、107 条验收保持 `NOT_RUN`） |
 | 数据库事实依据 | `docs/database/reports/DATA-SOURCE-SNAPSHOT-STATUS-DATABASE-VERIFICATION-001.md`（已提交数据库只读复核报告；本设计任务未连接数据库，见 DATABASE §2） |
 
 任务边界声明：
@@ -1111,10 +1111,10 @@ ChatGPT 对上一结果提交（`31aa9f5beec7ded3cd798b3af617fd79a1606ed0`）进
 
 ### 27.5 宽度不变性（不依赖内容、选中字重与滚动条）
 
-弹层外层宽度必须在下列全部状态中保持不变（相邻状态宽度差为 `0`）：初始“全部”、选中最短候选、选中最长候选、短↔长切换、多选并 `collapse-tags`、取消最长候选、清空/重置、打开/关闭面板、Tooltip 显示/隐藏、纵向滚动条出现/消失。具体不得作为宽度输入的因素：
+弹层外层宽度必须在下列全部状态中保持不变（相邻状态宽度差为 `0`）：初始“全部”、选中最短候选、选中最长候选、短↔长切换、多选并 `collapse-tags`、取消最长候选、清空/重置、打开/关闭面板、Tooltip 显示/隐藏、纵向滚动条出现/消失。**关闭态测量口径**：关闭后 Element Plus 可能隐藏或销毁 Teleport popper，关闭态不存在可测量的外层可见边界，故“打开/关闭面板”的正确验证为——面板打开且可见时测量外层 `.el-popper`、关闭面板并确认其已隐藏或销毁（**不要求**在关闭态测量宽度）、再次打开面板后重新测量，且重新打开后的宽度必须与关闭前相同（差为 `0`）。具体不得作为宽度输入的因素：
 
 - 候选项文本长度与内容；
-- 已选项的 `font-weight`——`DSS-REQ-036` 相关选中项 `is-selected` 默认 `font-weight: 700` **保留**，但因固定了外层 `width/min-width/max-width`，不得再改变弹层宽度（此为 `DSS-REQ-087` 相对既有选中强调规则的几何不变性补充）；
+- 已选项的 `font-weight`——Element Plus 下拉候选 `.el-select-dropdown__item.is-selected` 的既有选中强调样式（实测 `font-weight: 700`）**保留**，但该样式**不得**影响外层 popper 宽度；因固定了外层 `width/min-width/max-width`，不得再改变弹层宽度（此为 `DSS-REQ-087` 的几何不变性补充）；
 - 纵向滚动条出现/消失对弹层外侧宽度的挤占。
 
 ### 27.6 内外层关系与实现边界
@@ -1132,7 +1132,7 @@ ChatGPT 对上一结果提交（`31aa9f5beec7ded3cd798b3af617fd79a1606ed0`）进
 | `1700×920` | `480px` | `400px` | `240px` | 同上 |
 | `1920×1080` | `480px` | `400px` | `240px` | 同上 |
 | `2560×1440` | `480px` | `400px` | `240px` | 同上 |
-| 窄视口（`< 目标宽度 + 16px`） | `min(480px, calc(100vw - 16px))` | `min(400px, calc(100vw - 16px))` | `min(240px, calc(100vw - 16px))` | 弹层不越出视口；无水平滚动/溢出 |
+| 窄视口（探针端 `<496px`、源库 `<416px`、快照状态 `<256px`；也可用单个 `<256px` 可控 viewport 一次覆盖三者） | `min(480px, calc(100vw - 16px))` | `min(400px, calc(100vw - 16px))` | `min(240px, calc(100vw - 16px))` | 弹层不越出视口、不产生水平滚动/溢出；阈值数学：相应视口下 `100vw - 16px` 分别小于 `480px`/`400px`/`240px`，故实际外层宽度 = `viewportWidth − 16px`（小于常量目标宽度） |
 
 > 表中数值为设计口径；正式验收须在 `5173` 正式实现后用真实浏览器几何测量（`getBoundingClientRect()`）客观复核，见 `ACCEPTANCE.md` §4.22 `DSS-AC-104~107`。prototype 自测结果仅为设计验证证据。
 
@@ -1141,13 +1141,13 @@ ChatGPT 对上一结果提交（`31aa9f5beec7ded3cd798b3af617fd79a1606ed0`）进
 - **状态机不变**：选择、取消、清空、重置、打开/关闭只修改查询草稿、不发送请求；只有点击“查询”才按草稿发起查询；自动刷新、立即刷新继续使用已应用条件；单飞行、busy、失败保留旧结果、页面不可见冻结与恢复规则不变（与 `DSS-REQ-023/025/050~054` 一致）。
 - **截断与 Tooltip 不变**：四字段 20 Unicode code point 截断（`DSS-REQ-085`）与 `CLIENT_DESC` 完整 Tooltip（`DSS-REQ-086`）逻辑、内容与单实例语义不变；完整原始 ID/`value` 与查询参数不变；表格级 Tooltip（含源库表格只显示完整原始 `DATA_SOURCE_ID`）不变。
 - **表格与页面视觉不变**：本规则只固定下拉弹层宽度，不改表格列宽模型、行高、时间展示、状态标签、未知行背景、刷新按钮宽度等既有已批准视觉。
-- **接口/数据库不变**：不改 API 路径/方法/参数/响应字段、不改 SQL/表结构/索引/约束/只读边界（`API.md`/`DATABASE.md` 整文件零差异）。
+- **接口/数据库不变**：不改 API 路径/方法/参数/响应字段、不改 SQL/表结构/索引/约束/只读边界——`API.md` 与 `DATABASE.md` 在本 baseline 草案任务中仅同步 §1 组合计数、分层状态、下一入口及简短说明，API 业务契约与 §9 映射表逐字节不变、DATABASE 查询设计业务正文逐字节不变。
 
 ### 27.9 追踪与自检
 
 - 编号：`DSS-REQ-087` 连续、无重号、无复用；`DSS-AC-104~107` 连续、无重号、无复用；既有 `DSS-REQ-001~086`、`DSS-AC-001~103` 编号与业务行**不变**（`existing_requirements_business_row_change_status=ZERO`、`existing_acceptance_business_row_change_status=ZERO`）。
 - 矩阵：§14.2 需求 → 设计落点 **87/87**、§14.3 验收 → 设计落点 **107/107**，双向映射无悬空（映射矩阵见 `ACCEPTANCE.md` §5：`DSS-REQ-087`↔`DSS-AC-104/105/106/107`）。
 - 验收状态：`DSS-AC-001~107` 共 107 条**全部 `NOT_RUN`**、`acceptance_not_run_count=107`；本轮草案**未批准**，禁止把草案写成 `APPROVED`/`IMPLEMENTED`/`ACCEPTED`/`COMPLETED`，也不得把任何验收写成 `PASS`。
-- 代码零差异：本轮不产生 `frontend/`/`backend/`/SQL/配置差异（`frontend_code_diff=ZERO`、`backend_code_diff=ZERO`）；`API.md`/`DATABASE.md` 与既有历史报告整文件逐字节不变；不提交 runtime logs/截图/构建产物/依赖目录/临时文件。
-- 分层状态：`prototype_width_decision_status=APPROVED_BY_PROJECT_OWNER`、`popper_width_document_status=DRAFT_PENDING_CHATGPT_REVIEW_AND_PROJECT_OWNER_APPROVAL`、`popper_width_formal_5173_implementation_status=PENDING_FORMAL_IMPLEMENTATION_ON_5173`、`popper_width_formal_code_review_status=NOT_RUN`、`formal_acceptance_status=NOT_RUN`。
-- 下一入口：`CHATGPT_POPPER_WIDTH_BASELINE_REVIEW_FROM_GIT_THEN_PROJECT_OWNER_DOCUMENT_APPROVAL`（ChatGPT 从远程 Git 复审本草案，随后项目负责人对文档批准；**不得**在本任务执行正式验收、**不得**在 `5173` 正式前端实现本轮规则）。
+- 代码零差异：本轮不产生 `frontend/`/`backend/`/SQL/配置差异（`frontend_code_diff=ZERO`、`backend_code_diff=ZERO`）；`API.md` 与 `DATABASE.md` 在本 baseline 草案任务中仅同步 §1 组合计数、分层状态、下一入口及简短说明（API 业务契约与 §9 映射表逐字节不变、DATABASE 查询设计业务正文逐字节不变），既有历史报告不变；不提交 runtime logs/截图/构建产物/依赖目录/临时文件。
+- 分层状态：`prototype_width_decision_status=APPROVED_BY_PROJECT_OWNER`、`popper_width_document_status=DRAFT_PENDING_CHATGPT_REVIEW_AND_PROJECT_OWNER_APPROVAL`、`popper_width_formal_5173_implementation_status=PENDING_FORMAL_IMPLEMENTATION_ON_5173`、`popper_width_formal_code_review_status=NOT_RUN`、`formal_acceptance_status=NOT_RUN`、`human_formal_5173_review_status=NOT_RUN_FOR_THIS_ADJUSTMENT`、`pending_user_review=YES`、`pending_user_confirmation_count=0`（文档批准动作仍待项目负责人完成，无待澄清业务选项）。
+- 下一入口：`CHATGPT_POPPER_WIDTH_BASELINE_R1_REVIEW_FROM_GIT_THEN_PROJECT_OWNER_DOCUMENT_APPROVAL`（ChatGPT 从远程 Git 复审本草案，随后项目负责人对文档批准；**不得**在本任务执行正式验收、**不得**在 `5173` 正式前端实现本轮规则）。

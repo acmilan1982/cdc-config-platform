@@ -121,7 +121,7 @@
 
 - **未在 `5173` 实现**：`popper_width_formal_5173_implementation_status=PENDING_FORMAL_IMPLEMENTATION_ON_5173`；原型代码未复制进 `5173`。
 - **未执行正式验收**：`formal_acceptance_status=NOT_RUN`，107 条 `DSS-AC-001~107` 全部 `NOT_RUN`、`acceptance_not_run_count=107`；未把任何原型/开发自测写成 `PASS`。
-- **未代替项目负责人批准文档**：`popper_width_document_status=DRAFT_PENDING_CHATGPT_REVIEW_AND_PROJECT_OWNER_APPROVAL`、`pending_user_review=NO`、`pending_user_confirmation_count=0`；未把草案写成 `APPROVED`。
+- **未代替项目负责人批准文档**：`popper_width_document_status=DRAFT_PENDING_CHATGPT_REVIEW_AND_PROJECT_OWNER_APPROVAL`、`pending_user_review=YES`、`pending_user_confirmation_count=0`；未把草案写成 `APPROVED`。
 - **未做代码复审**：`popper_width_formal_code_review_status=NOT_RUN`。
 - 未运行测试/构建/浏览器验证；未启动或停止 `5173`/`5174`/`8080`；未访问数据库、ZooKeeper、Kafka；未创建通用 `QUERY-LIST-PAGE-UI-PATTERN`。
 
@@ -134,5 +134,5 @@
 - `formal_acceptance_status=NOT_RUN`、`acceptance_not_run_count=107`
 - `human_formal_5173_review_status=NOT_RUN_FOR_THIS_ADJUSTMENT`
 - `existing_requirements_business_row_change_status=ZERO`、`existing_acceptance_business_row_change_status=ZERO`
-- `pending_user_review=NO`、`pending_user_confirmation_count=0`
-- 下一入口：`CHATGPT_POPPER_WIDTH_BASELINE_REVIEW_FROM_GIT_THEN_PROJECT_OWNER_DOCUMENT_APPROVAL`（ChatGPT 从远程 Git 对本草案独立复审，复审通过后由项目负责人决定是否批准；批准前不得开始 `5173` 正式实现）。
+- `pending_user_review=YES`、`pending_user_confirmation_count=0`
+- 下一入口：`CHATGPT_POPPER_WIDTH_BASELINE_R1_REVIEW_FROM_GIT_THEN_PROJECT_OWNER_DOCUMENT_APPROVAL`（ChatGPT 从远程 Git 对本草案独立复审，复审通过后由项目负责人决定是否批准；批准前不得开始 `5173` 正式实现）。
