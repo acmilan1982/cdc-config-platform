@@ -671,6 +671,75 @@ describe('DataSourceSnapshotQueryBar 四字段统一字段级截断（DSS-REQ-08
   })
 })
 
+describe('DataSourceSnapshotQueryBar 四字段先 trim 再 20 码点截断（R1 §5/§5.1，DSS-REQ-085）', () => {
+  it('四个展示字段（CLIENT_ID / CLIENT_DESC / DATA_SOURCE_ORG / DATA_SOURCE_ID）共用同一规则：先 trim 再截断', async () => {
+    const wrapper = await mountBar({
+      clients: [{ id: `  ${'I'.repeat(22)}  `, desc: `  ${'D'.repeat(22)}  `, active: true }],
+      sources: [{ id: `  ${'S'.repeat(22)}  `, org: `  ${'源'.repeat(22)}  `, active: true }],
+    })
+    await openSelect(wrapper, 0)
+    const clientLabel = `${'I'.repeat(20)}...（${'D'.repeat(20)}...）`
+    expect(optionRow(clientPopper(), clientLabel).textContent!.trim()).toBe(clientLabel)
+
+    await openSelect(wrapper, 1)
+    const sourceLabel = `${'源'.repeat(20)}...（${'S'.repeat(20)}...）`
+    expect(optionRow(sourcePopper(), sourceLabel).textContent!.trim()).toBe(sourceLabel)
+    wrapper.unmount()
+  })
+
+  it('首尾空白被 trim：trim 前超 20、trim 后恰好 20 时完整显示、不追加省略号', async () => {
+    const id = `   ${'T'.repeat(20)}   `
+    const wrapper = await mountBar({ clients: [{ id, desc: null, active: true }] })
+    await openSelect(wrapper, 0)
+    const row = optionRow(clientPopper(), 'T'.repeat(20))
+    expect(row.textContent!.trim()).toBe('T'.repeat(20))
+    expect(row.textContent).not.toContain('...')
+    wrapper.unmount()
+  })
+
+  it('trim 只影响显示：带首尾空白的原始 ID 仍是完整选项 value 与查询参数', async () => {
+    const id = `  ${'U'.repeat(22)}  `
+    const wrapper = await mountBar({ clients: [{ id, desc: null, active: true }] })
+    await openSelect(wrapper, 0)
+    const label = 'U'.repeat(20) + '...'
+    const row = optionRow(clientPopper(), label)
+    expect(row.getAttribute('data-dss-client-id')).toBe(id)
+    await clickOption(clientPopper(), label)
+    await queryButton(wrapper).trigger('click')
+    expect((wrapper.emitted('query')![0]![0] as { clients: string[] }).clients).toEqual([id])
+    wrapper.unmount()
+  })
+
+  it('CLIENT_DESC 纯空白 trim 后为空：只显示处理后的 ID，不出现空括号', async () => {
+    const wrapper = await mountBar({ clients: [{ id: 'CL1', desc: '    ', active: true }] })
+    await openSelect(wrapper, 0)
+    const row = optionRow(clientPopper(), 'CL1')
+    expect(row.textContent!.trim()).toBe('CL1')
+    expect(row.textContent).not.toContain('（')
+    wrapper.unmount()
+  })
+
+  it('DATA_SOURCE_ORG 纯空白 trim 后为空：回退显示处理后的 DATA_SOURCE_ID，不出现空括号', async () => {
+    const wrapper = await mountBar({ sources: [{ id: '  DS1  ', org: '   ', active: true }] })
+    await openSelect(wrapper, 1)
+    const row = optionRow(sourcePopper(), 'DS1')
+    expect(row.textContent!.trim()).toBe('DS1')
+    expect(row.textContent).not.toContain('（')
+    wrapper.unmount()
+  })
+
+  it('组合标签不是整体截断：ID 与描述各自独立 trim + 20 码点截断', async () => {
+    // 组合串整体共 44 码点，若整体截断会得到 20 码点；分字段截断则应两段各保留 20 码点 + ...
+    const wrapper = await mountBar({
+      clients: [{ id: 'B'.repeat(21), desc: 'D'.repeat(21), active: true }],
+    })
+    await openSelect(wrapper, 0)
+    const label = `${'B'.repeat(20)}...（${'D'.repeat(20)}...）`
+    expect(optionRow(clientPopper(), label).textContent!.trim()).toBe(label)
+    wrapper.unmount()
+  })
+})
+
 describe('DataSourceSnapshotQueryBar CLIENT_DESC 完整 Tooltip（DSS-REQ-086，AC-100/101/102/103）', () => {
   // Tooltip 宿主 Teleport 到 body：每个用例前清掉可能残留的实例，避免跨用例误判“至多一个”。
   beforeEach(() => {
@@ -910,6 +979,201 @@ describe('DataSourceSnapshotQueryBar CLIENT_DESC 完整 Tooltip（DSS-REQ-086，
   })
 })
 
+describe('DataSourceSnapshotQueryBar Tooltip 稳定身份与截断标签碰撞（R1 §6.1/§6.2/§6.3，DSS-REQ-086）', () => {
+  beforeEach(() => {
+    document.body.querySelectorAll('.dss-q-tt').forEach((n) => n.remove())
+  })
+  afterEach(() => {
+    while (hosts.length) hosts.pop()!.remove()
+  })
+
+  /** 两个探针：trim + 20 码点截断后可见标签逐字相同，但原始 CLIENT_ID 与完整 CLIENT_DESC 均不同。 */
+  const COL_ID_A = `${'P'.repeat(20)}AAA`
+  const COL_ID_B = `${'P'.repeat(20)}BBB`
+  const COL_DESC_A = `${'D'.repeat(20)}AAA`
+  const COL_DESC_B = `${'D'.repeat(20)}BBB`
+  const COLLIDING_CLIENTS: ClientCandidate[] = [
+    { id: COL_ID_A, desc: COL_DESC_A, active: true },
+    { id: COL_ID_B, desc: COL_DESC_B, active: true },
+  ]
+  const COLLIDING_LABEL = `${'P'.repeat(20)}...（${'D'.repeat(20)}...）`
+
+  function clientRows(): HTMLElement[] {
+    return Array.from(clientPopper().querySelectorAll('.el-select-dropdown__item')) as HTMLElement[]
+  }
+
+  it('前提复核：两个探针的可见标签确实碰撞（逐字相同），而原始 ID / 完整描述互不相同', async () => {
+    const wrapper = await mountTtBar({ clients: COLLIDING_CLIENTS })
+    await openSelect(wrapper, 0)
+    const rows = clientRows()
+    expect(rows[1]!.textContent!.trim()).toBe(COLLIDING_LABEL)
+    expect(rows[2]!.textContent!.trim()).toBe(COLLIDING_LABEL)
+    expect(COL_ID_A).not.toBe(COL_ID_B)
+    expect(COL_DESC_A).not.toBe(COL_DESC_B)
+    wrapper.unmount()
+  })
+
+  it('候选行携带原始完整 CLIENT_ID 作为私有稳定身份（不依赖显示文字）', async () => {
+    const wrapper = await mountTtBar({ clients: COLLIDING_CLIENTS })
+    await openSelect(wrapper, 0)
+    const rows = clientRows()
+    expect(rows[0]!.getAttribute('data-dss-client-id')).toBe(ALL_OPTION)
+    expect(rows[1]!.getAttribute('data-dss-client-id')).toBe(COL_ID_A)
+    expect(rows[2]!.getAttribute('data-dss-client-id')).toBe(COL_ID_B)
+    wrapper.unmount()
+  })
+
+  it('可见已选项同样携带原始完整 CLIENT_ID（Element Plus label slot 提供的原始 option value）', async () => {
+    const wrapper = await mountTtBar({ clients: COLLIDING_CLIENTS })
+    await openSelect(wrapper, 0)
+    clientRows()[1]!.click()
+    await nextTick()
+    await nextTick()
+    const holder = wrapper.find('.dss-client-select .el-tag.is-closable [data-dss-client-id]')
+    expect(holder.exists()).toBe(true)
+    expect(holder.attributes('data-dss-client-id')).toBe(COL_ID_A)
+    wrapper.unmount()
+  })
+
+  it('碰撞候选分别悬停：各自显示自己的完整描述，互不串号', async () => {
+    const wrapper = await mountTtBar({ clients: COLLIDING_CLIENTS })
+    await openSelect(wrapper, 0)
+    const rows = clientRows()
+
+    hover(rows[1]!)
+    await settleTooltip()
+    expect(tooltipEl()!.textContent).toBe(COL_DESC_A)
+    unhover(rows[1]!)
+    await settleTooltip()
+
+    hover(rows[2]!)
+    await settleTooltip()
+    expect(tooltipEl()!.textContent).toBe(COL_DESC_B)
+    expect(tooltipEl()!.textContent).not.toContain('AAA')
+    unhover(rows[2]!)
+    await settleTooltip()
+    expect(tooltipEl()).toBeNull()
+    wrapper.unmount()
+  })
+
+  it('碰撞候选分别选中：可见已选项 Tooltip 仍对应正确探针（不因标签碰撞而失效或串号）', async () => {
+    const wrapper = await mountTtBar({ clients: COLLIDING_CLIENTS })
+    await openSelect(wrapper, 0)
+    clientRows()[1]!.click()
+    await nextTick()
+    await nextTick()
+
+    const tag = wrapper.find('.dss-client-select .el-tag.is-closable').element
+    hover(tag)
+    await settleTooltip()
+    expect(tooltipEl()!.textContent).toBe(COL_DESC_A)
+
+    // 追加选中第二个碰撞探针：可见标签仍是首个选中项，Tooltip 必须仍为 A 的完整描述
+    await openSelect(wrapper, 0)
+    clientRows()[2]!.click()
+    await nextTick()
+    await nextTick()
+    const collapseTag = wrapper.find('.dss-client-select .el-tag.is-closable')
+    expect(collapseTag.find('[data-dss-client-id]').attributes('data-dss-client-id')).toBe(COL_ID_A)
+    hover(collapseTag.element)
+    await settleTooltip()
+    expect(document.body.querySelectorAll('.dss-q-tt')).toHaveLength(1)
+    expect(tooltipEl()!.textContent).toBe(COL_DESC_A)
+    wrapper.unmount()
+  })
+
+  it('碰撞探针快速交替悬停：任意时刻至多一个实例，内容随锚点正确切换', async () => {
+    const wrapper = await mountTtBar({ clients: COLLIDING_CLIENTS })
+    await openSelect(wrapper, 0)
+    const rows = clientRows()
+    hover(rows[1]!)
+    await settleTooltip()
+    expect(document.body.querySelectorAll('.dss-q-tt')).toHaveLength(1)
+    hover(rows[2]!)
+    await settleTooltip()
+    expect(document.body.querySelectorAll('.dss-q-tt')).toHaveLength(1)
+    expect(tooltipEl()!.textContent).toBe(COL_DESC_B)
+    hover(rows[1]!)
+    await settleTooltip()
+    expect(document.body.querySelectorAll('.dss-q-tt')).toHaveLength(1)
+    expect(tooltipEl()!.textContent).toBe(COL_DESC_A)
+    wrapper.unmount()
+  })
+
+  it('Tooltip 内容为 trim 后的完整描述：不截断、不保留首尾无意义空白', async () => {
+    const desc = `   ${'长'.repeat(25)}   `
+    const wrapper = await mountTtBar({ clients: [{ id: 'C1', desc, active: true }] })
+    await openSelect(wrapper, 0)
+    hover(optionRow(clientPopper(), `C1（${'长'.repeat(20)}...）`))
+    await settleTooltip()
+    expect(tooltipEl()!.textContent).toBe('长'.repeat(25))
+    expect(tooltipEl()!.textContent).not.toContain(' ')
+    wrapper.unmount()
+  })
+
+  it('判定基于 trim 后的码点数：trim 前 >20 但 trim 后恰好 20 → 无 Tooltip', async () => {
+    const desc = `   ${'长'.repeat(20)}   `
+    const wrapper = await mountTtBar({ clients: [{ id: 'C1', desc, active: true }] })
+    await openSelect(wrapper, 0)
+    hover(optionRow(clientPopper(), `C1（${'长'.repeat(20)}）`))
+    await settleTooltip()
+    expect(tooltipEl()).toBeNull()
+    wrapper.unmount()
+  })
+
+  it('判定基于 trim 后的码点数：trim 后 21 → 显示 Tooltip，且内容为 trim 后的 21 码点全文', async () => {
+    const desc = `  ${'长'.repeat(21)}  `
+    const wrapper = await mountTtBar({ clients: [{ id: 'C1', desc, active: true }] })
+    await openSelect(wrapper, 0)
+    hover(optionRow(clientPopper(), `C1（${'长'.repeat(20)}...）`))
+    await settleTooltip()
+    expect(tooltipEl()!.textContent).toBe('长'.repeat(21))
+    wrapper.unmount()
+  })
+
+  it('纯空白候选描述不产生 Tooltip（trim 后为空）', async () => {
+    const wrapper = await mountTtBar({ clients: [{ id: 'C1', desc: '   ', active: true }] })
+    await openSelect(wrapper, 0)
+    hover(optionRow(clientPopper(), 'C1'))
+    await settleTooltip()
+    expect(tooltipEl()).toBeNull()
+    wrapper.unmount()
+  })
+
+  it('幽灵项即使标签碰撞也不产生错误映射：原始 ID 不在候选内 → 无 Tooltip', async () => {
+    const wrapper = await mountTtBar({ clients: [{ id: COL_ID_A, desc: COL_DESC_A, active: true }] })
+    await openSelect(wrapper, 0)
+    clientRows()[1]!.click()
+    await nextTick()
+    await nextTick()
+    await wrapper.setProps({ clients: [] })
+    await nextTick()
+    await openSelect(wrapper, 0)
+    const ghost = clientRows().find((it) => it.textContent?.includes('不在候选内'))!
+    expect(ghost.getAttribute('data-dss-client-id')).toBe(COL_ID_A)
+    hover(ghost)
+    await settleTooltip()
+    expect(tooltipEl()).toBeNull()
+    wrapper.unmount()
+  })
+
+  it('hover 全程不发送请求：碰撞候选与已选项悬停/移出 0 次 query 事件', async () => {
+    const wrapper = await mountTtBar({ clients: COLLIDING_CLIENTS })
+    await openSelect(wrapper, 0)
+    const rows = clientRows()
+    hover(rows[1]!)
+    await settleTooltip()
+    unhover(rows[1]!)
+    await settleTooltip()
+    hover(rows[2]!)
+    await settleTooltip()
+    unhover(rows[2]!)
+    await settleTooltip()
+    expect(wrapper.emitted('query')).toBeUndefined()
+    wrapper.unmount()
+  })
+})
+
 describe('DataSourceSnapshotQueryBar 查询控件外部几何锁（DSS-REQ-084，AC-096/097/103）', () => {
   it('源码字面量契约：三个下拉框锁定 width/min-width/max-width/flex-basis 为 240/300/200', () => {
     const src = queryBarSource()
@@ -979,6 +1243,25 @@ describe('DataSourceSnapshotQueryBar 查询控件外部几何锁（DSS-REQ-084�
     await queryButton(wrapper).trigger('click')
     const draft = wrapper.emitted('query')![0]![0] as { clients: string[]; sources: string[]; statuses: string[] }
     expect(draft).toEqual({ clients: [ALL_OPTION], sources: [ALL_OPTION], statuses: [ALL_OPTION] })
+    wrapper.unmount()
+  })
+})
+
+describe('DataSourceSnapshotQueryBar R1 稳定身份实现约束（R1 §6.2）', () => {
+  it('源码不再以显示文字反查探针身份（无按标签等值匹配、无 textContent 反查）', () => {
+    const src = queryBarSource()
+    expect(src).not.toMatch(/matchClientByLabel/)
+    expect(src).not.toContain('textContent')
+    // 不引入全局 Element Plus DOM 猜测
+    expect(src).not.toMatch(/document\.querySelector\(\s*['"]\.el-select/)
+  })
+
+  it('私有身份属性只落在探针端下拉；源库/快照状态下拉一律不携带（不跨字段污染）', async () => {
+    const wrapper = await mountBar()
+    await openSelect(wrapper, 1)
+    expect(sourcePopper().querySelectorAll('[data-dss-client-id]')).toHaveLength(0)
+    await openSelect(wrapper, 2)
+    expect(popperByClass('dss-status-popper').querySelectorAll('[data-dss-client-id]')).toHaveLength(0)
     wrapper.unmount()
   })
 })

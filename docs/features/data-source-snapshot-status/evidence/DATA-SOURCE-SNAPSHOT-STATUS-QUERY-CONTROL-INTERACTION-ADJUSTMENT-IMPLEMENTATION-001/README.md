@@ -123,3 +123,19 @@ backend/ 后端与统计调度器只读观察记录（脱敏）
 1. `UI.md` §20.6 第二句“`1280` … 不换行”与 §19.7（`DSS-REQ-083`/`DSS-AC-094`）明确撤回“1280 下所有查询条件与查询/重置必须同处一行”的前提存在**表述冲突**。按 `ACCEPTANCE.md` 的 `DSS-AC-094` 与 `UI.md` §19.7，以“**不因候选文本长度产生额外换行**”为口径；实测 1280 查询栏高度在实现前后、以及 16 个内容状态之间 delta 恒为 `0`（三个字段同处一行，仅查询/重置按钮组按既有 `flex-wrap` 位于第二行）。本任务不修改 §20.6 已批准业务正文，仅记录冲突与实测证据。
 2. `after-viewports.json` 与 `before-viewports.json` 逐字节相同——见 §4.1 说明，属预期结果而非文件重复使用。
 3. 本目录证据为**开发自测证据**，不替代正式验收；所有 `DSS-AC-*` 仍 `NOT_RUN`。
+
+## 9. R1 更正（2026-09-11，追加，不修改以上原有行）
+
+后续任务 `DATA-SOURCE-SNAPSHOT-STATUS-QUERY-CONTROL-INTERACTION-ADJUSTMENT-IMPLEMENTATION-001-R1`
+复审时发现：本 README §5 列出的 `tests/vitest-targeted.log`、`vitest-feature.log`、`vitest-full.log`、
+`build.log` 四个文件**被仓库 `.gitignore` 第 30 行 `*.log` 排除，从未真正进入 Git**（根因记录见 R1 §13）。
+`git ls-tree -r --name-only HEAD` 在本实现提交 `a479888` 上检索不到上述四个 `.log` 文件。
+
+R1 已按“证据必须真实进入 Git”的要求重新执行测试与构建，并以不会被忽略的 `.txt` 原始输出**取代**上述
+四个文件，新证据位于：
+
+`docs/features/data-source-snapshot-status/evidence/DATA-SOURCE-SNAPSHOT-STATUS-QUERY-CONTROL-INTERACTION-ADJUSTMENT-IMPLEMENTATION-001-R1/tests/`
+（`vitest-targeted.txt` / `vitest-feature.txt` / `vitest-full.txt` / `build.txt` / `diff-check.txt`）
+
+本目录原有证据文件（`before/`、`after/`、`docs/`、`git/` 等）**未被修改**，仅按 §13.5 追加本更正段。
+R1 新证据与旧证据的完整取代/补充关系见 R1 目录 `README.md` §1。

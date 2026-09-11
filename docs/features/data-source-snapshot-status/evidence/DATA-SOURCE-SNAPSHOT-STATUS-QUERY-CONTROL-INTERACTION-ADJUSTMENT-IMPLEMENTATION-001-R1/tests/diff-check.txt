@@ -1,0 +1,37 @@
+# R1 git diff 现场证据 (只读)  生成于 2026-09-11 16:32:54
+$ git diff --check
+EXIT_CODE=0
+
+$ git diff --stat
+ docs/features/README.md                            |   3 +-
+ .../data-source-snapshot-status/ACCEPTANCE.md      |   3 +-
+ docs/features/data-source-snapshot-status/API.md   |   4 +-
+ .../data-source-snapshot-status/DATABASE.md        |   4 +-
+ .../features/data-source-snapshot-status/DESIGN.md |  19 +-
+ .../features/data-source-snapshot-status/README.md |  18 +-
+ .../data-source-snapshot-status/REQUIREMENTS.md    |   3 +-
+ docs/features/data-source-snapshot-status/UI.md    |  28 +-
+ .../README.md                                      |  16 ++
+ .../components/DataSourceSnapshotQueryBar.spec.ts  | 283 +++++++++++++++++++++
+ .../components/DataSourceSnapshotQueryBar.vue      |  72 +++---
+ .../data-source-run-state/utils/format.spec.ts     |  75 ++++++
+ .../views/data-source-run-state/utils/format.ts    |  19 ++
+ 13 files changed, 482 insertions(+), 65 deletions(-)
+
+$ git status --short
+ M docs/features/README.md
+ M docs/features/data-source-snapshot-status/ACCEPTANCE.md
+ M docs/features/data-source-snapshot-status/API.md
+ M docs/features/data-source-snapshot-status/DATABASE.md
+ M docs/features/data-source-snapshot-status/DESIGN.md
+ M docs/features/data-source-snapshot-status/README.md
+ M docs/features/data-source-snapshot-status/REQUIREMENTS.md
+ M docs/features/data-source-snapshot-status/UI.md
+ M docs/features/data-source-snapshot-status/evidence/DATA-SOURCE-SNAPSHOT-STATUS-QUERY-CONTROL-INTERACTION-ADJUSTMENT-IMPLEMENTATION-001/README.md
+ M frontend/src/views/data-source-run-state/components/DataSourceSnapshotQueryBar.spec.ts
+ M frontend/src/views/data-source-run-state/components/DataSourceSnapshotQueryBar.vue
+ M frontend/src/views/data-source-run-state/utils/format.spec.ts
+ M frontend/src/views/data-source-run-state/utils/format.ts
+?? docs/features/data-source-snapshot-status/evidence/DATA-SOURCE-SNAPSHOT-STATUS-QUERY-CONTROL-INTERACTION-ADJUSTMENT-IMPLEMENTATION-001-R1/
+?? docs/features/data-source-snapshot-status/reports/DATA-SOURCE-SNAPSHOT-STATUS-QUERY-CONTROL-INTERACTION-ADJUSTMENT-IMPLEMENTATION-001-R1.md
+?? frontend/node_modules

@@ -58,7 +58,7 @@
 | 本轮（查询控件交互调整基线）状态 | `APPROVED`（`query_control_interaction_adjustment_status=APPROVED`；已经 ChatGPT 从 Git 独立复审 `APPROVED`、项目负责人于 2026-09-10 明确回复“批准”，由 `DATA-SOURCE-SNAPSHOT-STATUS-QUERY-CONTROL-INTERACTION-ADJUSTMENT-BASELINE-APPROVAL-001` 批准收口，批准内容基准提交 `cf9f9eb0240f275cd50eb37546e6d6256892a9f4`；批准不代表已实现） |
 | 本轮（查询控件交互调整基线）实现状态 | `IMPLEMENTED_ADJUSTMENT_PENDING_REVIEW`（`query_control_interaction_adjustment_implementation_status=IMPLEMENTED_ADJUSTMENT_PENDING_REVIEW`；本轮调整已由独立正式实现任务 `DATA-SOURCE-SNAPSHOT-STATUS-QUERY-CONTROL-INTERACTION-ADJUSTMENT-IMPLEMENTATION-001` 于 2026-09-11 落地、待 ChatGPT 独立复审） |
 | 本轮（查询控件交互调整草案）需求/验收计数 | 需求 `DSS-REQ-084~086` 共 3 条（累计 `DSS-REQ-001~086` 共 86 条）、验收 `DSS-AC-096~103` 共 8 条（累计 `DSS-AC-001~103` 共 103 条全部 `NOT_RUN`、`acceptance_not_run_count=103`），追踪矩阵 86/86 与 103/103，见本文件 §20、`REQUIREMENTS.md` §21.6/§21.7、`ACCEPTANCE.md` §4.21/§5 |
-| 本轮（查询控件交互调整基线）下一入口 | `DATA-SOURCE-SNAPSHOT-STATUS-QUERY-CONTROL-INTERACTION-ADJUSTMENT-IMPLEMENTATION-001`（本轮查询控件交互调整已批准收口，下一入口为独立正式实现任务：在 `5173` 正式前端按批准内容基准提交 `cf9f9eb0240f275cd50eb37546e6d6256892a9f4` 实现；正式验收与人工视觉验收仍 `NOT_RUN`） |
+| 本轮（查询控件交互调整基线）下一入口 | `CHATGPT_R1_IMPLEMENTATION_REVIEW_FROM_GIT_THEN_PROJECT_OWNER_VISUAL_INTERACTION_REVIEW`（本轮调整已由独立正式实现任务 `DATA-SOURCE-SNAPSHOT-STATUS-QUERY-CONTROL-INTERACTION-ADJUSTMENT-IMPLEMENTATION-001` 在 `5173` 正式前端按批准内容基准提交 `cf9f9eb0240f275cd50eb37546e6d6256892a9f4` 落地（结果提交 `a47988820c797ff60bd7244b2d0f899bd8fc3be5`），ChatGPT 对该提交独立代码复审结论为 `CHANGES_REQUIRED`；R1 修正任务 `…-IMPLEMENTATION-001-R1` 已按复审意见完成 Tooltip 稳定身份、四字段 trim＋Unicode 截断、Git 可复核证据补交与本文档冲突消解，`query_control_interaction_adjustment_code_review_status=PENDING_CHATGPT_REVIEW`，下一入口为 ChatGPT 从 Git 复审 R1 结果、随后项目负责人进行视觉/交互复审；正式验收与人工视觉验收仍 `NOT_RUN`） |
 | 通用查询列表页 UI 基线状态 | `NOT_CREATED_BY_DESIGN`（通用 `QUERY-LIST-PAGE-UI-PATTERN` 须待本页正式实现并验收通过后再独立评估建立，本任务**不创建、不批准**） |
 | 创建日期 | 2026-09-05；2026-09-06 设计批准收口；2026-09-07 建立第一轮验收前 UI 调整草案并批准/实现；2026-09-08 建立第二轮 UI 调整草案（R0/R1）并批准收口为 `DATA-SOURCE-SNAPSHOT-STATUS-UI-ADJUSTMENT-BASELINE-APPROVAL-002`，同日以 `...-002-R2` 纯文档纠正源库 Tooltip 内容并重新进入复审，再以 `...-002-R3` 记录纠正，ChatGPT 对 R3 结果提交独立正式复审 `APPROVED`、项目负责人明确“批准”，同日重新批准收口为 `DATA-SOURCE-SNAPSHOT-STATUS-UI-ADJUSTMENT-BASELINE-APPROVAL-002-R1`（批准内容基准提交 `cf40b5d...`）；2026-09-10 隔离视觉原型 R2～R7 设计固化（`DATA-SOURCE-SNAPSHOT-STATUS-PROTOTYPE-DESIGN-FREEZE-001`，见 §19）；2026-09-10 查询控件交互调整基线经 `DATA-SOURCE-SNAPSHOT-STATUS-QUERY-CONTROL-INTERACTION-ADJUSTMENT-BASELINE-APPROVAL-001` 批准收口为 `APPROVED`（批准内容基准提交 `cf9f9eb0240f275cd50eb37546e6d6256892a9f4`，见 §20） |
 
@@ -694,27 +694,28 @@ ChatGPT 对上一结果提交（`31aa9f5beec7ded3cd798b3af617fd79a1606ed0`）正
 
 ### 20.4 四个展示字段统一字段级截断界面规则（`DSS-REQ-085`；扩展 §16.3/§16.4/§16.5）
 
-- 统一 `truncate(value, 20)`：按 **Unicode 码点**计数（`CJK`/emoji 各计 1 个码点，禁止拆开代理对）；`≤20` 返回原始值；`>20` 返回前 `20` 个码点 + 英文 `...`。
-- 探针端展示 `truncate(CLIENT_ID, 20)（truncate(CLIENT_DESC, 20)）`；源库端展示 `truncate(DATA_SOURCE_ORG, 20)（truncate(DATA_SOURCE_ID, 20)）`。
-- 空值规则：`CLIENT_DESC` 为 `null`/空/纯空白时不产生空括号，探针端退化为 `truncate(CLIENT_ID, 20)`；源库端 `ORG` 为空/空白/配置缺失时按 §16.4 先用原始 `DATA_SOURCE_ID` 回退、再套 `truncate(...,20)`，同样不产生空括号。
-- 边界：恰好 `20` 码点显示完整、不追加 `...`；`≥21` 码点显示前 `20` 码点 + `...`。
-- 候选下拉项与可见选中项使用同一 `truncate` 结果，同一原始值两处显示完全一致。
-- **仅显示态**：选项 `value`、查询参数、已应用查询条件、请求语义一律保留完整原始 ID；截断不回流数据层；`CSS text-overflow` 仅作最后兜底。
+- 统一 `displayField(value, 20)`：先做 `null`/`undefined` 安全归一为 `''` 并执行 `trim()`（`normalizeFieldText`），再对 trim 后结果按 **Unicode 码点**计数（`CJK`/emoji 各计 1 个码点，禁止拆开代理对）；trim 后 `≤20` 返回该值；trim 后 `>20` 返回前 `20` 个码点 + ASCII 英文 `...`。
+- 组合显示按**每个组成字段分别** trim＋20 码点截断，不得把整个组合串统一截成 20 码点：探针端 `displayField(CLIENT_ID, 20)（displayField(CLIENT_DESC, 20)）`；源库端 `displayField(DATA_SOURCE_ORG, 20)（displayField(DATA_SOURCE_ID, 20)）`。
+- 空值规则：`CLIENT_DESC` trim 后为空（`null`/空/纯空白）时不产生空括号，探针端退化为 `displayField(CLIENT_ID, 20)`；源库端 `ORG` trim 后为空/配置缺失时按 §16.4 先用原始 `DATA_SOURCE_ID` 回退、再套 `displayField(...,20)`，同样不产生空括号。
+- 边界（按 **trim 后**码点数）：恰好 `20` 码点显示完整、不追加 `...`；`≥21` 码点显示前 `20` 码点 + `...`；trim 前超 20 但 trim 后 `≤20` 显示 trim 后完整值。
+- 候选下拉项与可见选中项使用同一 `displayField` 结果，同一原始值两处显示完全一致。
+- **仅显示态**：选项 `value`、查询参数、已应用查询条件、请求语义一律保留完整原始 ID；trim 与截断均不回流数据层；`CSS text-overflow` 仅作最后兜底。
 - 验收 `DSS-AC-098`/`099`/`103`。
 
 ### 20.5 `CLIENT_DESC` Tooltip 界面规则（`DSS-REQ-086`）
 
-- 仅当原始 `CLIENT_DESC` 码点长度 `> 20` 时出现；作用于候选悬停与可见选中项悬停两处。
-- 内容仅显示**完整未截断的原始 `CLIENT_DESC`**；不显示 `CLIENT_ID`、不显示拼接串、不为源库端字段提供该 Tooltip；表格 Tooltip 与既有已批准源库表格 Tooltip（完整原始 `DATA_SOURCE_ID` only，§16.6/§16.7、§19.5）不变。
-- 原始值 `null`/空/纯空白或 `≤20` 码点时不出现。
+- 设 `normalizedDesc = String(CLIENT_DESC ?? '').trim()`；仅当 `normalizedDesc` 码点长度 `> 20` 时出现；作用于候选悬停与可见选中项悬停两处。
+- 内容仅显示 **trim 后完整未截断的 `normalizedDesc`**（不再次截断、不保留首尾无意义空白）；不显示 `CLIENT_ID`、不显示拼接串、不为源库端字段提供该 Tooltip；表格 Tooltip 与既有已批准源库表格 Tooltip（完整原始 `DATA_SOURCE_ID` only，§16.6/§16.7、§19.5）不变。
+- `normalizedDesc` 为空（`null`/空/纯空白）或 `≤20` 码点时不出现。
+- Tooltip 定位锚点必须使用**稳定身份**——原始完整 `CLIENT_ID`、Element Plus slot 提供的一一对应的原始 option/value，或 Feature 私有 `data-*` 标识；**不得**以 trim＋20 码点截断后的可见文字反查探针（不同探针截断后可能得到逐字相同的标签）；不得引入全局 Element Plus DOM 猜测或跨 Feature 全局覆盖。
 - 安全最大宽度 `480px` 或 `min(480px, calc(100vw - 16px))`，自然换行；同一时刻至多一个可见实例、不堆叠、离开即隐藏；`+N` 沿用 `Element Plus` 既有语义。
 - 显示/隐藏不得改变下拉宽度、查询区高度或其他控件位置。
 - 验收 `DSS-AC-100`/`101`/`102`/`103`。
 
 ### 20.6 四档视口与几何验证要求
 
-- 实现任务须在四档视口 `1280`/`1700`/`1920`/`2560` 下验证上述规则（宽度稳定、无额外换行、后续字段与按钮不位移、Tooltip 单实例且安全宽度生效）。
-- `1280` 为最窄口径，须重点核验查询区不溢出、不换行、不推动动作按钮。
+- 实现任务须在四档视口 `1280`/`1700`/`1920`/`2560` 下验证上述规则（宽度稳定、内容长度变化不引入额外换行、后续字段与按钮不位移、Tooltip 单实例且安全宽度生效）。
+- `1280` 为最窄口径，须重点核验查询区不溢出、不推动动作按钮，并且**允许查询/重置动作组按既有响应式规则进入第二行**——该换行为既有响应式设计，不是缺陷、回退或阻塞项；选择、取消、清空任意长短选项时，不得额外改变三个下拉框宽度、查询栏高度、既有换行状态或下游控件位置（与 `DSS-AC-094` 口径一致；已撤回“`1280` 下所有查询条件和查询/重置必须同处一行”这一前提）。
 
 ### 20.7 不变契约、取代关系与自检
 
@@ -723,4 +724,5 @@ ChatGPT 对上一结果提交（`31aa9f5beec7ded3cd798b3af617fd79a1606ed0`）正
 - 编号与追踪：`DSS-REQ-084~086`（累计 86 条）、`DSS-AC-096~103`（累计 103 条全部 `NOT_RUN`、`acceptance_not_run_count=103`）；矩阵 86/86 与 103/103 双向无悬空；本轮界面规则已批准为 `APPROVED`，但禁止把已批准调整写成 `IMPLEMENTED`/`ACCEPTED`/`COMPLETED`，也不得把任何验收写成 `PASS`。
 - 代码零差异：本轮不产生 `frontend/`/`backend/`/SQL/配置差异；`API.md`/`DATABASE.md` 与既有历史报告整文件逐字节不变。
 - 分层状态：`query_control_interaction_adjustment_status=APPROVED`、`..._implementation_status=IMPLEMENTED_ADJUSTMENT_PENDING_REVIEW`、`project_owner_visual_review_status=CHANGES_REQUIRED`、`formal_acceptance_status=NOT_RUN`、`human_visual_acceptance_status=NOT_RUN`、`pending_user_review=NO`、`pending_user_confirmation_count=0`。
-- 变更记录：2026-09-10，新增 §20 并更新 §1 元数据（新增本轮草案相关状态行）；R1 只定向纠正了其当时的当前状态残留与下一入口（不修改 §20 界面业务规则，作为历史保留）；随后由 `DATA-SOURCE-SNAPSHOT-STATUS-QUERY-CONTROL-INTERACTION-ADJUSTMENT-BASELINE-APPROVAL-001` 批准收口为 `APPROVED`（§20.2～§20.6 界面业务规则逐字节不变）。下一入口：`DATA-SOURCE-SNAPSHOT-STATUS-QUERY-CONTROL-INTERACTION-ADJUSTMENT-IMPLEMENTATION-001`。
+- 变更记录：2026-09-10，新增 §20 并更新 §1 元数据（新增本轮草案相关状态行）；R1 只定向纠正了其当时的当前状态残留与下一入口（不修改 §20 界面业务规则，作为历史保留）；随后由 `DATA-SOURCE-SNAPSHOT-STATUS-QUERY-CONTROL-INTERACTION-ADJUSTMENT-BASELINE-APPROVAL-001` 批准收口为 `APPROVED`（§20.2～§20.6 界面业务规则逐字节不变）。
+- R1 修正变更记录（`DATA-SOURCE-SNAPSHOT-STATUS-QUERY-CONTROL-INTERACTION-ADJUSTMENT-IMPLEMENTATION-001-R1`，2026-09-11，代码修正驱动的文档同步）：实现结果提交 `a47988820c797ff60bd7244b2d0f899bd8fc3be5` 经 ChatGPT 复审 `CHANGES_REQUIRED`，R1 据此把 §20.4 的字段级截断口径由“直接按码点截断”明确为“先 `null` 安全归一 + `trim()`，再按 Unicode 码点计数”（单一纯函数 `displayField`；组合串按组成字段分别处理；边界以 trim 后码点数为准；trim 与截断均只影响显示），并在 §20.5 明确 Tooltip 内容为 `normalizedDesc = String(CLIENT_DESC ?? '').trim()` 且判定基于 trim 后码点 `> 20`，新增**锚点稳定身份**约束（按原始完整 `CLIENT_ID` / Element Plus slot 原始 option value / Feature 私有 `data-*` 定位，禁止以截断或组合显示文字反查探针、禁止全局 Element Plus DOM 猜测或跨 Feature 覆盖）。§20.6 的 `1280` 口径与 §20.2/§20.3/§20.5 已批准视觉数值零变化；业务行、编号与 `API.md`/`DATABASE.md` 契约均不变。下一入口：`CHATGPT_R1_IMPLEMENTATION_REVIEW_FROM_GIT_THEN_PROJECT_OWNER_VISUAL_INTERACTION_REVIEW`（本轮调整已由实现任务于 2026-09-11 落地，并经 R1 修正任务按 ChatGPT 复审 `CHANGES_REQUIRED` 完成修正、待 ChatGPT 从 Git 复审 R1 后由项目负责人进行视觉/交互复审）。

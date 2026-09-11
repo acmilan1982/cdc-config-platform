@@ -1,0 +1,4814 @@
+[
+  {
+    "viewport": {
+      "w": 1280,
+      "h": 800
+    },
+    "mode": "synth",
+    "widths": {
+      "client": 240,
+      "source": 300,
+      "status": 200
+    },
+    "maxAdjacentDelta": {
+      "client": 0,
+      "source": 0,
+      "status": 0,
+      "qBtnX": 0,
+      "barH": 0,
+      "groups": 0
+    },
+    "maxHorizontalOverflow": 0,
+    "barH": 70,
+    "groupsY": [
+      175.5,
+      175.5,
+      175.5
+    ],
+    "groupsRowCount": 1,
+    "stateTags": [
+      "initial_all",
+      "collision_A_selected",
+      "collision_A_B_selected",
+      "longest_selected",
+      "multi_collapse_tags",
+      "clear_to_all",
+      "reset",
+      "source_longest"
+    ],
+    "adjacent": [
+      {
+        "from": "initial_all",
+        "to": "collision_A_selected",
+        "dClient": 0,
+        "dSource": 0,
+        "dStatus": 0,
+        "dQBtnX": 0,
+        "dBarH": 0,
+        "dGroups": [
+          [
+            0,
+            0
+          ],
+          [
+            0,
+            0
+          ],
+          [
+            0,
+            0
+          ]
+        ]
+      },
+      {
+        "from": "collision_A_selected",
+        "to": "collision_A_B_selected",
+        "dClient": 0,
+        "dSource": 0,
+        "dStatus": 0,
+        "dQBtnX": 0,
+        "dBarH": 0,
+        "dGroups": [
+          [
+            0,
+            0
+          ],
+          [
+            0,
+            0
+          ],
+          [
+            0,
+            0
+          ]
+        ]
+      },
+      {
+        "from": "collision_A_B_selected",
+        "to": "longest_selected",
+        "dClient": 0,
+        "dSource": 0,
+        "dStatus": 0,
+        "dQBtnX": 0,
+        "dBarH": 0,
+        "dGroups": [
+          [
+            0,
+            0
+          ],
+          [
+            0,
+            0
+          ],
+          [
+            0,
+            0
+          ]
+        ]
+      },
+      {
+        "from": "longest_selected",
+        "to": "multi_collapse_tags",
+        "dClient": 0,
+        "dSource": 0,
+        "dStatus": 0,
+        "dQBtnX": 0,
+        "dBarH": 0,
+        "dGroups": [
+          [
+            0,
+            0
+          ],
+          [
+            0,
+            0
+          ],
+          [
+            0,
+            0
+          ]
+        ]
+      },
+      {
+        "from": "multi_collapse_tags",
+        "to": "clear_to_all",
+        "dClient": 0,
+        "dSource": 0,
+        "dStatus": 0,
+        "dQBtnX": 0,
+        "dBarH": 0,
+        "dGroups": [
+          [
+            0,
+            0
+          ],
+          [
+            0,
+            0
+          ],
+          [
+            0,
+            0
+          ]
+        ]
+      },
+      {
+        "from": "clear_to_all",
+        "to": "reset",
+        "dClient": 0,
+        "dSource": 0,
+        "dStatus": 0,
+        "dQBtnX": 0,
+        "dBarH": 0,
+        "dGroups": [
+          [
+            0,
+            0
+          ],
+          [
+            0,
+            0
+          ],
+          [
+            0,
+            0
+          ]
+        ]
+      },
+      {
+        "from": "reset",
+        "to": "source_longest",
+        "dClient": 0,
+        "dSource": 0,
+        "dStatus": 0,
+        "dQBtnX": 0,
+        "dBarH": 0,
+        "dGroups": [
+          [
+            0,
+            0
+          ],
+          [
+            0,
+            0
+          ],
+          [
+            0,
+            0
+          ]
+        ]
+      }
+    ],
+    "states": [
+      {
+        "tag": "initial_all",
+        "client": {
+          "x": 340,
+          "y": 175.5,
+          "w": 240,
+          "h": 32
+        },
+        "source": {
+          "x": 628,
+          "y": 175.5,
+          "w": 300,
+          "h": 32
+        },
+        "status": {
+          "x": 1004,
+          "y": 175.5,
+          "w": 200,
+          "h": 32
+        },
+        "clientWrap": {
+          "x": 340,
+          "y": 175.5,
+          "w": 240,
+          "h": 32
+        },
+        "sourceWrap": {
+          "x": 628,
+          "y": 175.5,
+          "w": 300,
+          "h": 32
+        },
+        "statusWrap": {
+          "x": 1004,
+          "y": 175.5,
+          "w": 200,
+          "h": 32
+        },
+        "qBtn": {
+          "x": 292,
+          "y": 215.5,
+          "w": 62,
+          "h": 30
+        },
+        "resetBtn": {
+          "x": 374,
+          "y": 215.5,
+          "w": 58,
+          "h": 30
+        },
+        "bar": {
+          "x": 292,
+          "y": 175.5,
+          "w": 916,
+          "h": 70
+        },
+        "groups": [
+          {
+            "x": 292,
+            "y": 175.5,
+            "w": 288,
+            "h": 32
+          },
+          {
+            "x": 594,
+            "y": 175.5,
+            "w": 334,
+            "h": 32
+          },
+          {
+            "x": 942,
+            "y": 175.5,
+            "w": 262,
+            "h": 32
+          }
+        ],
+        "overflowX": 0
+      },
+      {
+        "tag": "collision_A_selected",
+        "client": {
+          "x": 340,
+          "y": 175.5,
+          "w": 240,
+          "h": 32
+        },
+        "source": {
+          "x": 628,
+          "y": 175.5,
+          "w": 300,
+          "h": 32
+        },
+        "status": {
+          "x": 1004,
+          "y": 175.5,
+          "w": 200,
+          "h": 32
+        },
+        "clientWrap": {
+          "x": 340,
+          "y": 175.5,
+          "w": 240,
+          "h": 32
+        },
+        "sourceWrap": {
+          "x": 628,
+          "y": 175.5,
+          "w": 300,
+          "h": 32
+        },
+        "statusWrap": {
+          "x": 1004,
+          "y": 175.5,
+          "w": 200,
+          "h": 32
+        },
+        "qBtn": {
+          "x": 292,
+          "y": 215.5,
+          "w": 62,
+          "h": 30
+        },
+        "resetBtn": {
+          "x": 374,
+          "y": 215.5,
+          "w": 58,
+          "h": 30
+        },
+        "bar": {
+          "x": 292,
+          "y": 175.5,
+          "w": 916,
+          "h": 70
+        },
+        "groups": [
+          {
+            "x": 292,
+            "y": 175.5,
+            "w": 288,
+            "h": 32
+          },
+          {
+            "x": 594,
+            "y": 175.5,
+            "w": 334,
+            "h": 32
+          },
+          {
+            "x": 942,
+            "y": 175.5,
+            "w": 262,
+            "h": 32
+          }
+        ],
+        "overflowX": 0
+      },
+      {
+        "tag": "collision_A_B_selected",
+        "client": {
+          "x": 340,
+          "y": 175.5,
+          "w": 240,
+          "h": 32
+        },
+        "source": {
+          "x": 628,
+          "y": 175.5,
+          "w": 300,
+          "h": 32
+        },
+        "status": {
+          "x": 1004,
+          "y": 175.5,
+          "w": 200,
+          "h": 32
+        },
+        "clientWrap": {
+          "x": 340,
+          "y": 175.5,
+          "w": 240,
+          "h": 32
+        },
+        "sourceWrap": {
+          "x": 628,
+          "y": 175.5,
+          "w": 300,
+          "h": 32
+        },
+        "statusWrap": {
+          "x": 1004,
+          "y": 175.5,
+          "w": 200,
+          "h": 32
+        },
+        "qBtn": {
+          "x": 292,
+          "y": 215.5,
+          "w": 62,
+          "h": 30
+        },
+        "resetBtn": {
+          "x": 374,
+          "y": 215.5,
+          "w": 58,
+          "h": 30
+        },
+        "bar": {
+          "x": 292,
+          "y": 175.5,
+          "w": 916,
+          "h": 70
+        },
+        "groups": [
+          {
+            "x": 292,
+            "y": 175.5,
+            "w": 288,
+            "h": 32
+          },
+          {
+            "x": 594,
+            "y": 175.5,
+            "w": 334,
+            "h": 32
+          },
+          {
+            "x": 942,
+            "y": 175.5,
+            "w": 262,
+            "h": 32
+          }
+        ],
+        "overflowX": 0
+      },
+      {
+        "tag": "longest_selected",
+        "client": {
+          "x": 340,
+          "y": 175.5,
+          "w": 240,
+          "h": 32
+        },
+        "source": {
+          "x": 628,
+          "y": 175.5,
+          "w": 300,
+          "h": 32
+        },
+        "status": {
+          "x": 1004,
+          "y": 175.5,
+          "w": 200,
+          "h": 32
+        },
+        "clientWrap": {
+          "x": 340,
+          "y": 175.5,
+          "w": 240,
+          "h": 32
+        },
+        "sourceWrap": {
+          "x": 628,
+          "y": 175.5,
+          "w": 300,
+          "h": 32
+        },
+        "statusWrap": {
+          "x": 1004,
+          "y": 175.5,
+          "w": 200,
+          "h": 32
+        },
+        "qBtn": {
+          "x": 292,
+          "y": 215.5,
+          "w": 62,
+          "h": 30
+        },
+        "resetBtn": {
+          "x": 374,
+          "y": 215.5,
+          "w": 58,
+          "h": 30
+        },
+        "bar": {
+          "x": 292,
+          "y": 175.5,
+          "w": 916,
+          "h": 70
+        },
+        "groups": [
+          {
+            "x": 292,
+            "y": 175.5,
+            "w": 288,
+            "h": 32
+          },
+          {
+            "x": 594,
+            "y": 175.5,
+            "w": 334,
+            "h": 32
+          },
+          {
+            "x": 942,
+            "y": 175.5,
+            "w": 262,
+            "h": 32
+          }
+        ],
+        "overflowX": 0
+      },
+      {
+        "tag": "multi_collapse_tags",
+        "client": {
+          "x": 340,
+          "y": 175.5,
+          "w": 240,
+          "h": 32
+        },
+        "source": {
+          "x": 628,
+          "y": 175.5,
+          "w": 300,
+          "h": 32
+        },
+        "status": {
+          "x": 1004,
+          "y": 175.5,
+          "w": 200,
+          "h": 32
+        },
+        "clientWrap": {
+          "x": 340,
+          "y": 175.5,
+          "w": 240,
+          "h": 32
+        },
+        "sourceWrap": {
+          "x": 628,
+          "y": 175.5,
+          "w": 300,
+          "h": 32
+        },
+        "statusWrap": {
+          "x": 1004,
+          "y": 175.5,
+          "w": 200,
+          "h": 32
+        },
+        "qBtn": {
+          "x": 292,
+          "y": 215.5,
+          "w": 62,
+          "h": 30
+        },
+        "resetBtn": {
+          "x": 374,
+          "y": 215.5,
+          "w": 58,
+          "h": 30
+        },
+        "bar": {
+          "x": 292,
+          "y": 175.5,
+          "w": 916,
+          "h": 70
+        },
+        "groups": [
+          {
+            "x": 292,
+            "y": 175.5,
+            "w": 288,
+            "h": 32
+          },
+          {
+            "x": 594,
+            "y": 175.5,
+            "w": 334,
+            "h": 32
+          },
+          {
+            "x": 942,
+            "y": 175.5,
+            "w": 262,
+            "h": 32
+          }
+        ],
+        "overflowX": 0
+      },
+      {
+        "tag": "clear_to_all",
+        "client": {
+          "x": 340,
+          "y": 175.5,
+          "w": 240,
+          "h": 32
+        },
+        "source": {
+          "x": 628,
+          "y": 175.5,
+          "w": 300,
+          "h": 32
+        },
+        "status": {
+          "x": 1004,
+          "y": 175.5,
+          "w": 200,
+          "h": 32
+        },
+        "clientWrap": {
+          "x": 340,
+          "y": 175.5,
+          "w": 240,
+          "h": 32
+        },
+        "sourceWrap": {
+          "x": 628,
+          "y": 175.5,
+          "w": 300,
+          "h": 32
+        },
+        "statusWrap": {
+          "x": 1004,
+          "y": 175.5,
+          "w": 200,
+          "h": 32
+        },
+        "qBtn": {
+          "x": 292,
+          "y": 215.5,
+          "w": 62,
+          "h": 30
+        },
+        "resetBtn": {
+          "x": 374,
+          "y": 215.5,
+          "w": 58,
+          "h": 30
+        },
+        "bar": {
+          "x": 292,
+          "y": 175.5,
+          "w": 916,
+          "h": 70
+        },
+        "groups": [
+          {
+            "x": 292,
+            "y": 175.5,
+            "w": 288,
+            "h": 32
+          },
+          {
+            "x": 594,
+            "y": 175.5,
+            "w": 334,
+            "h": 32
+          },
+          {
+            "x": 942,
+            "y": 175.5,
+            "w": 262,
+            "h": 32
+          }
+        ],
+        "overflowX": 0
+      },
+      {
+        "tag": "reset",
+        "client": {
+          "x": 340,
+          "y": 175.5,
+          "w": 240,
+          "h": 32
+        },
+        "source": {
+          "x": 628,
+          "y": 175.5,
+          "w": 300,
+          "h": 32
+        },
+        "status": {
+          "x": 1004,
+          "y": 175.5,
+          "w": 200,
+          "h": 32
+        },
+        "clientWrap": {
+          "x": 340,
+          "y": 175.5,
+          "w": 240,
+          "h": 32
+        },
+        "sourceWrap": {
+          "x": 628,
+          "y": 175.5,
+          "w": 300,
+          "h": 32
+        },
+        "statusWrap": {
+          "x": 1004,
+          "y": 175.5,
+          "w": 200,
+          "h": 32
+        },
+        "qBtn": {
+          "x": 292,
+          "y": 215.5,
+          "w": 62,
+          "h": 30
+        },
+        "resetBtn": {
+          "x": 374,
+          "y": 215.5,
+          "w": 58,
+          "h": 30
+        },
+        "bar": {
+          "x": 292,
+          "y": 175.5,
+          "w": 916,
+          "h": 70
+        },
+        "groups": [
+          {
+            "x": 292,
+            "y": 175.5,
+            "w": 288,
+            "h": 32
+          },
+          {
+            "x": 594,
+            "y": 175.5,
+            "w": 334,
+            "h": 32
+          },
+          {
+            "x": 942,
+            "y": 175.5,
+            "w": 262,
+            "h": 32
+          }
+        ],
+        "overflowX": 0
+      },
+      {
+        "tag": "source_longest",
+        "client": {
+          "x": 340,
+          "y": 175.5,
+          "w": 240,
+          "h": 32
+        },
+        "source": {
+          "x": 628,
+          "y": 175.5,
+          "w": 300,
+          "h": 32
+        },
+        "status": {
+          "x": 1004,
+          "y": 175.5,
+          "w": 200,
+          "h": 32
+        },
+        "clientWrap": {
+          "x": 340,
+          "y": 175.5,
+          "w": 240,
+          "h": 32
+        },
+        "sourceWrap": {
+          "x": 628,
+          "y": 175.5,
+          "w": 300,
+          "h": 32
+        },
+        "statusWrap": {
+          "x": 1004,
+          "y": 175.5,
+          "w": 200,
+          "h": 32
+        },
+        "qBtn": {
+          "x": 292,
+          "y": 215.5,
+          "w": 62,
+          "h": 30
+        },
+        "resetBtn": {
+          "x": 374,
+          "y": 215.5,
+          "w": 58,
+          "h": 30
+        },
+        "bar": {
+          "x": 292,
+          "y": 175.5,
+          "w": 916,
+          "h": 70
+        },
+        "groups": [
+          {
+            "x": 292,
+            "y": 175.5,
+            "w": 288,
+            "h": 32
+          },
+          {
+            "x": 594,
+            "y": 175.5,
+            "w": 334,
+            "h": 32
+          },
+          {
+            "x": 942,
+            "y": 175.5,
+            "w": 262,
+            "h": 32
+          }
+        ],
+        "overflowX": 0
+      }
+    ],
+    "candLabels": [
+      "全部",
+      "PPPPPPPPPPPPPPPPPPPP...（DDDDDDDDDDDDDDDDDDDD...）",
+      "PPPPPPPPPPPPPPPPPPPP...（DDDDDDDDDDDDDDDDDDDD...）",
+      "id19-AAAAAAAAAAAAAA（ddddddddddddddddddd）",
+      "id20-BBBBBBBBBBBBBBB（eeeeeeeeeeeeeeeeeeee）",
+      "id21-CCCCCCCCCCCCCCC...（ffffffffffffffffffff...）",
+      "id22-DDDDDDDDDDDDDDD...（gggggggggggggggggggg...）",
+      "中中中中中中中中中中中中中中中中中中中中...（中中中中中中中中中中中中中中中中中中中中...）",
+      "😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀...（😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀...）",
+      "very-long-client-id-...",
+      "short-desc（长描述长描述长描述长描述长描述长描述长描...）",
+      "desc-empty-str",
+      "desc-20（22222222222222222222）"
+    ],
+    "collisionRows": {
+      "PPPPPPPPPPPPPPPPPPPPAAA": {
+        "x": 580,
+        "y": 278,
+        "attr": "PPPPPPPPPPPPPPPPPPPPAAA",
+        "text": "PPPPPPPPPPPPPPPPPPPP...（DDDDDDDDDDDDDDDDDDDD...）",
+        "rect": {
+          "x": 341,
+          "y": 261,
+          "w": 478,
+          "h": 34,
+          "right": 819,
+          "bottom": 295
+        }
+      },
+      "PPPPPPPPPPPPPPPPPPPPBBB": {
+        "x": 580,
+        "y": 312,
+        "attr": "PPPPPPPPPPPPPPPPPPPPBBB",
+        "text": "PPPPPPPPPPPPPPPPPPPP...（DDDDDDDDDDDDDDDDDDDD...）",
+        "rect": {
+          "x": 341,
+          "y": 295,
+          "w": 478,
+          "h": 34,
+          "right": 819,
+          "bottom": 329
+        }
+      }
+    },
+    "collisionProbe": [
+      {
+        "hoveredIdentity": "PPPPPPPPPPPPPPPPPPPPAAA",
+        "expectedTooltipText": "DDDDDDDDDDDDDDDDDDDDAAA",
+        "wrongIfReverseLookup": "DDDDDDDDDDDDDDDDDDDDBBB",
+        "renderedLabel": "PPPPPPPPPPPPPPPPPPPP...（DDDDDDDDDDDDDDDDDDDD...）",
+        "visibleLabelIdenticalToOther": true,
+        "tooltipText": "DDDDDDDDDDDDDDDDDDDDAAA",
+        "tooltipCount": 1,
+        "tooltipCountAfterLeave": 0,
+        "parentIsBody": true,
+        "tooltipRect": {
+          "w": 235.78,
+          "h": 33.5
+        },
+        "tooltipStyle": {
+          "maxWidth": "480px",
+          "whiteSpace": "pre-line",
+          "overflowWrap": "anywhere",
+          "position": "fixed",
+          "zIndex": "3000"
+        },
+        "ctrlDelta": {
+          "client": 0,
+          "barH": 0
+        },
+        "correct": true
+      },
+      {
+        "hoveredIdentity": "PPPPPPPPPPPPPPPPPPPPBBB",
+        "expectedTooltipText": "DDDDDDDDDDDDDDDDDDDDBBB",
+        "wrongIfReverseLookup": "DDDDDDDDDDDDDDDDDDDDAAA",
+        "renderedLabel": "PPPPPPPPPPPPPPPPPPPP...（DDDDDDDDDDDDDDDDDDDD...）",
+        "visibleLabelIdenticalToOther": true,
+        "tooltipText": "DDDDDDDDDDDDDDDDDDDDBBB",
+        "tooltipCount": 1,
+        "tooltipCountAfterLeave": 0,
+        "parentIsBody": true,
+        "tooltipRect": {
+          "w": 235.78,
+          "h": 33.5
+        },
+        "tooltipStyle": {
+          "maxWidth": "480px",
+          "whiteSpace": "pre-line",
+          "overflowWrap": "anywhere",
+          "position": "fixed",
+          "zIndex": "3000"
+        },
+        "ctrlDelta": {
+          "client": 0,
+          "barH": 0
+        },
+        "correct": true
+      }
+    ],
+    "boundaryProbe": [
+      {
+        "id": "id19-AAAAAAAAAAAAAA",
+        "found": true,
+        "rendered": "id19-AAAAAAAAAAAAAA（ddddddddddddddddddd）",
+        "expectLabel": "id19-AAAAAAAAAAAAAA（ddddddddddddddddddd）",
+        "labelOk": true,
+        "renderedCodePoints": 40,
+        "expectTooltip": false,
+        "gotTooltip": false,
+        "tooltipText": null,
+        "expectTooltipText": null,
+        "textOk": true,
+        "afterLeaveCount": 0
+      },
+      {
+        "id": "id20-BBBBBBBBBBBBBBB",
+        "found": true,
+        "rendered": "id20-BBBBBBBBBBBBBBB（eeeeeeeeeeeeeeeeeeee）",
+        "expectLabel": "id20-BBBBBBBBBBBBBBB（eeeeeeeeeeeeeeeeeeee）",
+        "labelOk": true,
+        "renderedCodePoints": 42,
+        "expectTooltip": false,
+        "gotTooltip": false,
+        "tooltipText": null,
+        "expectTooltipText": null,
+        "textOk": true,
+        "afterLeaveCount": 0
+      },
+      {
+        "id": "id21-CCCCCCCCCCCCCCCC",
+        "found": true,
+        "rendered": "id21-CCCCCCCCCCCCCCC...（ffffffffffffffffffff...）",
+        "expectLabel": "id21-CCCCCCCCCCCCCCC...（ffffffffffffffffffff...）",
+        "labelOk": true,
+        "renderedCodePoints": 48,
+        "expectTooltip": true,
+        "gotTooltip": true,
+        "tooltipText": "fffffffffffffffffffff",
+        "expectTooltipText": "fffffffffffffffffffff",
+        "textOk": true,
+        "afterLeaveCount": 0
+      },
+      {
+        "id": "id22-DDDDDDDDDDDDDDDDD",
+        "found": true,
+        "rendered": "id22-DDDDDDDDDDDDDDD...（gggggggggggggggggggg...）",
+        "expectLabel": "id22-DDDDDDDDDDDDDDD...（gggggggggggggggggggg...）",
+        "labelOk": true,
+        "renderedCodePoints": 48,
+        "expectTooltip": true,
+        "gotTooltip": true,
+        "tooltipText": "gggggggggggggggggggggg",
+        "expectTooltipText": "gggggggggggggggggggggg",
+        "textOk": true,
+        "afterLeaveCount": 0
+      },
+      {
+        "id": "中中中中中中中中中中中中中中中中中中中中中中中中中",
+        "found": true,
+        "rendered": "中中中中中中中中中中中中中中中中中中中中...（中中中中中中中中中中中中中中中中中中中中...）",
+        "expectLabel": "中中中中中中中中中中中中中中中中中中中中...（中中中中中中中中中中中中中中中中中中中中...）",
+        "labelOk": true,
+        "renderedCodePoints": 48,
+        "expectTooltip": true,
+        "gotTooltip": true,
+        "tooltipText": "中中中中中中中中中中中中中中中中中中中中中中中中",
+        "expectTooltipText": "中中中中中中中中中中中中中中中中中中中中中中中中",
+        "textOk": true,
+        "afterLeaveCount": 0
+      },
+      {
+        "id": "😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀",
+        "found": true,
+        "rendered": "😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀...（😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀...）",
+        "expectLabel": "😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀...（😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀...）",
+        "labelOk": true,
+        "renderedCodePoints": 48,
+        "expectTooltip": true,
+        "gotTooltip": true,
+        "tooltipText": "😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀",
+        "expectTooltipText": "😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀",
+        "textOk": true,
+        "afterLeaveCount": 0
+      },
+      {
+        "id": "very-long-client-id-XXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXX",
+        "found": true,
+        "rendered": "very-long-client-id-...",
+        "expectLabel": "very-long-client-id-...",
+        "labelOk": true,
+        "renderedCodePoints": 20,
+        "expectTooltip": false,
+        "gotTooltip": false,
+        "tooltipText": null,
+        "expectTooltipText": null,
+        "textOk": true,
+        "afterLeaveCount": 0
+      },
+      {
+        "id": "short-desc",
+        "found": true,
+        "rendered": "short-desc（长描述长描述长描述长描述长描述长描述长描...）",
+        "expectLabel": "short-desc（长描述长描述长描述长描述长描述长描述长描...）",
+        "labelOk": true,
+        "renderedCodePoints": 35,
+        "expectTooltip": true,
+        "gotTooltip": true,
+        "tooltipText": "长描述长描述长描述长描述长描述长描述长描述长描述长描述长描述长描述长描述长描述长描述长描述长描述长描述长描述长描述长描述长描述长描述长描述长描述长描述长描述长描述长描述长描述长描述长描述长描述长描述长描述长描述长描述长描述长描述长描述长描述长描述长描述长描述长描述长描述长描述长描述长描述长描述长描述长描述长描述长描述长描述长描述长描述长描述长描述长描述长描述长描述长描述长描述长描述长描述长描述长描述长描述长描述长描述长描述长描述长描述长描述长描述长描述长描述长描述长描述长描述长描述长描述长描述长描述长描述长描述长描述长描述长描述长描述长描述长描述长描述长描述长描述长描述长描述长描述长描述长描述",
+        "expectTooltipText": "长描述长描述长描述长描述长描述长描述长描述长描述长描述长描述长描述长描述长描述长描述长描述长描述长描述长描述长描述长描述长描述长描述长描述长描述长描述长描述长描述长描述长描述长描述长描述长描述长描述长描述长描述长描述长描述长描述长描述长描述长描述长描述长描述长描述长描述长描述长描述长描述长描述长描述长描述长描述长描述长描述长描述长描述长描述长描述长描述长描述长描述长描述长描述长描述长描述长描述长描述长描述长描述长描述长描述长描述长描述长描述长描述长描述长描述长描述长描述长描述长描述长描述长描述长描述长描述长描述长描述长描述长描述长描述长描述长描述长描述长描述长描述长描述长描述长描述长描述长描述",
+        "textOk": true,
+        "afterLeaveCount": 0
+      },
+      {
+        "id": "desc-empty-str",
+        "found": true,
+        "rendered": "desc-empty-str",
+        "expectLabel": "desc-empty-str",
+        "labelOk": true,
+        "renderedCodePoints": 14,
+        "expectTooltip": false,
+        "gotTooltip": false,
+        "tooltipText": null,
+        "expectTooltipText": null,
+        "textOk": true,
+        "afterLeaveCount": 0
+      },
+      {
+        "id": "desc-20",
+        "found": true,
+        "rendered": "desc-20（22222222222222222222）",
+        "expectLabel": "desc-20（22222222222222222222）",
+        "labelOk": true,
+        "renderedCodePoints": 29,
+        "expectTooltip": false,
+        "gotTooltip": false,
+        "tooltipText": null,
+        "expectTooltipText": null,
+        "textOk": true,
+        "afterLeaveCount": 0
+      }
+    ],
+    "sourceRendered": [
+      "全部",
+      "ooooooooooooooooooo（src19-AAAAAAAAAAAAA）",
+      "pppppppppppppppppppp（src20-BBBBBBBBBBBBBB）",
+      "qqqqqqqqqqqqqqqqqqqq...（src21-CCCCCCCCCCCCCC...）",
+      "rrrrrrrrrrrrrrrrrrrr...（src22-DDDDDDDDDDDDDD...）",
+      "中中中中中中中中中中中中中中中中中中中中...（中中中中中中中中中中中中中中中中中中中中...）",
+      "😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀...",
+      "src-very-long-YYYYYY...",
+      "宽宽宽宽宽宽宽宽宽宽宽宽宽宽宽宽宽宽宽宽...（src-wide-org）"
+    ],
+    "sourceProbe": [
+      {
+        "i": 0,
+        "found": true,
+        "rendered": "ooooooooooooooooooo（src19-AAAAAAAAAAAAA）",
+        "expectLabel": "ooooooooooooooooooo（src19-AAAAAAAAAAAAA）",
+        "labelOk": true,
+        "gotTooltip": false,
+        "tooltipText": null
+      },
+      {
+        "i": 1,
+        "found": true,
+        "rendered": "pppppppppppppppppppp（src20-BBBBBBBBBBBBBB）",
+        "expectLabel": "pppppppppppppppppppp（src20-BBBBBBBBBBBBBB）",
+        "labelOk": true,
+        "gotTooltip": false,
+        "tooltipText": null
+      },
+      {
+        "i": 2,
+        "found": true,
+        "rendered": "qqqqqqqqqqqqqqqqqqqq...（src21-CCCCCCCCCCCCCC...）",
+        "expectLabel": "qqqqqqqqqqqqqqqqqqqq...（src21-CCCCCCCCCCCCCC...）",
+        "labelOk": true,
+        "gotTooltip": false,
+        "tooltipText": null
+      },
+      {
+        "i": 3,
+        "found": true,
+        "rendered": "rrrrrrrrrrrrrrrrrrrr...（src22-DDDDDDDDDDDDDD...）",
+        "expectLabel": "rrrrrrrrrrrrrrrrrrrr...（src22-DDDDDDDDDDDDDD...）",
+        "labelOk": true,
+        "gotTooltip": false,
+        "tooltipText": null
+      },
+      {
+        "i": 4,
+        "found": true,
+        "rendered": "中中中中中中中中中中中中中中中中中中中中...（中中中中中中中中中中中中中中中中中中中中...）",
+        "expectLabel": "中中中中中中中中中中中中中中中中中中中中...（中中中中中中中中中中中中中中中中中中中中...）",
+        "labelOk": true,
+        "gotTooltip": false,
+        "tooltipText": null
+      },
+      {
+        "i": 5,
+        "found": true,
+        "rendered": "😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀...",
+        "expectLabel": "😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀...",
+        "labelOk": true,
+        "gotTooltip": false,
+        "tooltipText": null
+      },
+      {
+        "i": 6,
+        "found": true,
+        "rendered": "src-very-long-YYYYYY...",
+        "expectLabel": "src-very-long-YYYYYY...",
+        "labelOk": true,
+        "gotTooltip": false,
+        "tooltipText": null
+      },
+      {
+        "i": 7,
+        "found": true,
+        "rendered": "宽宽宽宽宽宽宽宽宽宽宽宽宽宽宽宽宽宽宽宽...（src-wide-org）",
+        "expectLabel": "宽宽宽宽宽宽宽宽宽宽宽宽宽宽宽宽宽宽宽宽...（src-wide-org）",
+        "labelOk": true,
+        "gotTooltip": false,
+        "tooltipText": null
+      }
+    ],
+    "selectedProbe": [
+      {
+        "selectedIdentity": "PPPPPPPPPPPPPPPPPPPPAAA",
+        "tagAttr": "PPPPPPPPPPPPPPPPPPPPAAA",
+        "tags": [
+          "PPPPPPPPPPPPPPPPPPPP...（DDDDDDDDDDDDDDDDDDDD...）"
+        ],
+        "tagClosable": true,
+        "expectTooltipText": "DDDDDDDDDDDDDDDDDDDDAAA",
+        "tooltipText": "DDDDDDDDDDDDDDDDDDDDAAA",
+        "tooltipCount": 1,
+        "afterLeaveCount": 0,
+        "correct": true
+      },
+      {
+        "selectedIdentity": "PPPPPPPPPPPPPPPPPPPPBBB",
+        "tagAttr": "PPPPPPPPPPPPPPPPPPPPBBB",
+        "tags": [
+          "PPPPPPPPPPPPPPPPPPPP...（DDDDDDDDDDDDDDDDDDDD...）"
+        ],
+        "tagClosable": true,
+        "expectTooltipText": "DDDDDDDDDDDDDDDDDDDDBBB",
+        "tooltipText": "DDDDDDDDDDDDDDDDDDDDBBB",
+        "tooltipCount": 1,
+        "afterLeaveCount": 0,
+        "correct": true
+      }
+    ],
+    "requests": {
+      "apiTotal": 5,
+      "initialLoad": 1,
+      "afterReset": 0,
+      "afterOpenClose": 0,
+      "afterHoverTooltip": 0,
+      "queryClickDelta": 1,
+      "lastQueryUrl": "http://127.0.0.1:5173/api/monitor/data-source-run-state/list?clientId=PPPPPPPPPPPPPPPPPPPPAAA",
+      "queryClientId": [
+        "PPPPPPPPPPPPPPPPPPPPAAA"
+      ],
+      "queryClientIdIsFullOriginal": true,
+      "nonGet": []
+    },
+    "otherRoute": {
+      "dssElements": 0,
+      "elSelect": 0
+    },
+    "singleTooltips": 0,
+    "consoleErrors": []
+  },
+  {
+    "viewport": {
+      "w": 1700,
+      "h": 920
+    },
+    "mode": "synth",
+    "widths": {
+      "client": 240,
+      "source": 300,
+      "status": 200
+    },
+    "maxAdjacentDelta": {
+      "client": 0,
+      "source": 0,
+      "status": 0,
+      "qBtnX": 0,
+      "barH": 0,
+      "groups": 0
+    },
+    "maxHorizontalOverflow": 0,
+    "barH": 32,
+    "groupsY": [
+      175.5,
+      175.5,
+      175.5
+    ],
+    "groupsRowCount": 1,
+    "stateTags": [
+      "initial_all",
+      "collision_A_selected",
+      "collision_A_B_selected",
+      "longest_selected",
+      "multi_collapse_tags",
+      "clear_to_all",
+      "reset",
+      "source_longest"
+    ],
+    "adjacent": [
+      {
+        "from": "initial_all",
+        "to": "collision_A_selected",
+        "dClient": 0,
+        "dSource": 0,
+        "dStatus": 0,
+        "dQBtnX": 0,
+        "dBarH": 0,
+        "dGroups": [
+          [
+            0,
+            0
+          ],
+          [
+            0,
+            0
+          ],
+          [
+            0,
+            0
+          ]
+        ]
+      },
+      {
+        "from": "collision_A_selected",
+        "to": "collision_A_B_selected",
+        "dClient": 0,
+        "dSource": 0,
+        "dStatus": 0,
+        "dQBtnX": 0,
+        "dBarH": 0,
+        "dGroups": [
+          [
+            0,
+            0
+          ],
+          [
+            0,
+            0
+          ],
+          [
+            0,
+            0
+          ]
+        ]
+      },
+      {
+        "from": "collision_A_B_selected",
+        "to": "longest_selected",
+        "dClient": 0,
+        "dSource": 0,
+        "dStatus": 0,
+        "dQBtnX": 0,
+        "dBarH": 0,
+        "dGroups": [
+          [
+            0,
+            0
+          ],
+          [
+            0,
+            0
+          ],
+          [
+            0,
+            0
+          ]
+        ]
+      },
+      {
+        "from": "longest_selected",
+        "to": "multi_collapse_tags",
+        "dClient": 0,
+        "dSource": 0,
+        "dStatus": 0,
+        "dQBtnX": 0,
+        "dBarH": 0,
+        "dGroups": [
+          [
+            0,
+            0
+          ],
+          [
+            0,
+            0
+          ],
+          [
+            0,
+            0
+          ]
+        ]
+      },
+      {
+        "from": "multi_collapse_tags",
+        "to": "clear_to_all",
+        "dClient": 0,
+        "dSource": 0,
+        "dStatus": 0,
+        "dQBtnX": 0,
+        "dBarH": 0,
+        "dGroups": [
+          [
+            0,
+            0
+          ],
+          [
+            0,
+            0
+          ],
+          [
+            0,
+            0
+          ]
+        ]
+      },
+      {
+        "from": "clear_to_all",
+        "to": "reset",
+        "dClient": 0,
+        "dSource": 0,
+        "dStatus": 0,
+        "dQBtnX": 0,
+        "dBarH": 0,
+        "dGroups": [
+          [
+            0,
+            0
+          ],
+          [
+            0,
+            0
+          ],
+          [
+            0,
+            0
+          ]
+        ]
+      },
+      {
+        "from": "reset",
+        "to": "source_longest",
+        "dClient": 0,
+        "dSource": 0,
+        "dStatus": 0,
+        "dQBtnX": 0,
+        "dBarH": 0,
+        "dGroups": [
+          [
+            0,
+            0
+          ],
+          [
+            0,
+            0
+          ],
+          [
+            0,
+            0
+          ]
+        ]
+      }
+    ],
+    "states": [
+      {
+        "tag": "initial_all",
+        "client": {
+          "x": 340,
+          "y": 175.5,
+          "w": 240,
+          "h": 32
+        },
+        "source": {
+          "x": 628,
+          "y": 175.5,
+          "w": 300,
+          "h": 32
+        },
+        "status": {
+          "x": 1004,
+          "y": 175.5,
+          "w": 200,
+          "h": 32
+        },
+        "clientWrap": {
+          "x": 340,
+          "y": 175.5,
+          "w": 240,
+          "h": 32
+        },
+        "sourceWrap": {
+          "x": 628,
+          "y": 175.5,
+          "w": 300,
+          "h": 32
+        },
+        "statusWrap": {
+          "x": 1004,
+          "y": 175.5,
+          "w": 200,
+          "h": 32
+        },
+        "qBtn": {
+          "x": 1218,
+          "y": 176.5,
+          "w": 62,
+          "h": 30
+        },
+        "resetBtn": {
+          "x": 1300,
+          "y": 176.5,
+          "w": 58,
+          "h": 30
+        },
+        "bar": {
+          "x": 292,
+          "y": 175.5,
+          "w": 1336,
+          "h": 32
+        },
+        "groups": [
+          {
+            "x": 292,
+            "y": 175.5,
+            "w": 288,
+            "h": 32
+          },
+          {
+            "x": 594,
+            "y": 175.5,
+            "w": 334,
+            "h": 32
+          },
+          {
+            "x": 942,
+            "y": 175.5,
+            "w": 262,
+            "h": 32
+          }
+        ],
+        "overflowX": 0
+      },
+      {
+        "tag": "collision_A_selected",
+        "client": {
+          "x": 340,
+          "y": 175.5,
+          "w": 240,
+          "h": 32
+        },
+        "source": {
+          "x": 628,
+          "y": 175.5,
+          "w": 300,
+          "h": 32
+        },
+        "status": {
+          "x": 1004,
+          "y": 175.5,
+          "w": 200,
+          "h": 32
+        },
+        "clientWrap": {
+          "x": 340,
+          "y": 175.5,
+          "w": 240,
+          "h": 32
+        },
+        "sourceWrap": {
+          "x": 628,
+          "y": 175.5,
+          "w": 300,
+          "h": 32
+        },
+        "statusWrap": {
+          "x": 1004,
+          "y": 175.5,
+          "w": 200,
+          "h": 32
+        },
+        "qBtn": {
+          "x": 1218,
+          "y": 176.5,
+          "w": 62,
+          "h": 30
+        },
+        "resetBtn": {
+          "x": 1300,
+          "y": 176.5,
+          "w": 58,
+          "h": 30
+        },
+        "bar": {
+          "x": 292,
+          "y": 175.5,
+          "w": 1336,
+          "h": 32
+        },
+        "groups": [
+          {
+            "x": 292,
+            "y": 175.5,
+            "w": 288,
+            "h": 32
+          },
+          {
+            "x": 594,
+            "y": 175.5,
+            "w": 334,
+            "h": 32
+          },
+          {
+            "x": 942,
+            "y": 175.5,
+            "w": 262,
+            "h": 32
+          }
+        ],
+        "overflowX": 0
+      },
+      {
+        "tag": "collision_A_B_selected",
+        "client": {
+          "x": 340,
+          "y": 175.5,
+          "w": 240,
+          "h": 32
+        },
+        "source": {
+          "x": 628,
+          "y": 175.5,
+          "w": 300,
+          "h": 32
+        },
+        "status": {
+          "x": 1004,
+          "y": 175.5,
+          "w": 200,
+          "h": 32
+        },
+        "clientWrap": {
+          "x": 340,
+          "y": 175.5,
+          "w": 240,
+          "h": 32
+        },
+        "sourceWrap": {
+          "x": 628,
+          "y": 175.5,
+          "w": 300,
+          "h": 32
+        },
+        "statusWrap": {
+          "x": 1004,
+          "y": 175.5,
+          "w": 200,
+          "h": 32
+        },
+        "qBtn": {
+          "x": 1218,
+          "y": 176.5,
+          "w": 62,
+          "h": 30
+        },
+        "resetBtn": {
+          "x": 1300,
+          "y": 176.5,
+          "w": 58,
+          "h": 30
+        },
+        "bar": {
+          "x": 292,
+          "y": 175.5,
+          "w": 1336,
+          "h": 32
+        },
+        "groups": [
+          {
+            "x": 292,
+            "y": 175.5,
+            "w": 288,
+            "h": 32
+          },
+          {
+            "x": 594,
+            "y": 175.5,
+            "w": 334,
+            "h": 32
+          },
+          {
+            "x": 942,
+            "y": 175.5,
+            "w": 262,
+            "h": 32
+          }
+        ],
+        "overflowX": 0
+      },
+      {
+        "tag": "longest_selected",
+        "client": {
+          "x": 340,
+          "y": 175.5,
+          "w": 240,
+          "h": 32
+        },
+        "source": {
+          "x": 628,
+          "y": 175.5,
+          "w": 300,
+          "h": 32
+        },
+        "status": {
+          "x": 1004,
+          "y": 175.5,
+          "w": 200,
+          "h": 32
+        },
+        "clientWrap": {
+          "x": 340,
+          "y": 175.5,
+          "w": 240,
+          "h": 32
+        },
+        "sourceWrap": {
+          "x": 628,
+          "y": 175.5,
+          "w": 300,
+          "h": 32
+        },
+        "statusWrap": {
+          "x": 1004,
+          "y": 175.5,
+          "w": 200,
+          "h": 32
+        },
+        "qBtn": {
+          "x": 1218,
+          "y": 176.5,
+          "w": 62,
+          "h": 30
+        },
+        "resetBtn": {
+          "x": 1300,
+          "y": 176.5,
+          "w": 58,
+          "h": 30
+        },
+        "bar": {
+          "x": 292,
+          "y": 175.5,
+          "w": 1336,
+          "h": 32
+        },
+        "groups": [
+          {
+            "x": 292,
+            "y": 175.5,
+            "w": 288,
+            "h": 32
+          },
+          {
+            "x": 594,
+            "y": 175.5,
+            "w": 334,
+            "h": 32
+          },
+          {
+            "x": 942,
+            "y": 175.5,
+            "w": 262,
+            "h": 32
+          }
+        ],
+        "overflowX": 0
+      },
+      {
+        "tag": "multi_collapse_tags",
+        "client": {
+          "x": 340,
+          "y": 175.5,
+          "w": 240,
+          "h": 32
+        },
+        "source": {
+          "x": 628,
+          "y": 175.5,
+          "w": 300,
+          "h": 32
+        },
+        "status": {
+          "x": 1004,
+          "y": 175.5,
+          "w": 200,
+          "h": 32
+        },
+        "clientWrap": {
+          "x": 340,
+          "y": 175.5,
+          "w": 240,
+          "h": 32
+        },
+        "sourceWrap": {
+          "x": 628,
+          "y": 175.5,
+          "w": 300,
+          "h": 32
+        },
+        "statusWrap": {
+          "x": 1004,
+          "y": 175.5,
+          "w": 200,
+          "h": 32
+        },
+        "qBtn": {
+          "x": 1218,
+          "y": 176.5,
+          "w": 62,
+          "h": 30
+        },
+        "resetBtn": {
+          "x": 1300,
+          "y": 176.5,
+          "w": 58,
+          "h": 30
+        },
+        "bar": {
+          "x": 292,
+          "y": 175.5,
+          "w": 1336,
+          "h": 32
+        },
+        "groups": [
+          {
+            "x": 292,
+            "y": 175.5,
+            "w": 288,
+            "h": 32
+          },
+          {
+            "x": 594,
+            "y": 175.5,
+            "w": 334,
+            "h": 32
+          },
+          {
+            "x": 942,
+            "y": 175.5,
+            "w": 262,
+            "h": 32
+          }
+        ],
+        "overflowX": 0
+      },
+      {
+        "tag": "clear_to_all",
+        "client": {
+          "x": 340,
+          "y": 175.5,
+          "w": 240,
+          "h": 32
+        },
+        "source": {
+          "x": 628,
+          "y": 175.5,
+          "w": 300,
+          "h": 32
+        },
+        "status": {
+          "x": 1004,
+          "y": 175.5,
+          "w": 200,
+          "h": 32
+        },
+        "clientWrap": {
+          "x": 340,
+          "y": 175.5,
+          "w": 240,
+          "h": 32
+        },
+        "sourceWrap": {
+          "x": 628,
+          "y": 175.5,
+          "w": 300,
+          "h": 32
+        },
+        "statusWrap": {
+          "x": 1004,
+          "y": 175.5,
+          "w": 200,
+          "h": 32
+        },
+        "qBtn": {
+          "x": 1218,
+          "y": 176.5,
+          "w": 62,
+          "h": 30
+        },
+        "resetBtn": {
+          "x": 1300,
+          "y": 176.5,
+          "w": 58,
+          "h": 30
+        },
+        "bar": {
+          "x": 292,
+          "y": 175.5,
+          "w": 1336,
+          "h": 32
+        },
+        "groups": [
+          {
+            "x": 292,
+            "y": 175.5,
+            "w": 288,
+            "h": 32
+          },
+          {
+            "x": 594,
+            "y": 175.5,
+            "w": 334,
+            "h": 32
+          },
+          {
+            "x": 942,
+            "y": 175.5,
+            "w": 262,
+            "h": 32
+          }
+        ],
+        "overflowX": 0
+      },
+      {
+        "tag": "reset",
+        "client": {
+          "x": 340,
+          "y": 175.5,
+          "w": 240,
+          "h": 32
+        },
+        "source": {
+          "x": 628,
+          "y": 175.5,
+          "w": 300,
+          "h": 32
+        },
+        "status": {
+          "x": 1004,
+          "y": 175.5,
+          "w": 200,
+          "h": 32
+        },
+        "clientWrap": {
+          "x": 340,
+          "y": 175.5,
+          "w": 240,
+          "h": 32
+        },
+        "sourceWrap": {
+          "x": 628,
+          "y": 175.5,
+          "w": 300,
+          "h": 32
+        },
+        "statusWrap": {
+          "x": 1004,
+          "y": 175.5,
+          "w": 200,
+          "h": 32
+        },
+        "qBtn": {
+          "x": 1218,
+          "y": 176.5,
+          "w": 62,
+          "h": 30
+        },
+        "resetBtn": {
+          "x": 1300,
+          "y": 176.5,
+          "w": 58,
+          "h": 30
+        },
+        "bar": {
+          "x": 292,
+          "y": 175.5,
+          "w": 1336,
+          "h": 32
+        },
+        "groups": [
+          {
+            "x": 292,
+            "y": 175.5,
+            "w": 288,
+            "h": 32
+          },
+          {
+            "x": 594,
+            "y": 175.5,
+            "w": 334,
+            "h": 32
+          },
+          {
+            "x": 942,
+            "y": 175.5,
+            "w": 262,
+            "h": 32
+          }
+        ],
+        "overflowX": 0
+      },
+      {
+        "tag": "source_longest",
+        "client": {
+          "x": 340,
+          "y": 175.5,
+          "w": 240,
+          "h": 32
+        },
+        "source": {
+          "x": 628,
+          "y": 175.5,
+          "w": 300,
+          "h": 32
+        },
+        "status": {
+          "x": 1004,
+          "y": 175.5,
+          "w": 200,
+          "h": 32
+        },
+        "clientWrap": {
+          "x": 340,
+          "y": 175.5,
+          "w": 240,
+          "h": 32
+        },
+        "sourceWrap": {
+          "x": 628,
+          "y": 175.5,
+          "w": 300,
+          "h": 32
+        },
+        "statusWrap": {
+          "x": 1004,
+          "y": 175.5,
+          "w": 200,
+          "h": 32
+        },
+        "qBtn": {
+          "x": 1218,
+          "y": 176.5,
+          "w": 62,
+          "h": 30
+        },
+        "resetBtn": {
+          "x": 1300,
+          "y": 176.5,
+          "w": 58,
+          "h": 30
+        },
+        "bar": {
+          "x": 292,
+          "y": 175.5,
+          "w": 1336,
+          "h": 32
+        },
+        "groups": [
+          {
+            "x": 292,
+            "y": 175.5,
+            "w": 288,
+            "h": 32
+          },
+          {
+            "x": 594,
+            "y": 175.5,
+            "w": 334,
+            "h": 32
+          },
+          {
+            "x": 942,
+            "y": 175.5,
+            "w": 262,
+            "h": 32
+          }
+        ],
+        "overflowX": 0
+      }
+    ],
+    "candLabels": [
+      "全部",
+      "PPPPPPPPPPPPPPPPPPPP...（DDDDDDDDDDDDDDDDDDDD...）",
+      "PPPPPPPPPPPPPPPPPPPP...（DDDDDDDDDDDDDDDDDDDD...）",
+      "id19-AAAAAAAAAAAAAA（ddddddddddddddddddd）",
+      "id20-BBBBBBBBBBBBBBB（eeeeeeeeeeeeeeeeeeee）",
+      "id21-CCCCCCCCCCCCCCC...（ffffffffffffffffffff...）",
+      "id22-DDDDDDDDDDDDDDD...（gggggggggggggggggggg...）",
+      "中中中中中中中中中中中中中中中中中中中中...（中中中中中中中中中中中中中中中中中中中中...）",
+      "😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀...（😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀...）",
+      "very-long-client-id-...",
+      "short-desc（长描述长描述长描述长描述长描述长描述长描...）",
+      "desc-empty-str",
+      "desc-20（22222222222222222222）"
+    ],
+    "collisionRows": {
+      "PPPPPPPPPPPPPPPPPPPPAAA": {
+        "x": 580,
+        "y": 278,
+        "attr": "PPPPPPPPPPPPPPPPPPPPAAA",
+        "text": "PPPPPPPPPPPPPPPPPPPP...（DDDDDDDDDDDDDDDDDDDD...）",
+        "rect": {
+          "x": 341,
+          "y": 261,
+          "w": 478,
+          "h": 34,
+          "right": 819,
+          "bottom": 295
+        }
+      },
+      "PPPPPPPPPPPPPPPPPPPPBBB": {
+        "x": 580,
+        "y": 312,
+        "attr": "PPPPPPPPPPPPPPPPPPPPBBB",
+        "text": "PPPPPPPPPPPPPPPPPPPP...（DDDDDDDDDDDDDDDDDDDD...）",
+        "rect": {
+          "x": 341,
+          "y": 295,
+          "w": 478,
+          "h": 34,
+          "right": 819,
+          "bottom": 329
+        }
+      }
+    },
+    "collisionProbe": [
+      {
+        "hoveredIdentity": "PPPPPPPPPPPPPPPPPPPPAAA",
+        "expectedTooltipText": "DDDDDDDDDDDDDDDDDDDDAAA",
+        "wrongIfReverseLookup": "DDDDDDDDDDDDDDDDDDDDBBB",
+        "renderedLabel": "PPPPPPPPPPPPPPPPPPPP...（DDDDDDDDDDDDDDDDDDDD...）",
+        "visibleLabelIdenticalToOther": true,
+        "tooltipText": "DDDDDDDDDDDDDDDDDDDDAAA",
+        "tooltipCount": 1,
+        "tooltipCountAfterLeave": 0,
+        "parentIsBody": true,
+        "tooltipRect": {
+          "w": 235.78,
+          "h": 33.5
+        },
+        "tooltipStyle": {
+          "maxWidth": "480px",
+          "whiteSpace": "pre-line",
+          "overflowWrap": "anywhere",
+          "position": "fixed",
+          "zIndex": "3000"
+        },
+        "ctrlDelta": {
+          "client": 0,
+          "barH": 0
+        },
+        "correct": true
+      },
+      {
+        "hoveredIdentity": "PPPPPPPPPPPPPPPPPPPPBBB",
+        "expectedTooltipText": "DDDDDDDDDDDDDDDDDDDDBBB",
+        "wrongIfReverseLookup": "DDDDDDDDDDDDDDDDDDDDAAA",
+        "renderedLabel": "PPPPPPPPPPPPPPPPPPPP...（DDDDDDDDDDDDDDDDDDDD...）",
+        "visibleLabelIdenticalToOther": true,
+        "tooltipText": "DDDDDDDDDDDDDDDDDDDDBBB",
+        "tooltipCount": 1,
+        "tooltipCountAfterLeave": 0,
+        "parentIsBody": true,
+        "tooltipRect": {
+          "w": 235.78,
+          "h": 33.5
+        },
+        "tooltipStyle": {
+          "maxWidth": "480px",
+          "whiteSpace": "pre-line",
+          "overflowWrap": "anywhere",
+          "position": "fixed",
+          "zIndex": "3000"
+        },
+        "ctrlDelta": {
+          "client": 0,
+          "barH": 0
+        },
+        "correct": true
+      }
+    ],
+    "boundaryProbe": [
+      {
+        "id": "id19-AAAAAAAAAAAAAA",
+        "found": true,
+        "rendered": "id19-AAAAAAAAAAAAAA（ddddddddddddddddddd）",
+        "expectLabel": "id19-AAAAAAAAAAAAAA（ddddddddddddddddddd）",
+        "labelOk": true,
+        "renderedCodePoints": 40,
+        "expectTooltip": false,
+        "gotTooltip": false,
+        "tooltipText": null,
+        "expectTooltipText": null,
+        "textOk": true,
+        "afterLeaveCount": 0
+      },
+      {
+        "id": "id20-BBBBBBBBBBBBBBB",
+        "found": true,
+        "rendered": "id20-BBBBBBBBBBBBBBB（eeeeeeeeeeeeeeeeeeee）",
+        "expectLabel": "id20-BBBBBBBBBBBBBBB（eeeeeeeeeeeeeeeeeeee）",
+        "labelOk": true,
+        "renderedCodePoints": 42,
+        "expectTooltip": false,
+        "gotTooltip": false,
+        "tooltipText": null,
+        "expectTooltipText": null,
+        "textOk": true,
+        "afterLeaveCount": 0
+      },
+      {
+        "id": "id21-CCCCCCCCCCCCCCCC",
+        "found": true,
+        "rendered": "id21-CCCCCCCCCCCCCCC...（ffffffffffffffffffff...）",
+        "expectLabel": "id21-CCCCCCCCCCCCCCC...（ffffffffffffffffffff...）",
+        "labelOk": true,
+        "renderedCodePoints": 48,
+        "expectTooltip": true,
+        "gotTooltip": true,
+        "tooltipText": "fffffffffffffffffffff",
+        "expectTooltipText": "fffffffffffffffffffff",
+        "textOk": true,
+        "afterLeaveCount": 0
+      },
+      {
+        "id": "id22-DDDDDDDDDDDDDDDDD",
+        "found": true,
+        "rendered": "id22-DDDDDDDDDDDDDDD...（gggggggggggggggggggg...）",
+        "expectLabel": "id22-DDDDDDDDDDDDDDD...（gggggggggggggggggggg...）",
+        "labelOk": true,
+        "renderedCodePoints": 48,
+        "expectTooltip": true,
+        "gotTooltip": true,
+        "tooltipText": "gggggggggggggggggggggg",
+        "expectTooltipText": "gggggggggggggggggggggg",
+        "textOk": true,
+        "afterLeaveCount": 0
+      },
+      {
+        "id": "中中中中中中中中中中中中中中中中中中中中中中中中中",
+        "found": true,
+        "rendered": "中中中中中中中中中中中中中中中中中中中中...（中中中中中中中中中中中中中中中中中中中中...）",
+        "expectLabel": "中中中中中中中中中中中中中中中中中中中中...（中中中中中中中中中中中中中中中中中中中中...）",
+        "labelOk": true,
+        "renderedCodePoints": 48,
+        "expectTooltip": true,
+        "gotTooltip": true,
+        "tooltipText": "中中中中中中中中中中中中中中中中中中中中中中中中",
+        "expectTooltipText": "中中中中中中中中中中中中中中中中中中中中中中中中",
+        "textOk": true,
+        "afterLeaveCount": 0
+      },
+      {
+        "id": "😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀",
+        "found": true,
+        "rendered": "😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀...（😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀...）",
+        "expectLabel": "😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀...（😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀...）",
+        "labelOk": true,
+        "renderedCodePoints": 48,
+        "expectTooltip": true,
+        "gotTooltip": true,
+        "tooltipText": "😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀",
+        "expectTooltipText": "😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀",
+        "textOk": true,
+        "afterLeaveCount": 0
+      },
+      {
+        "id": "very-long-client-id-XXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXX",
+        "found": true,
+        "rendered": "very-long-client-id-...",
+        "expectLabel": "very-long-client-id-...",
+        "labelOk": true,
+        "renderedCodePoints": 20,
+        "expectTooltip": false,
+        "gotTooltip": false,
+        "tooltipText": null,
+        "expectTooltipText": null,
+        "textOk": true,
+        "afterLeaveCount": 0
+      },
+      {
+        "id": "short-desc",
+        "found": true,
+        "rendered": "short-desc（长描述长描述长描述长描述长描述长描述长描...）",
+        "expectLabel": "short-desc（长描述长描述长描述长描述长描述长描述长描...）",
+        "labelOk": true,
+        "renderedCodePoints": 35,
+        "expectTooltip": true,
+        "gotTooltip": true,
+        "tooltipText": "长描述长描述长描述长描述长描述长描述长描述长描述长描述长描述长描述长描述长描述长描述长描述长描述长描述长描述长描述长描述长描述长描述长描述长描述长描述长描述长描述长描述长描述长描述长描述长描述长描述长描述长描述长描述长描述长描述长描述长描述长描述长描述长描述长描述长描述长描述长描述长描述长描述长描述长描述长描述长描述长描述长描述长描述长描述长描述长描述长描述长描述长描述长描述长描述长描述长描述长描述长描述长描述长描述长描述长描述长描述长描述长描述长描述长描述长描述长描述长描述长描述长描述长描述长描述长描述长描述长描述长描述长描述长描述长描述长描述长描述长描述长描述长描述长描述长描述长描述长描述",
+        "expectTooltipText": "长描述长描述长描述长描述长描述长描述长描述长描述长描述长描述长描述长描述长描述长描述长描述长描述长描述长描述长描述长描述长描述长描述长描述长描述长描述长描述长描述长描述长描述长描述长描述长描述长描述长描述长描述长描述长描述长描述长描述长描述长描述长描述长描述长描述长描述长描述长描述长描述长描述长描述长描述长描述长描述长描述长描述长描述长描述长描述长描述长描述长描述长描述长描述长描述长描述长描述长描述长描述长描述长描述长描述长描述长描述长描述长描述长描述长描述长描述长描述长描述长描述长描述长描述长描述长描述长描述长描述长描述长描述长描述长描述长描述长描述长描述长描述长描述长描述长描述长描述长描述",
+        "textOk": true,
+        "afterLeaveCount": 0
+      },
+      {
+        "id": "desc-empty-str",
+        "found": true,
+        "rendered": "desc-empty-str",
+        "expectLabel": "desc-empty-str",
+        "labelOk": true,
+        "renderedCodePoints": 14,
+        "expectTooltip": false,
+        "gotTooltip": false,
+        "tooltipText": null,
+        "expectTooltipText": null,
+        "textOk": true,
+        "afterLeaveCount": 0
+      },
+      {
+        "id": "desc-20",
+        "found": true,
+        "rendered": "desc-20（22222222222222222222）",
+        "expectLabel": "desc-20（22222222222222222222）",
+        "labelOk": true,
+        "renderedCodePoints": 29,
+        "expectTooltip": false,
+        "gotTooltip": false,
+        "tooltipText": null,
+        "expectTooltipText": null,
+        "textOk": true,
+        "afterLeaveCount": 0
+      }
+    ],
+    "sourceRendered": [
+      "全部",
+      "ooooooooooooooooooo（src19-AAAAAAAAAAAAA）",
+      "pppppppppppppppppppp（src20-BBBBBBBBBBBBBB）",
+      "qqqqqqqqqqqqqqqqqqqq...（src21-CCCCCCCCCCCCCC...）",
+      "rrrrrrrrrrrrrrrrrrrr...（src22-DDDDDDDDDDDDDD...）",
+      "中中中中中中中中中中中中中中中中中中中中...（中中中中中中中中中中中中中中中中中中中中...）",
+      "😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀...",
+      "src-very-long-YYYYYY...",
+      "宽宽宽宽宽宽宽宽宽宽宽宽宽宽宽宽宽宽宽宽...（src-wide-org）"
+    ],
+    "sourceProbe": [
+      {
+        "i": 0,
+        "found": true,
+        "rendered": "ooooooooooooooooooo（src19-AAAAAAAAAAAAA）",
+        "expectLabel": "ooooooooooooooooooo（src19-AAAAAAAAAAAAA）",
+        "labelOk": true,
+        "gotTooltip": false,
+        "tooltipText": null
+      },
+      {
+        "i": 1,
+        "found": true,
+        "rendered": "pppppppppppppppppppp（src20-BBBBBBBBBBBBBB）",
+        "expectLabel": "pppppppppppppppppppp（src20-BBBBBBBBBBBBBB）",
+        "labelOk": true,
+        "gotTooltip": false,
+        "tooltipText": null
+      },
+      {
+        "i": 2,
+        "found": true,
+        "rendered": "qqqqqqqqqqqqqqqqqqqq...（src21-CCCCCCCCCCCCCC...）",
+        "expectLabel": "qqqqqqqqqqqqqqqqqqqq...（src21-CCCCCCCCCCCCCC...）",
+        "labelOk": true,
+        "gotTooltip": false,
+        "tooltipText": null
+      },
+      {
+        "i": 3,
+        "found": true,
+        "rendered": "rrrrrrrrrrrrrrrrrrrr...（src22-DDDDDDDDDDDDDD...）",
+        "expectLabel": "rrrrrrrrrrrrrrrrrrrr...（src22-DDDDDDDDDDDDDD...）",
+        "labelOk": true,
+        "gotTooltip": false,
+        "tooltipText": null
+      },
+      {
+        "i": 4,
+        "found": true,
+        "rendered": "中中中中中中中中中中中中中中中中中中中中...（中中中中中中中中中中中中中中中中中中中中...）",
+        "expectLabel": "中中中中中中中中中中中中中中中中中中中中...（中中中中中中中中中中中中中中中中中中中中...）",
+        "labelOk": true,
+        "gotTooltip": false,
+        "tooltipText": null
+      },
+      {
+        "i": 5,
+        "found": true,
+        "rendered": "😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀...",
+        "expectLabel": "😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀...",
+        "labelOk": true,
+        "gotTooltip": false,
+        "tooltipText": null
+      },
+      {
+        "i": 6,
+        "found": true,
+        "rendered": "src-very-long-YYYYYY...",
+        "expectLabel": "src-very-long-YYYYYY...",
+        "labelOk": true,
+        "gotTooltip": false,
+        "tooltipText": null
+      },
+      {
+        "i": 7,
+        "found": true,
+        "rendered": "宽宽宽宽宽宽宽宽宽宽宽宽宽宽宽宽宽宽宽宽...（src-wide-org）",
+        "expectLabel": "宽宽宽宽宽宽宽宽宽宽宽宽宽宽宽宽宽宽宽宽...（src-wide-org）",
+        "labelOk": true,
+        "gotTooltip": false,
+        "tooltipText": null
+      }
+    ],
+    "selectedProbe": [
+      {
+        "selectedIdentity": "PPPPPPPPPPPPPPPPPPPPAAA",
+        "tagAttr": "PPPPPPPPPPPPPPPPPPPPAAA",
+        "tags": [
+          "PPPPPPPPPPPPPPPPPPPP...（DDDDDDDDDDDDDDDDDDDD...）"
+        ],
+        "tagClosable": true,
+        "expectTooltipText": "DDDDDDDDDDDDDDDDDDDDAAA",
+        "tooltipText": "DDDDDDDDDDDDDDDDDDDDAAA",
+        "tooltipCount": 1,
+        "afterLeaveCount": 0,
+        "correct": true
+      },
+      {
+        "selectedIdentity": "PPPPPPPPPPPPPPPPPPPPBBB",
+        "tagAttr": "PPPPPPPPPPPPPPPPPPPPBBB",
+        "tags": [
+          "PPPPPPPPPPPPPPPPPPPP...（DDDDDDDDDDDDDDDDDDDD...）"
+        ],
+        "tagClosable": true,
+        "expectTooltipText": "DDDDDDDDDDDDDDDDDDDDBBB",
+        "tooltipText": "DDDDDDDDDDDDDDDDDDDDBBB",
+        "tooltipCount": 1,
+        "afterLeaveCount": 0,
+        "correct": true
+      }
+    ],
+    "requests": {
+      "apiTotal": 5,
+      "initialLoad": 1,
+      "afterReset": 0,
+      "afterOpenClose": 0,
+      "afterHoverTooltip": 0,
+      "queryClickDelta": 1,
+      "lastQueryUrl": "http://127.0.0.1:5173/api/monitor/data-source-run-state/list?clientId=PPPPPPPPPPPPPPPPPPPPAAA",
+      "queryClientId": [
+        "PPPPPPPPPPPPPPPPPPPPAAA"
+      ],
+      "queryClientIdIsFullOriginal": true,
+      "nonGet": []
+    },
+    "otherRoute": {
+      "dssElements": 0,
+      "elSelect": 0
+    },
+    "singleTooltips": 0,
+    "consoleErrors": []
+  },
+  {
+    "viewport": {
+      "w": 1920,
+      "h": 1080
+    },
+    "mode": "synth",
+    "widths": {
+      "client": 240,
+      "source": 300,
+      "status": 200
+    },
+    "maxAdjacentDelta": {
+      "client": 0,
+      "source": 0,
+      "status": 0,
+      "qBtnX": 0,
+      "barH": 0,
+      "groups": 0
+    },
+    "maxHorizontalOverflow": 0,
+    "barH": 32,
+    "groupsY": [
+      175.5,
+      175.5,
+      175.5
+    ],
+    "groupsRowCount": 1,
+    "stateTags": [
+      "initial_all",
+      "collision_A_selected",
+      "collision_A_B_selected",
+      "longest_selected",
+      "multi_collapse_tags",
+      "clear_to_all",
+      "reset",
+      "source_longest"
+    ],
+    "adjacent": [
+      {
+        "from": "initial_all",
+        "to": "collision_A_selected",
+        "dClient": 0,
+        "dSource": 0,
+        "dStatus": 0,
+        "dQBtnX": 0,
+        "dBarH": 0,
+        "dGroups": [
+          [
+            0,
+            0
+          ],
+          [
+            0,
+            0
+          ],
+          [
+            0,
+            0
+          ]
+        ]
+      },
+      {
+        "from": "collision_A_selected",
+        "to": "collision_A_B_selected",
+        "dClient": 0,
+        "dSource": 0,
+        "dStatus": 0,
+        "dQBtnX": 0,
+        "dBarH": 0,
+        "dGroups": [
+          [
+            0,
+            0
+          ],
+          [
+            0,
+            0
+          ],
+          [
+            0,
+            0
+          ]
+        ]
+      },
+      {
+        "from": "collision_A_B_selected",
+        "to": "longest_selected",
+        "dClient": 0,
+        "dSource": 0,
+        "dStatus": 0,
+        "dQBtnX": 0,
+        "dBarH": 0,
+        "dGroups": [
+          [
+            0,
+            0
+          ],
+          [
+            0,
+            0
+          ],
+          [
+            0,
+            0
+          ]
+        ]
+      },
+      {
+        "from": "longest_selected",
+        "to": "multi_collapse_tags",
+        "dClient": 0,
+        "dSource": 0,
+        "dStatus": 0,
+        "dQBtnX": 0,
+        "dBarH": 0,
+        "dGroups": [
+          [
+            0,
+            0
+          ],
+          [
+            0,
+            0
+          ],
+          [
+            0,
+            0
+          ]
+        ]
+      },
+      {
+        "from": "multi_collapse_tags",
+        "to": "clear_to_all",
+        "dClient": 0,
+        "dSource": 0,
+        "dStatus": 0,
+        "dQBtnX": 0,
+        "dBarH": 0,
+        "dGroups": [
+          [
+            0,
+            0
+          ],
+          [
+            0,
+            0
+          ],
+          [
+            0,
+            0
+          ]
+        ]
+      },
+      {
+        "from": "clear_to_all",
+        "to": "reset",
+        "dClient": 0,
+        "dSource": 0,
+        "dStatus": 0,
+        "dQBtnX": 0,
+        "dBarH": 0,
+        "dGroups": [
+          [
+            0,
+            0
+          ],
+          [
+            0,
+            0
+          ],
+          [
+            0,
+            0
+          ]
+        ]
+      },
+      {
+        "from": "reset",
+        "to": "source_longest",
+        "dClient": 0,
+        "dSource": 0,
+        "dStatus": 0,
+        "dQBtnX": 0,
+        "dBarH": 0,
+        "dGroups": [
+          [
+            0,
+            0
+          ],
+          [
+            0,
+            0
+          ],
+          [
+            0,
+            0
+          ]
+        ]
+      }
+    ],
+    "states": [
+      {
+        "tag": "initial_all",
+        "client": {
+          "x": 340,
+          "y": 175.5,
+          "w": 240,
+          "h": 32
+        },
+        "source": {
+          "x": 628,
+          "y": 175.5,
+          "w": 300,
+          "h": 32
+        },
+        "status": {
+          "x": 1004,
+          "y": 175.5,
+          "w": 200,
+          "h": 32
+        },
+        "clientWrap": {
+          "x": 340,
+          "y": 175.5,
+          "w": 240,
+          "h": 32
+        },
+        "sourceWrap": {
+          "x": 628,
+          "y": 175.5,
+          "w": 300,
+          "h": 32
+        },
+        "statusWrap": {
+          "x": 1004,
+          "y": 175.5,
+          "w": 200,
+          "h": 32
+        },
+        "qBtn": {
+          "x": 1218,
+          "y": 176.5,
+          "w": 62,
+          "h": 30
+        },
+        "resetBtn": {
+          "x": 1300,
+          "y": 176.5,
+          "w": 58,
+          "h": 30
+        },
+        "bar": {
+          "x": 292,
+          "y": 175.5,
+          "w": 1556,
+          "h": 32
+        },
+        "groups": [
+          {
+            "x": 292,
+            "y": 175.5,
+            "w": 288,
+            "h": 32
+          },
+          {
+            "x": 594,
+            "y": 175.5,
+            "w": 334,
+            "h": 32
+          },
+          {
+            "x": 942,
+            "y": 175.5,
+            "w": 262,
+            "h": 32
+          }
+        ],
+        "overflowX": 0
+      },
+      {
+        "tag": "collision_A_selected",
+        "client": {
+          "x": 340,
+          "y": 175.5,
+          "w": 240,
+          "h": 32
+        },
+        "source": {
+          "x": 628,
+          "y": 175.5,
+          "w": 300,
+          "h": 32
+        },
+        "status": {
+          "x": 1004,
+          "y": 175.5,
+          "w": 200,
+          "h": 32
+        },
+        "clientWrap": {
+          "x": 340,
+          "y": 175.5,
+          "w": 240,
+          "h": 32
+        },
+        "sourceWrap": {
+          "x": 628,
+          "y": 175.5,
+          "w": 300,
+          "h": 32
+        },
+        "statusWrap": {
+          "x": 1004,
+          "y": 175.5,
+          "w": 200,
+          "h": 32
+        },
+        "qBtn": {
+          "x": 1218,
+          "y": 176.5,
+          "w": 62,
+          "h": 30
+        },
+        "resetBtn": {
+          "x": 1300,
+          "y": 176.5,
+          "w": 58,
+          "h": 30
+        },
+        "bar": {
+          "x": 292,
+          "y": 175.5,
+          "w": 1556,
+          "h": 32
+        },
+        "groups": [
+          {
+            "x": 292,
+            "y": 175.5,
+            "w": 288,
+            "h": 32
+          },
+          {
+            "x": 594,
+            "y": 175.5,
+            "w": 334,
+            "h": 32
+          },
+          {
+            "x": 942,
+            "y": 175.5,
+            "w": 262,
+            "h": 32
+          }
+        ],
+        "overflowX": 0
+      },
+      {
+        "tag": "collision_A_B_selected",
+        "client": {
+          "x": 340,
+          "y": 175.5,
+          "w": 240,
+          "h": 32
+        },
+        "source": {
+          "x": 628,
+          "y": 175.5,
+          "w": 300,
+          "h": 32
+        },
+        "status": {
+          "x": 1004,
+          "y": 175.5,
+          "w": 200,
+          "h": 32
+        },
+        "clientWrap": {
+          "x": 340,
+          "y": 175.5,
+          "w": 240,
+          "h": 32
+        },
+        "sourceWrap": {
+          "x": 628,
+          "y": 175.5,
+          "w": 300,
+          "h": 32
+        },
+        "statusWrap": {
+          "x": 1004,
+          "y": 175.5,
+          "w": 200,
+          "h": 32
+        },
+        "qBtn": {
+          "x": 1218,
+          "y": 176.5,
+          "w": 62,
+          "h": 30
+        },
+        "resetBtn": {
+          "x": 1300,
+          "y": 176.5,
+          "w": 58,
+          "h": 30
+        },
+        "bar": {
+          "x": 292,
+          "y": 175.5,
+          "w": 1556,
+          "h": 32
+        },
+        "groups": [
+          {
+            "x": 292,
+            "y": 175.5,
+            "w": 288,
+            "h": 32
+          },
+          {
+            "x": 594,
+            "y": 175.5,
+            "w": 334,
+            "h": 32
+          },
+          {
+            "x": 942,
+            "y": 175.5,
+            "w": 262,
+            "h": 32
+          }
+        ],
+        "overflowX": 0
+      },
+      {
+        "tag": "longest_selected",
+        "client": {
+          "x": 340,
+          "y": 175.5,
+          "w": 240,
+          "h": 32
+        },
+        "source": {
+          "x": 628,
+          "y": 175.5,
+          "w": 300,
+          "h": 32
+        },
+        "status": {
+          "x": 1004,
+          "y": 175.5,
+          "w": 200,
+          "h": 32
+        },
+        "clientWrap": {
+          "x": 340,
+          "y": 175.5,
+          "w": 240,
+          "h": 32
+        },
+        "sourceWrap": {
+          "x": 628,
+          "y": 175.5,
+          "w": 300,
+          "h": 32
+        },
+        "statusWrap": {
+          "x": 1004,
+          "y": 175.5,
+          "w": 200,
+          "h": 32
+        },
+        "qBtn": {
+          "x": 1218,
+          "y": 176.5,
+          "w": 62,
+          "h": 30
+        },
+        "resetBtn": {
+          "x": 1300,
+          "y": 176.5,
+          "w": 58,
+          "h": 30
+        },
+        "bar": {
+          "x": 292,
+          "y": 175.5,
+          "w": 1556,
+          "h": 32
+        },
+        "groups": [
+          {
+            "x": 292,
+            "y": 175.5,
+            "w": 288,
+            "h": 32
+          },
+          {
+            "x": 594,
+            "y": 175.5,
+            "w": 334,
+            "h": 32
+          },
+          {
+            "x": 942,
+            "y": 175.5,
+            "w": 262,
+            "h": 32
+          }
+        ],
+        "overflowX": 0
+      },
+      {
+        "tag": "multi_collapse_tags",
+        "client": {
+          "x": 340,
+          "y": 175.5,
+          "w": 240,
+          "h": 32
+        },
+        "source": {
+          "x": 628,
+          "y": 175.5,
+          "w": 300,
+          "h": 32
+        },
+        "status": {
+          "x": 1004,
+          "y": 175.5,
+          "w": 200,
+          "h": 32
+        },
+        "clientWrap": {
+          "x": 340,
+          "y": 175.5,
+          "w": 240,
+          "h": 32
+        },
+        "sourceWrap": {
+          "x": 628,
+          "y": 175.5,
+          "w": 300,
+          "h": 32
+        },
+        "statusWrap": {
+          "x": 1004,
+          "y": 175.5,
+          "w": 200,
+          "h": 32
+        },
+        "qBtn": {
+          "x": 1218,
+          "y": 176.5,
+          "w": 62,
+          "h": 30
+        },
+        "resetBtn": {
+          "x": 1300,
+          "y": 176.5,
+          "w": 58,
+          "h": 30
+        },
+        "bar": {
+          "x": 292,
+          "y": 175.5,
+          "w": 1556,
+          "h": 32
+        },
+        "groups": [
+          {
+            "x": 292,
+            "y": 175.5,
+            "w": 288,
+            "h": 32
+          },
+          {
+            "x": 594,
+            "y": 175.5,
+            "w": 334,
+            "h": 32
+          },
+          {
+            "x": 942,
+            "y": 175.5,
+            "w": 262,
+            "h": 32
+          }
+        ],
+        "overflowX": 0
+      },
+      {
+        "tag": "clear_to_all",
+        "client": {
+          "x": 340,
+          "y": 175.5,
+          "w": 240,
+          "h": 32
+        },
+        "source": {
+          "x": 628,
+          "y": 175.5,
+          "w": 300,
+          "h": 32
+        },
+        "status": {
+          "x": 1004,
+          "y": 175.5,
+          "w": 200,
+          "h": 32
+        },
+        "clientWrap": {
+          "x": 340,
+          "y": 175.5,
+          "w": 240,
+          "h": 32
+        },
+        "sourceWrap": {
+          "x": 628,
+          "y": 175.5,
+          "w": 300,
+          "h": 32
+        },
+        "statusWrap": {
+          "x": 1004,
+          "y": 175.5,
+          "w": 200,
+          "h": 32
+        },
+        "qBtn": {
+          "x": 1218,
+          "y": 176.5,
+          "w": 62,
+          "h": 30
+        },
+        "resetBtn": {
+          "x": 1300,
+          "y": 176.5,
+          "w": 58,
+          "h": 30
+        },
+        "bar": {
+          "x": 292,
+          "y": 175.5,
+          "w": 1556,
+          "h": 32
+        },
+        "groups": [
+          {
+            "x": 292,
+            "y": 175.5,
+            "w": 288,
+            "h": 32
+          },
+          {
+            "x": 594,
+            "y": 175.5,
+            "w": 334,
+            "h": 32
+          },
+          {
+            "x": 942,
+            "y": 175.5,
+            "w": 262,
+            "h": 32
+          }
+        ],
+        "overflowX": 0
+      },
+      {
+        "tag": "reset",
+        "client": {
+          "x": 340,
+          "y": 175.5,
+          "w": 240,
+          "h": 32
+        },
+        "source": {
+          "x": 628,
+          "y": 175.5,
+          "w": 300,
+          "h": 32
+        },
+        "status": {
+          "x": 1004,
+          "y": 175.5,
+          "w": 200,
+          "h": 32
+        },
+        "clientWrap": {
+          "x": 340,
+          "y": 175.5,
+          "w": 240,
+          "h": 32
+        },
+        "sourceWrap": {
+          "x": 628,
+          "y": 175.5,
+          "w": 300,
+          "h": 32
+        },
+        "statusWrap": {
+          "x": 1004,
+          "y": 175.5,
+          "w": 200,
+          "h": 32
+        },
+        "qBtn": {
+          "x": 1218,
+          "y": 176.5,
+          "w": 62,
+          "h": 30
+        },
+        "resetBtn": {
+          "x": 1300,
+          "y": 176.5,
+          "w": 58,
+          "h": 30
+        },
+        "bar": {
+          "x": 292,
+          "y": 175.5,
+          "w": 1556,
+          "h": 32
+        },
+        "groups": [
+          {
+            "x": 292,
+            "y": 175.5,
+            "w": 288,
+            "h": 32
+          },
+          {
+            "x": 594,
+            "y": 175.5,
+            "w": 334,
+            "h": 32
+          },
+          {
+            "x": 942,
+            "y": 175.5,
+            "w": 262,
+            "h": 32
+          }
+        ],
+        "overflowX": 0
+      },
+      {
+        "tag": "source_longest",
+        "client": {
+          "x": 340,
+          "y": 175.5,
+          "w": 240,
+          "h": 32
+        },
+        "source": {
+          "x": 628,
+          "y": 175.5,
+          "w": 300,
+          "h": 32
+        },
+        "status": {
+          "x": 1004,
+          "y": 175.5,
+          "w": 200,
+          "h": 32
+        },
+        "clientWrap": {
+          "x": 340,
+          "y": 175.5,
+          "w": 240,
+          "h": 32
+        },
+        "sourceWrap": {
+          "x": 628,
+          "y": 175.5,
+          "w": 300,
+          "h": 32
+        },
+        "statusWrap": {
+          "x": 1004,
+          "y": 175.5,
+          "w": 200,
+          "h": 32
+        },
+        "qBtn": {
+          "x": 1218,
+          "y": 176.5,
+          "w": 62,
+          "h": 30
+        },
+        "resetBtn": {
+          "x": 1300,
+          "y": 176.5,
+          "w": 58,
+          "h": 30
+        },
+        "bar": {
+          "x": 292,
+          "y": 175.5,
+          "w": 1556,
+          "h": 32
+        },
+        "groups": [
+          {
+            "x": 292,
+            "y": 175.5,
+            "w": 288,
+            "h": 32
+          },
+          {
+            "x": 594,
+            "y": 175.5,
+            "w": 334,
+            "h": 32
+          },
+          {
+            "x": 942,
+            "y": 175.5,
+            "w": 262,
+            "h": 32
+          }
+        ],
+        "overflowX": 0
+      }
+    ],
+    "candLabels": [
+      "全部",
+      "PPPPPPPPPPPPPPPPPPPP...（DDDDDDDDDDDDDDDDDDDD...）",
+      "PPPPPPPPPPPPPPPPPPPP...（DDDDDDDDDDDDDDDDDDDD...）",
+      "id19-AAAAAAAAAAAAAA（ddddddddddddddddddd）",
+      "id20-BBBBBBBBBBBBBBB（eeeeeeeeeeeeeeeeeeee）",
+      "id21-CCCCCCCCCCCCCCC...（ffffffffffffffffffff...）",
+      "id22-DDDDDDDDDDDDDDD...（gggggggggggggggggggg...）",
+      "中中中中中中中中中中中中中中中中中中中中...（中中中中中中中中中中中中中中中中中中中中...）",
+      "😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀...（😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀...）",
+      "very-long-client-id-...",
+      "short-desc（长描述长描述长描述长描述长描述长描述长描...）",
+      "desc-empty-str",
+      "desc-20（22222222222222222222）"
+    ],
+    "collisionRows": {
+      "PPPPPPPPPPPPPPPPPPPPAAA": {
+        "x": 580,
+        "y": 278,
+        "attr": "PPPPPPPPPPPPPPPPPPPPAAA",
+        "text": "PPPPPPPPPPPPPPPPPPPP...（DDDDDDDDDDDDDDDDDDDD...）",
+        "rect": {
+          "x": 341,
+          "y": 261,
+          "w": 478,
+          "h": 34,
+          "right": 819,
+          "bottom": 295
+        }
+      },
+      "PPPPPPPPPPPPPPPPPPPPBBB": {
+        "x": 580,
+        "y": 312,
+        "attr": "PPPPPPPPPPPPPPPPPPPPBBB",
+        "text": "PPPPPPPPPPPPPPPPPPPP...（DDDDDDDDDDDDDDDDDDDD...）",
+        "rect": {
+          "x": 341,
+          "y": 295,
+          "w": 478,
+          "h": 34,
+          "right": 819,
+          "bottom": 329
+        }
+      }
+    },
+    "collisionProbe": [
+      {
+        "hoveredIdentity": "PPPPPPPPPPPPPPPPPPPPAAA",
+        "expectedTooltipText": "DDDDDDDDDDDDDDDDDDDDAAA",
+        "wrongIfReverseLookup": "DDDDDDDDDDDDDDDDDDDDBBB",
+        "renderedLabel": "PPPPPPPPPPPPPPPPPPPP...（DDDDDDDDDDDDDDDDDDDD...）",
+        "visibleLabelIdenticalToOther": true,
+        "tooltipText": "DDDDDDDDDDDDDDDDDDDDAAA",
+        "tooltipCount": 1,
+        "tooltipCountAfterLeave": 0,
+        "parentIsBody": true,
+        "tooltipRect": {
+          "w": 235.78,
+          "h": 33.5
+        },
+        "tooltipStyle": {
+          "maxWidth": "480px",
+          "whiteSpace": "pre-line",
+          "overflowWrap": "anywhere",
+          "position": "fixed",
+          "zIndex": "3000"
+        },
+        "ctrlDelta": {
+          "client": 0,
+          "barH": 0
+        },
+        "correct": true
+      },
+      {
+        "hoveredIdentity": "PPPPPPPPPPPPPPPPPPPPBBB",
+        "expectedTooltipText": "DDDDDDDDDDDDDDDDDDDDBBB",
+        "wrongIfReverseLookup": "DDDDDDDDDDDDDDDDDDDDAAA",
+        "renderedLabel": "PPPPPPPPPPPPPPPPPPPP...（DDDDDDDDDDDDDDDDDDDD...）",
+        "visibleLabelIdenticalToOther": true,
+        "tooltipText": "DDDDDDDDDDDDDDDDDDDDBBB",
+        "tooltipCount": 1,
+        "tooltipCountAfterLeave": 0,
+        "parentIsBody": true,
+        "tooltipRect": {
+          "w": 235.78,
+          "h": 33.5
+        },
+        "tooltipStyle": {
+          "maxWidth": "480px",
+          "whiteSpace": "pre-line",
+          "overflowWrap": "anywhere",
+          "position": "fixed",
+          "zIndex": "3000"
+        },
+        "ctrlDelta": {
+          "client": 0,
+          "barH": 0
+        },
+        "correct": true
+      }
+    ],
+    "boundaryProbe": [
+      {
+        "id": "id19-AAAAAAAAAAAAAA",
+        "found": true,
+        "rendered": "id19-AAAAAAAAAAAAAA（ddddddddddddddddddd）",
+        "expectLabel": "id19-AAAAAAAAAAAAAA（ddddddddddddddddddd）",
+        "labelOk": true,
+        "renderedCodePoints": 40,
+        "expectTooltip": false,
+        "gotTooltip": false,
+        "tooltipText": null,
+        "expectTooltipText": null,
+        "textOk": true,
+        "afterLeaveCount": 0
+      },
+      {
+        "id": "id20-BBBBBBBBBBBBBBB",
+        "found": true,
+        "rendered": "id20-BBBBBBBBBBBBBBB（eeeeeeeeeeeeeeeeeeee）",
+        "expectLabel": "id20-BBBBBBBBBBBBBBB（eeeeeeeeeeeeeeeeeeee）",
+        "labelOk": true,
+        "renderedCodePoints": 42,
+        "expectTooltip": false,
+        "gotTooltip": false,
+        "tooltipText": null,
+        "expectTooltipText": null,
+        "textOk": true,
+        "afterLeaveCount": 0
+      },
+      {
+        "id": "id21-CCCCCCCCCCCCCCCC",
+        "found": true,
+        "rendered": "id21-CCCCCCCCCCCCCCC...（ffffffffffffffffffff...）",
+        "expectLabel": "id21-CCCCCCCCCCCCCCC...（ffffffffffffffffffff...）",
+        "labelOk": true,
+        "renderedCodePoints": 48,
+        "expectTooltip": true,
+        "gotTooltip": true,
+        "tooltipText": "fffffffffffffffffffff",
+        "expectTooltipText": "fffffffffffffffffffff",
+        "textOk": true,
+        "afterLeaveCount": 0
+      },
+      {
+        "id": "id22-DDDDDDDDDDDDDDDDD",
+        "found": true,
+        "rendered": "id22-DDDDDDDDDDDDDDD...（gggggggggggggggggggg...）",
+        "expectLabel": "id22-DDDDDDDDDDDDDDD...（gggggggggggggggggggg...）",
+        "labelOk": true,
+        "renderedCodePoints": 48,
+        "expectTooltip": true,
+        "gotTooltip": true,
+        "tooltipText": "gggggggggggggggggggggg",
+        "expectTooltipText": "gggggggggggggggggggggg",
+        "textOk": true,
+        "afterLeaveCount": 0
+      },
+      {
+        "id": "中中中中中中中中中中中中中中中中中中中中中中中中中",
+        "found": true,
+        "rendered": "中中中中中中中中中中中中中中中中中中中中...（中中中中中中中中中中中中中中中中中中中中...）",
+        "expectLabel": "中中中中中中中中中中中中中中中中中中中中...（中中中中中中中中中中中中中中中中中中中中...）",
+        "labelOk": true,
+        "renderedCodePoints": 48,
+        "expectTooltip": true,
+        "gotTooltip": true,
+        "tooltipText": "中中中中中中中中中中中中中中中中中中中中中中中中",
+        "expectTooltipText": "中中中中中中中中中中中中中中中中中中中中中中中中",
+        "textOk": true,
+        "afterLeaveCount": 0
+      },
+      {
+        "id": "😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀",
+        "found": true,
+        "rendered": "😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀...（😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀...）",
+        "expectLabel": "😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀...（😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀...）",
+        "labelOk": true,
+        "renderedCodePoints": 48,
+        "expectTooltip": true,
+        "gotTooltip": true,
+        "tooltipText": "😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀",
+        "expectTooltipText": "😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀",
+        "textOk": true,
+        "afterLeaveCount": 0
+      },
+      {
+        "id": "very-long-client-id-XXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXX",
+        "found": true,
+        "rendered": "very-long-client-id-...",
+        "expectLabel": "very-long-client-id-...",
+        "labelOk": true,
+        "renderedCodePoints": 20,
+        "expectTooltip": false,
+        "gotTooltip": false,
+        "tooltipText": null,
+        "expectTooltipText": null,
+        "textOk": true,
+        "afterLeaveCount": 0
+      },
+      {
+        "id": "short-desc",
+        "found": true,
+        "rendered": "short-desc（长描述长描述长描述长描述长描述长描述长描...）",
+        "expectLabel": "short-desc（长描述长描述长描述长描述长描述长描述长描...）",
+        "labelOk": true,
+        "renderedCodePoints": 35,
+        "expectTooltip": true,
+        "gotTooltip": true,
+        "tooltipText": "长描述长描述长描述长描述长描述长描述长描述长描述长描述长描述长描述长描述长描述长描述长描述长描述长描述长描述长描述长描述长描述长描述长描述长描述长描述长描述长描述长描述长描述长描述长描述长描述长描述长描述长描述长描述长描述长描述长描述长描述长描述长描述长描述长描述长描述长描述长描述长描述长描述长描述长描述长描述长描述长描述长描述长描述长描述长描述长描述长描述长描述长描述长描述长描述长描述长描述长描述长描述长描述长描述长描述长描述长描述长描述长描述长描述长描述长描述长描述长描述长描述长描述长描述长描述长描述长描述长描述长描述长描述长描述长描述长描述长描述长描述长描述长描述长描述长描述长描述长描述",
+        "expectTooltipText": "长描述长描述长描述长描述长描述长描述长描述长描述长描述长描述长描述长描述长描述长描述长描述长描述长描述长描述长描述长描述长描述长描述长描述长描述长描述长描述长描述长描述长描述长描述长描述长描述长描述长描述长描述长描述长描述长描述长描述长描述长描述长描述长描述长描述长描述长描述长描述长描述长描述长描述长描述长描述长描述长描述长描述长描述长描述长描述长描述长描述长描述长描述长描述长描述长描述长描述长描述长描述长描述长描述长描述长描述长描述长描述长描述长描述长描述长描述长描述长描述长描述长描述长描述长描述长描述长描述长描述长描述长描述长描述长描述长描述长描述长描述长描述长描述长描述长描述长描述长描述",
+        "textOk": true,
+        "afterLeaveCount": 0
+      },
+      {
+        "id": "desc-empty-str",
+        "found": true,
+        "rendered": "desc-empty-str",
+        "expectLabel": "desc-empty-str",
+        "labelOk": true,
+        "renderedCodePoints": 14,
+        "expectTooltip": false,
+        "gotTooltip": false,
+        "tooltipText": null,
+        "expectTooltipText": null,
+        "textOk": true,
+        "afterLeaveCount": 0
+      },
+      {
+        "id": "desc-20",
+        "found": true,
+        "rendered": "desc-20（22222222222222222222）",
+        "expectLabel": "desc-20（22222222222222222222）",
+        "labelOk": true,
+        "renderedCodePoints": 29,
+        "expectTooltip": false,
+        "gotTooltip": false,
+        "tooltipText": null,
+        "expectTooltipText": null,
+        "textOk": true,
+        "afterLeaveCount": 0
+      }
+    ],
+    "sourceRendered": [
+      "全部",
+      "ooooooooooooooooooo（src19-AAAAAAAAAAAAA）",
+      "pppppppppppppppppppp（src20-BBBBBBBBBBBBBB）",
+      "qqqqqqqqqqqqqqqqqqqq...（src21-CCCCCCCCCCCCCC...）",
+      "rrrrrrrrrrrrrrrrrrrr...（src22-DDDDDDDDDDDDDD...）",
+      "中中中中中中中中中中中中中中中中中中中中...（中中中中中中中中中中中中中中中中中中中中...）",
+      "😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀...",
+      "src-very-long-YYYYYY...",
+      "宽宽宽宽宽宽宽宽宽宽宽宽宽宽宽宽宽宽宽宽...（src-wide-org）"
+    ],
+    "sourceProbe": [
+      {
+        "i": 0,
+        "found": true,
+        "rendered": "ooooooooooooooooooo（src19-AAAAAAAAAAAAA）",
+        "expectLabel": "ooooooooooooooooooo（src19-AAAAAAAAAAAAA）",
+        "labelOk": true,
+        "gotTooltip": false,
+        "tooltipText": null
+      },
+      {
+        "i": 1,
+        "found": true,
+        "rendered": "pppppppppppppppppppp（src20-BBBBBBBBBBBBBB）",
+        "expectLabel": "pppppppppppppppppppp（src20-BBBBBBBBBBBBBB）",
+        "labelOk": true,
+        "gotTooltip": false,
+        "tooltipText": null
+      },
+      {
+        "i": 2,
+        "found": true,
+        "rendered": "qqqqqqqqqqqqqqqqqqqq...（src21-CCCCCCCCCCCCCC...）",
+        "expectLabel": "qqqqqqqqqqqqqqqqqqqq...（src21-CCCCCCCCCCCCCC...）",
+        "labelOk": true,
+        "gotTooltip": false,
+        "tooltipText": null
+      },
+      {
+        "i": 3,
+        "found": true,
+        "rendered": "rrrrrrrrrrrrrrrrrrrr...（src22-DDDDDDDDDDDDDD...）",
+        "expectLabel": "rrrrrrrrrrrrrrrrrrrr...（src22-DDDDDDDDDDDDDD...）",
+        "labelOk": true,
+        "gotTooltip": false,
+        "tooltipText": null
+      },
+      {
+        "i": 4,
+        "found": true,
+        "rendered": "中中中中中中中中中中中中中中中中中中中中...（中中中中中中中中中中中中中中中中中中中中...）",
+        "expectLabel": "中中中中中中中中中中中中中中中中中中中中...（中中中中中中中中中中中中中中中中中中中中...）",
+        "labelOk": true,
+        "gotTooltip": false,
+        "tooltipText": null
+      },
+      {
+        "i": 5,
+        "found": true,
+        "rendered": "😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀...",
+        "expectLabel": "😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀...",
+        "labelOk": true,
+        "gotTooltip": false,
+        "tooltipText": null
+      },
+      {
+        "i": 6,
+        "found": true,
+        "rendered": "src-very-long-YYYYYY...",
+        "expectLabel": "src-very-long-YYYYYY...",
+        "labelOk": true,
+        "gotTooltip": false,
+        "tooltipText": null
+      },
+      {
+        "i": 7,
+        "found": true,
+        "rendered": "宽宽宽宽宽宽宽宽宽宽宽宽宽宽宽宽宽宽宽宽...（src-wide-org）",
+        "expectLabel": "宽宽宽宽宽宽宽宽宽宽宽宽宽宽宽宽宽宽宽宽...（src-wide-org）",
+        "labelOk": true,
+        "gotTooltip": false,
+        "tooltipText": null
+      }
+    ],
+    "selectedProbe": [
+      {
+        "selectedIdentity": "PPPPPPPPPPPPPPPPPPPPAAA",
+        "tagAttr": "PPPPPPPPPPPPPPPPPPPPAAA",
+        "tags": [
+          "PPPPPPPPPPPPPPPPPPPP...（DDDDDDDDDDDDDDDDDDDD...）"
+        ],
+        "tagClosable": true,
+        "expectTooltipText": "DDDDDDDDDDDDDDDDDDDDAAA",
+        "tooltipText": "DDDDDDDDDDDDDDDDDDDDAAA",
+        "tooltipCount": 1,
+        "afterLeaveCount": 0,
+        "correct": true
+      },
+      {
+        "selectedIdentity": "PPPPPPPPPPPPPPPPPPPPBBB",
+        "tagAttr": "PPPPPPPPPPPPPPPPPPPPBBB",
+        "tags": [
+          "PPPPPPPPPPPPPPPPPPPP...（DDDDDDDDDDDDDDDDDDDD...）"
+        ],
+        "tagClosable": true,
+        "expectTooltipText": "DDDDDDDDDDDDDDDDDDDDBBB",
+        "tooltipText": "DDDDDDDDDDDDDDDDDDDDBBB",
+        "tooltipCount": 1,
+        "afterLeaveCount": 0,
+        "correct": true
+      }
+    ],
+    "requests": {
+      "apiTotal": 5,
+      "initialLoad": 1,
+      "afterReset": 0,
+      "afterOpenClose": 0,
+      "afterHoverTooltip": 0,
+      "queryClickDelta": 1,
+      "lastQueryUrl": "http://127.0.0.1:5173/api/monitor/data-source-run-state/list?clientId=PPPPPPPPPPPPPPPPPPPPAAA",
+      "queryClientId": [
+        "PPPPPPPPPPPPPPPPPPPPAAA"
+      ],
+      "queryClientIdIsFullOriginal": true,
+      "nonGet": []
+    },
+    "otherRoute": {
+      "dssElements": 0,
+      "elSelect": 0
+    },
+    "singleTooltips": 0,
+    "consoleErrors": []
+  },
+  {
+    "viewport": {
+      "w": 2560,
+      "h": 1440
+    },
+    "mode": "synth",
+    "widths": {
+      "client": 240,
+      "source": 300,
+      "status": 200
+    },
+    "maxAdjacentDelta": {
+      "client": 0,
+      "source": 0,
+      "status": 0,
+      "qBtnX": 0,
+      "barH": 0,
+      "groups": 0
+    },
+    "maxHorizontalOverflow": 0,
+    "barH": 32,
+    "groupsY": [
+      175.5,
+      175.5,
+      175.5
+    ],
+    "groupsRowCount": 1,
+    "stateTags": [
+      "initial_all",
+      "collision_A_selected",
+      "collision_A_B_selected",
+      "longest_selected",
+      "multi_collapse_tags",
+      "clear_to_all",
+      "reset",
+      "source_longest"
+    ],
+    "adjacent": [
+      {
+        "from": "initial_all",
+        "to": "collision_A_selected",
+        "dClient": 0,
+        "dSource": 0,
+        "dStatus": 0,
+        "dQBtnX": 0,
+        "dBarH": 0,
+        "dGroups": [
+          [
+            0,
+            0
+          ],
+          [
+            0,
+            0
+          ],
+          [
+            0,
+            0
+          ]
+        ]
+      },
+      {
+        "from": "collision_A_selected",
+        "to": "collision_A_B_selected",
+        "dClient": 0,
+        "dSource": 0,
+        "dStatus": 0,
+        "dQBtnX": 0,
+        "dBarH": 0,
+        "dGroups": [
+          [
+            0,
+            0
+          ],
+          [
+            0,
+            0
+          ],
+          [
+            0,
+            0
+          ]
+        ]
+      },
+      {
+        "from": "collision_A_B_selected",
+        "to": "longest_selected",
+        "dClient": 0,
+        "dSource": 0,
+        "dStatus": 0,
+        "dQBtnX": 0,
+        "dBarH": 0,
+        "dGroups": [
+          [
+            0,
+            0
+          ],
+          [
+            0,
+            0
+          ],
+          [
+            0,
+            0
+          ]
+        ]
+      },
+      {
+        "from": "longest_selected",
+        "to": "multi_collapse_tags",
+        "dClient": 0,
+        "dSource": 0,
+        "dStatus": 0,
+        "dQBtnX": 0,
+        "dBarH": 0,
+        "dGroups": [
+          [
+            0,
+            0
+          ],
+          [
+            0,
+            0
+          ],
+          [
+            0,
+            0
+          ]
+        ]
+      },
+      {
+        "from": "multi_collapse_tags",
+        "to": "clear_to_all",
+        "dClient": 0,
+        "dSource": 0,
+        "dStatus": 0,
+        "dQBtnX": 0,
+        "dBarH": 0,
+        "dGroups": [
+          [
+            0,
+            0
+          ],
+          [
+            0,
+            0
+          ],
+          [
+            0,
+            0
+          ]
+        ]
+      },
+      {
+        "from": "clear_to_all",
+        "to": "reset",
+        "dClient": 0,
+        "dSource": 0,
+        "dStatus": 0,
+        "dQBtnX": 0,
+        "dBarH": 0,
+        "dGroups": [
+          [
+            0,
+            0
+          ],
+          [
+            0,
+            0
+          ],
+          [
+            0,
+            0
+          ]
+        ]
+      },
+      {
+        "from": "reset",
+        "to": "source_longest",
+        "dClient": 0,
+        "dSource": 0,
+        "dStatus": 0,
+        "dQBtnX": 0,
+        "dBarH": 0,
+        "dGroups": [
+          [
+            0,
+            0
+          ],
+          [
+            0,
+            0
+          ],
+          [
+            0,
+            0
+          ]
+        ]
+      }
+    ],
+    "states": [
+      {
+        "tag": "initial_all",
+        "client": {
+          "x": 340,
+          "y": 175.5,
+          "w": 240,
+          "h": 32
+        },
+        "source": {
+          "x": 628,
+          "y": 175.5,
+          "w": 300,
+          "h": 32
+        },
+        "status": {
+          "x": 1004,
+          "y": 175.5,
+          "w": 200,
+          "h": 32
+        },
+        "clientWrap": {
+          "x": 340,
+          "y": 175.5,
+          "w": 240,
+          "h": 32
+        },
+        "sourceWrap": {
+          "x": 628,
+          "y": 175.5,
+          "w": 300,
+          "h": 32
+        },
+        "statusWrap": {
+          "x": 1004,
+          "y": 175.5,
+          "w": 200,
+          "h": 32
+        },
+        "qBtn": {
+          "x": 1218,
+          "y": 176.5,
+          "w": 62,
+          "h": 30
+        },
+        "resetBtn": {
+          "x": 1300,
+          "y": 176.5,
+          "w": 58,
+          "h": 30
+        },
+        "bar": {
+          "x": 292,
+          "y": 175.5,
+          "w": 2196,
+          "h": 32
+        },
+        "groups": [
+          {
+            "x": 292,
+            "y": 175.5,
+            "w": 288,
+            "h": 32
+          },
+          {
+            "x": 594,
+            "y": 175.5,
+            "w": 334,
+            "h": 32
+          },
+          {
+            "x": 942,
+            "y": 175.5,
+            "w": 262,
+            "h": 32
+          }
+        ],
+        "overflowX": 0
+      },
+      {
+        "tag": "collision_A_selected",
+        "client": {
+          "x": 340,
+          "y": 175.5,
+          "w": 240,
+          "h": 32
+        },
+        "source": {
+          "x": 628,
+          "y": 175.5,
+          "w": 300,
+          "h": 32
+        },
+        "status": {
+          "x": 1004,
+          "y": 175.5,
+          "w": 200,
+          "h": 32
+        },
+        "clientWrap": {
+          "x": 340,
+          "y": 175.5,
+          "w": 240,
+          "h": 32
+        },
+        "sourceWrap": {
+          "x": 628,
+          "y": 175.5,
+          "w": 300,
+          "h": 32
+        },
+        "statusWrap": {
+          "x": 1004,
+          "y": 175.5,
+          "w": 200,
+          "h": 32
+        },
+        "qBtn": {
+          "x": 1218,
+          "y": 176.5,
+          "w": 62,
+          "h": 30
+        },
+        "resetBtn": {
+          "x": 1300,
+          "y": 176.5,
+          "w": 58,
+          "h": 30
+        },
+        "bar": {
+          "x": 292,
+          "y": 175.5,
+          "w": 2196,
+          "h": 32
+        },
+        "groups": [
+          {
+            "x": 292,
+            "y": 175.5,
+            "w": 288,
+            "h": 32
+          },
+          {
+            "x": 594,
+            "y": 175.5,
+            "w": 334,
+            "h": 32
+          },
+          {
+            "x": 942,
+            "y": 175.5,
+            "w": 262,
+            "h": 32
+          }
+        ],
+        "overflowX": 0
+      },
+      {
+        "tag": "collision_A_B_selected",
+        "client": {
+          "x": 340,
+          "y": 175.5,
+          "w": 240,
+          "h": 32
+        },
+        "source": {
+          "x": 628,
+          "y": 175.5,
+          "w": 300,
+          "h": 32
+        },
+        "status": {
+          "x": 1004,
+          "y": 175.5,
+          "w": 200,
+          "h": 32
+        },
+        "clientWrap": {
+          "x": 340,
+          "y": 175.5,
+          "w": 240,
+          "h": 32
+        },
+        "sourceWrap": {
+          "x": 628,
+          "y": 175.5,
+          "w": 300,
+          "h": 32
+        },
+        "statusWrap": {
+          "x": 1004,
+          "y": 175.5,
+          "w": 200,
+          "h": 32
+        },
+        "qBtn": {
+          "x": 1218,
+          "y": 176.5,
+          "w": 62,
+          "h": 30
+        },
+        "resetBtn": {
+          "x": 1300,
+          "y": 176.5,
+          "w": 58,
+          "h": 30
+        },
+        "bar": {
+          "x": 292,
+          "y": 175.5,
+          "w": 2196,
+          "h": 32
+        },
+        "groups": [
+          {
+            "x": 292,
+            "y": 175.5,
+            "w": 288,
+            "h": 32
+          },
+          {
+            "x": 594,
+            "y": 175.5,
+            "w": 334,
+            "h": 32
+          },
+          {
+            "x": 942,
+            "y": 175.5,
+            "w": 262,
+            "h": 32
+          }
+        ],
+        "overflowX": 0
+      },
+      {
+        "tag": "longest_selected",
+        "client": {
+          "x": 340,
+          "y": 175.5,
+          "w": 240,
+          "h": 32
+        },
+        "source": {
+          "x": 628,
+          "y": 175.5,
+          "w": 300,
+          "h": 32
+        },
+        "status": {
+          "x": 1004,
+          "y": 175.5,
+          "w": 200,
+          "h": 32
+        },
+        "clientWrap": {
+          "x": 340,
+          "y": 175.5,
+          "w": 240,
+          "h": 32
+        },
+        "sourceWrap": {
+          "x": 628,
+          "y": 175.5,
+          "w": 300,
+          "h": 32
+        },
+        "statusWrap": {
+          "x": 1004,
+          "y": 175.5,
+          "w": 200,
+          "h": 32
+        },
+        "qBtn": {
+          "x": 1218,
+          "y": 176.5,
+          "w": 62,
+          "h": 30
+        },
+        "resetBtn": {
+          "x": 1300,
+          "y": 176.5,
+          "w": 58,
+          "h": 30
+        },
+        "bar": {
+          "x": 292,
+          "y": 175.5,
+          "w": 2196,
+          "h": 32
+        },
+        "groups": [
+          {
+            "x": 292,
+            "y": 175.5,
+            "w": 288,
+            "h": 32
+          },
+          {
+            "x": 594,
+            "y": 175.5,
+            "w": 334,
+            "h": 32
+          },
+          {
+            "x": 942,
+            "y": 175.5,
+            "w": 262,
+            "h": 32
+          }
+        ],
+        "overflowX": 0
+      },
+      {
+        "tag": "multi_collapse_tags",
+        "client": {
+          "x": 340,
+          "y": 175.5,
+          "w": 240,
+          "h": 32
+        },
+        "source": {
+          "x": 628,
+          "y": 175.5,
+          "w": 300,
+          "h": 32
+        },
+        "status": {
+          "x": 1004,
+          "y": 175.5,
+          "w": 200,
+          "h": 32
+        },
+        "clientWrap": {
+          "x": 340,
+          "y": 175.5,
+          "w": 240,
+          "h": 32
+        },
+        "sourceWrap": {
+          "x": 628,
+          "y": 175.5,
+          "w": 300,
+          "h": 32
+        },
+        "statusWrap": {
+          "x": 1004,
+          "y": 175.5,
+          "w": 200,
+          "h": 32
+        },
+        "qBtn": {
+          "x": 1218,
+          "y": 176.5,
+          "w": 62,
+          "h": 30
+        },
+        "resetBtn": {
+          "x": 1300,
+          "y": 176.5,
+          "w": 58,
+          "h": 30
+        },
+        "bar": {
+          "x": 292,
+          "y": 175.5,
+          "w": 2196,
+          "h": 32
+        },
+        "groups": [
+          {
+            "x": 292,
+            "y": 175.5,
+            "w": 288,
+            "h": 32
+          },
+          {
+            "x": 594,
+            "y": 175.5,
+            "w": 334,
+            "h": 32
+          },
+          {
+            "x": 942,
+            "y": 175.5,
+            "w": 262,
+            "h": 32
+          }
+        ],
+        "overflowX": 0
+      },
+      {
+        "tag": "clear_to_all",
+        "client": {
+          "x": 340,
+          "y": 175.5,
+          "w": 240,
+          "h": 32
+        },
+        "source": {
+          "x": 628,
+          "y": 175.5,
+          "w": 300,
+          "h": 32
+        },
+        "status": {
+          "x": 1004,
+          "y": 175.5,
+          "w": 200,
+          "h": 32
+        },
+        "clientWrap": {
+          "x": 340,
+          "y": 175.5,
+          "w": 240,
+          "h": 32
+        },
+        "sourceWrap": {
+          "x": 628,
+          "y": 175.5,
+          "w": 300,
+          "h": 32
+        },
+        "statusWrap": {
+          "x": 1004,
+          "y": 175.5,
+          "w": 200,
+          "h": 32
+        },
+        "qBtn": {
+          "x": 1218,
+          "y": 176.5,
+          "w": 62,
+          "h": 30
+        },
+        "resetBtn": {
+          "x": 1300,
+          "y": 176.5,
+          "w": 58,
+          "h": 30
+        },
+        "bar": {
+          "x": 292,
+          "y": 175.5,
+          "w": 2196,
+          "h": 32
+        },
+        "groups": [
+          {
+            "x": 292,
+            "y": 175.5,
+            "w": 288,
+            "h": 32
+          },
+          {
+            "x": 594,
+            "y": 175.5,
+            "w": 334,
+            "h": 32
+          },
+          {
+            "x": 942,
+            "y": 175.5,
+            "w": 262,
+            "h": 32
+          }
+        ],
+        "overflowX": 0
+      },
+      {
+        "tag": "reset",
+        "client": {
+          "x": 340,
+          "y": 175.5,
+          "w": 240,
+          "h": 32
+        },
+        "source": {
+          "x": 628,
+          "y": 175.5,
+          "w": 300,
+          "h": 32
+        },
+        "status": {
+          "x": 1004,
+          "y": 175.5,
+          "w": 200,
+          "h": 32
+        },
+        "clientWrap": {
+          "x": 340,
+          "y": 175.5,
+          "w": 240,
+          "h": 32
+        },
+        "sourceWrap": {
+          "x": 628,
+          "y": 175.5,
+          "w": 300,
+          "h": 32
+        },
+        "statusWrap": {
+          "x": 1004,
+          "y": 175.5,
+          "w": 200,
+          "h": 32
+        },
+        "qBtn": {
+          "x": 1218,
+          "y": 176.5,
+          "w": 62,
+          "h": 30
+        },
+        "resetBtn": {
+          "x": 1300,
+          "y": 176.5,
+          "w": 58,
+          "h": 30
+        },
+        "bar": {
+          "x": 292,
+          "y": 175.5,
+          "w": 2196,
+          "h": 32
+        },
+        "groups": [
+          {
+            "x": 292,
+            "y": 175.5,
+            "w": 288,
+            "h": 32
+          },
+          {
+            "x": 594,
+            "y": 175.5,
+            "w": 334,
+            "h": 32
+          },
+          {
+            "x": 942,
+            "y": 175.5,
+            "w": 262,
+            "h": 32
+          }
+        ],
+        "overflowX": 0
+      },
+      {
+        "tag": "source_longest",
+        "client": {
+          "x": 340,
+          "y": 175.5,
+          "w": 240,
+          "h": 32
+        },
+        "source": {
+          "x": 628,
+          "y": 175.5,
+          "w": 300,
+          "h": 32
+        },
+        "status": {
+          "x": 1004,
+          "y": 175.5,
+          "w": 200,
+          "h": 32
+        },
+        "clientWrap": {
+          "x": 340,
+          "y": 175.5,
+          "w": 240,
+          "h": 32
+        },
+        "sourceWrap": {
+          "x": 628,
+          "y": 175.5,
+          "w": 300,
+          "h": 32
+        },
+        "statusWrap": {
+          "x": 1004,
+          "y": 175.5,
+          "w": 200,
+          "h": 32
+        },
+        "qBtn": {
+          "x": 1218,
+          "y": 176.5,
+          "w": 62,
+          "h": 30
+        },
+        "resetBtn": {
+          "x": 1300,
+          "y": 176.5,
+          "w": 58,
+          "h": 30
+        },
+        "bar": {
+          "x": 292,
+          "y": 175.5,
+          "w": 2196,
+          "h": 32
+        },
+        "groups": [
+          {
+            "x": 292,
+            "y": 175.5,
+            "w": 288,
+            "h": 32
+          },
+          {
+            "x": 594,
+            "y": 175.5,
+            "w": 334,
+            "h": 32
+          },
+          {
+            "x": 942,
+            "y": 175.5,
+            "w": 262,
+            "h": 32
+          }
+        ],
+        "overflowX": 0
+      }
+    ],
+    "candLabels": [
+      "全部",
+      "PPPPPPPPPPPPPPPPPPPP...（DDDDDDDDDDDDDDDDDDDD...）",
+      "PPPPPPPPPPPPPPPPPPPP...（DDDDDDDDDDDDDDDDDDDD...）",
+      "id19-AAAAAAAAAAAAAA（ddddddddddddddddddd）",
+      "id20-BBBBBBBBBBBBBBB（eeeeeeeeeeeeeeeeeeee）",
+      "id21-CCCCCCCCCCCCCCC...（ffffffffffffffffffff...）",
+      "id22-DDDDDDDDDDDDDDD...（gggggggggggggggggggg...）",
+      "中中中中中中中中中中中中中中中中中中中中...（中中中中中中中中中中中中中中中中中中中中...）",
+      "😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀...（😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀...）",
+      "very-long-client-id-...",
+      "short-desc（长描述长描述长描述长描述长描述长描述长描...）",
+      "desc-empty-str",
+      "desc-20（22222222222222222222）"
+    ],
+    "collisionRows": {
+      "PPPPPPPPPPPPPPPPPPPPAAA": {
+        "x": 580,
+        "y": 278,
+        "attr": "PPPPPPPPPPPPPPPPPPPPAAA",
+        "text": "PPPPPPPPPPPPPPPPPPPP...（DDDDDDDDDDDDDDDDDDDD...）",
+        "rect": {
+          "x": 341,
+          "y": 261,
+          "w": 478,
+          "h": 34,
+          "right": 819,
+          "bottom": 295
+        }
+      },
+      "PPPPPPPPPPPPPPPPPPPPBBB": {
+        "x": 580,
+        "y": 312,
+        "attr": "PPPPPPPPPPPPPPPPPPPPBBB",
+        "text": "PPPPPPPPPPPPPPPPPPPP...（DDDDDDDDDDDDDDDDDDDD...）",
+        "rect": {
+          "x": 341,
+          "y": 295,
+          "w": 478,
+          "h": 34,
+          "right": 819,
+          "bottom": 329
+        }
+      }
+    },
+    "collisionProbe": [
+      {
+        "hoveredIdentity": "PPPPPPPPPPPPPPPPPPPPAAA",
+        "expectedTooltipText": "DDDDDDDDDDDDDDDDDDDDAAA",
+        "wrongIfReverseLookup": "DDDDDDDDDDDDDDDDDDDDBBB",
+        "renderedLabel": "PPPPPPPPPPPPPPPPPPPP...（DDDDDDDDDDDDDDDDDDDD...）",
+        "visibleLabelIdenticalToOther": true,
+        "tooltipText": "DDDDDDDDDDDDDDDDDDDDAAA",
+        "tooltipCount": 1,
+        "tooltipCountAfterLeave": 0,
+        "parentIsBody": true,
+        "tooltipRect": {
+          "w": 235.78,
+          "h": 33.5
+        },
+        "tooltipStyle": {
+          "maxWidth": "480px",
+          "whiteSpace": "pre-line",
+          "overflowWrap": "anywhere",
+          "position": "fixed",
+          "zIndex": "3000"
+        },
+        "ctrlDelta": {
+          "client": 0,
+          "barH": 0
+        },
+        "correct": true
+      },
+      {
+        "hoveredIdentity": "PPPPPPPPPPPPPPPPPPPPBBB",
+        "expectedTooltipText": "DDDDDDDDDDDDDDDDDDDDBBB",
+        "wrongIfReverseLookup": "DDDDDDDDDDDDDDDDDDDDAAA",
+        "renderedLabel": "PPPPPPPPPPPPPPPPPPPP...（DDDDDDDDDDDDDDDDDDDD...）",
+        "visibleLabelIdenticalToOther": true,
+        "tooltipText": "DDDDDDDDDDDDDDDDDDDDBBB",
+        "tooltipCount": 1,
+        "tooltipCountAfterLeave": 0,
+        "parentIsBody": true,
+        "tooltipRect": {
+          "w": 235.78,
+          "h": 33.5
+        },
+        "tooltipStyle": {
+          "maxWidth": "480px",
+          "whiteSpace": "pre-line",
+          "overflowWrap": "anywhere",
+          "position": "fixed",
+          "zIndex": "3000"
+        },
+        "ctrlDelta": {
+          "client": 0,
+          "barH": 0
+        },
+        "correct": true
+      }
+    ],
+    "boundaryProbe": [
+      {
+        "id": "id19-AAAAAAAAAAAAAA",
+        "found": true,
+        "rendered": "id19-AAAAAAAAAAAAAA（ddddddddddddddddddd）",
+        "expectLabel": "id19-AAAAAAAAAAAAAA（ddddddddddddddddddd）",
+        "labelOk": true,
+        "renderedCodePoints": 40,
+        "expectTooltip": false,
+        "gotTooltip": false,
+        "tooltipText": null,
+        "expectTooltipText": null,
+        "textOk": true,
+        "afterLeaveCount": 0
+      },
+      {
+        "id": "id20-BBBBBBBBBBBBBBB",
+        "found": true,
+        "rendered": "id20-BBBBBBBBBBBBBBB（eeeeeeeeeeeeeeeeeeee）",
+        "expectLabel": "id20-BBBBBBBBBBBBBBB（eeeeeeeeeeeeeeeeeeee）",
+        "labelOk": true,
+        "renderedCodePoints": 42,
+        "expectTooltip": false,
+        "gotTooltip": false,
+        "tooltipText": null,
+        "expectTooltipText": null,
+        "textOk": true,
+        "afterLeaveCount": 0
+      },
+      {
+        "id": "id21-CCCCCCCCCCCCCCCC",
+        "found": true,
+        "rendered": "id21-CCCCCCCCCCCCCCC...（ffffffffffffffffffff...）",
+        "expectLabel": "id21-CCCCCCCCCCCCCCC...（ffffffffffffffffffff...）",
+        "labelOk": true,
+        "renderedCodePoints": 48,
+        "expectTooltip": true,
+        "gotTooltip": true,
+        "tooltipText": "fffffffffffffffffffff",
+        "expectTooltipText": "fffffffffffffffffffff",
+        "textOk": true,
+        "afterLeaveCount": 0
+      },
+      {
+        "id": "id22-DDDDDDDDDDDDDDDDD",
+        "found": true,
+        "rendered": "id22-DDDDDDDDDDDDDDD...（gggggggggggggggggggg...）",
+        "expectLabel": "id22-DDDDDDDDDDDDDDD...（gggggggggggggggggggg...）",
+        "labelOk": true,
+        "renderedCodePoints": 48,
+        "expectTooltip": true,
+        "gotTooltip": true,
+        "tooltipText": "gggggggggggggggggggggg",
+        "expectTooltipText": "gggggggggggggggggggggg",
+        "textOk": true,
+        "afterLeaveCount": 0
+      },
+      {
+        "id": "中中中中中中中中中中中中中中中中中中中中中中中中中",
+        "found": true,
+        "rendered": "中中中中中中中中中中中中中中中中中中中中...（中中中中中中中中中中中中中中中中中中中中...）",
+        "expectLabel": "中中中中中中中中中中中中中中中中中中中中...（中中中中中中中中中中中中中中中中中中中中...）",
+        "labelOk": true,
+        "renderedCodePoints": 48,
+        "expectTooltip": true,
+        "gotTooltip": true,
+        "tooltipText": "中中中中中中中中中中中中中中中中中中中中中中中中",
+        "expectTooltipText": "中中中中中中中中中中中中中中中中中中中中中中中中",
+        "textOk": true,
+        "afterLeaveCount": 0
+      },
+      {
+        "id": "😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀",
+        "found": true,
+        "rendered": "😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀...（😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀...）",
+        "expectLabel": "😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀...（😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀...）",
+        "labelOk": true,
+        "renderedCodePoints": 48,
+        "expectTooltip": true,
+        "gotTooltip": true,
+        "tooltipText": "😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀",
+        "expectTooltipText": "😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀",
+        "textOk": true,
+        "afterLeaveCount": 0
+      },
+      {
+        "id": "very-long-client-id-XXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXX",
+        "found": true,
+        "rendered": "very-long-client-id-...",
+        "expectLabel": "very-long-client-id-...",
+        "labelOk": true,
+        "renderedCodePoints": 20,
+        "expectTooltip": false,
+        "gotTooltip": false,
+        "tooltipText": null,
+        "expectTooltipText": null,
+        "textOk": true,
+        "afterLeaveCount": 0
+      },
+      {
+        "id": "short-desc",
+        "found": true,
+        "rendered": "short-desc（长描述长描述长描述长描述长描述长描述长描...）",
+        "expectLabel": "short-desc（长描述长描述长描述长描述长描述长描述长描...）",
+        "labelOk": true,
+        "renderedCodePoints": 35,
+        "expectTooltip": true,
+        "gotTooltip": true,
+        "tooltipText": "长描述长描述长描述长描述长描述长描述长描述长描述长描述长描述长描述长描述长描述长描述长描述长描述长描述长描述长描述长描述长描述长描述长描述长描述长描述长描述长描述长描述长描述长描述长描述长描述长描述长描述长描述长描述长描述长描述长描述长描述长描述长描述长描述长描述长描述长描述长描述长描述长描述长描述长描述长描述长描述长描述长描述长描述长描述长描述长描述长描述长描述长描述长描述长描述长描述长描述长描述长描述长描述长描述长描述长描述长描述长描述长描述长描述长描述长描述长描述长描述长描述长描述长描述长描述长描述长描述长描述长描述长描述长描述长描述长描述长描述长描述长描述长描述长描述长描述长描述长描述",
+        "expectTooltipText": "长描述长描述长描述长描述长描述长描述长描述长描述长描述长描述长描述长描述长描述长描述长描述长描述长描述长描述长描述长描述长描述长描述长描述长描述长描述长描述长描述长描述长描述长描述长描述长描述长描述长描述长描述长描述长描述长描述长描述长描述长描述长描述长描述长描述长描述长描述长描述长描述长描述长描述长描述长描述长描述长描述长描述长描述长描述长描述长描述长描述长描述长描述长描述长描述长描述长描述长描述长描述长描述长描述长描述长描述长描述长描述长描述长描述长描述长描述长描述长描述长描述长描述长描述长描述长描述长描述长描述长描述长描述长描述长描述长描述长描述长描述长描述长描述长描述长描述长描述长描述",
+        "textOk": true,
+        "afterLeaveCount": 0
+      },
+      {
+        "id": "desc-empty-str",
+        "found": true,
+        "rendered": "desc-empty-str",
+        "expectLabel": "desc-empty-str",
+        "labelOk": true,
+        "renderedCodePoints": 14,
+        "expectTooltip": false,
+        "gotTooltip": false,
+        "tooltipText": null,
+        "expectTooltipText": null,
+        "textOk": true,
+        "afterLeaveCount": 0
+      },
+      {
+        "id": "desc-20",
+        "found": true,
+        "rendered": "desc-20（22222222222222222222）",
+        "expectLabel": "desc-20（22222222222222222222）",
+        "labelOk": true,
+        "renderedCodePoints": 29,
+        "expectTooltip": false,
+        "gotTooltip": false,
+        "tooltipText": null,
+        "expectTooltipText": null,
+        "textOk": true,
+        "afterLeaveCount": 0
+      }
+    ],
+    "sourceRendered": [
+      "全部",
+      "ooooooooooooooooooo（src19-AAAAAAAAAAAAA）",
+      "pppppppppppppppppppp（src20-BBBBBBBBBBBBBB）",
+      "qqqqqqqqqqqqqqqqqqqq...（src21-CCCCCCCCCCCCCC...）",
+      "rrrrrrrrrrrrrrrrrrrr...（src22-DDDDDDDDDDDDDD...）",
+      "中中中中中中中中中中中中中中中中中中中中...（中中中中中中中中中中中中中中中中中中中中...）",
+      "😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀...",
+      "src-very-long-YYYYYY...",
+      "宽宽宽宽宽宽宽宽宽宽宽宽宽宽宽宽宽宽宽宽...（src-wide-org）"
+    ],
+    "sourceProbe": [
+      {
+        "i": 0,
+        "found": true,
+        "rendered": "ooooooooooooooooooo（src19-AAAAAAAAAAAAA）",
+        "expectLabel": "ooooooooooooooooooo（src19-AAAAAAAAAAAAA）",
+        "labelOk": true,
+        "gotTooltip": false,
+        "tooltipText": null
+      },
+      {
+        "i": 1,
+        "found": true,
+        "rendered": "pppppppppppppppppppp（src20-BBBBBBBBBBBBBB）",
+        "expectLabel": "pppppppppppppppppppp（src20-BBBBBBBBBBBBBB）",
+        "labelOk": true,
+        "gotTooltip": false,
+        "tooltipText": null
+      },
+      {
+        "i": 2,
+        "found": true,
+        "rendered": "qqqqqqqqqqqqqqqqqqqq...（src21-CCCCCCCCCCCCCC...）",
+        "expectLabel": "qqqqqqqqqqqqqqqqqqqq...（src21-CCCCCCCCCCCCCC...）",
+        "labelOk": true,
+        "gotTooltip": false,
+        "tooltipText": null
+      },
+      {
+        "i": 3,
+        "found": true,
+        "rendered": "rrrrrrrrrrrrrrrrrrrr...（src22-DDDDDDDDDDDDDD...）",
+        "expectLabel": "rrrrrrrrrrrrrrrrrrrr...（src22-DDDDDDDDDDDDDD...）",
+        "labelOk": true,
+        "gotTooltip": false,
+        "tooltipText": null
+      },
+      {
+        "i": 4,
+        "found": true,
+        "rendered": "中中中中中中中中中中中中中中中中中中中中...（中中中中中中中中中中中中中中中中中中中中...）",
+        "expectLabel": "中中中中中中中中中中中中中中中中中中中中...（中中中中中中中中中中中中中中中中中中中中...）",
+        "labelOk": true,
+        "gotTooltip": false,
+        "tooltipText": null
+      },
+      {
+        "i": 5,
+        "found": true,
+        "rendered": "😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀...",
+        "expectLabel": "😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀...",
+        "labelOk": true,
+        "gotTooltip": false,
+        "tooltipText": null
+      },
+      {
+        "i": 6,
+        "found": true,
+        "rendered": "src-very-long-YYYYYY...",
+        "expectLabel": "src-very-long-YYYYYY...",
+        "labelOk": true,
+        "gotTooltip": false,
+        "tooltipText": null
+      },
+      {
+        "i": 7,
+        "found": true,
+        "rendered": "宽宽宽宽宽宽宽宽宽宽宽宽宽宽宽宽宽宽宽宽...（src-wide-org）",
+        "expectLabel": "宽宽宽宽宽宽宽宽宽宽宽宽宽宽宽宽宽宽宽宽...（src-wide-org）",
+        "labelOk": true,
+        "gotTooltip": false,
+        "tooltipText": null
+      }
+    ],
+    "selectedProbe": [
+      {
+        "selectedIdentity": "PPPPPPPPPPPPPPPPPPPPAAA",
+        "tagAttr": "PPPPPPPPPPPPPPPPPPPPAAA",
+        "tags": [
+          "PPPPPPPPPPPPPPPPPPPP...（DDDDDDDDDDDDDDDDDDDD...）"
+        ],
+        "tagClosable": true,
+        "expectTooltipText": "DDDDDDDDDDDDDDDDDDDDAAA",
+        "tooltipText": "DDDDDDDDDDDDDDDDDDDDAAA",
+        "tooltipCount": 1,
+        "afterLeaveCount": 0,
+        "correct": true
+      },
+      {
+        "selectedIdentity": "PPPPPPPPPPPPPPPPPPPPBBB",
+        "tagAttr": "PPPPPPPPPPPPPPPPPPPPBBB",
+        "tags": [
+          "PPPPPPPPPPPPPPPPPPPP...（DDDDDDDDDDDDDDDDDDDD...）"
+        ],
+        "tagClosable": true,
+        "expectTooltipText": "DDDDDDDDDDDDDDDDDDDDBBB",
+        "tooltipText": "DDDDDDDDDDDDDDDDDDDDBBB",
+        "tooltipCount": 1,
+        "afterLeaveCount": 0,
+        "correct": true
+      }
+    ],
+    "requests": {
+      "apiTotal": 5,
+      "initialLoad": 1,
+      "afterReset": 0,
+      "afterOpenClose": 0,
+      "afterHoverTooltip": 0,
+      "queryClickDelta": 1,
+      "lastQueryUrl": "http://127.0.0.1:5173/api/monitor/data-source-run-state/list?clientId=PPPPPPPPPPPPPPPPPPPPAAA",
+      "queryClientId": [
+        "PPPPPPPPPPPPPPPPPPPPAAA"
+      ],
+      "queryClientIdIsFullOriginal": true,
+      "nonGet": []
+    },
+    "otherRoute": {
+      "dssElements": 0,
+      "elSelect": 0
+    },
+    "singleTooltips": 0,
+    "consoleErrors": []
+  }
+]

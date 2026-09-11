@@ -22,6 +22,25 @@ export function truncateCodePoints(text: string, max: number = FIELD_TRUNCATE_CO
   return `${points.slice(0, max).join('')}...`
 }
 
+/**
+ * 四字段展示管线第一步（DSS-REQ-085）：null/undefined 安全归一为空字符串，其余执行 trim()。
+ * 只用于展示；调用方不得把结果回流到选项 value、选中值和查询参数。
+ */
+export function normalizeFieldText(value: string | null | undefined): string {
+  return value == null ? '' : value.trim()
+}
+
+/**
+ * 四字段统一展示规则（DSS-REQ-085，AC-098/099）：先 normalizeFieldText（null 安全 + trim），
+ * 再对 trim 后结果按 Unicode 码点计数——不超过 max 完整显示，超过则显示前 max 个码点并追加 ASCII 三点 `...`。
+ * CLIENT_ID / CLIENT_DESC / DATA_SOURCE_ORG / DATA_SOURCE_ID 四个展示字段必须共用本函数，
+ * 不得出现不同字段各自实现；组合标签对每个组成字段分别调用（不能先拼接再整体截断）。
+ * 只用于展示：返回值不得作为选项稳定身份、选中值或查询参数。
+ */
+export function displayField(value: string | null | undefined, max: number = FIELD_TRUNCATE_CODE_POINTS): string {
+  return truncateCodePoints(normalizeFieldText(value), max)
+}
+
 /** 后端 TO_CHAR 字符串（YYYY-MM-DD HH:mm:ss）或 null → 展示文本；null/空返回 --，原值不改变。 */
 export function formatTimeOrDash(value: string | null | undefined): string {
   if (value === null || value === undefined || value === '') return TIME_DASH

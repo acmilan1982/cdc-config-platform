@@ -1,0 +1,104 @@
+# R1 数据库 / 大屏统计调度器 观测证据 (只读)
+# 任务: DATA-SOURCE-SNAPSHOT-STATUS-QUERY-CONTROL-INTERACTION-ADJUSTMENT-IMPLEMENTATION-001-R1
+# 生成时间: 2026-09-11 16:30:52
+# 说明: 本任务为前端 R1 修正, 未执行任何手工 DML/DDL; 以下全部为只读 SELECT 原始输出。
+#       后端为 impl-001 工作区已构建 jar (pid 8537), 浏览器验证经 5173 -> /api -> 127.0.0.1:8080。
+
+==================================================================
+A) 后端运行日志 SQL 语句种类统计
+   日志: /agent/cdc-config-platform/runtime-logs/DATA-SOURCE-SNAPSHOT-STATUS-QUERY-CONTROL-INTERACTION-ADJUSTMENT-IMPLEMENTATION-001/backend-8080.log
+==================================================================
+$ grep -oE 'Preparing: *[A-Z]+' <log> | sort | uniq -c
+    217 Preparing: SELECT
+
+$ grep -cE 'Preparing: *(INSERT|UPDATE|DELETE|MERGE)' <log>   # 写语句计数
+0
+
+==================================================================
+B) 大屏统计调度器 StatsScheduler 触发记录 (如实, 未脱敏删减)
+==================================================================
+$ grep -nE 'StatsScheduler|StatsRoundRunner|RoundExecutor|BatchTransactionExecutor' <log>
+70:2026-09-11 13:18:59.610  INFO 8537 --- [           main] c.b.c.l.stats.lifecycle.StatsScheduler   : Stats scheduler started: initialDelayMs=600000, intervalMs=3600000
+173:2026-09-11 13:28:59.839  INFO 8537 --- [    cdc-stats-1] c.b.c.l.s.lifecycle.StatsRoundRunner     : Round START | task=LARGE_SCREEN_STATS | correctSafeUpper=345105064429543426 | errorSafeUpper=343663503049216441 | correctMaxLogId=345105064429543426 | errorMaxLogId=343663503049216441 | timeBoundary=356664903907409919 | correctBatchSize=200000 | errorBatchSize=200000
+174:2026-09-11 13:28:59.839  INFO 8537 --- [    cdc-stats-1] c.b.c.l.stats.executor.RoundExecutor     : Round start: task=LARGE_SCREEN_STATS, correctSafeUpperId=345105064429543426, errorSafeUpperId=343663503049216441, correctBatchSize=200000, errorBatchSize=200000, safetyDelay=30min
+184:2026-09-11 13:28:59.902 DEBUG 8537 --- [    cdc-stats-1] c.b.c.l.s.e.BatchTransactionExecutor     : Caught up: LARGE_SCREEN_STATS CORRECT, lastId=345105064429543426, safeUpper=345105064429543426
+188:2026-09-11 13:28:59.910 DEBUG 8537 --- [    cdc-stats-1] c.b.c.l.s.e.BatchTransactionExecutor     : Caught up: LARGE_SCREEN_STATS ERROR, lastId=343663503049216441, safeUpper=343663503049216441
+195:2026-09-11 13:28:59.925  INFO 8537 --- [    cdc-stats-1] c.b.c.l.stats.executor.RoundExecutor     : Round end: task=LARGE_SCREEN_STATS, correctBatches=0/10, errorBatches=0/10, correctProcessed=0, errorProcessed=0, correctCaughtUp=true, errorCaughtUp=true, correctFailed=false, errorFailed=false, stopReason=all_caught_up, duration=72ms
+196:2026-09-11 13:28:59.926  INFO 8537 --- [    cdc-stats-1] c.b.c.l.s.lifecycle.StatsRoundRunner     : Round RESULT | correctBatches=1 | errorBatches=1 | correctProcessed=0 | errorProcessed=0 | stopReason=all_caught_up | duration=72ms | newCorrectBatchSize=200000 | newErrorBatchSize=200000
+287:2026-09-11 14:28:59.933  INFO 8537 --- [    cdc-stats-1] c.b.c.l.s.lifecycle.StatsRoundRunner     : Round START | task=LARGE_SCREEN_STATS | correctSafeUpper=345105064429543426 | errorSafeUpper=343663503049216441 | correctMaxLogId=345105064429543426 | errorMaxLogId=343663503049216441 | timeBoundary=356680004752375807 | correctBatchSize=200000 | errorBatchSize=200000
+288:2026-09-11 14:28:59.933  INFO 8537 --- [    cdc-stats-1] c.b.c.l.stats.executor.RoundExecutor     : Round start: task=LARGE_SCREEN_STATS, correctSafeUpperId=345105064429543426, errorSafeUpperId=343663503049216441, correctBatchSize=200000, errorBatchSize=200000, safetyDelay=30min
+298:2026-09-11 14:28:59.967 DEBUG 8537 --- [    cdc-stats-1] c.b.c.l.s.e.BatchTransactionExecutor     : Caught up: LARGE_SCREEN_STATS CORRECT, lastId=345105064429543426, safeUpper=345105064429543426
+302:2026-09-11 14:28:59.974 DEBUG 8537 --- [    cdc-stats-1] c.b.c.l.s.e.BatchTransactionExecutor     : Caught up: LARGE_SCREEN_STATS ERROR, lastId=343663503049216441, safeUpper=343663503049216441
+309:2026-09-11 14:28:59.994  INFO 8537 --- [    cdc-stats-1] c.b.c.l.stats.executor.RoundExecutor     : Round end: task=LARGE_SCREEN_STATS, correctBatches=0/10, errorBatches=0/10, correctProcessed=0, errorProcessed=0, correctCaughtUp=true, errorCaughtUp=true, correctFailed=false, errorFailed=false, stopReason=all_caught_up, duration=47ms
+310:2026-09-11 14:28:59.994  INFO 8537 --- [    cdc-stats-1] c.b.c.l.s.lifecycle.StatsRoundRunner     : Round RESULT | correctBatches=1 | errorBatches=1 | correctProcessed=0 | errorProcessed=0 | stopReason=all_caught_up | duration=47ms | newCorrectBatchSize=200000 | newErrorBatchSize=200000
+311:2026-09-11 15:29:00.006  INFO 8537 --- [    cdc-stats-1] c.b.c.l.s.lifecycle.StatsRoundRunner     : Round START | task=LARGE_SCREEN_STATS | correctSafeUpper=345105064429543426 | errorSafeUpper=343663503049216441 | correctMaxLogId=345105064429543426 | errorMaxLogId=343663503049216441 | timeBoundary=356695104536182783 | correctBatchSize=200000 | errorBatchSize=200000
+312:2026-09-11 15:29:00.007  INFO 8537 --- [    cdc-stats-1] c.b.c.l.stats.executor.RoundExecutor     : Round start: task=LARGE_SCREEN_STATS, correctSafeUpperId=345105064429543426, errorSafeUpperId=343663503049216441, correctBatchSize=200000, errorBatchSize=200000, safetyDelay=30min
+322:2026-09-11 15:29:00.058 DEBUG 8537 --- [    cdc-stats-1] c.b.c.l.s.e.BatchTransactionExecutor     : Caught up: LARGE_SCREEN_STATS CORRECT, lastId=345105064429543426, safeUpper=345105064429543426
+326:2026-09-11 15:29:00.079 DEBUG 8537 --- [    cdc-stats-1] c.b.c.l.s.e.BatchTransactionExecutor     : Caught up: LARGE_SCREEN_STATS ERROR, lastId=343663503049216441, safeUpper=343663503049216441
+333:2026-09-11 15:29:00.098  INFO 8537 --- [    cdc-stats-1] c.b.c.l.stats.executor.RoundExecutor     : Round end: task=LARGE_SCREEN_STATS, correctBatches=0/10, errorBatches=0/10, correctProcessed=0, errorProcessed=0, correctCaughtUp=true, errorCaughtUp=true, correctFailed=false, errorFailed=false, stopReason=all_caught_up, duration=74ms
+334:2026-09-11 15:29:00.098  INFO 8537 --- [    cdc-stats-1] c.b.c.l.s.lifecycle.StatsRoundRunner     : Round RESULT | correctBatches=1 | errorBatches=1 | correctProcessed=0 | errorProcessed=0 | stopReason=all_caught_up | duration=74ms | newCorrectBatchSize=200000 | newErrorBatchSize=200000
+722:2026-09-11 16:29:00.104  INFO 8537 --- [    cdc-stats-1] c.b.c.l.s.lifecycle.StatsRoundRunner     : Round START | task=LARGE_SCREEN_STATS | correctSafeUpper=345105064429543426 | errorSafeUpper=343663503049216441 | correctMaxLogId=345105064429543426 | errorMaxLogId=343663503049216441 | timeBoundary=356710204466790399 | correctBatchSize=200000 | errorBatchSize=200000
+723:2026-09-11 16:29:00.104  INFO 8537 --- [    cdc-stats-1] c.b.c.l.stats.executor.RoundExecutor     : Round start: task=LARGE_SCREEN_STATS, correctSafeUpperId=345105064429543426, errorSafeUpperId=343663503049216441, correctBatchSize=200000, errorBatchSize=200000, safetyDelay=30min
+733:2026-09-11 16:29:00.120 DEBUG 8537 --- [    cdc-stats-1] c.b.c.l.s.e.BatchTransactionExecutor     : Caught up: LARGE_SCREEN_STATS CORRECT, lastId=345105064429543426, safeUpper=345105064429543426
+737:2026-09-11 16:29:00.124 DEBUG 8537 --- [    cdc-stats-1] c.b.c.l.s.e.BatchTransactionExecutor     : Caught up: LARGE_SCREEN_STATS ERROR, lastId=343663503049216441, safeUpper=343663503049216441
+744:2026-09-11 16:29:00.133  INFO 8537 --- [    cdc-stats-1] c.b.c.l.stats.executor.RoundExecutor     : Round end: task=LARGE_SCREEN_STATS, correctBatches=0/10, errorBatches=0/10, correctProcessed=0, errorProcessed=0, correctCaughtUp=true, errorCaughtUp=true, correctFailed=false, errorFailed=false, stopReason=all_caught_up, duration=22ms
+745:2026-09-11 16:29:00.133  INFO 8537 --- [    cdc-stats-1] c.b.c.l.s.lifecycle.StatsRoundRunner     : Round RESULT | correctBatches=1 | errorBatches=1 | correctProcessed=0 | errorProcessed=0 | stopReason=all_caught_up | duration=22ms | newCorrectBatchSize=200000 | newErrorBatchSize=200000
+
+==================================================================
+C) 数据库只读快照  CDC/CDC@//192.168.174.65:1521/prod.enmotech.com
+   命令: sqlplus -S '<dsn>' @/tmp/r1_sched.sql  (脚本内容见下)
+------------------------------------------------------------------
+set echo on pagesize 200 linesize 220 trimspool on feedback off
+select to_char(sysdate,'YYYY-MM-DD HH24:MI:SS') as now_time from dual;
+-- 统计相关表行数
+select 'CDC_STATS_WATERMARK' as t, count(*) as c from CDC_STATS_WATERMARK
+union all select 'CDC_STAT', count(*) from CDC_STAT
+union all select 'CDC_STATS_TASK_CONFIG', count(*) from CDC_STATS_TASK_CONFIG
+union all select 'CDC_DATA_SOURCE_RUN_STATE', count(*) from CDC_DATA_SOURCE_RUN_STATE;
+-- 大屏统计调度器 watermark (最后处理时间)
+col task_code format a24
+col log_type format a14
+select task_code, log_type, last_log_id, total_processed, to_char(create_time,'YYYY-MM-DD HH24:MI:SS') as create_t, to_char(update_time,'YYYY-MM-DD HH24:MI:SS') as update_t from CDC_STATS_WATERMARK;
+-- 本 Feature 业务表最大更新时间
+select count(*) as run_state_rows, to_char(max(updated_at),'YYYY-MM-DD HH24:MI:SS') as max_updated_at from CDC_DATA_SOURCE_RUN_STATE;
+exit
+------------------------------------------------------------------
+原始输出:
+
+NOW_TIME
+-------------------
+2026-09-11 16:31:51
+
+T				   C
+------------------------- ----------
+CDC_STATS_WATERMARK		   2
+CDC_STAT			   0
+CDC_STATS_TASK_CONFIG		   1
+CDC_DATA_SOURCE_RUN_STATE	  30
+
+TASK_CODE		 LOG_TYPE	LAST_LOG_ID TOTAL_PROCESSED CREATE_T		UPDATE_T
+------------------------ -------------- ----------- --------------- ------------------- -------------------
+LARGE_SCREEN_STATS	 CORRECT	 3.4511E+17	    3819479 2026-08-06 17:17:49 2026-08-10 16:37:57
+LARGE_SCREEN_STATS	 ERROR		 3.4366E+17		442 2026-08-06 17:17:49 2026-08-25 14:31:38
+
+RUN_STATE_ROWS MAX_UPDATED_AT
+-------------- -------------------
+	    30 2026-09-06 11:02:00
+SQLPLUS_EXIT_CODE=0
+
+==================================================================
+D) 观测结论 (如实)
+==================================================================
+- 调度器: StatsScheduler 于 2026-09-11 13:18:59.610 启动 (initialDelayMs=600000, intervalMs=3600000),
+  在本任务窗口内共触发 4 轮 LARGE_SCREEN_STATS: 13:28:59 / 14:28:59 / 15:29:00 / 16:29:00。
+  => stats_scheduler_status=TRIGGERED (4 rounds in window)。
+- 每轮结果均为 stopReason=all_caught_up, correctProcessed=0, errorProcessed=0, correctFailed=false,
+  errorFailed=false (见 B 段 Round end / Round RESULT 原文)。
+  => stats_scheduler_write_status=NO_WRITE_OBSERVED (触发但处理 0 条, 无写入)。
+- 后端日志全程写语句计数=0 (无 INSERT/UPDATE/DELETE/MERGE): 与上面 0 条处理一致。
+- CDC_STATS_WATERMARK 两行 update_time 分别为 2026-08-10 16:37:57 与 2026-08-25 14:31:38,
+  均早于本任务窗口, 与调度器 0 条处理一致。
+- CDC_STAT 行数=0; CDC_DATA_SOURCE_RUN_STATE 行数=30, max(updated_at)=2026-09-06 11:02:00,
+  与任务开始前一致, 无新增/修改。
+- 本任务未执行任何手工 DML/DDL, 未修改调度器配置, 未构造测试数据。
+  结论: manual_database_write_status=ZERO; ZooKeeper 未访问; Kafka 未访问。

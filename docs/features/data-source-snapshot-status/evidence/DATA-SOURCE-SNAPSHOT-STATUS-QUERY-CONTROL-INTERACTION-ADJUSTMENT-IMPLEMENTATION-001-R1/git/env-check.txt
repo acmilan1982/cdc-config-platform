@@ -1,0 +1,100 @@
+# R1 环境预检与 Git 现场（只读）
+# 执行时间: 2026-09-11 15:32:46 CST
+
+$ source /agent/cdc-config-platform/agent-env.sh
+sourced ok
+
+$ command -v git; git --version; command -v claude; claude --version; locale
+/usr/bin/git
+git version 2.47.3
+/root/.local/bin/claude
+2.1.143 (Claude Code)
+LANG=en_US.UTF-8
+LC_CTYPE="en_US.UTF-8"
+LC_NUMERIC="en_US.UTF-8"
+
+$ command -v node; command -v npm; node -v; npm -v
+/opt/node/bin/node
+/opt/node/bin/npm
+v24.17.0
+11.13.0
+
+$ command -v java; command -v mvn; java -version; mvn -version
+/usr/java/latest/bin/java
+/usr/local/maven/bin/mvn
+java version "1.8.0_202"
+Apache Maven 3.8.8 (4c87b05d9aedce574290d1acc98575ed5eb6cd39)
+
+$ command -v sqlplus; sqlplus -v
+/opt/oracle/instantclient/sqlplus
+
+
+$ test -x ${ZOOKEEPER_HOME}/bin/zkCli.sh; echo $?
+zkCli_present_exit=0
+
+===== Git 现场（只读） =====
+
+$ (R1 worktree) pwd; git branch --show-current; git rev-parse HEAD
+PWD=/agent/dss-query-ctl-impl-001-r1
+branch=  (detached HEAD, 本仓库约定)
+HEAD=a47988820c797ff60bd7244b2d0f899bd8fc3be5
+
+$ git fetch origin  # 任务授权
+fetch_exit=0
+
+$ git rev-parse origin/develop
+a47988820c797ff60bd7244b2d0f899bd8fc3be5
+
+$ git rev-parse a47988820c797ff60bd7244b2d0f899bd8fc3be5^   # 待修正实现提交的父提交
+548e16147675cdc6013a4d166bf60d7b1b8bda36
+
+$ git rev-parse a47988820c797ff60bd7244b2d0f899bd8fc3be5~1  (same)
+548e16147675cdc6013a4d166bf60d7b1b8bda36
+
+$ git ls-remote origin develop
+a47988820c797ff60bd7244b2d0f899bd8fc3be5	refs/heads/develop
+
+$ git worktree list
+/agent/cdc-config-platform                    4222b0a [develop]
+/agent/cdc-docs-freeze-001                    8998034 (detached HEAD)
+/agent/dss-formal-impl-001                    3ec9cbf (detached HEAD)
+/agent/dss-formal-impl-001-r1                 ba309ea (detached HEAD)
+/agent/dss-linear-style-original-001.R1       4222b0a (detached HEAD)
+/agent/dss-linear-style-prototype-001.BfGw0Z  4222b0a (detached HEAD)
+/agent/dss-query-ctl-001                      29379e7 (detached HEAD)
+/agent/dss-query-ctl-001-r1                   d6322cf (detached HEAD)
+/agent/dss-query-ctl-001-r2                   6c43d1e (detached HEAD)
+/agent/dss-query-ctl-001-r3                   cf9f9eb (detached HEAD)
+/agent/dss-query-ctl-appr-001                 548e161 (detached HEAD)
+/agent/dss-query-ctl-impl-001                 a479888 (detached HEAD)
+/agent/dss-query-ctl-impl-001-r1              a479888 (detached HEAD)
+/tmp/cdc-approval-r1-worktree                 c568df1 (detached HEAD)
+/tmp/cdc-approval-worktree                    b753bec (detached HEAD)
+/tmp/cdc-freeze-r1-worktree                   85a522e (detached HEAD)
+/tmp/cdc-freeze-r2-worktree                   9b0aa92 (detached HEAD)
+/tmp/cdc-freeze-r3-worktree                   e67b2ec (detached HEAD)
+/tmp/cdc-r1-worktree                          49eb778 (detached HEAD)
+
+$ git status --short  (R1 worktree)
+ M docs/features/README.md
+ M docs/features/data-source-snapshot-status/ACCEPTANCE.md
+ M docs/features/data-source-snapshot-status/API.md
+ M docs/features/data-source-snapshot-status/DATABASE.md
+ M docs/features/data-source-snapshot-status/DESIGN.md
+ M docs/features/data-source-snapshot-status/README.md
+ M docs/features/data-source-snapshot-status/REQUIREMENTS.md
+ M docs/features/data-source-snapshot-status/UI.md
+ M frontend/src/views/data-source-run-state/components/DataSourceSnapshotQueryBar.spec.ts
+ M frontend/src/views/data-source-run-state/components/DataSourceSnapshotQueryBar.vue
+ M frontend/src/views/data-source-run-state/utils/format.spec.ts
+ M frontend/src/views/data-source-run-state/utils/format.ts
+?? docs/features/data-source-snapshot-status/evidence/DATA-SOURCE-SNAPSHOT-STATUS-QUERY-CONTROL-INTERACTION-ADJUSTMENT-IMPLEMENTATION-001-R1/
+?? frontend/node_modules
+
+$ git -C /agent/cdc-config-platform rev-parse HEAD; git -C /agent/cdc-config-platform status --short | wc -l
+main_HEAD=4222b0a24b927aca6f62ff348fd8549b73d4156c
+main_changed_lines=116
+
+$ git -C /agent/dss-linear-style-prototype-001.BfGw0Z rev-parse HEAD; status --short | wc -l
+prototype_HEAD=4222b0a24b927aca6f62ff348fd8549b73d4156c
+prototype_changed_lines=13

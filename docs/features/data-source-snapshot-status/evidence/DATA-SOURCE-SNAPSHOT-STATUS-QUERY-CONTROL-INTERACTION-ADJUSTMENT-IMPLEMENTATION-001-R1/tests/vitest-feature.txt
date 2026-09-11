@@ -1,0 +1,25 @@
+$ npx vitest run src/views/data-source-run-state
+PWD=/agent/dss-query-ctl-impl-001-r1/frontend
+
+ RUN  v1.6.1 /agent/dss-query-ctl-impl-001-r1/frontend
+
+ ✓ src/views/data-source-run-state/components/DataSourceSnapshotQueryBar.spec.ts  (81 tests) 11656ms
+ ✓ src/views/data-source-run-state/composables/useDataSourceSnapshot.spec.ts  (26 tests) 42ms
+ ✓ src/views/data-source-run-state/components/DataSourceSnapshotTable.spec.ts  (29 tests) 1184ms
+ ✓ src/views/data-source-run-state/DataSourceRunStatePage.spec.ts  (18 tests) 3228ms
+ ✓ src/views/data-source-run-state/components/DataSourceSnapshotToolbar.spec.ts  (14 tests) 143ms
+ ✓ src/views/data-source-run-state/composables/useDataSourceSnapshot.errorChain.spec.ts  (6 tests) 79ms
+ ✓ src/views/data-source-run-state/tooltip/useSnapshotTooltip.spec.ts  (14 tests) 40ms
+ ✓ src/views/data-source-run-state/utils/format.spec.ts  (21 tests) 8ms
+ ✓ src/views/data-source-run-state/tooltip/SnapshotTooltipHost.spec.ts  (4 tests) 55ms
+ ✓ src/views/data-source-run-state/components/DataSourceSnapshotStatusTag.spec.ts  (8 tests) 95ms
+ ✓ src/views/data-source-run-state/tooltip/tooltipPosition.spec.ts  (10 tests) 5ms
+ ✓ src/views/data-source-run-state/utils/selection.spec.ts  (7 tests) 6ms
+ ✓ src/views/data-source-run-state/utils/rowKey.spec.ts  (3 tests) 4ms
+
+ Test Files  13 passed (13)
+      Tests  241 passed (241)
+   Start at  15:26:49
+   Duration  33.98s (transform 1.15s, setup 69ms, collect 7.06s, tests 16.55s, environment 6.60s, prepare 1.27s)
+
+EXIT_CODE=0

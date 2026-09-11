@@ -1,0 +1,4402 @@
+[
+  {
+    "viewport": {
+      "w": 1280,
+      "h": 800
+    },
+    "mode": "real",
+    "widths": {
+      "client": 240,
+      "source": 300,
+      "status": 200
+    },
+    "maxAdjacentDelta": {
+      "client": 0,
+      "source": 0,
+      "status": 0,
+      "qBtnX": 0,
+      "barH": 0,
+      "groups": 0
+    },
+    "maxHorizontalOverflow": 0,
+    "barH": 72,
+    "groupsY": [
+      175.5,
+      175.5,
+      215.5
+    ],
+    "groupsRowCount": 2,
+    "stateTags": [
+      "initial_all",
+      "collision_A_selected",
+      "collision_A_B_selected",
+      "longest_selected",
+      "multi_collapse_tags",
+      "clear_to_all",
+      "reset",
+      "source_longest"
+    ],
+    "adjacent": [
+      {
+        "from": "initial_all",
+        "to": "collision_A_selected",
+        "dClient": 0,
+        "dSource": 0,
+        "dStatus": 0,
+        "dQBtnX": 0,
+        "dBarH": 0,
+        "dGroups": [
+          [
+            0,
+            0
+          ],
+          [
+            0,
+            0
+          ],
+          [
+            0,
+            0
+          ]
+        ]
+      },
+      {
+        "from": "collision_A_selected",
+        "to": "collision_A_B_selected",
+        "dClient": 0,
+        "dSource": 0,
+        "dStatus": 0,
+        "dQBtnX": 0,
+        "dBarH": 0,
+        "dGroups": [
+          [
+            0,
+            0
+          ],
+          [
+            0,
+            0
+          ],
+          [
+            0,
+            0
+          ]
+        ]
+      },
+      {
+        "from": "collision_A_B_selected",
+        "to": "longest_selected",
+        "dClient": 0,
+        "dSource": 0,
+        "dStatus": 0,
+        "dQBtnX": 0,
+        "dBarH": 0,
+        "dGroups": [
+          [
+            0,
+            0
+          ],
+          [
+            0,
+            0
+          ],
+          [
+            0,
+            0
+          ]
+        ]
+      },
+      {
+        "from": "longest_selected",
+        "to": "multi_collapse_tags",
+        "dClient": 0,
+        "dSource": 0,
+        "dStatus": 0,
+        "dQBtnX": 0,
+        "dBarH": 0,
+        "dGroups": [
+          [
+            0,
+            0
+          ],
+          [
+            0,
+            0
+          ],
+          [
+            0,
+            0
+          ]
+        ]
+      },
+      {
+        "from": "multi_collapse_tags",
+        "to": "clear_to_all",
+        "dClient": 0,
+        "dSource": 0,
+        "dStatus": 0,
+        "dQBtnX": 0,
+        "dBarH": 0,
+        "dGroups": [
+          [
+            0,
+            0
+          ],
+          [
+            0,
+            0
+          ],
+          [
+            0,
+            0
+          ]
+        ]
+      },
+      {
+        "from": "clear_to_all",
+        "to": "reset",
+        "dClient": 0,
+        "dSource": 0,
+        "dStatus": 0,
+        "dQBtnX": 0,
+        "dBarH": 0,
+        "dGroups": [
+          [
+            0,
+            0
+          ],
+          [
+            0,
+            0
+          ],
+          [
+            0,
+            0
+          ]
+        ]
+      },
+      {
+        "from": "reset",
+        "to": "source_longest",
+        "dClient": 0,
+        "dSource": 0,
+        "dStatus": 0,
+        "dQBtnX": 0,
+        "dBarH": 0,
+        "dGroups": [
+          [
+            0,
+            0
+          ],
+          [
+            0,
+            0
+          ],
+          [
+            0,
+            0
+          ]
+        ]
+      }
+    ],
+    "states": [
+      {
+        "tag": "initial_all",
+        "client": {
+          "x": 340,
+          "y": 175.5,
+          "w": 240,
+          "h": 32
+        },
+        "source": {
+          "x": 628,
+          "y": 175.5,
+          "w": 300,
+          "h": 32
+        },
+        "status": {
+          "x": 354,
+          "y": 215.5,
+          "w": 200,
+          "h": 32
+        },
+        "clientWrap": {
+          "x": 340,
+          "y": 175.5,
+          "w": 240,
+          "h": 32
+        },
+        "sourceWrap": {
+          "x": 628,
+          "y": 175.5,
+          "w": 300,
+          "h": 32
+        },
+        "statusWrap": {
+          "x": 354,
+          "y": 215.5,
+          "w": 200,
+          "h": 32
+        },
+        "qBtn": {
+          "x": 568,
+          "y": 216.5,
+          "w": 62,
+          "h": 30
+        },
+        "resetBtn": {
+          "x": 650,
+          "y": 216.5,
+          "w": 58,
+          "h": 30
+        },
+        "bar": {
+          "x": 292,
+          "y": 175.5,
+          "w": 901,
+          "h": 72
+        },
+        "groups": [
+          {
+            "x": 292,
+            "y": 175.5,
+            "w": 288,
+            "h": 32
+          },
+          {
+            "x": 594,
+            "y": 175.5,
+            "w": 334,
+            "h": 32
+          },
+          {
+            "x": 292,
+            "y": 215.5,
+            "w": 262,
+            "h": 32
+          }
+        ],
+        "overflowX": 0
+      },
+      {
+        "tag": "collision_A_selected",
+        "client": {
+          "x": 340,
+          "y": 175.5,
+          "w": 240,
+          "h": 32
+        },
+        "source": {
+          "x": 628,
+          "y": 175.5,
+          "w": 300,
+          "h": 32
+        },
+        "status": {
+          "x": 354,
+          "y": 215.5,
+          "w": 200,
+          "h": 32
+        },
+        "clientWrap": {
+          "x": 340,
+          "y": 175.5,
+          "w": 240,
+          "h": 32
+        },
+        "sourceWrap": {
+          "x": 628,
+          "y": 175.5,
+          "w": 300,
+          "h": 32
+        },
+        "statusWrap": {
+          "x": 354,
+          "y": 215.5,
+          "w": 200,
+          "h": 32
+        },
+        "qBtn": {
+          "x": 568,
+          "y": 216.5,
+          "w": 62,
+          "h": 30
+        },
+        "resetBtn": {
+          "x": 650,
+          "y": 216.5,
+          "w": 58,
+          "h": 30
+        },
+        "bar": {
+          "x": 292,
+          "y": 175.5,
+          "w": 901,
+          "h": 72
+        },
+        "groups": [
+          {
+            "x": 292,
+            "y": 175.5,
+            "w": 288,
+            "h": 32
+          },
+          {
+            "x": 594,
+            "y": 175.5,
+            "w": 334,
+            "h": 32
+          },
+          {
+            "x": 292,
+            "y": 215.5,
+            "w": 262,
+            "h": 32
+          }
+        ],
+        "overflowX": 0
+      },
+      {
+        "tag": "collision_A_B_selected",
+        "client": {
+          "x": 340,
+          "y": 175.5,
+          "w": 240,
+          "h": 32
+        },
+        "source": {
+          "x": 628,
+          "y": 175.5,
+          "w": 300,
+          "h": 32
+        },
+        "status": {
+          "x": 354,
+          "y": 215.5,
+          "w": 200,
+          "h": 32
+        },
+        "clientWrap": {
+          "x": 340,
+          "y": 175.5,
+          "w": 240,
+          "h": 32
+        },
+        "sourceWrap": {
+          "x": 628,
+          "y": 175.5,
+          "w": 300,
+          "h": 32
+        },
+        "statusWrap": {
+          "x": 354,
+          "y": 215.5,
+          "w": 200,
+          "h": 32
+        },
+        "qBtn": {
+          "x": 568,
+          "y": 216.5,
+          "w": 62,
+          "h": 30
+        },
+        "resetBtn": {
+          "x": 650,
+          "y": 216.5,
+          "w": 58,
+          "h": 30
+        },
+        "bar": {
+          "x": 292,
+          "y": 175.5,
+          "w": 901,
+          "h": 72
+        },
+        "groups": [
+          {
+            "x": 292,
+            "y": 175.5,
+            "w": 288,
+            "h": 32
+          },
+          {
+            "x": 594,
+            "y": 175.5,
+            "w": 334,
+            "h": 32
+          },
+          {
+            "x": 292,
+            "y": 215.5,
+            "w": 262,
+            "h": 32
+          }
+        ],
+        "overflowX": 0
+      },
+      {
+        "tag": "longest_selected",
+        "client": {
+          "x": 340,
+          "y": 175.5,
+          "w": 240,
+          "h": 32
+        },
+        "source": {
+          "x": 628,
+          "y": 175.5,
+          "w": 300,
+          "h": 32
+        },
+        "status": {
+          "x": 354,
+          "y": 215.5,
+          "w": 200,
+          "h": 32
+        },
+        "clientWrap": {
+          "x": 340,
+          "y": 175.5,
+          "w": 240,
+          "h": 32
+        },
+        "sourceWrap": {
+          "x": 628,
+          "y": 175.5,
+          "w": 300,
+          "h": 32
+        },
+        "statusWrap": {
+          "x": 354,
+          "y": 215.5,
+          "w": 200,
+          "h": 32
+        },
+        "qBtn": {
+          "x": 568,
+          "y": 216.5,
+          "w": 62,
+          "h": 30
+        },
+        "resetBtn": {
+          "x": 650,
+          "y": 216.5,
+          "w": 58,
+          "h": 30
+        },
+        "bar": {
+          "x": 292,
+          "y": 175.5,
+          "w": 901,
+          "h": 72
+        },
+        "groups": [
+          {
+            "x": 292,
+            "y": 175.5,
+            "w": 288,
+            "h": 32
+          },
+          {
+            "x": 594,
+            "y": 175.5,
+            "w": 334,
+            "h": 32
+          },
+          {
+            "x": 292,
+            "y": 215.5,
+            "w": 262,
+            "h": 32
+          }
+        ],
+        "overflowX": 0
+      },
+      {
+        "tag": "multi_collapse_tags",
+        "client": {
+          "x": 340,
+          "y": 175.5,
+          "w": 240,
+          "h": 32
+        },
+        "source": {
+          "x": 628,
+          "y": 175.5,
+          "w": 300,
+          "h": 32
+        },
+        "status": {
+          "x": 354,
+          "y": 215.5,
+          "w": 200,
+          "h": 32
+        },
+        "clientWrap": {
+          "x": 340,
+          "y": 175.5,
+          "w": 240,
+          "h": 32
+        },
+        "sourceWrap": {
+          "x": 628,
+          "y": 175.5,
+          "w": 300,
+          "h": 32
+        },
+        "statusWrap": {
+          "x": 354,
+          "y": 215.5,
+          "w": 200,
+          "h": 32
+        },
+        "qBtn": {
+          "x": 568,
+          "y": 216.5,
+          "w": 62,
+          "h": 30
+        },
+        "resetBtn": {
+          "x": 650,
+          "y": 216.5,
+          "w": 58,
+          "h": 30
+        },
+        "bar": {
+          "x": 292,
+          "y": 175.5,
+          "w": 901,
+          "h": 72
+        },
+        "groups": [
+          {
+            "x": 292,
+            "y": 175.5,
+            "w": 288,
+            "h": 32
+          },
+          {
+            "x": 594,
+            "y": 175.5,
+            "w": 334,
+            "h": 32
+          },
+          {
+            "x": 292,
+            "y": 215.5,
+            "w": 262,
+            "h": 32
+          }
+        ],
+        "overflowX": 0
+      },
+      {
+        "tag": "clear_to_all",
+        "client": {
+          "x": 340,
+          "y": 175.5,
+          "w": 240,
+          "h": 32
+        },
+        "source": {
+          "x": 628,
+          "y": 175.5,
+          "w": 300,
+          "h": 32
+        },
+        "status": {
+          "x": 354,
+          "y": 215.5,
+          "w": 200,
+          "h": 32
+        },
+        "clientWrap": {
+          "x": 340,
+          "y": 175.5,
+          "w": 240,
+          "h": 32
+        },
+        "sourceWrap": {
+          "x": 628,
+          "y": 175.5,
+          "w": 300,
+          "h": 32
+        },
+        "statusWrap": {
+          "x": 354,
+          "y": 215.5,
+          "w": 200,
+          "h": 32
+        },
+        "qBtn": {
+          "x": 568,
+          "y": 216.5,
+          "w": 62,
+          "h": 30
+        },
+        "resetBtn": {
+          "x": 650,
+          "y": 216.5,
+          "w": 58,
+          "h": 30
+        },
+        "bar": {
+          "x": 292,
+          "y": 175.5,
+          "w": 901,
+          "h": 72
+        },
+        "groups": [
+          {
+            "x": 292,
+            "y": 175.5,
+            "w": 288,
+            "h": 32
+          },
+          {
+            "x": 594,
+            "y": 175.5,
+            "w": 334,
+            "h": 32
+          },
+          {
+            "x": 292,
+            "y": 215.5,
+            "w": 262,
+            "h": 32
+          }
+        ],
+        "overflowX": 0
+      },
+      {
+        "tag": "reset",
+        "client": {
+          "x": 340,
+          "y": 175.5,
+          "w": 240,
+          "h": 32
+        },
+        "source": {
+          "x": 628,
+          "y": 175.5,
+          "w": 300,
+          "h": 32
+        },
+        "status": {
+          "x": 354,
+          "y": 215.5,
+          "w": 200,
+          "h": 32
+        },
+        "clientWrap": {
+          "x": 340,
+          "y": 175.5,
+          "w": 240,
+          "h": 32
+        },
+        "sourceWrap": {
+          "x": 628,
+          "y": 175.5,
+          "w": 300,
+          "h": 32
+        },
+        "statusWrap": {
+          "x": 354,
+          "y": 215.5,
+          "w": 200,
+          "h": 32
+        },
+        "qBtn": {
+          "x": 568,
+          "y": 216.5,
+          "w": 62,
+          "h": 30
+        },
+        "resetBtn": {
+          "x": 650,
+          "y": 216.5,
+          "w": 58,
+          "h": 30
+        },
+        "bar": {
+          "x": 292,
+          "y": 175.5,
+          "w": 901,
+          "h": 72
+        },
+        "groups": [
+          {
+            "x": 292,
+            "y": 175.5,
+            "w": 288,
+            "h": 32
+          },
+          {
+            "x": 594,
+            "y": 175.5,
+            "w": 334,
+            "h": 32
+          },
+          {
+            "x": 292,
+            "y": 215.5,
+            "w": 262,
+            "h": 32
+          }
+        ],
+        "overflowX": 0
+      },
+      {
+        "tag": "source_longest",
+        "client": {
+          "x": 340,
+          "y": 175.5,
+          "w": 240,
+          "h": 32
+        },
+        "source": {
+          "x": 628,
+          "y": 175.5,
+          "w": 300,
+          "h": 32
+        },
+        "status": {
+          "x": 354,
+          "y": 215.5,
+          "w": 200,
+          "h": 32
+        },
+        "clientWrap": {
+          "x": 340,
+          "y": 175.5,
+          "w": 240,
+          "h": 32
+        },
+        "sourceWrap": {
+          "x": 628,
+          "y": 175.5,
+          "w": 300,
+          "h": 32
+        },
+        "statusWrap": {
+          "x": 354,
+          "y": 215.5,
+          "w": 200,
+          "h": 32
+        },
+        "qBtn": {
+          "x": 568,
+          "y": 216.5,
+          "w": 62,
+          "h": 30
+        },
+        "resetBtn": {
+          "x": 650,
+          "y": 216.5,
+          "w": 58,
+          "h": 30
+        },
+        "bar": {
+          "x": 292,
+          "y": 175.5,
+          "w": 901,
+          "h": 72
+        },
+        "groups": [
+          {
+            "x": 292,
+            "y": 175.5,
+            "w": 288,
+            "h": 32
+          },
+          {
+            "x": 594,
+            "y": 175.5,
+            "w": 334,
+            "h": 32
+          },
+          {
+            "x": 292,
+            "y": 215.5,
+            "w": 262,
+            "h": 32
+          }
+        ],
+        "overflowX": 0
+      }
+    ],
+    "candLabels": [
+      "全部",
+      "c-dssr1-0906-a（快照页测试探针A，请勿启用。长描述用于验...）",
+      "c-dssr1-0906-b（快照页测试探针B，请勿启用）",
+      "c-dssr1-0906-c（快照页测试探针C，请勿启用（其源库配置缺...）",
+      "c-dssr1-0906-d（快照页测试探针D，请勿启用（含超长描述演...）",
+      "c-dssr1-0906-e（快照页测试探针E，请勿启用）",
+      "c-dssr1-0906-miss1",
+      "c-dssr1-0906-miss2",
+      "hosp-012（总部测试 IP: 192.168.0.9...）"
+    ],
+    "collisionRows": {
+      "PPPPPPPPPPPPPPPPPPPPAAA": null,
+      "PPPPPPPPPPPPPPPPPPPPBBB": null
+    },
+    "collisionProbe": [],
+    "boundaryProbe": [
+      {
+        "id": "c-dssr1-0906-a",
+        "found": true,
+        "rendered": "c-dssr1-0906-a（快照页测试探针A，请勿启用。长描述用于验...）",
+        "expectLabel": "c-dssr1-0906-a（快照页测试探针A，请勿启用。长描述用于验...）",
+        "labelOk": true,
+        "renderedCodePoints": 39,
+        "expectTooltip": true,
+        "gotTooltip": true,
+        "tooltipText": "快照页测试探针A，请勿启用。长描述用于验证页面 Tooltip 与列宽截断：某市第一人民医院信息中心CDC采集探针（专用快照页测试实例，请勿启用其进行任何真实数据同步）。继续追加说明文字以拉长描述，确认列表单元格超长时显示省略号并可由 Tooltip 完整阅读；本条仅供源库快照状态只读页面视觉验证使用。",
+        "expectTooltipText": "快照页测试探针A，请勿启用。长描述用于验证页面 Tooltip 与列宽截断：某市第一人民医院信息中心CDC采集探针（专用快照页测试实例，请勿启用其进行任何真实数据同步）。继续追加说明文字以拉长描述，确认列表单元格超长时显示省略号并可由 Tooltip 完整阅读；本条仅供源库快照状态只读页面视觉验证使用。",
+        "textOk": true,
+        "afterLeaveCount": 0
+      },
+      {
+        "id": "c-dssr1-0906-b",
+        "found": true,
+        "rendered": "c-dssr1-0906-b（快照页测试探针B，请勿启用）",
+        "expectLabel": "c-dssr1-0906-b（快照页测试探针B，请勿启用）",
+        "labelOk": true,
+        "renderedCodePoints": 29,
+        "expectTooltip": false,
+        "gotTooltip": false,
+        "tooltipText": null,
+        "expectTooltipText": null,
+        "textOk": true,
+        "afterLeaveCount": 0
+      },
+      {
+        "id": "c-dssr1-0906-c",
+        "found": true,
+        "rendered": "c-dssr1-0906-c（快照页测试探针C，请勿启用（其源库配置缺...）",
+        "expectLabel": "c-dssr1-0906-c（快照页测试探针C，请勿启用（其源库配置缺...）",
+        "labelOk": true,
+        "renderedCodePoints": 39,
+        "expectTooltip": true,
+        "gotTooltip": true,
+        "tooltipText": "快照页测试探针C，请勿启用（其源库配置缺失）",
+        "expectTooltipText": "快照页测试探针C，请勿启用（其源库配置缺失）",
+        "textOk": true,
+        "afterLeaveCount": 0
+      },
+      {
+        "id": "c-dssr1-0906-d",
+        "found": true,
+        "rendered": "c-dssr1-0906-d（快照页测试探针D，请勿启用（含超长描述演...）",
+        "expectLabel": "c-dssr1-0906-d（快照页测试探针D，请勿启用（含超长描述演...）",
+        "labelOk": true,
+        "renderedCodePoints": 39,
+        "expectTooltip": true,
+        "gotTooltip": true,
+        "tooltipText": "快照页测试探针D，请勿启用（含超长描述演示：覆盖同源不同状态与并列时间排序）",
+        "expectTooltipText": "快照页测试探针D，请勿启用（含超长描述演示：覆盖同源不同状态与并列时间排序）",
+        "textOk": true,
+        "afterLeaveCount": 0
+      },
+      {
+        "id": "c-dssr1-0906-e",
+        "found": true,
+        "rendered": "c-dssr1-0906-e（快照页测试探针E，请勿启用）",
+        "expectLabel": "c-dssr1-0906-e（快照页测试探针E，请勿启用）",
+        "labelOk": true,
+        "renderedCodePoints": 29,
+        "expectTooltip": false,
+        "gotTooltip": false,
+        "tooltipText": null,
+        "expectTooltipText": null,
+        "textOk": true,
+        "afterLeaveCount": 0
+      },
+      {
+        "id": "c-dssr1-0906-miss1",
+        "found": true,
+        "rendered": "c-dssr1-0906-miss1",
+        "expectLabel": "c-dssr1-0906-miss1",
+        "labelOk": true,
+        "renderedCodePoints": 18,
+        "expectTooltip": false,
+        "gotTooltip": false,
+        "tooltipText": null,
+        "expectTooltipText": null,
+        "textOk": true,
+        "afterLeaveCount": 0
+      },
+      {
+        "id": "c-dssr1-0906-miss2",
+        "found": true,
+        "rendered": "c-dssr1-0906-miss2",
+        "expectLabel": "c-dssr1-0906-miss2",
+        "labelOk": true,
+        "renderedCodePoints": 18,
+        "expectTooltip": false,
+        "gotTooltip": false,
+        "tooltipText": null,
+        "expectTooltipText": null,
+        "textOk": true,
+        "afterLeaveCount": 0
+      },
+      {
+        "id": "hosp-012",
+        "found": true,
+        "rendered": "hosp-012（总部测试 IP: 192.168.0.9...）",
+        "expectLabel": "hosp-012（总部测试 IP: 192.168.0.9...）",
+        "labelOk": true,
+        "renderedCodePoints": 33,
+        "expectTooltip": true,
+        "gotTooltip": true,
+        "tooltipText": "总部测试 IP: 192.168.0.94, 192.168.174.1, 3.3.0.192, 192.168.100.1",
+        "expectTooltipText": "总部测试 IP: 192.168.0.94, 192.168.174.1, 3.3.0.192, 192.168.100.1",
+        "textOk": true,
+        "afterLeaveCount": 0
+      }
+    ],
+    "sourceRendered": [
+      "全部",
+      "SNAPSHOT-TEST-某市一院信息...（s-dssr1-0906-1）",
+      "SNAPSHOT-TEST-某市一院信息...（s-dssr1-0906-2）",
+      "SNAPSHOT-TEST-某市二院信息...（s-dssr1-0906-3）",
+      "SNAPSHOT-TEST-目标侧某中心...（s-dssr1-0906-4）",
+      "SNAPSHOT-TEST-第三方平台源...（s-dssr1-0906-5）",
+      "孝感市第一人民医院（112-source-19c）",
+      "s-dssr1-0906-m1",
+      "s-dssr1-0906-m2",
+      "s-dssr1-0906-m3"
+    ],
+    "sourceProbe": [
+      {
+        "i": 0,
+        "found": true,
+        "rendered": "SNAPSHOT-TEST-某市一院信息...（s-dssr1-0906-1）",
+        "expectLabel": "SNAPSHOT-TEST-某市一院信息...（s-dssr1-0906-1）",
+        "labelOk": true,
+        "gotTooltip": false,
+        "tooltipText": null
+      },
+      {
+        "i": 1,
+        "found": true,
+        "rendered": "SNAPSHOT-TEST-某市一院信息...（s-dssr1-0906-2）",
+        "expectLabel": "SNAPSHOT-TEST-某市一院信息...（s-dssr1-0906-2）",
+        "labelOk": true,
+        "gotTooltip": false,
+        "tooltipText": null
+      },
+      {
+        "i": 2,
+        "found": true,
+        "rendered": "SNAPSHOT-TEST-某市二院信息...（s-dssr1-0906-3）",
+        "expectLabel": "SNAPSHOT-TEST-某市二院信息...（s-dssr1-0906-3）",
+        "labelOk": true,
+        "gotTooltip": false,
+        "tooltipText": null
+      },
+      {
+        "i": 3,
+        "found": true,
+        "rendered": "SNAPSHOT-TEST-目标侧某中心...（s-dssr1-0906-4）",
+        "expectLabel": "SNAPSHOT-TEST-目标侧某中心...（s-dssr1-0906-4）",
+        "labelOk": true,
+        "gotTooltip": false,
+        "tooltipText": null
+      },
+      {
+        "i": 4,
+        "found": true,
+        "rendered": "SNAPSHOT-TEST-第三方平台源...（s-dssr1-0906-5）",
+        "expectLabel": "SNAPSHOT-TEST-第三方平台源...（s-dssr1-0906-5）",
+        "labelOk": true,
+        "gotTooltip": false,
+        "tooltipText": null
+      },
+      {
+        "i": 5,
+        "found": true,
+        "rendered": "孝感市第一人民医院（112-source-19c）",
+        "expectLabel": "孝感市第一人民医院（112-source-19c）",
+        "labelOk": true,
+        "gotTooltip": false,
+        "tooltipText": null
+      },
+      {
+        "i": 6,
+        "found": true,
+        "rendered": "s-dssr1-0906-m1",
+        "expectLabel": "s-dssr1-0906-m1",
+        "labelOk": true,
+        "gotTooltip": false,
+        "tooltipText": null
+      },
+      {
+        "i": 7,
+        "found": true,
+        "rendered": "s-dssr1-0906-m2",
+        "expectLabel": "s-dssr1-0906-m2",
+        "labelOk": true,
+        "gotTooltip": false,
+        "tooltipText": null
+      },
+      {
+        "i": 8,
+        "found": true,
+        "rendered": "s-dssr1-0906-m3",
+        "expectLabel": "s-dssr1-0906-m3",
+        "labelOk": true,
+        "gotTooltip": false,
+        "tooltipText": null
+      }
+    ],
+    "selectedProbe": [
+      {
+        "selectedIdentity": "c-dssr1-0906-a",
+        "tagAttr": "c-dssr1-0906-a",
+        "tags": [
+          "c-dssr1-0906-a（快照页测试探针A，请勿启用。长描述用于验...）"
+        ],
+        "tagClosable": true,
+        "expectTooltipText": "快照页测试探针A，请勿启用。长描述用于验证页面 Tooltip 与列宽截断：某市第一人民医院信息中心CDC采集探针（专用快照页测试实例，请勿启用其进行任何真实数据同步）。继续追加说明文字以拉长描述，确认列表单元格超长时显示省略号并可由 Tooltip 完整阅读；本条仅供源库快照状态只读页面视觉验证使用。",
+        "tooltipText": "快照页测试探针A，请勿启用。长描述用于验证页面 Tooltip 与列宽截断：某市第一人民医院信息中心CDC采集探针（专用快照页测试实例，请勿启用其进行任何真实数据同步）。继续追加说明文字以拉长描述，确认列表单元格超长时显示省略号并可由 Tooltip 完整阅读；本条仅供源库快照状态只读页面视觉验证使用。",
+        "tooltipCount": 1,
+        "afterLeaveCount": 0,
+        "correct": true
+      },
+      {
+        "selectedIdentity": "c-dssr1-0906-c",
+        "tagAttr": "c-dssr1-0906-c",
+        "tags": [
+          "c-dssr1-0906-c（快照页测试探针C，请勿启用（其源库配置缺...）"
+        ],
+        "tagClosable": true,
+        "expectTooltipText": "快照页测试探针C，请勿启用（其源库配置缺失）",
+        "tooltipText": "快照页测试探针C，请勿启用（其源库配置缺失）",
+        "tooltipCount": 1,
+        "afterLeaveCount": 0,
+        "correct": true
+      }
+    ],
+    "requests": {
+      "apiTotal": 5,
+      "initialLoad": 1,
+      "afterReset": 0,
+      "afterOpenClose": 0,
+      "afterHoverTooltip": 0,
+      "queryClickDelta": 1,
+      "lastQueryUrl": "http://127.0.0.1:5173/api/monitor/data-source-run-state/list?clientId=c-dssr1-0906-a",
+      "queryClientId": [
+        "c-dssr1-0906-a"
+      ],
+      "queryClientIdIsFullOriginal": true,
+      "nonGet": []
+    },
+    "otherRoute": {
+      "dssElements": 0,
+      "elSelect": 0
+    },
+    "singleTooltips": 0,
+    "consoleErrors": []
+  },
+  {
+    "viewport": {
+      "w": 1700,
+      "h": 920
+    },
+    "mode": "real",
+    "widths": {
+      "client": 240,
+      "source": 300,
+      "status": 200
+    },
+    "maxAdjacentDelta": {
+      "client": 0,
+      "source": 0,
+      "status": 0,
+      "qBtnX": 0,
+      "barH": 0,
+      "groups": 0
+    },
+    "maxHorizontalOverflow": 0,
+    "barH": 32,
+    "groupsY": [
+      175.5,
+      175.5,
+      175.5
+    ],
+    "groupsRowCount": 1,
+    "stateTags": [
+      "initial_all",
+      "collision_A_selected",
+      "collision_A_B_selected",
+      "longest_selected",
+      "multi_collapse_tags",
+      "clear_to_all",
+      "reset",
+      "source_longest"
+    ],
+    "adjacent": [
+      {
+        "from": "initial_all",
+        "to": "collision_A_selected",
+        "dClient": 0,
+        "dSource": 0,
+        "dStatus": 0,
+        "dQBtnX": 0,
+        "dBarH": 0,
+        "dGroups": [
+          [
+            0,
+            0
+          ],
+          [
+            0,
+            0
+          ],
+          [
+            0,
+            0
+          ]
+        ]
+      },
+      {
+        "from": "collision_A_selected",
+        "to": "collision_A_B_selected",
+        "dClient": 0,
+        "dSource": 0,
+        "dStatus": 0,
+        "dQBtnX": 0,
+        "dBarH": 0,
+        "dGroups": [
+          [
+            0,
+            0
+          ],
+          [
+            0,
+            0
+          ],
+          [
+            0,
+            0
+          ]
+        ]
+      },
+      {
+        "from": "collision_A_B_selected",
+        "to": "longest_selected",
+        "dClient": 0,
+        "dSource": 0,
+        "dStatus": 0,
+        "dQBtnX": 0,
+        "dBarH": 0,
+        "dGroups": [
+          [
+            0,
+            0
+          ],
+          [
+            0,
+            0
+          ],
+          [
+            0,
+            0
+          ]
+        ]
+      },
+      {
+        "from": "longest_selected",
+        "to": "multi_collapse_tags",
+        "dClient": 0,
+        "dSource": 0,
+        "dStatus": 0,
+        "dQBtnX": 0,
+        "dBarH": 0,
+        "dGroups": [
+          [
+            0,
+            0
+          ],
+          [
+            0,
+            0
+          ],
+          [
+            0,
+            0
+          ]
+        ]
+      },
+      {
+        "from": "multi_collapse_tags",
+        "to": "clear_to_all",
+        "dClient": 0,
+        "dSource": 0,
+        "dStatus": 0,
+        "dQBtnX": 0,
+        "dBarH": 0,
+        "dGroups": [
+          [
+            0,
+            0
+          ],
+          [
+            0,
+            0
+          ],
+          [
+            0,
+            0
+          ]
+        ]
+      },
+      {
+        "from": "clear_to_all",
+        "to": "reset",
+        "dClient": 0,
+        "dSource": 0,
+        "dStatus": 0,
+        "dQBtnX": 0,
+        "dBarH": 0,
+        "dGroups": [
+          [
+            0,
+            0
+          ],
+          [
+            0,
+            0
+          ],
+          [
+            0,
+            0
+          ]
+        ]
+      },
+      {
+        "from": "reset",
+        "to": "source_longest",
+        "dClient": 0,
+        "dSource": 0,
+        "dStatus": 0,
+        "dQBtnX": 0,
+        "dBarH": 0,
+        "dGroups": [
+          [
+            0,
+            0
+          ],
+          [
+            0,
+            0
+          ],
+          [
+            0,
+            0
+          ]
+        ]
+      }
+    ],
+    "states": [
+      {
+        "tag": "initial_all",
+        "client": {
+          "x": 340,
+          "y": 175.5,
+          "w": 240,
+          "h": 32
+        },
+        "source": {
+          "x": 628,
+          "y": 175.5,
+          "w": 300,
+          "h": 32
+        },
+        "status": {
+          "x": 1004,
+          "y": 175.5,
+          "w": 200,
+          "h": 32
+        },
+        "clientWrap": {
+          "x": 340,
+          "y": 175.5,
+          "w": 240,
+          "h": 32
+        },
+        "sourceWrap": {
+          "x": 628,
+          "y": 175.5,
+          "w": 300,
+          "h": 32
+        },
+        "statusWrap": {
+          "x": 1004,
+          "y": 175.5,
+          "w": 200,
+          "h": 32
+        },
+        "qBtn": {
+          "x": 1218,
+          "y": 176.5,
+          "w": 62,
+          "h": 30
+        },
+        "resetBtn": {
+          "x": 1300,
+          "y": 176.5,
+          "w": 58,
+          "h": 30
+        },
+        "bar": {
+          "x": 292,
+          "y": 175.5,
+          "w": 1321,
+          "h": 32
+        },
+        "groups": [
+          {
+            "x": 292,
+            "y": 175.5,
+            "w": 288,
+            "h": 32
+          },
+          {
+            "x": 594,
+            "y": 175.5,
+            "w": 334,
+            "h": 32
+          },
+          {
+            "x": 942,
+            "y": 175.5,
+            "w": 262,
+            "h": 32
+          }
+        ],
+        "overflowX": 0
+      },
+      {
+        "tag": "collision_A_selected",
+        "client": {
+          "x": 340,
+          "y": 175.5,
+          "w": 240,
+          "h": 32
+        },
+        "source": {
+          "x": 628,
+          "y": 175.5,
+          "w": 300,
+          "h": 32
+        },
+        "status": {
+          "x": 1004,
+          "y": 175.5,
+          "w": 200,
+          "h": 32
+        },
+        "clientWrap": {
+          "x": 340,
+          "y": 175.5,
+          "w": 240,
+          "h": 32
+        },
+        "sourceWrap": {
+          "x": 628,
+          "y": 175.5,
+          "w": 300,
+          "h": 32
+        },
+        "statusWrap": {
+          "x": 1004,
+          "y": 175.5,
+          "w": 200,
+          "h": 32
+        },
+        "qBtn": {
+          "x": 1218,
+          "y": 176.5,
+          "w": 62,
+          "h": 30
+        },
+        "resetBtn": {
+          "x": 1300,
+          "y": 176.5,
+          "w": 58,
+          "h": 30
+        },
+        "bar": {
+          "x": 292,
+          "y": 175.5,
+          "w": 1321,
+          "h": 32
+        },
+        "groups": [
+          {
+            "x": 292,
+            "y": 175.5,
+            "w": 288,
+            "h": 32
+          },
+          {
+            "x": 594,
+            "y": 175.5,
+            "w": 334,
+            "h": 32
+          },
+          {
+            "x": 942,
+            "y": 175.5,
+            "w": 262,
+            "h": 32
+          }
+        ],
+        "overflowX": 0
+      },
+      {
+        "tag": "collision_A_B_selected",
+        "client": {
+          "x": 340,
+          "y": 175.5,
+          "w": 240,
+          "h": 32
+        },
+        "source": {
+          "x": 628,
+          "y": 175.5,
+          "w": 300,
+          "h": 32
+        },
+        "status": {
+          "x": 1004,
+          "y": 175.5,
+          "w": 200,
+          "h": 32
+        },
+        "clientWrap": {
+          "x": 340,
+          "y": 175.5,
+          "w": 240,
+          "h": 32
+        },
+        "sourceWrap": {
+          "x": 628,
+          "y": 175.5,
+          "w": 300,
+          "h": 32
+        },
+        "statusWrap": {
+          "x": 1004,
+          "y": 175.5,
+          "w": 200,
+          "h": 32
+        },
+        "qBtn": {
+          "x": 1218,
+          "y": 176.5,
+          "w": 62,
+          "h": 30
+        },
+        "resetBtn": {
+          "x": 1300,
+          "y": 176.5,
+          "w": 58,
+          "h": 30
+        },
+        "bar": {
+          "x": 292,
+          "y": 175.5,
+          "w": 1321,
+          "h": 32
+        },
+        "groups": [
+          {
+            "x": 292,
+            "y": 175.5,
+            "w": 288,
+            "h": 32
+          },
+          {
+            "x": 594,
+            "y": 175.5,
+            "w": 334,
+            "h": 32
+          },
+          {
+            "x": 942,
+            "y": 175.5,
+            "w": 262,
+            "h": 32
+          }
+        ],
+        "overflowX": 0
+      },
+      {
+        "tag": "longest_selected",
+        "client": {
+          "x": 340,
+          "y": 175.5,
+          "w": 240,
+          "h": 32
+        },
+        "source": {
+          "x": 628,
+          "y": 175.5,
+          "w": 300,
+          "h": 32
+        },
+        "status": {
+          "x": 1004,
+          "y": 175.5,
+          "w": 200,
+          "h": 32
+        },
+        "clientWrap": {
+          "x": 340,
+          "y": 175.5,
+          "w": 240,
+          "h": 32
+        },
+        "sourceWrap": {
+          "x": 628,
+          "y": 175.5,
+          "w": 300,
+          "h": 32
+        },
+        "statusWrap": {
+          "x": 1004,
+          "y": 175.5,
+          "w": 200,
+          "h": 32
+        },
+        "qBtn": {
+          "x": 1218,
+          "y": 176.5,
+          "w": 62,
+          "h": 30
+        },
+        "resetBtn": {
+          "x": 1300,
+          "y": 176.5,
+          "w": 58,
+          "h": 30
+        },
+        "bar": {
+          "x": 292,
+          "y": 175.5,
+          "w": 1321,
+          "h": 32
+        },
+        "groups": [
+          {
+            "x": 292,
+            "y": 175.5,
+            "w": 288,
+            "h": 32
+          },
+          {
+            "x": 594,
+            "y": 175.5,
+            "w": 334,
+            "h": 32
+          },
+          {
+            "x": 942,
+            "y": 175.5,
+            "w": 262,
+            "h": 32
+          }
+        ],
+        "overflowX": 0
+      },
+      {
+        "tag": "multi_collapse_tags",
+        "client": {
+          "x": 340,
+          "y": 175.5,
+          "w": 240,
+          "h": 32
+        },
+        "source": {
+          "x": 628,
+          "y": 175.5,
+          "w": 300,
+          "h": 32
+        },
+        "status": {
+          "x": 1004,
+          "y": 175.5,
+          "w": 200,
+          "h": 32
+        },
+        "clientWrap": {
+          "x": 340,
+          "y": 175.5,
+          "w": 240,
+          "h": 32
+        },
+        "sourceWrap": {
+          "x": 628,
+          "y": 175.5,
+          "w": 300,
+          "h": 32
+        },
+        "statusWrap": {
+          "x": 1004,
+          "y": 175.5,
+          "w": 200,
+          "h": 32
+        },
+        "qBtn": {
+          "x": 1218,
+          "y": 176.5,
+          "w": 62,
+          "h": 30
+        },
+        "resetBtn": {
+          "x": 1300,
+          "y": 176.5,
+          "w": 58,
+          "h": 30
+        },
+        "bar": {
+          "x": 292,
+          "y": 175.5,
+          "w": 1321,
+          "h": 32
+        },
+        "groups": [
+          {
+            "x": 292,
+            "y": 175.5,
+            "w": 288,
+            "h": 32
+          },
+          {
+            "x": 594,
+            "y": 175.5,
+            "w": 334,
+            "h": 32
+          },
+          {
+            "x": 942,
+            "y": 175.5,
+            "w": 262,
+            "h": 32
+          }
+        ],
+        "overflowX": 0
+      },
+      {
+        "tag": "clear_to_all",
+        "client": {
+          "x": 340,
+          "y": 175.5,
+          "w": 240,
+          "h": 32
+        },
+        "source": {
+          "x": 628,
+          "y": 175.5,
+          "w": 300,
+          "h": 32
+        },
+        "status": {
+          "x": 1004,
+          "y": 175.5,
+          "w": 200,
+          "h": 32
+        },
+        "clientWrap": {
+          "x": 340,
+          "y": 175.5,
+          "w": 240,
+          "h": 32
+        },
+        "sourceWrap": {
+          "x": 628,
+          "y": 175.5,
+          "w": 300,
+          "h": 32
+        },
+        "statusWrap": {
+          "x": 1004,
+          "y": 175.5,
+          "w": 200,
+          "h": 32
+        },
+        "qBtn": {
+          "x": 1218,
+          "y": 176.5,
+          "w": 62,
+          "h": 30
+        },
+        "resetBtn": {
+          "x": 1300,
+          "y": 176.5,
+          "w": 58,
+          "h": 30
+        },
+        "bar": {
+          "x": 292,
+          "y": 175.5,
+          "w": 1321,
+          "h": 32
+        },
+        "groups": [
+          {
+            "x": 292,
+            "y": 175.5,
+            "w": 288,
+            "h": 32
+          },
+          {
+            "x": 594,
+            "y": 175.5,
+            "w": 334,
+            "h": 32
+          },
+          {
+            "x": 942,
+            "y": 175.5,
+            "w": 262,
+            "h": 32
+          }
+        ],
+        "overflowX": 0
+      },
+      {
+        "tag": "reset",
+        "client": {
+          "x": 340,
+          "y": 175.5,
+          "w": 240,
+          "h": 32
+        },
+        "source": {
+          "x": 628,
+          "y": 175.5,
+          "w": 300,
+          "h": 32
+        },
+        "status": {
+          "x": 1004,
+          "y": 175.5,
+          "w": 200,
+          "h": 32
+        },
+        "clientWrap": {
+          "x": 340,
+          "y": 175.5,
+          "w": 240,
+          "h": 32
+        },
+        "sourceWrap": {
+          "x": 628,
+          "y": 175.5,
+          "w": 300,
+          "h": 32
+        },
+        "statusWrap": {
+          "x": 1004,
+          "y": 175.5,
+          "w": 200,
+          "h": 32
+        },
+        "qBtn": {
+          "x": 1218,
+          "y": 176.5,
+          "w": 62,
+          "h": 30
+        },
+        "resetBtn": {
+          "x": 1300,
+          "y": 176.5,
+          "w": 58,
+          "h": 30
+        },
+        "bar": {
+          "x": 292,
+          "y": 175.5,
+          "w": 1321,
+          "h": 32
+        },
+        "groups": [
+          {
+            "x": 292,
+            "y": 175.5,
+            "w": 288,
+            "h": 32
+          },
+          {
+            "x": 594,
+            "y": 175.5,
+            "w": 334,
+            "h": 32
+          },
+          {
+            "x": 942,
+            "y": 175.5,
+            "w": 262,
+            "h": 32
+          }
+        ],
+        "overflowX": 0
+      },
+      {
+        "tag": "source_longest",
+        "client": {
+          "x": 340,
+          "y": 175.5,
+          "w": 240,
+          "h": 32
+        },
+        "source": {
+          "x": 628,
+          "y": 175.5,
+          "w": 300,
+          "h": 32
+        },
+        "status": {
+          "x": 1004,
+          "y": 175.5,
+          "w": 200,
+          "h": 32
+        },
+        "clientWrap": {
+          "x": 340,
+          "y": 175.5,
+          "w": 240,
+          "h": 32
+        },
+        "sourceWrap": {
+          "x": 628,
+          "y": 175.5,
+          "w": 300,
+          "h": 32
+        },
+        "statusWrap": {
+          "x": 1004,
+          "y": 175.5,
+          "w": 200,
+          "h": 32
+        },
+        "qBtn": {
+          "x": 1218,
+          "y": 176.5,
+          "w": 62,
+          "h": 30
+        },
+        "resetBtn": {
+          "x": 1300,
+          "y": 176.5,
+          "w": 58,
+          "h": 30
+        },
+        "bar": {
+          "x": 292,
+          "y": 175.5,
+          "w": 1321,
+          "h": 32
+        },
+        "groups": [
+          {
+            "x": 292,
+            "y": 175.5,
+            "w": 288,
+            "h": 32
+          },
+          {
+            "x": 594,
+            "y": 175.5,
+            "w": 334,
+            "h": 32
+          },
+          {
+            "x": 942,
+            "y": 175.5,
+            "w": 262,
+            "h": 32
+          }
+        ],
+        "overflowX": 0
+      }
+    ],
+    "candLabels": [
+      "全部",
+      "c-dssr1-0906-a（快照页测试探针A，请勿启用。长描述用于验...）",
+      "c-dssr1-0906-b（快照页测试探针B，请勿启用）",
+      "c-dssr1-0906-c（快照页测试探针C，请勿启用（其源库配置缺...）",
+      "c-dssr1-0906-d（快照页测试探针D，请勿启用（含超长描述演...）",
+      "c-dssr1-0906-e（快照页测试探针E，请勿启用）",
+      "c-dssr1-0906-miss1",
+      "c-dssr1-0906-miss2",
+      "hosp-012（总部测试 IP: 192.168.0.9...）"
+    ],
+    "collisionRows": {
+      "PPPPPPPPPPPPPPPPPPPPAAA": null,
+      "PPPPPPPPPPPPPPPPPPPPBBB": null
+    },
+    "collisionProbe": [],
+    "boundaryProbe": [
+      {
+        "id": "c-dssr1-0906-a",
+        "found": true,
+        "rendered": "c-dssr1-0906-a（快照页测试探针A，请勿启用。长描述用于验...）",
+        "expectLabel": "c-dssr1-0906-a（快照页测试探针A，请勿启用。长描述用于验...）",
+        "labelOk": true,
+        "renderedCodePoints": 39,
+        "expectTooltip": true,
+        "gotTooltip": true,
+        "tooltipText": "快照页测试探针A，请勿启用。长描述用于验证页面 Tooltip 与列宽截断：某市第一人民医院信息中心CDC采集探针（专用快照页测试实例，请勿启用其进行任何真实数据同步）。继续追加说明文字以拉长描述，确认列表单元格超长时显示省略号并可由 Tooltip 完整阅读；本条仅供源库快照状态只读页面视觉验证使用。",
+        "expectTooltipText": "快照页测试探针A，请勿启用。长描述用于验证页面 Tooltip 与列宽截断：某市第一人民医院信息中心CDC采集探针（专用快照页测试实例，请勿启用其进行任何真实数据同步）。继续追加说明文字以拉长描述，确认列表单元格超长时显示省略号并可由 Tooltip 完整阅读；本条仅供源库快照状态只读页面视觉验证使用。",
+        "textOk": true,
+        "afterLeaveCount": 0
+      },
+      {
+        "id": "c-dssr1-0906-b",
+        "found": true,
+        "rendered": "c-dssr1-0906-b（快照页测试探针B，请勿启用）",
+        "expectLabel": "c-dssr1-0906-b（快照页测试探针B，请勿启用）",
+        "labelOk": true,
+        "renderedCodePoints": 29,
+        "expectTooltip": false,
+        "gotTooltip": false,
+        "tooltipText": null,
+        "expectTooltipText": null,
+        "textOk": true,
+        "afterLeaveCount": 0
+      },
+      {
+        "id": "c-dssr1-0906-c",
+        "found": true,
+        "rendered": "c-dssr1-0906-c（快照页测试探针C，请勿启用（其源库配置缺...）",
+        "expectLabel": "c-dssr1-0906-c（快照页测试探针C，请勿启用（其源库配置缺...）",
+        "labelOk": true,
+        "renderedCodePoints": 39,
+        "expectTooltip": true,
+        "gotTooltip": true,
+        "tooltipText": "快照页测试探针C，请勿启用（其源库配置缺失）",
+        "expectTooltipText": "快照页测试探针C，请勿启用（其源库配置缺失）",
+        "textOk": true,
+        "afterLeaveCount": 0
+      },
+      {
+        "id": "c-dssr1-0906-d",
+        "found": true,
+        "rendered": "c-dssr1-0906-d（快照页测试探针D，请勿启用（含超长描述演...）",
+        "expectLabel": "c-dssr1-0906-d（快照页测试探针D，请勿启用（含超长描述演...）",
+        "labelOk": true,
+        "renderedCodePoints": 39,
+        "expectTooltip": true,
+        "gotTooltip": true,
+        "tooltipText": "快照页测试探针D，请勿启用（含超长描述演示：覆盖同源不同状态与并列时间排序）",
+        "expectTooltipText": "快照页测试探针D，请勿启用（含超长描述演示：覆盖同源不同状态与并列时间排序）",
+        "textOk": true,
+        "afterLeaveCount": 0
+      },
+      {
+        "id": "c-dssr1-0906-e",
+        "found": true,
+        "rendered": "c-dssr1-0906-e（快照页测试探针E，请勿启用）",
+        "expectLabel": "c-dssr1-0906-e（快照页测试探针E，请勿启用）",
+        "labelOk": true,
+        "renderedCodePoints": 29,
+        "expectTooltip": false,
+        "gotTooltip": false,
+        "tooltipText": null,
+        "expectTooltipText": null,
+        "textOk": true,
+        "afterLeaveCount": 0
+      },
+      {
+        "id": "c-dssr1-0906-miss1",
+        "found": true,
+        "rendered": "c-dssr1-0906-miss1",
+        "expectLabel": "c-dssr1-0906-miss1",
+        "labelOk": true,
+        "renderedCodePoints": 18,
+        "expectTooltip": false,
+        "gotTooltip": false,
+        "tooltipText": null,
+        "expectTooltipText": null,
+        "textOk": true,
+        "afterLeaveCount": 0
+      },
+      {
+        "id": "c-dssr1-0906-miss2",
+        "found": true,
+        "rendered": "c-dssr1-0906-miss2",
+        "expectLabel": "c-dssr1-0906-miss2",
+        "labelOk": true,
+        "renderedCodePoints": 18,
+        "expectTooltip": false,
+        "gotTooltip": false,
+        "tooltipText": null,
+        "expectTooltipText": null,
+        "textOk": true,
+        "afterLeaveCount": 0
+      },
+      {
+        "id": "hosp-012",
+        "found": true,
+        "rendered": "hosp-012（总部测试 IP: 192.168.0.9...）",
+        "expectLabel": "hosp-012（总部测试 IP: 192.168.0.9...）",
+        "labelOk": true,
+        "renderedCodePoints": 33,
+        "expectTooltip": true,
+        "gotTooltip": true,
+        "tooltipText": "总部测试 IP: 192.168.0.94, 192.168.174.1, 3.3.0.192, 192.168.100.1",
+        "expectTooltipText": "总部测试 IP: 192.168.0.94, 192.168.174.1, 3.3.0.192, 192.168.100.1",
+        "textOk": true,
+        "afterLeaveCount": 0
+      }
+    ],
+    "sourceRendered": [
+      "全部",
+      "SNAPSHOT-TEST-某市一院信息...（s-dssr1-0906-1）",
+      "SNAPSHOT-TEST-某市一院信息...（s-dssr1-0906-2）",
+      "SNAPSHOT-TEST-某市二院信息...（s-dssr1-0906-3）",
+      "SNAPSHOT-TEST-目标侧某中心...（s-dssr1-0906-4）",
+      "SNAPSHOT-TEST-第三方平台源...（s-dssr1-0906-5）",
+      "孝感市第一人民医院（112-source-19c）",
+      "s-dssr1-0906-m1",
+      "s-dssr1-0906-m2",
+      "s-dssr1-0906-m3"
+    ],
+    "sourceProbe": [
+      {
+        "i": 0,
+        "found": true,
+        "rendered": "SNAPSHOT-TEST-某市一院信息...（s-dssr1-0906-1）",
+        "expectLabel": "SNAPSHOT-TEST-某市一院信息...（s-dssr1-0906-1）",
+        "labelOk": true,
+        "gotTooltip": false,
+        "tooltipText": null
+      },
+      {
+        "i": 1,
+        "found": true,
+        "rendered": "SNAPSHOT-TEST-某市一院信息...（s-dssr1-0906-2）",
+        "expectLabel": "SNAPSHOT-TEST-某市一院信息...（s-dssr1-0906-2）",
+        "labelOk": true,
+        "gotTooltip": false,
+        "tooltipText": null
+      },
+      {
+        "i": 2,
+        "found": true,
+        "rendered": "SNAPSHOT-TEST-某市二院信息...（s-dssr1-0906-3）",
+        "expectLabel": "SNAPSHOT-TEST-某市二院信息...（s-dssr1-0906-3）",
+        "labelOk": true,
+        "gotTooltip": false,
+        "tooltipText": null
+      },
+      {
+        "i": 3,
+        "found": true,
+        "rendered": "SNAPSHOT-TEST-目标侧某中心...（s-dssr1-0906-4）",
+        "expectLabel": "SNAPSHOT-TEST-目标侧某中心...（s-dssr1-0906-4）",
+        "labelOk": true,
+        "gotTooltip": false,
+        "tooltipText": null
+      },
+      {
+        "i": 4,
+        "found": true,
+        "rendered": "SNAPSHOT-TEST-第三方平台源...（s-dssr1-0906-5）",
+        "expectLabel": "SNAPSHOT-TEST-第三方平台源...（s-dssr1-0906-5）",
+        "labelOk": true,
+        "gotTooltip": false,
+        "tooltipText": null
+      },
+      {
+        "i": 5,
+        "found": true,
+        "rendered": "孝感市第一人民医院（112-source-19c）",
+        "expectLabel": "孝感市第一人民医院（112-source-19c）",
+        "labelOk": true,
+        "gotTooltip": false,
+        "tooltipText": null
+      },
+      {
+        "i": 6,
+        "found": true,
+        "rendered": "s-dssr1-0906-m1",
+        "expectLabel": "s-dssr1-0906-m1",
+        "labelOk": true,
+        "gotTooltip": false,
+        "tooltipText": null
+      },
+      {
+        "i": 7,
+        "found": true,
+        "rendered": "s-dssr1-0906-m2",
+        "expectLabel": "s-dssr1-0906-m2",
+        "labelOk": true,
+        "gotTooltip": false,
+        "tooltipText": null
+      },
+      {
+        "i": 8,
+        "found": true,
+        "rendered": "s-dssr1-0906-m3",
+        "expectLabel": "s-dssr1-0906-m3",
+        "labelOk": true,
+        "gotTooltip": false,
+        "tooltipText": null
+      }
+    ],
+    "selectedProbe": [
+      {
+        "selectedIdentity": "c-dssr1-0906-a",
+        "tagAttr": "c-dssr1-0906-a",
+        "tags": [
+          "c-dssr1-0906-a（快照页测试探针A，请勿启用。长描述用于验...）"
+        ],
+        "tagClosable": true,
+        "expectTooltipText": "快照页测试探针A，请勿启用。长描述用于验证页面 Tooltip 与列宽截断：某市第一人民医院信息中心CDC采集探针（专用快照页测试实例，请勿启用其进行任何真实数据同步）。继续追加说明文字以拉长描述，确认列表单元格超长时显示省略号并可由 Tooltip 完整阅读；本条仅供源库快照状态只读页面视觉验证使用。",
+        "tooltipText": "快照页测试探针A，请勿启用。长描述用于验证页面 Tooltip 与列宽截断：某市第一人民医院信息中心CDC采集探针（专用快照页测试实例，请勿启用其进行任何真实数据同步）。继续追加说明文字以拉长描述，确认列表单元格超长时显示省略号并可由 Tooltip 完整阅读；本条仅供源库快照状态只读页面视觉验证使用。",
+        "tooltipCount": 1,
+        "afterLeaveCount": 0,
+        "correct": true
+      },
+      {
+        "selectedIdentity": "c-dssr1-0906-c",
+        "tagAttr": "c-dssr1-0906-c",
+        "tags": [
+          "c-dssr1-0906-c（快照页测试探针C，请勿启用（其源库配置缺...）"
+        ],
+        "tagClosable": true,
+        "expectTooltipText": "快照页测试探针C，请勿启用（其源库配置缺失）",
+        "tooltipText": "快照页测试探针C，请勿启用（其源库配置缺失）",
+        "tooltipCount": 1,
+        "afterLeaveCount": 0,
+        "correct": true
+      }
+    ],
+    "requests": {
+      "apiTotal": 5,
+      "initialLoad": 1,
+      "afterReset": 0,
+      "afterOpenClose": 0,
+      "afterHoverTooltip": 0,
+      "queryClickDelta": 1,
+      "lastQueryUrl": "http://127.0.0.1:5173/api/monitor/data-source-run-state/list?clientId=c-dssr1-0906-a",
+      "queryClientId": [
+        "c-dssr1-0906-a"
+      ],
+      "queryClientIdIsFullOriginal": true,
+      "nonGet": []
+    },
+    "otherRoute": {
+      "dssElements": 0,
+      "elSelect": 0
+    },
+    "singleTooltips": 0,
+    "consoleErrors": []
+  },
+  {
+    "viewport": {
+      "w": 1920,
+      "h": 1080
+    },
+    "mode": "real",
+    "widths": {
+      "client": 240,
+      "source": 300,
+      "status": 200
+    },
+    "maxAdjacentDelta": {
+      "client": 0,
+      "source": 0,
+      "status": 0,
+      "qBtnX": 0,
+      "barH": 0,
+      "groups": 0
+    },
+    "maxHorizontalOverflow": 0,
+    "barH": 32,
+    "groupsY": [
+      175.5,
+      175.5,
+      175.5
+    ],
+    "groupsRowCount": 1,
+    "stateTags": [
+      "initial_all",
+      "collision_A_selected",
+      "collision_A_B_selected",
+      "longest_selected",
+      "multi_collapse_tags",
+      "clear_to_all",
+      "reset",
+      "source_longest"
+    ],
+    "adjacent": [
+      {
+        "from": "initial_all",
+        "to": "collision_A_selected",
+        "dClient": 0,
+        "dSource": 0,
+        "dStatus": 0,
+        "dQBtnX": 0,
+        "dBarH": 0,
+        "dGroups": [
+          [
+            0,
+            0
+          ],
+          [
+            0,
+            0
+          ],
+          [
+            0,
+            0
+          ]
+        ]
+      },
+      {
+        "from": "collision_A_selected",
+        "to": "collision_A_B_selected",
+        "dClient": 0,
+        "dSource": 0,
+        "dStatus": 0,
+        "dQBtnX": 0,
+        "dBarH": 0,
+        "dGroups": [
+          [
+            0,
+            0
+          ],
+          [
+            0,
+            0
+          ],
+          [
+            0,
+            0
+          ]
+        ]
+      },
+      {
+        "from": "collision_A_B_selected",
+        "to": "longest_selected",
+        "dClient": 0,
+        "dSource": 0,
+        "dStatus": 0,
+        "dQBtnX": 0,
+        "dBarH": 0,
+        "dGroups": [
+          [
+            0,
+            0
+          ],
+          [
+            0,
+            0
+          ],
+          [
+            0,
+            0
+          ]
+        ]
+      },
+      {
+        "from": "longest_selected",
+        "to": "multi_collapse_tags",
+        "dClient": 0,
+        "dSource": 0,
+        "dStatus": 0,
+        "dQBtnX": 0,
+        "dBarH": 0,
+        "dGroups": [
+          [
+            0,
+            0
+          ],
+          [
+            0,
+            0
+          ],
+          [
+            0,
+            0
+          ]
+        ]
+      },
+      {
+        "from": "multi_collapse_tags",
+        "to": "clear_to_all",
+        "dClient": 0,
+        "dSource": 0,
+        "dStatus": 0,
+        "dQBtnX": 0,
+        "dBarH": 0,
+        "dGroups": [
+          [
+            0,
+            0
+          ],
+          [
+            0,
+            0
+          ],
+          [
+            0,
+            0
+          ]
+        ]
+      },
+      {
+        "from": "clear_to_all",
+        "to": "reset",
+        "dClient": 0,
+        "dSource": 0,
+        "dStatus": 0,
+        "dQBtnX": 0,
+        "dBarH": 0,
+        "dGroups": [
+          [
+            0,
+            0
+          ],
+          [
+            0,
+            0
+          ],
+          [
+            0,
+            0
+          ]
+        ]
+      },
+      {
+        "from": "reset",
+        "to": "source_longest",
+        "dClient": 0,
+        "dSource": 0,
+        "dStatus": 0,
+        "dQBtnX": 0,
+        "dBarH": 0,
+        "dGroups": [
+          [
+            0,
+            0
+          ],
+          [
+            0,
+            0
+          ],
+          [
+            0,
+            0
+          ]
+        ]
+      }
+    ],
+    "states": [
+      {
+        "tag": "initial_all",
+        "client": {
+          "x": 340,
+          "y": 175.5,
+          "w": 240,
+          "h": 32
+        },
+        "source": {
+          "x": 628,
+          "y": 175.5,
+          "w": 300,
+          "h": 32
+        },
+        "status": {
+          "x": 1004,
+          "y": 175.5,
+          "w": 200,
+          "h": 32
+        },
+        "clientWrap": {
+          "x": 340,
+          "y": 175.5,
+          "w": 240,
+          "h": 32
+        },
+        "sourceWrap": {
+          "x": 628,
+          "y": 175.5,
+          "w": 300,
+          "h": 32
+        },
+        "statusWrap": {
+          "x": 1004,
+          "y": 175.5,
+          "w": 200,
+          "h": 32
+        },
+        "qBtn": {
+          "x": 1218,
+          "y": 176.5,
+          "w": 62,
+          "h": 30
+        },
+        "resetBtn": {
+          "x": 1300,
+          "y": 176.5,
+          "w": 58,
+          "h": 30
+        },
+        "bar": {
+          "x": 292,
+          "y": 175.5,
+          "w": 1541,
+          "h": 32
+        },
+        "groups": [
+          {
+            "x": 292,
+            "y": 175.5,
+            "w": 288,
+            "h": 32
+          },
+          {
+            "x": 594,
+            "y": 175.5,
+            "w": 334,
+            "h": 32
+          },
+          {
+            "x": 942,
+            "y": 175.5,
+            "w": 262,
+            "h": 32
+          }
+        ],
+        "overflowX": 0
+      },
+      {
+        "tag": "collision_A_selected",
+        "client": {
+          "x": 340,
+          "y": 175.5,
+          "w": 240,
+          "h": 32
+        },
+        "source": {
+          "x": 628,
+          "y": 175.5,
+          "w": 300,
+          "h": 32
+        },
+        "status": {
+          "x": 1004,
+          "y": 175.5,
+          "w": 200,
+          "h": 32
+        },
+        "clientWrap": {
+          "x": 340,
+          "y": 175.5,
+          "w": 240,
+          "h": 32
+        },
+        "sourceWrap": {
+          "x": 628,
+          "y": 175.5,
+          "w": 300,
+          "h": 32
+        },
+        "statusWrap": {
+          "x": 1004,
+          "y": 175.5,
+          "w": 200,
+          "h": 32
+        },
+        "qBtn": {
+          "x": 1218,
+          "y": 176.5,
+          "w": 62,
+          "h": 30
+        },
+        "resetBtn": {
+          "x": 1300,
+          "y": 176.5,
+          "w": 58,
+          "h": 30
+        },
+        "bar": {
+          "x": 292,
+          "y": 175.5,
+          "w": 1541,
+          "h": 32
+        },
+        "groups": [
+          {
+            "x": 292,
+            "y": 175.5,
+            "w": 288,
+            "h": 32
+          },
+          {
+            "x": 594,
+            "y": 175.5,
+            "w": 334,
+            "h": 32
+          },
+          {
+            "x": 942,
+            "y": 175.5,
+            "w": 262,
+            "h": 32
+          }
+        ],
+        "overflowX": 0
+      },
+      {
+        "tag": "collision_A_B_selected",
+        "client": {
+          "x": 340,
+          "y": 175.5,
+          "w": 240,
+          "h": 32
+        },
+        "source": {
+          "x": 628,
+          "y": 175.5,
+          "w": 300,
+          "h": 32
+        },
+        "status": {
+          "x": 1004,
+          "y": 175.5,
+          "w": 200,
+          "h": 32
+        },
+        "clientWrap": {
+          "x": 340,
+          "y": 175.5,
+          "w": 240,
+          "h": 32
+        },
+        "sourceWrap": {
+          "x": 628,
+          "y": 175.5,
+          "w": 300,
+          "h": 32
+        },
+        "statusWrap": {
+          "x": 1004,
+          "y": 175.5,
+          "w": 200,
+          "h": 32
+        },
+        "qBtn": {
+          "x": 1218,
+          "y": 176.5,
+          "w": 62,
+          "h": 30
+        },
+        "resetBtn": {
+          "x": 1300,
+          "y": 176.5,
+          "w": 58,
+          "h": 30
+        },
+        "bar": {
+          "x": 292,
+          "y": 175.5,
+          "w": 1541,
+          "h": 32
+        },
+        "groups": [
+          {
+            "x": 292,
+            "y": 175.5,
+            "w": 288,
+            "h": 32
+          },
+          {
+            "x": 594,
+            "y": 175.5,
+            "w": 334,
+            "h": 32
+          },
+          {
+            "x": 942,
+            "y": 175.5,
+            "w": 262,
+            "h": 32
+          }
+        ],
+        "overflowX": 0
+      },
+      {
+        "tag": "longest_selected",
+        "client": {
+          "x": 340,
+          "y": 175.5,
+          "w": 240,
+          "h": 32
+        },
+        "source": {
+          "x": 628,
+          "y": 175.5,
+          "w": 300,
+          "h": 32
+        },
+        "status": {
+          "x": 1004,
+          "y": 175.5,
+          "w": 200,
+          "h": 32
+        },
+        "clientWrap": {
+          "x": 340,
+          "y": 175.5,
+          "w": 240,
+          "h": 32
+        },
+        "sourceWrap": {
+          "x": 628,
+          "y": 175.5,
+          "w": 300,
+          "h": 32
+        },
+        "statusWrap": {
+          "x": 1004,
+          "y": 175.5,
+          "w": 200,
+          "h": 32
+        },
+        "qBtn": {
+          "x": 1218,
+          "y": 176.5,
+          "w": 62,
+          "h": 30
+        },
+        "resetBtn": {
+          "x": 1300,
+          "y": 176.5,
+          "w": 58,
+          "h": 30
+        },
+        "bar": {
+          "x": 292,
+          "y": 175.5,
+          "w": 1541,
+          "h": 32
+        },
+        "groups": [
+          {
+            "x": 292,
+            "y": 175.5,
+            "w": 288,
+            "h": 32
+          },
+          {
+            "x": 594,
+            "y": 175.5,
+            "w": 334,
+            "h": 32
+          },
+          {
+            "x": 942,
+            "y": 175.5,
+            "w": 262,
+            "h": 32
+          }
+        ],
+        "overflowX": 0
+      },
+      {
+        "tag": "multi_collapse_tags",
+        "client": {
+          "x": 340,
+          "y": 175.5,
+          "w": 240,
+          "h": 32
+        },
+        "source": {
+          "x": 628,
+          "y": 175.5,
+          "w": 300,
+          "h": 32
+        },
+        "status": {
+          "x": 1004,
+          "y": 175.5,
+          "w": 200,
+          "h": 32
+        },
+        "clientWrap": {
+          "x": 340,
+          "y": 175.5,
+          "w": 240,
+          "h": 32
+        },
+        "sourceWrap": {
+          "x": 628,
+          "y": 175.5,
+          "w": 300,
+          "h": 32
+        },
+        "statusWrap": {
+          "x": 1004,
+          "y": 175.5,
+          "w": 200,
+          "h": 32
+        },
+        "qBtn": {
+          "x": 1218,
+          "y": 176.5,
+          "w": 62,
+          "h": 30
+        },
+        "resetBtn": {
+          "x": 1300,
+          "y": 176.5,
+          "w": 58,
+          "h": 30
+        },
+        "bar": {
+          "x": 292,
+          "y": 175.5,
+          "w": 1541,
+          "h": 32
+        },
+        "groups": [
+          {
+            "x": 292,
+            "y": 175.5,
+            "w": 288,
+            "h": 32
+          },
+          {
+            "x": 594,
+            "y": 175.5,
+            "w": 334,
+            "h": 32
+          },
+          {
+            "x": 942,
+            "y": 175.5,
+            "w": 262,
+            "h": 32
+          }
+        ],
+        "overflowX": 0
+      },
+      {
+        "tag": "clear_to_all",
+        "client": {
+          "x": 340,
+          "y": 175.5,
+          "w": 240,
+          "h": 32
+        },
+        "source": {
+          "x": 628,
+          "y": 175.5,
+          "w": 300,
+          "h": 32
+        },
+        "status": {
+          "x": 1004,
+          "y": 175.5,
+          "w": 200,
+          "h": 32
+        },
+        "clientWrap": {
+          "x": 340,
+          "y": 175.5,
+          "w": 240,
+          "h": 32
+        },
+        "sourceWrap": {
+          "x": 628,
+          "y": 175.5,
+          "w": 300,
+          "h": 32
+        },
+        "statusWrap": {
+          "x": 1004,
+          "y": 175.5,
+          "w": 200,
+          "h": 32
+        },
+        "qBtn": {
+          "x": 1218,
+          "y": 176.5,
+          "w": 62,
+          "h": 30
+        },
+        "resetBtn": {
+          "x": 1300,
+          "y": 176.5,
+          "w": 58,
+          "h": 30
+        },
+        "bar": {
+          "x": 292,
+          "y": 175.5,
+          "w": 1541,
+          "h": 32
+        },
+        "groups": [
+          {
+            "x": 292,
+            "y": 175.5,
+            "w": 288,
+            "h": 32
+          },
+          {
+            "x": 594,
+            "y": 175.5,
+            "w": 334,
+            "h": 32
+          },
+          {
+            "x": 942,
+            "y": 175.5,
+            "w": 262,
+            "h": 32
+          }
+        ],
+        "overflowX": 0
+      },
+      {
+        "tag": "reset",
+        "client": {
+          "x": 340,
+          "y": 175.5,
+          "w": 240,
+          "h": 32
+        },
+        "source": {
+          "x": 628,
+          "y": 175.5,
+          "w": 300,
+          "h": 32
+        },
+        "status": {
+          "x": 1004,
+          "y": 175.5,
+          "w": 200,
+          "h": 32
+        },
+        "clientWrap": {
+          "x": 340,
+          "y": 175.5,
+          "w": 240,
+          "h": 32
+        },
+        "sourceWrap": {
+          "x": 628,
+          "y": 175.5,
+          "w": 300,
+          "h": 32
+        },
+        "statusWrap": {
+          "x": 1004,
+          "y": 175.5,
+          "w": 200,
+          "h": 32
+        },
+        "qBtn": {
+          "x": 1218,
+          "y": 176.5,
+          "w": 62,
+          "h": 30
+        },
+        "resetBtn": {
+          "x": 1300,
+          "y": 176.5,
+          "w": 58,
+          "h": 30
+        },
+        "bar": {
+          "x": 292,
+          "y": 175.5,
+          "w": 1541,
+          "h": 32
+        },
+        "groups": [
+          {
+            "x": 292,
+            "y": 175.5,
+            "w": 288,
+            "h": 32
+          },
+          {
+            "x": 594,
+            "y": 175.5,
+            "w": 334,
+            "h": 32
+          },
+          {
+            "x": 942,
+            "y": 175.5,
+            "w": 262,
+            "h": 32
+          }
+        ],
+        "overflowX": 0
+      },
+      {
+        "tag": "source_longest",
+        "client": {
+          "x": 340,
+          "y": 175.5,
+          "w": 240,
+          "h": 32
+        },
+        "source": {
+          "x": 628,
+          "y": 175.5,
+          "w": 300,
+          "h": 32
+        },
+        "status": {
+          "x": 1004,
+          "y": 175.5,
+          "w": 200,
+          "h": 32
+        },
+        "clientWrap": {
+          "x": 340,
+          "y": 175.5,
+          "w": 240,
+          "h": 32
+        },
+        "sourceWrap": {
+          "x": 628,
+          "y": 175.5,
+          "w": 300,
+          "h": 32
+        },
+        "statusWrap": {
+          "x": 1004,
+          "y": 175.5,
+          "w": 200,
+          "h": 32
+        },
+        "qBtn": {
+          "x": 1218,
+          "y": 176.5,
+          "w": 62,
+          "h": 30
+        },
+        "resetBtn": {
+          "x": 1300,
+          "y": 176.5,
+          "w": 58,
+          "h": 30
+        },
+        "bar": {
+          "x": 292,
+          "y": 175.5,
+          "w": 1541,
+          "h": 32
+        },
+        "groups": [
+          {
+            "x": 292,
+            "y": 175.5,
+            "w": 288,
+            "h": 32
+          },
+          {
+            "x": 594,
+            "y": 175.5,
+            "w": 334,
+            "h": 32
+          },
+          {
+            "x": 942,
+            "y": 175.5,
+            "w": 262,
+            "h": 32
+          }
+        ],
+        "overflowX": 0
+      }
+    ],
+    "candLabels": [
+      "全部",
+      "c-dssr1-0906-a（快照页测试探针A，请勿启用。长描述用于验...）",
+      "c-dssr1-0906-b（快照页测试探针B，请勿启用）",
+      "c-dssr1-0906-c（快照页测试探针C，请勿启用（其源库配置缺...）",
+      "c-dssr1-0906-d（快照页测试探针D，请勿启用（含超长描述演...）",
+      "c-dssr1-0906-e（快照页测试探针E，请勿启用）",
+      "c-dssr1-0906-miss1",
+      "c-dssr1-0906-miss2",
+      "hosp-012（总部测试 IP: 192.168.0.9...）"
+    ],
+    "collisionRows": {
+      "PPPPPPPPPPPPPPPPPPPPAAA": null,
+      "PPPPPPPPPPPPPPPPPPPPBBB": null
+    },
+    "collisionProbe": [],
+    "boundaryProbe": [
+      {
+        "id": "c-dssr1-0906-a",
+        "found": true,
+        "rendered": "c-dssr1-0906-a（快照页测试探针A，请勿启用。长描述用于验...）",
+        "expectLabel": "c-dssr1-0906-a（快照页测试探针A，请勿启用。长描述用于验...）",
+        "labelOk": true,
+        "renderedCodePoints": 39,
+        "expectTooltip": true,
+        "gotTooltip": true,
+        "tooltipText": "快照页测试探针A，请勿启用。长描述用于验证页面 Tooltip 与列宽截断：某市第一人民医院信息中心CDC采集探针（专用快照页测试实例，请勿启用其进行任何真实数据同步）。继续追加说明文字以拉长描述，确认列表单元格超长时显示省略号并可由 Tooltip 完整阅读；本条仅供源库快照状态只读页面视觉验证使用。",
+        "expectTooltipText": "快照页测试探针A，请勿启用。长描述用于验证页面 Tooltip 与列宽截断：某市第一人民医院信息中心CDC采集探针（专用快照页测试实例，请勿启用其进行任何真实数据同步）。继续追加说明文字以拉长描述，确认列表单元格超长时显示省略号并可由 Tooltip 完整阅读；本条仅供源库快照状态只读页面视觉验证使用。",
+        "textOk": true,
+        "afterLeaveCount": 0
+      },
+      {
+        "id": "c-dssr1-0906-b",
+        "found": true,
+        "rendered": "c-dssr1-0906-b（快照页测试探针B，请勿启用）",
+        "expectLabel": "c-dssr1-0906-b（快照页测试探针B，请勿启用）",
+        "labelOk": true,
+        "renderedCodePoints": 29,
+        "expectTooltip": false,
+        "gotTooltip": false,
+        "tooltipText": null,
+        "expectTooltipText": null,
+        "textOk": true,
+        "afterLeaveCount": 0
+      },
+      {
+        "id": "c-dssr1-0906-c",
+        "found": true,
+        "rendered": "c-dssr1-0906-c（快照页测试探针C，请勿启用（其源库配置缺...）",
+        "expectLabel": "c-dssr1-0906-c（快照页测试探针C，请勿启用（其源库配置缺...）",
+        "labelOk": true,
+        "renderedCodePoints": 39,
+        "expectTooltip": true,
+        "gotTooltip": true,
+        "tooltipText": "快照页测试探针C，请勿启用（其源库配置缺失）",
+        "expectTooltipText": "快照页测试探针C，请勿启用（其源库配置缺失）",
+        "textOk": true,
+        "afterLeaveCount": 0
+      },
+      {
+        "id": "c-dssr1-0906-d",
+        "found": true,
+        "rendered": "c-dssr1-0906-d（快照页测试探针D，请勿启用（含超长描述演...）",
+        "expectLabel": "c-dssr1-0906-d（快照页测试探针D，请勿启用（含超长描述演...）",
+        "labelOk": true,
+        "renderedCodePoints": 39,
+        "expectTooltip": true,
+        "gotTooltip": true,
+        "tooltipText": "快照页测试探针D，请勿启用（含超长描述演示：覆盖同源不同状态与并列时间排序）",
+        "expectTooltipText": "快照页测试探针D，请勿启用（含超长描述演示：覆盖同源不同状态与并列时间排序）",
+        "textOk": true,
+        "afterLeaveCount": 0
+      },
+      {
+        "id": "c-dssr1-0906-e",
+        "found": true,
+        "rendered": "c-dssr1-0906-e（快照页测试探针E，请勿启用）",
+        "expectLabel": "c-dssr1-0906-e（快照页测试探针E，请勿启用）",
+        "labelOk": true,
+        "renderedCodePoints": 29,
+        "expectTooltip": false,
+        "gotTooltip": false,
+        "tooltipText": null,
+        "expectTooltipText": null,
+        "textOk": true,
+        "afterLeaveCount": 0
+      },
+      {
+        "id": "c-dssr1-0906-miss1",
+        "found": true,
+        "rendered": "c-dssr1-0906-miss1",
+        "expectLabel": "c-dssr1-0906-miss1",
+        "labelOk": true,
+        "renderedCodePoints": 18,
+        "expectTooltip": false,
+        "gotTooltip": false,
+        "tooltipText": null,
+        "expectTooltipText": null,
+        "textOk": true,
+        "afterLeaveCount": 0
+      },
+      {
+        "id": "c-dssr1-0906-miss2",
+        "found": true,
+        "rendered": "c-dssr1-0906-miss2",
+        "expectLabel": "c-dssr1-0906-miss2",
+        "labelOk": true,
+        "renderedCodePoints": 18,
+        "expectTooltip": false,
+        "gotTooltip": false,
+        "tooltipText": null,
+        "expectTooltipText": null,
+        "textOk": true,
+        "afterLeaveCount": 0
+      },
+      {
+        "id": "hosp-012",
+        "found": true,
+        "rendered": "hosp-012（总部测试 IP: 192.168.0.9...）",
+        "expectLabel": "hosp-012（总部测试 IP: 192.168.0.9...）",
+        "labelOk": true,
+        "renderedCodePoints": 33,
+        "expectTooltip": true,
+        "gotTooltip": true,
+        "tooltipText": "总部测试 IP: 192.168.0.94, 192.168.174.1, 3.3.0.192, 192.168.100.1",
+        "expectTooltipText": "总部测试 IP: 192.168.0.94, 192.168.174.1, 3.3.0.192, 192.168.100.1",
+        "textOk": true,
+        "afterLeaveCount": 0
+      }
+    ],
+    "sourceRendered": [
+      "全部",
+      "SNAPSHOT-TEST-某市一院信息...（s-dssr1-0906-1）",
+      "SNAPSHOT-TEST-某市一院信息...（s-dssr1-0906-2）",
+      "SNAPSHOT-TEST-某市二院信息...（s-dssr1-0906-3）",
+      "SNAPSHOT-TEST-目标侧某中心...（s-dssr1-0906-4）",
+      "SNAPSHOT-TEST-第三方平台源...（s-dssr1-0906-5）",
+      "孝感市第一人民医院（112-source-19c）",
+      "s-dssr1-0906-m1",
+      "s-dssr1-0906-m2",
+      "s-dssr1-0906-m3"
+    ],
+    "sourceProbe": [
+      {
+        "i": 0,
+        "found": true,
+        "rendered": "SNAPSHOT-TEST-某市一院信息...（s-dssr1-0906-1）",
+        "expectLabel": "SNAPSHOT-TEST-某市一院信息...（s-dssr1-0906-1）",
+        "labelOk": true,
+        "gotTooltip": false,
+        "tooltipText": null
+      },
+      {
+        "i": 1,
+        "found": true,
+        "rendered": "SNAPSHOT-TEST-某市一院信息...（s-dssr1-0906-2）",
+        "expectLabel": "SNAPSHOT-TEST-某市一院信息...（s-dssr1-0906-2）",
+        "labelOk": true,
+        "gotTooltip": false,
+        "tooltipText": null
+      },
+      {
+        "i": 2,
+        "found": true,
+        "rendered": "SNAPSHOT-TEST-某市二院信息...（s-dssr1-0906-3）",
+        "expectLabel": "SNAPSHOT-TEST-某市二院信息...（s-dssr1-0906-3）",
+        "labelOk": true,
+        "gotTooltip": false,
+        "tooltipText": null
+      },
+      {
+        "i": 3,
+        "found": true,
+        "rendered": "SNAPSHOT-TEST-目标侧某中心...（s-dssr1-0906-4）",
+        "expectLabel": "SNAPSHOT-TEST-目标侧某中心...（s-dssr1-0906-4）",
+        "labelOk": true,
+        "gotTooltip": false,
+        "tooltipText": null
+      },
+      {
+        "i": 4,
+        "found": true,
+        "rendered": "SNAPSHOT-TEST-第三方平台源...（s-dssr1-0906-5）",
+        "expectLabel": "SNAPSHOT-TEST-第三方平台源...（s-dssr1-0906-5）",
+        "labelOk": true,
+        "gotTooltip": false,
+        "tooltipText": null
+      },
+      {
+        "i": 5,
+        "found": true,
+        "rendered": "孝感市第一人民医院（112-source-19c）",
+        "expectLabel": "孝感市第一人民医院（112-source-19c）",
+        "labelOk": true,
+        "gotTooltip": false,
+        "tooltipText": null
+      },
+      {
+        "i": 6,
+        "found": true,
+        "rendered": "s-dssr1-0906-m1",
+        "expectLabel": "s-dssr1-0906-m1",
+        "labelOk": true,
+        "gotTooltip": false,
+        "tooltipText": null
+      },
+      {
+        "i": 7,
+        "found": true,
+        "rendered": "s-dssr1-0906-m2",
+        "expectLabel": "s-dssr1-0906-m2",
+        "labelOk": true,
+        "gotTooltip": false,
+        "tooltipText": null
+      },
+      {
+        "i": 8,
+        "found": true,
+        "rendered": "s-dssr1-0906-m3",
+        "expectLabel": "s-dssr1-0906-m3",
+        "labelOk": true,
+        "gotTooltip": false,
+        "tooltipText": null
+      }
+    ],
+    "selectedProbe": [
+      {
+        "selectedIdentity": "c-dssr1-0906-a",
+        "tagAttr": "c-dssr1-0906-a",
+        "tags": [
+          "c-dssr1-0906-a（快照页测试探针A，请勿启用。长描述用于验...）"
+        ],
+        "tagClosable": true,
+        "expectTooltipText": "快照页测试探针A，请勿启用。长描述用于验证页面 Tooltip 与列宽截断：某市第一人民医院信息中心CDC采集探针（专用快照页测试实例，请勿启用其进行任何真实数据同步）。继续追加说明文字以拉长描述，确认列表单元格超长时显示省略号并可由 Tooltip 完整阅读；本条仅供源库快照状态只读页面视觉验证使用。",
+        "tooltipText": "快照页测试探针A，请勿启用。长描述用于验证页面 Tooltip 与列宽截断：某市第一人民医院信息中心CDC采集探针（专用快照页测试实例，请勿启用其进行任何真实数据同步）。继续追加说明文字以拉长描述，确认列表单元格超长时显示省略号并可由 Tooltip 完整阅读；本条仅供源库快照状态只读页面视觉验证使用。",
+        "tooltipCount": 1,
+        "afterLeaveCount": 0,
+        "correct": true
+      },
+      {
+        "selectedIdentity": "c-dssr1-0906-c",
+        "tagAttr": "c-dssr1-0906-c",
+        "tags": [
+          "c-dssr1-0906-c（快照页测试探针C，请勿启用（其源库配置缺...）"
+        ],
+        "tagClosable": true,
+        "expectTooltipText": "快照页测试探针C，请勿启用（其源库配置缺失）",
+        "tooltipText": "快照页测试探针C，请勿启用（其源库配置缺失）",
+        "tooltipCount": 1,
+        "afterLeaveCount": 0,
+        "correct": true
+      }
+    ],
+    "requests": {
+      "apiTotal": 5,
+      "initialLoad": 1,
+      "afterReset": 0,
+      "afterOpenClose": 0,
+      "afterHoverTooltip": 0,
+      "queryClickDelta": 1,
+      "lastQueryUrl": "http://127.0.0.1:5173/api/monitor/data-source-run-state/list?clientId=c-dssr1-0906-a",
+      "queryClientId": [
+        "c-dssr1-0906-a"
+      ],
+      "queryClientIdIsFullOriginal": true,
+      "nonGet": []
+    },
+    "otherRoute": {
+      "dssElements": 0,
+      "elSelect": 0
+    },
+    "singleTooltips": 0,
+    "consoleErrors": []
+  },
+  {
+    "viewport": {
+      "w": 2560,
+      "h": 1440
+    },
+    "mode": "real",
+    "widths": {
+      "client": 240,
+      "source": 300,
+      "status": 200
+    },
+    "maxAdjacentDelta": {
+      "client": 0,
+      "source": 0,
+      "status": 0,
+      "qBtnX": 0,
+      "barH": 0,
+      "groups": 0
+    },
+    "maxHorizontalOverflow": 0,
+    "barH": 32,
+    "groupsY": [
+      175.5,
+      175.5,
+      175.5
+    ],
+    "groupsRowCount": 1,
+    "stateTags": [
+      "initial_all",
+      "collision_A_selected",
+      "collision_A_B_selected",
+      "longest_selected",
+      "multi_collapse_tags",
+      "clear_to_all",
+      "reset",
+      "source_longest"
+    ],
+    "adjacent": [
+      {
+        "from": "initial_all",
+        "to": "collision_A_selected",
+        "dClient": 0,
+        "dSource": 0,
+        "dStatus": 0,
+        "dQBtnX": 0,
+        "dBarH": 0,
+        "dGroups": [
+          [
+            0,
+            0
+          ],
+          [
+            0,
+            0
+          ],
+          [
+            0,
+            0
+          ]
+        ]
+      },
+      {
+        "from": "collision_A_selected",
+        "to": "collision_A_B_selected",
+        "dClient": 0,
+        "dSource": 0,
+        "dStatus": 0,
+        "dQBtnX": 0,
+        "dBarH": 0,
+        "dGroups": [
+          [
+            0,
+            0
+          ],
+          [
+            0,
+            0
+          ],
+          [
+            0,
+            0
+          ]
+        ]
+      },
+      {
+        "from": "collision_A_B_selected",
+        "to": "longest_selected",
+        "dClient": 0,
+        "dSource": 0,
+        "dStatus": 0,
+        "dQBtnX": 0,
+        "dBarH": 0,
+        "dGroups": [
+          [
+            0,
+            0
+          ],
+          [
+            0,
+            0
+          ],
+          [
+            0,
+            0
+          ]
+        ]
+      },
+      {
+        "from": "longest_selected",
+        "to": "multi_collapse_tags",
+        "dClient": 0,
+        "dSource": 0,
+        "dStatus": 0,
+        "dQBtnX": 0,
+        "dBarH": 0,
+        "dGroups": [
+          [
+            0,
+            0
+          ],
+          [
+            0,
+            0
+          ],
+          [
+            0,
+            0
+          ]
+        ]
+      },
+      {
+        "from": "multi_collapse_tags",
+        "to": "clear_to_all",
+        "dClient": 0,
+        "dSource": 0,
+        "dStatus": 0,
+        "dQBtnX": 0,
+        "dBarH": 0,
+        "dGroups": [
+          [
+            0,
+            0
+          ],
+          [
+            0,
+            0
+          ],
+          [
+            0,
+            0
+          ]
+        ]
+      },
+      {
+        "from": "clear_to_all",
+        "to": "reset",
+        "dClient": 0,
+        "dSource": 0,
+        "dStatus": 0,
+        "dQBtnX": 0,
+        "dBarH": 0,
+        "dGroups": [
+          [
+            0,
+            0
+          ],
+          [
+            0,
+            0
+          ],
+          [
+            0,
+            0
+          ]
+        ]
+      },
+      {
+        "from": "reset",
+        "to": "source_longest",
+        "dClient": 0,
+        "dSource": 0,
+        "dStatus": 0,
+        "dQBtnX": 0,
+        "dBarH": 0,
+        "dGroups": [
+          [
+            0,
+            0
+          ],
+          [
+            0,
+            0
+          ],
+          [
+            0,
+            0
+          ]
+        ]
+      }
+    ],
+    "states": [
+      {
+        "tag": "initial_all",
+        "client": {
+          "x": 340,
+          "y": 175.5,
+          "w": 240,
+          "h": 32
+        },
+        "source": {
+          "x": 628,
+          "y": 175.5,
+          "w": 300,
+          "h": 32
+        },
+        "status": {
+          "x": 1004,
+          "y": 175.5,
+          "w": 200,
+          "h": 32
+        },
+        "clientWrap": {
+          "x": 340,
+          "y": 175.5,
+          "w": 240,
+          "h": 32
+        },
+        "sourceWrap": {
+          "x": 628,
+          "y": 175.5,
+          "w": 300,
+          "h": 32
+        },
+        "statusWrap": {
+          "x": 1004,
+          "y": 175.5,
+          "w": 200,
+          "h": 32
+        },
+        "qBtn": {
+          "x": 1218,
+          "y": 176.5,
+          "w": 62,
+          "h": 30
+        },
+        "resetBtn": {
+          "x": 1300,
+          "y": 176.5,
+          "w": 58,
+          "h": 30
+        },
+        "bar": {
+          "x": 292,
+          "y": 175.5,
+          "w": 2181,
+          "h": 32
+        },
+        "groups": [
+          {
+            "x": 292,
+            "y": 175.5,
+            "w": 288,
+            "h": 32
+          },
+          {
+            "x": 594,
+            "y": 175.5,
+            "w": 334,
+            "h": 32
+          },
+          {
+            "x": 942,
+            "y": 175.5,
+            "w": 262,
+            "h": 32
+          }
+        ],
+        "overflowX": 0
+      },
+      {
+        "tag": "collision_A_selected",
+        "client": {
+          "x": 340,
+          "y": 175.5,
+          "w": 240,
+          "h": 32
+        },
+        "source": {
+          "x": 628,
+          "y": 175.5,
+          "w": 300,
+          "h": 32
+        },
+        "status": {
+          "x": 1004,
+          "y": 175.5,
+          "w": 200,
+          "h": 32
+        },
+        "clientWrap": {
+          "x": 340,
+          "y": 175.5,
+          "w": 240,
+          "h": 32
+        },
+        "sourceWrap": {
+          "x": 628,
+          "y": 175.5,
+          "w": 300,
+          "h": 32
+        },
+        "statusWrap": {
+          "x": 1004,
+          "y": 175.5,
+          "w": 200,
+          "h": 32
+        },
+        "qBtn": {
+          "x": 1218,
+          "y": 176.5,
+          "w": 62,
+          "h": 30
+        },
+        "resetBtn": {
+          "x": 1300,
+          "y": 176.5,
+          "w": 58,
+          "h": 30
+        },
+        "bar": {
+          "x": 292,
+          "y": 175.5,
+          "w": 2181,
+          "h": 32
+        },
+        "groups": [
+          {
+            "x": 292,
+            "y": 175.5,
+            "w": 288,
+            "h": 32
+          },
+          {
+            "x": 594,
+            "y": 175.5,
+            "w": 334,
+            "h": 32
+          },
+          {
+            "x": 942,
+            "y": 175.5,
+            "w": 262,
+            "h": 32
+          }
+        ],
+        "overflowX": 0
+      },
+      {
+        "tag": "collision_A_B_selected",
+        "client": {
+          "x": 340,
+          "y": 175.5,
+          "w": 240,
+          "h": 32
+        },
+        "source": {
+          "x": 628,
+          "y": 175.5,
+          "w": 300,
+          "h": 32
+        },
+        "status": {
+          "x": 1004,
+          "y": 175.5,
+          "w": 200,
+          "h": 32
+        },
+        "clientWrap": {
+          "x": 340,
+          "y": 175.5,
+          "w": 240,
+          "h": 32
+        },
+        "sourceWrap": {
+          "x": 628,
+          "y": 175.5,
+          "w": 300,
+          "h": 32
+        },
+        "statusWrap": {
+          "x": 1004,
+          "y": 175.5,
+          "w": 200,
+          "h": 32
+        },
+        "qBtn": {
+          "x": 1218,
+          "y": 176.5,
+          "w": 62,
+          "h": 30
+        },
+        "resetBtn": {
+          "x": 1300,
+          "y": 176.5,
+          "w": 58,
+          "h": 30
+        },
+        "bar": {
+          "x": 292,
+          "y": 175.5,
+          "w": 2181,
+          "h": 32
+        },
+        "groups": [
+          {
+            "x": 292,
+            "y": 175.5,
+            "w": 288,
+            "h": 32
+          },
+          {
+            "x": 594,
+            "y": 175.5,
+            "w": 334,
+            "h": 32
+          },
+          {
+            "x": 942,
+            "y": 175.5,
+            "w": 262,
+            "h": 32
+          }
+        ],
+        "overflowX": 0
+      },
+      {
+        "tag": "longest_selected",
+        "client": {
+          "x": 340,
+          "y": 175.5,
+          "w": 240,
+          "h": 32
+        },
+        "source": {
+          "x": 628,
+          "y": 175.5,
+          "w": 300,
+          "h": 32
+        },
+        "status": {
+          "x": 1004,
+          "y": 175.5,
+          "w": 200,
+          "h": 32
+        },
+        "clientWrap": {
+          "x": 340,
+          "y": 175.5,
+          "w": 240,
+          "h": 32
+        },
+        "sourceWrap": {
+          "x": 628,
+          "y": 175.5,
+          "w": 300,
+          "h": 32
+        },
+        "statusWrap": {
+          "x": 1004,
+          "y": 175.5,
+          "w": 200,
+          "h": 32
+        },
+        "qBtn": {
+          "x": 1218,
+          "y": 176.5,
+          "w": 62,
+          "h": 30
+        },
+        "resetBtn": {
+          "x": 1300,
+          "y": 176.5,
+          "w": 58,
+          "h": 30
+        },
+        "bar": {
+          "x": 292,
+          "y": 175.5,
+          "w": 2181,
+          "h": 32
+        },
+        "groups": [
+          {
+            "x": 292,
+            "y": 175.5,
+            "w": 288,
+            "h": 32
+          },
+          {
+            "x": 594,
+            "y": 175.5,
+            "w": 334,
+            "h": 32
+          },
+          {
+            "x": 942,
+            "y": 175.5,
+            "w": 262,
+            "h": 32
+          }
+        ],
+        "overflowX": 0
+      },
+      {
+        "tag": "multi_collapse_tags",
+        "client": {
+          "x": 340,
+          "y": 175.5,
+          "w": 240,
+          "h": 32
+        },
+        "source": {
+          "x": 628,
+          "y": 175.5,
+          "w": 300,
+          "h": 32
+        },
+        "status": {
+          "x": 1004,
+          "y": 175.5,
+          "w": 200,
+          "h": 32
+        },
+        "clientWrap": {
+          "x": 340,
+          "y": 175.5,
+          "w": 240,
+          "h": 32
+        },
+        "sourceWrap": {
+          "x": 628,
+          "y": 175.5,
+          "w": 300,
+          "h": 32
+        },
+        "statusWrap": {
+          "x": 1004,
+          "y": 175.5,
+          "w": 200,
+          "h": 32
+        },
+        "qBtn": {
+          "x": 1218,
+          "y": 176.5,
+          "w": 62,
+          "h": 30
+        },
+        "resetBtn": {
+          "x": 1300,
+          "y": 176.5,
+          "w": 58,
+          "h": 30
+        },
+        "bar": {
+          "x": 292,
+          "y": 175.5,
+          "w": 2181,
+          "h": 32
+        },
+        "groups": [
+          {
+            "x": 292,
+            "y": 175.5,
+            "w": 288,
+            "h": 32
+          },
+          {
+            "x": 594,
+            "y": 175.5,
+            "w": 334,
+            "h": 32
+          },
+          {
+            "x": 942,
+            "y": 175.5,
+            "w": 262,
+            "h": 32
+          }
+        ],
+        "overflowX": 0
+      },
+      {
+        "tag": "clear_to_all",
+        "client": {
+          "x": 340,
+          "y": 175.5,
+          "w": 240,
+          "h": 32
+        },
+        "source": {
+          "x": 628,
+          "y": 175.5,
+          "w": 300,
+          "h": 32
+        },
+        "status": {
+          "x": 1004,
+          "y": 175.5,
+          "w": 200,
+          "h": 32
+        },
+        "clientWrap": {
+          "x": 340,
+          "y": 175.5,
+          "w": 240,
+          "h": 32
+        },
+        "sourceWrap": {
+          "x": 628,
+          "y": 175.5,
+          "w": 300,
+          "h": 32
+        },
+        "statusWrap": {
+          "x": 1004,
+          "y": 175.5,
+          "w": 200,
+          "h": 32
+        },
+        "qBtn": {
+          "x": 1218,
+          "y": 176.5,
+          "w": 62,
+          "h": 30
+        },
+        "resetBtn": {
+          "x": 1300,
+          "y": 176.5,
+          "w": 58,
+          "h": 30
+        },
+        "bar": {
+          "x": 292,
+          "y": 175.5,
+          "w": 2181,
+          "h": 32
+        },
+        "groups": [
+          {
+            "x": 292,
+            "y": 175.5,
+            "w": 288,
+            "h": 32
+          },
+          {
+            "x": 594,
+            "y": 175.5,
+            "w": 334,
+            "h": 32
+          },
+          {
+            "x": 942,
+            "y": 175.5,
+            "w": 262,
+            "h": 32
+          }
+        ],
+        "overflowX": 0
+      },
+      {
+        "tag": "reset",
+        "client": {
+          "x": 340,
+          "y": 175.5,
+          "w": 240,
+          "h": 32
+        },
+        "source": {
+          "x": 628,
+          "y": 175.5,
+          "w": 300,
+          "h": 32
+        },
+        "status": {
+          "x": 1004,
+          "y": 175.5,
+          "w": 200,
+          "h": 32
+        },
+        "clientWrap": {
+          "x": 340,
+          "y": 175.5,
+          "w": 240,
+          "h": 32
+        },
+        "sourceWrap": {
+          "x": 628,
+          "y": 175.5,
+          "w": 300,
+          "h": 32
+        },
+        "statusWrap": {
+          "x": 1004,
+          "y": 175.5,
+          "w": 200,
+          "h": 32
+        },
+        "qBtn": {
+          "x": 1218,
+          "y": 176.5,
+          "w": 62,
+          "h": 30
+        },
+        "resetBtn": {
+          "x": 1300,
+          "y": 176.5,
+          "w": 58,
+          "h": 30
+        },
+        "bar": {
+          "x": 292,
+          "y": 175.5,
+          "w": 2181,
+          "h": 32
+        },
+        "groups": [
+          {
+            "x": 292,
+            "y": 175.5,
+            "w": 288,
+            "h": 32
+          },
+          {
+            "x": 594,
+            "y": 175.5,
+            "w": 334,
+            "h": 32
+          },
+          {
+            "x": 942,
+            "y": 175.5,
+            "w": 262,
+            "h": 32
+          }
+        ],
+        "overflowX": 0
+      },
+      {
+        "tag": "source_longest",
+        "client": {
+          "x": 340,
+          "y": 175.5,
+          "w": 240,
+          "h": 32
+        },
+        "source": {
+          "x": 628,
+          "y": 175.5,
+          "w": 300,
+          "h": 32
+        },
+        "status": {
+          "x": 1004,
+          "y": 175.5,
+          "w": 200,
+          "h": 32
+        },
+        "clientWrap": {
+          "x": 340,
+          "y": 175.5,
+          "w": 240,
+          "h": 32
+        },
+        "sourceWrap": {
+          "x": 628,
+          "y": 175.5,
+          "w": 300,
+          "h": 32
+        },
+        "statusWrap": {
+          "x": 1004,
+          "y": 175.5,
+          "w": 200,
+          "h": 32
+        },
+        "qBtn": {
+          "x": 1218,
+          "y": 176.5,
+          "w": 62,
+          "h": 30
+        },
+        "resetBtn": {
+          "x": 1300,
+          "y": 176.5,
+          "w": 58,
+          "h": 30
+        },
+        "bar": {
+          "x": 292,
+          "y": 175.5,
+          "w": 2181,
+          "h": 32
+        },
+        "groups": [
+          {
+            "x": 292,
+            "y": 175.5,
+            "w": 288,
+            "h": 32
+          },
+          {
+            "x": 594,
+            "y": 175.5,
+            "w": 334,
+            "h": 32
+          },
+          {
+            "x": 942,
+            "y": 175.5,
+            "w": 262,
+            "h": 32
+          }
+        ],
+        "overflowX": 0
+      }
+    ],
+    "candLabels": [
+      "全部",
+      "c-dssr1-0906-a（快照页测试探针A，请勿启用。长描述用于验...）",
+      "c-dssr1-0906-b（快照页测试探针B，请勿启用）",
+      "c-dssr1-0906-c（快照页测试探针C，请勿启用（其源库配置缺...）",
+      "c-dssr1-0906-d（快照页测试探针D，请勿启用（含超长描述演...）",
+      "c-dssr1-0906-e（快照页测试探针E，请勿启用）",
+      "c-dssr1-0906-miss1",
+      "c-dssr1-0906-miss2",
+      "hosp-012（总部测试 IP: 192.168.0.9...）"
+    ],
+    "collisionRows": {
+      "PPPPPPPPPPPPPPPPPPPPAAA": null,
+      "PPPPPPPPPPPPPPPPPPPPBBB": null
+    },
+    "collisionProbe": [],
+    "boundaryProbe": [
+      {
+        "id": "c-dssr1-0906-a",
+        "found": true,
+        "rendered": "c-dssr1-0906-a（快照页测试探针A，请勿启用。长描述用于验...）",
+        "expectLabel": "c-dssr1-0906-a（快照页测试探针A，请勿启用。长描述用于验...）",
+        "labelOk": true,
+        "renderedCodePoints": 39,
+        "expectTooltip": true,
+        "gotTooltip": true,
+        "tooltipText": "快照页测试探针A，请勿启用。长描述用于验证页面 Tooltip 与列宽截断：某市第一人民医院信息中心CDC采集探针（专用快照页测试实例，请勿启用其进行任何真实数据同步）。继续追加说明文字以拉长描述，确认列表单元格超长时显示省略号并可由 Tooltip 完整阅读；本条仅供源库快照状态只读页面视觉验证使用。",
+        "expectTooltipText": "快照页测试探针A，请勿启用。长描述用于验证页面 Tooltip 与列宽截断：某市第一人民医院信息中心CDC采集探针（专用快照页测试实例，请勿启用其进行任何真实数据同步）。继续追加说明文字以拉长描述，确认列表单元格超长时显示省略号并可由 Tooltip 完整阅读；本条仅供源库快照状态只读页面视觉验证使用。",
+        "textOk": true,
+        "afterLeaveCount": 0
+      },
+      {
+        "id": "c-dssr1-0906-b",
+        "found": true,
+        "rendered": "c-dssr1-0906-b（快照页测试探针B，请勿启用）",
+        "expectLabel": "c-dssr1-0906-b（快照页测试探针B，请勿启用）",
+        "labelOk": true,
+        "renderedCodePoints": 29,
+        "expectTooltip": false,
+        "gotTooltip": false,
+        "tooltipText": null,
+        "expectTooltipText": null,
+        "textOk": true,
+        "afterLeaveCount": 0
+      },
+      {
+        "id": "c-dssr1-0906-c",
+        "found": true,
+        "rendered": "c-dssr1-0906-c（快照页测试探针C，请勿启用（其源库配置缺...）",
+        "expectLabel": "c-dssr1-0906-c（快照页测试探针C，请勿启用（其源库配置缺...）",
+        "labelOk": true,
+        "renderedCodePoints": 39,
+        "expectTooltip": true,
+        "gotTooltip": true,
+        "tooltipText": "快照页测试探针C，请勿启用（其源库配置缺失）",
+        "expectTooltipText": "快照页测试探针C，请勿启用（其源库配置缺失）",
+        "textOk": true,
+        "afterLeaveCount": 0
+      },
+      {
+        "id": "c-dssr1-0906-d",
+        "found": true,
+        "rendered": "c-dssr1-0906-d（快照页测试探针D，请勿启用（含超长描述演...）",
+        "expectLabel": "c-dssr1-0906-d（快照页测试探针D，请勿启用（含超长描述演...）",
+        "labelOk": true,
+        "renderedCodePoints": 39,
+        "expectTooltip": true,
+        "gotTooltip": true,
+        "tooltipText": "快照页测试探针D，请勿启用（含超长描述演示：覆盖同源不同状态与并列时间排序）",
+        "expectTooltipText": "快照页测试探针D，请勿启用（含超长描述演示：覆盖同源不同状态与并列时间排序）",
+        "textOk": true,
+        "afterLeaveCount": 0
+      },
+      {
+        "id": "c-dssr1-0906-e",
+        "found": true,
+        "rendered": "c-dssr1-0906-e（快照页测试探针E，请勿启用）",
+        "expectLabel": "c-dssr1-0906-e（快照页测试探针E，请勿启用）",
+        "labelOk": true,
+        "renderedCodePoints": 29,
+        "expectTooltip": false,
+        "gotTooltip": false,
+        "tooltipText": null,
+        "expectTooltipText": null,
+        "textOk": true,
+        "afterLeaveCount": 0
+      },
+      {
+        "id": "c-dssr1-0906-miss1",
+        "found": true,
+        "rendered": "c-dssr1-0906-miss1",
+        "expectLabel": "c-dssr1-0906-miss1",
+        "labelOk": true,
+        "renderedCodePoints": 18,
+        "expectTooltip": false,
+        "gotTooltip": false,
+        "tooltipText": null,
+        "expectTooltipText": null,
+        "textOk": true,
+        "afterLeaveCount": 0
+      },
+      {
+        "id": "c-dssr1-0906-miss2",
+        "found": true,
+        "rendered": "c-dssr1-0906-miss2",
+        "expectLabel": "c-dssr1-0906-miss2",
+        "labelOk": true,
+        "renderedCodePoints": 18,
+        "expectTooltip": false,
+        "gotTooltip": false,
+        "tooltipText": null,
+        "expectTooltipText": null,
+        "textOk": true,
+        "afterLeaveCount": 0
+      },
+      {
+        "id": "hosp-012",
+        "found": true,
+        "rendered": "hosp-012（总部测试 IP: 192.168.0.9...）",
+        "expectLabel": "hosp-012（总部测试 IP: 192.168.0.9...）",
+        "labelOk": true,
+        "renderedCodePoints": 33,
+        "expectTooltip": true,
+        "gotTooltip": true,
+        "tooltipText": "总部测试 IP: 192.168.0.94, 192.168.174.1, 3.3.0.192, 192.168.100.1",
+        "expectTooltipText": "总部测试 IP: 192.168.0.94, 192.168.174.1, 3.3.0.192, 192.168.100.1",
+        "textOk": true,
+        "afterLeaveCount": 0
+      }
+    ],
+    "sourceRendered": [
+      "全部",
+      "SNAPSHOT-TEST-某市一院信息...（s-dssr1-0906-1）",
+      "SNAPSHOT-TEST-某市一院信息...（s-dssr1-0906-2）",
+      "SNAPSHOT-TEST-某市二院信息...（s-dssr1-0906-3）",
+      "SNAPSHOT-TEST-目标侧某中心...（s-dssr1-0906-4）",
+      "SNAPSHOT-TEST-第三方平台源...（s-dssr1-0906-5）",
+      "孝感市第一人民医院（112-source-19c）",
+      "s-dssr1-0906-m1",
+      "s-dssr1-0906-m2",
+      "s-dssr1-0906-m3"
+    ],
+    "sourceProbe": [
+      {
+        "i": 0,
+        "found": true,
+        "rendered": "SNAPSHOT-TEST-某市一院信息...（s-dssr1-0906-1）",
+        "expectLabel": "SNAPSHOT-TEST-某市一院信息...（s-dssr1-0906-1）",
+        "labelOk": true,
+        "gotTooltip": false,
+        "tooltipText": null
+      },
+      {
+        "i": 1,
+        "found": true,
+        "rendered": "SNAPSHOT-TEST-某市一院信息...（s-dssr1-0906-2）",
+        "expectLabel": "SNAPSHOT-TEST-某市一院信息...（s-dssr1-0906-2）",
+        "labelOk": true,
+        "gotTooltip": false,
+        "tooltipText": null
+      },
+      {
+        "i": 2,
+        "found": true,
+        "rendered": "SNAPSHOT-TEST-某市二院信息...（s-dssr1-0906-3）",
+        "expectLabel": "SNAPSHOT-TEST-某市二院信息...（s-dssr1-0906-3）",
+        "labelOk": true,
+        "gotTooltip": false,
+        "tooltipText": null
+      },
+      {
+        "i": 3,
+        "found": true,
+        "rendered": "SNAPSHOT-TEST-目标侧某中心...（s-dssr1-0906-4）",
+        "expectLabel": "SNAPSHOT-TEST-目标侧某中心...（s-dssr1-0906-4）",
+        "labelOk": true,
+        "gotTooltip": false,
+        "tooltipText": null
+      },
+      {
+        "i": 4,
+        "found": true,
+        "rendered": "SNAPSHOT-TEST-第三方平台源...（s-dssr1-0906-5）",
+        "expectLabel": "SNAPSHOT-TEST-第三方平台源...（s-dssr1-0906-5）",
+        "labelOk": true,
+        "gotTooltip": false,
+        "tooltipText": null
+      },
+      {
+        "i": 5,
+        "found": true,
+        "rendered": "孝感市第一人民医院（112-source-19c）",
+        "expectLabel": "孝感市第一人民医院（112-source-19c）",
+        "labelOk": true,
+        "gotTooltip": false,
+        "tooltipText": null
+      },
+      {
+        "i": 6,
+        "found": true,
+        "rendered": "s-dssr1-0906-m1",
+        "expectLabel": "s-dssr1-0906-m1",
+        "labelOk": true,
+        "gotTooltip": false,
+        "tooltipText": null
+      },
+      {
+        "i": 7,
+        "found": true,
+        "rendered": "s-dssr1-0906-m2",
+        "expectLabel": "s-dssr1-0906-m2",
+        "labelOk": true,
+        "gotTooltip": false,
+        "tooltipText": null
+      },
+      {
+        "i": 8,
+        "found": true,
+        "rendered": "s-dssr1-0906-m3",
+        "expectLabel": "s-dssr1-0906-m3",
+        "labelOk": true,
+        "gotTooltip": false,
+        "tooltipText": null
+      }
+    ],
+    "selectedProbe": [
+      {
+        "selectedIdentity": "c-dssr1-0906-a",
+        "tagAttr": "c-dssr1-0906-a",
+        "tags": [
+          "c-dssr1-0906-a（快照页测试探针A，请勿启用。长描述用于验...）"
+        ],
+        "tagClosable": true,
+        "expectTooltipText": "快照页测试探针A，请勿启用。长描述用于验证页面 Tooltip 与列宽截断：某市第一人民医院信息中心CDC采集探针（专用快照页测试实例，请勿启用其进行任何真实数据同步）。继续追加说明文字以拉长描述，确认列表单元格超长时显示省略号并可由 Tooltip 完整阅读；本条仅供源库快照状态只读页面视觉验证使用。",
+        "tooltipText": "快照页测试探针A，请勿启用。长描述用于验证页面 Tooltip 与列宽截断：某市第一人民医院信息中心CDC采集探针（专用快照页测试实例，请勿启用其进行任何真实数据同步）。继续追加说明文字以拉长描述，确认列表单元格超长时显示省略号并可由 Tooltip 完整阅读；本条仅供源库快照状态只读页面视觉验证使用。",
+        "tooltipCount": 1,
+        "afterLeaveCount": 0,
+        "correct": true
+      },
+      {
+        "selectedIdentity": "c-dssr1-0906-c",
+        "tagAttr": "c-dssr1-0906-c",
+        "tags": [
+          "c-dssr1-0906-c（快照页测试探针C，请勿启用（其源库配置缺...）"
+        ],
+        "tagClosable": true,
+        "expectTooltipText": "快照页测试探针C，请勿启用（其源库配置缺失）",
+        "tooltipText": "快照页测试探针C，请勿启用（其源库配置缺失）",
+        "tooltipCount": 1,
+        "afterLeaveCount": 0,
+        "correct": true
+      }
+    ],
+    "requests": {
+      "apiTotal": 5,
+      "initialLoad": 1,
+      "afterReset": 0,
+      "afterOpenClose": 0,
+      "afterHoverTooltip": 0,
+      "queryClickDelta": 1,
+      "lastQueryUrl": "http://127.0.0.1:5173/api/monitor/data-source-run-state/list?clientId=c-dssr1-0906-a",
+      "queryClientId": [
+        "c-dssr1-0906-a"
+      ],
+      "queryClientIdIsFullOriginal": true,
+      "nonGet": []
+    },
+    "otherRoute": {
+      "dssElements": 0,
+      "elSelect": 0
+    },
+    "singleTooltips": 0,
+    "consoleErrors": []
+  }
+]

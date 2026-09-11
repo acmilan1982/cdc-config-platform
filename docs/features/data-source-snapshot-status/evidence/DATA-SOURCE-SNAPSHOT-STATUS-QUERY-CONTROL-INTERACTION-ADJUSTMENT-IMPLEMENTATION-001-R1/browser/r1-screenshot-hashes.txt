@@ -1,0 +1,551 @@
+# R1 截图哈希索引 (DATA-SOURCE-SNAPSHOT-STATUS-QUERY-CONTROL-INTERACTION-ADJUSTMENT-IMPLEMENTATION-001-R1)
+#
+# 生成方式: sha256sum 对 browser/*.png 计算；文件名格式 r1-<mode>-<state>-<viewport>.png
+#   mode   = synth(合成只读探针负载) | real(真实只读数据)
+#   state  = 见下表“操作/身份”
+#   viewport = 1280x800 | 1700x920 | 1920x1080 | 2560x1440
+# 目标: 证明初始态与最长态截图不同、冲突探针 A/B 截图不同；并解释预期相同的哈希分组。
+
+# 共 104 张截图
+
+f65f76564a3ac9bdfca0f626efaf5be165399c9d73b16fa208c1b2be05966d93  r1-real-clear-1280x800.png
+    mode=real state=clear viewport=1280x800
+    操作: 手动打开客户端下拉并选择 全部 清空选择后的整页截图。
+    稳定身份: value=''
+
+a7ac99349637abba7de1e0251793cec58abe7dab70c1e063d07b09d5ede733a1  r1-real-clear-1700x920.png
+    mode=real state=clear viewport=1700x920
+    操作: 手动打开客户端下拉并选择 全部 清空选择后的整页截图。
+    稳定身份: value=''
+
+752869333b2372427f33b43e7f0755ab971f775e00533e10410e1bc3e49ca63a  r1-real-clear-1920x1080.png
+    mode=real state=clear viewport=1920x1080
+    操作: 手动打开客户端下拉并选择 全部 清空选择后的整页截图。
+    稳定身份: value=''
+
+b521e0d1df9da1b26b8af5a71f45c2c5e692a7bebd45aa6664098076e932f374  r1-real-clear-2560x1440.png
+    mode=real state=clear viewport=2560x1440
+    操作: 手动打开客户端下拉并选择 全部 清空选择后的整页截图。
+    稳定身份: value=''
+
+82659a5bdf9cf875c9a2ff827c601e7198fa9be0f8ab06934fe7f7d2e14cff0a  r1-real-initial-1280x800.png
+    mode=real state=initial viewport=1280x800
+    操作: 初始状态：客户端/数据源/快照状态均未选择（客户端=全部）。
+    稳定身份: 无已选项；选项列表首项为 全部(value='')
+
+304b8cfffb5ac6f65563716948439184da886ae45cd20a576db236e54027922f  r1-real-initial-1700x920.png
+    mode=real state=initial viewport=1700x920
+    操作: 初始状态：客户端/数据源/快照状态均未选择（客户端=全部）。
+    稳定身份: 无已选项；选项列表首项为 全部(value='')
+
+feb431f2e439a356bb7d585957ea41c58761ccd2a6ed8cbab49bc2bf2e334122  r1-real-initial-1920x1080.png
+    mode=real state=initial viewport=1920x1080
+    操作: 初始状态：客户端/数据源/快照状态均未选择（客户端=全部）。
+    稳定身份: 无已选项；选项列表首项为 全部(value='')
+
+49871f9b9d23ff000aff3eeb6e7616e709b60a40ae3274ef6782a33074835633  r1-real-initial-2560x1440.png
+    mode=real state=initial viewport=2560x1440
+    操作: 初始状态：客户端/数据源/快照状态均未选择（客户端=全部）。
+    稳定身份: 无已选项；选项列表首项为 全部(value='')
+
+c584c1ff0d6491b773076ca8ae99ebd755518d694cf2e9dc902a5d13847284b7  r1-real-longest-1280x800.png
+    mode=real state=longest viewport=1280x800
+    操作: 选择可见标签最长的客户端选项后的整页截图（用于证明与 initial 不同）。
+    稳定身份: synth: value='very-long-client-id-'+'X'*40；real: 真实数据中最长标签项
+
+e25c5b16dfbc08161bb3f24c78f4decb42fa1fdce75f40b2fdc7692a95b74535  r1-real-longest-1700x920.png
+    mode=real state=longest viewport=1700x920
+    操作: 选择可见标签最长的客户端选项后的整页截图（用于证明与 initial 不同）。
+    稳定身份: synth: value='very-long-client-id-'+'X'*40；real: 真实数据中最长标签项
+
+3e3dc96668ad31857809501b83145dadf5b220bb3b5fb9137cf0551b5a8dd6a6  r1-real-longest-1920x1080.png
+    mode=real state=longest viewport=1920x1080
+    操作: 选择可见标签最长的客户端选项后的整页截图（用于证明与 initial 不同）。
+    稳定身份: synth: value='very-long-client-id-'+'X'*40；real: 真实数据中最长标签项
+
+d307e9ed0d4673ff8b05b5fe4b36aa59b5e8b5e0cc535386faa24a994757e5be  r1-real-longest-2560x1440.png
+    mode=real state=longest viewport=2560x1440
+    操作: 选择可见标签最长的客户端选项后的整页截图（用于证明与 initial 不同）。
+    稳定身份: synth: value='very-long-client-id-'+'X'*40；real: 真实数据中最长标签项
+
+5e313042e48b9746fc80b19f6707a90233211568ae209fa3dcfb29326dcfe377  r1-real-other-route-1280x800.png
+    mode=real state=other-route viewport=1280x800
+    操作: 访问 /config/data-source 路由的整页截图（验证 dss-* 未泄漏到该路由）。
+    稳定身份: 不适用（非本 Feature 路由）
+
+5fe6a57c98ed40ca1c3f0495cf1b80ebcd97fa1bfe2271f1a85044d43f929665  r1-real-other-route-1700x920.png
+    mode=real state=other-route viewport=1700x920
+    操作: 访问 /config/data-source 路由的整页截图（验证 dss-* 未泄漏到该路由）。
+    稳定身份: 不适用（非本 Feature 路由）
+
+afeb01806f45cc2d44b18386cc95dc57b28cdc5ad01f359e692352ace9dfb928  r1-real-other-route-1920x1080.png
+    mode=real state=other-route viewport=1920x1080
+    操作: 访问 /config/data-source 路由的整页截图（验证 dss-* 未泄漏到该路由）。
+    稳定身份: 不适用（非本 Feature 路由）
+
+088692c332c9497e87413797a66675f631a735be6b763ae830196b6bc0570845  r1-real-other-route-2560x1440.png
+    mode=real state=other-route viewport=2560x1440
+    操作: 访问 /config/data-source 路由的整页截图（验证 dss-* 未泄漏到该路由）。
+    稳定身份: 不适用（非本 Feature 路由）
+
+9cc054328f23d1827c6b5074940d4693738dbacbe65e131b9f34d042132015d9  r1-real-reset-1280x800.png
+    mode=real state=reset viewport=1280x800
+    操作: 点击 重置 按钮后的整页截图。
+    稳定身份: 无已选项
+
+a7ac99349637abba7de1e0251793cec58abe7dab70c1e063d07b09d5ede733a1  r1-real-reset-1700x920.png
+    mode=real state=reset viewport=1700x920
+    操作: 点击 重置 按钮后的整页截图。
+    稳定身份: 无已选项
+
+752869333b2372427f33b43e7f0755ab971f775e00533e10410e1bc3e49ca63a  r1-real-reset-1920x1080.png
+    mode=real state=reset viewport=1920x1080
+    操作: 点击 重置 按钮后的整页截图。
+    稳定身份: 无已选项
+
+43ef6058b4998ca2f745ffbc0ec784ae952a87ea06fa8c20f50e9b367649aa2c  r1-real-reset-2560x1440.png
+    mode=real state=reset viewport=2560x1440
+    操作: 点击 重置 按钮后的整页截图。
+    稳定身份: 无已选项
+
+a10a31e66597a10d56ca9880d937aa4c640bc0092efca15aff066d35b820894f  r1-real-selected-tag-1-1280x800.png
+    mode=real state=selected-tag-1 viewport=1280x800
+    操作: 已选冲突探针 A 后，hover 已选可见项（el-tag）显示 tooltip。
+    稳定身份: 稳定身份=el-tag[data-dss-client-id]='P'*20+'AAA'
+
+cf071beb43924d736ec314187b5a17a437d8ee6a1d162b17fa357eb0e30771b0  r1-real-selected-tag-1-1700x920.png
+    mode=real state=selected-tag-1 viewport=1700x920
+    操作: 已选冲突探针 A 后，hover 已选可见项（el-tag）显示 tooltip。
+    稳定身份: 稳定身份=el-tag[data-dss-client-id]='P'*20+'AAA'
+
+94b262bfb1f3d890f64eb521a4f8a148300d20d714aa1c7fa08dba1ac2138160  r1-real-selected-tag-1-1920x1080.png
+    mode=real state=selected-tag-1 viewport=1920x1080
+    操作: 已选冲突探针 A 后，hover 已选可见项（el-tag）显示 tooltip。
+    稳定身份: 稳定身份=el-tag[data-dss-client-id]='P'*20+'AAA'
+
+bcd418394b0b134c20cbdd045c75b04c6821d73632c076fbe583470c00b6e9c1  r1-real-selected-tag-1-2560x1440.png
+    mode=real state=selected-tag-1 viewport=2560x1440
+    操作: 已选冲突探针 A 后，hover 已选可见项（el-tag）显示 tooltip。
+    稳定身份: 稳定身份=el-tag[data-dss-client-id]='P'*20+'AAA'
+
+e460748c4df0c56d040f947307dd69570ccd08e017d0d0323b65d65ec8a0ca69  r1-real-selected-tag-2-1280x800.png
+    mode=real state=selected-tag-2 viewport=1280x800
+    操作: 已选冲突探针 B 后，hover 已选可见项（el-tag）显示 tooltip。
+    稳定身份: 稳定身份=el-tag[data-dss-client-id]='P'*20+'BBB'
+
+a75858a4f6475c89677e3fb696d73890052bd06a3153827d19b30163b8dbafd9  r1-real-selected-tag-2-1700x920.png
+    mode=real state=selected-tag-2 viewport=1700x920
+    操作: 已选冲突探针 B 后，hover 已选可见项（el-tag）显示 tooltip。
+    稳定身份: 稳定身份=el-tag[data-dss-client-id]='P'*20+'BBB'
+
+879b8ea5753f9accbab877509ff555d1c385617187309f0ab0677f48cbf2fced  r1-real-selected-tag-2-1920x1080.png
+    mode=real state=selected-tag-2 viewport=1920x1080
+    操作: 已选冲突探针 B 后，hover 已选可见项（el-tag）显示 tooltip。
+    稳定身份: 稳定身份=el-tag[data-dss-client-id]='P'*20+'BBB'
+
+45b53cb2e6e4c903278e1f71e9d0e827b799820a281f9c5931ef3eebf0c1daba  r1-real-selected-tag-2-2560x1440.png
+    mode=real state=selected-tag-2 viewport=2560x1440
+    操作: 已选冲突探针 B 后，hover 已选可见项（el-tag）显示 tooltip。
+    稳定身份: 稳定身份=el-tag[data-dss-client-id]='P'*20+'BBB'
+
+c920ba8bb19191a891f89a7c27e68ca4c28254d7530790103e07ee594ea43edb  r1-real-tooltip-candidate-1280x800.png
+    mode=real state=tooltip-candidate viewport=1280x800
+    操作: 客户端下拉候选中 hover 第 6 个候选（id21-…，CLIENT_ID 21cp / CLIENT_DESC 21cp）触发 tooltip。
+    稳定身份: 稳定身份=该候选原始 value(id21-CCCCCCCCCCCCCCCC)
+
+f75d03fecb4200eb3af808293e7f104b1fb4105472b47f827b00be0997e936a9  r1-real-tooltip-candidate-1700x920.png
+    mode=real state=tooltip-candidate viewport=1700x920
+    操作: 客户端下拉候选中 hover 第 6 个候选（id21-…，CLIENT_ID 21cp / CLIENT_DESC 21cp）触发 tooltip。
+    稳定身份: 稳定身份=该候选原始 value(id21-CCCCCCCCCCCCCCCC)
+
+5ae5a133ad36ce6770c345d8a8ecec43ba21714a2349e9e9ac296be6fb25ee94  r1-real-tooltip-candidate-1920x1080.png
+    mode=real state=tooltip-candidate viewport=1920x1080
+    操作: 客户端下拉候选中 hover 第 6 个候选（id21-…，CLIENT_ID 21cp / CLIENT_DESC 21cp）触发 tooltip。
+    稳定身份: 稳定身份=该候选原始 value(id21-CCCCCCCCCCCCCCCC)
+
+02512178b41beeea824bbdcf7a756956ae58762e6b695a6c7fb7ce2a17188c2f  r1-real-tooltip-candidate-2560x1440.png
+    mode=real state=tooltip-candidate viewport=2560x1440
+    操作: 客户端下拉候选中 hover 第 6 个候选（id21-…，CLIENT_ID 21cp / CLIENT_DESC 21cp）触发 tooltip。
+    稳定身份: 稳定身份=该候选原始 value(id21-CCCCCCCCCCCCCCCC)
+
+295292d63253765f0c4f36d83bd36b2551fb43cff02276e0c20f26886bc479f2  r1-real-tooltip-tag-1-1280x800.png
+    mode=real state=tooltip-tag-1 viewport=1280x800
+    操作: 已选探针 A 的下拉框+tooltip 联合区域裁剪图（验证 tooltip 与控件相对几何）。
+    稳定身份: 稳定身份='P'*20+'AAA'
+
+4d080ac5d30fedec28aa596d47eae683a6ebe0908d90152f38f40ba5b9e97680  r1-real-tooltip-tag-1-1700x920.png
+    mode=real state=tooltip-tag-1 viewport=1700x920
+    操作: 已选探针 A 的下拉框+tooltip 联合区域裁剪图（验证 tooltip 与控件相对几何）。
+    稳定身份: 稳定身份='P'*20+'AAA'
+
+4d080ac5d30fedec28aa596d47eae683a6ebe0908d90152f38f40ba5b9e97680  r1-real-tooltip-tag-1-1920x1080.png
+    mode=real state=tooltip-tag-1 viewport=1920x1080
+    操作: 已选探针 A 的下拉框+tooltip 联合区域裁剪图（验证 tooltip 与控件相对几何）。
+    稳定身份: 稳定身份='P'*20+'AAA'
+
+4d080ac5d30fedec28aa596d47eae683a6ebe0908d90152f38f40ba5b9e97680  r1-real-tooltip-tag-1-2560x1440.png
+    mode=real state=tooltip-tag-1 viewport=2560x1440
+    操作: 已选探针 A 的下拉框+tooltip 联合区域裁剪图（验证 tooltip 与控件相对几何）。
+    稳定身份: 稳定身份='P'*20+'AAA'
+
+8f173cb799f88e70d66eaa61158a5b619e0d46cd4b2f0d03496a5fd51a05c1fb  r1-real-tooltip-tag-2-1280x800.png
+    mode=real state=tooltip-tag-2 viewport=1280x800
+    操作: 已选探针 B 的下拉框+tooltip 联合区域裁剪图。
+    稳定身份: 稳定身份='P'*20+'BBB'
+
+67e89d83de51e083e00247ab9acf40c5c25da22fabc0c7b0e778942afa9e5a2a  r1-real-tooltip-tag-2-1700x920.png
+    mode=real state=tooltip-tag-2 viewport=1700x920
+    操作: 已选探针 B 的下拉框+tooltip 联合区域裁剪图。
+    稳定身份: 稳定身份='P'*20+'BBB'
+
+67e89d83de51e083e00247ab9acf40c5c25da22fabc0c7b0e778942afa9e5a2a  r1-real-tooltip-tag-2-1920x1080.png
+    mode=real state=tooltip-tag-2 viewport=1920x1080
+    操作: 已选探针 B 的下拉框+tooltip 联合区域裁剪图。
+    稳定身份: 稳定身份='P'*20+'BBB'
+
+67e89d83de51e083e00247ab9acf40c5c25da22fabc0c7b0e778942afa9e5a2a  r1-real-tooltip-tag-2-2560x1440.png
+    mode=real state=tooltip-tag-2 viewport=2560x1440
+    操作: 已选探针 B 的下拉框+tooltip 联合区域裁剪图。
+    稳定身份: 稳定身份='P'*20+'BBB'
+
+70c72c0f1bf9ea19e2bce32272dfbf7c586f08e062385f7821da54320d5ad950  r1-real-zoom-longest-1280x800.png
+    mode=real state=zoom-longest viewport=1280x800
+    操作: longest 状态下查询栏裁剪图（控件几何）。
+    稳定身份: 同上
+
+2b8b186da18b22286063a7bda67b80fb55b92e0bf29c120ac6ccc378d28e8d7d  r1-real-zoom-longest-1700x920.png
+    mode=real state=zoom-longest viewport=1700x920
+    操作: longest 状态下查询栏裁剪图（控件几何）。
+    稳定身份: 同上
+
+63d577230944efc2259f9542602e24346d71c7ea0ef630d3c4e4a3f72090e6d8  r1-real-zoom-longest-1920x1080.png
+    mode=real state=zoom-longest viewport=1920x1080
+    操作: longest 状态下查询栏裁剪图（控件几何）。
+    稳定身份: 同上
+
+cadf7c7012c043463381a4814e9b41d80781a7cbbaa579650298014ea2ba90ae  r1-real-zoom-longest-2560x1440.png
+    mode=real state=zoom-longest viewport=2560x1440
+    操作: longest 状态下查询栏裁剪图（控件几何）。
+    稳定身份: 同上
+
+4272b86c03533d6c7365fcac5672b06a803ae3b112dbc3e9a9100b3f9b3c592f  r1-real-zoom-reset-1280x800.png
+    mode=real state=zoom-reset viewport=1280x800
+    操作: reset 状态下查询栏裁剪图。
+    稳定身份: 无已选项
+
+80a3fcb25ffecd1bfe75647b8afff7d14b42e621221083a07a9e1d94a2152ee0  r1-real-zoom-reset-1700x920.png
+    mode=real state=zoom-reset viewport=1700x920
+    操作: reset 状态下查询栏裁剪图。
+    稳定身份: 无已选项
+
+a7ff5d378f25501b265121a2febbf9c6a5da6b5e0330ff15e2fe9bd28475c357  r1-real-zoom-reset-1920x1080.png
+    mode=real state=zoom-reset viewport=1920x1080
+    操作: reset 状态下查询栏裁剪图。
+    稳定身份: 无已选项
+
+238f81a3ac8581f745e60a4eb924fe5daa770553ee7b098a72f99b4d73b2a855  r1-real-zoom-reset-2560x1440.png
+    mode=real state=zoom-reset viewport=2560x1440
+    操作: reset 状态下查询栏裁剪图。
+    稳定身份: 无已选项
+
+118858c4a46f51d6f6a15b3b3645e7f002cbcb2f3c7efd6a5a04f9621b7a2953  r1-synth-clear-1280x800.png
+    mode=synth state=clear viewport=1280x800
+    操作: 手动打开客户端下拉并选择 全部 清空选择后的整页截图。
+    稳定身份: value=''
+
+09a9e06e3639e46b36d8fdcebf6d0235e291532b4c40edc2adab38b1a53490d0  r1-synth-clear-1700x920.png
+    mode=synth state=clear viewport=1700x920
+    操作: 手动打开客户端下拉并选择 全部 清空选择后的整页截图。
+    稳定身份: value=''
+
+cd8cc5b97f118f3987c48ce80657e997eac2f3c9a64790c98229220fa0050d8d  r1-synth-clear-1920x1080.png
+    mode=synth state=clear viewport=1920x1080
+    操作: 手动打开客户端下拉并选择 全部 清空选择后的整页截图。
+    稳定身份: value=''
+
+d2fbbb9e07764a327f979ce0de3f7a637a5d350fa09b3b359eb0d2b5c6ff2bc8  r1-synth-clear-2560x1440.png
+    mode=synth state=clear viewport=2560x1440
+    操作: 手动打开客户端下拉并选择 全部 清空选择后的整页截图。
+    稳定身份: value=''
+
+f700194705d8efbdcb06f5140591dcf17702923679b51395feac14a70389bf40  r1-synth-collision-cand-A-1280x800.png
+    mode=synth state=collision-cand-A viewport=1280x800
+    操作: 在客户端下拉候选中 hover 冲突探针 A（CLIENT_ID='P'*20+'AAA'）；其可见标签与 B 逐字节相同。
+    稳定身份: 稳定身份 data-dss-client-id='P'*20+'AAA'；期望 tooltip=完整 CLIENT_DESC 'D'*20+'AAA'
+
+859cc086fd25b4dc46d71574327c585ac880a40fd2a205d8f4528925d1768788  r1-synth-collision-cand-A-1700x920.png
+    mode=synth state=collision-cand-A viewport=1700x920
+    操作: 在客户端下拉候选中 hover 冲突探针 A（CLIENT_ID='P'*20+'AAA'）；其可见标签与 B 逐字节相同。
+    稳定身份: 稳定身份 data-dss-client-id='P'*20+'AAA'；期望 tooltip=完整 CLIENT_DESC 'D'*20+'AAA'
+
+f3b765b4773eee22a7cd4ad1fbf8dc889c515ad741659a032ef5c93aecec260c  r1-synth-collision-cand-A-1920x1080.png
+    mode=synth state=collision-cand-A viewport=1920x1080
+    操作: 在客户端下拉候选中 hover 冲突探针 A（CLIENT_ID='P'*20+'AAA'）；其可见标签与 B 逐字节相同。
+    稳定身份: 稳定身份 data-dss-client-id='P'*20+'AAA'；期望 tooltip=完整 CLIENT_DESC 'D'*20+'AAA'
+
+f8e90ca78dbeb35048b9c79a272536445ce8b0040da6c653952117e66000fdb9  r1-synth-collision-cand-A-2560x1440.png
+    mode=synth state=collision-cand-A viewport=2560x1440
+    操作: 在客户端下拉候选中 hover 冲突探针 A（CLIENT_ID='P'*20+'AAA'）；其可见标签与 B 逐字节相同。
+    稳定身份: 稳定身份 data-dss-client-id='P'*20+'AAA'；期望 tooltip=完整 CLIENT_DESC 'D'*20+'AAA'
+
+12cbcf909c27e20ab3cf6d6abba0f259b014d0d6155a4ce42806ca998cd51d09  r1-synth-collision-cand-B-1280x800.png
+    mode=synth state=collision-cand-B viewport=1280x800
+    操作: 在客户端下拉候选中 hover 冲突探针 B（CLIENT_ID='P'*20+'BBB'）；其可见标签与 A 逐字节相同。
+    稳定身份: 稳定身份 data-dss-client-id='P'*20+'BBB'；期望 tooltip=完整 CLIENT_DESC 'D'*20+'BBB'
+
+2fcd16759bc851663a3e5fba8d2d75d4d3ab17511eb1bb7aa985be0212997cad  r1-synth-collision-cand-B-1700x920.png
+    mode=synth state=collision-cand-B viewport=1700x920
+    操作: 在客户端下拉候选中 hover 冲突探针 B（CLIENT_ID='P'*20+'BBB'）；其可见标签与 A 逐字节相同。
+    稳定身份: 稳定身份 data-dss-client-id='P'*20+'BBB'；期望 tooltip=完整 CLIENT_DESC 'D'*20+'BBB'
+
+3f54e1137e295f29433be803b3400e9db8c31f6eee39b89742f6d343372ee49d  r1-synth-collision-cand-B-1920x1080.png
+    mode=synth state=collision-cand-B viewport=1920x1080
+    操作: 在客户端下拉候选中 hover 冲突探针 B（CLIENT_ID='P'*20+'BBB'）；其可见标签与 A 逐字节相同。
+    稳定身份: 稳定身份 data-dss-client-id='P'*20+'BBB'；期望 tooltip=完整 CLIENT_DESC 'D'*20+'BBB'
+
+80d6d2523c7d5ce22cfd355a6d9ee7e1105b21c14e5d2fb720982fd1af3699a4  r1-synth-collision-cand-B-2560x1440.png
+    mode=synth state=collision-cand-B viewport=2560x1440
+    操作: 在客户端下拉候选中 hover 冲突探针 B（CLIENT_ID='P'*20+'BBB'）；其可见标签与 A 逐字节相同。
+    稳定身份: 稳定身份 data-dss-client-id='P'*20+'BBB'；期望 tooltip=完整 CLIENT_DESC 'D'*20+'BBB'
+
+7ee439c666064f98996abbca717a0d5b3c0073eb94cdc4a7e0b2957131e56701  r1-synth-initial-1280x800.png
+    mode=synth state=initial viewport=1280x800
+    操作: 初始状态：客户端/数据源/快照状态均未选择（客户端=全部）。
+    稳定身份: 无已选项；选项列表首项为 全部(value='')
+
+1951d4c37e78c9944da2db39b1e39dfffb0111ef602cb194a98248bfb06f1a6a  r1-synth-initial-1700x920.png
+    mode=synth state=initial viewport=1700x920
+    操作: 初始状态：客户端/数据源/快照状态均未选择（客户端=全部）。
+    稳定身份: 无已选项；选项列表首项为 全部(value='')
+
+b8deab87ec30fa701d00f0b7a09dbda77564f4fd49807999a8505be211a426be  r1-synth-initial-1920x1080.png
+    mode=synth state=initial viewport=1920x1080
+    操作: 初始状态：客户端/数据源/快照状态均未选择（客户端=全部）。
+    稳定身份: 无已选项；选项列表首项为 全部(value='')
+
+3fff4495cd5faa21dbcb456059644bc9ee85b13c3a4d1c79b427d2323c73a757  r1-synth-initial-2560x1440.png
+    mode=synth state=initial viewport=2560x1440
+    操作: 初始状态：客户端/数据源/快照状态均未选择（客户端=全部）。
+    稳定身份: 无已选项；选项列表首项为 全部(value='')
+
+045b90e027017f3e8a70be74b87156b037a9e82d616b2d491d02b81393666363  r1-synth-longest-1280x800.png
+    mode=synth state=longest viewport=1280x800
+    操作: 选择可见标签最长的客户端选项后的整页截图（用于证明与 initial 不同）。
+    稳定身份: synth: value='very-long-client-id-'+'X'*40；real: 真实数据中最长标签项
+
+98997bf2a8cb1811c0148ba1deb0341123f917e4c9a10abd2735bfdeb436279a  r1-synth-longest-1700x920.png
+    mode=synth state=longest viewport=1700x920
+    操作: 选择可见标签最长的客户端选项后的整页截图（用于证明与 initial 不同）。
+    稳定身份: synth: value='very-long-client-id-'+'X'*40；real: 真实数据中最长标签项
+
+107fbcd8696d46945af2e429306c8a1379adb036671e076b37e17531343b913a  r1-synth-longest-1920x1080.png
+    mode=synth state=longest viewport=1920x1080
+    操作: 选择可见标签最长的客户端选项后的整页截图（用于证明与 initial 不同）。
+    稳定身份: synth: value='very-long-client-id-'+'X'*40；real: 真实数据中最长标签项
+
+2bf37609e5a5fec5c4d89ba389489e494e861da1e43d7eaf1cddd0e968bdaed2  r1-synth-longest-2560x1440.png
+    mode=synth state=longest viewport=2560x1440
+    操作: 选择可见标签最长的客户端选项后的整页截图（用于证明与 initial 不同）。
+    稳定身份: synth: value='very-long-client-id-'+'X'*40；real: 真实数据中最长标签项
+
+5e313042e48b9746fc80b19f6707a90233211568ae209fa3dcfb29326dcfe377  r1-synth-other-route-1280x800.png
+    mode=synth state=other-route viewport=1280x800
+    操作: 访问 /config/data-source 路由的整页截图（验证 dss-* 未泄漏到该路由）。
+    稳定身份: 不适用（非本 Feature 路由）
+
+5fe6a57c98ed40ca1c3f0495cf1b80ebcd97fa1bfe2271f1a85044d43f929665  r1-synth-other-route-1700x920.png
+    mode=synth state=other-route viewport=1700x920
+    操作: 访问 /config/data-source 路由的整页截图（验证 dss-* 未泄漏到该路由）。
+    稳定身份: 不适用（非本 Feature 路由）
+
+afeb01806f45cc2d44b18386cc95dc57b28cdc5ad01f359e692352ace9dfb928  r1-synth-other-route-1920x1080.png
+    mode=synth state=other-route viewport=1920x1080
+    操作: 访问 /config/data-source 路由的整页截图（验证 dss-* 未泄漏到该路由）。
+    稳定身份: 不适用（非本 Feature 路由）
+
+088692c332c9497e87413797a66675f631a735be6b763ae830196b6bc0570845  r1-synth-other-route-2560x1440.png
+    mode=synth state=other-route viewport=2560x1440
+    操作: 访问 /config/data-source 路由的整页截图（验证 dss-* 未泄漏到该路由）。
+    稳定身份: 不适用（非本 Feature 路由）
+
+118858c4a46f51d6f6a15b3b3645e7f002cbcb2f3c7efd6a5a04f9621b7a2953  r1-synth-reset-1280x800.png
+    mode=synth state=reset viewport=1280x800
+    操作: 点击 重置 按钮后的整页截图。
+    稳定身份: 无已选项
+
+09a9e06e3639e46b36d8fdcebf6d0235e291532b4c40edc2adab38b1a53490d0  r1-synth-reset-1700x920.png
+    mode=synth state=reset viewport=1700x920
+    操作: 点击 重置 按钮后的整页截图。
+    稳定身份: 无已选项
+
+c9e4d4b3da58f67ba016078954e01dca8f7aac2cd48dbaefd6ca2ddf732a3389  r1-synth-reset-1920x1080.png
+    mode=synth state=reset viewport=1920x1080
+    操作: 点击 重置 按钮后的整页截图。
+    稳定身份: 无已选项
+
+96b14f020b3043613a16fc2726822bfe851f91d85418e75040fbeed91ffdb4dc  r1-synth-reset-2560x1440.png
+    mode=synth state=reset viewport=2560x1440
+    操作: 点击 重置 按钮后的整页截图。
+    稳定身份: 无已选项
+
+1eac312f290472038a6703da6dd28d38b09f78b0abecc96e6615e205599ba14c  r1-synth-selected-tag-1-1280x800.png
+    mode=synth state=selected-tag-1 viewport=1280x800
+    操作: 已选冲突探针 A 后，hover 已选可见项（el-tag）显示 tooltip。
+    稳定身份: 稳定身份=el-tag[data-dss-client-id]='P'*20+'AAA'
+
+dc8bf0577fb1c6e7d4f0f1702b7d24e0be377d9120b0ff434f0dc53feba65e38  r1-synth-selected-tag-1-1700x920.png
+    mode=synth state=selected-tag-1 viewport=1700x920
+    操作: 已选冲突探针 A 后，hover 已选可见项（el-tag）显示 tooltip。
+    稳定身份: 稳定身份=el-tag[data-dss-client-id]='P'*20+'AAA'
+
+4f721657670edb1993b0d76de90048d325142b96b29f16e1cd001334559df974  r1-synth-selected-tag-1-1920x1080.png
+    mode=synth state=selected-tag-1 viewport=1920x1080
+    操作: 已选冲突探针 A 后，hover 已选可见项（el-tag）显示 tooltip。
+    稳定身份: 稳定身份=el-tag[data-dss-client-id]='P'*20+'AAA'
+
+a51d9370166be03238c88b55ac1987cec7ea281c92998b52b63e29f11fc6c082  r1-synth-selected-tag-1-2560x1440.png
+    mode=synth state=selected-tag-1 viewport=2560x1440
+    操作: 已选冲突探针 A 后，hover 已选可见项（el-tag）显示 tooltip。
+    稳定身份: 稳定身份=el-tag[data-dss-client-id]='P'*20+'AAA'
+
+fcf99d16b5c51b728c36d7fbc339006cdde2c731103823199632fc129e257d31  r1-synth-selected-tag-2-1280x800.png
+    mode=synth state=selected-tag-2 viewport=1280x800
+    操作: 已选冲突探针 B 后，hover 已选可见项（el-tag）显示 tooltip。
+    稳定身份: 稳定身份=el-tag[data-dss-client-id]='P'*20+'BBB'
+
+7cc25df552ddf20824b847461b2c63b369d3c2dcd5dd9364cde7013ca32802f9  r1-synth-selected-tag-2-1700x920.png
+    mode=synth state=selected-tag-2 viewport=1700x920
+    操作: 已选冲突探针 B 后，hover 已选可见项（el-tag）显示 tooltip。
+    稳定身份: 稳定身份=el-tag[data-dss-client-id]='P'*20+'BBB'
+
+ff3150f415371becc6c02133550b9f217113ef54672d33b1fe23563e5dd78b75  r1-synth-selected-tag-2-1920x1080.png
+    mode=synth state=selected-tag-2 viewport=1920x1080
+    操作: 已选冲突探针 B 后，hover 已选可见项（el-tag）显示 tooltip。
+    稳定身份: 稳定身份=el-tag[data-dss-client-id]='P'*20+'BBB'
+
+722f579451e6f48644c51860a9e982081fd2667b3a3f1b4ba7a56b5a879fc128  r1-synth-selected-tag-2-2560x1440.png
+    mode=synth state=selected-tag-2 viewport=2560x1440
+    操作: 已选冲突探针 B 后，hover 已选可见项（el-tag）显示 tooltip。
+    稳定身份: 稳定身份=el-tag[data-dss-client-id]='P'*20+'BBB'
+
+2f515983543cb9af9625eb766919ab7c5c9ac51042632e90393256695f8b06eb  r1-synth-tooltip-candidate-1280x800.png
+    mode=synth state=tooltip-candidate viewport=1280x800
+    操作: 客户端下拉候选中 hover 第 6 个候选（id21-…，CLIENT_ID 21cp / CLIENT_DESC 21cp）触发 tooltip。
+    稳定身份: 稳定身份=该候选原始 value(id21-CCCCCCCCCCCCCCCC)
+
+15249bbd9fa9764873fee529553983e564da694f250b3675c2d1d4f830b843a5  r1-synth-tooltip-candidate-1700x920.png
+    mode=synth state=tooltip-candidate viewport=1700x920
+    操作: 客户端下拉候选中 hover 第 6 个候选（id21-…，CLIENT_ID 21cp / CLIENT_DESC 21cp）触发 tooltip。
+    稳定身份: 稳定身份=该候选原始 value(id21-CCCCCCCCCCCCCCCC)
+
+742bdbcb1a2e180babdbbd4d59a9d3d7a840d112ff1f3abd526250d2b2f1b663  r1-synth-tooltip-candidate-1920x1080.png
+    mode=synth state=tooltip-candidate viewport=1920x1080
+    操作: 客户端下拉候选中 hover 第 6 个候选（id21-…，CLIENT_ID 21cp / CLIENT_DESC 21cp）触发 tooltip。
+    稳定身份: 稳定身份=该候选原始 value(id21-CCCCCCCCCCCCCCCC)
+
+617feb00504d63b703a6bfc45432f951ef8d7e95d4bcf15eb1f688d975b231ae  r1-synth-tooltip-candidate-2560x1440.png
+    mode=synth state=tooltip-candidate viewport=2560x1440
+    操作: 客户端下拉候选中 hover 第 6 个候选（id21-…，CLIENT_ID 21cp / CLIENT_DESC 21cp）触发 tooltip。
+    稳定身份: 稳定身份=该候选原始 value(id21-CCCCCCCCCCCCCCCC)
+
+4771123332c210f6fa44f99d0d6fc546d012c1e2ee671e80317837a98e033d34  r1-synth-tooltip-tag-1-1280x800.png
+    mode=synth state=tooltip-tag-1 viewport=1280x800
+    操作: 已选探针 A 的下拉框+tooltip 联合区域裁剪图（验证 tooltip 与控件相对几何）。
+    稳定身份: 稳定身份='P'*20+'AAA'
+
+b456a97d60f5cf59e57882b5e284a9acc5a9806c5d6bbb165b98111b5ba8d6be  r1-synth-tooltip-tag-1-1700x920.png
+    mode=synth state=tooltip-tag-1 viewport=1700x920
+    操作: 已选探针 A 的下拉框+tooltip 联合区域裁剪图（验证 tooltip 与控件相对几何）。
+    稳定身份: 稳定身份='P'*20+'AAA'
+
+b456a97d60f5cf59e57882b5e284a9acc5a9806c5d6bbb165b98111b5ba8d6be  r1-synth-tooltip-tag-1-1920x1080.png
+    mode=synth state=tooltip-tag-1 viewport=1920x1080
+    操作: 已选探针 A 的下拉框+tooltip 联合区域裁剪图（验证 tooltip 与控件相对几何）。
+    稳定身份: 稳定身份='P'*20+'AAA'
+
+b456a97d60f5cf59e57882b5e284a9acc5a9806c5d6bbb165b98111b5ba8d6be  r1-synth-tooltip-tag-1-2560x1440.png
+    mode=synth state=tooltip-tag-1 viewport=2560x1440
+    操作: 已选探针 A 的下拉框+tooltip 联合区域裁剪图（验证 tooltip 与控件相对几何）。
+    稳定身份: 稳定身份='P'*20+'AAA'
+
+af103a3ae53bcdcc7f3d53ab45b7fdc97bb8dd3cb5b63d016c354a34c33854fb  r1-synth-tooltip-tag-2-1280x800.png
+    mode=synth state=tooltip-tag-2 viewport=1280x800
+    操作: 已选探针 B 的下拉框+tooltip 联合区域裁剪图。
+    稳定身份: 稳定身份='P'*20+'BBB'
+
+fa7a2ba259380c4b4d668cee1f7591a3d87a6320e9bf59cf8e9926917a94e4f7  r1-synth-tooltip-tag-2-1700x920.png
+    mode=synth state=tooltip-tag-2 viewport=1700x920
+    操作: 已选探针 B 的下拉框+tooltip 联合区域裁剪图。
+    稳定身份: 稳定身份='P'*20+'BBB'
+
+fa7a2ba259380c4b4d668cee1f7591a3d87a6320e9bf59cf8e9926917a94e4f7  r1-synth-tooltip-tag-2-1920x1080.png
+    mode=synth state=tooltip-tag-2 viewport=1920x1080
+    操作: 已选探针 B 的下拉框+tooltip 联合区域裁剪图。
+    稳定身份: 稳定身份='P'*20+'BBB'
+
+fa7a2ba259380c4b4d668cee1f7591a3d87a6320e9bf59cf8e9926917a94e4f7  r1-synth-tooltip-tag-2-2560x1440.png
+    mode=synth state=tooltip-tag-2 viewport=2560x1440
+    操作: 已选探针 B 的下拉框+tooltip 联合区域裁剪图。
+    稳定身份: 稳定身份='P'*20+'BBB'
+
+8c6efc664e6a0dd0bed49484c7f13f47a2ffa4e42cfdc1f76ec0c2899a6d17aa  r1-synth-zoom-longest-1280x800.png
+    mode=synth state=zoom-longest viewport=1280x800
+    操作: longest 状态下查询栏裁剪图（控件几何）。
+    稳定身份: 同上
+
+7827c8c208af0b9691a511f9eab298c4a3df5ad275ab381e5f8b876aa2ea27ba  r1-synth-zoom-longest-1700x920.png
+    mode=synth state=zoom-longest viewport=1700x920
+    操作: longest 状态下查询栏裁剪图（控件几何）。
+    稳定身份: 同上
+
+b9aad404ff370b2df3e2710c93adf36443ad77ccde49bdb63c5f408c6f80a295  r1-synth-zoom-longest-1920x1080.png
+    mode=synth state=zoom-longest viewport=1920x1080
+    操作: longest 状态下查询栏裁剪图（控件几何）。
+    稳定身份: 同上
+
+22b6d3d89b2600cc62cd88c8d7e7ca161cd1a4cfcaa3f34a5e5849547d070ca9  r1-synth-zoom-longest-2560x1440.png
+    mode=synth state=zoom-longest viewport=2560x1440
+    操作: longest 状态下查询栏裁剪图（控件几何）。
+    稳定身份: 同上
+
+be51c1c8a02d38e5adf74949c7901930bc92f26553bc456ce717c25d4298d1cb  r1-synth-zoom-reset-1280x800.png
+    mode=synth state=zoom-reset viewport=1280x800
+    操作: reset 状态下查询栏裁剪图。
+    稳定身份: 无已选项
+
+f37af9968218edb81fb4d17aaf9baa6e163f900b002f1d5bcc382fc62d09e63a  r1-synth-zoom-reset-1700x920.png
+    mode=synth state=zoom-reset viewport=1700x920
+    操作: reset 状态下查询栏裁剪图。
+    稳定身份: 无已选项
+
+618057d844d3c8d33f1a5a095a2a4d1b0b6e8349ab7911de0254815aed2e724b  r1-synth-zoom-reset-1920x1080.png
+    mode=synth state=zoom-reset viewport=1920x1080
+    操作: reset 状态下查询栏裁剪图。
+    稳定身份: 无已选项
+
+dd1be62251277768cb667f14ff17d69619305458453aee21c994ce527b45ee52  r1-synth-zoom-reset-2560x1440.png
+    mode=synth state=zoom-reset viewport=2560x1440
+    操作: reset 状态下查询栏裁剪图。
+    稳定身份: 无已选项
+
+================================================================================
+预期相同 (expected-identical) 哈希分组及原因:
+
+1) r1-{synth,real}-other-route-<vp>.png 两两相同（同一 viewport 下）:
+   原因: /config/data-source 为空壳路由，本 Feature 的查询栏 stub 不注入该路由，
+         synth 与 real 模式渲染完全一致 => 逐字节相同是正确结果。
+2) r1-<mode>-tooltip-tag-{1,2}-{1700x920,1920x1080,2560x1440}.png 同 mode 内三 viewport 相同:
+   原因: tooltip 为 position:fixed，裁剪区域=下拉框与 tooltip 的并集；在 >=1700 宽度下
+         控件几何不随视口变化，故裁剪像素一致。1280 因换行而不同（符合预期）。
+3) r1-<mode>-clear-<vp>.png 与 r1-<mode>-reset-<vp>.png 在部分 viewport 相同:
+   原因: clear 与 reset 的查询栏几何被证明逐字节相同（states.clear_to_all 与 states.reset
+         的所有 rect 相等）；整页像素是否相等取决于查询栏下方数据表重载瞬间的帧，
+         属表体区域时序差异，不在 R1 范围内。此为偶发相同，非声明不变量。
+================================================================================
+
+关键“必须不同”校验（全部通过）:
+  - initial vs longest: 4 viewport x 2 mode 全部不同
+  - collision-cand-A vs collision-cand-B (synth): 4 viewport 全部不同
+
+详见 r1-synth.json / r1-real.json 中各 viewport 的 collisionProbe/boundaryProbe/
+selectedProbe/sourceProbe/requests 字段。

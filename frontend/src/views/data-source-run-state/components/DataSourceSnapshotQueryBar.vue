@@ -11,11 +11,17 @@
         placeholder="全部"
         @change="(val: string[]) => onChange('clients', val)"
       >
+        <!-- 可见已选项（折叠 tags 仅渲染首个可关闭标签）的稳定身份来源：直接取 Element Plus label slot
+             提供的原始 option value，不再用截断后的显示文字反查探针（R1 §6.2）。 -->
+        <template #label="{ value, label }">
+          <span :data-dss-client-id="value">{{ label }}</span>
+        </template>
         <el-option
           v-for="opt in clientOptions"
           :key="opt.value"
           :label="opt.label"
           :value="opt.value"
+          :data-dss-client-id="opt.value"
           :class="{ 'dss-ghost': opt.ghost }"
         />
       </el-select>
@@ -91,7 +97,7 @@
 import { computed, nextTick, onBeforeUnmount, onMounted, reactive, ref, watch } from 'vue'
 import type { ClientCandidate, QueryDraft, SourceCandidate, StatusToken } from '@/types/dataSourceSnapshot'
 import { ALL_OPTION, concreteIds, normalizeDimension } from '@/views/data-source-run-state/utils/selection'
-import { FIELD_TRUNCATE_CODE_POINTS, codePointLength, truncateCodePoints } from '@/views/data-source-run-state/utils/format'
+import { FIELD_TRUNCATE_CODE_POINTS, codePointLength, displayField, normalizeFieldText } from '@/views/data-source-run-state/utils/format'
 import { computeTooltipPlacement } from '@/views/data-source-run-state/tooltip/tooltipPosition'
 import type { TooltipAnchor } from '@/views/data-source-run-state/tooltip/tooltipPosition'
 
@@ -133,20 +139,20 @@ const STATUS_LABELS: Record<StatusToken, string> = {
   UNKNOWN: '未知状态',
 }
 
-/** 探针端展示：truncate(CLIENT_ID,20)（truncate(CLIENT_DESC,20)）；描述 null/空/纯空白时不产生空括号（DSS-REQ-085，AC-098）。 */
+/** 探针端展示：displayField(CLIENT_ID)（displayField(CLIENT_DESC)）；描述 trim 后为空时不产生空括号（DSS-REQ-085，AC-098）。 */
 function clientLabel(c: ClientCandidate): string {
-  const desc = c.desc == null ? '' : c.desc.trim()
-  const idPart = truncateCodePoints(c.id, FIELD_TRUNCATE_CODE_POINTS)
-  if (desc.length === 0) return idPart
-  return `${idPart}（${truncateCodePoints(desc, FIELD_TRUNCATE_CODE_POINTS)}）`
+  const idPart = displayField(c.id)
+  const descPart = displayField(c.desc)
+  if (descPart.length === 0) return idPart
+  return `${idPart}（${descPart}）`
 }
 
-/** 源库展示：truncate(DATA_SOURCE_ORG,20)（truncate(DATA_SOURCE_ID,20)）；ORG 空/纯空白时回退截断后的原始 ID、不产生空括号（DSS-REQ-085，AC-098）。 */
+/** 源库展示：displayField(DATA_SOURCE_ORG)（displayField(DATA_SOURCE_ID)）；ORG trim 后为空时回退处理后的 ID、不产生空括号（DSS-REQ-085，AC-098）。 */
 function sourceLabel(s: SourceCandidate): string {
-  const org = s.org == null ? '' : s.org.trim()
-  const idPart = truncateCodePoints(s.id, FIELD_TRUNCATE_CODE_POINTS)
-  if (org.length === 0) return idPart
-  return `${truncateCodePoints(org, FIELD_TRUNCATE_CODE_POINTS)}（${idPart}）`
+  const idPart = displayField(s.id)
+  const orgPart = displayField(s.org)
+  if (orgPart.length === 0) return idPart
+  return `${orgPart}（${idPart}）`
 }
 
 function statusLabel(token: string): string {
@@ -172,13 +178,13 @@ function withGhost(
 const clientOptions = computed<Opt[]>(() => {
   const known = props.clients.map((c) => c.id)
   const knownOptions = props.clients.map((c) => ({ value: c.id, label: clientLabel(c) }))
-  return [{ value: ALL_OPTION, label: '全部' }, ...withGhost(draft.clients, known, knownOptions, (id) => `${truncateCodePoints(id, FIELD_TRUNCATE_CODE_POINTS)}（不在候选内）`)]
+  return [{ value: ALL_OPTION, label: '全部' }, ...withGhost(draft.clients, known, knownOptions, (id) => `${displayField(id)}（不在候选内）`)]
 })
 
 const sourceOptions = computed<Opt[]>(() => {
   const known = props.sources.map((s) => s.id)
   const knownOptions = props.sources.map((s) => ({ value: s.id, label: sourceLabel(s) }))
-  return [{ value: ALL_OPTION, label: '全部' }, ...withGhost(draft.sources, known, knownOptions, (id) => `${truncateCodePoints(id, FIELD_TRUNCATE_CODE_POINTS)}（不在候选内）`)]
+  return [{ value: ALL_OPTION, label: '全部' }, ...withGhost(draft.sources, known, knownOptions, (id) => `${displayField(id)}（不在候选内）`)]
 })
 
 const statusOptions = computed<Opt[]>(() => {
@@ -190,26 +196,29 @@ const statusOptions = computed<Opt[]>(() => {
 // ---------------------------------------------------------------- 查询控件内 CLIENT_DESC 完整 Tooltip
 // DSS-REQ-086 / AC-100~102：仅当原始 CLIENT_DESC code point 长度 > 20 时，为①探针端下拉候选项与
 // ②探针端控件中可见的选中项提供“完整未截断原始描述”单实例 Tooltip。源库字段/状态/超长 CLIENT_ID/
-// 折叠 `+N` 一律不提供。仅在截断确实丢失信息时才出现，故判定与内容都取 trim 后的描述（与展示、与
-// 表格既有 clientDescText 口径一致；§26.3 把 trim 视为展示管线的一部分，截断作用于 trim 后的值）。
+// 折叠 `+N` 一律不提供。仅在截断确实丢失信息时才出现，故判定与内容都取 trim 后的描述（与展示、
+// 与表格既有 clientDescText 口径一致；§26.3 把 trim 视为展示管线的一部分，截断作用于 trim 后的值）。
+// 锚点定位只走 Feature 私有 `data-dss-client-id`（原始完整 CLIENT_ID），不以可见文字反查（R1 §6.2）。
 
-/** 判定 + 内容：返回需要显示的完整原始 CLIENT_DESC；不需要 Tooltip 时返回 null。 */
+/** 判定 + 内容：返回需要显示的完整 trim 后 CLIENT_DESC；不需要 Tooltip 时返回 null。 */
 function clientDescTooltip(c: ClientCandidate): string | null {
-  const raw = c.desc
-  if (raw == null) return null
-  const desc = raw.trim()
+  const desc = normalizeFieldText(c.desc)
   if (desc.length === 0) return null
   return codePointLength(desc) > FIELD_TRUNCATE_CODE_POINTS ? desc : null
 }
 
 /**
- * 把一段展示文案反查回唯一探针候选：候选与可见选中项使用同一套 clientLabel，
- * 因此“该文案是否可明确对应单个既有候选”等价于标签等值且命中唯一。
- * 命中 0 个（“全部”、幽灵项、折叠 `+N` 聚合文案）或多个时一律不作为 Tooltip 锚点。
+ * 探针稳定身份通道（R1 §6.2）：Feature 私有 `data-dss-client-id` 承载原始完整 CLIENT_ID。
+ * 候选行由 `el-option` 的属性透传落到其渲染的 `li`；可见已选项由 Element Plus `label` slot
+ * 提供的原始 option value 落到标签内层节点。两者都不依赖截断后的显示文字，因此 trim + 20 码点
+ * 截断后可见标签相同的不同探针仍能被各自准确区分。
  */
-function matchClientByLabel(label: string): ClientCandidate | null {
-  const hits = props.clients.filter((c) => clientLabel(c) === label)
-  return hits.length === 1 ? hits[0]! : null
+const CLIENT_ID_ATTR = 'data-dss-client-id'
+
+/** 由原始完整 CLIENT_ID 精确定位候选；`__ALL__`、幽灵项或不存在的值时返回 null（不作为锚点）。 */
+function clientById(id: string | null): ClientCandidate | null {
+  if (id === null) return null
+  return props.clients.find((c) => c.id === id) ?? null
 }
 
 const tt = reactive<{ visible: boolean; content: string; anchor: TooltipAnchor | null; seq: number }>({
@@ -257,22 +266,23 @@ watch(
 let hoveredEl: HTMLElement | null = null
 
 /**
- * 锚点解析（只依赖 Element Plus 公开的面板/标签类名，不改动其内部 DOM 与盒模型）：
- * ① 探针端下拉候选项 → 该行的 `.el-select-dropdown__item`；
- * ② 探针端控件中可见的选中项 → 可关闭标签 `.el-tag`（折叠 `+N` 标签无 is-closable，被排除）。
+ * 锚点解析（只依赖 Element Plus 公开的面板/标签类名 + 本 Feature 私有 `data-*`，不改动其内部 DOM 与盒模型）：
+ * ① 探针端下拉候选项 → 该行的 `.el-select-dropdown__item`，身份取行上的 `data-dss-client-id`；
+ * ② 探针端控件中可见的选中项 → 可关闭标签 `.el-tag`（折叠 `+N` 标签无 is-closable 且无身份节点，双重排除）。
+ * 一律按原始完整 CLIENT_ID 定位，绝不以截断/组合后的可见文字反查。
  */
 function resolveTooltipAnchor(target: HTMLElement): { el: HTMLElement; content: string } | null {
   const row = target.closest('.dss-client-popper .el-select-dropdown__item')
   if (row) {
-    const c = matchClientByLabel((row.textContent ?? '').trim())
+    const c = clientById(row.getAttribute(CLIENT_ID_ATTR))
     const content = c ? clientDescTooltip(c) : null
     return content === null ? null : { el: row as HTMLElement, content }
   }
   const tag = target.closest('.dss-client-select .el-tag')
   if (tag) {
     if (!tag.classList.contains('is-closable')) return null
-    const text = tag.querySelector('.el-select__tags-text')?.textContent ?? ''
-    const c = matchClientByLabel(text.trim())
+    const holder = tag.querySelector(`[${CLIENT_ID_ATTR}]`)
+    const c = clientById(holder?.getAttribute(CLIENT_ID_ATTR) ?? null)
     const content = c ? clientDescTooltip(c) : null
     return content === null ? null : { el: tag as HTMLElement, content }
   }

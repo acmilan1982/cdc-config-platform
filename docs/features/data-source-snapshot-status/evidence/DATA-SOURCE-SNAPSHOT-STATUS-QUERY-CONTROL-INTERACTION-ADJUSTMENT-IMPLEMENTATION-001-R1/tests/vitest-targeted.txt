@@ -1,0 +1,14 @@
+$ npx vitest run src/views/data-source-run-state/utils/format.spec.ts src/views/data-source-run-state/components/DataSourceSnapshotQueryBar.spec.ts
+PWD=/agent/dss-query-ctl-impl-001-r1/frontend
+
+ RUN  v1.6.1 /agent/dss-query-ctl-impl-001-r1/frontend
+
+ ✓ src/views/data-source-run-state/components/DataSourceSnapshotQueryBar.spec.ts  (81 tests) 13580ms
+ ✓ src/views/data-source-run-state/utils/format.spec.ts  (21 tests) 7ms
+
+ Test Files  2 passed (2)
+      Tests  102 passed (102)
+   Start at  15:26:28
+   Duration  16.41s (transform 430ms, setup 23ms, collect 1.40s, tests 13.59s, environment 877ms, prepare 165ms)
+
+EXIT_CODE=0

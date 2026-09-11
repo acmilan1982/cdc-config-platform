@@ -3,8 +3,10 @@ import {
   FIELD_TRUNCATE_CODE_POINTS,
   TIME_DASH,
   codePointLength,
+  displayField,
   formatEpochToHms,
   formatTimeOrDash,
+  normalizeFieldText,
   truncateCodePoints,
 } from './format'
 
@@ -82,5 +84,78 @@ describe('format 统一字段级截断（DSS-REQ-085，AC-098）', () => {
   it('空串与单字符原样返回', () => {
     expect(truncateCodePoints('')).toBe('')
     expect(truncateCodePoints('a')).toBe('a')
+  })
+})
+
+describe('format 四字段统一展示管线 normalizeFieldText + displayField（DSS-REQ-085，AC-098/099/103）', () => {
+  const cp = (s: string, n: number) => s.repeat(n)
+
+  it('normalizeFieldText：null/undefined 安全归一为空串，不做其他改写', () => {
+    expect(normalizeFieldText(null)).toBe('')
+    expect(normalizeFieldText(undefined)).toBe('')
+    expect(normalizeFieldText('')).toBe('')
+    expect(normalizeFieldText('CL1')).toBe('CL1')
+  })
+
+  it('normalizeFieldText：执行 trim，首尾空白（含全空白）被去除', () => {
+    expect(normalizeFieldText('  CL1  ')).toBe('CL1')
+    expect(normalizeFieldText('\tCL1\n')).toBe('CL1')
+    expect(normalizeFieldText('   ')).toBe('')
+    expect(normalizeFieldText('\t\n ')).toBe('')
+  })
+
+  it('displayField：先 trim 再按 20 code point 判定；trim 前超 20、trim 后不足 20 时完整显示', () => {
+    const raw = `  ${cp('a', 15)}  ` // trim 前 19 个字符，trim 后 15 个 code point
+    expect(raw.length).toBeGreaterThan(15)
+    expect(displayField(raw)).toBe(cp('a', 15))
+    expect(displayField(raw)).not.toContain('...')
+  })
+
+  it('displayField：trim 前超 20、trim 后恰好 20 时完整显示、不追加省略号', () => {
+    const raw = `   ${cp('a', 20)}   `
+    expect(normalizeFieldText(raw)).toBe(cp('a', 20))
+    expect(displayField(raw)).toBe(cp('a', 20))
+    expect(displayField(raw)).not.toContain('...')
+  })
+
+  it('displayField：trim 后 19/20 完整显示，21/22 截断为前 20 code point + ASCII ...', () => {
+    for (const n of [0, 1, 19, 20]) {
+      expect(displayField(cp('a', n))).toBe(cp('a', n))
+      expect(displayField(cp('a', n))).not.toContain('...')
+    }
+    for (const n of [21, 22, 100]) {
+      expect(displayField(cp('a', n))).toBe(cp('a', 20) + '...')
+    }
+    expect(displayField(cp('a', 21))).not.toContain('…')
+  })
+
+  it('displayField：null/undefined/空串/全空白一律得到空串（调用方据此省略空括号）', () => {
+    for (const v of [null, undefined, '', '   ', '\t\n']) {
+      expect(displayField(v)).toBe('')
+    }
+  })
+
+  it('displayField：中文字符按 1 个 code point 计，20 个完整、21 个截断', () => {
+    expect(displayField(cp('中', 20))).toBe(cp('中', 20))
+    expect(displayField(cp('中', 21))).toBe(cp('中', 20) + '...')
+  })
+
+  it('displayField：代理对安全，25 个 emoji → 20 个完整 emoji + ...，无落单代理码元', () => {
+    const out = displayField(cp('😀', 25))
+    expect(out).toBe(cp('😀', 20) + '...')
+    expect(Array.from(out.slice(0, -3))).toEqual(Array.from({ length: 20 }, () => '😀'))
+  })
+
+  it('displayField：trim 后超长值结果为前 20 个 code point ＋ ASCII 三点（不是单字符 …）', () => {
+    const out = displayField(`  ${cp('X', 30)}  `)
+    expect(out).toBe(cp('X', 20) + '...')
+    expect(out).not.toContain('…')
+    expect(out).not.toContain(' ')
+  })
+
+  it('displayField：max 参数可覆盖默认 20（同一规则、只换阈值）', () => {
+    expect(displayField(cp('a', 5), 5)).toBe(cp('a', 5))
+    expect(displayField(cp('a', 6), 5)).toBe(cp('a', 5) + '...')
+    expect(FIELD_TRUNCATE_CODE_POINTS).toBe(20)
   })
 })

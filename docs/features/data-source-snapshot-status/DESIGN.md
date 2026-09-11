@@ -69,7 +69,7 @@
 | 本轮（查询控件交互调整基线）设计状态 | `APPROVED`（`query_control_interaction_adjustment_status=APPROVED`：本文件 §26 与 `REQUIREMENTS.md` §21.6/`ACCEPTANCE.md` §4.21 已经 ChatGPT 从 Git 独立复审 `APPROVED`、项目负责人于 2026-09-10 明确回复“批准”，由 `DATA-SOURCE-SNAPSHOT-STATUS-QUERY-CONTROL-INTERACTION-ADJUSTMENT-BASELINE-APPROVAL-001` 批准收口为 `APPROVED`（批准内容基准提交 `cf9f9eb0240f275cd50eb37546e6d6256892a9f4`）；批准不代表已实现，**不得**写成 `IMPLEMENTED`/`PASS`/`ACCEPTED`/`COMPLETED`） |
 | 本轮（查询控件交互调整基线）实现状态 | `IMPLEMENTED_ADJUSTMENT_PENDING_REVIEW`（`query_control_interaction_adjustment_implementation_status=IMPLEMENTED_ADJUSTMENT_PENDING_REVIEW`：本轮调整已由独立正式实现任务 `DATA-SOURCE-SNAPSHOT-STATUS-QUERY-CONTROL-INTERACTION-ADJUSTMENT-IMPLEMENTATION-001` 于 2026-09-11 落地、待 ChatGPT 独立复审） |
 | 本轮（查询控件交互调整基线）追踪计数 | 需求 → 设计落点 **86/86**（§14.2）、验收 → 设计落点 **103/103**（§14.3）；新增 `DSS-AC-096~103` 全部 `NOT_RUN` |
-| 下一入口（本轮调整基线） | `DATA-SOURCE-SNAPSHOT-STATUS-QUERY-CONTROL-INTERACTION-ADJUSTMENT-IMPLEMENTATION-001`（本轮查询控件交互调整已批准收口为 `APPROVED`，下一入口为独立正式实现任务：在 `5173` 正式前端按批准内容基准提交 `cf9f9eb0240f275cd50eb37546e6d6256892a9f4` 实现本轮调整；正式验收与人工视觉验收仍 `NOT_RUN`，须由后续独立正式验收任务执行） |
+| 下一入口（本轮调整实现 R1 复审） | `CHATGPT_R1_IMPLEMENTATION_REVIEW_FROM_GIT_THEN_PROJECT_OWNER_VISUAL_INTERACTION_REVIEW`（本轮查询控件交互调整已由独立正式实现任务 `DATA-SOURCE-SNAPSHOT-STATUS-QUERY-CONTROL-INTERACTION-ADJUSTMENT-IMPLEMENTATION-001` 在 `5173` 正式前端按批准内容基准提交 `cf9f9eb0240f275cd50eb37546e6d6256892a9f4` 落地（结果提交 `a47988820c797ff60bd7244b2d0f899bd8fc3be5`），ChatGPT 对该提交独立代码复审结论为 `CHANGES_REQUIRED`；R1 修正任务 `…-IMPLEMENTATION-001-R1` 已按复审意见完成 Tooltip 稳定身份、四字段 trim＋Unicode 截断、Git 可复核证据补交与文档冲突消解，`query_control_interaction_adjustment_code_review_status=PENDING_CHATGPT_REVIEW`，下一入口为 ChatGPT 从 Git 复审 R1 结果、随后项目负责人进行视觉/交互复审；正式验收与人工视觉验收仍 `NOT_RUN`，须由后续独立正式验收任务执行） |
 | 数据库事实依据 | `docs/database/reports/DATA-SOURCE-SNAPSHOT-STATUS-DATABASE-VERIFICATION-001.md`（已提交数据库只读复核报告；本设计任务未连接数据库，见 DATABASE §2） |
 
 任务边界声明：
@@ -1034,11 +1034,11 @@ ChatGPT 对上一结果提交（`31aa9f5beec7ded3cd798b3af617fd79a1606ed0`）进
 
 ### 26.3 字段级截断设计落点建议（`DSS-REQ-085`）
 
-- 统一函数 `truncate(value, 20)`：按 **Unicode 码点**（非 UTF-16 码元）计数；`≤20` 返回原始值；`>20` 返回前 `20` 个码点 + `...`（英文省略号，非单个 `…` 字符）；不得在代理对（surrogate pair）中间截断，`CJK`/emoji 各计 1 个码点。
-- 探针端展示：`truncate(CLIENT_ID, 20)（truncate(CLIENT_DESC, 20)）`；源库端展示：`truncate(DATA_SOURCE_ORG, 20)（truncate(DATA_SOURCE_ID, 20)）`。
-- 空值规则：`CLIENT_DESC` 为 `null`/空串/纯空白时不产生空括号，探针端退化为 `truncate(CLIENT_ID, 20)`；源库端 `ORG` 为空/空白/配置缺失时按既有 `DSS-REQ-074` 回退口径先用原始 `DATA_SOURCE_ID`，再对回退结果套 `truncate(...,20)`，同样不产生空括号。
-- 边界：恰好 `20` 码点 → 显示完整、不追加 `...`；`≥21` 码点 → 前 `20` 码点 + `...`。
-- 一致性：候选下拉项与可见选中项使用同一 `truncate` 结果，同一原始值在两处显示完全相同。
+- 统一函数 `displayField(value, 20)`：先做 `null`/`undefined` 安全归一为 `''` 并执行 `trim()`（`normalizeFieldText`），再对 trim 后的结果按 **Unicode 码点**（非 UTF-16 码元）计数；`≤20` 返回该值；`>20` 返回前 `20` 个码点 + `...`（英文省略号，非单个 `…` 字符）；不得在代理对（surrogate pair）中间截断，`CJK`/emoji 各计 1 个码点。四字段必须共用同一函数，不得各自实现。
+- 探针端展示：`displayField(CLIENT_ID, 20)（displayField(CLIENT_DESC, 20)）`；源库端展示：`displayField(DATA_SOURCE_ORG, 20)（displayField(DATA_SOURCE_ID, 20)）`；组合标签对每个组成字段分别 trim＋截断，不是把拼接后的整串整体截成 20 码点。
+- 空值规则：`CLIENT_DESC` 为 `null`/空串/纯空白（trim 后为空）时不产生空括号，探针端退化为 `displayField(CLIENT_ID, 20)`；源库端 `ORG` 为空/空白/配置缺失时按既有 `DSS-REQ-074` 回退口径先用原始 `DATA_SOURCE_ID`，再对回退结果套 `displayField(...,20)`，同样不产生空括号。
+- 边界：trim 后恰好 `20` 码点 → 显示完整、不追加 `...`；trim 后 `≥21` 码点 → 前 `20` 码点 + `...`（trim 前超 20、trim 后不足 20 时不追加省略号）。
+- 一致性：候选下拉项与可见选中项使用同一 `displayField` 结果，同一原始值在两处显示完全相同；`trim` 与截断只影响显示，不回写 `value`、已选状态与查询参数。
 - **仅显示态**：选项 `value`、查询参数、已应用查询条件、请求语义一律保留完整原始 ID，截断不得回流到数据层。
 - `CSS text-overflow` 作为最后兜底保留，不作为主手段。
 
@@ -1050,8 +1050,9 @@ ChatGPT 对上一结果提交（`31aa9f5beec7ded3cd798b3af617fd79a1606ed0`）进
 
 ### 26.5 `CLIENT_DESC` Tooltip 单实例与安全宽度设计落点建议（`DSS-REQ-086`）
 
-- 触发条件：仅当原始 `CLIENT_DESC` 码点长度 `> 20` 时；作用于候选悬停与可见选中项悬停两处；原始值 `null`/空/纯空白或 `≤20` 码点时不出现 Tooltip。
-- 内容：仅显示**完整未截断的原始 `CLIENT_DESC`**；不显示 `CLIENT_ID`、不显示拼接串、不为源库端字段（`DATA_SOURCE_ORG`/`DATA_SOURCE_ID`）提供该 Tooltip。表格 Tooltip 与既有已批准源库表格 Tooltip 规则（完整原始 `DATA_SOURCE_ID` only）**不变**。
+- 触发条件：仅当 `trim()` 后 `CLIENT_DESC` 码点长度 `> 20` 时；作用于候选悬停与可见选中项悬停两处；trim 后为 `null`/空/纯空白或 `≤20` 码点时不出现 Tooltip。
+- 内容：仅显示**trim 后完整未截断的 `CLIENT_DESC`**（不再次截断、不保留首尾无意义空白）；不显示 `CLIENT_ID`、不显示拼接串、不为源库端字段（`DATA_SOURCE_ORG`/`DATA_SOURCE_ID`）提供该 Tooltip。表格 Tooltip 与既有已批准源库表格 Tooltip 规则（完整原始 `DATA_SOURCE_ID` only）**不变**。
+- **锚点稳定身份**：Tooltip 目标必须按原始完整 `CLIENT_ID` 定位（Element Plus slot 提供的原始 option/value、与原始 option 一一对应的稳定索引，或 Feature 私有 `data-*`），**不得**以截断/组合后的可见文字反查探针——不同探针在 trim＋20 码点截断后可能得到完全相同的可见标签；不得引入全局 Element Plus DOM 猜测或跨 Feature 全局覆盖。
 - 安全宽度：`max-width` 取 `480px` 或 `min(480px, calc(100vw - 16px))`，自然换行；同一时刻至多一个可见实例、不堆叠、离开即隐藏；`+N` 的 `collapse-tags` 继续沿用 `Element Plus` 既有语义。
 - 几何无副作用：Tooltip 显示/隐藏不得改变下拉宽度、查询区高度或其他控件位置。
 
@@ -1062,4 +1063,4 @@ ChatGPT 对上一结果提交（`31aa9f5beec7ded3cd798b3af617fd79a1606ed0`）进
 - 验收状态：`DSS-AC-001~103` 共 103 条**全部 `NOT_RUN`**、`acceptance_not_run_count=103`；本轮调整已批准为 `APPROVED`，但禁止把已批准调整写成 `IMPLEMENTED`/`ACCEPTED`/`COMPLETED`，也不得把任何验收写成 `PASS`。
 - 代码零差异：本轮不产生 `frontend/`/`backend/`/SQL/配置差异；`API.md`/`DATABASE.md` 与既有历史报告整文件逐字节不变；不提交 runtime logs/截图/构建产物/依赖目录/临时文件。
 - 分层状态：`query_control_interaction_adjustment_status=APPROVED`、`..._implementation_status=IMPLEMENTED_ADJUSTMENT_PENDING_REVIEW`、`project_owner_visual_review_status=CHANGES_REQUIRED`、`formal_acceptance_status=NOT_RUN`、`human_visual_acceptance_status=NOT_RUN`、`pending_user_review=NO`、`pending_user_confirmation_count=0`。
-- 下一入口：`DATA-SOURCE-SNAPSHOT-STATUS-QUERY-CONTROL-INTERACTION-ADJUSTMENT-IMPLEMENTATION-001`（本轮查询控件交互调整已批准收口，下一入口为独立正式实现任务：在 `5173` 正式前端按批准内容基准提交 `cf9f9eb0240f275cd50eb37546e6d6256892a9f4` 实现；正式验收与人工视觉验收仍 `NOT_RUN`）。
+- 下一入口：`CHATGPT_R1_IMPLEMENTATION_REVIEW_FROM_GIT_THEN_PROJECT_OWNER_VISUAL_INTERACTION_REVIEW`（本轮查询控件交互调整已由实现任务 `DATA-SOURCE-SNAPSHOT-STATUS-QUERY-CONTROL-INTERACTION-ADJUSTMENT-IMPLEMENTATION-001` 在 `5173` 正式前端按批准内容基准提交 `cf9f9eb0240f275cd50eb37546e6d6256892a9f4` 落地（结果提交 `a47988820c797ff60bd7244b2d0f899bd8fc3be5`），ChatGPT 该提交代码复审结论 `CHANGES_REQUIRED`；R1 修正任务 `…-IMPLEMENTATION-001-R1` 已完成 Tooltip 稳定身份、四字段 trim＋Unicode 截断、Git 可复核证据补交与本文档 `1280` 冲突消解（§26.2/§26.3/§26.5），`query_control_interaction_adjustment_code_review_status=PENDING_CHATGPT_REVIEW`；下一入口为 ChatGPT 从 Git 复审 R1、随后项目负责人视觉/交互复审；正式验收与人工视觉验收仍 `NOT_RUN`）。
