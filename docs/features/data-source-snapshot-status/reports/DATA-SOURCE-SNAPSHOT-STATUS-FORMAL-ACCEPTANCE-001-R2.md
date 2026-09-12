@@ -210,3 +210,70 @@ CHATGPT_FORMAL_ACCEPTANCE_R2_REVIEW_FROM_GIT_THEN_PROJECT_OWNER_ACCEPTANCE_DECIS
 ```
 
 - 本任务到达 Commit + Push 后即停止，不作最终接受收口，不作项目负责人接受决定，不修改 `human_visual_acceptance_status=NOT_RUN`，不重跑正式验收，不启停 `5173`/`8080` 服务。
+
+
+## 14. R3 ChatGPT R2 复审纠正（append-only 追加，2026-09-13）
+
+> 本节为 `DATA-SOURCE-SNAPSHOT-STATUS-FORMAL-ACCEPTANCE-001-R3` 于报告文末 **append-only** 追加的纠正说明。
+> 本节不修改上文 §1～§13 任何一个字节；上文全部内容保持历史记录。本节**取代**上文对“8 份入口文档当前状态是否已完全一致”的当前解释，
+> 尤其取代 §4.3 的 `CURRENT_CONFLICT = 0` 当前判定。
+
+### 14.1 ChatGPT 从远程 Git 复审对象
+
+- ChatGPT 从远程 Git 独立复审的对象提交：`5ca9931da9babac5ccdfba5799d43ad32ba935e7`（即本报告 §12 所述 R2 推送结果提交）。
+- 复审维度：R1 正式补验执行与证据；R2 文档当前状态一致性修正；R2 整体 Git 提交。
+
+### 14.2 复审结论
+
+| 复审项 | ChatGPT 结论 |
+|---|---|
+| R1 正式补验执行与证据 | `APPROVED` |
+| R2 大部分文档当前状态一致性修正 | 通过 |
+| R2 整体 Git 提交 | `CHANGES_REQUIRED` |
+
+- R2 已**正确完成绝大多数**状态修正：8 份入口文档的当前验收事实、旧计数历史限定、旧入口历史标注、`PASS 107 / FAIL 0 / BLOCKED 0 / NOT_RUN 0` 统一等均正确。
+- R2 整体结论仍为 `CHANGES_REQUIRED`，**唯一原因**为 `DESIGN.md`/`UI.md` 共 7 处现行字段仍采用“旧直接值在前、当前值在后”的写法，与 R2 明确要求的“当前值必须前置”不符。
+- 未发现需求、验收业务行、追踪映射、业务规则、代码、测试、证据、API 或数据库契约问题。
+
+### 14.3 R2 报告原 `CURRENT_CONFLICT = 0` 判定不准确
+
+- 上文 §4.3 判定 `CURRENT_CONFLICT = 0` 的口径只统计了“旧 `NOT_RUN`／旧计数／旧入口”三类残留，
+  **未把“现行表格字段的第一个状态/入口 token 是否为当前值”作为独立判据**，因而漏判了 7 处“当前值未前置”的直接值位置。
+- 依据 R3 提示词 §10.3 的更严口径（“当前值是直接值/首个状态 token”，不得以“该行包含当前值”代替），R2 提交 `5ca9931…` 的真实判定应为：
+
+  ```text
+  CURRENT_DIRECT_VALUE_CONFLICT = 7
+  ```
+
+- 只有在 R3 完成 7 处直接值纠正后，方可重新判定为 `current_direct_value_conflict_count=0`。
+
+### 14.4 7 处“当前值未前置”的直接值位置（准确清单）
+
+`DESIGN.md` 3 处：
+
+1. “`5173` 正式验收状态（隔离视觉原型 R2～R7 视觉方案）”——直接值原以 `` `NOT_RUN`（该行时点历史值……） `` 开头，当前应为 `EXECUTED_PENDING_CHATGPT_REVIEW` 前置。
+2. “下一入口（本轮调整实现复审收口）”——直接值原以已完成的 `DATA-SOURCE-SNAPSHOT-STATUS-FORMAL-ACCEPTANCE-001` 开头，当前应为 R3 统一下一入口前置。
+3. “本轮（查询下拉固定宽度基线）下一入口”——同 2。
+
+`UI.md` 4 处：
+
+4. “本轮（查询控件交互调整草案）需求/验收计数”——原先把本轮新增条数与“2026-09-12 前历史值当时全部 `NOT_RUN`”写在前，当前应为 `PASS 107 / FAIL 0 / BLOCKED 0 / NOT_RUN 0` 前置。
+5. “本轮（查询控件交互调整基线）下一入口”——当前应为 R3 统一下一入口前置。
+6. “本轮（查询下拉固定宽度基线）需求/验收计数”——同 4。
+7. “本轮（查询下拉固定宽度基线）下一入口”——同 5。
+
+### 14.5 不被否定的事实
+
+本次 R2 复审的 `CHANGES_REQUIRED` **不否定** R2 报告已记录的以下事实，这些事实继续成立：
+
+- R1 正式补验执行与证据 `APPROVED`；`DSS-AC-065` 补验 `PASS`；
+- 正式验收结果 `PASS 107 / FAIL 0 / BLOCKED 0 / NOT_RUN 0`；
+- 数据库阶段 A 临时行插入后按完整复合主键精确 `DELETE` 并 `COMMIT`，三表逐字节恢复、前缀残留 `0`；
+- 代码、测试、证据、API 契约、DATABASE 契约零变化；
+- 87 条 `DSS-REQ-*`、107 条 `DSS-AC-*` 业务行逐字节不变。
+
+### 14.6 与上文的关系
+
+- 上文 §1～§13 保持历史记录，逐字节不变；
+- 本节取代上文 §4.3 对“当前是否存在直接值冲突”的当前解释：由 `CURRENT_CONFLICT = 0` 更正为 `CURRENT_DIRECT_VALUE_CONFLICT = 7`；
+- 该 7 处已由 `DATA-SOURCE-SNAPSHOT-STATUS-FORMAL-ACCEPTANCE-001-R3` 纠正，R3 报告载有修改前后对照与逐字段验证结果。
