@@ -284,3 +284,54 @@ DATA-SOURCE-SNAPSHOT-STATUS-FORMAL-ACCEPTANCE-001
 | `pending_user_review` | `NO` |
 | `pending_user_confirmation_count` | `0` |
 | 下一入口 | `DATA-SOURCE-SNAPSHOT-STATUS-FORMAL-ACCEPTANCE-001` |
+
+---
+
+## R1 追加纠正记录（2026-09-12）
+
+> 本记录由任务 `DATA-SOURCE-SNAPSHOT-STATUS-QUERY-CONTROL-INTERACTION-IMPLEMENTATION-REVIEW-CLOSEOUT-001-R1` **追加**于原报告末尾。
+> 原报告 §1～§15 及其自证清单内容**保持不变**，未删除、未改写、未伪造任何原始历史结论；本节仅在其后补充事实澄清与纠正说明。
+
+### R1-1 纠正事项
+
+ChatGPT 对原报告的独立复审结论为 `CHANGES_REQUIRED`，指出原报告在把「当前值」字段收口为收口后统一取值时**存在未收口的遗留当前字段**，其中包含原报告在范围判断上把 `DESIGN.md` §1 中与 popper 固定宽度相关的「当前状态/下一入口」等行判断为「授权范围外」从而未予同步的倾向。
+
+需要澄清的事实是：
+
+1. 原报告 §5「状态令牌表」实际枚举的收口令牌为：`query_control_interaction_adjustment_status`、`query_control_interaction_adjustment_implementation_status`、`query_control_interaction_adjustment_code_review_status`、`query_control_human_visual_interaction_review_status`、`project_owner_visual_review_status`、`formal_5173_code_review_status` 六项，以及保持不变的 `NOT_RUN`/`NO`/`0` 类令牌。
+2. 该枚举**未覆盖**以下同样属于「当前值」语义、且其残留值仍带 `PENDING_REVIEW` 或指向历史入口的字段：
+   - `DESIGN.md` §1 的 `implementation_status` 叙述；
+   - `DESIGN.md` §1 的 `formal_5173_implementation_status`；
+   - `DESIGN.md` §1 第 73 行 popper 任务编号行的 `popper_width_formal_5173_implementation_status`；
+   - 文档总体状态 `overall_document_status`；
+   - popper 固定宽度基线的「本轮下一入口」直接取值。
+3. 因此，原报告所隐含的「上述残留当前字段属于授权范围外、无需同步」判断**不成立**：这些字段的语义是当前状态/当前导航，属于本轮统一收口的应覆盖对象。该判断被纠正，而非认可。
+4. 上述遗留字段已由 R1 任务按任务提示词 §4/§5 的事实要求在 `DESIGN.md`、`UI.md`、`REQUIREMENTS.md`、`ACCEPTANCE.md`、`API.md`、`DATABASE.md`、Feature `README.md`、`docs/features/README.md` 中收口为：
+   - 当前实现状态 `IMPLEMENTED_ADJUSTMENT_PENDING_FORMAL_ACCEPTANCE`；
+   - 当前文档总体状态 `PROTOTYPE_DESIGN_APPROVED_AND_IMPLEMENTED_ON_5173_PENDING_FORMAL_ACCEPTANCE`；
+   - 当前统一下一入口 `DATA-SOURCE-SNAPSHOT-STATUS-FORMAL-ACCEPTANCE-001`。
+   历史值一律以日期/「此前/当时/历史/收口前」等限定词保留，未被全局替换。
+
+### R1-2 关于 `DESIGN.md` §1 第 73 行
+
+`DESIGN.md` §1 第 73 行（popper 固定宽度任务编号行）在 R0 提交 `1ddb84e9dec5a0aa2fc3b4aedc0d301855861f3a` 时，其「当前」字段末尾为：
+
+```text
+popper_width_formal_5173_implementation_status=IMPLEMENTED_ADJUSTMENT_PENDING_REVIEW
+```
+
+该值正是任务提示词 §5.1 第 4 项所指的待收口残留。R1 已将其当前值纠正为 `IMPLEMENTED_ADJUSTMENT_PENDING_FORMAL_ACCEPTANCE`，并保留该行的历史说明（原历史实现状态与当时代码复审结论 `CHANGES_REQUIRED`，设计落点见 `DESIGN.md` §27）。
+
+### R1-3 纠正后的口径
+
+- 查询控件交互调整：基线 `APPROVED`；实现 `IMPLEMENTED_ADJUSTMENT_PENDING_FORMAL_ACCEPTANCE`；代码复审 `APPROVED`；人工检查 `APPROVED_BY_PROJECT_OWNER`。
+- popper 固定宽度（R2）：文档 `APPROVED`；实现 `IMPLEMENTED_ADJUSTMENT_PENDING_FORMAL_ACCEPTANCE`；代码复审 `APPROVED`；人工检查 `APPROVED_BY_PROJECT_OWNER`。
+- R2～R7 正式 5173 视觉实现：已实现并经代码复审通过，其后调整亦经代码复审与人工检查，整体等待正式验收。
+- 正式验收 `NOT_RUN`；验收执行 `NOT_RUN`；人工正式验收 `NOT_RUN`；`DSS-AC-001~107` 仍全部 `NOT_RUN`。
+- 当前统一下一入口：`DATA-SOURCE-SNAPSHOT-STATUS-FORMAL-ACCEPTANCE-001`。
+
+### R1-4 边界声明
+
+- 本追加记录**未**修改原报告正文任何字节，仅在文末新增本节；
+- 本追加记录**未**执行正式验收、**未**改动任何 `DSS-AC-*` 结果、**未**改动前端/后端/测试/SQL/配置/图片/运行证据；
+- 本追加记录**未**访问数据库、ZooKeeper、Kafka，**未**启停任何服务。
