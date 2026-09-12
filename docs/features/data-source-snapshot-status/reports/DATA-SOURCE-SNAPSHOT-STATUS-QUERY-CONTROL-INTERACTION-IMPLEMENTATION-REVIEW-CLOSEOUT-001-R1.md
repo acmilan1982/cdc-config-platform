@@ -239,3 +239,32 @@ DATA-SOURCE-SNAPSHOT-STATUS-FORMAL-ACCEPTANCE-001
 ```
 
 须另立独立任务，按当前已批准需求/设计/接口/UI/数据库与 `DSS-AC-001~107` 执行正式验收；本任务不启动、不执行正式验收。
+
+---
+
+## R2 追加复审纠正记录（2026-09-12）
+
+> 本记录由任务 `DATA-SOURCE-SNAPSHOT-STATUS-QUERY-CONTROL-INTERACTION-IMPLEMENTATION-REVIEW-CLOSEOUT-001-R2` **追加**于本报告末尾。
+> 本报告 §1～§13 及其自证清单内容**保持不变**，未删除、未重写、未伪造任何原始历史结论；本节仅在其后补充事实澄清与纠正说明。
+
+### R2-1 复审结论与我方遗漏
+
+ChatGPT 已从远程 Git 独立复审本 R1 提交 `94ad34a3a149bc8a3719e5c58122df23738c7970`，结论仍为 `CHANGES_REQUIRED`，但**仅剩一处文档事实遗漏**；R1 的其余纠正（10 个白名单文件、8 份文档顶部当前状态与当前下一入口统一、查询控件交互与 popper 固定宽度的实现/复审/人工检查状态、当前下一入口为正式验收任务、业务行逐字节不变、`git diff --check` 干净）均被确认正确，不得回退。
+
+本 R1 报告在「所有残留当前值已纠正」这一结论上**并不完整**：遗漏了 `docs/features/data-source-snapshot-status/ACCEPTANCE.md` 中 `§4.22 查询下拉固定宽度基线新增验收（对应 REQUIREMENTS §21.8）` 标题下、`DSS-AC-104~107` 表格上方的前言段落。该段紧邻正式验收用例，仍把以下过期状态当作**当前事实**无历史限定地叙述：
+
+- `popper_width_formal_5173_implementation_status=IMPLEMENTED_ADJUSTMENT_PENDING_REVIEW`
+- `popper_width_formal_code_review_status=CHANGES_REQUIRED`
+- 人工视觉/交互复审未通过
+- `popper_width_r2_document_status=DRAFT_PENDING_CHATGPT_REVIEW_AND_PROJECT_OWNER_APPROVAL`（未批准）
+
+### R2-2 纠正动作
+
+R2 任务仅定向改写该前言，使其反映当前正确事实：`DSS-AC-104~107` 已纳入当前批准验收基线；popper 基线与 R2 支持边界（正式支持下限 `viewport width >= 1280px`、`<1280px` 仅防御性观察）均已批准（`popper_width_document_status=APPROVED`、`popper_width_r2_document_status=APPROVED`）；规则已在 `5173` 落地；ChatGPT 已按已批准 R2 支持边界复审实现，`popper_width_formal_code_review_status=APPROVED`；项目负责人 2026-09-12 人工页面检查 `APPROVED_BY_PROJECT_OWNER`；当前实现状态 `popper_width_formal_5173_implementation_status=IMPLEMENTED_ADJUSTMENT_PENDING_FORMAL_ACCEPTANCE`；`DSS-AC-001~107` 共 107 条仍全部 `NOT_RUN`，正式验收尚未执行。过期状态一律改写为**带时间限定的历史**。
+
+### R2-3 范围与边界声明
+
+- 本追加记录**未**修改本报告正文任何字节，仅在文末新增本节；
+- 本 R2 任务实际变更严格为 3 个文件：`ACCEPTANCE.md`（§4.22 前言 + 一条变更记录）、本 R1 报告（文末追加）、新增 R2 报告；
+- 本追加记录**未**执行正式验收、**未**改动任何 `DSS-AC-*`/`DSS-REQ-*` 业务行或追踪映射、**未**改动前端/后端/测试/SQL/配置/证据；
+- 本追加记录**未**访问数据库、ZooKeeper、Kafka，**未**启停任何服务。
