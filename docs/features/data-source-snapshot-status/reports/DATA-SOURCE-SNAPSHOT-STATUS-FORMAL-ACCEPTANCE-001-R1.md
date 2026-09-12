@@ -298,3 +298,46 @@ R0 证据 `README.md` 已追加 §6 指向上述两项纠正；本目录其他 R
 ## 18. 下一入口
 
 `CHATGPT_FORMAL_ACCEPTANCE_R1_REVIEW_FROM_GIT_THEN_PROJECT_OWNER_ACCEPTANCE_DECISION`
+
+
+## 19. R2 文档当前状态一致性纠正补充说明（`DATA-SOURCE-SNAPSHOT-STATUS-FORMAL-ACCEPTANCE-001-R2`，append-only）
+
+> 本节由 `DATA-SOURCE-SNAPSHOT-STATUS-FORMAL-ACCEPTANCE-001-R2` 于 2026-09-12 **追加**（仅追加，不改写、不删除本报告原有任何正文；本节之前的全部内容仍为 R1 当时的交付记录）。本节取代本报告正文中任何“8 份入口文档当前状态已完全同步/无残留”性质表述——该表述已被 ChatGPT 的提交级复审证明不成立。
+
+### 19.1 ChatGPT 对 R1 执行与证据的复审结论
+
+ChatGPT 已从远程 Git 对 R1 结果提交 `bf5f1b54a3abf54ea1d5ea1e1a9ed72cf39b7f7b` 独立复审：**R1 的验收执行与证据结论为 `APPROVED`**（`r1_acceptance_execution_evidence_status=APPROVED`）。
+
+### 19.2 整体 Git 提交复审临时为 `CHANGES_REQUIRED`
+
+ChatGPT 对**整体 Git 提交**的复审临时为 `CHANGES_REQUIRED`，**唯一**问题类别为：8 份入口文档仍残留非历史的旧 `NOT_RUN`、旧计数与旧下一入口，与已经写入的当前事实 `PASS 107` 相矛盾。**未发现**任何业务代码问题、测试代码问题、API 契约问题、DATABASE 契约问题、`DSS-AC-065` 判定问题或证据真实性问题。
+
+### 19.3 主要冲突类别
+
+1. **当前 `NOT_RUN` 残留**：把已执行后的当前状态仍写成 `全部 \`NOT_RUN\`` / `formal_acceptance_status=NOT_RUN` / `acceptance_execution_status=NOT_RUN`；
+2. **旧计数残留**：`acceptance_not_run_count=107`、`formal_acceptance_not_run_count=107`，以及历史扩张计数 68 / 80 / 86 / 95 / 103 等未作历史限定；
+3. **旧下一入口残留**：把已被处理的入口当作当前入口，即 `DATA-SOURCE-SNAPSHOT-STATUS-FORMAL-ACCEPTANCE-001`、`CHATGPT_FORMAL_ACCEPTANCE_REVIEW_FROM_GIT_THEN_TARGETED_COMPLETION_TASK`、`CHATGPT_FORMAL_ACCEPTANCE_R1_REVIEW_FROM_GIT_THEN_PROJECT_OWNER_ACCEPTANCE_DECISION`。
+
+### 19.4 纠正方式与范围
+
+上述问题已由 `DATA-SOURCE-SNAPSHOT-STATUS-FORMAL-ACCEPTANCE-001-R2`（**纯文档**当前状态一致性纠正任务）修正：
+
+- 统一当前验收事实为 `PASS 107 / FAIL 0 / BLOCKED 0 / NOT_RUN 0`（`acceptance_execution_status=PASS`、`formal_acceptance_status=EXECUTED_PENDING_CHATGPT_REVIEW`、`formal_acceptance_pass_count=107`、`formal_acceptance_fail_count=0`、`formal_acceptance_blocked_count=0`、`formal_acceptance_not_run_count=0`）；
+- 统一下一入口为 `CHATGPT_FORMAL_ACCEPTANCE_R2_REVIEW_FROM_GIT_THEN_PROJECT_OWNER_ACCEPTANCE_DECISION`；
+- 8 份入口文档为 `docs/features/README.md`、`docs/features/data-source-snapshot-status/README.md`、`.../REQUIREMENTS.md`、`.../ACCEPTANCE.md`、`.../DESIGN.md`、`.../UI.md`、`.../API.md`、`.../DATABASE.md`；
+- 旧事实一律保留但加显式历史限定（日期＋当时/执行前/历史/R0 前/R1 前/此前），**不删除真实历史**；`human_visual_acceptance_status=NOT_RUN` 作为当前真实值保留，未改写为 `PASS`/`APPROVED`。
+
+### 19.5 R1 既有事实与证据未被否定
+
+本补充说明**不否定** R1 的下列事实与证据，它们继续有效：
+
+- `DSS-AC-065` 判定为 `PASS`（经项目负责人批准阶段 A `INSERT` 7 行 + 精确复合主键 `DELETE` 7 行并逐行恢复）；
+- 最终计数 `107 / 0 / 0 / 0`；
+- 三张业务表逐字节恢复、任务前缀残留 `0`；
+- 测试、构建与浏览器补验结论；
+- 凭据脱敏处理；
+- ZooKeeper 分层事实与 R0 报告 diff-check 表述纠正。
+
+### 19.6 与原报告正文的关系
+
+本报告**原有正文（§1～§18）保持为 R1 当时的交付记录，未作任何改写**；本节为其后由 ChatGPT 复审触发的**补充说明**，并在“8 份入口文档当前状态是否已完全同步”这一问题上**取代**原正文的解释。
