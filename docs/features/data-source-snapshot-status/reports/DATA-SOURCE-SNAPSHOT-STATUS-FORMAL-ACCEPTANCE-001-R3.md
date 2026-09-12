@@ -253,3 +253,70 @@ CHATGPT_FORMAL_ACCEPTANCE_R3_REVIEW_FROM_GIT_THEN_PROJECT_OWNER_ACCEPTANCE_DECIS
 
 - R2 复审时点历史入口 `CHATGPT_FORMAL_ACCEPTANCE_R2_REVIEW_FROM_GIT_THEN_PROJECT_OWNER_ACCEPTANCE_DECISION` 已由本任务承接纠正，仅作历史保留；
 - 本任务到达 Commit + Push 后即停止，等待 ChatGPT 从远程 Git 复审 R3：不作最终接受收口，不作项目负责人接受决定，不修改 `human_visual_acceptance_status=NOT_RUN`，不重跑正式验收，不启停 `5173`/`8080` 服务。
+
+## 15. 最终接受收口追加记录（`DATA-SOURCE-SNAPSHOT-STATUS-FORMAL-ACCEPTANCE-CLOSEOUT-001`，2026-09-13，文末追加）
+
+> 本节由最终接受收口任务 `DATA-SOURCE-SNAPSHOT-STATUS-FORMAL-ACCEPTANCE-CLOSEOUT-001` **文末追加**写入；本报告 §1～§14 正文一字未删、未改写（append-only；原文件字节为本文件新字节的完整前缀，见 §15.6）。
+
+### 15.1 ChatGPT R3 复审与项目负责人最终接受决定
+
+| 项 | 值 |
+|---|---|
+| ChatGPT R3 复审对象 | 提交 `68528cfec4db6c3eb92b0e24bff0b7b29f56006a`（R3 纯文档纠正结果提交） |
+| ChatGPT R3 复审结论 | `APPROVED` |
+| 项目负责人最终接受决定 | 明确回复“批准最终接受收口”（`APPROVED`） |
+| 收口任务 | `DATA-SOURCE-SNAPSHOT-STATUS-FORMAL-ACCEPTANCE-CLOSEOUT-001`（纯文档；隔离 worktree `/agent/dss-formal-acceptance-closeout-001`，detached HEAD，基准提交 `68528cfec4db6c3eb92b0e24bff0b7b29f56006a`） |
+| 执行日期 | 2026-09-13 |
+
+### 15.2 R3 七处“当前值前置”纠正的复审结论
+
+- R3 对 `DESIGN.md` 3 处、`UI.md` 4 处共 7 处现行字段的“当前值前置”纠正，经 ChatGPT 从远程 Git 复审 `APPROVED`；
+- 经收口任务复核，R3 后 7 处当前直接值均已出现于字段直接值/首个状态 token 位置，无“旧直接值在前、当前值在后”残留。
+
+### 15.3 零业务变化与无未授权改动复核
+
+- 需求 `DSS-REQ-001~087` 共 87 条、验收 `DSS-AC-001~107` 共 107 条业务行逐字节不变；追踪 87/87、107/107；107 条验收执行结果保持 `PASS 107 / FAIL 0 / BLOCKED 0 / NOT_RUN 0`；
+- DESIGN §14.2/§14.3 追踪行、DESIGN §25~§27 与 UI §19~§21 业务规则正文、`API.md` 接口契约、`DATABASE.md` 三表投影/只读边界逐字节不变；
+- `frontend/**`、`backend/**`、测试代码、SQL、配置、证据目录、R0/R1/R2 报告零改动；
+- 未发现 R3 之后存在任何未授权业务改动。
+
+### 15.4 本报告 §14 的历史性质
+
+- §14“下一入口 `CHATGPT_FORMAL_ACCEPTANCE_R3_REVIEW_FROM_GIT_THEN_PROJECT_OWNER_ACCEPTANCE_DECISION`”、§14 末“不作最终接受收口”等表述，是 **R3 提交时点的真实历史状态**：当时 R3 尚未经 ChatGPT 复审、项目负责人尚未作出最终接受决定；
+- 该时点状态已被 2026-09-13 最终接受收口取代：`implementation_status=IMPLEMENTED_ACCEPTED`、`formal_acceptance_status=ACCEPTED`、`acceptance_execution_status=PASS`、`human_visual_acceptance_status=APPROVED_BY_PROJECT_OWNER`，当前统一下一入口 `NONE_FEATURE_ACCEPTED`；
+- §1～§14 原文（含 §14 历史入口、§1.1 与 §13 的 `human_visual_acceptance_status=NOT_RUN` 等 R3 时点值）**未删除、未改写**，仅作为 R3 时点历史保留。
+
+### 15.5 收口后最终状态（当前直接值）
+
+```text
+requirements_status=APPROVED
+acceptance_status=APPROVED
+design_status=APPROVED
+ui_status=APPROVED
+implementation_status=IMPLEMENTED_ACCEPTED
+formal_acceptance_status=ACCEPTED
+acceptance_execution_status=PASS
+formal_acceptance_pass_count=107
+formal_acceptance_fail_count=0
+formal_acceptance_blocked_count=0
+formal_acceptance_not_run_count=0
+human_visual_acceptance_status=APPROVED_BY_PROJECT_OWNER
+project_owner_visual_review_status=APPROVED_BY_PROJECT_OWNER
+pending_user_review=NO
+pending_user_confirmation_count=0
+requirements_count=87
+acceptance_count=107
+requirements_traceability_status=87_87
+acceptance_traceability_status=107_107
+current_next_entry=NONE_FEATURE_ACCEPTED
+```
+
+### 15.6 append-only 字节前缀校验
+
+- 校验方式：以 R3 结果提交 `68528cfec4db6c3eb92b0e24bff0b7b29f56006a` 中本报告原始 blob 为基准，逐字节比较“新文件是否以原文件内容为完整前缀”；
+- 结论：`r3_report_original_is_byte_prefix=True`、`r3_report_original_bytes_unchanged=True`；
+- 完整校验输出见收口报告 `reports/DATA-SOURCE-SNAPSHOT-STATUS-FORMAL-ACCEPTANCE-CLOSEOUT-001.md`。
+
+### 15.7 未运行声明
+
+- 本次追加为纯文档操作：未重跑正式验收、未运行测试/构建/浏览器、未启停 `5173`/`8080` 服务、未访问数据库/ZooKeeper/Kafka、未修改任何验收证据。
