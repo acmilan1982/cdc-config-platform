@@ -1,0 +1,230 @@
+2026-09-12 20:45:38.026 DEBUG 10371 --- [0.0-8080-exec-6] c.b.c.m.d.m.R.selectAll                  : ==>  Preparing: SELECT CLIENT_ID AS clientId, CLIENT_DESC AS clientDesc, FG_ACTIVE AS fgActive FROM CDC_CLIENT_MULTIPLE
+2026-09-12 20:45:38.026 DEBUG 10371 --- [0.0-8080-exec-6] c.b.c.m.d.m.R.selectAll                  : ==> Parameters:
+2026-09-12 20:45:38.030 DEBUG 10371 --- [0.0-8080-exec-6] c.b.c.m.d.m.R.selectAll                  : <==      Total: 16
+2026-09-12 20:45:38.030 DEBUG 10371 --- [0.0-8080-exec-6] c.b.c.m.d.m.R.selectAll                  : ==>  Preparing: SELECT DATA_SOURCE_ID AS dataSourceId, DATA_SOURCE_ORG AS dataSourceOrg, DATA_SOURCE_CATEGORY AS dataSourceCategory, FG_ACTIVE AS fgActive FROM CDC_DATA_SOURCE
+2026-09-12 20:45:38.030 DEBUG 10371 --- [0.0-8080-exec-6] c.b.c.m.d.m.R.selectAll                  : ==> Parameters:
+2026-09-12 20:45:38.032 DEBUG 10371 --- [0.0-8080-exec-6] c.b.c.m.d.m.R.selectAll                  : <==      Total: 34
+2026-09-12 20:45:38.033 DEBUG 10371 --- [0.0-8080-exec-6] c.b.c.m.d.m.D.selectAll                  : ==>  Preparing: SELECT CLIENT_ID AS clientId, DATA_SOURCE_ID AS dataSourceId, SNAPSHOT_STATUS AS snapshotStatus, TO_CHAR(SNAPSHOT_LAST_SEEN_AT, 'YYYY-MM-DD HH24:MI:SS') AS snapshotLastSeenAt, TO_CHAR(SNAPSHOT_COMPLETED_AT, 'YYYY-MM-DD HH24:MI:SS') AS snapshotCompletedAt, TO_CHAR(UPDATED_AT, 'YYYY-MM-DD HH24:MI:SS') AS updatedAt FROM CDC_DATA_SOURCE_RUN_STATE
+2026-09-12 20:45:38.033 DEBUG 10371 --- [0.0-8080-exec-6] c.b.c.m.d.m.D.selectAll                  : ==> Parameters:
+2026-09-12 20:45:38.037 DEBUG 10371 --- [0.0-8080-exec-6] c.b.c.m.d.m.D.selectAll                  : <==      Total: 37
+2026-09-12 20:45:38.057 DEBUG 10371 --- [0.0-8080-exec-8] c.b.c.m.d.m.R.selectAll                  : ==>  Preparing: SELECT CLIENT_ID AS clientId, CLIENT_DESC AS clientDesc, FG_ACTIVE AS fgActive FROM CDC_CLIENT_MULTIPLE
+2026-09-12 20:45:38.057 DEBUG 10371 --- [0.0-8080-exec-8] c.b.c.m.d.m.R.selectAll                  : ==> Parameters:
+2026-09-12 20:45:38.059 DEBUG 10371 --- [0.0-8080-exec-8] c.b.c.m.d.m.R.selectAll                  : <==      Total: 16
+2026-09-12 20:45:38.059 DEBUG 10371 --- [0.0-8080-exec-8] c.b.c.m.d.m.R.selectAll                  : ==>  Preparing: SELECT DATA_SOURCE_ID AS dataSourceId, DATA_SOURCE_ORG AS dataSourceOrg, DATA_SOURCE_CATEGORY AS dataSourceCategory, FG_ACTIVE AS fgActive FROM CDC_DATA_SOURCE
+2026-09-12 20:45:38.059 DEBUG 10371 --- [0.0-8080-exec-8] c.b.c.m.d.m.R.selectAll                  : ==> Parameters:
+2026-09-12 20:45:38.064 DEBUG 10371 --- [0.0-8080-exec-8] c.b.c.m.d.m.R.selectAll                  : <==      Total: 34
+2026-09-12 20:45:38.064 DEBUG 10371 --- [0.0-8080-exec-8] c.b.c.m.d.m.D.selectAll                  : ==>  Preparing: SELECT CLIENT_ID AS clientId, DATA_SOURCE_ID AS dataSourceId, SNAPSHOT_STATUS AS snapshotStatus, TO_CHAR(SNAPSHOT_LAST_SEEN_AT, 'YYYY-MM-DD HH24:MI:SS') AS snapshotLastSeenAt, TO_CHAR(SNAPSHOT_COMPLETED_AT, 'YYYY-MM-DD HH24:MI:SS') AS snapshotCompletedAt, TO_CHAR(UPDATED_AT, 'YYYY-MM-DD HH24:MI:SS') AS updatedAt FROM CDC_DATA_SOURCE_RUN_STATE
+2026-09-12 20:45:38.064 DEBUG 10371 --- [0.0-8080-exec-8] c.b.c.m.d.m.D.selectAll                  : ==> Parameters:
+2026-09-12 20:45:38.066 DEBUG 10371 --- [0.0-8080-exec-8] c.b.c.m.d.m.D.selectAll                  : <==      Total: 37
+2026-09-12 20:45:38.085 DEBUG 10371 --- [0.0-8080-exec-9] c.b.c.m.d.m.R.selectAll                  : ==>  Preparing: SELECT CLIENT_ID AS clientId, CLIENT_DESC AS clientDesc, FG_ACTIVE AS fgActive FROM CDC_CLIENT_MULTIPLE
+2026-09-12 20:45:38.086 DEBUG 10371 --- [0.0-8080-exec-9] c.b.c.m.d.m.R.selectAll                  : ==> Parameters:
+2026-09-12 20:45:38.092 DEBUG 10371 --- [0.0-8080-exec-9] c.b.c.m.d.m.R.selectAll                  : <==      Total: 16
+2026-09-12 20:45:38.092 DEBUG 10371 --- [0.0-8080-exec-9] c.b.c.m.d.m.R.selectAll                  : ==>  Preparing: SELECT DATA_SOURCE_ID AS dataSourceId, DATA_SOURCE_ORG AS dataSourceOrg, DATA_SOURCE_CATEGORY AS dataSourceCategory, FG_ACTIVE AS fgActive FROM CDC_DATA_SOURCE
+2026-09-12 20:45:38.093 DEBUG 10371 --- [0.0-8080-exec-9] c.b.c.m.d.m.R.selectAll                  : ==> Parameters:
+2026-09-12 20:45:38.095 DEBUG 10371 --- [0.0-8080-exec-9] c.b.c.m.d.m.R.selectAll                  : <==      Total: 34
+2026-09-12 20:45:38.096 DEBUG 10371 --- [0.0-8080-exec-9] c.b.c.m.d.m.D.selectAll                  : ==>  Preparing: SELECT CLIENT_ID AS clientId, DATA_SOURCE_ID AS dataSourceId, SNAPSHOT_STATUS AS snapshotStatus, TO_CHAR(SNAPSHOT_LAST_SEEN_AT, 'YYYY-MM-DD HH24:MI:SS') AS snapshotLastSeenAt, TO_CHAR(SNAPSHOT_COMPLETED_AT, 'YYYY-MM-DD HH24:MI:SS') AS snapshotCompletedAt, TO_CHAR(UPDATED_AT, 'YYYY-MM-DD HH24:MI:SS') AS updatedAt FROM CDC_DATA_SOURCE_RUN_STATE
+2026-09-12 20:45:38.096 DEBUG 10371 --- [0.0-8080-exec-9] c.b.c.m.d.m.D.selectAll                  : ==> Parameters:
+2026-09-12 20:45:38.099 DEBUG 10371 --- [0.0-8080-exec-9] c.b.c.m.d.m.D.selectAll                  : <==      Total: 37
+2026-09-12 20:45:38.122 DEBUG 10371 --- [0.0-8080-exec-2] c.b.c.m.d.m.R.selectAll                  : ==>  Preparing: SELECT CLIENT_ID AS clientId, CLIENT_DESC AS clientDesc, FG_ACTIVE AS fgActive FROM CDC_CLIENT_MULTIPLE
+2026-09-12 20:45:38.123 DEBUG 10371 --- [0.0-8080-exec-2] c.b.c.m.d.m.R.selectAll                  : ==> Parameters:
+2026-09-12 20:45:38.126 DEBUG 10371 --- [0.0-8080-exec-2] c.b.c.m.d.m.R.selectAll                  : <==      Total: 16
+2026-09-12 20:45:38.126 DEBUG 10371 --- [0.0-8080-exec-2] c.b.c.m.d.m.R.selectAll                  : ==>  Preparing: SELECT DATA_SOURCE_ID AS dataSourceId, DATA_SOURCE_ORG AS dataSourceOrg, DATA_SOURCE_CATEGORY AS dataSourceCategory, FG_ACTIVE AS fgActive FROM CDC_DATA_SOURCE
+2026-09-12 20:45:38.127 DEBUG 10371 --- [0.0-8080-exec-2] c.b.c.m.d.m.R.selectAll                  : ==> Parameters:
+2026-09-12 20:45:38.129 DEBUG 10371 --- [0.0-8080-exec-2] c.b.c.m.d.m.R.selectAll                  : <==      Total: 34
+2026-09-12 20:45:38.129 DEBUG 10371 --- [0.0-8080-exec-2] c.b.c.m.d.m.D.selectAll                  : ==>  Preparing: SELECT CLIENT_ID AS clientId, DATA_SOURCE_ID AS dataSourceId, SNAPSHOT_STATUS AS snapshotStatus, TO_CHAR(SNAPSHOT_LAST_SEEN_AT, 'YYYY-MM-DD HH24:MI:SS') AS snapshotLastSeenAt, TO_CHAR(SNAPSHOT_COMPLETED_AT, 'YYYY-MM-DD HH24:MI:SS') AS snapshotCompletedAt, TO_CHAR(UPDATED_AT, 'YYYY-MM-DD HH24:MI:SS') AS updatedAt FROM CDC_DATA_SOURCE_RUN_STATE
+2026-09-12 20:45:38.129 DEBUG 10371 --- [0.0-8080-exec-2] c.b.c.m.d.m.D.selectAll                  : ==> Parameters:
+2026-09-12 20:45:38.134 DEBUG 10371 --- [0.0-8080-exec-2] c.b.c.m.d.m.D.selectAll                  : <==      Total: 37
+2026-09-12 20:45:38.150 DEBUG 10371 --- [0.0-8080-exec-5] c.b.c.m.d.m.R.selectAll                  : ==>  Preparing: SELECT CLIENT_ID AS clientId, CLIENT_DESC AS clientDesc, FG_ACTIVE AS fgActive FROM CDC_CLIENT_MULTIPLE
+2026-09-12 20:45:38.150 DEBUG 10371 --- [0.0-8080-exec-5] c.b.c.m.d.m.R.selectAll                  : ==> Parameters:
+2026-09-12 20:45:38.155 DEBUG 10371 --- [0.0-8080-exec-5] c.b.c.m.d.m.R.selectAll                  : <==      Total: 16
+2026-09-12 20:45:38.156 DEBUG 10371 --- [0.0-8080-exec-5] c.b.c.m.d.m.R.selectAll                  : ==>  Preparing: SELECT DATA_SOURCE_ID AS dataSourceId, DATA_SOURCE_ORG AS dataSourceOrg, DATA_SOURCE_CATEGORY AS dataSourceCategory, FG_ACTIVE AS fgActive FROM CDC_DATA_SOURCE
+2026-09-12 20:45:38.156 DEBUG 10371 --- [0.0-8080-exec-5] c.b.c.m.d.m.R.selectAll                  : ==> Parameters:
+2026-09-12 20:45:38.159 DEBUG 10371 --- [0.0-8080-exec-5] c.b.c.m.d.m.R.selectAll                  : <==      Total: 34
+2026-09-12 20:45:38.160 DEBUG 10371 --- [0.0-8080-exec-5] c.b.c.m.d.m.D.selectAll                  : ==>  Preparing: SELECT CLIENT_ID AS clientId, DATA_SOURCE_ID AS dataSourceId, SNAPSHOT_STATUS AS snapshotStatus, TO_CHAR(SNAPSHOT_LAST_SEEN_AT, 'YYYY-MM-DD HH24:MI:SS') AS snapshotLastSeenAt, TO_CHAR(SNAPSHOT_COMPLETED_AT, 'YYYY-MM-DD HH24:MI:SS') AS snapshotCompletedAt, TO_CHAR(UPDATED_AT, 'YYYY-MM-DD HH24:MI:SS') AS updatedAt FROM CDC_DATA_SOURCE_RUN_STATE
+2026-09-12 20:45:38.160 DEBUG 10371 --- [0.0-8080-exec-5] c.b.c.m.d.m.D.selectAll                  : ==> Parameters:
+2026-09-12 20:45:38.163 DEBUG 10371 --- [0.0-8080-exec-5] c.b.c.m.d.m.D.selectAll                  : <==      Total: 37
+2026-09-12 20:45:38.183 DEBUG 10371 --- [0.0-8080-exec-6] c.b.c.m.d.m.R.selectAll                  : ==>  Preparing: SELECT CLIENT_ID AS clientId, CLIENT_DESC AS clientDesc, FG_ACTIVE AS fgActive FROM CDC_CLIENT_MULTIPLE
+2026-09-12 20:45:38.183 DEBUG 10371 --- [0.0-8080-exec-6] c.b.c.m.d.m.R.selectAll                  : ==> Parameters:
+2026-09-12 20:45:38.185 DEBUG 10371 --- [0.0-8080-exec-6] c.b.c.m.d.m.R.selectAll                  : <==      Total: 16
+2026-09-12 20:45:38.186 DEBUG 10371 --- [0.0-8080-exec-6] c.b.c.m.d.m.R.selectAll                  : ==>  Preparing: SELECT DATA_SOURCE_ID AS dataSourceId, DATA_SOURCE_ORG AS dataSourceOrg, DATA_SOURCE_CATEGORY AS dataSourceCategory, FG_ACTIVE AS fgActive FROM CDC_DATA_SOURCE
+2026-09-12 20:45:38.186 DEBUG 10371 --- [0.0-8080-exec-6] c.b.c.m.d.m.R.selectAll                  : ==> Parameters:
+2026-09-12 20:45:38.191 DEBUG 10371 --- [0.0-8080-exec-6] c.b.c.m.d.m.R.selectAll                  : <==      Total: 34
+2026-09-12 20:45:38.192 DEBUG 10371 --- [0.0-8080-exec-6] c.b.c.m.d.m.D.selectAll                  : ==>  Preparing: SELECT CLIENT_ID AS clientId, DATA_SOURCE_ID AS dataSourceId, SNAPSHOT_STATUS AS snapshotStatus, TO_CHAR(SNAPSHOT_LAST_SEEN_AT, 'YYYY-MM-DD HH24:MI:SS') AS snapshotLastSeenAt, TO_CHAR(SNAPSHOT_COMPLETED_AT, 'YYYY-MM-DD HH24:MI:SS') AS snapshotCompletedAt, TO_CHAR(UPDATED_AT, 'YYYY-MM-DD HH24:MI:SS') AS updatedAt FROM CDC_DATA_SOURCE_RUN_STATE
+2026-09-12 20:45:38.192 DEBUG 10371 --- [0.0-8080-exec-6] c.b.c.m.d.m.D.selectAll                  : ==> Parameters:
+2026-09-12 20:45:38.197 DEBUG 10371 --- [0.0-8080-exec-6] c.b.c.m.d.m.D.selectAll                  : <==      Total: 37
+2026-09-12 20:45:38.210 DEBUG 10371 --- [0.0-8080-exec-8] c.b.c.m.d.m.R.selectAll                  : ==>  Preparing: SELECT CLIENT_ID AS clientId, CLIENT_DESC AS clientDesc, FG_ACTIVE AS fgActive FROM CDC_CLIENT_MULTIPLE
+2026-09-12 20:45:38.211 DEBUG 10371 --- [0.0-8080-exec-8] c.b.c.m.d.m.R.selectAll                  : ==> Parameters:
+2026-09-12 20:45:38.212 DEBUG 10371 --- [0.0-8080-exec-8] c.b.c.m.d.m.R.selectAll                  : <==      Total: 16
+2026-09-12 20:45:38.212 DEBUG 10371 --- [0.0-8080-exec-8] c.b.c.m.d.m.R.selectAll                  : ==>  Preparing: SELECT DATA_SOURCE_ID AS dataSourceId, DATA_SOURCE_ORG AS dataSourceOrg, DATA_SOURCE_CATEGORY AS dataSourceCategory, FG_ACTIVE AS fgActive FROM CDC_DATA_SOURCE
+2026-09-12 20:45:38.213 DEBUG 10371 --- [0.0-8080-exec-8] c.b.c.m.d.m.R.selectAll                  : ==> Parameters:
+2026-09-12 20:45:38.217 DEBUG 10371 --- [0.0-8080-exec-8] c.b.c.m.d.m.R.selectAll                  : <==      Total: 34
+2026-09-12 20:45:38.218 DEBUG 10371 --- [0.0-8080-exec-8] c.b.c.m.d.m.D.selectAll                  : ==>  Preparing: SELECT CLIENT_ID AS clientId, DATA_SOURCE_ID AS dataSourceId, SNAPSHOT_STATUS AS snapshotStatus, TO_CHAR(SNAPSHOT_LAST_SEEN_AT, 'YYYY-MM-DD HH24:MI:SS') AS snapshotLastSeenAt, TO_CHAR(SNAPSHOT_COMPLETED_AT, 'YYYY-MM-DD HH24:MI:SS') AS snapshotCompletedAt, TO_CHAR(UPDATED_AT, 'YYYY-MM-DD HH24:MI:SS') AS updatedAt FROM CDC_DATA_SOURCE_RUN_STATE
+2026-09-12 20:45:38.218 DEBUG 10371 --- [0.0-8080-exec-8] c.b.c.m.d.m.D.selectAll                  : ==> Parameters:
+2026-09-12 20:45:38.223 DEBUG 10371 --- [0.0-8080-exec-8] c.b.c.m.d.m.D.selectAll                  : <==      Total: 37
+2026-09-12 20:45:38.240 DEBUG 10371 --- [0.0-8080-exec-9] c.b.c.m.d.m.R.selectAll                  : ==>  Preparing: SELECT CLIENT_ID AS clientId, CLIENT_DESC AS clientDesc, FG_ACTIVE AS fgActive FROM CDC_CLIENT_MULTIPLE
+2026-09-12 20:45:38.240 DEBUG 10371 --- [0.0-8080-exec-9] c.b.c.m.d.m.R.selectAll                  : ==> Parameters:
+2026-09-12 20:45:38.241 DEBUG 10371 --- [0.0-8080-exec-9] c.b.c.m.d.m.R.selectAll                  : <==      Total: 16
+2026-09-12 20:45:38.242 DEBUG 10371 --- [0.0-8080-exec-9] c.b.c.m.d.m.R.selectAll                  : ==>  Preparing: SELECT DATA_SOURCE_ID AS dataSourceId, DATA_SOURCE_ORG AS dataSourceOrg, DATA_SOURCE_CATEGORY AS dataSourceCategory, FG_ACTIVE AS fgActive FROM CDC_DATA_SOURCE
+2026-09-12 20:45:38.242 DEBUG 10371 --- [0.0-8080-exec-9] c.b.c.m.d.m.R.selectAll                  : ==> Parameters:
+2026-09-12 20:45:38.245 DEBUG 10371 --- [0.0-8080-exec-9] c.b.c.m.d.m.R.selectAll                  : <==      Total: 34
+2026-09-12 20:45:38.246 DEBUG 10371 --- [0.0-8080-exec-9] c.b.c.m.d.m.D.selectAll                  : ==>  Preparing: SELECT CLIENT_ID AS clientId, DATA_SOURCE_ID AS dataSourceId, SNAPSHOT_STATUS AS snapshotStatus, TO_CHAR(SNAPSHOT_LAST_SEEN_AT, 'YYYY-MM-DD HH24:MI:SS') AS snapshotLastSeenAt, TO_CHAR(SNAPSHOT_COMPLETED_AT, 'YYYY-MM-DD HH24:MI:SS') AS snapshotCompletedAt, TO_CHAR(UPDATED_AT, 'YYYY-MM-DD HH24:MI:SS') AS updatedAt FROM CDC_DATA_SOURCE_RUN_STATE
+2026-09-12 20:45:38.246 DEBUG 10371 --- [0.0-8080-exec-9] c.b.c.m.d.m.D.selectAll                  : ==> Parameters:
+2026-09-12 20:45:38.248 DEBUG 10371 --- [0.0-8080-exec-9] c.b.c.m.d.m.D.selectAll                  : <==      Total: 37
+2026-09-12 20:45:38.266 DEBUG 10371 --- [0.0-8080-exec-2] c.b.c.m.d.m.R.selectAll                  : ==>  Preparing: SELECT CLIENT_ID AS clientId, CLIENT_DESC AS clientDesc, FG_ACTIVE AS fgActive FROM CDC_CLIENT_MULTIPLE
+2026-09-12 20:45:38.266 DEBUG 10371 --- [0.0-8080-exec-2] c.b.c.m.d.m.R.selectAll                  : ==> Parameters:
+2026-09-12 20:45:38.267 DEBUG 10371 --- [0.0-8080-exec-2] c.b.c.m.d.m.R.selectAll                  : <==      Total: 16
+2026-09-12 20:45:38.268 DEBUG 10371 --- [0.0-8080-exec-2] c.b.c.m.d.m.R.selectAll                  : ==>  Preparing: SELECT DATA_SOURCE_ID AS dataSourceId, DATA_SOURCE_ORG AS dataSourceOrg, DATA_SOURCE_CATEGORY AS dataSourceCategory, FG_ACTIVE AS fgActive FROM CDC_DATA_SOURCE
+2026-09-12 20:45:38.268 DEBUG 10371 --- [0.0-8080-exec-2] c.b.c.m.d.m.R.selectAll                  : ==> Parameters:
+2026-09-12 20:45:38.271 DEBUG 10371 --- [0.0-8080-exec-2] c.b.c.m.d.m.R.selectAll                  : <==      Total: 34
+2026-09-12 20:45:38.272 DEBUG 10371 --- [0.0-8080-exec-2] c.b.c.m.d.m.D.selectAll                  : ==>  Preparing: SELECT CLIENT_ID AS clientId, DATA_SOURCE_ID AS dataSourceId, SNAPSHOT_STATUS AS snapshotStatus, TO_CHAR(SNAPSHOT_LAST_SEEN_AT, 'YYYY-MM-DD HH24:MI:SS') AS snapshotLastSeenAt, TO_CHAR(SNAPSHOT_COMPLETED_AT, 'YYYY-MM-DD HH24:MI:SS') AS snapshotCompletedAt, TO_CHAR(UPDATED_AT, 'YYYY-MM-DD HH24:MI:SS') AS updatedAt FROM CDC_DATA_SOURCE_RUN_STATE
+2026-09-12 20:45:38.272 DEBUG 10371 --- [0.0-8080-exec-2] c.b.c.m.d.m.D.selectAll                  : ==> Parameters:
+2026-09-12 20:45:38.276 DEBUG 10371 --- [0.0-8080-exec-2] c.b.c.m.d.m.D.selectAll                  : <==      Total: 37
+2026-09-12 20:45:38.296 DEBUG 10371 --- [0.0-8080-exec-5] c.b.c.m.d.m.R.selectAll                  : ==>  Preparing: SELECT CLIENT_ID AS clientId, CLIENT_DESC AS clientDesc, FG_ACTIVE AS fgActive FROM CDC_CLIENT_MULTIPLE
+2026-09-12 20:45:38.297 DEBUG 10371 --- [0.0-8080-exec-5] c.b.c.m.d.m.R.selectAll                  : ==> Parameters:
+2026-09-12 20:45:38.301 DEBUG 10371 --- [0.0-8080-exec-5] c.b.c.m.d.m.R.selectAll                  : <==      Total: 16
+2026-09-12 20:45:38.301 DEBUG 10371 --- [0.0-8080-exec-5] c.b.c.m.d.m.R.selectAll                  : ==>  Preparing: SELECT DATA_SOURCE_ID AS dataSourceId, DATA_SOURCE_ORG AS dataSourceOrg, DATA_SOURCE_CATEGORY AS dataSourceCategory, FG_ACTIVE AS fgActive FROM CDC_DATA_SOURCE
+2026-09-12 20:45:38.301 DEBUG 10371 --- [0.0-8080-exec-5] c.b.c.m.d.m.R.selectAll                  : ==> Parameters:
+2026-09-12 20:45:38.304 DEBUG 10371 --- [0.0-8080-exec-5] c.b.c.m.d.m.R.selectAll                  : <==      Total: 34
+2026-09-12 20:45:38.305 DEBUG 10371 --- [0.0-8080-exec-5] c.b.c.m.d.m.D.selectAll                  : ==>  Preparing: SELECT CLIENT_ID AS clientId, DATA_SOURCE_ID AS dataSourceId, SNAPSHOT_STATUS AS snapshotStatus, TO_CHAR(SNAPSHOT_LAST_SEEN_AT, 'YYYY-MM-DD HH24:MI:SS') AS snapshotLastSeenAt, TO_CHAR(SNAPSHOT_COMPLETED_AT, 'YYYY-MM-DD HH24:MI:SS') AS snapshotCompletedAt, TO_CHAR(UPDATED_AT, 'YYYY-MM-DD HH24:MI:SS') AS updatedAt FROM CDC_DATA_SOURCE_RUN_STATE
+2026-09-12 20:45:38.306 DEBUG 10371 --- [0.0-8080-exec-5] c.b.c.m.d.m.D.selectAll                  : ==> Parameters:
+2026-09-12 20:45:38.309 DEBUG 10371 --- [0.0-8080-exec-5] c.b.c.m.d.m.D.selectAll                  : <==      Total: 37
+2026-09-12 20:45:38.330 DEBUG 10371 --- [0.0-8080-exec-6] c.b.c.m.d.m.R.selectAll                  : ==>  Preparing: SELECT CLIENT_ID AS clientId, CLIENT_DESC AS clientDesc, FG_ACTIVE AS fgActive FROM CDC_CLIENT_MULTIPLE
+2026-09-12 20:45:38.330 DEBUG 10371 --- [0.0-8080-exec-6] c.b.c.m.d.m.R.selectAll                  : ==> Parameters:
+2026-09-12 20:45:38.333 DEBUG 10371 --- [0.0-8080-exec-6] c.b.c.m.d.m.R.selectAll                  : <==      Total: 16
+2026-09-12 20:45:38.333 DEBUG 10371 --- [0.0-8080-exec-6] c.b.c.m.d.m.R.selectAll                  : ==>  Preparing: SELECT DATA_SOURCE_ID AS dataSourceId, DATA_SOURCE_ORG AS dataSourceOrg, DATA_SOURCE_CATEGORY AS dataSourceCategory, FG_ACTIVE AS fgActive FROM CDC_DATA_SOURCE
+2026-09-12 20:45:38.333 DEBUG 10371 --- [0.0-8080-exec-6] c.b.c.m.d.m.R.selectAll                  : ==> Parameters:
+2026-09-12 20:45:38.336 DEBUG 10371 --- [0.0-8080-exec-6] c.b.c.m.d.m.R.selectAll                  : <==      Total: 34
+2026-09-12 20:45:38.336 DEBUG 10371 --- [0.0-8080-exec-6] c.b.c.m.d.m.D.selectAll                  : ==>  Preparing: SELECT CLIENT_ID AS clientId, DATA_SOURCE_ID AS dataSourceId, SNAPSHOT_STATUS AS snapshotStatus, TO_CHAR(SNAPSHOT_LAST_SEEN_AT, 'YYYY-MM-DD HH24:MI:SS') AS snapshotLastSeenAt, TO_CHAR(SNAPSHOT_COMPLETED_AT, 'YYYY-MM-DD HH24:MI:SS') AS snapshotCompletedAt, TO_CHAR(UPDATED_AT, 'YYYY-MM-DD HH24:MI:SS') AS updatedAt FROM CDC_DATA_SOURCE_RUN_STATE
+2026-09-12 20:45:38.336 DEBUG 10371 --- [0.0-8080-exec-6] c.b.c.m.d.m.D.selectAll                  : ==> Parameters:
+2026-09-12 20:45:38.341 DEBUG 10371 --- [0.0-8080-exec-6] c.b.c.m.d.m.D.selectAll                  : <==      Total: 37
+2026-09-12 20:45:38.355  WARN 10371 --- [0.0-8080-exec-8] c.b.c.c.e.GlobalExceptionHandler         : Business exception: code=41002, message=快照状态取值非法
+2026-09-12 20:45:41.129 DEBUG 10371 --- [0.0-8080-exec-9] c.b.c.m.d.m.R.selectAll                  : ==>  Preparing: SELECT CLIENT_ID AS clientId, CLIENT_DESC AS clientDesc, FG_ACTIVE AS fgActive FROM CDC_CLIENT_MULTIPLE
+2026-09-12 20:45:41.129 DEBUG 10371 --- [0.0-8080-exec-9] c.b.c.m.d.m.R.selectAll                  : ==> Parameters:
+2026-09-12 20:45:41.132 DEBUG 10371 --- [0.0-8080-exec-9] c.b.c.m.d.m.R.selectAll                  : <==      Total: 16
+2026-09-12 20:45:41.132 DEBUG 10371 --- [0.0-8080-exec-9] c.b.c.m.d.m.R.selectAll                  : ==>  Preparing: SELECT DATA_SOURCE_ID AS dataSourceId, DATA_SOURCE_ORG AS dataSourceOrg, DATA_SOURCE_CATEGORY AS dataSourceCategory, FG_ACTIVE AS fgActive FROM CDC_DATA_SOURCE
+2026-09-12 20:45:41.132 DEBUG 10371 --- [0.0-8080-exec-9] c.b.c.m.d.m.R.selectAll                  : ==> Parameters:
+2026-09-12 20:45:41.135 DEBUG 10371 --- [0.0-8080-exec-9] c.b.c.m.d.m.R.selectAll                  : <==      Total: 34
+2026-09-12 20:45:41.136 DEBUG 10371 --- [0.0-8080-exec-9] c.b.c.m.d.m.D.selectAll                  : ==>  Preparing: SELECT CLIENT_ID AS clientId, DATA_SOURCE_ID AS dataSourceId, SNAPSHOT_STATUS AS snapshotStatus, TO_CHAR(SNAPSHOT_LAST_SEEN_AT, 'YYYY-MM-DD HH24:MI:SS') AS snapshotLastSeenAt, TO_CHAR(SNAPSHOT_COMPLETED_AT, 'YYYY-MM-DD HH24:MI:SS') AS snapshotCompletedAt, TO_CHAR(UPDATED_AT, 'YYYY-MM-DD HH24:MI:SS') AS updatedAt FROM CDC_DATA_SOURCE_RUN_STATE
+2026-09-12 20:45:41.136 DEBUG 10371 --- [0.0-8080-exec-9] c.b.c.m.d.m.D.selectAll                  : ==> Parameters:
+2026-09-12 20:45:41.140 DEBUG 10371 --- [0.0-8080-exec-9] c.b.c.m.d.m.D.selectAll                  : <==      Total: 37
+2026-09-12 20:45:45.519 DEBUG 10371 --- [0.0-8080-exec-3] c.b.c.m.d.m.R.selectAll                  : ==>  Preparing: SELECT CLIENT_ID AS clientId, CLIENT_DESC AS clientDesc, FG_ACTIVE AS fgActive FROM CDC_CLIENT_MULTIPLE
+2026-09-12 20:45:45.519 DEBUG 10371 --- [0.0-8080-exec-3] c.b.c.m.d.m.R.selectAll                  : ==> Parameters:
+2026-09-12 20:45:45.523 DEBUG 10371 --- [0.0-8080-exec-3] c.b.c.m.d.m.R.selectAll                  : <==      Total: 16
+2026-09-12 20:45:45.523 DEBUG 10371 --- [0.0-8080-exec-3] c.b.c.m.d.m.R.selectAll                  : ==>  Preparing: SELECT DATA_SOURCE_ID AS dataSourceId, DATA_SOURCE_ORG AS dataSourceOrg, DATA_SOURCE_CATEGORY AS dataSourceCategory, FG_ACTIVE AS fgActive FROM CDC_DATA_SOURCE
+2026-09-12 20:45:45.523 DEBUG 10371 --- [0.0-8080-exec-3] c.b.c.m.d.m.R.selectAll                  : ==> Parameters:
+2026-09-12 20:45:45.530 DEBUG 10371 --- [0.0-8080-exec-3] c.b.c.m.d.m.R.selectAll                  : <==      Total: 34
+2026-09-12 20:45:45.530 DEBUG 10371 --- [0.0-8080-exec-3] c.b.c.m.d.m.D.selectAll                  : ==>  Preparing: SELECT CLIENT_ID AS clientId, DATA_SOURCE_ID AS dataSourceId, SNAPSHOT_STATUS AS snapshotStatus, TO_CHAR(SNAPSHOT_LAST_SEEN_AT, 'YYYY-MM-DD HH24:MI:SS') AS snapshotLastSeenAt, TO_CHAR(SNAPSHOT_COMPLETED_AT, 'YYYY-MM-DD HH24:MI:SS') AS snapshotCompletedAt, TO_CHAR(UPDATED_AT, 'YYYY-MM-DD HH24:MI:SS') AS updatedAt FROM CDC_DATA_SOURCE_RUN_STATE
+2026-09-12 20:45:45.531 DEBUG 10371 --- [0.0-8080-exec-3] c.b.c.m.d.m.D.selectAll                  : ==> Parameters:
+2026-09-12 20:45:45.537 DEBUG 10371 --- [0.0-8080-exec-3] c.b.c.m.d.m.D.selectAll                  : <==      Total: 37
+2026-09-12 20:45:49.159 DEBUG 10371 --- [0.0-8080-exec-2] c.b.c.m.d.m.R.selectAll                  : ==>  Preparing: SELECT CLIENT_ID AS clientId, CLIENT_DESC AS clientDesc, FG_ACTIVE AS fgActive FROM CDC_CLIENT_MULTIPLE
+2026-09-12 20:45:49.160 DEBUG 10371 --- [0.0-8080-exec-2] c.b.c.m.d.m.R.selectAll                  : ==> Parameters:
+2026-09-12 20:45:49.162 DEBUG 10371 --- [0.0-8080-exec-2] c.b.c.m.d.m.R.selectAll                  : <==      Total: 16
+2026-09-12 20:45:49.162 DEBUG 10371 --- [0.0-8080-exec-2] c.b.c.m.d.m.R.selectAll                  : ==>  Preparing: SELECT DATA_SOURCE_ID AS dataSourceId, DATA_SOURCE_ORG AS dataSourceOrg, DATA_SOURCE_CATEGORY AS dataSourceCategory, FG_ACTIVE AS fgActive FROM CDC_DATA_SOURCE
+2026-09-12 20:45:49.162 DEBUG 10371 --- [0.0-8080-exec-2] c.b.c.m.d.m.R.selectAll                  : ==> Parameters:
+2026-09-12 20:45:49.168 DEBUG 10371 --- [0.0-8080-exec-2] c.b.c.m.d.m.R.selectAll                  : <==      Total: 34
+2026-09-12 20:45:49.168 DEBUG 10371 --- [0.0-8080-exec-2] c.b.c.m.d.m.D.selectAll                  : ==>  Preparing: SELECT CLIENT_ID AS clientId, DATA_SOURCE_ID AS dataSourceId, SNAPSHOT_STATUS AS snapshotStatus, TO_CHAR(SNAPSHOT_LAST_SEEN_AT, 'YYYY-MM-DD HH24:MI:SS') AS snapshotLastSeenAt, TO_CHAR(SNAPSHOT_COMPLETED_AT, 'YYYY-MM-DD HH24:MI:SS') AS snapshotCompletedAt, TO_CHAR(UPDATED_AT, 'YYYY-MM-DD HH24:MI:SS') AS updatedAt FROM CDC_DATA_SOURCE_RUN_STATE
+2026-09-12 20:45:49.169 DEBUG 10371 --- [0.0-8080-exec-2] c.b.c.m.d.m.D.selectAll                  : ==> Parameters:
+2026-09-12 20:45:49.173 DEBUG 10371 --- [0.0-8080-exec-2] c.b.c.m.d.m.D.selectAll                  : <==      Total: 37
+2026-09-12 20:45:50.929 DEBUG 10371 --- [0.0-8080-exec-4] c.b.c.m.d.m.R.selectAll                  : ==>  Preparing: SELECT CLIENT_ID AS clientId, CLIENT_DESC AS clientDesc, FG_ACTIVE AS fgActive FROM CDC_CLIENT_MULTIPLE
+2026-09-12 20:45:50.930 DEBUG 10371 --- [0.0-8080-exec-4] c.b.c.m.d.m.R.selectAll                  : ==> Parameters:
+2026-09-12 20:45:50.931 DEBUG 10371 --- [0.0-8080-exec-4] c.b.c.m.d.m.R.selectAll                  : <==      Total: 16
+2026-09-12 20:45:50.931 DEBUG 10371 --- [0.0-8080-exec-4] c.b.c.m.d.m.R.selectAll                  : ==>  Preparing: SELECT DATA_SOURCE_ID AS dataSourceId, DATA_SOURCE_ORG AS dataSourceOrg, DATA_SOURCE_CATEGORY AS dataSourceCategory, FG_ACTIVE AS fgActive FROM CDC_DATA_SOURCE
+2026-09-12 20:45:50.932 DEBUG 10371 --- [0.0-8080-exec-4] c.b.c.m.d.m.R.selectAll                  : ==> Parameters:
+2026-09-12 20:45:50.934 DEBUG 10371 --- [0.0-8080-exec-4] c.b.c.m.d.m.R.selectAll                  : <==      Total: 34
+2026-09-12 20:45:50.934 DEBUG 10371 --- [0.0-8080-exec-4] c.b.c.m.d.m.D.selectAll                  : ==>  Preparing: SELECT CLIENT_ID AS clientId, DATA_SOURCE_ID AS dataSourceId, SNAPSHOT_STATUS AS snapshotStatus, TO_CHAR(SNAPSHOT_LAST_SEEN_AT, 'YYYY-MM-DD HH24:MI:SS') AS snapshotLastSeenAt, TO_CHAR(SNAPSHOT_COMPLETED_AT, 'YYYY-MM-DD HH24:MI:SS') AS snapshotCompletedAt, TO_CHAR(UPDATED_AT, 'YYYY-MM-DD HH24:MI:SS') AS updatedAt FROM CDC_DATA_SOURCE_RUN_STATE
+2026-09-12 20:45:50.935 DEBUG 10371 --- [0.0-8080-exec-4] c.b.c.m.d.m.D.selectAll                  : ==> Parameters:
+2026-09-12 20:45:50.939 DEBUG 10371 --- [0.0-8080-exec-4] c.b.c.m.d.m.D.selectAll                  : <==      Total: 37
+2026-09-12 20:45:53.688  INFO 10371 --- [19.16.111:2181)] org.apache.zookeeper.ClientCnxn          : Socket error occurred: 10.19.16.111/10.19.16.111:2181: Connection refused
+2026-09-12 20:45:54.245 DEBUG 10371 --- [0.0-8080-exec-5] c.b.c.m.d.m.R.selectAll                  : ==>  Preparing: SELECT CLIENT_ID AS clientId, CLIENT_DESC AS clientDesc, FG_ACTIVE AS fgActive FROM CDC_CLIENT_MULTIPLE
+2026-09-12 20:45:54.245 DEBUG 10371 --- [0.0-8080-exec-5] c.b.c.m.d.m.R.selectAll                  : ==> Parameters:
+2026-09-12 20:45:54.249 DEBUG 10371 --- [0.0-8080-exec-5] c.b.c.m.d.m.R.selectAll                  : <==      Total: 16
+2026-09-12 20:45:54.250 DEBUG 10371 --- [0.0-8080-exec-5] c.b.c.m.d.m.R.selectAll                  : ==>  Preparing: SELECT DATA_SOURCE_ID AS dataSourceId, DATA_SOURCE_ORG AS dataSourceOrg, DATA_SOURCE_CATEGORY AS dataSourceCategory, FG_ACTIVE AS fgActive FROM CDC_DATA_SOURCE
+2026-09-12 20:45:54.250 DEBUG 10371 --- [0.0-8080-exec-5] c.b.c.m.d.m.R.selectAll                  : ==> Parameters:
+2026-09-12 20:45:54.256 DEBUG 10371 --- [0.0-8080-exec-5] c.b.c.m.d.m.R.selectAll                  : <==      Total: 34
+2026-09-12 20:45:54.257 DEBUG 10371 --- [0.0-8080-exec-5] c.b.c.m.d.m.D.selectAll                  : ==>  Preparing: SELECT CLIENT_ID AS clientId, DATA_SOURCE_ID AS dataSourceId, SNAPSHOT_STATUS AS snapshotStatus, TO_CHAR(SNAPSHOT_LAST_SEEN_AT, 'YYYY-MM-DD HH24:MI:SS') AS snapshotLastSeenAt, TO_CHAR(SNAPSHOT_COMPLETED_AT, 'YYYY-MM-DD HH24:MI:SS') AS snapshotCompletedAt, TO_CHAR(UPDATED_AT, 'YYYY-MM-DD HH24:MI:SS') AS updatedAt FROM CDC_DATA_SOURCE_RUN_STATE
+2026-09-12 20:45:54.257 DEBUG 10371 --- [0.0-8080-exec-5] c.b.c.m.d.m.D.selectAll                  : ==> Parameters:
+2026-09-12 20:45:54.259 DEBUG 10371 --- [0.0-8080-exec-5] c.b.c.m.d.m.D.selectAll                  : <==      Total: 37
+2026-09-12 20:45:54.800  INFO 10371 --- [19.16.111:2181)] org.apache.zookeeper.ClientCnxn          : Opening socket connection to server 10.19.16.111/10.19.16.111:2181. Will not attempt to authenticate using SASL (unknown error)
+2026-09-12 20:45:56.004 DEBUG 10371 --- [.0-8080-exec-10] c.b.c.m.d.m.R.selectAll                  : ==>  Preparing: SELECT CLIENT_ID AS clientId, CLIENT_DESC AS clientDesc, FG_ACTIVE AS fgActive FROM CDC_CLIENT_MULTIPLE
+2026-09-12 20:45:56.004 DEBUG 10371 --- [.0-8080-exec-10] c.b.c.m.d.m.R.selectAll                  : ==> Parameters:
+2026-09-12 20:45:56.006 DEBUG 10371 --- [.0-8080-exec-10] c.b.c.m.d.m.R.selectAll                  : <==      Total: 16
+2026-09-12 20:45:56.006 DEBUG 10371 --- [.0-8080-exec-10] c.b.c.m.d.m.R.selectAll                  : ==>  Preparing: SELECT DATA_SOURCE_ID AS dataSourceId, DATA_SOURCE_ORG AS dataSourceOrg, DATA_SOURCE_CATEGORY AS dataSourceCategory, FG_ACTIVE AS fgActive FROM CDC_DATA_SOURCE
+2026-09-12 20:45:56.006 DEBUG 10371 --- [.0-8080-exec-10] c.b.c.m.d.m.R.selectAll                  : ==> Parameters:
+2026-09-12 20:45:56.008 DEBUG 10371 --- [.0-8080-exec-10] c.b.c.m.d.m.R.selectAll                  : <==      Total: 34
+2026-09-12 20:45:56.009 DEBUG 10371 --- [.0-8080-exec-10] c.b.c.m.d.m.D.selectAll                  : ==>  Preparing: SELECT CLIENT_ID AS clientId, DATA_SOURCE_ID AS dataSourceId, SNAPSHOT_STATUS AS snapshotStatus, TO_CHAR(SNAPSHOT_LAST_SEEN_AT, 'YYYY-MM-DD HH24:MI:SS') AS snapshotLastSeenAt, TO_CHAR(SNAPSHOT_COMPLETED_AT, 'YYYY-MM-DD HH24:MI:SS') AS snapshotCompletedAt, TO_CHAR(UPDATED_AT, 'YYYY-MM-DD HH24:MI:SS') AS updatedAt FROM CDC_DATA_SOURCE_RUN_STATE
+2026-09-12 20:45:56.009 DEBUG 10371 --- [.0-8080-exec-10] c.b.c.m.d.m.D.selectAll                  : ==> Parameters:
+2026-09-12 20:45:56.012 DEBUG 10371 --- [.0-8080-exec-10] c.b.c.m.d.m.D.selectAll                  : <==      Total: 37
+2026-09-12 20:45:59.439 DEBUG 10371 --- [0.0-8080-exec-6] c.b.c.m.d.m.R.selectAll                  : ==>  Preparing: SELECT CLIENT_ID AS clientId, CLIENT_DESC AS clientDesc, FG_ACTIVE AS fgActive FROM CDC_CLIENT_MULTIPLE
+2026-09-12 20:45:59.439 DEBUG 10371 --- [0.0-8080-exec-6] c.b.c.m.d.m.R.selectAll                  : ==> Parameters:
+2026-09-12 20:45:59.441 DEBUG 10371 --- [0.0-8080-exec-6] c.b.c.m.d.m.R.selectAll                  : <==      Total: 16
+2026-09-12 20:45:59.442 DEBUG 10371 --- [0.0-8080-exec-6] c.b.c.m.d.m.R.selectAll                  : ==>  Preparing: SELECT DATA_SOURCE_ID AS dataSourceId, DATA_SOURCE_ORG AS dataSourceOrg, DATA_SOURCE_CATEGORY AS dataSourceCategory, FG_ACTIVE AS fgActive FROM CDC_DATA_SOURCE
+2026-09-12 20:45:59.442 DEBUG 10371 --- [0.0-8080-exec-6] c.b.c.m.d.m.R.selectAll                  : ==> Parameters:
+2026-09-12 20:45:59.446 DEBUG 10371 --- [0.0-8080-exec-6] c.b.c.m.d.m.R.selectAll                  : <==      Total: 34
+2026-09-12 20:45:59.446 DEBUG 10371 --- [0.0-8080-exec-6] c.b.c.m.d.m.D.selectAll                  : ==>  Preparing: SELECT CLIENT_ID AS clientId, DATA_SOURCE_ID AS dataSourceId, SNAPSHOT_STATUS AS snapshotStatus, TO_CHAR(SNAPSHOT_LAST_SEEN_AT, 'YYYY-MM-DD HH24:MI:SS') AS snapshotLastSeenAt, TO_CHAR(SNAPSHOT_COMPLETED_AT, 'YYYY-MM-DD HH24:MI:SS') AS snapshotCompletedAt, TO_CHAR(UPDATED_AT, 'YYYY-MM-DD HH24:MI:SS') AS updatedAt FROM CDC_DATA_SOURCE_RUN_STATE
+2026-09-12 20:45:59.447 DEBUG 10371 --- [0.0-8080-exec-6] c.b.c.m.d.m.D.selectAll                  : ==> Parameters:
+2026-09-12 20:45:59.455 DEBUG 10371 --- [0.0-8080-exec-6] c.b.c.m.d.m.D.selectAll                  : <==      Total: 37
+2026-09-12 20:46:01.318 DEBUG 10371 --- [0.0-8080-exec-7] c.b.c.m.d.m.R.selectAll                  : ==>  Preparing: SELECT CLIENT_ID AS clientId, CLIENT_DESC AS clientDesc, FG_ACTIVE AS fgActive FROM CDC_CLIENT_MULTIPLE
+2026-09-12 20:46:01.318 DEBUG 10371 --- [0.0-8080-exec-7] c.b.c.m.d.m.R.selectAll                  : ==> Parameters:
+2026-09-12 20:46:01.320 DEBUG 10371 --- [0.0-8080-exec-7] c.b.c.m.d.m.R.selectAll                  : <==      Total: 16
+2026-09-12 20:46:01.320 DEBUG 10371 --- [0.0-8080-exec-7] c.b.c.m.d.m.R.selectAll                  : ==>  Preparing: SELECT DATA_SOURCE_ID AS dataSourceId, DATA_SOURCE_ORG AS dataSourceOrg, DATA_SOURCE_CATEGORY AS dataSourceCategory, FG_ACTIVE AS fgActive FROM CDC_DATA_SOURCE
+2026-09-12 20:46:01.321 DEBUG 10371 --- [0.0-8080-exec-7] c.b.c.m.d.m.R.selectAll                  : ==> Parameters:
+2026-09-12 20:46:01.325 DEBUG 10371 --- [0.0-8080-exec-7] c.b.c.m.d.m.R.selectAll                  : <==      Total: 34
+2026-09-12 20:46:01.326 DEBUG 10371 --- [0.0-8080-exec-7] c.b.c.m.d.m.D.selectAll                  : ==>  Preparing: SELECT CLIENT_ID AS clientId, DATA_SOURCE_ID AS dataSourceId, SNAPSHOT_STATUS AS snapshotStatus, TO_CHAR(SNAPSHOT_LAST_SEEN_AT, 'YYYY-MM-DD HH24:MI:SS') AS snapshotLastSeenAt, TO_CHAR(SNAPSHOT_COMPLETED_AT, 'YYYY-MM-DD HH24:MI:SS') AS snapshotCompletedAt, TO_CHAR(UPDATED_AT, 'YYYY-MM-DD HH24:MI:SS') AS updatedAt FROM CDC_DATA_SOURCE_RUN_STATE
+2026-09-12 20:46:01.326 DEBUG 10371 --- [0.0-8080-exec-7] c.b.c.m.d.m.D.selectAll                  : ==> Parameters:
+2026-09-12 20:46:01.332 DEBUG 10371 --- [0.0-8080-exec-7] c.b.c.m.d.m.D.selectAll                  : <==      Total: 37
+2026-09-12 20:46:04.803 DEBUG 10371 --- [0.0-8080-exec-8] c.b.c.m.d.m.R.selectAll                  : ==>  Preparing: SELECT CLIENT_ID AS clientId, CLIENT_DESC AS clientDesc, FG_ACTIVE AS fgActive FROM CDC_CLIENT_MULTIPLE
+2026-09-12 20:46:04.804 DEBUG 10371 --- [0.0-8080-exec-8] c.b.c.m.d.m.R.selectAll                  : ==> Parameters:
+2026-09-12 20:46:04.807 DEBUG 10371 --- [0.0-8080-exec-8] c.b.c.m.d.m.R.selectAll                  : <==      Total: 16
+2026-09-12 20:46:04.807 DEBUG 10371 --- [0.0-8080-exec-8] c.b.c.m.d.m.R.selectAll                  : ==>  Preparing: SELECT DATA_SOURCE_ID AS dataSourceId, DATA_SOURCE_ORG AS dataSourceOrg, DATA_SOURCE_CATEGORY AS dataSourceCategory, FG_ACTIVE AS fgActive FROM CDC_DATA_SOURCE
+2026-09-12 20:46:04.808 DEBUG 10371 --- [0.0-8080-exec-8] c.b.c.m.d.m.R.selectAll                  : ==> Parameters:
+2026-09-12 20:46:04.819 DEBUG 10371 --- [0.0-8080-exec-8] c.b.c.m.d.m.R.selectAll                  : <==      Total: 34
+2026-09-12 20:46:04.820 DEBUG 10371 --- [0.0-8080-exec-8] c.b.c.m.d.m.D.selectAll                  : ==>  Preparing: SELECT CLIENT_ID AS clientId, DATA_SOURCE_ID AS dataSourceId, SNAPSHOT_STATUS AS snapshotStatus, TO_CHAR(SNAPSHOT_LAST_SEEN_AT, 'YYYY-MM-DD HH24:MI:SS') AS snapshotLastSeenAt, TO_CHAR(SNAPSHOT_COMPLETED_AT, 'YYYY-MM-DD HH24:MI:SS') AS snapshotCompletedAt, TO_CHAR(UPDATED_AT, 'YYYY-MM-DD HH24:MI:SS') AS updatedAt FROM CDC_DATA_SOURCE_RUN_STATE
+2026-09-12 20:46:04.820 DEBUG 10371 --- [0.0-8080-exec-8] c.b.c.m.d.m.D.selectAll                  : ==> Parameters:
+2026-09-12 20:46:04.842 DEBUG 10371 --- [0.0-8080-exec-8] c.b.c.m.d.m.D.selectAll                  : <==      Total: 37
+2026-09-12 20:46:06.649 DEBUG 10371 --- [0.0-8080-exec-1] c.b.c.m.d.m.R.selectAll                  : ==>  Preparing: SELECT CLIENT_ID AS clientId, CLIENT_DESC AS clientDesc, FG_ACTIVE AS fgActive FROM CDC_CLIENT_MULTIPLE
+2026-09-12 20:46:06.649 DEBUG 10371 --- [0.0-8080-exec-1] c.b.c.m.d.m.R.selectAll                  : ==> Parameters:
+2026-09-12 20:46:06.653 DEBUG 10371 --- [0.0-8080-exec-1] c.b.c.m.d.m.R.selectAll                  : <==      Total: 16
+2026-09-12 20:46:06.654 DEBUG 10371 --- [0.0-8080-exec-1] c.b.c.m.d.m.R.selectAll                  : ==>  Preparing: SELECT DATA_SOURCE_ID AS dataSourceId, DATA_SOURCE_ORG AS dataSourceOrg, DATA_SOURCE_CATEGORY AS dataSourceCategory, FG_ACTIVE AS fgActive FROM CDC_DATA_SOURCE
+2026-09-12 20:46:06.658 DEBUG 10371 --- [0.0-8080-exec-1] c.b.c.m.d.m.R.selectAll                  : ==> Parameters:
+2026-09-12 20:46:06.672 DEBUG 10371 --- [0.0-8080-exec-1] c.b.c.m.d.m.R.selectAll                  : <==      Total: 34
+2026-09-12 20:46:06.672 DEBUG 10371 --- [0.0-8080-exec-1] c.b.c.m.d.m.D.selectAll                  : ==>  Preparing: SELECT CLIENT_ID AS clientId, DATA_SOURCE_ID AS dataSourceId, SNAPSHOT_STATUS AS snapshotStatus, TO_CHAR(SNAPSHOT_LAST_SEEN_AT, 'YYYY-MM-DD HH24:MI:SS') AS snapshotLastSeenAt, TO_CHAR(SNAPSHOT_COMPLETED_AT, 'YYYY-MM-DD HH24:MI:SS') AS snapshotCompletedAt, TO_CHAR(UPDATED_AT, 'YYYY-MM-DD HH24:MI:SS') AS updatedAt FROM CDC_DATA_SOURCE_RUN_STATE
+2026-09-12 20:46:06.672 DEBUG 10371 --- [0.0-8080-exec-1] c.b.c.m.d.m.D.selectAll                  : ==> Parameters:
+2026-09-12 20:46:06.677 DEBUG 10371 --- [0.0-8080-exec-1] c.b.c.m.d.m.D.selectAll                  : <==      Total: 37
+2026-09-12 20:46:10.065 DEBUG 10371 --- [0.0-8080-exec-9] c.b.c.m.d.m.R.selectAll                  : ==>  Preparing: SELECT CLIENT_ID AS clientId, CLIENT_DESC AS clientDesc, FG_ACTIVE AS fgActive FROM CDC_CLIENT_MULTIPLE
+2026-09-12 20:46:10.065 DEBUG 10371 --- [0.0-8080-exec-9] c.b.c.m.d.m.R.selectAll                  : ==> Parameters:
+2026-09-12 20:46:10.069 DEBUG 10371 --- [0.0-8080-exec-9] c.b.c.m.d.m.R.selectAll                  : <==      Total: 16
+2026-09-12 20:46:10.069 DEBUG 10371 --- [0.0-8080-exec-9] c.b.c.m.d.m.R.selectAll                  : ==>  Preparing: SELECT DATA_SOURCE_ID AS dataSourceId, DATA_SOURCE_ORG AS dataSourceOrg, DATA_SOURCE_CATEGORY AS dataSourceCategory, FG_ACTIVE AS fgActive FROM CDC_DATA_SOURCE
+2026-09-12 20:46:10.069 DEBUG 10371 --- [0.0-8080-exec-9] c.b.c.m.d.m.R.selectAll                  : ==> Parameters:
+2026-09-12 20:46:10.076 DEBUG 10371 --- [0.0-8080-exec-9] c.b.c.m.d.m.R.selectAll                  : <==      Total: 34
+2026-09-12 20:46:10.076 DEBUG 10371 --- [0.0-8080-exec-9] c.b.c.m.d.m.D.selectAll                  : ==>  Preparing: SELECT CLIENT_ID AS clientId, DATA_SOURCE_ID AS dataSourceId, SNAPSHOT_STATUS AS snapshotStatus, TO_CHAR(SNAPSHOT_LAST_SEEN_AT, 'YYYY-MM-DD HH24:MI:SS') AS snapshotLastSeenAt, TO_CHAR(SNAPSHOT_COMPLETED_AT, 'YYYY-MM-DD HH24:MI:SS') AS snapshotCompletedAt, TO_CHAR(UPDATED_AT, 'YYYY-MM-DD HH24:MI:SS') AS updatedAt FROM CDC_DATA_SOURCE_RUN_STATE
+2026-09-12 20:46:10.077 DEBUG 10371 --- [0.0-8080-exec-9] c.b.c.m.d.m.D.selectAll                  : ==> Parameters:
+2026-09-12 20:46:10.082 DEBUG 10371 --- [0.0-8080-exec-9] c.b.c.m.d.m.D.selectAll                  : <==      Total: 37
+2026-09-12 20:46:11.914 DEBUG 10371 --- [0.0-8080-exec-3] c.b.c.m.d.m.R.selectAll                  : ==>  Preparing: SELECT CLIENT_ID AS clientId, CLIENT_DESC AS clientDesc, FG_ACTIVE AS fgActive FROM CDC_CLIENT_MULTIPLE
+2026-09-12 20:46:11.915 DEBUG 10371 --- [0.0-8080-exec-3] c.b.c.m.d.m.R.selectAll                  : ==> Parameters:
+2026-09-12 20:46:11.920 DEBUG 10371 --- [0.0-8080-exec-3] c.b.c.m.d.m.R.selectAll                  : <==      Total: 16
+2026-09-12 20:46:11.922 DEBUG 10371 --- [0.0-8080-exec-3] c.b.c.m.d.m.R.selectAll                  : ==>  Preparing: SELECT DATA_SOURCE_ID AS dataSourceId, DATA_SOURCE_ORG AS dataSourceOrg, DATA_SOURCE_CATEGORY AS dataSourceCategory, FG_ACTIVE AS fgActive FROM CDC_DATA_SOURCE
+2026-09-12 20:46:11.922 DEBUG 10371 --- [0.0-8080-exec-3] c.b.c.m.d.m.R.selectAll                  : ==> Parameters:
+2026-09-12 20:46:11.929 DEBUG 10371 --- [0.0-8080-exec-3] c.b.c.m.d.m.R.selectAll                  : <==      Total: 34
+2026-09-12 20:46:11.930 DEBUG 10371 --- [0.0-8080-exec-3] c.b.c.m.d.m.D.selectAll                  : ==>  Preparing: SELECT CLIENT_ID AS clientId, DATA_SOURCE_ID AS dataSourceId, SNAPSHOT_STATUS AS snapshotStatus, TO_CHAR(SNAPSHOT_LAST_SEEN_AT, 'YYYY-MM-DD HH24:MI:SS') AS snapshotLastSeenAt, TO_CHAR(SNAPSHOT_COMPLETED_AT, 'YYYY-MM-DD HH24:MI:SS') AS snapshotCompletedAt, TO_CHAR(UPDATED_AT, 'YYYY-MM-DD HH24:MI:SS') AS updatedAt FROM CDC_DATA_SOURCE_RUN_STATE
+2026-09-12 20:46:11.933 DEBUG 10371 --- [0.0-8080-exec-3] c.b.c.m.d.m.D.selectAll                  : ==> Parameters:
+2026-09-12 20:46:11.937 DEBUG 10371 --- [0.0-8080-exec-3] c.b.c.m.d.m.D.selectAll                  : <==      Total: 37
+2026-09-12 20:46:15.302 DEBUG 10371 --- [0.0-8080-exec-2] c.b.c.m.d.m.R.selectAll                  : ==>  Preparing: SELECT CLIENT_ID AS clientId, CLIENT_DESC AS clientDesc, FG_ACTIVE AS fgActive FROM CDC_CLIENT_MULTIPLE
+2026-09-12 20:46:15.303 DEBUG 10371 --- [0.0-8080-exec-2] c.b.c.m.d.m.R.selectAll                  : ==> Parameters:
+2026-09-12 20:46:15.306 DEBUG 10371 --- [0.0-8080-exec-2] c.b.c.m.d.m.R.selectAll                  : <==      Total: 16
+2026-09-12 20:46:15.306 DEBUG 10371 --- [0.0-8080-exec-2] c.b.c.m.d.m.R.selectAll                  : ==>  Preparing: SELECT DATA_SOURCE_ID AS dataSourceId, DATA_SOURCE_ORG AS dataSourceOrg, DATA_SOURCE_CATEGORY AS dataSourceCategory, FG_ACTIVE AS fgActive FROM CDC_DATA_SOURCE
+2026-09-12 20:46:15.307 DEBUG 10371 --- [0.0-8080-exec-2] c.b.c.m.d.m.R.selectAll                  : ==> Parameters:
+2026-09-12 20:46:15.312 DEBUG 10371 --- [0.0-8080-exec-2] c.b.c.m.d.m.R.selectAll                  : <==      Total: 34
+2026-09-12 20:46:15.312 DEBUG 10371 --- [0.0-8080-exec-2] c.b.c.m.d.m.D.selectAll                  : ==>  Preparing: SELECT CLIENT_ID AS clientId, DATA_SOURCE_ID AS dataSourceId, SNAPSHOT_STATUS AS snapshotStatus, TO_CHAR(SNAPSHOT_LAST_SEEN_AT, 'YYYY-MM-DD HH24:MI:SS') AS snapshotLastSeenAt, TO_CHAR(SNAPSHOT_COMPLETED_AT, 'YYYY-MM-DD HH24:MI:SS') AS snapshotCompletedAt, TO_CHAR(UPDATED_AT, 'YYYY-MM-DD HH24:MI:SS') AS updatedAt FROM CDC_DATA_SOURCE_RUN_STATE
+2026-09-12 20:46:15.312 DEBUG 10371 --- [0.0-8080-exec-2] c.b.c.m.d.m.D.selectAll                  : ==> Parameters:
+2026-09-12 20:46:15.317 DEBUG 10371 --- [0.0-8080-exec-2] c.b.c.m.d.m.D.selectAll                  : <==      Total: 37
+2026-09-12 20:46:15.805  INFO 10371 --- [19.16.111:2181)] org.apache.zookeeper.ClientCnxn          : Socket error occurred: 10.19.16.111/10.19.16.111:2181: Connection refused
+2026-09-12 20:46:16.921  INFO 10371 --- [19.16.111:2181)] org.apache.zookeeper.ClientCnxn          : Opening socket connection to server 10.19.16.111/10.19.16.111:2181. Will not attempt to authenticate using SASL (unknown error)
+2026-09-12 20:46:17.182 DEBUG 10371 --- [0.0-8080-exec-4] c.b.c.m.d.m.R.selectAll                  : ==>  Preparing: SELECT CLIENT_ID AS clientId, CLIENT_DESC AS clientDesc, FG_ACTIVE AS fgActive FROM CDC_CLIENT_MULTIPLE
+2026-09-12 20:46:17.182 DEBUG 10371 --- [0.0-8080-exec-4] c.b.c.m.d.m.R.selectAll                  : ==> Parameters:
+2026-09-12 20:46:17.185 DEBUG 10371 --- [0.0-8080-exec-4] c.b.c.m.d.m.R.selectAll                  : <==      Total: 16
+2026-09-12 20:46:17.186 DEBUG 10371 --- [0.0-8080-exec-4] c.b.c.m.d.m.R.selectAll                  : ==>  Preparing: SELECT DATA_SOURCE_ID AS dataSourceId, DATA_SOURCE_ORG AS dataSourceOrg, DATA_SOURCE_CATEGORY AS dataSourceCategory, FG_ACTIVE AS fgActive FROM CDC_DATA_SOURCE
+2026-09-12 20:46:17.186 DEBUG 10371 --- [0.0-8080-exec-4] c.b.c.m.d.m.R.selectAll                  : ==> Parameters:
+2026-09-12 20:46:17.191 DEBUG 10371 --- [0.0-8080-exec-4] c.b.c.m.d.m.R.selectAll                  : <==      Total: 34
+2026-09-12 20:46:17.192 DEBUG 10371 --- [0.0-8080-exec-4] c.b.c.m.d.m.D.selectAll                  : ==>  Preparing: SELECT CLIENT_ID AS clientId, DATA_SOURCE_ID AS dataSourceId, SNAPSHOT_STATUS AS snapshotStatus, TO_CHAR(SNAPSHOT_LAST_SEEN_AT, 'YYYY-MM-DD HH24:MI:SS') AS snapshotLastSeenAt, TO_CHAR(SNAPSHOT_COMPLETED_AT, 'YYYY-MM-DD HH24:MI:SS') AS snapshotCompletedAt, TO_CHAR(UPDATED_AT, 'YYYY-MM-DD HH24:MI:SS') AS updatedAt FROM CDC_DATA_SOURCE_RUN_STATE
+2026-09-12 20:46:17.192 DEBUG 10371 --- [0.0-8080-exec-4] c.b.c.m.d.m.D.selectAll                  : ==> Parameters:
+2026-09-12 20:46:17.198 DEBUG 10371 --- [0.0-8080-exec-4] c.b.c.m.d.m.D.selectAll                  : <==      Total: 37

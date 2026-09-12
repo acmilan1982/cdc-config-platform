@@ -1,0 +1,13 @@
+# DSS-AC-065 R1 — pre-INSERT precondition, derived from the pre-task export
+# run_state_before.txt (byte-identical to the post-restore export 03f4044c…).
+# Proves the 7 approved composite PKs were free and no task-prefix row existed
+# before any write, so the DELETEs could not remove pre-existing data.
+prefix_occurrences_in_before_export=0
+pk_hosp-007|112-source-19c_present_rows=0
+pk_hosp-002|112-source-19c_present_rows=0
+pk_dss-fa065-r1-client-orphan|112-source-19c_present_rows=0
+pk_hosp-0061|dss-fa065-r1-source-orphan_present_rows=0
+pk_CCFG-AC-R1-OFF|112-source-19c_present_rows=0
+pk_CCFG-AC-R1-ON|199-source_present_rows=0
+pk_hosp-012|company-target-doris-v4_present_rows=0
+config_tables_prefix_present=data_source_before.txt:0,client_multiple_before.txt:0

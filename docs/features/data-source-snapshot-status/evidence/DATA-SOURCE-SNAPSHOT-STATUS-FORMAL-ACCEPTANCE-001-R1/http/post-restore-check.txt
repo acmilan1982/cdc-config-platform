@@ -1,0 +1,10 @@
+# R1 post-restore API check — DATA-SOURCE-SNAPSHOT-STATUS-FORMAL-ACCEPTANCE-001-R1
+# after §8.3 restore, the no-param list response must match the R0 baseline payload
+# (only the response timestamp field may differ)
+url=http://192.168.174.70:8080/api/monitor/data-source-run-state/list
+post_restore_file=http/99-post-restore-no-params.json (16974 bytes)
+r0_baseline_file=../DATA-SOURCE-SNAPSHOT-STATUS-FORMAL-ACCEPTANCE-001/http/01-no-params.json (16974 bytes)
+timestamp.post_restore=2026-09-12T20:53:45.019
+timestamp.r0_baseline=2026-09-12T16:12:33.692
+payload_identical_excluding_timestamp=True
+records=30 candidates.clients=8 candidates.sources=9

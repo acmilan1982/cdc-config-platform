@@ -1,0 +1,52 @@
+=== chosen client configs ===
+
+CLIENT_ID		   FG	CLIENT_DESC
+-------------------------- ---- ----------------------------------------
+CCFG-AC-R1-OFF		   0
+CCFG-AC-R1-ON              1    CCFG-AC-R1 人工验收夹具：启用探针（持有
+                                7 个合法源库，用于观察机构标签/+N/Toolti
+                                p/完整清单/行高）
+
+hosp-002                   1    总部测试 IP: 3.3.0.168, 192.168.174.1, 1
+				92.168.1.127, 192.168.100.1
+
+hosp-0061                  1    总部测试 IP: 192.168.0.94, 192.168.174.1
+				, 3.3.0.192, 192.168.100.1
+
+hosp-007                   1    总部测试 IP: 192.168.0.94, 192.168.174.1
+				, 3.3.0.192, 192.168.100.1
+
+hosp-012                   1    总部测试 IP: 192.168.0.94, 192.168.174.1
+				, 3.3.0.192, 192.168.100.1
+
+
+6 rows selected.
+
+=== chosen source configs ===
+
+DATA_SOURCE_ID			   FG	CAT	   ORG
+---------------------------------- ---- ---------- ------------------------------
+112-source-19c                     1    source     孝感市第一人民医院
+199-source                         0    SOURCE     业务库
+company-target-doris-v4            1    target     doirs库
+
+3 rows selected.
+
+=== prefix zero-check all three tables ===
+
+M			  V
+---------------- ----------
+RS_client_prefix	  0
+RS_source_prefix	  0
+CM_prefix		  0
+DS_prefix		  0
+
+4 rows selected.
+
+=== proposed PK conflict check (must be 0) ===
+
+ CONFLICTS
+----------
+	 0
+
+1 row selected.

@@ -1,0 +1,15 @@
+# R1 git facts — DATA-SOURCE-SNAPSHOT-STATUS-FORMAL-ACCEPTANCE-001-R1
+# generated: 2026-09-12T20:52:38+08:00
+
+## 1. branch / HEAD / start point
+  branch=
+  head=3190b3d2450478bef34b24578312c76c3973cb08
+  expected_start=3190b3d2450478bef34b24578312c76c3973cb08
+  head_matches_expected=yes
+  remote_develop_ls_remote=3190b3d2450478bef34b24578312c76c3973cb08
+  worktree=/agent/dss-formal-acceptance-001-r1
+
+## 2. R0 commit range and its composition
+  r0_range=af88aa847c7cf6a197237a46f59130744d13f082..3190b3d2450478bef34b24578312c76c3973cb08
+  files: 144  insertions/deletions:
+     144 files changed, 29327 insertions(+), 140 deletions(-)

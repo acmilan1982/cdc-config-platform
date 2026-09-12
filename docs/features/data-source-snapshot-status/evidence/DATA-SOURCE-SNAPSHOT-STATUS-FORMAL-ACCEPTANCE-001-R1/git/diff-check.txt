@@ -1,0 +1,129 @@
+# R1 diff-check layered conclusion — DATA-SOURCE-SNAPSHOT-STATUS-FORMAL-ACCEPTANCE-001-R1
+# generated: 2026-09-12T20:53:24+08:00
+
+## 1. FULL commit range (R0 delivery commit) — git diff --check
+  rc=2
+  trailing-whitespace findings: 90
+  --- offending file list (unique, exact) ---
+  docs/features/data-source-snapshot-status/evidence/DATA-SOURCE-SNAPSHOT-STATUS-FORMAL-ACCEPTANCE-001/services/backend-runtime.txt
+  docs/features/data-source-snapshot-status/evidence/DATA-SOURCE-SNAPSHOT-STATUS-FORMAL-ACCEPTANCE-001/services/liveness.txt
+  docs/features/data-source-snapshot-status/evidence/DATA-SOURCE-SNAPSHOT-STATUS-FORMAL-ACCEPTANCE-001/tests/backend-package.txt
+  docs/features/data-source-snapshot-status/evidence/DATA-SOURCE-SNAPSHOT-STATUS-FORMAL-ACCEPTANCE-001/tests/backend-targeted.txt
+  --- offending line numbers per file ---
+    docs/features/data-source-snapshot-status/evidence/DATA-SOURCE-SNAPSHOT-STATUS-FORMAL-ACCEPTANCE-001/services/backend-runtime.txt
+      line 24
+      line 25
+      line 26
+      line 27
+      line 82
+      line 85
+      line 88
+      line 91
+      line 94
+      line 97
+      line 100
+      line 103
+      line 106
+      line 109
+      line 112
+      line 115
+      line 118
+      line 121
+      line 124
+      line 127
+      line 130
+      line 133
+      line 136
+      line 139
+      line 142
+      line 145
+      line 148
+      line 151
+      line 154
+      line 157
+      line 160
+      line 163
+      line 166
+      line 169
+      line 172
+      line 175
+      line 178
+      line 181
+      line 184
+      line 187
+      line 192
+      line 195
+      line 198
+      line 201
+      line 204
+      line 207
+      line 210
+      line 213
+      line 216
+      line 219
+      line 222
+      line 225
+      line 228
+      line 231
+      line 234
+      line 237
+      line 240
+      line 243
+      line 246
+      line 249
+      line 252
+      line 255
+      line 258
+      line 261
+      line 1462
+      line 1465
+      line 1468
+    docs/features/data-source-snapshot-status/evidence/DATA-SOURCE-SNAPSHOT-STATUS-FORMAL-ACCEPTANCE-001/services/liveness.txt
+      line 10
+      line 11
+    docs/features/data-source-snapshot-status/evidence/DATA-SOURCE-SNAPSHOT-STATUS-FORMAL-ACCEPTANCE-001/tests/backend-package.txt
+      line 5
+      line 10
+      line 13
+      line 19
+      line 25
+      line 28
+      line 33
+      line 39
+      line 42
+      line 45
+    docs/features/data-source-snapshot-status/evidence/DATA-SOURCE-SNAPSHOT-STATUS-FORMAL-ACCEPTANCE-001/tests/backend-targeted.txt
+      line 6
+      line 11
+      line 17
+      line 23
+      line 26
+      line 31
+      line 37
+      line 39
+      line 49
+      line 51
+      line 53
+
+## 2. Author-generated business files in the same range — git diff --check
+  rc=0  (0 = clean)
+
+
+## 3. Classification
+  NONZERO_ONLY_PRESERVED_R0_RAW_TRANSCRIPT_WHITESPACE
+  The nonzero in §1 is confined to verbatim byte-for-byte transcript .txt evidence files
+  whose captured source output itself carried trailing whitespace. Task §14.2 requires those
+  files to remain byte-identical to the R0 commit, so the whitespace is preserved, not stripped.
+  Author-generated Markdown/JSON/scripts in the same range are clean (§2 rc=0).
+
+## 4. R1 change set (working tree on top of 3190b3d...) — git diff --check
+  rc=0  (0 = clean; covers tracked R1 modifications AND every new R1 file)
+  R1-authored captures were normalized for end-of-line trailing blanks / blank line at EOF per §16:
+    readonly/runtime-window.txt   (renamed from runtime-window.log: *.log is gitignored, so the .log
+                                   name could not be committed; content otherwise unchanged)
+    tests/backend-targeted.txt, services/README.txt, git/diff-check.txt, browser captures,
+    7 SQL*Plus captures (database/insert-run.txt, delete-run.txt, insert-verify.txt,
+    sql-approval/phaseA-columns.txt, phaseA-config.txt, phaseA-identity.txt, phaseA-values.txt)
+  Only end-of-line blanks / trailing blank lines were removed; no audited or asserted content was
+  altered. readonly/runtime-audit.txt log path and byte count were re-synced to the normalized file.
+  No R0 evidence file was renamed, rewritten or normalized.

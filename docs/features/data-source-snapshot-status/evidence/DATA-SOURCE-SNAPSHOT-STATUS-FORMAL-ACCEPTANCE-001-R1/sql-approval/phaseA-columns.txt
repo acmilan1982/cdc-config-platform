@@ -1,0 +1,85 @@
+
+TABLE_NAME		  COLUMN_ID COLUMN_NAME
+------------------------ ---------- ----------------------------------
+DATA_TYPE															 DATA_LENGTH N
+-------------------------------------------------------------------------------------------------------------------------------- ----------- -
+CDC_CLIENT_MULTIPLE		  1 CLIENT_ID
+VARCHAR2																  32 N
+
+CDC_CLIENT_MULTIPLE		  2 CLIENT_DESC
+VARCHAR2																1024 Y
+
+CDC_CLIENT_MULTIPLE		  3 DATA_SOURCE_ID
+VARCHAR2																1024 Y
+
+CDC_CLIENT_MULTIPLE		  4 FG_ACTIVE
+VARCHAR2																   1 N
+
+CDC_DATA_SOURCE 		  1 DATA_SOURCE_ID
+VARCHAR2																  32 N
+
+CDC_DATA_SOURCE 		  2 DATA_SOURCE_ORG
+VARCHAR2																  64 N
+
+CDC_DATA_SOURCE 		  3 DATA_SOURCE_HOST
+VARCHAR2																  64 N
+
+CDC_DATA_SOURCE 		  4 DATA_SOURCE_PORT
+VARCHAR2																  64 N
+
+CDC_DATA_SOURCE 		  5 DATA_SOURCE_USER_NAME
+VARCHAR2																  64 N
+
+CDC_DATA_SOURCE 		  6 DATA_SOURCE_PASSWORD
+VARCHAR2																  64 N
+
+CDC_DATA_SOURCE 		  7 DATA_SOURCE_TYPE
+VARCHAR2																  32 N
+
+CDC_DATA_SOURCE 		  8 DATA_SOURCE_SERVICE_NAME
+VARCHAR2																  64 N
+
+CDC_DATA_SOURCE 		  9 INSERT_TIME
+DATE																	   7 Y
+
+CDC_DATA_SOURCE 		 10 UPDATE_TIME
+DATE																	   7 Y
+
+CDC_DATA_SOURCE 		 11 DELETE_TIME
+DATE																	   7 Y
+
+CDC_DATA_SOURCE 		 12 FG_ACTIVE
+VARCHAR2																   1 Y
+
+CDC_DATA_SOURCE 		 13 DATA_SOURCE_DOMAIN
+VARCHAR2																  32 Y
+
+CDC_DATA_SOURCE 		 14 DATA_SOURCE_CATEGORY
+VARCHAR2																  30 Y
+
+CDC_DATA_SOURCE 		 15 SOURCE_APP
+VARCHAR2																  20 Y
+
+CDC_DATA_SOURCE 		 16 DATA_SOURCE_NAME
+VARCHAR2																  30 Y
+
+CDC_DATA_SOURCE 		 17 DATA_SOURCE_BIZ_ATTR
+VARCHAR2																2000 Y
+
+
+21 rows selected.
+
+=== PK of config tables ===
+
+TABLE_NAME		 CONSTRAINT_NAME														  C
+------------------------ -------------------------------------------------------------------------------------------------------------------------------- -
+COLUMN_NAME			     POSITION
+---------------------------------- ----------
+CDC_CLIENT_MULTIPLE	 PK_CDC_CLIENT_MULTIPLE 													  P
+CLIENT_ID				    1
+
+CDC_DATA_SOURCE 	 PK_CDC_DATA_SOURCE														  P
+DATA_SOURCE_ID				    1
+
+
+2 rows selected.

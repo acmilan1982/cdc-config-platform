@@ -1,0 +1,54 @@
+
+1 row created.
+
+
+1 row created.
+
+
+1 row created.
+
+
+1 row created.
+
+
+1 row created.
+
+
+1 row created.
+
+
+1 row created.
+
+
+Commit complete.
+
+=== post-insert counts ===
+select 'RUN_STATE' as t, count(*) as rows from CDC_DATA_SOURCE_RUN_STATE
+                                     *
+ERROR at line 1:
+ORA-00923: FROM keyword not found where expected
+
+
+=== prefix hits after insert ===
+
+M			  V
+---------------- ----------
+RS_client_prefix	  1
+RS_source_prefix	  1
+
+2 rows selected.
+
+=== status distribution after insert ===
+
+SNAPSHOT_STATUS 			CNT
+-------------------------------- ----------
+SNAPSHOT_RUNNING			 17
+SNAPSHOT_COMPLETED			 13
+UNKNOWN 				  2
+UNKNOWN_MODE				  1
+STARTING				  1
+SNAPSHOT_FA065_UNKNOWN			  1
+SNAPSHOT_STALE				  1
+SNAPSHOT_UNKNOWN			  1
+
+8 rows selected.

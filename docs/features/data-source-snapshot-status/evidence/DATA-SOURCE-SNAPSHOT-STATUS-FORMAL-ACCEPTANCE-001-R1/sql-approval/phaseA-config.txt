@@ -1,0 +1,129 @@
+=== PK columns ===
+
+COLUMN_NAME
+----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
+  POSITION
+----------
+CLIENT_ID
+	 1
+
+DATA_SOURCE_ID
+	 2
+
+
+2 rows selected.
+
+=== CLIENT_MULTIPLE config (id, fg, has_desc) ===
+
+CLIENT_ID		       FG   DSCC
+------------------------------ ---- ----
+CCFG-AC-R1-ABN		       X    HAS
+CCFG-AC-R1-HIST-COM	       0    HAS
+CCFG-AC-R1-OFF		       0    NULL
+CCFG-AC-R1-ON		       1    HAS
+c-dssr1-0906-a		       0    HAS
+c-dssr1-0906-b		       0    HAS
+c-dssr1-0906-c		       0    HAS
+c-dssr1-0906-d		       0    HAS
+c-dssr1-0906-e		       0    HAS
+hosp-001		       0    HAS
+hosp-002		       1    HAS
+hosp-006		       0    HAS
+hosp-0061		       1    HAS
+hosp-007		       1    HAS
+hosp-008		       0    HAS
+hosp-012		       1    HAS
+
+16 rows selected.
+
+=== DATA_SOURCE config (id, fg, category) ===
+
+DATA_SOURCE_ID			   FG	CAT
+---------------------------------- ---- ----------
+1111				   0	target
+111111111111111111111111	   0	source
+112-source-19c			   1	source
+199-source			   0	SOURCE
+5905f1ce83024410836b40ca0ebfc446   1	source
+5905f1ce83024410836b40ca0ebfc477   0	target
+CCFG-AC-R1-COM,ID		   1	SOURCE
+CCFG-AC-R1-DS01 		   1	SOURCE
+CCFG-AC-R1-DS02 		   1	SOURCE
+CCFG-AC-R1-DS03 		   1	SOURCE
+CCFG-AC-R1-DS04 		   1	SOURCE
+CCFG-AC-R1-DS05 		   1	SOURCE
+CCFG-AC-R1-DS06 		   1	SOURCE
+CCFG-AC-R1-DS07 		   1	SOURCE
+CCFG-AC-R1-DS08 		   1	SOURCE
+a31a1a6e542747ea8bcbfb12bd43b6b9   0	target
+company-target-doris-v4 	   1	target
+company-target-mysql-5		   1	target
+fail-db 			   0	SOURCE
+mock7				   0	SOURCE
+mock8				   0	SOURCE
+mock9				   0	SOURCE
+my-19c				   1	source
+my-target-doris-v4		   0	target
+s-dssr1-0906-1			   0	SOURCE
+s-dssr1-0906-2			   0	SOURCE
+s-dssr1-0906-3			   0	SOURCE
+s-dssr1-0906-4			   0	TARGET
+s-dssr1-0906-5			   0
+target-doris-v3 		   0	target
+target-doris-v4 		   1	target
+target-mysql-5			   0	target
+target-oracle			   0	target
+target-oracle-WJW		   0	target
+
+34 rows selected.
+
+=== RUN_STATE status distribution ===
+
+SNAPSHOT_STATUS 			CNT
+-------------------------------- ----------
+SNAPSHOT_RUNNING			 13
+SNAPSHOT_COMPLETED			 11
+UNKNOWN 				  2
+UNKNOWN_MODE				  1
+STARTING				  1
+SNAPSHOT_STALE				  1
+SNAPSHOT_UNKNOWN			  1
+
+7 rows selected.
+
+=== RUN_STATE rows ===
+
+CLIENT_ID		       DATA_SOURCE_ID			  ST				   UPD
+------------------------------ ---------------------------------- -------------------------------- -------------------
+c-dssr1-0906-a		       s-dssr1-0906-1			  SNAPSHOT_RUNNING		   2026-09-06 11:02:00
+c-dssr1-0906-a		       s-dssr1-0906-2			  SNAPSHOT_RUNNING		   2026-09-06 11:01:30
+c-dssr1-0906-a		       s-dssr1-0906-3			  SNAPSHOT_COMPLETED		   2026-09-06 11:00:05
+c-dssr1-0906-a		       s-dssr1-0906-4			  SNAPSHOT_COMPLETED		   2026-09-06 10:59:00
+c-dssr1-0906-a		       s-dssr1-0906-5			  SNAPSHOT_STALE		   2026-09-06 10:58:00
+c-dssr1-0906-b		       s-dssr1-0906-1			  SNAPSHOT_RUNNING		   2026-09-06 10:57:00
+c-dssr1-0906-b		       s-dssr1-0906-2			  UNKNOWN			   2026-09-06 10:56:00
+c-dssr1-0906-b		       s-dssr1-0906-3			  SNAPSHOT_COMPLETED		   2026-09-06 10:55:30
+c-dssr1-0906-b		       s-dssr1-0906-5			  SNAPSHOT_COMPLETED		   2026-09-06 10:54:10
+c-dssr1-0906-c		       s-dssr1-0906-4			  SNAPSHOT_COMPLETED		   2026-09-05 08:00:00
+c-dssr1-0906-c		       s-dssr1-0906-5			  UNKNOWN			   2026-09-05 08:00:00
+c-dssr1-0906-c		       s-dssr1-0906-m1			  SNAPSHOT_RUNNING		   2026-09-06 10:53:00
+c-dssr1-0906-c		       s-dssr1-0906-m2			  STARTING			   2026-09-06 10:52:00
+c-dssr1-0906-c		       s-dssr1-0906-m3			  SNAPSHOT_COMPLETED		   2026-09-06 10:51:20
+c-dssr1-0906-d		       s-dssr1-0906-1			  SNAPSHOT_COMPLETED		   2026-09-06 10:50:00
+c-dssr1-0906-d		       s-dssr1-0906-2			  SNAPSHOT_RUNNING		   2026-09-06 10:49:30
+c-dssr1-0906-d		       s-dssr1-0906-3			  SNAPSHOT_RUNNING		   2026-09-05 08:00:00
+c-dssr1-0906-d		       s-dssr1-0906-4			  SNAPSHOT_UNKNOWN		   2026-09-06 10:49:00
+c-dssr1-0906-d		       s-dssr1-0906-5			  SNAPSHOT_RUNNING		   2026-09-05 08:00:00
+c-dssr1-0906-e		       s-dssr1-0906-1			  SNAPSHOT_RUNNING		   2026-09-05 08:00:00
+c-dssr1-0906-e		       s-dssr1-0906-2			  SNAPSHOT_RUNNING		   2026-09-05 08:00:00
+c-dssr1-0906-e		       s-dssr1-0906-3			  SNAPSHOT_RUNNING		   2026-09-06 10:48:00
+c-dssr1-0906-e		       s-dssr1-0906-4			  SNAPSHOT_COMPLETED		   2026-09-06 10:47:40
+c-dssr1-0906-e		       s-dssr1-0906-5			  SNAPSHOT_COMPLETED		   2026-09-05 08:00:00
+c-dssr1-0906-miss1	       s-dssr1-0906-2			  SNAPSHOT_RUNNING		   2026-09-06 10:46:00
+c-dssr1-0906-miss1	       s-dssr1-0906-3			  UNKNOWN_MODE			   2026-09-06 10:45:00
+c-dssr1-0906-miss2	       s-dssr1-0906-1			  SNAPSHOT_COMPLETED		   2026-09-06 10:44:50
+c-dssr1-0906-miss2	       s-dssr1-0906-m1			  SNAPSHOT_RUNNING		   2026-09-06 10:43:00
+c-dssr1-0906-miss2	       s-dssr1-0906-m2			  SNAPSHOT_COMPLETED		   2026-09-06 10:42:00
+hosp-012		       112-source-19c			  SNAPSHOT_RUNNING		   2026-08-17 17:28:46
+
+30 rows selected.

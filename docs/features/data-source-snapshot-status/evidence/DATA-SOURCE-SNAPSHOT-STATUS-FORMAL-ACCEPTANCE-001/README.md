@@ -76,3 +76,13 @@ bash docs/features/data-source-snapshot-status/evidence/DATA-SOURCE-SNAPSHOT-STA
 # 浏览器用例（需前端 5173 + 后端 8080 在运行）
 node docs/features/data-source-snapshot-status/evidence/DATA-SOURCE-SNAPSHOT-STATUS-FORMAL-ACCEPTANCE-001/browser/scripts/fa-closeout.cjs
 ```
+
+## 6. R1 追加纠正入口（append-only，`DATA-SOURCE-SNAPSHOT-STATUS-FORMAL-ACCEPTANCE-001-R1`）
+
+> 本节由后续任务 `DATA-SOURCE-SNAPSHOT-STATUS-FORMAL-ACCEPTANCE-001-R1`（2026-09-12）**文末追加**。
+> 上文 §1～§5 索引**未删除、未重写**；本目录**其他 134 个证据文件逐字节不变**。
+
+1. **`git diff --check` 分层纠正**：业务文档/作者生成文件干净；完整提交 `af88aa84…3190b3d…` 因本目录 `services/backend-runtime.txt` 的**逐字节转录原始日志行尾空格**而返回非零。这些空格是原始证据内容，不得清洗。详见 `…-R1/git/diff-check.txt`（`NONZERO_ONLY_PRESERVED_R0_RAW_TRANSCRIPT_WHITESPACE`）与 R0 报告 §16.1。
+2. **ZooKeeper 分层纠正**：Feature 主动访问/依赖均为 `NONE`；当前环境无可用 ZooKeeper 且本 Feature 不需要；本目录 `services/backend-runtime.txt` 中的 `ClientCnxn` / `2181` 记录属**后台应用无关连接尝试**（`OBSERVED`）；未观察到节点读写（`ZERO_NOT_OBSERVED`）。详见 `…-R1/readonly/runtime-audit.txt` §6 与 R0 报告 §16.2。
+
+R1 全部证据与判定见 `docs/features/data-source-snapshot-status/evidence/DATA-SOURCE-SNAPSHOT-STATUS-FORMAL-ACCEPTANCE-001-R1/` 与 `reports/DATA-SOURCE-SNAPSHOT-STATUS-FORMAL-ACCEPTANCE-001-R1.md`。

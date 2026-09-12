@@ -1,0 +1,5 @@
+# cmd: mvn -Dtest='com.bsoft.cdcconfig.monitor.datasourcerunstate.**' test
+# worktree: /agent/dss-formal-acceptance-001-r1 @ 3190b3d
+# started: 2026-09-12T20:50:16+08:00
+# exit=0
+# ended: 2026-09-12T20:50:31+08:00

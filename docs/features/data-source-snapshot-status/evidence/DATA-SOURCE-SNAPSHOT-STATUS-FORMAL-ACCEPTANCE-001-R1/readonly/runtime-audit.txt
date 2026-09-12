@@ -1,0 +1,53 @@
+# Backend SQL audit — DATA-SOURCE-SNAPSHOT-STATUS-FORMAL-ACCEPTANCE-001-R1 (DSS-AC-065 supplement)
+# log=/agent/dss-formal-acceptance-001-r1/docs/features/data-source-snapshot-status/evidence/DATA-SOURCE-SNAPSHOT-STATUS-FORMAL-ACCEPTANCE-001-R1/readonly/runtime-window.txt
+# lines=230  bytes=42749
+# window bounded by readonly/.window.begin (N0..N1) on the live backend log
+# note: input slice is stored as .txt so it is committable under the repository `.gitignore` `*.log`
+#       rule; end-of-line trailing blanks on captured log lines were normalized per task §16
+#       (R1-authored capture, no R0 file touched). Only end-of-line blanks changed — every subject
+#       this audit greps for (SQL verbs, table names, DDL/PL-SQL markers, ZK messages) is unaffected.
+
+## 1. All MyBatis 'Preparing:' statements by SQL verb
+       75 Preparing: SELECT
+
+## 2. WRITE statements (INSERT/UPDATE/DELETE/MERGE) — full list (expect none)
+  write_statement_count=0
+
+## 3. Distinct read-only statements against the Feature three tables
+  --- CDC_DATA_SOURCE_RUN_STATE
+      SELECT=25  WRITE=0
+      Preparing: SELECT CLIENT_ID AS clientId, DATA_SOURCE_ID AS dataSourceId, SNAPSHOT_STATUS AS snapshotStatus, TO_CHAR(SNAPSHOT_LAST_SEEN_AT, 'YYYY-MM-DD HH24:MI:SS') AS snapshotLastSeenAt, TO_CHAR(SNAPSHOT_COMPLETED_AT, 'YYYY-MM-DD HH24:MI:SS') AS snapshotCompletedAt, TO_CHAR(UPDATED_AT, 'YYYY-MM-DD HH24:MI:SS') AS updatedAt FROM CDC_DATA_SOURCE_RUN_STATE
+  --- CDC_CLIENT_MULTIPLE
+      SELECT=25  WRITE=0
+      Preparing: SELECT CLIENT_ID AS clientId, CLIENT_DESC AS clientDesc, FG_ACTIVE AS fgActive FROM CDC_CLIENT_MULTIPLE
+  --- CDC_DATA_SOURCE
+      SELECT=25  WRITE=0
+      Preparing: SELECT DATA_SOURCE_ID AS dataSourceId, DATA_SOURCE_ORG AS dataSourceOrg, DATA_SOURCE_CATEGORY AS dataSourceCategory, FG_ACTIVE AS fgActive FROM CDC_DATA_SOURCE
+
+## 4. Any DDL / PL-SQL / commit markers in window
+  /CREATE / = 0
+  /ALTER / = 0
+  /DROP / = 0
+  /TRUNCATE/ = 0
+  /BEGIN/ = 0
+  /COMMIT/ = 0
+  /callable/ = 0
+
+## 5. All tables referenced by window statements (by verb)
+       25 FROM CDC_CLIENT_MULTIPLE
+       25 FROM CDC_DATA_SOURCE
+       25 FROM CDC_DATA_SOURCE_RUN_STATE
+
+## 6. ZooKeeper (layered reporting — Feature uses no ZK API)
+  zk_lines=4
+  --- distinct zk messages (Background application connection attempts ONLY; expect connect/refused, no node ops)
+            2 [19.16.111:2181)] org.apache.zookeeper.ClientCnxn          : Opening socket connection to server 10.19.16.111/10.19.16.111:2181. Will not attempt to authenticate using SASL (unknown error)
+            2 [19.16.111:2181)] org.apache.zookeeper.ClientCnxn          : Socket error occurred: 10.19.16.111/10.19.16.111:2181: Connection refused
+  --- ZK node read/write API markers (expect 0): getData/setData/create/delete/setACL/reconfig list
+      /getData/ = 0
+      /setData/ = 0
+      /setACL/ = 0
+      /reconfig/ = 0
+      /ZooKeeper\.getChildren/ = 0
+      /zkCli/ = 0
+      /bsoft-cdc/ = 0

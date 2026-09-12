@@ -1,0 +1,28 @@
+# R1 tests & build — DATA-SOURCE-SNAPSHOT-STATUS-FORMAL-ACCEPTANCE-001-R1
+# generated: 2026-09-12T20:54:38+08:00
+# worktree: /agent/dss-formal-acceptance-001-r1 @ 3190b3d2450478bef34b24578312c76c3973cb08 (same code as R0 services)
+
+## 1. backend targeted  [file: backend-targeted.txt]
+  Tests run: 4, Failures: 0, Errors: 0, Skipped: 0, Time elapsed: 0.059 s - in com.bsoft.cdcconfig.monitor.datasourcerunstate.DataSourceRunStateReadOnlyContractTest
+  Tests run: 20, Failures: 0, Errors: 0, Skipped: 0, Time elapsed: 0.735 s - in com.bsoft.cdcconfig.monitor.datasourcerunstate.service.impl.DataSourceRunStateQueryServiceImplTest
+  Tests run: 3, Failures: 0, Errors: 0, Skipped: 0, Time elapsed: 0.244 s - in com.bsoft.cdcconfig.monitor.datasourcerunstate.vo.SnapshotStatusItemVoJsonTest
+  TOTAL Tests run: 27, Failures: 0, Errors: 0, Skipped: 0
+  BUILD SUCCESS
+  # exit=0
+
+## 2. frontend targeted  [file: frontend-targeted.txt]
+   Test Files  14 passed (14)
+        Tests  250 passed (250)
+  # exit=0
+
+## 3. frontend build  [file: frontend-build.txt]
+  # cmd: npm run build  (vue-tsc --noEmit && vite build)
+  > vue-tsc --noEmit && vite build
+  ✓ built in 21.68s
+  # exit=0
+
+## 4. note
+  - npm ci was run in this worktree because frontend/node_modules did not exist (CLAUDE.md §10.2).
+  - No test/code file was modified; these are re-runs of the Feature's own suites on the same commit.
+  - The full 106-case R0 acceptance matrix was NOT re-run (task §13: no code change => no need);
+    only the §9.1 affected cases were re-verified (see coverage-matrix-r1.md).

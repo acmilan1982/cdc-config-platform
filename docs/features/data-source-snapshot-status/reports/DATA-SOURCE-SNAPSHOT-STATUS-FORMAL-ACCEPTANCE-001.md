@@ -322,3 +322,34 @@ CHATGPT_FORMAL_ACCEPTANCE_REVIEW_FROM_GIT_THEN_TARGETED_COMPLETION_TASK
 - 对 `DSS-AC-065` 的替代结论，或对其余 106 条之外任何事项的批准。
 
 正式验收已执行，下一步为 ChatGPT 从 Git 独立复核，随后另立**定向补全任务**处理 `DSS-AC-065`。
+
+---
+
+## 16. R1 追加纠正（append-only，`DATA-SOURCE-SNAPSHOT-STATUS-FORMAL-ACCEPTANCE-001-R1`）
+
+> 本节由后续任务 `DATA-SOURCE-SNAPSHOT-STATUS-FORMAL-ACCEPTANCE-001-R1`（2026-09-12）**文末追加**。
+> R0 报告 §1～§15 正文**未删除、未重写**；以下两处事实纠正**取代** R0 相应原句的当前解释。
+
+### 16.1 `git diff --check` 事实纠正（取代 §11.2 的 `CLEAN` 表述）
+
+R0 报告 §11.2 把全提交 `git diff --check` 记作 `CLEAN`，**不准确**。经 R1 复核：
+
+- 对**业务文档/作者生成文件**（Markdown、JSON、脚本等）执行 `git diff --check` 为**干净**；
+- 对完整提交 `af88aa84…3190b3d…` 执行 `git diff --check` **返回非零**；
+- 唯一原因是**逐字节转录的 R0 原始日志**（`services/backend-runtime.txt` 等 `.txt` 原始输出）保留了**源输出自身的行尾空格**；
+- 这些空格是**原始证据内容**，不是业务文档格式错误，且 §14.2 要求其逐字节不变，**不得**清洗；
+- 因此 §11.2 的 `CLEAN` 表述由本追加纠正取代；R0 正文原句保留以存历史。
+
+R1 的分层结论见 `evidence/DATA-SOURCE-SNAPSHOT-STATUS-FORMAL-ACCEPTANCE-001-R1/git/diff-check.txt`，记录为 `NONZERO_ONLY_PRESERVED_R0_RAW_TRANSCRIPT_WHITESPACE`。
+
+### 16.2 ZooKeeper 事实纠正（取代 §3.2 的“未访问 ZooKeeper” 笼统表述）
+
+R0 报告 §3.2 笼统写作“**未访问、未操作** ZooKeeper”。经 R1 复核并按项目负责人 2026-09-12 补充确认，须按**分层口径**表述：
+
+- 本 Feature 的**代码与页面没有任何 ZooKeeper 调用或依赖**（`feature_zookeeper_access_status=NONE`、`feature_zookeeper_dependency_status=NONE`）；
+- **当前环境没有可用 ZooKeeper**，且本页面/接口**不需要**连接 ZooKeeper（`environment_zookeeper_status=UNAVAILABLE_NOT_REQUIRED_FOR_FEATURE`）；
+- R0 后端进程日志中**实际出现**后台 `ClientCnxn` / `10.19.16.111:2181` 的连接与重试（**后台应用无关连接尝试**，`OBSERVED`）；因此“未访问 ZooKeeper”只能指 **Feature 主动行为**，**不能**指整个应用进程没有任何连接尝试；
+- **未观察到任何 ZooKeeper 节点读写**（`zookeeper_node_read_write_status=ZERO_NOT_OBSERVED`）；
+- 该环境噪声**不影响**本 Feature 的验收结论，也不构成本 Feature 的失败或 `BLOCKED` 理由。
+
+R1 分层审计见 `evidence/DATA-SOURCE-SNAPSHOT-STATUS-FORMAL-ACCEPTANCE-001-R1/readonly/runtime-audit.txt` §6。

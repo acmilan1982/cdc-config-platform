@@ -1,0 +1,33 @@
+DSS-AC-065 R1 real-browser supplement (REAL backend + REAL 5173 page)
+route=http://127.0.0.1:5173/monitor/data-source-state viewport=1920x1080
+rows=37 distribution={"● 快照进行中":17,"? 未知状态":7,"✓ 快照已完成":13} warnRows=7
+
+PASS pageLoadsFormalRoute rows=37
+PASS runStateRowsAllRetained rendered=37, expected=37 (30 baseline + 7 temp)
+PASS statusDistribution17_7_13 {"● 快照进行中":17,"? 未知状态":7,"✓ 快照已完成":13}
+PASS warningRows7 7
+PASS sevenTempRowsAllPresent found=S1,S2,S3,S4,S5,S6,S7
+PASS S1_completedRow {"s":"✓ 快照已完成","ls":"2026-09-12 20:58:00","cp":"2026-09-12 20:58:30","up":"2026-09-12 20:58:30"}
+PASS S2_unknownRow {"s":"? 未知状态","w":true,"ls":"2026-09-12 20:57:00","cp":"--"}
+PASS S3_orphanProbeFallback {"p":"dss-fa065-r1-client-orphan","pi":false,"pd":false,"s":"● 快照进行中","src":"孝感市第一人民医院"}
+PASS S4_orphanSourceFallback {"src":"dss-fa065-r1-source-orphan","si":false,"sd":false,"s":"✓ 快照已完成","cp":"2026-09-12 20:55:30"}
+PASS S5_disabledProbeMark {"pi":true,"pit":"停用","s":"● 快照进行中"}
+PASS S6_disabledSourceConfig {"src":"业务库","s":"● 快照进行中","ls":"2026-09-12 20:53:00"}
+PASS S7_nonSourceCategory {"src":"doirs库","sd":false,"ls":"--","s":"● 快照进行中"}
+PASS sortRunningGroupHead dss-fa065-r1-client-orphan|孝感市第一人民医院|2026-09-12 20:56:00 ; CCFG-AC-R1-OFF|孝感市第一人民医院|2026-09-12 20:54:00 ; CCFG-AC-R1-ON|业务库|2026-09-12 20:53:00 ; hosp-012|doirs库|2026-09-12 20:52:00
+PASS sortGroupBoundaries firstUnknownIdx=17, firstCompletedIdx=24
+PASS sortUnknownGroupHead hosp-002|2026-09-12 20:57:00
+PASS sortCompletedGroupHead hosp-007|2026-09-12 20:58:30 ; hosp-0061|2026-09-12 20:55:30
+PASS uiFilter_client_hosp007 {"sel":"hosp-007（总部测试 IP: 192.168.0.9...）","n":1,"p":"hosp-007"}
+PASS uiFilter_client_orphanProbe {"sel":"dss-fa065-r1-client-...","n":1,"p":"dss-fa065-r1-client-orphan"}
+PASS uiFilter_client_hosp002_unknown {"sel":"hosp-002（总部测试 IP: 3.3.0.168, ...）","n":1,"p":"hosp-002","s":"? 未知状态"}
+PASS uiFilter_status_unknown {"sel":"未知状态（UNKNOWN）","n":7,"warn":7}
+PASS uiFilter_status_completed {"sel":"快照已完成（COMPLETED）","n":13,"r0":"hosp-007","r1":"dss-fa065-r1-source-orphan"}
+PASS uiFilter_source_orphanSource {"sel":"dss-fa065-r1-source-...","n":1,"src":"dss-fa065-r1-source-orphan"}
+PASS resetRestoresAllRows rows after reset=37
+PASS noWriteRequestFromPage []
+PASS onlyListApiUsed []
+PASS noConsoleOrPageErrors {"console":[],"page":[]}
+
+summary assertions=26 passed=26 failed=0
+nonGetRequests=0 listApiGets=14 otherApi=0 consoleErrors=0 pageErrors=0

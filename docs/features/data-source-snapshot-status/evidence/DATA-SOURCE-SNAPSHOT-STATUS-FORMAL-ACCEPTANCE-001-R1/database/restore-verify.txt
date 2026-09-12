@@ -1,0 +1,35 @@
+# DSS-AC-065 R1 restore verification (§8.3)
+# table under test: CDC / CDC_DATA_SOURCE_RUN_STATE (dev Oracle 19c 192.168.174.65:1521/prod.enmotech.com)
+
+## 1. byte-compare: restored export vs pre-task export (expect identical)
+  run_state        before=03f4044cfac28a6d restored=03f4044cfac28a6d -> IDENTICAL
+  client_multiple  before=a9f7d2faf237c7a2 restored=a9f7d2faf237c7a2 -> IDENTICAL
+  data_source      before=34e9a7094dce513e restored=34e9a7094dce513e -> IDENTICAL
+
+## 2. row counts and content digests (live re-read after restore)
+-- task-prefix rows remaining (expect 0)
+  prefix_rows=0
+-- any of the 7 approved composite PKs still present (expect 0)
+  temp_pk_remaining=0
+-- total row counts (expect run_state=30 client_multiple=16 data_source=34)
+  run_state=30
+  client_multiple=16
+  data_source=34
+-- ordered 6-field content digest and PK-set digest (expect 3928100845 / 524003855)
+  content_digest=3928100845
+  pk_set_digest=524003855
+-- status distribution (expect 30 rows total)
+  SNAPSHOT_COMPLETED = 11
+  SNAPSHOT_RUNNING = 13
+  SNAPSHOT_STALE = 1
+  SNAPSHOT_UNKNOWN = 1
+  STARTING = 1
+  UNKNOWN = 2
+  UNKNOWN_MODE = 1
+-- NULL counts
+  last_seen_null=13 completed_null=19
+-- task-prefix rows in config tables (expect 0)
+  cm_prefix=0
+  ds_prefix=0
+
+## 3. cleanup tail — rows remaining with the task prefix in any Feature table

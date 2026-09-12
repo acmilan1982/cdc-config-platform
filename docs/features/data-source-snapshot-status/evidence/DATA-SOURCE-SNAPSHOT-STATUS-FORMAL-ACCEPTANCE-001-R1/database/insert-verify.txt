@@ -1,0 +1,29 @@
+=== the 7 temporary rows, six fields ===
+
+CLIENT_ID		   DATA_SOURCE_ID		    ST			     LS 		  CA		       UP
+-------------------------- -------------------------------- ------------------------ -------------------- -------------------- --------------------
+hosp-007		   112-source-19c		    SNAPSHOT_COMPLETED	     2026-09-12 20:58:00  2026-09-12 20:58:30  2026-09-12 20:58:30
+hosp-002		   112-source-19c		    SNAPSHOT_FA065_UNKNOWN   2026-09-12 20:57:00  ~NULL~	       2026-09-12 20:57:00
+dss-fa065-r1-client-orphan 112-source-19c		    SNAPSHOT_RUNNING	     2026-09-12 20:56:00  ~NULL~	       2026-09-12 20:56:00
+hosp-0061		   dss-fa065-r1-source-orphan	    SNAPSHOT_COMPLETED	     2026-09-12 20:55:00  2026-09-12 20:55:30  2026-09-12 20:55:30
+CCFG-AC-R1-OFF		   112-source-19c		    SNAPSHOT_RUNNING	     2026-09-12 20:54:00  ~NULL~	       2026-09-12 20:54:00
+CCFG-AC-R1-ON		   199-source			    SNAPSHOT_RUNNING	     2026-09-12 20:53:00  ~NULL~	       2026-09-12 20:53:00
+hosp-012		   company-target-doris-v4	    SNAPSHOT_RUNNING	     ~NULL~		  ~NULL~	       2026-09-12 20:52:00
+
+7 rows selected.
+
+=== row counts ===
+
+TOTAL_ROWS
+----------
+	37
+
+1 row selected.
+
+=== non-task rows (must be 30) ===
+
+NONTASK_ROWS
+------------
+	  30
+
+1 row selected.

@@ -1,0 +1,57 @@
+### 01-no-params  http=200  url=http://192.168.174.70:8080/api/monitor/data-source-run-state/list
+  code=200 message=success records=37 cat={'RUNNING': 17, 'UNKNOWN': 7, 'COMPLETED': 13}
+  candidates: clients=14 sources=12 statuses=['RUNNING', 'COMPLETED', 'UNKNOWN']
+  ROW {"clientId": "dss-fa065-r1-client-orphan", "clientRef": {"desc": null, "state": "NOT_FOUND"}, "snapshotCompletedAt": null, "snapshotLastSeenAt": "2026-09-12 20:56:00", "snapshotStatus": "SNAPSHOT_RUNNING", "sourceId": "112-source-19c", "sourceRef": {"category": "SOURCE", "org": "孝感市第一人民医院", "sourceRole": true, "state": "ACTIVE"}, "statusCategory": "RUNNING", "updatedAt": "2026-09-12 20:56:00"}
+  ROW {"clientId": "hosp-0061", "clientRef": {"desc": "总部测试 IP: 192.168.0.94, 192.168.174.1, 3.3.0.192, 192.168.100.1", "state": "ACTIVE"}, "snapshotCompletedAt": "2026-09-12 20:55:30", "snapshotLastSeenAt": "2026-09-12 20:55:00", "snapshotStatus": "SNAPSHOT_COMPLETED", "sourceId": "dss-fa065-r1-source-orphan", "sourceRef": {"category": null, "org": null, "sourceRole": false, "state": "NOT_FOUND"}, "statusCategory": "COMPLETED", "updatedAt": "2026-09-12 20:55:30"}
+
+### 02-status-completed  http=200  url=http://192.168.174.70:8080/api/monitor/data-source-run-state/list?status=COMPLETED
+  code=200 message=success records=13 cat={'COMPLETED': 13}
+  candidates: clients=14 sources=12 statuses=['RUNNING', 'COMPLETED', 'UNKNOWN']
+  ROW {"clientId": "hosp-0061", "clientRef": {"desc": "总部测试 IP: 192.168.0.94, 192.168.174.1, 3.3.0.192, 192.168.100.1", "state": "ACTIVE"}, "snapshotCompletedAt": "2026-09-12 20:55:30", "snapshotLastSeenAt": "2026-09-12 20:55:00", "snapshotStatus": "SNAPSHOT_COMPLETED", "sourceId": "dss-fa065-r1-source-orphan", "sourceRef": {"category": null, "org": null, "sourceRole": false, "state": "NOT_FOUND"}, "statusCategory": "COMPLETED", "updatedAt": "2026-09-12 20:55:30"}
+
+### 03-status-unknown  http=200  url=http://192.168.174.70:8080/api/monitor/data-source-run-state/list?status=UNKNOWN
+  code=200 message=success records=7 cat={'UNKNOWN': 7}
+  candidates: clients=14 sources=12 statuses=['RUNNING', 'COMPLETED', 'UNKNOWN']
+
+### 04-status-running  http=200  url=http://192.168.174.70:8080/api/monitor/data-source-run-state/list?status=RUNNING
+  code=200 message=success records=17 cat={'RUNNING': 17}
+  candidates: clients=14 sources=12 statuses=['RUNNING', 'COMPLETED', 'UNKNOWN']
+  ROW {"clientId": "dss-fa065-r1-client-orphan", "clientRef": {"desc": null, "state": "NOT_FOUND"}, "snapshotCompletedAt": null, "snapshotLastSeenAt": "2026-09-12 20:56:00", "snapshotStatus": "SNAPSHOT_RUNNING", "sourceId": "112-source-19c", "sourceRef": {"category": "SOURCE", "org": "孝感市第一人民医院", "sourceRole": true, "state": "ACTIVE"}, "statusCategory": "RUNNING", "updatedAt": "2026-09-12 20:56:00"}
+
+### 05-client-hosp007  http=200  url=http://192.168.174.70:8080/api/monitor/data-source-run-state/list?clientId=hosp-007
+  code=200 message=success records=1 cat={'COMPLETED': 1}
+  candidates: clients=14 sources=12 statuses=['RUNNING', 'COMPLETED', 'UNKNOWN']
+  ROW {"clientId": "hosp-007", "clientRef": {"desc": "总部测试 IP: 192.168.0.94, 192.168.174.1, 3.3.0.192, 192.168.100.1", "state": "ACTIVE"}, "snapshotCompletedAt": "2026-09-12 20:58:30", "snapshotLastSeenAt": "2026-09-12 20:58:00", "snapshotStatus": "SNAPSHOT_COMPLETED", "sourceId": "112-source-19c", "sourceRef": {"category": "SOURCE", "org": "孝感市第一人民医院", "sourceRole": true, "state": "ACTIVE"}, "statusCategory": "COMPLETED", "updatedAt": "2026-09-12 20:58:30"}
+
+### 06-client-orphan-probe  http=200  url=http://192.168.174.70:8080/api/monitor/data-source-run-state/list?clientId=dss-fa065-r1-client-orphan
+  code=200 message=success records=1 cat={'RUNNING': 1}
+  candidates: clients=14 sources=12 statuses=['RUNNING', 'COMPLETED', 'UNKNOWN']
+  ROW {"clientId": "dss-fa065-r1-client-orphan", "clientRef": {"desc": null, "state": "NOT_FOUND"}, "snapshotCompletedAt": null, "snapshotLastSeenAt": "2026-09-12 20:56:00", "snapshotStatus": "SNAPSHOT_RUNNING", "sourceId": "112-source-19c", "sourceRef": {"category": "SOURCE", "org": "孝感市第一人民医院", "sourceRole": true, "state": "ACTIVE"}, "statusCategory": "RUNNING", "updatedAt": "2026-09-12 20:56:00"}
+
+### 07-source-orphan-source  http=200  url=http://192.168.174.70:8080/api/monitor/data-source-run-state/list?sourceId=dss-fa065-r1-source-orphan
+  code=200 message=success records=1 cat={'COMPLETED': 1}
+  candidates: clients=14 sources=12 statuses=['RUNNING', 'COMPLETED', 'UNKNOWN']
+  ROW {"clientId": "hosp-0061", "clientRef": {"desc": "总部测试 IP: 192.168.0.94, 192.168.174.1, 3.3.0.192, 192.168.100.1", "state": "ACTIVE"}, "snapshotCompletedAt": "2026-09-12 20:55:30", "snapshotLastSeenAt": "2026-09-12 20:55:00", "snapshotStatus": "SNAPSHOT_COMPLETED", "sourceId": "dss-fa065-r1-source-orphan", "sourceRef": {"category": null, "org": null, "sourceRole": false, "state": "NOT_FOUND"}, "statusCategory": "COMPLETED", "updatedAt": "2026-09-12 20:55:30"}
+
+### 08-client-disabled  http=200  url=http://192.168.174.70:8080/api/monitor/data-source-run-state/list?clientId=CCFG-AC-R1-OFF
+  code=200 message=success records=1 cat={'RUNNING': 1}
+  candidates: clients=14 sources=12 statuses=['RUNNING', 'COMPLETED', 'UNKNOWN']
+  ROW {"clientId": "CCFG-AC-R1-OFF", "clientRef": {"desc": null, "state": "INACTIVE"}, "snapshotCompletedAt": null, "snapshotLastSeenAt": "2026-09-12 20:54:00", "snapshotStatus": "SNAPSHOT_RUNNING", "sourceId": "112-source-19c", "sourceRef": {"category": "SOURCE", "org": "孝感市第一人民医院", "sourceRole": true, "state": "ACTIVE"}, "statusCategory": "RUNNING", "updatedAt": "2026-09-12 20:54:00"}
+
+### 09-source-disabled  http=200  url=http://192.168.174.70:8080/api/monitor/data-source-run-state/list?sourceId=199-source
+  code=200 message=success records=1 cat={'RUNNING': 1}
+  candidates: clients=14 sources=12 statuses=['RUNNING', 'COMPLETED', 'UNKNOWN']
+  ROW {"clientId": "CCFG-AC-R1-ON", "clientRef": {"desc": "CCFG-AC-R1 人工验收夹具：启用探针（持有 7 个合法源库，用于观察机构标签/+N/Tooltip/完整清单/行高）", "state": "ACTIVE"}, "snapshotCompletedAt": null, "snapshotLastSeenAt": "2026-09-12 20:53:00", "snapshotStatus": "SNAPSHOT_RUNNING", "sourceId": "199-source", "sourceRef": {"category": "SOURCE", "org": "业务库", "sourceRole": true, "state": "INACTIVE"}, "statusCategory": "RUNNING", "updatedAt": "2026-09-12 20:53:00"}
+
+### 10-source-nonsource  http=200  url=http://192.168.174.70:8080/api/monitor/data-source-run-state/list?sourceId=company-target-doris-v4
+  code=200 message=success records=1 cat={'RUNNING': 1}
+  candidates: clients=14 sources=12 statuses=['RUNNING', 'COMPLETED', 'UNKNOWN']
+  ROW {"clientId": "hosp-012", "clientRef": {"desc": "总部测试 IP: 192.168.0.94, 192.168.174.1, 3.3.0.192, 192.168.100.1", "state": "ACTIVE"}, "snapshotCompletedAt": null, "snapshotLastSeenAt": null, "snapshotStatus": "SNAPSHOT_RUNNING", "sourceId": "company-target-doris-v4", "sourceRef": {"category": "TARGET", "org": "doirs库", "sourceRole": false, "state": "ACTIVE"}, "statusCategory": "RUNNING", "updatedAt": "2026-09-12 20:52:00"}
+
+### 11-client-hosp002-status-unknown  http=200  url=http://192.168.174.70:8080/api/monitor/data-source-run-state/list?clientId=hosp-002&status=UNKNOWN
+  code=200 message=success records=1 cat={'UNKNOWN': 1}
+  candidates: clients=14 sources=12 statuses=['RUNNING', 'COMPLETED', 'UNKNOWN']
+  ROW {"clientId": "hosp-002", "clientRef": {"desc": "总部测试 IP: 3.3.0.168, 192.168.174.1, 192.168.1.127, 192.168.100.1", "state": "ACTIVE"}, "snapshotCompletedAt": null, "snapshotLastSeenAt": "2026-09-12 20:57:00", "snapshotStatus": "SNAPSHOT_FA065_UNKNOWN", "sourceId": "112-source-19c", "sourceRef": {"category": "SOURCE", "org": "孝感市第一人民医院", "sourceRole": true, "state": "ACTIVE"}, "statusCategory": "UNKNOWN", "updatedAt": "2026-09-12 20:57:00"}
+
+### 12-invalid-status  http=200  url=http://192.168.174.70:8080/api/monitor/data-source-run-state/list?status=FORBIDDEN_STATE
+  code=41002 message=快照状态取值非法 records=0 cat={}
