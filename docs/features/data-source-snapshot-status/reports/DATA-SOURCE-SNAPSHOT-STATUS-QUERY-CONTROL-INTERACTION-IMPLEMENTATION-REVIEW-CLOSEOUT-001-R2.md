@@ -160,3 +160,14 @@ DATA-SOURCE-SNAPSHOT-STATUS-FORMAL-ACCEPTANCE-001
 | `pending_user_review` | `NO` |
 | `pending_user_confirmation_count` | `0` |
 | 下一入口 | `DATA-SOURCE-SNAPSHOT-STATUS-FORMAL-ACCEPTANCE-001` |
+
+## 附：R3 追加纠正记录（2026-09-12，append-only）
+
+本节为 `...-CLOSEOUT-001-R3` 任务对该 R2 报告的**追加说明**，不删除、不改写、不伪造原报告任何正文。
+
+- **R2 目标本身正确**：本报告 §3 对 `ACCEPTANCE.md` §4.22 前言的定向纠正，以及由 ChatGPT 从远程 Git 复审 R2 提交 `8f094392acb0e68934a91d9955b2494e9295b9c3` 的 `APPROVED` 结论，均成立且保留。
+- **R2 的前置判断不完整**：R2 认为 §4.22 前言修正后即可进入正式验收，该判断**遗漏了** `ACCEPTANCE.md` §1 当前状态表中 3 处仍以无历史限定的当前语气陈述过期事实的位置。正式验收启动前复核时发现该遗漏。
+- **首版 R3 提示词的前提错误**：首版 `...-CLOSEOUT-001-R3` 提示词断言 §1 共有 **6** 个字段为旧值。Agent 在 **零改动**状态下核验后停线并报告前提冲突，未执行任何修改。
+- **ChatGPT 裁决**：确认 Agent 停线正确；实际核实 6 个字段中**只有 3 处**为真实残留——即 `ACCEPTANCE.md` 第 21 行（项目负责人人工页面检查状态直接值 `CHANGES_REQUIRED`）、第 76 行（“文档版本”行实现状态 `IMPLEMENTED_ADJUSTMENT_PENDING` 与 86 条计数）、第 87 行（“重要声明”对应条目的同一 token 与 86 条计数）；另外 5 个字段自 `8f094392...` 起已是当前正确值。
+- **修订版 R3 的落地范围**：`...-CLOSEOUT-001-R3` 修订版只修正上述 3 处真实残留并在本文变更记录区追加一条 2026-09-12 R3 事实一致性记录；其余 5 个字段零 diff；§4.22 前言、`DSS-AC-001~107` 业务行、代码、契约与证据均零变化。R3 结论报告见 `reports/DATA-SOURCE-SNAPSHOT-STATUS-QUERY-CONTROL-INTERACTION-IMPLEMENTATION-REVIEW-CLOSEOUT-001-R3.md`。
+- **本报告原正文完整保留**：以上说明只作追加，原 §1～§11 及自证清单内容不受影响。
