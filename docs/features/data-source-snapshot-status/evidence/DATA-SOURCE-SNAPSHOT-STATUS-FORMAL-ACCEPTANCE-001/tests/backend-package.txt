@@ -1,0 +1,55 @@
+# cmd: mvn clean package -DskipTests
+# started: 2026-09-12T16:08:56+08:00
+
+[INFO] Scanning for projects...
+[INFO] 
+[INFO] ---------------< com.bsoft:cdc-config-platform-backend >----------------
+[INFO] Building cdc-config-platform-backend 1.0.0-SNAPSHOT
+[INFO]   from pom.xml
+[INFO] --------------------------------[ jar ]---------------------------------
+[INFO] 
+[INFO] --- maven-clean-plugin:3.2.0:clean (default-clean) @ cdc-config-platform-backend ---
+[INFO] Deleting /agent/dss-formal-acceptance-001/backend/target
+[INFO] 
+[INFO] --- maven-resources-plugin:3.2.0:resources (default-resources) @ cdc-config-platform-backend ---
+[INFO] Using 'UTF-8' encoding to copy filtered resources.
+[INFO] Using 'UTF-8' encoding to copy filtered properties files.
+[INFO] Copying 2 resources
+[INFO] Copying 34 resources
+[INFO] 
+[INFO] --- maven-compiler-plugin:3.10.1:compile (default-compile) @ cdc-config-platform-backend ---
+[INFO] Changes detected - recompiling the module!
+[INFO] Compiling 290 source files to /agent/dss-formal-acceptance-001/backend/target/classes
+[INFO] /agent/dss-formal-acceptance-001/backend/src/main/java/com/bsoft/cdcconfig/largescreen/stats/reader/LogBatchReader.java: /agent/dss-formal-acceptance-001/backend/src/main/java/com/bsoft/cdcconfig/largescreen/stats/reader/LogBatchReader.java uses or overrides a deprecated API.
+[INFO] /agent/dss-formal-acceptance-001/backend/src/main/java/com/bsoft/cdcconfig/largescreen/stats/reader/LogBatchReader.java: Recompile with -Xlint:deprecation for details.
+[INFO] 
+[INFO] --- animal-sniffer-maven-plugin:1.23:check (default) @ cdc-config-platform-backend ---
+[INFO] Checking unresolved references to org.codehaus.mojo.signature:java18:1.0
+[INFO] 
+[INFO] --- maven-resources-plugin:3.2.0:testResources (default-testResources) @ cdc-config-platform-backend ---
+[INFO] Using 'UTF-8' encoding to copy filtered resources.
+[INFO] Using 'UTF-8' encoding to copy filtered properties files.
+[INFO] skip non existing resourceDirectory /agent/dss-formal-acceptance-001/backend/src/test/resources
+[INFO] 
+[INFO] --- maven-compiler-plugin:3.10.1:testCompile (default-testCompile) @ cdc-config-platform-backend ---
+[INFO] Changes detected - recompiling the module!
+[INFO] Compiling 73 source files to /agent/dss-formal-acceptance-001/backend/target/test-classes
+[INFO] /agent/dss-formal-acceptance-001/backend/src/test/java/com/bsoft/cdcconfig/datasource/service/DataSourceServiceTest.java: Some input files use unchecked or unsafe operations.
+[INFO] /agent/dss-formal-acceptance-001/backend/src/test/java/com/bsoft/cdcconfig/datasource/service/DataSourceServiceTest.java: Recompile with -Xlint:unchecked for details.
+[INFO] 
+[INFO] --- maven-surefire-plugin:2.22.2:test (default-test) @ cdc-config-platform-backend ---
+[INFO] Tests are skipped.
+[INFO] 
+[INFO] --- maven-jar-plugin:3.2.2:jar (default-jar) @ cdc-config-platform-backend ---
+[INFO] Building jar: /agent/dss-formal-acceptance-001/backend/target/cdc-config-platform-backend-1.0.0-SNAPSHOT.jar
+[INFO] 
+[INFO] --- spring-boot-maven-plugin:2.7.18:repackage (repackage) @ cdc-config-platform-backend ---
+[INFO] Replacing main artifact with repackaged archive
+[INFO] ------------------------------------------------------------------------
+[INFO] BUILD SUCCESS
+[INFO] ------------------------------------------------------------------------
+[INFO] Total time:  9.285 s
+[INFO] Finished at: 2026-09-12T16:09:06+08:00
+[INFO] ------------------------------------------------------------------------
+
+EXIT_CODE=0

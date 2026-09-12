@@ -1,0 +1,353 @@
+===== A. ROW COUNTS (Feature three business tables + stats) =====
+
+TABLE_NAME		   ROW_COUNT
+------------------------- ----------
+CDC_DATA_SOURCE_RUN_STATE	  30
+CDC_CLIENT_MULTIPLE		  16
+CDC_DATA_SOURCE 		  34
+===== B. CDC_DATA_SOURCE_RUN_STATE FULL CONTENT (ordered) =====
+
+CLIENT_ID	       DATA_SOURCE_ID		      SNAPSHOT_STATUS	   SNAPSHOT_LAST_SEEN_ SNAPSHOT_COMPLETED_ UPDATED_AT
+---------------------- ------------------------------ -------------------- ------------------- ------------------- -------------------
+c-dssr1-0906-a	       s-dssr1-0906-1		      SNAPSHOT_RUNNING	   2026-09-06 11:02:00			   2026-09-06 11:02:00
+c-dssr1-0906-a	       s-dssr1-0906-2		      SNAPSHOT_RUNNING	   2026-09-06 11:01:30			   2026-09-06 11:01:30
+c-dssr1-0906-a	       s-dssr1-0906-3		      SNAPSHOT_COMPLETED   2026-09-06 11:00:00 2026-09-06 11:00:05 2026-09-06 11:00:05
+c-dssr1-0906-a	       s-dssr1-0906-4		      SNAPSHOT_COMPLETED		       2026-09-06 10:59:00 2026-09-06 10:59:00
+c-dssr1-0906-a	       s-dssr1-0906-5		      SNAPSHOT_STALE	   2026-09-06 10:58:00			   2026-09-06 10:58:00
+c-dssr1-0906-b	       s-dssr1-0906-1		      SNAPSHOT_RUNNING	   2026-09-06 10:57:00			   2026-09-06 10:57:00
+c-dssr1-0906-b	       s-dssr1-0906-2		      UNKNOWN							   2026-09-06 10:56:00
+c-dssr1-0906-b	       s-dssr1-0906-3		      SNAPSHOT_COMPLETED   2026-09-06 10:55:00 2026-09-06 10:55:30 2026-09-06 10:55:30
+c-dssr1-0906-b	       s-dssr1-0906-5		      SNAPSHOT_COMPLETED   2026-09-06 10:54:00 2026-09-06 10:54:10 2026-09-06 10:54:10
+c-dssr1-0906-c	       s-dssr1-0906-4		      SNAPSHOT_COMPLETED		       2026-09-05 07:58:30 2026-09-05 08:00:00
+c-dssr1-0906-c	       s-dssr1-0906-5		      UNKNOWN							   2026-09-05 08:00:00
+c-dssr1-0906-c	       s-dssr1-0906-m1		      SNAPSHOT_RUNNING	   2026-09-06 10:53:00			   2026-09-06 10:53:00
+c-dssr1-0906-c	       s-dssr1-0906-m2		      STARTING							   2026-09-06 10:52:00
+c-dssr1-0906-c	       s-dssr1-0906-m3		      SNAPSHOT_COMPLETED   2026-09-06 10:51:00 2026-09-06 10:51:20 2026-09-06 10:51:20
+c-dssr1-0906-d	       s-dssr1-0906-1		      SNAPSHOT_COMPLETED		       2026-09-06 10:50:00 2026-09-06 10:50:00
+c-dssr1-0906-d	       s-dssr1-0906-2		      SNAPSHOT_RUNNING	   2026-09-06 10:49:30			   2026-09-06 10:49:30
+c-dssr1-0906-d	       s-dssr1-0906-3		      SNAPSHOT_RUNNING						   2026-09-05 08:00:00
+c-dssr1-0906-d	       s-dssr1-0906-4		      SNAPSHOT_UNKNOWN	   2026-09-06 10:49:00			   2026-09-06 10:49:00
+c-dssr1-0906-d	       s-dssr1-0906-5		      SNAPSHOT_RUNNING						   2026-09-05 08:00:00
+c-dssr1-0906-e	       s-dssr1-0906-1		      SNAPSHOT_RUNNING						   2026-09-05 08:00:00
+c-dssr1-0906-e	       s-dssr1-0906-2		      SNAPSHOT_RUNNING						   2026-09-05 08:00:00
+c-dssr1-0906-e	       s-dssr1-0906-3		      SNAPSHOT_RUNNING	   2026-09-06 10:48:00			   2026-09-06 10:48:00
+c-dssr1-0906-e	       s-dssr1-0906-4		      SNAPSHOT_COMPLETED   2026-09-06 10:47:00 2026-09-06 10:47:40 2026-09-06 10:47:40
+c-dssr1-0906-e	       s-dssr1-0906-5		      SNAPSHOT_COMPLETED		       2026-09-05 07:59:00 2026-09-05 08:00:00
+c-dssr1-0906-miss1     s-dssr1-0906-2		      SNAPSHOT_RUNNING	   2026-09-06 10:46:00			   2026-09-06 10:46:00
+c-dssr1-0906-miss1     s-dssr1-0906-3		      UNKNOWN_MODE						   2026-09-06 10:45:00
+c-dssr1-0906-miss2     s-dssr1-0906-1		      SNAPSHOT_COMPLETED   2026-09-06 10:44:00 2026-09-06 10:44:50 2026-09-06 10:44:50
+c-dssr1-0906-miss2     s-dssr1-0906-m1		      SNAPSHOT_RUNNING	   2026-09-06 10:43:00			   2026-09-06 10:43:00
+c-dssr1-0906-miss2     s-dssr1-0906-m2		      SNAPSHOT_COMPLETED		       2026-09-06 10:42:00 2026-09-06 10:42:00
+hosp-012	       112-source-19c		      SNAPSHOT_RUNNING	   2026-08-17 17:28:46			   2026-08-17 17:28:46
+===== C. RUN_STATE STATUS DISTRIBUTION =====
+
+SNAPSHOT_STATUS 	    CNT
+-------------------- ----------
+SNAPSHOT_COMPLETED	     11
+SNAPSHOT_RUNNING	     13
+SNAPSHOT_STALE		      1
+SNAPSHOT_UNKNOWN	      1
+STARTING		      1
+UNKNOWN 		      2
+UNKNOWN_MODE		      1
+===== D. RUN_STATE CONTENT HASH =====
+
+ ROW_COUNT CONTENT_HASH_SUM
+---------- ----------------
+	30	 6.2239E+10
+===== E. CONSTRAINTS AND INDEXES (three tables) =====
+
+TABLE_NAME		   CONSTRAINT_NAME		      C STATUS
+-------------------------- ---------------------------------- - --------
+SEARCH_CONDITION_VC
+----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
+CDC_CLIENT_MULTIPLE	   SYS_C0041473 		      C ENABLED
+"CLIENT_ID" IS NOT NULL
+
+CDC_CLIENT_MULTIPLE	   SYS_C0041474 		      C ENABLED
+"FG_ACTIVE" IS NOT NULL
+
+CDC_CLIENT_MULTIPLE	   PK_CDC_CLIENT_MULTIPLE	      P ENABLED
+
+
+CDC_DATA_SOURCE 	   SYS_C0041424 		      C ENABLED
+"DATA_SOURCE_ID" IS NOT NULL
+
+CDC_DATA_SOURCE 	   SYS_C0041425 		      C ENABLED
+"DATA_SOURCE_ORG" IS NOT NULL
+
+CDC_DATA_SOURCE 	   SYS_C0041426 		      C ENABLED
+"DATA_SOURCE_HOST" IS NOT NULL
+
+CDC_DATA_SOURCE 	   SYS_C0041427 		      C ENABLED
+"DATA_SOURCE_PORT" IS NOT NULL
+
+CDC_DATA_SOURCE 	   SYS_C0041428 		      C ENABLED
+"DATA_SOURCE_USER_NAME" IS NOT NULL
+
+CDC_DATA_SOURCE 	   SYS_C0041429 		      C ENABLED
+"DATA_SOURCE_PASSWORD" IS NOT NULL
+
+CDC_DATA_SOURCE 	   SYS_C0041430 		      C ENABLED
+"DATA_SOURCE_TYPE" IS NOT NULL
+
+CDC_DATA_SOURCE 	   SYS_C0041431 		      C ENABLED
+"DATA_SOURCE_SERVICE_NAME" IS NOT NULL
+
+CDC_DATA_SOURCE 	   PK_CDC_DATA_SOURCE		      P ENABLED
+
+
+CDC_DATA_SOURCE_RUN_STATE  SYS_C0041433 		      C ENABLED
+"CLIENT_ID" IS NOT NULL
+
+CDC_DATA_SOURCE_RUN_STATE  SYS_C0041434 		      C ENABLED
+"DATA_SOURCE_ID" IS NOT NULL
+
+CDC_DATA_SOURCE_RUN_STATE  SYS_C0041435 		      C ENABLED
+"SNAPSHOT_STATUS" IS NOT NULL
+
+CDC_DATA_SOURCE_RUN_STATE  SYS_C0041436 		      C ENABLED
+"UPDATED_AT" IS NOT NULL
+
+CDC_DATA_SOURCE_RUN_STATE  PK_CDC_DS_RUN_STATE		      P ENABLED
+
+
+
+TABLE_NAME		   INDEX_NAME			      UNIQUENES STATUS
+-------------------------- ---------------------------------- --------- --------
+CDC_CLIENT_MULTIPLE	   PK_CDC_CLIENT_MULTIPLE	      UNIQUE	VALID
+CDC_DATA_SOURCE 	   IDX_CDC_DATA_SOURCE_ID_ACTIVE      NONUNIQUE VALID
+CDC_DATA_SOURCE 	   IDX_CDC_DATA_SOURCE_NAME	      NONUNIQUE VALID
+CDC_DATA_SOURCE 	   IDX_CDC_LOG_CORRECT_ORG	      NONUNIQUE VALID
+CDC_DATA_SOURCE 	   IDX_CDS_ACTIVE		      NONUNIQUE VALID
+CDC_DATA_SOURCE 	   PK_CDC_DATA_SOURCE		      UNIQUE	VALID
+CDC_DATA_SOURCE_RUN_STATE  PK_CDC_DS_RUN_STATE		      UNIQUE	VALID
+===== F. RUN_STATE x CLIENT_MULTIPLE LEFT JOIN (per-row probe config) =====
+
+CLIENT_ID	       DATA_SOURCE_ID		      SNAPSHOT_STATUS	   CLIENT_DESC			      C CONFIG_STA   DESC_LEN
+---------------------- ------------------------------ -------------------- ---------------------------------- - ---------- ----------
+c-dssr1-0906-a         s-dssr1-0906-1                 SNAPSHOT_RUNNING     快照页测试探针A，请勿启用。长描述  0 HAS_CONFIG        152
+                                                                           用于验证页面 Tooltip 与列宽截断：
+                                                                           某市第一人民医院信息中心CDC采集探
+                                                                           针（专用快照页测试实例，请勿启用其
+                                                                           进行任何真实数据同步）。继续追加说
+                                                                           明文字以拉长描述，确认列表单元格超
+                                                                           长时显示省略号并可由 Tooltip 完整
+                                                                           阅读；本条仅供源库快照状态只读页面
+                                                                           视觉验证使用。
+
+c-dssr1-0906-a         s-dssr1-0906-2                 SNAPSHOT_RUNNING     快照页测试探针A，请勿启用。长描述  0 HAS_CONFIG        152
+                                                                           用于验证页面 Tooltip 与列宽截断：
+                                                                           某市第一人民医院信息中心CDC采集探
+                                                                           针（专用快照页测试实例，请勿启用其
+                                                                           进行任何真实数据同步）。继续追加说
+                                                                           明文字以拉长描述，确认列表单元格超
+                                                                           长时显示省略号并可由 Tooltip 完整
+                                                                           阅读；本条仅供源库快照状态只读页面
+                                                                           视觉验证使用。
+
+c-dssr1-0906-a         s-dssr1-0906-3                 SNAPSHOT_COMPLETED   快照页测试探针A，请勿启用。长描述  0 HAS_CONFIG        152
+                                                                           用于验证页面 Tooltip 与列宽截断：
+                                                                           某市第一人民医院信息中心CDC采集探
+                                                                           针（专用快照页测试实例，请勿启用其
+                                                                           进行任何真实数据同步）。继续追加说
+                                                                           明文字以拉长描述，确认列表单元格超
+                                                                           长时显示省略号并可由 Tooltip 完整
+                                                                           阅读；本条仅供源库快照状态只读页面
+                                                                           视觉验证使用。
+
+c-dssr1-0906-a         s-dssr1-0906-4                 SNAPSHOT_COMPLETED   快照页测试探针A，请勿启用。长描述  0 HAS_CONFIG        152
+                                                                           用于验证页面 Tooltip 与列宽截断：
+                                                                           某市第一人民医院信息中心CDC采集探
+                                                                           针（专用快照页测试实例，请勿启用其
+                                                                           进行任何真实数据同步）。继续追加说
+                                                                           明文字以拉长描述，确认列表单元格超
+                                                                           长时显示省略号并可由 Tooltip 完整
+                                                                           阅读；本条仅供源库快照状态只读页面
+                                                                           视觉验证使用。
+
+c-dssr1-0906-a         s-dssr1-0906-5                 SNAPSHOT_STALE       快照页测试探针A，请勿启用。长描述  0 HAS_CONFIG        152
+                                                                           用于验证页面 Tooltip 与列宽截断：
+                                                                           某市第一人民医院信息中心CDC采集探
+                                                                           针（专用快照页测试实例，请勿启用其
+                                                                           进行任何真实数据同步）。继续追加说
+                                                                           明文字以拉长描述，确认列表单元格超
+                                                                           长时显示省略号并可由 Tooltip 完整
+                                                                           阅读；本条仅供源库快照状态只读页面
+                                                                           视觉验证使用。
+
+c-dssr1-0906-b         s-dssr1-0906-1                 SNAPSHOT_RUNNING     快照页测试探针B，请勿启用          0 HAS_CONFIG         13
+c-dssr1-0906-b         s-dssr1-0906-2                 UNKNOWN              快照页测试探针B，请勿启用          0 HAS_CONFIG         13
+c-dssr1-0906-b         s-dssr1-0906-3                 SNAPSHOT_COMPLETED   快照页测试探针B，请勿启用          0 HAS_CONFIG         13
+c-dssr1-0906-b         s-dssr1-0906-5                 SNAPSHOT_COMPLETED   快照页测试探针B，请勿启用          0 HAS_CONFIG         13
+c-dssr1-0906-c         s-dssr1-0906-4                 SNAPSHOT_COMPLETED   快照页测试探针C，请勿启用（其源库  0 HAS_CONFIG         22
+                                                                           配置缺失）
+
+c-dssr1-0906-c         s-dssr1-0906-5                 UNKNOWN              快照页测试探针C，请勿启用（其源库  0 HAS_CONFIG         22
+                                                                           配置缺失）
+
+c-dssr1-0906-c         s-dssr1-0906-m1                SNAPSHOT_RUNNING     快照页测试探针C，请勿启用（其源库  0 HAS_CONFIG         22
+                                                                           配置缺失）
+
+c-dssr1-0906-c         s-dssr1-0906-m2                STARTING             快照页测试探针C，请勿启用（其源库  0 HAS_CONFIG         22
+                                                                           配置缺失）
+
+c-dssr1-0906-c         s-dssr1-0906-m3                SNAPSHOT_COMPLETED   快照页测试探针C，请勿启用（其源库  0 HAS_CONFIG         22
+                                                                           配置缺失）
+
+c-dssr1-0906-d         s-dssr1-0906-1                 SNAPSHOT_COMPLETED   快照页测试探针D，请勿启用（含超长  0 HAS_CONFIG         38
+                                                                           描述演示：覆盖同源不同状态与并列时
+                                                                           间排序）
+
+c-dssr1-0906-d         s-dssr1-0906-2                 SNAPSHOT_RUNNING     快照页测试探针D，请勿启用（含超长  0 HAS_CONFIG         38
+                                                                           描述演示：覆盖同源不同状态与并列时
+                                                                           间排序）
+
+c-dssr1-0906-d         s-dssr1-0906-3                 SNAPSHOT_RUNNING     快照页测试探针D，请勿启用（含超长  0 HAS_CONFIG         38
+                                                                           描述演示：覆盖同源不同状态与并列时
+                                                                           间排序）
+
+c-dssr1-0906-d         s-dssr1-0906-4                 SNAPSHOT_UNKNOWN     快照页测试探针D，请勿启用（含超长  0 HAS_CONFIG         38
+                                                                           描述演示：覆盖同源不同状态与并列时
+                                                                           间排序）
+
+c-dssr1-0906-d         s-dssr1-0906-5                 SNAPSHOT_RUNNING     快照页测试探针D，请勿启用（含超长  0 HAS_CONFIG         38
+                                                                           描述演示：覆盖同源不同状态与并列时
+                                                                           间排序）
+
+c-dssr1-0906-e         s-dssr1-0906-1                 SNAPSHOT_RUNNING     快照页测试探针E，请勿启用          0 HAS_CONFIG         13
+c-dssr1-0906-e         s-dssr1-0906-2                 SNAPSHOT_RUNNING     快照页测试探针E，请勿启用          0 HAS_CONFIG         13
+c-dssr1-0906-e         s-dssr1-0906-3                 SNAPSHOT_RUNNING     快照页测试探针E，请勿启用          0 HAS_CONFIG         13
+c-dssr1-0906-e         s-dssr1-0906-4                 SNAPSHOT_COMPLETED   快照页测试探针E，请勿启用          0 HAS_CONFIG         13
+c-dssr1-0906-e         s-dssr1-0906-5                 SNAPSHOT_COMPLETED   快照页测试探针E，请勿启用          0 HAS_CONFIG         13
+c-dssr1-0906-miss1     s-dssr1-0906-2		      SNAPSHOT_RUNNING						NO_CONFIG
+c-dssr1-0906-miss1     s-dssr1-0906-3		      UNKNOWN_MODE						NO_CONFIG
+c-dssr1-0906-miss2     s-dssr1-0906-1		      SNAPSHOT_COMPLETED					NO_CONFIG
+c-dssr1-0906-miss2     s-dssr1-0906-m1		      SNAPSHOT_RUNNING						NO_CONFIG
+c-dssr1-0906-miss2     s-dssr1-0906-m2		      SNAPSHOT_COMPLETED					NO_CONFIG
+hosp-012               112-source-19c                 SNAPSHOT_RUNNING     总部测试 IP: 192.168.0.94, 192.168 1 HAS_CONFIG         62
+									   .174.1, 3.3.0.192, 192.168.100.1
+
+===== G. RUN_STATE x CDC_DATA_SOURCE LEFT JOIN (per-row source config) =====
+
+CLIENT_ID	       DATA_SOURCE_ID		      SNAPSHOT_STATUS	   DATA_SOURCE_ORG	      DATA_SOURCE_CATEGORY S CONFIG_STA
+---------------------- ------------------------------ -------------------- -------------------------- -------------------- - ----------
+c-dssr1-0906-a         s-dssr1-0906-1                 SNAPSHOT_RUNNING     SNAPSHOT-TEST-某市一院信息 SOURCE               0 HAS_CONFIG
+                                                                           中心源库-DONOTUSE
+
+c-dssr1-0906-a         s-dssr1-0906-2                 SNAPSHOT_RUNNING     SNAPSHOT-TEST-某市一院信息 SOURCE               0 HAS_CONFIG
+                                                                           中心源库-DONOTUSE
+
+c-dssr1-0906-a         s-dssr1-0906-3                 SNAPSHOT_COMPLETED   SNAPSHOT-TEST-某市二院信息 SOURCE               0 HAS_CONFIG
+                                                                           中心源库-DONOTUSE
+
+c-dssr1-0906-a         s-dssr1-0906-4                 SNAPSHOT_COMPLETED   SNAPSHOT-TEST-目标侧某中心 TARGET               0 HAS_CONFIG
+                                                                           源库-DONOTUSE
+
+c-dssr1-0906-a         s-dssr1-0906-5                 SNAPSHOT_STALE       SNAPSHOT-TEST-第三方平台源                      0 HAS_CONFIG
+                                                                           库-DONOTUSE
+
+c-dssr1-0906-b         s-dssr1-0906-1                 SNAPSHOT_RUNNING     SNAPSHOT-TEST-某市一院信息 SOURCE               0 HAS_CONFIG
+                                                                           中心源库-DONOTUSE
+
+c-dssr1-0906-b         s-dssr1-0906-2                 UNKNOWN              SNAPSHOT-TEST-某市一院信息 SOURCE               0 HAS_CONFIG
+                                                                           中心源库-DONOTUSE
+
+c-dssr1-0906-b         s-dssr1-0906-3                 SNAPSHOT_COMPLETED   SNAPSHOT-TEST-某市二院信息 SOURCE               0 HAS_CONFIG
+                                                                           中心源库-DONOTUSE
+
+c-dssr1-0906-b         s-dssr1-0906-5                 SNAPSHOT_COMPLETED   SNAPSHOT-TEST-第三方平台源                      0 HAS_CONFIG
+                                                                           库-DONOTUSE
+
+c-dssr1-0906-c         s-dssr1-0906-4                 SNAPSHOT_COMPLETED   SNAPSHOT-TEST-目标侧某中心 TARGET               0 HAS_CONFIG
+                                                                           源库-DONOTUSE
+
+c-dssr1-0906-c         s-dssr1-0906-5                 UNKNOWN              SNAPSHOT-TEST-第三方平台源                      0 HAS_CONFIG
+                                                                           库-DONOTUSE
+
+c-dssr1-0906-c	       s-dssr1-0906-m1		      SNAPSHOT_RUNNING							     NO_CONFIG
+c-dssr1-0906-c	       s-dssr1-0906-m2		      STARTING								     NO_CONFIG
+c-dssr1-0906-c	       s-dssr1-0906-m3		      SNAPSHOT_COMPLETED						     NO_CONFIG
+c-dssr1-0906-d         s-dssr1-0906-1                 SNAPSHOT_COMPLETED   SNAPSHOT-TEST-某市一院信息 SOURCE               0 HAS_CONFIG
+                                                                           中心源库-DONOTUSE
+
+c-dssr1-0906-d         s-dssr1-0906-2                 SNAPSHOT_RUNNING     SNAPSHOT-TEST-某市一院信息 SOURCE               0 HAS_CONFIG
+                                                                           中心源库-DONOTUSE
+
+c-dssr1-0906-d         s-dssr1-0906-3                 SNAPSHOT_RUNNING     SNAPSHOT-TEST-某市二院信息 SOURCE               0 HAS_CONFIG
+                                                                           中心源库-DONOTUSE
+
+c-dssr1-0906-d         s-dssr1-0906-4                 SNAPSHOT_UNKNOWN     SNAPSHOT-TEST-目标侧某中心 TARGET               0 HAS_CONFIG
+                                                                           源库-DONOTUSE
+
+c-dssr1-0906-d         s-dssr1-0906-5                 SNAPSHOT_RUNNING     SNAPSHOT-TEST-第三方平台源                      0 HAS_CONFIG
+                                                                           库-DONOTUSE
+
+c-dssr1-0906-e         s-dssr1-0906-1                 SNAPSHOT_RUNNING     SNAPSHOT-TEST-某市一院信息 SOURCE               0 HAS_CONFIG
+                                                                           中心源库-DONOTUSE
+
+c-dssr1-0906-e         s-dssr1-0906-2                 SNAPSHOT_RUNNING     SNAPSHOT-TEST-某市一院信息 SOURCE               0 HAS_CONFIG
+                                                                           中心源库-DONOTUSE
+
+c-dssr1-0906-e         s-dssr1-0906-3                 SNAPSHOT_RUNNING     SNAPSHOT-TEST-某市二院信息 SOURCE               0 HAS_CONFIG
+                                                                           中心源库-DONOTUSE
+
+c-dssr1-0906-e         s-dssr1-0906-4                 SNAPSHOT_COMPLETED   SNAPSHOT-TEST-目标侧某中心 TARGET               0 HAS_CONFIG
+                                                                           源库-DONOTUSE
+
+c-dssr1-0906-e         s-dssr1-0906-5                 SNAPSHOT_COMPLETED   SNAPSHOT-TEST-第三方平台源                      0 HAS_CONFIG
+                                                                           库-DONOTUSE
+
+c-dssr1-0906-miss1     s-dssr1-0906-2                 SNAPSHOT_RUNNING     SNAPSHOT-TEST-某市一院信息 SOURCE               0 HAS_CONFIG
+                                                                           中心源库-DONOTUSE
+
+c-dssr1-0906-miss1     s-dssr1-0906-3                 UNKNOWN_MODE         SNAPSHOT-TEST-某市二院信息 SOURCE               0 HAS_CONFIG
+                                                                           中心源库-DONOTUSE
+
+c-dssr1-0906-miss2     s-dssr1-0906-1                 SNAPSHOT_COMPLETED   SNAPSHOT-TEST-某市一院信息 SOURCE               0 HAS_CONFIG
+                                                                           中心源库-DONOTUSE
+
+c-dssr1-0906-miss2     s-dssr1-0906-m1		      SNAPSHOT_RUNNING							     NO_CONFIG
+c-dssr1-0906-miss2     s-dssr1-0906-m2		      SNAPSHOT_COMPLETED						     NO_CONFIG
+hosp-012               112-source-19c                 SNAPSHOT_RUNNING     孝感市第一人民医院         source               1 HAS_CONFIG
+===== H. JOINED ROWCOUNT (LEFT JOIN must not change row count) =====
+
+JOINED_ROWS
+-----------
+	 30
+===== I. CANDIDATE SOURCES (distinct RUN_STATE values) =====
+
+DIM    VALUE
+------ ----------------------------------------------------------------
+CLIENT c-dssr1-0906-a
+CLIENT c-dssr1-0906-b
+CLIENT c-dssr1-0906-c
+CLIENT c-dssr1-0906-d
+CLIENT c-dssr1-0906-e
+CLIENT c-dssr1-0906-miss1
+CLIENT c-dssr1-0906-miss2
+CLIENT hosp-012
+SOURCE 112-source-19c
+SOURCE s-dssr1-0906-1
+SOURCE s-dssr1-0906-2
+SOURCE s-dssr1-0906-3
+SOURCE s-dssr1-0906-4
+SOURCE s-dssr1-0906-5
+SOURCE s-dssr1-0906-m1
+SOURCE s-dssr1-0906-m2
+SOURCE s-dssr1-0906-m3
+===== J. CDC_STATS_* TABLES PRESENT? =====
+
+TABLE_NAME
+----------------------------------------
+CDC_STATS_CUMULATIVE_OVERVIEW
+CDC_STATS_DAILY_OVERVIEW
+CDC_STATS_DIM_CUMULATIVE
+CDC_STATS_DIM_DAILY
+CDC_STATS_TASK_CONFIG
+CDC_STATS_WATERMARK
+===== K. MAX UPDATED_AT / NULL TIME COUNTS =====
+
+TOTAL_ROWS NULL_LAST_SEEN NULL_COMPLETED NULL_UPDATED
+---------- -------------- -------------- ------------
+	30	       13	      19	    0

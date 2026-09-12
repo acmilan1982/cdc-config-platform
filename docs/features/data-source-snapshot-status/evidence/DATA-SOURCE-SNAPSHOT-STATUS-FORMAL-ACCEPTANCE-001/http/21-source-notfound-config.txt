@@ -1,0 +1,9 @@
+# GET http://127.0.0.1:8080/api/monitor/data-source-run-state/list?sourceId=s-dssr1-0906-m1
+# 2026-09-12T16:12:35+08:00
+# HTTP status:
+200
+
+code=200 message="success"
+records=2  客户端候选client=0 source=0 status=[]
+statusCategory分布={"RUNNING":2}
+firstRecord={"clientId":"c-dssr1-0906-c","clientRef":{"state":"INACTIVE","desc":"快照页测试探针C，请勿启用（其源库配置缺失）"},"sourceId":"s-dssr1-0906-m1","sourceRef":{"state":"NOT_FOUND","org":null,"category":null,"sourceRole":false},"snapshotStatus":"SNAPSHOT_RUNNING","statusCategory":"RUNNING","snapshotLastSeenAt":"2026-09-06 10:53:00","snapshotCompletedAt":null,"updatedAt":"2026-09-06 10:53:00"}

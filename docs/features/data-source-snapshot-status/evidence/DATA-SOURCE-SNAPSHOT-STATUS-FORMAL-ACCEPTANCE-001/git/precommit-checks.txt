@@ -1,0 +1,82 @@
+# Pre-commit checks (prompt §16) — DATA-SOURCE-SNAPSHOT-STATUS-FORMAL-ACCEPTANCE-001
+# recorded_at=2026-09-12T20:15:25+08:00
+# base af88aa847c7cf6a197237a46f59130744d13f082
+
+== 1. requirements numbering (DSS-REQ-*) ==
+  count=87
+  unique=87
+  first/last: DSS-REQ-001 .. DSS-REQ-087
+
+== 2. acceptance numbering (DSS-AC-*) ==
+  count=107
+  unique=107
+  first/last: DSS-AC-001 .. DSS-AC-107
+
+== 3. four-state counts (must total 107) ==
+  PASS=106
+  FAIL=0
+  BLOCKED=1
+  NOT_RUN=0
+
+== 4. status column only: business columns byte-identical vs base ==
+  STATUS-COLUMN-ONLY: OK (107 business columns byte-identical)
+
+== 5. DESIGN traceability 87/87 and 107/107 ==
+  71:| 本轮（查询控件交互调整基线）追踪计数 | 需求 → 设计落点 **87/87**（§14.2）、验收 → 设计落点 **107/107**（§14.3）；本轮新增 `DSS-AC-096~103` 全部 `NOT_RUN`；当前全量 `DSS-AC-001~107` 共 107 条全部 `NOT_RUN` |
+  80:| 本轮（查询下拉固定宽度基线）追踪计数 | 需求 → 设计落点 **87/87**（§14.2）、验收 → 设计落点 **107/107**（§14.3）；新增 `DSS-AC-104~107` 已收口为 `APPROVED` 且全部 `NOT_RUN` |
+  563:### 14.2 需求 → 设计落点矩阵（87/87）
+  618:覆盖：87/87；无悬空需求。本轮（2026-09-10 查询控件交互调整草案）新增需求 `DSS-REQ-084~086`（基线已批准；对应实现已进入 `5173`，当前实现状态 `IMPLEMENTED_ADJUSTMENT_PENDING_FORMAL_ACCEPTANCE`，其独立代码复审已由 `DATA-SOURCE-SNAPSHOT-STATUS-QUERY-CONTROL-INTERACTION-IMPLEMENTATION-REVIEW-CLOSEOUT-001`（2026-09-12）从 `PENDING_CHATGPT_REVIEW` 收口为 `APPROVED`——ChatGPT 从远程 Git 复审 R1 修正实现提交 `edba7c891884d0f000a7c9edc196b2bffb95e0b0`；`2a9a271690bfdc68b16772268e84928a33abdeda` 仅为测试计数文档纠正、无代码变化；项目负责人人工视觉/交互检查 `APPROVED_BY_PROJECT_OWNER`）的设计落点统一为本文件 §26 与 UI §20（对应 `DSS-AC-096~103`）；其中 `DSS-REQ-084`/`DSS-REQ-085` 对既有 `DSS-REQ-075` 探针下拉截断口径、既有 `DSS-REQ-022/024` 候选截断与控件宽度口径做定向取代/扩展，`DSS-REQ-086` 对既有 `DSS-REQ-028`/`DSS-REQ-070` 的 Tooltip 口径做定向扩展，取代关系见 REQUIREMENTS §21.7。本轮（2026-09-11 查询下拉固定宽度基线草案）新增需求 `DSS-REQ-087`（已随 `DATA-SOURCE-SNAPSHOT-STATUS-SELECT-POPPER-FIXED-WIDTH-BASELINE-APPROVAL-001` 收口为 `popper_width_document_status=APPROVED`；其 R2 支持视口边界修正文档亦已批准，正式支持视口下限为 `viewport width >= 1280px`；对应实现已进入 `5173`，当前实现状态 `IMPLEMENTED_ADJUSTMENT_PENDING_FORMAL_ACCEPTANCE`，代码复审 `APPROVED`、项目负责人视觉与交互检查 `APPROVED_BY_PROJECT_OWNER`，尚待正式验收）的设计落点为本文件 §27 与 UI §21（对应 `DSS-AC-104~107`）：它把 `DSS-REQ-084` 已确立的“固定外部几何”口径从触发控件（trigger）扩展到 Teleport 到 `body` 的下拉弹层（popper）外层 `.el-popper`，**不重写** `DSS-REQ-084`（取代/扩展关系见 REQUIREMENTS §21.8）。第二轮（§22）在已批准基线之上定向修订的既有需求行 `DSS-REQ-022/024/028/029/041/042/043/044/045/069/070` 其现行设计落点亦以 §22 对应小节为准（`022/024`→§22.5、`028/041/043(探针端停用)`→§22.3、`029/042/044/043(源库停用)`→§22.4、`045`→§22.3/§22.4、`069`→§22.2、`070`→§22.6/§22.7）。隔离视觉原型 R2～R7 设计固化新增需求 `DSS-REQ-076~083` 的设计落点为本文件 §25.3 各小节与 UI §19 对应小节（设计固化基线已批准，并已由 `DATA-SOURCE-SNAPSHOT-STATUS-PROTOTYPE-TO-FORMAL-IMPLEMENTATION-001` 落地到 `5173`；原正式实现结果提交 `3ec9cbf6487eacff004212fb3aca3064c3bd18cc` 的代码复审为 `APPROVED`，项目负责人随后页面检查结论 `CHANGES_REQUIRED` 已驱动查询控件交互及 popper 固定宽度后续调整；Feature 正式验收仍为 `NOT_RUN`）；其中 `DSS-REQ-076` 取代 `DSS-REQ-066②`、`DSS-REQ-079` 取代 `DSS-REQ-069/072` 的列宽模型，取代关系见 REQUIREMENTS §21.5。
+  620:### 14.3 验收 → 设计落点矩阵（107/107）
+  698:覆盖：107/107；无悬空验收。本轮新增 `DSS-AC-096~103` 共 8 条（对应基线已批准；实现已进入 `5173`，当前实现状态 `IMPLEMENTED_ADJUSTMENT_PENDING_FORMAL_ACCEPTANCE`，其独立代码复审已由 `DATA-SOURCE-SNAPSHOT-STATUS-QUERY-CONTROL-INTERACTION-IMPLEMENTATION-REVIEW-CLOSEOUT-001`（2026-09-12）从 `PENDING_CHATGPT_REVIEW` 收口为 `APPROVED`（ChatGPT 从远程 Git 复审 R1 修正实现提交 `edba7c891884d0f000a7c9edc196b2bffb95e0b0`），项目负责人人工视觉/交互检查 `APPROVED_BY_PROJECT_OWNER`；这 8 条验收仍全部为 `NOT_RUN`）反向映射到 `DSS-REQ-084`/`DSS-REQ-085`/`DSS-REQ-086`（映射矩阵见 `ACCEPTANCE.md` §5，双向 86/86 与 103/103），设计落点统一为本文件 §26 与 UI §20；正式验收仍未执行、`acceptance_not_run_count=107`。本轮（2026-09-11 查询下拉固定宽度基线草案）新增 `DSS-AC-104~107` 共 4 条（均为 `NOT_RUN`，已随 `DATA-SOURCE-SNAPSHOT-STATUS-SELECT-POPPER-FIXED-WIDTH-BASELINE-APPROVAL-001` 收口为 `APPROVED`，其 R2 支持视口边界修正文档亦已批准、正式支持视口下限为 `viewport width >= 1280px`；实现已进入 `5173`，当前实现状态 `IMPLEMENTED_ADJUSTMENT_PENDING_FORMAL_ACCEPTANCE`，代码复审 `APPROVED`、项目负责人视觉与交互检查 `APPROVED_BY_PROJECT_OWNER`，这 4 条验收仍全部为 `NOT_RUN`）反向映射到 `DSS-REQ-087`（映射矩阵见 `ACCEPTANCE.md` §5），设计落点统一为本文件 §27 与 UI §21；据此矩阵整体更新为需求 87/87、验收 107/107，双向引用无悬空；本规则已由 `DATA-SOURCE-SNAPSHOT-STATUS-SELECT-POPPER-FIXED-WIDTH-IMPLEMENTATION-001` 在 `5173` 正式前端落地（`popper_width_formal_5173_implementation_status=IMPLEMENTED_ADJUSTMENT_PENDING_FORMAL_ACCEPTANCE`），其实现代码复审为 `APPROVED`、项目负责人人工视觉交互检查为 `APPROVED_BY_PROJECT_OWNER`、正式验收仍未执行、`acceptance_not_run_count=107`。
+  1081:- 2026-09-12，查询控件交互调整实现复审收口（纯文档复审结论收口任务 `DATA-SOURCE-SNAPSHOT-STATUS-QUERY-CONTROL-INTERACTION-IMPLEMENTATION-REVIEW-CLOSEOUT-001`，不修改代码、业务规则、需求/验收业务行、API/DATABASE 契约或验收结果、不执行正式验收）：ChatGPT 已从远程 Git 复审 R1 修正实现提交 `edba7c891884d0f000a7c9edc196b2bffb95e0b0` 结论 `query_control_interaction_adjustment_code_review_status=APPROVED`（R2 提交 `2a9a271690bfdc68b16772268e84928a33abdeda` 仅为测试计数文档纠正，无代码变化）；其核心依据为四字段 `CLIENT_ID`/`CLIENT_DESC`/`DATA_SOURCE_ORG`/`DATA_SOURCE_ID` 共用单一展示管线（先 `trim()` 再按 20 个 Unicode 码点判断与截断）、`CLIENT_DESC` 仅在 trim 后超 20 码点时显示 Tooltip 且内容为完整 trim 后描述、Tooltip 按原始完整 `CLIENT_ID` 的 Feature 私有稳定身份定位而不以截断后可见文字反查、展示截断不回写选项 `value`/查询草稿/已应用条件/GET 参数、Tooltip 单实例且组件卸载清理监听器且不污染表格 Tooltip，均未回退；项目负责人对含后续 popper 固定宽度修正的最终 `5173` 页面人工检查明确回复“人工检查了，没有问题”，收口 `query_control_human_visual_interaction_review_status=APPROVED_BY_PROJECT_OWNER`、`project_owner_visual_review_status=APPROVED_BY_PROJECT_OWNER`；实现状态由 `IMPLEMENTED_ADJUSTMENT_PENDING_REVIEW` 更新为 `query_control_interaction_adjustment_implementation_status=IMPLEMENTED_ADJUSTMENT_PENDING_FORMAL_ACCEPTANCE`。仅修改本文件 §1 当前元数据状态行、§14.2/§14.3 当前状态说明、§26.6 当前追踪说明与本节变更记录；**§14.2/§14.3 追踪映射表行逐字节不变**（`DSS-REQ-084~086`/`DSS-AC-096~103` 业务行冻结），§14.2/§14.3 覆盖仍为 87/87 与 107/107，需求 87、验收 107（全部 `NOT_RUN`、`formal_acceptance_not_run_count=107`）；§27 业务规则、`API.md`/`DATABASE.md` 契约与业务正文、`frontend/`/`backend/`/SQL/配置/测试/证据/既有报告零改动。代码复审与人工页面检查通过**只表示**实现可以进入独立正式验收阶段，**不得**写成 107 条正式验收已执行/通过、`IMPLEMENTED_ACCEPTED`/`FORMALLY_ACCEPTED`/`formal_acceptance_status=PASS`/`COMPLETED`。统一下一入口 `DATA-SOURCE-SNAPSHOT-STATUS-FORMAL-ACCEPTANCE-001`（报告见 `reports/DATA-SOURCE-SNAPSHOT-STATUS-QUERY-CONTROL-INTERACTION-IMPLEMENTATION-REVIEW-CLOSEOUT-001.md`）。
+  1152:- 矩阵：§14.2 需求 → 设计落点 **87/87**、§14.3 验收 → 设计落点 **107/107**，双向映射无悬空（映射矩阵见 `ACCEPTANCE.md` §5：`DSS-REQ-087`↔`DSS-AC-104/105/106/107`）。
+
+== 6. API/DATABASE contract zero-change ==
+   docs/features/data-source-snapshot-status/API.md      | 6 ++++--
+   docs/features/data-source-snapshot-status/DATABASE.md | 6 ++++--
+   2 files changed, 8 insertions(+), 4 deletions(-)
+  (only §1 status/count/next-entry lines; contract tables unchanged — see per-file diff below)
+  contract-keyword lines changed: 6
+
+== 7. frontend/backend/test code diff must be ZERO ==
+  (empty => ZERO)
+
+== 8. sensitive-info scan over changed/untracked evidence ==
+  docs/features/data-source-snapshot-status/evidence/DATA-SOURCE-SNAPSHOT-STATUS-FORMAL-ACCEPTANCE-001/database/columns.txt:30:	 6 DATA_SOURCE_PASSWORD 	VARCHAR2		    64 N
+  docs/features/data-source-snapshot-status/evidence/DATA-SOURCE-SNAPSHOT-STATUS-FORMAL-ACCEPTANCE-001/database/baseline-before.txt:89:"DATA_SOURCE_PASSWORD" IS NOT NULL
+  (matches limited to the project's own authorised internal dev DB reference or none)
+
+== 9. git diff --check ==
+  exit=0
+
+== 10. changed files all within §14 whitelist ==
+   M docs/features/README.md
+   M docs/features/data-source-snapshot-status/ACCEPTANCE.md
+   M docs/features/data-source-snapshot-status/API.md
+   M docs/features/data-source-snapshot-status/DATABASE.md
+   M docs/features/data-source-snapshot-status/DESIGN.md
+   M docs/features/data-source-snapshot-status/README.md
+   M docs/features/data-source-snapshot-status/REQUIREMENTS.md
+   M docs/features/data-source-snapshot-status/UI.md
+  ?? docs/features/data-source-snapshot-status/evidence/DATA-SOURCE-SNAPSHOT-STATUS-FORMAL-ACCEPTANCE-001/
+  ?? docs/features/data-source-snapshot-status/reports/DATA-SOURCE-SNAPSHOT-STATUS-FORMAL-ACCEPTANCE-001.md
+
+[补充确认 / ADDITIONAL CONFIRMATION — 2026-09-12]
+[check4-contract-keyword] matches=6，全部为 API.md/DATABASE.md 中被替换的 `acceptance_status` 行
+  （各 1 组 -/+）与追加的 2 条「正式验收执行同步记录」blockquote 的散文内容；这些行以文字
+  声明「接口/数据库契约零变化」，并非对契约表、§9 映射、路径、字段或 SQL 的实际修改。
+  结论：contract_change=NONE，散文引用表名，不构成契约变更。
+[check8-sensitive] `DATA_SOURCE_PASSWORD` 命中 2 处，均为「列名元数据」而非凭据值：
+  - database/columns.txt:30 —— 表结构列清单中的列名 `DATA_SOURCE_PASSWORD VARCHAR2(64) N`
+  - database/baseline-before.txt:89 —— 只读 null 计数查询 `"DATA_SOURCE_PASSWORD" IS NOT NULL`
+  未出现任何密码值、Token、Cookie、Authorization、完整连接串。§14.2 无违规。
+
+[git-diff-check 说明 / WHITESPACE-CHECK NOTE — 2026-09-12]
+`git diff --check` 对「作者编辑的 Markdown」返回 exit=0（干净）：
+  `git diff --cached --check -- '*.md'` → md_check_exit=0
+暂存后整体检查仅有「尾随空格」告警，且全部位于 4 个逐字节捕获的原始证据 .txt：
+  services/backend-runtime.txt、services/liveness.txt、
+  tests/backend-package.txt、tests/backend-targeted.txt
+这些是 mvn/spring/ss 原始输出的逐字节转录，尾随空格是输出本身的一部分；
+按 §14.2「保留原始日志并逐字节一致提交」的要求**必须保留**，不得为通过空白检查而改写。
+结论：作者文档 `git diff --check` 干净；证据转录保留原始尾随空格，属规则要求而非违规。

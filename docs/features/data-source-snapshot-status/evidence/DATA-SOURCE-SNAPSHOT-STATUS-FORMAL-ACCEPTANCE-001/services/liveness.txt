@@ -1,0 +1,20 @@
+# Service evidence capture for DATA-SOURCE-SNAPSHOT-STATUS-FORMAL-ACCEPTANCE-001
+# 2026-09-12T19:37:50+08:00
+
+## ps (ps -p PID -o pid,ppid,etime,cmd)
+backend:   10371       1    03:27:29 java -jar target/cdc-config-platform-backend-1.0.0-SNAPSHOT.jar --server.address=0.0.0.0
+frontend-launcher:   10517       1    03:25:58 npm exec vite --host 0.0.0.0 --port 5173
+frontend-listener:   10530   10517    03:25:58 node /agent/dss-formal-acceptance-001/frontend/node_modules/.bin/vite --host 0.0.0.0 --port 5173
+
+## listen sockets (ss -ltnp)
+LISTEN 0      511          0.0.0.0:5173       0.0.0.0:*    users:(("MainThread",pid=10530,fd=22))    
+LISTEN 0      100                *:8080             *:*    users:(("java",pid=10371,fd=22))          
+
+## local health: frontend index (curl --noproxy '*')
+HTTP 200  429 bytes
+## local health: frontend network URL
+HTTP 200  429 bytes
+## local health: backend list API
+HTTP 200  16974 bytes
+## local health: backend via network host
+HTTP 200  16974 bytes

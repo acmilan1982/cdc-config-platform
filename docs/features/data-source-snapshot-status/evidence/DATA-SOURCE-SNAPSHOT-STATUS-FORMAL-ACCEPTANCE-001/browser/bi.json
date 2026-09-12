@@ -1,0 +1,260 @@
+{
+  "mode": "BI-interception",
+  "label": "BI — backend list response substituted; NOT real backend data",
+  "route": "http://127.0.0.1:5173/monitor/data-source-state",
+  "assertions": [
+    {
+      "name": "clientLabel[\"AAAAAAAAAAAAAAAAAAA\"]",
+      "ok": true,
+      "detail": "\"AAAAAAAAAAAAAAAAAAA（short19）\""
+    },
+    {
+      "name": "clientLabel[\"AAAAAAAAAAAAAAAAAAAA\"]",
+      "ok": true,
+      "detail": "\"AAAAAAAAAAAAAAAAAAAA（exactly20）\""
+    },
+    {
+      "name": "clientLabel[\"AAAAAAAAAAAAAAAAAAAAX\"]",
+      "ok": true,
+      "detail": "\"AAAAAAAAAAAAAAAAAAAA...（DDDDDDDDDDDDDDDD\""
+    },
+    {
+      "name": "clientLabel[\"AAAAAAAAAAAAAAAAAAAAY\"]",
+      "ok": true,
+      "detail": "\"AAAAAAAAAAAAAAAAAAAA...（DDDDDDDDDDDDDDDD\""
+    },
+    {
+      "name": "clientLabel[\"AAAAAAAAAAAAAAAAAAAAZZ\"]",
+      "ok": true,
+      "detail": "\"AAAAAAAAAAAAAAAAAAAA...（DDDDDDDDDDDDDDDD\""
+    },
+    {
+      "name": "clientLabel[\"中中中中中中中中中中中中中中中中中中中中中\"]",
+      "ok": true,
+      "detail": "\"中中中中中中中中中中中中中中中中中中中中...（cjk21）\""
+    },
+    {
+      "name": "clientLabel[\"😀😀😀😀😀😀😀😀😀😀😀😀😀\"]",
+      "ok": true,
+      "detail": "\"😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀\""
+    },
+    {
+      "name": "client19NotTruncated",
+      "ok": true,
+      "detail": "\"AAAAAAAAAAAAAAAAAAA（short19）\""
+    },
+    {
+      "name": "client20NotTruncated",
+      "ok": true,
+      "detail": "\"AAAAAAAAAAAAAAAAAAAA（exactly20）\""
+    },
+    {
+      "name": "client21Truncated",
+      "ok": true,
+      "detail": "\"AAAAAAAAAAAAAAAAAAAA...（DDDDDDDDDDDDDDDDDDDD...）\""
+    },
+    {
+      "name": "client22Truncated",
+      "ok": true,
+      "detail": "\"AAAAAAAAAAAAAAAAAAAA...（DDDDDDDDDDDDDDDDDDDD...）\""
+    },
+    {
+      "name": "clientCjk21TruncatedByCodePoint",
+      "ok": true,
+      "detail": "\"中中中中中中中中中中中中中中中中中中中中...（cjk21）\""
+    },
+    {
+      "name": "clientEmoji21NoSurrogateSplit",
+      "ok": true,
+      "detail": "\"😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀...（emoji21）\""
+    },
+    {
+      "name": "fieldsTruncatedBeforeAssembly",
+      "ok": true,
+      "detail": "\"AAAAAAAAAAAAAAAAAAAA...（DDDDDDDDDDDDDDDDDDDD...）\""
+    },
+    {
+      "name": "allCandidateClientsRendered",
+      "ok": true,
+      "detail": "options=8 expected=8"
+    },
+    {
+      "name": "collidingTruncatedLabelsConstructed",
+      "ok": true,
+      "detail": "AAAAAAAAAAAAAAAAAAAA... vs AAAAAAAAAAAAAAAAAAAA..."
+    },
+    {
+      "name": "identityCandidatesDistinct",
+      "ok": true,
+      "detail": "ia=3 ib=4"
+    },
+    {
+      "name": "identityAnchorByRawClientId",
+      "ok": true,
+      "detail": "holderA=AAAAAAAAAAAAAAAAAAAAX holderB=AAAAAAAAAAAAAAAAAAAAY"
+    },
+    {
+      "name": "identityTooltipNoCrossAttribution",
+      "ok": true,
+      "detail": "A=\"DDDDDDDDDDDDDDDDDDDDX\" B=\"DDDDDDDDDDDDDDDDDDDDY\""
+    },
+    {
+      "name": "requestCarriesFullRawId",
+      "ok": true,
+      "detail": "[\"AAAAAAAAAAAAAAAAAAAAX\"]"
+    },
+    {
+      "name": "requestDoesNotCarryEllipsis",
+      "ok": true,
+      "detail": "[\"AAAAAAAAAAAAAAAAAAAAX\"]"
+    },
+    {
+      "name": "sourceLongIdTruncated",
+      "ok": true,
+      "detail": "[\"中中中中中中中中中中中中中中中中中中中中...\"]"
+    },
+    {
+      "name": "sourceLongOrgTruncated",
+      "ok": true,
+      "detail": "[\"全部\",\"org-short（AAAAAAAAAAAAAAA）\",\"SNAPSHOT-ORG-超过二十个字符...（AAAAAA\",\"AAAAAAAAAAAAAAAAAAAA\",\"中中中中中中中中中中中中中中中中中中中中...\",\"SNAPSHOT-ORG-emoji-l...（😀😀😀\"]"
+    },
+    {
+      "name": "unknownRawStatusTooltip",
+      "ok": true,
+      "detail": "\"原始状态：SNAPSHOT_WEIRD_LONG_RAW_VALUE\""
+    }
+  ],
+  "clientLabels": [
+    {
+      "text": "全部",
+      "len": 2,
+      "truncated": false,
+      "ghost": false
+    },
+    {
+      "text": "AAAAAAAAAAAAAAAAAAA（short19）",
+      "len": 28,
+      "truncated": false,
+      "ghost": false
+    },
+    {
+      "text": "AAAAAAAAAAAAAAAAAAAA（exactly20）",
+      "len": 31,
+      "truncated": false,
+      "ghost": false
+    },
+    {
+      "text": "AAAAAAAAAAAAAAAAAAAA...（DDDDDDDDDDDDDDDDDDDD...）",
+      "len": 48,
+      "truncated": false,
+      "ghost": false
+    },
+    {
+      "text": "AAAAAAAAAAAAAAAAAAAA...（DDDDDDDDDDDDDDDDDDDD...）",
+      "len": 48,
+      "truncated": false,
+      "ghost": false
+    },
+    {
+      "text": "AAAAAAAAAAAAAAAAAAAA...（desc22cp）",
+      "len": 33,
+      "truncated": false,
+      "ghost": false
+    },
+    {
+      "text": "中中中中中中中中中中中中中中中中中中中中...（cjk21）",
+      "len": 30,
+      "truncated": false,
+      "ghost": false
+    },
+    {
+      "text": "😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀...（emoji21）",
+      "len": 32,
+      "truncated": false,
+      "ghost": false
+    }
+  ],
+  "sourceLabels": [
+    {
+      "text": "全部",
+      "len": 2,
+      "truncated": false
+    },
+    {
+      "text": "org-short（AAAAAAAAAAAAAAA）",
+      "len": 26,
+      "truncated": false
+    },
+    {
+      "text": "SNAPSHOT-ORG-超过二十个字符...（AAAAAAAAAAAAAAAAAAAA...）",
+      "len": 48,
+      "truncated": false
+    },
+    {
+      "text": "AAAAAAAAAAAAAAAAAAAA",
+      "len": 20,
+      "truncated": false
+    },
+    {
+      "text": "中中中中中中中中中中中中中中中中中中中中...",
+      "len": 23,
+      "truncated": true
+    },
+    {
+      "text": "SNAPSHOT-ORG-emoji-l...（😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀...）",
+      "len": 48,
+      "truncated": false
+    }
+  ],
+  "identityCheck": {
+    "a": {
+      "id": "AAAAAAAAAAAAAAAAAAAAX",
+      "desc": "DDDDDDDDDDDDDDDDDDDDX",
+      "idx": 3,
+      "probe": {
+        "t": {
+          "content": "DDDDDDDDDDDDDDDDDDDDX",
+          "vis": "visible"
+        },
+        "holder": {
+          "id": "AAAAAAAAAAAAAAAAAAAAX",
+          "text": "AAAAAAAAAAAAAAAAAAAA...（DDDDDDDDDDDDDDDDDDDD...）"
+        }
+      }
+    },
+    "b": {
+      "id": "AAAAAAAAAAAAAAAAAAAAY",
+      "desc": "DDDDDDDDDDDDDDDDDDDDY",
+      "idx": 4,
+      "probe": {
+        "t": {
+          "content": "DDDDDDDDDDDDDDDDDDDDY",
+          "vis": "visible"
+        },
+        "holder": {
+          "id": "AAAAAAAAAAAAAAAAAAAAY",
+          "text": "AAAAAAAAAAAAAAAAAAAA...（DDDDDDDDDDDDDDDDDDDD...）"
+        }
+      }
+    },
+    "sameVisibleLabel": true
+  },
+  "requestParams": [
+    {
+      "url": "http://127.0.0.1:5173/api/monitor/data-source-run-state/list?clientId=AAAAAAAAAAAAAAAAAAAAX"
+    }
+  ],
+  "rawStatusTooltip": {
+    "rowIndex": 2,
+    "content": "原始状态：SNAPSHOT_WEIRD_LONG_RAW_VALUE"
+  },
+  "interceptedRequests": [
+    "GET http://127.0.0.1:5173/api/monitor/data-source-run-state/list?clientId=AAAAAAAAAAAAAAAAAAAAX"
+  ],
+  "consoleErrors": [],
+  "nonGet": [],
+  "summary": {
+    "assertions": 24,
+    "failed": 0
+  }
+}

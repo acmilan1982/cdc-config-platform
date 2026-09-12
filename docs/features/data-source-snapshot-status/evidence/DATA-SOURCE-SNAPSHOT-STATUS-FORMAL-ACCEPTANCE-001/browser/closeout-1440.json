@@ -1,0 +1,297 @@
+{
+  "mode": "closeout-1440",
+  "route": "http://127.0.0.1:5173/monitor/data-source-state",
+  "viewport": {
+    "name": "1440x900",
+    "width": 1440,
+    "height": 900
+  },
+  "geometry": {
+    "headerWidths": [
+      70,
+      170,
+      285,
+      140,
+      170,
+      170,
+      170
+    ],
+    "rowCount": 30,
+    "rowH": 49,
+    "tableMinW": "1175px",
+    "tableW": 1175,
+    "resultCardBodyW": 1108,
+    "wrapOverflowX": "auto",
+    "wrapScroll": {
+      "sw": 1175,
+      "cw": 1076
+    },
+    "docScroll": {
+      "sw": 1440,
+      "cw": 1440
+    },
+    "timeCellPad": {
+      "pl": "8px",
+      "pr": "8px",
+      "pt": "0px",
+      "pb": "0px"
+    },
+    "timeTexts": [
+      "2026-09-06 11:02:00",
+      "--",
+      "2026-09-06 11:02:00"
+    ],
+    "timeOverflow": [
+      0,
+      0,
+      0
+    ],
+    "refreshBtnW": 110,
+    "countdownText": "59 秒后自动刷新",
+    "ring": {
+      "x": 971.28,
+      "y": 249.5,
+      "w": 16,
+      "h": 16,
+      "right": 987.28
+    },
+    "queryCardH": 52,
+    "labels": [
+      "探针端",
+      "源库",
+      "快照状态"
+    ],
+    "triggerW": [
+      240,
+      300,
+      200
+    ],
+    "actions": {
+      "x": 1218,
+      "y": 176.5,
+      "w": 140,
+      "h": 30,
+      "right": 1358
+    },
+    "qGroups": [
+      {
+        "x": 292,
+        "y": 175.5,
+        "w": 288,
+        "h": 32,
+        "right": 580
+      },
+      {
+        "x": 594,
+        "y": 175.5,
+        "w": 334,
+        "h": 32,
+        "right": 928
+      },
+      {
+        "x": 942,
+        "y": 175.5,
+        "w": 262,
+        "h": 32,
+        "right": 1204
+      }
+    ],
+    "refreshGroupOriginX": {
+      "x": 971.28,
+      "y": 249.5,
+      "w": 16,
+      "h": 16,
+      "right": 987.28
+    }
+  },
+  "layoutStates": {
+    "S0_INIT_ALL": {
+      "queryCardH": 52,
+      "actions": {
+        "x": 1218,
+        "y": 176.5,
+        "right": 1358
+      },
+      "groupXs": [
+        292,
+        594,
+        942
+      ],
+      "triggerW": [
+        240,
+        300,
+        200
+      ],
+      "tags": [
+        "全部"
+      ]
+    },
+    "S1_SHORTEST": {
+      "queryCardH": 52,
+      "actions": {
+        "x": 1218,
+        "y": 176.5,
+        "right": 1358
+      },
+      "groupXs": [
+        292,
+        594,
+        942
+      ],
+      "triggerW": [
+        240,
+        300,
+        200
+      ],
+      "tags": [
+        "c-dssr1-0906-a（快照页测试探针A，请勿启用。长描述用于验...）"
+      ]
+    },
+    "S2_LONGEST": {
+      "queryCardH": 52,
+      "actions": {
+        "x": 1218,
+        "y": 176.5,
+        "right": 1358
+      },
+      "groupXs": [
+        292,
+        594,
+        942
+      ],
+      "triggerW": [
+        240,
+        300,
+        200
+      ],
+      "tags": [
+        "c-dssr1-0906-a（快照页测试探针A，请勿启用。长描述用于验...）",
+        "+ 1"
+      ]
+    },
+    "S3_MULTI_COLLAPSE": {
+      "queryCardH": 52,
+      "actions": {
+        "x": 1218,
+        "y": 176.5,
+        "right": 1358
+      },
+      "groupXs": [
+        292,
+        594,
+        942
+      ],
+      "triggerW": [
+        240,
+        300,
+        200
+      ],
+      "tags": [
+        "c-dssr1-0906-a（快照页测试探针A，请勿启用。长描述用于验...）",
+        "+ 4"
+      ]
+    },
+    "S4_AFTER_RESET": {
+      "queryCardH": 52,
+      "actions": {
+        "x": 1218,
+        "y": 176.5,
+        "right": 1358
+      },
+      "groupXs": [
+        292,
+        594,
+        942
+      ],
+      "triggerW": [
+        240,
+        300,
+        200
+      ],
+      "tags": [
+        "全部"
+      ]
+    }
+  },
+  "assertions": [
+    {
+      "name": "tableFillsOrScrollsAt1440",
+      "ok": true,
+      "detail": "{\"tableW\":1175,\"bodyW\":1108,\"wrap\":{\"sw\":1175,\"cw\":1076}}"
+    },
+    {
+      "name": "fixedColsAtOrAboveMinModel",
+      "ok": true,
+      "detail": "[70,170,285,140,170,170,170]"
+    },
+    {
+      "name": "timesEqualWidth",
+      "ok": true,
+      "detail": "[170,170,170]"
+    },
+    {
+      "name": "timeNoEllipsis",
+      "ok": true,
+      "detail": "[0,0,0]"
+    },
+    {
+      "name": "timeCellPadding8",
+      "ok": true,
+      "detail": "{\"pl\":\"8px\",\"pr\":\"8px\",\"pt\":\"0px\",\"pb\":\"0px\"}"
+    },
+    {
+      "name": "rowH49",
+      "ok": true,
+      "detail": "49"
+    },
+    {
+      "name": "refreshBtn110",
+      "ok": true,
+      "detail": "110"
+    },
+    {
+      "name": "ring16",
+      "ok": true,
+      "detail": "{\"x\":971.28,\"y\":249.5,\"w\":16,\"h\":16,\"right\":987.28}"
+    },
+    {
+      "name": "actionsXInvariantAcrossStates",
+      "ok": true,
+      "detail": "[1218,1218,1218,1218,1218]"
+    },
+    {
+      "name": "actionsYInvariantAcrossStates",
+      "ok": true,
+      "detail": "[176.5,176.5,176.5,176.5,176.5]"
+    },
+    {
+      "name": "queryCardHeightInvariant",
+      "ok": true,
+      "detail": "[52,52,52,52,52]"
+    },
+    {
+      "name": "triggerWidthsInvariant",
+      "ok": true,
+      "detail": "[[240,300,200],[240,300,200],[240,300,200],[240,300,200],[240,300,200]]"
+    },
+    {
+      "name": "multiSelectProducedCollapsedTags",
+      "ok": true,
+      "detail": "[\"c-dssr1-0906-a（快照页测试探针A，请勿启用。长描述用于验...）\",\"+ 4\"]"
+    },
+    {
+      "name": "consoleErrorsZero",
+      "ok": true,
+      "detail": "[]"
+    },
+    {
+      "name": "nonGetZero",
+      "ok": true,
+      "detail": "[]"
+    }
+  ],
+  "global": {
+    "consoleErrors": [],
+    "nonGet": []
+  }
+}

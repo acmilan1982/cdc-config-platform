@@ -1,0 +1,48 @@
+{
+  "mode": "changed-data",
+  "label": "BI — backend list response substituted between refreshes; NOT real backend data",
+  "route": "http://127.0.0.1:5173/monitor/data-source-state",
+  "assertions": [
+    {
+      "name": "refreshReflectsNewestValue",
+      "ok": true,
+      "detail": "[\"2026-09-12 08:00:01\",\"--\",\"2026-09-12 08:00:01\"] -> [\"2026-09-12 09:30:47\",\"--\",\"2026-09-12 09:30:47\"]"
+    },
+    {
+      "name": "noWriteRequestFromPage",
+      "ok": true,
+      "detail": "[]"
+    },
+    {
+      "name": "refreshWasGet",
+      "ok": true,
+      "detail": "55"
+    }
+  ],
+  "phases": {
+    "before": {
+      "probe": "c-dssr1-0906-a",
+      "times": [
+        "2026-09-12 08:00:01",
+        "--",
+        "2026-09-12 08:00:01"
+      ]
+    },
+    "after": {
+      "probe": "c-dssr1-0906-a",
+      "times": [
+        "2026-09-12 09:30:47",
+        "--",
+        "2026-09-12 09:30:47"
+      ]
+    }
+  },
+  "global": {
+    "consoleErrors": [],
+    "nonGet": []
+  },
+  "summary": {
+    "assertions": 3,
+    "failed": 0
+  }
+}

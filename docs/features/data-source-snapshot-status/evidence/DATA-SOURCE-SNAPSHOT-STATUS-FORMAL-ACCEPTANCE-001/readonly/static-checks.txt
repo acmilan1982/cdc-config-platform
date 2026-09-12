@@ -1,0 +1,87 @@
+# Static review (SC) evidence — DATA-SOURCE-SNAPSHOT-STATUS-FORMAL-ACCEPTANCE-001
+# Read-only greps + file inspections against the task worktree (base af88aa84).
+# Collected 2026-09-12. No file was modified.
+
+== S1. Naming / menu / route (DSS-AC-001/002/003/004/005) ==
+$ grep -n "data-source-state" frontend/src/router/index.ts
+40:    path: '/monitor/data-source-state',
+43:    meta: { title: '源库快照状态', group: '运行监控' }        # exactly one route record
+
+$ grep -c "data-source-state" frontend/src/config/menu.ts
+1                                                            # exactly one menu entry
+
+$ grep -n "源库快照状态" frontend/src/config/menu.ts
+26:      { path: '/monitor/data-source-state', title: '源库快照状态', icon: 'DataLine' },
+
+$ grep -n "dssTitle|dss-title" frontend/src/views/data-source-run-state/DataSourceRunStatePage.vue
+5:      <h2 class="dss-title">源库快照状态</h2>                # page title
+# breadcrumb text is derived from route meta.title (HeaderBar.vue) -> 源库快照状态
+
+$ grep -rn "数据源运行状态" frontend/src        -> 1 hit, HomePage.vue:65 (unrouted component, not imported anywhere)
+$ grep -rn "数据源运行状态" backend/src         -> 2 hits, committed stale build bundle
+                                                   backend/src/main/resources/static/assets/*.js
+                                                   (pre-existing PlaceholderPage build output, chunk hash aaNH3SSt
+                                                    differs from the current build eLQZ7Bas)
+# The four surfaces named by DSS-AC-001/005 (menu, route meta, page title, breadcrumb) carry
+# 源库快照状态 with no old-name residue. The two hits above are OUTSIDE those four surfaces and
+# are NOT reachable at 5173 (index route redirects to /config/data-source; no HomePage route).
+# Recorded as an observation in the report's residual-issues section; not a case failure.
+
+$ git ls-files --error-unmatch frontend/src/views/HomePage.vue -> TRACKED (committed by 78b8e16, FRONTEND_APP_SHELL_001)
+$ grep -rn "HomePage" frontend/src -> 0 references (dead component)
+
+== S2. Cross-program boundary / no sync-client (DSS-AC-007/008/009) ==
+$ grep -rniE "sync-client|kafka|syncClient" frontend/src/views/data-source-run-state frontend/src/api/dataSourceSnapshot.ts
+0 hits                                                      # no new sync-client interaction code in this repo
+
+$ grep -rniE "在线|离线|健康|失联|同步进度|增量" <feature files>
+1 hit: DataSourceSnapshotTable.vue:197 (CSS comment "源库增量最大" = width increment, not sync-incremental)
+0 semantics of online/health/offline/progress
+
+$ grep -rniE "超时|长期运行|timeout" frontend/src/views/data-source-run-state
+- hits only in *.spec.ts (test timers) and setTimeout/clearTimeout in useDataSourceSnapshot.ts /
+  useSnapshotTooltip.ts (real 60s scheduler + tooltip delay) — no time-derived UI status
+
+$ grep -rnE "未开始|待快照|尚无快照记录" <feature files>
+0 hits                                                      # no inferred/virtual status (DSS-AC-016)
+
+== S3. Read-only backend boundary (DSS-AC-010/011/012/013/049/062) ==
+Feature package files:
+  controller/DataSourceRunStateController.java
+  service/DataSourceRunStateQueryService.java + service/impl/DataSourceRunStateQueryServiceImpl.java
+  mapper/DataSourceRunStateMapper.java, mapper/RunStateClientMapper.java, mapper/RunStateDataSourceMapper.java
+  model/*, vo/*, enums/SnapshotStatusCategory.java, exception/DataSourceRunStateErrorCode.java
+  constant/DataSourceRunStateConstants.java
+
+$ grep -rniE "insert|update|delete|merge|save|remove" <feature java>
+Only matches: a class comment in DataSourceRunStateController.java:16 ("无任何 POST/PUT/PATCH/DELETE 或写方法调用路径")
+and a local variable name byUpdated in DataSourceRunStateQueryServiceImpl.java:110-111. No write call.
+
+Runtime confirmation (readonly/runtime-audit.txt, backend log /tmp/dss-fa-001/backend.log, 1503 lines):
+  write_statement_count = 0
+  CDC_DATA_SOURCE_RUN_STATE: SELECT=23 WRITE=0
+  CDC_CLIENT_MULTIPLE:       SELECT=23 WRITE=0
+  CDC_DATA_SOURCE:           SELECT=23 WRITE=0
+Read-only contract test: DataSourceRunStateReadOnlyContractTest (4 tests, pass) — backend BT.
+
+== S4. Read-only UI surfaces (DSS-AC-011/018/025/031/046/060) ==
+BR structure.json readOnlyProbe (all four viewports): buttons=["查询","重置","立即刷新"],
+  hasActionColumn=false, editableInputsOutsideQuery=0, dssCardCount=2 (queryCard + resultCard),
+  errorCard=false; headers exactly the seven approved columns; pagination=0; sortableHeaders=0.
+
+== S5. Table fill / min-width model (DSS-AC-073/081/090) ==
+$ grep -n "1175" frontend/src/views/data-source-run-state/components/DataSourceSnapshotTable.vue
+  min-width: 1175px with width:100% (no fixed width:1175px) — table fills, scrolls below min.
+FT: DataSourceSnapshotTable.spec.ts:153 asserts min-width:1175px present and non-min width:1175px absent.
+
+== S6. Category-anomaly display (DSS-AC-041/083) ==
+FT: DataSourceSnapshotTable.spec.ts:238 "源库停用/类别非 SOURCE/配置缺失：保留行按 ORG 或回退 ID 展示，
+  不出现红字“停用”与黄色图标" — covers the source TYPE!=SOURCE / type-casing case that the
+  live dev DB does not currently contain (observable variant is INACTIVE / NOT_FOUND).
+
+== S7. Popper isolation (DSS-AC-085/104/105/106/107) ==
+FT + BR: bare .el-popper width rules = 19, ALL from element-plus/dist/index.css, 0 feature-authored
+  (browser/table-visual.txt featureAuthoredImportantRules=0); feature styles use min specificity and
+  feature-namespaced popper classes; no !important; inner .el-select-dropdown adapts to the outer
+  .el-popper (inner 478/398/238 = outer 480/400/240 minus 2px border) rather than hard-coding the
+  same border-box width.

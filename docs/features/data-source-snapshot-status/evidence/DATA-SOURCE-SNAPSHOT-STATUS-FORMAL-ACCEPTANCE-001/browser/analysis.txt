@@ -1,0 +1,92 @@
+== browser matrix consolidated findings ==
+All rows below are BR (real Chromium + CDP against the live 5173 page) unless
+explicitly marked BI. BI rows substitute only the list-API response bytes and
+are NOT real backend data.
+
+-- §11.1 structure.json --
+  1280x800 route=/monitor/data-source-state title="CDC 配置管理平台" dssTitle="源库快照状态" activeMenu="源库快照状态" headers=["序号","探针端","源库","快照状态","快照启动时间","快照完成时间","记录更新时间"] headerCount=7 bodyRowCount=30 pagination=0 sortableHeaders=0
+    readOnlyProbe={"buttons":["查询","重置","立即刷新"],"hasActionColumn":false,"editableInputsOutsideQuery":0,"dssCardCount":2,"queryCard":true,"resultCard":true,"errorCard":false,"dssPagePresent":true}
+  1700x920 route=/monitor/data-source-state title="CDC 配置管理平台" dssTitle="源库快照状态" activeMenu="源库快照状态" headers=["序号","探针端","源库","快照状态","快照启动时间","快照完成时间","记录更新时间"] headerCount=7 bodyRowCount=30 pagination=0 sortableHeaders=0
+    readOnlyProbe={"buttons":["查询","重置","立即刷新"],"hasActionColumn":false,"editableInputsOutsideQuery":0,"dssCardCount":2,"queryCard":true,"resultCard":true,"errorCard":false,"dssPagePresent":true}
+  1920x1080 route=/monitor/data-source-state title="CDC 配置管理平台" dssTitle="源库快照状态" activeMenu="源库快照状态" headers=["序号","探针端","源库","快照状态","快照启动时间","快照完成时间","记录更新时间"] headerCount=7 bodyRowCount=30 pagination=0 sortableHeaders=0
+    readOnlyProbe={"buttons":["查询","重置","立即刷新"],"hasActionColumn":false,"editableInputsOutsideQuery":0,"dssCardCount":2,"queryCard":true,"resultCard":true,"errorCard":false,"dssPagePresent":true}
+  2560x1440 route=/monitor/data-source-state title="CDC 配置管理平台" dssTitle="源库快照状态" activeMenu="源库快照状态" headers=["序号","探针端","源库","快照状态","快照启动时间","快照完成时间","记录更新时间"] headerCount=7 bodyRowCount=30 pagination=0 sortableHeaders=0
+    readOnlyProbe={"buttons":["查询","重置","立即刷新"],"hasActionColumn":false,"editableInputsOutsideQuery":0,"dssCardCount":2,"queryCard":true,"resultCard":true,"errorCard":false,"dssPagePresent":true}
+  global consoleErrors=0 nonGet=0
+
+-- §11.7 leak.json (dss-* isolation on 4 non-Feature routes) --
+  /large-screen hasDssElement=false dssClassAttrMention=false dssStyleRuleCount=0 hasDssPage=false hasDssTable=false dssVarDefined=false
+  /config/data-source hasDssElement=false dssClassAttrMention=false dssStyleRuleCount=0 hasDssPage=false hasDssTable=false dssVarDefined=false
+  /monitor/cdc-node hasDssElement=false dssClassAttrMention=false dssStyleRuleCount=0 hasDssPage=false hasDssTable=false dssVarDefined=false
+  /config/client hasDssElement=false dssClassAttrMention=false dssStyleRuleCount=0 hasDssPage=false hasDssTable=false dssVarDefined=false
+  global consoleErrors=0
+
+-- §11.4 popper-matrix.json --
+  target={client:480,source:400,status:240} reps=5
+  total states measured=120 targetWidthDeviationMax=0
+  global consoleErrors=0 nonGet=0
+
+-- §11.2/§11.3 data.json (real BR) --
+  assertions=40 failed=0
+  rows=30 consoleErrors=0 nonGet=0
+
+-- §11.3 bi.json (BI — backend list response substituted; NOT real backend data) --
+  label="BI — backend list response substituted; NOT real backend data"
+  assertions=24 failed=0 interceptedRequests=1
+
+-- §11.5 table-visual.json --
+  1280x800 rowH=49 tableMinW=1175px tableW=1175px wrapOverflowX=auto wrapScroll=1175/916 docScroll=1280/1280 headerWidths=[70,170,285,140,170,170,170] cellWidths=[70,170,285,140,170,170,170]
+    timeTexts=["2026-09-06 11:02:00","--","2026-09-06 11:02:00"] timeCellPad={"pl":"8px","pr":"8px","pt":"0px","pb":"0px"} timeOverflow=[0,0,0] queryBarH=70 labels=["探针端","源库","快照状态"]
+    ring={"l":811.28,"t":287.5,"w":16,"h":16,"r":827.28,"b":303.5} viewBox=0 0 16 16 progress={"stroke":"rgb(37, 99, 235)","strokeWidth":"2px","dashArray":"40.84","transform":"rotate(-90 8 8)"} track={"stroke":"rgb(228, 228, 231)","strokeWidth":"2px"}
+    countdownText="59 秒后自动刷新" refreshBtn idle/loading/after=110/110/110 refreshTime="最近成功刷新：19:49:29"
+    unknownRow=6 normalRow=24 unknownBg=rgba(254, 243, 199, 0.42) hoverBg=rgba(254, 243, 199, 0.65)
+    featureAuthoredImportantRules=0 bareElPopperRulesTotal=19 (all from element-plus/dist/index.css; 0 feature-authored)
+  1700x920 rowH=49 tableMinW=1175px tableW=1336px wrapOverflowX=auto wrapScroll=1336/1336 docScroll=1700/1700 headerWidths=[70,200,332,140,198,198,198] cellWidths=[70,200,332,140,198,198,198]
+    timeTexts=["2026-09-06 11:02:00","--","2026-09-06 11:02:00"] timeCellPad={"pl":"8px","pr":"8px","pt":"0px","pb":"0px"} timeOverflow=[0,0,0] queryBarH=32 labels=["探针端","源库","快照状态"]
+    ring={"l":1231.28,"t":249.5,"w":16,"h":16,"r":1247.28,"b":265.5} viewBox=0 0 16 16 progress={"stroke":"rgb(37, 99, 235)","strokeWidth":"2px","dashArray":"40.84","transform":"rotate(-90 8 8)"} track={"stroke":"rgb(228, 228, 231)","strokeWidth":"2px"}
+    countdownText="59 秒后自动刷新" refreshBtn idle/loading/after=110/110/110 refreshTime="最近成功刷新：19:49:36"
+    unknownRow=6 normalRow=24 unknownBg=rgba(254, 243, 199, 0.42) hoverBg=rgba(254, 243, 199, 0.65)
+    featureAuthoredImportantRules=0 bareElPopperRulesTotal=19 (all from element-plus/dist/index.css; 0 feature-authored)
+  1920x1080 rowH=49 tableMinW=1175px tableW=1556px wrapOverflowX=auto wrapScroll=1556/1556 docScroll=1920/1920 headerWidths=[70,238,397,140,237,237,237] cellWidths=[70,238,397,140,237,237,237]
+    timeTexts=["2026-09-06 11:02:00","--","2026-09-06 11:02:00"] timeCellPad={"pl":"8px","pr":"8px","pt":"0px","pb":"0px"} timeOverflow=[0,0,0] queryBarH=32 labels=["探针端","源库","快照状态"]
+    ring={"l":1451.28,"t":249.5,"w":16,"h":16,"r":1467.28,"b":265.5} viewBox=0 0 16 16 progress={"stroke":"rgb(37, 99, 235)","strokeWidth":"2px","dashArray":"40.84","transform":"rotate(-90 8 8)"} track={"stroke":"rgb(228, 228, 231)","strokeWidth":"2px"}
+    countdownText="59 秒后自动刷新" refreshBtn idle/loading/after=110/110/110 refreshTime="最近成功刷新：19:49:42"
+    unknownRow=6 normalRow=24 unknownBg=rgba(254, 243, 199, 0.42) hoverBg=rgba(254, 243, 199, 0.655)
+    featureAuthoredImportantRules=0 bareElPopperRulesTotal=19 (all from element-plus/dist/index.css; 0 feature-authored)
+  2560x1440 rowH=49 tableMinW=1175px tableW=2196px wrapOverflowX=auto wrapScroll=2196/2196 docScroll=2560/2560 headerWidths=[70,353,586,140,349,349,349] cellWidths=[70,353,586,140,349,349,349]
+    timeTexts=["2026-09-06 11:02:00","--","2026-09-06 11:02:00"] timeCellPad={"pl":"8px","pr":"8px","pt":"0px","pb":"0px"} timeOverflow=[0,0,0] queryBarH=32 labels=["探针端","源库","快照状态"]
+    ring={"l":2091.28,"t":249.5,"w":16,"h":16,"r":2107.28,"b":265.5} viewBox=0 0 16 16 progress={"stroke":"rgb(37, 99, 235)","strokeWidth":"2px","dashArray":"40.84","transform":"rotate(-90 8 8)"} track={"stroke":"rgb(228, 228, 231)","strokeWidth":"2px"}
+    countdownText="59 秒后自动刷新" refreshBtn idle/loading/after=110/110/110 refreshTime="最近成功刷新：19:49:49"
+    unknownRow=6 normalRow=24 unknownBg=rgba(254, 243, 199, 0.42) hoverBg=rgba(254, 243, 199, 0.655)
+    featureAuthoredImportantRules=0 bareElPopperRulesTotal=19 (all from element-plus/dist/index.css; 0 feature-authored)
+  displacement (loading/refresh-icon/error/table-fill/tooltip must not move the group or actions):
+    1280x800 refreshBtnW={"idle":110,"loading":110,"after":110} groupOriginX={"idleX":811.28,"loadingX":811.28,"afterX":811.28,"withTtX":811.28} actionsOrigin={"loadingY":215.5,"afterY":215.5,"withTtY":215.5,"loadingX":292,"afterX":292,"withTtX":292}
+    1700x920 refreshBtnW={"idle":110,"loading":110,"after":110} groupOriginX={"idleX":1231.28,"loadingX":1231.28,"afterX":1231.28,"withTtX":1231.28} actionsOrigin={"loadingY":176.5,"afterY":176.5,"withTtY":176.5,"loadingX":1218,"afterX":1218,"withTtX":1218}
+    1920x1080 refreshBtnW={"idle":110,"loading":110,"after":110} groupOriginX={"idleX":1451.28,"loadingX":1451.28,"afterX":1451.28,"withTtX":1451.28} actionsOrigin={"loadingY":176.5,"afterY":176.5,"withTtY":176.5,"loadingX":1218,"afterX":1218,"withTtX":1218}
+    2560x1440 refreshBtnW={"idle":110,"loading":110,"after":110} groupOriginX={"idleX":2091.28,"loadingX":2091.28,"afterX":2091.28,"withTtX":2091.28} actionsOrigin={"loadingY":176.5,"afterY":176.5,"withTtY":176.5,"loadingX":1218,"afterX":1218,"withTtX":1218}
+  global consoleErrors=0 nonGet=0
+
+-- §11.6 requests.json --
+  assertions=22 failed=0
+  phases=["initial","countdown","query","reset","singleFlight","failure","emptySuccess","hidden"]
+    initial: {"getCount":1,"urls":["http://127.0.0.1:5173/api/monitor/data-source-run-state/list"]}
+    countdown: {"requestsDuringTick":0,"countdownSeconds":"45"}
+    query: {"url":"http://127.0.0.1:5173/api/monitor/data-source-run-state/list?clientId=hosp-012"}
+    reset: {"requestsAfterReset":0,"tagsBefore":["hosp-012（总部测试 IP: 192.168.0.9...）"],"tagsAfterReset":["全部"]}
+    singleFlight: {"burstEvents":160,"getCount":1,"urls":["http://127.0.0.1:5173/api/monitor/data-source-run-state/list?clientId=hosp-012"]}
+    failure: {"rowsBefore":1,"rowsAfter":1,"summaryBefore":"共 1 条","summaryAfter":"共 1 条","refreshTimeBefore":"最近成功刷新：19:52:02","refreshTimeAfter":"最近成功刷新：19:52:02","uiAfter":["hosp-012（总部测试 IP: 192.168.0.9...）","+ 1"],"errSlot":"刷新失败，将在约 60 秒后自动重试"}
+    emptySuccess: {"summary":"共 0 条","rows":0,"errSlot":""}
+    hidden: {"duringHidden":0,"afterVisible":1}
+  consoleErrorsBeforeInjection=0 consoleErrorsInjectedFailure=1 nonGet=0
+
+-- screenshots-manifest.json (sha256 + PNG dims) --
+  entries=24
+  page-idle: 4 shots ["1280x800 a650279c96ff","1700x920 b1f458a8fa64","1920x1080 c6494d7c9c77","2560x1440 4a8ae0d4dcea"]
+  popper-client: 4 shots ["480x276 65b32a458cbc","480x276 b511dc2b990c","480x276 b511dc2b990c","480x276 b511dc2b990c"]
+  popper-source: 4 shots ["400x276 0c93001a7078","400x276 0ba4608c75aa","400x276 0ba4608c75aa","400x276 0ba4608c75aa"]
+  popper-status: 4 shots ["240x150 6a72c26c19e3","240x150 845a95193e51","240x150 845a95193e51","240x150 845a95193e51"]
+  refresh-loading: 4 shots ["1280x800 d554af341c18","1700x920 a292bf7c6345","1920x1080 39770db0fdfd","2560x1440 b751cd192e65"]
+  tooltip-unknown-status: 4 shots ["1280x800 5136a30c7203","1700x920 35d6ee7a79e3","1920x1080 1b69248ed361","2560x1440 ae869d7a8c5f"]
+  NOTE: popper-client/source/status at 1700/1920/2560 are byte-identical (same sha256)
+  because the popper widths are viewport-independent; only the 1280 capture differs.
+  This is recorded as measured, not claimed as four independent geometries.

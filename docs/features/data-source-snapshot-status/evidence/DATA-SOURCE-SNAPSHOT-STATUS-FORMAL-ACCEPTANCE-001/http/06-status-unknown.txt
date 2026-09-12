@@ -1,0 +1,9 @@
+# GET http://127.0.0.1:8080/api/monitor/data-source-run-state/list?status=UNKNOWN
+# 2026-09-12T16:12:34+08:00
+# HTTP status:
+200
+
+code=200 message="success"
+records=6  客户端候选client=0 source=0 status=[]
+statusCategory分布={"UNKNOWN":6}
+firstRecord={"clientId":"c-dssr1-0906-a","clientRef":{"state":"INACTIVE","desc":"快照页测试探针A，请勿启用。长描述用于验证页面 Tooltip 与列宽截断：某市第一人民医院信息中心CDC采集探针（专用快照页测试实例，请勿启用其进行任何真实数据同步）。继续追加说明文字以拉长描述，确认列表单元格超长时显示省略号并可由 Tooltip 完整阅读；本条仅供源库快照状态只读页面视觉验证使用。"},"sourceId":"s-dssr1-0906-5","sourceRef":{"state":"INACTIVE","org":"SNAPSHOT-TEST-第三方平台源库-DONOTUSE","category":null,"sourceRole":false},"snapshotStatus":"SNAPSHOT_STALE","statusCategory":"UNKNOWN","snapshotLastSeenAt":"2026-09-06 10:58:00","snapshotCompletedAt":null,"updatedAt":"2026-09-06 10:58:00"}

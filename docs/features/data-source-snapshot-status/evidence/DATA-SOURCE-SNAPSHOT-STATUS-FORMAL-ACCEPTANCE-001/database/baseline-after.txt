@@ -1,0 +1,77 @@
+===== A. ROW COUNTS (Feature three business tables) =====
+
+TABLE_NAME		   ROW_COUNT
+------------------------- ----------
+CDC_DATA_SOURCE_RUN_STATE	  30
+CDC_CLIENT_MULTIPLE		  16
+CDC_DATA_SOURCE 		  34
+===== B. CDC_DATA_SOURCE_RUN_STATE FULL CONTENT (ordered) =====
+
+CLIENT_ID	       DATA_SOURCE_ID		      SNAPSHOT_STATUS	   SNAPSHOT_LAST_SEEN_ SNAPSHOT_COMPLETED_ UPDATED_AT
+---------------------- ------------------------------ -------------------- ------------------- ------------------- -------------------
+c-dssr1-0906-a	       s-dssr1-0906-1		      SNAPSHOT_RUNNING	   2026-09-06 11:02:00			   2026-09-06 11:02:00
+c-dssr1-0906-a	       s-dssr1-0906-2		      SNAPSHOT_RUNNING	   2026-09-06 11:01:30			   2026-09-06 11:01:30
+c-dssr1-0906-a	       s-dssr1-0906-3		      SNAPSHOT_COMPLETED   2026-09-06 11:00:00 2026-09-06 11:00:05 2026-09-06 11:00:05
+c-dssr1-0906-a	       s-dssr1-0906-4		      SNAPSHOT_COMPLETED		       2026-09-06 10:59:00 2026-09-06 10:59:00
+c-dssr1-0906-a	       s-dssr1-0906-5		      SNAPSHOT_STALE	   2026-09-06 10:58:00			   2026-09-06 10:58:00
+c-dssr1-0906-b	       s-dssr1-0906-1		      SNAPSHOT_RUNNING	   2026-09-06 10:57:00			   2026-09-06 10:57:00
+c-dssr1-0906-b	       s-dssr1-0906-2		      UNKNOWN							   2026-09-06 10:56:00
+c-dssr1-0906-b	       s-dssr1-0906-3		      SNAPSHOT_COMPLETED   2026-09-06 10:55:00 2026-09-06 10:55:30 2026-09-06 10:55:30
+c-dssr1-0906-b	       s-dssr1-0906-5		      SNAPSHOT_COMPLETED   2026-09-06 10:54:00 2026-09-06 10:54:10 2026-09-06 10:54:10
+c-dssr1-0906-c	       s-dssr1-0906-4		      SNAPSHOT_COMPLETED		       2026-09-05 07:58:30 2026-09-05 08:00:00
+c-dssr1-0906-c	       s-dssr1-0906-5		      UNKNOWN							   2026-09-05 08:00:00
+c-dssr1-0906-c	       s-dssr1-0906-m1		      SNAPSHOT_RUNNING	   2026-09-06 10:53:00			   2026-09-06 10:53:00
+c-dssr1-0906-c	       s-dssr1-0906-m2		      STARTING							   2026-09-06 10:52:00
+c-dssr1-0906-c	       s-dssr1-0906-m3		      SNAPSHOT_COMPLETED   2026-09-06 10:51:00 2026-09-06 10:51:20 2026-09-06 10:51:20
+c-dssr1-0906-d	       s-dssr1-0906-1		      SNAPSHOT_COMPLETED		       2026-09-06 10:50:00 2026-09-06 10:50:00
+c-dssr1-0906-d	       s-dssr1-0906-2		      SNAPSHOT_RUNNING	   2026-09-06 10:49:30			   2026-09-06 10:49:30
+c-dssr1-0906-d	       s-dssr1-0906-3		      SNAPSHOT_RUNNING						   2026-09-05 08:00:00
+c-dssr1-0906-d	       s-dssr1-0906-4		      SNAPSHOT_UNKNOWN	   2026-09-06 10:49:00			   2026-09-06 10:49:00
+c-dssr1-0906-d	       s-dssr1-0906-5		      SNAPSHOT_RUNNING						   2026-09-05 08:00:00
+c-dssr1-0906-e	       s-dssr1-0906-1		      SNAPSHOT_RUNNING						   2026-09-05 08:00:00
+c-dssr1-0906-e	       s-dssr1-0906-2		      SNAPSHOT_RUNNING						   2026-09-05 08:00:00
+c-dssr1-0906-e	       s-dssr1-0906-3		      SNAPSHOT_RUNNING	   2026-09-06 10:48:00			   2026-09-06 10:48:00
+c-dssr1-0906-e	       s-dssr1-0906-4		      SNAPSHOT_COMPLETED   2026-09-06 10:47:00 2026-09-06 10:47:40 2026-09-06 10:47:40
+c-dssr1-0906-e	       s-dssr1-0906-5		      SNAPSHOT_COMPLETED		       2026-09-05 07:59:00 2026-09-05 08:00:00
+c-dssr1-0906-miss1     s-dssr1-0906-2		      SNAPSHOT_RUNNING	   2026-09-06 10:46:00			   2026-09-06 10:46:00
+c-dssr1-0906-miss1     s-dssr1-0906-3		      UNKNOWN_MODE						   2026-09-06 10:45:00
+c-dssr1-0906-miss2     s-dssr1-0906-1		      SNAPSHOT_COMPLETED   2026-09-06 10:44:00 2026-09-06 10:44:50 2026-09-06 10:44:50
+c-dssr1-0906-miss2     s-dssr1-0906-m1		      SNAPSHOT_RUNNING	   2026-09-06 10:43:00			   2026-09-06 10:43:00
+c-dssr1-0906-miss2     s-dssr1-0906-m2		      SNAPSHOT_COMPLETED		       2026-09-06 10:42:00 2026-09-06 10:42:00
+hosp-012	       112-source-19c		      SNAPSHOT_RUNNING	   2026-08-17 17:28:46			   2026-08-17 17:28:46
+===== C. RUN_STATE STATUS DISTRIBUTION =====
+
+SNAPSHOT_STATUS 	    CNT
+-------------------- ----------
+SNAPSHOT_COMPLETED	     11
+SNAPSHOT_RUNNING	     13
+SNAPSHOT_STALE		      1
+SNAPSHOT_UNKNOWN	      1
+STARTING		      1
+UNKNOWN 		      2
+UNKNOWN_MODE		      1
+===== D. RUN_STATE CONTENT HASH =====
+
+ ROW_COUNT CONTENT_HASH_SUM
+---------- ----------------
+	30	 6.2239E+10
+===== H. JOINED ROWCOUNT (LEFT JOIN must not change row count) =====
+
+JOINED_ROWS
+-----------
+	 30
+===== K. NULL TIME COUNTS =====
+
+TOTAL_ROWS NULL_LAST_SEEN NULL_COMPLETED NULL_UPDATED
+---------- -------------- -------------- ------------
+	30	       13	      19	    0
+===== L. CDC_STATS_* ROW COUNTS (scheduler domain, separate from Feature tables) =====
+
+TABLE_NAME		       ROW_COUNT
+----------------------------- ----------
+CDC_STATS_TASK_CONFIG		       1
+CDC_STATS_WATERMARK		       2
+CDC_STATS_CUMULATIVE_OVERVIEW	       1
+CDC_STATS_DAILY_OVERVIEW	       3
+CDC_STATS_DIM_CUMULATIVE	      13
+CDC_STATS_DIM_DAILY		      17

@@ -1,0 +1,9 @@
+# GET http://127.0.0.1:8080/api/monitor/data-source-run-state/list?clientId=c-dssr1-0906-miss1
+# 2026-09-12T16:12:34+08:00
+# HTTP status:
+200
+
+code=200 message="success"
+records=2  客户端候选client=0 source=0 status=[]
+statusCategory分布={"RUNNING":1,"UNKNOWN":1}
+firstRecord={"clientId":"c-dssr1-0906-miss1","clientRef":{"state":"NOT_FOUND","desc":null},"sourceId":"s-dssr1-0906-2","sourceRef":{"state":"INACTIVE","org":"SNAPSHOT-TEST-某市一院信息中心源库-DONOTUSE","category":"SOURCE","sourceRole":true},"snapshotStatus":"SNAPSHOT_RUNNING","statusCategory":"RUNNING","snapshotLastSeenAt":"2026-09-06 10:46:00","snapshotCompletedAt":null,"updatedAt":"2026-09-06 10:46:00"}

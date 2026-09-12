@@ -1,0 +1,57 @@
+== 1280x800 docScroll=1280/1280
+  headerWidths=[70,170,285,140,170,170,170]
+  cellWidths=[70,170,285,140,170,170,170]
+  rowHeight=49 timeTexts=["2026-09-06 11:02:00","--","2026-09-06 11:02:00"] timeCellPad={"pl":"8px","pr":"8px","pt":"0px","pb":"0px"} timeOverflow=[0,0,0]
+  table minWidth=1175px width=1175px wrapOverflowX=auto wrapScroll=1175/916
+  summaryCount="共 30 条" summaryUnknown="其中 6 条未知状态" unknownBg=rgb(254, 243, 199)
+  unknownRow=6 normalRow=24 unknownBg=rgba(254, 243, 199, 0.42) normalBg=rgba(0, 0, 0, 0) hoverBg=rgba(254, 243, 199, 0.65)
+  refreshGroupChildren=[{},"dss-countdown-text","dss-refresh-sep","dss-refresh-time","el-button dss-refresh-btn"]
+  countdownRing={"rect":{"l":811.28,"t":287.5,"w":16,"h":16,"r":827.28,"b":303.5},"viewBox":"0 0 16 16","srcW":null,"srcH":null} progress={"stroke":"rgb(37, 99, 235)","strokeWidth":"2px","dashArray":"40.84","transform":"rotate(-90 8 8)"} track={"stroke":"rgb(228, 228, 231)","strokeWidth":"2px"}
+  countdownText="59 秒后自动刷新" seconds="59" unit="秒后自动刷新"
+  refreshBtn idle=110 loading=110 is-loading=true after=110
+  refreshTime="最近成功刷新：19:49:29"
+  labels=[{"text":"探针端","x":292,"y":180.3},{"text":"源库","x":594,"y":180.3},{"text":"快照状态","x":942,"y":180.3}] queryBarH=70 queryActions=(292,215.5)
+  !important dss rules=0 bare .el-popper override rules=19
+== 1700x920 docScroll=1700/1700
+  headerWidths=[70,200,332,140,198,198,198]
+  cellWidths=[70,200,332,140,198,198,198]
+  rowHeight=49 timeTexts=["2026-09-06 11:02:00","--","2026-09-06 11:02:00"] timeCellPad={"pl":"8px","pr":"8px","pt":"0px","pb":"0px"} timeOverflow=[0,0,0]
+  table minWidth=1175px width=1336px wrapOverflowX=auto wrapScroll=1336/1336
+  summaryCount="共 30 条" summaryUnknown="其中 6 条未知状态" unknownBg=rgb(254, 243, 199)
+  unknownRow=6 normalRow=24 unknownBg=rgba(254, 243, 199, 0.42) normalBg=rgba(0, 0, 0, 0) hoverBg=rgba(254, 243, 199, 0.65)
+  refreshGroupChildren=[{},"dss-countdown-text","dss-refresh-sep","dss-refresh-time","el-button dss-refresh-btn"]
+  countdownRing={"rect":{"l":1231.28,"t":249.5,"w":16,"h":16,"r":1247.28,"b":265.5},"viewBox":"0 0 16 16","srcW":null,"srcH":null} progress={"stroke":"rgb(37, 99, 235)","strokeWidth":"2px","dashArray":"40.84","transform":"rotate(-90 8 8)"} track={"stroke":"rgb(228, 228, 231)","strokeWidth":"2px"}
+  countdownText="59 秒后自动刷新" seconds="59" unit="秒后自动刷新"
+  refreshBtn idle=110 loading=110 is-loading=true after=110
+  refreshTime="最近成功刷新：19:49:36"
+  labels=[{"text":"探针端","x":292,"y":180.3},{"text":"源库","x":594,"y":180.3},{"text":"快照状态","x":942,"y":180.3}] queryBarH=32 queryActions=(1218,176.5)
+  !important dss rules=0 bare .el-popper override rules=19
+== 1920x1080 docScroll=1920/1920
+  headerWidths=[70,238,397,140,237,237,237]
+  cellWidths=[70,238,397,140,237,237,237]
+  rowHeight=49 timeTexts=["2026-09-06 11:02:00","--","2026-09-06 11:02:00"] timeCellPad={"pl":"8px","pr":"8px","pt":"0px","pb":"0px"} timeOverflow=[0,0,0]
+  table minWidth=1175px width=1556px wrapOverflowX=auto wrapScroll=1556/1556
+  summaryCount="共 30 条" summaryUnknown="其中 6 条未知状态" unknownBg=rgb(254, 243, 199)
+  unknownRow=6 normalRow=24 unknownBg=rgba(254, 243, 199, 0.42) normalBg=rgba(0, 0, 0, 0) hoverBg=rgba(254, 243, 199, 0.655)
+  refreshGroupChildren=[{},"dss-countdown-text","dss-refresh-sep","dss-refresh-time","el-button dss-refresh-btn"]
+  countdownRing={"rect":{"l":1451.28,"t":249.5,"w":16,"h":16,"r":1467.28,"b":265.5},"viewBox":"0 0 16 16","srcW":null,"srcH":null} progress={"stroke":"rgb(37, 99, 235)","strokeWidth":"2px","dashArray":"40.84","transform":"rotate(-90 8 8)"} track={"stroke":"rgb(228, 228, 231)","strokeWidth":"2px"}
+  countdownText="59 秒后自动刷新" seconds="59" unit="秒后自动刷新"
+  refreshBtn idle=110 loading=110 is-loading=true after=110
+  refreshTime="最近成功刷新：19:49:42"
+  labels=[{"text":"探针端","x":292,"y":180.3},{"text":"源库","x":594,"y":180.3},{"text":"快照状态","x":942,"y":180.3}] queryBarH=32 queryActions=(1218,176.5)
+  !important dss rules=0 bare .el-popper override rules=19
+== 2560x1440 docScroll=2560/2560
+  headerWidths=[70,353,586,140,349,349,349]
+  cellWidths=[70,353,586,140,349,349,349]
+  rowHeight=49 timeTexts=["2026-09-06 11:02:00","--","2026-09-06 11:02:00"] timeCellPad={"pl":"8px","pr":"8px","pt":"0px","pb":"0px"} timeOverflow=[0,0,0]
+  table minWidth=1175px width=2196px wrapOverflowX=auto wrapScroll=2196/2196
+  summaryCount="共 30 条" summaryUnknown="其中 6 条未知状态" unknownBg=rgb(254, 243, 199)
+  unknownRow=6 normalRow=24 unknownBg=rgba(254, 243, 199, 0.42) normalBg=rgba(0, 0, 0, 0) hoverBg=rgba(254, 243, 199, 0.655)
+  refreshGroupChildren=[{},"dss-countdown-text","dss-refresh-sep","dss-refresh-time","el-button dss-refresh-btn"]
+  countdownRing={"rect":{"l":2091.28,"t":249.5,"w":16,"h":16,"r":2107.28,"b":265.5},"viewBox":"0 0 16 16","srcW":null,"srcH":null} progress={"stroke":"rgb(37, 99, 235)","strokeWidth":"2px","dashArray":"40.84","transform":"rotate(-90 8 8)"} track={"stroke":"rgb(228, 228, 231)","strokeWidth":"2px"}
+  countdownText="59 秒后自动刷新" seconds="59" unit="秒后自动刷新"
+  refreshBtn idle=110 loading=110 is-loading=true after=110
+  refreshTime="最近成功刷新：19:49:49"
+  labels=[{"text":"探针端","x":292,"y":180.3},{"text":"源库","x":594,"y":180.3},{"text":"快照状态","x":942,"y":180.3}] queryBarH=32 queryActions=(1218,176.5)
+  !important dss rules=0 bare .el-popper override rules=19
+GLOBAL consoleErrors=0 nonGet=0

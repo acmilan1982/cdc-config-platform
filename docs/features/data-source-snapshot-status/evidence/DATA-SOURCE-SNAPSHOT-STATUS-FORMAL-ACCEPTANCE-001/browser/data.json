@@ -1,0 +1,1551 @@
+{
+  "mode": "real-data",
+  "route": "http://127.0.0.1:5173/monitor/data-source-state",
+  "delayMs": 320,
+  "assertions": [
+    {
+      "name": "rowCountMatchesApi",
+      "ok": true,
+      "detail": "30 vs 30"
+    },
+    {
+      "name": "statusCategoriesPresent",
+      "ok": true,
+      "detail": "[\"RUNNING\",\"UNKNOWN\",\"COMPLETED\"]"
+    },
+    {
+      "name": "statusTooltipRaw[RUNNING]",
+      "ok": true,
+      "detail": "原始状态：SNAPSHOT_RUNNING"
+    },
+    {
+      "name": "statusTooltipSingle[RUNNING]",
+      "ok": true,
+      "detail": "1"
+    },
+    {
+      "name": "statusTooltipRaw[UNKNOWN]",
+      "ok": true,
+      "detail": "原始状态：SNAPSHOT_STALE"
+    },
+    {
+      "name": "statusTooltipSingle[UNKNOWN]",
+      "ok": true,
+      "detail": "1"
+    },
+    {
+      "name": "statusTooltipRaw[COMPLETED]",
+      "ok": true,
+      "detail": "原始状态：SNAPSHOT_COMPLETED"
+    },
+    {
+      "name": "statusTooltipSingle[COMPLETED]",
+      "ok": true,
+      "detail": "1"
+    },
+    {
+      "name": "probeTooltipEqualsTrimmedDesc[0]",
+      "ok": true,
+      "detail": "\"快照页测试探针A，请勿启用。长描述用于验证页面 Tooltip 与列宽截断：某市\""
+    },
+    {
+      "name": "probeTooltipShortShowsDesc[2]",
+      "ok": true,
+      "detail": "\"快照页测试探针B，请勿启用\""
+    },
+    {
+      "name": "probeTooltipClosedOnLeave[2]",
+      "ok": true,
+      "detail": "gone"
+    },
+    {
+      "name": "probeTooltipNoEmpty[6]",
+      "ok": true,
+      "detail": "none"
+    },
+    {
+      "name": "inactiveMarkSeen",
+      "ok": true,
+      "detail": "seen=24 mismatch=0"
+    },
+    {
+      "name": "inactiveMarkCorrect",
+      "ok": true,
+      "detail": "mismatch=0"
+    },
+    {
+      "name": "probeDescVariantsCovered",
+      "ok": true,
+      "detail": "long=1 short=1 empty=1"
+    },
+    {
+      "name": "sourceTooltipRawId[org][0]",
+      "ok": true,
+      "detail": "s-dssr1-0906-1"
+    },
+    {
+      "name": "sourceTooltipNotOrg[org][0]",
+      "ok": true,
+      "detail": "equals org!"
+    },
+    {
+      "name": "sourceTooltipRawId[fallback][3]",
+      "ok": true,
+      "detail": "s-dssr1-0906-m1"
+    },
+    {
+      "name": "sourceTooltipNotOrg[fallback][3]",
+      "ok": true,
+      "detail": "equals org!"
+    },
+    {
+      "name": "sourceOrgAndFallbackCovered",
+      "ok": true,
+      "detail": "org=25 fallback=5"
+    },
+    {
+      "name": "sourceTooltipAlwaysRawId",
+      "ok": true,
+      "detail": "mismatch=0"
+    },
+    {
+      "name": "tooltipHostAtMostOne",
+      "ok": true,
+      "detail": "true"
+    },
+    {
+      "name": "noNativeTitle",
+      "ok": true,
+      "detail": "rowsWithTitle=0"
+    },
+    {
+      "name": "tooltipNonEnterable",
+      "ok": true,
+      "detail": "none"
+    },
+    {
+      "name": "tooltipWithinViewport",
+      "ok": true,
+      "detail": "{\"l\":964,\"t\":962,\"r\":1170,\"b\":995.5,\"w\":206,\"h\":33.5}"
+    },
+    {
+      "name": "tooltipFixedPosition",
+      "ok": true,
+      "detail": "fixed"
+    },
+    {
+      "name": "tooltipClosesOnScroll",
+      "ok": true,
+      "detail": "before=true after=false"
+    },
+    {
+      "name": "tooltipClosesOnVisibilityChange",
+      "ok": true,
+      "detail": "before=true after=false"
+    },
+    {
+      "name": "tooltipBoundaryAvoidance",
+      "ok": true,
+      "detail": "{\"l\":730,\"t\":397,\"r\":839.4,\"b\":430.5,\"w\":109.4,\"h\":33.5}"
+    },
+    {
+      "name": "naturalTruncationCasesPresent",
+      "ok": true,
+      "detail": "count=8"
+    },
+    {
+      "name": "orgTruncatedOptionLabel[SNAPSHOT-TES]",
+      "ok": true,
+      "detail": "found"
+    },
+    {
+      "name": "orgTruncatedOptionLabel[SNAPSHOT-TES]",
+      "ok": true,
+      "detail": "found"
+    },
+    {
+      "name": "orgTruncatedOptionLabel[SNAPSHOT-TES]",
+      "ok": true,
+      "detail": "found"
+    },
+    {
+      "name": "orgTruncatedOptionLabel[SNAPSHOT-TES]",
+      "ok": true,
+      "detail": "found"
+    },
+    {
+      "name": "shortOrgNotTruncated",
+      "ok": true,
+      "detail": "孝感市第一人民医院（112-source-19c）"
+    },
+    {
+      "name": "emptyOrgNoEmptyParens",
+      "ok": true,
+      "detail": "[\"全部\",\"s-dssr1-0906-m1\",\"s-dssr1-0906-m2\",\"s-dssr1-0906-m3\"]"
+    },
+    {
+      "name": "qbarTooltipShowsFullTrimmedDesc",
+      "ok": true,
+      "detail": "\"快照页测试探针A，请勿启用。长描述用于验证页面 Tooltip 与列宽截断：某市\""
+    },
+    {
+      "name": "qbarTooltipAbsentForShortDesc",
+      "ok": true,
+      "detail": "none"
+    },
+    {
+      "name": "qbarTooltipAbsentForAll",
+      "ok": true,
+      "detail": "none"
+    },
+    {
+      "name": "qbarTooltipAbsentForEmptyDesc",
+      "ok": true,
+      "detail": "none"
+    }
+  ],
+  "rows": [
+    {
+      "index": 0,
+      "rowClass": "el-table__row",
+      "isWarning": false,
+      "seq": "1",
+      "probeText": "c-dssr1-0906-a",
+      "probeTtKind": "client-desc-c-dssr1-0906-a\u0000s-dssr1-0906-1",
+      "inactiveMark": "停用",
+      "sourceText": "SNAPSHOT-TEST-某市一院信息中心源库-DONOTUSE",
+      "sourceTtKind": "source-main-c-dssr1-0906-a\u0000s-dssr1-0906-1",
+      "statusText": "●\n快照进行中",
+      "statusLabel": "●快照进行中",
+      "statusSymbol": "●",
+      "statusTtKind": "status-c-dssr1-0906-a\u0000s-dssr1-0906-1",
+      "times": [
+        "2026-09-06 11:02:00",
+        "--",
+        "2026-09-06 11:02:00"
+      ],
+      "dashCount": 1,
+      "cells": [
+        "1",
+        "c-dssr1-0906-a\n停用",
+        "SNAPSHOT-TEST-某市一院信息中心源库-DONOTUSE",
+        "●\n快照进行中",
+        "2026-09-06 11:02:00",
+        "--",
+        "2026-09-06 11:02:00"
+      ],
+      "nativeTitle": null,
+      "ttElCount": 3
+    },
+    {
+      "index": 1,
+      "rowClass": "el-table__row",
+      "isWarning": false,
+      "seq": "2",
+      "probeText": "c-dssr1-0906-a",
+      "probeTtKind": "client-desc-c-dssr1-0906-a\u0000s-dssr1-0906-2",
+      "inactiveMark": "停用",
+      "sourceText": "SNAPSHOT-TEST-某市一院信息中心源库-DONOTUSE",
+      "sourceTtKind": "source-main-c-dssr1-0906-a\u0000s-dssr1-0906-2",
+      "statusText": "●\n快照进行中",
+      "statusLabel": "●快照进行中",
+      "statusSymbol": "●",
+      "statusTtKind": "status-c-dssr1-0906-a\u0000s-dssr1-0906-2",
+      "times": [
+        "2026-09-06 11:01:30",
+        "--",
+        "2026-09-06 11:01:30"
+      ],
+      "dashCount": 1,
+      "cells": [
+        "2",
+        "c-dssr1-0906-a\n停用",
+        "SNAPSHOT-TEST-某市一院信息中心源库-DONOTUSE",
+        "●\n快照进行中",
+        "2026-09-06 11:01:30",
+        "--",
+        "2026-09-06 11:01:30"
+      ],
+      "nativeTitle": null,
+      "ttElCount": 3
+    },
+    {
+      "index": 2,
+      "rowClass": "el-table__row",
+      "isWarning": false,
+      "seq": "3",
+      "probeText": "c-dssr1-0906-b",
+      "probeTtKind": "client-desc-c-dssr1-0906-b\u0000s-dssr1-0906-1",
+      "inactiveMark": "停用",
+      "sourceText": "SNAPSHOT-TEST-某市一院信息中心源库-DONOTUSE",
+      "sourceTtKind": "source-main-c-dssr1-0906-b\u0000s-dssr1-0906-1",
+      "statusText": "●\n快照进行中",
+      "statusLabel": "●快照进行中",
+      "statusSymbol": "●",
+      "statusTtKind": "status-c-dssr1-0906-b\u0000s-dssr1-0906-1",
+      "times": [
+        "2026-09-06 10:57:00",
+        "--",
+        "2026-09-06 10:57:00"
+      ],
+      "dashCount": 1,
+      "cells": [
+        "3",
+        "c-dssr1-0906-b\n停用",
+        "SNAPSHOT-TEST-某市一院信息中心源库-DONOTUSE",
+        "●\n快照进行中",
+        "2026-09-06 10:57:00",
+        "--",
+        "2026-09-06 10:57:00"
+      ],
+      "nativeTitle": null,
+      "ttElCount": 3
+    },
+    {
+      "index": 3,
+      "rowClass": "el-table__row",
+      "isWarning": false,
+      "seq": "4",
+      "probeText": "c-dssr1-0906-c",
+      "probeTtKind": "client-desc-c-dssr1-0906-c\u0000s-dssr1-0906-m1",
+      "inactiveMark": "停用",
+      "sourceText": "s-dssr1-0906-m1",
+      "sourceTtKind": "source-main-c-dssr1-0906-c\u0000s-dssr1-0906-m1",
+      "statusText": "●\n快照进行中",
+      "statusLabel": "●快照进行中",
+      "statusSymbol": "●",
+      "statusTtKind": "status-c-dssr1-0906-c\u0000s-dssr1-0906-m1",
+      "times": [
+        "2026-09-06 10:53:00",
+        "--",
+        "2026-09-06 10:53:00"
+      ],
+      "dashCount": 1,
+      "cells": [
+        "4",
+        "c-dssr1-0906-c\n停用",
+        "s-dssr1-0906-m1",
+        "●\n快照进行中",
+        "2026-09-06 10:53:00",
+        "--",
+        "2026-09-06 10:53:00"
+      ],
+      "nativeTitle": null,
+      "ttElCount": 3
+    },
+    {
+      "index": 4,
+      "rowClass": "el-table__row",
+      "isWarning": false,
+      "seq": "5",
+      "probeText": "c-dssr1-0906-d",
+      "probeTtKind": "client-desc-c-dssr1-0906-d\u0000s-dssr1-0906-2",
+      "inactiveMark": "停用",
+      "sourceText": "SNAPSHOT-TEST-某市一院信息中心源库-DONOTUSE",
+      "sourceTtKind": "source-main-c-dssr1-0906-d\u0000s-dssr1-0906-2",
+      "statusText": "●\n快照进行中",
+      "statusLabel": "●快照进行中",
+      "statusSymbol": "●",
+      "statusTtKind": "status-c-dssr1-0906-d\u0000s-dssr1-0906-2",
+      "times": [
+        "2026-09-06 10:49:30",
+        "--",
+        "2026-09-06 10:49:30"
+      ],
+      "dashCount": 1,
+      "cells": [
+        "5",
+        "c-dssr1-0906-d\n停用",
+        "SNAPSHOT-TEST-某市一院信息中心源库-DONOTUSE",
+        "●\n快照进行中",
+        "2026-09-06 10:49:30",
+        "--",
+        "2026-09-06 10:49:30"
+      ],
+      "nativeTitle": null,
+      "ttElCount": 3
+    },
+    {
+      "index": 5,
+      "rowClass": "el-table__row",
+      "isWarning": false,
+      "seq": "6",
+      "probeText": "c-dssr1-0906-e",
+      "probeTtKind": "client-desc-c-dssr1-0906-e\u0000s-dssr1-0906-3",
+      "inactiveMark": "停用",
+      "sourceText": "SNAPSHOT-TEST-某市二院信息中心源库-DONOTUSE",
+      "sourceTtKind": "source-main-c-dssr1-0906-e\u0000s-dssr1-0906-3",
+      "statusText": "●\n快照进行中",
+      "statusLabel": "●快照进行中",
+      "statusSymbol": "●",
+      "statusTtKind": "status-c-dssr1-0906-e\u0000s-dssr1-0906-3",
+      "times": [
+        "2026-09-06 10:48:00",
+        "--",
+        "2026-09-06 10:48:00"
+      ],
+      "dashCount": 1,
+      "cells": [
+        "6",
+        "c-dssr1-0906-e\n停用",
+        "SNAPSHOT-TEST-某市二院信息中心源库-DONOTUSE",
+        "●\n快照进行中",
+        "2026-09-06 10:48:00",
+        "--",
+        "2026-09-06 10:48:00"
+      ],
+      "nativeTitle": null,
+      "ttElCount": 3
+    },
+    {
+      "index": 6,
+      "rowClass": "el-table__row",
+      "isWarning": false,
+      "seq": "7",
+      "probeText": "c-dssr1-0906-miss1",
+      "probeTtKind": "client-desc-c-dssr1-0906-miss1\u0000s-dssr1-0906-2",
+      "inactiveMark": null,
+      "sourceText": "SNAPSHOT-TEST-某市一院信息中心源库-DONOTUSE",
+      "sourceTtKind": "source-main-c-dssr1-0906-miss1\u0000s-dssr1-0906-2",
+      "statusText": "●\n快照进行中",
+      "statusLabel": "●快照进行中",
+      "statusSymbol": "●",
+      "statusTtKind": "status-c-dssr1-0906-miss1\u0000s-dssr1-0906-2",
+      "times": [
+        "2026-09-06 10:46:00",
+        "--",
+        "2026-09-06 10:46:00"
+      ],
+      "dashCount": 1,
+      "cells": [
+        "7",
+        "c-dssr1-0906-miss1",
+        "SNAPSHOT-TEST-某市一院信息中心源库-DONOTUSE",
+        "●\n快照进行中",
+        "2026-09-06 10:46:00",
+        "--",
+        "2026-09-06 10:46:00"
+      ],
+      "nativeTitle": null,
+      "ttElCount": 3
+    },
+    {
+      "index": 7,
+      "rowClass": "el-table__row",
+      "isWarning": false,
+      "seq": "8",
+      "probeText": "c-dssr1-0906-miss2",
+      "probeTtKind": "client-desc-c-dssr1-0906-miss2\u0000s-dssr1-0906-m1",
+      "inactiveMark": null,
+      "sourceText": "s-dssr1-0906-m1",
+      "sourceTtKind": "source-main-c-dssr1-0906-miss2\u0000s-dssr1-0906-m1",
+      "statusText": "●\n快照进行中",
+      "statusLabel": "●快照进行中",
+      "statusSymbol": "●",
+      "statusTtKind": "status-c-dssr1-0906-miss2\u0000s-dssr1-0906-m1",
+      "times": [
+        "2026-09-06 10:43:00",
+        "--",
+        "2026-09-06 10:43:00"
+      ],
+      "dashCount": 1,
+      "cells": [
+        "8",
+        "c-dssr1-0906-miss2",
+        "s-dssr1-0906-m1",
+        "●\n快照进行中",
+        "2026-09-06 10:43:00",
+        "--",
+        "2026-09-06 10:43:00"
+      ],
+      "nativeTitle": null,
+      "ttElCount": 3
+    },
+    {
+      "index": 8,
+      "rowClass": "el-table__row",
+      "isWarning": false,
+      "seq": "9",
+      "probeText": "c-dssr1-0906-d",
+      "probeTtKind": "client-desc-c-dssr1-0906-d\u0000s-dssr1-0906-3",
+      "inactiveMark": "停用",
+      "sourceText": "SNAPSHOT-TEST-某市二院信息中心源库-DONOTUSE",
+      "sourceTtKind": "source-main-c-dssr1-0906-d\u0000s-dssr1-0906-3",
+      "statusText": "●\n快照进行中",
+      "statusLabel": "●快照进行中",
+      "statusSymbol": "●",
+      "statusTtKind": "status-c-dssr1-0906-d\u0000s-dssr1-0906-3",
+      "times": [
+        "--",
+        "--",
+        "2026-09-05 08:00:00"
+      ],
+      "dashCount": 2,
+      "cells": [
+        "9",
+        "c-dssr1-0906-d\n停用",
+        "SNAPSHOT-TEST-某市二院信息中心源库-DONOTUSE",
+        "●\n快照进行中",
+        "--",
+        "--",
+        "2026-09-05 08:00:00"
+      ],
+      "nativeTitle": null,
+      "ttElCount": 3
+    },
+    {
+      "index": 9,
+      "rowClass": "el-table__row",
+      "isWarning": false,
+      "seq": "10",
+      "probeText": "c-dssr1-0906-d",
+      "probeTtKind": "client-desc-c-dssr1-0906-d\u0000s-dssr1-0906-5",
+      "inactiveMark": "停用",
+      "sourceText": "SNAPSHOT-TEST-第三方平台源库-DONOTUSE",
+      "sourceTtKind": "source-main-c-dssr1-0906-d\u0000s-dssr1-0906-5",
+      "statusText": "●\n快照进行中",
+      "statusLabel": "●快照进行中",
+      "statusSymbol": "●",
+      "statusTtKind": "status-c-dssr1-0906-d\u0000s-dssr1-0906-5",
+      "times": [
+        "--",
+        "--",
+        "2026-09-05 08:00:00"
+      ],
+      "dashCount": 2,
+      "cells": [
+        "10",
+        "c-dssr1-0906-d\n停用",
+        "SNAPSHOT-TEST-第三方平台源库-DONOTUSE",
+        "●\n快照进行中",
+        "--",
+        "--",
+        "2026-09-05 08:00:00"
+      ],
+      "nativeTitle": null,
+      "ttElCount": 3
+    },
+    {
+      "index": 10,
+      "rowClass": "el-table__row",
+      "isWarning": false,
+      "seq": "11",
+      "probeText": "c-dssr1-0906-e",
+      "probeTtKind": "client-desc-c-dssr1-0906-e\u0000s-dssr1-0906-1",
+      "inactiveMark": "停用",
+      "sourceText": "SNAPSHOT-TEST-某市一院信息中心源库-DONOTUSE",
+      "sourceTtKind": "source-main-c-dssr1-0906-e\u0000s-dssr1-0906-1",
+      "statusText": "●\n快照进行中",
+      "statusLabel": "●快照进行中",
+      "statusSymbol": "●",
+      "statusTtKind": "status-c-dssr1-0906-e\u0000s-dssr1-0906-1",
+      "times": [
+        "--",
+        "--",
+        "2026-09-05 08:00:00"
+      ],
+      "dashCount": 2,
+      "cells": [
+        "11",
+        "c-dssr1-0906-e\n停用",
+        "SNAPSHOT-TEST-某市一院信息中心源库-DONOTUSE",
+        "●\n快照进行中",
+        "--",
+        "--",
+        "2026-09-05 08:00:00"
+      ],
+      "nativeTitle": null,
+      "ttElCount": 3
+    },
+    {
+      "index": 11,
+      "rowClass": "el-table__row",
+      "isWarning": false,
+      "seq": "12",
+      "probeText": "c-dssr1-0906-e",
+      "probeTtKind": "client-desc-c-dssr1-0906-e\u0000s-dssr1-0906-2",
+      "inactiveMark": "停用",
+      "sourceText": "SNAPSHOT-TEST-某市一院信息中心源库-DONOTUSE",
+      "sourceTtKind": "source-main-c-dssr1-0906-e\u0000s-dssr1-0906-2",
+      "statusText": "●\n快照进行中",
+      "statusLabel": "●快照进行中",
+      "statusSymbol": "●",
+      "statusTtKind": "status-c-dssr1-0906-e\u0000s-dssr1-0906-2",
+      "times": [
+        "--",
+        "--",
+        "2026-09-05 08:00:00"
+      ],
+      "dashCount": 2,
+      "cells": [
+        "12",
+        "c-dssr1-0906-e\n停用",
+        "SNAPSHOT-TEST-某市一院信息中心源库-DONOTUSE",
+        "●\n快照进行中",
+        "--",
+        "--",
+        "2026-09-05 08:00:00"
+      ],
+      "nativeTitle": null,
+      "ttElCount": 3
+    },
+    {
+      "index": 12,
+      "rowClass": "el-table__row",
+      "isWarning": false,
+      "seq": "13",
+      "probeText": "hosp-012",
+      "probeTtKind": "client-desc-hosp-012\u0000112-source-19c",
+      "inactiveMark": null,
+      "sourceText": "孝感市第一人民医院",
+      "sourceTtKind": "source-main-hosp-012\u0000112-source-19c",
+      "statusText": "●\n快照进行中",
+      "statusLabel": "●快照进行中",
+      "statusSymbol": "●",
+      "statusTtKind": "status-hosp-012\u0000112-source-19c",
+      "times": [
+        "2026-08-17 17:28:46",
+        "--",
+        "2026-08-17 17:28:46"
+      ],
+      "dashCount": 1,
+      "cells": [
+        "13",
+        "hosp-012",
+        "孝感市第一人民医院",
+        "●\n快照进行中",
+        "2026-08-17 17:28:46",
+        "--",
+        "2026-08-17 17:28:46"
+      ],
+      "nativeTitle": null,
+      "ttElCount": 3
+    },
+    {
+      "index": 13,
+      "rowClass": "el-table__row dss-warning-row",
+      "isWarning": true,
+      "seq": "14",
+      "probeText": "c-dssr1-0906-a",
+      "probeTtKind": "client-desc-c-dssr1-0906-a\u0000s-dssr1-0906-5",
+      "inactiveMark": "停用",
+      "sourceText": "SNAPSHOT-TEST-第三方平台源库-DONOTUSE",
+      "sourceTtKind": "source-main-c-dssr1-0906-a\u0000s-dssr1-0906-5",
+      "statusText": "?\n未知状态",
+      "statusLabel": "?未知状态",
+      "statusSymbol": "?",
+      "statusTtKind": "status-c-dssr1-0906-a\u0000s-dssr1-0906-5",
+      "times": [
+        "2026-09-06 10:58:00",
+        "--",
+        "2026-09-06 10:58:00"
+      ],
+      "dashCount": 1,
+      "cells": [
+        "14",
+        "c-dssr1-0906-a\n停用",
+        "SNAPSHOT-TEST-第三方平台源库-DONOTUSE",
+        "?\n未知状态",
+        "2026-09-06 10:58:00",
+        "--",
+        "2026-09-06 10:58:00"
+      ],
+      "nativeTitle": null,
+      "ttElCount": 3
+    },
+    {
+      "index": 14,
+      "rowClass": "el-table__row dss-warning-row",
+      "isWarning": true,
+      "seq": "15",
+      "probeText": "c-dssr1-0906-b",
+      "probeTtKind": "client-desc-c-dssr1-0906-b\u0000s-dssr1-0906-2",
+      "inactiveMark": "停用",
+      "sourceText": "SNAPSHOT-TEST-某市一院信息中心源库-DONOTUSE",
+      "sourceTtKind": "source-main-c-dssr1-0906-b\u0000s-dssr1-0906-2",
+      "statusText": "?\n未知状态",
+      "statusLabel": "?未知状态",
+      "statusSymbol": "?",
+      "statusTtKind": "status-c-dssr1-0906-b\u0000s-dssr1-0906-2",
+      "times": [
+        "--",
+        "--",
+        "2026-09-06 10:56:00"
+      ],
+      "dashCount": 2,
+      "cells": [
+        "15",
+        "c-dssr1-0906-b\n停用",
+        "SNAPSHOT-TEST-某市一院信息中心源库-DONOTUSE",
+        "?\n未知状态",
+        "--",
+        "--",
+        "2026-09-06 10:56:00"
+      ],
+      "nativeTitle": null,
+      "ttElCount": 3
+    },
+    {
+      "index": 15,
+      "rowClass": "el-table__row dss-warning-row",
+      "isWarning": true,
+      "seq": "16",
+      "probeText": "c-dssr1-0906-c",
+      "probeTtKind": "client-desc-c-dssr1-0906-c\u0000s-dssr1-0906-m2",
+      "inactiveMark": "停用",
+      "sourceText": "s-dssr1-0906-m2",
+      "sourceTtKind": "source-main-c-dssr1-0906-c\u0000s-dssr1-0906-m2",
+      "statusText": "?\n未知状态",
+      "statusLabel": "?未知状态",
+      "statusSymbol": "?",
+      "statusTtKind": "status-c-dssr1-0906-c\u0000s-dssr1-0906-m2",
+      "times": [
+        "--",
+        "--",
+        "2026-09-06 10:52:00"
+      ],
+      "dashCount": 2,
+      "cells": [
+        "16",
+        "c-dssr1-0906-c\n停用",
+        "s-dssr1-0906-m2",
+        "?\n未知状态",
+        "--",
+        "--",
+        "2026-09-06 10:52:00"
+      ],
+      "nativeTitle": null,
+      "ttElCount": 3
+    },
+    {
+      "index": 16,
+      "rowClass": "el-table__row dss-warning-row",
+      "isWarning": true,
+      "seq": "17",
+      "probeText": "c-dssr1-0906-d",
+      "probeTtKind": "client-desc-c-dssr1-0906-d\u0000s-dssr1-0906-4",
+      "inactiveMark": "停用",
+      "sourceText": "SNAPSHOT-TEST-目标侧某中心源库-DONOTUSE",
+      "sourceTtKind": "source-main-c-dssr1-0906-d\u0000s-dssr1-0906-4",
+      "statusText": "?\n未知状态",
+      "statusLabel": "?未知状态",
+      "statusSymbol": "?",
+      "statusTtKind": "status-c-dssr1-0906-d\u0000s-dssr1-0906-4",
+      "times": [
+        "2026-09-06 10:49:00",
+        "--",
+        "2026-09-06 10:49:00"
+      ],
+      "dashCount": 1,
+      "cells": [
+        "17",
+        "c-dssr1-0906-d\n停用",
+        "SNAPSHOT-TEST-目标侧某中心源库-DONOTUSE",
+        "?\n未知状态",
+        "2026-09-06 10:49:00",
+        "--",
+        "2026-09-06 10:49:00"
+      ],
+      "nativeTitle": null,
+      "ttElCount": 3
+    },
+    {
+      "index": 17,
+      "rowClass": "el-table__row dss-warning-row",
+      "isWarning": true,
+      "seq": "18",
+      "probeText": "c-dssr1-0906-miss1",
+      "probeTtKind": "client-desc-c-dssr1-0906-miss1\u0000s-dssr1-0906-3",
+      "inactiveMark": null,
+      "sourceText": "SNAPSHOT-TEST-某市二院信息中心源库-DONOTUSE",
+      "sourceTtKind": "source-main-c-dssr1-0906-miss1\u0000s-dssr1-0906-3",
+      "statusText": "?\n未知状态",
+      "statusLabel": "?未知状态",
+      "statusSymbol": "?",
+      "statusTtKind": "status-c-dssr1-0906-miss1\u0000s-dssr1-0906-3",
+      "times": [
+        "--",
+        "--",
+        "2026-09-06 10:45:00"
+      ],
+      "dashCount": 2,
+      "cells": [
+        "18",
+        "c-dssr1-0906-miss1",
+        "SNAPSHOT-TEST-某市二院信息中心源库-DONOTUSE",
+        "?\n未知状态",
+        "--",
+        "--",
+        "2026-09-06 10:45:00"
+      ],
+      "nativeTitle": null,
+      "ttElCount": 3
+    },
+    {
+      "index": 18,
+      "rowClass": "el-table__row dss-warning-row",
+      "isWarning": true,
+      "seq": "19",
+      "probeText": "c-dssr1-0906-c",
+      "probeTtKind": "client-desc-c-dssr1-0906-c\u0000s-dssr1-0906-5",
+      "inactiveMark": "停用",
+      "sourceText": "SNAPSHOT-TEST-第三方平台源库-DONOTUSE",
+      "sourceTtKind": "source-main-c-dssr1-0906-c\u0000s-dssr1-0906-5",
+      "statusText": "?\n未知状态",
+      "statusLabel": "?未知状态",
+      "statusSymbol": "?",
+      "statusTtKind": "status-c-dssr1-0906-c\u0000s-dssr1-0906-5",
+      "times": [
+        "--",
+        "--",
+        "2026-09-05 08:00:00"
+      ],
+      "dashCount": 2,
+      "cells": [
+        "19",
+        "c-dssr1-0906-c\n停用",
+        "SNAPSHOT-TEST-第三方平台源库-DONOTUSE",
+        "?\n未知状态",
+        "--",
+        "--",
+        "2026-09-05 08:00:00"
+      ],
+      "nativeTitle": null,
+      "ttElCount": 3
+    },
+    {
+      "index": 19,
+      "rowClass": "el-table__row",
+      "isWarning": false,
+      "seq": "20",
+      "probeText": "c-dssr1-0906-a",
+      "probeTtKind": "client-desc-c-dssr1-0906-a\u0000s-dssr1-0906-3",
+      "inactiveMark": "停用",
+      "sourceText": "SNAPSHOT-TEST-某市二院信息中心源库-DONOTUSE",
+      "sourceTtKind": "source-main-c-dssr1-0906-a\u0000s-dssr1-0906-3",
+      "statusText": "✓\n快照已完成",
+      "statusLabel": "✓快照已完成",
+      "statusSymbol": "✓",
+      "statusTtKind": "status-c-dssr1-0906-a\u0000s-dssr1-0906-3",
+      "times": [
+        "2026-09-06 11:00:00",
+        "2026-09-06 11:00:05",
+        "2026-09-06 11:00:05"
+      ],
+      "dashCount": 0,
+      "cells": [
+        "20",
+        "c-dssr1-0906-a\n停用",
+        "SNAPSHOT-TEST-某市二院信息中心源库-DONOTUSE",
+        "✓\n快照已完成",
+        "2026-09-06 11:00:00",
+        "2026-09-06 11:00:05",
+        "2026-09-06 11:00:05"
+      ],
+      "nativeTitle": null,
+      "ttElCount": 3
+    },
+    {
+      "index": 20,
+      "rowClass": "el-table__row",
+      "isWarning": false,
+      "seq": "21",
+      "probeText": "c-dssr1-0906-a",
+      "probeTtKind": "client-desc-c-dssr1-0906-a\u0000s-dssr1-0906-4",
+      "inactiveMark": "停用",
+      "sourceText": "SNAPSHOT-TEST-目标侧某中心源库-DONOTUSE",
+      "sourceTtKind": "source-main-c-dssr1-0906-a\u0000s-dssr1-0906-4",
+      "statusText": "✓\n快照已完成",
+      "statusLabel": "✓快照已完成",
+      "statusSymbol": "✓",
+      "statusTtKind": "status-c-dssr1-0906-a\u0000s-dssr1-0906-4",
+      "times": [
+        "--",
+        "2026-09-06 10:59:00",
+        "2026-09-06 10:59:00"
+      ],
+      "dashCount": 1,
+      "cells": [
+        "21",
+        "c-dssr1-0906-a\n停用",
+        "SNAPSHOT-TEST-目标侧某中心源库-DONOTUSE",
+        "✓\n快照已完成",
+        "--",
+        "2026-09-06 10:59:00",
+        "2026-09-06 10:59:00"
+      ],
+      "nativeTitle": null,
+      "ttElCount": 3
+    },
+    {
+      "index": 21,
+      "rowClass": "el-table__row",
+      "isWarning": false,
+      "seq": "22",
+      "probeText": "c-dssr1-0906-b",
+      "probeTtKind": "client-desc-c-dssr1-0906-b\u0000s-dssr1-0906-3",
+      "inactiveMark": "停用",
+      "sourceText": "SNAPSHOT-TEST-某市二院信息中心源库-DONOTUSE",
+      "sourceTtKind": "source-main-c-dssr1-0906-b\u0000s-dssr1-0906-3",
+      "statusText": "✓\n快照已完成",
+      "statusLabel": "✓快照已完成",
+      "statusSymbol": "✓",
+      "statusTtKind": "status-c-dssr1-0906-b\u0000s-dssr1-0906-3",
+      "times": [
+        "2026-09-06 10:55:00",
+        "2026-09-06 10:55:30",
+        "2026-09-06 10:55:30"
+      ],
+      "dashCount": 0,
+      "cells": [
+        "22",
+        "c-dssr1-0906-b\n停用",
+        "SNAPSHOT-TEST-某市二院信息中心源库-DONOTUSE",
+        "✓\n快照已完成",
+        "2026-09-06 10:55:00",
+        "2026-09-06 10:55:30",
+        "2026-09-06 10:55:30"
+      ],
+      "nativeTitle": null,
+      "ttElCount": 3
+    },
+    {
+      "index": 22,
+      "rowClass": "el-table__row",
+      "isWarning": false,
+      "seq": "23",
+      "probeText": "c-dssr1-0906-b",
+      "probeTtKind": "client-desc-c-dssr1-0906-b\u0000s-dssr1-0906-5",
+      "inactiveMark": "停用",
+      "sourceText": "SNAPSHOT-TEST-第三方平台源库-DONOTUSE",
+      "sourceTtKind": "source-main-c-dssr1-0906-b\u0000s-dssr1-0906-5",
+      "statusText": "✓\n快照已完成",
+      "statusLabel": "✓快照已完成",
+      "statusSymbol": "✓",
+      "statusTtKind": "status-c-dssr1-0906-b\u0000s-dssr1-0906-5",
+      "times": [
+        "2026-09-06 10:54:00",
+        "2026-09-06 10:54:10",
+        "2026-09-06 10:54:10"
+      ],
+      "dashCount": 0,
+      "cells": [
+        "23",
+        "c-dssr1-0906-b\n停用",
+        "SNAPSHOT-TEST-第三方平台源库-DONOTUSE",
+        "✓\n快照已完成",
+        "2026-09-06 10:54:00",
+        "2026-09-06 10:54:10",
+        "2026-09-06 10:54:10"
+      ],
+      "nativeTitle": null,
+      "ttElCount": 3
+    },
+    {
+      "index": 23,
+      "rowClass": "el-table__row",
+      "isWarning": false,
+      "seq": "24",
+      "probeText": "c-dssr1-0906-c",
+      "probeTtKind": "client-desc-c-dssr1-0906-c\u0000s-dssr1-0906-m3",
+      "inactiveMark": "停用",
+      "sourceText": "s-dssr1-0906-m3",
+      "sourceTtKind": "source-main-c-dssr1-0906-c\u0000s-dssr1-0906-m3",
+      "statusText": "✓\n快照已完成",
+      "statusLabel": "✓快照已完成",
+      "statusSymbol": "✓",
+      "statusTtKind": "status-c-dssr1-0906-c\u0000s-dssr1-0906-m3",
+      "times": [
+        "2026-09-06 10:51:00",
+        "2026-09-06 10:51:20",
+        "2026-09-06 10:51:20"
+      ],
+      "dashCount": 0,
+      "cells": [
+        "24",
+        "c-dssr1-0906-c\n停用",
+        "s-dssr1-0906-m3",
+        "✓\n快照已完成",
+        "2026-09-06 10:51:00",
+        "2026-09-06 10:51:20",
+        "2026-09-06 10:51:20"
+      ],
+      "nativeTitle": null,
+      "ttElCount": 3
+    },
+    {
+      "index": 24,
+      "rowClass": "el-table__row",
+      "isWarning": false,
+      "seq": "25",
+      "probeText": "c-dssr1-0906-d",
+      "probeTtKind": "client-desc-c-dssr1-0906-d\u0000s-dssr1-0906-1",
+      "inactiveMark": "停用",
+      "sourceText": "SNAPSHOT-TEST-某市一院信息中心源库-DONOTUSE",
+      "sourceTtKind": "source-main-c-dssr1-0906-d\u0000s-dssr1-0906-1",
+      "statusText": "✓\n快照已完成",
+      "statusLabel": "✓快照已完成",
+      "statusSymbol": "✓",
+      "statusTtKind": "status-c-dssr1-0906-d\u0000s-dssr1-0906-1",
+      "times": [
+        "--",
+        "2026-09-06 10:50:00",
+        "2026-09-06 10:50:00"
+      ],
+      "dashCount": 1,
+      "cells": [
+        "25",
+        "c-dssr1-0906-d\n停用",
+        "SNAPSHOT-TEST-某市一院信息中心源库-DONOTUSE",
+        "✓\n快照已完成",
+        "--",
+        "2026-09-06 10:50:00",
+        "2026-09-06 10:50:00"
+      ],
+      "nativeTitle": null,
+      "ttElCount": 3
+    },
+    {
+      "index": 25,
+      "rowClass": "el-table__row",
+      "isWarning": false,
+      "seq": "26",
+      "probeText": "c-dssr1-0906-e",
+      "probeTtKind": "client-desc-c-dssr1-0906-e\u0000s-dssr1-0906-4",
+      "inactiveMark": "停用",
+      "sourceText": "SNAPSHOT-TEST-目标侧某中心源库-DONOTUSE",
+      "sourceTtKind": "source-main-c-dssr1-0906-e\u0000s-dssr1-0906-4",
+      "statusText": "✓\n快照已完成",
+      "statusLabel": "✓快照已完成",
+      "statusSymbol": "✓",
+      "statusTtKind": "status-c-dssr1-0906-e\u0000s-dssr1-0906-4",
+      "times": [
+        "2026-09-06 10:47:00",
+        "2026-09-06 10:47:40",
+        "2026-09-06 10:47:40"
+      ],
+      "dashCount": 0,
+      "cells": [
+        "26",
+        "c-dssr1-0906-e\n停用",
+        "SNAPSHOT-TEST-目标侧某中心源库-DONOTUSE",
+        "✓\n快照已完成",
+        "2026-09-06 10:47:00",
+        "2026-09-06 10:47:40",
+        "2026-09-06 10:47:40"
+      ],
+      "nativeTitle": null,
+      "ttElCount": 3
+    },
+    {
+      "index": 26,
+      "rowClass": "el-table__row",
+      "isWarning": false,
+      "seq": "27",
+      "probeText": "c-dssr1-0906-miss2",
+      "probeTtKind": "client-desc-c-dssr1-0906-miss2\u0000s-dssr1-0906-1",
+      "inactiveMark": null,
+      "sourceText": "SNAPSHOT-TEST-某市一院信息中心源库-DONOTUSE",
+      "sourceTtKind": "source-main-c-dssr1-0906-miss2\u0000s-dssr1-0906-1",
+      "statusText": "✓\n快照已完成",
+      "statusLabel": "✓快照已完成",
+      "statusSymbol": "✓",
+      "statusTtKind": "status-c-dssr1-0906-miss2\u0000s-dssr1-0906-1",
+      "times": [
+        "2026-09-06 10:44:00",
+        "2026-09-06 10:44:50",
+        "2026-09-06 10:44:50"
+      ],
+      "dashCount": 0,
+      "cells": [
+        "27",
+        "c-dssr1-0906-miss2",
+        "SNAPSHOT-TEST-某市一院信息中心源库-DONOTUSE",
+        "✓\n快照已完成",
+        "2026-09-06 10:44:00",
+        "2026-09-06 10:44:50",
+        "2026-09-06 10:44:50"
+      ],
+      "nativeTitle": null,
+      "ttElCount": 3
+    },
+    {
+      "index": 27,
+      "rowClass": "el-table__row",
+      "isWarning": false,
+      "seq": "28",
+      "probeText": "c-dssr1-0906-miss2",
+      "probeTtKind": "client-desc-c-dssr1-0906-miss2\u0000s-dssr1-0906-m2",
+      "inactiveMark": null,
+      "sourceText": "s-dssr1-0906-m2",
+      "sourceTtKind": "source-main-c-dssr1-0906-miss2\u0000s-dssr1-0906-m2",
+      "statusText": "✓\n快照已完成",
+      "statusLabel": "✓快照已完成",
+      "statusSymbol": "✓",
+      "statusTtKind": "status-c-dssr1-0906-miss2\u0000s-dssr1-0906-m2",
+      "times": [
+        "--",
+        "2026-09-06 10:42:00",
+        "2026-09-06 10:42:00"
+      ],
+      "dashCount": 1,
+      "cells": [
+        "28",
+        "c-dssr1-0906-miss2",
+        "s-dssr1-0906-m2",
+        "✓\n快照已完成",
+        "--",
+        "2026-09-06 10:42:00",
+        "2026-09-06 10:42:00"
+      ],
+      "nativeTitle": null,
+      "ttElCount": 3
+    },
+    {
+      "index": 28,
+      "rowClass": "el-table__row",
+      "isWarning": false,
+      "seq": "29",
+      "probeText": "c-dssr1-0906-c",
+      "probeTtKind": "client-desc-c-dssr1-0906-c\u0000s-dssr1-0906-4",
+      "inactiveMark": "停用",
+      "sourceText": "SNAPSHOT-TEST-目标侧某中心源库-DONOTUSE",
+      "sourceTtKind": "source-main-c-dssr1-0906-c\u0000s-dssr1-0906-4",
+      "statusText": "✓\n快照已完成",
+      "statusLabel": "✓快照已完成",
+      "statusSymbol": "✓",
+      "statusTtKind": "status-c-dssr1-0906-c\u0000s-dssr1-0906-4",
+      "times": [
+        "--",
+        "2026-09-05 07:58:30",
+        "2026-09-05 08:00:00"
+      ],
+      "dashCount": 1,
+      "cells": [
+        "29",
+        "c-dssr1-0906-c\n停用",
+        "SNAPSHOT-TEST-目标侧某中心源库-DONOTUSE",
+        "✓\n快照已完成",
+        "--",
+        "2026-09-05 07:58:30",
+        "2026-09-05 08:00:00"
+      ],
+      "nativeTitle": null,
+      "ttElCount": 3
+    },
+    {
+      "index": 29,
+      "rowClass": "el-table__row",
+      "isWarning": false,
+      "seq": "30",
+      "probeText": "c-dssr1-0906-e",
+      "probeTtKind": "client-desc-c-dssr1-0906-e\u0000s-dssr1-0906-5",
+      "inactiveMark": "停用",
+      "sourceText": "SNAPSHOT-TEST-第三方平台源库-DONOTUSE",
+      "sourceTtKind": "source-main-c-dssr1-0906-e\u0000s-dssr1-0906-5",
+      "statusText": "✓\n快照已完成",
+      "statusLabel": "✓快照已完成",
+      "statusSymbol": "✓",
+      "statusTtKind": "status-c-dssr1-0906-e\u0000s-dssr1-0906-5",
+      "times": [
+        "--",
+        "2026-09-05 07:59:00",
+        "2026-09-05 08:00:00"
+      ],
+      "dashCount": 1,
+      "cells": [
+        "30",
+        "c-dssr1-0906-e\n停用",
+        "SNAPSHOT-TEST-第三方平台源库-DONOTUSE",
+        "✓\n快照已完成",
+        "--",
+        "2026-09-05 07:59:00",
+        "2026-09-05 08:00:00"
+      ],
+      "nativeTitle": null,
+      "ttElCount": 3
+    }
+  ],
+  "tooltipProbes": [
+    {
+      "kind": "status",
+      "index": 0,
+      "category": "RUNNING",
+      "rawDbValue": "SNAPSHOT_RUNNING",
+      "tooltip": {
+        "hostCount": 1,
+        "content": "原始状态：SNAPSHOT_RUNNING",
+        "pointerEvents": "none",
+        "position": "fixed",
+        "visibility": "visible",
+        "maxWidth": "1904px",
+        "rect": {
+          "l": 954,
+          "t": 399,
+          "r": 1180.4,
+          "b": 432.5,
+          "w": 226.4,
+          "h": 33.5
+        },
+        "vw": 1920,
+        "vh": 1080,
+        "withinViewport": true,
+        "role": "tooltip"
+      }
+    },
+    {
+      "kind": "status",
+      "index": 13,
+      "category": "UNKNOWN",
+      "rawDbValue": "SNAPSHOT_STALE",
+      "tooltip": {
+        "hostCount": 1,
+        "content": "原始状态：SNAPSHOT_STALE",
+        "pointerEvents": "none",
+        "position": "fixed",
+        "visibility": "visible",
+        "maxWidth": "1904px",
+        "rect": {
+          "l": 964,
+          "t": 962,
+          "r": 1170,
+          "b": 995.5,
+          "w": 206,
+          "h": 33.5
+        },
+        "vw": 1920,
+        "vh": 1080,
+        "withinViewport": true,
+        "role": "tooltip"
+      }
+    },
+    {
+      "kind": "status",
+      "index": 19,
+      "category": "COMPLETED",
+      "rawDbValue": "SNAPSHOT_COMPLETED",
+      "tooltip": {
+        "hostCount": 1,
+        "content": "原始状态：SNAPSHOT_COMPLETED",
+        "pointerEvents": "none",
+        "position": "fixed",
+        "visibility": "visible",
+        "maxWidth": "1904px",
+        "rect": {
+          "l": 943,
+          "t": 510,
+          "r": 1189.7,
+          "b": 543.5,
+          "w": 246.7,
+          "h": 33.5
+        },
+        "vw": 1920,
+        "vh": 1080,
+        "withinViewport": true,
+        "role": "tooltip"
+      }
+    },
+    {
+      "kind": "probe",
+      "index": 0,
+      "cpLen": 152,
+      "desc": "快照页测试探针A，请勿启用。长描述用于验证页面 Tooltip 与列宽截断：某市第一人民医院信息中心CDC采集探针（专用快照页测试实例，请勿启用其进行任何真实数据同步）。继续追加说明文字以拉长描述，确认列表单元格超长时显示省略号并可由 Tooltip 完整阅读；本条仅供源库快照状态只读页面视觉验证使用。",
+      "tooltip": {
+        "hostCount": 1,
+        "content": "快照页测试探针A，请勿启用。长描述用于验证页面 Tooltip 与列宽截断：某市第一人民医院信息中心CDC采集探针（专用快照页测试实例，请勿启用其进行任何真实数据同步）。继续追加说明文字以拉长描述，确认列表单元格超长时显示省略号并可由 Tooltip 完整阅读；本条仅供源库快照状态只读页面视觉验证使用。",
+        "pointerEvents": "none",
+        "position": "fixed",
+        "visibility": "visible",
+        "maxWidth": "1904px",
+        "rect": {
+          "l": 8,
+          "t": 397,
+          "r": 1840,
+          "b": 430.5,
+          "w": 1832,
+          "h": 33.5
+        },
+        "vw": 1920,
+        "vh": 1080,
+        "withinViewport": true,
+        "role": "tooltip"
+      }
+    },
+    {
+      "kind": "probe-short",
+      "index": 2,
+      "cpLen": 13,
+      "desc": "快照页测试探针B，请勿启用",
+      "shown": true,
+      "afterLeave": null
+    },
+    {
+      "kind": "probe-empty",
+      "index": 6,
+      "desc": "",
+      "tooltip": null
+    },
+    {
+      "kind": "source-org",
+      "index": 0,
+      "org": "SNAPSHOT-TEST-某市一院信息中心源库-DONOTUSE",
+      "sourceId": "s-dssr1-0906-1",
+      "tooltip": {
+        "hostCount": 1,
+        "content": "s-dssr1-0906-1",
+        "pointerEvents": "none",
+        "position": "fixed",
+        "visibility": "visible",
+        "maxWidth": "1904px",
+        "rect": {
+          "l": 730,
+          "t": 397,
+          "r": 839.4,
+          "b": 430.5,
+          "w": 109.4,
+          "h": 33.5
+        },
+        "vw": 1920,
+        "vh": 1080,
+        "withinViewport": true,
+        "role": "tooltip"
+      }
+    },
+    {
+      "kind": "source-fallback",
+      "index": 3,
+      "org": "",
+      "sourceId": "s-dssr1-0906-m1",
+      "tooltip": {
+        "hostCount": 1,
+        "content": "s-dssr1-0906-m1",
+        "pointerEvents": "none",
+        "position": "fixed",
+        "visibility": "visible",
+        "maxWidth": "1904px",
+        "rect": {
+          "l": 605,
+          "t": 544,
+          "r": 725.3,
+          "b": 577.5,
+          "w": 120.3,
+          "h": 33.5
+        },
+        "vw": 1920,
+        "vh": 1080,
+        "withinViewport": true,
+        "role": "tooltip"
+      }
+    }
+  ],
+  "naturalTruncation": [
+    {
+      "field": "CLIENT_DESC",
+      "raw": "快照页测试探针A，请勿启用。长描述用于验证页面 Tooltip 与列宽截断：某市第一人民医院信息中心CDC采集探针（专用快照页测试实例，请勿启用其进行任何真实数据同步）。继续追加说明文字以拉长描述，确认列表单元格超长时显示省略号并可由 Tooltip 完整阅读；本条仅供源库快照状态只读页面视觉验证使用。",
+      "cp": 152,
+      "expectedDisplay": "快照页测试探针A，请勿启用。长描述用于验...",
+      "rule": "first 20 code points + ASCII ..."
+    },
+    {
+      "field": "DATA_SOURCE_ORG",
+      "raw": "SNAPSHOT-TEST-某市一院信息中心源库-DONOTUSE",
+      "cp": 33,
+      "expectedDisplay": "SNAPSHOT-TEST-某市一院信息...",
+      "rule": "first 20 code points + ASCII ..."
+    },
+    {
+      "field": "CLIENT_DESC",
+      "raw": "快照页测试探针C，请勿启用（其源库配置缺失）",
+      "cp": 22,
+      "expectedDisplay": "快照页测试探针C，请勿启用（其源库配置缺...",
+      "rule": "first 20 code points + ASCII ..."
+    },
+    {
+      "field": "CLIENT_DESC",
+      "raw": "快照页测试探针D，请勿启用（含超长描述演示：覆盖同源不同状态与并列时间排序）",
+      "cp": 38,
+      "expectedDisplay": "快照页测试探针D，请勿启用（含超长描述演...",
+      "rule": "first 20 code points + ASCII ..."
+    },
+    {
+      "field": "DATA_SOURCE_ORG",
+      "raw": "SNAPSHOT-TEST-某市二院信息中心源库-DONOTUSE",
+      "cp": 33,
+      "expectedDisplay": "SNAPSHOT-TEST-某市二院信息...",
+      "rule": "first 20 code points + ASCII ..."
+    },
+    {
+      "field": "DATA_SOURCE_ORG",
+      "raw": "SNAPSHOT-TEST-第三方平台源库-DONOTUSE",
+      "cp": 30,
+      "expectedDisplay": "SNAPSHOT-TEST-第三方平台源...",
+      "rule": "first 20 code points + ASCII ..."
+    },
+    {
+      "field": "CLIENT_DESC",
+      "raw": "总部测试 IP: 192.168.0.94, 192.168.174.1, 3.3.0.192, 192.168.100.1",
+      "cp": 62,
+      "expectedDisplay": "总部测试 IP: 192.168.0.9...",
+      "rule": "first 20 code points + ASCII ..."
+    },
+    {
+      "field": "DATA_SOURCE_ORG",
+      "raw": "SNAPSHOT-TEST-目标侧某中心源库-DONOTUSE",
+      "cp": 31,
+      "expectedDisplay": "SNAPSHOT-TEST-目标侧某中心...",
+      "rule": "first 20 code points + ASCII ..."
+    }
+  ],
+  "queryBarTooltip": [
+    {
+      "kind": "client-desc-long",
+      "clientId": "c-dssr1-0906-a",
+      "descCp": 152,
+      "tooltip": {
+        "content": "快照页测试探针A，请勿启用。长描述用于验证页面 Tooltip 与列宽截断：某市第一人民医院信息中心CDC采集探针（专用快照页测试实例，请勿启用其进行任何真实数据同步）。继续追加说明文字以拉长描述，确认列表单元格超长时显示省略号并可由 Tooltip 完整阅读；本条仅供源库快照状态只读页面视觉验证使用。",
+        "visibility": "visible",
+        "pointerEvents": "none",
+        "role": "tooltip",
+        "count": 1,
+        "rect": {
+          "l": 340,
+          "t": 303,
+          "r": 820,
+          "b": 395
+        },
+        "withinViewport": true
+      }
+    },
+    {
+      "kind": "client-desc-short",
+      "clientId": "c-dssr1-0906-b",
+      "descCp": 13,
+      "tooltip": null
+    }
+  ],
+  "apiDump": {
+    "code": 200,
+    "records": 30,
+    "candidateClients": 8,
+    "candidateSources": 9,
+    "statuses": [
+      "RUNNING",
+      "COMPLETED",
+      "UNKNOWN"
+    ]
+  },
+  "sourceOptionStats": [
+    {
+      "text": "全部",
+      "len": 2,
+      "truncated": false
+    },
+    {
+      "text": "SNAPSHOT-TEST-某市一院信息...（s-dssr1-0906-1）",
+      "len": 39,
+      "truncated": false
+    },
+    {
+      "text": "SNAPSHOT-TEST-某市一院信息...（s-dssr1-0906-2）",
+      "len": 39,
+      "truncated": false
+    },
+    {
+      "text": "SNAPSHOT-TEST-某市二院信息...（s-dssr1-0906-3）",
+      "len": 39,
+      "truncated": false
+    },
+    {
+      "text": "SNAPSHOT-TEST-目标侧某中心...（s-dssr1-0906-4）",
+      "len": 39,
+      "truncated": false
+    },
+    {
+      "text": "SNAPSHOT-TEST-第三方平台源...（s-dssr1-0906-5）",
+      "len": 39,
+      "truncated": false
+    },
+    {
+      "text": "孝感市第一人民医院（112-source-19c）",
+      "len": 25,
+      "truncated": false
+    },
+    {
+      "text": "s-dssr1-0906-m1",
+      "len": 15,
+      "truncated": false
+    },
+    {
+      "text": "s-dssr1-0906-m2",
+      "len": 15,
+      "truncated": false
+    },
+    {
+      "text": "s-dssr1-0906-m3",
+      "len": 15,
+      "truncated": false
+    }
+  ],
+  "clientOptionStats": [
+    {
+      "text": "全部",
+      "len": 2,
+      "truncated": false,
+      "ghost": false
+    },
+    {
+      "text": "c-dssr1-0906-a（快照页测试探针A，请勿启用。长描述用于验...）",
+      "len": 39,
+      "truncated": false,
+      "ghost": false
+    },
+    {
+      "text": "c-dssr1-0906-b（快照页测试探针B，请勿启用）",
+      "len": 29,
+      "truncated": false,
+      "ghost": false
+    },
+    {
+      "text": "c-dssr1-0906-c（快照页测试探针C，请勿启用（其源库配置缺...）",
+      "len": 39,
+      "truncated": false,
+      "ghost": false
+    },
+    {
+      "text": "c-dssr1-0906-d（快照页测试探针D，请勿启用（含超长描述演...）",
+      "len": 39,
+      "truncated": false,
+      "ghost": false
+    },
+    {
+      "text": "c-dssr1-0906-e（快照页测试探针E，请勿启用）",
+      "len": 29,
+      "truncated": false,
+      "ghost": false
+    },
+    {
+      "text": "c-dssr1-0906-miss1",
+      "len": 18,
+      "truncated": false,
+      "ghost": false
+    },
+    {
+      "text": "c-dssr1-0906-miss2",
+      "len": 18,
+      "truncated": false,
+      "ghost": false
+    },
+    {
+      "text": "hosp-012（总部测试 IP: 192.168.0.9...）",
+      "len": 33,
+      "truncated": false,
+      "ghost": false
+    }
+  ],
+  "consoleErrors": [],
+  "nonGet": [],
+  "summary": {
+    "assertions": 40,
+    "failed": 0
+  }
+}

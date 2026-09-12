@@ -1,0 +1,8 @@
+# GET http://127.0.0.1:8080/api/monitor/data-source-run-state/list?status=BOGUS
+# 2026-09-12T16:12:34+08:00
+# HTTP status:
+200
+
+code=41002 message="快照状态取值非法"
+records=0  客户端候选client=0 source=0 status=[]
+statusCategory分布={}

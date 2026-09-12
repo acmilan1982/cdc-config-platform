@@ -1,0 +1,38 @@
+# Backend SQL audit — DATA-SOURCE-SNAPSHOT-STATUS-FORMAL-ACCEPTANCE-001
+# log=/tmp/dss-fa-001/backend.log
+# lines=1503  bytes=297500
+
+## 1. All MyBatis 'Preparing:' statements by SQL verb
+       94 Preparing: SELECT
+
+## 2. WRITE statements (INSERT/UPDATE/DELETE/MERGE) — full list (expect none)
+  write_statement_count=0
+
+## 3. Feature business table CDC_DATA_SOURCE_RUN_STATE — access statements by verb
+  total mentions=23
+  SELECT=23
+  WRITE =0
+
+## 4. Other Feature tables CDC_CLIENT_MULTIPLE / CDC_DATA_SOURCE access by verb
+  CDC_CLIENT_MULTIPLE: SELECT=23 WRITE=0
+  CDC_DATA_SOURCE: SELECT=23 WRITE=0
+
+## 5. Stats scheduler rounds observed in this log window
+  2026-09-12 16:10:33.423  INFO 10371 --- [           main] c.b.c.l.stats.lifecycle.StatsScheduler   : Stats scheduler started: initialDelayMs=600000, intervalMs=3600000
+  2026-09-12 16:20:33.580  INFO 10371 --- [    cdc-stats-1] c.b.c.l.s.lifecycle.StatsRoundRunner     : Round START | task=LARGE_SCREEN_STATS | correctSafeUpper=345105064429543426 | errorSafeUpper=343663503049216441 | correctMaxLogId=345105064429543426 | errorMaxLogId=343663503049216441 | timeBoundary=357070467179216895 | correctBatchSize=200000 | errorBatchSize=200000
+  2026-09-12 16:20:33.639  INFO 10371 --- [    cdc-stats-1] c.b.c.l.stats.executor.RoundExecutor     : Round end: task=LARGE_SCREEN_STATS, correctBatches=0/10, errorBatches=0/10, correctProcessed=0, errorProcessed=0, correctCaughtUp=true, errorCaughtUp=true, correctFailed=false, errorFailed=false, stopReason=all_caught_up, duration=51ms
+  2026-09-12 17:20:33.647  INFO 10371 --- [    cdc-stats-1] c.b.c.l.s.lifecycle.StatsRoundRunner     : Round START | task=LARGE_SCREEN_STATS | correctSafeUpper=345105064429543426 | errorSafeUpper=343663503049216441 | correctMaxLogId=345105064429543426 | errorMaxLogId=343663503049216441 | timeBoundary=357085567583780863 | correctBatchSize=200000 | errorBatchSize=200000
+  2026-09-12 17:20:33.676  INFO 10371 --- [    cdc-stats-1] c.b.c.l.stats.executor.RoundExecutor     : Round end: task=LARGE_SCREEN_STATS, correctBatches=0/10, errorBatches=0/10, correctProcessed=0, errorProcessed=0, correctCaughtUp=true, errorCaughtUp=true, correctFailed=false, errorFailed=false, stopReason=all_caught_up, duration=22ms
+  2026-09-12 18:20:33.686  INFO 10371 --- [    cdc-stats-1] c.b.c.l.s.lifecycle.StatsRoundRunner     : Round START | task=LARGE_SCREEN_STATS | correctSafeUpper=345105064429543426 | errorSafeUpper=343663503049216441 | correctMaxLogId=345105064429543426 | errorMaxLogId=343663503049216441 | timeBoundary=357100667229175807 | correctBatchSize=200000 | errorBatchSize=200000
+  2026-09-12 18:20:33.712  INFO 10371 --- [    cdc-stats-1] c.b.c.l.stats.executor.RoundExecutor     : Round end: task=LARGE_SCREEN_STATS, correctBatches=0/10, errorBatches=0/10, correctProcessed=0, errorProcessed=0, correctCaughtUp=true, errorCaughtUp=true, correctFailed=false, errorFailed=false, stopReason=all_caught_up, duration=19ms
+  2026-09-12 19:20:33.717  INFO 10371 --- [    cdc-stats-1] c.b.c.l.s.lifecycle.StatsRoundRunner     : Round START | task=LARGE_SCREEN_STATS | correctSafeUpper=345105064429543426 | errorSafeUpper=343663503049216441 | correctMaxLogId=345105064429543426 | errorMaxLogId=343663503049216441 | timeBoundary=357115766878765055 | correctBatchSize=200000 | errorBatchSize=200000
+  2026-09-12 19:20:33.737  INFO 10371 --- [    cdc-stats-1] c.b.c.l.stats.executor.RoundExecutor     : Round end: task=LARGE_SCREEN_STATS, correctBatches=0/10, errorBatches=0/10, correctProcessed=0, errorProcessed=0, correctCaughtUp=true, errorCaughtUp=true, correctFailed=false, errorFailed=false, stopReason=all_caught_up, duration=14ms
+
+## 6. Stats scheduler tables touched (separate from Feature three tables)
+  CDC_STATS_TASK_CONFIG: SELECT=1 WRITE=0
+  CDC_STATS_WATERMARK: SELECT=24 WRITE=0
+  CDC_STATS_DAILY: SELECT=0 WRITE=0
+  CDC_STATS_CUMULATIVE: SELECT=0 WRITE=0
+
+## 7. ZooKeeper client chatter (application startup, unrelated to this Feature; no ZK API used by the Feature)
+  zk_lines=1145

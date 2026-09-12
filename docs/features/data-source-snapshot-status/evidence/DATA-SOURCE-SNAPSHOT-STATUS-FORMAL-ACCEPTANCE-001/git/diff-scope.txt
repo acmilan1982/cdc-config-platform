@@ -1,0 +1,33 @@
+# Diff scope — DATA-SOURCE-SNAPSHOT-STATUS-FORMAL-ACCEPTANCE-001
+# recorded_at=2026-09-12T20:15:13+08:00
+# base af88aa847c7cf6a197237a46f59130744d13f082
+
+== git status --short ==
+ M docs/features/README.md
+ M docs/features/data-source-snapshot-status/ACCEPTANCE.md
+ M docs/features/data-source-snapshot-status/API.md
+ M docs/features/data-source-snapshot-status/DATABASE.md
+ M docs/features/data-source-snapshot-status/DESIGN.md
+ M docs/features/data-source-snapshot-status/README.md
+ M docs/features/data-source-snapshot-status/REQUIREMENTS.md
+ M docs/features/data-source-snapshot-status/UI.md
+?? docs/features/data-source-snapshot-status/evidence/DATA-SOURCE-SNAPSHOT-STATUS-FORMAL-ACCEPTANCE-001/
+?? docs/features/data-source-snapshot-status/reports/DATA-SOURCE-SNAPSHOT-STATUS-FORMAL-ACCEPTANCE-001.md
+
+== git diff --stat (tracked) ==
+ docs/features/README.md                            |   1 +
+ .../data-source-snapshot-status/ACCEPTANCE.md      | 249 +++++++++++----------
+ docs/features/data-source-snapshot-status/API.md   |   6 +-
+ .../data-source-snapshot-status/DATABASE.md        |   6 +-
+ .../features/data-source-snapshot-status/DESIGN.md |  13 +-
+ .../features/data-source-snapshot-status/README.md |   8 +-
+ .../data-source-snapshot-status/REQUIREMENTS.md    |   1 +
+ docs/features/data-source-snapshot-status/UI.md    |  11 +-
+ 8 files changed, 155 insertions(+), 140 deletions(-)
+
+== code/test diff (must be ZERO) ==
+  (empty above => zero frontend/backend code or test changes)
+
+== untracked, full ==
+  ?? docs/features/data-source-snapshot-status/evidence/DATA-SOURCE-SNAPSHOT-STATUS-FORMAL-ACCEPTANCE-001/
+  ?? docs/features/data-source-snapshot-status/reports/DATA-SOURCE-SNAPSHOT-STATUS-FORMAL-ACCEPTANCE-001.md

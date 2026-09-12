@@ -1,0 +1,9 @@
+# GET http://127.0.0.1:8080/api/monitor/data-source-run-state/list?clientId=c-dssr1-0906-d&sourceId=s-dssr1-0906-4
+# 2026-09-12T16:12:35+08:00
+# HTTP status:
+200
+
+code=200 message="success"
+records=1  客户端候选client=0 source=0 status=[]
+statusCategory分布={"UNKNOWN":1}
+firstRecord={"clientId":"c-dssr1-0906-d","clientRef":{"state":"INACTIVE","desc":"快照页测试探针D，请勿启用（含超长描述演示：覆盖同源不同状态与并列时间排序）"},"sourceId":"s-dssr1-0906-4","sourceRef":{"state":"INACTIVE","org":"SNAPSHOT-TEST-目标侧某中心源库-DONOTUSE","category":"TARGET","sourceRole":false},"snapshotStatus":"SNAPSHOT_UNKNOWN","statusCategory":"UNKNOWN","snapshotLastSeenAt":"2026-09-06 10:49:00","snapshotCompletedAt":null,"updatedAt":"2026-09-06 10:49:00"}

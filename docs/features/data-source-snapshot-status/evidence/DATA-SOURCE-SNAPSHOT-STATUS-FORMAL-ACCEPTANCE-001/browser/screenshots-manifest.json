@@ -1,0 +1,210 @@
+{
+  "mode": "screenshots",
+  "route": "http://127.0.0.1:5173/monitor/data-source-state",
+  "entries": [
+    {
+      "viewport": "1280x800",
+      "name": "page-idle-1280x800.png",
+      "kind": "page-idle",
+      "width": 1280,
+      "height": 800,
+      "sha256": "a650279c96ff358730b1e85b70b89d0d093db58e8cb4d7ed7d6cbc17cc009160"
+    },
+    {
+      "viewport": "1280x800",
+      "name": "popper-client-1280x800.png",
+      "kind": "popper-client",
+      "target": 480,
+      "width": 480,
+      "height": 276,
+      "sha256": "65b32a458cbc8696396cfb16a113c4f566838be74936cf8f495e158ecd60bcb3"
+    },
+    {
+      "viewport": "1280x800",
+      "name": "popper-source-1280x800.png",
+      "kind": "popper-source",
+      "target": 400,
+      "width": 400,
+      "height": 276,
+      "sha256": "0c93001a70780991fe21f69e5378373649052bdb0ade02543b783c00abe1fc61"
+    },
+    {
+      "viewport": "1280x800",
+      "name": "popper-status-1280x800.png",
+      "kind": "popper-status",
+      "target": 240,
+      "width": 240,
+      "height": 150,
+      "sha256": "6a72c26c19e33982a9841183ec17129bc3ce099221cd0d1b48bbb0237c284925"
+    },
+    {
+      "viewport": "1280x800",
+      "name": "refresh-loading-1280x800.png",
+      "kind": "refresh-loading",
+      "width": 1280,
+      "height": 800,
+      "sha256": "d554af341c1869bca6715d82a1f0cc3df7ba60de30b85bfd3d157f803408dbe5"
+    },
+    {
+      "viewport": "1280x800",
+      "name": "tooltip-unknown-status-1280x800.png",
+      "kind": "tooltip-unknown-status",
+      "width": 1280,
+      "height": 800,
+      "sha256": "5136a30c7203c3461f1449782da33051e2c16935bd6f9cd48c12af0dbf4fddb1"
+    },
+    {
+      "viewport": "1700x920",
+      "name": "page-idle-1700x920.png",
+      "kind": "page-idle",
+      "width": 1700,
+      "height": 920,
+      "sha256": "b1f458a8fa64301ea3d1d9fd65e086ff2a4b7de1a86d4db7f713a9fd70e2b4b8"
+    },
+    {
+      "viewport": "1700x920",
+      "name": "popper-client-1700x920.png",
+      "kind": "popper-client",
+      "target": 480,
+      "width": 480,
+      "height": 276,
+      "sha256": "b511dc2b990c36e6294221ad0f79c3f32d11972f10529e776028c7bedcabd355"
+    },
+    {
+      "viewport": "1700x920",
+      "name": "popper-source-1700x920.png",
+      "kind": "popper-source",
+      "target": 400,
+      "width": 400,
+      "height": 276,
+      "sha256": "0ba4608c75aa1e1c24e4e9311ce2466047813922eb928a3d3a68da299187e864"
+    },
+    {
+      "viewport": "1700x920",
+      "name": "popper-status-1700x920.png",
+      "kind": "popper-status",
+      "target": 240,
+      "width": 240,
+      "height": 150,
+      "sha256": "845a95193e51d9cd30a0228382088dbe3b10f97b2d1525601714dd6d73759b39"
+    },
+    {
+      "viewport": "1700x920",
+      "name": "refresh-loading-1700x920.png",
+      "kind": "refresh-loading",
+      "width": 1700,
+      "height": 920,
+      "sha256": "a292bf7c6345dec5e1a4e1bf37d75bc98ca4a081b0b4b0c5de2443dc2c31d6a3"
+    },
+    {
+      "viewport": "1700x920",
+      "name": "tooltip-unknown-status-1700x920.png",
+      "kind": "tooltip-unknown-status",
+      "width": 1700,
+      "height": 920,
+      "sha256": "35d6ee7a79e30b0427d57d6e4b9d6428381f1ff64659d3891ac54c701e7acc76"
+    },
+    {
+      "viewport": "1920x1080",
+      "name": "page-idle-1920x1080.png",
+      "kind": "page-idle",
+      "width": 1920,
+      "height": 1080,
+      "sha256": "c6494d7c9c77ccae46e48000914effd891d9787f382b30ba2ed634987e49b815"
+    },
+    {
+      "viewport": "1920x1080",
+      "name": "popper-client-1920x1080.png",
+      "kind": "popper-client",
+      "target": 480,
+      "width": 480,
+      "height": 276,
+      "sha256": "b511dc2b990c36e6294221ad0f79c3f32d11972f10529e776028c7bedcabd355"
+    },
+    {
+      "viewport": "1920x1080",
+      "name": "popper-source-1920x1080.png",
+      "kind": "popper-source",
+      "target": 400,
+      "width": 400,
+      "height": 276,
+      "sha256": "0ba4608c75aa1e1c24e4e9311ce2466047813922eb928a3d3a68da299187e864"
+    },
+    {
+      "viewport": "1920x1080",
+      "name": "popper-status-1920x1080.png",
+      "kind": "popper-status",
+      "target": 240,
+      "width": 240,
+      "height": 150,
+      "sha256": "845a95193e51d9cd30a0228382088dbe3b10f97b2d1525601714dd6d73759b39"
+    },
+    {
+      "viewport": "1920x1080",
+      "name": "refresh-loading-1920x1080.png",
+      "kind": "refresh-loading",
+      "width": 1920,
+      "height": 1080,
+      "sha256": "39770db0fdfd4f956d3e6901f0f2da0903f2a3177dcb5e9ae9c52f32525f5015"
+    },
+    {
+      "viewport": "1920x1080",
+      "name": "tooltip-unknown-status-1920x1080.png",
+      "kind": "tooltip-unknown-status",
+      "width": 1920,
+      "height": 1080,
+      "sha256": "1b69248ed361ef52f5ce98787ec6554e91a2a4e5be3b4b1fa3c98cb8e3337180"
+    },
+    {
+      "viewport": "2560x1440",
+      "name": "page-idle-2560x1440.png",
+      "kind": "page-idle",
+      "width": 2560,
+      "height": 1440,
+      "sha256": "4a8ae0d4dcea84655563e7006c8b1004f97099a133b6135b7f23380d45173697"
+    },
+    {
+      "viewport": "2560x1440",
+      "name": "popper-client-2560x1440.png",
+      "kind": "popper-client",
+      "target": 480,
+      "width": 480,
+      "height": 276,
+      "sha256": "b511dc2b990c36e6294221ad0f79c3f32d11972f10529e776028c7bedcabd355"
+    },
+    {
+      "viewport": "2560x1440",
+      "name": "popper-source-2560x1440.png",
+      "kind": "popper-source",
+      "target": 400,
+      "width": 400,
+      "height": 276,
+      "sha256": "0ba4608c75aa1e1c24e4e9311ce2466047813922eb928a3d3a68da299187e864"
+    },
+    {
+      "viewport": "2560x1440",
+      "name": "popper-status-2560x1440.png",
+      "kind": "popper-status",
+      "target": 240,
+      "width": 240,
+      "height": 150,
+      "sha256": "845a95193e51d9cd30a0228382088dbe3b10f97b2d1525601714dd6d73759b39"
+    },
+    {
+      "viewport": "2560x1440",
+      "name": "refresh-loading-2560x1440.png",
+      "kind": "refresh-loading",
+      "width": 2560,
+      "height": 1440,
+      "sha256": "b751cd192e657b32aa2b575287c94b14bdb88858f8264284bf22c7d964a9a540"
+    },
+    {
+      "viewport": "2560x1440",
+      "name": "tooltip-unknown-status-2560x1440.png",
+      "kind": "tooltip-unknown-status",
+      "width": 2560,
+      "height": 1440,
+      "sha256": "ae869d7a8c5f06c8c862c7b3cf33a432dfa4eb681130557c4bd5c9f95d892731"
+    }
+  ]
+}

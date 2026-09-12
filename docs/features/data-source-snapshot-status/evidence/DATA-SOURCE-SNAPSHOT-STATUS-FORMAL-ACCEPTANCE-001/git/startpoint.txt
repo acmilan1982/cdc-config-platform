@@ -1,0 +1,59 @@
+== Git startpoint and environment (DATA-SOURCE-SNAPSHOT-STATUS-FORMAL-ACCEPTANCE-001) ==
+recorded_at=2026-09-12T19:59:24+08:00
+
+-- task base (prompt 3) --
+task_code=DATA-SOURCE-SNAPSHOT-STATUS-FORMAL-ACCEPTANCE-001
+expected_start_commit=af88aa847c7cf6a197237a46f59130744d13f082
+branch=develop
+
+-- isolated worktree used for this task --
+worktree=/agent/dss-formal-acceptance-001
+state=detached HEAD
+head=af88aa847c7cf6a197237a46f59130744d13f082
+
+-- remote (authoritative push target) --
+origin=git@github-cdc:acmilan1982/cdc-config-platform.git
+ls_remote_develop=af88aa847c7cf6a197237a46f59130744d13f082
+remote_equals_expected_start=YES
+
+-- main worktree and other worktrees (recorded only; NOT entered/modified/cleaned) --
+/agent/cdc-config-platform                      4222b0a [develop]
+/agent/cdc-docs-freeze-001                      8998034 (detached HEAD)
+/agent/dss-design-traceability-corr-001         d4c5267 (detached HEAD)
+/agent/dss-design-traceability-corr-001-r1      758253c (detached HEAD)
+/agent/dss-formal-acceptance-001                af88aa8 (detached HEAD)
+/agent/dss-formal-impl-001                      3ec9cbf (detached HEAD)
+/agent/dss-formal-impl-001-r1                   ba309ea (detached HEAD)
+/agent/dss-linear-style-original-001.R1         4222b0a (detached HEAD)
+/agent/dss-linear-style-prototype-001.BfGw0Z    4222b0a (detached HEAD)
+/agent/dss-popper-impl-closeout-001             cacfb70 (detached HEAD)
+/agent/dss-popper-r2-appr-001                   183d3b5 (detached HEAD)
+/agent/dss-popper-width-baseline-001            6cd197d (detached HEAD)
+/agent/dss-popper-width-baseline-001-r1         f74dd72 (detached HEAD)
+/agent/dss-popper-width-baseline-approval-001   5649a8a (detached HEAD)
+/agent/dss-popper-width-impl-001                e3c2392 (detached HEAD)
+/agent/dss-qc-review-closeout-001               1ddb84e (detached HEAD)
+/agent/dss-qc-review-closeout-001-r1            af88aa8 (detached HEAD)
+/agent/dss-query-ctl-001                        29379e7 (detached HEAD)
+/agent/dss-query-ctl-001-r1                     d6322cf (detached HEAD)
+/agent/dss-query-ctl-001-r2                     6c43d1e (detached HEAD)
+/agent/dss-query-ctl-001-r3                     cf9f9eb (detached HEAD)
+/agent/dss-query-ctl-appr-001                   548e161 (detached HEAD)
+/agent/dss-query-ctl-impl-001                   a479888 (detached HEAD)
+/agent/dss-query-ctl-impl-001-r1                edba7c8 (detached HEAD)
+/agent/dss-query-ctl-impl-001-r2                2a9a271 (detached HEAD)
+/agent/dss-select-popper-fixed-width-proto-001  2a9a271 (detached HEAD)
+/agent/dss-select-width-diag-001                2a9a271 (detached HEAD)
+/tmp/cdc-approval-r1-worktree                   c568df1 (detached HEAD)
+/tmp/cdc-approval-worktree                      b753bec (detached HEAD)
+/tmp/cdc-freeze-r1-worktree                     85a522e (detached HEAD)
+/tmp/cdc-freeze-r2-worktree                     9b0aa92 (detached HEAD)
+/tmp/cdc-freeze-r3-worktree                     e67b2ec (detached HEAD)
+/tmp/cdc-popper-appr-r1-worktree                485be09 (detached HEAD)
+/tmp/cdc-popper-r2-worktree                     0666cd9 (detached HEAD)
+/tmp/cdc-r1-worktree                            49eb778 (detached HEAD)
+
+note: local branch 'develop' in /agent/cdc-config-platform sits at
+4222b0a24b927aca6f62ff348fd8549b73d4156c, which is an ANCESTOR of the task base
+af88aa84... (verified: git merge-base --is-ancestor 4222b0a af88aa8 => YES). So the
+main worktree is simply behind origin/develop; there is no divergence and no stop condition.

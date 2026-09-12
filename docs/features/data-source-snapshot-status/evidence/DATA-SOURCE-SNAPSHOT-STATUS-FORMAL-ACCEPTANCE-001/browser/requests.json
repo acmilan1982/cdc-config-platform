@@ -1,0 +1,184 @@
+{
+  "mode": "request-state-machine",
+  "route": "http://127.0.0.1:5173/monitor/data-source-state",
+  "biLabel": "BI phases substitute the list response; labelled per phase",
+  "phases": {
+    "initial": {
+      "getCount": 1,
+      "urls": [
+        "http://127.0.0.1:5173/api/monitor/data-source-run-state/list"
+      ]
+    },
+    "countdown": {
+      "requestsDuringTick": 0,
+      "countdownSeconds": "45"
+    },
+    "query": {
+      "url": "http://127.0.0.1:5173/api/monitor/data-source-run-state/list?clientId=hosp-012"
+    },
+    "reset": {
+      "requestsAfterReset": 0,
+      "tagsBefore": [
+        "hosp-012（总部测试 IP: 192.168.0.9...）"
+      ],
+      "tagsAfterReset": [
+        "全部"
+      ]
+    },
+    "singleFlight": {
+      "burstEvents": 160,
+      "getCount": 1,
+      "urls": [
+        "http://127.0.0.1:5173/api/monitor/data-source-run-state/list?clientId=hosp-012"
+      ]
+    },
+    "failure": {
+      "rowsBefore": 1,
+      "rowsAfter": 1,
+      "summaryBefore": "共 1 条",
+      "summaryAfter": "共 1 条",
+      "refreshTimeBefore": "最近成功刷新：19:52:02",
+      "refreshTimeAfter": "最近成功刷新：19:52:02",
+      "uiAfter": [
+        "hosp-012（总部测试 IP: 192.168.0.9...）",
+        "+ 1"
+      ],
+      "errSlot": "刷新失败，将在约 60 秒后自动重试"
+    },
+    "emptySuccess": {
+      "summary": "共 0 条",
+      "rows": 0,
+      "errSlot": ""
+    },
+    "hidden": {
+      "duringHidden": 0,
+      "afterVisible": 1
+    }
+  },
+  "assertions": [
+    {
+      "name": "initialExactlyOneGet",
+      "ok": true,
+      "detail": "1"
+    },
+    {
+      "name": "initialUsesAllCriteria",
+      "ok": true,
+      "detail": "http://127.0.0.1:5173/api/monitor/data-source-run-state/list"
+    },
+    {
+      "name": "countdownTickZeroRequests",
+      "ok": true,
+      "detail": "0"
+    },
+    {
+      "name": "queryUsesClickedSelection",
+      "ok": true,
+      "detail": "http://127.0.0.1:5173/api/monitor/data-source-run-state/list?clientId=hosp-012"
+    },
+    {
+      "name": "resetZeroRequests",
+      "ok": true,
+      "detail": "0"
+    },
+    {
+      "name": "resetRestoresAllSentinel",
+      "ok": true,
+      "detail": "[\"全部\"]"
+    },
+    {
+      "name": "resetKeepsAppliedCriteria",
+      "ok": true,
+      "detail": "http://127.0.0.1:5173/api/monitor/data-source-run-state/list?clientId=hosp-012"
+    },
+    {
+      "name": "singleFlightBurstAtLeast40",
+      "ok": true,
+      "detail": "160"
+    },
+    {
+      "name": "singleFlightExactlyOneGet",
+      "ok": true,
+      "detail": "[\"http://127.0.0.1:5173/api/monitor/data-source-run-state/list?clientId=hosp-012\"]"
+    },
+    {
+      "name": "failureKeepsRows",
+      "ok": true,
+      "detail": "1->1"
+    },
+    {
+      "name": "failureKeepsSummary",
+      "ok": true,
+      "detail": "共 1 条->共 1 条"
+    },
+    {
+      "name": "failureKeepsLastSuccessTime",
+      "ok": true,
+      "detail": "最近成功刷新：19:52:02->最近成功刷新：19:52:02"
+    },
+    {
+      "name": "failureRetainsUiSelection",
+      "ok": true,
+      "detail": "[\"hosp-012（总部测试 IP: 192.168.0.9...）\",\"+ 1\"]"
+    },
+    {
+      "name": "failureShowsInlineNotice",
+      "ok": true,
+      "detail": "\"刷新失败，将在约 60 秒后自动重试\""
+    },
+    {
+      "name": "failureKeepsAppliedCriteria",
+      "ok": true,
+      "detail": "http://127.0.0.1:5173/api/monitor/data-source-run-state/list?clientId=hosp-012"
+    },
+    {
+      "name": "emptySuccessShowsZero",
+      "ok": true,
+      "detail": "共 0 条"
+    },
+    {
+      "name": "emptySuccessNoRows",
+      "ok": true,
+      "detail": "0"
+    },
+    {
+      "name": "emptySuccessUpgradesAppliedCriteria",
+      "ok": true,
+      "detail": "http://127.0.0.1:5173/api/monitor/data-source-run-state/list?clientId=c-dssr1-0906-d"
+    },
+    {
+      "name": "hiddenFreezesRequests",
+      "ok": true,
+      "detail": "0"
+    },
+    {
+      "name": "visibleTriggersAtMostOne",
+      "ok": true,
+      "detail": "1"
+    },
+    {
+      "name": "consoleErrorsZeroOutsideInjectedFailure",
+      "ok": true,
+      "detail": "[]"
+    },
+    {
+      "name": "nonGetZero",
+      "ok": true,
+      "detail": "[]"
+    }
+  ],
+  "global": {
+    "consoleErrors": [
+      "Failed to load resource: the server responded with a status of 500 (Internal Server Error)"
+    ],
+    "nonGet": [],
+    "consoleErrorsBeforeInjection": 0,
+    "consoleErrorsInjectedFailure": [
+      "Failed to load resource: the server responded with a status of 500 (Internal Server Error)"
+    ]
+  },
+  "summary": {
+    "assertions": 22,
+    "failed": 0
+  }
+}

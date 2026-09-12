@@ -1,0 +1,1232 @@
+{
+  "viewports": [
+    {
+      "viewport": "1280x800",
+      "struct": {
+        "route": "/monitor/data-source-state",
+        "title": "CDC 配置管理平台",
+        "dssTitle": "源库快照状态",
+        "dssDesc": "展示各探针端与源库组合的初始快照阶段状态；页面只读。",
+        "menuItems": [
+          "数据源管理",
+          "探针端管理",
+          "数据订阅",
+          "中心端配置",
+          "CDC 节点状态",
+          "源库快照状态",
+          "数据同步进度",
+          "日志查询",
+          "故障历史",
+          "故障监控"
+        ],
+        "activeMenu": "源库快照状态",
+        "breadcrumb": [
+          "运行监控\n/",
+          "源库快照状态"
+        ],
+        "readOnlyProbe": {
+          "buttons": [
+            "查询",
+            "重置",
+            "立即刷新"
+          ],
+          "hasActionColumn": false,
+          "editableInputsOutsideQuery": 0,
+          "dssCardCount": 2,
+          "queryCard": true,
+          "resultCard": true,
+          "errorCard": false,
+          "dssPagePresent": true
+        },
+        "table": {
+          "exists": true,
+          "headers": [
+            "序号",
+            "探针端",
+            "源库",
+            "快照状态",
+            "快照启动时间",
+            "快照完成时间",
+            "记录更新时间"
+          ],
+          "headerCount": 7,
+          "bodyRowCount": 30,
+          "pagination": 0,
+          "sortableHeaders": 0,
+          "columns": [
+            "70",
+            "170",
+            "285",
+            "140",
+            "170",
+            "170",
+            "170",
+            "70",
+            "170",
+            "285",
+            "140",
+            "170",
+            "170",
+            "170"
+          ]
+        },
+        "pageIdentity": "dss-page",
+        "counts": {
+          "menuItems": 10,
+          "breadcrumb": 2
+        }
+      },
+      "dom": {
+        "table": {
+          "rect": {
+            "x": 292,
+            "y": 346.5,
+            "w": 1175,
+            "h": 1516,
+            "right": 1467,
+            "bottom": 1862.5
+          },
+          "offsetW": 1175,
+          "offsetH": 1516,
+          "clientW": 1175,
+          "scrollW": 1175,
+          "css": {
+            "width": "1175px",
+            "minWidth": "1175px",
+            "maxWidth": "100%",
+            "height": "1516px",
+            "padding": "0px",
+            "paddingLeft": "0px",
+            "paddingTop": "0px",
+            "background": "rgb(255, 255, 255)",
+            "borderRadius": "0px",
+            "border": "0px none rgb(96, 98, 102)",
+            "boxShadow": "none",
+            "fontWeight": "400",
+            "fontSize": "14px",
+            "color": "rgb(96, 98, 102)",
+            "display": "block",
+            "flexWrap": "nowrap",
+            "overflow": "hidden",
+            "overflowX": "hidden",
+            "pointerEvents": "auto",
+            "visibility": "visible",
+            "whiteSpace": "normal",
+            "textOverflow": "clip"
+          }
+        },
+        "rowHeight": 49,
+        "headers": [
+          {
+            "text": "序号",
+            "w": 70,
+            "css": {
+              "textAlign": "center",
+              "padding": "11px 0px"
+            }
+          },
+          {
+            "text": "探针端",
+            "w": 170,
+            "css": {
+              "textAlign": "left",
+              "padding": "11px 0px"
+            }
+          },
+          {
+            "text": "源库",
+            "w": 285,
+            "css": {
+              "textAlign": "left",
+              "padding": "11px 0px"
+            }
+          },
+          {
+            "text": "快照状态",
+            "w": 140,
+            "css": {
+              "textAlign": "center",
+              "padding": "11px 0px"
+            }
+          },
+          {
+            "text": "快照启动时间",
+            "w": 170,
+            "css": {
+              "textAlign": "left",
+              "padding": "11px 0px"
+            }
+          },
+          {
+            "text": "快照完成时间",
+            "w": 170,
+            "css": {
+              "textAlign": "left",
+              "padding": "11px 0px"
+            }
+          },
+          {
+            "text": "记录更新时间",
+            "w": 170,
+            "css": {
+              "textAlign": "left",
+              "padding": "11px 0px"
+            }
+          }
+        ],
+        "rowCount": 30,
+        "pagination": 0,
+        "sortArrows": 0,
+        "titles": {
+          "h2": "源库快照状态",
+          "desc": "展示各探针端与源库组合的初始快照阶段状态；页面只读。"
+        },
+        "route": "/monitor/data-source-state",
+        "bodyScroll": {
+          "docScrollW": 1280,
+          "docClientW": 1280
+        },
+        "globalContainers": {
+          "body": {
+            "rect": {
+              "x": 0,
+              "y": 0,
+              "w": 1280,
+              "h": 800,
+              "right": 1280,
+              "bottom": 800
+            },
+            "offsetW": 1280,
+            "offsetH": 800,
+            "clientW": 1280,
+            "scrollW": 1280,
+            "css": {
+              "width": "1280px",
+              "minWidth": "0px",
+              "maxWidth": "none",
+              "height": "800px",
+              "padding": "0px",
+              "paddingLeft": "0px",
+              "paddingTop": "0px",
+              "background": "rgb(245, 247, 250)",
+              "borderRadius": "0px",
+              "border": "0px none rgb(48, 49, 51)",
+              "boxShadow": "none",
+              "fontWeight": "400",
+              "fontSize": "14px",
+              "color": "rgb(48, 49, 51)",
+              "display": "block",
+              "flexWrap": "nowrap",
+              "overflow": "visible",
+              "overflowX": "visible",
+              "pointerEvents": "auto",
+              "visibility": "visible",
+              "whiteSpace": "normal",
+              "textOverflow": "clip"
+            }
+          },
+          "contentArea": {
+            "rect": {
+              "x": 220,
+              "y": 48,
+              "w": 1060,
+              "h": 752,
+              "right": 1280,
+              "bottom": 800
+            },
+            "offsetW": 1060,
+            "offsetH": 752,
+            "clientW": 1060,
+            "scrollW": 1060,
+            "css": {
+              "width": "1060px",
+              "minWidth": "auto",
+              "maxWidth": "none",
+              "height": "752px",
+              "padding": "16px 20px",
+              "paddingLeft": "20px",
+              "paddingTop": "16px",
+              "background": "rgb(240, 242, 245)",
+              "borderRadius": "0px",
+              "border": "0px none rgb(48, 49, 51)",
+              "boxShadow": "none",
+              "fontWeight": "400",
+              "fontSize": "14px",
+              "color": "rgb(48, 49, 51)",
+              "display": "block",
+              "flexWrap": "nowrap",
+              "overflow": "auto",
+              "overflowX": "auto",
+              "pointerEvents": "auto",
+              "visibility": "visible",
+              "whiteSpace": "normal",
+              "textOverflow": "clip"
+            }
+          },
+          "contentCard": {
+            "rect": {
+              "x": 240,
+              "y": 64,
+              "w": 1020,
+              "h": 1846.5,
+              "right": 1260,
+              "bottom": 1910.5
+            },
+            "offsetW": 1020,
+            "offsetH": 1847,
+            "clientW": 1020,
+            "scrollW": 1020,
+            "css": {
+              "width": "1020px",
+              "minWidth": "0px",
+              "maxWidth": "none",
+              "height": "1846.5px",
+              "padding": "20px",
+              "paddingLeft": "20px",
+              "paddingTop": "20px",
+              "background": "rgb(255, 255, 255)",
+              "borderRadius": "4px",
+              "border": "0px none rgb(48, 49, 51)",
+              "boxShadow": "none",
+              "fontWeight": "400",
+              "fontSize": "14px",
+              "color": "rgb(48, 49, 51)",
+              "display": "block",
+              "flexWrap": "nowrap",
+              "overflow": "visible",
+              "overflowX": "visible",
+              "pointerEvents": "auto",
+              "visibility": "visible",
+              "whiteSpace": "normal",
+              "textOverflow": "clip"
+            }
+          }
+        },
+        "summaryCount": "共 30 条",
+        "summaryUnknown": "其中 6 条未知状态"
+      }
+    },
+    {
+      "viewport": "1700x920",
+      "struct": {
+        "route": "/monitor/data-source-state",
+        "title": "CDC 配置管理平台",
+        "dssTitle": "源库快照状态",
+        "dssDesc": "展示各探针端与源库组合的初始快照阶段状态；页面只读。",
+        "menuItems": [
+          "数据源管理",
+          "探针端管理",
+          "数据订阅",
+          "中心端配置",
+          "CDC 节点状态",
+          "源库快照状态",
+          "数据同步进度",
+          "日志查询",
+          "故障历史",
+          "故障监控"
+        ],
+        "activeMenu": "源库快照状态",
+        "breadcrumb": [
+          "运行监控\n/",
+          "源库快照状态"
+        ],
+        "readOnlyProbe": {
+          "buttons": [
+            "查询",
+            "重置",
+            "立即刷新"
+          ],
+          "hasActionColumn": false,
+          "editableInputsOutsideQuery": 0,
+          "dssCardCount": 2,
+          "queryCard": true,
+          "resultCard": true,
+          "errorCard": false,
+          "dssPagePresent": true
+        },
+        "table": {
+          "exists": true,
+          "headers": [
+            "序号",
+            "探针端",
+            "源库",
+            "快照状态",
+            "快照启动时间",
+            "快照完成时间",
+            "记录更新时间"
+          ],
+          "headerCount": 7,
+          "bodyRowCount": 30,
+          "pagination": 0,
+          "sortableHeaders": 0,
+          "columns": [
+            "70",
+            "200",
+            "332",
+            "140",
+            "198",
+            "198",
+            "198",
+            "70",
+            "200",
+            "332",
+            "140",
+            "198",
+            "198",
+            "198"
+          ]
+        },
+        "pageIdentity": "dss-page",
+        "counts": {
+          "menuItems": 10,
+          "breadcrumb": 2
+        }
+      },
+      "dom": {
+        "table": {
+          "rect": {
+            "x": 292,
+            "y": 308.5,
+            "w": 1336,
+            "h": 1516,
+            "right": 1628,
+            "bottom": 1824.5
+          },
+          "offsetW": 1336,
+          "offsetH": 1516,
+          "clientW": 1336,
+          "scrollW": 1336,
+          "css": {
+            "width": "1336px",
+            "minWidth": "1175px",
+            "maxWidth": "100%",
+            "height": "1516px",
+            "padding": "0px",
+            "paddingLeft": "0px",
+            "paddingTop": "0px",
+            "background": "rgb(255, 255, 255)",
+            "borderRadius": "0px",
+            "border": "0px none rgb(96, 98, 102)",
+            "boxShadow": "none",
+            "fontWeight": "400",
+            "fontSize": "14px",
+            "color": "rgb(96, 98, 102)",
+            "display": "block",
+            "flexWrap": "nowrap",
+            "overflow": "hidden",
+            "overflowX": "hidden",
+            "pointerEvents": "auto",
+            "visibility": "visible",
+            "whiteSpace": "normal",
+            "textOverflow": "clip"
+          }
+        },
+        "rowHeight": 49,
+        "headers": [
+          {
+            "text": "序号",
+            "w": 70,
+            "css": {
+              "textAlign": "center",
+              "padding": "11px 0px"
+            }
+          },
+          {
+            "text": "探针端",
+            "w": 200,
+            "css": {
+              "textAlign": "left",
+              "padding": "11px 0px"
+            }
+          },
+          {
+            "text": "源库",
+            "w": 332,
+            "css": {
+              "textAlign": "left",
+              "padding": "11px 0px"
+            }
+          },
+          {
+            "text": "快照状态",
+            "w": 140,
+            "css": {
+              "textAlign": "center",
+              "padding": "11px 0px"
+            }
+          },
+          {
+            "text": "快照启动时间",
+            "w": 198,
+            "css": {
+              "textAlign": "left",
+              "padding": "11px 0px"
+            }
+          },
+          {
+            "text": "快照完成时间",
+            "w": 198,
+            "css": {
+              "textAlign": "left",
+              "padding": "11px 0px"
+            }
+          },
+          {
+            "text": "记录更新时间",
+            "w": 198,
+            "css": {
+              "textAlign": "left",
+              "padding": "11px 0px"
+            }
+          }
+        ],
+        "rowCount": 30,
+        "pagination": 0,
+        "sortArrows": 0,
+        "titles": {
+          "h2": "源库快照状态",
+          "desc": "展示各探针端与源库组合的初始快照阶段状态；页面只读。"
+        },
+        "route": "/monitor/data-source-state",
+        "bodyScroll": {
+          "docScrollW": 1700,
+          "docClientW": 1700
+        },
+        "globalContainers": {
+          "body": {
+            "rect": {
+              "x": 0,
+              "y": 0,
+              "w": 1700,
+              "h": 920,
+              "right": 1700,
+              "bottom": 920
+            },
+            "offsetW": 1700,
+            "offsetH": 920,
+            "clientW": 1700,
+            "scrollW": 1700,
+            "css": {
+              "width": "1700px",
+              "minWidth": "0px",
+              "maxWidth": "none",
+              "height": "920px",
+              "padding": "0px",
+              "paddingLeft": "0px",
+              "paddingTop": "0px",
+              "background": "rgb(245, 247, 250)",
+              "borderRadius": "0px",
+              "border": "0px none rgb(48, 49, 51)",
+              "boxShadow": "none",
+              "fontWeight": "400",
+              "fontSize": "14px",
+              "color": "rgb(48, 49, 51)",
+              "display": "block",
+              "flexWrap": "nowrap",
+              "overflow": "visible",
+              "overflowX": "visible",
+              "pointerEvents": "auto",
+              "visibility": "visible",
+              "whiteSpace": "normal",
+              "textOverflow": "clip"
+            }
+          },
+          "contentArea": {
+            "rect": {
+              "x": 220,
+              "y": 48,
+              "w": 1480,
+              "h": 872,
+              "right": 1700,
+              "bottom": 920
+            },
+            "offsetW": 1480,
+            "offsetH": 872,
+            "clientW": 1480,
+            "scrollW": 1480,
+            "css": {
+              "width": "1480px",
+              "minWidth": "auto",
+              "maxWidth": "none",
+              "height": "872px",
+              "padding": "16px 20px",
+              "paddingLeft": "20px",
+              "paddingTop": "16px",
+              "background": "rgb(240, 242, 245)",
+              "borderRadius": "0px",
+              "border": "0px none rgb(48, 49, 51)",
+              "boxShadow": "none",
+              "fontWeight": "400",
+              "fontSize": "14px",
+              "color": "rgb(48, 49, 51)",
+              "display": "block",
+              "flexWrap": "nowrap",
+              "overflow": "auto",
+              "overflowX": "auto",
+              "pointerEvents": "auto",
+              "visibility": "visible",
+              "whiteSpace": "normal",
+              "textOverflow": "clip"
+            }
+          },
+          "contentCard": {
+            "rect": {
+              "x": 240,
+              "y": 64,
+              "w": 1440,
+              "h": 1808.5,
+              "right": 1680,
+              "bottom": 1872.5
+            },
+            "offsetW": 1440,
+            "offsetH": 1809,
+            "clientW": 1440,
+            "scrollW": 1440,
+            "css": {
+              "width": "1440px",
+              "minWidth": "0px",
+              "maxWidth": "none",
+              "height": "1808.5px",
+              "padding": "20px",
+              "paddingLeft": "20px",
+              "paddingTop": "20px",
+              "background": "rgb(255, 255, 255)",
+              "borderRadius": "4px",
+              "border": "0px none rgb(48, 49, 51)",
+              "boxShadow": "none",
+              "fontWeight": "400",
+              "fontSize": "14px",
+              "color": "rgb(48, 49, 51)",
+              "display": "block",
+              "flexWrap": "nowrap",
+              "overflow": "visible",
+              "overflowX": "visible",
+              "pointerEvents": "auto",
+              "visibility": "visible",
+              "whiteSpace": "normal",
+              "textOverflow": "clip"
+            }
+          }
+        },
+        "summaryCount": "共 30 条",
+        "summaryUnknown": "其中 6 条未知状态"
+      }
+    },
+    {
+      "viewport": "1920x1080",
+      "struct": {
+        "route": "/monitor/data-source-state",
+        "title": "CDC 配置管理平台",
+        "dssTitle": "源库快照状态",
+        "dssDesc": "展示各探针端与源库组合的初始快照阶段状态；页面只读。",
+        "menuItems": [
+          "数据源管理",
+          "探针端管理",
+          "数据订阅",
+          "中心端配置",
+          "CDC 节点状态",
+          "源库快照状态",
+          "数据同步进度",
+          "日志查询",
+          "故障历史",
+          "故障监控"
+        ],
+        "activeMenu": "源库快照状态",
+        "breadcrumb": [
+          "运行监控\n/",
+          "源库快照状态"
+        ],
+        "readOnlyProbe": {
+          "buttons": [
+            "查询",
+            "重置",
+            "立即刷新"
+          ],
+          "hasActionColumn": false,
+          "editableInputsOutsideQuery": 0,
+          "dssCardCount": 2,
+          "queryCard": true,
+          "resultCard": true,
+          "errorCard": false,
+          "dssPagePresent": true
+        },
+        "table": {
+          "exists": true,
+          "headers": [
+            "序号",
+            "探针端",
+            "源库",
+            "快照状态",
+            "快照启动时间",
+            "快照完成时间",
+            "记录更新时间"
+          ],
+          "headerCount": 7,
+          "bodyRowCount": 30,
+          "pagination": 0,
+          "sortableHeaders": 0,
+          "columns": [
+            "70",
+            "238",
+            "397",
+            "140",
+            "237",
+            "237",
+            "237",
+            "70",
+            "238",
+            "397",
+            "140",
+            "237",
+            "237",
+            "237"
+          ]
+        },
+        "pageIdentity": "dss-page",
+        "counts": {
+          "menuItems": 10,
+          "breadcrumb": 2
+        }
+      },
+      "dom": {
+        "table": {
+          "rect": {
+            "x": 292,
+            "y": 308.5,
+            "w": 1556,
+            "h": 1516,
+            "right": 1848,
+            "bottom": 1824.5
+          },
+          "offsetW": 1556,
+          "offsetH": 1516,
+          "clientW": 1556,
+          "scrollW": 1556,
+          "css": {
+            "width": "1556px",
+            "minWidth": "1175px",
+            "maxWidth": "100%",
+            "height": "1516px",
+            "padding": "0px",
+            "paddingLeft": "0px",
+            "paddingTop": "0px",
+            "background": "rgb(255, 255, 255)",
+            "borderRadius": "0px",
+            "border": "0px none rgb(96, 98, 102)",
+            "boxShadow": "none",
+            "fontWeight": "400",
+            "fontSize": "14px",
+            "color": "rgb(96, 98, 102)",
+            "display": "block",
+            "flexWrap": "nowrap",
+            "overflow": "hidden",
+            "overflowX": "hidden",
+            "pointerEvents": "auto",
+            "visibility": "visible",
+            "whiteSpace": "normal",
+            "textOverflow": "clip"
+          }
+        },
+        "rowHeight": 49,
+        "headers": [
+          {
+            "text": "序号",
+            "w": 70,
+            "css": {
+              "textAlign": "center",
+              "padding": "11px 0px"
+            }
+          },
+          {
+            "text": "探针端",
+            "w": 238,
+            "css": {
+              "textAlign": "left",
+              "padding": "11px 0px"
+            }
+          },
+          {
+            "text": "源库",
+            "w": 397,
+            "css": {
+              "textAlign": "left",
+              "padding": "11px 0px"
+            }
+          },
+          {
+            "text": "快照状态",
+            "w": 140,
+            "css": {
+              "textAlign": "center",
+              "padding": "11px 0px"
+            }
+          },
+          {
+            "text": "快照启动时间",
+            "w": 237,
+            "css": {
+              "textAlign": "left",
+              "padding": "11px 0px"
+            }
+          },
+          {
+            "text": "快照完成时间",
+            "w": 237,
+            "css": {
+              "textAlign": "left",
+              "padding": "11px 0px"
+            }
+          },
+          {
+            "text": "记录更新时间",
+            "w": 237,
+            "css": {
+              "textAlign": "left",
+              "padding": "11px 0px"
+            }
+          }
+        ],
+        "rowCount": 30,
+        "pagination": 0,
+        "sortArrows": 0,
+        "titles": {
+          "h2": "源库快照状态",
+          "desc": "展示各探针端与源库组合的初始快照阶段状态；页面只读。"
+        },
+        "route": "/monitor/data-source-state",
+        "bodyScroll": {
+          "docScrollW": 1920,
+          "docClientW": 1920
+        },
+        "globalContainers": {
+          "body": {
+            "rect": {
+              "x": 0,
+              "y": 0,
+              "w": 1920,
+              "h": 1080,
+              "right": 1920,
+              "bottom": 1080
+            },
+            "offsetW": 1920,
+            "offsetH": 1080,
+            "clientW": 1920,
+            "scrollW": 1920,
+            "css": {
+              "width": "1920px",
+              "minWidth": "0px",
+              "maxWidth": "none",
+              "height": "1080px",
+              "padding": "0px",
+              "paddingLeft": "0px",
+              "paddingTop": "0px",
+              "background": "rgb(245, 247, 250)",
+              "borderRadius": "0px",
+              "border": "0px none rgb(48, 49, 51)",
+              "boxShadow": "none",
+              "fontWeight": "400",
+              "fontSize": "14px",
+              "color": "rgb(48, 49, 51)",
+              "display": "block",
+              "flexWrap": "nowrap",
+              "overflow": "visible",
+              "overflowX": "visible",
+              "pointerEvents": "auto",
+              "visibility": "visible",
+              "whiteSpace": "normal",
+              "textOverflow": "clip"
+            }
+          },
+          "contentArea": {
+            "rect": {
+              "x": 220,
+              "y": 48,
+              "w": 1700,
+              "h": 1032,
+              "right": 1920,
+              "bottom": 1080
+            },
+            "offsetW": 1700,
+            "offsetH": 1032,
+            "clientW": 1700,
+            "scrollW": 1700,
+            "css": {
+              "width": "1700px",
+              "minWidth": "auto",
+              "maxWidth": "none",
+              "height": "1032px",
+              "padding": "16px 20px",
+              "paddingLeft": "20px",
+              "paddingTop": "16px",
+              "background": "rgb(240, 242, 245)",
+              "borderRadius": "0px",
+              "border": "0px none rgb(48, 49, 51)",
+              "boxShadow": "none",
+              "fontWeight": "400",
+              "fontSize": "14px",
+              "color": "rgb(48, 49, 51)",
+              "display": "block",
+              "flexWrap": "nowrap",
+              "overflow": "auto",
+              "overflowX": "auto",
+              "pointerEvents": "auto",
+              "visibility": "visible",
+              "whiteSpace": "normal",
+              "textOverflow": "clip"
+            }
+          },
+          "contentCard": {
+            "rect": {
+              "x": 240,
+              "y": 64,
+              "w": 1660,
+              "h": 1808.5,
+              "right": 1900,
+              "bottom": 1872.5
+            },
+            "offsetW": 1660,
+            "offsetH": 1809,
+            "clientW": 1660,
+            "scrollW": 1660,
+            "css": {
+              "width": "1660px",
+              "minWidth": "0px",
+              "maxWidth": "none",
+              "height": "1808.5px",
+              "padding": "20px",
+              "paddingLeft": "20px",
+              "paddingTop": "20px",
+              "background": "rgb(255, 255, 255)",
+              "borderRadius": "4px",
+              "border": "0px none rgb(48, 49, 51)",
+              "boxShadow": "none",
+              "fontWeight": "400",
+              "fontSize": "14px",
+              "color": "rgb(48, 49, 51)",
+              "display": "block",
+              "flexWrap": "nowrap",
+              "overflow": "visible",
+              "overflowX": "visible",
+              "pointerEvents": "auto",
+              "visibility": "visible",
+              "whiteSpace": "normal",
+              "textOverflow": "clip"
+            }
+          }
+        },
+        "summaryCount": "共 30 条",
+        "summaryUnknown": "其中 6 条未知状态"
+      }
+    },
+    {
+      "viewport": "2560x1440",
+      "struct": {
+        "route": "/monitor/data-source-state",
+        "title": "CDC 配置管理平台",
+        "dssTitle": "源库快照状态",
+        "dssDesc": "展示各探针端与源库组合的初始快照阶段状态；页面只读。",
+        "menuItems": [
+          "数据源管理",
+          "探针端管理",
+          "数据订阅",
+          "中心端配置",
+          "CDC 节点状态",
+          "源库快照状态",
+          "数据同步进度",
+          "日志查询",
+          "故障历史",
+          "故障监控"
+        ],
+        "activeMenu": "源库快照状态",
+        "breadcrumb": [
+          "运行监控\n/",
+          "源库快照状态"
+        ],
+        "readOnlyProbe": {
+          "buttons": [
+            "查询",
+            "重置",
+            "立即刷新"
+          ],
+          "hasActionColumn": false,
+          "editableInputsOutsideQuery": 0,
+          "dssCardCount": 2,
+          "queryCard": true,
+          "resultCard": true,
+          "errorCard": false,
+          "dssPagePresent": true
+        },
+        "table": {
+          "exists": true,
+          "headers": [
+            "序号",
+            "探针端",
+            "源库",
+            "快照状态",
+            "快照启动时间",
+            "快照完成时间",
+            "记录更新时间"
+          ],
+          "headerCount": 7,
+          "bodyRowCount": 30,
+          "pagination": 0,
+          "sortableHeaders": 0,
+          "columns": [
+            "70",
+            "353",
+            "586",
+            "140",
+            "349",
+            "349",
+            "349",
+            "70",
+            "353",
+            "586",
+            "140",
+            "349",
+            "349",
+            "349"
+          ]
+        },
+        "pageIdentity": "dss-page",
+        "counts": {
+          "menuItems": 10,
+          "breadcrumb": 2
+        }
+      },
+      "dom": {
+        "table": {
+          "rect": {
+            "x": 292,
+            "y": 308.5,
+            "w": 2196,
+            "h": 1516,
+            "right": 2488,
+            "bottom": 1824.5
+          },
+          "offsetW": 2196,
+          "offsetH": 1516,
+          "clientW": 2196,
+          "scrollW": 2196,
+          "css": {
+            "width": "2196px",
+            "minWidth": "1175px",
+            "maxWidth": "100%",
+            "height": "1516px",
+            "padding": "0px",
+            "paddingLeft": "0px",
+            "paddingTop": "0px",
+            "background": "rgb(255, 255, 255)",
+            "borderRadius": "0px",
+            "border": "0px none rgb(96, 98, 102)",
+            "boxShadow": "none",
+            "fontWeight": "400",
+            "fontSize": "14px",
+            "color": "rgb(96, 98, 102)",
+            "display": "block",
+            "flexWrap": "nowrap",
+            "overflow": "hidden",
+            "overflowX": "hidden",
+            "pointerEvents": "auto",
+            "visibility": "visible",
+            "whiteSpace": "normal",
+            "textOverflow": "clip"
+          }
+        },
+        "rowHeight": 49,
+        "headers": [
+          {
+            "text": "序号",
+            "w": 70,
+            "css": {
+              "textAlign": "center",
+              "padding": "11px 0px"
+            }
+          },
+          {
+            "text": "探针端",
+            "w": 353,
+            "css": {
+              "textAlign": "left",
+              "padding": "11px 0px"
+            }
+          },
+          {
+            "text": "源库",
+            "w": 586,
+            "css": {
+              "textAlign": "left",
+              "padding": "11px 0px"
+            }
+          },
+          {
+            "text": "快照状态",
+            "w": 140,
+            "css": {
+              "textAlign": "center",
+              "padding": "11px 0px"
+            }
+          },
+          {
+            "text": "快照启动时间",
+            "w": 349,
+            "css": {
+              "textAlign": "left",
+              "padding": "11px 0px"
+            }
+          },
+          {
+            "text": "快照完成时间",
+            "w": 349,
+            "css": {
+              "textAlign": "left",
+              "padding": "11px 0px"
+            }
+          },
+          {
+            "text": "记录更新时间",
+            "w": 349,
+            "css": {
+              "textAlign": "left",
+              "padding": "11px 0px"
+            }
+          }
+        ],
+        "rowCount": 30,
+        "pagination": 0,
+        "sortArrows": 0,
+        "titles": {
+          "h2": "源库快照状态",
+          "desc": "展示各探针端与源库组合的初始快照阶段状态；页面只读。"
+        },
+        "route": "/monitor/data-source-state",
+        "bodyScroll": {
+          "docScrollW": 2560,
+          "docClientW": 2560
+        },
+        "globalContainers": {
+          "body": {
+            "rect": {
+              "x": 0,
+              "y": 0,
+              "w": 2560,
+              "h": 1440,
+              "right": 2560,
+              "bottom": 1440
+            },
+            "offsetW": 2560,
+            "offsetH": 1440,
+            "clientW": 2560,
+            "scrollW": 2560,
+            "css": {
+              "width": "2560px",
+              "minWidth": "0px",
+              "maxWidth": "none",
+              "height": "1440px",
+              "padding": "0px",
+              "paddingLeft": "0px",
+              "paddingTop": "0px",
+              "background": "rgb(245, 247, 250)",
+              "borderRadius": "0px",
+              "border": "0px none rgb(48, 49, 51)",
+              "boxShadow": "none",
+              "fontWeight": "400",
+              "fontSize": "14px",
+              "color": "rgb(48, 49, 51)",
+              "display": "block",
+              "flexWrap": "nowrap",
+              "overflow": "visible",
+              "overflowX": "visible",
+              "pointerEvents": "auto",
+              "visibility": "visible",
+              "whiteSpace": "normal",
+              "textOverflow": "clip"
+            }
+          },
+          "contentArea": {
+            "rect": {
+              "x": 220,
+              "y": 48,
+              "w": 2340,
+              "h": 1392,
+              "right": 2560,
+              "bottom": 1440
+            },
+            "offsetW": 2340,
+            "offsetH": 1392,
+            "clientW": 2340,
+            "scrollW": 2340,
+            "css": {
+              "width": "2340px",
+              "minWidth": "auto",
+              "maxWidth": "none",
+              "height": "1392px",
+              "padding": "16px 20px",
+              "paddingLeft": "20px",
+              "paddingTop": "16px",
+              "background": "rgb(240, 242, 245)",
+              "borderRadius": "0px",
+              "border": "0px none rgb(48, 49, 51)",
+              "boxShadow": "none",
+              "fontWeight": "400",
+              "fontSize": "14px",
+              "color": "rgb(48, 49, 51)",
+              "display": "block",
+              "flexWrap": "nowrap",
+              "overflow": "auto",
+              "overflowX": "auto",
+              "pointerEvents": "auto",
+              "visibility": "visible",
+              "whiteSpace": "normal",
+              "textOverflow": "clip"
+            }
+          },
+          "contentCard": {
+            "rect": {
+              "x": 240,
+              "y": 64,
+              "w": 2300,
+              "h": 1808.5,
+              "right": 2540,
+              "bottom": 1872.5
+            },
+            "offsetW": 2300,
+            "offsetH": 1809,
+            "clientW": 2300,
+            "scrollW": 2300,
+            "css": {
+              "width": "2300px",
+              "minWidth": "0px",
+              "maxWidth": "none",
+              "height": "1808.5px",
+              "padding": "20px",
+              "paddingLeft": "20px",
+              "paddingTop": "20px",
+              "background": "rgb(255, 255, 255)",
+              "borderRadius": "4px",
+              "border": "0px none rgb(48, 49, 51)",
+              "boxShadow": "none",
+              "fontWeight": "400",
+              "fontSize": "14px",
+              "color": "rgb(48, 49, 51)",
+              "display": "block",
+              "flexWrap": "nowrap",
+              "overflow": "visible",
+              "overflowX": "visible",
+              "pointerEvents": "auto",
+              "visibility": "visible",
+              "whiteSpace": "normal",
+              "textOverflow": "clip"
+            }
+          }
+        },
+        "summaryCount": "共 30 条",
+        "summaryUnknown": "其中 6 条未知状态"
+      }
+    }
+  ],
+  "global": {
+    "consoleErrors": [],
+    "nonGet": []
+  }
+}

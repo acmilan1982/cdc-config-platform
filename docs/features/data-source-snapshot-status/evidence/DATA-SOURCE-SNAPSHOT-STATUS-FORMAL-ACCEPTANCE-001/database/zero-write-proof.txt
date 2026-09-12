@@ -1,0 +1,31 @@
+== ZERO-WRITE PROOF: before vs after (bodies of the same read-only queries; section headers excluded) ==
+before = baseline-before.txt (captured 2026-09-12 ~16:10, before the browser/HTTP acceptance run)
+after  = baseline-after.txt  (captured 2026-09-12 ~19:57, after the browser/HTTP acceptance run)
+
+SECTION A: IDENTICAL
+SECTION B: IDENTICAL
+SECTION C: IDENTICAL
+SECTION D: IDENTICAL
+SECTION H: IDENTICAL
+SECTION K: IDENTICAL
+
+Concrete values (after; identical before):
+  A  CDC_DATA_SOURCE_RUN_STATE rows = 30 ; CDC_CLIENT_MULTIPLE = 16 ; CDC_DATA_SOURCE = 34
+  C  status distribution = SNAPSHOT_COMPLETED 11 / SNAPSHOT_RUNNING 13 / SNAPSHOT_STALE 1 / SNAPSHOT_UNKNOWN 1 / STARTING 1 / UNKNOWN 2 / UNKNOWN_MODE 1
+  D  RUN_STATE content_hash_sum = 6.2239E+10 over 30 rows
+  H  joined_rows = 30 (LEFT JOIN does not change row count)
+  K  null_last_seen 13 / null_completed 19 / null_updated 0
+
+== L. CDC_STATS_* row counts (after; scheduler domain, kept separate from the Feature three tables per prompt 6.3) ==
+TABLE_NAME		       ROW_COUNT
+----------------------------- ----------
+CDC_STATS_TASK_CONFIG		       1
+CDC_STATS_WATERMARK		       2
+CDC_STATS_CUMULATIVE_OVERVIEW	       1
+CDC_STATS_DAILY_OVERVIEW	       3
+CDC_STATS_DIM_CUMULATIVE	      13
+CDC_STATS_DIM_DAILY		      17
+
+Note: L is a current-state observation only; no before/after delta is claimed for CDC_STATS_*.
+Scheduler write behaviour is evidenced separately by readonly/runtime-audit.txt (0 write
+statements; 4 hourly rounds all stopReason=all_caught_up correctProcessed=0 errorProcessed=0).

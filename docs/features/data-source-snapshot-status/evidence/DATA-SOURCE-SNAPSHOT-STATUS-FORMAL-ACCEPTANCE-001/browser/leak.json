@@ -1,0 +1,56 @@
+{
+  "routes": [
+    {
+      "route": "/large-screen",
+      "hasDssElement": false,
+      "dssElementClasses": [],
+      "dssClassAttrMention": false,
+      "dssStyleRuleCount": 0,
+      "dssStyleRulesSample": [],
+      "elPopperCount": 0,
+      "hasDssPage": false,
+      "hasDssTable": false,
+      "dssVarDefined": false
+    },
+    {
+      "route": "/config/data-source",
+      "hasDssElement": false,
+      "dssElementClasses": [],
+      "dssClassAttrMention": false,
+      "dssStyleRuleCount": 0,
+      "dssStyleRulesSample": [],
+      "elPopperCount": 0,
+      "hasDssPage": false,
+      "hasDssTable": false,
+      "dssVarDefined": false
+    },
+    {
+      "route": "/monitor/cdc-node",
+      "hasDssElement": false,
+      "dssElementClasses": [],
+      "dssClassAttrMention": false,
+      "dssStyleRuleCount": 0,
+      "dssStyleRulesSample": [],
+      "elPopperCount": 1,
+      "hasDssPage": false,
+      "hasDssTable": false,
+      "dssVarDefined": false
+    },
+    {
+      "route": "/config/client",
+      "hasDssElement": false,
+      "dssElementClasses": [],
+      "dssClassAttrMention": false,
+      "dssStyleRuleCount": 0,
+      "dssStyleRulesSample": [],
+      "elPopperCount": 2,
+      "hasDssPage": false,
+      "hasDssTable": false,
+      "dssVarDefined": false
+    }
+  ],
+  "global": {
+    "consoleErrors": [],
+    "nonGet": []
+  }
+}

@@ -1,0 +1,1375 @@
+{
+  "mode": "table-visual",
+  "route": "http://127.0.0.1:5173/monitor/data-source-state",
+  "viewports": [
+    {
+      "viewport": "1280x800",
+      "base": {
+        "table": {
+          "rect": {
+            "l": 292,
+            "t": 346.5,
+            "w": 1175,
+            "h": 1516,
+            "r": 1467,
+            "b": 1862.5
+          },
+          "minWidth": "1175px",
+          "width": "1175px"
+        },
+        "tableWrap": {
+          "rect": {
+            "l": 292,
+            "t": 346.5,
+            "w": 916,
+            "h": 1516,
+            "r": 1208,
+            "b": 1862.5
+          },
+          "overflowX": "auto",
+          "scrollW": 1175,
+          "clientW": 916
+        },
+        "resultBody": {
+          "l": 276,
+          "t": 336.5,
+          "w": 948,
+          "h": 1540,
+          "r": 1224,
+          "b": 1876.5
+        },
+        "headerWidths": [
+          70,
+          170,
+          285,
+          140,
+          170,
+          170,
+          170
+        ],
+        "headerTexts": [
+          "序号",
+          "探针端",
+          "源库",
+          "快照状态",
+          "快照启动时间",
+          "快照完成时间",
+          "记录更新时间"
+        ],
+        "cellWidths": [
+          70,
+          170,
+          285,
+          140,
+          170,
+          170,
+          170
+        ],
+        "rowHeight": 49,
+        "timeTexts": [
+          "2026-09-06 11:02:00",
+          "--",
+          "2026-09-06 11:02:00"
+        ],
+        "timeTextWidths": [
+          148.23,
+          15.61,
+          148.23
+        ],
+        "timeCellPadding": {
+          "pl": "8px",
+          "pr": "8px",
+          "pt": "0px",
+          "pb": "0px"
+        },
+        "timeFontFamily": "\"SF Mono\", \"JetBrains Mono\", Menlo, Consolas, \"Liberation Mono\", monospace",
+        "timeScrollOverflow": [
+          0,
+          0,
+          0
+        ],
+        "unknownRowCount": 6,
+        "normalRowCount": 24,
+        "unknownRowBg": "rgba(254, 243, 199, 0.42)",
+        "normalRowBg": "rgba(0, 0, 0, 0)",
+        "summaryCount": {
+          "text": "共 30 条",
+          "l": 292,
+          "t": 282.7,
+          "w": 58.7,
+          "h": 25.59,
+          "r": 350.7,
+          "b": 308.3,
+          "css": {
+            "fontSize": "16px",
+            "fontWeight": "700"
+          }
+        },
+        "summaryUnknown": {
+          "text": "其中 6 条未知状态",
+          "l": 360.7,
+          "t": 284.5,
+          "w": 113.34,
+          "h": 22,
+          "r": 474.05,
+          "b": 306.5,
+          "css": {
+            "background": "rgb(254, 243, 199)",
+            "color": "rgb(180, 83, 9)",
+            "radius": "999px",
+            "lineHeight": "22px"
+          }
+        },
+        "refreshGroup": {
+          "l": 811.28,
+          "t": 279.5,
+          "w": 396.72,
+          "h": 32,
+          "r": 1208,
+          "b": 311.5
+        },
+        "refreshGroupChildren": [
+          {
+            "cls": {},
+            "tag": "svg",
+            "rect": {
+              "l": 811.28,
+              "t": 287.5,
+              "w": 16,
+              "h": 16,
+              "r": 827.28,
+              "b": 303.5
+            }
+          },
+          {
+            "cls": "dss-countdown-text",
+            "tag": "SPAN",
+            "rect": {
+              "l": 835.28,
+              "t": 285.09,
+              "w": 96.11,
+              "h": 20.8,
+              "r": 931.39,
+              "b": 305.89
+            }
+          },
+          {
+            "cls": "dss-refresh-sep",
+            "tag": "SPAN",
+            "rect": {
+              "l": 939.39,
+              "t": 288.5,
+              "w": 1,
+              "h": 14,
+              "r": 940.39,
+              "b": 302.5
+            }
+          },
+          {
+            "cls": "dss-refresh-time",
+            "tag": "SPAN",
+            "rect": {
+              "l": 948.39,
+              "t": 285.09,
+              "w": 141.61,
+              "h": 20.8,
+              "r": 1090,
+              "b": 305.89
+            }
+          },
+          {
+            "cls": "el-button dss-refresh-btn",
+            "tag": "BUTTON",
+            "rect": {
+              "l": 1098,
+              "t": 279.5,
+              "w": 110,
+              "h": 32,
+              "r": 1208,
+              "b": 311.5
+            }
+          }
+        ],
+        "hasDssRefreshSep": true,
+        "countdownRing": {
+          "rect": {
+            "l": 811.28,
+            "t": 287.5,
+            "w": 16,
+            "h": 16,
+            "r": 827.28,
+            "b": 303.5
+          },
+          "viewBox": "0 0 16 16",
+          "srcW": null,
+          "srcH": null
+        },
+        "ringProgress": {
+          "stroke": "rgb(37, 99, 235)",
+          "strokeWidth": "2px",
+          "dashArray": "40.84",
+          "transform": "rotate(-90 8 8)"
+        },
+        "ringTrack": {
+          "stroke": "rgb(228, 228, 231)",
+          "strokeWidth": "2px"
+        },
+        "countdownText": "59 秒后自动刷新",
+        "countdownSeconds": "59",
+        "countdownUnit": "秒后自动刷新",
+        "refreshBtn": {
+          "rect": {
+            "l": 1098,
+            "t": 279.5,
+            "w": 110,
+            "h": 32,
+            "r": 1208,
+            "b": 311.5
+          },
+          "text": "立即刷新",
+          "loading": false
+        },
+        "refreshTime": {
+          "text": "最近成功刷新：19:49:29",
+          "rect": {
+            "l": 948.39,
+            "t": 285.09,
+            "w": 141.61,
+            "h": 20.8,
+            "r": 1090,
+            "b": 305.89
+          }
+        },
+        "queryBtn": {
+          "rect": {
+            "l": 292,
+            "t": 215.5,
+            "w": 62,
+            "h": 30,
+            "r": 354,
+            "b": 245.5
+          },
+          "text": "查询"
+        },
+        "resetBtn": {
+          "rect": {
+            "l": 374,
+            "t": 215.5,
+            "w": 58,
+            "h": 30,
+            "r": 432,
+            "b": 245.5
+          },
+          "text": "重置"
+        },
+        "labels": [
+          {
+            "text": "探针端",
+            "x": 292,
+            "y": 180.3
+          },
+          {
+            "text": "源库",
+            "x": 594,
+            "y": 180.3
+          },
+          {
+            "text": "快照状态",
+            "x": 942,
+            "y": 180.3
+          }
+        ],
+        "queryBarH": 70,
+        "queryActionsY": 215.5,
+        "queryActionsX": 292,
+        "docScroll": {
+          "sw": 1280,
+          "cw": 1280
+        },
+        "hasImportant": 0,
+        "elPopperOverrideRules": 19
+      },
+      "before": {
+        "btnW": 110,
+        "groupX": 811.28,
+        "groupY": 279.5,
+        "actionsY": 215.5,
+        "actionsX": 292
+      },
+      "hoverUnknownBg": "rgba(254, 243, 199, 0.65)",
+      "loading": {
+        "btnW": 110,
+        "btnLoading": true,
+        "groupX": 811.28,
+        "groupY": 279.5,
+        "actionsY": 215.5,
+        "actionsX": 292
+      },
+      "after": {
+        "btnW": 110,
+        "groupX": 811.28,
+        "groupY": 279.5,
+        "actionsY": 215.5,
+        "actionsX": 292
+      },
+      "withTooltip": {
+        "groupX": 811.28,
+        "groupY": 279.5,
+        "actionsY": 215.5,
+        "actionsX": 292,
+        "rowH": 49
+      }
+    },
+    {
+      "viewport": "1700x920",
+      "base": {
+        "table": {
+          "rect": {
+            "l": 292,
+            "t": 308.5,
+            "w": 1336,
+            "h": 1516,
+            "r": 1628,
+            "b": 1824.5
+          },
+          "minWidth": "1175px",
+          "width": "1336px"
+        },
+        "tableWrap": {
+          "rect": {
+            "l": 292,
+            "t": 308.5,
+            "w": 1336,
+            "h": 1516,
+            "r": 1628,
+            "b": 1824.5
+          },
+          "overflowX": "auto",
+          "scrollW": 1336,
+          "clientW": 1336
+        },
+        "resultBody": {
+          "l": 276,
+          "t": 298.5,
+          "w": 1368,
+          "h": 1540,
+          "r": 1644,
+          "b": 1838.5
+        },
+        "headerWidths": [
+          70,
+          200,
+          332,
+          140,
+          198,
+          198,
+          198
+        ],
+        "headerTexts": [
+          "序号",
+          "探针端",
+          "源库",
+          "快照状态",
+          "快照启动时间",
+          "快照完成时间",
+          "记录更新时间"
+        ],
+        "cellWidths": [
+          70,
+          200,
+          332,
+          140,
+          198,
+          198,
+          198
+        ],
+        "rowHeight": 49,
+        "timeTexts": [
+          "2026-09-06 11:02:00",
+          "--",
+          "2026-09-06 11:02:00"
+        ],
+        "timeTextWidths": [
+          148.23,
+          15.61,
+          148.23
+        ],
+        "timeCellPadding": {
+          "pl": "8px",
+          "pr": "8px",
+          "pt": "0px",
+          "pb": "0px"
+        },
+        "timeFontFamily": "\"SF Mono\", \"JetBrains Mono\", Menlo, Consolas, \"Liberation Mono\", monospace",
+        "timeScrollOverflow": [
+          0,
+          0,
+          0
+        ],
+        "unknownRowCount": 6,
+        "normalRowCount": 24,
+        "unknownRowBg": "rgba(254, 243, 199, 0.42)",
+        "normalRowBg": "rgba(0, 0, 0, 0)",
+        "summaryCount": {
+          "text": "共 30 条",
+          "l": 292,
+          "t": 244.7,
+          "w": 58.7,
+          "h": 25.59,
+          "r": 350.7,
+          "b": 270.3,
+          "css": {
+            "fontSize": "16px",
+            "fontWeight": "700"
+          }
+        },
+        "summaryUnknown": {
+          "text": "其中 6 条未知状态",
+          "l": 360.7,
+          "t": 246.5,
+          "w": 113.34,
+          "h": 22,
+          "r": 474.05,
+          "b": 268.5,
+          "css": {
+            "background": "rgb(254, 243, 199)",
+            "color": "rgb(180, 83, 9)",
+            "radius": "999px",
+            "lineHeight": "22px"
+          }
+        },
+        "refreshGroup": {
+          "l": 1231.28,
+          "t": 241.5,
+          "w": 396.72,
+          "h": 32,
+          "r": 1628,
+          "b": 273.5
+        },
+        "refreshGroupChildren": [
+          {
+            "cls": {},
+            "tag": "svg",
+            "rect": {
+              "l": 1231.28,
+              "t": 249.5,
+              "w": 16,
+              "h": 16,
+              "r": 1247.28,
+              "b": 265.5
+            }
+          },
+          {
+            "cls": "dss-countdown-text",
+            "tag": "SPAN",
+            "rect": {
+              "l": 1255.28,
+              "t": 247.09,
+              "w": 96.11,
+              "h": 20.8,
+              "r": 1351.39,
+              "b": 267.89
+            }
+          },
+          {
+            "cls": "dss-refresh-sep",
+            "tag": "SPAN",
+            "rect": {
+              "l": 1359.39,
+              "t": 250.5,
+              "w": 1,
+              "h": 14,
+              "r": 1360.39,
+              "b": 264.5
+            }
+          },
+          {
+            "cls": "dss-refresh-time",
+            "tag": "SPAN",
+            "rect": {
+              "l": 1368.39,
+              "t": 247.09,
+              "w": 141.61,
+              "h": 20.8,
+              "r": 1510,
+              "b": 267.89
+            }
+          },
+          {
+            "cls": "el-button dss-refresh-btn",
+            "tag": "BUTTON",
+            "rect": {
+              "l": 1518,
+              "t": 241.5,
+              "w": 110,
+              "h": 32,
+              "r": 1628,
+              "b": 273.5
+            }
+          }
+        ],
+        "hasDssRefreshSep": true,
+        "countdownRing": {
+          "rect": {
+            "l": 1231.28,
+            "t": 249.5,
+            "w": 16,
+            "h": 16,
+            "r": 1247.28,
+            "b": 265.5
+          },
+          "viewBox": "0 0 16 16",
+          "srcW": null,
+          "srcH": null
+        },
+        "ringProgress": {
+          "stroke": "rgb(37, 99, 235)",
+          "strokeWidth": "2px",
+          "dashArray": "40.84",
+          "transform": "rotate(-90 8 8)"
+        },
+        "ringTrack": {
+          "stroke": "rgb(228, 228, 231)",
+          "strokeWidth": "2px"
+        },
+        "countdownText": "59 秒后自动刷新",
+        "countdownSeconds": "59",
+        "countdownUnit": "秒后自动刷新",
+        "refreshBtn": {
+          "rect": {
+            "l": 1518,
+            "t": 241.5,
+            "w": 110,
+            "h": 32,
+            "r": 1628,
+            "b": 273.5
+          },
+          "text": "立即刷新",
+          "loading": false
+        },
+        "refreshTime": {
+          "text": "最近成功刷新：19:49:36",
+          "rect": {
+            "l": 1368.39,
+            "t": 247.09,
+            "w": 141.61,
+            "h": 20.8,
+            "r": 1510,
+            "b": 267.89
+          }
+        },
+        "queryBtn": {
+          "rect": {
+            "l": 1218,
+            "t": 176.5,
+            "w": 62,
+            "h": 30,
+            "r": 1280,
+            "b": 206.5
+          },
+          "text": "查询"
+        },
+        "resetBtn": {
+          "rect": {
+            "l": 1300,
+            "t": 176.5,
+            "w": 58,
+            "h": 30,
+            "r": 1358,
+            "b": 206.5
+          },
+          "text": "重置"
+        },
+        "labels": [
+          {
+            "text": "探针端",
+            "x": 292,
+            "y": 180.3
+          },
+          {
+            "text": "源库",
+            "x": 594,
+            "y": 180.3
+          },
+          {
+            "text": "快照状态",
+            "x": 942,
+            "y": 180.3
+          }
+        ],
+        "queryBarH": 32,
+        "queryActionsY": 176.5,
+        "queryActionsX": 1218,
+        "docScroll": {
+          "sw": 1700,
+          "cw": 1700
+        },
+        "hasImportant": 0,
+        "elPopperOverrideRules": 19
+      },
+      "before": {
+        "btnW": 110,
+        "groupX": 1231.28,
+        "groupY": 241.5,
+        "actionsY": 176.5,
+        "actionsX": 1218
+      },
+      "hoverUnknownBg": "rgba(254, 243, 199, 0.65)",
+      "loading": {
+        "btnW": 110,
+        "btnLoading": true,
+        "groupX": 1231.28,
+        "groupY": 241.5,
+        "actionsY": 176.5,
+        "actionsX": 1218
+      },
+      "after": {
+        "btnW": 110,
+        "groupX": 1231.28,
+        "groupY": 241.5,
+        "actionsY": 176.5,
+        "actionsX": 1218
+      },
+      "withTooltip": {
+        "groupX": 1231.28,
+        "groupY": 241.5,
+        "actionsY": 176.5,
+        "actionsX": 1218,
+        "rowH": 49
+      }
+    },
+    {
+      "viewport": "1920x1080",
+      "base": {
+        "table": {
+          "rect": {
+            "l": 292,
+            "t": 308.5,
+            "w": 1556,
+            "h": 1516,
+            "r": 1848,
+            "b": 1824.5
+          },
+          "minWidth": "1175px",
+          "width": "1556px"
+        },
+        "tableWrap": {
+          "rect": {
+            "l": 292,
+            "t": 308.5,
+            "w": 1556,
+            "h": 1516,
+            "r": 1848,
+            "b": 1824.5
+          },
+          "overflowX": "auto",
+          "scrollW": 1556,
+          "clientW": 1556
+        },
+        "resultBody": {
+          "l": 276,
+          "t": 298.5,
+          "w": 1588,
+          "h": 1540,
+          "r": 1864,
+          "b": 1838.5
+        },
+        "headerWidths": [
+          70,
+          238,
+          397,
+          140,
+          237,
+          237,
+          237
+        ],
+        "headerTexts": [
+          "序号",
+          "探针端",
+          "源库",
+          "快照状态",
+          "快照启动时间",
+          "快照完成时间",
+          "记录更新时间"
+        ],
+        "cellWidths": [
+          70,
+          238,
+          397,
+          140,
+          237,
+          237,
+          237
+        ],
+        "rowHeight": 49,
+        "timeTexts": [
+          "2026-09-06 11:02:00",
+          "--",
+          "2026-09-06 11:02:00"
+        ],
+        "timeTextWidths": [
+          148.23,
+          15.61,
+          148.23
+        ],
+        "timeCellPadding": {
+          "pl": "8px",
+          "pr": "8px",
+          "pt": "0px",
+          "pb": "0px"
+        },
+        "timeFontFamily": "\"SF Mono\", \"JetBrains Mono\", Menlo, Consolas, \"Liberation Mono\", monospace",
+        "timeScrollOverflow": [
+          0,
+          0,
+          0
+        ],
+        "unknownRowCount": 6,
+        "normalRowCount": 24,
+        "unknownRowBg": "rgba(254, 243, 199, 0.42)",
+        "normalRowBg": "rgba(0, 0, 0, 0)",
+        "summaryCount": {
+          "text": "共 30 条",
+          "l": 292,
+          "t": 244.7,
+          "w": 58.7,
+          "h": 25.59,
+          "r": 350.7,
+          "b": 270.3,
+          "css": {
+            "fontSize": "16px",
+            "fontWeight": "700"
+          }
+        },
+        "summaryUnknown": {
+          "text": "其中 6 条未知状态",
+          "l": 360.7,
+          "t": 246.5,
+          "w": 113.34,
+          "h": 22,
+          "r": 474.05,
+          "b": 268.5,
+          "css": {
+            "background": "rgb(254, 243, 199)",
+            "color": "rgb(180, 83, 9)",
+            "radius": "999px",
+            "lineHeight": "22px"
+          }
+        },
+        "refreshGroup": {
+          "l": 1451.28,
+          "t": 241.5,
+          "w": 396.72,
+          "h": 32,
+          "r": 1848,
+          "b": 273.5
+        },
+        "refreshGroupChildren": [
+          {
+            "cls": {},
+            "tag": "svg",
+            "rect": {
+              "l": 1451.28,
+              "t": 249.5,
+              "w": 16,
+              "h": 16,
+              "r": 1467.28,
+              "b": 265.5
+            }
+          },
+          {
+            "cls": "dss-countdown-text",
+            "tag": "SPAN",
+            "rect": {
+              "l": 1475.28,
+              "t": 247.09,
+              "w": 96.11,
+              "h": 20.8,
+              "r": 1571.39,
+              "b": 267.89
+            }
+          },
+          {
+            "cls": "dss-refresh-sep",
+            "tag": "SPAN",
+            "rect": {
+              "l": 1579.39,
+              "t": 250.5,
+              "w": 1,
+              "h": 14,
+              "r": 1580.39,
+              "b": 264.5
+            }
+          },
+          {
+            "cls": "dss-refresh-time",
+            "tag": "SPAN",
+            "rect": {
+              "l": 1588.39,
+              "t": 247.09,
+              "w": 141.61,
+              "h": 20.8,
+              "r": 1730,
+              "b": 267.89
+            }
+          },
+          {
+            "cls": "el-button dss-refresh-btn",
+            "tag": "BUTTON",
+            "rect": {
+              "l": 1738,
+              "t": 241.5,
+              "w": 110,
+              "h": 32,
+              "r": 1848,
+              "b": 273.5
+            }
+          }
+        ],
+        "hasDssRefreshSep": true,
+        "countdownRing": {
+          "rect": {
+            "l": 1451.28,
+            "t": 249.5,
+            "w": 16,
+            "h": 16,
+            "r": 1467.28,
+            "b": 265.5
+          },
+          "viewBox": "0 0 16 16",
+          "srcW": null,
+          "srcH": null
+        },
+        "ringProgress": {
+          "stroke": "rgb(37, 99, 235)",
+          "strokeWidth": "2px",
+          "dashArray": "40.84",
+          "transform": "rotate(-90 8 8)"
+        },
+        "ringTrack": {
+          "stroke": "rgb(228, 228, 231)",
+          "strokeWidth": "2px"
+        },
+        "countdownText": "59 秒后自动刷新",
+        "countdownSeconds": "59",
+        "countdownUnit": "秒后自动刷新",
+        "refreshBtn": {
+          "rect": {
+            "l": 1738,
+            "t": 241.5,
+            "w": 110,
+            "h": 32,
+            "r": 1848,
+            "b": 273.5
+          },
+          "text": "立即刷新",
+          "loading": false
+        },
+        "refreshTime": {
+          "text": "最近成功刷新：19:49:42",
+          "rect": {
+            "l": 1588.39,
+            "t": 247.09,
+            "w": 141.61,
+            "h": 20.8,
+            "r": 1730,
+            "b": 267.89
+          }
+        },
+        "queryBtn": {
+          "rect": {
+            "l": 1218,
+            "t": 176.5,
+            "w": 62,
+            "h": 30,
+            "r": 1280,
+            "b": 206.5
+          },
+          "text": "查询"
+        },
+        "resetBtn": {
+          "rect": {
+            "l": 1300,
+            "t": 176.5,
+            "w": 58,
+            "h": 30,
+            "r": 1358,
+            "b": 206.5
+          },
+          "text": "重置"
+        },
+        "labels": [
+          {
+            "text": "探针端",
+            "x": 292,
+            "y": 180.3
+          },
+          {
+            "text": "源库",
+            "x": 594,
+            "y": 180.3
+          },
+          {
+            "text": "快照状态",
+            "x": 942,
+            "y": 180.3
+          }
+        ],
+        "queryBarH": 32,
+        "queryActionsY": 176.5,
+        "queryActionsX": 1218,
+        "docScroll": {
+          "sw": 1920,
+          "cw": 1920
+        },
+        "hasImportant": 0,
+        "elPopperOverrideRules": 19
+      },
+      "before": {
+        "btnW": 110,
+        "groupX": 1451.28,
+        "groupY": 241.5,
+        "actionsY": 176.5,
+        "actionsX": 1218
+      },
+      "hoverUnknownBg": "rgba(254, 243, 199, 0.655)",
+      "loading": {
+        "btnW": 110,
+        "btnLoading": true,
+        "groupX": 1451.28,
+        "groupY": 241.5,
+        "actionsY": 176.5,
+        "actionsX": 1218
+      },
+      "after": {
+        "btnW": 110,
+        "groupX": 1451.28,
+        "groupY": 241.5,
+        "actionsY": 176.5,
+        "actionsX": 1218
+      },
+      "withTooltip": {
+        "groupX": 1451.28,
+        "groupY": 241.5,
+        "actionsY": 176.5,
+        "actionsX": 1218,
+        "rowH": 49
+      }
+    },
+    {
+      "viewport": "2560x1440",
+      "base": {
+        "table": {
+          "rect": {
+            "l": 292,
+            "t": 308.5,
+            "w": 2196,
+            "h": 1516,
+            "r": 2488,
+            "b": 1824.5
+          },
+          "minWidth": "1175px",
+          "width": "2196px"
+        },
+        "tableWrap": {
+          "rect": {
+            "l": 292,
+            "t": 308.5,
+            "w": 2196,
+            "h": 1516,
+            "r": 2488,
+            "b": 1824.5
+          },
+          "overflowX": "auto",
+          "scrollW": 2196,
+          "clientW": 2196
+        },
+        "resultBody": {
+          "l": 276,
+          "t": 298.5,
+          "w": 2228,
+          "h": 1540,
+          "r": 2504,
+          "b": 1838.5
+        },
+        "headerWidths": [
+          70,
+          353,
+          586,
+          140,
+          349,
+          349,
+          349
+        ],
+        "headerTexts": [
+          "序号",
+          "探针端",
+          "源库",
+          "快照状态",
+          "快照启动时间",
+          "快照完成时间",
+          "记录更新时间"
+        ],
+        "cellWidths": [
+          70,
+          353,
+          586,
+          140,
+          349,
+          349,
+          349
+        ],
+        "rowHeight": 49,
+        "timeTexts": [
+          "2026-09-06 11:02:00",
+          "--",
+          "2026-09-06 11:02:00"
+        ],
+        "timeTextWidths": [
+          148.23,
+          15.61,
+          148.23
+        ],
+        "timeCellPadding": {
+          "pl": "8px",
+          "pr": "8px",
+          "pt": "0px",
+          "pb": "0px"
+        },
+        "timeFontFamily": "\"SF Mono\", \"JetBrains Mono\", Menlo, Consolas, \"Liberation Mono\", monospace",
+        "timeScrollOverflow": [
+          0,
+          0,
+          0
+        ],
+        "unknownRowCount": 6,
+        "normalRowCount": 24,
+        "unknownRowBg": "rgba(254, 243, 199, 0.42)",
+        "normalRowBg": "rgba(0, 0, 0, 0)",
+        "summaryCount": {
+          "text": "共 30 条",
+          "l": 292,
+          "t": 244.7,
+          "w": 58.7,
+          "h": 25.59,
+          "r": 350.7,
+          "b": 270.3,
+          "css": {
+            "fontSize": "16px",
+            "fontWeight": "700"
+          }
+        },
+        "summaryUnknown": {
+          "text": "其中 6 条未知状态",
+          "l": 360.7,
+          "t": 246.5,
+          "w": 113.34,
+          "h": 22,
+          "r": 474.05,
+          "b": 268.5,
+          "css": {
+            "background": "rgb(254, 243, 199)",
+            "color": "rgb(180, 83, 9)",
+            "radius": "999px",
+            "lineHeight": "22px"
+          }
+        },
+        "refreshGroup": {
+          "l": 2091.28,
+          "t": 241.5,
+          "w": 396.72,
+          "h": 32,
+          "r": 2488,
+          "b": 273.5
+        },
+        "refreshGroupChildren": [
+          {
+            "cls": {},
+            "tag": "svg",
+            "rect": {
+              "l": 2091.28,
+              "t": 249.5,
+              "w": 16,
+              "h": 16,
+              "r": 2107.28,
+              "b": 265.5
+            }
+          },
+          {
+            "cls": "dss-countdown-text",
+            "tag": "SPAN",
+            "rect": {
+              "l": 2115.28,
+              "t": 247.09,
+              "w": 96.11,
+              "h": 20.8,
+              "r": 2211.39,
+              "b": 267.89
+            }
+          },
+          {
+            "cls": "dss-refresh-sep",
+            "tag": "SPAN",
+            "rect": {
+              "l": 2219.39,
+              "t": 250.5,
+              "w": 1,
+              "h": 14,
+              "r": 2220.39,
+              "b": 264.5
+            }
+          },
+          {
+            "cls": "dss-refresh-time",
+            "tag": "SPAN",
+            "rect": {
+              "l": 2228.39,
+              "t": 247.09,
+              "w": 141.61,
+              "h": 20.8,
+              "r": 2370,
+              "b": 267.89
+            }
+          },
+          {
+            "cls": "el-button dss-refresh-btn",
+            "tag": "BUTTON",
+            "rect": {
+              "l": 2378,
+              "t": 241.5,
+              "w": 110,
+              "h": 32,
+              "r": 2488,
+              "b": 273.5
+            }
+          }
+        ],
+        "hasDssRefreshSep": true,
+        "countdownRing": {
+          "rect": {
+            "l": 2091.28,
+            "t": 249.5,
+            "w": 16,
+            "h": 16,
+            "r": 2107.28,
+            "b": 265.5
+          },
+          "viewBox": "0 0 16 16",
+          "srcW": null,
+          "srcH": null
+        },
+        "ringProgress": {
+          "stroke": "rgb(37, 99, 235)",
+          "strokeWidth": "2px",
+          "dashArray": "40.84",
+          "transform": "rotate(-90 8 8)"
+        },
+        "ringTrack": {
+          "stroke": "rgb(228, 228, 231)",
+          "strokeWidth": "2px"
+        },
+        "countdownText": "59 秒后自动刷新",
+        "countdownSeconds": "59",
+        "countdownUnit": "秒后自动刷新",
+        "refreshBtn": {
+          "rect": {
+            "l": 2378,
+            "t": 241.5,
+            "w": 110,
+            "h": 32,
+            "r": 2488,
+            "b": 273.5
+          },
+          "text": "立即刷新",
+          "loading": false
+        },
+        "refreshTime": {
+          "text": "最近成功刷新：19:49:49",
+          "rect": {
+            "l": 2228.39,
+            "t": 247.09,
+            "w": 141.61,
+            "h": 20.8,
+            "r": 2370,
+            "b": 267.89
+          }
+        },
+        "queryBtn": {
+          "rect": {
+            "l": 1218,
+            "t": 176.5,
+            "w": 62,
+            "h": 30,
+            "r": 1280,
+            "b": 206.5
+          },
+          "text": "查询"
+        },
+        "resetBtn": {
+          "rect": {
+            "l": 1300,
+            "t": 176.5,
+            "w": 58,
+            "h": 30,
+            "r": 1358,
+            "b": 206.5
+          },
+          "text": "重置"
+        },
+        "labels": [
+          {
+            "text": "探针端",
+            "x": 292,
+            "y": 180.3
+          },
+          {
+            "text": "源库",
+            "x": 594,
+            "y": 180.3
+          },
+          {
+            "text": "快照状态",
+            "x": 942,
+            "y": 180.3
+          }
+        ],
+        "queryBarH": 32,
+        "queryActionsY": 176.5,
+        "queryActionsX": 1218,
+        "docScroll": {
+          "sw": 2560,
+          "cw": 2560
+        },
+        "hasImportant": 0,
+        "elPopperOverrideRules": 19
+      },
+      "before": {
+        "btnW": 110,
+        "groupX": 2091.28,
+        "groupY": 241.5,
+        "actionsY": 176.5,
+        "actionsX": 1218
+      },
+      "hoverUnknownBg": "rgba(254, 243, 199, 0.655)",
+      "loading": {
+        "btnW": 110,
+        "btnLoading": true,
+        "groupX": 2091.28,
+        "groupY": 241.5,
+        "actionsY": 176.5,
+        "actionsX": 1218
+      },
+      "after": {
+        "btnW": 110,
+        "groupX": 2091.28,
+        "groupY": 241.5,
+        "actionsY": 176.5,
+        "actionsX": 1218
+      },
+      "withTooltip": {
+        "groupX": 2091.28,
+        "groupY": 241.5,
+        "actionsY": 176.5,
+        "actionsX": 1218,
+        "rowH": 49
+      }
+    }
+  ],
+  "loadingDisplacement": null,
+  "errorDisplacement": null,
+  "hoverDisplacement": null,
+  "global": {
+    "consoleErrors": [],
+    "nonGet": []
+  },
+  "displacements": [
+    {
+      "viewport": "1280x800",
+      "refreshBtnW": {
+        "idle": 110,
+        "loading": 110,
+        "after": 110
+      },
+      "groupOrigin": {
+        "idleX": 811.28,
+        "loadingX": 811.28,
+        "afterX": 811.28,
+        "withTtX": 811.28
+      },
+      "actionsOrigin": {
+        "loadingY": 215.5,
+        "afterY": 215.5,
+        "withTtY": 215.5,
+        "loadingX": 292,
+        "afterX": 292,
+        "withTtX": 292
+      }
+    },
+    {
+      "viewport": "1700x920",
+      "refreshBtnW": {
+        "idle": 110,
+        "loading": 110,
+        "after": 110
+      },
+      "groupOrigin": {
+        "idleX": 1231.28,
+        "loadingX": 1231.28,
+        "afterX": 1231.28,
+        "withTtX": 1231.28
+      },
+      "actionsOrigin": {
+        "loadingY": 176.5,
+        "afterY": 176.5,
+        "withTtY": 176.5,
+        "loadingX": 1218,
+        "afterX": 1218,
+        "withTtX": 1218
+      }
+    },
+    {
+      "viewport": "1920x1080",
+      "refreshBtnW": {
+        "idle": 110,
+        "loading": 110,
+        "after": 110
+      },
+      "groupOrigin": {
+        "idleX": 1451.28,
+        "loadingX": 1451.28,
+        "afterX": 1451.28,
+        "withTtX": 1451.28
+      },
+      "actionsOrigin": {
+        "loadingY": 176.5,
+        "afterY": 176.5,
+        "withTtY": 176.5,
+        "loadingX": 1218,
+        "afterX": 1218,
+        "withTtX": 1218
+      }
+    },
+    {
+      "viewport": "2560x1440",
+      "refreshBtnW": {
+        "idle": 110,
+        "loading": 110,
+        "after": 110
+      },
+      "groupOrigin": {
+        "idleX": 2091.28,
+        "loadingX": 2091.28,
+        "afterX": 2091.28,
+        "withTtX": 2091.28
+      },
+      "actionsOrigin": {
+        "loadingY": 176.5,
+        "afterY": 176.5,
+        "withTtY": 176.5,
+        "loadingX": 1218,
+        "afterX": 1218,
+        "withTtX": 1218
+      }
+    }
+  ]
+}
