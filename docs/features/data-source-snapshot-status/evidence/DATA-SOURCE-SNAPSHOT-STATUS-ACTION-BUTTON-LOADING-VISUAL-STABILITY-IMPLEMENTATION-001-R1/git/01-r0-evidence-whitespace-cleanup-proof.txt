@@ -2,55 +2,56 @@
 generated_at: 2026-09-14T18:47:27+08:00
 worktree: /agent/dss-abl-impl-001-r1 (detached HEAD fccefbffccac7fbcc7bff039384549c24e0ed45e)
 
+（说明：本节内嵌的 git diff --check 原始输出里，命中行的行尾空白字符以可见符号表示：`␠`=空格、`␉`=制表符；符号个数与原行尾空白字符数一致。此处理仅为避免本证据文件自身产生行尾空白，不改动任何被引用的原始日志内容。）
 == 1. 复现 ChatGPT 在 R0 提交范围上的 git diff --check ==
 $ git diff --check 9f06725d23d66e845cb5ab1d8d8d4f151401893b fccefbffccac7fbcc7bff039384549c24e0ed45e
 docs/features/data-source-snapshot-status/evidence/DATA-SOURCE-SNAPSHOT-STATUS-ACTION-BUTTON-LOADING-VISUAL-STABILITY-IMPLEMENTATION-001/frontend/01-targeted-component-specs.txt:11: new blank line at EOF.
 docs/features/data-source-snapshot-status/evidence/DATA-SOURCE-SNAPSHOT-STATUS-ACTION-BUTTON-LOADING-VISUAL-STABILITY-IMPLEMENTATION-001/frontend/02-feature-data-source-run-state.txt:22: new blank line at EOF.
 docs/features/data-source-snapshot-status/evidence/DATA-SOURCE-SNAPSHOT-STATUS-ACTION-BUTTON-LOADING-VISUAL-STABILITY-IMPLEMENTATION-001/frontend/03-frontend-full-vitest.txt:69: new blank line at EOF.
 docs/features/data-source-snapshot-status/evidence/DATA-SOURCE-SNAPSHOT-STATUS-ACTION-BUTTON-LOADING-VISUAL-STABILITY-IMPLEMENTATION-001/git/01-base-status.txt:4: trailing whitespace.
-+branch: 
++branch:␠
 docs/features/data-source-snapshot-status/evidence/DATA-SOURCE-SNAPSHOT-STATUS-ACTION-BUTTON-LOADING-VISUAL-STABILITY-IMPLEMENTATION-001/git/04-frozen-region-proof.txt:24: trailing whitespace.
-+1211:> 2026-09-14 纯文档定向纠正（不实现、不执行正式验收）：按 ChatGPT 对 R0 复审结论 `CHANGES_REQUIRED_CURRENT_STATUS_CONSISTENCY_ONLY` 纠正顶部当前状态冲突：`pending_user_review` 当前直接值前置为 `YES`（原 
++1211:> 2026-09-14 纯文档定向纠正（不实现、不执行正式验收）：按 ChatGPT 对 R0 复审结论 `CHANGES_REQUIRED_CURRENT_STATUS_CONSISTENCY_ONLY` 纠正顶部当前状态冲突：`pending_user_review` 当前直接值前置为 `YES`（原␠
 docs/features/data-source-snapshot-status/evidence/DATA-SOURCE-SNAPSHOT-STATUS-ACTION-BUTTON-LOADING-VISUAL-STABILITY-IMPLEMENTATION-001/service/final-service-state.txt:7: trailing whitespace.
-+LISTEN 0      511          0.0.0.0:5173       0.0.0.0:*   
++LISTEN 0      511          0.0.0.0:5173       0.0.0.0:*␠␠␠
 docs/features/data-source-snapshot-status/evidence/DATA-SOURCE-SNAPSHOT-STATUS-ACTION-BUTTON-LOADING-VISUAL-STABILITY-IMPLEMENTATION-001/service/final-service-state.txt:23: trailing whitespace.
-+  17382 /opt/google/chrome/chrome --headless=new --no-sandbox --disable-gpu --disable-dev-shm-usage 
++  17382 /opt/google/chrome/chrome --headless=new --no-sandbox --disable-gpu --disable-dev-shm-usage␠
 docs/features/data-source-snapshot-status/evidence/DATA-SOURCE-SNAPSHOT-STATUS-ACTION-BUTTON-LOADING-VISUAL-STABILITY-IMPLEMENTATION-001/service/port-process-http.txt:13: trailing whitespace.
-+node /agent/dss-abl-impl-001/frontend/node_modules/.bin/vite --host 0.0.0.0 --port 5173 
++node /agent/dss-abl-impl-001/frontend/node_modules/.bin/vite --host 0.0.0.0 --port 5173␠
 docs/features/data-source-snapshot-status/evidence/DATA-SOURCE-SNAPSHOT-STATUS-ACTION-BUTTON-LOADING-VISUAL-STABILITY-IMPLEMENTATION-001/service/port-process-http.txt:16: trailing whitespace.
-+/opt/google/chrome/chrome --headless=new --no-sandbox --disable-gpu --disable-dev-shm-usage --hide-scrollbars --no-first-run --no-default-browser-check --no-proxy-server --proxy-bypass-list=* --force-device-scale-factor=1 --remote-debugging-port=9222 --user-data-dir=/tmp/abl-cdp/profile --window-size=1920,1080 --no-sandbox --noerrdialogs --ozone-platform=headless --ozone-override-screen-size=800,600 --use-angle=swiftshader-webgl about:blank 
++/opt/google/chrome/chrome --headless=new --no-sandbox --disable-gpu --disable-dev-shm-usage --hide-scrollbars --no-first-run --no-default-browser-check --no-proxy-server --proxy-bypass-list=* --force-device-scale-factor=1 --remote-debugging-port=9222 --user-data-dir=/tmp/abl-cdp/profile --window-size=1920,1080 --no-sandbox --noerrdialogs --ozone-platform=headless --ozone-override-screen-size=800,600 --use-angle=swiftshader-webgl about:blank␠
 docs/features/data-source-snapshot-status/evidence/DATA-SOURCE-SNAPSHOT-STATUS-ACTION-BUTTON-LOADING-VISUAL-STABILITY-IMPLEMENTATION-001/service/port-process-http.txt:26: trailing whitespace.
-+LISTEN 0      511          0.0.0.0:5173       0.0.0.0:*   
++LISTEN 0      511          0.0.0.0:5173       0.0.0.0:*␠␠␠
 docs/features/data-source-snapshot-status/evidence/DATA-SOURCE-SNAPSHOT-STATUS-ACTION-BUTTON-LOADING-VISUAL-STABILITY-IMPLEMENTATION-001/service/port-process-http.txt:27: trailing whitespace.
-+LISTEN 0      4096       127.0.0.1:7891       0.0.0.0:*   
++LISTEN 0      4096       127.0.0.1:7891       0.0.0.0:*␠␠␠
 docs/features/data-source-snapshot-status/evidence/DATA-SOURCE-SNAPSHOT-STATUS-ACTION-BUTTON-LOADING-VISUAL-STABILITY-IMPLEMENTATION-001/service/port-process-http.txt:28: trailing whitespace.
-+LISTEN 0      4096       127.0.0.1:7890       0.0.0.0:*   
++LISTEN 0      4096       127.0.0.1:7890       0.0.0.0:*␠␠␠
 docs/features/data-source-snapshot-status/evidence/DATA-SOURCE-SNAPSHOT-STATUS-ACTION-BUTTON-LOADING-VISUAL-STABILITY-IMPLEMENTATION-001/service/port-process-http.txt:29: trailing whitespace.
-+LISTEN 0      4096       127.0.0.1:7893       0.0.0.0:*   
++LISTEN 0      4096       127.0.0.1:7893       0.0.0.0:*␠␠␠
 docs/features/data-source-snapshot-status/evidence/DATA-SOURCE-SNAPSHOT-STATUS-ACTION-BUTTON-LOADING-VISUAL-STABILITY-IMPLEMENTATION-001/service/port-process-http.txt:30: trailing whitespace.
-+LISTEN 0      128        127.0.0.1:6010       0.0.0.0:*   
++LISTEN 0      128        127.0.0.1:6010       0.0.0.0:*␠␠␠
 docs/features/data-source-snapshot-status/evidence/DATA-SOURCE-SNAPSHOT-STATUS-ACTION-BUTTON-LOADING-VISUAL-STABILITY-IMPLEMENTATION-001/service/port-process-http.txt:31: trailing whitespace.
-+LISTEN 0      511        127.0.0.1:18792      0.0.0.0:*   
++LISTEN 0      511        127.0.0.1:18792      0.0.0.0:*␠␠␠
 docs/features/data-source-snapshot-status/evidence/DATA-SOURCE-SNAPSHOT-STATUS-ACTION-BUTTON-LOADING-VISUAL-STABILITY-IMPLEMENTATION-001/service/port-process-http.txt:32: trailing whitespace.
-+LISTEN 0      511        127.0.0.1:18791      0.0.0.0:*   
++LISTEN 0      511        127.0.0.1:18791      0.0.0.0:*␠␠␠
 docs/features/data-source-snapshot-status/evidence/DATA-SOURCE-SNAPSHOT-STATUS-ACTION-BUTTON-LOADING-VISUAL-STABILITY-IMPLEMENTATION-001/service/port-process-http.txt:33: trailing whitespace.
-+LISTEN 0      511        127.0.0.1:18789      0.0.0.0:*   
++LISTEN 0      511        127.0.0.1:18789      0.0.0.0:*␠␠␠
 docs/features/data-source-snapshot-status/evidence/DATA-SOURCE-SNAPSHOT-STATUS-ACTION-BUTTON-LOADING-VISUAL-STABILITY-IMPLEMENTATION-001/service/port-process-http.txt:34: trailing whitespace.
-+LISTEN 0      128          0.0.0.0:22         0.0.0.0:*   
++LISTEN 0      128          0.0.0.0:22         0.0.0.0:*␠␠␠
 docs/features/data-source-snapshot-status/evidence/DATA-SOURCE-SNAPSHOT-STATUS-ACTION-BUTTON-LOADING-VISUAL-STABILITY-IMPLEMENTATION-001/service/port-process-http.txt:35: trailing whitespace.
-+LISTEN 0      4096       127.0.0.1:631        0.0.0.0:*   
++LISTEN 0      4096       127.0.0.1:631        0.0.0.0:*␠␠␠
 docs/features/data-source-snapshot-status/evidence/DATA-SOURCE-SNAPSHOT-STATUS-ACTION-BUTTON-LOADING-VISUAL-STABILITY-IMPLEMENTATION-001/service/port-process-http.txt:36: trailing whitespace.
-+LISTEN 0      4096       127.0.0.1:9090       0.0.0.0:*   
++LISTEN 0      4096       127.0.0.1:9090       0.0.0.0:*␠␠␠
 docs/features/data-source-snapshot-status/evidence/DATA-SOURCE-SNAPSHOT-STATUS-ACTION-BUTTON-LOADING-VISUAL-STABILITY-IMPLEMENTATION-001/service/port-process-http.txt:37: trailing whitespace.
-+LISTEN 0      10         127.0.0.1:9222       0.0.0.0:*   
++LISTEN 0      10         127.0.0.1:9222       0.0.0.0:*␠␠␠
 docs/features/data-source-snapshot-status/evidence/DATA-SOURCE-SNAPSHOT-STATUS-ACTION-BUTTON-LOADING-VISUAL-STABILITY-IMPLEMENTATION-001/service/port-process-http.txt:38: trailing whitespace.
-+LISTEN 0      511            [::1]:18789         [::]:*   
++LISTEN 0      511            [::1]:18789         [::]:*␠␠␠
 docs/features/data-source-snapshot-status/evidence/DATA-SOURCE-SNAPSHOT-STATUS-ACTION-BUTTON-LOADING-VISUAL-STABILITY-IMPLEMENTATION-001/service/port-process-http.txt:39: trailing whitespace.
-+LISTEN 0      4096           [::1]:631           [::]:*   
++LISTEN 0      4096           [::1]:631           [::]:*␠␠␠
 docs/features/data-source-snapshot-status/evidence/DATA-SOURCE-SNAPSHOT-STATUS-ACTION-BUTTON-LOADING-VISUAL-STABILITY-IMPLEMENTATION-001/service/port-process-http.txt:40: trailing whitespace.
-+LISTEN 0      128             [::]:22            [::]:*   
++LISTEN 0      128             [::]:22            [::]:*␠␠␠
 docs/features/data-source-snapshot-status/evidence/DATA-SOURCE-SNAPSHOT-STATUS-ACTION-BUTTON-LOADING-VISUAL-STABILITY-IMPLEMENTATION-001/service/port-process-http.txt:41: trailing whitespace.
-+LISTEN 0      128            [::1]:6010          [::]:*   
++LISTEN 0      128            [::1]:6010          [::]:*␠␠␠
 exit=2
 命中文件数=7
 

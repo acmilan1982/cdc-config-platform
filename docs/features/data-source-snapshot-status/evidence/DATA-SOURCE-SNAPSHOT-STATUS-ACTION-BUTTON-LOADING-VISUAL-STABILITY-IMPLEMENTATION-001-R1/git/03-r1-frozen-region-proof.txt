@@ -9,8 +9,8 @@
 
 ## 2. ACCEPTANCE.md — business rows + status column
   ACCEPTANCE business rows: rows HEAD=113 worktree=113 -> BYTE-IDENTICAL (changed=0)
-  status column tally  HEAD:  6 NOT_RUN  107 PASS 
-  status column tally  WT  :  6 NOT_RUN  107 PASS 
+  status column tally  HEAD:  6 NOT_RUN  107 PASS
+  status column tally  WT  :  6 NOT_RUN  107 PASS
 
 ## 3. The 6 new acceptance rows DSS-AC-108~113 (must stay NOT_RUN, byte-identical)
   DSS-AC-108~113 rows: rows HEAD=6 worktree=6 -> BYTE-IDENTICAL (changed=0)

@@ -169,3 +169,12 @@ R0 测试未删除，仅新增/加固；`DataSourceRunStatePage.spec.ts` 未修�
 - 当前下一入口：`CHATGPT_ACTION_BUTTON_LOADING_VISUAL_STABILITY_IMPLEMENTATION_R1_REVIEW_FROM_GIT_THEN_PROJECT_OWNER_VISUAL_INTERACTION_REVIEW`
 - 即：先由 ChatGPT 从远程 Git 对 R1 提交做独立代码与证据复审，再由项目负责人做人工视觉/交互检查。
 - 本任务**未**自宣代码复审通过、**未**执行项目负责人人工检查、**未**正式执行 `DSS-AC-108~113`（该 6 条仍为 `NOT_RUN`），**未**把本轮写成 `IMPLEMENTED_ACCEPTED`/`ACCEPTED`/`COMPLETED`。
+
+## 附录 A：提交计数更正与仅空白修复提交（2026-09-14，追加）
+
+- §10 所述单次提交 `9fdccd202a47df29df95745491fcc9bf4cf8f082` 推送成功后，复核发现 **§15.1 未满足**：本 R1 新增的两个证据文件 `git/01-r0-evidence-whitespace-cleanup-proof.txt` 与 `git/03-r1-frozen-region-proof.txt` 因内嵌 `git diff --check` 原始输出而含行尾空白，导致自 `9f06725d…` 至该结果提交的 `git diff --check` 实测退出码为 `2`。
+- 提交前同命令曾测得 `0`，原因已定位并如实记录：`git diff <commit>` **不含未跟踪文件**，而当时新 R1 证据目录尚未 `git add`，故未纳入该次检查；这是本任务自测方法的缺陷，不是提交事实的偏差。
+- 经项目负责人**明确授权**，追加一次**仅空白**修复提交：将上述两个证据文件中的行尾空白以可见符号 `␠`（空格）/`␉`（制表符）替代（符号个数与原行尾空白字符数一致，不改动被引用的原始日志内容与数值）。修复后自 `9f06725d…` 至 R1 结果（含该修复提交）的 `git diff --check` 真实返回 `0`。
+- 因此 **R1 交付共含两次提交**：`9fdccd2…`（主体）+ 本次仅空白修复提交。本次追加提交仅包含：上述两个证据文件的行尾空白替换，以及本附录 A 的追加；未修改任何其他文件内容。
+- 该两次提交与 §14.7「只创建一个普通提交」存在**明确偏离**，系在「§14.7 单次提交」与「§15.1 累计 `git diff --check` 退出 0」不可同时满足时，由项目负责人指定并授权的收口方式。**未**使用 `amend`、`rebase` 或 `force push`；远程为普通快进推进。
+- 除上述事实更正外，§1~§12 的其余结论不变；6 条 `DSS-AC-108~113` 仍为 `NOT_RUN`，代码复审仍为 `PENDING_CHATGPT_REVIEW`，人工视觉/交互检查仍为 `NOT_RUN`。
