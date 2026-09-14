@@ -1,0 +1,10 @@
+SERVICE STATE (formal acceptance)
+recorded_at_local=2026-09-14
+frontend_listen=0.0.0.0:5173 pid=19652 cwd=/agent/dss-abl-fa-001/frontend
+  cmd=node /agent/dss-abl-fa-001/frontend/node_modules/.bin/vite --host 0.0.0.0 --port 5173 --strictPort
+backend_listen=*:8080 pid=19585 cwd=/agent/dss-abl-fa-001/backend
+  cmd=java -jar target/cdc-config-platform-backend-1.0.0-SNAPSHOT.jar --server.address=0.0.0.0
+frontend_url=http://192.168.174.70:5173/monitor/data-source-state
+backend_url=http://192.168.174.70:8080
+backend_jar_md5=2aedcd6c1888d63eddf19ff5cec9f199
+worktree=/agent/dss-abl-fa-001 base_commit=5195a716ed3b6d0d3122decfe937b73b27581d5a

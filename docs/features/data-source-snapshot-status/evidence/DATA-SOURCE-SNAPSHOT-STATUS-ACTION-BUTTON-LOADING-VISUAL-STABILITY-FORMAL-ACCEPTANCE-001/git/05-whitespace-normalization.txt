@@ -1,0 +1,37 @@
+WHITESPACE NORMALISATION OF THE NEW EVIDENCE (information-preserving, pre-commit)
+recorded_at_local=2026-09-14
+rule: section 18 - raw evidence output containing trailing whitespace must be handled before
+      committing so that 'git diff --check' and 'git diff --cached --check' both truly exit 0.
+
+normalisation applied (mechanical, content-preserving):
+  - remove trailing space/TAB/CR characters at end of each line
+  - guarantee the file ends with exactly one LF, UTF-8, LF line endings
+  - binary files (PNG screenshots) were NOT touched
+  - no word, digit, punctuation mark or value was changed; only invisible end-of-line padding
+
+per-file normalisation manifest (files with 0 normalised lines are omitted):
+  service/01-service-state.txt	trailing_ws_lines_normalized=2	total_lines=11
+  service/02-served-source-fingerprint.txt	trailing_ws_lines_normalized=1	total_lines=27
+  service/backend.log	trailing_ws_lines_normalized=496	total_lines=1783
+
+verification after normalisation: text_files=32 trailing_ws_findings=0
+
+second normalisation pass (immediately before staging, same rule):
+  service/backend.log	trailing_ws_lines_normalized=12	total_lines=1819
+
+  reason: the backend service stays running (prompt section 4) and keeps appending its Spring/JDBC
+          DEBUG output to service/backend.log, whose 'Parameters:' lines carry a trailing space.
+          service/backend.log and service/vite-dev.log are matched by the repository .gitignore rule
+          "*.log", so they are kept local and are NOT committed (consistent with every earlier round).
+          The relevant background content is committed instead as the bounded, normalised extract
+          service/09-backend-background-behaviour.txt. The normalisation of the raw logs is retained
+          only so the local working tree stays clean; no visible character of any log line is altered,
+          only end-of-line padding is removed.
+
+verification after second pass: all changed/added text files trailing_ws_findings=0
+
+why this is information-preserving:
+  - the removed characters are end-of-line padding only; every visible character of every
+    log line, JSON value, test output and rect measurement is byte-identical before/after.
+  - the normalisation is applied only to files created by this formal-acceptance task; no
+    existing (previously committed) evidence or report was touched (see git/02).

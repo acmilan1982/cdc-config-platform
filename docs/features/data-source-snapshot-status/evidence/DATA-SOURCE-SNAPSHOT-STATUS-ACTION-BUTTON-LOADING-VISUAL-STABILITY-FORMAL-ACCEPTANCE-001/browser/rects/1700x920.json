@@ -1,0 +1,4276 @@
+{
+  "viewport": "1700x920",
+  "states": [
+    {
+      "name": "TIME_--",
+      "substituted": {
+        "time": "--",
+        "count": "60"
+      },
+      "group": {
+        "x": 1231.28125,
+        "y": 241.5,
+        "w": 396.71875,
+        "h": 32,
+        "vis": "visible",
+        "op": "1",
+        "disp": "flex"
+      },
+      "time": {
+        "x": 1368.375,
+        "y": 247.09375,
+        "w": 141.625,
+        "h": 20.796875,
+        "vis": "visible",
+        "op": "1",
+        "disp": "block"
+      },
+      "timePrefix": {
+        "x": 1368.375,
+        "y": 249.09375,
+        "w": 91.015625,
+        "h": 15,
+        "vis": "visible",
+        "op": "1",
+        "disp": "inline"
+      },
+      "timeValue": {
+        "x": 1459.390625,
+        "y": 247.09375,
+        "w": 50.609375,
+        "h": 20.796875,
+        "vis": "visible",
+        "op": "1",
+        "disp": "inline-block"
+      },
+      "timeReserve": {
+        "x": 1459.390625,
+        "y": 249.09375,
+        "w": 50.609375,
+        "h": 15,
+        "vis": "hidden",
+        "op": "1",
+        "disp": "inline"
+      },
+      "timeActual": {
+        "x": 1459.390625,
+        "y": 247.09375,
+        "w": 8.671875,
+        "h": 20.796875,
+        "vis": "visible",
+        "op": "1",
+        "disp": "block"
+      },
+      "secs": {
+        "x": 1255.28125,
+        "y": 247.09375,
+        "w": 14.453125,
+        "h": 20.796875,
+        "vis": "visible",
+        "op": "1",
+        "disp": "inline-block"
+      },
+      "refreshSep": {
+        "x": 1359.375,
+        "y": 250.5,
+        "w": 1,
+        "h": 14,
+        "vis": "visible",
+        "op": "1",
+        "disp": "block"
+      },
+      "refreshBtn": {
+        "x": 1518,
+        "y": 241.5,
+        "w": 110,
+        "h": 32,
+        "vis": "visible",
+        "op": "1",
+        "disp": "flex"
+      },
+      "refreshLabel": {
+        "x": 1545,
+        "y": 250.5,
+        "w": 56,
+        "h": 14,
+        "vis": "visible",
+        "op": "1",
+        "disp": "block"
+      },
+      "refreshSpinnerBox": {
+        "x": 1522,
+        "y": 251.5,
+        "w": 12,
+        "h": 12
+      },
+      "queryBtn": {
+        "x": 1218,
+        "y": 176.5,
+        "w": 62,
+        "h": 30,
+        "vis": "visible",
+        "op": "1",
+        "disp": "flex"
+      },
+      "queryLabel": {
+        "x": 1235,
+        "y": 184.5,
+        "w": 28,
+        "h": 14,
+        "vis": "visible",
+        "op": "1",
+        "disp": "block"
+      },
+      "querySpinnerBox": {
+        "x": 1221,
+        "y": 185.5,
+        "w": 12,
+        "h": 12
+      },
+      "queryBar": {
+        "x": 292,
+        "y": 175.5,
+        "w": 1336,
+        "h": 32,
+        "vis": "visible",
+        "op": "1",
+        "disp": "flex"
+      },
+      "queryActions": {
+        "x": 1218,
+        "y": 176.5,
+        "w": 140,
+        "h": 30,
+        "vis": "visible",
+        "op": "1",
+        "disp": "flex"
+      },
+      "queryGroup": {
+        "x": 292,
+        "y": 175.5,
+        "w": 288,
+        "h": 32,
+        "vis": "visible",
+        "op": "1",
+        "disp": "flex"
+      },
+      "resetBtn": {
+        "x": 1300,
+        "y": 176.5,
+        "w": 58,
+        "h": 30,
+        "vis": "visible",
+        "op": "1",
+        "disp": "flex"
+      },
+      "texts": {
+        "timePrefix": "最近成功刷新：",
+        "timeReserve": "88:88:88",
+        "timeActual": "--",
+        "secs": "60",
+        "refreshLabel": "立即刷新",
+        "queryLabel": "查询"
+      },
+      "aria": {
+        "reserveHidden": "true",
+        "refreshSpinnerHidden": "true",
+        "querySpinnerHidden": "true",
+        "refreshBusy": null,
+        "queryBusy": null,
+        "refreshDisabled": null,
+        "queryDisabled": null
+      },
+      "nativeDisabled": {
+        "refresh": false,
+        "query": false
+      },
+      "spinnerVisible": {
+        "refresh": false,
+        "query": false
+      },
+      "elementPlusLoadingIcon": 0,
+      "anim": {
+        "refreshSpinner": "dss-action-spin-a581eda5",
+        "querySpinner": "dss-action-spin-cd886c8f",
+        "ringProgressTransition": "0s"
+      },
+      "nodeCounts": {
+        "reserve": 1,
+        "actual": 1,
+        "refreshSpinner": 1,
+        "querySpinner": 1
+      },
+      "doc": {
+        "scrollWidth": 1700,
+        "clientWidth": 1700
+      },
+      "timeOuterText": "最近成功刷新：88:88:88--"
+    },
+    {
+      "name": "TIME_00:00:00",
+      "substituted": {
+        "time": "00:00:00",
+        "count": "60"
+      },
+      "group": {
+        "x": 1231.28125,
+        "y": 241.5,
+        "w": 396.71875,
+        "h": 32,
+        "vis": "visible",
+        "op": "1",
+        "disp": "flex"
+      },
+      "time": {
+        "x": 1368.375,
+        "y": 247.09375,
+        "w": 141.625,
+        "h": 20.796875,
+        "vis": "visible",
+        "op": "1",
+        "disp": "block"
+      },
+      "timePrefix": {
+        "x": 1368.375,
+        "y": 249.09375,
+        "w": 91.015625,
+        "h": 15,
+        "vis": "visible",
+        "op": "1",
+        "disp": "inline"
+      },
+      "timeValue": {
+        "x": 1459.390625,
+        "y": 247.09375,
+        "w": 50.609375,
+        "h": 20.796875,
+        "vis": "visible",
+        "op": "1",
+        "disp": "inline-block"
+      },
+      "timeReserve": {
+        "x": 1459.390625,
+        "y": 249.09375,
+        "w": 50.609375,
+        "h": 15,
+        "vis": "hidden",
+        "op": "1",
+        "disp": "inline"
+      },
+      "timeActual": {
+        "x": 1459.390625,
+        "y": 247.09375,
+        "w": 50.609375,
+        "h": 20.796875,
+        "vis": "visible",
+        "op": "1",
+        "disp": "block"
+      },
+      "secs": {
+        "x": 1255.28125,
+        "y": 247.09375,
+        "w": 14.453125,
+        "h": 20.796875,
+        "vis": "visible",
+        "op": "1",
+        "disp": "inline-block"
+      },
+      "refreshSep": {
+        "x": 1359.375,
+        "y": 250.5,
+        "w": 1,
+        "h": 14,
+        "vis": "visible",
+        "op": "1",
+        "disp": "block"
+      },
+      "refreshBtn": {
+        "x": 1518,
+        "y": 241.5,
+        "w": 110,
+        "h": 32,
+        "vis": "visible",
+        "op": "1",
+        "disp": "flex"
+      },
+      "refreshLabel": {
+        "x": 1545,
+        "y": 250.5,
+        "w": 56,
+        "h": 14,
+        "vis": "visible",
+        "op": "1",
+        "disp": "block"
+      },
+      "refreshSpinnerBox": {
+        "x": 1522,
+        "y": 251.5,
+        "w": 12,
+        "h": 12
+      },
+      "queryBtn": {
+        "x": 1218,
+        "y": 176.5,
+        "w": 62,
+        "h": 30,
+        "vis": "visible",
+        "op": "1",
+        "disp": "flex"
+      },
+      "queryLabel": {
+        "x": 1235,
+        "y": 184.5,
+        "w": 28,
+        "h": 14,
+        "vis": "visible",
+        "op": "1",
+        "disp": "block"
+      },
+      "querySpinnerBox": {
+        "x": 1221,
+        "y": 185.5,
+        "w": 12,
+        "h": 12
+      },
+      "queryBar": {
+        "x": 292,
+        "y": 175.5,
+        "w": 1336,
+        "h": 32,
+        "vis": "visible",
+        "op": "1",
+        "disp": "flex"
+      },
+      "queryActions": {
+        "x": 1218,
+        "y": 176.5,
+        "w": 140,
+        "h": 30,
+        "vis": "visible",
+        "op": "1",
+        "disp": "flex"
+      },
+      "queryGroup": {
+        "x": 292,
+        "y": 175.5,
+        "w": 288,
+        "h": 32,
+        "vis": "visible",
+        "op": "1",
+        "disp": "flex"
+      },
+      "resetBtn": {
+        "x": 1300,
+        "y": 176.5,
+        "w": 58,
+        "h": 30,
+        "vis": "visible",
+        "op": "1",
+        "disp": "flex"
+      },
+      "texts": {
+        "timePrefix": "最近成功刷新：",
+        "timeReserve": "88:88:88",
+        "timeActual": "00:00:00",
+        "secs": "60",
+        "refreshLabel": "立即刷新",
+        "queryLabel": "查询"
+      },
+      "aria": {
+        "reserveHidden": "true",
+        "refreshSpinnerHidden": "true",
+        "querySpinnerHidden": "true",
+        "refreshBusy": null,
+        "queryBusy": null,
+        "refreshDisabled": null,
+        "queryDisabled": null
+      },
+      "nativeDisabled": {
+        "refresh": false,
+        "query": false
+      },
+      "spinnerVisible": {
+        "refresh": false,
+        "query": false
+      },
+      "elementPlusLoadingIcon": 0,
+      "anim": {
+        "refreshSpinner": "dss-action-spin-a581eda5",
+        "querySpinner": "dss-action-spin-cd886c8f",
+        "ringProgressTransition": "0s"
+      },
+      "nodeCounts": {
+        "reserve": 1,
+        "actual": 1,
+        "refreshSpinner": 1,
+        "querySpinner": 1
+      },
+      "doc": {
+        "scrollWidth": 1700,
+        "clientWidth": 1700
+      },
+      "timeOuterText": "最近成功刷新：88:88:8800:00:00"
+    },
+    {
+      "name": "TIME_11:11:11",
+      "substituted": {
+        "time": "11:11:11",
+        "count": "60"
+      },
+      "group": {
+        "x": 1231.28125,
+        "y": 241.5,
+        "w": 396.71875,
+        "h": 32,
+        "vis": "visible",
+        "op": "1",
+        "disp": "flex"
+      },
+      "time": {
+        "x": 1368.375,
+        "y": 247.09375,
+        "w": 141.625,
+        "h": 20.796875,
+        "vis": "visible",
+        "op": "1",
+        "disp": "block"
+      },
+      "timePrefix": {
+        "x": 1368.375,
+        "y": 249.09375,
+        "w": 91.015625,
+        "h": 15,
+        "vis": "visible",
+        "op": "1",
+        "disp": "inline"
+      },
+      "timeValue": {
+        "x": 1459.390625,
+        "y": 247.09375,
+        "w": 50.609375,
+        "h": 20.796875,
+        "vis": "visible",
+        "op": "1",
+        "disp": "inline-block"
+      },
+      "timeReserve": {
+        "x": 1459.390625,
+        "y": 249.09375,
+        "w": 50.609375,
+        "h": 15,
+        "vis": "hidden",
+        "op": "1",
+        "disp": "inline"
+      },
+      "timeActual": {
+        "x": 1459.390625,
+        "y": 247.09375,
+        "w": 47.71875,
+        "h": 20.796875,
+        "vis": "visible",
+        "op": "1",
+        "disp": "block"
+      },
+      "secs": {
+        "x": 1255.28125,
+        "y": 247.09375,
+        "w": 14.453125,
+        "h": 20.796875,
+        "vis": "visible",
+        "op": "1",
+        "disp": "inline-block"
+      },
+      "refreshSep": {
+        "x": 1359.375,
+        "y": 250.5,
+        "w": 1,
+        "h": 14,
+        "vis": "visible",
+        "op": "1",
+        "disp": "block"
+      },
+      "refreshBtn": {
+        "x": 1518,
+        "y": 241.5,
+        "w": 110,
+        "h": 32,
+        "vis": "visible",
+        "op": "1",
+        "disp": "flex"
+      },
+      "refreshLabel": {
+        "x": 1545,
+        "y": 250.5,
+        "w": 56,
+        "h": 14,
+        "vis": "visible",
+        "op": "1",
+        "disp": "block"
+      },
+      "refreshSpinnerBox": {
+        "x": 1522,
+        "y": 251.5,
+        "w": 12,
+        "h": 12
+      },
+      "queryBtn": {
+        "x": 1218,
+        "y": 176.5,
+        "w": 62,
+        "h": 30,
+        "vis": "visible",
+        "op": "1",
+        "disp": "flex"
+      },
+      "queryLabel": {
+        "x": 1235,
+        "y": 184.5,
+        "w": 28,
+        "h": 14,
+        "vis": "visible",
+        "op": "1",
+        "disp": "block"
+      },
+      "querySpinnerBox": {
+        "x": 1221,
+        "y": 185.5,
+        "w": 12,
+        "h": 12
+      },
+      "queryBar": {
+        "x": 292,
+        "y": 175.5,
+        "w": 1336,
+        "h": 32,
+        "vis": "visible",
+        "op": "1",
+        "disp": "flex"
+      },
+      "queryActions": {
+        "x": 1218,
+        "y": 176.5,
+        "w": 140,
+        "h": 30,
+        "vis": "visible",
+        "op": "1",
+        "disp": "flex"
+      },
+      "queryGroup": {
+        "x": 292,
+        "y": 175.5,
+        "w": 288,
+        "h": 32,
+        "vis": "visible",
+        "op": "1",
+        "disp": "flex"
+      },
+      "resetBtn": {
+        "x": 1300,
+        "y": 176.5,
+        "w": 58,
+        "h": 30,
+        "vis": "visible",
+        "op": "1",
+        "disp": "flex"
+      },
+      "texts": {
+        "timePrefix": "最近成功刷新：",
+        "timeReserve": "88:88:88",
+        "timeActual": "11:11:11",
+        "secs": "60",
+        "refreshLabel": "立即刷新",
+        "queryLabel": "查询"
+      },
+      "aria": {
+        "reserveHidden": "true",
+        "refreshSpinnerHidden": "true",
+        "querySpinnerHidden": "true",
+        "refreshBusy": null,
+        "queryBusy": null,
+        "refreshDisabled": null,
+        "queryDisabled": null
+      },
+      "nativeDisabled": {
+        "refresh": false,
+        "query": false
+      },
+      "spinnerVisible": {
+        "refresh": false,
+        "query": false
+      },
+      "elementPlusLoadingIcon": 0,
+      "anim": {
+        "refreshSpinner": "dss-action-spin-a581eda5",
+        "querySpinner": "dss-action-spin-cd886c8f",
+        "ringProgressTransition": "0s"
+      },
+      "nodeCounts": {
+        "reserve": 1,
+        "actual": 1,
+        "refreshSpinner": 1,
+        "querySpinner": 1
+      },
+      "doc": {
+        "scrollWidth": 1700,
+        "clientWidth": 1700
+      },
+      "timeOuterText": "最近成功刷新：88:88:8811:11:11"
+    },
+    {
+      "name": "TIME_14:11:09",
+      "substituted": {
+        "time": "14:11:09",
+        "count": "60"
+      },
+      "group": {
+        "x": 1231.28125,
+        "y": 241.5,
+        "w": 396.71875,
+        "h": 32,
+        "vis": "visible",
+        "op": "1",
+        "disp": "flex"
+      },
+      "time": {
+        "x": 1368.375,
+        "y": 247.09375,
+        "w": 141.625,
+        "h": 20.796875,
+        "vis": "visible",
+        "op": "1",
+        "disp": "block"
+      },
+      "timePrefix": {
+        "x": 1368.375,
+        "y": 249.09375,
+        "w": 91.015625,
+        "h": 15,
+        "vis": "visible",
+        "op": "1",
+        "disp": "inline"
+      },
+      "timeValue": {
+        "x": 1459.390625,
+        "y": 247.09375,
+        "w": 50.609375,
+        "h": 20.796875,
+        "vis": "visible",
+        "op": "1",
+        "disp": "inline-block"
+      },
+      "timeReserve": {
+        "x": 1459.390625,
+        "y": 249.09375,
+        "w": 50.609375,
+        "h": 15,
+        "vis": "hidden",
+        "op": "1",
+        "disp": "inline"
+      },
+      "timeActual": {
+        "x": 1459.390625,
+        "y": 247.09375,
+        "w": 49.640625,
+        "h": 20.796875,
+        "vis": "visible",
+        "op": "1",
+        "disp": "block"
+      },
+      "secs": {
+        "x": 1255.28125,
+        "y": 247.09375,
+        "w": 14.453125,
+        "h": 20.796875,
+        "vis": "visible",
+        "op": "1",
+        "disp": "inline-block"
+      },
+      "refreshSep": {
+        "x": 1359.375,
+        "y": 250.5,
+        "w": 1,
+        "h": 14,
+        "vis": "visible",
+        "op": "1",
+        "disp": "block"
+      },
+      "refreshBtn": {
+        "x": 1518,
+        "y": 241.5,
+        "w": 110,
+        "h": 32,
+        "vis": "visible",
+        "op": "1",
+        "disp": "flex"
+      },
+      "refreshLabel": {
+        "x": 1545,
+        "y": 250.5,
+        "w": 56,
+        "h": 14,
+        "vis": "visible",
+        "op": "1",
+        "disp": "block"
+      },
+      "refreshSpinnerBox": {
+        "x": 1522,
+        "y": 251.5,
+        "w": 12,
+        "h": 12
+      },
+      "queryBtn": {
+        "x": 1218,
+        "y": 176.5,
+        "w": 62,
+        "h": 30,
+        "vis": "visible",
+        "op": "1",
+        "disp": "flex"
+      },
+      "queryLabel": {
+        "x": 1235,
+        "y": 184.5,
+        "w": 28,
+        "h": 14,
+        "vis": "visible",
+        "op": "1",
+        "disp": "block"
+      },
+      "querySpinnerBox": {
+        "x": 1221,
+        "y": 185.5,
+        "w": 12,
+        "h": 12
+      },
+      "queryBar": {
+        "x": 292,
+        "y": 175.5,
+        "w": 1336,
+        "h": 32,
+        "vis": "visible",
+        "op": "1",
+        "disp": "flex"
+      },
+      "queryActions": {
+        "x": 1218,
+        "y": 176.5,
+        "w": 140,
+        "h": 30,
+        "vis": "visible",
+        "op": "1",
+        "disp": "flex"
+      },
+      "queryGroup": {
+        "x": 292,
+        "y": 175.5,
+        "w": 288,
+        "h": 32,
+        "vis": "visible",
+        "op": "1",
+        "disp": "flex"
+      },
+      "resetBtn": {
+        "x": 1300,
+        "y": 176.5,
+        "w": 58,
+        "h": 30,
+        "vis": "visible",
+        "op": "1",
+        "disp": "flex"
+      },
+      "texts": {
+        "timePrefix": "最近成功刷新：",
+        "timeReserve": "88:88:88",
+        "timeActual": "14:11:09",
+        "secs": "60",
+        "refreshLabel": "立即刷新",
+        "queryLabel": "查询"
+      },
+      "aria": {
+        "reserveHidden": "true",
+        "refreshSpinnerHidden": "true",
+        "querySpinnerHidden": "true",
+        "refreshBusy": null,
+        "queryBusy": null,
+        "refreshDisabled": null,
+        "queryDisabled": null
+      },
+      "nativeDisabled": {
+        "refresh": false,
+        "query": false
+      },
+      "spinnerVisible": {
+        "refresh": false,
+        "query": false
+      },
+      "elementPlusLoadingIcon": 0,
+      "anim": {
+        "refreshSpinner": "dss-action-spin-a581eda5",
+        "querySpinner": "dss-action-spin-cd886c8f",
+        "ringProgressTransition": "0s"
+      },
+      "nodeCounts": {
+        "reserve": 1,
+        "actual": 1,
+        "refreshSpinner": 1,
+        "querySpinner": 1
+      },
+      "doc": {
+        "scrollWidth": 1700,
+        "clientWidth": 1700
+      },
+      "timeOuterText": "最近成功刷新：88:88:8814:11:09"
+    },
+    {
+      "name": "TIME_14:11:10",
+      "substituted": {
+        "time": "14:11:10",
+        "count": "60"
+      },
+      "group": {
+        "x": 1231.28125,
+        "y": 241.5,
+        "w": 396.71875,
+        "h": 32,
+        "vis": "visible",
+        "op": "1",
+        "disp": "flex"
+      },
+      "time": {
+        "x": 1368.375,
+        "y": 247.09375,
+        "w": 141.625,
+        "h": 20.796875,
+        "vis": "visible",
+        "op": "1",
+        "disp": "block"
+      },
+      "timePrefix": {
+        "x": 1368.375,
+        "y": 249.09375,
+        "w": 91.015625,
+        "h": 15,
+        "vis": "visible",
+        "op": "1",
+        "disp": "inline"
+      },
+      "timeValue": {
+        "x": 1459.390625,
+        "y": 247.09375,
+        "w": 50.609375,
+        "h": 20.796875,
+        "vis": "visible",
+        "op": "1",
+        "disp": "inline-block"
+      },
+      "timeReserve": {
+        "x": 1459.390625,
+        "y": 249.09375,
+        "w": 50.609375,
+        "h": 15,
+        "vis": "hidden",
+        "op": "1",
+        "disp": "inline"
+      },
+      "timeActual": {
+        "x": 1459.390625,
+        "y": 247.09375,
+        "w": 49.640625,
+        "h": 20.796875,
+        "vis": "visible",
+        "op": "1",
+        "disp": "block"
+      },
+      "secs": {
+        "x": 1255.28125,
+        "y": 247.09375,
+        "w": 14.453125,
+        "h": 20.796875,
+        "vis": "visible",
+        "op": "1",
+        "disp": "inline-block"
+      },
+      "refreshSep": {
+        "x": 1359.375,
+        "y": 250.5,
+        "w": 1,
+        "h": 14,
+        "vis": "visible",
+        "op": "1",
+        "disp": "block"
+      },
+      "refreshBtn": {
+        "x": 1518,
+        "y": 241.5,
+        "w": 110,
+        "h": 32,
+        "vis": "visible",
+        "op": "1",
+        "disp": "flex"
+      },
+      "refreshLabel": {
+        "x": 1545,
+        "y": 250.5,
+        "w": 56,
+        "h": 14,
+        "vis": "visible",
+        "op": "1",
+        "disp": "block"
+      },
+      "refreshSpinnerBox": {
+        "x": 1522,
+        "y": 251.5,
+        "w": 12,
+        "h": 12
+      },
+      "queryBtn": {
+        "x": 1218,
+        "y": 176.5,
+        "w": 62,
+        "h": 30,
+        "vis": "visible",
+        "op": "1",
+        "disp": "flex"
+      },
+      "queryLabel": {
+        "x": 1235,
+        "y": 184.5,
+        "w": 28,
+        "h": 14,
+        "vis": "visible",
+        "op": "1",
+        "disp": "block"
+      },
+      "querySpinnerBox": {
+        "x": 1221,
+        "y": 185.5,
+        "w": 12,
+        "h": 12
+      },
+      "queryBar": {
+        "x": 292,
+        "y": 175.5,
+        "w": 1336,
+        "h": 32,
+        "vis": "visible",
+        "op": "1",
+        "disp": "flex"
+      },
+      "queryActions": {
+        "x": 1218,
+        "y": 176.5,
+        "w": 140,
+        "h": 30,
+        "vis": "visible",
+        "op": "1",
+        "disp": "flex"
+      },
+      "queryGroup": {
+        "x": 292,
+        "y": 175.5,
+        "w": 288,
+        "h": 32,
+        "vis": "visible",
+        "op": "1",
+        "disp": "flex"
+      },
+      "resetBtn": {
+        "x": 1300,
+        "y": 176.5,
+        "w": 58,
+        "h": 30,
+        "vis": "visible",
+        "op": "1",
+        "disp": "flex"
+      },
+      "texts": {
+        "timePrefix": "最近成功刷新：",
+        "timeReserve": "88:88:88",
+        "timeActual": "14:11:10",
+        "secs": "60",
+        "refreshLabel": "立即刷新",
+        "queryLabel": "查询"
+      },
+      "aria": {
+        "reserveHidden": "true",
+        "refreshSpinnerHidden": "true",
+        "querySpinnerHidden": "true",
+        "refreshBusy": null,
+        "queryBusy": null,
+        "refreshDisabled": null,
+        "queryDisabled": null
+      },
+      "nativeDisabled": {
+        "refresh": false,
+        "query": false
+      },
+      "spinnerVisible": {
+        "refresh": false,
+        "query": false
+      },
+      "elementPlusLoadingIcon": 0,
+      "anim": {
+        "refreshSpinner": "dss-action-spin-a581eda5",
+        "querySpinner": "dss-action-spin-cd886c8f",
+        "ringProgressTransition": "0s"
+      },
+      "nodeCounts": {
+        "reserve": 1,
+        "actual": 1,
+        "refreshSpinner": 1,
+        "querySpinner": 1
+      },
+      "doc": {
+        "scrollWidth": 1700,
+        "clientWidth": 1700
+      },
+      "timeOuterText": "最近成功刷新：88:88:8814:11:10"
+    },
+    {
+      "name": "TIME_14:11:11",
+      "substituted": {
+        "time": "14:11:11",
+        "count": "60"
+      },
+      "group": {
+        "x": 1231.28125,
+        "y": 241.5,
+        "w": 396.71875,
+        "h": 32,
+        "vis": "visible",
+        "op": "1",
+        "disp": "flex"
+      },
+      "time": {
+        "x": 1368.375,
+        "y": 247.09375,
+        "w": 141.625,
+        "h": 20.796875,
+        "vis": "visible",
+        "op": "1",
+        "disp": "block"
+      },
+      "timePrefix": {
+        "x": 1368.375,
+        "y": 249.09375,
+        "w": 91.015625,
+        "h": 15,
+        "vis": "visible",
+        "op": "1",
+        "disp": "inline"
+      },
+      "timeValue": {
+        "x": 1459.390625,
+        "y": 247.09375,
+        "w": 50.609375,
+        "h": 20.796875,
+        "vis": "visible",
+        "op": "1",
+        "disp": "inline-block"
+      },
+      "timeReserve": {
+        "x": 1459.390625,
+        "y": 249.09375,
+        "w": 50.609375,
+        "h": 15,
+        "vis": "hidden",
+        "op": "1",
+        "disp": "inline"
+      },
+      "timeActual": {
+        "x": 1459.390625,
+        "y": 247.09375,
+        "w": 48.6875,
+        "h": 20.796875,
+        "vis": "visible",
+        "op": "1",
+        "disp": "block"
+      },
+      "secs": {
+        "x": 1255.28125,
+        "y": 247.09375,
+        "w": 14.453125,
+        "h": 20.796875,
+        "vis": "visible",
+        "op": "1",
+        "disp": "inline-block"
+      },
+      "refreshSep": {
+        "x": 1359.375,
+        "y": 250.5,
+        "w": 1,
+        "h": 14,
+        "vis": "visible",
+        "op": "1",
+        "disp": "block"
+      },
+      "refreshBtn": {
+        "x": 1518,
+        "y": 241.5,
+        "w": 110,
+        "h": 32,
+        "vis": "visible",
+        "op": "1",
+        "disp": "flex"
+      },
+      "refreshLabel": {
+        "x": 1545,
+        "y": 250.5,
+        "w": 56,
+        "h": 14,
+        "vis": "visible",
+        "op": "1",
+        "disp": "block"
+      },
+      "refreshSpinnerBox": {
+        "x": 1522,
+        "y": 251.50000762939453,
+        "w": 12,
+        "h": 12
+      },
+      "queryBtn": {
+        "x": 1218,
+        "y": 176.5,
+        "w": 62,
+        "h": 30,
+        "vis": "visible",
+        "op": "1",
+        "disp": "flex"
+      },
+      "queryLabel": {
+        "x": 1235,
+        "y": 184.5,
+        "w": 28,
+        "h": 14,
+        "vis": "visible",
+        "op": "1",
+        "disp": "block"
+      },
+      "querySpinnerBox": {
+        "x": 1221,
+        "y": 185.50000762939453,
+        "w": 12,
+        "h": 12
+      },
+      "queryBar": {
+        "x": 292,
+        "y": 175.5,
+        "w": 1336,
+        "h": 32,
+        "vis": "visible",
+        "op": "1",
+        "disp": "flex"
+      },
+      "queryActions": {
+        "x": 1218,
+        "y": 176.5,
+        "w": 140,
+        "h": 30,
+        "vis": "visible",
+        "op": "1",
+        "disp": "flex"
+      },
+      "queryGroup": {
+        "x": 292,
+        "y": 175.5,
+        "w": 288,
+        "h": 32,
+        "vis": "visible",
+        "op": "1",
+        "disp": "flex"
+      },
+      "resetBtn": {
+        "x": 1300,
+        "y": 176.5,
+        "w": 58,
+        "h": 30,
+        "vis": "visible",
+        "op": "1",
+        "disp": "flex"
+      },
+      "texts": {
+        "timePrefix": "最近成功刷新：",
+        "timeReserve": "88:88:88",
+        "timeActual": "14:11:11",
+        "secs": "60",
+        "refreshLabel": "立即刷新",
+        "queryLabel": "查询"
+      },
+      "aria": {
+        "reserveHidden": "true",
+        "refreshSpinnerHidden": "true",
+        "querySpinnerHidden": "true",
+        "refreshBusy": null,
+        "queryBusy": null,
+        "refreshDisabled": null,
+        "queryDisabled": null
+      },
+      "nativeDisabled": {
+        "refresh": false,
+        "query": false
+      },
+      "spinnerVisible": {
+        "refresh": false,
+        "query": false
+      },
+      "elementPlusLoadingIcon": 0,
+      "anim": {
+        "refreshSpinner": "dss-action-spin-a581eda5",
+        "querySpinner": "dss-action-spin-cd886c8f",
+        "ringProgressTransition": "0s"
+      },
+      "nodeCounts": {
+        "reserve": 1,
+        "actual": 1,
+        "refreshSpinner": 1,
+        "querySpinner": 1
+      },
+      "doc": {
+        "scrollWidth": 1700,
+        "clientWidth": 1700
+      },
+      "timeOuterText": "最近成功刷新：88:88:8814:11:11"
+    },
+    {
+      "name": "TIME_23:59:59",
+      "substituted": {
+        "time": "23:59:59",
+        "count": "60"
+      },
+      "group": {
+        "x": 1231.28125,
+        "y": 241.5,
+        "w": 396.71875,
+        "h": 32,
+        "vis": "visible",
+        "op": "1",
+        "disp": "flex"
+      },
+      "time": {
+        "x": 1368.375,
+        "y": 247.09375,
+        "w": 141.625,
+        "h": 20.796875,
+        "vis": "visible",
+        "op": "1",
+        "disp": "block"
+      },
+      "timePrefix": {
+        "x": 1368.375,
+        "y": 249.09375,
+        "w": 91.015625,
+        "h": 15,
+        "vis": "visible",
+        "op": "1",
+        "disp": "inline"
+      },
+      "timeValue": {
+        "x": 1459.390625,
+        "y": 247.09375,
+        "w": 50.609375,
+        "h": 20.796875,
+        "vis": "visible",
+        "op": "1",
+        "disp": "inline-block"
+      },
+      "timeReserve": {
+        "x": 1459.390625,
+        "y": 249.09375,
+        "w": 50.609375,
+        "h": 15,
+        "vis": "hidden",
+        "op": "1",
+        "disp": "inline"
+      },
+      "timeActual": {
+        "x": 1459.390625,
+        "y": 247.09375,
+        "w": 50.609375,
+        "h": 20.796875,
+        "vis": "visible",
+        "op": "1",
+        "disp": "block"
+      },
+      "secs": {
+        "x": 1255.28125,
+        "y": 247.09375,
+        "w": 14.453125,
+        "h": 20.796875,
+        "vis": "visible",
+        "op": "1",
+        "disp": "inline-block"
+      },
+      "refreshSep": {
+        "x": 1359.375,
+        "y": 250.5,
+        "w": 1,
+        "h": 14,
+        "vis": "visible",
+        "op": "1",
+        "disp": "block"
+      },
+      "refreshBtn": {
+        "x": 1518,
+        "y": 241.5,
+        "w": 110,
+        "h": 32,
+        "vis": "visible",
+        "op": "1",
+        "disp": "flex"
+      },
+      "refreshLabel": {
+        "x": 1545,
+        "y": 250.5,
+        "w": 56,
+        "h": 14,
+        "vis": "visible",
+        "op": "1",
+        "disp": "block"
+      },
+      "refreshSpinnerBox": {
+        "x": 1522,
+        "y": 251.50000762939453,
+        "w": 12,
+        "h": 12
+      },
+      "queryBtn": {
+        "x": 1218,
+        "y": 176.5,
+        "w": 62,
+        "h": 30,
+        "vis": "visible",
+        "op": "1",
+        "disp": "flex"
+      },
+      "queryLabel": {
+        "x": 1235,
+        "y": 184.5,
+        "w": 28,
+        "h": 14,
+        "vis": "visible",
+        "op": "1",
+        "disp": "block"
+      },
+      "querySpinnerBox": {
+        "x": 1221,
+        "y": 185.50000762939453,
+        "w": 12,
+        "h": 12
+      },
+      "queryBar": {
+        "x": 292,
+        "y": 175.5,
+        "w": 1336,
+        "h": 32,
+        "vis": "visible",
+        "op": "1",
+        "disp": "flex"
+      },
+      "queryActions": {
+        "x": 1218,
+        "y": 176.5,
+        "w": 140,
+        "h": 30,
+        "vis": "visible",
+        "op": "1",
+        "disp": "flex"
+      },
+      "queryGroup": {
+        "x": 292,
+        "y": 175.5,
+        "w": 288,
+        "h": 32,
+        "vis": "visible",
+        "op": "1",
+        "disp": "flex"
+      },
+      "resetBtn": {
+        "x": 1300,
+        "y": 176.5,
+        "w": 58,
+        "h": 30,
+        "vis": "visible",
+        "op": "1",
+        "disp": "flex"
+      },
+      "texts": {
+        "timePrefix": "最近成功刷新：",
+        "timeReserve": "88:88:88",
+        "timeActual": "23:59:59",
+        "secs": "60",
+        "refreshLabel": "立即刷新",
+        "queryLabel": "查询"
+      },
+      "aria": {
+        "reserveHidden": "true",
+        "refreshSpinnerHidden": "true",
+        "querySpinnerHidden": "true",
+        "refreshBusy": null,
+        "queryBusy": null,
+        "refreshDisabled": null,
+        "queryDisabled": null
+      },
+      "nativeDisabled": {
+        "refresh": false,
+        "query": false
+      },
+      "spinnerVisible": {
+        "refresh": false,
+        "query": false
+      },
+      "elementPlusLoadingIcon": 0,
+      "anim": {
+        "refreshSpinner": "dss-action-spin-a581eda5",
+        "querySpinner": "dss-action-spin-cd886c8f",
+        "ringProgressTransition": "0s"
+      },
+      "nodeCounts": {
+        "reserve": 1,
+        "actual": 1,
+        "refreshSpinner": 1,
+        "querySpinner": 1
+      },
+      "doc": {
+        "scrollWidth": 1700,
+        "clientWidth": 1700
+      },
+      "timeOuterText": "最近成功刷新：88:88:8823:59:59"
+    },
+    {
+      "name": "COUNT_60",
+      "substituted": {
+        "time": "14:11:11",
+        "count": "60"
+      },
+      "group": {
+        "x": 1231.28125,
+        "y": 241.5,
+        "w": 396.71875,
+        "h": 32,
+        "vis": "visible",
+        "op": "1",
+        "disp": "flex"
+      },
+      "time": {
+        "x": 1368.375,
+        "y": 247.09375,
+        "w": 141.625,
+        "h": 20.796875,
+        "vis": "visible",
+        "op": "1",
+        "disp": "block"
+      },
+      "timePrefix": {
+        "x": 1368.375,
+        "y": 249.09375,
+        "w": 91.015625,
+        "h": 15,
+        "vis": "visible",
+        "op": "1",
+        "disp": "inline"
+      },
+      "timeValue": {
+        "x": 1459.390625,
+        "y": 247.09375,
+        "w": 50.609375,
+        "h": 20.796875,
+        "vis": "visible",
+        "op": "1",
+        "disp": "inline-block"
+      },
+      "timeReserve": {
+        "x": 1459.390625,
+        "y": 249.09375,
+        "w": 50.609375,
+        "h": 15,
+        "vis": "hidden",
+        "op": "1",
+        "disp": "inline"
+      },
+      "timeActual": {
+        "x": 1459.390625,
+        "y": 247.09375,
+        "w": 48.6875,
+        "h": 20.796875,
+        "vis": "visible",
+        "op": "1",
+        "disp": "block"
+      },
+      "secs": {
+        "x": 1255.28125,
+        "y": 247.09375,
+        "w": 14.453125,
+        "h": 20.796875,
+        "vis": "visible",
+        "op": "1",
+        "disp": "inline-block"
+      },
+      "refreshSep": {
+        "x": 1359.375,
+        "y": 250.5,
+        "w": 1,
+        "h": 14,
+        "vis": "visible",
+        "op": "1",
+        "disp": "block"
+      },
+      "refreshBtn": {
+        "x": 1518,
+        "y": 241.5,
+        "w": 110,
+        "h": 32,
+        "vis": "visible",
+        "op": "1",
+        "disp": "flex"
+      },
+      "refreshLabel": {
+        "x": 1545,
+        "y": 250.5,
+        "w": 56,
+        "h": 14,
+        "vis": "visible",
+        "op": "1",
+        "disp": "block"
+      },
+      "refreshSpinnerBox": {
+        "x": 1522,
+        "y": 251.50000762939453,
+        "w": 12,
+        "h": 12
+      },
+      "queryBtn": {
+        "x": 1218,
+        "y": 176.5,
+        "w": 62,
+        "h": 30,
+        "vis": "visible",
+        "op": "1",
+        "disp": "flex"
+      },
+      "queryLabel": {
+        "x": 1235,
+        "y": 184.5,
+        "w": 28,
+        "h": 14,
+        "vis": "visible",
+        "op": "1",
+        "disp": "block"
+      },
+      "querySpinnerBox": {
+        "x": 1221,
+        "y": 185.50000762939453,
+        "w": 12,
+        "h": 12
+      },
+      "queryBar": {
+        "x": 292,
+        "y": 175.5,
+        "w": 1336,
+        "h": 32,
+        "vis": "visible",
+        "op": "1",
+        "disp": "flex"
+      },
+      "queryActions": {
+        "x": 1218,
+        "y": 176.5,
+        "w": 140,
+        "h": 30,
+        "vis": "visible",
+        "op": "1",
+        "disp": "flex"
+      },
+      "queryGroup": {
+        "x": 292,
+        "y": 175.5,
+        "w": 288,
+        "h": 32,
+        "vis": "visible",
+        "op": "1",
+        "disp": "flex"
+      },
+      "resetBtn": {
+        "x": 1300,
+        "y": 176.5,
+        "w": 58,
+        "h": 30,
+        "vis": "visible",
+        "op": "1",
+        "disp": "flex"
+      },
+      "texts": {
+        "timePrefix": "最近成功刷新：",
+        "timeReserve": "88:88:88",
+        "timeActual": "14:11:11",
+        "secs": "60",
+        "refreshLabel": "立即刷新",
+        "queryLabel": "查询"
+      },
+      "aria": {
+        "reserveHidden": "true",
+        "refreshSpinnerHidden": "true",
+        "querySpinnerHidden": "true",
+        "refreshBusy": null,
+        "queryBusy": null,
+        "refreshDisabled": null,
+        "queryDisabled": null
+      },
+      "nativeDisabled": {
+        "refresh": false,
+        "query": false
+      },
+      "spinnerVisible": {
+        "refresh": false,
+        "query": false
+      },
+      "elementPlusLoadingIcon": 0,
+      "anim": {
+        "refreshSpinner": "dss-action-spin-a581eda5",
+        "querySpinner": "dss-action-spin-cd886c8f",
+        "ringProgressTransition": "0s"
+      },
+      "nodeCounts": {
+        "reserve": 1,
+        "actual": 1,
+        "refreshSpinner": 1,
+        "querySpinner": 1
+      },
+      "doc": {
+        "scrollWidth": 1700,
+        "clientWidth": 1700
+      },
+      "timeOuterText": "最近成功刷新：88:88:8814:11:11"
+    },
+    {
+      "name": "COUNT_59",
+      "substituted": {
+        "time": "14:11:11",
+        "count": "59"
+      },
+      "group": {
+        "x": 1231.28125,
+        "y": 241.5,
+        "w": 396.71875,
+        "h": 32,
+        "vis": "visible",
+        "op": "1",
+        "disp": "flex"
+      },
+      "time": {
+        "x": 1368.375,
+        "y": 247.09375,
+        "w": 141.625,
+        "h": 20.796875,
+        "vis": "visible",
+        "op": "1",
+        "disp": "block"
+      },
+      "timePrefix": {
+        "x": 1368.375,
+        "y": 249.09375,
+        "w": 91.015625,
+        "h": 15,
+        "vis": "visible",
+        "op": "1",
+        "disp": "inline"
+      },
+      "timeValue": {
+        "x": 1459.390625,
+        "y": 247.09375,
+        "w": 50.609375,
+        "h": 20.796875,
+        "vis": "visible",
+        "op": "1",
+        "disp": "inline-block"
+      },
+      "timeReserve": {
+        "x": 1459.390625,
+        "y": 249.09375,
+        "w": 50.609375,
+        "h": 15,
+        "vis": "hidden",
+        "op": "1",
+        "disp": "inline"
+      },
+      "timeActual": {
+        "x": 1459.390625,
+        "y": 247.09375,
+        "w": 48.6875,
+        "h": 20.796875,
+        "vis": "visible",
+        "op": "1",
+        "disp": "block"
+      },
+      "secs": {
+        "x": 1255.28125,
+        "y": 247.09375,
+        "w": 14.453125,
+        "h": 20.796875,
+        "vis": "visible",
+        "op": "1",
+        "disp": "inline-block"
+      },
+      "refreshSep": {
+        "x": 1359.375,
+        "y": 250.5,
+        "w": 1,
+        "h": 14,
+        "vis": "visible",
+        "op": "1",
+        "disp": "block"
+      },
+      "refreshBtn": {
+        "x": 1518,
+        "y": 241.5,
+        "w": 110,
+        "h": 32,
+        "vis": "visible",
+        "op": "1",
+        "disp": "flex"
+      },
+      "refreshLabel": {
+        "x": 1545,
+        "y": 250.5,
+        "w": 56,
+        "h": 14,
+        "vis": "visible",
+        "op": "1",
+        "disp": "block"
+      },
+      "refreshSpinnerBox": {
+        "x": 1522,
+        "y": 251.50000762939453,
+        "w": 12,
+        "h": 12
+      },
+      "queryBtn": {
+        "x": 1218,
+        "y": 176.5,
+        "w": 62,
+        "h": 30,
+        "vis": "visible",
+        "op": "1",
+        "disp": "flex"
+      },
+      "queryLabel": {
+        "x": 1235,
+        "y": 184.5,
+        "w": 28,
+        "h": 14,
+        "vis": "visible",
+        "op": "1",
+        "disp": "block"
+      },
+      "querySpinnerBox": {
+        "x": 1221,
+        "y": 185.50000762939453,
+        "w": 12,
+        "h": 12
+      },
+      "queryBar": {
+        "x": 292,
+        "y": 175.5,
+        "w": 1336,
+        "h": 32,
+        "vis": "visible",
+        "op": "1",
+        "disp": "flex"
+      },
+      "queryActions": {
+        "x": 1218,
+        "y": 176.5,
+        "w": 140,
+        "h": 30,
+        "vis": "visible",
+        "op": "1",
+        "disp": "flex"
+      },
+      "queryGroup": {
+        "x": 292,
+        "y": 175.5,
+        "w": 288,
+        "h": 32,
+        "vis": "visible",
+        "op": "1",
+        "disp": "flex"
+      },
+      "resetBtn": {
+        "x": 1300,
+        "y": 176.5,
+        "w": 58,
+        "h": 30,
+        "vis": "visible",
+        "op": "1",
+        "disp": "flex"
+      },
+      "texts": {
+        "timePrefix": "最近成功刷新：",
+        "timeReserve": "88:88:88",
+        "timeActual": "14:11:11",
+        "secs": "59",
+        "refreshLabel": "立即刷新",
+        "queryLabel": "查询"
+      },
+      "aria": {
+        "reserveHidden": "true",
+        "refreshSpinnerHidden": "true",
+        "querySpinnerHidden": "true",
+        "refreshBusy": null,
+        "queryBusy": null,
+        "refreshDisabled": null,
+        "queryDisabled": null
+      },
+      "nativeDisabled": {
+        "refresh": false,
+        "query": false
+      },
+      "spinnerVisible": {
+        "refresh": false,
+        "query": false
+      },
+      "elementPlusLoadingIcon": 0,
+      "anim": {
+        "refreshSpinner": "dss-action-spin-a581eda5",
+        "querySpinner": "dss-action-spin-cd886c8f",
+        "ringProgressTransition": "0s"
+      },
+      "nodeCounts": {
+        "reserve": 1,
+        "actual": 1,
+        "refreshSpinner": 1,
+        "querySpinner": 1
+      },
+      "doc": {
+        "scrollWidth": 1700,
+        "clientWidth": 1700
+      },
+      "timeOuterText": "最近成功刷新：88:88:8814:11:11"
+    },
+    {
+      "name": "COUNT_10",
+      "substituted": {
+        "time": "14:11:11",
+        "count": "10"
+      },
+      "group": {
+        "x": 1231.28125,
+        "y": 241.5,
+        "w": 396.71875,
+        "h": 32,
+        "vis": "visible",
+        "op": "1",
+        "disp": "flex"
+      },
+      "time": {
+        "x": 1368.375,
+        "y": 247.09375,
+        "w": 141.625,
+        "h": 20.796875,
+        "vis": "visible",
+        "op": "1",
+        "disp": "block"
+      },
+      "timePrefix": {
+        "x": 1368.375,
+        "y": 249.09375,
+        "w": 91.015625,
+        "h": 15,
+        "vis": "visible",
+        "op": "1",
+        "disp": "inline"
+      },
+      "timeValue": {
+        "x": 1459.390625,
+        "y": 247.09375,
+        "w": 50.609375,
+        "h": 20.796875,
+        "vis": "visible",
+        "op": "1",
+        "disp": "inline-block"
+      },
+      "timeReserve": {
+        "x": 1459.390625,
+        "y": 249.09375,
+        "w": 50.609375,
+        "h": 15,
+        "vis": "hidden",
+        "op": "1",
+        "disp": "inline"
+      },
+      "timeActual": {
+        "x": 1459.390625,
+        "y": 247.09375,
+        "w": 48.6875,
+        "h": 20.796875,
+        "vis": "visible",
+        "op": "1",
+        "disp": "block"
+      },
+      "secs": {
+        "x": 1255.28125,
+        "y": 247.09375,
+        "w": 14.453125,
+        "h": 20.796875,
+        "vis": "visible",
+        "op": "1",
+        "disp": "inline-block"
+      },
+      "refreshSep": {
+        "x": 1359.375,
+        "y": 250.5,
+        "w": 1,
+        "h": 14,
+        "vis": "visible",
+        "op": "1",
+        "disp": "block"
+      },
+      "refreshBtn": {
+        "x": 1518,
+        "y": 241.5,
+        "w": 110,
+        "h": 32,
+        "vis": "visible",
+        "op": "1",
+        "disp": "flex"
+      },
+      "refreshLabel": {
+        "x": 1545,
+        "y": 250.5,
+        "w": 56,
+        "h": 14,
+        "vis": "visible",
+        "op": "1",
+        "disp": "block"
+      },
+      "refreshSpinnerBox": {
+        "x": 1522,
+        "y": 251.5,
+        "w": 12,
+        "h": 12
+      },
+      "queryBtn": {
+        "x": 1218,
+        "y": 176.5,
+        "w": 62,
+        "h": 30,
+        "vis": "visible",
+        "op": "1",
+        "disp": "flex"
+      },
+      "queryLabel": {
+        "x": 1235,
+        "y": 184.5,
+        "w": 28,
+        "h": 14,
+        "vis": "visible",
+        "op": "1",
+        "disp": "block"
+      },
+      "querySpinnerBox": {
+        "x": 1221,
+        "y": 185.5,
+        "w": 12,
+        "h": 12
+      },
+      "queryBar": {
+        "x": 292,
+        "y": 175.5,
+        "w": 1336,
+        "h": 32,
+        "vis": "visible",
+        "op": "1",
+        "disp": "flex"
+      },
+      "queryActions": {
+        "x": 1218,
+        "y": 176.5,
+        "w": 140,
+        "h": 30,
+        "vis": "visible",
+        "op": "1",
+        "disp": "flex"
+      },
+      "queryGroup": {
+        "x": 292,
+        "y": 175.5,
+        "w": 288,
+        "h": 32,
+        "vis": "visible",
+        "op": "1",
+        "disp": "flex"
+      },
+      "resetBtn": {
+        "x": 1300,
+        "y": 176.5,
+        "w": 58,
+        "h": 30,
+        "vis": "visible",
+        "op": "1",
+        "disp": "flex"
+      },
+      "texts": {
+        "timePrefix": "最近成功刷新：",
+        "timeReserve": "88:88:88",
+        "timeActual": "14:11:11",
+        "secs": "10",
+        "refreshLabel": "立即刷新",
+        "queryLabel": "查询"
+      },
+      "aria": {
+        "reserveHidden": "true",
+        "refreshSpinnerHidden": "true",
+        "querySpinnerHidden": "true",
+        "refreshBusy": null,
+        "queryBusy": null,
+        "refreshDisabled": null,
+        "queryDisabled": null
+      },
+      "nativeDisabled": {
+        "refresh": false,
+        "query": false
+      },
+      "spinnerVisible": {
+        "refresh": false,
+        "query": false
+      },
+      "elementPlusLoadingIcon": 0,
+      "anim": {
+        "refreshSpinner": "dss-action-spin-a581eda5",
+        "querySpinner": "dss-action-spin-cd886c8f",
+        "ringProgressTransition": "0s"
+      },
+      "nodeCounts": {
+        "reserve": 1,
+        "actual": 1,
+        "refreshSpinner": 1,
+        "querySpinner": 1
+      },
+      "doc": {
+        "scrollWidth": 1700,
+        "clientWidth": 1700
+      },
+      "timeOuterText": "最近成功刷新：88:88:8814:11:11"
+    },
+    {
+      "name": "COUNT_9",
+      "substituted": {
+        "time": "14:11:11",
+        "count": "9"
+      },
+      "group": {
+        "x": 1231.28125,
+        "y": 241.5,
+        "w": 396.71875,
+        "h": 32,
+        "vis": "visible",
+        "op": "1",
+        "disp": "flex"
+      },
+      "time": {
+        "x": 1368.375,
+        "y": 247.09375,
+        "w": 141.625,
+        "h": 20.796875,
+        "vis": "visible",
+        "op": "1",
+        "disp": "block"
+      },
+      "timePrefix": {
+        "x": 1368.375,
+        "y": 249.09375,
+        "w": 91.015625,
+        "h": 15,
+        "vis": "visible",
+        "op": "1",
+        "disp": "inline"
+      },
+      "timeValue": {
+        "x": 1459.390625,
+        "y": 247.09375,
+        "w": 50.609375,
+        "h": 20.796875,
+        "vis": "visible",
+        "op": "1",
+        "disp": "inline-block"
+      },
+      "timeReserve": {
+        "x": 1459.390625,
+        "y": 249.09375,
+        "w": 50.609375,
+        "h": 15,
+        "vis": "hidden",
+        "op": "1",
+        "disp": "inline"
+      },
+      "timeActual": {
+        "x": 1459.390625,
+        "y": 247.09375,
+        "w": 48.6875,
+        "h": 20.796875,
+        "vis": "visible",
+        "op": "1",
+        "disp": "block"
+      },
+      "secs": {
+        "x": 1255.28125,
+        "y": 247.09375,
+        "w": 14.453125,
+        "h": 20.796875,
+        "vis": "visible",
+        "op": "1",
+        "disp": "inline-block"
+      },
+      "refreshSep": {
+        "x": 1359.375,
+        "y": 250.5,
+        "w": 1,
+        "h": 14,
+        "vis": "visible",
+        "op": "1",
+        "disp": "block"
+      },
+      "refreshBtn": {
+        "x": 1518,
+        "y": 241.5,
+        "w": 110,
+        "h": 32,
+        "vis": "visible",
+        "op": "1",
+        "disp": "flex"
+      },
+      "refreshLabel": {
+        "x": 1545,
+        "y": 250.5,
+        "w": 56,
+        "h": 14,
+        "vis": "visible",
+        "op": "1",
+        "disp": "block"
+      },
+      "refreshSpinnerBox": {
+        "x": 1522,
+        "y": 251.5,
+        "w": 12,
+        "h": 12
+      },
+      "queryBtn": {
+        "x": 1218,
+        "y": 176.5,
+        "w": 62,
+        "h": 30,
+        "vis": "visible",
+        "op": "1",
+        "disp": "flex"
+      },
+      "queryLabel": {
+        "x": 1235,
+        "y": 184.5,
+        "w": 28,
+        "h": 14,
+        "vis": "visible",
+        "op": "1",
+        "disp": "block"
+      },
+      "querySpinnerBox": {
+        "x": 1221,
+        "y": 185.5,
+        "w": 12,
+        "h": 12
+      },
+      "queryBar": {
+        "x": 292,
+        "y": 175.5,
+        "w": 1336,
+        "h": 32,
+        "vis": "visible",
+        "op": "1",
+        "disp": "flex"
+      },
+      "queryActions": {
+        "x": 1218,
+        "y": 176.5,
+        "w": 140,
+        "h": 30,
+        "vis": "visible",
+        "op": "1",
+        "disp": "flex"
+      },
+      "queryGroup": {
+        "x": 292,
+        "y": 175.5,
+        "w": 288,
+        "h": 32,
+        "vis": "visible",
+        "op": "1",
+        "disp": "flex"
+      },
+      "resetBtn": {
+        "x": 1300,
+        "y": 176.5,
+        "w": 58,
+        "h": 30,
+        "vis": "visible",
+        "op": "1",
+        "disp": "flex"
+      },
+      "texts": {
+        "timePrefix": "最近成功刷新：",
+        "timeReserve": "88:88:88",
+        "timeActual": "14:11:11",
+        "secs": "9",
+        "refreshLabel": "立即刷新",
+        "queryLabel": "查询"
+      },
+      "aria": {
+        "reserveHidden": "true",
+        "refreshSpinnerHidden": "true",
+        "querySpinnerHidden": "true",
+        "refreshBusy": null,
+        "queryBusy": null,
+        "refreshDisabled": null,
+        "queryDisabled": null
+      },
+      "nativeDisabled": {
+        "refresh": false,
+        "query": false
+      },
+      "spinnerVisible": {
+        "refresh": false,
+        "query": false
+      },
+      "elementPlusLoadingIcon": 0,
+      "anim": {
+        "refreshSpinner": "dss-action-spin-a581eda5",
+        "querySpinner": "dss-action-spin-cd886c8f",
+        "ringProgressTransition": "0s"
+      },
+      "nodeCounts": {
+        "reserve": 1,
+        "actual": 1,
+        "refreshSpinner": 1,
+        "querySpinner": 1
+      },
+      "doc": {
+        "scrollWidth": 1700,
+        "clientWidth": 1700
+      },
+      "timeOuterText": "最近成功刷新：88:88:8814:11:11"
+    },
+    {
+      "name": "COUNT_0",
+      "substituted": {
+        "time": "14:11:11",
+        "count": "0"
+      },
+      "group": {
+        "x": 1231.28125,
+        "y": 241.5,
+        "w": 396.71875,
+        "h": 32,
+        "vis": "visible",
+        "op": "1",
+        "disp": "flex"
+      },
+      "time": {
+        "x": 1368.375,
+        "y": 247.09375,
+        "w": 141.625,
+        "h": 20.796875,
+        "vis": "visible",
+        "op": "1",
+        "disp": "block"
+      },
+      "timePrefix": {
+        "x": 1368.375,
+        "y": 249.09375,
+        "w": 91.015625,
+        "h": 15,
+        "vis": "visible",
+        "op": "1",
+        "disp": "inline"
+      },
+      "timeValue": {
+        "x": 1459.390625,
+        "y": 247.09375,
+        "w": 50.609375,
+        "h": 20.796875,
+        "vis": "visible",
+        "op": "1",
+        "disp": "inline-block"
+      },
+      "timeReserve": {
+        "x": 1459.390625,
+        "y": 249.09375,
+        "w": 50.609375,
+        "h": 15,
+        "vis": "hidden",
+        "op": "1",
+        "disp": "inline"
+      },
+      "timeActual": {
+        "x": 1459.390625,
+        "y": 247.09375,
+        "w": 48.6875,
+        "h": 20.796875,
+        "vis": "visible",
+        "op": "1",
+        "disp": "block"
+      },
+      "secs": {
+        "x": 1255.28125,
+        "y": 247.09375,
+        "w": 14.453125,
+        "h": 20.796875,
+        "vis": "visible",
+        "op": "1",
+        "disp": "inline-block"
+      },
+      "refreshSep": {
+        "x": 1359.375,
+        "y": 250.5,
+        "w": 1,
+        "h": 14,
+        "vis": "visible",
+        "op": "1",
+        "disp": "block"
+      },
+      "refreshBtn": {
+        "x": 1518,
+        "y": 241.5,
+        "w": 110,
+        "h": 32,
+        "vis": "visible",
+        "op": "1",
+        "disp": "flex"
+      },
+      "refreshLabel": {
+        "x": 1545,
+        "y": 250.5,
+        "w": 56,
+        "h": 14,
+        "vis": "visible",
+        "op": "1",
+        "disp": "block"
+      },
+      "refreshSpinnerBox": {
+        "x": 1522,
+        "y": 251.5,
+        "w": 12,
+        "h": 12
+      },
+      "queryBtn": {
+        "x": 1218,
+        "y": 176.5,
+        "w": 62,
+        "h": 30,
+        "vis": "visible",
+        "op": "1",
+        "disp": "flex"
+      },
+      "queryLabel": {
+        "x": 1235,
+        "y": 184.5,
+        "w": 28,
+        "h": 14,
+        "vis": "visible",
+        "op": "1",
+        "disp": "block"
+      },
+      "querySpinnerBox": {
+        "x": 1221,
+        "y": 185.5,
+        "w": 12,
+        "h": 12
+      },
+      "queryBar": {
+        "x": 292,
+        "y": 175.5,
+        "w": 1336,
+        "h": 32,
+        "vis": "visible",
+        "op": "1",
+        "disp": "flex"
+      },
+      "queryActions": {
+        "x": 1218,
+        "y": 176.5,
+        "w": 140,
+        "h": 30,
+        "vis": "visible",
+        "op": "1",
+        "disp": "flex"
+      },
+      "queryGroup": {
+        "x": 292,
+        "y": 175.5,
+        "w": 288,
+        "h": 32,
+        "vis": "visible",
+        "op": "1",
+        "disp": "flex"
+      },
+      "resetBtn": {
+        "x": 1300,
+        "y": 176.5,
+        "w": 58,
+        "h": 30,
+        "vis": "visible",
+        "op": "1",
+        "disp": "flex"
+      },
+      "texts": {
+        "timePrefix": "最近成功刷新：",
+        "timeReserve": "88:88:88",
+        "timeActual": "14:11:11",
+        "secs": "0",
+        "refreshLabel": "立即刷新",
+        "queryLabel": "查询"
+      },
+      "aria": {
+        "reserveHidden": "true",
+        "refreshSpinnerHidden": "true",
+        "querySpinnerHidden": "true",
+        "refreshBusy": null,
+        "queryBusy": null,
+        "refreshDisabled": null,
+        "queryDisabled": null
+      },
+      "nativeDisabled": {
+        "refresh": false,
+        "query": false
+      },
+      "spinnerVisible": {
+        "refresh": false,
+        "query": false
+      },
+      "elementPlusLoadingIcon": 0,
+      "anim": {
+        "refreshSpinner": "dss-action-spin-a581eda5",
+        "querySpinner": "dss-action-spin-cd886c8f",
+        "ringProgressTransition": "0s"
+      },
+      "nodeCounts": {
+        "reserve": 1,
+        "actual": 1,
+        "refreshSpinner": 1,
+        "querySpinner": 1
+      },
+      "doc": {
+        "scrollWidth": 1700,
+        "clientWidth": 1700
+      },
+      "timeOuterText": "最近成功刷新：88:88:8814:11:11"
+    },
+    {
+      "name": "COUNT_--",
+      "substituted": {
+        "time": "14:11:11",
+        "count": "--"
+      },
+      "group": {
+        "x": 1231.28125,
+        "y": 241.5,
+        "w": 396.71875,
+        "h": 32,
+        "vis": "visible",
+        "op": "1",
+        "disp": "flex"
+      },
+      "time": {
+        "x": 1368.375,
+        "y": 247.09375,
+        "w": 141.625,
+        "h": 20.796875,
+        "vis": "visible",
+        "op": "1",
+        "disp": "block"
+      },
+      "timePrefix": {
+        "x": 1368.375,
+        "y": 249.09375,
+        "w": 91.015625,
+        "h": 15,
+        "vis": "visible",
+        "op": "1",
+        "disp": "inline"
+      },
+      "timeValue": {
+        "x": 1459.390625,
+        "y": 247.09375,
+        "w": 50.609375,
+        "h": 20.796875,
+        "vis": "visible",
+        "op": "1",
+        "disp": "inline-block"
+      },
+      "timeReserve": {
+        "x": 1459.390625,
+        "y": 249.09375,
+        "w": 50.609375,
+        "h": 15,
+        "vis": "hidden",
+        "op": "1",
+        "disp": "inline"
+      },
+      "timeActual": {
+        "x": 1459.390625,
+        "y": 247.09375,
+        "w": 48.6875,
+        "h": 20.796875,
+        "vis": "visible",
+        "op": "1",
+        "disp": "block"
+      },
+      "secs": {
+        "x": 1255.28125,
+        "y": 247.09375,
+        "w": 14.453125,
+        "h": 20.796875,
+        "vis": "visible",
+        "op": "1",
+        "disp": "inline-block"
+      },
+      "refreshSep": {
+        "x": 1359.375,
+        "y": 250.5,
+        "w": 1,
+        "h": 14,
+        "vis": "visible",
+        "op": "1",
+        "disp": "block"
+      },
+      "refreshBtn": {
+        "x": 1518,
+        "y": 241.5,
+        "w": 110,
+        "h": 32,
+        "vis": "visible",
+        "op": "1",
+        "disp": "flex"
+      },
+      "refreshLabel": {
+        "x": 1545,
+        "y": 250.5,
+        "w": 56,
+        "h": 14,
+        "vis": "visible",
+        "op": "1",
+        "disp": "block"
+      },
+      "refreshSpinnerBox": {
+        "x": 1522,
+        "y": 251.5,
+        "w": 12,
+        "h": 12
+      },
+      "queryBtn": {
+        "x": 1218,
+        "y": 176.5,
+        "w": 62,
+        "h": 30,
+        "vis": "visible",
+        "op": "1",
+        "disp": "flex"
+      },
+      "queryLabel": {
+        "x": 1235,
+        "y": 184.5,
+        "w": 28,
+        "h": 14,
+        "vis": "visible",
+        "op": "1",
+        "disp": "block"
+      },
+      "querySpinnerBox": {
+        "x": 1221,
+        "y": 185.5,
+        "w": 12,
+        "h": 12
+      },
+      "queryBar": {
+        "x": 292,
+        "y": 175.5,
+        "w": 1336,
+        "h": 32,
+        "vis": "visible",
+        "op": "1",
+        "disp": "flex"
+      },
+      "queryActions": {
+        "x": 1218,
+        "y": 176.5,
+        "w": 140,
+        "h": 30,
+        "vis": "visible",
+        "op": "1",
+        "disp": "flex"
+      },
+      "queryGroup": {
+        "x": 292,
+        "y": 175.5,
+        "w": 288,
+        "h": 32,
+        "vis": "visible",
+        "op": "1",
+        "disp": "flex"
+      },
+      "resetBtn": {
+        "x": 1300,
+        "y": 176.5,
+        "w": 58,
+        "h": 30,
+        "vis": "visible",
+        "op": "1",
+        "disp": "flex"
+      },
+      "texts": {
+        "timePrefix": "最近成功刷新：",
+        "timeReserve": "88:88:88",
+        "timeActual": "14:11:11",
+        "secs": "--",
+        "refreshLabel": "立即刷新",
+        "queryLabel": "查询"
+      },
+      "aria": {
+        "reserveHidden": "true",
+        "refreshSpinnerHidden": "true",
+        "querySpinnerHidden": "true",
+        "refreshBusy": null,
+        "queryBusy": null,
+        "refreshDisabled": null,
+        "queryDisabled": null
+      },
+      "nativeDisabled": {
+        "refresh": false,
+        "query": false
+      },
+      "spinnerVisible": {
+        "refresh": false,
+        "query": false
+      },
+      "elementPlusLoadingIcon": 0,
+      "anim": {
+        "refreshSpinner": "dss-action-spin-a581eda5",
+        "querySpinner": "dss-action-spin-cd886c8f",
+        "ringProgressTransition": "0s"
+      },
+      "nodeCounts": {
+        "reserve": 1,
+        "actual": 1,
+        "refreshSpinner": 1,
+        "querySpinner": 1
+      },
+      "doc": {
+        "scrollWidth": 1700,
+        "clientWidth": 1700
+      },
+      "timeOuterText": "最近成功刷新：88:88:8814:11:11"
+    },
+    {
+      "name": "IDLE",
+      "substituted": {},
+      "group": {
+        "x": 1231.28125,
+        "y": 241.5,
+        "w": 396.71875,
+        "h": 32,
+        "vis": "visible",
+        "op": "1",
+        "disp": "flex"
+      },
+      "time": {
+        "x": 1368.375,
+        "y": 247.09375,
+        "w": 141.625,
+        "h": 20.796875,
+        "vis": "visible",
+        "op": "1",
+        "disp": "block"
+      },
+      "timePrefix": {
+        "x": 1368.375,
+        "y": 249.09375,
+        "w": 91.015625,
+        "h": 15,
+        "vis": "visible",
+        "op": "1",
+        "disp": "inline"
+      },
+      "timeValue": {
+        "x": 1459.390625,
+        "y": 247.09375,
+        "w": 50.609375,
+        "h": 20.796875,
+        "vis": "visible",
+        "op": "1",
+        "disp": "inline-block"
+      },
+      "timeReserve": {
+        "x": 1459.390625,
+        "y": 249.09375,
+        "w": 50.609375,
+        "h": 15,
+        "vis": "hidden",
+        "op": "1",
+        "disp": "inline"
+      },
+      "timeActual": {
+        "x": 1459.390625,
+        "y": 247.09375,
+        "w": 48.6875,
+        "h": 20.796875,
+        "vis": "visible",
+        "op": "1",
+        "disp": "block"
+      },
+      "secs": {
+        "x": 1255.28125,
+        "y": 247.09375,
+        "w": 14.453125,
+        "h": 20.796875,
+        "vis": "visible",
+        "op": "1",
+        "disp": "inline-block"
+      },
+      "refreshSep": {
+        "x": 1359.375,
+        "y": 250.5,
+        "w": 1,
+        "h": 14,
+        "vis": "visible",
+        "op": "1",
+        "disp": "block"
+      },
+      "refreshBtn": {
+        "x": 1518,
+        "y": 241.5,
+        "w": 110,
+        "h": 32,
+        "vis": "visible",
+        "op": "1",
+        "disp": "flex"
+      },
+      "refreshLabel": {
+        "x": 1545,
+        "y": 250.5,
+        "w": 56,
+        "h": 14,
+        "vis": "visible",
+        "op": "1",
+        "disp": "block"
+      },
+      "refreshSpinnerBox": {
+        "x": 1522,
+        "y": 251.5,
+        "w": 12,
+        "h": 12
+      },
+      "queryBtn": {
+        "x": 1218,
+        "y": 176.5,
+        "w": 62,
+        "h": 30,
+        "vis": "visible",
+        "op": "1",
+        "disp": "flex"
+      },
+      "queryLabel": {
+        "x": 1235,
+        "y": 184.5,
+        "w": 28,
+        "h": 14,
+        "vis": "visible",
+        "op": "1",
+        "disp": "block"
+      },
+      "querySpinnerBox": {
+        "x": 1221,
+        "y": 185.5,
+        "w": 12,
+        "h": 12
+      },
+      "queryBar": {
+        "x": 292,
+        "y": 175.5,
+        "w": 1336,
+        "h": 32,
+        "vis": "visible",
+        "op": "1",
+        "disp": "flex"
+      },
+      "queryActions": {
+        "x": 1218,
+        "y": 176.5,
+        "w": 140,
+        "h": 30,
+        "vis": "visible",
+        "op": "1",
+        "disp": "flex"
+      },
+      "queryGroup": {
+        "x": 292,
+        "y": 175.5,
+        "w": 288,
+        "h": 32,
+        "vis": "visible",
+        "op": "1",
+        "disp": "flex"
+      },
+      "resetBtn": {
+        "x": 1300,
+        "y": 176.5,
+        "w": 58,
+        "h": 30,
+        "vis": "visible",
+        "op": "1",
+        "disp": "flex"
+      },
+      "texts": {
+        "timePrefix": "最近成功刷新：",
+        "timeReserve": "88:88:88",
+        "timeActual": "14:11:11",
+        "secs": "--",
+        "refreshLabel": "立即刷新",
+        "queryLabel": "查询"
+      },
+      "aria": {
+        "reserveHidden": "true",
+        "refreshSpinnerHidden": "true",
+        "querySpinnerHidden": "true",
+        "refreshBusy": null,
+        "queryBusy": null,
+        "refreshDisabled": null,
+        "queryDisabled": null
+      },
+      "nativeDisabled": {
+        "refresh": false,
+        "query": false
+      },
+      "spinnerVisible": {
+        "refresh": false,
+        "query": false
+      },
+      "elementPlusLoadingIcon": 0,
+      "anim": {
+        "refreshSpinner": "dss-action-spin-a581eda5",
+        "querySpinner": "dss-action-spin-cd886c8f",
+        "ringProgressTransition": "0s"
+      },
+      "nodeCounts": {
+        "reserve": 1,
+        "actual": 1,
+        "refreshSpinner": 1,
+        "querySpinner": 1
+      },
+      "doc": {
+        "scrollWidth": 1700,
+        "clientWidth": 1700
+      },
+      "timeOuterText": "最近成功刷新：88:88:8814:11:11"
+    },
+    {
+      "name": "MANUAL_LOADING",
+      "substituted": {},
+      "group": {
+        "x": 1231.28125,
+        "y": 241.5,
+        "w": 396.71875,
+        "h": 32,
+        "vis": "visible",
+        "op": "1",
+        "disp": "flex"
+      },
+      "time": {
+        "x": 1368.375,
+        "y": 247.09375,
+        "w": 141.625,
+        "h": 20.796875,
+        "vis": "visible",
+        "op": "1",
+        "disp": "block"
+      },
+      "timePrefix": {
+        "x": 1368.375,
+        "y": 249.09375,
+        "w": 91.015625,
+        "h": 15,
+        "vis": "visible",
+        "op": "1",
+        "disp": "inline"
+      },
+      "timeValue": {
+        "x": 1459.390625,
+        "y": 247.09375,
+        "w": 50.609375,
+        "h": 20.796875,
+        "vis": "visible",
+        "op": "1",
+        "disp": "inline-block"
+      },
+      "timeReserve": {
+        "x": 1459.390625,
+        "y": 249.09375,
+        "w": 50.609375,
+        "h": 15,
+        "vis": "hidden",
+        "op": "1",
+        "disp": "inline"
+      },
+      "timeActual": {
+        "x": 1459.390625,
+        "y": 247.09375,
+        "w": 48.6875,
+        "h": 20.796875,
+        "vis": "visible",
+        "op": "1",
+        "disp": "block"
+      },
+      "secs": {
+        "x": 1255.28125,
+        "y": 247.09375,
+        "w": 14.453125,
+        "h": 20.796875,
+        "vis": "visible",
+        "op": "1",
+        "disp": "inline-block"
+      },
+      "refreshSep": {
+        "x": 1359.375,
+        "y": 250.5,
+        "w": 1,
+        "h": 14,
+        "vis": "visible",
+        "op": "1",
+        "disp": "block"
+      },
+      "refreshBtn": {
+        "x": 1518,
+        "y": 241.5,
+        "w": 110,
+        "h": 32,
+        "vis": "visible",
+        "op": "1",
+        "disp": "flex"
+      },
+      "refreshLabel": {
+        "x": 1545,
+        "y": 250.5,
+        "w": 56,
+        "h": 14,
+        "vis": "visible",
+        "op": "1",
+        "disp": "block"
+      },
+      "refreshSpinnerBox": {
+        "x": 1522,
+        "y": 251.50000762939453,
+        "w": 12,
+        "h": 12
+      },
+      "queryBtn": {
+        "x": 1218,
+        "y": 176.5,
+        "w": 62,
+        "h": 30,
+        "vis": "visible",
+        "op": "1",
+        "disp": "flex"
+      },
+      "queryLabel": {
+        "x": 1235,
+        "y": 184.5,
+        "w": 28,
+        "h": 14,
+        "vis": "visible",
+        "op": "1",
+        "disp": "block"
+      },
+      "querySpinnerBox": {
+        "x": 1221,
+        "y": 185.5,
+        "w": 12,
+        "h": 12
+      },
+      "queryBar": {
+        "x": 292,
+        "y": 175.5,
+        "w": 1336,
+        "h": 32,
+        "vis": "visible",
+        "op": "1",
+        "disp": "flex"
+      },
+      "queryActions": {
+        "x": 1218,
+        "y": 176.5,
+        "w": 140,
+        "h": 30,
+        "vis": "visible",
+        "op": "1",
+        "disp": "flex"
+      },
+      "queryGroup": {
+        "x": 292,
+        "y": 175.5,
+        "w": 288,
+        "h": 32,
+        "vis": "visible",
+        "op": "1",
+        "disp": "flex"
+      },
+      "resetBtn": {
+        "x": 1300,
+        "y": 176.5,
+        "w": 58,
+        "h": 30,
+        "vis": "visible",
+        "op": "1",
+        "disp": "flex"
+      },
+      "texts": {
+        "timePrefix": "最近成功刷新：",
+        "timeReserve": "88:88:88",
+        "timeActual": "14:11:11",
+        "secs": "--",
+        "refreshLabel": "立即刷新",
+        "queryLabel": "查询"
+      },
+      "aria": {
+        "reserveHidden": "true",
+        "refreshSpinnerHidden": "true",
+        "querySpinnerHidden": "true",
+        "refreshBusy": "true",
+        "queryBusy": null,
+        "refreshDisabled": "true",
+        "queryDisabled": "true"
+      },
+      "nativeDisabled": {
+        "refresh": false,
+        "query": false
+      },
+      "spinnerVisible": {
+        "refresh": true,
+        "query": false
+      },
+      "elementPlusLoadingIcon": 0,
+      "anim": {
+        "refreshSpinner": "dss-action-spin-a581eda5",
+        "querySpinner": "dss-action-spin-cd886c8f",
+        "ringProgressTransition": "0s"
+      },
+      "nodeCounts": {
+        "reserve": 1,
+        "actual": 1,
+        "refreshSpinner": 1,
+        "querySpinner": 1
+      },
+      "doc": {
+        "scrollWidth": 1700,
+        "clientWidth": 1700
+      },
+      "timeOuterText": "最近成功刷新：88:88:8814:11:11"
+    },
+    {
+      "name": "MANUAL_SUCCESS",
+      "substituted": {},
+      "group": {
+        "x": 1231.28125,
+        "y": 241.5,
+        "w": 396.71875,
+        "h": 32,
+        "vis": "visible",
+        "op": "1",
+        "disp": "flex"
+      },
+      "time": {
+        "x": 1368.375,
+        "y": 247.09375,
+        "w": 141.625,
+        "h": 20.796875,
+        "vis": "visible",
+        "op": "1",
+        "disp": "block"
+      },
+      "timePrefix": {
+        "x": 1368.375,
+        "y": 249.09375,
+        "w": 91.015625,
+        "h": 15,
+        "vis": "visible",
+        "op": "1",
+        "disp": "inline"
+      },
+      "timeValue": {
+        "x": 1459.390625,
+        "y": 247.09375,
+        "w": 50.609375,
+        "h": 20.796875,
+        "vis": "visible",
+        "op": "1",
+        "disp": "inline-block"
+      },
+      "timeReserve": {
+        "x": 1459.390625,
+        "y": 249.09375,
+        "w": 50.609375,
+        "h": 15,
+        "vis": "hidden",
+        "op": "1",
+        "disp": "inline"
+      },
+      "timeActual": {
+        "x": 1459.390625,
+        "y": 247.09375,
+        "w": 50.609375,
+        "h": 20.796875,
+        "vis": "visible",
+        "op": "1",
+        "disp": "block"
+      },
+      "secs": {
+        "x": 1255.28125,
+        "y": 247.09375,
+        "w": 14.453125,
+        "h": 20.796875,
+        "vis": "visible",
+        "op": "1",
+        "disp": "inline-block"
+      },
+      "refreshSep": {
+        "x": 1359.375,
+        "y": 250.5,
+        "w": 1,
+        "h": 14,
+        "vis": "visible",
+        "op": "1",
+        "disp": "block"
+      },
+      "refreshBtn": {
+        "x": 1518,
+        "y": 241.5,
+        "w": 110,
+        "h": 32,
+        "vis": "visible",
+        "op": "1",
+        "disp": "flex"
+      },
+      "refreshLabel": {
+        "x": 1545,
+        "y": 250.5,
+        "w": 56,
+        "h": 14,
+        "vis": "visible",
+        "op": "1",
+        "disp": "block"
+      },
+      "refreshSpinnerBox": {
+        "x": 1522,
+        "y": 251.49999237060547,
+        "w": 12,
+        "h": 12
+      },
+      "queryBtn": {
+        "x": 1218,
+        "y": 176.5,
+        "w": 62,
+        "h": 30,
+        "vis": "visible",
+        "op": "1",
+        "disp": "flex"
+      },
+      "queryLabel": {
+        "x": 1235,
+        "y": 184.5,
+        "w": 28,
+        "h": 14,
+        "vis": "visible",
+        "op": "1",
+        "disp": "block"
+      },
+      "querySpinnerBox": {
+        "x": 1221,
+        "y": 185.5,
+        "w": 12,
+        "h": 12
+      },
+      "queryBar": {
+        "x": 292,
+        "y": 175.5,
+        "w": 1336,
+        "h": 32,
+        "vis": "visible",
+        "op": "1",
+        "disp": "flex"
+      },
+      "queryActions": {
+        "x": 1218,
+        "y": 176.5,
+        "w": 140,
+        "h": 30,
+        "vis": "visible",
+        "op": "1",
+        "disp": "flex"
+      },
+      "queryGroup": {
+        "x": 292,
+        "y": 175.5,
+        "w": 288,
+        "h": 32,
+        "vis": "visible",
+        "op": "1",
+        "disp": "flex"
+      },
+      "resetBtn": {
+        "x": 1300,
+        "y": 176.5,
+        "w": 58,
+        "h": 30,
+        "vis": "visible",
+        "op": "1",
+        "disp": "flex"
+      },
+      "texts": {
+        "timePrefix": "最近成功刷新：",
+        "timeReserve": "88:88:88",
+        "timeActual": "20:48:09",
+        "secs": "--",
+        "refreshLabel": "立即刷新",
+        "queryLabel": "查询"
+      },
+      "aria": {
+        "reserveHidden": "true",
+        "refreshSpinnerHidden": "true",
+        "querySpinnerHidden": "true",
+        "refreshBusy": null,
+        "queryBusy": null,
+        "refreshDisabled": null,
+        "queryDisabled": null
+      },
+      "nativeDisabled": {
+        "refresh": false,
+        "query": false
+      },
+      "spinnerVisible": {
+        "refresh": false,
+        "query": false
+      },
+      "elementPlusLoadingIcon": 0,
+      "anim": {
+        "refreshSpinner": "dss-action-spin-a581eda5",
+        "querySpinner": "dss-action-spin-cd886c8f",
+        "ringProgressTransition": "0s"
+      },
+      "nodeCounts": {
+        "reserve": 1,
+        "actual": 1,
+        "refreshSpinner": 1,
+        "querySpinner": 1
+      },
+      "doc": {
+        "scrollWidth": 1700,
+        "clientWidth": 1700
+      },
+      "timeOuterText": "最近成功刷新：88:88:8820:48:09"
+    },
+    {
+      "name": "MANUAL_FAILURE",
+      "substituted": {},
+      "group": {
+        "x": 1231.28125,
+        "y": 241.5,
+        "w": 396.71875,
+        "h": 32,
+        "vis": "visible",
+        "op": "1",
+        "disp": "flex"
+      },
+      "time": {
+        "x": 1368.375,
+        "y": 247.09375,
+        "w": 141.625,
+        "h": 20.796875,
+        "vis": "visible",
+        "op": "1",
+        "disp": "block"
+      },
+      "timePrefix": {
+        "x": 1368.375,
+        "y": 249.09375,
+        "w": 91.015625,
+        "h": 15,
+        "vis": "visible",
+        "op": "1",
+        "disp": "inline"
+      },
+      "timeValue": {
+        "x": 1459.390625,
+        "y": 247.09375,
+        "w": 50.609375,
+        "h": 20.796875,
+        "vis": "visible",
+        "op": "1",
+        "disp": "inline-block"
+      },
+      "timeReserve": {
+        "x": 1459.390625,
+        "y": 249.09375,
+        "w": 50.609375,
+        "h": 15,
+        "vis": "hidden",
+        "op": "1",
+        "disp": "inline"
+      },
+      "timeActual": {
+        "x": 1459.390625,
+        "y": 247.09375,
+        "w": 50.609375,
+        "h": 20.796875,
+        "vis": "visible",
+        "op": "1",
+        "disp": "block"
+      },
+      "secs": {
+        "x": 1255.28125,
+        "y": 247.09375,
+        "w": 14.453125,
+        "h": 20.796875,
+        "vis": "visible",
+        "op": "1",
+        "disp": "inline-block"
+      },
+      "refreshSep": {
+        "x": 1359.375,
+        "y": 250.5,
+        "w": 1,
+        "h": 14,
+        "vis": "visible",
+        "op": "1",
+        "disp": "block"
+      },
+      "refreshBtn": {
+        "x": 1518,
+        "y": 241.5,
+        "w": 110,
+        "h": 32,
+        "vis": "visible",
+        "op": "1",
+        "disp": "flex"
+      },
+      "refreshLabel": {
+        "x": 1545,
+        "y": 250.5,
+        "w": 56,
+        "h": 14,
+        "vis": "visible",
+        "op": "1",
+        "disp": "block"
+      },
+      "refreshSpinnerBox": {
+        "x": 1522,
+        "y": 251.49999237060547,
+        "w": 12,
+        "h": 12
+      },
+      "queryBtn": {
+        "x": 1218,
+        "y": 176.5,
+        "w": 62,
+        "h": 30,
+        "vis": "visible",
+        "op": "1",
+        "disp": "flex"
+      },
+      "queryLabel": {
+        "x": 1235,
+        "y": 184.5,
+        "w": 28,
+        "h": 14,
+        "vis": "visible",
+        "op": "1",
+        "disp": "block"
+      },
+      "querySpinnerBox": {
+        "x": 1221,
+        "y": 185.5,
+        "w": 12,
+        "h": 12
+      },
+      "queryBar": {
+        "x": 292,
+        "y": 175.5,
+        "w": 1336,
+        "h": 32,
+        "vis": "visible",
+        "op": "1",
+        "disp": "flex"
+      },
+      "queryActions": {
+        "x": 1218,
+        "y": 176.5,
+        "w": 140,
+        "h": 30,
+        "vis": "visible",
+        "op": "1",
+        "disp": "flex"
+      },
+      "queryGroup": {
+        "x": 292,
+        "y": 175.5,
+        "w": 288,
+        "h": 32,
+        "vis": "visible",
+        "op": "1",
+        "disp": "flex"
+      },
+      "resetBtn": {
+        "x": 1300,
+        "y": 176.5,
+        "w": 58,
+        "h": 30,
+        "vis": "visible",
+        "op": "1",
+        "disp": "flex"
+      },
+      "texts": {
+        "timePrefix": "最近成功刷新：",
+        "timeReserve": "88:88:88",
+        "timeActual": "20:48:09",
+        "secs": "--",
+        "refreshLabel": "立即刷新",
+        "queryLabel": "查询"
+      },
+      "aria": {
+        "reserveHidden": "true",
+        "refreshSpinnerHidden": "true",
+        "querySpinnerHidden": "true",
+        "refreshBusy": null,
+        "queryBusy": null,
+        "refreshDisabled": null,
+        "queryDisabled": null
+      },
+      "nativeDisabled": {
+        "refresh": false,
+        "query": false
+      },
+      "spinnerVisible": {
+        "refresh": false,
+        "query": false
+      },
+      "elementPlusLoadingIcon": 0,
+      "anim": {
+        "refreshSpinner": "dss-action-spin-a581eda5",
+        "querySpinner": "dss-action-spin-cd886c8f",
+        "ringProgressTransition": "0s"
+      },
+      "nodeCounts": {
+        "reserve": 1,
+        "actual": 1,
+        "refreshSpinner": 1,
+        "querySpinner": 1
+      },
+      "doc": {
+        "scrollWidth": 1700,
+        "clientWidth": 1700
+      },
+      "timeOuterText": "最近成功刷新：88:88:8820:48:09"
+    },
+    {
+      "name": "QUERY_LOADING",
+      "substituted": {},
+      "group": {
+        "x": 1231.28125,
+        "y": 241.5,
+        "w": 396.71875,
+        "h": 32,
+        "vis": "visible",
+        "op": "1",
+        "disp": "flex"
+      },
+      "time": {
+        "x": 1368.375,
+        "y": 247.09375,
+        "w": 141.625,
+        "h": 20.796875,
+        "vis": "visible",
+        "op": "1",
+        "disp": "block"
+      },
+      "timePrefix": {
+        "x": 1368.375,
+        "y": 249.09375,
+        "w": 91.015625,
+        "h": 15,
+        "vis": "visible",
+        "op": "1",
+        "disp": "inline"
+      },
+      "timeValue": {
+        "x": 1459.390625,
+        "y": 247.09375,
+        "w": 50.609375,
+        "h": 20.796875,
+        "vis": "visible",
+        "op": "1",
+        "disp": "inline-block"
+      },
+      "timeReserve": {
+        "x": 1459.390625,
+        "y": 249.09375,
+        "w": 50.609375,
+        "h": 15,
+        "vis": "hidden",
+        "op": "1",
+        "disp": "inline"
+      },
+      "timeActual": {
+        "x": 1459.390625,
+        "y": 247.09375,
+        "w": 50.609375,
+        "h": 20.796875,
+        "vis": "visible",
+        "op": "1",
+        "disp": "block"
+      },
+      "secs": {
+        "x": 1255.28125,
+        "y": 247.09375,
+        "w": 14.453125,
+        "h": 20.796875,
+        "vis": "visible",
+        "op": "1",
+        "disp": "inline-block"
+      },
+      "refreshSep": {
+        "x": 1359.375,
+        "y": 250.5,
+        "w": 1,
+        "h": 14,
+        "vis": "visible",
+        "op": "1",
+        "disp": "block"
+      },
+      "refreshBtn": {
+        "x": 1518,
+        "y": 241.5,
+        "w": 110,
+        "h": 32,
+        "vis": "visible",
+        "op": "1",
+        "disp": "flex"
+      },
+      "refreshLabel": {
+        "x": 1545,
+        "y": 250.5,
+        "w": 56,
+        "h": 14,
+        "vis": "visible",
+        "op": "1",
+        "disp": "block"
+      },
+      "refreshSpinnerBox": {
+        "x": 1522,
+        "y": 251.5,
+        "w": 12,
+        "h": 12
+      },
+      "queryBtn": {
+        "x": 1218,
+        "y": 176.5,
+        "w": 62,
+        "h": 30,
+        "vis": "visible",
+        "op": "1",
+        "disp": "flex"
+      },
+      "queryLabel": {
+        "x": 1235,
+        "y": 184.5,
+        "w": 28,
+        "h": 14,
+        "vis": "visible",
+        "op": "1",
+        "disp": "block"
+      },
+      "querySpinnerBox": {
+        "x": 1221,
+        "y": 185.5,
+        "w": 12,
+        "h": 12
+      },
+      "queryBar": {
+        "x": 292,
+        "y": 175.5,
+        "w": 1336,
+        "h": 32,
+        "vis": "visible",
+        "op": "1",
+        "disp": "flex"
+      },
+      "queryActions": {
+        "x": 1218,
+        "y": 176.5,
+        "w": 140,
+        "h": 30,
+        "vis": "visible",
+        "op": "1",
+        "disp": "flex"
+      },
+      "queryGroup": {
+        "x": 292,
+        "y": 175.5,
+        "w": 288,
+        "h": 32,
+        "vis": "visible",
+        "op": "1",
+        "disp": "flex"
+      },
+      "resetBtn": {
+        "x": 1300,
+        "y": 176.5,
+        "w": 58,
+        "h": 30,
+        "vis": "visible",
+        "op": "1",
+        "disp": "flex"
+      },
+      "texts": {
+        "timePrefix": "最近成功刷新：",
+        "timeReserve": "88:88:88",
+        "timeActual": "20:48:09",
+        "secs": "--",
+        "refreshLabel": "立即刷新",
+        "queryLabel": "查询"
+      },
+      "aria": {
+        "reserveHidden": "true",
+        "refreshSpinnerHidden": "true",
+        "querySpinnerHidden": "true",
+        "refreshBusy": null,
+        "queryBusy": "true",
+        "refreshDisabled": "true",
+        "queryDisabled": "true"
+      },
+      "nativeDisabled": {
+        "refresh": false,
+        "query": false
+      },
+      "spinnerVisible": {
+        "refresh": false,
+        "query": true
+      },
+      "elementPlusLoadingIcon": 0,
+      "anim": {
+        "refreshSpinner": "dss-action-spin-a581eda5",
+        "querySpinner": "dss-action-spin-cd886c8f",
+        "ringProgressTransition": "0s"
+      },
+      "nodeCounts": {
+        "reserve": 1,
+        "actual": 1,
+        "refreshSpinner": 1,
+        "querySpinner": 1
+      },
+      "doc": {
+        "scrollWidth": 1700,
+        "clientWidth": 1700
+      },
+      "timeOuterText": "最近成功刷新：88:88:8820:48:09"
+    },
+    {
+      "name": "QUERY_SUCCESS",
+      "substituted": {},
+      "group": {
+        "x": 1231.28125,
+        "y": 241.5,
+        "w": 396.71875,
+        "h": 32,
+        "vis": "visible",
+        "op": "1",
+        "disp": "flex"
+      },
+      "time": {
+        "x": 1368.375,
+        "y": 247.09375,
+        "w": 141.625,
+        "h": 20.796875,
+        "vis": "visible",
+        "op": "1",
+        "disp": "block"
+      },
+      "timePrefix": {
+        "x": 1368.375,
+        "y": 249.09375,
+        "w": 91.015625,
+        "h": 15,
+        "vis": "visible",
+        "op": "1",
+        "disp": "inline"
+      },
+      "timeValue": {
+        "x": 1459.390625,
+        "y": 247.09375,
+        "w": 50.609375,
+        "h": 20.796875,
+        "vis": "visible",
+        "op": "1",
+        "disp": "inline-block"
+      },
+      "timeReserve": {
+        "x": 1459.390625,
+        "y": 249.09375,
+        "w": 50.609375,
+        "h": 15,
+        "vis": "hidden",
+        "op": "1",
+        "disp": "inline"
+      },
+      "timeActual": {
+        "x": 1459.390625,
+        "y": 247.09375,
+        "w": 50.609375,
+        "h": 20.796875,
+        "vis": "visible",
+        "op": "1",
+        "disp": "block"
+      },
+      "secs": {
+        "x": 1255.28125,
+        "y": 247.09375,
+        "w": 14.453125,
+        "h": 20.796875,
+        "vis": "visible",
+        "op": "1",
+        "disp": "inline-block"
+      },
+      "refreshSep": {
+        "x": 1359.375,
+        "y": 250.5,
+        "w": 1,
+        "h": 14,
+        "vis": "visible",
+        "op": "1",
+        "disp": "block"
+      },
+      "refreshBtn": {
+        "x": 1518,
+        "y": 241.5,
+        "w": 110,
+        "h": 32,
+        "vis": "visible",
+        "op": "1",
+        "disp": "flex"
+      },
+      "refreshLabel": {
+        "x": 1545,
+        "y": 250.5,
+        "w": 56,
+        "h": 14,
+        "vis": "visible",
+        "op": "1",
+        "disp": "block"
+      },
+      "refreshSpinnerBox": {
+        "x": 1522,
+        "y": 251.49999237060547,
+        "w": 12,
+        "h": 12
+      },
+      "queryBtn": {
+        "x": 1218,
+        "y": 176.5,
+        "w": 62,
+        "h": 30,
+        "vis": "visible",
+        "op": "1",
+        "disp": "flex"
+      },
+      "queryLabel": {
+        "x": 1235,
+        "y": 184.5,
+        "w": 28,
+        "h": 14,
+        "vis": "visible",
+        "op": "1",
+        "disp": "block"
+      },
+      "querySpinnerBox": {
+        "x": 1221,
+        "y": 185.5,
+        "w": 12,
+        "h": 12
+      },
+      "queryBar": {
+        "x": 292,
+        "y": 175.5,
+        "w": 1336,
+        "h": 32,
+        "vis": "visible",
+        "op": "1",
+        "disp": "flex"
+      },
+      "queryActions": {
+        "x": 1218,
+        "y": 176.5,
+        "w": 140,
+        "h": 30,
+        "vis": "visible",
+        "op": "1",
+        "disp": "flex"
+      },
+      "queryGroup": {
+        "x": 292,
+        "y": 175.5,
+        "w": 288,
+        "h": 32,
+        "vis": "visible",
+        "op": "1",
+        "disp": "flex"
+      },
+      "resetBtn": {
+        "x": 1300,
+        "y": 176.5,
+        "w": 58,
+        "h": 30,
+        "vis": "visible",
+        "op": "1",
+        "disp": "flex"
+      },
+      "texts": {
+        "timePrefix": "最近成功刷新：",
+        "timeReserve": "88:88:88",
+        "timeActual": "20:48:10",
+        "secs": "--",
+        "refreshLabel": "立即刷新",
+        "queryLabel": "查询"
+      },
+      "aria": {
+        "reserveHidden": "true",
+        "refreshSpinnerHidden": "true",
+        "querySpinnerHidden": "true",
+        "refreshBusy": null,
+        "queryBusy": null,
+        "refreshDisabled": null,
+        "queryDisabled": null
+      },
+      "nativeDisabled": {
+        "refresh": false,
+        "query": false
+      },
+      "spinnerVisible": {
+        "refresh": false,
+        "query": false
+      },
+      "elementPlusLoadingIcon": 0,
+      "anim": {
+        "refreshSpinner": "dss-action-spin-a581eda5",
+        "querySpinner": "dss-action-spin-cd886c8f",
+        "ringProgressTransition": "0s"
+      },
+      "nodeCounts": {
+        "reserve": 1,
+        "actual": 1,
+        "refreshSpinner": 1,
+        "querySpinner": 1
+      },
+      "doc": {
+        "scrollWidth": 1700,
+        "clientWidth": 1700
+      },
+      "timeOuterText": "最近成功刷新：88:88:8820:48:10"
+    },
+    {
+      "name": "QUERY_FAILURE",
+      "substituted": {},
+      "group": {
+        "x": 1231.28125,
+        "y": 241.5,
+        "w": 396.71875,
+        "h": 32,
+        "vis": "visible",
+        "op": "1",
+        "disp": "flex"
+      },
+      "time": {
+        "x": 1368.375,
+        "y": 247.09375,
+        "w": 141.625,
+        "h": 20.796875,
+        "vis": "visible",
+        "op": "1",
+        "disp": "block"
+      },
+      "timePrefix": {
+        "x": 1368.375,
+        "y": 249.09375,
+        "w": 91.015625,
+        "h": 15,
+        "vis": "visible",
+        "op": "1",
+        "disp": "inline"
+      },
+      "timeValue": {
+        "x": 1459.390625,
+        "y": 247.09375,
+        "w": 50.609375,
+        "h": 20.796875,
+        "vis": "visible",
+        "op": "1",
+        "disp": "inline-block"
+      },
+      "timeReserve": {
+        "x": 1459.390625,
+        "y": 249.09375,
+        "w": 50.609375,
+        "h": 15,
+        "vis": "hidden",
+        "op": "1",
+        "disp": "inline"
+      },
+      "timeActual": {
+        "x": 1459.390625,
+        "y": 247.09375,
+        "w": 50.609375,
+        "h": 20.796875,
+        "vis": "visible",
+        "op": "1",
+        "disp": "block"
+      },
+      "secs": {
+        "x": 1255.28125,
+        "y": 247.09375,
+        "w": 14.453125,
+        "h": 20.796875,
+        "vis": "visible",
+        "op": "1",
+        "disp": "inline-block"
+      },
+      "refreshSep": {
+        "x": 1359.375,
+        "y": 250.5,
+        "w": 1,
+        "h": 14,
+        "vis": "visible",
+        "op": "1",
+        "disp": "block"
+      },
+      "refreshBtn": {
+        "x": 1518,
+        "y": 241.5,
+        "w": 110,
+        "h": 32,
+        "vis": "visible",
+        "op": "1",
+        "disp": "flex"
+      },
+      "refreshLabel": {
+        "x": 1545,
+        "y": 250.5,
+        "w": 56,
+        "h": 14,
+        "vis": "visible",
+        "op": "1",
+        "disp": "block"
+      },
+      "refreshSpinnerBox": {
+        "x": 1522,
+        "y": 251.5,
+        "w": 12,
+        "h": 12
+      },
+      "queryBtn": {
+        "x": 1218,
+        "y": 176.5,
+        "w": 62,
+        "h": 30,
+        "vis": "visible",
+        "op": "1",
+        "disp": "flex"
+      },
+      "queryLabel": {
+        "x": 1235,
+        "y": 184.5,
+        "w": 28,
+        "h": 14,
+        "vis": "visible",
+        "op": "1",
+        "disp": "block"
+      },
+      "querySpinnerBox": {
+        "x": 1221,
+        "y": 185.5,
+        "w": 12,
+        "h": 12
+      },
+      "queryBar": {
+        "x": 292,
+        "y": 175.5,
+        "w": 1336,
+        "h": 32,
+        "vis": "visible",
+        "op": "1",
+        "disp": "flex"
+      },
+      "queryActions": {
+        "x": 1218,
+        "y": 176.5,
+        "w": 140,
+        "h": 30,
+        "vis": "visible",
+        "op": "1",
+        "disp": "flex"
+      },
+      "queryGroup": {
+        "x": 292,
+        "y": 175.5,
+        "w": 288,
+        "h": 32,
+        "vis": "visible",
+        "op": "1",
+        "disp": "flex"
+      },
+      "resetBtn": {
+        "x": 1300,
+        "y": 176.5,
+        "w": 58,
+        "h": 30,
+        "vis": "visible",
+        "op": "1",
+        "disp": "flex"
+      },
+      "texts": {
+        "timePrefix": "最近成功刷新：",
+        "timeReserve": "88:88:88",
+        "timeActual": "20:48:10",
+        "secs": "--",
+        "refreshLabel": "立即刷新",
+        "queryLabel": "查询"
+      },
+      "aria": {
+        "reserveHidden": "true",
+        "refreshSpinnerHidden": "true",
+        "querySpinnerHidden": "true",
+        "refreshBusy": null,
+        "queryBusy": null,
+        "refreshDisabled": null,
+        "queryDisabled": null
+      },
+      "nativeDisabled": {
+        "refresh": false,
+        "query": false
+      },
+      "spinnerVisible": {
+        "refresh": false,
+        "query": false
+      },
+      "elementPlusLoadingIcon": 0,
+      "anim": {
+        "refreshSpinner": "dss-action-spin-a581eda5",
+        "querySpinner": "dss-action-spin-cd886c8f",
+        "ringProgressTransition": "0s"
+      },
+      "nodeCounts": {
+        "reserve": 1,
+        "actual": 1,
+        "refreshSpinner": 1,
+        "querySpinner": 1
+      },
+      "doc": {
+        "scrollWidth": 1700,
+        "clientWidth": 1700
+      },
+      "timeOuterText": "最近成功刷新：88:88:8820:48:10"
+    }
+  ],
+  "deltas": {
+    "refresh_group_rect_delta": {
+      "x": 0,
+      "y": 0,
+      "width": 0,
+      "height": 0
+    },
+    "refresh_time_rect_delta": {
+      "width": 0
+    },
+    "refresh_time_value_rect_delta": {
+      "width": 0
+    },
+    "refresh_time_prefix_rect_delta": {
+      "width": 0
+    },
+    "countdown_seconds_slot_rect_delta": {
+      "width": 0
+    },
+    "refresh_btn_rect_delta": {
+      "x": 0,
+      "y": 0,
+      "width": 0,
+      "height": 0
+    },
+    "refresh_label_center_delta": {
+      "x": 0,
+      "y": 0
+    },
+    "query_btn_rect_delta": {
+      "x": 0,
+      "y": 0,
+      "width": 0,
+      "height": 0
+    },
+    "query_label_center_delta": {
+      "x": 0,
+      "y": 0
+    },
+    "query_actions_rect_delta": {
+      "x": 0,
+      "y": 0,
+      "width": 0,
+      "height": 0
+    },
+    "query_bar_rect_delta": {
+      "x": 0,
+      "y": 0,
+      "width": 0,
+      "height": 0
+    },
+    "reset_btn_rect_delta": {
+      "x": 0,
+      "y": 0,
+      "width": 0,
+      "height": 0
+    },
+    "query_group_rect_delta": {
+      "x": 0,
+      "y": 0,
+      "width": 0,
+      "height": 0
+    },
+    "refresh_sep_rect_delta": {
+      "x": 0,
+      "y": 0,
+      "width": 0,
+      "height": 0
+    }
+  },
+  "widths": {
+    "queryButton": {
+      "values": [
+        62,
+        62,
+        62,
+        62,
+        62,
+        62,
+        62,
+        62,
+        62,
+        62,
+        62,
+        62,
+        62,
+        62,
+        62,
+        62,
+        62,
+        62,
+        62,
+        62
+      ],
+      "delta": 0,
+      "min": 62,
+      "max": 62
+    },
+    "refreshButton": {
+      "values": [
+        110,
+        110,
+        110,
+        110,
+        110,
+        110,
+        110,
+        110,
+        110,
+        110,
+        110,
+        110,
+        110,
+        110,
+        110,
+        110,
+        110,
+        110,
+        110,
+        110
+      ],
+      "delta": 0,
+      "min": 110,
+      "max": 110
+    },
+    "refreshTimeSlot": {
+      "values": [
+        50.609,
+        50.609,
+        50.609,
+        50.609,
+        50.609,
+        50.609,
+        50.609,
+        50.609,
+        50.609,
+        50.609,
+        50.609,
+        50.609,
+        50.609,
+        50.609,
+        50.609,
+        50.609,
+        50.609,
+        50.609,
+        50.609,
+        50.609
+      ],
+      "delta": 0,
+      "min": 50.609,
+      "max": 50.609
+    },
+    "countdownSlot": {
+      "values": [
+        14.453,
+        14.453,
+        14.453,
+        14.453,
+        14.453,
+        14.453,
+        14.453,
+        14.453,
+        14.453,
+        14.453,
+        14.453,
+        14.453,
+        14.453,
+        14.453,
+        14.453,
+        14.453,
+        14.453,
+        14.453,
+        14.453,
+        14.453
+      ],
+      "delta": 0,
+      "min": 14.453,
+      "max": 14.453
+    }
+  },
+  "invariants": {
+    "reserveTextConstant": true,
+    "reserveAriaHiddenAlways": true,
+    "prefixConstant": true,
+    "nodeCountsStable": true,
+    "labelsConstant": true,
+    "spinnersAriaHiddenAlways": true,
+    "buttonsNeverNativelyDisabled": true,
+    "refreshSpinnerLitOnlyWhenManual": true,
+    "querySpinnerLitOnlyWhenQuery": true,
+    "busyOnlyOnManualLoading": true
+  }
+}

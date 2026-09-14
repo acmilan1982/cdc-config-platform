@@ -1,0 +1,91 @@
+DSS-AC EVIDENCE INDEX AND VERDICT
+task=DATA-SOURCE-SNAPSHOT-STATUS-ACTION-BUTTON-LOADING-VISUAL-STABILITY-FORMAL-ACCEPTANCE-001
+base_commit=5195a716ed3b6d0d3122decfe937b73b27581d5a
+branch=develop
+browser=real Chromium (Chrome/148.0.7778.167) driven over CDP; page served from this worktree's Vite
+        instance on 5173 (--strictPort), single GET continued to the REAL backend on 8080 for success paths;
+        only the target GET is failed at the browser network layer. No backend/DB/production code changed.
+official_viewports=1280x800,1700x920,1920x1080,2560x1440
+geometry_rule=max difference of raw getBoundingClientRect() values across states === 0 (no tolerance,
+        no right-anchor substitute, no rounding mask); machine-checked by harness/assertions.mjs.
+
+raw artefacts (all in this directory):
+  browser/acceptance-matrix.json           full result object (4 viewports x 20 states, deltas, invariants, request/console data)
+  browser/rects/<vp>.json                  per-viewport per-state RAW rects + recorded deltas + invariants
+  browser/acceptance-requests.json         every request observed (method+url) and every real-backend response
+  browser/acceptance-console.json          browser console/exception/log-error capture (empty = 0 errors)
+  browser/acceptance-assertion-analysis.txt machine verdict + recomputed per-viewport deltas
+  browser/acceptance-run.txt               raw runner stdout/stderr + EXIT_CODE
+  browser/screenshots/*.png                per-viewport IDLE / MANUAL_LOADING / QUERY_LOADING + reduced-motion + other-route
+  harness/cdp.mjs                          minimal CDP client
+  harness/acceptance.mjs                   matrix + request-semantics runner (page-free assertion module call)
+  harness/assertions.mjs                   pure judgement module (the only place a verdict is produced)
+  harness/negative-selftest.mjs            self-test proving assertions.mjs is falsifiable (clean PASS, 0.001px FAIL)
+  browser/negative-selftest.txt            raw output of the negative self-test + exit code
+  service/00-pre-existing-instances.txt    5173/5174 listener PID/command/cwd/user before this task
+  service/01-service-state.txt             final listener state (5173 frontend, 8080 backend)
+  service/02-served-source-fingerprint.txt served-feature-file blob hashes == base commit
+  service/03-targeted-tests.txt            DataSourceSnapshotQueryBar/Toolbar spec results
+  service/04-feature-tests.txt             data-source-run-state feature suite results
+  service/05-full-tests.txt                full frontend suite results
+  service/06-typecheck.txt                 vue-tsc --noEmit result
+  service/07-build.txt                     vite build result
+  service/08-service-control-record.txt    PID / cwd / command / URL / log / stop command for both services
+  service/09-backend-background-behaviour.txt  committed bounded extract: startup + unrelated ZooKeeper background lines
+  db/01-readonly-snapshot-before.txt       read-only row-count/key-set/content-digest of the 3 business tables (before)
+  db/02-readonly-snapshot-after.txt        same snapshots after the acceptance run (after)
+  db/03-readonly-snapshot-diff.txt         before vs after comparison (identical)
+  db/04-request-path-sql-audit.txt         request-path SQL classification (SELECT only; 0 write statements)
+  git/01-scope-and-base.txt                base commit, changed paths, whitelist verdict, remote precondition
+  git/02-frozen-boundary-audit.txt         path-level zero diff + region sha1 digests of frozen business rules
+  git/03-diff-check.txt                    git diff --check / git diff --cached --check results
+  git/04-credential-scan.txt               secret-pattern scan of the new evidence and changed docs
+  git/05-whitespace-normalization.txt      manifest of the information-preserving trailing-whitespace normalization
+  git/06-precommit-checks.txt              machine output of the sixteen section-19 pre-commit checks
+
+note on the raw service logs: service/backend.log and service/vite-dev.log are the live stdout of the two
+  running services and are matched by the repository .gitignore rule "*.log", so they are kept local and
+  are NOT part of this commit (consistent with every earlier round, which committed no *.log). The backend
+  service stays running (section 4) and keeps appending to service/backend.log after this task ends.
+  Its relevant background content is committed as the bounded, normalised extract
+  service/09-backend-background-behaviour.txt; no visible character of any captured line was altered.
+
+formal acceptance report (outside this directory):
+  docs/features/data-source-snapshot-status/reports/DATA-SOURCE-SNAPSHOT-STATUS-ACTION-BUTTON-LOADING-VISUAL-STABILITY-FORMAL-ACCEPTANCE-001.md
+
+verdict per criterion:
+  DSS-AC-108 (查询按钮几何稳定)  = PASS
+    evidence: rects/*.json query_btn x/y/w/h delta == 0 in all 20 states x 4 viewports; query_button_width_set == [62];
+              elementPlusLoadingIcon == 0 in every state (default EP Loading icon never enters the content flow);
+              buttons never natively disabled; correct restore after success and failure.
+  DSS-AC-109 (查询按钮文案与指示器) = PASS
+    evidence: queryLabel text == "查询" in all states; query_label_center x==0 and y==0;
+              query indicator box strictly inside the button and fully LEFT of the label in every state
+              (indicator_in_left_blank_outside_content_flow); indicator single persistent node; aria-hidden==true always;
+              reduced motion: query spinner animationName == "none" while still statically visible, button geometry unchanged
+              (reducedMotion.queryIndicatorStaticallyVisible == true). White-ring-before-查询 form accepted by owner; not restyled.
+  DSS-AC-110 (立即刷新按钮几何稳定) = PASS
+    evidence: refresh_btn x/y/w/h delta == 0 in all states x viewports; refresh_button_width_set == [110];
+              elementPlusLoadingIcon == 0; correct restore after Loading.
+  DSS-AC-111 (刷新组与倒计时几何稳定) = PASS
+    evidence: refreshLabel text == "立即刷新" always; refresh_label_center x==0, y==0;
+              indicator strictly inside + fully left of label; .dss-refresh-group x/y/w/h delta == 0 across
+              "最近成功刷新：--", multiple HH:mm:ss groups and post-success updates; countdown 60/59/10/9/0/--
+              leaves the 2ch seconds slot and all following elements at delta 0 (countdown_seconds_slot width==0,
+              reset_btn/query_group/refresh_sep deltas == 0).
+  DSS-AC-112 (请求语义与状态互斥) = PASS
+    evidence: requestSemantics in acceptance-matrix.json:
+              single valid click -> exactly 1 GET; in-flight duplicate click -> +0; other button while locked -> +0;
+              Enter while locked -> +0; hidden freezes countdown (before==after, 0 GETs while hidden) and resume issues
+              exactly one recovery GET that does NOT light either manual indicator; success updates data and last-refresh time
+              (real backend 200, rows present); failure preserves old rows/old applied conditions (non-default
+              "?status=RUNNING" identical before and after) and old success time, and shows the converged message;
+              writeRequests == 0; page read-only.
+  DSS-AC-113 (无回归 / 相邻控件 / 溢出) = PASS
+    evidence: reset_btn / query_group / refresh_sep rect deltas == 0 across all states; query_bar delta == 0;
+              no_horizontal_overflow (scrollWidth <= clientWidth) in every state;
+              browser console errors == 0; requests.nonGet == 0 and requests.apiNonGet == 0;
+              other-route leak (dssNodes/refreshGroup/spinner/actionLabel) all == 0 on /monitor/data-source.
+
+machine verdict: checks_passed=294  assertion_failure_count=0  strict_harness_exit_code=0
+                 RESULT=ALL_HARD_ASSERTIONS_PASSED

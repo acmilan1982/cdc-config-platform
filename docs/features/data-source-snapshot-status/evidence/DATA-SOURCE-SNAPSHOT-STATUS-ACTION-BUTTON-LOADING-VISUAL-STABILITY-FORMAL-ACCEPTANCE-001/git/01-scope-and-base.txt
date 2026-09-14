@@ -1,0 +1,73 @@
+GIT SCOPE AND BASE FINGERPRINT (formal acceptance)
+recorded_at_local=2026-09-14
+repo_dir=/agent/dss-abl-fa-001 (isolated worktree, detached HEAD)
+branch=HEAD
+base_commit=5195a716ed3b6d0d3122decfe937b73b27581d5a
+base_commit_expected=5195a716ed3b6d0d3122decfe937b73b27581d5a
+base_matches_expected=yes
+main_worktree=/agent/cdc-config-platform branch=develop head=4222b0a24b927aca6f62ff348fd8549b73d4156c (untouched, not entered for edits)
+
+tracked_paths_changed_vs_base (only these 8 files):
+  docs/features/README.md
+  docs/features/data-source-snapshot-status/ACCEPTANCE.md
+  docs/features/data-source-snapshot-status/API.md
+  docs/features/data-source-snapshot-status/DATABASE.md
+  docs/features/data-source-snapshot-status/DESIGN.md
+  docs/features/data-source-snapshot-status/README.md
+  docs/features/data-source-snapshot-status/REQUIREMENTS.md
+  docs/features/data-source-snapshot-status/UI.md
+
+whitelist_check (section 16 allowed files):
+  docs/features/README.md                                  -> ALLOWED (change-log row)
+  docs/features/data-source-snapshot-status/README.md       -> ALLOWED (status/statistics/next-entry + record)
+  docs/features/data-source-snapshot-status/REQUIREMENTS.md -> ALLOWED (same)
+  docs/features/data-source-snapshot-status/ACCEPTANCE.md   -> ALLOWED (DSS-AC-108~113 status column + status/statistics/next-entry + record)
+  docs/features/data-source-snapshot-status/DESIGN.md       -> ALLOWED (same)
+  docs/features/data-source-snapshot-status/UI.md           -> ALLOWED (same)
+  docs/features/data-source-snapshot-status/API.md          -> ALLOWED (same)
+  docs/features/data-source-snapshot-status/DATABASE.md     -> ALLOWED (same)
+  new: reports/DATA-SOURCE-SNAPSHOT-STATUS-ACTION-BUTTON-LOADING-VISUAL-STABILITY-FORMAL-ACCEPTANCE-001.md -> ALLOWED
+  new: evidence/DATA-SOURCE-SNAPSHOT-STATUS-ACTION-BUTTON-LOADING-VISUAL-STABILITY-FORMAL-ACCEPTANCE-001/** -> ALLOWED
+  paths outside whitelist: 0
+
+untracked_paths_are_only_new_evidence_dir=0 (0 means yes)
+
+per-file changed line numbers vs base (git diff -U0 hunk headers):
+diff --git a/docs/features/README.md b/docs/features/README.md
+@@ -67 +67 @@
+@@ -152,0 +153,2 @@
+diff --git a/docs/features/data-source-snapshot-status/ACCEPTANCE.md b/docs/features/data-source-snapshot-status/ACCEPTANCE.md
+@@ -79 +79 @@
+@@ -368,6 +368,6 @@
+@@ -511 +511,3 @@
+diff --git a/docs/features/data-source-snapshot-status/API.md b/docs/features/data-source-snapshot-status/API.md
+@@ -22 +22 @@
+@@ -372 +372,3 @@ GET /api/monitor/data-source-run-state/list?status=RUNNING&status=FORBIDDEN_STAT
+diff --git a/docs/features/data-source-snapshot-status/DATABASE.md b/docs/features/data-source-snapshot-status/DATABASE.md
+@@ -21 +21 @@
+@@ -262 +262,3 @@ FROM CDC_DATA_SOURCE
+diff --git a/docs/features/data-source-snapshot-status/DESIGN.md b/docs/features/data-source-snapshot-status/DESIGN.md
+@@ -84 +84 @@
+@@ -1207 +1207 @@ ChatGPT 对上一结果提交（`31aa9f5beec7ded3cd798b3af617fd79a1606ed0`）进
+@@ -1227 +1227,5 @@ ChatGPT 对上一结果提交（`31aa9f5beec7ded3cd798b3af617fd79a1606ed0`）进
+diff --git a/docs/features/data-source-snapshot-status/README.md b/docs/features/data-source-snapshot-status/README.md
+@@ -31 +31 @@
+@@ -260 +260,3 @@
+diff --git a/docs/features/data-source-snapshot-status/REQUIREMENTS.md b/docs/features/data-source-snapshot-status/REQUIREMENTS.md
+@@ -91 +91 @@
+@@ -558 +558,3 @@ R0 初版 §22“待用户复审的草案建议”所列 8 项 `DSS-PROP-*` 已
+diff --git a/docs/features/data-source-snapshot-status/UI.md b/docs/features/data-source-snapshot-status/UI.md
+@@ -74 +74 @@
+@@ -842 +842 @@ ChatGPT 对上一结果提交（`31aa9f5beec7ded3cd798b3af617fd79a1606ed0`）正
+@@ -862 +862,5 @@ ChatGPT 对上一结果提交（`31aa9f5beec7ded3cd798b3af617fd79a1606ed0`）正
+GIT REMOTE PRECONDITION (read-only)
+recorded_at_local=2026-09-14
+origin_develop_ls_remote=5195a716ed3b6d0d3122decfe937b73b27581d5a
+local_origin_develop_ref=5195a716ed3b6d0d3122decfe937b73b27581d5a
+worktree_HEAD=5195a716ed3b6d0d3122decfe937b73b27581d5a
+base_commit_expected=5195a716ed3b6d0d3122decfe937b73b27581d5a
+precondition_origin_develop_equals_expected=YES
+worktree_mode=detached HEAD at the exact origin/develop tip; no rebase/merge performed;
+              the resulting commit is pushed back with 'git push origin HEAD:develop'.
+main_worktree=/agent/cdc-config-platform branch=develop head=4222b0a24b927aca6f62ff348fd8549b73d4156c
+  preserved byte-for-byte; not entered, not cleaned, not modified by this task.

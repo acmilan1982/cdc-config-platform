@@ -1,0 +1,33 @@
+SERVICE CONTROL RECORD (formal acceptance, for user verification)
+recorded_at_local=2026-09-14
+worktree=/agent/dss-abl-fa-001 base_commit=5195a716ed3b6d0d3122decfe937b73b27581d5a (detached)
+
+FRONTEND
+  pid=19652
+  listen=0.0.0.0:5173   (verified: ss -ltnp shows 0.0.0.0:5173)
+  cwd=/agent/dss-abl-fa-001/frontend
+  cmd=node /agent/dss-abl-fa-001/frontend/node_modules/.bin/vite --host 0.0.0.0 --port 5173 --strictPort
+  log=service/vite-dev.log
+  url_for_user=http://192.168.174.70:5173/monitor/data-source-state
+  stop=kill 19652
+
+BACKEND
+  pid=19585
+  listen=*:8080        (verified: ss -ltnp shows *:8080)
+  cwd=/agent/dss-abl-fa-001/backend
+  cmd=java -jar target/cdc-config-platform-backend-1.0.0-SNAPSHOT.jar --server.address=0.0.0.0
+  log=service/backend.log
+  url=http://192.168.174.70:8080
+  health_check=GET http://192.168.174.70:8080/api/monitor/data-source-run-state/list -> HTTP 200
+  stop=kill 19585
+
+stopping both after acceptance:
+  kill 19652 19585
+
+notes:
+  - both services were started from THIS isolated worktree (5195a71...), not from the main
+    workspace /agent/cdc-config-platform, which is preserved byte-for-byte and untouched.
+  - the three previously running Feature-owned listener instances were identified by exact
+    pid+cwd+command and stopped before start (see service/00-pre-existing-instances.txt).
+  - no unknown-origin process was stopped; no port-wide kill, no 'pkill node', no 'killall'.
+  - both services are intentionally kept running for user visual verification.

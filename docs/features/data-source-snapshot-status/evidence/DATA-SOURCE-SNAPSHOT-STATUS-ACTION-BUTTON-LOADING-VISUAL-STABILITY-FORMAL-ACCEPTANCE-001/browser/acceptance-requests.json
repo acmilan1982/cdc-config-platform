@@ -1,0 +1,2145 @@
+{
+  "requests": [
+    {
+      "method": "GET",
+      "url": "http://192.168.174.70:5173/monitor/data-source-state"
+    },
+    {
+      "method": "GET",
+      "url": "http://192.168.174.70:5173/@vite/client"
+    },
+    {
+      "method": "GET",
+      "url": "http://192.168.174.70:5173/src/main.ts"
+    },
+    {
+      "method": "GET",
+      "url": "http://192.168.174.70:5173/node_modules/.vite/deps/vue.js?v=1553cedb"
+    },
+    {
+      "method": "GET",
+      "url": "http://192.168.174.70:5173/node_modules/.vite/deps/element-plus.js?v=16b860c1"
+    },
+    {
+      "method": "GET",
+      "url": "http://192.168.174.70:5173/node_modules/element-plus/dist/index.css"
+    },
+    {
+      "method": "GET",
+      "url": "http://192.168.174.70:5173/node_modules/.vite/deps/element-plus_es_locale_lang_zh-cn.js?v=99880c31"
+    },
+    {
+      "method": "GET",
+      "url": "http://192.168.174.70:5173/src/App.vue"
+    },
+    {
+      "method": "GET",
+      "url": "http://192.168.174.70:5173/src/router/index.ts"
+    },
+    {
+      "method": "GET",
+      "url": "http://192.168.174.70:5173/src/stores/index.ts"
+    },
+    {
+      "method": "GET",
+      "url": "http://192.168.174.70:5173/src/styles/global.css"
+    },
+    {
+      "method": "GET",
+      "url": "http://192.168.174.70:5173/node_modules/vite/dist/client/env.mjs"
+    },
+    {
+      "method": "GET",
+      "url": "http://192.168.174.70:5173/node_modules/.vite/deps/chunk-J5D6QMP7.js?v=c72b7f9a"
+    },
+    {
+      "method": "GET",
+      "url": "http://192.168.174.70:5173/node_modules/.vite/deps/chunk-G3PMV62Z.js?v=c72b7f9a"
+    },
+    {
+      "method": "GET",
+      "url": "http://192.168.174.70:5173/node_modules/.vite/deps/vue-router.js?v=a8ba07c0"
+    },
+    {
+      "method": "GET",
+      "url": "http://192.168.174.70:5173/src/layouts/MainLayout.vue"
+    },
+    {
+      "method": "GET",
+      "url": "http://192.168.174.70:5173/@id/__x00__plugin-vue:export-helper"
+    },
+    {
+      "method": "GET",
+      "url": "http://192.168.174.70:5173/node_modules/.vite/deps/pinia.js?v=805650fa"
+    },
+    {
+      "method": "GET",
+      "url": "http://192.168.174.70:5173/node_modules/.vite/deps/chunk-YFT6OQ5R.js?v=c72b7f9a"
+    },
+    {
+      "method": "GET",
+      "url": "http://192.168.174.70:5173/src/stores/app.ts"
+    },
+    {
+      "method": "GET",
+      "url": "http://192.168.174.70:5173/src/layouts/Sidebar.vue"
+    },
+    {
+      "method": "GET",
+      "url": "http://192.168.174.70:5173/src/layouts/HeaderBar.vue"
+    },
+    {
+      "method": "GET",
+      "url": "http://192.168.174.70:5173/src/layouts/MainLayout.vue?vue&type=style&index=0&scoped=22686b16&lang.css"
+    },
+    {
+      "method": "GET",
+      "url": "http://192.168.174.70:5173/node_modules/.vite/deps/chunk-YTRRJBUP.js?v=c72b7f9a"
+    },
+    {
+      "method": "GET",
+      "url": "http://192.168.174.70:5173/node_modules/.vite/deps/chunk-Q6SH2LQN.js?v=c72b7f9a"
+    },
+    {
+      "method": "GET",
+      "url": "http://192.168.174.70:5173/src/config/menu.ts"
+    },
+    {
+      "method": "GET",
+      "url": "http://192.168.174.70:5173/src/views/log-query/reinitBus.ts"
+    },
+    {
+      "method": "GET",
+      "url": "http://192.168.174.70:5173/src/layouts/Sidebar.vue?vue&type=style&index=0&scoped=cc56cb04&lang.css"
+    },
+    {
+      "method": "GET",
+      "url": "http://192.168.174.70:5173/node_modules/.vite/deps/@element-plus_icons-vue.js?v=88c3f2f2"
+    },
+    {
+      "method": "GET",
+      "url": "http://192.168.174.70:5173/src/layouts/HeaderBar.vue?vue&type=style&index=0&scoped=ddbc33b4&lang.css"
+    },
+    {
+      "method": "GET",
+      "url": "http://192.168.174.70:5173/src/views/data-source-run-state/DataSourceRunStatePage.vue"
+    },
+    {
+      "method": "GET",
+      "url": "http://192.168.174.70:5173/vite.svg"
+    },
+    {
+      "method": "GET",
+      "url": "http://192.168.174.70:5173/src/views/data-source-run-state/composables/useDataSourceSnapshot.ts"
+    },
+    {
+      "method": "GET",
+      "url": "http://192.168.174.70:5173/src/views/data-source-run-state/components/DataSourceSnapshotQueryBar.vue"
+    },
+    {
+      "method": "GET",
+      "url": "http://192.168.174.70:5173/src/views/data-source-run-state/components/DataSourceSnapshotToolbar.vue"
+    },
+    {
+      "method": "GET",
+      "url": "http://192.168.174.70:5173/src/views/data-source-run-state/components/DataSourceSnapshotTable.vue"
+    },
+    {
+      "method": "GET",
+      "url": "http://192.168.174.70:5173/src/views/data-source-run-state/DataSourceRunStatePage.vue?vue&type=style&index=0&scoped=a7db12e6&lang.css"
+    },
+    {
+      "method": "GET",
+      "url": "http://192.168.174.70:5173/src/api/dataSourceSnapshot.ts"
+    },
+    {
+      "method": "GET",
+      "url": "http://192.168.174.70:5173/src/views/data-source-run-state/utils/selection.ts"
+    },
+    {
+      "method": "GET",
+      "url": "http://192.168.174.70:5173/src/views/data-source-run-state/utils/format.ts"
+    },
+    {
+      "method": "GET",
+      "url": "http://192.168.174.70:5173/src/views/data-source-run-state/tooltip/tooltipPosition.ts"
+    },
+    {
+      "method": "GET",
+      "url": "http://192.168.174.70:5173/src/views/data-source-run-state/components/DataSourceSnapshotQueryBar.vue?vue&type=style&index=0&scoped=cd886c8f&lang.css"
+    },
+    {
+      "method": "GET",
+      "url": "http://192.168.174.70:5173/src/views/data-source-run-state/components/DataSourceSnapshotQueryBar.vue?vue&type=style&index=1&lang.css"
+    },
+    {
+      "method": "GET",
+      "url": "http://192.168.174.70:5173/src/views/data-source-run-state/components/DataSourceSnapshotToolbar.vue?vue&type=style&index=0&scoped=a581eda5&lang.css"
+    },
+    {
+      "method": "GET",
+      "url": "http://192.168.174.70:5173/src/services/http.ts"
+    },
+    {
+      "method": "GET",
+      "url": "http://192.168.174.70:5173/src/views/data-source-run-state/utils/rowKey.ts"
+    },
+    {
+      "method": "GET",
+      "url": "http://192.168.174.70:5173/src/views/data-source-run-state/components/DataSourceSnapshotStatusTag.vue"
+    },
+    {
+      "method": "GET",
+      "url": "http://192.168.174.70:5173/src/views/data-source-run-state/tooltip/SnapshotTooltipHost.vue"
+    },
+    {
+      "method": "GET",
+      "url": "http://192.168.174.70:5173/src/views/data-source-run-state/tooltip/useSnapshotTooltip.ts"
+    },
+    {
+      "method": "GET",
+      "url": "http://192.168.174.70:5173/src/views/data-source-run-state/components/DataSourceSnapshotTable.vue?vue&type=style&index=0&scoped=a0b5e578&lang.css"
+    },
+    {
+      "method": "GET",
+      "url": "http://192.168.174.70:5173/node_modules/.vite/deps/axios.js?v=7b7db2e4"
+    },
+    {
+      "method": "GET",
+      "url": "http://192.168.174.70:5173/src/views/data-source-run-state/tooltip/SnapshotTooltipHost.vue?vue&type=style&index=0&scoped=e8ab6064&lang.css"
+    },
+    {
+      "method": "GET",
+      "url": "http://192.168.174.70:5173/src/views/data-source-run-state/components/DataSourceSnapshotStatusTag.vue?vue&type=style&index=0&scoped=8119ec47&lang.css"
+    },
+    {
+      "method": "GET",
+      "url": "http://192.168.174.70:5173/api/monitor/data-source-run-state/list"
+    },
+    {
+      "method": "GET",
+      "url": "http://192.168.174.70:5173/api/monitor/data-source-run-state/list"
+    },
+    {
+      "method": "GET",
+      "url": "http://192.168.174.70:5173/api/monitor/data-source-run-state/list"
+    },
+    {
+      "method": "GET",
+      "url": "http://192.168.174.70:5173/api/monitor/data-source-run-state/list"
+    },
+    {
+      "method": "GET",
+      "url": "http://192.168.174.70:5173/api/monitor/data-source-run-state/list"
+    },
+    {
+      "method": "GET",
+      "url": "http://192.168.174.70:5173/monitor/data-source-state"
+    },
+    {
+      "method": "GET",
+      "url": "http://192.168.174.70:5173/@vite/client"
+    },
+    {
+      "method": "GET",
+      "url": "http://192.168.174.70:5173/src/main.ts"
+    },
+    {
+      "method": "GET",
+      "url": "http://192.168.174.70:5173/node_modules/.vite/deps/vue.js?v=1553cedb"
+    },
+    {
+      "method": "GET",
+      "url": "http://192.168.174.70:5173/node_modules/.vite/deps/element-plus.js?v=16b860c1"
+    },
+    {
+      "method": "GET",
+      "url": "http://192.168.174.70:5173/node_modules/element-plus/dist/index.css"
+    },
+    {
+      "method": "GET",
+      "url": "http://192.168.174.70:5173/node_modules/.vite/deps/element-plus_es_locale_lang_zh-cn.js?v=99880c31"
+    },
+    {
+      "method": "GET",
+      "url": "http://192.168.174.70:5173/src/App.vue"
+    },
+    {
+      "method": "GET",
+      "url": "http://192.168.174.70:5173/src/router/index.ts"
+    },
+    {
+      "method": "GET",
+      "url": "http://192.168.174.70:5173/src/stores/index.ts"
+    },
+    {
+      "method": "GET",
+      "url": "http://192.168.174.70:5173/src/styles/global.css"
+    },
+    {
+      "method": "GET",
+      "url": "http://192.168.174.70:5173/node_modules/.vite/deps/chunk-J5D6QMP7.js?v=c72b7f9a"
+    },
+    {
+      "method": "GET",
+      "url": "http://192.168.174.70:5173/node_modules/.vite/deps/chunk-G3PMV62Z.js?v=c72b7f9a"
+    },
+    {
+      "method": "GET",
+      "url": "http://192.168.174.70:5173/node_modules/.vite/deps/chunk-YTRRJBUP.js?v=c72b7f9a"
+    },
+    {
+      "method": "GET",
+      "url": "http://192.168.174.70:5173/node_modules/.vite/deps/chunk-Q6SH2LQN.js?v=c72b7f9a"
+    },
+    {
+      "method": "GET",
+      "url": "http://192.168.174.70:5173/node_modules/vite/dist/client/env.mjs"
+    },
+    {
+      "method": "GET",
+      "url": "http://192.168.174.70:5173/node_modules/.vite/deps/vue-router.js?v=a8ba07c0"
+    },
+    {
+      "method": "GET",
+      "url": "http://192.168.174.70:5173/src/layouts/MainLayout.vue"
+    },
+    {
+      "method": "GET",
+      "url": "http://192.168.174.70:5173/@id/__x00__plugin-vue:export-helper"
+    },
+    {
+      "method": "GET",
+      "url": "http://192.168.174.70:5173/node_modules/.vite/deps/chunk-YFT6OQ5R.js?v=c72b7f9a"
+    },
+    {
+      "method": "GET",
+      "url": "http://192.168.174.70:5173/node_modules/.vite/deps/pinia.js?v=805650fa"
+    },
+    {
+      "method": "GET",
+      "url": "http://192.168.174.70:5173/src/stores/app.ts"
+    },
+    {
+      "method": "GET",
+      "url": "http://192.168.174.70:5173/src/layouts/Sidebar.vue"
+    },
+    {
+      "method": "GET",
+      "url": "http://192.168.174.70:5173/src/layouts/HeaderBar.vue"
+    },
+    {
+      "method": "GET",
+      "url": "http://192.168.174.70:5173/src/layouts/MainLayout.vue?vue&type=style&index=0&scoped=22686b16&lang.css"
+    },
+    {
+      "method": "GET",
+      "url": "http://192.168.174.70:5173/src/config/menu.ts"
+    },
+    {
+      "method": "GET",
+      "url": "http://192.168.174.70:5173/src/views/log-query/reinitBus.ts"
+    },
+    {
+      "method": "GET",
+      "url": "http://192.168.174.70:5173/src/layouts/Sidebar.vue?vue&type=style&index=0&scoped=cc56cb04&lang.css"
+    },
+    {
+      "method": "GET",
+      "url": "http://192.168.174.70:5173/node_modules/.vite/deps/@element-plus_icons-vue.js?v=88c3f2f2"
+    },
+    {
+      "method": "GET",
+      "url": "http://192.168.174.70:5173/src/layouts/HeaderBar.vue?vue&type=style&index=0&scoped=ddbc33b4&lang.css"
+    },
+    {
+      "method": "GET",
+      "url": "http://192.168.174.70:5173/src/views/data-source-run-state/DataSourceRunStatePage.vue"
+    },
+    {
+      "method": "GET",
+      "url": "http://192.168.174.70:5173/src/views/data-source-run-state/composables/useDataSourceSnapshot.ts"
+    },
+    {
+      "method": "GET",
+      "url": "http://192.168.174.70:5173/src/views/data-source-run-state/components/DataSourceSnapshotQueryBar.vue"
+    },
+    {
+      "method": "GET",
+      "url": "http://192.168.174.70:5173/src/views/data-source-run-state/components/DataSourceSnapshotToolbar.vue"
+    },
+    {
+      "method": "GET",
+      "url": "http://192.168.174.70:5173/src/views/data-source-run-state/components/DataSourceSnapshotTable.vue"
+    },
+    {
+      "method": "GET",
+      "url": "http://192.168.174.70:5173/src/views/data-source-run-state/DataSourceRunStatePage.vue?vue&type=style&index=0&scoped=a7db12e6&lang.css"
+    },
+    {
+      "method": "GET",
+      "url": "http://192.168.174.70:5173/vite.svg"
+    },
+    {
+      "method": "GET",
+      "url": "http://192.168.174.70:5173/src/api/dataSourceSnapshot.ts"
+    },
+    {
+      "method": "GET",
+      "url": "http://192.168.174.70:5173/src/views/data-source-run-state/utils/selection.ts"
+    },
+    {
+      "method": "GET",
+      "url": "http://192.168.174.70:5173/src/views/data-source-run-state/utils/format.ts"
+    },
+    {
+      "method": "GET",
+      "url": "http://192.168.174.70:5173/src/views/data-source-run-state/tooltip/tooltipPosition.ts"
+    },
+    {
+      "method": "GET",
+      "url": "http://192.168.174.70:5173/src/views/data-source-run-state/components/DataSourceSnapshotQueryBar.vue?vue&type=style&index=0&scoped=cd886c8f&lang.css"
+    },
+    {
+      "method": "GET",
+      "url": "http://192.168.174.70:5173/src/views/data-source-run-state/components/DataSourceSnapshotQueryBar.vue?vue&type=style&index=1&lang.css"
+    },
+    {
+      "method": "GET",
+      "url": "http://192.168.174.70:5173/src/views/data-source-run-state/utils/rowKey.ts"
+    },
+    {
+      "method": "GET",
+      "url": "http://192.168.174.70:5173/src/views/data-source-run-state/components/DataSourceSnapshotStatusTag.vue"
+    },
+    {
+      "method": "GET",
+      "url": "http://192.168.174.70:5173/src/views/data-source-run-state/tooltip/SnapshotTooltipHost.vue"
+    },
+    {
+      "method": "GET",
+      "url": "http://192.168.174.70:5173/src/views/data-source-run-state/tooltip/useSnapshotTooltip.ts"
+    },
+    {
+      "method": "GET",
+      "url": "http://192.168.174.70:5173/src/views/data-source-run-state/components/DataSourceSnapshotTable.vue?vue&type=style&index=0&scoped=a0b5e578&lang.css"
+    },
+    {
+      "method": "GET",
+      "url": "http://192.168.174.70:5173/src/views/data-source-run-state/components/DataSourceSnapshotToolbar.vue?vue&type=style&index=0&scoped=a581eda5&lang.css"
+    },
+    {
+      "method": "GET",
+      "url": "http://192.168.174.70:5173/src/services/http.ts"
+    },
+    {
+      "method": "GET",
+      "url": "http://192.168.174.70:5173/src/views/data-source-run-state/components/DataSourceSnapshotStatusTag.vue?vue&type=style&index=0&scoped=8119ec47&lang.css"
+    },
+    {
+      "method": "GET",
+      "url": "http://192.168.174.70:5173/src/views/data-source-run-state/tooltip/SnapshotTooltipHost.vue?vue&type=style&index=0&scoped=e8ab6064&lang.css"
+    },
+    {
+      "method": "GET",
+      "url": "http://192.168.174.70:5173/node_modules/.vite/deps/axios.js?v=7b7db2e4"
+    },
+    {
+      "method": "GET",
+      "url": "http://192.168.174.70:5173/api/monitor/data-source-run-state/list"
+    },
+    {
+      "method": "GET",
+      "url": "http://192.168.174.70:5173/api/monitor/data-source-run-state/list"
+    },
+    {
+      "method": "GET",
+      "url": "http://192.168.174.70:5173/api/monitor/data-source-run-state/list"
+    },
+    {
+      "method": "GET",
+      "url": "http://192.168.174.70:5173/api/monitor/data-source-run-state/list"
+    },
+    {
+      "method": "GET",
+      "url": "http://192.168.174.70:5173/api/monitor/data-source-run-state/list"
+    },
+    {
+      "method": "GET",
+      "url": "http://192.168.174.70:5173/monitor/data-source-state"
+    },
+    {
+      "method": "GET",
+      "url": "http://192.168.174.70:5173/@vite/client"
+    },
+    {
+      "method": "GET",
+      "url": "http://192.168.174.70:5173/src/main.ts"
+    },
+    {
+      "method": "GET",
+      "url": "http://192.168.174.70:5173/node_modules/vite/dist/client/env.mjs"
+    },
+    {
+      "method": "GET",
+      "url": "http://192.168.174.70:5173/node_modules/.vite/deps/vue.js?v=1553cedb"
+    },
+    {
+      "method": "GET",
+      "url": "http://192.168.174.70:5173/node_modules/.vite/deps/element-plus.js?v=16b860c1"
+    },
+    {
+      "method": "GET",
+      "url": "http://192.168.174.70:5173/node_modules/element-plus/dist/index.css"
+    },
+    {
+      "method": "GET",
+      "url": "http://192.168.174.70:5173/node_modules/.vite/deps/element-plus_es_locale_lang_zh-cn.js?v=99880c31"
+    },
+    {
+      "method": "GET",
+      "url": "http://192.168.174.70:5173/src/App.vue"
+    },
+    {
+      "method": "GET",
+      "url": "http://192.168.174.70:5173/src/router/index.ts"
+    },
+    {
+      "method": "GET",
+      "url": "http://192.168.174.70:5173/src/stores/index.ts"
+    },
+    {
+      "method": "GET",
+      "url": "http://192.168.174.70:5173/src/styles/global.css"
+    },
+    {
+      "method": "GET",
+      "url": "http://192.168.174.70:5173/node_modules/.vite/deps/chunk-J5D6QMP7.js?v=c72b7f9a"
+    },
+    {
+      "method": "GET",
+      "url": "http://192.168.174.70:5173/node_modules/.vite/deps/chunk-G3PMV62Z.js?v=c72b7f9a"
+    },
+    {
+      "method": "GET",
+      "url": "http://192.168.174.70:5173/node_modules/.vite/deps/chunk-YTRRJBUP.js?v=c72b7f9a"
+    },
+    {
+      "method": "GET",
+      "url": "http://192.168.174.70:5173/node_modules/.vite/deps/chunk-Q6SH2LQN.js?v=c72b7f9a"
+    },
+    {
+      "method": "GET",
+      "url": "http://192.168.174.70:5173/node_modules/.vite/deps/vue-router.js?v=a8ba07c0"
+    },
+    {
+      "method": "GET",
+      "url": "http://192.168.174.70:5173/src/layouts/MainLayout.vue"
+    },
+    {
+      "method": "GET",
+      "url": "http://192.168.174.70:5173/@id/__x00__plugin-vue:export-helper"
+    },
+    {
+      "method": "GET",
+      "url": "http://192.168.174.70:5173/node_modules/.vite/deps/chunk-YFT6OQ5R.js?v=c72b7f9a"
+    },
+    {
+      "method": "GET",
+      "url": "http://192.168.174.70:5173/node_modules/.vite/deps/pinia.js?v=805650fa"
+    },
+    {
+      "method": "GET",
+      "url": "http://192.168.174.70:5173/src/stores/app.ts"
+    },
+    {
+      "method": "GET",
+      "url": "http://192.168.174.70:5173/src/layouts/Sidebar.vue"
+    },
+    {
+      "method": "GET",
+      "url": "http://192.168.174.70:5173/src/layouts/HeaderBar.vue"
+    },
+    {
+      "method": "GET",
+      "url": "http://192.168.174.70:5173/src/layouts/MainLayout.vue?vue&type=style&index=0&scoped=22686b16&lang.css"
+    },
+    {
+      "method": "GET",
+      "url": "http://192.168.174.70:5173/src/config/menu.ts"
+    },
+    {
+      "method": "GET",
+      "url": "http://192.168.174.70:5173/src/views/log-query/reinitBus.ts"
+    },
+    {
+      "method": "GET",
+      "url": "http://192.168.174.70:5173/src/layouts/Sidebar.vue?vue&type=style&index=0&scoped=cc56cb04&lang.css"
+    },
+    {
+      "method": "GET",
+      "url": "http://192.168.174.70:5173/node_modules/.vite/deps/@element-plus_icons-vue.js?v=88c3f2f2"
+    },
+    {
+      "method": "GET",
+      "url": "http://192.168.174.70:5173/src/layouts/HeaderBar.vue?vue&type=style&index=0&scoped=ddbc33b4&lang.css"
+    },
+    {
+      "method": "GET",
+      "url": "http://192.168.174.70:5173/src/views/data-source-run-state/DataSourceRunStatePage.vue"
+    },
+    {
+      "method": "GET",
+      "url": "http://192.168.174.70:5173/src/views/data-source-run-state/composables/useDataSourceSnapshot.ts"
+    },
+    {
+      "method": "GET",
+      "url": "http://192.168.174.70:5173/src/views/data-source-run-state/components/DataSourceSnapshotQueryBar.vue"
+    },
+    {
+      "method": "GET",
+      "url": "http://192.168.174.70:5173/src/views/data-source-run-state/components/DataSourceSnapshotToolbar.vue"
+    },
+    {
+      "method": "GET",
+      "url": "http://192.168.174.70:5173/src/views/data-source-run-state/components/DataSourceSnapshotTable.vue"
+    },
+    {
+      "method": "GET",
+      "url": "http://192.168.174.70:5173/src/views/data-source-run-state/DataSourceRunStatePage.vue?vue&type=style&index=0&scoped=a7db12e6&lang.css"
+    },
+    {
+      "method": "GET",
+      "url": "http://192.168.174.70:5173/vite.svg"
+    },
+    {
+      "method": "GET",
+      "url": "http://192.168.174.70:5173/src/api/dataSourceSnapshot.ts"
+    },
+    {
+      "method": "GET",
+      "url": "http://192.168.174.70:5173/src/views/data-source-run-state/utils/selection.ts"
+    },
+    {
+      "method": "GET",
+      "url": "http://192.168.174.70:5173/src/views/data-source-run-state/utils/format.ts"
+    },
+    {
+      "method": "GET",
+      "url": "http://192.168.174.70:5173/src/views/data-source-run-state/tooltip/tooltipPosition.ts"
+    },
+    {
+      "method": "GET",
+      "url": "http://192.168.174.70:5173/src/views/data-source-run-state/components/DataSourceSnapshotQueryBar.vue?vue&type=style&index=0&scoped=cd886c8f&lang.css"
+    },
+    {
+      "method": "GET",
+      "url": "http://192.168.174.70:5173/src/views/data-source-run-state/components/DataSourceSnapshotQueryBar.vue?vue&type=style&index=1&lang.css"
+    },
+    {
+      "method": "GET",
+      "url": "http://192.168.174.70:5173/src/views/data-source-run-state/components/DataSourceSnapshotToolbar.vue?vue&type=style&index=0&scoped=a581eda5&lang.css"
+    },
+    {
+      "method": "GET",
+      "url": "http://192.168.174.70:5173/src/views/data-source-run-state/utils/rowKey.ts"
+    },
+    {
+      "method": "GET",
+      "url": "http://192.168.174.70:5173/src/views/data-source-run-state/components/DataSourceSnapshotStatusTag.vue"
+    },
+    {
+      "method": "GET",
+      "url": "http://192.168.174.70:5173/src/views/data-source-run-state/tooltip/SnapshotTooltipHost.vue"
+    },
+    {
+      "method": "GET",
+      "url": "http://192.168.174.70:5173/src/views/data-source-run-state/tooltip/useSnapshotTooltip.ts"
+    },
+    {
+      "method": "GET",
+      "url": "http://192.168.174.70:5173/src/views/data-source-run-state/components/DataSourceSnapshotTable.vue?vue&type=style&index=0&scoped=a0b5e578&lang.css"
+    },
+    {
+      "method": "GET",
+      "url": "http://192.168.174.70:5173/src/services/http.ts"
+    },
+    {
+      "method": "GET",
+      "url": "http://192.168.174.70:5173/src/views/data-source-run-state/tooltip/SnapshotTooltipHost.vue?vue&type=style&index=0&scoped=e8ab6064&lang.css"
+    },
+    {
+      "method": "GET",
+      "url": "http://192.168.174.70:5173/src/views/data-source-run-state/components/DataSourceSnapshotStatusTag.vue?vue&type=style&index=0&scoped=8119ec47&lang.css"
+    },
+    {
+      "method": "GET",
+      "url": "http://192.168.174.70:5173/node_modules/.vite/deps/axios.js?v=7b7db2e4"
+    },
+    {
+      "method": "GET",
+      "url": "http://192.168.174.70:5173/api/monitor/data-source-run-state/list"
+    },
+    {
+      "method": "GET",
+      "url": "http://192.168.174.70:5173/api/monitor/data-source-run-state/list"
+    },
+    {
+      "method": "GET",
+      "url": "http://192.168.174.70:5173/api/monitor/data-source-run-state/list"
+    },
+    {
+      "method": "GET",
+      "url": "http://192.168.174.70:5173/api/monitor/data-source-run-state/list"
+    },
+    {
+      "method": "GET",
+      "url": "http://192.168.174.70:5173/api/monitor/data-source-run-state/list"
+    },
+    {
+      "method": "GET",
+      "url": "http://192.168.174.70:5173/monitor/data-source-state"
+    },
+    {
+      "method": "GET",
+      "url": "http://192.168.174.70:5173/@vite/client"
+    },
+    {
+      "method": "GET",
+      "url": "http://192.168.174.70:5173/src/main.ts"
+    },
+    {
+      "method": "GET",
+      "url": "http://192.168.174.70:5173/node_modules/vite/dist/client/env.mjs"
+    },
+    {
+      "method": "GET",
+      "url": "http://192.168.174.70:5173/node_modules/.vite/deps/vue.js?v=1553cedb"
+    },
+    {
+      "method": "GET",
+      "url": "http://192.168.174.70:5173/node_modules/.vite/deps/element-plus.js?v=16b860c1"
+    },
+    {
+      "method": "GET",
+      "url": "http://192.168.174.70:5173/node_modules/element-plus/dist/index.css"
+    },
+    {
+      "method": "GET",
+      "url": "http://192.168.174.70:5173/node_modules/.vite/deps/element-plus_es_locale_lang_zh-cn.js?v=99880c31"
+    },
+    {
+      "method": "GET",
+      "url": "http://192.168.174.70:5173/src/App.vue"
+    },
+    {
+      "method": "GET",
+      "url": "http://192.168.174.70:5173/src/router/index.ts"
+    },
+    {
+      "method": "GET",
+      "url": "http://192.168.174.70:5173/src/stores/index.ts"
+    },
+    {
+      "method": "GET",
+      "url": "http://192.168.174.70:5173/src/styles/global.css"
+    },
+    {
+      "method": "GET",
+      "url": "http://192.168.174.70:5173/node_modules/.vite/deps/chunk-J5D6QMP7.js?v=c72b7f9a"
+    },
+    {
+      "method": "GET",
+      "url": "http://192.168.174.70:5173/node_modules/.vite/deps/chunk-G3PMV62Z.js?v=c72b7f9a"
+    },
+    {
+      "method": "GET",
+      "url": "http://192.168.174.70:5173/node_modules/.vite/deps/chunk-YTRRJBUP.js?v=c72b7f9a"
+    },
+    {
+      "method": "GET",
+      "url": "http://192.168.174.70:5173/node_modules/.vite/deps/chunk-Q6SH2LQN.js?v=c72b7f9a"
+    },
+    {
+      "method": "GET",
+      "url": "http://192.168.174.70:5173/node_modules/.vite/deps/vue-router.js?v=a8ba07c0"
+    },
+    {
+      "method": "GET",
+      "url": "http://192.168.174.70:5173/src/layouts/MainLayout.vue"
+    },
+    {
+      "method": "GET",
+      "url": "http://192.168.174.70:5173/@id/__x00__plugin-vue:export-helper"
+    },
+    {
+      "method": "GET",
+      "url": "http://192.168.174.70:5173/node_modules/.vite/deps/chunk-YFT6OQ5R.js?v=c72b7f9a"
+    },
+    {
+      "method": "GET",
+      "url": "http://192.168.174.70:5173/node_modules/.vite/deps/pinia.js?v=805650fa"
+    },
+    {
+      "method": "GET",
+      "url": "http://192.168.174.70:5173/src/stores/app.ts"
+    },
+    {
+      "method": "GET",
+      "url": "http://192.168.174.70:5173/src/layouts/Sidebar.vue"
+    },
+    {
+      "method": "GET",
+      "url": "http://192.168.174.70:5173/src/layouts/HeaderBar.vue"
+    },
+    {
+      "method": "GET",
+      "url": "http://192.168.174.70:5173/src/layouts/MainLayout.vue?vue&type=style&index=0&scoped=22686b16&lang.css"
+    },
+    {
+      "method": "GET",
+      "url": "http://192.168.174.70:5173/src/config/menu.ts"
+    },
+    {
+      "method": "GET",
+      "url": "http://192.168.174.70:5173/src/views/log-query/reinitBus.ts"
+    },
+    {
+      "method": "GET",
+      "url": "http://192.168.174.70:5173/src/layouts/Sidebar.vue?vue&type=style&index=0&scoped=cc56cb04&lang.css"
+    },
+    {
+      "method": "GET",
+      "url": "http://192.168.174.70:5173/node_modules/.vite/deps/@element-plus_icons-vue.js?v=88c3f2f2"
+    },
+    {
+      "method": "GET",
+      "url": "http://192.168.174.70:5173/src/layouts/HeaderBar.vue?vue&type=style&index=0&scoped=ddbc33b4&lang.css"
+    },
+    {
+      "method": "GET",
+      "url": "http://192.168.174.70:5173/src/views/data-source-run-state/DataSourceRunStatePage.vue"
+    },
+    {
+      "method": "GET",
+      "url": "http://192.168.174.70:5173/src/views/data-source-run-state/composables/useDataSourceSnapshot.ts"
+    },
+    {
+      "method": "GET",
+      "url": "http://192.168.174.70:5173/src/views/data-source-run-state/components/DataSourceSnapshotQueryBar.vue"
+    },
+    {
+      "method": "GET",
+      "url": "http://192.168.174.70:5173/src/views/data-source-run-state/components/DataSourceSnapshotToolbar.vue"
+    },
+    {
+      "method": "GET",
+      "url": "http://192.168.174.70:5173/src/views/data-source-run-state/components/DataSourceSnapshotTable.vue"
+    },
+    {
+      "method": "GET",
+      "url": "http://192.168.174.70:5173/src/views/data-source-run-state/DataSourceRunStatePage.vue?vue&type=style&index=0&scoped=a7db12e6&lang.css"
+    },
+    {
+      "method": "GET",
+      "url": "http://192.168.174.70:5173/vite.svg"
+    },
+    {
+      "method": "GET",
+      "url": "http://192.168.174.70:5173/src/api/dataSourceSnapshot.ts"
+    },
+    {
+      "method": "GET",
+      "url": "http://192.168.174.70:5173/src/views/data-source-run-state/utils/selection.ts"
+    },
+    {
+      "method": "GET",
+      "url": "http://192.168.174.70:5173/src/views/data-source-run-state/utils/format.ts"
+    },
+    {
+      "method": "GET",
+      "url": "http://192.168.174.70:5173/src/views/data-source-run-state/tooltip/tooltipPosition.ts"
+    },
+    {
+      "method": "GET",
+      "url": "http://192.168.174.70:5173/src/views/data-source-run-state/components/DataSourceSnapshotQueryBar.vue?vue&type=style&index=0&scoped=cd886c8f&lang.css"
+    },
+    {
+      "method": "GET",
+      "url": "http://192.168.174.70:5173/src/views/data-source-run-state/components/DataSourceSnapshotQueryBar.vue?vue&type=style&index=1&lang.css"
+    },
+    {
+      "method": "GET",
+      "url": "http://192.168.174.70:5173/src/views/data-source-run-state/components/DataSourceSnapshotToolbar.vue?vue&type=style&index=0&scoped=a581eda5&lang.css"
+    },
+    {
+      "method": "GET",
+      "url": "http://192.168.174.70:5173/src/views/data-source-run-state/utils/rowKey.ts"
+    },
+    {
+      "method": "GET",
+      "url": "http://192.168.174.70:5173/src/views/data-source-run-state/components/DataSourceSnapshotStatusTag.vue"
+    },
+    {
+      "method": "GET",
+      "url": "http://192.168.174.70:5173/src/views/data-source-run-state/tooltip/SnapshotTooltipHost.vue"
+    },
+    {
+      "method": "GET",
+      "url": "http://192.168.174.70:5173/src/views/data-source-run-state/tooltip/useSnapshotTooltip.ts"
+    },
+    {
+      "method": "GET",
+      "url": "http://192.168.174.70:5173/src/views/data-source-run-state/components/DataSourceSnapshotTable.vue?vue&type=style&index=0&scoped=a0b5e578&lang.css"
+    },
+    {
+      "method": "GET",
+      "url": "http://192.168.174.70:5173/src/services/http.ts"
+    },
+    {
+      "method": "GET",
+      "url": "http://192.168.174.70:5173/src/views/data-source-run-state/components/DataSourceSnapshotStatusTag.vue?vue&type=style&index=0&scoped=8119ec47&lang.css"
+    },
+    {
+      "method": "GET",
+      "url": "http://192.168.174.70:5173/src/views/data-source-run-state/tooltip/SnapshotTooltipHost.vue?vue&type=style&index=0&scoped=e8ab6064&lang.css"
+    },
+    {
+      "method": "GET",
+      "url": "http://192.168.174.70:5173/node_modules/.vite/deps/axios.js?v=7b7db2e4"
+    },
+    {
+      "method": "GET",
+      "url": "http://192.168.174.70:5173/api/monitor/data-source-run-state/list"
+    },
+    {
+      "method": "GET",
+      "url": "http://192.168.174.70:5173/api/monitor/data-source-run-state/list"
+    },
+    {
+      "method": "GET",
+      "url": "http://192.168.174.70:5173/api/monitor/data-source-run-state/list"
+    },
+    {
+      "method": "GET",
+      "url": "http://192.168.174.70:5173/api/monitor/data-source-run-state/list"
+    },
+    {
+      "method": "GET",
+      "url": "http://192.168.174.70:5173/api/monitor/data-source-run-state/list"
+    },
+    {
+      "method": "GET",
+      "url": "http://192.168.174.70:5173/monitor/data-source-state"
+    },
+    {
+      "method": "GET",
+      "url": "http://192.168.174.70:5173/@vite/client"
+    },
+    {
+      "method": "GET",
+      "url": "http://192.168.174.70:5173/src/main.ts"
+    },
+    {
+      "method": "GET",
+      "url": "http://192.168.174.70:5173/node_modules/vite/dist/client/env.mjs"
+    },
+    {
+      "method": "GET",
+      "url": "http://192.168.174.70:5173/node_modules/.vite/deps/vue.js?v=1553cedb"
+    },
+    {
+      "method": "GET",
+      "url": "http://192.168.174.70:5173/node_modules/.vite/deps/element-plus.js?v=16b860c1"
+    },
+    {
+      "method": "GET",
+      "url": "http://192.168.174.70:5173/node_modules/element-plus/dist/index.css"
+    },
+    {
+      "method": "GET",
+      "url": "http://192.168.174.70:5173/node_modules/.vite/deps/element-plus_es_locale_lang_zh-cn.js?v=99880c31"
+    },
+    {
+      "method": "GET",
+      "url": "http://192.168.174.70:5173/src/App.vue"
+    },
+    {
+      "method": "GET",
+      "url": "http://192.168.174.70:5173/src/router/index.ts"
+    },
+    {
+      "method": "GET",
+      "url": "http://192.168.174.70:5173/src/stores/index.ts"
+    },
+    {
+      "method": "GET",
+      "url": "http://192.168.174.70:5173/src/styles/global.css"
+    },
+    {
+      "method": "GET",
+      "url": "http://192.168.174.70:5173/node_modules/.vite/deps/chunk-J5D6QMP7.js?v=c72b7f9a"
+    },
+    {
+      "method": "GET",
+      "url": "http://192.168.174.70:5173/node_modules/.vite/deps/chunk-G3PMV62Z.js?v=c72b7f9a"
+    },
+    {
+      "method": "GET",
+      "url": "http://192.168.174.70:5173/node_modules/.vite/deps/chunk-YTRRJBUP.js?v=c72b7f9a"
+    },
+    {
+      "method": "GET",
+      "url": "http://192.168.174.70:5173/node_modules/.vite/deps/chunk-Q6SH2LQN.js?v=c72b7f9a"
+    },
+    {
+      "method": "GET",
+      "url": "http://192.168.174.70:5173/node_modules/.vite/deps/vue-router.js?v=a8ba07c0"
+    },
+    {
+      "method": "GET",
+      "url": "http://192.168.174.70:5173/src/layouts/MainLayout.vue"
+    },
+    {
+      "method": "GET",
+      "url": "http://192.168.174.70:5173/@id/__x00__plugin-vue:export-helper"
+    },
+    {
+      "method": "GET",
+      "url": "http://192.168.174.70:5173/node_modules/.vite/deps/pinia.js?v=805650fa"
+    },
+    {
+      "method": "GET",
+      "url": "http://192.168.174.70:5173/node_modules/.vite/deps/chunk-YFT6OQ5R.js?v=c72b7f9a"
+    },
+    {
+      "method": "GET",
+      "url": "http://192.168.174.70:5173/src/stores/app.ts"
+    },
+    {
+      "method": "GET",
+      "url": "http://192.168.174.70:5173/src/layouts/Sidebar.vue"
+    },
+    {
+      "method": "GET",
+      "url": "http://192.168.174.70:5173/src/layouts/HeaderBar.vue"
+    },
+    {
+      "method": "GET",
+      "url": "http://192.168.174.70:5173/src/layouts/MainLayout.vue?vue&type=style&index=0&scoped=22686b16&lang.css"
+    },
+    {
+      "method": "GET",
+      "url": "http://192.168.174.70:5173/src/config/menu.ts"
+    },
+    {
+      "method": "GET",
+      "url": "http://192.168.174.70:5173/src/views/log-query/reinitBus.ts"
+    },
+    {
+      "method": "GET",
+      "url": "http://192.168.174.70:5173/src/layouts/Sidebar.vue?vue&type=style&index=0&scoped=cc56cb04&lang.css"
+    },
+    {
+      "method": "GET",
+      "url": "http://192.168.174.70:5173/node_modules/.vite/deps/@element-plus_icons-vue.js?v=88c3f2f2"
+    },
+    {
+      "method": "GET",
+      "url": "http://192.168.174.70:5173/src/layouts/HeaderBar.vue?vue&type=style&index=0&scoped=ddbc33b4&lang.css"
+    },
+    {
+      "method": "GET",
+      "url": "http://192.168.174.70:5173/src/views/data-source-run-state/DataSourceRunStatePage.vue"
+    },
+    {
+      "method": "GET",
+      "url": "http://192.168.174.70:5173/src/views/data-source-run-state/composables/useDataSourceSnapshot.ts"
+    },
+    {
+      "method": "GET",
+      "url": "http://192.168.174.70:5173/src/views/data-source-run-state/components/DataSourceSnapshotQueryBar.vue"
+    },
+    {
+      "method": "GET",
+      "url": "http://192.168.174.70:5173/src/views/data-source-run-state/components/DataSourceSnapshotToolbar.vue"
+    },
+    {
+      "method": "GET",
+      "url": "http://192.168.174.70:5173/src/views/data-source-run-state/components/DataSourceSnapshotTable.vue"
+    },
+    {
+      "method": "GET",
+      "url": "http://192.168.174.70:5173/src/views/data-source-run-state/DataSourceRunStatePage.vue?vue&type=style&index=0&scoped=a7db12e6&lang.css"
+    },
+    {
+      "method": "GET",
+      "url": "http://192.168.174.70:5173/vite.svg"
+    },
+    {
+      "method": "GET",
+      "url": "http://192.168.174.70:5173/src/api/dataSourceSnapshot.ts"
+    },
+    {
+      "method": "GET",
+      "url": "http://192.168.174.70:5173/src/views/data-source-run-state/utils/selection.ts"
+    },
+    {
+      "method": "GET",
+      "url": "http://192.168.174.70:5173/src/views/data-source-run-state/utils/format.ts"
+    },
+    {
+      "method": "GET",
+      "url": "http://192.168.174.70:5173/src/views/data-source-run-state/tooltip/tooltipPosition.ts"
+    },
+    {
+      "method": "GET",
+      "url": "http://192.168.174.70:5173/src/views/data-source-run-state/components/DataSourceSnapshotQueryBar.vue?vue&type=style&index=0&scoped=cd886c8f&lang.css"
+    },
+    {
+      "method": "GET",
+      "url": "http://192.168.174.70:5173/src/views/data-source-run-state/components/DataSourceSnapshotQueryBar.vue?vue&type=style&index=1&lang.css"
+    },
+    {
+      "method": "GET",
+      "url": "http://192.168.174.70:5173/src/views/data-source-run-state/components/DataSourceSnapshotToolbar.vue?vue&type=style&index=0&scoped=a581eda5&lang.css"
+    },
+    {
+      "method": "GET",
+      "url": "http://192.168.174.70:5173/src/views/data-source-run-state/utils/rowKey.ts"
+    },
+    {
+      "method": "GET",
+      "url": "http://192.168.174.70:5173/src/views/data-source-run-state/components/DataSourceSnapshotStatusTag.vue"
+    },
+    {
+      "method": "GET",
+      "url": "http://192.168.174.70:5173/src/views/data-source-run-state/tooltip/SnapshotTooltipHost.vue"
+    },
+    {
+      "method": "GET",
+      "url": "http://192.168.174.70:5173/src/views/data-source-run-state/tooltip/useSnapshotTooltip.ts"
+    },
+    {
+      "method": "GET",
+      "url": "http://192.168.174.70:5173/src/views/data-source-run-state/components/DataSourceSnapshotTable.vue?vue&type=style&index=0&scoped=a0b5e578&lang.css"
+    },
+    {
+      "method": "GET",
+      "url": "http://192.168.174.70:5173/src/services/http.ts"
+    },
+    {
+      "method": "GET",
+      "url": "http://192.168.174.70:5173/src/views/data-source-run-state/components/DataSourceSnapshotStatusTag.vue?vue&type=style&index=0&scoped=8119ec47&lang.css"
+    },
+    {
+      "method": "GET",
+      "url": "http://192.168.174.70:5173/src/views/data-source-run-state/tooltip/SnapshotTooltipHost.vue?vue&type=style&index=0&scoped=e8ab6064&lang.css"
+    },
+    {
+      "method": "GET",
+      "url": "http://192.168.174.70:5173/node_modules/.vite/deps/axios.js?v=7b7db2e4"
+    },
+    {
+      "method": "GET",
+      "url": "http://192.168.174.70:5173/api/monitor/data-source-run-state/list"
+    },
+    {
+      "method": "GET",
+      "url": "http://192.168.174.70:5173/api/monitor/data-source-run-state/list"
+    },
+    {
+      "method": "GET",
+      "url": "http://192.168.174.70:5173/api/monitor/data-source-run-state/list"
+    },
+    {
+      "method": "GET",
+      "url": "http://192.168.174.70:5173/monitor/data-source"
+    },
+    {
+      "method": "GET",
+      "url": "http://192.168.174.70:5173/@vite/client"
+    },
+    {
+      "method": "GET",
+      "url": "http://192.168.174.70:5173/src/main.ts"
+    },
+    {
+      "method": "GET",
+      "url": "http://192.168.174.70:5173/node_modules/vite/dist/client/env.mjs"
+    },
+    {
+      "method": "GET",
+      "url": "http://192.168.174.70:5173/node_modules/.vite/deps/vue.js?v=1553cedb"
+    },
+    {
+      "method": "GET",
+      "url": "http://192.168.174.70:5173/node_modules/.vite/deps/element-plus.js?v=16b860c1"
+    },
+    {
+      "method": "GET",
+      "url": "http://192.168.174.70:5173/node_modules/element-plus/dist/index.css"
+    },
+    {
+      "method": "GET",
+      "url": "http://192.168.174.70:5173/node_modules/.vite/deps/element-plus_es_locale_lang_zh-cn.js?v=99880c31"
+    },
+    {
+      "method": "GET",
+      "url": "http://192.168.174.70:5173/src/App.vue"
+    },
+    {
+      "method": "GET",
+      "url": "http://192.168.174.70:5173/src/router/index.ts"
+    },
+    {
+      "method": "GET",
+      "url": "http://192.168.174.70:5173/src/stores/index.ts"
+    },
+    {
+      "method": "GET",
+      "url": "http://192.168.174.70:5173/src/styles/global.css"
+    },
+    {
+      "method": "GET",
+      "url": "http://192.168.174.70:5173/node_modules/.vite/deps/chunk-J5D6QMP7.js?v=c72b7f9a"
+    },
+    {
+      "method": "GET",
+      "url": "http://192.168.174.70:5173/node_modules/.vite/deps/chunk-G3PMV62Z.js?v=c72b7f9a"
+    },
+    {
+      "method": "GET",
+      "url": "http://192.168.174.70:5173/node_modules/.vite/deps/chunk-YTRRJBUP.js?v=c72b7f9a"
+    },
+    {
+      "method": "GET",
+      "url": "http://192.168.174.70:5173/node_modules/.vite/deps/chunk-Q6SH2LQN.js?v=c72b7f9a"
+    },
+    {
+      "method": "GET",
+      "url": "http://192.168.174.70:5173/node_modules/.vite/deps/vue-router.js?v=a8ba07c0"
+    },
+    {
+      "method": "GET",
+      "url": "http://192.168.174.70:5173/src/layouts/MainLayout.vue"
+    },
+    {
+      "method": "GET",
+      "url": "http://192.168.174.70:5173/@id/__x00__plugin-vue:export-helper"
+    },
+    {
+      "method": "GET",
+      "url": "http://192.168.174.70:5173/node_modules/.vite/deps/pinia.js?v=805650fa"
+    },
+    {
+      "method": "GET",
+      "url": "http://192.168.174.70:5173/node_modules/.vite/deps/chunk-YFT6OQ5R.js?v=c72b7f9a"
+    },
+    {
+      "method": "GET",
+      "url": "http://192.168.174.70:5173/src/stores/app.ts"
+    },
+    {
+      "method": "GET",
+      "url": "http://192.168.174.70:5173/src/layouts/Sidebar.vue"
+    },
+    {
+      "method": "GET",
+      "url": "http://192.168.174.70:5173/src/layouts/HeaderBar.vue"
+    },
+    {
+      "method": "GET",
+      "url": "http://192.168.174.70:5173/src/layouts/MainLayout.vue?vue&type=style&index=0&scoped=22686b16&lang.css"
+    },
+    {
+      "method": "GET",
+      "url": "http://192.168.174.70:5173/src/config/menu.ts"
+    },
+    {
+      "method": "GET",
+      "url": "http://192.168.174.70:5173/src/views/log-query/reinitBus.ts"
+    },
+    {
+      "method": "GET",
+      "url": "http://192.168.174.70:5173/src/layouts/Sidebar.vue?vue&type=style&index=0&scoped=cc56cb04&lang.css"
+    },
+    {
+      "method": "GET",
+      "url": "http://192.168.174.70:5173/node_modules/.vite/deps/@element-plus_icons-vue.js?v=88c3f2f2"
+    },
+    {
+      "method": "GET",
+      "url": "http://192.168.174.70:5173/src/layouts/HeaderBar.vue?vue&type=style&index=0&scoped=ddbc33b4&lang.css"
+    },
+    {
+      "method": "GET",
+      "url": "http://192.168.174.70:5173/vite.svg"
+    },
+    {
+      "method": "GET",
+      "url": "http://192.168.174.70:5173/monitor/data-source-state"
+    },
+    {
+      "method": "GET",
+      "url": "http://192.168.174.70:5173/@vite/client"
+    },
+    {
+      "method": "GET",
+      "url": "http://192.168.174.70:5173/src/main.ts"
+    },
+    {
+      "method": "GET",
+      "url": "http://192.168.174.70:5173/node_modules/vite/dist/client/env.mjs"
+    },
+    {
+      "method": "GET",
+      "url": "http://192.168.174.70:5173/node_modules/.vite/deps/vue.js?v=1553cedb"
+    },
+    {
+      "method": "GET",
+      "url": "http://192.168.174.70:5173/node_modules/.vite/deps/element-plus.js?v=16b860c1"
+    },
+    {
+      "method": "GET",
+      "url": "http://192.168.174.70:5173/node_modules/element-plus/dist/index.css"
+    },
+    {
+      "method": "GET",
+      "url": "http://192.168.174.70:5173/node_modules/.vite/deps/element-plus_es_locale_lang_zh-cn.js?v=99880c31"
+    },
+    {
+      "method": "GET",
+      "url": "http://192.168.174.70:5173/src/App.vue"
+    },
+    {
+      "method": "GET",
+      "url": "http://192.168.174.70:5173/src/router/index.ts"
+    },
+    {
+      "method": "GET",
+      "url": "http://192.168.174.70:5173/src/stores/index.ts"
+    },
+    {
+      "method": "GET",
+      "url": "http://192.168.174.70:5173/src/styles/global.css"
+    },
+    {
+      "method": "GET",
+      "url": "http://192.168.174.70:5173/node_modules/.vite/deps/chunk-J5D6QMP7.js?v=c72b7f9a"
+    },
+    {
+      "method": "GET",
+      "url": "http://192.168.174.70:5173/node_modules/.vite/deps/chunk-G3PMV62Z.js?v=c72b7f9a"
+    },
+    {
+      "method": "GET",
+      "url": "http://192.168.174.70:5173/node_modules/.vite/deps/chunk-YTRRJBUP.js?v=c72b7f9a"
+    },
+    {
+      "method": "GET",
+      "url": "http://192.168.174.70:5173/node_modules/.vite/deps/chunk-Q6SH2LQN.js?v=c72b7f9a"
+    },
+    {
+      "method": "GET",
+      "url": "http://192.168.174.70:5173/node_modules/.vite/deps/vue-router.js?v=a8ba07c0"
+    },
+    {
+      "method": "GET",
+      "url": "http://192.168.174.70:5173/src/layouts/MainLayout.vue"
+    },
+    {
+      "method": "GET",
+      "url": "http://192.168.174.70:5173/@id/__x00__plugin-vue:export-helper"
+    },
+    {
+      "method": "GET",
+      "url": "http://192.168.174.70:5173/node_modules/.vite/deps/chunk-YFT6OQ5R.js?v=c72b7f9a"
+    },
+    {
+      "method": "GET",
+      "url": "http://192.168.174.70:5173/node_modules/.vite/deps/pinia.js?v=805650fa"
+    },
+    {
+      "method": "GET",
+      "url": "http://192.168.174.70:5173/src/stores/app.ts"
+    },
+    {
+      "method": "GET",
+      "url": "http://192.168.174.70:5173/src/layouts/Sidebar.vue"
+    },
+    {
+      "method": "GET",
+      "url": "http://192.168.174.70:5173/src/layouts/HeaderBar.vue"
+    },
+    {
+      "method": "GET",
+      "url": "http://192.168.174.70:5173/src/layouts/MainLayout.vue?vue&type=style&index=0&scoped=22686b16&lang.css"
+    },
+    {
+      "method": "GET",
+      "url": "http://192.168.174.70:5173/src/config/menu.ts"
+    },
+    {
+      "method": "GET",
+      "url": "http://192.168.174.70:5173/src/views/log-query/reinitBus.ts"
+    },
+    {
+      "method": "GET",
+      "url": "http://192.168.174.70:5173/src/layouts/Sidebar.vue?vue&type=style&index=0&scoped=cc56cb04&lang.css"
+    },
+    {
+      "method": "GET",
+      "url": "http://192.168.174.70:5173/node_modules/.vite/deps/@element-plus_icons-vue.js?v=88c3f2f2"
+    },
+    {
+      "method": "GET",
+      "url": "http://192.168.174.70:5173/src/layouts/HeaderBar.vue?vue&type=style&index=0&scoped=ddbc33b4&lang.css"
+    },
+    {
+      "method": "GET",
+      "url": "http://192.168.174.70:5173/src/views/data-source-run-state/DataSourceRunStatePage.vue"
+    },
+    {
+      "method": "GET",
+      "url": "http://192.168.174.70:5173/src/views/data-source-run-state/composables/useDataSourceSnapshot.ts"
+    },
+    {
+      "method": "GET",
+      "url": "http://192.168.174.70:5173/src/views/data-source-run-state/components/DataSourceSnapshotQueryBar.vue"
+    },
+    {
+      "method": "GET",
+      "url": "http://192.168.174.70:5173/src/views/data-source-run-state/components/DataSourceSnapshotToolbar.vue"
+    },
+    {
+      "method": "GET",
+      "url": "http://192.168.174.70:5173/src/views/data-source-run-state/components/DataSourceSnapshotTable.vue"
+    },
+    {
+      "method": "GET",
+      "url": "http://192.168.174.70:5173/src/views/data-source-run-state/DataSourceRunStatePage.vue?vue&type=style&index=0&scoped=a7db12e6&lang.css"
+    },
+    {
+      "method": "GET",
+      "url": "http://192.168.174.70:5173/vite.svg"
+    },
+    {
+      "method": "GET",
+      "url": "http://192.168.174.70:5173/src/api/dataSourceSnapshot.ts"
+    },
+    {
+      "method": "GET",
+      "url": "http://192.168.174.70:5173/src/views/data-source-run-state/utils/selection.ts"
+    },
+    {
+      "method": "GET",
+      "url": "http://192.168.174.70:5173/src/views/data-source-run-state/utils/format.ts"
+    },
+    {
+      "method": "GET",
+      "url": "http://192.168.174.70:5173/src/views/data-source-run-state/tooltip/tooltipPosition.ts"
+    },
+    {
+      "method": "GET",
+      "url": "http://192.168.174.70:5173/src/views/data-source-run-state/components/DataSourceSnapshotQueryBar.vue?vue&type=style&index=0&scoped=cd886c8f&lang.css"
+    },
+    {
+      "method": "GET",
+      "url": "http://192.168.174.70:5173/src/views/data-source-run-state/components/DataSourceSnapshotQueryBar.vue?vue&type=style&index=1&lang.css"
+    },
+    {
+      "method": "GET",
+      "url": "http://192.168.174.70:5173/src/views/data-source-run-state/components/DataSourceSnapshotToolbar.vue?vue&type=style&index=0&scoped=a581eda5&lang.css"
+    },
+    {
+      "method": "GET",
+      "url": "http://192.168.174.70:5173/src/views/data-source-run-state/utils/rowKey.ts"
+    },
+    {
+      "method": "GET",
+      "url": "http://192.168.174.70:5173/src/views/data-source-run-state/components/DataSourceSnapshotStatusTag.vue"
+    },
+    {
+      "method": "GET",
+      "url": "http://192.168.174.70:5173/src/views/data-source-run-state/tooltip/SnapshotTooltipHost.vue"
+    },
+    {
+      "method": "GET",
+      "url": "http://192.168.174.70:5173/src/views/data-source-run-state/tooltip/useSnapshotTooltip.ts"
+    },
+    {
+      "method": "GET",
+      "url": "http://192.168.174.70:5173/src/views/data-source-run-state/components/DataSourceSnapshotTable.vue?vue&type=style&index=0&scoped=a0b5e578&lang.css"
+    },
+    {
+      "method": "GET",
+      "url": "http://192.168.174.70:5173/src/services/http.ts"
+    },
+    {
+      "method": "GET",
+      "url": "http://192.168.174.70:5173/src/views/data-source-run-state/components/DataSourceSnapshotStatusTag.vue?vue&type=style&index=0&scoped=8119ec47&lang.css"
+    },
+    {
+      "method": "GET",
+      "url": "http://192.168.174.70:5173/src/views/data-source-run-state/tooltip/SnapshotTooltipHost.vue?vue&type=style&index=0&scoped=e8ab6064&lang.css"
+    },
+    {
+      "method": "GET",
+      "url": "http://192.168.174.70:5173/node_modules/.vite/deps/axios.js?v=7b7db2e4"
+    },
+    {
+      "method": "GET",
+      "url": "http://192.168.174.70:5173/api/monitor/data-source-run-state/list"
+    },
+    {
+      "method": "GET",
+      "url": "http://192.168.174.70:5173/api/monitor/data-source-run-state/list"
+    },
+    {
+      "method": "GET",
+      "url": "http://192.168.174.70:5173/api/monitor/data-source-run-state/list"
+    },
+    {
+      "method": "GET",
+      "url": "http://192.168.174.70:5173/api/monitor/data-source-run-state/list"
+    },
+    {
+      "method": "GET",
+      "url": "http://192.168.174.70:5173/api/monitor/data-source-run-state/list"
+    },
+    {
+      "method": "GET",
+      "url": "http://192.168.174.70:5173/monitor/data-source-state"
+    },
+    {
+      "method": "GET",
+      "url": "http://192.168.174.70:5173/@vite/client"
+    },
+    {
+      "method": "GET",
+      "url": "http://192.168.174.70:5173/src/main.ts"
+    },
+    {
+      "method": "GET",
+      "url": "http://192.168.174.70:5173/node_modules/vite/dist/client/env.mjs"
+    },
+    {
+      "method": "GET",
+      "url": "http://192.168.174.70:5173/node_modules/.vite/deps/vue.js?v=1553cedb"
+    },
+    {
+      "method": "GET",
+      "url": "http://192.168.174.70:5173/node_modules/.vite/deps/element-plus.js?v=16b860c1"
+    },
+    {
+      "method": "GET",
+      "url": "http://192.168.174.70:5173/node_modules/element-plus/dist/index.css"
+    },
+    {
+      "method": "GET",
+      "url": "http://192.168.174.70:5173/node_modules/.vite/deps/element-plus_es_locale_lang_zh-cn.js?v=99880c31"
+    },
+    {
+      "method": "GET",
+      "url": "http://192.168.174.70:5173/src/App.vue"
+    },
+    {
+      "method": "GET",
+      "url": "http://192.168.174.70:5173/src/router/index.ts"
+    },
+    {
+      "method": "GET",
+      "url": "http://192.168.174.70:5173/src/stores/index.ts"
+    },
+    {
+      "method": "GET",
+      "url": "http://192.168.174.70:5173/src/styles/global.css"
+    },
+    {
+      "method": "GET",
+      "url": "http://192.168.174.70:5173/node_modules/.vite/deps/chunk-J5D6QMP7.js?v=c72b7f9a"
+    },
+    {
+      "method": "GET",
+      "url": "http://192.168.174.70:5173/node_modules/.vite/deps/chunk-G3PMV62Z.js?v=c72b7f9a"
+    },
+    {
+      "method": "GET",
+      "url": "http://192.168.174.70:5173/node_modules/.vite/deps/chunk-YTRRJBUP.js?v=c72b7f9a"
+    },
+    {
+      "method": "GET",
+      "url": "http://192.168.174.70:5173/node_modules/.vite/deps/chunk-Q6SH2LQN.js?v=c72b7f9a"
+    },
+    {
+      "method": "GET",
+      "url": "http://192.168.174.70:5173/node_modules/.vite/deps/vue-router.js?v=a8ba07c0"
+    },
+    {
+      "method": "GET",
+      "url": "http://192.168.174.70:5173/src/layouts/MainLayout.vue"
+    },
+    {
+      "method": "GET",
+      "url": "http://192.168.174.70:5173/@id/__x00__plugin-vue:export-helper"
+    },
+    {
+      "method": "GET",
+      "url": "http://192.168.174.70:5173/node_modules/.vite/deps/chunk-YFT6OQ5R.js?v=c72b7f9a"
+    },
+    {
+      "method": "GET",
+      "url": "http://192.168.174.70:5173/node_modules/.vite/deps/pinia.js?v=805650fa"
+    },
+    {
+      "method": "GET",
+      "url": "http://192.168.174.70:5173/src/stores/app.ts"
+    },
+    {
+      "method": "GET",
+      "url": "http://192.168.174.70:5173/src/layouts/Sidebar.vue"
+    },
+    {
+      "method": "GET",
+      "url": "http://192.168.174.70:5173/src/layouts/HeaderBar.vue"
+    },
+    {
+      "method": "GET",
+      "url": "http://192.168.174.70:5173/src/layouts/MainLayout.vue?vue&type=style&index=0&scoped=22686b16&lang.css"
+    },
+    {
+      "method": "GET",
+      "url": "http://192.168.174.70:5173/src/config/menu.ts"
+    },
+    {
+      "method": "GET",
+      "url": "http://192.168.174.70:5173/src/views/log-query/reinitBus.ts"
+    },
+    {
+      "method": "GET",
+      "url": "http://192.168.174.70:5173/src/layouts/Sidebar.vue?vue&type=style&index=0&scoped=cc56cb04&lang.css"
+    },
+    {
+      "method": "GET",
+      "url": "http://192.168.174.70:5173/node_modules/.vite/deps/@element-plus_icons-vue.js?v=88c3f2f2"
+    },
+    {
+      "method": "GET",
+      "url": "http://192.168.174.70:5173/src/layouts/HeaderBar.vue?vue&type=style&index=0&scoped=ddbc33b4&lang.css"
+    },
+    {
+      "method": "GET",
+      "url": "http://192.168.174.70:5173/src/views/data-source-run-state/DataSourceRunStatePage.vue"
+    },
+    {
+      "method": "GET",
+      "url": "http://192.168.174.70:5173/src/views/data-source-run-state/composables/useDataSourceSnapshot.ts"
+    },
+    {
+      "method": "GET",
+      "url": "http://192.168.174.70:5173/src/views/data-source-run-state/components/DataSourceSnapshotQueryBar.vue"
+    },
+    {
+      "method": "GET",
+      "url": "http://192.168.174.70:5173/src/views/data-source-run-state/components/DataSourceSnapshotToolbar.vue"
+    },
+    {
+      "method": "GET",
+      "url": "http://192.168.174.70:5173/src/views/data-source-run-state/components/DataSourceSnapshotTable.vue"
+    },
+    {
+      "method": "GET",
+      "url": "http://192.168.174.70:5173/src/views/data-source-run-state/DataSourceRunStatePage.vue?vue&type=style&index=0&scoped=a7db12e6&lang.css"
+    },
+    {
+      "method": "GET",
+      "url": "http://192.168.174.70:5173/vite.svg"
+    },
+    {
+      "method": "GET",
+      "url": "http://192.168.174.70:5173/src/api/dataSourceSnapshot.ts"
+    },
+    {
+      "method": "GET",
+      "url": "http://192.168.174.70:5173/src/views/data-source-run-state/utils/selection.ts"
+    },
+    {
+      "method": "GET",
+      "url": "http://192.168.174.70:5173/src/views/data-source-run-state/utils/format.ts"
+    },
+    {
+      "method": "GET",
+      "url": "http://192.168.174.70:5173/src/views/data-source-run-state/tooltip/tooltipPosition.ts"
+    },
+    {
+      "method": "GET",
+      "url": "http://192.168.174.70:5173/src/views/data-source-run-state/components/DataSourceSnapshotQueryBar.vue?vue&type=style&index=0&scoped=cd886c8f&lang.css"
+    },
+    {
+      "method": "GET",
+      "url": "http://192.168.174.70:5173/src/views/data-source-run-state/components/DataSourceSnapshotQueryBar.vue?vue&type=style&index=1&lang.css"
+    },
+    {
+      "method": "GET",
+      "url": "http://192.168.174.70:5173/src/views/data-source-run-state/components/DataSourceSnapshotToolbar.vue?vue&type=style&index=0&scoped=a581eda5&lang.css"
+    },
+    {
+      "method": "GET",
+      "url": "http://192.168.174.70:5173/src/views/data-source-run-state/utils/rowKey.ts"
+    },
+    {
+      "method": "GET",
+      "url": "http://192.168.174.70:5173/src/views/data-source-run-state/components/DataSourceSnapshotStatusTag.vue"
+    },
+    {
+      "method": "GET",
+      "url": "http://192.168.174.70:5173/src/views/data-source-run-state/tooltip/SnapshotTooltipHost.vue"
+    },
+    {
+      "method": "GET",
+      "url": "http://192.168.174.70:5173/src/views/data-source-run-state/tooltip/useSnapshotTooltip.ts"
+    },
+    {
+      "method": "GET",
+      "url": "http://192.168.174.70:5173/src/views/data-source-run-state/components/DataSourceSnapshotTable.vue?vue&type=style&index=0&scoped=a0b5e578&lang.css"
+    },
+    {
+      "method": "GET",
+      "url": "http://192.168.174.70:5173/src/services/http.ts"
+    },
+    {
+      "method": "GET",
+      "url": "http://192.168.174.70:5173/src/views/data-source-run-state/components/DataSourceSnapshotStatusTag.vue?vue&type=style&index=0&scoped=8119ec47&lang.css"
+    },
+    {
+      "method": "GET",
+      "url": "http://192.168.174.70:5173/src/views/data-source-run-state/tooltip/SnapshotTooltipHost.vue?vue&type=style&index=0&scoped=e8ab6064&lang.css"
+    },
+    {
+      "method": "GET",
+      "url": "http://192.168.174.70:5173/node_modules/.vite/deps/axios.js?v=7b7db2e4"
+    },
+    {
+      "method": "GET",
+      "url": "http://192.168.174.70:5173/api/monitor/data-source-run-state/list"
+    },
+    {
+      "method": "GET",
+      "url": "http://192.168.174.70:5173/api/monitor/data-source-run-state/list"
+    },
+    {
+      "method": "GET",
+      "url": "data:image/svg+xml;utf8,%3Csvg class='icon' width='200' height='200' viewBox='0 0 1024 1024' xmlns='http://www.w3.org/2000/svg'%3E%3Cpath fill='currentColor' d='M406.656 706.944L195.84 496.256a32 32 0 10-45.248 45.248l256 256 512-512a32 32 0 00-45.248-45.248L406.592 706.944z'%3E%3C/path%3E%3C/svg%3E"
+    },
+    {
+      "method": "GET",
+      "url": "http://192.168.174.70:5173/api/monitor/data-source-run-state/list?status=RUNNING"
+    },
+    {
+      "method": "GET",
+      "url": "http://192.168.174.70:5173/api/monitor/data-source-run-state/list?status=RUNNING"
+    },
+    {
+      "method": "GET",
+      "url": "http://192.168.174.70:5173/api/monitor/data-source-run-state/list?status=RUNNING"
+    },
+    {
+      "method": "GET",
+      "url": "http://192.168.174.70:5173/monitor/data-source-state"
+    },
+    {
+      "method": "GET",
+      "url": "http://192.168.174.70:5173/@vite/client"
+    },
+    {
+      "method": "GET",
+      "url": "http://192.168.174.70:5173/src/main.ts"
+    },
+    {
+      "method": "GET",
+      "url": "http://192.168.174.70:5173/node_modules/vite/dist/client/env.mjs"
+    },
+    {
+      "method": "GET",
+      "url": "http://192.168.174.70:5173/node_modules/.vite/deps/vue.js?v=1553cedb"
+    },
+    {
+      "method": "GET",
+      "url": "http://192.168.174.70:5173/node_modules/.vite/deps/element-plus.js?v=16b860c1"
+    },
+    {
+      "method": "GET",
+      "url": "http://192.168.174.70:5173/node_modules/element-plus/dist/index.css"
+    },
+    {
+      "method": "GET",
+      "url": "http://192.168.174.70:5173/node_modules/.vite/deps/element-plus_es_locale_lang_zh-cn.js?v=99880c31"
+    },
+    {
+      "method": "GET",
+      "url": "http://192.168.174.70:5173/src/App.vue"
+    },
+    {
+      "method": "GET",
+      "url": "http://192.168.174.70:5173/src/router/index.ts"
+    },
+    {
+      "method": "GET",
+      "url": "http://192.168.174.70:5173/src/stores/index.ts"
+    },
+    {
+      "method": "GET",
+      "url": "http://192.168.174.70:5173/src/styles/global.css"
+    },
+    {
+      "method": "GET",
+      "url": "http://192.168.174.70:5173/node_modules/.vite/deps/chunk-J5D6QMP7.js?v=c72b7f9a"
+    },
+    {
+      "method": "GET",
+      "url": "http://192.168.174.70:5173/node_modules/.vite/deps/chunk-G3PMV62Z.js?v=c72b7f9a"
+    },
+    {
+      "method": "GET",
+      "url": "http://192.168.174.70:5173/node_modules/.vite/deps/chunk-YTRRJBUP.js?v=c72b7f9a"
+    },
+    {
+      "method": "GET",
+      "url": "http://192.168.174.70:5173/node_modules/.vite/deps/chunk-Q6SH2LQN.js?v=c72b7f9a"
+    },
+    {
+      "method": "GET",
+      "url": "http://192.168.174.70:5173/node_modules/.vite/deps/vue-router.js?v=a8ba07c0"
+    },
+    {
+      "method": "GET",
+      "url": "http://192.168.174.70:5173/src/layouts/MainLayout.vue"
+    },
+    {
+      "method": "GET",
+      "url": "http://192.168.174.70:5173/@id/__x00__plugin-vue:export-helper"
+    },
+    {
+      "method": "GET",
+      "url": "http://192.168.174.70:5173/node_modules/.vite/deps/chunk-YFT6OQ5R.js?v=c72b7f9a"
+    },
+    {
+      "method": "GET",
+      "url": "http://192.168.174.70:5173/node_modules/.vite/deps/pinia.js?v=805650fa"
+    },
+    {
+      "method": "GET",
+      "url": "http://192.168.174.70:5173/src/stores/app.ts"
+    },
+    {
+      "method": "GET",
+      "url": "http://192.168.174.70:5173/src/layouts/Sidebar.vue"
+    },
+    {
+      "method": "GET",
+      "url": "http://192.168.174.70:5173/src/layouts/HeaderBar.vue"
+    },
+    {
+      "method": "GET",
+      "url": "http://192.168.174.70:5173/src/layouts/MainLayout.vue?vue&type=style&index=0&scoped=22686b16&lang.css"
+    },
+    {
+      "method": "GET",
+      "url": "http://192.168.174.70:5173/src/config/menu.ts"
+    },
+    {
+      "method": "GET",
+      "url": "http://192.168.174.70:5173/src/views/log-query/reinitBus.ts"
+    },
+    {
+      "method": "GET",
+      "url": "http://192.168.174.70:5173/src/layouts/Sidebar.vue?vue&type=style&index=0&scoped=cc56cb04&lang.css"
+    },
+    {
+      "method": "GET",
+      "url": "http://192.168.174.70:5173/node_modules/.vite/deps/@element-plus_icons-vue.js?v=88c3f2f2"
+    },
+    {
+      "method": "GET",
+      "url": "http://192.168.174.70:5173/src/layouts/HeaderBar.vue?vue&type=style&index=0&scoped=ddbc33b4&lang.css"
+    },
+    {
+      "method": "GET",
+      "url": "http://192.168.174.70:5173/src/views/data-source-run-state/DataSourceRunStatePage.vue"
+    },
+    {
+      "method": "GET",
+      "url": "http://192.168.174.70:5173/src/views/data-source-run-state/composables/useDataSourceSnapshot.ts"
+    },
+    {
+      "method": "GET",
+      "url": "http://192.168.174.70:5173/src/views/data-source-run-state/components/DataSourceSnapshotQueryBar.vue"
+    },
+    {
+      "method": "GET",
+      "url": "http://192.168.174.70:5173/src/views/data-source-run-state/components/DataSourceSnapshotToolbar.vue"
+    },
+    {
+      "method": "GET",
+      "url": "http://192.168.174.70:5173/src/views/data-source-run-state/components/DataSourceSnapshotTable.vue"
+    },
+    {
+      "method": "GET",
+      "url": "http://192.168.174.70:5173/src/views/data-source-run-state/DataSourceRunStatePage.vue?vue&type=style&index=0&scoped=a7db12e6&lang.css"
+    },
+    {
+      "method": "GET",
+      "url": "http://192.168.174.70:5173/vite.svg"
+    },
+    {
+      "method": "GET",
+      "url": "http://192.168.174.70:5173/src/api/dataSourceSnapshot.ts"
+    },
+    {
+      "method": "GET",
+      "url": "http://192.168.174.70:5173/src/views/data-source-run-state/utils/selection.ts"
+    },
+    {
+      "method": "GET",
+      "url": "http://192.168.174.70:5173/src/views/data-source-run-state/utils/format.ts"
+    },
+    {
+      "method": "GET",
+      "url": "http://192.168.174.70:5173/src/views/data-source-run-state/tooltip/tooltipPosition.ts"
+    },
+    {
+      "method": "GET",
+      "url": "http://192.168.174.70:5173/src/views/data-source-run-state/components/DataSourceSnapshotQueryBar.vue?vue&type=style&index=0&scoped=cd886c8f&lang.css"
+    },
+    {
+      "method": "GET",
+      "url": "http://192.168.174.70:5173/src/views/data-source-run-state/components/DataSourceSnapshotQueryBar.vue?vue&type=style&index=1&lang.css"
+    },
+    {
+      "method": "GET",
+      "url": "http://192.168.174.70:5173/src/views/data-source-run-state/components/DataSourceSnapshotToolbar.vue?vue&type=style&index=0&scoped=a581eda5&lang.css"
+    },
+    {
+      "method": "GET",
+      "url": "http://192.168.174.70:5173/src/views/data-source-run-state/utils/rowKey.ts"
+    },
+    {
+      "method": "GET",
+      "url": "http://192.168.174.70:5173/src/views/data-source-run-state/components/DataSourceSnapshotStatusTag.vue"
+    },
+    {
+      "method": "GET",
+      "url": "http://192.168.174.70:5173/src/views/data-source-run-state/tooltip/SnapshotTooltipHost.vue"
+    },
+    {
+      "method": "GET",
+      "url": "http://192.168.174.70:5173/src/views/data-source-run-state/tooltip/useSnapshotTooltip.ts"
+    },
+    {
+      "method": "GET",
+      "url": "http://192.168.174.70:5173/src/views/data-source-run-state/components/DataSourceSnapshotTable.vue?vue&type=style&index=0&scoped=a0b5e578&lang.css"
+    },
+    {
+      "method": "GET",
+      "url": "http://192.168.174.70:5173/src/services/http.ts"
+    },
+    {
+      "method": "GET",
+      "url": "http://192.168.174.70:5173/src/views/data-source-run-state/components/DataSourceSnapshotStatusTag.vue?vue&type=style&index=0&scoped=8119ec47&lang.css"
+    },
+    {
+      "method": "GET",
+      "url": "http://192.168.174.70:5173/src/views/data-source-run-state/tooltip/SnapshotTooltipHost.vue?vue&type=style&index=0&scoped=e8ab6064&lang.css"
+    },
+    {
+      "method": "GET",
+      "url": "http://192.168.174.70:5173/node_modules/.vite/deps/axios.js?v=7b7db2e4"
+    },
+    {
+      "method": "GET",
+      "url": "http://192.168.174.70:5173/api/monitor/data-source-run-state/list"
+    },
+    {
+      "method": "GET",
+      "url": "http://192.168.174.70:5173/api/monitor/data-source-run-state/list"
+    }
+  ],
+  "realResponses": [
+    {
+      "status": 200,
+      "url": "http://192.168.174.70:5173/api/monitor/data-source-run-state/list",
+      "records": 30
+    },
+    {
+      "status": 200,
+      "url": "http://192.168.174.70:5173/api/monitor/data-source-run-state/list",
+      "records": 30
+    },
+    {
+      "status": 200,
+      "url": "http://192.168.174.70:5173/api/monitor/data-source-run-state/list",
+      "records": null
+    },
+    {
+      "status": 200,
+      "url": "http://192.168.174.70:5173/api/monitor/data-source-run-state/list",
+      "records": 30
+    },
+    {
+      "status": 200,
+      "url": "http://192.168.174.70:5173/api/monitor/data-source-run-state/list",
+      "records": null
+    },
+    {
+      "status": 200,
+      "url": "http://192.168.174.70:5173/api/monitor/data-source-run-state/list",
+      "records": 30
+    },
+    {
+      "status": 200,
+      "url": "http://192.168.174.70:5173/api/monitor/data-source-run-state/list",
+      "records": 30
+    },
+    {
+      "status": 200,
+      "url": "http://192.168.174.70:5173/api/monitor/data-source-run-state/list",
+      "records": null
+    },
+    {
+      "status": 200,
+      "url": "http://192.168.174.70:5173/api/monitor/data-source-run-state/list",
+      "records": 30
+    },
+    {
+      "status": 200,
+      "url": "http://192.168.174.70:5173/api/monitor/data-source-run-state/list",
+      "records": null
+    },
+    {
+      "status": 200,
+      "url": "http://192.168.174.70:5173/api/monitor/data-source-run-state/list",
+      "records": 30
+    },
+    {
+      "status": 200,
+      "url": "http://192.168.174.70:5173/api/monitor/data-source-run-state/list",
+      "records": 30
+    },
+    {
+      "status": 200,
+      "url": "http://192.168.174.70:5173/api/monitor/data-source-run-state/list",
+      "records": null
+    },
+    {
+      "status": 200,
+      "url": "http://192.168.174.70:5173/api/monitor/data-source-run-state/list",
+      "records": 30
+    },
+    {
+      "status": 200,
+      "url": "http://192.168.174.70:5173/api/monitor/data-source-run-state/list",
+      "records": null
+    },
+    {
+      "status": 200,
+      "url": "http://192.168.174.70:5173/api/monitor/data-source-run-state/list",
+      "records": 30
+    },
+    {
+      "status": 200,
+      "url": "http://192.168.174.70:5173/api/monitor/data-source-run-state/list",
+      "records": 30
+    },
+    {
+      "status": 200,
+      "url": "http://192.168.174.70:5173/api/monitor/data-source-run-state/list",
+      "records": null
+    },
+    {
+      "status": 200,
+      "url": "http://192.168.174.70:5173/api/monitor/data-source-run-state/list",
+      "records": null
+    },
+    {
+      "status": 200,
+      "url": "http://192.168.174.70:5173/api/monitor/data-source-run-state/list",
+      "records": null
+    },
+    {
+      "status": 200,
+      "url": "http://192.168.174.70:5173/api/monitor/data-source-run-state/list",
+      "records": 30
+    },
+    {
+      "status": 200,
+      "url": "http://192.168.174.70:5173/api/monitor/data-source-run-state/list",
+      "records": 30
+    },
+    {
+      "status": 200,
+      "url": "http://192.168.174.70:5173/api/monitor/data-source-run-state/list",
+      "records": 30
+    },
+    {
+      "status": 200,
+      "url": "http://192.168.174.70:5173/api/monitor/data-source-run-state/list",
+      "records": 30
+    },
+    {
+      "status": 200,
+      "url": "http://192.168.174.70:5173/api/monitor/data-source-run-state/list",
+      "records": 30
+    },
+    {
+      "status": 200,
+      "url": "http://192.168.174.70:5173/api/monitor/data-source-run-state/list",
+      "records": 30
+    },
+    {
+      "status": 200,
+      "url": "http://192.168.174.70:5173/api/monitor/data-source-run-state/list",
+      "records": 30
+    },
+    {
+      "status": 200,
+      "url": "http://192.168.174.70:5173/api/monitor/data-source-run-state/list",
+      "records": 30
+    },
+    {
+      "status": 200,
+      "url": "http://192.168.174.70:5173/api/monitor/data-source-run-state/list",
+      "records": 30
+    },
+    {
+      "status": 200,
+      "url": "http://192.168.174.70:5173/api/monitor/data-source-run-state/list",
+      "records": 30
+    },
+    {
+      "status": 200,
+      "url": "http://192.168.174.70:5173/api/monitor/data-source-run-state/list?status=RUNNING",
+      "records": 13
+    },
+    {
+      "status": 200,
+      "url": "http://192.168.174.70:5173/api/monitor/data-source-run-state/list?status=RUNNING",
+      "records": null
+    },
+    {
+      "status": 200,
+      "url": "http://192.168.174.70:5173/api/monitor/data-source-run-state/list?status=RUNNING",
+      "records": 13
+    },
+    {
+      "status": 200,
+      "url": "http://192.168.174.70:5173/api/monitor/data-source-run-state/list",
+      "records": 30
+    },
+    {
+      "status": 200,
+      "url": "http://192.168.174.70:5173/api/monitor/data-source-run-state/list",
+      "records": 30
+    }
+  ]
+}

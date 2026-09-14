@@ -1,0 +1,40 @@
+FROZEN BOUNDARY AUDIT (working tree vs base 5195a716ed3b6d0d3122decfe937b73b27581d5a)
+rule: only acceptance status/statistics/next-entry lines, the DSS-AC-108~113 status cells,
+      the DESIGN 31 / UI 25 status-and-boundary bullet, the closeout record qualifier,
+      and appended records may differ.
+note: API.md 9 and DATABASE.md 14 are the final sections, so their append-only records
+      and the closeout-record qualifier are removed before the digest comparison.
+
+[1] path-level zero diff vs base
+    frontend     changed_files=0 (ZERO)
+    backend      changed_files=0 (ZERO)
+    docs/features/data-source-snapshot-status/reports          changed_tracked_files=0 (ZERO; the new evidence dir is a new untracked dir, no existing file touched)
+    docs/features/data-source-snapshot-status/evidence         changed_tracked_files=0 (ZERO; the new evidence dir is a new untracked dir, no existing file touched)
+    non-docs changed files: 0 (SQL/config/dependencies all live under frontend/backend/ -> ZERO)
+
+[2] named frozen regions: base digest vs working digest
+    DESIGN.md ## 14.           base=06780621d34f work=06780621d34f  IDENTICAL
+    DESIGN.md ## 31.           base=5b41a276c483 work=298a030a3aee  DIFF
+        strip the `- **状态与边界**` status bullet: base=9ee7468ff29d work=9ee7468ff29d  IDENTICAL -> business rules unchanged
+    UI.md ## 9.                base=8769824f977f work=8769824f977f  IDENTICAL
+    UI.md ## 25.               base=c46163eb4e5e work=88f462cb19bc  DIFF
+        strip the `- **状态与边界**` status bullet: base=0ca513728fa2 work=0ca513728fa2  IDENTICAL -> business rules unchanged
+    API.md ## 9.               base=91734d2aeffe work=91734d2aeffe  IDENTICAL
+    DATABASE.md ## 14.         base=709f2669880f work=709f2669880f  IDENTICAL
+
+[3] per-file changed-line audit (each changed non-blank line must carry an allowed marker)
+    README.md            changed_nonblank_lines=  3 unexplained=0
+    ACCEPTANCE.md        changed_nonblank_lines= 17 unexplained=0
+    API.md               changed_nonblank_lines=  5 unexplained=0
+    DATABASE.md          changed_nonblank_lines=  5 unexplained=0
+    DESIGN.md            changed_nonblank_lines=  8 unexplained=0
+    README.md            changed_nonblank_lines=  5 unexplained=0
+    REQUIREMENTS.md      changed_nonblank_lines=  5 unexplained=0
+    UI.md                changed_nonblank_lines=  8 unexplained=0
+    total unexplained changed lines = 0 (0 required)
+
+[4] counts
+    AC rows=113 unique=113 set_equals_1..113=True all_PASS=True
+    status cells differing vs base: [108, 109, 110, 111, 112, 113] (must be exactly 108..113)
+    DSS-AC-108~113 now PASS=True ; DSS-AC-001~107 still all PASS=True
+    REQ rows=89 unique=89 set_equals_1..89=True

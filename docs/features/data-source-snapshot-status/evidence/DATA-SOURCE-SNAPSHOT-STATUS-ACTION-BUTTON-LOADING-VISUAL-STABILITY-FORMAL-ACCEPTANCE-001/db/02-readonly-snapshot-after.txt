@@ -1,0 +1,19 @@
+### §14 READ-ONLY AFTER SNAPSHOT (recorded 2026-09-14 20:48:37 CST)
+### same SQL as db/01-readonly-snapshot-before.txt; SELECT-only; no credentials recorded
+
+## CDC_DATA_SOURCE_RUN_STATE
+
+rows=30 distinct_keys=30 hash=68964369185
+## CDC_CLIENT_MULTIPLE
+
+rows=16 distinct_keys=16 hash=34895894117
+## CDC_DATA_SOURCE
+
+rows=34 distinct_keys=34 hash=80666457590
+## PK_CONSTRAINTS
+
+CDC_CLIENT_MULTIPLE pk=PK_CDC_CLIENT_MULTIPLE cols=CLIENT_ID pos=1
+CDC_DATA_SOURCE pk=PK_CDC_DATA_SOURCE cols=DATA_SOURCE_ID pos=1
+CDC_DATA_SOURCE_RUN_STATE pk=PK_CDC_DS_RUN_STATE cols=CLIENT_ID pos=1
+CDC_DATA_SOURCE_RUN_STATE pk=PK_CDC_DS_RUN_STATE cols=DATA_SOURCE_ID pos=2
+## END

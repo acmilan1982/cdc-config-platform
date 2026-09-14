@@ -1,0 +1,16 @@
+### NEGATIVE SELF-TEST (is the assertion module falsifiable?)
+### command: node harness/negative-selftest.mjs browser/acceptance-matrix.json
+
+NEGATIVE SELF-TEST OF THE ACCEPTANCE ASSERTION MODULE
+input=/agent/dss-abl-fa-001/docs/features/data-source-snapshot-status/evidence/DATA-SOURCE-SNAPSHOT-STATUS-ACTION-BUTTON-LOADING-VISUAL-STABILITY-FORMAL-ACCEPTANCE-001/browser/acceptance-matrix.json
+(a) untouched result            : passed=true failures=0 checks=294
+(b) +0.001px width/y in 1920x1080/MANUAL_LOADING : passed=false failures=3
+    detected failures:
+      refresh_btn_rect_delta.y | 1920x1080 | actual=0.0010000000000047748 expected=0
+      query_btn_rect_delta.width | 1920x1080 | actual=0.0009999999999976694 expected=0
+      query_button_actual_width_set | 1920x1080 | actual="62,62.001" expected="62"
+
+SELF_TEST_RESULT=PASS (module is falsifiable: clean passes, 0.001px displacement detected)
+SELF_TEST_EXIT_CODE=0
+
+EXIT_CODE=0

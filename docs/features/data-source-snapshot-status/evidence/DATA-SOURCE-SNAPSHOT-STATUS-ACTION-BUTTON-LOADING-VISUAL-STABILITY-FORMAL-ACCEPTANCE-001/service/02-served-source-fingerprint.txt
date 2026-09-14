@@ -1,0 +1,26 @@
+SERVED FEATURE SOURCE FINGERPRINT
+task=DATA-SOURCE-SNAPSHOT-STATUS-ACTION-BUTTON-LOADING-VISUAL-STABILITY-FORMAL-ACCEPTANCE-001
+base_commit=5195a716ed3b6d0d3122decfe937b73b27581d5a
+frontend_vite_pid=19652
+frontend_vite_cwd=/agent/dss-abl-fa-001/frontend
+frontend_vite_cmd=node /agent/dss-abl-fa-001/frontend/node_modules/.bin/vite --host 0.0.0.0 --port 5173 --strictPort
+
+[1] git blob hash of the four button-round Feature files in commit 5195a71 vs git hash-object of the working tree file
+    (equal => the bytes on disk in this worktree are exactly the 5195a71 bytes)
+  MATCH  commit=36e501da0c2f44cf3cc2269b3be62d2485761471  worktree=36e501da0c2f44cf3cc2269b3be62d2485761471  frontend/src/views/data-source-run-state/components/DataSourceSnapshotQueryBar.vue
+  MATCH  commit=6219da2239c593a1bd9856aaac29afc12d52f7ae  worktree=6219da2239c593a1bd9856aaac29afc12d52f7ae  frontend/src/views/data-source-run-state/components/DataSourceSnapshotQueryBar.spec.ts
+  MATCH  commit=2723426a8e9a3c461dbb087b99250b25e170f1bc  worktree=2723426a8e9a3c461dbb087b99250b25e170f1bc  frontend/src/views/data-source-run-state/components/DataSourceSnapshotToolbar.vue
+  MATCH  commit=7ab59211c2d39fe44247bc527d38c408bc171aac  worktree=7ab59211c2d39fe44247bc527d38c408bc171aac  frontend/src/views/data-source-run-state/components/DataSourceSnapshotToolbar.spec.ts
+  MATCH  commit=210162bee9d3345096550133ed9f73152a38e144  worktree=210162bee9d3345096550133ed9f73152a38e144  frontend/src/views/data-source-run-state/DataSourceRunStatePage.spec.ts
+  git status --short for these five paths:
+    (no output above => zero drift from 5195a71)
+
+[2] served-over-HTTP markers from the Vite dev server on 0.0.0.0:5173 (transformed by Vite)
+  DataSourceSnapshotToolbar.vue (js module)     http=200  markers dss-refresh-group/dss-btn-spinner/dss-action-label/dss-refresh-btn present
+  DataSourceSnapshotToolbar.vue (style module)  http=200  '110px' occurrences=1
+  DataSourceSnapshotQueryBar.vue (style module) http=200  '62px' occurrences=1
+
+[3] route reachability (curl, --noproxy)
+  http://127.0.0.1:5173/monitor/data-source-state -> 200
+  http://192.168.174.70:5173/monitor/data-source-state -> 200
+  http://192.168.174.70:8080/api/monitor/data-source-run-state/list -> 200

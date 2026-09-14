@@ -1,0 +1,19 @@
+§14 FEATURE BUSINESS-TABLE READ-ONLY BEFORE/AFTER COMPARISON
+task=DATA-SOURCE-SNAPSHOT-STATUS-ACTION-BUTTON-LOADING-VISUAL-STABILITY-FORMAL-ACCEPTANCE-001
+source_before=db/01-readonly-snapshot-before.txt   source_after=db/02-readonly-snapshot-after.txt
+method: same SELECT-only SQL (/tmp/fa-db-snapshot.sql); row count + distinct primary-key count + content hash
+        (ora_hash over NVL-wrapped non-PASSWORD columns); PK constraints re-read from the data dictionary.
+        No DB address/username/password/connection string is recorded in this file.
+
+table                      rows_before rows_after distinct_before distinct_after hash_before hash_after  verdict
+CDC_DATA_SOURCE_RUN_STATE  30          30         30              30             68964369185 68964369185 IDENTICAL
+CDC_CLIENT_MULTIPLE        16          16         16              16             34895894117 34895894117 IDENTICAL
+CDC_DATA_SOURCE            34          34         34              34             80666457590 80666457590 IDENTICAL
+
+primary keys (before == after):
+  PK_CDC_DS_RUN_STATE   (CLIENT_ID, DATA_SOURCE_ID)
+  PK_CDC_CLIENT_MULTIPLE(CLIENT_ID)
+  PK_CDC_DATA_SOURCE    (DATA_SOURCE_ID)
+
+FEATURE_BUSINESS_TABLE_RESTORE_STATUS=IDENTICAL  (before/after snapshots byte-equal; 0 rows added/removed/changed)
+database_write_status=ZERO  (no INSERT/UPDATE/DELETE/MERGE/DDL executed by this task at any point)

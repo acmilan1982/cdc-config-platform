@@ -1,0 +1,34 @@
+§14 REQUEST-PATH SQL CLASSIFICATION AUDIT
+task=DATA-SOURCE-SNAPSHOT-STATUS-ACTION-BUTTON-LOADING-VISUAL-STABILITY-FORMAL-ACCEPTANCE-001
+base_commit=5195a716ed3b6d0d3122decfe937b73b27581d5a
+scope: the Feature's single endpoint GET /api/monitor/data-source-run-state/list only.
+
+[A] CODE-LEVEL CLASSIFICATION (backend source at 5195a71, package com.bsoft.cdcconfig.monitor.datasourcerunstate)
+  controller mappings found:
+    DataSourceRunStateController.java:19  @RequestMapping("/api/monitor/data-source-run-state")
+    DataSourceRunStateController.java:28  @GetMapping("/list")
+  write mappings (@PostMapping/@PutMapping/@PatchMapping/@DeleteMapping): 0
+  mapper statements (src/main/java/.../mapper/*.java):
+    DataSourceRunStateMapper.java:16 @Select("SELECT CLIENT_ID AS clientId, DATA_SOURCE_ID AS dataSourceId, ...")
+    RunStateClientMapper.java:15     @Select("SELECT CLIENT_ID AS clientId, CLIENT_DESC AS clientDesc, FG_ACTIVE AS fgActive ...")
+    RunStateDataSourceMapper.java:16 @Select("SELECT DATA_SOURCE_ID AS dataSourceId, DATA_SOURCE_ORG AS dataSourceOrg, ...")
+  @Insert/@Update/@Delete annotations in the Feature package: 0
+  write verbs (INSERT/UPDATE/DELETE/MERGE/TRUNCATE) in Feature package .java/.xml (excluding column names
+    insert_time/update_time/delete_time and constants): 0
+
+[B] RUNTIME LOG CLASSIFICATION (service/backend.log window 2026-09-14 20:30:29 -> 20:48:31, level DEBUG)
+  total log lines: 1710
+  lines containing a write verb (insert/update/delete/merge/truncate, case-insensitive): 0
+  lines containing "select " (case-insensitive): 475
+  Feature request-path mapper calls observed: c.b.c.m.d.m.D.selectAll -> "Total: 30" (real rows served)
+  REQUEST_PATH_WRITE_STATEMENT_COUNT=0
+  REQUEST_PATH_SELECT_STATEMENT_COUNT>=1 (all Feature requests issued SELECT only)
+
+[C] SEPARATELY-AUDITED BACKGROUND COMPONENT (§14 last bullet)
+  StatsScheduler (c.b.c.l.stats.lifecycle.StatsScheduler) is a PRE-EXISTING platform background component,
+  NOT part of this Feature and NOT part of the Feature request path.
+  observed: "Stats scheduler started: initialDelayMs=600000, intervalMs=3600000" at 20:30:30;
+            at 20:40:30 thread cdc-stats-1 issued SELECTs against CDC_STATS_WATERMARK / CDC_STATS_TASK_CONFIG.
+  In the captured window this background component produced 0 write statements by log evidence.
+  It does not touch the Feature's three tables (CDC_DATA_SOURCE_RUN_STATE / CDC_CLIENT_MULTIPLE /
+  CDC_DATA_SOURCE) and is not conflated with "page writes". The Feature page is read-only.

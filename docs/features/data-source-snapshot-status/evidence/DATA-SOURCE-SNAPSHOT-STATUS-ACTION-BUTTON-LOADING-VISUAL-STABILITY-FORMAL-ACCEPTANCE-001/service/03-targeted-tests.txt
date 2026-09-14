@@ -1,0 +1,13 @@
+=== [1] TARGETED COMPONENT TESTS: DataSourceSnapshotQueryBar.spec.ts + DataSourceSnapshotToolbar.spec.ts ===
+
+ RUN  v1.6.1 /agent/dss-abl-fa-001/frontend
+
+ ✓ src/views/data-source-run-state/components/DataSourceSnapshotToolbar.spec.ts  (27 tests) 360ms
+ ✓ src/views/data-source-run-state/components/DataSourceSnapshotQueryBar.spec.ts  (92 tests) 13393ms
+
+ Test Files  2 passed (2)
+      Tests  119 passed (119)
+   Start at  20:31:10
+   Duration  16.33s (transform 692ms, setup 51ms, collect 3.85s, tests 13.75s, environment 1.09s, prepare 246ms)
+
+TARGETED_EXIT=0

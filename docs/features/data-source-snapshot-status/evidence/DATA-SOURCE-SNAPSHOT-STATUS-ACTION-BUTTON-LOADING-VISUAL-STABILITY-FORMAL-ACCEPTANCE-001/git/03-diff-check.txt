@@ -1,0 +1,55 @@
+GIT DIFF-CHECK EVIDENCE (formal acceptance, pre-commit)
+recorded_at_local=2026-09-14
+
+--- git diff --check (workspace vs index) ---
+git_diff_check_exit_code=0
+
+--- git diff --check (staged index, nothing staged yet) ---
+git_diff_cached_check_exit_code=0
+
+--- staged paths at this point ---
+  (count: 0)
+
+--- whitespace scan of the new (untracked) acceptance evidence + new report ---
+files_scanned=46
+report_present=False
+files_with_trailing_whitespace=17
+   TRAILING_WS docs/features/data-source-snapshot-status/evidence/DATA-SOURCE-SNAPSHOT-STATUS-ACTION-BUTTON-LOADING-VISUAL-STABILITY-FORMAL-ACCEPTANCE-001/service/backend.log line 24
+   TRAILING_WS docs/features/data-source-snapshot-status/evidence/DATA-SOURCE-SNAPSHOT-STATUS-ACTION-BUTTON-LOADING-VISUAL-STABILITY-FORMAL-ACCEPTANCE-001/service/backend.log line 25
+   TRAILING_WS docs/features/data-source-snapshot-status/evidence/DATA-SOURCE-SNAPSHOT-STATUS-ACTION-BUTTON-LOADING-VISUAL-STABILITY-FORMAL-ACCEPTANCE-001/service/backend.log line 26
+   TRAILING_WS docs/features/data-source-snapshot-status/evidence/DATA-SOURCE-SNAPSHOT-STATUS-ACTION-BUTTON-LOADING-VISUAL-STABILITY-FORMAL-ACCEPTANCE-001/service/backend.log line 27
+   TRAILING_WS docs/features/data-source-snapshot-status/evidence/DATA-SOURCE-SNAPSHOT-STATUS-ACTION-BUTTON-LOADING-VISUAL-STABILITY-FORMAL-ACCEPTANCE-001/service/backend.log line 75
+   TRAILING_WS docs/features/data-source-snapshot-status/evidence/DATA-SOURCE-SNAPSHOT-STATUS-ACTION-BUTTON-LOADING-VISUAL-STABILITY-FORMAL-ACCEPTANCE-001/service/backend.log line 78
+   TRAILING_WS docs/features/data-source-snapshot-status/evidence/DATA-SOURCE-SNAPSHOT-STATUS-ACTION-BUTTON-LOADING-VISUAL-STABILITY-FORMAL-ACCEPTANCE-001/service/backend.log line 81
+   TRAILING_WS docs/features/data-source-snapshot-status/evidence/DATA-SOURCE-SNAPSHOT-STATUS-ACTION-BUTTON-LOADING-VISUAL-STABILITY-FORMAL-ACCEPTANCE-001/service/backend.log line 84
+   TRAILING_WS docs/features/data-source-snapshot-status/evidence/DATA-SOURCE-SNAPSHOT-STATUS-ACTION-BUTTON-LOADING-VISUAL-STABILITY-FORMAL-ACCEPTANCE-001/service/backend.log line 87
+   TRAILING_WS docs/features/data-source-snapshot-status/evidence/DATA-SOURCE-SNAPSHOT-STATUS-ACTION-BUTTON-LOADING-VISUAL-STABILITY-FORMAL-ACCEPTANCE-001/service/backend.log line 90
+   TRAILING_WS docs/features/data-source-snapshot-status/evidence/DATA-SOURCE-SNAPSHOT-STATUS-ACTION-BUTTON-LOADING-VISUAL-STABILITY-FORMAL-ACCEPTANCE-001/service/backend.log line 326
+   TRAILING_WS docs/features/data-source-snapshot-status/evidence/DATA-SOURCE-SNAPSHOT-STATUS-ACTION-BUTTON-LOADING-VISUAL-STABILITY-FORMAL-ACCEPTANCE-001/service/backend.log line 329
+   TRAILING_WS docs/features/data-source-snapshot-status/evidence/DATA-SOURCE-SNAPSHOT-STATUS-ACTION-BUTTON-LOADING-VISUAL-STABILITY-FORMAL-ACCEPTANCE-001/service/backend.log line 332
+   TRAILING_WS docs/features/data-source-snapshot-status/evidence/DATA-SOURCE-SNAPSHOT-STATUS-ACTION-BUTTON-LOADING-VISUAL-STABILITY-FORMAL-ACCEPTANCE-001/service/backend.log line 335
+   TRAILING_WS docs/features/data-source-snapshot-status/evidence/DATA-SOURCE-SNAPSHOT-STATUS-ACTION-BUTTON-LOADING-VISUAL-STABILITY-FORMAL-ACCEPTANCE-001/service/backend.log line 338
+   TRAILING_WS docs/features/data-source-snapshot-status/evidence/DATA-SOURCE-SNAPSHOT-STATUS-ACTION-BUTTON-LOADING-VISUAL-STABILITY-FORMAL-ACCEPTANCE-001/service/backend.log line 341
+   TRAILING_WS docs/features/data-source-snapshot-status/evidence/DATA-SOURCE-SNAPSHOT-STATUS-ACTION-BUTTON-LOADING-VISUAL-STABILITY-FORMAL-ACCEPTANCE-001/service/backend.log line 344
+   TRAILING_WS docs/features/data-source-snapshot-status/evidence/DATA-SOURCE-SNAPSHOT-STATUS-ACTION-BUTTON-LOADING-VISUAL-STABILITY-FORMAL-ACCEPTANCE-001/service/backend.log line 347
+   TRAILING_WS docs/features/data-source-snapshot-status/evidence/DATA-SOURCE-SNAPSHOT-STATUS-ACTION-BUTTON-LOADING-VISUAL-STABILITY-FORMAL-ACCEPTANCE-001/service/backend.log line 350
+   TRAILING_WS docs/features/data-source-snapshot-status/evidence/DATA-SOURCE-SNAPSHOT-STATUS-ACTION-BUTTON-LOADING-VISUAL-STABILITY-FORMAL-ACCEPTANCE-001/service/backend.log line 353
+files_with_CRLF=14
+files_with_tab_characters=15
+
+--- whitespace scan of the 8 changed entry docs (tracked) ---
+changed_docs_trailing_ws_or_crlf_findings=0
+
+--- FINAL STATE (after normalisation, at commit time) ---
+The 17 trailing-whitespace findings above were all end-of-line padding in the live log
+service/backend.log, plus 3 in service/01-service-state.txt and service/02-served-source-fingerprint.txt.
+They were normalised (see git/05-whitespace-normalization.txt): only end-of-line padding was removed and
+no visible character changed. The two raw *.log files are matched by .gitignore "*.log" and are NOT
+committed; the committed background record is service/09-backend-background-behaviour.txt.
+
+final_staged_paths_check:
+  git_diff_check_exit_code=0            (workspace vs index)
+  git_diff_cached_check_exit_code=0     (staged index)
+  staged_files_trailing_ws_findings=0
+  committed_text_files_trailing_ws_findings=0
+  binary_files_untouched=service-independent (PNG screenshots not normalised)

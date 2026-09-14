@@ -1,0 +1,54 @@
+BACKEND STARTUP AND UNRELATED ZOOKEEPER BACKGROUND BEHAVIOUR (bounded extract)
+task=DATA-SOURCE-SNAPSHOT-STATUS-ACTION-BUTTON-LOADING-VISUAL-STABILITY-FORMAL-ACCEPTANCE-001
+source=service/backend.log (live Spring Boot stdout, gitignored *.log - kept local, not committed)
+note: this Feature does NOT depend on ZooKeeper; feature_zookeeper_dependency=NONE.
+      The lines below are background behaviour of the shared backend, recorded per prompt section 5,
+      NOT a Feature dependency and NOT an acceptance failure. No ZooKeeper/Kafka write was performed.
+
+--- startup summary (verbatim lines) ---
+56:2026-09-14 20:30:26.399  INFO 19585 --- [           main] org.apache.zookeeper.ZooKeeper           : Initiating client connection, connectString=10.19.16.111:2181 sessionTimeout=30000 watcher=org.apache.curator.ConnectionState@17f9d882
+62:2026-09-14 20:30:28.163  INFO 19585 --- [           main] o.s.b.w.embedded.tomcat.TomcatWebServer  : Tomcat started on port(s): 8080 (http) with context path ''
+63:2026-09-14 20:30:28.194  INFO 19585 --- [           main] c.b.c.CdcConfigPlatformApplication       : Started CdcConfigPlatformApplication in 7.487 seconds (JVM running for 8.071)
+152:2026-09-14 20:34:09.713  INFO 19585 --- [ain-EventThread] org.apache.zookeeper.ZooKeeper           : Initiating client connection, connectString=10.19.16.111:2181 sessionTimeout=30000 watcher=org.apache.curator.ConnectionState@17f9d882
+294:2026-09-14 20:39:29.868  INFO 19585 --- [ain-EventThread] org.apache.zookeeper.ZooKeeper           : Initiating client connection, connectString=10.19.16.111:2181 sessionTimeout=30000 watcher=org.apache.curator.ConnectionState@17f9d882
+
+--- ZooKeeper background: session timeout / connection loss / expiry (verbatim lines) ---
+58:2026-09-14 20:30:26.540  INFO 19585 --- [19.16.111:2181)] org.apache.zookeeper.ClientCnxn          : Socket connection established to 10.19.16.111/10.19.16.111:2181, initiating session
+59:2026-09-14 20:30:26.559  INFO 19585 --- [19.16.111:2181)] org.apache.zookeeper.ClientCnxn          : Session establishment complete on server 10.19.16.111/10.19.16.111:2181, sessionid = 0x10922dad14a00ac, negotiated timeout = 30000
+92:2026-09-14 20:33:46.736  WARN 19585 --- [19.16.111:2181)] org.apache.zookeeper.ClientCnxn          : Client session timed out, have not heard from server in 20010ms for sessionid 0x10922dad14a00ac
+93:2026-09-14 20:33:46.737  INFO 19585 --- [19.16.111:2181)] org.apache.zookeeper.ClientCnxn          : Client session timed out, have not heard from server in 20010ms for sessionid 0x10922dad14a00ac, closing socket connection and attempting reconnect
+95:2026-09-14 20:34:01.894 ERROR 19585 --- [tor-Framework-0] org.apache.curator.ConnectionState       : Connection timed out for connection string (10.19.16.111:2181) and timeout (15000) / elapsed (15020)
+97:org.apache.curator.CuratorConnectionLossException: KeeperErrorCode = ConnectionLoss
+112:2026-09-14 20:34:02.895 ERROR 19585 --- [tor-Framework-0] org.apache.curator.ConnectionState       : Connection timed out for connection string (10.19.16.111:2181) and timeout (15000) / elapsed (16057)
+114:org.apache.curator.CuratorConnectionLossException: KeeperErrorCode = ConnectionLoss
+129:2026-09-14 20:34:03.896 ERROR 19585 --- [tor-Framework-0] org.apache.curator.ConnectionState       : Connection timed out for connection string (10.19.16.111:2181) and timeout (15000) / elapsed (17058)
+131:org.apache.curator.CuratorConnectionLossException: KeeperErrorCode = ConnectionLoss
+147:2026-09-14 20:34:09.708  INFO 19585 --- [19.16.111:2181)] org.apache.zookeeper.ClientCnxn          : Socket connection established to 10.19.16.111/10.19.16.111:2181, initiating session
+148:2026-09-14 20:34:09.711  WARN 19585 --- [19.16.111:2181)] org.apache.zookeeper.ClientCnxn          : Unable to reconnect to ZooKeeper service, session 0x10922dad14a00ac has expired
+149:2026-09-14 20:34:09.711  INFO 19585 --- [19.16.111:2181)] org.apache.zookeeper.ClientCnxn          : Unable to reconnect to ZooKeeper service, session 0x10922dad14a00ac has expired, closing socket connection
+155:2026-09-14 20:34:09.744  INFO 19585 --- [19.16.111:2181)] org.apache.zookeeper.ClientCnxn          : Socket connection established to 10.19.16.111/10.19.16.111:2181, initiating session
+156:2026-09-14 20:34:09.748  INFO 19585 --- [19.16.111:2181)] org.apache.zookeeper.ClientCnxn          : Session establishment complete on server 10.19.16.111/10.19.16.111:2181, sessionid = 0x10922dad14a00ad, negotiated timeout = 30000
+158:2026-09-14 20:34:29.912  WARN 19585 --- [19.16.111:2181)] org.apache.zookeeper.ClientCnxn          : Client session timed out, have not heard from server in 20010ms for sessionid 0x10922dad14a00ad
+159:2026-09-14 20:34:29.912  INFO 19585 --- [19.16.111:2181)] org.apache.zookeeper.ClientCnxn          : Client session timed out, have not heard from server in 20010ms for sessionid 0x10922dad14a00ad, closing socket connection and attempting reconnect
+161:2026-09-14 20:34:45.023 ERROR 19585 --- [tor-Framework-0] org.apache.curator.ConnectionState       : Connection timed out for connection string (10.19.16.111:2181) and timeout (15000) / elapsed (15010)
+163:org.apache.curator.CuratorConnectionLossException: KeeperErrorCode = ConnectionLoss
+178:2026-09-14 20:34:46.024 ERROR 19585 --- [tor-Framework-0] org.apache.curator.ConnectionState       : Connection timed out for connection string (10.19.16.111:2181) and timeout (15000) / elapsed (16011)
+180:org.apache.curator.CuratorConnectionLossException: KeeperErrorCode = ConnectionLoss
+195:2026-09-14 20:34:47.026 ERROR 19585 --- [tor-Framework-0] org.apache.curator.ConnectionState       : Connection timed out for connection string (10.19.16.111:2181) and timeout (15000) / elapsed (17012)
+197:org.apache.curator.CuratorConnectionLossException: KeeperErrorCode = ConnectionLoss
+212:2026-09-14 20:34:51.028 ERROR 19585 --- [tor-Framework-0] org.apache.curator.ConnectionState       : Connection timed out for connection string (10.19.16.111:2181) and timeout (15000) / elapsed (21014)
+214:org.apache.curator.CuratorConnectionLossException: KeeperErrorCode = ConnectionLoss
+248:org.apache.curator.CuratorConnectionLossException: KeeperErrorCode = ConnectionLoss
+264:2026-09-14 20:35:21.852  WARN 19585 --- [19.16.111:2181)] org.apache.zookeeper.ClientCnxn          : Client session timed out, have not heard from server in 51840ms for sessionid 0x10922dad14a00ad
+265:2026-09-14 20:35:21.853  INFO 19585 --- [19.16.111:2181)] org.apache.zookeeper.ClientCnxn          : Client session timed out, have not heard from server in 51840ms for sessionid 0x10922dad14a00ad, closing socket connection and attempting reconnect
+291:2026-09-14 20:39:29.866  INFO 19585 --- [19.16.111:2181)] org.apache.zookeeper.ClientCnxn          : Socket connection established to 10.19.16.111/10.19.16.111:2181, initiating session
+293:2026-09-14 20:39:29.868  WARN 19585 --- [19.16.111:2181)] org.apache.zookeeper.ClientCnxn          : Unable to reconnect to ZooKeeper service, session 0x10922dad14a00ad has expired
+295:2026-09-14 20:39:29.868  INFO 19585 --- [19.16.111:2181)] org.apache.zookeeper.ClientCnxn          : Unable to reconnect to ZooKeeper service, session 0x10922dad14a00ad has expired, closing socket connection
+298:2026-09-14 20:39:29.875  INFO 19585 --- [19.16.111:2181)] org.apache.zookeeper.ClientCnxn          : Socket connection established to 10.19.16.111/10.19.16.111:2181, initiating session
+299:2026-09-14 20:39:29.878  INFO 19585 --- [19.16.111:2181)] org.apache.zookeeper.ClientCnxn          : Session establishment complete on server 10.19.16.111/10.19.16.111:2181, sessionid = 0x10922dad14a00ae, negotiated timeout = 30000
+
+--- tail summary ---
+total_lines_at_extract=1845
+zookeeper_error_lines=15
+feature_request_lines(D.selectAll/R.selectAll)=1539
+feature_dependency_on_zookeeper=NONE

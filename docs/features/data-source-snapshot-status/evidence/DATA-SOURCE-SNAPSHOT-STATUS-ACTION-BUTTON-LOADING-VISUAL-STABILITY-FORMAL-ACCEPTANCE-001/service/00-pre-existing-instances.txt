@@ -1,0 +1,28 @@
+FORMAL ACCEPTANCE §4.1 PRE-EXISTING LISTENER INVENTORY (recorded before stopping)
+task=DATA-SOURCE-SNAPSHOT-STATUS-ACTION-BUTTON-LOADING-VISUAL-STABILITY-FORMAL-ACCEPTANCE-001
+recorded_at_local=2026-09-14
+this_task_worktree=/agent/dss-abl-fa-001
+this_task_base_commit=5195a716ed3b6d0d3122decfe937b73b27581d5a
+
+port  pid    proto  bind        user  cmdline                                                            cwd
+5173  5338   tcp4   0.0.0.0     root  node /agent/dss-abl-impl-001-r1/frontend/node_modules/.bin/vite   /agent/dss-abl-impl-001-r1/frontend
+                                      --host 0.0.0.0 --port 5173
+5174  10647  tcp4   0.0.0.0     root  node /agent/dss-abl-impl-001-r2/frontend/node_modules/.bin/vite   /agent/dss-abl-impl-001-r2/frontend
+                                      --host 0.0.0.0 --port 5174 --strictPort
+8080  14362  tcp6   *:8080       root  java -jar target/cdc-config-platform-backend-1.0.0-SNAPSHOT.jar   /agent/dss-abl-impl-001-r2/backend
+                                      --server.address=0.0.0.0
+
+ownership determination:
+- 5338  cwd /agent/dss-abl-impl-001-r1/frontend  -> this Feature's prior task (IMPLEMENTATION-001-R1) Vite instance. CONFIRMED Feature-owned.
+- 10647 cwd /agent/dss-abl-impl-001-r2/frontend  -> this Feature's prior task (IMPLEMENTATION-001-R2) Vite instance. CONFIRMED Feature-owned.
+- 14362 cwd /agent/dss-abl-impl-001-r2/backend   -> this Feature's prior task (IMPLEMENTATION-001-R2) backend instance. CONFIRMED Feature-owned.
+  (The backend serving 8080 is NOT from this task's worktree; §4.3 requires the 8080 backend to come from
+   5195a71 source, so this instance is replaced.)
+
+action: all three confirmed Feature-owned prior-task instances are recorded above and then stopped
+        individually by exact PID. No port-wide kill, no pkill/killall, no unknown-origin process stopped.
+
+process start times:
+  5338  Mon Sep 14 18:51:03 2026
+  10647 Mon Sep 14 19:29:57 2026
+  14362 Mon Sep 14 19:59:20 2026

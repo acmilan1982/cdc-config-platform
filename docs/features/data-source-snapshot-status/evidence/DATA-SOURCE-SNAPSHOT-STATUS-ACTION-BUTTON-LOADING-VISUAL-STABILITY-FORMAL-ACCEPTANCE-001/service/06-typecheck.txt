@@ -1,0 +1,2 @@
+=== [4] vue-tsc --noEmit ===
+TYPECHECK_EXIT=0
