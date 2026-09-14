@@ -1,0 +1,24 @@
+R2 STRICT ASSERTION ANALYSIS (machine-generated; this file is a judgement, not a narrative)
+task=DATA-SOURCE-SNAPSHOT-STATUS-ACTION-BUTTON-LOADING-VISUAL-STABILITY-IMPLEMENTATION-001-R2
+strict-matrix.json=/agent/dss-abl-impl-001-r2/docs/features/data-source-snapshot-status/evidence/DATA-SOURCE-SNAPSHOT-STATUS-ACTION-BUTTON-LOADING-VISUAL-STABILITY-IMPLEMENTATION-001-R2/browser/strict-matrix.json
+required_viewports=1280x800,1700x920,1920x1080,2560x1440
+required_state_count_per_viewport=20
+checks_passed=230
+assertion_failure_count=0
+strict_harness_exit_code=0
+
+per-viewport deltas (raw, recomputed from recorded states; all required to be exactly 0):
+  1280x800: {"refresh_group_rect_delta":{"x":0,"y":0,"width":0,"height":0},"refresh_time_rect_delta":{"width":0},"refresh_time_value_rect_delta":{"width":0},"refresh_time_prefix_rect_delta":{"width":0},"countdown_seconds_slot_rect_delta":{"width":0},"refresh_btn_rect_delta":{"x":0,"y":0,"width":0,"height":0},"refresh_label_center_delta":{"x":0},"query_btn_rect_delta":{"x":0,"y":0,"width":0,"height":0},"query_label_center_delta":{"x":0},"query_actions_rect_delta":{"x":0,"y":0,"width":0,"height":0},"query_bar_rect_delta":{"x":0,"y":0,"width":0,"height":0}}
+  1280x800: query_button_width_set=[62] refresh_button_width_set=[110]
+  1280x800: invariants={"reserveTextConstant":true,"reserveAriaHiddenAlways":true,"prefixConstant":true,"nodeCountsStable":true,"labelsConstant":true,"spinnersAriaHiddenAlways":true,"buttonsNeverNativelyDisabled":true,"refreshSpinnerLitOnlyWhenManual":true,"querySpinnerLitOnlyWhenQuery":true,"busyOnlyOnManualLoading":true}
+  1700x920: {"refresh_group_rect_delta":{"x":0,"y":0,"width":0,"height":0},"refresh_time_rect_delta":{"width":0},"refresh_time_value_rect_delta":{"width":0},"refresh_time_prefix_rect_delta":{"width":0},"countdown_seconds_slot_rect_delta":{"width":0},"refresh_btn_rect_delta":{"x":0,"y":0,"width":0,"height":0},"refresh_label_center_delta":{"x":0},"query_btn_rect_delta":{"x":0,"y":0,"width":0,"height":0},"query_label_center_delta":{"x":0},"query_actions_rect_delta":{"x":0,"y":0,"width":0,"height":0},"query_bar_rect_delta":{"x":0,"y":0,"width":0,"height":0}}
+  1700x920: query_button_width_set=[62] refresh_button_width_set=[110]
+  1700x920: invariants={"reserveTextConstant":true,"reserveAriaHiddenAlways":true,"prefixConstant":true,"nodeCountsStable":true,"labelsConstant":true,"spinnersAriaHiddenAlways":true,"buttonsNeverNativelyDisabled":true,"refreshSpinnerLitOnlyWhenManual":true,"querySpinnerLitOnlyWhenQuery":true,"busyOnlyOnManualLoading":true}
+  1920x1080: {"refresh_group_rect_delta":{"x":0,"y":0,"width":0,"height":0},"refresh_time_rect_delta":{"width":0},"refresh_time_value_rect_delta":{"width":0},"refresh_time_prefix_rect_delta":{"width":0},"countdown_seconds_slot_rect_delta":{"width":0},"refresh_btn_rect_delta":{"x":0,"y":0,"width":0,"height":0},"refresh_label_center_delta":{"x":0},"query_btn_rect_delta":{"x":0,"y":0,"width":0,"height":0},"query_label_center_delta":{"x":0},"query_actions_rect_delta":{"x":0,"y":0,"width":0,"height":0},"query_bar_rect_delta":{"x":0,"y":0,"width":0,"height":0}}
+  1920x1080: query_button_width_set=[62] refresh_button_width_set=[110]
+  1920x1080: invariants={"reserveTextConstant":true,"reserveAriaHiddenAlways":true,"prefixConstant":true,"nodeCountsStable":true,"labelsConstant":true,"spinnersAriaHiddenAlways":true,"buttonsNeverNativelyDisabled":true,"refreshSpinnerLitOnlyWhenManual":true,"querySpinnerLitOnlyWhenQuery":true,"busyOnlyOnManualLoading":true}
+  2560x1440: {"refresh_group_rect_delta":{"x":0,"y":0,"width":0,"height":0},"refresh_time_rect_delta":{"width":0},"refresh_time_value_rect_delta":{"width":0},"refresh_time_prefix_rect_delta":{"width":0},"countdown_seconds_slot_rect_delta":{"width":0},"refresh_btn_rect_delta":{"x":0,"y":0,"width":0,"height":0},"refresh_label_center_delta":{"x":0},"query_btn_rect_delta":{"x":0,"y":0,"width":0,"height":0},"query_label_center_delta":{"x":0},"query_actions_rect_delta":{"x":0,"y":0,"width":0,"height":0},"query_bar_rect_delta":{"x":0,"y":0,"width":0,"height":0}}
+  2560x1440: query_button_width_set=[62] refresh_button_width_set=[110]
+  2560x1440: invariants={"reserveTextConstant":true,"reserveAriaHiddenAlways":true,"prefixConstant":true,"nodeCountsStable":true,"labelsConstant":true,"spinnersAriaHiddenAlways":true,"buttonsNeverNativelyDisabled":true,"refreshSpinnerLitOnlyWhenManual":true,"querySpinnerLitOnlyWhenQuery":true,"busyOnlyOnManualLoading":true}
+
+RESULT=ALL_HARD_ASSERTIONS_PASSED

@@ -178,3 +178,16 @@ R0 测试未删除，仅新增/加固；`DataSourceRunStatePage.spec.ts` 未修�
 - 因此 **R1 交付共含两次提交**：`9fdccd2…`（主体）+ 本次仅空白修复提交。本次追加提交仅包含：上述两个证据文件的行尾空白替换，以及本附录 A 的追加；未修改任何其他文件内容。
 - 该两次提交与 §14.7「只创建一个普通提交」存在**明确偏离**，系在「§14.7 单次提交」与「§15.1 累计 `git diff --check` 退出 0」不可同时满足时，由项目负责人指定并授权的收口方式。**未**使用 `amend`、`rebase` 或 `force push`；远程为普通快进推进。
 - 除上述事实更正外，§1~§12 的其余结论不变；6 条 `DSS-AC-108~113` 仍为 `NOT_RUN`，代码复审仍为 `PENDING_CHATGPT_REVIEW`，人工视觉/交互检查仍为 `NOT_RUN`。
+
+
+## 附录 B：R2 严格断言闭环更正（2026-09-14，追加；不改动上文任何字节）
+
+- 更正对象：本报告 §7 结论表中的 `strict_whole_rect_assertion_status=PASS_ALL_4_VIEWPORTS`，以及 `browser/10-strict-matrix-run.txt` 与 `browser/13-strict-whole-rect-analysis.txt` 所呈现的 `exit=0`。
+- ChatGPT 对 R1 结果提交 `1b58e3c9a234062bb1b9351f7675aeb21abd76cd` 的远程 Git 复审结论为 `CHANGES_REQUIRED_EVIDENCE_ASSERTION_ONLY`：R1 的 `browser/harness/strict.mjs` 只**计算并打印** delta 与不变量；除运行异常外，**没有**对非零 delta、错误按钮宽度、不变量失败、非 GET、console error 或样式泄漏执行失败断言。因此 `10-strict-matrix-run.txt` 的 `exit=0` 只能说明脚本运行到底，**不能证明**“严格判据通过”，`strict_whole_rect_assertion_status=PASS_ALL_4_VIEWPORTS` 的证据强度不足。
+- 该更正是**证据与断言强度**问题，不是几何结论问题：R1 实测的四视口整矩形 `0px`、按钮 `62px/110px` 等数值本身未被质疑。
+- R2（`DATA-SOURCE-SNAPSHOT-STATUS-ACTION-BUTTON-LOADING-VISUAL-STABILITY-IMPLEMENTATION-001-R2`）仅补齐“实测数据 → 机器可失败断言 → 真实退出码”闭环，**未修改任何前端业务代码**：
+  - 新增共享纯断言模块 `browser/harness/assertions.mjs`，由真实浏览器 harness 与无页面负向自测**共同调用**（避免两套判定漂移）；
+  - 真实浏览器 harness 在写完结果后调用该模块，任一断言失败即抛出并以非零退出码结束；
+  - 负向自测对真实结果注入单点 `refresh_group_rect_delta.x = +0.001`，实测得到非零退出码。
+- **本附录不修改、不覆盖本报告上文的任何字节**；§1~§12 与附录 A 作为历史事实原样保留。
+- 状态不变：`DSS-AC-108~113` 共 6 条仍为 `NOT_RUN`，代码复审仍为 `PENDING_CHATGPT_REVIEW`，人工视觉/交互检查仍为 `NOT_RUN`；本报告与 R2 均**不得**写成 `IMPLEMENTED_ACCEPTED`/`ACCEPTED`/`COMPLETED`。

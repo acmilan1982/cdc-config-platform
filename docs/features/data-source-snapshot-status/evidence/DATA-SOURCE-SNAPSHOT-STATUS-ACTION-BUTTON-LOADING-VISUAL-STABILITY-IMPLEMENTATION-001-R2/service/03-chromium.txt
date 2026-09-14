@@ -1,0 +1,5 @@
+R2 CHROMIUM
+binary=/opt/google/chrome/chrome
+version=Google Chrome 148.0.7778.167
+flags=--headless=new --no-sandbox --disable-gpu --disable-dev-shm-usage --hide-scrollbars --no-first-run --no-default-browser-check --no-proxy-server --proxy-bypass-list=* --force-device-scale-factor=1 --remote-debugging-port=9222 --user-data-dir=/tmp/abl-r1-cdp/profile --window-size=1920,1080 --ozone-platform=headless
+pid=5454

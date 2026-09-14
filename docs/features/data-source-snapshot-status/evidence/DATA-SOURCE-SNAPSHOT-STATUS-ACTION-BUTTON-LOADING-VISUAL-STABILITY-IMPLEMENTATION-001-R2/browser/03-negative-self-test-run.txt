@@ -1,0 +1,33 @@
+R2 NEGATIVE SELF-TEST RUN (§4.4) — page-free, no browser, no page
+command: node browser/harness/negative-self-test.mjs browser/strict-matrix.json browser/negative-control
+started_at_utc=2026-09-14T11:30:45Z
+----- stdout/stderr -----
+R2 NEGATIVE SELF-TEST (§4.4) — page-free proof that the strict judgement can fail
+real_result_input=/agent/dss-abl-impl-001-r2/docs/features/data-source-snapshot-status/evidence/DATA-SOURCE-SNAPSHOT-STATUS-ACTION-BUTTON-LOADING-VISUAL-STABILITY-IMPLEMENTATION-001-R2/browser/strict-matrix.json
+mutated_input=/agent/dss-abl-impl-001-r2/docs/features/data-source-snapshot-status/evidence/DATA-SOURCE-SNAPSHOT-STATUS-ACTION-BUTTON-LOADING-VISUAL-STABILITY-IMPLEMENTATION-001-R2/browser/negative-control/NEGATIVE-CONTROL-mutated-input.DO-NOT-USE-AS-EVIDENCE.json
+mutation=1280x800 / TIME_-- / .group.x : 811.28125 -> 811.28225 (delta +0.001)
+required_field_asserted=refresh_group_rect_delta.x
+
+--- control A: untouched real result through assert-result.mjs (expected exit 0) ---
+child_exit_code=0
+input=/agent/dss-abl-impl-001-r2/docs/features/data-source-snapshot-status/evidence/DATA-SOURCE-SNAPSHOT-STATUS-ACTION-BUTTON-LOADING-VISUAL-STABILITY-IMPLEMENTATION-001-R2/browser/strict-matrix.json
+checks_passed=230
+assertion_failure_count=0
+RESULT=ALL_HARD_ASSERTIONS_PASSED
+
+--- control B: mutated result through assert-result.mjs (expected NON-ZERO) ---
+child_exit_code=1
+input=/agent/dss-abl-impl-001-r2/docs/features/data-source-snapshot-status/evidence/DATA-SOURCE-SNAPSHOT-STATUS-ACTION-BUTTON-LOADING-VISUAL-STABILITY-IMPLEMENTATION-001-R2/browser/negative-control/NEGATIVE-CONTROL-mutated-input.DO-NOT-USE-AS-EVIDENCE.json
+checks_passed=229
+assertion_failure_count=1
+RESULT=ASSERTION_FAILURES
+  FAIL refresh_group_rect_delta.x | 1280x800 | actual=0.0009999999999763531 | expected="0"
+
+expected_non_zero_exit_observed=true (this non-zero exit IS the expected result of the negative control)
+untouched_real_result_still_passes=true
+target_field_reported_in_failures=true
+mutated_copy_is_marked_non_evidentiary=true
+
+RESULT=NEGATIVE_CONTROL_BEHAVED_AS_EXPECTED
+----- exit code -----
+finished_at_utc=2026-09-14T11:30:46Z

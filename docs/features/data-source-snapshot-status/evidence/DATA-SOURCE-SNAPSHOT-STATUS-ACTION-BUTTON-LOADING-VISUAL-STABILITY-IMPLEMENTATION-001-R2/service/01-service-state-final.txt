@@ -1,0 +1,28 @@
+R2 SERVICE STATE (frozen snapshot, recorded at closeout of the browser run)
+recorded_at_utc=2026-09-14T11:31:00Z
+
+[chromium]
+pid=5454
+/opt/google/chrome/chrome --headless=new --no-sandbox --disable-gpu --disable-dev-shm-usage --hide-scrollbars --no-first-run --no-default-browser-check --no-proxy-server --proxy-bypass-list=* --force-device-scale-factor=1 --remote-debugging-port=9222 --user-data-dir=/tmp/abl-r1-cdp/profile --window-size=1920,1080 --ozone-platform=headless
+cdp_version=Chrome/148.0.7778.167
+
+[vite dev server used by this R2 run]
+pid=10647  ppid=10646
+cmdline=node /agent/dss-abl-impl-001-r2/frontend/node_modules/.bin/vite --host 0.0.0.0 --port 5174 --strictPort
+cwd=/agent/dss-abl-impl-001-r2/frontend
+listen=0.0.0.0:5174
+stop_command=kill 10647
+
+[page]
+GET http://127.0.0.1:5174/monitor/data-source-state -> status=200
+
+[R1 instance NOT reused and NOT modified]
+r1_vite=pid 5338 port 5173 (untouched; its live log evidence/...-R1/service/vite-dev.txt was NOT written to or committed by R2)
+
+[backend]
+backend_8080_started=NO (R2 §8: must not start the backend)
+backend_http_probe_not_performed=YES (R2 does not depend on the backend; the single GET is intercepted at the browser layer)
+
+[external access boundary]
+network_url_reported_by_vite=http://192.168.174.70:5174/
+IMPORTANT: this URL only proves the frontend shell is reachable. The backend (8080) is NOT running, so this is NOT a ready manual-acceptance entry; per R2 §8 the front/back manual-check environment is to be prepared separately from the latest clean remote commit after R2 passes ChatGPT review.

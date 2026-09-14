@@ -1,0 +1,65 @@
+R2 frozen-boundary proof 2/2 — business rows, traceability, R1 append-only prefix and R0/R1 raw-evidence integrity
+task_base_commit=1b58e3c9a234062bb1b9351f7675aeb21abd76cd
+worktree_head=1b58e3c9a234062bb1b9351f7675aeb21abd76cd
+
+--- REQUIREMENTS.md business rows ---
+rows_at_base=89 rows_now=89 byte_identical=YES
+  PASS: base=2 now=2
+  FAIL: base=0 now=0
+  BLOCKED: base=0 now=0
+  NOT_RUN: base=0 now=0
+
+--- ACCEPTANCE.md business rows ---
+rows_at_base=113 rows_now=113 byte_identical=YES
+  PASS: base=107 now=107
+  FAIL: base=0 now=0
+  BLOCKED: base=0 now=0
+  NOT_RUN: base=6 now=6
+
+--- R1 report and R1 evidence README append-only integrity (base blob must be an exact prefix) ---
+path=docs/features/data-source-snapshot-status/reports/DATA-SOURCE-SNAPSHOT-STATUS-ACTION-BUTTON-LOADING-VISUAL-STABILITY-IMPLEMENTATION-001-R1.md
+  base_bytes=17249 now_bytes=19307 base_is_exact_prefix=YES
+  appended_bytes=2058
+  sha256(base_blob)=01030605a18d13ab8ee3ea34c1d274c909e243d8382e1ded20fc0f46b3f50939
+  sha256(now_prefix_of_same_length)=01030605a18d13ab8ee3ea34c1d274c909e243d8382e1ded20fc0f46b3f50939
+
+path=docs/features/data-source-snapshot-status/evidence/DATA-SOURCE-SNAPSHOT-STATUS-ACTION-BUTTON-LOADING-VISUAL-STABILITY-IMPLEMENTATION-001-R1/README.md
+  base_bytes=7238 now_bytes=8501 base_is_exact_prefix=YES
+  appended_bytes=1263
+  sha256(base_blob)=4d525a9556558fe51c2e29a29ed2678c8b01ef8956d65b594c386fdfb6128a3c
+  sha256(now_prefix_of_same_length)=4d525a9556558fe51c2e29a29ed2678c8b01ef8956d65b594c386fdfb6128a3c
+
+--- business-rule / contract bodies unchanged outside the synchronised header lines ---
+path=docs/features/data-source-snapshot-status/DESIGN.md
+  base_lines=1220 now_lines=1224 appended_lines=4
+  modified_pre_existing_lines=72,81,84,1207,1219
+  expected_modified_lines=72,81,84,1207,1219
+  other_pre_existing_lines_byte_identical=YES
+
+path=docs/features/data-source-snapshot-status/UI.md
+  base_lines=855 now_lines=859 appended_lines=4
+  modified_pre_existing_lines=61,70,74,842,854
+  expected_modified_lines=61,70,74,842,854
+  other_pre_existing_lines_byte_identical=YES
+
+path=docs/features/data-source-snapshot-status/API.md
+  base_lines=369 now_lines=371 appended_lines=2
+  modified_pre_existing_lines=22,368
+  expected_modified_lines=22,368
+  other_pre_existing_lines_byte_identical=YES
+
+path=docs/features/data-source-snapshot-status/DATABASE.md
+  base_lines=259 now_lines=261 appended_lines=2
+  modified_pre_existing_lines=21,258
+  expected_modified_lines=21,258
+  other_pre_existing_lines_byte_identical=YES
+
+--- R0/R1 committed raw evidence untouched ---
+path=docs/features/data-source-snapshot-status/evidence/DATA-SOURCE-SNAPSHOT-STATUS-ACTION-BUTTON-LOADING-VISUAL-STABILITY-IMPLEMENTATION-001
+  modified_paths=(none)
+  raw_evidence_files_modified=NONE
+  note=R1 evidence README.md change is the authorized append-only correction (proof above shows base blob is an exact prefix)
+path=docs/features/data-source-snapshot-status/evidence/DATA-SOURCE-SNAPSHOT-STATUS-ACTION-BUTTON-LOADING-VISUAL-STABILITY-IMPLEMENTATION-001-R1
+  modified_paths=M docs/features/data-source-snapshot-status/evidence/DATA-SOURCE-SNAPSHOT-STATUS-ACTION-BUTTON-LOADING-VISUAL-STABILITY-IMPLEMENTATION-001-R1/README.md
+  raw_evidence_files_modified=NONE
+  note=R1 evidence README.md change is the authorized append-only correction (proof above shows base blob is an exact prefix)

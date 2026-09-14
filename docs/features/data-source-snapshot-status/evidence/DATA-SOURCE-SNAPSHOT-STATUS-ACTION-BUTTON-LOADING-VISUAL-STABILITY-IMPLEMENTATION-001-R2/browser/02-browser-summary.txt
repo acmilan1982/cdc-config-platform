@@ -1,0 +1,89 @@
+R2 REAL-BROWSER STRICT MATRIX — READ-ONLY SUMMARY (generated from strict-matrix.json)
+task=DATA-SOURCE-SNAPSHOT-STATUS-ACTION-BUTTON-LOADING-VISUAL-STABILITY-IMPLEMENTATION-001-R2
+chromium=Chrome/148.0.7778.167 (headless=new, CDP 127.0.0.1:9222)
+served_by=http://127.0.0.1:5174 (Vite 5.4.21, worktree /agent/dss-abl-impl-001-r2, HEAD=1b58e3c...)
+injection=GET-only Fetch interception of */api/monitor/data-source-run-state/list* (no backend, no DB, no ZK)
+
+[1280x800] state_count=20 (required 20)
+  group_delta            = {"x": 0, "y": 0, "width": 0, "height": 0}
+  time_delta.width       = 0
+  time_value_delta.width = 0  (slot width 50.609px)
+  time_prefix_delta.width= 0
+  countdown_slot_delta.w = 0  (slot width 14.453px)
+  refresh_btn_delta      = {"x": 0, "y": 0, "width": 0, "height": 0}  actual width set=[110]
+  query_btn_delta        = {"x": 0, "y": 0, "width": 0, "height": 0}  actual width set=[62]
+  refresh_label_cx_delta = 0
+  query_label_cx_delta   = 0
+  query_actions_delta    = {"x": 0, "y": 0, "width": 0, "height": 0}
+  query_bar_delta        = {"x": 0, "y": 0, "width": 0, "height": 0}
+  reserve text/aria      = ['88:88:88'] / ['true']
+  label texts            = refresh:['立即刷新'] query:['查询']
+  native disabled ever   = [(False, False)]
+  invariants all true    = True (10 invariants)
+  real success-time updates seen (MANUAL_SUCCESS .dss-refresh-time-actual) = ['19:30:28']
+[1700x920] state_count=20 (required 20)
+  group_delta            = {"x": 0, "y": 0, "width": 0, "height": 0}
+  time_delta.width       = 0
+  time_value_delta.width = 0  (slot width 50.609px)
+  time_prefix_delta.width= 0
+  countdown_slot_delta.w = 0  (slot width 14.453px)
+  refresh_btn_delta      = {"x": 0, "y": 0, "width": 0, "height": 0}  actual width set=[110]
+  query_btn_delta        = {"x": 0, "y": 0, "width": 0, "height": 0}  actual width set=[62]
+  refresh_label_cx_delta = 0
+  query_label_cx_delta   = 0
+  query_actions_delta    = {"x": 0, "y": 0, "width": 0, "height": 0}
+  query_bar_delta        = {"x": 0, "y": 0, "width": 0, "height": 0}
+  reserve text/aria      = ['88:88:88'] / ['true']
+  label texts            = refresh:['立即刷新'] query:['查询']
+  native disabled ever   = [(False, False)]
+  invariants all true    = True (10 invariants)
+  real success-time updates seen (MANUAL_SUCCESS .dss-refresh-time-actual) = ['14:11:11']
+[1920x1080] state_count=20 (required 20)
+  group_delta            = {"x": 0, "y": 0, "width": 0, "height": 0}
+  time_delta.width       = 0
+  time_value_delta.width = 0  (slot width 50.609px)
+  time_prefix_delta.width= 0
+  countdown_slot_delta.w = 0  (slot width 14.453px)
+  refresh_btn_delta      = {"x": 0, "y": 0, "width": 0, "height": 0}  actual width set=[110]
+  query_btn_delta        = {"x": 0, "y": 0, "width": 0, "height": 0}  actual width set=[62]
+  refresh_label_cx_delta = 0
+  query_label_cx_delta   = 0
+  query_actions_delta    = {"x": 0, "y": 0, "width": 0, "height": 0}
+  query_bar_delta        = {"x": 0, "y": 0, "width": 0, "height": 0}
+  reserve text/aria      = ['88:88:88'] / ['true']
+  label texts            = refresh:['立即刷新'] query:['查询']
+  native disabled ever   = [(False, False)]
+  invariants all true    = True (10 invariants)
+  real success-time updates seen (MANUAL_SUCCESS .dss-refresh-time-actual) = ['14:11:11']
+[2560x1440] state_count=20 (required 20)
+  group_delta            = {"x": 0, "y": 0, "width": 0, "height": 0}
+  time_delta.width       = 0
+  time_value_delta.width = 0  (slot width 50.609px)
+  time_prefix_delta.width= 0
+  countdown_slot_delta.w = 0  (slot width 14.453px)
+  refresh_btn_delta      = {"x": 0, "y": 0, "width": 0, "height": 0}  actual width set=[110]
+  query_btn_delta        = {"x": 0, "y": 0, "width": 0, "height": 0}  actual width set=[62]
+  refresh_label_cx_delta = 0
+  query_label_cx_delta   = 0
+  query_actions_delta    = {"x": 0, "y": 0, "width": 0, "height": 0}
+  query_bar_delta        = {"x": 0, "y": 0, "width": 0, "height": 0}
+  reserve text/aria      = ['88:88:88'] / ['true']
+  label texts            = refresh:['立即刷新'] query:['查询']
+  native disabled ever   = [(False, False)]
+  invariants all true    = True (10 invariants)
+  real success-time updates seen (MANUAL_SUCCESS .dss-refresh-time-actual) = ['19:30:34']
+
+[global]
+  requests total=318 nonGET=0 api=24 apiNonGET=0
+  browser console errors = 0
+  other-route /monitor/data-source leak = {"dssNodes": 0, "refreshGroup": 0, "spinner": 0, "actionLabel": 0}
+  reduced-motion normal animation  = dss-action-spin-a581eda5 / dss-action-spin-cd886c8f
+  reduced-motion reduce animation  = none / none
+  reduced-motion loading indicator still visible = {'refresh': True, 'query': False}
+  reduced-motion idle==idle(reduced) rect = True; idle(reduced)==loading(reduced) rect = True
+
+[machine judgement]
+  shared module = browser/harness/assertions.mjs (also used by the page-free negative self-test)
+  strict.mjs real run: checks_passed=230 assertion_failure_count=0 exit=0 -> ALL_HARD_ASSERTIONS_PASSED
+  negative self-test: injected refresh_group_rect_delta.x=+0.001 -> child exit 1, FAIL refresh_group_rect_delta.x (1280x800) actual=0.0009999999999763531
+  NOTE: the injected 0.001 is reported UNROUNDED, i.e. no rounding can hide a non-zero displacement.

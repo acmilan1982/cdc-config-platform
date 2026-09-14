@@ -1,0 +1,39 @@
+R2 STRICT MATRIX REAL BROWSER RUN
+command: node harness/strict.mjs <browser-dir> http://127.0.0.1:5174
+chromium: Chrome/148.0.7778.167
+started_at_utc=2026-09-14T11:30:26Z
+----- stdout/stderr -----
+viewport 1280x800: state_count=20 group_delta={"x":0,"y":0,"width":0,"height":0}
+viewport 1700x920: state_count=20 group_delta={"x":0,"y":0,"width":0,"height":0}
+viewport 1920x1080: state_count=20 group_delta={"x":0,"y":0,"width":0,"height":0}
+viewport 2560x1440: state_count=20 group_delta={"x":0,"y":0,"width":0,"height":0}
+requests total=318 nonGET=0 apiNonGET=0; console errors=0
+reduced-motion: {"normalMediaAnimation":{"refreshSpinner":"dss-action-spin-a581eda5","querySpinner":"dss-action-spin-cd886c8f","ringProgressTransition":"0s"},"reducedMediaAnimation":{"refreshSpinner":"none","querySpinner":"none","ringProgressTransition":"0s"},"reducedLoadingAnimation":{"refreshSpinner":"none","querySpinner":"none","ringProgressTransition":"0s"},"reducedLoadingSpinnerVisible":{"refresh":true,"query":false},"reducedLoadingSpinnerBox":{"x":1742,"y":251.5,"w":12,"h":12},"idleVsReducedIdleSameRect":true,"reducedIdleVsReducedLoadingSameRect":true,"reducedIdleGroup":{"x":1451.28125,"y":241.5,"w":396.71875,"h":32,"vis":"visible","op":"1","disp":"flex"},"reducedLoadingGroup":{"x":1451.28125,"y":241.5,"w":396.71875,"h":32,"vis":"visible","op":"1","disp":"flex"}}
+other-route leak: {"dssNodes":0,"refreshGroup":0,"spinner":0,"actionLabel":0}
+R2 STRICT ASSERTION ANALYSIS (machine-generated; this file is a judgement, not a narrative)
+task=DATA-SOURCE-SNAPSHOT-STATUS-ACTION-BUTTON-LOADING-VISUAL-STABILITY-IMPLEMENTATION-001-R2
+strict-matrix.json=/agent/dss-abl-impl-001-r2/docs/features/data-source-snapshot-status/evidence/DATA-SOURCE-SNAPSHOT-STATUS-ACTION-BUTTON-LOADING-VISUAL-STABILITY-IMPLEMENTATION-001-R2/browser/strict-matrix.json
+required_viewports=1280x800,1700x920,1920x1080,2560x1440
+required_state_count_per_viewport=20
+checks_passed=230
+assertion_failure_count=0
+strict_harness_exit_code=0
+
+per-viewport deltas (raw, recomputed from recorded states; all required to be exactly 0):
+  1280x800: {"refresh_group_rect_delta":{"x":0,"y":0,"width":0,"height":0},"refresh_time_rect_delta":{"width":0},"refresh_time_value_rect_delta":{"width":0},"refresh_time_prefix_rect_delta":{"width":0},"countdown_seconds_slot_rect_delta":{"width":0},"refresh_btn_rect_delta":{"x":0,"y":0,"width":0,"height":0},"refresh_label_center_delta":{"x":0},"query_btn_rect_delta":{"x":0,"y":0,"width":0,"height":0},"query_label_center_delta":{"x":0},"query_actions_rect_delta":{"x":0,"y":0,"width":0,"height":0},"query_bar_rect_delta":{"x":0,"y":0,"width":0,"height":0}}
+  1280x800: query_button_width_set=[62] refresh_button_width_set=[110]
+  1280x800: invariants={"reserveTextConstant":true,"reserveAriaHiddenAlways":true,"prefixConstant":true,"nodeCountsStable":true,"labelsConstant":true,"spinnersAriaHiddenAlways":true,"buttonsNeverNativelyDisabled":true,"refreshSpinnerLitOnlyWhenManual":true,"querySpinnerLitOnlyWhenQuery":true,"busyOnlyOnManualLoading":true}
+  1700x920: {"refresh_group_rect_delta":{"x":0,"y":0,"width":0,"height":0},"refresh_time_rect_delta":{"width":0},"refresh_time_value_rect_delta":{"width":0},"refresh_time_prefix_rect_delta":{"width":0},"countdown_seconds_slot_rect_delta":{"width":0},"refresh_btn_rect_delta":{"x":0,"y":0,"width":0,"height":0},"refresh_label_center_delta":{"x":0},"query_btn_rect_delta":{"x":0,"y":0,"width":0,"height":0},"query_label_center_delta":{"x":0},"query_actions_rect_delta":{"x":0,"y":0,"width":0,"height":0},"query_bar_rect_delta":{"x":0,"y":0,"width":0,"height":0}}
+  1700x920: query_button_width_set=[62] refresh_button_width_set=[110]
+  1700x920: invariants={"reserveTextConstant":true,"reserveAriaHiddenAlways":true,"prefixConstant":true,"nodeCountsStable":true,"labelsConstant":true,"spinnersAriaHiddenAlways":true,"buttonsNeverNativelyDisabled":true,"refreshSpinnerLitOnlyWhenManual":true,"querySpinnerLitOnlyWhenQuery":true,"busyOnlyOnManualLoading":true}
+  1920x1080: {"refresh_group_rect_delta":{"x":0,"y":0,"width":0,"height":0},"refresh_time_rect_delta":{"width":0},"refresh_time_value_rect_delta":{"width":0},"refresh_time_prefix_rect_delta":{"width":0},"countdown_seconds_slot_rect_delta":{"width":0},"refresh_btn_rect_delta":{"x":0,"y":0,"width":0,"height":0},"refresh_label_center_delta":{"x":0},"query_btn_rect_delta":{"x":0,"y":0,"width":0,"height":0},"query_label_center_delta":{"x":0},"query_actions_rect_delta":{"x":0,"y":0,"width":0,"height":0},"query_bar_rect_delta":{"x":0,"y":0,"width":0,"height":0}}
+  1920x1080: query_button_width_set=[62] refresh_button_width_set=[110]
+  1920x1080: invariants={"reserveTextConstant":true,"reserveAriaHiddenAlways":true,"prefixConstant":true,"nodeCountsStable":true,"labelsConstant":true,"spinnersAriaHiddenAlways":true,"buttonsNeverNativelyDisabled":true,"refreshSpinnerLitOnlyWhenManual":true,"querySpinnerLitOnlyWhenQuery":true,"busyOnlyOnManualLoading":true}
+  2560x1440: {"refresh_group_rect_delta":{"x":0,"y":0,"width":0,"height":0},"refresh_time_rect_delta":{"width":0},"refresh_time_value_rect_delta":{"width":0},"refresh_time_prefix_rect_delta":{"width":0},"countdown_seconds_slot_rect_delta":{"width":0},"refresh_btn_rect_delta":{"x":0,"y":0,"width":0,"height":0},"refresh_label_center_delta":{"x":0},"query_btn_rect_delta":{"x":0,"y":0,"width":0,"height":0},"query_label_center_delta":{"x":0},"query_actions_rect_delta":{"x":0,"y":0,"width":0,"height":0},"query_bar_rect_delta":{"x":0,"y":0,"width":0,"height":0}}
+  2560x1440: query_button_width_set=[62] refresh_button_width_set=[110]
+  2560x1440: invariants={"reserveTextConstant":true,"reserveAriaHiddenAlways":true,"prefixConstant":true,"nodeCountsStable":true,"labelsConstant":true,"spinnersAriaHiddenAlways":true,"buttonsNeverNativelyDisabled":true,"refreshSpinnerLitOnlyWhenManual":true,"querySpinnerLitOnlyWhenQuery":true,"busyOnlyOnManualLoading":true}
+
+RESULT=ALL_HARD_ASSERTIONS_PASSED
+----- exit code -----
+strict_harness_real_run_exit_code=0
+finished_at_utc=2026-09-14T11:30:38Z

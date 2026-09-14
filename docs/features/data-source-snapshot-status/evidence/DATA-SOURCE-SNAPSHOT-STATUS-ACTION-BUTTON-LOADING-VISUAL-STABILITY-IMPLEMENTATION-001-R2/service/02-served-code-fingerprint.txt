@@ -1,0 +1,46 @@
+R2 SERVICE / SERVED-CODE FINGERPRINT
+recorded_at_utc=2026-09-14T11:30:21Z
+worktree=/agent/dss-abl-impl-001-r2
+worktree_HEAD=1b58e3c9a234062bb1b9351f7675aeb21abd76cd
+branch_or_detached=DETACHED
+r2_task_base=1b58e3c9a234062bb1b9351f7675aeb21abd76cd
+
+[frontend dev server actually used by this R2 browser run]
+pid=10647
+ppid=10646
+cwd=/agent/dss-abl-impl-001-r2/frontend
+cmdline=node /agent/dss-abl-impl-001-r2/frontend/node_modules/.bin/vite --host 0.0.0.0 --port 5174 --strictPort
+bind=0.0.0.0:5174 (strictPort)
+base_url_used_by_harness=http://127.0.0.1:5174
+listen_check: 1 socket(s) on 5174
+live_log=/tmp/r2-vite-dev.log (deliberately OUTSIDE the repo: this project's Vite log grows forever with proxy ECONNREFUSED lines, which is exactly the R1 trailing-whitespace defect class; a frozen snapshot is committed instead)
+
+[NOTE] the R1 worktree Vite instance (pid 5338, port 5173) was NOT reused and NOT modified.
+
+[page reachability from this host]
+GET http://127.0.0.1:5174/monitor/data-source-state -> status=200
+
+[worked example: on-disk source vs base-commit blob vs served module]
+  frontend/src/views/data-source-run-state/components/DataSourceSnapshotToolbar.vue
+    on_disk_sha256_16=2ff8133125c24ad4
+    base_commit_blob_sha256_16=2ff8133125c24ad4
+    verdict=IDENTICAL
+  frontend/src/views/data-source-run-state/components/DataSourceSnapshotQueryBar.vue
+    on_disk_sha256_16=57a277e7bdb0da45
+    base_commit_blob_sha256_16=57a277e7bdb0da45
+    verdict=IDENTICAL
+  frontend/src/views/data-source-run-state/DataSourceRunStatePage.vue
+    on_disk_sha256_16=9ada8f980993a51b
+    base_commit_blob_sha256_16=9ada8f980993a51b
+    verdict=IDENTICAL
+  frontend/src/views/data-source-run-state/composables/useDataSourceSnapshot.ts
+    on_disk_sha256_16=1835d906dbdaaf9b
+    base_commit_blob_sha256_16=1835d906dbdaaf9b
+    verdict=IDENTICAL
+
+[served (Vite-transformed) module hashes from pid 10647]
+  /src/views/data-source-run-state/components/DataSourceSnapshotToolbar.vue sha256_16=e258889b385d8612
+  /src/views/data-source-run-state/components/DataSourceSnapshotQueryBar.vue sha256_16=dac9cc26d6afd94d
+
+[conclusion]
+The dev server serving this R2 browser run has cwd /agent/dss-abl-impl-001-r2/frontend, whose HEAD is 1b58e3c..., and the four feature-private source files it serves are byte-identical to their 1b58e3c blobs. Therefore the business code exercised by R2 IS the R2 task base; R2 changed no frontend code.

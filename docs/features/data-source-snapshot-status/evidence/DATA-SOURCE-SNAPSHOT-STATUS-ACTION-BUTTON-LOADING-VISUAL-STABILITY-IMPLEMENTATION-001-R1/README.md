@@ -75,3 +75,14 @@ git/       Git 现场与范围/零差异/冻结区证明
 | 类型检查 / 构建 | `vue-tsc --noEmit` exit=0；`npm run build` exit=0 | `frontend/04~05-*.txt` |
 | R0 证据空白清理 | 7 文件仅空白机械清理，非空白内容逐字节不变；R0 `git diff --check` 实测退出码 `2` | `git/01-r0-evidence-whitespace-cleanup-proof.txt` |
 | 冻结区 | `DSS-REQ` 89 行、`DSS-AC` 113 行+状态列（`PASS 107 / NOT_RUN 6`）、§14.2/§14.3 映射行逐字节不变 | `git/03-r1-frozen-region-proof.txt` |
+
+
+## R2 严格断言闭环更正导航（2026-09-14，追加；不改动上文任何字节）
+
+> 本 R1 证据目录为**历史事实**，保持原样不变：其中 `browser/10-strict-matrix-run.txt` 的 `exit=0` 只证明脚本运行到底，`browser/harness/strict.mjs` 除运行异常外未做失败断言。该问题已由 **R2** 更正，未回写、未覆盖、未删除本目录任何文件。
+
+- 更正确认（远程 Git 复审）：ChatGPT 对 R1 结果提交 `1b58e3c9a234062bb1b9351f7675aeb21abd76cd` 的复审结论为 `CHANGES_REQUIRED_EVIDENCE_ASSERTION_ONLY`，唯一问题为“实测数据 → 机器可失败断言 → 真实退出码”闭环缺失。
+- 更正交付：`DATA-SOURCE-SNAPSHOT-STATUS-ACTION-BUTTON-LOADING-VISUAL-STABILITY-IMPLEMENTATION-001-R2`，仅新增断言模块、带失败断言的浏览器 harness、无页面负向自测及对应证据，**`frontend/**` 零差异**。
+- 更正后证据目录：`../DATA-SOURCE-SNAPSHOT-STATUS-ACTION-BUTTON-LOADING-VISUAL-STABILITY-IMPLEMENTATION-001-R2/`
+- 更正后报告：`docs/features/data-source-snapshot-status/reports/DATA-SOURCE-SNAPSHOT-STATUS-ACTION-BUTTON-LOADING-VISUAL-STABILITY-IMPLEMENTATION-001-R2.md`
+- 状态不变：`DSS-AC-108~113` 共 6 条仍为 `NOT_RUN`。
