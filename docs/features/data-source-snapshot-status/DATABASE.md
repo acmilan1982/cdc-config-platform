@@ -18,6 +18,7 @@
 | pending_user_confirmation_count | `0`（与 DESIGN.md §15.2 一致） |
 | 设计任务编号 | `DATA-SOURCE-SNAPSHOT-STATUS-DESIGN-BASELINE-001` |
 | 创建日期 | 2026-09-05 |
+| 操作按钮 Loading 视觉稳定性草案分层状态（本轮 `DATA-SOURCE-SNAPSHOT-STATUS-ACTION-BUTTON-LOADING-VISUAL-STABILITY-BASELINE-001`，2026-09-14） | **数据库结构、查询设计与只读边界不变。** 分层状态（与另 7 份入口文档一致）：`accepted_feature_implementation_status=IMPLEMENTED_ACCEPTED`、`accepted_feature_formal_acceptance_status=ACCEPTED`、`accepted_feature_acceptance_pass_count=107`、`action_button_loading_visual_stability_solution_direction_status=APPROVED_BY_PROJECT_OWNER`、`action_button_loading_visual_stability_document_status=DRAFT_PENDING_CHATGPT_REVIEW_AND_PROJECT_OWNER_APPROVAL`、`action_button_loading_visual_stability_implementation_status=PENDING_FORMAL_IMPLEMENTATION_ON_5173`、`action_button_loading_visual_stability_acceptance_status=NOT_RUN`、`action_button_loading_visual_stability_acceptance_not_run_count=6`、`requirements_count=89`、`acceptance_count=113`、`pending_user_review=YES`、`pending_user_confirmation_count=0`、`next_entry=CHATGPT_ACTION_BUTTON_LOADING_VISUAL_STABILITY_BASELINE_REVIEW_FROM_GIT_THEN_PROJECT_OWNER_APPROVAL`。本轮为纯前端视觉调整草案：不改三表投影/SQL/字段/主键/索引/约束/关联/排序/只读边界，本文件业务正文逐字节不变，不访问数据库。 |
 
 > 状态同步说明（2026-09-10，`DATA-SOURCE-SNAPSHOT-STATUS-PROTOTYPE-DESIGN-FREEZE-001-R1`）：上表当前元数据已由设计固化/实现阶段更新为需求 83 条（`DSS-REQ-001~083`）、验收 95 条（`DSS-AC-001~095`）且全部 `NOT_RUN`，并按分层记录实现状态。**R2～R7 为纯前端视觉/交互呈现调整，本次元数据同步不改变 API/DATABASE 业务契约**——三表投影、只读边界、字段/主键/索引/约束、SQL 与查询语义、既有批准日期/批准内容基准均不变。
 
