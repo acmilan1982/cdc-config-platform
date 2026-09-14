@@ -200,3 +200,13 @@
 ## 11. 后续入口
 
 `next_step=CHATGPT_ACTION_BUTTON_LOADING_VISUAL_STABILITY_BASELINE_REVIEW_FROM_GIT_THEN_PROJECT_OWNER_APPROVAL`
+
+
+## 12. R1 当前状态一致性纠正补充说明（`DATA-SOURCE-SNAPSHOT-STATUS-ACTION-BUTTON-LOADING-VISUAL-STABILITY-BASELINE-001-R1`，2026-09-14）
+
+> 本节由 R1 纯文档定向纠正任务在 R0 报告正文之后**追加**，不改写、不删除本报告任何既有内容；本节以上全部字节即为 R0 报告原始内容。
+
+- **R0 报告结论不完整之处（更正）**：本报告 §1～§11 当时声称八份入口文档“当前状态已统一”**并不完全**。经 ChatGPT 从远程 Git 复审本报告对应结果提交 `cf6aec1f34a98cb38d113fc8ab681376979b5243`，结论为 `chatgpt_r0_review_status=CHANGES_REQUIRED_CURRENT_STATUS_CONSISTENCY_ONLY`：**八份入口文档顶部当前状态区仍残留旧直接值**——四处 `pending_user_review=NO`（Feature `README.md` 顶部“待确认与审阅”行、`ACCEPTANCE.md`/`DESIGN.md`/`UI.md` 顶部 `pending_user_review` 行）未改为当前的 `YES`；且多处顶部当前状态/当前导航仍把历史入口 `NONE_FEATURE_ACCEPTED`、以及 R0 复审入口 `CHATGPT_ACTION_BUTTON_LOADING_VISUAL_STABILITY_BASELINE_REVIEW_FROM_GIT_THEN_PROJECT_OWNER_APPROVAL` 当作“当前统一下一入口”直接值，使当前状态同时出现两个答案。
+- **R0 报告中原本就正确、R1 未改动的部分**：按钮 Loading 方案方向与几何（“查询”`62px`/“立即刷新”`110px`）、需求 89、验收 113、`DSS-REQ-001~089` 与 `DSS-AC-001~113` 业务行、`DSS-AC-001~107` 的 `PASS 107` 状态列、DESIGN §14.2/§14.3 追踪（89/89 与 113/113）、DESIGN §31、UI §25、API/DATABASE 业务契约与正文——以上均为正确内容，R0 报告对此的描述**无需更正**，R1 亦逐字节保持不变。
+- **R1 所做的纠正**：仅纠正上述“当前状态双答案”问题——把四处 `pending_user_review` 的当前直接值前置为 `YES`、把原有 `NO` 降级为带“截至 2026-09-14 本轮新增调整提出前”日期限定的历史事实；把八份入口文档顶部当前状态/当前导航的“当前统一下一入口”统一前置为 `CHATGPT_ACTION_BUTTON_LOADING_VISUAL_STABILITY_BASELINE_R1_REVIEW_FROM_GIT_THEN_PROJECT_OWNER_APPROVAL`，并把 `NONE_FEATURE_ACCEPTED`、R0 复审入口统一降级为带日期/任务号限定的历史入口。历史记录未被删除。
+- **最终口径**：R1 报告见 `reports/DATA-SOURCE-SNAPSHOT-STATUS-ACTION-BUTTON-LOADING-VISUAL-STABILITY-BASELINE-001-R1.md`；本轮草案仍为 `DRAFT_PENDING_CHATGPT_REVIEW_AND_PROJECT_OWNER_APPROVAL`，未实现（`PENDING_FORMAL_IMPLEMENTATION_ON_5173`）、未验收（`NOT_RUN` 6），当前下一致入口为 `CHATGPT_ACTION_BUTTON_LOADING_VISUAL_STABILITY_BASELINE_R1_REVIEW_FROM_GIT_THEN_PROJECT_OWNER_APPROVAL`。
