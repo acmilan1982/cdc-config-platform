@@ -190,3 +190,16 @@ acceptance_count=113
 ## 11. 遗留观察（不改动）
 
 - `DESIGN.md` §14.2 章节标题中的计数标注为“（87/87）”，而该矩阵实际已含 89 条需求追踪行（§14.3 标题已更新为 113/113）。该标题文本与基准提交逐字节一致，属本轮之前遗留的标注性措辞，**不在本次白名单授权范围内**（§14.2/§14.3 映射须逐字节不变），故不作修改，仅登记为观察项。追踪矩阵实际内容为 89/89 与 113/113，无缺漏。
+
+## 12. R1 批准收口一致性纠正记录（append-only，不修改上文任何字节）
+
+> 2026-09-14 由后续任务 `DATA-SOURCE-SNAPSHOT-STATUS-ACTION-BUTTON-LOADING-VISUAL-STABILITY-BASELINE-APPROVAL-001-R1` 在文末追加。本节为 append-only 记录：本报告上方原有内容逐字节保持不变，未被删除或改写；本报告的批准决定与业务内容继续有效，本次纠正**不撤销批准**。
+
+纠正依据：ChatGPT 从远程 Git 对本批准收口提交 `a43b45b0d2e8312c859d231fdfe3ed3505d209d6` 的复审结论为 `CHANGES_REQUIRED_DOCUMENT_CURRENT_STATUS_CONSISTENCY_ONLY`——批准决定、按钮业务规则、需求/验收业务行及 API/数据库边界本身无问题，仅存在当前文档一致性残留。
+
+需要记录的两点事实更正：
+
+1. **当前直接值统一结论的更正**：本报告 §5 与 §7 声称“八份入口文档当前直接值统一（`pending_user_review=NO`）”为 `PASS`。该结论对 `docs/features/README.md`、`docs/features/data-source-snapshot-status/README.md`、`REQUIREMENTS.md`、`API.md`、`DATABASE.md` 成立，但 `ACCEPTANCE.md` §1、`DESIGN.md` §1、`UI.md` §1 三处顶部 `pending_user_review` 的**当前直接值**当时实际仍以 `YES` 开头；本报告相应检查仅确认了 `pending_user_review=NO` 字样在该文件内存在，未区分“当前直接值”与“带限定的历史保留值”，故未发现该三处冲突。本报告该 `PASS` 判断在上述三处不成立，已由 R1 任务把三处当前直接值纠正为 `NO`。
+2. **§14.2 标题观察项的处置变更**：本报告 §11 把 `DESIGN.md` §14.2 标题计数“（87/87）”登记为“本轮之前遗留、不在白名单内、不作修改”的观察项。R1 任务就同一事实给出新的处置：既然 §14.2 矩阵当前已含 `DSS-REQ-001~089` 共 89 条需求追踪行、且正文覆盖统计也为 `89/89`，该标题即构成**当前**追踪标题不一致，因此 R1 已将标题由 `（87/87）` 修正为 `（89/89）`；§14.2/§14.3 的映射表格行仍逐字节不变。
+
+本纠正不改变本报告下述结论的有效性：ChatGPT R1 复审 `APPROVED`、项目负责人 `批准`、批准日期 2026-09-14、批准内容基准提交 `c4d5c096a7428d7f5be1af0d776c53655dd86e26`、按钮业务规则（“查询” `62px`、“立即刷新” `110px` 与 Feature 私有覆盖式 Loading 指示器）、`DSS-REQ-001~089` / `DSS-AC-001~113` 业务行、验收分层 `PASS 107 / FAIL 0 / BLOCKED 0 / NOT_RUN 6`、API/数据库契约与前后端代码均未改变。下一入口仍为 `DATA-SOURCE-SNAPSHOT-STATUS-ACTION-BUTTON-LOADING-VISUAL-STABILITY-IMPLEMENTATION-001`。
