@@ -1,7 +1,7 @@
 # 任务起始现场（只读采集）
 captured_at: 2026-09-14T14:27:36+08:00
 worktree: /agent/dss-abl-impl-001
-branch: 
+branch:
 HEAD: 9f06725d23d66e845cb5ab1d8d8d4f151401893b
 HEAD subject: docs(source-snapshot): correct action loading approval current status [DATA-SOURCE-SNAPSHOT-STATUS-ACTION-BUTTON-LOADING-VISUAL-STABILITY-BASELINE-APPROVAL-001-R1]
 origin/develop (ls-remote): 9f06725d23d66e845cb5ab1d8d8d4f151401893b	refs/heads/develop

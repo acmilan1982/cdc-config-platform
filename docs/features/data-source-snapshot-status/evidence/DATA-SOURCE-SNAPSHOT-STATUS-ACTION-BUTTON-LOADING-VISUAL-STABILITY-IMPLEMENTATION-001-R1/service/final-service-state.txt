@@ -1,0 +1,45 @@
+# R1 final service state (front-end preview for project-owner manual check)
+
+task_code=DATA-SOURCE-SNAPSHOT-STATUS-ACTION-BUTTON-LOADING-VISUAL-STABILITY-IMPLEMENTATION-001-R1
+branch=develop (R1 result worktree, detached HEAD at the single task base commit)
+result_worktree=/agent/dss-abl-impl-001-r1
+main_worktree=/agent/cdc-config-platform (develop@4222b0a + existing modifications; NOT entered, NOT cleaned, NOT served from)
+
+## Frontend (kept running for the project owner's manual visual/interaction check)
+
+service_frontend_pid=5338
+service_frontend_parent_pid=5326
+service_frontend_cwd=/agent/dss-abl-impl-001-r1/frontend
+service_frontend_cmd=node /agent/dss-abl-impl-001-r1/frontend/node_modules/.bin/vite --host 0.0.0.0 --port 5173
+service_frontend_bind=0.0.0.0:5173
+service_url=http://192.168.174.70:5173/monitor/data-source-state
+service_log_path=docs/features/data-source-snapshot-status/evidence/DATA-SOURCE-SNAPSHOT-STATUS-ACTION-BUTTON-LOADING-VISUAL-STABILITY-IMPLEMENTATION-001-R1/service/vite-dev.txt
+service_stop_command=kill 5338
+
+## Backend
+
+service_backend_pid=NOT_STARTED
+# Per R1 prompt §13: the backend must NOT be started. The Vite dev proxy logs `ECONNREFUSED 127.0.0.1:8080`
+# for /api/monitor/data-source-run-state/list, which is expected — R1 browser verification drives the page
+# through the CDP GET-interception harness and never depends on the backend or the database.
+
+## Reachability boundary
+
+local  127.0.0.1:5173/monitor/data-source-state    -> HTTP 200
+host   192.168.174.70:5173/monitor/data-source-state -> HTTP 200
+# A local 200 does not prove the project owner's network path. User-side reachability is to be confirmed
+# by the project owner opening the URL above.
+
+## Browser (headless Chromium used for the R1 strict matrix; not required for the manual check)
+
+browser_pid=5454
+browser_cmd=/opt/google/chrome/chrome --headless=new --remote-debugging-port=9222 ...
+browser_cdp_bind=127.0.0.1:9222
+browser_log_path=docs/features/data-source-snapshot-status/evidence/DATA-SOURCE-SNAPSHOT-STATUS-ACTION-BUTTON-LOADING-VISUAL-STABILITY-IMPLEMENTATION-001-R1/service/chrome.txt
+browser_stop_command=kill 5454
+
+## Guardrails observed
+
+- Zero non-GET requests; zero database access; zero SQL; zero ZooKeeper/Kafka access.
+- R0's Vite instance (PID 17227) was verified gone before the R1 instance started on 5173 (no port conflict).
+- No process of unknown origin was stopped.

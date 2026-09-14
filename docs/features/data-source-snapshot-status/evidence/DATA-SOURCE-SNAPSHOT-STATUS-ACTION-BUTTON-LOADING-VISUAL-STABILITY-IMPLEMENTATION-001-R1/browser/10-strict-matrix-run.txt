@@ -1,0 +1,11 @@
+# R1 strict whole-rect matrix - raw run log
+cmd: node harness/strict.mjs <out>
+started_at: 2026-09-14T18:55:42+08:00
+viewport 1280x800: group delta={"x":0,"y":0,"width":0,"height":0}
+viewport 1700x920: group delta={"x":0,"y":0,"width":0,"height":0}
+viewport 1920x1080: group delta={"x":0,"y":0,"width":0,"height":0}
+viewport 2560x1440: group delta={"x":0,"y":0,"width":0,"height":0}
+requests total=318 nonGET=0 apiNonGET=0; console errors=0
+reduced-motion: {"normalMediaAnimation":{"refreshSpinner":"dss-action-spin-a581eda5","querySpinner":"dss-action-spin-cd886c8f","ringProgressTransition":"0s"},"reducedMediaAnimation":{"refreshSpinner":"none","querySpinner":"none","ringProgressTransition":"0s"},"reducedLoadingAnimation":{"refreshSpinner":"none","querySpinner":"none","ringProgressTransition":"0s"},"reducedLoadingSpinnerVisible":{"refresh":true,"query":false},"reducedLoadingSpinnerBox":{"x":1742,"y":251.5,"w":12,"h":12},"idleVsReducedIdleSameRect":true,"reducedIdleVsReducedLoadingSameRect":true,"reducedIdleGroup":{"x":1451.28125,"y":241.5,"w":396.71875,"h":32,"vis":"visible","op":"1","disp":"flex"},"reducedLoadingGroup":{"x":1451.28125,"y":241.5,"w":396.71875,"h":32,"vis":"visible","op":"1","disp":"flex"}}
+other-route leak: {"dssNodes":0,"refreshGroup":0,"spinner":0,"actionLabel":0}
+exit=0

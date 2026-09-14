@@ -1,0 +1,233 @@
+{
+  "checks": [
+    {
+      "name": "popper dss-client-popper width = 480px",
+      "pass": true,
+      "detail": {
+        "w": 480,
+        "minW": "480px",
+        "maxW": "480px",
+        "visible": true
+      }
+    },
+    {
+      "name": "popper dss-source-popper width = 400px",
+      "pass": true,
+      "detail": {
+        "w": 400,
+        "minW": "400px",
+        "maxW": "400px",
+        "visible": true
+      }
+    },
+    {
+      "name": "popper dss-status-popper width = 240px",
+      "pass": true,
+      "detail": {
+        "w": 240,
+        "minW": "240px",
+        "maxW": "240px",
+        "visible": true
+      }
+    },
+    {
+      "name": "c3 option desc truncated to 20 code points + \"...\"",
+      "pass": true,
+      "detail": {
+        "id": "c3",
+        "text": "c3（长长长长长长长长长长长长长长长长长长长长...）",
+        "codepoints": 27
+      }
+    },
+    {
+      "name": "short option desc not truncated, no ellipsis",
+      "pass": true,
+      "detail": {
+        "id": "c1",
+        "text": "c1（端1）",
+        "codepoints": 6
+      }
+    },
+    {
+      "name": "truncated option hover shows .dss-q-tt with full 25-cp desc",
+      "pass": true,
+      "detail": {
+        "text": "长长长长长长长长长长长长长长长长长长长长长长长长长",
+        "codepoints": 25,
+        "parentIsBody": true,
+        "position": "fixed",
+        "visible": true,
+        "belowTrigger": false
+      }
+    },
+    {
+      "name": "non-truncated option shows no tooltip",
+      "pass": true,
+      "detail": {
+        "ttBefore": false,
+        "ttAfter": null
+      }
+    },
+    {
+      "name": "multi-select query serializes repeated clientId params",
+      "pass": true,
+      "detail": "/api/monitor/data-source-run-state/list?clientId=c1&clientId=c2"
+    },
+    {
+      "name": "selected tag shows 20-cp truncated label but keeps raw identity",
+      "pass": true,
+      "detail": {
+        "text": "c3（长长长长长长长长长长长长长长长长长长长长...）",
+        "id": "c3"
+      }
+    },
+    {
+      "name": "selected-tag hover shows full-desc tooltip",
+      "pass": true,
+      "detail": {
+        "visible": true,
+        "text": "长长长长长长长长长长长长长长长长长长长长长长长长长"
+      }
+    },
+    {
+      "name": "single selection serializes exactly one clientId",
+      "pass": true,
+      "detail": "/api/monitor/data-source-run-state/list?clientId=c3"
+    },
+    {
+      "name": "table CLIENT_DESC tooltip unchanged (full raw desc)",
+      "pass": true,
+      "detail": {
+        "text": "长长长长长长长长长长长长长长长长长长长长长长长长长",
+        "codepoints": 25
+      }
+    },
+    {
+      "name": "failure keeps previous result rows",
+      "pass": true,
+      "detail": {
+        "before": 2,
+        "after": 2
+      }
+    },
+    {
+      "name": "failure keeps 最近成功刷新 and shows收敛 warning",
+      "pass": true,
+      "detail": {
+        "rows": 2,
+        "refreshTime": "最近成功刷新：88:88:8818:56:06",
+        "error": "刷新失败，将在约 60 秒后自动重试",
+        "firstLoadErr": false
+      }
+    },
+    {
+      "name": "countdown freezes while page hidden (no 假走)",
+      "pass": true,
+      "detail": {
+        "secs1": "60",
+        "secsHiddenStart": "60",
+        "secsHiddenLater": "60"
+      }
+    },
+    {
+      "name": "resume-visible triggers exactly 1 restore GET",
+      "pass": true,
+      "detail": "/api/monitor/data-source-run-state/list?clientId=c3"
+    },
+    {
+      "name": "restore must not light either action indicator",
+      "pass": true,
+      "detail": {
+        "query": "hidden",
+        "refresh": "hidden",
+        "queryBusy": null,
+        "refreshBusy": null,
+        "refreshActive": true
+      }
+    },
+    {
+      "name": "countdown restarts after resume",
+      "pass": true,
+      "detail": {
+        "secs": "60",
+        "rows": 2
+      }
+    }
+  ],
+  "listCalls": [
+    {
+      "method": "GET",
+      "url": "http://127.0.0.1:5173/api/monitor/data-source-run-state/list",
+      "action": "ok"
+    },
+    {
+      "method": "GET",
+      "url": "http://127.0.0.1:5173/api/monitor/data-source-run-state/list?clientId=c1&clientId=c2",
+      "action": "held"
+    },
+    {
+      "method": "GET",
+      "url": "http://127.0.0.1:5173/api/monitor/data-source-run-state/list?clientId=c3",
+      "action": "held"
+    },
+    {
+      "method": "GET",
+      "url": "http://127.0.0.1:5173/api/monitor/data-source-run-state/list?clientId=c3",
+      "action": "held"
+    },
+    {
+      "method": "GET",
+      "url": "http://127.0.0.1:5173/api/monitor/data-source-run-state/list?clientId=c3",
+      "action": "held"
+    }
+  ],
+  "startedAt": "2026-09-14T10:55:56.473Z",
+  "selectedTags": {
+    "tags": [
+      {
+        "text": "c1（端1）",
+        "closable": true,
+        "id": "c1"
+      },
+      {
+        "text": "+ 1",
+        "closable": false,
+        "id": null
+      }
+    ]
+  },
+  "failure": {
+    "rowsBefore": 2,
+    "timeBefore": "最近成功刷新：88:88:8818:56:06",
+    "afterFail": {
+      "rows": 2,
+      "refreshTime": "最近成功刷新：88:88:8818:56:06",
+      "error": "刷新失败，将在约 60 秒后自动重试",
+      "firstLoadErr": false
+    }
+  },
+  "hidden": {
+    "secs1": "60",
+    "secsHiddenStart": "60",
+    "secsHiddenLater": "60"
+  },
+  "resume": {
+    "heldBefore": 3,
+    "resumeState": {
+      "query": "hidden",
+      "refresh": "hidden",
+      "queryBusy": null,
+      "refreshBusy": null,
+      "refreshActive": true
+    },
+    "url": "/api/monitor/data-source-run-state/list?clientId=c3"
+  },
+  "afterResume": {
+    "secs": "60",
+    "rows": 2
+  },
+  "consoleErrors": [],
+  "finishedAt": "2026-09-14T10:56:13.364Z",
+  "methodsAllGet": true,
+  "failed": []
+}

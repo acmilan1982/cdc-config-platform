@@ -1,0 +1,44 @@
+# R1 frozen-region proof (DSS-REQ/DSS-AC business rows, status column, §14.2/§14.3 mapping rows)
+# task_code=DATA-SOURCE-SNAPSHOT-STATUS-ACTION-BUTTON-LOADING-VISUAL-STABILITY-IMPLEMENTATION-001-R1
+# base = HEAD (fccefbffccac7fbcc7bff039384549c24e0ed45e); compares frozen regions only
+# generated: 2026-09-14T11:07:56Z UTC
+
+## 1. REQUIREMENTS.md — business rows
+  REQUIREMENTS business rows: rows HEAD=89 worktree=89 -> BYTE-IDENTICAL (changed=0)
+  count of 'DSS-REQ-0' mentions: HEAD=195 worktree=196  (mentions in prose/matrix also counted; row check above is authoritative)
+
+## 2. ACCEPTANCE.md — business rows + status column
+  ACCEPTANCE business rows: rows HEAD=113 worktree=113 -> BYTE-IDENTICAL (changed=0)
+  status column tally  HEAD:  6 NOT_RUN  107 PASS 
+  status column tally  WT  :  6 NOT_RUN  107 PASS 
+
+## 3. The 6 new acceptance rows DSS-AC-108~113 (must stay NOT_RUN, byte-identical)
+  DSS-AC-108~113 rows: rows HEAD=6 worktree=6 -> BYTE-IDENTICAL (changed=0)
+
+## 4. DESIGN.md §14.2 mapping rows
+  §14.2 mapping rows (DSS-REQ->design): rows HEAD=49 worktree=49 -> BYTE-IDENTICAL (changed=0)
+## 5. DESIGN.md §14.3 mapping rows
+  §14.3 mapping rows (DSS-AC->design): rows HEAD=66 worktree=66 -> BYTE-IDENTICAL (changed=0)
+
+## 6. DESIGN §14.2/§14.3 heading counts
+  HEAD §14.2/§14.3 headings: ### 14.2 需求 → 设计落点矩阵（89/89）|### 14.3 验收 → 设计落点矩阵（113/113）（2026-09-14 操作按钮 Loading 视觉稳定性草案把追踪更新为 113/113；原文“（107/107）”为 2026-09-14 本轮草案提出前的历史表述）|
+  WT   §14.2/§14.3 headings: ### 14.2 需求 → 设计落点矩阵（89/89）|### 14.3 验收 → 设计落点矩阵（113/113）（2026-09-14 操作按钮 Loading 视觉稳定性草案把追踪更新为 113/113；原文“（107/107）”为 2026-09-14 本轮草案提出前的历史表述）|
+
+## 7. Whole-file numstat of the 8 entry docs
+3	2	docs/features/README.md
+6	4	docs/features/data-source-snapshot-status/ACCEPTANCE.md
+3	1	docs/features/data-source-snapshot-status/API.md
+3	1	docs/features/data-source-snapshot-status/DATABASE.md
+6	4	docs/features/data-source-snapshot-status/DESIGN.md
+5	3	docs/features/data-source-snapshot-status/README.md
+8	6	docs/features/data-source-snapshot-status/REQUIREMENTS.md
+6	4	docs/features/data-source-snapshot-status/UI.md
+
+## 8. API/DATABASE contract bodies
+  API.md      changed lines: 3 (metadata status line + appended record only)
+  DATABASE.md changed lines: 3 (metadata status line + appended record only)
+  API/DATABASE § mapping tables and request/response field bodies: see numstat above (only line 21/22 metadata + EOF appended record changed; diff -U0 hunks below)
+@@ -22 +22 @@
+@@ -366,0 +367,2 @@ GET /api/monitor/data-source-run-state/list?status=RUNNING&status=FORBIDDEN_STAT
+@@ -21 +21 @@
+@@ -256,0 +257,2 @@ FROM CDC_DATA_SOURCE

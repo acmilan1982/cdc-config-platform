@@ -1,0 +1,142 @@
+cmd: node harness/diag-group.mjs   (R0 0.95px closure, 1280x800)
+started_at: 2026-09-14T19:03:08+08:00
+# R1 closure of the R0 refresh-group left-edge finding (1280x800 tier)
+{
+  "tier": "1280x800",
+  "states": {
+    "--": {
+      "groupLeft": 811.281,
+      "groupRight": 1208,
+      "groupW": 396.719,
+      "timeW": 141.625,
+      "slotW": 50.609
+    },
+    "00:00:00": {
+      "groupLeft": 811.281,
+      "groupRight": 1208,
+      "groupW": 396.719,
+      "timeW": 141.625,
+      "slotW": 50.609
+    },
+    "11:11:11": {
+      "groupLeft": 811.281,
+      "groupRight": 1208,
+      "groupW": 396.719,
+      "timeW": 141.625,
+      "slotW": 50.609
+    },
+    "14:11:09": {
+      "groupLeft": 811.281,
+      "groupRight": 1208,
+      "groupW": 396.719,
+      "timeW": 141.625,
+      "slotW": 50.609
+    },
+    "14:11:10": {
+      "groupLeft": 811.281,
+      "groupRight": 1208,
+      "groupW": 396.719,
+      "timeW": 141.625,
+      "slotW": 50.609
+    },
+    "14:11:11": {
+      "groupLeft": 811.281,
+      "groupRight": 1208,
+      "groupW": 396.719,
+      "timeW": 141.625,
+      "slotW": 50.609
+    },
+    "23:59:59": {
+      "groupLeft": 811.281,
+      "groupRight": 1208,
+      "groupW": 396.719,
+      "timeW": 141.625,
+      "slotW": 50.609
+    }
+  },
+  "countdown": {
+    "0": {
+      "secsW": 14.453,
+      "groupLeft": 811.281,
+      "groupW": 396.719
+    },
+    "9": {
+      "secsW": 14.453,
+      "groupLeft": 811.281,
+      "groupW": 396.719
+    },
+    "10": {
+      "secsW": 14.453,
+      "groupLeft": 811.281,
+      "groupW": 396.719
+    },
+    "59": {
+      "secsW": 14.453,
+      "groupLeft": 811.281,
+      "groupW": 396.719
+    },
+    "60": {
+      "secsW": 14.453,
+      "groupLeft": 811.281,
+      "groupW": 396.719
+    },
+    "09": {
+      "secsW": 14.453,
+      "groupLeft": 811.281,
+      "groupW": 396.719
+    },
+    "--": {
+      "secsW": 14.453,
+      "groupLeft": 811.281,
+      "groupW": 396.719
+    }
+  },
+  "deltas": {
+    "groupLeft": {
+      "min": 811.281,
+      "max": 811.281,
+      "delta": 0
+    },
+    "groupRight": {
+      "min": 1208,
+      "max": 1208,
+      "delta": 0
+    },
+    "groupW": {
+      "min": 396.719,
+      "max": 396.719,
+      "delta": 0
+    },
+    "timeW": {
+      "min": 141.625,
+      "max": 141.625,
+      "delta": 0
+    },
+    "timeSlotW": {
+      "min": 50.609,
+      "max": 50.609,
+      "delta": 0
+    },
+    "countdownGroupLeft": {
+      "min": 811.281,
+      "max": 811.281,
+      "delta": 0
+    },
+    "countdownSecsW": {
+      "min": 14.453,
+      "max": 14.453,
+      "delta": 0
+    }
+  },
+  "reserve": {
+    "text": "88:88:88",
+    "visibility": "hidden",
+    "w": 50.609
+  }
+}
+-- conclusion --
+R0: group LEFT edge spread was 0.953px (812.25 -> 813.20) while the right anchor stayed put; R0 reported only the right edge.
+R1: groupLeft delta = 0px, groupRight delta = 0px, groupW delta = 0px.
+R1: time text width delta = 0px (R0 saw 140.641 vs 139.688 = 0.953px here).
+R1: countdown seconds width delta = 0px.
+exit=0

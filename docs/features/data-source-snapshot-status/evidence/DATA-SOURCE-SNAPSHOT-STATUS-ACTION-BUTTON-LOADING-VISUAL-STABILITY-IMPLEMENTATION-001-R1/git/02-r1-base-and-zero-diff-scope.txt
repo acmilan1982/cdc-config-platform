@@ -1,0 +1,166 @@
+# R1 base state, worktree isolation and zero-diff scope proof
+# task_code=DATA-SOURCE-SNAPSHOT-STATUS-ACTION-BUTTON-LOADING-VISUAL-STABILITY-IMPLEMENTATION-001-R1
+# generated: 2026-09-14T11:05:04Z UTC
+
+## 1. R1 worktree and base commit
+$ git rev-parse HEAD
+fccefbffccac7fbcc7bff039384549c24e0ed45e
+$ git rev-parse --abbrev-ref HEAD
+HEAD
+$ git worktree list
+/agent/cdc-config-platform                        4222b0a [develop]
+/agent/cdc-docs-freeze-001                        8998034 (detached HEAD)
+/agent/dss-abl-appr-r1-001                        9f06725 (detached HEAD)
+/agent/dss-abl-impl-001                           fccefbf (detached HEAD)
+/agent/dss-abl-impl-001-r1                        fccefbf (detached HEAD)
+/agent/dss-action-button-loading-approval-001     a43b45b (detached HEAD)
+/agent/dss-action-button-loading-baseline-001     cf6aec1 (detached HEAD)
+/agent/dss-action-button-loading-baseline-001-r1  c4d5c09 (detached HEAD)
+/agent/dss-design-traceability-corr-001           d4c5267 (detached HEAD)
+/agent/dss-design-traceability-corr-001-r1        758253c (detached HEAD)
+/agent/dss-formal-acceptance-001                  3190b3d (detached HEAD)
+/agent/dss-formal-acceptance-001-r1               bf5f1b5 (detached HEAD)
+/agent/dss-formal-acceptance-001-r2               5ca9931 (detached HEAD)
+/agent/dss-formal-acceptance-001-r3               68528cf (detached HEAD)
+/agent/dss-formal-acceptance-closeout-001         f3d383e (detached HEAD)
+/agent/dss-formal-impl-001                        3ec9cbf (detached HEAD)
+/agent/dss-formal-impl-001-r1                     ba309ea (detached HEAD)
+/agent/dss-linear-style-original-001.R1           4222b0a (detached HEAD)
+/agent/dss-linear-style-prototype-001.BfGw0Z      4222b0a (detached HEAD)
+/agent/dss-popper-impl-closeout-001               cacfb70 (detached HEAD)
+/agent/dss-popper-r2-appr-001                     183d3b5 (detached HEAD)
+/agent/dss-popper-width-baseline-001              6cd197d (detached HEAD)
+/agent/dss-popper-width-baseline-001-r1           f74dd72 (detached HEAD)
+/agent/dss-popper-width-baseline-approval-001     5649a8a (detached HEAD)
+/agent/dss-popper-width-impl-001                  e3c2392 (detached HEAD)
+/agent/dss-qc-review-closeout-001                 1ddb84e (detached HEAD)
+/agent/dss-qc-review-closeout-001-r1              af88aa8 (detached HEAD)
+/agent/dss-query-ctl-001                          29379e7 (detached HEAD)
+/agent/dss-query-ctl-001-r1                       d6322cf (detached HEAD)
+/agent/dss-query-ctl-001-r2                       6c43d1e (detached HEAD)
+/agent/dss-query-ctl-001-r3                       cf9f9eb (detached HEAD)
+/agent/dss-query-ctl-appr-001                     548e161 (detached HEAD)
+/agent/dss-query-ctl-impl-001                     a479888 (detached HEAD)
+/agent/dss-query-ctl-impl-001-r1                  edba7c8 (detached HEAD)
+/agent/dss-query-ctl-impl-001-r2                  2a9a271 (detached HEAD)
+/agent/dss-select-popper-fixed-width-proto-001    2a9a271 (detached HEAD)
+/agent/dss-select-width-diag-001                  2a9a271 (detached HEAD)
+/tmp/cdc-approval-r1-worktree                     c568df1 (detached HEAD)
+/tmp/cdc-approval-worktree                        b753bec (detached HEAD)
+/tmp/cdc-freeze-r1-worktree                       85a522e (detached HEAD)
+/tmp/cdc-freeze-r2-worktree                       9b0aa92 (detached HEAD)
+/tmp/cdc-freeze-r3-worktree                       e67b2ec (detached HEAD)
+/tmp/cdc-popper-appr-r1-worktree                  485be09 (detached HEAD)
+/tmp/cdc-popper-r2-worktree                       0666cd9 (detached HEAD)
+/tmp/cdc-r1-worktree                              49eb778 (detached HEAD)
+
+base_commit_id=fccefbffccac7fbcc7bff039384549c24e0ed45e
+approved_content_commit_id=c4d5c096a7428d7f5be1af0d776c53655dd86e26
+doc_approval_closeout_r1_commit=9f06725d23d66e845cb5ab1d8d8d4f151401893b
+
+## 2. Change scope (git status --short)
+ M docs/features/data-source-snapshot-status/evidence/DATA-SOURCE-SNAPSHOT-STATUS-ACTION-BUTTON-LOADING-VISUAL-STABILITY-IMPLEMENTATION-001/README.md
+ M docs/features/data-source-snapshot-status/evidence/DATA-SOURCE-SNAPSHOT-STATUS-ACTION-BUTTON-LOADING-VISUAL-STABILITY-IMPLEMENTATION-001/frontend/01-targeted-component-specs.txt
+ M docs/features/data-source-snapshot-status/evidence/DATA-SOURCE-SNAPSHOT-STATUS-ACTION-BUTTON-LOADING-VISUAL-STABILITY-IMPLEMENTATION-001/frontend/02-feature-data-source-run-state.txt
+ M docs/features/data-source-snapshot-status/evidence/DATA-SOURCE-SNAPSHOT-STATUS-ACTION-BUTTON-LOADING-VISUAL-STABILITY-IMPLEMENTATION-001/frontend/03-frontend-full-vitest.txt
+ M docs/features/data-source-snapshot-status/evidence/DATA-SOURCE-SNAPSHOT-STATUS-ACTION-BUTTON-LOADING-VISUAL-STABILITY-IMPLEMENTATION-001/git/01-base-status.txt
+ M docs/features/data-source-snapshot-status/evidence/DATA-SOURCE-SNAPSHOT-STATUS-ACTION-BUTTON-LOADING-VISUAL-STABILITY-IMPLEMENTATION-001/git/04-frozen-region-proof.txt
+ M docs/features/data-source-snapshot-status/evidence/DATA-SOURCE-SNAPSHOT-STATUS-ACTION-BUTTON-LOADING-VISUAL-STABILITY-IMPLEMENTATION-001/service/final-service-state.txt
+ M docs/features/data-source-snapshot-status/evidence/DATA-SOURCE-SNAPSHOT-STATUS-ACTION-BUTTON-LOADING-VISUAL-STABILITY-IMPLEMENTATION-001/service/port-process-http.txt
+ M docs/features/data-source-snapshot-status/reports/DATA-SOURCE-SNAPSHOT-STATUS-ACTION-BUTTON-LOADING-VISUAL-STABILITY-IMPLEMENTATION-001.md
+ M frontend/src/views/data-source-run-state/components/DataSourceSnapshotToolbar.spec.ts
+ M frontend/src/views/data-source-run-state/components/DataSourceSnapshotToolbar.vue
+?? docs/features/data-source-snapshot-status/evidence/DATA-SOURCE-SNAPSHOT-STATUS-ACTION-BUTTON-LOADING-VISUAL-STABILITY-IMPLEMENTATION-001-R1/
+
+## 3. Modified tracked files (git diff --stat)
+ .../README.md                                      |  14 +++
+ .../frontend/01-targeted-component-specs.txt       |   1 -
+ .../frontend/02-feature-data-source-run-state.txt  |   1 -
+ .../frontend/03-frontend-full-vitest.txt           |   1 -
+ .../git/01-base-status.txt                         |   2 +-
+ .../git/04-frozen-region-proof.txt                 |   2 +-
+ .../service/final-service-state.txt                |   4 +-
+ .../service/port-process-http.txt                  |  36 +++----
+ ...-LOADING-VISUAL-STABILITY-IMPLEMENTATION-001.md |  33 ++++++
+ .../components/DataSourceSnapshotToolbar.spec.ts   | 119 ++++++++++++++++++++-
+ .../components/DataSourceSnapshotToolbar.vue       |  44 +++++++-
+ 11 files changed, 223 insertions(+), 34 deletions(-)
+
+## 4. FULL enumeration of every tracked file in the Feature tree, with numstat
+#    (only the two Toolbar files may be non-zero; all others MUST be zero)
+  ZERO   frontend/src/views/data-source-run-state/DataSourceRunStatePage.spec.ts
+  ZERO   frontend/src/views/data-source-run-state/DataSourceRunStatePage.vue
+  ZERO   frontend/src/views/data-source-run-state/components/DataSourceSnapshotQueryBar.spec.ts
+  ZERO   frontend/src/views/data-source-run-state/components/DataSourceSnapshotQueryBar.vue
+  ZERO   frontend/src/views/data-source-run-state/components/DataSourceSnapshotStatusTag.spec.ts
+  ZERO   frontend/src/views/data-source-run-state/components/DataSourceSnapshotStatusTag.vue
+  ZERO   frontend/src/views/data-source-run-state/components/DataSourceSnapshotTable.spec.ts
+  ZERO   frontend/src/views/data-source-run-state/components/DataSourceSnapshotTable.vue
+  CHANGE 114	5	frontend/src/views/data-source-run-state/components/DataSourceSnapshotToolbar.spec.ts
+  CHANGE 40	4	frontend/src/views/data-source-run-state/components/DataSourceSnapshotToolbar.vue
+  ZERO   frontend/src/views/data-source-run-state/composables/useDataSourceSnapshot.errorChain.spec.ts
+  ZERO   frontend/src/views/data-source-run-state/composables/useDataSourceSnapshot.spec.ts
+  ZERO   frontend/src/views/data-source-run-state/composables/useDataSourceSnapshot.ts
+  ZERO   frontend/src/views/data-source-run-state/tooltip/SnapshotTooltipHost.spec.ts
+  ZERO   frontend/src/views/data-source-run-state/tooltip/SnapshotTooltipHost.vue
+  ZERO   frontend/src/views/data-source-run-state/tooltip/tooltipPosition.spec.ts
+  ZERO   frontend/src/views/data-source-run-state/tooltip/tooltipPosition.ts
+  ZERO   frontend/src/views/data-source-run-state/tooltip/useSnapshotTooltip.spec.ts
+  ZERO   frontend/src/views/data-source-run-state/tooltip/useSnapshotTooltip.ts
+  ZERO   frontend/src/views/data-source-run-state/utils/format.spec.ts
+  ZERO   frontend/src/views/data-source-run-state/utils/format.ts
+  ZERO   frontend/src/views/data-source-run-state/utils/rowKey.spec.ts
+  ZERO   frontend/src/views/data-source-run-state/utils/rowKey.ts
+  ZERO   frontend/src/views/data-source-run-state/utils/selection.spec.ts
+  ZERO   frontend/src/views/data-source-run-state/utils/selection.ts
+
+## 5. Other forced zero-diff objects
+  changed_files=0  backend
+  changed_files=0  docs/baseline
+  changed_files=0  CLAUDE.md
+  changed_files=0  frontend/package.json
+  changed_files=0  frontend/package-lock.json
+  changed_files=0  frontend/src/api
+  changed_files=0  frontend/src/router
+  changed_files=0  frontend/src/styles
+  changed_files=0  frontend/src/types
+  changed_files=0  frontend/src/config
+  changed_files=0  frontend/src/stores
+  changed_files=0  frontend/src/layouts
+
+## 6. Untracked files (git status --short --untracked-files=all | grep '^??')
+  ?? docs/features/data-source-snapshot-status/evidence/DATA-SOURCE-SNAPSHOT-STATUS-ACTION-BUTTON-LOADING-VISUAL-STABILITY-IMPLEMENTATION-001-R1/browser/10-strict-matrix-run.txt
+  ?? docs/features/data-source-snapshot-status/evidence/DATA-SOURCE-SNAPSHOT-STATUS-ACTION-BUTTON-LOADING-VISUAL-STABILITY-IMPLEMENTATION-001-R1/browser/11-spot-run.txt
+  ?? docs/features/data-source-snapshot-status/evidence/DATA-SOURCE-SNAPSHOT-STATUS-ACTION-BUTTON-LOADING-VISUAL-STABILITY-IMPLEMENTATION-001-R1/browser/12-singleflight-run.txt
+  ?? docs/features/data-source-snapshot-status/evidence/DATA-SOURCE-SNAPSHOT-STATUS-ACTION-BUTTON-LOADING-VISUAL-STABILITY-IMPLEMENTATION-001-R1/browser/13-strict-whole-rect-analysis.txt
+  ?? docs/features/data-source-snapshot-status/evidence/DATA-SOURCE-SNAPSHOT-STATUS-ACTION-BUTTON-LOADING-VISUAL-STABILITY-IMPLEMENTATION-001-R1/browser/14-shot-run.txt
+  ?? docs/features/data-source-snapshot-status/evidence/DATA-SOURCE-SNAPSHOT-STATUS-ACTION-BUTTON-LOADING-VISUAL-STABILITY-IMPLEMENTATION-001-R1/browser/15-browser-summary.txt
+  ?? docs/features/data-source-snapshot-status/evidence/DATA-SOURCE-SNAPSHOT-STATUS-ACTION-BUTTON-LOADING-VISUAL-STABILITY-IMPLEMENTATION-001-R1/browser/16-per-state-geometry.txt
+  ?? docs/features/data-source-snapshot-status/evidence/DATA-SOURCE-SNAPSHOT-STATUS-ACTION-BUTTON-LOADING-VISUAL-STABILITY-IMPLEMENTATION-001-R1/browser/17-r0-0.95px-closure-1280x800.txt
+  ?? docs/features/data-source-snapshot-status/evidence/DATA-SOURCE-SNAPSHOT-STATUS-ACTION-BUTTON-LOADING-VISUAL-STABILITY-IMPLEMENTATION-001-R1/browser/harness/cdp.mjs
+  ?? docs/features/data-source-snapshot-status/evidence/DATA-SOURCE-SNAPSHOT-STATUS-ACTION-BUTTON-LOADING-VISUAL-STABILITY-IMPLEMENTATION-001-R1/browser/harness/diag-group.mjs
+  ?? docs/features/data-source-snapshot-status/evidence/DATA-SOURCE-SNAPSHOT-STATUS-ACTION-BUTTON-LOADING-VISUAL-STABILITY-IMPLEMENTATION-001-R1/browser/harness/shot.mjs
+  ?? docs/features/data-source-snapshot-status/evidence/DATA-SOURCE-SNAPSHOT-STATUS-ACTION-BUTTON-LOADING-VISUAL-STABILITY-IMPLEMENTATION-001-R1/browser/harness/singleflight.mjs
+  ?? docs/features/data-source-snapshot-status/evidence/DATA-SOURCE-SNAPSHOT-STATUS-ACTION-BUTTON-LOADING-VISUAL-STABILITY-IMPLEMENTATION-001-R1/browser/harness/spot.mjs
+  ?? docs/features/data-source-snapshot-status/evidence/DATA-SOURCE-SNAPSHOT-STATUS-ACTION-BUTTON-LOADING-VISUAL-STABILITY-IMPLEMENTATION-001-R1/browser/harness/strict.mjs
+  ?? docs/features/data-source-snapshot-status/evidence/DATA-SOURCE-SNAPSHOT-STATUS-ACTION-BUTTON-LOADING-VISUAL-STABILITY-IMPLEMENTATION-001-R1/browser/shot-idle-group-1920x1080.png
+  ?? docs/features/data-source-snapshot-status/evidence/DATA-SOURCE-SNAPSHOT-STATUS-ACTION-BUTTON-LOADING-VISUAL-STABILITY-IMPLEMENTATION-001-R1/browser/shot-manual-loading-full-1920x1080.png
+  ?? docs/features/data-source-snapshot-status/evidence/DATA-SOURCE-SNAPSHOT-STATUS-ACTION-BUTTON-LOADING-VISUAL-STABILITY-IMPLEMENTATION-001-R1/browser/shot-manual-loading-group-1920x1080.png
+  ?? docs/features/data-source-snapshot-status/evidence/DATA-SOURCE-SNAPSHOT-STATUS-ACTION-BUTTON-LOADING-VISUAL-STABILITY-IMPLEMENTATION-001-R1/browser/shot-time-141111-group-1920x1080.png
+  ?? docs/features/data-source-snapshot-status/evidence/DATA-SOURCE-SNAPSHOT-STATUS-ACTION-BUTTON-LOADING-VISUAL-STABILITY-IMPLEMENTATION-001-R1/browser/shot-time-dash-group-1920x1080.png
+  ?? docs/features/data-source-snapshot-status/evidence/DATA-SOURCE-SNAPSHOT-STATUS-ACTION-BUTTON-LOADING-VISUAL-STABILITY-IMPLEMENTATION-001-R1/browser/singleflight.json
+  ?? docs/features/data-source-snapshot-status/evidence/DATA-SOURCE-SNAPSHOT-STATUS-ACTION-BUTTON-LOADING-VISUAL-STABILITY-IMPLEMENTATION-001-R1/browser/spot.json
+  ?? docs/features/data-source-snapshot-status/evidence/DATA-SOURCE-SNAPSHOT-STATUS-ACTION-BUTTON-LOADING-VISUAL-STABILITY-IMPLEMENTATION-001-R1/browser/strict-matrix.json
+  ?? docs/features/data-source-snapshot-status/evidence/DATA-SOURCE-SNAPSHOT-STATUS-ACTION-BUTTON-LOADING-VISUAL-STABILITY-IMPLEMENTATION-001-R1/frontend/01-targeted-component-specs.txt
+  ?? docs/features/data-source-snapshot-status/evidence/DATA-SOURCE-SNAPSHOT-STATUS-ACTION-BUTTON-LOADING-VISUAL-STABILITY-IMPLEMENTATION-001-R1/frontend/02-feature-data-source-run-state.txt
+  ?? docs/features/data-source-snapshot-status/evidence/DATA-SOURCE-SNAPSHOT-STATUS-ACTION-BUTTON-LOADING-VISUAL-STABILITY-IMPLEMENTATION-001-R1/frontend/03-frontend-full-vitest.txt
+  ?? docs/features/data-source-snapshot-status/evidence/DATA-SOURCE-SNAPSHOT-STATUS-ACTION-BUTTON-LOADING-VISUAL-STABILITY-IMPLEMENTATION-001-R1/frontend/04-vue-tsc-noemit.txt
+  ?? docs/features/data-source-snapshot-status/evidence/DATA-SOURCE-SNAPSHOT-STATUS-ACTION-BUTTON-LOADING-VISUAL-STABILITY-IMPLEMENTATION-001-R1/frontend/05-frontend-build.txt
+  ?? docs/features/data-source-snapshot-status/evidence/DATA-SOURCE-SNAPSHOT-STATUS-ACTION-BUTTON-LOADING-VISUAL-STABILITY-IMPLEMENTATION-001-R1/git/01-r0-evidence-whitespace-cleanup-proof.txt
+  ?? docs/features/data-source-snapshot-status/evidence/DATA-SOURCE-SNAPSHOT-STATUS-ACTION-BUTTON-LOADING-VISUAL-STABILITY-IMPLEMENTATION-001-R1/git/02-r1-base-and-zero-diff-scope.txt
+  ?? docs/features/data-source-snapshot-status/evidence/DATA-SOURCE-SNAPSHOT-STATUS-ACTION-BUTTON-LOADING-VISUAL-STABILITY-IMPLEMENTATION-001-R1/service/chrome.txt
+  ?? docs/features/data-source-snapshot-status/evidence/DATA-SOURCE-SNAPSHOT-STATUS-ACTION-BUTTON-LOADING-VISUAL-STABILITY-IMPLEMENTATION-001-R1/service/vite-dev.txt
+  # (--untracked-files=all expands the single untracked directory above; every listed path lies
+  #  under .../evidence/...-IMPLEMENTATION-001-R1/ , i.e. the new R1 evidence directory.)
+  # No untracked file exists anywhere else in the worktree.
+  # frontend/node_modules is a worktree-local symlink excluded via .git/info/exclude (line 7: node_modules); it produces no git status entry and no diff.

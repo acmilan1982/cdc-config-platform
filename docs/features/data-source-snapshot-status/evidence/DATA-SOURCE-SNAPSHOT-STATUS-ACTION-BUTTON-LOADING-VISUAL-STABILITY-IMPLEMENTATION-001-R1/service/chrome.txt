@@ -1,0 +1,6 @@
+[0914/185120.832170:WARNING:chrome/app/chrome_main_linux.cc:84] Read channel stable from /opt/google/chrome/CHROME_VERSION_EXTRA
+[5487:5487:0914/185121.282221:ERROR:media/gpu/vaapi/vaapi_wrapper.cc:1658] vaInitialize failed: unknown libva error
+
+DevTools listening on ws://127.0.0.1:9222/devtools/browser/b422ef6e-55b3-4ee5-9847-cabd66b879da
+[5454:5454:0914/185123.270026:ERROR:components/dbus/xdg/request.cc:173] Request ended (non-user cancelled).
+[5454:5454:0914/185421.415600:ERROR:services/on_device_model/public/cpp/service_client.cc:37] Unexpected on_device_model service disconnect; reason: 1, description: Error loading backend.

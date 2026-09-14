@@ -1,0 +1,135 @@
+R1 STRICT WHOLE-RECT MATRIX - real Chromium Chrome/148.0.7778.167
+frontend served from: /agent/dss-abl-impl-001-r1 (R1 result worktree), vite dev 0.0.0.0:5173
+interception: browser-layer Fetch on GET /api/monitor/data-source-run-state/list only (GET-only; no backend/DB/ZK)
+criterion: DSS-AC-113 ORIGINAL strict judgement - the whole .dss-refresh-group rect x/y/width/height must be identical across every state.
+           The R0 substitute criterion ("right anchor edge stable + same timestamp string") is REMOVED and no longer asserted anywhere.
+tolerance : none. Deltas are max-min over the states, rounded to 3 decimals; 0 means exact equality.
+
+viewports: 1280x800 / 1700x920 / 1920x1080 / 2560x1440
+states per viewport (20): TIME_-- / TIME_00:00:00 / TIME_11:11:11 / TIME_14:11:09 / TIME_14:11:10 / TIME_14:11:11 / TIME_23:59:59 / COUNT_60 / COUNT_59 / COUNT_10 / COUNT_9 / COUNT_0 / COUNT_-- / IDLE / MANUAL_LOADING / MANUAL_SUCCESS / MANUAL_FAILURE / QUERY_LOADING / QUERY_SUCCESS / QUERY_FAILURE
+
+== 1280x800 ==
+  refresh_group_rect_delta.x       = 0
+  refresh_group_rect_delta.y       = 0
+  refresh_group_rect_delta.width   = 0
+  refresh_group_rect_delta.height  = 0
+  refresh_time_rect_delta.width    = 0
+  time_value_slot_rect_delta.width = 0
+  time_prefix_rect_delta.width     = 0
+  countdown_seconds_slot_delta.width = 0
+  refresh_btn_rect_delta           = {"x":0,"y":0,"width":0,"height":0}   widths=[110]
+  query_btn_rect_delta             = {"x":0,"y":0,"width":0,"height":0}   widths=[62]
+  refresh_label_center_delta       = {"x":0}
+  query_label_center_delta         = {"x":0}
+  query_actions_rect_delta         = {"x":0,"y":0,"width":0,"height":0}
+  query_bar_rect_delta             = {"x":0,"y":0,"width":0,"height":0}
+  invariants (all must be true):
+      true   reserveTextConstant
+      true   reserveAriaHiddenAlways
+      true   prefixConstant
+      true   nodeCountsStable
+      true   labelsConstant
+      true   spinnersAriaHiddenAlways
+      true   buttonsNeverNativelyDisabled
+      true   refreshSpinnerLitOnlyWhenManual
+      true   querySpinnerLitOnlyWhenQuery
+      true   busyOnlyOnManualLoading
+  time strings covered : ["--","00:00:00","11:11:11","14:11:09","14:11:10","14:11:11","23:59:59","18:55:43"]
+  countdown strings    : ["60","59","10","9","0","--"]
+  reserve text / visibility : ["88:88:88"] / ["hidden"]
+
+== 1700x920 ==
+  refresh_group_rect_delta.x       = 0
+  refresh_group_rect_delta.y       = 0
+  refresh_group_rect_delta.width   = 0
+  refresh_group_rect_delta.height  = 0
+  refresh_time_rect_delta.width    = 0
+  time_value_slot_rect_delta.width = 0
+  time_prefix_rect_delta.width     = 0
+  countdown_seconds_slot_delta.width = 0
+  refresh_btn_rect_delta           = {"x":0,"y":0,"width":0,"height":0}   widths=[110]
+  query_btn_rect_delta             = {"x":0,"y":0,"width":0,"height":0}   widths=[62]
+  refresh_label_center_delta       = {"x":0}
+  query_label_center_delta         = {"x":0}
+  query_actions_rect_delta         = {"x":0,"y":0,"width":0,"height":0}
+  query_bar_rect_delta             = {"x":0,"y":0,"width":0,"height":0}
+  invariants (all must be true):
+      true   reserveTextConstant
+      true   reserveAriaHiddenAlways
+      true   prefixConstant
+      true   nodeCountsStable
+      true   labelsConstant
+      true   spinnersAriaHiddenAlways
+      true   buttonsNeverNativelyDisabled
+      true   refreshSpinnerLitOnlyWhenManual
+      true   querySpinnerLitOnlyWhenQuery
+      true   busyOnlyOnManualLoading
+  time strings covered : ["--","00:00:00","11:11:11","14:11:09","14:11:10","14:11:11","23:59:59","18:55:45"]
+  countdown strings    : ["60","59","10","9","0","--"]
+  reserve text / visibility : ["88:88:88"] / ["hidden"]
+
+== 1920x1080 ==
+  refresh_group_rect_delta.x       = 0
+  refresh_group_rect_delta.y       = 0
+  refresh_group_rect_delta.width   = 0
+  refresh_group_rect_delta.height  = 0
+  refresh_time_rect_delta.width    = 0
+  time_value_slot_rect_delta.width = 0
+  time_prefix_rect_delta.width     = 0
+  countdown_seconds_slot_delta.width = 0
+  refresh_btn_rect_delta           = {"x":0,"y":0,"width":0,"height":0}   widths=[110]
+  query_btn_rect_delta             = {"x":0,"y":0,"width":0,"height":0}   widths=[62]
+  refresh_label_center_delta       = {"x":0}
+  query_label_center_delta         = {"x":0}
+  query_actions_rect_delta         = {"x":0,"y":0,"width":0,"height":0}
+  query_bar_rect_delta             = {"x":0,"y":0,"width":0,"height":0}
+  invariants (all must be true):
+      true   reserveTextConstant
+      true   reserveAriaHiddenAlways
+      true   prefixConstant
+      true   nodeCountsStable
+      true   labelsConstant
+      true   spinnersAriaHiddenAlways
+      true   buttonsNeverNativelyDisabled
+      true   refreshSpinnerLitOnlyWhenManual
+      true   querySpinnerLitOnlyWhenQuery
+      true   busyOnlyOnManualLoading
+  time strings covered : ["--","00:00:00","11:11:11","14:11:09","14:11:10","14:11:11","23:59:59"]
+  countdown strings    : ["60","59","10","9","0","--"]
+  reserve text / visibility : ["88:88:88"] / ["hidden"]
+
+== 2560x1440 ==
+  refresh_group_rect_delta.x       = 0
+  refresh_group_rect_delta.y       = 0
+  refresh_group_rect_delta.width   = 0
+  refresh_group_rect_delta.height  = 0
+  refresh_time_rect_delta.width    = 0
+  time_value_slot_rect_delta.width = 0
+  time_prefix_rect_delta.width     = 0
+  countdown_seconds_slot_delta.width = 0
+  refresh_btn_rect_delta           = {"x":0,"y":0,"width":0,"height":0}   widths=[110]
+  query_btn_rect_delta             = {"x":0,"y":0,"width":0,"height":0}   widths=[62]
+  refresh_label_center_delta       = {"x":0}
+  query_label_center_delta         = {"x":0}
+  query_actions_rect_delta         = {"x":0,"y":0,"width":0,"height":0}
+  query_bar_rect_delta             = {"x":0,"y":0,"width":0,"height":0}
+  invariants (all must be true):
+      true   reserveTextConstant
+      true   reserveAriaHiddenAlways
+      true   prefixConstant
+      true   nodeCountsStable
+      true   labelsConstant
+      true   spinnersAriaHiddenAlways
+      true   buttonsNeverNativelyDisabled
+      true   refreshSpinnerLitOnlyWhenManual
+      true   querySpinnerLitOnlyWhenQuery
+      true   busyOnlyOnManualLoading
+  time strings covered : ["--","00:00:00","11:11:11","14:11:09","14:11:10","14:11:11","23:59:59","18:55:48"]
+  countdown strings    : ["60","59","10","9","0","--"]
+  reserve text / visibility : ["88:88:88"] / ["hidden"]
+
+== global ==
+  requests: total=318 nonGET=0 api=24 apiNonGET=0
+  browser console errors: 0
+  reduced motion: {"normalMediaAnimation":{"refreshSpinner":"dss-action-spin-a581eda5","querySpinner":"dss-action-spin-cd886c8f","ringProgressTransition":"0s"},"reducedMediaAnimation":{"refreshSpinner":"none","querySpinner":"none","ringProgressTransition":"0s"},"reducedLoadingAnimation":{"refreshSpinner":"none","querySpinner":"none","ringProgressTransition":"0s"},"reducedLoadingSpinnerVisible":{"refresh":true,"query":false},"reducedLoadingSpinnerBox":{"x":1742,"y":251.5,"w":12,"h":12},"idleVsReducedIdleSameRect":true,"reducedIdleVsReducedLoadingSameRect":true,"reducedIdleGroup":{"x":1451.28125,"y":241.5,"w":396.71875,"h":32,"vis":"visible","op":"1","disp":"flex"},"reducedLoadingGroup":{"x":1451.28125,"y":241.5,"w":396.71875,"h":32,"vis":"visible","op":"1","disp":"flex"}}
+  other route /monitor/data-source style leak: {"dssNodes":0,"refreshGroup":0,"spinner":0,"actionLabel":0}

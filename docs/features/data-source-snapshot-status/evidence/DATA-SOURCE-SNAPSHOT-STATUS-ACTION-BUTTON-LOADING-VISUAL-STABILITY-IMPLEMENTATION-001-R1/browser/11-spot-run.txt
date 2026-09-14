@@ -1,0 +1,6 @@
+# R1 regression spot-check (§8.4) - raw run log
+cmd: node harness/spot.mjs <out>
+started_at: 2026-09-14T18:55:56+08:00
+WROTE /tmp/abl-r1-out/spot.json checks=18 failed=0 listCalls=5 consoleErrors=0
+FAILED: NONE
+exit=0

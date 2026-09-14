@@ -1,0 +1,87 @@
+# R0 证据文件行尾空白机械清理证明（R1 §9）
+generated_at: 2026-09-14T18:47:27+08:00
+worktree: /agent/dss-abl-impl-001-r1 (detached HEAD fccefbffccac7fbcc7bff039384549c24e0ed45e)
+
+== 1. 复现 ChatGPT 在 R0 提交范围上的 git diff --check ==
+$ git diff --check 9f06725d23d66e845cb5ab1d8d8d4f151401893b fccefbffccac7fbcc7bff039384549c24e0ed45e
+docs/features/data-source-snapshot-status/evidence/DATA-SOURCE-SNAPSHOT-STATUS-ACTION-BUTTON-LOADING-VISUAL-STABILITY-IMPLEMENTATION-001/frontend/01-targeted-component-specs.txt:11: new blank line at EOF.
+docs/features/data-source-snapshot-status/evidence/DATA-SOURCE-SNAPSHOT-STATUS-ACTION-BUTTON-LOADING-VISUAL-STABILITY-IMPLEMENTATION-001/frontend/02-feature-data-source-run-state.txt:22: new blank line at EOF.
+docs/features/data-source-snapshot-status/evidence/DATA-SOURCE-SNAPSHOT-STATUS-ACTION-BUTTON-LOADING-VISUAL-STABILITY-IMPLEMENTATION-001/frontend/03-frontend-full-vitest.txt:69: new blank line at EOF.
+docs/features/data-source-snapshot-status/evidence/DATA-SOURCE-SNAPSHOT-STATUS-ACTION-BUTTON-LOADING-VISUAL-STABILITY-IMPLEMENTATION-001/git/01-base-status.txt:4: trailing whitespace.
++branch: 
+docs/features/data-source-snapshot-status/evidence/DATA-SOURCE-SNAPSHOT-STATUS-ACTION-BUTTON-LOADING-VISUAL-STABILITY-IMPLEMENTATION-001/git/04-frozen-region-proof.txt:24: trailing whitespace.
++1211:> 2026-09-14 纯文档定向纠正（不实现、不执行正式验收）：按 ChatGPT 对 R0 复审结论 `CHANGES_REQUIRED_CURRENT_STATUS_CONSISTENCY_ONLY` 纠正顶部当前状态冲突：`pending_user_review` 当前直接值前置为 `YES`（原 
+docs/features/data-source-snapshot-status/evidence/DATA-SOURCE-SNAPSHOT-STATUS-ACTION-BUTTON-LOADING-VISUAL-STABILITY-IMPLEMENTATION-001/service/final-service-state.txt:7: trailing whitespace.
++LISTEN 0      511          0.0.0.0:5173       0.0.0.0:*   
+docs/features/data-source-snapshot-status/evidence/DATA-SOURCE-SNAPSHOT-STATUS-ACTION-BUTTON-LOADING-VISUAL-STABILITY-IMPLEMENTATION-001/service/final-service-state.txt:23: trailing whitespace.
++  17382 /opt/google/chrome/chrome --headless=new --no-sandbox --disable-gpu --disable-dev-shm-usage 
+docs/features/data-source-snapshot-status/evidence/DATA-SOURCE-SNAPSHOT-STATUS-ACTION-BUTTON-LOADING-VISUAL-STABILITY-IMPLEMENTATION-001/service/port-process-http.txt:13: trailing whitespace.
++node /agent/dss-abl-impl-001/frontend/node_modules/.bin/vite --host 0.0.0.0 --port 5173 
+docs/features/data-source-snapshot-status/evidence/DATA-SOURCE-SNAPSHOT-STATUS-ACTION-BUTTON-LOADING-VISUAL-STABILITY-IMPLEMENTATION-001/service/port-process-http.txt:16: trailing whitespace.
++/opt/google/chrome/chrome --headless=new --no-sandbox --disable-gpu --disable-dev-shm-usage --hide-scrollbars --no-first-run --no-default-browser-check --no-proxy-server --proxy-bypass-list=* --force-device-scale-factor=1 --remote-debugging-port=9222 --user-data-dir=/tmp/abl-cdp/profile --window-size=1920,1080 --no-sandbox --noerrdialogs --ozone-platform=headless --ozone-override-screen-size=800,600 --use-angle=swiftshader-webgl about:blank 
+docs/features/data-source-snapshot-status/evidence/DATA-SOURCE-SNAPSHOT-STATUS-ACTION-BUTTON-LOADING-VISUAL-STABILITY-IMPLEMENTATION-001/service/port-process-http.txt:26: trailing whitespace.
++LISTEN 0      511          0.0.0.0:5173       0.0.0.0:*   
+docs/features/data-source-snapshot-status/evidence/DATA-SOURCE-SNAPSHOT-STATUS-ACTION-BUTTON-LOADING-VISUAL-STABILITY-IMPLEMENTATION-001/service/port-process-http.txt:27: trailing whitespace.
++LISTEN 0      4096       127.0.0.1:7891       0.0.0.0:*   
+docs/features/data-source-snapshot-status/evidence/DATA-SOURCE-SNAPSHOT-STATUS-ACTION-BUTTON-LOADING-VISUAL-STABILITY-IMPLEMENTATION-001/service/port-process-http.txt:28: trailing whitespace.
++LISTEN 0      4096       127.0.0.1:7890       0.0.0.0:*   
+docs/features/data-source-snapshot-status/evidence/DATA-SOURCE-SNAPSHOT-STATUS-ACTION-BUTTON-LOADING-VISUAL-STABILITY-IMPLEMENTATION-001/service/port-process-http.txt:29: trailing whitespace.
++LISTEN 0      4096       127.0.0.1:7893       0.0.0.0:*   
+docs/features/data-source-snapshot-status/evidence/DATA-SOURCE-SNAPSHOT-STATUS-ACTION-BUTTON-LOADING-VISUAL-STABILITY-IMPLEMENTATION-001/service/port-process-http.txt:30: trailing whitespace.
++LISTEN 0      128        127.0.0.1:6010       0.0.0.0:*   
+docs/features/data-source-snapshot-status/evidence/DATA-SOURCE-SNAPSHOT-STATUS-ACTION-BUTTON-LOADING-VISUAL-STABILITY-IMPLEMENTATION-001/service/port-process-http.txt:31: trailing whitespace.
++LISTEN 0      511        127.0.0.1:18792      0.0.0.0:*   
+docs/features/data-source-snapshot-status/evidence/DATA-SOURCE-SNAPSHOT-STATUS-ACTION-BUTTON-LOADING-VISUAL-STABILITY-IMPLEMENTATION-001/service/port-process-http.txt:32: trailing whitespace.
++LISTEN 0      511        127.0.0.1:18791      0.0.0.0:*   
+docs/features/data-source-snapshot-status/evidence/DATA-SOURCE-SNAPSHOT-STATUS-ACTION-BUTTON-LOADING-VISUAL-STABILITY-IMPLEMENTATION-001/service/port-process-http.txt:33: trailing whitespace.
++LISTEN 0      511        127.0.0.1:18789      0.0.0.0:*   
+docs/features/data-source-snapshot-status/evidence/DATA-SOURCE-SNAPSHOT-STATUS-ACTION-BUTTON-LOADING-VISUAL-STABILITY-IMPLEMENTATION-001/service/port-process-http.txt:34: trailing whitespace.
++LISTEN 0      128          0.0.0.0:22         0.0.0.0:*   
+docs/features/data-source-snapshot-status/evidence/DATA-SOURCE-SNAPSHOT-STATUS-ACTION-BUTTON-LOADING-VISUAL-STABILITY-IMPLEMENTATION-001/service/port-process-http.txt:35: trailing whitespace.
++LISTEN 0      4096       127.0.0.1:631        0.0.0.0:*   
+docs/features/data-source-snapshot-status/evidence/DATA-SOURCE-SNAPSHOT-STATUS-ACTION-BUTTON-LOADING-VISUAL-STABILITY-IMPLEMENTATION-001/service/port-process-http.txt:36: trailing whitespace.
++LISTEN 0      4096       127.0.0.1:9090       0.0.0.0:*   
+docs/features/data-source-snapshot-status/evidence/DATA-SOURCE-SNAPSHOT-STATUS-ACTION-BUTTON-LOADING-VISUAL-STABILITY-IMPLEMENTATION-001/service/port-process-http.txt:37: trailing whitespace.
++LISTEN 0      10         127.0.0.1:9222       0.0.0.0:*   
+docs/features/data-source-snapshot-status/evidence/DATA-SOURCE-SNAPSHOT-STATUS-ACTION-BUTTON-LOADING-VISUAL-STABILITY-IMPLEMENTATION-001/service/port-process-http.txt:38: trailing whitespace.
++LISTEN 0      511            [::1]:18789         [::]:*   
+docs/features/data-source-snapshot-status/evidence/DATA-SOURCE-SNAPSHOT-STATUS-ACTION-BUTTON-LOADING-VISUAL-STABILITY-IMPLEMENTATION-001/service/port-process-http.txt:39: trailing whitespace.
++LISTEN 0      4096           [::1]:631           [::]:*   
+docs/features/data-source-snapshot-status/evidence/DATA-SOURCE-SNAPSHOT-STATUS-ACTION-BUTTON-LOADING-VISUAL-STABILITY-IMPLEMENTATION-001/service/port-process-http.txt:40: trailing whitespace.
++LISTEN 0      128             [::]:22            [::]:*   
+docs/features/data-source-snapshot-status/evidence/DATA-SOURCE-SNAPSHOT-STATUS-ACTION-BUTTON-LOADING-VISUAL-STABILITY-IMPLEMENTATION-001/service/port-process-http.txt:41: trailing whitespace.
++LISTEN 0      128            [::1]:6010          [::]:*   
+exit=2
+命中文件数=7
+
+== 2. 机械清理后：相对 R0 结果提交 fccefbf 的差异（--numstat，必须仅这 7 个文件）==
+$ git diff --numstat -- docs/features/data-source-snapshot-status/evidence/DATA-SOURCE-SNAPSHOT-STATUS-ACTION-BUTTON-LOADING-VISUAL-STABILITY-IMPLEMENTATION-001
+0	1	docs/features/data-source-snapshot-status/evidence/DATA-SOURCE-SNAPSHOT-STATUS-ACTION-BUTTON-LOADING-VISUAL-STABILITY-IMPLEMENTATION-001/frontend/01-targeted-component-specs.txt
+0	1	docs/features/data-source-snapshot-status/evidence/DATA-SOURCE-SNAPSHOT-STATUS-ACTION-BUTTON-LOADING-VISUAL-STABILITY-IMPLEMENTATION-001/frontend/02-feature-data-source-run-state.txt
+0	1	docs/features/data-source-snapshot-status/evidence/DATA-SOURCE-SNAPSHOT-STATUS-ACTION-BUTTON-LOADING-VISUAL-STABILITY-IMPLEMENTATION-001/frontend/03-frontend-full-vitest.txt
+1	1	docs/features/data-source-snapshot-status/evidence/DATA-SOURCE-SNAPSHOT-STATUS-ACTION-BUTTON-LOADING-VISUAL-STABILITY-IMPLEMENTATION-001/git/01-base-status.txt
+1	1	docs/features/data-source-snapshot-status/evidence/DATA-SOURCE-SNAPSHOT-STATUS-ACTION-BUTTON-LOADING-VISUAL-STABILITY-IMPLEMENTATION-001/git/04-frozen-region-proof.txt
+2	2	docs/features/data-source-snapshot-status/evidence/DATA-SOURCE-SNAPSHOT-STATUS-ACTION-BUTTON-LOADING-VISUAL-STABILITY-IMPLEMENTATION-001/service/final-service-state.txt
+18	18	docs/features/data-source-snapshot-status/evidence/DATA-SOURCE-SNAPSHOT-STATUS-ACTION-BUTTON-LOADING-VISUAL-STABILITY-IMPLEMENTATION-001/service/port-process-http.txt
+
+== 3. 机械清理后：忽略行内空白 + 忽略空行的差异（必须为 0 行 = 业务内容零变化）==
+$ git diff --ignore-all-space --ignore-blank-lines -- <R0 evidence dir> | wc -l
+0
+
+== 4. 逐文件行数 / 非空行数 / 清理类型 ==
+file                                           type     lines b->a     nonblank   sha256(before)->sha256(after)
+frontend/01-targeted-component-specs.txt       eof_blank_only 12->11         7->7       addf065cb377->040ff0ac51a9
+frontend/02-feature-data-source-run-state.txt  eof_blank_only 23->22         18->18     84796d2a526d->614cfbf84e45
+frontend/03-frontend-full-vitest.txt           eof_blank_only 70->69         63->63     a059439a88e3->d5ca16514f9f
+git/01-base-status.txt                         trailing_ws_only 58->58         55->55     36f802ada28c->ec624427d051
+git/04-frozen-region-proof.txt                 trailing_ws_only 49->49         44->44     3c67d4ba712b->850a9fbe6e3d
+service/final-service-state.txt                trailing_ws_only 32->32         23->23     00b4d31cd926->4b055b14e527
+service/port-process-http.txt                  trailing_ws_only 49->49         45->45     e4f30f9d5c30->89f35fe80e96
+
+== 5. 结论 ==
+1) R0 提交范围 9f06725d23d6..fccefbffccac 的真实 git diff --check 退出码为 2（非 CLEAN），命中 7 个文件；
+   R0 报告中「git diff --check=CLEAN」与提交事实不符，R1 在 R0 报告中以追加方式更正，未改写原文。
+2) 本清理为纯行尾空白机械清理：3 个文件仅删除多余 EOF 空行，4 个文件仅删除行尾空白/制表符。
+3) 行内容、顺序、数值、命令、退出码均未改变：忽略行内空白与空行的差异为 0 行；
+   全部文件非空行数不变；未改写或伪造任何日志内容。
+4) 未触碰 R0 其余证据文件（--numstat 仅列出上述 7 个）。

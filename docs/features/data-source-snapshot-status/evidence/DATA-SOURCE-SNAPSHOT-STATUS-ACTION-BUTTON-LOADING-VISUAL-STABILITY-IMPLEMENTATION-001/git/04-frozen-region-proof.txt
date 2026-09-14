@@ -21,7 +21,7 @@ docs/features/data-source-snapshot-status/DATABASE.md: rows=0 changed=0 []
 622:### 14.3 验收 → 设计落点矩阵（113/113）（2026-09-14 操作按钮 Loading 视觉稳定性草案把追踪更新为 113/113；原文“（107/107）”为 2026-09-14 本轮草案提出前的历史表述）
 703:覆盖：113/113；无悬空验收。本轮（2026-09-14 操作按钮 Loading 视觉稳定性草案）新增验收 `DSS-AC-108~113` 共 6 条（全部 `NOT_RUN`）反向映射到 `DSS-REQ-088`/`DSS-REQ-089`（映射矩阵见 `ACCEPTANCE.md` §5），设计落
 1206:- **追踪更新**：本节对应新增需求 `DSS-REQ-088`/`DSS-REQ-089`（REQUIREMENTS §21.9）与新增验收 `DSS-AC-108~113`（ACCEPTANCE §4.23，全部 `NOT_RUN`）。§14.2 更新为 89/89、§14.3 更新为 113/113，
-1211:> 2026-09-14 纯文档定向纠正（不实现、不执行正式验收）：按 ChatGPT 对 R0 复审结论 `CHANGES_REQUIRED_CURRENT_STATUS_CONSISTENCY_ONLY` 纠正顶部当前状态冲突：`pending_user_review` 当前直接值前置为 `YES`（原 
+1211:> 2026-09-14 纯文档定向纠正（不实现、不执行正式验收）：按 ChatGPT 对 R0 复审结论 `CHANGES_REQUIRED_CURRENT_STATUS_CONSISTENCY_ONLY` 纠正顶部当前状态冲突：`pending_user_review` 当前直接值前置为 `YES`（原
 1215:> 2026-09-14 纯文档、极小定向事实一致性纠正（不实现、不执行正式验收、不改代码/契约）。ChatGPT 从远程 Git 对批准收口提交 `a43b45b0d2e8312c859d231fdfe3ed3505d209d6` 的复审结论为 `CHANGES_REQUIRED_DOCUMENT_CURR
 1217:> 操作按钮 Loading 视觉稳定性前端实现记录（2026-09-14，`DATA-SOURCE-SNAPSHOT-STATUS-ACTION-BUTTON-LOADING-VISUAL-STABILITY-IMPLEMENTATION-001`，前端正式实现 + 自动化测试 + 构建 + 真实浏览器开发
 

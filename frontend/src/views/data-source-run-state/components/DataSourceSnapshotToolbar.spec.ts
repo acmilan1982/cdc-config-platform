@@ -45,6 +45,17 @@ function directChildren(wrapper: ReturnType<typeof mountToolbar>) {
   return Array.from(group(wrapper).element.children) as HTMLElement[]
 }
 
+/**
+ * 「最近成功刷新」的可见正文 = 固定前缀文本 + 可见 actual 文本。
+ * 定宽槽位内另有 aria-hidden 的常量 reserve（88:88:88），它只占位、不显示、不参与读屏，
+ * 因此不能用整节点 textContent 断言可见正文（R1 §5.2 / §7.1）。
+ */
+function visibleTimeText(el: HTMLElement): string {
+  const prefix = el.querySelector('.dss-refresh-time-prefix')?.textContent ?? ''
+  const actual = el.querySelector('.dss-refresh-time-actual')?.textContent ?? ''
+  return `${prefix}${actual}`
+}
+
 const RING_LENGTH = 2 * Math.PI * 6.5
 
 describe('DataSourceSnapshotToolbar 内容与固定顺序（UI §13.3，R2 §9.1）', () => {
@@ -57,7 +68,7 @@ describe('DataSourceSnapshotToolbar 内容与固定顺序（UI §13.3，R2 §9.1
     expect(children[3].classList.contains('dss-refresh-time')).toBe(true)
     expect(children[4].classList.contains('dss-refresh-btn')).toBe(true)
     expect(children[1].textContent).toBe('60 秒后自动刷新')
-    expect(children[3].textContent).toBe('最近成功刷新：10:11:12')
+    expect(visibleTimeText(children[3])).toBe('最近成功刷新：10:11:12')
     expect(children[4].textContent).toContain('立即刷新')
     // 静态灰点已移除（R2 §9.1 用倒计时环替换）
     expect(wrapper.find('.dss-refresh-dot').exists()).toBe(false)
@@ -66,7 +77,7 @@ describe('DataSourceSnapshotToolbar 内容与固定顺序（UI §13.3，R2 §9.1
 
   it('从未成功刷新时“最近成功刷新：--”（页面空值占位，不出现空时间）', () => {
     const wrapper = mountToolbar({ lastRefreshText: '--' })
-    expect(directChildren(wrapper)[3].textContent).toBe('最近成功刷新：--')
+    expect(visibleTimeText(directChildren(wrapper)[3])).toBe('最近成功刷新：--')
     wrapper.unmount()
   })
 
@@ -116,10 +127,18 @@ describe('DataSourceSnapshotToolbar 倒计时环与可见秒数（R2 §9.1，装
     wNone.unmount()
   })
 
-  it('秒数占位固定 2ch + tabular-nums；reduced-motion 关闭 progress 过渡但仍保留静态正确进度', () => {
+  it('秒数占位固定 2ch 槽位 + tabular-nums；reduced-motion 关闭 progress 过渡但仍保留静态正确进度', () => {
     const src = SRC()
-    expect(src).toMatch(/\.dss-countdown-seconds\s*\{[^}]*min-width:\s*2ch[^}]*\}/)
-    expect(src).toMatch(/\.dss-countdown-seconds\s*\{[^}]*font-variant-numeric:\s*tabular-nums[^}]*\}/)
+    const rule = src.match(/\.dss-countdown-seconds\s*\{[^}]*\}/s)?.[0] ?? ''
+    expect(rule).not.toBe('')
+    // R1 §5.3：width / min-width / max-width / flex-basis 四值同锁 2ch，盒宽恒定（不再只靠 min-width 兜底）
+    expect(rule).toMatch(/width:\s*2ch/)
+    expect(rule).toMatch(/min-width:\s*2ch/)
+    expect(rule).toMatch(/max-width:\s*2ch/)
+    expect(rule).toMatch(/flex-basis:\s*2ch/)
+    expect(rule).toMatch(/box-sizing:\s*border-box/)
+    expect(rule).toMatch(/text-align:\s*right/)
+    expect(rule).toMatch(/font-variant-numeric:\s*tabular-nums/)
     expect(src).toMatch(/@media \(prefers-reduced-motion: reduce\)\s*\{[^}]*transition:\s*none/)
   })
 
@@ -129,6 +148,96 @@ describe('DataSourceSnapshotToolbar 倒计时环与可见秒数（R2 §9.1，装
     expect(btn.find('.dss-countdown-ring').exists()).toBe(false)
     expect(btn.find('.dss-countdown-text').exists()).toBe(false)
     wrapper.unmount()
+  })
+})
+
+describe('DataSourceSnapshotToolbar 时间值定宽槽位（R1 §5.2 / §7.1，DSS-AC-113 全矩形 0px 判据）', () => {
+  const TIMES = ['--', '00:00:00', '11:11:11', '14:11:09', '14:11:10', '14:11:11', '23:59:59']
+
+  it('固定前缀与可见时间值拆为独立子节点：prefix=“最近成功刷新：”，actual=真实时间值', () => {
+    const wrapper = mountToolbar({ lastRefreshText: '14:11:11' })
+    const time = directChildren(wrapper)[3]
+    expect(time.querySelector('.dss-refresh-time-prefix')?.textContent).toBe('最近成功刷新：')
+    expect(time.querySelector('.dss-refresh-time-actual')?.textContent).toBe('14:11:11')
+    wrapper.unmount()
+  })
+
+  it('reserve 为常量节点 88:88:88，不可见语义（visibility:hidden）且 aria-hidden=true、不出现在可见正文', () => {
+    const wrapper = mountToolbar({ lastRefreshText: '14:11:11' })
+    const reserve = directChildren(wrapper)[3].querySelector('.dss-refresh-time-reserve')
+    expect(reserve).not.toBeNull()
+    expect(reserve?.textContent).toBe('88:88:88')
+    expect(reserve?.getAttribute('aria-hidden')).toBe('true')
+    expect(visibleTimeText(directChildren(wrapper)[3])).toBe('最近成功刷新：14:11:11')
+    wrapper.unmount()
+  })
+
+  it('reserve 常驻且内容恒定：在 -- 与多个不同数字组合时间值之间切换，占位节点不增删、文本不变', () => {
+    const domShape = (v: string) => {
+      const wrapper = mountToolbar({ lastRefreshText: v })
+      const time = directChildren(wrapper)[3]
+      const shape = {
+        children: Array.from(time.children).map((c) => (c as HTMLElement).className),
+        valueChildren: Array.from(time.querySelector('.dss-refresh-time-value')?.children ?? []).map(
+          (c) => (c as HTMLElement).className,
+        ),
+        reserve: time.querySelector('.dss-refresh-time-reserve')?.textContent,
+        reserveHidden: time.querySelector('.dss-refresh-time-reserve')?.getAttribute('aria-hidden'),
+        actualCount: time.querySelectorAll('.dss-refresh-time-actual').length,
+        reserveCount: time.querySelectorAll('.dss-refresh-time-reserve').length,
+      }
+      wrapper.unmount()
+      return shape
+    }
+    const base = domShape('--')
+    for (const v of TIMES) {
+      expect(domShape(v)).toEqual(base)
+    }
+    expect(base.reserve).toBe('88:88:88')
+    expect(base.reserveHidden).toBe('true')
+    expect(base.actualCount).toBe(1)
+    expect(base.reserveCount).toBe(1)
+  })
+
+  it('可见正文严格为“最近成功刷新：{{ lastRefreshText }}”，全部时间取值均不泄漏 reserve 文本', () => {
+    for (const v of TIMES) {
+      const wrapper = mountToolbar({ lastRefreshText: v })
+      expect(visibleTimeText(directChildren(wrapper)[3])).toBe(`最近成功刷新：${v}`)
+      wrapper.unmount()
+    }
+  })
+
+  it('源码静态契约：槽位定宽靠常量 reserve；actual 绝对定位脱离内容流；无 JS 测宽 / 观察器 / !important / 全局覆盖', () => {
+    const src = SRC()
+    const valueRule = src.match(/\.dss-refresh-time-value\s*\{[^}]*\}/s)?.[0] ?? ''
+    const reserveRule = src.match(/\.dss-refresh-time-reserve\s*\{[^}]*\}/s)?.[0] ?? ''
+    const actualRule = src.match(/\.dss-refresh-time-actual\s*\{[^}]*\}/s)?.[0] ?? ''
+    expect(valueRule).not.toBe('')
+    expect(reserveRule).not.toBe('')
+    expect(actualRule).not.toBe('')
+    // 槽位包含块：相对定位 + inline-block（宽度由流内 reserve 决定）
+    expect(valueRule).toMatch(/position:\s*relative/)
+    expect(valueRule).toMatch(/display:\s*inline-block/)
+    // reserve 必须占位（visibility:hidden 而非 display:none），且不得可见
+    expect(reserveRule).toMatch(/visibility:\s*hidden/)
+    expect(reserveRule).not.toMatch(/display:\s*none/)
+    // actual 绝对定位于槽位左上，脱离内容流，不推动相邻元素
+    expect(actualRule).toMatch(/position:\s*absolute/)
+    expect(actualRule).toMatch(/left:\s*0/)
+    expect(actualRule).toMatch(/top:\s*0/)
+    // 纯 CSS 方案：不引入 JS 测宽 / 尺寸观察器 / 轮询 / 强制样式 / 全局覆盖
+    expect(src).not.toMatch(/!important/)
+    expect(src).not.toMatch(/ResizeObserver/)
+    expect(src).not.toMatch(/requestAnimationFrame/)
+    expect(src).not.toMatch(/offsetWidth|clientWidth|getBoundingClientRect/)
+    expect(src).not.toMatch(/(^|\n)\s*\.el-/)
+    expect(src).not.toMatch(/:root/)
+  })
+
+  it('不改变时间值字体与页面现有文字视觉：不使用等宽字体族，不新增 font-family 声明', () => {
+    const src = SRC()
+    expect(src).not.toMatch(/font-family/)
+    expect(src).not.toMatch(/monospace/)
   })
 })
 

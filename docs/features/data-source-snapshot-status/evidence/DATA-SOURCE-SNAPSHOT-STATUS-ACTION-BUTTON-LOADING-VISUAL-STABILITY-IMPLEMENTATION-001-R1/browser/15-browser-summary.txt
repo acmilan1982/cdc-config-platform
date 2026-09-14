@@ -1,0 +1,79 @@
+ACTION-BUTTON LOADING VISUAL STABILITY - R1 real-Chromium self-test summary
+frontend served from: /agent/dss-abl-impl-001-r1 (R1 task result worktree), vite dev 0.0.0.0:5173
+chromium: Chrome/148.0.7778.167 headless=new, CDP over the global WebSocket, no extra npm install
+interception: browser-layer Fetch on GET /api/monitor/data-source-run-state/list only (GET-only; no backend, no DB, no ZooKeeper)
+
+== A. STRICT WHOLE-RECT MATRIX (criterion = DSS-AC-113 original strict judgement; R0 substitute REMOVED) ==
+   4 viewports x 20 states = 80 measured states; tolerance = none.
+   states: TIME_-- / TIME_00:00:00 / TIME_11:11:11 / TIME_14:11:09 / TIME_14:11:10 / TIME_14:11:11 / TIME_23:59:59 / COUNT_60 / COUNT_59 / COUNT_10 / COUNT_9 / COUNT_0 / COUNT_-- / IDLE / MANUAL_LOADING / MANUAL_SUCCESS / MANUAL_FAILURE / QUERY_LOADING / QUERY_SUCCESS / QUERY_FAILURE
+  1280x800  group delta x=0 y=0 w=0 h=0
+            time slot delta.w=0; refresh-time delta.w=0; countdown seconds slot delta.w=0
+            refresh btn w=[110] delta={"x":0,"y":0,"width":0,"height":0} label center delta={"x":0}
+            query   btn w=[62] delta={"x":0,"y":0,"width":0,"height":0} label center delta={"x":0}
+            query actions delta={"x":0,"y":0,"width":0,"height":0}; query bar delta={"x":0,"y":0,"width":0,"height":0}
+            time strings covered: ["--","00:00:00","11:11:11","14:11:09","14:11:10","14:11:11","23:59:59","18:55:43"]
+            countdown strings covered: ["60","59","10","9","0","--"]
+            invariants all true: true
+  1700x920  group delta x=0 y=0 w=0 h=0
+            time slot delta.w=0; refresh-time delta.w=0; countdown seconds slot delta.w=0
+            refresh btn w=[110] delta={"x":0,"y":0,"width":0,"height":0} label center delta={"x":0}
+            query   btn w=[62] delta={"x":0,"y":0,"width":0,"height":0} label center delta={"x":0}
+            query actions delta={"x":0,"y":0,"width":0,"height":0}; query bar delta={"x":0,"y":0,"width":0,"height":0}
+            time strings covered: ["--","00:00:00","11:11:11","14:11:09","14:11:10","14:11:11","23:59:59","18:55:45"]
+            countdown strings covered: ["60","59","10","9","0","--"]
+            invariants all true: true
+  1920x1080 group delta x=0 y=0 w=0 h=0
+            time slot delta.w=0; refresh-time delta.w=0; countdown seconds slot delta.w=0
+            refresh btn w=[110] delta={"x":0,"y":0,"width":0,"height":0} label center delta={"x":0}
+            query   btn w=[62] delta={"x":0,"y":0,"width":0,"height":0} label center delta={"x":0}
+            query actions delta={"x":0,"y":0,"width":0,"height":0}; query bar delta={"x":0,"y":0,"width":0,"height":0}
+            time strings covered: ["--","00:00:00","11:11:11","14:11:09","14:11:10","14:11:11","23:59:59"]
+            countdown strings covered: ["60","59","10","9","0","--"]
+            invariants all true: true
+  2560x1440 group delta x=0 y=0 w=0 h=0
+            time slot delta.w=0; refresh-time delta.w=0; countdown seconds slot delta.w=0
+            refresh btn w=[110] delta={"x":0,"y":0,"width":0,"height":0} label center delta={"x":0}
+            query   btn w=[62] delta={"x":0,"y":0,"width":0,"height":0} label center delta={"x":0}
+            query actions delta={"x":0,"y":0,"width":0,"height":0}; query bar delta={"x":0,"y":0,"width":0,"height":0}
+            time strings covered: ["--","00:00:00","11:11:11","14:11:09","14:11:10","14:11:11","23:59:59","18:55:48"]
+            countdown strings covered: ["60","59","10","9","0","--"]
+            invariants all true: true
+  requests total=318 nonGET=0 apiNonGET=0; console errors=0
+  reduced motion: media-normal animation=dss-action-spin-a581eda5 -> media-reduce animation=none; indicator still visible while Loading=true; idle-vs-reducedIdle same rect=true; reducedIdle-vs-reducedLoading same rect=true
+  other route /monitor/data-source dss-* leak: {"dssNodes":0,"refreshGroup":0,"spinner":0,"actionLabel":0}
+
+== B. single-flight / duplicate defence ==
+  PASS  manual in-flight: exactly 1 list GET despite 3x refresh + 3x query + 2x Enter
+  PASS  manual in-flight: refresh aria-busy=true, query aria-disabled=true
+  PASS  manual in-flight: neither button natively disabled
+  PASS  manual in-flight: refresh indicator lit, query indicator unlit
+  PASS  query in-flight: exactly 1 list GET despite 3x query + 3x refresh + 1x Enter
+  PASS  query in-flight: query aria-disabled=true, refresh aria-disabled=true
+  PASS  query in-flight: query indicator lit, refresh indicator unlit
+  PASS  query in-flight: neither button natively disabled
+  PASS  all intercepted calls are GET
+  PASS  browser console errors = 0
+  methods: {"total":3,"nonGet":0,"nonGetSamples":[]}; console errors=0
+
+== C. §8.4 regression spot-check (1920x1080) ==
+  PASS  popper dss-client-popper width = 480px
+  PASS  popper dss-source-popper width = 400px
+  PASS  popper dss-status-popper width = 240px
+  PASS  c3 option desc truncated to 20 code points + "..."
+  PASS  short option desc not truncated, no ellipsis
+  PASS  truncated option hover shows .dss-q-tt with full 25-cp desc
+  PASS  non-truncated option shows no tooltip
+  PASS  multi-select query serializes repeated clientId params
+  PASS  selected tag shows 20-cp truncated label but keeps raw identity
+  PASS  selected-tag hover shows full-desc tooltip
+  PASS  single selection serializes exactly one clientId
+  PASS  table CLIENT_DESC tooltip unchanged (full raw desc)
+  PASS  failure keeps previous result rows
+  PASS  failure keeps 最近成功刷新 and shows收敛 warning
+  PASS  countdown freezes while page hidden (no 假走)
+  PASS  resume-visible triggers exactly 1 restore GET
+  PASS  restore must not light either action indicator
+  PASS  countdown restarts after resume
+  list calls: [{"method":"GET","url":"http://127.0.0.1:5173/api/monitor/data-source-run-state/list","action":"ok"},{"method":"GET","url":"http://127.0.0.1:5173/api/monitor/data-source-run-state/list?clientId=c1&clientId=c2","action":"held"},{"method":"GET","url":"http://127.0.0.1:5173/api/monitor/data-source-run-state/list?clientId=c3","action":"held"},{"method":"GET","url":"http://127.0.0.1:5173/api/monitor/data-source-run-state/list?clientId=c3","action":"held"},{"method":"GET","url":"http://127.0.0.1:5173/api/monitor/data-source-run-state/list?clientId=c3","action":"held"}]
+
+FAILS: matrix=NONE singleflight=NONE spot=NONE

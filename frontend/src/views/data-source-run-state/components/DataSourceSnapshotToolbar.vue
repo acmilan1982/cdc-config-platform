@@ -14,12 +14,21 @@
         :style="{ strokeDashoffset: ringDashOffset }"
       ></circle>
     </svg>
-    <!-- 倒计时文字：秒数占位宽度固定（tabular 2ch，60→9 不移动“最近成功刷新”与按钮 x 坐标） -->
+    <!-- 倒计时文字：秒数为固定 2ch 槽位（width/min/max 同锁，60→9 / -- 不移动“最近成功刷新”与按钮 x 坐标） -->
     <span class="dss-countdown-text">
       <span class="dss-countdown-seconds">{{ secondsText }}</span> <span class="dss-countdown-unit">秒后自动刷新</span>
     </span>
     <span class="dss-refresh-sep" aria-hidden="true"></span>
-    <span class="dss-refresh-time">最近成功刷新：{{ lastRefreshText }}</span>
+    <!-- 固定前缀 + 常驻定宽时间值槽位（DSS-AC-113 / R1 §5.2）：正文严格为“最近成功刷新：{{ lastRefreshText }}”。
+         reserve 常驻但不可见（visibility:hidden + aria-hidden），仅用于占定值宽度；actual 绝对定位于同一槽位左上，
+         因此槽位宽度只由常量 reserve 决定，与真实时间字符串的字形宽度无关（比例数字字体下尤为必要）。 -->
+    <span class="dss-refresh-time">
+      <span class="dss-refresh-time-prefix">最近成功刷新：</span>
+      <span class="dss-refresh-time-value">
+        <span class="dss-refresh-time-reserve" aria-hidden="true">88:88:88</span>
+        <span class="dss-refresh-time-actual">{{ lastRefreshText }}</span>
+      </span>
+    </span>
     <!-- “立即刷新”：白底细边框次级按钮（R5 §5）；固定宽度；被功能阻断时视觉稳定。
          Loading 视觉（DSS-REQ-089 / DESIGN §31 / UI §25）：相对定位容器 + 常驻绝对定位 Feature 私有指示器
          + 独立固定居中文字标签节点；仅 kind=manual 点亮指示器，否则在按钮内容流内显隐而不改变几何。 -->
@@ -48,7 +57,9 @@ const RING_LENGTH = 2 * Math.PI * RING_RADIUS
  * 秒数取整、环形进度同向递减；无已安排周期（首载/从未成功/隐藏暂停前）显示占位 --。
  * 整组作为单一 flex/flow 项靠右；窄宽度下由结果卡片头部整组换行，不允许只把按钮拆到下一行。
  * 按钮白底细边框次级（R5 §5，不抢黑色“查询”主按钮），loading/禁用仍可读；
- * 三态几何稳定：按钮固定宽度、秒数 2ch 占位，均不推动前方文案/后方按钮坐标。
+ * 三态几何稳定：按钮固定宽度、秒数固定 2ch 槽位，均不推动前方文案/后方按钮坐标。
+ * 时间值槽位（R1 §5.2）：前缀与时间值拆为独立子节点，时间值由常驻 reserve 常量占位定宽、actual 绝对定位
+ * 显示真实值，使整组几何不随“最近成功刷新”时间字符串变化（DSS-AC-113 全矩形 0px 判据）。
  */
 const props = defineProps<{
   /** “最近成功刷新：HH:mm:ss”；从未成功显示 --（UI §13.3）。 */
@@ -120,10 +131,15 @@ function onRefresh(): void {
 .dss-countdown-text {
   white-space: nowrap;
 }
-/* 秒数固定 2ch 占位：60/59/9/-- 宽度恒定，后缀与后方元素 x 坐标不变 */
+/* 秒数固定 2ch 槽位（R1 §5.3）：width / min-width / max-width / flex-basis 四值同锁 2ch，
+   box-sizing:border-box 使 1px 级内容差异不外溢；60/59/10/9/0/-- 盒宽恒定，后缀与后方元素 x 坐标不变。 */
 .dss-countdown-seconds {
   display: inline-block;
+  width: 2ch;
   min-width: 2ch;
+  max-width: 2ch;
+  flex-basis: 2ch;
+  box-sizing: border-box;
   text-align: right;
   font-variant-numeric: tabular-nums;
 }
@@ -137,6 +153,26 @@ function onRefresh(): void {
   background: var(--dss-divider, #f0f0f1);
 }
 .dss-refresh-time {
+  white-space: nowrap;
+}
+/* 定宽时间值槽位（R1 §5.2）：包含块为相对定位的 inline-block，宽度完全由常驻 reserve 常量文本决定。
+   actual 绝对定位（left/top:0），脱离内容流：无论时间字符串为 --、HH:mm:ss 还是不同数字组合，
+   槽位盒宽恒定，故整个刷新信息组 x/y/width/height 不随“最近成功刷新”时间变化而位移。 */
+.dss-refresh-time-value {
+  position: relative;
+  display: inline-block;
+  white-space: nowrap;
+}
+/* 常量占位：不可见但必须占位（visibility:hidden 而非 display:none）。不参与读屏（aria-hidden）。 */
+.dss-refresh-time-reserve {
+  visibility: hidden;
+  font-variant-numeric: tabular-nums;
+}
+/* 可见时间值：与 reserve 同一布局单元，绝对定位于槽位左上，不推动任何相邻元素。 */
+.dss-refresh-time-actual {
+  position: absolute;
+  left: 0;
+  top: 0;
   white-space: nowrap;
   font-variant-numeric: tabular-nums;
 }

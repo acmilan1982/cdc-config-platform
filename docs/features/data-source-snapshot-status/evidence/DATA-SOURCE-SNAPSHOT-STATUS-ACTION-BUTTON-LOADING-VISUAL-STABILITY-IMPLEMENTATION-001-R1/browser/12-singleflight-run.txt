@@ -1,0 +1,15 @@
+# R1 single-flight / duplicate defence - raw run log
+cmd: node harness/singleflight.mjs <out>
+started_at: 2026-09-14T18:56:13+08:00
+PASS  manual in-flight: exactly 1 list GET despite 3x refresh + 3x query + 2x Enter  {"state":{"refreshBusy":"true","refreshDisabled":"true","queryDisabled":"true","refreshNativeDisabled":false,"queryNativeDisabled":false,"refreshSpinnerLit":true,"querySpinnerLit":false},"listCallsDuringWindow":1}
+PASS  manual in-flight: refresh aria-busy=true, query aria-disabled=true  {"refreshBusy":"true","refreshDisabled":"true","queryDisabled":"true","refreshNativeDisabled":false,"queryNativeDisabled":false,"refreshSpinnerLit":true,"querySpinnerLit":false}
+PASS  manual in-flight: neither button natively disabled  {"refreshBusy":"true","refreshDisabled":"true","queryDisabled":"true","refreshNativeDisabled":false,"queryNativeDisabled":false,"refreshSpinnerLit":true,"querySpinnerLit":false}
+PASS  manual in-flight: refresh indicator lit, query indicator unlit  {"refreshBusy":"true","refreshDisabled":"true","queryDisabled":"true","refreshNativeDisabled":false,"queryNativeDisabled":false,"refreshSpinnerLit":true,"querySpinnerLit":false}
+PASS  query in-flight: exactly 1 list GET despite 3x query + 3x refresh + 1x Enter  {"state":{"refreshDisabled":"true","queryDisabled":"true","refreshSpinnerLit":false,"querySpinnerLit":true,"refreshNativeDisabled":false,"queryNativeDisabled":false},"listCallsDuringWindow":1}
+PASS  query in-flight: query aria-disabled=true, refresh aria-disabled=true  {"refreshDisabled":"true","queryDisabled":"true","refreshSpinnerLit":false,"querySpinnerLit":true,"refreshNativeDisabled":false,"queryNativeDisabled":false}
+PASS  query in-flight: query indicator lit, refresh indicator unlit  {"refreshDisabled":"true","queryDisabled":"true","refreshSpinnerLit":false,"querySpinnerLit":true,"refreshNativeDisabled":false,"queryNativeDisabled":false}
+PASS  query in-flight: neither button natively disabled  {"refreshDisabled":"true","queryDisabled":"true","refreshSpinnerLit":false,"querySpinnerLit":true,"refreshNativeDisabled":false,"queryNativeDisabled":false}
+PASS  all intercepted calls are GET  {"total":3,"nonGet":0,"nonGetSamples":[]}
+PASS  browser console errors = 0  []
+FAILED: NONE
+exit=0

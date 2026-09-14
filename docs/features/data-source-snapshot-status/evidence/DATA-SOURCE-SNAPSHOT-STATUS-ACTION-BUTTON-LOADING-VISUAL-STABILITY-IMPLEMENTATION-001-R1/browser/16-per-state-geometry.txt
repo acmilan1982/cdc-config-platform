@@ -1,0 +1,142 @@
+R1 per-state geometry detail (proves the fixed slots are font/glyph independent)
+source: strict-matrix.json; deltas and widths in CSS px, unrounded values as reported by getBoundingClientRect()
+
+== 1280x800 (group w/const, time slot w, countdown slot w) ==
+  group width set          : [396.71875]
+  group x set              : [811.28125]
+  .dss-refresh-time w set  : [141.625]
+  time value slot w set    : [50.609375]
+  time reserve w set       : [50.609375]
+  time prefix w set        : [91.015625]
+  hidden reserve rect set  : [{"w":50.609375,"vis":"hidden"}]
+  countdown slot w set     : [14.453125]
+  refresh btn w set        : [110]
+  query btn w set          : [62]
+  query bar h set          : [70]
+  state           timeActual  secs groupW     timeSlotW  groupX
+  TIME_--         --          60   396.71875  50.609375  811.28125
+  TIME_00:00:00   00:00:00    60   396.71875  50.609375  811.28125
+  TIME_11:11:11   11:11:11    60   396.71875  50.609375  811.28125
+  TIME_14:11:09   14:11:09    60   396.71875  50.609375  811.28125
+  TIME_14:11:10   14:11:10    60   396.71875  50.609375  811.28125
+  TIME_14:11:11   14:11:11    60   396.71875  50.609375  811.28125
+  TIME_23:59:59   23:59:59    60   396.71875  50.609375  811.28125
+  COUNT_60        14:11:11    60   396.71875  50.609375  811.28125
+  COUNT_59        14:11:11    59   396.71875  50.609375  811.28125
+  COUNT_10        14:11:11    10   396.71875  50.609375  811.28125
+  COUNT_9         14:11:11    9    396.71875  50.609375  811.28125
+  COUNT_0         14:11:11    0    396.71875  50.609375  811.28125
+  COUNT_--        14:11:11    --   396.71875  50.609375  811.28125
+  IDLE            14:11:11    --   396.71875  50.609375  811.28125
+  MANUAL_LOADING  14:11:11    --   396.71875  50.609375  811.28125
+  MANUAL_SUCCESS  18:55:43    --   396.71875  50.609375  811.28125
+  MANUAL_FAILURE  18:55:43    --   396.71875  50.609375  811.28125
+  QUERY_LOADING   18:55:43    --   396.71875  50.609375  811.28125
+  QUERY_SUCCESS   18:55:43    --   396.71875  50.609375  811.28125
+  QUERY_FAILURE   18:55:43    --   396.71875  50.609375  811.28125
+
+== 1700x920 (group w/const, time slot w, countdown slot w) ==
+  group width set          : [396.71875]
+  group x set              : [1231.28125]
+  .dss-refresh-time w set  : [141.625]
+  time value slot w set    : [50.609375]
+  time reserve w set       : [50.609375]
+  time prefix w set        : [91.015625]
+  hidden reserve rect set  : [{"w":50.609375,"vis":"hidden"}]
+  countdown slot w set     : [14.453125]
+  refresh btn w set        : [110]
+  query btn w set          : [62]
+  query bar h set          : [32]
+  state           timeActual  secs groupW     timeSlotW  groupX
+  TIME_--         --          60   396.71875  50.609375  1231.28125
+  TIME_00:00:00   00:00:00    60   396.71875  50.609375  1231.28125
+  TIME_11:11:11   11:11:11    60   396.71875  50.609375  1231.28125
+  TIME_14:11:09   14:11:09    60   396.71875  50.609375  1231.28125
+  TIME_14:11:10   14:11:10    60   396.71875  50.609375  1231.28125
+  TIME_14:11:11   14:11:11    60   396.71875  50.609375  1231.28125
+  TIME_23:59:59   23:59:59    60   396.71875  50.609375  1231.28125
+  COUNT_60        14:11:11    60   396.71875  50.609375  1231.28125
+  COUNT_59        14:11:11    59   396.71875  50.609375  1231.28125
+  COUNT_10        14:11:11    10   396.71875  50.609375  1231.28125
+  COUNT_9         14:11:11    9    396.71875  50.609375  1231.28125
+  COUNT_0         14:11:11    0    396.71875  50.609375  1231.28125
+  COUNT_--        14:11:11    --   396.71875  50.609375  1231.28125
+  IDLE            14:11:11    --   396.71875  50.609375  1231.28125
+  MANUAL_LOADING  14:11:11    --   396.71875  50.609375  1231.28125
+  MANUAL_SUCCESS  14:11:11    --   396.71875  50.609375  1231.28125
+  MANUAL_FAILURE  14:11:11    --   396.71875  50.609375  1231.28125
+  QUERY_LOADING   14:11:11    --   396.71875  50.609375  1231.28125
+  QUERY_SUCCESS   18:55:45    --   396.71875  50.609375  1231.28125
+  QUERY_FAILURE   18:55:45    --   396.71875  50.609375  1231.28125
+
+== 1920x1080 (group w/const, time slot w, countdown slot w) ==
+  group width set          : [396.71875]
+  group x set              : [1451.28125]
+  .dss-refresh-time w set  : [141.625]
+  time value slot w set    : [50.609375]
+  time reserve w set       : [50.609375]
+  time prefix w set        : [91.015625]
+  hidden reserve rect set  : [{"w":50.609375,"vis":"hidden"}]
+  countdown slot w set     : [14.453125]
+  refresh btn w set        : [110]
+  query btn w set          : [62]
+  query bar h set          : [32]
+  state           timeActual  secs groupW     timeSlotW  groupX
+  TIME_--         --          60   396.71875  50.609375  1451.28125
+  TIME_00:00:00   00:00:00    60   396.71875  50.609375  1451.28125
+  TIME_11:11:11   11:11:11    60   396.71875  50.609375  1451.28125
+  TIME_14:11:09   14:11:09    60   396.71875  50.609375  1451.28125
+  TIME_14:11:10   14:11:10    60   396.71875  50.609375  1451.28125
+  TIME_14:11:11   14:11:11    60   396.71875  50.609375  1451.28125
+  TIME_23:59:59   23:59:59    60   396.71875  50.609375  1451.28125
+  COUNT_60        14:11:11    60   396.71875  50.609375  1451.28125
+  COUNT_59        14:11:11    59   396.71875  50.609375  1451.28125
+  COUNT_10        14:11:11    10   396.71875  50.609375  1451.28125
+  COUNT_9         14:11:11    9    396.71875  50.609375  1451.28125
+  COUNT_0         14:11:11    0    396.71875  50.609375  1451.28125
+  COUNT_--        14:11:11    --   396.71875  50.609375  1451.28125
+  IDLE            14:11:11    --   396.71875  50.609375  1451.28125
+  MANUAL_LOADING  14:11:11    --   396.71875  50.609375  1451.28125
+  MANUAL_SUCCESS  14:11:11    --   396.71875  50.609375  1451.28125
+  MANUAL_FAILURE  14:11:11    --   396.71875  50.609375  1451.28125
+  QUERY_LOADING   14:11:11    --   396.71875  50.609375  1451.28125
+  QUERY_SUCCESS   14:11:11    --   396.71875  50.609375  1451.28125
+  QUERY_FAILURE   14:11:11    --   396.71875  50.609375  1451.28125
+
+== 2560x1440 (group w/const, time slot w, countdown slot w) ==
+  group width set          : [396.71875]
+  group x set              : [2091.28125]
+  .dss-refresh-time w set  : [141.625]
+  time value slot w set    : [50.609375]
+  time reserve w set       : [50.609375]
+  time prefix w set        : [91.015625]
+  hidden reserve rect set  : [{"w":50.609375,"vis":"hidden"}]
+  countdown slot w set     : [14.453125]
+  refresh btn w set        : [110]
+  query btn w set          : [62]
+  query bar h set          : [32]
+  state           timeActual  secs groupW     timeSlotW  groupX
+  TIME_--         --          60   396.71875  50.609375  2091.28125
+  TIME_00:00:00   00:00:00    60   396.71875  50.609375  2091.28125
+  TIME_11:11:11   11:11:11    60   396.71875  50.609375  2091.28125
+  TIME_14:11:09   14:11:09    60   396.71875  50.609375  2091.28125
+  TIME_14:11:10   14:11:10    60   396.71875  50.609375  2091.28125
+  TIME_14:11:11   14:11:11    60   396.71875  50.609375  2091.28125
+  TIME_23:59:59   23:59:59    60   396.71875  50.609375  2091.28125
+  COUNT_60        14:11:11    60   396.71875  50.609375  2091.28125
+  COUNT_59        14:11:11    59   396.71875  50.609375  2091.28125
+  COUNT_10        14:11:11    10   396.71875  50.609375  2091.28125
+  COUNT_9         14:11:11    9    396.71875  50.609375  2091.28125
+  COUNT_0         14:11:11    0    396.71875  50.609375  2091.28125
+  COUNT_--        14:11:11    --   396.71875  50.609375  2091.28125
+  IDLE            14:11:11    --   396.71875  50.609375  2091.28125
+  MANUAL_LOADING  14:11:11    --   396.71875  50.609375  2091.28125
+  MANUAL_SUCCESS  18:55:48    --   396.71875  50.609375  2091.28125
+  MANUAL_FAILURE  18:55:48    --   396.71875  50.609375  2091.28125
+  QUERY_LOADING   18:55:48    --   396.71875  50.609375  2091.28125
+  QUERY_SUCCESS   18:55:48    --   396.71875  50.609375  2091.28125
+  QUERY_FAILURE   18:55:48    --   396.71875  50.609375  2091.28125
+
+NOTE: the hidden reserve (88:88:88, visibility:hidden, aria-hidden=true) never changes width and is never visible in any state;
+      the visible time value is absolutely positioned inside the same slot, so slot width is set by the constant reserve only,
+      which is why every time string incl. -- and the post-success real update yields the identical slot/group rect.

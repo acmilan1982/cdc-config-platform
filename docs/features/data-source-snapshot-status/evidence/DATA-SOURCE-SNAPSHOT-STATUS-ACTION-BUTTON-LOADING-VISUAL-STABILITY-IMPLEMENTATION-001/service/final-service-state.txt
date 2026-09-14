@@ -4,7 +4,7 @@ worktree served from: /agent/dss-abl-impl-001 (this task's isolated worktree, de
 NOT served from: /agent/cdc-config-platform (main worktree preserved at 4222b0a)
 
 -- port 5173 listener --
-LISTEN 0      511          0.0.0.0:5173       0.0.0.0:*   
+LISTEN 0      511          0.0.0.0:5173       0.0.0.0:*
 
 -- vite process --
     PID    PPID     ELAPSED CMD
@@ -20,7 +20,7 @@ http://127.0.0.1:5173/monitor/data-source-state -> 200
 http://192.168.174.70:5173/monitor/data-source-state -> 200
 
 -- headless chrome (harness only) --
-  17382 /opt/google/chrome/chrome --headless=new --no-sandbox --disable-gpu --disable-dev-shm-usage 
+  17382 /opt/google/chrome/chrome --headless=new --no-sandbox --disable-gpu --disable-dev-shm-usage
 
 -- access URL for project owner --
 http://192.168.174.70:5173/monitor/data-source-state

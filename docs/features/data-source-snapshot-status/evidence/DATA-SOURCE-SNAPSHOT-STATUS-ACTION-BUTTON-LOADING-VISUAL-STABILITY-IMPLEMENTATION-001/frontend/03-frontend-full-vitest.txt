@@ -66,4 +66,3 @@ async-validator: [ 'serviceName is required' ]
       Tests  848 passed (848)
    Start at  14:16:43
    Duration  75.10s (transform 5.42s, setup 315ms, collect 49.13s, tests 113.52s, environment 37.50s, prepare 8.26s)
-

@@ -1,0 +1,155 @@
+{
+  "results": {
+    "whileManualLoading": {
+      "state": {
+        "refreshBusy": "true",
+        "refreshDisabled": "true",
+        "queryDisabled": "true",
+        "refreshNativeDisabled": false,
+        "queryNativeDisabled": false,
+        "refreshSpinnerLit": true,
+        "querySpinnerLit": false
+      },
+      "listCallsDuringWindow": 1
+    },
+    "whileQueryLoading": {
+      "state": {
+        "refreshDisabled": "true",
+        "queryDisabled": "true",
+        "refreshSpinnerLit": false,
+        "querySpinnerLit": true,
+        "refreshNativeDisabled": false,
+        "queryNativeDisabled": false
+      },
+      "listCallsDuringWindow": 1
+    },
+    "methods": {
+      "total": 3,
+      "nonGet": 0,
+      "nonGetSamples": []
+    },
+    "consoleErrors": []
+  },
+  "checks": [
+    {
+      "name": "manual in-flight: exactly 1 list GET despite 3x refresh + 3x query + 2x Enter",
+      "pass": true,
+      "detail": {
+        "state": {
+          "refreshBusy": "true",
+          "refreshDisabled": "true",
+          "queryDisabled": "true",
+          "refreshNativeDisabled": false,
+          "queryNativeDisabled": false,
+          "refreshSpinnerLit": true,
+          "querySpinnerLit": false
+        },
+        "listCallsDuringWindow": 1
+      }
+    },
+    {
+      "name": "manual in-flight: refresh aria-busy=true, query aria-disabled=true",
+      "pass": true,
+      "detail": {
+        "refreshBusy": "true",
+        "refreshDisabled": "true",
+        "queryDisabled": "true",
+        "refreshNativeDisabled": false,
+        "queryNativeDisabled": false,
+        "refreshSpinnerLit": true,
+        "querySpinnerLit": false
+      }
+    },
+    {
+      "name": "manual in-flight: neither button natively disabled",
+      "pass": true,
+      "detail": {
+        "refreshBusy": "true",
+        "refreshDisabled": "true",
+        "queryDisabled": "true",
+        "refreshNativeDisabled": false,
+        "queryNativeDisabled": false,
+        "refreshSpinnerLit": true,
+        "querySpinnerLit": false
+      }
+    },
+    {
+      "name": "manual in-flight: refresh indicator lit, query indicator unlit",
+      "pass": true,
+      "detail": {
+        "refreshBusy": "true",
+        "refreshDisabled": "true",
+        "queryDisabled": "true",
+        "refreshNativeDisabled": false,
+        "queryNativeDisabled": false,
+        "refreshSpinnerLit": true,
+        "querySpinnerLit": false
+      }
+    },
+    {
+      "name": "query in-flight: exactly 1 list GET despite 3x query + 3x refresh + 1x Enter",
+      "pass": true,
+      "detail": {
+        "state": {
+          "refreshDisabled": "true",
+          "queryDisabled": "true",
+          "refreshSpinnerLit": false,
+          "querySpinnerLit": true,
+          "refreshNativeDisabled": false,
+          "queryNativeDisabled": false
+        },
+        "listCallsDuringWindow": 1
+      }
+    },
+    {
+      "name": "query in-flight: query aria-disabled=true, refresh aria-disabled=true",
+      "pass": true,
+      "detail": {
+        "refreshDisabled": "true",
+        "queryDisabled": "true",
+        "refreshSpinnerLit": false,
+        "querySpinnerLit": true,
+        "refreshNativeDisabled": false,
+        "queryNativeDisabled": false
+      }
+    },
+    {
+      "name": "query in-flight: query indicator lit, refresh indicator unlit",
+      "pass": true,
+      "detail": {
+        "refreshDisabled": "true",
+        "queryDisabled": "true",
+        "refreshSpinnerLit": false,
+        "querySpinnerLit": true,
+        "refreshNativeDisabled": false,
+        "queryNativeDisabled": false
+      }
+    },
+    {
+      "name": "query in-flight: neither button natively disabled",
+      "pass": true,
+      "detail": {
+        "refreshDisabled": "true",
+        "queryDisabled": "true",
+        "refreshSpinnerLit": false,
+        "querySpinnerLit": true,
+        "refreshNativeDisabled": false,
+        "queryNativeDisabled": false
+      }
+    },
+    {
+      "name": "all intercepted calls are GET",
+      "pass": true,
+      "detail": {
+        "total": 3,
+        "nonGet": 0,
+        "nonGetSamples": []
+      }
+    },
+    {
+      "name": "browser console errors = 0",
+      "pass": true,
+      "detail": []
+    }
+  ]
+}

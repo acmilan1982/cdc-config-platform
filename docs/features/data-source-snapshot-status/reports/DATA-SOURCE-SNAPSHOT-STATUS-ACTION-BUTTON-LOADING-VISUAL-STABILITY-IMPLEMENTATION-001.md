@@ -155,3 +155,36 @@
 - 当前下一入口：`CHATGPT_ACTION_BUTTON_LOADING_VISUAL_STABILITY_IMPLEMENTATION_REVIEW_FROM_GIT_THEN_PROJECT_OWNER_VISUAL_INTERACTION_REVIEW`
 - 即：先由 ChatGPT 从远程 Git 对本次提交做独立代码与证据复审，再由项目负责人做人工视觉/交互检查。
 - 本任务**未**自宣代码复审通过、**未**执行项目负责人人工检查、**未**正式执行 `DSS-AC-108~113`（该 6 条仍为 `NOT_RUN`），**未**把本轮写成 `IMPLEMENTED_ACCEPTED`/`ACCEPTED`/`COMPLETED`。
+
+---
+
+## 附录 A：ChatGPT 对 R0 的复审更正记录（R1 追加，2026-09-14）
+
+> 本节为 **DATA-SOURCE-SNAPSHOT-STATUS-ACTION-BUTTON-LOADING-VISUAL-STABILITY-IMPLEMENTATION-001-R1** 任务对 R0 报告的**追加更正**。上方 §1~§10 原文（含其原始字节）保持不变，作为历史记录保留；本节不修改原文前缀，仅补充 R0 远程 Git 复审结论与事实更正。
+
+- 远程 Git 复审对象：R0 提交 `fccefbffccac7fbcc7bff039384549c24e0ed45e`（父提交 `9f06725d23d66e845cb5ab1d8d8d4f151401893b`）。
+- 复审结论：`CHANGES_REQUIRED`。R0 的按钮 Loading 核心实现（两按钮脱离 Element Plus 默认 Loading 内容流、Feature 私有常驻绝对定位指示器、独立标签节点、62px/110px 定宽、`aria-*` 与事件去重、reduced-motion 保留）经复审确认方向正确并保留；但整体代码复审结论为 `CHANGES_REQUIRED`，原因为下方三项事实问题。
+
+### A.1 更正一：R0 报告的 `git diff --check=CLEAN` 与提交事实不符
+
+- §1 第 5 条与 §8 相关表述声称 R0 提交的 `git diff --check` 为 `CLEAN`（退出码 0）。
+- 复审方在 `9f06725d23d66e845cb5ab1d8d8d4f151401893b..fccefbffccac7fbcc7bff039384549c24e0ed45e` 范围实测 `git diff --check` 返回码为 **2**，命中 **7** 个新增证据文件（行尾空白 / 文件尾多余空行）。
+- 更正：R0 报告的 `git diff --check=CLEAN` **不符合提交事实**。R1 已对这 7 个文件仅做**空白机械清理**（行内容、顺序、数值、命令、退出码不变，非空白内容逐字节一致），并在 R1 证据 `git/01-r0-evidence-whitespace-cleanup-proof.txt` 中给出清理前后逐文件行数/非空行数/sha256 与 `--ignore-all-space --ignore-blank-lines` 零差异证明；清理后自原始实现基准 `9f06725d...` 至 R1 结果提交的 `git diff --check` 真实返回 0。
+
+### A.2 更正二：`adjacent_controls_position_delta_px=0` 未覆盖刷新信息组左沿 0.95px 事实
+
+- §6 表内“邻近控件（查询/重置组）位移 `0.0px`”仅覆盖查询/重置组，未覆盖“刷新信息组”自身的边缘位移。
+- 复审方指出 R0 在 `1280×800` 档实测 `.dss-refresh-group` 左沿 `812.25px → 813.20px`，位移 `0.953px`，成因是“最近成功刷新：HH:mm:ss”文本在 `:11` 与 `:09/:10` 之间的字形宽度差（`140.641px` vs `139.688px`）。
+- 更正：R0 报告的 `adjacent_controls_position_delta_px=0` **未覆盖**刷新信息组左沿 `0.95px` 事实；该事实虽已在 R0 报告 §6 末段以“唯一非零几何量”注记，但不满足已批准的 `DSS-AC-113` 判据。
+
+### A.3 更正三：R0 分析器“右锚点 + 同时间文本”替代判据不符合 DSS-AC-113
+
+- 已批准的 `DSS-AC-113` 直接判据为：“「刷新信息组」的位置与相邻控件 `x/y` 最大位移为 `0px`”，即**整矩形**零位移。
+- R0 分析器将该判据替换为“右锚定边零位移 + 相同时间戳文本 ⇒ 相同组几何”的替代判据，属对验收判据的**自行放宽**，不符合 `DSS-AC-113`。
+- 更正：R1 **恢复并满足严格的全矩形判据**——以 `.dss-refresh-group` 的 `x/y/width/height` 在 `--`、多个合法 `HH:mm:ss`、不同位数字时间、刷新成功时间更新前后、查询/手动 Loading 成功失败、倒计时 `60/59/10/9/0/--` 等状态下逐一实测，四视口 `refresh_group_rect_delta.x/y/width/height` 全部为 `0px`；R1 未通过放大小数容差取得通过，也未修改需求/验收文档迎合实现。
+
+### A.4 更正后的整体结论
+
+- R0 按钮核心实现**通过部分保留**（R1 未回退、未放宽）。
+- R0 整体代码复审结论为 **`CHANGES_REQUIRED`**；R1 针对上述 A.1/A.2/A.3 完成更正后，重新交由 ChatGPT 从远程 Git 复审，再由项目负责人做人工视觉/交互检查。
+- 本更正记录不改变 `DSS-AC-108~113` 的状态：在 R1 结束时该 6 条仍为 `NOT_RUN`。

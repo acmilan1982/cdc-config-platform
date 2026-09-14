@@ -65,3 +65,17 @@ git/       Git 现场与范围/零差异证明
 | 其他路由样式泄漏 | `/monitor/data-source` 上 `dss-*` 节点 `0` | 同上 |
 | 回归抽查 | 18/18 通过（popper 480/400/240、截断、Tooltip、重复查询参数、失败保留旧数据、隐形冻结/恢复） | `browser/spot.json` + `14-browser-spot.log` |
 | 唯一非零几何量 | 刷新信息组左缘 `0.95px`（`1280×800`），成因=既有“最近成功刷新 HH:mm:ss”文本宽度差，锚定右缘位移 `0`，与 Loading 无关 | `browser/16-refresh-group-diagnosis.txt` |
+
+---
+
+## 更正索引（R1 追加，2026-09-14）
+
+> 本节由 **DATA-SOURCE-SNAPSHOT-STATUS-ACTION-BUTTON-LOADING-VISUAL-STABILITY-IMPLEMENTATION-001-R1** 追加；上方原文（含其原始字节）保持不变，作为历史记录保留。
+
+- 本目录（R0 证据）经 ChatGPT 远程 Git 复审后结论为 **`CHANGES_REQUIRED`**：
+  - 本目录 7 个文本文件（`frontend/01-targeted-component-specs.txt`、`frontend/02-feature-data-source-run-state.txt`、`frontend/03-frontend-full-vitest.txt`、`git/01-base-status.txt`、`git/04-frozen-region-proof.txt`、`service/final-service-state.txt`、`service/port-process-http.txt`）经实测 `git diff --check` 返回码 2；R1 已仅做**空白机械清理**（非空白内容逐字节不变），清理证明见 R1 证据 `git/01-r0-evidence-whitespace-cleanup-proof.txt`。
+  - 本目录 `browser/16-refresh-group-diagnosis.txt` 记录的刷新信息组左沿 `0.95px` 事实，已被 R1 以定宽时间值槽位 + 固定 2ch 秒数槽位修复至四视口 `0px`。
+- R0 报告更正记录：`reports/DATA-SOURCE-SNAPSHOT-STATUS-ACTION-BUTTON-LOADING-VISUAL-STABILITY-IMPLEMENTATION-001.md` 附录 A（追加）。
+- R1 实现报告：`reports/DATA-SOURCE-SNAPSHOT-STATUS-ACTION-BUTTON-LOADING-VISUAL-STABILITY-IMPLEMENTATION-001-R1.md`
+- R1 证据目录：`evidence/DATA-SOURCE-SNAPSHOT-STATUS-ACTION-BUTTON-LOADING-VISUAL-STABILITY-IMPLEMENTATION-001-R1/`
+- R1 结束时 `DSS-AC-108~113` 仍为 `NOT_RUN`（本目录开发自测证据不代表正式验收）。

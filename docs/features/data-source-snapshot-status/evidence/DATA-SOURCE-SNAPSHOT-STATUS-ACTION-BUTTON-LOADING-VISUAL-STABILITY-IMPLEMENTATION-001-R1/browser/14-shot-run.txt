@@ -1,0 +1,5 @@
+# R1 视觉截图采集 - raw run log
+cmd: node harness/shot.mjs <out>
+started_at: 2026-09-14T18:56:18+08:00
+shots written to /tmp/abl-r1-out
+exit=0
