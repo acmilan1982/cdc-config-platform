@@ -1,0 +1,2 @@
+WROTE /tmp/abl-cdp/out/spot.json checks=18 failed=0 listCalls=5 consoleErrors=0
+FAILED: NONE

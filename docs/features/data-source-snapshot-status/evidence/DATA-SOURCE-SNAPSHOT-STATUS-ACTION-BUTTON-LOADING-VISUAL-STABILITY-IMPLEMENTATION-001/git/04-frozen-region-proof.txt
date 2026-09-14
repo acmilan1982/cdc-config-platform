@@ -1,0 +1,48 @@
+# 冻结区域逐字节不变证明
+generated_at: 2026-09-14T14:28:06+08:00
+== DSS-REQ / DSS-AC business rows byte-identity (vs git HEAD) ==
+docs/features/README.md: rows=0 changed=0 []
+docs/features/data-source-snapshot-status/README.md: rows=0 changed=0 []
+docs/features/data-source-snapshot-status/REQUIREMENTS.md: rows=89 changed=0 []
+docs/features/data-source-snapshot-status/ACCEPTANCE.md: rows=164 changed=0 []
+docs/features/data-source-snapshot-status/DESIGN.md: rows=115 changed=0 []
+docs/features/data-source-snapshot-status/UI.md: rows=0 changed=0 []
+docs/features/data-source-snapshot-status/API.md: rows=0 changed=0 []
+docs/features/data-source-snapshot-status/DATABASE.md: rows=0 changed=0 []
+
+== DSS-AC status column tally (must be PASS 107 / NOT_RUN 6) ==
+      6 NOT_RUN
+    107 PASS
+
+== DESIGN §14.2 / §14.3 coverage stats lines ==
+84:| 操作按钮 Loading 视觉稳定性文档分层状态（本轮 `DATA-SOURCE-SNAPSHOT-STATUS-ACTION-BUTTON-LOADING-VISUAL-STABILITY-BASELINE-001`，2026-09-14；已由 `DATA-SOURCE-SNAPSHOT-STATUS-AC
+564:### 14.2 需求 → 设计落点矩阵（89/89）
+620:覆盖：89/89；无悬空需求。本轮（2026-09-14 操作按钮 Loading 视觉稳定性草案）新增需求 `DSS-REQ-088`/`DSS-REQ-089` 的设计落点为本文件 §31 与 UI §25（对应 `DSS-AC-108~113`，全部 `NOT_RUN`）；原“覆盖：87/87；无悬空需求
+622:### 14.3 验收 → 设计落点矩阵（113/113）（2026-09-14 操作按钮 Loading 视觉稳定性草案把追踪更新为 113/113；原文“（107/107）”为 2026-09-14 本轮草案提出前的历史表述）
+703:覆盖：113/113；无悬空验收。本轮（2026-09-14 操作按钮 Loading 视觉稳定性草案）新增验收 `DSS-AC-108~113` 共 6 条（全部 `NOT_RUN`）反向映射到 `DSS-REQ-088`/`DSS-REQ-089`（映射矩阵见 `ACCEPTANCE.md` §5），设计落
+1206:- **追踪更新**：本节对应新增需求 `DSS-REQ-088`/`DSS-REQ-089`（REQUIREMENTS §21.9）与新增验收 `DSS-AC-108~113`（ACCEPTANCE §4.23，全部 `NOT_RUN`）。§14.2 更新为 89/89、§14.3 更新为 113/113，
+1211:> 2026-09-14 纯文档定向纠正（不实现、不执行正式验收）：按 ChatGPT 对 R0 复审结论 `CHANGES_REQUIRED_CURRENT_STATUS_CONSISTENCY_ONLY` 纠正顶部当前状态冲突：`pending_user_review` 当前直接值前置为 `YES`（原 
+1215:> 2026-09-14 纯文档、极小定向事实一致性纠正（不实现、不执行正式验收、不改代码/契约）。ChatGPT 从远程 Git 对批准收口提交 `a43b45b0d2e8312c859d231fdfe3ed3505d209d6` 的复审结论为 `CHANGES_REQUIRED_DOCUMENT_CURR
+1217:> 操作按钮 Loading 视觉稳定性前端实现记录（2026-09-14，`DATA-SOURCE-SNAPSHOT-STATUS-ACTION-BUTTON-LOADING-VISUAL-STABILITY-IMPLEMENTATION-001`，前端正式实现 + 自动化测试 + 构建 + 真实浏览器开发
+
+== changed line ranges: DESIGN (§31 metadata only) / UI (§25 metadata only) ==
+@@ -18,2 +18,2 @@
+@@ -61 +61 @@
+@@ -72 +72 @@
+@@ -81 +81 @@
+@@ -84 +84 @@
+@@ -1207 +1207 @@ ChatGPT 对上一结果提交（`31aa9f5beec7ded3cd798b3af617fd79a1606ed0`）进
+@@ -1215 +1215,3 @@ ChatGPT 对上一结果提交（`31aa9f5beec7ded3cd798b3af617fd79a1606ed0`）进
+@@ -61 +61 @@
+@@ -70 +70 @@
+@@ -74 +74 @@
+@@ -842 +842 @@ ChatGPT 对上一结果提交（`31aa9f5beec7ded3cd798b3af617fd79a1606ed0`）正
+@@ -850 +850,3 @@ ChatGPT 对上一结果提交（`31aa9f5beec7ded3cd798b3af617fd79a1606ed0`）正
+
+== changed line ranges: API / DATABASE (§1 only) ==
+@@ -17 +17 @@
+@@ -22 +22 @@
+@@ -364 +364,3 @@ GET /api/monitor/data-source-run-state/list?status=RUNNING&status=FORBIDDEN_STAT
+@@ -16 +16 @@
+@@ -21 +21 @@
+@@ -254 +254,3 @@ FROM CDC_DATA_SOURCE

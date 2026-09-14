@@ -1,0 +1,6 @@
+# 远程同步前置检查（push 前复核）
+generated_at: 2026-09-14T14:28:07+08:00
+local HEAD        : 9f06725d23d66e845cb5ab1d8d8d4f151401893b
+origin/develop    : 9f06725d23d66e845cb5ab1d8d8d4f151401893b
+ls-remote develop : 9f06725d23d66e845cb5ab1d8d8d4f151401893b	refs/heads/develop
+ahead/behind      : 0	0

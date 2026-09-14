@@ -1,0 +1,5 @@
+[17419:17419:0914/140653.471572:ERROR:media/gpu/vaapi/vaapi_wrapper.cc:1658] vaInitialize failed: unknown libva error
+
+DevTools listening on ws://127.0.0.1:9222/devtools/browser/2c50ff83-da5a-4bdf-94b6-4741a8891452
+[17382:17382:0914/140654.201253:ERROR:components/dbus/xdg/request.cc:173] Request ended (non-user cancelled).
+[17382:17382:0914/140953.570368:ERROR:services/on_device_model/public/cpp/service_client.cc:37] Unexpected on_device_model service disconnect; reason: 1, description: Error loading backend.

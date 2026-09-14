@@ -1,0 +1,52 @@
+# 修改范围检查
+generated_at: 2026-09-14T14:28:06+08:00
+
+== git diff --check（必须 CLEAN）==
+exit=0
+
+== git diff --stat ==
+ docs/features/README.md                            |   5 +-
+ .../data-source-snapshot-status/ACCEPTANCE.md      |  11 +-
+ docs/features/data-source-snapshot-status/API.md   |   8 +-
+ .../data-source-snapshot-status/DATABASE.md        |   8 +-
+ .../features/data-source-snapshot-status/DESIGN.md |  18 ++--
+ .../features/data-source-snapshot-status/README.md |  12 ++-
+ .../data-source-snapshot-status/REQUIREMENTS.md    |  15 +--
+ docs/features/data-source-snapshot-status/UI.md    |  12 ++-
+ .../DataSourceRunStatePage.spec.ts                 |  29 +++--
+ .../components/DataSourceSnapshotQueryBar.spec.ts  | 116 +++++++++++++++++++-
+ .../components/DataSourceSnapshotQueryBar.vue      |  64 ++++++++++-
+ .../components/DataSourceSnapshotToolbar.spec.ts   | 118 ++++++++++++++++++++-
+ .../components/DataSourceSnapshotToolbar.vue       |  60 ++++++++++-
+ 13 files changed, 412 insertions(+), 64 deletions(-)
+
+== git status --short ==
+ M docs/features/README.md
+ M docs/features/data-source-snapshot-status/ACCEPTANCE.md
+ M docs/features/data-source-snapshot-status/API.md
+ M docs/features/data-source-snapshot-status/DATABASE.md
+ M docs/features/data-source-snapshot-status/DESIGN.md
+ M docs/features/data-source-snapshot-status/README.md
+ M docs/features/data-source-snapshot-status/REQUIREMENTS.md
+ M docs/features/data-source-snapshot-status/UI.md
+ M frontend/src/views/data-source-run-state/DataSourceRunStatePage.spec.ts
+ M frontend/src/views/data-source-run-state/components/DataSourceSnapshotQueryBar.spec.ts
+ M frontend/src/views/data-source-run-state/components/DataSourceSnapshotQueryBar.vue
+ M frontend/src/views/data-source-run-state/components/DataSourceSnapshotToolbar.spec.ts
+ M frontend/src/views/data-source-run-state/components/DataSourceSnapshotToolbar.vue
+?? docs/features/data-source-snapshot-status/evidence/DATA-SOURCE-SNAPSHOT-STATUS-ACTION-BUTTON-LOADING-VISUAL-STABILITY-IMPLEMENTATION-001/
+
+== tracked changed paths (git diff --name-only) ==
+docs/features/README.md
+docs/features/data-source-snapshot-status/ACCEPTANCE.md
+docs/features/data-source-snapshot-status/API.md
+docs/features/data-source-snapshot-status/DATABASE.md
+docs/features/data-source-snapshot-status/DESIGN.md
+docs/features/data-source-snapshot-status/README.md
+docs/features/data-source-snapshot-status/REQUIREMENTS.md
+docs/features/data-source-snapshot-status/UI.md
+frontend/src/views/data-source-run-state/DataSourceRunStatePage.spec.ts
+frontend/src/views/data-source-run-state/components/DataSourceSnapshotQueryBar.spec.ts
+frontend/src/views/data-source-run-state/components/DataSourceSnapshotQueryBar.vue
+frontend/src/views/data-source-run-state/components/DataSourceSnapshotToolbar.spec.ts
+frontend/src/views/data-source-run-state/components/DataSourceSnapshotToolbar.vue

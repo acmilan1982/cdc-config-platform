@@ -67,14 +67,20 @@
       </el-select>
     </div>
     <div class="dss-q-actions">
-      <!-- 查询按钮：仅 kind=query 显示 loading；被功能阻断时视觉稳定，以 aria-disabled + 事件防御阻止鼠标/键盘二次请求 -->
+      <!-- 查询按钮（DSS-REQ-088 / DESIGN §31 / UI §25）：相对定位容器 + 常驻绝对定位 Feature 私有 Loading
+           指示器 + 独立固定居中文字标签节点。不再使用 Element Plus 默认 loading —— 其图标进入内容流会顶宽
+           按钮并推移文字；四态文字恒为“查询”，指示器不进内容流，状态切换只改变可见性/旋转。
+           被功能阻断时以 aria-disabled + 事件防御阻止鼠标/键盘二次请求。 -->
       <el-button
         type="primary"
         class="dss-query-btn"
-        :loading="queryLoading"
+        :aria-busy="queryLoading ? 'true' : undefined"
         :aria-disabled="ariaBlocked || undefined"
         @click="onQuery"
-      >查询</el-button>
+      >
+        <span class="dss-btn-spinner" :class="{ 'is-visible': queryLoading }" aria-hidden="true"></span>
+        <span class="dss-action-label">查询</span>
+      </el-button>
       <el-button class="dss-reset-btn" @click="onReset">重置</el-button>
     </div>
     <!-- CLIENT_DESC 完整 Tooltip（DSS-REQ-086，AC-100~102）：查询控件内隔离的最小单实例实现。
@@ -467,7 +473,19 @@ defineExpose({ reset: onReset })
   flex: 0 0 auto;
 }
 /* 查询：黑色主按钮；重置：浅灰底深灰字次按钮（Linear 单一主视觉） */
+/* 查询按钮几何锁（DSS-REQ-088 / DESIGN §31 / UI §25）：width / min-width / max-width / flex-basis
+   四值同锁 62px，box-sizing: border-box 使 62px 为含边框外框宽度（60px 内容盒 + 左右 1px 边框）；
+   min/max 夹住宽度、flex 0 0 62px 阻止被 .dss-q-actions 拉伸或压缩，因此 idle / Loading / 成功 / 失败
+   四态外框 x/y/width/height 零位移。position: relative 使常驻私有指示器以本按钮为包含块。 */
 .dss-q-actions .dss-query-btn {
+  position: relative;
+  width: 62px;
+  min-width: 62px;
+  max-width: 62px;
+  flex-grow: 0;
+  flex-shrink: 0;
+  flex-basis: 62px;
+  box-sizing: border-box;
   background: var(--dss-primary, #09090b);
   border-color: var(--dss-primary, #09090b);
   color: #ffffff;
@@ -496,6 +514,46 @@ defineExpose({ reset: onReset })
   background: #d9d9dd;
   border-color: transparent;
   color: var(--dss-text-secondary, #3f3f46);
+}
+/* Feature 私有 Loading 指示器（DSS-REQ-088/089，AC-108~113）：常驻 DOM 节点，绝对定位于文字左侧空白区
+   （16px 左内边距之内，不与文字重叠），不进入按钮内容流，因此显隐/旋转不重排、不推移文字、不改变外框。
+   颜色取 currentColor：查询按钮为白色、立即刷新按钮为深灰，复用既有色调，不引入新视觉系统。
+   本规则全部落在 Feature 私有命名空间内：不做强制提升，不新增全局按钮/图标/加载类覆盖，
+   也不做任何脚本尺寸监听（尺寸观察器 / resize / 轮询 / 运行时宽度测量）。 */
+.dss-btn-spinner {
+  position: absolute;
+  left: 2px;
+  top: 50%;
+  width: 12px;
+  height: 12px;
+  margin-top: -6px;
+  box-sizing: border-box;
+  border-radius: 50%;
+  border: 2px solid currentColor;
+  border-top-color: transparent;
+  opacity: 0;
+  visibility: hidden;
+  animation: dss-action-spin 0.6s linear infinite;
+}
+.dss-btn-spinner.is-visible {
+  opacity: 1;
+  visibility: visible;
+}
+/* 独立文字标签节点：文本内容在四种状态下恒定，节点由按钮 inline-flex + justify-content: center 固定居中，
+   不随 Loading 状态改内容或宽度。 */
+.dss-action-label {
+  white-space: nowrap;
+}
+@keyframes dss-action-spin {
+  to {
+    transform: rotate(360deg);
+  }
+}
+/* 减弱动效偏好下停止旋转，但指示器仍静态可见、几何完全稳定（DSS-REQ-088/089⑦）。 */
+@media (prefers-reduced-motion: reduce) {
+  .dss-btn-spinner {
+    animation: none;
+  }
 }
 /* 查询控件内 CLIENT_DESC 完整 Tooltip（DSS-REQ-086，AC-100~102）：
    安全最大宽度 min(480px, calc(100vw - 16px))，width:max-content → 在安全宽度内单行、超出才自然换行、不越出视口；

@@ -194,18 +194,126 @@ describe('DataSourceSnapshotQueryBar 重置/忙碌禁用（DESIGN §8 E7，R1-02
 })
 
 describe('DataSourceSnapshotQueryBar 六类请求查询按钮视觉映射（DSS-REQ-071④，AC-078）', () => {
-  it('仅 query 在途（queryLoading）时“查询”按钮显示 loading（is-loading 且原生禁用）', async () => {
+  it('仅 query 在途（queryLoading）时点亮 Feature 私有指示器：文案恒为“查询”、不原生禁用、无 Element Plus is-loading', async () => {
     const wrapper = await mountBar({ queryLoading: true, busy: true })
     const btn = queryButton(wrapper)
-    expect(btn.classes()).toContain('is-loading')
-    expect((btn.element as HTMLButtonElement).disabled).toBe(true)
+    // 不再使用 Element Plus 默认 loading：无 is-loading 类、无内容流 el-icon、不原生禁用
+    expect(btn.classes()).not.toContain('is-loading')
+    expect(btn.find('.el-icon').exists()).toBe(false)
+    expect((btn.element as HTMLButtonElement).disabled).toBe(false)
+    // 常驻私有指示器：Loading 时可见且 aria-hidden，文字标签内容不变
+    const spinner = btn.find('.dss-btn-spinner')
+    expect(spinner.exists()).toBe(true)
+    expect(spinner.classes()).toContain('is-visible')
+    expect(spinner.attributes('aria-hidden')).toBe('true')
+    expect(btn.find('.dss-action-label').text()).toBe('查询')
     wrapper.unmount()
   })
 
-  it('initial/retry/auto/restore 在途不使“查询”按钮 loading：queryLoading=false 时按钮外观稳定', async () => {
+  it('initial/retry/auto/restore 在途不点亮“查询”指示器：queryLoading=false 时按钮与指示器外观均稳定', async () => {
     const wrapper = await mountBar({ busy: true }) // 模拟其它请求在途
     const btn = queryButton(wrapper)
     expect(btn.classes()).not.toContain('is-loading')
+    expect((btn.element as HTMLButtonElement).disabled).toBe(false)
+    const spinner = btn.find('.dss-btn-spinner')
+    expect(spinner.exists()).toBe(true)
+    expect(spinner.classes()).not.toContain('is-visible')
+    expect(btn.find('.dss-action-label').text()).toBe('查询')
+    wrapper.unmount()
+  })
+})
+
+describe('DataSourceSnapshotQueryBar 查询按钮 Loading 视觉稳定性（DSS-REQ-088，AC-108/109/112/113）', () => {
+  it('常驻指示器节点在 idle 与 Loading 两态都存在、仅切换可见性；两态文案严格为“查询”', async () => {
+    const idle = await mountBar()
+    const idleBtn = queryButton(idle)
+    expect(idleBtn.find('.dss-btn-spinner').exists()).toBe(true)
+    expect(idleBtn.find('.dss-btn-spinner').classes()).not.toContain('is-visible')
+    expect(idleBtn.find('.dss-action-label').text()).toBe('查询')
+    expect(idleBtn.text().trim()).toBe('查询')
+    // 不存在“查询中…/加载中”等随状态变化的文案
+    expect(idleBtn.text()).not.toContain('中')
+    idle.unmount()
+
+    const loading = await mountBar({ queryLoading: true, busy: true })
+    const loadingBtn = queryButton(loading)
+    expect(loadingBtn.find('.dss-btn-spinner').exists()).toBe(true)
+    expect(loadingBtn.find('.dss-btn-spinner').classes()).toContain('is-visible')
+    expect(loadingBtn.find('.dss-action-label').text()).toBe('查询')
+    expect(loadingBtn.text().trim()).toBe('查询')
+    loading.unmount()
+  })
+
+  it('指示器为 Feature 私有节点且 aria-hidden="true"、非全局 Element Plus 图标', async () => {
+    const wrapper = await mountBar({ queryLoading: true, busy: true })
+    const spinner = queryButton(wrapper).find('.dss-btn-spinner')
+    expect(spinner.attributes('aria-hidden')).toBe('true')
+    // 私有命名空间：不借用 Element Plus 的 loading 图标类
+    expect(spinner.classes()).not.toContain('is-loading')
+    expect(spinner.classes()).not.toContain('el-icon')
+    wrapper.unmount()
+  })
+
+  it('aria-busy 跟随 queryLoading：Loading 中为 true，结束后移除；aria-disabled 语义不受影响', async () => {
+    const wrapper = await mountBar({ queryLoading: true, busy: true })
+    const btn = queryButton(wrapper)
+    expect(btn.attributes('aria-busy')).toBe('true')
+    expect(btn.attributes('aria-disabled')).toBe('true')
+    await wrapper.setProps({ queryLoading: false, busy: false })
+    await nextTick()
+    expect(btn.attributes('aria-busy')).toBeUndefined()
+    expect(btn.attributes('aria-disabled')).toBeUndefined()
+    wrapper.unmount()
+  })
+
+  it('源码静态契约：width/min-width/max-width/flex-basis 四值锁定 62px + box-sizing: border-box + position: relative', () => {
+    const rule = queryBarSource().match(/\.dss-q-actions \.dss-query-btn\s*\{[^}]*\}/s)?.[0] ?? ''
+    expect(rule).not.toBe('')
+    expect(rule).toMatch(/position:\s*relative/)
+    expect(rule).toMatch(/width:\s*62px/)
+    expect(rule).toMatch(/min-width:\s*62px/)
+    expect(rule).toMatch(/max-width:\s*62px/)
+    expect(rule).toMatch(/flex-basis:\s*62px/)
+    expect(rule).toMatch(/box-sizing:\s*border-box/)
+    // 既有视觉（黑底主按钮 / 30px 高 / 0 16px 内边距）不被本轮触碰
+    expect(rule).toMatch(/background:\s*var\(--dss-primary,\s*#09090b\)/)
+    expect(rule).toMatch(/height:\s*30px/)
+    expect(rule).toMatch(/padding:\s*0 16px/)
+  })
+
+  it('源码静态契约：私有指示器绝对定位、不进内容流；显隐只切可见性/透明度；无 !important、无全局 EP 覆写、无 JS 尺寸监听', () => {
+    const src = queryBarSource()
+    const spinner = src.match(/\.dss-btn-spinner\s*\{[^}]*\}/s)?.[0] ?? ''
+    expect(spinner).not.toBe('')
+    expect(spinner).toMatch(/position:\s*absolute/)
+    expect(spinner).toMatch(/opacity:\s*0/)
+    expect(spinner).toMatch(/visibility:\s*hidden/)
+    expect(src).toMatch(/\.dss-btn-spinner\.is-visible\s*\{[^}]*opacity:\s*1[^}]*visibility:\s*visible/s)
+    // 不使用 !important、不新增全局 .el-button/.el-icon/.is-loading 覆写、不做 JS 尺寸监听
+    expect(src).not.toMatch(/!important/)
+    expect(src).not.toMatch(/(^|\n)\s*\.el-button\s*\{/)
+    expect(src).not.toMatch(/(^|\n)\s*\.el-icon\s*\{/)
+    expect(src).not.toMatch(/(^|\n)\s*\.is-loading\s*\{/)
+    expect(src).not.toMatch(/ResizeObserver/)
+    expect(src).not.toMatch(/requestAnimationFrame/)
+  })
+
+  it('reduced-motion 规则只停止旋转、不隐藏指示器（保持静态可见）', () => {
+    const css = queryBarCss()
+    const block = css.match(/@media \(prefers-reduced-motion: reduce\)\s*\{([\s\S]*?)\n\}/)?.[1] ?? ''
+    expect(block).not.toBe('')
+    expect(block).toMatch(/\.dss-btn-spinner\s*\{[^}]*animation:\s*none/)
+    // 只关停动画，不引入 display:none / visibility:hidden 之类会隐藏指示器的声明
+    expect(block).not.toMatch(/display:\s*none/)
+    expect(block).not.toMatch(/visibility:\s*hidden/)
+  })
+
+  it('busy 期间点击/键盘触发“查询”仍被事件防御阻断，且不产生原生禁用外观变化', async () => {
+    const wrapper = await mountBar({ busy: true })
+    const btn = queryButton(wrapper)
+    await btn.trigger('click')
+    btn.element.click()
+    expect(wrapper.emitted('query')).toBeUndefined()
     expect((btn.element as HTMLButtonElement).disabled).toBe(false)
     wrapper.unmount()
   })

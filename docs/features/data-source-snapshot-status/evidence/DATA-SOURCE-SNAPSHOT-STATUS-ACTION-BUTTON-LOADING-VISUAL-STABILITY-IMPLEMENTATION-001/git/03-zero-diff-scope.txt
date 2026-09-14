@@ -1,0 +1,25 @@
+# 白名单外零差异证明（每个条目均应为空输出）
+generated_at: 2026-09-14T14:28:06+08:00
+backend                                                                                    diff=ZERO
+docs/baseline                                                                              diff=ZERO
+CLAUDE.md                                                                                  diff=ZERO
+frontend/src/views/data-source-run-state/useDataSourceSnapshot.ts                          diff=ZERO
+frontend/src/views/data-source-run-state/DataSourceRunStatePage.vue                        diff=ZERO
+frontend/src/views/data-source-run-state/components/DataSourceSnapshotTable.vue            diff=ZERO
+frontend/src/views/data-source-run-state/components/DataSourceSnapshotSelects.vue          diff=ZERO
+frontend/package.json                                                                      diff=ZERO
+frontend/package-lock.json                                                                 diff=ZERO
+frontend/src/styles                                                                        diff=ZERO
+frontend/src/router                                                                        diff=ZERO
+frontend/src/api                                                                           diff=ZERO
+frontend/src/types                                                                         diff=ZERO
+
+== untracked (excluding the new evidence dir) ==
+NONE
+
+== frontend business code changed files ==
+  frontend/src/views/data-source-run-state/DataSourceRunStatePage.spec.ts
+  frontend/src/views/data-source-run-state/components/DataSourceSnapshotQueryBar.spec.ts
+  frontend/src/views/data-source-run-state/components/DataSourceSnapshotQueryBar.vue
+  frontend/src/views/data-source-run-state/components/DataSourceSnapshotToolbar.spec.ts
+  frontend/src/views/data-source-run-state/components/DataSourceSnapshotToolbar.vue

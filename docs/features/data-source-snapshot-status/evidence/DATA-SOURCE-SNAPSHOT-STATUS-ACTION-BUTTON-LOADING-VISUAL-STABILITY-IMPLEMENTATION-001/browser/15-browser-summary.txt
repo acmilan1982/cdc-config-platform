@@ -1,0 +1,78 @@
+ACTION-BUTTON LOADING VISUAL STABILITY - real Chromium (Chrome/148.0.7778.167) self-test summary
+frontend served from: /agent/dss-abl-impl-001 (task result worktree), vite dev 0.0.0.0:5173
+interception: browser-layer Fetch on GET /api/monitor/data-source-run-state/list only (GET-only, no backend/DB/ZK)
+
+== A. four-viewport matrix (9 states per viewport: IDLE/QUERY_LOADING/QUERY_SUCCESS/MANUAL_LOADING/MANUAL_SUCCESS/MANUAL_LOADING_2/MANUAL_FAILURE/QUERY_LOADING_2/QUERY_FAILURE) ==
+  1280x800: query w=[62] delta={'x': 0.0, 'y': 0.0, 'w': 0.0, 'h': 0.0} label delta={'x': 0.0, 'y': 0.0}
+          refresh w=[110] delta={'x': 0.0, 'y': 0.0, 'w': 0.0, 'h': 0.0} label delta={'x': 0.0, 'y': 0.0}
+          query/reset group delta={'x': 0.0, 'y': 0.0, 'w': 0.0, 'h': 0.0}; refresh-group left delta=0.95px right delta=0.0px
+          query-bar height=[70]; child tops identical=True; wrap identical=True
+          spinner->label gap: query=[2]px refresh=[11]px; overlap any state=False
+          spinner node count q=1 r=1 all states; aria-hidden=true all states; label text 查询/立即刷新 all states
+  1700x920: query w=[62] delta={'x': 0.0, 'y': 0.0, 'w': 0.0, 'h': 0.0} label delta={'x': 0.0, 'y': 0.0}
+          refresh w=[110] delta={'x': 0.0, 'y': 0.0, 'w': 0.0, 'h': 0.0} label delta={'x': 0.0, 'y': 0.0}
+          query/reset group delta={'x': 0.0, 'y': 0.0, 'w': 0.0, 'h': 0.0}; refresh-group left delta=0.0px right delta=0.0px
+          query-bar height=[32]; child tops identical=True; wrap identical=True
+          spinner->label gap: query=[2]px refresh=[11]px; overlap any state=False
+          spinner node count q=1 r=1 all states; aria-hidden=true all states; label text 查询/立即刷新 all states
+  1920x1080: query w=[62] delta={'x': 0.0, 'y': 0.0, 'w': 0.0, 'h': 0.0} label delta={'x': 0.0, 'y': 0.0}
+          refresh w=[110] delta={'x': 0.0, 'y': 0.0, 'w': 0.0, 'h': 0.0} label delta={'x': 0.0, 'y': 0.0}
+          query/reset group delta={'x': 0.0, 'y': 0.0, 'w': 0.0, 'h': 0.0}; refresh-group left delta=0.0px right delta=0.0px
+          query-bar height=[32]; child tops identical=True; wrap identical=True
+          spinner->label gap: query=[2]px refresh=[11]px; overlap any state=False
+          spinner node count q=1 r=1 all states; aria-hidden=true all states; label text 查询/立即刷新 all states
+  2560x1440: query w=[62] delta={'x': 0.0, 'y': 0.0, 'w': 0.0, 'h': 0.0} label delta={'x': 0.0, 'y': 0.0}
+          refresh w=[110] delta={'x': 0.0, 'y': 0.0, 'w': 0.0, 'h': 0.0} label delta={'x': 0.0, 'y': 0.0}
+          query/reset group delta={'x': 0.0, 'y': 0.0, 'w': 0.0, 'h': 0.0}; refresh-group left delta=0.0px right delta=0.0px
+          query-bar height=[32]; child tops identical=True; wrap identical=True
+          spinner->label gap: query=[2]px refresh=[11]px; overlap any state=False
+          spinner node count q=1 r=1 all states; aria-hidden=true all states; label text 查询/立即刷新 all states
+  requests total=375 nonGET=0 apiNonGET=0 listGET=26
+  injected failures=8; console errors=0
+  prefers-reduced-motion: animationName=none indicator visibility=visible idle-vs-loading geometry identical=True
+  busy duplicate defence: extra requests while 3x(click 立即刷新 + click 查询) + 2x Enter = 1 (only the opening refresh); buttons never natively disabled
+  auto refresh (waited 59553ms): query indicator=hidden refresh indicator=hidden (manual indicator unlit)
+  keyboard: 1 plain 查询 click = 1 GET
+  other route /monitor/data-source: dss-* nodes=0 dss-btn-spinner=0 dss-action-label=0
+
+== B. §9.5 regression spot-check (1920x1080) ==
+  PASS  popper dss-client-popper width = 480px
+        {"w": 480, "minW": "480px", "maxW": "480px", "visible": true}
+  PASS  popper dss-source-popper width = 400px
+        {"w": 400, "minW": "400px", "maxW": "400px", "visible": true}
+  PASS  popper dss-status-popper width = 240px
+        {"w": 240, "minW": "240px", "maxW": "240px", "visible": true}
+  PASS  c3 option desc truncated to 20 code points + "..."
+        {"id": "c3", "text": "c3（长长长长长长长长长长长长长长长长长长长长...）", "codepoints": 27}
+  PASS  short option desc not truncated, no ellipsis
+        {"id": "c1", "text": "c1（端1）", "codepoints": 6}
+  PASS  truncated option hover shows .dss-q-tt with full 25-cp desc
+        {"text": "长长长长长长长长长长长长长长长长长长长长长长长长长", "codepoints": 25, "parentIsBody": true, "position": "fixed", "visible": true, "belowTrigger": false}
+  PASS  non-truncated option shows no tooltip
+        {"ttBefore": false, "ttAfter": null}
+  PASS  multi-select query serializes repeated clientId params
+        "/api/monitor/data-source-run-state/list?clientId=c1&clientId=c2"
+  PASS  selected tag shows 20-cp truncated label but keeps raw identity
+        {"text": "c3（长长长长长长长长长长长长长长长长长长长长...）", "id": "c3"}
+  PASS  selected-tag hover shows full-desc tooltip
+        {"visible": true, "text": "长长长长长长长长长长长长长长长长长长长长长长长长长"}
+  PASS  single selection serializes exactly one clientId
+        "/api/monitor/data-source-run-state/list?clientId=c3"
+  PASS  table CLIENT_DESC tooltip unchanged (full raw desc)
+        {"text": "长长长长长长长长长长长长长长长长长长长长长长长长长", "codepoints": 25}
+  PASS  failure keeps previous result rows
+        {"before": 2, "after": 2}
+  PASS  failure keeps 最近成功刷新 and shows收敛 warning
+        {"rows": 2, "refreshTime": "最近成功刷新：14:15:34", "error": "刷新失败，将在约 60 秒后自动重试", "firstLoadErr": false}
+  PASS  countdown freezes while page hidden (no 假走)
+        {"secs1": "60", "secsHiddenStart": "60", "secsHiddenLater": "60"}
+  PASS  resume-visible triggers exactly 1 restore GET
+        "/api/monitor/data-source-run-state/list?clientId=c3"
+  PASS  restore must not light either action indicator
+        {"query": "hidden", "refresh": "hidden", "queryBusy": null, "refreshBusy": null, "refreshActive": true}
+  PASS  countdown restarts after resume
+        {"secs": "60", "rows": 2}
+  all intercepted calls GET=True; console errors=0
+  calls: /api/monitor/data-source-run-state/list [ok] ; /api/monitor/data-source-run-state/list?clientId=c1&clientId=c2 [held] ; /api/monitor/data-source-run-state/list?clientId=c3 [held] ; /api/monitor/data-source-run-state/list?clientId=c3 [held] ; /api/monitor/data-source-run-state/list?clientId=c3 [held]
+
+FAILS: matrix=see 13-browser-analysis.txt spot=NONE

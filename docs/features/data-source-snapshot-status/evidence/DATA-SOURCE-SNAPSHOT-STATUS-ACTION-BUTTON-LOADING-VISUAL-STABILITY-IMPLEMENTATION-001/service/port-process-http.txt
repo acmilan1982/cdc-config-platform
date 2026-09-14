@@ -1,0 +1,48 @@
+== 端口占用与进程来源（证据快照 2026-09-14 14:20:34） ==
+--- port 5173
+  (no listener)
+--- port 5174
+  (no listener)
+--- port 8080
+  (no listener)
+--- port 9222
+  (no listener)
+
+== 相关进程 cmdline / cwd ==
+--- PID 17227
+node /agent/dss-abl-impl-001/frontend/node_modules/.bin/vite --host 0.0.0.0 --port 5173 
+/agent/dss-abl-impl-001/frontend
+--- PID 17382
+/opt/google/chrome/chrome --headless=new --no-sandbox --disable-gpu --disable-dev-shm-usage --hide-scrollbars --no-first-run --no-default-browser-check --no-proxy-server --proxy-bypass-list=* --force-device-scale-factor=1 --remote-debugging-port=9222 --user-data-dir=/tmp/abl-cdp/profile --window-size=1920,1080 --no-sandbox --noerrdialogs --ozone-platform=headless --ozone-override-screen-size=800,600 --use-angle=swiftshader-webgl about:blank 
+/tmp/abl-cdp
+
+== 本机 HTTP 探测（绕过代理） ==
+5173/127.0.0.1 -> 200
+5173/192.168.174.70 -> 200
+8080 -> 000
+8080 -> unreachable
+== ss -ltn (all TCP listeners) ==
+State  Recv-Q Send-Q Local Address:Port  Peer Address:Port
+LISTEN 0      511          0.0.0.0:5173       0.0.0.0:*   
+LISTEN 0      4096       127.0.0.1:7891       0.0.0.0:*   
+LISTEN 0      4096       127.0.0.1:7890       0.0.0.0:*   
+LISTEN 0      4096       127.0.0.1:7893       0.0.0.0:*   
+LISTEN 0      128        127.0.0.1:6010       0.0.0.0:*   
+LISTEN 0      511        127.0.0.1:18792      0.0.0.0:*   
+LISTEN 0      511        127.0.0.1:18791      0.0.0.0:*   
+LISTEN 0      511        127.0.0.1:18789      0.0.0.0:*   
+LISTEN 0      128          0.0.0.0:22         0.0.0.0:*   
+LISTEN 0      4096       127.0.0.1:631        0.0.0.0:*   
+LISTEN 0      4096       127.0.0.1:9090       0.0.0.0:*   
+LISTEN 0      10         127.0.0.1:9222       0.0.0.0:*   
+LISTEN 0      511            [::1]:18789         [::]:*   
+LISTEN 0      4096           [::1]:631           [::]:*   
+LISTEN 0      128             [::]:22            [::]:*   
+LISTEN 0      128            [::1]:6010          [::]:*   
+
+== via /proc net (fallback) ==
+127.0.0.1:5173 -> OPEN
+127.0.0.1:5174 -> closed
+127.0.0.1:8080 -> closed
+127.0.0.1:9222 -> OPEN
+127.0.0.1:51730 -> closed

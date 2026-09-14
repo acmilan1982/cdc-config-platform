@@ -20,13 +20,18 @@
     </span>
     <span class="dss-refresh-sep" aria-hidden="true"></span>
     <span class="dss-refresh-time">最近成功刷新：{{ lastRefreshText }}</span>
-    <!-- “立即刷新”：白底细边框次级按钮（R5 §5）；固定宽度；仅 kind=manual 显示 loading；被功能阻断时视觉稳定 -->
+    <!-- “立即刷新”：白底细边框次级按钮（R5 §5）；固定宽度；被功能阻断时视觉稳定。
+         Loading 视觉（DSS-REQ-089 / DESIGN §31 / UI §25）：相对定位容器 + 常驻绝对定位 Feature 私有指示器
+         + 独立固定居中文字标签节点；仅 kind=manual 点亮指示器，否则在按钮内容流内显隐而不改变几何。 -->
     <el-button
       class="dss-refresh-btn"
-      :loading="manualLoading"
+      :aria-busy="manualLoading ? 'true' : undefined"
       :aria-disabled="ariaBlocked || undefined"
       @click="onRefresh"
-    >立即刷新</el-button>
+    >
+      <span class="dss-btn-spinner" :class="{ 'is-visible': manualLoading }" aria-hidden="true"></span>
+      <span class="dss-action-label">立即刷新</span>
+    </el-button>
   </div>
 </template>
 
@@ -135,11 +140,19 @@ function onRefresh(): void {
   white-space: nowrap;
   font-variant-numeric: tabular-nums;
 }
-/* AC-068/072 + R5 §5 稳定宽度：loading 图标显隐/禁用态变化不改变按钮水平宽度；
-   box-sizing:border-box 保证 1px 边框计入 110px 内框，idle 与 loading 外框完全等宽 */
+/* AC-068/072 + R5 §5 稳定宽度 + DSS-REQ-089 几何锁：width / min-width / max-width / flex-basis 四值同锁
+   110px；box-sizing:border-box 保证 1px 边框计入 110px 外框。min/max 夹住宽度、flex 0 0 110px 阻止被
+   .dss-refresh-group 拉伸或压缩，因此 idle / Loading / 成功 / 失败四态外框 x/y/width/height 零位移。
+   position: relative 使常驻私有指示器以本按钮为包含块（绝对定位，不进入按钮内容流）。 */
 .dss-refresh-btn {
   width: 110px;
   box-sizing: border-box;
+  position: relative;
+  min-width: 110px;
+  max-width: 110px;
+  flex-grow: 0;
+  flex-shrink: 0;
+  flex-basis: 110px;
 }
 /* “立即刷新”白底细边框次级按钮（R5 §5）：background #FFFFFF / border 1px #E4E4E7 / color #3F3F46 / radius 6px；
    hover 浅灰 #F4F4F5；focus-visible 仅靠克制局部焦点环，不靠颜色；loading/disabled 仍可读；
@@ -168,9 +181,46 @@ function onRefresh(): void {
   border: 1px solid #e4e4e7;
   color: #8e8e96;
 }
+/* Feature 私有 Loading 指示器（DSS-REQ-089，AC-110~113）：常驻 DOM 节点，绝对定位于文字左侧空白区
+   （按钮左内边距之内，不与文字重叠），不进入按钮内容流，因此显隐/旋转不重排、不推移文字、不改变外框。
+   颜色取 currentColor（本按钮为深灰 #3f3f46），复用既有色调，不引入新视觉系统。
+   本规则全部落在 Feature 私有命名空间内：不做强制提升，不新增全局按钮/图标/加载类覆盖，
+   也不做任何脚本尺寸监听（尺寸观察器 / resize / 轮询 / 运行时宽度测量）。 */
+.dss-btn-spinner {
+  position: absolute;
+  left: 3px;
+  top: 50%;
+  width: 12px;
+  height: 12px;
+  margin-top: -6px;
+  box-sizing: border-box;
+  border-radius: 50%;
+  border: 2px solid currentColor;
+  border-top-color: transparent;
+  opacity: 0;
+  visibility: hidden;
+  animation: dss-action-spin 0.6s linear infinite;
+}
+.dss-btn-spinner.is-visible {
+  opacity: 1;
+  visibility: visible;
+}
+/* 独立文字标签节点：文本内容在四种状态下恒定，节点由按钮 inline-flex + justify-content: center 固定居中。 */
+.dss-action-label {
+  white-space: nowrap;
+}
+@keyframes dss-action-spin {
+  to {
+    transform: rotate(360deg);
+  }
+}
 @media (prefers-reduced-motion: reduce) {
   .dss-countdown-ring .dss-ring-progress {
     transition: none;
+  }
+  /* 停止旋转，但指示器仍静态可见、几何完全稳定（DSS-REQ-089⑦）。 */
+  .dss-btn-spinner {
+    animation: none;
   }
 }
 </style>

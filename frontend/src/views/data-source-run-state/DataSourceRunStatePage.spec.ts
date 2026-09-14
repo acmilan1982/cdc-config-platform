@@ -330,7 +330,7 @@ describe('DataSourceRunStatePage R7 页面级中间背景透明化（R7 §4/§7�
 })
 
 describe('DataSourceRunStatePage 六类请求页面级视觉（DSS-REQ-071）', () => {
-  it('query 在途：仅“查询”按钮 loading，表格不遮罩、立即刷新不 loading', async () => {
+  it('query 在途：仅“查询”按钮点亮私有指示器，表格不遮罩、立即刷新不点亮', async () => {
     mockedFetch.mockResolvedValue(okRes([row('A', 'RUNNING', 'SNAPSHOT_RUNNING')]))
     const wrapper = await mountPage()
 
@@ -341,20 +341,26 @@ describe('DataSourceRunStatePage 六类请求页面级视觉（DSS-REQ-071）', 
 
     // 表格不被整表遮罩：仅 initial 首载点亮整表 loading，query 在途表格 loading 为 false（query 不遮罩表格，DSS-REQ-071③）
     expect(tableLoading(wrapper)).toBe(false)
-    // 仅查询按钮显示 loading；立即刷新不 loading
+    // 查询按钮点亮 Feature 私有常驻指示器；不再使用 Element Plus 默认 loading（DSS-REQ-088）
     const q = findButton(wrapper, '查询')
-    expect(q.classes()).toContain('is-loading')
+    expect(q.classes()).not.toContain('is-loading')
+    expect(q.find('.dss-btn-spinner').classes()).toContain('is-visible')
+    expect(q.find('.dss-action-label').text()).toBe('查询')
+    expect(q.attributes('aria-busy')).toBe('true')
+    // 立即刷新不点亮：query 与 manual 指示器互相独立
     const r = findButton(wrapper, '立即刷新')
-    expect(r.classes()).not.toContain('is-loading')
+    expect(r.find('.dss-btn-spinner').classes()).not.toContain('is-visible')
 
     gate.release(okRes([row('A', 'RUNNING', 'SNAPSHOT_RUNNING'), row('B', 'COMPLETED', 'SNAPSHOT_COMPLETED')]))
     await settle()
     expect(wrapper.find('.dss-summary-count').text()).toBe('共 2 条')
-    expect(findButton(wrapper, '查询').classes()).not.toContain('is-loading')
+    const qAfter = findButton(wrapper, '查询')
+    expect(qAfter.find('.dss-btn-spinner').classes()).not.toContain('is-visible')
+    expect(qAfter.attributes('aria-busy')).toBeUndefined()
     wrapper.unmount()
   })
 
-  it('manual 在途：仅“立即刷新”按钮 loading；查询按钮外观稳定（不闪动/不变灰）；表格不遮罩', async () => {
+  it('manual 在途：仅“立即刷新”按钮点亮私有指示器；查询按钮外观稳定（不闪动/不变灰）；表格不遮罩', async () => {
     mockedFetch.mockResolvedValue(okRes([row('A', 'RUNNING', 'SNAPSHOT_RUNNING')]))
     const wrapper = await mountPage()
 
@@ -363,9 +369,14 @@ describe('DataSourceRunStatePage 六类请求页面级视觉（DSS-REQ-071）', 
     await findButton(wrapper, '立即刷新').trigger('click')
     await settle()
 
-    expect(findButton(wrapper, '立即刷新').classes()).toContain('is-loading')
+    const r = findButton(wrapper, '立即刷新')
+    expect(r.classes()).not.toContain('is-loading')
+    expect(r.find('.dss-btn-spinner').classes()).toContain('is-visible')
+    expect(r.find('.dss-action-label').text()).toBe('立即刷新')
+    expect(r.attributes('aria-busy')).toBe('true')
     const q = findButton(wrapper, '查询')
-    expect(q.classes()).not.toContain('is-loading')
+    expect(q.find('.dss-btn-spinner').classes()).not.toContain('is-visible')
+    expect(q.attributes('aria-busy')).toBeUndefined()
     expect((q.element as HTMLButtonElement).disabled).toBe(false)
     expect(q.attributes('aria-disabled')).toBe('true')
     // 表格不遮罩：manual 在途表格 loading 为 false（仅 initial 点亮整表 loading）
@@ -373,7 +384,7 @@ describe('DataSourceRunStatePage 六类请求页面级视觉（DSS-REQ-071）', 
 
     gate.release(okRes([row('A2', 'RUNNING', 'SNAPSHOT_RUNNING')]))
     await settle()
-    expect(findButton(wrapper, '立即刷新').classes()).not.toContain('is-loading')
+    expect(findButton(wrapper, '立即刷新').find('.dss-btn-spinner').classes()).not.toContain('is-visible')
     wrapper.unmount()
   })
 

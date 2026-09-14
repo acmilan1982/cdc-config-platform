@@ -1,0 +1,82 @@
+Re-optimizing dependencies because vite config has changed
+
+  VITE v5.4.21  ready in 318 ms
+
+  ➜  Local:   http://localhost:5173/
+  ➜  Network: http://192.168.174.70:5173/
+2:05:28 PM [vite] http proxy error: /api/monitor/data-source-run-state/list
+Error: connect ECONNREFUSED 127.0.0.1:8080
+    at TCPConnectWrap.afterConnect [as oncomplete] (node:net:1706:16)
+2:06:28 PM [vite] http proxy error: /api/monitor/data-source-run-state/list
+Error: connect ECONNREFUSED 127.0.0.1:8080
+    at TCPConnectWrap.afterConnect [as oncomplete] (node:net:1706:16)
+2:07:15 PM [vite] http proxy error: /api/monitor/data-source-run-state/list
+Error: connect ECONNREFUSED 127.0.0.1:8080
+    at TCPConnectWrap.afterConnect [as oncomplete] (node:net:1706:16)
+2:07:21 PM [vite] http proxy error: /api/monitor/data-source-run-state/list
+Error: connect ECONNREFUSED 127.0.0.1:8080
+    at TCPConnectWrap.afterConnect [as oncomplete] (node:net:1706:16)
+2:07:24 PM [vite] http proxy error: /api/monitor/data-source-run-state/list
+Error: connect ECONNREFUSED 127.0.0.1:8080
+    at TCPConnectWrap.afterConnect [as oncomplete] (node:net:1706:16)
+2:07:28 PM [vite] http proxy error: /api/monitor/data-source-run-state/list
+Error: connect ECONNREFUSED 127.0.0.1:8080
+    at TCPConnectWrap.afterConnect [as oncomplete] (node:net:1706:16)
+2:08:28 PM [vite] http proxy error: /api/monitor/data-source-run-state/list
+Error: connect ECONNREFUSED 127.0.0.1:8080
+    at TCPConnectWrap.afterConnect [as oncomplete] (node:net:1706:16)
+2:09:28 PM [vite] http proxy error: /api/monitor/data-source-run-state/list
+Error: connect ECONNREFUSED 127.0.0.1:8080
+    at TCPConnectWrap.afterConnect [as oncomplete] (node:net:1706:16)
+2:09:56 PM [vite] hmr update /src/views/data-source-run-state/components/DataSourceSnapshotQueryBar.vue?vue&type=style&index=0&scoped=cd886c8f&lang.css
+2:10:28 PM [vite] http proxy error: /api/monitor/data-source-run-state/list
+Error: connect ECONNREFUSED 127.0.0.1:8080
+    at TCPConnectWrap.afterConnect [as oncomplete] (node:net:1706:16)
+2:11:28 PM [vite] http proxy error: /api/monitor/data-source-run-state/list
+Error: connect ECONNREFUSED 127.0.0.1:8080
+    at TCPConnectWrap.afterConnect [as oncomplete] (node:net:1706:16)
+2:12:29 PM [vite] http proxy error: /api/monitor/data-source-run-state/list
+Error: connect ECONNREFUSED 127.0.0.1:8080
+    at TCPConnectWrap.afterConnect [as oncomplete] (node:net:1706:16)
+2:13:29 PM [vite] http proxy error: /api/monitor/data-source-run-state/list
+Error: connect ECONNREFUSED 127.0.0.1:8080
+    at TCPConnectWrap.afterConnect [as oncomplete] (node:net:1706:16)
+2:14:29 PM [vite] http proxy error: /api/monitor/data-source-run-state/list
+Error: connect ECONNREFUSED 127.0.0.1:8080
+    at TCPConnectWrap.afterConnect [as oncomplete] (node:net:1706:16)
+2:14:38 PM [vite] http proxy error: /api/monitor/data-source-run-state/list
+Error: connect ECONNREFUSED 127.0.0.1:8080
+    at TCPConnectWrap.afterConnect [as oncomplete] (node:net:1706:16)
+2:15:29 PM [vite] http proxy error: /api/monitor/data-source-run-state/list
+Error: connect ECONNREFUSED 127.0.0.1:8080
+    at TCPConnectWrap.afterConnect [as oncomplete] (node:net:1706:16)
+2:16:29 PM [vite] http proxy error: /api/monitor/data-source-run-state/list
+Error: connect ECONNREFUSED 127.0.0.1:8080
+    at TCPConnectWrap.afterConnect [as oncomplete] (node:net:1706:16)
+2:16:40 PM [vite] http proxy error: /api/monitor/data-source-run-state/list?clientId=c3
+Error: connect ECONNREFUSED 127.0.0.1:8080
+    at TCPConnectWrap.afterConnect [as oncomplete] (node:net:1706:16)
+2:17:29 PM [vite] http proxy error: /api/monitor/data-source-run-state/list
+Error: connect ECONNREFUSED 127.0.0.1:8080
+    at TCPConnectWrap.afterConnect [as oncomplete] (node:net:1706:16)
+2:17:40 PM [vite] http proxy error: /api/monitor/data-source-run-state/list?clientId=c3
+Error: connect ECONNREFUSED 127.0.0.1:8080
+    at TCPConnectWrap.afterConnect [as oncomplete] (node:net:1706:16)
+2:18:29 PM [vite] http proxy error: /api/monitor/data-source-run-state/list
+Error: connect ECONNREFUSED 127.0.0.1:8080
+    at TCPConnectWrap.afterConnect [as oncomplete] (node:net:1706:16)
+2:18:40 PM [vite] http proxy error: /api/monitor/data-source-run-state/list?clientId=c3
+Error: connect ECONNREFUSED 127.0.0.1:8080
+    at TCPConnectWrap.afterConnect [as oncomplete] (node:net:1706:16)
+2:19:29 PM [vite] http proxy error: /api/monitor/data-source-run-state/list
+Error: connect ECONNREFUSED 127.0.0.1:8080
+    at TCPConnectWrap.afterConnect [as oncomplete] (node:net:1706:16)
+2:19:37 PM [vite] http proxy error: /api/monitor/data-source-run-state/list?clientId=c3
+Error: connect ECONNREFUSED 127.0.0.1:8080
+    at TCPConnectWrap.afterConnect [as oncomplete] (node:net:1706:16)
+2:19:38 PM [vite] http proxy error: /api/monitor/data-source-run-state/list
+Error: connect ECONNREFUSED 127.0.0.1:8080
+    at TCPConnectWrap.afterConnect [as oncomplete] (node:net:1706:16)
+2:20:29 PM [vite] http proxy error: /api/monitor/data-source-run-state/list
+Error: connect ECONNREFUSED 127.0.0.1:8080
+    at TCPConnectWrap.afterConnect [as oncomplete] (node:net:1706:16)

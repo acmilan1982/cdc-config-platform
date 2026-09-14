@@ -152,15 +152,24 @@ describe('DataSourceSnapshotToolbar “立即刷新”白底细边框次级按�
     expect(src).not.toMatch(/background:\s*#2563eb/)
   })
 
-  it('按钮承载独立固定宽度类 .dss-refresh-btn；仅 manual 在途显示 loading', () => {
+  it('按钮承载独立固定宽度类 .dss-refresh-btn；仅 manual 在途点亮私有指示器（不再使用 Element Plus loading）', () => {
     const wrapper = mountToolbar()
-    expect(refreshBtn(wrapper).classes()).toContain('dss-refresh-btn')
-    expect(refreshBtn(wrapper).classes()).toContain('el-button')
-    expect(refreshBtn(wrapper).classes()).not.toContain('is-loading')
+    const idle = refreshBtn(wrapper)
+    expect(idle.classes()).toContain('dss-refresh-btn')
+    expect(idle.classes()).toContain('el-button')
+    expect(idle.classes()).not.toContain('is-loading')
+    expect(idle.find('.dss-btn-spinner').exists()).toBe(true)
+    expect(idle.find('.dss-btn-spinner').classes()).not.toContain('is-visible')
+    expect(idle.find('.dss-action-label').text()).toBe('立即刷新')
     wrapper.unmount()
 
     const loading = mountToolbar({ manualLoading: true })
-    expect(refreshBtn(loading).classes()).toContain('is-loading')
+    const loadingBtn = refreshBtn(loading)
+    expect(loadingBtn.classes()).not.toContain('is-loading')
+    expect(loadingBtn.find('.el-icon').exists()).toBe(false)
+    expect((loadingBtn.element as HTMLButtonElement).disabled).toBe(false)
+    expect(loadingBtn.find('.dss-btn-spinner').classes()).toContain('is-visible')
+    expect(loadingBtn.find('.dss-action-label').text()).toBe('立即刷新')
     loading.unmount()
   })
 
@@ -196,5 +205,104 @@ describe('DataSourceSnapshotToolbar “立即刷新”白底细边框次级按�
     expect(src).not.toMatch(/:root/)
     // 除 scoped 自带的属性化选择器外，任何 .el-button 规则都必须以 .dss- 前缀出现
     expect(src).toMatch(/\.dss-refresh-group \.dss-refresh-btn/)
+  })
+})
+
+describe('DataSourceSnapshotToolbar 立即刷新 Loading 视觉稳定性（DSS-REQ-089，AC-110/111/112/113）', () => {
+  it('常驻指示器在 idle 与 Loading 两态都存在、仅切可见性；两态文案严格为“立即刷新”', () => {
+    const idle = mountToolbar()
+    const idleBtn = refreshBtn(idle)
+    expect(idleBtn.find('.dss-btn-spinner').exists()).toBe(true)
+    expect(idleBtn.find('.dss-btn-spinner').classes()).not.toContain('is-visible')
+    expect(idleBtn.find('.dss-action-label').text()).toBe('立即刷新')
+    expect(idleBtn.text().trim()).toBe('立即刷新')
+    idle.unmount()
+
+    const loading = mountToolbar({ manualLoading: true })
+    const loadingBtn = refreshBtn(loading)
+    expect(loadingBtn.find('.dss-btn-spinner').exists()).toBe(true)
+    expect(loadingBtn.find('.dss-btn-spinner').classes()).toContain('is-visible')
+    expect(loadingBtn.find('.dss-action-label').text()).toBe('立即刷新')
+    expect(loadingBtn.text().trim()).toBe('立即刷新')
+    loading.unmount()
+  })
+
+  it('指示器为 Feature 私有节点且 aria-hidden="true"；不借用 Element Plus loading 图标类', () => {
+    const wrapper = mountToolbar({ manualLoading: true })
+    const spinner = refreshBtn(wrapper).find('.dss-btn-spinner')
+    expect(spinner.attributes('aria-hidden')).toBe('true')
+    expect(spinner.classes()).not.toContain('is-loading')
+    expect(spinner.classes()).not.toContain('el-icon')
+    wrapper.unmount()
+  })
+
+  it('aria-busy 跟随 manualLoading：Loading 中为 true，空闲态移除；aria-disabled 语义不受影响', () => {
+    const idle = mountToolbar()
+    expect(refreshBtn(idle).attributes('aria-busy')).toBeUndefined()
+    idle.unmount()
+
+    const loading = mountToolbar({ manualLoading: true })
+    expect(refreshBtn(loading).attributes('aria-busy')).toBe('true')
+    loading.unmount()
+
+    const busy = mountToolbar({ busy: true })
+    const busyBtn = refreshBtn(busy)
+    expect(busyBtn.attributes('aria-busy')).toBeUndefined()
+    expect(busyBtn.attributes('aria-disabled')).toBe('true')
+    busy.unmount()
+  })
+
+  it('状态独立：仅 busy（非 manual）不点亮指示器；仅 manual 不产生 aria-disabled', () => {
+    const busy = mountToolbar({ busy: true })
+    const busyBtn = refreshBtn(busy)
+    expect(busyBtn.find('.dss-btn-spinner').classes()).not.toContain('is-visible')
+    expect(busyBtn.attributes('aria-disabled')).toBe('true')
+    busy.unmount()
+
+    const manual = mountToolbar({ manualLoading: true })
+    const manualBtn = refreshBtn(manual)
+    expect(manualBtn.find('.dss-btn-spinner').classes()).toContain('is-visible')
+    expect(manualBtn.attributes('aria-disabled')).toBeUndefined()
+    manual.unmount()
+  })
+
+  it('源码静态契约：width/min-width/max-width/flex-basis 四值锁定 110px + box-sizing: border-box + position: relative', () => {
+    const rule = SRC().match(/\.dss-refresh-btn\s*\{[^}]*\}/s)?.[0] ?? ''
+    expect(rule).not.toBe('')
+    expect(rule).toMatch(/width:\s*110px/)
+    expect(rule).toMatch(/min-width:\s*110px/)
+    expect(rule).toMatch(/max-width:\s*110px/)
+    expect(rule).toMatch(/flex-basis:\s*110px/)
+    expect(rule).toMatch(/box-sizing:\s*border-box/)
+    expect(rule).toMatch(/position:\s*relative/)
+  })
+
+  it('源码静态契约：私有指示器绝对定位、不进内容流；显隐只切可见性/透明度；无 !important、无全局 EP 覆写、无 JS 尺寸监听', () => {
+    const src = SRC()
+    const spinner = src.match(/\.dss-btn-spinner\s*\{[^}]*\}/s)?.[0] ?? ''
+    expect(spinner).not.toBe('')
+    expect(spinner).toMatch(/position:\s*absolute/)
+    expect(spinner).toMatch(/opacity:\s*0/)
+    expect(spinner).toMatch(/visibility:\s*hidden/)
+    expect(src).toMatch(/\.dss-btn-spinner\.is-visible\s*\{[^}]*opacity:\s*1[^}]*visibility:\s*visible/s)
+    expect(src).not.toMatch(/!important/)
+    expect(src).not.toMatch(/(^|\n)\s*\.el-button\s*\{/)
+    expect(src).not.toMatch(/(^|\n)\s*\.el-icon\s*\{/)
+    expect(src).not.toMatch(/(^|\n)\s*\.is-loading\s*\{/)
+    expect(src).not.toMatch(/ResizeObserver/)
+    expect(src).not.toMatch(/requestAnimationFrame/)
+    // 仍不引入主按钮/蓝色基底视觉（保持次级白底细边框）
+    expect(src).not.toMatch(/background:\s*#09090b/)
+    expect(src).not.toMatch(/background:\s*#2563eb/)
+  })
+
+  it('reduced-motion 规则在停止旋转的同时保留静态可见指示器（不隐藏、不改变几何）', () => {
+    const src = SRC()
+    const block = src.match(/@media \(prefers-reduced-motion: reduce\)\s*\{([\s\S]*?)\n\}/)?.[1] ?? ''
+    expect(block).not.toBe('')
+    expect(block).toMatch(/\.dss-btn-spinner\s*\{[^}]*animation:\s*none/)
+    expect(block).toMatch(/\.dss-countdown-ring \.dss-ring-progress\s*\{[^}]*transition:\s*none/)
+    expect(block).not.toMatch(/display:\s*none/)
+    expect(block).not.toMatch(/visibility:\s*hidden/)
   })
 })

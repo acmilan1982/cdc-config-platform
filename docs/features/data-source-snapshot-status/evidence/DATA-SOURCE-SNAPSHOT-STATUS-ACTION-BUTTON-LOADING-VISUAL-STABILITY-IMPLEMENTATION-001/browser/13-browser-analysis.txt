@@ -1,0 +1,1306 @@
+{
+  "viewports": {
+    "1280x800": {
+      "states": [
+        "IDLE",
+        "QUERY_LOADING",
+        "QUERY_SUCCESS",
+        "MANUAL_LOADING",
+        "MANUAL_SUCCESS",
+        "MANUAL_LOADING_2",
+        "MANUAL_FAILURE",
+        "QUERY_LOADING_2",
+        "QUERY_FAILURE"
+      ],
+      "queryBtn": {
+        "x": 0,
+        "y": 0,
+        "w": 0,
+        "h": 0
+      },
+      "refreshBtn": {
+        "x": 0,
+        "y": 0,
+        "w": 0,
+        "h": 0
+      },
+      "queryLabel": {
+        "x": 0,
+        "y": 0
+      },
+      "refreshLabel": {
+        "x": 0,
+        "y": 0
+      },
+      "qActions": {
+        "x": 0,
+        "y": 0,
+        "w": 0,
+        "h": 0
+      },
+      "queryBar": {
+        "x": 0,
+        "y": 0,
+        "w": 0,
+        "h": 0
+      },
+      "refreshGroupLeft": 0.95,
+      "refreshGroupRight": 0,
+      "queryBarHeights": [
+        70,
+        70,
+        70,
+        70,
+        70,
+        70,
+        70,
+        70,
+        70
+      ],
+      "queryBarChildTops": [
+        "[175.5,175.5,175.5,215.5]",
+        "[175.5,175.5,175.5,215.5]",
+        "[175.5,175.5,175.5,215.5]",
+        "[175.5,175.5,175.5,215.5]",
+        "[175.5,175.5,175.5,215.5]",
+        "[175.5,175.5,175.5,215.5]",
+        "[175.5,175.5,175.5,215.5]",
+        "[175.5,175.5,175.5,215.5]",
+        "[175.5,175.5,175.5,215.5]"
+      ],
+      "widths": {
+        "query": [
+          62,
+          62,
+          62,
+          62,
+          62,
+          62,
+          62,
+          62,
+          62
+        ],
+        "refresh": [
+          110,
+          110,
+          110,
+          110,
+          110,
+          110,
+          110,
+          110,
+          110
+        ]
+      },
+      "spinnerVisible": [
+        "IDLE:q=hidden/dss-action-spin-cd886c8f,r=hidden/dss-action-spin-a581eda5",
+        "QUERY_LOADING:q=visible/dss-action-spin-cd886c8f,r=hidden/dss-action-spin-a581eda5",
+        "QUERY_SUCCESS:q=hidden/dss-action-spin-cd886c8f,r=hidden/dss-action-spin-a581eda5",
+        "MANUAL_LOADING:q=hidden/dss-action-spin-cd886c8f,r=visible/dss-action-spin-a581eda5",
+        "MANUAL_SUCCESS:q=hidden/dss-action-spin-cd886c8f,r=hidden/dss-action-spin-a581eda5",
+        "MANUAL_LOADING_2:q=hidden/dss-action-spin-cd886c8f,r=visible/dss-action-spin-a581eda5",
+        "MANUAL_FAILURE:q=hidden/dss-action-spin-cd886c8f,r=hidden/dss-action-spin-a581eda5",
+        "QUERY_LOADING_2:q=visible/dss-action-spin-cd886c8f,r=hidden/dss-action-spin-a581eda5",
+        "QUERY_FAILURE:q=hidden/dss-action-spin-cd886c8f,r=hidden/dss-action-spin-a581eda5"
+      ],
+      "overlaps": [
+        "IDLE:q=false,r=false",
+        "QUERY_LOADING:q=false,r=false",
+        "QUERY_SUCCESS:q=false,r=false",
+        "MANUAL_LOADING:q=false,r=false",
+        "MANUAL_SUCCESS:q=false,r=false",
+        "MANUAL_LOADING_2:q=false,r=false",
+        "MANUAL_FAILURE:q=false,r=false",
+        "QUERY_LOADING_2:q=false,r=false",
+        "QUERY_FAILURE:q=false,r=false"
+      ],
+      "gaps": [
+        "IDLE:q=2,r=11",
+        "QUERY_LOADING:q=2,r=11",
+        "QUERY_SUCCESS:q=2,r=11",
+        "MANUAL_LOADING:q=2,r=11",
+        "MANUAL_SUCCESS:q=2,r=11",
+        "MANUAL_LOADING_2:q=2,r=11",
+        "MANUAL_FAILURE:q=2,r=11",
+        "QUERY_LOADING_2:q=2,r=11",
+        "QUERY_FAILURE:q=2,r=11"
+      ],
+      "ariaBusy": [
+        "IDLE:q=null,r=null",
+        "QUERY_LOADING:q=true,r=null",
+        "QUERY_SUCCESS:q=null,r=null",
+        "MANUAL_LOADING:q=null,r=true",
+        "MANUAL_SUCCESS:q=null,r=null",
+        "MANUAL_LOADING_2:q=null,r=true",
+        "MANUAL_FAILURE:q=null,r=null",
+        "QUERY_LOADING_2:q=true,r=null",
+        "QUERY_FAILURE:q=null,r=null"
+      ],
+      "ariaDisabled": [
+        "IDLE:q=null,r=null",
+        "QUERY_LOADING:q=true,r=true",
+        "QUERY_SUCCESS:q=null,r=null",
+        "MANUAL_LOADING:q=true,r=true",
+        "MANUAL_SUCCESS:q=null,r=null",
+        "MANUAL_LOADING_2:q=true,r=true",
+        "MANUAL_FAILURE:q=null,r=null",
+        "QUERY_LOADING_2:q=true,r=true",
+        "QUERY_FAILURE:q=null,r=null"
+      ],
+      "disabled": [
+        "IDLE:q=false,r=false",
+        "QUERY_LOADING:q=false,r=false",
+        "QUERY_SUCCESS:q=false,r=false",
+        "MANUAL_LOADING:q=false,r=false",
+        "MANUAL_SUCCESS:q=false,r=false",
+        "MANUAL_LOADING_2:q=false,r=false",
+        "MANUAL_FAILURE:q=false,r=false",
+        "QUERY_LOADING_2:q=false,r=false",
+        "QUERY_FAILURE:q=false,r=false"
+      ],
+      "labels": [
+        "IDLE:q=\"查询\",r=\"立即刷新\"",
+        "QUERY_LOADING:q=\"查询\",r=\"立即刷新\"",
+        "QUERY_SUCCESS:q=\"查询\",r=\"立即刷新\"",
+        "MANUAL_LOADING:q=\"查询\",r=\"立即刷新\"",
+        "MANUAL_SUCCESS:q=\"查询\",r=\"立即刷新\"",
+        "MANUAL_LOADING_2:q=\"查询\",r=\"立即刷新\"",
+        "MANUAL_FAILURE:q=\"查询\",r=\"立即刷新\"",
+        "QUERY_LOADING_2:q=\"查询\",r=\"立即刷新\"",
+        "QUERY_FAILURE:q=\"查询\",r=\"立即刷新\""
+      ],
+      "ariaHidden": [
+        "IDLE:q=true,r=true",
+        "QUERY_LOADING:q=true,r=true",
+        "QUERY_SUCCESS:q=true,r=true",
+        "MANUAL_LOADING:q=true,r=true",
+        "MANUAL_SUCCESS:q=true,r=true",
+        "MANUAL_LOADING_2:q=true,r=true",
+        "MANUAL_FAILURE:q=true,r=true",
+        "QUERY_LOADING_2:q=true,r=true",
+        "QUERY_FAILURE:q=true,r=true"
+      ],
+      "spinnerCounts": [
+        "IDLE:q=1,r=1",
+        "QUERY_LOADING:q=1,r=1",
+        "QUERY_SUCCESS:q=1,r=1",
+        "MANUAL_LOADING:q=1,r=1",
+        "MANUAL_SUCCESS:q=1,r=1",
+        "MANUAL_LOADING_2:q=1,r=1",
+        "MANUAL_FAILURE:q=1,r=1",
+        "QUERY_LOADING_2:q=1,r=1",
+        "QUERY_FAILURE:q=1,r=1"
+      ],
+      "dssCounts": [
+        "IDLE:spinner=2,label=2",
+        "QUERY_LOADING:spinner=2,label=2",
+        "QUERY_SUCCESS:spinner=2,label=2",
+        "MANUAL_LOADING:spinner=2,label=2",
+        "MANUAL_SUCCESS:spinner=2,label=2",
+        "MANUAL_LOADING_2:spinner=2,label=2",
+        "MANUAL_FAILURE:spinner=2,label=2",
+        "QUERY_LOADING_2:spinner=2,label=2",
+        "QUERY_FAILURE:spinner=2,label=2"
+      ],
+      "selects": {
+        "client": {
+          "x": 340,
+          "y": 175.5,
+          "w": 240,
+          "h": 32
+        },
+        "source": {
+          "x": 628,
+          "y": 175.5,
+          "w": 300,
+          "h": 32
+        },
+        "status": {
+          "x": 1004,
+          "y": 175.5,
+          "w": 200,
+          "h": 32
+        }
+      },
+      "summaryText": [
+        "IDLE:共 2 条",
+        "QUERY_LOADING:共 2 条",
+        "QUERY_SUCCESS:共 3 条",
+        "MANUAL_LOADING:共 3 条",
+        "MANUAL_SUCCESS:共 3 条",
+        "MANUAL_LOADING_2:共 3 条",
+        "MANUAL_FAILURE:共 3 条",
+        "QUERY_LOADING_2:共 3 条",
+        "QUERY_FAILURE:共 3 条"
+      ],
+      "rows": [
+        "IDLE:2",
+        "QUERY_LOADING:2",
+        "QUERY_SUCCESS:3",
+        "MANUAL_LOADING:3",
+        "MANUAL_SUCCESS:3",
+        "MANUAL_LOADING_2:3",
+        "MANUAL_FAILURE:3",
+        "QUERY_LOADING_2:3",
+        "QUERY_FAILURE:3"
+      ],
+      "refreshTime": [
+        "IDLE:最近成功刷新：14:11:09",
+        "QUERY_LOADING:最近成功刷新：14:11:09",
+        "QUERY_SUCCESS:最近成功刷新：14:11:10",
+        "MANUAL_LOADING:最近成功刷新：14:11:10",
+        "MANUAL_SUCCESS:最近成功刷新：14:11:11",
+        "MANUAL_LOADING_2:最近成功刷新：14:11:11",
+        "MANUAL_FAILURE:最近成功刷新：14:11:11",
+        "QUERY_LOADING_2:最近成功刷新：14:11:11",
+        "QUERY_FAILURE:最近成功刷新：14:11:11"
+      ],
+      "listCalls": [
+        "GET ok /api/monitor/data-source-run-state/list",
+        "GET delayed /api/monitor/data-source-run-state/list",
+        "GET delayed /api/monitor/data-source-run-state/list",
+        "GET delayed /api/monitor/data-source-run-state/list",
+        "GET delayed /api/monitor/data-source-run-state/list"
+      ]
+    },
+    "1700x920": {
+      "states": [
+        "IDLE",
+        "QUERY_LOADING",
+        "QUERY_SUCCESS",
+        "MANUAL_LOADING",
+        "MANUAL_SUCCESS",
+        "MANUAL_LOADING_2",
+        "MANUAL_FAILURE",
+        "QUERY_LOADING_2",
+        "QUERY_FAILURE"
+      ],
+      "queryBtn": {
+        "x": 0,
+        "y": 0,
+        "w": 0,
+        "h": 0
+      },
+      "refreshBtn": {
+        "x": 0,
+        "y": 0,
+        "w": 0,
+        "h": 0
+      },
+      "queryLabel": {
+        "x": 0,
+        "y": 0
+      },
+      "refreshLabel": {
+        "x": 0,
+        "y": 0
+      },
+      "qActions": {
+        "x": 0,
+        "y": 0,
+        "w": 0,
+        "h": 0
+      },
+      "queryBar": {
+        "x": 0,
+        "y": 0,
+        "w": 0,
+        "h": 0
+      },
+      "refreshGroupLeft": 0,
+      "refreshGroupRight": 0,
+      "queryBarHeights": [
+        32,
+        32,
+        32,
+        32,
+        32,
+        32,
+        32,
+        32,
+        32
+      ],
+      "queryBarChildTops": [
+        "[175.5,175.5,175.5,176.5]",
+        "[175.5,175.5,175.5,176.5]",
+        "[175.5,175.5,175.5,176.5]",
+        "[175.5,175.5,175.5,176.5]",
+        "[175.5,175.5,175.5,176.5]",
+        "[175.5,175.5,175.5,176.5]",
+        "[175.5,175.5,175.5,176.5]",
+        "[175.5,175.5,175.5,176.5]",
+        "[175.5,175.5,175.5,176.5]"
+      ],
+      "widths": {
+        "query": [
+          62,
+          62,
+          62,
+          62,
+          62,
+          62,
+          62,
+          62,
+          62
+        ],
+        "refresh": [
+          110,
+          110,
+          110,
+          110,
+          110,
+          110,
+          110,
+          110,
+          110
+        ]
+      },
+      "spinnerVisible": [
+        "IDLE:q=hidden/dss-action-spin-cd886c8f,r=hidden/dss-action-spin-a581eda5",
+        "QUERY_LOADING:q=visible/dss-action-spin-cd886c8f,r=hidden/dss-action-spin-a581eda5",
+        "QUERY_SUCCESS:q=hidden/dss-action-spin-cd886c8f,r=hidden/dss-action-spin-a581eda5",
+        "MANUAL_LOADING:q=hidden/dss-action-spin-cd886c8f,r=visible/dss-action-spin-a581eda5",
+        "MANUAL_SUCCESS:q=hidden/dss-action-spin-cd886c8f,r=hidden/dss-action-spin-a581eda5",
+        "MANUAL_LOADING_2:q=hidden/dss-action-spin-cd886c8f,r=visible/dss-action-spin-a581eda5",
+        "MANUAL_FAILURE:q=hidden/dss-action-spin-cd886c8f,r=hidden/dss-action-spin-a581eda5",
+        "QUERY_LOADING_2:q=visible/dss-action-spin-cd886c8f,r=hidden/dss-action-spin-a581eda5",
+        "QUERY_FAILURE:q=hidden/dss-action-spin-cd886c8f,r=hidden/dss-action-spin-a581eda5"
+      ],
+      "overlaps": [
+        "IDLE:q=false,r=false",
+        "QUERY_LOADING:q=false,r=false",
+        "QUERY_SUCCESS:q=false,r=false",
+        "MANUAL_LOADING:q=false,r=false",
+        "MANUAL_SUCCESS:q=false,r=false",
+        "MANUAL_LOADING_2:q=false,r=false",
+        "MANUAL_FAILURE:q=false,r=false",
+        "QUERY_LOADING_2:q=false,r=false",
+        "QUERY_FAILURE:q=false,r=false"
+      ],
+      "gaps": [
+        "IDLE:q=2,r=11",
+        "QUERY_LOADING:q=2,r=11",
+        "QUERY_SUCCESS:q=2,r=11",
+        "MANUAL_LOADING:q=2,r=11",
+        "MANUAL_SUCCESS:q=2,r=11",
+        "MANUAL_LOADING_2:q=2,r=11",
+        "MANUAL_FAILURE:q=2,r=11",
+        "QUERY_LOADING_2:q=2,r=11",
+        "QUERY_FAILURE:q=2,r=11"
+      ],
+      "ariaBusy": [
+        "IDLE:q=null,r=null",
+        "QUERY_LOADING:q=true,r=null",
+        "QUERY_SUCCESS:q=null,r=null",
+        "MANUAL_LOADING:q=null,r=true",
+        "MANUAL_SUCCESS:q=null,r=null",
+        "MANUAL_LOADING_2:q=null,r=true",
+        "MANUAL_FAILURE:q=null,r=null",
+        "QUERY_LOADING_2:q=true,r=null",
+        "QUERY_FAILURE:q=null,r=null"
+      ],
+      "ariaDisabled": [
+        "IDLE:q=null,r=null",
+        "QUERY_LOADING:q=true,r=true",
+        "QUERY_SUCCESS:q=null,r=null",
+        "MANUAL_LOADING:q=true,r=true",
+        "MANUAL_SUCCESS:q=null,r=null",
+        "MANUAL_LOADING_2:q=true,r=true",
+        "MANUAL_FAILURE:q=null,r=null",
+        "QUERY_LOADING_2:q=true,r=true",
+        "QUERY_FAILURE:q=null,r=null"
+      ],
+      "disabled": [
+        "IDLE:q=false,r=false",
+        "QUERY_LOADING:q=false,r=false",
+        "QUERY_SUCCESS:q=false,r=false",
+        "MANUAL_LOADING:q=false,r=false",
+        "MANUAL_SUCCESS:q=false,r=false",
+        "MANUAL_LOADING_2:q=false,r=false",
+        "MANUAL_FAILURE:q=false,r=false",
+        "QUERY_LOADING_2:q=false,r=false",
+        "QUERY_FAILURE:q=false,r=false"
+      ],
+      "labels": [
+        "IDLE:q=\"查询\",r=\"立即刷新\"",
+        "QUERY_LOADING:q=\"查询\",r=\"立即刷新\"",
+        "QUERY_SUCCESS:q=\"查询\",r=\"立即刷新\"",
+        "MANUAL_LOADING:q=\"查询\",r=\"立即刷新\"",
+        "MANUAL_SUCCESS:q=\"查询\",r=\"立即刷新\"",
+        "MANUAL_LOADING_2:q=\"查询\",r=\"立即刷新\"",
+        "MANUAL_FAILURE:q=\"查询\",r=\"立即刷新\"",
+        "QUERY_LOADING_2:q=\"查询\",r=\"立即刷新\"",
+        "QUERY_FAILURE:q=\"查询\",r=\"立即刷新\""
+      ],
+      "ariaHidden": [
+        "IDLE:q=true,r=true",
+        "QUERY_LOADING:q=true,r=true",
+        "QUERY_SUCCESS:q=true,r=true",
+        "MANUAL_LOADING:q=true,r=true",
+        "MANUAL_SUCCESS:q=true,r=true",
+        "MANUAL_LOADING_2:q=true,r=true",
+        "MANUAL_FAILURE:q=true,r=true",
+        "QUERY_LOADING_2:q=true,r=true",
+        "QUERY_FAILURE:q=true,r=true"
+      ],
+      "spinnerCounts": [
+        "IDLE:q=1,r=1",
+        "QUERY_LOADING:q=1,r=1",
+        "QUERY_SUCCESS:q=1,r=1",
+        "MANUAL_LOADING:q=1,r=1",
+        "MANUAL_SUCCESS:q=1,r=1",
+        "MANUAL_LOADING_2:q=1,r=1",
+        "MANUAL_FAILURE:q=1,r=1",
+        "QUERY_LOADING_2:q=1,r=1",
+        "QUERY_FAILURE:q=1,r=1"
+      ],
+      "dssCounts": [
+        "IDLE:spinner=2,label=2",
+        "QUERY_LOADING:spinner=2,label=2",
+        "QUERY_SUCCESS:spinner=2,label=2",
+        "MANUAL_LOADING:spinner=2,label=2",
+        "MANUAL_SUCCESS:spinner=2,label=2",
+        "MANUAL_LOADING_2:spinner=2,label=2",
+        "MANUAL_FAILURE:spinner=2,label=2",
+        "QUERY_LOADING_2:spinner=2,label=2",
+        "QUERY_FAILURE:spinner=2,label=2"
+      ],
+      "selects": {
+        "client": {
+          "x": 340,
+          "y": 175.5,
+          "w": 240,
+          "h": 32
+        },
+        "source": {
+          "x": 628,
+          "y": 175.5,
+          "w": 300,
+          "h": 32
+        },
+        "status": {
+          "x": 1004,
+          "y": 175.5,
+          "w": 200,
+          "h": 32
+        }
+      },
+      "summaryText": [
+        "IDLE:共 2 条",
+        "QUERY_LOADING:共 2 条",
+        "QUERY_SUCCESS:共 3 条",
+        "MANUAL_LOADING:共 3 条",
+        "MANUAL_SUCCESS:共 3 条",
+        "MANUAL_LOADING_2:共 3 条",
+        "MANUAL_FAILURE:共 3 条",
+        "QUERY_LOADING_2:共 3 条",
+        "QUERY_FAILURE:共 3 条"
+      ],
+      "rows": [
+        "IDLE:2",
+        "QUERY_LOADING:2",
+        "QUERY_SUCCESS:3",
+        "MANUAL_LOADING:3",
+        "MANUAL_SUCCESS:3",
+        "MANUAL_LOADING_2:3",
+        "MANUAL_FAILURE:3",
+        "QUERY_LOADING_2:3",
+        "QUERY_FAILURE:3"
+      ],
+      "refreshTime": [
+        "IDLE:最近成功刷新：14:11:14",
+        "QUERY_LOADING:最近成功刷新：14:11:14",
+        "QUERY_SUCCESS:最近成功刷新：14:11:15",
+        "MANUAL_LOADING:最近成功刷新：14:11:15",
+        "MANUAL_SUCCESS:最近成功刷新：14:11:16",
+        "MANUAL_LOADING_2:最近成功刷新：14:11:16",
+        "MANUAL_FAILURE:最近成功刷新：14:11:16",
+        "QUERY_LOADING_2:最近成功刷新：14:11:16",
+        "QUERY_FAILURE:最近成功刷新：14:11:16"
+      ],
+      "listCalls": [
+        "GET ok /api/monitor/data-source-run-state/list",
+        "GET delayed /api/monitor/data-source-run-state/list",
+        "GET delayed /api/monitor/data-source-run-state/list",
+        "GET delayed /api/monitor/data-source-run-state/list",
+        "GET delayed /api/monitor/data-source-run-state/list"
+      ]
+    },
+    "1920x1080": {
+      "states": [
+        "IDLE",
+        "QUERY_LOADING",
+        "QUERY_SUCCESS",
+        "MANUAL_LOADING",
+        "MANUAL_SUCCESS",
+        "MANUAL_LOADING_2",
+        "MANUAL_FAILURE",
+        "QUERY_LOADING_2",
+        "QUERY_FAILURE"
+      ],
+      "queryBtn": {
+        "x": 0,
+        "y": 0,
+        "w": 0,
+        "h": 0
+      },
+      "refreshBtn": {
+        "x": 0,
+        "y": 0,
+        "w": 0,
+        "h": 0
+      },
+      "queryLabel": {
+        "x": 0,
+        "y": 0
+      },
+      "refreshLabel": {
+        "x": 0,
+        "y": 0
+      },
+      "qActions": {
+        "x": 0,
+        "y": 0,
+        "w": 0,
+        "h": 0
+      },
+      "queryBar": {
+        "x": 0,
+        "y": 0,
+        "w": 0,
+        "h": 0
+      },
+      "refreshGroupLeft": 0,
+      "refreshGroupRight": 0,
+      "queryBarHeights": [
+        32,
+        32,
+        32,
+        32,
+        32,
+        32,
+        32,
+        32,
+        32
+      ],
+      "queryBarChildTops": [
+        "[175.5,175.5,175.5,176.5]",
+        "[175.5,175.5,175.5,176.5]",
+        "[175.5,175.5,175.5,176.5]",
+        "[175.5,175.5,175.5,176.5]",
+        "[175.5,175.5,175.5,176.5]",
+        "[175.5,175.5,175.5,176.5]",
+        "[175.5,175.5,175.5,176.5]",
+        "[175.5,175.5,175.5,176.5]",
+        "[175.5,175.5,175.5,176.5]"
+      ],
+      "widths": {
+        "query": [
+          62,
+          62,
+          62,
+          62,
+          62,
+          62,
+          62,
+          62,
+          62
+        ],
+        "refresh": [
+          110,
+          110,
+          110,
+          110,
+          110,
+          110,
+          110,
+          110,
+          110
+        ]
+      },
+      "spinnerVisible": [
+        "IDLE:q=hidden/dss-action-spin-cd886c8f,r=hidden/dss-action-spin-a581eda5",
+        "QUERY_LOADING:q=visible/dss-action-spin-cd886c8f,r=hidden/dss-action-spin-a581eda5",
+        "QUERY_SUCCESS:q=hidden/dss-action-spin-cd886c8f,r=hidden/dss-action-spin-a581eda5",
+        "MANUAL_LOADING:q=hidden/dss-action-spin-cd886c8f,r=visible/dss-action-spin-a581eda5",
+        "MANUAL_SUCCESS:q=hidden/dss-action-spin-cd886c8f,r=hidden/dss-action-spin-a581eda5",
+        "MANUAL_LOADING_2:q=hidden/dss-action-spin-cd886c8f,r=visible/dss-action-spin-a581eda5",
+        "MANUAL_FAILURE:q=hidden/dss-action-spin-cd886c8f,r=hidden/dss-action-spin-a581eda5",
+        "QUERY_LOADING_2:q=visible/dss-action-spin-cd886c8f,r=hidden/dss-action-spin-a581eda5",
+        "QUERY_FAILURE:q=hidden/dss-action-spin-cd886c8f,r=hidden/dss-action-spin-a581eda5"
+      ],
+      "overlaps": [
+        "IDLE:q=false,r=false",
+        "QUERY_LOADING:q=false,r=false",
+        "QUERY_SUCCESS:q=false,r=false",
+        "MANUAL_LOADING:q=false,r=false",
+        "MANUAL_SUCCESS:q=false,r=false",
+        "MANUAL_LOADING_2:q=false,r=false",
+        "MANUAL_FAILURE:q=false,r=false",
+        "QUERY_LOADING_2:q=false,r=false",
+        "QUERY_FAILURE:q=false,r=false"
+      ],
+      "gaps": [
+        "IDLE:q=2,r=11",
+        "QUERY_LOADING:q=2,r=11",
+        "QUERY_SUCCESS:q=2,r=11",
+        "MANUAL_LOADING:q=2,r=11",
+        "MANUAL_SUCCESS:q=2,r=11",
+        "MANUAL_LOADING_2:q=2,r=11",
+        "MANUAL_FAILURE:q=2,r=11",
+        "QUERY_LOADING_2:q=2,r=11",
+        "QUERY_FAILURE:q=2,r=11"
+      ],
+      "ariaBusy": [
+        "IDLE:q=null,r=null",
+        "QUERY_LOADING:q=true,r=null",
+        "QUERY_SUCCESS:q=null,r=null",
+        "MANUAL_LOADING:q=null,r=true",
+        "MANUAL_SUCCESS:q=null,r=null",
+        "MANUAL_LOADING_2:q=null,r=true",
+        "MANUAL_FAILURE:q=null,r=null",
+        "QUERY_LOADING_2:q=true,r=null",
+        "QUERY_FAILURE:q=null,r=null"
+      ],
+      "ariaDisabled": [
+        "IDLE:q=null,r=null",
+        "QUERY_LOADING:q=true,r=true",
+        "QUERY_SUCCESS:q=null,r=null",
+        "MANUAL_LOADING:q=true,r=true",
+        "MANUAL_SUCCESS:q=null,r=null",
+        "MANUAL_LOADING_2:q=true,r=true",
+        "MANUAL_FAILURE:q=null,r=null",
+        "QUERY_LOADING_2:q=true,r=true",
+        "QUERY_FAILURE:q=null,r=null"
+      ],
+      "disabled": [
+        "IDLE:q=false,r=false",
+        "QUERY_LOADING:q=false,r=false",
+        "QUERY_SUCCESS:q=false,r=false",
+        "MANUAL_LOADING:q=false,r=false",
+        "MANUAL_SUCCESS:q=false,r=false",
+        "MANUAL_LOADING_2:q=false,r=false",
+        "MANUAL_FAILURE:q=false,r=false",
+        "QUERY_LOADING_2:q=false,r=false",
+        "QUERY_FAILURE:q=false,r=false"
+      ],
+      "labels": [
+        "IDLE:q=\"查询\",r=\"立即刷新\"",
+        "QUERY_LOADING:q=\"查询\",r=\"立即刷新\"",
+        "QUERY_SUCCESS:q=\"查询\",r=\"立即刷新\"",
+        "MANUAL_LOADING:q=\"查询\",r=\"立即刷新\"",
+        "MANUAL_SUCCESS:q=\"查询\",r=\"立即刷新\"",
+        "MANUAL_LOADING_2:q=\"查询\",r=\"立即刷新\"",
+        "MANUAL_FAILURE:q=\"查询\",r=\"立即刷新\"",
+        "QUERY_LOADING_2:q=\"查询\",r=\"立即刷新\"",
+        "QUERY_FAILURE:q=\"查询\",r=\"立即刷新\""
+      ],
+      "ariaHidden": [
+        "IDLE:q=true,r=true",
+        "QUERY_LOADING:q=true,r=true",
+        "QUERY_SUCCESS:q=true,r=true",
+        "MANUAL_LOADING:q=true,r=true",
+        "MANUAL_SUCCESS:q=true,r=true",
+        "MANUAL_LOADING_2:q=true,r=true",
+        "MANUAL_FAILURE:q=true,r=true",
+        "QUERY_LOADING_2:q=true,r=true",
+        "QUERY_FAILURE:q=true,r=true"
+      ],
+      "spinnerCounts": [
+        "IDLE:q=1,r=1",
+        "QUERY_LOADING:q=1,r=1",
+        "QUERY_SUCCESS:q=1,r=1",
+        "MANUAL_LOADING:q=1,r=1",
+        "MANUAL_SUCCESS:q=1,r=1",
+        "MANUAL_LOADING_2:q=1,r=1",
+        "MANUAL_FAILURE:q=1,r=1",
+        "QUERY_LOADING_2:q=1,r=1",
+        "QUERY_FAILURE:q=1,r=1"
+      ],
+      "dssCounts": [
+        "IDLE:spinner=2,label=2",
+        "QUERY_LOADING:spinner=2,label=2",
+        "QUERY_SUCCESS:spinner=2,label=2",
+        "MANUAL_LOADING:spinner=2,label=2",
+        "MANUAL_SUCCESS:spinner=2,label=2",
+        "MANUAL_LOADING_2:spinner=2,label=2",
+        "MANUAL_FAILURE:spinner=2,label=2",
+        "QUERY_LOADING_2:spinner=2,label=2",
+        "QUERY_FAILURE:spinner=2,label=2"
+      ],
+      "selects": {
+        "client": {
+          "x": 340,
+          "y": 175.5,
+          "w": 240,
+          "h": 32
+        },
+        "source": {
+          "x": 628,
+          "y": 175.5,
+          "w": 300,
+          "h": 32
+        },
+        "status": {
+          "x": 1004,
+          "y": 175.5,
+          "w": 200,
+          "h": 32
+        }
+      },
+      "summaryText": [
+        "IDLE:共 2 条",
+        "QUERY_LOADING:共 2 条",
+        "QUERY_SUCCESS:共 3 条",
+        "MANUAL_LOADING:共 3 条",
+        "MANUAL_SUCCESS:共 3 条",
+        "MANUAL_LOADING_2:共 3 条",
+        "MANUAL_FAILURE:共 3 条",
+        "QUERY_LOADING_2:共 3 条",
+        "QUERY_FAILURE:共 3 条"
+      ],
+      "rows": [
+        "IDLE:2",
+        "QUERY_LOADING:2",
+        "QUERY_SUCCESS:3",
+        "MANUAL_LOADING:3",
+        "MANUAL_SUCCESS:3",
+        "MANUAL_LOADING_2:3",
+        "MANUAL_FAILURE:3",
+        "QUERY_LOADING_2:3",
+        "QUERY_FAILURE:3"
+      ],
+      "refreshTime": [
+        "IDLE:最近成功刷新：14:11:18",
+        "QUERY_LOADING:最近成功刷新：14:11:18",
+        "QUERY_SUCCESS:最近成功刷新：14:11:19",
+        "MANUAL_LOADING:最近成功刷新：14:11:19",
+        "MANUAL_SUCCESS:最近成功刷新：14:11:21",
+        "MANUAL_LOADING_2:最近成功刷新：14:11:21",
+        "MANUAL_FAILURE:最近成功刷新：14:11:21",
+        "QUERY_LOADING_2:最近成功刷新：14:11:21",
+        "QUERY_FAILURE:最近成功刷新：14:11:21"
+      ],
+      "listCalls": [
+        "GET ok /api/monitor/data-source-run-state/list",
+        "GET delayed /api/monitor/data-source-run-state/list",
+        "GET delayed /api/monitor/data-source-run-state/list",
+        "GET delayed /api/monitor/data-source-run-state/list",
+        "GET delayed /api/monitor/data-source-run-state/list"
+      ]
+    },
+    "2560x1440": {
+      "states": [
+        "IDLE",
+        "QUERY_LOADING",
+        "QUERY_SUCCESS",
+        "MANUAL_LOADING",
+        "MANUAL_SUCCESS",
+        "MANUAL_LOADING_2",
+        "MANUAL_FAILURE",
+        "QUERY_LOADING_2",
+        "QUERY_FAILURE"
+      ],
+      "queryBtn": {
+        "x": 0,
+        "y": 0,
+        "w": 0,
+        "h": 0
+      },
+      "refreshBtn": {
+        "x": 0,
+        "y": 0,
+        "w": 0,
+        "h": 0
+      },
+      "queryLabel": {
+        "x": 0,
+        "y": 0
+      },
+      "refreshLabel": {
+        "x": 0,
+        "y": 0
+      },
+      "qActions": {
+        "x": 0,
+        "y": 0,
+        "w": 0,
+        "h": 0
+      },
+      "queryBar": {
+        "x": 0,
+        "y": 0,
+        "w": 0,
+        "h": 0
+      },
+      "refreshGroupLeft": 0,
+      "refreshGroupRight": 0,
+      "queryBarHeights": [
+        32,
+        32,
+        32,
+        32,
+        32,
+        32,
+        32,
+        32,
+        32
+      ],
+      "queryBarChildTops": [
+        "[175.5,175.5,175.5,176.5]",
+        "[175.5,175.5,175.5,176.5]",
+        "[175.5,175.5,175.5,176.5]",
+        "[175.5,175.5,175.5,176.5]",
+        "[175.5,175.5,175.5,176.5]",
+        "[175.5,175.5,175.5,176.5]",
+        "[175.5,175.5,175.5,176.5]",
+        "[175.5,175.5,175.5,176.5]",
+        "[175.5,175.5,175.5,176.5]"
+      ],
+      "widths": {
+        "query": [
+          62,
+          62,
+          62,
+          62,
+          62,
+          62,
+          62,
+          62,
+          62
+        ],
+        "refresh": [
+          110,
+          110,
+          110,
+          110,
+          110,
+          110,
+          110,
+          110,
+          110
+        ]
+      },
+      "spinnerVisible": [
+        "IDLE:q=hidden/dss-action-spin-cd886c8f,r=hidden/dss-action-spin-a581eda5",
+        "QUERY_LOADING:q=visible/dss-action-spin-cd886c8f,r=hidden/dss-action-spin-a581eda5",
+        "QUERY_SUCCESS:q=hidden/dss-action-spin-cd886c8f,r=hidden/dss-action-spin-a581eda5",
+        "MANUAL_LOADING:q=hidden/dss-action-spin-cd886c8f,r=visible/dss-action-spin-a581eda5",
+        "MANUAL_SUCCESS:q=hidden/dss-action-spin-cd886c8f,r=hidden/dss-action-spin-a581eda5",
+        "MANUAL_LOADING_2:q=hidden/dss-action-spin-cd886c8f,r=visible/dss-action-spin-a581eda5",
+        "MANUAL_FAILURE:q=hidden/dss-action-spin-cd886c8f,r=hidden/dss-action-spin-a581eda5",
+        "QUERY_LOADING_2:q=visible/dss-action-spin-cd886c8f,r=hidden/dss-action-spin-a581eda5",
+        "QUERY_FAILURE:q=hidden/dss-action-spin-cd886c8f,r=hidden/dss-action-spin-a581eda5"
+      ],
+      "overlaps": [
+        "IDLE:q=false,r=false",
+        "QUERY_LOADING:q=false,r=false",
+        "QUERY_SUCCESS:q=false,r=false",
+        "MANUAL_LOADING:q=false,r=false",
+        "MANUAL_SUCCESS:q=false,r=false",
+        "MANUAL_LOADING_2:q=false,r=false",
+        "MANUAL_FAILURE:q=false,r=false",
+        "QUERY_LOADING_2:q=false,r=false",
+        "QUERY_FAILURE:q=false,r=false"
+      ],
+      "gaps": [
+        "IDLE:q=2,r=11",
+        "QUERY_LOADING:q=2,r=11",
+        "QUERY_SUCCESS:q=2,r=11",
+        "MANUAL_LOADING:q=2,r=11",
+        "MANUAL_SUCCESS:q=2,r=11",
+        "MANUAL_LOADING_2:q=2,r=11",
+        "MANUAL_FAILURE:q=2,r=11",
+        "QUERY_LOADING_2:q=2,r=11",
+        "QUERY_FAILURE:q=2,r=11"
+      ],
+      "ariaBusy": [
+        "IDLE:q=null,r=null",
+        "QUERY_LOADING:q=true,r=null",
+        "QUERY_SUCCESS:q=null,r=null",
+        "MANUAL_LOADING:q=null,r=true",
+        "MANUAL_SUCCESS:q=null,r=null",
+        "MANUAL_LOADING_2:q=null,r=true",
+        "MANUAL_FAILURE:q=null,r=null",
+        "QUERY_LOADING_2:q=true,r=null",
+        "QUERY_FAILURE:q=null,r=null"
+      ],
+      "ariaDisabled": [
+        "IDLE:q=null,r=null",
+        "QUERY_LOADING:q=true,r=true",
+        "QUERY_SUCCESS:q=null,r=null",
+        "MANUAL_LOADING:q=true,r=true",
+        "MANUAL_SUCCESS:q=null,r=null",
+        "MANUAL_LOADING_2:q=true,r=true",
+        "MANUAL_FAILURE:q=null,r=null",
+        "QUERY_LOADING_2:q=true,r=true",
+        "QUERY_FAILURE:q=null,r=null"
+      ],
+      "disabled": [
+        "IDLE:q=false,r=false",
+        "QUERY_LOADING:q=false,r=false",
+        "QUERY_SUCCESS:q=false,r=false",
+        "MANUAL_LOADING:q=false,r=false",
+        "MANUAL_SUCCESS:q=false,r=false",
+        "MANUAL_LOADING_2:q=false,r=false",
+        "MANUAL_FAILURE:q=false,r=false",
+        "QUERY_LOADING_2:q=false,r=false",
+        "QUERY_FAILURE:q=false,r=false"
+      ],
+      "labels": [
+        "IDLE:q=\"查询\",r=\"立即刷新\"",
+        "QUERY_LOADING:q=\"查询\",r=\"立即刷新\"",
+        "QUERY_SUCCESS:q=\"查询\",r=\"立即刷新\"",
+        "MANUAL_LOADING:q=\"查询\",r=\"立即刷新\"",
+        "MANUAL_SUCCESS:q=\"查询\",r=\"立即刷新\"",
+        "MANUAL_LOADING_2:q=\"查询\",r=\"立即刷新\"",
+        "MANUAL_FAILURE:q=\"查询\",r=\"立即刷新\"",
+        "QUERY_LOADING_2:q=\"查询\",r=\"立即刷新\"",
+        "QUERY_FAILURE:q=\"查询\",r=\"立即刷新\""
+      ],
+      "ariaHidden": [
+        "IDLE:q=true,r=true",
+        "QUERY_LOADING:q=true,r=true",
+        "QUERY_SUCCESS:q=true,r=true",
+        "MANUAL_LOADING:q=true,r=true",
+        "MANUAL_SUCCESS:q=true,r=true",
+        "MANUAL_LOADING_2:q=true,r=true",
+        "MANUAL_FAILURE:q=true,r=true",
+        "QUERY_LOADING_2:q=true,r=true",
+        "QUERY_FAILURE:q=true,r=true"
+      ],
+      "spinnerCounts": [
+        "IDLE:q=1,r=1",
+        "QUERY_LOADING:q=1,r=1",
+        "QUERY_SUCCESS:q=1,r=1",
+        "MANUAL_LOADING:q=1,r=1",
+        "MANUAL_SUCCESS:q=1,r=1",
+        "MANUAL_LOADING_2:q=1,r=1",
+        "MANUAL_FAILURE:q=1,r=1",
+        "QUERY_LOADING_2:q=1,r=1",
+        "QUERY_FAILURE:q=1,r=1"
+      ],
+      "dssCounts": [
+        "IDLE:spinner=2,label=2",
+        "QUERY_LOADING:spinner=2,label=2",
+        "QUERY_SUCCESS:spinner=2,label=2",
+        "MANUAL_LOADING:spinner=2,label=2",
+        "MANUAL_SUCCESS:spinner=2,label=2",
+        "MANUAL_LOADING_2:spinner=2,label=2",
+        "MANUAL_FAILURE:spinner=2,label=2",
+        "QUERY_LOADING_2:spinner=2,label=2",
+        "QUERY_FAILURE:spinner=2,label=2"
+      ],
+      "selects": {
+        "client": {
+          "x": 340,
+          "y": 175.5,
+          "w": 240,
+          "h": 32
+        },
+        "source": {
+          "x": 628,
+          "y": 175.5,
+          "w": 300,
+          "h": 32
+        },
+        "status": {
+          "x": 1004,
+          "y": 175.5,
+          "w": 200,
+          "h": 32
+        }
+      },
+      "summaryText": [
+        "IDLE:共 2 条",
+        "QUERY_LOADING:共 2 条",
+        "QUERY_SUCCESS:共 3 条",
+        "MANUAL_LOADING:共 3 条",
+        "MANUAL_SUCCESS:共 3 条",
+        "MANUAL_LOADING_2:共 3 条",
+        "MANUAL_FAILURE:共 3 条",
+        "QUERY_LOADING_2:共 3 条",
+        "QUERY_FAILURE:共 3 条"
+      ],
+      "rows": [
+        "IDLE:2",
+        "QUERY_LOADING:2",
+        "QUERY_SUCCESS:3",
+        "MANUAL_LOADING:3",
+        "MANUAL_SUCCESS:3",
+        "MANUAL_LOADING_2:3",
+        "MANUAL_FAILURE:3",
+        "QUERY_LOADING_2:3",
+        "QUERY_FAILURE:3"
+      ],
+      "refreshTime": [
+        "IDLE:最近成功刷新：14:11:24",
+        "QUERY_LOADING:最近成功刷新：14:11:24",
+        "QUERY_SUCCESS:最近成功刷新：14:11:24",
+        "MANUAL_LOADING:最近成功刷新：14:11:24",
+        "MANUAL_SUCCESS:最近成功刷新：14:11:25",
+        "MANUAL_LOADING_2:最近成功刷新：14:11:25",
+        "MANUAL_FAILURE:最近成功刷新：14:11:25",
+        "QUERY_LOADING_2:最近成功刷新：14:11:25",
+        "QUERY_FAILURE:最近成功刷新：14:11:25"
+      ],
+      "listCalls": [
+        "GET ok /api/monitor/data-source-run-state/list",
+        "GET delayed /api/monitor/data-source-run-state/list",
+        "GET delayed /api/monitor/data-source-run-state/list",
+        "GET delayed /api/monitor/data-source-run-state/list",
+        "GET delayed /api/monitor/data-source-run-state/list"
+      ]
+    }
+  },
+  "fails": [],
+  "special": {
+    "reducedMotion": {
+      "idle": {
+        "reducedMotion": true,
+        "querySpinner": {
+          "count": 1,
+          "rect": {
+            "x": 1221,
+            "y": 185.5,
+            "w": 12,
+            "h": 12
+          },
+          "untransformedBox": {
+            "left": 1221,
+            "right": 1233,
+            "top": 185.5,
+            "bottom": 197.5
+          },
+          "visibility": "hidden",
+          "opacity": "0",
+          "animationName": "none",
+          "ariaHidden": "true",
+          "overlapsLabel": false,
+          "gapToLabelPx": 2
+        },
+        "refreshSpinner": {
+          "count": 1,
+          "rect": {
+            "x": 1742,
+            "y": 251.5,
+            "w": 12,
+            "h": 12
+          },
+          "untransformedBox": {
+            "left": 1742,
+            "right": 1754,
+            "top": 251.5,
+            "bottom": 263.5
+          },
+          "visibility": "hidden",
+          "opacity": "0",
+          "animationName": "none",
+          "ariaHidden": "true",
+          "overlapsLabel": false,
+          "gapToLabelPx": 11
+        },
+        "queryAriaBusy": null,
+        "queryBtn": {
+          "x": 1218,
+          "y": 176.5,
+          "w": 62,
+          "h": 30
+        },
+        "refreshBtn": {
+          "x": 1738,
+          "y": 241.5,
+          "w": 110,
+          "h": 32
+        },
+        "queryLabel": {
+          "x": 1249,
+          "y": 191.5
+        },
+        "refreshLabel": {
+          "x": 1793,
+          "y": 257.5
+        },
+        "label": "RM_IDLE"
+      },
+      "loading": {
+        "reducedMotion": true,
+        "querySpinner": {
+          "count": 1,
+          "rect": {
+            "x": 1221,
+            "y": 185.5,
+            "w": 12,
+            "h": 12
+          },
+          "untransformedBox": {
+            "left": 1221,
+            "right": 1233,
+            "top": 185.5,
+            "bottom": 197.5
+          },
+          "visibility": "visible",
+          "opacity": "1",
+          "animationName": "none",
+          "ariaHidden": "true",
+          "overlapsLabel": false,
+          "gapToLabelPx": 2
+        },
+        "refreshSpinner": {
+          "count": 1,
+          "rect": {
+            "x": 1742,
+            "y": 251.5,
+            "w": 12,
+            "h": 12
+          },
+          "untransformedBox": {
+            "left": 1742,
+            "right": 1754,
+            "top": 251.5,
+            "bottom": 263.5
+          },
+          "visibility": "hidden",
+          "opacity": "0",
+          "animationName": "none",
+          "ariaHidden": "true",
+          "overlapsLabel": false,
+          "gapToLabelPx": 11
+        },
+        "queryAriaBusy": "true",
+        "queryBtn": {
+          "x": 1218,
+          "y": 176.5,
+          "w": 62,
+          "h": 30
+        },
+        "refreshBtn": {
+          "x": 1738,
+          "y": 241.5,
+          "w": 110,
+          "h": 32
+        },
+        "queryLabel": {
+          "x": 1249,
+          "y": 191.5
+        },
+        "refreshLabel": {
+          "x": 1793,
+          "y": 257.5
+        },
+        "label": "RM_QUERY_LOADING"
+      },
+      "after": {
+        "reducedMotion": true,
+        "querySpinner": {
+          "count": 1,
+          "rect": {
+            "x": 1221,
+            "y": 185.5,
+            "w": 12,
+            "h": 12
+          },
+          "untransformedBox": {
+            "left": 1221,
+            "right": 1233,
+            "top": 185.5,
+            "bottom": 197.5
+          },
+          "visibility": "hidden",
+          "opacity": "0",
+          "animationName": "none",
+          "ariaHidden": "true",
+          "overlapsLabel": false,
+          "gapToLabelPx": 2
+        },
+        "refreshSpinner": {
+          "count": 1,
+          "rect": {
+            "x": 1742,
+            "y": 251.5,
+            "w": 12,
+            "h": 12
+          },
+          "untransformedBox": {
+            "left": 1742,
+            "right": 1754,
+            "top": 251.5,
+            "bottom": 263.5
+          },
+          "visibility": "hidden",
+          "opacity": "0",
+          "animationName": "none",
+          "ariaHidden": "true",
+          "overlapsLabel": false,
+          "gapToLabelPx": 11
+        },
+        "queryAriaBusy": null,
+        "queryBtn": {
+          "x": 1218,
+          "y": 176.5,
+          "w": 62,
+          "h": 30
+        },
+        "refreshBtn": {
+          "x": 1738,
+          "y": 241.5,
+          "w": 110,
+          "h": 32
+        },
+        "queryLabel": {
+          "x": 1249,
+          "y": 191.5
+        },
+        "refreshLabel": {
+          "x": 1793,
+          "y": 257.5
+        },
+        "label": "RM_QUERY_SUCCESS"
+      },
+      "reduceMatches": true
+    },
+    "keyboard": {
+      "requestsAfterPlainClick": 1
+    },
+    "busy": {
+      "extraRequestsDuringBusyClicks": 1,
+      "listCalls": [
+        {
+          "url": "http://127.0.0.1:5173/api/monitor/data-source-run-state/list",
+          "method": "GET",
+          "action": "delayed"
+        }
+      ],
+      "queryDisabled": false,
+      "refreshAriaBusy": "true"
+    },
+    "autoRefresh": {
+      "waitedMs": 59553,
+      "loadingQueryVisible": "hidden",
+      "loadingRefreshVisible": "hidden",
+      "loadingQueryAriaBusy": null,
+      "loadingRefreshAriaBusy": null
+    },
+    "otherRoute": {
+      "path": "/monitor/data-source",
+      "dssClassNodeCount": 0,
+      "dssSpinnerCount": 0,
+      "dssLabelCount": 0,
+      "buttonCount": 0
+    },
+    "requestSummary": {
+      "total": 375,
+      "nonGet": 0,
+      "apiNonGet": 0,
+      "listGets": 26
+    },
+    "consoleErrors": [],
+    "injectedFailures": 8,
+    "listCallSummary": {
+      "delayed": 1
+    }
+  }
+}
+
+=== FAILS ===
+NONE

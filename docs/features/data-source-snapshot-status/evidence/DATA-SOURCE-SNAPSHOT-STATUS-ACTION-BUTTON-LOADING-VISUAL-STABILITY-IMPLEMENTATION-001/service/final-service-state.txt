@@ -1,0 +1,31 @@
+== 前端开发服务（任务结果 worktree）证据快照 ==
+captured_at: 2026-09-14T14:28:34+08:00
+worktree served from: /agent/dss-abl-impl-001 (this task's isolated worktree, detached HEAD 9f06725)
+NOT served from: /agent/cdc-config-platform (main worktree preserved at 4222b0a)
+
+-- port 5173 listener --
+LISTEN 0      511          0.0.0.0:5173       0.0.0.0:*   
+
+-- vite process --
+    PID    PPID     ELAPSED CMD
+  17227   17214       23:10 node /agent/dss-abl-impl-001/frontend/node_modules/.bin/vite --host 0.0.0.0 --port 5173
+-- vite cwd --
+/agent/dss-abl-impl-001/frontend
+
+-- port 8080 (backend) --
+no listener (backend neither reused nor started)
+
+-- local HTTP probes (--noproxy to bypass server proxy) --
+http://127.0.0.1:5173/monitor/data-source-state -> 200
+http://192.168.174.70:5173/monitor/data-source-state -> 200
+
+-- headless chrome (harness only) --
+  17382 /opt/google/chrome/chrome --headless=new --no-sandbox --disable-gpu --disable-dev-shm-usage 
+
+-- access URL for project owner --
+http://192.168.174.70:5173/monitor/data-source-state
+
+-- stop command --
+kill 17227
+
+log: /agent/dss-abl-impl-001/docs/features/data-source-snapshot-status/evidence/DATA-SOURCE-SNAPSHOT-STATUS-ACTION-BUTTON-LOADING-VISUAL-STABILITY-IMPLEMENTATION-001/browser/10-vite-dev.log
