@@ -1,0 +1,16 @@
+# R1 报告 append-only 证明
+report=docs/features/data-source-snapshot-status/reports/DATA-SOURCE-SNAPSHOT-STATUS-QUERY-BUTTON-AND-TABLE-LAYOUT-STABILITY-IMPLEMENTATION-001-R1.md
+base_commit=8272d69bda0fa917cd569d85cbd61f6ed9e28b4e
+base_bytes=16602
+base_sha256=8783e06c862eabe4c4a88a515bad8630918cf11a423b84e662f3a5e68ecf7323
+now_bytes=21334
+now_sha256=ddd6bb2caf9fdfbb2dbe2c7310945c1febe2222a7ba9cae5b84303a80b75054d
+base_is_complete_prefix=true
+appended_bytes=4732
+appended_starts_with_section12=true
+numstat_added=74 numstat_deleted=0
+deleted_diff_lines=0 []
+deletion_bytes=0
+section12_present=true
+section12_count=1
+append_only_status=PASS

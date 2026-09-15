@@ -1,0 +1,30 @@
+[PASS] §10-1  git-diff-check                     :: git diff --check exit=0
+[PASS] §10-2  whitelist-only-changed-paths       :: changed_paths=21 outside_whitelist=0
+[PASS] §10-3  frontend-zero-diff                 :: git diff 8272d69 -- frontend => 0 个文件 []
+[PASS] §10-4  backend-zero-diff                  :: git diff 8272d69 -- backend => 0 个文件 []
+[PASS] §10-5  test-files-zero-diff               :: git diff 8272d69 -- *test* *.spec.* => 0 个文件 []
+[PASS] §10-6  deps-lock-sql-config-zero-diff     :: git diff 8272d69 -- 依赖/锁文件/SQL/配置 => 0 个文件 []
+[PASS] §10-7  requirement-rows                   :: business_rows=91 unique=91 set==001..091=True byte_identical=True
+[PASS] §10-8  acceptance-rows                    :: business_rows=118 unique=118 set==001..118=True byte_and_status_identical=True
+[PASS] §10-9  acceptance-statistics              :: PASS=113 FAIL=0 BLOCKED=0 NOT_RUN=5 (total=118)
+[PASS] §10-10 design-traceability-14.2-14.3      :: unique REQ=91/91 AC=118/118 mapping_block_byte_identical=True
+[PASS] §10-11 design-38-non-authorized-body      :: region_restored_equals_base=True
+[PASS] §10-12 ui-32-non-authorized-body          :: region_restored_equals_base=True
+[PASS] §10-13 api-database-contract-body         :: API(region_restored_equals_base=True) DATABASE(region_restored_equals_base=True)
+[PASS] §10-14 r0-report-frozen                   :: git diff 8272d69 -- R0 实现报告 => 零差异
+[PASS] §10-15 r0-r1-existing-evidence-frozen     :: R0 证据=32 文件 R1 证据=15 文件 差异=零差异
+[PASS] §10-16 r1-report-append-only              :: base_bytes=16602 now_bytes=21334 complete_prefix=True numstat_deletions=0 deleted_lines=0
+[PASS] §10-17 r0-r1-file-facts-consistent        :: 8 份文档分层计数令牌缺失=无
+[PASS] §10-18 unqualified-fact-conflation-zero   :: 未限定错误混写计数=0 []
+[PASS] §10-19 r0-file-counts                     :: 八份文档均含 r0_production_source_file_count=2 / r0_test_file_count=2 / r0_total_frontend_changed_file_count=4
+[PASS] §10-20 r1-reference-counts                :: 八份文档均含 r1_reference_corrected_file_count=4 / r1_reference_corrected_location_count=5
+[PASS] §10-21 status-awaiting-r2-and-114-118-not-run :: 八份文档状态令牌一致=True；AC-114~118=5 条且全 NOT_RUN=True []
+[PASS] §10-22 current-next-entry-is-r2           :: 八份文档当前下一入口均为 R2 入口、R1 入口仅为已限定历史=是
+[PASS] §10-23 credential-scan                    :: scanned=21 secret_hits=0 []
+[PASS] §10-24 no-trailing-whitespace-and-doc-validation :: 行尾空白=0 []；项目文档校验工具=NOT_AVAILABLE
+[PASS] §10-25 worktree-preservation              :: baseline_worktrees=55 既有 worktree 漂移=0 main_unchanged=True r2_worktree_present=True r2_head=base/detached=True
+[PASS] §10-26 git-diff-cached-check              :: git diff --cached --check exit=0
+[PASS] §10-27 staged-paths-whitelist             :: staged=21 outside_whitelist=0
+
+checks_run=27  failed=0
+section10_status=PASS

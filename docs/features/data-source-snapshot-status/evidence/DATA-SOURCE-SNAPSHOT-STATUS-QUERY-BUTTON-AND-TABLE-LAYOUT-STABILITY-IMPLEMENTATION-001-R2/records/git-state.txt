@@ -1,0 +1,28 @@
+# R2 worktree 相对基准提交的变更
+ M docs/features/README.md
+ M docs/features/data-source-snapshot-status/ACCEPTANCE.md
+ M docs/features/data-source-snapshot-status/API.md
+ M docs/features/data-source-snapshot-status/DATABASE.md
+ M docs/features/data-source-snapshot-status/DESIGN.md
+ M docs/features/data-source-snapshot-status/README.md
+ M docs/features/data-source-snapshot-status/REQUIREMENTS.md
+ M docs/features/data-source-snapshot-status/UI.md
+ M docs/features/data-source-snapshot-status/reports/DATA-SOURCE-SNAPSHOT-STATUS-QUERY-BUTTON-AND-TABLE-LAYOUT-STABILITY-IMPLEMENTATION-001-R1.md
+?? docs/features/data-source-snapshot-status/evidence/DATA-SOURCE-SNAPSHOT-STATUS-QUERY-BUTTON-AND-TABLE-LAYOUT-STABILITY-IMPLEMENTATION-001-R2/
+?? docs/features/data-source-snapshot-status/reports/DATA-SOURCE-SNAPSHOT-STATUS-QUERY-BUTTON-AND-TABLE-LAYOUT-STABILITY-IMPLEMENTATION-001-R2.md
+
+5	3	docs/features/README.md
+5	3	docs/features/data-source-snapshot-status/ACCEPTANCE.md
+5	3	docs/features/data-source-snapshot-status/API.md
+5	3	docs/features/data-source-snapshot-status/DATABASE.md
+6	4	docs/features/data-source-snapshot-status/DESIGN.md
+5	3	docs/features/data-source-snapshot-status/README.md
+5	3	docs/features/data-source-snapshot-status/REQUIREMENTS.md
+6	4	docs/features/data-source-snapshot-status/UI.md
+74	0	docs/features/data-source-snapshot-status/reports/DATA-SOURCE-SNAPSHOT-STATUS-QUERY-BUTTON-AND-TABLE-LAYOUT-STABILITY-IMPLEMENTATION-001-R1.md
+
+# HEAD
+8272d69bda0fa917cd569d85cbd61f6ed9e28b4e
+
+# 远程 develop
+8272d69bda0fa917cd569d85cbd61f6ed9e28b4e	refs/heads/develop

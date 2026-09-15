@@ -1,0 +1,61 @@
+######## README.md  hits=4 unqualified=0
+  L164   [QUALIFIED  ] conflated_r0_r1_file_fact
+  L47    [QUALIFIED  ] implementation_not_implemented
+  L67    [QUALIFIED  ] implementation_not_implemented
+  L158   [QUALIFIED  ] implementation_not_implemented
+######## data-source-snapshot-status/README.md  hits=11 unqualified=0
+  L279   [QUALIFIED  ] conflated_r0_r1_file_fact
+  L106   [QUALIFIED  ] implementation_not_implemented
+  L107   [QUALIFIED  ] implementation_not_implemented
+  L108   [QUALIFIED  ] implementation_not_implemented
+  L111   [QUALIFIED  ] implementation_not_implemented
+  L112   [QUALIFIED  ] implementation_not_implemented
+  L113   [QUALIFIED  ] implementation_not_implemented
+  L114   [QUALIFIED  ] implementation_not_implemented
+  L215   [QUALIFIED  ] implementation_not_implemented
+  L269   [QUALIFIED  ] implementation_not_implemented
+  L271   [QUALIFIED  ] implementation_not_implemented
+######## data-source-snapshot-status/REQUIREMENTS.md  hits=8 unqualified=0
+  L590   [QUALIFIED  ] conflated_r0_r1_file_fact
+  L31    [QUALIFIED  ] implementation_not_implemented
+  L61    [QUALIFIED  ] implementation_not_implemented
+  L91    [QUALIFIED  ] implementation_not_implemented
+  L469   [QUALIFIED  ] implementation_not_implemented
+  L511   [QUALIFIED  ] implementation_not_implemented
+  L582   [QUALIFIED  ] implementation_not_implemented
+  L510   [QUALIFIED  ] frontend_zero_diff
+######## data-source-snapshot-status/ACCEPTANCE.md  hits=4 unqualified=0
+  L553   [QUALIFIED  ] conflated_r0_r1_file_fact
+  L51    [QUALIFIED  ] implementation_not_implemented
+  L79    [QUALIFIED  ] implementation_not_implemented
+  L545   [QUALIFIED  ] implementation_not_implemented
+######## data-source-snapshot-status/DESIGN.md  hits=9 unqualified=0
+  L1332  [QUALIFIED  ] conflated_r0_r1_file_fact
+  L18    [QUALIFIED  ] implementation_not_implemented
+  L32    [QUALIFIED  ] implementation_not_implemented
+  L84    [QUALIFIED  ] implementation_not_implemented
+  L1250  [QUALIFIED  ] implementation_not_implemented
+  L1250  [QUALIFIED  ] implementation_not_implemented
+  L1322  [QUALIFIED  ] implementation_not_implemented
+  L1324  [QUALIFIED  ] implementation_not_implemented
+  L1322  [QUALIFIED  ] frontend_zero_diff
+######## data-source-snapshot-status/UI.md  hits=10 unqualified=0
+  L951   [QUALIFIED  ] conflated_r0_r1_file_fact
+  L74    [QUALIFIED  ] implementation_not_implemented
+  L877   [QUALIFIED  ] implementation_not_implemented
+  L877   [QUALIFIED  ] implementation_not_implemented
+  L877   [QUALIFIED  ] implementation_not_implemented
+  L937   [QUALIFIED  ] implementation_not_implemented
+  L942   [QUALIFIED  ] implementation_not_implemented
+  L943   [QUALIFIED  ] implementation_not_implemented
+  L937   [QUALIFIED  ] frontend_zero_diff
+  L937   [QUALIFIED  ] frontend_zero_diff
+######## data-source-snapshot-status/API.md  hits=3 unqualified=0
+  L391   [QUALIFIED  ] conflated_r0_r1_file_fact
+  L381   [QUALIFIED  ] implementation_not_implemented
+  L383   [QUALIFIED  ] implementation_not_implemented
+######## data-source-snapshot-status/DATABASE.md  hits=3 unqualified=0
+  L281   [QUALIFIED  ] conflated_r0_r1_file_fact
+  L271   [QUALIFIED  ] implementation_not_implemented
+  L273   [QUALIFIED  ] implementation_not_implemented
+### total_unqualified=0
