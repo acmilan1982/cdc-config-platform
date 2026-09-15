@@ -1,0 +1,11 @@
+[viewport 1280x800] states=6 longRows=30 shortRows=1 dupGets=1
+[viewport 1700x920] states=6 longRows=30 shortRows=1 dupGets=1
+[viewport 1920x1080] states=6 longRows=30 shortRows=1 dupGets=1
+[viewport 2560x1440] states=6 longRows=30 shortRows=1 dupGets=1
+[route /config/data-source] area=true gutterClass=false gutter=auto dssNodes=0
+[route /config/client] area=true gutterClass=false gutter=auto dssNodes=0
+[route /monitor/cdc-node] area=true gutterClass=false gutter=auto dssNodes=0
+
+strict_assertion_status=PASS
+strict_assertion_check_count=398
+strict_assertion_failure_count=0

@@ -1,0 +1,43 @@
+negative_control_marker=NEGATIVE-CONTROL-0.001PX-DO-NOT-USE-AS-ACCEPTANCE-EVIDENCE
+negative_control_injection_px=0.001
+negative_control_injection_count=16
+  injected 1280x800/LONG_IDLE/headers[0].x: 292 -> 292.001
+  injected 1280x800/LONG_IDLE/headers[0].width: 70 -> 70.001
+  injected 1280x800/LONG_IDLE/scroll.clientWidth: 1045 -> 1045.001
+  injected 1280x800/SHORT_IDLE/queryBtn.x: 568 -> 568.001
+  injected 1700x920/LONG_IDLE/headers[0].x: 292 -> 292.001
+  injected 1700x920/LONG_IDLE/headers[0].width: 70 -> 70.001
+  injected 1700x920/LONG_IDLE/scroll.clientWidth: 1465 -> 1465.001
+  injected 1700x920/SHORT_IDLE/queryBtn.x: 1218 -> 1218.001
+  injected 1920x1080/LONG_IDLE/headers[0].x: 292 -> 292.001
+  injected 1920x1080/LONG_IDLE/headers[0].width: 70 -> 70.001
+  injected 1920x1080/LONG_IDLE/scroll.clientWidth: 1685 -> 1685.001
+  injected 1920x1080/SHORT_IDLE/queryBtn.x: 1218 -> 1218.001
+  injected 2560x1440/LONG_IDLE/headers[0].x: 292 -> 292.001
+  injected 2560x1440/LONG_IDLE/headers[0].width: 70 -> 70.001
+  injected 2560x1440/LONG_IDLE/scroll.clientWidth: 2325 -> 2325.001
+  injected 2560x1440/SHORT_IDLE/queryBtn.x: 1218 -> 1218.001
+negative_control_judge_failure_count=20
+negative_control_judge_passed=false
+--- un-rounded failing values reported by the SHARED judge ---
+  query_button_self_rect_delta.x @ 1280x800: actual=0.0009999999999763531 expected=0
+  content_area_client_width_delta @ 1280x800: actual=0.0009999999999763531 expected=0
+  header_cell_x_delta[序号] @ 1280x800: actual=0.0009999999999763531 expected=0
+  header_cell_width_delta[序号] @ 1280x800: actual=0.0010000000000047748 expected=0
+  fixed_column_width[序号] @ 1280x800: actual=70,70.001 expected=70
+  query_button_self_rect_delta.x @ 1700x920: actual=0.0009999999999763531 expected=0
+  content_area_client_width_delta @ 1700x920: actual=0.0009999999999763531 expected=0
+  header_cell_x_delta[序号] @ 1700x920: actual=0.0009999999999763531 expected=0
+  header_cell_width_delta[序号] @ 1700x920: actual=0.0010000000000047748 expected=0
+  fixed_column_width[序号] @ 1700x920: actual=70,70.001 expected=70
+  query_button_self_rect_delta.x @ 1920x1080: actual=0.0009999999999763531 expected=0
+  content_area_client_width_delta @ 1920x1080: actual=0.0009999999999763531 expected=0
+  header_cell_x_delta[序号] @ 1920x1080: actual=0.0009999999999763531 expected=0
+  header_cell_width_delta[序号] @ 1920x1080: actual=0.0010000000000047748 expected=0
+  fixed_column_width[序号] @ 1920x1080: actual=70,70.001 expected=70
+  query_button_self_rect_delta.x @ 2560x1440: actual=0.0009999999999763531 expected=0
+  content_area_client_width_delta @ 2560x1440: actual=0.0010000000002037268 expected=0
+  header_cell_x_delta[序号] @ 2560x1440: actual=0.0009999999999763531 expected=0
+  header_cell_width_delta[序号] @ 2560x1440: actual=0.0010000000000047748 expected=0
+  fixed_column_width[序号] @ 2560x1440: actual=70,70.001 expected=70
+negative_control_status=CAUGHT_EXIT_NON_ZERO

@@ -1,0 +1,1999 @@
+{
+  "passed": true,
+  "failure_count": 0,
+  "check_count": 398,
+  "negative_control_expected_to_fail": false,
+  "failures": [],
+  "checked": [
+    {
+      "field": "state_names",
+      "where": "1280x800",
+      "actual": 6
+    },
+    {
+      "field": "query_button_width_set",
+      "where": "1280x800",
+      "actual": 62
+    },
+    {
+      "field": "query_button_width",
+      "where": "1280x800",
+      "actual": "62px"
+    },
+    {
+      "field": "query_button_minWidth",
+      "where": "1280x800",
+      "actual": "62px"
+    },
+    {
+      "field": "query_button_maxWidth",
+      "where": "1280x800",
+      "actual": "62px"
+    },
+    {
+      "field": "query_button_flexBasis",
+      "where": "1280x800",
+      "actual": "62px"
+    },
+    {
+      "field": "query_button_self_rect_delta.x",
+      "where": "1280x800",
+      "actual": 0
+    },
+    {
+      "field": "query_button_self_rect_delta.y",
+      "where": "1280x800",
+      "actual": 0
+    },
+    {
+      "field": "query_button_self_rect_delta.width",
+      "where": "1280x800",
+      "actual": 0
+    },
+    {
+      "field": "query_button_self_rect_delta.height",
+      "where": "1280x800",
+      "actual": 0
+    },
+    {
+      "field": "reset_button_width_set",
+      "where": "1280x800",
+      "actual": 62
+    },
+    {
+      "field": "reset_button_width",
+      "where": "1280x800",
+      "actual": "62px"
+    },
+    {
+      "field": "reset_button_minWidth",
+      "where": "1280x800",
+      "actual": "62px"
+    },
+    {
+      "field": "reset_button_maxWidth",
+      "where": "1280x800",
+      "actual": "62px"
+    },
+    {
+      "field": "reset_button_flexBasis",
+      "where": "1280x800",
+      "actual": "62px"
+    },
+    {
+      "field": "reset_button_self_rect_delta.x",
+      "where": "1280x800",
+      "actual": 0
+    },
+    {
+      "field": "reset_button_self_rect_delta.y",
+      "where": "1280x800",
+      "actual": 0
+    },
+    {
+      "field": "reset_button_self_rect_delta.width",
+      "where": "1280x800",
+      "actual": 0
+    },
+    {
+      "field": "reset_button_self_rect_delta.height",
+      "where": "1280x800",
+      "actual": 0
+    },
+    {
+      "field": "refresh_button_width_set",
+      "where": "1280x800",
+      "actual": 110
+    },
+    {
+      "field": "refresh_button_width",
+      "where": "1280x800",
+      "actual": "110px"
+    },
+    {
+      "field": "refresh_button_minWidth",
+      "where": "1280x800",
+      "actual": "110px"
+    },
+    {
+      "field": "refresh_button_maxWidth",
+      "where": "1280x800",
+      "actual": "110px"
+    },
+    {
+      "field": "refresh_button_flexBasis",
+      "where": "1280x800",
+      "actual": "110px"
+    },
+    {
+      "field": "refresh_button_self_rect_delta.x",
+      "where": "1280x800",
+      "actual": 0
+    },
+    {
+      "field": "refresh_button_self_rect_delta.y",
+      "where": "1280x800",
+      "actual": 0
+    },
+    {
+      "field": "refresh_button_self_rect_delta.width",
+      "where": "1280x800",
+      "actual": 0
+    },
+    {
+      "field": "refresh_button_self_rect_delta.height",
+      "where": "1280x800",
+      "actual": 0
+    },
+    {
+      "field": "query_bar_rect_delta.height",
+      "where": "1280x800",
+      "actual": 0
+    },
+    {
+      "field": "query_actions_rect_delta.height",
+      "where": "1280x800",
+      "actual": 0
+    },
+    {
+      "field": "query_actions_single_line",
+      "where": "1280x800",
+      "actual": true
+    },
+    {
+      "field": "adjacent_queryGroup_rect_delta.x",
+      "where": "1280x800",
+      "actual": 0
+    },
+    {
+      "field": "adjacent_queryGroup_rect_delta.y",
+      "where": "1280x800",
+      "actual": 0
+    },
+    {
+      "field": "adjacent_queryGroup_rect_delta.width",
+      "where": "1280x800",
+      "actual": 0
+    },
+    {
+      "field": "adjacent_queryGroup_rect_delta.height",
+      "where": "1280x800",
+      "actual": 0
+    },
+    {
+      "field": "adjacent_queryBar_rect_delta.x",
+      "where": "1280x800",
+      "actual": 0
+    },
+    {
+      "field": "adjacent_queryBar_rect_delta.y",
+      "where": "1280x800",
+      "actual": 0
+    },
+    {
+      "field": "adjacent_queryBar_rect_delta.width",
+      "where": "1280x800",
+      "actual": 0
+    },
+    {
+      "field": "adjacent_queryBar_rect_delta.height",
+      "where": "1280x800",
+      "actual": 0
+    },
+    {
+      "field": "long_state_real_vertical_overflow",
+      "where": "1280x800",
+      "actual": true
+    },
+    {
+      "field": "short_state_no_vertical_overflow",
+      "where": "1280x800",
+      "actual": true
+    },
+    {
+      "field": "restore_long_state_real_vertical_overflow",
+      "where": "1280x800",
+      "actual": true
+    },
+    {
+      "field": "long_result_record_count",
+      "where": "1280x800",
+      "actual": 30
+    },
+    {
+      "field": "short_result_record_count",
+      "where": "1280x800",
+      "actual": 1
+    },
+    {
+      "field": "scroll_container_computed_scrollbar_gutter",
+      "where": "1280x800",
+      "actual": "stable"
+    },
+    {
+      "field": "scroll_container_route_scoped_class",
+      "where": "1280x800",
+      "actual": true
+    },
+    {
+      "field": "content_area_rect_delta.x",
+      "where": "1280x800",
+      "actual": 0
+    },
+    {
+      "field": "content_area_rect_delta.width",
+      "where": "1280x800",
+      "actual": 0
+    },
+    {
+      "field": "content_area_client_width_delta",
+      "where": "1280x800",
+      "actual": 0
+    },
+    {
+      "field": "page_root_rect_delta.x",
+      "where": "1280x800",
+      "actual": 0
+    },
+    {
+      "field": "page_root_rect_delta.width",
+      "where": "1280x800",
+      "actual": 0
+    },
+    {
+      "field": "result_card_rect_delta.x",
+      "where": "1280x800",
+      "actual": 0
+    },
+    {
+      "field": "result_card_rect_delta.width",
+      "where": "1280x800",
+      "actual": 0
+    },
+    {
+      "field": "table_outer_frame_rect_delta.x",
+      "where": "1280x800",
+      "actual": 0
+    },
+    {
+      "field": "table_outer_frame_rect_delta.width",
+      "where": "1280x800",
+      "actual": 0
+    },
+    {
+      "field": "header_cell_count",
+      "where": "1280x800",
+      "actual": 7
+    },
+    {
+      "field": "header_labels_consistent",
+      "where": "1280x800",
+      "actual": true
+    },
+    {
+      "field": "header_cell_x_delta[序号]",
+      "where": "1280x800",
+      "actual": 0
+    },
+    {
+      "field": "header_cell_width_delta[序号]",
+      "where": "1280x800",
+      "actual": 0
+    },
+    {
+      "field": "data_column_start_x_delta[序号]",
+      "where": "1280x800",
+      "actual": 0
+    },
+    {
+      "field": "header_cell_x_delta[探针端]",
+      "where": "1280x800",
+      "actual": 0
+    },
+    {
+      "field": "header_cell_width_delta[探针端]",
+      "where": "1280x800",
+      "actual": 0
+    },
+    {
+      "field": "data_column_start_x_delta[探针端]",
+      "where": "1280x800",
+      "actual": 0
+    },
+    {
+      "field": "header_cell_x_delta[源库]",
+      "where": "1280x800",
+      "actual": 0
+    },
+    {
+      "field": "header_cell_width_delta[源库]",
+      "where": "1280x800",
+      "actual": 0
+    },
+    {
+      "field": "data_column_start_x_delta[源库]",
+      "where": "1280x800",
+      "actual": 0
+    },
+    {
+      "field": "header_cell_x_delta[快照状态]",
+      "where": "1280x800",
+      "actual": 0
+    },
+    {
+      "field": "header_cell_width_delta[快照状态]",
+      "where": "1280x800",
+      "actual": 0
+    },
+    {
+      "field": "data_column_start_x_delta[快照状态]",
+      "where": "1280x800",
+      "actual": 0
+    },
+    {
+      "field": "header_cell_x_delta[快照启动时间]",
+      "where": "1280x800",
+      "actual": 0
+    },
+    {
+      "field": "header_cell_width_delta[快照启动时间]",
+      "where": "1280x800",
+      "actual": 0
+    },
+    {
+      "field": "data_column_start_x_delta[快照启动时间]",
+      "where": "1280x800",
+      "actual": 0
+    },
+    {
+      "field": "header_cell_x_delta[快照完成时间]",
+      "where": "1280x800",
+      "actual": 0
+    },
+    {
+      "field": "header_cell_width_delta[快照完成时间]",
+      "where": "1280x800",
+      "actual": 0
+    },
+    {
+      "field": "data_column_start_x_delta[快照完成时间]",
+      "where": "1280x800",
+      "actual": 0
+    },
+    {
+      "field": "header_cell_x_delta[记录更新时间]",
+      "where": "1280x800",
+      "actual": 0
+    },
+    {
+      "field": "header_cell_width_delta[记录更新时间]",
+      "where": "1280x800",
+      "actual": 0
+    },
+    {
+      "field": "data_column_start_x_delta[记录更新时间]",
+      "where": "1280x800",
+      "actual": 0
+    },
+    {
+      "field": "header_center_x_delta[探针端]",
+      "where": "1280x800",
+      "actual": 0
+    },
+    {
+      "field": "header_center_x_delta[源库]",
+      "where": "1280x800",
+      "actual": 0
+    },
+    {
+      "field": "header_center_x_delta[快照状态]",
+      "where": "1280x800",
+      "actual": 0
+    },
+    {
+      "field": "header_center_x_delta[快照启动时间]",
+      "where": "1280x800",
+      "actual": 0
+    },
+    {
+      "field": "header_center_x_delta[快照完成时间]",
+      "where": "1280x800",
+      "actual": 0
+    },
+    {
+      "field": "header_center_x_delta[记录更新时间]",
+      "where": "1280x800",
+      "actual": 0
+    },
+    {
+      "field": "summary_count_text_semantics",
+      "where": "1280x800",
+      "actual": "共 30 条 | 共 1 条"
+    },
+    {
+      "field": "summary_count_text_differs_long_vs_short",
+      "where": "1280x800",
+      "actual": "共 30 条 -> 共 1 条"
+    },
+    {
+      "field": "no_horizontal_overflow",
+      "where": "1280x800",
+      "actual": true
+    },
+    {
+      "field": "fixed_column_width[序号]",
+      "where": "1280x800",
+      "actual": 70
+    },
+    {
+      "field": "fixed_column_width[快照状态]",
+      "where": "1280x800",
+      "actual": 140
+    },
+    {
+      "field": "elastic_column_min_width[探针端]",
+      "where": "1280x800",
+      "actual": true
+    },
+    {
+      "field": "elastic_column_min_width[源库]",
+      "where": "1280x800",
+      "actual": true
+    },
+    {
+      "field": "elastic_column_min_width[快照启动时间]",
+      "where": "1280x800",
+      "actual": true
+    },
+    {
+      "field": "elastic_column_min_width[快照完成时间]",
+      "where": "1280x800",
+      "actual": true
+    },
+    {
+      "field": "elastic_column_min_width[记录更新时间]",
+      "where": "1280x800",
+      "actual": true
+    },
+    {
+      "field": "state_names",
+      "where": "1700x920",
+      "actual": 6
+    },
+    {
+      "field": "query_button_width_set",
+      "where": "1700x920",
+      "actual": 62
+    },
+    {
+      "field": "query_button_width",
+      "where": "1700x920",
+      "actual": "62px"
+    },
+    {
+      "field": "query_button_minWidth",
+      "where": "1700x920",
+      "actual": "62px"
+    },
+    {
+      "field": "query_button_maxWidth",
+      "where": "1700x920",
+      "actual": "62px"
+    },
+    {
+      "field": "query_button_flexBasis",
+      "where": "1700x920",
+      "actual": "62px"
+    },
+    {
+      "field": "query_button_self_rect_delta.x",
+      "where": "1700x920",
+      "actual": 0
+    },
+    {
+      "field": "query_button_self_rect_delta.y",
+      "where": "1700x920",
+      "actual": 0
+    },
+    {
+      "field": "query_button_self_rect_delta.width",
+      "where": "1700x920",
+      "actual": 0
+    },
+    {
+      "field": "query_button_self_rect_delta.height",
+      "where": "1700x920",
+      "actual": 0
+    },
+    {
+      "field": "reset_button_width_set",
+      "where": "1700x920",
+      "actual": 62
+    },
+    {
+      "field": "reset_button_width",
+      "where": "1700x920",
+      "actual": "62px"
+    },
+    {
+      "field": "reset_button_minWidth",
+      "where": "1700x920",
+      "actual": "62px"
+    },
+    {
+      "field": "reset_button_maxWidth",
+      "where": "1700x920",
+      "actual": "62px"
+    },
+    {
+      "field": "reset_button_flexBasis",
+      "where": "1700x920",
+      "actual": "62px"
+    },
+    {
+      "field": "reset_button_self_rect_delta.x",
+      "where": "1700x920",
+      "actual": 0
+    },
+    {
+      "field": "reset_button_self_rect_delta.y",
+      "where": "1700x920",
+      "actual": 0
+    },
+    {
+      "field": "reset_button_self_rect_delta.width",
+      "where": "1700x920",
+      "actual": 0
+    },
+    {
+      "field": "reset_button_self_rect_delta.height",
+      "where": "1700x920",
+      "actual": 0
+    },
+    {
+      "field": "refresh_button_width_set",
+      "where": "1700x920",
+      "actual": 110
+    },
+    {
+      "field": "refresh_button_width",
+      "where": "1700x920",
+      "actual": "110px"
+    },
+    {
+      "field": "refresh_button_minWidth",
+      "where": "1700x920",
+      "actual": "110px"
+    },
+    {
+      "field": "refresh_button_maxWidth",
+      "where": "1700x920",
+      "actual": "110px"
+    },
+    {
+      "field": "refresh_button_flexBasis",
+      "where": "1700x920",
+      "actual": "110px"
+    },
+    {
+      "field": "refresh_button_self_rect_delta.x",
+      "where": "1700x920",
+      "actual": 0
+    },
+    {
+      "field": "refresh_button_self_rect_delta.y",
+      "where": "1700x920",
+      "actual": 0
+    },
+    {
+      "field": "refresh_button_self_rect_delta.width",
+      "where": "1700x920",
+      "actual": 0
+    },
+    {
+      "field": "refresh_button_self_rect_delta.height",
+      "where": "1700x920",
+      "actual": 0
+    },
+    {
+      "field": "query_bar_rect_delta.height",
+      "where": "1700x920",
+      "actual": 0
+    },
+    {
+      "field": "query_actions_rect_delta.height",
+      "where": "1700x920",
+      "actual": 0
+    },
+    {
+      "field": "query_actions_single_line",
+      "where": "1700x920",
+      "actual": true
+    },
+    {
+      "field": "adjacent_queryGroup_rect_delta.x",
+      "where": "1700x920",
+      "actual": 0
+    },
+    {
+      "field": "adjacent_queryGroup_rect_delta.y",
+      "where": "1700x920",
+      "actual": 0
+    },
+    {
+      "field": "adjacent_queryGroup_rect_delta.width",
+      "where": "1700x920",
+      "actual": 0
+    },
+    {
+      "field": "adjacent_queryGroup_rect_delta.height",
+      "where": "1700x920",
+      "actual": 0
+    },
+    {
+      "field": "adjacent_queryBar_rect_delta.x",
+      "where": "1700x920",
+      "actual": 0
+    },
+    {
+      "field": "adjacent_queryBar_rect_delta.y",
+      "where": "1700x920",
+      "actual": 0
+    },
+    {
+      "field": "adjacent_queryBar_rect_delta.width",
+      "where": "1700x920",
+      "actual": 0
+    },
+    {
+      "field": "adjacent_queryBar_rect_delta.height",
+      "where": "1700x920",
+      "actual": 0
+    },
+    {
+      "field": "long_state_real_vertical_overflow",
+      "where": "1700x920",
+      "actual": true
+    },
+    {
+      "field": "short_state_no_vertical_overflow",
+      "where": "1700x920",
+      "actual": true
+    },
+    {
+      "field": "restore_long_state_real_vertical_overflow",
+      "where": "1700x920",
+      "actual": true
+    },
+    {
+      "field": "long_result_record_count",
+      "where": "1700x920",
+      "actual": 30
+    },
+    {
+      "field": "short_result_record_count",
+      "where": "1700x920",
+      "actual": 1
+    },
+    {
+      "field": "scroll_container_computed_scrollbar_gutter",
+      "where": "1700x920",
+      "actual": "stable"
+    },
+    {
+      "field": "scroll_container_route_scoped_class",
+      "where": "1700x920",
+      "actual": true
+    },
+    {
+      "field": "content_area_rect_delta.x",
+      "where": "1700x920",
+      "actual": 0
+    },
+    {
+      "field": "content_area_rect_delta.width",
+      "where": "1700x920",
+      "actual": 0
+    },
+    {
+      "field": "content_area_client_width_delta",
+      "where": "1700x920",
+      "actual": 0
+    },
+    {
+      "field": "page_root_rect_delta.x",
+      "where": "1700x920",
+      "actual": 0
+    },
+    {
+      "field": "page_root_rect_delta.width",
+      "where": "1700x920",
+      "actual": 0
+    },
+    {
+      "field": "result_card_rect_delta.x",
+      "where": "1700x920",
+      "actual": 0
+    },
+    {
+      "field": "result_card_rect_delta.width",
+      "where": "1700x920",
+      "actual": 0
+    },
+    {
+      "field": "table_outer_frame_rect_delta.x",
+      "where": "1700x920",
+      "actual": 0
+    },
+    {
+      "field": "table_outer_frame_rect_delta.width",
+      "where": "1700x920",
+      "actual": 0
+    },
+    {
+      "field": "header_cell_count",
+      "where": "1700x920",
+      "actual": 7
+    },
+    {
+      "field": "header_labels_consistent",
+      "where": "1700x920",
+      "actual": true
+    },
+    {
+      "field": "header_cell_x_delta[序号]",
+      "where": "1700x920",
+      "actual": 0
+    },
+    {
+      "field": "header_cell_width_delta[序号]",
+      "where": "1700x920",
+      "actual": 0
+    },
+    {
+      "field": "data_column_start_x_delta[序号]",
+      "where": "1700x920",
+      "actual": 0
+    },
+    {
+      "field": "header_cell_x_delta[探针端]",
+      "where": "1700x920",
+      "actual": 0
+    },
+    {
+      "field": "header_cell_width_delta[探针端]",
+      "where": "1700x920",
+      "actual": 0
+    },
+    {
+      "field": "data_column_start_x_delta[探针端]",
+      "where": "1700x920",
+      "actual": 0
+    },
+    {
+      "field": "header_cell_x_delta[源库]",
+      "where": "1700x920",
+      "actual": 0
+    },
+    {
+      "field": "header_cell_width_delta[源库]",
+      "where": "1700x920",
+      "actual": 0
+    },
+    {
+      "field": "data_column_start_x_delta[源库]",
+      "where": "1700x920",
+      "actual": 0
+    },
+    {
+      "field": "header_cell_x_delta[快照状态]",
+      "where": "1700x920",
+      "actual": 0
+    },
+    {
+      "field": "header_cell_width_delta[快照状态]",
+      "where": "1700x920",
+      "actual": 0
+    },
+    {
+      "field": "data_column_start_x_delta[快照状态]",
+      "where": "1700x920",
+      "actual": 0
+    },
+    {
+      "field": "header_cell_x_delta[快照启动时间]",
+      "where": "1700x920",
+      "actual": 0
+    },
+    {
+      "field": "header_cell_width_delta[快照启动时间]",
+      "where": "1700x920",
+      "actual": 0
+    },
+    {
+      "field": "data_column_start_x_delta[快照启动时间]",
+      "where": "1700x920",
+      "actual": 0
+    },
+    {
+      "field": "header_cell_x_delta[快照完成时间]",
+      "where": "1700x920",
+      "actual": 0
+    },
+    {
+      "field": "header_cell_width_delta[快照完成时间]",
+      "where": "1700x920",
+      "actual": 0
+    },
+    {
+      "field": "data_column_start_x_delta[快照完成时间]",
+      "where": "1700x920",
+      "actual": 0
+    },
+    {
+      "field": "header_cell_x_delta[记录更新时间]",
+      "where": "1700x920",
+      "actual": 0
+    },
+    {
+      "field": "header_cell_width_delta[记录更新时间]",
+      "where": "1700x920",
+      "actual": 0
+    },
+    {
+      "field": "data_column_start_x_delta[记录更新时间]",
+      "where": "1700x920",
+      "actual": 0
+    },
+    {
+      "field": "header_center_x_delta[探针端]",
+      "where": "1700x920",
+      "actual": 0
+    },
+    {
+      "field": "header_center_x_delta[源库]",
+      "where": "1700x920",
+      "actual": 0
+    },
+    {
+      "field": "header_center_x_delta[快照状态]",
+      "where": "1700x920",
+      "actual": 0
+    },
+    {
+      "field": "header_center_x_delta[快照启动时间]",
+      "where": "1700x920",
+      "actual": 0
+    },
+    {
+      "field": "header_center_x_delta[快照完成时间]",
+      "where": "1700x920",
+      "actual": 0
+    },
+    {
+      "field": "header_center_x_delta[记录更新时间]",
+      "where": "1700x920",
+      "actual": 0
+    },
+    {
+      "field": "summary_count_text_semantics",
+      "where": "1700x920",
+      "actual": "共 30 条 | 共 1 条"
+    },
+    {
+      "field": "summary_count_text_differs_long_vs_short",
+      "where": "1700x920",
+      "actual": "共 30 条 -> 共 1 条"
+    },
+    {
+      "field": "no_horizontal_overflow",
+      "where": "1700x920",
+      "actual": true
+    },
+    {
+      "field": "fixed_column_width[序号]",
+      "where": "1700x920",
+      "actual": 70
+    },
+    {
+      "field": "fixed_column_width[快照状态]",
+      "where": "1700x920",
+      "actual": 140
+    },
+    {
+      "field": "elastic_column_min_width[探针端]",
+      "where": "1700x920",
+      "actual": true
+    },
+    {
+      "field": "elastic_column_min_width[源库]",
+      "where": "1700x920",
+      "actual": true
+    },
+    {
+      "field": "elastic_column_min_width[快照启动时间]",
+      "where": "1700x920",
+      "actual": true
+    },
+    {
+      "field": "elastic_column_min_width[快照完成时间]",
+      "where": "1700x920",
+      "actual": true
+    },
+    {
+      "field": "elastic_column_min_width[记录更新时间]",
+      "where": "1700x920",
+      "actual": true
+    },
+    {
+      "field": "state_names",
+      "where": "1920x1080",
+      "actual": 6
+    },
+    {
+      "field": "query_button_width_set",
+      "where": "1920x1080",
+      "actual": 62
+    },
+    {
+      "field": "query_button_width",
+      "where": "1920x1080",
+      "actual": "62px"
+    },
+    {
+      "field": "query_button_minWidth",
+      "where": "1920x1080",
+      "actual": "62px"
+    },
+    {
+      "field": "query_button_maxWidth",
+      "where": "1920x1080",
+      "actual": "62px"
+    },
+    {
+      "field": "query_button_flexBasis",
+      "where": "1920x1080",
+      "actual": "62px"
+    },
+    {
+      "field": "query_button_self_rect_delta.x",
+      "where": "1920x1080",
+      "actual": 0
+    },
+    {
+      "field": "query_button_self_rect_delta.y",
+      "where": "1920x1080",
+      "actual": 0
+    },
+    {
+      "field": "query_button_self_rect_delta.width",
+      "where": "1920x1080",
+      "actual": 0
+    },
+    {
+      "field": "query_button_self_rect_delta.height",
+      "where": "1920x1080",
+      "actual": 0
+    },
+    {
+      "field": "reset_button_width_set",
+      "where": "1920x1080",
+      "actual": 62
+    },
+    {
+      "field": "reset_button_width",
+      "where": "1920x1080",
+      "actual": "62px"
+    },
+    {
+      "field": "reset_button_minWidth",
+      "where": "1920x1080",
+      "actual": "62px"
+    },
+    {
+      "field": "reset_button_maxWidth",
+      "where": "1920x1080",
+      "actual": "62px"
+    },
+    {
+      "field": "reset_button_flexBasis",
+      "where": "1920x1080",
+      "actual": "62px"
+    },
+    {
+      "field": "reset_button_self_rect_delta.x",
+      "where": "1920x1080",
+      "actual": 0
+    },
+    {
+      "field": "reset_button_self_rect_delta.y",
+      "where": "1920x1080",
+      "actual": 0
+    },
+    {
+      "field": "reset_button_self_rect_delta.width",
+      "where": "1920x1080",
+      "actual": 0
+    },
+    {
+      "field": "reset_button_self_rect_delta.height",
+      "where": "1920x1080",
+      "actual": 0
+    },
+    {
+      "field": "refresh_button_width_set",
+      "where": "1920x1080",
+      "actual": 110
+    },
+    {
+      "field": "refresh_button_width",
+      "where": "1920x1080",
+      "actual": "110px"
+    },
+    {
+      "field": "refresh_button_minWidth",
+      "where": "1920x1080",
+      "actual": "110px"
+    },
+    {
+      "field": "refresh_button_maxWidth",
+      "where": "1920x1080",
+      "actual": "110px"
+    },
+    {
+      "field": "refresh_button_flexBasis",
+      "where": "1920x1080",
+      "actual": "110px"
+    },
+    {
+      "field": "refresh_button_self_rect_delta.x",
+      "where": "1920x1080",
+      "actual": 0
+    },
+    {
+      "field": "refresh_button_self_rect_delta.y",
+      "where": "1920x1080",
+      "actual": 0
+    },
+    {
+      "field": "refresh_button_self_rect_delta.width",
+      "where": "1920x1080",
+      "actual": 0
+    },
+    {
+      "field": "refresh_button_self_rect_delta.height",
+      "where": "1920x1080",
+      "actual": 0
+    },
+    {
+      "field": "query_bar_rect_delta.height",
+      "where": "1920x1080",
+      "actual": 0
+    },
+    {
+      "field": "query_actions_rect_delta.height",
+      "where": "1920x1080",
+      "actual": 0
+    },
+    {
+      "field": "query_actions_single_line",
+      "where": "1920x1080",
+      "actual": true
+    },
+    {
+      "field": "adjacent_queryGroup_rect_delta.x",
+      "where": "1920x1080",
+      "actual": 0
+    },
+    {
+      "field": "adjacent_queryGroup_rect_delta.y",
+      "where": "1920x1080",
+      "actual": 0
+    },
+    {
+      "field": "adjacent_queryGroup_rect_delta.width",
+      "where": "1920x1080",
+      "actual": 0
+    },
+    {
+      "field": "adjacent_queryGroup_rect_delta.height",
+      "where": "1920x1080",
+      "actual": 0
+    },
+    {
+      "field": "adjacent_queryBar_rect_delta.x",
+      "where": "1920x1080",
+      "actual": 0
+    },
+    {
+      "field": "adjacent_queryBar_rect_delta.y",
+      "where": "1920x1080",
+      "actual": 0
+    },
+    {
+      "field": "adjacent_queryBar_rect_delta.width",
+      "where": "1920x1080",
+      "actual": 0
+    },
+    {
+      "field": "adjacent_queryBar_rect_delta.height",
+      "where": "1920x1080",
+      "actual": 0
+    },
+    {
+      "field": "long_state_real_vertical_overflow",
+      "where": "1920x1080",
+      "actual": true
+    },
+    {
+      "field": "short_state_no_vertical_overflow",
+      "where": "1920x1080",
+      "actual": true
+    },
+    {
+      "field": "restore_long_state_real_vertical_overflow",
+      "where": "1920x1080",
+      "actual": true
+    },
+    {
+      "field": "long_result_record_count",
+      "where": "1920x1080",
+      "actual": 30
+    },
+    {
+      "field": "short_result_record_count",
+      "where": "1920x1080",
+      "actual": 1
+    },
+    {
+      "field": "scroll_container_computed_scrollbar_gutter",
+      "where": "1920x1080",
+      "actual": "stable"
+    },
+    {
+      "field": "scroll_container_route_scoped_class",
+      "where": "1920x1080",
+      "actual": true
+    },
+    {
+      "field": "content_area_rect_delta.x",
+      "where": "1920x1080",
+      "actual": 0
+    },
+    {
+      "field": "content_area_rect_delta.width",
+      "where": "1920x1080",
+      "actual": 0
+    },
+    {
+      "field": "content_area_client_width_delta",
+      "where": "1920x1080",
+      "actual": 0
+    },
+    {
+      "field": "page_root_rect_delta.x",
+      "where": "1920x1080",
+      "actual": 0
+    },
+    {
+      "field": "page_root_rect_delta.width",
+      "where": "1920x1080",
+      "actual": 0
+    },
+    {
+      "field": "result_card_rect_delta.x",
+      "where": "1920x1080",
+      "actual": 0
+    },
+    {
+      "field": "result_card_rect_delta.width",
+      "where": "1920x1080",
+      "actual": 0
+    },
+    {
+      "field": "table_outer_frame_rect_delta.x",
+      "where": "1920x1080",
+      "actual": 0
+    },
+    {
+      "field": "table_outer_frame_rect_delta.width",
+      "where": "1920x1080",
+      "actual": 0
+    },
+    {
+      "field": "header_cell_count",
+      "where": "1920x1080",
+      "actual": 7
+    },
+    {
+      "field": "header_labels_consistent",
+      "where": "1920x1080",
+      "actual": true
+    },
+    {
+      "field": "header_cell_x_delta[序号]",
+      "where": "1920x1080",
+      "actual": 0
+    },
+    {
+      "field": "header_cell_width_delta[序号]",
+      "where": "1920x1080",
+      "actual": 0
+    },
+    {
+      "field": "data_column_start_x_delta[序号]",
+      "where": "1920x1080",
+      "actual": 0
+    },
+    {
+      "field": "header_cell_x_delta[探针端]",
+      "where": "1920x1080",
+      "actual": 0
+    },
+    {
+      "field": "header_cell_width_delta[探针端]",
+      "where": "1920x1080",
+      "actual": 0
+    },
+    {
+      "field": "data_column_start_x_delta[探针端]",
+      "where": "1920x1080",
+      "actual": 0
+    },
+    {
+      "field": "header_cell_x_delta[源库]",
+      "where": "1920x1080",
+      "actual": 0
+    },
+    {
+      "field": "header_cell_width_delta[源库]",
+      "where": "1920x1080",
+      "actual": 0
+    },
+    {
+      "field": "data_column_start_x_delta[源库]",
+      "where": "1920x1080",
+      "actual": 0
+    },
+    {
+      "field": "header_cell_x_delta[快照状态]",
+      "where": "1920x1080",
+      "actual": 0
+    },
+    {
+      "field": "header_cell_width_delta[快照状态]",
+      "where": "1920x1080",
+      "actual": 0
+    },
+    {
+      "field": "data_column_start_x_delta[快照状态]",
+      "where": "1920x1080",
+      "actual": 0
+    },
+    {
+      "field": "header_cell_x_delta[快照启动时间]",
+      "where": "1920x1080",
+      "actual": 0
+    },
+    {
+      "field": "header_cell_width_delta[快照启动时间]",
+      "where": "1920x1080",
+      "actual": 0
+    },
+    {
+      "field": "data_column_start_x_delta[快照启动时间]",
+      "where": "1920x1080",
+      "actual": 0
+    },
+    {
+      "field": "header_cell_x_delta[快照完成时间]",
+      "where": "1920x1080",
+      "actual": 0
+    },
+    {
+      "field": "header_cell_width_delta[快照完成时间]",
+      "where": "1920x1080",
+      "actual": 0
+    },
+    {
+      "field": "data_column_start_x_delta[快照完成时间]",
+      "where": "1920x1080",
+      "actual": 0
+    },
+    {
+      "field": "header_cell_x_delta[记录更新时间]",
+      "where": "1920x1080",
+      "actual": 0
+    },
+    {
+      "field": "header_cell_width_delta[记录更新时间]",
+      "where": "1920x1080",
+      "actual": 0
+    },
+    {
+      "field": "data_column_start_x_delta[记录更新时间]",
+      "where": "1920x1080",
+      "actual": 0
+    },
+    {
+      "field": "header_center_x_delta[探针端]",
+      "where": "1920x1080",
+      "actual": 0
+    },
+    {
+      "field": "header_center_x_delta[源库]",
+      "where": "1920x1080",
+      "actual": 0
+    },
+    {
+      "field": "header_center_x_delta[快照状态]",
+      "where": "1920x1080",
+      "actual": 0
+    },
+    {
+      "field": "header_center_x_delta[快照启动时间]",
+      "where": "1920x1080",
+      "actual": 0
+    },
+    {
+      "field": "header_center_x_delta[快照完成时间]",
+      "where": "1920x1080",
+      "actual": 0
+    },
+    {
+      "field": "header_center_x_delta[记录更新时间]",
+      "where": "1920x1080",
+      "actual": 0
+    },
+    {
+      "field": "summary_count_text_semantics",
+      "where": "1920x1080",
+      "actual": "共 30 条 | 共 1 条"
+    },
+    {
+      "field": "summary_count_text_differs_long_vs_short",
+      "where": "1920x1080",
+      "actual": "共 30 条 -> 共 1 条"
+    },
+    {
+      "field": "no_horizontal_overflow",
+      "where": "1920x1080",
+      "actual": true
+    },
+    {
+      "field": "fixed_column_width[序号]",
+      "where": "1920x1080",
+      "actual": 70
+    },
+    {
+      "field": "fixed_column_width[快照状态]",
+      "where": "1920x1080",
+      "actual": 140
+    },
+    {
+      "field": "elastic_column_min_width[探针端]",
+      "where": "1920x1080",
+      "actual": true
+    },
+    {
+      "field": "elastic_column_min_width[源库]",
+      "where": "1920x1080",
+      "actual": true
+    },
+    {
+      "field": "elastic_column_min_width[快照启动时间]",
+      "where": "1920x1080",
+      "actual": true
+    },
+    {
+      "field": "elastic_column_min_width[快照完成时间]",
+      "where": "1920x1080",
+      "actual": true
+    },
+    {
+      "field": "elastic_column_min_width[记录更新时间]",
+      "where": "1920x1080",
+      "actual": true
+    },
+    {
+      "field": "state_names",
+      "where": "2560x1440",
+      "actual": 6
+    },
+    {
+      "field": "query_button_width_set",
+      "where": "2560x1440",
+      "actual": 62
+    },
+    {
+      "field": "query_button_width",
+      "where": "2560x1440",
+      "actual": "62px"
+    },
+    {
+      "field": "query_button_minWidth",
+      "where": "2560x1440",
+      "actual": "62px"
+    },
+    {
+      "field": "query_button_maxWidth",
+      "where": "2560x1440",
+      "actual": "62px"
+    },
+    {
+      "field": "query_button_flexBasis",
+      "where": "2560x1440",
+      "actual": "62px"
+    },
+    {
+      "field": "query_button_self_rect_delta.x",
+      "where": "2560x1440",
+      "actual": 0
+    },
+    {
+      "field": "query_button_self_rect_delta.y",
+      "where": "2560x1440",
+      "actual": 0
+    },
+    {
+      "field": "query_button_self_rect_delta.width",
+      "where": "2560x1440",
+      "actual": 0
+    },
+    {
+      "field": "query_button_self_rect_delta.height",
+      "where": "2560x1440",
+      "actual": 0
+    },
+    {
+      "field": "reset_button_width_set",
+      "where": "2560x1440",
+      "actual": 62
+    },
+    {
+      "field": "reset_button_width",
+      "where": "2560x1440",
+      "actual": "62px"
+    },
+    {
+      "field": "reset_button_minWidth",
+      "where": "2560x1440",
+      "actual": "62px"
+    },
+    {
+      "field": "reset_button_maxWidth",
+      "where": "2560x1440",
+      "actual": "62px"
+    },
+    {
+      "field": "reset_button_flexBasis",
+      "where": "2560x1440",
+      "actual": "62px"
+    },
+    {
+      "field": "reset_button_self_rect_delta.x",
+      "where": "2560x1440",
+      "actual": 0
+    },
+    {
+      "field": "reset_button_self_rect_delta.y",
+      "where": "2560x1440",
+      "actual": 0
+    },
+    {
+      "field": "reset_button_self_rect_delta.width",
+      "where": "2560x1440",
+      "actual": 0
+    },
+    {
+      "field": "reset_button_self_rect_delta.height",
+      "where": "2560x1440",
+      "actual": 0
+    },
+    {
+      "field": "refresh_button_width_set",
+      "where": "2560x1440",
+      "actual": 110
+    },
+    {
+      "field": "refresh_button_width",
+      "where": "2560x1440",
+      "actual": "110px"
+    },
+    {
+      "field": "refresh_button_minWidth",
+      "where": "2560x1440",
+      "actual": "110px"
+    },
+    {
+      "field": "refresh_button_maxWidth",
+      "where": "2560x1440",
+      "actual": "110px"
+    },
+    {
+      "field": "refresh_button_flexBasis",
+      "where": "2560x1440",
+      "actual": "110px"
+    },
+    {
+      "field": "refresh_button_self_rect_delta.x",
+      "where": "2560x1440",
+      "actual": 0
+    },
+    {
+      "field": "refresh_button_self_rect_delta.y",
+      "where": "2560x1440",
+      "actual": 0
+    },
+    {
+      "field": "refresh_button_self_rect_delta.width",
+      "where": "2560x1440",
+      "actual": 0
+    },
+    {
+      "field": "refresh_button_self_rect_delta.height",
+      "where": "2560x1440",
+      "actual": 0
+    },
+    {
+      "field": "query_bar_rect_delta.height",
+      "where": "2560x1440",
+      "actual": 0
+    },
+    {
+      "field": "query_actions_rect_delta.height",
+      "where": "2560x1440",
+      "actual": 0
+    },
+    {
+      "field": "query_actions_single_line",
+      "where": "2560x1440",
+      "actual": true
+    },
+    {
+      "field": "adjacent_queryGroup_rect_delta.x",
+      "where": "2560x1440",
+      "actual": 0
+    },
+    {
+      "field": "adjacent_queryGroup_rect_delta.y",
+      "where": "2560x1440",
+      "actual": 0
+    },
+    {
+      "field": "adjacent_queryGroup_rect_delta.width",
+      "where": "2560x1440",
+      "actual": 0
+    },
+    {
+      "field": "adjacent_queryGroup_rect_delta.height",
+      "where": "2560x1440",
+      "actual": 0
+    },
+    {
+      "field": "adjacent_queryBar_rect_delta.x",
+      "where": "2560x1440",
+      "actual": 0
+    },
+    {
+      "field": "adjacent_queryBar_rect_delta.y",
+      "where": "2560x1440",
+      "actual": 0
+    },
+    {
+      "field": "adjacent_queryBar_rect_delta.width",
+      "where": "2560x1440",
+      "actual": 0
+    },
+    {
+      "field": "adjacent_queryBar_rect_delta.height",
+      "where": "2560x1440",
+      "actual": 0
+    },
+    {
+      "field": "long_state_real_vertical_overflow",
+      "where": "2560x1440",
+      "actual": true
+    },
+    {
+      "field": "short_state_no_vertical_overflow",
+      "where": "2560x1440",
+      "actual": true
+    },
+    {
+      "field": "restore_long_state_real_vertical_overflow",
+      "where": "2560x1440",
+      "actual": true
+    },
+    {
+      "field": "long_result_record_count",
+      "where": "2560x1440",
+      "actual": 30
+    },
+    {
+      "field": "short_result_record_count",
+      "where": "2560x1440",
+      "actual": 1
+    },
+    {
+      "field": "scroll_container_computed_scrollbar_gutter",
+      "where": "2560x1440",
+      "actual": "stable"
+    },
+    {
+      "field": "scroll_container_route_scoped_class",
+      "where": "2560x1440",
+      "actual": true
+    },
+    {
+      "field": "content_area_rect_delta.x",
+      "where": "2560x1440",
+      "actual": 0
+    },
+    {
+      "field": "content_area_rect_delta.width",
+      "where": "2560x1440",
+      "actual": 0
+    },
+    {
+      "field": "content_area_client_width_delta",
+      "where": "2560x1440",
+      "actual": 0
+    },
+    {
+      "field": "page_root_rect_delta.x",
+      "where": "2560x1440",
+      "actual": 0
+    },
+    {
+      "field": "page_root_rect_delta.width",
+      "where": "2560x1440",
+      "actual": 0
+    },
+    {
+      "field": "result_card_rect_delta.x",
+      "where": "2560x1440",
+      "actual": 0
+    },
+    {
+      "field": "result_card_rect_delta.width",
+      "where": "2560x1440",
+      "actual": 0
+    },
+    {
+      "field": "table_outer_frame_rect_delta.x",
+      "where": "2560x1440",
+      "actual": 0
+    },
+    {
+      "field": "table_outer_frame_rect_delta.width",
+      "where": "2560x1440",
+      "actual": 0
+    },
+    {
+      "field": "header_cell_count",
+      "where": "2560x1440",
+      "actual": 7
+    },
+    {
+      "field": "header_labels_consistent",
+      "where": "2560x1440",
+      "actual": true
+    },
+    {
+      "field": "header_cell_x_delta[序号]",
+      "where": "2560x1440",
+      "actual": 0
+    },
+    {
+      "field": "header_cell_width_delta[序号]",
+      "where": "2560x1440",
+      "actual": 0
+    },
+    {
+      "field": "data_column_start_x_delta[序号]",
+      "where": "2560x1440",
+      "actual": 0
+    },
+    {
+      "field": "header_cell_x_delta[探针端]",
+      "where": "2560x1440",
+      "actual": 0
+    },
+    {
+      "field": "header_cell_width_delta[探针端]",
+      "where": "2560x1440",
+      "actual": 0
+    },
+    {
+      "field": "data_column_start_x_delta[探针端]",
+      "where": "2560x1440",
+      "actual": 0
+    },
+    {
+      "field": "header_cell_x_delta[源库]",
+      "where": "2560x1440",
+      "actual": 0
+    },
+    {
+      "field": "header_cell_width_delta[源库]",
+      "where": "2560x1440",
+      "actual": 0
+    },
+    {
+      "field": "data_column_start_x_delta[源库]",
+      "where": "2560x1440",
+      "actual": 0
+    },
+    {
+      "field": "header_cell_x_delta[快照状态]",
+      "where": "2560x1440",
+      "actual": 0
+    },
+    {
+      "field": "header_cell_width_delta[快照状态]",
+      "where": "2560x1440",
+      "actual": 0
+    },
+    {
+      "field": "data_column_start_x_delta[快照状态]",
+      "where": "2560x1440",
+      "actual": 0
+    },
+    {
+      "field": "header_cell_x_delta[快照启动时间]",
+      "where": "2560x1440",
+      "actual": 0
+    },
+    {
+      "field": "header_cell_width_delta[快照启动时间]",
+      "where": "2560x1440",
+      "actual": 0
+    },
+    {
+      "field": "data_column_start_x_delta[快照启动时间]",
+      "where": "2560x1440",
+      "actual": 0
+    },
+    {
+      "field": "header_cell_x_delta[快照完成时间]",
+      "where": "2560x1440",
+      "actual": 0
+    },
+    {
+      "field": "header_cell_width_delta[快照完成时间]",
+      "where": "2560x1440",
+      "actual": 0
+    },
+    {
+      "field": "data_column_start_x_delta[快照完成时间]",
+      "where": "2560x1440",
+      "actual": 0
+    },
+    {
+      "field": "header_cell_x_delta[记录更新时间]",
+      "where": "2560x1440",
+      "actual": 0
+    },
+    {
+      "field": "header_cell_width_delta[记录更新时间]",
+      "where": "2560x1440",
+      "actual": 0
+    },
+    {
+      "field": "data_column_start_x_delta[记录更新时间]",
+      "where": "2560x1440",
+      "actual": 0
+    },
+    {
+      "field": "header_center_x_delta[探针端]",
+      "where": "2560x1440",
+      "actual": 0
+    },
+    {
+      "field": "header_center_x_delta[源库]",
+      "where": "2560x1440",
+      "actual": 0
+    },
+    {
+      "field": "header_center_x_delta[快照状态]",
+      "where": "2560x1440",
+      "actual": 0
+    },
+    {
+      "field": "header_center_x_delta[快照启动时间]",
+      "where": "2560x1440",
+      "actual": 0
+    },
+    {
+      "field": "header_center_x_delta[快照完成时间]",
+      "where": "2560x1440",
+      "actual": 0
+    },
+    {
+      "field": "header_center_x_delta[记录更新时间]",
+      "where": "2560x1440",
+      "actual": 0
+    },
+    {
+      "field": "summary_count_text_semantics",
+      "where": "2560x1440",
+      "actual": "共 30 条 | 共 1 条"
+    },
+    {
+      "field": "summary_count_text_differs_long_vs_short",
+      "where": "2560x1440",
+      "actual": "共 30 条 -> 共 1 条"
+    },
+    {
+      "field": "no_horizontal_overflow",
+      "where": "2560x1440",
+      "actual": true
+    },
+    {
+      "field": "fixed_column_width[序号]",
+      "where": "2560x1440",
+      "actual": 70
+    },
+    {
+      "field": "fixed_column_width[快照状态]",
+      "where": "2560x1440",
+      "actual": 140
+    },
+    {
+      "field": "elastic_column_min_width[探针端]",
+      "where": "2560x1440",
+      "actual": true
+    },
+    {
+      "field": "elastic_column_min_width[源库]",
+      "where": "2560x1440",
+      "actual": true
+    },
+    {
+      "field": "elastic_column_min_width[快照启动时间]",
+      "where": "2560x1440",
+      "actual": true
+    },
+    {
+      "field": "elastic_column_min_width[快照完成时间]",
+      "where": "2560x1440",
+      "actual": true
+    },
+    {
+      "field": "elastic_column_min_width[记录更新时间]",
+      "where": "2560x1440",
+      "actual": true
+    },
+    {
+      "field": "elastic_column_absorbs_width[探针端]",
+      "where": "cross-viewport",
+      "actual": "170,198,236,348"
+    },
+    {
+      "field": "elastic_column_absorbs_width[源库]",
+      "where": "cross-viewport",
+      "actual": "285,328,393,582"
+    },
+    {
+      "field": "elastic_column_absorbs_width[快照启动时间]",
+      "where": "cross-viewport",
+      "actual": "170,195,234,347"
+    },
+    {
+      "field": "elastic_column_absorbs_width[快照完成时间]",
+      "where": "cross-viewport",
+      "actual": "170,195,234,347"
+    },
+    {
+      "field": "elastic_column_absorbs_width[记录更新时间]",
+      "where": "cross-viewport",
+      "actual": "170,195,234,347"
+    },
+    {
+      "field": "otherRouteLeak.routesChecked",
+      "where": "global",
+      "actual": 3
+    },
+    {
+      "field": "otherRouteLeak.gutterClassPresent",
+      "where": "global",
+      "actual": 0
+    },
+    {
+      "field": "otherRouteLeak.stableGutterComputed",
+      "where": "global",
+      "actual": 0
+    },
+    {
+      "field": "otherRouteLeak.dssFeatureNodes",
+      "where": "global",
+      "actual": 0
+    },
+    {
+      "field": "requests.nonGet",
+      "where": "global",
+      "actual": 0
+    },
+    {
+      "field": "requests.apiNonGet",
+      "where": "global",
+      "actual": 0
+    },
+    {
+      "field": "requests.listGets",
+      "where": "global",
+      "actual": 20
+    },
+    {
+      "field": "requestSemantics.in_flight_duplicate_click_no_extra_get",
+      "where": "global",
+      "actual": 1
+    },
+    {
+      "field": "requestSemantics.failure_preserves_old_results",
+      "where": "global",
+      "actual": true
+    },
+    {
+      "field": "consoleErrors",
+      "where": "global",
+      "actual": 0
+    },
+    {
+      "field": "injection.positive_control_served",
+      "where": "global",
+      "actual": 4
+    },
+    {
+      "field": "injection.console_error_attributed",
+      "where": "global",
+      "actual": 4
+    },
+    {
+      "field": "successPath.real_backend_200",
+      "where": "global",
+      "actual": true
+    },
+    {
+      "field": "successPath.real_backend_records",
+      "where": "global",
+      "actual": 30
+    },
+    {
+      "field": "successPath.real_list_responses_all_200",
+      "where": "global",
+      "actual": true
+    },
+    {
+      "field": "successPath.failure_injected_at_browser_layer_only",
+      "where": "global",
+      "actual": true
+    },
+    {
+      "field": "official_file_clean_of_negative_control_marker",
+      "where": "global",
+      "actual": true
+    }
+  ]
+}

@@ -1,0 +1,218 @@
+{
+  "scroll": {
+    "x": 220,
+    "y": 48,
+    "w": 1480,
+    "h": 872,
+    "right": 1700,
+    "bottom": 920,
+    "clientWidth": 1465,
+    "offsetWidth": 1480,
+    "scrollHeight": 1841,
+    "clientHeight": 872,
+    "scrollbarGutter": "stable",
+    "overflowY": "auto",
+    "hasGutterClass": true
+  },
+  "rect": {
+    "pageRoot": {
+      "x": 260,
+      "y": 84,
+      "w": 1385,
+      "h": 1768.5,
+      "right": 1645,
+      "bottom": 1852.5
+    },
+    "resultCard": {
+      "x": 276,
+      "y": 229.5,
+      "w": 1353,
+      "h": 1609,
+      "right": 1629,
+      "bottom": 1838.5
+    },
+    "tableWrap": {
+      "x": 292,
+      "y": 308.5,
+      "w": 1321,
+      "h": 1516,
+      "right": 1613,
+      "bottom": 1824.5
+    },
+    "table": {
+      "x": 292,
+      "y": 308.5,
+      "w": 1321,
+      "h": 1516,
+      "right": 1613,
+      "bottom": 1824.5
+    },
+    "queryBar": {
+      "x": 292,
+      "y": 175.5,
+      "w": 1321,
+      "h": 32,
+      "right": 1613,
+      "bottom": 207.5
+    },
+    "queryGroup": {
+      "x": 1218,
+      "y": 176.5,
+      "w": 144,
+      "h": 30,
+      "right": 1362,
+      "bottom": 206.5
+    },
+    "queryBtn": {
+      "x": 1218,
+      "y": 176.5,
+      "w": 62,
+      "h": 30,
+      "right": 1280,
+      "bottom": 206.5
+    },
+    "resetBtn": {
+      "x": 1300,
+      "y": 176.5,
+      "w": 62,
+      "h": 30,
+      "right": 1362,
+      "bottom": 206.5
+    },
+    "refreshBtn": {
+      "x": 1503,
+      "y": 241.5,
+      "w": 110,
+      "h": 32,
+      "right": 1613,
+      "bottom": 273.5
+    }
+  },
+  "btnStyles": {
+    "queryBtn": {
+      "width": "62px",
+      "minWidth": "62px",
+      "maxWidth": "62px",
+      "flexBasis": "62px",
+      "flexGrow": "0",
+      "flexShrink": "0",
+      "boxSizing": "border-box"
+    },
+    "resetBtn": {
+      "width": "62px",
+      "minWidth": "62px",
+      "maxWidth": "62px",
+      "flexBasis": "62px",
+      "flexGrow": "0",
+      "flexShrink": "0",
+      "boxSizing": "border-box"
+    },
+    "refreshBtn": {
+      "width": "110px",
+      "minWidth": "110px",
+      "maxWidth": "110px",
+      "flexBasis": "110px",
+      "flexGrow": "0",
+      "flexShrink": "0",
+      "boxSizing": "border-box"
+    }
+  },
+  "headers": [
+    {
+      "label": "序号",
+      "x": 292,
+      "y": 308.5,
+      "width": 70,
+      "height": 46,
+      "centerX": 327
+    },
+    {
+      "label": "探针端",
+      "x": 362,
+      "y": 308.5,
+      "width": 198,
+      "height": 46,
+      "centerX": 461
+    },
+    {
+      "label": "源库",
+      "x": 560,
+      "y": 308.5,
+      "width": 328,
+      "height": 46,
+      "centerX": 724
+    },
+    {
+      "label": "快照状态",
+      "x": 888,
+      "y": 308.5,
+      "width": 140,
+      "height": 46,
+      "centerX": 958
+    },
+    {
+      "label": "快照启动时间",
+      "x": 1028,
+      "y": 308.5,
+      "width": 195,
+      "height": 46,
+      "centerX": 1125.5
+    },
+    {
+      "label": "快照完成时间",
+      "x": 1223,
+      "y": 308.5,
+      "width": 195,
+      "height": 46,
+      "centerX": 1320.5
+    },
+    {
+      "label": "记录更新时间",
+      "x": 1418,
+      "y": 308.5,
+      "width": 195,
+      "height": 46,
+      "centerX": 1515.5
+    }
+  ],
+  "dataCols": [
+    {
+      "x": 292,
+      "width": 70
+    },
+    {
+      "x": 362,
+      "width": 198
+    },
+    {
+      "x": 560,
+      "width": 328
+    },
+    {
+      "x": 888,
+      "width": 140
+    },
+    {
+      "x": 1028,
+      "width": 195
+    },
+    {
+      "x": 1223,
+      "width": 195
+    },
+    {
+      "x": 1418,
+      "width": 195
+    }
+  ],
+  "rowCount": 30,
+  "summaryText": "共 30 条",
+  "unknownBadgeVisible": true,
+  "errorVisible": false,
+  "loadingMask": false,
+  "queryBusy": null,
+  "doc": {
+    "scrollWidth": 1700,
+    "clientWidth": 1700
+  }
+}

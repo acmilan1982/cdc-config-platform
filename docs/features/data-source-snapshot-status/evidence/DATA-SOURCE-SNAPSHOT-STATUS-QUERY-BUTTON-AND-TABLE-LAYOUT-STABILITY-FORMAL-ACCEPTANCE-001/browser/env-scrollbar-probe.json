@@ -1,0 +1,36 @@
+{
+  "chromium": "Chrome/148.0.7778.167",
+  "page_level_scrollbar_space_px": 15,
+  "classic_scrollbars_take_layout_space": true,
+  "containers": {
+    "stableShort": {
+      "clientWidth": 585,
+      "offsetWidth": 600,
+      "scrollH": 200,
+      "clientH": 200
+    },
+    "autoShort": {
+      "clientWidth": 600,
+      "offsetWidth": 600,
+      "scrollH": 200,
+      "clientH": 200
+    },
+    "stableTall": {
+      "clientWidth": 585,
+      "offsetWidth": 600,
+      "scrollH": 900,
+      "clientH": 200
+    },
+    "autoTall": {
+      "clientWidth": 585,
+      "offsetWidth": 600,
+      "scrollH": 900,
+      "clientH": 200
+    }
+  },
+  "reads": {
+    "stable_gutter_keeps_clientWidth_when_no_overflow": true,
+    "auto_gutter_changes_clientWidth_when_scrollbar_appears": true,
+    "auto_gutter_width_cost_px": 15
+  }
+}
