@@ -169,3 +169,93 @@ CHATGPT_QUERY_BUTTON_AND_TABLE_LAYOUT_STABILITY_BASELINE_REVIEW_FROM_GIT_THEN_PR
 ```
 
 即：先由 ChatGPT 从远程 Git 独立复审本草案文档，再由项目负责人决定是否批准本草案文档。
+---
+
+## 10. ChatGPT R0 复审与 R1 纠正记录
+
+> 本节为 **append-only 追加记录**（2026-09-15，任务 `DATA-SOURCE-SNAPSHOT-STATUS-QUERY-BUTTON-AND-TABLE-LAYOUT-STABILITY-BASELINE-001-R1`，纯文档极小定向纠正）。本节不改写、不删除、不覆盖本报告上述任何原文；上述 R0 原文的全部原始字节在追加后仍构成本文件的**完整字节前缀**。
+
+### 10.1 追加前提（append-only 字节证明）
+
+| 项目 | 值 |
+|---|---|
+| 本报告在追加前的字节数 | `11317` |
+| 本报告在追加前的 `sha256` | `7f85b34ab22114b71c64bccc5a9462579a0ed832292bb90de91ea208a6a1fc47` |
+| 追加后文件的前 `11317` 字节 | 与上述字节逐字节相同（本文件前缀比对校验通过，删除行数为 `0`） |
+| 校验方式 | 以 `git show be101a19558ae1ef1436bb3d61746dc21338e49a:docs/features/data-source-snapshot-status/reports/DATA-SOURCE-SNAPSHOT-STATUS-QUERY-BUTTON-AND-TABLE-LAYOUT-STABILITY-BASELINE-001.md` 取出 R0 提交中的本报告原始字节，与本文件相同长度前缀做逐字节比较 |
+| R0 报告路径 | `docs/features/data-source-snapshot-status/reports/DATA-SOURCE-SNAPSHOT-STATUS-QUERY-BUTTON-AND-TABLE-LAYOUT-STABILITY-BASELINE-001.md` |
+| R1 报告路径 | `docs/features/data-source-snapshot-status/reports/DATA-SOURCE-SNAPSHOT-STATUS-QUERY-BUTTON-AND-TABLE-LAYOUT-STABILITY-BASELINE-001-R1.md` |
+
+### 10.2 R0 复审结论
+
+```text
+chatgpt_r0_review_status=CHANGES_REQUIRED
+review_scope=TWO_DOCUMENT_WORDING_CONFLICTS_ONLY
+business_direction_status=CORRECT_AND_PRESERVED
+```
+
+ChatGPT 从远程 Git 复审 R0 草案提交 `be101a19558ae1ef1436bb3d61746dc21338e49a` 后，判定**业务方向正确并予以保留**，变更需求**仅**限定为两项**文档措辞冲突**的纠正。R1 纠正状态：`r1_document_wording_correction_status=COMPLETED_PENDING_CHATGPT_REVIEW`。
+
+### 10.3 纠正一：本报告 §3.1“重置”按钮口径为文档错误
+
+本报告 §3.1 表格中原写作：
+
+```text
+| 重置 | `width = 62px`（固定宽度） | **仅**固定宽度；不新增 loading 态、不改变禁用逻辑、不改变点击语义 |
+```
+
+该表述为**文档口径错误**：它与 `DESIGN.md` §38.3、`ACCEPTANCE.md` `DSS-AC-114` 采用的**四属性同时锁定**口径冲突，也与紧跟其后的“禁止只设 `width` 而放任 `min-width`/`max-width`/`flex-basis` 被内容或 flex 分配改写”规则自相矛盾。
+
+本节按 R1 任务要求**不修改**上述 R0 原文（原文保留在本报告 §3.1 中，作为历史记录），在此给出纠正后的**权威口径**：
+
+```text
+width = min-width = max-width = flex-basis = 62px
+```
+
+权威说明：四属性同时锁定，避免内容宽度或 flex 分配把按钮撑开或压缩；本轮**只**增加固定几何约束；**不**新增 Loading 状态；**不**改变“重置”按钮禁用逻辑、点击语义、按钮高度、间距或视觉层级。该权威口径已在 `UI.md` §32.2 原位落地（原“仅 `width = 62px`”已改为四属性锁定），并与 `DESIGN.md` §38.3、`ACCEPTANCE.md` `DSS-AC-114` 统一；`UI.md` §32.2 中“禁止只设 `width` 而放任其余三个属性被改写”的规则保留不变。
+
+### 10.4 纠正二：`DSS-AC-114` 跨按钮坐标歧义已在 R1 原位纠正
+
+`ACCEPTANCE.md` 中 `DSS-AC-114` 原文“三个按钮在四种状态下的 `x`/`y`/`width`/`height` 零位移（短结果与长结果之间、“查询”与“重置”之间均一致）”可能被误解为要求**两个不同按钮**的 `x`/`y` 坐标数值相同。该歧义已由 R1 在 `ACCEPTANCE.md` 中**原位**消除（`DSS-AC-114` 的编号、状态 `NOT_RUN`、关联需求 `DSS-REQ-090`、宽度数值与业务目标均不变），纠正后的判定口径为：每个按钮均以其自身空闲稳定态为基准分别比较；“查询”与“重置”只要求宽度同为 `62px`（宽度集合均为 `[62]`），不比较两个不同按钮的绝对 `x` 坐标；“立即刷新”以其自身空闲态为基准比较，宽度集合继续为 `[110]`。`dss_ac_114_cross_button_coordinate_ambiguity_status=CLEARED`、`dss_ac_114_self_baseline_comparison_status=EXPLICIT`。
+
+### 10.5 未改变的内容（全部冻结）
+
+R1 相对 R0 提交 `be101a1...` **未改变**以下内容：
+
+- 业务方向与已确认解决方案方向（`business_direction_change_status=ZERO`）；
+- 真实根因链（查询结果行数变化 → 真实主内容滚动容器纵向滚动条出现/消失 → `clientWidth` 变化 → Element Plus 重新分配弹性列宽 → 探针端等弹性列与后续列水平位移），以及“共 N 条”**不是**直接根因的判定；
+- 宽度数值：查询 `62px`、重置 `62px`（四属性）、立即刷新 `110px`（四属性）；`reset_button_width_lock_status=WIDTH_MIN_WIDTH_MAX_WIDTH_FLEX_BASIS_ALL_62`；
+- 路由私有真实主滚动容器 `scrollbar-gutter: stable` 方案与表格弹性列策略；
+- 不采用 JS/`ResizeObserver` 宽度补偿、不作全局滚动行为修改；
+- 计数与追踪：需求 `DSS-REQ-001~091` 共 91 条、验收 `DSS-AC-001~118` 共 118 条、追踪 `91/91` 与 `118/118`；既有 `DSS-AC-001~113` 全部 `PASS`（`PASS 113 / FAIL 0 / BLOCKED 0 / NOT_RUN 0`），本轮 `DSS-AC-114~118` 共 5 条全部 `NOT_RUN`；
+- API 与数据库契约；`frontend/**`、`backend/**`、测试、SQL、配置、依赖、锁文件、证据与其他既有报告。
+
+### 10.6 R1 后的分层状态与下一入口
+
+```text
+chatgpt_r0_review_status=CHANGES_REQUIRED_TWO_DOCUMENT_WORDING_CONFLICTS_ONLY
+r1_document_wording_correction_status=COMPLETED_PENDING_CHATGPT_REVIEW
+accepted_scope_acceptance_status=PASS_113
+query_button_and_table_layout_stability_solution_direction_status=APPROVED_BY_PROJECT_OWNER
+query_button_and_table_layout_stability_document_status=DRAFT_PENDING_CHATGPT_REVIEW_AND_PROJECT_OWNER_APPROVAL
+query_button_and_table_layout_stability_implementation_status=PENDING_FORMAL_IMPLEMENTATION_ON_5173
+query_button_and_table_layout_stability_code_review_status=NOT_RUN
+query_button_and_table_layout_stability_acceptance_status=NOT_RUN
+query_button_and_table_layout_stability_acceptance_not_run_count=5
+pending_user_review=YES
+pending_user_confirmation_count=0
+```
+
+- 当前下一入口：`CHATGPT_QUERY_BUTTON_AND_TABLE_LAYOUT_STABILITY_BASELINE_R1_REVIEW_FROM_GIT_THEN_PROJECT_OWNER_DOCUMENT_APPROVAL`。
+- R0 入口 `CHATGPT_QUERY_BUTTON_AND_TABLE_LAYOUT_STABILITY_BASELINE_REVIEW_FROM_GIT_THEN_PROJECT_OWNER_DOCUMENT_APPROVAL` 作为 **2026-09-15 历史入口**保留：**R0 历史入口，已由 R1 纠正任务处理**，不再构成本轮当前直接值。
+- 本草案仍**未批准**、**未实现**、**未验收**；`DSS-AC-114~118` 仍全部 `NOT_RUN`；既有 113 条 `PASS` 不变；未作最终接受收口。
+
+### 10.7 R1 明确未执行项
+
+- 未批准 R1 文档（不得写成 `APPROVED`）；
+- 未开始前端实现（不得写成 `IMPLEMENTED`）；
+- 未执行 `DSS-AC-114~118`（不得写成 `PASS`）；
+- 未改变既有 113 条 `PASS`；
+- 未作最终接受收口；
+- 未启动、停止或重启任何服务；未清理任何 worktree；
+- 未连接数据库、未访问或写入 ZooKeeper、未访问 Kafka。
