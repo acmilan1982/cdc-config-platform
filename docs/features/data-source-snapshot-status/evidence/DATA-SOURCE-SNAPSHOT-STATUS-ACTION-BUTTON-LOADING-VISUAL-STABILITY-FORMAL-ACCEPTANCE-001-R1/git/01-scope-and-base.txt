@@ -1,0 +1,92 @@
+### R1 SCOPE AND BASE (whitelist audit, corrected)
+task=DATA-SOURCE-SNAPSHOT-STATUS-ACTION-BUTTON-LOADING-VISUAL-STABILITY-FORMAL-ACCEPTANCE-001-R1
+date=2026-09-15 09:57:26 +0800
+worktree=/agent/dss-abl-fa-001-r1
+worktree_mode=isolated clean worktree on detached HEAD by design; only branch involved is develop
+git_dir_branch=HEAD (detached HEAD; no branch checked out in this worktree)
+head=eeafac6fb1030615bb17f21f35da9f2043597903
+base_commit=eeafac6fb1030615bb17f21f35da9f2043597903
+base_commit_expected=eeafac6fb1030615bb17f21f35da9f2043597903
+head_equals_base=True
+origin_develop_must_equal_base=eeafac6fb1030615bb17f21f35da9f2043597903
+
+--- git status --short (working tree, before staging) -- (verbatim; paths printed with no stripping) ---
+ M docs/features/README.md
+ M docs/features/data-source-snapshot-status/ACCEPTANCE.md
+ M docs/features/data-source-snapshot-status/API.md
+ M docs/features/data-source-snapshot-status/DATABASE.md
+ M docs/features/data-source-snapshot-status/DESIGN.md
+ M docs/features/data-source-snapshot-status/README.md
+ M docs/features/data-source-snapshot-status/REQUIREMENTS.md
+ M docs/features/data-source-snapshot-status/UI.md
+ M docs/features/data-source-snapshot-status/reports/DATA-SOURCE-SNAPSHOT-STATUS-ACTION-BUTTON-LOADING-VISUAL-STABILITY-FORMAL-ACCEPTANCE-001.md
+?? docs/features/data-source-snapshot-status/evidence/DATA-SOURCE-SNAPSHOT-STATUS-ACTION-BUTTON-LOADING-VISUAL-STABILITY-FORMAL-ACCEPTANCE-001-R1/
+
+--- untracked paths ---
+docs/features/data-source-snapshot-status/evidence/DATA-SOURCE-SNAPSHOT-STATUS-ACTION-BUTTON-LOADING-VISUAL-STABILITY-FORMAL-ACCEPTANCE-001-R1/
+
+--- tracked paths changed vs base (git diff --name-only) ---
+  docs/features/README.md
+  docs/features/data-source-snapshot-status/ACCEPTANCE.md
+  docs/features/data-source-snapshot-status/API.md
+  docs/features/data-source-snapshot-status/DATABASE.md
+  docs/features/data-source-snapshot-status/DESIGN.md
+  docs/features/data-source-snapshot-status/README.md
+  docs/features/data-source-snapshot-status/REQUIREMENTS.md
+  docs/features/data-source-snapshot-status/UI.md
+  docs/features/data-source-snapshot-status/reports/DATA-SOURCE-SNAPSHOT-STATUS-ACTION-BUTTON-LOADING-VISUAL-STABILITY-FORMAL-ACCEPTANCE-001.md
+
+--- R1 prompt section 6 allowed set ---
+allowed_tracked:
+  docs/features/README.md
+  docs/features/data-source-snapshot-status/README.md
+  docs/features/data-source-snapshot-status/REQUIREMENTS.md
+  docs/features/data-source-snapshot-status/ACCEPTANCE.md
+  docs/features/data-source-snapshot-status/DESIGN.md
+  docs/features/data-source-snapshot-status/UI.md
+  docs/features/data-source-snapshot-status/API.md
+  docs/features/data-source-snapshot-status/DATABASE.md
+  docs/features/data-source-snapshot-status/reports/DATA-SOURCE-SNAPSHOT-STATUS-ACTION-BUTTON-LOADING-VISUAL-STABILITY-FORMAL-ACCEPTANCE-001.md
+  docs/features/data-source-snapshot-status/reports/DATA-SOURCE-SNAPSHOT-STATUS-ACTION-BUTTON-LOADING-VISUAL-STABILITY-FORMAL-ACCEPTANCE-001-R1.md
+allowed_new_dir:
+  docs/features/data-source-snapshot-status/evidence/DATA-SOURCE-SNAPSHOT-STATUS-ACTION-BUTTON-LOADING-VISUAL-STABILITY-FORMAL-ACCEPTANCE-001-R1/**
+
+--- whitelist check (every changed/untracked path classified) ---
+  ALLOWED docs/features/README.md
+  ALLOWED docs/features/data-source-snapshot-status/ACCEPTANCE.md
+  ALLOWED docs/features/data-source-snapshot-status/API.md
+  ALLOWED docs/features/data-source-snapshot-status/DATABASE.md
+  ALLOWED docs/features/data-source-snapshot-status/DESIGN.md
+  ALLOWED docs/features/data-source-snapshot-status/README.md
+  ALLOWED docs/features/data-source-snapshot-status/REQUIREMENTS.md
+  ALLOWED docs/features/data-source-snapshot-status/UI.md
+  ALLOWED docs/features/data-source-snapshot-status/reports/DATA-SOURCE-SNAPSHOT-STATUS-ACTION-BUTTON-LOADING-VISUAL-STABILITY-FORMAL-ACCEPTANCE-001.md
+  ALLOWED docs/features/README.md
+  ALLOWED docs/features/data-source-snapshot-status/ACCEPTANCE.md
+  ALLOWED docs/features/data-source-snapshot-status/API.md
+  ALLOWED docs/features/data-source-snapshot-status/DATABASE.md
+  ALLOWED docs/features/data-source-snapshot-status/DESIGN.md
+  ALLOWED docs/features/data-source-snapshot-status/README.md
+  ALLOWED docs/features/data-source-snapshot-status/REQUIREMENTS.md
+  ALLOWED docs/features/data-source-snapshot-status/UI.md
+  ALLOWED docs/features/data-source-snapshot-status/reports/DATA-SOURCE-SNAPSHOT-STATUS-ACTION-BUTTON-LOADING-VISUAL-STABILITY-FORMAL-ACCEPTANCE-001.md
+  ALLOWED [new] docs/features/data-source-snapshot-status/evidence/DATA-SOURCE-SNAPSHOT-STATUS-ACTION-BUTTON-LOADING-VISUAL-STABILITY-FORMAL-ACCEPTANCE-001-R1/
+paths_outside_whitelist=0
+
+--- non-docs / code frozen check ---
+non_docs_paths=[]
+frontend_paths=[]
+backend_paths=[]
+test_or_sql_or_config_or_dependency_or_lock_paths=[]
+
+--- remote precondition (read-only, after git fetch origin develop) ---
+origin_develop_ls_remote=eeafac6fb1030615bb17f21f35da9f2043597903
+local_origin_develop_ref=eeafac6fb1030615bb17f21f35da9f2043597903
+worktree_HEAD=eeafac6fb1030615bb17f21f35da9f2043597903
+precondition_origin_develop_equals_base=YES
+
+--- main worktree preservation (not entered, not cleaned by this task) ---
+main_worktree=/agent/cdc-config-platform branch=develop head=4222b0a24b927aca6f62ff348fd8549b73d4156c
+  ~116 pre-existing modifications preserved byte-for-byte; none staged/committed/overwritten.
+existing_worktrees_entered_cleaned_reset_or_stashed=NONE
+verdict=PASS

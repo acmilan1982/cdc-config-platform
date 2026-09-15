@@ -1,0 +1,84 @@
+### R1 FROZEN-BOUNDARY PROOF (docs-only correction; no code, contract or business-rule change)
+task=DATA-SOURCE-SNAPSHOT-STATUS-ACTION-BUTTON-LOADING-VISUAL-STABILITY-FORMAL-ACCEPTANCE-001-R1
+base_commit=eeafac6fb1030615bb17f21f35da9f2043597903
+date=2026-09-15
+method=compare base tree (git show BASE:<path>) against working tree; line-level diff on the frozen sections
+
+--- 1. changed tracked paths vs base (git diff --name-only BASE) ---
+docs/features/README.md
+docs/features/data-source-snapshot-status/ACCEPTANCE.md
+docs/features/data-source-snapshot-status/API.md
+docs/features/data-source-snapshot-status/DATABASE.md
+docs/features/data-source-snapshot-status/DESIGN.md
+docs/features/data-source-snapshot-status/README.md
+docs/features/data-source-snapshot-status/REQUIREMENTS.md
+docs/features/data-source-snapshot-status/UI.md
+docs/features/data-source-snapshot-status/reports/DATA-SOURCE-SNAPSHOT-STATUS-ACTION-BUTTON-LOADING-VISUAL-STABILITY-FORMAL-ACCEPTANCE-001.md
+(all 9 are inside the R1 prompt section 6 allowed set; 0 non-docs paths)
+
+--- 2. frontend / backend / tests / SQL / config / deps / locks ---
+git diff --name-only BASE -- frontend backend src test tests  => (empty)
+non_docs_changed_paths=[]
+frontend_paths=[]
+backend_paths=[]
+test_or_sql_or_config_or_dependency_or_lock_paths=[]
+verdict=ZERO_DIFF
+
+--- 3. DSS-REQ-001..089 business rows ---
+base_rows=89  work_rows=89
+rows_byte_identical=True
+unique_ids=89  contiguous_1..89=True
+verdict=UNCHANGED (89/89 byte-identical)
+
+--- 4. DSS-AC-001..113 acceptance rows ---
+base_rows=113  work_rows=113
+id_set_is_exactly_DSS-AC-001_through_113=True (unique, no duplicate, no gap)
+row_order_identical_base_vs_work=True
+base_status_column=113 x PASS (PASS 113 / FAIL 0 / BLOCKED 0 / NOT_RUN 0)
+work_status_column=113 x PASS (PASS 113 / FAIL 0 / BLOCKED 0 / NOT_RUN 0)
+differing_rows=['DSS-AC-108','DSS-AC-110']
+differs_only_in_column=前置条件 (the R1 current-fact correction; see ACCEPTANCE.md §4.23 evidence)
+numbering/requirement_mapping/prerequisites_steps_shape/expected/PASS_state=UNCHANGED
+verdict=113 CONTIGUOUS UNIQUE ALL PASS; only the two current-fact notes corrected, no acceptance-state change
+
+--- 5. DESIGN §31 (business-rule body of the action-button-loading adjustment) ---
+base_line_count=12  work_line_count=12
+differing_line_indices=[10,11] (0-based within section):
+  line 10 = *- **追踪更新**...* (only the stale literal `全部 NOT_RUN` replaced by `已于 2026-09-14 由 ...-FORMAL-ACCEPTANCE-001 正式验收执行，全部 PASS`)
+  line 11 = *- **状态与边界**...* (current status tokens refreshed)
+business_rule_requirement_and_boundary_body_lines=UNCHANGED
+verdict=BUSINESS RULE BODY UNCHANGED
+
+--- 6. UI §25 (action-button-loading visual contract) ---
+base_line_count=15  work_line_count=15
+differing_line_indices=[2,14]:
+  line 2  = dated draft record opening (stale `not_run_count=6` corrected to PASS with a dated history qualifier)
+  line 14 = *- **状态与边界**...* (current status tokens refreshed)
+UI_contract_lines=UNCHANGED
+verdict=VISUAL CONTRACT UNCHANGED
+
+--- 7. API §9 ---
+base_line_count=57  work_line_count=59
+differing_line_indices=[55,57] = the two R0 acceptance record lines (dated history refreshed); lines 0..54 (the API contract body) are byte-identical
+appended=2 lines (blank + R1 correction record)
+path/method/params/response/DTO/VO/error_codes=UNCHANGED
+verdict=API CONTRACT UNCHANGED
+
+--- 8. DATABASE §14 ---
+base_line_count=56  work_line_count=58
+differing_line_indices=[54,56] = the two R0 acceptance record lines; lines 0..53 (contract body) byte-identical
+appended=2 lines (blank + R1 correction record)
+three_table_projection/SQL/fields/PK/index/constraints/relations/order/read_only_boundary=UNCHANGED
+verdict=DATABASE CONTRACT UNCHANGED
+
+--- 9. frozen R0 conclusions (must NOT be negated by R1) ---
+code_review=APPROVED
+human_visual_interaction_review=APPROVED_BY_PROJECT_OWNER
+acceptance_status=EXECUTED_PENDING_CHATGPT_REVIEW
+acceptance_execution=PASS (6/6 DSS-AC-108..113; 113/113 total)
+implementation=IMPLEMENTED_ADJUSTMENT_PENDING_FINAL_ACCEPTANCE
+adjustment=6 PASS / 0 FAIL / 0 BLOCKED / 0 NOT_RUN
+formal=113 PASS / 0 FAIL / 0 BLOCKED / 0 NOT_RUN
+chatgpt_r0_verdict=CHANGES_REQUIRED_DOCUMENT_AND_EVIDENCE_FACT_CONSISTENCY_ONLY (fact-consistency only; does not overturn the PASS conclusions)
+R1 declared ACCEPTED / IMPLEMENTED_ACCEPTED / COMPLETED=false
+verdict=PASS: R1 corrected document/evidence facts only; all frozen R0 conclusions preserved

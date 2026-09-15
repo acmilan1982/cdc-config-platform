@@ -1,0 +1,19 @@
+R1 PAGE-FREE STRICT ACCEPTANCE-RESULT CLI - ORIGINAL R0 RESULT (must exit 0)
+task=DATA-SOURCE-SNAPSHOT-STATUS-ACTION-BUTTON-LOADING-VISUAL-STABILITY-FORMAL-ACCEPTANCE-001-R1
+input=R0 browser/acceptance-matrix.json (the untouched result collected by the R0 formal acceptance)
+evaluator=shared R0 browser/harness/assertions.mjs -> evaluateAcceptanceResult (no copy, no drift)
+reproduce_from=browser/ then run:  node harness/assert-result.mjs ../../DATA-SOURCE-SNAPSHOT-STATUS-ACTION-BUTTON-LOADING-VISUAL-STABILITY-FORMAL-ACCEPTANCE-001/browser/acceptance-matrix.json
+captured_process_exit_code=0
+
+--- stdout ---
+R1 PAGE-FREE STRICT ACCEPTANCE-RESULT CLI
+input=../../DATA-SOURCE-SNAPSHOT-STATUS-ACTION-BUTTON-LOADING-VISUAL-STABILITY-FORMAL-ACCEPTANCE-001/browser/acceptance-matrix.json
+input_sha256=e90e8bf398a8018523f6bc237a6c5c9acb78f0f4bfd3e80f45aa7a743c4e506e
+evaluator=/agent/dss-abl-fa-001-r1/docs/features/data-source-snapshot-status/evidence/DATA-SOURCE-SNAPSHOT-STATUS-ACTION-BUTTON-LOADING-VISUAL-STABILITY-FORMAL-ACCEPTANCE-001/browser/harness/assertions.mjs
+evaluator_sha256=d911a8fd04e8efe2c8cb6bb76d723a7f72c91f283da15ed6d05ae0bb0d6ff284
+passed=true
+failure_count=0
+check_count=294
+RESULT=PASS (all hard assertions hold; no drift detected)
+--- stderr ---
+(empty: nothing was written to stderr)

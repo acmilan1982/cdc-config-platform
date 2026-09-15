@@ -1,0 +1,28 @@
+### R1 R0-REPORT APPEND-ONLY PROOF
+task=DATA-SOURCE-SNAPSHOT-STATUS-ACTION-BUTTON-LOADING-VISUAL-STABILITY-FORMAL-ACCEPTANCE-001-R1
+base_commit=eeafac6fb1030615bb17f21f35da9f2043597903
+date=2026-09-15
+path=docs/features/data-source-snapshot-status/reports/DATA-SOURCE-SNAPSHOT-STATUS-ACTION-BUTTON-LOADING-VISUAL-STABILITY-FORMAL-ACCEPTANCE-001.md
+
+=== base version (git show BASE:<path>) ===
+base_bytes=17900
+base_sha256=2cd0955da04412f5eaccbc4df1d413b078e79c61eb0a57857b1836304eee863a
+
+=== worktree version ===
+work_bytes=23789
+work_sha256=4317480cad86f0fc4c6d79a2ef8e61924aabb812134b26708773bd74eb8f03bc
+
+=== append-only verification ===
+prefix_is_exact_base=YES  (work_bytes[0:17900] == base_bytes, byte for byte)
+prefix_sha256=2cd0955da04412f5eaccbc4df1d413b078e79c61eb0a57857b1836304eee863a  (identical to base sha256)
+cmp -n 17900 base work  => exit 0 (no differing byte in the first 17900 bytes)
+deleted_bytes=0   original_lines_rewritten=0
+appended_bytes=5889
+
+=== appended content (new, not modifying §1..§9) ===
+## 10. R1 定向纠正（2026-09-15，`...-R1`；本节为追加，上文 §1～§9 零字节改动）
+  10.1 negative self-test exit-code fact correction (R0 negative-selftest.mjs really exited 0; evaluateAcceptanceResult() detected the mutation)
+  10.2 unified ZooKeeper layering wording
+  10.3 unified R1 next entry
+
+verdict=PASS: r0_report_append_only_status=APPEND_ONLY_VERIFIED (0 deletions, 0 rewriting, base bytes are the exact prefix)

@@ -1,0 +1,83 @@
+### R1 DOCUMENT CONSISTENCY CHECK
+task=DATA-SOURCE-SNAPSHOT-STATUS-ACTION-BUTTON-LOADING-VISUAL-STABILITY-FORMAL-ACCEPTANCE-001-R1
+base_commit=eeafac6fb1030615bb17f21f35da9f2043597903
+date=2026-09-15
+docs_checked=8 (docs/features/README.md + feature README/REQUIREMENTS/ACCEPTANCE/DESIGN/UI/API/DATABASE)
+
+--- 1. unified current-value tokens (R1 prompt section 5.1) present in all 8 docs ---
+action_button_loading_visual_stability_document_status=APPROVED                       all 8
+action_button_loading_visual_stability_implementation_status=IMPLEMENTED_ADJUSTMENT_PENDING_FINAL_ACCEPTANCE   all 8
+action_button_loading_visual_stability_code_review_status=APPROVED                   all 8
+action_button_loading_visual_stability_human_visual_interaction_review_status=APPROVED_BY_PROJECT_OWNER  all 8
+action_button_loading_visual_stability_acceptance_status=EXECUTED_PENDING_CHATGPT_REVIEW   all 8
+action_button_loading_visual_stability_acceptance_execution_status=PASS              all 8
+action_button_loading_visual_stability_acceptance_pass_count=6                       all 8
+action_button_loading_visual_stability_acceptance_fail_count=0                       all 8
+action_button_loading_visual_stability_acceptance_blocked_count=0                    all 8
+action_button_loading_visual_stability_acceptance_not_run_count=0                    all 8
+formal_acceptance_pass_count=113                                                     all 8
+formal_acceptance_fail_count=0                                                       all 8
+formal_acceptance_blocked_count=0                                                    all 8
+formal_acceptance_not_run_count=0                                                    all 8
+pending_user_review=NO                                                               all 8
+pending_user_confirmation_count=0                                                    all 8
+missing_token_count=0
+
+--- 2. post-R1 status block (R1 prompt section 10) present in all 8 docs ---
+chatgpt_r0_formal_acceptance_review_status=CHANGES_REQUIRED_DOCUMENT_AND_EVIDENCE_FACT_CONSISTENCY_ONLY   all 8
+r0_acceptance_execution_result_status=PRESERVED_PASS_6_OF_6_TOTAL_113_OF_113                              all 8
+r1_document_and_evidence_correction_status=COMPLETED_PENDING_CHATGPT_REVIEW                               all 8
+missing_token_count=0
+
+--- 3. unified ZooKeeper layering (R1 prompt section 5.5) in all 8 docs ---
+zookeeper_environment_status=AVAILABLE                                                       all 8
+background_backend_zookeeper_session_status=OBSERVED_SESSION_ESTABLISHED_THEN_TIMEOUT_OR_RECONNECT   all 8
+formal_acceptance_task_initiated_zookeeper_node_operation_status=NONE                        all 8
+zookeeper_write_status=NOT_REQUESTED                                                         all 8
+feature_zookeeper_dependency=NONE                                                            all 8
+banned_unexplained_token "zookeeper_access_status=NONE" occurrences=0
+banned_token "NOT_AVAILABLE_NOT_REQUIRED_BY_FEATURE" occurrences=0
+note=the background backend ZooKeeper session is NOT written as a page Feature dependency; feature_zookeeper_dependency=NONE everywhere; R1 did not connect to ZooKeeper.
+
+--- 4. unified R1 next entry in all 8 docs ---
+CHATGPT_ACTION_BUTTON_LOADING_VISUAL_STABILITY_FORMAL_ACCEPTANCE_R1_REVIEW_FROM_GIT_THEN_PROJECT_OWNER_FINAL_ACCEPTANCE_DECISION
+occurrences per doc: index 5, README 4, REQUIREMENTS 4, ACCEPTANCE 4, DESIGN 5, UI 5, API 4, DATABASE 4 (>=1 everywhere)
+old_entry_conflict_count_current_layer=0
+
+--- 5. old R0 next entry only as dated history ---
+old_entry_string=CHATGPT_ACTION_BUTTON_LOADING_VISUAL_STABILITY_FORMAL_ACCEPTANCE_REVIEW_FROM_GIT_THEN_PROJECT_OWNER_FINAL_ACCEPTANCE_DECISION
+total_occurrences=33
+qualified_as_dated_history=33
+unqualified_current_declaration=0
+qualifier=each occurrence sits inside a dated record (index change-log row, `> ` round record, or an inline `**历史（2026-09-14 R0 正式验收提交时）**` marker) that states it was the R0-point entry and has been superseded by the R1 entry.
+
+--- 6. current-layer legacy-token conflicts (feature-scoped) ---
+legacy patterns scanned:
+  action_button_loading_visual_stability_acceptance_status=NOT_RUN
+  action_button_loading_visual_stability_acceptance_not_run_count=6
+  action_button_loading_visual_stability_implementation_status=IMPLEMENTED_ADJUSTMENT_PENDING (without _FINAL_ACCEPTANCE)
+  action_button_loading_visual_stability_document_status= (not APPROVED)
+  action_button_loading_visual_stability_human_visual_interaction_review_status= (not APPROVED)
+  CHATGPT_..._FORMAL_ACCEPTANCE_REVIEW_... (old R0 entry, see item 5)
+total_legacy_occurrences=254
+occurrences_on_CURRENT (non-historical) lines=0
+legacy_occurrence_classification:
+  dated blockquote records (`> `)        = 163
+  index change-log rows (`| 2026-..`)    = 12
+  inline historical-qualified lines      = 79   (lines carrying 历史 / 已由 / 当时 / R0 提交 / 实现前历史 / 草案 markers)
+  current-value-layer conflicts          = 0
+note=R1 was not permitted to tidy or rewrite earlier historical chains (prompt section 5.1). The legacy values therefore survive only inside dated per-round records, which is exactly the historical chain; they never appear in a primary status block or a current next-entry declaration. The metric that matters is current-value-layer conflicts = 0.
+
+--- 7. ACCEPTANCE.md section 4.23 current-fact correction ---
+occurrences of "已实现（本轮尚未实现）" = 0
+occurrences of "本轮尚未实现" in current-fact position = 0
+DSS-AC-108 first prerequisite now = 实现已落地, code review APPROVED + human review APPROVED_BY_PROJECT_OWNER, formal acceptance executed 2026-09-14 PASS, pending ChatGPT R1 review + owner final decision; previous "本轮尚未实现" kept only as a dated history note
+DSS-AC-110 prerequisite annotated identically
+numbering / requirement mapping / prerequisite-step shape / expected / PASS state = UNCHANGED
+
+--- 8. legacy conflict counters (R1 prompt section 13 machine fields) ---
+current_status_conflict_count=0
+current_old_next_entry_conflict_count=0
+acceptance_section_4_23_current_fact_conflict_count=0
+
+verdict=PASS: all 8 entry docs unified on the current values, statistics, ZooKeeper layering and R1 next entry; every legacy value is confined to a dated history record

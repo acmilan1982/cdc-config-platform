@@ -1,0 +1,23 @@
+R1 PAGE-FREE STRICT ACCEPTANCE-RESULT CLI - NEGATIVE CONTROL (must exit 1)
+task=DATA-SOURCE-SNAPSHOT-STATUS-ACTION-BUTTON-LOADING-VISUAL-STABILITY-FORMAL-ACCEPTANCE-001-R1
+input=browser/NEGATIVE-CONTROL-0.001PX-DO-NOT-USE-AS-ACCEPTANCE-EVIDENCE.json (a copy of the R0 result with exactly 0.001px injected)
+evaluator=shared R0 browser/harness/assertions.mjs -> evaluateAcceptanceResult (no copy, no drift)
+reproduce_from=browser/ then run:  node harness/assert-result.mjs NEGATIVE-CONTROL-0.001PX-DO-NOT-USE-AS-ACCEPTANCE-EVIDENCE.json
+captured_process_exit_code=1
+
+--- stdout ---
+(empty: the CLI writes the failure report to stderr)
+--- stderr ---
+R1 PAGE-FREE STRICT ACCEPTANCE-RESULT CLI
+input=NEGATIVE-CONTROL-0.001PX-DO-NOT-USE-AS-ACCEPTANCE-EVIDENCE.json
+input_sha256=3a744e88f3d00d3cd6a315863bdee0b7c5932ed81b6550809f287c16c55eedcd
+evaluator=/agent/dss-abl-fa-001-r1/docs/features/data-source-snapshot-status/evidence/DATA-SOURCE-SNAPSHOT-STATUS-ACTION-BUTTON-LOADING-VISUAL-STABILITY-FORMAL-ACCEPTANCE-001/browser/harness/assertions.mjs
+evaluator_sha256=d911a8fd04e8efe2c8cb6bb76d723a7f72c91f283da15ed6d05ae0bb0d6ff284
+passed=false
+failure_count=3
+check_count=291
+detected failures: 3
+  field=refresh_btn_rect_delta.y | where=1920x1080 | actual=0.0010000000000047748 | expected=0
+  field=query_btn_rect_delta.width | where=1920x1080 | actual=0.0009999999999976694 | expected=0
+  field=query_button_actual_width_set | where=1920x1080 | actual="62,62.001" | expected="62"
+RESULT=FAIL (falsified; see the failing fields above)

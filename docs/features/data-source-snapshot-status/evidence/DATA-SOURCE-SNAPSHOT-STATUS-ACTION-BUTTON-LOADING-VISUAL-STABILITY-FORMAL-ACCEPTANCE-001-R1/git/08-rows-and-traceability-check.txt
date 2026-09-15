@@ -1,0 +1,43 @@
+### R1 ROWS AND TRACEABILITY CHECK
+task=DATA-SOURCE-SNAPSHOT-STATUS-ACTION-BUTTON-LOADING-VISUAL-STABILITY-FORMAL-ACCEPTANCE-001-R1
+base_commit=eeafac6fb1030615bb17f21f35da9f2043597903
+date=2026-09-15
+
+--- 1. DSS-REQ rows in REQUIREMENTS.md ---
+row_pattern=`| DSS-REQ-NNN |` (business rows only)
+base_rows=89   work_rows=89
+unique_ids=89  id_set_is_exactly_DSS-REQ-001..089=True
+duplicate_ids=0  dangling_references=0  reused_ids=0
+rows_byte_identical_base_vs_work=True
+verdict=89 CONTIGUOUS UNIQUE, BYTE-IDENTICAL TO BASE
+
+--- 2. DSS-AC rows in ACCEPTANCE.md ---
+row_pattern=`| DSS-AC-NNN |`
+base_rows=113  work_rows=113
+unique_ids=113  id_set_is_exactly_DSS-AC-001..113=True
+duplicate_ids=0  dangling_references=0  reused_ids=0
+row_order_identical_base_vs_work=True (order follows the frozen requirement mapping; it is not numeric-sequential by design and this is unchanged)
+status_column base = 113 x PASS  (PASS 113 / FAIL 0 / BLOCKED 0 / NOT_RUN 0)
+status_column work = 113 x PASS  (PASS 113 / FAIL 0 / BLOCKED 0 / NOT_RUN 0)
+only_differing_rows=DSS-AC-108, DSS-AC-110 (and only in the 前置条件 column; PASS state unchanged)
+verdict=113 CONTIGUOUS UNIQUE, ALL PASS
+
+--- 3. DESIGN traceability matrices ---
+section 14.2 (需求 → 设计落点矩阵): distinct DSS-REQ referenced = 89 (DSS-REQ-001..089)  => 89/89
+section 14.3 (验收 → 设计落点矩阵): distinct DSS-AC referenced  = 113 (DSS-AC-001..113) => 113/113
+section 14.2 identical base vs work = True
+section 14.3 identical base vs work = True
+verdict=89/89 AND 113/113, UNCHANGED FROM BASE
+
+--- 4. statistics consistency across docs ---
+formal acceptance: PASS 113 / FAIL 0 / BLOCKED 0 / NOT_RUN 0
+action-button-loading adjustment round: PASS 6 / FAIL 0 / BLOCKED 0 / NOT_RUN 0
+DSS-AC-001..107 remain PASS (not modified by R1)
+verdict=ALL STATISTICS UNIFIED AND UNCHANGED
+
+--- 5. cross-check against the base R0 evidence ---
+R0 evidence EVIDENCE-INDEX.txt records: checks_passed=294, assertion_failure_count=0, strict_harness_exit_code=0
+R0 acceptance-matrix.json sha256 unchanged (see git/06-r0-evidence-unchanged-proof.txt)
+R1 does NOT re-run and does NOT contradict these; it only corrects the wording of the R0 negative self-test exit code (see the R0 report section 10.1).
+
+verdict=PASS: rows and traceability are complete, contiguous, unique and unchanged from base; R1 asserts no acceptance-state change

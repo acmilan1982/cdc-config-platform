@@ -1,0 +1,29 @@
+R1 NEGATIVE-CONTROL INJECTION RECORD (how the falsifying input was produced)
+task=DATA-SOURCE-SNAPSHOT-STATUS-ACTION-BUTTON-LOADING-VISUAL-STABILITY-FORMAL-ACCEPTANCE-001-R1
+
+purpose: prove that the shared R0 evaluator is falsifiable through a REAL child-process exit code, not
+         only through an in-process boolean. The negative-control file is NOT acceptance evidence and
+         must never be presented as a PASS result.
+
+source_file=R0 evidence/...-FORMAL-ACCEPTANCE-001/browser/acceptance-matrix.json
+source_sha256=e90e8bf398a8018523f6bc237a6c5c9acb78f0f4bfd3e80f45aa7a743c4e506e
+control_file=browser/NEGATIVE-CONTROL-0.001PX-DO-NOT-USE-AS-ACCEPTANCE-EVIDENCE.json
+control_sha256=3a744e88f3d00d3cd6a315863bdee0b7c5932ed81b6550809f287c16c55eedcd
+
+method: deep-copy the untouched R0 result and add exactly 0.001px to ONE state's raw rect values:
+  viewport       = 1920x1080
+  state          = MANUAL_LOADING
+  queryBtn.w     : 62      -> 62.001
+  refreshBtn.y   : 241.5   -> 241.501
+No other value in the document was altered. A marker field
+"__R1_NEGATIVE_CONTROL__": { DO_NOT_USE_AS_ACCEPTANCE_EVIDENCE: true, ... } was added at the top level so
+the file cannot be mistaken for a genuine result; it does not participate in any assertion.
+
+expected_result: passed=false, exit code 1, with unrounded non-zero deltas
+  refresh_btn_rect_delta.y      actual=0.0010000000000047748  expected=0
+  query_btn_rect_delta.width    actual=0.0009999999999976694  expected=0
+  query_button_actual_width_set actual="62,62.001"            expected="62"
+
+why this matters: the evaluator recomputes every delta from the raw getBoundingClientRect() values with no
+rounding, so a sub-0.001px displacement cannot be masked. See negative-control-assertion.txt for the real
+captured stdout/stderr and process exit code.

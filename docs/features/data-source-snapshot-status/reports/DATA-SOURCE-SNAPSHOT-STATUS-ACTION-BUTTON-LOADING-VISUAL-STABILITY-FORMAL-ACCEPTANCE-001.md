@@ -160,3 +160,29 @@
 - 停止服务：`kill 19652 19585`（详情见 `service/08-service-control-record.txt`）。
 - 证据索引与逐条判定：`evidence/DATA-SOURCE-SNAPSHOT-STATUS-ACTION-BUTTON-LOADING-VISUAL-STABILITY-FORMAL-ACCEPTANCE-001/EVIDENCE-INDEX.txt`。
 - 下一入口：`CHATGPT_ACTION_BUTTON_LOADING_VISUAL_STABILITY_FORMAL_ACCEPTANCE_REVIEW_FROM_GIT_THEN_PROJECT_OWNER_FINAL_ACCEPTANCE_DECISION`（先由 ChatGPT 从远程 Git 复审本轮正式验收结果，再由项目负责人作最终接受决定）。
+
+---
+
+## 10. R1 定向纠正（2026-09-15，`DATA-SOURCE-SNAPSHOT-STATUS-ACTION-BUTTON-LOADING-VISUAL-STABILITY-FORMAL-ACCEPTANCE-001-R1`；**本节为追加，上文 §1～§9 零字节改动**）
+
+> 本节由纯文档与证据事实一致性纠正任务 `DATA-SOURCE-SNAPSHOT-STATUS-ACTION-BUTTON-LOADING-VISUAL-STABILITY-FORMAL-ACCEPTANCE-001-R1`（基点提交 `eeafac6fb1030615bb17f21f35da9f2043597903`）**追加**，用于纠正本报告上文的**证据事实表述错误**，并同步当前 ZooKeeper 环境分层口径与当前下一入口。**本节不改变 R0 的任何实质结论**：`DSS-AC-108~113` 六条仍为 `PASS`，机器断言 `294` 项通过、失败 `0`、判定模块真实退出码 `0`，四档视口几何严格 `0px`、按钮宽度恒为 `62px`/`110px`，数据库只读零写入，代码/契约/追踪零差异。上文 §1～§9 的**任何字节均未删除或改写**：追加前基点文件 `sha256=2cd0955da04412f5eaccbc4df1d413b078e79c61eb0a57857b1836304eee863a`（`17900` 字节），追加后该文件仍以其为**完整前缀**（逐字节前缀比对 `cmp -n 17900` 退出 `0`，证明见 R1 证据 `evidence/DATA-SOURCE-SNAPSHOT-STATUS-ACTION-BUTTON-LOADING-VISUAL-STABILITY-FORMAL-ACCEPTANCE-001-R1/git/05-r0-report-append-only-proof.txt`）。
+
+### 10.1 纠正一：负向自测的**退出码**事实（上文 §4 第 5 条）
+
+- **上文错误表述**：§4 第 5 条写“断言模块报出**未舍入实测量**（`0.0009999999999976694` / `0.0010000000000047748`）并以**非零退出码**结束”。该“非零退出码”表述是**证据事实错误**，必须按下列事实理解。
+- **事实 (1) 断言函数确实检测到变异**：R0 的判定模块 `evaluateAcceptanceResult()` 对注入的恰好 `0.001px` 位移**确实判定失败**——证据 `browser/negative-selftest.txt` 记录 `(b) +0.001px width/y in 1920x1080/MANUAL_LOADING : passed=false failures=3`，三条失败为 `refresh_btn_rect_delta.y | 1920x1080 | actual=0.0010000000000047748 expected=0`、`query_btn_rect_delta.width | 1920x1080 | actual=0.0009999999999976694 expected=0`、`query_button_actual_width_set | 1920x1080 | actual="62,62.001" expected="62"`。**“模块可证伪、无舍入掩盖、无伪通过”的结论成立**。
+- **事实 (2) R0 `negative-selftest.mjs` 进程退出码实际为 `0`**：该程序的设计语义是“**成功检测出变异即自测成功**”（`browser/harness/negative-selftest.mjs` 末尾 `const ok = baseline.passed === true && afterMutation.passed === false && afterMutation.failure_count > 0` 与 `process.exit(ok ? 0 : 1)`）。因此“检测到 `0.001px` 变异”对应的是**退出码 `0`**；R0 证据 `browser/negative-selftest.txt` 中的 `SELF_TEST_EXIT_CODE=0` 与 shell 捕获的 `EXIT_CODE=0` 与该事实一致。
+- **事实 (3) 原表述的性质**：上文把“**断言模块判定失败**”误写为“**自测程序进程退出码非零**”，属于**证据事实错误**（而非结论错误）。R0 验收判定本身不受影响。
+- **R1 证据补强**：R1 新增**页面无关**判定 CLI `evidence/DATA-SOURCE-SNAPSHOT-STATUS-ACTION-BUTTON-LOADING-VISUAL-STABILITY-FORMAL-ACCEPTANCE-001-R1/browser/harness/assert-result.mjs`，**复用 R0 同一** `evaluateAcceptanceResult()`（不复制、不改写判定逻辑），以**真实子进程退出码**给出可被 shell 直接证明的失败路径：对 R0 原始 `browser/acceptance-matrix.json` 真实退出码 `0`（`passed=true`、失败 `0`）；对仅注入恰好 `0.001px` 的负向控制副本真实退出码 `1`，并打印**未舍入**非零差值与失败字段。命令、stdout、stderr 与 shell 捕获退出码见 `…-R1/browser/original-result-assertion.txt`、`…-R1/browser/negative-control-assertion.txt`、`…-R1/browser/negative-control-injection-record.txt`。该负向控制副本**仅用于证明判定可失败**，**不得**作为任何 `PASS` 验收证据使用。
+
+### 10.2 纠正二：ZooKeeper 当前环境分层口径（上文 §1）
+
+- 上文 §1 对“后端启动期存在与本 Feature **无关**的 ZooKeeper 连接背景日志（曾建立到 `10.19.16.111:2181` 的会话，随后超时/重连）”的**事实描述本身准确**；本次纠正的是**分层口径**，统一为：`zookeeper_environment_status=AVAILABLE`（**项目负责人提供的当前环境事实**；本 R1 任务**未**主动连接、访问或验证 ZooKeeper）、`background_backend_zookeeper_session_status=OBSERVED_SESSION_ESTABLISHED_THEN_TIMEOUT_OR_RECONNECT`、`formal_acceptance_task_initiated_zookeeper_node_operation_status=NONE`、`zookeeper_write_status=NOT_REQUESTED`、`feature_zookeeper_dependency=NONE`。
+- 三层必须分开读：**环境可用性** / **后端后台组件既有会话行为** / **本 Feature 的依赖与写操作**；不得再用裸的、不区分层级的 `zookeeper_access_status=NONE` 式表述。
+
+### 10.3 当前下一入口（R1 之后）
+
+- 上文 §9 的 R0 下一入口 `CHATGPT_ACTION_BUTTON_LOADING_VISUAL_STABILITY_FORMAL_ACCEPTANCE_REVIEW_FROM_GIT_THEN_PROJECT_OWNER_FINAL_ACCEPTANCE_DECISION` 作为 **2026-09-14 R0 正式验收提交后的历史入口**保留。
+- 当前统一下一入口为 `CHATGPT_ACTION_BUTTON_LOADING_VISUAL_STABILITY_FORMAL_ACCEPTANCE_R1_REVIEW_FROM_GIT_THEN_PROJECT_OWNER_FINAL_ACCEPTANCE_DECISION`：先由 ChatGPT 从远程 Git 复审 R1 纠正结果，再由项目负责人作出最终接受决定。
+- 本轮**尚未最终接受**：不写 `ACCEPTED`/`IMPLEMENTED_ACCEPTED`/`COMPLETED`，`action_button_loading_visual_stability_acceptance_status=EXECUTED_PENDING_CHATGPT_REVIEW` 保持不变。
+- R1 报告：`reports/DATA-SOURCE-SNAPSHOT-STATUS-ACTION-BUTTON-LOADING-VISUAL-STABILITY-FORMAL-ACCEPTANCE-001-R1.md`；R1 证据：`evidence/DATA-SOURCE-SNAPSHOT-STATUS-ACTION-BUTTON-LOADING-VISUAL-STABILITY-FORMAL-ACCEPTANCE-001-R1/`。

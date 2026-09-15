@@ -1,0 +1,26 @@
+### R1 DIFF-CHECK AND WHITESPACE EVIDENCE
+task=DATA-SOURCE-SNAPSHOT-STATUS-ACTION-BUTTON-LOADING-VISUAL-STABILITY-FORMAL-ACCEPTANCE-001-R1
+base_commit=eeafac6fb1030615bb17f21f35da9f2043597903
+date=2026-09-15
+worktree=/agent/dss-abl-fa-001-r1
+
+=== working-tree diff check (excluding the untracked new evidence dir) ===
+command: git diff --check
+shell_captured_exit_code=0
+stdout=(empty; no whitespace errors / conflict markers reported)
+
+=== staged diff check ===
+command: git diff --cached --check
+shell_captured_exit_code=0
+stdout=(empty)
+
+note=both invocations returned a real shell exit code 0; this was captured by the shell, not asserted in text.
+
+=== whitespace scan of the new R1 evidence dir ===
+scope=docs/features/data-source-snapshot-status/evidence/DATA-SOURCE-SNAPSHOT-STATUS-ACTION-BUTTON-LOADING-VISUAL-STABILITY-FORMAL-ACCEPTANCE-001-R1/**
+files_scanned=7
+files_with_CRLF=0
+lines_with_trailing_space_or_tab=0
+note=the new evidence files are authored LF-only with no trailing whitespace, so once staged they cannot make `git diff --check` non-zero.
+
+verdict=PASS: git diff --check == 0 and git diff --cached --check == 0 (real exit codes); new evidence is whitespace-clean

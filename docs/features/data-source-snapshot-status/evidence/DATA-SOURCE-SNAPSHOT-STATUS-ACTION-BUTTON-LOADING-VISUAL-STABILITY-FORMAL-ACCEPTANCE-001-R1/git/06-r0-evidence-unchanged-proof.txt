@@ -1,0 +1,26 @@
+### R1 R0-EVIDENCE UNCHANGED PROOF
+task=DATA-SOURCE-SNAPSHOT-STATUS-ACTION-BUTTON-LOADING-VISUAL-STABILITY-FORMAL-ACCEPTANCE-001-R1
+base_commit=eeafac6fb1030615bb17f21f35da9f2043597903
+date=2026-09-15
+r0_evidence_dir=docs/features/data-source-snapshot-status/evidence/DATA-SOURCE-SNAPSHOT-STATUS-ACTION-BUTTON-LOADING-VISUAL-STABILITY-FORMAL-ACCEPTANCE-001/
+
+=== per-file comparison (base tree vs worktree) ===
+files_in_base=49
+files_in_worktree=49
+files_identical=49
+files_differing=0
+files_missing=0
+extra_files_added_under_r0_dir=0
+method=for each path from `git ls-tree -r BASE -- <r0_dir>`, compare sha256(git show BASE:<path>) with sha256(current file)
+result=all 49 R0 evidence files are byte-identical to the base commit; no file was added, removed or modified under the R0 evidence directory.
+
+=== notable files confirmed untouched ===
+browser/acceptance-matrix.json            (sha256 e90e8bf398a8018523f6bc237a6c5c9acb78f0f4bfd3e80f45aa7a743c4e506e - unchanged)
+browser/harness/assertions.mjs            (evaluator reused read-only by the R1 CLI; unchanged)
+browser/harness/negative-selftest.mjs     (R0 script; unchanged)
+browser/negative-selftest.txt             (SELF_TEST_EXIT_CODE=0 / EXIT_CODE=0; unchanged)
+service/09-backend-background-behaviour.txt
+git/01..06
+EVIDENCE-INDEX.txt
+
+verdict=PASS: r0_evidence_change_status=ZERO
