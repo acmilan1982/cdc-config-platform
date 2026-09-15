@@ -1,0 +1,22 @@
+# 变更路径白名单判定
+
+## git status --porcelain
+ M docs/features/README.md
+ M docs/features/data-source-snapshot-status/ACCEPTANCE.md
+ M docs/features/data-source-snapshot-status/API.md
+ M docs/features/data-source-snapshot-status/DATABASE.md
+ M docs/features/data-source-snapshot-status/DESIGN.md
+ M docs/features/data-source-snapshot-status/README.md
+ M docs/features/data-source-snapshot-status/REQUIREMENTS.md
+ M docs/features/data-source-snapshot-status/UI.md
+ M docs/features/data-source-snapshot-status/evidence/DATA-SOURCE-SNAPSHOT-STATUS-QUERY-BUTTON-AND-TABLE-LAYOUT-STABILITY-IMPLEMENTATION-001-R2/README.md
+ M docs/features/data-source-snapshot-status/evidence/DATA-SOURCE-SNAPSHOT-STATUS-QUERY-BUTTON-AND-TABLE-LAYOUT-STABILITY-IMPLEMENTATION-001-R3/README.md
+ M docs/features/data-source-snapshot-status/reports/DATA-SOURCE-SNAPSHOT-STATUS-QUERY-BUTTON-AND-TABLE-LAYOUT-STABILITY-IMPLEMENTATION-001-R3.md
+?? docs/features/data-source-snapshot-status/evidence/DATA-SOURCE-SNAPSHOT-STATUS-QUERY-BUTTON-AND-TABLE-LAYOUT-STABILITY-IMPLEMENTATION-001-R4/
+?? docs/features/data-source-snapshot-status/reports/DATA-SOURCE-SNAPSHOT-STATUS-QUERY-BUTTON-AND-TABLE-LAYOUT-STABILITY-IMPLEMENTATION-001-R4.md
+
+## 白名单判定（未暂存模式，脚本内真实子进程判定）
+  judged_paths=13
+  outside_whitelist=[]
+  verdict=PASS
+whitelist_exit_code=0

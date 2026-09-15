@@ -1,0 +1,44 @@
+# 历史文件 append-only（字节前缀）与八份入口文档反向应用证明
+# 基准提交=64004ca062a92ab40e07350e231d97befe6f496c
+
+## A. 三份历史文件的字节前缀性质
+path=docs/features/data-source-snapshot-status/reports/DATA-SOURCE-SNAPSHOT-STATUS-QUERY-BUTTON-AND-TABLE-LAYOUT-STABILITY-IMPLEMENTATION-001-R3.md
+  base_exists=True base_bytes=13400 now_bytes=17514
+  base_sha256=0960ccbe6b33264f2d848c8878418892da16d548289e718397ecaed8428ff144
+  now_sha256=d2cefd252ad1d500f2a10258e2d333fe5fcc8fece69b4dd6a67dd979a866bf29
+  base_bytes_is_complete_prefix_of_now=True
+  appended_bytes=4114
+
+path=docs/features/data-source-snapshot-status/evidence/DATA-SOURCE-SNAPSHOT-STATUS-QUERY-BUTTON-AND-TABLE-LAYOUT-STABILITY-IMPLEMENTATION-001-R2/README.md
+  base_exists=True base_bytes=3205 now_bytes=5222
+  base_sha256=f445589fbc4431020e5e952527b898d740a558857dc4164b2d178fa3a834d24c
+  now_sha256=a9b35aa04342365ed91ef3733dd8afb2937b8f10dd52923052fd6343422c0621
+  base_bytes_is_complete_prefix_of_now=True
+  appended_bytes=2017
+
+path=docs/features/data-source-snapshot-status/evidence/DATA-SOURCE-SNAPSHOT-STATUS-QUERY-BUTTON-AND-TABLE-LAYOUT-STABILITY-IMPLEMENTATION-001-R3/README.md
+  base_exists=True base_bytes=6245 now_bytes=7939
+  base_sha256=dffbe34573754de42a34302729a22eb57392a371fe6d2b11591ea9a8a88668d5
+  now_sha256=1316a6ce2677dc66f41f360e07c8dfe8af90bfa89728c83b01624ef97f79fe12
+  base_bytes_is_complete_prefix_of_now=True
+  appended_bytes=1694
+
+## B. 三份历史文件的删除行计数（须为 0）
+19	0	docs/features/data-source-snapshot-status/evidence/DATA-SOURCE-SNAPSHOT-STATUS-QUERY-BUTTON-AND-TABLE-LAYOUT-STABILITY-IMPLEMENTATION-001-R2/README.md
+19	0	docs/features/data-source-snapshot-status/evidence/DATA-SOURCE-SNAPSHOT-STATUS-QUERY-BUTTON-AND-TABLE-LAYOUT-STABILITY-IMPLEMENTATION-001-R3/README.md
+43	0	docs/features/data-source-snapshot-status/reports/DATA-SOURCE-SNAPSHOT-STATUS-QUERY-BUTTON-AND-TABLE-LAYOUT-STABILITY-IMPLEMENTATION-001-R3.md
+
+## C. 八份入口文档：反向应用（撤销声明编辑后须与基准逐字节相等）
+[PASS] reverse-apply README.md                        restored_equals_base=True
+[PASS] reverse-apply README.md                        restored_equals_base=True
+[PASS] reverse-apply REQUIREMENTS.md                  restored_equals_base=True
+[PASS] reverse-apply ACCEPTANCE.md                    restored_equals_base=True
+[PASS] reverse-apply DESIGN.md                        restored_equals_base=True
+[PASS] reverse-apply UI.md                            restored_equals_base=True
+[PASS] reverse-apply API.md                           restored_equals_base=True
+[PASS] reverse-apply DATABASE.md                      restored_equals_base=True
+[PASS] append-only-prefix DATA-SOURCE-SNAPSHOT-STATUS-QUERY-BUTTON-AND-TABLE-LAYOUT-STABILITY-IMPLEMENTATION-001-R3.md base=13400 now=17514 appended=4114 prefix=True
+[PASS] append-only-prefix README.md                   base=3205 now=5222 appended=2017 prefix=True
+[PASS] append-only-prefix README.md                   base=6245 now=7939 appended=1694 prefix=True
+
+# 反向应用同时证明『只改了声明过的东西』与『声明的都改了』。

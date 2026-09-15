@@ -250,3 +250,46 @@ pending_user_confirmation_count=0
 - `git diff --check` 与 `git diff --cached --check` 退出码均为 `0`；
 - 本任务新增行无行尾空白；
 - 项目文档校验工具不存在，如实记为 `NOT_AVAILABLE`。
+
+## 14. ChatGPT R3 复审与 R4 结果事实纠正记录（append-only 追加，2026-09-15）
+
+> 本节由 `DATA-SOURCE-SNAPSHOT-STATUS-QUERY-BUTTON-AND-TABLE-LAYOUT-STABILITY-IMPLEMENTATION-001-R4` 在文末追加。基准 `64004ca062a92ab40e07350e231d97befe6f496c` 中本文件的全部原始字节构成修改后文件的**完整字节前缀**；未删除、未替换、未移动、未原位编辑任何既有内容。
+
+### 14.1 ChatGPT 从远程 Git 的 R3 复审结论
+
+```text
+chatgpt_r3_review_status=CHANGES_REQUIRED_TWO_RESULT_FACT_CORRECTIONS_ONLY
+r3_evidence_script_correction_review_status=APPROVED
+r3_business_implementation_status=PRESERVED_APPROVED
+```
+
+R3 对 `scripts/run-checks.py` 的 `--staged` 路径解析修复与共享判定负向自测**被认可且不被推翻**，本轮不得再次修改该脚本：`r3_evidence_script_correction_status=PASS`、`r3_evidence_script_reproducibility_status=PASS`、`r3_evidence_script_change_status=ZERO`。
+
+### 14.2 纠正一：62/62/110px 是固定宽度，不是高度
+
+本报告 §10 末段的「查询按钮 62px、重置 62px、刷新 110px」是**固定宽度**口径，正确字段名为 `query_button_fixed_width_px=62`、`reset_button_fixed_width_px=62`、`refresh_button_fixed_width_px=110`。上述原文属历史记录，按 append-only 规则**不改写**；本节作为其唯一定性说明。R3 结果输出中如以高度命名同一批数值，属“R3 结果输出中的错误字段名，已由 R4 纠正”，不构成当前事实，也不是本报告正文的表述。
+
+R4 **未**建立、**未**测量、**未**修改任何按钮高度基线：`button_height_baseline_status=NOT_DEFINED_NOT_CHANGED`；基准提交中未限定高度字段的当前事实计数为 `0`；`frontend/**` 零差异，未重新测量按钮。
+
+### 14.3 纠正二：R2 证据 README 的真实 Git 对象状态
+
+本报告 §8.2 把 `evidence/...-R2/README.md` 记为「在基准中**不存在**（基准字节 0），故 append-only 以‘基准字节 0 为完整前缀’成立」。该表述与 Git 对象事实一致的部分是「不存在」，但其 append-only 措辞不精确，容易与「存在一个被跟踪的 0 字节文件」混淆。按 R4 提示词 §5.4，R4 以 Git 对象机器判定选取唯一分支：
+
+```text
+r2_result_commit_id=09e268f905d083d6237b4dfc446198b4c5157661
+r2_evidence_readme_git_object_status=NOT_PRESENT
+r2_evidence_readme_cat_file_exit_code=128
+r2_evidence_readme_base_blob_size_bytes=NOT_APPLICABLE
+r2_evidence_readme_base_status=NOT_PRESENT_AT_R2_RESULT_COMMIT
+r2_evidence_readme_creation_status=CREATED_RETROSPECTIVELY_BY_R3
+r2_evidence_readme_append_only_status=NOT_APPLICABLE_NO_BASE_FILE
+r2_evidence_readme_ambiguous_zero_byte_claim_count=0
+```
+
+判定命令与真实输出见 R4 证据目录 `records/02-r2-readme-git-object-judgement.txt`（含原始命令、标准输出、标准错误与真实退出码）。结论：R3 创建的是位于 R2 证据目录中的**R3 回溯说明文件**，不是对 R2 已存在 README 的追加；“基准 0 字节为完整前缀”只是空前缀性质，不能作为 R2 历史文件保留证明；该文件无需删除或移动，只纠正其来源与性质描述。
+
+### 14.4 冻结与未执行范围
+
+R4 相对 64004ca 的冻结结论与 R3 一致：需求 `DSS-REQ-001~091`（91 行）业务行、验收 `DSS-AC-001~118`（118 行）完整业务行与状态列、`DESIGN.md` §14.2/§14.3 映射行、`DESIGN.md` §38、`UI.md` §32、API/DATABASE 契约正文逐字节不变；`frontend/**`、`backend/**`、项目测试、SQL、配置、依赖与锁文件零差异；R2 `run-checks.py` 与基准逐字节不变；`DSS-AC-114~118` 共 5 条仍全部 `NOT_RUN`。
+
+R4 **未**重跑任何业务测试、**未**执行前端或后端构建、**未**做浏览器几何验证、**未**执行 `DSS-AC-114~118`、**未**开始正式验收、**未**访问数据库/ZooKeeper/Kafka、**未**启停 `5173`/`8080` 服务、**未**清理任何 worktree。文档事实纠正**不等于**代码复审通过、**不等于**新增验收已执行、**不等于**最终接受收口。

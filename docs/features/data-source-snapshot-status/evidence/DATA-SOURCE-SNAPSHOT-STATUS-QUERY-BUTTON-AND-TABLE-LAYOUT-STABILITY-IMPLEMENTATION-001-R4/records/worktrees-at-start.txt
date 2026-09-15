@@ -1,0 +1,121 @@
+# 任务开始时全部既有 worktree 快照（R4 创建之前）
+# 生成时间基准：R4 任务开始时
+
+## git worktree list（完整）
+/agent/cdc-config-platform                                  4222b0a [develop]
+/agent/cdc-docs-freeze-001                                  8998034 (detached HEAD)
+/agent/dss-abl-appr-r1-001                                  9f06725 (detached HEAD)
+/agent/dss-abl-fa-001                                       eeafac6 (detached HEAD)
+/agent/dss-abl-fa-001-r1                                    94a8423 (detached HEAD)
+/agent/dss-abl-impl-001                                     fccefbf (detached HEAD)
+/agent/dss-abl-impl-001-r1                                  1b58e3c (detached HEAD)
+/agent/dss-abl-impl-001-r2                                  0ab6895 (detached HEAD)
+/agent/dss-abl-revclose-001                                 5195a71 (detached HEAD)
+/agent/dss-action-button-loading-approval-001               a43b45b (detached HEAD)
+/agent/dss-action-button-loading-baseline-001               cf6aec1 (detached HEAD)
+/agent/dss-action-button-loading-baseline-001-r1            c4d5c09 (detached HEAD)
+/agent/dss-design-traceability-corr-001                     d4c5267 (detached HEAD)
+/agent/dss-design-traceability-corr-001-r1                  758253c (detached HEAD)
+/agent/dss-formal-acceptance-001                            3190b3d (detached HEAD)
+/agent/dss-formal-acceptance-001-r1                         bf5f1b5 (detached HEAD)
+/agent/dss-formal-acceptance-001-r2                         5ca9931 (detached HEAD)
+/agent/dss-formal-acceptance-001-r3                         68528cf (detached HEAD)
+/agent/dss-formal-acceptance-closeout-001                   f3d383e (detached HEAD)
+/agent/dss-formal-impl-001                                  3ec9cbf (detached HEAD)
+/agent/dss-formal-impl-001-r1                               ba309ea (detached HEAD)
+/agent/dss-linear-style-original-001.R1                     4222b0a (detached HEAD)
+/agent/dss-linear-style-prototype-001.BfGw0Z                4222b0a (detached HEAD)
+/agent/dss-popper-impl-closeout-001                         cacfb70 (detached HEAD)
+/agent/dss-popper-r2-appr-001                               183d3b5 (detached HEAD)
+/agent/dss-popper-width-baseline-001                        6cd197d (detached HEAD)
+/agent/dss-popper-width-baseline-001-r1                     f74dd72 (detached HEAD)
+/agent/dss-popper-width-baseline-approval-001               5649a8a (detached HEAD)
+/agent/dss-popper-width-impl-001                            e3c2392 (detached HEAD)
+/agent/dss-qc-review-closeout-001                           1ddb84e (detached HEAD)
+/agent/dss-qc-review-closeout-001-r1                        af88aa8 (detached HEAD)
+/agent/dss-query-button-table-layout-baseline-001           be101a1 (detached HEAD)
+/agent/dss-query-button-table-layout-baseline-001-r1        46d8aeb (detached HEAD)
+/agent/dss-query-button-table-layout-baseline-approval-001  9ba4e75 (detached HEAD)
+/agent/dss-query-button-table-layout-implementation-001     d77e174 (detached HEAD)
+/agent/dss-query-button-table-layout-implementation-001-r1  8272d69 (detached HEAD)
+/agent/dss-query-button-table-layout-implementation-001-r2  09e268f (detached HEAD)
+/agent/dss-query-button-table-layout-implementation-001-r3  64004ca (detached HEAD)
+/agent/dss-query-ctl-001                                    29379e7 (detached HEAD)
+/agent/dss-query-ctl-001-r1                                 d6322cf (detached HEAD)
+/agent/dss-query-ctl-001-r2                                 6c43d1e (detached HEAD)
+/agent/dss-query-ctl-001-r3                                 cf9f9eb (detached HEAD)
+/agent/dss-query-ctl-appr-001                               548e161 (detached HEAD)
+/agent/dss-query-ctl-impl-001                               a479888 (detached HEAD)
+/agent/dss-query-ctl-impl-001-r1                            edba7c8 (detached HEAD)
+/agent/dss-query-ctl-impl-001-r2                            2a9a271 (detached HEAD)
+/agent/dss-select-popper-fixed-width-proto-001              2a9a271 (detached HEAD)
+/agent/dss-select-width-diag-001                            2a9a271 (detached HEAD)
+/tmp/cdc-approval-r1-worktree                               c568df1 (detached HEAD)
+/tmp/cdc-approval-worktree                                  b753bec (detached HEAD)
+/tmp/cdc-freeze-r1-worktree                                 85a522e (detached HEAD)
+/tmp/cdc-freeze-r2-worktree                                 9b0aa92 (detached HEAD)
+/tmp/cdc-freeze-r3-worktree                                 e67b2ec (detached HEAD)
+/tmp/cdc-popper-appr-r1-worktree                            485be09 (detached HEAD)
+/tmp/cdc-popper-r2-worktree                                 0666cd9 (detached HEAD)
+/tmp/cdc-r1-worktree                                        49eb778 (detached HEAD)
+
+## 逐条 worktree：路径 / HEAD / 分支或 detached / 修改项数
+  path=/agent/cdc-config-platform                                     head=4222b0a  ref=refs/heads/develop           mods=116
+  path=/agent/cdc-docs-freeze-001                                     head=8998034  ref=detached                     mods=0
+  path=/agent/dss-abl-appr-r1-001                                     head=9f06725  ref=detached                     mods=0
+  path=/agent/dss-abl-fa-001                                          head=eeafac6  ref=detached                     mods=0
+  path=/agent/dss-abl-fa-001-r1                                       head=94a8423  ref=detached                     mods=0
+  path=/agent/dss-abl-impl-001                                        head=fccefbf  ref=detached                     mods=0
+  path=/agent/dss-abl-impl-001-r1                                     head=1b58e3c  ref=detached                     mods=2
+  path=/agent/dss-abl-impl-001-r2                                     head=0ab6895  ref=detached                     mods=0
+  path=/agent/dss-abl-revclose-001                                    head=5195a71  ref=detached                     mods=0
+  path=/agent/dss-action-button-loading-approval-001                  head=a43b45b  ref=detached                     mods=0
+  path=/agent/dss-action-button-loading-baseline-001                  head=cf6aec1  ref=detached                     mods=0
+  path=/agent/dss-action-button-loading-baseline-001-r1               head=c4d5c09  ref=detached                     mods=0
+  path=/agent/dss-design-traceability-corr-001                        head=d4c5267  ref=detached                     mods=0
+  path=/agent/dss-design-traceability-corr-001-r1                     head=758253c  ref=detached                     mods=0
+  path=/agent/dss-formal-acceptance-001                               head=3190b3d  ref=detached                     mods=0
+  path=/agent/dss-formal-acceptance-001-r1                            head=bf5f1b5  ref=detached                     mods=0
+  path=/agent/dss-formal-acceptance-001-r2                            head=5ca9931  ref=detached                     mods=0
+  path=/agent/dss-formal-acceptance-001-r3                            head=68528cf  ref=detached                     mods=0
+  path=/agent/dss-formal-acceptance-closeout-001                      head=f3d383e  ref=detached                     mods=0
+  path=/agent/dss-formal-impl-001                                     head=3ec9cbf  ref=detached                     mods=1
+  path=/agent/dss-formal-impl-001-r1                                  head=ba309ea  ref=detached                     mods=0
+  path=/agent/dss-linear-style-original-001.R1                        head=4222b0a  ref=detached                     mods=0
+  path=/agent/dss-linear-style-prototype-001.BfGw0Z                   head=4222b0a  ref=detached                     mods=13
+  path=/agent/dss-popper-impl-closeout-001                            head=cacfb70  ref=detached                     mods=0
+  path=/agent/dss-popper-r2-appr-001                                  head=183d3b5  ref=detached                     mods=0
+  path=/agent/dss-popper-width-baseline-001                           head=6cd197d  ref=detached                     mods=0
+  path=/agent/dss-popper-width-baseline-001-r1                        head=f74dd72  ref=detached                     mods=0
+  path=/agent/dss-popper-width-baseline-approval-001                  head=5649a8a  ref=detached                     mods=0
+  path=/agent/dss-popper-width-impl-001                               head=e3c2392  ref=detached                     mods=0
+  path=/agent/dss-qc-review-closeout-001                              head=1ddb84e  ref=detached                     mods=0
+  path=/agent/dss-qc-review-closeout-001-r1                           head=af88aa8  ref=detached                     mods=0
+  path=/agent/dss-query-button-table-layout-baseline-001              head=be101a1  ref=detached                     mods=0
+  path=/agent/dss-query-button-table-layout-baseline-001-r1           head=46d8aeb  ref=detached                     mods=0
+  path=/agent/dss-query-button-table-layout-baseline-approval-001     head=9ba4e75  ref=detached                     mods=0
+  path=/agent/dss-query-button-table-layout-implementation-001        head=d77e174  ref=detached                     mods=0
+  path=/agent/dss-query-button-table-layout-implementation-001-r1     head=8272d69  ref=detached                     mods=0
+  path=/agent/dss-query-button-table-layout-implementation-001-r2     head=09e268f  ref=detached                     mods=0
+  path=/agent/dss-query-button-table-layout-implementation-001-r3     head=64004ca  ref=detached                     mods=0
+  path=/agent/dss-query-ctl-001                                       head=29379e7  ref=detached                     mods=0
+  path=/agent/dss-query-ctl-001-r1                                    head=d6322cf  ref=detached                     mods=0
+  path=/agent/dss-query-ctl-001-r2                                    head=6c43d1e  ref=detached                     mods=0
+  path=/agent/dss-query-ctl-001-r3                                    head=cf9f9eb  ref=detached                     mods=0
+  path=/agent/dss-query-ctl-appr-001                                  head=548e161  ref=detached                     mods=1
+  path=/agent/dss-query-ctl-impl-001                                  head=a479888  ref=detached                     mods=0
+  path=/agent/dss-query-ctl-impl-001-r1                               head=edba7c8  ref=detached                     mods=0
+  path=/agent/dss-query-ctl-impl-001-r2                               head=2a9a271  ref=detached                     mods=0
+  path=/agent/dss-select-popper-fixed-width-proto-001                 head=2a9a271  ref=detached                     mods=2
+  path=/agent/dss-select-width-diag-001                               head=2a9a271  ref=detached                     mods=0
+  path=/tmp/cdc-approval-r1-worktree                                  head=c568df1  ref=detached                     mods=0
+  path=/tmp/cdc-approval-worktree                                     head=b753bec  ref=detached                     mods=0
+  path=/tmp/cdc-freeze-r1-worktree                                    head=85a522e  ref=detached                     mods=0
+  path=/tmp/cdc-freeze-r2-worktree                                    head=9b0aa92  ref=detached                     mods=0
+  path=/tmp/cdc-freeze-r3-worktree                                    head=e67b2ec  ref=detached                     mods=0
+  path=/tmp/cdc-popper-appr-r1-worktree                               head=485be09  ref=detached                     mods=0
+  path=/tmp/cdc-popper-r2-worktree                                    head=0666cd9  ref=detached                     mods=0
+  path=/tmp/cdc-r1-worktree                                           head=49eb778  ref=detached                     mods=724
+
+## 计数
+  worktree_count=56

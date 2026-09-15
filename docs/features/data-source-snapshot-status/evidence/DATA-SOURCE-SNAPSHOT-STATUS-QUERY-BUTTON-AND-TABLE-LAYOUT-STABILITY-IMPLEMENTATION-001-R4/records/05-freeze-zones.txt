@@ -1,0 +1,27 @@
+# 冻结区零差异证明（相对基准提交 64004ca062a92ab40e07350e231d97befe6f496c）
+
+git diff --name-only 64004ca -- frontend           => 0
+git diff --name-only 64004ca -- backend            => 0
+git diff --name-only 64004ca -- package.json       => 0
+git diff --name-only 64004ca -- package-lock.json  => 0
+git diff --name-only 64004ca -- pnpm-lock.yaml     => 0
+git diff --name-only 64004ca -- yarn.lock          => 0
+git diff --name-only 64004ca -- *.sql              => 0
+git diff --name-only 64004ca -- *config*          => 0
+git diff --name-only 64004ca -- *test* *.spec.*   => 0
+
+## R2 已修复证据脚本的零差异（sha256 字节相等）
+  R2 run-checks.py base_sha256=d2601323030ded81ec6d31db22fd7d3baceffab344342f5038015c6f33ac29f7
+  R2 run-checks.py now_sha256 =d2601323030ded81ec6d31db22fd7d3baceffab344342f5038015c6f33ac29f7
+
+## §10 点名的四个前端文件（应为零差异）
+  frontend/src/layouts/MainLayout.vue                                                             diff_lines=0
+  frontend/src/layouts/MainLayout.spec.ts                                                         diff_lines=0
+  frontend/src/views/data-source-run-state/components/DataSourceSnapshotQueryBar.vue              diff_lines=0
+  frontend/src/views/data-source-run-state/components/DataSourceSnapshotQueryBar.spec.ts          diff_lines=0
+
+## R2 报告零差异（本任务不含针对其 §12 的纠正，故保持零差异）
+  R2 报告 diff_lines=0
+
+## R0/R1 报告与证据目录零差异
+  R0/R1 路径族 => 0

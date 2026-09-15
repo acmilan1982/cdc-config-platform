@@ -1,0 +1,31 @@
+# R4 任务 Git 现场与范围
+
+worktree_path=/agent/dss-query-button-table-layout-implementation-001-r4
+branch=  # 空 = detached
+head=64004ca062a92ab40e07350e231d97befe6f496c
+base_commit_id=64004ca062a92ab40e07350e231d97befe6f496c
+
+## git status --short
+ M docs/features/README.md
+ M docs/features/data-source-snapshot-status/ACCEPTANCE.md
+ M docs/features/data-source-snapshot-status/API.md
+ M docs/features/data-source-snapshot-status/DATABASE.md
+ M docs/features/data-source-snapshot-status/DESIGN.md
+ M docs/features/data-source-snapshot-status/README.md
+ M docs/features/data-source-snapshot-status/REQUIREMENTS.md
+ M docs/features/data-source-snapshot-status/UI.md
+ M docs/features/data-source-snapshot-status/evidence/DATA-SOURCE-SNAPSHOT-STATUS-QUERY-BUTTON-AND-TABLE-LAYOUT-STABILITY-IMPLEMENTATION-001-R2/README.md
+ M docs/features/data-source-snapshot-status/evidence/DATA-SOURCE-SNAPSHOT-STATUS-QUERY-BUTTON-AND-TABLE-LAYOUT-STABILITY-IMPLEMENTATION-001-R3/README.md
+ M docs/features/data-source-snapshot-status/reports/DATA-SOURCE-SNAPSHOT-STATUS-QUERY-BUTTON-AND-TABLE-LAYOUT-STABILITY-IMPLEMENTATION-001-R3.md
+?? docs/features/data-source-snapshot-status/evidence/DATA-SOURCE-SNAPSHOT-STATUS-QUERY-BUTTON-AND-TABLE-LAYOUT-STABILITY-IMPLEMENTATION-001-R4/
+?? docs/features/data-source-snapshot-status/reports/DATA-SOURCE-SNAPSHOT-STATUS-QUERY-BUTTON-AND-TABLE-LAYOUT-STABILITY-IMPLEMENTATION-001-R4.md
+
+## 已暂存路径
+
+## 远程基准
+64004ca062a92ab40e07350e231d97befe6f496c	refs/heads/develop
+
+## hooks 未被禁用或绕过
+git_hooks_status=NOT_DISABLED_NOT_BYPASSED
+  core.hooksPath(config)=<unset>
+  .git/hooks/pre-commit executable=no

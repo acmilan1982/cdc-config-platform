@@ -1,0 +1,51 @@
+# 按钮尺寸字段口径扫描（R4 纠正一：62/62/110 为固定宽度，非高度）
+
+## A. 当前事实中『未限定 *_height_px』出现次数（须为 0）
+  docs/features/README.md                                                  0
+  docs/features/data-source-snapshot-status/README.md                      0
+  docs/features/data-source-snapshot-status/REQUIREMENTS.md                0
+  docs/features/data-source-snapshot-status/ACCEPTANCE.md                  0
+  docs/features/data-source-snapshot-status/DESIGN.md                      0
+  docs/features/data-source-snapshot-status/UI.md                          0
+  docs/features/data-source-snapshot-status/API.md                         0
+  docs/features/data-source-snapshot-status/DATABASE.md                    0
+  docs/features/data-source-snapshot-status/reports/DATA-SOURCE-SNAPSHOT-STATUS-QUERY-BUTTON-AND-TABLE-LAYOUT-STABILITY-IMPLEMENTATION-001-R3.md 0
+
+## B. 全部被跟踪文本中『按钮高度字段名 *_height_px』的命中（须为空）
+  # 排除本 R4 证据脚本自身（其中含用于扫描的正则字面量，不是事实）
+  （无 HIT = 全仓库无按钮高度字段名）
+
+## B2. 状态令牌 button_height_baseline_status（非字段名，不在禁止范围）
+  # 仅统计入口文档与 R3 报告；排除 R4 证据目录（含本记录自身）
+  docs/features/data-source-snapshot-status/ACCEPTANCE.md:557 => button_height_baseline_status=NOT_DEFINED_NOT_CHANGED
+  docs/features/data-source-snapshot-status/API.md:395 => button_height_baseline_status=NOT_DEFINED_NOT_CHANGED
+  docs/features/data-source-snapshot-status/DATABASE.md:285 => button_height_baseline_status=NOT_DEFINED_NOT_CHANGED
+  docs/features/data-source-snapshot-status/DESIGN.md:1336 => button_height_baseline_status=NOT_DEFINED_NOT_CHANGED
+  docs/features/data-source-snapshot-status/README.md:283 => button_height_baseline_status=NOT_DEFINED_NOT_CHANGED
+  docs/features/data-source-snapshot-status/reports/DATA-SOURCE-SNAPSHOT-STATUS-QUERY-BUTTON-AND-TABLE-LAYOUT-STABILITY-IMPLEMENTATION-001-R3.md:272 => button_height_baseline_status=NOT_DEFINED_NOT_CHANGED
+  docs/features/data-source-snapshot-status/REQUIREMENTS.md:594 => button_height_baseline_status=NOT_DEFINED_NOT_CHANGED
+  docs/features/data-source-snapshot-status/UI.md:955 => button_height_baseline_status=NOT_DEFINED_NOT_CHANGED
+  docs/features/README.md:168 => button_height_baseline_status=NOT_DEFINED_NOT_CHANGED
+
+## C. 正确字段名在当前事实中的存在性（须全部 present）
+  query_button_fixed_width_px=62           present=True
+  reset_button_fixed_width_px=62           present=True
+  refresh_button_fixed_width_px=110        present=True
+
+## D. 『高度』邻近 62/110 的命中（逐条人工归类，非误标）
+  docs/features/README.md:47:ed_width_px=110`），不是按钮高度；本轮不建立、不测量、不修改任何按钮高度基线
+  docs/features/README.md:67:ed_width_px=110`），不是按钮高度；本轮不建立、不测量、不修改任何按钮高度基线
+  docs/features/README.md:168:d_width_px=110`；它们不是按钮高度，R4 不建立、不测量、不修改任何按钮高度基
+  docs/features/data-source-snapshot-status/UI.md:77:ed_width_px=110`），不是按钮高度；本轮不建立、不测量、不修改任何按钮高度基线
+  docs/features/data-source-snapshot-status/UI.md:955:d_width_px=110`；它们不是按钮高度，R4 不建立、不测量、不修改任何按钮高度基
+  docs/features/data-source-snapshot-status/DESIGN.md:87:ed_width_px=110`），不是按钮高度；本轮不建立、不测量、不修改任何按钮高度基线
+  docs/features/data-source-snapshot-status/DESIGN.md:1306:钮宽度集合严格为 `[110]`；查询栏整体高度不变；相邻筛选控件与按钮位置不因查询/重置状
+  docs/features/data-source-snapshot-status/DESIGN.md:1336:d_width_px=110`；它们不是按钮高度，R4 不建立、不测量、不修改任何按钮高度基
+  docs/features/data-source-snapshot-status/reports/DATA-SOURCE-SNAPSHOT-STATUS-QUERY-BUTTON-AND-TABLE-LAYOUT-STABILITY-IMPLEMENTATION-001-R3.md:268:一：62/62/110px 是固定宽度，不是高度
+  # 归类：命中全部为 (i) R4 自身的显式否定表述『不是按钮高度』
+  #       (ii) 既有的『查询栏整体高度不变/查询栏整体高度』表述
+  # 无任何『按钮高度=62/110』或『按钮高度字段=62/110』的肯定性误标。
+
+## 结论
+  current_wrong_height_field_conflict_count=0
+  button_height_baseline_status=NOT_DEFINED_NOT_CHANGED

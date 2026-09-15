@@ -100,3 +100,22 @@ python3 .../-R2/scripts/run-checks.py --verify-paths <路径清单文件>
 `frontend/**` 文件；自测前后会比对索引与工作区指纹并在文件中标记
 `NEGATIVE-CONTROL` 与 `DO-NOT-USE-AS-BUSINESS-EVIDENCE`。
 相关输出**不构成任何业务失败证据**。
+
+## 8. R4 对第 2 节表的基准口径纠正（append-only 追加，2026-09-15）
+
+> 本节由 `DATA-SOURCE-SNAPSHOT-STATUS-QUERY-BUTTON-AND-TABLE-LAYOUT-STABILITY-IMPLEMENTATION-001-R4` 在文末追加。基准 `64004ca062a92ab40e07350e231d97befe6f496c` 中本文件的全部原始字节构成修改后文件的**完整字节前缀**；未删除、未替换、未移动、未原位编辑任何既有内容。
+
+第 2 节表把 `records/05-append-only-proofs.txt` 描述为「R2 报告 / R2 证据 README 的 append-only 证明」。该描述对 R2 **报告**成立，但对 R2 **证据 README** 不成立：后者在 R2 结果提交 `09e268f905d083d6237b4dfc446198b4c5157661` 中**不存在**，由 R3 创建，因此不存在可追加的基准文件。其唯一正确口径为：
+
+```text
+r2_evidence_readme_git_object_status=NOT_PRESENT
+r2_evidence_readme_cat_file_exit_code=128
+r2_evidence_readme_base_blob_size_bytes=NOT_APPLICABLE
+r2_evidence_readme_base_status=NOT_PRESENT_AT_R2_RESULT_COMMIT
+r2_evidence_readme_creation_status=CREATED_RETROSPECTIVELY_BY_R3
+r2_evidence_readme_append_only_status=NOT_APPLICABLE_NO_BASE_FILE
+```
+
+`records/05-append-only-proofs.txt` 中「基准字节 0」只是空前缀性质，不构成 R2 历史文件保留证明，也不是 `append-only=PASS` 的依据。该原始记录按规则**不原位修改**，纠正仅以本节与 R4 证据目录为准。
+
+另外，第 2 节表与第 4 节中出现的按钮尺寸描述一律应按**固定宽度**理解：`query_button_fixed_width_px=62`、`reset_button_fixed_width_px=62`、`refresh_button_fixed_width_px=110`；它们不是按钮高度，R4 不建立、不测量、不修改任何按钮高度基线。

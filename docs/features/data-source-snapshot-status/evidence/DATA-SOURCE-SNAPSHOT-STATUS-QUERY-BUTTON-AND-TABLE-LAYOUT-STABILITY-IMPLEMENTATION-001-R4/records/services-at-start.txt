@@ -1,0 +1,19 @@
+# 任务开始时 5173 / 8080 监听进程快照（仅用于结束时证明未触碰）
+
+## ss -ltnp（5173 / 8080）
+LISTEN 0      511          0.0.0.0:5173       0.0.0.0:*    users:(("MainThread",pid=20567,fd=19))
+LISTEN 0      100                *:8080             *:*    users:(("java",pid=20509,fd=23))
+
+## 逐进程：PID / cwd / 完整命令
+  --- pid=20567 ---
+  cwd=/agent/dss-query-button-table-layout-implementation-001/frontend
+  cmd=node /agent/dss-query-button-table-layout-implementation-001/frontend/node_modules/.bin/vite --host 0.0.0.0 --port 5173 --strictPort
+  start_time=Tue Sep 15 14:09:15 2026
+  --- pid=20509 ---
+  cwd=/agent/dss-query-button-table-layout-implementation-001/backend
+  cmd=java -jar target/cdc-config-platform-backend-1.0.0-SNAPSHOT.jar --server.port=8080
+  start_time=Tue Sep 15 14:09:11 2026
+
+## ss -ltnp（5173 / 8080）结束时，用于与起始快照比对
+LISTEN 0      511          0.0.0.0:5173       0.0.0.0:*    users:(("MainThread",pid=20567,fd=19))
+LISTEN 0      100                *:8080             *:*    users:(("java",pid=20509,fd=23))

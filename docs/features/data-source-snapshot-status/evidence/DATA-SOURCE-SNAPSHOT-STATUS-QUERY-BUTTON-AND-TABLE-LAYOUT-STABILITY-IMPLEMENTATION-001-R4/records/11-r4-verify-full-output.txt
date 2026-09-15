@@ -1,0 +1,78 @@
+# R4 §14 校验脚本完整输出（真实退出码）
+# 脚本=docs/features/data-source-snapshot-status/evidence/DATA-SOURCE-SNAPSHOT-STATUS-QUERY-BUTTON-AND-TABLE-LAYOUT-STABILITY-IMPLEMENTATION-001-R4/checks/r4-verify.py
+# sha256=c4eb6d3b3276797ac4f8a054524e648031e581631cf7abad02485711b4d23c21
+
+# R4 校验：基准=64004ca062a92ab40e07350e231d97befe6f496c
+# worktree=/agent/dss-query-button-table-layout-implementation-001-r4
+
+[PASS] reverse-apply README.md                        restored_equals_base=True
+[PASS] reverse-apply README.md                        restored_equals_base=True
+[PASS] reverse-apply REQUIREMENTS.md                  restored_equals_base=True
+[PASS] reverse-apply ACCEPTANCE.md                    restored_equals_base=True
+[PASS] reverse-apply DESIGN.md                        restored_equals_base=True
+[PASS] reverse-apply UI.md                            restored_equals_base=True
+[PASS] reverse-apply API.md                           restored_equals_base=True
+[PASS] reverse-apply DATABASE.md                      restored_equals_base=True
+
+[PASS] append-only-prefix DATA-SOURCE-SNAPSHOT-STATUS-QUERY-BUTTON-AND-TABLE-LAYOUT-STABILITY-IMPLEMENTATION-001-R3.md base=13400 now=17514 appended=4114 prefix=True
+[PASS] append-only-prefix README.md                   base=3205 now=5222 appended=2017 prefix=True
+[PASS] append-only-prefix README.md                   base=6245 now=7939 appended=1694 prefix=True
+
+[PASS] freeze-zero-diff frontend/**                   changed_files=0
+[PASS] freeze-zero-diff backend/**                    changed_files=0
+[PASS] freeze-zero-diff 依赖与锁文件                        changed_files=0
+[PASS] freeze-zero-diff *.sql                         changed_files=0
+[PASS] freeze-zero-diff 配置                            changed_files=0
+[PASS] freeze-zero-diff R2 run-checks.py              sha256_base=d2601323030ded81 sha256_now=d2601323030ded81
+[PASS] freeze-zero-diff MainLayout.vue                diff_lines=0
+[PASS] freeze-zero-diff MainLayout.spec.ts            diff_lines=0
+[PASS] freeze-zero-diff DataSourceSnapshotQueryBar.vue diff_lines=0
+[PASS] freeze-zero-diff DataSourceSnapshotQueryBar.spec.ts diff_lines=0
+
+[PASS] DSS-REQ 业务行逐字节不变                               base_rows=91 now_rows=91 identical=True
+[PASS] DSS-REQ 行数=91                                  count=91
+[PASS] DSS-AC 业务行逐字节不变                                base_rows=118 now_rows=118 identical=True
+[PASS] DSS-AC 行数=118                                  count=118
+
+[PASS] DSS-AC-114~118 仍为 NOT_RUN                      not_run=[114, 115, 116, 117, 118]
+[PASS] DSS-AC-114~118 状态列逐字节不变                        identical=True
+[PASS] requirements_count=91                          unique=91
+[PASS] acceptance_count=118                           unique=118
+[PASS] traceability-mapping-unchanged                 unique REQ=91/91 AC=118/118 mapping_block_byte_identical=True
+
+[PASS] 未限定 *_height_px 当前事实计数=0                       count=0
+[PASS] 未限定的 query_button_height_px=62 当前事实计数=0        count=0
+[PASS] 未限定的 reset_button_height_px=62 当前事实计数=0        count=0
+[PASS] 未限定的 refresh_button_height_px=110 当前事实计数=0     count=0
+[PASS] 当前字段 query_button_fixed_width_px=62            present=True
+[PASS] 当前字段 reset_button_fixed_width_px=62            present=True
+[PASS] 当前字段 refresh_button_fixed_width_px=110         present=True
+
+[PASS] DESIGN §38 业务规则正文 逐字节不变                        base_bytes=24820 now_bytes=24820 region_restored_equals_base=True
+[PASS] UI §32 业务规则正文 逐字节不变                            base_bytes=25006 now_bytes=25006 region_restored_equals_base=True
+[PASS] API 契约正文 逐字节不变                                 base_bytes=64702 now_bytes=64702 region_restored_equals_base=True
+[PASS] DATABASE 契约正文 逐字节不变                            base_bytes=61065 now_bytes=61065 region_restored_equals_base=True
+
+[PASS] R0/R1/R2/R3 既有脚本逐字节不变                          scripts=17 differing=0
+[PASS] R2 README cat-file -e 非 0                      exit_code=128
+[PASS] R2 README ls-tree 无该路径                         ls_tree_lines=0
+[PASS] R2 README 在 R3 提交中为 A                          diff_tree='A\tdocs/features/data-source-snapshot-status/evidence/DATA-SOURCE-SNAPSHOT-STATUS-QUERY-BUTTON-AND-TABLE-LAYOUT-STABILITY-IMPLEMENTATION-001-R2/README.md'
+
+[PASS] 变更路径全部属于白名单                                    outside=[]
+# 变更路径（13）
+#   docs/features/README.md
+#   docs/features/data-source-snapshot-status/ACCEPTANCE.md
+#   docs/features/data-source-snapshot-status/API.md
+#   docs/features/data-source-snapshot-status/DATABASE.md
+#   docs/features/data-source-snapshot-status/DESIGN.md
+#   docs/features/data-source-snapshot-status/README.md
+#   docs/features/data-source-snapshot-status/REQUIREMENTS.md
+#   docs/features/data-source-snapshot-status/UI.md
+#   docs/features/data-source-snapshot-status/evidence/DATA-SOURCE-SNAPSHOT-STATUS-QUERY-BUTTON-AND-TABLE-LAYOUT-STABILITY-IMPLEMENTATION-001-R2/README.md
+#   docs/features/data-source-snapshot-status/evidence/DATA-SOURCE-SNAPSHOT-STATUS-QUERY-BUTTON-AND-TABLE-LAYOUT-STABILITY-IMPLEMENTATION-001-R3/README.md
+#   docs/features/data-source-snapshot-status/evidence/DATA-SOURCE-SNAPSHOT-STATUS-QUERY-BUTTON-AND-TABLE-LAYOUT-STABILITY-IMPLEMENTATION-001-R4/
+#   docs/features/data-source-snapshot-status/reports/DATA-SOURCE-SNAPSHOT-STATUS-QUERY-BUTTON-AND-TABLE-LAYOUT-STABILITY-IMPLEMENTATION-001-R3.md
+#   docs/features/data-source-snapshot-status/reports/DATA-SOURCE-SNAPSHOT-STATUS-QUERY-BUTTON-AND-TABLE-LAYOUT-STABILITY-IMPLEMENTATION-001-R4.md
+
+final_result=PASS
+verify_exit_code=0

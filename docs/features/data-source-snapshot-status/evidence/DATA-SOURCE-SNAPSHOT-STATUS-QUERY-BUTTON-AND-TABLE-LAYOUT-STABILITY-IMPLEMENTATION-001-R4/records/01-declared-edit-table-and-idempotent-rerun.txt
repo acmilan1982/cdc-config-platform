@@ -1,0 +1,26 @@
+# R4 声明式文档纠正：编辑表与幂等复跑
+# 基准提交=64004ca062a92ab40e07350e231d97befe6f496c
+# 脚本=docs/features/data-source-snapshot-status/evidence/DATA-SOURCE-SNAPSHOT-STATUS-QUERY-BUTTON-AND-TABLE-LAYOUT-STABILITY-IMPLEMENTATION-001-R4/scripts/r4-docs-correction.py
+# 脚本 sha256=7db8cfe8298a51c3a2ae4a2dd8e45e373bcf6badab6f34847ed3a791e251fda3
+
+## 复跑（脚本从基准 blob 派生目标内容；再次运行须 changed_files=0）
+  docs/features/README.md                                        R3→R4=4  B1=2  hist=2  bytes=277828→283288
+  docs/features/data-source-snapshot-status/README.md            R3→R4=4  B1=1  hist=3  bytes=344413→349471
+  docs/features/data-source-snapshot-status/REQUIREMENTS.md      R3→R4=4  B1=1  hist=3  bytes=351424→356482
+  docs/features/data-source-snapshot-status/ACCEPTANCE.md        R3→R4=4  B1=1  hist=3  bytes=355353→360411
+  docs/features/data-source-snapshot-status/DESIGN.md            R3→R4=4  B1=1  hist=3  bytes=376983→382041
+  docs/features/data-source-snapshot-status/UI.md                R3→R4=4  B1=1  hist=3  bytes=310296→315354
+  docs/features/data-source-snapshot-status/API.md               R3→R4=4  B1=1  hist=3  bytes=137573→142631
+  docs/features/data-source-snapshot-status/DATABASE.md          R3→R4=4  B1=1  hist=3  bytes=132929→137987
+  DATA-SOURCE-SNAPSHOT-STATUS-QUERY-BUTTON-AND-TABLE-LAYOUT-STABILITY-IMPLEMENTATION-001-R3.md append-only  基准=13400  现在=17514  追加=4114 前缀=True
+  README.md                                                      append-only  基准=3205  现在=5222  追加=2017 前缀=True
+  README.md                                                      append-only  基准=6245  现在=7939  追加=1694 前缀=True
+
+changed_files=0
+correction_exit_code=0
+
+## 八份入口文档的声明编辑类型（每份）
+  E_R3 -> E_R4 令牌替换            : 4 处/份
+  B1『当前直接值』块重写为 R4 口径  : features/README.md 2 处，其余 7 份各 1 处
+  R3 历史链插入（R3 令牌降格为历史）: features/README.md 2 处，其余 7 份各 3 处
+  文末追加 R4 记录块                : 1 处/份
