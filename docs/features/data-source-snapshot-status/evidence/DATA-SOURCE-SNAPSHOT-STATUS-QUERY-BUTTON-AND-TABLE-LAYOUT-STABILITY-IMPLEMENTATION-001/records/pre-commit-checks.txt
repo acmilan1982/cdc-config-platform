@@ -1,0 +1,37 @@
+DATA-SOURCE-SNAPSHOT-STATUS-QUERY-BUTTON-AND-TABLE-LAYOUT-STABILITY-IMPLEMENTATION-001
+§16 pre-commit 检查记录（相对基准 9ba4e75fb8fae8f34ce41b3693eb0ea759ba4366）
+
+[01] git_diff_check_status=0
+     git_diff_cached_check_status=0
+[02] 变更路径全部落在 §15 白名单内（8 入口文档 + 2 业务源 + 2 测试 + 新报告 + 新证据目录）
+[03] 业务源仅 2 个：frontend/src/layouts/MainLayout.vue、.../components/DataSourceSnapshotQueryBar.vue
+     测试仅 2 个：frontend/src/layouts/MainLayout.spec.ts（新增）、.../DataSourceSnapshotQueryBar.spec.ts
+[04] backend/**、SQL、配置、依赖与锁文件零差异
+[05] 查询 62px / 重置 62px / 立即刷新 110px；重置四属性 width=min-width=max-width=flex-basis=62px
+[06] 私有 class dss-stable-gutter 仅在 route.name === DataSourceRunState 时挂载
+[07] 通用 .content-area 无任何无条件 scrollbar-gutter: stable
+[08] 无 window.innerWidth/clientWidth 计算、无 ResizeObserver/MutationObserver、无轮询、无运行时宽度补偿
+[09] targeted_querybar=103_passed(103)_exit_0
+     targeted_mainlayout=10_passed(10)_exit_0
+     feature_test=276_passed(276)_exit_0
+     frontend_full_test=875_passed(875)_exit_0
+     frontend_build=SUCCESS_built_in_15.32s_exit_0
+[10] 四视口 x 长短结果真实 GET 查询矩阵通过；未舍入严格 === 0 几何断言通过
+[11] strict_harness_real_run_exit_code=0
+     strict_harness_negative_control_exit_code=1
+     negative_control_exited_nonzero=yes
+[12] browser_console_errors=0；non_get_requests=0；other_route_gutter_leak=0（其他路由计算值 auto）
+[13] DSS-REQ-001~091 业务行 91/91 逐字节相同；DSS-AC-001~118 业务行与状态列 118/118 逐字节相同
+     DSS-AC-114~118 全部 NOT_RUN；验收统计仍为 PASS 113 / FAIL 0 / BLOCKED 0 / NOT_RUN 5
+[14] DESIGN §14.2/§14.3 映射行逐字节相同（91/91、118/118）；DESIGN §38 与 UI §32 业务正文逐字节相同
+     API.md / DATABASE.md 契约正文逐字节相同
+     docs/ 全部 diff 切片仅落在：分层状态行、下一入口行、文档尾部追加的实现记录块
+[15] 既有报告与证据零差异（reports/ 下无任何新增或修改的既有文件）
+[16] 8 份入口文档当前状态与下一入口无冲突；旧实现入口已降级为带日期/任务编号/已处理的历史值
+[17] credential_scan_status=CLEAN（无口令、Token、Cookie、Authorization、私钥、完整连接串）
+[18] 主工作树 /agent/cdc-config-platform 保持 4222b0a + 116 项既有修改，未被触碰
+     其他既有 worktree 的 HEAD 与修改数保持不变；未进入、修改、reset、stash、clean 或删除任何其他工作树
+
+documentation_validation_status=NOT_AVAILABLE
+备注：服务器未预装 markdownlint / mdl 等项目内 Markdown 校验工具，未执行文档格式自动校验，
+      不据此声明文档校验通过。

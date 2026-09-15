@@ -1425,3 +1425,170 @@ describe('DataSourceSnapshotQueryBar R1 稳定身份实现约束（R1 §6.2）',
     wrapper.unmount()
   })
 })
+
+// ---------------------------------------------------------------------------
+// DSS-REQ-090 / DSS-REQ-091：查询按钮与表格布局稳定性实现（“查询/重置”同宽 62px）
+// 判定基准：每个按钮只与自身稳定基准比较；查询与重置只要求宽度集合均为 [62]，不比较绝对 x。
+// ---------------------------------------------------------------------------
+
+describe('DataSourceSnapshotQueryBar 重置按钮固定几何（DSS-REQ-091）', () => {
+  /** 去注释后提取 `.dss-q-actions .dss-reset-btn` 规则体：契约断言只看真实声明。 */
+  function resetRule(): string {
+    const css = queryBarCss()
+    const m = css.match(/\.dss-q-actions \.dss-reset-btn\s*\{([^}]*)\}/)
+    return m ? m[1]! : ''
+  }
+
+  /** 去注释后提取 `.dss-q-actions .dss-query-btn` 规则体。 */
+  function queryRule(): string {
+    const css = queryBarCss()
+    const m = css.match(/\.dss-q-actions \.dss-query-btn\s*\{([^}]*)\}/)
+    return m ? m[1]! : ''
+  }
+
+  /** 属性声明精确匹配：属性名必须紧跟 `;` 或规则体起始，避免 min-width/max-width 误命中 width。 */
+  function decl(body: string, prop: string): RegExp {
+    return new RegExp(`(^|;)\\s*${prop}:\\s*62px\\s*(;|$)`)
+  }
+
+  it('源码字面量契约：重置按钮 width/min-width/max-width/flex-basis 四项均为 62px，且各只声明一次', () => {
+    const rule = resetRule()
+    expect(rule).not.toBe('')
+    for (const prop of ['width', 'min-width', 'max-width', 'flex-basis']) {
+      // 删除任一属性、或把任一项改成非 62px，断言即失败
+      expect(rule, `重置按钮缺少 ${prop}: 62px`).toMatch(decl(rule, prop))
+      const occurrences = rule.match(new RegExp(`(^|;)\\s*${prop}:`, 'g')) ?? []
+      expect(occurrences, `${prop} 声明数`).toHaveLength(1)
+    }
+  })
+
+  it('四属性锁不得相互顶替：单独的 min-width/max-width/flex-basis 不能替代 width 声明', () => {
+    const rule = resetRule()
+    // 去掉 min-width / max-width / flex-basis 三行后，仍必须留下独立的 width: 62px
+    const withoutOthers = rule
+      .replace(/[^;{}]*min-width:[^;]*;/g, '')
+      .replace(/[^;{}]*max-width:[^;]*;/g, '')
+      .replace(/[^;{}]*flex-basis:[^;]*;/g, '')
+    expect(withoutOthers).toMatch(decl(withoutOthers, 'width'))
+  })
+
+  it('源码字面量契约：重置按钮显式阻止 flex 拉伸/压缩并采用稳定盒模型', () => {
+    const rule = resetRule()
+    expect(rule).toMatch(/(^|;)\s*flex-grow:\s*0\s*(;|$)/)
+    expect(rule).toMatch(/(^|;)\s*flex-shrink:\s*0\s*(;|$)/)
+    expect(rule).toMatch(/(^|;)\s*box-sizing:\s*border-box\s*(;|$)/)
+  })
+
+  it('源码字面量契约：查询与重置同为 62px；立即刷新 110px 未被本轮触碰', () => {
+    const q = queryRule()
+    for (const prop of ['width', 'min-width', 'max-width', 'flex-basis']) {
+      expect(q, `查询按钮 ${prop}`).toMatch(decl(q, prop))
+    }
+    // 立即刷新属于工具栏（不在本组件内），本组件不得出现 110px 按钮几何声明
+    expect(queryBarCss()).not.toMatch(/110px/)
+    // 也不再使用 `flex: 0 0 62px` 简写（与四属性逐一锁定口径统一）
+    expect(resetRule()).not.toMatch(/(^|;)\s*flex:\s*0 0 62px/)
+  })
+
+  it('源码字面量契约：仅新增固定几何约束——高度/padding/颜色/透明边框/圆角/点击语义均不变', () => {
+    const rule = resetRule()
+    expect(rule).toMatch(/(^|;)\s*height:\s*30px\s*(;|$)/)
+    expect(rule).toMatch(/(^|;)\s*padding:\s*0 14px\s*(;|$)/)
+    expect(rule).toMatch(/(^|;)\s*background:\s*#e4e4e7\s*(;|$)/)
+    expect(rule).toMatch(/(^|;)\s*border-color:\s*transparent\s*(;|$)/)
+    expect(rule).toMatch(/(^|;)\s*border-radius:\s*6px\s*(;|$)/)
+    expect(rule).toMatch(/(^|;)\s*color:\s*var\(--dss-text-secondary,\s*#3f3f46\)\s*(;|$)/)
+    expect(rule).toMatch(/(^|;)\s*font-weight:\s*500\s*(;|$)/)
+  })
+
+  it('action group 不拉伸/压缩两个按钮：两者均为 flex-grow 0 + flex-shrink 0，且动作组自身 flex: 0 0 auto', () => {
+    const css = queryBarCss()
+    const group = css.match(/\.dss-q-actions\s*\{([^}]*)\}/)?.[1] ?? ''
+    expect(group).toMatch(/(^|;)\s*flex:\s*0 0 auto\s*(;|$)/)
+    for (const [name, body] of [['查询', queryRule()], ['重置', resetRule()]] as const) {
+      expect(body, `${name}按钮 flex-grow`).toMatch(/(^|;)\s*flex-grow:\s*0\s*(;|$)/)
+      expect(body, `${name}按钮 flex-shrink`).toMatch(/(^|;)\s*flex-shrink:\s*0\s*(;|$)/)
+    }
+  })
+
+  it('重置按钮无 Loading：无指示器节点、无 is-loading、无 aria-busy、无 el-icon，文案恒为“重置”', async () => {
+    const wrapper = await mountBar({ queryLoading: true, busy: true })
+    const btn = resetButton(wrapper)
+    expect(btn.classes()).not.toContain('is-loading')
+    expect(btn.find('.dss-btn-spinner').exists()).toBe(false)
+    expect(btn.find('.el-icon').exists()).toBe(false)
+    expect(btn.attributes('aria-busy')).toBeUndefined()
+    expect(btn.text().trim()).toBe('重置')
+    wrapper.unmount()
+  })
+
+  it('源码层面不存在重置 Loading 状态输入或状态分支（仅新增几何约束，不新增交互状态）', () => {
+    const src = queryBarSource()
+    expect(src).not.toMatch(/resetLoading/)
+    expect(src).not.toMatch(/isReset[A-Za-z]*/)
+    expect(src).not.toMatch(/resetting/i)
+    // 组件 props 契约仍是 5 项，未新增任何 loading 输入
+    const props = src.match(/defineProps<\{([\s\S]*?)\}>/)?.[1] ?? ''
+    expect(props).not.toBe('')
+    // 全部 loading 语义 prop 只有既有 queryLoading 一项：不存在 resetLoading 之类新输入
+    const loadingFields = props.match(/^\s*\w*[Ll]oading\w*\s*[?:]/gm) ?? []
+    expect(loadingFields).toHaveLength(1)
+    expect(loadingFields[0]).toMatch(/queryLoading/)
+  })
+
+  it('点击重置仍只恢复三项“全部”且不发查询；busy/queryLoading 期间重置语义不变', async () => {
+    const wrapper = await mountBar({ queryLoading: true, busy: true })
+    await openSelect(wrapper, 0)
+    await clickOption(dropdownByText('CL1（客户端一）'), 'CL1（客户端一）')
+    expect(wrapper.emitted('query')).toBeUndefined()
+
+    await resetButton(wrapper).trigger('click')
+    expect(wrapper.emitted('query')).toBeUndefined()
+
+    await wrapper.setProps({ queryLoading: false, busy: false })
+    await queryButton(wrapper).trigger('click')
+    expect(wrapper.emitted('query')).toHaveLength(1)
+    expect(wrapper.emitted('query')![0]![0]).toEqual({
+      clients: [ALL_OPTION],
+      sources: [ALL_OPTION],
+      statuses: [ALL_OPTION],
+    })
+    wrapper.unmount()
+  })
+
+  it('页面状态变化（idle → Loading → 成功 → 失败）时重置按钮 DOM 与文案零变化', async () => {
+    const wrapper = await mountBar()
+    const snapshot = () => {
+      const btn = resetButton(wrapper)
+      return { text: btn.text().trim(), cls: [...btn.classes()].sort(), html: btn.html() }
+    }
+    const idle = snapshot()
+
+    await wrapper.setProps({ queryLoading: true, busy: true })
+    await nextTick()
+    expect(snapshot()).toEqual(idle)
+
+    await wrapper.setProps({ queryLoading: false, busy: false })
+    await nextTick()
+    expect(snapshot()).toEqual(idle)
+
+    await wrapper.setProps({ busy: true }) // 失败/其他请求在途
+    await nextTick()
+    expect(snapshot()).toEqual(idle)
+    wrapper.unmount()
+  })
+
+  it('零回退：查询按钮既有四属性 62px 几何锁、私有指示器与四态文案不变', async () => {
+    const q = queryRule()
+    for (const prop of ['width', 'min-width', 'max-width', 'flex-basis']) {
+      expect(q, `查询按钮 ${prop}`).toMatch(decl(q, prop))
+    }
+    const wrapper = await mountBar({ queryLoading: true, busy: true })
+    const btn = queryButton(wrapper)
+    expect(btn.find('.dss-btn-spinner').classes()).toContain('is-visible')
+    expect(btn.find('.dss-action-label').text()).toBe('查询')
+    expect(btn.attributes('aria-busy')).toBe('true')
+    expect(btn.classes()).not.toContain('is-loading')
+    wrapper.unmount()
+  })
+})

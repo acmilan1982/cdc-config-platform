@@ -1,0 +1,7 @@
+checks=114 passed=114 failed=0
+per-viewport deltas:
+  1280x800 ca_rect={"x":0,"y":0,"width":0,"height":0} ca_clientWidth=0 query={"x":0,"y":0,"width":0,"height":0} reset={"x":0,"y":0,"width":0,"height":0} refresh={"x":0,"y":0,"width":0,"height":0} actions={"x":0,"y":0,"width":0,"height":0} headX=[0,0,0,0,0,0,0] headW=[0,0,0,0,0,0,0]
+  1700x920 ca_rect={"x":0,"y":0,"width":0,"height":0} ca_clientWidth=0 query={"x":0,"y":0,"width":0,"height":0} reset={"x":0,"y":0,"width":0,"height":0} refresh={"x":0,"y":0,"width":0,"height":0} actions={"x":0,"y":0,"width":0,"height":0} headX=[0,0,0,0,0,0,0] headW=[0,0,0,0,0,0,0]
+  1920x1080 ca_rect={"x":0,"y":0,"width":0,"height":0} ca_clientWidth=0 query={"x":0,"y":0,"width":0,"height":0} reset={"x":0,"y":0,"width":0,"height":0} refresh={"x":0,"y":0,"width":0,"height":0} actions={"x":0,"y":0,"width":0,"height":0} headX=[0,0,0,0,0,0,0] headW=[0,0,0,0,0,0,0]
+  2560x1440 ca_rect={"x":0,"y":0,"width":0,"height":0} ca_clientWidth=0 query={"x":0,"y":0,"width":0,"height":0} reset={"x":0,"y":0,"width":0,"height":0} refresh={"x":0,"y":0,"width":0,"height":0} actions={"x":0,"y":0,"width":0,"height":0} headX=[0,0,0,0,0,0,0] headW=[0,0,0,0,0,0,0]
+JUDGEMENT=PASS

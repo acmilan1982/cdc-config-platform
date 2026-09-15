@@ -1,0 +1,13 @@
+[viewport 1280x800] begin
+[viewport 1280x800] long rows=30 scrollNeed=true clientWidth=1045
+[viewport 1280x800] short rows=1 scrollNeed=false clientWidth=1045
+[viewport 1700x920] begin
+[viewport 1700x920] long rows=30 scrollNeed=true clientWidth=1465
+[viewport 1700x920] short rows=1 scrollNeed=false clientWidth=1465
+[viewport 1920x1080] begin
+[viewport 1920x1080] long rows=30 scrollNeed=true clientWidth=1685
+[viewport 1920x1080] short rows=1 scrollNeed=false clientWidth=1685
+[viewport 2560x1440] begin
+[viewport 2560x1440] long rows=30 scrollNeed=true clientWidth=2325
+[viewport 2560x1440] short rows=1 scrollNeed=false clientWidth=2325
+SAMPLED long=4 short=4 consoleErrors=0 nonGet=0

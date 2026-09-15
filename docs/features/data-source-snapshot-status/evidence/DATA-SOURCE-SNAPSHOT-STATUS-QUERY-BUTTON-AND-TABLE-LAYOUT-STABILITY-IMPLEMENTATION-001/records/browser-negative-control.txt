@@ -1,0 +1,4 @@
+NEGATIVE-CONTROL DO-NOT-USE-AS-EVIDENCE injected +0.001px into longSamples[0].contentArea.rect.x (220 -> 220.001)
+checks=114 passed=113 failed=1
+FAIL [1280x800] content_area_rect_delta_zero :: {"x":-0.0010000000000047748,"y":0,"width":0,"height":0}
+NEGATIVE_CONTROL_JUDGEMENT=FAIL

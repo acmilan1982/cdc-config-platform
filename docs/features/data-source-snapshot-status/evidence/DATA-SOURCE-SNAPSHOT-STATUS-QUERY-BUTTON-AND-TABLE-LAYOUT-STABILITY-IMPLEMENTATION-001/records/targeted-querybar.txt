@@ -1,0 +1,9 @@
+
+ RUN  v1.6.1 /agent/dss-query-button-table-layout-implementation-001/frontend
+
+ ✓ src/views/data-source-run-state/components/DataSourceSnapshotQueryBar.spec.ts  (103 tests) 13476ms
+
+ Test Files  1 passed (1)
+      Tests  103 passed (103)
+   Start at  14:03:47
+   Duration  15.65s (transform 362ms, setup 29ms, collect 1.27s, tests 13.48s, environment 491ms, prepare 124ms)

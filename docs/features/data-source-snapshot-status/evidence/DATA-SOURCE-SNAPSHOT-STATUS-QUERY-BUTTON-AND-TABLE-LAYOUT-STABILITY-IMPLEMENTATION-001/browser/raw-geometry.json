@@ -1,0 +1,3868 @@
+{
+  "meta": {
+    "generatedAt": "2026-09-15T06:19:57.049Z",
+    "origin": "http://192.168.174.70:5173",
+    "pagePath": "/monitor/data-source-state",
+    "shortClientId": "hosp-012",
+    "expectedLongRows": 30,
+    "expectedShortRows": 1,
+    "viewports": [
+      {
+        "width": 1280,
+        "height": 800,
+        "dpr": 1
+      },
+      {
+        "width": 1700,
+        "height": 920,
+        "dpr": 1
+      },
+      {
+        "width": 1920,
+        "height": 1080,
+        "dpr": 1
+      },
+      {
+        "width": 2560,
+        "height": 1440,
+        "dpr": 1
+      }
+    ],
+    "samplingMode": "REAL_PAGE_GET_QUERY"
+  },
+  "longSamples": [
+    {
+      "ts": 1789453198629,
+      "viewport": {
+        "innerWidth": 1280,
+        "innerHeight": 800,
+        "devicePixelRatio": 1,
+        "visualViewportWidth": 1280
+      },
+      "documentElementClientWidth": 1280,
+      "documentElementScrollHeight": 800,
+      "contentArea": {
+        "rect": {
+          "x": 220,
+          "y": 48,
+          "width": 1060,
+          "height": 752
+        },
+        "clientWidth": 1045,
+        "scrollWidth": 1045,
+        "clientHeight": 752,
+        "scrollHeight": 1881,
+        "hasVerticalScrollNeed": true,
+        "scrollbarGutterComputed": "stable",
+        "overflowYComputed": "auto",
+        "hasPrivateGutterClass": true,
+        "className": "content-area dss-stable-gutter",
+        "scrollbarOccupiesSpace": 15
+      },
+      "buttons": {
+        "query": {
+          "x": 568,
+          "y": 216.5,
+          "width": 62,
+          "height": 30,
+          "widthCss": "62px",
+          "minWidthCss": "62px",
+          "maxWidthCss": "62px",
+          "flexBasisCss": "62px",
+          "spinnerVisible": false
+        },
+        "reset": {
+          "x": 650,
+          "y": 216.5,
+          "width": 62,
+          "height": 30,
+          "widthCss": "62px",
+          "minWidthCss": "62px",
+          "maxWidthCss": "62px",
+          "flexBasisCss": "62px",
+          "text": "重置"
+        },
+        "refresh": {
+          "x": 1083,
+          "y": 281.5,
+          "width": 110,
+          "height": 32,
+          "widthCss": "110px",
+          "minWidthCss": "110px",
+          "maxWidthCss": "110px",
+          "flexBasisCss": "110px",
+          "spinnerVisible": false,
+          "text": "立即刷新"
+        }
+      },
+      "queryActions": {
+        "x": 568,
+        "y": 216.5,
+        "width": 144,
+        "height": 30
+      },
+      "queryBar": {
+        "x": 292,
+        "y": 175.5,
+        "width": 901,
+        "height": 72
+      },
+      "resultCard": {
+        "x": 292,
+        "y": 348.5,
+        "width": 901,
+        "height": 1516
+      },
+      "tableFrame": {
+        "x": 292,
+        "y": 348.5,
+        "width": 1175,
+        "height": 1516
+      },
+      "tableHeaderWrapper": {
+        "x": 292,
+        "y": 348.5,
+        "width": 1175,
+        "height": 46
+      },
+      "headers": [
+        {
+          "index": 0,
+          "label": "序号",
+          "x": 292,
+          "y": 348.5,
+          "width": 70,
+          "height": 46
+        },
+        {
+          "index": 1,
+          "label": "探针端",
+          "x": 362,
+          "y": 348.5,
+          "width": 170,
+          "height": 46
+        },
+        {
+          "index": 2,
+          "label": "源库",
+          "x": 532,
+          "y": 348.5,
+          "width": 285,
+          "height": 46
+        },
+        {
+          "index": 3,
+          "label": "快照状态",
+          "x": 817,
+          "y": 348.5,
+          "width": 140,
+          "height": 46
+        },
+        {
+          "index": 4,
+          "label": "快照启动时间",
+          "x": 957,
+          "y": 348.5,
+          "width": 170,
+          "height": 46
+        },
+        {
+          "index": 5,
+          "label": "快照完成时间",
+          "x": 1127,
+          "y": 348.5,
+          "width": 170,
+          "height": 46
+        },
+        {
+          "index": 6,
+          "label": "记录更新时间",
+          "x": 1297,
+          "y": 348.5,
+          "width": 170,
+          "height": 46
+        }
+      ],
+      "rowCount": 30,
+      "seqCells": [
+        "1",
+        "2",
+        "3",
+        "4",
+        "5",
+        "6",
+        "7",
+        "8",
+        "9",
+        "10",
+        "11",
+        "12",
+        "13",
+        "14",
+        "15",
+        "16",
+        "17",
+        "18",
+        "19",
+        "20",
+        "21",
+        "22",
+        "23",
+        "24",
+        "25",
+        "26",
+        "27",
+        "28",
+        "29",
+        "30"
+      ],
+      "route": {
+        "path": "/monitor/data-source-state",
+        "title": "CDC 配置管理平台"
+      },
+      "tag": "1280x800-LONG",
+      "screenshot": "/agent/dss-query-button-table-layout-implementation-001/docs/features/data-source-snapshot-status/evidence/DATA-SOURCE-SNAPSHOT-STATUS-QUERY-BUTTON-AND-TABLE-LAYOUT-STABILITY-IMPLEMENTATION-001/browser/screenshots/1280x800-LONG.png"
+    },
+    {
+      "ts": 1789453200644,
+      "viewport": {
+        "innerWidth": 1700,
+        "innerHeight": 920,
+        "devicePixelRatio": 1,
+        "visualViewportWidth": 1700
+      },
+      "documentElementClientWidth": 1700,
+      "documentElementScrollHeight": 920,
+      "contentArea": {
+        "rect": {
+          "x": 220,
+          "y": 48,
+          "width": 1480,
+          "height": 872
+        },
+        "clientWidth": 1465,
+        "scrollWidth": 1465,
+        "clientHeight": 872,
+        "scrollHeight": 1841,
+        "hasVerticalScrollNeed": true,
+        "scrollbarGutterComputed": "stable",
+        "overflowYComputed": "auto",
+        "hasPrivateGutterClass": true,
+        "className": "content-area dss-stable-gutter",
+        "scrollbarOccupiesSpace": 15
+      },
+      "buttons": {
+        "query": {
+          "x": 1218,
+          "y": 176.5,
+          "width": 62,
+          "height": 30,
+          "widthCss": "62px",
+          "minWidthCss": "62px",
+          "maxWidthCss": "62px",
+          "flexBasisCss": "62px",
+          "spinnerVisible": false
+        },
+        "reset": {
+          "x": 1300,
+          "y": 176.5,
+          "width": 62,
+          "height": 30,
+          "widthCss": "62px",
+          "minWidthCss": "62px",
+          "maxWidthCss": "62px",
+          "flexBasisCss": "62px",
+          "text": "重置"
+        },
+        "refresh": {
+          "x": 1503,
+          "y": 241.5,
+          "width": 110,
+          "height": 32,
+          "widthCss": "110px",
+          "minWidthCss": "110px",
+          "maxWidthCss": "110px",
+          "flexBasisCss": "110px",
+          "spinnerVisible": false,
+          "text": "立即刷新"
+        }
+      },
+      "queryActions": {
+        "x": 1218,
+        "y": 176.5,
+        "width": 144,
+        "height": 30
+      },
+      "queryBar": {
+        "x": 292,
+        "y": 175.5,
+        "width": 1321,
+        "height": 32
+      },
+      "resultCard": {
+        "x": 292,
+        "y": 308.5,
+        "width": 1321,
+        "height": 1516
+      },
+      "tableFrame": {
+        "x": 292,
+        "y": 308.5,
+        "width": 1321,
+        "height": 1516
+      },
+      "tableHeaderWrapper": {
+        "x": 292,
+        "y": 308.5,
+        "width": 1321,
+        "height": 46
+      },
+      "headers": [
+        {
+          "index": 0,
+          "label": "序号",
+          "x": 292,
+          "y": 308.5,
+          "width": 70,
+          "height": 46
+        },
+        {
+          "index": 1,
+          "label": "探针端",
+          "x": 362,
+          "y": 308.5,
+          "width": 198,
+          "height": 46
+        },
+        {
+          "index": 2,
+          "label": "源库",
+          "x": 560,
+          "y": 308.5,
+          "width": 328,
+          "height": 46
+        },
+        {
+          "index": 3,
+          "label": "快照状态",
+          "x": 888,
+          "y": 308.5,
+          "width": 140,
+          "height": 46
+        },
+        {
+          "index": 4,
+          "label": "快照启动时间",
+          "x": 1028,
+          "y": 308.5,
+          "width": 195,
+          "height": 46
+        },
+        {
+          "index": 5,
+          "label": "快照完成时间",
+          "x": 1223,
+          "y": 308.5,
+          "width": 195,
+          "height": 46
+        },
+        {
+          "index": 6,
+          "label": "记录更新时间",
+          "x": 1418,
+          "y": 308.5,
+          "width": 195,
+          "height": 46
+        }
+      ],
+      "rowCount": 30,
+      "seqCells": [
+        "1",
+        "2",
+        "3",
+        "4",
+        "5",
+        "6",
+        "7",
+        "8",
+        "9",
+        "10",
+        "11",
+        "12",
+        "13",
+        "14",
+        "15",
+        "16",
+        "17",
+        "18",
+        "19",
+        "20",
+        "21",
+        "22",
+        "23",
+        "24",
+        "25",
+        "26",
+        "27",
+        "28",
+        "29",
+        "30"
+      ],
+      "route": {
+        "path": "/monitor/data-source-state",
+        "title": "CDC 配置管理平台"
+      },
+      "tag": "1700x920-LONG",
+      "screenshot": "/agent/dss-query-button-table-layout-implementation-001/docs/features/data-source-snapshot-status/evidence/DATA-SOURCE-SNAPSHOT-STATUS-QUERY-BUTTON-AND-TABLE-LAYOUT-STABILITY-IMPLEMENTATION-001/browser/screenshots/1700x920-LONG.png"
+    },
+    {
+      "ts": 1789453202740,
+      "viewport": {
+        "innerWidth": 1920,
+        "innerHeight": 1080,
+        "devicePixelRatio": 1,
+        "visualViewportWidth": 1920
+      },
+      "documentElementClientWidth": 1920,
+      "documentElementScrollHeight": 1080,
+      "contentArea": {
+        "rect": {
+          "x": 220,
+          "y": 48,
+          "width": 1700,
+          "height": 1032
+        },
+        "clientWidth": 1685,
+        "scrollWidth": 1685,
+        "clientHeight": 1032,
+        "scrollHeight": 1841,
+        "hasVerticalScrollNeed": true,
+        "scrollbarGutterComputed": "stable",
+        "overflowYComputed": "auto",
+        "hasPrivateGutterClass": true,
+        "className": "content-area dss-stable-gutter",
+        "scrollbarOccupiesSpace": 15
+      },
+      "buttons": {
+        "query": {
+          "x": 1218,
+          "y": 176.5,
+          "width": 62,
+          "height": 30,
+          "widthCss": "62px",
+          "minWidthCss": "62px",
+          "maxWidthCss": "62px",
+          "flexBasisCss": "62px",
+          "spinnerVisible": false
+        },
+        "reset": {
+          "x": 1300,
+          "y": 176.5,
+          "width": 62,
+          "height": 30,
+          "widthCss": "62px",
+          "minWidthCss": "62px",
+          "maxWidthCss": "62px",
+          "flexBasisCss": "62px",
+          "text": "重置"
+        },
+        "refresh": {
+          "x": 1723,
+          "y": 241.5,
+          "width": 110,
+          "height": 32,
+          "widthCss": "110px",
+          "minWidthCss": "110px",
+          "maxWidthCss": "110px",
+          "flexBasisCss": "110px",
+          "spinnerVisible": false,
+          "text": "立即刷新"
+        }
+      },
+      "queryActions": {
+        "x": 1218,
+        "y": 176.5,
+        "width": 144,
+        "height": 30
+      },
+      "queryBar": {
+        "x": 292,
+        "y": 175.5,
+        "width": 1541,
+        "height": 32
+      },
+      "resultCard": {
+        "x": 292,
+        "y": 308.5,
+        "width": 1541,
+        "height": 1516
+      },
+      "tableFrame": {
+        "x": 292,
+        "y": 308.5,
+        "width": 1541,
+        "height": 1516
+      },
+      "tableHeaderWrapper": {
+        "x": 292,
+        "y": 308.5,
+        "width": 1541,
+        "height": 46
+      },
+      "headers": [
+        {
+          "index": 0,
+          "label": "序号",
+          "x": 292,
+          "y": 308.5,
+          "width": 70,
+          "height": 46
+        },
+        {
+          "index": 1,
+          "label": "探针端",
+          "x": 362,
+          "y": 308.5,
+          "width": 236,
+          "height": 46
+        },
+        {
+          "index": 2,
+          "label": "源库",
+          "x": 598,
+          "y": 308.5,
+          "width": 393,
+          "height": 46
+        },
+        {
+          "index": 3,
+          "label": "快照状态",
+          "x": 991,
+          "y": 308.5,
+          "width": 140,
+          "height": 46
+        },
+        {
+          "index": 4,
+          "label": "快照启动时间",
+          "x": 1131,
+          "y": 308.5,
+          "width": 234,
+          "height": 46
+        },
+        {
+          "index": 5,
+          "label": "快照完成时间",
+          "x": 1365,
+          "y": 308.5,
+          "width": 234,
+          "height": 46
+        },
+        {
+          "index": 6,
+          "label": "记录更新时间",
+          "x": 1599,
+          "y": 308.5,
+          "width": 234,
+          "height": 46
+        }
+      ],
+      "rowCount": 30,
+      "seqCells": [
+        "1",
+        "2",
+        "3",
+        "4",
+        "5",
+        "6",
+        "7",
+        "8",
+        "9",
+        "10",
+        "11",
+        "12",
+        "13",
+        "14",
+        "15",
+        "16",
+        "17",
+        "18",
+        "19",
+        "20",
+        "21",
+        "22",
+        "23",
+        "24",
+        "25",
+        "26",
+        "27",
+        "28",
+        "29",
+        "30"
+      ],
+      "route": {
+        "path": "/monitor/data-source-state",
+        "title": "CDC 配置管理平台"
+      },
+      "tag": "1920x1080-LONG",
+      "screenshot": "/agent/dss-query-button-table-layout-implementation-001/docs/features/data-source-snapshot-status/evidence/DATA-SOURCE-SNAPSHOT-STATUS-QUERY-BUTTON-AND-TABLE-LAYOUT-STABILITY-IMPLEMENTATION-001/browser/screenshots/1920x1080-LONG.png"
+    },
+    {
+      "ts": 1789453204840,
+      "viewport": {
+        "innerWidth": 2560,
+        "innerHeight": 1440,
+        "devicePixelRatio": 1,
+        "visualViewportWidth": 2560
+      },
+      "documentElementClientWidth": 2560,
+      "documentElementScrollHeight": 1440,
+      "contentArea": {
+        "rect": {
+          "x": 220,
+          "y": 48,
+          "width": 2340,
+          "height": 1392
+        },
+        "clientWidth": 2325,
+        "scrollWidth": 2325,
+        "clientHeight": 1392,
+        "scrollHeight": 1841,
+        "hasVerticalScrollNeed": true,
+        "scrollbarGutterComputed": "stable",
+        "overflowYComputed": "auto",
+        "hasPrivateGutterClass": true,
+        "className": "content-area dss-stable-gutter",
+        "scrollbarOccupiesSpace": 15
+      },
+      "buttons": {
+        "query": {
+          "x": 1218,
+          "y": 176.5,
+          "width": 62,
+          "height": 30,
+          "widthCss": "62px",
+          "minWidthCss": "62px",
+          "maxWidthCss": "62px",
+          "flexBasisCss": "62px",
+          "spinnerVisible": false
+        },
+        "reset": {
+          "x": 1300,
+          "y": 176.5,
+          "width": 62,
+          "height": 30,
+          "widthCss": "62px",
+          "minWidthCss": "62px",
+          "maxWidthCss": "62px",
+          "flexBasisCss": "62px",
+          "text": "重置"
+        },
+        "refresh": {
+          "x": 2363,
+          "y": 241.5,
+          "width": 110,
+          "height": 32,
+          "widthCss": "110px",
+          "minWidthCss": "110px",
+          "maxWidthCss": "110px",
+          "flexBasisCss": "110px",
+          "spinnerVisible": false,
+          "text": "立即刷新"
+        }
+      },
+      "queryActions": {
+        "x": 1218,
+        "y": 176.5,
+        "width": 144,
+        "height": 30
+      },
+      "queryBar": {
+        "x": 292,
+        "y": 175.5,
+        "width": 2181,
+        "height": 32
+      },
+      "resultCard": {
+        "x": 292,
+        "y": 308.5,
+        "width": 2181,
+        "height": 1516
+      },
+      "tableFrame": {
+        "x": 292,
+        "y": 308.5,
+        "width": 2181,
+        "height": 1516
+      },
+      "tableHeaderWrapper": {
+        "x": 292,
+        "y": 308.5,
+        "width": 2181,
+        "height": 46
+      },
+      "headers": [
+        {
+          "index": 0,
+          "label": "序号",
+          "x": 292,
+          "y": 308.5,
+          "width": 70,
+          "height": 46
+        },
+        {
+          "index": 1,
+          "label": "探针端",
+          "x": 362,
+          "y": 308.5,
+          "width": 348,
+          "height": 46
+        },
+        {
+          "index": 2,
+          "label": "源库",
+          "x": 710,
+          "y": 308.5,
+          "width": 582,
+          "height": 46
+        },
+        {
+          "index": 3,
+          "label": "快照状态",
+          "x": 1292,
+          "y": 308.5,
+          "width": 140,
+          "height": 46
+        },
+        {
+          "index": 4,
+          "label": "快照启动时间",
+          "x": 1432,
+          "y": 308.5,
+          "width": 347,
+          "height": 46
+        },
+        {
+          "index": 5,
+          "label": "快照完成时间",
+          "x": 1779,
+          "y": 308.5,
+          "width": 347,
+          "height": 46
+        },
+        {
+          "index": 6,
+          "label": "记录更新时间",
+          "x": 2126,
+          "y": 308.5,
+          "width": 347,
+          "height": 46
+        }
+      ],
+      "rowCount": 30,
+      "seqCells": [
+        "1",
+        "2",
+        "3",
+        "4",
+        "5",
+        "6",
+        "7",
+        "8",
+        "9",
+        "10",
+        "11",
+        "12",
+        "13",
+        "14",
+        "15",
+        "16",
+        "17",
+        "18",
+        "19",
+        "20",
+        "21",
+        "22",
+        "23",
+        "24",
+        "25",
+        "26",
+        "27",
+        "28",
+        "29",
+        "30"
+      ],
+      "route": {
+        "path": "/monitor/data-source-state",
+        "title": "CDC 配置管理平台"
+      },
+      "tag": "2560x1440-LONG",
+      "screenshot": "/agent/dss-query-button-table-layout-implementation-001/docs/features/data-source-snapshot-status/evidence/DATA-SOURCE-SNAPSHOT-STATUS-QUERY-BUTTON-AND-TABLE-LAYOUT-STABILITY-IMPLEMENTATION-001/browser/screenshots/2560x1440-LONG.png"
+    }
+  ],
+  "shortSamples": [
+    {
+      "ts": 1789453199952,
+      "viewport": {
+        "innerWidth": 1280,
+        "innerHeight": 800,
+        "devicePixelRatio": 1,
+        "visualViewportWidth": 1280
+      },
+      "documentElementClientWidth": 1280,
+      "documentElementScrollHeight": 800,
+      "contentArea": {
+        "rect": {
+          "x": 220,
+          "y": 48,
+          "width": 1060,
+          "height": 752
+        },
+        "clientWidth": 1045,
+        "scrollWidth": 1045,
+        "clientHeight": 752,
+        "scrollHeight": 752,
+        "hasVerticalScrollNeed": false,
+        "scrollbarGutterComputed": "stable",
+        "overflowYComputed": "auto",
+        "hasPrivateGutterClass": true,
+        "className": "content-area dss-stable-gutter",
+        "scrollbarOccupiesSpace": 15
+      },
+      "buttons": {
+        "query": {
+          "x": 568,
+          "y": 216.5,
+          "width": 62,
+          "height": 30,
+          "widthCss": "62px",
+          "minWidthCss": "62px",
+          "maxWidthCss": "62px",
+          "flexBasisCss": "62px",
+          "spinnerVisible": false
+        },
+        "reset": {
+          "x": 650,
+          "y": 216.5,
+          "width": 62,
+          "height": 30,
+          "widthCss": "62px",
+          "minWidthCss": "62px",
+          "maxWidthCss": "62px",
+          "flexBasisCss": "62px",
+          "text": "重置"
+        },
+        "refresh": {
+          "x": 1083,
+          "y": 281.5,
+          "width": 110,
+          "height": 32,
+          "widthCss": "110px",
+          "minWidthCss": "110px",
+          "maxWidthCss": "110px",
+          "flexBasisCss": "110px",
+          "spinnerVisible": false,
+          "text": "立即刷新"
+        }
+      },
+      "queryActions": {
+        "x": 568,
+        "y": 216.5,
+        "width": 144,
+        "height": 30
+      },
+      "queryBar": {
+        "x": 292,
+        "y": 175.5,
+        "width": 901,
+        "height": 72
+      },
+      "resultCard": {
+        "x": 292,
+        "y": 348.5,
+        "width": 901,
+        "height": 95
+      },
+      "tableFrame": {
+        "x": 292,
+        "y": 348.5,
+        "width": 1175,
+        "height": 95
+      },
+      "tableHeaderWrapper": {
+        "x": 292,
+        "y": 348.5,
+        "width": 1175,
+        "height": 46
+      },
+      "headers": [
+        {
+          "index": 0,
+          "label": "序号",
+          "x": 292,
+          "y": 348.5,
+          "width": 70,
+          "height": 46
+        },
+        {
+          "index": 1,
+          "label": "探针端",
+          "x": 362,
+          "y": 348.5,
+          "width": 170,
+          "height": 46
+        },
+        {
+          "index": 2,
+          "label": "源库",
+          "x": 532,
+          "y": 348.5,
+          "width": 285,
+          "height": 46
+        },
+        {
+          "index": 3,
+          "label": "快照状态",
+          "x": 817,
+          "y": 348.5,
+          "width": 140,
+          "height": 46
+        },
+        {
+          "index": 4,
+          "label": "快照启动时间",
+          "x": 957,
+          "y": 348.5,
+          "width": 170,
+          "height": 46
+        },
+        {
+          "index": 5,
+          "label": "快照完成时间",
+          "x": 1127,
+          "y": 348.5,
+          "width": 170,
+          "height": 46
+        },
+        {
+          "index": 6,
+          "label": "记录更新时间",
+          "x": 1297,
+          "y": 348.5,
+          "width": 170,
+          "height": 46
+        }
+      ],
+      "rowCount": 1,
+      "seqCells": [
+        "1"
+      ],
+      "route": {
+        "path": "/monitor/data-source-state",
+        "title": "CDC 配置管理平台"
+      },
+      "tag": "1280x800-SHORT",
+      "screenshot": "/agent/dss-query-button-table-layout-implementation-001/docs/features/data-source-snapshot-status/evidence/DATA-SOURCE-SNAPSHOT-STATUS-QUERY-BUTTON-AND-TABLE-LAYOUT-STABILITY-IMPLEMENTATION-001/browser/screenshots/1280x800-SHORT.png"
+    },
+    {
+      "ts": 1789453202041,
+      "viewport": {
+        "innerWidth": 1700,
+        "innerHeight": 920,
+        "devicePixelRatio": 1,
+        "visualViewportWidth": 1700
+      },
+      "documentElementClientWidth": 1700,
+      "documentElementScrollHeight": 920,
+      "contentArea": {
+        "rect": {
+          "x": 220,
+          "y": 48,
+          "width": 1480,
+          "height": 872
+        },
+        "clientWidth": 1465,
+        "scrollWidth": 1465,
+        "clientHeight": 872,
+        "scrollHeight": 872,
+        "hasVerticalScrollNeed": false,
+        "scrollbarGutterComputed": "stable",
+        "overflowYComputed": "auto",
+        "hasPrivateGutterClass": true,
+        "className": "content-area dss-stable-gutter",
+        "scrollbarOccupiesSpace": 15
+      },
+      "buttons": {
+        "query": {
+          "x": 1218,
+          "y": 176.5,
+          "width": 62,
+          "height": 30,
+          "widthCss": "62px",
+          "minWidthCss": "62px",
+          "maxWidthCss": "62px",
+          "flexBasisCss": "62px",
+          "spinnerVisible": false
+        },
+        "reset": {
+          "x": 1300,
+          "y": 176.5,
+          "width": 62,
+          "height": 30,
+          "widthCss": "62px",
+          "minWidthCss": "62px",
+          "maxWidthCss": "62px",
+          "flexBasisCss": "62px",
+          "text": "重置"
+        },
+        "refresh": {
+          "x": 1503,
+          "y": 241.5,
+          "width": 110,
+          "height": 32,
+          "widthCss": "110px",
+          "minWidthCss": "110px",
+          "maxWidthCss": "110px",
+          "flexBasisCss": "110px",
+          "spinnerVisible": false,
+          "text": "立即刷新"
+        }
+      },
+      "queryActions": {
+        "x": 1218,
+        "y": 176.5,
+        "width": 144,
+        "height": 30
+      },
+      "queryBar": {
+        "x": 292,
+        "y": 175.5,
+        "width": 1321,
+        "height": 32
+      },
+      "resultCard": {
+        "x": 292,
+        "y": 308.5,
+        "width": 1321,
+        "height": 95
+      },
+      "tableFrame": {
+        "x": 292,
+        "y": 308.5,
+        "width": 1321,
+        "height": 95
+      },
+      "tableHeaderWrapper": {
+        "x": 292,
+        "y": 308.5,
+        "width": 1321,
+        "height": 46
+      },
+      "headers": [
+        {
+          "index": 0,
+          "label": "序号",
+          "x": 292,
+          "y": 308.5,
+          "width": 70,
+          "height": 46
+        },
+        {
+          "index": 1,
+          "label": "探针端",
+          "x": 362,
+          "y": 308.5,
+          "width": 198,
+          "height": 46
+        },
+        {
+          "index": 2,
+          "label": "源库",
+          "x": 560,
+          "y": 308.5,
+          "width": 328,
+          "height": 46
+        },
+        {
+          "index": 3,
+          "label": "快照状态",
+          "x": 888,
+          "y": 308.5,
+          "width": 140,
+          "height": 46
+        },
+        {
+          "index": 4,
+          "label": "快照启动时间",
+          "x": 1028,
+          "y": 308.5,
+          "width": 195,
+          "height": 46
+        },
+        {
+          "index": 5,
+          "label": "快照完成时间",
+          "x": 1223,
+          "y": 308.5,
+          "width": 195,
+          "height": 46
+        },
+        {
+          "index": 6,
+          "label": "记录更新时间",
+          "x": 1418,
+          "y": 308.5,
+          "width": 195,
+          "height": 46
+        }
+      ],
+      "rowCount": 1,
+      "seqCells": [
+        "1"
+      ],
+      "route": {
+        "path": "/monitor/data-source-state",
+        "title": "CDC 配置管理平台"
+      },
+      "tag": "1700x920-SHORT",
+      "screenshot": "/agent/dss-query-button-table-layout-implementation-001/docs/features/data-source-snapshot-status/evidence/DATA-SOURCE-SNAPSHOT-STATUS-QUERY-BUTTON-AND-TABLE-LAYOUT-STABILITY-IMPLEMENTATION-001/browser/screenshots/1700x920-SHORT.png"
+    },
+    {
+      "ts": 1789453204144,
+      "viewport": {
+        "innerWidth": 1920,
+        "innerHeight": 1080,
+        "devicePixelRatio": 1,
+        "visualViewportWidth": 1920
+      },
+      "documentElementClientWidth": 1920,
+      "documentElementScrollHeight": 1080,
+      "contentArea": {
+        "rect": {
+          "x": 220,
+          "y": 48,
+          "width": 1700,
+          "height": 1032
+        },
+        "clientWidth": 1685,
+        "scrollWidth": 1685,
+        "clientHeight": 1032,
+        "scrollHeight": 1032,
+        "hasVerticalScrollNeed": false,
+        "scrollbarGutterComputed": "stable",
+        "overflowYComputed": "auto",
+        "hasPrivateGutterClass": true,
+        "className": "content-area dss-stable-gutter",
+        "scrollbarOccupiesSpace": 15
+      },
+      "buttons": {
+        "query": {
+          "x": 1218,
+          "y": 176.5,
+          "width": 62,
+          "height": 30,
+          "widthCss": "62px",
+          "minWidthCss": "62px",
+          "maxWidthCss": "62px",
+          "flexBasisCss": "62px",
+          "spinnerVisible": false
+        },
+        "reset": {
+          "x": 1300,
+          "y": 176.5,
+          "width": 62,
+          "height": 30,
+          "widthCss": "62px",
+          "minWidthCss": "62px",
+          "maxWidthCss": "62px",
+          "flexBasisCss": "62px",
+          "text": "重置"
+        },
+        "refresh": {
+          "x": 1723,
+          "y": 241.5,
+          "width": 110,
+          "height": 32,
+          "widthCss": "110px",
+          "minWidthCss": "110px",
+          "maxWidthCss": "110px",
+          "flexBasisCss": "110px",
+          "spinnerVisible": false,
+          "text": "立即刷新"
+        }
+      },
+      "queryActions": {
+        "x": 1218,
+        "y": 176.5,
+        "width": 144,
+        "height": 30
+      },
+      "queryBar": {
+        "x": 292,
+        "y": 175.5,
+        "width": 1541,
+        "height": 32
+      },
+      "resultCard": {
+        "x": 292,
+        "y": 308.5,
+        "width": 1541,
+        "height": 95
+      },
+      "tableFrame": {
+        "x": 292,
+        "y": 308.5,
+        "width": 1541,
+        "height": 95
+      },
+      "tableHeaderWrapper": {
+        "x": 292,
+        "y": 308.5,
+        "width": 1541,
+        "height": 46
+      },
+      "headers": [
+        {
+          "index": 0,
+          "label": "序号",
+          "x": 292,
+          "y": 308.5,
+          "width": 70,
+          "height": 46
+        },
+        {
+          "index": 1,
+          "label": "探针端",
+          "x": 362,
+          "y": 308.5,
+          "width": 236,
+          "height": 46
+        },
+        {
+          "index": 2,
+          "label": "源库",
+          "x": 598,
+          "y": 308.5,
+          "width": 393,
+          "height": 46
+        },
+        {
+          "index": 3,
+          "label": "快照状态",
+          "x": 991,
+          "y": 308.5,
+          "width": 140,
+          "height": 46
+        },
+        {
+          "index": 4,
+          "label": "快照启动时间",
+          "x": 1131,
+          "y": 308.5,
+          "width": 234,
+          "height": 46
+        },
+        {
+          "index": 5,
+          "label": "快照完成时间",
+          "x": 1365,
+          "y": 308.5,
+          "width": 234,
+          "height": 46
+        },
+        {
+          "index": 6,
+          "label": "记录更新时间",
+          "x": 1599,
+          "y": 308.5,
+          "width": 234,
+          "height": 46
+        }
+      ],
+      "rowCount": 1,
+      "seqCells": [
+        "1"
+      ],
+      "route": {
+        "path": "/monitor/data-source-state",
+        "title": "CDC 配置管理平台"
+      },
+      "tag": "1920x1080-SHORT",
+      "screenshot": "/agent/dss-query-button-table-layout-implementation-001/docs/features/data-source-snapshot-status/evidence/DATA-SOURCE-SNAPSHOT-STATUS-QUERY-BUTTON-AND-TABLE-LAYOUT-STABILITY-IMPLEMENTATION-001/browser/screenshots/1920x1080-SHORT.png"
+    },
+    {
+      "ts": 1789453206278,
+      "viewport": {
+        "innerWidth": 2560,
+        "innerHeight": 1440,
+        "devicePixelRatio": 1,
+        "visualViewportWidth": 2560
+      },
+      "documentElementClientWidth": 2560,
+      "documentElementScrollHeight": 1440,
+      "contentArea": {
+        "rect": {
+          "x": 220,
+          "y": 48,
+          "width": 2340,
+          "height": 1392
+        },
+        "clientWidth": 2325,
+        "scrollWidth": 2325,
+        "clientHeight": 1392,
+        "scrollHeight": 1392,
+        "hasVerticalScrollNeed": false,
+        "scrollbarGutterComputed": "stable",
+        "overflowYComputed": "auto",
+        "hasPrivateGutterClass": true,
+        "className": "content-area dss-stable-gutter",
+        "scrollbarOccupiesSpace": 15
+      },
+      "buttons": {
+        "query": {
+          "x": 1218,
+          "y": 176.5,
+          "width": 62,
+          "height": 30,
+          "widthCss": "62px",
+          "minWidthCss": "62px",
+          "maxWidthCss": "62px",
+          "flexBasisCss": "62px",
+          "spinnerVisible": false
+        },
+        "reset": {
+          "x": 1300,
+          "y": 176.5,
+          "width": 62,
+          "height": 30,
+          "widthCss": "62px",
+          "minWidthCss": "62px",
+          "maxWidthCss": "62px",
+          "flexBasisCss": "62px",
+          "text": "重置"
+        },
+        "refresh": {
+          "x": 2363,
+          "y": 241.5,
+          "width": 110,
+          "height": 32,
+          "widthCss": "110px",
+          "minWidthCss": "110px",
+          "maxWidthCss": "110px",
+          "flexBasisCss": "110px",
+          "spinnerVisible": false,
+          "text": "立即刷新"
+        }
+      },
+      "queryActions": {
+        "x": 1218,
+        "y": 176.5,
+        "width": 144,
+        "height": 30
+      },
+      "queryBar": {
+        "x": 292,
+        "y": 175.5,
+        "width": 2181,
+        "height": 32
+      },
+      "resultCard": {
+        "x": 292,
+        "y": 308.5,
+        "width": 2181,
+        "height": 95
+      },
+      "tableFrame": {
+        "x": 292,
+        "y": 308.5,
+        "width": 2181,
+        "height": 95
+      },
+      "tableHeaderWrapper": {
+        "x": 292,
+        "y": 308.5,
+        "width": 2181,
+        "height": 46
+      },
+      "headers": [
+        {
+          "index": 0,
+          "label": "序号",
+          "x": 292,
+          "y": 308.5,
+          "width": 70,
+          "height": 46
+        },
+        {
+          "index": 1,
+          "label": "探针端",
+          "x": 362,
+          "y": 308.5,
+          "width": 348,
+          "height": 46
+        },
+        {
+          "index": 2,
+          "label": "源库",
+          "x": 710,
+          "y": 308.5,
+          "width": 582,
+          "height": 46
+        },
+        {
+          "index": 3,
+          "label": "快照状态",
+          "x": 1292,
+          "y": 308.5,
+          "width": 140,
+          "height": 46
+        },
+        {
+          "index": 4,
+          "label": "快照启动时间",
+          "x": 1432,
+          "y": 308.5,
+          "width": 347,
+          "height": 46
+        },
+        {
+          "index": 5,
+          "label": "快照完成时间",
+          "x": 1779,
+          "y": 308.5,
+          "width": 347,
+          "height": 46
+        },
+        {
+          "index": 6,
+          "label": "记录更新时间",
+          "x": 2126,
+          "y": 308.5,
+          "width": 347,
+          "height": 46
+        }
+      ],
+      "rowCount": 1,
+      "seqCells": [
+        "1"
+      ],
+      "route": {
+        "path": "/monitor/data-source-state",
+        "title": "CDC 配置管理平台"
+      },
+      "tag": "2560x1440-SHORT",
+      "screenshot": "/agent/dss-query-button-table-layout-implementation-001/docs/features/data-source-snapshot-status/evidence/DATA-SOURCE-SNAPSHOT-STATUS-QUERY-BUTTON-AND-TABLE-LAYOUT-STABILITY-IMPLEMENTATION-001/browser/screenshots/2560x1440-SHORT.png"
+    }
+  ],
+  "extra": {
+    "1280x800_longRows": 30,
+    "1280x800_shortRows": 1,
+    "1280x800_longScrollNeed": true,
+    "1280x800_shortScrollNeed": false,
+    "1700x920_longRows": 30,
+    "1700x920_shortRows": 1,
+    "1700x920_longScrollNeed": true,
+    "1700x920_shortScrollNeed": false,
+    "1920x1080_longRows": 30,
+    "1920x1080_shortRows": 1,
+    "1920x1080_longScrollNeed": true,
+    "1920x1080_shortScrollNeed": false,
+    "2560x1440_longRows": 30,
+    "2560x1440_shortRows": 1,
+    "2560x1440_longScrollNeed": true,
+    "2560x1440_shortScrollNeed": false,
+    "otherRoutesProbed": [
+      "/config/data-source",
+      "/config/client",
+      "/monitor/cdc-node"
+    ]
+  },
+  "consoleErrors": [],
+  "networkRequests": [
+    {
+      "method": "GET",
+      "url": "http://192.168.174.70:5173/monitor/data-source-state",
+      "type": "Document"
+    },
+    {
+      "method": "GET",
+      "url": "http://192.168.174.70:5173/@vite/client",
+      "type": "Script"
+    },
+    {
+      "method": "GET",
+      "url": "http://192.168.174.70:5173/src/main.ts",
+      "type": "Script"
+    },
+    {
+      "method": "GET",
+      "url": "http://192.168.174.70:5173/node_modules/.vite/deps/vue.js?v=a0921c8a",
+      "type": "Script"
+    },
+    {
+      "method": "GET",
+      "url": "http://192.168.174.70:5173/node_modules/.vite/deps/element-plus.js?v=98ed8262",
+      "type": "Script"
+    },
+    {
+      "method": "GET",
+      "url": "http://192.168.174.70:5173/node_modules/element-plus/dist/index.css",
+      "type": "Script"
+    },
+    {
+      "method": "GET",
+      "url": "http://192.168.174.70:5173/node_modules/.vite/deps/element-plus_es_locale_lang_zh-cn.js?v=c8f4b3b5",
+      "type": "Script"
+    },
+    {
+      "method": "GET",
+      "url": "http://192.168.174.70:5173/src/App.vue",
+      "type": "Script"
+    },
+    {
+      "method": "GET",
+      "url": "http://192.168.174.70:5173/src/router/index.ts",
+      "type": "Script"
+    },
+    {
+      "method": "GET",
+      "url": "http://192.168.174.70:5173/src/stores/index.ts",
+      "type": "Script"
+    },
+    {
+      "method": "GET",
+      "url": "http://192.168.174.70:5173/src/styles/global.css",
+      "type": "Script"
+    },
+    {
+      "method": "GET",
+      "url": "http://192.168.174.70:5173/node_modules/vite/dist/client/env.mjs",
+      "type": "Script"
+    },
+    {
+      "method": "GET",
+      "url": "http://192.168.174.70:5173/node_modules/.vite/deps/chunk-J5D6QMP7.js?v=61df142e",
+      "type": "Script"
+    },
+    {
+      "method": "GET",
+      "url": "http://192.168.174.70:5173/node_modules/.vite/deps/chunk-G3PMV62Z.js?v=61df142e",
+      "type": "Script"
+    },
+    {
+      "method": "GET",
+      "url": "http://192.168.174.70:5173/node_modules/.vite/deps/pinia.js?v=f2cef053",
+      "type": "Script"
+    },
+    {
+      "method": "GET",
+      "url": "http://192.168.174.70:5173/node_modules/.vite/deps/vue-router.js?v=cecd6fef",
+      "type": "Script"
+    },
+    {
+      "method": "GET",
+      "url": "http://192.168.174.70:5173/src/layouts/MainLayout.vue",
+      "type": "Script"
+    },
+    {
+      "method": "GET",
+      "url": "http://192.168.174.70:5173/@id/__x00__plugin-vue:export-helper",
+      "type": "Script"
+    },
+    {
+      "method": "GET",
+      "url": "http://192.168.174.70:5173/node_modules/.vite/deps/chunk-YFT6OQ5R.js?v=61df142e",
+      "type": "Script"
+    },
+    {
+      "method": "GET",
+      "url": "http://192.168.174.70:5173/src/stores/app.ts",
+      "type": "Script"
+    },
+    {
+      "method": "GET",
+      "url": "http://192.168.174.70:5173/src/layouts/Sidebar.vue",
+      "type": "Script"
+    },
+    {
+      "method": "GET",
+      "url": "http://192.168.174.70:5173/src/layouts/HeaderBar.vue",
+      "type": "Script"
+    },
+    {
+      "method": "GET",
+      "url": "http://192.168.174.70:5173/src/layouts/MainLayout.vue?vue&type=style&index=0&scoped=22686b16&lang.css",
+      "type": "Script"
+    },
+    {
+      "method": "GET",
+      "url": "http://192.168.174.70:5173/src/config/menu.ts",
+      "type": "Script"
+    },
+    {
+      "method": "GET",
+      "url": "http://192.168.174.70:5173/src/views/log-query/reinitBus.ts",
+      "type": "Script"
+    },
+    {
+      "method": "GET",
+      "url": "http://192.168.174.70:5173/src/layouts/Sidebar.vue?vue&type=style&index=0&scoped=cc56cb04&lang.css",
+      "type": "Script"
+    },
+    {
+      "method": "GET",
+      "url": "http://192.168.174.70:5173/node_modules/.vite/deps/@element-plus_icons-vue.js?v=6dfb84b3",
+      "type": "Script"
+    },
+    {
+      "method": "GET",
+      "url": "http://192.168.174.70:5173/src/layouts/HeaderBar.vue?vue&type=style&index=0&scoped=ddbc33b4&lang.css",
+      "type": "Script"
+    },
+    {
+      "method": "GET",
+      "url": "http://192.168.174.70:5173/node_modules/.vite/deps/chunk-YTRRJBUP.js?v=61df142e",
+      "type": "Script"
+    },
+    {
+      "method": "GET",
+      "url": "http://192.168.174.70:5173/node_modules/.vite/deps/chunk-Q6SH2LQN.js?v=61df142e",
+      "type": "Script"
+    },
+    {
+      "method": "GET",
+      "url": "http://192.168.174.70:5173/src/views/data-source-run-state/DataSourceRunStatePage.vue",
+      "type": "Script"
+    },
+    {
+      "method": "GET",
+      "url": "http://192.168.174.70:5173/src/views/data-source-run-state/composables/useDataSourceSnapshot.ts",
+      "type": "Script"
+    },
+    {
+      "method": "GET",
+      "url": "http://192.168.174.70:5173/src/views/data-source-run-state/components/DataSourceSnapshotQueryBar.vue",
+      "type": "Script"
+    },
+    {
+      "method": "GET",
+      "url": "http://192.168.174.70:5173/src/views/data-source-run-state/components/DataSourceSnapshotToolbar.vue",
+      "type": "Script"
+    },
+    {
+      "method": "GET",
+      "url": "http://192.168.174.70:5173/src/views/data-source-run-state/components/DataSourceSnapshotTable.vue",
+      "type": "Script"
+    },
+    {
+      "method": "GET",
+      "url": "http://192.168.174.70:5173/src/views/data-source-run-state/DataSourceRunStatePage.vue?vue&type=style&index=0&scoped=a7db12e6&lang.css",
+      "type": "Script"
+    },
+    {
+      "method": "GET",
+      "url": "http://192.168.174.70:5173/src/views/data-source-run-state/utils/selection.ts",
+      "type": "Script"
+    },
+    {
+      "method": "GET",
+      "url": "http://192.168.174.70:5173/src/views/data-source-run-state/utils/format.ts",
+      "type": "Script"
+    },
+    {
+      "method": "GET",
+      "url": "http://192.168.174.70:5173/src/views/data-source-run-state/tooltip/tooltipPosition.ts",
+      "type": "Script"
+    },
+    {
+      "method": "GET",
+      "url": "http://192.168.174.70:5173/src/views/data-source-run-state/components/DataSourceSnapshotQueryBar.vue?vue&type=style&index=0&scoped=cd886c8f&lang.css",
+      "type": "Script"
+    },
+    {
+      "method": "GET",
+      "url": "http://192.168.174.70:5173/src/views/data-source-run-state/components/DataSourceSnapshotQueryBar.vue?vue&type=style&index=1&lang.css",
+      "type": "Script"
+    },
+    {
+      "method": "GET",
+      "url": "http://192.168.174.70:5173/src/api/dataSourceSnapshot.ts",
+      "type": "Script"
+    },
+    {
+      "method": "GET",
+      "url": "http://192.168.174.70:5173/src/views/data-source-run-state/utils/rowKey.ts",
+      "type": "Script"
+    },
+    {
+      "method": "GET",
+      "url": "http://192.168.174.70:5173/src/views/data-source-run-state/components/DataSourceSnapshotStatusTag.vue",
+      "type": "Script"
+    },
+    {
+      "method": "GET",
+      "url": "http://192.168.174.70:5173/src/views/data-source-run-state/tooltip/SnapshotTooltipHost.vue",
+      "type": "Script"
+    },
+    {
+      "method": "GET",
+      "url": "http://192.168.174.70:5173/src/views/data-source-run-state/tooltip/useSnapshotTooltip.ts",
+      "type": "Script"
+    },
+    {
+      "method": "GET",
+      "url": "http://192.168.174.70:5173/src/views/data-source-run-state/components/DataSourceSnapshotTable.vue?vue&type=style&index=0&scoped=a0b5e578&lang.css",
+      "type": "Script"
+    },
+    {
+      "method": "GET",
+      "url": "http://192.168.174.70:5173/src/views/data-source-run-state/components/DataSourceSnapshotToolbar.vue?vue&type=style&index=0&scoped=a581eda5&lang.css",
+      "type": "Script"
+    },
+    {
+      "method": "GET",
+      "url": "http://192.168.174.70:5173/vite.svg",
+      "type": "Other"
+    },
+    {
+      "method": "GET",
+      "url": "http://192.168.174.70:5173/src/services/http.ts",
+      "type": "Script"
+    },
+    {
+      "method": "GET",
+      "url": "http://192.168.174.70:5173/src/views/data-source-run-state/components/DataSourceSnapshotStatusTag.vue?vue&type=style&index=0&scoped=8119ec47&lang.css",
+      "type": "Script"
+    },
+    {
+      "method": "GET",
+      "url": "http://192.168.174.70:5173/src/views/data-source-run-state/tooltip/SnapshotTooltipHost.vue?vue&type=style&index=0&scoped=e8ab6064&lang.css",
+      "type": "Script"
+    },
+    {
+      "method": "GET",
+      "url": "http://192.168.174.70:5173/node_modules/.vite/deps/axios.js?v=e2819c19",
+      "type": "Script"
+    },
+    {
+      "method": "GET",
+      "url": "http://192.168.174.70:5173/api/monitor/data-source-run-state/list",
+      "type": "XHR"
+    },
+    {
+      "method": "GET",
+      "url": "http://192.168.174.70:5173/api/monitor/data-source-run-state/list",
+      "type": "XHR"
+    },
+    {
+      "method": "GET",
+      "url": "data:image/svg+xml;utf8,%3Csvg class='icon' width='200' height='200' viewBox='0 0 1024 1024' xmlns='http://www.w3.org/2000/svg'%3E%3Cpath fill='currentColor' d='M406.656 706.944L195.84 496.256a32 32 0 10-45.248 45.248l256 256 512-512a32 32 0 00-45.248-45.248L406.592 706.944z'%3E%3C/path%3E%3C/svg%3E",
+      "type": "Image"
+    },
+    {
+      "method": "GET",
+      "url": "http://192.168.174.70:5173/api/monitor/data-source-run-state/list?clientId=hosp-012",
+      "type": "XHR"
+    },
+    {
+      "method": "GET",
+      "url": "http://192.168.174.70:5173/api/monitor/data-source-run-state/list",
+      "type": "XHR"
+    },
+    {
+      "method": "GET",
+      "url": "http://192.168.174.70:5173/api/monitor/data-source-run-state/list?clientId=hosp-012",
+      "type": "XHR"
+    },
+    {
+      "method": "GET",
+      "url": "http://192.168.174.70:5173/api/monitor/data-source-run-state/list",
+      "type": "XHR"
+    },
+    {
+      "method": "GET",
+      "url": "http://192.168.174.70:5173/api/monitor/data-source-run-state/list?clientId=hosp-012",
+      "type": "XHR"
+    },
+    {
+      "method": "GET",
+      "url": "http://192.168.174.70:5173/api/monitor/data-source-run-state/list",
+      "type": "XHR"
+    },
+    {
+      "method": "GET",
+      "url": "http://192.168.174.70:5173/api/monitor/data-source-run-state/list?clientId=hosp-012",
+      "type": "XHR"
+    },
+    {
+      "method": "GET",
+      "url": "http://192.168.174.70:5173/config/data-source",
+      "type": "Document"
+    },
+    {
+      "method": "GET",
+      "url": "http://192.168.174.70:5173/@vite/client",
+      "type": "Script"
+    },
+    {
+      "method": "GET",
+      "url": "http://192.168.174.70:5173/src/main.ts",
+      "type": "Script"
+    },
+    {
+      "method": "GET",
+      "url": "http://192.168.174.70:5173/node_modules/.vite/deps/vue.js?v=a0921c8a",
+      "type": "Script"
+    },
+    {
+      "method": "GET",
+      "url": "http://192.168.174.70:5173/node_modules/.vite/deps/element-plus.js?v=98ed8262",
+      "type": "Script"
+    },
+    {
+      "method": "GET",
+      "url": "http://192.168.174.70:5173/node_modules/element-plus/dist/index.css",
+      "type": "Script"
+    },
+    {
+      "method": "GET",
+      "url": "http://192.168.174.70:5173/node_modules/.vite/deps/element-plus_es_locale_lang_zh-cn.js?v=c8f4b3b5",
+      "type": "Script"
+    },
+    {
+      "method": "GET",
+      "url": "http://192.168.174.70:5173/src/App.vue",
+      "type": "Script"
+    },
+    {
+      "method": "GET",
+      "url": "http://192.168.174.70:5173/src/router/index.ts",
+      "type": "Script"
+    },
+    {
+      "method": "GET",
+      "url": "http://192.168.174.70:5173/src/stores/index.ts",
+      "type": "Script"
+    },
+    {
+      "method": "GET",
+      "url": "http://192.168.174.70:5173/src/styles/global.css",
+      "type": "Script"
+    },
+    {
+      "method": "GET",
+      "url": "http://192.168.174.70:5173/node_modules/vite/dist/client/env.mjs",
+      "type": "Script"
+    },
+    {
+      "method": "GET",
+      "url": "http://192.168.174.70:5173/node_modules/.vite/deps/chunk-J5D6QMP7.js?v=61df142e",
+      "type": "Script"
+    },
+    {
+      "method": "GET",
+      "url": "http://192.168.174.70:5173/node_modules/.vite/deps/chunk-G3PMV62Z.js?v=61df142e",
+      "type": "Script"
+    },
+    {
+      "method": "GET",
+      "url": "http://192.168.174.70:5173/node_modules/.vite/deps/chunk-YTRRJBUP.js?v=61df142e",
+      "type": "Script"
+    },
+    {
+      "method": "GET",
+      "url": "http://192.168.174.70:5173/node_modules/.vite/deps/chunk-Q6SH2LQN.js?v=61df142e",
+      "type": "Script"
+    },
+    {
+      "method": "GET",
+      "url": "http://192.168.174.70:5173/node_modules/.vite/deps/vue-router.js?v=cecd6fef",
+      "type": "Script"
+    },
+    {
+      "method": "GET",
+      "url": "http://192.168.174.70:5173/src/layouts/MainLayout.vue",
+      "type": "Script"
+    },
+    {
+      "method": "GET",
+      "url": "http://192.168.174.70:5173/@id/__x00__plugin-vue:export-helper",
+      "type": "Script"
+    },
+    {
+      "method": "GET",
+      "url": "http://192.168.174.70:5173/node_modules/.vite/deps/pinia.js?v=f2cef053",
+      "type": "Script"
+    },
+    {
+      "method": "GET",
+      "url": "http://192.168.174.70:5173/node_modules/.vite/deps/chunk-YFT6OQ5R.js?v=61df142e",
+      "type": "Script"
+    },
+    {
+      "method": "GET",
+      "url": "http://192.168.174.70:5173/src/stores/app.ts",
+      "type": "Script"
+    },
+    {
+      "method": "GET",
+      "url": "http://192.168.174.70:5173/src/layouts/Sidebar.vue",
+      "type": "Script"
+    },
+    {
+      "method": "GET",
+      "url": "http://192.168.174.70:5173/src/layouts/HeaderBar.vue",
+      "type": "Script"
+    },
+    {
+      "method": "GET",
+      "url": "http://192.168.174.70:5173/src/layouts/MainLayout.vue?vue&type=style&index=0&scoped=22686b16&lang.css",
+      "type": "Script"
+    },
+    {
+      "method": "GET",
+      "url": "http://192.168.174.70:5173/src/config/menu.ts",
+      "type": "Script"
+    },
+    {
+      "method": "GET",
+      "url": "http://192.168.174.70:5173/src/views/log-query/reinitBus.ts",
+      "type": "Script"
+    },
+    {
+      "method": "GET",
+      "url": "http://192.168.174.70:5173/src/layouts/Sidebar.vue?vue&type=style&index=0&scoped=cc56cb04&lang.css",
+      "type": "Script"
+    },
+    {
+      "method": "GET",
+      "url": "http://192.168.174.70:5173/node_modules/.vite/deps/@element-plus_icons-vue.js?v=6dfb84b3",
+      "type": "Script"
+    },
+    {
+      "method": "GET",
+      "url": "http://192.168.174.70:5173/src/layouts/HeaderBar.vue?vue&type=style&index=0&scoped=ddbc33b4&lang.css",
+      "type": "Script"
+    },
+    {
+      "method": "GET",
+      "url": "http://192.168.174.70:5173/src/views/data-source/DataSourcePage.vue",
+      "type": "Script"
+    },
+    {
+      "method": "GET",
+      "url": "http://192.168.174.70:5173/node_modules/.vite/deps/async-validator.js?v=9032271f",
+      "type": "Script"
+    },
+    {
+      "method": "GET",
+      "url": "http://192.168.174.70:5173/src/views/data-source/draggableDialog.ts",
+      "type": "Script"
+    },
+    {
+      "method": "GET",
+      "url": "http://192.168.174.70:5173/src/api/dataSource.ts",
+      "type": "Script"
+    },
+    {
+      "method": "GET",
+      "url": "http://192.168.174.70:5173/src/views/data-source/DataSourcePage.vue?vue&type=style&index=0&scoped=814877e4&lang.css",
+      "type": "Script"
+    },
+    {
+      "method": "GET",
+      "url": "http://192.168.174.70:5173/vite.svg",
+      "type": "Other"
+    },
+    {
+      "method": "GET",
+      "url": "http://192.168.174.70:5173/src/services/http.ts",
+      "type": "Script"
+    },
+    {
+      "method": "GET",
+      "url": "http://192.168.174.70:5173/node_modules/.vite/deps/axios.js?v=e2819c19",
+      "type": "Script"
+    },
+    {
+      "method": "GET",
+      "url": "http://192.168.174.70:5173/api/data-sources",
+      "type": "XHR"
+    },
+    {
+      "method": "GET",
+      "url": "http://192.168.174.70:5173/config/client",
+      "type": "Document"
+    },
+    {
+      "method": "GET",
+      "url": "http://192.168.174.70:5173/@vite/client",
+      "type": "Script"
+    },
+    {
+      "method": "GET",
+      "url": "http://192.168.174.70:5173/src/main.ts",
+      "type": "Script"
+    },
+    {
+      "method": "GET",
+      "url": "http://192.168.174.70:5173/node_modules/vite/dist/client/env.mjs",
+      "type": "Script"
+    },
+    {
+      "method": "GET",
+      "url": "http://192.168.174.70:5173/node_modules/.vite/deps/vue.js?v=a0921c8a",
+      "type": "Script"
+    },
+    {
+      "method": "GET",
+      "url": "http://192.168.174.70:5173/node_modules/.vite/deps/element-plus.js?v=98ed8262",
+      "type": "Script"
+    },
+    {
+      "method": "GET",
+      "url": "http://192.168.174.70:5173/node_modules/element-plus/dist/index.css",
+      "type": "Script"
+    },
+    {
+      "method": "GET",
+      "url": "http://192.168.174.70:5173/node_modules/.vite/deps/element-plus_es_locale_lang_zh-cn.js?v=c8f4b3b5",
+      "type": "Script"
+    },
+    {
+      "method": "GET",
+      "url": "http://192.168.174.70:5173/src/App.vue",
+      "type": "Script"
+    },
+    {
+      "method": "GET",
+      "url": "http://192.168.174.70:5173/src/router/index.ts",
+      "type": "Script"
+    },
+    {
+      "method": "GET",
+      "url": "http://192.168.174.70:5173/src/stores/index.ts",
+      "type": "Script"
+    },
+    {
+      "method": "GET",
+      "url": "http://192.168.174.70:5173/src/styles/global.css",
+      "type": "Script"
+    },
+    {
+      "method": "GET",
+      "url": "http://192.168.174.70:5173/node_modules/.vite/deps/chunk-J5D6QMP7.js?v=61df142e",
+      "type": "Script"
+    },
+    {
+      "method": "GET",
+      "url": "http://192.168.174.70:5173/node_modules/.vite/deps/chunk-G3PMV62Z.js?v=61df142e",
+      "type": "Script"
+    },
+    {
+      "method": "GET",
+      "url": "http://192.168.174.70:5173/node_modules/.vite/deps/chunk-YTRRJBUP.js?v=61df142e",
+      "type": "Script"
+    },
+    {
+      "method": "GET",
+      "url": "http://192.168.174.70:5173/node_modules/.vite/deps/chunk-Q6SH2LQN.js?v=61df142e",
+      "type": "Script"
+    },
+    {
+      "method": "GET",
+      "url": "http://192.168.174.70:5173/node_modules/.vite/deps/vue-router.js?v=cecd6fef",
+      "type": "Script"
+    },
+    {
+      "method": "GET",
+      "url": "http://192.168.174.70:5173/src/layouts/MainLayout.vue",
+      "type": "Script"
+    },
+    {
+      "method": "GET",
+      "url": "http://192.168.174.70:5173/@id/__x00__plugin-vue:export-helper",
+      "type": "Script"
+    },
+    {
+      "method": "GET",
+      "url": "http://192.168.174.70:5173/node_modules/.vite/deps/chunk-YFT6OQ5R.js?v=61df142e",
+      "type": "Script"
+    },
+    {
+      "method": "GET",
+      "url": "http://192.168.174.70:5173/node_modules/.vite/deps/pinia.js?v=f2cef053",
+      "type": "Script"
+    },
+    {
+      "method": "GET",
+      "url": "http://192.168.174.70:5173/src/stores/app.ts",
+      "type": "Script"
+    },
+    {
+      "method": "GET",
+      "url": "http://192.168.174.70:5173/src/layouts/Sidebar.vue",
+      "type": "Script"
+    },
+    {
+      "method": "GET",
+      "url": "http://192.168.174.70:5173/src/layouts/HeaderBar.vue",
+      "type": "Script"
+    },
+    {
+      "method": "GET",
+      "url": "http://192.168.174.70:5173/src/layouts/MainLayout.vue?vue&type=style&index=0&scoped=22686b16&lang.css",
+      "type": "Script"
+    },
+    {
+      "method": "GET",
+      "url": "http://192.168.174.70:5173/src/config/menu.ts",
+      "type": "Script"
+    },
+    {
+      "method": "GET",
+      "url": "http://192.168.174.70:5173/src/views/log-query/reinitBus.ts",
+      "type": "Script"
+    },
+    {
+      "method": "GET",
+      "url": "http://192.168.174.70:5173/src/layouts/Sidebar.vue?vue&type=style&index=0&scoped=cc56cb04&lang.css",
+      "type": "Script"
+    },
+    {
+      "method": "GET",
+      "url": "http://192.168.174.70:5173/node_modules/.vite/deps/@element-plus_icons-vue.js?v=6dfb84b3",
+      "type": "Script"
+    },
+    {
+      "method": "GET",
+      "url": "http://192.168.174.70:5173/src/layouts/HeaderBar.vue?vue&type=style&index=0&scoped=ddbc33b4&lang.css",
+      "type": "Script"
+    },
+    {
+      "method": "GET",
+      "url": "http://192.168.174.70:5173/src/views/client-config/ClientConfigPage.vue",
+      "type": "Script"
+    },
+    {
+      "method": "GET",
+      "url": "http://192.168.174.70:5173/vite.svg",
+      "type": "Other"
+    },
+    {
+      "method": "GET",
+      "url": "http://192.168.174.70:5173/src/views/client-config/listLayout.ts",
+      "type": "Script"
+    },
+    {
+      "method": "GET",
+      "url": "http://192.168.174.70:5173/src/api/clientConfig.ts",
+      "type": "Script"
+    },
+    {
+      "method": "GET",
+      "url": "http://192.168.174.70:5173/src/views/client-config/ClientConfigPage.vue?vue&type=style&index=0&scoped=093fb766&lang.css",
+      "type": "Script"
+    },
+    {
+      "method": "GET",
+      "url": "http://192.168.174.70:5173/src/services/http.ts",
+      "type": "Script"
+    },
+    {
+      "method": "GET",
+      "url": "http://192.168.174.70:5173/node_modules/.vite/deps/axios.js?v=e2819c19",
+      "type": "Script"
+    },
+    {
+      "method": "GET",
+      "url": "http://192.168.174.70:5173/api/clients?status=ALL",
+      "type": "XHR"
+    },
+    {
+      "method": "GET",
+      "url": "http://192.168.174.70:5173/monitor/cdc-node",
+      "type": "Document"
+    },
+    {
+      "method": "GET",
+      "url": "http://192.168.174.70:5173/@vite/client",
+      "type": "Script"
+    },
+    {
+      "method": "GET",
+      "url": "http://192.168.174.70:5173/src/main.ts",
+      "type": "Script"
+    },
+    {
+      "method": "GET",
+      "url": "http://192.168.174.70:5173/node_modules/vite/dist/client/env.mjs",
+      "type": "Script"
+    },
+    {
+      "method": "GET",
+      "url": "http://192.168.174.70:5173/node_modules/.vite/deps/vue.js?v=a0921c8a",
+      "type": "Script"
+    },
+    {
+      "method": "GET",
+      "url": "http://192.168.174.70:5173/node_modules/.vite/deps/element-plus.js?v=98ed8262",
+      "type": "Script"
+    },
+    {
+      "method": "GET",
+      "url": "http://192.168.174.70:5173/node_modules/element-plus/dist/index.css",
+      "type": "Script"
+    },
+    {
+      "method": "GET",
+      "url": "http://192.168.174.70:5173/node_modules/.vite/deps/element-plus_es_locale_lang_zh-cn.js?v=c8f4b3b5",
+      "type": "Script"
+    },
+    {
+      "method": "GET",
+      "url": "http://192.168.174.70:5173/src/App.vue",
+      "type": "Script"
+    },
+    {
+      "method": "GET",
+      "url": "http://192.168.174.70:5173/src/router/index.ts",
+      "type": "Script"
+    },
+    {
+      "method": "GET",
+      "url": "http://192.168.174.70:5173/src/stores/index.ts",
+      "type": "Script"
+    },
+    {
+      "method": "GET",
+      "url": "http://192.168.174.70:5173/src/styles/global.css",
+      "type": "Script"
+    },
+    {
+      "method": "GET",
+      "url": "http://192.168.174.70:5173/node_modules/.vite/deps/chunk-J5D6QMP7.js?v=61df142e",
+      "type": "Script"
+    },
+    {
+      "method": "GET",
+      "url": "http://192.168.174.70:5173/node_modules/.vite/deps/chunk-G3PMV62Z.js?v=61df142e",
+      "type": "Script"
+    },
+    {
+      "method": "GET",
+      "url": "http://192.168.174.70:5173/node_modules/.vite/deps/chunk-YTRRJBUP.js?v=61df142e",
+      "type": "Script"
+    },
+    {
+      "method": "GET",
+      "url": "http://192.168.174.70:5173/node_modules/.vite/deps/chunk-Q6SH2LQN.js?v=61df142e",
+      "type": "Script"
+    },
+    {
+      "method": "GET",
+      "url": "http://192.168.174.70:5173/node_modules/.vite/deps/vue-router.js?v=cecd6fef",
+      "type": "Script"
+    },
+    {
+      "method": "GET",
+      "url": "http://192.168.174.70:5173/src/layouts/MainLayout.vue",
+      "type": "Script"
+    },
+    {
+      "method": "GET",
+      "url": "http://192.168.174.70:5173/@id/__x00__plugin-vue:export-helper",
+      "type": "Script"
+    },
+    {
+      "method": "GET",
+      "url": "http://192.168.174.70:5173/node_modules/.vite/deps/chunk-YFT6OQ5R.js?v=61df142e",
+      "type": "Script"
+    },
+    {
+      "method": "GET",
+      "url": "http://192.168.174.70:5173/node_modules/.vite/deps/pinia.js?v=f2cef053",
+      "type": "Script"
+    },
+    {
+      "method": "GET",
+      "url": "http://192.168.174.70:5173/src/stores/app.ts",
+      "type": "Script"
+    },
+    {
+      "method": "GET",
+      "url": "http://192.168.174.70:5173/src/layouts/Sidebar.vue",
+      "type": "Script"
+    },
+    {
+      "method": "GET",
+      "url": "http://192.168.174.70:5173/src/layouts/HeaderBar.vue",
+      "type": "Script"
+    },
+    {
+      "method": "GET",
+      "url": "http://192.168.174.70:5173/src/layouts/MainLayout.vue?vue&type=style&index=0&scoped=22686b16&lang.css",
+      "type": "Script"
+    },
+    {
+      "method": "GET",
+      "url": "http://192.168.174.70:5173/src/config/menu.ts",
+      "type": "Script"
+    },
+    {
+      "method": "GET",
+      "url": "http://192.168.174.70:5173/src/views/log-query/reinitBus.ts",
+      "type": "Script"
+    },
+    {
+      "method": "GET",
+      "url": "http://192.168.174.70:5173/src/layouts/Sidebar.vue?vue&type=style&index=0&scoped=cc56cb04&lang.css",
+      "type": "Script"
+    },
+    {
+      "method": "GET",
+      "url": "http://192.168.174.70:5173/node_modules/.vite/deps/@element-plus_icons-vue.js?v=6dfb84b3",
+      "type": "Script"
+    },
+    {
+      "method": "GET",
+      "url": "http://192.168.174.70:5173/src/layouts/HeaderBar.vue?vue&type=style&index=0&scoped=ddbc33b4&lang.css",
+      "type": "Script"
+    },
+    {
+      "method": "GET",
+      "url": "http://192.168.174.70:5173/src/views/cdc-node-status/CdcNodeStatusPage.vue",
+      "type": "Script"
+    },
+    {
+      "method": "GET",
+      "url": "http://192.168.174.70:5173/src/components/monitor/ClientCard.vue",
+      "type": "Script"
+    },
+    {
+      "method": "GET",
+      "url": "http://192.168.174.70:5173/src/api/monitor.ts",
+      "type": "Script"
+    },
+    {
+      "method": "GET",
+      "url": "http://192.168.174.70:5173/src/views/cdc-node-status/CdcNodeStatusPage.vue?vue&type=style&index=0&scoped=6738aa6b&lang.css",
+      "type": "Script"
+    },
+    {
+      "method": "GET",
+      "url": "http://192.168.174.70:5173/vite.svg",
+      "type": "Other"
+    },
+    {
+      "method": "GET",
+      "url": "http://192.168.174.70:5173/src/components/monitor/ClientCard.vue?vue&type=style&index=0&scoped=8e331475&lang.css",
+      "type": "Script"
+    },
+    {
+      "method": "GET",
+      "url": "http://192.168.174.70:5173/src/services/http.ts",
+      "type": "Script"
+    },
+    {
+      "method": "GET",
+      "url": "http://192.168.174.70:5173/node_modules/.vite/deps/axios.js?v=e2819c19",
+      "type": "Script"
+    },
+    {
+      "method": "GET",
+      "url": "http://192.168.174.70:5173/api/monitor/zookeeper/health",
+      "type": "XHR"
+    },
+    {
+      "method": "GET",
+      "url": "http://192.168.174.70:5173/api/monitor/zookeeper/clients",
+      "type": "XHR"
+    },
+    {
+      "method": "GET",
+      "url": "http://192.168.174.70:5173/monitor/data-source-state",
+      "type": "Document"
+    },
+    {
+      "method": "GET",
+      "url": "http://192.168.174.70:5173/@vite/client",
+      "type": "Script"
+    },
+    {
+      "method": "GET",
+      "url": "http://192.168.174.70:5173/src/main.ts",
+      "type": "Script"
+    },
+    {
+      "method": "GET",
+      "url": "http://192.168.174.70:5173/node_modules/vite/dist/client/env.mjs",
+      "type": "Script"
+    },
+    {
+      "method": "GET",
+      "url": "http://192.168.174.70:5173/node_modules/.vite/deps/vue.js?v=a0921c8a",
+      "type": "Script"
+    },
+    {
+      "method": "GET",
+      "url": "http://192.168.174.70:5173/node_modules/.vite/deps/element-plus.js?v=98ed8262",
+      "type": "Script"
+    },
+    {
+      "method": "GET",
+      "url": "http://192.168.174.70:5173/node_modules/element-plus/dist/index.css",
+      "type": "Script"
+    },
+    {
+      "method": "GET",
+      "url": "http://192.168.174.70:5173/node_modules/.vite/deps/element-plus_es_locale_lang_zh-cn.js?v=c8f4b3b5",
+      "type": "Script"
+    },
+    {
+      "method": "GET",
+      "url": "http://192.168.174.70:5173/src/App.vue",
+      "type": "Script"
+    },
+    {
+      "method": "GET",
+      "url": "http://192.168.174.70:5173/src/router/index.ts",
+      "type": "Script"
+    },
+    {
+      "method": "GET",
+      "url": "http://192.168.174.70:5173/src/stores/index.ts",
+      "type": "Script"
+    },
+    {
+      "method": "GET",
+      "url": "http://192.168.174.70:5173/src/styles/global.css",
+      "type": "Script"
+    },
+    {
+      "method": "GET",
+      "url": "http://192.168.174.70:5173/node_modules/.vite/deps/chunk-J5D6QMP7.js?v=61df142e",
+      "type": "Script"
+    },
+    {
+      "method": "GET",
+      "url": "http://192.168.174.70:5173/node_modules/.vite/deps/chunk-G3PMV62Z.js?v=61df142e",
+      "type": "Script"
+    },
+    {
+      "method": "GET",
+      "url": "http://192.168.174.70:5173/node_modules/.vite/deps/chunk-YTRRJBUP.js?v=61df142e",
+      "type": "Script"
+    },
+    {
+      "method": "GET",
+      "url": "http://192.168.174.70:5173/node_modules/.vite/deps/chunk-Q6SH2LQN.js?v=61df142e",
+      "type": "Script"
+    },
+    {
+      "method": "GET",
+      "url": "http://192.168.174.70:5173/node_modules/.vite/deps/vue-router.js?v=cecd6fef",
+      "type": "Script"
+    },
+    {
+      "method": "GET",
+      "url": "http://192.168.174.70:5173/src/layouts/MainLayout.vue",
+      "type": "Script"
+    },
+    {
+      "method": "GET",
+      "url": "http://192.168.174.70:5173/@id/__x00__plugin-vue:export-helper",
+      "type": "Script"
+    },
+    {
+      "method": "GET",
+      "url": "http://192.168.174.70:5173/node_modules/.vite/deps/chunk-YFT6OQ5R.js?v=61df142e",
+      "type": "Script"
+    },
+    {
+      "method": "GET",
+      "url": "http://192.168.174.70:5173/node_modules/.vite/deps/pinia.js?v=f2cef053",
+      "type": "Script"
+    },
+    {
+      "method": "GET",
+      "url": "http://192.168.174.70:5173/src/stores/app.ts",
+      "type": "Script"
+    },
+    {
+      "method": "GET",
+      "url": "http://192.168.174.70:5173/src/layouts/Sidebar.vue",
+      "type": "Script"
+    },
+    {
+      "method": "GET",
+      "url": "http://192.168.174.70:5173/src/layouts/HeaderBar.vue",
+      "type": "Script"
+    },
+    {
+      "method": "GET",
+      "url": "http://192.168.174.70:5173/src/layouts/MainLayout.vue?vue&type=style&index=0&scoped=22686b16&lang.css",
+      "type": "Script"
+    },
+    {
+      "method": "GET",
+      "url": "http://192.168.174.70:5173/src/config/menu.ts",
+      "type": "Script"
+    },
+    {
+      "method": "GET",
+      "url": "http://192.168.174.70:5173/src/views/log-query/reinitBus.ts",
+      "type": "Script"
+    },
+    {
+      "method": "GET",
+      "url": "http://192.168.174.70:5173/src/layouts/Sidebar.vue?vue&type=style&index=0&scoped=cc56cb04&lang.css",
+      "type": "Script"
+    },
+    {
+      "method": "GET",
+      "url": "http://192.168.174.70:5173/node_modules/.vite/deps/@element-plus_icons-vue.js?v=6dfb84b3",
+      "type": "Script"
+    },
+    {
+      "method": "GET",
+      "url": "http://192.168.174.70:5173/src/layouts/HeaderBar.vue?vue&type=style&index=0&scoped=ddbc33b4&lang.css",
+      "type": "Script"
+    },
+    {
+      "method": "GET",
+      "url": "http://192.168.174.70:5173/src/views/data-source-run-state/DataSourceRunStatePage.vue",
+      "type": "Script"
+    },
+    {
+      "method": "GET",
+      "url": "http://192.168.174.70:5173/src/views/data-source-run-state/composables/useDataSourceSnapshot.ts",
+      "type": "Script"
+    },
+    {
+      "method": "GET",
+      "url": "http://192.168.174.70:5173/src/views/data-source-run-state/components/DataSourceSnapshotQueryBar.vue",
+      "type": "Script"
+    },
+    {
+      "method": "GET",
+      "url": "http://192.168.174.70:5173/src/views/data-source-run-state/components/DataSourceSnapshotToolbar.vue",
+      "type": "Script"
+    },
+    {
+      "method": "GET",
+      "url": "http://192.168.174.70:5173/src/views/data-source-run-state/components/DataSourceSnapshotTable.vue",
+      "type": "Script"
+    },
+    {
+      "method": "GET",
+      "url": "http://192.168.174.70:5173/src/views/data-source-run-state/DataSourceRunStatePage.vue?vue&type=style&index=0&scoped=a7db12e6&lang.css",
+      "type": "Script"
+    },
+    {
+      "method": "GET",
+      "url": "http://192.168.174.70:5173/vite.svg",
+      "type": "Other"
+    },
+    {
+      "method": "GET",
+      "url": "http://192.168.174.70:5173/src/api/dataSourceSnapshot.ts",
+      "type": "Script"
+    },
+    {
+      "method": "GET",
+      "url": "http://192.168.174.70:5173/src/views/data-source-run-state/utils/selection.ts",
+      "type": "Script"
+    },
+    {
+      "method": "GET",
+      "url": "http://192.168.174.70:5173/src/views/data-source-run-state/utils/format.ts",
+      "type": "Script"
+    },
+    {
+      "method": "GET",
+      "url": "http://192.168.174.70:5173/src/views/data-source-run-state/tooltip/tooltipPosition.ts",
+      "type": "Script"
+    },
+    {
+      "method": "GET",
+      "url": "http://192.168.174.70:5173/src/views/data-source-run-state/components/DataSourceSnapshotQueryBar.vue?vue&type=style&index=0&scoped=cd886c8f&lang.css",
+      "type": "Script"
+    },
+    {
+      "method": "GET",
+      "url": "http://192.168.174.70:5173/src/views/data-source-run-state/components/DataSourceSnapshotQueryBar.vue?vue&type=style&index=1&lang.css",
+      "type": "Script"
+    },
+    {
+      "method": "GET",
+      "url": "http://192.168.174.70:5173/src/views/data-source-run-state/components/DataSourceSnapshotToolbar.vue?vue&type=style&index=0&scoped=a581eda5&lang.css",
+      "type": "Script"
+    },
+    {
+      "method": "GET",
+      "url": "http://192.168.174.70:5173/src/views/data-source-run-state/utils/rowKey.ts",
+      "type": "Script"
+    },
+    {
+      "method": "GET",
+      "url": "http://192.168.174.70:5173/src/views/data-source-run-state/components/DataSourceSnapshotStatusTag.vue",
+      "type": "Script"
+    },
+    {
+      "method": "GET",
+      "url": "http://192.168.174.70:5173/src/views/data-source-run-state/tooltip/SnapshotTooltipHost.vue",
+      "type": "Script"
+    },
+    {
+      "method": "GET",
+      "url": "http://192.168.174.70:5173/src/views/data-source-run-state/tooltip/useSnapshotTooltip.ts",
+      "type": "Script"
+    },
+    {
+      "method": "GET",
+      "url": "http://192.168.174.70:5173/src/views/data-source-run-state/components/DataSourceSnapshotTable.vue?vue&type=style&index=0&scoped=a0b5e578&lang.css",
+      "type": "Script"
+    },
+    {
+      "method": "GET",
+      "url": "http://192.168.174.70:5173/src/services/http.ts",
+      "type": "Script"
+    },
+    {
+      "method": "GET",
+      "url": "http://192.168.174.70:5173/node_modules/.vite/deps/axios.js?v=e2819c19",
+      "type": "Script"
+    },
+    {
+      "method": "GET",
+      "url": "http://192.168.174.70:5173/src/views/data-source-run-state/components/DataSourceSnapshotStatusTag.vue?vue&type=style&index=0&scoped=8119ec47&lang.css",
+      "type": "Script"
+    },
+    {
+      "method": "GET",
+      "url": "http://192.168.174.70:5173/src/views/data-source-run-state/tooltip/SnapshotTooltipHost.vue?vue&type=style&index=0&scoped=e8ab6064&lang.css",
+      "type": "Script"
+    },
+    {
+      "method": "GET",
+      "url": "http://192.168.174.70:5173/api/monitor/data-source-run-state/list",
+      "type": "XHR"
+    },
+    {
+      "method": "GET",
+      "url": "data:image/svg+xml;utf8,%3Csvg class='icon' width='200' height='200' viewBox='0 0 1024 1024' xmlns='http://www.w3.org/2000/svg'%3E%3Cpath fill='currentColor' d='M406.656 706.944L195.84 496.256a32 32 0 10-45.248 45.248l256 256 512-512a32 32 0 00-45.248-45.248L406.592 706.944z'%3E%3C/path%3E%3C/svg%3E",
+      "type": "Image"
+    },
+    {
+      "method": "GET",
+      "url": "http://192.168.174.70:5173/api/monitor/data-source-run-state/list?clientId=hosp-012",
+      "type": "XHR"
+    },
+    {
+      "method": "GET",
+      "url": "http://192.168.174.70:5173/api/monitor/data-source-run-state/list",
+      "type": "XHR"
+    },
+    {
+      "method": "GET",
+      "url": "http://192.168.174.70:5173/api/monitor/data-source-run-state/list",
+      "type": "XHR"
+    }
+  ],
+  "routeIsolation": [
+    {
+      "path": "/config/data-source",
+      "expectedPrivateClass": false,
+      "hasPrivateClass": false,
+      "scrollbarGutterComputed": "auto",
+      "overflowYComputed": "auto",
+      "className": "content-area"
+    },
+    {
+      "path": "/config/client",
+      "expectedPrivateClass": false,
+      "hasPrivateClass": false,
+      "scrollbarGutterComputed": "auto",
+      "overflowYComputed": "auto",
+      "className": "content-area"
+    },
+    {
+      "path": "/monitor/cdc-node",
+      "expectedPrivateClass": false,
+      "hasPrivateClass": false,
+      "scrollbarGutterComputed": "auto",
+      "overflowYComputed": "auto",
+      "className": "content-area"
+    },
+    {
+      "path": "/monitor/data-source-state",
+      "expectedPrivateClass": true,
+      "hasPrivateClass": true,
+      "scrollbarGutterComputed": "stable",
+      "overflowYComputed": "auto",
+      "className": "content-area dss-stable-gutter"
+    }
+  ],
+  "resetSemantics": {
+    "rowsBeforeReset": 1,
+    "rowsImmediatelyAfterReset": 1,
+    "listRequestsImmediatelyAfterReset": 0,
+    "listRequestUrlsImmediatelyAfterReset": [],
+    "selectedPlaceholdersAfterReset": [
+      "全部",
+      "",
+      "全部",
+      "",
+      "全部",
+      ""
+    ],
+    "rowsAfterPostResetQuery": 30,
+    "listRequestsDeltaOnPostResetQuery": 1
+  },
+  "loadingStability": {
+    "frameCount": 42,
+    "framesWithQuerySpinner": 1,
+    "frames": [
+      {
+        "t": 4019.2999999998137,
+        "query": {
+          "x": 568,
+          "y": 216.5,
+          "width": 62,
+          "height": 30
+        },
+        "reset": {
+          "x": 650,
+          "y": 216.5,
+          "width": 62,
+          "height": 30
+        },
+        "refresh": {
+          "x": 1083,
+          "y": 281.5,
+          "width": 110,
+          "height": 32
+        },
+        "querySpinnerVisible": false,
+        "refreshSpinnerVisible": false,
+        "queryText": "查询",
+        "resetText": "重置",
+        "refreshText": "立即刷新",
+        "queryAriaBusy": null
+      },
+      {
+        "t": 4037.2000000001863,
+        "query": {
+          "x": 568,
+          "y": 216.5,
+          "width": 62,
+          "height": 30
+        },
+        "reset": {
+          "x": 650,
+          "y": 216.5,
+          "width": 62,
+          "height": 30
+        },
+        "refresh": {
+          "x": 1083,
+          "y": 281.5,
+          "width": 110,
+          "height": 32
+        },
+        "querySpinnerVisible": true,
+        "refreshSpinnerVisible": false,
+        "queryText": "查询",
+        "resetText": "重置",
+        "refreshText": "立即刷新",
+        "queryAriaBusy": "true"
+      },
+      {
+        "t": 4113.5999999996275,
+        "query": {
+          "x": 568,
+          "y": 216.5,
+          "width": 62,
+          "height": 30
+        },
+        "reset": {
+          "x": 650,
+          "y": 216.5,
+          "width": 62,
+          "height": 30
+        },
+        "refresh": {
+          "x": 1083,
+          "y": 281.5,
+          "width": 110,
+          "height": 32
+        },
+        "querySpinnerVisible": false,
+        "refreshSpinnerVisible": false,
+        "queryText": "查询",
+        "resetText": "重置",
+        "refreshText": "立即刷新",
+        "queryAriaBusy": null
+      },
+      {
+        "t": 4146.299999999814,
+        "query": {
+          "x": 568,
+          "y": 216.5,
+          "width": 62,
+          "height": 30
+        },
+        "reset": {
+          "x": 650,
+          "y": 216.5,
+          "width": 62,
+          "height": 30
+        },
+        "refresh": {
+          "x": 1083,
+          "y": 281.5,
+          "width": 110,
+          "height": 32
+        },
+        "querySpinnerVisible": false,
+        "refreshSpinnerVisible": false,
+        "queryText": "查询",
+        "resetText": "重置",
+        "refreshText": "立即刷新",
+        "queryAriaBusy": null
+      },
+      {
+        "t": 4179.700000000186,
+        "query": {
+          "x": 568,
+          "y": 216.5,
+          "width": 62,
+          "height": 30
+        },
+        "reset": {
+          "x": 650,
+          "y": 216.5,
+          "width": 62,
+          "height": 30
+        },
+        "refresh": {
+          "x": 1083,
+          "y": 281.5,
+          "width": 110,
+          "height": 32
+        },
+        "querySpinnerVisible": false,
+        "refreshSpinnerVisible": false,
+        "queryText": "查询",
+        "resetText": "重置",
+        "refreshText": "立即刷新",
+        "queryAriaBusy": null
+      },
+      {
+        "t": 4213.5,
+        "query": {
+          "x": 568,
+          "y": 216.5,
+          "width": 62,
+          "height": 30
+        },
+        "reset": {
+          "x": 650,
+          "y": 216.5,
+          "width": 62,
+          "height": 30
+        },
+        "refresh": {
+          "x": 1083,
+          "y": 281.5,
+          "width": 110,
+          "height": 32
+        },
+        "querySpinnerVisible": false,
+        "refreshSpinnerVisible": false,
+        "queryText": "查询",
+        "resetText": "重置",
+        "refreshText": "立即刷新",
+        "queryAriaBusy": null
+      },
+      {
+        "t": 4246.200000000186,
+        "query": {
+          "x": 568,
+          "y": 216.5,
+          "width": 62,
+          "height": 30
+        },
+        "reset": {
+          "x": 650,
+          "y": 216.5,
+          "width": 62,
+          "height": 30
+        },
+        "refresh": {
+          "x": 1083,
+          "y": 281.5,
+          "width": 110,
+          "height": 32
+        },
+        "querySpinnerVisible": false,
+        "refreshSpinnerVisible": false,
+        "queryText": "查询",
+        "resetText": "重置",
+        "refreshText": "立即刷新",
+        "queryAriaBusy": null
+      },
+      {
+        "t": 4278.299999999814,
+        "query": {
+          "x": 568,
+          "y": 216.5,
+          "width": 62,
+          "height": 30
+        },
+        "reset": {
+          "x": 650,
+          "y": 216.5,
+          "width": 62,
+          "height": 30
+        },
+        "refresh": {
+          "x": 1083,
+          "y": 281.5,
+          "width": 110,
+          "height": 32
+        },
+        "querySpinnerVisible": false,
+        "refreshSpinnerVisible": false,
+        "queryText": "查询",
+        "resetText": "重置",
+        "refreshText": "立即刷新",
+        "queryAriaBusy": null
+      },
+      {
+        "t": 4311.0999999996275,
+        "query": {
+          "x": 568,
+          "y": 216.5,
+          "width": 62,
+          "height": 30
+        },
+        "reset": {
+          "x": 650,
+          "y": 216.5,
+          "width": 62,
+          "height": 30
+        },
+        "refresh": {
+          "x": 1083,
+          "y": 281.5,
+          "width": 110,
+          "height": 32
+        },
+        "querySpinnerVisible": false,
+        "refreshSpinnerVisible": false,
+        "queryText": "查询",
+        "resetText": "重置",
+        "refreshText": "立即刷新",
+        "queryAriaBusy": null
+      },
+      {
+        "t": 4343.399999999441,
+        "query": {
+          "x": 568,
+          "y": 216.5,
+          "width": 62,
+          "height": 30
+        },
+        "reset": {
+          "x": 650,
+          "y": 216.5,
+          "width": 62,
+          "height": 30
+        },
+        "refresh": {
+          "x": 1083,
+          "y": 281.5,
+          "width": 110,
+          "height": 32
+        },
+        "querySpinnerVisible": false,
+        "refreshSpinnerVisible": false,
+        "queryText": "查询",
+        "resetText": "重置",
+        "refreshText": "立即刷新",
+        "queryAriaBusy": null
+      },
+      {
+        "t": 4382.0999999996275,
+        "query": {
+          "x": 568,
+          "y": 216.5,
+          "width": 62,
+          "height": 30
+        },
+        "reset": {
+          "x": 650,
+          "y": 216.5,
+          "width": 62,
+          "height": 30
+        },
+        "refresh": {
+          "x": 1083,
+          "y": 281.5,
+          "width": 110,
+          "height": 32
+        },
+        "querySpinnerVisible": false,
+        "refreshSpinnerVisible": false,
+        "queryText": "查询",
+        "resetText": "重置",
+        "refreshText": "立即刷新",
+        "queryAriaBusy": null
+      },
+      {
+        "t": 4415.299999999814,
+        "query": {
+          "x": 568,
+          "y": 216.5,
+          "width": 62,
+          "height": 30
+        },
+        "reset": {
+          "x": 650,
+          "y": 216.5,
+          "width": 62,
+          "height": 30
+        },
+        "refresh": {
+          "x": 1083,
+          "y": 281.5,
+          "width": 110,
+          "height": 32
+        },
+        "querySpinnerVisible": false,
+        "refreshSpinnerVisible": false,
+        "queryText": "查询",
+        "resetText": "重置",
+        "refreshText": "立即刷新",
+        "queryAriaBusy": null
+      },
+      {
+        "t": 4447.700000000186,
+        "query": {
+          "x": 568,
+          "y": 216.5,
+          "width": 62,
+          "height": 30
+        },
+        "reset": {
+          "x": 650,
+          "y": 216.5,
+          "width": 62,
+          "height": 30
+        },
+        "refresh": {
+          "x": 1083,
+          "y": 281.5,
+          "width": 110,
+          "height": 32
+        },
+        "querySpinnerVisible": false,
+        "refreshSpinnerVisible": false,
+        "queryText": "查询",
+        "resetText": "重置",
+        "refreshText": "立即刷新",
+        "queryAriaBusy": null
+      },
+      {
+        "t": 4479.799999999814,
+        "query": {
+          "x": 568,
+          "y": 216.5,
+          "width": 62,
+          "height": 30
+        },
+        "reset": {
+          "x": 650,
+          "y": 216.5,
+          "width": 62,
+          "height": 30
+        },
+        "refresh": {
+          "x": 1083,
+          "y": 281.5,
+          "width": 110,
+          "height": 32
+        },
+        "querySpinnerVisible": false,
+        "refreshSpinnerVisible": false,
+        "queryText": "查询",
+        "resetText": "重置",
+        "refreshText": "立即刷新",
+        "queryAriaBusy": null
+      },
+      {
+        "t": 4512,
+        "query": {
+          "x": 568,
+          "y": 216.5,
+          "width": 62,
+          "height": 30
+        },
+        "reset": {
+          "x": 650,
+          "y": 216.5,
+          "width": 62,
+          "height": 30
+        },
+        "refresh": {
+          "x": 1083,
+          "y": 281.5,
+          "width": 110,
+          "height": 32
+        },
+        "querySpinnerVisible": false,
+        "refreshSpinnerVisible": false,
+        "queryText": "查询",
+        "resetText": "重置",
+        "refreshText": "立即刷新",
+        "queryAriaBusy": null
+      },
+      {
+        "t": 4544.200000000186,
+        "query": {
+          "x": 568,
+          "y": 216.5,
+          "width": 62,
+          "height": 30
+        },
+        "reset": {
+          "x": 650,
+          "y": 216.5,
+          "width": 62,
+          "height": 30
+        },
+        "refresh": {
+          "x": 1083,
+          "y": 281.5,
+          "width": 110,
+          "height": 32
+        },
+        "querySpinnerVisible": false,
+        "refreshSpinnerVisible": false,
+        "queryText": "查询",
+        "resetText": "重置",
+        "refreshText": "立即刷新",
+        "queryAriaBusy": null
+      },
+      {
+        "t": 4575.700000000186,
+        "query": {
+          "x": 568,
+          "y": 216.5,
+          "width": 62,
+          "height": 30
+        },
+        "reset": {
+          "x": 650,
+          "y": 216.5,
+          "width": 62,
+          "height": 30
+        },
+        "refresh": {
+          "x": 1083,
+          "y": 281.5,
+          "width": 110,
+          "height": 32
+        },
+        "querySpinnerVisible": false,
+        "refreshSpinnerVisible": false,
+        "queryText": "查询",
+        "resetText": "重置",
+        "refreshText": "立即刷新",
+        "queryAriaBusy": null
+      },
+      {
+        "t": 4607.700000000186,
+        "query": {
+          "x": 568,
+          "y": 216.5,
+          "width": 62,
+          "height": 30
+        },
+        "reset": {
+          "x": 650,
+          "y": 216.5,
+          "width": 62,
+          "height": 30
+        },
+        "refresh": {
+          "x": 1083,
+          "y": 281.5,
+          "width": 110,
+          "height": 32
+        },
+        "querySpinnerVisible": false,
+        "refreshSpinnerVisible": false,
+        "queryText": "查询",
+        "resetText": "重置",
+        "refreshText": "立即刷新",
+        "queryAriaBusy": null
+      },
+      {
+        "t": 4640.399999999441,
+        "query": {
+          "x": 568,
+          "y": 216.5,
+          "width": 62,
+          "height": 30
+        },
+        "reset": {
+          "x": 650,
+          "y": 216.5,
+          "width": 62,
+          "height": 30
+        },
+        "refresh": {
+          "x": 1083,
+          "y": 281.5,
+          "width": 110,
+          "height": 32
+        },
+        "querySpinnerVisible": false,
+        "refreshSpinnerVisible": false,
+        "queryText": "查询",
+        "resetText": "重置",
+        "refreshText": "立即刷新",
+        "queryAriaBusy": null
+      },
+      {
+        "t": 4673.5,
+        "query": {
+          "x": 568,
+          "y": 216.5,
+          "width": 62,
+          "height": 30
+        },
+        "reset": {
+          "x": 650,
+          "y": 216.5,
+          "width": 62,
+          "height": 30
+        },
+        "refresh": {
+          "x": 1083,
+          "y": 281.5,
+          "width": 110,
+          "height": 32
+        },
+        "querySpinnerVisible": false,
+        "refreshSpinnerVisible": false,
+        "queryText": "查询",
+        "resetText": "重置",
+        "refreshText": "立即刷新",
+        "queryAriaBusy": null
+      },
+      {
+        "t": 4706.5999999996275,
+        "query": {
+          "x": 568,
+          "y": 216.5,
+          "width": 62,
+          "height": 30
+        },
+        "reset": {
+          "x": 650,
+          "y": 216.5,
+          "width": 62,
+          "height": 30
+        },
+        "refresh": {
+          "x": 1083,
+          "y": 281.5,
+          "width": 110,
+          "height": 32
+        },
+        "querySpinnerVisible": false,
+        "refreshSpinnerVisible": false,
+        "queryText": "查询",
+        "resetText": "重置",
+        "refreshText": "立即刷新",
+        "queryAriaBusy": null
+      },
+      {
+        "t": 4739.399999999441,
+        "query": {
+          "x": 568,
+          "y": 216.5,
+          "width": 62,
+          "height": 30
+        },
+        "reset": {
+          "x": 650,
+          "y": 216.5,
+          "width": 62,
+          "height": 30
+        },
+        "refresh": {
+          "x": 1083,
+          "y": 281.5,
+          "width": 110,
+          "height": 32
+        },
+        "querySpinnerVisible": false,
+        "refreshSpinnerVisible": false,
+        "queryText": "查询",
+        "resetText": "重置",
+        "refreshText": "立即刷新",
+        "queryAriaBusy": null
+      },
+      {
+        "t": 4772.799999999814,
+        "query": {
+          "x": 568,
+          "y": 216.5,
+          "width": 62,
+          "height": 30
+        },
+        "reset": {
+          "x": 650,
+          "y": 216.5,
+          "width": 62,
+          "height": 30
+        },
+        "refresh": {
+          "x": 1083,
+          "y": 281.5,
+          "width": 110,
+          "height": 32
+        },
+        "querySpinnerVisible": false,
+        "refreshSpinnerVisible": false,
+        "queryText": "查询",
+        "resetText": "重置",
+        "refreshText": "立即刷新",
+        "queryAriaBusy": null
+      },
+      {
+        "t": 4805,
+        "query": {
+          "x": 568,
+          "y": 216.5,
+          "width": 62,
+          "height": 30
+        },
+        "reset": {
+          "x": 650,
+          "y": 216.5,
+          "width": 62,
+          "height": 30
+        },
+        "refresh": {
+          "x": 1083,
+          "y": 281.5,
+          "width": 110,
+          "height": 32
+        },
+        "querySpinnerVisible": false,
+        "refreshSpinnerVisible": false,
+        "queryText": "查询",
+        "resetText": "重置",
+        "refreshText": "立即刷新",
+        "queryAriaBusy": null
+      },
+      {
+        "t": 4838,
+        "query": {
+          "x": 568,
+          "y": 216.5,
+          "width": 62,
+          "height": 30
+        },
+        "reset": {
+          "x": 650,
+          "y": 216.5,
+          "width": 62,
+          "height": 30
+        },
+        "refresh": {
+          "x": 1083,
+          "y": 281.5,
+          "width": 110,
+          "height": 32
+        },
+        "querySpinnerVisible": false,
+        "refreshSpinnerVisible": false,
+        "queryText": "查询",
+        "resetText": "重置",
+        "refreshText": "立即刷新",
+        "queryAriaBusy": null
+      },
+      {
+        "t": 4870.200000000186,
+        "query": {
+          "x": 568,
+          "y": 216.5,
+          "width": 62,
+          "height": 30
+        },
+        "reset": {
+          "x": 650,
+          "y": 216.5,
+          "width": 62,
+          "height": 30
+        },
+        "refresh": {
+          "x": 1083,
+          "y": 281.5,
+          "width": 110,
+          "height": 32
+        },
+        "querySpinnerVisible": false,
+        "refreshSpinnerVisible": false,
+        "queryText": "查询",
+        "resetText": "重置",
+        "refreshText": "立即刷新",
+        "queryAriaBusy": null
+      },
+      {
+        "t": 4902.299999999814,
+        "query": {
+          "x": 568,
+          "y": 216.5,
+          "width": 62,
+          "height": 30
+        },
+        "reset": {
+          "x": 650,
+          "y": 216.5,
+          "width": 62,
+          "height": 30
+        },
+        "refresh": {
+          "x": 1083,
+          "y": 281.5,
+          "width": 110,
+          "height": 32
+        },
+        "querySpinnerVisible": false,
+        "refreshSpinnerVisible": false,
+        "queryText": "查询",
+        "resetText": "重置",
+        "refreshText": "立即刷新",
+        "queryAriaBusy": null
+      },
+      {
+        "t": 4934.5,
+        "query": {
+          "x": 568,
+          "y": 216.5,
+          "width": 62,
+          "height": 30
+        },
+        "reset": {
+          "x": 650,
+          "y": 216.5,
+          "width": 62,
+          "height": 30
+        },
+        "refresh": {
+          "x": 1083,
+          "y": 281.5,
+          "width": 110,
+          "height": 32
+        },
+        "querySpinnerVisible": false,
+        "refreshSpinnerVisible": false,
+        "queryText": "查询",
+        "resetText": "重置",
+        "refreshText": "立即刷新",
+        "queryAriaBusy": null
+      },
+      {
+        "t": 4966.5999999996275,
+        "query": {
+          "x": 568,
+          "y": 216.5,
+          "width": 62,
+          "height": 30
+        },
+        "reset": {
+          "x": 650,
+          "y": 216.5,
+          "width": 62,
+          "height": 30
+        },
+        "refresh": {
+          "x": 1083,
+          "y": 281.5,
+          "width": 110,
+          "height": 32
+        },
+        "querySpinnerVisible": false,
+        "refreshSpinnerVisible": false,
+        "queryText": "查询",
+        "resetText": "重置",
+        "refreshText": "立即刷新",
+        "queryAriaBusy": null
+      },
+      {
+        "t": 4999.5999999996275,
+        "query": {
+          "x": 568,
+          "y": 216.5,
+          "width": 62,
+          "height": 30
+        },
+        "reset": {
+          "x": 650,
+          "y": 216.5,
+          "width": 62,
+          "height": 30
+        },
+        "refresh": {
+          "x": 1083,
+          "y": 281.5,
+          "width": 110,
+          "height": 32
+        },
+        "querySpinnerVisible": false,
+        "refreshSpinnerVisible": false,
+        "queryText": "查询",
+        "resetText": "重置",
+        "refreshText": "立即刷新",
+        "queryAriaBusy": null
+      },
+      {
+        "t": 5032.5,
+        "query": {
+          "x": 568,
+          "y": 216.5,
+          "width": 62,
+          "height": 30
+        },
+        "reset": {
+          "x": 650,
+          "y": 216.5,
+          "width": 62,
+          "height": 30
+        },
+        "refresh": {
+          "x": 1083,
+          "y": 281.5,
+          "width": 110,
+          "height": 32
+        },
+        "querySpinnerVisible": false,
+        "refreshSpinnerVisible": false,
+        "queryText": "查询",
+        "resetText": "重置",
+        "refreshText": "立即刷新",
+        "queryAriaBusy": null
+      },
+      {
+        "t": 5066.700000000186,
+        "query": {
+          "x": 568,
+          "y": 216.5,
+          "width": 62,
+          "height": 30
+        },
+        "reset": {
+          "x": 650,
+          "y": 216.5,
+          "width": 62,
+          "height": 30
+        },
+        "refresh": {
+          "x": 1083,
+          "y": 281.5,
+          "width": 110,
+          "height": 32
+        },
+        "querySpinnerVisible": false,
+        "refreshSpinnerVisible": false,
+        "queryText": "查询",
+        "resetText": "重置",
+        "refreshText": "立即刷新",
+        "queryAriaBusy": null
+      },
+      {
+        "t": 5099.799999999814,
+        "query": {
+          "x": 568,
+          "y": 216.5,
+          "width": 62,
+          "height": 30
+        },
+        "reset": {
+          "x": 650,
+          "y": 216.5,
+          "width": 62,
+          "height": 30
+        },
+        "refresh": {
+          "x": 1083,
+          "y": 281.5,
+          "width": 110,
+          "height": 32
+        },
+        "querySpinnerVisible": false,
+        "refreshSpinnerVisible": false,
+        "queryText": "查询",
+        "resetText": "重置",
+        "refreshText": "立即刷新",
+        "queryAriaBusy": null
+      },
+      {
+        "t": 5132.399999999441,
+        "query": {
+          "x": 568,
+          "y": 216.5,
+          "width": 62,
+          "height": 30
+        },
+        "reset": {
+          "x": 650,
+          "y": 216.5,
+          "width": 62,
+          "height": 30
+        },
+        "refresh": {
+          "x": 1083,
+          "y": 281.5,
+          "width": 110,
+          "height": 32
+        },
+        "querySpinnerVisible": false,
+        "refreshSpinnerVisible": false,
+        "queryText": "查询",
+        "resetText": "重置",
+        "refreshText": "立即刷新",
+        "queryAriaBusy": null
+      },
+      {
+        "t": 5165.0999999996275,
+        "query": {
+          "x": 568,
+          "y": 216.5,
+          "width": 62,
+          "height": 30
+        },
+        "reset": {
+          "x": 650,
+          "y": 216.5,
+          "width": 62,
+          "height": 30
+        },
+        "refresh": {
+          "x": 1083,
+          "y": 281.5,
+          "width": 110,
+          "height": 32
+        },
+        "querySpinnerVisible": false,
+        "refreshSpinnerVisible": false,
+        "queryText": "查询",
+        "resetText": "重置",
+        "refreshText": "立即刷新",
+        "queryAriaBusy": null
+      },
+      {
+        "t": 5197.5999999996275,
+        "query": {
+          "x": 568,
+          "y": 216.5,
+          "width": 62,
+          "height": 30
+        },
+        "reset": {
+          "x": 650,
+          "y": 216.5,
+          "width": 62,
+          "height": 30
+        },
+        "refresh": {
+          "x": 1083,
+          "y": 281.5,
+          "width": 110,
+          "height": 32
+        },
+        "querySpinnerVisible": false,
+        "refreshSpinnerVisible": false,
+        "queryText": "查询",
+        "resetText": "重置",
+        "refreshText": "立即刷新",
+        "queryAriaBusy": null
+      },
+      {
+        "t": 5231.0999999996275,
+        "query": {
+          "x": 568,
+          "y": 216.5,
+          "width": 62,
+          "height": 30
+        },
+        "reset": {
+          "x": 650,
+          "y": 216.5,
+          "width": 62,
+          "height": 30
+        },
+        "refresh": {
+          "x": 1083,
+          "y": 281.5,
+          "width": 110,
+          "height": 32
+        },
+        "querySpinnerVisible": false,
+        "refreshSpinnerVisible": false,
+        "queryText": "查询",
+        "resetText": "重置",
+        "refreshText": "立即刷新",
+        "queryAriaBusy": null
+      },
+      {
+        "t": 5263.5999999996275,
+        "query": {
+          "x": 568,
+          "y": 216.5,
+          "width": 62,
+          "height": 30
+        },
+        "reset": {
+          "x": 650,
+          "y": 216.5,
+          "width": 62,
+          "height": 30
+        },
+        "refresh": {
+          "x": 1083,
+          "y": 281.5,
+          "width": 110,
+          "height": 32
+        },
+        "querySpinnerVisible": false,
+        "refreshSpinnerVisible": false,
+        "queryText": "查询",
+        "resetText": "重置",
+        "refreshText": "立即刷新",
+        "queryAriaBusy": null
+      },
+      {
+        "t": 5296.899999999441,
+        "query": {
+          "x": 568,
+          "y": 216.5,
+          "width": 62,
+          "height": 30
+        },
+        "reset": {
+          "x": 650,
+          "y": 216.5,
+          "width": 62,
+          "height": 30
+        },
+        "refresh": {
+          "x": 1083,
+          "y": 281.5,
+          "width": 110,
+          "height": 32
+        },
+        "querySpinnerVisible": false,
+        "refreshSpinnerVisible": false,
+        "queryText": "查询",
+        "resetText": "重置",
+        "refreshText": "立即刷新",
+        "queryAriaBusy": null
+      },
+      {
+        "t": 5330,
+        "query": {
+          "x": 568,
+          "y": 216.5,
+          "width": 62,
+          "height": 30
+        },
+        "reset": {
+          "x": 650,
+          "y": 216.5,
+          "width": 62,
+          "height": 30
+        },
+        "refresh": {
+          "x": 1083,
+          "y": 281.5,
+          "width": 110,
+          "height": 32
+        },
+        "querySpinnerVisible": false,
+        "refreshSpinnerVisible": false,
+        "queryText": "查询",
+        "resetText": "重置",
+        "refreshText": "立即刷新",
+        "queryAriaBusy": null
+      },
+      {
+        "t": 5364,
+        "query": {
+          "x": 568,
+          "y": 216.5,
+          "width": 62,
+          "height": 30
+        },
+        "reset": {
+          "x": 650,
+          "y": 216.5,
+          "width": 62,
+          "height": 30
+        },
+        "refresh": {
+          "x": 1083,
+          "y": 281.5,
+          "width": 110,
+          "height": 32
+        },
+        "querySpinnerVisible": false,
+        "refreshSpinnerVisible": false,
+        "queryText": "查询",
+        "resetText": "重置",
+        "refreshText": "立即刷新",
+        "queryAriaBusy": null
+      },
+      {
+        "t": 5397.799999999814,
+        "query": {
+          "x": 568,
+          "y": 216.5,
+          "width": 62,
+          "height": 30
+        },
+        "reset": {
+          "x": 650,
+          "y": 216.5,
+          "width": 62,
+          "height": 30
+        },
+        "refresh": {
+          "x": 1083,
+          "y": 281.5,
+          "width": 110,
+          "height": 32
+        },
+        "querySpinnerVisible": false,
+        "refreshSpinnerVisible": false,
+        "queryText": "查询",
+        "resetText": "重置",
+        "refreshText": "立即刷新",
+        "queryAriaBusy": null
+      }
+    ]
+  },
+  "networkSummary": {
+    "total": 238,
+    "nonGet": [],
+    "listApiGetCount": 13
+  }
+}
