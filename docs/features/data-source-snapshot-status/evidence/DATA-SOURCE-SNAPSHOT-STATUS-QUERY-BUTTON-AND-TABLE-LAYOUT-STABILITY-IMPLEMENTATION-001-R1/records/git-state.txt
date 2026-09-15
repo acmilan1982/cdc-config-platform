@@ -1,0 +1,252 @@
+# R1 结束时 worktree 列表
+worktree /agent/cdc-config-platform
+HEAD 4222b0a24b927aca6f62ff348fd8549b73d4156c
+branch refs/heads/develop
+
+worktree /agent/cdc-docs-freeze-001
+HEAD 899803491427a6a7e6b6295f43ef49a11ed56037
+detached
+
+worktree /agent/dss-abl-appr-r1-001
+HEAD 9f06725d23d66e845cb5ab1d8d8d4f151401893b
+detached
+
+worktree /agent/dss-abl-fa-001
+HEAD eeafac6fb1030615bb17f21f35da9f2043597903
+detached
+
+worktree /agent/dss-abl-fa-001-r1
+HEAD 94a84239ae9b617e783f5acf20274e838e11a105
+detached
+
+worktree /agent/dss-abl-impl-001
+HEAD fccefbffccac7fbcc7bff039384549c24e0ed45e
+detached
+
+worktree /agent/dss-abl-impl-001-r1
+HEAD 1b58e3c9a234062bb1b9351f7675aeb21abd76cd
+detached
+
+worktree /agent/dss-abl-impl-001-r2
+HEAD 0ab68959e4bb9973c25f610769716e6d00a597d2
+detached
+
+worktree /agent/dss-abl-revclose-001
+HEAD 5195a716ed3b6d0d3122decfe937b73b27581d5a
+detached
+
+worktree /agent/dss-action-button-loading-approval-001
+HEAD a43b45b0d2e8312c859d231fdfe3ed3505d209d6
+detached
+
+worktree /agent/dss-action-button-loading-baseline-001
+HEAD cf6aec1f34a98cb38d113fc8ab681376979b5243
+detached
+
+worktree /agent/dss-action-button-loading-baseline-001-r1
+HEAD c4d5c096a7428d7f5be1af0d776c53655dd86e26
+detached
+
+worktree /agent/dss-design-traceability-corr-001
+HEAD d4c526779a2003cd0f4221bdb4d06b8509893919
+detached
+
+worktree /agent/dss-design-traceability-corr-001-r1
+HEAD 758253cb842e7c2eceade93744e4c51e93cbe58f
+detached
+
+worktree /agent/dss-formal-acceptance-001
+HEAD 3190b3d2450478bef34b24578312c76c3973cb08
+detached
+
+worktree /agent/dss-formal-acceptance-001-r1
+HEAD bf5f1b54a3abf54ea1d5ea1e1a9ed72cf39b7f7b
+detached
+
+worktree /agent/dss-formal-acceptance-001-r2
+HEAD 5ca9931da9babac5ccdfba5799d43ad32ba935e7
+detached
+
+worktree /agent/dss-formal-acceptance-001-r3
+HEAD 68528cfec4db6c3eb92b0e24bff0b7b29f56006a
+detached
+
+worktree /agent/dss-formal-acceptance-closeout-001
+HEAD f3d383eb8b37b422033481a51acd89f0f28900cc
+detached
+
+worktree /agent/dss-formal-impl-001
+HEAD 3ec9cbf6487eacff004212fb3aca3064c3bd18cc
+detached
+
+worktree /agent/dss-formal-impl-001-r1
+HEAD ba309ea8b469e3796ab08ed87c6ccb8c6d5bb253
+detached
+
+worktree /agent/dss-linear-style-original-001.R1
+HEAD 4222b0a24b927aca6f62ff348fd8549b73d4156c
+detached
+
+worktree /agent/dss-linear-style-prototype-001.BfGw0Z
+HEAD 4222b0a24b927aca6f62ff348fd8549b73d4156c
+detached
+
+worktree /agent/dss-popper-impl-closeout-001
+HEAD cacfb7040bb32ad837985534a56d8ed5dcc00075
+detached
+
+worktree /agent/dss-popper-r2-appr-001
+HEAD 183d3b5d8ddb15facf848aa0b327500e0243cbd8
+detached
+
+worktree /agent/dss-popper-width-baseline-001
+HEAD 6cd197d23a75cd9e0686c473ab27c45a6661e517
+detached
+
+worktree /agent/dss-popper-width-baseline-001-r1
+HEAD f74dd725682b745f1b8ac6a1b9358eff10aaddc2
+detached
+
+worktree /agent/dss-popper-width-baseline-approval-001
+HEAD 5649a8a8040b67bec0dc23b10596281cd5706bb3
+detached
+
+worktree /agent/dss-popper-width-impl-001
+HEAD e3c239230bbe854f0280a05f8151d30174fea110
+detached
+
+worktree /agent/dss-qc-review-closeout-001
+HEAD 1ddb84e9dec5a0aa2fc3b4aedc0d301855861f3a
+detached
+
+worktree /agent/dss-qc-review-closeout-001-r1
+HEAD af88aa847c7cf6a197237a46f59130744d13f082
+detached
+
+worktree /agent/dss-query-button-table-layout-baseline-001
+HEAD be101a19558ae1ef1436bb3d61746dc21338e49a
+detached
+
+worktree /agent/dss-query-button-table-layout-baseline-001-r1
+HEAD 46d8aeb3fc3ec332788933635c47936592b70b1e
+detached
+
+worktree /agent/dss-query-button-table-layout-baseline-approval-001
+HEAD 9ba4e75fb8fae8f34ce41b3693eb0ea759ba4366
+detached
+
+worktree /agent/dss-query-button-table-layout-implementation-001
+HEAD d77e174a912daf852837c9658f13672918fc766e
+detached
+
+worktree /agent/dss-query-button-table-layout-implementation-001-r1
+HEAD d77e174a912daf852837c9658f13672918fc766e
+detached
+
+worktree /agent/dss-query-ctl-001
+HEAD 29379e78f455f923d1095823322dc77c19f07e33
+detached
+
+worktree /agent/dss-query-ctl-001-r1
+HEAD d6322cfb50b6cb43a0c38dd9a42f85d037c24da1
+detached
+
+worktree /agent/dss-query-ctl-001-r2
+HEAD 6c43d1ee7dce3bb0b7583b4c38b367a4be64ba6f
+detached
+
+worktree /agent/dss-query-ctl-001-r3
+HEAD cf9f9eb0240f275cd50eb37546e6d6256892a9f4
+detached
+
+worktree /agent/dss-query-ctl-appr-001
+HEAD 548e16147675cdc6013a4d166bf60d7b1b8bda36
+detached
+
+worktree /agent/dss-query-ctl-impl-001
+HEAD a47988820c797ff60bd7244b2d0f899bd8fc3be5
+detached
+
+worktree /agent/dss-query-ctl-impl-001-r1
+HEAD edba7c891884d0f000a7c9edc196b2bffb95e0b0
+detached
+
+worktree /agent/dss-query-ctl-impl-001-r2
+HEAD 2a9a271690bfdc68b16772268e84928a33abdeda
+detached
+
+worktree /agent/dss-select-popper-fixed-width-proto-001
+HEAD 2a9a271690bfdc68b16772268e84928a33abdeda
+detached
+
+worktree /agent/dss-select-width-diag-001
+HEAD 2a9a271690bfdc68b16772268e84928a33abdeda
+detached
+
+worktree /tmp/cdc-approval-r1-worktree
+HEAD c568df1f7b0be14b7decdf59f2ef9116ff0bf403
+detached
+
+worktree /tmp/cdc-approval-worktree
+HEAD b753bec563f9cec7cfb9278eb40098d5f59b1634
+detached
+
+worktree /tmp/cdc-freeze-r1-worktree
+HEAD 85a522e492e34b2e168bb32b9f638bbb41afd76b
+detached
+
+worktree /tmp/cdc-freeze-r2-worktree
+HEAD 9b0aa9254f75e03f7b1eb52ee7454d970b76af4c
+detached
+
+worktree /tmp/cdc-freeze-r3-worktree
+HEAD e67b2ecc3897c3e83597126e259ee4c19349a66a
+detached
+
+worktree /tmp/cdc-popper-appr-r1-worktree
+HEAD 485be09db758e4ba6f543fcc88a399cc5a46d384
+detached
+
+worktree /tmp/cdc-popper-r2-worktree
+HEAD 0666cd96f1f27784f6d77404bd8d4820dbd96013
+detached
+
+worktree /tmp/cdc-r1-worktree
+HEAD 49eb778cb24b4f6d26a192d5441b0476099cf68d
+detached
+
+
+# R1 worktree 相对基准提交的变更
+M  docs/features/README.md
+M  docs/features/data-source-snapshot-status/ACCEPTANCE.md
+M  docs/features/data-source-snapshot-status/API.md
+M  docs/features/data-source-snapshot-status/DATABASE.md
+M  docs/features/data-source-snapshot-status/DESIGN.md
+M  docs/features/data-source-snapshot-status/README.md
+M  docs/features/data-source-snapshot-status/REQUIREMENTS.md
+M  docs/features/data-source-snapshot-status/UI.md
+A  docs/features/data-source-snapshot-status/reports/DATA-SOURCE-SNAPSHOT-STATUS-QUERY-BUTTON-AND-TABLE-LAYOUT-STABILITY-IMPLEMENTATION-001-R1.md
+M  docs/features/data-source-snapshot-status/reports/DATA-SOURCE-SNAPSHOT-STATUS-QUERY-BUTTON-AND-TABLE-LAYOUT-STABILITY-IMPLEMENTATION-001.md
+M  frontend/src/layouts/MainLayout.spec.ts
+M  frontend/src/layouts/MainLayout.vue
+M  frontend/src/views/data-source-run-state/components/DataSourceSnapshotQueryBar.spec.ts
+M  frontend/src/views/data-source-run-state/components/DataSourceSnapshotQueryBar.vue
+?? docs/features/data-source-snapshot-status/evidence/DATA-SOURCE-SNAPSHOT-STATUS-QUERY-BUTTON-AND-TABLE-LAYOUT-STABILITY-IMPLEMENTATION-001-R1/
+
+5	3	docs/features/README.md
+5	3	docs/features/data-source-snapshot-status/ACCEPTANCE.md
+5	3	docs/features/data-source-snapshot-status/API.md
+5	3	docs/features/data-source-snapshot-status/DATABASE.md
+7	5	docs/features/data-source-snapshot-status/DESIGN.md
+5	3	docs/features/data-source-snapshot-status/README.md
+6	4	docs/features/data-source-snapshot-status/REQUIREMENTS.md
+7	5	docs/features/data-source-snapshot-status/UI.md
+235	0	docs/features/data-source-snapshot-status/reports/DATA-SOURCE-SNAPSHOT-STATUS-QUERY-BUTTON-AND-TABLE-LAYOUT-STABILITY-IMPLEMENTATION-001-R1.md
+56	0	docs/features/data-source-snapshot-status/reports/DATA-SOURCE-SNAPSHOT-STATUS-QUERY-BUTTON-AND-TABLE-LAYOUT-STABILITY-IMPLEMENTATION-001.md
+2	2	frontend/src/layouts/MainLayout.spec.ts
+1	1	frontend/src/layouts/MainLayout.vue
+1	1	frontend/src/views/data-source-run-state/components/DataSourceSnapshotQueryBar.spec.ts
+1	1	frontend/src/views/data-source-run-state/components/DataSourceSnapshotQueryBar.vue
+
+# HEAD
+d77e174a912daf852837c9658f13672918fc766e

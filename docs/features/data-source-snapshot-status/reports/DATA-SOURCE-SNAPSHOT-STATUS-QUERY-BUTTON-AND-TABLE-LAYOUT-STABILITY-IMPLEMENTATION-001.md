@@ -353,3 +353,59 @@ CHATGPT_QUERY_BUTTON_AND_TABLE_LAYOUT_STABILITY_IMPLEMENTATION_REVIEW_FROM_GIT_T
 | 停止命令 | `kill 20567 20509` |
 
 两个进程均属于本任务隔离 worktree，`/proc/<PID>/cwd` 已核验；因需供项目负责人人工视觉交互复核，**保持运行**。
+
+---
+
+## 11. ChatGPT R0 复审与 R1 定向纠正记录（2026-09-15，`DATA-SOURCE-SNAPSHOT-STATUS-QUERY-BUTTON-AND-TABLE-LAYOUT-STABILITY-IMPLEMENTATION-001-R1`）
+
+本节由 R1 定向纠正任务**追加**。本文件以上全部原有字节在基准提交 `d77e174a912daf852837c9658f13672918fc766e` 中保持完整前缀、逐字节不变，无删除、无替换、无就地修改（证明见 §11.5）。
+
+### 11.1 ChatGPT 从远程 Git 的 R0 复审结论
+
+- `chatgpt_r0_review_status=CHANGES_REQUIRED_DOCUMENT_TRACEABILITY_AND_CURRENT_STATUS_ONLY`——**仅**要求纠正需求编号引用与文档当前事实；
+- `business_implementation_review_status=CORRECT_AND_PRESERVED`——业务实现被判为正确并保留，**不被推翻**；
+- `browser_evidence_review_status=APPROVED_FOR_IMPLEMENTATION_REVIEW`——R0 浏览器证据被认可，**不重跑**。
+
+### 11.2 本报告内的需求编号引用错误（只在 R1 记录中说明，**不回改原文字节**）
+
+- §3.3 实现文件清单中写为：`frontend/src/views/data-source-run-state/components/DataSourceSnapshotQueryBar.spec.ts`（**修改**，追加“重置按钮固定几何（`DSS-REQ-091`）”describe 块，92 → 103 个用例）。
+- 该引用**错误**：查询/重置按钮固定宽度属于 `DSS-REQ-090`，不属于 `DSS-REQ-091`；**正确值应为 `DSS-REQ-090`**。
+- 同一 §3.2、§3.3 中 `frontend/src/layouts/MainLayout.vue` 与 `MainLayout.spec.ts` 的“真实主内容滚动容器稳定 scrollbar gutter”描述对应 `DSS-REQ-091`，该对应关系本来就正确，R1 未改动其业务含义。
+- 按 R1“只追加、不改写原文字节”的约束，上述错误引用保留在本节之前的历史字节中；其正确口径以本节为准。
+
+### 11.3 该错误的影响边界
+
+- 只影响**需求编号的文字引用**，不涉及任何可执行逻辑、CSS 声明、断言、测试步骤、fixture 或 mock；
+- 不改变业务实现与 CSS（“查询”/“重置”`62px`、“立即刷新”`110px`；`scrollbar-gutter: stable` 仅作用于 `DataSourceRunState` 路由的真实主内容滚动容器 `.content-area`）；
+- 不改变 R0 浏览器几何实测结果（四档视口长/短两态 `clientWidth` 逐档完全相等、七列表头 `x`/`width` 差值全 `0`、查询/重置/立即刷新三按钮自矩形差值全 `0`、机器判定 `114/114 PASS`、`0.001px` 负向注入退出码 `1`）；
+- 不改变验收基线（既有 `DSS-AC-001~113` 仍 `PASS 113 / FAIL 0 / BLOCKED 0 / NOT_RUN 0`；`DSS-AC-114~118` 仍全部 `NOT_RUN`）。
+
+### 11.4 R1 同时执行的文档当前事实纠正
+
+8 份入口文档（`docs/features/README.md` 与 `docs/features/data-source-snapshot-status/` 下 `README.md`、`REQUIREMENTS.md`、`ACCEPTANCE.md`、`DESIGN.md`、`UI.md`、`API.md`、`DATABASE.md`）中，本轮状态由实现前口径的当前语气改为带日期与任务编号、且注明“已由实现任务处理完毕”的历史事实。当前事实统一为：
+
+```text
+query_button_and_table_layout_stability_document_status=APPROVED
+query_button_and_table_layout_stability_implementation_status=IMPLEMENTED_ADJUSTMENT_PENDING_REVIEW
+query_button_and_table_layout_stability_code_review_status=PENDING_CHATGPT_REVIEW
+query_button_and_table_layout_stability_human_visual_interaction_review_status=NOT_RUN
+query_button_and_table_layout_stability_acceptance_status=NOT_RUN
+query_button_and_table_layout_stability_acceptance_not_run_count=5
+pending_user_review=NO
+pending_user_confirmation_count=0
+```
+
+统一下一入口更新为 `CHATGPT_QUERY_BUTTON_AND_TABLE_LAYOUT_STABILITY_IMPLEMENTATION_R1_REVIEW_FROM_GIT_THEN_PROJECT_OWNER_VISUAL_INTERACTION_REVIEW`；R0 入口 `CHATGPT_QUERY_BUTTON_AND_TABLE_LAYOUT_STABILITY_IMPLEMENTATION_REVIEW_FROM_GIT_THEN_PROJECT_OWNER_VISUAL_INTERACTION_REVIEW` 保留为 2026-09-15 R0 实现提交后的历史入口，已由本 R1 纠正任务处理，不构成当前直接值。
+
+### 11.5 追加写入证明（append-only）
+
+| 项 | 值 |
+|---|---|
+| 基准提交 | `d77e174a912daf852837c9658f13672918fc766e` |
+| 追加前字节数（基准提交） | `23728` |
+| 追加前 SHA-256（基准提交） | `4ec9764ccc62b3a1afad5cb2dd67de1d153898e9a396975b8b879364fa2eb9a5` |
+| 原有字节为追加后文件的完整前缀 | `true`（逐字节前缀比较证明，见 R1 证据 `scripts/verify-report-append-only.py`） |
+| 追加后字节数与 SHA-256 | 记于 R1 证据 `records/append-only-proof.txt`（文件无法内嵌自身哈希，故不写入本文件） |
+| `git diff --numstat` 删除行数 | `0` |
+
+R1 未推翻、未重跑 R0 业务实现与浏览器证据；`DSS-AC-114~118` 共 5 条仍全部 `NOT_RUN`。**实现完成不等于代码复审通过、不等于本轮 5 条新增验收已执行、不等于最终接受收口**；本轮以 ChatGPT 从远程 Git 的 R1 实现复审与项目负责人对 `5173` 的人工视觉交互复核为下一入口。

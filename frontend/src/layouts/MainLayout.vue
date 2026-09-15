@@ -59,7 +59,7 @@ const isDataSourceRunState = computed(() => route.name === 'DataSourceRunState')
   background-color: #f0f2f5;
 }
 
-/* Feature 私有路由作用域滚动条槽位（DSS-REQ-090）：只有同时带 .dss-stable-gutter 的 .content-area
+/* Feature 私有路由作用域滚动条槽位（DSS-REQ-091）：只有同时带 .dss-stable-gutter 的 .content-area
    才保留稳定纵向滚动条槽位，使滚动条在长/短结果之间出现或消失时不改变 clientWidth。
    通用 .content-area 不声明 scrollbar-gutter，其他路由保持浏览器默认行为；
    不使用 overflow-y: scroll 永久强制滚动条，也不做运行时宽度补偿。 */

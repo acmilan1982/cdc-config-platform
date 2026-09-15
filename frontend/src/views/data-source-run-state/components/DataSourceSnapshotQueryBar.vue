@@ -500,7 +500,7 @@ defineExpose({ reset: onReset })
   border-color: #27272a;
   color: #ffffff;
 }
-/* 重置按钮几何锁（DSS-REQ-091）：width / min-width / max-width / flex-basis 四值同锁 62px，与“查询”
+/* 重置按钮几何锁（DSS-REQ-090）：width / min-width / max-width / flex-basis 四值同锁 62px，与“查询”
    按钮同宽（R1 统一口径：width = min-width = max-width = flex-basis = 62px）；box-sizing: border-box
    使 62px 为含边框外框宽度，flex-grow/shrink: 0 阻止被 .dss-q-actions 拉伸或压缩，因此本按钮自身空闲
    稳定态、成功态与失败态外框 x/y/width/height 零位移。仅新增固定几何约束：既有高度 30px、padding

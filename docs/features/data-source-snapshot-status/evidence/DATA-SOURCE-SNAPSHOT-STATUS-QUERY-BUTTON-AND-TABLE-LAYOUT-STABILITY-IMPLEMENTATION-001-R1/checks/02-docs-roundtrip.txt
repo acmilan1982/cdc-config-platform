@@ -1,0 +1,10 @@
+file=README.md  base_bytes=257247  cur_bytes=263703  r1_block_bytes=3536  ops=3  restored_equals_base=True  unauthorized_diff_count=0
+file=data-source-snapshot-status/README.md  base_bytes=327111  cur_bytes=332281  r1_block_bytes=3536  ops=3  restored_equals_base=True  unauthorized_diff_count=0
+file=data-source-snapshot-status/REQUIREMENTS.md  base_bytes=333099  cur_bytes=339292  r1_block_bytes=3536  ops=4  restored_equals_base=True  unauthorized_diff_count=0
+file=data-source-snapshot-status/ACCEPTANCE.md  base_bytes=338051  cur_bytes=343221  r1_block_bytes=3536  ops=3  restored_equals_base=True  unauthorized_diff_count=0
+file=data-source-snapshot-status/DESIGN.md  base_bytes=357666  cur_bytes=364291  r1_block_bytes=3536  ops=6  restored_equals_base=True  unauthorized_diff_count=0
+file=data-source-snapshot-status/UI.md  base_bytes=291225  cur_bytes=297662  r1_block_bytes=3536  ops=5  restored_equals_base=True  unauthorized_diff_count=0
+file=data-source-snapshot-status/API.md  base_bytes=120271  cur_bytes=125441  r1_block_bytes=3536  ops=3  restored_equals_base=True  unauthorized_diff_count=0
+file=data-source-snapshot-status/DATABASE.md  base_bytes=115627  cur_bytes=120797  r1_block_bytes=3536  ops=3  restored_equals_base=True  unauthorized_diff_count=0
+total_files=8  bad=0
+docs_roundtrip_status=PASS

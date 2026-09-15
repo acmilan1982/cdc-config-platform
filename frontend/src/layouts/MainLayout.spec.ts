@@ -9,7 +9,7 @@ import ElementPlus from 'element-plus'
 import MainLayout from './MainLayout.vue'
 
 /**
- * DSS-REQ-090：仅“数据源运行状态”路由的真实主内容纵向滚动容器保留稳定 scrollbar gutter。
+ * DSS-REQ-091：仅“数据源运行状态”路由的真实主内容纵向滚动容器保留稳定 scrollbar gutter。
  * 判定基于同一挂载实例上的响应式路由切换，而不是两个互不相关的静态字符串快照。
  */
 
@@ -103,7 +103,7 @@ function layoutCode(): string {
     .replace(/^\s*\/\/.*$/gm, '')
 }
 
-describe('MainLayout 路由作用域稳定滚动条槽位（DSS-REQ-090）', () => {
+describe('MainLayout 路由作用域稳定滚动条槽位（DSS-REQ-091）', () => {
   it('目标路由下 .content-area 带 Feature 私有 stable-gutter class', async () => {
     const { wrapper, router } = await mountLayout('/monitor/data-source-state')
     expect(router.currentRoute.value.name).toBe(TARGET_ROUTE_NAME)

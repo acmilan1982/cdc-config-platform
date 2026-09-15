@@ -1,0 +1,14 @@
+# 定向测试（仅证明 §5 注释/测试显示名改动未破坏用例发现与执行；不作为正式验收，不替代 DSS-AC-114~118）
+# worktree: /agent/dss-query-button-table-layout-implementation-001-r1  base: d77e174a912daf852837c9658f13672918fc766e
+# 命令: node node_modules/.bin/vitest run src/layouts/MainLayout.spec.ts src/views/data-source-run-state/components/DataSourceSnapshotQueryBar.spec.ts --reporter=basic
+
+
+ RUN  v1.6.1 /agent/dss-query-button-table-layout-implementation-001-r1/frontend
+
+ ✓ src/layouts/MainLayout.spec.ts  (10 tests) 339ms
+ ✓ src/views/data-source-run-state/components/DataSourceSnapshotQueryBar.spec.ts  (103 tests) 13408ms
+
+ Test Files  2 passed (2)
+      Tests  113 passed (113)
+   Start at  15:14:22
+   Duration  15.57s (transform 609ms, setup 93ms, collect 2.51s, tests 13.75s, environment 1.04s, prepare 216ms)

@@ -1,0 +1,14 @@
+report_path=docs/features/data-source-snapshot-status/reports/DATA-SOURCE-SNAPSHOT-STATUS-QUERY-BUTTON-AND-TABLE-LAYOUT-STABILITY-IMPLEMENTATION-001.md
+base_commit=d77e174a912daf852837c9658f13672918fc766e
+base_bytes=23728
+base_sha256=4ec9764ccc62b3a1afad5cb2dd67de1d153898e9a396975b8b879364fa2eb9a5
+current_bytes=28659
+current_sha256=9e23d546901ab0682f8184287a786c919816a82d05457cd35de01dddbc40d1ca
+base_is_complete_prefix_of_current=True
+appended_bytes=4931
+appended_line_count=56
+r1_section_header_occurrences=1
+appended_h2_section_count=1
+deleted_or_replaced_bytes_count=0
+git_diff_numstat=
+report_append_only_status=PASS

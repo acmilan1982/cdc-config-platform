@@ -1,0 +1,15 @@
+[PASS] §9-1  git-diff-check                 :: git diff --check exit=0 ; git diff --cached --check exit=0（工作区未暂存，后者为空）
+[PASS] §9-2  whitelist-only                 :: changed_paths=15 outside_whitelist=0
+[PASS] §9-5  requirement-rows               :: business_rows=91 unique_ids=91 set==001..091=True byte_identical=True
+[PASS] §9-6  acceptance-rows                :: business_rows=118 unique_ids=118 set==001..118=True byte_identical=True
+[PASS] §9-7  acceptance-statistics          :: PASS=113 FAIL=0 BLOCKED=0 NOT_RUN=5 (total=118)
+[PASS] §9-8  design-traceability            :: §14.2+§14.3 unique REQ=91/91 AC=118/118  mapping_block_byte_identical=True
+[PASS] §9-9  api-db-contract                :: restored_equals_base=[('API.md', True), ('DATABASE.md', True)]；两文件的声明编辑均为状态表/记录措辞（各 3 处）
+[PASS] §9-11 r0-evidence-frozen             :: base_files=32  git diff d77e174 -- <R0 evidence> => ''
+[PASS] §9-12 requirement-reference-conflict :: conflict_count=0 []
+[PASS] §9-14 credential-scan                :: scanned=24 secret_hits=0 []
+[PASS] §9-15 worktree-preservation          :: baseline_worktrees=53 drift=0 main_worktree_unchanged=True new_worktree_present=True
+[PASS] §9-16 frozen-boundary                :: tracked_changed=14 expected=14 ；backend/SQL/配置/依赖/锁文件/路由/全局样式/其他既有报告均不在变更集内
+
+checks_run=12  failed=0
+section9_core_status=PASS

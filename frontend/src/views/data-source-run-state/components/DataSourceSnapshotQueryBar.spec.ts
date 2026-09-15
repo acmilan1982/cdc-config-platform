@@ -1431,7 +1431,7 @@ describe('DataSourceSnapshotQueryBar R1 稳定身份实现约束（R1 §6.2）',
 // 判定基准：每个按钮只与自身稳定基准比较；查询与重置只要求宽度集合均为 [62]，不比较绝对 x。
 // ---------------------------------------------------------------------------
 
-describe('DataSourceSnapshotQueryBar 重置按钮固定几何（DSS-REQ-091）', () => {
+describe('DataSourceSnapshotQueryBar 重置按钮固定几何（DSS-REQ-090）', () => {
   /** 去注释后提取 `.dss-q-actions .dss-reset-btn` 规则体：契约断言只看真实声明。 */
   function resetRule(): string {
     const css = queryBarCss()
