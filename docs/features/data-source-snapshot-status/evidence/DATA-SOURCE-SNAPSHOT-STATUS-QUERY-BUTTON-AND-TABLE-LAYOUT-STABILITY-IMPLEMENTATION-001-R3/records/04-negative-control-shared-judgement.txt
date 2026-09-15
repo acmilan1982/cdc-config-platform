@@ -1,0 +1,26 @@
+# NEGATIVE-CONTROL-DO-NOT-USE-AS-BUSINESS-EVIDENCE
+# 被测生产脚本=docs/features/data-source-snapshot-status/evidence/DATA-SOURCE-SNAPSHOT-STATUS-QUERY-BUTTON-AND-TABLE-LAYOUT-STABILITY-IMPLEMENTATION-001-R2/scripts/run-checks.py
+# 生产脚本 sha256=d2601323030ded81ec6d31db22fd7d3baceffab344342f5038015c6f33ac29f7
+# worktree=/agent/dss-query-button-table-layout-implementation-001-r3
+# 共享逻辑入口=judge_paths, parse_path_lines, parse_porcelain
+# 临时目录=/tmp/r3-negative-control-yponma85（合成样例，仅存在于 /tmp）
+
+# 前置：索引条目数=29  工作区变更条目数=29  真实 frontend 上界路径已存在=False
+
+[PASS] 1-positive-pure-path-intact :: parse_path_lines('docs/features/data-source-snapshot-status/README.md') == ['docs/features/data-source-snapshot-status/README.md']
+[PASS] 2-positive-whitelisted-accepted :: judge_paths([白名单路径, R3 前缀路径]) == []
+[PASS] 3-negative-unauthorized-rejected-by-shared-judge :: judge_paths(['frontend/src/unauthorized-negative-control.vue']) == ['frontend/src/unauthorized-negative-control.vue']
+[PASS] 4-negative-subprocess-nonzero-exit :: exit_code=1（期望非 0）
+       | judge_mode=VERIFY_PATHS
+       | judge_input=/tmp/r3-negative-control-yponma85/synthetic-paths.txt
+       | judged_path_count=1
+       | failed_path_count=1
+       |   path='frontend/src/unauthorized-negative-control.vue'  in_whitelist=False  untruncated=True
+       |   OUTSIDE_WHITELIST: 'frontend/src/unauthorized-negative-control.vue'
+       | final_result=FAIL
+[PASS] 4b-negative-subprocess-explicit-report :: stdout 含 OUTSIDE_WHITELIST=True
+[PASS] 5-no-pollution :: 索引未变=True 工作区未变=True 未创建真实 frontend/src/unauthorized-negative-control.vue=True
+
+# 合成样例清理=True（未删除或改动任何真实项目路径）
+final_result=PASS
+self_test_exit_code=0

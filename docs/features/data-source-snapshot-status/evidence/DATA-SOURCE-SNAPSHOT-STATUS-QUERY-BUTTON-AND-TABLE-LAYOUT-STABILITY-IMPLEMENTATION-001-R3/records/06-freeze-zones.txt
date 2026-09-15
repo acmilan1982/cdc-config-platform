@@ -1,0 +1,24 @@
+# 冻结区零差异证明（相对基准提交 09e268f905d083d6237b4dfc446198b4c5157661）
+
+git diff --name-only 09e268f -- frontend           => 0 个文件
+git diff --name-only 09e268f -- backend            => 0 个文件
+git diff --name-only 09e268f -- package.json       => 0 个文件
+git diff --name-only 09e268f -- package-lock.json  => 0 个文件
+git diff --name-only 09e268f -- pnpm-lock.yaml     => 0 个文件
+git diff --name-only 09e268f -- yarn.lock          => 0 个文件
+git diff --name-only 09e268f -- *.sql              => 0
+git diff --name-only 09e268f -- *config*          => 0
+git diff --name-only 09e268f -- *test* *.spec.*   => 1
+
+## 上述 *test*/*.spec.* 命中明细（docs/** 为文档与证据工具，非项目测试代码）
+  docs/features/data-source-snapshot-status/evidence/DATA-SOURCE-SNAPSHOT-STATUS-QUERY-BUTTON-AND-TABLE-LAYOUT-STABILITY-IMPLEMENTATION-001-R3/checks/r3-negative-control-self-test.py
+
+## §10 点名的四个前端文件（应为零差异）
+  frontend/src/layouts/MainLayout.vue                                                             diff_lines=0
+  frontend/src/layouts/MainLayout.spec.ts                                                         diff_lines=0
+  frontend/src/views/data-source-run-state/components/DataSourceSnapshotQueryBar.vue              diff_lines=0
+  frontend/src/views/data-source-run-state/components/DataSourceSnapshotQueryBar.spec.ts          diff_lines=0
+
+## 全量不可变路径族的零差异确认
+  R0/R1 报告与证据（git diff --name-only）=> 0
+  （注：R0 证据目录的路径前缀与 R0/实现报告目录不同，上行为 0 即零差异）

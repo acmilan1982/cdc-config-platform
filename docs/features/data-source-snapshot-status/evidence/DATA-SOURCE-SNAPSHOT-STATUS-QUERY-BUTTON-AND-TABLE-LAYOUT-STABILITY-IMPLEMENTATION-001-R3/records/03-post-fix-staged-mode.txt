@@ -1,0 +1,57 @@
+# 修复后脚本真实执行（--staged 模式；无位置参数，脚本自解析路径）
+# 脚本=docs/features/data-source-snapshot-status/evidence/DATA-SOURCE-SNAPSHOT-STATUS-QUERY-BUTTON-AND-TABLE-LAYOUT-STABILITY-IMPLEMENTATION-001-R2/scripts/run-checks.py
+# sha256=d2601323030ded81ec6d31db22fd7d3baceffab344342f5038015c6f33ac29f7
+
+[PASS] §14-1  git-diff-check                         :: git diff --check exit=0
+[PASS] §14-2  whitelist-only-changed-paths           :: changed_paths=29 outside_whitelist=0
+[PASS] §14-3  frontend-zero-diff                     :: git diff 09e268f -- frontend => 0 个文件 []
+[PASS] §14-4  backend-zero-diff                      :: git diff 09e268f -- backend => 0 个文件 []
+[PASS] §14-5  test-files-zero-diff                   :: git diff 09e268f -- *test* *.spec.* => 项目测试文件 0 个 []（另排除 docs/** 非测试代码 1 个 ['docs/features/data-source-snapshot-status/evidence/DATA-SOURCE-SNAPSHOT-STATUS-QUERY-BUTTON-AND-TABLE-LAYOUT-STABILITY-IMPLEMENTATION-001-R3/checks/r3-negative-control-self-test.py']）
+[PASS] §14-6  deps-lock-sql-config-zero-diff         :: git diff 09e268f -- 依赖/锁文件/SQL/配置 => 0 个文件 []
+[PASS] §14-7  requirement-rows                       :: business_rows=91 unique=91 set==001..091=True byte_identical=True
+[PASS] §14-8  acceptance-rows                        :: business_rows=118 unique=118 set==001..118=True byte_and_status_identical=True
+[PASS] §14-9  acceptance-statistics                  :: PASS=113 FAIL=0 BLOCKED=0 NOT_RUN=5 (total=118)
+[PASS] §14-10 design-traceability-14.2-14.3          :: unique REQ=91/91 AC=118/118 mapping_block_byte_identical=True
+[PASS] §14-11 design-38-non-authorized-body          :: region_restored_equals_base=True；base+declared=True(bytes=376983)
+[PASS] §14-12 ui-32-non-authorized-body              :: region_restored_equals_base=True；base+declared=True(bytes=310296)
+[PASS] §14-13 api-database-contract-body             :: API(region_restored_equals_base=True) DATABASE(region_restored_equals_base=True) base+declared=True
+[PASS] §14-14 r0-r1-report-evidence-frozen           :: R0 证据=32 文件 R1 证据=15 文件 报告+证据差异=零差异
+[PASS] §14-15 r2-report-append-only                  :: base_bytes=18023 now_bytes=22729 complete_prefix=True numstat_deletions=0 deleted_lines=0
+[PASS] §14-16 r2-evidence-readme-append-only         :: base_bytes=0 now_bytes=3205 complete_prefix=True numstat_deletions=0
+[PASS] §14-17 r2-other-evidence-frozen               :: R2 证据目录内除 README 与 run-checks.py 外的差异=零差异 / 变更=零差异
+[PASS] §14-24 stale-reproducibility-claim-qualified  :: 八份文档内过强声明=0；R2 报告原句仍在（基准内=True/True）；纠正章节与限定语齐全=True
+[PASS] §14-25 current-status-and-next-entry-r3       :: 八份文档当前下一入口均为 R3 入口、状态令牌齐全、R2/R1 入口仅为已限定历史=是
+[PASS] §14-26 dss-ac-114-118-still-not-run           :: AC-114~118=5 条且全 NOT_RUN=True
+[PASS] §14-27 credential-scan                        :: scanned=31 secret_hits=0 []
+[PASS] §14-28 no-trailing-whitespace-and-doc-validation :: 行尾空白=0 []；项目文档校验工具=NOT_AVAILABLE
+[PASS] §14-34 worktree-preservation                  :: baseline_worktrees=55 既有 worktree 漂移=0 main_unchanged=True 本任务 worktree=base/detached=True
+[PASS] §14-35 existing-services-untouched            :: 快照={'5173': '20567', '8080': '20509'} 当前={'5173': '20567', '8080': '20509'} 一致=True
+[PASS] §14-20 pure-path-preserved                    :: parse_path_lines('docs/features/data-source-snapshot-status/README.md') == ['docs/features/data-source-snapshot-status/README.md']（完整、未截断）
+[PASS] §14-21 unauthorized-path-rejected-by-shared-judge :: judge_paths(['frontend/src/unauthorized-negative-control.vue']) == ['frontend/src/unauthorized-negative-control.vue']（共享判定真实拒绝）
+[PASS] §14-22 negative-control-subprocess-nonzero    :: --verify-paths 真实子进程 exit=1（期望非 0）；stdout 末行=['final_result=FAIL']
+[PASS] §14-23 negative-control-did-not-touch-project :: index 与工作区未变=True；未创建真实 frontend/src/unauthorized-negative-control.vue=True
+[PASS] §14-29 git-diff-cached-check                  :: git diff --cached --check exit=0
+[PASS] §14-30 staged-paths-whitelist                 :: staged=29 outside_whitelist=0；示例完整路径=['docs/features/README.md']
+[PASS] §14-31 worktree-index-script-byte-identity    :: git diff --exit-code -- <脚本> exit=0；worktree==index bytes=True
+[PASS] §14-32 git-show-index-script-byte-identity    :: git show :<脚本> == 工作树脚本 bytes=True (31515 bytes)
+[PASS] §14-33 all-evidence-staged-no-leftover        :: 未暂存的工作区修改=0 []；未跟踪新增=0 []
+
+mode=STAGED
+worktree=/agent/dss-query-button-table-layout-implementation-001-r3
+base=09e268f905d083d6237b4dfc446198b4c5157661
+judged_path_count=58
+checks_run=33  failed=0
+final_result=PASS
+staged_mode_exit_code=0
+
+## 工作树脚本 与 index 脚本 的字节同一性（原始命令与真实退出码）
+$ git diff --exit-code -- docs/features/data-source-snapshot-status/evidence/DATA-SOURCE-SNAPSHOT-STATUS-QUERY-BUTTON-AND-TABLE-LAYOUT-STABILITY-IMPLEMENTATION-001-R2/scripts/run-checks.py
+  exit_code=0
+$ git diff --cached --name-only | wc -l
+29
+$ git show :docs/features/data-source-snapshot-status/evidence/DATA-SOURCE-SNAPSHOT-STATUS-QUERY-BUTTON-AND-TABLE-LAYOUT-STABILITY-IMPLEMENTATION-001-R2/scripts/run-checks.py > /tmp/r3-index-run-checks.py
+  exit_code=0
+$ cmp -s /tmp/r3-index-run-checks.py docs/features/data-source-snapshot-status/evidence/DATA-SOURCE-SNAPSHOT-STATUS-QUERY-BUTTON-AND-TABLE-LAYOUT-STABILITY-IMPLEMENTATION-001-R2/scripts/run-checks.py
+  cmp_exit_code=0
+  worktree_sha256=d2601323030ded81ec6d31db22fd7d3baceffab344342f5038015c6f33ac29f7
+  index_sha256=d2601323030ded81ec6d31db22fd7d3baceffab344342f5038015c6f33ac29f7

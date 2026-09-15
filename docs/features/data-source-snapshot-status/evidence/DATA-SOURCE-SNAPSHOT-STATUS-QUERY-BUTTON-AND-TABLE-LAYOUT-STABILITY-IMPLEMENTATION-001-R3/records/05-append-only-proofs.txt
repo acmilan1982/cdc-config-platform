@@ -1,0 +1,25 @@
+# R2 报告与 R2 证据 README 的 append-only（字节前缀）证明
+# 基准提交=09e268f905d083d6237b4dfc446198b4c5157661
+
+path=docs/features/data-source-snapshot-status/reports/DATA-SOURCE-SNAPSHOT-STATUS-QUERY-BUTTON-AND-TABLE-LAYOUT-STABILITY-IMPLEMENTATION-001-R2.md
+  base_exists=True base_bytes=18023 now_bytes=22729
+  base_sha256=0ee43d0f1a53f8d52fd86ca35f28f9c8c4c468fade0b9636f3d0fea015fe7c11
+  now_sha256=2ab95c0e2aef5ff54a7b0e0168f57a796effd6380934b5ffec35e42d4d63d558
+  base_bytes_is_complete_prefix_of_now=True
+  appended_bytes=4706
+  bytes_removed=0
+
+path=docs/features/data-source-snapshot-status/evidence/DATA-SOURCE-SNAPSHOT-STATUS-QUERY-BUTTON-AND-TABLE-LAYOUT-STABILITY-IMPLEMENTATION-001-R2/README.md
+  base_exists=False base_bytes=0 now_bytes=3205
+  base_sha256=N/A(基准不存在)
+  now_sha256=f445589fbc4431020e5e952527b898d740a558857dc4164b2d178fa3a834d24c
+  base_bytes_is_complete_prefix_of_now=True
+  appended_bytes=3205
+  bytes_removed=0
+
+## numstat（新增/删除行；删除列须为 0）
+38	0	docs/features/data-source-snapshot-status/evidence/DATA-SOURCE-SNAPSHOT-STATUS-QUERY-BUTTON-AND-TABLE-LAYOUT-STABILITY-IMPLEMENTATION-001-R2/README.md
+46	0	docs/features/data-source-snapshot-status/reports/DATA-SOURCE-SNAPSHOT-STATUS-QUERY-BUTTON-AND-TABLE-LAYOUT-STABILITY-IMPLEMENTATION-001-R2.md
+
+## 删除行计数（结果须为 0）
+0

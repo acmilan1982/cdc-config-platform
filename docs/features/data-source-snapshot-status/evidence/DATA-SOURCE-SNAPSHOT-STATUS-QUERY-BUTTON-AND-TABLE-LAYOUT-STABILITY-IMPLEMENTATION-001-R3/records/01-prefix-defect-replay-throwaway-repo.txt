@@ -1,0 +1,57 @@
+# ===== 修复前复现：R2 已提交脚本在 --staged 下的路径截取缺陷 =====
+# 复现方式：/tmp 下的抛弃式仓库（基准 docs/ 目录副本 + 一个额外暂存的合法白名单路径探针）
+# 为什么用抛弃式仓库：R3 任务禁止污染真实 index；该缺陷只在 --staged 有内容时显现
+# NEGATIVE-CONTROL / DO-NOT-USE-AS-BUSINESS-EVIDENCE
+
+# 脱敏说明：本记录中的开发库账号/口令字面量与 Authorization 头正则字面量
+# 均为"被扫描脚本源码内部的正则字面量"在扫描结论中的回显，
+# 已替换为 <REDACTED-...> 占位符；本记录不含任何可用凭据、口令或完整连接串。
+
+# ===== 修复前复现：R2 已提交脚本的 --staged 路径截取缺陷 =====
+# original_script=/tmp/dss-r3/repro/original-r2-run-checks.py
+# original_script_sha256=cc02ff85cd5e0c02b26da9f29850559c2e48be026620b441c9680188c1326b89
+# throwaway_repo=/tmp/dss-r3/repro/throwaway-repo  (NEGATIVE-CONTROL / DO-NOT-USE-AS-BUSINESS-EVIDENCE)
+# 说明：仓库内容 = 基准提交的 docs/ 目录副本 + 一个额外暂存的合法白名单路径探针；
+#       真实项目工作区与 index 均未被触碰。
+# base=29267b37f161ffd11c2c8fe77448537b45cf4f1a
+
+# 暂存内容（真实 git 输出，纯路径、不截断）
+  raw: docs/features/data-source-snapshot-status/evidence/DATA-SOURCE-SNAPSHOT-STATUS-QUERY-BUTTON-AND-TABLE-LAYOUT-STABILITY-IMPLEMENTATION-001-R2/NEGATIVE-CONTROL-probe-DO-NOT-USE-AS-BUSINESS-EVIDENCE.txt
+
+# 原始脚本第 434 行的解析结果（截断前 3 个字符）
+  parsed: ['s/features/data-source-snapshot-status/evidence/DATA-SOURCE-SNAPSHOT-STATUS-QUERY-BUTTON-AND-TABLE-LAYOUT-STABILITY-IMPLEMENTATION-001-R2/NEGATIVE-CONTROL-probe-DO-NOT-USE-AS-BUSINESS-EVIDENCE.txt']
+# 正确解析（完整行）
+  parsed: ['docs/features/data-source-snapshot-status/evidence/DATA-SOURCE-SNAPSHOT-STATUS-QUERY-BUTTON-AND-TABLE-LAYOUT-STABILITY-IMPLEMENTATION-001-R2/NEGATIVE-CONTROL-probe-DO-NOT-USE-AS-BUSINESS-EVIDENCE.txt']
+
+# 真实执行原始脚本（--staged）
+[PASS] §10-1  git-diff-check                     :: git diff --check exit=0
+[PASS] §10-2  whitelist-only-changed-paths       :: changed_paths=1 outside_whitelist=0
+[PASS] §10-3  frontend-zero-diff                 :: git diff 29267b3 -- frontend => 0 个文件 []
+[PASS] §10-4  backend-zero-diff                  :: git diff 29267b3 -- backend => 0 个文件 []
+[PASS] §10-5  test-files-zero-diff               :: git diff 29267b3 -- *test* *.spec.* => 0 个文件 []
+[PASS] §10-6  deps-lock-sql-config-zero-diff     :: git diff 29267b3 -- 依赖/锁文件/SQL/配置 => 0 个文件 []
+[PASS] §10-7  requirement-rows                   :: business_rows=91 unique=91 set==001..091=True byte_identical=True
+[PASS] §10-8  acceptance-rows                    :: business_rows=118 unique=118 set==001..118=True byte_and_status_identical=True
+[PASS] §10-9  acceptance-statistics              :: PASS=113 FAIL=0 BLOCKED=0 NOT_RUN=5 (total=118)
+[PASS] §10-10 design-traceability-14.2-14.3      :: unique REQ=91/91 AC=118/118 mapping_block_byte_identical=True
+[FAIL] §10-11 design-38-non-authorized-body      :: region_restored_equals_base=False
+[FAIL] §10-12 ui-32-non-authorized-body          :: region_restored_equals_base=False
+[FAIL] §10-13 api-database-contract-body         :: API(region_restored_equals_base=False) DATABASE(region_restored_equals_base=False)
+[PASS] §10-14 r0-report-frozen                   :: git diff 29267b3 -- R0 实现报告 => 零差异
+[PASS] §10-15 r0-r1-existing-evidence-frozen     :: R0 证据=32 文件 R1 证据=15 文件 差异=零差异
+[FAIL] §10-16 r1-report-append-only              :: base_bytes=21334 now_bytes=21334 complete_prefix=True numstat_deletions=-1 deleted_lines=0
+[PASS] §10-17 r0-r1-file-facts-consistent        :: 8 份文档分层计数令牌缺失=无
+[PASS] §10-18 unqualified-fact-conflation-zero   :: 未限定错误混写计数=0 []
+[PASS] §10-19 r0-file-counts                     :: 八份文档均含 r0_production_source_file_count=2 / r0_test_file_count=2 / r0_total_frontend_changed_file_count=4
+[PASS] §10-20 r1-reference-counts                :: 八份文档均含 r1_reference_corrected_file_count=4 / r1_reference_corrected_location_count=5
+[PASS] §10-21 status-awaiting-r2-and-114-118-not-run :: 八份文档状态令牌一致=True；AC-114~118=5 条且全 NOT_RUN=True []
+[PASS] §10-22 current-next-entry-is-r2           :: 八份文档当前下一入口均为 R2 入口、R1 入口仅为已限定历史=是
+[FAIL] §10-23 credential-scan                    :: scanned=23 secret_hits=2 [('docs/features/data-source-snapshot-status/evidence/DATA-SOURCE-SNAPSHOT-STATUS-QUERY-BUTTON-AND-TABLE-LAYOUT-STABILITY-IMPLEMENTATION-001-R2/scripts/run-checks.py', '<REDACTED-DEV-DB-LITERAL>'), ('docs/features/data-source-snapshot-status/evidence/DATA-SOURCE-SNAPSHOT-STATUS-QUERY-BUTTON-AND-TABLE-LAYOUT-STABILITY-IMPLEMENTATION-001-R2/scripts/run-checks.py', '<REDACTED-AUTH-HEADER-REGEX-LITERAL>\')]
+[PASS] §10-24 no-trailing-whitespace-and-doc-validation :: 行尾空白=0 []；项目文档校验工具=NOT_AVAILABLE
+[FAIL] §10-25 worktree-preservation              :: baseline_worktrees=0 既有 worktree 漂移=0 main_unchanged=False r2_worktree_present=True r2_head=base/detached=False
+[PASS] §10-26 git-diff-cached-check              :: git diff --cached --check exit=0
+[FAIL] §10-27 staged-paths-whitelist             :: staged=1 outside_whitelist=1  [['s/features/data-source-snapshot-status/evidence/DATA-SOURCE-SNAPSHOT-STATUS-QUERY-BUTTON-AND-TABLE-LAYOUT-STABILITY-IMPLEMENTATION-001-R2/NEGATIVE-CONTROL-probe-DO-NOT-USE-AS-BUSINESS-EVIDENCE.txt']]
+
+checks_run=27  failed=7
+section10_status=FAIL
+original_script_exit_code=1

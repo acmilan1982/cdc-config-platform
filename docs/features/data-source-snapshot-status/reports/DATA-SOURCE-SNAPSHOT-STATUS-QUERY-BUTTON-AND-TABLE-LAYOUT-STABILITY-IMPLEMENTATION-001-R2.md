@@ -230,3 +230,49 @@ pending_user_confirmation_count=0
 
 - 本轮实现完成**不等于**代码复审通过、**不等于**本轮 5 条新增验收已执行、**不等于**最终接受收口；
 - 下一入口：`CHATGPT_QUERY_BUTTON_AND_TABLE_LAYOUT_STABILITY_IMPLEMENTATION_R2_REVIEW_FROM_GIT_THEN_PROJECT_OWNER_VISUAL_INTERACTION_REVIEW`——即先由 ChatGPT 从远程 Git 对 R2 提交做实现复审，再由项目负责人对 `http://192.168.174.70:5173/monitor/data-source-state` 作人工视觉交互复核，之后再决定是否另立任务执行 `DSS-AC-114~118` 共 5 条新增验收。
+
+## 12. ChatGPT R2 复审与 R3 证据脚本纠正记录（append-only 追加，2026-09-15）
+
+> 本节由 `DATA-SOURCE-SNAPSHOT-STATUS-QUERY-BUTTON-AND-TABLE-LAYOUT-STABILITY-IMPLEMENTATION-001-R3` 在文末追加。基准 `09e268f905d083d6237b4dfc446198b4c5157661` 中本文件的全部原始字节构成修改后文件的**完整字节前缀**；未删除、未替换、未移动、未原位编辑任何既有内容。
+
+### 12.1 ChatGPT 从远程 Git 的 R2 复审结论
+
+```text
+chatgpt_r2_review_status=CHANGES_REQUIRED_EVIDENCE_SCRIPT_REPRODUCIBILITY_ONLY
+r2_document_fact_separation_review_status=APPROVED
+r2_business_implementation_status=PRESERVED_APPROVED
+r2_evidence_script_reproducibility_status=CHANGES_REQUIRED
+```
+
+R2 的文档事实分层结论、业务实现结论与状态纠正结论**均不被推翻**：本报告 §2～§6 的事实分层与 append-only 证明继续有效，§11 的状态与下一入口表述也未被撤销。本轮唯一需要纠正的是**证据工具的可复现性**。
+
+### 12.2 缺陷根因与修复前的真实复跑
+
+R2 提交中的 `scripts/run-checks.py` 副本在 `--staged` 分支写作：
+
+```python
+stg = [ln[3:].strip() for ln in git('diff', '--cached', '--name-only').stdout.splitlines() if ln.strip()]
+```
+
+`git diff --cached --name-only` 输出的是**裸路径**，不含 `XY ` 状态前缀；而同一脚本对 `git status --porcelain`（**含** `XY ` 前缀）使用 `ln[3:]` 是正确的。两种输出格式不同却用了同一种截取方式，于是 `--staged` 复跑会把每个已暂存路径的前 3 个字符无条件吃掉（例如 `docs/features/...` 变成 `s/features/...`），使**全部**合法白名单路径被误判为越界并返回非零退出码。这是确定性的解析缺陷，与仓库内容无关，可稳定复现。
+
+使用 R2 提交中的原始字节（未做任何修改）真实复跑的结果见 R3 证据目录 `records/` 下的修复前复跑记录：退出码为非零，输出同时给出被截断的解析结果与完整的真实路径。
+
+### 12.3 两个必须分开的事实
+
+- **R2 实际提交范围**：经独立检查合规。对提交 `09e268f...` 执行 `git show --name-only`，21 条路径全部属于 R2 白名单，`r2_changed_path_whitelist_independent_recheck_status=PASS`；
+- **R2 已提交脚本的可复现性**：失败，`r2_committed_evidence_script_staged_replay_status=FAIL_KNOWN_PARSER_DEFECT`。
+
+二者是两个事实，不得混写为「R2 已提交脚本自身可复跑成功」。
+
+### 12.4 本报告过强表述的限定
+
+本报告 §8 结尾的「校验脚本 `scripts/run-checks.py` 对每项断言失败均返回真实非零退出码；本清单结果由该脚本真实执行产生，未以"脚本成功运行"代替断言结论。」与 §9 文件清单中的「checks/01-section10-checks.txt                 # §10 校验输出（25 项全 PASS）」属于 R2 提交时的不准确可复现性声明，已由 R3 纠正：R2 提交中的 `scripts/run-checks.py` 副本在 `--staged` 分支无条件截断了路径前 3 个字符，因此该提交副本在今天复跑 `--staged` 会误报白名单失败，§10-27 的通过结论**不可**由该提交副本直接复现；R2 当时手工核验的对象是工作区中已修复但**未再次暂存**的副本。两个事实必须分开：**R2 实际提交范围**经独立检查合规（对 `09e268f...` 执行 `git show --name-only`，21 条路径全部属于 R2 白名单，`r2_changed_path_whitelist_independent_recheck_status=PASS`），而 **R2 已提交脚本的可复现性**确认为失败（`r2_committed_evidence_script_staged_replay_status=FAIL_KNOWN_PARSER_DEFECT`）。不得把二者混写为「R2 已提交脚本自身可复跑成功」。
+
+### 12.5 R3 修复内容与真实退出码
+
+R2 证据脚本 `scripts/run-checks.py` 已由 R3 修复：路径解析与白名单判定收敛为同一套共享纯函数 `parse_path_lines()` / `judge_paths()`（普通模式与 `--staged` 模式共用同一判定），`git status --porcelain` 的 `XY ` 前缀由独立的 `parse_porcelain()` 处理；新增 `--verify-paths <路径清单>` 负向自测入口；判定失败真实返回非零退出码，成功真实返回 0，异常不外吞。修复后真实退出码见 R3 报告 §5 与 R3 证据目录 `records/`。
+
+### 12.6 本轮未执行的范围
+
+R3 **未**重跑任何业务测试、**未**执行前端或后端构建、**未**做浏览器几何验证、**未**执行 `DSS-AC-114~118`、**未**开始正式验收、**未**访问数据库/ZooKeeper/Kafka、**未**启停 `5173`/`8080` 服务、**未**清理任何 worktree。证据脚本复跑只是证据工具的自我核验，**不得**写成正式验收。
