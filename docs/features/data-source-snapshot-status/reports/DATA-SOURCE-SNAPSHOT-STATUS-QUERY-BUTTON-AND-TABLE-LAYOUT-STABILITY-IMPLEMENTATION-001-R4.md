@@ -211,3 +211,125 @@ R3 旧入口保留为**明确已由 R4 接续的历史事实**，不再作为当
 | `records/11-r4-verify-full-output.txt` | §14 校验完整输出 |
 | `records/worktrees-at-start.txt` / `worktrees-at-end.txt` | worktree 起始/结束快照 |
 | `records/services-at-start.txt` | `5173`/`8080` 起始与结束快照 |
+
+
+## 11. 实现复审收口追加节（2026-09-15，`DATA-SOURCE-SNAPSHOT-STATUS-QUERY-BUTTON-AND-TABLE-LAYOUT-STABILITY-IMPLEMENTATION-REVIEW-CLOSEOUT-001` 严格文末追加）
+
+> 本节为任务 `DATA-SOURCE-SNAPSHOT-STATUS-QUERY-BUTTON-AND-TABLE-LAYOUT-STABILITY-IMPLEMENTATION-REVIEW-CLOSEOUT-001` 对本报告的**严格文末追加**。
+> 本节之前的全部字节为本报告在 `9d4b83f02970b64f25da3d233aa83e1a41572029` 中的原始内容，构成当前文件的完整字节前缀；
+> 追加过程删除字节 `0`、删除行 `0`，未原位修改任何既有行，未删除、未移动、未重排任何既有内容。
+> 本节不改变 R4 的任务性质：R4 仍为「纯文档、极小定向的结果事实纠正」；
+> 其 §2（按钮尺寸是固定宽度，不是高度）、§3（R2 evidence README 的真实基准状态）的纠正结论、
+> §5 的 append-only 证明与 §6 的冻结证明在本节追加后依然成立。
+
+### 11.1 ChatGPT 对 R4 的远程 Git 代码复审结论
+
+ChatGPT 已从远程 Git 对 R4 结果事实纠正提交 `9d4b83f02970b64f25da3d233aa83e1a41572029` 完成代码复审，结论：
+
+```text
+chatgpt_r4_implementation_review_status=APPROVED
+r4_result_fact_correction_review_status=APPROVED
+r3_evidence_script_correction_review_status=APPROVED
+business_implementation_review_status=APPROVED
+```
+
+据此，八份入口文档的 `query_button_and_table_layout_stability_code_review_status` 由本收口任务收口为 `APPROVED`。
+
+### 11.2 项目负责人人工视觉/交互复核结论
+
+```text
+project_owner_review_date=2026-09-15
+project_owner_review_url=http://192.168.174.70:5173/monitor/data-source-state
+project_owner_review_result=NO_ISSUES_FOUND
+project_owner_visual_interaction_review_status=APPROVED_BY_PROJECT_OWNER
+```
+
+项目负责人已于 2026-09-15 打开 `http://192.168.174.70:5173/monitor/data-source-state` 检查页面视觉效果与交互，
+并明确回复「我人工检查了，没有问题」。据此，`query_button_and_table_layout_stability_human_visual_interaction_review_status`
+收口为 `APPROVED_BY_PROJECT_OWNER`。
+
+**能力边界（不得扩写）**：该人工检查**仅**证明当前功能页面的视觉与交互效果没有发现问题。
+项目负责人**没有**重新执行前端自动化测试、**没有**重新执行四档视口机器断言、**没有**逐条检查机器证据、
+**没有**执行 `DSS-AC-114~118`，也**没有**作出正式验收或最终接受结论。
+本节不把该检查写成正式验收通过，也不把其结论外推到 `DSS-AC-114~118`。
+
+### 11.3 收口后八份入口文档当前直接值
+
+```text
+query_button_and_table_layout_stability_document_status=APPROVED
+query_button_and_table_layout_stability_implementation_status=IMPLEMENTED_ADJUSTMENT_PENDING_FORMAL_ACCEPTANCE
+query_button_and_table_layout_stability_code_review_status=APPROVED
+query_button_and_table_layout_stability_human_visual_interaction_review_status=APPROVED_BY_PROJECT_OWNER
+query_button_and_table_layout_stability_acceptance_status=NOT_RUN
+query_button_and_table_layout_stability_acceptance_not_run_count=5
+pending_user_review=NO
+pending_user_confirmation_count=0
+stable_scrollbar_gutter_route_scope=DATA_SOURCE_RUN_STATE_ONLY
+```
+
+即本报告 §7 所载的 `query_button_and_table_layout_stability_implementation_status=IMPLEMENTED_ADJUSTMENT_PENDING_REVIEW`、
+`query_button_and_table_layout_stability_code_review_status=PENDING_CHATGPT_REVIEW`、`query_button_and_table_layout_stability_human_visual_interaction_review_status=NOT_RUN`
+与下一入口 `CHATGPT_QUERY_BUTTON_AND_TABLE_LAYOUT_STABILITY_IMPLEMENTATION_R4_REVIEW_FROM_GIT_THEN_PROJECT_OWNER_VISUAL_INTERACTION_REVIEW`
+均为 2026-09-15 R4 结果事实纠正任务提交并推送时点的**历史直接值**，已由 `DATA-SOURCE-SNAPSHOT-STATUS-QUERY-BUTTON-AND-TABLE-LAYOUT-STABILITY-IMPLEMENTATION-REVIEW-CLOSEOUT-001` 收口，
+不构成当前直接值。本报告 §7 的其余事实保持不变：
+
+```text
+query_button_and_table_layout_stability_query_button_fixed_width_px=62
+query_button_and_table_layout_stability_reset_button_fixed_width_px=62
+query_button_and_table_layout_stability_refresh_button_fixed_width_px=110
+query_button_and_table_layout_stability_button_height_baseline_status=NOT_DEFINED_NOT_CHANGED
+query_button_and_table_layout_stability_acceptance_status=NOT_RUN
+query_button_and_table_layout_stability_acceptance_not_run_count=5
+pending_user_review=NO
+pending_user_confirmation_count=0
+```
+
+收口后统一当前下一入口：
+
+```text
+next_step=DATA-SOURCE-SNAPSHOT-STATUS-QUERY-BUTTON-AND-TABLE-LAYOUT-STABILITY-FORMAL-ACCEPTANCE-001
+```
+
+### 11.4 验收统计分层（严禁写成 118 PASS）
+
+```text
+requirements_count=91
+acceptance_count=118
+accepted_scope_pass_count=113
+adjustment_acceptance_status=NOT_RUN
+adjustment_acceptance_pass_count=0
+adjustment_acceptance_not_run_count=5
+formal_acceptance_pass_count=113
+formal_acceptance_fail_count=0
+formal_acceptance_blocked_count=0
+formal_acceptance_not_run_count=5
+DSS-AC-114~118 status=NOT_RUN (count=5)
+```
+
+本轮**未**将任何状态写成 `IMPLEMENTED_ACCEPTED`、`ACCEPTED` 或 `COMPLETED`；
+**未**执行 `DSS-AC-114~118`，**未**将其写成 `PASS`，其状态列逐字节不变，仍为 `NOT_RUN`；
+**未**把项目负责人的人工视觉/交互检查写成正式验收通过；**未**写成「118 条全部通过」。
+
+### 11.5 本节追加的字节事实
+
+```text
+r4_report_base_commit=9d4b83f02970b64f25da3d233aa83e1a41572029
+r4_report_base_bytes=13644
+r4_report_base_lines=213
+r4_report_base_sha256=fe9d551c6e2ae333e42d8c601c1f09fa09fe0bf26a2ab00ac10daccd381c185b
+r4_report_append_only_status=PASS
+r4_report_append_deleted_bytes=0
+r4_report_append_deleted_lines=0
+r4_report_base_is_exact_byte_prefix=TRUE
+```
+
+`r4_report_base_sha256` 可用 `git cat-file -p 9d4b83f02970b64f25da3d233aa83e1a41572029:<path> | sha256sum` 独立复算；
+该值描述的是**追加前**的基准版本，不是本文件修改后的自身哈希，本节不记录本文件修改后的自身 SHA-256。
+
+### 11.6 R4 报告的定位与上位入口
+
+本节追加后 R4 报告的整体定位不变：它记录的仍是 R4 结果事实纠正任务本身，
+其状态声明的**当前值**以上文 §11.3 的收口口径为准，§7 的口径降格为该任务时点的历史直接值。
+实现复审收口任务的完整记录见 `docs/features/data-source-snapshot-status/reports/DATA-SOURCE-SNAPSHOT-STATUS-QUERY-BUTTON-AND-TABLE-LAYOUT-STABILITY-IMPLEMENTATION-REVIEW-CLOSEOUT-001.md`；
+该收口任务**不**执行 `DSS-AC-114~118`、**不**作正式验收、**不**作最终接受收口。
+统一当前下一入口为 `DATA-SOURCE-SNAPSHOT-STATUS-QUERY-BUTTON-AND-TABLE-LAYOUT-STABILITY-FORMAL-ACCEPTANCE-001`。
