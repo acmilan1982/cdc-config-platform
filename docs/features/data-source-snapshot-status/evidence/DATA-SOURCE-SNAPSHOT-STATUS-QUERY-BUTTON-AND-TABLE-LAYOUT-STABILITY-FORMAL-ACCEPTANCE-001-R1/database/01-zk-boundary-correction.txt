@@ -1,0 +1,131 @@
+task_code=DATA-SOURCE-SNAPSHOT-STATUS-QUERY-BUTTON-AND-TABLE-LAYOUT-STABILITY-FORMAL-ACCEPTANCE-001-R1
+task_round=R1
+task_date=2026-09-16
+task_type=DOC_AND_EVIDENCE_FACT_CORRECTION_ONLY
+
+================================================================
+1. 本轮（R1）自身对 ZooKeeper / 数据库 / Kafka 的访问
+================================================================
+
+r1_task_zookeeper_access_status=NONE
+r1_task_database_access_status=NONE
+r1_task_kafka_access_status=NONE
+
+- 本轮**未**执行任何 ZooKeeper 命令：无 `zkCli.sh`、无 `ls` / `get` / `stat` / `getAcl` /
+  无 `create` / `set` / `delete` / `setAcl` / `reconfig` / `multi`；
+- **未**做任何“只读可用性确认”或连接探测；
+- **未**连接 Oracle，**未**执行任何 SQL（含 `SELECT`）；
+- **未**访问 Kafka；
+- 本轮只从 Git 中读取 R0 已提交的历史证据，并在文档中纠正事实与口径。
+
+本轮未验证 ZooKeeper 环境可用性；`zookeeper_environment_status=AVAILABLE` 是**既有环境事实**，
+来源为 R0 已提交证据，本轮未重新连接确认。
+
+================================================================
+2. 被纠正的事实（R0 实际执行行为）
+================================================================
+
+R0 正式验收任务（`DATA-SOURCE-SNAPSHOT-STATUS-QUERY-BUTTON-AND-TABLE-LAYOUT-STABILITY-FORMAL-ACCEPTANCE-001`）
+在 2026-09-15 执行期间，**主动**执行了一次：
+
+    $ZOOKEEPER_HOME/bin/zkCli.sh -server $CDC_ZK_CONNECT ls /bsoft-cdc/clients
+
+返回：
+
+    [hosp-012]
+
+事实定性：
+- 发起方：R0 正式验收任务**主动**发起（不是环境被动状态，也不是页面/后端发起）；
+- 手段：ZooKeeper CLI（`zkCli.sh`）；
+- 对象：`/bsoft-cdc/clients`；
+- 次数：**一次**只读节点读取；
+- 写操作：**无**（无 create/set/delete/reconfig/multi）；
+- ACL：**无**修改（无 setAcl）；
+- 与页面依赖：**无关**。
+
+================================================================
+3. 边界冲突（这是本次纠正的唯一实质原因）
+================================================================
+
+R0 提示词明确要求正式验收任务**不得主动执行 ZooKeeper CLI、不得读取节点**。
+上述 `ls /bsoft-cdc/clients` 是一次由任务主动发起的 CLI 节点读取，因此**违反**该任务边界。
+该违反与“环境是否只读”无关：即便只读，任务主动读取本身即被禁止。
+
+R0 记录中把该探测写成 “ZooKeeper environment (read-only availability probe only)”、
+“ZooKeeper 仅只读”，属于**笼统写法**，掩盖了“任务主动读取 + 边界违反”这一事实。
+
+================================================================
+4. 被纠正的错误结果字段
+================================================================
+
+R0 证据文件中该状态字段当时被记为（此即**错误结果字段**）：
+
+    formal_acceptance_task_initiated_zookeeper_node_operation_status=NONE
+
+`NONE` 表示“本任务未发起任何 ZooKeeper 节点操作”，**与事实不符**——
+任务实际上主动发起了一次 CLI 只读节点读取。
+
+该错误字段的原始行**未被删除、未被覆盖、未被伪造**，
+仍逐字节保留在 R0 证据文件中作为 R0 当时记录（见第 6 节 append-only 证明）。
+
+================================================================
+5. 正确结果字段（当前事实）
+================================================================
+
+zookeeper_environment_status=AVAILABLE
+formal_acceptance_task_initiated_zookeeper_node_operation_status=READ_ONLY_LS_ONE
+formal_acceptance_task_initiated_zookeeper_cli_status=EXECUTED_ONCE
+formal_acceptance_task_initiated_zookeeper_read_status=READ_ONE_PATH
+formal_acceptance_task_initiated_zookeeper_read_path=/bsoft-cdc/clients
+zookeeper_boundary_compliance_status=VIOLATED_READ_PROHIBITION
+zookeeper_write_status=ZERO
+zookeeper_acl_change_status=ZERO
+feature_zookeeper_dependency=NONE
+
+即：环境可用属实；由正式验收任务主动发起的 CLI 只读节点读取确为**一次**；
+该读取违反只读禁令；ZooKeeper 写入为 `ZERO`、ACL 修改为 `ZERO`；
+本 Feature 对 ZooKeeper 的依赖仍为 `NONE`。
+
+================================================================
+6. append-only 证明（R0 ZooKeeper / Kafka 证据文件）
+================================================================
+
+path=docs/features/data-source-snapshot-status/evidence/DATA-SOURCE-SNAPSHOT-STATUS-QUERY-BUTTON-AND-TABLE-LAYOUT-STABILITY-FORMAL-ACCEPTANCE-001/database/zookeeper-kafka-boundary.md
+before_bytes=1632
+before_newline_bytes=44
+before_sha256=108c9f8308c3725709b25afe1cc3c191c21f69098e2c495090e5cae1d9beea4a
+after_bytes=5806
+after_newline_bytes=130
+after_sha256=0d482b1d459628115d9a313fbd1436bdce262aee8ed5e6ee47df7310fe4f10eb
+original_bytes_are_exact_prefix_of_new_file=true
+deleted_bytes=0
+deleted_lines=0
+appended_bytes=4174
+
+（原始命令、返回值与原错误字段行全部保留为 R0 当时记录；
+文末新增「## R1 纠正段（append-only）」八个小节。）
+
+================================================================
+7. 为什么该读取不影响 DSS-AC-114~118 的业务结论
+================================================================
+
+- 本 Feature 后端包 `com.bsoft.cdcconfig.monitor.datasourcerunstate` 内零
+  ZooKeeper / Curator / sync-client 引用；
+- `DESIGN.md` §2.3 将 Kafka/ZooKeeper/sync-client 接入明确列为**非范围**；
+- `DSS-AC-114~118` 的判定依据是真实页面、真实后端、真实 Chromium 的原始几何与严格断言，
+  与该 ZooKeeper 只读读取无任何因果关系；
+- ChatGPT 复审已认定该偏差是**任务边界与结果事实**问题，
+  `r0_business_acceptance_evidence_review_status=APPROVED`。
+
+因此：`DSS-AC-114~118` 全部 `PASS`、`formal_acceptance_pass_count=118` 保留，
+不因本次纠正而改变。
+
+================================================================
+8. ZooKeeper 写入与 ACL 最终口径
+================================================================
+
+zookeeper_write_status=ZERO
+zookeeper_acl_change_status=ZERO
+
+R0 的该次读取为只读 `ls`；`create`/`set`/`delete`/`setAcl`/`reconfig`/`multi` 写操作 0 次，
+未修改任何 ACL。R1 本轮自身也未执行任何 ZooKeeper 命令。

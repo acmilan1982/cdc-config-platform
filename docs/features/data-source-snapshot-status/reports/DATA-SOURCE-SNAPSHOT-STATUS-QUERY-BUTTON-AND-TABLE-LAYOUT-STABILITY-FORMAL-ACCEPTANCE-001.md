@@ -207,3 +207,73 @@ service_log_directory=/tmp/dss-query-button-table-layout-formal-acceptance-001/
 ```text
 CHATGPT_QUERY_BUTTON_AND_TABLE_LAYOUT_STABILITY_FORMAL_ACCEPTANCE_REVIEW_FROM_GIT_THEN_PROJECT_OWNER_FINAL_ACCEPTANCE_DECISION
 ```
+
+---
+
+## 17. ChatGPT R0 复审与 R1 ZooKeeper 边界事实纠正记录
+
+本节由纯文档与证据事实定向纠正任务 `DATA-SOURCE-SNAPSHOT-STATUS-QUERY-BUTTON-AND-TABLE-LAYOUT-STABILITY-FORMAL-ACCEPTANCE-001-R1`（2026-09-16）以 **append-only** 方式追加。
+本报告上文全部字节（§1～§16，含全部数字、表格与结论）保持原样：未删除、未改写、未重排。
+
+### 17.1 ChatGPT 对 R0 的复审结论
+
+| 字段 | 值 |
+|---|---|
+| `chatgpt_r0_formal_acceptance_review_status` | `CHANGES_REQUIRED_ZOOKEEPER_BOUNDARY_AND_RESULT_FACT_ONLY` |
+| `r0_business_acceptance_evidence_review_status` | `APPROVED` |
+| `r0_formal_acceptance_execution_result_status` | `PRESERVED_PASS_5_OF_5_TOTAL_118_OF_118` |
+
+复审确认本报告 §3～§10 的业务验收与机器证据有效：四档视口、长短结果切换、398 项严格断言 0 失败、
+正式判定 `exit 0`、页面无关负向控制注入 `+0.001px` 后由同一判定器判出 20 项失败并真实 `exit 1`、
+查询/重置/立即刷新按钮固定宽度 62px/62px/110px、route-scoped stable scrollbar gutter 与其他路由零泄漏、
+前端/后端/项目测试/依赖/锁文件/SQL/配置零变化。**唯一**需要纠正的是 ZooKeeper 边界及其结果字段，
+不推翻业务验收结论。
+
+### 17.2 需要纠正的事实
+
+本报告 §11 第 2 项记录"仅执行一次只读 `ls /bsoft-cdc/clients` → `[hosp-012]`"，该**行为记录本身属实**，
+但它是由本正式验收任务**主动**发起、使用 ZooKeeper CLI、对 `/bsoft-cdc/clients` 执行的一次只读节点读取，
+**违反** R0 提示词的任务边界（不得主动执行 ZooKeeper CLI、不得读取节点）。
+§11 与 §16 以"ZooKeeper 只读"表述该行为，掩盖了"任务主动读取 + 边界违反"这一事实，属于结果事实错误。
+
+### 17.3 正确结果字段
+
+```text
+zookeeper_environment_status=AVAILABLE
+formal_acceptance_task_initiated_zookeeper_node_operation_status=READ_ONLY_LS_ONE
+formal_acceptance_task_initiated_zookeeper_cli_status=EXECUTED_ONCE
+formal_acceptance_task_initiated_zookeeper_read_status=READ_ONE_PATH
+formal_acceptance_task_initiated_zookeeper_read_path=/bsoft-cdc/clients
+zookeeper_boundary_compliance_status=VIOLATED_READ_PROHIBITION
+zookeeper_write_status=ZERO
+zookeeper_acl_change_status=ZERO
+feature_zookeeper_dependency=NONE
+```
+
+R0 证据文件 `evidence/DATA-SOURCE-SNAPSHOT-STATUS-QUERY-BUTTON-AND-TABLE-LAYOUT-STABILITY-FORMAL-ACCEPTANCE-001/database/zookeeper-kafka-boundary.md`
+中该状态字段当时的值被记为 `NONE`，那是**错误结果字段**（未反映任务主动读取），已在同一文件中以 append-only 方式纠正。
+
+### 17.4 被保留的业务结论
+
+`DSS-AC-114=PASS`、`DSS-AC-115=PASS`、`DSS-AC-116=PASS`、`DSS-AC-117=PASS`、`DSS-AC-118=PASS`、
+`adjustment_acceptance_pass_count=5`、`adjustment_acceptance_fail_count=0`、
+`adjustment_acceptance_blocked_count=0`、`adjustment_acceptance_not_run_count=0`、
+`formal_acceptance_pass_count=118`、`formal_acceptance_fail_count=0`、
+`formal_acceptance_blocked_count=0`、`formal_acceptance_not_run_count=0` 全部保留。
+本轮 R1 未重跑测试、构建、浏览器几何采集或 `DSS-AC-114~118`；未连接数据库、ZooKeeper、Kafka。
+
+### 17.5 当前状态与下一入口
+
+```text
+query_button_and_table_layout_stability_acceptance_status=EXECUTED_PENDING_CHATGPT_REVIEW
+query_button_and_table_layout_stability_acceptance_execution_status=PASS
+query_button_and_table_layout_stability_implementation_status=IMPLEMENTED_ADJUSTMENT_PENDING_FINAL_ACCEPTANCE
+final_acceptance_status=NOT_EXECUTED
+next_step=CHATGPT_QUERY_BUTTON_AND_TABLE_LAYOUT_STABILITY_FORMAL_ACCEPTANCE_R1_REVIEW_FROM_GIT_THEN_PROJECT_OWNER_FINAL_ACCEPTANCE_DECISION
+```
+
+本节记录不构成 `ACCEPTED`、`IMPLEMENTED_ACCEPTED` 或 `COMPLETED`，也不声称 ChatGPT 已批准 R1，
+也不声称项目负责人已作出最终接受决定。
+
+R1 报告：`docs/features/data-source-snapshot-status/reports/DATA-SOURCE-SNAPSHOT-STATUS-QUERY-BUTTON-AND-TABLE-LAYOUT-STABILITY-FORMAL-ACCEPTANCE-001-R1.md`
+R1 证据：`docs/features/data-source-snapshot-status/evidence/DATA-SOURCE-SNAPSHOT-STATUS-QUERY-BUTTON-AND-TABLE-LAYOUT-STABILITY-FORMAL-ACCEPTANCE-001-R1/`

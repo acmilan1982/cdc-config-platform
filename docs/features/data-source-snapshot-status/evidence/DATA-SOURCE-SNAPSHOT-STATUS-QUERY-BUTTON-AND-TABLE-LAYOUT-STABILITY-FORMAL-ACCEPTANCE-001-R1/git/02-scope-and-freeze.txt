@@ -1,0 +1,122 @@
+task_code=DATA-SOURCE-SNAPSHOT-STATUS-QUERY-BUTTON-AND-TABLE-LAYOUT-STABILITY-FORMAL-ACCEPTANCE-001-R1
+base_commit_id=71368a0a338209af564103291f5a51bc03e60bb4
+isolation_worktree=/agent/dss-query-button-table-layout-formal-acceptance-001-r1
+scope_capture=2026-09-16
+
+================================================================
+1. 变更路径（白名单校验的实际输入）
+================================================================
+
+command: git -C <worktree> diff --name-status 71368a0...  -- .
+command: git -C <worktree> ls-files --others --exclude-standard
+
+--- M（已跟踪文件被修改，共 10）---
+M	docs/features/README.md
+M	docs/features/data-source-snapshot-status/README.md
+M	docs/features/data-source-snapshot-status/REQUIREMENTS.md
+M	docs/features/data-source-snapshot-status/ACCEPTANCE.md
+M	docs/features/data-source-snapshot-status/DESIGN.md
+M	docs/features/data-source-snapshot-status/UI.md
+M	docs/features/data-source-snapshot-status/API.md
+M	docs/features/data-source-snapshot-status/DATABASE.md
+M	docs/features/data-source-snapshot-status/reports/DATA-SOURCE-SNAPSHOT-STATUS-QUERY-BUTTON-AND-TABLE-LAYOUT-STABILITY-FORMAL-ACCEPTANCE-001.md
+M	docs/features/data-source-snapshot-status/evidence/DATA-SOURCE-SNAPSHOT-STATUS-QUERY-BUTTON-AND-TABLE-LAYOUT-STABILITY-FORMAL-ACCEPTANCE-001/database/zookeeper-kafka-boundary.md
+
+--- ??（新增，共 7，全部位于 R1 白名单目录内）---
+??	docs/features/data-source-snapshot-status/reports/DATA-SOURCE-SNAPSHOT-STATUS-QUERY-BUTTON-AND-TABLE-LAYOUT-STABILITY-FORMAL-ACCEPTANCE-001-R1.md
+??	docs/features/data-source-snapshot-status/evidence/DATA-SOURCE-SNAPSHOT-STATUS-QUERY-BUTTON-AND-TABLE-LAYOUT-STABILITY-FORMAL-ACCEPTANCE-001-R1/README.md
+??	docs/features/data-source-snapshot-status/evidence/DATA-SOURCE-SNAPSHOT-STATUS-QUERY-BUTTON-AND-TABLE-LAYOUT-STABILITY-FORMAL-ACCEPTANCE-001-R1/checks/apply-doc-corrections.py
+??	docs/features/data-source-snapshot-status/evidence/DATA-SOURCE-SNAPSHOT-STATUS-QUERY-BUTTON-AND-TABLE-LAYOUT-STABILITY-FORMAL-ACCEPTANCE-001-R1/checks/apply-append-only.py
+??	docs/features/data-source-snapshot-status/evidence/DATA-SOURCE-SNAPSHOT-STATUS-QUERY-BUTTON-AND-TABLE-LAYOUT-STABILITY-FORMAL-ACCEPTANCE-001-R1/checks/check-r1.sh
+??	docs/features/data-source-snapshot-status/evidence/DATA-SOURCE-SNAPSHOT-STATUS-QUERY-BUTTON-AND-TABLE-LAYOUT-STABILITY-FORMAL-ACCEPTANCE-001-R1/checks/check-r1-lib.py
+??	docs/features/data-source-snapshot-status/evidence/DATA-SOURCE-SNAPSHOT-STATUS-QUERY-BUTTON-AND-TABLE-LAYOUT-STABILITY-FORMAL-ACCEPTANCE-001-R1/{docs,database,git,services}/**
+
+（注：`checks/check-r1.sh`、`checks/check-r1-lib.py`、`checks/check-r1-output.txt`、
+`git/01-base-and-worktree.txt`、`git/02-scope-and-freeze.txt`、`git/04-credential-scan.txt`、
+`database/01-zk-boundary-correction.txt`、`README.md` 均由本任务新增，全部位于
+`evidence/...-R1/**` 白名单前缀之内。）
+
+whitelist_path_count_violations=NONE
+
+================================================================
+2. 白名单（R1 提示词 §12）
+================================================================
+
+本任务允许修改或新增的路径仅为：
+
+docs/features/README.md
+docs/features/data-source-snapshot-status/README.md
+docs/features/data-source-snapshot-status/REQUIREMENTS.md
+docs/features/data-source-snapshot-status/ACCEPTANCE.md
+docs/features/data-source-snapshot-status/DESIGN.md
+docs/features/data-source-snapshot-status/UI.md
+docs/features/data-source-snapshot-status/API.md
+docs/features/data-source-snapshot-status/DATABASE.md
+docs/features/data-source-snapshot-status/reports/DATA-SOURCE-SNAPSHOT-STATUS-QUERY-BUTTON-AND-TABLE-LAYOUT-STABILITY-FORMAL-ACCEPTANCE-001.md   （append-only）
+docs/features/data-source-snapshot-status/reports/DATA-SOURCE-SNAPSHOT-STATUS-QUERY-BUTTON-AND-TABLE-LAYOUT-STABILITY-FORMAL-ACCEPTANCE-001-R1.md   （新增）
+docs/features/data-source-snapshot-status/evidence/DATA-SOURCE-SNAPSHOT-STATUS-QUERY-BUTTON-AND-TABLE-LAYOUT-STABILITY-FORMAL-ACCEPTANCE-001/database/zookeeper-kafka-boundary.md   （append-only）
+docs/features/data-source-snapshot-status/evidence/DATA-SOURCE-SNAPSHOT-STATUS-QUERY-BUTTON-AND-TABLE-LAYOUT-STABILITY-FORMAL-ACCEPTANCE-001-R1/**   （新增）
+
+实际变更路径 100% 落在上述白名单内；白名单之外差异 = 0。
+
+================================================================
+3. 冻结范围零差异（R1 提示词 §7）
+================================================================
+
+command: git -C <worktree> diff --stat 71368a0... -- frontend backend '**/*.spec.ts' '**/*.test.ts' package.json package-lock.json pom.xml '**/*.sql'
+
+输出：（空）
+
+frontend_code_diff=ZERO
+backend_code_diff=ZERO
+project_test_code_diff=ZERO
+dependency_lockfile_diff=ZERO
+sql_config_diff=ZERO
+
+除以下三类白名单对象外，**全部既有报告与证据零差异**：
+- §6.2 的 R0 正式验收报告（仅 append-only 追加 §17）；
+- §6.3 的 R0 ZooKeeper/Kafka 证据文件（仅 append-only 追加 R1 纠正段）；
+- §6.1 的八份入口文档（仅原位更新入口元数据 + 历史限定语 + 文末追加 R1 记录段）。
+
+other_existing_report_evidence_change_status=ZERO
+
+R0 逐步采集的浏览器证据、截图、`rects/*.json`、判定 JSON、测试记录、数据库证据：
+**零差异**（未被本轮读取改写，也未复制进 R1 证据目录制造“重新验收”印象）。
+
+================================================================
+4. 每份入口文档的改动位置（精确到行）
+================================================================
+
+八份入口文档相对基准提交**只有 3 行发生变化**：
+
+| 文档 | 基准总行数 | 变更行（基准行号） | 变更性质 |
+|---|---|---|---|
+| docs/features/README.md | 172 | 47, 67, 172 | 两处入口元数据 + 末行历史限定语（并在其后追加 R1 记录） |
+| data-source-snapshot-status/README.md | 287 | 32, 34, 287 | 同上 |
+| data-source-snapshot-status/REQUIREMENTS.md | 598 | 92, 94, 598 | 同上 |
+| data-source-snapshot-status/ACCEPTANCE.md | 564 | 80, 82, 564 | 同上 |
+| data-source-snapshot-status/DESIGN.md | 1340 | 85, 87, 1340 | 同上 |
+| data-source-snapshot-status/UI.md | 959 | 75, 77, 959 | 同上 |
+| data-source-snapshot-status/API.md | 399 | 23, 25, 399 | 同上 |
+| data-source-snapshot-status/DATABASE.md | 289 | 22, 24, 289 | 同上 |
+
+即：除两处「下一入口/文档分层状态」元数据行与**最后一行**的历史限定语外，
+每份文档的**其余全部行逐字节不变**——包括
+`DSS-REQ-001~091` / `DSS-AC-001~118` 全部业务行与状态列、
+`DESIGN.md` §38 业务规则、`UI.md` §32 业务规则、`API.md`/`DATABASE.md` 契约正文。
+
+第 3 行变更（末行）只做**历史限定语**插入：原「ZooKeeper 仅只读」原文一字未删，
+仅在其后增补一段标注其为历史笼统写法、并给出正确口径的括号说明。
+逐文档核对结果见 `../docs/01-entry-doc-corrections.txt`。
+
+================================================================
+5. 冻结边界之外的“未改动”声明
+================================================================
+
+- `DSS-REQ-001~091` 业务行：逐字节不变；
+- `DSS-AC-001~118` 完整业务行与状态列：逐字节不变（**未**把 `DSS-AC-114~118` 改回 `NOT_RUN`）；
+- `DESIGN.md` §38 业务规则正文：逐字节不变；
+- `UI.md` §32 业务规则正文：逐字节不变；
+- `API.md` 接口契约正文、`DATABASE.md` 表结构与只读契约正文：逐字节不变；
+- `.gitignore`、`.claude/settings.json`、`.claude/skills/**`、`docs/baseline/**` 六份正式项目级基线：均未修改；
+- 本任务提示词 Markdown（`docs/prompts/...`）：未修改、未提交。

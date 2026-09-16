@@ -1,0 +1,138 @@
+task_code=DATA-SOURCE-SNAPSHOT-STATUS-QUERY-BUTTON-AND-TABLE-LAYOUT-STABILITY-FORMAL-ACCEPTANCE-001-R1
+prompt_section=§13（30 项强制校验）
+note=本文件由 checks/check-r1.sh 真实执行产生；任何一项失败脚本即以非零退出码结束。
+note=运行方式：bash checks/check-r1.sh
+
+====================================================================================================
+R1 强制校验（提示词 §13，30 项）
+worktree=/agent/dss-query-button-table-layout-formal-acceptance-001-r1
+base_commit_id=71368a0a338209af564103291f5a51bc03e60bb4
+run_at=2026-09-16T01:43:22Z
+====================================================================================================
+CHECK 01 PASS  origin/develop 与 ls-remote 在任务开始时等于基准提交 (=71368a0a338209af564103291f5a51bc03e60bb4)
+CHECK 01b PASS  任务开始快照记录的远程值等于基准提交 (=1)
+CHECK 02 PASS  HEAD 等于基准提交 (=71368a0a338209af564103291f5a51bc03e60bb4)
+CHECK 02b PASS  隔离工作区为 detached HEAD（不指向任何本地分支）
+CHECK 02c PASS  任务开始快照记录工作区基于基准提交 (=1)
+CHECK 03 PASS  全部变更路径位于 §12 白名单内（白名单外=0） (=0)
+CHECK 03b PASS  新增文件全部位于 R1 报告或 R1 证据目录（越界=0） (=0)
+       modified_tracked=10 untracked_new=14
+CHECK 04 PASS  frontend/backend/项目测试/依赖/锁文件/SQL/配置 零差异 (=0)
+CHECK 04b PASS  冻结清单声明的 5 个零差异项与 git 实测一致 (=0)
+CHECK 05 PASS  八份入口文档中仅 3 行变化（DESIGN.md 抽样验证通过）
+doc=docs/features/data-source-snapshot-status/REQUIREMENTS.md kind=REQ base_rows=112 cur_rows=112 expected_distinct_ids=91
+  PASS docs/features/data-source-snapshot-status/REQUIREMENTS.md REQ: 112 行业务行相对基准逐字节不变
+  PASS docs/features/data-source-snapshot-status/REQUIREMENTS.md REQ: 编号集合完整覆盖 DSS-REQ-001~091（91 个）
+  sub_result=PASS failures=0
+CHECK 05b PASS  DSS-REQ-001~091 业务行逐字节不变且编号完整
+doc=docs/features/data-source-snapshot-status/ACCEPTANCE.md kind=AC base_rows=118 cur_rows=118 expected_distinct_ids=118
+  PASS docs/features/data-source-snapshot-status/ACCEPTANCE.md AC: 118 行业务行相对基准逐字节不变
+  PASS docs/features/data-source-snapshot-status/ACCEPTANCE.md AC: 编号集合完整覆盖 DSS-AC-001~118（118 个）
+  sub_result=PASS failures=0
+CHECK 06 PASS  DSS-AC-001~118 完整业务行与状态列逐字节不变且编号完整
+CHECK 07 PASS  DSS-AC-114~118 状态列仍全部为 PASS (=5)
+CHECK 07b PASS  ACCEPTANCE.md 中仍存在 5 条 DSS-AC-114~118 行 (=5)
+CHECK 08a PASS  八份文档各含 1 行 R1 记录段 (=8)
+CHECK 08b PASS  R1 记录段内 formal_acceptance_pass_count=118 (=8)
+CHECK 08c PASS  R1 记录段内 adjustment_acceptance_pass_count=5 (=8)
+CHECK 08d PASS  R1 记录段内 0 FAIL / 0 BLOCKED / 0 NOT_RUN 口径 (=8)
+CHECK 08e PASS  R1 报告 §4 保留 118 PASS / 0 FAIL / 0 BLOCKED / 0 NOT_RUN 明细 (=1)
+CHECK 09a PASS  DESIGN §14.2 需求 → 设计落点矩阵（91/91）存在且唯一 (=1)
+CHECK 09b PASS  DESIGN 追踪覆盖声明 91/91 (=1)
+CHECK 09c PASS  需求总数 91 共 22 处且全部与 acceptance_count=118 成对紧邻（无孤立值/历史值冒充） (=22)
+CHECK 09c2 PASS  需求总数 91 覆盖全部 8 份入口文档 (=8)
+CHECK 10a PASS  DESIGN §14.3 验收 → 设计落点矩阵（118/118）存在且唯一 (=1)
+CHECK 10b PASS  DESIGN 追踪覆盖声明 118/118 (=1)
+CHECK 10c PASS  验收总数 118 共 22 处且全部与 requirements_count=91 成对紧邻（无孤立值/历史值冒充） (=22)
+CHECK 10c2 PASS  验收总数 118 覆盖全部 8 份入口文档 (=8)
+doc=docs/features/data-source-snapshot-status/DESIGN.md heading=## 38. base_span_lines=79 cur_span_lines=79
+  PASS docs/features/data-source-snapshot-status/DESIGN.md: 章节正文 79 行相对基准逐字节不变（## 38...docs/features/data-source-snapshot-status/DESIGN.md 起）
+  sub_result=PASS failures=0
+CHECK 11 PASS  DESIGN.md §38 业务规则正文逐字节不变
+doc=docs/features/data-source-snapshot-status/UI.md heading=## 32. base_span_lines=69 cur_span_lines=69
+  PASS docs/features/data-source-snapshot-status/UI.md: 章节正文 69 行相对基准逐字节不变（## 32...docs/features/data-source-snapshot-status/UI.md 起）
+  sub_result=PASS failures=0
+CHECK 12 PASS  UI.md §32 业务规则正文逐字节不变
+CHECK 13a PASS  API.md 除 2 处入口元数据与末行插入外逐字节不变（含全部接口契约正文）
+CHECK 13b PASS  DATABASE.md 除 2 处入口元数据与末行插入外逐字节不变（含表结构/SQL/只读契约正文）
+CHECK 14 PASS  R0 正式验收报告 append-only 成立：原 12929 字节为新文件完整前缀，删除 0 字节 0 行（after=17204，+4275 字节）
+CHECK 15 PASS  R0 ZooKeeper/Kafka 证据文件 append-only 成立：原 1632 字节为新文件完整前缀，删除 0 字节 0 行（after=5806，+4174 字节）
+CHECK 15b PASS  R0 报告追加的 §17 章节存在 (=1)
+CHECK 15c PASS  R0 ZK 证据文件追加的 R1 纠正段存在 (=1)
+CHECK 16 PASS  除 §6.1/§6.2/§6.3 指定对象外的既有报告与证据零差异 (=0)
+CHECK 16b PASS  R0 浏览器证据/截图/rect JSON/判定 JSON/测试记录/数据库证据零差异 (=0)
+CHECK 17a PASS  错误字段在本 Feature 当前直接事实（R1 记录段）中计数为 0 (=0)
+CHECK 17b PASS  错误字段在 R1 证据目录中仅 1 处（纠正记录对被纠正错误值的引用） (=1)
+CHECK 17b2 PASS  该处位于纠正记录第 4 节「被纠正的错误结果字段」标题（第 58 行）之后的第 63 行
+CHECK 17b3 PASS  该处前 3 行内以「（此即**错误结果字段**）」明确标注其为错误值（非当前事实） (=1)
+CHECK 17c PASS  八份入口文档中 8 处均属 ABLV 历史记录（不在 ABLV 行上的计数为 0） (=0)
+CHECK 17d PASS  全仓库（docs/）该字面量总数与本报告 §8.2 声明的 14 一致 (=14)
+CHECK 17d2 PASS  该字面量分布在 14 个文件（每文件恰 1 处，与 §8.2 六类归属一致） (=14)
+CHECK 17e PASS  R1 报告自身仅 1 处提及且明确标注为错误结果字段 (=1)
+CHECK 17f PASS  R0 证据文件保留 R0 原始记录 1 处（§6.3 允许） (=1)
+CHECK 18a PASS  正确字段 READ_ONLY_LS_ONE 在 R1 记录段中每份文档 1 处 (=8)
+CHECK 18b PASS  正确字段在历史限定语中每份文档 1 处 (=8)
+CHECK 18c PASS  正确字段在 R1 报告中出现 (=1)
+CHECK 18d PASS  正确字段在 R0 纠正段中出现 (=1)
+CHECK 19a PASS  VIOLATED_READ_PROHIBITION 在 R1 记录段中每份文档 1 处 (=8)
+CHECK 19b PASS  VIOLATED_READ_PROHIBITION 在历史限定语中每份文档 1 处 (=8)
+CHECK 19c PASS  八份入口文档中 zookeeper_boundary_compliance_status 取值一致（总 32，VIOLATED 32） (=0)
+CHECK 19d PASS  VIOLATED_READ_PROHIBITION 在 R1 报告中出现 (=1)
+CHECK 20a PASS  R1 记录段中 zookeeper_write_status=ZERO 每份文档 1 处 (=8)
+CHECK 20b PASS  R1 记录段中 zookeeper_acl_change_status=ZERO 每份文档 1 处 (=8)
+CHECK 20c PASS  八份入口文档中 zookeeper_acl_change_status 取值全部为 ZERO（总 32，ZERO 32） (=0)
+CHECK 20d PASS  R1 报告中写入与 ACL 均为 ZERO (=2)
+CHECK 20e PASS  R0 纠正段声明写入与 ACL 均为 ZERO (=2)
+CHECK 21 PASS  八份入口文档当前下一入口统一为 R1 ChatGPT 复审入口（每份 2 处） (=0)
+CHECK 21b PASS  R0 入口的「当前直接值」后缀已全部降级为历史（剩余 0） (=0)
+CHECK 22a PASS  R1 记录段中不存在当前 ACCEPTED/IMPLEMENTED_ACCEPTED/COMPLETED 状态 (=0)
+CHECK 22b PASS  R1 记录段明确 final_acceptance_status=NOT_EXECUTED (=8)
+CHECK 22c PASS  R1 记录段明确 acceptance_status=EXECUTED_PENDING_CHATGPT_REVIEW (=8)
+CHECK 22d PASS  R1 报告声明不构成 ACCEPTED/IMPLEMENTED_ACCEPTED/COMPLETED (=1)
+CHECK 23a PASS  八份入口文档均声明「不等于 ChatGPT 已批准 R1」 (=8)
+CHECK 23b PASS  R1 记录段（八份文档）均声明「不等于项目负责人已作最终接受」 (=8)
+CHECK 23c PASS  R1 报告声明不声称 ChatGPT 已批准 R1 (=1)
+CHECK 23d PASS  R1 报告声明不声称项目负责人已作最终接受 (=1)
+CHECK 24a PASS  本轮 ZooKeeper 访问声明全部为 NONE（无其他取值） (=10)
+CHECK 24b PASS  本轮数据库访问声明全部为 NONE（无其他取值） (=2)
+CHECK 24c PASS  本轮 Kafka 访问声明全部为 NONE（无其他取值） (=2)
+CHECK 24d PASS  三类声明均存在（zk=10 db=2 kafka=2）
+CHECK 24e PASS  本任务执行/服务记录中无 zkCli 调用痕迹 (=0)
+CHECK 25a PASS  R0 记录的三个服务 PID 仍未运行（本任务未启动、未停止、未重启） (=0)
+CHECK 25b PASS  无 5173/8080 监听端口（服务在任务开始前已退出，本轮未启停） (=0)
+CHECK 25c PASS  服务存在性记录文件已保存 (=1)
+CHECK 26 PASS  git diff --check exit 0
+CHECK 27 PASS  git diff --cached --check exit 0
+CHECK 28 PASS  凭据扫描无密码/Token/完整数据库连接串/认证信息 (=0)
+CHECK 28b PASS  凭据扫描记录文件已保存 (=1)
+CHECK 29a PASS  主工作区既有修改条数与任务开始快照一致 (=116)
+CHECK 29b PASS  主工作区既有修改逐行不变（未被本任务修改/覆盖/暂存） (=0)
+CHECK 29c PASS  主工作区仍位于 develop 且 HEAD 不变 (=4222b0a24b927aca6f62ff348fd8549b73d4156c)
+CHECK 30a PASS  既有 worktree 路径/HEAD 未漂移（含本任务新增 worktree 在内逐行一致） (=0)
+CHECK 30b PASS  worktree 总数 = 任务开始时 59 + 本任务新增 1 (=60)
+====================================================================================================
+checks_passed=86
+checks_failed=0
+failed_check_ids=
+RESULT=PASS
+====================================================================================================
+
+shell_exit_code=0
+
+====================================================================================================
+附：脚本失败能力负向控制（证明结果不是恒 PASS）
+====================================================================================================
+方法：把本脚本复制到 /tmp，仅把 10c2 的期望值 8 篡改为 9，其余一字不改，对同一工作区重跑。
+
+command: sed 's|assert_eq 10c2 ... 8|assert_eq 10c2 "NEGCTL 期望 9" 9|' checks/check-r1.sh > /tmp/r1-negctl/check-r1-negctl.sh
+command: bash /tmp/r1-negctl/check-r1-negctl.sh; echo $?
+
+输出关键行：
+  CHECK 10c2 FAIL  NEGCTL 期望 9 [expected=9 actual=8]
+  checks_failed=1
+  RESULT=FAIL
+  exit_code=1
+
+negative_control_exit_code=1
+conclusion=脚本具备真实失败能力：期望值被改动后确实 FAIL 且以非零退出码结束，正式运行的 RESULT=PASS 不是空匹配伪造。
+（该负向控制只在 /tmp 内进行，未修改工作区任何文件。）

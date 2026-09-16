@@ -1,0 +1,74 @@
+task_code=DATA-SOURCE-SNAPSHOT-STATUS-QUERY-BUTTON-AND-TABLE-LAYOUT-STABILITY-FORMAL-ACCEPTANCE-001-R1
+task_round=R1
+task_date=2026-09-16
+isolation_worktree=/agent/dss-query-button-table-layout-formal-acceptance-001-r1
+main_worktree=/agent/cdc-config-platform
+
+================================================================
+1. 任务开始时（2026-09-16T01:26:29Z / 09:26:29 CST）远程基准事实
+================================================================
+
+command: git ls-remote origin refs/heads/develop
+result : 71368a0a338209af564103291f5a51bc03e60bb4	refs/heads/develop
+
+base_commit_id=71368a0a338209af564103291f5a51bc03e60bb4
+origin_develop_at_task_start=71368a0a338209af564103291f5a51bc03e60bb4
+ls_remote_develop_at_task_start=71368a0a338209af564103291f5a51bc03e60bb4
+remote_equals_base_at_task_start=true
+
+R0 正式验收基准提交（R0 提示词起点）  = 682650058b85b99b13a343373d6887bf0784ec1f
+R0 正式验收执行结果提交（R1 唯一基准） = 71368a0a338209af564103291f5a51bc03e60bb4
+
+说明：`71368a0...` 是 R0 正式验收执行任务提交并推送后的结果提交，
+也是当前 R1 任务的**唯一基准**。本任务开始时 `origin/develop` 与 `git ls-remote`
+均严格等于该提交，无分叉、无领先/落后。
+
+================================================================
+2. 隔离工作区
+================================================================
+
+创建命令: git -C /agent/cdc-config-platform worktree add --detach \
+            /agent/dss-query-button-table-layout-formal-acceptance-001-r1 \
+            71368a0a338209af564103291f5a51bc03e60bb4
+
+--- worktree list --porcelain 中本任务条目 ---
+worktree /agent/dss-query-button-table-layout-formal-acceptance-001-r1
+HEAD 71368a0a338209af564103291f5a51bc03e60bb4
+detached
+
+command: git -C <isolation_worktree> rev-parse HEAD
+result : 71368a0a338209af564103291f5a51bc03e60bb4
+
+command: git -C <isolation_worktree> symbolic-ref -q HEAD
+result : (无输出 / exit != 0) -> detached HEAD，不指向任何本地分支
+
+isolation_worktree_detached=true
+isolation_worktree_head=71368a0a338209af564103291f5a51bc03e60bb4
+isolation_worktree_head_equals_base=true
+isolation_worktree_is_not_develop_branch=true
+
+在任务开始（本任务第一次写入之前）该工作区为**干净**状态：
+所有已跟踪文件与 `71368a0...` 一致，无未跟踪文件、无暂存内容。
+本任务的全部写入均发生在此隔离工作区内。
+
+================================================================
+3. worktree 数量
+================================================================
+
+worktree_count_at_task_start = 59（创建本任务工作区之前）
+worktree_count_after_create = 60（含本任务新建的隔离工作区）
+worktree_count_at_check_time = 60
+
+本任务只**新增**一个隔离工作区，未删除、未移动、未清理、未进入其他既有工作区。
+
+================================================================
+4. 分支与停线前置检查
+================================================================
+
+branch_used_for_commit_push=develop（仅通过 fast-forward push 到 develop，见 git/05）
+current_branch_inside_isolation_worktree=(detached，无本地分支)
+main_worktree_branch=develop
+main_worktree_head=4222b0a24b927aca6f62ff348fd8549b73d4156c
+
+分叉检查：任务开始时 `origin/develop == 71368a0...`，本任务基于该提交新建 detached
+工作区，不存在本地/远程分叉。停线条件（§5.6）均未触发。

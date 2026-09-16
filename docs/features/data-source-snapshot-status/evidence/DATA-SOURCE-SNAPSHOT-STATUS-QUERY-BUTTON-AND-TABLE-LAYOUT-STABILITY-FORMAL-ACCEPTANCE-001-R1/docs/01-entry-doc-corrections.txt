@@ -1,0 +1,101 @@
+====================================================================================================
+mode for all eight entry docs: IN_PLACE_ENTRY_METADATA_REWRITE_PLUS_APPEND
+(prompt §6.2/§6.3 append-only constraints apply only to the R0 report and the R0
+ ZooKeeper evidence file; these eight entry docs are corrected in place per §6.1)
+path=README.md before=296567 after=304766
+  before_sha256=677c14ad6acac1726120e6a32464e32368f9ce51b5611c9e6ecf7c6401b26fbb
+  after_sha256=616a5e06b672c1d82961d0ead965cefd47b2df1846afa80bf1012605d5a47a1b
+  entry_backticked_replaced=2
+  entry_plain_replaced=0
+  r1_current_entry_count=2
+  r0_entry_demoted_to_history_count=2
+  r0_current_value_marker_remaining=0
+  vague_phrase_qualified=4
+  wrong_none_field_count=1
+  wrong_readonly_field_count=4
+  r1_record_appended=True
+path=data-source-snapshot-status/README.md before=365668 after=373865
+  before_sha256=4fc03d299faea4f829eb04d45a64ee5a11ca1aa6655dec157166729af8a1f0f5
+  after_sha256=b43ba97c80f670d59450ac8089f207bd619acf9f7545392b003aa41c8a94ed5a
+  entry_backticked_replaced=1
+  entry_plain_replaced=1
+  r1_current_entry_count=2
+  r0_entry_demoted_to_history_count=2
+  r0_current_value_marker_remaining=0
+  vague_phrase_qualified=4
+  wrong_none_field_count=1
+  wrong_readonly_field_count=4
+  r1_record_appended=True
+path=data-source-snapshot-status/REQUIREMENTS.md before=372586 after=380783
+  before_sha256=1ca7b6eff1a8f058f769fbe509ecbed48709b74e6dfee554cdb0b72602795858
+  after_sha256=646e4f242d6a1bc1a5d07f2435a0d4aa077b1d59a14d0c14a3e7b1f9f70596a6
+  entry_backticked_replaced=1
+  entry_plain_replaced=1
+  r1_current_entry_count=2
+  r0_entry_demoted_to_history_count=2
+  r0_current_value_marker_remaining=0
+  vague_phrase_qualified=4
+  wrong_none_field_count=1
+  wrong_readonly_field_count=4
+  r1_record_appended=True
+path=data-source-snapshot-status/ACCEPTANCE.md before=380359 after=388556
+  before_sha256=7ccfeb2e52b7feb53b50afec86c215e360f731091a03419ad15ef8071c131957
+  after_sha256=f0ae5af5aeccbbf367ca64ade1338279f503e44412b148cc92fe5bdc851cd242
+  entry_backticked_replaced=1
+  entry_plain_replaced=1
+  r1_current_entry_count=2
+  r0_entry_demoted_to_history_count=2
+  r0_current_value_marker_remaining=0
+  vague_phrase_qualified=4
+  wrong_none_field_count=1
+  wrong_readonly_field_count=4
+  r1_record_appended=True
+path=data-source-snapshot-status/DESIGN.md before=398145 after=406342
+  before_sha256=10b9b49dff02bc9c8a0a3e655dc7f0561ae41759b9eee2f19ce18785ceccbdcd
+  after_sha256=2a51067f0059abaf16c315df0207e5baf85fe85643f121284ee6f2fb05d5c177
+  entry_backticked_replaced=1
+  entry_plain_replaced=1
+  r1_current_entry_count=2
+  r0_entry_demoted_to_history_count=2
+  r0_current_value_marker_remaining=0
+  vague_phrase_qualified=4
+  wrong_none_field_count=1
+  wrong_readonly_field_count=4
+  r1_record_appended=True
+path=data-source-snapshot-status/UI.md before=331314 after=339511
+  before_sha256=7fb84778ca3f25b05d135b23a580271ebcb562226bb19c9882ed2a3e64fae6c4
+  after_sha256=3f6dc587c758291ad9b0fa809210fed31a748c15bd05a371f33698bb8f0d2a60
+  entry_backticked_replaced=1
+  entry_plain_replaced=1
+  r1_current_entry_count=2
+  r0_entry_demoted_to_history_count=2
+  r0_current_value_marker_remaining=0
+  vague_phrase_qualified=4
+  wrong_none_field_count=1
+  wrong_readonly_field_count=4
+  r1_record_appended=True
+path=data-source-snapshot-status/API.md before=158593 after=166790
+  before_sha256=f1c25a008aaf667a199d35261e8cc5b5abb8c1901b6396e89af924c128ef379e
+  after_sha256=ddca5eb3c483f396ec3d4607afdc8dd3fab982e4a85d275b0f738aba75641746
+  entry_backticked_replaced=1
+  entry_plain_replaced=1
+  r1_current_entry_count=2
+  r0_entry_demoted_to_history_count=2
+  r0_current_value_marker_remaining=0
+  vague_phrase_qualified=4
+  wrong_none_field_count=1
+  wrong_readonly_field_count=4
+  r1_record_appended=True
+path=data-source-snapshot-status/DATABASE.md before=153949 after=162146
+  before_sha256=134253796c466ba0797ffff7286cae0011a83dc4101a8e60c86a2f610b300db2
+  after_sha256=b96aee07736e4cc8d7e4ecb443fcfb7564b12f4130ec444a494d03555595471c
+  entry_backticked_replaced=1
+  entry_plain_replaced=1
+  r1_current_entry_count=2
+  r0_entry_demoted_to_history_count=2
+  r0_current_value_marker_remaining=0
+  vague_phrase_qualified=4
+  wrong_none_field_count=1
+  wrong_readonly_field_count=4
+  r1_record_appended=True
+files_processed=8 fails=0

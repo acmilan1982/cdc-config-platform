@@ -1,0 +1,22 @@
+task_code=DATA-SOURCE-SNAPSHOT-STATUS-QUERY-BUTTON-AND-TABLE-LAYOUT-STABILITY-FORMAL-ACCEPTANCE-001-R1
+capture_utc=2026-09-16T01:31:31Z
+capture_local=2026-09-16 09:31:31 CST
+
+## A. 基准与 worktree
+worktree_path=/agent/dss-query-button-table-layout-formal-acceptance-001-r1
+worktree_head=71368a0a338209af564103291f5a51bc03e60bb4
+worktree_branch=  # 空=detached
+worktree_status_short=11 行（本任务自身新增/修改）
+base_commit_is_71368a0=true
+
+## B. 远程
+git_ls_remote_origin_develop=71368a0a338209af564103291f5a51bc03e60bb4
+origin_develop_ref=71368a0a338209af564103291f5a51bc03e60bb4
+
+## C. 服务存在性（非侵入式，prompt §9；本轮未启停任何服务）
+pid=112421 state=ABSENT_IN_PROC (任务开始前已退出；prompt §9 明确不影响本轮文档纠正)
+pid=112435 state=ABSENT_IN_PROC (任务开始前已退出；prompt §9 明确不影响本轮文档纠正)
+pid=112346 state=ABSENT_IN_PROC (任务开始前已退出；prompt §9 明确不影响本轮文档纠正)
+listening_5173_8080:
+  none
+note=本轮未执行 curl/smoke check、未访问页面或后端接口、未启动/停止/重启任何进程
