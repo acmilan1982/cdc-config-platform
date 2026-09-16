@@ -443,6 +443,36 @@ meta: {
 - 与现有 `MainLayout` 架构的一致性；
 - 可测试性（能否用计算样式逐路由断言）。
 
+#### 5.6.1 详细设计草案的交叉引用（草案，未批准，未实现）
+
+**历史事实保留**：本节确曾形成**两个**候选启用形式（候选一路由元数据、
+候选二页面壳 Props），该历史与上述评估清单**均不删除、不改写**。
+
+后续的公共组件详细设计草案 `SHARED_COMPONENT_DESIGN.md`（状态
+`DRAFT_PENDING_CHATGPT_AND_PROJECT_OWNER_REVIEW`）在评估上述清单后，
+**选择候选一（路由元数据）作为唯一最终建议方案**：
+
+```text
+stable_scrollbar_gutter_design_choice=ROUTE_META
+stable_scrollbar_gutter_target=MAIN_LAYOUT_CONTENT_AREA
+stable_scrollbar_gutter_activation_status=DESIGNED_NOT_IMPLEMENTED
+```
+
+该结论的**性质与边界**：
+
+- 它是**详细设计草案的结论**，状态为
+  `DRAFT_PENDING_CHATGPT_AND_PROJECT_OWNER_REVIEW`，
+  **尚未**经 ChatGPT 复审，**尚未**经项目负责人批准，**尚未**实现；
+- 它**不**使候选二成为“已废弃规范”，也**不**改变本节的评估清单；
+- **候选二（页面壳 Props）在草案中被否决**，理由是真实纵向滚动容器
+  `.content-area` 位于 `MainLayout.vue`，是页面组件的**祖先**，
+  页面壳 Props 无法在不引入反向耦合的前提下控制祖先容器；
+- 在草案获批并由后续独立授权的实现任务启动之前：
+  `scrollbar-gutter` 仍**只**通过硬编码路由名作用于 `/monitor/data-source-state`，
+  其他路由计算值仍为 `auto`，**不得**据本结论先行改动代码；
+- §5.7 的全部禁止项**继续有效**，且草案**未**放宽其中任何一条；
+- 本节**不得**被理解为“稳定滚动条槽已实现”或“已完成公共化”。
+
 ### 5.7 明确禁止的实现方式
 
 `TEMPLATE_RULE_APPROVED`（沿用参考实现已冻结的禁止项）：

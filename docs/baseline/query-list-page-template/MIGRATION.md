@@ -163,14 +163,44 @@ TOPIC-OFFSET-QUERY-LIST-TEMPLATE-MIGRATION-001
 | 4 | `QUERY-LIST-PAGE-SHARED-COMPONENT-FORMAL-ACCEPTANCE-001` | 等价性正式验收 | 否 |
 | 5 | `TOPIC-OFFSET-QUERY-LIST-TEMPLATE-MIGRATION-001` | 数据同步进度试点迁移 | 是（最终是否选择该页面仍需项目负责人确认） |
 
+### 6.1 第 2 步（公共组件详细设计）的当前进度状态
+
+上表第 2 步 `QUERY-LIST-PAGE-SHARED-COMPONENT-DESIGN-001` 的本质是**纯设计、
+不写代码**。其当前进度状态记为：
+
+```text
+shared_component_design_phase_status=DRAFT_COMPLETED_PENDING_REVIEW
+shared_component_design_status=DRAFT_PENDING_CHATGPT_AND_PROJECT_OWNER_REVIEW
+shared_component_design_path=docs/baseline/query-list-page-template/SHARED_COMPONENT_DESIGN.md
+```
+
+含义与边界（必须严格按此理解，不得扩张）：
+
+- 该阶段**只**完成了一份**草案**并已提交，等待 **ChatGPT 从远程 Git 独立复审**，
+  之后由**项目负责人**决定是否批准；
+- `DRAFT_COMPLETED_PENDING_REVIEW` **不表示**该设计已批准、已冻结或可据以开工；
+  它**不**使公共组件实现状态发生任何变化；
+- 该阶段**未**实现公共组件、**未**新增 Composable、**未**新增路由元数据、
+  **未**修改任何业务页面、**未**迁移任何页面；
+- `shared_component_implementation_status` 仍为 `NOT_STARTED`，
+  `page_migration_status` 仍为 `NOT_STARTED`，
+  `query_list_page_template_implementation_status` 仍为 `NOT_STARTED`；
+- 第 3 步（`QUERY-LIST-PAGE-SHARED-COMPONENT-IMPLEMENTATION-001`）
+  **仍不得启动**，除非草案获批且有独立任务与独立授权。
+
 ---
 
 ## 7. 当前有效下一步
 
 ```text
-next_step=QUERY-LIST-PAGE-SHARED-COMPONENT-DESIGN-001
+next_step=CHATGPT_QUERY_LIST_PAGE_SHARED_COMPONENT_DESIGN_REVIEW_FROM_REMOTE_GIT_THEN_PROJECT_OWNER_APPROVAL_DECISION
 ```
 
-批准收口完成后，**只允许**进入公共组件详细设计任务（`QUERY-LIST-PAGE-SHARED-COMPONENT-DESIGN-001`）。
-该任务仍需独立提示词与独立授权；**未经后续独立授权，仍不得实现公共组件或迁移任何页面**。
+公共组件详细设计任务（`QUERY-LIST-PAGE-SHARED-COMPONENT-DESIGN-001`）已产出草案
+`SHARED_COMPONENT_DESIGN.md`。下一步为 **ChatGPT 从远程 Git 对该草案进行独立复审**，
+随后由**项目负责人做出批准决定**。
+
+该草案**尚未批准**。在草案获批并由后续**独立授权的实现任务**启动之前：
+**不得**实现公共组件、**不得**让参考页面接入公共组件、**不得**迁移任何页面、
+**不得**把任何 `NOT_STARTED` 状态改为 `IMPLEMENTED`。
 本文件保持 `page_migration_status=NOT_STARTED`、`shared_component_implementation_status=NOT_STARTED`。

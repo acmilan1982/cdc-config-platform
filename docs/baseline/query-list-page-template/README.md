@@ -22,11 +22,18 @@ chatgpt_r1_review_status=APPROVED
 project_owner_approval_status=APPROVED
 approval_task=QUERY-LIST-PAGE-TEMPLATE-BASELINE-APPROVAL-001
 approval_date=2026-09-16
+shared_component_design_status=DRAFT_PENDING_CHATGPT_AND_PROJECT_OWNER_REVIEW
 ```
 
 说明：
 
 - 本模板是**项目级已批准基线**，**尚未实现**，**尚未应用到任何页面**。
+- `shared_component_design_status` 指**公共组件详细设计草案**的状态
+  （见 `SHARED_COMPONENT_DESIGN.md`）。该草案**尚未复审、尚未批准、尚未实现**；
+  它的存在**不改变**本模板的批准状态，也**不改变**
+  `query_list_page_template_implementation_status`、
+  `shared_component_implementation_status`、`page_migration_status`
+  三者仍为 `NOT_STARTED` 的事实。
 - 本模板**不改变任何 Feature 的既有状态**；“源库快照状态”的最终接受状态
   （`FINAL_ACCEPTED_AND_CLOSED`）由原 Feature 收口任务确立，本任务只读取、不重开、不改写。
 - 本任务**未创建公共组件**、**未创建 Composable**、**未迁移任何页面**、**未修改任何代码**。
@@ -162,6 +169,7 @@ PROPOSED_NOT_IMPLEMENTED
 | `DESIGN.md` | 三层设计（页面壳层 / 展示组件层 / 行为组合层）、候选组件与 Composable、状态模型、明确不得抽取的内容 |
 | `UI.md` | 页面结构、查询区、结果工具栏、表格、稳定滚动条槽、响应式与可访问性规范 |
 | `MIGRATION.md` | 逐页评估清单、推荐迁移顺序、每页独立任务要求、已接受参考页保护、后续任务代码 |
+| `SHARED_COMPONENT_DESIGN.md` | **公共组件详细设计草案**（未批准、未实现）：组件决策矩阵、目录与命名、各组件公共契约、Loading 与按钮几何、单实例 Tooltip、稳定滚动条槽唯一方案、状态归属、样式令牌、响应式与可访问性、阶段一范围、验收矩阵、风险与回滚 |
 
 ## 7. 后续任务入口
 
@@ -177,13 +185,18 @@ TOPIC-OFFSET-QUERY-LIST-TEMPLATE-MIGRATION-001
 当前唯一有效下一步：
 
 ```text
-next_step=QUERY-LIST-PAGE-SHARED-COMPONENT-DESIGN-001
+next_step=CHATGPT_QUERY_LIST_PAGE_SHARED_COMPONENT_DESIGN_REVIEW_FROM_REMOTE_GIT_THEN_PROJECT_OWNER_APPROVAL_DECISION
 ```
 
-即：模板基线已完成批准收口，下一任务为**公共组件详细设计**。该任务是**纯设计任务，不写代码**，
-只确定组件边界、命名、Props / Slots / 事件与样式隔离方案。
-该任务仍需**独立提示词与独立授权**；在其完成并经独立授权之前，仍不得实现公共组件、
-不得迁移任何页面。
+即：公共组件详细设计任务（`QUERY-LIST-PAGE-SHARED-COMPONENT-DESIGN-001`）
+已产出草案 `SHARED_COMPONENT_DESIGN.md`（纯设计任务，**未写代码**）。
+下一步为：**ChatGPT 从远程 Git 对该草案进行独立复审**，
+随后由**项目负责人做出批准决定**。
+
+`shared_component_design_status=DRAFT_PENDING_CHATGPT_AND_PROJECT_OWNER_REVIEW`
+表示草案**尚未批准**。在该草案经复审与批准、并由后续**独立授权的实现任务**
+启动之前：仍**不得**实现公共组件、**不得**让参考页面接入公共组件、
+**不得**迁移任何页面、**不得**把任何 `NOT_STARTED` 状态改为 `IMPLEMENTED`。
 
 ## 8. 使用本模板的注意事项
 
@@ -219,3 +232,22 @@ next_step=QUERY-LIST-PAGE-SHARED-COMPONENT-DESIGN-001
   不执行测试、构建或浏览器验证**；公共组件实现状态与页面迁移状态仍为 `NOT_STARTED`。
   批准仅意味着四份模板文档及其规范成为后续设计与迁移的正式基线输入，
   **不代表**公共组件已设计或实现、参考页面已接入公共组件、任何页面已迁移。
+- 2026-09-16，新增**公共组件详细设计草案**（`QUERY-LIST-PAGE-SHARED-COMPONENT-DESIGN-001`，
+  纯文档设计任务）。设计基准提交 `44d2605f5fa0529f472a6e3b189cd5b88f38a5dd`。
+  新增 `SHARED_COMPONENT_DESIGN.md`（本目录第 5 份文档），并对本目录四份已批准文档
+  做**最小**更新：本文件状态区新增 `shared_component_design_status` 一行、
+  第 6 节导航新增该草案条目、第 7 节下一步入口改为
+  `CHATGPT_QUERY_LIST_PAGE_SHARED_COMPONENT_DESIGN_REVIEW_FROM_REMOTE_GIT_THEN_PROJECT_OWNER_APPROVAL_DECISION`；
+  `DESIGN.md` 增加指向草案的段落；`UI.md` 在两处稳定滚动条槽候选形式后增加交叉引用；
+  `MIGRATION.md` 把“公共组件详细设计”阶段记为 `DRAFT_COMPLETED_PENDING_REVIEW`
+  并更新下一步入口。
+  本轮**不实现**任何公共组件与 Composable、**不新增**路由元数据、**不修改**任何前端
+  或后端代码与测试、**不迁移**任何页面、**不重开**任何 Feature、
+  **不执行**测试、构建或浏览器验证。
+  本文件版本**不记录**本轮结果提交（其尚不存在）；结果提交应在实现任务或
+  后续文档任务中另行记录。
+  状态：`query_list_page_template_document_status=APPROVED`、
+  `shared_component_design_status=DRAFT_PENDING_CHATGPT_AND_PROJECT_OWNER_REVIEW`、
+  `query_list_page_template_implementation_status=NOT_STARTED`、
+  `shared_component_implementation_status=NOT_STARTED`、
+  `page_migration_status=NOT_STARTED`、`reference_feature_status=FINAL_ACCEPTED_AND_CLOSED`。
