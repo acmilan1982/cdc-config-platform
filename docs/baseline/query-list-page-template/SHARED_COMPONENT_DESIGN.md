@@ -1,7 +1,7 @@
-# 查询列表页公共组件 · 详细设计（草案，待复审）
+# 查询列表页公共组件 · 详细设计（已批准，未实现）
 
 ```text
-shared_component_design_status=DRAFT_PENDING_CHATGPT_AND_PROJECT_OWNER_REVIEW
+shared_component_design_status=APPROVED
 query_list_page_template_document_status=APPROVED
 query_list_page_template_implementation_status=NOT_STARTED
 shared_component_implementation_status=NOT_STARTED
@@ -13,16 +13,29 @@ r1_correction_task=QUERY-LIST-PAGE-SHARED-COMPONENT-DESIGN-001-R1
 r1_correction_base_commit_id=106bb41c83c9dfd6f19b323cd68bd1b347193f80
 r2_correction_task=QUERY-LIST-PAGE-SHARED-COMPONENT-DESIGN-001-R2
 r2_correction_base_commit_id=db9309058c230411c33466bff5027e87b6e0e1fb
+r2_correction_result_commit_id=6f3c3517821d4b7e43300180033c5b5ef7c628f9
+approval_task=QUERY-LIST-PAGE-SHARED-COMPONENT-DESIGN-APPROVAL-001
+approval_date=2026-09-16
 chatgpt_r0_shared_component_design_review_status=CHANGES_REQUIRED_CONTRACT_EQUIVALENCE_CORRECTIONS_ONLY
 chatgpt_r1_shared_component_design_review_status=CHANGES_REQUIRED_FOUR_CONTRACT_CLOSURE_CORRECTIONS
-r1_contract_equivalence_correction_status=APPLIED_PENDING_CHATGPT_R1_REVIEW
-r2_contract_closure_correction_status=APPLIED_PENDING_CHATGPT_R2_REVIEW
+chatgpt_r2_shared_component_design_review_status=APPROVED
+r1_contract_equivalence_correction_status=APPLIED_AND_REVIEWED_CHANGES_REQUIRED
+r2_contract_closure_correction_status=APPLIED_AND_REVIEWED_APPROVED
+project_owner_approval_status=APPROVED
+shared_component_design_approval_status=COMPLETED
 ```
 
 > 设计任务：`QUERY-LIST-PAGE-SHARED-COMPONENT-DESIGN-001`
+> 批准任务：`QUERY-LIST-PAGE-SHARED-COMPONENT-DESIGN-APPROVAL-001`
 > 分支：`develop`
-> 本轮为**纯设计任务**：**未创建任何组件、Composable、路由元数据或样式**，
-> **未修改“源库快照状态”页面**，**未迁移任何页面**，**未执行任何测试、构建或浏览器验证**。
+> 本设计由**纯设计任务**产出，并已由**纯文档批准任务**收口为**已批准**；
+> 两个任务**均未创建任何组件、Composable、路由元数据或样式**，
+> **均未修改“源库快照状态”页面或任何其他页面**，**均未迁移任何页面**，
+> **均未执行任何测试、构建或浏览器验证**。
+> `shared_component_design_status=APPROVED` 只表示**设计结论已批准**，
+> **不表示**公共组件已实现、参考页面已接入公共组件或任何页面已迁移；
+> `shared_component_implementation_status`、`page_migration_status`、
+> `query_list_page_template_implementation_status` 三者仍为 `NOT_STARTED`。
 
 ## 0. 本文件的标记与边界
 
@@ -31,11 +44,11 @@ r2_contract_closure_correction_status=APPLIED_PENDING_CHATGPT_R2_REVIEW
 本文件全文只使用**一个**标记：
 
 ```text
-SHARED_COMPONENT_DESIGN_DECISION_DRAFT
+SHARED_COMPONENT_DESIGN_DECISION_APPROVED
 ```
 
-含义：**本轮设计任务给出的草案结论**。所有组件命名、目录、Props / Slots / Emits、
-类型、令牌、路由元数据与阶段划分均属此标记，**均未实现**，**尚未批准**。
+含义：**本文件已批准的设计结论**。所有组件命名、目录、Props / Slots / Emits、
+类型、令牌、路由元数据与阶段划分均属此标记，**均已批准**，但**均未实现**。
 
 本文件**不使用** `README.md` §5 定义的三类标记，以避免与本目录既有四份文档的
 标记计数产生歧义。本文件描述参考实现现状时写“参考实现事实”，引用已批准模板规范时
@@ -68,7 +81,8 @@ SHARED_COMPONENT_DESIGN_DECISION_DRAFT
 - 不修改“源库快照状态”页面代码，不重开其已接受的 Feature 状态；
 - 不迁移“数据同步进度”或任何其他页面；
 - 不执行测试、构建、浏览器几何回归；
-- 不把本草案写成“已批准”“已实现”“已迁移”。
+- 不把本草案写成“已实现”“已迁移”（设计结论已由后续纯文档批准任务收口为已批准，
+  但组件实现与页面迁移**仍未开始**）。
 
 ---
 
@@ -76,7 +90,7 @@ SHARED_COMPONENT_DESIGN_DECISION_DRAFT
 
 ### 7.1.1 目标
 
-`SHARED_COMPONENT_DESIGN_DECISION_DRAFT` —— 本设计要回答的问题，以及本轮给出的答案：
+`SHARED_COMPONENT_DESIGN_DECISION_APPROVED` —— 本设计要回答的问题，以及本轮给出的答案：
 
 | 问题 | 本轮答案位置 |
 | --- | --- |
@@ -93,7 +107,7 @@ SHARED_COMPONENT_DESIGN_DECISION_DRAFT
 
 ### 7.1.2 非目标
 
-`SHARED_COMPONENT_DESIGN_DECISION_DRAFT`：
+`SHARED_COMPONENT_DESIGN_DECISION_APPROVED`：
 
 1. **不实现**任何组件或 Composable；
 2. **不启用**任何路由元数据，**不修改** `MainLayout.vue` 或 `router/index.ts`；
@@ -106,7 +120,7 @@ SHARED_COMPONENT_DESIGN_DECISION_DRAFT
 
 ### 7.1.3 适用范围
 
-`SHARED_COMPONENT_DESIGN_DECISION_DRAFT` —— 本设计与已批准模板保持一致，只面向
+`SHARED_COMPONENT_DESIGN_DECISION_APPROVED` —— 本设计与已批准模板保持一致，只面向
 **只读查询列表页**：顶部查询条件 + 结果表格为主体的页面形态。带增删改的配置管理页、
 详情页、大屏页、向导页不在范围内。
 
@@ -116,7 +130,7 @@ SHARED_COMPONENT_DESIGN_DECISION_DRAFT
 
 ### 7.2.1 页面结构与容器
 
-`SHARED_COMPONENT_DESIGN_DECISION_DRAFT`（参考实现事实核验）：
+`SHARED_COMPONENT_DESIGN_DECISION_APPROVED`（参考实现事实核验）：
 
 | 项 | 参考实现（`data-source-run-state`） | 对照页面（`topic-offset`） |
 | --- | --- | --- |
@@ -132,7 +146,7 @@ SHARED_COMPONENT_DESIGN_DECISION_DRAFT
 但**视觉实现差异显著**（卡片 vs 无卡片、间距 12px vs 4px、字重 650 vs 600）。
 这直接决定了 §7.3 的组件边界与 §7.9 的令牌设计：**共享的是契约与几何，不是像素**。
 
-`SHARED_COMPONENT_DESIGN_DECISION_DRAFT` —— **两层内边距必须同时保留**：
+`SHARED_COMPONENT_DESIGN_DECISION_APPROVED` —— **两层内边距必须同时保留**：
 `.dss-page` 自带**内层**页面内边距 `padding:14px 16px`（连同 `border-radius:10px`、
 `background:transparent`），而 §7.2.7 所述 `MainLayout .content-area` 的
 `padding:16px 20px` 是**外层**布局内边距。两者是**两层不同的事实**，
@@ -140,7 +154,7 @@ SHARED_COMPONENT_DESIGN_DECISION_DRAFT
 
 ### 7.2.2 查询 / 重置 / 刷新按钮的固定宽度与 Loading 几何
 
-`SHARED_COMPONENT_DESIGN_DECISION_DRAFT`（参考实现事实核验）：
+`SHARED_COMPONENT_DESIGN_DECISION_APPROVED`（参考实现事实核验）：
 
 | 按钮 | 选择器 | 固定宽度 | 高度 | 四个宽度值同锁 | Loading 指示器 |
 | --- | --- | --- | --- | --- | --- |
@@ -161,7 +175,7 @@ SHARED_COMPONENT_DESIGN_DECISION_DRAFT
 
 ### 7.2.3 结果区右侧刷新信息组
 
-`SHARED_COMPONENT_DESIGN_DECISION_DRAFT`（参考实现事实核验）——
+`SHARED_COMPONENT_DESIGN_DECISION_APPROVED`（参考实现事实核验）——
 `DataSourceSnapshotToolbar.vue` 的顺序与几何设施：
 
 | 顺序 | 元素 | 几何稳定设施 |
@@ -182,7 +196,7 @@ SHARED_COMPONENT_DESIGN_DECISION_DRAFT
 
 ### 7.2.4 表格横向溢出与长文本
 
-`SHARED_COMPONENT_DESIGN_DECISION_DRAFT`（参考实现事实核验）：
+`SHARED_COMPONENT_DESIGN_DECISION_APPROVED`（参考实现事实核验）：
 
 - `.dss-table-wrap { width:100%; overflow-x:auto }`——**仅两条声明**；
 - `el-table` 自身 `.dss-table { width:100%; min-width:1175px }`，`min-width` 由
@@ -195,7 +209,7 @@ SHARED_COMPONENT_DESIGN_DECISION_DRAFT
 
 ### 7.2.5 两套 Tooltip 实现
 
-`SHARED_COMPONENT_DESIGN_DECISION_DRAFT`（参考实现事实核验）：
+`SHARED_COMPONENT_DESIGN_DECISION_APPROVED`（参考实现事实核验）：
 
 | # | 实现 | 位置 | 触发方式 | 定位算法 |
 | --- | --- | --- | --- | --- |
@@ -217,7 +231,7 @@ SHARED_COMPONENT_DESIGN_DECISION_DRAFT
 
 ### 7.2.6 `useDataSourceSnapshot` 行为事实
 
-`SHARED_COMPONENT_DESIGN_DECISION_DRAFT`（参考实现事实核验）：
+`SHARED_COMPONENT_DESIGN_DECISION_APPROVED`（参考实现事实核验）：
 
 | 项 | 事实 |
 | --- | --- |
@@ -246,7 +260,7 @@ SHARED_COMPONENT_DESIGN_DECISION_DRAFT
 
 ### 7.2.7 真实滚动容器与稳定滚动条槽
 
-`SHARED_COMPONENT_DESIGN_DECISION_DRAFT`（参考实现事实核验）：
+`SHARED_COMPONENT_DESIGN_DECISION_APPROVED`（参考实现事实核验）：
 
 - 真实纵向滚动容器是**布局层**的 `MainLayout.vue` 中的 `.content-area`：
   `flex:1; padding:16px 20px; overflow-y:auto; background-color:#f0f2f5`；
@@ -259,7 +273,7 @@ SHARED_COMPONENT_DESIGN_DECISION_DRAFT
 
 ### 7.2.8 公共目录与命名惯例
 
-`SHARED_COMPONENT_DESIGN_DECISION_DRAFT`（参考实现事实核验）：
+`SHARED_COMPONENT_DESIGN_DECISION_APPROVED`（参考实现事实核验）：
 
 | 目录 | 现状 |
 | --- | --- |
@@ -279,7 +293,7 @@ SHARED_COMPONENT_DESIGN_DECISION_DRAFT
 
 ### 6.1 十项候选的唯一结论
 
-`SHARED_COMPONENT_DESIGN_DECISION_DRAFT` —— 对已批准基线中的每个候选项给出
+`SHARED_COMPONENT_DESIGN_DECISION_APPROVED` —— 对已批准基线中的每个候选项给出
 **恰好一个**结论。结论取值：
 
 - `KEEP_FOR_FIRST_IMPLEMENTATION`（阶段一实现）
@@ -302,7 +316,7 @@ SHARED_COMPONENT_DESIGN_DECISION_DRAFT
 
 ### 6.2 计数与覆盖
 
-`SHARED_COMPONENT_DESIGN_DECISION_DRAFT`：
+`SHARED_COMPONENT_DESIGN_DECISION_APPROVED`：
 
 ```text
 candidate_component_count=10
@@ -316,7 +330,7 @@ candidate_decision_coverage_status=COMPLETE_ALL_10_CANDIDATES_DECIDED
 
 ### 6.3 与推荐方向的差异说明（不机械照抄）
 
-`SHARED_COMPONENT_DESIGN_DECISION_DRAFT` —— 本轮结论与已批准基线中的
+`SHARED_COMPONENT_DESIGN_DECISION_APPROVED` —— 本轮结论与已批准基线中的
 推荐方向基本一致，但有**一处明确偏离**，理由如下：
 
 **偏离项**：基线文档把“稳定表格容器”列为展示组件层的一个独立候选项；
@@ -343,7 +357,7 @@ candidate_decision_coverage_status=COMPLETE_ALL_10_CANDIDATES_DECIDED
 
 ### 7.3.1 建议结构
 
-`SHARED_COMPONENT_DESIGN_DECISION_DRAFT`：
+`SHARED_COMPONENT_DESIGN_DECISION_APPROVED`：
 
 ```text
 frontend/src/components/query-list/
@@ -370,7 +384,7 @@ frontend/src/composables/query-list/
 
 ### 7.3.2 命名规则
 
-`SHARED_COMPONENT_DESIGN_DECISION_DRAFT`：
+`SHARED_COMPONENT_DESIGN_DECISION_APPROVED`：
 
 | 对象 | 规则 | 示例 |
 | --- | --- | --- |
@@ -390,7 +404,7 @@ frontend/src/composables/query-list/
 
 ### 7.3.3 为什么新增 `frontend/src/composables/query-list/`
 
-`SHARED_COMPONENT_DESIGN_DECISION_DRAFT` —— 源码核验显示
+`SHARED_COMPONENT_DESIGN_DECISION_APPROVED` —— 源码核验显示
 `frontend/src/composables/` **当前不存在**，4 个 Composable 全部位于各自
 页面的 `views/*/composables/` 下。新增顶层 `composables/` 的理由：
 
@@ -406,7 +420,7 @@ frontend/src/composables/query-list/
 
 ### 7.3.4 为什么没有超级组件，也没有薄包装
 
-`SHARED_COMPONENT_DESIGN_DECISION_DRAFT`：
+`SHARED_COMPONENT_DESIGN_DECISION_APPROVED`：
 
 - **没有超级组件**：`QueryListPageShell` 只持骨架与留白，
   `QueryListQueryPanel` 只持查询区容器，`QueryListResultPanel` 只持结果区容器，
@@ -422,7 +436,7 @@ frontend/src/composables/query-list/
 
 ## 7.4 各组件的完整公共契约
 
-`SHARED_COMPONENT_DESIGN_DECISION_DRAFT` —— 以下 TypeScript 接口为**设计草案**，
+`SHARED_COMPONENT_DESIGN_DECISION_APPROVED` —— 以下 TypeScript 接口为**设计草案**，
 用于固定契约语义，**不得**被视为已存在的类型定义。
 类型中的注释即语义约定；默认值即“调用方不传时的行为”。
 
@@ -466,8 +480,10 @@ interface QueryListPageShellEmits {
 | 契约项 | 内容 |
 | --- | --- |
 | 渲染结构 | `div.ql-page > (header.ql-page__header > (h2.ql-page__title + p.ql-page__description + slot[name=header-extra]))? + slot（默认槽内容，直接成为 `.ql-page` 的子节点）` |
-| **默认槽包装层** | **不存在**。默认槽内容**逐一**成为 `.ql-page` 的直接子节点；公共层**不得**在默认槽外层插入任何 `div`（包括 `div.ql-page__body`）、`Fragment` 容器或其它包装元素。**`div.ql-page__body` 已从本设计契约中移除**（`page_shell_body_wrapper_status=REMOVED_FROM_DESIGN_CONTRACT`） |
-| 直接子节点集合与顺序 | 参考页面等价接入后，`.ql-page`（原 `.dss-page`）的**直接**元素子节点必须**恰好**为 3 个且顺序为：① 页头、② 查询面板、③ 结果面板。中间**不得**出现占位/包装/过渡节点——这与参考实现既有断言（`.dss-page` 的 `element.children.length === 3`，注释“中间没有插入额外的占位/包装层”）逐字对应 |
+| **默认槽包装层** | **不存在**（`default_slot_wrapper_status=NONE`）。**正常内容状态与首载失败状态均不得**生成 `.ql-page__body` 或任何默认槽包装层。默认槽内容**逐一**成为 `.ql-page` 的直接子节点；公共层**不得**在默认槽外层插入任何 `div`（包括 `div.ql-page__body`）、`Fragment` 容器或其它包装元素。**`div.ql-page__body` 已从本设计契约中移除**（`page_shell_body_wrapper_status=REMOVED_FROM_DESIGN_CONTRACT`） |
+| 直接子节点集合与顺序（**正常内容状态**） | 参考页面等价接入后，`.ql-page`（原 `.dss-page`）的**直接**元素子节点必须**恰好**为 3 个且顺序为：① 页头、② 查询面板、③ 结果面板（`normal_content_state_direct_element_children=EXACTLY_3_HEADER_QUERY_RESULT`）。中间**不得**出现占位/包装/过渡节点——这与参考实现既有断言（`.dss-page` 的 `element.children.length === 3`，注释“中间没有插入额外的占位/包装层”）逐字对应。**该 3 子节点基数只适用于正常内容状态**，不是无条件全状态规则 |
+| 直接子节点集合与顺序（**首载失败状态**，`firstLoadError`） | 该状态下 `.ql-page` 的**直接**元素子节点必须**恰好**为 2 个且顺序为：① 页头、② 错误卡片（`first_load_error_state_direct_element_children=EXACTLY_2_HEADER_ERROR_CARD`）。正常内容与错误卡片由 Feature 条件渲染**二选一**，公共页面壳**不**额外生成任何节点 |
+| 根级 `gap` 的作用对象 | 根级 `gap:12px` **始终只作用于当前状态下的直接子项**（`root_gap_applies_to_current_direct_children=YES`）：正常内容状态下形成“页头 → 查询面板 → 结果面板”两段间距；首载失败状态下形成“页头 → 错误卡片”一段间距 |
 | 默认值 | `title = ''`、`description = ''`；均空且无 `#header` → 不渲染 `header` 节点 |
 | 暴露方法 | **无**（不 `defineExpose`） |
 | 拥有 | **页面内层内边距**（`padding`）、页面圆角与背景、页面段落纵向间距，以及页头标题/描述的排版与配色——参考实现的 `.dss-page` **自带**这些值 |
@@ -477,11 +493,12 @@ interface QueryListPageShellEmits {
 
 **为什么必须移除包装层（几何原因，唯一结论）**：`.ql-page` 的段落纵向间距由
 **根元素自身的** `display:flex; flex-direction:column; gap:var(--ql-page-gap,12px)`
-提供，`gap` 只作用于**直接子项之间**。参考实现的 `.dss-page` 正是以
-“页头 / 查询卡片 / 结果卡片”三个直接子项获得 `12px` 的两段间距。
+提供，`gap` 只作用于**直接子项之间**。**正常内容状态**下参考实现的 `.dss-page` 正是以
+“页头 / 查询卡片 / 结果卡片”三个直接子项获得 `12px` 的两段间距；
+**首载失败状态**下则以“页头 / 错误卡片”两个直接子项获得 `12px` 的一段间距。
 若默认槽外包一层 `div.ql-page__body`：页头与包装层之间只剩**一段** `12px`，
 查询卡片与结果卡片则落入包装层内部、由包装层的布局规则决定——
-**参考页面的直接子结构（3 个）与 `gap` 几何同时被改变**，等价接入立即产生像素位移。
+**两种状态的直接子结构（3 个 / 2 个）与 `gap` 几何同时被改变**，等价接入立即产生像素位移。
 
 **根布局契约**（可执行 CSS，`--ql-*` 默认值取参考实现现状值，可被调用方覆盖）：
 
@@ -1040,7 +1057,7 @@ query_candidate_tooltip_max_width=min(480px, calc(100vw - 16px))
 
 ### 7.5.1 固定宽度值
 
-`SHARED_COMPONENT_DESIGN_DECISION_DRAFT` —— 公共层的默认固定宽度**取参考实现现状值**：
+`SHARED_COMPONENT_DESIGN_DECISION_APPROVED` —— 公共层的默认固定宽度**取参考实现现状值**：
 
 ```text
 query_button_reference_fixed_width_px=62
@@ -1054,7 +1071,7 @@ refresh_button_reference_fixed_width_px=110
 
 ### 7.5.2 几何稳定的三个必要条件
 
-`SHARED_COMPONENT_DESIGN_DECISION_DRAFT`：
+`SHARED_COMPONENT_DESIGN_DECISION_APPROVED`：
 
 1. **按钮外框不变**：四值同锁 + 禁止拉伸/压缩；
 2. **文字不移动**：按钮内为 `inline-flex + justify-content:center`，
@@ -1067,7 +1084,7 @@ refresh_button_reference_fixed_width_px=110
 
 ### 7.5.3 统一 Spinner 槽
 
-`SHARED_COMPONENT_DESIGN_DECISION_DRAFT`：
+`SHARED_COMPONENT_DESIGN_DECISION_APPROVED`：
 
 ```text
 .ql-btn-spinner {
@@ -1102,7 +1119,7 @@ refresh_button_reference_fixed_width_px=110
 
 ### 7.5.4 按钮高度基线
 
-`SHARED_COMPONENT_DESIGN_DECISION_DRAFT`：
+`SHARED_COMPONENT_DESIGN_DECISION_APPROVED`：
 
 ```text
 button_height_baseline_status=NOT_DEFINED_NOT_CHANGED
@@ -1125,7 +1142,7 @@ button_height_baseline_status=NOT_DEFINED_NOT_CHANGED
 
 ### 7.5.5 两处历史偏移值的收敛方式（重要）
 
-`SHARED_COMPONENT_DESIGN_DECISION_DRAFT` —— 事实：参考实现的两套私有实现
+`SHARED_COMPONENT_DESIGN_DECISION_APPROVED` —— 事实：参考实现的两套私有实现
 `left` 偏移不同（查询按钮 `2px`，刷新按钮 `3px`）。
 
 **问题**：若公共层取单一常数值，则必然使其中一个按钮的指示器**移动 1px**。
@@ -1148,7 +1165,7 @@ button_height_baseline_status=NOT_DEFINED_NOT_CHANGED
 
 ### 7.5.6 统一 ARIA 与阻断规则
 
-`SHARED_COMPONENT_DESIGN_DECISION_DRAFT`：
+`SHARED_COMPONENT_DESIGN_DECISION_APPROVED`：
 
 | 状态 | 语义 |
 | --- | --- |
@@ -1167,7 +1184,7 @@ Element Plus 的 `disabled`，公共层必须沿用该做法，**不得**改用 
 
 ### 7.6.1 目标数据与控制器契约
 
-`SHARED_COMPONENT_DESIGN_DECISION_DRAFT`：
+`SHARED_COMPONENT_DESIGN_DECISION_APPROVED`：
 
 ```ts
 /** 锚点矩形（视口坐标系）。 */
@@ -1272,7 +1289,7 @@ Host 的实现形态为：根据 `props.target.maxWidthPx` 计算一个**安全�
 
 ### 7.6.2 机制唯一性（含“两个定位算法”的处理）
 
-`SHARED_COMPONENT_DESIGN_DECISION_DRAFT` —— 统一范围的**精确边界**：
+`SHARED_COMPONENT_DESIGN_DECISION_APPROVED` —— 统一范围的**精确边界**：
 
 **统一的部分**：
 
@@ -1304,7 +1321,7 @@ Host 的实现形态为：根据 `props.target.maxWidthPx` 计算一个**安全�
 
 ### 7.6.3 参考页面“查询栏候选 Tooltip”的归并路径
 
-`SHARED_COMPONENT_DESIGN_DECISION_DRAFT` —— 参考实现中查询栏的 `.dss-q-tt`
+`SHARED_COMPONENT_DESIGN_DECISION_APPROVED` —— 参考实现中查询栏的 `.dss-q-tt`
 是第二套实现，**必须**归并，归并方式（阶段一实现任务执行，本设计不执行）：
 
 1. 查询栏不再自行渲染 Tooltip DOM；
@@ -1332,7 +1349,7 @@ Host 的实现形态为：根据 `props.target.maxWidthPx` 计算一个**安全�
 
 ### 7.6.4 Host 组件契约
 
-`SHARED_COMPONENT_DESIGN_DECISION_DRAFT`：
+`SHARED_COMPONENT_DESIGN_DECISION_APPROVED`：
 
 ```ts
 interface QueryListTooltipHostProps {
@@ -1368,7 +1385,7 @@ interface QueryListTooltipHostProps {
 
 ### 7.6.5 业务内容不得内置
 
-`SHARED_COMPONENT_DESIGN_DECISION_DRAFT`：
+`SHARED_COMPONENT_DESIGN_DECISION_APPROVED`：
 
 - 公共层**不包含**任何 Feature 文案、任何字段名、任何“原始状态/展示状态”的语义；
 - 参考实现中表格侧“正文 + Tooltip 正文”是**分别提供**的
@@ -1379,7 +1396,7 @@ interface QueryListTooltipHostProps {
 
 ### 7.6.6 可访问性
 
-`SHARED_COMPONENT_DESIGN_DECISION_DRAFT`：
+`SHARED_COMPONENT_DESIGN_DECISION_APPROVED`：
 
 | 项 | 设计 |
 | --- | --- |
@@ -1435,7 +1452,7 @@ R2 关闭的四处 Tooltip 断点（对应 §7.6.1 / §7.6.3 / §7.6.4 / §7.6.6
 
 ### 7.7.1 结论：路由元数据
 
-`SHARED_COMPONENT_DESIGN_DECISION_DRAFT`：
+`SHARED_COMPONENT_DESIGN_DECISION_APPROVED`：
 
 ```text
 stable_scrollbar_gutter_design_choice=ROUTE_META
@@ -1453,7 +1470,7 @@ other_route_gutter_leak_status=NOT_APPLICABLE_DOCUMENT_ONLY
 
 ### 7.7.2 `RouteMeta` 类型扩展建议
 
-`SHARED_COMPONENT_DESIGN_DECISION_DRAFT`（设计草案，**未创建**）：
+`SHARED_COMPONENT_DESIGN_DECISION_APPROVED`（设计草案，**未创建**）：
 
 ```ts
 // frontend/src/router/index.ts（或独立的类型增强文件）
@@ -1483,7 +1500,7 @@ declare module 'vue-router' {
 
 ### 7.7.3 `MainLayout` 计算语义建议
 
-`SHARED_COMPONENT_DESIGN_DECISION_DRAFT`（设计草案，**未实现**）：
+`SHARED_COMPONENT_DESIGN_DECISION_APPROVED`（设计草案，**未实现**）：
 
 ```ts
 // 语义描述（非最终代码）
@@ -1503,7 +1520,7 @@ const stableScrollbarGutter = computed(() => route.meta.stableScrollbarGutter ==
 
 ### 7.7.4 设计理由（为什么是路由元数据）
 
-`SHARED_COMPONENT_DESIGN_DECISION_DRAFT`：
+`SHARED_COMPONENT_DESIGN_DECISION_APPROVED`：
 
 1. **真实滚动容器的位置**：源码核验显示，承载页面纵向滚动的容器是
    **`MainLayout.vue` 中的 `.content-area`**，它是页面组件（例如
@@ -1523,7 +1540,7 @@ const stableScrollbarGutter = computed(() => route.meta.stableScrollbarGutter ==
 
 ### 7.7.5 关键风险记录：`MainLayout.spec.ts` 已固化现有实现
 
-`SHARED_COMPONENT_DESIGN_DECISION_DRAFT`（参考实现事实核验）——
+`SHARED_COMPONENT_DESIGN_DECISION_APPROVED`（参考实现事实核验）——
 `frontend/src/layouts/MainLayout.spec.ts`（225 行）当前把以下内容写成**断言**：
 
 | 断言内容 | 与本设计的关系 |
@@ -1545,7 +1562,7 @@ const stableScrollbarGutter = computed(() => route.meta.stableScrollbarGutter ==
 
 ### 7.7.6 行为定义
 
-`SHARED_COMPONENT_DESIGN_DECISION_DRAFT`：
+`SHARED_COMPONENT_DESIGN_DECISION_APPROVED`：
 
 | 场景 | 行为 |
 | --- | --- |
@@ -1558,7 +1575,7 @@ const stableScrollbarGutter = computed(() => route.meta.stableScrollbarGutter ==
 
 ### 7.7.7 后续测试要点（阶段一实现任务用，本设计不执行）
 
-`SHARED_COMPONENT_DESIGN_DECISION_DRAFT`：
+`SHARED_COMPONENT_DESIGN_DECISION_APPROVED`：
 
 1. 声明 `meta.stableScrollbarGutter: true` 的路由 → `.content-area` 计算样式
    `scrollbar-gutter` 为 `stable`；
@@ -1573,7 +1590,7 @@ const stableScrollbarGutter = computed(() => route.meta.stableScrollbarGutter ==
 
 ### 7.7.8 明确仍然禁止
 
-`SHARED_COMPONENT_DESIGN_DECISION_DRAFT` —— 与已批准模板规范一致，本方案
+`SHARED_COMPONENT_DESIGN_DECISION_APPROVED` —— 与已批准模板规范一致，本方案
 **仍然禁止**：
 
 - 全局 `overflow-y: scroll`；
@@ -1590,7 +1607,7 @@ const stableScrollbarGutter = computed(() => route.meta.stableScrollbarGutter ==
 
 ### 7.8.1 归属取值
 
-`SHARED_COMPONENT_DESIGN_DECISION_DRAFT`：
+`SHARED_COMPONENT_DESIGN_DECISION_APPROVED`：
 
 - `FEATURE`：必须由具体业务页面/Feature 持有；
 - `PRESENTATIONAL_COMPONENT`：由本文档定义的展示组件内部持有（视觉瞬时状态）；
@@ -1622,7 +1639,7 @@ const stableScrollbarGutter = computed(() => route.meta.stableScrollbarGutter ==
 
 ### 7.8.3 阶段一的边界结论
 
-`SHARED_COMPONENT_DESIGN_DECISION_DRAFT`：
+`SHARED_COMPONENT_DESIGN_DECISION_APPROVED`：
 
 ```text
 behavior_composable_first_implementation_status=DEFERRED_ALL_THREE
@@ -1658,7 +1675,7 @@ behavior_composable_first_implementation_status=DEFERRED_ALL_THREE
 
 ### 7.8.4 `useQueryListAppliedQuery` 接口草案（延后）
 
-`SHARED_COMPONENT_DESIGN_DECISION_DRAFT`：
+`SHARED_COMPONENT_DESIGN_DECISION_APPROVED`：
 
 ```ts
 interface UseQueryListAppliedQueryOptions<TCriteria, TDraft> {
@@ -1692,7 +1709,7 @@ interface UseQueryListAppliedQueryReturn<TCriteria, TDraft> {
 
 ### 7.8.5 `useQueryListSingleFlightRequest` 接口草案（延后）
 
-`SHARED_COMPONENT_DESIGN_DECISION_DRAFT`：
+`SHARED_COMPONENT_DESIGN_DECISION_APPROVED`：
 
 ```ts
 type QueryListRequestKind = string  // 由调用方定义类别集合
@@ -1726,7 +1743,7 @@ interface UseQueryListSingleFlightRequestReturn<TReq, TRes, TKind extends QueryL
 
 ### 7.8.6 `useQueryListVisibleAutoRefresh` 接口草案（延后）
 
-`SHARED_COMPONENT_DESIGN_DECISION_DRAFT`：
+`SHARED_COMPONENT_DESIGN_DECISION_APPROVED`：
 
 ```ts
 interface UseQueryListVisibleAutoRefreshOptions {
@@ -1764,7 +1781,7 @@ interface UseQueryListVisibleAutoRefreshReturn {
 
 ### 7.9.1 类名前缀与作用域
 
-`SHARED_COMPONENT_DESIGN_DECISION_DRAFT`：
+`SHARED_COMPONENT_DESIGN_DECISION_APPROVED`：
 
 | 项 | 规则 |
 | --- | --- |
@@ -1778,7 +1795,7 @@ interface UseQueryListVisibleAutoRefreshReturn {
 
 ### 7.9.2 令牌清单（建议名称 / 默认值 / 可覆盖层）
 
-`SHARED_COMPONENT_DESIGN_DECISION_DRAFT`：
+`SHARED_COMPONENT_DESIGN_DECISION_APPROVED`：
 
 | 令牌 | 默认值 | 可覆盖层 | 说明 |
 | --- | --- | --- | --- |
@@ -1835,7 +1852,7 @@ interface UseQueryListVisibleAutoRefreshReturn {
 
 ### 7.9.3 可成为令牌的尺寸 vs 必须留在 Feature 的尺寸
 
-`SHARED_COMPONENT_DESIGN_DECISION_DRAFT`：
+`SHARED_COMPONENT_DESIGN_DECISION_APPROVED`：
 
 **可成为公共令牌**（与业务无关、且是几何契约的一部分）：
 
@@ -1862,7 +1879,7 @@ interface UseQueryListVisibleAutoRefreshReturn {
 
 ### 7.9.4 如何证明对未迁移页面零样式泄漏
 
-`SHARED_COMPONENT_DESIGN_DECISION_DRAFT`（阶段一验收要点，本设计只设计不执行）：
+`SHARED_COMPONENT_DESIGN_DECISION_APPROVED`（阶段一验收要点，本设计只设计不执行）：
 
 1. **静态**：公共层无全局样式块；`--ql-*` 未定义在 `:root`/`body`；
    全部 `:deep()` 均带 `ql-` 限定；
@@ -1875,7 +1892,7 @@ interface UseQueryListVisibleAutoRefreshReturn {
 
 ### 7.9.5 Element Plus 深度选择器限制
 
-`SHARED_COMPONENT_DESIGN_DECISION_DRAFT`：
+`SHARED_COMPONENT_DESIGN_DECISION_APPROVED`：
 
 - 允许在 `scoped` 内使用 `:deep()`，但**必须**由本组件根类限定；
 - **禁止**在公共层新增全局 popper 类（例如 `.el-popper.ql-*`）。
@@ -1890,7 +1907,7 @@ interface UseQueryListVisibleAutoRefreshReturn {
 
 ### 7.10.1 响应式
 
-`SHARED_COMPONENT_DESIGN_DECISION_DRAFT`：
+`SHARED_COMPONENT_DESIGN_DECISION_APPROVED`：
 
 | 项 | 规则 |
 | --- | --- |
@@ -1904,7 +1921,7 @@ interface UseQueryListVisibleAutoRefreshReturn {
 
 ### 7.10.2 可访问性
 
-`SHARED_COMPONENT_DESIGN_DECISION_DRAFT`：
+`SHARED_COMPONENT_DESIGN_DECISION_APPROVED`：
 
 | 项 | 规则 |
 | --- | --- |
@@ -1924,7 +1941,7 @@ interface UseQueryListVisibleAutoRefreshReturn {
 
 ### 7.10.3 非 Spinner 动效边界
 
-`SHARED_COMPONENT_DESIGN_DECISION_DRAFT`：
+`SHARED_COMPONENT_DESIGN_DECISION_APPROVED`：
 
 - 公共层**不引入**任何新的过渡动画；
 - 参考实现已明确：倒计时环为**逐秒离散**递减，**无填充式补间**，
@@ -1938,7 +1955,7 @@ interface UseQueryListVisibleAutoRefreshReturn {
 
 ### 7.11.1 阶段一必须完成
 
-`SHARED_COMPONENT_DESIGN_DECISION_DRAFT`：
+`SHARED_COMPONENT_DESIGN_DECISION_APPROVED`：
 
 1. 创建 6 个展示组件：`QueryListPageShell`、`QueryListQueryPanel`、
    `QueryListActions`、`QueryListResultPanel`、`QueryListRefreshToolbar`、
@@ -1960,9 +1977,11 @@ interface UseQueryListVisibleAutoRefreshReturn {
    以及标题（`margin:0` / `20px` / `650` / `-0.01em` / `#09090b`）与描述
    （`margin:4px 0 0` / `13px` / `#71717a` / `1.5`）的完整排版事实——
    这些值**不能**由 `MainLayout .content-area` 的外层 padding 替代（见 §7.2.1、§7.4.1）；
-   **同时**，页面壳的**默认槽不得插入包装层**：`.ql-page` 的直接子节点必须仍为
-   “页头 / 查询面板 / 结果面板”三个且顺序不变，使参考实现既有的
-   `.dss-page` 直接子节点基数断言（`children.length === 3`）在接入后继续成立（见 §7.4.1）；
+   **同时**，页面壳的**默认槽不得插入包装层**：在**正常内容状态**下 `.ql-page` 的
+   直接子节点必须仍为“页头 / 查询面板 / 结果面板”三个且顺序不变，使参考实现既有的
+   `.dss-page` 直接子节点基数断言（`children.length === 3`）在接入后继续成立；
+   在**首载失败状态**下直接子节点必须为“页头 / 错误卡片”两个且顺序不变；
+   两种状态均**不得**生成 `.ql-page__body` 或任何默认槽包装层（见 §7.4.1）；
 7. 保持 `useDataSourceSnapshot.ts` 的成熟请求状态机与全部 Feature 业务语义
    **完全不变**（六类请求、单飞行、失败保留、隐藏冻结、恢复补发、
    倒计时投影、重置不查询）；
@@ -1970,7 +1989,7 @@ interface UseQueryListVisibleAutoRefreshReturn {
 
 ### 7.11.2 阶段一明确不做
 
-`SHARED_COMPONENT_DESIGN_DECISION_DRAFT`：
+`SHARED_COMPONENT_DESIGN_DECISION_APPROVED`：
 
 1. **不迁移**“数据同步进度”或任何其他页面；
 2. **不实现**三个被延后的行为 Composable（不创建文件、不建占位）；
@@ -1984,7 +2003,7 @@ interface UseQueryListVisibleAutoRefreshReturn {
 
 ### 7.11.3 偏离说明
 
-`SHARED_COMPONENT_DESIGN_DECISION_DRAFT` —— 与已批准基线的推荐方向相比，
+`SHARED_COMPONENT_DESIGN_DECISION_APPROVED` —— 与已批准基线的推荐方向相比，
 阶段一有**两处**需显式记录的偏离，均已在上文给出理由：
 
 | 偏离 | 内容 | 理由位置 |
@@ -2000,7 +2019,7 @@ interface UseQueryListVisibleAutoRefreshReturn {
 
 ## 7.12 后续实现与验收矩阵（本轮只设计，不执行）
 
-`SHARED_COMPONENT_DESIGN_DECISION_DRAFT` —— 下表为**阶段一实现任务**应执行的
+`SHARED_COMPONENT_DESIGN_DECISION_APPROVED` —— 下表为**阶段一实现任务**应执行的
 验证项清单。**本设计任务不执行其中任何一项**。
 
 ### 7.12.1 功能与回归
@@ -2022,7 +2041,7 @@ interface UseQueryListVisibleAutoRefreshReturn {
 | 13 | 其他路由 `scrollbar-gutter` 无泄漏 | 逐路由计算样式断言 | `NOT_RUN_DOCUMENT_DESIGN_ONLY` |
 | 14 | 负向控制可使严格几何断言非零退出 | 注入错误实现，断言检查失败 | `NOT_RUN_DOCUMENT_DESIGN_ONLY` |
 | 15 | 页面壳矩形与排版逐值不变 | 断言等价接入后 `.ql-page` 的 `padding` / `border-radius` / `background` / `row-gap` 与标题/描述的 `margin` / `font-size` / `font-weight` / `letter-spacing` / `color` / `line-height` 与接入前**逐值相同**（`14px 16px` / `10px` / `transparent` / `12px`；`0` / `20px` / `650` / `-0.01em` / `#09090b`；`4px 0 0` / `13px` / `#71717a` / `1.5`） | `NOT_RUN_DOCUMENT_DESIGN_ONLY` |
-| 15a | 页面壳**直接子节点集合与顺序**不变 | 断言等价接入后 `.ql-page` 的**直接**元素子节点**恰好**为 3 个且顺序为“页头 → 查询面板 → 结果面板”（沿用参考实现既有断言口径：`element.children.length === 3`，并逐项断言三个直接子节点分别命中页头 / 查询卡片 / 结果卡片）；断言模板**未生成** `.ql-page__body`、未在默认槽外层插入任何包装元素；断言第一个直接子节点与第二个之间的间距等于根级 `gap`（`12px`），即根级 `gap` 直接作用于页头与业务段落 | `NOT_RUN_DOCUMENT_DESIGN_ONLY` |
+| 15a | 页面壳**直接子节点集合与顺序**不变（**按状态分别断言**） | **正常内容状态**：断言等价接入后 `.ql-page` 的**直接**元素子节点**恰好**为 3 个且顺序为“页头 → 查询面板 → 结果面板”（沿用参考实现既有断言口径：`element.children.length === 3`，并逐项断言三个直接子节点分别命中页头 / 查询卡片 / 结果卡片）；断言第一个直接子节点与第二个之间的间距等于根级 `gap`（`12px`），即根级 `gap` 直接作用于页头与业务段落。**首载失败状态**（`firstLoadError`）：断言 `.ql-page` 的**直接**元素子节点**恰好**为 2 个且顺序为“页头 → 错误卡片”，并断言根级 `gap` 作用于该段。**两种状态共同断言**：模板**未生成** `.ql-page__body`、未在默认槽外层插入任何包装元素 | `NOT_RUN_DOCUMENT_DESIGN_ONLY` |
 | 16 | 结果面板四段结构与 divider/正文几何 | 断言存在 `header` / `error-slot` / `divider` / `body` 四段且顺序不变；divider 为 `1px` / `#f0f0f1` / `margin 0 16px`；正文 `padding 10px 16px 14px` 且 `min-width:0` | `NOT_RUN_DOCUMENT_DESIGN_ONLY` |
 | 17 | 查询/重置按钮完整视觉与可选高度 | 断言 `:hover` / `:focus` 两态下底色、边框、文字色与参考实现一致；`heightPx` 未传时**不输出 `height`**，参考页显式传 `30` 时计算高度为 `30px` | `NOT_RUN_DOCUMENT_DESIGN_ONLY` |
 | 17a | 焦点态**严格等价**（`:focus` 而非 `:focus-visible`） | 三种路径逐一与参考实现**逐值比较**底色/边框/文字色，且结果必须一致：① **鼠标点击后移出按钮**（点击形成焦点 → 移出 → 断言焦点态视觉仍在），② **键盘聚焦**（Tab 到达按钮 → 断言焦点态视觉），③ **hover**（移入不点击 → 断言 hover 态视觉）；并断言组件源码中查询/重置按钮的状态选择器为 `:focus`、**不含** `:focus-visible`；同时断言 `QueryListRefreshToolbar` 自身的 `focus-visible` **未被改动** | `NOT_RUN_DOCUMENT_DESIGN_ONLY` |
@@ -2039,7 +2058,7 @@ interface UseQueryListVisibleAutoRefreshReturn {
 
 ### 7.12.3 严格几何判定口径
 
-`SHARED_COMPONENT_DESIGN_DECISION_DRAFT` —— 沿用参考实现已冻结的口径：
+`SHARED_COMPONENT_DESIGN_DECISION_APPROVED` —— 沿用参考实现已冻结的口径：
 
 - 判定阈值为**严格 `0`**（不做像素取整、不设容差）；
 - 观测对象包括：按钮外框 `x/y/width/height`、按钮相邻元素的
@@ -2054,7 +2073,7 @@ interface UseQueryListVisibleAutoRefreshReturn {
 
 ### 7.13.1 风险清单
 
-`SHARED_COMPONENT_DESIGN_DECISION_DRAFT`：
+`SHARED_COMPONENT_DESIGN_DECISION_APPROVED`：
 
 | # | 风险 | 影响 | 缓解 |
 | --- | --- | --- | --- |
@@ -2075,11 +2094,11 @@ interface UseQueryListVisibleAutoRefreshReturn {
 | 15 | **页面壳内层内边距被误归给布局层** | 公共页面壳丢失 `padding:14px 16px`、圆角与本页标题/描述配色，等价接入后页面几何与排版变化 | §7.2.1、§7.4.1：`.dss-page` 自带内层 `padding` 与 `border-radius`，与 `MainLayout .content-area` 的外层 `padding` 是两层事实，不得合并口径；§7.12.1 第 15 项逐值断言 |
 | 16 | **结果面板分隔线与正文几何缺失** | 头部/正文之间缺少 1px 分隔线或正文内边距变化，产生像素位移 | §7.4.4 的四段渲染结构与 divider/body 令牌；§7.12.1 第 16 项断言 |
 | 17 | **统一 Tooltip 丢失调用方内容宽度或读屏关联** | 查询候选 Tooltip 由 `480px` 变为整视口宽；`role="tooltip"` 无触发关联，读屏不可达；或控制器与 Host 各自生成 ID 导致关联错位 | §7.6.1 的 `maxWidthPx` 契约闭环（`show → 校验 → target.maxWidthPx → Host 最终 max-width → 测量`；表格省略、查询候选显式传 `480`）、§7.6.4 的 `hostId` 单值共享与 `aria-describedby` token 生命周期（追加/去重/切换先移除/只移除自身 token/无剩余删除属性）；§7.12.1 第 18、19 项断言 |
-| 18 | **页面壳默认槽被插入包装层** | `.ql-page` 的直接子节点由 3 个变为 2 个（页头 + 包装层），查询卡片与结果卡片之间的根级 `12px` 间距失效，等价接入立即产生像素位移，并直接违反参考实现既有的“直接子节点基数 = 3”断言 | §7.4.1 明确**不存在**默认槽包装层、`div.ql-page__body` 已从契约移除，并给出“`gap` 只在直接子项之间生效”的几何理由；§7.12.1 第 15a 项断言直接子节点集合/顺序与根级间距 |
+| 18 | **页面壳默认槽被插入包装层** | **正常内容状态**下 `.ql-page` 的直接子节点由 3 个变为 2 个（页头 + 包装层），查询卡片与结果卡片之间的根级 `12px` 间距失效；**首载失败状态**下的“页头 + 错误卡片”两子节点结构同样被破坏。两种状态在等价接入后立即产生像素位移，并直接违反参考实现既有的“正常内容状态下直接子节点基数 = 3”断言 | §7.4.1 明确**不存在**默认槽包装层、`div.ql-page__body` 已从契约移除，并给出“`gap` 只在直接子项之间生效”的几何理由；§7.12.1 第 15a 项按正常内容状态（3 子节点）与首载失败状态（2 子节点）分别断言直接子节点集合/顺序与根级间距 |
 
 ### 7.13.2 回滚设计
 
-`SHARED_COMPONENT_DESIGN_DECISION_DRAFT`：
+`SHARED_COMPONENT_DESIGN_DECISION_APPROVED`：
 
 1. **回滚粒度**：阶段一实现任务必须组织为“**先新增公共层，再等价接入参考页面**”
    两个可独立回退的提交单元。若接入后出现不可接受的等价性问题，
@@ -2101,22 +2120,22 @@ interface UseQueryListVisibleAutoRefreshReturn {
 
 ## 8. 与四份已批准模板文档的关系
 
-`SHARED_COMPONENT_DESIGN_DECISION_DRAFT` —— 本文件是四份已批准模板文档的
-**下游详细设计草案**：
+`SHARED_COMPONENT_DESIGN_DECISION_APPROVED` —— 本文件是四份已批准模板文档的
+**下游详细设计**（设计结论已批准，尚未实现）：
 
 - 四份模板文档仍是**已批准基线**，本文件**不修改**其规范内容；
 - 本文件对候选清单的结论是**逐项带证据的细化**，其中一处结论与基线
   候选表的建议并列方式不同（见 §6.3），但**不否定**基线候选表的
   存在意义与分层结论；
 - 四份模板文档新增的最小导航与状态指引见各自文件；
-- 本文件的状态为 `DRAFT_PENDING_CHATGPT_AND_PROJECT_OWNER_REVIEW`，
-  **未批准**、**未实现**。
+- 本文件的状态为 `APPROVED`（设计结论**已批准**），**未实现**；
+  批准**不改变**四份模板文档的任何规范内容，也**不改变**其标记计数。
 
 ---
 
 ## 9. R1 契约等价性纠正记录
 
-`SHARED_COMPONENT_DESIGN_DECISION_DRAFT` —— 本节记录 R1
+`SHARED_COMPONENT_DESIGN_DECISION_APPROVED` —— 本节记录 R1
 （`QUERY-LIST-PAGE-SHARED-COMPONENT-DESIGN-001-R1`，基准提交
 `106bb41c83c9dfd6f19b323cd68bd1b347193f80`）对 R0 草案所做的**契约等价性纠正**。
 
@@ -2149,21 +2168,23 @@ implementation_authorization_status=NOT_GRANTED
 - 按钮高度基线状态仍为**未定义、未改变**（见 §7.5.4）；
 - 三个固定宽度参考值仍为 `62 / 62 / 110`（见 §7.5.1）。
 
-本文件继续只使用 `SHARED_COMPONENT_DESIGN_DECISION_DRAFT` 一个标记，
-**未使用** `README.md` §5 的四类保留标记。R1 仍是**纯文档纠正任务**：
+本文件继续只使用 `SHARED_COMPONENT_DESIGN_DECISION_APPROVED` 一个标记，
+**未使用** `README.md` §5 的四类保留标记。R1 是**纯文档纠正任务**：
 **未创建任何组件、Composable、路由元数据或样式**，**未修改“源库快照状态”页面**，
 **未迁移任何页面**，**未执行任何测试、构建或浏览器验证**。
 
-R1 完成后仍需 **ChatGPT 从远程 Git 复审**，随后由**项目负责人**决定是否批准；
-在此之前 `shared_component_implementation_status`、`page_migration_status`、
+R1 完成时（`2026-09-16`）该设计**仍需** ChatGPT 从远程 Git 复审，随后由
+**项目负责人**决定是否批准；该复审与批准已在 R2 任务与后续批准收口任务中完成
+（见 §10、§11），本段只保留 R1 时点的历史事实。截至 R1，
+`shared_component_implementation_status`、`page_migration_status`、
 `query_list_page_template_implementation_status` 仍为 `NOT_STARTED`，
-**不得**实现公共组件、**不得**让参考页面接入公共组件、**不得**迁移任何页面。
+且**不得**实现公共组件、**不得**让参考页面接入公共组件、**不得**迁移任何页面。
 
 ---
 
 ## 10. R2 契约闭环纠正记录
 
-`SHARED_COMPONENT_DESIGN_DECISION_DRAFT` —— 本节记录 R2
+`SHARED_COMPONENT_DESIGN_DECISION_APPROVED` —— 本节记录 R2
 （`QUERY-LIST-PAGE-SHARED-COMPONENT-DESIGN-001-R2`，日期 `2026-09-16`，
 基准提交 `db9309058c230411c33466bff5027e87b6e0e1fb`）对 R1 草案所做的
 **契约闭环纠正**。
@@ -2175,7 +2196,7 @@ ChatGPT 对 R1 的复审结论为
 
 | # | 纠正 | 位置 |
 | --- | --- | --- |
-| 1 | `QueryListPageShell` 的默认槽包装层 `div.ql-page__body` 会改变参考页面的直接子节点结构与根级 `gap` 几何 → **删除该包装层**，默认槽内容直接成为 `.ql-page` 的子节点；补齐 `.ql-page` / `.ql-page__title` / `.ql-page__description` 的可执行 CSS 与“直接子节点恰好 3 个且顺序不变”的断言 | §7.4.1、§7.9.2、§7.11.1 第 6 项、§7.12.1 第 15a 项、§7.13.1 风险 18 |
+| 1 | `QueryListPageShell` 的默认槽包装层 `div.ql-page__body` 会改变参考页面的直接子节点结构与根级 `gap` 几何 → **删除该包装层**，默认槽内容直接成为 `.ql-page` 的子节点；补齐 `.ql-page` / `.ql-page__title` / `.ql-page__description` 的可执行 CSS 与“**正常内容状态**下直接子节点恰好 3 个且顺序不变”的断言（该断言在后续批准收口中进一步补足首载失败状态的 2 子节点断言，见 §11） | §7.4.1、§7.9.2、§7.11.1 第 6 项、§7.12.1 第 15a 项、§7.13.1 风险 18 |
 | 2 | Tooltip 的 `maxWidthPx`、Host `id` 与触发元素 `aria-describedby` 未构成可实现的闭环 → `QueryListTooltipTarget` 增加 `maxWidthPx`、控制器返回 `hostId`、Host props 增加 `id`，写明唯一使用关系与`show → 校验 → target.maxWidthPx → Host 最终 max-width → 测量` 全链路，并写明 `aria-describedby` 的追加 / 去重 / 切换 / 清理 / 无剩余即删除属性 / 保留原有 token 规则 | §7.4.6、§7.6.1、§7.6.3、§7.6.4、§7.6.6、§7.6.7、§7.8.2、§7.9.2、§7.9.3、§7.11.1 第 3 项、§7.12.1 第 18、19 项、§7.13.1 风险 17 |
 | 3 | `QueryListActions` 查询/重置按钮的焦点选择器被写成 `:focus-visible`，与参考实现的 `:focus` **不是严格等价** → 全篇改为 `:hover, :focus`；`QueryListRefreshToolbar` 自身的 `focus-visible` 事实不在本项范围、不得机械替换 | §7.4.3、§7.12.1 第 17、17a 项 |
 | 4 | 候选决策矩阵中“无自动刷新的页面无需传参即可不渲染倒计时段”的旧表述，与“`countdown` 必填但可空”自相矛盾 → 改为“无自动刷新的页面**显式传 `countdown=null`**，即可不渲染倒计时段”，并把全篇统一为“必填但可空”的唯一表述 | §6.1 候选 5、§7.4.5、§7.4.7 |
@@ -2195,11 +2216,80 @@ R2 仍是**纯文档纠正任务**：**未创建任何组件、Composable、路�
 **未修改“源库快照状态”页面或任何其他页面**，**未迁移任何页面**，
 **未执行任何测试、构建或浏览器验证**，**未进入实现阶段**。
 
-`implementation_authorization_status` 仍为 `NOT_GRANTED`。R2 的记录**不包含**
-任何结果提交号（该提交号在 R2 完成 Commit 并由远程复审时才会产生）。
-本文件继续只使用 `SHARED_COMPONENT_DESIGN_DECISION_DRAFT` 一个标记，
+`implementation_authorization_status` 在 R2 期间为 `NOT_GRANTED`。R2 记录撰写时
+**不包含**任何结果提交号；该提交号其后确认为
+`6f3c3517821d4b7e43300180033c5b5ef7c628f9`（见文件头状态区与 §11）。
+本文件继续只使用 `SHARED_COMPONENT_DESIGN_DECISION_APPROVED` 一个标记，
 **未使用** `README.md` §5 的四类保留标记。
 
-R2 完成后仍需 **ChatGPT 从远程 Git 复审**，随后由**项目负责人**决定是否批准；
-在此之前公共组件实现状态、页面迁移状态与模板实现状态均**不得**由 `NOT_STARTED`
-改为任何已实现取值。
+R2 完成时（`2026-09-16`）该设计**仍需** ChatGPT 从远程 Git 复审，随后由
+**项目负责人**决定是否批准；该复审结论为 `APPROVED`，项目负责人亦已批准
+（见 §11），本段只保留 R2 时点的历史事实。公共组件实现状态、页面迁移状态与
+模板实现状态在 R2 与批准收口后**仍为 `NOT_STARTED`**，
+**不得**改为任何已实现取值。
+
+---
+
+## 11. ChatGPT R2 复审与项目负责人批准记录
+
+本节记录本设计的**批准收口**
+（`QUERY-LIST-PAGE-SHARED-COMPONENT-DESIGN-APPROVAL-001`，日期 `2026-09-16`）。
+
+### 11.1 批准依据
+
+```text
+r2_correction_result_commit_id=6f3c3517821d4b7e43300180033c5b5ef7c628f9
+chatgpt_r2_shared_component_design_review_status=APPROVED
+project_owner_approval_status=APPROVED
+project_owner_instruction=CONTINUE_AFTER_CHATGPT_R2_APPROVAL_AND_APPROVAL_RECOMMENDATION
+approval_task=QUERY-LIST-PAGE-SHARED-COMPONENT-DESIGN-APPROVAL-001
+approval_date=2026-09-16
+```
+
+ChatGPT 从远程 Git 对 R2 提交
+`6f3c3517821d4b7e43300180033c5b5ef7c628f9` 的独立复审结论为 `APPROVED`：
+架构方向、四处契约闭环纠正、十项候选结论、路由元数据方案、Tooltip 契约、
+页面壳契约、查询/重置选择器契约与 `countdown` 契约**全部通过**。
+项目负责人在获知该结论与批准建议后回复“按照你的想法来，请继续”，
+本任务将其记录为对**本详细设计**的批准授权。
+
+### 11.2 批准收口的具体变更
+
+1. **标记批准收口**：设计正文的全部设计决策标记由草案态**等量**替换为批准态标记
+   （`66` 处；草案态标记现为 `0` 处）；
+2. **状态批准收口**：`shared_component_design_status` 由待复审转为 `APPROVED`；
+   ChatGPT R0/R1 复审结论、R1/R2 纠正状态、项目负责人批准状态与批准任务号
+   均已按 §11.1 与文件头状态区记录；
+3. **唯一措辞澄清（不改变架构）**：把 `.ql-page` 的“直接元素子节点恰好 3 个”
+   限定到**正常内容状态**，并为**首载失败状态**补齐“页头 / 错误卡片”共 2 个
+   直接元素子节点的断言；两种状态**均不得**生成默认槽包装层，根级 `gap`
+   **始终只作用于当前状态下的直接子项**（见 §7.4.1 契约行、§7.11.1 第 6 项、
+   §7.12.1 第 15a 项、§7.13.1 风险 18）。本项仅澄清契约边界，
+   **未**引入包装层、**未**改变插槽 API、**未**改变根布局 CSS。
+
+### 11.3 批准后的边界（未实现、未迁移）
+
+```text
+query_list_page_template_document_status=APPROVED
+shared_component_design_status=APPROVED
+query_list_page_template_implementation_status=NOT_STARTED
+shared_component_implementation_status=NOT_STARTED
+page_migration_status=NOT_STARTED
+reference_feature_status=FINAL_ACCEPTED_AND_CLOSED
+implementation_authorization_status=NOT_GRANTED
+```
+
+- 本批准任务**未创建任何组件、Composable、测试、样式或路由元数据**；
+- **未修改** `frontend/**`、`backend/**`、项目测试、任何 Feature 文档、
+  既有报告或既有证据；
+- **未修改**“源库快照状态”参考页面，**未迁移**任何页面；
+- **未执行**测试、构建、接口调用或浏览器几何回归；
+- **未访问**数据库、ZooKeeper 或 Kafka。
+- 设计获批**不等于**公共组件已实现。下一步为**独立授权的实现任务**：
+
+```text
+next_step=QUERY-LIST-PAGE-SHARED-COMPONENT-IMPLEMENTATION-001
+```
+
+该入口只表示**可以单独发起**公共组件实现任务，**不表示**本批准任务已经实施；
+具体采用哪个页面作为首个迁移试点，仍需**项目负责人另行确认**。

@@ -22,39 +22,49 @@ chatgpt_r1_review_status=APPROVED
 project_owner_approval_status=APPROVED
 approval_task=QUERY-LIST-PAGE-TEMPLATE-BASELINE-APPROVAL-001
 approval_date=2026-09-16
-shared_component_design_status=DRAFT_PENDING_CHATGPT_AND_PROJECT_OWNER_REVIEW
+shared_component_design_status=APPROVED
+shared_component_design_approval_status=COMPLETED
+shared_component_design_approval_task=QUERY-LIST-PAGE-SHARED-COMPONENT-DESIGN-APPROVAL-001
+shared_component_design_approval_date=2026-09-16
 chatgpt_r0_shared_component_design_review_status=CHANGES_REQUIRED_CONTRACT_EQUIVALENCE_CORRECTIONS_ONLY
 chatgpt_r1_shared_component_design_review_status=CHANGES_REQUIRED_FOUR_CONTRACT_CLOSURE_CORRECTIONS
-r1_contract_equivalence_correction_status=APPLIED_PENDING_CHATGPT_R1_REVIEW
-r2_contract_closure_correction_status=APPLIED_PENDING_CHATGPT_R2_REVIEW
+chatgpt_r2_shared_component_design_review_status=APPROVED
+r1_contract_equivalence_correction_status=APPLIED_AND_REVIEWED_CHANGES_REQUIRED
+r2_contract_closure_correction_status=APPLIED_AND_REVIEWED_APPROVED
+project_owner_approval_status=APPROVED
 ```
 
 说明：
 
 - 本模板是**项目级已批准基线**，**尚未实现**，**尚未应用到任何页面**。
-- `shared_component_design_status` 指**公共组件详细设计草案**的状态
-  （见 `SHARED_COMPONENT_DESIGN.md`）。该草案**尚未批准、尚未实现**；
-  它的存在**不改变**本模板的批准状态，也**不改变**
-  `query_list_page_template_implementation_status`、
+- `shared_component_design_status` 指**公共组件详细设计**（见
+  `SHARED_COMPONENT_DESIGN.md`）的状态。该设计**已批准**（`APPROVED`），
+  但**尚未实现、尚未接入任何页面**；它的存在**不改变**本模板的批准状态，
+  也**不改变** `query_list_page_template_implementation_status`、
   `shared_component_implementation_status`、`page_migration_status`
   三者仍为 `NOT_STARTED` 的事实。
 - `chatgpt_r0_shared_component_design_review_status`,
   `chatgpt_r1_shared_component_design_review_status`,
-  `r1_contract_equivalence_correction_status` 与
-  `r2_contract_closure_correction_status` **只**描述**公共组件详细设计草案**
-  的复审与纠正状态，其演进为：ChatGPT 从远程 Git 对 R0 草案的复审结论为
-  “架构方向通过、只需纠正契约等价性”；R1
-  （`QUERY-LIST-PAGE-SHARED-COMPONENT-DESIGN-001-R1`）已应用该纠正；
-  ChatGPT 对 R1 的复审结论为
+  `chatgpt_r2_shared_component_design_review_status`,
+  `r1_contract_equivalence_correction_status`,
+  `r2_contract_closure_correction_status` 与
+  `shared_component_design_approval_status` **只**描述**公共组件详细设计**
+  的复审、纠正与批准状态；其演进均为**已完成的历史事实**：ChatGPT 从远程 Git
+  对 R0 草案的复审结论为“架构方向通过、只需纠正契约等价性”，R1
+  （`QUERY-LIST-PAGE-SHARED-COMPONENT-DESIGN-001-R1`，日期 `2026-09-16`）
+  已应用该纠正；ChatGPT 对 R1 的复审结论为
   `CHANGES_REQUIRED_FOUR_CONTRACT_CLOSURE_CORRECTIONS`
   （架构方向继续通过，仍需关闭 `QueryListPageShell` DOM/间距、
-  Tooltip 类型与 Host ID、按钮焦点态等价、`countdown` 表述四处契约缺口）；
-  R2（`QUERY-LIST-PAGE-SHARED-COMPONENT-DESIGN-001-R2`）已应用该纠正，
-  **等待 ChatGPT R2 复审**。这些状态**不表示**设计已批准、**不表示**
-  公共组件已实现、**不表示**任何页面已迁移。注意：本文件顶部
+  Tooltip 类型与 Host ID、按钮焦点态等价、`countdown` 表述四处契约缺口），
+  R2（`QUERY-LIST-PAGE-SHARED-COMPONENT-DESIGN-001-R2`，日期 `2026-09-16`）
+  已应用该纠正并提交（`6f3c3517821d4b7e43300180033c5b5ef7c628f9`）；
+  ChatGPT 对 R2 提交的独立复审结论为 `APPROVED`，项目负责人随后批准；
+  批准收口任务为
+  `QUERY-LIST-PAGE-SHARED-COMPONENT-DESIGN-APPROVAL-001`（`2026-09-16`）。
+  这些状态**不表示**公共组件已实现、**不表示**任何页面已迁移。注意：本文件顶部
   “ChatGPT R1 复审 / 项目负责人授权”指**四份模板文档的批准收口**
   （`QUERY-LIST-PAGE-TEMPLATE-BASELINE-APPROVAL-001`），与本设计的 R0/R1/R2
-  是**两个不同任务**，不得混为一谈。
+  及批准收口是**不同任务**，不得混为一谈。
 - 本模板**不改变任何 Feature 的既有状态**；“源库快照状态”的最终接受状态
   （`FINAL_ACCEPTED_AND_CLOSED`）由原 Feature 收口任务确立，本任务只读取、不重开、不改写。
 - 本任务**未创建公共组件**、**未创建 Composable**、**未迁移任何页面**、**未修改任何代码**。
@@ -190,7 +200,7 @@ PROPOSED_NOT_IMPLEMENTED
 | `DESIGN.md` | 三层设计（页面壳层 / 展示组件层 / 行为组合层）、候选组件与 Composable、状态模型、明确不得抽取的内容 |
 | `UI.md` | 页面结构、查询区、结果工具栏、表格、稳定滚动条槽、响应式与可访问性规范 |
 | `MIGRATION.md` | 逐页评估清单、推荐迁移顺序、每页独立任务要求、已接受参考页保护、后续任务代码 |
-| `SHARED_COMPONENT_DESIGN.md` | **公共组件详细设计草案**（未批准、未实现）：组件决策矩阵、目录与命名、各组件公共契约、Loading 与按钮几何、单实例 Tooltip、稳定滚动条槽唯一方案、状态归属、样式令牌、响应式与可访问性、阶段一范围、验收矩阵、风险与回滚 |
+| `SHARED_COMPONENT_DESIGN.md` | **公共组件详细设计**（已批准、未实现）：组件决策矩阵、目录与命名、各组件公共契约、Loading 与按钮几何、单实例 Tooltip、稳定滚动条槽唯一方案、状态归属、样式令牌、响应式与可访问性、阶段一范围、验收矩阵、风险与回滚 |
 
 ## 7. 后续任务入口
 
@@ -206,24 +216,34 @@ TOPIC-OFFSET-QUERY-LIST-TEMPLATE-MIGRATION-001
 当前唯一有效下一步：
 
 ```text
-next_step=CHATGPT_QUERY_LIST_PAGE_SHARED_COMPONENT_DESIGN_R2_REVIEW_FROM_REMOTE_GIT_THEN_PROJECT_OWNER_APPROVAL_DECISION
+next_step=QUERY-LIST-PAGE-SHARED-COMPONENT-IMPLEMENTATION-001
 ```
 
 即：公共组件详细设计任务（`QUERY-LIST-PAGE-SHARED-COMPONENT-DESIGN-001`）
-已产出草案 `SHARED_COMPONENT_DESIGN.md`（纯设计任务，**未写代码**）；
+已产出 `SHARED_COMPONENT_DESIGN.md`（纯设计任务，**未写代码**）；
 ChatGPT 从远程 Git 对 R0 草案的复审结论为“架构方向通过、只需纠正契约等价性”；
 R1 纠正任务（`QUERY-LIST-PAGE-SHARED-COMPONENT-DESIGN-001-R1`，纯文档纠正）
 已应用该纠正并提交；ChatGPT 对 R1 的复审结论为
 `CHANGES_REQUIRED_FOUR_CONTRACT_CLOSURE_CORRECTIONS`；
 R2 纠正任务（`QUERY-LIST-PAGE-SHARED-COMPONENT-DESIGN-001-R2`，纯文档纠正）
-已应用该四项契约闭环纠正并提交。
-下一步为：**ChatGPT 从远程 Git 对 R2 进行独立复审**，
-随后由**项目负责人做出批准决定**。
+已应用该四项契约闭环纠正并提交（`6f3c3517821d4b7e43300180033c5b5ef7c628f9`）；
+ChatGPT 对 R2 的独立复审结论为 `APPROVED`；
+批准收口任务
+（`QUERY-LIST-PAGE-SHARED-COMPONENT-DESIGN-APPROVAL-001`，`2026-09-16`）
+已把该设计收口为**已批准**。
 
-`shared_component_design_status=DRAFT_PENDING_CHATGPT_AND_PROJECT_OWNER_REVIEW`
-表示草案**尚未批准**。在该草案经复审与批准、并由后续**独立授权的实现任务**
-启动之前：仍**不得**实现公共组件、**不得**让参考页面接入公共组件、
-**不得**迁移任何页面、**不得**把任何 `NOT_STARTED` 状态改为 `IMPLEMENTED`。
+`shared_component_design_status=APPROVED` 表示**设计结论已批准**，
+下一条唯一入口是**独立授权的公共组件实现任务**：
+
+```text
+QUERY-LIST-PAGE-SHARED-COMPONENT-IMPLEMENTATION-001
+```
+
+该入口**只表示可以单独发起实现任务**，**不表示**本批准任务已经实施；
+在实现任务由项目负责人独立授权之前：仍**不得**实现公共组件、
+**不得**让参考页面接入公共组件、**不得**迁移任何页面、
+**不得**把任何 `NOT_STARTED` 状态改为 `IMPLEMENTED`。
+本批准任务**未**实现任何组件、**未**新增路由元数据、**未**迁移任何页面。
 
 ## 8. 使用本模板的注意事项
 
@@ -336,3 +356,34 @@ R2 纠正任务（`QUERY-LIST-PAGE-SHARED-COMPONENT-DESIGN-001-R2`，纯文档�
   `r2_contract_closure_correction_status=APPLIED_PENDING_CHATGPT_R2_REVIEW`、
   `shared_component_implementation_status=NOT_STARTED`、
   `page_migration_status=NOT_STARTED`；**未**把设计状态改为 `APPROVED`。
+- 2026-09-16，公共组件详细设计**R2 复审与项目负责人批准收口**
+  （`QUERY-LIST-PAGE-SHARED-COMPONENT-DESIGN-APPROVAL-001`，纯文档任务）。
+  本轮基准提交 `6f3c3517821d4b7e43300180033c5b5ef7c628f9`（即 R2 结果提交）。
+  ChatGPT 从远程 Git 对该 R2 提交的独立复审结论为 `APPROVED`
+  （架构方向、四处契约闭环、十项候选结论、路由元数据方案、Tooltip 契约、
+  页面壳契约、查询/重置选择器契约与 `countdown` 契约全部通过）；
+  项目负责人在 ChatGPT 给出批准建议后回复“按照你的想法来，请继续”，
+  授权本批准收口任务。
+  本轮把 `SHARED_COMPONENT_DESIGN.md` 由待复审状态收口为**已批准**：
+  设计正文全部设计决策标记由草案态**等量**替换为批准态（`66` 处，
+  草案态现为 `0` 处）；`shared_component_design_status` 改为 `APPROVED`；
+  并把 `.ql-page` 的“直接元素子节点恰好 3 个”限定到**正常内容状态**，
+  为首载失败状态（`firstLoadError`）补齐“页头 / 错误卡片”共 2 个直接元素
+  子节点的断言，两种状态均**不得**生成默认槽包装层——该澄清**仅**限定契约边界，
+  **未**引入包装层、**未**改变插槽 API、**未**改变根布局 CSS。
+  同时对 `DESIGN.md`、`UI.md`、`MIGRATION.md` 做**最小**引用与状态更新。
+  本轮**不改变**架构方向与候选取舍
+  （`10/6/1/3/0` 计数、`ROUTE_META`、`DEFERRED_ALL_THREE`、
+  `NOT_DEFINED_NOT_CHANGED` 均保持不变），
+  **不实现**任何公共组件与 Composable、**不新增**路由元数据、
+  **不修改**任何前端或后端代码与测试、**不迁移**任何页面、**不重开**任何 Feature、
+  **不执行**测试、构建或浏览器验证。
+  批准后状态：`query_list_page_template_document_status=APPROVED`、
+  `shared_component_design_status=APPROVED`、
+  `shared_component_design_approval_status=COMPLETED`、
+  `query_list_page_template_implementation_status=NOT_STARTED`、
+  `shared_component_implementation_status=NOT_STARTED`、
+  `page_migration_status=NOT_STARTED`、`reference_feature_status=FINAL_ACCEPTED_AND_CLOSED`；
+  下一条唯一入口为 `QUERY-LIST-PAGE-SHARED-COMPONENT-IMPLEMENTATION-001`，
+  该入口仅表示**可以单独发起实现任务**。
+  **设计获批不等于公共组件已实现、不等于任何页面已迁移。**
