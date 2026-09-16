@@ -23,17 +23,29 @@ project_owner_approval_status=APPROVED
 approval_task=QUERY-LIST-PAGE-TEMPLATE-BASELINE-APPROVAL-001
 approval_date=2026-09-16
 shared_component_design_status=DRAFT_PENDING_CHATGPT_AND_PROJECT_OWNER_REVIEW
+chatgpt_r0_shared_component_design_review_status=CHANGES_REQUIRED_CONTRACT_EQUIVALENCE_CORRECTIONS_ONLY
+r1_contract_equivalence_correction_status=APPLIED_PENDING_CHATGPT_R1_REVIEW
 ```
 
 说明：
 
 - 本模板是**项目级已批准基线**，**尚未实现**，**尚未应用到任何页面**。
 - `shared_component_design_status` 指**公共组件详细设计草案**的状态
-  （见 `SHARED_COMPONENT_DESIGN.md`）。该草案**尚未复审、尚未批准、尚未实现**；
+  （见 `SHARED_COMPONENT_DESIGN.md`）。该草案**尚未批准、尚未实现**；
   它的存在**不改变**本模板的批准状态，也**不改变**
   `query_list_page_template_implementation_status`、
   `shared_component_implementation_status`、`page_migration_status`
   三者仍为 `NOT_STARTED` 的事实。
+- `chatgpt_r0_shared_component_design_review_status` 与
+  `r1_contract_equivalence_correction_status` **只**描述**公共组件详细设计草案**
+  的复审与纠正状态：ChatGPT 从远程 Git 对 R0 草案的复审结论为
+  “架构方向通过、只需纠正契约等价性”；R1
+  （`QUERY-LIST-PAGE-SHARED-COMPONENT-DESIGN-001-R1`）已应用该纠正，
+  **等待 ChatGPT R1 复审**。这两个状态**不表示**设计已批准、**不表示**
+  公共组件已实现、**不表示**任何页面已迁移。注意：本文件顶部
+  “ChatGPT R1 复审 / 项目负责人授权”指**四份模板文档的批准收口**
+  （`QUERY-LIST-PAGE-TEMPLATE-BASELINE-APPROVAL-001`），与本设计的 R0/R1
+  是**两个不同任务**，不得混为一谈。
 - 本模板**不改变任何 Feature 的既有状态**；“源库快照状态”的最终接受状态
   （`FINAL_ACCEPTED_AND_CLOSED`）由原 Feature 收口任务确立，本任务只读取、不重开、不改写。
 - 本任务**未创建公共组件**、**未创建 Composable**、**未迁移任何页面**、**未修改任何代码**。
@@ -185,12 +197,15 @@ TOPIC-OFFSET-QUERY-LIST-TEMPLATE-MIGRATION-001
 当前唯一有效下一步：
 
 ```text
-next_step=CHATGPT_QUERY_LIST_PAGE_SHARED_COMPONENT_DESIGN_REVIEW_FROM_REMOTE_GIT_THEN_PROJECT_OWNER_APPROVAL_DECISION
+next_step=CHATGPT_QUERY_LIST_PAGE_SHARED_COMPONENT_DESIGN_R1_REVIEW_FROM_REMOTE_GIT_THEN_PROJECT_OWNER_APPROVAL_DECISION
 ```
 
 即：公共组件详细设计任务（`QUERY-LIST-PAGE-SHARED-COMPONENT-DESIGN-001`）
-已产出草案 `SHARED_COMPONENT_DESIGN.md`（纯设计任务，**未写代码**）。
-下一步为：**ChatGPT 从远程 Git 对该草案进行独立复审**，
+已产出草案 `SHARED_COMPONENT_DESIGN.md`（纯设计任务，**未写代码**）；
+ChatGPT 从远程 Git 对 R0 草案的复审结论为“架构方向通过、只需纠正契约等价性”；
+R1 纠正任务（`QUERY-LIST-PAGE-SHARED-COMPONENT-DESIGN-001-R1`，纯文档纠正）
+已应用该纠正并提交。
+下一步为：**ChatGPT 从远程 Git 对 R1 进行独立复审**，
 随后由**项目负责人做出批准决定**。
 
 `shared_component_design_status=DRAFT_PENDING_CHATGPT_AND_PROJECT_OWNER_REVIEW`
@@ -251,3 +266,30 @@ next_step=CHATGPT_QUERY_LIST_PAGE_SHARED_COMPONENT_DESIGN_REVIEW_FROM_REMOTE_GIT
   `query_list_page_template_implementation_status=NOT_STARTED`、
   `shared_component_implementation_status=NOT_STARTED`、
   `page_migration_status=NOT_STARTED`、`reference_feature_status=FINAL_ACCEPTED_AND_CLOSED`。
+- 2026-09-16，公共组件详细设计**R0 复审与 R1 契约等价性纠正**
+  （`QUERY-LIST-PAGE-SHARED-COMPONENT-DESIGN-001-R1`，纯文档纠正任务）。
+  本轮基准提交 `106bb41c83c9dfd6f19b323cd68bd1b347193f80`（即 R0 结果提交）。
+  ChatGPT 从远程 Git 对 R0 草案的复审结论为
+  `CHANGES_REQUIRED_CONTRACT_EQUIVALENCE_CORRECTIONS_ONLY`
+  （架构方向、候选取舍、路由元数据方案与阶段划分通过，仅需纠正公共契约
+  无法复现参考页面现状的问题）。
+  只纠正 `SHARED_COMPONENT_DESIGN.md` 的以下五项**契约等价性缺口**：
+  页面壳几何与排版事实（内层内边距 `14px 16px`、圆角 `10px`、背景 `transparent`、
+  标题 `#09090b`、描述 `#71717a` 等，并修正“页面内边距属 `MainLayout`”的错误归属）；
+  结果面板的 divider 与正文 `padding` / `min-width:0`；
+  查询/重置按钮的完整视觉契约与 `heightPx` **无公共默认值**；
+  统一 Tooltip 的调用方 `maxWidthPx`（表格省略、查询候选传 `480`）与
+  `aria-describedby` 读屏关联生命周期；
+  以及 `countdown` 必填性、重复标题/重复状态行、操作组换行表述等内部一致性。
+  同时对 `README.md`、`MIGRATION.md` 做**最小**状态与入口更新。
+  本轮**不改变**架构方向与候选取舍
+  （`6/1/3/0` 计数、`ROUTE_META`、`DEFERRED_ALL_THREE`、
+  `NOT_DEFINED_NOT_CHANGED` 均保持不变），
+  **不实现**任何公共组件与 Composable、**不新增**路由元数据、
+  **不修改**任何前端或后端代码与测试、**不迁移**任何页面、**不重开**任何 Feature、
+  **不执行**测试、构建或浏览器验证。
+  本文件**不记录**本轮结果提交（其尚不存在）；结果提交应在后续文档任务中记录。
+  纠正后状态：`shared_component_design_status=DRAFT_PENDING_CHATGPT_AND_PROJECT_OWNER_REVIEW`、
+  `r1_contract_equivalence_correction_status=APPLIED_PENDING_CHATGPT_R1_REVIEW`、
+  `shared_component_implementation_status=NOT_STARTED`、
+  `page_migration_status=NOT_STARTED`；**未**把设计状态改为 `APPROVED`。

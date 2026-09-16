@@ -169,7 +169,7 @@ TOPIC-OFFSET-QUERY-LIST-TEMPLATE-MIGRATION-001
 不写代码**。其当前进度状态记为：
 
 ```text
-shared_component_design_phase_status=DRAFT_COMPLETED_PENDING_REVIEW
+shared_component_design_phase_status=R1_CORRECTION_APPLIED_PENDING_REVIEW
 shared_component_design_status=DRAFT_PENDING_CHATGPT_AND_PROJECT_OWNER_REVIEW
 shared_component_design_path=docs/baseline/query-list-page-template/SHARED_COMPONENT_DESIGN.md
 ```
@@ -178,7 +178,11 @@ shared_component_design_path=docs/baseline/query-list-page-template/SHARED_COMPO
 
 - 该阶段**只**完成了一份**草案**并已提交，等待 **ChatGPT 从远程 Git 独立复审**，
   之后由**项目负责人**决定是否批准；
-- `DRAFT_COMPLETED_PENDING_REVIEW` **不表示**该设计已批准、已冻结或可据以开工；
+- ChatGPT 对 R0 草案的复审结论为
+  `CHANGES_REQUIRED_CONTRACT_EQUIVALENCE_CORRECTIONS_ONLY`
+  （架构方向通过，仅需纠正契约等价性）；R1 纠正任务
+  （`QUERY-LIST-PAGE-SHARED-COMPONENT-DESIGN-001-R1`）已应用该纠正，**等待 ChatGPT R1 复审**；
+- `R1_CORRECTION_APPLIED_PENDING_REVIEW` **不表示**该设计已批准、已冻结或可据以开工；
   它**不**使公共组件实现状态发生任何变化；
 - 该阶段**未**实现公共组件、**未**新增 Composable、**未**新增路由元数据、
   **未**修改任何业务页面、**未**迁移任何页面；
@@ -193,11 +197,14 @@ shared_component_design_path=docs/baseline/query-list-page-template/SHARED_COMPO
 ## 7. 当前有效下一步
 
 ```text
-next_step=CHATGPT_QUERY_LIST_PAGE_SHARED_COMPONENT_DESIGN_REVIEW_FROM_REMOTE_GIT_THEN_PROJECT_OWNER_APPROVAL_DECISION
+next_step=CHATGPT_QUERY_LIST_PAGE_SHARED_COMPONENT_DESIGN_R1_REVIEW_FROM_REMOTE_GIT_THEN_PROJECT_OWNER_APPROVAL_DECISION
 ```
 
 公共组件详细设计任务（`QUERY-LIST-PAGE-SHARED-COMPONENT-DESIGN-001`）已产出草案
-`SHARED_COMPONENT_DESIGN.md`。下一步为 **ChatGPT 从远程 Git 对该草案进行独立复审**，
+`SHARED_COMPONENT_DESIGN.md`；ChatGPT 对 R0 的复审结论为
+“架构方向通过、只需纠正契约等价性”，R1 纠正任务
+（`QUERY-LIST-PAGE-SHARED-COMPONENT-DESIGN-001-R1`）已应用该纠正。
+下一步为 **ChatGPT 从远程 Git 对 R1 进行独立复审**，
 随后由**项目负责人做出批准决定**。
 
 该草案**尚未批准**。在草案获批并由后续**独立授权的实现任务**启动之前：
