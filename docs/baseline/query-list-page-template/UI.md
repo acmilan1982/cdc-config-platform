@@ -68,8 +68,9 @@
 - 宽度不足时允许**整组换行**，但换行必须由容器宽度触发，**不得**由控件内容长度触发；
 - 每个控件的宽度必须**预先锁定**，不得随选中内容长度变化而伸缩。
 
-`REFERENCE_IMPLEMENTATION_FACT` —— 参考实现的查询区 `.dss-refresh-group` 之外的
-三个条件组，各自把「宽 / 最小宽 / 最大宽 / `flex-basis`」四值同锁：
+`REFERENCE_IMPLEMENTATION_FACT` —— 参考实现的查询区 `.dss-query-bar` 内包含三个
+`.dss-q-group` 条件组；每个条件组均将标签和控件组合为一个不可拆分的行内单元，
+并分别把控件的「宽 / 最小宽 / 最大宽 / `flex-basis`」四值同锁：
 
 | 控件 | 锁定宽度 | 说明 |
 | --- | --- | --- |
@@ -321,7 +322,8 @@ flex: 0 0 auto; white-space: nowrap; font-size: 13px`；结果卡片头部整体
 
 > `REFERENCE_IMPLEMENTATION_FACT`：上述两个实现是**参考实现的现状**，不是模板要求的
 > “必须有两个 Tooltip”。模板只要求“同屏最多 1 个 Tooltip”，并建议在组件化时收敛为
-> 单一可复用的单实例机制（见 `DESIGN.md` §2.6 的 `PROPOSED_NOT_IMPLEMENTED` 候选）。
+> 单一可复用的单实例机制（见 `DESIGN.md` §2 的 `SingleTooltip.vue` 候选及 §2.3 的
+> 组件化难点说明；二者均属于 `PROPOSED_NOT_IMPLEMENTED`）。
 
 ### 4.5 分页、页大小、最大返回条数、固定表头、横向滚动
 
