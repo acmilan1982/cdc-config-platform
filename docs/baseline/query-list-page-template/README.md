@@ -1,6 +1,10 @@
-# 查询列表页模板基线（草案）
+# 查询列表页模板基线（批准版）
 
-> 文档状态：`DRAFT_PENDING_CHATGPT_AND_PROJECT_OWNER_REVIEW`
+> 文档状态：`APPROVED`
+> 批准任务：`QUERY-LIST-PAGE-TEMPLATE-BASELINE-APPROVAL-001`
+> 批准日期：2026-09-16
+> ChatGPT R1 复审：`APPROVED`
+> 项目负责人授权：`APPROVED`
 > 建立任务：`QUERY-LIST-PAGE-TEMPLATE-BASELINE-001`
 > 建立日期：2026-09-16
 > 基准提交：`83ff5c1ff80190459a4849eb74617cd4760db26e`
@@ -9,20 +13,26 @@
 ## 1. 状态
 
 ```text
-query_list_page_template_document_status=DRAFT_PENDING_CHATGPT_AND_PROJECT_OWNER_REVIEW
+query_list_page_template_document_status=APPROVED
 query_list_page_template_implementation_status=NOT_STARTED
 shared_component_implementation_status=NOT_STARTED
 page_migration_status=NOT_STARTED
 reference_feature_status=FINAL_ACCEPTED_AND_CLOSED
+chatgpt_r1_review_status=APPROVED
+project_owner_approval_status=APPROVED
+approval_task=QUERY-LIST-PAGE-TEMPLATE-BASELINE-APPROVAL-001
+approval_date=2026-09-16
 ```
 
 说明：
 
-- 本模板是**项目级草案**，尚未批准，未实现，未应用到任何页面。
+- 本模板是**项目级已批准基线**，**尚未实现**，**尚未应用到任何页面**。
 - 本模板**不改变任何 Feature 的既有状态**；“源库快照状态”的最终接受状态
   （`FINAL_ACCEPTED_AND_CLOSED`）由原 Feature 收口任务确立，本任务只读取、不重开、不改写。
 - 本任务**未创建公共组件**、**未创建 Composable**、**未迁移任何页面**、**未修改任何代码**。
-- 上述五项状态**不得**写成 `APPROVED`、`IMPLEMENTED`、`ACCEPTED` 或 `COMPLETED`。
+- `query_list_page_template_implementation_status`、`shared_component_implementation_status`、
+  `page_migration_status` **不得**写成 `IMPLEMENTED`、`ACCEPTED` 或 `COMPLETED`；
+  文档状态为 `APPROVED` 不代表公共组件已实现，也不代表任何页面已迁移。
 
 ## 2. 模板目标与适用范围
 
@@ -37,7 +47,7 @@ reference_feature_status=FINAL_ACCEPTED_AND_CLOSED
 
 ### 2.2 适用范围
 
-模板草案面向**只读查询列表页**，典型形态为：
+本模板面向**只读查询列表页**，典型形态为：
 
 - 页面只读取数据，不写入数据库；
 - 顶部一组查询条件（多选、文本框、日期范围等）；
@@ -91,10 +101,10 @@ reference_base_commit=83ff5c1ff80190459a4849eb74617cd4760db26e
 | 术语 | 含义 |
 | --- | --- |
 | 查询列表页 | 以查询条件 + 结果表格为主体的页面形态 |
-| 模板基线 | 项目级、跨 Feature 的推荐结构与规范，本文件集即其草案 |
+| 模板基线 | 项目级、跨 Feature 的推荐结构与规范，本文件集即其已批准基线 |
 | 参考实现 | 已经最终接受、“源库快照状态”的当前代码与文档 |
 | 参考事实 | 在基准提交 `83ff5c1...` 中可直接验证的代码/文档事实 |
-| 草案规则 | 拟作为项目级规范、尚待复审批准的内容 |
+| 已批准规范 | 项目级、已经 ChatGPT 复审与项目负责人批准的内容 |
 | 后续建议 | 尚未实现的候选组件、Composable、路由元数据与迁移顺序 |
 | 请求草稿 | 用户在查询区当前选择、尚未提交的选择 |
 | 已应用条件 | 最近一次**成功**查询所确立的条件；刷新恒按它执行 |
@@ -118,16 +128,16 @@ REFERENCE_IMPLEMENTATION_FACT
 重置按钮固定宽度 `62px`、立即刷新按钮固定宽度 `110px`、稳定滚动条槽当前作用于
 `MainLayout` 内容区域、当前仅 `data-source-run-state` 路由启用、其他路由样式泄漏为零。
 
-### 5.2 模板规范草案
+### 5.2 模板规范（已批准）
 
 标记：
 
 ```text
-TEMPLATE_RULE_DRAFT_PENDING_REVIEW
+TEMPLATE_RULE_APPROVED
 ```
 
-表示拟作为项目级查询列表页规范、**尚待 ChatGPT 与项目负责人复审批准**的内容。
-草案**不得**被写成已经批准，**不得**被写成已经应用到所有页面。
+表示已经 ChatGPT 复审与项目负责人批准的项目级查询列表页规范。
+已批准规范**不得**被写成已经实现，**不得**被写成已经应用到所有页面。
 
 ### 5.3 后续实现建议
 
@@ -140,7 +150,7 @@ PROPOSED_NOT_IMPLEMENTED
 包括候选公共组件、候选 Composable、候选路由元数据、Props、Slots、事件与迁移顺序。
 这些内容**不得**被写成现有代码已经具备的能力。
 
-> 阅读约定：本文档集中，凡未显式标注的内容默认属于 `TEMPLATE_RULE_DRAFT_PENDING_REVIEW`；
+> 阅读约定：本文档集中，凡未显式标注的内容默认属于 `TEMPLATE_RULE_APPROVED`；
 > 凡描述当前代码行为的内容必须标注 `REFERENCE_IMPLEMENTATION_FACT`；
 > 凡描述未来代码接口的内容必须标注 `PROPOSED_NOT_IMPLEMENTED`。
 
@@ -167,15 +177,17 @@ TOPIC-OFFSET-QUERY-LIST-TEMPLATE-MIGRATION-001
 当前唯一有效下一步：
 
 ```text
-next_step=CHATGPT_QUERY_LIST_PAGE_TEMPLATE_BASELINE_REVIEW_FROM_REMOTE_GIT_THEN_PROJECT_OWNER_APPROVAL_DECISION
+next_step=QUERY-LIST-PAGE-SHARED-COMPONENT-DESIGN-001
 ```
 
-即：由 ChatGPT 从远程 Git 复审本四份模板文档，随后由项目负责人决定是否批准该模板基线。
-在批准之前，不得进入公共组件设计、实现或任何页面迁移。
+即：模板基线已完成批准收口，下一任务为**公共组件详细设计**。该任务是**纯设计任务，不写代码**，
+只确定组件边界、命名、Props / Slots / 事件与样式隔离方案。
+该任务仍需**独立提示词与独立授权**；在其完成并经独立授权之前，仍不得实现公共组件、
+不得迁移任何页面。
 
 ## 8. 使用本模板的注意事项
 
-- 本模板是**项目级草案**，不会改变任何 Feature 的既有状态。
+- 本模板是**项目级已批准基线**，不会改变任何 Feature 的既有状态。
 - “源库快照状态”是**参考实现**，不是可直接复制的业务页面；其查询字段、列定义、
   状态标签语义、接口与分页策略均属于该 Feature 专属。
 - 后续页面必须**逐页评估**，不能批量无差别套用（见 `MIGRATION.md`）。
@@ -193,3 +205,17 @@ next_step=CHATGPT_QUERY_LIST_PAGE_TEMPLATE_BASELINE_REVIEW_FROM_REMOTE_GIT_THEN_
   不访问数据库、ZooKeeper 或 Kafka，不启停任何服务，不执行测试、构建或浏览器验证。
   文档状态 `DRAFT_PENDING_CHATGPT_AND_PROJECT_OWNER_REVIEW`；
   实现状态 `NOT_STARTED`；公共组件实现状态 `NOT_STARTED`；页面迁移状态 `NOT_STARTED`。
+- 2026-09-16，查询列表页模板基线**批准收口**
+  （`QUERY-LIST-PAGE-TEMPLATE-BASELINE-APPROVAL-001`，纯文档任务）。
+  R0 建立草案提交 `87d85c0f37805584470a6e555247f618fdf6296c`；
+  R1 纠正查询区类名事实与 Tooltip 章节引用提交 `6c2eea445f93c4fe8261aea986765ef8a31caf63`；
+  ChatGPT 从远程 Git 对 R1 提交的独立复审结论为 `APPROVED`；
+  项目负责人在 ChatGPT 给出批准建议后回复“继续”，授权本批准收口任务。
+  本轮只把四份模板文档由草案状态收口为已批准基线，并把全部规范分层标记
+  由草案标记统一升级为已批准标记（`README.md` `2` 处、`DESIGN.md` `7` 处、
+  `UI.md` `32` 处、`MIGRATION.md` `7` 处，共 `48` 处）；
+  参考实现事实标记与未实现建议标记两类保持不变。
+  **本轮不实现公共组件、不新建 Composable、不修改任何业务页面、不迁移任何页面、
+  不执行测试、构建或浏览器验证**；公共组件实现状态与页面迁移状态仍为 `NOT_STARTED`。
+  批准仅意味着四份模板文档及其规范成为后续设计与迁移的正式基线输入，
+  **不代表**公共组件已设计或实现、参考页面已接入公共组件、任何页面已迁移。

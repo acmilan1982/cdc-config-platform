@@ -1,19 +1,21 @@
-# 查询列表页模板基线 · 迁移（草案）
+# 查询列表页模板基线 · 迁移（批准版）
 
-> 文档状态：`DRAFT_PENDING_CHATGPT_AND_PROJECT_OWNER_REVIEW`
+> 文档状态：`APPROVED`
+> 批准任务：`QUERY-LIST-PAGE-TEMPLATE-BASELINE-APPROVAL-001`
+> 批准日期：2026-09-16
 > 建立任务：`QUERY-LIST-PAGE-TEMPLATE-BASELINE-001`
 > 基准提交：`83ff5c1ff80190459a4849eb74617cd4760db26e`
 
 事实分层标记含义见 `README.md` §5。
 
-> 本文件是**迁移计划草案**，**不执行**任何迁移。当前状态：
+> 本文件是**已批准迁移计划**，**尚未执行**任何迁移。当前状态：
 > `page_migration_status=NOT_STARTED`、`shared_component_implementation_status=NOT_STARTED`。
 
 ---
 
 ## 1. 迁移前评估（逐页检查清单）
 
-`TEMPLATE_RULE_DRAFT_PENDING_REVIEW` —— 任何页面在考虑套用本模板前，**必须**逐条回答
+`TEMPLATE_RULE_APPROVED` —— 任何页面在考虑套用本模板前，**必须**逐条回答
 以下问题并形成书面结论。任一问题无明确答案时，不得开始迁移。
 
 | # | 问题 | 影响 |
@@ -41,7 +43,7 @@
 | 日志查询 | `/monitor/log-query` | 只读 | 是（游标分页） | 否（显式查询） | 部分适用：双 Tab、初始化锁定、游标分页属 Feature 专属 |
 | 数据源管理 | `/config/data-source` | 配置管理（含新增/编辑/删除） | 未使用分页控件 | 否 | **不适合直接套用**：含写操作与行级操作列 |
 
-`TEMPLATE_RULE_DRAFT_PENDING_REVIEW` —— 上述分类仅为**评估起点**，
+`TEMPLATE_RULE_APPROVED` —— 上述分类仅为**评估起点**，
 **不得**把对照页面当前的个别实现自动提升为模板规则。例如：
 
 - “数据同步进度”的固定 `150` 条/页**不是**模板默认页大小；
@@ -52,7 +54,7 @@
 
 ## 2. 推荐迁移顺序
 
-`TEMPLATE_RULE_DRAFT_PENDING_REVIEW` —— 推荐顺序如下（**全部为草案，未执行**）：
+`TEMPLATE_RULE_APPROVED` —— 推荐顺序如下（**已经批准，但尚未执行**）：
 
 1. **建立模板基线**（本任务）。
 2. **单独完成公共组件详细设计**：在模板基线获批后，先做一次纯设计任务，
@@ -71,7 +73,7 @@
 
 ## 3. 每页独立任务
 
-`TEMPLATE_RULE_DRAFT_PENDING_REVIEW` —— 硬性要求：
+`TEMPLATE_RULE_APPROVED` —— 硬性要求：
 
 - 每个页面**必须独立建立**调整需求、实现、复审和验收任务；
 - **不得**在一个提交中同时抽取公共组件并迁移多个业务页面；
@@ -93,7 +95,7 @@
 `docs/features/data-source-snapshot-status/reports/DATA-SOURCE-SNAPSHOT-STATUS-QUERY-BUTTON-AND-TABLE-LAYOUT-STABILITY-FINAL-ACCEPTANCE-CLOSEOUT-001.md`，
 验收统计 `formal_acceptance_pass_count=118`、`fail=0`、`blocked=0`、`not_run=0`。
 
-`TEMPLATE_RULE_DRAFT_PENDING_REVIEW` —— 未来如果因公共组件化**修改其代码**，必须：
+`TEMPLATE_RULE_APPROVED` —— 未来如果因公共组件化**修改其代码**，必须：
 
 1. 保持 **API 请求和业务语义不变**；
 2. 保持 **查询、重置、刷新行为不变**；
@@ -111,7 +113,7 @@
 
 ### 4.1 什么算“业务行为变化”
 
-`TEMPLATE_RULE_DRAFT_PENDING_REVIEW` —— 下列任一情况属于业务行为变化，
+`TEMPLATE_RULE_APPROVED` —— 下列任一情况属于业务行为变化，
 必须走 Feature 调整流程而非重构：
 
 - 请求条件、请求次数、请求时机发生变化；
@@ -127,7 +129,7 @@
 
 ## 5. 不纳入迁移范围的页面类型
 
-`TEMPLATE_RULE_DRAFT_PENDING_REVIEW` —— 以下类型**不强制迁移**：
+`TEMPLATE_RULE_APPROVED` —— 以下类型**不强制迁移**：
 
 - 含新增、编辑、删除、启停、批量保存的配置管理页面；
 - 详情页、大屏页、多步骤表单页；
@@ -151,7 +153,7 @@ QUERY-LIST-PAGE-SHARED-COMPONENT-FORMAL-ACCEPTANCE-001
 TOPIC-OFFSET-QUERY-LIST-TEMPLATE-MIGRATION-001
 ```
 
-建议的推进节奏（草案）：
+已批准的推进节奏：
 
 | 顺序 | 任务代码 | 产出 | 是否写代码 |
 | --- | --- | --- | --- |
@@ -166,7 +168,9 @@ TOPIC-OFFSET-QUERY-LIST-TEMPLATE-MIGRATION-001
 ## 7. 当前有效下一步
 
 ```text
-next_step=CHATGPT_QUERY_LIST_PAGE_TEMPLATE_BASELINE_REVIEW_FROM_REMOTE_GIT_THEN_PROJECT_OWNER_APPROVAL_DECISION
+next_step=QUERY-LIST-PAGE-SHARED-COMPONENT-DESIGN-001
 ```
 
-在模板基线**获批之前**，不得进入公共组件设计、实现或任何页面迁移。
+批准收口完成后，**只允许**进入公共组件详细设计任务（`QUERY-LIST-PAGE-SHARED-COMPONENT-DESIGN-001`）。
+该任务仍需独立提示词与独立授权；**未经后续独立授权，仍不得实现公共组件或迁移任何页面**。
+本文件保持 `page_migration_status=NOT_STARTED`、`shared_component_implementation_status=NOT_STARTED`。

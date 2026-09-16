@@ -1,17 +1,19 @@
-# 查询列表页模板基线 · UI 规范（草案）
+# 查询列表页模板基线 · UI 规范（批准版）
 
-> 文档状态：`DRAFT_PENDING_CHATGPT_AND_PROJECT_OWNER_REVIEW`
+> 文档状态：`APPROVED`
+> 批准任务：`QUERY-LIST-PAGE-TEMPLATE-BASELINE-APPROVAL-001`
+> 批准日期：2026-09-16
 > 建立任务：`QUERY-LIST-PAGE-TEMPLATE-BASELINE-001`
 > 基准提交：`83ff5c1ff80190459a4849eb74617cd4760db26e`
 
 事实分层标记含义见 `README.md` §5：
 
 - `REFERENCE_IMPLEMENTATION_FACT`：可在基准提交中直接验证的参考实现事实；
-- `TEMPLATE_RULE_DRAFT_PENDING_REVIEW`：拟作为项目级规范、尚待复审批准的草案；
+- `TEMPLATE_RULE_APPROVED`：已经 ChatGPT 复审与项目负责人批准的项目级规范；
 - `PROPOSED_NOT_IMPLEMENTED`：后续实现建议，当前代码**不具备**该能力。
 
 > 本文件中的一切数值与结构，只在被标注为 `REFERENCE_IMPLEMENTATION_FACT` 时，
-> 才是“源库快照状态”当前代码的真实属性；其余为草案或建议。
+> 才是“源库快照状态”当前代码的真实属性；其余为已批准模板规范或未实现建议。
 
 ---
 
@@ -19,7 +21,7 @@
 
 ### 1.1 推荐三段式结构
 
-`TEMPLATE_RULE_DRAFT_PENDING_REVIEW` —— 标准查询列表页推荐自上而下分为三段：
+`TEMPLATE_RULE_APPROVED` —— 标准查询列表页推荐自上而下分为三段：
 
 1. **页面标题与说明区**：页面标题 + 一句话功能说明；
 2. **查询条件卡片**：查询字段与“查询 / 重置”操作；
@@ -47,7 +49,7 @@
 
 ### 1.3 模板默认结构≠必备能力
 
-`TEMPLATE_RULE_DRAFT_PENDING_REVIEW` —— 三段式是模板的**默认**结构，不代表每个页面
+`TEMPLATE_RULE_APPROVED` —— 三段式是模板的**默认**结构，不代表每个页面
 都必须拥有自动刷新、倒计时、刷新失败提示或结果摘要胶囊。不具备相应业务的页面，
 应省略对应区块，而不是保留空壳。
 
@@ -61,7 +63,7 @@
 
 ### 2.1 查询字段的栅格与间距原则
 
-`TEMPLATE_RULE_DRAFT_PENDING_REVIEW`：
+`TEMPLATE_RULE_APPROVED`：
 
 - 查询区采用**单行流式排列**：每个条件为「标签 + 控件」一组，组间以间距分隔；
 - 操作区（“查询 / 重置”）跟随在条件组之后，同属一行；
@@ -82,7 +84,7 @@
 
 ### 2.2 不同控件的适配边界
 
-`TEMPLATE_RULE_DRAFT_PENDING_REVIEW`：
+`TEMPLATE_RULE_APPROVED`：
 
 | 控件类型 | 宽度策略 | 备注 |
 | --- | --- | --- |
@@ -92,7 +94,7 @@
 | 日期范围 | 固定宽度 | 使用组件默认宽度并四值同锁 |
 | 复杂组合控件 | 固定宽度或占整行 | 由业务决定，但必须稳定 |
 
-`TEMPLATE_RULE_DRAFT_PENDING_REVIEW` —— 多选控件建议启用 `collapse-tags`，
+`TEMPLATE_RULE_APPROVED` —— 多选控件建议启用 `collapse-tags`，
 使已选项折叠为标签，避免选中项增多时把控件“撑高”并推动整行高度。
 
 `REFERENCE_IMPLEMENTATION_FACT` —— 参考实现三个多选均使用 `multiple` +
@@ -103,7 +105,7 @@
 
 ### 2.3 “查询”和“重置”操作的位置
 
-`TEMPLATE_RULE_DRAFT_PENDING_REVIEW`：
+`TEMPLATE_RULE_APPROVED`：
 
 - 操作区位于查询条件组的**末尾**，与条件组同一行流；
 - “查询”在前，“重置”在后；
@@ -115,7 +117,7 @@
 
 ### 2.4 标准中文按钮的默认固定宽度
 
-`TEMPLATE_RULE_DRAFT_PENDING_REVIEW` —— 当按钮文案是标准中文时，模板推荐：
+`TEMPLATE_RULE_APPROVED` —— 当按钮文案是标准中文时，模板推荐：
 
 | 按钮文案 | 默认固定宽度 | 依据 |
 | --- | --- | --- |
@@ -131,7 +133,7 @@
 
 ### 2.5 Loading 时按钮几何稳定
 
-`TEMPLATE_RULE_DRAFT_PENDING_REVIEW` —— Loading 状态**必须**满足：
+`TEMPLATE_RULE_APPROVED` —— Loading 状态**必须**满足：
 指示器出现和消失时，按钮外框（`x` / `y` / `width` / `height`）以及按钮左右两侧相邻
 元素的坐标**不得**移动。实现方式推荐「常驻指示器 + 绝对定位」：
 指示器节点始终存在于 DOM 中（仅切换可见性），以按钮为包含块绝对定位，
@@ -152,7 +154,7 @@
 
 ### 2.6 “重置”是否立即查询
 
-`TEMPLATE_RULE_DRAFT_PENDING_REVIEW` —— “重置”的语义**默认建议为“不立即查询”**：
+`TEMPLATE_RULE_APPROVED` —— “重置”的语义**默认建议为“不立即查询”**：
 点击后只把查询区草稿恢复为默认条件，不清空当前结果、不发起请求。
 若某业务确实需要“重置即查询”，**必须**由该 Feature 的需求明确写出，不得默认沿用。
 
@@ -161,7 +163,7 @@
 
 ### 2.7 非标准按钮文案的稳定宽度规则
 
-`TEMPLATE_RULE_DRAFT_PENDING_REVIEW` —— 当按钮文案不是标准“查询 / 重置”（例如
+`TEMPLATE_RULE_APPROVED` —— 当按钮文案不是标准“查询 / 重置”（例如
 “搜索”“筛选”“应用条件”“刷新列表”）时，**不得**机械套用 `62px`。此时应遵守：
 
 1. 先按文案与字号确定一个**整数像素**的目标宽度；
@@ -177,7 +179,7 @@
 
 ### 3.1 左侧：结果摘要或已应用条件
 
-`TEMPLATE_RULE_DRAFT_PENDING_REVIEW` —— 结果区头部左侧可放置：
+`TEMPLATE_RULE_APPROVED` —— 结果区头部左侧可放置：
 
 - 结果总数摘要（例如“共 N 条”）；
 - 附加提示（例如“其中 N 条未知状态”）；
@@ -193,7 +195,7 @@
 
 ### 3.2 右侧：刷新信息整体靠右
 
-`TEMPLATE_RULE_DRAFT_PENDING_REVIEW` —— 若页面具备刷新能力，则
+`TEMPLATE_RULE_APPROVED` —— 若页面具备刷新能力，则
 **自动刷新提示 + 最近成功刷新时间 + “立即刷新”按钮**必须组成一个**整体靠右**的
 不可拆散逻辑组，顺序固定，窄宽度下整体换行，**不得**只把按钮拆到下一行。
 
@@ -216,12 +218,12 @@ flex: 0 0 auto; white-space: nowrap; font-size: 13px`；结果卡片头部整体
   `.dss-refresh-time-reserve`（`88:88:88`，`visibility: hidden` 而非 `display: none`）
   与绝对定位的 `.dss-refresh-time-actual`，使槽位宽度只由常量决定、与真实时间字符串无关。
 
-`TEMPLATE_RULE_DRAFT_PENDING_REVIEW` —— 上述“定宽槽位 + 常量占位”是做可变文本
+`TEMPLATE_RULE_APPROVED` —— 上述“定宽槽位 + 常量占位”是做可变文本
 几何稳定的推荐手法：**先锁盒宽，再让内容脱流定位**。
 
 ### 3.3 “立即刷新”标准按钮固定宽度
 
-`TEMPLATE_RULE_DRAFT_PENDING_REVIEW` —— 标准中文文案的“立即刷新”按钮，默认固定宽度 `110px`。
+`TEMPLATE_RULE_APPROVED` —— 标准中文文案的“立即刷新”按钮，默认固定宽度 `110px`。
 
 `REFERENCE_IMPLEMENTATION_FACT` —— 参考实现 `.dss-refresh-btn` 四值同锁 `110px`
 （`width / min-width / max-width / flex-basis`，含 `box-sizing: border-box`、
@@ -230,7 +232,7 @@ flex: 0 0 auto; white-space: nowrap; font-size: 13px`；结果卡片头部整体
 
 ### 3.4 Loading 出现时按钮与前置文字位置不变
 
-`TEMPLATE_RULE_DRAFT_PENDING_REVIEW` —— “立即刷新”进入 Loading 时，
+`TEMPLATE_RULE_APPROVED` —— “立即刷新”进入 Loading 时，
 按钮自身外框以及按钮**之前**的倒计时文字、分隔符、时间文本的坐标**不得**移动。
 
 `REFERENCE_IMPLEMENTATION_FACT` —— 参考实现同样用常驻绝对定位指示器
@@ -239,7 +241,7 @@ flex: 0 0 auto; white-space: nowrap; font-size: 13px`；结果卡片头部整体
 
 ### 3.5 不支持自动刷新的页面
 
-`TEMPLATE_RULE_DRAFT_PENDING_REVIEW` —— 不支持自动刷新的页面**可以**不显示倒计时环与
+`TEMPLATE_RULE_APPROVED` —— 不支持自动刷新的页面**可以**不显示倒计时环与
 “N 秒后自动刷新”，但：
 
 - 若保留“立即刷新”，则其固定宽度与 Loading 几何稳定要求不变；
@@ -251,7 +253,7 @@ flex: 0 0 auto; white-space: nowrap; font-size: 13px`；结果卡片头部整体
 
 ### 4.1 容器、空状态与 Loading 状态
 
-`TEMPLATE_RULE_DRAFT_PENDING_REVIEW`：
+`TEMPLATE_RULE_APPROVED`：
 
 - 表格外层应有一个容器负责横向溢出（推荐 `overflow-x: auto`），
   使表格可设最小宽度并在窄容器下横向滚动；
@@ -265,7 +267,7 @@ flex: 0 0 auto; white-space: nowrap; font-size: 13px`；结果卡片头部整体
 
 ### 4.2 列宽由业务页面定义
 
-`TEMPLATE_RULE_DRAFT_PENDING_REVIEW` —— **列宽必须由业务页面定义，模板不得统一
+`TEMPLATE_RULE_APPROVED` —— **列宽必须由业务页面定义，模板不得统一
 所有业务列宽。** 模板只建议“固定列 + `min-width` 弹性列混合”的**结构原则**，
 不规定任何具体像素。
 
@@ -284,7 +286,7 @@ flex: 0 0 auto; white-space: nowrap; font-size: 13px`；结果卡片头部整体
 
 ### 4.3 长文本单行省略与 Tooltip
 
-`TEMPLATE_RULE_DRAFT_PENDING_REVIEW`：
+`TEMPLATE_RULE_APPROVED`：
 
 - 长文本默认**单行省略**（`overflow: hidden; text-overflow: ellipsis; white-space: nowrap`），
   单元格不得因文本过长而换行、撑高行；
@@ -297,7 +299,7 @@ flex: 0 0 auto; white-space: nowrap; font-size: 13px`；结果卡片头部整体
 
 ### 4.4 Tooltip 页面级单实例
 
-`TEMPLATE_RULE_DRAFT_PENDING_REVIEW` —— Tooltip **必须**支持“页面级单实例”或等价机制，
+`TEMPLATE_RULE_APPROVED` —— Tooltip **必须**支持“页面级单实例”或等价机制，
 使快速扫过多行时**任意时刻最多只显示一个 Tooltip**。推荐实现要点：
 
 - 单一受控 Host，`Teleport` 到 `body`，避免被表格 `overflow` 裁切；
@@ -327,7 +329,7 @@ flex: 0 0 auto; white-space: nowrap; font-size: 13px`；结果卡片头部整体
 
 ### 4.5 分页、页大小、最大返回条数、固定表头、横向滚动
 
-`TEMPLATE_RULE_DRAFT_PENDING_REVIEW` —— 以下全部**必须由业务 Feature 决定**，
+`TEMPLATE_RULE_APPROVED` —— 以下全部**必须由业务 Feature 决定**，
 模板**不得**给出通用默认：
 
 - 是否分页；
@@ -352,7 +354,7 @@ flex: 0 0 auto; white-space: nowrap; font-size: 13px`；结果卡片头部整体
 
 ### 5.1 准确术语
 
-`TEMPLATE_RULE_DRAFT_PENDING_REVIEW` —— 本能力使用准确术语：
+`TEMPLATE_RULE_APPROVED` —— 本能力使用准确术语：
 
 ```css
 scrollbar-gutter: stable;
@@ -362,7 +364,7 @@ scrollbar-gutter: stable;
 
 ### 5.2 它做什么
 
-`TEMPLATE_RULE_DRAFT_PENDING_REVIEW`：
+`TEMPLATE_RULE_APPROVED`：
 
 - 它用于在**纵向滚动条出现或消失时预留稳定空间**；
 - 它稳定的是**页面或指定滚动容器的可用宽度**（即该容器的 `clientWidth` 不因滚动条
@@ -383,7 +385,7 @@ scrollbar-gutter: stable;
 
 ### 5.3 它不是什么（必须显式写明）
 
-`TEMPLATE_RULE_DRAFT_PENDING_REVIEW` —— 以下三条**必须**在任何介绍该能力的地方写明，
+`TEMPLATE_RULE_APPROVED` —— 以下三条**必须**在任何介绍该能力的地方写明，
 避免误用：
 
 1. **它不是表格的横向滚动条。** 表格横向滚动由表格外层容器的 `overflow-x: auto`
@@ -405,7 +407,7 @@ scrollbar-gutter: stable;
 
 ### 5.5 未来必须显式选择启用
 
-`TEMPLATE_RULE_DRAFT_PENDING_REVIEW` —— 后续把该能力公共化时，**必须显式选择启用**，
+`TEMPLATE_RULE_APPROVED` —— 后续把该能力公共化时，**必须显式选择启用**，
 **不能**直接扩散为全局默认样式。启用方式应满足：
 
 - 只有明确声明需要它的页面/路由才生效；
@@ -443,7 +445,7 @@ meta: {
 
 ### 5.7 明确禁止的实现方式
 
-`TEMPLATE_RULE_DRAFT_PENDING_REVIEW`（沿用参考实现已冻结的禁止项）：
+`TEMPLATE_RULE_APPROVED`（沿用参考实现已冻结的禁止项）：
 
 - **不得**伪造滚动内容：不加空白行、不加占位块、不设 `min-height` 强行维持滚动条；
 - **不得**使用 JS 宽度监听、`ResizeObserver` 宽度补偿、运行时表格宽度计算，
@@ -463,7 +465,7 @@ meta: {
   → 探针端等弹性列轻微变化，其后列水平位移
 ```
 
-`TEMPLATE_RULE_DRAFT_PENDING_REVIEW` —— 任何文档、报告或实现说明**不得**把结果汇总文案
+`TEMPLATE_RULE_APPROVED` —— 任何文档、报告或实现说明**不得**把结果汇总文案
 （“共 30 条”变“共 1 条”）本身写成**直接**根因；记录数变化只通过页面高度与纵向滚动条
 状态**间接**相关，也**不得**以修改汇总文案作为修复手段。
 
@@ -484,7 +486,7 @@ meta: {
 断言必须是**机器可执行**的，且必须具备真实失败出口（对注入 `0.001px` 的负向位移
 必须返回**非零**退出码）。
 
-`TEMPLATE_RULE_DRAFT_PENDING_REVIEW` —— 后续任何启用该能力的页面，其等价性验证
+`TEMPLATE_RULE_APPROVED` —— 后续任何启用该能力的页面，其等价性验证
 **建议沿用**同一判定口径（严格 `0` + 负向控制）。
 
 ---
@@ -493,7 +495,7 @@ meta: {
 
 ### 6.1 响应式
 
-`TEMPLATE_RULE_DRAFT_PENDING_REVIEW`：
+`TEMPLATE_RULE_APPROVED`：
 
 - 标准桌面视口下布局**不应出现无意义跳动**：查询控件、操作按钮、结果头部右侧刷新组、
   表头列位置都应在数据变化时保持稳定；
@@ -505,7 +507,7 @@ meta: {
 
 ### 6.2 可访问性
 
-`TEMPLATE_RULE_DRAFT_PENDING_REVIEW`：
+`TEMPLATE_RULE_APPROVED`：
 
 - 文本省略必须有**可访问完整内容的方式**（Tooltip、`title`、可展开详情等）；
 - Loading、禁用和错误状态**不能只依赖颜色**表达，必须同时有文字或 ARIA 语义；
@@ -529,7 +531,7 @@ meta: {
 
 ## 7. 与通用规则 / Feature 专属的边界
 
-`TEMPLATE_RULE_DRAFT_PENDING_REVIEW` —— 下表明确区分“可成为通用规范”与
+`TEMPLATE_RULE_APPROVED` —— 下表明确区分“可成为通用规范”与
 “必须留在具体 Feature”的内容：
 
 | 项目 | 归属 |

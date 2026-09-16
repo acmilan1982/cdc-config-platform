@@ -1,6 +1,8 @@
-# 查询列表页模板基线 · 设计（草案）
+# 查询列表页模板基线 · 设计（批准版）
 
-> 文档状态：`DRAFT_PENDING_CHATGPT_AND_PROJECT_OWNER_REVIEW`
+> 文档状态：`APPROVED`
+> 批准任务：`QUERY-LIST-PAGE-TEMPLATE-BASELINE-APPROVAL-001`
+> 批准日期：2026-09-16
 > 建立任务：`QUERY-LIST-PAGE-TEMPLATE-BASELINE-001`
 > 基准提交：`83ff5c1ff80190459a4849eb74617cd4760db26e`
 
@@ -14,7 +16,7 @@
 
 ## 1. 三层设计
 
-`TEMPLATE_RULE_DRAFT_PENDING_REVIEW` —— 把候选公共能力分为三层，每层明确
+`TEMPLATE_RULE_APPROVED` —— 把候选公共能力分为三层，每层明确
 “可复用范围”与“必须排除的业务内容”：
 
 | 层级 | 可复用范围 | 必须排除的业务内容 |
@@ -47,7 +49,7 @@
 
 ### 2.1 候选组件的强制约束
 
-`TEMPLATE_RULE_DRAFT_PENDING_REVIEW`：
+`TEMPLATE_RULE_APPROVED`：
 
 - 真实组件名称需在**后续设计任务**中结合仓库命名规则确定（上表名称仅为示意）；
 - **不得**为了复用而创建“承担所有业务行为”的超级组件；
@@ -89,7 +91,7 @@
 
 ### 2.4 候选组件不得承担的内容
 
-`TEMPLATE_RULE_DRAFT_PENDING_REVIEW` —— 候选公共组件**不得**承担：
+`TEMPLATE_RULE_APPROVED` —— 候选公共组件**不得**承担：
 
 - 任何具体查询字段的渲染逻辑；
 - 任何 API 调用、参数拼接或响应解析；
@@ -151,7 +153,7 @@
 
 ### 3.4 三类结论的区分
 
-`TEMPLATE_RULE_DRAFT_PENDING_REVIEW` —— 使用候选 Composable 时，必须区分：
+`TEMPLATE_RULE_APPROVED` —— 使用候选 Composable 时，必须区分：
 
 | 类别 | 含义 |
 | --- | --- |
@@ -165,7 +167,7 @@
 
 ## 4. 状态模型
 
-`TEMPLATE_RULE_DRAFT_PENDING_REVIEW` —— 推荐的查询列表页状态模型包含：
+`TEMPLATE_RULE_APPROVED` —— 推荐的查询列表页状态模型包含：
 
 | 状态 | 含义 |
 | --- | --- |
@@ -180,7 +182,7 @@
 
 ### 4.1 推荐行为
 
-`TEMPLATE_RULE_DRAFT_PENDING_REVIEW`：
+`TEMPLATE_RULE_APPROVED`：
 
 1. **只有成功请求才替换已应用条件和结果**；
 2. **失败时保留旧结果及旧已应用条件**，只给出收敛的失败提示；
@@ -212,7 +214,7 @@
 
 ## 5. 明确不得抽取的内容
 
-`TEMPLATE_RULE_DRAFT_PENDING_REVIEW` —— 以下内容**必须留在具体 Feature**，
+`TEMPLATE_RULE_APPROVED` —— 以下内容**必须留在具体 Feature**，
 公共组件与 Composable **不得**覆盖：
 
 1. 具体查询字段（字段名、数量、顺序）；
