@@ -3,9 +3,10 @@
     <Sidebar />
     <div class="layout-right" :class="{ collapsed: appStore.sidebarCollapsed }">
       <HeaderBar />
-      <!-- 数据源运行状态页的真实主内容纵向滚动容器仍是本 .content-area（overflow-y: auto）；
-           `.dss-stable-gutter` 仅在 name=DataSourceRunState 时加上，其他路由保持默认行为。 -->
-      <div class="content-area" :class="{ 'dss-stable-gutter': isDataSourceRunState }">
+      <!-- 真实主内容纵向滚动容器仍是本 .content-area（overflow-y: auto）；
+           `.is-stable-gutter` 仅在路由显式声明 meta.stableScrollbarGutter === true 时加上，
+           未声明的路由保持浏览器默认行为。 -->
+      <div class="content-area" :class="{ 'is-stable-gutter': stableScrollbarGutter }">
         <div class="content-card">
           <router-view />
         </div>
@@ -25,11 +26,11 @@ const appStore = useAppStore()
 const route = useRoute()
 
 /**
- * 仅“数据源运行状态”路由需要稳定滚动条槽位：查询结果行数变化 → 本容器纵向滚动条出现/消失 →
- * 主内容可用 clientWidth 变化 → Element Plus 重新分配弹性列宽 → 表头列水平位移。
- * 本容器即真实页面纵向滚动容器，故槽位加在此处；其他路由不加，保持默认行为。
+ * 稳定滚动条槽位由路由元数据显式声明（SHARED_COMPONENT_DESIGN §7.7）：结果行数变化 → 本容器纵向
+ * 滚动条出现/消失 → 主内容可用 clientWidth 变化 → Element Plus 重新分配弹性列宽 → 表头列水平位移。
+ * 本容器即真实页面纵向滚动容器，故槽位加在此处；严格以 `=== true` 判定，未声明的路由保持默认行为。
  */
-const isDataSourceRunState = computed(() => route.name === 'DataSourceRunState')
+const stableScrollbarGutter = computed(() => route.meta.stableScrollbarGutter === true)
 </script>
 
 <style scoped>
@@ -59,11 +60,11 @@ const isDataSourceRunState = computed(() => route.name === 'DataSourceRunState')
   background-color: #f0f2f5;
 }
 
-/* Feature 私有路由作用域滚动条槽位（DSS-REQ-091）：只有同时带 .dss-stable-gutter 的 .content-area
+/* 通用（非 Feature 命名）滚动条槽位类：只有带 .is-stable-gutter 的 .content-area
    才保留稳定纵向滚动条槽位，使滚动条在长/短结果之间出现或消失时不改变 clientWidth。
-   通用 .content-area 不声明 scrollbar-gutter，其他路由保持浏览器默认行为；
+   基础 .content-area 不声明 scrollbar-gutter，未声明的路由保持浏览器默认行为；
    不使用 overflow-y: scroll 永久强制滚动条，也不做运行时宽度补偿。 */
-.content-area.dss-stable-gutter {
+.content-area.is-stable-gutter {
   scrollbar-gutter: stable;
 }
 

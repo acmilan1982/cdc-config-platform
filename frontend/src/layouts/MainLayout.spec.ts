@@ -9,12 +9,15 @@ import ElementPlus from 'element-plus'
 import MainLayout from './MainLayout.vue'
 
 /**
- * DSS-REQ-091：仅“数据源运行状态”路由的真实主内容纵向滚动容器保留稳定 scrollbar gutter。
+ * 稳定滚动条槽位（SHARED_COMPONENT_DESIGN §7.7）：判据为路由显式声明的
+ * `meta.stableScrollbarGutter === true`，未声明 / `false` / `undefined` / 非布尔真值一律保持浏览器默认。
  * 判定基于同一挂载实例上的响应式路由切换，而不是两个互不相关的静态字符串快照。
  */
 
-const GUTTER_CLASS = 'dss-stable-gutter'
-const TARGET_ROUTE_NAME = 'DataSourceRunState'
+const GUTTER_CLASS = 'is-stable-gutter'
+/** 声明了稳定滚动条槽位的目标路由（等价接入后的“源库快照状态”）。 */
+const TARGET_PATH = '/monitor/stable-target'
+const TARGET_ROUTE_NAME = 'StableTarget'
 
 /** 目标路由之外的代表性真实路由名（覆盖配置/监控两组与 standalone 大屏）。 */
 const OTHER_ROUTE_NAMES = [
@@ -27,6 +30,11 @@ const OTHER_ROUTE_NAMES = [
   'LargeScreen',
 ] as const
 
+/** 显式声明 false 的路由：不得启用。 */
+const FALSE_FLAG_PATH = '/stub/flag-false'
+/** 声明了真但非 `true` 的值：`=== true` 严格判据下不得启用。 */
+const TRUTHY_FLAG_PATH = '/stub/flag-truthy'
+
 const StubPage = defineComponent({
   name: 'StubPage',
   setup: () => () => h('div', { class: 'stub-page' }),
@@ -37,10 +45,10 @@ function makeRouter(includeTarget: boolean): Router {
     ...(includeTarget
       ? [
           {
-            path: '/monitor/data-source-state',
+            path: TARGET_PATH,
             name: TARGET_ROUTE_NAME,
             component: StubPage,
-            meta: { title: '数据源运行状态', group: '运行监控' },
+            meta: { title: '源库快照状态', group: '运行监控', stableScrollbarGutter: true },
           },
         ]
       : []),
@@ -50,6 +58,14 @@ function makeRouter(includeTarget: boolean): Router {
       component: StubPage,
       meta: { title: name, group: '测试' },
     })),
+    { path: FALSE_FLAG_PATH, name: 'FlagFalse', component: StubPage, meta: { stableScrollbarGutter: false } },
+    {
+      path: TRUTHY_FLAG_PATH,
+      name: 'FlagTruthy',
+      component: StubPage,
+      // 非布尔真值：仅用于证明判据严格为 `=== true`
+      meta: { stableScrollbarGutter: 'true' as unknown as boolean },
+    },
     // 无 name 的具名路由：route.name 为 undefined
     { path: '/unnamed', component: StubPage, meta: { title: ' unnamed' } },
   ]
@@ -103,16 +119,17 @@ function layoutCode(): string {
     .replace(/^\s*\/\/.*$/gm, '')
 }
 
-describe('MainLayout 路由作用域稳定滚动条槽位（DSS-REQ-091）', () => {
-  it('目标路由下 .content-area 带 Feature 私有 stable-gutter class', async () => {
-    const { wrapper, router } = await mountLayout('/monitor/data-source-state')
+describe('MainLayout 路由元数据作用域稳定滚动条槽位（SHARED_COMPONENT_DESIGN §7.7）', () => {
+  it('声明 meta.stableScrollbarGutter === true 的路由下 .content-area 带通用 stable-gutter class', async () => {
+    const { wrapper, router } = await mountLayout(TARGET_PATH)
     expect(router.currentRoute.value.name).toBe(TARGET_ROUTE_NAME)
+    expect(router.currentRoute.value.meta.stableScrollbarGutter).toBe(true)
     expect(contentArea(wrapper).classes()).toContain(GUTTER_CLASS)
     wrapper.unmount()
   })
 
   it('同一实例路由切换：切到任一其他路由移除 class，切回目标路由恢复（响应式，不重新挂载）', async () => {
-    const { wrapper, router } = await mountLayout('/monitor/data-source-state')
+    const { wrapper, router } = await mountLayout(TARGET_PATH)
     const area = contentArea(wrapper)
     expect(area.classes()).toContain(GUTTER_CLASS)
 
@@ -121,9 +138,9 @@ describe('MainLayout 路由作用域稳定滚动条槽位（DSS-REQ-091）', () 
       await flushPromises()
       await nextTick()
       expect(router.currentRoute.value.name, `切到 ${name}`).toBe(name)
-      expect(area.classes(), `${name} 下不应带私有 class`).not.toContain(GUTTER_CLASS)
+      expect(area.classes(), `${name} 下不应带 gutter class`).not.toContain(GUTTER_CLASS)
 
-      await router.push('/monitor/data-source-state')
+      await router.push(TARGET_PATH)
       await flushPromises()
       await nextTick()
       expect(area.classes(), `从 ${name} 切回目标路由应恢复`).toContain(GUTTER_CLASS)
@@ -134,9 +151,10 @@ describe('MainLayout 路由作用域稳定滚动条槽位（DSS-REQ-091）', () 
     wrapper.unmount()
   })
 
-  it('无 name 的路由（route.name 为 undefined）下也不带 class：不是“非目标即启用”的反向逻辑', async () => {
+  it('未声明元数据的路由（含无 name 路由）下也不带 class：不是“非目标即启用”的反向逻辑', async () => {
     const { wrapper, router } = await mountLayout('/unnamed')
     expect(router.currentRoute.value.name).toBeUndefined()
+    expect(router.currentRoute.value.meta.stableScrollbarGutter).toBeUndefined()
     expect(contentArea(wrapper).classes()).not.toContain(GUTTER_CLASS)
 
     // 同一实例再切到具名非目标路由，仍不带 class
@@ -146,21 +164,38 @@ describe('MainLayout 路由作用域稳定滚动条槽位（DSS-REQ-091）', () 
     expect(contentArea(wrapper).classes()).not.toContain(GUTTER_CLASS)
 
     // 切到目标路由则启用
-    await router.push('/monitor/data-source-state')
+    await router.push(TARGET_PATH)
     await flushPromises()
     await nextTick()
     expect(contentArea(wrapper).classes()).toContain(GUTTER_CLASS)
     wrapper.unmount()
   })
 
-  it('scoped CSS：私有 class 规则确实声明 scrollbar-gutter: stable', () => {
+  it('显式 false 与非布尔真值均不启用：判据严格为 === true', async () => {
+    const { wrapper, router } = await mountLayout(FALSE_FLAG_PATH)
+    expect(router.currentRoute.value.meta.stableScrollbarGutter).toBe(false)
+    expect(contentArea(wrapper).classes()).not.toContain(GUTTER_CLASS)
+
+    await router.push(TRUTHY_FLAG_PATH)
+    await flushPromises()
+    await nextTick()
+    expect(contentArea(wrapper).classes()).not.toContain(GUTTER_CLASS)
+
+    await router.push(TARGET_PATH)
+    await flushPromises()
+    await nextTick()
+    expect(contentArea(wrapper).classes()).toContain(GUTTER_CLASS)
+    wrapper.unmount()
+  })
+
+  it('scoped CSS：通用 gutter class 规则确实声明 scrollbar-gutter: stable', () => {
     const style = layoutStyle()
-    const rule = style.match(/\.content-area\.dss-stable-gutter\s*\{([^}]*)\}/)?.[1] ?? ''
+    const rule = style.match(/\.content-area\.is-stable-gutter\s*\{([^}]*)\}/)?.[1] ?? ''
     expect(rule).not.toBe('')
     expect(rule).toMatch(/(^|;)\s*scrollbar-gutter:\s*stable\s*(;|$)/)
   })
 
-  it('全文件只有一处 scrollbar-gutter 声明，且必须与私有 class 复合：通用 .content-area 不得无条件 stable', () => {
+  it('全文件只有一处 scrollbar-gutter 声明，且必须与 gutter class 复合：通用 .content-area 不得无条件 stable', () => {
     const style = layoutStyle()
     const all = style.match(/scrollbar-gutter/g) ?? []
     expect(all).toHaveLength(1)
@@ -199,17 +234,19 @@ describe('MainLayout 路由作用域稳定滚动条槽位（DSS-REQ-091）', () 
     expect(code).not.toMatch(/style\.(paddingRight|paddingLeft|marginRight|width)\s*=/)
   })
 
-  it('源码契约：class 开关只由当前路由 name 决定，且只认目标路由名', () => {
+  it('源码契约：class 开关只由路由元数据决定，且已删除硬编码路由名判据', () => {
     const code = layoutCode()
-    expect(code).toMatch(/route\.name\s*===\s*['"]DataSourceRunState['"]/)
-    // 不引入 path 前缀匹配、不写死父级容器或其他路由名
+    expect(code).toMatch(/route\.meta\.stableScrollbarGutter\s*===\s*true/)
+    // 判据不得回退为硬编码路由名，也不得引入 path 前缀匹配
+    expect(code).not.toMatch(/route\.name\s*===\s*['"]DataSourceRunState['"]/)
+    expect(code).not.toMatch(/route\.name\s*===/)
     expect(code).not.toMatch(/route\.path\s*===\s*['"]\/monitor['"]/)
-    // 私有 class 名去注释后只出现两处：一处模板绑定 + 一处 CSS 规则
-    expect(code.match(/dss-stable-gutter/g) ?? []).toHaveLength(1)
-    expect(layoutStyle().match(/dss-stable-gutter/g) ?? []).toHaveLength(1)
+    // 通用 class 名去注释后只出现两处：一处模板绑定 + 一处 CSS 规则
+    expect(code.match(/is-stable-gutter/g) ?? []).toHaveLength(1)
+    expect(layoutStyle().match(/is-stable-gutter/g) ?? []).toHaveLength(1)
   })
 
-  it('私有 class 不进入全局非 scoped 样式块（不污染其他路由与全局样式）', () => {
+  it('通用 class 不进入全局非 scoped 样式块（不污染其他路由与全局样式）', () => {
     const src = layoutSource()
     const globalBlocks = src.match(/<style(?![^>]*\bscoped\b)[^>]*>/g) ?? []
     expect(globalBlocks).toHaveLength(0)

@@ -86,8 +86,10 @@ describe('DataSourceSnapshotStatusTag 纯展示（DSS-REQ-035/036/038，AC-028�
     expect(wrapper.find('.dss-tt').exists()).toBe(false)
     expect(wrapper.find('[data-tt-kind]').exists()).toBe(false)
     expect(wrapper.find('[title]').exists()).toBe(false)
-    // 未向 body teleport 任何单实例 Host 内容
-    expect(document.querySelector('.dss-single-tooltip[data-tt-host="1"]')).toBeNull()
+    // 未向 body teleport 任何 Tooltip 宿主内容（私有 Host 已删除，公共 Host 唯一）
+    for (const sel of ['.dss-single-tooltip', '.ql-tooltip', '.dss-q-tt']) {
+      expect(document.querySelector(sel), sel).toBeNull()
+    }
     // R3：符号为普通文本/字符槽，不是图标组件（无 ElIcon / svg / 图标库引用）
     expect(wrapper.find('.el-icon').exists()).toBe(false)
     wrapper.unmount()

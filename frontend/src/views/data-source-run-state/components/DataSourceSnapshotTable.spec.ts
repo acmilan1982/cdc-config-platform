@@ -5,15 +5,17 @@ import { resolve } from 'node:path'
 import { nextTick } from 'vue'
 import ElementPlus from 'element-plus'
 import DataSourceSnapshotTable from './DataSourceSnapshotTable.vue'
-import { SNAPSHOT_TOOLTIP_DELAY_MS } from '../tooltip/useSnapshotTooltip'
 import type { SnapshotStatusItem, StatusToken } from '@/types/dataSourceSnapshot'
+import type { QueryListTooltipShowOptions } from '@/components/query-list'
 
 /**
  * 测试环境限制说明：vitest 使用 jsdom 且未注入 scoped css，无法计算真实像素宽度、单行省略与换行，
  * 这些以（a）源码宽度字面量契约测试 +（b）结构与类断言表达，真实像素与省略/边缘避让由浏览器开发
- * 验证测量并归档。Tooltip 延迟用假定时器驱动；Host 经 Teleport 到 body，故经 document 查询断言。
- * 本轮（第二轮）按 DESIGN §22.2-22.4 / UI §16.2-16.4：列弹性模型、探针端/源库展示简化、删除黄色
- * 图标、源库列 Tooltip 只显示完整原始 DATA_SOURCE_ID。
+ * 验证测量并归档。
+ * Tooltip 已上移为**页面唯一控制器 + 页面唯一 Host**（§7.6）：表格只通过 showTooltip/hideTooltip
+ * 委托，自身不再渲染任何 Tooltip DOM；延迟、单实例、全局关闭等行为由
+ * `useQueryListTooltip.spec.ts`（控制器）与 `QueryListTooltipHost.spec.ts`（Host）覆盖，
+ * 本文件保留“委托了什么 / 是否委托”的等价覆盖。
  */
 
 type RefState = 'ACTIVE' | 'INACTIVE' | 'NOT_FOUND'
@@ -37,7 +39,14 @@ const mounts: VueWrapper[] = []
 
 async function mountTable(records: SnapshotStatusItem[], loading = false) {
   const wrapper = mount(DataSourceSnapshotTable, {
-    props: { records, loading },
+    props: {
+      records,
+      loading,
+      // Tooltip 由页面唯一控制器承担（§7.6.1）：表格只通过 show/hide 委托，
+      // 因此测试统一注入 spy，断言“是否委托、委托了什么”，不再断言 Tooltip DOM。
+      showTooltip: vi.fn(),
+      hideTooltip: vi.fn(),
+    },
     global: { plugins: [ElementPlus] },
   })
   mounts.push(wrapper)
@@ -54,24 +63,45 @@ afterEach(() => {
   vi.clearAllMocks()
 })
 
-function hostInBody(): HTMLElement | null {
-  return document.querySelector('.dss-single-tooltip[data-tt-host="1"]')
+function tooltipProps(wrapper: VueWrapper) {
+  return wrapper.vm.$props as unknown as {
+    showTooltip: ReturnType<typeof vi.fn>
+    hideTooltip: ReturnType<typeof vi.fn>
+  }
 }
 
-function hostCountInBody(): number {
-  return document.querySelectorAll('.dss-single-tooltip[data-tt-host="1"]').length
+function showSpy(wrapper: VueWrapper): ReturnType<typeof vi.fn> {
+  return tooltipProps(wrapper).showTooltip
+}
+
+function hideSpy(wrapper: VueWrapper): ReturnType<typeof vi.fn> {
+  return tooltipProps(wrapper).hideTooltip
+}
+
+function showCalls(wrapper: VueWrapper): QueryListTooltipShowOptions[] {
+  return showSpy(wrapper).mock.calls.map((call) => call[0] as QueryListTooltipShowOptions)
+}
+
+function lastShow(wrapper: VueWrapper): QueryListTooltipShowOptions {
+  const calls = showCalls(wrapper)
+  expect(calls.length).toBeGreaterThan(0)
+  return calls[calls.length - 1]!
+}
+
+/** 表格自身不得渲染任何 Tooltip 节点：宿主唯一性由页面级 Host 保证。 */
+function ownTooltipNodes(): number {
+  return document.body.querySelectorAll('.ql-tooltip, .dss-single-tooltip').length
 }
 
 const tick = (): Promise<void> => nextTick()
 
-/** Host 渲染/移除依赖 watch(post-flush) + Teleport 补丁：稳定冲刷多次 nextTick。 */
 async function ticks(count = 2): Promise<void> {
   for (let i = 0; i < count; i++) await tick()
 }
 
+/** 悬停触发：控制器按 320ms 延迟揭示，这里只断言委托即刻发生（延迟行为由控制器测试覆盖）。 */
 async function reveal(trigger: DOMWrapper<Element>): Promise<void> {
   await trigger.trigger('mouseenter')
-  await vi.advanceTimersByTimeAsync(SNAPSHOT_TOOLTIP_DELAY_MS)
   await ticks()
 }
 
@@ -157,10 +187,14 @@ describe('DataSourceSnapshotTable 七列顺序与列弹性宽度契约（UI §16
     expect(src).toMatch(/(?<!min-)width\s*:\s*100%/)
   })
 
-  it('表格根类 .dss-table + 外层容器承载窄屏横向滚动（不换行压时间列）', async () => {
+  it('表格根即 .dss-table 本体：私有滚动容器已合并进公共结果面板正文区（不换行压时间列）', async () => {
     const wrapper = await mountTable([item()])
-    expect(wrapper.element.classList.contains('dss-table-wrap')).toBe(true)
+    expect(wrapper.element.classList.contains('el-table')).toBe(true)
+    expect(wrapper.element.classList.contains('dss-table')).toBe(true)
     expect(wrapper.find('.dss-table').exists()).toBe(true)
+    // 窄屏横向滚动由公共 QueryListResultPanel 正文区承载（§7.4.4/§7.5.4 合并决策）
+    expect(wrapper.find('.dss-table-wrap').exists()).toBe(false)
+    expect(wrapper.element.classList.contains('dss-table-wrap')).toBe(false)
     wrapper.unmount()
   })
 })
@@ -328,26 +362,27 @@ describe('DataSourceSnapshotTable loading 整表遮罩（DSS-REQ-071①）', () 
   })
 })
 
-describe('DataSourceSnapshotTable 页面级单实例 Tooltip 集成（第二轮现行，DSS-REQ-070，AC-076/077）', () => {
-  it('各触发类型进入同一 Host；探针端=完整 CLIENT_DESC、源库=完整原始 DATA_SOURCE_ID、状态=原始值；reveal 后 Host 恒为 1', async () => {
+describe('DataSourceSnapshotTable 页面级单实例 Tooltip 委托（DSS-REQ-070，AC-076/077）', () => {
+  it('三类触发源均委托同一控制器：探针端=完整 CLIENT_DESC、源库=完整原始 DATA_SOURCE_ID、状态=原始值', async () => {
     const wrapper = await mountTable([item()])
-    vi.useFakeTimers()
 
     // 探针端完整 CLIENT_DESC
     await reveal(triggerByKind(wrapper, 'client-desc-'))
-    expect(hostCountInBody()).toBe(1)
-    expect(hostInBody()!.textContent).toBe('HIS 探针示例')
+    expect(lastShow(wrapper)).toMatchObject({ content: 'HIS 探针示例' })
+    expect(lastShow(wrapper).key).toMatch(/^client-/)
+    // 表格自身不渲染 Tooltip DOM：宿主唯一性由页面级 Host 保证
+    expect(ownTooltipNodes()).toBe(0)
 
     // 源库列 Tooltip 只显示完整原始 DATA_SOURCE_ID（正常 ORG 行也不显示 ORG）
     await reveal(triggerByKind(wrapper, 'source-main-'))
-    expect(hostCountInBody()).toBe(1)
-    expect(hostInBody()!.textContent).toBe('112-source')
-    expect(hostInBody()!.textContent).not.toContain('示例医院源库')
+    expect(lastShow(wrapper).content).toBe('112-source')
+    expect(lastShow(wrapper).content).not.toContain('示例医院源库')
+    expect(lastShow(wrapper).key).toMatch(/^source-/)
 
     // 未知/原始状态值
     await reveal(triggerByKind(wrapper, 'status-'))
-    expect(hostCountInBody()).toBe(1)
-    expect(hostInBody()!.textContent).toBe('原始状态：SNAPSHOT_RUNNING')
+    expect(lastShow(wrapper).content).toBe('原始状态：SNAPSHOT_RUNNING')
+    expect(lastShow(wrapper).key).toMatch(/^status-/)
     wrapper.unmount()
   })
 
@@ -357,15 +392,15 @@ describe('DataSourceSnapshotTable 页面级单实例 Tooltip 集成（第二轮�
       item({ clientId: 'SI', sourceRef: { state: 'INACTIVE' as RefState, org: null, category: 'SOURCE', sourceRole: true } }),
       item({ clientId: 'SC', sourceRef: { state: 'ACTIVE' as RefState, org: null, category: 'OTHER', sourceRole: false } }),
     ])
-    vi.useFakeTimers()
     const sourceTriggers = wrapper.findAll('[data-tt-kind^="source-main-"]')
     expect(sourceTriggers).toHaveLength(3)
     for (const t of sourceTriggers) {
       await reveal(t)
-      expect(hostInBody()!.textContent).toBe('112-source')
-      expect(hostInBody()!.textContent).not.toContain('缺失')
-      expect(hostInBody()!.textContent).not.toContain('停用')
-      expect(hostInBody()!.textContent).not.toContain('类别非')
+      const content = lastShow(wrapper).content
+      expect(content).toBe('112-source')
+      expect(content).not.toContain('缺失')
+      expect(content).not.toContain('停用')
+      expect(content).not.toContain('类别非')
     }
     wrapper.unmount()
   })
@@ -377,93 +412,81 @@ describe('DataSourceSnapshotTable 页面级单实例 Tooltip 集成（第二轮�
     wrapper.unmount()
   })
 
-  it('探针端描述为空不弹空 Tooltip（host 不出现）', async () => {
+  it('探针端描述为空：委托内容为空串，由唯一控制器按“空内容即关闭”处理（不产生空 Tooltip）', async () => {
     const wrapper = await mountTable([item({ clientRef: { state: 'ACTIVE' as RefState, desc: null } })])
-    vi.useFakeTimers()
-    await triggerByKind(wrapper, 'client-desc-').trigger('mouseenter')
-    await vi.advanceTimersByTimeAsync(SNAPSHOT_TOOLTIP_DELAY_MS)
-    await ticks()
-    expect(hostCountInBody()).toBe(0)
+    await reveal(triggerByKind(wrapper, 'client-desc-'))
+    expect(lastShow(wrapper).content).toBe('')
+    expect(ownTooltipNodes()).toBe(0)
     wrapper.unmount()
   })
 
-  it('快速横向扫过多个触发点：同一 Host 仅承载最后一个，数量恒 1（先关旧项再延迟显示）', async () => {
+  it('快速横向扫过多个触发点：每次悬停都以新 key 委托，控制器保证同时至多 1 个 current', async () => {
     const wrapper = await mountTable([
       item({ clientId: 'A', snapshotStatus: 'SNAPSHOT_RUNNING', statusCategory: 'RUNNING' as StatusToken }),
       item({ clientId: 'B', snapshotStatus: 'SNAPSHOT_COMPLETED', statusCategory: 'COMPLETED' as StatusToken }),
     ])
-    vi.useFakeTimers()
     await reveal(triggerByKind(wrapper, 'status-'))
-    expect(hostCountInBody()).toBe(1)
+    expect(showSpy(wrapper)).toHaveBeenCalledTimes(1)
 
-    await triggerByKind(wrapper, 'client-desc-').trigger('mouseenter')
-    await ticks()
-    expect(hostCountInBody()).toBe(0)
-    await vi.advanceTimersByTimeAsync(SNAPSHOT_TOOLTIP_DELAY_MS)
-    await ticks()
-    await ticks()
-    expect(hostCountInBody()).toBe(1)
-    expect(hostInBody()!.textContent).toBe('HIS 探针示例')
+    await reveal(triggerByKind(wrapper, 'client-desc-'))
+    expect(showSpy(wrapper)).toHaveBeenCalledTimes(2)
+    // 最后一次委托是探针端描述；同时至多 1 个 current 由控制器测试覆盖
+    expect(lastShow(wrapper).content).toBe('HIS 探针示例')
+    expect(ownTooltipNodes()).toBe(0)
     wrapper.unmount()
   })
 
   it('records 替换关闭 Tooltip（数据刷新不残留旧悬浮）', async () => {
     const wrapper = await mountTable([item()])
-    vi.useFakeTimers()
     await reveal(triggerByKind(wrapper, 'status-'))
-    expect(hostCountInBody()).toBe(1)
+    expect(showSpy(wrapper)).toHaveBeenCalledTimes(1)
+    expect(hideSpy(wrapper)).not.toHaveBeenCalled()
+
     await wrapper.setProps({ records: [item({ clientId: 'NEW' })] })
     await ticks()
-    expect(hostCountInBody()).toBe(0)
+    expect(hideSpy(wrapper)).toHaveBeenCalledTimes(1)
     wrapper.unmount()
   })
 
-  it('window scroll/resize 与页面隐藏均关闭 Tooltip 并清除延迟', async () => {
+  it('mouseleave 关闭：三类触发源均委托 hide', async () => {
     const wrapper = await mountTable([item()])
-    vi.useFakeTimers()
-
-    await reveal(triggerByKind(wrapper, 'status-'))
-    expect(hostCountInBody()).toBe(1)
-    window.dispatchEvent(new Event('scroll'))
-    await ticks()
-    expect(hostCountInBody()).toBe(0)
-
-    await reveal(triggerByKind(wrapper, 'status-'))
-    window.dispatchEvent(new Event('resize'))
-    await ticks()
-    expect(hostCountInBody()).toBe(0)
-
-    await reveal(triggerByKind(wrapper, 'status-'))
-    document.dispatchEvent(new Event('visibilitychange'))
-    await ticks()
-    expect(hostCountInBody()).toBe(0)
-
-    // 延迟窗内事件也取消延迟：不再 reveal
-    await triggerByKind(wrapper, 'status-').trigger('mouseenter')
-    window.dispatchEvent(new Event('scroll'))
-    await vi.advanceTimersByTimeAsync(SNAPSHOT_TOOLTIP_DELAY_MS)
-    await ticks()
-    expect(hostCountInBody()).toBe(0)
+    for (const prefix of ['client-desc-', 'source-main-', 'status-']) {
+      const trigger = triggerByKind(wrapper, prefix)
+      await reveal(trigger)
+      const before = hideSpy(wrapper).mock.calls.length
+      await trigger.trigger('mouseleave')
+      expect(hideSpy(wrapper).mock.calls.length, prefix).toBe(before + 1)
+    }
     wrapper.unmount()
   })
 
-  it('卸载后 Host 移除且无残留延迟状态', async () => {
+  it('全局关闭（scroll/resize/页面隐藏）由页面唯一控制器绑定，表格不自行注册窗口监听', () => {
+    const src = readFileSync(resolve(process.cwd(), 'src/views/data-source-run-state/components/DataSourceSnapshotTable.vue'), 'utf8')
+    expect(src).not.toMatch(/addEventListener/)
+    expect(src).not.toMatch(/Teleport/)
+    expect(src).not.toMatch(/dss-single-tooltip/)
+    expect(src).not.toMatch(/SNAPSHOT_TOOLTIP_DELAY_MS/)
+    expect(src).not.toMatch(/setTimeout/)
+  })
+
+  it('卸载后不再委托，且页面不残留表格 Tooltip 节点', async () => {
     const wrapper = await mountTable([item()])
-    vi.useFakeTimers()
     await reveal(triggerByKind(wrapper, 'status-'))
-    expect(hostCountInBody()).toBe(1)
+    const show = showSpy(wrapper)
+    expect(show).toHaveBeenCalledTimes(1)
+    expect(ownTooltipNodes()).toBe(0)
     wrapper.unmount()
     await ticks()
-    expect(hostCountInBody()).toBe(0)
+    expect(show).toHaveBeenCalledTimes(1)
+    expect(ownTooltipNodes()).toBe(0)
   })
 
-  it('状态标签本身不创建独立 Tooltip：无独立 popper，原始值经同一 Host', async () => {
+  it('状态标签本身不创建独立 Tooltip：无独立 popper，原始值经同一控制器', async () => {
     const wrapper = await mountTable([item({ snapshotStatus: 'SNAPSHOT_RUNNING', statusCategory: 'RUNNING' as StatusToken })])
     expect(wrapper.findAll('.el-popper')).toHaveLength(0)
-    vi.useFakeTimers()
     await reveal(triggerByKind(wrapper, 'status-'))
-    expect(hostCountInBody()).toBe(1)
-    expect(hostInBody()!.textContent).toBe('原始状态：SNAPSHOT_RUNNING')
+    expect(lastShow(wrapper).content).toBe('原始状态：SNAPSHOT_RUNNING')
+    expect(ownTooltipNodes()).toBe(0)
     wrapper.unmount()
   })
 })

@@ -1,4 +1,4 @@
-import { afterEach, beforeEach, describe, it, expect } from 'vitest'
+import { afterEach, beforeEach, describe, it, expect, vi } from 'vitest'
 import { mount, flushPromises, type VueWrapper } from '@vue/test-utils'
 import { readFileSync } from 'node:fs'
 import { resolve } from 'node:path'
@@ -23,6 +23,10 @@ async function mountBar(props: Record<string, unknown> = {}, attachTo?: Element)
       statuses: STATUSES,
       busy: false,
       queryLoading: false,
+      // Tooltip 由页面唯一控制器承担（§7.6.1）：本组件只通过 show/hide 委托，
+      // 因此测试统一注入 spy，断言“是否委托、委托了什么”，不再断言 Tooltip DOM。
+      showTooltip: vi.fn(),
+      hideTooltip: vi.fn(),
       ...props,
     },
     global: { plugins: [ElementPlus] },
@@ -30,6 +34,40 @@ async function mountBar(props: Record<string, unknown> = {}, attachTo?: Element)
   })
   await flushPromises()
   return wrapper
+}
+
+type TooltipShowOptions = {
+  key: string
+  content: string
+  el?: HTMLElement
+  anchor?: unknown
+  maxWidthPx?: number
+}
+
+/** 组件注入的 show/hide 委托 spy（由 mountBar 默认注入，测试只读）。 */
+function tooltipProps(wrapper: VueWrapper) {
+  return wrapper.vm.$props as unknown as {
+    showTooltip: ReturnType<typeof vi.fn>
+    hideTooltip: ReturnType<typeof vi.fn>
+  }
+}
+
+function showSpy(wrapper: VueWrapper): ReturnType<typeof vi.fn> {
+  return tooltipProps(wrapper).showTooltip
+}
+
+function hideSpy(wrapper: VueWrapper): ReturnType<typeof vi.fn> {
+  return tooltipProps(wrapper).hideTooltip
+}
+
+function showCalls(wrapper: VueWrapper): TooltipShowOptions[] {
+  return showSpy(wrapper).mock.calls.map((call) => call[0] as TooltipShowOptions)
+}
+
+function lastShow(wrapper: VueWrapper): TooltipShowOptions {
+  const calls = showCalls(wrapper)
+  expect(calls.length).toBeGreaterThan(0)
+  return calls[calls.length - 1]!
 }
 
 async function openSelect(wrapper: VueWrapper, index: number) {
@@ -202,11 +240,11 @@ describe('DataSourceSnapshotQueryBar 六类请求查询按钮视觉映射（DSS-
     expect(btn.find('.el-icon').exists()).toBe(false)
     expect((btn.element as HTMLButtonElement).disabled).toBe(false)
     // 常驻私有指示器：Loading 时可见且 aria-hidden，文字标签内容不变
-    const spinner = btn.find('.dss-btn-spinner')
+    const spinner = btn.find('.ql-btn-spinner')
     expect(spinner.exists()).toBe(true)
     expect(spinner.classes()).toContain('is-visible')
     expect(spinner.attributes('aria-hidden')).toBe('true')
-    expect(btn.find('.dss-action-label').text()).toBe('查询')
+    expect(btn.find('.ql-action-label').text()).toBe('查询')
     wrapper.unmount()
   })
 
@@ -215,10 +253,10 @@ describe('DataSourceSnapshotQueryBar 六类请求查询按钮视觉映射（DSS-
     const btn = queryButton(wrapper)
     expect(btn.classes()).not.toContain('is-loading')
     expect((btn.element as HTMLButtonElement).disabled).toBe(false)
-    const spinner = btn.find('.dss-btn-spinner')
+    const spinner = btn.find('.ql-btn-spinner')
     expect(spinner.exists()).toBe(true)
     expect(spinner.classes()).not.toContain('is-visible')
-    expect(btn.find('.dss-action-label').text()).toBe('查询')
+    expect(btn.find('.ql-action-label').text()).toBe('查询')
     wrapper.unmount()
   })
 })
@@ -227,9 +265,9 @@ describe('DataSourceSnapshotQueryBar 查询按钮 Loading 视觉稳定性（DSS-
   it('常驻指示器节点在 idle 与 Loading 两态都存在、仅切换可见性；两态文案严格为“查询”', async () => {
     const idle = await mountBar()
     const idleBtn = queryButton(idle)
-    expect(idleBtn.find('.dss-btn-spinner').exists()).toBe(true)
-    expect(idleBtn.find('.dss-btn-spinner').classes()).not.toContain('is-visible')
-    expect(idleBtn.find('.dss-action-label').text()).toBe('查询')
+    expect(idleBtn.find('.ql-btn-spinner').exists()).toBe(true)
+    expect(idleBtn.find('.ql-btn-spinner').classes()).not.toContain('is-visible')
+    expect(idleBtn.find('.ql-action-label').text()).toBe('查询')
     expect(idleBtn.text().trim()).toBe('查询')
     // 不存在“查询中…/加载中”等随状态变化的文案
     expect(idleBtn.text()).not.toContain('中')
@@ -237,16 +275,16 @@ describe('DataSourceSnapshotQueryBar 查询按钮 Loading 视觉稳定性（DSS-
 
     const loading = await mountBar({ queryLoading: true, busy: true })
     const loadingBtn = queryButton(loading)
-    expect(loadingBtn.find('.dss-btn-spinner').exists()).toBe(true)
-    expect(loadingBtn.find('.dss-btn-spinner').classes()).toContain('is-visible')
-    expect(loadingBtn.find('.dss-action-label').text()).toBe('查询')
+    expect(loadingBtn.find('.ql-btn-spinner').exists()).toBe(true)
+    expect(loadingBtn.find('.ql-btn-spinner').classes()).toContain('is-visible')
+    expect(loadingBtn.find('.ql-action-label').text()).toBe('查询')
     expect(loadingBtn.text().trim()).toBe('查询')
     loading.unmount()
   })
 
   it('指示器为 Feature 私有节点且 aria-hidden="true"、非全局 Element Plus 图标', async () => {
     const wrapper = await mountBar({ queryLoading: true, busy: true })
-    const spinner = queryButton(wrapper).find('.dss-btn-spinner')
+    const spinner = queryButton(wrapper).find('.ql-btn-spinner')
     expect(spinner.attributes('aria-hidden')).toBe('true')
     // 私有命名空间：不借用 Element Plus 的 loading 图标类
     expect(spinner.classes()).not.toContain('is-loading')
@@ -266,46 +304,64 @@ describe('DataSourceSnapshotQueryBar 查询按钮 Loading 视觉稳定性（DSS-
     wrapper.unmount()
   })
 
-  it('源码静态契约：width/min-width/max-width/flex-basis 四值锁定 62px + box-sizing: border-box + position: relative', () => {
-    const rule = queryBarSource().match(/\.dss-q-actions \.dss-query-btn\s*\{[^}]*\}/s)?.[0] ?? ''
-    expect(rule).not.toBe('')
-    expect(rule).toMatch(/position:\s*relative/)
-    expect(rule).toMatch(/width:\s*62px/)
-    expect(rule).toMatch(/min-width:\s*62px/)
-    expect(rule).toMatch(/max-width:\s*62px/)
-    expect(rule).toMatch(/flex-basis:\s*62px/)
-    expect(rule).toMatch(/box-sizing:\s*border-box/)
-    // 既有视觉（黑底主按钮 / 30px 高 / 0 16px 内边距）不被本轮触碰
-    expect(rule).toMatch(/background:\s*var\(--dss-primary,\s*#09090b\)/)
-    expect(rule).toMatch(/height:\s*30px/)
-    expect(rule).toMatch(/padding:\s*0 16px/)
+  it('几何契约已上移公共操作区：查询按钮四值锁定 62px + 稳定盒模型 + 相对定位，高度仍由本页显式传 30px', async () => {
+    const wrapper = await mountBar()
+    const style = queryButton(wrapper).attributes('style') ?? ''
+    for (const decl of [
+      'width: 62px',
+      'min-width: 62px',
+      'max-width: 62px',
+      'flex-basis: 62px',
+      'flex-grow: 0',
+      'flex-shrink: 0',
+      'box-sizing: border-box',
+    ]) {
+      expect(style, `查询按钮缺 ${decl}`).toContain(decl)
+    }
+    // 参考页面事实高度 30px：公共层无默认高度，必须由本页显式传入（§7.5.2）
+    expect(style).toMatch(/height:\s*30px/)
+
+    const shared = sharedActionsCss()
+    expect(shared).toMatch(/\.ql-actions__query\s*\{[^}]*position:\s*relative/s)
+    expect(shared).toMatch(/background:\s*var\(--ql-actions-query-bg,\s*#09090b\)/)
+    expect(shared).toMatch(/padding:\s*var\(--ql-actions-query-padding,\s*0 16px\)/)
+    // 本组件不再声明任何按钮几何
+    expect(queryBarCss()).not.toMatch(/\.dss-query-btn|\.dss-q-actions|\.dss-reset-btn/)
+    wrapper.unmount()
   })
 
-  it('源码静态契约：私有指示器绝对定位、不进内容流；显隐只切可见性/透明度；无 !important、无全局 EP 覆写、无 JS 尺寸监听', () => {
-    const src = queryBarSource()
-    const spinner = src.match(/\.dss-btn-spinner\s*\{[^}]*\}/s)?.[0] ?? ''
+  it('常驻指示器在公共层绝对定位、不进内容流；本组件不再声明指示器 / Tooltip DOM 样式，也无 !important / 全局 EP 覆写 / JS 尺寸监听', () => {
+    const shared = sharedActionsCss()
+    const spinner = shared.match(/\.ql-btn-spinner\s*\{([^}]*)\}/)?.[1] ?? ''
     expect(spinner).not.toBe('')
     expect(spinner).toMatch(/position:\s*absolute/)
     expect(spinner).toMatch(/opacity:\s*0/)
     expect(spinner).toMatch(/visibility:\s*hidden/)
-    expect(src).toMatch(/\.dss-btn-spinner\.is-visible\s*\{[^}]*opacity:\s*1[^}]*visibility:\s*visible/s)
-    // 不使用 !important、不新增全局 .el-button/.el-icon/.is-loading 覆写、不做 JS 尺寸监听
-    expect(src).not.toMatch(/!important/)
-    expect(src).not.toMatch(/(^|\n)\s*\.el-button\s*\{/)
-    expect(src).not.toMatch(/(^|\n)\s*\.el-icon\s*\{/)
-    expect(src).not.toMatch(/(^|\n)\s*\.is-loading\s*\{/)
-    expect(src).not.toMatch(/ResizeObserver/)
-    expect(src).not.toMatch(/requestAnimationFrame/)
+    expect(spinner).toMatch(/border:\s*2px solid currentColor/)
+    expect(shared).toMatch(/\.ql-btn-spinner\.is-visible\s*\{[^}]*opacity:\s*1[^}]*visibility:\s*visible/s)
+
+    // 只判定真实声明：先剥离 CSS/模板注释（注释里会说明“这些已移入公共层”）
+    const src = queryBarSource()
+    const declared = src.replace(/\/\*[\s\S]*?\*\//g, '').replace(/<!--[\s\S]*?-->/g, '')
+    expect(declared).not.toMatch(/\.ql-btn-spinner|\.ql-action-label|\.dss-q-tt|\.dss-btn-spinner|\.dss-action-label/)
+    expect(declared).not.toMatch(/!important/)
+    expect(declared).not.toMatch(/(^|\n)\s*\.el-button\s*\{/)
+    expect(declared).not.toMatch(/(^|\n)\s*\.el-icon\s*\{/)
+    expect(declared).not.toMatch(/(^|\n)\s*\.is-loading\s*\{/)
+    expect(declared).not.toMatch(/ResizeObserver/)
+    expect(declared).not.toMatch(/requestAnimationFrame/)
   })
 
-  it('reduced-motion 规则只停止旋转、不隐藏指示器（保持静态可见）', () => {
-    const css = queryBarCss()
-    const block = css.match(/@media \(prefers-reduced-motion: reduce\)\s*\{([\s\S]*?)\n\}/)?.[1] ?? ''
+  it('reduced-motion 规则由公共层承载：只停止旋转、不隐藏指示器（保持静态可见）', () => {
+    const block =
+      sharedActionsCss().match(/@media \(prefers-reduced-motion: reduce\)\s*\{([\s\S]*?)\n\}/)?.[1] ?? ''
     expect(block).not.toBe('')
-    expect(block).toMatch(/\.dss-btn-spinner\s*\{[^}]*animation:\s*none/)
+    expect(block).toMatch(/\.ql-btn-spinner\s*\{[^}]*animation:\s*none/)
     // 只关停动画，不引入 display:none / visibility:hidden 之类会隐藏指示器的声明
     expect(block).not.toMatch(/display:\s*none/)
     expect(block).not.toMatch(/visibility:\s*hidden/)
+    // 本组件不再拥有该媒体查询（指示器样式已不在本文件）
+    expect(queryBarCss()).not.toMatch(/prefers-reduced-motion/)
   })
 
   it('busy 期间点击/键盘触发“查询”仍被事件防御阻断，且不产生原生禁用外观变化', async () => {
@@ -607,13 +663,14 @@ describe('DataSourceSnapshotQueryBar R6 查询字段标签视觉层级（R6 §1�
     expect(src).toMatch(/\.dss-select :deep\(\.el-select__wrapper\)\s*\{[^}]*min-height:\s*30px/s)
   })
 
-  it('不影响查询按钮：仍为黑色主按钮，文案与类名不变', async () => {
+  it('不影响查询按钮：仍为黑色主按钮，文案与语义类不变', async () => {
     const wrapper = await mountBar()
     const btn = queryButton(wrapper)
-    expect(btn.classes()).toContain('dss-query-btn')
+    // 按钮几何/视觉已上移到公共 QueryListActions（§7.4.3），语义类随之改为 ql-actions__query
+    expect(btn.classes()).toContain('ql-actions__query')
     expect(btn.text().trim()).toBe('查询')
-    // 黑色主按钮语义（R5 已确认）不被本轮标签调整触碰
-    expect(queryBarSrc()).toMatch(/\.dss-q-actions \.dss-query-btn\s*\{[^}]*background:\s*var\(--dss-primary,\s*#09090b\)/s)
+    // 黑色主按钮语义（R5 已确认）不被本轮标签调整触碰：仍由 #09090b 承担
+    expect(sharedRule(sharedActionsCss(), '.ql-actions__query')).toMatch(/background:\s*var\(--ql-actions-query-bg,\s*#09090b\)/)
     wrapper.unmount()
   })
 
@@ -657,6 +714,23 @@ function queryBarSource(): string {
 /** 去掉 CSS/模板注释后的源码：契约断言只看真实声明，不受注释文本影响。 */
 function queryBarCss(): string {
   return queryBarSource().replace(/\/\*[\s\S]*?\*\//g, '')
+}
+
+/** 公共操作区源码：查询/重置按钮本体的几何与视觉契约已上移到该组件（§7.4.3）。 */
+function sharedSource(file: string): string {
+  return readFileSync(resolve(process.cwd(), 'src/components/query-list', file), 'utf8')
+}
+
+function sharedActionsCss(): string {
+  return sharedSource('QueryListActions.vue').replace(/\/\*[\s\S]*?\*\//g, '')
+}
+
+function sharedRefreshCss(): string {
+  return sharedSource('QueryListRefreshToolbar.vue').replace(/\/\*[\s\S]*?\*\//g, '')
+}
+
+function sharedRule(css: string, selector: string): string {
+  return css.match(new RegExp(`${selector.replace(/[.*+?^${}()|[\]\\]/g, '\\$&')}\\s*\\{([^}]*)\\}`))?.[1] ?? ''
 }
 
 function optionRow(popper: HTMLElement, label: string): HTMLElement {
@@ -708,9 +782,12 @@ async function settleTooltip() {
   await nextTick()
 }
 
-function tooltipEl(): HTMLElement | null {
-  const all = document.body.querySelectorAll('.dss-q-tt')
-  return all.length ? (all[all.length - 1] as HTMLElement) : null
+/**
+ * Tooltip DOM 由**页面唯一 Host**渲染（§7.4.6/§7.6.4）：查询栏自身不得渲染任何 Tooltip 节点，
+ * 因此这里断言「容器内 Tooltip 节点数恒为 0」，并统一用 show/hide 委托 spy 判定显示语义。
+ */
+function ownTooltipNodes(): number {
+  return document.body.querySelectorAll('.ql-tooltip, .dss-q-tt, .dss-single-tooltip').length
 }
 
 describe('DataSourceSnapshotQueryBar 四字段统一字段级截断（DSS-REQ-085，AC-098/099/103）', () => {
@@ -900,16 +977,15 @@ describe('DataSourceSnapshotQueryBar 四字段先 trim 再 20 码点截断（R1 
   })
 })
 
-describe('DataSourceSnapshotQueryBar CLIENT_DESC 完整 Tooltip（DSS-REQ-086，AC-100/101/102/103）', () => {
-  // Tooltip 宿主 Teleport 到 body：每个用例前清掉可能残留的实例，避免跨用例误判“至多一个”。
+describe('DataSourceSnapshotQueryBar CLIENT_DESC 完整 Tooltip 判定与委托（DSS-REQ-086，AC-100/101/102/103）', () => {
   beforeEach(() => {
-    document.body.querySelectorAll('.dss-q-tt').forEach((n) => n.remove())
+    document.body.querySelectorAll('.ql-tooltip').forEach((n) => n.remove())
   })
   afterEach(() => {
     while (hosts.length) hosts.pop()!.remove()
   })
 
-  it('仅当原始 CLIENT_DESC code point 长度 > 20 时，候选项悬停显示完整未截断原文', async () => {
+  it('仅当原始 CLIENT_DESC code point 长度 > 20 时，候选项悬停向页面唯一控制器委托显示完整未截断原文', async () => {
     const wrapper = await mountTtBar({
       clients: [{ id: 'C1', desc: LONG_DESC, active: true }],
     })
@@ -917,97 +993,106 @@ describe('DataSourceSnapshotQueryBar CLIENT_DESC 完整 Tooltip（DSS-REQ-086，
     const row = optionRow(clientPopper(), `C1（${'长'.repeat(20)}...）`)
     hover(row)
     await settleTooltip()
-    const tt = tooltipEl()
-    expect(tt).toBeTruthy()
+
+    const call = lastShow(wrapper)
     // 内容 = 完整原始描述：不含 CLIENT_ID、不含组合文本、不含截断文本、不追加说明
-    expect(tt!.textContent).toBe(LONG_DESC)
-    expect(tt!.textContent).not.toContain('C1')
-    expect(tt!.textContent).not.toContain('...')
-    expect(tt!.textContent).not.toContain('不在候选内')
+    expect(call.content).toBe(LONG_DESC)
+    expect(call.content).not.toContain('C1')
+    expect(call.content).not.toContain('...')
+    expect(call.content).not.toContain('不在候选内')
+    // 锚点为命中的候选行本体；稳定身份取原始完整 CLIENT_ID（不依赖显示文字）
+    expect(call.key).toBe('client-desc:C1')
+    expect(call.el).toBe(row)
+    expect(call.maxWidthPx).toBe(480)
+
     unhover(row)
     await settleTooltip()
-    expect(tooltipEl()).toBeNull()
+    expect(hideSpy(wrapper)).toHaveBeenCalled()
     wrapper.unmount()
   })
 
-  it('长度恰好 20（不被截断）时无 Tooltip；19 亦无', async () => {
+  it('长度恰好 20（不被截断）时无委托；19 亦无', async () => {
     for (const desc of ['长'.repeat(20), '长'.repeat(19)]) {
       const wrapper = await mountTtBar({ clients: [{ id: 'C1', desc, active: true }] })
       await openSelect(wrapper, 0)
       hover(optionRow(clientPopper(), `C1（${desc}）`))
       await settleTooltip()
-      expect(tooltipEl()).toBeNull()
+      expect(showSpy(wrapper)).not.toHaveBeenCalled()
       wrapper.unmount()
     }
   })
 
-  it('CLIENT_DESC 为 null/空串/纯空白时无 Tooltip', async () => {
+  it('CLIENT_DESC 为 null/空串/纯空白时无委托', async () => {
     for (const desc of [null, '', '   ']) {
       const wrapper = await mountTtBar({ clients: [{ id: 'C1', desc, active: true }] })
       await openSelect(wrapper, 0)
       hover(optionRow(clientPopper(), 'C1'))
       await settleTooltip()
-      expect(tooltipEl()).toBeNull()
+      expect(showSpy(wrapper)).not.toHaveBeenCalled()
       wrapper.unmount()
     }
   })
 
-  it('超长 CLIENT_ID 自身不产生 Tooltip（本轮不为 ID 新增 Tooltip）', async () => {
+  it('超长 CLIENT_ID 自身不产生委托（本轮不为 ID 新增 Tooltip）', async () => {
     const wrapper = await mountTtBar({ clients: [{ id: CP21, desc: null, active: true }] })
     await openSelect(wrapper, 0)
     hover(optionRow(clientPopper(), 'B'.repeat(20) + '...'))
     await settleTooltip()
-    expect(tooltipEl()).toBeNull()
+    expect(showSpy(wrapper)).not.toHaveBeenCalled()
     wrapper.unmount()
   })
 
-  it('源库候选（ORG/ID 超 20）悬停不产生 Tooltip（本轮不为源库新增 Tooltip）', async () => {
+  it('源库候选（ORG/ID 超 20）悬停不产生委托（本轮不为源库新增 Tooltip）', async () => {
     const wrapper = await mountTtBar({
       sources: [{ id: 'S'.repeat(22), org: '源'.repeat(22), active: true }],
     })
     await openSelect(wrapper, 1)
     hover(optionRow(sourcePopper(), `${'源'.repeat(20)}...（${'S'.repeat(20)}...）`))
     await settleTooltip()
-    expect(tooltipEl()).toBeNull()
+    expect(showSpy(wrapper)).not.toHaveBeenCalled()
     wrapper.unmount()
   })
 
-  it('“全部”候选悬停不产生 Tooltip', async () => {
+  it('“全部”候选悬停不产生委托', async () => {
     const wrapper = await mountTtBar()
     await openSelect(wrapper, 0)
     hover(optionRow(clientPopper(), '全部'))
     await settleTooltip()
-    expect(tooltipEl()).toBeNull()
+    expect(showSpy(wrapper)).not.toHaveBeenCalled()
     wrapper.unmount()
   })
 
-  it('控件中可见选中项悬停同样显示完整原文；内容与候选一致', async () => {
+  it('控件中可见选中项悬停同样委托完整原文；内容与候选一致', async () => {
     const wrapper = await mountTtBar({ clients: [{ id: 'C1', desc: LONG_DESC, active: true }] })
     await openSelect(wrapper, 0)
     await clickOption(clientPopper(), `C1（${'长'.repeat(20)}...）`)
     const tag = wrapper.find('.dss-client-select .el-tag').element
     hover(tag)
     await settleTooltip()
-    const tt = tooltipEl()
-    expect(tt).toBeTruthy()
-    expect(tt!.textContent).toBe(LONG_DESC)
+
+    const call = lastShow(wrapper)
+    expect(call.content).toBe(LONG_DESC)
+    expect(call.key).toBe('client-desc:C1')
+    expect(call.el).toBe(tag)
+    expect(call.maxWidthPx).toBe(480)
+
     unhover(tag)
     await settleTooltip()
-    expect(tooltipEl()).toBeNull()
+    expect(hideSpy(wrapper)).toHaveBeenCalled()
     wrapper.unmount()
   })
 
-  it('已选但描述 ≤20 的选中项悬停无 Tooltip', async () => {
+  it('已选但描述 ≤20 的选中项悬停无委托', async () => {
     const wrapper = await mountTtBar({ clients: [{ id: 'C1', desc: '短描述', active: true }] })
     await openSelect(wrapper, 0)
     await clickOption(clientPopper(), 'C1（短描述）')
     hover(wrapper.find('.dss-client-select .el-tag').element)
     await settleTooltip()
-    expect(tooltipEl()).toBeNull()
+    expect(showSpy(wrapper)).not.toHaveBeenCalled()
     wrapper.unmount()
   })
 
-  it('多选折叠 +N：悬停可见标签显示其自身描述，悬停 +N 不聚合、不显示任何 Tooltip', async () => {
+  it('多选折叠 +N：悬停可见标签委托其自身描述，悬停 +N 不聚合、不委托任何 Tooltip', async () => {
     const wrapper = await mountTtBar({
       clients: [
         { id: 'C1', desc: LONG_DESC, active: true },
@@ -1022,28 +1107,29 @@ describe('DataSourceSnapshotQueryBar CLIENT_DESC 完整 Tooltip（DSS-REQ-086，
     await openSelect(wrapper, 0)
     await clickOption(clientPopper(), 'C3（第三个描述）')
 
-    // 可见标签 = 第一个选中项（C1），Tooltip 只显示它自己的完整描述
+    // 可见标签 = 第一个选中项（C1），委托的只是它自己的完整描述
     const visibleTag = wrapper.findAll('.dss-client-select .el-tag').find((t) =>
       t.classes().includes('is-closable'),
     )!
     hover(visibleTag.element)
     await settleTooltip()
-    expect(tooltipEl()!.textContent).toBe(LONG_DESC)
+    expect(lastShow(wrapper).content).toBe(LONG_DESC)
     unhover(visibleTag.element)
     await settleTooltip()
 
-    // +N 折叠标签：无 is-closable，且其文案不对应任何单个探针候选 → 不产生 Tooltip
+    // +N 折叠标签：无 is-closable，且其文案不对应任何单个探针候选 → 不产生委托
     const collapseTag = wrapper
       .findAll('.dss-client-select .el-tag')
       .find((t) => /^\s*\+\s*\d+\s*$/.test(t.text()))!
     expect(collapseTag.classes()).not.toContain('is-closable')
+    showSpy(wrapper).mockClear()
     hover(collapseTag.element)
     await settleTooltip()
-    expect(tooltipEl()).toBeNull()
+    expect(showSpy(wrapper)).not.toHaveBeenCalled()
     wrapper.unmount()
   })
 
-  it('快速在两个候选间移动：任意时刻至多一个可见实例（不叠加）', async () => {
+  it('快速在两个候选间移动：每次只委托当前锚点，且查询栏自身不产生任何 Tooltip 节点（唯一宿主由页面持有）', async () => {
     const wrapper = await mountTtBar({
       clients: [
         { id: 'C1', desc: LONG_DESC, active: true },
@@ -1055,11 +1141,16 @@ describe('DataSourceSnapshotQueryBar CLIENT_DESC 完整 Tooltip（DSS-REQ-086，
     const second = optionRow(clientPopper(), `C2（${'D'.repeat(20)}...）`)
     hover(first)
     await settleTooltip()
-    expect(document.body.querySelectorAll('.dss-q-tt')).toHaveLength(1)
+    expect(showCalls(wrapper)).toHaveLength(1)
+    expect(lastShow(wrapper).el).toBe(first)
+
     hover(second)
     await settleTooltip()
-    expect(document.body.querySelectorAll('.dss-q-tt')).toHaveLength(1)
-    expect(tooltipEl()!.textContent).toBe('D'.repeat(23))
+    expect(showCalls(wrapper)).toHaveLength(2)
+    expect(lastShow(wrapper).el).toBe(second)
+    expect(lastShow(wrapper).content).toBe('D'.repeat(23))
+    // 单实例由页面唯一控制器保证：本组件不渲染任何 Tooltip 节点（不存在“两个实例”可能）
+    expect(ownTooltipNodes()).toBe(0)
     wrapper.unmount()
   })
 
@@ -1069,15 +1160,18 @@ describe('DataSourceSnapshotQueryBar CLIENT_DESC 完整 Tooltip（DSS-REQ-086，
     const row = optionRow(clientPopper(), `C1（${'长'.repeat(20)}...）`)
     hover(row)
     await settleTooltip()
-    expect(tooltipEl()).toBeTruthy()
-    // 在同一锚点内部移动：仍保持可见
+    expect(showCalls(wrapper)).toHaveLength(1)
+
+    // 在同一锚点内部移动：不重复委托、不隐藏
+    hideSpy(wrapper).mockClear()
     unhover(row, row)
     await settleTooltip()
-    expect(tooltipEl()).toBeTruthy()
+    expect(hideSpy(wrapper)).not.toHaveBeenCalled()
+
     // 移出锚点：隐藏
     unhover(row, document.body)
     await settleTooltip()
-    expect(tooltipEl()).toBeNull()
+    expect(hideSpy(wrapper)).toHaveBeenCalled()
     wrapper.unmount()
   })
 
@@ -1087,11 +1181,11 @@ describe('DataSourceSnapshotQueryBar CLIENT_DESC 完整 Tooltip（DSS-REQ-086，
     const row = optionRow(clientPopper(), `C1（${'长'.repeat(20)}...）`)
     hover(row)
     await settleTooltip()
-    expect(tooltipEl()).toBeTruthy()
+    expect(showCalls(wrapper)).toHaveLength(1)
+    const show = showSpy(wrapper)
     wrapper.unmount()
-    // Teleport 宿主随组件卸载移除
-    expect(tooltipEl()).toBeNull()
-    // 卸载后再出现“结构上命中锚点选择器”的节点：若文档级监听器未移除，会重新弹出 Tooltip
+
+    // 卸载后再出现“结构上命中锚点选择器”的节点：若文档级监听器未移除，会重新委托
     const zombie = document.createElement('div')
     zombie.className = 'dss-client-popper'
     const zombieRow = document.createElement('div')
@@ -1101,7 +1195,7 @@ describe('DataSourceSnapshotQueryBar CLIENT_DESC 完整 Tooltip（DSS-REQ-086，
     document.body.appendChild(zombie)
     hover(zombieRow)
     await settleTooltip()
-    expect(tooltipEl()).toBeNull()
+    expect(show).toHaveBeenCalledTimes(1)
     zombie.remove()
   })
 
@@ -1117,31 +1211,37 @@ describe('DataSourceSnapshotQueryBar CLIENT_DESC 完整 Tooltip（DSS-REQ-086，
     wrapper.unmount()
   })
 
-  it('Tooltip 宿主 Teleport 到 body、不在查询栏子树内（position:fixed 不参与查询栏布局）', async () => {
+  it('Tooltip 宿主由页面唯一 Host 承担：查询栏自身不渲染任何 Tooltip 节点（不产生第二宿主）', async () => {
     const wrapper = await mountTtBar({ clients: [{ id: 'C1', desc: LONG_DESC, active: true }] })
     await openSelect(wrapper, 0)
     hover(optionRow(clientPopper(), `C1（${'长'.repeat(20)}...）`))
     await settleTooltip()
-    const tt = tooltipEl()!
-    expect(wrapper.find('.dss-q-tt').exists()).toBe(false)
-    expect(tt.closest('.dss-query-bar')).toBeNull()
+    expect(lastShow(wrapper).content).toBe(LONG_DESC)
+    // 组件子树与 body 中都没有第二宿主：Teleport/DOM/定位全部由页面级 Host 负责
+    for (const sel of ['.ql-tooltip', '.dss-q-tt', '.dss-single-tooltip']) {
+      expect(wrapper.find(sel).exists(), sel).toBe(false)
+      expect(document.body.querySelector(sel), sel).toBeNull()
+    }
     wrapper.unmount()
   })
 
-  it('类名与页面级表格 Tooltip 独立：不使用 dss-single-tooltip（不污染表格 Tooltip 规则）', async () => {
+  it('不污染页面级 Tooltip 的公共契约：查询栏不渲染 Tooltip DOM，只按 480px 内容上限委托', async () => {
     const wrapper = await mountTtBar({ clients: [{ id: 'C1', desc: LONG_DESC, active: true }] })
     await openSelect(wrapper, 0)
     hover(optionRow(clientPopper(), `C1（${'长'.repeat(20)}...）`))
     await settleTooltip()
-    expect(document.body.querySelector('.dss-single-tooltip')).toBeNull()
-    expect(tooltipEl()!.classList.contains('dss-q-tt')).toBe(true)
+    // 安全上限（min(480px, calc(100vw - 16px))）、定位与不可交互全部由公共 Host/Composable 拥有，
+    // 查询栏只提供「查询栏内容上限 480px」这一个输入（§7.6.2）。
+    expect(lastShow(wrapper).maxWidthPx).toBe(480)
+    expect(ownTooltipNodes()).toBe(0)
+    expect(queryBarCss()).not.toMatch(/\.ql-tooltip|dss-single-tooltip/)
     wrapper.unmount()
   })
 })
 
 describe('DataSourceSnapshotQueryBar Tooltip 稳定身份与截断标签碰撞（R1 §6.1/§6.2/§6.3，DSS-REQ-086）', () => {
   beforeEach(() => {
-    document.body.querySelectorAll('.dss-q-tt').forEach((n) => n.remove())
+    document.body.querySelectorAll('.ql-tooltip').forEach((n) => n.remove())
   })
   afterEach(() => {
     while (hosts.length) hosts.pop()!.remove()
@@ -1195,28 +1295,31 @@ describe('DataSourceSnapshotQueryBar Tooltip 稳定身份与截断标签碰撞�
     wrapper.unmount()
   })
 
-  it('碰撞候选分别悬停：各自显示自己的完整描述，互不串号', async () => {
+  it('碰撞候选分别悬停：各自委托自己的完整描述，互不串号', async () => {
     const wrapper = await mountTtBar({ clients: COLLIDING_CLIENTS })
     await openSelect(wrapper, 0)
     const rows = clientRows()
 
     hover(rows[1]!)
     await settleTooltip()
-    expect(tooltipEl()!.textContent).toBe(COL_DESC_A)
+    expect(lastShow(wrapper).content).toBe(COL_DESC_A)
+    expect(lastShow(wrapper).key).toBe(`client-desc:${COL_ID_A}`)
     unhover(rows[1]!)
     await settleTooltip()
 
     hover(rows[2]!)
     await settleTooltip()
-    expect(tooltipEl()!.textContent).toBe(COL_DESC_B)
-    expect(tooltipEl()!.textContent).not.toContain('AAA')
+    expect(lastShow(wrapper).content).toBe(COL_DESC_B)
+    expect(lastShow(wrapper).content).not.toContain('AAA')
+    expect(lastShow(wrapper).key).toBe(`client-desc:${COL_ID_B}`)
+    expect(lastShow(wrapper).el).toBe(rows[2])
     unhover(rows[2]!)
     await settleTooltip()
-    expect(tooltipEl()).toBeNull()
+    expect(hideSpy(wrapper)).toHaveBeenCalled()
     wrapper.unmount()
   })
 
-  it('碰撞候选分别选中：可见已选项 Tooltip 仍对应正确探针（不因标签碰撞而失效或串号）', async () => {
+  it('碰撞候选分别选中：可见已选项委托仍对应正确探针（不因标签碰撞而失效或串号）', async () => {
     const wrapper = await mountTtBar({ clients: COLLIDING_CLIENTS })
     await openSelect(wrapper, 0)
     clientRows()[1]!.click()
@@ -1226,9 +1329,10 @@ describe('DataSourceSnapshotQueryBar Tooltip 稳定身份与截断标签碰撞�
     const tag = wrapper.find('.dss-client-select .el-tag.is-closable').element
     hover(tag)
     await settleTooltip()
-    expect(tooltipEl()!.textContent).toBe(COL_DESC_A)
+    expect(lastShow(wrapper).content).toBe(COL_DESC_A)
+    expect(lastShow(wrapper).key).toBe(`client-desc:${COL_ID_A}`)
 
-    // 追加选中第二个碰撞探针：可见标签仍是首个选中项，Tooltip 必须仍为 A 的完整描述
+    // 追加选中第二个碰撞探针：可见标签仍是首个选中项，委托必须仍为 A 的完整描述
     await openSelect(wrapper, 0)
     clientRows()[2]!.click()
     await nextTick()
@@ -1237,26 +1341,28 @@ describe('DataSourceSnapshotQueryBar Tooltip 稳定身份与截断标签碰撞�
     expect(collapseTag.find('[data-dss-client-id]').attributes('data-dss-client-id')).toBe(COL_ID_A)
     hover(collapseTag.element)
     await settleTooltip()
-    expect(document.body.querySelectorAll('.dss-q-tt')).toHaveLength(1)
-    expect(tooltipEl()!.textContent).toBe(COL_DESC_A)
+    const calls = showCalls(wrapper)
+    expect(calls[calls.length - 1]!.key).toBe(`client-desc:${COL_ID_A}`)
+    expect(calls[calls.length - 1]!.content).toBe(COL_DESC_A)
     wrapper.unmount()
   })
 
-  it('碰撞探针快速交替悬停：任意时刻至多一个实例，内容随锚点正确切换', async () => {
+  it('碰撞探针快速交替悬停：每次只委托一个锚点，内容随锚点正确切换（组件不持有 Tooltip DOM）', async () => {
     const wrapper = await mountTtBar({ clients: COLLIDING_CLIENTS })
     await openSelect(wrapper, 0)
     const rows = clientRows()
     hover(rows[1]!)
     await settleTooltip()
-    expect(document.body.querySelectorAll('.dss-q-tt')).toHaveLength(1)
+    expect(lastShow(wrapper).el).toBe(rows[1])
     hover(rows[2]!)
     await settleTooltip()
-    expect(document.body.querySelectorAll('.dss-q-tt')).toHaveLength(1)
-    expect(tooltipEl()!.textContent).toBe(COL_DESC_B)
+    expect(lastShow(wrapper).el).toBe(rows[2])
+    expect(lastShow(wrapper).content).toBe(COL_DESC_B)
     hover(rows[1]!)
     await settleTooltip()
-    expect(document.body.querySelectorAll('.dss-q-tt')).toHaveLength(1)
-    expect(tooltipEl()!.textContent).toBe(COL_DESC_A)
+    expect(lastShow(wrapper).el).toBe(rows[1])
+    expect(lastShow(wrapper).content).toBe(COL_DESC_A)
+    expect(ownTooltipNodes()).toBe(0)
     wrapper.unmount()
   })
 
@@ -1266,41 +1372,41 @@ describe('DataSourceSnapshotQueryBar Tooltip 稳定身份与截断标签碰撞�
     await openSelect(wrapper, 0)
     hover(optionRow(clientPopper(), `C1（${'长'.repeat(20)}...）`))
     await settleTooltip()
-    expect(tooltipEl()!.textContent).toBe('长'.repeat(25))
-    expect(tooltipEl()!.textContent).not.toContain(' ')
+    expect(lastShow(wrapper).content).toBe('长'.repeat(25))
+    expect(lastShow(wrapper).content).not.toContain(' ')
     wrapper.unmount()
   })
 
-  it('判定基于 trim 后的码点数：trim 前 >20 但 trim 后恰好 20 → 无 Tooltip', async () => {
+  it('判定基于 trim 后的码点数：trim 前 >20 但 trim 后恰好 20 → 无委托', async () => {
     const desc = `   ${'长'.repeat(20)}   `
     const wrapper = await mountTtBar({ clients: [{ id: 'C1', desc, active: true }] })
     await openSelect(wrapper, 0)
     hover(optionRow(clientPopper(), `C1（${'长'.repeat(20)}）`))
     await settleTooltip()
-    expect(tooltipEl()).toBeNull()
+    expect(showSpy(wrapper)).not.toHaveBeenCalled()
     wrapper.unmount()
   })
 
-  it('判定基于 trim 后的码点数：trim 后 21 → 显示 Tooltip，且内容为 trim 后的 21 码点全文', async () => {
+  it('判定基于 trim 后的码点数：trim 后 21 → 委托显示，且内容为 trim 后的 21 码点全文', async () => {
     const desc = `  ${'长'.repeat(21)}  `
     const wrapper = await mountTtBar({ clients: [{ id: 'C1', desc, active: true }] })
     await openSelect(wrapper, 0)
     hover(optionRow(clientPopper(), `C1（${'长'.repeat(20)}...）`))
     await settleTooltip()
-    expect(tooltipEl()!.textContent).toBe('长'.repeat(21))
+    expect(lastShow(wrapper).content).toBe('长'.repeat(21))
     wrapper.unmount()
   })
 
-  it('纯空白候选描述不产生 Tooltip（trim 后为空）', async () => {
+  it('纯空白候选描述不产生委托（trim 后为空）', async () => {
     const wrapper = await mountTtBar({ clients: [{ id: 'C1', desc: '   ', active: true }] })
     await openSelect(wrapper, 0)
     hover(optionRow(clientPopper(), 'C1'))
     await settleTooltip()
-    expect(tooltipEl()).toBeNull()
+    expect(showSpy(wrapper)).not.toHaveBeenCalled()
     wrapper.unmount()
   })
 
-  it('幽灵项即使标签碰撞也不产生错误映射：原始 ID 不在候选内 → 无 Tooltip', async () => {
+  it('幽灵项即使标签碰撞也不产生错误映射：原始 ID 不在候选内 → 无委托', async () => {
     const wrapper = await mountTtBar({ clients: [{ id: COL_ID_A, desc: COL_DESC_A, active: true }] })
     await openSelect(wrapper, 0)
     clientRows()[1]!.click()
@@ -1313,7 +1419,7 @@ describe('DataSourceSnapshotQueryBar Tooltip 稳定身份与截断标签碰撞�
     expect(ghost.getAttribute('data-dss-client-id')).toBe(COL_ID_A)
     hover(ghost)
     await settleTooltip()
-    expect(tooltipEl()).toBeNull()
+    expect(showSpy(wrapper)).not.toHaveBeenCalled()
     wrapper.unmount()
   })
 
@@ -1387,14 +1493,31 @@ describe('DataSourceSnapshotQueryBar 查询控件外部几何锁（DSS-REQ-084�
     expect(block).toMatch(/text-overflow:\s*ellipsis/)
   })
 
-  it('Tooltip 安全最大宽度契约：min(480px, calc(100vw - 16px)) 且自然换行、不可交互、fixed 定位', () => {
-    const src = queryBarSource()
-    const block = src.match(/\.dss-q-tt\s*\{[^}]*\}/s)?.[0]
-    expect(block).toBeTruthy()
-    expect(block).toMatch(/max-width:\s*min\(480px,\s*calc\(100vw - 16px\)\)/)
-    expect(block).toMatch(/position:\s*fixed/)
-    expect(block).toMatch(/pointer-events:\s*none/)
-    expect(block).toMatch(/overflow-wrap:\s*anywhere/)
+  it('Tooltip 安全最大宽度契约：只委托 maxWidthPx=480，最终上限由公共 Host 收敛到视口安全值', async () => {
+    const wrapper = await mountTtBar({ clients: [{ id: 'C1', desc: LONG_DESC, active: true }] })
+    await openSelect(wrapper, 0)
+    await hover(optionRow(clientPopper(), `C1（${'长'.repeat(20)}...）`))
+    await settleTooltip()
+
+    // 内容上限只有一个来源：查询栏只声明 480px，不自己算视口、不自己写 max-width
+    expect(lastShow(wrapper).maxWidthPx).toBe(480)
+    expect(ownTooltipNodes()).toBe(0)
+    // 查询栏不再声明任何 Tooltip 定位/换行/不可交互样式（这些是公共 Host 的职责）
+    const css = queryBarCss()
+    expect(css).not.toMatch(/\.dss-q-tt/)
+    expect(css).not.toMatch(/dss-single-tooltip/)
+    // 公共 Host 承担 fixed + 不可交互 + 长词换行
+    const host = sharedRule(
+      readFileSync(resolve(process.cwd(), 'src/components/query-list/QueryListTooltipHost.vue'), 'utf8').replace(
+        /\/\*[\s\S]*?\*\//g,
+        '',
+      ),
+      '.ql-tooltip',
+    )
+    expect(host).toMatch(/position:\s*fixed/)
+    expect(host).toMatch(/pointer-events:\s*none/)
+    expect(host).toMatch(/overflow-wrap:\s*anywhere/)
+    wrapper.unmount()
   })
 
   it('内容长度不同不改变 query 草稿语义：三个字段的“全部”默认态仍为 ALL_OPTION', async () => {
@@ -1431,103 +1554,120 @@ describe('DataSourceSnapshotQueryBar R1 稳定身份实现约束（R1 §6.2）',
 // 判定基准：每个按钮只与自身稳定基准比较；查询与重置只要求宽度集合均为 [62]，不比较绝对 x。
 // ---------------------------------------------------------------------------
 
-describe('DataSourceSnapshotQueryBar 重置按钮固定几何（DSS-REQ-090）', () => {
-  /** 去注释后提取 `.dss-q-actions .dss-reset-btn` 规则体：契约断言只看真实声明。 */
-  function resetRule(): string {
-    const css = queryBarCss()
-    const m = css.match(/\.dss-q-actions \.dss-reset-btn\s*\{([^}]*)\}/)
-    return m ? m[1]! : ''
+describe('DataSourceSnapshotQueryBar 重置按钮固定几何（DSS-REQ-090，几何上移到公共 QueryListActions §7.4.3）', () => {
+  /** 运行时内联样式：宽度四值同锁由公共组件以 inline style 表达（§7.5.1/§7.5.2）。 */
+  function inlineStyle(btn: { attributes(name: string): string | undefined }): string {
+    return btn.attributes('style') ?? ''
   }
 
-  /** 去注释后提取 `.dss-q-actions .dss-query-btn` 规则体。 */
-  function queryRule(): string {
-    const css = queryBarCss()
-    const m = css.match(/\.dss-q-actions \.dss-query-btn\s*\{([^}]*)\}/)
-    return m ? m[1]! : ''
+  function resetStyle(wrapper: VueWrapper): string {
+    return inlineStyle(resetButton(wrapper))
   }
 
-  /** 属性声明精确匹配：属性名必须紧跟 `;` 或规则体起始，避免 min-width/max-width 误命中 width。 */
+  function queryStyle(wrapper: VueWrapper): string {
+    return inlineStyle(queryButton(wrapper))
+  }
+
+  /** 属性声明精确匹配：属性名必须紧跟 `;` 或样式串起始，避免 min-width/max-width 误命中 width。 */
   function decl(body: string, prop: string): RegExp {
     return new RegExp(`(^|;)\\s*${prop}:\\s*62px\\s*(;|$)`)
   }
 
-  it('源码字面量契约：重置按钮 width/min-width/max-width/flex-basis 四项均为 62px，且各只声明一次', () => {
-    const rule = resetRule()
-    expect(rule).not.toBe('')
+  it('运行时契约：重置按钮 width/min-width/max-width/flex-basis 四项均为 62px，且各只声明一次', async () => {
+    const wrapper = await mountBar()
+    const style = resetStyle(wrapper)
+    expect(style).not.toBe('')
     for (const prop of ['width', 'min-width', 'max-width', 'flex-basis']) {
       // 删除任一属性、或把任一项改成非 62px，断言即失败
-      expect(rule, `重置按钮缺少 ${prop}: 62px`).toMatch(decl(rule, prop))
-      const occurrences = rule.match(new RegExp(`(^|;)\\s*${prop}:`, 'g')) ?? []
+      expect(style, `重置按钮缺少 ${prop}: 62px`).toMatch(decl(style, prop))
+      const occurrences = style.match(new RegExp(`(^|;)\\s*${prop}:`, 'g')) ?? []
       expect(occurrences, `${prop} 声明数`).toHaveLength(1)
     }
+    wrapper.unmount()
   })
 
-  it('四属性锁不得相互顶替：单独的 min-width/max-width/flex-basis 不能替代 width 声明', () => {
-    const rule = resetRule()
+  it('四属性锁不得相互顶替：单独的 min-width/max-width/flex-basis 不能替代 width 声明', async () => {
+    const wrapper = await mountBar()
+    const style = resetStyle(wrapper)
     // 去掉 min-width / max-width / flex-basis 三行后，仍必须留下独立的 width: 62px
-    const withoutOthers = rule
-      .replace(/[^;{}]*min-width:[^;]*;/g, '')
-      .replace(/[^;{}]*max-width:[^;]*;/g, '')
-      .replace(/[^;{}]*flex-basis:[^;]*;/g, '')
+    const withoutOthers = style
+      .replace(/[^;{}]*min-width:[^;]*;?/g, '')
+      .replace(/[^;{}]*max-width:[^;]*;?/g, '')
+      .replace(/[^;{}]*flex-basis:[^;]*;?/g, '')
     expect(withoutOthers).toMatch(decl(withoutOthers, 'width'))
+    wrapper.unmount()
   })
 
-  it('源码字面量契约：重置按钮显式阻止 flex 拉伸/压缩并采用稳定盒模型', () => {
-    const rule = resetRule()
-    expect(rule).toMatch(/(^|;)\s*flex-grow:\s*0\s*(;|$)/)
-    expect(rule).toMatch(/(^|;)\s*flex-shrink:\s*0\s*(;|$)/)
-    expect(rule).toMatch(/(^|;)\s*box-sizing:\s*border-box\s*(;|$)/)
+  it('运行时契约：重置按钮显式阻止 flex 拉伸/压缩并采用稳定盒模型', async () => {
+    const wrapper = await mountBar()
+    const style = resetStyle(wrapper)
+    expect(style).toMatch(/(^|;)\s*flex-grow:\s*0\s*(;|$)/)
+    expect(style).toMatch(/(^|;)\s*flex-shrink:\s*0\s*(;|$)/)
+    expect(style).toMatch(/(^|;)\s*box-sizing:\s*border-box\s*(;|$)/)
+    wrapper.unmount()
   })
 
-  it('源码字面量契约：查询与重置同为 62px；立即刷新 110px 未被本轮触碰', () => {
-    const q = queryRule()
+  it('运行时契约：查询与重置同为 62px；立即刷新 110px 未被本轮触碰', async () => {
+    const wrapper = await mountBar()
+    const q = queryStyle(wrapper)
     for (const prop of ['width', 'min-width', 'max-width', 'flex-basis']) {
       expect(q, `查询按钮 ${prop}`).toMatch(decl(q, prop))
     }
     // 立即刷新属于工具栏（不在本组件内），本组件不得出现 110px 按钮几何声明
     expect(queryBarCss()).not.toMatch(/110px/)
-    // 也不再使用 `flex: 0 0 62px` 简写（与四属性逐一锁定口径统一）
-    expect(resetRule()).not.toMatch(/(^|;)\s*flex:\s*0 0 62px/)
+    // 也不使用 `flex: 0 0 62px` 简写（与四属性逐一锁定口径统一）
+    expect(resetStyle(wrapper)).not.toMatch(/(^|;)\s*flex:\s*0 0 62px/)
+    expect(resetStyle(wrapper)).not.toMatch(/(^|;)\s*flex:/)
+    wrapper.unmount()
   })
 
-  it('源码字面量契约：仅新增固定几何约束——高度/padding/颜色/透明边框/圆角/点击语义均不变', () => {
-    const rule = resetRule()
-    expect(rule).toMatch(/(^|;)\s*height:\s*30px\s*(;|$)/)
-    expect(rule).toMatch(/(^|;)\s*padding:\s*0 14px\s*(;|$)/)
-    expect(rule).toMatch(/(^|;)\s*background:\s*#e4e4e7\s*(;|$)/)
-    expect(rule).toMatch(/(^|;)\s*border-color:\s*transparent\s*(;|$)/)
-    expect(rule).toMatch(/(^|;)\s*border-radius:\s*6px\s*(;|$)/)
-    expect(rule).toMatch(/(^|;)\s*color:\s*var\(--dss-text-secondary,\s*#3f3f46\)\s*(;|$)/)
-    expect(rule).toMatch(/(^|;)\s*font-weight:\s*500\s*(;|$)/)
+  it('契约：仅新增固定几何约束——高度/padding/颜色/透明边框/圆角/点击语义均不变', async () => {
+    const wrapper = await mountBar()
+    // 高度由调用方显式传入（公共层无默认高度）：参考页传 30px
+    expect(resetStyle(wrapper)).toMatch(/(^|;)\s*height:\s*30px\s*(;|$)/)
+    // 其余视觉由公共组件的 --ql-* 令牌钉死，与既有参考页事实值一致
+    const rule = sharedRule(sharedActionsCss(), '.ql-actions__reset')
+    expect(rule).not.toBe('')
+    expect(rule).toMatch(/padding:\s*var\(--ql-actions-reset-padding,\s*0 14px\)/)
+    expect(rule).toMatch(/background:\s*var\(--ql-actions-reset-bg,\s*#e4e4e7\)/)
+    expect(rule).toMatch(/border:\s*1px solid var\(--ql-actions-reset-border,\s*transparent\)/)
+    expect(rule).toMatch(/border-radius:\s*var\(--ql-actions-radius,\s*6px\)/)
+    expect(rule).toMatch(/color:\s*var\(--ql-actions-reset-fg,\s*#3f3f46\)/)
+    expect(rule).toMatch(/font-weight:\s*var\(--ql-actions-font-weight,\s*500\)/)
+    wrapper.unmount()
   })
 
-  it('action group 不拉伸/压缩两个按钮：两者均为 flex-grow 0 + flex-shrink 0，且动作组自身 flex: 0 0 auto', () => {
-    const css = queryBarCss()
-    const group = css.match(/\.dss-q-actions\s*\{([^}]*)\}/)?.[1] ?? ''
+  it('action group 不拉伸/压缩两个按钮：两者均为 flex-grow 0 + flex-shrink 0，且动作组自身 flex: 0 0 auto', async () => {
+    // 动作组本体由公共组件渲染：对外仍是不可分割的单一 flex 项
+    const group = sharedRule(sharedActionsCss(), '.ql-actions')
     expect(group).toMatch(/(^|;)\s*flex:\s*0 0 auto\s*(;|$)/)
-    for (const [name, body] of [['查询', queryRule()], ['重置', resetRule()]] as const) {
+    const wrapper = await mountBar()
+    for (const [name, body] of [['查询', queryStyle(wrapper)], ['重置', resetStyle(wrapper)]] as const) {
       expect(body, `${name}按钮 flex-grow`).toMatch(/(^|;)\s*flex-grow:\s*0\s*(;|$)/)
       expect(body, `${name}按钮 flex-shrink`).toMatch(/(^|;)\s*flex-shrink:\s*0\s*(;|$)/)
     }
+    wrapper.unmount()
   })
 
   it('重置按钮无 Loading：无指示器节点、无 is-loading、无 aria-busy、无 el-icon，文案恒为“重置”', async () => {
     const wrapper = await mountBar({ queryLoading: true, busy: true })
     const btn = resetButton(wrapper)
     expect(btn.classes()).not.toContain('is-loading')
-    expect(btn.find('.dss-btn-spinner').exists()).toBe(false)
+    expect(btn.find('.ql-btn-spinner').exists()).toBe(false)
     expect(btn.find('.el-icon').exists()).toBe(false)
     expect(btn.attributes('aria-busy')).toBeUndefined()
     expect(btn.text().trim()).toBe('重置')
     wrapper.unmount()
   })
 
-  it('源码层面不存在重置 Loading 状态输入或状态分支（仅新增几何约束，不新增交互状态）', () => {
+  it('源码层面不存在重置 Loading 状态输入或状态分支；查询栏不覆写按钮宽度', () => {
     const src = queryBarSource()
     expect(src).not.toMatch(/resetLoading/)
     expect(src).not.toMatch(/isReset[A-Za-z]*/)
     expect(src).not.toMatch(/resetting/i)
-    // 组件 props 契约仍是 5 项，未新增任何 loading 输入
+    // 宽度不变量由公共组件默认值（62/62）承担：查询栏不得传入任何宽度覆盖
+    expect(src).not.toMatch(/query-width-px|reset-width-px/)
+    // 组件 props 契约：既有 3 个业务维度 + busy + queryLoading + 两个 Tooltip 委托入口
     const props = src.match(/defineProps<\{([\s\S]*?)\}>/)?.[1] ?? ''
     expect(props).not.toBe('')
     // 全部 loading 语义 prop 只有既有 queryLoading 一项：不存在 resetLoading 之类新输入
@@ -1536,16 +1676,23 @@ describe('DataSourceSnapshotQueryBar 重置按钮固定几何（DSS-REQ-090）',
     expect(loadingFields[0]).toMatch(/queryLoading/)
   })
 
-  it('点击重置仍只恢复三项“全部”且不发查询；busy/queryLoading 期间重置语义不变', async () => {
+  it('点击重置仍只恢复三项“全部”且不发查询；busy 期间重置与查询同样被入口阻断（§7.5 阻断语义）', async () => {
     const wrapper = await mountBar({ queryLoading: true, busy: true })
     await openSelect(wrapper, 0)
     await clickOption(dropdownByText('CL1（客户端一）'), 'CL1（客户端一）')
     expect(wrapper.emitted('query')).toBeUndefined()
 
+    // busy：重置按钮按契约带 aria-disabled，点击处理入口直接返回（草稿保持不变、不发查询）
+    expect(resetButton(wrapper).attributes('aria-disabled')).toBe('true')
     await resetButton(wrapper).trigger('click')
     expect(wrapper.emitted('query')).toBeUndefined()
 
+    // busy 解除后重置才生效：恢复三项“全部”，仍不发查询
     await wrapper.setProps({ queryLoading: false, busy: false })
+    expect(resetButton(wrapper).attributes('aria-disabled')).toBeUndefined()
+    await resetButton(wrapper).trigger('click')
+    expect(wrapper.emitted('query')).toBeUndefined()
+
     await queryButton(wrapper).trigger('click')
     expect(wrapper.emitted('query')).toHaveLength(1)
     expect(wrapper.emitted('query')![0]![0]).toEqual({
@@ -1556,37 +1703,45 @@ describe('DataSourceSnapshotQueryBar 重置按钮固定几何（DSS-REQ-090）',
     wrapper.unmount()
   })
 
-  it('页面状态变化（idle → Loading → 成功 → 失败）时重置按钮 DOM 与文案零变化', async () => {
+  it('页面状态变化（idle → Loading → 成功 → 失败）时重置按钮文案/类名/几何零变化，仅按契约切换 aria-disabled', async () => {
     const wrapper = await mountBar()
     const snapshot = () => {
       const btn = resetButton(wrapper)
-      return { text: btn.text().trim(), cls: [...btn.classes()].sort(), html: btn.html() }
+      return { text: btn.text().trim(), cls: [...btn.classes()].sort(), style: btn.attributes('style') }
     }
     const idle = snapshot()
+    expect(resetButton(wrapper).attributes('aria-disabled')).toBeUndefined()
 
     await wrapper.setProps({ queryLoading: true, busy: true })
     await nextTick()
     expect(snapshot()).toEqual(idle)
+    // 唯一的 DOM 差异是契约要求的无障碍语义标记，不改变外观/几何/文案
+    expect(resetButton(wrapper).attributes('aria-disabled')).toBe('true')
 
     await wrapper.setProps({ queryLoading: false, busy: false })
     await nextTick()
     expect(snapshot()).toEqual(idle)
+    expect(resetButton(wrapper).attributes('aria-disabled')).toBeUndefined()
 
     await wrapper.setProps({ busy: true }) // 失败/其他请求在途
     await nextTick()
     expect(snapshot()).toEqual(idle)
+    expect(resetButton(wrapper).attributes('aria-disabled')).toBe('true')
+    // 不新增指示器节点、不进入 is-loading
+    expect(resetButton(wrapper).find('.ql-btn-spinner').exists()).toBe(false)
+    expect(resetButton(wrapper).classes()).not.toContain('is-loading')
     wrapper.unmount()
   })
 
-  it('零回退：查询按钮既有四属性 62px 几何锁、私有指示器与四态文案不变', async () => {
-    const q = queryRule()
+  it('零回退：查询按钮既有四属性 62px 几何锁、常驻指示器与四态文案不变', async () => {
+    const wrapper = await mountBar({ queryLoading: true, busy: true })
+    const q = queryStyle(wrapper)
     for (const prop of ['width', 'min-width', 'max-width', 'flex-basis']) {
       expect(q, `查询按钮 ${prop}`).toMatch(decl(q, prop))
     }
-    const wrapper = await mountBar({ queryLoading: true, busy: true })
     const btn = queryButton(wrapper)
-    expect(btn.find('.dss-btn-spinner').classes()).toContain('is-visible')
-    expect(btn.find('.dss-action-label').text()).toBe('查询')
+    expect(btn.find('.ql-btn-spinner').classes()).toContain('is-visible')
+    expect(btn.find('.ql-action-label').text()).toBe('查询')
     expect(btn.attributes('aria-busy')).toBe('true')
     expect(btn.classes()).not.toContain('is-loading')
     wrapper.unmount()

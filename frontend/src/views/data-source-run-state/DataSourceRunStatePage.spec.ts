@@ -122,24 +122,31 @@ describe('DataSourceRunStatePage 三块清晰分区（UI §13.1，DSS-REQ-066，
     mockedFetch.mockResolvedValue(okRes([row('A', 'RUNNING', 'SNAPSHOT_RUNNING')]))
     const wrapper = await mountPage()
 
-    // 1. 页头语义区
-    const header = wrapper.find('.dss-page-header')
+    // 1. 页头语义区（公共外壳提供，本页只传 Feature 文案）
+    const header = wrapper.find('.ql-page__header')
     expect(header.exists()).toBe(true)
-    expect(header.find('h2').text()).toBe('源库快照状态')
-    expect(header.find('.dss-desc').text()).toContain('只读')
+    expect(header.find('h2.ql-page__title').text()).toBe('源库快照状态')
+    expect(header.find('p.ql-page__description').text()).toContain('只读')
 
-    // 2. 独立查询卡片
-    const queryCard = wrapper.find('.dss-query-card')
+    // 2. 独立查询卡片（公共查询面板承载底座，本页只放字段组与操作区）
+    const queryCard = wrapper.find('.ql-q-panel')
     expect(queryCard.exists()).toBe(true)
     expect(queryCard.find('.dss-q-label').exists()).toBe(true)
     expect(queryCard.text()).toContain('查询')
     expect(queryCard.text()).toContain('重置')
 
-    // 3. 独立结果卡片（内部头部 + 表格主体，卡片间有上下间距容器）
-    const resultCard = wrapper.find('.dss-result-card')
+    // 3. 独立结果卡片（内部头部 + 表格主体）
+    const resultCard = wrapper.find('.ql-result-panel')
     expect(resultCard.exists()).toBe(true)
     expect(resultCard.find('.el-table').exists()).toBe(true)
-    expect(wrapper.find('.dss-page').element.children.length).toBeGreaterThanOrEqual(3)
+
+    // 公共外壳不生成包装层：页头 + 查询区 + 结果区逐一成为根的直接元素子节点
+    const page = wrapper.find('.ql-page')
+    const children = [...page.element.children] as HTMLElement[]
+    expect(children.map((c) => c.classList.contains('ql-page__header'))).toEqual([true, false, false])
+    expect(children.map((c) => c.classList.contains('ql-q-panel'))).toEqual([false, true, false])
+    expect(children.map((c) => c.classList.contains('ql-result-panel'))).toEqual([false, false, true])
+    for (const child of children) expect(child.parentElement).toBe(page.element)
     wrapper.unmount()
   })
 
@@ -147,16 +154,23 @@ describe('DataSourceRunStatePage 三块清晰分区（UI §13.1，DSS-REQ-066，
     mockedFetch.mockResolvedValue(okRes([row('A', 'RUNNING', 'SNAPSHOT_RUNNING')]))
     const wrapper = await mountPage()
 
-    const header = wrapper.find('.dss-result-card__header')
+    const header = wrapper.find('.ql-result-panel__header')
     const children = Array.from(header.element.children) as HTMLElement[]
-    const groups = children.filter((c) => c.classList.contains('dss-result-summary') || c.classList.contains('dss-refresh-group'))
-    expect(groups).toHaveLength(2)
-    // 左组仅总数（该数据无未知）；右组为刷新组整体（含“立即刷新”）
-    expect(children.find((c) => c.classList.contains('dss-result-summary'))?.textContent).toContain('共 1 条')
-    const rg = children.find((c) => c.classList.contains('dss-refresh-group'))
+    expect(children).toHaveLength(2)
+    const summary = children.find((c) => c.classList.contains('ql-result-panel__summary'))!
+    const toolbar = children.find((c) => c.classList.contains('ql-result-panel__toolbar'))!
+    expect(summary).toBeTruthy()
+    expect(toolbar).toBeTruthy()
+    // 左组仅总数（该数据无未知）
+    expect(summary.textContent).toContain('共 1 条')
+    expect(summary.querySelector('.dss-summary-count')).not.toBeNull()
+    // 右组为刷新组整体（不可拆散）：工具栏唯一子节点即公共刷新组
+    expect(toolbar.children).toHaveLength(1)
+    const rg = toolbar.firstElementChild as HTMLElement
+    expect(rg.classList.contains('ql-refresh-group')).toBe(true)
     // R2 §9.1：真实自动刷新剩余秒数文案（首载完成后即同步重置为 60）
-    expect(rg?.textContent).toContain('60 秒后自动刷新')
-    expect(rg?.textContent).toContain('立即刷新')
+    expect(rg.textContent).toContain('60 秒后自动刷新')
+    expect(rg.textContent).toContain('立即刷新')
     wrapper.unmount()
   })
 })
@@ -229,89 +243,94 @@ describe('DataSourceRunStatePage R5 汇总栏样式字面量契约（§3，jsdom
     wrapper.unmount()
   })
 
-  it('右侧刷新组结构与 props/事件管道零改动（R3 §7/§12.3）：Toolbar 承接倒计时与手动刷新并发出 refresh', () => {
+  it('右侧刷新组结构未改（R3 §7/§12.3）：公共 Toolbar 承接倒计时与手动刷新并发出 refresh', () => {
     const src = readFileSync(resolve(process.cwd(), 'src/views/data-source-run-state/DataSourceRunStatePage.vue'), 'utf8')
-    expect(src).toMatch(/<DataSourceSnapshotToolbar/)
-    expect(src).toMatch(/:last-refresh-text=/)
-    expect(src).toMatch(/:countdown-seconds=/)
-    expect(src).toMatch(/:countdown-progress=/)
-    expect(src).toMatch(/:manual-loading=/)
-    expect(src).toMatch(/:busy=/)
-    expect(src).toMatch(/@refresh=/)
+    expect(src).toMatch(/<QueryListRefreshToolbar/)
+    expect(src).toMatch(/:countdown="countdown"/)
+    expect(src).toMatch(/:last-refresh-text="lastRefreshText"/)
+    expect(src).toMatch(/:manual-loading="manualLoading"/)
+    expect(src).toMatch(/:busy="busy"/)
+    expect(src).toMatch(/@refresh="onManualRefresh"/)
+    // 倒计时仍由本页状态投影（seconds/progress 两值），公共组件不持有定时器
+    expect(src).toMatch(/autoRefreshRemainingSeconds/)
+    expect(src).toMatch(/autoRefreshProgress/)
   })
 })
 
-describe('DataSourceRunStatePage R7 页面级中间背景透明化（R7 §4/§7，jsdom 不计算样式）', () => {
+describe('DataSourceRunStatePage 页面级底座由公共层承载（R7 §4/§7，jsdom 不计算样式）', () => {
   const pageSrc = (): string =>
     readFileSync(resolve(process.cwd(), 'src/views/data-source-run-state/DataSourceRunStatePage.vue'), 'utf8')
 
-  it('页面根容器背景已改为 transparent，不再有第二重近白/浅灰页面底色（#fafafa 消失）', () => {
-    const src = pageSrc()
-    const css = src.split('<style scoped>')[1] ?? ''
-    // 只取 .dss-page 规则块（.dss-page-header 以 -header 紧随，不会误匹配）
-    const page = css.match(/\.dss-page\s*\{[^}]*\}/)?.[0] ?? ''
-    expect(page).not.toBe('')
-    expect(page).toMatch(/background:\s*transparent/)
-    // 既不回到 #fafafa，也不复用卡片白底令牌（背景必须完全透明）
-    expect(page).not.toMatch(/#fafafa/)
-    expect(page).not.toMatch(/background:\s*var\(--dss-surface/)
-    expect(page).not.toMatch(/background-color\s*:/)
+  const sharedSrc = (file: string): string =>
+    readFileSync(resolve(process.cwd(), 'src/components/query-list', file), 'utf8')
+
+  const sharedRule = (file: string, selector: string): string => {
+    const css = sharedSrc(file).replace(/\/\*[\s\S]*?\*\//g, '')
+    return css.match(new RegExp(`${selector.replace(/[.*+?^${}()|[\]\\]/g, '\\$&')}\\s*\\{([^}]*)\\}`))?.[1] ?? ''
+  }
+
+  it('页面根容器背景仍为 transparent，不再有第二重近白/浅灰页面底色（#fafafa 消失）', () => {
+    const body = sharedRule('QueryListPageShell.vue', '.ql-page')
+    expect(body).not.toBe('')
+    expect(body).toMatch(/background:\s*var\(--ql-page-background,\s*transparent\)/)
+    // 本页不得覆写该令牌，也不得重新引入页面底色
+    const css = pageSrc().split('<style scoped>')[1] ?? ''
+    expect(css).not.toMatch(/--ql-page-background/)
+    expect(css).not.toMatch(/#fafafa/)
+    expect(css).not.toMatch(/\.dss-page\b/)
   })
 
-  it('页面根容器盒模型零改动：仍在 .dss-page 之外只改 background；display/flex-direction/gap/padding/radius/margin 保持 R6', () => {
-    const src = pageSrc()
-    const css = src.split('<style scoped>')[1] ?? ''
-    const page = css.match(/\.dss-page\s*\{[^}]*\}/)?.[0] ?? ''
-    expect(page).toMatch(/display:\s*flex/)
-    expect(page).toMatch(/flex-direction:\s*column/)
-    expect(page).toMatch(/gap:\s*12px/)
-    expect(page).toMatch(/padding:\s*14px 16px/)
-    expect(page).toMatch(/border-radius:\s*10px/)
-    // 透明化不得通过新增 margin / 定位 / 尺寸来抵消
-    expect(page).not.toMatch(/margin\s*:/)
-    expect(page).not.toMatch(/position\s*:/)
-    expect(page).not.toMatch(/(?<!min-)width\s*:/)
-    expect(page).not.toMatch(/(?<!min-)height\s*:/)
-    // 局部令牌未因本轮被改写
-    expect(page).toMatch(/--dss-surface:\s*#ffffff/)
-    expect(page).toMatch(/--dss-embedded:\s*#f4f4f5/)
+  it('页面根容器盒模型零改动：gap/padding/radius 仍是参考事实值，本页不新增 margin/定位/尺寸补偿', () => {
+    const body = sharedRule('QueryListPageShell.vue', '.ql-page')
+    expect(body).toMatch(/(^|;)\s*display:\s*flex\s*(;|$)/)
+    expect(body).toMatch(/(^|;)\s*flex-direction:\s*column\s*(;|$)/)
+    expect(body).toMatch(/gap:\s*var\(--ql-page-gap,\s*12px\)/)
+    expect(body).toMatch(/padding:\s*var\(--ql-page-padding,\s*14px 16px\)/)
+    expect(body).toMatch(/border-radius:\s*var\(--ql-page-radius,\s*10px\)/)
+    const css = pageSrc().split('<style scoped>')[1] ?? ''
+    // 本页不得为几何改动覆写外壳令牌
+    for (const token of ['--ql-page-gap', '--ql-page-padding', '--ql-page-radius']) {
+      expect(css, `${token} 不应在本页覆写`).not.toMatch(new RegExp(token))
+    }
+    expect(css).not.toMatch(/--ql-title-|--ql-desc-/)
   })
 
-  it('查询栏浅灰底未被波及：.dss-query-card 仍为 var(--dss-embedded, #f4f4f5)，尺寸与去阴影保持 R6（R7 §5.1）', () => {
-    const src = pageSrc()
-    const css = src.split('<style scoped>')[1] ?? ''
-    const queryCard = css.match(/\.dss-query-card\s*\{[^}]*\}/)?.[0] ?? ''
-    expect(queryCard).not.toBe('')
-    expect(queryCard).toMatch(/background:\s*var\(--dss-embedded,\s*#f4f4f5\)/)
-    expect(queryCard).not.toMatch(/transparent/)
-    expect(queryCard).toMatch(/border-radius:\s*8px/)
-    expect(queryCard).toMatch(/padding:\s*10px 16px/)
-    expect(queryCard).toMatch(/box-shadow:\s*none/)
+  it('查询栏浅灰底未被波及：公共查询面板仍为 #f4f4f5 / 8px 圆角 / 10px 16px 内边距 / 无阴影（R7 §5.1）', () => {
+    const body = sharedRule('QueryListQueryPanel.vue', '.ql-q-panel')
+    expect(body).not.toBe('')
+    expect(body).toMatch(/background:\s*var\(--ql-q-panel-bg,\s*#f4f4f5\)/)
+    expect(body).not.toMatch(/transparent/)
+    expect(body).toMatch(/border-radius:\s*var\(--ql-q-panel-radius,\s*8px\)/)
+    expect(body).toMatch(/padding:\s*var\(--ql-q-panel-padding,\s*10px 16px\)/)
+    // 无阴影（线性面板：去阴影保持 R6）
+    expect(body).not.toMatch(/box-shadow/)
+    const css = pageSrc().split('<style scoped>')[1] ?? ''
+    expect(css).not.toMatch(/--ql-q-panel-/)
   })
 
-  it('结果区域底座未被波及：.dss-card 仍为 var(--dss-surface, #ffffff)，无硬边框 + 10px 圆角 + 极弱阴影（R7 §5.3）', () => {
-    const src = pageSrc()
-    const css = src.split('<style scoped>')[1] ?? ''
-    const card = css.match(/\.dss-card\s*\{[^}]*\}/)?.[0] ?? ''
-    expect(card).not.toBe('')
-    expect(card).toMatch(/background:\s*var\(--dss-surface,\s*#ffffff\)/)
-    expect(card).not.toMatch(/transparent/)
-    expect(card).toMatch(/border:\s*none/)
-    expect(card).toMatch(/border-radius:\s*10px/)
-    expect(card).toMatch(/box-shadow:\s*0 1px 2px rgba\(9,\s*9,\s*11,\s*0\.04\),\s*0 1px 3px rgba\(9,\s*9,\s*11,\s*0\.03\)/)
-    // 结果卡片仍是白底而不是承接页面底色
-    expect(css.match(/\.dss-result-card\s*\{[^}]*\}/)?.[0] ?? '').not.toMatch(/background\s*:/)
+  it('结果区域底座未被波及：公共结果面板仍为白底 + 10px 圆角 + 极弱阴影、无硬边框（R7 §5.3）', () => {
+    const body = sharedRule('QueryListResultPanel.vue', '.ql-result-panel')
+    expect(body).not.toBe('')
+    expect(body).toMatch(/background:\s*var\(--ql-result-panel-bg,\s*#ffffff\)/)
+    expect(body).not.toMatch(/transparent/)
+    expect(body).not.toMatch(/(^|;)\s*border\s*:/)
+    expect(body).toMatch(/border-radius:\s*var\(--ql-result-panel-radius,\s*10px\)/)
+    expect(body).toMatch(
+      /box-shadow:\s*var\(--ql-result-panel-shadow,\s*0 1px 2px rgba\(9,\s*9,\s*11,\s*0\.04\),\s*0 1px 3px rgba\(9,\s*9,\s*11,\s*0\.03\)\)/,
+    )
+    const css = pageSrc().split('<style scoped>')[1] ?? ''
+    expect(css).not.toMatch(/--ql-result-panel-/)
   })
 
-  it('DOM 结构未为透明化而重构：.dss-page 仍直接包裹页头 + 查询卡片 + 结果卡片（R7 §4 禁止改 DOM）', async () => {
+  it('DOM 结构未为视觉调整而重构：根仍直接包裹页头 + 查询区 + 结果区（R7 §4 禁止改 DOM）', async () => {
     mockedFetch.mockResolvedValue(okRes([row('A', 'RUNNING', 'SNAPSHOT_RUNNING')]))
     const wrapper = await mountPage()
-    const page = wrapper.find('.dss-page')
+    const page = wrapper.find('.ql-page')
     expect(page.exists()).toBe(true)
     const childClasses = Array.from(page.element.children).map((c) => c.className)
-    expect(childClasses).toContain('dss-page-header')
-    expect(childClasses).toContain('dss-card dss-query-card')
-    expect(childClasses).toContain('dss-card dss-result-card')
+    expect(childClasses.some((c) => c.includes('ql-page__header'))).toBe(true)
+    expect(childClasses.some((c) => c.includes('ql-q-panel'))).toBe(true)
+    expect(childClasses.some((c) => c.includes('ql-result-panel'))).toBe(true)
     // 中间没有插入额外的占位/包装层
     expect(page.element.children.length).toBe(3)
     wrapper.unmount()
@@ -326,6 +345,8 @@ describe('DataSourceRunStatePage R7 页面级中间背景透明化（R7 §4/§7�
     expect(css).not.toMatch(/--el-[a-z-]+\s*:/)
     expect(css).not.toMatch(/^\s*(body|html)\s*[,{]/m)
     expect(css).not.toMatch(/^\s*\.el-[a-z-]+\s*(,|\{)/m)
+    // Feature 命名空间仍是 .dss-*，公共层命名空间仍是 .ql-*
+    expect(css).not.toMatch(/^\s*\.ql-[a-z-]+\s*(,|\{|$)/m)
   })
 })
 
@@ -344,18 +365,18 @@ describe('DataSourceRunStatePage 六类请求页面级视觉（DSS-REQ-071）', 
     // 查询按钮点亮 Feature 私有常驻指示器；不再使用 Element Plus 默认 loading（DSS-REQ-088）
     const q = findButton(wrapper, '查询')
     expect(q.classes()).not.toContain('is-loading')
-    expect(q.find('.dss-btn-spinner').classes()).toContain('is-visible')
-    expect(q.find('.dss-action-label').text()).toBe('查询')
+    expect(q.find('.ql-btn-spinner').classes()).toContain('is-visible')
+    expect(q.find('.ql-action-label').text()).toBe('查询')
     expect(q.attributes('aria-busy')).toBe('true')
     // 立即刷新不点亮：query 与 manual 指示器互相独立
     const r = findButton(wrapper, '立即刷新')
-    expect(r.find('.dss-btn-spinner').classes()).not.toContain('is-visible')
+    expect(r.find('.ql-btn-spinner').classes()).not.toContain('is-visible')
 
     gate.release(okRes([row('A', 'RUNNING', 'SNAPSHOT_RUNNING'), row('B', 'COMPLETED', 'SNAPSHOT_COMPLETED')]))
     await settle()
     expect(wrapper.find('.dss-summary-count').text()).toBe('共 2 条')
     const qAfter = findButton(wrapper, '查询')
-    expect(qAfter.find('.dss-btn-spinner').classes()).not.toContain('is-visible')
+    expect(qAfter.find('.ql-btn-spinner').classes()).not.toContain('is-visible')
     expect(qAfter.attributes('aria-busy')).toBeUndefined()
     wrapper.unmount()
   })
@@ -371,11 +392,11 @@ describe('DataSourceRunStatePage 六类请求页面级视觉（DSS-REQ-071）', 
 
     const r = findButton(wrapper, '立即刷新')
     expect(r.classes()).not.toContain('is-loading')
-    expect(r.find('.dss-btn-spinner').classes()).toContain('is-visible')
-    expect(r.find('.dss-action-label').text()).toBe('立即刷新')
+    expect(r.find('.ql-btn-spinner').classes()).toContain('is-visible')
+    expect(r.find('.ql-action-label').text()).toBe('立即刷新')
     expect(r.attributes('aria-busy')).toBe('true')
     const q = findButton(wrapper, '查询')
-    expect(q.find('.dss-btn-spinner').classes()).not.toContain('is-visible')
+    expect(q.find('.ql-btn-spinner').classes()).not.toContain('is-visible')
     expect(q.attributes('aria-busy')).toBeUndefined()
     expect((q.element as HTMLButtonElement).disabled).toBe(false)
     expect(q.attributes('aria-disabled')).toBe('true')
@@ -384,7 +405,7 @@ describe('DataSourceRunStatePage 六类请求页面级视觉（DSS-REQ-071）', 
 
     gate.release(okRes([row('A2', 'RUNNING', 'SNAPSHOT_RUNNING')]))
     await settle()
-    expect(findButton(wrapper, '立即刷新').find('.dss-btn-spinner').classes()).not.toContain('is-visible')
+    expect(findButton(wrapper, '立即刷新').find('.ql-btn-spinner').classes()).not.toContain('is-visible')
     wrapper.unmount()
   })
 
@@ -423,13 +444,13 @@ describe('DataSourceRunStatePage 重置不发请求 + 失败稳定槽位（DESIG
     mockedFetch.mockResolvedValue(okRes([row('A', 'RUNNING', 'SNAPSHOT_RUNNING')]))
     const wrapper = await mountPage()
 
-    const headerBefore = wrapper.find('.dss-result-card__header').element.children.length
+    const headerBefore = wrapper.find('.ql-result-panel__header').element.children.length
     mockedFetch.mockRejectedValue(new Error('network'))
     await findButton(wrapper, '立即刷新').trigger('click')
     await settle()
 
     // 槽位常驻（min-height 预留行），失败时渲染 role=status 收敛提示
-    const slot = wrapper.find('.dss-result-error-slot')
+    const slot = wrapper.find('.ql-result-panel__error-slot')
     expect(slot.exists()).toBe(true)
     const err = wrapper.find('.dss-result-error')
     expect(err.exists()).toBe(true)
@@ -438,7 +459,7 @@ describe('DataSourceRunStatePage 重置不发请求 + 失败稳定槽位（DESIG
     // 失败保留上一次成功记录（不清表）
     expect(wrapper.find('.dss-summary-count').text()).toBe('共 1 条')
     // 结果头部仍只有左右两个直接子组（几何稳定）
-    expect(wrapper.find('.dss-result-card__header').element.children.length).toBe(headerBefore)
+    expect(wrapper.find('.ql-result-panel__header').element.children.length).toBe(headerBefore)
     wrapper.unmount()
   })
 })

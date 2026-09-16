@@ -1,5 +1,7 @@
 <template>
-  <div class="dss-query-bar">
+  <!-- 查询条件区容器改由公共层提供（SHARED_COMPONENT_DESIGN §7.4.2）：字段组流式换行区 + 操作区，
+       本组件只保留字段组、标签与控件宽度等 Feature 专属内容。 -->
+  <QueryListQueryPanel>
     <div class="dss-q-group">
       <span class="dss-q-label">探针端</span>
       <el-select
@@ -66,46 +68,27 @@
         />
       </el-select>
     </div>
-    <div class="dss-q-actions">
-      <!-- 查询按钮（DSS-REQ-088 / DESIGN §31 / UI §25）：相对定位容器 + 常驻绝对定位 Feature 私有 Loading
-           指示器 + 独立固定居中文字标签节点。不再使用 Element Plus 默认 loading —— 其图标进入内容流会顶宽
-           按钮并推移文字；四态文字恒为“查询”，指示器不进内容流，状态切换只改变可见性/旋转。
-           被功能阻断时以 aria-disabled + 事件防御阻止鼠标/键盘二次请求。 -->
-      <el-button
-        type="primary"
-        class="dss-query-btn"
-        :aria-busy="queryLoading ? 'true' : undefined"
-        :aria-disabled="ariaBlocked || undefined"
-        @click="onQuery"
-      >
-        <span class="dss-btn-spinner" :class="{ 'is-visible': queryLoading }" aria-hidden="true"></span>
-        <span class="dss-action-label">查询</span>
-      </el-button>
-      <el-button class="dss-reset-btn" @click="onReset">重置</el-button>
-    </div>
-    <!-- CLIENT_DESC 完整 Tooltip（DSS-REQ-086，AC-100~102）：查询控件内隔离的最小单实例实现。
-         与页面级表格 Tooltip（.dss-single-tooltip + useSnapshotTooltip 控制器）互相独立：不复用其控制器、
-         不复用其类名，因此不会污染表格既有 Tooltip 与源库表格 Tooltip 的批准规则。
-         position:fixed + Teleport 到 body → 全程不参与查询栏布局，显隐不改变任何控件几何。 -->
-    <Teleport to="body">
-      <div
-        v-if="tt.visible"
-        ref="ttEl"
-        class="dss-q-tt"
-        role="tooltip"
-        :style="ttStyle"
-      >{{ tt.content }}</div>
-    </Teleport>
-  </div>
+    <!-- 查询/重置按钮由公共操作区渲染（§7.4.3）：固定宽度四值同锁与 Loading 几何稳定契约由公共层负责，
+         查询文案恒为“查询”、被功能阻断时以 aria-disabled + 事件防御阻止二次请求，语义与冻结前一致。 -->
+    <template #actions>
+      <QueryListActions
+        :height-px="30"
+        :query-loading="queryLoading"
+        :busy="busy"
+        @query="onQuery"
+        @reset="onReset"
+      />
+    </template>
+  </QueryListQueryPanel>
 </template>
 
 <script setup lang="ts">
-import { computed, nextTick, onBeforeUnmount, onMounted, reactive, ref, watch } from 'vue'
+import { computed, onBeforeUnmount, onMounted, reactive } from 'vue'
 import type { ClientCandidate, QueryDraft, SourceCandidate, StatusToken } from '@/types/dataSourceSnapshot'
+import { QueryListActions, QueryListQueryPanel } from '@/components/query-list'
+import type { QueryListTooltipShowOptions } from '@/components/query-list'
 import { ALL_OPTION, concreteIds, normalizeDimension } from '@/views/data-source-run-state/utils/selection'
 import { FIELD_TRUNCATE_CODE_POINTS, codePointLength, displayField, normalizeFieldText } from '@/views/data-source-run-state/utils/format'
-import { computeTooltipPlacement } from '@/views/data-source-run-state/tooltip/tooltipPosition'
-import type { TooltipAnchor } from '@/views/data-source-run-state/tooltip/tooltipPosition'
 
 interface Opt {
   value: string
@@ -121,10 +104,11 @@ const props = defineProps<{
   busy: boolean
   /** 仅 kind=query 在途：查询按钮显示 loading（DSS-REQ-071③，AC-078）。 */
   queryLoading: boolean
+  /** 页面唯一 Tooltip 控制器的 show（DSS-REQ-086，AC-100~102）。 */
+  showTooltip: (opts: QueryListTooltipShowOptions) => void
+  /** 页面唯一 Tooltip 控制器的 hide。 */
+  hideTooltip: () => void
 }>()
-
-/** busy 期间查询功能被阻断：以 aria-disabled 语义标记，不改变外观。 */
-const ariaBlocked = computed(() => props.busy)
 
 const emit = defineEmits<{
   (e: 'query', draft: QueryDraft): void
@@ -227,48 +211,17 @@ function clientById(id: string | null): ClientCandidate | null {
   return props.clients.find((c) => c.id === id) ?? null
 }
 
-const tt = reactive<{ visible: boolean; content: string; anchor: TooltipAnchor | null; seq: number }>({
-  visible: false,
-  content: '',
-  anchor: null,
-  seq: 0,
-})
-const ttEl = ref<HTMLElement | null>(null)
-/** 定位态样式：先置不可见、测量新内容尺寸后再一次性显示（与页面级 Tooltip 同策略，无旧坐标残影）。 */
-const ttStyle = ref('visibility:hidden')
-
+/**
+ * 锚点、延迟、单实例与定位全部交给页面唯一控制器（§7.6.1/§7.6.4）：本组件只负责 Feature 专属的
+ * “何时显示 CLIENT_DESC Tooltip”判定与锚点解析，不再持有 Teleport / Tooltip DOM / 定位状态，
+ * 也不重复实现定位算法。
+ */
 function hideTt(): void {
   hoveredEl = null
-  tt.visible = false
-  ttStyle.value = 'visibility:hidden'
+  props.hideTooltip()
 }
 
-function showTt(el: HTMLElement, content: string): void {
-  const r = el.getBoundingClientRect()
-  tt.content = content
-  tt.anchor = { top: r.top, left: r.left, width: r.width, height: r.height, bottom: r.bottom, right: r.right }
-  tt.seq += 1
-  tt.visible = true
-}
-
-watch(
-  () => tt.seq,
-  async () => {
-    ttStyle.value = 'visibility:hidden'
-    await nextTick()
-    const el = ttEl.value
-    if (!tt.visible || !el || !tt.anchor) return
-    const p = computeTooltipPlacement(
-      tt.anchor,
-      { width: el.offsetWidth || 0, height: el.offsetHeight || 0 },
-      { width: window.innerWidth || 0, height: window.innerHeight || 0 },
-    )
-    ttStyle.value = `left:${Math.round(p.left)}px;top:${Math.round(p.top)}px`
-  },
-  { flush: 'post' },
-)
-
-/** 命中的悬停元素；用于同一锚点内移动时不重算、不重复显示。 */
+/** 命中的悬停元素；用于同一锚点内移动时不重发 show。 */
 let hoveredEl: HTMLElement | null = null
 
 /**
@@ -277,20 +230,22 @@ let hoveredEl: HTMLElement | null = null
  * ② 探针端控件中可见的选中项 → 可关闭标签 `.el-tag`（折叠 `+N` 标签无 is-closable 且无身份节点，双重排除）。
  * 一律按原始完整 CLIENT_ID 定位，绝不以截断/组合后的可见文字反查。
  */
-function resolveTooltipAnchor(target: HTMLElement): { el: HTMLElement; content: string } | null {
+function resolveTooltipAnchor(target: HTMLElement): { el: HTMLElement; id: string; content: string } | null {
   const row = target.closest('.dss-client-popper .el-select-dropdown__item')
   if (row) {
-    const c = clientById(row.getAttribute(CLIENT_ID_ATTR))
+    const id = row.getAttribute(CLIENT_ID_ATTR)
+    const c = clientById(id)
     const content = c ? clientDescTooltip(c) : null
-    return content === null ? null : { el: row as HTMLElement, content }
+    return content === null || id === null ? null : { el: row as HTMLElement, id, content }
   }
   const tag = target.closest('.dss-client-select .el-tag')
   if (tag) {
     if (!tag.classList.contains('is-closable')) return null
     const holder = tag.querySelector(`[${CLIENT_ID_ATTR}]`)
-    const c = clientById(holder?.getAttribute(CLIENT_ID_ATTR) ?? null)
+    const id = holder?.getAttribute(CLIENT_ID_ATTR) ?? null
+    const c = clientById(id)
     const content = c ? clientDescTooltip(c) : null
-    return content === null ? null : { el: tag as HTMLElement, content }
+    return content === null || id === null ? null : { el: tag as HTMLElement, id, content }
   }
   return null
 }
@@ -309,7 +264,8 @@ function onDocMouseOver(e: MouseEvent): void {
   }
   if (hit.el === hoveredEl) return
   hoveredEl = hit.el
-  showTt(hit.el, hit.content)
+  // 查询栏内容上限固定 480px（§7.6.2）：与候选下拉外部宽度一致，超出才换行且不越出视口。
+  props.showTooltip({ key: `client-desc:${hit.id}`, content: hit.content, el: hit.el, maxWidthPx: 480 })
 }
 
 function onDocMouseOut(e: MouseEvent): void {
@@ -356,12 +312,8 @@ defineExpose({ reset: onReset })
 </script>
 
 <style scoped>
-.dss-query-bar {
-  display: flex;
-  flex-wrap: wrap;
-  align-items: center;
-  gap: 8px 14px;
-}
+/* 字段组容器、操作区容器与按钮本体均已由公共层提供（.ql-q-panel__flow / .ql-q-panel__actions /
+   .ql-actions）；本文件只保留字段组、标签、控件宽度与下拉外观等 Feature 专属样式。 */
 .dss-q-group {
   display: inline-flex;
   align-items: center;
@@ -466,130 +418,9 @@ defineExpose({ reset: onReset })
   text-overflow: ellipsis;
   white-space: nowrap;
 }
-.dss-q-actions {
-  display: inline-flex;
-  align-items: center;
-  gap: 8px;
-  flex: 0 0 auto;
-}
-/* 查询：黑色主按钮；重置：浅灰底深灰字次按钮（Linear 单一主视觉） */
-/* 查询按钮几何锁（DSS-REQ-088 / DESIGN §31 / UI §25）：width / min-width / max-width / flex-basis
-   四值同锁 62px，box-sizing: border-box 使 62px 为含边框外框宽度（60px 内容盒 + 左右 1px 边框）；
-   min/max 夹住宽度、flex 0 0 62px 阻止被 .dss-q-actions 拉伸或压缩，因此 idle / Loading / 成功 / 失败
-   四态外框 x/y/width/height 零位移。position: relative 使常驻私有指示器以本按钮为包含块。 */
-.dss-q-actions .dss-query-btn {
-  position: relative;
-  width: 62px;
-  min-width: 62px;
-  max-width: 62px;
-  flex-grow: 0;
-  flex-shrink: 0;
-  flex-basis: 62px;
-  box-sizing: border-box;
-  background: var(--dss-primary, #09090b);
-  border-color: var(--dss-primary, #09090b);
-  color: #ffffff;
-  font-weight: 500;
-  border-radius: 6px;
-  height: 30px;
-  padding: 0 16px;
-}
-.dss-q-actions .dss-query-btn:hover,
-.dss-q-actions .dss-query-btn:focus {
-  background: #27272a;
-  border-color: #27272a;
-  color: #ffffff;
-}
-/* 重置按钮几何锁（DSS-REQ-090）：width / min-width / max-width / flex-basis 四值同锁 62px，与“查询”
-   按钮同宽（R1 统一口径：width = min-width = max-width = flex-basis = 62px）；box-sizing: border-box
-   使 62px 为含边框外框宽度，flex-grow/shrink: 0 阻止被 .dss-q-actions 拉伸或压缩，因此本按钮自身空闲
-   稳定态、成功态与失败态外框 x/y/width/height 零位移。仅新增固定几何约束：既有高度 30px、padding
-   0 14px、颜色、透明边框、6px 圆角、与“查询”的 8px 间距、点击语义与禁用逻辑全部不变，
-   也不为此按钮新增 Loading 状态与指示器节点。 */
-.dss-q-actions .dss-reset-btn {
-  width: 62px;
-  min-width: 62px;
-  max-width: 62px;
-  flex-grow: 0;
-  flex-shrink: 0;
-  flex-basis: 62px;
-  box-sizing: border-box;
-  background: #e4e4e7;
-  border-color: transparent;
-  color: var(--dss-text-secondary, #3f3f46);
-  font-weight: 500;
-  border-radius: 6px;
-  height: 30px;
-  padding: 0 14px;
-}
-.dss-q-actions .dss-reset-btn:hover,
-.dss-q-actions .dss-reset-btn:focus {
-  background: #d9d9dd;
-  border-color: transparent;
-  color: var(--dss-text-secondary, #3f3f46);
-}
-/* Feature 私有 Loading 指示器（DSS-REQ-088/089，AC-108~113）：常驻 DOM 节点，绝对定位于文字左侧空白区
-   （16px 左内边距之内，不与文字重叠），不进入按钮内容流，因此显隐/旋转不重排、不推移文字、不改变外框。
-   颜色取 currentColor：查询按钮为白色、立即刷新按钮为深灰，复用既有色调，不引入新视觉系统。
-   本规则全部落在 Feature 私有命名空间内：不做强制提升，不新增全局按钮/图标/加载类覆盖，
-   也不做任何脚本尺寸监听（尺寸观察器 / resize / 轮询 / 运行时宽度测量）。 */
-.dss-btn-spinner {
-  position: absolute;
-  left: 2px;
-  top: 50%;
-  width: 12px;
-  height: 12px;
-  margin-top: -6px;
-  box-sizing: border-box;
-  border-radius: 50%;
-  border: 2px solid currentColor;
-  border-top-color: transparent;
-  opacity: 0;
-  visibility: hidden;
-  animation: dss-action-spin 0.6s linear infinite;
-}
-.dss-btn-spinner.is-visible {
-  opacity: 1;
-  visibility: visible;
-}
-/* 独立文字标签节点：文本内容在四种状态下恒定，节点由按钮 inline-flex + justify-content: center 固定居中，
-   不随 Loading 状态改内容或宽度。 */
-.dss-action-label {
-  white-space: nowrap;
-}
-@keyframes dss-action-spin {
-  to {
-    transform: rotate(360deg);
-  }
-}
-/* 减弱动效偏好下停止旋转，但指示器仍静态可见、几何完全稳定（DSS-REQ-088/089⑦）。 */
-@media (prefers-reduced-motion: reduce) {
-  .dss-btn-spinner {
-    animation: none;
-  }
-}
-/* 查询控件内 CLIENT_DESC 完整 Tooltip（DSS-REQ-086，AC-100~102）：
-   安全最大宽度 min(480px, calc(100vw - 16px))，width:max-content → 在安全宽度内单行、超出才自然换行、不越出视口；
-   单实例（同一时刻至多一个 DOM 节点）、不可交互、position:fixed 不参与查询栏布局。
-   类名 dss-q-tt 独立于页面级表格 Tooltip 的 .dss-single-tooltip，两者互不干扰。 */
-.dss-q-tt {
-  position: fixed;
-  z-index: 3000;
-  box-sizing: border-box;
-  max-width: min(480px, calc(100vw - 16px));
-  width: max-content;
-  padding: 6px 10px;
-  border: 1px solid #dcdfe6;
-  border-radius: 4px;
-  background: #ffffff;
-  box-shadow: 0 2px 12px rgba(0, 0, 0, 0.12);
-  color: #303133;
-  font-size: 13px;
-  line-height: 1.5;
-  white-space: pre-line;
-  overflow-wrap: anywhere;
-  pointer-events: none;
-}
+/* 查询/重置按钮的固定宽度四值同锁、常驻 Loading 指示器、文字标签节点与 Tooltip 宿主样式
+   全部移入公共层（.ql-actions__query / .ql-actions__reset / .ql-btn-spinner / .ql-tooltip，§7.4.3/§7.4.6）：
+   本文件不再声明按钮几何、指示器、定位或任何 Tooltip DOM 样式。 */
 </style>
 
 <!-- 候选下拉幽灵项（teleport 到 body）：以弱化样式提示该值当前不在候选内（UI §3.5） -->

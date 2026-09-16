@@ -1,101 +1,98 @@
 <template>
-  <div class="dss-table-wrap">
-    <el-table
-      :data="records"
-      v-loading="loading"
-      class="dss-table"
-      :empty-text="emptyText"
-      :row-key="rowKey"
-      :row-class-name="rowClassName"
-    >
-      <el-table-column label="序号" width="70" align="center">
-        <template #default="{ $index }">
-          <span class="dss-seq">{{ $index + 1 }}</span>
-        </template>
-      </el-table-column>
+  <el-table
+    :data="records"
+    v-loading="loading"
+    class="dss-table"
+    :empty-text="emptyText"
+    :row-key="rowKey"
+    :row-class-name="rowClassName"
+  >
+    <el-table-column label="序号" width="70" align="center">
+      <template #default="{ $index }">
+        <span class="dss-seq">{{ $index + 1 }}</span>
+      </template>
+    </el-table-column>
 
-      <!-- 探针端列（弹性列，min-width:170，R5）：始终显示原始 CLIENT_ID（600 字重）；非启用(FG_ACTIVE≠'1')在 ID 后追加浅红微型"停用"Badge；完整非空 CLIENT_DESC 走页面级单实例 Tooltip -->
-      <el-table-column label="探针端" min-width="170" align="left">
-        <template #default="{ row }">
-          <div class="dss-cell">
-            <span
-              class="dss-cell-main dss-probe-main dss-tt dss-mono"
-              :data-tt-kind="`client-desc-${rowKey(row)}`"
-              @mouseenter="onProbeMainEnter(row, $event)"
-              @mouseleave="tooltip.hide()"
-            >{{ row.clientId }}</span>
-            <span v-if="isProbeInactive(row)" class="dss-inactive-mark">停用</span>
-          </div>
-        </template>
-      </el-table-column>
-
-      <!-- 源库列（弹性列，min-width:285，R5；始终明显宽于探针端）：正常 ORG 非空只显示 ORG；ORG 空/配置缺失回退原始 DATA_SOURCE_ID；Tooltip 恒为完整原始 DATA_SOURCE_ID -->
-      <el-table-column label="源库" min-width="285" align="left">
-        <template #default="{ row }">
-          <div class="dss-cell">
-            <span
-              class="dss-cell-main dss-tt"
-              :data-tt-kind="`source-main-${rowKey(row)}`"
-              @mouseenter="onSourceMainEnter(row, $event)"
-              @mouseleave="tooltip.hide()"
-            >{{ sourceMainText(row) }}</span>
-          </div>
-        </template>
-      </el-table-column>
-
-      <el-table-column label="快照状态" width="140" align="center">
-        <template #default="{ row }">
+    <!-- 探针端列（弹性列，min-width:170，R5）：始终显示原始 CLIENT_ID（600 字重）；非启用(FG_ACTIVE≠'1')在 ID 后追加浅红微型"停用"Badge；完整非空 CLIENT_DESC 走页面级单实例 Tooltip -->
+    <el-table-column label="探针端" min-width="170" align="left">
+      <template #default="{ row }">
+        <div class="dss-cell">
           <span
-            class="dss-tt dss-status-trigger"
-            :data-tt-kind="`status-${rowKey(row)}`"
-            @mouseenter="onStatusEnter(row, $event)"
-            @mouseleave="tooltip.hide()"
-          >
-            <DataSourceSnapshotStatusTag :status-category="row.statusCategory" />
-          </span>
-        </template>
-      </el-table-column>
+            class="dss-cell-main dss-probe-main dss-tt dss-mono"
+            :data-tt-kind="`client-desc-${rowKey(row)}`"
+            @mouseenter="onProbeMainEnter(row, $event)"
+            @mouseleave="hideTooltip()"
+          >{{ row.clientId }}</span>
+          <span v-if="isProbeInactive(row)" class="dss-inactive-mark">停用</span>
+        </div>
+      </template>
+    </el-table-column>
 
-      <!-- 三时间列（弹性列，min-width:170，R5）：与探针端/源库同为 min-width 弹性列；三列等宽并在宽屏吸收富余，但不无限吞掉空间（探针端/源库亦同步拉宽） -->
-      <el-table-column label="快照启动时间" min-width="170" align="left">
-        <template #default="{ row }">
-          <span class="dss-time" :class="{ 'dss-time-dash': isDash(row.snapshotLastSeenAt) }">
-            {{ formatTime(row.snapshotLastSeenAt) }}
-          </span>
-        </template>
-      </el-table-column>
+    <!-- 源库列（弹性列，min-width:285，R5；始终明显宽于探针端）：正常 ORG 非空只显示 ORG；ORG 空/配置缺失回退原始 DATA_SOURCE_ID；Tooltip 恒为完整原始 DATA_SOURCE_ID -->
+    <el-table-column label="源库" min-width="285" align="left">
+      <template #default="{ row }">
+        <div class="dss-cell">
+          <span
+            class="dss-cell-main dss-tt"
+            :data-tt-kind="`source-main-${rowKey(row)}`"
+            @mouseenter="onSourceMainEnter(row, $event)"
+            @mouseleave="hideTooltip()"
+          >{{ sourceMainText(row) }}</span>
+        </div>
+      </template>
+    </el-table-column>
 
-      <el-table-column label="快照完成时间" min-width="170" align="left">
-        <template #default="{ row }">
-          <span class="dss-time" :class="{ 'dss-time-dash': isDash(row.snapshotCompletedAt) }">
-            {{ formatTime(row.snapshotCompletedAt) }}
-          </span>
-        </template>
-      </el-table-column>
+    <el-table-column label="快照状态" width="140" align="center">
+      <template #default="{ row }">
+        <span
+          class="dss-tt dss-status-trigger"
+          :data-tt-kind="`status-${rowKey(row)}`"
+          @mouseenter="onStatusEnter(row, $event)"
+          @mouseleave="hideTooltip()"
+        >
+          <DataSourceSnapshotStatusTag :status-category="row.statusCategory" />
+        </span>
+      </template>
+    </el-table-column>
 
-      <el-table-column label="记录更新时间" min-width="170" align="left">
-        <template #default="{ row }">
-          <span class="dss-time" :class="{ 'dss-time-dash': isDash(row.updatedAt) }">
-            {{ formatTime(row.updatedAt) }}
-          </span>
-        </template>
-      </el-table-column>
-    </el-table>
+    <!-- 三时间列（弹性列，min-width:170，R5）：与探针端/源库同为 min-width 弹性列；三列等宽并在宽屏吸收富余，但不无限吞掉空间（探针端/源库亦同步拉宽） -->
+    <el-table-column label="快照启动时间" min-width="170" align="left">
+      <template #default="{ row }">
+        <span class="dss-time" :class="{ 'dss-time-dash': isDash(row.snapshotLastSeenAt) }">
+          {{ formatTime(row.snapshotLastSeenAt) }}
+        </span>
+      </template>
+    </el-table-column>
 
-    <!-- 页面级单实例 Tooltip Host：页面唯一表格 → 任意时刻最多 1 个 Tooltip -->
-    <SnapshotTooltipHost :target="ttCurrent" />
-  </div>
+    <el-table-column label="快照完成时间" min-width="170" align="left">
+      <template #default="{ row }">
+        <span class="dss-time" :class="{ 'dss-time-dash': isDash(row.snapshotCompletedAt) }">
+          {{ formatTime(row.snapshotCompletedAt) }}
+        </span>
+      </template>
+    </el-table-column>
+
+    <el-table-column label="记录更新时间" min-width="170" align="left">
+      <template #default="{ row }">
+        <span class="dss-time" :class="{ 'dss-time-dash': isDash(row.updatedAt) }">
+          {{ formatTime(row.updatedAt) }}
+        </span>
+      </template>
+    </el-table-column>
+  </el-table>
 </template>
 
 <script setup lang="ts">
-import { onMounted, onUnmounted, watch } from 'vue'
+/**
+ * 表格自身不再包横向溢出容器：该职责已并入结果面板正文区（§7.4.4），本组件根节点即 el-table，
+ * Feature 业务最小宽度 min-width:1175px 仍本表格所有。
+ */
+import { watch } from 'vue'
 import type { SnapshotStatusItem } from '@/types/dataSourceSnapshot'
+import type { QueryListTooltipShowOptions } from '@/components/query-list'
 import { rowKey } from '@/views/data-source-run-state/utils/rowKey'
 import { formatTimeOrDash } from '@/views/data-source-run-state/utils/format'
 import DataSourceSnapshotStatusTag from './DataSourceSnapshotStatusTag.vue'
-import SnapshotTooltipHost from '../tooltip/SnapshotTooltipHost.vue'
-import { useSnapshotTooltip } from '../tooltip/useSnapshotTooltip'
-import type { ShowTooltipOptions } from '../tooltip/useSnapshotTooltip'
 
 const props = withDefaults(
   defineProps<{
@@ -103,13 +100,13 @@ const props = withDefaults(
     /** 整表 loading：仅 initial 首载在途（DSS-REQ-071①，query 不遮罩表格）。 */
     loading: boolean
     emptyText?: string
+    /** 页面唯一 Tooltip 控制器的 show。表格不传 maxWidthPx：内容上限只用视口安全上限。 */
+    showTooltip: (opts: QueryListTooltipShowOptions) => void
+    /** 页面唯一 Tooltip 控制器的 hide。 */
+    hideTooltip: () => void
   }>(),
   { emptyText: '暂无数据' },
 )
-
-const tooltip = useSnapshotTooltip()
-// 顶层 ref 绑定在模板自动解包：将 tooltip.current 解出为顶层 ref，Host :target 才收到真实状态（而非 Ref 本体）
-const ttCurrent = tooltip.current
 
 /** 仅 statusCategory=UNKNOWN 的行追加浅黄整行背景（纯视觉试验类，DSS-AC-070；不改变行数据与任何事件）。 */
 function rowClassName({ row }: { row: SnapshotStatusItem; rowIndex: number }): string {
@@ -147,52 +144,37 @@ function sourceMainText(row: SnapshotStatusItem): string {
   return sourceShowsOrg(row) ? sourceOrgText(row) : row.sourceId
 }
 
-function openTooltip(opts: ShowTooltipOptions): void {
-  tooltip.show(opts)
-}
-
 function onProbeMainEnter(row: SnapshotStatusItem, e: MouseEvent): void {
-  openTooltip({ key: `client-${rowKey(row)}`, content: clientDescText(row), el: e.currentTarget as HTMLElement })
+  props.showTooltip({
+    key: `client-${rowKey(row)}`,
+    content: clientDescText(row),
+    el: e.currentTarget as HTMLElement,
+  })
 }
 
 /** 源库列 Tooltip 恒为完整原始 DATA_SOURCE_ID（正常行与回退行同源，DSS-REQ-074，AC-075）。 */
 function onSourceMainEnter(row: SnapshotStatusItem, e: MouseEvent): void {
-  openTooltip({ key: `source-${rowKey(row)}`, content: row.sourceId, el: e.currentTarget as HTMLElement })
+  props.showTooltip({ key: `source-${rowKey(row)}`, content: row.sourceId, el: e.currentTarget as HTMLElement })
 }
 
 function onStatusEnter(row: SnapshotStatusItem, e: MouseEvent): void {
-  openTooltip({
+  props.showTooltip({
     key: `status-${rowKey(row)}`,
     content: `原始状态：${row.snapshotStatus}`,
     el: e.currentTarget as HTMLElement,
   })
 }
 
-let unbindGlobalClose: (() => void) | null = null
-
-onMounted(() => {
-  unbindGlobalClose = tooltip.bindGlobalClose()
-})
-
-onUnmounted(() => {
-  if (unbindGlobalClose) unbindGlobalClose()
-  tooltip.destroy()
-})
-
 /** 表格数据替换（records 变化）关闭 Tooltip（DSS-REQ-070②，AC-076）。 */
 watch(
   () => props.records,
-  () => tooltip.hide(),
+  () => props.hideTooltip(),
 )
 </script>
 
 <style scoped>
 /* Linear 原型（纯视觉试验）：仅在本表格子树内收紧 EP 表观感；不改全局 --el-*、不改业务结构。
    表已移除 border（模板层），EP 默认即无垂直网格，仅每行 1px 水平分隔线，其颜色经表根自定义属性局部收紧到 #f4f4f5。 */
-.dss-table-wrap {
-  width: 100%;
-  overflow-x: auto;
-}
 /* 弹性表格（DSS-REQ-069/AC-073，R5 列宽模型）：固定列 序号70＋快照状态140；弹性列（min-width）探针端170/源库285/三时间列各170，
    按 min-width 成比例吸收宽屏富余并铺满结果卡片（源库增量最大、始终明显宽于探针端）；最小总宽 70+170+285+140+170×3=1175、窄屏容器横向滚动 */
 .dss-table {
