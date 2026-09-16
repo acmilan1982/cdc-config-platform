@@ -11,8 +11,12 @@ design_task=QUERY-LIST-PAGE-SHARED-COMPONENT-DESIGN-001
 design_base_commit_id=44d2605f5fa0529f472a6e3b189cd5b88f38a5dd
 r1_correction_task=QUERY-LIST-PAGE-SHARED-COMPONENT-DESIGN-001-R1
 r1_correction_base_commit_id=106bb41c83c9dfd6f19b323cd68bd1b347193f80
+r2_correction_task=QUERY-LIST-PAGE-SHARED-COMPONENT-DESIGN-001-R2
+r2_correction_base_commit_id=db9309058c230411c33466bff5027e87b6e0e1fb
 chatgpt_r0_shared_component_design_review_status=CHANGES_REQUIRED_CONTRACT_EQUIVALENCE_CORRECTIONS_ONLY
+chatgpt_r1_shared_component_design_review_status=CHANGES_REQUIRED_FOUR_CONTRACT_CLOSURE_CORRECTIONS
 r1_contract_equivalence_correction_status=APPLIED_PENDING_CHATGPT_R1_REVIEW
+r2_contract_closure_correction_status=APPLIED_PENDING_CHATGPT_R2_REVIEW
 ```
 
 > 设计任务：`QUERY-LIST-PAGE-SHARED-COMPONENT-DESIGN-001`
@@ -289,7 +293,7 @@ SHARED_COMPONENT_DESIGN_DECISION_DRAFT
 | 2 | `QueryPanel.vue` | `QueryListQueryPanel.vue` | `KEEP_FOR_FIRST_IMPLEMENTATION` | 三个查询页（DSS / topic-offset / log-query）都有“N 个字段组 + 操作按钮同处一行、整体换行”的形态；字段组**作为整体换行**、操作组**不被拆散**是需要被固定下来的契约 | 是 | `.dss-card.dss-query-card` + `.dss-query-bar` 的 flex 换行 | topic-offset 无卡片，可通过 `variant` 与令牌降为无底色 | 把 `el-form :inline`（log-query）误纳入 → 组件只提供流式容器，不强制表单机制 |
 | 3 | `QueryActions.vue` | `QueryListActions.vue` | `KEEP_FOR_FIRST_IMPLEMENTATION` | 固定宽度 62/62 + 四值同锁 + 常驻指示器 + 独立居中文字节点，是**几何稳定契约**的载体；若由调用方自行提供按钮则契约无法保证 | 是 | `.dss-q-actions` / `.dss-query-btn` / `.dss-reset-btn` / `.dss-btn-spinner` | topic-offset 现在是裸 `el-button`（无锁宽、`:loading` 默认指示器），可获得与参考页面同级的稳定性 | 非标准文案被机械套用 `62px` → §7.4.3 规定必须显式给定宽度 |
 | 4 | `ResultPanel.vue` | `QueryListResultPanel.vue` | `KEEP_FOR_FIRST_IMPLEMENTATION` | 结果卡片头部（`space-between` + `flex-wrap` + `gap:12px 16px`）与**预留高度错误槽**（`min-height:22px`）是几何稳定的关键设施，且与业务无关 | 是 | `.dss-card.dss-result-card` + `__header` / `__divider` / `__body` + `.dss-result-error-slot` | topic-offset 的 `.toff-toolbar` 可等价替换，并获得预留错误槽 | Slot 过宽导致壳化 → §7.4.4 限定 4 个槽 |
-| 5 | `RefreshToolbar.vue` | `QueryListRefreshToolbar.vue` | `KEEP_FOR_FIRST_IMPLEMENTATION` | 承载第二处几何稳定机制（110px + 常驻指示器 + `2ch` 秒槽 + 常量占位时间槽 + 不可拆散组）；纯展示，无状态机 | 是 | `DataSourceSnapshotToolbar.vue` 全部 | topic-offset 可获得固定宽度与定宽时间槽；**无自动刷新的页面不传倒计时即可不渲染该段** | Props 过多 / 强制倒计时 → §7.4.5 以 `countdown: null` 表示“本页无自动刷新” |
+| 5 | `RefreshToolbar.vue` | `QueryListRefreshToolbar.vue` | `KEEP_FOR_FIRST_IMPLEMENTATION` | 承载第二处几何稳定机制（110px + 常驻指示器 + `2ch` 秒槽 + 常量占位时间槽 + 不可拆散组）；纯展示，无状态机 | 是 | `DataSourceSnapshotToolbar.vue` 全部 | topic-offset 可获得固定宽度与定宽时间槽；**无自动刷新的页面显式传 `countdown=null`，即可不渲染倒计时段** | Props 过多 / 强制倒计时 → §7.4.5 以 `countdown: null` 表示“本页无自动刷新” |
 | 6 | `StableTableContainer.vue` | ——（并入 `QueryListResultPanel.vue` 的 `#body`） | `MERGE_INTO_ANOTHER_COMPONENT` | 源码核验：参考实现对应物 `.dss-table-wrap` **仅** `width:100%; overflow-x:auto` 两条声明，无独立契约、无可配置项；单独成组件属薄包装 | 否（并入 #4） | `.dss-table-wrap` | 无独立价值；作为结果面板正文区默认样式已足够 | 业务列宽（`min-width:1175px`）被误并入公共层 → §7.4.4 明确列宽留 Feature |
 | 7 | `SingleTooltip.vue` | `QueryListTooltipHost.vue` + `useQueryListTooltip.ts` | `KEEP_FOR_FIRST_IMPLEMENTATION` | 参考实现已有完整机制（Host + composable + 锚点定位），且存在**两处同类实现**必须收敛；对应组件是“同屏最多 1 个”的唯一承载者 | 是 | `tooltip/SnapshotTooltipHost.vue` + `tooltip/useSnapshotTooltip.ts` + `tooltip/tooltipPosition.ts` | topic-offset 未来若需要长文本 Tooltip，可直接复用；当前用原生 `title`，不冲突 | 把指针跟随算法强行并入 → §7.6.2 明确只统一锚点矩形算法与单实例语义 |
 | 8 | `useAppliedQuery` | `useQueryListAppliedQuery` | `DEFER_UNTIL_SECOND_CONSUMER` | 参考实现的 `appliedCriteria`/`hasSuccess` 内嵌于 `useDataSourceSnapshot.ts`；对照页面把生效条件放在 **Pinia store**。两者**状态归属模型不同**；阶段一抽取须同时改写已接受页面的状态机 | 否 | `useDataSourceSnapshot.ts` 的 `appliedCriteria`/`hasSuccess`/`commitSuccess` + `utils/selection.ts` | 接口已完整设计（§7.8.4）；第二个消费者出现后再抽取 | 抽取即重写已验收页面 → 见 §7.11 偏离说明与 §7.12 判定面 |
@@ -446,7 +450,11 @@ interface QueryListPageShellSlots {
   description?: () => unknown
   /** 页头下方的补充内容（例如信息提示块）。位于描述之后、主体之前。 */
   'header-extra'?: () => unknown
-  /** 页面主体。调用方在其中平铺查询面板与结果面板。 */
+  /**
+   * 页面主体。**直接渲染为 `.ql-page` 的子节点**，不插入任何包装元素。
+   * 调用方在其中平铺查询面板与结果面板，二者与页头同为 `.ql-page` 的直接子项，
+   * 因而共享 `.ql-page` 根元素的 `display:flex; flex-direction:column; gap` 段落节奏。
+   */
   default?: () => unknown
 }
 
@@ -457,7 +465,9 @@ interface QueryListPageShellEmits {
 
 | 契约项 | 内容 |
 | --- | --- |
-| 渲染结构 | `div.ql-page > (header.ql-page__header > (title, description, extra)) + div.ql-page__body > slot` |
+| 渲染结构 | `div.ql-page > (header.ql-page__header > (h2.ql-page__title + p.ql-page__description + slot[name=header-extra]))? + slot（默认槽内容，直接成为 `.ql-page` 的子节点）` |
+| **默认槽包装层** | **不存在**。默认槽内容**逐一**成为 `.ql-page` 的直接子节点；公共层**不得**在默认槽外层插入任何 `div`（包括 `div.ql-page__body`）、`Fragment` 容器或其它包装元素。**`div.ql-page__body` 已从本设计契约中移除**（`page_shell_body_wrapper_status=REMOVED_FROM_DESIGN_CONTRACT`） |
+| 直接子节点集合与顺序 | 参考页面等价接入后，`.ql-page`（原 `.dss-page`）的**直接**元素子节点必须**恰好**为 3 个且顺序为：① 页头、② 查询面板、③ 结果面板。中间**不得**出现占位/包装/过渡节点——这与参考实现既有断言（`.dss-page` 的 `element.children.length === 3`，注释“中间没有插入额外的占位/包装层”）逐字对应 |
 | 默认值 | `title = ''`、`description = ''`；均空且无 `#header` → 不渲染 `header` 节点 |
 | 暴露方法 | **无**（不 `defineExpose`） |
 | 拥有 | **页面内层内边距**（`padding`）、页面圆角与背景、页面段落纵向间距，以及页头标题/描述的排版与配色——参考实现的 `.dss-page` **自带**这些值 |
@@ -465,10 +475,52 @@ interface QueryListPageShellEmits {
 | 必需 Props | 无 |
 | Slot 必需性 | 全部可选；`default` 为唯一实际必需内容 |
 
+**为什么必须移除包装层（几何原因，唯一结论）**：`.ql-page` 的段落纵向间距由
+**根元素自身的** `display:flex; flex-direction:column; gap:var(--ql-page-gap,12px)`
+提供，`gap` 只作用于**直接子项之间**。参考实现的 `.dss-page` 正是以
+“页头 / 查询卡片 / 结果卡片”三个直接子项获得 `12px` 的两段间距。
+若默认槽外包一层 `div.ql-page__body`：页头与包装层之间只剩**一段** `12px`，
+查询卡片与结果卡片则落入包装层内部、由包装层的布局规则决定——
+**参考页面的直接子结构（3 个）与 `gap` 几何同时被改变**，等价接入立即产生像素位移。
+
+**根布局契约**（可执行 CSS，`--ql-*` 默认值取参考实现现状值，可被调用方覆盖）：
+
+```css
+.ql-page {
+  display: flex;
+  flex-direction: column;
+  gap: var(--ql-page-gap, 12px);
+  padding: var(--ql-page-padding, 14px 16px);
+  border-radius: var(--ql-page-radius, 10px);
+  background: var(--ql-page-background, transparent);
+}
+
+.ql-page__title {
+  margin: var(--ql-title-margin, 0);
+  font-size: var(--ql-title-size, 20px);
+  font-weight: var(--ql-title-weight, 650);
+  letter-spacing: var(--ql-title-letter-spacing, -0.01em);
+  color: var(--ql-title-color, #09090b);
+}
+
+.ql-page__description {
+  margin: var(--ql-desc-margin, 4px 0 0);
+  font-size: var(--ql-desc-size, 13px);
+  color: var(--ql-desc-color, #71717a);
+  line-height: var(--ql-desc-line-height, 1.5);
+}
+```
+
+上述规则是**阶段一必须逐条落地**的等价性契约；`gap` 落在根元素而非包装层，
+是“默认槽不插入包装层”在 CSS 上的必然结果——**不得**用 `display:contents`
+把包装层“藏”起来作为替代方案（不保留两套实现选择）。本方案**不改变**
+首载失败（`firstLoadError` 错误卡片）与正常内容之间的 Feature 条件渲染语义：
+两者仍由 Feature 决定渲染哪一个，公共页面壳只提供纵向流容器与页头。
+
 **CSS 契约**（`--ql-*` 的默认值**取参考实现现状值**，可被调用方覆盖）：
 
 ```text
---ql-page-gap               默认 12px            页面段落纵向间距
+--ql-page-gap               默认 12px            页面段落纵向间距（作用于 `.ql-page` 的**直接**子项之间）
 --ql-page-padding           默认 14px 16px       页面内层内边距（参考实现 `.dss-page` 现状值）
 --ql-page-radius            默认 10px            页面圆角
 --ql-page-background        默认 transparent     页面背景
@@ -649,7 +701,7 @@ interface QueryListActionsEmits {
                              文字 var(--ql-actions-query-fg,#ffffff)；
                              字重 var(--ql-actions-font-weight,500)；圆角 var(--ql-actions-radius,6px)；
                              padding var(--ql-actions-query-padding,0 16px)
-.ql-actions__query:hover / :focus-visible
+.ql-actions__query:hover / :focus
                              背景 var(--ql-actions-query-bg-hover,#27272a)；
                              边框 1px solid var(--ql-actions-query-border-hover,#27272a)；
                              文字 var(--ql-actions-query-fg-hover,#ffffff)
@@ -658,7 +710,7 @@ interface QueryListActionsEmits {
                              文字 var(--ql-actions-reset-fg,#3f3f46)；
                              字重 var(--ql-actions-font-weight,500)；圆角 var(--ql-actions-radius,6px)；
                              padding var(--ql-actions-reset-padding,0 14px)
-.ql-actions__reset:hover / :focus-visible
+.ql-actions__reset:hover / :focus
                              背景 var(--ql-actions-reset-bg-hover,#d9d9dd)；
                              边框 1px solid var(--ql-actions-reset-border-hover,transparent)；
                              文字 var(--ql-actions-reset-fg-hover,#3f3f46)
@@ -668,13 +720,28 @@ interface QueryListActionsEmits {
 
 上述全部色值由公共 `--ql-*` 令牌承载并在组件 scoped 内声明，
 **不依赖 Element Plus 默认主题碰巧相同**，也**不得**通过 `.dss-*` 选择器
-从外部穿透覆盖（含 `:hover` / `:focus-visible` 两态）。
+从外部穿透覆盖（含 `:hover` / `:focus` 两态）。
+
+**焦点态口径（唯一表述：`:focus`，不是 `:focus-visible`）**：参考实现的查询/重置按钮
+状态选择器为 `:hover, :focus`（源码核验：`.dss-q-actions .dss-query-btn:hover,
+.dss-q-actions .dss-query-btn:focus` 与 `.dss-q-actions .dss-reset-btn:hover,
+.dss-q-actions .dss-reset-btn:focus`）。阶段一为保证**零视觉变化**必须沿用
+`:hover, :focus`：
+
+- `:focus` 与 `:focus-visible` **不是严格等价**——鼠标点击形成焦点后移出按钮时，
+  `:focus` 仍命中而 `:focus-visible` 通常不命中，两者会产生不同视觉结果；
+- `:focus` 下的背景 / 边框 / 文字色**分别等于**上表已确认的 hover 值
+  （查询 `#27272a` / `#27272a` / `#ffffff`；重置 `#d9d9dd` / `transparent` / `#3f3f46`）；
+- 本组件**不重新设计焦点环**、不追加任何新的交互视觉；
+- `QueryListRefreshToolbar` 自身既有的 `focus-visible`（§7.4.5、§7.10.2）**不在本口径范围内**，
+  不得机械替换；
+- 未来若要把这两个按钮改为 `:focus-visible`，属**视觉变化**，必须另立 Feature 视觉调整任务并独立验收。
 
 **可访问性契约**：`queryLoading` 时按钮 `aria-busy="true"`；指示器节点
 `aria-hidden="true"`；文字节点内容在四态（空闲 / Loading / 成功 / 失败）下
 **恒定不变**；键盘 Enter / Space 与焦点行为由 `el-button` 原生提供。
 查询按钮的 `type="primary"` **仅供 `el-button` 内部语义使用**，其全部视觉由
-上表 `--ql-*` 令牌显式钉死（含 `:hover` / `:focus-visible`），
+上表 `--ql-*` 令牌显式钉死（含 `:hover` / `:focus` 两态），
 **不得**依赖 Element Plus 默认主题色（见 §7.9.5 的深度选择器限制）。
 
 ### 7.4.4 `QueryListResultPanel.vue`
@@ -883,11 +950,19 @@ interface QueryListRefreshToolbarEmits {
 
 ```ts
 interface QueryListTooltipHostProps {
-  /** 当前目标；null 时不渲染任何 DOM。 */
+  /** Host 根节点 `id`；**必须**直接使用控制器返回的 `hostId`，Host 不自行生成。 */
+  id: string
+  /** 当前目标；null 时不渲染任何 DOM。目标可携带已校验的 `maxWidthPx`。 */
   target: QueryListTooltipTarget | null
 }
 // 无 Slots、无 Emits、无暴露方法。
-// 控制器 useQueryListTooltip() 的签名见 §7.6.1。
+// 控制器 useQueryListTooltip() 的签名（含 hostId）见 §7.6.1。
+```
+
+**唯一使用关系**（只表达数据关系；模板因 `ref` 自动解包写 `tooltip.current` 属同一套接口）：
+
+```vue
+<QueryListTooltipHost :id="tooltip.hostId" :target="tooltip.current.value" />
 ```
 
 **CSS 契约**：
@@ -909,8 +984,12 @@ interface QueryListTooltipHostProps {
 
 ```text
 .ql-tooltip   position:fixed; box-sizing:border-box; width:max-content;
-              max-width:var(--ql-tooltip-max-width,calc(100vw - 16px));
+              max-width: <由 props.target.maxWidthPx 决定的唯一值，见下>；
               white-space:pre-line; overflow-wrap:anywhere; pointer-events:none
+              id="<props.id>"
+              最终宽度：
+                target.maxWidthPx 省略 → var(--ql-tooltip-max-width,calc(100vw - 16px))
+                target.maxWidthPx = 480 → min(480px, var(--ql-tooltip-max-width,calc(100vw - 16px)))
 ```
 
 **调用方内容上限（`maxWidthPx`）**：统一 Host、控制器与定位算法**不代表**强制统一
@@ -922,14 +1001,17 @@ query_candidate_tooltip_max_width=min(480px, calc(100vw - 16px))
 ```
 
 因此宿主支持调用方传入可选内容上限：表格 Tooltip **省略** `maxWidthPx`；
-查询候选 Tooltip 传 `480`，最终宽度为 `min(480px, calc(100vw - 16px))`。
-详见 §7.6.1 的 `QueryListTooltipShowOptions` 与 §7.6.4。
+查询候选 Tooltip **显式传 `480`**，最终宽度为 `min(480px, calc(100vw - 16px))`。
+传递链路为 `show(options.maxWidthPx) → 校验 → target.maxWidthPx → Host 最终 max-width → 测量`，
+`Host` **只**从 `props.target.maxWidthPx` 读取（不得引入第二种来源）；
+详见 §7.6.1 的 `QueryListTooltipShowOptions` / `QueryListTooltipTarget` 与 §7.6.4。
 
 **可访问性契约**：
 
 | 项 | 规则 |
 | --- | --- |
-| 语义 | 根元素 `role="tooltip"`；内容对读屏可见（不设 `aria-hidden`） |
+| 语义 | 根元素 `role="tooltip"`，`id` = 控制器 `hostId`；内容对读屏可见（不设 `aria-hidden`） |
+| 读屏关联 | 控制器把 `hostId` 作为 `aria-describedby` **token** 追加到触发元素（去重、只移除自身 token、无剩余 token 时删除属性），目标成为当前 target 时建立、关闭/切换/销毁时清理（详见 §7.6.4、§7.6.6） |
 | 不可交互 | `pointer-events:none`——不拦截鼠标、不可聚焦、不参与 Tab 序列 |
 | 触发可达性 | 控制器不区分触发方式（鼠标 / 焦点 / 程序调用）；是否提供键盘触发由调用方决定（见 §7.6.6） |
 | `Escape` | 控制器在页面级关闭事件组内提供 `Escape` 关闭（可绑定开关控制，见 §7.6.6） |
@@ -945,7 +1027,7 @@ query_candidate_tooltip_max_width=min(480px, calc(100vw - 16px))
 | `QueryListActions` | 无 | 无 | `query` / `reset` | 无 | **是（查询 + 重置）** |
 | `QueryListResultPanel` | 无 | `summary` / `toolbar` / `error` / `body` | 无 | 无 | 否 |
 | `QueryListRefreshToolbar` | `countdown`（可 `null`） | 无 | `refresh` | 无 | **是（立即刷新）** |
-| `QueryListTooltipHost` | `target` | 无 | 无 | 无 | 否 |
+| `QueryListTooltipHost` | `id`（= 控制器 `hostId`）、`target` | 无 | 无 | 无 | 否 |
 
 **暴露方法的统一结论**：六个组件**一律不提供 `defineExpose`**。
 参考页面当前的 `defineExpose({ reset })`（查询栏）与 `defineExpose({ reset, draft })`
@@ -1106,6 +1188,12 @@ interface QueryListTooltipTarget {
   content: string
   /** 锚点矩形。 */
   anchor: QueryListTooltipAnchor
+  /**
+   * **已校验后**的调用方内容上限（px）；省略表示只使用视口安全上限。
+   * 由控制器在 `show()` 时校验后写入，Host **只**从这里读取——Host 不得自行生成、
+   * 也不得从任何未声明的私有状态或全局变量取得宽度（见 §7.6.3 的完整链路）。
+   */
+  maxWidthPx?: number
 }
 
 interface QueryListTooltipShowOptions {
@@ -1117,12 +1205,18 @@ interface QueryListTooltipShowOptions {
   /**
    * 调用方内容上限（px）。省略时**仅**使用视口安全上限；
    * 传 480 时使用 min(480px, calc(100vw - 16px))。
-   * 必须是有限正数；不接受任意 CSS 字符串。
+   * 必须是有限正数；不接受任意 CSS 字符串（非法值忽略并退回视口安全上限）。
    */
   maxWidthPx?: number
 }
 
 interface UseQueryListTooltipReturn {
+  /**
+   * 控制器创建时生成；**页面实例内唯一**且**整个生命周期稳定**。
+   * 同一个值同时用于：① Host 根节点的 `id`，② 控制器向触发元素追加
+   * `aria-describedby` token 时的取值。**Host 不得另外生成第二个 ID。**
+   */
+  hostId: string
   /** 当前目标（响应式）。 */
   current: Ref<QueryListTooltipTarget | null>
   /** 请求显示；内容为空即关闭；新 key 先即时关闭旧项再走统一延迟。 */
@@ -1139,14 +1233,41 @@ interface UseQueryListTooltipReturn {
 declare const QUERY_LIST_TOOLTIP_DELAY_MS: 320
 ```
 
+**唯一使用关系**（页面持有控制器，Host 消费同一实例的 `hostId` 与 `current`）：
+
+```vue
+<QueryListTooltipHost :id="tooltip.hostId" :target="tooltip.current.value" />
+```
+
+上面的 Vue 表达式只表达**数据关系**；若真实模板因 `ref` 自动解包写成
+`tooltip.current`，属**同一套**接口的语法差异，**不得**解释为第二套接口或第二个 Host。
+
+**`maxWidthPx` 的完整链路**（唯一实现形态，不存在第二种传递方式）：
+
+```text
+show(options.maxWidthPx)
+  → 控制器校验为有限正数（非法/缺失 → 视为省略）
+  → 写入 current.value.maxWidthPx（target 的一部分）
+  → Host 从 props.target.maxWidthPx 生成最终 max-width
+  → 定位测量使用施加该上限后的真实 offsetWidth / offsetHeight
+```
+
+Host 的实现形态为：根据 `props.target.maxWidthPx` 计算一个**安全的内联 `maxWidth` 值**
+（省略 → `var(--ql-tooltip-max-width, calc(100vw - 16px))`；传 `480` →
+`min(480px, var(--ql-tooltip-max-width, calc(100vw - 16px)))`）。
+无论采用内联字符串还是数值型 CSS 自定义属性，**最终计算结果必须唯一且可测试**；
+文档**不得**保留无法直接映射到 CSS 的裸 `maxWidthPx` 标识。
+
 **按调用方的最大宽度行为**：
 
-- 表格 Tooltip **不传** `maxWidthPx`，仅使用视口安全上限 `calc(100vw - 16px)`；
-- 查询候选 Tooltip **传 `480`**，使用 `min(480px, calc(100vw - 16px))`；
+- 表格 Tooltip **省略** `maxWidthPx`，仅使用视口安全上限 `calc(100vw - 16px)`；
+- 查询候选 Tooltip **必须传 `480`**，使用 `min(480px, calc(100vw - 16px))`；
+  i.e. `show({ key, content, el: targetElement, maxWidthPx: 480 })`；
 - Host 最终宽度**始终**不超过 `calc(100vw - 16px)`；
 - **不允许**传入任意 CSS 字符串；数值必须校验为**有限正数**，否则忽略并退回视口安全上限；
 - **切换 target 时最大宽度必须随 target 更新**，且新内容完成测量前保持隐藏
   （沿用 §7.6.4 的“先隐藏 → 测量 → 再显示”流程）；
+- **不允许**用未声明的私有状态、模块级单例或外部全局变量偷偷传递宽度；
 - 仍然**只有一个 Host、一套定位算法**（机制不因内容宽度差异而分裂）。
 
 ### 7.6.2 机制唯一性（含“两个定位算法”的处理）
@@ -1189,11 +1310,18 @@ declare const QUERY_LIST_TOOLTIP_DELAY_MS: 320
 1. 查询栏不再自行渲染 Tooltip DOM；
 2. 查询栏沿用其现有的文档级捕获 `mouseover` / `mouseout` 委派，
    命中 `data-dss-client-id` 目标后，调用
-   `useQueryListTooltip().show({ key, content, el: target })`；
-3. 是否显示（描述为 null、码点长度 ≤ 20、非可见候选/可关闭标签）等
+   `useQueryListTooltip().show({ key, content, el: targetElement, maxWidthPx: 480 })`
+   ——参考实现中查询候选 Tooltip 的 `max-width` 为
+   `min(480px, calc(100vw - 16px))`，因此**必须显式传 `maxWidthPx: 480`**；
+   省略该项会让查询候选 Tooltip 退化为整视口宽（`calc(100vw - 16px)`），
+   属**视觉变化**，阶段一不允许；
+3. 表格 Tooltip 的调用示例为
+   `useQueryListTooltip().show({ key, content, el: targetElement })`
+   ——**省略** `maxWidthPx`，仅使用视口安全上限；
+4. 是否显示（描述为 null、码点长度 ≤ 20、非可见候选/可关闭标签）等
    **业务判定留在查询栏**（Feature 专属），公共层只接收“显示这一段内容在
    这个元素旁边”；
-4. 关键路径：公共 `show()` 的 `el` 参数接受**任意**元素，
+5. 关键路径：公共 `show()` 的 `el` 参数接受**任意**元素，
    因此查询栏与表格可共用同一控制器与同一 Host。
 
 **同一页面内两个触发源共用控制器**时，控制器实例必须**页面唯一**：
@@ -1208,23 +1336,35 @@ declare const QUERY_LIST_TOOLTIP_DELAY_MS: 320
 
 ```ts
 interface QueryListTooltipHostProps {
-  /** 当前目标；null 时不渲染任何 DOM。 */
+  /**
+   * Host 根节点的 `id`。**必须直接使用控制器返回的 `hostId`**；
+   * Host **不得**自行生成 ID（否则控制器无法可靠知道用于 `aria-describedby` 的取值）。
+   */
+  id: string
+  /** 当前目标；null 时不渲染任何 DOM。目标携带 `maxWidthPx` 时以其为内容上限。 */
   target: QueryListTooltipTarget | null
 }
+```
+
+**唯一使用关系**：
+
+```vue
+<QueryListTooltipHost :id="tooltip.hostId" :target="tooltip.current.value" />
 ```
 
 | 契约项 | 内容 |
 | --- | --- |
 | 渲染位置 | `Teleport to="body"`——避免被表格 `overflow` 裁切 |
-| 根元素 | `div.ql-tooltip`，`role="tooltip"`，`data-ql-tooltip-host="1"`，并携带**页面实例唯一且稳定**的 `id`（供 `aria-describedby` 关联） |
-| 最大宽度 | `max-width: min(var(--ql-tooltip-max-width,calc(100vw - 16px)), maxWidthPx)`；未传 `maxWidthPx` 时只用视口安全上限（见 §7.6.1） |
-| 定位流程 | 目标变化 → `posStyle` 立即回到 `visibility:hidden` → `nextTick()` → 测量 `offsetWidth`/`offsetHeight` → 计算落点 → 一次性显示；**杜绝新内容沿用旧锚点坐标闪现** |
+| 根元素 | `div.ql-tooltip`，`role="tooltip"`，`data-ql-tooltip-host="1"`，`id` 直接绑定 `props.id`（即控制器 `hostId`）——**页面实例唯一且稳定**，供 `aria-describedby` 关联；Host **不**生成第二个 ID |
+| 最大宽度 | 由 `props.target.maxWidthPx` 决定：省略 → `var(--ql-tooltip-max-width,calc(100vw - 16px))`；传 `480` → `min(480px, var(--ql-tooltip-max-width,calc(100vw - 16px)))`。**只**从 `target` 读取，不引入第二种宽度来源（完整链路见 §7.6.1） |
+| 定位流程 | 目标变化 → `posStyle` 立即回到 `visibility:hidden` → `nextTick()` → 在**施加了正确宽度上限**的前提下测量 `offsetWidth`/`offsetHeight` → 计算落点 → 一次性显示；**杜绝新内容沿用旧锚点坐标闪现** |
 | 单行策略 | `width:max-content`——内容自然单行；**仅当**自然宽度超过安全视口（`calc(100vw - 16px)`，`border-box` 计入 padding/border）时才换行，换行后仍全文可读、不横向越界 |
 | 交互 | `pointer-events:none`——不可交互，不拦截鼠标事件 |
-| 读屏关联（`aria-describedby`） | 控制器通过 `el` 显示 Tooltip 时，把 Host 的 `id` 作为**一个 token** 追加到触发元素现有的 `aria-describedby`；**不得覆盖**触发元素已有的 token |
-| 关联清理 | `hide()`、target 替换、锚定列表整体更新、路由切换、组件销毁时，**只移除控制器自己添加的 token**，触发元素原有值保持不变；同一页面始终**只有一个** Tooltip id/Host，不跨路由残留 |
-| 无 `el` 的显式 anchor | 调用方只传显式 `anchor` 而未传 `el` 时，**调用方自负**建立 `aria-describedby`，或明确该调用仅服务鼠标、**不宣称读屏可达** |
-| 无残留 | `target: null` 时不渲染 DOM；不保留任何跨页面状态 |
+| 读屏关联（`aria-describedby`） | 控制器在 `el` 对应的目标**真正成为当前 target 时**，把 `hostId` 作为**一个 token** 追加到该 `el` 现有的 `aria-describedby`；追加前按 ASCII 空白拆分并**去重**，不重复加入同一 `hostId`；**不得覆盖、不得删除**调用方原有 token |
+| 关联切换 | 触发元素切换时，**先**从旧元素**只移除自己的** `hostId`，**再**给新元素追加 |
+| 关联清理 | `hide()`、延迟取消、锚定列表整体更新、路由切换、`destroy()` 时，**只移除控制器自己添加的 token**；若移除后**没有剩余 token**，则**删除 `aria-describedby` 属性**；仍有其他 token 时保留并规范为**空格分隔** |
+| 无 `el` 的显式 anchor | 调用方只传显式 `anchor` 而未传 `el` 时，控制器**不修改任何元素属性**，`aria-describedby` 由**调用方自负**建立，或明确该调用仅服务鼠标、**不宣称读屏可达** |
+| 无残留 | `target: null` 时不渲染 DOM；页面销毁后**不得**残留 Host DOM、定时器、全局监听或 `aria-describedby` token；不保留任何跨页面状态 |
 
 ### 7.6.5 业务内容不得内置
 
@@ -1244,7 +1384,9 @@ interface QueryListTooltipHostProps {
 | 项 | 设计 |
 | --- | --- |
 | Host 语义 | `role="tooltip"`；`aria-hidden` 不设置（内容对读屏可见） |
-| 触发关联 | 仅给 Host 设置 `role="tooltip"` **不足以**建立读屏关联；必须由控制器把 Host 的唯一 `id` 以 `aria-describedby` **追加 token** 的方式关联到触发元素，并在 hide/target 替换/列表更新/路由切换/销毁时只移除自身 token（详见 §7.6.4） |
+| 触发关联 | 仅给 Host 设置 `role="tooltip"` **不足以**建立读屏关联；必须由控制器把 Host 的 `id`（= 控制器 `hostId`）以 `aria-describedby` **追加 token** 的方式关联到触发元素 |
+| 关联完整规则 | ① token 在目标**真正成为当前 target 时**追加；② 追加前按 ASCII 空白拆分并**去重**，不重复加入同一 `hostId`；③ 切换触发元素时**先**从旧元素只移除自己的 `hostId`、**再**给新元素追加；④ `hide()` / 延迟取消 / 列表整体更新 / 路由切换 / `destroy()` 时**只移除自身 token**；⑤ 移除后无剩余 token → **删除属性**，有剩余 token → 保留并规范为空格分隔；⑥ **不覆盖、不删除**调用方原有 token；⑦ 仅传 `anchor` 而无 `el` 时控制器**不修改任何元素属性**（详见 §7.6.4） |
+| `hostId` 唯一性 | `hostId` 由页面唯一的 `useQueryListTooltip()` 控制器实例创建，**同一值**同时用于 Host 根节点 `id` 与上述关联逻辑；Host **不**生成第二个 ID；页面销毁后不残留 token |
 | 调用方内容上限 | 查询候选 Tooltip 传 `maxWidthPx=480`；表格 Tooltip 省略（详见 §7.6.1）；读屏可读性不因内容上限而变化 |
 | 鼠标 | 触发元素 `mouseenter` → `show()`；`mouseleave` → `hide()` |
 | 键盘焦点 | **API 支持**：控制器不区分触发方式，调用方可在 `focus` 事件上调用同一个 `show()`。是否启用由调用方决定 |
@@ -1270,9 +1412,22 @@ tooltip_keyboard_trigger_for_reference_page=NOT_ADDED_IN_PHASE_1
 tooltip_escape_close=DESIGNED_PHASE_1_REQUIRES_EXPLICIT_DECLARATION
 tooltip_table_max_width=calc(100vw - 16px)
 tooltip_query_candidate_max_width=min(480px, calc(100vw - 16px))
-tooltip_per_target_max_width_status=DESIGNED_CALLER_OPTIONAL_MAXWIDTHPX
+tooltip_per_target_max_width_status=CLOSED_TARGET_CARRIES_VALIDATED_MAXWIDTHPX
+tooltip_target_max_width_field_status=DESIGNED_TARGET_CARRIES_VALIDATED_MAXWIDTHPX
+tooltip_max_width_dataflow_status=CLOSED_SHOW_VALIDATE_TARGET_HOST_MEASURE
+tooltip_host_id_contract_status=DESIGNED_CONTROLLER_GENERATED_HOSTID_SHARED_WITH_HOST_ID_PROP
 tooltip_aria_describedby_status=DESIGNED_PAGE_UNIQUE_ID_TOKEN_ADDITIVE
+tooltip_aria_describedby_lifecycle_status=CLOSED_APPEND_DEDUPE_SWITCH_CLEANUP_OWN_TOKEN_ONLY
 ```
+
+R2 关闭的四处 Tooltip 断点（对应 §7.6.1 / §7.6.3 / §7.6.4 / §7.6.6）：
+
+1. `QueryListTooltipTarget` 现携带 `maxWidthPx`，Host 有唯一的宽度读取来源；
+2. 控制器返回 `hostId`，Host 通过 `id` prop 消费**同一个**值，Host 不再自行生成；
+3. `show → 校验 → target.maxWidthPx → Host 最终 max-width → 测量` 形成完整链路，
+   查询候选调用显式传 `maxWidthPx: 480`、表格调用显式省略；
+4. `aria-describedby` 的追加 / 去重 / 切换 / 清理 / 删除空属性 / 保留原有 token
+   规则全部写明，可逐条断言。
 
 ---
 
@@ -1458,7 +1613,9 @@ const stableScrollbarGutter = computed(() => route.meta.stableScrollbarGutter ==
 | 自动刷新 deadline | `FEATURE` | 单一事实来源；公共层阶段一不接管 |
 | 倒计时展示投影（剩余秒 / 比例） | `FEATURE`（投影由公共组件**渲染**） | 状态在 Feature，渲染在 `QueryListRefreshToolbar`（`countdown` prop） |
 | 页面可见性 | `FEATURE` | 参考实现由页面在 `onMounted`/`onUnmounted` 绑定 `visibilitychange` 并转发给 composable |
-| Tooltip 目标（当前 1 个） | `SHARED_COMPOSABLE` | 阶段一唯一落地的公共状态持有者（`useQueryListTooltip`）；**页面唯一实例**，页面销毁即清空，**不跨路由保留** |
+| Tooltip 目标（当前 1 个，含已校验的 `maxWidthPx`） | `SHARED_COMPOSABLE` | 阶段一唯一落地的公共状态持有者（`useQueryListTooltip`）；**页面唯一实例**，页面销毁即清空，**不跨路由保留**；调用方内容上限随目标一起存放，Host 只从目标读取 |
+| Tooltip Host `id`（`hostId`） | `SHARED_COMPOSABLE` | 由 `useQueryListTooltip` 实例**创建时生成一次**，页面实例内唯一且全生命周期稳定；同时供 Host 根节点 `id` 与 `aria-describedby` 关联使用 |
+| Tooltip `aria-describedby` token（触发元素上的追加） | `SHARED_COMPOSABLE`（写入调用方元素） | 由控制器按“追加 / 去重 / 切换前先移除 / 只移除自身 token / 无剩余时删除属性”规则写入与清理；不覆盖调用方原有 token |
 | 稳定滚动条槽启用开关 | `LAYOUT_OR_ROUTER` | 由 `route.meta.stableScrollbarGutter` 声明，`MainLayout` 读取 |
 | 按钮 Loading 视觉（指示器显隐） | `PRESENTATIONAL_COMPONENT`（由 prop 驱动） | 组件只做“显隐投影”，真值来自 Feature 的 `requestKind` 派生 |
 | Tooltip 延迟定时器 / 关闭事件绑定 | `SHARED_COMPOSABLE` | 由 `useQueryListTooltip` 内部持有并在卸载时清理 |
@@ -1674,7 +1831,7 @@ interface UseQueryListVisibleAutoRefreshReturn {
 | `--ql-actions-reset-padding` | `0 14px` | 组件根 | 重置按钮水平内边距 |
 | `--ql-btn-spinner-inset` | `2px` | 组件根 | Spinner 左偏移（见 §7.5.5） |
 | `--ql-tooltip-z-index` | `3000` | 组件根 | Tooltip 层级 |
-| `--ql-tooltip-max-width` | `calc(100vw - 16px)` | 组件根 | Tooltip 视口安全上限（始终生效）；调用方可用 `maxWidthPx` 进一步收窄（见 §7.6.1） |
+| `--ql-tooltip-max-width` | `calc(100vw - 16px)` | 组件根 | Tooltip 视口安全上限（**始终生效**）；调用方可经 `target.maxWidthPx` 进一步收窄（查询候选 `480`），Host 只从 `target` 读取（见 §7.6.1） |
 
 ### 7.9.3 可成为令牌的尺寸 vs 必须留在 Feature 的尺寸
 
@@ -1698,7 +1855,10 @@ interface UseQueryListVisibleAutoRefreshReturn {
 - **分页**控件形态、页大小、最大返回条数；
 - 状态标签的**配色与文案**；
 - 时间列**空值占位**文案（参考实现 `--`）；
-- 失败提示**文案**（参考实现 `刷新失败，将在约 60 秒后自动重试`）。
+- 失败提示**文案**（参考实现 `刷新失败，将在约 60 秒后自动重试`）；
+- Tooltip 的**按调用方内容上限**（参考实现查询候选 `480`）——该数值由调用方经
+  `show({ maxWidthPx })` 传入并随 `target` 保存，公共层只提供**视口安全上限**令牌
+  `--ql-tooltip-max-width`，**不**为任何调用方预设内容宽度（见 §7.6.1）。
 
 ### 7.9.4 如何证明对未迁移页面零样式泄漏
 
@@ -1784,7 +1944,11 @@ interface UseQueryListVisibleAutoRefreshReturn {
    `QueryListActions`、`QueryListResultPanel`、`QueryListRefreshToolbar`、
    `QueryListTooltipHost`；
 2. 创建公共类型 `types.ts`（Tooltip 目标/锚点、倒计时投影等）；
-3. 创建统一 Tooltip 控制器 `frontend/src/composables/query-list/useQueryListTooltip.ts`；
+3. 创建统一 Tooltip 控制器 `frontend/src/composables/query-list/useQueryListTooltip.ts`：
+   控制器在创建时生成**页面唯一且稳定**的 `hostId`，`show()` 校验并写入
+   `target.maxWidthPx`，并按 §7.6.4 / §7.6.6 的规则维护触发元素上的
+   `aria-describedby` token（追加 / 去重 / 切换前先移除 / 只移除自身 token /
+   无剩余时删除属性）；`QueryListTooltipHost` 通过 `id` prop 消费同一个 `hostId`；
 4. 把该 Feature 的**两处私有 Loading 几何样式**收敛到公共展示层
    （一个类名、一份 CSS、一个令牌；历史 1px 偏移由令牌局部覆盖保留，见 §7.5.5）；
 5. 把稳定滚动条槽的判据从**硬编码路由名**改为**显式路由元数据**
@@ -1796,6 +1960,9 @@ interface UseQueryListVisibleAutoRefreshReturn {
    以及标题（`margin:0` / `20px` / `650` / `-0.01em` / `#09090b`）与描述
    （`margin:4px 0 0` / `13px` / `#71717a` / `1.5`）的完整排版事实——
    这些值**不能**由 `MainLayout .content-area` 的外层 padding 替代（见 §7.2.1、§7.4.1）；
+   **同时**，页面壳的**默认槽不得插入包装层**：`.ql-page` 的直接子节点必须仍为
+   “页头 / 查询面板 / 结果面板”三个且顺序不变，使参考实现既有的
+   `.dss-page` 直接子节点基数断言（`children.length === 3`）在接入后继续成立（见 §7.4.1）；
 7. 保持 `useDataSourceSnapshot.ts` 的成熟请求状态机与全部 Feature 业务语义
    **完全不变**（六类请求、单飞行、失败保留、隐藏冻结、恢复补发、
    倒计时投影、重置不查询）；
@@ -1855,10 +2022,12 @@ interface UseQueryListVisibleAutoRefreshReturn {
 | 13 | 其他路由 `scrollbar-gutter` 无泄漏 | 逐路由计算样式断言 | `NOT_RUN_DOCUMENT_DESIGN_ONLY` |
 | 14 | 负向控制可使严格几何断言非零退出 | 注入错误实现，断言检查失败 | `NOT_RUN_DOCUMENT_DESIGN_ONLY` |
 | 15 | 页面壳矩形与排版逐值不变 | 断言等价接入后 `.ql-page` 的 `padding` / `border-radius` / `background` / `row-gap` 与标题/描述的 `margin` / `font-size` / `font-weight` / `letter-spacing` / `color` / `line-height` 与接入前**逐值相同**（`14px 16px` / `10px` / `transparent` / `12px`；`0` / `20px` / `650` / `-0.01em` / `#09090b`；`4px 0 0` / `13px` / `#71717a` / `1.5`） | `NOT_RUN_DOCUMENT_DESIGN_ONLY` |
+| 15a | 页面壳**直接子节点集合与顺序**不变 | 断言等价接入后 `.ql-page` 的**直接**元素子节点**恰好**为 3 个且顺序为“页头 → 查询面板 → 结果面板”（沿用参考实现既有断言口径：`element.children.length === 3`，并逐项断言三个直接子节点分别命中页头 / 查询卡片 / 结果卡片）；断言模板**未生成** `.ql-page__body`、未在默认槽外层插入任何包装元素；断言第一个直接子节点与第二个之间的间距等于根级 `gap`（`12px`），即根级 `gap` 直接作用于页头与业务段落 | `NOT_RUN_DOCUMENT_DESIGN_ONLY` |
 | 16 | 结果面板四段结构与 divider/正文几何 | 断言存在 `header` / `error-slot` / `divider` / `body` 四段且顺序不变；divider 为 `1px` / `#f0f0f1` / `margin 0 16px`；正文 `padding 10px 16px 14px` 且 `min-width:0` | `NOT_RUN_DOCUMENT_DESIGN_ONLY` |
-| 17 | 查询/重置按钮完整视觉与可选高度 | 断言 `:hover` / `:focus-visible` 两态下底色、边框、文字色与参考实现一致；`heightPx` 未传时**不输出 `height`**，参考页显式传 `30` 时计算高度为 `30px` | `NOT_RUN_DOCUMENT_DESIGN_ONLY` |
-| 18 | Tooltip 按调用方的最大宽度 | 断言查询候选 Tooltip 宽度 ≤ `min(480px, calc(100vw - 16px))`；表格 Tooltip 宽度 ≤ `calc(100vw - 16px)`；切 target 时宽度随内容上限更新 | `NOT_RUN_DOCUMENT_DESIGN_ONLY` |
-| 19 | Tooltip `aria-describedby` 关联 | 断言通过 `el` 显示时触发元素新增一个 Host `id` token；`hide()` / 销毁后只移除该 token，触发元素原有 `aria-describedby` 值不变；同一页面 Tooltip `id`/Host 唯一 | `NOT_RUN_DOCUMENT_DESIGN_ONLY` |
+| 17 | 查询/重置按钮完整视觉与可选高度 | 断言 `:hover` / `:focus` 两态下底色、边框、文字色与参考实现一致；`heightPx` 未传时**不输出 `height`**，参考页显式传 `30` 时计算高度为 `30px` | `NOT_RUN_DOCUMENT_DESIGN_ONLY` |
+| 17a | 焦点态**严格等价**（`:focus` 而非 `:focus-visible`） | 三种路径逐一与参考实现**逐值比较**底色/边框/文字色，且结果必须一致：① **鼠标点击后移出按钮**（点击形成焦点 → 移出 → 断言焦点态视觉仍在），② **键盘聚焦**（Tab 到达按钮 → 断言焦点态视觉），③ **hover**（移入不点击 → 断言 hover 态视觉）；并断言组件源码中查询/重置按钮的状态选择器为 `:focus`、**不含** `:focus-visible`；同时断言 `QueryListRefreshToolbar` 自身的 `focus-visible` **未被改动** | `NOT_RUN_DOCUMENT_DESIGN_ONLY` |
+| 18 | Tooltip 按调用方的最大宽度 | 断言查询候选 Tooltip 宽度 ≤ `min(480px, calc(100vw - 16px))`；表格 Tooltip 宽度 ≤ `calc(100vw - 16px)`；断言宽度来源**唯一**——Host 只读 `props.target.maxWidthPx`，`show()` 校验有限正数后写入 target，测量在施加该上限之后进行；切 target 时宽度随内容上限更新 | `NOT_RUN_DOCUMENT_DESIGN_ONLY` |
+| 19 | Tooltip `aria-describedby` 关联与 `hostId` | ① 断言 Host 根节点 `id` **等于**控制器 `hostId`，且 Host 未生成第二个 ID；② 断言目标成为当前 target 时触发元素新增**恰好一个** `hostId` token；③ 断言重复 `show()` 同一元素**不重复**加入该 token（去重）；④ 断言切换触发元素时**先**从旧元素移除自身 token、**再**给新元素追加；⑤ 断言 `hide()` / 延迟取消 / 销毁后只移除自身 token，触发元素原有 token **保持原值**；⑥ 断言移除后无剩余 token 时 `aria-describedby` **属性被删除**，有剩余 token 时保留并以空格分隔；⑦ 断言仅传 `anchor` 而无 `el` 时控制器**不修改任何元素属性**；⑧ 同一页面 Tooltip `id`/Host 唯一 | `NOT_RUN_DOCUMENT_DESIGN_ONLY` |
 
 ### 7.12.2 环境边界
 
@@ -1905,7 +2074,8 @@ interface UseQueryListVisibleAutoRefreshReturn {
 | 14 | **阶段一顺带迁移其他页面** | 破坏“每页独立任务”纪律，无法定位失败 | §7.11.2 第 1 项：阶段一只做参考页面等价接入 |
 | 15 | **页面壳内层内边距被误归给布局层** | 公共页面壳丢失 `padding:14px 16px`、圆角与本页标题/描述配色，等价接入后页面几何与排版变化 | §7.2.1、§7.4.1：`.dss-page` 自带内层 `padding` 与 `border-radius`，与 `MainLayout .content-area` 的外层 `padding` 是两层事实，不得合并口径；§7.12.1 第 15 项逐值断言 |
 | 16 | **结果面板分隔线与正文几何缺失** | 头部/正文之间缺少 1px 分隔线或正文内边距变化，产生像素位移 | §7.4.4 的四段渲染结构与 divider/body 令牌；§7.12.1 第 16 项断言 |
-| 17 | **统一 Tooltip 丢失调用方内容宽度或读屏关联** | 查询候选 Tooltip 由 `480px` 变为整视口宽；`role="tooltip"` 无触发关联，读屏不可达 | §7.6.1 的 `maxWidthPx`（表格省略、查询候选传 `480`）与 §7.6.4 的 `aria-describedby` token 生命周期；§7.12.1 第 18、19 项断言 |
+| 17 | **统一 Tooltip 丢失调用方内容宽度或读屏关联** | 查询候选 Tooltip 由 `480px` 变为整视口宽；`role="tooltip"` 无触发关联，读屏不可达；或控制器与 Host 各自生成 ID 导致关联错位 | §7.6.1 的 `maxWidthPx` 契约闭环（`show → 校验 → target.maxWidthPx → Host 最终 max-width → 测量`；表格省略、查询候选显式传 `480`）、§7.6.4 的 `hostId` 单值共享与 `aria-describedby` token 生命周期（追加/去重/切换先移除/只移除自身 token/无剩余删除属性）；§7.12.1 第 18、19 项断言 |
+| 18 | **页面壳默认槽被插入包装层** | `.ql-page` 的直接子节点由 3 个变为 2 个（页头 + 包装层），查询卡片与结果卡片之间的根级 `12px` 间距失效，等价接入立即产生像素位移，并直接违反参考实现既有的“直接子节点基数 = 3”断言 | §7.4.1 明确**不存在**默认槽包装层、`div.ql-page__body` 已从契约移除，并给出“`gap` 只在直接子项之间生效”的几何理由；§7.12.1 第 15a 项断言直接子节点集合/顺序与根级间距 |
 
 ### 7.13.2 回滚设计
 
@@ -1988,3 +2158,48 @@ R1 完成后仍需 **ChatGPT 从远程 Git 复审**，随后由**项目负责人
 在此之前 `shared_component_implementation_status`、`page_migration_status`、
 `query_list_page_template_implementation_status` 仍为 `NOT_STARTED`，
 **不得**实现公共组件、**不得**让参考页面接入公共组件、**不得**迁移任何页面。
+
+---
+
+## 10. R2 契约闭环纠正记录
+
+`SHARED_COMPONENT_DESIGN_DECISION_DRAFT` —— 本节记录 R2
+（`QUERY-LIST-PAGE-SHARED-COMPONENT-DESIGN-001-R2`，日期 `2026-09-16`，
+基准提交 `db9309058c230411c33466bff5027e87b6e0e1fb`）对 R1 草案所做的
+**契约闭环纠正**。
+
+ChatGPT 对 R1 的复审结论为
+`chatgpt_r1_shared_component_design_review_status=CHANGES_REQUIRED_FOUR_CONTRACT_CLOSURE_CORRECTIONS`：
+架构方向继续通过，仍需关闭四处契约缺口。R2 **只**纠正以下四项，
+**不改变**架构方向、候选取舍、路由元数据方案与阶段划分：
+
+| # | 纠正 | 位置 |
+| --- | --- | --- |
+| 1 | `QueryListPageShell` 的默认槽包装层 `div.ql-page__body` 会改变参考页面的直接子节点结构与根级 `gap` 几何 → **删除该包装层**，默认槽内容直接成为 `.ql-page` 的子节点；补齐 `.ql-page` / `.ql-page__title` / `.ql-page__description` 的可执行 CSS 与“直接子节点恰好 3 个且顺序不变”的断言 | §7.4.1、§7.9.2、§7.11.1 第 6 项、§7.12.1 第 15a 项、§7.13.1 风险 18 |
+| 2 | Tooltip 的 `maxWidthPx`、Host `id` 与触发元素 `aria-describedby` 未构成可实现的闭环 → `QueryListTooltipTarget` 增加 `maxWidthPx`、控制器返回 `hostId`、Host props 增加 `id`，写明唯一使用关系与`show → 校验 → target.maxWidthPx → Host 最终 max-width → 测量` 全链路，并写明 `aria-describedby` 的追加 / 去重 / 切换 / 清理 / 无剩余即删除属性 / 保留原有 token 规则 | §7.4.6、§7.6.1、§7.6.3、§7.6.4、§7.6.6、§7.6.7、§7.8.2、§7.9.2、§7.9.3、§7.11.1 第 3 项、§7.12.1 第 18、19 项、§7.13.1 风险 17 |
+| 3 | `QueryListActions` 查询/重置按钮的焦点选择器被写成 `:focus-visible`，与参考实现的 `:focus` **不是严格等价** → 全篇改为 `:hover, :focus`；`QueryListRefreshToolbar` 自身的 `focus-visible` 事实不在本项范围、不得机械替换 | §7.4.3、§7.12.1 第 17、17a 项 |
+| 4 | 候选决策矩阵中“无自动刷新的页面无需传参即可不渲染倒计时段”的旧表述，与“`countdown` 必填但可空”自相矛盾 → 改为“无自动刷新的页面**显式传 `countdown=null`**，即可不渲染倒计时段”，并把全篇统一为“必填但可空”的唯一表述 | §6.1 候选 5、§7.4.5、§7.4.7 |
+
+以下结论在 R2 中**保持不变**，且其权威取值仍只在 §6.1、§6.2、§7.5.1、§7.5.4、§7.7、
+§7.8.3 给出——本节**不重复声明**，以免产生第二处事实来源：
+
+- 候选决策计数与全部候选结论（见 §6.1、§6.2）；
+- 稳定滚动条槽的唯一方案仍为**路由元数据**、目标仍为 `MainLayout` 内容区域（见 §7.7）；
+- 三个行为 Composable 阶段一**全部延后**（见 §7.8.3）；
+- 按钮高度基线状态仍为**未定义、未改变**（见 §7.5.4）；
+- R1 已确认的页面壳双层内边距事实、结果面板四段结构与 divider/正文几何、
+  查询/重置按钮完整视觉、Tooltip 两类内容宽度目标、必填可空 `countdown`、
+  操作组“内部永不拆散 / 整组可换行”——**全部保持**。
+
+R2 仍是**纯文档纠正任务**：**未创建任何组件、Composable、路由元数据或样式**，
+**未修改“源库快照状态”页面或任何其他页面**，**未迁移任何页面**，
+**未执行任何测试、构建或浏览器验证**，**未进入实现阶段**。
+
+`implementation_authorization_status` 仍为 `NOT_GRANTED`。R2 的记录**不包含**
+任何结果提交号（该提交号在 R2 完成 Commit 并由远程复审时才会产生）。
+本文件继续只使用 `SHARED_COMPONENT_DESIGN_DECISION_DRAFT` 一个标记，
+**未使用** `README.md` §5 的四类保留标记。
+
+R2 完成后仍需 **ChatGPT 从远程 Git 复审**，随后由**项目负责人**决定是否批准；
+在此之前公共组件实现状态、页面迁移状态与模板实现状态均**不得**由 `NOT_STARTED`
+改为任何已实现取值。
