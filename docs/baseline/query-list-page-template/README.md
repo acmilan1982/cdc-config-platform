@@ -17,7 +17,10 @@ query_list_page_template_document_status=APPROVED
 query_list_page_template_implementation_status=NOT_STARTED
 shared_component_implementation_status=IMPLEMENTED_FORMAL_ACCEPTANCE_EXECUTED_PENDING_CHATGPT_REVIEW
 shared_component_formal_acceptance_execution_status=PASS
-shared_component_formal_acceptance_review_status=PENDING_CHATGPT_REMOTE_GIT_REVIEW
+shared_component_formal_acceptance_review_status=PENDING_CHATGPT_R1_REMOTE_GIT_REVIEW
+chatgpt_formal_acceptance_r0_review_status=CHANGES_REQUIRED_TWO_DOCUMENT_EVIDENCE_CORRECTIONS_ONLY
+formal_acceptance_r1_correction_task=QUERY-LIST-PAGE-SHARED-COMPONENT-FORMAL-ACCEPTANCE-001-R1
+formal_acceptance_r1_correction_status=APPLIED_PENDING_CHATGPT_R1_REVIEW
 shared_component_project_owner_acceptance_status=PENDING
 page_migration_status=NOT_STARTED
 reference_feature_status=FINAL_ACCEPTED_AND_CLOSED
@@ -252,16 +255,23 @@ ChatGPT 对 R2 的独立复审结论为 `APPROVED`；
 （`QUERY-LIST-PAGE-SHARED-COMPONENT-FORMAL-ACCEPTANCE-001`，`2026-09-17`）
 已执行 17 项强制验收用例并全部通过。
 
-下一条唯一入口是**ChatGPT 从远程 Git 对该正式验收执行的独立复审**：
+下一条唯一入口是**ChatGPT 从远程 Git 对该正式验收执行的 R1 独立复审**：
 
 ```text
-CHATGPT_QUERY_LIST_PAGE_SHARED_COMPONENT_FORMAL_ACCEPTANCE_REVIEW_FROM_REMOTE_GIT
+CHATGPT_QUERY_LIST_PAGE_SHARED_COMPONENT_FORMAL_ACCEPTANCE_R1_REVIEW_FROM_REMOTE_GIT
 ```
 
 该入口**只表示**等待 ChatGPT 复审，**不表示**复审已通过、**不表示**项目负责人已最终接受、
 **不表示**任何页面迁移已获授权：仍**不得**迁移任何页面、
 **不得**把 `page_migration_status` 改为任何非 `NOT_STARTED` 值、
 **不得**自行声明项目负责人最终接受。
+
+正式验收执行的 ChatGPT 远程复审结论为
+`CHANGES_REQUIRED_TWO_DOCUMENT_EVIDENCE_CORRECTIONS_ONLY`
+（仅两处验收文档内部数字不一致：报告 §13「未实现建议」计数、`AC-001`/`AC-017` 的
+worktree 数量 `70/71`）；R1 纯文档纠正任务
+（`QUERY-LIST-PAGE-SHARED-COMPONENT-FORMAL-ACCEPTANCE-001-R1`）已定向应用该两处纠正
+并**未**重跑任何验收用例、测试、构建或浏览器验证。
 
 ## 8. 使用本模板的注意事项
 
@@ -438,4 +448,33 @@ CHATGPT_QUERY_LIST_PAGE_SHARED_COMPONENT_FORMAL_ACCEPTANCE_REVIEW_FROM_REMOTE_GI
   下一条唯一入口为
   `CHATGPT_QUERY_LIST_PAGE_SHARED_COMPONENT_FORMAL_ACCEPTANCE_REVIEW_FROM_REMOTE_GIT`。
   **正式验收执行通过不等于 ChatGPT 远程复审已通过、不等于项目负责人最终接受、
+  不等于任何页面迁移已获授权。**
+
+- `2026-09-17`（`QUERY-LIST-PAGE-SHARED-COMPONENT-FORMAL-ACCEPTANCE-001-R1`，**纯文档纠正**）：
+  ChatGPT 从远程 Git 对正式验收执行提交
+  （`63d26f8ce981d7708798fa48a452e148b1ea8698`）的复审结论为
+  `CHANGES_REQUIRED_TWO_DOCUMENT_EVIDENCE_CORRECTIONS_ONLY`，本 R1 任务只定向纠正两处
+  验收文档内部数字不一致，**未**重跑正式验收、**未**执行任何测试/构建/浏览器验证、
+  **未**启动服务、**未**修改实现或测试代码：
+  1. 正式验收报告 §13 的「未实现建议」计数由自相矛盾的
+     `proposed_not_implemented_count=0（保留 9 处未实现建议标记）`
+     纠正为 `proposed_not_implemented_count=9`；
+  2. `AC-001` 的 worktree 数量 `71` 与 `AC-017` 的 `70` 不一致 —— 依据 Git worktree
+     注册表时点证据（`.git/worktrees` 目录 mtime 与
+     `…-implementation-001-r1` 注册项 birth 同为 `2026-09-17 12:19:35`，
+     为该注册表成员最后一次变化；此后至提交时总数恒为 `70` = 1 主工作区 + 69 已登记
+     worktree），判定 `71` 为同一时点笔误，两份证据统一为 `70`，
+     「验收前后数量一致、全部保持原状」的结论经证据复核后继续成立
+     （推证见 `evidence/…/AC-017-scope-freeze-safety.md` §7.1）。
+  两处纠正均**未**新增或删除任何保留标记字面量：模板标记冻结保持 `48/0/43/9`、
+  设计决策冻结保持 `66/0`；17 项验收结论保持 `17/17/0`，定向测试 `367/367/0`、
+  全量测试 `967/967/0`、严格几何 `263/0`、负向控制结论均保持不变。
+  更新后状态：
+  `chatgpt_formal_acceptance_r0_review_status=CHANGES_REQUIRED_TWO_DOCUMENT_EVIDENCE_CORRECTIONS_ONLY`、
+  `formal_acceptance_r1_correction_status=APPLIED_PENDING_CHATGPT_R1_REVIEW`、
+  `shared_component_formal_acceptance_review_status=PENDING_CHATGPT_R1_REMOTE_GIT_REVIEW`、
+  `shared_component_project_owner_acceptance_status=PENDING`、
+  `page_migration_status=NOT_STARTED`；下一条唯一入口为
+  `CHATGPT_QUERY_LIST_PAGE_SHARED_COMPONENT_FORMAL_ACCEPTANCE_R1_REVIEW_FROM_REMOTE_GIT`。
+  **R1 纠正完成不等于 ChatGPT R1 远程复审已通过、不等于项目负责人最终接受、
   不等于任何页面迁移已获授权。**

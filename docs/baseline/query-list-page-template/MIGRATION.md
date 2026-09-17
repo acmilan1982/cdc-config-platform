@@ -214,7 +214,7 @@ shared_component_design_path=docs/baseline/query-list-page-template/SHARED_COMPO
 ## 7. 当前有效下一步
 
 ```text
-next_step=CHATGPT_QUERY_LIST_PAGE_SHARED_COMPONENT_FORMAL_ACCEPTANCE_REVIEW_FROM_REMOTE_GIT
+next_step=CHATGPT_QUERY_LIST_PAGE_SHARED_COMPONENT_FORMAL_ACCEPTANCE_R1_REVIEW_FROM_REMOTE_GIT
 ```
 
 公共组件详细设计任务（`QUERY-LIST-PAGE-SHARED-COMPONENT-DESIGN-001`）已产出草案
@@ -234,6 +234,10 @@ ChatGPT 对 R2 的独立复审结论为 `APPROVED`，批准收口任务
 公共组件（**未**迁移第二个页面）；随后独立正式验收任务
 `QUERY-LIST-PAGE-SHARED-COMPONENT-FORMAL-ACCEPTANCE-001` 已执行本轮正式验收。
 该入口**不表示** ChatGPT 远程复审已经通过、**也不表示**已经选择或迁移任何页面。
+该正式验收执行的 ChatGPT 远程复审结论为
+`CHANGES_REQUIRED_TWO_DOCUMENT_EVIDENCE_CORRECTIONS_ONLY`（仅两处验收文档内部数字不一致）；
+纯文档 R1 纠正任务（`QUERY-LIST-PAGE-SHARED-COMPONENT-FORMAL-ACCEPTANCE-001-R1`）
+已定向应用该两处纠正，**未**重跑验收、**未**执行测试/构建/浏览器验证、**未**修改实现或测试。
 
 边界继续保持：本文件保持 `page_migration_status=NOT_STARTED`，
 `shared_component_implementation_status` 现为

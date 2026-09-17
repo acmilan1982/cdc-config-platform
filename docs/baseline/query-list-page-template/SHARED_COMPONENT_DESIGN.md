@@ -31,7 +31,10 @@ chatgpt_r1_implementation_review_status=APPROVED
 formal_acceptance_task=QUERY-LIST-PAGE-SHARED-COMPONENT-FORMAL-ACCEPTANCE-001
 formal_acceptance_base_commit_id=d1cd3b1fffb56b50793e576a369325e94063cabc
 formal_acceptance_execution_status=PASS
-formal_acceptance_review_status=PENDING_CHATGPT_REMOTE_GIT_REVIEW
+formal_acceptance_review_status=PENDING_CHATGPT_R1_REMOTE_GIT_REVIEW
+chatgpt_formal_acceptance_r0_review_status=CHANGES_REQUIRED_TWO_DOCUMENT_EVIDENCE_CORRECTIONS_ONLY
+formal_acceptance_r1_correction_task=QUERY-LIST-PAGE-SHARED-COMPONENT-FORMAL-ACCEPTANCE-001-R1
+formal_acceptance_r1_correction_status=APPLIED_PENDING_CHATGPT_R1_REVIEW
 shared_component_project_owner_acceptance_status=PENDING
 ```
 
@@ -2368,7 +2371,24 @@ page_migration_status=NOT_STARTED
 reference_feature_status=FINAL_ACCEPTED_AND_CLOSED
 ```
 
-### 12.4 边界与未授权事项
+### 12.4 R1 文档证据纠正（`QUERY-LIST-PAGE-SHARED-COMPONENT-FORMAL-ACCEPTANCE-001-R1`）
+
+ChatGPT 从远程 Git 对正式验收执行提交
+（`63d26f8ce981d7708798fa48a452e148b1ea8698`）的复审结论为
+`CHANGES_REQUIRED_TWO_DOCUMENT_EVIDENCE_CORRECTIONS_ONLY`。纯文档 R1 纠正任务只定向
+纠正两处验收文档内部数字不一致（报告 §13 未实现建议计数、`AC-001`/`AC-017` 的
+worktree 数量 `70/71`），**未**改变本节任何设计或验收结论。
+
+```text
+chatgpt_formal_acceptance_r0_review_status=CHANGES_REQUIRED_TWO_DOCUMENT_EVIDENCE_CORRECTIONS_ONLY
+formal_acceptance_r1_correction_status=APPLIED_PENDING_CHATGPT_R1_REVIEW
+formal_acceptance_execution_status=PASS
+formal_acceptance_review_status=PENDING_CHATGPT_R1_REMOTE_GIT_REVIEW
+acceptance_rerun_required=NO
+formal_acceptance_rerun_status=NOT_RUN_NOT_REQUIRED
+```
+
+### 12.5 边界与未授权事项
 
 - 正式验收**执行**通过**不等于** ChatGPT 远程复审已通过，**不等于**项目负责人最终接受；
 - 本轮**未**写入 `FINAL_ACCEPTED`、`FINAL_ACCEPTED_AND_CLOSED`、`PROJECT_OWNER_APPROVED`
@@ -2380,5 +2400,5 @@ reference_feature_status=FINAL_ACCEPTED_AND_CLOSED
 - **未访问**数据库（无读无写）、**未**主动访问或写入 ZooKeeper、**未访问** Kafka。
 
 ```text
-next_step=CHATGPT_QUERY_LIST_PAGE_SHARED_COMPONENT_FORMAL_ACCEPTANCE_REVIEW_FROM_REMOTE_GIT
+next_step=CHATGPT_QUERY_LIST_PAGE_SHARED_COMPONENT_FORMAL_ACCEPTANCE_R1_REVIEW_FROM_REMOTE_GIT
 ```

@@ -141,12 +141,65 @@ existing_worktrees_preservation_status=PRESERVED_UNTOUCHED
 - 主工作区 `/agent/cdc-config-platform` 验收前后均为 `develop @ 4222b0a…`，
   `git status --short` 行数恒为 116（全部为任务开始前既存的、与本任务无关的修改），
   本任务**未**修改、覆盖、暂存、提交或丢弃其中任何内容；
-- `git worktree list` 共 70 条，本任务只使用其中 1 条
+- `git worktree list` 总量恒为 **70** 条（1 个主工作区 + 69 个已登记隔离 worktree），
+  本任务只使用其中 1 条
   （`/agent/query-list-page-shared-component-implementation-001-r1`）；
 - 本任务**未**进入、清理、删除、`reset`、`stash` 或修改任何其它既有 worktree；
 - 本任务**未**执行 `git worktree prune` / `remove`；本任务工作区在任务结束后**保留**，
   等待复审；
 - 未删除任何既有报告或证据。
+
+### 7.1 worktree 数量时点核验（R1 纠正）
+
+基准提交中本文件与 `AC-001-base-isolation-and-services.md` 曾分别写为 `70` 与 `71`，
+两者不一致。按提示词 §6.1（同一时点的笔误）核验并统一如下。
+
+**对应的登记事实（命令与输出位置）**：
+
+| 项 | 值 | 来源 |
+|---|---|---|
+| 注册表目录 mtime | `2026-09-17 12:19:35.714526647 +0800` | `stat -c '%y' .git/worktrees` |
+| 本任务工作区注册项 birth | `2026-09-17 12:19:35.714526647 +0800` | `stat -c '%w' .git/worktrees/query-list-page-shared-component-implementation-001-r1` |
+| 注册表当前条目数 | 69 | `ls -1 .git/worktrees \| wc -l` |
+| `git worktree list` 当前条数 | 70 | `git worktree list \| wc -l` |
+| prunable 条目数 | 0 | `git worktree list --porcelain \| grep -c '^prunable'` |
+| 已登记路径缺失数 | 0 | 逐个读取 `.git/worktrees/*/gitdir` 后 `test -d` |
+
+**推证**：`.git/worktrees` 目录 mtime 是该注册表**成员集合**最后一次发生增删的时刻；
+实测为 `2026-09-17 12:19:35`，与 `…-implementation-001-r1` 注册项的 birth 时间逐微秒相同，
+即该时刻的唯一变化就是本任务工作区被登记。注册表中 `2026-09-17` 只有该条目，
+其余条目 birth 均为 `2026-09-16`。因此自 `12:19:35` 起直到提交时，
+`git worktree list` 总数**恒为 70**，完整覆盖正式验收窗口（约 `13:18`–`13:41`），
+且 `12:19:35` 早于验收开始。
+
+**结论**：
+
+- 被证明的实际数量为 **70**（起始与结束一致，无外部并发变化）；
+- `AC-001` 中的 `71` 为同一时点的笔误，已按提示词 §6.1 统一为唯一可证明的 `70`；
+  该文件已同步纠正并指向本节；
+- 是否存在本任务之外的并发 worktree 变化：**否**（注册表成员自 `12:19:35` 起不变）；
+- 本任务自身 worktree 路径：`/agent/query-list-page-shared-component-implementation-001-r1`，
+  状态：**保留**（未清理、未 `prune`、未删除），等待复审。
+
+```text
+worktree_count_conflict_resolution=TYPO_CORRECTED
+worktree_count_at_acceptance_start=70
+worktree_count_at_acceptance_end=70
+worktree_count_at_acceptance_commit=70
+worktree_count_evidence_source=.git/worktrees registry (mtime + entry birth times) + git worktree list
+external_concurrent_worktree_change_status=NONE_DETECTED
+main_worktree_preservation_status=PRESERVED_UNTOUCHED
+existing_worktrees_preservation_status=PRESERVED_UNTOUCHED
+```
+
+原始命令输出留存于验收临时目录：
+
+```text
+/tmp/query-list-page-shared-component-formal-acceptance-001/r1-worktree-count-evidence.log
+```
+
+该文件逐条记录本节全部命令与其原始输出；验收服务的日志同在该目录
+（`backend.log`、`frontend.log`）。上述结论不依赖任何未留存的记录。
 
 ## 8. 进程与端口收口
 

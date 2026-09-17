@@ -242,7 +242,7 @@ sql_config_diff=ZERO
 template_rule_approved_count=48
 template_rule_draft_count=0
 reference_implementation_fact_count=43
-proposed_not_implemented_count=0（保留 9 处未实现建议标记）
+proposed_not_implemented_count=9
 shared_component_design_decision_approved_count=66
 shared_component_design_decision_draft_count=0
 ```
@@ -269,8 +269,11 @@ shared_component_design_decision_draft_count=0
 ```text
 shared_component_design_status=APPROVED
 shared_component_implementation_status=IMPLEMENTED_FORMAL_ACCEPTANCE_EXECUTED_PENDING_CHATGPT_REVIEW
+chatgpt_formal_acceptance_r0_review_status=CHANGES_REQUIRED_TWO_DOCUMENT_EVIDENCE_CORRECTIONS_ONLY
+formal_acceptance_r1_correction_status=APPLIED_PENDING_CHATGPT_R1_REVIEW
 formal_acceptance_execution_status=PASS
-formal_acceptance_review_status=PENDING_CHATGPT_REMOTE_GIT_REVIEW
+formal_acceptance_review_status=PENDING_CHATGPT_R1_REMOTE_GIT_REVIEW
+acceptance_rerun_required=NO
 project_owner_acceptance_status=PENDING
 page_migration_status=NOT_STARTED
 ```
@@ -292,7 +295,7 @@ page_migration_status=NOT_STARTED
 ## 16. 下一入口
 
 ```text
-next_step=CHATGPT_QUERY_LIST_PAGE_SHARED_COMPONENT_FORMAL_ACCEPTANCE_REVIEW_FROM_REMOTE_GIT
+next_step=CHATGPT_QUERY_LIST_PAGE_SHARED_COMPONENT_FORMAL_ACCEPTANCE_R1_REVIEW_FROM_REMOTE_GIT
 ```
 
 ## 17. 证据索引
@@ -312,3 +315,33 @@ service_log_directory=/tmp/query-list-page-shared-component-formal-acceptance-00
 | `AC-015-strict-geometry.md` | AC-015 |
 | `AC-016-negative-controls.md` | AC-016 |
 | `AC-017-scope-freeze-safety.md` | AC-017 |
+
+## 18. R1 文档证据纠正记录（`QUERY-LIST-PAGE-SHARED-COMPONENT-FORMAL-ACCEPTANCE-001-R1`）
+
+基准提交 `63d26f8ce981d7708798fa48a452e148b1ea8698` 的远程复审结论为
+`CHANGES_REQUIRED_TWO_DOCUMENT_EVIDENCE_CORRECTIONS_ONLY`（仅两处文档内部数字不一致）。
+本任务只做这两处定向纠正，**未**重跑任何验收用例、测试、构建或浏览器验证。
+
+| # | 纠正 | 纠正前 | 纠正后 | 依据 |
+|---|---|---|---|---|
+| 1 | 本报告 §13「未实现建议」计数自相矛盾（字段值写作 `0`，紧跟括注却写「保留 9 处未实现建议标记」） | 字段名不变，取值为 `0`（与括注矛盾） | 字段名不变，取值为 `9`（见 §13） | 冻结事实 `48/0/43/9`、`AC-017` §2「未实现建议 9→9」 |
+| 2 | worktree 数量在两份证据中不一致 | `AC-001` 写作 `71`，`AC-017` 写作 `70` | 统一为 `70` | Git worktree 注册表时点证据，见 `AC-017` §7.1 |
+
+两处纠正均**未**新增或删除任何保留标记字面量；模板标记冻结保持 `48/0/43/9`，
+设计决策冻结保持 `66/0`。17 项验收结论保持 `17/17/0`，定向测试 `367/367/0`、
+全量测试 `967/967/0`、严格几何 `263/0`、负向控制结论均保持不变。
+
+```text
+formal_acceptance_execution_status=PASS
+acceptance_case_count=17
+acceptance_pass_count=17
+acceptance_fail_count=0
+implementation_finding_count=0
+test_finding_count=0
+acceptance_rerun_required=NO
+formal_acceptance_rerun_status=NOT_RUN_NOT_REQUIRED
+test_status=NOT_RUN_DOCUMENT_CORRECTION_ONLY
+build_status=NOT_RUN_DOCUMENT_CORRECTION_ONLY
+browser_verification_status=NOT_RUN_DOCUMENT_CORRECTION_ONLY
+service_lifecycle_status=NOT_RUN
+```

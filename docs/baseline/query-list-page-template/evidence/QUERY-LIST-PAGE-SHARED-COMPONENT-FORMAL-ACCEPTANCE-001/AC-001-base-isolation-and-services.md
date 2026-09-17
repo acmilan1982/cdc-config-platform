@@ -23,7 +23,12 @@
 - 无其它任务占用该工作区；
 - 未移动主工作区分支：主工作区 `/agent/cdc-config-platform` 仍为 `4222b0a [develop]`，会话开始前后一致。
 
-未进入、清理、删除、reset、stash 或修改任何其它既有 worktree（`git worktree list` 共 71 项，全部保持原状）。
+未进入、清理、删除、reset、stash 或修改任何其它既有 worktree：`git worktree list`
+在本任务整个窗口内的总量恒为 **70** 项（1 个主工作区 + 69 个已登记隔离 worktree），
+本任务只使用其中 1 项（`/agent/query-list-page-shared-component-implementation-001-r1`），
+验收开始与结束两次检查数量一致、全部保持原状。（此前本文件一度写作 `71`，
+经 Git worktree 注册表证据核验为笔误；完整推证见
+`AC-017-scope-freeze-safety.md` §7.1。）
 
 ## 3. 环境预检
 
