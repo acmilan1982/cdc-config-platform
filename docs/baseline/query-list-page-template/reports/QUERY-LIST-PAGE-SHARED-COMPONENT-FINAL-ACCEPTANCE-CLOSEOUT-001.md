@@ -316,7 +316,10 @@ design_decision_freeze_status=PASS_66_0
 
 - **未**重跑原 17 项正式验收；
 - **未**重跑补充 21 项正式验收；
-- **未**重跑负向控制；
+- **未**重跑原正式验收及补充正式验收中的**既有产品 / 验收负向控制**；
+- 与之区分：本收口任务**仅**在 `/tmp` 临时副本上执行了 3 项**收口文档一致性校验器**
+  负向对照（迁移状态改为已开始 / 迁移授权改为已授予 / 把验收数量错误累计），
+  用于证明收口状态与迁移禁令校验不是空转，**不属于**产品测试、正式验收或正式验收重跑；
 - **未**执行 Maven、Vitest、`vue-tsc` 或 npm build；
 - **未**启动浏览器或进行页面 smoke check；
 - **未**启动、停止、重启或访问当前 `5173` / `8080` 服务；
@@ -328,6 +331,9 @@ design_decision_freeze_status=PASS_66_0
 - **未**顺手修复无关文档问题。
 
 ```text
+existing_formal_acceptance_negative_controls_rerun_status=NOT_RUN_NOT_REQUIRED
+closeout_document_validator_negative_control_status=PASS_3_OF_3_NON_ZERO_EXIT
+closeout_document_validator_negative_control_restore_status=BYTE_IDENTICAL_RESTORED
 test_status=NOT_RUN_NOT_REQUIRED_DOC_ONLY
 build_status=NOT_RUN_NOT_REQUIRED_DOC_ONLY
 browser_verification_status=NOT_RUN_NOT_REQUIRED_DOC_ONLY
@@ -397,7 +403,7 @@ r1_git_hooks_execution_status=NO_ACTIVE_HOOKS_PRESENT
 
 ## 11. 文档一致性校验与负向控制
 
-提交前执行了专用文档一致性校验，覆盖 §10 全部 26 项检查（含远程基准一致、
+提交前执行了专用文档一致性校验，覆盖**任务提示词 §10 所列 26 类强制校验**（含远程基准一致、
 隔离 worktree 干净、变更路径白名单、收口报告存在且任务编号唯一、三份入口文档当前状态一致、
 各状态字段取值、唯一当前入口、17 与 21 包含关系准确且无累计错误、项目负责人原话逐字记录、
 R1 复审 `APPROVED` 记录、R0 hooks 过程偏差完整保留、冻结计数、既有报告与证据零变化、
@@ -405,14 +411,23 @@ R1 复审 `APPROVED` 记录、R0 hooks 过程偏差完整保留、冻结计数�
 `git diff` 与 `git diff --cached` 检查、凭据扫描、既有 worktree 保持原样、
 结果提交父提交严格为唯一基准）。
 
-负向控制在 `/tmp/query-list-page-shared-component-final-acceptance-closeout-001/`
+校验分两个运行时点如实记录：提交前 `43/43`；提交后增加“结果提交父提交唯一且严格为基准”
+与“提交后工作区干净”两项，为 `45/45`。
+
+**收口文档一致性校验器**的负向对照在 `/tmp/query-list-page-shared-component-final-acceptance-closeout-001/`
 的临时副本上进行，**未**修改 Git 工作区，**未**提交任何临时脚本或日志；
 变异后校验器返回非零退出码，随后临时副本被**逐字节还原**。
+这 3 项负向对照（迁移状态改为已开始 / 迁移授权改为已授予 / 把验收数量错误累计）
+**不属于**产品测试、正式验收或正式验收重跑；原正式验收及补充正式验收中的
+**既有产品 / 验收负向控制本轮未重跑**。
 
 ```text
-mandatory_check_status=PASS
-negative_control_status=PASS
+pre_commit_validator_status=PASS_43_OF_43
+post_commit_validator_status=PASS_45_OF_45
+mandatory_check_status=PASS_45_OF_45
+negative_control_status=PASS_3_OF_3_NON_ZERO_EXIT
 negative_control_restore_status=BYTE_IDENTICAL_RESTORED
+existing_formal_acceptance_negative_controls_rerun_status=NOT_RUN_NOT_REQUIRED
 ```
 
 ## 12. 后续入口

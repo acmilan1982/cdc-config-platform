@@ -582,7 +582,14 @@ worktree 数量 `70/71`）；R1 纯文档纠正任务
   ```text
   我确认公共组件及“源库快照状态”参考页最终验收通过，可以执行最终接受收口；暂不授权其他页面迁移。
   ```
-  本任务为**纯文档收口**：**未**重跑原 17 项或补充 21 项验收、**未**重跑负向控制、
+  本任务为**纯文档收口**：**未**重跑原 17 项或补充 21 项验收、
+  **未**重跑原正式验收及补充正式验收中的**既有产品 / 验收负向控制**
+  （`existing_formal_acceptance_negative_controls_rerun_status=NOT_RUN_NOT_REQUIRED`）；
+  与之区分：本收口任务**仅**在 `/tmp` 临时副本上执行了 3 项**收口文档一致性校验器**
+  负向对照（迁移状态改为已开始 / 迁移授权改为已授予 / 把验收数量错误累计），
+  用于证明收口状态与迁移禁令校验不是空转，**不属于**产品测试、正式验收或正式验收重跑
+  （`closeout_document_validator_negative_control_status=PASS_3_OF_3_NON_ZERO_EXIT`、
+  `closeout_document_validator_negative_control_restore_status=BYTE_IDENTICAL_RESTORED`）；
   **未**执行测试 / 构建 / 浏览器验证、**未**启动或停止任何服务、**未**访问数据库 /
   ZooKeeper / Kafka，**未**修改任何生产代码 / 测试代码 / 依赖 / 锁文件 / SQL / 配置，
   **未**修改任何既有报告或证据（逐字节不变）。
