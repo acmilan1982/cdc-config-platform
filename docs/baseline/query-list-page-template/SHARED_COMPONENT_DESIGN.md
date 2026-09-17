@@ -2511,3 +2511,35 @@ page_migration_status=NOT_STARTED
 **不等于**项目负责人最终接受；**未访问**数据库写操作、**未**主动访问或写入 ZooKeeper、
 **未访问** Kafka。下一条唯一入口为
 `CHATGPT_QUERY_LIST_PAGE_SHARED_TOOLTIP_HOVER_RELIABILITY_SUPPLEMENTAL_FORMAL_ACCEPTANCE_REVIEW_FROM_REMOTE_GIT`。
+
+### 12.7 补充验收的 R1 纯文档与证据纠正（`2026-09-17`）
+
+ChatGPT 对补充验收 R0 提交 `7077b839c51250778e7462d39c92deba69e88e09` 的远程 Git 复审结论为
+`CHANGES_REQUIRED_FOUR_DOCUMENT_EVIDENCE_CORRECTIONS_ONLY`。R1 纠正任务
+`QUERY-LIST-PAGE-SHARED-TOOLTIP-HOVER-RELIABILITY-SUPPLEMENTAL-FORMAL-ACCEPTANCE-001-R1`
+只定向纠正四类文档 / 证据问题：R0 提交的 hooks 路径覆盖事实披露、参考页名称、
+`git status --short` 采集时点、两处文字错误。
+
+- R0 提交创建时使用了 `-c core.hooksPath=.git/hooks`，覆盖了 Git 默认的 `$GIT_DIR/hooks`
+  查找路径；该仓库活动 hook 数为 0（仅有 `*.sample`），故**无实际 hook 被跳过**，
+  但这是一次**已发生的过程偏差**，如实记录，不再描述为"未覆盖 / 未绕过 hooks"；
+- 本轮公共组件的**参考页**是**"源库快照状态"**（`/monitor/data-source-state`）；
+  "数据同步进度"（`/monitor/topic-offset`）只是后续迁移的**优先试点候选**。
+
+R1 **未**重跑 21 项验收、测试、构建、浏览器验证或负向控制，**未**修改任何生产代码 /
+测试代码 / 依赖 / 配置 / SQL，**未**改变 21/21 PASS 的执行事实；模板标记冻结保持
+`48/0/43/9`、设计决策冻结保持 `66/0`。
+
+```text
+chatgpt_supplemental_formal_acceptance_r0_review_status=CHANGES_REQUIRED_FOUR_DOCUMENT_EVIDENCE_CORRECTIONS_ONLY
+supplemental_formal_acceptance_r1_correction_task=QUERY-LIST-PAGE-SHARED-TOOLTIP-HOVER-RELIABILITY-SUPPLEMENTAL-FORMAL-ACCEPTANCE-001-R1
+supplemental_formal_acceptance_r1_correction_status=APPLIED_PENDING_CHATGPT_R1_REVIEW
+supplemental_formal_acceptance_execution_status=PASS_UNCHANGED_21_OF_21
+acceptance_rerun_status=NOT_RUN_NOT_REQUIRED_DOCUMENT_CORRECTION_ONLY
+project_owner_final_acceptance_status=PENDING
+page_migration_status=NOT_STARTED
+```
+
+**R1 纠正不等于远程复审通过、不等于项目负责人最终接受**；**未**迁移任何页面、
+**未**启动页面迁移。下一条唯一入口为
+`CHATGPT_QUERY_LIST_PAGE_SHARED_TOOLTIP_HOVER_RELIABILITY_SUPPLEMENTAL_FORMAL_ACCEPTANCE_R1_REVIEW_FROM_REMOTE_GIT`。

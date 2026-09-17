@@ -297,3 +297,30 @@ page_migration_status=NOT_STARTED
 **不得**让参考页之外的页面接入公共组件、**不得**把任何 `NOT_STARTED` 状态改写为收口态。
 下一条唯一入口为
 `CHATGPT_QUERY_LIST_PAGE_SHARED_TOOLTIP_HOVER_RELIABILITY_SUPPLEMENTAL_FORMAL_ACCEPTANCE_REVIEW_FROM_REMOTE_GIT`。
+
+### R1 纯文档与证据纠正（`2026-09-17`）
+
+ChatGPT 对补充验收 R0 提交 `7077b839c51250778e7462d39c92deba69e88e09` 的远程 Git 复审结论为
+`CHANGES_REQUIRED_FOUR_DOCUMENT_EVIDENCE_CORRECTIONS_ONLY`。R1 纠正任务
+`QUERY-LIST-PAGE-SHARED-TOOLTIP-HOVER-RELIABILITY-SUPPLEMENTAL-FORMAL-ACCEPTANCE-001-R1`
+只定向纠正四类文档 / 证据问题（R0 hooks 路径覆盖事实披露、参考页名称、
+`git status --short` 采集时点、两处文字错误），**未**重跑验收、测试、构建或浏览器验证，
+**未**修改任何生产代码 / 测试代码 / 依赖 / 配置 / SQL，
+**未**改变补充验收 21/21 PASS 的执行事实。
+
+参考页边界再次明确：本轮公共组件的**参考页**是**"源库快照状态"**
+（`/monitor/data-source-state`）；"数据同步进度"（`/monitor/topic-offset`）
+只是后续迁移的**优先试点候选**，不是本轮参考页。
+
+```text
+chatgpt_supplemental_formal_acceptance_r0_review_status=CHANGES_REQUIRED_FOUR_DOCUMENT_EVIDENCE_CORRECTIONS_ONLY
+supplemental_formal_acceptance_r1_correction_task=QUERY-LIST-PAGE-SHARED-TOOLTIP-HOVER-RELIABILITY-SUPPLEMENTAL-FORMAL-ACCEPTANCE-001-R1
+supplemental_formal_acceptance_r1_correction_status=APPLIED_PENDING_CHATGPT_R1_REVIEW
+supplemental_formal_acceptance_execution_status=PASS_UNCHANGED_21_OF_21
+acceptance_rerun_status=NOT_RUN_NOT_REQUIRED_DOCUMENT_CORRECTION_ONLY
+project_owner_final_acceptance_status=PENDING
+page_migration_status=NOT_STARTED
+```
+
+**R1 纠正不等于远程复审通过、不等于项目负责人最终接受**；边界与上一节一致，
+`page_migration_status` 保持 `NOT_STARTED`，**未**选择试点页面、**未**启动任何页面迁移。

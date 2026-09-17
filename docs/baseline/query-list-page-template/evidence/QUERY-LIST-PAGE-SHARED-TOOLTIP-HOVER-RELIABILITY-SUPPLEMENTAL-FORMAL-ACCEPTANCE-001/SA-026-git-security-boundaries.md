@@ -37,7 +37,7 @@ git worktree list --porcelain | grep -c '^worktree '   => 71
 **未在** `/agent/cdc-config-platform` 中执行任何验收测量或写操作（§3 明令禁止）；
 所有命令均在 detached 验收工作树或 `/tmp` 隔离副本中执行。
 
-## 3. 零 diff 类别
+## 3. 零 diff 类别与 `git status --short` 的采集时点
 
 本轮为**纯验收加记录**任务，不修改任何生产/测试/依赖/配置内容：
 
@@ -52,12 +52,60 @@ git worktree list --porcelain | grep -c '^worktree '   => 71
 | 其他页面 | ZERO | ZERO |
 | 原验收报告与原证据目录 | 不得改写 | 不在改动列表内 |
 
-`git status --short` 在提交前**只**列出：
+### 3.1 采集时点一：三份基线文档状态追加**之前**
+
+该时点仅出现本轮新增的报告与证据目录；三份基线文档的状态追加尚未写入，
+因此**该输出不能代表最终提交前的范围**：
 
 ```text
 ?? docs/baseline/query-list-page-template/reports/QUERY-LIST-PAGE-SHARED-TOOLTIP-HOVER-RELIABILITY-SUPPLEMENTAL-FORMAL-ACCEPTANCE-001.md
 ?? docs/baseline/query-list-page-template/evidence/QUERY-LIST-PAGE-SHARED-TOOLTIP-HOVER-RELIABILITY-SUPPLEMENTAL-FORMAL-ACCEPTANCE-001/
 ```
+
+### 3.2 采集时点二：最终暂存 / 提交前（完整范围）
+
+三份基线文档追加完成后、`git add` 之后采集：
+
+```text
+M  docs/baseline/query-list-page-template/README.md
+M  docs/baseline/query-list-page-template/MIGRATION.md
+M  docs/baseline/query-list-page-template/SHARED_COMPONENT_DESIGN.md
+A  docs/baseline/query-list-page-template/reports/QUERY-LIST-PAGE-SHARED-TOOLTIP-HOVER-RELIABILITY-SUPPLEMENTAL-FORMAL-ACCEPTANCE-001.md
+A  docs/baseline/query-list-page-template/evidence/QUERY-LIST-PAGE-SHARED-TOOLTIP-HOVER-RELIABILITY-SUPPLEMENTAL-FORMAL-ACCEPTANCE-001/...
+```
+
+最终提交 `7077b839c51250778e7462d39c92deba69e88e09` 的精确范围（`git show --name-status` 实测）：
+
+```text
+3 个基线文档 + 1 个报告 + 11 个证据文件 = 15 个文件
+```
+
+<details>
+<summary>完整文件清单（15）</summary>
+
+```text
+M  docs/baseline/query-list-page-template/README.md
+M  docs/baseline/query-list-page-template/MIGRATION.md
+M  docs/baseline/query-list-page-template/SHARED_COMPONENT_DESIGN.md
+A  docs/baseline/query-list-page-template/reports/QUERY-LIST-PAGE-SHARED-TOOLTIP-HOVER-RELIABILITY-SUPPLEMENTAL-FORMAL-ACCEPTANCE-001.md
+A  .../evidence/QUERY-LIST-PAGE-SHARED-TOOLTIP-HOVER-RELIABILITY-SUPPLEMENTAL-FORMAL-ACCEPTANCE-001/SA-001-baseline-isolation-services.md
+A  .../…-001/SA-002-017-original-cases-replay.md
+A  .../…-001/SA-018-status-tooltip-immediate-reliability.md
+A  .../…-001/SA-019-key-aware-hide-lifecycle.md
+A  .../…-001/SA-020-default-320ms-freeze.md
+A  .../…-001/SA-021-scope-freeze-owner-decision.md
+A  .../…-001/SA-022-tests-typecheck-build.md
+A  .../…-001/SA-023-four-viewport-regression.md
+A  .../…-001/SA-024-strict-geometry.md
+A  .../…-001/SA-025-negative-controls.md
+A  .../…-001/SA-026-git-security-boundaries.md
+```
+
+</details>
+
+> **与 R1 提示词的差异记录**：R1 任务提示词 §7.2 记为「3 个基线文档、1 个报告和
+> 10 个证据文件，共 14 个文件」。`git show --name-status 7077b83` 实测为
+> **11 个证据文件、共 15 个文件**。此处以仓库实际提交为准；提示词的 14/10 计数有误。
 
 修正提交 `b453635…0a1cd99` 的 10 文件范围仍为原样（4 生产 / 3 测试 / 3 基线文档，`602 insertions(+), 46 deletions(-)`），
 本轮未改动其中任何一个文件。
@@ -151,7 +199,69 @@ task_service_lifecycle_status=ALL_OWN_PIDS_STOPPED  port_5273_status=RELEASED
 worktree_cleanup_status=NONE_PERFORMED
 ```
 
-## 8. 结论字段
+## 8. Git hooks 事实披露（R0 过程偏差与本轮状态）
+
+### 8.1 R0 提交（`7077b839…`）的 hooks 路径覆盖——已发生的过程偏差
+
+R0 创建提交时命令行使用了 `-c core.hooksPath=.git/hooks`。这是一次**已发生的过程偏差**，
+在此如实完整记录，不淡化、不改写为"完全合规"：
+
+```text
+r0_commit_command_hooks_override_status=USED_EXPLICIT_CORE_HOOKSPATH_OVERRIDE
+r0_commit_core_hooks_path_argument=.git/hooks
+r0_repository_configured_core_hooks_path=UNSET
+r0_default_hooks_directory_active_hook_count=0
+r0_active_hook_bypass_effect=NONE_NO_ACTIVE_HOOK_EXISTED
+r0_process_deviation_status=RECORDED
+```
+
+事实说明：
+
+- Git 默认从 `$GIT_DIR/hooks` 查找 hooks；R0 的命令行参数覆盖了该默认查找路径；
+- 相对 `core.hooksPath` 按 hooks 执行目录解析。在 linked worktree 中，工作树根目录的
+  `.git` 是**文件**（指向 `…/.git/worktrees/<name>`）而非目录，因此
+  `-c core.hooksPath=.git/hooks` **不能**被描述为与默认 `$GIT_DIR/hooks` 等价；
+- 实测仓库配置中 `core.hooksPath` 为 `UNSET`，`git rev-parse --git-path hooks` 指向
+  `/agent/cdc-config-platform/.git/hooks`，该目录下只有 `*.sample` 文件，
+  **活动 hook 数为 0**，因此**没有实际活动 hook 被跳过**；
+- 但"没有实际影响"**不等于**"没有覆盖 hooks 路径"。R0 提交**不得**再被写成
+  "未禁用 / 未绕过 hooks"。
+
+```text
+r0_hooks_override_disclosure_status=DISCLOSED_NOT_MINIMIZED
+```
+
+### 8.2 本轮（R1）提交的 hooks 状态
+
+提交前记录：
+
+```bash
+git config --show-origin --get core.hooksPath
+# （无输出，退出码 1）—— 仓库与全局均未配置，记为 UNSET；退出码 1 在此不是失败
+
+git rev-parse --git-path hooks
+# /agent/cdc-config-platform/.git/hooks
+```
+
+按 `git rev-parse --git-path hooks` 的**实际返回路径**检查（而非工作树根目录字面量 `.git/hooks`）：
+
+```text
+非 *.sample 文件数量          = 0
+可执行非 *.sample hook 数量    = 0
+```
+
+本轮提交使用普通命令 `git commit -m "docs(...): ..."`，**未**使用
+`git -c core.hooksPath=…`、**未**使用 `--no-verify`、**未**设置
+`GIT_CONFIG_*` / `GIT_CONFIG_COUNT`、**未**重命名 / 移动 / 删除 hooks、
+**未**修改仓库或全局 Git 配置。
+
+```text
+r1_commit_hooks_path_status=DEFAULT_GIT_HOOKS_PATH_USED
+r1_active_hook_count=0
+r1_git_hooks_execution_status=NO_ACTIVE_HOOKS_PRESENT
+```
+
+## 9. 结论字段
 
 ```text
 git_three_way_sync_status=PASS
@@ -166,4 +276,9 @@ credential_scan_status=PASS
 project_owner_service_preservation_status=PASS
 task_service_lifecycle_status=PASS
 worktree_cleanup_status=NONE_PERFORMED
+r0_commit_command_hooks_override_status=USED_EXPLICIT_CORE_HOOKSPATH_OVERRIDE
+r0_process_deviation_status=RECORDED
+r1_commit_hooks_path_status=DEFAULT_GIT_HOOKS_PATH_USED
+r1_active_hook_count=0
+r1_git_hooks_execution_status=NO_ACTIVE_HOOKS_PRESENT
 ```

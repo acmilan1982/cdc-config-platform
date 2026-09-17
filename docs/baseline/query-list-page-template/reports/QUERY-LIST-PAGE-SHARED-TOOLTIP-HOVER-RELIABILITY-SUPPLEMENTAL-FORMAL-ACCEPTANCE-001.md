@@ -1,6 +1,6 @@
 # QUERY-LIST-PAGE-SHARED-TOOLTIP-HOVER-RELIABILITY-SUPPLEMENTAL-FORMAL-ACCEPTANCE-001
 
-> 本文件是本轮**补充分正式验收**的独立报告。它不是对原正式验收报告的改写，也不代表项目负责人最终接受。
+> 本文件是本轮**补充正式验收**的独立报告。它不是对原正式验收报告的改写，也不代表项目负责人最终接受。
 > 原报告 `reports/QUERY-LIST-PAGE-SHARED-COMPONENT-FORMAL-ACCEPTANCE-001.md` 及其证据目录本轮**只读、未修改**。
 
 ## 1. 任务与结论
@@ -204,8 +204,12 @@ M frontend/src/views/data-source-run-state/components/DataSourceSnapshotTable.vu
 | 项目负责人最终接受仍为 PENDING | 成立 |
 | 未声明任何页面迁移授权 | 成立 |
 
-文档中既有的 `FINAL_ACCEPTED_AND_CLOSED` 字样均指**参考页**（"数据同步进度"）或**明令禁止本 Feature 写入**的说明文字，
-与本 Feature 状态无关。
+文档中既有的 `FINAL_ACCEPTED_AND_CLOSED` 字样均指**参考页**（**"源库快照状态"**，
+`/monitor/data-source-state`）或**明令禁止本 Feature 写入**的说明文字，与本 Feature 状态无关。
+
+页面名称边界（R1 纠正）：“源库快照状态”是本轮公共组件的**参考页**；
+“数据同步进度”（`/monitor/topic-offset`）只是后续迁移的**优先试点候选**，
+**不是**参考页；二者均**不**代表本轮公共组件已最终接受。
 
 冻结计数的口径为**基线正文**（`README.md` / `MIGRATION.md` / `SHARED_COMPONENT_DESIGN.md` / `DESIGN.md` / `UI.md`），
 **排除 `reports/` 与 `evidence/`**。这两份目录承载历次与本次验收记录，必然复述标记名；
@@ -221,8 +225,8 @@ M frontend/src/views/data-source-run-state/components/DataSourceSnapshotTable.vu
 | 类型检查 | `npx vue-tsc --noEmit` | 退出码 0 |
 | 生产构建 | `npm run build` | `built in 17.21s`，退出码 0 |
 
-实测数量**高于**修正报告记载（390 > 390 持平、990 > 967），未为凑数修改任何测试；无关键用例被跳过。
-本轮未新增或调整测试文件（零 diff）。
+与修正报告记载对照：定向测试数量**持平**（`390 = 390`），全量测试数量**增加**（`990 > 967`）；
+未为凑数修改任何测试，无关键用例被跳过。本轮未新增或调整测试文件（零 diff）。
 
 ## 11. 严格几何（§10.1）
 
@@ -325,3 +329,75 @@ page_migration_status=NOT_STARTED
 ```
 
 本报告**不**宣称 ChatGPT 复审通过、**不**宣称项目负责人最终接受、**不**开始任何页面迁移。
+
+## 17. R1 纠正记录（纯文档与证据）
+
+ChatGPT 对 R0 提交 `7077b839c51250778e7462d39c92deba69e88e09` 的远程 Git 复审结论为
+`CHANGES_REQUIRED_FOUR_DOCUMENT_EVIDENCE_CORRECTIONS_ONLY`（仅四类文档 / 证据维度问题）。
+R1 任务只定向纠正这四类问题，**未**重跑 21 项验收、测试、构建、浏览器验证或负向控制，
+**未**修改生产代码 / 测试代码 / 依赖 / 配置 / SQL，**未**改变 21/21 PASS 的执行事实。
+
+```text
+chatgpt_supplemental_formal_acceptance_r0_review_status=CHANGES_REQUIRED_FOUR_DOCUMENT_EVIDENCE_CORRECTIONS_ONLY
+supplemental_formal_acceptance_r1_correction_status=APPLIED_PENDING_CHATGPT_R1_REVIEW
+supplemental_formal_acceptance_execution_status=PASS_UNCHANGED_21_OF_21
+acceptance_rerun_status=NOT_RUN_NOT_REQUIRED_DOCUMENT_CORRECTION_ONLY
+test_status=NOT_RUN_DOCUMENT_CORRECTION_ONLY
+build_status=NOT_RUN_DOCUMENT_CORRECTION_ONLY
+browser_verification_status=NOT_RUN_DOCUMENT_CORRECTION_ONLY
+service_lifecycle_status=NOT_RUN
+```
+
+### 17.1 纠正一：Git hooks 路径覆盖事实（R0 过程偏差）
+
+R0 创建提交时命令行使用了 `-c core.hooksPath=.git/hooks`。这是一次**已发生的**过程偏差，
+如实记录、不淡化、不改写为"完全合规"：
+
+```text
+r0_commit_command_hooks_override_status=USED_EXPLICIT_CORE_HOOKSPATH_OVERRIDE
+r0_commit_core_hooks_path_argument=.git/hooks
+r0_repository_configured_core_hooks_path=UNSET
+r0_default_hooks_directory_active_hook_count=0
+r0_active_hook_bypass_effect=NONE_NO_ACTIVE_HOOK_EXISTED
+r0_process_deviation_status=RECORDED
+```
+
+Git 默认从 `$GIT_DIR/hooks` 查找 hooks，R0 的命令行参数覆盖了该默认路径；
+相对 `core.hooksPath` 按 hooks 执行目录解析，而 linked worktree 根目录的 `.git` 是文件，
+故该参数**不能**视为与默认 `$GIT_DIR/hooks` 等价。仓库默认 hooks 目录下只有 `*.sample`，
+活动 hook 数为 0，**没有实际活动 hook 被跳过**；但"没有实际影响"不等于"没有覆盖路径"，
+R0 提交**不得**再被描述为"未禁用 / 未绕过 hooks"。细节见 SA-026 §8。
+
+R1 本轮提交使用普通 `git commit -m …`，按 `git rev-parse --git-path hooks` 的实际返回路径
+（`/agent/cdc-config-platform/.git/hooks`）核查，非 `*.sample` 文件数与可执行 hook 数均为 0：
+
+```text
+r1_commit_hooks_path_status=DEFAULT_GIT_HOOKS_PATH_USED
+r1_active_hook_count=0
+r1_git_hooks_execution_status=NO_ACTIVE_HOOKS_PRESENT
+```
+
+### 17.2 纠正二：参考页名称
+
+原报告把参考页误写为"数据同步进度"，已纠正为 **"源库快照状态"**（`/monitor/data-source-state`）。
+"数据同步进度"（`/monitor/topic-offset`）只是后续迁移的**优先试点候选**，不是本轮参考页。
+
+### 17.3 纠正三：`git status --short` 采集时点
+
+原报告只记录了一个较早时点、并把当时只含未跟踪报告 / 证据的输出写成"提交前最终状态"。
+已在 SA-026 §3 拆分为两个明确时点（三份基线文档状态追加**之前** / 最终暂存提交**前**），
+并补齐 R0 最终提交的完整范围：**3 个基线文档 + 1 个报告 + 11 个证据文件 = 15 个文件**
+（`git show --name-status 7077b83` 实测；R1 提示词所记 14/10 计数有误，以仓库为准）。
+
+### 17.4 纠正四：文字准确性
+
+- 报告首行标题语的衍字已修正为 **"补充正式验收"**；
+- 原写法把定向测试数量误述为"高于"记载，已改为 **"390 = 390（定向数量持平）、990 > 967（全量数量增加）"**；
+- 两处错误文本均已从全部 6 个允许文件中清除（残留计数为 0）。
+
+```text
+reference_page_name_correction_status=PASS_DATA_SOURCE_STATE
+git_status_timepoint_correction_status=PASS_TWO_TIMEPOINTS
+wording_correction_status=PASS
+forbidden_residual_status=ZERO
+```

@@ -90,9 +90,17 @@ grep -rn -E "FINAL_ACCEPTED|FINAL_ACCEPTED_AND_CLOSED|PROJECT_OWNER_APPROVED|PAG
   README.md MIGRATION.md SHARED_COMPONENT_DESIGN.md
 ```
 
-命中项全部为：(a) 参考页（"数据同步进度"）自身的 `reference_feature_status=FINAL_ACCEPTED_AND_CLOSED`；
+命中项全部为：(a) 参考页（**"源库快照状态"**）自身的 `reference_feature_status=FINAL_ACCEPTED_AND_CLOSED`；
 (b) 明令禁止本 Feature 写入这些串的说明文字。**无任何一处**把本 Feature 或本页面写成
 `FINAL_ACCEPTED` / `FINAL_ACCEPTED_AND_CLOSED` / `PROJECT_OWNER_APPROVED` / `PAGE_MIGRATION_STARTED`。
+
+参考页边界（R1 纠正，避免页面名称混淆）：
+
+- **"源库快照状态"**是本轮公共组件的**参考页**（`/monitor/data-source-state`），
+  上述 `reference_feature_status=FINAL_ACCEPTED_AND_CLOSED` 描述的是该参考 Feature 的既有历史状态；
+- **"数据同步进度"**（`/monitor/topic-offset`）只是后续迁移的**优先试点候选**，
+  **不是**本轮公共组件的参考页；
+- 二者均**不**代表本轮公共组件已被最终接受。
 
 模板与设计决策正文段落未被改写，本轮只在其后追加状态与历史。
 

@@ -549,3 +549,28 @@ worktree 数量 `70/71`）；R1 纯文档纠正任务
   `CHATGPT_QUERY_LIST_PAGE_SHARED_TOOLTIP_HOVER_RELIABILITY_SUPPLEMENTAL_FORMAL_ACCEPTANCE_REVIEW_FROM_REMOTE_GIT`。
   **补充验收执行通过不等于 ChatGPT 远程复审已通过、不等于项目负责人最终接受已通过、
   不等于任何页面迁移已获授权；本任务不迁移任何页面。**
+- 2026-09-17，上述补充正式验收的 **R1 纯文档与证据纠正**
+  （`QUERY-LIST-PAGE-SHARED-TOOLTIP-HOVER-RELIABILITY-SUPPLEMENTAL-FORMAL-ACCEPTANCE-001-R1`）。
+  ChatGPT 对 R0 提交 `7077b839c51250778e7462d39c92deba69e88e09` 的远程 Git 复审结论为
+  `CHANGES_REQUIRED_FOUR_DOCUMENT_EVIDENCE_CORRECTIONS_ONLY`（仅四类文档 / 证据问题）。
+  R1 只定向纠正这四类问题：① 如实披露 R0 提交使用了 `-c core.hooksPath=.git/hooks`
+  ——该参数覆盖了 Git 默认的 `$GIT_DIR/hooks` 查找路径，属**已发生的过程偏差**，
+  仓库活动 hook 数为 0 故无实际 hook 被跳过，但**不得**再写成"未覆盖 / 未绕过 hooks"；
+  ② 把误写的参考页名称"数据同步进度"纠正为**"源库快照状态"**
+  （"数据同步进度"仅为后续迁移的优先试点候选）；③ 把 `git status --short` 拆分为两个明确采集时点，
+  并补齐 R0 最终提交的完整范围（3 个基线文档 + 1 个报告 + 11 个证据文件 = 15 个文件）；④ 纠正
+  两处文字错误（报告首行标题语的衍字、以及把定向测试数量误述为高于记载）。
+  R1 **未**重跑 21 项验收、测试、构建、浏览器验证或负向控制，**未**修改生产代码 / 测试代码 /
+  依赖 / 配置 / SQL，**未**改变 21/21 PASS 的执行事实；模板标记冻结保持 `48/0/43/9`、
+  设计决策冻结保持 `66/0`。
+  ```text
+  chatgpt_supplemental_formal_acceptance_r0_review_status=CHANGES_REQUIRED_FOUR_DOCUMENT_EVIDENCE_CORRECTIONS_ONLY
+  supplemental_formal_acceptance_r1_correction_task=QUERY-LIST-PAGE-SHARED-TOOLTIP-HOVER-RELIABILITY-SUPPLEMENTAL-FORMAL-ACCEPTANCE-001-R1
+  supplemental_formal_acceptance_r1_correction_status=APPLIED_PENDING_CHATGPT_R1_REVIEW
+  supplemental_formal_acceptance_execution_status=PASS_UNCHANGED_21_OF_21
+  acceptance_rerun_status=NOT_RUN_NOT_REQUIRED_DOCUMENT_CORRECTION_ONLY
+  project_owner_final_acceptance_status=PENDING
+  page_migration_status=NOT_STARTED
+  ```
+  **R1 纠正不等于 ChatGPT R1 复审已通过、不等于项目负责人最终接受已通过、
+  不等于任何页面迁移已获授权；本任务不迁移任何页面。**
