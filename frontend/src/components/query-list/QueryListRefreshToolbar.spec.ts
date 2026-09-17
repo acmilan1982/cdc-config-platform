@@ -12,15 +12,30 @@ import type { QueryListCountdown } from './types'
  * `{ seconds: null, progress: null }` 表示启用但当前无已安排周期（秒数显示 `--`）；
  * 立即刷新按钮 110px 四值同锁、常驻 Spinner 只切换 opacity/visibility、busy 以 aria-disabled + 事件入口阻断；
  * 组件不持有倒计时状态、不持有请求、不注册任何定时器。
+ *
+ * 常驻 Spinner 的规则已上移到公共层唯一来源 `query-list-spinner.css`（§7.11.1）：
+ * 本组件以内联样式 + `<style scoped src>` 外链共同构成其生效样式，断言读取两者并集；
+ * 刷新环自身的 reduced-motion 规则仍留在本组件内联样式中。
  */
 
+const COMPONENT_DIR = resolve(process.cwd(), 'src/components/query-list')
+
 function toolbarSource(): string {
-  return readFileSync(resolve(process.cwd(), 'src/components/query-list/QueryListRefreshToolbar.vue'), 'utf8')
+  return readFileSync(resolve(COMPONENT_DIR, 'QueryListRefreshToolbar.vue'), 'utf8')
+}
+
+/** 组件以 `<style ... src="...">` 外链的公共层样式源内容。 */
+function linkedStyle(): string {
+  return [...toolbarSource().matchAll(/<style[^>]*\bsrc="([^"]+)"[^>]*>/g)]
+    .map((m) => readFileSync(resolve(COMPONENT_DIR, m[1]!), 'utf8'))
+    .join('\n')
 }
 
 function scopedStyle(): string {
-  const block = toolbarSource().match(/<style[^>]*>([\s\S]*?)<\/style>/)?.[1] ?? ''
-  return block.replace(/\/\*[\s\S]*?\*\//g, '')
+  const inline = [...toolbarSource().matchAll(/<style(?![^>]*\bsrc=)[^>]*>([\s\S]*?)<\/style>/g)].map(
+    (m) => m[1] ?? '',
+  )
+  return [...inline, linkedStyle()].join('\n').replace(/\/\*[\s\S]*?\*\//g, '')
 }
 
 function ruleOf(selector: string): string {

@@ -220,46 +220,17 @@ function onRefresh(): void {
   outline-offset: 1px;
 }
 
-/* 常驻指示器（§7.5.3，类名与令牌与查询/重置按钮一致）：绝对定位脱离内容流，
-   只切换 opacity / visibility；颜色一律 currentColor。 */
-.ql-btn-spinner {
-  position: absolute;
-  left: var(--ql-btn-spinner-inset, 2px);
-  top: 50%;
-  width: 12px;
-  height: 12px;
-  margin-top: -6px;
-  box-sizing: border-box;
-  border-radius: 50%;
-  border: 2px solid currentColor;
-  border-top-color: transparent;
-  opacity: 0;
-  visibility: hidden;
-  animation: ql-action-spin 0.6s linear infinite;
-}
-
-.ql-btn-spinner.is-visible {
-  opacity: 1;
-  visibility: visible;
-}
-
+/* 独立固定居中文字节点：四态内容恒定。 */
 .ql-action-label {
   white-space: nowrap;
 }
 
-@keyframes ql-action-spin {
-  to {
-    transform: rotate(360deg);
-  }
-}
-
 @media (prefers-reduced-motion: reduce) {
+  /* 环进度过渡属于刷新环自身规则，继续留在本组件。 */
   .ql-ring-progress {
     transition: none;
   }
-  /* 停止旋转，但指示器仍静态可见、几何完全稳定。 */
-  .ql-btn-spinner {
-    animation: none;
-  }
 }
 </style>
+
+<style scoped src="./query-list-spinner.css"></style>

@@ -721,12 +721,25 @@ function sharedSource(file: string): string {
   return readFileSync(resolve(process.cwd(), 'src/components/query-list', file), 'utf8')
 }
 
+/**
+ * 公共组件生效样式 = 内联样式块 + 以 `<style scoped src>` 外链的公共层样式源。
+ * 常驻 Spinner 规则自 §7.11.1 起只存在于唯一来源 `query-list-spinner.css`，
+ * 因此断言必须读取其外链内容，而不是只看组件内联样式。
+ */
+function sharedCss(file: string): string {
+  const src = sharedSource(file)
+  const linked = [...src.matchAll(/<style[^>]*\bsrc="([^"]+)"[^>]*>/g)].map((m) =>
+    readFileSync(resolve(process.cwd(), 'src/components/query-list', m[1]!), 'utf8'),
+  )
+  return [src, ...linked].join('\n').replace(/\/\*[\s\S]*?\*\//g, '')
+}
+
 function sharedActionsCss(): string {
-  return sharedSource('QueryListActions.vue').replace(/\/\*[\s\S]*?\*\//g, '')
+  return sharedCss('QueryListActions.vue')
 }
 
 function sharedRefreshCss(): string {
-  return sharedSource('QueryListRefreshToolbar.vue').replace(/\/\*[\s\S]*?\*\//g, '')
+  return sharedCss('QueryListRefreshToolbar.vue')
 }
 
 function sharedRule(css: string, selector: string): string {

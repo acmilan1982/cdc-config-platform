@@ -10,15 +10,29 @@ import QueryListActions from './QueryListActions.vue'
  * 两个按钮本体由公共组件渲染，固定宽度四值同锁（默认 62/62）、可选显式高度（无公共默认值）、
  * 常驻 Spinner 只切换 opacity/visibility、busy 以 aria-disabled + 事件入口防御阻断（不用原生 disabled）。
  * 判据均落在渲染结果与真实 CSS 声明上，不做纯字符串快照。
+ *
+ * 常驻 Spinner 的规则已上移到公共层唯一来源 `query-list-spinner.css`（§7.11.1）：
+ * 本组件以内联样式 + `<style scoped src>` 外链共同构成其生效样式，断言读取两者并集。
  */
 
+const COMPONENT_DIR = resolve(process.cwd(), 'src/components/query-list')
+
 function actionsSource(): string {
-  return readFileSync(resolve(process.cwd(), 'src/components/query-list/QueryListActions.vue'), 'utf8')
+  return readFileSync(resolve(COMPONENT_DIR, 'QueryListActions.vue'), 'utf8')
+}
+
+/** 组件以 `<style ... src="...">` 外链的公共层样式源内容。 */
+function linkedStyle(): string {
+  return [...actionsSource().matchAll(/<style[^>]*\bsrc="([^"]+)"[^>]*>/g)]
+    .map((m) => readFileSync(resolve(COMPONENT_DIR, m[1]!), 'utf8'))
+    .join('\n')
 }
 
 function scopedStyle(): string {
-  const block = actionsSource().match(/<style[^>]*>([\s\S]*?)<\/style>/)?.[1] ?? ''
-  return block.replace(/\/\*[\s\S]*?\*\//g, '')
+  const inline = [...actionsSource().matchAll(/<style(?![^>]*\bsrc=)[^>]*>([\s\S]*?)<\/style>/g)].map(
+    (m) => m[1] ?? '',
+  )
+  return [...inline, linkedStyle()].join('\n').replace(/\/\*[\s\S]*?\*\//g, '')
 }
 
 function ruleOf(selector: string): string {

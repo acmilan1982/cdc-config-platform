@@ -144,39 +144,6 @@ function onReset(): void {
 .ql-action-label {
   white-space: nowrap;
 }
-
-/* 常驻指示器（§7.5.3）：绝对定位脱离内容流，只切换 opacity / visibility，不增删节点、不改尺寸。
-   颜色一律 currentColor —— 公共层不硬编码。 */
-.ql-btn-spinner {
-  position: absolute;
-  left: var(--ql-btn-spinner-inset, 2px);
-  top: 50%;
-  width: 12px;
-  height: 12px;
-  margin-top: -6px;
-  box-sizing: border-box;
-  border-radius: 50%;
-  border: 2px solid currentColor;
-  border-top-color: transparent;
-  opacity: 0;
-  visibility: hidden;
-  animation: ql-action-spin 0.6s linear infinite;
-}
-
-.ql-btn-spinner.is-visible {
-  opacity: 1;
-  visibility: visible;
-}
-
-@keyframes ql-action-spin {
-  to {
-    transform: rotate(360deg);
-  }
-}
-
-@media (prefers-reduced-motion: reduce) {
-  .ql-btn-spinner {
-    animation: none;
-  }
-}
 </style>
+
+<style scoped src="./query-list-spinner.css"></style>

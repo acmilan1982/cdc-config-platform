@@ -1,0 +1,45 @@
+/* 公共层常驻 Loading 指示器：几何与可见性规则的唯一源码（SHARED_COMPONENT_DESIGN §7.5.3、§7.11.1）。
+ *
+ * 契约「一个类名、一份 CSS、一个令牌」：
+ *   - 一个类名：`.ql-btn-spinner`
+ *   - 一份 CSS：本文件（QueryListActions / QueryListRefreshToolbar 各自以
+ *     `<style scoped src="./query-list-spinner.css">` 引用同一来源，源码只有一份）
+ *   - 一个令牌：`--ql-btn-spinner-inset`（公共默认 2px；调用页可局部覆写）
+ *
+ * 指示器为常驻节点，绝对定位脱离内容流，只切换 opacity / visibility，
+ * 因此点亮与熄灭都不改变按钮外框、文字位置与相邻元素坐标。
+ * 颜色一律 currentColor，与按钮文字色一致，公共层不硬编码任何颜色。
+ */
+
+.ql-btn-spinner {
+  position: absolute;
+  left: var(--ql-btn-spinner-inset, 2px);
+  top: 50%;
+  width: 12px;
+  height: 12px;
+  margin-top: -6px;
+  box-sizing: border-box;
+  border-radius: 50%;
+  border: 2px solid currentColor;
+  border-top-color: transparent;
+  opacity: 0;
+  visibility: hidden;
+  animation: ql-action-spin 0.6s linear infinite;
+}
+
+.ql-btn-spinner.is-visible {
+  opacity: 1;
+  visibility: visible;
+}
+
+@keyframes ql-action-spin {
+  to {
+    transform: rotate(360deg);
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .ql-btn-spinner {
+    animation: none;
+  }
+}
