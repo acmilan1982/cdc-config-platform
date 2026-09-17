@@ -9,7 +9,8 @@
 事实分层标记含义见 `README.md` §5。
 
 > 本文件是**已批准迁移计划**，**尚未执行**任何迁移。当前状态：
-> `page_migration_status=NOT_STARTED`、`shared_component_implementation_status=NOT_STARTED`。
+> `page_migration_status=NOT_STARTED`、
+> `shared_component_implementation_status=IMPLEMENTED_FORMAL_ACCEPTANCE_EXECUTED_PENDING_CHATGPT_REVIEW`。
 
 ---
 
@@ -194,12 +195,18 @@ shared_component_design_path=docs/baseline/query-list-page-template/SHARED_COMPO
 - **设计已批准**只表示契约与架构结论可以据以开工，它**本身不实现任何内容**：
   该阶段**未**实现公共组件、**未**新增 Composable、**未**新增路由元数据、
   **未**修改任何业务页面、**未**迁移任何页面；
-- `shared_component_implementation_status` 仍为 `NOT_STARTED`，
-  `page_migration_status` 仍为 `NOT_STARTED`，
-  `query_list_page_template_implementation_status` 仍为 `NOT_STARTED`；
-- 第 3 步（`QUERY-LIST-PAGE-SHARED-COMPONENT-IMPLEMENTATION-001`）
-  **仍不得启动**，除非有**独立任务与独立授权**；
-  **设计获批不等于已授权实现**；
+- 设计批准当时 `shared_component_implementation_status` 为 `NOT_STARTED`、
+  `page_migration_status` 为 `NOT_STARTED`、
+  `query_list_page_template_implementation_status` 为 `NOT_STARTED`；
+  此后公共组件实现任务（`QUERY-LIST-PAGE-SHARED-COMPONENT-IMPLEMENTATION-001`
+  及其纠正 `…-001-R1`）与正式验收任务
+  （`QUERY-LIST-PAGE-SHARED-COMPONENT-FORMAL-ACCEPTANCE-001`）均由**独立任务与独立授权**
+  执行；`shared_component_implementation_status` 现为
+  `IMPLEMENTED_FORMAL_ACCEPTANCE_EXECUTED_PENDING_CHATGPT_REVIEW`，
+  `page_migration_status` 与 `query_list_page_template_implementation_status`
+  仍为 `NOT_STARTED`；
+- 任何页面迁移**仍不得启动**，除非有**独立任务与独立授权**；
+  **设计获批不等于已授权实现，实现并验收通过也不等于已授权页面迁移**；
 - 本批准**不改变**“具体试点页面仍需项目负责人另行确认”的既有边界。
 
 ---
@@ -207,7 +214,7 @@ shared_component_design_path=docs/baseline/query-list-page-template/SHARED_COMPO
 ## 7. 当前有效下一步
 
 ```text
-next_step=QUERY-LIST-PAGE-SHARED-COMPONENT-IMPLEMENTATION-001
+next_step=CHATGPT_QUERY_LIST_PAGE_SHARED_COMPONENT_FORMAL_ACCEPTANCE_REVIEW_FROM_REMOTE_GIT
 ```
 
 公共组件详细设计任务（`QUERY-LIST-PAGE-SHARED-COMPONENT-DESIGN-001`）已产出草案
@@ -222,13 +229,16 @@ ChatGPT 对 R2 的独立复审结论为 `APPROVED`，批准收口任务
 （`QUERY-LIST-PAGE-SHARED-COMPONENT-DESIGN-APPROVAL-001`，`2026-09-16`）
 已把该设计收口为 `APPROVED`。
 
-下一步入口为独立实现任务 `QUERY-LIST-PAGE-SHARED-COMPONENT-IMPLEMENTATION-001`。
-该入口**只表示**一个**独立授权的实现任务**可以被启动，
-**不表示**实现已经开始、**也不表示**已经选择或迁移任何页面。
+公共组件实现任务 `QUERY-LIST-PAGE-SHARED-COMPONENT-IMPLEMENTATION-001`
+及其纠正 `…-001-R1` 已由独立授权任务执行完毕，参考页“源库快照状态”已**等价接入**
+公共组件（**未**迁移第二个页面）；随后独立正式验收任务
+`QUERY-LIST-PAGE-SHARED-COMPONENT-FORMAL-ACCEPTANCE-001` 已执行本轮正式验收。
+该入口**不表示** ChatGPT 远程复审已经通过、**也不表示**已经选择或迁移任何页面。
 
-边界继续保持：本文件保持 `page_migration_status=NOT_STARTED`、
-`shared_component_implementation_status=NOT_STARTED`。在**独立授权的实现任务**启动之前：
-**不得**实现公共组件、**不得**让参考页面接入公共组件、**不得**迁移任何页面、
-**不得**把任何 `NOT_STARTED` 状态改为 `IMPLEMENTED`。
-**设计批准不等于已授权实现**；并且**具体采用哪个页面作为首个迁移试点，
-仍需项目负责人另行确认**。
+边界继续保持：本文件保持 `page_migration_status=NOT_STARTED`，
+`shared_component_implementation_status` 现为
+`IMPLEMENTED_FORMAL_ACCEPTANCE_EXECUTED_PENDING_CHATGPT_REVIEW`。在 ChatGPT 远程复审
+与项目负责人接受完成之前：**不得**迁移任何页面、**不得**让参考页之外的页面接入公共组件、
+**不得**把任何 `NOT_STARTED` 状态改写为 `FINAL_ACCEPTED` 或 `FINAL_ACCEPTED_AND_CLOSED`。
+**正式验收执行通过不等于远程复审通过、不等于项目负责人最终接受**；
+并且**具体采用哪个页面作为首个迁移试点，仍需项目负责人另行确认**。

@@ -1,10 +1,10 @@
-# 查询列表页公共组件 · 详细设计（已批准，未实现）
+# 查询列表页公共组件 · 详细设计（已批准；阶段一已实现并执行正式验收，待远程复审）
 
 ```text
 shared_component_design_status=APPROVED
 query_list_page_template_document_status=APPROVED
 query_list_page_template_implementation_status=NOT_STARTED
-shared_component_implementation_status=NOT_STARTED
+shared_component_implementation_status=IMPLEMENTED_FORMAL_ACCEPTANCE_EXECUTED_PENDING_CHATGPT_REVIEW
 page_migration_status=NOT_STARTED
 reference_feature_status=FINAL_ACCEPTED_AND_CLOSED
 design_task=QUERY-LIST-PAGE-SHARED-COMPONENT-DESIGN-001
@@ -23,6 +23,16 @@ r1_contract_equivalence_correction_status=APPLIED_AND_REVIEWED_CHANGES_REQUIRED
 r2_contract_closure_correction_status=APPLIED_AND_REVIEWED_APPROVED
 project_owner_approval_status=APPROVED
 shared_component_design_approval_status=COMPLETED
+implementation_task=QUERY-LIST-PAGE-SHARED-COMPONENT-IMPLEMENTATION-001
+implementation_result_commit_id=ff9bf2b8ed026f42cfd42904065a4577e7aa1556
+r1_implementation_task=QUERY-LIST-PAGE-SHARED-COMPONENT-IMPLEMENTATION-001-R1
+r1_implementation_result_commit_id=d1cd3b1fffb56b50793e576a369325e94063cabc
+chatgpt_r1_implementation_review_status=APPROVED
+formal_acceptance_task=QUERY-LIST-PAGE-SHARED-COMPONENT-FORMAL-ACCEPTANCE-001
+formal_acceptance_base_commit_id=d1cd3b1fffb56b50793e576a369325e94063cabc
+formal_acceptance_execution_status=PASS
+formal_acceptance_review_status=PENDING_CHATGPT_REMOTE_GIT_REVIEW
+shared_component_project_owner_acceptance_status=PENDING
 ```
 
 > 设计任务：`QUERY-LIST-PAGE-SHARED-COMPONENT-DESIGN-001`
@@ -33,9 +43,15 @@ shared_component_design_approval_status=COMPLETED
 > **均未修改“源库快照状态”页面或任何其他页面**，**均未迁移任何页面**，
 > **均未执行任何测试、构建或浏览器验证**。
 > `shared_component_design_status=APPROVED` 只表示**设计结论已批准**，
-> **不表示**公共组件已实现、参考页面已接入公共组件或任何页面已迁移；
-> `shared_component_implementation_status`、`page_migration_status`、
-> `query_list_page_template_implementation_status` 三者仍为 `NOT_STARTED`。
+> **不表示**公共组件已实现、参考页面已接入公共组件或任何页面已迁移。
+> 截至本次状态更新：`shared_component_implementation_status` 已由后续独立授权任务
+> 推进为 `IMPLEMENTED_FORMAL_ACCEPTANCE_EXECUTED_PENDING_CHATGPT_REVIEW`；
+> `page_migration_status` 与 `query_list_page_template_implementation_status`
+> 仍为 `NOT_STARTED`。
+>
+> 上述推进**不等于** ChatGPT 远程复审已通过，**不等于**项目负责人最终接受，
+> **不等于**任何页面迁移已获授权；`FINAL_ACCEPTED` / `FINAL_ACCEPTED_AND_CLOSED` /
+> `PROJECT_OWNER_APPROVED` / `PAGE_MIGRATION_STARTED` 均**未被写入**。
 
 ## 0. 本文件的标记与边界
 
@@ -2293,3 +2309,76 @@ next_step=QUERY-LIST-PAGE-SHARED-COMPONENT-IMPLEMENTATION-001
 
 该入口只表示**可以单独发起**公共组件实现任务，**不表示**本批准任务已经实施；
 具体采用哪个页面作为首个迁移试点，仍需**项目负责人另行确认**。
+
+---
+
+## 12. 阶段一实现与正式验收执行记录（2026-09-17）
+
+> 本节是**审计记录**，只追加后续独立任务的结果；**不改变**本文件任何已批准设计语义、
+> 候选决策、数值契约或事实分层标记（批准态设计决策标记仍为 `66` 处，草案态为 `0` 处）。
+> §11 记录的是 `2026-09-16` 批准收口当时的状态快照，本节**不重写**该历史记录；
+> §11.3 末尾的 `next_step` 是**批准当时**的入口，本节末尾的 `next_step` 才是**当前有效**入口。
+
+### 12.1 已执行的独立任务
+
+| 阶段 | 任务编号 | 结果提交 |
+|---|---|---|
+| 实现 | `QUERY-LIST-PAGE-SHARED-COMPONENT-IMPLEMENTATION-001` | `ff9bf2b8ed026f42cfd42904065a4577e7aa1556` |
+| R1 纠正 | `QUERY-LIST-PAGE-SHARED-COMPONENT-IMPLEMENTATION-001-R1` | `d1cd3b1fffb56b50793e576a369325e94063cabc` |
+| 正式验收执行 | `QUERY-LIST-PAGE-SHARED-COMPONENT-FORMAL-ACCEPTANCE-001` | 见本节 §12.2 |
+
+- ChatGPT 对 R1 实现提交的复审结论为 `APPROVED`；
+- 实现范围严格限于阶段一：6 个公共组件（`QueryListPageShell`、`QueryListQueryPanel`、
+  `QueryListActions`、`QueryListResultPanel`、`QueryListRefreshToolbar`、
+  `QueryListTooltipHost`）与 1 个 Composable（`useQueryListTooltip`）；
+  `StableTableContainer` 职责并入 `QueryListResultPanel` 正文区、**未**单独成组件；
+  三个行为 Composable 仍为**推迟**状态（无文件、无引用）；
+  **未迁移第二个页面**；公共出口未增长；
+- 参考页“源库快照状态”**等价接入**公共组件，业务语义未改变。
+
+### 12.2 正式验收执行结论
+
+```text
+formal_acceptance_task=QUERY-LIST-PAGE-SHARED-COMPONENT-FORMAL-ACCEPTANCE-001
+formal_acceptance_base_commit_id=d1cd3b1fffb56b50793e576a369325e94063cabc
+formal_acceptance_case_count=17
+formal_acceptance_pass_count=17
+formal_acceptance_fail_count=0
+formal_acceptance_execution_status=PASS
+formal_acceptance_review_status=PENDING_CHATGPT_REMOTE_GIT_REVIEW
+```
+
+验收基准为 `d1cd3b1fffb56b50793e576a369325e94063cabc`（父提交
+`ff9bf2b8ed026f42cfd42904065a4577e7aa1556`），在**独立隔离工作区**执行；
+17 项强制验收用例全部 PASS，**未发现**需要在实现代码或测试代码中修复的缺陷，
+因此生产代码、测试代码、依赖与锁定文件的修改量均为**零**。
+
+```text
+formal_acceptance_report=docs/baseline/query-list-page-template/reports/QUERY-LIST-PAGE-SHARED-COMPONENT-FORMAL-ACCEPTANCE-001.md
+formal_acceptance_evidence=docs/baseline/query-list-page-template/evidence/QUERY-LIST-PAGE-SHARED-COMPONENT-FORMAL-ACCEPTANCE-001/
+```
+
+### 12.3 更新后的状态
+
+```text
+shared_component_design_status=APPROVED
+query_list_page_template_implementation_status=NOT_STARTED
+shared_component_implementation_status=IMPLEMENTED_FORMAL_ACCEPTANCE_EXECUTED_PENDING_CHATGPT_REVIEW
+page_migration_status=NOT_STARTED
+reference_feature_status=FINAL_ACCEPTED_AND_CLOSED
+```
+
+### 12.4 边界与未授权事项
+
+- 正式验收**执行**通过**不等于** ChatGPT 远程复审已通过，**不等于**项目负责人最终接受；
+- 本轮**未**写入 `FINAL_ACCEPTED`、`FINAL_ACCEPTED_AND_CLOSED`、`PROJECT_OWNER_APPROVED`
+  或 `PAGE_MIGRATION_STARTED`；
+- **未**批准第二个页面迁移、**未**选择试点页面、**未**启动任何页面迁移；
+- 参考页“源库快照状态”的 `FINAL_ACCEPTED_AND_CLOSED` 由原 Feature 收口任务确立，
+  本轮只读取、不重开、不改写；
+- 本节**未**修改公共组件、参考页、路由、布局或任何测试代码；
+- **未访问**数据库（无读无写）、**未**主动访问或写入 ZooKeeper、**未访问** Kafka。
+
+```text
+next_step=CHATGPT_QUERY_LIST_PAGE_SHARED_COMPONENT_FORMAL_ACCEPTANCE_REVIEW_FROM_REMOTE_GIT
+```
