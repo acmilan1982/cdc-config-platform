@@ -574,3 +574,59 @@ worktree 数量 `70/71`）；R1 纯文档纠正任务
   ```
   **R1 纠正不等于 ChatGPT R1 复审已通过、不等于项目负责人最终接受已通过、
   不等于任何页面迁移已获授权；本任务不迁移任何页面。**
+- 2026-09-17，**公共组件与“源库快照状态”参考页等价接入的最终接受收口**
+  （`QUERY-LIST-PAGE-SHARED-COMPONENT-FINAL-ACCEPTANCE-CLOSEOUT-001`）。
+  ChatGPT 已从远程 Git 对补充验收 R1 纠正提交
+  `84086446ae9cfa4dce5a92b47832cb63f9c722a2` 复审为 `APPROVED`。
+  项目负责人本次明确给出最终接受决定，原话逐字记录如下：
+  ```text
+  我确认公共组件及“源库快照状态”参考页最终验收通过，可以执行最终接受收口；暂不授权其他页面迁移。
+  ```
+  本任务为**纯文档收口**：**未**重跑原 17 项或补充 21 项验收、**未**重跑负向控制、
+  **未**执行测试 / 构建 / 浏览器验证、**未**启动或停止任何服务、**未**访问数据库 /
+  ZooKeeper / Kafka，**未**修改任何生产代码 / 测试代码 / 依赖 / 锁文件 / SQL / 配置，
+  **未**修改任何既有报告或证据（逐字节不变）。
+  计数口径：原正式验收 17 项；补充正式验收 21 项，且**包含**原 17 项在纠正后提交上的
+  重新重放，两者是**包含关系而非并列关系**，**不得**相加累计成“独立用例总数”；
+  最终权威验收覆盖为补充验收 `21/21` PASS，原 `17/17` 作为历史验收阶段事实保留。
+  冻结计数保持：模板标记 `48/0/43/9`、设计决策 `66/0`。
+  本文件顶部状态块与历史各节为各自时点的历史记录，保留不动；
+  下方状态块为本基线文档**当前权威状态**：
+
+  ```text
+  shared_component_design_status=APPROVED
+  shared_component_implementation_status=IMPLEMENTED_ACCEPTED
+  shared_component_formal_acceptance_status=ACCEPTED
+  shared_component_formal_acceptance_execution_status=PASS
+  shared_component_original_acceptance_case_count=17
+  shared_component_original_acceptance_pass_count=17
+  shared_component_supplemental_acceptance_case_count=21
+  shared_component_supplemental_acceptance_pass_count=21
+  shared_component_supplemental_acceptance_review_status=APPROVED
+  tooltip_hover_reliability_correction_status=IMPLEMENTED_ACCEPTED
+  project_owner_manual_tooltip_recheck_status=PASS
+  reference_page_name=源库快照状态
+  reference_page_path=/monitor/data-source-state
+  reference_page_equivalent_integration_status=IMPLEMENTED_ACCEPTED
+  shared_component_project_owner_acceptance_status=APPROVED
+  shared_component_final_acceptance_status=ACCEPTED_BY_PROJECT_OWNER
+  shared_component_completion_status=COMPLETED
+  project_owner_final_acceptance_decision=APPROVED
+  project_owner_final_acceptance_date=2026-09-17
+  pending_project_owner_acceptance=NO
+  page_migration_status=NOT_STARTED
+  page_migration_authorization_status=NOT_GRANTED
+  pilot_page_selection_status=NOT_DECIDED
+  current_next_entry=NONE_SHARED_COMPONENT_FINAL_ACCEPTED_AND_CLOSED_NO_PAGE_MIGRATION_AUTHORIZED
+  ```
+
+  边界：本次最终接受**只**覆盖公共组件设计、公共组件实现、“源库快照状态”参考页的
+  等价接入、Tooltip 悬停可靠性纠正及对应正式 / 补充正式验收；
+  `page_migration_status` 保持 `NOT_STARTED`、`page_migration_authorization_status`
+  保持 `NOT_GRANTED`、`pilot_page_selection_status` 保持 `NOT_DECIDED`。
+  项目负责人**暂不授权其他页面迁移**；“数据同步进度”仍只是未来的**优先试点候选**，
+  **未被选定**；`query_list_page_template_implementation_status` 保持 `NOT_STARTED`。
+  上述唯一入口**仅**表示公共组件与参考页接入已经接受并关闭，
+  **不表示**其他页面或整个项目完成。R0 提交使用 `-c core.hooksPath=.git/hooks`
+  的过程偏差继续如实保留（`r0_process_deviation_status=RECORDED`），
+  不因最终接受而删除或弱化。
