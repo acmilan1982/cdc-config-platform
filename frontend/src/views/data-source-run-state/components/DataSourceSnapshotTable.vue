@@ -21,7 +21,7 @@
             class="dss-cell-main dss-probe-main dss-tt dss-mono"
             :data-tt-kind="`client-desc-${rowKey(row)}`"
             @mouseenter="onProbeMainEnter(row, $event)"
-            @mouseleave="hideTooltip()"
+            @mouseleave="onProbeMainLeave(row)"
           >{{ row.clientId }}</span>
           <span v-if="isProbeInactive(row)" class="dss-inactive-mark">停用</span>
         </div>
@@ -36,7 +36,7 @@
             class="dss-cell-main dss-tt"
             :data-tt-kind="`source-main-${rowKey(row)}`"
             @mouseenter="onSourceMainEnter(row, $event)"
-            @mouseleave="hideTooltip()"
+            @mouseleave="onSourceMainLeave(row)"
           >{{ sourceMainText(row) }}</span>
         </div>
       </template>
@@ -48,7 +48,7 @@
           class="dss-tt dss-status-trigger"
           :data-tt-kind="`status-${rowKey(row)}`"
           @mouseenter="onStatusEnter(row, $event)"
-          @mouseleave="hideTooltip()"
+          @mouseleave="onStatusLeave(row)"
         >
           <DataSourceSnapshotStatusTag :status-category="row.statusCategory" />
         </span>
@@ -102,8 +102,8 @@ const props = withDefaults(
     emptyText?: string
     /** 页面唯一 Tooltip 控制器的 show。表格不传 maxWidthPx：内容上限只用视口安全上限。 */
     showTooltip: (opts: QueryListTooltipShowOptions) => void
-    /** 页面唯一 Tooltip 控制器的 hide。 */
-    hideTooltip: () => void
+    /** 页面唯一 Tooltip 控制器的 hide：无参 = 全局关闭；带 key = 仅关闭/取消该 key 自身。 */
+    hideTooltip: (key?: string) => void
   }>(),
   { emptyText: '暂无数据' },
 )
@@ -152,9 +152,19 @@ function onProbeMainEnter(row: SnapshotStatusItem, e: MouseEvent): void {
   })
 }
 
+/** 探针端延用公共默认 320ms（不传 delayMs）；离开只关闭本 key，旧行的延迟 leave 不得取消新目标。 */
+function onProbeMainLeave(row: SnapshotStatusItem): void {
+  props.hideTooltip(`client-${rowKey(row)}`)
+}
+
 /** 源库列 Tooltip 恒为完整原始 DATA_SOURCE_ID（正常行与回退行同源，DSS-REQ-074，AC-075）。 */
 function onSourceMainEnter(row: SnapshotStatusItem, e: MouseEvent): void {
   props.showTooltip({ key: `source-${rowKey(row)}`, content: row.sourceId, el: e.currentTarget as HTMLElement })
+}
+
+/** 源库延用公共默认 320ms（不传 delayMs）；离开只关闭本 key。 */
+function onSourceMainLeave(row: SnapshotStatusItem): void {
+  props.hideTooltip(`source-${rowKey(row)}`)
 }
 
 function onStatusEnter(row: SnapshotStatusItem, e: MouseEvent): void {
@@ -162,7 +172,15 @@ function onStatusEnter(row: SnapshotStatusItem, e: MouseEvent): void {
     key: `status-${rowKey(row)}`,
     content: `原始状态：${row.snapshotStatus}`,
     el: e.currentTarget as HTMLElement,
+    // 状态标签命中区仅约 20px 高：走公共默认 320ms 会在快速划入/扫行时被 mouseleave 取消而偶发不显示，
+    // 故仅此处显式取 0——同步成为当前目标、不创建等待定时器（内容/锚点/宽度/ARIA/单实例语义均不变）。
+    delayMs: 0,
   })
+}
+
+/** 离开只关闭本 key：过期 key 的 leave 对控制器为 no-op，不会取消/关闭新目标。 */
+function onStatusLeave(row: SnapshotStatusItem): void {
+  props.hideTooltip(`status-${rowKey(row)}`)
 }
 
 /** 表格数据替换（records 变化）关闭 Tooltip（DSS-REQ-070②，AC-076）。 */

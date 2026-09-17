@@ -416,3 +416,221 @@ describe('useQueryListTooltip 全局关闭与实例标识（§7.6.1 / §7.6.6）
     ctl.destroy()
   })
 })
+
+/**
+ * 悬停可靠性修正（TOOLTIP-HOVER-RELIABILITY-CORRECTION §6.2 / §10.1）：
+ * 公共默认仍为 320ms（不改为全局 0、不移除延迟机制）；新增可选 `delayMs` 只控制显示时机，
+ * `0` 语义为“不创建等待定时器、同步成为当前目标”，非法值一律不隐式转换而退回公共默认。
+ */
+describe('useQueryListTooltip delayMs 显示时机（§6.2 / §10.1）', () => {
+  it('省略 delayMs 仍走公共默认 320ms：319ms 不显示、320ms 才显示', () => {
+    const ctl = useQueryListTooltip()
+    expect(QUERY_LIST_TOOLTIP_DELAY_MS).toBe(320)
+    showOn(ctl, element())
+    vi.advanceTimersByTime(319)
+    expect(ctl.current.value).toBeNull()
+    vi.advanceTimersByTime(1)
+    expect(ctl.current.value).not.toBeNull()
+    ctl.destroy()
+  })
+
+  it('delayMs=0 同步成为当前目标，且不创建任何等待定时器', () => {
+    const ctl = useQueryListTooltip()
+    const el = element()
+    ctl.show({ key: 'k', content: '内容', el, delayMs: 0 })
+    // 尚未推进任何时间即为当前目标
+    expect(ctl.current.value).not.toBeNull()
+    expect(ctl.current.value!.key).toBe('k')
+    expect(vi.getTimerCount()).toBe(0)
+
+    // 再推进时间也不会产生第二个揭示/重复写入
+    vi.advanceTimersByTime(QUERY_LIST_TOOLTIP_DELAY_MS)
+    expect(ctl.current.value!.key).toBe('k')
+    expect(describedBy(el)).toBe(ctl.hostId)
+    ctl.destroy()
+  })
+
+  it('delayMs=0 的即时目标与延迟目标共享同一单实例语义（新目标先即时关闭旧项）', () => {
+    const ctl = useQueryListTooltip()
+    const a = element()
+    const b = element({ 'aria-describedby': 'keep' })
+    ctl.show({ key: 'a', content: 'A', el: a, delayMs: 0 })
+    expect(ctl.current.value!.key).toBe('a')
+
+    ctl.show({ key: 'b', content: 'B', el: b, delayMs: 0 })
+    expect(ctl.current.value!.key).toBe('b')
+    expect(describedBy(a)).toBeNull()
+    expect(describedBy(b)).toBe(`keep ${ctl.hostId}`)
+    ctl.destroy()
+  })
+
+  it('delayMs 为有限正数时按该毫秒数显示', () => {
+    const ctl = useQueryListTooltip()
+    ctl.show({ key: 'k', content: '内容', anchor: rect(), delayMs: 100 })
+    vi.advanceTimersByTime(99)
+    expect(ctl.current.value).toBeNull()
+    vi.advanceTimersByTime(1)
+    expect(ctl.current.value).not.toBeNull()
+    ctl.destroy()
+  })
+
+  it('负数 / NaN / Infinity / 非 number 一律不隐式转换，统一退回公共默认 320ms', () => {
+    const badValues: unknown[] = [-1, -0.5, Number.NaN, Number.POSITIVE_INFINITY, Number.NEGATIVE_INFINITY, '0', '100', null, {}]
+    for (const bad of badValues) {
+      const ctl = useQueryListTooltip()
+      ctl.show({ key: 'k', content: '内容', anchor: rect(), delayMs: bad as number })
+      vi.advanceTimersByTime(319)
+      expect(ctl.current.value, `delayMs=${String(bad)} 应仍处延迟窗内`).toBeNull()
+      vi.advanceTimersByTime(1)
+      expect(ctl.current.value, `delayMs=${String(bad)} 应退回 320ms`).not.toBeNull()
+      ctl.destroy()
+    }
+  })
+
+  it('delayMs=0 时空内容仍然立即关闭，不产生 Tooltip', () => {
+    const ctl = useQueryListTooltip()
+    for (const empty of ['', '   ', '\t\n']) {
+      ctl.show({ key: 'k', content: empty, anchor: rect(), delayMs: 0 })
+      expect(ctl.current.value).toBeNull()
+    }
+    expect(vi.getTimerCount()).toBe(0)
+    ctl.destroy()
+  })
+
+  it('delayMs 只改显示时机：内容、锚点、maxWidthPx 与 ARIA 行为完全一致', () => {
+    const ctl = useQueryListTooltip()
+    const el = element({ 'aria-describedby': 'keep' })
+    el.getBoundingClientRect = () => rect({ top: 7, left: 8, width: 9, height: 10, bottom: 17, right: 18 })
+    ctl.show({ key: 'k', content: '完整内容', el, maxWidthPx: 480, delayMs: 0 })
+
+    const target = ctl.current.value!
+    expect(target.content).toBe('完整内容')
+    expect(target.maxWidthPx).toBe(480)
+    expect(target.anchor).toEqual({ top: 7, left: 8, width: 9, height: 10, bottom: 17, right: 18 })
+    expect(describedBy(el)).toBe(`keep ${ctl.hostId}`)
+    ctl.destroy()
+  })
+})
+
+/**
+ * key 感知关闭（TOOLTIP-HOVER-RELIABILITY-CORRECTION §6.4 / §10.2）：
+ * 修正前 mouseleave 无条件 `hide()`，旧行的延迟 leave 会取消/关闭新目标刚建立的显示；
+ * 修正后 `hide(key)` 仅在 key 等于当前等待目标或当前显示目标时生效，过期 key 一律 no-op。
+ */
+describe('useQueryListTooltip 按 key 关闭（§6.4 / §10.2）', () => {
+  it('hide(当前显示 key) 关闭当前目标', () => {
+    const ctl = useQueryListTooltip()
+    const el = element()
+    showOn(ctl, el, 'a', 'A')
+    vi.advanceTimersByTime(QUERY_LIST_TOOLTIP_DELAY_MS)
+    expect(ctl.current.value!.key).toBe('a')
+
+    ctl.hide('a')
+    expect(ctl.current.value).toBeNull()
+    expect(describedBy(el)).toBeNull()
+    ctl.destroy()
+  })
+
+  it('hide(当前等待 key) 取消延迟等待', () => {
+    const ctl = useQueryListTooltip()
+    showOn(ctl, element(), 'a', 'A')
+    ctl.hide('a')
+    vi.advanceTimersByTime(QUERY_LIST_TOOLTIP_DELAY_MS)
+    expect(ctl.current.value).toBeNull()
+    ctl.destroy()
+  })
+
+  it('hide(过期 key) 不取消新 key 刚建立的等待', () => {
+    const ctl = useQueryListTooltip()
+    const first = element()
+    const second = element()
+    showOn(ctl, first, 'a', 'A')
+    showOn(ctl, second, 'b', 'B')
+
+    // 旧目标 a 的延迟 mouseleave 此刻到达：不得取消 b 的等待
+    ctl.hide('a')
+    vi.advanceTimersByTime(QUERY_LIST_TOOLTIP_DELAY_MS)
+    expect(ctl.current.value!.key).toBe('b')
+    expect(ctl.current.value!.content).toBe('B')
+    ctl.destroy()
+  })
+
+  it('hide(过期 key) 不关闭新 key 的当前目标，也不误清其 ARIA 关联', () => {
+    const ctl = useQueryListTooltip()
+    const first = element()
+    const second = element()
+    showOn(ctl, first, 'a', 'A')
+    vi.advanceTimersByTime(QUERY_LIST_TOOLTIP_DELAY_MS)
+    showOn(ctl, second, 'b', 'B')
+    vi.advanceTimersByTime(QUERY_LIST_TOOLTIP_DELAY_MS)
+    expect(ctl.current.value!.key).toBe('b')
+    expect(describedBy(second)).toBe(ctl.hostId)
+
+    ctl.hide('a')
+    expect(ctl.current.value!.key).toBe('b')
+    expect(describedBy(second)).toBe(ctl.hostId)
+    ctl.destroy()
+  })
+
+  it('hide()（无参）仍然无条件取消等待并关闭当前目标', () => {
+    const ctl = useQueryListTooltip()
+    const el = element()
+    // 等待中：无条件取消
+    showOn(ctl, el, 'a', 'A')
+    ctl.hide()
+    vi.advanceTimersByTime(QUERY_LIST_TOOLTIP_DELAY_MS)
+    expect(ctl.current.value).toBeNull()
+
+    // 显示中：无条件关闭
+    showOn(ctl, el, 'a', 'A')
+    vi.advanceTimersByTime(QUERY_LIST_TOOLTIP_DELAY_MS)
+    ctl.hide()
+    expect(ctl.current.value).toBeNull()
+    ctl.destroy()
+  })
+
+  it('全局关闭（scroll / resize / visibilitychange）仍然无条件生效，与 key 无关', () => {
+    const ctl = useQueryListTooltip()
+    const el = element()
+    const unbind = ctl.bindGlobalClose()
+    const cases: Array<() => void> = [
+      () => window.dispatchEvent(new Event('scroll')),
+      () => window.dispatchEvent(new Event('resize')),
+      () => document.dispatchEvent(new Event('visibilitychange')),
+    ]
+    for (const [index, fire] of cases.entries()) {
+      ctl.show({ key: `k${index}`, content: '内容', el, delayMs: 0 })
+      expect(ctl.current.value).not.toBeNull()
+      fire()
+      expect(ctl.current.value).toBeNull()
+    }
+    unbind()
+    ctl.destroy()
+  })
+
+  it('destroy 在即时目标与按 key 关闭路径下同样清空并进入终止态', () => {
+    const ctl = useQueryListTooltip()
+    const el = element({ 'aria-describedby': 'keep' })
+    ctl.show({ key: 'a', content: 'A', el, delayMs: 0 })
+    expect(describedBy(el)).toBe(`keep ${ctl.hostId}`)
+
+    ctl.destroy()
+    expect(ctl.current.value).toBeNull()
+    expect(describedBy(el)).toBe('keep')
+
+    // 终止态下按 key 关闭亦为 no-op（不抛错、不复活）
+    ctl.hide('a')
+    expect(ctl.current.value).toBeNull()
+  })
+
+  it('回归：320ms 连续停留内离开仍取消（缺陷机制本身保留为公共默认语义）', () => {
+    const ctl = useQueryListTooltip()
+    const el = element()
+    showOn(ctl, el, 'status-r1', '原始状态：SNAPSHOT_RUNNING')
+    vi.advanceTimersByTime(QUERY_LIST_TOOLTIP_DELAY_MS - 1)
+    ctl.hide('status-r1')
+    vi.advanceTimersByTime(1)
+    expect(ctl.current.value).toBeNull()
+    ctl.destroy()
+  })
+})

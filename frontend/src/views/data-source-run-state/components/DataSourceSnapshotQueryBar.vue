@@ -106,8 +106,8 @@ const props = defineProps<{
   queryLoading: boolean
   /** 页面唯一 Tooltip 控制器的 show（DSS-REQ-086，AC-100~102）。 */
   showTooltip: (opts: QueryListTooltipShowOptions) => void
-  /** 页面唯一 Tooltip 控制器的 hide。 */
-  hideTooltip: () => void
+  /** 页面唯一 Tooltip 控制器的 hide：无参 = 全局关闭；带 key = 仅关闭/取消该 key 自身。 */
+  hideTooltip: (key?: string) => void
 }>()
 
 const emit = defineEmits<{
@@ -216,13 +216,19 @@ function clientById(id: string | null): ClientCandidate | null {
  * “何时显示 CLIENT_DESC Tooltip”判定与锚点解析，不再持有 Teleport / Tooltip DOM / 定位状态，
  * 也不重复实现定位算法。
  */
-function hideTt(): void {
+function hideTt(leavingKey?: string): void {
+  const key = leavingKey ?? hoveredKey
   hoveredEl = null
-  props.hideTooltip()
+  hoveredKey = null
+  // 与 show 同一稳定 key：过期 key（旧锚点乱序到达的 mouseleave）由控制器 no-op，不会关掉新目标。
+  if (key !== null) props.hideTooltip(key)
 }
 
 /** 命中的悬停元素；用于同一锚点内移动时不重发 show。 */
 let hoveredEl: HTMLElement | null = null
+
+/** 当前悬停锚点的稳定身份键（`client-desc:${CLIENT_ID}`），与 show 的 key 同源。 */
+let hoveredKey: string | null = null
 
 /**
  * 锚点解析（只依赖 Element Plus 公开的面板/标签类名 + 本 Feature 私有 `data-*`，不改动其内部 DOM 与盒模型）：
@@ -264,17 +270,21 @@ function onDocMouseOver(e: MouseEvent): void {
   }
   if (hit.el === hoveredEl) return
   hoveredEl = hit.el
+  hoveredKey = `client-desc:${hit.id}`
   // 查询栏内容上限固定 480px（§7.6.2）：与候选下拉外部宽度一致，超出才换行且不越出视口。
-  props.showTooltip({ key: `client-desc:${hit.id}`, content: hit.content, el: hit.el, maxWidthPx: 480 })
+  // 延迟沿用公共默认 320ms（不传 delayMs）：查询候选不是小命中区，保持既有节奏。
+  props.showTooltip({ key: hoveredKey, content: hit.content, el: hit.el, maxWidthPx: 480 })
 }
 
 function onDocMouseOut(e: MouseEvent): void {
   const target = e.target
   if (!isElement(target)) return
-  if (!resolveTooltipAnchor(target)) return
+  const leaving = resolveTooltipAnchor(target)
+  if (!leaving) return
   const to = e.relatedTarget
   if (isElement(to) && hoveredEl && hoveredEl.contains(to)) return
-  hideTt()
+  // 按“被离开的锚点”自身的 key 关闭，而不是当前悬停键：乱序到达的旧 mouseout 无法关掉新目标。
+  hideTt(`client-desc:${leaving.id}`)
 }
 
 // 下拉面板被 Teleport 到 body，不在组件子树内，故用捕获阶段的文档级委托统一覆盖“候选 + 可见选中项”两处锚点。
@@ -286,6 +296,7 @@ onBeforeUnmount(() => {
   document.removeEventListener('mouseover', onDocMouseOver, true)
   document.removeEventListener('mouseout', onDocMouseOut, true)
   hoveredEl = null
+  hoveredKey = null
 })
 
 /** 多选互斥：选“全部”清空具体、选具体去“全部”、清空回“全部”；只改草稿，不发请求（DSS-REQ-022/023）。 */

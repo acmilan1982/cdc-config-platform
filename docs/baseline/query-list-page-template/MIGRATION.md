@@ -214,7 +214,7 @@ shared_component_design_path=docs/baseline/query-list-page-template/SHARED_COMPO
 ## 7. 当前有效下一步
 
 ```text
-next_step=CHATGPT_QUERY_LIST_PAGE_SHARED_COMPONENT_FORMAL_ACCEPTANCE_R1_REVIEW_FROM_REMOTE_GIT
+next_step=CHATGPT_QUERY_LIST_PAGE_SHARED_TOOLTIP_HOVER_RELIABILITY_CORRECTION_REVIEW_FROM_REMOTE_GIT
 ```
 
 公共组件详细设计任务（`QUERY-LIST-PAGE-SHARED-COMPONENT-DESIGN-001`）已产出草案
@@ -239,10 +239,31 @@ ChatGPT 对 R2 的独立复审结论为 `APPROVED`，批准收口任务
 纯文档 R1 纠正任务（`QUERY-LIST-PAGE-SHARED-COMPONENT-FORMAL-ACCEPTANCE-001-R1`）
 已定向应用该两处纠正，**未**重跑验收、**未**执行测试/构建/浏览器验证、**未**修改实现或测试。
 
+项目负责人在“源库快照状态”页人工复检时发现 Tooltip **悬停可靠性**问题
+（30+ 条记录下快速移入 / 快速扫行时“快照状态”Tooltip 有时不显示），要求定向纠正；
+被人工独立授权的前置纠正任务
+`QUERY-LIST-PAGE-SHARED-TOOLTIP-HOVER-RELIABILITY-CORRECTION-001`（`2026-09-17`）
+已完成该纠正：`show()` 新增可选 `delayMs`（公共默认仍为
+`QUERY_LIST_TOOLTIP_DELAY_MS=320`，**仅**“快照状态”一处显式传 `0`，
+探针端 / 源库 / 查询候选继续使用公共默认），`hide()` 新增可选 `key` 参数
+（无参仍是全局关闭；带 key 只关闭/取消该 key 自身，过期 key 为 no-op），
+每个鼠标触发器在进入与离开使用同一稳定 key；**未**放大“快照状态”命中区、
+**未**改变列宽 / 行高 / 单元格内边距、**未**改变任何视觉与业务契约。
+该缺陷**不是**公共组件抽取引入的：抽取前提交
+`94a84239ae9b617e783f5acf20274e838e11a105` 的
+`frontend/src/views/data-source-run-state/tooltip/useSnapshotTooltip.ts`
+中已存在同一“320ms 连续停留”机制。契约细节见
+`SHARED_COMPONENT_DESIGN.md` §7.6.8。
+纠正后状态：`tooltip_hover_reliability_correction_status=IMPLEMENTED_PENDING_CHATGPT_REVIEW`、
+`project_owner_manual_review_status=CHANGES_REQUIRED_TOOLTIP_HOVER_RELIABILITY_CORRECTION_IMPLEMENTED_PENDING_RECHECK`、
+`shared_component_implementation_status=IMPLEMENTED`、
+`formal_acceptance_execution_status=PASS_17_OF_17`。
+
 边界继续保持：本文件保持 `page_migration_status=NOT_STARTED`，
 `shared_component_implementation_status` 现为
 `IMPLEMENTED_FORMAL_ACCEPTANCE_EXECUTED_PENDING_CHATGPT_REVIEW`。在 ChatGPT 远程复审
 与项目负责人接受完成之前：**不得**迁移任何页面、**不得**让参考页之外的页面接入公共组件、
 **不得**把任何 `NOT_STARTED` 状态改写为 `FINAL_ACCEPTED` 或 `FINAL_ACCEPTED_AND_CLOSED`。
 **正式验收执行通过不等于远程复审通过、不等于项目负责人最终接受**；
+**本轮悬停可靠性纠正完成也不等于项目负责人复检已通过**；
 并且**具体采用哪个页面作为首个迁移试点，仍需项目负责人另行确认**。

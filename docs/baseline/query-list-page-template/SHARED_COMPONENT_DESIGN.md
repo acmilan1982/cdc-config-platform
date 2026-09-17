@@ -1244,6 +1244,14 @@ interface QueryListTooltipShowOptions {
    * 必须是有限正数；不接受任意 CSS 字符串（非法值忽略并退回视口安全上限）。
    */
   maxWidthPx?: number
+  /**
+   * 显示时机（ms，可选）。**仅**控制“何时成为当前目标”，不改变内容、锚点、
+   * 宽度、ARIA 关联与单实例语义：省略 → 公共默认 `QUERY_LIST_TOOLTIP_DELAY_MS`；
+   * `0` → 同步成为当前目标、不创建等待定时器；有限正数 → 等待该毫秒数；
+   * 负数 / `NaN` / `±Infinity` / 非 number → 不做隐式转换，退回公共默认。
+   * 语义与授权范围见 §7.6.8。
+   */
+  delayMs?: number
 }
 
 interface UseQueryListTooltipReturn {
@@ -1255,17 +1263,21 @@ interface UseQueryListTooltipReturn {
   hostId: string
   /** 当前目标（响应式）。 */
   current: Ref<QueryListTooltipTarget | null>
-  /** 请求显示；内容为空即关闭；新 key 先即时关闭旧项再走统一延迟。 */
+  /** 请求显示；内容为空即关闭；新 key 先即时关闭旧项再按 `delayMs` 决定时机（§7.6.8）。 */
   show: (opts: QueryListTooltipShowOptions) => void
-  /** 取消延迟并即时关闭。 */
-  hide: () => void
+  /**
+   * 无参 = 全局关闭：取消延迟并即时关闭当前目标（历史行为，保持不变）；
+   * 带 key = **仅**取消/关闭该 key 自身：key 既非当前等待目标、也非当前显示目标时为 no-op，
+   * 不会取消新目标的等待、也不会关闭新目标（详见 §7.6.8）。
+   */
+  hide: (key?: string) => void
   /** 绑定页面级关闭事件（页面/表格滚动、窗口缩放、页面隐藏）。返回解绑函数。 */
   bindGlobalClose: () => () => void
   /** 组件卸载：清定时器并置空，防止卸载后写入。 */
   destroy: () => void
 }
 
-/** 统一短暂显示延迟（参考实现事实值）。 */
+/** 统一短暂显示延迟（参考实现事实值）；仍是 `delayMs` 省略时的公共默认。 */
 declare const QUERY_LIST_TOOLTIP_DELAY_MS: 320
 ```
 
@@ -1424,7 +1436,7 @@ interface QueryListTooltipHostProps {
 | 关联完整规则 | ① token 在目标**真正成为当前 target 时**追加；② 追加前按 ASCII 空白拆分并**去重**，不重复加入同一 `hostId`；③ 切换触发元素时**先**从旧元素只移除自己的 `hostId`、**再**给新元素追加；④ `hide()` / 延迟取消 / 列表整体更新 / 路由切换 / `destroy()` 时**只移除自身 token**；⑤ 移除后无剩余 token → **删除属性**，有剩余 token → 保留并规范为空格分隔；⑥ **不覆盖、不删除**调用方原有 token；⑦ 仅传 `anchor` 而无 `el` 时控制器**不修改任何元素属性**（详见 §7.6.4） |
 | `hostId` 唯一性 | `hostId` 由页面唯一的 `useQueryListTooltip()` 控制器实例创建，**同一值**同时用于 Host 根节点 `id` 与上述关联逻辑；Host **不**生成第二个 ID；页面销毁后不残留 token |
 | 调用方内容上限 | 查询候选 Tooltip 传 `maxWidthPx=480`；表格 Tooltip 省略（详见 §7.6.1）；读屏可读性不因内容上限而变化 |
-| 鼠标 | 触发元素 `mouseenter` → `show()`；`mouseleave` → `hide()` |
+| 鼠标 | 触发元素 `mouseenter` → `show()`；`mouseleave` → `hide(key)`（与该次 `show()` 同一稳定 key，过期 key 为 no-op；页面级关闭仍走无参 `hide()`，见 §7.6.8） |
 | 键盘焦点 | **API 支持**：控制器不区分触发方式，调用方可在 `focus` 事件上调用同一个 `show()`。是否启用由调用方决定 |
 | Escape | 控制器提供全局 `Escape` 关闭（绑定在页面级关闭事件组内），**关闭当前 Tooltip 且不影响其它交互** |
 | 截断文本可达 | 因延迟显示在 `keydown`/`focus` 场景不适用，调用方应保证被截断的值可通过 Tooltip 之外的途径获得（参考实现已通过 Tooltip 提供全文） |
@@ -1464,6 +1476,62 @@ R2 关闭的四处 Tooltip 断点（对应 §7.6.1 / §7.6.3 / §7.6.4 / §7.6.6
    查询候选调用显式传 `maxWidthPx: 480`、表格调用显式省略；
 4. `aria-describedby` 的追加 / 去重 / 切换 / 清理 / 删除空属性 / 保留原有 token
    规则全部写明，可逐条断言。
+
+### 7.6.8 悬停可靠性与按 key 关闭纠正
+
+本节记录 `QUERY-LIST-PAGE-SHARED-TOOLTIP-HOVER-RELIABILITY-CORRECTION-001`
+（`2026-09-17`）引入的两处**机制纠正**及其授权边界。本节**不**新增设计决策，
+只把项目负责人在参考页人工复检中发现的问题与已批准的纠正契约写入正式基线。
+
+**问题（项目负责人人工复检发现）**：在“源库快照状态”页加载 30+ 条记录后，
+悬停“快照状态”标签**有时显示 Tooltip、有时不显示**——缓慢移入可见，
+快速移入或快速扫行常常不显示。
+
+**缺陷归属**：该问题**不是**公共组件抽取引入的。
+抽取前的参考实现在提交
+`94a84239ae9b617e783f5acf20274e838e11a105`
+（`frontend/src/views/data-source-run-state/tooltip/useSnapshotTooltip.ts`）
+中即已存在同一机制：公共默认延迟 `QUERY_LIST_TOOLTIP_DELAY_MS=320` 要求
+**连续停留 320ms**，`mouseleave` / 滚动 / 窗口缩放 / 页面隐藏 / 新目标进入
+都会取消或替换这次等待；而“快照状态”触发元素只是一个约 20px 高的标签背景框，
+快速划入时很难满足连续停留条件。公共组件抽取**如实保留**了该既有语义。
+
+**批准的纠正（两项，且仅此两项）**：
+
+1. **可选 `delayMs`**：`show()` 新增可选 `delayMs?: number`，语义与校验规则
+   已在 §7.6.1 写明。公共默认 `QUERY_LIST_TOOLTIP_DELAY_MS=320` **保持不变**，
+   未传参的调用方行为**完全不变**，延迟机制**未被移除**；
+   只有参考页“快照状态”一处显式传 `delayMs: 0`。
+   “探针端描述”“源库”“查询候选”**不得**传 `delayMs: 0`——它们保持公共默认 320ms。
+2. **按 key 关闭**：`hide(key?: string)` 语义已在 §7.6.1 写明。每个鼠标触发器
+   在 `mouseenter` / `mouseleave` 使用**同一稳定 key**（状态 `status-<rowKey>`、
+   探针 `client-<rowKey>`、源库 `source-<rowKey>`，查询候选沿用其既有稳定 key），
+   `mouseleave` 调用 `hide(key)`；页面级关闭（滚动 / 缩放 / 页面隐藏 /
+   记录整体替换 / 卸载）仍调用无参 `hide()`。这样旧锚点乱序到达的
+   `mouseleave` 只会命中自己的 key，**不会**取消或关闭新目标。
+
+**明确不做的（边界）**：**不放大**“快照状态”命中区——不整格触发、不加透明覆盖层、
+**不修改** `DataSourceSnapshotStatusTag` 的结构 / 文案 / 颜色 / 符号 / 尺寸 / 状态映射，
+**不修改**列宽、行高与单元格内边距。
+
+**保持不变（回归冻结）**：§7.6.2 全部统一项、§7.6.3 归并路径、§7.6.4 Host 契约
+（`Teleport to="body"`、`pointer-events:none`、锚点矩形四边避让 / 优先上方 / 水平居中 / 夹取、
+视口安全上限；表格省略 `maxWidthPx`、查询候选传 `480`）、§7.6.5 业务内容不得内置、
+§7.6.6 可访问性规则（含 `aria-describedby` 仍只清理自身 token、空内容立即关闭、
+`Escape` 默认不启用）。
+
+```text
+tooltip_hover_reliability_correction_status=IMPLEMENTED_PENDING_CHATGPT_REVIEW
+tooltip_hover_defect_origin_status=PRE_EXISTING_BEFORE_SHARED_COMPONENT_EXTRACTION
+default_tooltip_delay_ms=320
+status_tooltip_delay_ms=0
+tooltip_hide_signature_status=CLOSED_OPTIONAL_KEY_SELF_SCOPED_GLOBAL_BY_DEFAULT
+project_owner_manual_review_status=CHANGES_REQUIRED_TOOLTIP_HOVER_RELIABILITY_CORRECTION_IMPLEMENTED_PENDING_RECHECK
+project_owner_acceptance_status=PENDING
+page_migration_status=NOT_STARTED
+```
+
+**纠正完成不等于 ChatGPT 复审已通过、不等于项目负责人最终接受、不等于页面迁移已获授权。**
 
 ---
 

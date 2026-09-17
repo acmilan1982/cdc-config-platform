@@ -490,3 +490,103 @@ describe('DataSourceSnapshotTable 页面级单实例 Tooltip 委托（DSS-REQ-07
     wrapper.unmount()
   })
 })
+
+/**
+ * 悬停可靠性修正（TOOLTIP-HOVER-RELIABILITY-CORRECTION §6.3 / §6.5 / §10.3）：
+ * ① 快照状态命中区仅约 20px 高，快速划入/扫行时 320ms 延迟会被 mouseleave 取消 → 仅该触发器显式取 delayMs:0；
+ * ② 探针端 / 源库保持公共默认 320ms，不得被本任务顺手改为即时；
+ * ③ 每个触发器的 mouseenter / mouseleave 必须使用同一个稳定 key，离开按 key 关闭（不是无条件关闭）。
+ */
+describe('DataSourceSnapshotTable 状态即时显示与稳定 key 关闭（§6.3/§6.5）', () => {
+  it('快照状态显式传 delayMs:0（小命中区同步成为当前目标，不依赖 320ms 连续停留）', async () => {
+    const wrapper = await mountTable([item()])
+    await reveal(triggerByKind(wrapper, 'status-'))
+    expect(lastShow(wrapper).delayMs).toBe(0)
+    expect(lastShow(wrapper).content).toBe('原始状态：SNAPSHOT_RUNNING')
+    expect(ownTooltipNodes()).toBe(0)
+    wrapper.unmount()
+  })
+
+  it('探针端与源库不传 delayMs：保持公共默认 320ms，不得成为即时', async () => {
+    const wrapper = await mountTable([item()])
+    await reveal(triggerByKind(wrapper, 'client-desc-'))
+    expect(lastShow(wrapper).delayMs).toBeUndefined()
+    await reveal(triggerByKind(wrapper, 'source-main-'))
+    expect(lastShow(wrapper).delayMs).toBeUndefined()
+    wrapper.unmount()
+  })
+
+  it('三类触发器 mouseenter 与 mouseleave 使用同一稳定 key，离开按该 key 精确关闭', async () => {
+    const wrapper = await mountTable([item({ clientId: 'R1' })])
+    const pairs = [
+      ['client-desc-', 'client-'],
+      ['source-main-', 'source-'],
+      ['status-', 'status-'],
+    ] as const
+    for (const [prefix, keyPrefix] of pairs) {
+      const trigger = triggerByKind(wrapper, prefix)
+      // 触发器自身的 data-tt-kind 即 `${keyPrefix}${rowKey(row)}`，据此推导该行的稳定 key
+      const rowId = trigger.attributes('data-tt-kind')!.slice(prefix.length)
+      expect(rowId, prefix).toContain('R1')
+      const expectedKey = `${keyPrefix}${rowId}`
+
+      await reveal(trigger)
+      expect(lastShow(wrapper).key, prefix).toBe(expectedKey)
+
+      const before = hideSpy(wrapper).mock.calls.length
+      await trigger.trigger('mouseleave')
+      const calls = hideSpy(wrapper).mock.calls
+      expect(calls.length, prefix).toBe(before + 1)
+      // 离开必须携带与进入完全相同的 key（且不是无参全局关闭）
+      expect(calls[calls.length - 1]![0], prefix).toBe(expectedKey)
+    }
+    wrapper.unmount()
+  })
+
+  it('多行扫描：每行离开只带自己的 key，旧行遗留的 leave 不会关掉新行目标', async () => {
+    const wrapper = await mountTable([
+      item({ clientId: 'R1', snapshotStatus: 'SNAPSHOT_RUNNING' }),
+      item({ clientId: 'R2', snapshotStatus: 'SNAPSHOT_COMPLETED' }),
+    ])
+    const statuses = wrapper.findAll('[data-tt-kind^="status-"]')
+    expect(statuses).toHaveLength(2)
+    const keyOf = (index: number): string =>
+      `status-${statuses[index].attributes('data-tt-kind')!.slice('status-'.length)}`
+    expect(keyOf(0)).not.toBe(keyOf(1))
+
+    // 快速扫过 R1 → R2（R2 进入后 R1 的 leave 才到达）
+    await reveal(statuses[0])
+    await reveal(statuses[1])
+    expect(lastShow(wrapper).key).toBe(keyOf(1))
+
+    await statuses[0].trigger('mouseleave')
+    expect(hideSpy(wrapper).mock.calls[hideSpy(wrapper).mock.calls.length - 1]![0]).toBe(keyOf(0))
+
+    // 两行 key 互不相同：旧 key 的关闭不会命中当前目标（key 感知关闭由控制器测试覆盖）
+    expect(showCalls(wrapper).map((c) => c.key)).toEqual([keyOf(0), keyOf(1)])
+    wrapper.unmount()
+  })
+
+  it('records 替换仍走无参全局关闭（与 key 无关，历史行为不变）', async () => {
+    const wrapper = await mountTable([item()])
+    await reveal(triggerByKind(wrapper, 'status-'))
+    await wrapper.setProps({ records: [item({ clientId: 'NEW' })] })
+    await ticks()
+    const calls = hideSpy(wrapper).mock.calls
+    expect(calls).toHaveLength(1)
+    expect(calls[0]).toHaveLength(0)
+    wrapper.unmount()
+  })
+
+  it('状态命中区未被放大：触发器仍是标签外包的 inline-block span，单元格/列宽/标签外观字面量不变', async () => {
+    const src = readFileSync(resolve(process.cwd(), 'src/views/data-source-run-state/components/DataSourceSnapshotTable.vue'), 'utf8')
+    // 未新增透明覆盖层 / 整格触发器 / 命中区扩展
+    expect(src).not.toMatch(/position:\s*absolute/)
+    expect(src).not.toMatch(/inset:\s*0/)
+    expect(src).not.toMatch(/::?after|::?before/)
+    expect(src).not.toMatch(/dss-status-hit|hit-area|expand/i)
+    // 列宽与行高契约保持
+    expect(src).toMatch(/label="快照状态"\s+width="140"/)
+    expect(src).toMatch(/padding:\s*12px 0/)
+  })
+})

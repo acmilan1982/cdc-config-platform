@@ -1188,6 +1188,40 @@ describe('DataSourceSnapshotQueryBar CLIENT_DESC 完整 Tooltip 判定与委托�
     wrapper.unmount()
   })
 
+  it('候选 mouseenter/mouseleave 使用同一稳定 key（client-desc:<原始 CLIENT_ID>），离开按该 key 关闭', async () => {
+    const wrapper = await mountTtBar({
+      clients: [
+        { id: 'C1', desc: LONG_DESC, active: true },
+        { id: 'C2', desc: 'D'.repeat(23), active: true },
+      ],
+    })
+    await openSelect(wrapper, 0)
+    const first = optionRow(clientPopper(), `C1（${'长'.repeat(20)}...）`)
+    const second = optionRow(clientPopper(), `C2（${'D'.repeat(20)}...）`)
+    hover(first)
+    await settleTooltip()
+    hover(second)
+    await settleTooltip()
+
+    // 每个候选离开时只关闭它自己的 key（不是无参全局关闭）
+    unhover(first)
+    await settleTooltip()
+    unhover(second)
+    await settleTooltip()
+    const keys = hideSpy(wrapper).mock.calls.map((c) => c[0])
+    expect(keys).toEqual(['client-desc:C1', 'client-desc:C2'])
+    wrapper.unmount()
+  })
+
+  it('查询候选延用公共默认 320ms：不传 delayMs（不得被本任务顺手改为即时）', async () => {
+    const wrapper = await mountTtBar({ clients: [{ id: 'C1', desc: LONG_DESC, active: true }] })
+    await openSelect(wrapper, 0)
+    hover(optionRow(clientPopper(), `C1（${'长'.repeat(20)}...）`))
+    await settleTooltip()
+    expect((lastShow(wrapper) as { delayMs?: number }).delayMs).toBeUndefined()
+    wrapper.unmount()
+  })
+
   it('卸载后不再响应文档级悬停事件（不残留监听器）', async () => {
     const wrapper = await mountTtBar({ clients: [{ id: 'C1', desc: LONG_DESC, active: true }] })
     await openSelect(wrapper, 0)

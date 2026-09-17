@@ -37,6 +37,16 @@ export interface QueryListTooltipShowOptions {
    * 调用方内容上限（px）。必须是有限正数；非法值忽略并退回视口安全上限。
    */
   maxWidthPx?: number
+  /**
+   * 调用方显示延迟（ms）。唯一语义：
+   * - 省略 → 公共默认 {@link QUERY_LIST_TOOLTIP_DELAY_MS}（320ms）；
+   * - `0` → 立即成为当前目标，不创建等待定时器；
+   * - 有限正数 → 使用该毫秒数；
+   * - 其它（负数、`NaN`、`Infinity`、非 number）→ 不报错，统一退回公共默认 320ms。
+   *
+   * 只控制显示时机：内容、锚点、最大宽度、ARIA 与单实例语义均不受影响。
+   */
+  delayMs?: number
 }
 
 /** 自动刷新倒计时投影。`null` 表示该页面不使用自动刷新。 */
@@ -60,10 +70,15 @@ export interface UseQueryListTooltipReturn {
   hostId: string
   /** 当前目标（响应式）。 */
   current: Ref<QueryListTooltipTarget | null>
-  /** 请求显示；内容为空即关闭；新 key 先即时关闭旧项再走统一延迟。 */
+  /** 请求显示；内容为空即关闭；新 key 先即时关闭旧项再走该次调用指定的延迟。 */
   show: (opts: QueryListTooltipShowOptions) => void
-  /** 取消延迟并即时关闭。 */
-  hide: () => void
+  /**
+   * 关闭接口：
+   * - `hide()`：无条件取消当前等待并关闭当前 Tooltip（滚动、resize、页面隐藏、记录整体替换、路由卸载等全局关闭）；
+   * - `hide(key)`：仅当 `key` 等于当前等待目标或当前显示目标时才取消/关闭；key 已过期时 no-op，
+   *   旧目标的延迟 `mouseleave` 不会取消新目标刚建立的等待或显示。
+   */
+  hide: (key?: string) => void
   /** 绑定页面级关闭事件（页面/表格滚动、窗口缩放、页面隐藏）。返回解绑函数。 */
   bindGlobalClose: (options?: BindGlobalCloseOptions) => () => void
   /** 组件卸载：清定时器并置空，防止卸载后写入。 */

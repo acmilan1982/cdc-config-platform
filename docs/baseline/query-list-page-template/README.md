@@ -22,6 +22,8 @@ chatgpt_formal_acceptance_r0_review_status=CHANGES_REQUIRED_TWO_DOCUMENT_EVIDENC
 formal_acceptance_r1_correction_task=QUERY-LIST-PAGE-SHARED-COMPONENT-FORMAL-ACCEPTANCE-001-R1
 formal_acceptance_r1_correction_status=APPLIED_PENDING_CHATGPT_R1_REVIEW
 shared_component_project_owner_acceptance_status=PENDING
+tooltip_hover_reliability_correction_status=IMPLEMENTED_PENDING_CHATGPT_REVIEW
+project_owner_manual_review_status=CHANGES_REQUIRED_TOOLTIP_HOVER_RELIABILITY_CORRECTION_IMPLEMENTED_PENDING_RECHECK
 page_migration_status=NOT_STARTED
 reference_feature_status=FINAL_ACCEPTED_AND_CLOSED
 chatgpt_r1_review_status=APPROVED
@@ -478,3 +480,37 @@ worktree 数量 `70/71`）；R1 纯文档纠正任务
   `CHATGPT_QUERY_LIST_PAGE_SHARED_COMPONENT_FORMAL_ACCEPTANCE_R1_REVIEW_FROM_REMOTE_GIT`。
   **R1 纠正完成不等于 ChatGPT R1 远程复审已通过、不等于项目负责人最终接受、
   不等于任何页面迁移已获授权。**
+- 2026-09-17，参考页 Tooltip **悬停可靠性纠正**
+  （`QUERY-LIST-PAGE-SHARED-TOOLTIP-HOVER-RELIABILITY-CORRECTION-001`）。
+  项目负责人在“源库快照状态”页人工复检中发现：加载 30+ 条记录后悬停“快照状态”标签
+  **有时显示、有时不显示**——缓慢移入可见，快速移入或快速扫行常常不显示。
+  该缺陷**不是**公共组件抽取引入的：抽取前提交
+  `94a84239ae9b617e783f5acf20274e838e11a105` 的
+  `frontend/src/views/data-source-run-state/tooltip/useSnapshotTooltip.ts`
+  即已存在同一“连续停留 `320ms` 才显示、离开即取消”机制，抽取时如实保留。
+  本任务按人工授权只做两项机制纠正：① `show()` 新增可选 `delayMs`
+  （公共默认 `QUERY_LIST_TOOLTIP_DELAY_MS=320` **保持不变**，未传参行为不变，
+  延迟机制**未**移除；**仅**“快照状态”一处显式传 `0`，探针端 / 源库 / 查询候选
+  继续使用公共默认，不得被顺手改为即时）；② `hide(key?: string)`
+  （无参仍是全局关闭，带 key 只关闭/取消该 key 自身，过期 key 为 no-op），
+  每个鼠标触发器进入与离开使用同一稳定 key。
+  **未**放大“快照状态”命中区（不整格触发、不加透明覆盖层、不改
+  `DataSourceSnapshotStatusTag` 结构与文案、不改列宽 / 行高 / 内边距）；
+  **未**改变 Tooltip 单实例、Teleport、锚点定位、`maxWidthPx`、`aria-describedby`
+  与关闭时机等既有契约；**未**改变业务状态机、接口参数、查询条件与刷新周期；
+  **未**修改后端代码、数据库、ZooKeeper 与 Kafka。
+  定向测试与全量前端测试、`vue-tsc`、生产构建全部通过；真实前后端 + 真实浏览器
+  在 `1280x800` 与 `1920x1080` 两个视口以真实指针事件验证通过
+  （快速直入状态框 20/20、快速横扫、两行来回 40/40、查询后重做、探针 / 源库 /
+  查询候选仍保持 320ms 的对照、滚动 / 缩放 / 记录替换关闭均正常）；
+  三处临时负向变异均被断言失败并已按字节还原（未入库）。
+  **未**新增或删除任何保留标记字面量：模板标记冻结保持 `48/0/43/9`、
+  设计决策冻结保持 `66/0`。
+  更新后状态：`tooltip_hover_reliability_correction_status=IMPLEMENTED_PENDING_CHATGPT_REVIEW`、
+  `project_owner_manual_review_status=CHANGES_REQUIRED_TOOLTIP_HOVER_RELIABILITY_CORRECTION_IMPLEMENTED_PENDING_RECHECK`、
+  `project_owner_acceptance_status=PENDING`、
+  `shared_component_implementation_status=IMPLEMENTED`、
+  `page_migration_status=NOT_STARTED`；下一条唯一入口为
+  `CHATGPT_QUERY_LIST_PAGE_SHARED_TOOLTIP_HOVER_RELIABILITY_CORRECTION_REVIEW_FROM_REMOTE_GIT`。
+  **纠正完成不等于 ChatGPT 远程复审已通过、不等于项目负责人复检与最终接受已通过、
+  不等于任何页面迁移已获授权；本任务不迁移任何页面。**
