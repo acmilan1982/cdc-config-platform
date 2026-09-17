@@ -2470,3 +2470,44 @@ formal_acceptance_rerun_status=NOT_RUN_NOT_REQUIRED
 ```text
 next_step=CHATGPT_QUERY_LIST_PAGE_SHARED_COMPONENT_FORMAL_ACCEPTANCE_R1_REVIEW_FROM_REMOTE_GIT
 ```
+
+### 12.6 Tooltip 悬停可靠性纠正的补充正式验收（`2026-09-17`）
+
+悬停可靠性纠正（`QUERY-LIST-PAGE-SHARED-TOOLTIP-HOVER-RELIABILITY-CORRECTION-001`）
+已由 ChatGPT 从远程 Git 复审为 `APPROVED`；项目负责人在真实运行环境中人工复检
+“快照状态”Tooltip 快速划入 / 扫行现象，结论为 **PASS**。补充正式验收任务
+`QUERY-LIST-PAGE-SHARED-TOOLTIP-HOVER-RELIABILITY-SUPPLEMENTAL-FORMAL-ACCEPTANCE-001`
+在该纠正提交 `0a1cd99640a5cfa08280a95c23ca3c7231ea6a73`（执行时 `origin/develop` HEAD）上
+执行 21 项补充验收：原 17 项（`AC-001`～`AC-017`）在当前提交上重新采集复现、
+`SA-018` 快照状态即时显示可靠性、`SA-019` key 感知关闭与生命周期、
+`SA-020` 公共默认 `320ms` 冻结、`SA-021` 修正范围与文档冻结及项目负责人决策记录，
+执行结论为 `PASS`。
+
+该轮复现的关键契约事实（与 §7.6.8 一致，本轮仅复核、未改动）：
+
+- 公共默认 `QUERY_LIST_TOOLTIP_DELAY_MS=320` 冻结：探针端 / 源库 / 查询候选在真实浏览器中
+  快速穿过不显示、停留约 `320ms` 后显示；非数值、负数、`NaN`、`±Infinity` 一律回落 `320`；
+- 显式 `delayMs: 0` **仅**“快照状态”一处：不创建等待定时器、同步成为当前目标；
+- `hide(key)` 只作用于匹配的 pending / current key，过期 key 为 no-op；无参 `hide()` 仍为全局关闭；
+- 内容、锚点、`maxWidthPx`、`aria-describedby`、单实例（同屏宿主恒 ≤ `1`）等语义**不因 `delayMs` 改变**；
+- 命中区未被放大，列宽 / 行高 / 内边距 / 状态标签视觉未变。
+
+本任务为纯验收加记录任务：**未**修改任何生产代码、测试代码、依赖、锁文件、SQL 或配置；
+原验收报告与原证据目录未被改写；模板标记冻结保持 `48/0/43/9`、设计决策冻结保持 `66/0`。
+
+```text
+tooltip_hover_reliability_correction_status=IMPLEMENTED_AND_CHATGPT_REVIEW_APPROVED
+project_owner_manual_tooltip_recheck_status=PASS
+supplemental_formal_acceptance_task=QUERY-LIST-PAGE-SHARED-TOOLTIP-HOVER-RELIABILITY-SUPPLEMENTAL-FORMAL-ACCEPTANCE-001
+supplemental_formal_acceptance_execution_status=PASS
+supplemental_formal_acceptance_review_status=PENDING_CHATGPT_REMOTE_GIT_REVIEW
+project_owner_final_acceptance_status=PENDING
+page_migration_status=NOT_STARTED
+```
+
+边界：§12.5 所列四个收口标记串在本节同样**未被写入**；
+**未**迁移任何页面、**未**让参考页之外的页面接入公共组件、
+**未**批准试点页面；补充验收**执行**通过**不等于** ChatGPT 远程复审已通过、
+**不等于**项目负责人最终接受；**未访问**数据库写操作、**未**主动访问或写入 ZooKeeper、
+**未访问** Kafka。下一条唯一入口为
+`CHATGPT_QUERY_LIST_PAGE_SHARED_TOOLTIP_HOVER_RELIABILITY_SUPPLEMENTAL_FORMAL_ACCEPTANCE_REVIEW_FROM_REMOTE_GIT`。

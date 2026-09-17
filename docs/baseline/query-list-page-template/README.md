@@ -514,3 +514,38 @@ worktree 数量 `70/71`）；R1 纯文档纠正任务
   `CHATGPT_QUERY_LIST_PAGE_SHARED_TOOLTIP_HOVER_RELIABILITY_CORRECTION_REVIEW_FROM_REMOTE_GIT`。
   **纠正完成不等于 ChatGPT 远程复审已通过、不等于项目负责人复检与最终接受已通过、
   不等于任何页面迁移已获授权；本任务不迁移任何页面。**
+- 2026-09-17，参考页 Tooltip 悬停可靠性纠正的**补充正式验收**
+  （`QUERY-LIST-PAGE-SHARED-TOOLTIP-HOVER-RELIABILITY-SUPPLEMENTAL-FORMAL-ACCEPTANCE-001`）。
+  该纠正已由 ChatGPT 从远程 Git 复审为 `APPROVED`；项目负责人在真实运行环境中人工复检
+  “快照状态”Tooltip 快速划入 / 扫行现象，结论为 **PASS**。
+  本任务在纠正提交 `0a1cd99640a5cfa08280a95c23ca3c7231ea6a73`
+  （执行时 `origin/develop` HEAD，`git ls-remote` 与任务基线三方一致）上执行 21 项补充验收：
+  原 17 项（`AC-001`～`AC-017`）在当前提交上**重新采集复现**（未沿用历史 PASS 结论）、
+  `SA-018` 即时显示可靠性（`1280x800` / `1920x1080` 两视口真实指针事件，快速直入各 `20/20`，
+  横扫与相邻两行来回全部通过，首载与查询后各做一轮）、
+  `SA-019` key 感知关闭与生命周期（单元 + 真实浏览器：当前 key 取消 / 关闭、过期 key 为 no-op、
+  快速 `A→B` 切换时 `A` 的迟到 `mouseleave` 不关闭 `B`、滚动 / 缩放 / 记录替换 / 卸载均正确清理、
+  `aria-describedby` 只增删自身 token）、
+  `SA-020` 公共默认 `320ms` 冻结（探针端 / 源库 / 查询候选在真实浏览器中保持默认，
+  仅“快照状态”为 `0`；非数值、负数、`NaN`、`±Infinity` 一律回落 `320`）、
+  `SA-021` 修正范围、文档冻结与项目负责人决策记录。
+  定向测试 17 文件 / `390` 用例、全量 `55` 文件 / `990` 用例、`vue-tsc`、生产构建全部通过；
+  严格几何零容差 `263/0`（跨实现角色与同角色两种口径）；四个视口 `1280x800` / `1700x920` /
+  `1920x1080` / `2560x1440` 回归通过；同屏 Tooltip 宿主恒 ≤ `1`；其他路由
+  `scrollbar-gutter` 无泄漏；控制台除验收主动注入的一条 `500` 外无错误；业务请求全部为 `GET`。
+  原 `AC-016` 五项负向控制全部重放复现（退出码均非 0），另新增四项修正专项负向控制
+  （移除“快照状态”`delayMs:0`、`hide(key)` 退回无条件关闭、给探针端加 `delayMs:0`、
+  几何 `+0.001px` 注入）同样全部复现；所有文件型变异还原后与基线**逐字节相同**，
+  未进入暂存区 / 提交 / 证据源文件。
+  本轮**未**修改任何生产代码、测试代码、依赖、锁文件、SQL 或配置（全部零 diff）；
+  模板标记冻结保持 `48/0/43/9`、设计决策冻结保持 `66/0`。
+  更新后状态：`tooltip_hover_reliability_correction_status=IMPLEMENTED_AND_CHATGPT_REVIEW_APPROVED`、
+  `project_owner_manual_tooltip_recheck_status=PASS`、
+  `supplemental_formal_acceptance_task=QUERY-LIST-PAGE-SHARED-TOOLTIP-HOVER-RELIABILITY-SUPPLEMENTAL-FORMAL-ACCEPTANCE-001`、
+  `supplemental_formal_acceptance_execution_status=PASS`、
+  `supplemental_formal_acceptance_review_status=PENDING_CHATGPT_REMOTE_GIT_REVIEW`、
+  `project_owner_final_acceptance_status=PENDING`、
+  `page_migration_status=NOT_STARTED`；下一条唯一入口为
+  `CHATGPT_QUERY_LIST_PAGE_SHARED_TOOLTIP_HOVER_RELIABILITY_SUPPLEMENTAL_FORMAL_ACCEPTANCE_REVIEW_FROM_REMOTE_GIT`。
+  **补充验收执行通过不等于 ChatGPT 远程复审已通过、不等于项目负责人最终接受已通过、
+  不等于任何页面迁移已获授权；本任务不迁移任何页面。**

@@ -267,3 +267,33 @@ ChatGPT 对 R2 的独立复审结论为 `APPROVED`，批准收口任务
 **正式验收执行通过不等于远程复审通过、不等于项目负责人最终接受**；
 **本轮悬停可靠性纠正完成也不等于项目负责人复检已通过**；
 并且**具体采用哪个页面作为首个迁移试点，仍需项目负责人另行确认**。
+
+## 迁移状态补充（`2026-09-17`）
+
+悬停可靠性纠正（`QUERY-LIST-PAGE-SHARED-TOOLTIP-HOVER-RELIABILITY-CORRECTION-001`）
+已由 ChatGPT 从远程 Git 复审为 `APPROVED`；项目负责人在真实运行环境中人工复检
+“快照状态”Tooltip，结论为 **PASS**。在此之上，补充正式验收任务
+`QUERY-LIST-PAGE-SHARED-TOOLTIP-HOVER-RELIABILITY-SUPPLEMENTAL-FORMAL-ACCEPTANCE-001`
+在纠正提交 `0a1cd99640a5cfa08280a95c23ca3c7231ea6a73` 上执行 21 项补充验收
+（原 17 项重放 + `SA-018` 即时显示可靠性 + `SA-019` key 感知关闭与生命周期 +
+`SA-020` 公共默认 `320ms` 冻结 + `SA-021` 范围与文档冻结），执行结论为 `PASS`。
+该任务为纯验收加记录任务，**未**修改任何生产代码、测试代码、依赖、锁文件、SQL 或配置。
+
+```text
+tooltip_hover_reliability_correction_status=IMPLEMENTED_AND_CHATGPT_REVIEW_APPROVED
+project_owner_manual_tooltip_recheck_status=PASS
+supplemental_formal_acceptance_task=QUERY-LIST-PAGE-SHARED-TOOLTIP-HOVER-RELIABILITY-SUPPLEMENTAL-FORMAL-ACCEPTANCE-001
+supplemental_formal_acceptance_execution_status=PASS
+supplemental_formal_acceptance_review_status=PENDING_CHATGPT_REMOTE_GIT_REVIEW
+project_owner_final_acceptance_status=PENDING
+page_migration_status=NOT_STARTED
+```
+
+边界继续保持：本文件保持 `page_migration_status=NOT_STARTED`。
+**补充验收执行通过不等于远程复审通过、不等于项目负责人最终接受**；
+**项目负责人人工复查 PASS 仅针对“快照状态”Tooltip 快速划入现象，不构成最终接受**；
+本节**未**写入本节之上所列的四个收口标记串；
+在 ChatGPT 远程复审与项目负责人接受完成之前：**不得**迁移任何页面、
+**不得**让参考页之外的页面接入公共组件、**不得**把任何 `NOT_STARTED` 状态改写为收口态。
+下一条唯一入口为
+`CHATGPT_QUERY_LIST_PAGE_SHARED_TOOLTIP_HOVER_RELIABILITY_SUPPLEMENTAL_FORMAL_ACCEPTANCE_REVIEW_FROM_REMOTE_GIT`。
