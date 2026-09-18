@@ -35,6 +35,40 @@
 - 数据库基线：[docs/database/](../database/README.md) — 已批准（APPROVED，PROJECT-DATABASE-BASELINE-APPROVAL-001）：14 张表、15 条逻辑关系（已确认 12、高度可信 3、待确认 0）、4 项候选物理设计 PENDING_DECISION。
 - Feature 基线：[docs/features/](../features/README.md) — Feature 总索引与各 Feature 基线目录。
 
+## 查询列表页模板基线入口
+
+查询列表页模板基线（**项目级已批准**）：[docs/baseline/query-list-page-template/](./query-list-page-template/README.md)。
+该模板面向只读查询列表页，已完成设计、实现、正式验收及项目负责人最终接受收口（`2026-09-17`）。
+
+主要入口：
+
+- 目标、适用范围、参考实现与当前状态：[query-list-page-template/README.md](./query-list-page-template/README.md)
+- 公共组件详细设计（已批准；阶段一已实现并接受）：[query-list-page-template/SHARED_COMPONENT_DESIGN.md](./query-list-page-template/SHARED_COMPONENT_DESIGN.md)
+- 逐页迁移评估清单、推荐顺序与已接受页保护：[query-list-page-template/MIGRATION.md](./query-list-page-template/MIGRATION.md)
+- 其余文档：[DESIGN.md](./query-list-page-template/DESIGN.md)、[UI.md](./query-list-page-template/UI.md)
+
+当前状态（**权威状态块以模板目录 `README.md` §9 最终接受收口段落为准**，本节不另立定义）：
+
+```text
+template_status=APPROVED_IMPLEMENTED_ACCEPTED
+shared_component_status=FINAL_ACCEPTED_AND_CLOSED
+reference_page=源库快照状态
+reference_page_status=IMPLEMENTED_ACCEPTED
+page_migration_status=NOT_STARTED
+page_migration_authorization_status=NOT_GRANTED
+pilot_page_selection_status=NOT_DECIDED
+```
+
+- **参考页**：“源库快照状态”（`/monitor/data-source-state`）是**已接受的参考页等价接入**，
+  其查询字段、列定义、状态标签语义、接口与分页策略仍属该 Feature 专属，**不是**可直接复制的业务页面。
+- **使用触发条件**：新建查询列表页、对查询列表页做结构性调整、修改公共交互，
+  或评估既有页面迁移时，必须先阅读上述三份入口文档，并优先评估复用该模板与公共组件；
+  若业务差异确实不适用，必须记录差异与理由，不得静默复制一套平行实现。
+- **授权边界**：模板与公共组件的最终接受**不等于**其他页面已迁移。既有页面是否迁移必须**单独评估**，
+  并经项目负责人**明确授权**；当前**未授权**其他页面迁移，**未选择**试点页面。
+- **计数口径**：原正式验收 17 项、补充正式验收 21 项；补充 21 项**包含**原 17 项在纠正后提交上的
+  重新重放，两者是**包含关系而非并列关系**，**不得**把两者相加累计为“独立用例总数”；权威验收覆盖为补充验收 `21/21` PASS。
+
 ## 文档权威边界
 
 - 项目级基线（本目录）与 Feature 级基线（docs/features/）承载正式结论；`docs/baseline-work/` 等过程材料不冒充正式基线（CLAUDE.md §3.3）。
