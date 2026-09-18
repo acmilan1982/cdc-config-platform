@@ -1,18 +1,17 @@
 <template>
-  <div class="sidebar" :class="{ collapsed: appStore.sidebarCollapsed }">
+  <div class="sidebar">
     <div class="brand">
       <span class="brand-text">
-        {{ appStore.sidebarCollapsed ? 'CDC' : 'CDC 配置管理平台' }}
+        CDC 数据同步平台
       </span>
     </div>
 
     <el-menu
       :default-active="currentPath"
-      :collapse="appStore.sidebarCollapsed"
       :router="true"
-      background-color="#304156"
-      text-color="#bfcbd9"
-      active-text-color="#409eff"
+      background-color="transparent"
+      text-color="#cbd5e1"
+      active-text-color="#ffffff"
       class="sidebar-menu"
       @select="onMenuSelect"
     >
@@ -23,7 +22,7 @@
             :key="item.path"
             :index="item.path"
           >
-            <el-icon><component :is="item.icon" /></el-icon>
+            <el-icon><component :is="resolveIcon(item.icon)" /></el-icon>
             <span>{{ item.title }}</span>
           </el-menu-item>
         </el-menu-item-group>
@@ -34,15 +33,39 @@
 
 <script setup lang="ts">
 import { computed } from 'vue'
+import type { Component } from 'vue'
 import { useRoute } from 'vue-router'
-import { useAppStore } from '@/stores/app'
 import { menuGroups } from '@/config/menu'
 import { triggerLogQueryReinit } from '@/views/log-query/reinitBus'
+import {
+  DataAnalysis,
+  Monitor,
+  Connection,
+  Setting,
+  Odometer,
+  DataLine,
+  TrendCharts,
+  Document,
+} from '@element-plus/icons-vue'
 
-const appStore = useAppStore()
 const route = useRoute()
 
 const currentPath = computed(() => route.path)
+
+const iconMap: Record<string, Component> = {
+  DataAnalysis,
+  Monitor,
+  Connection,
+  Setting,
+  Odometer,
+  DataLine,
+  TrendCharts,
+  Document,
+}
+
+function resolveIcon(name: string): Component | undefined {
+  return iconMap[name]
+}
 
 /**
  * 再次点击当前"日志查询"菜单项时触发页面完整重新初始化（LQ-UI-142~146 / LQ-AC-181）。
@@ -62,16 +85,11 @@ function onMenuSelect(index: string) {
   top: 0;
   bottom: 0;
   width: 220px;
-  background-color: #304156;
+  background-color: var(--app-sidebar-bg);
   display: flex;
   flex-direction: column;
-  transition: width 0.28s;
   z-index: 100;
   overflow: hidden;
-}
-
-.sidebar.collapsed {
-  width: 64px;
 }
 
 .brand {
@@ -79,9 +97,11 @@ function onMenuSelect(index: string) {
   display: flex;
   align-items: center;
   justify-content: center;
-  border-bottom: 1px solid rgba(255, 255, 255, 0.08);
+  background-color: var(--app-logo-bg);
+  border-bottom: 1px solid rgba(255, 255, 255, 0.06);
   overflow: hidden;
   white-space: nowrap;
+  flex-shrink: 0;
 }
 
 .brand-text {
@@ -93,18 +113,55 @@ function onMenuSelect(index: string) {
 
 .sidebar-menu {
   flex: 1;
+  width: 220px;
   overflow-y: auto;
   overflow-x: hidden;
   border-right: none;
+  padding: 8px 0;
 }
 
-.sidebar-menu:not(.el-menu--collapse) {
-  width: 220px;
-}
-
-.menu-group :deep(.el-menu-item-group__title) {
-  color: rgba(255, 255, 255, 0.4);
+.sidebar-menu :deep(.el-menu-item-group__title) {
+  color: var(--app-menu-group-text);
   font-size: 12px;
-  padding: 12px 20px 4px;
+  line-height: 1.4;
+  padding: 16px 24px 6px;
+  letter-spacing: 1px;
+}
+
+.sidebar-menu :deep(.el-menu-item) {
+  position: relative;
+  height: 44px;
+  line-height: 44px;
+  margin: 2px 10px;
+  border-radius: 8px;
+  color: var(--app-menu-text);
+  transition: background-color 0.2s, color 0.2s;
+}
+
+.sidebar-menu :deep(.el-menu-item:hover) {
+  background-color: var(--app-menu-hover-bg);
+  color: var(--app-menu-text);
+}
+
+.sidebar-menu :deep(.el-menu-item.is-active) {
+  background-color: var(--app-menu-active-bg);
+  color: var(--app-menu-active-text);
+}
+
+.sidebar-menu :deep(.el-menu-item.is-active::before) {
+  content: '';
+  position: absolute;
+  left: 8px;
+  top: 50%;
+  transform: translateY(-50%);
+  width: 3px;
+  height: 18px;
+  border-radius: 999px;
+  background-color: var(--app-menu-active-bar);
+}
+
+.sidebar-menu :deep(.el-menu-item:focus-visible) {
+  outline: none;
+  box-shadow: inset 0 0 0 2px var(--app-menu-active-bar);
 }
 </style>

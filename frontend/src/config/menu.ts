@@ -27,7 +27,8 @@ export const menuGroups: MenuGroup[] = [
       { path: '/monitor/topic-offset', title: '数据同步进度', icon: 'TrendCharts' },
       { path: '/monitor/log-query', title: '日志查询', icon: 'Document' },
       { path: '/monitor/job-failure/history', title: '故障历史', icon: 'Document' },
-      { path: '/monitor/job-failure', title: '故障监控', icon: 'WarningFilled' }
+      { path: '/monitor/job-failure', title: '故障监控', icon: 'Monitor' },
+      { path: '/large-screen', title: '数据同步统计大屏', icon: 'DataAnalysis' }
     ]
   }
 ]

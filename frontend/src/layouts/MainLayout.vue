@@ -1,7 +1,7 @@
 <template>
   <div class="main-layout">
     <Sidebar />
-    <div class="layout-right" :class="{ collapsed: appStore.sidebarCollapsed }">
+    <div class="layout-right">
       <HeaderBar />
       <div class="content-area">
         <div class="content-card">
@@ -13,11 +13,8 @@
 </template>
 
 <script setup lang="ts">
-import { useAppStore } from '@/stores/app'
 import Sidebar from './Sidebar.vue'
 import HeaderBar from './HeaderBar.vue'
-
-const appStore = useAppStore()
 </script>
 
 <style scoped>
@@ -33,23 +30,20 @@ const appStore = useAppStore()
   flex-direction: column;
   min-width: 0;
   margin-left: 220px;
-  transition: margin-left 0.28s;
-}
-
-.layout-right.collapsed {
-  margin-left: 64px;
 }
 
 .content-area {
   flex: 1;
   padding: 16px 20px;
   overflow-y: auto;
-  background-color: #f0f2f5;
+  background-color: var(--app-page-bg);
 }
 
 .content-card {
-  background-color: #fff;
-  border-radius: 4px;
+  background-color: var(--app-surface-bg);
+  border: 1px solid var(--app-border);
+  border-radius: var(--app-card-radius);
+  box-shadow: var(--app-card-shadow);
   min-height: 100%;
   padding: 20px;
 }
