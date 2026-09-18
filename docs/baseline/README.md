@@ -38,7 +38,7 @@
 ## 查询列表页模板基线入口
 
 查询列表页模板基线（**项目级已批准**）：[docs/baseline/query-list-page-template/](./query-list-page-template/README.md)。
-该模板面向只读查询列表页，已完成设计、实现、正式验收及项目负责人最终接受收口（`2026-09-17`）。
+该模板面向只读查询列表页：模板文档已完成设计并获批准；其阶段一公共组件已实现、通过正式验收，并由项目负责人于 `2026-09-17` 最终接受收口；模板页面迁移实现**尚未开始**。
 
 主要入口：
 
@@ -50,7 +50,8 @@
 当前状态（**权威状态块以模板目录 `README.md` §9 最终接受收口段落为准**，本节不另立定义）：
 
 ```text
-template_status=APPROVED_IMPLEMENTED_ACCEPTED
+query_list_page_template_document_status=APPROVED
+query_list_page_template_implementation_status=NOT_STARTED
 shared_component_status=FINAL_ACCEPTED_AND_CLOSED
 reference_page=源库快照状态
 reference_page_status=IMPLEMENTED_ACCEPTED
@@ -64,7 +65,7 @@ pilot_page_selection_status=NOT_DECIDED
 - **使用触发条件**：新建查询列表页、对查询列表页做结构性调整、修改公共交互，
   或评估既有页面迁移时，必须先阅读上述三份入口文档，并优先评估复用该模板与公共组件；
   若业务差异确实不适用，必须记录差异与理由，不得静默复制一套平行实现。
-- **授权边界**：模板与公共组件的最终接受**不等于**其他页面已迁移。既有页面是否迁移必须**单独评估**，
+- **授权边界**：模板文档批准与公共组件最终接受**不等同于**页面迁移授权，也**不等于**其他页面已迁移。既有页面是否迁移必须**单独评估**，
   并经项目负责人**明确授权**；当前**未授权**其他页面迁移，**未选择**试点页面。
 - **计数口径**：原正式验收 17 项、补充正式验收 21 项；补充 21 项**包含**原 17 项在纠正后提交上的
   重新重放，两者是**包含关系而非并列关系**，**不得**把两者相加累计为“独立用例总数”；权威验收覆盖为补充验收 `21/21` PASS。
