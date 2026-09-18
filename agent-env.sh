@@ -40,3 +40,9 @@ export NPM_CONFIG_CACHE=/data/npm-cache
 
 # npm registry
 export NPM_CONFIG_REGISTRY=https://registry.npmmirror.com
+
+# ZooKeeper environment
+export ZOOKEEPER_HOME=/opt/zookeeper/zookeeper-3.4.14
+export CDC_ZK_CONNECT=10.19.16.111:2181
+export CDC_ZK_ROOT=/bsoft-cdc
+export PATH="$ZOOKEEPER_HOME/bin:$PATH"
