@@ -83,7 +83,7 @@
 
 **追踪**：DS-REQ-001/002/003/005/006/007/008/009/010/011/012/013/014/091/105；DS-AC-001~010/011~019/087/098/100。
 
-> **本轮新草案局部替代声明（§11，`DRAFT_PENDING_USER_REVIEW`）**：本节被本轮新草案**局部替代**的部分如下，替代边界之外的本节结论**继续有效**。
+> **本轮已批准调整基线局部替代声明（§11，`APPROVED`）**：本节被本轮已批准调整基线**局部替代**的部分如下，替代边界之外的本节结论**继续有效**。
 > 1. “页面标题与操作区 / 查询区 / 主表格 / 列清单 / 不得展示列 / 行操作”中被 §10 替代的部分（结果区头部、角色条件、移除编辑按钮、更多菜单）**继续以 §10 为准**；
 > 2. 本节“主表格：一次加载并展示全部 `FG_ACTIVE='1'` 记录”被 `DS-REQ-150` **局部替代**为“展示全部记录”，无分页与 ID 升序**不变**；
 > 3. 本节“不得展示列：… `FG_ACTIVE` …”被 `DS-REQ-152`~`DS-REQ-154` **局部替代**为“不新增独立状态列，但在数据源 ID 列内以‘停用’/‘异常（原始值=…）’标识表达状态”，其余不得展示列（密码等）**继续有效**；
@@ -376,11 +376,13 @@
 | 2026-09-19 | 列表首页选择性接入公共组件调整 UI 设计批准收口：§10 章节标题与状态声明由 `DRAFT_PENDING_USER_REVIEW` 收口为 `APPROVED`（`adjustment_ui_status=APPROVED`）；记录完整批准链（初版草案提交 `01680ee5...` → R1 修订提交 `c3fd460b...` → ChatGPT 远程 Git R1 复审 `REVIEW_PASS` → 项目负责人 2026-09-19 明确回复“批准这轮调整基线”；批准任务 `DATA-SOURCE-LIST-PAGE-SELECTIVE-QUERY-LIST-INTEGRATION-APPROVAL-CLOSEOUT-001`）；明确批准不等于实现、测试或验收——§10.1~§10.6 技术正文与 R1 冻结方案（`QueryListResultPanel` 固定结构、角色 `el-select` `140px`、无分页/无刷新/Tooltip 保留、双击编辑与“更多”菜单、局部替代声明边界）**零变化**，实现状态仍为 `NOT_STARTED`、实现授权 `NOT_GRANTED_IN_THIS_TASK`、`DS-AC-116~140` 仍全部 `NOT_RUN`；§0~§9 既有 `APPROVED` UI 基线逐字冻结；既有统计 `PASS=113/FAIL=0/BLOCKED=2/NOT_RUN=0` 与 `DS-AC-104`/`DS-AC-108` 两个 `BLOCKED` 逐字保留 | DATA-SOURCE-LIST-PAGE-SELECTIVE-QUERY-LIST-INTEGRATION-APPROVAL-CLOSEOUT-001（项目负责人批准驱动的调整基线批准收口；纯文档任务；未修改任何业务代码/测试/依赖/配置/SQL；未访问数据库/ZK/Kafka；未启动服务） |
 | 2026-09-19 | 本轮调整实现状态回写：§10 章节标题改为“（`APPROVED`，`IMPLEMENTED_PENDING_USER_REVIEW`）”，状态声明由 `implementation_status=NOT_STARTED`/`implementation_authorization_status=NOT_GRANTED_IN_THIS_TASK`/`acceptance_execution_status=ALL_NOT_RUN` 更新为 `implementation_status=IMPLEMENTED_PENDING_USER_REVIEW`/`implementation_authorization_status=GRANTED_IN_THIS_TASK`/`formal_acceptance_execution_status=NOT_RUN`/`new_adjustment_acceptance_status=ALL_NOT_RUN`；实现按 §10 已批准 UI 设计落地（`QueryListPageShell`/`QueryListQueryPanel`/`QueryListActions`/`QueryListResultPanel` 接入、角色 `el-select` `140px`、无分页、无刷新工具栏、Tooltip 保留、行双击编辑与“更多”操作列）；§10.1~§10.6 技术正文与 R1 冻结方案**零变化**；`DS-AC-116~140` 仍全部 `NOT_RUN`，实现状态未置 `IMPLEMENTED_ACCEPTED`；页面视觉结论以后续项目负责人页面目测为准；§0~§9 既有 `APPROVED` UI 基线逐字冻结；既有统计 `PASS=113/FAIL=0/BLOCKED=2/NOT_RUN=0` 与两个 `BLOCKED` 逐字保留 | `DATA-SOURCE-LIST-PAGE-SELECTIVE-QUERY-LIST-INTEGRATION-IMPLEMENTATION-001`（已批准调整基线的前后端实现、自动化测试、构建与实现状态回写；未访问数据库/ZK/Kafka；未启动服务） |
 
-## 11. 列表展示全部状态、启用/停用及视觉微调（`DRAFT_PENDING_USER_REVIEW`，未实现）
+## 11. 列表展示全部状态、启用/停用及视觉微调（`APPROVED`，未实现）
 
-> 本轮草案分层状态：`adjustment_document_status=DRAFT_PENDING_USER_REVIEW`、`adjustment_baseline_status=DRAFT_PENDING_USER_REVIEW`、`implementation_status=NOT_STARTED`、`implementation_authorization_status=NOT_GRANTED_IN_THIS_TASK`、`formal_acceptance_execution_status=NOT_RUN`、`new_adjustment_acceptance_status=ALL_NOT_RUN`。
+> 本轮调整基线分层状态：`adjustment_document_status=APPROVED`、`adjustment_baseline_status=APPROVED`、`adjustment_ui_status=APPROVED`、`implementation_status=NOT_STARTED`、`implementation_authorization_status=NOT_GRANTED_IN_THIS_TASK`、`formal_acceptance_execution_status=NOT_RUN`、`new_adjustment_acceptance_status=ALL_NOT_RUN`。
 >
-> 任务：`DATA-SOURCE-LIST-ALL-STATUS-ENABLE-DISABLE-UI-ADJUSTMENT-BASELINE-001`（纯文档草案）。关联需求 `DS-REQ-139`~`DS-REQ-177`，关联验收 `DS-AC-141`~`DS-AC-182`。§0~§10 既有结论**逐字冻结**；本节对 §1/§10 的替代见 §1 后的“本轮新草案局部替代声明”与 §11.0。
+> 批准链（2026-09-19）：初版草案提交 `4ccd6610...` → R1 修订提交 `c4e1048...` → R2 极小修订提交 `aa906c0...` → ChatGPT 从远程 Git 复审 R2 提交 `aa906c0...` 结论 `REVIEW_PASS`（`blocking_finding_count=0`）→ 项目负责人 2026-09-19 明确回复“批准本轮调整基线” → 批准收口任务 `DATA-SOURCE-LIST-ALL-STATUS-ENABLE-DISABLE-UI-ADJUSTMENT-APPROVAL-CLOSEOUT-001`。批准对象为经初版、R1、R2 修订并由 ChatGPT 远程复审通过的**当前**调整基线，**非仅初版**；批准只代表 UI 基线正式成立，**不代表**已实现、已测试、已验收或生产可用。
+>
+> 任务：`DATA-SOURCE-LIST-ALL-STATUS-ENABLE-DISABLE-UI-ADJUSTMENT-BASELINE-001`（纯文档任务）。关联需求 `DS-REQ-139`~`DS-REQ-177`，关联验收 `DS-AC-141`~`DS-AC-182`。§0~§10 既有结论**逐字冻结**；本节对 §1/§10 的替代见 §1 后的“本轮已批准调整基线局部替代声明”与 §11.0。
 
 ### 11.0 对既有 UI 结论的局部替代边界
 
@@ -514,3 +516,13 @@
 - 本轮新增需求 `DS-REQ-139~177`（39 条）与本轮新增验收 `DS-AC-141~182`（42 条）全部为 `NOT_RUN`；上一轮 `DS-AC-116~140`（25 条）仍全部 `NOT_RUN`，未混入本轮统计；页面视觉结论以后续项目负责人页面目测为准；
 - 既有正式复验统计 `PASS=113/FAIL=0/BLOCKED=2/NOT_RUN=0`（阻塞 `DS-AC-104`/`DS-AC-108`）逐字保留，未置 `IMPLEMENTED_ACCEPTED`；
 - 本轮为纯文档草案：未修改任何 `.vue`/`.ts`/`.java`/测试/依赖/配置/SQL/锁文件，未访问数据库/ZK/Kafka，未启动服务，未运行 Maven/npm 测试或构建。
+
+### 12.2 批准收口（2026-09-19，任务 `DATA-SOURCE-LIST-ALL-STATUS-ENABLE-DISABLE-UI-ADJUSTMENT-APPROVAL-CLOSEOUT-001`）
+
+- 2026-09-19；
+- §11 章节标题由“（`DRAFT_PENDING_USER_REVIEW`，未实现）”收口为“（`APPROVED`，未实现）”；分层状态 `adjustment_document_status`/`adjustment_baseline_status` 由 `DRAFT_PENDING_USER_REVIEW` 收口为 `APPROVED`，并同步 `adjustment_ui_status=APPROVED`（`implementation_status`/`implementation_authorization_status`/`formal_acceptance_execution_status`/`new_adjustment_acceptance_status` 保持 `NOT_STARTED`/`NOT_GRANTED_IN_THIS_TASK`/`NOT_RUN`/`ALL_NOT_RUN`）；
+- 记录完整批准链：初版草案提交 `4ccd6610...` → R1 修订提交 `c4e1048...` → R2 极小修订提交 `aa906c0...` → ChatGPT 远程 Git 复审 R2 提交 `aa906c0...` 结论 `REVIEW_PASS`（`blocking_finding_count=0`）→ 项目负责人 2026-09-19 明确回复“批准本轮调整基线” → 批准收口任务 `DATA-SOURCE-LIST-ALL-STATUS-ENABLE-DISABLE-UI-ADJUSTMENT-APPROVAL-CLOSEOUT-001`；
+- §1 末尾“本轮新草案局部替代声明”改标为“本轮已批准调整基线局部替代声明（§11，`APPROVED`）”；
+- §11.0~§11.9 UI 正文（线框、序号列与列宽、行高/字体、停用/异常标识、重置语义、启停菜单、黑色主按钮、明确不变项）**零变化**；§0~§10 既有 `APPROVED` UI 基线与 §10.1~§10.7 技术正文逐字冻结；
+- `DS-REQ-001~177` 编号与正文零变化；本轮新增验收 `DS-AC-141~182`（42 条）仍全部 `NOT_RUN`，上一轮 `DS-AC-116~140`（25 条）仍全部 `NOT_RUN`；既有 `PASS=113/FAIL=0/BLOCKED=2/NOT_RUN=0` 逐字保留；
+- 批准只代表 UI 基线正式成立，**不代表**已实现、已测试、已验收或生产可用；页面视觉仍须后续项目负责人页面目测，实现须**另行**授权并使用独立任务；未修改任何 `.vue`/`.ts`/`.java`/测试/依赖/配置/SQL，未访问数据库/ZK/Kafka，未启动服务。

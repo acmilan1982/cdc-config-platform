@@ -72,7 +72,7 @@
 | 业务属性 | 主表 `DATA_SOURCE_BIZ_ATTR` 列已存在但无管理入口 | 仅目标库独立弹窗读取/保存；原样传输不 trim、不校验 JSON（`DS-REQ-082`~`090`） |
 | 前端 | `DataSourcePage.vue` 占位页 | 正式页面替换占位页；路由 `/config/data-source` 保留 |
 
-> **本轮新草案局部替代提示（§13，`DRAFT_PENDING_USER_REVIEW`）**：本表“列表”行“无分页，直接返回全部 `FG_ACTIVE='1'` 记录”与“启用/停用”行“删除；目标设计不提供启用/停用能力（`DS-REQ-003`/`091`）”两处目标设计结论，已由本轮 `DS-REQ-150`（列表查询全部记录）与 `DS-REQ-168`~`DS-REQ-173`（新增独立启用/停用接口，只更新主表 `FG_ACTIVE`）**局部替代**。替代边界：列表查询范围由“仅 `FG_ACTIVE='1'`”改为“全部记录”，无分页与 `DATA_SOURCE_ID` 升序**不变**；启用/停用由“删除能力”改为“保留能力但收敛为只写主表 `FG_ACTIVE` 的独立接口”。§1.4“旧分页/启停/一对一 EXTEND 语义在目标接口集中**删除**”中关于**旧**接口语义删除的结论仍成立（旧接口语义删除 ≠ 不提供启停能力），本条不改变 EXTEND 相关结论。详细设计见 §13，变更记录见 §14。
+> **本轮已批准调整基线局部替代提示（§13，`APPROVED`）**：本表“列表”行“无分页，直接返回全部 `FG_ACTIVE='1'` 记录”与“启用/停用”行“删除；目标设计不提供启用/停用能力（`DS-REQ-003`/`091`）”两处目标设计结论，已由本轮 `DS-REQ-150`（列表查询全部记录）与 `DS-REQ-168`~`DS-REQ-173`（新增独立启用/停用接口，只更新主表 `FG_ACTIVE`）**局部替代**。替代边界：列表查询范围由“仅 `FG_ACTIVE='1'`”改为“全部记录”，无分页与 `DATA_SOURCE_ID` 升序**不变**；启用/停用由“删除能力”改为“保留能力但收敛为只写主表 `FG_ACTIVE` 的独立接口”。§1.4“旧分页/启停/一对一 EXTEND 语义在目标接口集中**删除**”中关于**旧**接口语义删除的结论仍成立（旧接口语义删除 ≠ 不提供启停能力），本条不改变 EXTEND 相关结论。详细设计见 §13，变更记录见 §14。
 
 ### 1.3 现有类与新增/拆分清单
 
@@ -564,11 +564,13 @@
 - 既有统计 `PASS=113/FAIL=0/BLOCKED=2/NOT_RUN=0`（阻塞 `DS-AC-104`/`DS-AC-108`）与原始证据逐字保留；
 - 依据任务 `DATA-SOURCE-LIST-PAGE-SELECTIVE-QUERY-LIST-INTEGRATION-IMPLEMENTATION-001`（已批准调整基线的前后端实现、自动化测试、构建与实现状态回写；未修改公共查询列表组件、数据库结构/数据/SQL/配置；未访问数据库/ZK/Kafka；未启动服务）。
 
-## 13. 列表展示全部状态、启用/停用及视觉微调设计（`DRAFT_PENDING_USER_REVIEW`，未实现）
+## 13. 列表展示全部状态、启用/停用及视觉微调设计（`APPROVED`，未实现）
 
-> 本轮调整基线分层状态：`adjustment_document_status=DRAFT_PENDING_USER_REVIEW`、`adjustment_baseline_status=DRAFT_PENDING_USER_REVIEW`、`implementation_status=NOT_STARTED`、`implementation_authorization_status=NOT_GRANTED_IN_THIS_TASK`、`formal_acceptance_execution_status=NOT_RUN`、`new_adjustment_acceptance_status=ALL_NOT_RUN`。
+> 本轮调整基线分层状态：`adjustment_document_status=APPROVED`、`adjustment_baseline_status=APPROVED`、`adjustment_design_status=APPROVED`、`implementation_status=NOT_STARTED`、`implementation_authorization_status=NOT_GRANTED_IN_THIS_TASK`、`formal_acceptance_execution_status=NOT_RUN`、`new_adjustment_acceptance_status=ALL_NOT_RUN`。
 >
-> 任务：`DATA-SOURCE-LIST-ALL-STATUS-ENABLE-DISABLE-UI-ADJUSTMENT-BASELINE-001`（`task_type=FEATURE_ADJUSTMENT_BASELINE_DRAFT`，纯文档任务）。
+> 批准链（2026-09-19）：初版草案提交 `4ccd6610...` → R1 修订提交 `c4e1048...` → R2 极小修订提交 `aa906c0...` → ChatGPT 从远程 Git 复审 R2 提交 `aa906c0...` 结论 `REVIEW_PASS`（`blocking_finding_count=0`）→ 项目负责人 2026-09-19 明确回复“批准本轮调整基线” → 批准收口任务 `DATA-SOURCE-LIST-ALL-STATUS-ENABLE-DISABLE-UI-ADJUSTMENT-APPROVAL-CLOSEOUT-001`。批准对象为经初版、R1、R2 修订并由 ChatGPT 远程复审通过的**当前**调整基线，**非仅初版**；批准只代表设计基线正式成立，**不代表**已实现、已测试、已验收或生产可用。
+>
+> 任务：`DATA-SOURCE-LIST-ALL-STATUS-ENABLE-DISABLE-UI-ADJUSTMENT-BASELINE-001`（`task_type=FEATURE_ADJUSTMENT_BASELINE`，纯文档任务）。
 >
 > 本节只冻结**设计结论**，不实现、不测试、不验收、不修改任何代码/配置/SQL；关联需求 `DS-REQ-139~177`，关联验收 `DS-AC-141~182`。§0~§12 既有结论**逐字冻结**；本节对旧结论的替代一律通过 §13.0 的“局部替代声明”显式给出边界，未声明替代的旧规则继续有效。
 
@@ -758,3 +760,13 @@
 - **§13.5 影响行数与并发完全冻结**：影响行数 ≠ 1（含读取后被改变导致 `0` 行）→ `50002` 回滚；不引入重试/悲观锁/乐观版本/新错误码；重复目标状态仅在首次读取已处于目标状态时幂等成功；并发冲突请求返回 `50002`；错误表 `50002` 行同步明确“含读取后被改变导致 `0` 行”。
 - **§13.5 前端消息处理与 §13.6 成功/失败处理统一**：删除“`40400`/`40250` 后刷新列表”，改为**任何启停失败均不自动重新查询**，保留当前列表、结果总数与已应用条件并恢复 busy；**只有成功**才按当前已应用查询条件重新查询（`DS-REQ-173`/`DS-AC-177`）。
 - `DS-REQ-001~177` 编号与正文零变化；本轮草案状态仍为 `DRAFT_PENDING_USER_REVIEW`、`implementation_status=NOT_STARTED`、`implementation_authorization_status=NOT_GRANTED_IN_THIS_TASK`、`new_adjustment_acceptance_status=ALL_NOT_RUN`；未修改任何业务代码/测试/依赖/配置/SQL，未访问数据库/ZK/Kafka，未启动服务。
+
+### 14.3 批准收口（2026-09-19，任务 `DATA-SOURCE-LIST-ALL-STATUS-ENABLE-DISABLE-UI-ADJUSTMENT-APPROVAL-CLOSEOUT-001`）
+
+- 2026-09-19；
+- §13 章节标题由“（`DRAFT_PENDING_USER_REVIEW`，未实现）”收口为“（`APPROVED`，未实现）”；分层状态 `adjustment_document_status`/`adjustment_baseline_status` 由 `DRAFT_PENDING_USER_REVIEW` 收口为 `APPROVED`，并同步 `adjustment_design_status=APPROVED`（`implementation_status`/`implementation_authorization_status`/`formal_acceptance_execution_status`/`new_adjustment_acceptance_status` 保持 `NOT_STARTED`/`NOT_GRANTED_IN_THIS_TASK`/`NOT_RUN`/`ALL_NOT_RUN`）；
+- 记录完整批准链：初版草案提交 `4ccd6610...` → R1 修订提交 `c4e1048...` → R2 极小修订提交 `aa906c0...` → ChatGPT 远程 Git 复审 R2 提交 `aa906c0...` 结论 `REVIEW_PASS`（`blocking_finding_count=0`）→ 项目负责人 2026-09-19 明确回复“批准本轮调整基线” → 批准收口任务 `DATA-SOURCE-LIST-ALL-STATUS-ENABLE-DISABLE-UI-ADJUSTMENT-APPROVAL-CLOSEOUT-001`；
+- §1.2 表后“本轮新草案局部替代提示”改标为“本轮已批准调整基线局部替代提示（§13，`APPROVED`）”；
+- §13.0~§13.6 设计正文（含 R1 冻结的先读、幂等不写、NULL-safe 原状态条件 `UPDATE`、并发 `50002`、失败不刷新）**零变化**；§0~§12 既有 `APPROVED` 设计基线与 §11 追踪结论逐字冻结；
+- `DS-REQ-001~177` 编号与正文零变化；本轮新增验收 `DS-AC-141~182`（42 条）仍全部 `NOT_RUN`，上一轮 `DS-AC-116~140`（25 条）仍全部 `NOT_RUN`；既有 `PASS=113/FAIL=0/BLOCKED=2/NOT_RUN=0`（阻塞 `DS-AC-104`/`DS-AC-108`）逐字保留；
+- 批准只代表设计基线正式成立，**不代表**已实现、已测试、已验收或生产可用；实现须**另行**授权并使用独立任务；未修改任何业务代码/测试/依赖/配置/SQL，未访问数据库/ZK/Kafka，未启动服务。

@@ -111,7 +111,7 @@
 | 策略删除 | — | 物理删除当前 EXTEND 行 | 原逻辑键 `DATA_SOURCE_ID=? AND TARGET_DATA_SOURCE_ID=?`；先 `COUNT(*)`：0 行 → `40401`、≥2 行 → `40903`、恰好 1 才 DML，DML 后校验受影响行数=1 | `@Transactional` | 不清理存量多条；`sourceId` 不存在或非 `'1'` → `40400`，非 SOURCE → `40006` |
 | 连接测试 | 编辑未改密码时按 `originalDataSourceId` 定位 `FG_ACTIVE='1'` 记录读取持久化密码 | 无（不写业务数据） | 一次性临时连接 | 无事务 | 不写任何业务表；不进入应用连接池；表单可编辑 `dataSourceId` 不用于读取旧密码 |
 
-> **本轮新草案局部替代提示（§9，`DRAFT_PENDING_USER_REVIEW`）**：本表以下单元格被本轮**局部替代**，替代边界与新版操作矩阵见 §9.2。
+> **本轮已批准调整基线局部替代提示（§9，`APPROVED`）**：本表以下单元格被本轮**局部替代**，替代边界与新版操作矩阵见 §9.2。
 > - “列表”行 WHERE 条件中的 `FG_ACTIVE='1'` → 改为**不过滤 `FG_ACTIVE`**（返回全部记录），仍然 `ORDER BY DATA_SOURCE_ID ASC`（`DS-REQ-150`）。
 > - “详情”“编辑”“删除”“业务属性读”“业务属性保存”“策略列表”“策略新增”“策略编辑”“策略删除”“连接测试”各行 WHERE 条件中的 `FG_ACTIVE='1'`，对**主记录自身**改为“`'1'` 或 `'0'` 均可，`NULL`/非 `0`/`1` 拒绝并返回 `40400`”（`DS-REQ-155`~`DS-REQ-162`）。
 > - “新增”行写入字段 `FG_ACTIVE('1')`、以及“编辑”行“`FG_ACTIVE` 保留”**不变**（`DS-REQ-176`）。
@@ -145,7 +145,7 @@
 - **命名策略逻辑键计数检查**：新增按**新逻辑键**全量计数（0 行允许 INSERT；1 行 → `40902`；≥2 行 → `40903`），插入后校验受影响行数=1；编辑先按**原逻辑键** `COUNT(*)`（0 → `40401`；≥2 → `40903`；恰好 1 才继续），若逻辑键变化再按新逻辑键查重并排除原记录（0 行允许更新、1 行 → `40902`、≥2 行 → `40903`）；删除按原逻辑键 `COUNT(*)` 恰好为 1 才执行 DML，DML 后校验受影响行数=1（`DS-REQ-064`/`067`）。
 - **不得直接承诺新增索引**：本设计不新增索引/DDL；查询基于现有已批准索引与 ≤100 行小规模数据，性能由表规模与现有结构保证（`DESIGN.md` §8）。
 
-> **本轮新草案局部替代提示（§9，`DRAFT_PENDING_USER_REVIEW`）**：本节以下两条结论被**局部替代**。
+> **本轮已批准调整基线局部替代提示（§9，`APPROVED`）**：本节以下两条结论被**局部替代**。
 > 1. “**`FG_ACTIVE='1'` 固定过滤**：列表、详情、编辑、删除、业务属性、目标候选、命名策略关联查询均只触及 `FG_ACTIVE='1'` 记录；主记录不存在或非 `'1'` 一律视为不存在并返回 `40400`（`DS-REQ-002`）”**局部替代**为：**列表**不按 `FG_ACTIVE` 过滤（返回全部记录，`DS-REQ-150`）；**详情/编辑/删除/业务属性/源库命名策略/编辑态连接测试**对**自身主记录**接受 `'1'` 与 `'0'`（`'0'` 不再视为不存在，`DS-REQ-155`~`DS-REQ-158`），`NULL`/非 `0`/`1` 仍拒绝并返回 `40400`（`DS-REQ-162`）。**目标候选**的 `FG_ACTIVE='1'` 过滤**不作替代、继续有效**（`DS-REQ-159`）。
 > 2. 本节“角色限定查询”中“不存在或非 `'1'` → `40400`”的两处表述，同样按上述边界**局部替代**（`'0'` 改为放行；`NULL`/非 `0`/`1` 仍 `40400`）；角色校验本身（业务属性须 `TARGET`、命名策略入口须 `SOURCE`）**不放宽**。新目标库校验 `FG_ACTIVE='1' AND UPPER(DATA_SOURCE_CATEGORY)='TARGET'` 与 `40005` **不作替代、继续有效**。
 > 其余结论（忽略大小写模糊/精确比较、命名策略组合键查重、trim、默认 ID 升序、角色大小写兼容、逻辑键计数检查、不新增索引）**全部继续有效**。新版 WHERE 条件与启停写入边界见 §9.2、§9.3。
@@ -240,22 +240,24 @@ new_adjustment_acceptance_status=ALL_NOT_RUN
 
 ---
 
-## 9. 本轮列表展示全部状态与启用/停用的数据库变化声明（`DRAFT_PENDING_USER_REVIEW`）
+## 9. 本轮列表展示全部状态与启用/停用的数据库变化声明（`APPROVED`）
 
-> 状态：`DRAFT_PENDING_USER_REVIEW`。本轮草案分层状态：
+> 状态：`APPROVED`。本轮调整基线分层状态：
 
 ```text
-adjustment_document_status=DRAFT_PENDING_USER_REVIEW
-adjustment_baseline_status=DRAFT_PENDING_USER_REVIEW
-adjustment_database_status=DRAFT_PENDING_USER_REVIEW
+adjustment_document_status=APPROVED
+adjustment_baseline_status=APPROVED
+adjustment_database_status=APPROVED
 implementation_status=NOT_STARTED
 implementation_authorization_status=NOT_GRANTED_IN_THIS_TASK
 formal_acceptance_execution_status=NOT_RUN
 new_adjustment_acceptance_status=ALL_NOT_RUN
 ```
 
-- 任务：`DATA-SOURCE-LIST-ALL-STATUS-ENABLE-DISABLE-UI-ADJUSTMENT-BASELINE-001`（纯文档草案）。关联需求 `DS-REQ-150`~`DS-REQ-159`、`DS-REQ-168`~`DS-REQ-171`、`DS-REQ-176`、`DS-REQ-177`；关联验收 `DS-AC-150`~`DS-AC-178`、`DS-AC-182`。
-- 本节**尚未**获得项目负责人批准，**未**授权实现，**未**执行任何正式验收。
+- 任务：`DATA-SOURCE-LIST-ALL-STATUS-ENABLE-DISABLE-UI-ADJUSTMENT-BASELINE-001`（纯文档调整基线）。关联需求 `DS-REQ-150`~`DS-REQ-159`、`DS-REQ-168`~`DS-REQ-171`、`DS-REQ-176`、`DS-REQ-177`；关联验收 `DS-AC-150`~`DS-AC-178`、`DS-AC-182`。
+- **批准链（完整）**：初版提交 `4ccd66106e832a0fd10dc42617507899cbb26463` → R1 修订提交 `c4e10486465fbb406dbc068ff0998c49edd4e53b` → R2 修订提交 `aa906c0004d51d638a16212f3d6ba7753d18288d`；ChatGPT 远程复审（对 R2 提交 `aa906c0...`）= `REVIEW_PASS`，`blocking_finding_count=0`；项目负责人批准日期 `2026-09-19`，批准表述“批准本轮调整基线”，批准权限 `项目负责人（用户）`，批准任务 `DATA-SOURCE-LIST-ALL-STATUS-ENABLE-DISABLE-UI-ADJUSTMENT-APPROVAL-CLOSEOUT-001`。
+- 本批准针对**初版 + R1 + R2 修订后、且经 ChatGPT 远程复审通过**的调整基线，**非**仅批准初版草案。
+- 本节**已**获得项目负责人批准，**尚未**授权实现，**未**执行任何正式验收。
 
 ### 9.1 无数据库变化声明
 
@@ -360,3 +362,11 @@ WHERE DATA_SOURCE_ID = :dataSourceId
 - **§9.2 错误码说明修正**：删除旧的“`NULL`/非 `0`/`1` 一律视为非法、并把启停接口一并归入 `40250`”整体表述，改为分场景：非启停维护接口 → `40400`；`enable` → `40250` 不写库；`disable` → **不**返回 `40250`，按 NULL-safe 原状态条件归一化为 `'0'`。
 - **§9.3 极小交叉引用**：新增一条 `observedStatus` 原状态匹配说明（`NULL` 只匹配 `NULL`；非空异常值经 `FG_ACTIVE = :observedStatus` 精确匹配；禁止统一写成 `FG_ACTIVE IS NULL`）；§9.3 伪 SQL、`50002` 回滚与并发结论**不变**。
 - §9.1 零数据库变化声明、§9.4 局部替代清单、§9.5 追踪、§2/§4 既有单元格、§1 物理结构、§3 更新/删除边界、§5 数据安全、§8 既有声明**逐字冻结**；`DS-REQ-001~177` 编号与正文零变化；本轮草案状态仍为 `DRAFT_PENDING_USER_REVIEW`、`NOT_STARTED`、`NOT_GRANTED_IN_THIS_TASK`、`ALL_NOT_RUN`；未访问数据库/ZK/Kafka，未启动服务。
+
+### 10.4 批准收口（2026-09-19，任务 `DATA-SOURCE-LIST-ALL-STATUS-ENABLE-DISABLE-UI-ADJUSTMENT-APPROVAL-CLOSEOUT-001`）
+
+- 依据项目负责人 2026-09-19 批准“批准本轮调整基线”，以及 ChatGPT 对远程 R2 提交 `aa906c0...` 的复审结论 `REVIEW_PASS`（`blocking_finding_count=0`）。
+- 将 §9 标题与状态块由 `DRAFT_PENDING_USER_REVIEW` 更新为 `APPROVED`，写入完整批准链（`4ccd661...` → `c4e1048...` → `aa906c0...`）；`adjustment_document_status`/`adjustment_baseline_status`/`adjustment_database_status` 均为 `APPROVED`，`implementation_status=NOT_STARTED`、`implementation_authorization_status=NOT_GRANTED_IN_THIS_TASK`、`formal_acceptance_execution_status=NOT_RUN`、`new_adjustment_acceptance_status=ALL_NOT_RUN`。
+- 将 §2 表后与 §4 后的“本轮新草案局部替代提示（§9，`DRAFT_PENDING_USER_REVIEW`）”标签更新为“本轮已批准调整基线局部替代提示（§9，`APPROVED`）”，仅改状态标签，未改动替代边界与结论正文。
+- 本次仅做文档状态与批准链收口：**未**改动 `DS-REQ-001~177`（139~177 仍 39 条）与 `DS-AC-001~182`（141~182 仍 42 条，全部 `NOT_RUN`；116~140 仍 25 条，全部 `NOT_RUN`）的编号与正文；既有正式复验统计 `PASS=113/FAIL=0/BLOCKED=2/NOT_RUN=0`（阻塞 `DS-AC-104`/`DS-AC-108`）逐字保留。
+- 本轮为纯文档收口：未修改任何业务代码/测试/依赖/配置/SQL/锁文件，未访问数据库/ZK/Kafka，未启动服务，未运行 Maven/npm 测试或构建；未授权实现。

@@ -67,7 +67,7 @@
 
 **接口数量**：13 个。
 
-> **本轮新草案接口增量提示（§11，`DRAFT_PENDING_USER_REVIEW`）**：本轮拟新增 2 个独立启停接口（`PUT /api/data-sources/{id}/enable`、`PUT /api/data-sources/{id}/disable`），接口数量由 13 增至 **15**（详见 §11.1）。§11 为**未批准、未实现**的草案；本表 13 个接口的路径、契约与既有结论**逐字冻结、未修改**。同时 §4.1 的“后端固定 `FG_ACTIVE='1'` 过滤”与 `DataSourceListVO` 不含 `fgActive` 两处结论，以及 §5.2 中 `50002` 的“废弃”状态、§6.1 中两条启停接口的“**删除**”处理，均由 §11 局部替代（替代边界见 §11.7），未在此处静默改写。
+> **本轮已批准调整基线接口增量提示（§11，`APPROVED`）**：本轮新增 2 个独立启停接口（`PUT /api/data-sources/{id}/enable`、`PUT /api/data-sources/{id}/disable`），接口数量由 13 增至 **15**（详见 §11.1）。§11 为**已批准、未实现**的基线；本表 13 个接口的路径、契约与既有结论**逐字冻结、未修改**。同时 §4.1 的“后端固定 `FG_ACTIVE='1'` 过滤”与 `DataSourceListVO` 不含 `fgActive` 两处结论，以及 §5.2 中 `50002` 的“废弃”状态、§6.1 中两条启停接口的“**删除**”处理，均由 §11 局部替代（替代边界见 §11.7），未在此处静默改写。
 
 ---
 
@@ -163,7 +163,7 @@
 - 不含密码、`dataSourceOrg`、`bizAttr`、`dataSourceDomain`、`fgActive`、时间字段、`sourceApp`（`DS-REQ-011`/`012`）。
 - `port` 为 JSON number；`dataSourceCategory` 为规范化 `SOURCE`/`TARGET`（后端忽略大小写识别存量后输出）。
 
-> **本轮新草案局部替代提示（§11，`DRAFT_PENDING_USER_REVIEW`）**：上两处结论被局部替代——① “后端固定 `FG_ACTIVE='1'` 过滤”改为“**返回 `CDC_DATA_SOURCE` 全部记录，不过滤 `FG_ACTIVE`**”（`DS-REQ-150`）；② 响应字段清单**新增** `fgActive`（返回**原始值**，`'1'`/`'0'`/`NULL`/其他历史值均原样返回，不静默归一化）（`DS-REQ-151`/`DS-REQ-154`）。**不被替代**：不含密码等敏感字段、不含时间字段与 `sourceApp` 的结论继续有效（`DS-REQ-047`/`DS-REQ-107` 重申）；`port` 为 number、`dataSourceCategory` 规范化的结论继续有效；无分页、`DATA_SOURCE_ID` 升序、三条件模糊查询与 `category` 过滤继续有效。详细契约见 §11.2。
+> **本轮已批准调整基线局部替代提示（§11，`APPROVED`）**：上两处结论被局部替代——① “后端固定 `FG_ACTIVE='1'` 过滤”改为“**返回 `CDC_DATA_SOURCE` 全部记录，不过滤 `FG_ACTIVE`**”（`DS-REQ-150`）；② 响应字段清单**新增** `fgActive`（返回**原始值**，`'1'`/`'0'`/`NULL`/其他历史值均原样返回，不静默归一化）（`DS-REQ-151`/`DS-REQ-154`）。**不被替代**：不含密码等敏感字段、不含时间字段与 `sourceApp` 的结论继续有效（`DS-REQ-047`/`DS-REQ-107` 重申）；`port` 为 number、`dataSourceCategory` 规范化的结论继续有效；无分页、`DATA_SOURCE_ID` 升序、三条件模糊查询与 `category` 过滤继续有效。详细契约见 §11.2。
 
 ### 4.2 GET /api/data-sources/{id}（详情）
 
@@ -413,7 +413,7 @@
 | 40004 | 扩展配置不能为空（`EXTEND_REQUIRED`） | 一对一必填 EXTEND 语义被 `DS-REQ-062`/`063` 取代（源库 0..N 命名策略） |
 | 50002 | 状态操作失败（`STATUS_FAILED`） | 启用/停用能力移除（`DS-REQ-003`/`091`） |
 
-> **本轮新草案对 `50002` 的局部替代提示（§11，`DRAFT_PENDING_USER_REVIEW`）**：本轮恢复启用/停用能力（`DS-REQ-168`~`DS-REQ-173`），因此 `50002`（`STATUS_FAILED`）**由“废弃码”恢复为“生效码”**，语义收敛为“启停接口 `UPDATE` 影响行数 ≠ 1（保存/状态操作失败），事务回滚”（见 §11.4）。上表“废弃原因”描述的是**历史**结论，本轮不作改写；`40004`（`EXTEND_REQUIRED`）的废弃结论**继续有效**、不受本轮影响。本轮**唯一新增**业务码为 `40250`（非法状态，仅 `enable` 遇到 `NULL`/非 `0`/`1` 时返回），其余启停错误一律复用既有码。
+> **本轮已批准调整基线对 `50002` 的局部替代提示（§11，`APPROVED`）**：本轮恢复启用/停用能力（`DS-REQ-168`~`DS-REQ-173`），因此 `50002`（`STATUS_FAILED`）**由“废弃码”恢复为“生效码”**，语义收敛为“启停接口 `UPDATE` 影响行数 ≠ 1（保存/状态操作失败），事务回滚”（见 §11.4）。上表“废弃原因”描述的是**历史**结论，本轮不作改写；`40004`（`EXTEND_REQUIRED`）的废弃结论**继续有效**、不受本轮影响。本轮**唯一新增**业务码为 `40250`（非法状态，仅 `enable` 遇到 `NULL`/非 `0`/`1` 时返回），其余启停错误一律复用既有码。
 
 ### 5.3 场景 → 码/消息
 
@@ -448,7 +448,7 @@
 | `PUT /api/data-sources/{id}/disable` | **删除** |
 | （无） | **新增**：测试连接、目标候选、业务属性读写、命名策略 CRUD（§4.6~§4.13） |
 
-> **本轮新草案局部替代提示（§11，`DRAFT_PENDING_USER_REVIEW`）**：上表两条 `PUT /api/data-sources/{id}/enable`、`PUT /api/data-sources/{id}/disable` 的“**删除**”处理，被 `DS-REQ-168`~`DS-REQ-173` **局部替代**为“**保留路径风格、重新提供能力**”，但语义收敛为“**只更新主表 `FG_ACTIVE` 的独立接口**（启用写 `'1'`、停用写 `'0'`），不联写、不级联、不访问源库、不操作进程/ZK/Kafka”（§11.1/§11.3）。替代边界：旧候选实现对这两条接口的**旧语义**（一对一 EXTEND 联写等）仍按原结论**移除**；本表其余各行（无分页列表替换、详情收敛、新增/编辑/删除不联写）**继续有效**，不被本轮替代。
+> **本轮已批准调整基线局部替代提示（§11，`APPROVED`）**：上表两条 `PUT /api/data-sources/{id}/enable`、`PUT /api/data-sources/{id}/disable` 的“**删除**”处理，被 `DS-REQ-168`~`DS-REQ-173` **局部替代**为“**保留路径风格、重新提供能力**”，但语义收敛为“**只更新主表 `FG_ACTIVE` 的独立接口**（启用写 `'1'`、停用写 `'0'`），不联写、不级联、不访问源库、不操作进程/ZK/Kafka”（§11.1/§11.3）。替代边界：旧候选实现对这两条接口的**旧语义**（一对一 EXTEND 联写等）仍按原结论**移除**；本表其余各行（无分页列表替换、详情收敛、新增/编辑/删除不联写）**继续有效**，不被本轮替代。
 
 ### 6.2 仓库内调用者扫描
 
@@ -557,11 +557,13 @@
 - 2026-09-19 批准收口（任务 `DATA-SOURCE-LIST-PAGE-SELECTIVE-QUERY-LIST-INTEGRATION-APPROVAL-CLOSEOUT-001`）：§9 章节标题与状态声明由 `DRAFT_PENDING_USER_REVIEW` 收口为 `APPROVED`（`adjustment_api_status=APPROVED`）；记录批准链（初版草案提交 `01680ee5...` → R1 修订提交 `c3fd460b...` → ChatGPT 远程 Git R1 复审 `REVIEW_PASS` → 项目负责人 2026-09-19 明确回复“批准这轮调整基线”）；§9.1~§9.4 技术正文与 R1 冻结方案（`category` 归一化、允许 `null` 的 `@Pattern`、`BindException` → 控制器局部 `@ExceptionHandler` → HTTP 400 / `code=400` / 字段级消息、不新增业务码、不自动转大写、本轮不改代码）**零变化**；§0~§8 既有 `APPROVED` API 基线逐字冻结；实现状态仍为 `NOT_STARTED`、实现授权 `NOT_GRANTED_IN_THIS_TASK`、本轮新增验收 `DS-AC-116~140` 仍全部 `NOT_RUN`；既有统计 `PASS=113/FAIL=0/BLOCKED=2/NOT_RUN=0` 逐字保留。
 - 2026-09-19 实现状态回写（任务 `DATA-SOURCE-LIST-PAGE-SELECTIVE-QUERY-LIST-INTEGRATION-IMPLEMENTATION-001`）：§9 章节标题改为“（`APPROVED`，`IMPLEMENTED_PENDING_USER_REVIEW`）”，状态声明由 `implementation_status=NOT_STARTED`/`implementation_authorization_status=NOT_GRANTED_IN_THIS_TASK`/`acceptance_execution_status=ALL_NOT_RUN` 更新为 `implementation_status=IMPLEMENTED_PENDING_USER_REVIEW`/`implementation_authorization_status=GRANTED_IN_THIS_TASK`/`formal_acceptance_execution_status=NOT_RUN`/`new_adjustment_acceptance_status=ALL_NOT_RUN`；实现按 §9 已批准契约落地：`DataSourceQuery` 新增可选 `category`（`trim()` → 空转 `null` → 不自动转大写）、`@Pattern(regexp="SOURCE|TARGET")` 允许 `null`、`DataSourceController` 增加局部 `@ExceptionHandler(BindException.class)` 返回 HTTP 400 / `code=400` / 字段级消息、`DataSourceServiceImpl` 列表过滤使用 `UPPER(DATA_SOURCE_CATEGORY) = {0}` 绑定参数；§9.1~§9.5 技术正文**零变化**，`GlobalExceptionHandler` 无 diff，未新增业务码；本轮新增验收 `DS-AC-116~140` 仍全部 `NOT_RUN`（`ALL_NOT_RUN`），实现状态未置 `IMPLEMENTED_ACCEPTED`；既有统计 `PASS=113/FAIL=0/BLOCKED=2/NOT_RUN=0` 逐字保留；未访问数据库/ZK/Kafka；未启动服务。
 
-## 11. 启用/停用接口与列表状态字段（`DRAFT_PENDING_USER_REVIEW`，未实现）
+## 11. 启用/停用接口与列表状态字段（`APPROVED`，未实现）
 
-> 本轮草案分层状态：`adjustment_document_status=DRAFT_PENDING_USER_REVIEW`、`adjustment_baseline_status=DRAFT_PENDING_USER_REVIEW`、`implementation_status=NOT_STARTED`、`implementation_authorization_status=NOT_GRANTED_IN_THIS_TASK`、`formal_acceptance_execution_status=NOT_RUN`、`new_adjustment_acceptance_status=ALL_NOT_RUN`。
+> 本轮调整基线分层状态：`adjustment_document_status=APPROVED`、`adjustment_baseline_status=APPROVED`、`adjustment_api_status=APPROVED`、`implementation_status=NOT_STARTED`、`implementation_authorization_status=NOT_GRANTED_IN_THIS_TASK`、`formal_acceptance_execution_status=NOT_RUN`、`new_adjustment_acceptance_status=ALL_NOT_RUN`。
 >
-> 任务：`DATA-SOURCE-LIST-ALL-STATUS-ENABLE-DISABLE-UI-ADJUSTMENT-BASELINE-001`（纯文档草案）。关联需求 `DS-REQ-150`~`DS-REQ-173`，关联验收 `DS-AC-150`~`DS-AC-178`、`DS-AC-181`。本节只冻结契约，**不实现**；§0~§10 既有结论**逐字冻结**。
+> 批准链（2026-09-19）：初版草案提交 `4ccd6610...` → R1 修订提交 `c4e1048...` → R2 极小修订提交 `aa906c0...` → ChatGPT 从远程 Git 复审 R2 提交 `aa906c0...` 结论 `REVIEW_PASS`（`blocking_finding_count=0`）→ 项目负责人 2026-09-19 明确回复“批准本轮调整基线” → 批准收口任务 `DATA-SOURCE-LIST-ALL-STATUS-ENABLE-DISABLE-UI-ADJUSTMENT-APPROVAL-CLOSEOUT-001`。批准对象为经初版、R1、R2 修订并由 ChatGPT 远程复审通过的**当前**调整基线，**非仅初版**；批准只代表接口契约正式成立，**不代表**已实现、已测试、已验收或生产可用。
+>
+> 任务：`DATA-SOURCE-LIST-ALL-STATUS-ENABLE-DISABLE-UI-ADJUSTMENT-BASELINE-001`（纯文档任务）。关联需求 `DS-REQ-150`~`DS-REQ-173`，关联验收 `DS-AC-150`~`DS-AC-178`、`DS-AC-181`。本节只冻结契约，**不实现**；§0~§10 既有结论**逐字冻结**。
 
 ### 11.1 接口增量
 
@@ -678,4 +680,14 @@
 - **修正不存在的需求引用**：删除 §11 全部 `DS-REQ-18x` 引用（初版错误引用了一个不存在、编号超出本轮最大 `DS-REQ-177` 的编号），改为引用既有敏感信息保护需求 `DS-REQ-047`/`DS-REQ-107`（涉及启停外部系统与成功消息边界处并列 `DS-REQ-169`）；§11.6 追踪表相应行由“`DS-REQ-18x`”改为“`DS-REQ-047`、`DS-REQ-107`、`DS-REQ-169`”。
 - **冻结统一启停方案**：§11.3 明确两个接口均**先读取**当前记录及原始 `FG_ACTIVE`（不按 `FG_ACTIVE='1'` 过滤；不存在 → `40400` 不写库）；“单条 `UPDATE` 短事务”修正为“**每次非幂等状态变更最多执行一条 `UPDATE`，允许 `UPDATE` 前先读取**”；非幂等路径 `UPDATE` 必须**带原状态条件**（`DATA_SOURCE_ID` + 事务首次读取的原始 `FG_ACTIVE`，含 `NULL`），**不得**退化为无状态条件的 `UPDATE ... WHERE DATA_SOURCE_ID=?`；影响行数 ≠ 1（含读取后被改变导致 `0` 行）→ `50002` 回滚；不引入重试/悲观锁/乐观版本/新错误码；重复目标状态仅在首次读取已处于目标状态时幂等成功；并发冲突请求返回 `50002`。§11.4 错误表 50002 行同步明确“含读取后状态被改变导致 `0` 行”。
 - **统一失败页面行为**：§11.4 前端消息处理由“`40400`/`40250` 后刷新列表”改为**任何启停失败均不刷新列表**，保留列表、结果总数与已应用条件并恢复 busy；只有成功才按当前已应用条件重新查询（`DS-REQ-173`/`DS-AC-177`）。
-- 本节为纯文档修订：未修改任何业务代码/测试/依赖/配置/SQL，未访问数据库/ZK/Kafka，未启动服务；本轮草案状态仍为 `DRAFT_PENDING_USER_REVIEW`、`implementation_status=NOT_STARTED`、`implementation_authorization_status=NOT_GRANTED_IN_THIS_TASK`、`new_adjustment_acceptance_status=ALL_NOT_RUN`。
+- 本节为纯文档修订：未修改任何业务代码/测试/依赖/配置/SQL，未访问数据库/ZK/Kafka，未启动服务；本轮草案状态仍为 `DRAFT_PENDING_USER_REVIEW`、`implementation_status=NOT_STARTED`、`implementation_authorization_status=NOT_GRANTED_IN_THIS_TASK`、`new_adjustment_acceptance_status=ALL_NOT_RUN`（该状态已被下方批准收口取代）。
+
+### 12.3 批准收口（2026-09-19，任务 `DATA-SOURCE-LIST-ALL-STATUS-ENABLE-DISABLE-UI-ADJUSTMENT-APPROVAL-CLOSEOUT-001`）
+
+- 2026-09-19；
+- §11 章节标题由“（`DRAFT_PENDING_USER_REVIEW`，未实现）”收口为“（`APPROVED`，未实现）”；分层状态 `adjustment_document_status`/`adjustment_baseline_status` 由 `DRAFT_PENDING_USER_REVIEW` 收口为 `APPROVED`，并同步 `adjustment_api_status=APPROVED`（`implementation_status`/`implementation_authorization_status`/`formal_acceptance_execution_status`/`new_adjustment_acceptance_status` 保持 `NOT_STARTED`/`NOT_GRANTED_IN_THIS_TASK`/`NOT_RUN`/`ALL_NOT_RUN`）；
+- 记录完整批准链：初版草案提交 `4ccd6610...` → R1 修订提交 `c4e1048...` → R2 极小修订提交 `aa906c0...` → ChatGPT 远程 Git 复审 R2 提交 `aa906c0...` 结论 `REVIEW_PASS`（`blocking_finding_count=0`）→ 项目负责人 2026-09-19 明确回复“批准本轮调整基线” → 批准收口任务 `DATA-SOURCE-LIST-ALL-STATUS-ENABLE-DISABLE-UI-ADJUSTMENT-APPROVAL-CLOSEOUT-001`；
+- §4.1、§5.2、§6.1 的“本轮新草案局部替代提示”改标为“本轮已批准调整基线局部替代提示（§11，`APPROVED`）”；
+- §11.1~§11.7 接口契约与 R1 冻结方案（先读、幂等不写、NULL-safe 原状态条件 `UPDATE`、并发 `50002`、失败不刷新）**零变化**；§0~§10 既有 `APPROVED` API 基线与 §9 技术正文逐字冻结；
+- `DS-REQ-001~177` 编号与正文零变化；本轮新增验收 `DS-AC-141~182`（42 条）仍全部 `NOT_RUN`，上一轮 `DS-AC-116~140`（25 条）仍全部 `NOT_RUN`；既有 `PASS=113/FAIL=0/BLOCKED=2/NOT_RUN=0` 逐字保留；
+- 批准只代表接口契约正式成立，**不代表**已实现、已测试、已验收或生产可用；实现须**另行**授权并使用独立任务；未修改任何业务代码/测试/依赖/配置/SQL，未访问数据库/ZK/Kafka，未启动服务。

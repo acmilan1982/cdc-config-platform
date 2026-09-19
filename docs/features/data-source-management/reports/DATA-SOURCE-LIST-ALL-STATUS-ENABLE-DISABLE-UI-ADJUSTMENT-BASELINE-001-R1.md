@@ -164,4 +164,5 @@ next_step=CHATGPT_REMOTE_GIT_R1_REVIEW_THEN_PROJECT_OWNER_BASELINE_APPROVAL_DECI
 | 日期 | 变更 | 依据 |
 |---|---|---|
 | 2026-09-19 | 创建本报告：记录 Git 现场、三类阻塞问题的修订前/后结论、实际修改文件、编号/数量/状态/正文保护检查、静态检查结果、未执行事项与下一步入口 | DATA-SOURCE-LIST-ALL-STATUS-ENABLE-DISABLE-UI-ADJUSTMENT-BASELINE-001-R1（ChatGPT 远程复审 `CHANGES_REQUIRED` 定向修订；纯文档任务） |
-| 2026-09-19 | **R2 勘误**：在报告标题后新增 R2 勘误声明，定向修正本报告 §5 中“跨文档一致性 / 无残留冲突”的不完整结论（R1 后 `DATABASE.md §9.2` 仍残留“异常状态统一写成 `FG_ACTIVE IS NULL`”与“`40250` 误含 `disable`”两处错误），指向 R2 报告；R1 历史内容保留未删 | DATA-SOURCE-LIST-ALL-STATUS-ENABLE-DISABLE-UI-ADJUSTMENT-BASELINE-001-R2（ChatGPT 远程 R2 复审 `CHANGES_REQUIRED` 定向勘误；纯文档任务） |
+| 2026-09-19 | **R2 勘误**：在报告标题后新增 R2 勘误声明，定向修正本报告 §5 中“跨文档一致性 / 无残留冲突”的不完整结论（R1 后 `DATABASE.md §9.2` 仍残留“异常状态统一写成 `FG_ACTIVE IS NULL`”与“`40250` 误含 `disable`”两处错误），指向 R2 报告；R1 历史内容保留未删 | DATA-SOURCE-LIST-ALL-STATUS-ENABLE-DISABLE-UI-ADJUSTMENT-BASELINE-001-R2（ChatGPT 对远程 R1 提交 `c4e1048...` 复审 `CHANGES_REQUIRED`，触发 R2 修订；对 R2 提交 `aa906c0...` 复审 `REVIEW_PASS`；纯文档任务） |
+| 2026-09-19 | **批准收口**：修正原“ChatGPT 远程 R2 复审 `CHANGES_REQUIRED`”历史链措辞为“对 R1 提交 `c4e1048...` 复审 `CHANGES_REQUIRED`，触发 R2 修订”，并区分 R2 提交复审为 `REVIEW_PASS`；R1 历史内容保留未删；本轮状态由 `DRAFT_PENDING_USER_REVIEW` 收口为 `APPROVED`，仍未授权实现、验收全部 `NOT_RUN` | DATA-SOURCE-LIST-ALL-STATUS-ENABLE-DISABLE-UI-ADJUSTMENT-APPROVAL-CLOSEOUT-001（纯文档任务） |

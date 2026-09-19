@@ -176,10 +176,25 @@ next_step=CHATGPT_REMOTE_GIT_R2_REVIEW_THEN_PROJECT_OWNER_BASELINE_APPROVAL_DECI
 2. 复审通过后，由**项目负责人**决定是否批准本轮调整基线；批准后**另行**生成实现任务提示词。
 3. 本任务**不得**继续实现。
 
+## 10.1 R2 提交复审与批准收口记录（2026-09-19）
+
+```text
+reviewed_commit=aa906c0004d51d638a16212f3d6ba7753d18288d
+chatgpt_remote_r2_review=REVIEW_PASS
+blocking_finding_count=0
+project_owner_approval_date=2026-09-19
+project_owner_approval_statement=批准本轮调整基线
+approval_task=DATA-SOURCE-LIST-ALL-STATUS-ENABLE-DISABLE-UI-ADJUSTMENT-APPROVAL-CLOSEOUT-001
+```
+
+- R1 提交复审（`c4e1048...`）= `CHANGES_REQUIRED`、`blocking_finding_count=1`，触发 R2 修订；R2 提交复审（`aa906c0...`）= `REVIEW_PASS`、`blocking_finding_count=0`，随后项目负责人批准本轮调整基线。二者为**不同提交、不同结论**，本报告**未**把 R1 的 `CHANGES_REQUIRED` 历史改为 `REVIEW_PASS`。
+- 批准后由任务 `DATA-SOURCE-LIST-ALL-STATUS-ENABLE-DISABLE-UI-ADJUSTMENT-APPROVAL-CLOSEOUT-001` 统一收口为 `APPROVED`；**仍未**授权实现、**未**执行正式验收。
+
 ---
 
 ## 11. 变更记录
 
 | 日期 | 变更 | 依据 |
 |---|---|---|
-| 2026-09-19 | 创建本报告：记录 Git 现场、ChatGPT 对 R1 的唯一阻塞发现、`DATABASE.md §9.2` 修订前/后原状态匹配矩阵、`40400`/`40250`/异常停用归一化的适用范围、§9.3 权威通用条件、实际修改文件、编号/数量/状态/正文保护检查、静态检查结果、未执行事项与下一步入口 | DATA-SOURCE-LIST-ALL-STATUS-ENABLE-DISABLE-UI-ADJUSTMENT-BASELINE-001-R2（ChatGPT 远程 R2 复审 `CHANGES_REQUIRED` 定向修订；纯文档任务） |
+| 2026-09-19 | 创建本报告：记录 Git 现场、ChatGPT 对 R1 的唯一阻塞发现、`DATABASE.md §9.2` 修订前/后原状态匹配矩阵、`40400`/`40250`/异常停用归一化的适用范围、§9.3 权威通用条件、实际修改文件、编号/数量/状态/正文保护检查、静态检查结果、未执行事项与下一步入口 | DATA-SOURCE-LIST-ALL-STATUS-ENABLE-DISABLE-UI-ADJUSTMENT-BASELINE-001-R2（ChatGPT 对远程 R1 提交 `c4e1048...` 复审 `CHANGES_REQUIRED`，触发 R2 修订；纯文档任务） |
+| 2026-09-19 | **批准收口**：新增 §10.1，记录对 R2 提交 `aa906c0...` 的 ChatGPT 远程复审结论 `REVIEW_PASS`（`blocking_finding_count=0`）与项目负责人批准；修正原“ChatGPT 远程 R2 复审 `CHANGES_REQUIRED`”历史链措辞，明确 R1 提交复审与 R2 提交复审为不同提交、不同结论 | DATA-SOURCE-LIST-ALL-STATUS-ENABLE-DISABLE-UI-ADJUSTMENT-APPROVAL-CLOSEOUT-001（纯文档任务） |
