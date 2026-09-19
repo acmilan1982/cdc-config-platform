@@ -443,7 +443,7 @@
 |---|---|
 | DS-REQ-121 | 列表首页使用查询列表页模板的视觉语言与稳定布局原则，呈现三段结构：① 页面标题与一句话说明；② 查询条件区；③ 结果列表区。 |
 | DS-REQ-122 | 页面**不显示**任何刷新倒计时、最近刷新时间或“立即刷新”按钮。 |
-| DS-REQ-123 | 结果区头部：左侧为“数据源列表”与当前结果数量；右侧为“新增数据源”；头部下方**直接进入表格**，不增加双击提示行。 |
+| DS-REQ-123 | 结果区头部：左侧为“数据源列表”与当前结果数量；右侧为“新增数据源”。结果区**保留** `QueryListResultPanel` 已验收的固定结构：头部 → 固定错误槽 → 固定分隔线 → `body` 主体槽。`DataSourcePage.vue` 现有 `loadError` 对应的 `el-alert` 映射到该固定错误槽（保留现有错误消息展示与关闭行为，不删除错误提示能力）；数据源表格放入 `body` 主体槽；结果区**不增加**双击提示行或其他辅助说明行。 |
 | DS-REQ-124 | 页面**不得显示**“双击数据行可编辑”提示文案，但**双击编辑功能必须保留**。 |
 | DS-REQ-137 | 首次加载与查询 Loading 期间，查询/重置按钮宽度与结果区卡片几何**保持稳定**（查询/重置按钮宽度四值同锁，Loading 不改变按钮与卡片边界）。 |
 
@@ -453,10 +453,18 @@
 
 | 编号 | 需求 |
 |---|---|
-| DS-REQ-125 | 查询条件**保留**数据源 ID、数据源名称、主机地址三个文本条件；**新增**“角色”单选条件，固定三个取值：全部（默认；表示不传角色限制）、源库（`SOURCE`）、目标库（`TARGET`）。 |
+| DS-REQ-125 | 查询条件**保留**数据源 ID、数据源名称、主机地址三个文本条件；**新增**“角色”条件，控件固定为 Element Plus `el-select` **单选下拉框**（**不得**画成 Radio / 单选按钮组），默认与占位显示均为“全部”；选项顺序与显示文本固定为：全部、源库、目标库，绑定值依次为空值（表示不传角色限制）、`SOURCE`、`TARGET`；控件宽度冻结为 `140px`。 |
 | DS-REQ-126 | 角色过滤必须使用规范化代码 `SOURCE` / `TARGET`，**不得**把中文展示值（“源库/目标库”）作为数据库查询值；角色条件与其他非空条件使用 **AND** 组合；保留既有文本条件的 trim 与忽略大小写包含查询规则。 |
 | DS-REQ-127 | 点击“查询”按当前草稿条件查询；点击“重置”恢复三个文本条件为空、角色为“全部”，并**继续遵守当前已批准的“重置后立即恢复全部有效记录”语义**（`DS-REQ-009`）；**不得**套用模板默认的“重置不查询”建议覆盖本 Feature 既有规则。 |
-| DS-REQ-128 | API 设计定义一个**可选**角色查询参数；缺席或空值表示“全部”；合法值仅 `SOURCE` / `TARGET`；非法值的 HTTP / code / 消息行为必须与当前统一参数校验契约一致；参数名必须与当前项目命名习惯一致；**不引入数据库结构变化**。 |
+| DS-REQ-128 | API 设计定义一个**可选**字符串角色查询参数 `category`（沿用当前 `DataSourceQuery` 的短小写命名习惯）；缺席、`null`、空字符串或仅空白均归一化为“全部”（不做角色限制）；非空值**只接受精确大写** `SOURCE` / `TARGET`，**不得**自动转大写、**不得**把非法值静默转换为合法值；非法值的 HTTP 状态、业务 `code` 与字段级消息行为必须与当前统一参数校验契约一致，且**不引入数据库结构变化**。 |
+
+> **R1 修订说明（§22.3，`DS-REQ-128`，2026-09-19）**：本 R1 将 `category` 的归一化、校验与异常映射冻结为下列唯一方案，相关描述以本条为准（旧草案中按 `MethodArgumentNotValidException` 承接的表述已作废）：
+> 1. **归一化时机**：`category` 为 `DataSourceQuery` 上的可选字符串字段；在请求绑定完成后、Bean Validation 执行前完成归一化——先 `trim()` 去除首尾空白；`null` 或 trim 后空字符串统一转为 `null`，表示“全部”；非空值**不自动转大写**。
+> 2. **校验约束**：在归一化为空值后，使用**允许 `null` 的字段约束**校验非空值，例如 `@Pattern(regexp = "SOURCE|TARGET", message = "角色仅支持 SOURCE 或 TARGET")`。Bean Validation 对 `null` 不判失败，因此“全部”合法。
+> 3. **异常类型**：`GET` 请求中 `@ModelAttribute` 的绑定/字段校验错误按 **`BindException`** 处理，**不得**再声称由 `MethodArgumentNotValidException` 承接。
+> 4. **改动边界**：设计冻结为在 `DataSourceController` 增加**功能局部**的 `@ExceptionHandler(BindException.class)`（与既有局部 `@ExceptionHandler(HttpMessageNotReadableException.class)` 同构）；**不得**在本轮扩大为全局异常处理器改造。该局部处理器返回既有统一错误结构：HTTP `400 Bad Request`、业务 `code=400`、`message` 优先取 `category` 字段的校验消息，无法提取字段消息时使用明确的通用参数错误消息，且不泄露堆栈或内部实现细节。
+> 5. **回归风险须在设计中显式记录**：`MethodArgumentNotValidException extends BindException`，而控制器局部 `@ExceptionHandler` 优先级高于 `@RestControllerAdvice`；因此该局部处理器必须对既有请求体校验错误保持原有字段级消息语义，不得造成回归。
+> 6. **本轮不改代码**：本条只冻结实现方案；本轮**不实际修改** `DataSourceQuery`、`DataSourceController` 或任何异常处理代码。若实现阶段统一响应类字段名与“code/message”称谓不同，应使用仓库实际字段名，但必须保持 HTTP 400、业务码 400 与字段级消息语义。
 
 > **局部替代声明（§22.3）**：`DS-REQ-125` **局部替代** `DS-REQ-006` 中“查询条件**严格限定为**三个普通文本输入框”的**排他性**表述。替代边界严格限定为该排他性：`DS-REQ-006` 关于“存在且仅存在数据源 ID / 数据源名称 / 主机地址三个文本条件”的结论**继续有效**；`DS-REQ-007`（忽略大小写包含）、`DS-REQ-008`（AND 组合、先 trim）、`DS-REQ-009`（查询 / 重置行为）、`DS-REQ-010`（默认 ID 升序）**均不被替代，继续有效**。因此本轮不存在“三个条件”与“四个条件”两个互相冲突的当前有效结论：当前有效结论为“三个文本条件 + 一个角色单选条件”。
 
@@ -471,7 +479,7 @@
 | DS-REQ-133 | 删除继续使用**现有**二次确认、并发阻断、错误提示与“仅删除主表记录”的业务语义（`DS-REQ-091`~`097` 的既有结论继续有效，不被本轮替代）；删除项在“更多”菜单中为红色危险样式，但危险样式不改变删除的业务语义。 |
 | DS-REQ-134 | “更多”菜单及其下拉面板的事件**不得冒泡**触发双击编辑或其他行事件。 |
 | DS-REQ-135 | **保留**当前页面既有 Tooltip 行为；本轮**不得删除、弱化或改变**，包括本轮范围外的命名策略弹窗 Tooltip。主列表既有 `show-overflow-tooltip` 机制为当前实现事实，必须如实记录；是否迁移到公共单实例 Tooltip 机制必须以最小行为变化、公共组件契约与 Feature 基线为依据给出明确设计结论，**没有充分必要性时优先保留现有机制**，不得为“接入数量”强行改写已存在行为。 |
-| DS-REQ-136 | 主列表前后端**继续不使用**分页参数或分页交互：不新增页码、页大小选择器、“加载更多”或服务端分页；保持既有“记录总数不超过 100、一次加载全部”的已批准边界（`DS-REQ-005` 继续有效）；**不得**因 `QueryListResultPanel.body` 支持承载分页就自行增加分页。 |
+| DS-REQ-136 | 主列表前后端**继续不使用**分页参数或分页交互：不新增页码、页大小选择器、“加载更多”或服务端分页；保持既有“记录总数不超过 100、一次加载全部”的已批准边界（`DS-REQ-005` 继续有效）；**不得**因 `QueryListResultPanel.body` 支持承载分页就自行增加分页。**“无分页”仅表示 `body` 主体槽中不放分页组件，不意味着删除 `QueryListResultPanel` 的固定错误槽或固定分隔线**（`DS-REQ-123` 的结构结论继续有效）。 |
 | DS-REQ-138 | **不引入样式泄漏**：其他路由与公共组件既有参考页（“源库快照状态” `/monitor/data-source-state`）视觉与业务**零回归**；稳定滚动条槽仍只对 `/monitor/data-source-state` 生效。 |
 
 > **局部替代声明（§22.4）**：`DS-REQ-130` **局部替代** `DS-REQ-013` 的行操作“编辑”项与 `DS-REQ-014` 中“单击‘编辑’按钮”的表述。替代边界严格限定于此：`DS-REQ-013` 中“业务属性（仅目标库）”“目标库命名策略（仅源库）”“删除”三项**继续有效**；`DS-REQ-014` 中“双击行打开编辑弹窗”的结论**继续有效**，仅“单击编辑按钮”的入口被移除。`DS-REQ-103`（双击编辑与按钮编辑行为一致）的适用前提随之变化，本轮以 `DS-REQ-130` 为准：编辑入口只有双击一种。因此本轮不存在“编辑按钮存在”与“编辑按钮移除”两个互相冲突的当前有效结论。
@@ -490,5 +498,6 @@
 | 2026-08-30 | 定向正式复验状态回写：更新当前事实型元数据与状态说明——定向正式复验结果 `PASS=113/FAIL=0/BLOCKED=2/NOT_RUN=0`（阻塞 `DS-AC-104`/`DS-AC-108`）、整体正式验收状态 `BLOCKED`、实现状态保持 `IMPLEMENTED_PENDING_REVIEW`（未置 `IMPLEMENTED_ACCEPTED`）、新调整实现 `IMPLEMENTED_PENDING_REVIEW`；`DS-AC-052`/`DS-AC-105` 已修复并复验转为 `PASS`，`DS-AC-107`/`DS-AC-109~115` 复验为 `PASS`、`DS-AC-108` 复验为 `BLOCKED`；`DS-REQ-001~115` 需求编号与正文逐字保持 | DATA-SOURCE-FORMAL-REVERIFICATION-001（定向正式复验；纯文档状态回写） |
 | 2026-08-30 | R1 定向修订：ChatGPT 对正式复验提交的复审为 `CHANGES_REQUIRED`；仅修正 §20 一处复验前过期的“既有缺陷边界”状态段为当前事实（`DS-AC-052`/`DS-AC-105` 已修复并分别经真实日志扫描与真实 HTTP 复验转为 `PASS`，`DS-AC-104`/`DS-AC-108` 保持 `BLOCKED`，当前实现状态 `IMPLEMENTED_PENDING_REVIEW` 未置 `IMPLEMENTED_ACCEPTED`）；未改变任何需求正文、验收状态或正式复验结论；当前统计仍为 `PASS=113/FAIL=0/BLOCKED=2/NOT_RUN=0`，整体正式验收状态仍为 `BLOCKED`，实现状态仍为 `IMPLEMENTED_PENDING_REVIEW` | DATA-SOURCE-FORMAL-REVERIFICATION-001-R1（ChatGPT 复审 CHANGES_REQUIRED 定向修订；纯文档任务） |
 | 2026-09-19 | 列表首页选择性接入公共组件调整需求草案落盘：新增 §22「列表首页选择性接入查询列表页公共组件调整需求（`DRAFT_PENDING_USER_REVIEW`）」，追加 `DS-REQ-116~138` 共 23 条（范围与职责边界 116~120；页面结构与结果区头部 121~124、137；查询条件与角色 125~128；主列表与行操作 129~136、138）；以四段“局部替代声明”明确 `DS-REQ-125`/`130` 对 `DS-REQ-006`/`013`/`014` 的**局部**替代边界，避免“三条件 vs 四条件”“编辑按钮存在 vs 移除”两个互相冲突的当前有效结论并存；“无分页（`DS-REQ-005`）”“当前 Tooltip”“双击编辑”等既有结论与 `DS-REQ-001~115` 编号、正文、语义逐字冻结；既有正式验收统计 `PASS=113/FAIL=0/BLOCKED=2/NOT_RUN=0` 与 `DS-AC-104`/`DS-AC-108` 两个 `BLOCKED` 逐字保留，未写为 `IMPLEMENTED_ACCEPTED`，本组需求实现状态 `NOT_STARTED`、验收状态全部 `NOT_RUN`、实现授权 `NOT_GRANTED_IN_THIS_TASK` | DATA-SOURCE-LIST-PAGE-SELECTIVE-QUERY-LIST-INTEGRATION-BASELINE-001（列表首页调整基线草案；纯文档任务；未修改任何业务代码/测试/依赖/配置/SQL；未访问数据库/ZK/Kafka；未启动服务） |
+| 2026-09-19 | R1 定向修订（ChatGPT 远程独立复审四项问题）：① `DS-REQ-128` 改写并追加“R1 修订说明”，把 `category` 归一化（trim → 空转 `null` → 不自动转大写）、允许 `null` 的 `@Pattern(regexp="SOURCE\|TARGET")` 约束、按 `BindException` 承接 `GET + @ModelAttribute` 绑定/校验错误、控制器局部 `@ExceptionHandler(BindException.class)` 返回 HTTP 400 / `code=400` / 字段级消息（含通用兜底、不泄露堆栈、不改全局处理器、本轮不改代码）冻结为唯一方案，并显式记录 `MethodArgumentNotValidException extends BindException` 的局部处理器优先级回归风险；② `DS-REQ-123` 删除“头部下方直接进入表格”，改为保留 `QueryListResultPanel` 固定结构（头部 → 固定错误槽 → 固定分隔线 → `body` 主体槽），`loadError` 的 `el-alert` 映射错误槽；③ `DS-REQ-125` 角色控件明确为 `el-select` 单选下拉框、宽度 `140px`、禁止 Radio 画法；④ `DS-REQ-136` 增加“无分页 ≠ 删除固定错误槽或分隔线”的口径。`DS-REQ-116~138` 编号与数量未变（23 条），`DS-REQ-001~115` 逐字冻结未改 | DATA-SOURCE-LIST-PAGE-SELECTIVE-QUERY-LIST-INTEGRATION-BASELINE-001-R1（ChatGPT 远程复审四项问题定向修订；纯文档任务；未修改任何业务代码/测试/依赖/配置/SQL；未访问数据库/ZK/Kafka；未启动服务） |
 
 > 关联文档：验收基线 `docs/features/data-source-management/ACCEPTANCE.md`；执行报告 `docs/features/data-source-management/reports/DATA-SOURCE-REQUIREMENTS-BASELINE-001.md`；验收后调整草案执行报告 `docs/features/data-source-management/reports/DATA-SOURCE-POST-ACCEPTANCE-ADJUSTMENT-BASELINE-001.md`；验收后调整草案 R1 修订报告 `docs/features/data-source-management/reports/DATA-SOURCE-POST-ACCEPTANCE-ADJUSTMENT-BASELINE-001-R1.md`；验收后调整批准收口报告 `docs/features/data-source-management/reports/DATA-SOURCE-POST-ACCEPTANCE-ADJUSTMENT-APPROVAL-CLOSEOUT-001.md`；定向正式复验报告 `docs/features/data-source-management/reports/DATA-SOURCE-FORMAL-REVERIFICATION-001.md`。

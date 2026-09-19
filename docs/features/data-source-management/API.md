@@ -487,22 +487,29 @@
 
 | 参数 | 类型 | 必填 | 合法值 | 说明 |
 |---|---|---|---|---|
-| `category` | string | 否 | `SOURCE` / `TARGET` | 按数据源角色过滤；**缺席或空值 = 不做角色限制（“全部”）** |
+| `category` | string | 否 | 精确大写 `SOURCE` / `TARGET` | 按数据源角色过滤；**缺席、`null`、空字符串或仅空白 = 不做角色限制（“全部”）**；非空值**不自动转大写** |
 
 - **命名依据**：当前列表查询对象为 `DataSourceQuery { id, name, host }`，项目既有习惯为“短小写单词”参数名；领域与代码中的角色术语为 `dataSourceCategory`/`DataSourceCategory`（规范化值 `SOURCE`/`TARGET`），故取 `category`。项目代码与数据库列中不存在名为 `role` 的术语，故**不采用** `role`。
+- **归一化（绑定后、Bean Validation 前）**：先 `trim()` 去除首尾空白；`null` 或 trim 后空字符串统一转为 `null`，表示“全部”；非空值**不自动转大写**，只接受精确大写 `SOURCE` / `TARGET`。
 - **取值来源**：必须使用规范化代码 `SOURCE` / `TARGET`；**不得**使用中文展示值（“源库/目标库”）作为查询值。后端沿用既有 `UPPER(DATA_SOURCE_CATEGORY)` 大小写兼容比较执行过滤（`DATABASE.md` §4）。
 - **组合语义**：`category` 与任一非空文本条件 **AND** 组合；文本条件继续遵守 trim 与 `UPPER(col) LIKE UPPER('%'||?||'%')` 忽略大小写包含规则（§4.1、`DATABASE.md` §4）。
 - **数据库影响**：无。不新增列、索引、约束或任何 DDL；仅对既有 `DATA_SOURCE_CATEGORY` 列增加一个可选过滤条件。
 
-### 9.2 非法值行为
+### 9.2 非法值行为与异常链路（R1 冻结方案）
 
-非法值（例如 `category=FOO`）的处理**沿用当前统一参数校验契约**，与既有字段校验路径一致（§5.1）：
+非法值（例如 `category=FOO`、`category=source`）的处理**沿用当前统一参数校验契约**，与既有字段校验路径一致（§5.1）：
 
 | 场景 | HTTP | code | 结构 |
 |---|---|---|---|
-| 非法 `category`（非 `SOURCE`/`TARGET`） | 400 | 400 | 字段级校验消息（`ApiResponse.fail(400, "<field>: <message>")`） |
+| 非法 `category`（非精确大写 `SOURCE`/`TARGET`） | 400 | 400 | `ApiResponse.fail(400, "<字段级消息>")`：优先取 `category` 字段校验消息（如“角色仅支持 SOURCE 或 TARGET”），无法提取字段消息时使用明确的通用参数错误消息 |
 
-- **不新增业务错误码**。理由：§5.2 明确将既有 `40001`（角色非法）限定为“**仅用于新增/编辑主表请求中 `dataSourceCategory` 非 `SOURCE`/`TARGET`**”，不适用于列表查询参数；列表查询参数属“请求参数校验失败”范畴，应走 `MethodArgumentNotValidException` → HTTP 400 / `code=400` 的统一契约。
+- **异常类型**：`GET` 请求中 `@ModelAttribute` 的绑定/字段校验错误按 **`BindException`** 处理；**不得**再声称由 `MethodArgumentNotValidException` 承接（该绑定路径不产生该异常）。
+- **校验约束**：归一化为空值后，以**允许 `null`** 的字段约束校验非空值，例如 `@Pattern(regexp = "SOURCE|TARGET", message = "角色仅支持 SOURCE 或 TARGET")`；Bean Validation 对 `null` 不判失败，故“全部”合法。
+- **改动边界（冻结）**：在 `DataSourceController` 增加**功能局部**的 `@ExceptionHandler(BindException.class)`（与既有局部 `@ExceptionHandler(HttpMessageNotReadableException.class)` 同构）；**不得**扩大为全局异常处理器改造。该局部处理器返回既有统一错误结构（HTTP 400 / 业务码 400 / 字段级消息），**不泄露堆栈或内部实现细节**。
+- **回归风险（须在实现阶段验证）**：`MethodArgumentNotValidException extends BindException`，而控制器局部 `@ExceptionHandler` 优先级高于 `@RestControllerAdvice`；该局部处理器必须保持既有请求体校验错误（`"field: msg; field: msg"` 拼接）的字段级消息语义，不得回归。
+- **不新增业务错误码**。理由：§5.2 明确将既有 `40001`（角色非法）限定为“**仅用于新增/编辑主表请求中 `dataSourceCategory` 非 `SOURCE`/`TARGET`**”，不适用于列表查询参数；列表查询参数属“请求参数校验失败”范畴，应走上述 `BindException` → HTTP 400 / `code=400` 的统一契约。
+- **不得静默转换**：不得把 `source` / `target` 等非法值自动转大写为合法值。
+- **本轮不改代码**：本 R1 只冻结实现方案，不实际修改 `DataSourceQuery`、`DataSourceController` 或任何异常处理代码。若实现阶段统一响应类字段名与“code/message”称谓不同，应使用仓库实际字段名，但必须保持 HTTP 400、业务码 400 与字段级消息语义。
 - 该设计保持与 `DS-AC-105` 确立的“非法参数返回 HTTP 400 而非 500”方向一致，并避免在只读查询路径上引入 CRUD 语义的业务码。
 
 ### 9.3 与 §4.1 的差异摘要
@@ -510,17 +517,23 @@
 | 项目 | §4.1（既有 `APPROVED`） | §9（本轮草案） |
 |---|---|---|
 | 查询参数 | `id` / `name` / `host`（均可选） | 追加可选 `category`（`SOURCE`/`TARGET`）；三者不变 |
-| 角色限制 | 无 | `category` 缺席/空 = 全部；提供时按规范化代码过滤 |
+| 角色限制 | 无 | `category` 缺席/`null`/空/仅空白 = 全部；提供时按精确大写规范化代码过滤 |
 | 分页 | 不接受 `pageNum`/`pageSize` | **不变**（继续不接受） |
 | 响应结构 | 数组、非分页 | **不变** |
 | `FG_ACTIVE` 过滤与排序 | `FG_ACTIVE='1'`、按 `DATA_SOURCE_ID` 升序 | **不变** |
-| 校验失败 | §5.1 统一契约 | `category` 非法走同一契约（HTTP 400 / `code=400`） |
+| 校验失败 | §5.1 统一契约 | `category` 非法按 `BindException` 走同一契约（HTTP 400 / `code=400` / 字段级消息） |
 
 ### 9.4 需求追踪（`DS-REQ-128`）
 
 | 需求 | 落点 |
 |---|---|
-| DS-REQ-128 | §9.1（可选参数、缺席/空=全部、合法值仅 `SOURCE`/`TARGET`、命名一致性）、§9.2（非法值统一校验契约）、§9.3（无数据库结构变化） |
+| DS-REQ-128 | §9.1（可选参数、缺席/`null`/空/仅空白=全部、非空仅精确大写 `SOURCE`/`TARGET`、不自动转大写、命名一致性）、§9.2（归一化时机、允许 `null` 的 `@Pattern`、`BindException` 异常链路、控制器局部处理器边界、字段级消息与通用兜底、回归风险、不新增业务码、本轮不改代码）、§9.3（无数据库结构变化、校验失败口径） |
+
+### 9.5 变更记录（R1 定向修订）
+
+| 日期 | 变更 | 依据 |
+|---|---|---|
+| 2026-09-19 | R1 定向修订（ChatGPT 远程独立复审）：§9.1 明确归一化顺序（`trim()` → 空转 `null` → 不自动转大写）与“精确大写 `SOURCE`/`TARGET`”取值；§9.2 由按 `MethodArgumentNotValidException` 承接改为按 **`BindException`** 承接，补充允许 `null` 的 `@Pattern(regexp="SOURCE|TARGET")` 约束、`DataSourceController` 功能局部 `@ExceptionHandler(BindException.class)` 的改动边界与统一错误结构（HTTP 400 / `code=400` / 优先 `category` 字段消息 + 通用兜底 / 不泄露堆栈）、`MethodArgumentNotValidException extends BindException` 的局部处理器优先级回归风险、以及“本轮只冻结方案、不改代码”；§9.3 同步校验失败口径。§9 参数名、无分页、无数据库结构变化等结论未变 | DATA-SOURCE-LIST-PAGE-SELECTIVE-QUERY-LIST-INTEGRATION-BASELINE-001-R1（ChatGPT 远程复审定向修订；纯文档任务） |
 
 ## 10. 本轮草案变更记录（2026-09-19）
 
@@ -529,4 +542,5 @@
 - §0~§8 既有 `APPROVED` API 基线逐字冻结、未修改；
 - 实现状态仍为 `NOT_STARTED`（本轮为纯文档草案，未修改任何 `.vue`/`.ts`/`.java`/测试/依赖/配置/SQL，未访问数据库/ZK/Kafka，未启动服务）；
 - 本轮新增验收 `DS-AC-116~140` 均为 `NOT_RUN`；既有正式复验统计 `PASS=113/FAIL=0/BLOCKED=2/NOT_RUN=0` 逐字保留；
-- 依据任务 `DATA-SOURCE-LIST-PAGE-SELECTIVE-QUERY-LIST-INTEGRATION-BASELINE-001`。
+- 依据任务 `DATA-SOURCE-LIST-PAGE-SELECTIVE-QUERY-LIST-INTEGRATION-BASELINE-001`；
+- R1 定向修订见 §9.5（ChatGPT 远程复审四项问题之 `category` 归一化/校验/异常映射；`DS-REQ-128` 编号与数量未变）。

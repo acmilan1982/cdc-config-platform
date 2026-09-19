@@ -427,26 +427,35 @@
 | 页面能力 | 公共组件 | 槽位/契约 | 归属 |
 |---|---|---|---|
 | 页面标题与一句话说明 | `QueryListPageShell` | props `title`/`description`，默认槽直挂 `.ql-page` | 公共 |
-| 查询条件容器 | `QueryListQueryPanel` | 默认槽承载三个文本条件 + 角色单选 | 公共容器 / Feature 内容 |
+| 查询条件容器 | `QueryListQueryPanel` | 默认槽承载三个文本条件 + 角色 `el-select` 单选下拉框 | 公共容器 / Feature 内容 |
 | 查询 / 重置 | `QueryListActions` | emits `query`/`reset`；`queryWidthPx`/`resetWidthPx` 四值同锁 | 公共 |
-| 结果卡片 | `QueryListResultPanel` | `toolbar` 槽 = “新增数据源”；`body` 槽 = Feature 表格、空状态与行操作 | 公共容器 / Feature 内容 |
+| 结果卡片 | `QueryListResultPanel` | 固定错误槽 = Feature `loadError` 的 `el-alert`；`toolbar` 槽 = “新增数据源”；`body` 槽 = Feature 表格、空状态与行操作 | 公共容器 / Feature 内容 |
 | 自动刷新工具栏 | **不接入** `QueryListRefreshToolbar` | — | — |
 | 稳定滚动条槽 | **不自动启用** | — | — |
 
 - 现有公共组件契约以当前远程已接受实现为准（`frontend/src/components/query-list/**`），本节不修改其 props / slots / emits / CSS。
+- `QueryListResultPanel` 保持其**已验收的固定结构**：结果区头部 → 固定错误槽 → 固定分隔线 → `body` 主体槽。数据源表格放入 `body` 主体槽；“无分页”**只**表示 `body` 中不放分页组件，**不**删除固定错误槽与固定分隔线（`DS-REQ-123`/`136`）。
 
 ### 11.3 页面结构与结果区头部
 
 - 三段结构：① 页面标题与一句话说明（`QueryListPageShell`）；② 查询条件区（`QueryListQueryPanel` + `QueryListActions`）；③ 结果列表区（`QueryListResultPanel`）。
-- 结果区头部：左侧“数据源列表” + 当前结果数量；右侧“新增数据源”；头部下方直接进入表格，不增加双击提示行。
+- 结果区头部：左侧“数据源列表” + 当前结果数量；右侧“新增数据源”。
+- 结果区**保留** `QueryListResultPanel` 固定结构：头部 → 固定错误槽 → 固定分隔线 → `body` 主体槽。`DataSourcePage.vue` 现有 `loadError` 对应的 `el-alert` 映射到**固定错误槽**，保留现有错误消息展示与关闭行为；数据源表格放入 `body` 主体槽；结果区**不增加**“双击数据行可编辑”提示行或其他辅助说明行。
 - 不显示刷新倒计时、最近刷新时间或“立即刷新”；不显示“双击数据行可编辑”文案，但双击编辑保留（`DS-REQ-122`/`124`）。
 
 ### 11.4 角色查询条件与 API 参数设计
 
-- 查询区在既有三个文本条件之外新增“角色”单选，固定取值：全部（默认）/ 源库（`SOURCE`）/ 目标库（`TARGET`）。
+- 查询区在既有三个文本条件之外新增“角色”条件，控件固定为 Element Plus `el-select` **单选下拉框**（**不得**画成 Radio / 单选按钮组）；占位与默认显示“全部”；选项顺序与显示文本固定为：全部、源库、目标库，绑定值依次为空值、`SOURCE`、`TARGET`；控件宽度冻结为 `140px`（同一文档不得出现其他宽度）；宽屏顺序固定为：数据源 ID → 名称 → 角色 → 主机 → 查询 → 重置；窄屏响应式遵循 `QueryListQueryPanel` 已验收的整组换行规则，不单独发明本页断点或布局算法。查询提交当前角色值；重置后角色回到“全部”（`DS-REQ-125`/`127`）。
 - 过滤使用规范化代码 `SOURCE`/`TARGET`，与既有 `DATA_SOURCE_CATEGORY` 大小写兼容比较复用（`DESIGN §7`、`DATABASE §4`）；**不**使用中文展示值作为数据库查询值。
 - 角色与其他非空条件 **AND** 组合；文本条件继续遵守既有 trim 与忽略大小写包含规则。
-- API 侧定义一个**可选**查询参数（详细草案见 `API.md` §9）：缺席/空值 = 全部；合法值仅 `SOURCE`/`TARGET`；非法值按当前统一参数校验契约处理（HTTP 400 / `code=400` / 字段级消息），**不新增**业务错误码（既有 `40001` 按 `API.md` §5.2 仅用于新增/编辑请求体，不适用于列表查询参数）。
+- API 侧定义一个**可选**字符串查询参数 `category`（详细草案见 `API.md` §9）。归一化、校验与异常映射冻结为：
+  1. 绑定完成后、Bean Validation 前归一化：先 `trim()`；`null` 或 trim 后空字符串统一转为 `null`（表示“全部”）；非空值**不自动转大写**，只接受精确大写 `SOURCE`/`TARGET`。
+  2. 归一化为空值后，以**允许 `null`** 的字段约束校验非空值，例如 `@Pattern(regexp = "SOURCE|TARGET", message = "角色仅支持 SOURCE 或 TARGET")`；Bean Validation 对 `null` 不判失败，故“全部”合法。
+  3. `GET` 请求中 `@ModelAttribute` 的绑定/字段校验错误按 **`BindException`** 处理，**不再**声称由 `MethodArgumentNotValidException` 承接。
+  4. 改动边界冻结为在 `DataSourceController` 增加**功能局部**的 `@ExceptionHandler(BindException.class)`（与既有局部 `@ExceptionHandler(HttpMessageNotReadableException.class)` 同构），返回 HTTP `400` / `code=400` / 优先取 `category` 字段校验消息（无法提取字段消息时使用明确的通用参数错误消息），不泄露堆栈或内部细节；**不**扩大为全局异常处理器改造。
+  5. **回归风险（须在实现阶段验证）**：`MethodArgumentNotValidException extends BindException`，而控制器局部 `@ExceptionHandler` 优先级高于 `@RestControllerAdvice`；该局部处理器必须保持既有请求体校验错误的字段级消息语义，不得回归。
+  6. **不新增**业务错误码（既有 `40001` 按 `API.md` §5.2 仅用于新增/编辑请求体，不适用于列表查询参数）。
+  7. 本条只冻结实现方案；本轮**不实际修改** `DataSourceQuery`、`DataSourceController` 或任何异常处理代码。
 - **不引入任何数据库结构变化**（无 DDL、无新列、无索引/约束变化）。
 
 ### 11.5 主列表、操作列与删除
@@ -461,7 +470,7 @@
 
 ### 11.6 无分页与几何稳定性
 
-- 前后端继续不使用分页参数或分页交互，保持“记录总数不超过 100、一次加载全部”的已批准边界（`DS-REQ-005` 继续有效）；不因 `QueryListResultPanel.body` 支持承载分页而增加分页。
+- 前后端继续不使用分页参数或分页交互，保持“记录总数不超过 100、一次加载全部”的已批准边界（`DS-REQ-005` 继续有效）；不因 `QueryListResultPanel.body` 支持承载分页而增加分页。“无分页”**只**表示 `body` 中不放分页组件，**不**意味着删除 `QueryListResultPanel` 的固定错误槽或固定分隔线。
 - 首次加载与查询 Loading 期间，查询/重置按钮宽度四值同锁、结果卡片几何保持稳定，无跳变。
 - 页面不提供自动刷新、手工刷新工具栏或“立即刷新”。
 
@@ -488,9 +497,9 @@
 | DS-REQ-120 | §11.1 |
 | DS-REQ-121 | §11.3 |
 | DS-REQ-122 | §11.3、§11.6 |
-| DS-REQ-123 | §11.3 |
+| DS-REQ-123 | §11.2、§11.3 |
 | DS-REQ-124 | §11.3、§11.5 |
-| DS-REQ-125 | §11.4 |
+| DS-REQ-125 | §11.2、§11.4 |
 | DS-REQ-126 | §11.4 |
 | DS-REQ-127 | §11.4（重置语义沿用既有 `DS-REQ-009`，不套用模板默认） |
 | DS-REQ-128 | §11.4 |
@@ -505,7 +514,9 @@
 | DS-REQ-137 | §11.6 |
 | DS-REQ-138 | §11.2、§11.8 |
 
-## 12. 本轮草案变更记录（2026-09-19）
+## 12. 本轮草案变更记录
+
+### 12.1 初版草案（2026-09-19，任务 `...-001`）
 
 - 2026-09-19；
 - 新增 §11「列表首页选择性接入查询列表页公共组件设计（`DRAFT_PENDING_USER_REVIEW`，未实现）」；
@@ -514,3 +525,15 @@
 - 本轮新增需求 `DS-REQ-116~138` 与本轮新增验收 `DS-AC-116~140` 均为 `NOT_RUN`；
 - 既有正式复验统计 `PASS=113/FAIL=0/BLOCKED=2/NOT_RUN=0`（阻塞 `DS-AC-104`/`DS-AC-108`）逐字保留，未置 `IMPLEMENTED_ACCEPTED`；
 - 依据任务 `DATA-SOURCE-LIST-PAGE-SELECTIVE-QUERY-LIST-INTEGRATION-BASELINE-001`。
+
+### 12.2 R1 定向修订（2026-09-19，任务 `...-001-R1`）
+
+- 2026-09-19；
+- 修订范围仅限 ChatGPT 远程独立复审提出的四项问题，落在 §11.2、§11.3、§11.4、§11.6：
+  1. §11.4：`category` 归一化/校验/异常映射冻结为“trim → 空转 `null` → 不自动转大写 → 允许 `null` 的 `@Pattern(regexp="SOURCE|TARGET")` → `BindException` → 控制器局部 `@ExceptionHandler(BindException.class)` 返回 HTTP 400 / `code=400` / 字段级消息”，并显式记录局部处理器优先级回归风险与“本轮不改代码”；
+  2. §11.2/§11.3/§11.6：删除“头部下方直接进入表格”，明确保留 `QueryListResultPanel` 固定结构（头部 → 固定错误槽 → 固定分隔线 → `body`），`loadError` 的 `el-alert` 映射错误槽，且“无分页 ≠ 删除固定错误槽或分隔线”；
+  3. §11.2/§11.4：角色条件明确为 `el-select` 单选下拉框、宽度 `140px`、禁止 Radio 画法，并冻结选项顺序、绑定值与宽屏排列顺序；
+  4. 本节变更记录与 `REQUIREMENTS.md` §21、`ACCEPTANCE.md` §7、`API.md` §10、`UI.md` §10.7 的 R1 记录一致。
+- §0~§10 既有 `APPROVED` 设计基线与 §11 其他小节结论未修改；`DS-REQ-116~138` 编号与数量（23 条）未变；
+- 实现状态仍为 `NOT_STARTED`；本轮新增验收 `DS-AC-116~140` 仍全部为 `NOT_RUN`；既有统计 `PASS=113/FAIL=0/BLOCKED=2/NOT_RUN=0` 逐字保留；
+- 依据任务 `DATA-SOURCE-LIST-PAGE-SELECTIVE-QUERY-LIST-INTEGRATION-BASELINE-001-R1`（纯文档修订；未修改任何业务代码/测试/依赖/配置/SQL；未访问数据库/ZK/Kafka；未启动服务）。

@@ -71,13 +71,13 @@ implementation_authorization_status=NOT_GRANTED_IN_THIS_TASK
 ## 4. 本轮调整的关键边界（速览，详版见各专门文档）
 
 - **范围**：只调整 `/config/data-source` 第一个主列表页。新增/编辑数据源弹窗、业务属性弹窗、目标库命名策略弹窗及其内部表单/列表、测试连接行为、删除确认框、其他路由与其他 Feature **均不变**。
-- **选择性接入公共组件**：`QueryListPageShell`（标题与说明）、`QueryListQueryPanel`（查询条件容器）、`QueryListActions`（查询 / 重置）、`QueryListResultPanel`（结果卡片，`toolbar` 槽承载“新增数据源”，`body` 槽承载 Feature 自有表格与行操作）。
+- **选择性接入公共组件**：`QueryListPageShell`（标题与说明）、`QueryListQueryPanel`（查询条件容器）、`QueryListActions`（查询 / 重置）、`QueryListResultPanel`（结果卡片，保留固定结构“头部 → 固定错误槽 → 固定分隔线 → `body`”；固定错误槽承载 `loadError` 的 `el-alert`，`toolbar` 槽承载“新增数据源”，`body` 槽承载 Feature 自有表格与行操作）。
 - **不接入**：`QueryListRefreshToolbar`；稳定滚动条槽不自动启用。
 - **不分页**：前后端继续不使用分页参数或分页交互（`DS-REQ-005` 保持）。
 - **Tooltip 保留**：既有 `show-overflow-tooltip` 行为不得删除、弱化或改变。
 - **编辑入口**：移除每行可见“编辑”按钮，编辑只保留双击行；页面不得显示“双击数据行可编辑”提示文案。
 - **操作列**：只保留一个带文字的“更多”下拉；源库行菜单为“目标库命名策略 / 分隔线 / 红色危险项 删除”，目标库行菜单为“业务属性 / 分隔线 / 红色危险项 删除”；菜单不含“编辑”。
-- **角色查询**：新增“角色”单选（全部 / 源库 `SOURCE` / 目标库 `TARGET`），默认“全部”；过滤使用规范化代码，不使用中文展示值。
+- **角色查询**：新增“角色”`el-select` 单选下拉框（选项顺序与文本：全部 / 源库 / 目标库，绑定值：空值 / `SOURCE` / `TARGET`），默认“全部”，宽度 `140px`；过滤使用规范化代码，不使用中文展示值，前端不静默纠正非法值。
 - **重置语义**：保持既有 `DS-REQ-009`“重置后立即恢复全部有效记录”；不得套用模板默认“重置不查询”。
 
 ## 5. 变更记录
@@ -85,3 +85,4 @@ implementation_authorization_status=NOT_GRANTED_IN_THIS_TASK
 | 日期 | 变更 | 依据 |
 |---|---|---|
 | 2026-09-19 | 创建本 Feature 入口文档（此前该 Feature 无 `README.md`）：建立状态分层、文档导航与本轮调整边界速览；本轮调整草案为 `DRAFT_PENDING_USER_REVIEW` / `NOT_STARTED` / 验收全部 `NOT_RUN`；既有基线状态与 `PASS=113/FAIL=0/BLOCKED=2/NOT_RUN=0` 逐字保留 | `DATA-SOURCE-LIST-PAGE-SELECTIVE-QUERY-LIST-INTEGRATION-BASELINE-001`（列表首页调整基线草案；纯文档任务） |
+| 2026-09-19 | R1 定向修订（ChatGPT 远程独立复审四项问题）：§4 速览同步——结果卡片补充“固定结构（头部 → 固定错误槽 → 固定分隔线 → `body`）”与 `loadError` 的错误槽承载；“角色查询”由“单选”改为 `el-select` 单选下拉框并补充选项顺序、绑定值与 `140px` 宽度、前端不静默纠正非法值。§2 状态分层、§3 文档导航与既有验收统计未修改 | `DATA-SOURCE-LIST-PAGE-SELECTIVE-QUERY-LIST-INTEGRATION-BASELINE-001-R1`（ChatGPT 远程复审定向修订；纯文档任务） |

@@ -439,3 +439,30 @@ data_source_list_page_selective_integration_acceptance_status=ALL_NOT_RUN
   （其 `pilot_page_selection_status` 仍为 `NOT_DECIDED`）。
 - **不得**把本轮文档草案写成公共组件或页面已实现：本轮为纯文档任务，
   未修改任何公共组件实现，未修改任何页面源码，未创建迁移分支或迁移提交。
+
+### R1 修订记录（`2026-09-19`）
+
+本节为**追加**记录，不改写上方授权事实、§1.1 / §5 结论与状态块。
+
+- R1 任务：`DATA-SOURCE-LIST-PAGE-SELECTIVE-QUERY-LIST-INTEGRATION-BASELINE-001-R1`
+  （ChatGPT 对初版草案提交 `01680ee527b8e35cd4afd84c4789b862d34f7a77` 远程独立复审的定向修订）。
+- 修订范围：仅四项文档问题——`category` 查询参数的归一化 / 校验 / 异常映射（冻结为
+  `BindException` + `DataSourceController` 功能局部 `@ExceptionHandler(BindException.class)`，
+  HTTP 400 / `code=400` / 字段级消息）、`QueryListResultPanel` 固定结构（头部 → 固定错误槽 →
+  固定分隔线 → `body`）与错误槽映射、角色控件明确为 `el-select` 单选下拉框（`140px`）、
+  补齐强制全文阅读。**未**改变授权范围、未改变业务行为不变的前提、
+  **未**改写 §1.1 / §5 的通用排除原则。
+- R1 状态（本次记录时点的权威事实）：
+
+```text
+data_source_list_page_selective_integration_r1_task=DATA-SOURCE-LIST-PAGE-SELECTIVE-QUERY-LIST-INTEGRATION-BASELINE-001-R1
+data_source_list_page_selective_integration_authorization_status=UNCHANGED_GRANTED_BY_PROJECT_OWNER_FOR_THIS_PAGE_ONLY
+data_source_list_page_selective_integration_document_status=DRAFT_PENDING_USER_REVIEW
+data_source_list_page_selective_integration_implementation_status=NOT_STARTED
+data_source_list_page_selective_integration_acceptance_status=ALL_NOT_RUN
+data_source_list_page_selective_integration_r1_review_findings_resolved=4
+```
+
+- 模板级 `page_migration_status` / `page_migration_authorization_status` /
+  `pilot_page_selection_status` 与“源库快照状态”参考页历史**均不变**；
+  本节不构成任何其他页面的迁移授权。
