@@ -67,6 +67,8 @@
 
 **接口数量**：13 个。
 
+> **本轮新草案接口增量提示（§11，`DRAFT_PENDING_USER_REVIEW`）**：本轮拟新增 2 个独立启停接口（`PUT /api/data-sources/{id}/enable`、`PUT /api/data-sources/{id}/disable`），接口数量由 13 增至 **15**（详见 §11.1）。§11 为**未批准、未实现**的草案；本表 13 个接口的路径、契约与既有结论**逐字冻结、未修改**。同时 §4.1 的“后端固定 `FG_ACTIVE='1'` 过滤”与 `DataSourceListVO` 不含 `fgActive` 两处结论，以及 §5.2 中 `50002` 的“废弃”状态、§6.1 中两条启停接口的“**删除**”处理，均由 §11 局部替代（替代边界见 §11.7），未在此处静默改写。
+
 ---
 
 ## 2. 组合逻辑键接口（§7.2）
@@ -160,6 +162,8 @@
 
 - 不含密码、`dataSourceOrg`、`bizAttr`、`dataSourceDomain`、`fgActive`、时间字段、`sourceApp`（`DS-REQ-011`/`012`）。
 - `port` 为 JSON number；`dataSourceCategory` 为规范化 `SOURCE`/`TARGET`（后端忽略大小写识别存量后输出）。
+
+> **本轮新草案局部替代提示（§11，`DRAFT_PENDING_USER_REVIEW`）**：上两处结论被局部替代——① “后端固定 `FG_ACTIVE='1'` 过滤”改为“**返回 `CDC_DATA_SOURCE` 全部记录，不过滤 `FG_ACTIVE`**”（`DS-REQ-150`）；② 响应字段清单**新增** `fgActive`（返回**原始值**，`'1'`/`'0'`/`NULL`/其他历史值均原样返回，不静默归一化）（`DS-REQ-151`/`DS-REQ-154`）。**不被替代**：不含密码等敏感字段、不含时间字段与 `sourceApp` 的结论继续有效（`DS-REQ-181` 重申）；`port` 为 number、`dataSourceCategory` 规范化的结论继续有效；无分页、`DATA_SOURCE_ID` 升序、三条件模糊查询与 `category` 过滤继续有效。详细契约见 §11.2。
 
 ### 4.2 GET /api/data-sources/{id}（详情）
 
@@ -409,6 +413,8 @@
 | 40004 | 扩展配置不能为空（`EXTEND_REQUIRED`） | 一对一必填 EXTEND 语义被 `DS-REQ-062`/`063` 取代（源库 0..N 命名策略） |
 | 50002 | 状态操作失败（`STATUS_FAILED`） | 启用/停用能力移除（`DS-REQ-003`/`091`） |
 
+> **本轮新草案对 `50002` 的局部替代提示（§11，`DRAFT_PENDING_USER_REVIEW`）**：本轮恢复启用/停用能力（`DS-REQ-168`~`DS-REQ-173`），因此 `50002`（`STATUS_FAILED`）**由“废弃码”恢复为“生效码”**，语义收敛为“启停接口 `UPDATE` 影响行数 ≠ 1（保存/状态操作失败），事务回滚”（见 §11.4）。上表“废弃原因”描述的是**历史**结论，本轮不作改写；`40004`（`EXTEND_REQUIRED`）的废弃结论**继续有效**、不受本轮影响。本轮**唯一新增**业务码为 `40250`（非法状态，仅 `enable` 遇到 `NULL`/非 `0`/`1` 时返回），其余启停错误一律复用既有码。
+
 ### 5.3 场景 → 码/消息
 
 | 场景 | 结果 |
@@ -441,6 +447,8 @@
 | `PUT /api/data-sources/{id}/enable` | **删除**（无启用/停用能力，`DS-REQ-003`） |
 | `PUT /api/data-sources/{id}/disable` | **删除** |
 | （无） | **新增**：测试连接、目标候选、业务属性读写、命名策略 CRUD（§4.6~§4.13） |
+
+> **本轮新草案局部替代提示（§11，`DRAFT_PENDING_USER_REVIEW`）**：上表两条 `PUT /api/data-sources/{id}/enable`、`PUT /api/data-sources/{id}/disable` 的“**删除**”处理，被 `DS-REQ-168`~`DS-REQ-173` **局部替代**为“**保留路径风格、重新提供能力**”，但语义收敛为“**只更新主表 `FG_ACTIVE` 的独立接口**（启用写 `'1'`、停用写 `'0'`），不联写、不级联、不访问源库、不操作进程/ZK/Kafka”（§11.1/§11.3）。替代边界：旧候选实现对这两条接口的**旧语义**（一对一 EXTEND 联写等）仍按原结论**移除**；本表其余各行（无分页列表替换、详情收敛、新增/编辑/删除不联写）**继续有效**，不被本轮替代。
 
 ### 6.2 仓库内调用者扫描
 
@@ -548,3 +556,117 @@
 - R1 定向修订见 §9.5（ChatGPT 远程复审四项问题之 `category` 归一化/校验/异常映射；`DS-REQ-128` 编号与数量未变）。
 - 2026-09-19 批准收口（任务 `DATA-SOURCE-LIST-PAGE-SELECTIVE-QUERY-LIST-INTEGRATION-APPROVAL-CLOSEOUT-001`）：§9 章节标题与状态声明由 `DRAFT_PENDING_USER_REVIEW` 收口为 `APPROVED`（`adjustment_api_status=APPROVED`）；记录批准链（初版草案提交 `01680ee5...` → R1 修订提交 `c3fd460b...` → ChatGPT 远程 Git R1 复审 `REVIEW_PASS` → 项目负责人 2026-09-19 明确回复“批准这轮调整基线”）；§9.1~§9.4 技术正文与 R1 冻结方案（`category` 归一化、允许 `null` 的 `@Pattern`、`BindException` → 控制器局部 `@ExceptionHandler` → HTTP 400 / `code=400` / 字段级消息、不新增业务码、不自动转大写、本轮不改代码）**零变化**；§0~§8 既有 `APPROVED` API 基线逐字冻结；实现状态仍为 `NOT_STARTED`、实现授权 `NOT_GRANTED_IN_THIS_TASK`、本轮新增验收 `DS-AC-116~140` 仍全部 `NOT_RUN`；既有统计 `PASS=113/FAIL=0/BLOCKED=2/NOT_RUN=0` 逐字保留。
 - 2026-09-19 实现状态回写（任务 `DATA-SOURCE-LIST-PAGE-SELECTIVE-QUERY-LIST-INTEGRATION-IMPLEMENTATION-001`）：§9 章节标题改为“（`APPROVED`，`IMPLEMENTED_PENDING_USER_REVIEW`）”，状态声明由 `implementation_status=NOT_STARTED`/`implementation_authorization_status=NOT_GRANTED_IN_THIS_TASK`/`acceptance_execution_status=ALL_NOT_RUN` 更新为 `implementation_status=IMPLEMENTED_PENDING_USER_REVIEW`/`implementation_authorization_status=GRANTED_IN_THIS_TASK`/`formal_acceptance_execution_status=NOT_RUN`/`new_adjustment_acceptance_status=ALL_NOT_RUN`；实现按 §9 已批准契约落地：`DataSourceQuery` 新增可选 `category`（`trim()` → 空转 `null` → 不自动转大写）、`@Pattern(regexp="SOURCE|TARGET")` 允许 `null`、`DataSourceController` 增加局部 `@ExceptionHandler(BindException.class)` 返回 HTTP 400 / `code=400` / 字段级消息、`DataSourceServiceImpl` 列表过滤使用 `UPPER(DATA_SOURCE_CATEGORY) = {0}` 绑定参数；§9.1~§9.5 技术正文**零变化**，`GlobalExceptionHandler` 无 diff，未新增业务码；本轮新增验收 `DS-AC-116~140` 仍全部 `NOT_RUN`（`ALL_NOT_RUN`），实现状态未置 `IMPLEMENTED_ACCEPTED`；既有统计 `PASS=113/FAIL=0/BLOCKED=2/NOT_RUN=0` 逐字保留；未访问数据库/ZK/Kafka；未启动服务。
+
+## 11. 启用/停用接口与列表状态字段（`DRAFT_PENDING_USER_REVIEW`，未实现）
+
+> 本轮草案分层状态：`adjustment_document_status=DRAFT_PENDING_USER_REVIEW`、`adjustment_baseline_status=DRAFT_PENDING_USER_REVIEW`、`implementation_status=NOT_STARTED`、`implementation_authorization_status=NOT_GRANTED_IN_THIS_TASK`、`formal_acceptance_execution_status=NOT_RUN`、`new_adjustment_acceptance_status=ALL_NOT_RUN`。
+>
+> 任务：`DATA-SOURCE-LIST-ALL-STATUS-ENABLE-DISABLE-UI-ADJUSTMENT-BASELINE-001`（纯文档草案）。关联需求 `DS-REQ-150`~`DS-REQ-173`，关联验收 `DS-AC-150`~`DS-AC-178`、`DS-AC-181`。本节只冻结契约，**不实现**；§0~§10 既有结论**逐字冻结**。
+
+### 11.1 接口增量
+
+| # | 方法 | 路径 | 说明 | 关联 DS-REQ |
+|---|---|---|---|---|
+| 14 | PUT | `/api/data-sources/{dataSourceId}/enable` | 启用：只把主表 `FG_ACTIVE` 写为 `'1'` | 168,169,170,171 |
+| 15 | PUT | `/api/data-sources/{dataSourceId}/disable` | 停用：只把主表 `FG_ACTIVE` 写为 `'0'`（异常状态归一化为 `'0'`） | 168,169,170,171 |
+
+- 无请求体（`PUT` 空 body）；`dataSourceId` 为路径参数，按字符串传输（与既有 ID 契约一致）。
+- 响应沿用既有统一结构 `ApiResponse`：成功为 `code=0`（或项目既有成功码）且 `data.success=true`；失败按 §11.4 错误契约。
+- 路径风格与既有 `/api/data-sources/**` 一致；两条均为字面量后缀段，不与 `/api/data-sources/{id}` 冲突（后者为 `GET`，方法不同，且后缀段不同）。
+
+### 11.2 列表接口状态字段（`GET /api/data-sources`）
+
+- 查询范围：**移除**固定 `FG_ACTIVE='1'` 过滤，返回 `CDC_DATA_SOURCE` 全部记录（`DS-REQ-150`）。
+- 其余契约**不变**：三条件忽略大小写模糊包含、`category` 规范化代码过滤、AND 组合、先 `trim`、无分页、`DATA_SOURCE_ID` 升序。
+- 响应字段**新增** `fgActive`（原始值直传）：
+
+```json
+[
+  {
+    "dataSourceId": "DS01",
+    "dataSourceName": "源库A",
+    "dataSourceCategory": "SOURCE",
+    "dataSourceType": "ORACLE",
+    "host": "10.0.0.1",
+    "port": 1521,
+    "serviceName": "prod",
+    "userName": "cdc",
+    "fgActive": "0"
+  }
+]
+```
+
+- `fgActive` 取值语义：`"1"`=启用、`"0"`=停用、`null`=异常（原值为 `NULL`）、其他字符串=异常（历史非 `0`/`1` 值）；**后端不归一化、不折叠**，页面据此在“数据源 ID”列内渲染标识（`DS-REQ-151`~`DS-REQ-154`）。
+- **不新增**独立“状态”列或状态派生字段；仍不含密码、`dataSourceOrg`、`bizAttr`、`dataSourceDomain`、时间字段、`sourceApp`（`DS-REQ-181`）。
+
+### 11.3 启停状态机与写入边界
+
+| 接口 | 当前 `FG_ACTIVE` | 行为 | 结果 |
+|---|---|---|---|
+| `enable` | `'0'` | `UPDATE ... SET FG_ACTIVE='1'` | 成功 |
+| `enable` | `'1'` | 不写入 | 幂等成功（重复目标状态） |
+| `enable` | `NULL` / 非 `0`/`1` | 拒绝 | `40250`，不写库 |
+| `disable` | `'1'` | `UPDATE ... SET FG_ACTIVE='0'` | 成功 |
+| `disable` | `'0'` | 不写入 | 幂等成功（重复目标状态） |
+| `disable` | `NULL` / 非 `0`/`1` | `UPDATE ... SET FG_ACTIVE='0'` | 成功（归一化） |
+
+- 事务边界：单条主表记录的**单条 `UPDATE`**，短事务；`enable` 在写入前先读取当前值以实施上表状态机。
+- 只更新 `CDC_DATA_SOURCE.FG_ACTIVE` 一列。**不修改**其他字段；**不级联** `CDC_DATA_SOURCE_EXTEND`、客户端、订阅或任何其他表；**不访问**源库；**不操作**进程、ZooKeeper、Kafka（`DS-REQ-168`/`DS-REQ-169`）。
+- 并发：**不加锁**、**无乐观版本字段**、**不新增**并发控制；并发或先后请求最终收敛到其中一个请求的目标值；**不承诺**“至多一次成功”（`DS-REQ-171`）。
+- 成功响应消息只陈述“状态已更新”，**不得**声称进程已启动/停止或配置已实时生效。
+
+### 11.4 错误契约
+
+| 场景 | HTTP | code | 说明 |
+|---|---|---|---|
+| 目标主表记录不存在 | 200（既有统一结构） | `40400` | 复用 §5.2 `40400`；事务内无任何写入 |
+| 非法状态（仅 `enable`，当前值为 `NULL`/非 `0`/`1`） | 200 | `40250` | **本轮唯一新增业务码**；不写库 |
+| 重复目标状态（`enable` 遇 `'1'`、`disable` 遇 `'0'`） | 200 | 成功码 | 幂等成功，不写库、不报错 |
+| `UPDATE` 影响行数 ≠ 1 | 200 | `50002` | `STATUS_FAILED`（由“废弃”恢复为生效，见 §5.2 追加说明）；事务回滚，不留中间状态 |
+| 其他保存类失败 | 200 | `50000` | 沿用既有 `SAVE_FAILED` 语义 |
+
+**前端消息处理（冻结）**：`40400` → 提示目标不存在并刷新列表；`40250` → 提示状态异常、需先停用归一化并刷新列表；`50002`/`50000` → 提示操作失败、请重试并**保留**当前列表与已应用条件、恢复 busy；成功 → 按**当前已应用查询条件**重新查询（`DS-REQ-172`/`DS-REQ-173`）。错误消息不得泄露堆栈、密码或其他敏感信息（`DS-REQ-181`）。
+
+### 11.5 兼容性增量
+
+| 现有/既有结论 | 本轮处理 |
+|---|---|
+| §4.1 “后端固定 `FG_ACTIVE='1'` 过滤” | **局部替代**为“返回全部记录”（§11.2） |
+| §4.1 `DataSourceListVO` 不含 `fgActive` | **局部替代**为“新增 `fgActive` 原始值字段”（§11.2） |
+| §5.2 `50002` 标注“废弃” | **局部替代**为“恢复为生效码，语义=启停 `UPDATE` 影响行数 ≠ 1”（§11.4） |
+| §6.1 `PUT /{id}/enable`、`PUT /{id}/disable` 标注“**删除**” | **局部替代**为“保留路径风格并重新提供能力，语义收敛为只更新主表 `FG_ACTIVE`”（§11.1/§11.3） |
+| §6.1 `DataSourceControllerTest` 覆盖旧 7 接口（含 enable/disable） | 结论**继续有效**：实现阶段须同步适配（本轮不修改测试代码） |
+
+- 未列出的既有结论**继续有效**；不得把两套接口契约同时作为“当前有效结论”。
+
+### 11.6 需求追踪（`DS-REQ-139`~`DS-REQ-177` 中与 API 相关部分）
+
+| 需求 | 接口落点 |
+|---|---|
+| DS-REQ-150、DS-REQ-151、DS-REQ-152、DS-REQ-153、DS-REQ-154 | §11.2（列表返回全部记录 + `fgActive` 原始值） |
+| DS-REQ-160、DS-REQ-161、DS-REQ-162 | §11.3、§11.4（异常状态只可归一化停用；`enable` 拒绝异常） |
+| DS-REQ-168、DS-REQ-169、DS-REQ-170、DS-REQ-171、DS-REQ-172、DS-REQ-173 | §11.1、§11.3、§11.4 |
+| DS-REQ-181 | §11.2、§11.4（不返回敏感字段、不泄露敏感信息） |
+| DS-REQ-139、DS-REQ-140、DS-REQ-141~149、DS-REQ-155~159、DS-REQ-163~167、DS-REQ-174~177 | §11.7（本轮对 API 无契约影响） |
+
+### 11.7 本轮无 API 契约变化的结论
+
+- 重置语义（`DS-REQ-139`/`DS-REQ-140`）、结果区头部（`DS-REQ-141`）、序号列（`DS-REQ-142`/`DS-REQ-143`）、主机列宽（`DS-REQ-145`）、视觉对齐（`DS-REQ-146`~`DS-REQ-149`）均为**纯前端**结论，**不改变**任何 API 请求或响应契约。
+- 停用记录允许维护（`DS-REQ-155`~`DS-REQ-159`）**不放宽**任何既有 API 参数校验或角色校验；受影响的仅是既有接口内部“主记录 `FG_ACTIVE!='1'` ⇒ `40400`”的**状态前置条件**，该条件对**自身主记录**由“必须为 `'1'`”改为“`'0'` 亦放行、异常值仍拒绝”（`DS-REQ-158`）。目标库候选（`GET /target-options`）、命名策略新目标库校验（`40005`）与其他 Feature 候选**仍只接受 `FG_ACTIVE='1'`**（`DS-REQ-159`）。
+- “更多”菜单（`DS-REQ-163`~`DS-REQ-167`）与新增按钮视觉（`DS-REQ-174`）为**纯前端**结论。
+- 明确不变项（`DS-REQ-175`~`DS-REQ-177`）中，**无分页参数**、**无新增列表字段（除 `fgActive`）**、**无 DDL/无存量清洗**为 API 层结论。
+
+## 12. 本轮调整变更记录
+
+### 12.1 初版草案（2026-09-19，任务 `DATA-SOURCE-LIST-ALL-STATUS-ENABLE-DISABLE-UI-ADJUSTMENT-BASELINE-001`）
+
+- 2026-09-19；
+- 新增 §11「启用/停用接口与列表状态字段（`DRAFT_PENDING_USER_REVIEW`，未实现）」与本节；
+- §1 接口总表后、§4.1、§5.2、§6.1 分别增加“本轮新草案局部替代提示”，显式给出替代边界，未静默改写既有结论；
+- 接口数量：既有 13 个**逐字冻结**；本轮草案拟新增 2 个（`PUT /api/data-sources/{dataSourceId}/enable`、`PUT /api/data-sources/{dataSourceId}/disable`），草案生效后为 15 个；
+- 冻结启停状态机（`enable` 只接受 `'0'`；`disable` 接受 `'1'` 并接受异常归一化为 `'0'`；重复目标状态幂等成功且不写库）、写入边界（单条主表 `UPDATE`、不级联、不访问外部系统）、并发结论（不加锁、最终收敛、不承诺至多一次成功）、错误码（复用 `40400`、新增 `40250`、恢复 `50002`、沿用 `50000`）与前端消息处理；
+- `GET /api/data-sources` 由“固定 `FG_ACTIVE='1'` 过滤、响应不含 `fgActive`”改为“返回全部记录、响应新增原始 `fgActive`”；
+- §0~§10 既有 `APPROVED` API 基线与 §9 技术正文逐字冻结、未修改；`DS-REQ-001~138` 编号与正文未改；
+- 本轮新增需求 `DS-REQ-139~177`（39 条）与本轮新增验收 `DS-AC-141~182`（42 条）全部为 `NOT_RUN`；上一轮 `DS-AC-116~140`（25 条）仍全部 `NOT_RUN`，未混入本轮统计；
+- 既有正式复验统计 `PASS=113/FAIL=0/BLOCKED=2/NOT_RUN=0`（阻塞 `DS-AC-104`/`DS-AC-108`）逐字保留，未置 `IMPLEMENTED_ACCEPTED`；
+- 本轮为纯文档草案：未修改任何 `.java`/`.vue`/`.ts`/测试/依赖/配置/SQL/锁文件，未访问数据库/ZK/Kafka，未启动服务，未运行 Maven/npm 测试或构建。

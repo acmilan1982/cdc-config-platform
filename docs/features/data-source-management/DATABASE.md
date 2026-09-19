@@ -111,6 +111,12 @@
 | 策略删除 | — | 物理删除当前 EXTEND 行 | 原逻辑键 `DATA_SOURCE_ID=? AND TARGET_DATA_SOURCE_ID=?`；先 `COUNT(*)`：0 行 → `40401`、≥2 行 → `40903`、恰好 1 才 DML，DML 后校验受影响行数=1 | `@Transactional` | 不清理存量多条；`sourceId` 不存在或非 `'1'` → `40400`，非 SOURCE → `40006` |
 | 连接测试 | 编辑未改密码时按 `originalDataSourceId` 定位 `FG_ACTIVE='1'` 记录读取持久化密码 | 无（不写业务数据） | 一次性临时连接 | 无事务 | 不写任何业务表；不进入应用连接池；表单可编辑 `dataSourceId` 不用于读取旧密码 |
 
+> **本轮新草案局部替代提示（§9，`DRAFT_PENDING_USER_REVIEW`）**：本表以下单元格被本轮**局部替代**，替代边界与新版操作矩阵见 §9.2。
+> - “列表”行 WHERE 条件中的 `FG_ACTIVE='1'` → 改为**不过滤 `FG_ACTIVE`**（返回全部记录），仍然 `ORDER BY DATA_SOURCE_ID ASC`（`DS-REQ-150`）。
+> - “详情”“编辑”“删除”“业务属性读”“业务属性保存”“策略列表”“策略新增”“策略编辑”“策略删除”“连接测试”各行 WHERE 条件中的 `FG_ACTIVE='1'`，对**主记录自身**改为“`'1'` 或 `'0'` 均可，`NULL`/非 `0`/`1` 拒绝并返回 `40400`”（`DS-REQ-155`~`DS-REQ-162`）。
+> - “新增”行写入字段 `FG_ACTIVE('1')`、以及“编辑”行“`FG_ACTIVE` 保留”**不变**（`DS-REQ-176`）。
+> - “目标候选”行 `FG_ACTIVE='1' AND UPPER(DATA_SOURCE_CATEGORY)='TARGET'` **不作替代、继续有效**（`DS-REQ-159`）。
+
 ---
 
 ## 3. 更新和删除边界（§9.3）
@@ -138,6 +144,11 @@
 - **角色限定查询**：业务属性读取/保存仅针对存在且有效的 `FG_ACTIVE='1'` 记录并校验角色为 `TARGET`（不存在或非 `'1'` → `40400`；存在且有效但角色非 TARGET → `40006`）；命名策略列表/新增/编辑/删除仅针对 `sourceId` 对应存在且有效的 `FG_ACTIVE='1'` 记录并校验角色为 `SOURCE`（不存在或非 `'1'` → `40400`；存在且有效但角色非 SOURCE → `40006`），新目标库须 `FG_ACTIVE='1' AND UPPER(DATA_SOURCE_CATEGORY)='TARGET'`，无效一律 → `40005`（`DS-REQ-069`/`076`/`082`）。
 - **命名策略逻辑键计数检查**：新增按**新逻辑键**全量计数（0 行允许 INSERT；1 行 → `40902`；≥2 行 → `40903`），插入后校验受影响行数=1；编辑先按**原逻辑键** `COUNT(*)`（0 → `40401`；≥2 → `40903`；恰好 1 才继续），若逻辑键变化再按新逻辑键查重并排除原记录（0 行允许更新、1 行 → `40902`、≥2 行 → `40903`）；删除按原逻辑键 `COUNT(*)` 恰好为 1 才执行 DML，DML 后校验受影响行数=1（`DS-REQ-064`/`067`）。
 - **不得直接承诺新增索引**：本设计不新增索引/DDL；查询基于现有已批准索引与 ≤100 行小规模数据，性能由表规模与现有结构保证（`DESIGN.md` §8）。
+
+> **本轮新草案局部替代提示（§9，`DRAFT_PENDING_USER_REVIEW`）**：本节以下两条结论被**局部替代**。
+> 1. “**`FG_ACTIVE='1'` 固定过滤**：列表、详情、编辑、删除、业务属性、目标候选、命名策略关联查询均只触及 `FG_ACTIVE='1'` 记录；主记录不存在或非 `'1'` 一律视为不存在并返回 `40400`（`DS-REQ-002`）”**局部替代**为：**列表**不按 `FG_ACTIVE` 过滤（返回全部记录，`DS-REQ-150`）；**详情/编辑/删除/业务属性/源库命名策略/编辑态连接测试**对**自身主记录**接受 `'1'` 与 `'0'`（`'0'` 不再视为不存在，`DS-REQ-155`~`DS-REQ-158`），`NULL`/非 `0`/`1` 仍拒绝并返回 `40400`（`DS-REQ-162`）。**目标候选**的 `FG_ACTIVE='1'` 过滤**不作替代、继续有效**（`DS-REQ-159`）。
+> 2. 本节“角色限定查询”中“不存在或非 `'1'` → `40400`”的两处表述，同样按上述边界**局部替代**（`'0'` 改为放行；`NULL`/非 `0`/`1` 仍 `40400`）；角色校验本身（业务属性须 `TARGET`、命名策略入口须 `SOURCE`）**不放宽**。新目标库校验 `FG_ACTIVE='1' AND UPPER(DATA_SOURCE_CATEGORY)='TARGET'` 与 `40005` **不作替代、继续有效**。
+> 其余结论（忽略大小写模糊/精确比较、命名策略组合键查重、trim、默认 ID 升序、角色大小写兼容、逻辑键计数检查、不新增索引）**全部继续有效**。新版 WHERE 条件与启停写入边界见 §9.2、§9.3。
 
 ---
 
@@ -226,3 +237,94 @@ new_adjustment_acceptance_status=ALL_NOT_RUN
 - 本轮新增验收 `DS-AC-116~140` 仍全部 `NOT_RUN`（`ALL_NOT_RUN`），实现状态未置 `IMPLEMENTED_ACCEPTED`；既有正式复验统计 `PASS=113/FAIL=0/BLOCKED=2/NOT_RUN=0`（阻塞 `DS-AC-104`/`DS-AC-108`）逐字保留；
 - §0~§7 与 §8.1 既有正文、历史状态与批准链**逐字冻结、未修改**；
 - 依据任务 `DATA-SOURCE-LIST-PAGE-SELECTIVE-QUERY-LIST-INTEGRATION-IMPLEMENTATION-001`（已批准调整基线的前后端实现、自动化测试、构建与实现状态回写；未访问数据库/ZK/Kafka；未启动服务）。
+
+---
+
+## 9. 本轮列表展示全部状态与启用/停用的数据库变化声明（`DRAFT_PENDING_USER_REVIEW`）
+
+> 状态：`DRAFT_PENDING_USER_REVIEW`。本轮草案分层状态：
+
+```text
+adjustment_document_status=DRAFT_PENDING_USER_REVIEW
+adjustment_baseline_status=DRAFT_PENDING_USER_REVIEW
+adjustment_database_status=DRAFT_PENDING_USER_REVIEW
+implementation_status=NOT_STARTED
+implementation_authorization_status=NOT_GRANTED_IN_THIS_TASK
+formal_acceptance_execution_status=NOT_RUN
+new_adjustment_acceptance_status=ALL_NOT_RUN
+```
+
+- 任务：`DATA-SOURCE-LIST-ALL-STATUS-ENABLE-DISABLE-UI-ADJUSTMENT-BASELINE-001`（纯文档草案）。关联需求 `DS-REQ-150`~`DS-REQ-159`、`DS-REQ-168`~`DS-REQ-171`、`DS-REQ-176`、`DS-REQ-177`；关联验收 `DS-AC-150`~`DS-AC-178`、`DS-AC-182`。
+- 本节**尚未**获得项目负责人批准，**未**授权实现，**未**执行任何正式验收。
+
+### 9.1 无数据库变化声明
+
+- **本轮无任何数据库结构变化**：不新增/修改/删除表、列、主键、唯一约束、索引、序列、视图、同义词或触发器；**无任何 DDL**（`DS-REQ-177`）。
+- **无存量数据清洗/订正**：不 UPDATE/DELETE 任何存量记录；`FG_ACTIVE` 为 `NULL` 或非 `0`/`1` 的存量异常记录**保持原样**，仅通过页面“停用”显式归一化为 `'0'`（`DS-REQ-161`/`DS-REQ-177`）。
+- 新增的 `fgActive` 为**接口响应字段**，直接映射既有物理列 `CDC_DATA_SOURCE.FG_ACTIVE`（`VARCHAR2(1)`，可空），**不新增列**（`DS-REQ-154`）。
+- 本轮**不访问**数据库、**不执行**任何 SQL/DDL/DML（纯文档草案任务）。
+
+### 9.2 操作矩阵变化（相对 §2）
+
+| 操作 | 新版 WHERE 条件（变化部分） | 写入字段 | 变化来源 |
+|---|---|---|---|
+| 列表 | **取消** `FG_ACTIVE='1'`；保留三条件模糊 + 角色条件 + `ORDER BY DATA_SOURCE_ID ASC` | 无 | `DS-REQ-150` |
+| 详情 | `DATA_SOURCE_ID=? AND FG_ACTIVE IN ('1','0')`（不存在、或 `FG_ACTIVE` 为 `NULL`/非 `0`/`1` → `40400`） | 无 | `DS-REQ-158` |
+| 编辑 | `DATA_SOURCE_ID = originalId AND FG_ACTIVE IN ('1','0')`；UPDATE 受影响行数须为 1 | 编辑字段；**`FG_ACTIVE` 不写、保持原值**（`'0'` 保存后仍 `'0'`） | `DS-REQ-155`、`DS-REQ-176` |
+| 删除 | `DATA_SOURCE_ID=? AND FG_ACTIVE IN ('1','0')`；DELETE 受影响行数须为 1；仍为物理删除 | 物理删除 | `DS-REQ-156` |
+| 业务属性读/保存 | `DATA_SOURCE_ID=? AND UPPER(DATA_SOURCE_CATEGORY)='TARGET' AND FG_ACTIVE IN ('1','0')` | 仅 `DATA_SOURCE_BIZ_ATTR` | `DS-REQ-156` |
+| 策略列表/新增/编辑/删除（`sourceId` 校验） | `sourceId` 记录须 `FG_ACTIVE IN ('1','0') AND UPPER(DATA_SOURCE_CATEGORY)='SOURCE'` | 仅 `CDC_DATA_SOURCE_EXTEND` | `DS-REQ-156` |
+| 编辑态连接测试（未改密码时读取持久化密码） | 按 `originalDataSourceId` 定位 `FG_ACTIVE IN ('1','0')` 记录读取密码 | 无 | `DS-REQ-157` |
+| **启用**（新增操作） | `DATA_SOURCE_ID=? AND FG_ACTIVE='0'` → 写 `'1'`；`FG_ACTIVE='1'` → 幂等成功不写；`NULL`/非 `0`/`1` → `40250` 不写 | `FG_ACTIVE` 一列 | `DS-REQ-168`、`DS-REQ-170` |
+| **停用**（新增操作） | `DATA_SOURCE_ID=?` → 写 `'0'`（`'1'` 与 `NULL`/非 `0`/`1` 均归一化为 `'0'`）；`FG_ACTIVE='0'` → 幂等成功不写 | `FG_ACTIVE` 一列 | `DS-REQ-168`、`DS-REQ-170` |
+| 目标候选（**不变**） | `FG_ACTIVE='1' AND UPPER(DATA_SOURCE_CATEGORY)='TARGET'` | 无 | `DS-REQ-159`（不作替代） |
+| 新增（**不变**） | 插入主表，`FG_ACTIVE` 写 `'1'` | 同 §2 | `DS-REQ-176` |
+
+- “`FG_ACTIVE IN ('1','0')`”是本轮为表达便利采用的书写形式；实现可用等价条件（如 `FG_ACTIVE = '1' OR FG_ACTIVE = '0'`），语义相同：**仅** `'1'` 与 `'0'` 被接受，`NULL`/非 `0`/`1` 一律视为非法并返回 `40400`（对启停接口则返回 `40250`）。不得使用 `FG_ACTIVE <> '1'`、`FG_ACTIVE IS NOT NULL` 等会**放宽**到其他历史值的写法。
+- 除上表列出的变化外，§2 其余行的读取字段、写入字段、事务与“禁止触碰”结论**继续有效**。
+
+### 9.3 启停写入边界（新增）
+
+- `enable`：`UPDATE CDC_DATA_SOURCE SET FG_ACTIVE='1' WHERE DATA_SOURCE_ID=? AND FG_ACTIVE='0'`（先读取当前值实施状态机；`'1'` 时不执行 DML）。
+- `disable`：`UPDATE CDC_DATA_SOURCE SET FG_ACTIVE='0' WHERE DATA_SOURCE_ID=?`（`'0'` 时不执行 DML）。
+- **只更新 `FG_ACTIVE` 一列**；不修改任何其他列；**不级联** `CDC_DATA_SOURCE_EXTEND`、客户端、订阅或任何其他表；**不访问**源库；**不操作**进程/ZooKeeper/Kafka（`DS-REQ-168`/`DS-REQ-169`）。
+- 事务为单条 `UPDATE` 的短事务；`UPDATE` 受影响行数 ≠ 1（非幂等路径）→ `50002`（`STATUS_FAILED`）并回滚，不留中间状态（`DS-REQ-171`；错误码见 `API.md` §11.4）。
+- 并发：**不加锁**、**不使用**乐观版本列、**不新增**并发控制；并发/先后请求最终收敛到其中一个请求的目标值；**不承诺**“至多一次成功”（`DS-REQ-171`）。
+
+### 9.4 局部替代声明清单
+
+| # | 被替代的既有数据库结论 | 替代需求 | 边界 |
+|---|---|---|---|
+| 1 | §2“列表”行 WHERE 中的 `FG_ACTIVE='1'` | `DS-REQ-150` | 只取消列表过滤；ORDER BY 与三条件/角色条件不变 |
+| 2 | §2 详情/编辑/删除/业务属性/策略/连接测试各行 WHERE 中“非 `'1'` 视为不存在” | `DS-REQ-155`~`DS-REQ-158` | 只对**自身主记录**放行 `'0'`；`NULL`/非 `0`/`1` 仍 `40400`；角色校验与密码保护不放宽 |
+| 3 | §4“`FG_ACTIVE='1'` 固定过滤”条 | `DS-REQ-150`~`DS-REQ-159` | 同上；**目标候选过滤不作替代** |
+| 4 | §4“角色限定查询”中两处“非 `'1'` → `40400`” | `DS-REQ-158` | 同上；`40006` 角色不符语义不变；`40005` 新目标库校验不变 |
+
+- §1 物理结构（含 `FG_ACTIVE VARCHAR2(1)` 可空）、§3 更新/删除边界（物理删除、不级联、受影响行数校验、不使用 `ROWNUM=1`）、§5 数据安全、§8 既有声明**全部继续有效**，不被本轮替代。
+
+### 9.5 追踪
+
+| 数据库结论 | 关联 DS-REQ | 关联 DS-AC |
+|---|---|---|
+| 列表取消 `FG_ACTIVE` 过滤、`fgActive` 原值直传 | 150,151,152,153,154 | 150,151,152 |
+| 停用记录允许读/写维护、保存后仍 `'0'` | 155,156,157,158 | 159,160,161,162,163,164 |
+| 异常记录可自 `NULL`/非 `0`/`1` 显式归一化为 `'0'`、其它写操作拒绝 | 160,161,162 | 165,166,167 |
+| 启停只写 `FG_ACTIVE`、不级联、不访问外部系统 | 168,169 | 168,169 |
+| 启停状态机与错误码（`40400`/`40250`/`50002`） | 170,171 | 170,171,172,173,174,175 |
+| 目标候选仍只含 `'1'` | 159 | 178 |
+| 零 DDL、零存量清洗、新增写 `'1'`、编辑不改状态 | 176,177 | 182 |
+
+## 10. 本轮调整变更记录
+
+### 10.1 初版草案（2026-09-19，任务 `DATA-SOURCE-LIST-ALL-STATUS-ENABLE-DISABLE-UI-ADJUSTMENT-BASELINE-001`）
+
+- 2026-09-19；
+- 新增 §9「本轮列表展示全部状态与启用/停用的数据库变化声明（`DRAFT_PENDING_USER_REVIEW`）」与本节；§2 表后、§4 后分别增加“本轮新草案局部替代提示”，显式给出替代边界，未静默改写 §2/§4 既有单元格；
+- §9.1 声明**零数据库结构变化、零存量数据清洗**；`fgActive` 为既有物理列 `CDC_DATA_SOURCE.FG_ACTIVE` 的响应映射，不新增列；
+- §9.2 冻结新版操作矩阵（列表取消 `FG_ACTIVE` 过滤；详情/编辑/删除/业务属性/策略/编辑态连接测试对自身主记录放行 `'0'`、拒绝 `NULL`/非 `0`/`1`；新增启用/停用两行；目标候选与新增**不作替代**），并明确禁止使用 `FG_ACTIVE <> '1'` 等会放宽到其他历史值的写法；
+- §9.3 冻结启停写入边界：只更新 `FG_ACTIVE` 一列、单条 `UPDATE` 短事务、不级联其他表、不访问源库/进程/ZK/Kafka、受影响行数 ≠ 1 → `50002` 回滚、不加锁且最终收敛；
+- §9.4 以四条“局部替代声明”冻结对 §2/§4 的替代边界；
+- §1 物理结构、§3 更新/删除边界、§5 数据安全、§8 既有声明逐字冻结、未修改；`DS-REQ-001~138` 编号与正文未改；
+- 本轮新增需求 `DS-REQ-139~177`（39 条）与本轮新增验收 `DS-AC-141~182`（42 条）全部为 `NOT_RUN`；上一轮 `DS-AC-116~140`（25 条）仍全部 `NOT_RUN`，未混入本轮统计；
+- 既有正式复验统计 `PASS=113/FAIL=0/BLOCKED=2/NOT_RUN=0`（阻塞 `DS-AC-104`/`DS-AC-108`）逐字保留，未置 `IMPLEMENTED_ACCEPTED`；
+- 本轮为纯文档草案：未修改任何业务代码/测试/依赖/配置/SQL/锁文件，未访问数据库/ZK/Kafka，未启动服务，未运行 Maven/npm 测试或构建。
