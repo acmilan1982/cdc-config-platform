@@ -367,14 +367,14 @@
 | DS-AC-171 | NOT_RUN | DS-REQ-170 | 存在 `FG_ACTIVE='1'` 的记录与异常状态记录 | 对 `'1'` 记录调用 `disable`；对异常记录调用 `disable` | `'1'` 记录停用成功并写为 `'0'`；异常记录停用成功并把状态**归一化为 `'0'`**；两种情况均只更新 `FG_ACTIVE` |
 | DS-AC-172 | NOT_RUN | DS-REQ-171 | 存在 `FG_ACTIVE='1'` 的记录与 `FG_ACTIVE='0'` 的记录 | 对 `'1'` 记录调用 `enable`；对 `'0'` 记录调用 `disable`；完成后只读核对数据库 | 均为**幂等成功**：返回成功、数据库 `FG_ACTIVE` 保持原目标值（`'1'`/`'0'`）、**不产生**额外写入或字段变更；**不**返回非法状态错误 |
 | DS-AC-173 | NOT_RUN | DS-REQ-171 | 使用一个不存在于 `CDC_DATA_SOURCE` 的数据源 ID | 调用 `enable` 与 `disable` | 均返回 `40400`（目标不存在）；事务内**未发生任何写入**；错误信息为既有可展示业务提示，不泄露堆栈或内部实现细节 |
-| DS-AC-174 | NOT_RUN | DS-REQ-171 | 同一条记录在两次并发/先后请求间状态被改变 | 并发或先后发起目标状态相反的启停请求；完成后只读核对数据库 | **不**加锁、**不**使用乐观版本字段；两次请求均不做部分更新；最终状态**收敛**到其中一个请求的目标值（`'0'` 或 `'1'`）；文档**不承诺**“至多一次成功”，异常/冲突结果按实现期冻结的错误码返回 |
+| DS-AC-174 | NOT_RUN | DS-REQ-171 | 同一条记录在两次并发/先后请求间状态被改变 | 并发或先后发起目标状态相反的启停请求；完成后只读核对数据库 | **不**加锁、**不**使用乐观版本字段；两次请求均不做部分更新；最终状态**收敛**到其中一个请求的目标值（`'0'` 或 `'1'`）；文档**不承诺**“至多一次成功”；发生条件 `UPDATE` 冲突（影响行数 ≠ 1）的请求返回 `50002`（`STATUS_FAILED`）并回滚，不以“实现期再冻结错误码”表述 |
 | DS-AC-175 | NOT_RUN | DS-REQ-171 | 构造 `UPDATE` 影响行数 ≠ 1 的情形（构造该场景需另行获得写授权；仅定义期望行为） | 调用 `enable` 或 `disable` | 返回 `50002`（`STATUS_FAILED`）；事务**回滚**，记录 `FG_ACTIVE` 保持原值，**不留下**中间状态；错误信息可展示且不泄露堆栈 |
 | DS-AC-176 | NOT_RUN | DS-REQ-172 | 已应用一组带条件查询（含文本条件与角色条件）；列表含该停用目标记录 | 对列表中某 `'1'` 记录执行停用并确认；再对某 `'0'` 记录执行启用并确认 | 成功提示后按**当前已应用查询条件**重新查询（未读取尚未点击“查询”的草稿条件）；停用成功后该行**仍保留**并出现“停用”标识；启用成功后标识消失，行仍保留 |
 | DS-AC-177 | NOT_RUN | DS-REQ-173 | 已应用一组条件查询；构造一次启停接口失败（如后端不可达或返回业务错误） | 执行停用/启用；观察列表、busy 状态与错误提示；在同一行操作进行中再次触发提交 | 当前列表与已应用条件**保持不变**；busy 状态**恢复**（按钮与菜单重新可用）；显示明确错误提示；同一行操作期间**避免重复提交**（不产生并发重复请求） |
 | DS-AC-178 | NOT_RUN | DS-REQ-159 | 数据库存在 `FG_ACTIVE='0'` 的目标库与数据源记录（构造该数据库状态需另行获得写授权；仅定义期望行为） | 打开目标库候选下拉；检查探针端、数据订阅等其他 Feature 的数据源候选 | 目标库候选**仍只包含** `FG_ACTIVE='1'` 且 `DATA_SOURCE_CATEGORY='TARGET'` 的记录（`DS-AC-076`/`DS-AC-086` 结论保持）；探针端、数据订阅等其他 Feature 的候选规则**不变**，停用记录不作为任何新增候选 |
 | DS-AC-179 | NOT_RUN | DS-REQ-174 | 已进入主列表页 | 观察“新增数据源”按钮的 normal / hover / active / disabled 四种状态与图标 | 按钮为**黑色实心主按钮**，与页面“查询”按钮同一黑白灰视觉语言；白色文字；保留前置**加号图标**；hover 为略浅深灰、active 再加深；尺寸与圆角与公共查询列表页规范一致；**不存在** Element Plus 默认蓝色视觉；按钮位置与新增业务流程不变 |
 | DS-AC-180 | NOT_RUN | DS-REQ-175, DS-REQ-176 | 本轮调整实现后 | 观察列表底部、页面刷新相关元素、滚动条槽与 Tooltip；分别打开新增/编辑数据源、业务属性、目标库命名策略弹窗 | 无分页控件与分页参数；无刷新工具栏、无自动刷新、无“立即刷新”、无最近刷新时间；`scrollbar-gutter: stable` 仍只对 `/monitor/data-source-state` 生效；既有 `show-overflow-tooltip` 机制保留；三个业务弹窗除为支持停用记录维护而调整的**必要**读/写状态边界外，**无非必要视觉回归**（布局、字段、宽度、视觉不变） |
-| DS-AC-181 | NOT_RUN | DS-REQ-169 | 启停相关接口与日志可用 | 检查列表与详情 API/VO 响应字段；检查启停相关日志与错误消息 | API/VO **不返回**密码等敏感字段；启停日志与错误消息**不泄露**密码、凭据或其他敏感信息 |
+| DS-AC-181 | NOT_RUN | DS-REQ-047, DS-REQ-107, DS-REQ-169 | 启停相关接口与日志可用 | 检查列表与详情 API/VO 响应字段；检查启停相关日志与错误消息 | API/VO **不返回**密码等敏感字段；启停日志与错误消息**不泄露**密码、凭据或其他敏感信息 |
 | DS-AC-182 | NOT_RUN | DS-REQ-176, DS-REQ-177 | 本轮调整实现后 | 检查数据库元数据与变更脚本；新增一条记录；编辑一条记录；只读查询 `FG_ACTIVE` | **零 DDL**：无新增/修改表、字段、索引、约束、序列或视图；**零存量清洗**；新增记录仍默认写 `FG_ACTIVE='1'`；编辑不改变 `FG_ACTIVE`（状态只能通过独立启用/停用接口改变） |
 
 ## 5. 需求—验收追踪矩阵
@@ -427,7 +427,7 @@
 | DS-REQ-044 | DS-AC-049 |
 | DS-REQ-045 | DS-AC-050、DS-AC-051 |
 | DS-REQ-046 | DS-AC-050 |
-| DS-REQ-047 | DS-AC-052 |
+| DS-REQ-047 | DS-AC-052、DS-AC-181 |
 | DS-REQ-048 | DS-AC-053 |
 | DS-REQ-049 | DS-AC-054 |
 | DS-REQ-050 | DS-AC-055 |
@@ -487,7 +487,7 @@
 | DS-REQ-104 | DS-AC-099 |
 | DS-REQ-105 | DS-AC-100 |
 | DS-REQ-106 | DS-AC-105 |
-| DS-REQ-107 | DS-AC-062、DS-AC-063、DS-AC-095 |
+| DS-REQ-107 | DS-AC-062、DS-AC-063、DS-AC-095、DS-AC-181 |
 | DS-REQ-108 | DS-AC-038、DS-AC-106 |
 | DS-REQ-109 | DS-AC-101 |
 | DS-REQ-110 | DS-AC-107、DS-AC-108 |
@@ -581,5 +581,6 @@
 | 2026-09-19 | 列表首页选择性接入公共组件调整验收标准批准收口：§4.16 章节标题与状态声明由 `DRAFT_PENDING_USER_REVIEW` 收口为 `APPROVED`（`adjustment_acceptance_definition_status=APPROVED`），§3 分类数量行与分层说明同步改为“本轮调整基线（`APPROVED`，未实现、未执行，全部 `NOT_RUN`）”；记录完整批准链（初版草案提交 `01680ee5...` → R1 修订提交 `c3fd460b...` → ChatGPT 远程 Git R1 复审 `REVIEW_PASS` → 项目负责人 2026-09-19 明确回复“批准这轮调整基线”；批准任务 `DATA-SOURCE-LIST-PAGE-SELECTIVE-QUERY-LIST-INTEGRATION-APPROVAL-CLOSEOUT-001`）；明确批准验收标准不等于用例通过——`DS-AC-116~140` 共 25 条编号、前置条件、操作与预期结果**零变化**且仍全部 `NOT_RUN`，实现状态仍为 `NOT_STARTED`、实现授权 `NOT_GRANTED_IN_THIS_TASK`；既有 `DS-AC-001~115` 用例、追踪矩阵既有行与 `PASS=113/FAIL=0/BLOCKED=2/NOT_RUN=0`、`DS-AC-104`/`DS-AC-108` 两个 `BLOCKED` 及原始证据逐字保留 | DATA-SOURCE-LIST-PAGE-SELECTIVE-QUERY-LIST-INTEGRATION-APPROVAL-CLOSEOUT-001（项目负责人批准驱动的调整基线批准收口；纯文档任务；未修改任何业务代码/测试/依赖/配置/SQL；未访问数据库/ZK/Kafka；未启动服务） |
 | 2026-09-19 | 本轮调整实现状态回写：§4.16 章节标题改为“（`APPROVED`，已实现待目测，全部 `NOT_RUN`）”，状态声明由 `implementation_status=NOT_STARTED`/`implementation_authorization_status=NOT_GRANTED_IN_THIS_TASK`/`acceptance_execution_status=ALL_NOT_RUN` 更新为 `implementation_status=IMPLEMENTED_PENDING_USER_REVIEW`/`implementation_authorization_status=GRANTED_IN_THIS_TASK`/`formal_acceptance_execution_status=NOT_RUN`/`new_adjustment_acceptance_status=ALL_NOT_RUN`；§3 分类数量行与分层说明中的“未实现”改为“已实现待目测”；`DS-AC-116~140` 共 25 条编号、前置条件、操作与预期结果与状态**零变化**，仍全部 `NOT_RUN`（自动化测试通过不等于正式执行这 25 条验收）；既有 `DS-AC-001~115` 用例、追踪矩阵与 `PASS=113/FAIL=0/BLOCKED=2/NOT_RUN=0`、`DS-AC-104`/`DS-AC-108` 两个 `BLOCKED` 逐字保留 | `DATA-SOURCE-LIST-PAGE-SELECTIVE-QUERY-LIST-INTEGRATION-IMPLEMENTATION-001`（已批准调整基线的前后端实现、自动化测试、构建与实现状态回写；未访问数据库/ZK/Kafka；未启动服务） |
 | 2026-09-19 | 列表展示全部状态、启用/停用及视觉微调调整用例草案落盘：新增 §4.17 与 `DS-AC-141~182` 共 42 条（**全部 `NOT_RUN`**，`DRAFT_PENDING_USER_REVIEW`，未获批、未实现、未执行），覆盖重置零请求与重置后查询、头部 `共 n 条`、序号列与 ID 升序、主机列缩窄与 Tooltip 保留、行高/基础字体/数据源 ID 字体/角色标签字体对齐参考页、无样式泄漏与参考页零回归、列表返回原始 `fgActive` 与四类状态展示、停用/异常标识位置与可读性、动态启停菜单与顺序/颜色、二次确认与不冒泡、源库/目标库菜单结构、停用记录编辑/删除/业务属性/命名策略/编辑态连接测试且保存后仍为 `'0'`、异常行只可停用归零且前后端阻止其他写操作与直接启用、启停接口只更新 `FG_ACTIVE` 且不级联不访问外部系统、非法状态与幂等/目标不存在/并发/影响行数异常/回滚、成功按已应用条件刷新与失败保留旧列表、其他 Feature 候选仍只含启用、黑色主按钮四态与加号图标、无分页/无刷新工具栏/无稳定滚动条槽/Tooltip 保留/三弹窗无回归、API/VO 与日志不泄露敏感信息、零 DDL 与零存量清洗；§3 分类数量表新增本轮草案行（42 条**不计入**既有 115 条）并更新分层说明为三层；§4.2/§4.3 分别追加“另一轮调整草案局部替代提示”，处理 `DS-AC-005`/`DS-AC-006`/`DS-AC-010`/`DS-AC-018` 被本轮局部替代的当前有效结论边界（其历史状态 `PASS` 与执行证据逐字保持）；§5 追踪矩阵追加 `DS-REQ-139~177` 行并保持既有行不变；既有 115 条用例、`PASS=113/FAIL=0/BLOCKED=2/NOT_RUN=0`、`DS-AC-104`/`DS-AC-108` 两个 `BLOCKED` 与上一轮 `DS-AC-116~140`（25 条全部 `NOT_RUN`）逐字保留，未混入本轮统计，未置 `IMPLEMENTED_ACCEPTED` | DATA-SOURCE-LIST-ALL-STATUS-ENABLE-DISABLE-UI-ADJUSTMENT-BASELINE-001（列表展示全部状态与启用/停用调整基线草案；纯文档任务；未修改任何业务代码/测试/依赖/配置/SQL；未访问数据库/ZK/Kafka；未启动服务） |
+| 2026-09-19 | R1 定向修订（ChatGPT 对远程提交 `4ccd6610...` 的复审结论 `CHANGES_REQUIRED`，3 类阻塞问题）：**不新增、不删除、不重编号**任何用例，`DS-AC-141~182` 仍为 42 条且全部 `NOT_RUN`。① 删除虚构的 `DS-REQ-18x` 引用（初版错误引用了一个不存在、编号超出本轮最大 `DS-REQ-177` 的编号）：`DS-AC-181` 的“关联需求”列由 `DS-REQ-169` 修正为 `DS-REQ-047, DS-REQ-107, DS-REQ-169`（编号、状态与正文不变）；§5 追踪矩阵中 `DS-REQ-047` 增补 `DS-AC-181`、`DS-REQ-107` 增补 `DS-AC-181`、`DS-REQ-169` 保留 `DS-AC-181`。② `DS-AC-174` 预期结果中“异常/冲突结果按实现期冻结的错误码返回”改为明确的“条件 `UPDATE` 冲突（影响行数 ≠ 1）返回 `50002`（`STATUS_FAILED`）并回滚”，用例编号与 `NOT_RUN` 状态不变。③ 失败页面行为与 `DS-REQ-173`/`DS-AC-177` 保持一致（任何启停失败不刷新列表）由 `DESIGN/API/原报告` 侧修订，本文件无其他业务正文变化。既有 `DS-AC-001~115` 用例、`PASS=113/FAIL=0/BLOCKED=2/NOT_RUN=0`、`DS-AC-104`/`DS-AC-108` 两个 `BLOCKED` 与上一轮 `DS-AC-116~140`（25 条全部 `NOT_RUN`）逐字保留 | DATA-SOURCE-LIST-ALL-STATUS-ENABLE-DISABLE-UI-ADJUSTMENT-BASELINE-001-R1（ChatGPT 远程复审定向修订；纯文档任务；未修改任何业务代码/测试/依赖/配置/SQL；未访问数据库/ZK/Kafka；未启动服务） |
 
 > 关联文档：需求基线 `docs/features/data-source-management/REQUIREMENTS.md`；初始执行报告 `docs/features/data-source-management/reports/DATA-SOURCE-REQUIREMENTS-BASELINE-001.md`；R1 执行报告 `docs/features/data-source-management/reports/DATA-SOURCE-REQUIREMENTS-BASELINE-001-R1.md`；原正式验收报告 `docs/features/data-source-management/reports/DATA-SOURCE-FORMAL-ACCEPTANCE-001.md`；R1 定向修订报告 `docs/features/data-source-management/reports/DATA-SOURCE-FORMAL-ACCEPTANCE-001-R1.md`；验收后调整草案执行报告 `docs/features/data-source-management/reports/DATA-SOURCE-POST-ACCEPTANCE-ADJUSTMENT-BASELINE-001.md`；验收后调整批准收口报告 `docs/features/data-source-management/reports/DATA-SOURCE-POST-ACCEPTANCE-ADJUSTMENT-APPROVAL-CLOSEOUT-001.md`；定向正式复验报告 `docs/features/data-source-management/reports/DATA-SOURCE-FORMAL-REVERIFICATION-001.md`。
