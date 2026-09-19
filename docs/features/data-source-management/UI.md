@@ -268,9 +268,12 @@
 
 ---
 
-## 10. 列表首页选择性接入查询列表页公共组件（`DRAFT_PENDING_USER_REVIEW`，未实现）
+## 10. 列表首页选择性接入查询列表页公共组件（`APPROVED`，未实现）
 
-> 状态：`DRAFT_PENDING_USER_REVIEW`。以下内容严格落实 `REQUIREMENTS.md` §22 的 `DS-REQ-116~138` 与 `ACCEPTANCE.md` §4.16 的 `DS-AC-116~140`（全部 `NOT_RUN`），为任务 `DATA-SOURCE-LIST-PAGE-SELECTIVE-QUERY-LIST-INTEGRATION-BASELINE-001` 的 UI 设计草案，**尚未批准、尚未实现、尚未验收**；实现授权 `NOT_GRANTED_IN_THIS_TASK`。§0~§9 既有 `APPROVED` UI 基线逐字冻结、不重写。
+> 状态：`APPROVED`。本轮调整基线分层状态：`adjustment_ui_status=APPROVED`、`adjustment_baseline_status=APPROVED`、`implementation_status=NOT_STARTED`、`implementation_authorization_status=NOT_GRANTED_IN_THIS_TASK`、`acceptance_execution_status=ALL_NOT_RUN`。以下内容严格落实 `REQUIREMENTS.md` §22 的 `DS-REQ-116~138` 与 `ACCEPTANCE.md` §4.16 的 `DS-AC-116~140`（全部 `NOT_RUN`），为任务 `DATA-SOURCE-LIST-PAGE-SELECTIVE-QUERY-LIST-INTEGRATION-BASELINE-001` 形成的 UI 设计基线，**已获批准**，但**尚未实现、尚未验收**。
+> 批准链（2026-09-19）：初版草案提交 `01680ee527b8e35cd4afd84c4789b862d34f7a77` → R1 修订提交 `c3fd460bea64a14ccc7b52a554194a133330e29d` → ChatGPT 远程 Git R1 复审结论 `REVIEW_PASS` → 项目负责人 2026-09-19 明确回复“批准这轮调整基线”；批准任务 `DATA-SOURCE-LIST-PAGE-SELECTIVE-QUERY-LIST-INTEGRATION-APPROVAL-CLOSEOUT-001`。
+> 批准 UI 设计**不代表**已实现、已测试、已验收或生产可用：实现状态仍为 `NOT_STARTED`，实现授权为 `NOT_GRANTED_IN_THIS_TASK`，`DS-AC-116~140`（25 条）仍全部 `NOT_RUN`。
+> §0~§9 既有 `APPROVED` UI 基线逐字冻结、不重写。
 
 ### 10.1 三段结构与结果区头部（局部替代 §1）
 
@@ -362,3 +365,4 @@
 |---|---|---|
 | 2026-09-19 | 新增“列表首页选择性接入查询列表页公共组件”设计草案章节（§10），严格落实 `DS-REQ-116~138` 与 `DS-AC-116~140`（全部 `NOT_RUN`）；以“局部替代声明”明确 §10.1 对 §1 页面区划/结果区头部/查询区排布的替代边界，以及 §10.3 对 §1“行操作：编辑”项的替代；§0~§9 既有 `APPROVED` UI 基线逐字冻结、不重写；实现状态仍为 `NOT_STARTED`（本轮为纯文档草案，未修改任何业务代码/测试/依赖/配置/SQL，未访问数据库/ZK/Kafka，未启动服务）；既有正式复验统计 `PASS=113/FAIL=0/BLOCKED=2/NOT_RUN=0` 与 `DS-AC-104`/`DS-AC-108` 两个 `BLOCKED` 逐字保留，未置 `IMPLEMENTED_ACCEPTED` | DATA-SOURCE-LIST-PAGE-SELECTIVE-QUERY-LIST-INTEGRATION-BASELINE-001（列表首页调整基线草案；纯文档任务） |
 | 2026-09-19 | R1 定向修订（ChatGPT 远程独立复审）：① §10.1 线框与文字删除“头部下方直接进入表格”，明确保留 `QueryListResultPanel` 固定结构（头部 → 固定错误槽 → 固定分隔线 → `body`），`loadError` 的 `el-alert` 映射固定错误槽；② §10.1/§10.2 将角色控件由 Radio 改为 `el-select` 单选下拉框、宽度冻结 `140px`、选项顺序“全部/源库/目标库”、宽屏顺序“数据源ID → 名称 → 角色 → 主机 → 查询 → 重置”、窄屏整组换行；③ §10.2 增加“前端不静默纠正非法角色值”的说明并指向 `API.md` §9；④ §10.5 增加“无分页 ≠ 删除固定错误槽/分隔线”。§0~§9 与 §10.3/§10.4 未修改；`DS-REQ-116~138` 编号与数量未变 | DATA-SOURCE-LIST-PAGE-SELECTIVE-QUERY-LIST-INTEGRATION-BASELINE-001-R1（ChatGPT 远程复审定向修订；纯文档任务） |
+| 2026-09-19 | 列表首页选择性接入公共组件调整 UI 设计批准收口：§10 章节标题与状态声明由 `DRAFT_PENDING_USER_REVIEW` 收口为 `APPROVED`（`adjustment_ui_status=APPROVED`）；记录完整批准链（初版草案提交 `01680ee5...` → R1 修订提交 `c3fd460b...` → ChatGPT 远程 Git R1 复审 `REVIEW_PASS` → 项目负责人 2026-09-19 明确回复“批准这轮调整基线”；批准任务 `DATA-SOURCE-LIST-PAGE-SELECTIVE-QUERY-LIST-INTEGRATION-APPROVAL-CLOSEOUT-001`）；明确批准不等于实现、测试或验收——§10.1~§10.6 技术正文与 R1 冻结方案（`QueryListResultPanel` 固定结构、角色 `el-select` `140px`、无分页/无刷新/Tooltip 保留、双击编辑与“更多”菜单、局部替代声明边界）**零变化**，实现状态仍为 `NOT_STARTED`、实现授权 `NOT_GRANTED_IN_THIS_TASK`、`DS-AC-116~140` 仍全部 `NOT_RUN`；§0~§9 既有 `APPROVED` UI 基线逐字冻结；既有统计 `PASS=113/FAIL=0/BLOCKED=2/NOT_RUN=0` 与 `DS-AC-104`/`DS-AC-108` 两个 `BLOCKED` 逐字保留 | DATA-SOURCE-LIST-PAGE-SELECTIVE-QUERY-LIST-INTEGRATION-APPROVAL-CLOSEOUT-001（项目负责人批准驱动的调整基线批准收口；纯文档任务；未修改任何业务代码/测试/依赖/配置/SQL；未访问数据库/ZK/Kafka；未启动服务） |

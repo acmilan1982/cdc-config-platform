@@ -405,10 +405,12 @@
 
 ---
 
-## 11. 列表首页选择性接入查询列表页公共组件设计（`DRAFT_PENDING_USER_REVIEW`，未实现）
+## 11. 列表首页选择性接入查询列表页公共组件设计（`APPROVED`，未实现）
 
-> 状态：`DRAFT_PENDING_USER_REVIEW`。本节为任务 `DATA-SOURCE-LIST-PAGE-SELECTIVE-QUERY-LIST-INTEGRATION-BASELINE-001`（`task_type=FEATURE_ADJUSTMENT_BASELINE_DRAFT`）的设计草案，**尚未批准、尚未实现、尚未验收**；实现授权 `NOT_GRANTED_IN_THIS_TASK`。
-> §0~§10 的既有 `APPROVED` 设计基线与追踪结论保持原样、编号与正文逐字冻结；本节只就 `/config/data-source` **第一个主列表页面**的选择性接入给出草案结论，并明确其与既有设计的局部替代边界。
+> 状态：`APPROVED`。本轮调整基线分层状态：`adjustment_design_status=APPROVED`、`adjustment_baseline_status=APPROVED`、`implementation_status=NOT_STARTED`、`implementation_authorization_status=NOT_GRANTED_IN_THIS_TASK`、`acceptance_execution_status=ALL_NOT_RUN`。本节为任务 `DATA-SOURCE-LIST-PAGE-SELECTIVE-QUERY-LIST-INTEGRATION-BASELINE-001`（`task_type=FEATURE_ADJUSTMENT_BASELINE_DRAFT`）形成的设计基线，**已获批准**，但**尚未实现、尚未验收**。
+> 批准链（2026-09-19）：初版草案提交 `01680ee527b8e35cd4afd84c4789b862d34f7a77` → R1 修订提交 `c3fd460bea64a14ccc7b52a554194a133330e29d` → ChatGPT 远程 Git R1 复审结论 `REVIEW_PASS` → 项目负责人 2026-09-19 明确回复“批准这轮调整基线”；批准任务 `DATA-SOURCE-LIST-PAGE-SELECTIVE-QUERY-LIST-INTEGRATION-APPROVAL-CLOSEOUT-001`。
+> 批准设计**不代表**已实现、已测试、已验收或生产可用：实现状态仍为 `NOT_STARTED`，实现授权为 `NOT_GRANTED_IN_THIS_TASK`，`DS-AC-116~140`（25 条）仍全部 `NOT_RUN`。
+> §0~§10 的既有 `APPROVED` 设计基线与追踪结论保持原样、编号与正文逐字冻结；本节只就 `/config/data-source` **第一个主列表页面**的选择性接入给出结论，并明确其与既有设计的局部替代边界。
 > 关联需求：`REQUIREMENTS.md` §22 的 `DS-REQ-116~138`；关联验收：`ACCEPTANCE.md` §4.16 的 `DS-AC-116~140`（全部 `NOT_RUN`）。
 
 ### 11.1 分层职责与边界
@@ -483,7 +485,7 @@
 ### 11.8 迁移授权与基线边界
 
 - 查询列表页模板基线（`docs/baseline/query-list-page-template/`）面向**只读查询列表页**，其 `MIGRATION.md` §1.1 将“数据源管理（含新增/编辑/删除）”列为**不适合直接套用**，§5 将含 CRUD 的配置管理页面列为**不纳入迁移范围**，并给出“若后续确需统一视觉，应另立任务评估”的路径。
-- 本轮为项目负责人于 **2026-09-18** 明确授权“数据源管理列表页选择性接入查询列表页公共组件”后，依据该“另立任务评估”路径发起的**页面范围化、行为不变**的选择性接入草案；非模板级“页面迁移”。
+- 本轮为项目负责人于 **2026-09-18** 明确授权“数据源管理列表页选择性接入查询列表页公共组件”后，依据该“另立任务评估”路径发起的**页面范围化、行为不变**的选择性接入调整基线（2026-09-19 已获批）；非模板级“页面迁移”。
 - 该授权与仍未实施的状态以**追加**方式记录于 `docs/baseline/query-list-page-template/MIGRATION.md`（不改写既有历史）；模板级 `page_migration_status`/`page_migration_authorization_status`/`pilot_page_selection_status` 维持 `NOT_STARTED`/`NOT_GRANTED`/`NOT_DECIDED` 不变，其他页面未获授权。
 
 ### 11.9 需求追踪（`DS-REQ-116~138`）
@@ -514,7 +516,7 @@
 | DS-REQ-137 | §11.6 |
 | DS-REQ-138 | §11.2、§11.8 |
 
-## 12. 本轮草案变更记录
+## 12. 本轮调整变更记录
 
 ### 12.1 初版草案（2026-09-19，任务 `...-001`）
 
@@ -537,3 +539,14 @@
 - §0~§10 既有 `APPROVED` 设计基线与 §11 其他小节结论未修改；`DS-REQ-116~138` 编号与数量（23 条）未变；
 - 实现状态仍为 `NOT_STARTED`；本轮新增验收 `DS-AC-116~140` 仍全部为 `NOT_RUN`；既有统计 `PASS=113/FAIL=0/BLOCKED=2/NOT_RUN=0` 逐字保留；
 - 依据任务 `DATA-SOURCE-LIST-PAGE-SELECTIVE-QUERY-LIST-INTEGRATION-BASELINE-001-R1`（纯文档修订；未修改任何业务代码/测试/依赖/配置/SQL；未访问数据库/ZK/Kafka；未启动服务）。
+
+### 12.3 批准收口（2026-09-19，任务 `...-APPROVAL-CLOSEOUT-001`）
+
+- 2026-09-19；
+- 本轮调整设计基线由 `DRAFT_PENDING_USER_REVIEW` 收口为 `APPROVED`（`adjustment_design_status=APPROVED`、`adjustment_baseline_status=APPROVED`）；§11 章节标题与状态声明同步更新；§11.8 将“选择性接入草案”表述更新为“选择性接入调整基线（2026-09-19 已获批）”；
+- 批准链：初版草案提交 `01680ee527b8e35cd4afd84c4789b862d34f7a77` → R1 修订提交 `c3fd460bea64a14ccc7b52a554194a133330e29d` → ChatGPT 远程 Git R1 复审结论 `REVIEW_PASS` → 项目负责人于 2026-09-19 明确回复“批准这轮调整基线”（批准任务 `DATA-SOURCE-LIST-PAGE-SELECTIVE-QUERY-LIST-INTEGRATION-APPROVAL-CLOSEOUT-001`）；
+- 批准只代表设计正式成立，**不代表**已实现、已测试、已验收或生产可用：实现状态仍为 `NOT_STARTED`，实现授权仍为 `NOT_GRANTED_IN_THIS_TASK`，本轮新增验收 `DS-AC-116~140`（25 条）仍全部 `NOT_RUN`；
+- §0~§10 既有 `APPROVED` 设计基线与追踪结论逐字冻结、未修改；§11.1~§11.7、§11.9 技术正文与 R1 冻结方案（`category` 归一化/校验/`BindException`、`QueryListResultPanel` 固定结构、角色 `el-select` `140px`、无分页/无刷新/Tooltip 保留）**零变化**；`DS-REQ-116~138` 数量（23 条）与编号未变；
+- 模板级 `page_migration_status`/`page_migration_authorization_status`/`pilot_page_selection_status` 维持 `NOT_STARTED`/`NOT_GRANTED`/`NOT_DECIDED` 不变，其他页面未获授权；
+- 既有统计 `PASS=113/FAIL=0/BLOCKED=2/NOT_RUN=0`（阻塞 `DS-AC-104`/`DS-AC-108`）与原始证据逐字保留；
+- 依据任务 `DATA-SOURCE-LIST-PAGE-SELECTIVE-QUERY-LIST-INTEGRATION-APPROVAL-CLOSEOUT-001`（项目负责人批准驱动的调整基线批准收口；纯文档任务；未修改任何业务代码/测试/依赖/配置/SQL；未访问数据库/ZK/Kafka；未启动服务）。

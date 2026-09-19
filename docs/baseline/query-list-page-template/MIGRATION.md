@@ -466,3 +466,37 @@ data_source_list_page_selective_integration_r1_review_findings_resolved=4
 - 模板级 `page_migration_status` / `page_migration_authorization_status` /
   `pilot_page_selection_status` 与“源库快照状态”参考页历史**均不变**；
   本节不构成任何其他页面的迁移授权。
+
+### 批准收口记录（`2026-09-19`）
+
+本节为**追加**记录，不改写上方授权事实、§1.1 / §5 结论、状态块与 R1 记录。
+
+- 批准任务：`DATA-SOURCE-LIST-PAGE-SELECTIVE-QUERY-LIST-INTEGRATION-APPROVAL-CLOSEOUT-001`。
+- 批准事实：项目负责人于 `2026-09-19` 明确回复“批准这轮调整基线”，将数据源管理列表页
+  “选择性接入查询列表页公共组件”的**页面级调整基线**正式批准。
+- 批准链：初版草案提交 `01680ee5` → R1 修订提交 `c3fd460b` →
+  ChatGPT 远程 Git R1 复审结论 `REVIEW_PASS` → 项目负责人 `2026-09-19` 批准。
+- 记录范围**只**是上述**页面级**调整基线已获批这一事实。本轮为纯文档收口，
+  未修改任何公共组件实现、页面源码、依赖、锁文件、配置或 SQL，
+  未访问数据库 / ZooKeeper / Kafka，未启动服务。
+- 页面级状态（本次记录时点的权威事实）：
+
+```text
+data_source_list_page_selective_integration_approval_closeout_task=DATA-SOURCE-LIST-PAGE-SELECTIVE-QUERY-LIST-INTEGRATION-APPROVAL-CLOSEOUT-001
+data_source_list_page_selective_integration_page_adjustment_baseline_status=APPROVED
+data_source_list_page_selective_integration_authorization_status=UNCHANGED_GRANTED_BY_PROJECT_OWNER_FOR_THIS_PAGE_ONLY
+data_source_list_page_selective_integration_implementation_status=NOT_STARTED
+data_source_list_page_selective_integration_acceptance_status=ALL_NOT_RUN
+```
+
+- 边界（明确不得）：
+  - **不得**把本条记录解释为模板级页面迁移授权：模板级 `page_migration_status` 保持
+    `NOT_STARTED`，`page_migration_authorization_status` 保持 `NOT_GRANTED`，
+    `pilot_page_selection_status` 保持 `NOT_DECIDED`，上方 `2026-09-17` 状态块不变。
+  - **不得**把批准页面级调整基线解释为批准其他任何页面迁移；本记录**只**覆盖
+    数据源管理第一个主列表页面，其他页面仍未被授权。
+  - **不得**把 `APPROVED` 写成已实现、已测试、已验收或生产可用：实现状态仍为
+    `NOT_STARTED`，本轮新增验收仍全部 `NOT_RUN`。
+  - **不得**改写 §1.1“不适合直接套用：含写操作与行级操作列”与 §5“不纳入迁移范围”
+    的通用排除原则；本轮为“另立任务评估 + 项目负责人明确授权”的**页面级授权例外**，
+    二者继续并行生效。
