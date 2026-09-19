@@ -5,6 +5,8 @@ import {
   createNamingStrategy,
   deleteDataSource,
   deleteNamingStrategy,
+  disableDataSource,
+  enableDataSource,
   fetchBizAttr,
   fetchDataSourceList,
   fetchDataSourceDetail,
@@ -44,6 +46,7 @@ function okRows(): ApiResponse<DataSourceRow[]> {
         port: 1521,
         serviceName: 'orcl',
         userName: 'user',
+        fgActive: '1',
       },
     ],
   }
@@ -145,6 +148,26 @@ describe('data-source API 请求契约（API.md 数据源管理 §4）', () => {
       { timeout: TIMEOUT },
     ])
     expect(res).toEqual(okNull())
+  })
+
+  it('PUT /api/data-sources/{id}/enable 与 /disable 使用 encodeURIComponent 且不带请求体', async () => {
+    const putSpy = vi.spyOn(http, 'put').mockResolvedValue({ data: okNull() } as never)
+
+    const enabled = await enableDataSource('DS 001')
+    expect(putSpy.mock.calls[0]).toEqual([
+      '/api/data-sources/DS%20001/enable',
+      undefined,
+      { timeout: TIMEOUT },
+    ])
+    expect(enabled).toEqual(okNull())
+
+    const disabled = await disableDataSource('DS 001')
+    expect(putSpy.mock.calls[1]).toEqual([
+      '/api/data-sources/DS%20001/disable',
+      undefined,
+      { timeout: TIMEOUT },
+    ])
+    expect(disabled).toEqual(okNull())
   })
 
   it('POST /api/data-sources/test-connection 携带 originalDataSourceId 与 password', async () => {

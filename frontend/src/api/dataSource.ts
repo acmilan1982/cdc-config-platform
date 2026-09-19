@@ -71,6 +71,26 @@ export async function deleteDataSource(dataSourceId: string): Promise<ApiRespons
   return res.data
 }
 
+/** PUT /api/data-sources/{dataSourceId}/enable（只把主表 FG_ACTIVE 写为 '1'） */
+export async function enableDataSource(dataSourceId: string): Promise<ApiResponse<null>> {
+  const res = await http.put<ApiResponse<null>>(
+    `/api/data-sources/${encodeURIComponent(dataSourceId)}/enable`,
+    undefined,
+    { timeout: REQUEST_TIMEOUT },
+  )
+  return res.data
+}
+
+/** PUT /api/data-sources/{dataSourceId}/disable（只把主表 FG_ACTIVE 写为 '0'；异常值归一化） */
+export async function disableDataSource(dataSourceId: string): Promise<ApiResponse<null>> {
+  const res = await http.put<ApiResponse<null>>(
+    `/api/data-sources/${encodeURIComponent(dataSourceId)}/disable`,
+    undefined,
+    { timeout: REQUEST_TIMEOUT },
+  )
+  return res.data
+}
+
 /** POST /api/data-sources/test-connection（编辑未改密码时携带 originalDataSourceId） */
 export async function testDataSourceConnection(
   request: TestConnectionRequest,

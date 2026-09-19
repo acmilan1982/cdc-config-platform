@@ -15,11 +15,13 @@ public final class DataSourceErrorCode {
     public static final int INVALID_NAMING_STRATEGY = 40003;
     public static final int INVALID_TARGET_DATA_SOURCE = 40005;
     public static final int ROLE_NOT_APPLICABLE = 40006;
+    public static final int STATUS_INVALID = 40250;
     public static final int NAMING_STRATEGY_NOT_FOUND = 40401;
     public static final int NAMING_STRATEGY_DUPLICATE = 40902;
     public static final int NAMING_STRATEGY_MULTI_CONFLICT = 40903;
     public static final int SAVE_FAILED = 50000;
     public static final int DELETE_FAILED = 50001;
+    public static final int STATUS_FAILED = 50002;
 
     // -- factory methods --
 
@@ -63,6 +65,11 @@ public final class DataSourceErrorCode {
                 "数据源角色不适用于当前操作");
     }
 
+    public static BusinessException statusInvalid() {
+        return new BusinessException(STATUS_INVALID,
+                "数据源状态异常，不可启用，请先停用以归一化状态");
+    }
+
     public static BusinessException namingStrategyNotFound() {
         return new BusinessException(NAMING_STRATEGY_NOT_FOUND,
                 "命名策略不存在");
@@ -84,5 +91,9 @@ public final class DataSourceErrorCode {
 
     public static BusinessException deleteFailed() {
         return new BusinessException(DELETE_FAILED, "删除失败");
+    }
+
+    public static BusinessException statusFailed() {
+        return new BusinessException(STATUS_FAILED, "状态更新失败，请重试");
     }
 }

@@ -58,7 +58,7 @@ public class DataSourceController {
         this.namingStrategyService = namingStrategyService;
     }
 
-    @Operation(summary = "查询数据源列表", description = "支持按数据源ID、名称、主机模糊匹配，仅返回启用数据源，按ID升序")
+    @Operation(summary = "查询数据源列表", description = "支持按数据源ID、名称、主机模糊匹配，返回全部状态的数据源，按ID升序")
     @GetMapping
     public ApiResponse<List<DataSourceListVO>> list(@Valid DataSourceQuery query) {
         return ApiResponse.success(dataSourceService.list(query));
@@ -103,6 +103,22 @@ public class DataSourceController {
     public ApiResponse<Void> delete(
             @Parameter(description = "数据源ID") @PathVariable String dataSourceId) {
         dataSourceService.delete(dataSourceId);
+        return ApiResponse.success();
+    }
+
+    @Operation(summary = "启用数据源", description = "只把主表记录 FG_ACTIVE 写为 '1'；已启用时为幂等成功；异常状态返回 40250")
+    @PutMapping("/{dataSourceId}/enable")
+    public ApiResponse<Void> enable(
+            @Parameter(description = "数据源ID") @PathVariable String dataSourceId) {
+        dataSourceService.enable(dataSourceId);
+        return ApiResponse.success();
+    }
+
+    @Operation(summary = "停用数据源", description = "只把主表记录 FG_ACTIVE 写为 '0'；已停用时为幂等成功；异常状态归一化为 '0'")
+    @PutMapping("/{dataSourceId}/disable")
+    public ApiResponse<Void> disable(
+            @Parameter(description = "数据源ID") @PathVariable String dataSourceId) {
+        dataSourceService.disable(dataSourceId);
         return ApiResponse.success();
     }
 

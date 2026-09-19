@@ -557,13 +557,13 @@
 - 2026-09-19 批准收口（任务 `DATA-SOURCE-LIST-PAGE-SELECTIVE-QUERY-LIST-INTEGRATION-APPROVAL-CLOSEOUT-001`）：§9 章节标题与状态声明由 `DRAFT_PENDING_USER_REVIEW` 收口为 `APPROVED`（`adjustment_api_status=APPROVED`）；记录批准链（初版草案提交 `01680ee5...` → R1 修订提交 `c3fd460b...` → ChatGPT 远程 Git R1 复审 `REVIEW_PASS` → 项目负责人 2026-09-19 明确回复“批准这轮调整基线”）；§9.1~§9.4 技术正文与 R1 冻结方案（`category` 归一化、允许 `null` 的 `@Pattern`、`BindException` → 控制器局部 `@ExceptionHandler` → HTTP 400 / `code=400` / 字段级消息、不新增业务码、不自动转大写、本轮不改代码）**零变化**；§0~§8 既有 `APPROVED` API 基线逐字冻结；实现状态仍为 `NOT_STARTED`、实现授权 `NOT_GRANTED_IN_THIS_TASK`、本轮新增验收 `DS-AC-116~140` 仍全部 `NOT_RUN`；既有统计 `PASS=113/FAIL=0/BLOCKED=2/NOT_RUN=0` 逐字保留。
 - 2026-09-19 实现状态回写（任务 `DATA-SOURCE-LIST-PAGE-SELECTIVE-QUERY-LIST-INTEGRATION-IMPLEMENTATION-001`）：§9 章节标题改为“（`APPROVED`，`IMPLEMENTED_PENDING_USER_REVIEW`）”，状态声明由 `implementation_status=NOT_STARTED`/`implementation_authorization_status=NOT_GRANTED_IN_THIS_TASK`/`acceptance_execution_status=ALL_NOT_RUN` 更新为 `implementation_status=IMPLEMENTED_PENDING_USER_REVIEW`/`implementation_authorization_status=GRANTED_IN_THIS_TASK`/`formal_acceptance_execution_status=NOT_RUN`/`new_adjustment_acceptance_status=ALL_NOT_RUN`；实现按 §9 已批准契约落地：`DataSourceQuery` 新增可选 `category`（`trim()` → 空转 `null` → 不自动转大写）、`@Pattern(regexp="SOURCE|TARGET")` 允许 `null`、`DataSourceController` 增加局部 `@ExceptionHandler(BindException.class)` 返回 HTTP 400 / `code=400` / 字段级消息、`DataSourceServiceImpl` 列表过滤使用 `UPPER(DATA_SOURCE_CATEGORY) = {0}` 绑定参数；§9.1~§9.5 技术正文**零变化**，`GlobalExceptionHandler` 无 diff，未新增业务码；本轮新增验收 `DS-AC-116~140` 仍全部 `NOT_RUN`（`ALL_NOT_RUN`），实现状态未置 `IMPLEMENTED_ACCEPTED`；既有统计 `PASS=113/FAIL=0/BLOCKED=2/NOT_RUN=0` 逐字保留；未访问数据库/ZK/Kafka；未启动服务。
 
-## 11. 启用/停用接口与列表状态字段（`APPROVED`，未实现）
+## 11. 启用/停用接口与列表状态字段（`APPROVED`，`IMPLEMENTED_PENDING_USER_REVIEW`）
 
-> 本轮调整基线分层状态：`adjustment_document_status=APPROVED`、`adjustment_baseline_status=APPROVED`、`adjustment_api_status=APPROVED`、`implementation_status=NOT_STARTED`、`implementation_authorization_status=NOT_GRANTED_IN_THIS_TASK`、`formal_acceptance_execution_status=NOT_RUN`、`new_adjustment_acceptance_status=ALL_NOT_RUN`。
+> 本轮调整基线分层状态：`adjustment_document_status=APPROVED`、`adjustment_baseline_status=APPROVED`、`adjustment_api_status=APPROVED`、`implementation_status=IMPLEMENTED_PENDING_USER_REVIEW`、`implementation_authorization_status=GRANTED_IN_THIS_TASK`、`formal_acceptance_execution_status=NOT_RUN`、`new_adjustment_acceptance_status=ALL_NOT_RUN`。
 >
-> 批准链（2026-09-19）：初版草案提交 `4ccd6610...` → R1 修订提交 `c4e1048...` → R2 极小修订提交 `aa906c0...` → ChatGPT 从远程 Git 复审 R2 提交 `aa906c0...` 结论 `REVIEW_PASS`（`blocking_finding_count=0`）→ 项目负责人 2026-09-19 明确回复“批准本轮调整基线” → 批准收口任务 `DATA-SOURCE-LIST-ALL-STATUS-ENABLE-DISABLE-UI-ADJUSTMENT-APPROVAL-CLOSEOUT-001`。批准对象为经初版、R1、R2 修订并由 ChatGPT 远程复审通过的**当前**调整基线，**非仅初版**；批准只代表接口契约正式成立，**不代表**已实现、已测试、已验收或生产可用。
+> 批准链（2026-09-19）：初版草案提交 `4ccd6610...` → R1 修订提交 `c4e1048...` → R2 极小修订提交 `aa906c0...` → ChatGPT 从远程 Git 复审 R2 提交 `aa906c0...` 结论 `REVIEW_PASS`（`blocking_finding_count=0`）→ 项目负责人 2026-09-19 明确回复“批准本轮调整基线” → 批准收口任务 `DATA-SOURCE-LIST-ALL-STATUS-ENABLE-DISABLE-UI-ADJUSTMENT-APPROVAL-CLOSEOUT-001`。批准对象为经初版、R1、R2 修订并由 ChatGPT 远程复审通过的**当前**调整基线，**非仅初版**；批准与实现只代表接口契约正式成立且已落地，**不代表**已测试、已验收或生产可用。
 >
-> 任务：`DATA-SOURCE-LIST-ALL-STATUS-ENABLE-DISABLE-UI-ADJUSTMENT-BASELINE-001`（纯文档任务）。关联需求 `DS-REQ-150`~`DS-REQ-173`，关联验收 `DS-AC-150`~`DS-AC-178`、`DS-AC-181`。本节只冻结契约，**不实现**；§0~§10 既有结论**逐字冻结**。
+> 任务：`DATA-SOURCE-LIST-ALL-STATUS-ENABLE-DISABLE-UI-ADJUSTMENT-BASELINE-001`（纯文档任务）。实现任务：`DATA-SOURCE-LIST-ALL-STATUS-ENABLE-DISABLE-UI-ADJUSTMENT-IMPLEMENTATION-001`（2026-09-19）。关联需求 `DS-REQ-150`~`DS-REQ-173`，关联验收 `DS-AC-150`~`DS-AC-178`、`DS-AC-181`（全部 `NOT_RUN`）。§0~§10 既有结论**逐字冻结**。
 
 ### 11.1 接口增量
 
@@ -691,3 +691,12 @@
 - §11.1~§11.7 接口契约与 R1 冻结方案（先读、幂等不写、NULL-safe 原状态条件 `UPDATE`、并发 `50002`、失败不刷新）**零变化**；§0~§10 既有 `APPROVED` API 基线与 §9 技术正文逐字冻结；
 - `DS-REQ-001~177` 编号与正文零变化；本轮新增验收 `DS-AC-141~182`（42 条）仍全部 `NOT_RUN`，上一轮 `DS-AC-116~140`（25 条）仍全部 `NOT_RUN`；既有 `PASS=113/FAIL=0/BLOCKED=2/NOT_RUN=0` 逐字保留；
 - 批准只代表接口契约正式成立，**不代表**已实现、已测试、已验收或生产可用；实现须**另行**授权并使用独立任务；未修改任何业务代码/测试/依赖/配置/SQL，未访问数据库/ZK/Kafka，未启动服务。
+
+### 12.4 实现状态回写（2026-09-19，任务 `DATA-SOURCE-LIST-ALL-STATUS-ENABLE-DISABLE-UI-ADJUSTMENT-IMPLEMENTATION-001`）
+
+- §11 章节标题由“（`APPROVED`，未实现）”更新为“（`APPROVED`，`IMPLEMENTED_PENDING_USER_REVIEW`）”；分层状态由 `implementation_status=NOT_STARTED`/`implementation_authorization_status=NOT_GRANTED_IN_THIS_TASK` 更新为 `IMPLEMENTED_PENDING_USER_REVIEW`/`GRANTED_IN_THIS_TASK`，并补充实现任务号（`adjustment_document_status`/`adjustment_baseline_status`/`adjustment_api_status` 保持 `APPROVED`，`formal_acceptance_execution_status=NOT_RUN`、`new_adjustment_acceptance_status=ALL_NOT_RUN` 保持）；
+- 实现按 §11 已批准契约落地：`GET /api/data-sources` 列表返回 `CDC_DATA_SOURCE` 全部状态并在行 VO 中返回原始 `fgActive`（不归一化）；新增 `PUT /api/data-sources/{dataSourceId}/enable` 与 `PUT /api/data-sources/{dataSourceId}/disable`（无请求体，路径段 `encodeURIComponent`）；错误码复用 `40400`、新增 `40250`（仅 `enable` 遇异常状态）、恢复 `50002`（影响行数 ≠ 1 / 并发冲突），HTTP 仍为 200 + 业务 `code`；
+- 非幂等 `UPDATE` 带原状态条件（`NULL` 用 `FG_ACTIVE IS NULL`、非空异常值用 `FG_ACTIVE=:observedStatus`），重复目标状态幂等不写库，影响行数 ≠ 1 → `50002` 回滚；失败不刷新列表；
+- §11.1~§11.7 契约与 R1 冻结方案**零变化**；§0~§10 既有 `APPROVED` API 基线与 §9 技术正文逐字冻结；`DS-REQ-139~177` 数量（39 条）与编号未变；
+- 本轮新增验收 `DS-AC-141~182`（42 条）仍全部 `NOT_RUN`，上一轮 `DS-AC-116~140`（25 条）仍全部 `NOT_RUN`；既有 `PASS=113/FAIL=0/BLOCKED=2/NOT_RUN=0` 逐字保留；
+- 实现状态为 `IMPLEMENTED_PENDING_USER_REVIEW`，**未**置为 `IMPLEMENTED_ACCEPTED`/`ACCEPTED`/生产可用；未访问数据库/ZK/Kafka（含自动化测试，测试全部为 Mapper mock / 静态检查），未对数据库执行任何 DDL/DML，未启动/停止/重启任何服务。

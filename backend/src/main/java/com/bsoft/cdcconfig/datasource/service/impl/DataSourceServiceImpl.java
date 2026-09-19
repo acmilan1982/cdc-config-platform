@@ -67,7 +67,6 @@ public class DataSourceServiceImpl implements DataSourceService {
             wrapper.apply("UPPER(DATA_SOURCE_CATEGORY) = {0}", category);
         }
 
-        wrapper.eq(DataSource::getFgActive, "1");
         wrapper.orderByAsc(DataSource::getDataSourceId);
 
         List<DataSource> records = dataSourceMapper.selectList(wrapper);
@@ -82,7 +81,7 @@ public class DataSourceServiceImpl implements DataSourceService {
 
     @Override
     public DataSourceDetailVO getDetail(String dataSourceId) {
-        DataSource ds = requireActiveRecord(trim(dataSourceId));
+        DataSource ds = requireMaintainableRecord(trim(dataSourceId));
         return DataSourceConverter.toDetailVO(ds);
     }
 
@@ -120,7 +119,7 @@ public class DataSourceServiceImpl implements DataSourceService {
     @Transactional(rollbackFor = Exception.class)
     public String update(String originalDataSourceId, DataSourceUpdateDTO dto) {
         String originalId = trim(originalDataSourceId);
-        requireActiveRecord(originalId);
+        requireMaintainableRecord(originalId);
 
         trimInPlace(dto);
         String submittedId = dto.getDataSourceId();
@@ -146,7 +145,7 @@ public class DataSourceServiceImpl implements DataSourceService {
 
         LambdaUpdateWrapper<DataSource> wrapper = new LambdaUpdateWrapper<>();
         wrapper.eq(DataSource::getDataSourceId, originalId)
-                .eq(DataSource::getFgActive, "1")
+                .in(DataSource::getFgActive, "1", "0")
                 .set(DataSource::getDataSourceName, name)
                 .set(DataSource::getDataSourceCategory, DataSourceCategoryEnum.normalize(category))
                 .set(DataSource::getDataSourceType, DataSourceConverter.normalizeType(type))
@@ -175,15 +174,71 @@ public class DataSourceServiceImpl implements DataSourceService {
     @Transactional(rollbackFor = Exception.class)
     public void delete(String dataSourceId) {
         String id = trim(dataSourceId);
-        requireActiveRecord(id);
+        requireMaintainableRecord(id);
         int rows = dataSourceMapper.delete(
                 new LambdaQueryWrapper<DataSource>()
                         .eq(DataSource::getDataSourceId, id)
-                        .eq(DataSource::getFgActive, "1"));
+                        .in(DataSource::getFgActive, "1", "0"));
         if (rows != 1) {
             throw DataSourceErrorCode.deleteFailed();
         }
         log.info("Deleted data source: {}", id);
+    }
+
+    // ---- enable / disable ----
+
+    @Override
+    @Transactional(rollbackFor = Exception.class)
+    public void enable(String dataSourceId) {
+        String id = trim(dataSourceId);
+        String observedStatus = readRawStatus(id);
+        if ("1".equals(observedStatus)) {
+            return; // 幂等：已处于目标状态，不执行 DML
+        }
+        if (!"0".equals(observedStatus)) {
+            throw DataSourceErrorCode.statusInvalid();
+        }
+        updateStatusConditionally(id, observedStatus, "1");
+    }
+
+    @Override
+    @Transactional(rollbackFor = Exception.class)
+    public void disable(String dataSourceId) {
+        String id = trim(dataSourceId);
+        String observedStatus = readRawStatus(id);
+        if ("0".equals(observedStatus)) {
+            return; // 幂等：已处于目标状态，不执行 DML
+        }
+        // '1' 与异常值（含 NULL）均归一化为 '0'
+        updateStatusConditionally(id, observedStatus, "0");
+    }
+
+    /** 按 ID 读取主表记录及其原始 FG_ACTIVE；不按 FG_ACTIVE 过滤，不存在抛 40400。 */
+    private String readRawStatus(String dataSourceId) {
+        DataSource current = dataSourceMapper.selectOne(
+                new LambdaQueryWrapper<DataSource>()
+                        .eq(DataSource::getDataSourceId, dataSourceId));
+        if (current == null) {
+            throw DataSourceErrorCode.notFound(dataSourceId);
+        }
+        return current.getFgActive();
+    }
+
+    /** 带原状态条件的单条 UPDATE；影响行数不为 1 抛 50002 回滚。 */
+    private void updateStatusConditionally(String dataSourceId, String observedStatus, String targetStatus) {
+        LambdaUpdateWrapper<DataSource> wrapper = new LambdaUpdateWrapper<>();
+        wrapper.eq(DataSource::getDataSourceId, dataSourceId);
+        if (observedStatus == null) {
+            wrapper.isNull(DataSource::getFgActive);
+        } else {
+            wrapper.eq(DataSource::getFgActive, observedStatus);
+        }
+        wrapper.set(DataSource::getFgActive, targetStatus);
+        int rows = dataSourceMapper.update(null, wrapper);
+        if (rows != 1) {
+            throw DataSourceErrorCode.statusFailed();
+        }
+        log.info("Updated data source status: {} [{}] -> {}", dataSourceId, observedStatus, targetStatus);
     }
 
     // ---- test connection ----
@@ -206,7 +261,7 @@ public class DataSourceServiceImpl implements DataSourceService {
             DataSource record = dataSourceMapper.selectOne(
                     new LambdaQueryWrapper<DataSource>()
                             .eq(DataSource::getDataSourceId, originalId)
-                            .eq(DataSource::getFgActive, "1"));
+                            .in(DataSource::getFgActive, "1", "0"));
             if (record == null) {
                 throw DataSourceErrorCode.notFound(originalId);
             }
@@ -252,7 +307,7 @@ public class DataSourceServiceImpl implements DataSourceService {
         int rows = dataSourceMapper.update(null,
                 new LambdaUpdateWrapper<DataSource>()
                         .eq(DataSource::getDataSourceId, id)
-                        .eq(DataSource::getFgActive, "1")
+                        .in(DataSource::getFgActive, "1", "0")
                         .set(DataSource::getDataSourceBizAttr, dto.getBizAttr()));
         if (rows != 1) {
             throw DataSourceErrorCode.saveFailed();
@@ -262,11 +317,11 @@ public class DataSourceServiceImpl implements DataSourceService {
 
     // ---- helpers ----
 
-    private DataSource requireActiveRecord(String dataSourceId) {
+    private DataSource requireMaintainableRecord(String dataSourceId) {
         DataSource ds = dataSourceMapper.selectOne(
                 new LambdaQueryWrapper<DataSource>()
                         .eq(DataSource::getDataSourceId, dataSourceId)
-                        .eq(DataSource::getFgActive, "1"));
+                        .in(DataSource::getFgActive, "1", "0"));
         if (ds == null) {
             throw DataSourceErrorCode.notFound(dataSourceId);
         }
@@ -274,7 +329,7 @@ public class DataSourceServiceImpl implements DataSourceService {
     }
 
     private DataSource requireTargetRecord(String dataSourceId) {
-        DataSource ds = requireActiveRecord(dataSourceId);
+        DataSource ds = requireMaintainableRecord(dataSourceId);
         if (!"TARGET".equalsIgnoreCase(ds.getDataSourceCategory())) {
             throw DataSourceErrorCode.roleNotApplicable();
         }

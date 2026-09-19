@@ -10,6 +10,7 @@ public class DataSourceListVO {
     private Integer port;
     private String userName;
     private String serviceName;
+    private String fgActive;
 
     public String getDataSourceId() { return dataSourceId; }
     public void setDataSourceId(String dataSourceId) { this.dataSourceId = dataSourceId; }
@@ -34,4 +35,7 @@ public class DataSourceListVO {
 
     public String getServiceName() { return serviceName; }
     public void setServiceName(String serviceName) { this.serviceName = serviceName; }
+
+    public String getFgActive() { return fgActive; }
+    public void setFgActive(String fgActive) { this.fgActive = fgActive; }
 }

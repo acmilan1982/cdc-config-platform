@@ -25,6 +25,10 @@ public interface DataSourceService {
 
     void delete(String dataSourceId);
 
+    void enable(String dataSourceId);
+
+    void disable(String dataSourceId);
+
     TestConnectionResultVO testConnection(TestConnectionDTO dto);
 
     List<TargetOptionVO> targetOptions();

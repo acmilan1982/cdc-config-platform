@@ -126,7 +126,7 @@ class DataSourceServiceTest {
 
     // ---- list ----
     @Test
-    void list_shouldReturnActiveRecordsWithFilters() {
+    void list_shouldReturnAllStatusRecordsWithFilters() {
         DataSourceQuery query = new DataSourceQuery();
         query.setId("DS");
         query.setName("测试");
@@ -145,11 +145,11 @@ class DataSourceServiceTest {
         assertTrue(sql.contains("UPPER(DATA_SOURCE_ID) LIKE"));
         assertTrue(sql.contains("UPPER(DATA_SOURCE_NAME) LIKE"));
         assertTrue(sql.contains("UPPER(DATA_SOURCE_HOST) LIKE"));
-        assertTrue(sql.contains("FG_ACTIVE"));
+        assertFalse(sql.contains("FG_ACTIVE"));
     }
 
     @Test
-    void list_withoutFilters_shouldStillFilterActive() {
+    void list_withoutFilters_shouldNotFilterActive() {
         when(dataSourceMapper.selectList(any(LambdaQueryWrapper.class)))
                 .thenReturn(Collections.emptyList());
 
@@ -157,7 +157,30 @@ class DataSourceServiceTest {
 
         ArgumentCaptor<LambdaQueryWrapper<DataSource>> captor = ArgumentCaptor.forClass(LambdaQueryWrapper.class);
         verify(dataSourceMapper).selectList(captor.capture());
-        assertTrue(captor.getValue().getCustomSqlSegment().contains("FG_ACTIVE"));
+        assertFalse(captor.getValue().getCustomSqlSegment().contains("FG_ACTIVE"));
+    }
+
+    @Test
+    void list_shouldReturnRawFgActiveWithoutNormalization() {
+        DataSource inactive = new DataSource();
+        inactive.setDataSourceId("DS0");
+        inactive.setFgActive("0");
+        DataSource abnormal = new DataSource();
+        abnormal.setDataSourceId("DSX");
+        abnormal.setFgActive("X");
+        DataSource nullStatus = new DataSource();
+        nullStatus.setDataSourceId("DSN");
+        nullStatus.setFgActive(null);
+        when(dataSourceMapper.selectList(any(LambdaQueryWrapper.class)))
+                .thenReturn(java.util.Arrays.asList(sourceDs, inactive, abnormal, nullStatus));
+
+        List<DataSourceListVO> vos = service.list(new DataSourceQuery());
+
+        assertEquals(4, vos.size());
+        assertEquals("1", vos.get(0).getFgActive());
+        assertEquals("0", vos.get(1).getFgActive());
+        assertEquals("X", vos.get(2).getFgActive());
+        assertEquals(null, vos.get(3).getFgActive());
     }
 
     @Test
@@ -173,7 +196,7 @@ class DataSourceServiceTest {
         verify(dataSourceMapper).selectList(captor.capture());
         String sql = captor.getValue().getCustomSqlSegment();
         assertTrue(sql.contains("UPPER(DATA_SOURCE_CATEGORY) ="));
-        assertTrue(sql.contains("FG_ACTIVE"));
+        assertFalse(sql.contains("FG_ACTIVE"));
     }
 
     @Test
@@ -505,6 +528,185 @@ class DataSourceServiceTest {
         BusinessException ex = assertThrows(BusinessException.class,
                 () -> service.delete("SRC001"));
         assertEquals(DataSourceErrorCode.DELETE_FAILED, ex.getCode());
+    }
+
+    // ---- maintainable boundary (FG_ACTIVE IN ('1','0')) ----
+    @Test
+    void getDetail_shouldAcceptActiveOrInactive() {
+        when(dataSourceMapper.selectOne(any(LambdaQueryWrapper.class))).thenReturn(sourceDs);
+
+        service.getDetail("SRC001");
+
+        ArgumentCaptor<LambdaQueryWrapper<DataSource>> captor = ArgumentCaptor.forClass(LambdaQueryWrapper.class);
+        verify(dataSourceMapper).selectOne(captor.capture());
+        String sql = captor.getValue().getCustomSqlSegment();
+        assertTrue(sql.contains("FG_ACTIVE IN"), "expect FG_ACTIVE IN ('1','0'), got: " + sql);
+        assertFalse(sql.contains("FG_ACTIVE ="), "must not degrade to FG_ACTIVE = '1': " + sql);
+    }
+
+    @Test
+    void testConnection_withoutPassword_shouldReadInactiveRecord() {
+        testConnDTO.setPassword(null);
+        testConnDTO.setOriginalDataSourceId("SRC001");
+        when(dataSourceMapper.selectOne(any(LambdaQueryWrapper.class))).thenReturn(sourceDs);
+        when(connectionTester.test(any(), any(), any(), any(), any(), any()))
+                .thenReturn(new TestConnectionResultVO(true, "连接成功"));
+
+        service.testConnection(testConnDTO);
+
+        ArgumentCaptor<LambdaQueryWrapper<DataSource>> captor = ArgumentCaptor.forClass(LambdaQueryWrapper.class);
+        verify(dataSourceMapper).selectOne(captor.capture());
+        assertTrue(captor.getValue().getCustomSqlSegment().contains("FG_ACTIVE IN"));
+    }
+
+    @Test
+    void saveBizAttr_shouldAcceptActiveOrInactiveSourceRecord() {
+        when(dataSourceMapper.selectOne(any(LambdaQueryWrapper.class))).thenReturn(targetDs);
+        when(dataSourceMapper.update(any(), any(LambdaUpdateWrapper.class))).thenReturn(1);
+
+        service.saveBizAttr("TG001", new BizAttrSaveDTO());
+
+        ArgumentCaptor<LambdaQueryWrapper<DataSource>> captor = ArgumentCaptor.forClass(LambdaQueryWrapper.class);
+        verify(dataSourceMapper).selectOne(captor.capture());
+        assertTrue(captor.getValue().getCustomSqlSegment().contains("FG_ACTIVE IN"));
+    }
+
+    // ---- enable ----
+    @Test
+    void enable_fromInactive_shouldWriteActive() {
+        sourceDs.setFgActive("0");
+        when(dataSourceMapper.selectOne(any(LambdaQueryWrapper.class))).thenReturn(sourceDs);
+        when(dataSourceMapper.update(any(), any(LambdaUpdateWrapper.class))).thenReturn(1);
+
+        service.enable("SRC001");
+
+        ArgumentCaptor<LambdaUpdateWrapper<DataSource>> captor = ArgumentCaptor.forClass(LambdaUpdateWrapper.class);
+        verify(dataSourceMapper).update(eq(null), captor.capture());
+        LambdaUpdateWrapper<DataSource> wrapper = captor.getValue();
+        assertTrue(wrapper.getSqlSet().contains("FG_ACTIVE"));
+        String where = wrapper.getCustomSqlSegment();
+        assertTrue(where.contains("DATA_SOURCE_ID ="));
+        assertTrue(where.contains("FG_ACTIVE ="), "conditional update must match observed status: " + where);
+    }
+
+    @Test
+    void enable_alreadyActive_shouldBeIdempotentWithoutDml() {
+        sourceDs.setFgActive("1");
+        when(dataSourceMapper.selectOne(any(LambdaQueryWrapper.class))).thenReturn(sourceDs);
+
+        service.enable("SRC001");
+
+        verify(dataSourceMapper, never()).update(any(), any(LambdaUpdateWrapper.class));
+    }
+
+    @Test
+    void enable_abnormalStatus_shouldThrow40250WithoutDml() {
+        sourceDs.setFgActive("X");
+        when(dataSourceMapper.selectOne(any(LambdaQueryWrapper.class))).thenReturn(sourceDs);
+
+        BusinessException ex = assertThrows(BusinessException.class, () -> service.enable("SRC001"));
+        assertEquals(DataSourceErrorCode.STATUS_INVALID, ex.getCode());
+        verify(dataSourceMapper, never()).update(any(), any(LambdaUpdateWrapper.class));
+    }
+
+    @Test
+    void enable_nullStatus_shouldThrow40250WithoutDml() {
+        sourceDs.setFgActive(null);
+        when(dataSourceMapper.selectOne(any(LambdaQueryWrapper.class))).thenReturn(sourceDs);
+
+        BusinessException ex = assertThrows(BusinessException.class, () -> service.enable("SRC001"));
+        assertEquals(DataSourceErrorCode.STATUS_INVALID, ex.getCode());
+        verify(dataSourceMapper, never()).update(any(), any(LambdaUpdateWrapper.class));
+    }
+
+    @Test
+    void enable_notFound_shouldThrow40400WithoutDml() {
+        when(dataSourceMapper.selectOne(any(LambdaQueryWrapper.class))).thenReturn(null);
+
+        BusinessException ex = assertThrows(BusinessException.class, () -> service.enable("NONEXIST"));
+        assertEquals(DataSourceErrorCode.DATA_SOURCE_NOT_FOUND, ex.getCode());
+        verify(dataSourceMapper, never()).update(any(), any(LambdaUpdateWrapper.class));
+    }
+
+    @Test
+    void enable_conditionalUpdateZeroRows_shouldThrow50002() {
+        sourceDs.setFgActive("0");
+        when(dataSourceMapper.selectOne(any(LambdaQueryWrapper.class))).thenReturn(sourceDs);
+        when(dataSourceMapper.update(any(), any(LambdaUpdateWrapper.class))).thenReturn(0);
+
+        BusinessException ex = assertThrows(BusinessException.class, () -> service.enable("SRC001"));
+        assertEquals(DataSourceErrorCode.STATUS_FAILED, ex.getCode());
+    }
+
+    // ---- disable ----
+    @Test
+    void disable_fromActive_shouldWriteInactive() {
+        sourceDs.setFgActive("1");
+        when(dataSourceMapper.selectOne(any(LambdaQueryWrapper.class))).thenReturn(sourceDs);
+        when(dataSourceMapper.update(any(), any(LambdaUpdateWrapper.class))).thenReturn(1);
+
+        service.disable("SRC001");
+
+        ArgumentCaptor<LambdaUpdateWrapper<DataSource>> captor = ArgumentCaptor.forClass(LambdaUpdateWrapper.class);
+        verify(dataSourceMapper).update(eq(null), captor.capture());
+        LambdaUpdateWrapper<DataSource> wrapper = captor.getValue();
+        assertTrue(wrapper.getSqlSet().contains("FG_ACTIVE"));
+        assertTrue(wrapper.getCustomSqlSegment().contains("FG_ACTIVE ="));
+    }
+
+    @Test
+    void disable_alreadyInactive_shouldBeIdempotentWithoutDml() {
+        sourceDs.setFgActive("0");
+        when(dataSourceMapper.selectOne(any(LambdaQueryWrapper.class))).thenReturn(sourceDs);
+
+        service.disable("SRC001");
+
+        verify(dataSourceMapper, never()).update(any(), any(LambdaUpdateWrapper.class));
+    }
+
+    @Test
+    void disable_abnormalStatus_shouldNormalizeToInactive() {
+        sourceDs.setFgActive("X");
+        when(dataSourceMapper.selectOne(any(LambdaQueryWrapper.class))).thenReturn(sourceDs);
+        when(dataSourceMapper.update(any(), any(LambdaUpdateWrapper.class))).thenReturn(1);
+
+        service.disable("SRC001");
+
+        ArgumentCaptor<LambdaUpdateWrapper<DataSource>> captor = ArgumentCaptor.forClass(LambdaUpdateWrapper.class);
+        verify(dataSourceMapper).update(eq(null), captor.capture());
+        assertTrue(captor.getValue().getCustomSqlSegment().contains("FG_ACTIVE ="));
+    }
+
+    @Test
+    void disable_nullStatus_shouldNormalizeWithNullSafeCondition() {
+        sourceDs.setFgActive(null);
+        when(dataSourceMapper.selectOne(any(LambdaQueryWrapper.class))).thenReturn(sourceDs);
+        when(dataSourceMapper.update(any(), any(LambdaUpdateWrapper.class))).thenReturn(1);
+
+        service.disable("SRC001");
+
+        ArgumentCaptor<LambdaUpdateWrapper<DataSource>> captor = ArgumentCaptor.forClass(LambdaUpdateWrapper.class);
+        verify(dataSourceMapper).update(eq(null), captor.capture());
+        assertTrue(captor.getValue().getCustomSqlSegment().contains("FG_ACTIVE IS NULL"));
+    }
+
+    @Test
+    void disable_notFound_shouldThrow40400WithoutDml() {
+        when(dataSourceMapper.selectOne(any(LambdaQueryWrapper.class))).thenReturn(null);
+
+        BusinessException ex = assertThrows(BusinessException.class, () -> service.disable("NONEXIST"));
+        assertEquals(DataSourceErrorCode.DATA_SOURCE_NOT_FOUND, ex.getCode());
+        verify(dataSourceMapper, never()).update(any(), any(LambdaUpdateWrapper.class));
+    }
+
+    @Test
+    void disable_conditionalUpdateZeroRows_shouldThrow50002() {
+        sourceDs.setFgActive("1");
+        when(dataSourceMapper.selectOne(any(LambdaQueryWrapper.class))).thenReturn(sourceDs);
+        when(dataSourceMapper.update(any(), any(LambdaUpdateWrapper.class))).thenReturn(0);
+
+        BusinessException ex = assertThrows(BusinessException.class, () -> service.disable("SRC001"));
+        assertEquals(DataSourceErrorCode.STATUS_FAILED, ex.getCode());
     }
 
     // ---- testConnection ----

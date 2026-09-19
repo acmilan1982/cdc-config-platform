@@ -24,6 +24,7 @@ public class DataSourceConverter {
         vo.setPort(parsePort(ds.getDataSourcePort()));
         vo.setUserName(ds.getDataSourceUserName());
         vo.setServiceName(ds.getDataSourceServiceName());
+        vo.setFgActive(ds.getFgActive());
         return vo;
     }
 

@@ -14,6 +14,8 @@ export interface DataSourceRow {
   port: number
   serviceName: string
   userName: string
+  /** 原始 FG_ACTIVE：`'1'`/`'0'`/`null`/其他历史字符串原样返回，不归一化（API.md §11.2）。 */
+  fgActive: string | null
 }
 
 /** 列表查询参数（三文本条件忽略大小写模糊 + 可选角色 `category`，AND、先 trim；无分页）。 */

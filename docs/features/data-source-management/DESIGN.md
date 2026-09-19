@@ -564,15 +564,17 @@
 - 既有统计 `PASS=113/FAIL=0/BLOCKED=2/NOT_RUN=0`（阻塞 `DS-AC-104`/`DS-AC-108`）与原始证据逐字保留；
 - 依据任务 `DATA-SOURCE-LIST-PAGE-SELECTIVE-QUERY-LIST-INTEGRATION-IMPLEMENTATION-001`（已批准调整基线的前后端实现、自动化测试、构建与实现状态回写；未修改公共查询列表组件、数据库结构/数据/SQL/配置；未访问数据库/ZK/Kafka；未启动服务）。
 
-## 13. 列表展示全部状态、启用/停用及视觉微调设计（`APPROVED`，未实现）
+## 13. 列表展示全部状态、启用/停用及视觉微调设计（`APPROVED`，`IMPLEMENTED_PENDING_USER_REVIEW`）
 
-> 本轮调整基线分层状态：`adjustment_document_status=APPROVED`、`adjustment_baseline_status=APPROVED`、`adjustment_design_status=APPROVED`、`implementation_status=NOT_STARTED`、`implementation_authorization_status=NOT_GRANTED_IN_THIS_TASK`、`formal_acceptance_execution_status=NOT_RUN`、`new_adjustment_acceptance_status=ALL_NOT_RUN`。
+> 本轮调整基线分层状态：`adjustment_document_status=APPROVED`、`adjustment_baseline_status=APPROVED`、`adjustment_design_status=APPROVED`、`implementation_status=IMPLEMENTED_PENDING_USER_REVIEW`、`implementation_authorization_status=GRANTED_IN_THIS_TASK`、`formal_acceptance_execution_status=NOT_RUN`、`new_adjustment_acceptance_status=ALL_NOT_RUN`。
 >
-> 批准链（2026-09-19）：初版草案提交 `4ccd6610...` → R1 修订提交 `c4e1048...` → R2 极小修订提交 `aa906c0...` → ChatGPT 从远程 Git 复审 R2 提交 `aa906c0...` 结论 `REVIEW_PASS`（`blocking_finding_count=0`）→ 项目负责人 2026-09-19 明确回复“批准本轮调整基线” → 批准收口任务 `DATA-SOURCE-LIST-ALL-STATUS-ENABLE-DISABLE-UI-ADJUSTMENT-APPROVAL-CLOSEOUT-001`。批准对象为经初版、R1、R2 修订并由 ChatGPT 远程复审通过的**当前**调整基线，**非仅初版**；批准只代表设计基线正式成立，**不代表**已实现、已测试、已验收或生产可用。
+> 批准链（2026-09-19）：初版草案提交 `4ccd6610...` → R1 修订提交 `c4e1048...` → R2 极小修订提交 `aa906c0...` → ChatGPT 从远程 Git 复审 R2 提交 `aa906c0...` 结论 `REVIEW_PASS`（`blocking_finding_count=0`）→ 项目负责人 2026-09-19 明确回复“批准本轮调整基线” → 批准收口任务 `DATA-SOURCE-LIST-ALL-STATUS-ENABLE-DISABLE-UI-ADJUSTMENT-APPROVAL-CLOSEOUT-001`。批准对象为经初版、R1、R2 修订并由 ChatGPT 远程复审通过的**当前**调整基线，**非仅初版**；批准与实现只代表设计基线正式成立且已落地，**不代表**已测试、已验收或生产可用。
 >
 > 任务：`DATA-SOURCE-LIST-ALL-STATUS-ENABLE-DISABLE-UI-ADJUSTMENT-BASELINE-001`（`task_type=FEATURE_ADJUSTMENT_BASELINE`，纯文档任务）。
 >
-> 本节只冻结**设计结论**，不实现、不测试、不验收、不修改任何代码/配置/SQL；关联需求 `DS-REQ-139~177`，关联验收 `DS-AC-141~182`。§0~§12 既有结论**逐字冻结**；本节对旧结论的替代一律通过 §13.0 的“局部替代声明”显式给出边界，未声明替代的旧规则继续有效。
+> 实现任务：`DATA-SOURCE-LIST-ALL-STATUS-ENABLE-DISABLE-UI-ADJUSTMENT-IMPLEMENTATION-001`（2026-09-19）；实现状态 `IMPLEMENTED_PENDING_USER_REVIEW`、实现授权 `GRANTED_IN_THIS_TASK`，`DS-AC-141~182`（42 条）仍全部 `NOT_RUN`。
+>
+> 本节冻结**设计结论**；关联需求 `DS-REQ-139~177`，关联验收 `DS-AC-141~182`。§0~§12 既有结论**逐字冻结**；本节对旧结论的替代一律通过 §13.0 的“局部替代声明”显式给出边界，未声明替代的旧规则继续有效。
 
 ### 13.0 局部替代声明清单
 
@@ -770,3 +772,11 @@
 - §13.0~§13.6 设计正文（含 R1 冻结的先读、幂等不写、NULL-safe 原状态条件 `UPDATE`、并发 `50002`、失败不刷新）**零变化**；§0~§12 既有 `APPROVED` 设计基线与 §11 追踪结论逐字冻结；
 - `DS-REQ-001~177` 编号与正文零变化；本轮新增验收 `DS-AC-141~182`（42 条）仍全部 `NOT_RUN`，上一轮 `DS-AC-116~140`（25 条）仍全部 `NOT_RUN`；既有 `PASS=113/FAIL=0/BLOCKED=2/NOT_RUN=0`（阻塞 `DS-AC-104`/`DS-AC-108`）逐字保留；
 - 批准只代表设计基线正式成立，**不代表**已实现、已测试、已验收或生产可用；实现须**另行**授权并使用独立任务；未修改任何业务代码/测试/依赖/配置/SQL，未访问数据库/ZK/Kafka，未启动服务。
+
+### 14.4 实现状态回写（2026-09-19，任务 `DATA-SOURCE-LIST-ALL-STATUS-ENABLE-DISABLE-UI-ADJUSTMENT-IMPLEMENTATION-001`）
+
+- §13 章节标题由“（`APPROVED`，未实现）”更新为“（`APPROVED`，`IMPLEMENTED_PENDING_USER_REVIEW`）”；分层状态由 `implementation_status=NOT_STARTED`/`implementation_authorization_status=NOT_GRANTED_IN_THIS_TASK` 更新为 `IMPLEMENTED_PENDING_USER_REVIEW`/`GRANTED_IN_THIS_TASK`，并补充实现任务号（`adjustment_document_status`/`adjustment_baseline_status`/`adjustment_design_status` 保持 `APPROVED`，`formal_acceptance_execution_status=NOT_RUN`、`new_adjustment_acceptance_status=ALL_NOT_RUN` 保持）；
+- 实现按 §13 已批准设计执行：列表返回并展示 `CDC_DATA_SOURCE` 全部状态与原始 `FG_ACTIVE`；维护边界由 `FG_ACTIVE='1'` 放宽为精确 `FG_ACTIVE IN ('1','0')`；异常记录只允许显式“停用”归一化；逐行启用/停用菜单 + 二次确认 + 行级 busy；新增 `PUT /api/data-sources/{id}/enable`、`PUT /api/data-sources/{id}/disable` 两个接口，严格实现 §13.5 冻结的先读、幂等不写、NULL-safe 原状态条件 `UPDATE`、影响行数 ≠ 1 → `50002` 回滚、失败不刷新列表；
+- §13.0~§13.6 设计正文（含 R1 冻结方案与 R2 极小修订）**零变化**；§0~§12 既有 `APPROVED` 设计基线与 §11 追踪结论逐字冻结；
+- `DS-REQ-139~177` 数量（39 条）与编号未变；本轮新增验收 `DS-AC-141~182`（42 条）仍全部 `NOT_RUN`，上一轮 `DS-AC-116~140`（25 条）仍全部 `NOT_RUN`；既有 `PASS=113/FAIL=0/BLOCKED=2/NOT_RUN=0`（阻塞 `DS-AC-104`/`DS-AC-108`）逐字保留；
+- 实现状态为 `IMPLEMENTED_PENDING_USER_REVIEW`，**未**置为 `IMPLEMENTED_ACCEPTED`/`ACCEPTED`/生产可用；正式验收执行状态 `NOT_RUN`；未访问数据库/ZK/Kafka（含自动化测试），未对数据库执行任何 DDL/DML，未启动/停止/重启任何服务。

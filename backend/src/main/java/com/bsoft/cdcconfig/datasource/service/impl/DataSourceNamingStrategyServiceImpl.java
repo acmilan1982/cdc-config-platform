@@ -198,7 +198,7 @@ public class DataSourceNamingStrategyServiceImpl implements DataSourceNamingStra
         DataSource ds = dataSourceMapper.selectOne(
                 new LambdaQueryWrapper<DataSource>()
                         .eq(DataSource::getDataSourceId, sourceId)
-                        .eq(DataSource::getFgActive, "1"));
+                        .in(DataSource::getFgActive, "1", "0"));
         if (ds == null) {
             throw DataSourceErrorCode.notFound(sourceId);
         }

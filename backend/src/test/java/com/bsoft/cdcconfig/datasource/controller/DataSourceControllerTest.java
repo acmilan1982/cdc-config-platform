@@ -5,6 +5,7 @@ import com.bsoft.cdcconfig.datasource.dto.DataSourceCreateDTO;
 import com.bsoft.cdcconfig.datasource.dto.DataSourceUpdateDTO;
 import com.bsoft.cdcconfig.datasource.dto.NamingStrategyDTO;
 import com.bsoft.cdcconfig.datasource.dto.TestConnectionDTO;
+import com.bsoft.cdcconfig.datasource.exception.DataSourceErrorCode;
 import com.bsoft.cdcconfig.datasource.query.DataSourceQuery;
 import com.bsoft.cdcconfig.datasource.service.DataSourceNamingStrategyService;
 import com.bsoft.cdcconfig.datasource.service.DataSourceService;
@@ -222,6 +223,59 @@ class DataSourceControllerTest {
                 .andExpect(jsonPath("$.code").value(200));
 
         verify(dataSourceService).delete("DS001");
+    }
+
+    // ---- enable / disable ----
+    @Test
+    void enable_shouldSucceed() throws Exception {
+        doNothing().when(dataSourceService).enable("DS001");
+
+        mockMvc.perform(put("/api/data-sources/DS001/enable"))
+                .andExpect(status().isOk())
+                .andExpect(jsonPath("$.code").value(200));
+
+        verify(dataSourceService).enable("DS001");
+    }
+
+    @Test
+    void disable_shouldSucceed() throws Exception {
+        doNothing().when(dataSourceService).disable("DS001");
+
+        mockMvc.perform(put("/api/data-sources/DS001/disable"))
+                .andExpect(status().isOk())
+                .andExpect(jsonPath("$.code").value(200));
+
+        verify(dataSourceService).disable("DS001");
+    }
+
+    @Test
+    void enable_invalidStatus_shouldReturn40250() throws Exception {
+        org.mockito.Mockito.doThrow(DataSourceErrorCode.statusInvalid())
+                .when(dataSourceService).enable("DS001");
+
+        mockMvc.perform(put("/api/data-sources/DS001/enable"))
+                .andExpect(status().isOk())
+                .andExpect(jsonPath("$.code").value(40250));
+    }
+
+    @Test
+    void disable_statusConflict_shouldReturn50002() throws Exception {
+        org.mockito.Mockito.doThrow(DataSourceErrorCode.statusFailed())
+                .when(dataSourceService).disable("DS001");
+
+        mockMvc.perform(put("/api/data-sources/DS001/disable"))
+                .andExpect(status().isOk())
+                .andExpect(jsonPath("$.code").value(50002));
+    }
+
+    @Test
+    void enable_notFound_shouldReturn40400() throws Exception {
+        org.mockito.Mockito.doThrow(DataSourceErrorCode.notFound("NONEXIST"))
+                .when(dataSourceService).enable("NONEXIST");
+
+        mockMvc.perform(put("/api/data-sources/NONEXIST/enable"))
+                .andExpect(status().isOk())
+                .andExpect(jsonPath("$.code").value(40400));
     }
 
     // ---- test-connection ----

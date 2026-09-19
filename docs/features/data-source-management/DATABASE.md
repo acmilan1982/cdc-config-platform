@@ -240,7 +240,7 @@ new_adjustment_acceptance_status=ALL_NOT_RUN
 
 ---
 
-## 9. 本轮列表展示全部状态与启用/停用的数据库变化声明（`APPROVED`）
+## 9. 本轮列表展示全部状态与启用/停用的数据库变化声明（`APPROVED`，实现后无数据库变化）
 
 > 状态：`APPROVED`。本轮调整基线分层状态：
 
@@ -248,13 +248,13 @@ new_adjustment_acceptance_status=ALL_NOT_RUN
 adjustment_document_status=APPROVED
 adjustment_baseline_status=APPROVED
 adjustment_database_status=APPROVED
-implementation_status=NOT_STARTED
-implementation_authorization_status=NOT_GRANTED_IN_THIS_TASK
+implementation_status=IMPLEMENTED_PENDING_USER_REVIEW
+implementation_authorization_status=GRANTED_IN_THIS_TASK
 formal_acceptance_execution_status=NOT_RUN
 new_adjustment_acceptance_status=ALL_NOT_RUN
 ```
 
-- 任务：`DATA-SOURCE-LIST-ALL-STATUS-ENABLE-DISABLE-UI-ADJUSTMENT-BASELINE-001`（纯文档调整基线）。关联需求 `DS-REQ-150`~`DS-REQ-159`、`DS-REQ-168`~`DS-REQ-171`、`DS-REQ-176`、`DS-REQ-177`；关联验收 `DS-AC-150`~`DS-AC-178`、`DS-AC-182`。
+- 任务：`DATA-SOURCE-LIST-ALL-STATUS-ENABLE-DISABLE-UI-ADJUSTMENT-BASELINE-001`（纯文档调整基线）。实现任务：`DATA-SOURCE-LIST-ALL-STATUS-ENABLE-DISABLE-UI-ADJUSTMENT-IMPLEMENTATION-001`（2026-09-19）。关联需求 `DS-REQ-150`~`DS-REQ-159`、`DS-REQ-168`~`DS-REQ-171`、`DS-REQ-176`、`DS-REQ-177`；关联验收 `DS-AC-150`~`DS-AC-178`、`DS-AC-182`（全部 `NOT_RUN`）。
 - **批准链（完整）**：初版提交 `4ccd66106e832a0fd10dc42617507899cbb26463` → R1 修订提交 `c4e10486465fbb406dbc068ff0998c49edd4e53b` → R2 修订提交 `aa906c0004d51d638a16212f3d6ba7753d18288d`；ChatGPT 远程复审（对 R2 提交 `aa906c0...`）= `REVIEW_PASS`，`blocking_finding_count=0`；项目负责人批准日期 `2026-09-19`，批准表述“批准本轮调整基线”，批准权限 `项目负责人（用户）`，批准任务 `DATA-SOURCE-LIST-ALL-STATUS-ENABLE-DISABLE-UI-ADJUSTMENT-APPROVAL-CLOSEOUT-001`。
 - 本批准针对**初版 + R1 + R2 修订后、且经 ChatGPT 远程复审通过**的调整基线，**非**仅批准初版草案。
 - 本节**已**获得项目负责人批准，**尚未**授权实现，**未**执行任何正式验收。
@@ -370,3 +370,13 @@ WHERE DATA_SOURCE_ID = :dataSourceId
 - 将 §2 表后与 §4 后的“本轮新草案局部替代提示（§9，`DRAFT_PENDING_USER_REVIEW`）”标签更新为“本轮已批准调整基线局部替代提示（§9，`APPROVED`）”，仅改状态标签，未改动替代边界与结论正文。
 - 本次仅做文档状态与批准链收口：**未**改动 `DS-REQ-001~177`（139~177 仍 39 条）与 `DS-AC-001~182`（141~182 仍 42 条，全部 `NOT_RUN`；116~140 仍 25 条，全部 `NOT_RUN`）的编号与正文；既有正式复验统计 `PASS=113/FAIL=0/BLOCKED=2/NOT_RUN=0`（阻塞 `DS-AC-104`/`DS-AC-108`）逐字保留。
 - 本轮为纯文档收口：未修改任何业务代码/测试/依赖/配置/SQL/锁文件，未访问数据库/ZK/Kafka，未启动服务，未运行 Maven/npm 测试或构建；未授权实现。
+
+### 10.5 实现状态回写（2026-09-19，任务 `DATA-SOURCE-LIST-ALL-STATUS-ENABLE-DISABLE-UI-ADJUSTMENT-IMPLEMENTATION-001`）
+
+- 依据项目负责人 2026-09-19 在本任务内对**已批准**调整基线的实现授权（`implementation_authorization_status=GRANTED_IN_THIS_TASK`），本任务按 §9 冻结结论完成后端与前端实现，并按 §8 要求回写数据库侧实现状态。
+- **§9 标题与状态块更新**：标题更新为「（`APPROVED`，实现后无数据库变化）」；状态块 `implementation_status` 由 `NOT_STARTED` 更新为 `IMPLEMENTED_PENDING_USER_REVIEW`，`implementation_authorization_status` 由 `NOT_GRANTED_IN_THIS_TASK` 更新为 `GRANTED_IN_THIS_TASK`；`adjustment_document_status`/`adjustment_baseline_status`/`adjustment_database_status` 仍为 `APPROVED`，`formal_acceptance_execution_status=NOT_RUN`、`new_adjustment_acceptance_status=ALL_NOT_RUN` **逐字保留**。
+- **§9.1 零数据库变化声明逐字保留**：实现后**仍无任何**表/列/主键/唯一约束/索引/序列/视图/同义词/触发器变化，**无 DDL**，**无存量数据清洗/订正**；新增 `fgActive` 仍为既有物理列 `CDC_DATA_SOURCE.FG_ACTIVE VARCHAR2(1)` 的接口响应映射，未新增列（`DS-REQ-154`、`DS-REQ-177`）。
+- **§9.2 操作矩阵与 §9.3 启停写入边界正文零变化**：`enable`/`disable` 状态机、条件 `UPDATE`（`DATA_SOURCE_ID` + 事务首次读取的原始 `FG_ACTIVE`，含 `NULL` 匹配）、受影响行数 ≠ 1 → `50002` 回滚、不级联、不访问源库/ZK/Kafka/进程、不加锁/不乐观版本列的结论**逐字保留**；实现仅按该冻结语义落地 `enable`/`disable` 两条接口（见 `DESIGN.md` §14.4、`API.md` §12.4）。
+- **编号与正文零变化**：`DS-REQ-001~177`（139~177 仍 39 条）与 `DS-AC-001~182`（141~182 仍 42 条、116~140 仍 25 条）编号与正文均未改动；本轮 42 条新增验收与本轮前 25 条验收**仍全部 `NOT_RUN`**，未置 `PASS`。
+- 既有正式复验统计 `PASS=113/FAIL=0/BLOCKED=2/NOT_RUN=0`（阻塞 `DS-AC-104`/`DS-AC-108`）**逐字保留**，未置 `IMPLEMENTED_ACCEPTED`。
+- 本任务**未访问数据库、未执行任何 SQL/DDL/DML、未写入任何数据、未访问 ZooKeeper/Kafka/业务源库、未启动/停止任何服务**；未修改任何迁移/DDL/初始化数据脚本、依赖或锁文件。

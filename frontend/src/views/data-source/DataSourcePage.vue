@@ -60,11 +60,12 @@
     <!-- 结果区：头部（数据源列表 + 数量 / 新增数据源）→ 固定错误槽 → 固定分隔线 → body 主体槽 -->
     <QueryListResultPanel v-loading="loading">
       <template #summary>
-        <span class="ds-result-title">数据源列表</span>
         <span class="ds-result-count">共 {{ rows.length }} 条</span>
       </template>
       <template #toolbar>
-        <el-button type="primary" @click="openCreate">新增数据源</el-button>
+        <el-button class="ds-add-button" @click="openCreate">
+          <el-icon class="ds-add-icon"><Plus /></el-icon>新增数据源
+        </el-button>
       </template>
       <template #error>
         <el-alert
@@ -96,7 +97,20 @@
               </p>
             </div>
           </template>
-          <el-table-column prop="dataSourceId" label="数据源ID" min-width="120" show-overflow-tooltip />
+          <el-table-column label="序号" width="70" align="center">
+            <template #default="{ $index }">
+              <span class="ds-seq">{{ $index + 1 }}</span>
+            </template>
+          </el-table-column>
+          <el-table-column prop="dataSourceId" label="数据源ID" min-width="140" show-overflow-tooltip>
+            <template #default="{ row }">
+              <div class="ds-id-cell">
+                <span class="ds-id-text">{{ row.dataSourceId }}</span>
+                <span v-if="isInactive(row)" class="ds-inactive-mark">停用</span>
+                <span v-else-if="isAbnormal(row)" class="ds-abnormal-mark">{{ abnormalMark(row) }}</span>
+              </div>
+            </template>
+          </el-table-column>
           <el-table-column prop="dataSourceName" label="数据源名称" min-width="140" show-overflow-tooltip />
           <el-table-column label="角色" width="90">
             <template #default="{ row }">
@@ -106,7 +120,7 @@
             </template>
           </el-table-column>
           <el-table-column prop="dataSourceType" label="类型" width="90" />
-          <el-table-column prop="host" label="主机" min-width="130" show-overflow-tooltip />
+          <el-table-column prop="host" label="主机" min-width="110" show-overflow-tooltip />
           <el-table-column prop="port" label="端口" width="80" />
           <el-table-column prop="serviceName" label="Service Name/数据库名" min-width="150" show-overflow-tooltip />
           <el-table-column prop="userName" label="用户名" min-width="110" show-overflow-tooltip />
@@ -125,20 +139,39 @@
                 </span>
                 <template #dropdown>
                   <el-dropdown-menu>
-                    <el-dropdown-item
-                      v-if="row.dataSourceCategory === 'SOURCE'"
-                      command="naming"
-                    >目标库命名策略</el-dropdown-item>
-                    <el-dropdown-item
-                      v-if="row.dataSourceCategory === 'TARGET'"
-                      command="bizAttr"
-                    >业务属性</el-dropdown-item>
-                    <el-dropdown-item
-                      command="delete"
-                      divided
-                      class="ds-more-danger"
-                      :disabled="deletingId !== ''"
-                    >删除</el-dropdown-item>
+                    <!-- 异常行（FG_ACTIVE 非 '0'/'1'）只保留归一化“停用”，隐藏全部业务写入口（DS-REQ-167） -->
+                    <template v-if="isAbnormal(row)">
+                      <el-dropdown-item command="disable" :disabled="rowBusy(row)">停用</el-dropdown-item>
+                    </template>
+                    <template v-else>
+                      <el-dropdown-item
+                        v-if="row.dataSourceCategory === 'SOURCE'"
+                        command="naming"
+                      >目标库命名策略</el-dropdown-item>
+                      <el-dropdown-item
+                        v-if="row.dataSourceCategory === 'TARGET'"
+                        command="bizAttr"
+                      >业务属性</el-dropdown-item>
+                      <el-dropdown-item
+                        v-if="!isInactive(row)"
+                        command="disable"
+                        divided
+                        class="ds-more-warning"
+                        :disabled="rowBusy(row)"
+                      >停用</el-dropdown-item>
+                      <el-dropdown-item
+                        v-else
+                        command="enable"
+                        divided
+                        :disabled="rowBusy(row)"
+                      >启用</el-dropdown-item>
+                      <el-dropdown-item
+                        command="delete"
+                        divided
+                        class="ds-more-danger"
+                        :disabled="deletingId !== '' || statusBusyId !== ''"
+                      >删除</el-dropdown-item>
+                    </template>
                   </el-dropdown-menu>
                 </template>
               </el-dropdown>
@@ -417,7 +450,7 @@ import { computed, nextTick, onBeforeUnmount, onMounted, ref, watch } from 'vue'
 import type { Ref } from 'vue'
 import { ElMessage, ElMessageBox } from 'element-plus'
 import type { FormInstance, FormRules } from 'element-plus'
-import { ArrowDown } from '@element-plus/icons-vue'
+import { ArrowDown, Plus } from '@element-plus/icons-vue'
 import Schema from 'async-validator'
 import { enableDialogDrag, type DialogDragController } from './draggableDialog'
 import {
@@ -431,6 +464,8 @@ import {
   createNamingStrategy,
   deleteDataSource,
   deleteNamingStrategy,
+  disableDataSource,
+  enableDataSource,
   fetchBizAttr,
   fetchDataSourceDetail,
   fetchDataSourceList,
@@ -472,6 +507,21 @@ function categoryLabel(category: string): string {
 
 function strategyLabel(strategy: string): string {
   return strategy === 'TABLE_MERGE' ? '表合并' : '自定义前后缀'
+}
+
+// ---- 行状态分类（直接消费列表返回的原始 fgActive，前端不归一化，UI §11.4） ----
+
+function isInactive(row: DataSourceRow): boolean {
+  return row.fgActive === '0'
+}
+
+function isAbnormal(row: DataSourceRow): boolean {
+  return row.fgActive !== '1' && row.fgActive !== '0'
+}
+
+/** 异常标识必须显示真实原值；原值为 NULL 时明确显示 NULL（UI §11.4）。 */
+function abnormalMark(row: DataSourceRow): string {
+  return `异常（原始值=${row.fgActive === null ? 'NULL' : row.fgActive}）`
 }
 
 /**
@@ -530,10 +580,9 @@ function onQuery() {
   loadList(effectiveSnapshot())
 }
 
+/** 重置只清空查询控件：不发请求、不改动表格/总数/错误/已应用条件（DS-REQ-139/140，UI §11.5）。 */
 function onReset() {
   query.value = { id: '', name: '', host: '', category: '' }
-  effectiveQuery.value = null
-  loadList(effectiveSnapshot())
 }
 
 /** “更多”菜单命令派发（稳定 command 值）：菜单不含编辑，编辑入口只保留双击行（DS-REQ-130/131）。 */
@@ -542,15 +591,72 @@ function onRowCommand(command: string, row: DataSourceRow) {
     openNamingStrategy(row)
   } else if (command === 'bizAttr') {
     openBizAttr(row)
+  } else if (command === 'enable') {
+    onToggleStatus(row, 'enable')
+  } else if (command === 'disable') {
+    onToggleStatus(row, 'disable')
   } else if (command === 'delete') {
     onDelete(row)
   }
 }
 
 const deletingId = ref('')
+/** 正在执行启用/停用的行 ID：行级 busy，同一行操作期间禁用该行启停与删除入口（DS-REQ-173）。 */
+const statusBusyId = ref('')
+
+/** 该行是否有在途写操作（删除或启停）。 */
+function rowBusy(row: DataSourceRow): boolean {
+  return statusBusyId.value === row.dataSourceId || deletingId.value === row.dataSourceId
+}
+
+/** 启停失败按 DESIGN §13.5 冻结消息分支处理；任何失败都不刷新列表。 */
+function statusErrorMessage(code: number, message?: string): string {
+  if (code === 40400) return message || '数据源不存在'
+  if (code === 40250) return message || '该记录状态异常，只能先停用以归一化状态'
+  if (code === 50002 || code === 50000) return '操作失败，请重试'
+  return message || '操作失败，请重试'
+}
+
+/**
+ * 逐行启用/停用：二次确认 → 调用接口 → 成功仅按当前已应用条件刷新；
+ * 失败保留列表/总数/已应用条件并恢复 busy，不自动重新查询（DS-REQ-165/172/173）。
+ */
+async function onToggleStatus(row: DataSourceRow, action: 'enable' | 'disable') {
+  if (statusBusyId.value || deletingId.value) {
+    return
+  }
+  const verb = action === 'enable' ? '启用' : '停用'
+  // 通过 guard 后立即置忙，防止确认框未决时重复提交
+  statusBusyId.value = row.dataSourceId
+  try {
+    await ElMessageBox.confirm(
+      `确定${verb}数据源 ${row.dataSourceId}（${row.dataSourceName}）吗？`,
+      '提示',
+      { type: 'warning', confirmButtonText: verb, cancelButtonText: '取消' },
+    )
+  } catch {
+    statusBusyId.value = ''
+    return
+  }
+  try {
+    const res = action === 'enable'
+      ? await enableDataSource(row.dataSourceId)
+      : await disableDataSource(row.dataSourceId)
+    if (res.code === 200) {
+      ElMessage.success('数据源状态已更新')
+      await loadList(effectiveSnapshot())
+    } else {
+      ElMessage.error(statusErrorMessage(res.code, res.message))
+    }
+  } catch (e) {
+    ElMessage.error(resolveHttpMessage(e))
+  } finally {
+    statusBusyId.value = ''
+  }
+}
 
 async function onDelete(row: DataSourceRow) {
-  if (deletingId.value) {
+  if (deletingId.value || statusBusyId.value) {
     return
   }
   // 通过初始 guard 后立即进入“确认/执行中”状态，防止确认未决时再次弹确认
@@ -784,6 +890,11 @@ function openEdit(row: DataSourceRow) {
 }
 
 function onRowDoubleClick(row: DataSourceRow) {
+  // 异常行唯一允许的写操作是归一化停用：不提供编辑入口（DS-REQ-162/167）
+  if (isAbnormal(row)) {
+    ElMessage.warning('该记录状态异常，请先停用以归一化状态')
+    return
+  }
   openEdit(row)
 }
 
@@ -1549,16 +1660,38 @@ onMounted(() => {
   flex: 0 0 140px;
 }
 
-.ds-result-title {
-  font-size: 15px;
+/* 结果区左上角只显示“共 n 条”（DS-REQ-141） */
+.ds-result-count {
+  font-size: 14px;
   font-weight: 600;
   color: var(--el-text-color-primary);
 }
 
-.ds-result-count {
-  margin-left: 8px;
-  font-size: 13px;
-  color: var(--el-text-color-secondary);
+/* “新增数据源”：黑色实心主按钮，与页面“查询”按钮同一黑白灰视觉语言（DS-REQ-174）。
+   :not(.is-disabled) 限定仅正常态换色，禁用态沿用 Element Plus 既有禁用视觉。 */
+.ds-add-button:not(.is-disabled) {
+  background: #09090b;
+  border-color: #09090b;
+  color: #ffffff;
+  border-radius: 6px;
+  font-weight: 500;
+}
+
+.ds-add-button:not(.is-disabled):hover,
+.ds-add-button:not(.is-disabled):focus {
+  background: #27272a;
+  border-color: #27272a;
+  color: #ffffff;
+}
+
+.ds-add-button:not(.is-disabled):active {
+  background: #18181b;
+  border-color: #18181b;
+  color: #ffffff;
+}
+
+.ds-add-icon {
+  margin-right: 4px;
 }
 
 .load-error {
@@ -1577,8 +1710,113 @@ onMounted(() => {
   font-size: 12px;
 }
 
+/* 行高与表头/正文字号对齐“源库快照状态”页（DS-REQ-146）：局部收紧 EP 表令牌，作用仅限本表 */
 .data-table {
   width: 100%;
+  --el-table-border-color: #f4f4f5;
+  --el-table-header-text-color: #71717a;
+  --el-table-header-bg-color: #ffffff;
+}
+
+.data-table :deep(.el-table__header th .cell) {
+  font-size: 12px;
+  font-weight: 600;
+  color: #71717a;
+  letter-spacing: 0.01em;
+}
+
+.data-table :deep(td.el-table__cell) {
+  padding: 12px 0;
+}
+
+.data-table :deep(th.el-table__cell) {
+  padding: 11px 0;
+}
+
+/* 序号列：固定窄宽、居中，与参考页同款等宽数字弱化色（DS-REQ-142） */
+.ds-seq {
+  font-size: 13px;
+  color: #71717a;
+  font-variant-numeric: tabular-nums;
+}
+
+.ds-id-cell {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  max-width: 100%;
+  line-height: 1.5;
+}
+
+/* 数据源 ID 正文对齐参考页“探针端”列主值：600 字重 + 等宽字体族（DS-REQ-147） */
+.ds-id-text {
+  flex: 0 1 auto;
+  min-width: 0;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+  font-size: 14px;
+  font-weight: 600;
+  color: #09090b;
+  font-family: "SF Mono", "JetBrains Mono", Menlo, Consolas, "Liberation Mono", monospace;
+  font-variant-numeric: tabular-nums;
+}
+
+/* 停用胶囊：与参考页“探针端”列停用标识同款；不换行、不改变行高（DS-REQ-152） */
+.ds-inactive-mark {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  flex: 0 0 auto;
+  box-sizing: border-box;
+  padding: 0 6px;
+  height: 20px;
+  border-radius: 4px;
+  background: #fee2e2;
+  color: #991b1b;
+  font-size: 11px;
+  font-weight: 700;
+  line-height: 1;
+  white-space: nowrap;
+}
+
+/* 异常标识：显示真实原值，不得静默显示为“停用”（DS-REQ-153）；配色与红色停用标识可区分 */
+.ds-abnormal-mark {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  flex: 0 0 auto;
+  box-sizing: border-box;
+  padding: 0 6px;
+  height: 20px;
+  border-radius: 4px;
+  background: #fef3c7;
+  color: #b45309;
+  font-size: 11px;
+  font-weight: 700;
+  line-height: 1;
+  white-space: nowrap;
+}
+
+/* 角色标签对齐参考页“快照状态”标签：固定高、无边框、12px/600；两类角色颜色仍可区分（DS-REQ-148） */
+.data-table :deep(.el-tag) {
+  height: 20px;
+  line-height: 20px;
+  padding: 0 9px;
+  border: none;
+  border-radius: 4px;
+  font-size: 12px;
+  font-weight: 600;
+}
+
+.data-table :deep(.el-tag--warning) {
+  background: #fef3c7;
+  color: #b45309;
+}
+
+.data-table :deep(.el-tag--success) {
+  background: #ecfdf5;
+  color: #047857;
 }
 
 .editor-form .el-select {
@@ -1752,5 +1990,15 @@ onMounted(() => {
 .ds-more-popper .el-dropdown-menu__item.ds-more-danger.is-disabled,
 .ds-more-popper .el-dropdown-menu__item.ds-more-danger.is-disabled:hover {
   color: var(--el-color-danger-light-5);
+}
+
+/* “停用”为警示色（琥珀），与红色“删除”可区分（DS-REQ-164） */
+.ds-more-popper .el-dropdown-menu__item.ds-more-warning {
+  color: #b45309;
+}
+
+.ds-more-popper .el-dropdown-menu__item.ds-more-warning.is-disabled,
+.ds-more-popper .el-dropdown-menu__item.ds-more-warning.is-disabled:hover {
+  color: #f0b775;
 }
 </style>
