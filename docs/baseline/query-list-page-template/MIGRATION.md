@@ -387,3 +387,55 @@ current_next_entry=NONE_SHARED_COMPONENT_FINAL_ACCEPTED_AND_CLOSED_NO_PAGE_MIGRA
 上述唯一入口**仅**表示公共组件与参考页接入已经接受并关闭，
 **不表示**其他页面或整个项目完成。R0 提交使用 `-c core.hooksPath=.git/hooks`
 的过程偏差继续如实保留（`r0_process_deviation_status=RECORDED`）。
+
+---
+
+## 数据源管理列表页选择性接入授权记录（`2026-09-18` 授权 / `2026-09-19` 记录）
+
+本节为**追加**记录，不改写上方任何历史结论与状态块。上方 §1~§7 及
+`2026-09-17` 各时点记录的正文保持原样。
+
+### 授权事实
+
+- 授权日期：`2026-09-18`；授权人：项目负责人。
+- 授权内容（原文引用）：“数据源管理列表页选择性接入查询列表页公共组件”。
+- 授权对象：`数据源管理`（`/config/data-source`）的**第一个主列表页面**，
+  且**仅限**“选择性接入”标题与说明（`QueryListPageShell`）、查询条件容器
+  （`QueryListQueryPanel`）、查询 / 重置（`QueryListActions`）、结果卡片
+  （`QueryListResultPanel`）四个公共组件。
+- 授权性质：**页面范围化、业务行为不变**的选择性接入授权，
+  属上方 §5“若后续确需统一视觉，应另立任务评估”所指引的**另立任务**路径，
+  而**非**模板级“页面迁移”。
+
+### 与上方 §1.1 / §5 既有结论的关系（必须显式记录，不得静默覆盖）
+
+- §1.1 分类表中“数据源管理”一行为 **“不适合直接套用：含写操作与行级操作列”**；
+  §5 将“含新增 / 编辑 / 删除的配置管理页面”列为 **不纳入迁移范围**。
+- 本轮授权是在上述结论**仍然有效**的前提下，由项目负责人**明确授权**发起的
+  页面范围化选择性接入，业务行为（CRUD / 分页 / Tooltip / 请求次数 / 错误语义 /
+  空状态 / 列表刷新时机 / 角色规范化 / 删除 / 弹窗）保持不变；
+  §1.1 / §5 关于“不适合直接套用”“不纳入迁移范围”的结论**不被改写**，
+  本轮不受其自动授权，而是走“另立任务评估 + 项目负责人明确授权”。
+
+### 当前状态（本次记录时点的权威事实）
+
+```text
+data_source_list_page_selective_integration_task=DATA-SOURCE-LIST-PAGE-SELECTIVE-QUERY-LIST-INTEGRATION-BASELINE-001
+data_source_list_page_selective_integration_authorization_date=2026-09-18
+data_source_list_page_selective_integration_authorization_status=GRANTED_BY_PROJECT_OWNER_FOR_THIS_PAGE_ONLY
+data_source_list_page_selective_integration_document_status=DRAFT_PENDING_USER_REVIEW
+data_source_list_page_selective_integration_implementation_status=NOT_STARTED
+data_source_list_page_selective_integration_acceptance_status=ALL_NOT_RUN
+```
+
+### 边界（明确不得）
+
+- **不得**把整个查询列表页模板写成已迁移：模板级 `page_migration_status` 保持
+  `NOT_STARTED`，`page_migration_authorization_status` 保持 `NOT_GRANTED`，
+  `pilot_page_selection_status` 保持 `NOT_DECIDED`。
+- **不得**写成“所有页面已授权”：本授权**只**覆盖数据源管理第一个主列表页面。
+- **不得**改写“源库快照状态”参考页历史（`2026-09-17` 各时点记录保持不变）。
+- **不得**把“数据同步进度”（`/monitor/topic-offset`）误写为已选定试点
+  （其 `pilot_page_selection_status` 仍为 `NOT_DECIDED`）。
+- **不得**把本轮文档草案写成公共组件或页面已实现：本轮为纯文档任务，
+  未修改任何公共组件实现，未修改任何页面源码，未创建迁移分支或迁移提交。

@@ -183,3 +183,13 @@
 - 实现状态仍为 `NOT_STARTED`；
 - 106 条验收仍为 `NOT_RUN`；
 - 依据为本批准任务 `DATA-SOURCE-DESIGN-APPROVAL-CLOSEOUT-001` 及 `fdb9ecaf5bc24373e586d853b4174d1a9cd8bbfc` 最终复审通过基准。
+
+---
+
+## 8. 本轮列表首页调整的数据库变化声明（`DRAFT_PENDING_USER_REVIEW`）
+
+- 任务：`DATA-SOURCE-LIST-PAGE-SELECTIVE-QUERY-LIST-INTEGRATION-BASELINE-001`。
+- **本轮无任何数据库变化**：不新增/修改/删除表、列、主键、唯一约束、索引、序列、视图或触发器；**无任何 DDL**；不改变现有数据库对象。
+- 新增的“角色”查询条件仅对既有 `DATA_SOURCE_CATEGORY` 列增加一个**可选**过滤条件，沿用本文件 §4 既有的 `UPPER(DATA_SOURCE_CATEGORY)` 大小写兼容比较；不新增列、不改写存量数据。
+- 本轮为纯文档草案任务：未访问数据库、未执行任何 SQL/DDL/DML；实现状态 `NOT_STARTED`。
+- 本轮新增验收 `DS-AC-116~140` 均为 `NOT_RUN`；既有正式复验统计 `PASS=113/FAIL=0/BLOCKED=2/NOT_RUN=0` 逐字保留。

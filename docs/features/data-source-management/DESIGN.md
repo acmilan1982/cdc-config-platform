@@ -402,3 +402,115 @@
 - 实现状态仍为 `NOT_STARTED`；
 - 106 条验收仍为 `NOT_RUN`；
 - 依据为本批准任务 `DATA-SOURCE-DESIGN-APPROVAL-CLOSEOUT-001` 及 `fdb9ecaf5bc24373e586d853b4174d1a9cd8bbfc` 最终复审通过基准。
+
+---
+
+## 11. 列表首页选择性接入查询列表页公共组件设计（`DRAFT_PENDING_USER_REVIEW`，未实现）
+
+> 状态：`DRAFT_PENDING_USER_REVIEW`。本节为任务 `DATA-SOURCE-LIST-PAGE-SELECTIVE-QUERY-LIST-INTEGRATION-BASELINE-001`（`task_type=FEATURE_ADJUSTMENT_BASELINE_DRAFT`）的设计草案，**尚未批准、尚未实现、尚未验收**；实现授权 `NOT_GRANTED_IN_THIS_TASK`。
+> §0~§10 的既有 `APPROVED` 设计基线与追踪结论保持原样、编号与正文逐字冻结；本节只就 `/config/data-source` **第一个主列表页面**的选择性接入给出草案结论，并明确其与既有设计的局部替代边界。
+> 关联需求：`REQUIREMENTS.md` §22 的 `DS-REQ-116~138`；关联验收：`ACCEPTANCE.md` §4.16 的 `DS-AC-116~140`（全部 `NOT_RUN`）。
+
+### 11.1 分层职责与边界
+
+| 层 | 本轮职责 | 明确不承担 |
+|---|---|---|
+| 公共页面壳（`QueryListPageShell`/`QueryListQueryPanel`/`QueryListActions`/`QueryListResultPanel`） | 提供标题与说明、查询条件容器、查询/重置动作、结果卡片与槽位 | CRUD 状态、分页、Tooltip 状态、API 请求、弹窗状态、数据源业务规则 |
+| 数据源管理 Feature | 持有查询草稿与生效条件、请求与错误语义、空状态、表格与行操作、弹窗 | 不复制一套平行等价 CSS；不改写公共组件实现 |
+| 路由/布局 | `/config/data-source` 保持既有 meta；稳定滚动条槽仍只对 `/monitor/data-source-state` 生效 | 不为本页启用 `stableScrollbarGutter` |
+
+- 公共组件接入**不改变**请求次数、请求时机、错误语义、空状态、列表刷新时机、角色规范化、删除行为与弹窗行为（`DS-REQ-120`）。
+- 接入方式为**选择性复用**，不是把 CRUD 配置管理页改造成只读监控页（`DS-REQ-117`）。
+
+### 11.2 组件接入映射与槽位归属
+
+| 页面能力 | 公共组件 | 槽位/契约 | 归属 |
+|---|---|---|---|
+| 页面标题与一句话说明 | `QueryListPageShell` | props `title`/`description`，默认槽直挂 `.ql-page` | 公共 |
+| 查询条件容器 | `QueryListQueryPanel` | 默认槽承载三个文本条件 + 角色单选 | 公共容器 / Feature 内容 |
+| 查询 / 重置 | `QueryListActions` | emits `query`/`reset`；`queryWidthPx`/`resetWidthPx` 四值同锁 | 公共 |
+| 结果卡片 | `QueryListResultPanel` | `toolbar` 槽 = “新增数据源”；`body` 槽 = Feature 表格、空状态与行操作 | 公共容器 / Feature 内容 |
+| 自动刷新工具栏 | **不接入** `QueryListRefreshToolbar` | — | — |
+| 稳定滚动条槽 | **不自动启用** | — | — |
+
+- 现有公共组件契约以当前远程已接受实现为准（`frontend/src/components/query-list/**`），本节不修改其 props / slots / emits / CSS。
+
+### 11.3 页面结构与结果区头部
+
+- 三段结构：① 页面标题与一句话说明（`QueryListPageShell`）；② 查询条件区（`QueryListQueryPanel` + `QueryListActions`）；③ 结果列表区（`QueryListResultPanel`）。
+- 结果区头部：左侧“数据源列表” + 当前结果数量；右侧“新增数据源”；头部下方直接进入表格，不增加双击提示行。
+- 不显示刷新倒计时、最近刷新时间或“立即刷新”；不显示“双击数据行可编辑”文案，但双击编辑保留（`DS-REQ-122`/`124`）。
+
+### 11.4 角色查询条件与 API 参数设计
+
+- 查询区在既有三个文本条件之外新增“角色”单选，固定取值：全部（默认）/ 源库（`SOURCE`）/ 目标库（`TARGET`）。
+- 过滤使用规范化代码 `SOURCE`/`TARGET`，与既有 `DATA_SOURCE_CATEGORY` 大小写兼容比较复用（`DESIGN §7`、`DATABASE §4`）；**不**使用中文展示值作为数据库查询值。
+- 角色与其他非空条件 **AND** 组合；文本条件继续遵守既有 trim 与忽略大小写包含规则。
+- API 侧定义一个**可选**查询参数（详细草案见 `API.md` §9）：缺席/空值 = 全部；合法值仅 `SOURCE`/`TARGET`；非法值按当前统一参数校验契约处理（HTTP 400 / `code=400` / 字段级消息），**不新增**业务错误码（既有 `40001` 按 `API.md` §5.2 仅用于新增/编辑请求体，不适用于列表查询参数）。
+- **不引入任何数据库结构变化**（无 DDL、无新列、无索引/约束变化）。
+
+### 11.5 主列表、操作列与删除
+
+- 主列表列清单、默认排序（`DS-REQ-010` ID 升序）、有效记录范围、角色标签均保持既有结论（`DS-REQ-129`）。
+- 移除每行可见“编辑”按钮；编辑入口只保留双击行（局部替代 `DS-REQ-013` 编辑项、`DS-REQ-014` 中“单击编辑按钮”表述；`DS-REQ-103` 适用前提随之变化）。
+- 操作列只保留一个带文字的“更多”下拉：
+  - 源库行：`目标库命名策略` / 分隔线 / 红色危险项 `删除`；
+  - 目标库行：`业务属性` / 分隔线 / 红色危险项 `删除`；
+  - 菜单不含“编辑”；菜单与下拉面板事件不冒泡触发双击编辑或其他行事件。
+- 删除继续使用既有二次确认、并发阻断、错误提示与“仅删除主表记录”语义（`DS-REQ-091~097` 不变）；危险样式不改变删除业务语义。
+
+### 11.6 无分页与几何稳定性
+
+- 前后端继续不使用分页参数或分页交互，保持“记录总数不超过 100、一次加载全部”的已批准边界（`DS-REQ-005` 继续有效）；不因 `QueryListResultPanel.body` 支持承载分页而增加分页。
+- 首次加载与查询 Loading 期间，查询/重置按钮宽度四值同锁、结果卡片几何保持稳定，无跳变。
+- 页面不提供自动刷新、手工刷新工具栏或“立即刷新”。
+
+### 11.7 Tooltip 结论（保留既有机制）
+
+- 当前主列表实现事实：数据源 ID、数据源名称、主机地址、Service Name/数据库名、用户名等列使用 Element Plus `show-overflow-tooltip`。
+- 本轮**保留**该机制；**不删除、不弱化、不改变**，包括本轮范围外的命名策略弹窗 Tooltip。
+- 迁移到公共单实例 Tooltip（`QueryListTooltipHost` + `useQueryListTooltip`）**未纳入本轮**：迁移会改变触发/延迟/单实例语义，属可观测行为变化，缺少充分必要性，故优先保留现有机制。
+
+### 11.8 迁移授权与基线边界
+
+- 查询列表页模板基线（`docs/baseline/query-list-page-template/`）面向**只读查询列表页**，其 `MIGRATION.md` §1.1 将“数据源管理（含新增/编辑/删除）”列为**不适合直接套用**，§5 将含 CRUD 的配置管理页面列为**不纳入迁移范围**，并给出“若后续确需统一视觉，应另立任务评估”的路径。
+- 本轮为项目负责人于 **2026-09-18** 明确授权“数据源管理列表页选择性接入查询列表页公共组件”后，依据该“另立任务评估”路径发起的**页面范围化、行为不变**的选择性接入草案；非模板级“页面迁移”。
+- 该授权与仍未实施的状态以**追加**方式记录于 `docs/baseline/query-list-page-template/MIGRATION.md`（不改写既有历史）；模板级 `page_migration_status`/`page_migration_authorization_status`/`pilot_page_selection_status` 维持 `NOT_STARTED`/`NOT_GRANTED`/`NOT_DECIDED` 不变，其他页面未获授权。
+
+### 11.9 需求追踪（`DS-REQ-116~138`）
+
+| 需求 | 设计落点 |
+|---|---|
+| DS-REQ-116 | §11.1、§11.8 |
+| DS-REQ-117 | §11.1、§11.2 |
+| DS-REQ-118 | §11.2 |
+| DS-REQ-119 | §11.2、§11.6 |
+| DS-REQ-120 | §11.1 |
+| DS-REQ-121 | §11.3 |
+| DS-REQ-122 | §11.3、§11.6 |
+| DS-REQ-123 | §11.3 |
+| DS-REQ-124 | §11.3、§11.5 |
+| DS-REQ-125 | §11.4 |
+| DS-REQ-126 | §11.4 |
+| DS-REQ-127 | §11.4（重置语义沿用既有 `DS-REQ-009`，不套用模板默认） |
+| DS-REQ-128 | §11.4 |
+| DS-REQ-129 | §11.5 |
+| DS-REQ-130 | §11.5 |
+| DS-REQ-131 | §11.5 |
+| DS-REQ-132 | §11.5 |
+| DS-REQ-133 | §11.5 |
+| DS-REQ-134 | §11.5 |
+| DS-REQ-135 | §11.7 |
+| DS-REQ-136 | §11.6 |
+| DS-REQ-137 | §11.6 |
+| DS-REQ-138 | §11.2、§11.8 |
+
+## 12. 本轮草案变更记录（2026-09-19）
+
+- 2026-09-19；
+- 新增 §11「列表首页选择性接入查询列表页公共组件设计（`DRAFT_PENDING_USER_REVIEW`，未实现）」；
+- §0~§10 既有 `APPROVED` 设计基线与追踪结论逐字冻结、未修改；
+- 实现状态仍为 `NOT_STARTED`（本轮为纯文档草案，未修改任何 `.vue`/`.ts`/`.java`/测试/依赖/配置/SQL，未访问数据库/ZK/Kafka，未启动服务）；
+- 本轮新增需求 `DS-REQ-116~138` 与本轮新增验收 `DS-AC-116~140` 均为 `NOT_RUN`；
+- 既有正式复验统计 `PASS=113/FAIL=0/BLOCKED=2/NOT_RUN=0`（阻塞 `DS-AC-104`/`DS-AC-108`）逐字保留，未置 `IMPLEMENTED_ACCEPTED`；
+- 依据任务 `DATA-SOURCE-LIST-PAGE-SELECTIVE-QUERY-LIST-INTEGRATION-BASELINE-001`。

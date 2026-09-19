@@ -472,3 +472,61 @@
 - 实现状态仍为 `NOT_STARTED`；
 - 106 条验收仍为 `NOT_RUN`；
 - 依据为本批准任务 `DATA-SOURCE-DESIGN-APPROVAL-CLOSEOUT-001` 及 `fdb9ecaf5bc24373e586d853b4174d1a9cd8bbfc` 最终复审通过基准。
+
+---
+
+## 9. 角色查询参数草案（`DRAFT_PENDING_USER_REVIEW`，未实现）
+
+> 状态：`DRAFT_PENDING_USER_REVIEW`。本节为任务 `DATA-SOURCE-LIST-PAGE-SELECTIVE-QUERY-LIST-INTEGRATION-BASELINE-001` 的 API 设计草案，**尚未批准、尚未实现**；实现授权 `NOT_GRANTED_IN_THIS_TASK`。
+> 本节只对 `GET /api/data-sources` 列表接口**追加一个可选参数**；§4.1 既有三参数、无分页结构、响应字段与 `FG_ACTIVE='1'` 过滤等结论**继续有效**，不被替代。
+> 关联需求 `DS-REQ-128`；关联验收 `DS-AC-120`~`DS-AC-124`、`DS-AC-139`（全部 `NOT_RUN`）。
+
+### 9.1 参数定义
+
+`GET /api/data-sources` 在既有 `id` / `name` / `host` 之外，追加可选查询参数：
+
+| 参数 | 类型 | 必填 | 合法值 | 说明 |
+|---|---|---|---|---|
+| `category` | string | 否 | `SOURCE` / `TARGET` | 按数据源角色过滤；**缺席或空值 = 不做角色限制（“全部”）** |
+
+- **命名依据**：当前列表查询对象为 `DataSourceQuery { id, name, host }`，项目既有习惯为“短小写单词”参数名；领域与代码中的角色术语为 `dataSourceCategory`/`DataSourceCategory`（规范化值 `SOURCE`/`TARGET`），故取 `category`。项目代码与数据库列中不存在名为 `role` 的术语，故**不采用** `role`。
+- **取值来源**：必须使用规范化代码 `SOURCE` / `TARGET`；**不得**使用中文展示值（“源库/目标库”）作为查询值。后端沿用既有 `UPPER(DATA_SOURCE_CATEGORY)` 大小写兼容比较执行过滤（`DATABASE.md` §4）。
+- **组合语义**：`category` 与任一非空文本条件 **AND** 组合；文本条件继续遵守 trim 与 `UPPER(col) LIKE UPPER('%'||?||'%')` 忽略大小写包含规则（§4.1、`DATABASE.md` §4）。
+- **数据库影响**：无。不新增列、索引、约束或任何 DDL；仅对既有 `DATA_SOURCE_CATEGORY` 列增加一个可选过滤条件。
+
+### 9.2 非法值行为
+
+非法值（例如 `category=FOO`）的处理**沿用当前统一参数校验契约**，与既有字段校验路径一致（§5.1）：
+
+| 场景 | HTTP | code | 结构 |
+|---|---|---|---|
+| 非法 `category`（非 `SOURCE`/`TARGET`） | 400 | 400 | 字段级校验消息（`ApiResponse.fail(400, "<field>: <message>")`） |
+
+- **不新增业务错误码**。理由：§5.2 明确将既有 `40001`（角色非法）限定为“**仅用于新增/编辑主表请求中 `dataSourceCategory` 非 `SOURCE`/`TARGET`**”，不适用于列表查询参数；列表查询参数属“请求参数校验失败”范畴，应走 `MethodArgumentNotValidException` → HTTP 400 / `code=400` 的统一契约。
+- 该设计保持与 `DS-AC-105` 确立的“非法参数返回 HTTP 400 而非 500”方向一致，并避免在只读查询路径上引入 CRUD 语义的业务码。
+
+### 9.3 与 §4.1 的差异摘要
+
+| 项目 | §4.1（既有 `APPROVED`） | §9（本轮草案） |
+|---|---|---|
+| 查询参数 | `id` / `name` / `host`（均可选） | 追加可选 `category`（`SOURCE`/`TARGET`）；三者不变 |
+| 角色限制 | 无 | `category` 缺席/空 = 全部；提供时按规范化代码过滤 |
+| 分页 | 不接受 `pageNum`/`pageSize` | **不变**（继续不接受） |
+| 响应结构 | 数组、非分页 | **不变** |
+| `FG_ACTIVE` 过滤与排序 | `FG_ACTIVE='1'`、按 `DATA_SOURCE_ID` 升序 | **不变** |
+| 校验失败 | §5.1 统一契约 | `category` 非法走同一契约（HTTP 400 / `code=400`） |
+
+### 9.4 需求追踪（`DS-REQ-128`）
+
+| 需求 | 落点 |
+|---|---|
+| DS-REQ-128 | §9.1（可选参数、缺席/空=全部、合法值仅 `SOURCE`/`TARGET`、命名一致性）、§9.2（非法值统一校验契约）、§9.3（无数据库结构变化） |
+
+## 10. 本轮草案变更记录（2026-09-19）
+
+- 2026-09-19；
+- 新增 §9「角色查询参数草案（`DRAFT_PENDING_USER_REVIEW`，未实现）」；
+- §0~§8 既有 `APPROVED` API 基线逐字冻结、未修改；
+- 实现状态仍为 `NOT_STARTED`（本轮为纯文档草案，未修改任何 `.vue`/`.ts`/`.java`/测试/依赖/配置/SQL，未访问数据库/ZK/Kafka，未启动服务）；
+- 本轮新增验收 `DS-AC-116~140` 均为 `NOT_RUN`；既有正式复验统计 `PASS=113/FAIL=0/BLOCKED=2/NOT_RUN=0` 逐字保留；
+- 依据任务 `DATA-SOURCE-LIST-PAGE-SELECTIVE-QUERY-LIST-INTEGRATION-BASELINE-001`。
