@@ -276,11 +276,15 @@ new_adjustment_acceptance_status=ALL_NOT_RUN
 | 策略列表/新增/编辑/删除（`sourceId` 校验） | `sourceId` 记录须 `FG_ACTIVE IN ('1','0') AND UPPER(DATA_SOURCE_CATEGORY)='SOURCE'` | 仅 `CDC_DATA_SOURCE_EXTEND` | `DS-REQ-156` |
 | 编辑态连接测试（未改密码时读取持久化密码） | 按 `originalDataSourceId` 定位 `FG_ACTIVE IN ('1','0')` 记录读取密码 | 无 | `DS-REQ-157` |
 | **启用**（新增操作） | 先读 `DATA_SOURCE_ID` 当前记录（不按 `FG_ACTIVE='1'` 过滤）：`'0'` → 条件 `UPDATE ... AND FG_ACTIVE='0'` 写 `'1'`；`'1'` → 幂等成功不写；`NULL`/非 `0`/`1` → `40250` 不写；记录不存在 → `40400` 不写 | `FG_ACTIVE` 一列 | `DS-REQ-168`、`DS-REQ-170` |
-| **停用**（新增操作） | 先读 `DATA_SOURCE_ID` 当前记录（不按 `FG_ACTIVE='1'` 过滤）：`'1'` → 条件 `UPDATE ... AND FG_ACTIVE='1'` 写 `'0'`；`NULL`/非 `0`/`1` → 条件 `UPDATE ... AND FG_ACTIVE IS NULL`（按读到的原值匹配）写 `'0'` 归一化；`'0'` → 幂等成功不写；记录不存在 → `40400` 不写 | `FG_ACTIVE` 一列 | `DS-REQ-168`、`DS-REQ-170` |
+| **停用**（新增操作） | 先读 `DATA_SOURCE_ID` 当前记录（不按 `FG_ACTIVE='1'` 过滤）：`'1'` → 条件 `UPDATE ... AND FG_ACTIVE='1'` 写 `'0'`；`'0'` → 幂等成功不写；`NULL`/非 `0`/`1` → 使用 §9.3 的 NULL-safe 原状态匹配条件执行条件 `UPDATE` 写 `'0'` 归一化（`NULL` 用 `FG_ACTIVE IS NULL`，非空异常值用 `FG_ACTIVE=:observedStatus`）；记录不存在 → `40400` 不写 | `FG_ACTIVE` 一列 | `DS-REQ-168`、`DS-REQ-170` |
 | 目标候选（**不变**） | `FG_ACTIVE='1' AND UPPER(DATA_SOURCE_CATEGORY)='TARGET'` | 无 | `DS-REQ-159`（不作替代） |
 | 新增（**不变**） | 插入主表，`FG_ACTIVE` 写 `'1'` | 同 §2 | `DS-REQ-176` |
 
-- “`FG_ACTIVE IN ('1','0')`”是本轮为表达便利采用的书写形式；实现可用等价条件（如 `FG_ACTIVE = '1' OR FG_ACTIVE = '0'`），语义相同：**仅** `'1'` 与 `'0'` 被接受，`NULL`/非 `0`/`1` 一律视为非法并返回 `40400`（对启停接口则返回 `40250`）。不得使用 `FG_ACTIVE <> '1'`、`FG_ACTIVE IS NOT NULL` 等会**放宽**到其他历史值的写法。
+- “`FG_ACTIVE IN ('1','0')`”是本轮为表达便利采用的书写形式；实现可用等价条件（如 `FG_ACTIVE = '1' OR FG_ACTIVE = '0'`），语义相同：**仅** `'1'` 与 `'0'` 被接受。不得使用 `FG_ACTIVE <> '1'`、`FG_ACTIVE IS NOT NULL` 等会**放宽**到其他历史值的写法。
+- `NULL`/非 `0`/`1` 记录的处置**按接口分场景冻结**：
+  - **非启停维护接口**（详情、编辑、删除、业务属性读/保存、源库命名策略列表/新增/编辑/删除、编辑态连接测试）：主记录仅接受 `'1'`/`'0'`，`NULL`/非 `0`/`1` 一律视为非法并返回 `40400`。
+  - **`enable`**：`NULL`/非 `0`/`1` 返回 `40250`，**不写库**。
+  - **`disable`**：`NULL`/非 `0`/`1` **不**返回 `40250`，改用 §9.3 的 NULL-safe 原状态匹配条件执行 `UPDATE`，显式归一化为 `'0'`。
 - 除上表列出的变化外，§2 其余行的读取字段、写入字段、事务与“禁止触碰”结论**继续有效**。
 
 ### 9.3 启停写入边界（新增）
@@ -299,6 +303,7 @@ WHERE DATA_SOURCE_ID = :dataSourceId
       )
 ```
 
+- **`observedStatus` 的原状态匹配**：`observedStatus` 为 `NULL` 时**只**匹配数据库 `NULL`；`observedStatus` 为 `'X'` 等**非空异常值**时通过 `FG_ACTIVE = :observedStatus` **精确匹配**；**不得**把所有异常状态统一写成 `FG_ACTIVE IS NULL`（`IS NULL` 无法匹配非空异常值，会导致异常记录停用归一化遗漏）。
 - **不得**退化为无状态条件的 `UPDATE CDC_DATA_SOURCE SET FG_ACTIVE='0' WHERE DATA_SOURCE_ID=?`——无状态条件 SQL 会破坏“当前已为 `'0'` 时不执行 DML”的幂等约束，也无法独立区分“目标不存在”与“已经为 `'0'`”，并可能让读取后的旧请求覆盖新状态。状态机（`enable`/`disable` 各分支）见 `DESIGN.md` §13.5 与 `API.md` §11.3。
 - **只更新 `FG_ACTIVE` 一列**；不修改任何其他列；**不级联** `CDC_DATA_SOURCE_EXTEND`、客户端、订阅或任何其他表；**不访问**源库；**不操作**进程/ZooKeeper/Kafka（`DS-REQ-168`/`DS-REQ-169`）。
 - **影响行数与并发（完全冻结）**：非幂等路径的条件 `UPDATE` 受影响行数为 `1` → 成功；**不为 `1`（包括读取后被其他请求改变导致 `0` 行）→ `50002`（`STATUS_FAILED`）并回滚当前事务**，不留中间状态（`DS-REQ-171`；错误码见 `API.md` §11.4）。**不**引入重试、再次读取后改判成功、悲观锁、乐观版本列或新的错误码。重复目标状态**只有**在本事务首次读取时已处于目标状态，才按幂等成功处理。并发相反请求的最终数据库状态允许为其中一个请求的目标值；发生条件 `UPDATE` 冲突的请求返回 `50002`。**不加锁**、**不使用**乐观版本列（`DS-REQ-171`）。
@@ -347,3 +352,11 @@ WHERE DATA_SOURCE_ID = :dataSourceId
 - **§9.2 启停两行重写**：明确两个操作均**先读**当前记录（不按 `FG_ACTIVE='1'` 过滤），非幂等路径使用**带原状态条件**的 `UPDATE`（`enable` 匹配 `'0'`；`disable` 匹配 `'1'` 或 `NULL`/非 `0`/`1` 的原始值）；`'0'`（`disable`）与 `'1'`（`enable`）保持幂等不写；记录不存在 → `40400` 不写。
 - **§9.3 重写**：删除无状态条件的 `UPDATE ... WHERE DATA_SOURCE_ID=?`，给出等价伪 SQL（`DATA_SOURCE_ID` + 事务首次读取的原始 `FG_ACTIVE`，含 `NULL` 匹配）；“单条 `UPDATE` 短事务”修正为“**每次非幂等状态变更最多执行一条 `UPDATE`，允许 `UPDATE` 前先读取**”；影响行数 ≠ 1（含读取后被改变导致 `0` 行）→ `50002` 回滚；并发冲突请求返回 `50002`；不引入重试/悲观锁/乐观版本/新错误码。
 - §1 物理结构、§2/§4 既有单元格、§3 更新/删除边界、§5 数据安全、§8 既有声明**逐字冻结**；`DS-REQ-001~177` 编号与正文零变化；本轮草案状态仍为 `DRAFT_PENDING_USER_REVIEW`、`implementation_status=NOT_STARTED`、`implementation_authorization_status=NOT_GRANTED_IN_THIS_TASK`、`new_adjustment_acceptance_status=ALL_NOT_RUN`；未访问数据库/ZK/Kafka，未启动服务。
+
+### 10.3 R2 极小修订（2026-09-19，任务 `DATA-SOURCE-LIST-ALL-STATUS-ENABLE-DISABLE-UI-ADJUSTMENT-BASELINE-001-R2`）
+
+- 依据 ChatGPT 对远程 R1 提交 `c4e1048...` 的复审结论 `CHANGES_REQUIRED`（唯一阻塞，两处关联表述错误），只做 §9.2 的最小修订，不重写 §9.3 通用条件。
+- **§9.2「停用」行修正**：`NULL`/非 `0`/`1` 不再整体写成 `FG_ACTIVE IS NULL`，改为“使用 §9.3 的 NULL-safe 原状态匹配条件”（`NULL` 用 `FG_ACTIVE IS NULL`，非空异常值用 `FG_ACTIVE=:observedStatus`）；`'0'` 仍幂等不写、记录不存在仍 `40400` 不写。
+- **§9.2 错误码说明修正**：删除旧的“`NULL`/非 `0`/`1` 一律视为非法、并把启停接口一并归入 `40250`”整体表述，改为分场景：非启停维护接口 → `40400`；`enable` → `40250` 不写库；`disable` → **不**返回 `40250`，按 NULL-safe 原状态条件归一化为 `'0'`。
+- **§9.3 极小交叉引用**：新增一条 `observedStatus` 原状态匹配说明（`NULL` 只匹配 `NULL`；非空异常值经 `FG_ACTIVE = :observedStatus` 精确匹配；禁止统一写成 `FG_ACTIVE IS NULL`）；§9.3 伪 SQL、`50002` 回滚与并发结论**不变**。
+- §9.1 零数据库变化声明、§9.4 局部替代清单、§9.5 追踪、§2/§4 既有单元格、§1 物理结构、§3 更新/删除边界、§5 数据安全、§8 既有声明**逐字冻结**；`DS-REQ-001~177` 编号与正文零变化；本轮草案状态仍为 `DRAFT_PENDING_USER_REVIEW`、`NOT_STARTED`、`NOT_GRANTED_IN_THIS_TASK`、`ALL_NOT_RUN`；未访问数据库/ZK/Kafka，未启动服务。

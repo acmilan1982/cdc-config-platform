@@ -12,6 +12,14 @@
 >
 > 以下为初版原文，保留历史内容，仅在被 R1 取代处就近标注 **【已被 R1 取代】**。
 
+> ## ⚠️ R2 勘误声明（2026-09-19，任务 `...-001-R2`）
+>
+> - R1 对总体方案的修订（两个接口均**先读取**原始 `FG_ACTIVE`、**幂等不写**、**带原状态条件的 `UPDATE`**、影响行数 ≠ 1 → `50002` 回滚、并发冲突返回 `50002`、**任何启停失败均不刷新列表**）**继续有效**，本 R2 不推翻 R1。
+> - 但 ChatGPT 对远程 R1 提交 `c4e10486465fbb406dbc068ff0998c49edd4e53b` 的复审仍返回 `CHANGES_REQUIRED`（唯一阻塞）：**R1 之后 `DATABASE.md §9.2` 仍残留两处关联表述错误**——① 把「停用」的 `NULL`/非 `0`/`1` 统一写成 `FG_ACTIVE IS NULL`（`IS NULL` 无法匹配 `'X'` 等非空异常值，会使非空异常记录停用归一化失败）；② 矩阵后说明仍写成“`NULL`/非 `0`/`1` 一律视为非法……对启停接口返回 `40250`”（错误地把 `disable` 也包含在内）。
+> - 本 R2 以“**NULL-safe 原状态匹配**”（`NULL` 用 `FG_ACTIVE IS NULL`，非空异常值用 `FG_ACTIVE=:observedStatus`）与“**仅 `enable` 异常返回 `40250`；`disable` 异常不返回 `40250`，按原状态条件归一化为 `'0'`**”取代上述错误表述。
+> - 本报告初版历史内容**不删除**；R2 只修正 `DATABASE.md §9.2`，未改 DESIGN/API/ACCEPTANCE 的已冻结状态机。
+> - 修订详情见 [DATA-SOURCE-LIST-ALL-STATUS-ENABLE-DISABLE-UI-ADJUSTMENT-BASELINE-001-R2.md](./DATA-SOURCE-LIST-ALL-STATUS-ENABLE-DISABLE-UI-ADJUSTMENT-BASELINE-001-R2.md)。
+
 - 任务编号：`DATA-SOURCE-LIST-ALL-STATUS-ENABLE-DISABLE-UI-ADJUSTMENT-BASELINE-001`
 - 日期：2026-09-19
 - 分支：`develop`
@@ -267,3 +275,4 @@ next_step=CHATGPT_REMOTE_GIT_REVIEW_THEN_PROJECT_OWNER_BASELINE_APPROVAL_DECISIO
 |---|---|---|
 | 2026-09-19 | 创建本报告：记录读取范围、当前事实、歧义冻结、变更文件、局部替代清单、启停接口/状态机/错误/事务摘要、停用/异常操作矩阵、追踪完整性、既有与两轮调整验收统计、未执行事项与下一步入口 | DATA-SOURCE-LIST-ALL-STATUS-ENABLE-DISABLE-UI-ADJUSTMENT-BASELINE-001（纯文档任务） |
 | 2026-09-19 | **R1 勘误标注**：在报告顶部新增 R1 勘误声明，并对 §3.1、§6、§8 中被 R1 取代的结论（`traceability_status=COMPLETE`、无状态条件 `UPDATE`/单条 `UPDATE` 表述、`40400`/`40250` 后刷新、并发错误码留待实现期）就近加 **【已被 R1 取代】** 标注；历史内容保留未删；本轮状态仍为 `DRAFT_PENDING_USER_REVIEW`、未授权实现、验收全部 `NOT_RUN` | DATA-SOURCE-LIST-ALL-STATUS-ENABLE-DISABLE-UI-ADJUSTMENT-BASELINE-001-R1（ChatGPT 远程复审 `CHANGES_REQUIRED` 定向勘误；纯文档任务） |
+| 2026-09-19 | **R2 勘误标注**：在 R1 勘误声明之后新增 R2 勘误声明，说明 R1 总体方案修订继续有效、R1 后 `DATABASE.md §9.2` 仍残留两处错误（`NULL`/非 `0`/`1` 统一写成 `FG_ACTIVE IS NULL`；`40250` 误含 `disable`），并由 R2 以 NULL-safe 原状态匹配与“仅 `enable` 异常返回 `40250`”取代；初版历史内容保留未删；本轮状态仍为 `DRAFT_PENDING_USER_REVIEW`、未授权实现、验收全部 `NOT_RUN` | DATA-SOURCE-LIST-ALL-STATUS-ENABLE-DISABLE-UI-ADJUSTMENT-BASELINE-001-R2（ChatGPT 远程 R2 复审 `CHANGES_REQUIRED` 定向勘误；纯文档任务） |

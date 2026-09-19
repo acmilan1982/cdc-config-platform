@@ -1,5 +1,14 @@
 # DATA-SOURCE-LIST-ALL-STATUS-ENABLE-DISABLE-UI-ADJUSTMENT-BASELINE-001-R1 执行报告
 
+> ## ⚠️ R2 勘误声明（2026-09-19，任务 `...-001-R2`）
+>
+> **本报告（R1）关于“跨文档完全一致 / 无残留冲突”的结论已被 R2 定向修正，阅读本报告时须同时阅读 R2 结论。**
+>
+> - ChatGPT 对远程 R1 提交 `c4e10486465fbb406dbc068ff0998c49edd4e53b` 的复审结论仍为 **`CHANGES_REQUIRED`**，`blocking_finding_count=1`，`implementation_may_start=NO`：**唯一阻塞位于 `DATABASE.md §9.2`**（两处关联表述错误）。
+> - 具体地，本报告 §5「静态检查结果」中“**跨文档一致性**……对读取、幂等、条件 `UPDATE`、`50002`、失败保留列表的表述一致”以及“冲突表述清除”两项结论**不完整**：`DATABASE.md §9.2` 仍把「停用」的 `NULL`/非 `0`/`1` 统一写成 `FG_ACTIVE IS NULL`，且错误码说明仍写成“`NULL`/非 `0`/`1`……对启停接口返回 `40250`”（误含 `disable`）。
+> - R1 的其余修订（删除虚构需求引用、先读、幂等不写、带原状态条件 `UPDATE`、并发 `50002`、失败不刷新）**继续有效**，本 R2 只修正上述 `DATABASE.md §9.2` 两处。
+> - 本报告历史内容**不删除**；修订详情见 [DATA-SOURCE-LIST-ALL-STATUS-ENABLE-DISABLE-UI-ADJUSTMENT-BASELINE-001-R2.md](./DATA-SOURCE-LIST-ALL-STATUS-ENABLE-DISABLE-UI-ADJUSTMENT-BASELINE-001-R2.md)。
+
 - 任务编号：`DATA-SOURCE-LIST-ALL-STATUS-ENABLE-DISABLE-UI-ADJUSTMENT-BASELINE-001-R1`
 - 日期：2026-09-19
 - 分支：`develop`
@@ -155,3 +164,4 @@ next_step=CHATGPT_REMOTE_GIT_R1_REVIEW_THEN_PROJECT_OWNER_BASELINE_APPROVAL_DECI
 | 日期 | 变更 | 依据 |
 |---|---|---|
 | 2026-09-19 | 创建本报告：记录 Git 现场、三类阻塞问题的修订前/后结论、实际修改文件、编号/数量/状态/正文保护检查、静态检查结果、未执行事项与下一步入口 | DATA-SOURCE-LIST-ALL-STATUS-ENABLE-DISABLE-UI-ADJUSTMENT-BASELINE-001-R1（ChatGPT 远程复审 `CHANGES_REQUIRED` 定向修订；纯文档任务） |
+| 2026-09-19 | **R2 勘误**：在报告标题后新增 R2 勘误声明，定向修正本报告 §5 中“跨文档一致性 / 无残留冲突”的不完整结论（R1 后 `DATABASE.md §9.2` 仍残留“异常状态统一写成 `FG_ACTIVE IS NULL`”与“`40250` 误含 `disable`”两处错误），指向 R2 报告；R1 历史内容保留未删 | DATA-SOURCE-LIST-ALL-STATUS-ENABLE-DISABLE-UI-ADJUSTMENT-BASELINE-001-R2（ChatGPT 远程 R2 复审 `CHANGES_REQUIRED` 定向勘误；纯文档任务） |
