@@ -5,6 +5,7 @@ import com.bsoft.cdcconfig.datasource.dto.DataSourceCreateDTO;
 import com.bsoft.cdcconfig.datasource.dto.DataSourceUpdateDTO;
 import com.bsoft.cdcconfig.datasource.dto.NamingStrategyDTO;
 import com.bsoft.cdcconfig.datasource.dto.TestConnectionDTO;
+import com.bsoft.cdcconfig.datasource.query.DataSourceQuery;
 import com.bsoft.cdcconfig.datasource.service.DataSourceNamingStrategyService;
 import com.bsoft.cdcconfig.datasource.service.DataSourceService;
 import com.bsoft.cdcconfig.datasource.vo.BizAttrVO;
@@ -15,6 +16,7 @@ import com.bsoft.cdcconfig.datasource.vo.TargetOptionVO;
 import com.bsoft.cdcconfig.datasource.vo.TestConnectionResultVO;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import org.junit.jupiter.api.Test;
+import org.mockito.ArgumentCaptor;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.web.servlet.WebMvcTest;
 import org.springframework.boot.test.mock.mockito.MockBean;
@@ -23,9 +25,15 @@ import org.springframework.test.web.servlet.MockMvc;
 
 import java.util.Collections;
 
+import static org.hamcrest.Matchers.allOf;
+import static org.hamcrest.Matchers.containsString;
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertNull;
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.ArgumentMatchers.eq;
 import static org.mockito.Mockito.doNothing;
+import static org.mockito.Mockito.never;
+import static org.mockito.Mockito.times;
 import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.delete;
@@ -76,6 +84,51 @@ class DataSourceControllerTest {
                 .andExpect(jsonPath("$.code").value(200));
     }
 
+    @Test
+    void list_categorySourceOrTarget_shouldPassNormalizedValue() throws Exception {
+        when(dataSourceService.list(any())).thenReturn(Collections.emptyList());
+
+        mockMvc.perform(get("/api/data-sources").param("category", "SOURCE"))
+                .andExpect(status().isOk());
+        mockMvc.perform(get("/api/data-sources").param("category", "TARGET"))
+                .andExpect(status().isOk());
+
+        ArgumentCaptor<DataSourceQuery> captor = ArgumentCaptor.forClass(DataSourceQuery.class);
+        verify(dataSourceService, times(2)).list(captor.capture());
+        assertEquals("SOURCE", captor.getAllValues().get(0).getCategory());
+        assertEquals("TARGET", captor.getAllValues().get(1).getCategory());
+    }
+
+    @Test
+    void list_absentEmptyOrBlankCategory_shouldNormalizeToNull() throws Exception {
+        when(dataSourceService.list(any())).thenReturn(Collections.emptyList());
+
+        mockMvc.perform(get("/api/data-sources")).andExpect(status().isOk());
+        mockMvc.perform(get("/api/data-sources").param("category", "")).andExpect(status().isOk());
+        mockMvc.perform(get("/api/data-sources").param("category", "   ")).andExpect(status().isOk());
+
+        ArgumentCaptor<DataSourceQuery> captor = ArgumentCaptor.forClass(DataSourceQuery.class);
+        verify(dataSourceService, times(3)).list(captor.capture());
+        for (DataSourceQuery query : captor.getAllValues()) {
+            assertNull(query.getCategory());
+        }
+    }
+
+    @Test
+    void list_illegalCategory_shouldReturn400WithFieldMessageAndNotReachService() throws Exception {
+        mockMvc.perform(get("/api/data-sources").param("category", "source"))
+                .andExpect(status().isBadRequest())
+                .andExpect(jsonPath("$.code").value(400))
+                .andExpect(jsonPath("$.message").value("角色仅支持 SOURCE 或 TARGET"));
+
+        mockMvc.perform(get("/api/data-sources").param("category", "FOO"))
+                .andExpect(status().isBadRequest())
+                .andExpect(jsonPath("$.code").value(400))
+                .andExpect(jsonPath("$.message").value("角色仅支持 SOURCE 或 TARGET"));
+
+        verify(dataSourceService, never()).list(any());
+    }
+
     // ---- detail ----
     @Test
     void detail_shouldReturnDetail() throws Exception {
@@ -112,6 +165,28 @@ class DataSourceControllerTest {
                         .contentType(MediaType.APPLICATION_JSON)
                         .content("{}"))
                 .andExpect(status().isBadRequest());
+    }
+
+    /**
+     * 回归保护：控制器局部 @ExceptionHandler(BindException.class) 优先级高于 @RestControllerAdvice，
+     * MethodArgumentNotValidException 仍必须保持既有 "field: msg; field: msg" 请求体字段级聚合语义。
+     */
+    @Test
+    void create_multipleFieldErrors_shouldAggregateFieldLevelMessages() throws Exception {
+        String body = "{\"dataSourceId\":null,\"dataSourceName\":null,"
+                + "\"dataSourceCategory\":\"SOURCE\",\"dataSourceType\":\"ORACLE\","
+                + "\"host\":\"192.168.1.1\",\"port\":1521,\"userName\":\"testuser\","
+                + "\"password\":\"testpass\",\"serviceName\":\"testdb\"}";
+
+        mockMvc.perform(post("/api/data-sources")
+                        .contentType(MediaType.APPLICATION_JSON)
+                        .content(body))
+                .andExpect(status().isBadRequest())
+                .andExpect(jsonPath("$.code").value(400))
+                .andExpect(jsonPath("$.message", allOf(
+                        containsString("dataSourceId: 数据源ID不能为空"),
+                        containsString("dataSourceName: 数据源名称不能为空"),
+                        containsString("; "))));
     }
 
     // ---- update ----

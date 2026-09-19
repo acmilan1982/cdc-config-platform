@@ -16,11 +16,13 @@ export interface DataSourceRow {
   userName: string
 }
 
-/** 列表查询参数（三条件忽略大小写模糊、AND、先 trim；无分页）。 */
+/** 列表查询参数（三文本条件忽略大小写模糊 + 可选角色 `category`，AND、先 trim；无分页）。 */
 export interface DataSourceListQuery {
   id?: string
   name?: string
   host?: string
+  /** 角色过滤：缺席/空串 = 全部；非空只接受精确大写 `SOURCE`/`TARGET`（API.md §9.1）。 */
+  category?: string
 }
 
 /** 新增请求体（API.md §4.3，password 必填）。 */

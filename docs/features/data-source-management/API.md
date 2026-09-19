@@ -475,11 +475,11 @@
 
 ---
 
-## 9. 角色查询参数（`APPROVED`，未实现）
+## 9. 角色查询参数（`APPROVED`，`IMPLEMENTED_PENDING_USER_REVIEW`）
 
-> 状态：`APPROVED`。本轮调整基线分层状态：`adjustment_api_status=APPROVED`、`adjustment_baseline_status=APPROVED`、`implementation_status=NOT_STARTED`、`implementation_authorization_status=NOT_GRANTED_IN_THIS_TASK`、`acceptance_execution_status=ALL_NOT_RUN`。本节为任务 `DATA-SOURCE-LIST-PAGE-SELECTIVE-QUERY-LIST-INTEGRATION-BASELINE-001` 形成的 API 设计基线，**已获批准**，但**尚未实现、尚未验收**。
+> 状态：`APPROVED`。本轮调整基线分层状态：`adjustment_api_status=APPROVED`、`adjustment_baseline_status=APPROVED`、`implementation_status=IMPLEMENTED_PENDING_USER_REVIEW`、`implementation_authorization_status=GRANTED_IN_THIS_TASK`、`formal_acceptance_execution_status=NOT_RUN`、`new_adjustment_acceptance_status=ALL_NOT_RUN`。本节为任务 `DATA-SOURCE-LIST-PAGE-SELECTIVE-QUERY-LIST-INTEGRATION-BASELINE-001` 形成的 API 设计基线，**已获批准**，并已由 `DATA-SOURCE-LIST-PAGE-SELECTIVE-QUERY-LIST-INTEGRATION-IMPLEMENTATION-001` 实现，**尚未验收**。
 > 批准链（2026-09-19）：初版草案提交 `01680ee527b8e35cd4afd84c4789b862d34f7a77` → R1 修订提交 `c3fd460bea64a14ccc7b52a554194a133330e29d` → ChatGPT 远程 Git R1 复审结论 `REVIEW_PASS` → 项目负责人 2026-09-19 明确回复“批准这轮调整基线”；批准任务 `DATA-SOURCE-LIST-PAGE-SELECTIVE-QUERY-LIST-INTEGRATION-APPROVAL-CLOSEOUT-001`。
-> 批准 API 设计**不代表**已实现、已测试、已验收或生产可用：实现状态仍为 `NOT_STARTED`；本轮**不实际修改** `DataSourceQuery`、`DataSourceController` 或任何异常处理代码。
+> 实现**不代表**已验收或生产可用：实现状态为 `IMPLEMENTED_PENDING_USER_REVIEW`；实现落在 `DataSourceQuery`、`DataSourceController`（局部 `@ExceptionHandler`）与 `DataSourceServiceImpl`，未修改 `GlobalExceptionHandler`。
 > 本节只对 `GET /api/data-sources` 列表接口**追加一个可选参数**；§4.1 既有三参数、无分页结构、响应字段与 `FG_ACTIVE='1'` 过滤等结论**继续有效**，不被替代。
 > 关联需求 `DS-REQ-128`；关联验收 `DS-AC-120`~`DS-AC-124`、`DS-AC-139`（全部 `NOT_RUN`）。
 
@@ -547,3 +547,4 @@
 - 依据任务 `DATA-SOURCE-LIST-PAGE-SELECTIVE-QUERY-LIST-INTEGRATION-BASELINE-001`；
 - R1 定向修订见 §9.5（ChatGPT 远程复审四项问题之 `category` 归一化/校验/异常映射；`DS-REQ-128` 编号与数量未变）。
 - 2026-09-19 批准收口（任务 `DATA-SOURCE-LIST-PAGE-SELECTIVE-QUERY-LIST-INTEGRATION-APPROVAL-CLOSEOUT-001`）：§9 章节标题与状态声明由 `DRAFT_PENDING_USER_REVIEW` 收口为 `APPROVED`（`adjustment_api_status=APPROVED`）；记录批准链（初版草案提交 `01680ee5...` → R1 修订提交 `c3fd460b...` → ChatGPT 远程 Git R1 复审 `REVIEW_PASS` → 项目负责人 2026-09-19 明确回复“批准这轮调整基线”）；§9.1~§9.4 技术正文与 R1 冻结方案（`category` 归一化、允许 `null` 的 `@Pattern`、`BindException` → 控制器局部 `@ExceptionHandler` → HTTP 400 / `code=400` / 字段级消息、不新增业务码、不自动转大写、本轮不改代码）**零变化**；§0~§8 既有 `APPROVED` API 基线逐字冻结；实现状态仍为 `NOT_STARTED`、实现授权 `NOT_GRANTED_IN_THIS_TASK`、本轮新增验收 `DS-AC-116~140` 仍全部 `NOT_RUN`；既有统计 `PASS=113/FAIL=0/BLOCKED=2/NOT_RUN=0` 逐字保留。
+- 2026-09-19 实现状态回写（任务 `DATA-SOURCE-LIST-PAGE-SELECTIVE-QUERY-LIST-INTEGRATION-IMPLEMENTATION-001`）：§9 章节标题改为“（`APPROVED`，`IMPLEMENTED_PENDING_USER_REVIEW`）”，状态声明由 `implementation_status=NOT_STARTED`/`implementation_authorization_status=NOT_GRANTED_IN_THIS_TASK`/`acceptance_execution_status=ALL_NOT_RUN` 更新为 `implementation_status=IMPLEMENTED_PENDING_USER_REVIEW`/`implementation_authorization_status=GRANTED_IN_THIS_TASK`/`formal_acceptance_execution_status=NOT_RUN`/`new_adjustment_acceptance_status=ALL_NOT_RUN`；实现按 §9 已批准契约落地：`DataSourceQuery` 新增可选 `category`（`trim()` → 空转 `null` → 不自动转大写）、`@Pattern(regexp="SOURCE|TARGET")` 允许 `null`、`DataSourceController` 增加局部 `@ExceptionHandler(BindException.class)` 返回 HTTP 400 / `code=400` / 字段级消息、`DataSourceServiceImpl` 列表过滤使用 `UPPER(DATA_SOURCE_CATEGORY) = {0}` 绑定参数；§9.1~§9.5 技术正文**零变化**，`GlobalExceptionHandler` 无 diff，未新增业务码；本轮新增验收 `DS-AC-116~140` 仍全部 `NOT_RUN`（`ALL_NOT_RUN`），实现状态未置 `IMPLEMENTED_ACCEPTED`；既有统计 `PASS=113/FAIL=0/BLOCKED=2/NOT_RUN=0` 逐字保留；未访问数据库/ZK/Kafka；未启动服务。

@@ -1,121 +1,152 @@
 <template>
-  <div class="data-source-page">
-    <!-- 查询区 -->
-    <el-card class="query-card" shadow="never">
-      <el-form inline :model="query" class="query-form">
-        <el-form-item label="数据源ID">
-          <el-input
-            v-model="query.id"
-            placeholder="数据源ID模糊查询"
-            clearable
-            maxlength="32"
-            @keyup.enter="onQuery"
-          />
-        </el-form-item>
-        <el-form-item label="名称">
-          <el-input
-            v-model="query.name"
-            placeholder="数据源名称模糊查询"
-            clearable
-            maxlength="30"
-            @keyup.enter="onQuery"
-          />
-        </el-form-item>
-        <el-form-item label="主机">
-          <el-input
-            v-model="query.host"
-            placeholder="主机地址模糊查询"
-            clearable
-            maxlength="64"
-            @keyup.enter="onQuery"
-          />
-        </el-form-item>
-        <el-form-item>
-          <el-button type="primary" @click="onQuery">查询</el-button>
-          <el-button @click="onReset">重置</el-button>
-        </el-form-item>
-      </el-form>
-    </el-card>
-
-    <!-- 主列表 -->
-    <el-card class="table-card" shadow="never" v-loading="loading">
-      <div class="card-toolbar">
-        <span class="table-title">数据源列表</span>
-        <el-button type="primary" @click="openCreate">新增数据源</el-button>
+  <!-- 页面外壳、查询区容器、查询/重置动作与结果卡片全部来自公共查询列表组件（DESIGN §11.2）：
+       本页只持有 Feature 文案、查询草稿与生效条件、请求与错误语义、表格与行操作、三个业务弹窗。
+       默认槽内容逐一成为 .ql-page 直接子节点，不新增任何包装层。 -->
+  <QueryListPageShell
+    class="data-source-page"
+    title="数据源管理"
+    description="维护源库与目标库的连接配置"
+  >
+    <!-- 查询条件区：三个文本条件 + 角色单选下拉框，均作为字段组整组换行（DESIGN §11.4） -->
+    <QueryListQueryPanel>
+      <div class="ds-q-group">
+        <span class="ds-q-label">数据源ID</span>
+        <el-input
+          v-model="query.id"
+          class="ds-q-input"
+          placeholder="数据源ID模糊查询"
+          clearable
+          maxlength="32"
+          @keyup.enter="onQuery"
+        />
       </div>
+      <div class="ds-q-group">
+        <span class="ds-q-label">名称</span>
+        <el-input
+          v-model="query.name"
+          class="ds-q-input"
+          placeholder="数据源名称模糊查询"
+          clearable
+          maxlength="30"
+          @keyup.enter="onQuery"
+        />
+      </div>
+      <div class="ds-q-group">
+        <span class="ds-q-label">角色</span>
+        <!-- 单选下拉框（非 Radio）；选项顺序与绑定值固定为 全部/''、源库/SOURCE、目标库/TARGET；
+             宽度冻结 140px；非法值不被静默纠正，由服务端返回字段级错误 -->
+        <el-select v-model="query.category" class="ds-q-category" placeholder="全部">
+          <el-option label="全部" value="" />
+          <el-option label="源库" value="SOURCE" />
+          <el-option label="目标库" value="TARGET" />
+        </el-select>
+      </div>
+      <div class="ds-q-group">
+        <span class="ds-q-label">主机</span>
+        <el-input
+          v-model="query.host"
+          class="ds-q-input"
+          placeholder="主机地址模糊查询"
+          clearable
+          maxlength="64"
+          @keyup.enter="onQuery"
+        />
+      </div>
+      <template #actions>
+        <QueryListActions :query-loading="loading" @query="onQuery" @reset="onReset" />
+      </template>
+    </QueryListQueryPanel>
 
-      <el-alert
-        v-if="loadError"
-        :title="loadError"
-        type="error"
-        show-icon
-        :closable="false"
-        class="load-error"
-      />
-
-      <el-table
-        :data="rows"
-        class="data-table"
-        @row-dblclick="onRowDoubleClick"
-      >
-        <template #empty>
-          <div v-if="!loading && !loadError" class="empty-state">
-            <p class="empty-main">
-              {{ effectiveQuery ? '未找到符合当前查询条件的数据源' : '暂无数据源' }}
-            </p>
-            <p class="empty-sub">
-              {{
-                effectiveQuery
-                  ? '请调整查询条件后重试，或点击上方“重置”查看全部数据源'
-                  : '点击右上角“新增数据源”创建第一条数据源'
-              }}
-            </p>
-          </div>
-        </template>
-        <el-table-column prop="dataSourceId" label="数据源ID" min-width="120" show-overflow-tooltip />
-        <el-table-column prop="dataSourceName" label="数据源名称" min-width="140" show-overflow-tooltip />
-        <el-table-column label="角色" width="90">
-          <template #default="{ row }">
-            <el-tag :type="row.dataSourceCategory === 'SOURCE' ? 'warning' : 'success'" size="small">
-              {{ categoryLabel(row.dataSourceCategory) }}
-            </el-tag>
+    <!-- 结果区：头部（数据源列表 + 数量 / 新增数据源）→ 固定错误槽 → 固定分隔线 → body 主体槽 -->
+    <QueryListResultPanel v-loading="loading">
+      <template #summary>
+        <span class="ds-result-title">数据源列表</span>
+        <span class="ds-result-count">共 {{ rows.length }} 条</span>
+      </template>
+      <template #toolbar>
+        <el-button type="primary" @click="openCreate">新增数据源</el-button>
+      </template>
+      <template #error>
+        <el-alert
+          v-if="loadError"
+          :title="loadError"
+          type="error"
+          show-icon
+          :closable="false"
+          class="load-error"
+        />
+      </template>
+      <template #body>
+        <el-table
+          :data="rows"
+          class="data-table"
+          @row-dblclick="onRowDoubleClick"
+        >
+          <template #empty>
+            <div v-if="!loading && !loadError" class="empty-state">
+              <p class="empty-main">
+                {{ effectiveQuery ? '未找到符合当前查询条件的数据源' : '暂无数据源' }}
+              </p>
+              <p class="empty-sub">
+                {{
+                  effectiveQuery
+                    ? '请调整查询条件后重试，或点击上方“重置”查看全部数据源'
+                    : '点击右上角“新增数据源”创建第一条数据源'
+                }}
+              </p>
+            </div>
           </template>
-        </el-table-column>
-        <el-table-column prop="dataSourceType" label="类型" width="90" />
-        <el-table-column prop="host" label="主机" min-width="130" show-overflow-tooltip />
-        <el-table-column prop="port" label="端口" width="80" />
-        <el-table-column prop="serviceName" label="Service Name/数据库名" min-width="150" show-overflow-tooltip />
-        <el-table-column prop="userName" label="用户名" min-width="110" show-overflow-tooltip />
-        <el-table-column label="操作" width="300" fixed="right">
-          <template #default="{ row }">
-            <el-button link type="primary" @click="openEdit(row)">编辑</el-button>
-            <el-button
-              link
-              type="danger"
-              :loading="deletingId === row.dataSourceId"
-              :disabled="deletingId !== ''"
-              @click="onDelete(row)"
-            >删除</el-button>
-            <el-button
-              v-if="row.dataSourceCategory === 'TARGET'"
-              link
-              type="primary"
-              @click="openBizAttr(row)"
-            >
-              业务属性
-            </el-button>
-            <el-button
-              v-if="row.dataSourceCategory === 'SOURCE'"
-              link
-              type="primary"
-              @click="openNamingStrategy(row)"
-            >
-              目标库命名策略
-            </el-button>
-          </template>
-        </el-table-column>
-      </el-table>
-    </el-card>
+          <el-table-column prop="dataSourceId" label="数据源ID" min-width="120" show-overflow-tooltip />
+          <el-table-column prop="dataSourceName" label="数据源名称" min-width="140" show-overflow-tooltip />
+          <el-table-column label="角色" width="90">
+            <template #default="{ row }">
+              <el-tag :type="row.dataSourceCategory === 'SOURCE' ? 'warning' : 'success'" size="small">
+                {{ categoryLabel(row.dataSourceCategory) }}
+              </el-tag>
+            </template>
+          </el-table-column>
+          <el-table-column prop="dataSourceType" label="类型" width="90" />
+          <el-table-column prop="host" label="主机" min-width="130" show-overflow-tooltip />
+          <el-table-column prop="port" label="端口" width="80" />
+          <el-table-column prop="serviceName" label="Service Name/数据库名" min-width="150" show-overflow-tooltip />
+          <el-table-column prop="userName" label="用户名" min-width="110" show-overflow-tooltip />
+          <el-table-column label="操作" width="110" fixed="right">
+            <template #default="{ row }">
+              <!-- 唯一带文字的“更多”入口（不含编辑）；trigger 与弹层事件均不冒泡到行双击（DS-REQ-134） -->
+              <el-dropdown
+                trigger="click"
+                popper-class="ds-more-popper"
+                @command="(command: string) => onRowCommand(command, row)"
+                @click.stop
+                @dblclick.stop
+              >
+                <span class="row-more" @click.stop @dblclick.stop>
+                  更多<el-icon class="row-more-icon"><ArrowDown /></el-icon>
+                </span>
+                <template #dropdown>
+                  <el-dropdown-menu>
+                    <el-dropdown-item
+                      v-if="row.dataSourceCategory === 'SOURCE'"
+                      command="naming"
+                    >目标库命名策略</el-dropdown-item>
+                    <el-dropdown-item
+                      v-if="row.dataSourceCategory === 'TARGET'"
+                      command="bizAttr"
+                    >业务属性</el-dropdown-item>
+                    <el-dropdown-item
+                      command="delete"
+                      divided
+                      class="ds-more-danger"
+                      :disabled="deletingId !== ''"
+                    >删除</el-dropdown-item>
+                  </el-dropdown-menu>
+                </template>
+              </el-dropdown>
+            </template>
+          </el-table-column>
+        </el-table>
+      </template>
+    </QueryListResultPanel>
 
     <!-- 新增/编辑数据源 -->
     <el-dialog
@@ -378,7 +409,7 @@
         </el-button>
       </template>
     </el-dialog>
-  </div>
+  </QueryListPageShell>
 </template>
 
 <script setup lang="ts">
@@ -386,8 +417,15 @@ import { computed, nextTick, onBeforeUnmount, onMounted, ref, watch } from 'vue'
 import type { Ref } from 'vue'
 import { ElMessage, ElMessageBox } from 'element-plus'
 import type { FormInstance, FormRules } from 'element-plus'
+import { ArrowDown } from '@element-plus/icons-vue'
 import Schema from 'async-validator'
 import { enableDialogDrag, type DialogDragController } from './draggableDialog'
+import {
+  QueryListActions,
+  QueryListPageShell,
+  QueryListQueryPanel,
+  QueryListResultPanel,
+} from '@/components/query-list'
 import {
   createDataSource,
   createNamingStrategy,
@@ -421,7 +459,7 @@ const TEST_COUNTDOWN_SECONDS = 10
 const rows = ref<DataSourceRow[]>([])
 const loading = ref(false)
 const loadError = ref('')
-const query = ref<DataSourceListQuery>({ id: '', name: '', host: '' })
+const query = ref<DataSourceListQuery>({ id: '', name: '', host: '', category: '' })
 
 /** 最后一次实际执行并生效的查询条件快照；仅用于空状态两级文案判断（DS-REQ-110/111）。 */
 const effectiveQuery = ref<DataSourceListQuery | null>(null)
@@ -480,6 +518,9 @@ function normalizeQuery(): DataSourceListQuery {
   if (id) q.id = id
   if (name) q.name = name
   if (host) q.host = host
+  // 角色：空值表示“全部”，不传该参数；只用规范化代码 SOURCE/TARGET，不静默纠正非法值（DS-REQ-126/128）
+  const category = (query.value.category ?? '').trim()
+  if (category) q.category = category
   return q
 }
 
@@ -490,9 +531,20 @@ function onQuery() {
 }
 
 function onReset() {
-  query.value = { id: '', name: '', host: '' }
+  query.value = { id: '', name: '', host: '', category: '' }
   effectiveQuery.value = null
   loadList(effectiveSnapshot())
+}
+
+/** “更多”菜单命令派发（稳定 command 值）：菜单不含编辑，编辑入口只保留双击行（DS-REQ-130/131）。 */
+function onRowCommand(command: string, row: DataSourceRow) {
+  if (command === 'naming') {
+    openNamingStrategy(row)
+  } else if (command === 'bizAttr') {
+    openBizAttr(row)
+  } else if (command === 'delete') {
+    onDelete(row)
+  }
 }
 
 const deletingId = ref('')
@@ -1468,39 +1520,61 @@ onMounted(() => {
 </script>
 
 <style scoped>
-.data-source-page {
-  padding: 4px;
-}
-
-.query-card {
-  margin-bottom: 12px;
-}
-
-.query-form {
-  display: flex;
-  flex-wrap: wrap;
-  gap: 0 8px;
-}
-
-.table-card {
-  width: 100%;
-}
-
-.card-toolbar {
-  display: flex;
+/* 页面外壳、查询区容器、查询/重置按钮与结果卡片盒模型全部由公共层提供
+   （.ql-page / .ql-q-panel / .ql-actions / .ql-result-panel）；本文件只保留 Feature 专属字段组、
+   字段标签、控件宽度、结果区头部文字与表格样式，不复制公共层等价 CSS。 */
+.ds-q-group {
+  display: inline-flex;
   align-items: center;
-  justify-content: space-between;
-  margin-bottom: 12px;
+  gap: 6px;
+  flex: 0 0 auto;
 }
 
-.table-title {
+.ds-q-label {
+  flex: 0 0 auto;
+  font-size: 13px;
+  color: var(--el-text-color-regular);
+  white-space: nowrap;
+}
+
+.ds-q-input {
+  width: 180px;
+}
+
+/* 角色单选下拉框宽度冻结为 140px（DESIGN §11.4 / UI §10.2） */
+.ds-q-category {
+  width: 140px;
+  min-width: 140px;
+  max-width: 140px;
+  flex: 0 0 140px;
+}
+
+.ds-result-title {
   font-size: 15px;
   font-weight: 600;
   color: var(--el-text-color-primary);
 }
 
+.ds-result-count {
+  margin-left: 8px;
+  font-size: 13px;
+  color: var(--el-text-color-secondary);
+}
+
 .load-error {
-  margin-bottom: 12px;
+  margin: 0;
+}
+
+.row-more {
+  display: inline-flex;
+  align-items: center;
+  gap: 2px;
+  cursor: pointer;
+  color: var(--el-color-primary);
+}
+
+.row-more-icon {
+  font-size: 12px;
 }
 
 .data-table {
@@ -1665,5 +1739,18 @@ onMounted(() => {
   font-size: 12px;
   line-height: 1.5;
   color: var(--el-text-color-secondary);
+}
+</style>
+
+<!-- “更多”下拉菜单（Teleport 到 body，故必须为全局作用域并只限定在本页 popper-class 命名空间内）：
+     删除项为红色危险样式，但不改变删除的业务语义（DS-REQ-133）；菜单不含编辑项。 -->
+<style>
+.ds-more-popper .el-dropdown-menu__item.ds-more-danger {
+  color: var(--el-color-danger);
+}
+
+.ds-more-popper .el-dropdown-menu__item.ds-more-danger.is-disabled,
+.ds-more-popper .el-dropdown-menu__item.ds-more-danger.is-disabled:hover {
+  color: var(--el-color-danger-light-5);
 }
 </style>

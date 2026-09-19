@@ -160,6 +160,34 @@ class DataSourceServiceTest {
         assertTrue(captor.getValue().getCustomSqlSegment().contains("FG_ACTIVE"));
     }
 
+    @Test
+    void list_withCategory_shouldApplyCaseCompatibleAndFilter() {
+        DataSourceQuery query = new DataSourceQuery();
+        query.setCategory("TARGET");
+        when(dataSourceMapper.selectList(any(LambdaQueryWrapper.class)))
+                .thenReturn(Collections.emptyList());
+
+        service.list(query);
+
+        ArgumentCaptor<LambdaQueryWrapper<DataSource>> captor = ArgumentCaptor.forClass(LambdaQueryWrapper.class);
+        verify(dataSourceMapper).selectList(captor.capture());
+        String sql = captor.getValue().getCustomSqlSegment();
+        assertTrue(sql.contains("UPPER(DATA_SOURCE_CATEGORY) ="));
+        assertTrue(sql.contains("FG_ACTIVE"));
+    }
+
+    @Test
+    void list_withoutCategory_shouldNotFilterCategory() {
+        when(dataSourceMapper.selectList(any(LambdaQueryWrapper.class)))
+                .thenReturn(Collections.emptyList());
+
+        service.list(new DataSourceQuery());
+
+        ArgumentCaptor<LambdaQueryWrapper<DataSource>> captor = ArgumentCaptor.forClass(LambdaQueryWrapper.class);
+        verify(dataSourceMapper).selectList(captor.capture());
+        assertFalse(captor.getValue().getCustomSqlSegment().contains("DATA_SOURCE_CATEGORY"));
+    }
+
     // ---- getDetail ----
     @Test
     void getDetail_shouldReturnDetail() {

@@ -186,25 +186,26 @@
 
 ---
 
-## 8. 本轮列表首页调整的数据库变化声明（`APPROVED`）
+## 8. 本轮列表首页调整的数据库变化声明（`APPROVED`，实现后无数据库变化）
 
 > 状态：`APPROVED`。本轮调整基线分层状态：
 
 ```text
 adjustment_database_status=APPROVED
 adjustment_baseline_status=APPROVED
-implementation_status=NOT_STARTED
-implementation_authorization_status=NOT_GRANTED_IN_THIS_TASK
-acceptance_execution_status=ALL_NOT_RUN
+implementation_status=IMPLEMENTED_PENDING_USER_REVIEW
+implementation_authorization_status=GRANTED_IN_THIS_TASK
+formal_acceptance_execution_status=NOT_RUN
+new_adjustment_acceptance_status=ALL_NOT_RUN
 ```
 
 > 批准链（2026-09-19）：初版草案提交 `01680ee527b8e35cd4afd84c4789b862d34f7a77` → R1 修订提交 `c3fd460bea64a14ccc7b52a554194a133330e29d` → ChatGPT 远程 Git R1 复审结论 `REVIEW_PASS` → 项目负责人 2026-09-19 明确回复“批准这轮调整基线” → 批准收口提交 `178b7a0cb5ae2b467847ba940615d1b80a323da2`（任务 `DATA-SOURCE-LIST-PAGE-SELECTIVE-QUERY-LIST-INTEGRATION-APPROVAL-CLOSEOUT-001`）。
-> 批准只代表本节的“无数据库变化声明”随本轮调整基线**正式成立**，**不代表**已实现、已测试、已验收或生产可用：实现状态仍为 `NOT_STARTED`，实现授权为 `NOT_GRANTED_IN_THIS_TASK`，本轮新增 `DS-AC-116~140`（25 条）仍全部 `NOT_RUN`。
+> 批准只代表本节的“无数据库变化声明”随本轮调整基线**正式成立**：本轮实现已由 `DATA-SOURCE-LIST-PAGE-SELECTIVE-QUERY-LIST-INTEGRATION-IMPLEMENTATION-001` 完成（实现状态 `IMPLEMENTED_PENDING_USER_REVIEW`，实现授权 `GRANTED_IN_THIS_TASK`），实现后**仍无数据库变化**；**不代表**已测试、已验收或生产可用，本轮新增 `DS-AC-116~140`（25 条）仍全部 `NOT_RUN`。
 
 - 任务：`DATA-SOURCE-LIST-PAGE-SELECTIVE-QUERY-LIST-INTEGRATION-BASELINE-001`。
 - **本轮无任何数据库变化**：不新增/修改/删除表、列、主键、唯一约束、索引、序列、视图或触发器；**无任何 DDL**；不改变现有数据库对象。
 - 新增的“角色”查询条件仅对既有 `DATA_SOURCE_CATEGORY` 列增加一个**可选**过滤条件，沿用本文件 §4 既有的 `UPPER(DATA_SOURCE_CATEGORY)` 大小写兼容比较；不新增列、不改写存量数据、不清洗存量数据。
-- 本节“无数据库变化声明”的当前事实：已随本轮调整基线**正式批准**；本轮为纯文档任务，未访问数据库、未执行任何 SQL/DDL/DML；实现状态仍为 `NOT_STARTED`。批准本节**不等于**批准执行任何数据库变更——本轮不存在任何待执行的数据库变更。
+- 本节“无数据库变化声明”的当前事实：已随本轮调整基线**正式批准**，且本轮实现已完成（实现状态 `IMPLEMENTED_PENDING_USER_REVIEW`）；本轮实现未访问数据库、未执行任何 SQL/DDL/DML，实现后仍无数据库变化。批准本节**不等于**批准执行任何数据库变更——本轮不存在任何待执行的数据库变更。
 - 本轮新增验收 `DS-AC-116~140` 均为 `NOT_RUN`；既有正式复验统计 `PASS=113/FAIL=0/BLOCKED=2/NOT_RUN=0`（阻塞 `DS-AC-104`/`DS-AC-108`）逐字保留。
 
 ### 8.1 批准收口变更记录（2026-09-19）
@@ -215,3 +216,13 @@ acceptance_execution_status=ALL_NOT_RUN
 - §8 数据库技术结论**零变化**：无表/列/主键/唯一约束/索引/序列/视图/触发器变化、无 DDL、角色查询只复用既有 `DATA_SOURCE_CATEGORY`、沿用 `UPPER(DATA_SOURCE_CATEGORY)` 大小写兼容比较、不清洗不改写存量数据、未访问数据库且未执行 SQL/DDL/DML；
 - §0~§7 既有正文、历史状态与批准链**逐字冻结、未修改**；
 - 依据任务 `DATA-SOURCE-LIST-PAGE-SELECTIVE-QUERY-LIST-INTEGRATION-APPROVAL-CLOSEOUT-001-R1`（对批准收口遗漏 `DATABASE.md §8` 状态的定向修订；纯文档任务；未修改任何业务代码/测试/依赖/配置/SQL；未访问数据库/ZK/Kafka；未启动服务）。
+
+### 8.2 实现状态回写（2026-09-19，任务 `DATA-SOURCE-LIST-PAGE-SELECTIVE-QUERY-LIST-INTEGRATION-IMPLEMENTATION-001`）
+
+- 2026-09-19；
+- §8 章节标题由“（`APPROVED`）”改为“（`APPROVED`，实现后无数据库变化）”，状态声明由 `implementation_status=NOT_STARTED`/`implementation_authorization_status=NOT_GRANTED_IN_THIS_TASK`/`acceptance_execution_status=ALL_NOT_RUN` 更新为 `implementation_status=IMPLEMENTED_PENDING_USER_REVIEW`/`implementation_authorization_status=GRANTED_IN_THIS_TASK`/`formal_acceptance_execution_status=NOT_RUN`/`new_adjustment_acceptance_status=ALL_NOT_RUN`（`adjustment_database_status`/`adjustment_baseline_status` 保持 `APPROVED`）；
+- §8 数据库技术结论**零变化**：实现仅在服务层新增 `UPPER(DATA_SOURCE_CATEGORY) = {0}` 绑定参数过滤，无表/列/主键/唯一约束/索引/序列/视图/触发器变化、无 DDL、无 DML、不清洗不改写存量数据；
+- 实现期间**未访问数据库**、未执行任何 SQL/DDL/DML，未修改数据库配置或 SQL 脚本（`backend` 侧仅 Java 源码与测试变更）；
+- 本轮新增验收 `DS-AC-116~140` 仍全部 `NOT_RUN`（`ALL_NOT_RUN`），实现状态未置 `IMPLEMENTED_ACCEPTED`；既有正式复验统计 `PASS=113/FAIL=0/BLOCKED=2/NOT_RUN=0`（阻塞 `DS-AC-104`/`DS-AC-108`）逐字保留；
+- §0~§7 与 §8.1 既有正文、历史状态与批准链**逐字冻结、未修改**；
+- 依据任务 `DATA-SOURCE-LIST-PAGE-SELECTIVE-QUERY-LIST-INTEGRATION-IMPLEMENTATION-001`（已批准调整基线的前后端实现、自动化测试、构建与实现状态回写；未访问数据库/ZK/Kafka；未启动服务）。

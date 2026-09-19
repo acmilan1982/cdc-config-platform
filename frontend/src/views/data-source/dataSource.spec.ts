@@ -161,6 +161,39 @@ function namingInput(w: PageWrapper, label: string) {
   return input
 }
 
+/** 当前可见的下拉面板（`el-select` 面板 teleport 到 body；已关闭的 popper 父级含 display:none）。 */
+function visibleSelectDropdown(optionLabel: string): Element | null {
+  return (
+    Array.from(document.body.querySelectorAll('.el-select-dropdown'))
+      .filter((d) => {
+        const popper = d.parentElement
+        return !!popper && !(popper.getAttribute('style') || '').includes('display: none')
+      })
+      .find((d) =>
+        Array.from(d.querySelectorAll('.el-select-dropdown__item')).some((it) =>
+          it.textContent?.includes(optionLabel),
+        ),
+      ) ?? null
+  )
+}
+
+/** 点击当前可见下拉中含指定文本的选项。 */
+async function clickVisibleOption(optionLabel: string) {
+  const dropdown = visibleSelectDropdown(optionLabel)
+  if (!dropdown) {
+    throw new Error(`dropdown not found for option: ${optionLabel}`)
+  }
+  const item = Array.from(dropdown.querySelectorAll('.el-select-dropdown__item')).find((it) =>
+    it.textContent?.includes(optionLabel),
+  )
+  if (!item) {
+    throw new Error(`option not found: ${optionLabel}`)
+  }
+  ;(item as HTMLElement).click()
+  await nextTick()
+  await nextTick()
+}
+
 /** 真实点击 el-select 展开下拉，再点击当前可见下拉中含指定文本的选项（下拉 teleport 到 body）。 */
 async function pickSelect(
   w: PageWrapper,
@@ -176,29 +209,7 @@ async function pickSelect(
   await select.find('.el-select__wrapper').trigger('click')
   await nextTick()
   await nextTick()
-  // 已关闭的下拉仍保留在 body，但其 popper 父级含 display:none；只选当前可见的下拉。
-  const dropdown = Array.from(document.body.querySelectorAll('.el-select-dropdown'))
-    .filter((d) => {
-      const popper = d.parentElement
-      return !!popper && !(popper.getAttribute('style') || '').includes('display: none')
-    })
-    .find((d) =>
-      Array.from(d.querySelectorAll('.el-select-dropdown__item')).some((it) =>
-        it.textContent?.includes(optionLabel),
-      ),
-    )
-  if (!dropdown) {
-    throw new Error(`dropdown not found for option: ${optionLabel}`)
-  }
-  const item = Array.from(dropdown.querySelectorAll('.el-select-dropdown__item')).find((it) =>
-    it.textContent?.includes(optionLabel),
-  )
-  if (!item) {
-    throw new Error(`option not found: ${optionLabel}`)
-  }
-  ;(item as HTMLElement).click()
-  await nextTick()
-  await nextTick()
+  await clickVisibleOption(optionLabel)
 }
 
 /** 真实点击命名策略单选卡片（DS-REQ-115 自绘卡片，非 el-radio）。 */
@@ -212,14 +223,88 @@ async function clickStrategyCard(w: PageWrapper, name: string) {
   await nextTick()
 }
 
+/** 查询区字段组（标签 + 控件，公共查询面板的直接 flex 子项）。 */
+function queryGroup(w: PageWrapper, label: string) {
+  const group = w.findAll('.ds-q-group').find((g) => g.find('.ds-q-label').text() === label)
+  if (!group) {
+    throw new Error(`query group not found for label: ${label}`)
+  }
+  return group
+}
+
 /** 设置查询区输入框。 */
 async function setQueryInput(w: PageWrapper, label: string, value: string) {
-  const qItems = w.findAll('.query-form .el-form-item')
-  const item = qItems.find((i) => i.text().includes(label))
-  if (!item) {
-    throw new Error(`query form-item not found for label: ${label}`)
+  await queryGroup(w, label).find('input').setValue(value)
+}
+
+/** 选择查询区“角色”单选下拉框选项（teleport 到 body）。 */
+async function pickQueryCategory(w: PageWrapper, optionLabel: string) {
+  await queryGroup(w, '角色').find('.el-select__wrapper').trigger('click')
+  await nextTick()
+  await nextTick()
+  await clickVisibleOption(optionLabel)
+}
+
+/** 双击数据行打开编辑：编辑入口唯一，可见“编辑”按钮已移除（DS-REQ-130）。 */
+async function openEditRow(w: PageWrapper, row: DataSourceRow) {
+  w.findComponent({ name: 'ElTable' }).vm.$emit('row-dblclick', row)
+  await flushPromises()
+}
+
+/**
+ * 第 rowIndex 行“更多”菜单的菜单项。
+ * 菜单 teleport 到 body 且持久渲染（组件未卸载即长期留在 document 中），
+ * 因此按触发器 `aria-controls` 指向的菜单 id 精确定位，避免命中其他页面的残留弹层。
+ */
+function rowMenuItems(w: PageWrapper, rowIndex = 0): Element[] {
+  const menuId = w.findAll('.row-more')[rowIndex]?.attributes('aria-controls')
+  if (!menuId) return []
+  const menu = document.getElementById(menuId)
+  return menu ? Array.from(menu.querySelectorAll('.el-dropdown-menu__item')) : []
+}
+
+/** 行“更多”菜单的可见项文本（含分隔线项时为空字符串已过滤）。 */
+function rowMenuLabels(w: PageWrapper, rowIndex = 0): string[] {
+  return rowMenuItems(w, rowIndex)
+    .map((el) => (el.textContent ?? '').trim())
+    .filter((t) => t !== '')
+}
+
+/**
+ * 打开第 rowIndex 行的“更多”下拉。
+ * `el-dropdown` 的展开走 `ElTooltip` 的非受控 delayed toggle：点击后由 `setTimeout(0)`
+ * 才真正 open，因此必须等待一次真实定时器宏任务；`flushPromises` 走 `setImmediate`，
+ * 会在该定时器之前返回。已展开时直接返回，避免再次点击把菜单关掉。
+ */
+async function openRowMenu(w: PageWrapper, rowIndex = 0) {
+  const trigger = w.findAll('.row-more')[rowIndex]
+  if (!trigger) {
+    throw new Error(`row-more trigger not found at index ${rowIndex}`)
   }
-  await item.find('input').setValue(value)
+  if (trigger.element.getAttribute('aria-expanded') === 'true') {
+    return
+  }
+  await trigger.trigger('click')
+  // 等待一次真实定时器宏任务：`flushPromises` 走 `setImmediate`，会在 `setTimeout(0)`
+  // 之前返回，因此不足以让 delayed toggle 真正展开。
+  await new Promise((resolve) => setTimeout(resolve, 0))
+  await nextTick()
+  if (trigger.element.getAttribute('aria-expanded') !== 'true') {
+    throw new Error(`row menu did not open at index ${rowIndex}`)
+  }
+}
+
+/** 打开行“更多”菜单并点击指定菜单项（命令值到业务动作的映射由页面负责）。 */
+async function clickRowMenuAction(w: PageWrapper, rowIndex: number, label: string) {
+  await openRowMenu(w, rowIndex)
+  const item = rowMenuItems(w, rowIndex).find((el) => (el.textContent ?? '').trim() === label)
+  if (!item) {
+    throw new Error(`row menu item not found: ${label}`)
+  }
+  ;(item as HTMLElement).click()
+  await nextTick()
+  await flushPromises()
+  await nextTick()
 }
 
 /** fake timers 下冲刷微任务（flushPromises 依赖 setTimeout 会挂起）。 */
@@ -283,41 +368,65 @@ beforeEach(() => {
 afterEach(() => {
   vi.useRealTimers()
   vi.restoreAllMocks()
+  // 组件以 attachTo: document.body 挂载，teleport 的弹层留在 body 中；
+  // 清空 body 保证每个用例从干净 DOM 开始（否则残留弹层会干扰后续用例的弹层状态）。
+  document.body.innerHTML = ''
 })
 
 describe('列表加载与查询', () => {
-  it('成功加载渲染两行、角色标签与操作按钮', async () => {
+  it('成功加载渲染两行、角色标签与公共组件三段结构', async () => {
     const wrapper = await mountPage()
 
     expect(wrapper.text()).toContain('SRC001')
     expect(wrapper.text()).toContain('TG001')
     expect(wrapper.text()).toContain('源库')
     expect(wrapper.text()).toContain('目标库')
-    expect(wrapper.text()).toContain('目标库命名策略')
-    expect(wrapper.text()).toContain('业务属性')
-    // 每行编辑/删除 + 各自扩展按钮，共 6 个行操作按钮
-    expect(wrapper.findAll('.data-table button').length).toBeGreaterThanOrEqual(6)
+
+    // 选择性接入的四个公共组件（DS-REQ-117）
+    expect(wrapper.find('.ql-page').exists()).toBe(true)
+    expect(wrapper.find('.ql-page__title').text()).toBe('数据源管理')
+    expect(wrapper.find('.ql-q-panel').exists()).toBe(true)
+    expect(wrapper.find('.ql-actions').exists()).toBe(true)
+    expect(wrapper.find('.ql-result-panel').exists()).toBe(true)
+    // 结果区固定结构：头部 → 固定错误槽 → 固定分隔线 → body（DS-REQ-123/136）
+    expect(wrapper.find('.ql-result-panel__header').exists()).toBe(true)
+    expect(wrapper.find('.ql-result-panel__error-slot').exists()).toBe(true)
+    expect(wrapper.find('.ql-result-panel__divider').exists()).toBe(true)
+    expect(wrapper.find('.ql-result-panel__body .data-table').exists()).toBe(true)
+    // 不接入刷新工具栏、无分页（DS-REQ-119/136）
+    expect(wrapper.find('.ql-refresh-group').exists()).toBe(false)
+    expect(wrapper.find('.el-pagination').exists()).toBe(false)
     wrapper.unmount()
   })
 
   it('查询 trim 后按 AND 传参；重置清空并重载', async () => {
     const wrapper = await mountPage()
 
-    const qItems = wrapper.findAll('.query-form .el-form-item')
-    const idItem = qItems.find((i) => i.text().includes('数据源ID'))!
-    await idItem.find('input').setValue(' SRC ')
-    const nameItem = qItems.find((i) => i.text().includes('名称'))!
-    await nameItem.find('input').setValue(' 源 ')
-    const hostItem = qItems.find((i) => i.text().includes('主机'))!
-    await hostItem.find('input').setValue(' 10.1 ')
+    await setQueryInput(wrapper, '数据源ID', ' SRC ')
+    await setQueryInput(wrapper, '名称', ' 源 ')
+    await setQueryInput(wrapper, '主机', ' 10.1 ')
     await buttonByText(wrapper, '查询')!.trigger('click')
     await flushPromises()
-
     expect(mockedList).toHaveBeenLastCalledWith({ id: 'SRC', name: '源', host: '10.1' })
 
+    // 角色 = 源库：只提交规范化代码 SOURCE，绝不提交中文展示值（DS-REQ-126）
+    await pickQueryCategory(wrapper, '源库')
+    await buttonByText(wrapper, '查询')!.trigger('click')
+    await flushPromises()
+    expect(mockedList).toHaveBeenLastCalledWith({
+      id: 'SRC',
+      name: '源',
+      host: '10.1',
+      category: 'SOURCE',
+    })
+    expect(JSON.stringify(mockedList.mock.calls.at(-1))).not.toContain('源库')
+
+    // 重置：三个文本条件清空 + 角色回到“全部”，并立即恢复全部有效记录（DS-REQ-127）
     await buttonByText(wrapper, '重置')!.trigger('click')
     await flushPromises()
     expect(mockedList).toHaveBeenLastCalledWith({})
+    // 绑定值为空串时 el-select 以占位符呈现当前值，两份文案都固定为“全部”
+    expect(queryGroup(wrapper, '角色').find('.el-select__placeholder').text()).toBe('全部')
     wrapper.unmount()
   })
 
@@ -332,6 +441,140 @@ describe('列表加载与查询', () => {
     mockedList.mockRejectedValueOnce(new Error('network down'))
     const wrapper = await mountPage()
     expect(wrapper.find('.load-error').text()).toContain('network down')
+    wrapper.unmount()
+  })
+})
+
+describe('查询列表公共组件选择性接入（DS-REQ-116~138）', () => {
+  it('查询区角色为单选下拉框，选项顺序与展示文案固定，默认全部', async () => {
+    const wrapper = await mountPage()
+    const group = queryGroup(wrapper, '角色')
+
+    // 单选下拉框而非 Radio（DS-REQ-125）；140px 宽度由 scoped 样式冻结（视觉检查复核）
+    expect(group.find('.el-select').exists()).toBe(true)
+    expect(group.find('.el-radio-group').exists()).toBe(false)
+    expect(group.find('.ds-q-category').exists()).toBe(true)
+    // 默认“全部”
+    expect(group.find('.el-select__placeholder').text()).toBe('全部')
+
+    // 选项顺序与展示文案固定：全部 / 源库 / 目标库
+    await group.find('.el-select__wrapper').trigger('click')
+    await nextTick()
+    await nextTick()
+    const dropdown = visibleSelectDropdown('全部')
+    expect(dropdown).not.toBeNull()
+    expect(
+      Array.from(dropdown!.querySelectorAll('.el-select-dropdown__item')).map((item) =>
+        (item.textContent ?? '').trim(),
+      ),
+    ).toEqual(['全部', '源库', '目标库'])
+    wrapper.unmount()
+  })
+
+  it('角色=目标库提交 TARGET；角色=全部不提交 category（不发中文值、无分页参数）', async () => {
+    const wrapper = await mountPage()
+
+    await pickQueryCategory(wrapper, '目标库')
+    await buttonByText(wrapper, '查询')!.trigger('click')
+    await flushPromises()
+    expect(mockedList).toHaveBeenLastCalledWith({ category: 'TARGET' })
+    expect(JSON.stringify(mockedList.mock.calls.at(-1))).not.toContain('目标库')
+
+    // 选回“全部”后条件整体缺席，且无任何分页参数
+    await pickQueryCategory(wrapper, '全部')
+    await buttonByText(wrapper, '查询')!.trigger('click')
+    await flushPromises()
+    expect(mockedList).toHaveBeenLastCalledWith({})
+    expect(Object.keys(mockedList.mock.calls.at(-1)![0] ?? {})).not.toContain('page')
+    wrapper.unmount()
+  })
+
+  it('结果区头部展示标题与数量、工具栏仅新增数据源；加载失败信息落在固定错误槽内', async () => {
+    const wrapper = await mountPage()
+    expect(wrapper.find('.ql-result-panel__summary').text()).toContain('数据源列表')
+    expect(wrapper.find('.ql-result-panel__summary').text()).toContain('共 2 条')
+    expect(wrapper.find('.ql-result-panel__toolbar').findAll('button').map((b) => b.text())).toEqual([
+      '新增数据源',
+    ])
+    // 无失败时错误槽内无告警，但固定结构仍在
+    expect(wrapper.find('.ql-result-panel__error-slot').exists()).toBe(true)
+    expect(wrapper.find('.ql-result-panel__error-slot .load-error').exists()).toBe(false)
+    wrapper.unmount()
+
+    mockedList.mockResolvedValueOnce(failList(50000, '数据源列表加载失败'))
+    const failed = await mountPage()
+    expect(failed.find('.ql-result-panel__error-slot .load-error').exists()).toBe(true)
+    expect(failed.find('.ql-result-panel__body .data-table').exists()).toBe(true)
+    failed.unmount()
+  })
+
+  it('加载期间固定结构不塌陷：错误槽、分隔线与主体槽仍在，且无分页', async () => {
+    mockedList.mockReturnValueOnce(new Promise<ApiResponse<DataSourceRow[]>>(() => {}))
+    const wrapper = await mountPage()
+
+    expect(wrapper.find('.ql-result-panel__error-slot').exists()).toBe(true)
+    expect(wrapper.find('.ql-result-panel__divider').exists()).toBe(true)
+    expect(wrapper.find('.ql-result-panel__body').exists()).toBe(true)
+    expect(wrapper.find('.el-pagination').exists()).toBe(false)
+    expect(wrapper.find('.ql-refresh-group').exists()).toBe(false)
+    wrapper.unmount()
+  })
+
+  it('操作列只有带文字的“更多”入口：无编辑按钮、菜单不含编辑，源库/目标库菜单与危险色删除正确', async () => {
+    const wrapper = await mountPage()
+
+    // 无行内编辑按钮；操作列唯一入口是“更多”（DS-REQ-130/131）
+    expect(wrapper.findAll('.data-table button').map((b) => b.text())).toEqual([])
+    expect(wrapper.findAll('.row-more').map((el) => el.text().trim())).toEqual(['更多', '更多'])
+
+    // 源库行：目标库命名策略 / 分隔线 / 危险色删除（DS-REQ-132）
+    await openRowMenu(wrapper, 0)
+    expect(rowMenuLabels(wrapper, 0)).toEqual(['目标库命名策略', '删除'])
+    expect(rowMenuLabels(wrapper, 0)).not.toContain('编辑')
+    // 目标库行：业务属性 / 分隔线 / 危险色删除（DS-REQ-133）
+    await openRowMenu(wrapper, 1)
+    expect(rowMenuLabels(wrapper, 1)).toEqual(['业务属性', '删除'])
+
+    const menuId = wrapper.findAll('.row-more')[0].attributes('aria-controls')!
+    const menu = document.getElementById(menuId)!
+    // 分隔线独立渲染，不属于可点击菜单项
+    expect(menu.querySelector('.el-dropdown-menu__item--divided')).not.toBeNull()
+    expect(menu.querySelectorAll('.el-dropdown-menu__item')).toHaveLength(2)
+    // 删除项为危险色样式（popper-class 作用域）
+    const deleteItem = rowMenuItems(wrapper, 0).find((el) => (el.textContent ?? '').trim() === '删除')!
+    expect(deleteItem.className).toContain('ds-more-danger')
+    wrapper.unmount()
+  })
+
+  it('菜单交互不触发行编辑：触发器双击与删除命令都不打开编辑弹窗', async () => {
+    const wrapper = await mountPage()
+
+    // 直接双击“更多”触发器：不冒泡到行双击，编辑弹窗不出现（DS-REQ-134）
+    await wrapper.findAll('.row-more')[0].trigger('dblclick')
+    await flushPromises()
+    expect(wrapper.find('.editor-dialog').exists()).toBe(false)
+
+    confirmSpy.mockRejectedValueOnce('cancel')
+    await clickRowMenuAction(wrapper, 0, '删除')
+    expect(wrapper.find('.editor-dialog').exists()).toBe(false)
+
+    // 行双击仍是唯一编辑入口：在行内普通单元格上双击确实会进入编辑，
+    // 说明上面的否定结论来自“更多”入口阻断冒泡，而非双击事件分发失效
+    await wrapper.findAll('.data-table .el-table__body .cell')[0].trigger('dblclick')
+    await flushPromises()
+    expect(wrapper.find('.editor-dialog').exists()).toBe(true)
+    wrapper.unmount()
+  })
+
+  it('长文本列保留 show-overflow-tooltip，且无行内编辑提示文案、无分页与刷新工具栏', async () => {
+    const wrapper = await mountPage()
+
+    expect(
+      document.querySelectorAll('.data-table .el-table__body .el-tooltip').length,
+    ).toBeGreaterThanOrEqual(1)
+    expect(wrapper.text()).not.toContain('双击数据行可编辑')
+    expect(wrapper.find('.el-pagination').exists()).toBe(false)
+    expect(wrapper.find('.ql-refresh-group').exists()).toBe(false)
     wrapper.unmount()
   })
 })
@@ -418,8 +661,7 @@ describe('新增数据源', () => {
 describe('编辑数据源', () => {
   it('打开编辑通过详情接口加载并显示密码掩码；未改密码保存请求不含 password，路径用原 ID', async () => {
     const wrapper = await mountPage()
-    await buttonByText(wrapper, '编辑')!.trigger('click')
-    await flushPromises()
+    await openEditRow(wrapper, srcRow)
 
     expect(mockedDetail).toHaveBeenCalledWith('SRC001')
     expect(editorInput(wrapper, '数据源名称').element.value).toBe('源库A')
@@ -440,8 +682,7 @@ describe('编辑数据源', () => {
 
   it('编辑修改密码：请求携带 trim 后新密码，数据源ID 可修改但路径仍用原 ID', async () => {
     const wrapper = await mountPage()
-    await buttonByText(wrapper, '编辑')!.trigger('click')
-    await flushPromises()
+    await openEditRow(wrapper, srcRow)
 
     await editorInput(wrapper, '数据源ID').setValue('SRC999')
     await editorInput(wrapper, '密码').setValue(' newpass ')
@@ -475,8 +716,7 @@ describe('编辑数据源', () => {
       data: null,
     } as unknown as ApiResponse<DataSourceRow>)
     const wrapper = await mountPage()
-    await buttonByText(wrapper, '编辑')!.trigger('click')
-    await flushPromises()
+    await openEditRow(wrapper, srcRow)
 
     expect(wrapper.find('.form-error').text()).toContain('数据源不存在')
     // 列表行数据未被当作权威详情：名称仍为空
@@ -487,8 +727,7 @@ describe('编辑数据源', () => {
   it('详情网络异常显示错误', async () => {
     mockedDetail.mockRejectedValueOnce(new Error('network down'))
     const wrapper = await mountPage()
-    await buttonByText(wrapper, '编辑')!.trigger('click')
-    await flushPromises()
+    await openEditRow(wrapper, srcRow)
 
     expect(wrapper.find('.form-error').text()).toContain('network down')
     wrapper.unmount()
@@ -531,8 +770,7 @@ describe('编辑数据源', () => {
     const wrapper = await mountPage()
 
     // 编辑 A：详情请求未决
-    await buttonByText(wrapper, '编辑')!.trigger('click')
-    await flushPromises()
+    await openEditRow(wrapper, srcRow)
 
     // 关闭编辑弹窗（详情未加载完成，快照为空，无需确认）
     await buttonByText(wrapper, '取消')!.trigger('click')
@@ -567,8 +805,7 @@ describe('编辑数据源', () => {
     const wrapper = await mountPage()
 
     // 编辑 A：详情未决
-    await buttonByText(wrapper, '编辑')!.trigger('click')
-    await flushPromises()
+    await openEditRow(wrapper, srcRow)
 
     // 关闭 A（快照为空，无需确认）
     await buttonByText(wrapper, '取消')!.trigger('click')
@@ -603,8 +840,7 @@ describe('编辑数据源', () => {
       .mockResolvedValueOnce(okRow(tgtRow))
     const wrapper = await mountPage()
 
-    await buttonByText(wrapper, '编辑')!.trigger('click')
-    await flushPromises()
+    await openEditRow(wrapper, srcRow)
     await buttonByText(wrapper, '取消')!.trigger('click')
     await flushPromises()
 
@@ -763,8 +999,7 @@ describe('测试连接', () => {
 describe('删除数据源', () => {
   it('确认后调用删除并刷新列表', async () => {
     const wrapper = await mountPage()
-    await buttonByText(wrapper, '删除')!.trigger('click')
-    await flushPromises()
+    await clickRowMenuAction(wrapper, 0, '删除')
 
     expect(confirmSpy).toHaveBeenCalledTimes(1)
     expect(mockedDelete).toHaveBeenCalledWith('SRC001')
@@ -776,8 +1011,7 @@ describe('删除数据源', () => {
   it('取消删除不调用接口', async () => {
     confirmSpy.mockRejectedValueOnce('cancel')
     const wrapper = await mountPage()
-    await buttonByText(wrapper, '删除')!.trigger('click')
-    await flushPromises()
+    await clickRowMenuAction(wrapper, 0, '删除')
 
     expect(mockedDelete).not.toHaveBeenCalled()
     wrapper.unmount()
@@ -788,10 +1022,8 @@ describe('删除数据源', () => {
     mockedDelete.mockReturnValueOnce(new Promise<ApiResponse<null>>((res) => (resolve = res)))
     const wrapper = await mountPage()
 
-    await buttonByText(wrapper, '删除')!.trigger('click')
-    await flushPromises()
-    await buttonByText(wrapper, '删除')!.trigger('click')
-    await flushPromises()
+    await clickRowMenuAction(wrapper, 0, '删除')
+    await clickRowMenuAction(wrapper, 0, '删除')
 
     expect(mockedDelete).toHaveBeenCalledTimes(1)
     resolve(okNull())
@@ -806,13 +1038,11 @@ describe('删除数据源', () => {
     )
     const wrapper = await mountPage()
 
-    await buttonByText(wrapper, '删除')!.trigger('click')
-    await flushPromises()
+    await clickRowMenuAction(wrapper, 0, '删除')
     expect(confirmSpy).toHaveBeenCalledTimes(1)
 
     // 确认未决：再次触发不再弹第二个确认，也不发请求
-    await buttonByText(wrapper, '删除')!.trigger('click')
-    await flushPromises()
+    await clickRowMenuAction(wrapper, 0, '删除')
     expect(confirmSpy).toHaveBeenCalledTimes(1)
     expect(mockedDelete).not.toHaveBeenCalled()
 
@@ -821,8 +1051,7 @@ describe('删除数据源', () => {
     await flushPromises()
     expect(mockedDelete).not.toHaveBeenCalled()
 
-    await buttonByText(wrapper, '删除')!.trigger('click')
-    await flushPromises()
+    await clickRowMenuAction(wrapper, 0, '删除')
     expect(confirmSpy).toHaveBeenCalledTimes(2)
     expect(mockedDelete).toHaveBeenCalledWith('SRC001')
     wrapper.unmount()
@@ -832,8 +1061,7 @@ describe('删除数据源', () => {
 describe('编辑弹窗未保存确认', () => {
   it('主编辑弹窗脏数据关闭需确认', async () => {
     const wrapper = await mountPage()
-    await buttonByText(wrapper, '编辑')!.trigger('click')
-    await flushPromises()
+    await openEditRow(wrapper, srcRow)
 
     await editorInput(wrapper, '数据源名称').setValue('源库A改')
     await nextTick()
@@ -847,8 +1075,7 @@ describe('编辑弹窗未保存确认', () => {
   it('拒绝确认保持弹窗与表单', async () => {
     confirmSpy.mockRejectedValueOnce('cancel')
     const wrapper = await mountPage()
-    await buttonByText(wrapper, '编辑')!.trigger('click')
-    await flushPromises()
+    await openEditRow(wrapper, srcRow)
 
     await editorInput(wrapper, '数据源名称').setValue('源库A改')
     await nextTick()
@@ -862,8 +1089,7 @@ describe('编辑弹窗未保存确认', () => {
 
   it('无修改直接关闭不弹确认', async () => {
     const wrapper = await mountPage()
-    await buttonByText(wrapper, '编辑')!.trigger('click')
-    await flushPromises()
+    await openEditRow(wrapper, srcRow)
 
     await buttonByText(wrapper, '取消')!.trigger('click')
     await flushPromises()
@@ -896,8 +1122,7 @@ describe('编辑弹窗未保存确认', () => {
 
   it('密码聚焦失焦不误标已修改，星号恢复', async () => {
     const wrapper = await mountPage()
-    await buttonByText(wrapper, '编辑')!.trigger('click')
-    await flushPromises()
+    await openEditRow(wrapper, srcRow)
 
     const pwd = editorInput(wrapper, '密码')
     expect(pwd.element.value).toBe('*********')
@@ -917,8 +1142,7 @@ describe('编辑弹窗未保存确认', () => {
 describe('业务属性（仅目标库）', () => {
   it('打开显示原内容，保存时原样提交（不 trim 不校验）', async () => {
     const wrapper = await mountPage()
-    await buttonByText(wrapper, '业务属性')!.trigger('click')
-    await flushPromises()
+    await clickRowMenuAction(wrapper, 1, '业务属性')
 
     const textarea = wrapper.find('.biz-attr-body textarea')
     expect((textarea.element as HTMLTextAreaElement).value).toBe('{"a": 1}')
@@ -936,8 +1160,7 @@ describe('业务属性（仅目标库）', () => {
 
   it('有未保存修改时关闭需二次确认', async () => {
     const wrapper = await mountPage()
-    await buttonByText(wrapper, '业务属性')!.trigger('click')
-    await flushPromises()
+    await clickRowMenuAction(wrapper, 1, '业务属性')
 
     await wrapper.find('.biz-attr-body textarea').setValue('changed')
     await nextTick()
@@ -950,8 +1173,7 @@ describe('业务属性（仅目标库）', () => {
 
   it('无修改时直接关闭不弹确认', async () => {
     const wrapper = await mountPage()
-    await buttonByText(wrapper, '业务属性')!.trigger('click')
-    await flushPromises()
+    await clickRowMenuAction(wrapper, 1, '业务属性')
 
     await buttonByText(wrapper, '取消')!.trigger('click')
     await flushPromises()
@@ -964,8 +1186,7 @@ describe('业务属性（仅目标库）', () => {
 describe('目标库命名策略（仅源库）', () => {
   it('打开显示策略列表与目标候选；标题含源库ID与名称；表格列含数据库类型', async () => {
     const wrapper = await mountPage()
-    await buttonByText(wrapper, '目标库命名策略')!.trigger('click')
-    await flushPromises()
+    await clickRowMenuAction(wrapper, 0, '目标库命名策略')
 
     expect(mockedNaming).toHaveBeenCalledWith('SRC001')
     const title = wrapper
@@ -988,8 +1209,7 @@ describe('目标库命名策略（仅源库）', () => {
 
   it('TABLE_MERGE 提交清空前缀后缀；CUSTOM 必填前后缀', async () => {
     const wrapper = await mountPage()
-    await buttonByText(wrapper, '目标库命名策略')!.trigger('click')
-    await flushPromises()
+    await clickRowMenuAction(wrapper, 0, '目标库命名策略')
 
     // 默认 TABLE_MERGE：选择目标库后直接新增
     await pickSelect(wrapper, '.naming-form', 0, 'TG002（目标库C）')
@@ -1032,8 +1252,7 @@ describe('目标库命名策略（仅源库）', () => {
 
   it('切回 TABLE_MERGE 自动清空前缀后缀', async () => {
     const wrapper = await mountPage()
-    await buttonByText(wrapper, '目标库命名策略')!.trigger('click')
-    await flushPromises()
+    await clickRowMenuAction(wrapper, 0, '目标库命名策略')
 
     await clickStrategyCard(wrapper, '自定义前后缀')
     await namingInput(wrapper, '表名前缀').setValue('pre')
@@ -1050,8 +1269,7 @@ describe('目标库命名策略（仅源库）', () => {
 
   it('编辑用原目标库 ID 定位路径，请求体可携带新目标库', async () => {
     const wrapper = await mountPage()
-    await buttonByText(wrapper, '目标库命名策略')!.trigger('click')
-    await flushPromises()
+    await clickRowMenuAction(wrapper, 0, '目标库命名策略')
 
     const editBtn = wrapper
       .findAll('.naming-table button')
@@ -1074,8 +1292,7 @@ describe('目标库命名策略（仅源库）', () => {
 
   it('删除命名策略确认后按 targetId 路径调用并刷新', async () => {
     const wrapper = await mountPage()
-    await buttonByText(wrapper, '目标库命名策略')!.trigger('click')
-    await flushPromises()
+    await clickRowMenuAction(wrapper, 0, '目标库命名策略')
 
     const delBtn = wrapper
       .findAll('.naming-table button')
@@ -1094,8 +1311,7 @@ describe('目标库命名策略（仅源库）', () => {
     let resolve!: (v: ApiResponse<null>) => void
     mockedDeleteNaming.mockReturnValueOnce(new Promise<ApiResponse<null>>((res) => (resolve = res)))
     const wrapper = await mountPage()
-    await buttonByText(wrapper, '目标库命名策略')!.trigger('click')
-    await flushPromises()
+    await clickRowMenuAction(wrapper, 0, '目标库命名策略')
 
     const delBtn = wrapper
       .findAll('.naming-table button')
@@ -1117,8 +1333,7 @@ describe('目标库命名策略（仅源库）', () => {
       new Promise<never>((_, rej) => (rejectConfirm = rej)),
     )
     const wrapper = await mountPage()
-    await buttonByText(wrapper, '目标库命名策略')!.trigger('click')
-    await flushPromises()
+    await clickRowMenuAction(wrapper, 0, '目标库命名策略')
 
     const delBtn = wrapper
       .findAll('.naming-table button')
@@ -1149,8 +1364,7 @@ describe('目标库命名策略（仅源库）', () => {
       new Promise<ApiResponse<null>>((_, rej) => (rejectCreate = rej)),
     )
     const wrapper = await mountPage()
-    await buttonByText(wrapper, '目标库命名策略')!.trigger('click')
-    await flushPromises()
+    await clickRowMenuAction(wrapper, 0, '目标库命名策略')
 
     // CUSTOM 策略下前后缀在非保存期可编辑
     await clickStrategyCard(wrapper, '自定义前后缀')
@@ -1190,8 +1404,7 @@ describe('目标库命名策略（仅源库）', () => {
       new Promise<ApiResponse<null>>((res) => (resolveCreate = res)),
     )
     const wrapper = await mountPage()
-    await buttonByText(wrapper, '目标库命名策略')!.trigger('click')
-    await flushPromises()
+    await clickRowMenuAction(wrapper, 0, '目标库命名策略')
 
     await pickSelect(wrapper, '.naming-form', 0, 'TG002（目标库C）')
     await exactButton(wrapper, '新增')!.trigger('click')
@@ -1213,8 +1426,7 @@ describe('目标库命名策略（仅源库）', () => {
   it('命名策略脏数据关闭需确认；拒绝保持弹窗', async () => {
     confirmSpy.mockRejectedValueOnce('cancel')
     const wrapper = await mountPage()
-    await buttonByText(wrapper, '目标库命名策略')!.trigger('click')
-    await flushPromises()
+    await clickRowMenuAction(wrapper, 0, '目标库命名策略')
 
     await pickSelect(wrapper, '.naming-form', 0, 'TG002（目标库C）')
     await nextTick()
@@ -1228,8 +1440,7 @@ describe('目标库命名策略（仅源库）', () => {
 
   it('命名策略脏数据关闭确认后关闭', async () => {
     const wrapper = await mountPage()
-    await buttonByText(wrapper, '目标库命名策略')!.trigger('click')
-    await flushPromises()
+    await clickRowMenuAction(wrapper, 0, '目标库命名策略')
 
     await pickSelect(wrapper, '.naming-form', 0, 'TG002（目标库C）')
     await nextTick()
@@ -1245,8 +1456,7 @@ describe('目标库命名策略（仅源库）', () => {
   it('编辑切换时脏数据需确认，拒绝后保持当前表单', async () => {
     confirmSpy.mockRejectedValueOnce('cancel')
     const wrapper = await mountPage()
-    await buttonByText(wrapper, '目标库命名策略')!.trigger('click')
-    await flushPromises()
+    await clickRowMenuAction(wrapper, 0, '目标库命名策略')
 
     const editBtn = wrapper
       .findAll('.naming-table button')
@@ -1434,8 +1644,7 @@ describe('生效查询快照与自动刷新（R1）', () => {
     await setQueryInput(wrapper, '数据源ID', 'NOPE')
 
     // 编辑成功后的自动刷新仍使用 A
-    await buttonByText(wrapper, '编辑')!.trigger('click')
-    await flushPromises()
+    await openEditRow(wrapper, srcRow)
     await editorInput(wrapper, '数据源名称').setValue('源库A改')
     await nextTick()
     await buttonByText(wrapper, '保存')!.trigger('click')
@@ -1460,8 +1669,7 @@ describe('生效查询快照与自动刷新（R1）', () => {
     await setQueryInput(wrapper, '数据源ID', 'NOPE')
 
     // 删除成功后的自动刷新仍使用 A
-    await buttonByText(wrapper, '删除')!.trigger('click')
-    await flushPromises()
+    await clickRowMenuAction(wrapper, 0, '删除')
 
     expect(mockedDelete).toHaveBeenCalledWith('SRC001')
     expect(elMessageSuccessSpy).toHaveBeenCalledWith('删除成功')
@@ -1503,8 +1711,7 @@ describe('生效查询快照与自动刷新（R1）', () => {
     expect(mockedList).toHaveBeenLastCalledWith({})
 
     // 重置后的自动刷新（删除成功）仍使用无条件快照
-    await buttonByText(wrapper, '删除')!.trigger('click')
-    await flushPromises()
+    await clickRowMenuAction(wrapper, 0, '删除')
     expect(mockedDelete).toHaveBeenCalledWith('SRC001')
     expect(mockedList).toHaveBeenLastCalledWith({})
     wrapper.unmount()
@@ -1526,8 +1733,7 @@ describe('生效查询快照与自动刷新（R1）', () => {
     await flushPromises()
 
     // 删除成功触发自动刷新（用生效快照 SRC）→ 请求挂起
-    await buttonByText(wrapper, '删除')!.trigger('click')
-    await flushPromises()
+    await clickRowMenuAction(wrapper, 0, '删除')
     expect(mockedDelete).toHaveBeenCalledWith('SRC001')
 
     // 随后重置：无条件请求立即返回空 → 系统空状态
@@ -1680,8 +1886,7 @@ describe('三个业务弹窗标题栏拖动（DS-REQ-112）', () => {
   it('删除确认框固定居中，不具备业务弹窗拖动能力', async () => {
     const wrapper = await mountPage()
     confirmSpy.mockRestore()
-    await buttonByText(wrapper, '删除')!.trigger('click')
-    await flushPromises()
+    await clickRowMenuAction(wrapper, 0, '删除')
 
     const box = document.querySelector('.el-message-box') as HTMLElement
     expect(box).toBeTruthy()
@@ -1786,8 +1991,7 @@ describe('拖动监听生命周期清理（R1）', () => {
 
   it('命名策略弹窗标题栏同样可拖动（三个业务弹窗全覆盖）', async () => {
     const wrapper = await mountPage()
-    await buttonByText(wrapper, '目标库命名策略')!.trigger('click')
-    await flushPromises()
+    await clickRowMenuAction(wrapper, 0, '目标库命名策略')
 
     const el = document.querySelector('.naming-dialog') as HTMLElement
     const header = document.querySelector('.naming-dialog .el-dialog__header') as HTMLElement
@@ -1816,8 +2020,7 @@ describe('表单标签左对齐与固定列宽（DS-REQ-113）', () => {
     await flushPromises()
 
     // 命名策略弹窗
-    await buttonByText(wrapper, '目标库命名策略')!.trigger('click')
-    await flushPromises()
+    await clickRowMenuAction(wrapper, 0, '目标库命名策略')
     const namingForm = wrapper.find('.naming-form')
     expect(namingForm.classes()).toContain('el-form--label-left')
     const namingLabel = namingForm.find('.el-form-item__label')
@@ -1826,8 +2029,7 @@ describe('表单标签左对齐与固定列宽（DS-REQ-113）', () => {
     await flushPromises()
 
     // 业务属性弹窗存在（textarea 无表单标签），具备 biz-attr-dialog 类
-    await buttonByText(wrapper, '业务属性')!.trigger('click')
-    await flushPromises()
+    await clickRowMenuAction(wrapper, 1, '业务属性')
     expect(wrapper.find('.biz-attr-dialog').exists()).toBe(true)
     await buttonByText(wrapper, '取消')!.trigger('click')
     await flushPromises()
@@ -1838,8 +2040,7 @@ describe('表单标签左对齐与固定列宽（DS-REQ-113）', () => {
 describe('命名策略弹窗布局（DS-REQ-114）', () => {
   it('桌面宽约1050px、七列、无分页、五行空间与 Tooltip', async () => {
     const wrapper = await mountPage()
-    await buttonByText(wrapper, '目标库命名策略')!.trigger('click')
-    await flushPromises()
+    await clickRowMenuAction(wrapper, 0, '目标库命名策略')
 
     const dialog = wrapper.find('.naming-dialog')
     expect(dialog.exists()).toBe(true)
@@ -1872,8 +2073,7 @@ describe('命名策略弹窗布局（DS-REQ-114）', () => {
 describe('命名策略单选卡片（DS-REQ-115）', () => {
   it('两张卡片固定文案、整卡点击选中态与键盘操作', async () => {
     const wrapper = await mountPage()
-    await buttonByText(wrapper, '目标库命名策略')!.trigger('click')
-    await flushPromises()
+    await clickRowMenuAction(wrapper, 0, '目标库命名策略')
 
     const cards = wrapper.findAll('.naming-form .strategy-card')
     expect(cards.length).toBe(2)
@@ -1903,8 +2103,7 @@ describe('命名策略单选卡片（DS-REQ-115）', () => {
 
   it('策略切换时前后缀联动：表合并清空并禁用前后缀', async () => {
     const wrapper = await mountPage()
-    await buttonByText(wrapper, '目标库命名策略')!.trigger('click')
-    await flushPromises()
+    await clickRowMenuAction(wrapper, 0, '目标库命名策略')
 
     await clickStrategyCard(wrapper, '自定义前后缀')
     await namingInput(wrapper, '表名前缀').setValue('pre')

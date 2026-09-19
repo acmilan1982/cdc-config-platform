@@ -24,6 +24,10 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.converter.HttpMessageNotReadableException;
+import org.springframework.util.StringUtils;
+import org.springframework.validation.BindException;
+import org.springframework.validation.FieldError;
+import org.springframework.web.bind.MethodArgumentNotValidException;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -176,5 +180,42 @@ public class DataSourceController {
             }
         }
         return null;
+    }
+
+    /**
+     * 查询参数绑定/字段校验失败（如非法 category）：按批准契约返回 HTTP 400 / code=400 / 字段级消息。
+     * MethodArgumentNotValidException 继承 BindException，且控制器局部处理器优先级高于 @RestControllerAdvice，
+     * 故此处对请求体校验必须保持既有 "field: msg; field: msg" 聚合语义，不得回归。
+     * 只输出字段名与错误类型，不泄露输入值、异常堆栈或内部实现细节。
+     */
+    @ExceptionHandler(BindException.class)
+    @ResponseStatus(HttpStatus.BAD_REQUEST)
+    public ApiResponse<Void> handleBindException(BindException e) {
+        log.warn("Invalid data source request parameters: {}", describeErrorFields(e));
+        return ApiResponse.fail(400, resolveBindExceptionMessage(e));
+    }
+
+    private static String resolveBindExceptionMessage(BindException e) {
+        List<FieldError> fieldErrors = e.getBindingResult().getFieldErrors();
+        if (!(e instanceof MethodArgumentNotValidException)) {
+            for (FieldError fieldError : fieldErrors) {
+                if ("category".equals(fieldError.getField()) && StringUtils.hasText(fieldError.getDefaultMessage())) {
+                    return fieldError.getDefaultMessage();
+                }
+            }
+        }
+        return fieldErrors.stream()
+                .map(fieldError -> fieldError.getField() + ": " + fieldError.getDefaultMessage())
+                .reduce((a, b) -> a + "; " + b)
+                .orElse("参数校验失败");
+    }
+
+    private static String describeErrorFields(BindException e) {
+        String fields = e.getBindingResult().getFieldErrors().stream()
+                .map(FieldError::getField)
+                .distinct()
+                .reduce((a, b) -> a + "," + b)
+                .orElse(null);
+        return fields != null ? "field=" + fields : "no-field-error";
     }
 }

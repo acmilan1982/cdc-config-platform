@@ -62,6 +62,10 @@ public class DataSourceServiceImpl implements DataSourceService {
         if (StringUtils.hasText(host)) {
             wrapper.apply("UPPER(DATA_SOURCE_HOST) LIKE UPPER('%' || {0} || '%') ESCAPE '\\'", escapeLike(host));
         }
+        String category = query.getCategory();
+        if (StringUtils.hasText(category)) {
+            wrapper.apply("UPPER(DATA_SOURCE_CATEGORY) = {0}", category);
+        }
 
         wrapper.eq(DataSource::getFgActive, "1");
         wrapper.orderByAsc(DataSource::getDataSourceId);

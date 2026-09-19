@@ -70,10 +70,10 @@
 | 通用交互、错误处理与安全 | DS-AC-093 ~ DS-AC-101 | 9 |
 | 补充验收（trim/临时连接/后端独立校验/无 DDL） | DS-AC-102 ~ DS-AC-106 | 5 |
 | 已批准的验收后页面调整（`APPROVED`，已执行：8 条 `PASS`、1 条 `BLOCKED`） | DS-AC-107 ~ DS-AC-115 | 9 |
-| 本轮列表首页选择性接入公共组件调整基线（`APPROVED`，未实现、未执行，全部 `NOT_RUN`） | DS-AC-116 ~ DS-AC-140 | 25 |
+| 本轮列表首页选择性接入公共组件调整基线（`APPROVED`，已实现待目测、未执行，全部 `NOT_RUN`） | DS-AC-116 ~ DS-AC-140 | 25 |
 | **合计（原批准 106 + 已批准调整 9）** | DS-AC-001 ~ DS-AC-115 | **115**（115 例已全部执行，定向正式复验 `PASS=113/FAIL=0/BLOCKED=2/NOT_RUN=0`，阻塞 `DS-AC-104`/`DS-AC-108`；整体正式验收状态 `BLOCKED`） |
 
-> 分层说明：上表“合计 115”为**既有基线**用例总数，已全部执行且统计逐字冻结。本轮调整基线另增 25 条（`DS-AC-116~140`，全部 `NOT_RUN`），**不计入**既有 115 条统计，二者按“既有基线 `APPROVED`（已执行）+ 本轮调整基线 `APPROVED`（验收标准已批准、尚未实现、尚未执行）”分层表述；既有 `PASS=113/FAIL=0/BLOCKED=2/NOT_RUN=0` 与 `DS-AC-104`、`DS-AC-108` 两个 `BLOCKED` 保持原样，不得因本轮调整清零或改写。
+> 分层说明：上表“合计 115”为**既有基线**用例总数，已全部执行且统计逐字冻结。本轮调整基线另增 25 条（`DS-AC-116~140`，全部 `NOT_RUN`），**不计入**既有 115 条统计，二者按“既有基线 `APPROVED`（已执行）+ 本轮调整基线 `APPROVED`（验收标准已批准、实现已完成待目测、尚未执行）”分层表述；既有 `PASS=113/FAIL=0/BLOCKED=2/NOT_RUN=0` 与 `DS-AC-104`、`DS-AC-108` 两个 `BLOCKED` 保持原样，不得因本轮调整清零或改写。
 
 ## 4. 验收用例
 
@@ -277,13 +277,13 @@
 | DS-AC-114 | PASS | DS-REQ-114 | 已进入数据源管理页面；实际复验需构造约 5 条专用命名策略（构造数据库状态需另行获得写授权） | 构造约 5 条专用命名策略后打开弹窗，观察列表 | 列表不分页，约 5 行记录可完整展示；目标库 ID、目标库名称、数据库类型、命名策略、前缀、后缀、操作七列布局不拥挤；长 ID/名称/前后缀内容省略显示，悬停展示完整值 |
 | DS-AC-115 | PASS | DS-REQ-115, DS-REQ-079, DS-REQ-080 | 已进入“目标库命名策略”弹窗新增/编辑策略 | 核验两张单选卡片的名称、说明、整卡点击与选中视觉；切换 `TABLE_MERGE` 与 `CUSTOM_PREFIX_SUFFIX` | 两张横向单选卡片第一行显示单选按钮与策略名称、第二行显示固定说明；点击整张卡片可选中，选中态为蓝色边框与浅蓝背景；切换为表合并时清空并禁用前后缀，切换为自定义前后缀时启用并按既有规则校验 |
 
-### 4.16 列表首页选择性接入查询列表页公共组件调整用例（`APPROVED`，全部 `NOT_RUN`）
+### 4.16 列表首页选择性接入查询列表页公共组件调整用例（`APPROVED`，已实现待目测，全部 `NOT_RUN`）
 
-> 以下 `DS-AC-116~140` 为本轮“列表首页选择性接入查询列表页公共组件”调整基线用例，状态**全部为 `NOT_RUN`**（尚未实现、尚未执行）。本轮调整基线分层状态：`adjustment_acceptance_definition_status=APPROVED`、`adjustment_baseline_status=APPROVED`、`implementation_status=NOT_STARTED`、`implementation_authorization_status=NOT_GRANTED_IN_THIS_TASK`、`acceptance_execution_status=ALL_NOT_RUN`。
+> 以下 `DS-AC-116~140` 为本轮“列表首页选择性接入查询列表页公共组件”调整基线用例，状态**全部为 `NOT_RUN`**（实现已完成待目测、尚未执行）。本轮调整基线分层状态：`adjustment_acceptance_definition_status=APPROVED`、`adjustment_baseline_status=APPROVED`、`implementation_status=IMPLEMENTED_PENDING_USER_REVIEW`、`implementation_authorization_status=GRANTED_IN_THIS_TASK`、`formal_acceptance_execution_status=NOT_RUN`、`new_adjustment_acceptance_status=ALL_NOT_RUN`。
 >
 > 批准链（2026-09-19）：初版草案提交 `01680ee527b8e35cd4afd84c4789b862d34f7a77` → R1 修订提交 `c3fd460bea64a14ccc7b52a554194a133330e29d` → ChatGPT 远程 Git R1 复审结论 `REVIEW_PASS` → 项目负责人 2026-09-19 明确回复“批准这轮调整基线”；批准任务 `DATA-SOURCE-LIST-PAGE-SELECTIVE-QUERY-LIST-INTEGRATION-APPROVAL-CLOSEOUT-001`。
 >
-> 批准验收标准**不等于**用例通过：这 25 条验收尚未执行，仍全部 `NOT_RUN`；本轮调整尚未实现（`NOT_STARTED`）。关联需求见 `REQUIREMENTS.md` §22 的 `DS-REQ-116~138`（23 条）。这 25 条**不计入**既有 115 条统计；既有 `PASS=113/FAIL=0/BLOCKED=2/NOT_RUN=0` 与 `DS-AC-104`/`DS-AC-108` 两个 `BLOCKED` 不受本轮影响。
+> 批准验收标准**不等于**用例通过：这 25 条验收尚未执行，仍全部 `NOT_RUN`；本轮调整已实现（`IMPLEMENTED_PENDING_USER_REVIEW`），实现完成不等于用例通过。关联需求见 `REQUIREMENTS.md` §22 的 `DS-REQ-116~138`（23 条）。这 25 条**不计入**既有 115 条统计；既有 `PASS=113/FAIL=0/BLOCKED=2/NOT_RUN=0` 与 `DS-AC-104`/`DS-AC-108` 两个 `BLOCKED` 不受本轮影响。
 >
 > 用例编号从既有最大未占用编号 `DS-AC-115` 继续，不重编号、不复用、不删除任何历史条目。
 
@@ -478,5 +478,6 @@
 | 2026-09-19 | 列表首页选择性接入公共组件调整用例草案落盘：新增 §4.16 与 `DS-AC-116~140` 共 25 条（**全部 `NOT_RUN`**，`DRAFT_PENDING_USER_REVIEW`，未实现、未执行），覆盖公共组件选择性接入范围与未接入范围、职责边界、三段结构、结果区头部、角色默认/查询/AND/规范化代码/重置立即查询/非法值、Loading 几何稳定、无刷新工具栏、无分页、Tooltip 保留、双击编辑保留且无提示文案、可见编辑按钮移除、“更多”带文字下拉、源库/目标库菜单差异与事件不冒泡、删除危险样式与业务语义不变、弹窗零变化、其他路由与参考页零回归、无样式泄漏；§3 分类数量表新增本轮草案行并加分层说明（25 条**不计入**既有 115 条）；§5 追踪矩阵追加 `DS-REQ-116~138` 行；§4.2/§4.3 分别加“局部替代提示”处理 `DS-AC-007`/`DS-AC-009`/`DS-AC-011` 被本轮局部替代的当前有效结论边界（其历史状态 `PASS` 与执行证据逐字保持）；既有 115 条用例、追踪矩阵既有行与 `PASS=113/FAIL=0/BLOCKED=2/NOT_RUN=0`、`DS-AC-104`/`DS-AC-108` 两个 `BLOCKED` 逐字保留，未置 `IMPLEMENTED_ACCEPTED` | DATA-SOURCE-LIST-PAGE-SELECTIVE-QUERY-LIST-INTEGRATION-BASELINE-001（列表首页调整基线草案；纯文档任务；未修改任何业务代码/测试/依赖/配置/SQL；未访问数据库/ZK/Kafka；未启动服务） |
 | 2026-09-19 | R1 定向修订（ChatGPT 远程独立复审四项问题）：修订**既有**用例文字与预期结果，**不新增、不删除、不重编号**任何用例，`DS-AC-116~140` 仍为 25 条且全部 `NOT_RUN`。① `DS-AC-124` 改为覆盖 `category` 归一化（缺席/`null`/空/仅空白 = 全部）、`SOURCE`/`TARGET` 合法、`source`/`target`/`FOO` 非法返回 HTTP 400 / `code=400` / 字段级消息（含通用兜底、不泄露堆栈）、**不得静默转大写**、不新增业务码、既有请求体校验消息不回归；② `DS-AC-119`/`DS-AC-130` 删除“直接进入表格”，明确保留 `QueryListResultPanel` 固定结构（头部 → 固定错误槽 → 固定分隔线 → `body`），`loadError` 的 `el-alert` 映射固定错误槽；③ `DS-AC-120` 明确角色为 `el-select` 单选下拉框、宽度 `140px`、选项顺序与宽屏排列顺序、窄屏整组换行；④ `DS-AC-127` 增加“无分页 ≠ 删除固定错误槽/分隔线”；`DS-AC-138` 补充固定错误槽承载范围。§3 分类数量、§5 追踪矩阵行数、既有 115 条用例与 `PASS=113/FAIL=0/BLOCKED=2/NOT_RUN=0`（含 `DS-AC-104`/`DS-AC-108` 两个 `BLOCKED` 及原始证据）逐字保留 | DATA-SOURCE-LIST-PAGE-SELECTIVE-QUERY-LIST-INTEGRATION-BASELINE-001-R1（ChatGPT 远程复审定向修订；纯文档任务；未修改任何业务代码/测试/依赖/配置/SQL；未访问数据库/ZK/Kafka；未启动服务） |
 | 2026-09-19 | 列表首页选择性接入公共组件调整验收标准批准收口：§4.16 章节标题与状态声明由 `DRAFT_PENDING_USER_REVIEW` 收口为 `APPROVED`（`adjustment_acceptance_definition_status=APPROVED`），§3 分类数量行与分层说明同步改为“本轮调整基线（`APPROVED`，未实现、未执行，全部 `NOT_RUN`）”；记录完整批准链（初版草案提交 `01680ee5...` → R1 修订提交 `c3fd460b...` → ChatGPT 远程 Git R1 复审 `REVIEW_PASS` → 项目负责人 2026-09-19 明确回复“批准这轮调整基线”；批准任务 `DATA-SOURCE-LIST-PAGE-SELECTIVE-QUERY-LIST-INTEGRATION-APPROVAL-CLOSEOUT-001`）；明确批准验收标准不等于用例通过——`DS-AC-116~140` 共 25 条编号、前置条件、操作与预期结果**零变化**且仍全部 `NOT_RUN`，实现状态仍为 `NOT_STARTED`、实现授权 `NOT_GRANTED_IN_THIS_TASK`；既有 `DS-AC-001~115` 用例、追踪矩阵既有行与 `PASS=113/FAIL=0/BLOCKED=2/NOT_RUN=0`、`DS-AC-104`/`DS-AC-108` 两个 `BLOCKED` 及原始证据逐字保留 | DATA-SOURCE-LIST-PAGE-SELECTIVE-QUERY-LIST-INTEGRATION-APPROVAL-CLOSEOUT-001（项目负责人批准驱动的调整基线批准收口；纯文档任务；未修改任何业务代码/测试/依赖/配置/SQL；未访问数据库/ZK/Kafka；未启动服务） |
+| 2026-09-19 | 本轮调整实现状态回写：§4.16 章节标题改为“（`APPROVED`，已实现待目测，全部 `NOT_RUN`）”，状态声明由 `implementation_status=NOT_STARTED`/`implementation_authorization_status=NOT_GRANTED_IN_THIS_TASK`/`acceptance_execution_status=ALL_NOT_RUN` 更新为 `implementation_status=IMPLEMENTED_PENDING_USER_REVIEW`/`implementation_authorization_status=GRANTED_IN_THIS_TASK`/`formal_acceptance_execution_status=NOT_RUN`/`new_adjustment_acceptance_status=ALL_NOT_RUN`；§3 分类数量行与分层说明中的“未实现”改为“已实现待目测”；`DS-AC-116~140` 共 25 条编号、前置条件、操作与预期结果与状态**零变化**，仍全部 `NOT_RUN`（自动化测试通过不等于正式执行这 25 条验收）；既有 `DS-AC-001~115` 用例、追踪矩阵与 `PASS=113/FAIL=0/BLOCKED=2/NOT_RUN=0`、`DS-AC-104`/`DS-AC-108` 两个 `BLOCKED` 逐字保留 | `DATA-SOURCE-LIST-PAGE-SELECTIVE-QUERY-LIST-INTEGRATION-IMPLEMENTATION-001`（已批准调整基线的前后端实现、自动化测试、构建与实现状态回写；未访问数据库/ZK/Kafka；未启动服务） |
 
 > 关联文档：需求基线 `docs/features/data-source-management/REQUIREMENTS.md`；初始执行报告 `docs/features/data-source-management/reports/DATA-SOURCE-REQUIREMENTS-BASELINE-001.md`；R1 执行报告 `docs/features/data-source-management/reports/DATA-SOURCE-REQUIREMENTS-BASELINE-001-R1.md`；原正式验收报告 `docs/features/data-source-management/reports/DATA-SOURCE-FORMAL-ACCEPTANCE-001.md`；R1 定向修订报告 `docs/features/data-source-management/reports/DATA-SOURCE-FORMAL-ACCEPTANCE-001-R1.md`；验收后调整草案执行报告 `docs/features/data-source-management/reports/DATA-SOURCE-POST-ACCEPTANCE-ADJUSTMENT-BASELINE-001.md`；验收后调整批准收口报告 `docs/features/data-source-management/reports/DATA-SOURCE-POST-ACCEPTANCE-ADJUSTMENT-APPROVAL-CLOSEOUT-001.md`；定向正式复验报告 `docs/features/data-source-management/reports/DATA-SOURCE-FORMAL-REVERIFICATION-001.md`。

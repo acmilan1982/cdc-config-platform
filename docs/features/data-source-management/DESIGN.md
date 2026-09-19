@@ -405,11 +405,11 @@
 
 ---
 
-## 11. 列表首页选择性接入查询列表页公共组件设计（`APPROVED`，未实现）
+## 11. 列表首页选择性接入查询列表页公共组件设计（`APPROVED`，`IMPLEMENTED_PENDING_USER_REVIEW`）
 
-> 状态：`APPROVED`。本轮调整基线分层状态：`adjustment_design_status=APPROVED`、`adjustment_baseline_status=APPROVED`、`implementation_status=NOT_STARTED`、`implementation_authorization_status=NOT_GRANTED_IN_THIS_TASK`、`acceptance_execution_status=ALL_NOT_RUN`。本节为任务 `DATA-SOURCE-LIST-PAGE-SELECTIVE-QUERY-LIST-INTEGRATION-BASELINE-001`（`task_type=FEATURE_ADJUSTMENT_BASELINE_DRAFT`）形成的设计基线，**已获批准**，但**尚未实现、尚未验收**。
+> 状态：`APPROVED`。本轮调整基线分层状态：`adjustment_design_status=APPROVED`、`adjustment_baseline_status=APPROVED`、`implementation_status=IMPLEMENTED_PENDING_USER_REVIEW`、`implementation_authorization_status=GRANTED_IN_THIS_TASK`、`formal_acceptance_execution_status=NOT_RUN`、`new_adjustment_acceptance_status=ALL_NOT_RUN`。本节为任务 `DATA-SOURCE-LIST-PAGE-SELECTIVE-QUERY-LIST-INTEGRATION-BASELINE-001`（`task_type=FEATURE_ADJUSTMENT_BASELINE_DRAFT`）形成的设计基线，**已获批准**，并已由 `DATA-SOURCE-LIST-PAGE-SELECTIVE-QUERY-LIST-INTEGRATION-IMPLEMENTATION-001` 实现，**尚未验收**。
 > 批准链（2026-09-19）：初版草案提交 `01680ee527b8e35cd4afd84c4789b862d34f7a77` → R1 修订提交 `c3fd460bea64a14ccc7b52a554194a133330e29d` → ChatGPT 远程 Git R1 复审结论 `REVIEW_PASS` → 项目负责人 2026-09-19 明确回复“批准这轮调整基线”；批准任务 `DATA-SOURCE-LIST-PAGE-SELECTIVE-QUERY-LIST-INTEGRATION-APPROVAL-CLOSEOUT-001`。
-> 批准设计**不代表**已实现、已测试、已验收或生产可用：实现状态仍为 `NOT_STARTED`，实现授权为 `NOT_GRANTED_IN_THIS_TASK`，`DS-AC-116~140`（25 条）仍全部 `NOT_RUN`。
+> 实现**不代表**已验收或生产可用：实现状态为 `IMPLEMENTED_PENDING_USER_REVIEW`，实现授权为 `GRANTED_IN_THIS_TASK`，`DS-AC-116~140`（25 条）仍全部 `NOT_RUN`。
 > §0~§10 的既有 `APPROVED` 设计基线与追踪结论保持原样、编号与正文逐字冻结；本节只就 `/config/data-source` **第一个主列表页面**的选择性接入给出结论，并明确其与既有设计的局部替代边界。
 > 关联需求：`REQUIREMENTS.md` §22 的 `DS-REQ-116~138`；关联验收：`ACCEPTANCE.md` §4.16 的 `DS-AC-116~140`（全部 `NOT_RUN`）。
 
@@ -550,3 +550,14 @@
 - 模板级 `page_migration_status`/`page_migration_authorization_status`/`pilot_page_selection_status` 维持 `NOT_STARTED`/`NOT_GRANTED`/`NOT_DECIDED` 不变，其他页面未获授权；
 - 既有统计 `PASS=113/FAIL=0/BLOCKED=2/NOT_RUN=0`（阻塞 `DS-AC-104`/`DS-AC-108`）与原始证据逐字保留；
 - 依据任务 `DATA-SOURCE-LIST-PAGE-SELECTIVE-QUERY-LIST-INTEGRATION-APPROVAL-CLOSEOUT-001`（项目负责人批准驱动的调整基线批准收口；纯文档任务；未修改任何业务代码/测试/依赖/配置/SQL；未访问数据库/ZK/Kafka；未启动服务）。
+
+### 12.4 实现状态回写（2026-09-19，任务 `DATA-SOURCE-LIST-PAGE-SELECTIVE-QUERY-LIST-INTEGRATION-IMPLEMENTATION-001`）
+
+- 2026-09-19；
+- §11 章节标题改为“（`APPROVED`，`IMPLEMENTED_PENDING_USER_REVIEW`）”，状态声明由 `implementation_status=NOT_STARTED`/`implementation_authorization_status=NOT_GRANTED_IN_THIS_TASK`/`acceptance_execution_status=ALL_NOT_RUN` 更新为 `implementation_status=IMPLEMENTED_PENDING_USER_REVIEW`/`implementation_authorization_status=GRANTED_IN_THIS_TASK`/`formal_acceptance_execution_status=NOT_RUN`/`new_adjustment_acceptance_status=ALL_NOT_RUN`（`adjustment_design_status`/`adjustment_baseline_status` 保持 `APPROVED`）；
+- 实现按 §11 已批准设计执行：`QueryListPageShell`/`QueryListQueryPanel`/`QueryListActions`/`QueryListResultPanel` 选择性接入、结果区固定结构（头部 → 固定错误槽 → 固定分隔线 → `body`）、角色 `el-select` 单选下拉框 `140px`、`category` 归一化/校验/控制器局部 `BindException` 处理、无分页、无刷新工具栏、Tooltip 保留、行双击编辑与“更多”操作列；未接入 `QueryListRefreshToolbar`、未启用稳定滚动条槽；
+- §11.1~§11.9 技术正文与 R1 冻结方案**零变化**；`DS-REQ-116~138` 数量（23 条）与编号未变；§0~§10 既有 `APPROVED` 设计基线与追踪结论逐字冻结、未修改；
+- 实现状态为 `IMPLEMENTED_PENDING_USER_REVIEW`，**未**置为 `IMPLEMENTED_ACCEPTED`/生产可用；`DS-AC-116~140`（25 条）仍全部 `NOT_RUN`（`ALL_NOT_RUN`），正式验收执行状态 `NOT_RUN`；
+- 模板级 `page_migration_status`/`page_migration_authorization_status`/`pilot_page_selection_status` 维持 `NOT_STARTED`/`NOT_GRANTED`/`NOT_DECIDED` 不变，其他页面未获授权；
+- 既有统计 `PASS=113/FAIL=0/BLOCKED=2/NOT_RUN=0`（阻塞 `DS-AC-104`/`DS-AC-108`）与原始证据逐字保留；
+- 依据任务 `DATA-SOURCE-LIST-PAGE-SELECTIVE-QUERY-LIST-INTEGRATION-IMPLEMENTATION-001`（已批准调整基线的前后端实现、自动化测试、构建与实现状态回写；未修改公共查询列表组件、数据库结构/数据/SQL/配置；未访问数据库/ZK/Kafka；未启动服务）。
