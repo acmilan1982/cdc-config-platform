@@ -486,15 +486,16 @@
 
 > **局部替代声明（§22.4）**：`DS-REQ-130` **局部替代** `DS-REQ-013` 的行操作“编辑”项与 `DS-REQ-014` 中“单击‘编辑’按钮”的表述。替代边界严格限定于此：`DS-REQ-013` 中“业务属性（仅目标库）”“目标库命名策略（仅源库）”“删除”三项**继续有效**；`DS-REQ-014` 中“双击行打开编辑弹窗”的结论**继续有效**，仅“单击编辑按钮”的入口被移除。`DS-REQ-103`（双击编辑与按钮编辑行为一致）的适用前提随之变化，本轮以 `DS-REQ-130` 为准：编辑入口只有双击一种。因此本轮不存在“编辑按钮存在”与“编辑按钮移除”两个互相冲突的当前有效结论。
 
-## 23. 列表展示全部状态、启用/停用及视觉微调调整需求（`APPROVED`，`IMPLEMENTED_PENDING_USER_REVIEW`）
+## 23. 列表展示全部状态、启用/停用及视觉微调调整需求（`APPROVED`，`IMPLEMENTED_PENDING_FINAL_ACCEPTANCE`，正式验收已执行 `PASS=42/FAIL=0/BLOCKED=0/NOT_RUN=0`）
 
-> 状态：`APPROVED`。本轮调整基线分层状态：`adjustment_document_status=APPROVED`、`adjustment_baseline_status=APPROVED`、`adjustment_requirements_status=APPROVED`、`implementation_status=IMPLEMENTED_PENDING_USER_REVIEW`、`implementation_authorization_status=GRANTED_IN_THIS_TASK`、`formal_acceptance_execution_status=NOT_RUN`、`new_adjustment_acceptance_status=ALL_NOT_RUN`。
+> 状态：`APPROVED`。本轮调整基线分层状态：`adjustment_document_status=APPROVED`、`adjustment_baseline_status=APPROVED`、`adjustment_requirements_status=APPROVED`、`implementation_status=IMPLEMENTED_PENDING_FINAL_ACCEPTANCE`、`implementation_authorization_status=GRANTED_IN_THIS_TASK`、`formal_acceptance_execution_status=EXECUTED_PASSED_LOCAL`、`new_adjustment_acceptance_status=PASS_42_OF_42`。
 > 任务：`DATA-SOURCE-LIST-ALL-STATUS-ENABLE-DISABLE-UI-ADJUSTMENT-BASELINE-001`（`task_type=FEATURE_ADJUSTMENT_BASELINE`，纯文档任务）。
 > 实现任务：`DATA-SOURCE-LIST-ALL-STATUS-ENABLE-DISABLE-UI-ADJUSTMENT-IMPLEMENTATION-001`（`DS-REQ-139~177` 的前后端实现、自动化测试、构建与实现状态回写，2026-09-19）。
+> 正式验收任务：`DATA-SOURCE-LIST-ALL-STATUS-ENABLE-DISABLE-UI-ADJUSTMENT-FORMAL-ACCEPTANCE-001`（真实浏览器 / 真实 HTTP / 真实数据库执行 `DS-AC-141~182` 共 42 条，2026-09-20；报告见 `reports/DATA-SOURCE-LIST-ALL-STATUS-ENABLE-DISABLE-UI-ADJUSTMENT-FORMAL-ACCEPTANCE-001.md`）。
 > 批准链（2026-09-19）：初版草案提交 `4ccd6610...` → R1 修订提交 `c4e1048...` → R2 极小修订提交 `aa906c0...` → ChatGPT 从远程 Git 复审 R2 提交 `aa906c0...` 结论 `REVIEW_PASS`（`blocking_finding_count=0`）→ 项目负责人 2026-09-19 明确回复“批准本轮调整基线” → 批准收口任务 `DATA-SOURCE-LIST-ALL-STATUS-ENABLE-DISABLE-UI-ADJUSTMENT-APPROVAL-CLOSEOUT-001`。批准对象为经初版、R1、R2 修订并由 ChatGPT 远程复审通过的**当前**调整基线，**非仅初版**。
-> 项目负责人已确认的产品输入（2026-09-19）：数据源管理列表页**展示全部状态**、允许**逐行启用/停用**，并作**头部、列、行高、字体与新增按钮**的视觉微调。本轮调整基线已把上述已确认结论写入权威文档；批准只代表需求基线正式成立，**不代表**已测试、已验收或生产可用：实现已由 `DATA-SOURCE-LIST-ALL-STATUS-ENABLE-DISABLE-UI-ADJUSTMENT-IMPLEMENTATION-001` 完成（实现状态 `IMPLEMENTED_PENDING_USER_REVIEW`、实现授权 `GRANTED_IN_THIS_TASK`），但新增验收 `DS-AC-141~182`（42 条）仍全部 `NOT_RUN`。
+> 项目负责人已确认的产品输入（2026-09-19）：数据源管理列表页**展示全部状态**、允许**逐行启用/停用**，并作**头部、列、行高、字体与新增按钮**的视觉微调。本轮调整基线已把上述已确认结论写入权威文档；批准只代表需求基线正式成立，**不代表**已测试、已验收或生产可用：实现已由 `DATA-SOURCE-LIST-ALL-STATUS-ENABLE-DISABLE-UI-ADJUSTMENT-IMPLEMENTATION-001` 完成（实现状态 `IMPLEMENTED_PENDING_FINAL_ACCEPTANCE`、实现授权 `GRANTED_IN_THIS_TASK`）；新增验收 `DS-AC-141~182`（42 条）已由 `DATA-SOURCE-LIST-ALL-STATUS-ENABLE-DISABLE-UI-ADJUSTMENT-FORMAL-ACCEPTANCE-001` 于 2026-09-20 在真实环境执行，结果 `PASS=42/FAIL=0/BLOCKED=0/NOT_RUN=0`，**未经最终验收结论前仍不构成验收通过或生产可用**。
 > 编号从当前最大已占用编号继续：新增 `DS-REQ-139~177` 共 39 条。既有 `DS-REQ-001~138` 的编号、正文与语义**逐字冻结**，本组需求不重编号、不复用、不删除任何历史条目；本轮对旧结论的替代一律通过“局部替代声明”显式给出边界，未声明替代的旧规则**继续有效**。
-> 既有正式复验统计逐字保留：`PASS=113 / FAIL=0 / BLOCKED=2 / NOT_RUN=0`，其中 `DS-AC-104`、`DS-AC-108` 仍为 `BLOCKED`。上一轮 `DS-AC-116~140` 仍全部 `NOT_RUN`，**不得**混入本轮新验收统计；本轮新增验收全部写为 `NOT_RUN`。
+> 既有正式复验统计逐字保留：`PASS=113 / FAIL=0 / BLOCKED=2 / NOT_RUN=0`，其中 `DS-AC-104`、`DS-AC-108` 仍为 `BLOCKED`。上一轮 `DS-AC-116~140` 仍全部 `NOT_RUN`，**不得**混入本轮新验收统计；本轮新增验收 `DS-AC-141~182` 的结论统计为 `PASS=42/FAIL=0/BLOCKED=0/NOT_RUN=0`，与上述既有统计相互独立、不得合并。
 
 ### 23.1 重置语义
 
