@@ -6,6 +6,8 @@
 执行日期：2026-09-20
 `RUN_TAG`：`FACC001`
 
+修订记录：R1（2026-09-20）——依据 ChatGPT 对远程提交 `0a4200a30beff753de997bd5fc13a9ee982e8aa9` 的 R1 复审（`review_status=CHANGES_REQUIRED`），仅修正本报告 §1 数据库行中的数据库**服务名拼写**（`prod.enmengtech.com` → `prod.enmotech.com`），使其与环境基线及实际执行证据一致。数据库地址、端口、Schema、用户名与密码按项目负责人明确决定继续明文保留，**不作缺陷或待整改项**。除此一处拼写外，本报告的结论、用例判定、证据与状态**均未改动**。
+
 ---
 
 ## 1. 任务身份与基线
@@ -19,7 +21,7 @@
 | 验收页面（用户访问） | `http://192.168.174.70:5173/config/data-source` |
 | 后端 | PID `14440`，`java -jar target/cdc-config-platform-backend-1.0.0-SNAPSHOT.jar --server.address=127.0.0.1`，监听 `[::ffff:127.0.0.1]:8080` |
 | 前端 | PID `14579`，Vite，监听 `0.0.0.0:5173` |
-| 数据库 | Oracle 19c，`192.168.174.65:1521/prod.enmengtech.com`（Schema/用户 `CDC`，开发库，只读访问既有数据） |
+| 数据库 | Oracle 19c，`192.168.174.65:1521/prod.enmotech.com`（Schema/用户 `CDC`，开发库，只读访问既有数据） |
 | `RUN_TAG` | `FACC001` |
 | 验收前 `CDC_DATA_SOURCE` 总行数 | 34 |
 | 验收前 `CDC_DATA_SOURCE_EXTEND` 总行数 | 10 |
