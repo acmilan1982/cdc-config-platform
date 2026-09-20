@@ -146,7 +146,7 @@ status=SUCCESS
 task_code=DATA-SOURCE-CREATE-EDIT-TIME-SORT-FORM-UI-ADJUSTMENT-FORMAL-ACCEPTANCE-001
 branch=develop
 base_commit_id=db1cfda7c8e10ddd5faa2a119e7550059a687d05
-result_commit_id=见提交后补记
+result_commit_id=935478a0966d2ec6fe157c3494d813427b1e05ff
 env_check_status=SUCCESS
 backend_build_status=SUCCESS
 frontend_build_status=SUCCESS
@@ -157,3 +157,17 @@ changed_files=见 §6
 error=
 AGENT_TASK_RESULT_END
 ```
+
+---
+
+## 附录 — 最终验收收口说明（2026-09-20）
+
+> 本附录由 `DATA-SOURCE-CREATE-EDIT-TIME-SORT-FORM-UI-ADJUSTMENT-FINAL-ACCEPTANCE-CLOSEOUT-001` 追加，**不重写**上述正式验收执行事实；仅补记提交号与最终验收决定。
+
+- **正式验收证据提交**：本报告的正式验收执行与状态回写提交为 `935478a0966d2ec6fe157c3494d813427b1e05ff`（上文机器可读结果 `result_commit_id` 已据此补记）。
+- **ChatGPT 远程复审**：ChatGPT 已从远程 Git 对该提交完成正式验收复审，结论 `status=REVIEW_PASS`、`reviewed_scope=DS-REQ-178~188 / DS-AC-183~199`、`acceptance_result=PASS_17_OF_17`、`blocking_finding_count=0`、`nonblocking_finding_count=2`、`project_owner_final_acceptance_recommendation=ACCEPT`。
+- **项目负责人最终验收决定**：项目负责人于 **2026-09-20** 明确决定**最终验收接受**。
+- **最终接受范围**：**严格只限于** `DS-REQ-178~188` / `DS-AC-183~199` 当前调整（`PASS=17/FAIL=0/BLOCKED=0/NOT_RUN=0`）；**不包括**数据源管理 Feature 整体正式验收状态，也不代表系统生产可用。
+- **被接受业务实现提交**：`55e6273b74182c408e36b75e09ad21819f33d3e2`（完整实现链 `807a5a58e373e522fe8b591569e22728a6662ed6 → 55e6273b74182c408e36b75e09ad21819f33d3e2`；初始提交存在已修复的密码误报必填缺陷，**不得**单独记作最终被接受实现）。
+- **两项非阻断文档修正**：`evidence/…/00-pregate-automation-gates.md` 的“课程库写入之前”笔误已改为“数据库写入之前”；本报告 `result_commit_id` 已由“见提交后补记”补记为上述提交号并追加本附录。
+- **本收口性质**：纯文档任务，未重跑测试或构建、未访问任何外部系统、未启停任何服务、未修改业务代码/测试/配置/依赖/锁文件/SQL；收口报告见 `reports/DATA-SOURCE-CREATE-EDIT-TIME-SORT-FORM-UI-ADJUSTMENT-FINAL-ACCEPTANCE-CLOSEOUT-001.md`。

@@ -1,7 +1,7 @@
 # 00 — 验收前自动化门禁结果（数据库写入之前）
 
 > 任务：`DATA-SOURCE-CREATE-EDIT-TIME-SORT-FORM-UI-ADJUSTMENT-FORMAL-ACCEPTANCE-001`
-> 执行时点：**课程库写入之前**（门禁在数据库写入前执行）
+> 执行时点：**数据库写入之前**（门禁在数据库写入前执行）
 > 执行工作树：`/agent/cdc-temp-ds-formui-formal-001`（`HEAD=db1cfda7c8e10ddd5faa2a119e7550059a687d05`，即本次运行源，前后端同源）
 > 执行时间：2026-09-20
 > 原始日志：`/agent/cdc-temp-ds-formui-001/logs/FACC002/`（`backend-targeted.log`、`backend-safe-suite.log`、`backend-package.log`、`frontend-targeted-109.log`、`frontend-targeted.log`、`frontend-full.log`、`frontend-build.log`、`frontend-npm-ci.log`，均**未入库**）
