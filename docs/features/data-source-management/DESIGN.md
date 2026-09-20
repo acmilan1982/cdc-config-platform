@@ -564,15 +564,15 @@
 - 既有统计 `PASS=113/FAIL=0/BLOCKED=2/NOT_RUN=0`（阻塞 `DS-AC-104`/`DS-AC-108`）与原始证据逐字保留；
 - 依据任务 `DATA-SOURCE-LIST-PAGE-SELECTIVE-QUERY-LIST-INTEGRATION-IMPLEMENTATION-001`（已批准调整基线的前后端实现、自动化测试、构建与实现状态回写；未修改公共查询列表组件、数据库结构/数据/SQL/配置；未访问数据库/ZK/Kafka；未启动服务）。
 
-## 13. 列表展示全部状态、启用/停用及视觉微调设计（`APPROVED`，`IMPLEMENTED_PENDING_FINAL_ACCEPTANCE`，正式验收已执行 `PASS=42/FAIL=0/BLOCKED=0/NOT_RUN=0`）
+## 13. 列表展示全部状态、启用/停用及视觉微调设计（`APPROVED`，`IMPLEMENTED_ACCEPTED`，正式验收已执行且最终验收已通过 `PASS=42/FAIL=0/BLOCKED=0/NOT_RUN=0`，`final_acceptance_status=ACCEPTED`）
 
-> 本轮调整基线分层状态：`adjustment_document_status=APPROVED`、`adjustment_baseline_status=APPROVED`、`adjustment_design_status=APPROVED`、`implementation_status=IMPLEMENTED_PENDING_FINAL_ACCEPTANCE`、`implementation_authorization_status=GRANTED_IN_THIS_TASK`、`formal_acceptance_execution_status=EXECUTED_PASSED_LOCAL`、`new_adjustment_acceptance_status=PASS_42_OF_42`（2026-09-20 由 `DATA-SOURCE-LIST-ALL-STATUS-ENABLE-DISABLE-UI-ADJUSTMENT-FORMAL-ACCEPTANCE-001` 在真实环境执行；**正式验收执行通过不等于最终验收通过**，未置 `IMPLEMENTED_ACCEPTED`/生产可用）。
+> 本轮调整基线分层状态：`adjustment_document_status=APPROVED`、`adjustment_baseline_status=APPROVED`、`adjustment_design_status=APPROVED`、`implementation_status=IMPLEMENTED_ACCEPTED`、`final_acceptance_status=ACCEPTED`、`implementation_authorization_status=GRANTED_IN_THIS_TASK`、`formal_acceptance_execution_status=EXECUTED_PASSED_LOCAL`、`new_adjustment_acceptance_status=PASS_42_OF_42`（2026-09-20 由 `DATA-SOURCE-LIST-ALL-STATUS-ENABLE-DISABLE-UI-ADJUSTMENT-FORMAL-ACCEPTANCE-001` 在真实环境执行，并经项目负责人 2026-09-20 最终验收接受；该 `ACCEPTED` **仅**适用于本节当前调整设计）。
 >
 > 批准链（2026-09-19）：初版草案提交 `4ccd6610...` → R1 修订提交 `c4e1048...` → R2 极小修订提交 `aa906c0...` → ChatGPT 从远程 Git 复审 R2 提交 `aa906c0...` 结论 `REVIEW_PASS`（`blocking_finding_count=0`）→ 项目负责人 2026-09-19 明确回复“批准本轮调整基线” → 批准收口任务 `DATA-SOURCE-LIST-ALL-STATUS-ENABLE-DISABLE-UI-ADJUSTMENT-APPROVAL-CLOSEOUT-001`。批准对象为经初版、R1、R2 修订并由 ChatGPT 远程复审通过的**当前**调整基线，**非仅初版**；批准与实现只代表设计基线正式成立且已落地，**不代表**已测试、已验收或生产可用。
 >
 > 任务：`DATA-SOURCE-LIST-ALL-STATUS-ENABLE-DISABLE-UI-ADJUSTMENT-BASELINE-001`（`task_type=FEATURE_ADJUSTMENT_BASELINE`，纯文档任务）。
 >
-> 实现任务：`DATA-SOURCE-LIST-ALL-STATUS-ENABLE-DISABLE-UI-ADJUSTMENT-IMPLEMENTATION-001`（2026-09-19）；实现授权 `GRANTED_IN_THIS_TASK`。正式验收任务：`DATA-SOURCE-LIST-ALL-STATUS-ENABLE-DISABLE-UI-ADJUSTMENT-FORMAL-ACCEPTANCE-001`（2026-09-20）；实现状态更新为 `IMPLEMENTED_PENDING_FINAL_ACCEPTANCE`，`DS-AC-141~182`（42 条）已由 `NOT_RUN` 更新为 `PASS`（`PASS=42/FAIL=0/BLOCKED=0/NOT_RUN=0`）。本节 §13.0~§13.9 设计结论**逐字未变**，仅状态分层随正式验收执行更新。
+> 实现任务：`DATA-SOURCE-LIST-ALL-STATUS-ENABLE-DISABLE-UI-ADJUSTMENT-IMPLEMENTATION-001`（2026-09-19）；实现授权 `GRANTED_IN_THIS_TASK`。正式验收任务：`DATA-SOURCE-LIST-ALL-STATUS-ENABLE-DISABLE-UI-ADJUSTMENT-FORMAL-ACCEPTANCE-001`（2026-09-20）；最终验收收口任务：`DATA-SOURCE-LIST-ALL-STATUS-ENABLE-DISABLE-UI-ADJUSTMENT-FINAL-ACCEPTANCE-CLOSEOUT-001`（2026-09-20，实现状态 `IMPLEMENTED_ACCEPTED`、`final_acceptance_status=ACCEPTED`），`DS-AC-141~182`（42 条）已由 `NOT_RUN` 更新为 `PASS`（`PASS=42/FAIL=0/BLOCKED=0/NOT_RUN=0`）。本节 §13.0~§13.9 设计结论**逐字未变**，仅状态分层随正式验收执行与最终验收接受更新。
 >
 > 本节冻结**设计结论**；关联需求 `DS-REQ-139~177`，关联验收 `DS-AC-141~182`。§0~§12 既有结论**逐字冻结**；本节对旧结论的替代一律通过 §13.0 的“局部替代声明”显式给出边界，未声明替代的旧规则继续有效。
 
@@ -788,3 +788,12 @@
 - **§13.0~§13.9 设计正文（含 R1 冻结方案与 R2 极小修订）逐字零变化**：`DS-REQ-139~177`（39 条）编号与正文未改；`DS-AC-001~182` 编号、关联需求、前置条件、操作步骤、预期结果零变化，仅 `DS-AC-141~182` 状态列由 `NOT_RUN` 更新为 `PASS`。
 - 既有正式复验统计 `PASS=113/FAIL=0/BLOCKED=2/NOT_RUN=0`（阻塞 `DS-AC-104`/`DS-AC-108`）**逐字保留**；上一轮 `DS-AC-116~140`（25 条）仍全部 `NOT_RUN`；实现状态**未**置为 `IMPLEMENTED_ACCEPTED`/`ACCEPTED`/生产可用，正式验收执行通过**不等于**最终验收通过。
 - 本任务未修改任何业务代码/测试/配置/依赖/锁文件/SQL/DDL；数据库仅执行 R2 批准的受控写入与清理（残留 `0`、既有数据字节级未变）、未执行 DDL；ZooKeeper 只读、无 Kafka、未访问业务源库/目标库；临时验收服务已按精确 PID 停止。报告见 `reports/DATA-SOURCE-LIST-ALL-STATUS-ENABLE-DISABLE-UI-ADJUSTMENT-FORMAL-ACCEPTANCE-001.md`。
+
+### 14.6 最终验收接受与状态回写（2026-09-20，任务 `DATA-SOURCE-LIST-ALL-STATUS-ENABLE-DISABLE-UI-ADJUSTMENT-FINAL-ACCEPTANCE-CLOSEOUT-001`）
+
+- 依据 ChatGPT 对远程证据提交 `30e902f7c2c3de62b7a7ff454fa25a4cef74fdfa` 的正式验收 R1 复审结论 `review_status=REVIEW_PASS`、`blocking_finding_count=0`；项目负责人据此于 2026-09-20 作出**最终验收接受**决定。
+- **§13 标题与状态块更新**：标题更新为「（`APPROVED`，`IMPLEMENTED_ACCEPTED`，正式验收已执行且最终验收已通过 `PASS=42/FAIL=0/BLOCKED=0/NOT_RUN=0`，`final_acceptance_status=ACCEPTED`）」；`implementation_status` 由 `IMPLEMENTED_PENDING_FINAL_ACCEPTANCE` 更新为 `IMPLEMENTED_ACCEPTED`，并新增 `final_acceptance_status=ACCEPTED`；`formal_acceptance_execution_status=EXECUTED_PASSED_LOCAL`、`new_adjustment_acceptance_status=PASS_42_OF_42` 逐字保留；`adjustment_document_status`/`adjustment_baseline_status`/`adjustment_design_status` 仍为 `APPROVED`。
+- **接受范围**：`DS-REQ-139~177`、`DS-AC-141~182`、正式验收结果 `PASS=42/FAIL=0/BLOCKED=0/NOT_RUN=0`、被验收业务实现提交 `399cb2249f60411b52235a859a8ce95d9f6e4579`、证据链截至 `30e902f7c2c3de62b7a7ff454fa25a4cef74fdfa`。
+- **§13.0~§13.9 设计正文（含 R1 冻结方案与 R2 极小修订）逐字零变化**；`DS-REQ-139~177`（39 条）与 `DS-AC-001~182` 编号、前置条件、操作步骤、预期结果未改。
+- **边界**：该 `ACCEPTED` **仅**适用于本轮当前调整设计，**不**把数据源管理 Feature 整体正式验收状态改为 `ACCEPTED`；既有 `PASS=113/FAIL=0/BLOCKED=2/NOT_RUN=0`、`DS-AC-104`/`DS-AC-108` 两个 `BLOCKED`、上一轮 `DS-AC-116~140`（25 条全部 `NOT_RUN`）均未改变。
+- 本任务未访问数据库/ZK/Kafka/源库/目标库；未启动服务；未重跑测试或构建；未修改业务代码/测试/配置/依赖/锁文件。

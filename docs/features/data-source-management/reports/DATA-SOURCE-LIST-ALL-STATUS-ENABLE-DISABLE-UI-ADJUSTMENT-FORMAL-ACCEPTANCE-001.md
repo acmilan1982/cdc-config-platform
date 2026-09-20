@@ -245,12 +245,15 @@ EXTEND DIFF: identical   （10 条记录，无任何差异）
 1. **`DS-AC-175` 证据层级**：该分支无法在不改代码、不碰既有数据、不制造不安全竞态的前提下取得端到端真实 HTTP 证据，按任务 §9.4 使用定向自动化测试 + 实现路径审计作为补充证据，已在证据文件中逐层明示，**不得**据此推断为端到端真实环境验证。
 2. **既有快照摘要字面量不可复现**：见 §5.3 末段，已如实报告并以逐字节基线比对替代。
 3. **既有 `DS-AC-104`/`DS-AC-108` 两个 `BLOCKED`**：与本轮调整无关，保持原状。
-4. **本报告不代表正式验收终审通过**：实现状态最多为 `IMPLEMENTED_PENDING_FINAL_ACCEPTANCE`；`ACCEPTED`/`IMPLEMENTED_ACCEPTED`/生产可用需由项目负责人最终决定。
+4. **本报告不代表正式验收终审通过**：本报告在执行时点不构成终审；`ACCEPTED`/`IMPLEMENTED_ACCEPTED`/生产可用需由项目负责人最终决定。**（收口记录，2026-09-20）** 该最终决定已于 2026-09-20 作出：ChatGPT 对远程证据提交 `30e902f7c2c3de62b7a7ff454fa25a4cef74fdfa` 的正式验收 R1 复审结论为 `review_status=REVIEW_PASS`、`blocking_finding_count=0`；项目负责人据此接受当前调整 `DS-REQ-139~177`/`DS-AC-141~182`，最终状态 `implementation_status=IMPLEMENTED_ACCEPTED`、`final_acceptance_status=ACCEPTED`（收口任务 `DATA-SOURCE-LIST-ALL-STATUS-ENABLE-DISABLE-UI-ADJUSTMENT-FINAL-ACCEPTANCE-CLOSEOUT-001`，见 `reports/DATA-SOURCE-LIST-ALL-STATUS-ENABLE-DISABLE-UI-ADJUSTMENT-FINAL-ACCEPTANCE-CLOSEOUT-001.md`）。该 `ACCEPTED` **仅**适用于当前调整，**不**改变数据源管理 Feature 整体正式验收状态。
 
-### 7.4 下一环节
+### 7.4 下一环节（已按序完成）
 
 ```text
 CHATGPT_REMOTE_GIT_FORMAL_ACCEPTANCE_REVIEW_THEN_PROJECT_OWNER_FINAL_ACCEPTANCE_DECISION
+→ 已完成：ChatGPT 对远程证据提交 30e902f7... 复审 REVIEW_PASS（blocking_finding_count=0）
+→ 已完成：项目负责人 2026-09-20 最终验收接受（implementation_status=IMPLEMENTED_ACCEPTED、final_acceptance_status=ACCEPTED）
+next_step=FINAL_ACCEPTANCE_CLOSED
 ```
 
-即：先由 ChatGPT 对远程 Git 提交做独立正式验收复审，再由项目负责人做最终验收决定。
+即：先由 ChatGPT 对远程 Git 提交做独立正式验收复审（已完成），再由项目负责人做最终验收决定（已完成）。本报告对应的正式验收执行结论保持 `PASS=42/FAIL=0/BLOCKED=0/NOT_RUN=0` 不变。

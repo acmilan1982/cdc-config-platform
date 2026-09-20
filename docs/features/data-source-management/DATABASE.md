@@ -240,7 +240,7 @@ new_adjustment_acceptance_status=ALL_NOT_RUN
 
 ---
 
-## 9. 本轮列表展示全部状态与启用/停用的数据库变化声明（`APPROVED`，实现后无数据库变化，正式验收已执行）
+## 9. 本轮列表展示全部状态与启用/停用的数据库变化声明（`APPROVED`，实现后无数据库变化，正式验收已执行且最终验收已通过）
 
 > 状态：`APPROVED`。本轮调整基线分层状态：
 
@@ -248,7 +248,8 @@ new_adjustment_acceptance_status=ALL_NOT_RUN
 adjustment_document_status=APPROVED
 adjustment_baseline_status=APPROVED
 adjustment_database_status=APPROVED
-implementation_status=IMPLEMENTED_PENDING_FINAL_ACCEPTANCE
+implementation_status=IMPLEMENTED_ACCEPTED
+final_acceptance_status=ACCEPTED
 implementation_authorization_status=GRANTED_IN_THIS_TASK
 formal_acceptance_execution_status=EXECUTED_PASSED_LOCAL
 new_adjustment_acceptance_status=PASS_42_OF_42
@@ -256,10 +257,10 @@ new_adjustment_acceptance_status=PASS_42_OF_42
 
 > 正式验收（`DATA-SOURCE-LIST-ALL-STATUS-ENABLE-DISABLE-UI-ADJUSTMENT-FORMAL-ACCEPTANCE-001`，2026-09-20）确认：本轮调整**零 DDL、零存量清洗**，未新增/修改表、字段、索引、约束、序列或视图；验收期间使用的受控自建数据（`FACC001-*`）已按已批准清单精确白名单清理，主表/延伸表白名单残留均为 `0`，既有 34 条主表与 10 条延伸表记录逐字节与验收前一致（未修改、未删除）。本条**不构成**任何数据库变更授权；本轮仍不存在任何待执行的数据库变更。
 
-- 任务：`DATA-SOURCE-LIST-ALL-STATUS-ENABLE-DISABLE-UI-ADJUSTMENT-BASELINE-001`（纯文档调整基线）。实现任务：`DATA-SOURCE-LIST-ALL-STATUS-ENABLE-DISABLE-UI-ADJUSTMENT-IMPLEMENTATION-001`（2026-09-19）。关联需求 `DS-REQ-150`~`DS-REQ-159`、`DS-REQ-168`~`DS-REQ-171`、`DS-REQ-176`、`DS-REQ-177`；关联验收 `DS-AC-150`~`DS-AC-178`、`DS-AC-182`（全部 `NOT_RUN`）。
+- 任务：`DATA-SOURCE-LIST-ALL-STATUS-ENABLE-DISABLE-UI-ADJUSTMENT-BASELINE-001`（纯文档调整基线）。实现任务：`DATA-SOURCE-LIST-ALL-STATUS-ENABLE-DISABLE-UI-ADJUSTMENT-IMPLEMENTATION-001`（2026-09-19）。正式验收任务：`DATA-SOURCE-LIST-ALL-STATUS-ENABLE-DISABLE-UI-ADJUSTMENT-FORMAL-ACCEPTANCE-001`（2026-09-20）。最终验收收口任务：`DATA-SOURCE-LIST-ALL-STATUS-ENABLE-DISABLE-UI-ADJUSTMENT-FINAL-ACCEPTANCE-CLOSEOUT-001`（2026-09-20，项目负责人最终验收接受）。关联需求 `DS-REQ-150`~`DS-REQ-159`、`DS-REQ-168`~`DS-REQ-171`、`DS-REQ-176`、`DS-REQ-177`；关联验收 `DS-AC-150`~`DS-AC-178`、`DS-AC-182`（已于 2026-09-20 正式验收执行并由 `NOT_RUN` 更新为 `PASS`，`PASS=42/FAIL=0/BLOCKED=0/NOT_RUN=0`）。
 - **批准链（完整）**：初版提交 `4ccd66106e832a0fd10dc42617507899cbb26463` → R1 修订提交 `c4e10486465fbb406dbc068ff0998c49edd4e53b` → R2 修订提交 `aa906c0004d51d638a16212f3d6ba7753d18288d`；ChatGPT 远程复审（对 R2 提交 `aa906c0...`）= `REVIEW_PASS`，`blocking_finding_count=0`；项目负责人批准日期 `2026-09-19`，批准表述“批准本轮调整基线”，批准权限 `项目负责人（用户）`，批准任务 `DATA-SOURCE-LIST-ALL-STATUS-ENABLE-DISABLE-UI-ADJUSTMENT-APPROVAL-CLOSEOUT-001`。
 - 本批准针对**初版 + R1 + R2 修订后、且经 ChatGPT 远程复审通过**的调整基线，**非**仅批准初版草案。
-- 本节**已**获得项目负责人批准，**尚未**授权实现，**未**执行任何正式验收。
+- 本节**已**获得项目负责人批准，**已**授权并完成实现，**已**执行正式验收并经项目负责人 2026-09-20 最终验收接受（`implementation_status=IMPLEMENTED_ACCEPTED`、`final_acceptance_status=ACCEPTED`；该接受**仅**适用于本节当前调整，**不构成**任何数据库变更授权）。
 
 ### 9.1 无数据库变化声明
 
@@ -392,3 +393,11 @@ WHERE DATA_SOURCE_ID = :dataSourceId
 - **编号与正文零变化**：`DS-REQ-001~177` 与 `DS-AC-001~182` 的编号与正文，以及既有统计 `PASS=113/FAIL=0/BLOCKED=2/NOT_RUN=0`（阻塞 `DS-AC-104`/`DS-AC-108`）均未改动；本轮仅将 `DS-AC-141~182` 状态由 `NOT_RUN` 更新为 `PASS`（42/42），`DS-AC-116~140` 仍全部 `NOT_RUN`；实现状态未置 `IMPLEMENTED_ACCEPTED`/`ACCEPTED`/`COMPLETED`。
 - 本节仅记录正式验收的数据库侧事实，**不构成任何数据库结构变更、存量数据变更或后续写操作的授权**；证据见 `evidence/DATA-SOURCE-LIST-ALL-STATUS-ENABLE-DISABLE-UI-ADJUSTMENT-FORMAL-ACCEPTANCE-001/`，报告见 `reports/DATA-SOURCE-LIST-ALL-STATUS-ENABLE-DISABLE-UI-ADJUSTMENT-FORMAL-ACCEPTANCE-001.md`。
 - 本轮未访问 ZooKeeper/Kafka/业务源库/目标库；未修改任何业务代码/测试/依赖/配置/SQL/锁文件。
+
+### 10.7 最终验收接受与状态回写（2026-09-20，任务 `DATA-SOURCE-LIST-ALL-STATUS-ENABLE-DISABLE-UI-ADJUSTMENT-FINAL-ACCEPTANCE-CLOSEOUT-001`）
+
+- 依据 ChatGPT 对远程证据提交 `30e902f7c2c3de62b7a7ff454fa25a4cef74fdfa` 的正式验收 R1 复审结论 `review_status=REVIEW_PASS`、`blocking_finding_count=0`；项目负责人据此于 2026-09-20 作出**最终验收接受**决定。
+- **§9 标题与状态块更新**：标题更新为「（`APPROVED`，实现后无数据库变化，正式验收已执行且最终验收已通过）」；状态块 `implementation_status` 由 `IMPLEMENTED_PENDING_FINAL_ACCEPTANCE` 更新为 `IMPLEMENTED_ACCEPTED`，并新增 `final_acceptance_status=ACCEPTED`；`formal_acceptance_execution_status=EXECUTED_PASSED_LOCAL`、`new_adjustment_acceptance_status=PASS_42_OF_42` 逐字保留。
+- **§9.1 零数据库变化声明逐字保留**：最终验收接受**未**引入任何表/列/主键/唯一约束/索引/序列/视图/同义词/触发器变化，**无 DDL**、**无存量数据清洗**；既有 34 条主表与 10 条延伸表记录仍与验收前逐字节一致。
+- **接受范围与边界**：`DS-REQ-139~177`/`DS-AC-141~182`、正式验收结果 `PASS=42/FAIL=0/BLOCKED=0/NOT_RUN=0`、被验收业务实现提交 `399cb224...`、证据链截至 `30e902f...`；该 `ACCEPTED` **仅**适用于本轮当前调整，**不构成**任何数据库变更授权，也**不**把 Feature 整体正式验收状态改为 `ACCEPTED`；既有 `PASS=113/FAIL=0/BLOCKED=2/NOT_RUN=0`、`DS-AC-104`/`DS-AC-108`、上一轮 `DS-AC-116~140`（25 条全部 `NOT_RUN`）均未改变。
+- 本任务未访问数据库/ZK/Kafka/源库/目标库；未启动服务；未重跑测试或构建；未修改业务代码/测试/依赖/配置/SQL/锁文件。
