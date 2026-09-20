@@ -401,3 +401,85 @@ WHERE DATA_SOURCE_ID = :dataSourceId
 - **§9.1 零数据库变化声明逐字保留**：最终验收接受**未**引入任何表/列/主键/唯一约束/索引/序列/视图/同义词/触发器变化，**无 DDL**、**无存量数据清洗**；既有 34 条主表与 10 条延伸表记录仍与验收前逐字节一致。
 - **接受范围与边界**：`DS-REQ-139~177`/`DS-AC-141~182`、正式验收结果 `PASS=42/FAIL=0/BLOCKED=0/NOT_RUN=0`、被验收业务实现提交 `399cb224...`、证据链截至 `30e902f...`；该 `ACCEPTED` **仅**适用于本轮当前调整，**不构成**任何数据库变更授权，也**不**把 Feature 整体正式验收状态改为 `ACCEPTED`；既有 `PASS=113/FAIL=0/BLOCKED=2/NOT_RUN=0`、`DS-AC-104`/`DS-AC-108`、上一轮 `DS-AC-116~140`（25 条全部 `NOT_RUN`）均未改变。
 - 本任务未访问数据库/ZK/Kafka/源库/目标库；未启动服务；未重跑测试或构建；未修改业务代码/测试/依赖/配置/SQL/锁文件。
+
+## 11. 本轮新增/修改时间字段维护与列表排序的数据库变化声明（`APPROVED`，实现后无数据库变化，`IMPLEMENTED_PENDING_USER_REVIEW`）
+
+> 分层状态：`adjustment_document_status=APPROVED`、`adjustment_baseline_status=APPROVED`、`adjustment_database_status=APPROVED`、`implementation_authorization_status=GRANTED_IN_THIS_TASK`、`implementation_status=IMPLEMENTED_PENDING_USER_REVIEW`、`formal_acceptance_execution_status=NOT_RUN`、`new_adjustment_acceptance_status=ALL_NOT_RUN`。本轮验收 `DS-AC-183~199`（17 条）全部 `NOT_RUN`。
+>
+> 本节仅为文档声明，**不构成任何数据库写操作的授权**。
+
+### 11.1 零数据库结构变化声明
+
+- 本轮**无任何**表/列/主键/唯一约束/索引/序列/视图/同义词/触发器变化；**零 DDL**。
+- `INSERT_TIME`、`UPDATE_TIME` 为 `CDC_DATA_SOURCE` **既有物理列**（见 §1），本轮**不**新增列、**不**修改列定义、**不**新增默认值、**不**新增触发器。
+- 本轮**不**为本调整新增索引；排序性能不由新增索引承载。
+- 本轮**不**回填、不清洗、不修改任何存量记录的时间字段；存量时间字段为空的记录**保持为空**。
+
+### 11.2 新增路径的写入语义（`DS-REQ-178`）
+
+| 项目 | 内容 |
+|---|---|
+| 目标表 | `CDC.DATA_SOURCE`（`CDC_DATA_SOURCE`） |
+| 语句 | 单条显式列清单 `INSERT`（`DataSourceMapper.insertWithSysdate`） |
+| 时间列 | `INSERT_TIME`、`UPDATE_TIME` 在**同一语句**中以 **`SYSDATE`** 写入 |
+| 取值来源 | Oracle 数据库当前时间；**不是** JVM 时间，**不是**列默认值 |
+| 一致性 | 两列由同一语句同一 `SYSDATE` 取值，库内时间差为 0 |
+| 其他列 | `FG_ACTIVE='1'` 等既有新增语义**不变**；实体不承载时间值 |
+
+- 该语句由应用在运行时执行；**本任务未由 Agent 执行任何 DML**。
+
+### 11.3 修改路径的写入语义（`DS-REQ-179`~`DS-REQ-182`）
+
+| 场景 | 语句形态 | 时间列 |
+|---|---|---|
+| 编辑保存（主弹窗） | 单条主表 `UPDATE`，`SET` 业务字段 + `UPDATE_TIME = SYSDATE` | `UPDATE_TIME` 更新；`INSERT_TIME` **不参与 SET** |
+| 非幂等启用 | 单条带原状态条件的 `UPDATE`，`SET FG_ACTIVE='1'` + `UPDATE_TIME = SYSDATE` | 同上 |
+| 非幂等停用 / 异常归一化停用 | 单条带原状态条件的 `UPDATE`，`SET FG_ACTIVE='0'` + `UPDATE_TIME = SYSDATE`（`NULL` 匹配用 `IS NULL`） | 同上 |
+| 幂等启用 / 幂等停用 | **无语句**（函数开头早退，零 DML） | 不写 |
+| 业务属性保存 | 单条主表 `UPDATE`，`SET DATA_SOURCE_BIZ_ATTR` + `UPDATE_TIME = SYSDATE` | 同上 |
+| 目标库命名策略（列表/新增/编辑/删除） | 只写 `CDC_DATA_SOURCE_EXTEND` | **不**联动主表 `UPDATE_TIME` |
+| 删除 | 既有 `DELETE`，语义不变 | 不写 |
+
+- `UPDATE_TIME = SYSDATE` 与业务字段**在同一条 `UPDATE`** 中完成；失败、并发冲突或影响行数 ≠ 1 的既有分支**继续**抛错并回滚，时间字段与业务字段同事务回滚，**不会**单独留下变化。
+- 上述写入均由应用在运行时执行；**本任务未由 Agent 执行任何 DML**。
+
+### 11.4 列表排序的数据库语义（`DS-REQ-183`）
+
+```sql
+ORDER BY UPDATE_TIME DESC NULLS LAST, INSERT_TIME DESC NULLS LAST, DATA_SOURCE_ID ASC
+```
+
+- 两个 `NULLS LAST` 与末尾 `DATA_SOURCE_ID ASC` **均为必需**（Oracle 专有排序语义；`DATA_SOURCE_ID ASC` 为时间相同时的稳定排序第三键）。
+- 该子句由后端查询明确生成，**前端不做**二次排序；**不**依赖任何新增索引。
+- `NULLS LAST` 保证存量时间字段为空的记录自然排在有时间记录**之后**，且**不要求**任何存量回填。
+
+### 11.5 局部替代声明
+
+1. **对既有“默认 `DATA_SOURCE_ID ASC`”排序结论**：`DS-REQ-183` **局部替代** `DS-REQ-010` 的默认排序键；`DATA_SOURCE_ID` 作为**第三排序键**继续生效。
+2. **对既有 §2/§4 操作矩阵**：本轮**不替代**任何既有单元格语义；`§9` 启停写入边界（只写 `FG_ACTIVE`、条件 `UPDATE`、`50002` 回滚、不级联）在本轮被**扩展**为“同一 `UPDATE` 中同时维护 `UPDATE_TIME`”，其余结论**不变**。
+3. **对既有数据边界**：`§3` 更新/删除边界、`§5` 数据安全、`§8` 既有声明**逐字保留**，本轮不改变任何既有约束、密码安全或并发结论。
+
+### 11.6 追踪
+
+| 主题 | 需求 | 验收 |
+|---|---|---|
+| 新增同一 INSERT 写两个 `SYSDATE` 时间列 | 178 | 183 |
+| 编辑保存保持 `INSERT_TIME` 并更新 `UPDATE_TIME` | 179 | 184 |
+| 非幂等启用/停用及异常归一化更新时间、幂等不写 | 180 | 185,186 |
+| 业务属性保存更新时间与失败整体回滚 | 181 | 187 |
+| 命名策略不联动主表时间、无回填、无 DDL | 182 | 188 |
+| 列表三键排序（两键 `DESC NULLS LAST` + 稳定第三键） | 183 | 189,190,191 |
+| 纯前端视觉项（无数据库变化） | 184~188 | 192~199 |
+
+## 12. 本轮调整变更记录
+
+### 12.1 实现与状态回写（2026-09-20，任务 `DATA-SOURCE-CREATE-EDIT-TIME-SORT-FORM-UI-ADJUSTMENT-001`）
+
+- 新增 §11「本轮新增/修改时间字段维护与列表排序的数据库变化声明（`APPROVED`，实现后无数据库变化，`IMPLEMENTED_PENDING_USER_REVIEW`）」与本节（§12）。
+- 分层状态：`adjustment_document_status=APPROVED`、`adjustment_baseline_status=APPROVED`、`adjustment_database_status=APPROVED`、`implementation_authorization_status=GRANTED_IN_THIS_TASK`、`implementation_status=IMPLEMENTED_PENDING_USER_REVIEW`、`formal_acceptance_execution_status=NOT_RUN`、`new_adjustment_acceptance_status=ALL_NOT_RUN`；项目负责人已在当前会话明确批准该方案。
+- **§11.1 零数据库变化声明逐字保留**：实现后**仍无任何**表/列/主键/唯一约束/索引/序列/视图/同义词/触发器变化，**无 DDL**、**无存量数据清洗/订正**、**无新增索引**；`INSERT_TIME`/`UPDATE_TIME` 仍为既有物理列。
+- 实现落点：`DataSourceMapper` 新增显式注解 `INSERT`（同一语句 `SYSDATE, SYSDATE`）；`DataSourceServiceImpl` 的 `update`/`updateStatusConditionally`/`saveBizAttr` 在同一 `UPDATE` 中追加 `UPDATE_TIME = SYSDATE`；`list` 以 `last(ORDER BY …)` 生成三键排序；幂等启停分支保持**零 DML**；命名策略路径**不**触及主表时间。
+- §1 物理结构、§2/§4 既有单元格、§3 更新/删除边界、§5 数据安全、§6~§8 既有声明**逐字冻结、未修改**；`DS-REQ-001~177` 编号与正文未改；`DS-AC-001~182` 编号、前置条件、操作步骤、预期结果未改。
+- 本轮新增验收 `DS-AC-183~199`（17 条）全部为 `NOT_RUN`；上一轮 `DS-AC-116~140`（25 条）仍全部 `NOT_RUN`；已最终接受的 `DS-AC-141~182`（42 条 `PASS`）状态未改变；既有 `PASS=113/FAIL=0/BLOCKED=2/NOT_RUN=0`（阻塞 `DS-AC-104`/`DS-AC-108`）**逐字保留**。
+- 实现状态为 `IMPLEMENTED_PENDING_USER_REVIEW`，**未**置为 `IMPLEMENTED_ACCEPTED`/`ACCEPTED`/生产可用；正式验收执行状态 `NOT_RUN`。
+- 本任务**未访问数据库**、**未执行任何 SQL/DDL/DML**、**未写入任何数据**、未访问 ZooKeeper/Kafka/业务源库/目标库（自动化测试全部为 Mapper mock / 静态断言）；未修改任何迁移/DDL/初始化数据脚本、依赖或锁文件；从最终提交启动的临时后端按既有配置自动建立连接池，不视为 Agent 主动访问。

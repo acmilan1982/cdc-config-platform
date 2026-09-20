@@ -1,5 +1,7 @@
 import { describe, it, expect, vi, beforeEach, afterEach } from 'vitest'
 import type { MockInstance } from 'vitest'
+import { readFileSync } from 'node:fs'
+import { resolve } from 'node:path'
 import { nextTick } from 'vue'
 import { mount, flushPromises } from '@vue/test-utils'
 import ElementPlus, { ElMessage, ElMessageBox } from 'element-plus'
@@ -921,6 +923,181 @@ describe('列表视觉调整：序号列、主机列宽与黑色主按钮（UI �
     expect(addButton.text()).toContain('新增数据源')
     expect(addButton.find('.ds-add-icon').exists()).toBe(true)
     expect(addButton.find('.ds-add-icon svg').exists()).toBe(true)
+    wrapper.unmount()
+  })
+})
+
+describe('新增/编辑主弹窗表单与按钮视觉调整（DS-REQ-184~188）', () => {
+  /** 该 SFC 的 `<style scoped>` 块正文；测试环境不注入 SFC 样式，故按源码静态校验声明。 */
+  function scopedStyleBlock(): string {
+    const source = readFileSync(
+      resolve(process.cwd(), 'src/views/data-source/DataSourcePage.vue'),
+      'utf-8',
+    )
+    const matched = source.match(/<style scoped>([\s\S]*?)<\/style>/)
+    if (!matched) {
+      throw new Error('scoped style block not found')
+    }
+    return matched[1]
+  }
+
+  /** 断言某条声明只出现在 `.editor-dialog` 限定范围内，不存在全局泄漏。 */
+  function expectDialogScopedRule(style: string, selector: string) {
+    const ruleIndex = style.indexOf(selector)
+    expect(ruleIndex, `selector not found: ${selector}`).toBeGreaterThan(-1)
+    // 规则起始位置必须带 `:deep(.editor-dialog`
+    const ruleStart = style.lastIndexOf('}', ruleIndex) + 1
+    const ruleHead = style.slice(ruleStart, ruleIndex + selector.length)
+    expect(ruleHead).toContain(':deep(.editor-dialog')
+  }
+
+  it('新增弹窗标签宽度 120px 且右对齐（DS-REQ-184 / DS-AC-192）', async () => {
+    const wrapper = await mountPage()
+    await buttonByText(wrapper, '新增数据源')!.trigger('click')
+    await flushPromises()
+
+    const form = wrapper.find('.editor-form')
+    expect(form.classes()).toContain('el-form--label-right')
+    expect(form.classes()).not.toContain('el-form--label-left')
+
+    const labels = wrapper.findAll('.editor-form .el-form-item__label')
+    expect(labels.length).toBeGreaterThan(0)
+    for (const label of labels) {
+      expect((label.element as HTMLElement).style.width).toBe('120px')
+    }
+    wrapper.unmount()
+  })
+
+  it('编辑弹窗沿用同一表单：标签仍右对齐 120px，测试连接条不随模式偏移（DS-AC-193）', async () => {
+    const wrapper = await mountPage()
+    await openEditRow(wrapper, srcRow)
+
+    const form = wrapper.find('.editor-form')
+    expect(form.classes()).toContain('el-form--label-right')
+    const labels = wrapper.findAll('.editor-form .el-form-item__label')
+    expect(labels.length).toBeGreaterThan(0)
+    for (const label of labels) {
+      expect((label.element as HTMLElement).style.width).toBe('120px')
+    }
+    // 测试连接按钮位于表单之外、输入区下方，标签对齐调整不影响其定位结构
+    expect(wrapper.find('.editor-dialog .test-bar button').exists()).toBe(true)
+    wrapper.unmount()
+  })
+
+  it('标签样式为 14px/500/#3f3f46、默认无衬线字体且限定在 .editor-dialog（DS-REQ-185 / DS-AC-194）', () => {
+    const style = scopedStyleBlock()
+    expectDialogScopedRule(style, '.el-form-item__label')
+
+    const ruleStart = style.lastIndexOf('}', style.indexOf('.el-form-item__label')) + 1
+    const rule = style.slice(ruleStart, style.indexOf('}', style.indexOf('.el-form-item__label')) + 1)
+    expect(rule).toContain('font-size: 14px')
+    expect(rule).toContain('font-weight: 500')
+    expect(rule).toContain('color: #3f3f46')
+    // 不套用列表 ID 的等宽字体，也不复制其 600 字重与 #09090b 强色
+    expect(rule).not.toContain('font-family')
+    expect(rule).not.toContain('monospace')
+    expect(rule).not.toContain('#09090b')
+  })
+
+  it('新增模式密码带 Element Plus 必填标识，编辑模式不带（DS-REQ-186 / DS-AC-195~196）', async () => {
+    const wrapper = await mountPage()
+    await buttonByText(wrapper, '新增数据源')!.trigger('click')
+    await flushPromises()
+
+    const createItem = editorInput(wrapper, '密码').element.closest('.el-form-item')!
+    expect(createItem.className).toContain('is-required')
+    // 必填标识来自表单项能力（CSS 星号），不是纯文本伪造
+    expect(createItem.querySelector('.el-form-item__label')!.textContent ?? '').not.toContain('*')
+    wrapper.unmount()
+
+    const editWrapper = await mountPage()
+    await openEditRow(editWrapper, srcRow)
+    const editItem = editorInput(editWrapper, '密码').element.closest('.el-form-item')!
+    expect(editItem.className).not.toContain('is-required')
+    editWrapper.unmount()
+  })
+
+  it('新增模式空密码被既有校验阻断（DS-AC-195）', async () => {
+    const wrapper = await mountPage()
+    await buttonByText(wrapper, '新增数据源')!.trigger('click')
+    await flushPromises()
+
+    // 除密码外全部必填项填齐，使“被阻断”可归因于密码为空
+    await pickSelect(wrapper, '.editor-form', 0, '源库（SOURCE）')
+    await pickSelect(wrapper, '.editor-form', 1, 'ORACLE')
+    await editorInput(wrapper, '数据源ID').setValue('SRC003')
+    await editorInput(wrapper, '数据源名称').setValue('源库C')
+    await editorInput(wrapper, '主机').setValue('10.4.4.4')
+    await editorInput(wrapper, '用户名').setValue('scott')
+    await editorInput(wrapper, 'Service Name').setValue('orcl3')
+    await nextTick()
+
+    await buttonByText(wrapper, '创建')!.trigger('click')
+    await flushPromises()
+
+    expect(mockedCreate).not.toHaveBeenCalled()
+    expect(wrapper.find('.form-error').text()).toContain('请输入密码')
+    wrapper.unmount()
+  })
+
+  it('编辑模式不显示必填标识且未修改密码可保存、请求不含 password（DS-AC-196）', async () => {
+    const wrapper = await mountPage()
+    await openEditRow(wrapper, srcRow)
+
+    const editItem = editorInput(wrapper, '密码').element.closest('.el-form-item')!
+    expect(editItem.className).not.toContain('is-required')
+    expect(editorInput(wrapper, '密码').element.value).toBe('*********')
+
+    await buttonByText(wrapper, '保存')!.trigger('click')
+    await flushPromises()
+
+    expect(mockedUpdate).toHaveBeenCalledTimes(1)
+    expect(mockedUpdate.mock.calls[0][1]).not.toHaveProperty('password')
+    wrapper.unmount()
+  })
+
+  it('创建/保存按钮使用专用局部 class，取消与测试连接按钮不受影响（DS-REQ-187~188 / DS-AC-197~199）', async () => {
+    const wrapper = await mountPage()
+    await buttonByText(wrapper, '新增数据源')!.trigger('click')
+    await flushPromises()
+
+    const createButton = exactButton(wrapper, '创建')!
+    expect(createButton.classes()).toContain('editor-submit-button')
+    expect(exactButton(wrapper, '取消')!.classes()).not.toContain('editor-submit-button')
+    expect(exactButton(wrapper, '测试连接')!.classes()).not.toContain('editor-submit-button')
+    wrapper.unmount()
+
+    const editWrapper = await mountPage()
+    await openEditRow(editWrapper, srcRow)
+    const saveButton = exactButton(editWrapper, '保存')!
+    expect(saveButton.classes()).toContain('editor-submit-button')
+    editWrapper.unmount()
+  })
+
+  it('提交按钮四态黑色视觉限定在 .editor-dialog 且仅覆盖非禁用态（DS-REQ-187~188）', () => {
+    const style = scopedStyleBlock()
+    expectDialogScopedRule(style, '.editor-submit-button:not(.is-disabled)')
+
+    expect(style).toContain('background: #09090b')
+    expect(style).toContain('background: #27272a')
+    expect(style).toContain('background: #18181b')
+    expect(style).toContain('color: #ffffff')
+    expect(style).toContain('border-radius: 6px')
+    expect(style).toContain('font-weight: 500')
+    // 禁用态不换色，沿用 Element Plus 既有禁用视觉
+    expect(style).toContain(':not(.is-disabled)')
+    expect(style).not.toContain('.editor-submit-button.is-disabled {')
+  })
+
+  it('业务属性弹窗提交按钮不复用主弹窗专用 class（无样式泄漏，DS-AC-199）', async () => {
+    const wrapper = await mountPage()
+    await clickRowMenuAction(wrapper, 1, '业务属性')
+
+    const bizButtons = wrapper.findAll('.biz-attr-dialog button')
+    expect(bizButtons.length).toBeGreaterThan(0)
+    for (const button of bizButtons) {
+      expect(button.classes()).not.toContain('editor-submit-button')
+    }
     wrapper.unmount()
   })
 })
@@ -2370,15 +2547,15 @@ describe('拖动监听生命周期清理（R1）', () => {
   })
 })
 
-describe('表单标签左对齐与固定列宽（DS-REQ-113）', () => {
-  it('三个业务弹窗：标签左对齐、固定列宽、必填星号稳定', async () => {
+describe('表单标签对齐与固定列宽（DS-REQ-113，主弹窗按 DS-REQ-184 调整为右对齐）', () => {
+  it('三个业务弹窗：主弹窗右对齐、其余左对齐，固定列宽与必填标识稳定', async () => {
     const wrapper = await mountPage()
 
-    // 新增/编辑弹窗
+    // 新增/编辑主弹窗：按已批准调整改为标签右对齐（DS-REQ-184），列宽与业务属性/命名策略弹窗互不影响
     await buttonByText(wrapper, '新增数据源')!.trigger('click')
     await flushPromises()
     const editorForm = wrapper.find('.editor-form')
-    expect(editorForm.classes()).toContain('el-form--label-left')
+    expect(editorForm.classes()).toContain('el-form--label-right')
     const editorLabel = editorForm.find('.el-form-item__label')
     expect(editorLabel.exists()).toBe(true)
     expect(editorLabel.attributes('style') ?? '').toContain('width: 120px')

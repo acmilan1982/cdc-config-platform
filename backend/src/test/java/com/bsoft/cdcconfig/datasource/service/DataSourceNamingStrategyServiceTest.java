@@ -32,6 +32,7 @@ import static org.junit.jupiter.api.Assertions.assertThrows;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.ArgumentMatchers.eq;
+import static org.mockito.Mockito.never;
 import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
 
@@ -376,6 +377,50 @@ class DataSourceNamingStrategyServiceTest {
         BusinessException ex = assertThrows(BusinessException.class,
                 () -> service.delete("SRC001", "TG001"));
         assertEquals(DataSourceErrorCode.DELETE_FAILED, ex.getCode());
+    }
+
+    // ---- 主表时间字段隔离：命名策略操作只写 CDC_DATA_SOURCE_EXTEND（DS-REQ-182） ----
+
+    @Test
+    void createNamingStrategy_shouldNotWriteMainTable() {
+        when(dataSourceMapper.selectOne(any(LambdaQueryWrapper.class))).thenReturn(sourceDs, targetDs);
+        when(extendMapper.selectCount(any(LambdaQueryWrapper.class))).thenReturn(0L);
+        when(extendMapper.insert(any(DataSourceExtend.class))).thenReturn(1);
+
+        service.create("SRC001", buildStrategyDTO("TG001", "TABLE_MERGE", "", ""));
+
+        verify(extendMapper).insert(any(DataSourceExtend.class));
+        verify(dataSourceMapper, never()).update(any(), any(LambdaUpdateWrapper.class));
+        verify(dataSourceMapper, never()).insert(any(DataSource.class));
+        verify(dataSourceMapper, never()).insertWithSysdate(any(DataSource.class));
+        verify(dataSourceMapper, never()).delete(any(LambdaQueryWrapper.class));
+    }
+
+    @Test
+    void updateNamingStrategy_shouldNotWriteMainTable() {
+        when(dataSourceMapper.selectOne(any(LambdaQueryWrapper.class))).thenReturn(sourceDs, targetDs);
+        when(extendMapper.selectCount(any(LambdaQueryWrapper.class))).thenReturn(1L);
+        when(extendMapper.update(any(), any(LambdaUpdateWrapper.class))).thenReturn(1);
+
+        service.update("SRC001", "TG001",
+                buildStrategyDTO("TG001", "TABLE_MERGE", "", ""));
+
+        verify(extendMapper).update(any(), any(LambdaUpdateWrapper.class));
+        verify(dataSourceMapper, never()).update(any(), any(LambdaUpdateWrapper.class));
+        verify(dataSourceMapper, never()).insertWithSysdate(any(DataSource.class));
+    }
+
+    @Test
+    void deleteNamingStrategy_shouldNotWriteMainTable() {
+        when(dataSourceMapper.selectOne(any(LambdaQueryWrapper.class))).thenReturn(sourceDs);
+        when(extendMapper.selectCount(any(LambdaQueryWrapper.class))).thenReturn(1L);
+        when(extendMapper.delete(any(LambdaQueryWrapper.class))).thenReturn(1);
+
+        service.delete("SRC001", "TG001");
+
+        verify(extendMapper).delete(any(LambdaQueryWrapper.class));
+        verify(dataSourceMapper, never()).update(any(), any(LambdaUpdateWrapper.class));
+        verify(dataSourceMapper, never()).insertWithSysdate(any(DataSource.class));
     }
 
     // -- helpers --

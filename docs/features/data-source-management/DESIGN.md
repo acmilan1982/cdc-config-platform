@@ -797,3 +797,96 @@
 - **§13.0~§13.9 设计正文（含 R1 冻结方案与 R2 极小修订）逐字零变化**；`DS-REQ-139~177`（39 条）与 `DS-AC-001~182` 编号、前置条件、操作步骤、预期结果未改。
 - **边界**：该 `ACCEPTED` **仅**适用于本轮当前调整设计，**不**把数据源管理 Feature 整体正式验收状态改为 `ACCEPTED`；既有 `PASS=113/FAIL=0/BLOCKED=2/NOT_RUN=0`、`DS-AC-104`/`DS-AC-108` 两个 `BLOCKED`、上一轮 `DS-AC-116~140`（25 条全部 `NOT_RUN`）均未改变。
 - 本任务未访问数据库/ZK/Kafka/源库/目标库；未启动服务；未重跑测试或构建；未修改业务代码/测试/配置/依赖/锁文件。
+
+## 15. 新增/修改时间字段维护、列表默认排序与主弹窗表单视觉调整设计（`APPROVED`，`IMPLEMENTED_PENDING_USER_REVIEW`）
+
+> 分层状态：`adjustment_document_status=APPROVED`、`adjustment_baseline_status=APPROVED`、`adjustment_design_status=APPROVED`、`implementation_authorization_status=GRANTED_IN_THIS_TASK`、`implementation_status=IMPLEMENTED_PENDING_USER_REVIEW`、`formal_acceptance_execution_status=NOT_RUN`、`new_adjustment_acceptance_status=ALL_NOT_RUN`。本轮验收 `DS-AC-183~199`（17 条）全部 `NOT_RUN`，自动化测试与构建通过**不等于**正式验收执行。
+
+### 15.0 局部替代声明
+
+1. **默认排序（对 §1.2/§2 既有 `DS-REQ-010` 结论）**：列表默认排序由 `DATA_SOURCE_ID ASC` **局部替代**为 `UPDATE_TIME DESC NULLS LAST, INSERT_TIME DESC NULLS LAST, DATA_SOURCE_ID ASC`。替代边界仅限“默认排序键”；`DATA_SOURCE_ID` 作为时间相同时的**稳定排序第三键**继续有效；无分页、模糊匹配与 AND 组合、全状态展示与原始 `fgActive` 返回**全部不变**。
+2. **主弹窗视觉（对既有 `DS-REQ-176` 结论）**：新增/编辑主弹窗的**标签对齐、标签文字样式、密码必填标识、右下角提交按钮视觉**被本轮设计替代；业务属性弹窗与目标库命名策略弹窗的布局、字段、宽度与视觉**不变**；主弹窗字段集合、校验规则、保存行为、弹窗宽度与业务流程**不变**。
+3. **时间字段维护（对 §9/§3 既有写入边界的补充）**：本轮为 `CDC_DATA_SOURCE` 的 `INSERT_TIME`/`UPDATE_TIME` 建立明确维护规则，属既有写入边界的**补充**；不改变任何既有业务校验、错误码、并发控制、删除语义或密码安全边界。
+
+### 15.1 新增时间字段（`DS-REQ-178`）
+
+- **不采用** `MyBatis-Plus` 的通用 `insert(entity)`：该方式无法让两列取数据库 `SYSDATE`，若在 Java 侧 `new Date()` 赋值则违反“不使用 JVM 时间”。
+- **采用** `DataSourceMapper` 上的**显式注解 INSERT**（`@Insert`），列出全部业务列并在常量位置写入 `SYSDATE, SYSDATE`；对应列 `INSERT_TIME`、`UPDATE_TIME` 在同一条 INSERT 中取值，时间一致。
+- 服务层新增路径由 `insertWithSysdate(entity)` 承接；`FG_ACTIVE='1'`、`DATA_SOURCE_ORG` 等既有新增语义不变；实体字段不承载时间值。
+- 不新增触发器，不修改表结构，不依赖数据库列默认值。
+
+### 15.2 主表修改时维护 `UPDATE_TIME`（`DS-REQ-179`~`DS-REQ-182`）
+
+| 场景 | 实现方式 | 结论 |
+|---|---|---|
+| 编辑保存（主弹窗“保存”） | 既有的单条 `LambdaUpdateWrapper` 主表 `UPDATE` 追加 `setSql("UPDATE_TIME = SYSDATE")` | 业务字段与时间在同一条 UPDATE；`INSERT_TIME` 不参与 SET |
+| 非幂等启用 / 停用 / 异常归一化停用 | 既有的“带原状态条件”单条 `UPDATE` 在同一 `LambdaUpdateWrapper` 中追加 `setSql("UPDATE_TIME = SYSDATE")` | 与 `FG_ACTIVE` 同一条 UPDATE；原状态条件（含 `NULL`）不变 |
+| 幂等启用 / 幂等停用 | **不进入**写路径，保持函数开头早退 | **零 DML**，不因更新时间而写库 |
+| 业务属性保存 | 既有的单条主表 `UPDATE` 追加 `setSql("UPDATE_TIME = SYSDATE")` | 与 `DATA_SOURCE_BIZ_ATTR` 同一条 UPDATE |
+| 目标库命名策略（列表/新增/编辑/删除） | 只写 `CDC_DATA_SOURCE_EXTEND` | **不联动**更新 `CDC_DATA_SOURCE.UPDATE_TIME` |
+
+- 失败、并发冲突或影响行数 ≠ 1 的既有分支**继续**抛错并回滚（`50000`/`50001`/`50002` 等既有错误码不变），时间字段与业务字段同事务回滚，**不会**单独留下变化。
+- 删除语义不变；**不**回填、不清洗、不修改任何存量时间字段；**不**新增索引；**零 DDL**。
+
+### 15.3 列表默认排序（`DS-REQ-183`）
+
+- 后端 `list(query)` 在既有过滤条件之后，以 `wrapper.last("ORDER BY …")` 明确生成：
+
+```sql
+ORDER BY UPDATE_TIME DESC NULLS LAST, INSERT_TIME DESC NULLS LAST, DATA_SOURCE_ID ASC
+```
+
+- 两个 `DESC NULLS LAST` 与末尾 `DATA_SOURCE_ID ASC` **均**为必需；选择 `last(...)` 而非 `orderBy(...)` 是因为 MyBatis-Plus 的 `orderBy` 不支持 `NULLS LAST` 这种 Oracle 专有排序语义。
+- 前端**不做**任何二次排序；查询条件、返回字段、全状态展示、无分页**均不变**。
+
+### 15.4 主弹窗标签对齐与文字样式（`DS-REQ-184`、`DS-REQ-185`）
+
+- 主弹窗 `el-form` 的 `label-position` 由 `left` 改为 `right`，`label-width` **保持** `120px`。
+- 因 `label-width` 不变、`.test-bar { padding-left: 120px; }` 不变，“测试连接”按钮与输入控件左侧的对齐线**不受影响**；输入控件起始位置**保持稳定**。
+- 标签文字样式以 `:deep(.editor-dialog .el-form-item__label)` 限定作用域：`font-size: 14px; font-weight: 500; color: #3f3f46`；不设置 `font-family`，沿用页面默认无衬线字体；**不**复用列表“数据源 ID”的等宽字体或 `font-weight: 600` / `#09090b`；必填星号继续由 Element Plus 的 `is-required` 伪元素渲染，仍为红色危险色。
+- 业务属性弹窗与目标库命名策略弹窗的 `label-position`/`label-width`/标签样式**不变**；样式不泄漏到其他页面。
+
+### 15.5 密码必填标识（`DS-REQ-186`）
+
+- 主弹窗密码表单项使用 Element Plus `el-form-item` 的 `required` 属性：`:required="!isEdit"`。
+- **新增模式**：`required` 为真 → 表单项获得 `is-required` 类 → 标签前显示红色星号；同时既有 `editorRules` 中的密码必填规则照常阻止空密码提交。
+- **编辑模式**：`required` 为假且**不参与**星号渲染 → 标签无星号；密码留空时既有“未修改则沿用原密码”语义不变。
+- 不使用纯文本伪造星号；既有掩码、聚焦、失焦、密码不回显行为不变。
+
+### 15.6 创建/保存按钮视觉（`DS-REQ-187`、`DS-REQ-188`）
+
+- 主弹窗右下角提交按钮保留 `type="primary"` 与既有 `:loading="saving"` / `:disabled="editorLoading"` 绑定，文案为 `isEdit ? '保存' : '创建'`，并新增专用类名 `editor-submit-button` 作为局部样式钩子。
+- 样式以 `:deep(.editor-dialog .editor-submit-button:not(.is-disabled))` 限定：常态 `#09090b`；`:hover`/`:focus` 为 `#27272a`；`:active` 为 `#18181b`；文字 `#ffffff`；`border-radius: 6px`；`font-weight: 500`。
+- 选择器带 `:not(.is-disabled)`，**不**覆盖 Element Plus 的禁用视觉，disabled 仍不可点击外观；loading 图标与文字颜色沿用上述白字设置保持可读。
+- “取消”按钮、“测试连接”按钮、业务属性弹窗与目标库命名策略弹窗的提交按钮**均不调整**；样式不泄漏到其他页面或弹窗。
+
+### 15.7 追踪
+
+| 需求 | 验收 | 设计条目 |
+|---|---|---|
+| DS-REQ-178 | DS-AC-183 | §15.1 |
+| DS-REQ-179 | DS-AC-184 | §15.2 |
+| DS-REQ-180 | DS-AC-185、DS-AC-186 | §15.2 |
+| DS-REQ-181 | DS-AC-187 | §15.2 |
+| DS-REQ-182 | DS-AC-188 | §15.2 |
+| DS-REQ-183 | DS-AC-189、DS-AC-190、DS-AC-191 | §15.3 |
+| DS-REQ-184 | DS-AC-192、DS-AC-193 | §15.4 |
+| DS-REQ-185 | DS-AC-194 | §15.4 |
+| DS-REQ-186 | DS-AC-195、DS-AC-196 | §15.5 |
+| DS-REQ-187 | DS-AC-197、DS-AC-198 | §15.6 |
+| DS-REQ-188 | DS-AC-199 | §15.6 |
+
+## 16. 本轮调整变更记录
+
+### 16.1 实现与状态回写（2026-09-20，任务 `DATA-SOURCE-CREATE-EDIT-TIME-SORT-FORM-UI-ADJUSTMENT-001`）
+
+- 新增 §15「新增/修改时间字段维护、列表默认排序与主弹窗表单视觉调整设计（`APPROVED`，`IMPLEMENTED_PENDING_USER_REVIEW`）」与本节（§16）。
+- 分层状态：`adjustment_document_status=APPROVED`、`adjustment_baseline_status=APPROVED`、`adjustment_design_status=APPROVED`、`implementation_authorization_status=GRANTED_IN_THIS_TASK`、`implementation_status=IMPLEMENTED_PENDING_USER_REVIEW`、`formal_acceptance_execution_status=NOT_RUN`、`new_adjustment_acceptance_status=ALL_NOT_RUN`；项目负责人已在当前会话明确批准该方案。
+- §15.0 三条“局部替代声明”冻结对既有结论的替代边界（默认排序键、主弹窗视觉、时间字段维护属补充）。
+- 实现落点：`DataSourceMapper` 新增显式注解 INSERT `insertWithSysdate`；`DataSourceServiceImpl` 的 `create`/`update`/`updateStatusConditionally`/`saveBizAttr` 与 `list` 按 §15.1~§15.3 调整；`DataSourcePage.vue` 主弹窗按 §15.4~§15.6 调整（`label-position`、密码 `:required`、`editor-submit-button` 与两段局部 `:deep(.editor-dialog …)` 样式）。
+- 幂等分支继续保持**零 DML**；命名策略路径未触及主表时间；删除、并发控制、错误码、密码安全、连接测试、查询条件、返回字段、全状态展示与无分页**全部不变**；**零 DDL**、**零存量清洗**、**零新增索引**。
+- §0~§14 既有设计基线与追踪结论**逐字冻结、未修改**；`DS-REQ-001~177` 编号与正文未改；`DS-AC-001~182` 编号、前置条件、操作步骤、预期结果未改。
+- 本轮新增验收 `DS-AC-183~199`（17 条）全部为 `NOT_RUN`；上一轮 `DS-AC-116~140`（25 条）仍全部 `NOT_RUN`；已最终接受的 `DS-AC-141~182`（42 条 `PASS`）状态未改变。
+- 既有 `PASS=113/FAIL=0/BLOCKED=2/NOT_RUN=0`（阻塞 `DS-AC-104`/`DS-AC-108`）**逐字保留**。
+- 实现状态为 `IMPLEMENTED_PENDING_USER_REVIEW`，**未**置为 `IMPLEMENTED_ACCEPTED`/`ACCEPTED`/生产可用；正式验收执行状态 `NOT_RUN`。
+- 未访问数据库/ZK/Kafka/业务源库/目标库；未对数据库执行任何 DDL/DML；未修改依赖与锁文件；从最终提交启动临时前后端服务供项目负责人目测（后端按既有配置自动建立连接池，不视为 Agent 主动访问）。

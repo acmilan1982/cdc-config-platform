@@ -727,3 +727,78 @@
 - **接受范围**：`DS-REQ-139~177`、`DS-AC-141~182`、正式验收结果 `PASS=42/FAIL=0/BLOCKED=0/NOT_RUN=0`、被验收业务实现提交 `399cb224...`、证据链截至 `30e902f...`。
 - **边界**：该 `ACCEPTED` **仅**适用于本轮当前接口与字段契约，**不**把数据源管理 Feature 整体正式验收状态改为 `ACCEPTED`；既有 `PASS=113/FAIL=0/BLOCKED=2/NOT_RUN=0` 与两个 `BLOCKED`、上一轮 `DS-AC-116~140`（25 条全部 `NOT_RUN`）均未改变。
 - 本任务未访问数据库/ZK/Kafka/源库/目标库；未启动服务；未重跑测试或构建；未修改业务代码/测试/配置/依赖/锁文件。
+
+## 13. 新增/修改时间字段维护、列表默认排序与主弹窗表单视觉调整的接口影响（`APPROVED`，`IMPLEMENTED_PENDING_USER_REVIEW`）
+
+> 分层状态：`adjustment_document_status=APPROVED`、`adjustment_baseline_status=APPROVED`、`adjustment_api_status=APPROVED`、`implementation_authorization_status=GRANTED_IN_THIS_TASK`、`implementation_status=IMPLEMENTED_PENDING_USER_REVIEW`、`formal_acceptance_execution_status=NOT_RUN`、`new_adjustment_acceptance_status=ALL_NOT_RUN`。本轮验收 `DS-AC-183~199`（17 条）全部 `NOT_RUN`。
+
+### 13.1 接口数量与契约概括
+
+- **接口数量不变**：既有 13 个 + 上一轮新增 2 个（`enable`/`disable`）= 15 个，本轮**不新增、不删除、不重命名**任何接口；**无**路径、方法、请求体、路径参数编码、错误码或错误响应结构的改动。
+- 本轮对 API 的影响仅限**内部写入语句**与**列表排序子句**，不改变任何请求/响应字段集合与业务码语义。
+
+### 13.2 `POST /api/data-sources`（新增）的时间字段写入
+
+- 成功新增时，`INSERT_TIME`、`UPDATE_TIME` 两列在**同一条 INSERT** 中以 **Oracle 数据库当前时间 `SYSDATE`** 写入；两列取值来源一致，时间差为 0。
+- **不**使用 JVM 时间；**不**依赖数据库列默认值；**不**新增触发器；**不**修改表结构。
+- 请求体、字段校验、唯一性校验、错误码（含 `40001`/`40002`/`40003`/`40004` 等既有码）、响应结构与 `FG_ACTIVE='1'` 的默认写入语义**全部不变**；时间字段**不**出现在请求体，**不**出现在响应体。
+
+### 13.3 `PUT /api/data-sources/{originalDataSourceId}`（编辑）、`enable`、`disable`、`PUT /api/data-sources/{dataSourceId}/biz-attr` 的时间字段维护
+
+| 接口 | 写入行为 | 说明 |
+|---|---|---|
+| `PUT /api/data-sources/{originalDataSourceId}` | 业务字段与 `UPDATE_TIME = SYSDATE` 在**同一条 UPDATE** 中写；`INSERT_TIME` 不参与 SET | 请求体、校验、唯一性、密码留空沿用、错误码与响应**不变** |
+| `PUT /api/data-sources/{dataSourceId}/enable` | **非幂等**路径在带原状态条件的单条 `UPDATE` 中同时设置 `FG_ACTIVE='1'` 与 `UPDATE_TIME = SYSDATE` | **幂等**路径（已为 `'1'`）**零 DML**，不因更新时间写库；异常状态仍返回 `40250` |
+| `PUT /api/data-sources/{dataSourceId}/disable` | **非幂等**与**异常归一化**路径在同一条件 `UPDATE` 中同时设置 `FG_ACTIVE='0'` 与 `UPDATE_TIME = SYSDATE` | **幂等**路径（已为 `'0'`）**零 DML**；异常值为 `NULL` 时条件仍为 `FG_ACTIVE IS NULL` |
+| `PUT /api/data-sources/{dataSourceId}/biz-attr` | `DATA_SOURCE_BIZ_ATTR` 与 `UPDATE_TIME = SYSDATE` 在**同一条 UPDATE** 中写 | 失败/影响行数 ≠ 1 → 既有 `50000` 并整体回滚，不留时间变化 |
+
+- 上述四个接口的**请求体、路径、方法、校验、错误码、错误响应、幂等语义、原状态条件 `UPDATE` 与并发结论**均**零变化**（见 §11.3/§11.4）；启用/停用**成功响应**仍为 `{"success": true}`。
+- 目标库命名策略相关接口（`GET/POST/PUT/DELETE /api/data-sources/{dataSourceId}/naming-strategies…`）只写 `CDC_DATA_SOURCE_EXTEND`，**不**联动更新 `CDC_DATA_SOURCE.UPDATE_TIME`。
+- 删除接口（`DELETE`）语义**不变**，不写任何时间字段。
+
+### 13.4 `GET /api/data-sources`（列表）的排序子句
+
+- 后端明确生成：
+
+```sql
+ORDER BY UPDATE_TIME DESC NULLS LAST, INSERT_TIME DESC NULLS LAST, DATA_SOURCE_ID ASC
+```
+
+- 两个 `NULLS LAST` 与末尾 `DATA_SOURCE_ID ASC` **均必需**；`DATA_SOURCE_ID ASC` 为时间相同时的稳定排序第三键。
+- **请求参数不变**（仍为 `id`、`name`、`host`、`category` 四项可选条件，`category` 归一化规则不变）；**响应字段不变**（仍返回全部记录与原始 `fgActive`，四态 JSON 契约见 §11.2）；**无分页**、**无新增字段**、**无新增索引**。
+- 前端**不做**二次排序；时间字段为 `NULL` 的存量记录自然排在有时间记录之后，**未**被回填或修改。
+
+### 13.5 本轮无 API 契约变化的结论
+
+- 主弹窗标签对齐与文字样式（`DS-REQ-184`/`DS-REQ-185`）、密码必填标识（`DS-REQ-186`）、创建/保存按钮视觉（`DS-REQ-187`/`DS-REQ-188`）均为**纯前端**结论，**不改变**任何 API 请求或响应契约。
+- 密码必填标识仅影响表单必填语义与星号渲染，**不**改变密码的传输、保存、留空沿用与不回显契约；日志与错误消息**继续**不泄露密码（`DS-REQ-047`/`DS-REQ-107` 结论保持）。
+- **零 DDL**、**零存量清洗**、**零新增索引**，无新增业务错误码。
+
+### 13.6 追踪
+
+| 需求 | 验收 | 接口影响 |
+|---|---|---|
+| DS-REQ-178 | DS-AC-183 | `POST /api/data-sources` 内部 INSERT |
+| DS-REQ-179 | DS-AC-184 | `PUT /api/data-sources/{originalDataSourceId}` 内部 UPDATE |
+| DS-REQ-180 | DS-AC-185、DS-AC-186 | `enable`/`disable` 内部条件 UPDATE |
+| DS-REQ-181 | DS-AC-187 | `biz-attr` 内部 UPDATE |
+| DS-REQ-182 | DS-AC-188 | 命名策略接口（无主表时间联动） |
+| DS-REQ-183 | DS-AC-189、DS-AC-190、DS-AC-191 | `GET /api/data-sources` 排序子句 |
+| DS-REQ-184 | DS-AC-192、DS-AC-193 | 无 API 变化（纯前端） |
+| DS-REQ-185 | DS-AC-194 | 无 API 变化（纯前端） |
+| DS-REQ-186 | DS-AC-195、DS-AC-196 | 无 API 变化（纯前端，契约不变） |
+| DS-REQ-187 | DS-AC-197、DS-AC-198 | 无 API 变化（纯前端） |
+| DS-REQ-188 | DS-AC-199 | 无 API 变化（纯前端） |
+
+## 14. 本轮调整变更记录
+
+### 14.1 实现与状态回写（2026-09-20，任务 `DATA-SOURCE-CREATE-EDIT-TIME-SORT-FORM-UI-ADJUSTMENT-001`）
+
+- 新增 §13「新增/修改时间字段维护、列表默认排序与主弹窗表单视觉调整的接口影响（`APPROVED`，`IMPLEMENTED_PENDING_USER_REVIEW`）」与本节（§14）。
+- 分层状态：`adjustment_document_status=APPROVED`、`adjustment_baseline_status=APPROVED`、`adjustment_api_status=APPROVED`、`implementation_authorization_status=GRANTED_IN_THIS_TASK`、`implementation_status=IMPLEMENTED_PENDING_USER_REVIEW`、`formal_acceptance_execution_status=NOT_RUN`、`new_adjustment_acceptance_status=ALL_NOT_RUN`；项目负责人已在当前会话明确批准该方案。
+- **接口数量不变（15 个）**；无路径、方法、请求体、路径参数编码、成功响应、错误码与错误响应结构改动。本轮只改内部写入语句的时间字段维护与列表排序子句。
+- 弃用列表“默认按 `DATA_SOURCE_ID ASC`”的当前有效结论已由 §13.4 **局部替代**为三键排序；`DATA_SOURCE_ID ASC` 降级为稳定排序第三键。
+- §0~§12 既有 `APPROVED` API 基线与技术正文**逐字冻结、未修改**；`DS-REQ-001~177` 编号与正文未改；`DS-AC-001~182` 编号、前置条件、操作步骤、预期结果未改。
+- 本轮新增验收 `DS-AC-183~199`（17 条）全部为 `NOT_RUN`；上一轮 `DS-AC-116~140`（25 条）仍全部 `NOT_RUN`；已最终接受的 `DS-AC-141~182`（42 条 `PASS`）状态未改变；既有 `PASS=113/FAIL=0/BLOCKED=2/NOT_RUN=0`（阻塞 `DS-AC-104`/`DS-AC-108`）**逐字保留**。
+- 实现状态为 `IMPLEMENTED_PENDING_USER_REVIEW`，**未**置为 `IMPLEMENTED_ACCEPTED`/`ACCEPTED`/生产可用；正式验收执行状态 `NOT_RUN`。
+- 未访问数据库/ZK/Kafka/业务源库/目标库（含自动化测试，测试全部为 Mapper mock / 静态检查）；未对数据库执行任何 DDL/DML；未修改依赖与锁文件；从最终提交启动临时前后端服务供项目负责人目测（后端按既有配置自动建立连接池，不视为 Agent 主动访问）。

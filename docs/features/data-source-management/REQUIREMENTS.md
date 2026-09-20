@@ -609,6 +609,53 @@
 | DS-REQ-176 | **保持不变**：三个既有业务弹窗（新增/编辑数据源、业务属性、目标库命名策略）的布局、字段、宽度和视觉**不做**重新设计；仅为支持停用记录维护而调整**必要的**数据读取/保存状态边界。新增记录仍默认写 `FG_ACTIVE='1'`；**编辑不得修改** `FG_ACTIVE`，状态只能通过独立启用/停用接口改变；物理删除语义不变，不改为逻辑删除。 |
 | DS-REQ-177 | **保持不变**：无数据库结构变化、无 DDL、无存量数据清洗。本轮新增的 `DS-REQ-139~177` 不新增任何表、字段、索引、约束、序列或视图，也不要求任何存量数据订正。 |
 
+## 24. 新增/修改时间字段维护、列表默认排序与主弹窗表单视觉调整需求（`APPROVED`，`IMPLEMENTED_PENDING_USER_REVIEW`）
+
+> 本章为本轮调整的权威需求正文。分层状态：`adjustment_document_status=APPROVED`、`adjustment_baseline_status=APPROVED`、`implementation_authorization_status=GRANTED_IN_THIS_TASK`、`implementation_status=IMPLEMENTED_PENDING_USER_REVIEW`、`formal_acceptance_execution_status=NOT_RUN`、`new_adjustment_acceptance_status=ALL_NOT_RUN`。
+>
+> 本轮验收用例 `DS-AC-183~199`（17 条）**全部为 `NOT_RUN`**。自动化测试与构建通过**不等于**正式验收执行，**不得**写为 `PASS`。
+>
+> `DS-REQ-001~177` 编号、正文与语义逐字冻结；既有 `PASS=113/FAIL=0/BLOCKED=2/NOT_RUN=0` 与 `DS-AC-104`/`DS-AC-108` 两个 `BLOCKED` 逐字保留；上一轮 `DS-AC-116~140`（25 条）仍全部 `NOT_RUN`；已最终接受的上一调整 `DS-REQ-139~177`/`DS-AC-141~182`（42 条 `PASS`）状态不变。
+>
+> 用例编号从上一轮最大已占用编号 `DS-REQ-177` / `DS-AC-182` 继续，不重编号、不复用、不删除任何历史条目。
+
+### 24.1 新增时间字段（同一 INSERT，数据库时间）
+
+| 编号 | 需求 |
+|---|---|
+| DS-REQ-178 | 新增 `CDC_DATA_SOURCE` 记录时，**必须**在**同一条 INSERT** 中以 Oracle 数据库当前时间写入 `INSERT_TIME = SYSDATE` 与 `UPDATE_TIME = SYSDATE`；两列取值来源一致；**不得**使用 JVM `new Date()`；**不得**依赖数据库列默认值；**不得**新增触发器；**不得**修改表结构；`FG_ACTIVE='1'` 等既有新增语义保持不变。 |
+
+### 24.2 主表修改时维护 `UPDATE_TIME`
+
+| 编号 | 需求 |
+|---|---|
+| DS-REQ-179 | 新增/编辑主弹窗的“保存”成功修改主表时，**保持** `INSERT_TIME` 不变，并在**同一条主表 UPDATE** 中设置 `UPDATE_TIME = SYSDATE`。 |
+| DS-REQ-180 | **非幂等**启用、**非幂等**停用以及异常状态**归一化**停用，在**同一条主表 UPDATE** 中设置 `UPDATE_TIME = SYSDATE`；`INSERT_TIME` 不变。启用/停用的**幂等**分支（已处于目标状态）原本不执行 DML，**继续不执行 DML**，且**不得**仅为更新时间而写库。 |
+| DS-REQ-181 | 业务属性保存在同一条主表 UPDATE 中同步更新 `UPDATE_TIME = SYSDATE`；失败、并发冲突或影响行数不符时事务整体**回滚**，时间字段**不得**单独留下变化。 |
+| DS-REQ-182 | 目标库命名策略操作修改的是 `CDC_DATA_SOURCE_EXTEND`，**不得**联动更新 `CDC_DATA_SOURCE.UPDATE_TIME`；删除语义保持不变；**不回填**、不清洗、不修改任何存量时间字段；不新增索引。 |
+
+> **局部替代声明（§24.2）**：`DS-REQ-179`~`DS-REQ-182` 对“主表修改时的时间字段维护”建立当前有效结论，属既有结论的**补充**；不替代任何既有业务校验、错误码、并发控制或删除语义。`DS-REQ-176` 中“编辑不得修改 `FG_ACTIVE`”**继续有效**并被本轮重申。
+
+### 24.3 列表默认排序
+
+| 编号 | 需求 |
+|---|---|
+| DS-REQ-183 | 数据源列表默认排序替换为 `ORDER BY UPDATE_TIME DESC NULLS LAST, INSERT_TIME DESC NULLS LAST, DATA_SOURCE_ID ASC`；**必须**由后端查询明确生成，**不在前端**做二次排序；`NULLS LAST` 与末尾 `DATA_SOURCE_ID ASC` **均不得省略**（后者是时间相同时的稳定排序条件）；查询条件、返回字段、全状态展示、无分页等既有行为**不变**；**不**为本调整新增索引；**不回填**存量记录，存量时间为空的记录自然排在有时间记录之后。 |
+
+> **局部替代声明（§24.3）**：`DS-REQ-183` **局部替代** `DS-REQ-010`（列表按 `DATA_SOURCE_ID` 升序）中“默认排序为 `DATA_SOURCE_ID ASC`”的当前有效结论。替代边界严格限定为：**列表默认排序改为以时间为第一/第二排序键，`DATA_SOURCE_ID ASC` 降级为时间相同的第三排序键（稳定排序）**。`DS-REQ-010` 中“`DATA_SOURCE_ID` 参与稳定排序”的意图被保留并重申；`DS-REQ-005`（无分页）、`DS-REQ-007`/`008`（模糊匹配与 AND 组合）、`DS-REQ-150`~`154`（全状态展示与原始 `fgActive` 返回）**全部继续有效**。
+
+### 24.4 主弹窗表单视觉调整（仅新增/编辑主弹窗）
+
+| 编号 | 需求 |
+|---|---|
+| DS-REQ-184 | 仅调整“新增数据源 / 编辑数据源”主弹窗：`label-width=120px`、`label-position=right`；各标签文字**右侧对齐**，标签右侧与输入控件左侧形成**统一对齐线**（标签左侧允许不对齐）；输入控件起始位置与当前整体布局**保持稳定**；“测试连接”按钮**继续**与输入控件左侧对齐；**不影响**业务属性弹窗与目标库命名策略弹窗。 |
+| DS-REQ-185 | 主弹窗配置项标签文字统一为 `font-size: 14px; font-weight: 500; color: #3f3f46`；使用页面**默认无衬线字体**，**不使用**列表“数据源 ID”正文的等宽字体；**不直接复制**列表 ID 的 `font-weight: 600` / `#09090b` 强视觉；必填星号**继续**使用 Element Plus 红色危险色；样式**严格限定**在 `.editor-dialog` / `.editor-form` 范围，**禁止全局泄漏**。 |
+| DS-REQ-186 | 密码必填标识必须与真实校验一致：**新增模式**密码必填并在“密码”标签前显示**红色星号**；**编辑模式**密码可不填写、**不显示**必填星号，未编辑密码表示**沿用原密码**；**不得**在编辑模式误导用户必须重新输入密码；既有密码掩码、聚焦、失焦、未修改沿用与密码不回显等行为**保持不变**；必填语义**必须**通过 Element Plus 表单项能力实现，**不得**用纯文本伪造星号。 |
+| DS-REQ-187 | 仅调整主弹窗右下角提交按钮文案与视觉：新增模式为“创建”，编辑模式为“保存”；常态背景/边框 `#09090b`，hover/focus 背景/边框 `#27272a`，active 背景/边框 `#18181b`，文字 `#ffffff`，圆角 `6px`，字重 `500`；与主列表“查询”“新增数据源”的黑白灰视觉语言一致；loading 图标与文字**保持可读**；disabled 状态**沿用** Element Plus 既有禁用视觉，不得保持可点击外观。 |
+| DS-REQ-188 | **保持不变**：“取消”按钮不变；“测试连接”按钮不变；业务属性弹窗与目标库命名策略弹窗的提交按钮**本轮不调整**；样式**不得**泄漏到其他页面或其他弹窗；主弹窗字段集合、字段校验规则、保存行为、弹窗宽度与业务流程**均不变**。 |
+
+> **局部替代声明（§24.4）**：`DS-REQ-184`~`DS-REQ-188` **局部替代** `DS-REQ-176` 中“三个既有业务弹窗（新增/编辑数据源、业务属性、目标库命名策略）的布局、字段、宽度和**视觉不做重新设计**”在**新增/编辑主弹窗标签对齐、标签文字样式、密码必填标识与右下角提交按钮视觉**上的适用。替代边界严格限定为上述四项；`DS-REQ-176` 中“业务属性弹窗与目标库命名策略弹窗的布局、字段、宽度和视觉不变”“新增记录仍默认写 `FG_ACTIVE='1'`”“编辑不得修改 `FG_ACTIVE`”“物理删除语义不变”**全部继续有效**，并由 `DS-REQ-188` 重申。
+
 ## 21. 文档级变更记录
 
 | 日期 | 变更 | 依据 |
@@ -631,5 +678,7 @@
 | 2026-09-19 | 本轮调整实现状态回写：§23 章节标题改为“（`APPROVED`，`IMPLEMENTED_PENDING_USER_REVIEW`）”，状态声明由 `implementation_status=NOT_STARTED`/`implementation_authorization_status=NOT_GRANTED_IN_THIS_TASK` 更新为 `implementation_status=IMPLEMENTED_PENDING_USER_REVIEW`/`implementation_authorization_status=GRANTED_IN_THIS_TASK`，并补充实现任务号 `DATA-SOURCE-LIST-ALL-STATUS-ENABLE-DISABLE-UI-ADJUSTMENT-IMPLEMENTATION-001`（`adjustment_document_status`/`adjustment_baseline_status`/`adjustment_requirements_status` 保持 `APPROVED`，`formal_acceptance_execution_status=NOT_RUN`、`new_adjustment_acceptance_status=ALL_NOT_RUN` 保持）；`DS-REQ-139~177` 共 39 条编号与需求正文**零变化**，十段“局部替代声明”及其边界未改；`DS-REQ-001~138` 编号、正文、语义逐字冻结；新增验收 `DS-AC-141~182`（42 条）仍全部 `NOT_RUN`、上一轮 `DS-AC-116~140` 仍全部 `NOT_RUN`；未置 `IMPLEMENTED_ACCEPTED`；既有 `PASS=113/FAIL=0/BLOCKED=2/NOT_RUN=0`、`DS-AC-104`/`DS-AC-108` 两个 `BLOCKED` 逐字保留 | `DATA-SOURCE-LIST-ALL-STATUS-ENABLE-DISABLE-UI-ADJUSTMENT-IMPLEMENTATION-001`（已批准调整基线的前后端实现、自动化测试、构建与实现状态回写；未访问数据库/ZK/Kafka；未启动服务） |
 | 2026-09-20 | 实现 R1 复审整改（ChatGPT 对实现提交 `6b7ae04...` 的复审结论 `CHANGES_REQUIRED`，6 项阻塞）中的需求侧一致性勘误：§23.1 新增第二段“局部替代声明（`DS-REQ-110` 空状态辅助提示语）”，声明 `DS-REQ-139`/`DS-REQ-140` **局部替代** `DS-REQ-110` 中“点击上方‘重置’查看全部数据源”这一隐含“重置即查询”的提示语，其余 `DS-REQ-110` 空状态要求（依据已生效查询条件区分两类空状态、主提示文案、无生效条件时主提示“暂无数据源”并引导“新增数据源”）**继续有效**；该替代登记为**已批准新旧条款的一致性勘误**，非新业务决策。`DS-REQ-139~177` 共 39 条编号与需求正文**零改动**（仅追加声明段）；`DS-REQ-001~138` 编号、正文、语义逐字冻结；实现状态保持 `IMPLEMENTED_PENDING_USER_REVIEW`（未晋升为已验收）；新增验收 `DS-AC-141~182`（42 条）仍全部 `NOT_RUN`、上一轮 `DS-AC-116~140` 仍全部 `NOT_RUN`；既有 `PASS=113/FAIL=0/BLOCKED=2/NOT_RUN=0`、`DS-AC-104`/`DS-AC-108` 两个 `BLOCKED` 逐字保留 | `DATA-SOURCE-LIST-ALL-STATUS-ENABLE-DISABLE-UI-ADJUSTMENT-IMPLEMENTATION-001-R1`（实现复审 R1 整改：需求侧一致性勘误声明与实现/测试/构建；未访问数据库/ZK/Kafka；未启动服务） |
 | 2026-09-20 | 项目负责人**最终验收接受**（纯文档收口）：§23 章节标题改为“（`APPROVED`，`IMPLEMENTED_ACCEPTED`，正式验收已执行且最终验收已通过 `PASS=42/FAIL=0/BLOCKED=0/NOT_RUN=0`，`final_acceptance_status=ACCEPTED`）”；分层状态 `implementation_status` 由 `IMPLEMENTED_PENDING_FINAL_ACCEPTANCE` 更新为 `IMPLEMENTED_ACCEPTED` 并新增 `final_acceptance_status=ACCEPTED`（`formal_acceptance_execution_status=EXECUTED_PASSED_LOCAL`、`new_adjustment_acceptance_status=PASS_42_OF_42` 逐字保留）；新增最终验收收口任务行，记录接受日期 2026-09-20、依据 ChatGPT 对远程证据提交 `30e902f7c2c3de62b7a7ff454fa25a4cef74fdfa` 的正式验收 R1 复审 `REVIEW_PASS`（`blocking_finding_count=0`）、接受范围 `DS-REQ-139~177`/`DS-AC-141~182`、被验收业务实现提交 `399cb2249f60411b52235a859a8ce95d9f6e4579`。`DS-REQ-139~177` 共 39 条编号与需求正文**零变化**，十段“局部替代声明”及其边界未改；`DS-REQ-001~138` 编号、正文、语义逐字冻结；**该 `ACCEPTED` 仅适用于本组当前调整，不改变数据源管理 Feature 整体正式验收状态**；既有 `PASS=113/FAIL=0/BLOCKED=2/NOT_RUN=0`、`DS-AC-104`/`DS-AC-108` 两个 `BLOCKED` 逐字保留；上一轮 `DS-AC-116~140`（25 条）仍全部 `NOT_RUN`、状态未改变 | `DATA-SOURCE-LIST-ALL-STATUS-ENABLE-DISABLE-UI-ADJUSTMENT-FINAL-ACCEPTANCE-CLOSEOUT-001`（最终验收接受与状态回写；纯文档任务；未访问数据库/ZK/Kafka；未启动服务；未重跑测试或构建） |
+
+| 2026-09-20 | 新增/修改时间字段维护、列表默认排序与主弹窗表单视觉调整需求落盘并完成实现状态回写：新增 §24「新增/修改时间字段维护、列表默认排序与主弹窗表单视觉调整需求（`APPROVED`，`IMPLEMENTED_PENDING_USER_REVIEW`）」，追加 `DS-REQ-178~188` 共 11 条（新增时间字段 178；主表修改时间维护 179~182；列表默认排序 183；主弹窗标签对齐 184、标签文字样式 185、密码必填标识 186、创建/保存按钮视觉 187、明确保持不变 188）；以三段“局部替代声明”逐项给出对 `DS-REQ-010`（默认排序 `DATA_SOURCE_ID ASC`）与 `DS-REQ-176`（三弹窗视觉不做重新设计）的**局部**替代边界，避免两套互相冲突的“当前有效结论”并存；分层状态 `adjustment_document_status=APPROVED`/`adjustment_baseline_status=APPROVED`/`implementation_authorization_status=GRANTED_IN_THIS_TASK`/`implementation_status=IMPLEMENTED_PENDING_USER_REVIEW`/`formal_acceptance_execution_status=NOT_RUN`/`new_adjustment_acceptance_status=ALL_NOT_RUN`；`DS-REQ-001~177` 编号、正文、语义逐字冻结；既有 `PASS=113/FAIL=0/BLOCKED=2/NOT_RUN=0` 与 `DS-AC-104`/`DS-AC-108` 两个 `BLOCKED` 逐字保留；上一轮 `DS-AC-116~140`（25 条）仍全部 `NOT_RUN`；已最终接受的上一调整 `DS-REQ-139~177`/`DS-AC-141~182`（42 条 `PASS`、`IMPLEMENTED_ACCEPTED`、`final_acceptance_status=ACCEPTED`）状态未改变；本轮新增验收 `DS-AC-183~199`（17 条）全部 `NOT_RUN`；未置 `IMPLEMENTED_ACCEPTED`/`ACCEPTED`/生产可用；**数据源管理 Feature 整体正式验收状态**仍不得改为 `ACCEPTED` | `DATA-SOURCE-CREATE-EDIT-TIME-SORT-FORM-UI-ADJUSTMENT-001`（项目负责人已明确批准的调整基线的前后端实现、自动化测试、构建与文档状态回写；未访问数据库/ZK/Kafka/源库/目标库；未执行 DDL/存量清洗；从最终提交启动临时服务供项目负责人目测） |
 
 > 关联文档：验收基线 `docs/features/data-source-management/ACCEPTANCE.md`；执行报告 `docs/features/data-source-management/reports/DATA-SOURCE-REQUIREMENTS-BASELINE-001.md`；验收后调整草案执行报告 `docs/features/data-source-management/reports/DATA-SOURCE-POST-ACCEPTANCE-ADJUSTMENT-BASELINE-001.md`；验收后调整草案 R1 修订报告 `docs/features/data-source-management/reports/DATA-SOURCE-POST-ACCEPTANCE-ADJUSTMENT-BASELINE-001-R1.md`；验收后调整批准收口报告 `docs/features/data-source-management/reports/DATA-SOURCE-POST-ACCEPTANCE-ADJUSTMENT-APPROVAL-CLOSEOUT-001.md`；定向正式复验报告 `docs/features/data-source-management/reports/DATA-SOURCE-FORMAL-REVERIFICATION-001.md`。

@@ -142,7 +142,7 @@ class DataSourcePasswordLogSecurityTest {
         create.setPassword(sentinel);
         create.setServiceName("testdb");
         when(dataSourceMapper.selectCount(any())).thenReturn(0L);
-        when(dataSourceMapper.insert(any(DataSource.class))).thenReturn(1);
+        when(dataSourceMapper.insertWithSysdate(any(DataSource.class))).thenReturn(1);
         service.create(create);
 
         // 编辑路径（携带新密码）
@@ -205,7 +205,7 @@ class DataSourcePasswordLogSecurityTest {
 
         // 未知异常路径：底层异常文本含哨兵，服务层上抛后按契约返回脱敏消息
         when(dataSourceMapper.selectCount(any())).thenReturn(0L);
-        when(dataSourceMapper.insert(any(DataSource.class)))
+        when(dataSourceMapper.insertWithSysdate(any(DataSource.class)))
                 .thenThrow(new RuntimeException("driver error with password=" + sentinel));
         RuntimeException leaky = org.junit.jupiter.api.Assertions.assertThrows(
                 RuntimeException.class, () -> service.create(create));

@@ -20,6 +20,7 @@ import com.bsoft.cdcconfig.datasource.vo.DataSourceDetailVO;
 import com.bsoft.cdcconfig.datasource.vo.DataSourceListVO;
 import com.bsoft.cdcconfig.datasource.vo.TargetOptionVO;
 import com.bsoft.cdcconfig.datasource.vo.TestConnectionResultVO;
+import org.apache.ibatis.annotations.Insert;
 import org.apache.ibatis.builder.MapperBuilderAssistant;
 import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.BeforeEach;
@@ -30,12 +31,14 @@ import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
 
+import java.lang.reflect.Method;
 import java.util.Collections;
 import java.util.List;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertFalse;
 import static org.junit.jupiter.api.Assertions.assertNotNull;
+import static org.junit.jupiter.api.Assertions.assertNull;
 import static org.junit.jupiter.api.Assertions.assertThrows;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 import static org.mockito.ArgumentMatchers.any;
@@ -238,13 +241,13 @@ class DataSourceServiceTest {
     @Test
     void create_shouldNormalizeAndInsert() {
         when(dataSourceMapper.selectCount(any(LambdaQueryWrapper.class))).thenReturn(0L);
-        when(dataSourceMapper.insert(any(DataSource.class))).thenReturn(1);
+        when(dataSourceMapper.insertWithSysdate(any(DataSource.class))).thenReturn(1);
 
         String id = service.create(createDTO);
 
         assertEquals("DS001", id);
         ArgumentCaptor<DataSource> captor = ArgumentCaptor.forClass(DataSource.class);
-        verify(dataSourceMapper).insert(captor.capture());
+        verify(dataSourceMapper).insertWithSysdate(captor.capture());
         DataSource inserted = captor.getValue();
         assertEquals("SOURCE", inserted.getDataSourceCategory());
         assertEquals("ORACLE", inserted.getDataSourceType());
@@ -257,12 +260,12 @@ class DataSourceServiceTest {
         createDTO.setDataSourceCategory("TARGET");
         createDTO.setDataSourceType("MYSQL");
         when(dataSourceMapper.selectCount(any(LambdaQueryWrapper.class))).thenReturn(0L);
-        when(dataSourceMapper.insert(any(DataSource.class))).thenReturn(1);
+        when(dataSourceMapper.insertWithSysdate(any(DataSource.class))).thenReturn(1);
 
         service.create(createDTO);
 
         ArgumentCaptor<DataSource> captor = ArgumentCaptor.forClass(DataSource.class);
-        verify(dataSourceMapper).insert(captor.capture());
+        verify(dataSourceMapper).insertWithSysdate(captor.capture());
         assertEquals("MYSQL", captor.getValue().getDataSourceType());
     }
 
@@ -331,7 +334,7 @@ class DataSourceServiceTest {
     @Test
     void create_insertFailed_shouldThrow50000() {
         when(dataSourceMapper.selectCount(any(LambdaQueryWrapper.class))).thenReturn(0L);
-        when(dataSourceMapper.insert(any(DataSource.class))).thenReturn(0);
+        when(dataSourceMapper.insertWithSysdate(any(DataSource.class))).thenReturn(0);
 
         BusinessException ex = assertThrows(BusinessException.class, () -> service.create(createDTO));
         assertEquals(DataSourceErrorCode.SAVE_FAILED, ex.getCode());
@@ -834,5 +837,191 @@ class DataSourceServiceTest {
         BusinessException ex = assertThrows(BusinessException.class,
                 () -> service.saveBizAttr("TG001", new BizAttrSaveDTO()));
         assertEquals(DataSourceErrorCode.SAVE_FAILED, ex.getCode());
+    }
+
+    // ---- 时间字段维护（DS-REQ-178~182） ----
+
+    /** 新增走专用 INSERT，且时间字段不由 Java 侧赋值——时间只能来自数据库 SYSDATE。 */
+    @Test
+    void create_shouldNotAssignTimeFieldsInJava() {
+        when(dataSourceMapper.selectCount(any(LambdaQueryWrapper.class))).thenReturn(0L);
+        when(dataSourceMapper.insertWithSysdate(any(DataSource.class))).thenReturn(1);
+
+        service.create(createDTO);
+
+        ArgumentCaptor<DataSource> captor = ArgumentCaptor.forClass(DataSource.class);
+        verify(dataSourceMapper).insertWithSysdate(captor.capture());
+        assertNull(captor.getValue().getInsertTime());
+        assertNull(captor.getValue().getUpdateTime());
+        verify(dataSourceMapper, never()).insert(any(DataSource.class));
+    }
+
+    /** 新增 SQL 必须在同一条 INSERT 中以数据库当前时间写入两个时间列（DS-REQ-178）。 */
+    @Test
+    void createInsertStatement_shouldWriteBothTimesWithSysdateInOneStatement() throws Exception {
+        Method method = DataSourceMapper.class.getMethod("insertWithSysdate", DataSource.class);
+        Insert annotation = method.getAnnotation(Insert.class);
+        assertNotNull(annotation, "insertWithSysdate 必须带 @Insert 注解");
+
+        String sql = String.join(" ", annotation.value()).replaceAll("\\s+", " ").trim();
+
+        assertTrue(sql.startsWith("INSERT INTO CDC_DATA_SOURCE"), sql);
+        assertTrue(sql.contains("INSERT_TIME, UPDATE_TIME)"), sql);
+        assertEquals(2, countOccurrences(sql, "SYSDATE"), "两个时间列都必须是 SYSDATE：" + sql);
+        assertTrue(sql.contains("SYSDATE, SYSDATE)"), sql);
+        assertFalse(sql.contains("SYSTIMESTAMP"), sql);
+    }
+
+    /** 主弹窗编辑保存：同一条 UPDATE 刷新 UPDATE_TIME，且不触碰 INSERT_TIME（DS-REQ-179）。 */
+    @Test
+    void update_shouldRefreshUpdateTimeAndKeepInsertTimeUntouched() {
+        when(dataSourceMapper.selectOne(any(LambdaQueryWrapper.class))).thenReturn(sourceDs);
+        when(dataSourceMapper.update(any(), any(LambdaUpdateWrapper.class))).thenReturn(1);
+
+        service.update("DS001", updateDTO);
+
+        ArgumentCaptor<LambdaUpdateWrapper<DataSource>> captor = ArgumentCaptor.forClass(LambdaUpdateWrapper.class);
+        verify(dataSourceMapper).update(eq(null), captor.capture());
+        String setSql = captor.getValue().getSqlSet();
+        assertTrue(setSql.contains("UPDATE_TIME = SYSDATE"), setSql);
+        assertFalse(setSql.contains("INSERT_TIME"), setSql);
+    }
+
+    /** 非幂等启用：状态与 UPDATE_TIME 在同一条 UPDATE 中写入（DS-REQ-180）。 */
+    @Test
+    void enable_nonIdempotent_shouldRefreshUpdateTime() {
+        sourceDs.setFgActive("0");
+        when(dataSourceMapper.selectOne(any(LambdaQueryWrapper.class))).thenReturn(sourceDs);
+        when(dataSourceMapper.update(any(), any(LambdaUpdateWrapper.class))).thenReturn(1);
+
+        service.enable("SRC001");
+
+        ArgumentCaptor<LambdaUpdateWrapper<DataSource>> captor = ArgumentCaptor.forClass(LambdaUpdateWrapper.class);
+        verify(dataSourceMapper).update(eq(null), captor.capture());
+        String setSql = captor.getValue().getSqlSet();
+        assertTrue(setSql.contains("FG_ACTIVE"));
+        assertTrue(setSql.contains("UPDATE_TIME = SYSDATE"), setSql);
+    }
+
+    /** 非幂等停用：状态与 UPDATE_TIME 在同一条 UPDATE 中写入（DS-REQ-180）。 */
+    @Test
+    void disable_nonIdempotent_shouldRefreshUpdateTime() {
+        sourceDs.setFgActive("1");
+        when(dataSourceMapper.selectOne(any(LambdaQueryWrapper.class))).thenReturn(sourceDs);
+        when(dataSourceMapper.update(any(), any(LambdaUpdateWrapper.class))).thenReturn(1);
+
+        service.disable("SRC001");
+
+        ArgumentCaptor<LambdaUpdateWrapper<DataSource>> captor = ArgumentCaptor.forClass(LambdaUpdateWrapper.class);
+        verify(dataSourceMapper).update(eq(null), captor.capture());
+        String setSql = captor.getValue().getSqlSet();
+        assertTrue(setSql.contains("FG_ACTIVE"));
+        assertTrue(setSql.contains("UPDATE_TIME = SYSDATE"), setSql);
+    }
+
+    /** 异常状态归一化停用同样刷新 UPDATE_TIME，并与原状态条件在同一条 UPDATE（DS-REQ-180）。 */
+    @Test
+    void disable_abnormalStatus_shouldRefreshUpdateTime() {
+        sourceDs.setFgActive("X");
+        when(dataSourceMapper.selectOne(any(LambdaQueryWrapper.class))).thenReturn(sourceDs);
+        when(dataSourceMapper.update(any(), any(LambdaUpdateWrapper.class))).thenReturn(1);
+
+        service.disable("SRC001");
+
+        ArgumentCaptor<LambdaUpdateWrapper<DataSource>> captor = ArgumentCaptor.forClass(LambdaUpdateWrapper.class);
+        verify(dataSourceMapper).update(eq(null), captor.capture());
+        assertTrue(captor.getValue().getSqlSet().contains("UPDATE_TIME = SYSDATE"));
+    }
+
+    /** 幂等启用分支不执行 DML，也不得仅为更新时间而写库（DS-REQ-180）。 */
+    @Test
+    void enable_idempotent_shouldNotWriteAnythingIncludingUpdateTime() {
+        sourceDs.setFgActive("1");
+        when(dataSourceMapper.selectOne(any(LambdaQueryWrapper.class))).thenReturn(sourceDs);
+
+        service.enable("SRC001");
+
+        verify(dataSourceMapper, never()).update(any(), any(LambdaUpdateWrapper.class));
+    }
+
+    /** 幂等停用分支不执行 DML，也不得仅为更新时间而写库（DS-REQ-180）。 */
+    @Test
+    void disable_idempotent_shouldNotWriteAnythingIncludingUpdateTime() {
+        sourceDs.setFgActive("0");
+        when(dataSourceMapper.selectOne(any(LambdaQueryWrapper.class))).thenReturn(sourceDs);
+
+        service.disable("SRC001");
+
+        verify(dataSourceMapper, never()).update(any(), any(LambdaUpdateWrapper.class));
+    }
+
+    /** 业务属性保存与 UPDATE_TIME 在同一条主表 UPDATE 中完成（DS-REQ-181）。 */
+    @Test
+    void saveBizAttr_shouldRefreshUpdateTimeInSameUpdate() {
+        when(dataSourceMapper.selectOne(any(LambdaQueryWrapper.class))).thenReturn(targetDs);
+        when(dataSourceMapper.update(any(), any(LambdaUpdateWrapper.class))).thenReturn(1);
+
+        BizAttrSaveDTO dto = new BizAttrSaveDTO();
+        dto.setBizAttr("{\"x\":\"y\"}");
+        service.saveBizAttr("TG001", dto);
+
+        ArgumentCaptor<LambdaUpdateWrapper<DataSource>> captor = ArgumentCaptor.forClass(LambdaUpdateWrapper.class);
+        verify(dataSourceMapper).update(eq(null), captor.capture());
+        String setSql = captor.getValue().getSqlSet();
+        assertTrue(setSql.contains("DATA_SOURCE_BIZ_ATTR"));
+        assertTrue(setSql.contains("UPDATE_TIME = SYSDATE"), setSql);
+    }
+
+    // ---- 列表排序（DS-REQ-183） ----
+
+    /** 列表默认排序由后端查询生成：两个时间列 DESC NULLS LAST，最后以 DATA_SOURCE_ID ASC 稳定排序。 */
+    @Test
+    void list_shouldOrderByTimesDescNullsLastThenIdAsc() {
+        when(dataSourceMapper.selectList(any(LambdaQueryWrapper.class)))
+                .thenReturn(Collections.emptyList());
+
+        service.list(new DataSourceQuery());
+
+        ArgumentCaptor<LambdaQueryWrapper<DataSource>> captor = ArgumentCaptor.forClass(LambdaQueryWrapper.class);
+        verify(dataSourceMapper).selectList(captor.capture());
+        String sql = captor.getValue().getSqlSegment();
+
+        int updateIdx = sql.indexOf("ORDER BY UPDATE_TIME DESC NULLS LAST");
+        int insertIdx = sql.indexOf("INSERT_TIME DESC NULLS LAST");
+        int idIdx = sql.indexOf("DATA_SOURCE_ID ASC");
+        assertTrue(updateIdx >= 0, sql);
+        assertTrue(insertIdx > updateIdx, sql);
+        assertTrue(idIdx > insertIdx, sql);
+        assertEquals(2, countOccurrences(sql, "NULLS LAST"), sql);
+    }
+
+    /** 排序条件不得混入查询过滤：过滤语义与既有行为一致（DS-REQ-183）。 */
+    @Test
+    void list_sortAddition_shouldKeepFiltersUnchanged() {
+        DataSourceQuery query = new DataSourceQuery();
+        query.setCategory("TARGET");
+        when(dataSourceMapper.selectList(any(LambdaQueryWrapper.class)))
+                .thenReturn(Collections.emptyList());
+
+        service.list(query);
+
+        ArgumentCaptor<LambdaQueryWrapper<DataSource>> captor = ArgumentCaptor.forClass(LambdaQueryWrapper.class);
+        verify(dataSourceMapper).selectList(captor.capture());
+        String where = captor.getValue().getCustomSqlSegment();
+        assertTrue(where.contains("UPPER(DATA_SOURCE_CATEGORY) ="));
+        assertFalse(where.contains("FG_ACTIVE"));
+    }
+
+    private static int countOccurrences(String text, String needle) {
+        int count = 0;
+        int from = 0;
+        while (true) {
+            int idx = text.indexOf(needle, from);
+            if (idx < 0) {
+                return count;
+            }
+            count++;
+            from = idx + needle.length();
+        }
     }
 }

@@ -560,3 +560,102 @@
 - **接受范围**：`DS-REQ-139~177`、`DS-AC-141~182`、正式验收结果 `PASS=42/FAIL=0/BLOCKED=0/NOT_RUN=0`、被验收业务实现提交 `399cb224...`、证据链截至 `30e902f...`；页面视觉结论的最终接受已由项目负责人 2026-09-20 最终验收决定。
 - **边界**：该 `ACCEPTED` **仅**适用于本轮当前调整视觉与交互，**不**把数据源管理 Feature 整体正式验收状态改为 `ACCEPTED`；既有 `PASS=113/FAIL=0/BLOCKED=2/NOT_RUN=0` 与两个 `BLOCKED`、上一轮 `DS-AC-116~140`（25 条全部 `NOT_RUN`）均未改变。
 - 本任务未访问数据库/ZK/Kafka/源库/目标库；未启动服务；未重跑测试或构建；未修改业务代码/测试/配置/依赖/锁文件。
+
+## 13. 新增/编辑主弹窗表单视觉调整（`APPROVED`，`IMPLEMENTED_PENDING_USER_REVIEW`）
+
+> 分层状态：`adjustment_document_status=APPROVED`、`adjustment_baseline_status=APPROVED`、`adjustment_ui_status=APPROVED`、`implementation_authorization_status=GRANTED_IN_THIS_TASK`、`implementation_status=IMPLEMENTED_PENDING_USER_REVIEW`、`formal_acceptance_execution_status=NOT_RUN`、`new_adjustment_acceptance_status=ALL_NOT_RUN`。本轮验收 `DS-AC-183~199`（17 条）全部 `NOT_RUN`。
+>
+> 页面视觉与交互的**最终结论以项目负责人页面目测为准**；本节的自动化测试与构建结论**不等于**视觉验收通过。
+
+### 13.0 局部替代声明
+
+1. **作用范围**：本节**仅**替代新增/编辑主弹窗（`.editor-dialog` / `.editor-form`）的**标签对齐、标签文字样式、密码必填标识、右下角提交按钮视觉**四项。§5 命名策略大弹窗、§9/§10/§11 中业务属性弹窗与命名策略弹窗的布局、字段、宽度与视觉**全部不变**。
+2. **对既有结论的边界**：主弹窗的字段集合、字段顺序、字段校验规则、弹窗宽度、保存行为与业务流程**不变**；“测试连接”按钮的**位置对齐线**不变；“取消”按钮视觉**不变**；密码掩码、聚焦、失焦、未修改沿用与不回显行为**不变**。
+3. **无全局泄漏**：所有新增样式限定在 `.editor-dialog` 范围内（`label-position` 只作用于该 `el-form`，颜色/字重样式以 `:deep(.editor-dialog …)` 限定），不写入全局样式，不影响其他页面或其他弹窗。
+
+### 13.1 标签对齐（`DS-REQ-184`）
+
+| 项目 | 调整前 | 调整后 |
+|---|---|---|
+| `label-position` | `left` | **`right`** |
+| `label-width` | `120px` | `120px`（**不变**） |
+| 标签右侧与输入控件左侧 | — | 形成**统一对齐线** |
+| 标签左侧 | 对齐 | 允许**不对齐** |
+| 输入控件起始位置 | 距弹窗左侧固定 | **保持稳定**（因 `label-width` 不变） |
+| “测试连接”按钮 | 与输入控件左侧对齐（`.test-bar { padding-left: 120px; }`） | **继续**与输入控件左侧对齐（该 padding 未改） |
+
+- 新增弹窗与编辑弹窗使用**同一套**右对齐 120px 表单布局（同一 `el-form`，仅标题与按钮文案随模式变化）。
+- 业务属性弹窗、目标库命名策略弹窗的 `label-position`（`left`）与 `label-width`（`110px`）**不变**。
+
+### 13.2 标签文字样式（`DS-REQ-185`）
+
+```css
+:deep(.editor-dialog .el-form-item__label) {
+  font-size: 14px;
+  font-weight: 500;
+  color: #3f3f46;
+}
+```
+
+- 使用页面**默认无衬线字体**（未设置 `font-family`，不继承列表“数据源 ID”正文的等宽字体）。
+- **不**使用列表 ID 的 `font-weight: 600` / `#09090b` 强视觉。
+- 必填星号继续由 Element Plus 的 `is-required` + `asterisk-left` 伪元素渲染，仍为 Element Plus 危险色（红色）。
+- 选择器限定 `.editor-dialog`，**无**全局泄漏。
+
+### 13.3 密码必填标识（`DS-REQ-186`）
+
+| 模式 | `el-form-item` 属性 | 标签星号 | 校验行为 | 留空语义 |
+|---|---|---|---|---|
+| 新增 | `prop="password" :required="!isEdit"` → `required=true` | **显示**红色星号 | 既有必填规则照常阻止空密码提交 | 必填，不允许留空 |
+| 编辑 | 同上 → `required=false` | **不显示**星号 | 不做必填校验 | 留空表示**沿用原密码** |
+
+- 必填语义通过 Element Plus 表单项的 `required` 能力实现，**不**使用纯文本伪造星号。
+- 密码掩码、聚焦、失焦、未修改沿用与密码不回显行为**不变**。
+
+### 13.4 创建/保存按钮视觉（`DS-REQ-187`、`DS-REQ-188`）
+
+| 状态 | 背景 / 边框 | 文字 |
+|---|---|---|
+| 常态 | `#09090b` | `#ffffff` |
+| `:hover` / `:focus` | `#27272a` | `#ffffff` |
+| `:active` | `#18181b` | `#ffffff` |
+| disabled | 沿用 Element Plus 既有禁用视觉（**不**被覆盖） | 沿用 |
+| loading | 沿用既有 `:loading="saving"` 绑定，图标与文字**可读** | `#ffffff` |
+
+- 圆角 `6px`，字重 `500`；与主列表“查询”“新增数据源”同一黑白灰视觉语言。
+- 文案：新增模式 **“创建”**，编辑模式 **“保存”**。
+- 选择器为 `:deep(.editor-dialog .editor-submit-button:not(.is-disabled))`，**不**覆盖禁用视觉。
+- “取消”按钮、“测试连接”按钮、业务属性弹窗与命名策略弹窗的提交按钮**均不调整**；样式不泄漏到其他页面或弹窗。
+
+### 13.5 明确不变项（`DS-REQ-188`）
+
+- 主弹窗字段集合、字段顺序、校验规则、弹窗宽度、保存行为与业务流程不变。
+- “取消”“测试连接”按钮视觉与位置不变。
+- 业务属性弹窗、目标库命名策略弹窗的布局、字段、宽度与视觉不变。
+- 其他页面与公共组件无视觉回归、无样式泄漏。
+
+### 13.6 追踪
+
+| 需求 | 验收 | UI 条目 |
+|---|---|---|
+| DS-REQ-184 | DS-AC-192、DS-AC-193 | §13.1 |
+| DS-REQ-185 | DS-AC-194 | §13.2 |
+| DS-REQ-186 | DS-AC-195、DS-AC-196 | §13.3 |
+| DS-REQ-187 | DS-AC-197、DS-AC-198 | §13.4 |
+| DS-REQ-188 | DS-AC-199 | §13.0、§13.5 |
+| DS-REQ-178、DS-REQ-179、DS-REQ-180、DS-REQ-181、DS-REQ-182 | DS-AC-183~DS-AC-188 | 无 UI 变化（服务端时间字段维护） |
+| DS-REQ-183 | DS-AC-189、DS-AC-190、DS-AC-191 | 无 UI 变化（服务端排序；前端**不做**二次排序） |
+
+## 14. 本轮调整变更记录
+
+### 14.1 实现与状态回写（2026-09-20，任务 `DATA-SOURCE-CREATE-EDIT-TIME-SORT-FORM-UI-ADJUSTMENT-001`）
+
+- 新增 §13「新增/编辑主弹窗表单视觉调整（`APPROVED`，`IMPLEMENTED_PENDING_USER_REVIEW`）」与本节（§14）。
+- 分层状态：`adjustment_document_status=APPROVED`、`adjustment_baseline_status=APPROVED`、`adjustment_ui_status=APPROVED`、`implementation_authorization_status=GRANTED_IN_THIS_TASK`、`implementation_status=IMPLEMENTED_PENDING_USER_REVIEW`、`formal_acceptance_execution_status=NOT_RUN`、`new_adjustment_acceptance_status=ALL_NOT_RUN`；项目负责人已在当前会话明确批准该方案。
+- §13.0 三条“局部替代声明”冻结作用范围（仅主弹窗四项）与不泄漏边界。
+- 实现落点（`DataSourcePage.vue`）：主弹窗 `el-form` 的 `label-position` 由 `left` 改为 `right`（`label-width` 仍 `120px`）；密码表单项增加 `:required="!isEdit"`；提交按钮新增专用类名 `editor-submit-button` 并按 §13.4 加局部样式；标签样式以 `:deep(.editor-dialog .el-form-item__label)` 限定。
+- §0~§12 既有 `APPROVED` UI 基线与技术正文**逐字冻结、未修改**；`DS-REQ-001~177` 编号与正文未改；`DS-AC-001~182` 编号、前置条件、操作步骤、预期结果未改。
+- 本轮新增验收 `DS-AC-183~199`（17 条）全部为 `NOT_RUN`；上一轮 `DS-AC-116~140`（25 条）仍全部 `NOT_RUN`；已最终接受的 `DS-AC-141~182`（42 条 `PASS`）状态未改变；既有 `PASS=113/FAIL=0/BLOCKED=2/NOT_RUN=0`（阻塞 `DS-AC-104`/`DS-AC-108`）**逐字保留**。
+- 实现状态为 `IMPLEMENTED_PENDING_USER_REVIEW`，**未**置为 `IMPLEMENTED_ACCEPTED`/`ACCEPTED`/生产可用；正式验收执行状态 `NOT_RUN`；**页面视觉与交互结论以项目负责人页面目测为准**。
+- 自动化测试覆盖：前端定向测试断言主弹窗 `el-form--label-right`、标签局部样式选择器与色值/字号/字重、密码必填星号在新增模式存在且编辑模式不存在、空密码被既有校验阻止、创建/保存按钮专用类名与四态色、取消/测试连接/业务属性弹窗按钮不受影响、样式无全局泄漏（vitest 未注入 SFC scoped 样式，视觉断言以类钩子与样式源码静态断言实现）。
+- 未访问数据库/ZK/Kafka/业务源库/目标库；未修改依赖与锁文件；从最终提交启动临时前后端服务供项目负责人目测（后端按既有配置自动建立连接池，不视为 Agent 主动访问）。

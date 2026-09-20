@@ -202,7 +202,7 @@
         :model="editorForm"
         :rules="editorRules"
         label-width="120px"
-        label-position="left"
+        label-position="right"
         class="editor-form"
         v-loading="editorLoading"
       >
@@ -250,7 +250,7 @@
         <el-form-item label="用户名" prop="userName">
           <el-input v-model="editorForm.userName" placeholder="请输入用户名" maxlength="64" />
         </el-form-item>
-        <el-form-item label="密码" prop="password">
+        <el-form-item label="密码" prop="password" :required="!isEdit">
           <el-input
             v-model="passwordInput"
             type="password"
@@ -287,7 +287,13 @@
 
       <template #footer>
         <el-button :disabled="saving" @click="requestCloseEditor">取消</el-button>
-        <el-button type="primary" :loading="saving" :disabled="editorLoading" @click="onSaveEditor">
+        <el-button
+          type="primary"
+          class="editor-submit-button"
+          :loading="saving"
+          :disabled="editorLoading"
+          @click="onSaveEditor"
+        >
           {{ isEdit ? '保存' : '创建' }}
         </el-button>
       </template>
@@ -1703,6 +1709,30 @@ onMounted(() => {
   color: #ffffff;
 }
 
+/* 主弹窗右下角“创建/保存”：与主列表“查询”“新增数据源”同一黑白灰视觉语言（DS-REQ-187）。
+   选择器限定在 .editor-dialog 内且 :not(.is-disabled) 仅覆盖正常态，
+   禁用态沿用 Element Plus 既有禁用视觉，取消/测试连接/其他弹窗按钮不受影响。 */
+:deep(.editor-dialog .editor-submit-button:not(.is-disabled)) {
+  background: #09090b;
+  border-color: #09090b;
+  color: #ffffff;
+  border-radius: 6px;
+  font-weight: 500;
+}
+
+:deep(.editor-dialog .editor-submit-button:not(.is-disabled):hover),
+:deep(.editor-dialog .editor-submit-button:not(.is-disabled):focus) {
+  background: #27272a;
+  border-color: #27272a;
+  color: #ffffff;
+}
+
+:deep(.editor-dialog .editor-submit-button:not(.is-disabled):active) {
+  background: #18181b;
+  border-color: #18181b;
+  color: #ffffff;
+}
+
 .ds-add-icon {
   margin-right: 4px;
 }
@@ -1834,6 +1864,14 @@ onMounted(() => {
 
 .editor-form .el-select {
   width: 100%;
+}
+
+/* 新增/编辑主弹窗配置项标签文字样式：使用页面默认无衬线字体，不套用列表 ID 的等宽字体与强视觉（DS-REQ-185）。
+   选择器限定在 .editor-dialog 内，不泄漏到业务属性、命名策略弹窗或其他页面。 */
+:deep(.editor-dialog .el-form-item__label) {
+  font-size: 14px;
+  font-weight: 500;
+  color: #3f3f46;
 }
 
 .field-tip {

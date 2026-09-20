@@ -67,7 +67,10 @@ public class DataSourceServiceImpl implements DataSourceService {
             wrapper.apply("UPPER(DATA_SOURCE_CATEGORY) = {0}", category);
         }
 
-        wrapper.orderByAsc(DataSource::getDataSourceId);
+        // Oracle 排序语义：时间倒序，NULL 排最后，时间相同时以 DATA_SOURCE_ID 升序稳定排序
+        wrapper.last("ORDER BY UPDATE_TIME DESC NULLS LAST, "
+                + "INSERT_TIME DESC NULLS LAST, "
+                + "DATA_SOURCE_ID ASC");
 
         List<DataSource> records = dataSourceMapper.selectList(wrapper);
         List<DataSourceListVO> result = new ArrayList<>(records.size());
@@ -105,7 +108,7 @@ public class DataSourceServiceImpl implements DataSourceService {
         assertTypeCompatible(category, type);
 
         DataSource ds = DataSourceConverter.toEntity(dto, name, "1");
-        int rows = dataSourceMapper.insert(ds);
+        int rows = dataSourceMapper.insertWithSysdate(ds);
         if (rows != 1) {
             throw DataSourceErrorCode.saveFailed();
         }
@@ -159,6 +162,8 @@ public class DataSourceServiceImpl implements DataSourceService {
         if (StringUtils.hasText(dto.getPassword())) {
             wrapper.set(DataSource::getDataSourcePassword, dto.getPassword());
         }
+        // 与业务字段在同一条主表 UPDATE 中维护修改时间；INSERT_TIME 保持不变
+        wrapper.setSql("UPDATE_TIME = SYSDATE");
 
         int rows = dataSourceMapper.update(null, wrapper);
         if (rows != 1) {
@@ -234,6 +239,7 @@ public class DataSourceServiceImpl implements DataSourceService {
             wrapper.eq(DataSource::getFgActive, observedStatus);
         }
         wrapper.set(DataSource::getFgActive, targetStatus);
+        wrapper.setSql("UPDATE_TIME = SYSDATE");
         int rows = dataSourceMapper.update(null, wrapper);
         if (rows != 1) {
             throw DataSourceErrorCode.statusFailed();
@@ -308,7 +314,8 @@ public class DataSourceServiceImpl implements DataSourceService {
                 new LambdaUpdateWrapper<DataSource>()
                         .eq(DataSource::getDataSourceId, id)
                         .in(DataSource::getFgActive, "1", "0")
-                        .set(DataSource::getDataSourceBizAttr, dto.getBizAttr()));
+                        .set(DataSource::getDataSourceBizAttr, dto.getBizAttr())
+                        .setSql("UPDATE_TIME = SYSDATE"));
         if (rows != 1) {
             throw DataSourceErrorCode.saveFailed();
         }
