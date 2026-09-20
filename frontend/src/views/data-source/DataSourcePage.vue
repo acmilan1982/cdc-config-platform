@@ -91,7 +91,7 @@
               <p class="empty-sub">
                 {{
                   effectiveQuery
-                    ? '请调整查询条件后重试，或点击上方“重置”查看全部数据源'
+                    ? '请调整查询条件后重试，或点击上方“重置”后再点击“查询”查看全部数据源'
                     : '点击右上角“新增数据源”创建第一条数据源'
                 }}
               </p>
@@ -139,9 +139,14 @@
                 </span>
                 <template #dropdown>
                   <el-dropdown-menu>
-                    <!-- 异常行（FG_ACTIVE 非 '0'/'1'）只保留归一化“停用”，隐藏全部业务写入口（DS-REQ-167） -->
+                    <!-- 异常行（FG_ACTIVE 非 '0'/'1'）只保留归一化“停用”，隐藏全部业务写入口（DS-REQ-167）；
+                         “停用”与正常行一致使用页面警示色（DS-REQ-164） -->
                     <template v-if="isAbnormal(row)">
-                      <el-dropdown-item command="disable" :disabled="rowBusy(row)">停用</el-dropdown-item>
+                      <el-dropdown-item
+                        command="disable"
+                        class="ds-more-warning"
+                        :disabled="rowBusy(row)"
+                      >停用</el-dropdown-item>
                     </template>
                     <template v-else>
                       <el-dropdown-item
@@ -152,6 +157,7 @@
                         v-if="row.dataSourceCategory === 'TARGET'"
                         command="bizAttr"
                       >业务属性</el-dropdown-item>
+                      <!-- 业务入口 → 一条分隔线 → 启用/停用 → 删除；“删除”为末项且不再产生第二条分隔线（DS-REQ-167） -->
                       <el-dropdown-item
                         v-if="!isInactive(row)"
                         command="disable"
@@ -167,7 +173,6 @@
                       >启用</el-dropdown-item>
                       <el-dropdown-item
                         command="delete"
-                        divided
                         class="ds-more-danger"
                         :disabled="deletingId !== '' || statusBusyId !== ''"
                       >删除</el-dropdown-item>
@@ -479,7 +484,7 @@ import {
 import type {
   DataSourceCreateRequest,
   DataSourceListQuery,
-  DataSourceRow,
+  DataSourceListRow,
   DataSourceUpdateRequest,
   NamingStrategySaveRequest,
   NamingStrategyVO,
@@ -491,7 +496,7 @@ import type {
 const PASSWORD_MASK = '*********'
 const TEST_COUNTDOWN_SECONDS = 10
 
-const rows = ref<DataSourceRow[]>([])
+const rows = ref<DataSourceListRow[]>([])
 const loading = ref(false)
 const loadError = ref('')
 const query = ref<DataSourceListQuery>({ id: '', name: '', host: '', category: '' })
@@ -511,17 +516,25 @@ function strategyLabel(strategy: string): string {
 
 // ---- 行状态分类（直接消费列表返回的原始 fgActive，前端不归一化，UI §11.4） ----
 
-function isInactive(row: DataSourceRow): boolean {
+function isInactive(row: DataSourceListRow): boolean {
   return row.fgActive === '0'
 }
 
-function isAbnormal(row: DataSourceRow): boolean {
+function isAbnormal(row: DataSourceListRow): boolean {
   return row.fgActive !== '1' && row.fgActive !== '0'
 }
 
-/** 异常标识必须显示真实原值；原值为 NULL 时明确显示 NULL（UI §11.4）。 */
-function abnormalMark(row: DataSourceRow): string {
-  return `异常（原始值=${row.fgActive === null ? 'NULL' : row.fgActive}）`
+/**
+ * 异常标识必须显示真实原值；原值为 NULL 时明确显示 NULL（UI §11.4）。
+ * 响应对象缺失 fgActive 字段（前后端版本不一致）时，不得显示 `undefined`，
+ * 也不得伪装为 NULL/'0'/'1'，须显式提示契约异常（R1 §3.6）。
+ */
+function abnormalMark(row: DataSourceListRow): string {
+  const raw = (row as Partial<DataSourceListRow>).fgActive
+  if (raw === undefined) {
+    return '异常（FG_ACTIVE 未返回）'
+  }
+  return `异常（原始值=${raw === null ? 'NULL' : raw}）`
 }
 
 /**
@@ -586,7 +599,7 @@ function onReset() {
 }
 
 /** “更多”菜单命令派发（稳定 command 值）：菜单不含编辑，编辑入口只保留双击行（DS-REQ-130/131）。 */
-function onRowCommand(command: string, row: DataSourceRow) {
+function onRowCommand(command: string, row: DataSourceListRow) {
   if (command === 'naming') {
     openNamingStrategy(row)
   } else if (command === 'bizAttr') {
@@ -605,7 +618,7 @@ const deletingId = ref('')
 const statusBusyId = ref('')
 
 /** 该行是否有在途写操作（删除或启停）。 */
-function rowBusy(row: DataSourceRow): boolean {
+function rowBusy(row: DataSourceListRow): boolean {
   return statusBusyId.value === row.dataSourceId || deletingId.value === row.dataSourceId
 }
 
@@ -621,7 +634,7 @@ function statusErrorMessage(code: number, message?: string): string {
  * 逐行启用/停用：二次确认 → 调用接口 → 成功仅按当前已应用条件刷新；
  * 失败保留列表/总数/已应用条件并恢复 busy，不自动重新查询（DS-REQ-165/172/173）。
  */
-async function onToggleStatus(row: DataSourceRow, action: 'enable' | 'disable') {
+async function onToggleStatus(row: DataSourceListRow, action: 'enable' | 'disable') {
   if (statusBusyId.value || deletingId.value) {
     return
   }
@@ -655,7 +668,7 @@ async function onToggleStatus(row: DataSourceRow, action: 'enable' | 'disable') 
   }
 }
 
-async function onDelete(row: DataSourceRow) {
+async function onDelete(row: DataSourceListRow) {
   if (deletingId.value || statusBusyId.value) {
     return
   }
@@ -873,7 +886,7 @@ function openCreate() {
 }
 
 /** 打开编辑弹窗即加载详情；originalDataSourceId 取自列表行并保持不变。 */
-function openEdit(row: DataSourceRow) {
+function openEdit(row: DataSourceListRow) {
   detailToken.value += 1
   editorMode.value = 'edit'
   originalDataSourceId.value = row.dataSourceId
@@ -889,7 +902,7 @@ function openEdit(row: DataSourceRow) {
   loadEditorDetail(row.dataSourceId)
 }
 
-function onRowDoubleClick(row: DataSourceRow) {
+function onRowDoubleClick(row: DataSourceListRow) {
   // 异常行唯一允许的写操作是归一化停用：不提供编辑入口（DS-REQ-162/167）
   if (isAbnormal(row)) {
     ElMessage.warning('该记录状态异常，请先停用以归一化状态')
@@ -1175,13 +1188,13 @@ async function onSaveEditor() {
 const bizAttrVisible = ref(false)
 const bizAttrLoading = ref(false)
 const bizAttrSaving = ref(false)
-const bizAttrTarget = ref<DataSourceRow | null>(null)
+const bizAttrTarget = ref<DataSourceListRow | null>(null)
 const bizAttrText = ref('')
 const bizAttrOriginal = ref('')
 
 const bizAttrDirty = computed(() => bizAttrText.value !== bizAttrOriginal.value)
 
-async function openBizAttr(row: DataSourceRow) {
+async function openBizAttr(row: DataSourceListRow) {
   bizAttrTarget.value = row
   bizAttrText.value = ''
   bizAttrOriginal.value = ''
@@ -1270,7 +1283,7 @@ const namingFormError = ref('')
 const namingLoading = ref(false)
 const namingSaving = ref(false)
 const namingDeletingId = ref('')
-const namingSource = ref<DataSourceRow | null>(null)
+const namingSource = ref<DataSourceListRow | null>(null)
 const namingRows = ref<NamingStrategyVO[]>([])
 const targetOptions = ref<TargetOptionVO[]>([])
 const namingFormRef = ref<FormInstance>()
@@ -1337,7 +1350,7 @@ const namingRules: FormRules = {
   tableNameSuffix: [{ validator: validateSuffix, trigger: 'blur' }],
 }
 
-async function openNamingStrategy(row: DataSourceRow) {
+async function openNamingStrategy(row: DataSourceListRow) {
   namingSource.value = row
   namingRows.value = []
   doResetNamingForm()

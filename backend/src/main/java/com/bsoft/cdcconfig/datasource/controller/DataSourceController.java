@@ -12,6 +12,7 @@ import com.bsoft.cdcconfig.datasource.service.DataSourceService;
 import com.bsoft.cdcconfig.datasource.vo.BizAttrVO;
 import com.bsoft.cdcconfig.datasource.vo.DataSourceDetailVO;
 import com.bsoft.cdcconfig.datasource.vo.DataSourceListVO;
+import com.bsoft.cdcconfig.datasource.vo.DataSourceStatusResultVO;
 import com.bsoft.cdcconfig.datasource.vo.NamingStrategyVO;
 import com.bsoft.cdcconfig.datasource.vo.TargetOptionVO;
 import com.bsoft.cdcconfig.datasource.vo.TestConnectionResultVO;
@@ -108,18 +109,18 @@ public class DataSourceController {
 
     @Operation(summary = "启用数据源", description = "只把主表记录 FG_ACTIVE 写为 '1'；已启用时为幂等成功；异常状态返回 40250")
     @PutMapping("/{dataSourceId}/enable")
-    public ApiResponse<Void> enable(
+    public ApiResponse<DataSourceStatusResultVO> enable(
             @Parameter(description = "数据源ID") @PathVariable String dataSourceId) {
         dataSourceService.enable(dataSourceId);
-        return ApiResponse.success();
+        return ApiResponse.success(DataSourceStatusResultVO.success());
     }
 
     @Operation(summary = "停用数据源", description = "只把主表记录 FG_ACTIVE 写为 '0'；已停用时为幂等成功；异常状态归一化为 '0'")
     @PutMapping("/{dataSourceId}/disable")
-    public ApiResponse<Void> disable(
+    public ApiResponse<DataSourceStatusResultVO> disable(
             @Parameter(description = "数据源ID") @PathVariable String dataSourceId) {
         dataSourceService.disable(dataSourceId);
-        return ApiResponse.success();
+        return ApiResponse.success(DataSourceStatusResultVO.success());
     }
 
     @Operation(summary = "查询数据源业务属性", description = "仅目标库支持读取业务属性")

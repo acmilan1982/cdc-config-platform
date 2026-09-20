@@ -4,8 +4,11 @@ export type DataSourceCategory = 'SOURCE' | 'TARGET'
 /** 数据库类型（源库仅 ORACLE，目标库可为 ORACLE/MYSQL/DORIS）。 */
 export type DataSourceType = 'ORACLE' | 'MYSQL' | 'DORIS'
 
-/** 列表/详情行（API.md §4.1/4.2，不含密码与隐藏字段）。 */
-export interface DataSourceRow {
+/**
+ * 列表记录（API.md §4.1/§11.2，不含密码与隐藏字段）。
+ * `fgActive` 为列表接口专属字段，必填；后端不归一化，原值直传。
+ */
+export interface DataSourceListRow {
   dataSourceId: string
   dataSourceName: string
   dataSourceCategory: DataSourceCategory
@@ -16,6 +19,26 @@ export interface DataSourceRow {
   userName: string
   /** 原始 FG_ACTIVE：`'1'`/`'0'`/`null`/其他历史字符串原样返回，不归一化（API.md §11.2）。 */
   fgActive: string | null
+}
+
+/**
+ * 详情响应（API.md §4.2）。后端详情契约**不包含** `fgActive`，
+ * 此处不得虚构该字段（详见 `DataSourceDetailVO`）。
+ */
+export interface DataSourceDetail {
+  dataSourceId: string
+  dataSourceName: string
+  dataSourceCategory: DataSourceCategory
+  dataSourceType: DataSourceType
+  host: string
+  port: number
+  serviceName: string
+  userName: string
+}
+
+/** 启用/停用成功结果（API.md §11.1）：成功响应 `data.success=true`。 */
+export interface DataSourceStatusResult {
+  success: boolean
 }
 
 /** 列表查询参数（三文本条件忽略大小写模糊 + 可选角色 `category`，AND、先 trim；无分页）。 */

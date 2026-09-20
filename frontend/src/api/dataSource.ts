@@ -4,8 +4,10 @@ import type {
   BizAttrSaveRequest,
   BizAttrVO,
   DataSourceCreateRequest,
+  DataSourceDetail,
   DataSourceListQuery,
-  DataSourceRow,
+  DataSourceListRow,
+  DataSourceStatusResult,
   DataSourceUpdateRequest,
   NamingStrategySaveRequest,
   NamingStrategyVO,
@@ -20,19 +22,19 @@ const REQUEST_TIMEOUT = 30000
 /** GET /api/data-sources（列表，三条件忽略大小写模糊，无分页） */
 export async function fetchDataSourceList(
   query: DataSourceListQuery,
-): Promise<ApiResponse<DataSourceRow[]>> {
-  const res = await http.get<ApiResponse<DataSourceRow[]>>('/api/data-sources', {
+): Promise<ApiResponse<DataSourceListRow[]>> {
+  const res = await http.get<ApiResponse<DataSourceListRow[]>>('/api/data-sources', {
     params: query,
     timeout: REQUEST_TIMEOUT,
   })
   return res.data
 }
 
-/** GET /api/data-sources/{dataSourceId}（详情） */
+/** GET /api/data-sources/{dataSourceId}（详情；详情契约不含 fgActive） */
 export async function fetchDataSourceDetail(
   dataSourceId: string,
-): Promise<ApiResponse<DataSourceRow>> {
-  const res = await http.get<ApiResponse<DataSourceRow>>(
+): Promise<ApiResponse<DataSourceDetail>> {
+  const res = await http.get<ApiResponse<DataSourceDetail>>(
     `/api/data-sources/${encodeURIComponent(dataSourceId)}`,
     { timeout: REQUEST_TIMEOUT },
   )
@@ -72,8 +74,10 @@ export async function deleteDataSource(dataSourceId: string): Promise<ApiRespons
 }
 
 /** PUT /api/data-sources/{dataSourceId}/enable（只把主表 FG_ACTIVE 写为 '1'） */
-export async function enableDataSource(dataSourceId: string): Promise<ApiResponse<null>> {
-  const res = await http.put<ApiResponse<null>>(
+export async function enableDataSource(
+  dataSourceId: string,
+): Promise<ApiResponse<DataSourceStatusResult>> {
+  const res = await http.put<ApiResponse<DataSourceStatusResult>>(
     `/api/data-sources/${encodeURIComponent(dataSourceId)}/enable`,
     undefined,
     { timeout: REQUEST_TIMEOUT },
@@ -82,8 +86,10 @@ export async function enableDataSource(dataSourceId: string): Promise<ApiRespons
 }
 
 /** PUT /api/data-sources/{dataSourceId}/disable（只把主表 FG_ACTIVE 写为 '0'；异常值归一化） */
-export async function disableDataSource(dataSourceId: string): Promise<ApiResponse<null>> {
-  const res = await http.put<ApiResponse<null>>(
+export async function disableDataSource(
+  dataSourceId: string,
+): Promise<ApiResponse<DataSourceStatusResult>> {
+  const res = await http.put<ApiResponse<DataSourceStatusResult>>(
     `/api/data-sources/${encodeURIComponent(dataSourceId)}/disable`,
     undefined,
     { timeout: REQUEST_TIMEOUT },

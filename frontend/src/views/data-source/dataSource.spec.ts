@@ -5,7 +5,9 @@ import { mount, flushPromises } from '@vue/test-utils'
 import ElementPlus, { ElMessage, ElMessageBox } from 'element-plus'
 import type { ApiResponse } from '@/types/monitor'
 import type {
-  DataSourceRow,
+  DataSourceDetail,
+  DataSourceListRow,
+  DataSourceStatusResult,
   NamingStrategyVO,
   TestConnectionResult,
 } from '@/types/dataSource'
@@ -63,7 +65,7 @@ const mockedDeleteNaming = vi.mocked(deleteNamingStrategy)
 const mockedEnable = vi.mocked(enableDataSource)
 const mockedDisable = vi.mocked(disableDataSource)
 
-const srcRow: DataSourceRow = {
+const srcRow: DataSourceListRow = {
   dataSourceId: 'SRC001',
   dataSourceName: '源库A',
   dataSourceCategory: 'SOURCE',
@@ -75,7 +77,7 @@ const srcRow: DataSourceRow = {
   fgActive: '1',
 }
 
-const tgtRow: DataSourceRow = {
+const tgtRow: DataSourceListRow = {
   dataSourceId: 'TG001',
   dataSourceName: '目标库B',
   dataSourceCategory: 'TARGET',
@@ -87,11 +89,11 @@ const tgtRow: DataSourceRow = {
   fgActive: '1',
 }
 
-function okList(data: DataSourceRow[]): ApiResponse<DataSourceRow[]> {
+function okList(data: DataSourceListRow[]): ApiResponse<DataSourceListRow[]> {
   return { code: 200, message: 'success', timestamp: '', data }
 }
 
-function failList(code: number, message: string): ApiResponse<DataSourceRow[]> {
+function failList(code: number, message: string): ApiResponse<DataSourceListRow[]> {
   return { code, message, timestamp: '', data: [] }
 }
 
@@ -99,12 +101,22 @@ function okString(value: string): ApiResponse<string> {
   return { code: 200, message: 'success', timestamp: '', data: value }
 }
 
-function okRow(row: DataSourceRow): ApiResponse<DataSourceRow> {
+function okRow(row: DataSourceDetail): ApiResponse<DataSourceDetail> {
   return { code: 200, message: 'success', timestamp: '', data: row }
 }
 
 function okNull(): ApiResponse<null> {
   return { code: 200, message: 'success', timestamp: '', data: null }
+}
+
+/** 启停成功结果（API.md §11.1）：data.success=true。 */
+function okStatus(): ApiResponse<DataSourceStatusResult> {
+  return { code: 200, message: 'success', timestamp: '', data: { success: true } }
+}
+
+/** 启停失败响应：后端错误路径返回 data=null（只有成功码才携带 data.success）。 */
+function failStatus(code: number, message: string): ApiResponse<DataSourceStatusResult> {
+  return { code, message, timestamp: '', data: null as unknown as DataSourceStatusResult }
 }
 
 function okTest(success: boolean, message: string): ApiResponse<TestConnectionResult> {
@@ -259,7 +271,7 @@ async function pickQueryCategory(w: PageWrapper, optionLabel: string) {
 }
 
 /** 双击数据行打开编辑：编辑入口唯一，可见“编辑”按钮已移除（DS-REQ-130）。 */
-async function openEditRow(w: PageWrapper, row: DataSourceRow) {
+async function openEditRow(w: PageWrapper, row: DataSourceListRow) {
   w.findComponent({ name: 'ElTable' }).vm.$emit('row-dblclick', row)
   await flushPromises()
 }
@@ -357,8 +369,8 @@ beforeEach(() => {
   mockedCreate.mockResolvedValue(okString('TG002'))
   mockedUpdate.mockResolvedValue(okString('SRC001'))
   mockedDelete.mockResolvedValue(okNull())
-  mockedEnable.mockResolvedValue(okNull())
-  mockedDisable.mockResolvedValue(okNull())
+  mockedEnable.mockResolvedValue(okStatus())
+  mockedDisable.mockResolvedValue(okStatus())
   mockedTargetOptions.mockResolvedValue({
     code: 200,
     message: 'success',
@@ -529,7 +541,7 @@ describe('查询列表公共组件选择性接入（DS-REQ-116~138）', () => {
   })
 
   it('加载期间固定结构不塌陷：错误槽、分隔线与主体槽仍在，且无分页', async () => {
-    mockedList.mockReturnValueOnce(new Promise<ApiResponse<DataSourceRow[]>>(() => {}))
+    mockedList.mockReturnValueOnce(new Promise<ApiResponse<DataSourceListRow[]>>(() => {}))
     const wrapper = await mountPage()
 
     expect(wrapper.find('.ql-result-panel__error-slot').exists()).toBe(true)
@@ -557,15 +569,20 @@ describe('查询列表公共组件选择性接入（DS-REQ-116~138）', () => {
 
     const menuId = wrapper.findAll('.row-more')[0].attributes('aria-controls')!
     const menu = document.getElementById(menuId)!
-    // 分隔线独立渲染，不属于可点击菜单项
-    expect(menu.querySelector('.el-dropdown-menu__item--divided')).not.toBeNull()
+    // 分隔线独立渲染且恰好一条：位于业务入口与启用/停用之间（DS-REQ-167 / R1 §3.3）
+    expect(menu.querySelectorAll('.el-dropdown-menu__item--divided')).toHaveLength(1)
     expect(menu.querySelectorAll('.el-dropdown-menu__item')).toHaveLength(3)
-    // 删除项为危险色样式（popper-class 作用域）；停用为警示色，两者可区分（DS-REQ-164）
+    // 删除项为危险色样式且为最后一项，其前不得产生第二条分隔线（R1 §3.3）
     const deleteItem = rowMenuItems(wrapper, 0).find((el) => (el.textContent ?? '').trim() === '删除')!
     expect(deleteItem.className).toContain('ds-more-danger')
+    expect(deleteItem.className).not.toContain('el-dropdown-menu__item--divided')
+    // 停用为警示色，与红色删除可区分
     const disableItem = rowMenuItems(wrapper, 0).find((el) => (el.textContent ?? '').trim() === '停用')!
     expect(disableItem.className).toContain('ds-more-warning')
-    // 删除是最后一项
+    // 唯一分隔线紧邻停用项之前（Element Plus 将 divided 渲染为独立 separator 元素）
+    const separator = menu.querySelector('.el-dropdown-menu__item--divided')!
+    expect(separator.nextElementSibling!.textContent!.trim()).toBe('停用')
+    expect(separator.previousElementSibling!.textContent!.trim()).toBe('目标库命名策略')
     expect(rowMenuLabels(wrapper, 0).at(-1)).toBe('删除')
     wrapper.unmount()
   })
@@ -604,14 +621,14 @@ describe('查询列表公共组件选择性接入（DS-REQ-116~138）', () => {
 })
 
 describe('行状态标识与逐行启用/停用（DS-REQ-160~173）', () => {
-  const disabledRow: DataSourceRow = { ...srcRow, fgActive: '0' }
-  const abnormalRow: DataSourceRow = {
+  const disabledRow: DataSourceListRow = { ...srcRow, fgActive: '0' }
+  const abnormalRow: DataSourceListRow = {
     ...srcRow,
     dataSourceId: 'SRC003',
     dataSourceName: '源库C',
     fgActive: 'X',
   }
-  const abnormalNullRow: DataSourceRow = {
+  const abnormalNullRow: DataSourceListRow = {
     ...srcRow,
     dataSourceId: 'SRC004',
     dataSourceName: '源库D',
@@ -639,6 +656,39 @@ describe('行状态标识与逐行启用/停用（DS-REQ-160~173）', () => {
     wrapper.unmount()
   })
 
+  it('响应缺失 fgActive 字段时显示契约异常提示，绝不显示 undefined（R1 §3.6）', async () => {
+    const missingRow = { ...srcRow, dataSourceId: 'SRC005', dataSourceName: '源库E' } as DataSourceListRow
+    delete (missingRow as { fgActive?: unknown }).fgActive
+    mockedList.mockResolvedValue(okList([missingRow]))
+    const wrapper = await mountPage()
+
+    const cell = wrapper.find('.ds-id-cell')
+    expect(cell.find('.ds-abnormal-mark').text()).toBe('异常（FG_ACTIVE 未返回）')
+    // 缺字段行仍按异常安全边界处理，不显示“停用”标识
+    expect(cell.find('.ds-inactive-mark').exists()).toBe(false)
+    expect(wrapper.text()).not.toContain('undefined')
+    wrapper.unmount()
+  })
+
+  it('五种 fgActive 取值渲染均不含 undefined 文本（R1 §3.6）', async () => {
+    const missingRow = { ...srcRow, dataSourceId: 'SRC005', dataSourceName: '源库E' } as DataSourceListRow
+    delete (missingRow as { fgActive?: unknown }).fgActive
+    mockedList.mockResolvedValue(
+      okList([srcRow, disabledRow, abnormalNullRow, abnormalRow, missingRow]),
+    )
+    const wrapper = await mountPage()
+
+    const idCells = wrapper.findAll('.ds-id-cell')
+    expect(idCells).toHaveLength(5)
+    expect(idCells[0].text()).toContain('SRC001')
+    expect(idCells[1].find('.ds-inactive-mark').text()).toBe('停用')
+    expect(idCells[2].find('.ds-abnormal-mark').text()).toBe('异常（原始值=NULL）')
+    expect(idCells[3].find('.ds-abnormal-mark').text()).toBe('异常（原始值=X）')
+    expect(idCells[4].find('.ds-abnormal-mark').text()).toBe('异常（FG_ACTIVE 未返回）')
+    expect(wrapper.text()).not.toContain('undefined')
+    wrapper.unmount()
+  })
+
   it('启用行菜单为业务入口 + 停用 + 删除；停用行改为“启用”且不再出现“停用”', async () => {
     mockedList.mockResolvedValue(okList([srcRow, disabledRow]))
     const wrapper = await mountPage()
@@ -649,6 +699,16 @@ describe('行状态标识与逐行启用/停用（DS-REQ-160~173）', () => {
     await openRowMenu(wrapper, 1)
     expect(rowMenuLabels(wrapper, 1)).toEqual(['目标库命名策略', '启用', '删除'])
     expect(rowMenuLabels(wrapper, 1)).not.toContain('停用')
+    // 停用行同结构：恰好一条分隔线、删除项不带分隔线（R1 §3.3）
+    const menuId = wrapper.findAll('.row-more')[1].attributes('aria-controls')!
+    const menu = document.getElementById(menuId)!
+    expect(menu.querySelectorAll('.el-dropdown-menu__item--divided')).toHaveLength(1)
+    expect(menu.querySelectorAll('.el-dropdown-menu__item')).toHaveLength(3)
+    const enableItem = rowMenuItems(wrapper, 1).find((el) => (el.textContent ?? '').trim() === '启用')!
+    expect(enableItem.className).not.toContain('el-dropdown-menu__item--divided')
+    expect(menu.querySelector('.el-dropdown-menu__item--divided')!.nextElementSibling!.textContent!.trim()).toBe('启用')
+    const deleteItem = rowMenuItems(wrapper, 1).find((el) => (el.textContent ?? '').trim() === '删除')!
+    expect(deleteItem.className).not.toContain('el-dropdown-menu__item--divided')
     wrapper.unmount()
   })
 
@@ -660,6 +720,21 @@ describe('行状态标识与逐行启用/停用（DS-REQ-160~173）', () => {
     expect(rowMenuLabels(wrapper, 0)).toEqual(['停用'])
     expect(rowMenuLabels(wrapper, 0)).not.toContain('删除')
     expect(rowMenuLabels(wrapper, 0)).not.toContain('目标库命名策略')
+    wrapper.unmount()
+  })
+
+  it('异常行“停用”使用页面警示色（R1 §3.3）', async () => {
+    mockedList.mockResolvedValue(okList([abnormalRow]))
+    const wrapper = await mountPage()
+
+    await openRowMenu(wrapper, 0)
+    const disableItem = rowMenuItems(wrapper, 0).find(
+      (el) => (el.textContent ?? '').trim() === '停用',
+    )!
+    expect(disableItem.className).toContain('ds-more-warning')
+    expect(disableItem.className).not.toContain('ds-more-danger')
+    // 异常行唯一允许的写操作，不含删除入口
+    expect(rowMenuLabels(wrapper, 0)).toEqual(['停用'])
     wrapper.unmount()
   })
 
@@ -717,7 +792,7 @@ describe('行状态标识与逐行启用/停用（DS-REQ-160~173）', () => {
   })
 
   it('启停失败保留表格/总数/已生效条件且不自动重查', async () => {
-    mockedDisable.mockResolvedValueOnce({ code: 50002, message: '状态更新失败，请重试', timestamp: '', data: null })
+    mockedDisable.mockResolvedValueOnce(failStatus(50002, '状态更新失败，请重试'))
     const wrapper = await mountPage()
 
     await setQueryInput(wrapper, '数据源ID', 'SRC')
@@ -742,31 +817,23 @@ describe('行状态标识与逐行启用/停用（DS-REQ-160~173）', () => {
     const wrapper = await mountPage()
 
     // 40250：异常状态不可启用，提示先停用
-    mockedDisable.mockResolvedValueOnce({
-      code: 40250,
-      message: '数据源状态异常，不可启用，请先停用以归一化状态',
-      timestamp: '',
-      data: null,
-    })
+    mockedDisable.mockResolvedValueOnce(
+      failStatus(40250, '数据源状态异常，不可启用，请先停用以归一化状态'),
+    )
     await clickRowMenuAction(wrapper, 0, '停用')
     expect(elMessageErrorSpy).toHaveBeenLastCalledWith('数据源状态异常，不可启用，请先停用以归一化状态')
 
     // 40400：记录已不存在，展示后端消息
-    mockedDisable.mockResolvedValueOnce({
-      code: 40400,
-      message: '数据源不存在: SRC001',
-      timestamp: '',
-      data: null,
-    })
+    mockedDisable.mockResolvedValueOnce(failStatus(40400, '数据源不存在: SRC001'))
     await clickRowMenuAction(wrapper, 0, '停用')
     expect(elMessageErrorSpy).toHaveBeenLastCalledWith('数据源不存在: SRC001')
     wrapper.unmount()
   })
 
   it('启停进行中重复触发只发一个请求（行级 busy）', async () => {
-    let resolveDisable!: (v: ApiResponse<null>) => void
+    let resolveDisable!: (v: ApiResponse<DataSourceStatusResult>) => void
     mockedDisable.mockReturnValueOnce(
-      new Promise<ApiResponse<null>>((res) => (resolveDisable = res)),
+      new Promise<ApiResponse<DataSourceStatusResult>>((res) => (resolveDisable = res)),
     )
     const wrapper = await mountPage()
 
@@ -774,7 +841,7 @@ describe('行状态标识与逐行启用/停用（DS-REQ-160~173）', () => {
     await clickRowMenuAction(wrapper, 0, '停用')
 
     expect(mockedDisable).toHaveBeenCalledTimes(1)
-    resolveDisable(okNull())
+    resolveDisable(okStatus())
     await flushPromises()
     wrapper.unmount()
   })
@@ -801,9 +868,9 @@ describe('行状态标识与逐行启用/停用（DS-REQ-160~173）', () => {
   })
 
   it('状态更新期间删除入口不可用：只发出启停请求', async () => {
-    let resolveDisable!: (v: ApiResponse<null>) => void
+    let resolveDisable!: (v: ApiResponse<DataSourceStatusResult>) => void
     mockedDisable.mockReturnValueOnce(
-      new Promise<ApiResponse<null>>((res) => (resolveDisable = res)),
+      new Promise<ApiResponse<DataSourceStatusResult>>((res) => (resolveDisable = res)),
     )
     const wrapper = await mountPage()
 
@@ -817,7 +884,7 @@ describe('行状态标识与逐行启用/停用（DS-REQ-160~173）', () => {
     expect(deleteItem?.className).toContain('is-disabled')
     expect(mockedDelete).not.toHaveBeenCalled()
 
-    resolveDisable(okNull())
+    resolveDisable(okStatus())
     await flushPromises()
     wrapper.unmount()
   })
@@ -993,7 +1060,7 @@ describe('编辑数据源', () => {
       message: '数据源不存在: SRC001',
       timestamp: '',
       data: null,
-    } as unknown as ApiResponse<DataSourceRow>)
+    } as unknown as ApiResponse<DataSourceDetail>)
     const wrapper = await mountPage()
     await openEditRow(wrapper, srcRow)
 
@@ -1013,10 +1080,10 @@ describe('编辑数据源', () => {
   })
 
   it('快速切换记录时迟到的详情响应被代次隔离', async () => {
-    let resolveFirst!: (v: ApiResponse<DataSourceRow>) => void
+    let resolveFirst!: (v: ApiResponse<DataSourceDetail>) => void
     mockedDetail
       .mockImplementationOnce(
-        () => new Promise<ApiResponse<DataSourceRow>>((res) => (resolveFirst = res)),
+        () => new Promise<ApiResponse<DataSourceDetail>>((res) => (resolveFirst = res)),
       )
       .mockResolvedValueOnce(okRow(tgtRow))
     const wrapper = await mountPage()
@@ -1042,9 +1109,9 @@ describe('编辑数据源', () => {
   })
 
   it('编辑详情未决→关闭→新增：迟到的编辑详情不覆盖新增表单', async () => {
-    let resolveDetail!: (v: ApiResponse<DataSourceRow>) => void
+    let resolveDetail!: (v: ApiResponse<DataSourceDetail>) => void
     mockedDetail.mockImplementationOnce(
-      () => new Promise<ApiResponse<DataSourceRow>>((res) => (resolveDetail = res)),
+      () => new Promise<ApiResponse<DataSourceDetail>>((res) => (resolveDetail = res)),
     )
     const wrapper = await mountPage()
 
@@ -1075,10 +1142,10 @@ describe('编辑数据源', () => {
   })
 
   it('编辑 A 详情未决→关闭→编辑 B：A 迟到成功不覆盖 B 详情与 originalDataSourceId', async () => {
-    let resolveDetailA!: (v: ApiResponse<DataSourceRow>) => void
+    let resolveDetailA!: (v: ApiResponse<DataSourceDetail>) => void
     mockedDetail
       .mockImplementationOnce(
-        () => new Promise<ApiResponse<DataSourceRow>>((res) => (resolveDetailA = res)),
+        () => new Promise<ApiResponse<DataSourceDetail>>((res) => (resolveDetailA = res)),
       )
       .mockResolvedValueOnce(okRow(tgtRow))
     const wrapper = await mountPage()
@@ -1114,7 +1181,7 @@ describe('编辑数据源', () => {
     mockedDetail
       .mockImplementationOnce(
         () =>
-          new Promise<ApiResponse<DataSourceRow>>((_, rej) => (rejectDetailA = rej)),
+          new Promise<ApiResponse<DataSourceDetail>>((_, rej) => (rejectDetailA = rej)),
       )
       .mockResolvedValueOnce(okRow(tgtRow))
     const wrapper = await mountPage()
@@ -1767,7 +1834,9 @@ describe('列表空状态（DS-REQ-110/111）', () => {
     const empty = wrapper.find('.empty-state')
     expect(empty.exists()).toBe(true)
     expect(empty.text()).toContain('未找到符合当前查询条件的数据源')
-    expect(empty.text()).toContain('请调整查询条件后重试，或点击上方“重置”查看全部数据源')
+    // 空结果提示必须准确表达“重置后还要再点查询”，不得暗示重置会自动查询（R1 §3.4）
+    expect(empty.text()).toContain('请调整查询条件后重试，或点击上方“重置”后再点击“查询”查看全部数据源')
+    expect(empty.text()).not.toContain('点击上方“重置”查看全部数据源')
     expect(empty.text()).not.toContain('暂无数据源')
     expect(empty.find('button').exists()).toBe(false)
     expect(empty.find('a').exists()).toBe(false)
@@ -1837,9 +1906,9 @@ describe('列表空状态（DS-REQ-110/111）', () => {
   })
 
   it('加载中与加载失败时不误显示普通空状态', async () => {
-    let resolve!: (v: ApiResponse<DataSourceRow[]>) => void
+    let resolve!: (v: ApiResponse<DataSourceListRow[]>) => void
     mockedList.mockImplementationOnce(
-      () => new Promise<ApiResponse<DataSourceRow[]>>((res) => (resolve = res)),
+      () => new Promise<ApiResponse<DataSourceListRow[]>>((res) => (resolve = res)),
     )
     const wrapper = await mountPage()
 
@@ -1861,11 +1930,11 @@ describe('列表空状态（DS-REQ-110/111）', () => {
   })
 
   it('并发查询只有最终生效请求更新列表与空状态，旧响应不得覆盖', async () => {
-    let resolveStale!: (v: ApiResponse<DataSourceRow[]>) => void
+    let resolveStale!: (v: ApiResponse<DataSourceListRow[]>) => void
     mockedList
       .mockResolvedValueOnce(okList([srcRow, tgtRow])) // mount 初始加载
       .mockImplementationOnce(
-        () => new Promise<ApiResponse<DataSourceRow[]>>((res) => (resolveStale = res)),
+        () => new Promise<ApiResponse<DataSourceListRow[]>>((res) => (resolveStale = res)),
       ) // 查询 NOPE 挂起
       .mockResolvedValueOnce(okList([])) // 撤空条件再查询立即返回空
     const wrapper = await mountPage()
@@ -2014,12 +2083,12 @@ describe('生效查询快照与自动刷新（R1）', () => {
   })
 
   it('自动刷新并发：迟到旧代次响应不得覆盖最终生效请求', async () => {
-    let resolveStale!: (v: ApiResponse<DataSourceRow[]>) => void
+    let resolveStale!: (v: ApiResponse<DataSourceListRow[]>) => void
     mockedList
       .mockResolvedValueOnce(okList([srcRow, tgtRow])) // mount 无条件
       .mockResolvedValueOnce(okList([srcRow, tgtRow])) // 查询 SRC
       .mockImplementationOnce(
-        () => new Promise<ApiResponse<DataSourceRow[]>>((res) => (resolveStale = res)),
+        () => new Promise<ApiResponse<DataSourceListRow[]>>((res) => (resolveStale = res)),
       ) // 删除自动刷新挂起（旧代次）
       .mockResolvedValueOnce(okList([])) // 撤空条件再查询立即返回空（新代次）
     const wrapper = await mountPage()

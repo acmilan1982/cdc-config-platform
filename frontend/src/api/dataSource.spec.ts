@@ -21,8 +21,10 @@ import type { ApiResponse } from '@/types/monitor'
 import type {
   BizAttrSaveRequest,
   DataSourceCreateRequest,
+  DataSourceDetail,
   DataSourceListQuery,
-  DataSourceRow,
+  DataSourceListRow,
+  DataSourceStatusResult,
   DataSourceUpdateRequest,
   NamingStrategySaveRequest,
   NamingStrategyVO,
@@ -31,7 +33,7 @@ import type {
 
 const TIMEOUT = 30000
 
-function okRows(): ApiResponse<DataSourceRow[]> {
+function okRows(): ApiResponse<DataSourceListRow[]> {
   return {
     code: 200,
     message: 'success',
@@ -52,8 +54,21 @@ function okRows(): ApiResponse<DataSourceRow[]> {
   }
 }
 
-function okRow(): ApiResponse<DataSourceRow> {
-  return { code: 200, message: 'success', timestamp: '', data: okRows().data![0] }
+/** 详情响应不含 fgActive（API.md §4.2）。 */
+function okRow(): ApiResponse<DataSourceDetail> {
+  const { dataSourceId, dataSourceName, dataSourceCategory, dataSourceType, host, port, serviceName, userName } =
+    okRows().data![0]
+  return {
+    code: 200,
+    message: 'success',
+    timestamp: '',
+    data: { dataSourceId, dataSourceName, dataSourceCategory, dataSourceType, host, port, serviceName, userName },
+  }
+}
+
+/** 启停成功结果（API.md §11.1）：data.success=true。 */
+function okStatus(): ApiResponse<DataSourceStatusResult> {
+  return { code: 200, message: 'success', timestamp: '', data: { success: true } }
 }
 
 function okString(value: string): ApiResponse<string> {
@@ -93,6 +108,8 @@ describe('data-source API 请求契约（API.md 数据源管理 §4）', () => {
       { timeout: TIMEOUT },
     ])
     expect(res).toEqual(okRow())
+    // 详情契约不返回 fgActive，不得在详情类型上虚构该字段（R1 §3.2）
+    expect(Object.prototype.hasOwnProperty.call(res.data!, 'fgActive')).toBe(false)
   })
 
   it('POST /api/data-sources 携带完整新增体', async () => {
@@ -150,8 +167,8 @@ describe('data-source API 请求契约（API.md 数据源管理 §4）', () => {
     expect(res).toEqual(okNull())
   })
 
-  it('PUT /api/data-sources/{id}/enable 与 /disable 使用 encodeURIComponent 且不带请求体', async () => {
-    const putSpy = vi.spyOn(http, 'put').mockResolvedValue({ data: okNull() } as never)
+  it('PUT /api/data-sources/{id}/enable 与 /disable 使用 encodeURIComponent、不带请求体，且返回 data.success=true', async () => {
+    const putSpy = vi.spyOn(http, 'put').mockResolvedValue({ data: okStatus() } as never)
 
     const enabled = await enableDataSource('DS 001')
     expect(putSpy.mock.calls[0]).toEqual([
@@ -159,7 +176,8 @@ describe('data-source API 请求契约（API.md 数据源管理 §4）', () => {
       undefined,
       { timeout: TIMEOUT },
     ])
-    expect(enabled).toEqual(okNull())
+    expect(enabled).toEqual(okStatus())
+    expect(enabled.data!.success).toBe(true)
 
     const disabled = await disableDataSource('DS 001')
     expect(putSpy.mock.calls[1]).toEqual([
@@ -167,7 +185,8 @@ describe('data-source API 请求契约（API.md 数据源管理 §4）', () => {
       undefined,
       { timeout: TIMEOUT },
     ])
-    expect(disabled).toEqual(okNull())
+    expect(disabled).toEqual(okStatus())
+    expect(disabled.data!.success).toBe(true)
   })
 
   it('POST /api/data-sources/test-connection 携带 originalDataSourceId 与 password', async () => {

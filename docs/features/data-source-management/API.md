@@ -598,7 +598,7 @@
 ]
 ```
 
-- `fgActive` 取值语义：`"1"`=启用、`"0"`=停用、`null`=异常（原值为 `NULL`）、其他字符串=异常（历史非 `0`/`1` 值）；**后端不归一化、不折叠**，页面据此在“数据源 ID”列内渲染标识（`DS-REQ-151`~`DS-REQ-154`）。
+- `fgActive` 取值语义：`"1"`=启用、`"0"`=停用、`null`=异常（原值为 `NULL`）、其他字符串=异常（历史非 `0`/`1` 值）；**后端不归一化、不折叠**，页面据此在“数据源 ID”列内渲染标识（`DS-REQ-151`~`DS-REQ-154`）。原值为 `NULL` 时以**显式 JSON `null`** 输出（`fgActive` **键必须存在**，不得因全局 `non_null` 序列化策略而省略该键），使前端能区分“原值为 `NULL`”与“字段未返回”。
 - **不新增**独立“状态”列或状态派生字段；仍不含密码、`dataSourceOrg`、`bizAttr`、`dataSourceDomain`、时间字段、`sourceApp`（`DS-REQ-047`/`DS-REQ-107`）。
 
 ### 11.3 启停状态机与写入边界
@@ -700,3 +700,13 @@
 - §11.1~§11.7 契约与 R1 冻结方案**零变化**；§0~§10 既有 `APPROVED` API 基线与 §9 技术正文逐字冻结；`DS-REQ-139~177` 数量（39 条）与编号未变；
 - 本轮新增验收 `DS-AC-141~182`（42 条）仍全部 `NOT_RUN`，上一轮 `DS-AC-116~140`（25 条）仍全部 `NOT_RUN`；既有 `PASS=113/FAIL=0/BLOCKED=2/NOT_RUN=0` 逐字保留；
 - 实现状态为 `IMPLEMENTED_PENDING_USER_REVIEW`，**未**置为 `IMPLEMENTED_ACCEPTED`/`ACCEPTED`/生产可用；未访问数据库/ZK/Kafka（含自动化测试，测试全部为 Mapper mock / 静态检查），未对数据库执行任何 DDL/DML，未启动/停止/重启任何服务。
+
+### 12.5 实现 R1 复审整改（2026-09-20，任务 `DATA-SOURCE-LIST-ALL-STATUS-ENABLE-DISABLE-UI-ADJUSTMENT-IMPLEMENTATION-001-R1`）
+
+- 2026-09-20；ChatGPT 对实现提交 `6b7ae04...` 的复审结论 `CHANGES_REQUIRED`（6 项阻塞），本 R1 按已批准契约整改实现与测试；接口契约侧改动与澄清如下：
+- §11.1 启停**成功响应**按已批准契约补齐：`data` 不再是 `null`，改为 `{"success": true}`（两个接口同一结构）；请求方法、路径、路径参数编码、无请求体、错误码与错误响应、事务与状态机边界**均未改动**；
+- §11.2 `fgActive` 取值语义补充澄清：原值为 `NULL` 时以**显式 JSON `null`** 输出（`fgActive` **键必须存在**），不得因全局 `null` 值字段不序列化策略而省略该键——否则前端无法区分“原值为 `NULL`”与“字段未返回”。此为对既有 §11.2 契约的**精确化澄清**（与 `DS-REQ-151`/`DS-REQ-154` 的“原始值直传、不归一化”一致），**非**新增业务决策；
+- 后端实现相应以字段级 `@JsonInclude(ALWAYS)` 仅覆盖 `DataSourceListVO.fgActive`，**未**修改全局 Jackson 序列化配置；自动化测试新增 Controller JSON 契约用例，断言同一响应内 `'1'`/`'0'`/NULL（显式 `null`）/非空异常值（`"X"`）四种 `fgActive` 均逐行输出；
+- §11.1~§11.7 其余契约与 R1 冻结方案**零变化**；§0~§10 既有 `APPROVED` API 基线与 §9 技术正文逐字冻结；`DS-REQ-139~177` 数量（39 条）与编号未变；
+- 本轮新增验收 `DS-AC-141~182`（42 条）仍全部 `NOT_RUN`，上一轮 `DS-AC-116~140`（25 条）仍全部 `NOT_RUN`；既有 `PASS=113/FAIL=0/BLOCKED=2/NOT_RUN=0` 逐字保留；
+- 实现状态保持 `IMPLEMENTED_PENDING_USER_REVIEW`，**未**晋升为 `IMPLEMENTED_ACCEPTED`/`ACCEPTED`/生产可用；未访问数据库/ZK/Kafka（含自动化测试，测试全部为 Mapper mock / 静态检查），未对数据库执行任何 DDL/DML，未启动/停止/重启任何服务。

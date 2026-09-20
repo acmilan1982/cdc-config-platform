@@ -28,6 +28,7 @@ import java.util.Collections;
 
 import static org.hamcrest.Matchers.allOf;
 import static org.hamcrest.Matchers.containsString;
+import static org.hamcrest.Matchers.nullValue;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertNull;
 import static org.mockito.ArgumentMatchers.any;
@@ -71,6 +72,33 @@ class DataSourceControllerTest {
                 .andExpect(status().isOk())
                 .andExpect(jsonPath("$.code").value(200))
                 .andExpect(jsonPath("$.data[0].dataSourceId").value("DS001"));
+    }
+
+    @Test
+    void list_shouldSerializeAllFgActiveStatesIncludingJsonNull() throws Exception {
+        DataSourceListVO enabled = new DataSourceListVO();
+        enabled.setDataSourceId("DS001");
+        enabled.setFgActive("1");
+        DataSourceListVO disabled = new DataSourceListVO();
+        disabled.setDataSourceId("DS002");
+        disabled.setFgActive("0");
+        DataSourceListVO nullState = new DataSourceListVO();
+        nullState.setDataSourceId("DS003");
+        nullState.setFgActive(null);
+        DataSourceListVO abnormal = new DataSourceListVO();
+        abnormal.setDataSourceId("DS004");
+        abnormal.setFgActive("X");
+        when(dataSourceService.list(any()))
+                .thenReturn(java.util.Arrays.asList(enabled, disabled, nullState, abnormal));
+
+        mockMvc.perform(get("/api/data-sources"))
+                .andExpect(status().isOk())
+                .andExpect(jsonPath("$.code").value(200))
+                .andExpect(jsonPath("$.data[0].fgActive").value("1"))
+                .andExpect(jsonPath("$.data[1].fgActive").value("0"))
+                .andExpect(jsonPath("$.data[2].fgActive").value(nullValue()))
+                .andExpect(jsonPath("$.data[2].dataSourceId").value("DS003"))
+                .andExpect(jsonPath("$.data[3].fgActive").value("X"));
     }
 
     @Test
@@ -232,7 +260,8 @@ class DataSourceControllerTest {
 
         mockMvc.perform(put("/api/data-sources/DS001/enable"))
                 .andExpect(status().isOk())
-                .andExpect(jsonPath("$.code").value(200));
+                .andExpect(jsonPath("$.code").value(200))
+                .andExpect(jsonPath("$.data.success").value(true));
 
         verify(dataSourceService).enable("DS001");
     }
@@ -243,9 +272,38 @@ class DataSourceControllerTest {
 
         mockMvc.perform(put("/api/data-sources/DS001/disable"))
                 .andExpect(status().isOk())
-                .andExpect(jsonPath("$.code").value(200));
+                .andExpect(jsonPath("$.code").value(200))
+                .andExpect(jsonPath("$.data.success").value(true));
 
         verify(dataSourceService).disable("DS001");
+    }
+
+    @Test
+    void enable_idempotentSuccess_shouldReturnSameSuccessPayload() throws Exception {
+        doNothing().when(dataSourceService).enable("DS001");
+
+        mockMvc.perform(put("/api/data-sources/DS001/enable"))
+                .andExpect(status().isOk())
+                .andExpect(jsonPath("$.code").value(200))
+                .andExpect(jsonPath("$.data.success").value(true));
+        mockMvc.perform(put("/api/data-sources/DS001/enable"))
+                .andExpect(status().isOk())
+                .andExpect(jsonPath("$.code").value(200))
+                .andExpect(jsonPath("$.data.success").value(true));
+    }
+
+    @Test
+    void disable_idempotentSuccess_shouldReturnSameSuccessPayload() throws Exception {
+        doNothing().when(dataSourceService).disable("DS001");
+
+        mockMvc.perform(put("/api/data-sources/DS001/disable"))
+                .andExpect(status().isOk())
+                .andExpect(jsonPath("$.code").value(200))
+                .andExpect(jsonPath("$.data.success").value(true));
+        mockMvc.perform(put("/api/data-sources/DS001/disable"))
+                .andExpect(status().isOk())
+                .andExpect(jsonPath("$.code").value(200))
+                .andExpect(jsonPath("$.data.success").value(true));
     }
 
     @Test
@@ -255,7 +313,8 @@ class DataSourceControllerTest {
 
         mockMvc.perform(put("/api/data-sources/DS001/enable"))
                 .andExpect(status().isOk())
-                .andExpect(jsonPath("$.code").value(40250));
+                .andExpect(jsonPath("$.code").value(40250))
+                .andExpect(jsonPath("$.data.success").doesNotExist());
     }
 
     @Test
@@ -265,7 +324,8 @@ class DataSourceControllerTest {
 
         mockMvc.perform(put("/api/data-sources/DS001/disable"))
                 .andExpect(status().isOk())
-                .andExpect(jsonPath("$.code").value(50002));
+                .andExpect(jsonPath("$.code").value(50002))
+                .andExpect(jsonPath("$.data.success").doesNotExist());
     }
 
     @Test
