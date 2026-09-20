@@ -728,9 +728,11 @@
 - **边界**：该 `ACCEPTED` **仅**适用于本轮当前接口与字段契约，**不**把数据源管理 Feature 整体正式验收状态改为 `ACCEPTED`；既有 `PASS=113/FAIL=0/BLOCKED=2/NOT_RUN=0` 与两个 `BLOCKED`、上一轮 `DS-AC-116~140`（25 条全部 `NOT_RUN`）均未改变。
 - 本任务未访问数据库/ZK/Kafka/源库/目标库；未启动服务；未重跑测试或构建；未修改业务代码/测试/配置/依赖/锁文件。
 
-## 13. 新增/修改时间字段维护、列表默认排序与主弹窗表单视觉调整的接口影响（`APPROVED`，`IMPLEMENTED_PENDING_USER_REVIEW`）
+## 13. 新增/修改时间字段维护、列表默认排序与主弹窗表单视觉调整的接口影响（`APPROVED`，`IMPLEMENTED_PENDING_FORMAL_ACCEPTANCE`）
 
-> 分层状态：`adjustment_document_status=APPROVED`、`adjustment_baseline_status=APPROVED`、`adjustment_api_status=APPROVED`、`implementation_authorization_status=GRANTED_IN_THIS_TASK`、`implementation_status=IMPLEMENTED_PENDING_USER_REVIEW`、`formal_acceptance_execution_status=NOT_RUN`、`new_adjustment_acceptance_status=ALL_NOT_RUN`。本轮验收 `DS-AC-183~199`（17 条）全部 `NOT_RUN`。
+> 分层状态：`adjustment_document_status=APPROVED`、`adjustment_baseline_status=APPROVED`、`adjustment_api_status=APPROVED`、`implementation_authorization_status=GRANTED_IN_THIS_TASK`、`implementation_status=IMPLEMENTED_PENDING_FORMAL_ACCEPTANCE`、`formal_acceptance_execution_status=NOT_RUN`、`new_adjustment_acceptance_status=ALL_NOT_RUN`、`project_owner_visual_review_status=PASS`、`password_false_required_defect_status=FIXED_CONFIRMED`。本轮验收 `DS-AC-183~199`（17 条）全部 `NOT_RUN`。
+>
+> `project_owner_visual_review_status=PASS` 仅代表项目负责人 2026-09-20 在真实运行页面完成**页面目测/功能复测并通过**（原话“我试了，新增修改都没有问题了。”），**不等于**正式验收执行；`DS-AC-183~199`（17 条）仍**全部 `NOT_RUN`**，`formal_acceptance_execution_status=NOT_RUN` 未改变。
 
 ### 13.1 接口数量与契约概括
 
@@ -802,3 +804,12 @@ ORDER BY UPDATE_TIME DESC NULLS LAST, INSERT_TIME DESC NULLS LAST, DATA_SOURCE_I
 - 本轮新增验收 `DS-AC-183~199`（17 条）全部为 `NOT_RUN`；上一轮 `DS-AC-116~140`（25 条）仍全部 `NOT_RUN`；已最终接受的 `DS-AC-141~182`（42 条 `PASS`）状态未改变；既有 `PASS=113/FAIL=0/BLOCKED=2/NOT_RUN=0`（阻塞 `DS-AC-104`/`DS-AC-108`）**逐字保留**。
 - 实现状态为 `IMPLEMENTED_PENDING_USER_REVIEW`，**未**置为 `IMPLEMENTED_ACCEPTED`/`ACCEPTED`/生产可用；正式验收执行状态 `NOT_RUN`。
 - 未访问数据库/ZK/Kafka/业务源库/目标库（含自动化测试，测试全部为 Mapper mock / 静态检查）；未对数据库执行任何 DDL/DML；未修改依赖与锁文件；从最终提交启动临时前后端服务供项目负责人目测（后端按既有配置自动建立连接池，不视为 Agent 主动访问）。
+
+### 14.2 R3 核心文档状态统一（2026-09-20，任务 `DATA-SOURCE-CREATE-EDIT-TIME-SORT-FORM-UI-ADJUSTMENT-001-R3`）
+
+- **触发**：ChatGPT 从远程 Git 复审 R2 提交 `f42aad01b4115f85b00ad67d541b8cd2e8decf51` 结论 `CHANGES_REQUIRED`（唯一阻塞：七份核心文档对最新一轮调整的**当前状态**不统一——`README.md`/`ACCEPTANCE.md`/`DESIGN.md`/`UI.md` 为 `IMPLEMENTED_PENDING_FORMAL_ACCEPTANCE`，而 `REQUIREMENTS.md §24`/`API.md §13`/`DATABASE.md §11` 仍为 `IMPLEMENTED_PENDING_USER_REVIEW`）。该残留源于 R2 授权范围未包含后三份文档，**非** R2 Agent 越权遗漏；本 R3 获得这三份文档的明确修改授权。
+- **§13 标题与状态块更新**：标题由「（`APPROVED`，`IMPLEMENTED_PENDING_USER_REVIEW`）」更新为「（`APPROVED`，`IMPLEMENTED_PENDING_FORMAL_ACCEPTANCE`）」；分层状态 `implementation_status` 同步更新，并补充 `project_owner_visual_review_status=PASS`、`password_false_required_defect_status=FIXED_CONFIRMED` 与“目测通过 ≠ 正式验收执行、17 条仍全部 `NOT_RUN`”的边界说明。
+- **§13 技术正文逐字冻结**：§13.1 接口数量（15 个）、§13.2~§13.5 的路径、方法、参数、请求体、响应、错误码、说明文案与 §13.4 排序子句、§13.6 追踪表**零变化**；`DS-REQ-178~188` 编号与正文未改，`DS-AC-183~199` 编号、关联需求、前置条件、操作步骤、预期结果未改。
+- **历史记录保护**：§9/§11 各轮变更记录中描述当时状态的 `IMPLEMENTED_PENDING_USER_REVIEW` 作为历史事实**逐字保留**，未做全文件机械替换；上一轮 `DS-AC-116~140` 所属 §9 的当前状态**保持** `IMPLEMENTED_PENDING_USER_REVIEW` 不变。
+- **边界**：`formal_acceptance_execution_status=NOT_RUN`、`new_adjustment_acceptance_status=ALL_NOT_RUN` 保持不变；`DS-AC-183~199`（17 条）仍全部 `NOT_RUN`；既有 `PASS=113/FAIL=0/BLOCKED=2/NOT_RUN=0`、`DS-AC-104`/`DS-AC-108` 两个 `BLOCKED` 逐字保留；已最终接受的 `DS-AC-141~182`（42 条 `PASS`）状态未改变；数据源管理 Feature 整体正式验收状态未改变；未写为 `PASS_17_OF_17`/`IMPLEMENTED_ACCEPTED`/`ACCEPTED`/生产可用。
+- **纯文档边界**：未修改任何运行代码/测试/配置/依赖/锁文件/SQL；未执行测试或构建；未访问数据库/ZK/Kafka/业务源库/目标库；未调用任何 HTTP 接口；未启停任何服务。报告：`reports/DATA-SOURCE-CREATE-EDIT-TIME-SORT-FORM-UI-ADJUSTMENT-001-R3.md`。
