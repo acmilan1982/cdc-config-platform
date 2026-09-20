@@ -798,9 +798,9 @@
 - **边界**：该 `ACCEPTED` **仅**适用于本轮当前调整设计，**不**把数据源管理 Feature 整体正式验收状态改为 `ACCEPTED`；既有 `PASS=113/FAIL=0/BLOCKED=2/NOT_RUN=0`、`DS-AC-104`/`DS-AC-108` 两个 `BLOCKED`、上一轮 `DS-AC-116~140`（25 条全部 `NOT_RUN`）均未改变。
 - 本任务未访问数据库/ZK/Kafka/源库/目标库；未启动服务；未重跑测试或构建；未修改业务代码/测试/配置/依赖/锁文件。
 
-## 15. 新增/修改时间字段维护、列表默认排序与主弹窗表单视觉调整设计（`APPROVED`，`IMPLEMENTED_PENDING_USER_REVIEW`）
+## 15. 新增/修改时间字段维护、列表默认排序与主弹窗表单视觉调整设计（`APPROVED`，`IMPLEMENTED_PENDING_FORMAL_ACCEPTANCE`）
 
-> 分层状态：`adjustment_document_status=APPROVED`、`adjustment_baseline_status=APPROVED`、`adjustment_design_status=APPROVED`、`implementation_authorization_status=GRANTED_IN_THIS_TASK`、`implementation_status=IMPLEMENTED_PENDING_USER_REVIEW`、`formal_acceptance_execution_status=NOT_RUN`、`new_adjustment_acceptance_status=ALL_NOT_RUN`。本轮验收 `DS-AC-183~199`（17 条）全部 `NOT_RUN`，自动化测试与构建通过**不等于**正式验收执行。
+> 分层状态：`adjustment_document_status=APPROVED`、`adjustment_baseline_status=APPROVED`、`adjustment_design_status=APPROVED`、`implementation_authorization_status=GRANTED_IN_THIS_TASK`、`implementation_status=IMPLEMENTED_PENDING_FORMAL_ACCEPTANCE`、`formal_acceptance_execution_status=NOT_RUN`、`new_adjustment_acceptance_status=ALL_NOT_RUN`、`project_owner_visual_review_status=PASS`、`password_false_required_defect_status=FIXED_CONFIRMED`。本轮验收 `DS-AC-183~199`（17 条）全部 `NOT_RUN`，自动化测试与构建通过**不等于**正式验收执行；项目负责人已于 2026-09-20 完成页面目测/功能复测并通过，但目测通过同样**不等于**正式验收执行。
 
 ### 15.0 局部替代声明
 
@@ -843,15 +843,27 @@ ORDER BY UPDATE_TIME DESC NULLS LAST, INSERT_TIME DESC NULLS LAST, DATA_SOURCE_I
 
 - 主弹窗 `el-form` 的 `label-position` 由 `left` 改为 `right`，`label-width` **保持** `120px`。
 - 因 `label-width` 不变、`.test-bar { padding-left: 120px; }` 不变，“测试连接”按钮与输入控件左侧的对齐线**不受影响**；输入控件起始位置**保持稳定**。
-- 标签文字样式以 `:deep(.editor-dialog .el-form-item__label)` 限定作用域：`font-size: 14px; font-weight: 500; color: #3f3f46`；不设置 `font-family`，沿用页面默认无衬线字体；**不**复用列表“数据源 ID”的等宽字体或 `font-weight: 600` / `#09090b`；必填星号继续由 Element Plus 的 `is-required` 伪元素渲染，仍为红色危险色。
+- 标签文字样式以 `:deep(.editor-dialog .el-form-item__label)` 限定作用域：`font-size: 14px; font-weight: 500; color: #3f3f46`；不设置 `font-family`，沿用页面默认无衬线字体；**不**复用列表“数据源 ID”的等宽字体或 `font-weight: 600` / `#09090b`；普通必填字段的星号继续由 Element Plus 既有 `is-required` + `asterisk-left` 伪元素渲染，仍为红色危险色。**密码字段是明确例外**：该表单项**不**依赖 `is-required` 渲染星号，而是按 §15.5 以专用视觉类渲染。
 - 业务属性弹窗与目标库命名策略弹窗的 `label-position`/`label-width`/标签样式**不变**；样式不泄漏到其他页面。
 
 ### 15.5 密码必填标识（`DS-REQ-186`）
 
-- 主弹窗密码表单项使用 Element Plus `el-form-item` 的 `required` 属性：`:required="!isEdit"`。
-- **新增模式**：`required` 为真 → 表单项获得 `is-required` 类 → 标签前显示红色星号；同时既有 `editorRules` 中的密码必填规则照常阻止空密码提交。
-- **编辑模式**：`required` 为假且**不参与**星号渲染 → 标签无星号；密码留空时既有“未修改则沿用原密码”语义不变。
-- 不使用纯文本伪造星号；既有掩码、聚焦、失焦、密码不回显行为不变。
+- 密码表单项保留 `prop="password"`，**删除** `required` 属性；**不**通过 Element Plus 的 `is-required` 机制渲染星号。
+- **新增模式**在密码表单项上挂载纯视觉局部类：
+
+```vue
+:class="{ 'editor-password-required-mark': !isEdit }"
+```
+
+- 星号由 `.editor-password-required-mark` 的 scoped CSS `::before` 渲染，颜色为 `var(--el-color-danger)`；选择器以 `:deep(.editor-dialog …)` 限定，无全局泄漏。
+- 该类**只控制视觉**，不产生任何校验副作用：
+  - **不**生成隐式必填规则；
+  - **不**添加 `is-required` 框架状态类；
+  - **不**读取不存在的 `editorForm.password`。
+- 新增模式空密码仍由既有 `validatePassword()` 提示中文 `请输入密码`。
+- **编辑模式**不挂载该类：标签**不显示**星号，且未修改密码时允许留空保存；主动修改密码后清空仍提示 `请输入新密码`。
+- 密码掩码、聚焦、失焦、密码不回显与请求体规则（编辑模式未修改密码时不携带 `password`）**全部保持不变**。
+- **R1 根因说明（2026-09-20）**：初版设计的 `:required="!isEdit"` 会使 Element Plus 针对 `prop="password"` 生成隐式必填规则，该规则校验的是 `editorForm.password`；而密码输入实际绑定独立状态 `passwordInput`（不在 `editorForm` 内），两者不一致，因此**密码已填写仍被拦截并显示英文 `password is required`**。该缺陷已由 `DATA-SOURCE-CREATE-EDIT-TIME-SORT-FORM-UI-ADJUSTMENT-001-R1` 按上述最终方案修复；本节即为修复后的权威设计。
 
 ### 15.6 创建/保存按钮视觉（`DS-REQ-187`、`DS-REQ-188`）
 
@@ -890,3 +902,14 @@ ORDER BY UPDATE_TIME DESC NULLS LAST, INSERT_TIME DESC NULLS LAST, DATA_SOURCE_I
 - 既有 `PASS=113/FAIL=0/BLOCKED=2/NOT_RUN=0`（阻塞 `DS-AC-104`/`DS-AC-108`）**逐字保留**。
 - 实现状态为 `IMPLEMENTED_PENDING_USER_REVIEW`，**未**置为 `IMPLEMENTED_ACCEPTED`/`ACCEPTED`/生产可用；正式验收执行状态 `NOT_RUN`。
 - 未访问数据库/ZK/Kafka/业务源库/目标库；未对数据库执行任何 DDL/DML；未修改依赖与锁文件；从最终提交启动临时前后端服务供项目负责人目测（后端按既有配置自动建立连接池，不视为 Agent 主动访问）。
+
+### 16.2 R2 设计文档纠偏（2026-09-20，任务 `DATA-SOURCE-CREATE-EDIT-TIME-SORT-FORM-UI-ADJUSTMENT-001-R2`）
+
+- **触发**：ChatGPT 从远程 Git 复审 R1 提交 `55e6273b74182c408e36b75e09ad21819f33d3e2`，结论 `code_review_status=REVIEW_PASS`、`overall_review_status=CHANGES_REQUIRED`、`blocking_finding_count=1`，唯一阻塞类型为 `DESIGN_DOCUMENT_INCONSISTENCY`：本文件 §15.4/§15.5 仍保留 R1 已废止的旧方案。
+- **§15.4 纠偏**：删除“必填星号继续由 Element Plus 的 `is-required` 伪元素渲染”的笼统表述，改为——普通必填字段仍可由 Element Plus 既有 `is-required` 机制渲染；**密码字段是明确例外**，按 §15.5 以专用视觉类渲染星号。
+- **§15.5 纠偏**：整节由旧方案（`required` 属性 / `is-required` 类 / “不使用纯文本伪造星号”）完整替换为 R1 已落地的最终方案（保留 `prop="password"` 并删除 `required`、新增模式挂载 `editor-password-required-mark` 局部类、scoped CSS `::before` 渲染 `var(--el-color-danger)` 星号、该类只控制视觉不生成隐式必填规则/不添加 `is-required`/不读取 `editorForm.password`、新增空密码仍由 `validatePassword()` 提示 `请输入密码`、编辑模式无星号且未修改可保存、主动修改后清空仍提示 `请输入新密码`、掩码与请求体规则不变），并补充 R1 根因说明。
+- **一致性目标**：本节纠偏后，§15.4/§15.5 与 R1 实际代码、`UI.md §13.3` 及 R1 执行报告一致，避免后续 Agent 依据旧描述重新引入同一缺陷。
+- **边界**：本 R2 为纯文档定向修订，**不改变**本轮需求语义（`DS-REQ-178~188` 编号与正文零变化）、**不改变**验收正文（`DS-AC-183~199` 编号、前置条件、操作步骤、预期结果零变化）、**未修改**任何运行代码/测试/配置/依赖/锁文件/SQL；未访问数据库/ZK/Kafka/业务源库/目标库；未执行测试或构建；未启停任何服务。
+- §16.1 及 §12/§14 全部历史变更记录（含“密码 `:required`”等当时准确的实现记录）**作为历史证据逐字保留**，未改写。
+- 状态回写：§15 标题与状态块 `implementation_status` 由 `IMPLEMENTED_PENDING_USER_REVIEW` 更新为 `IMPLEMENTED_PENDING_FORMAL_ACCEPTANCE`，并补充 `project_owner_visual_review_status=PASS`、`password_false_required_defect_status=FIXED_CONFIRMED`（项目负责人 2026-09-20 复测通过）；`formal_acceptance_execution_status=NOT_RUN`、`new_adjustment_acceptance_status=ALL_NOT_RUN` 保持不变。
+- 报告：`reports/DATA-SOURCE-CREATE-EDIT-TIME-SORT-FORM-UI-ADJUSTMENT-001-R2.md`。

@@ -561,11 +561,11 @@
 - **边界**：该 `ACCEPTED` **仅**适用于本轮当前调整视觉与交互，**不**把数据源管理 Feature 整体正式验收状态改为 `ACCEPTED`；既有 `PASS=113/FAIL=0/BLOCKED=2/NOT_RUN=0` 与两个 `BLOCKED`、上一轮 `DS-AC-116~140`（25 条全部 `NOT_RUN`）均未改变。
 - 本任务未访问数据库/ZK/Kafka/源库/目标库；未启动服务；未重跑测试或构建；未修改业务代码/测试/配置/依赖/锁文件。
 
-## 13. 新增/编辑主弹窗表单视觉调整（`APPROVED`，`IMPLEMENTED_PENDING_USER_REVIEW`）
+## 13. 新增/编辑主弹窗表单视觉调整（`APPROVED`，`IMPLEMENTED_PENDING_FORMAL_ACCEPTANCE`）
 
-> 分层状态：`adjustment_document_status=APPROVED`、`adjustment_baseline_status=APPROVED`、`adjustment_ui_status=APPROVED`、`implementation_authorization_status=GRANTED_IN_THIS_TASK`、`implementation_status=IMPLEMENTED_PENDING_USER_REVIEW`、`formal_acceptance_execution_status=NOT_RUN`、`new_adjustment_acceptance_status=ALL_NOT_RUN`。本轮验收 `DS-AC-183~199`（17 条）全部 `NOT_RUN`。
+> 分层状态：`adjustment_document_status=APPROVED`、`adjustment_baseline_status=APPROVED`、`adjustment_ui_status=APPROVED`、`implementation_authorization_status=GRANTED_IN_THIS_TASK`、`implementation_status=IMPLEMENTED_PENDING_FORMAL_ACCEPTANCE`、`formal_acceptance_execution_status=NOT_RUN`、`new_adjustment_acceptance_status=ALL_NOT_RUN`、`project_owner_visual_review_status=PASS`、`password_false_required_defect_status=FIXED_CONFIRMED`。本轮验收 `DS-AC-183~199`（17 条）全部 `NOT_RUN`。
 >
-> 页面视觉与交互的**最终结论以项目负责人页面目测为准**；本节的自动化测试与构建结论**不等于**视觉验收通过。
+> 页面视觉与交互的**最终结论以项目负责人页面目测为准**；项目负责人已于 2026-09-20 使用 R1 运行页面完成复测并通过（原话“我试了，新增修改都没有问题了。”），但本节的自动化测试与构建结论**不等于**视觉验收通过，目测通过也**不等于**正式验收执行。
 
 ### 13.0 局部替代声明
 
@@ -677,5 +677,17 @@
 - 修复（`DataSourcePage.vue`）：删除密码 `el-form-item` 上的 `:required="!isEdit"`，改为局部类 `:class="{ 'editor-password-required-mark': !isEdit }"` + 局部 CSS 伪元素星号；**未**改绑 `editorForm.password`，**未**把掩码写入表单模型，**未**改动 `validatePassword()` 与既有密码安全逻辑。
 - §13.3 已按上述最终机制改写并记录 R1 修复链；§13.2 星号说明补充“密码表单项为例外”指向 §13.3。
 - 测试回归保护（`dataSource.spec.ts`）：删除上一版“以 `is-required` 断言星号”的错误测试，新增“新增模式密码星号来自专用视觉 class、不带 `required` 属性与 `is-required` 状态类”“新增模式填写密码后创建不再出现 `password is required` 且按 trim 提交”“编辑模式主动修改密码后清空仍提示 `请输入新密码`”等用例；空密码被阻断用例补充“不出现英文提示”断言。
-- 状态保持：`implementation_status=IMPLEMENTED_PENDING_USER_REVIEW`、`formal_acceptance_execution_status=NOT_RUN`、`new_adjustment_acceptance_status=ALL_NOT_RUN`、`project_owner_visual_review_status=FAILED_FOUND_DEFECT_THEN_R1_FIXED_PENDING_RETEST`；`DS-AC-183~199` 仍全部 `NOT_RUN`；`DS-AC-001~115`（`PASS=113/FAIL=0/BLOCKED=2/NOT_RUN=0`）、`DS-AC-116~140`、`DS-AC-141~182`（42 条 `PASS`）不变量均未改变。**未**置为 `PASS`/`ACCEPTED`/`IMPLEMENTED_ACCEPTED`/生产可用。
+- 状态保持（R1 当时点）：`implementation_status=IMPLEMENTED_PENDING_USER_REVIEW`、`formal_acceptance_execution_status=NOT_RUN`、`new_adjustment_acceptance_status=ALL_NOT_RUN`、`project_owner_visual_review_status=FAILED_FOUND_DEFECT_THEN_R1_FIXED_PENDING_RETEST`（该两项状态已由下方 §14.3 的 R2 回写取代）；`DS-AC-183~199` 仍全部 `NOT_RUN`；`DS-AC-001~115`（`PASS=113/FAIL=0/BLOCKED=2/NOT_RUN=0`）、`DS-AC-116~140`、`DS-AC-141~182`（42 条 `PASS`）不变量均未改变。**未**置为 `PASS`/`ACCEPTED`/`IMPLEMENTED_ACCEPTED`/生产可用。
+
 - 详细复现、证据与构建结果见 `reports/DATA-SOURCE-CREATE-EDIT-TIME-SORT-FORM-UI-ADJUSTMENT-001-R1.md`。
+
+### 14.3 R2 设计文档纠偏与项目负责人目测结果回写（2026-09-20，任务 `DATA-SOURCE-CREATE-EDIT-TIME-SORT-FORM-UI-ADJUSTMENT-001-R2`）
+
+- **ChatGPT 远程 R1 复审**：对 R1 提交 `55e6273b74182c408e36b75e09ad21819f33d3e2` 结论 `code_review_status=REVIEW_PASS`、`overall_review_status=CHANGES_REQUIRED`、`blocking_finding_count=1`，唯一阻塞为 `DESIGN_DOCUMENT_INCONSISTENCY`（`DESIGN.md` §15.4/§15.5 残留已废止旧方案），**不在**本文件。
+- **项目负责人目测结果回写**：项目负责人 2026-09-20 使用 R1 运行页面完成复测后明确回复“我试了，新增修改都没有问题了。”。据此刻意区分记录：`project_owner_visual_review_status=PASS`、`create_function_visual_review_status=PASS`、`edit_function_visual_review_status=PASS`、`password_false_required_defect_status=FIXED_CONFIRMED`。
+- **§13 标题与状态块更新**：标题更新为「（`APPROVED`，`IMPLEMENTED_PENDING_FORMAL_ACCEPTANCE`）」；`implementation_status` 由 `IMPLEMENTED_PENDING_USER_REVIEW` 更新为 `IMPLEMENTED_PENDING_FORMAL_ACCEPTANCE`，并补充 `project_owner_visual_review_status=PASS`、`password_false_required_defect_status=FIXED_CONFIRMED`；`formal_acceptance_execution_status=NOT_RUN`、`new_adjustment_acceptance_status=ALL_NOT_RUN` 保持不变。
+- **§13.0~§13.6 既有 UI 设计正文逐字零变化**；`DS-REQ-178~188` 编号与正文零变化；`DS-AC-183~199` 编号、关联需求、前置条件、操作步骤、预期结果零变化且**仍全部 `NOT_RUN`**。
+- **目测 `PASS` 的边界**：仅代表本轮项目负责人页面目测/功能复测通过，**不等于**正式验收执行；未置 `PASS_17_OF_17`/`ACCEPTED`/`IMPLEMENTED_ACCEPTED`/生产可用；数据源管理 Feature 整体正式验收状态未改变；既有 `PASS=113/FAIL=0/BLOCKED=2/NOT_RUN=0`、`DS-AC-104`/`DS-AC-108` 两个 `BLOCKED`、上一轮 `DS-AC-116~140`（25 条全部 `NOT_RUN`）与已最终接受的 `DS-AC-141~182`（42 条 `PASS`）逐字保留。
+- **§14.1/§14.2 历史记录逐字保留**（含其中“密码表单项增加 `:required="!isEdit"`”等当时准确的实现记录），未改写。
+- **范围边界（如实记录）**：本 R2 允许修改范围不含 `REQUIREMENTS.md`/`API.md`/`DATABASE.md`，其 §24/§13/§11 的 `implementation_status` 仍为 `IMPLEMENTED_PENDING_USER_REVIEW`，需另行授权任务统一。
+- 本任务为纯文档修订：未修改任何运行代码/测试/配置/依赖/锁文件/SQL；未访问数据库/ZK/Kafka/源库/目标库；未执行测试或构建；未启停任何服务。
