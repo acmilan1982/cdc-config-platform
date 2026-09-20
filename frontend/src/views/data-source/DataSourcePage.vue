@@ -250,7 +250,11 @@
         <el-form-item label="用户名" prop="userName">
           <el-input v-model="editorForm.userName" placeholder="请输入用户名" maxlength="64" />
         </el-form-item>
-        <el-form-item label="密码" prop="password" :required="!isEdit">
+        <el-form-item
+          label="密码"
+          prop="password"
+          :class="{ 'editor-password-required-mark': !isEdit }"
+        >
           <el-input
             v-model="passwordInput"
             type="password"
@@ -1872,6 +1876,16 @@ onMounted(() => {
   font-size: 14px;
   font-weight: 500;
   color: #3f3f46;
+}
+
+/* 新增模式密码前的红色星号：纯视觉标记（DS-REQ-186）。
+   不使用 el-form-item 的 required 属性，也不产生任何校验规则——密码输入绑定独立状态 passwordInput、
+   不在 editorForm 内，若用 required 会生成读取 editorForm.password 的隐式必填规则，
+   导致“密码已填仍报 password is required”。class 仅挂在密码表单项上且编辑模式不挂。 */
+:deep(.editor-dialog .editor-password-required-mark .el-form-item__label)::before {
+  content: "*";
+  color: var(--el-color-danger);
+  margin-right: 4px;
 }
 
 .field-tip {

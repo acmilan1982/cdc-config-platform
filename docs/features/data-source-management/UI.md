@@ -599,17 +599,27 @@
 
 - 使用页面**默认无衬线字体**（未设置 `font-family`，不继承列表“数据源 ID”正文的等宽字体）。
 - **不**使用列表 ID 的 `font-weight: 600` / `#09090b` 强视觉。
-- 必填星号继续由 Element Plus 的 `is-required` + `asterisk-left` 伪元素渲染，仍为 Element Plus 危险色（红色）。
+- 必填星号继续由 Element Plus 的 `is-required` + `asterisk-left` 伪元素渲染，仍为 Element Plus 危险色（红色）。（**例外**：密码表单项的星号自 R1 起改为专用视觉类渲染，见 §13.3。）
 - 选择器限定 `.editor-dialog`，**无**全局泄漏。
 
 ### 13.3 密码必填标识（`DS-REQ-186`）
 
 | 模式 | `el-form-item` 属性 | 标签星号 | 校验行为 | 留空语义 |
 |---|---|---|---|---|
-| 新增 | `prop="password" :required="!isEdit"` → `required=true` | **显示**红色星号 | 既有必填规则照常阻止空密码提交 | 必填，不允许留空 |
-| 编辑 | 同上 → `required=false` | **不显示**星号 | 不做必填校验 | 留空表示**沿用原密码** |
+| 新增 | `prop="password"` + 局部类 `editor-password-required-mark` | **显示**红色星号（专用 CSS `::before`） | 既有必填规则照常阻止空密码提交 | 必填，不允许留空 |
+| 编辑 | `prop="password"`（不带该类） | **不显示**星号 | 不做必填校验 | 留空表示**沿用原密码** |
 
-- 必填语义通过 Element Plus 表单项的 `required` 能力实现，**不**使用纯文本伪造星号。
+```css
+:deep(.editor-dialog .editor-password-required-mark .el-form-item__label)::before {
+  content: "*";
+  color: var(--el-color-danger);
+  margin-right: 4px;
+}
+```
+
+- 新增模式密码前的红色星号是**纯视觉标记**，由密码表单项上的局部类 + 局部 CSS 伪元素渲染；**不**使用 `el-form-item` 的 `required` 属性，**不**产生任何校验规则，**不**添加 `is-required` 框架状态类。
+- **R1 定向修复（2026-09-20）**：初版实现使用 `:required="!isEdit"`，Element Plus 会据此生成针对 `prop="password"` 的隐式必填规则，该规则读取的是 `editorForm.password`（密码输入实际绑定独立状态 `passwordInput`，不在 `editorForm` 内），因此 `editorForm.password` 恒为空，导致**密码已填写仍被拦截并显示英文 `password is required`**。项目负责人在真实页面目测复现后，R1 改为上述视觉类方案，根因与复现细节见 `reports/DATA-SOURCE-CREATE-EDIT-TIME-SORT-FORM-UI-ADJUSTMENT-001-R1.md`。
+- 必填语义仍由既有中文校验 `validatePassword()` 承担：新增模式空密码提示 `请输入密码`；编辑模式主动修改后清空提示 `请输入新密码`；编辑模式未修改密码时允许留空保存。
 - 密码掩码、聚焦、失焦、未修改沿用与密码不回显行为**不变**。
 
 ### 13.4 创建/保存按钮视觉（`DS-REQ-187`、`DS-REQ-188`）
@@ -659,3 +669,13 @@
 - 实现状态为 `IMPLEMENTED_PENDING_USER_REVIEW`，**未**置为 `IMPLEMENTED_ACCEPTED`/`ACCEPTED`/生产可用；正式验收执行状态 `NOT_RUN`；**页面视觉与交互结论以项目负责人页面目测为准**。
 - 自动化测试覆盖：前端定向测试断言主弹窗 `el-form--label-right`、标签局部样式选择器与色值/字号/字重、密码必填星号在新增模式存在且编辑模式不存在、空密码被既有校验阻止、创建/保存按钮专用类名与四态色、取消/测试连接/业务属性弹窗按钮不受影响、样式无全局泄漏（vitest 未注入 SFC scoped 样式，视觉断言以类钩子与样式源码静态断言实现）。
 - 未访问数据库/ZK/Kafka/业务源库/目标库；未修改依赖与锁文件；从最终提交启动临时前后端服务供项目负责人目测（后端按既有配置自动建立连接池，不视为 Agent 主动访问）。
+
+### 14.2 R1 定向修复：新增模式密码误报必填（2026-09-20，任务 `DATA-SOURCE-CREATE-EDIT-TIME-SORT-FORM-UI-ADJUSTMENT-001-R1`）
+
+- 缺陷（项目负责人真实页面目测发现，附截图）：新增数据源弹窗中**密码已填写**，点击“创建”仍被前端拦截，密码下方显示英文 `password is required`。
+- 根因：§13.3 初版使用 `:required="!isEdit"`。Element Plus 会把表单项 `required` 转换为针对 `prop="password"` 的隐式必填规则，该规则校验 `editorForm.password`；而密码输入实际绑定独立状态 `passwordInput`（不在 `editorForm` 内），故 `editorForm.password` 恒为空，即使已输入密码仍触发框架英文默认提示并阻止提交。
+- 修复（`DataSourcePage.vue`）：删除密码 `el-form-item` 上的 `:required="!isEdit"`，改为局部类 `:class="{ 'editor-password-required-mark': !isEdit }"` + 局部 CSS 伪元素星号；**未**改绑 `editorForm.password`，**未**把掩码写入表单模型，**未**改动 `validatePassword()` 与既有密码安全逻辑。
+- §13.3 已按上述最终机制改写并记录 R1 修复链；§13.2 星号说明补充“密码表单项为例外”指向 §13.3。
+- 测试回归保护（`dataSource.spec.ts`）：删除上一版“以 `is-required` 断言星号”的错误测试，新增“新增模式密码星号来自专用视觉 class、不带 `required` 属性与 `is-required` 状态类”“新增模式填写密码后创建不再出现 `password is required` 且按 trim 提交”“编辑模式主动修改密码后清空仍提示 `请输入新密码`”等用例；空密码被阻断用例补充“不出现英文提示”断言。
+- 状态保持：`implementation_status=IMPLEMENTED_PENDING_USER_REVIEW`、`formal_acceptance_execution_status=NOT_RUN`、`new_adjustment_acceptance_status=ALL_NOT_RUN`、`project_owner_visual_review_status=FAILED_FOUND_DEFECT_THEN_R1_FIXED_PENDING_RETEST`；`DS-AC-183~199` 仍全部 `NOT_RUN`；`DS-AC-001~115`（`PASS=113/FAIL=0/BLOCKED=2/NOT_RUN=0`）、`DS-AC-116~140`、`DS-AC-141~182`（42 条 `PASS`）不变量均未改变。**未**置为 `PASS`/`ACCEPTED`/`IMPLEMENTED_ACCEPTED`/生产可用。
+- 详细复现、证据与构建结果见 `reports/DATA-SOURCE-CREATE-EDIT-TIME-SORT-FORM-UI-ADJUSTMENT-001-R1.md`。

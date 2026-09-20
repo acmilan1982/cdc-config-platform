@@ -999,22 +999,42 @@ describe('新增/编辑主弹窗表单与按钮视觉调整（DS-REQ-184~188）'
     expect(rule).not.toContain('#09090b')
   })
 
-  it('新增模式密码带 Element Plus 必填标识，编辑模式不带（DS-REQ-186 / DS-AC-195~196）', async () => {
+  it('新增模式密码星号来自专用视觉 class，不带 required 属性与 is-required 状态类（DS-REQ-186 / DS-AC-195~196）', async () => {
     const wrapper = await mountPage()
     await buttonByText(wrapper, '新增数据源')!.trigger('click')
     await flushPromises()
 
     const createItem = editorInput(wrapper, '密码').element.closest('.el-form-item')!
-    expect(createItem.className).toContain('is-required')
-    // 必填标识来自表单项能力（CSS 星号），不是纯文本伪造
+    // 星号必须靠专用视觉 class 实现
+    expect(createItem.className).toContain('editor-password-required-mark')
+    // 不得退回 Element Plus 的 required 能力：password 绑定的是独立状态 passwordInput，
+    // 而非 editorForm.password，required 会生成读取 editorForm.password 的隐式规则，
+    // 导致“已填密码仍报 password is required”。
+    expect(createItem.className).not.toContain('is-required')
+    expect(createItem.hasAttribute('required')).toBe(false)
+    // 星号是 CSS ::before，不是标签里的纯文本
     expect(createItem.querySelector('.el-form-item__label')!.textContent ?? '').not.toContain('*')
     wrapper.unmount()
 
     const editWrapper = await mountPage()
     await openEditRow(editWrapper, srcRow)
     const editItem = editorInput(editWrapper, '密码').element.closest('.el-form-item')!
+    expect(editItem.className).not.toContain('editor-password-required-mark')
     expect(editItem.className).not.toContain('is-required')
     editWrapper.unmount()
+  })
+
+  it('专用视觉 class 的星号规则存在于 scoped 样式且不引入校验（DS-REQ-186）', () => {
+    const style = scopedStyleBlock()
+    const ruleIndex = style.indexOf('.editor-password-required-mark')
+    expect(ruleIndex).toBeGreaterThan(-1)
+    const ruleEnd = style.indexOf('}', ruleIndex)
+    const rule = style.slice(ruleIndex, ruleEnd + 1)
+    expect(rule).toContain('::before')
+    expect(rule).toContain('content: "*"')
+    expect(rule).toContain('var(--el-color-danger)')
+    // 纯视觉：不触发表单项校验状态
+    expect(rule).not.toContain('is-required')
   })
 
   it('新增模式空密码被既有校验阻断（DS-AC-195）', async () => {
@@ -1037,6 +1057,36 @@ describe('新增/编辑主弹窗表单与按钮视觉调整（DS-REQ-184~188）'
 
     expect(mockedCreate).not.toHaveBeenCalled()
     expect(wrapper.find('.form-error').text()).toContain('请输入密码')
+    // 阻止空密码的必须是项目既有中文校验，而不是 required 产生的框架英文默认提示
+    expect(wrapper.text()).not.toContain('password is required')
+    wrapper.unmount()
+  })
+
+  it('新增模式填写密码后创建：不再出现 password is required，密码按 trim 提交（DS-AC-195 回归）', async () => {
+    const wrapper = await mountPage()
+    await buttonByText(wrapper, '新增数据源')!.trigger('click')
+    await flushPromises()
+
+    await pickSelect(wrapper, '.editor-form', 0, '源库（SOURCE）')
+    await pickSelect(wrapper, '.editor-form', 1, 'ORACLE')
+    await editorInput(wrapper, '数据源ID').setValue('SRC004')
+    await editorInput(wrapper, '数据源名称').setValue('源库D')
+    await editorInput(wrapper, '主机').setValue('10.5.5.5')
+    await editorInput(wrapper, '用户名').setValue('scott')
+    await editorInput(wrapper, 'Service Name').setValue('orcl4')
+    // 已填写密码，且带首尾空白用于验证 trim
+    await editorInput(wrapper, '密码').setValue('  secret  ')
+    await nextTick()
+
+    await buttonByText(wrapper, '创建')!.trigger('click')
+    await flushPromises()
+
+    // 缺陷复现点：密码已填仍被 required 隐式规则拦截并显示英文提示
+    expect(wrapper.text()).not.toContain('password is required')
+    expect(wrapper.find('.form-error').exists()).toBe(false)
+    expect(mockedCreate).toHaveBeenCalledTimes(1)
+    const request = mockedCreate.mock.calls[0][0] as unknown as Record<string, unknown>
+    expect(request.password).toBe('secret')
     wrapper.unmount()
   })
 
@@ -1217,6 +1267,25 @@ describe('编辑数据源', () => {
     const request = mockedUpdate.mock.calls[0][1] as unknown as Record<string, unknown>
     expect(request.dataSourceId).toBe('SRC999')
     expect(request.password).toBe('newpass')
+    wrapper.unmount()
+  })
+
+  it('编辑模式主动修改密码后清空：仍提示 请输入新密码，且不提交（DS-AC-196）', async () => {
+    const wrapper = await mountPage()
+    await openEditRow(wrapper, srcRow)
+    const passwordField = editorInput(wrapper, '密码')
+
+    // 主动改动密码 → 触发“已修改”语义，再清空
+    await passwordField.setValue('temp')
+    await passwordField.setValue('')
+    await nextTick()
+    await buttonByText(wrapper, '保存')!.trigger('click')
+    await flushPromises()
+
+    expect(mockedUpdate).not.toHaveBeenCalled()
+    expect(wrapper.text()).toContain('请输入新密码')
+    // 空密码在校验阶段被阻断，不会以空串或掩码提交
+    expect(wrapper.text()).not.toContain('password is required')
     wrapper.unmount()
   })
 
