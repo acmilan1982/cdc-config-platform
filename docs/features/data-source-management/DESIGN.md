@@ -798,9 +798,9 @@
 - **边界**：该 `ACCEPTED` **仅**适用于本轮当前调整设计，**不**把数据源管理 Feature 整体正式验收状态改为 `ACCEPTED`；既有 `PASS=113/FAIL=0/BLOCKED=2/NOT_RUN=0`、`DS-AC-104`/`DS-AC-108` 两个 `BLOCKED`、上一轮 `DS-AC-116~140`（25 条全部 `NOT_RUN`）均未改变。
 - 本任务未访问数据库/ZK/Kafka/源库/目标库；未启动服务；未重跑测试或构建；未修改业务代码/测试/配置/依赖/锁文件。
 
-## 15. 新增/修改时间字段维护、列表默认排序与主弹窗表单视觉调整设计（`APPROVED`，`IMPLEMENTED_PENDING_FORMAL_ACCEPTANCE`）
+## 15. 新增/修改时间字段维护、列表默认排序与主弹窗表单视觉调整设计（`APPROVED`，`IMPLEMENTED_PENDING_FINAL_ACCEPTANCE`，正式验收已在本地真实环境执行且 17 条全部 `PASS`）
 
-> 分层状态：`adjustment_document_status=APPROVED`、`adjustment_baseline_status=APPROVED`、`adjustment_design_status=APPROVED`、`implementation_authorization_status=GRANTED_IN_THIS_TASK`、`implementation_status=IMPLEMENTED_PENDING_FORMAL_ACCEPTANCE`、`formal_acceptance_execution_status=NOT_RUN`、`new_adjustment_acceptance_status=ALL_NOT_RUN`、`project_owner_visual_review_status=PASS`、`password_false_required_defect_status=FIXED_CONFIRMED`。本轮验收 `DS-AC-183~199`（17 条）全部 `NOT_RUN`，自动化测试与构建通过**不等于**正式验收执行；项目负责人已于 2026-09-20 完成页面目测/功能复测并通过，但目测通过同样**不等于**正式验收执行。
+> 分层状态：`adjustment_document_status=APPROVED`、`adjustment_baseline_status=APPROVED`、`adjustment_design_status=APPROVED`、`implementation_authorization_status=GRANTED_IN_THIS_TASK`、`implementation_status=IMPLEMENTED_PENDING_FINAL_ACCEPTANCE`、`formal_acceptance_execution_status=EXECUTED_PASSED_LOCAL`、`new_adjustment_acceptance_status=PASS_17_OF_17`、`final_acceptance_status=NOT_ACCEPTED_PENDING_PROJECT_OWNER`、`project_owner_visual_review_status=PASS`、`password_false_required_defect_status=FIXED_CONFIRMED`。本轮验收 `DS-AC-183~199`（17 条）已由 `DATA-SOURCE-CREATE-EDIT-TIME-SORT-FORM-UI-ADJUSTMENT-FORMAL-ACCEPTANCE-001` 于 2026-09-20 在真实后端 + 真实 Oracle 开发库 + 真实浏览器 + 受控验收数据（`RUN_TAG=FACC002`）下端到端执行：`PASS=17/FAIL=0/BLOCKED=0/NOT_RUN=0`；该 `EXECUTED_PASSED_LOCAL` **不构成**最终验收，不得写为 `ACCEPTED`/`IMPLEMENTED_ACCEPTED`/生产可用。
 
 ### 15.0 局部替代声明
 
@@ -913,3 +913,11 @@ ORDER BY UPDATE_TIME DESC NULLS LAST, INSERT_TIME DESC NULLS LAST, DATA_SOURCE_I
 - §16.1 及 §12/§14 全部历史变更记录（含“密码 `:required`”等当时准确的实现记录）**作为历史证据逐字保留**，未改写。
 - 状态回写：§15 标题与状态块 `implementation_status` 由 `IMPLEMENTED_PENDING_USER_REVIEW` 更新为 `IMPLEMENTED_PENDING_FORMAL_ACCEPTANCE`，并补充 `project_owner_visual_review_status=PASS`、`password_false_required_defect_status=FIXED_CONFIRMED`（项目负责人 2026-09-20 复测通过）；`formal_acceptance_execution_status=NOT_RUN`、`new_adjustment_acceptance_status=ALL_NOT_RUN` 保持不变。
 - 报告：`reports/DATA-SOURCE-CREATE-EDIT-TIME-SORT-FORM-UI-ADJUSTMENT-001-R2.md`。
+
+### 16.3 正式验收执行与状态回写（2026-09-20，任务 `DATA-SOURCE-CREATE-EDIT-TIME-SORT-FORM-UI-ADJUSTMENT-FORMAL-ACCEPTANCE-001`）
+
+- **状态回写**：§15 标题由“（`APPROVED`，`IMPLEMENTED_PENDING_FORMAL_ACCEPTANCE`）”改为“（`APPROVED`，`IMPLEMENTED_PENDING_FINAL_ACCEPTANCE`，正式验收已在本地真实环境执行且 17 条全部 `PASS`）”；分层状态由 `implementation_status=IMPLEMENTED_PENDING_FORMAL_ACCEPTANCE`/`formal_acceptance_execution_status=NOT_RUN`/`new_adjustment_acceptance_status=ALL_NOT_RUN` 更新为 `implementation_status=IMPLEMENTED_PENDING_FINAL_ACCEPTANCE`/`formal_acceptance_execution_status=EXECUTED_PASSED_LOCAL`/`new_adjustment_acceptance_status=PASS_17_OF_17`，并新增 `final_acceptance_status=NOT_ACCEPTED_PENDING_PROJECT_OWNER`；`adjustment_document_status`/`adjustment_baseline_status`/`adjustment_design_status` 仍为 `APPROVED`。
+- **执行结论**：`DS-AC-183~199`（17 条）于 2026-09-20 在真实后端 + 真实 Oracle 开发库 + 真实浏览器 + 受控验收数据（`RUN_TAG=FACC002`，运行源 `db1cfda7...`）下端到端执行，`PASS=17/FAIL=0/BLOCKED=0/NOT_RUN=0`（`DS-AC-198` 的禁用态采用定向自动化 + 计算样式 + 构建产物 CSS 佐证，证据层级已明示）。
+- **数据库**：写操作经项目负责人明确批准（`GRANTED_BY_PROJECT_OWNER_FOR_AGENT_CREATED_DATA_ONLY`），自建数据已按精确主键白名单清理（残留 `0`），既有 36 条主表与 10 条延伸表记录规范化快照四个 SHA-256 **逐字节一致**；未执行 DDL/存量清洗。
+- **边界**：本轮 `EXECUTED_PASSED_LOCAL` **不构成**最终验收；最终验收决定权属项目负责人，前置为 ChatGPT 从远程 Git 的正式验收复审。§15.0 三条“局部替代声明”与 §15.1~§15.6 设计内容**未改**；`DS-REQ-178~188`/`DS-AC-183~199` 编号、正文、前置条件、操作步骤、预期结果零变化；上一轮 `DS-AC-116~140`（25 条 `NOT_RUN`）与已最终接受的 `DS-AC-141~182`（42 条 `PASS`、`final_acceptance_status=ACCEPTED`）状态未改变；既有 `PASS=113/FAIL=0/BLOCKED=2/NOT_RUN=0` 与 `DS-AC-104`/`DS-AC-108` 两个 `BLOCKED` 逐字保留；未置 `ACCEPTED`/`IMPLEMENTED_ACCEPTED`/生产可用。
+- 报告：`reports/DATA-SOURCE-CREATE-EDIT-TIME-SORT-FORM-UI-ADJUSTMENT-FORMAL-ACCEPTANCE-001.md`。

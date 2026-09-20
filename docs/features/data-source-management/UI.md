@@ -561,11 +561,11 @@
 - **边界**：该 `ACCEPTED` **仅**适用于本轮当前调整视觉与交互，**不**把数据源管理 Feature 整体正式验收状态改为 `ACCEPTED`；既有 `PASS=113/FAIL=0/BLOCKED=2/NOT_RUN=0` 与两个 `BLOCKED`、上一轮 `DS-AC-116~140`（25 条全部 `NOT_RUN`）均未改变。
 - 本任务未访问数据库/ZK/Kafka/源库/目标库；未启动服务；未重跑测试或构建；未修改业务代码/测试/配置/依赖/锁文件。
 
-## 13. 新增/编辑主弹窗表单视觉调整（`APPROVED`，`IMPLEMENTED_PENDING_FORMAL_ACCEPTANCE`）
+## 13. 新增/编辑主弹窗表单视觉调整（`APPROVED`，`IMPLEMENTED_PENDING_FINAL_ACCEPTANCE`，正式验收已在本地真实环境执行且 17 条全部 `PASS`）
 
-> 分层状态：`adjustment_document_status=APPROVED`、`adjustment_baseline_status=APPROVED`、`adjustment_ui_status=APPROVED`、`implementation_authorization_status=GRANTED_IN_THIS_TASK`、`implementation_status=IMPLEMENTED_PENDING_FORMAL_ACCEPTANCE`、`formal_acceptance_execution_status=NOT_RUN`、`new_adjustment_acceptance_status=ALL_NOT_RUN`、`project_owner_visual_review_status=PASS`、`password_false_required_defect_status=FIXED_CONFIRMED`。本轮验收 `DS-AC-183~199`（17 条）全部 `NOT_RUN`。
+> 分层状态：`adjustment_document_status=APPROVED`、`adjustment_baseline_status=APPROVED`、`adjustment_ui_status=APPROVED`、`implementation_authorization_status=GRANTED_IN_THIS_TASK`、`implementation_status=IMPLEMENTED_PENDING_FINAL_ACCEPTANCE`、`formal_acceptance_execution_status=EXECUTED_PASSED_LOCAL`、`new_adjustment_acceptance_status=PASS_17_OF_17`、`final_acceptance_status=NOT_ACCEPTED_PENDING_PROJECT_OWNER`、`project_owner_visual_review_status=PASS`、`password_false_required_defect_status=FIXED_CONFIRMED`。本轮验收 `DS-AC-183~199`（17 条）已于 2026-09-20 在真实浏览器下端到端执行：`PASS=17/FAIL=0/BLOCKED=0/NOT_RUN=0`（其中 `DS-AC-198` 禁用态采用定向自动化 + 计算样式 + 构建产物 CSS 佐证，证据层级已明示）。
 >
-> 页面视觉与交互的**最终结论以项目负责人页面目测为准**；项目负责人已于 2026-09-20 使用 R1 运行页面完成复测并通过（原话“我试了，新增修改都没有问题了。”），但本节的自动化测试与构建结论**不等于**视觉验收通过，目测通过也**不等于**正式验收执行。
+> 页面视觉与交互的**最终结论以项目负责人页面目测为准**；项目负责人已于 2026-09-20 使用 R1 运行页面完成复测并通过（原话“我试了，新增修改都没有问题了。”），本轮正式验收亦已在真实浏览器采集计算样式证据。本轮 `EXECUTED_PASSED_LOCAL` **不构成**最终验收，**不得**写为 `ACCEPTED`/`IMPLEMENTED_ACCEPTED`/`final_acceptance_status=ACCEPTED`/生产可用。
 
 ### 13.0 局部替代声明
 
@@ -691,3 +691,10 @@
 - **§14.1/§14.2 历史记录逐字保留**（含其中“密码表单项增加 `:required="!isEdit"`”等当时准确的实现记录），未改写。
 - **范围边界（如实记录）**：本 R2 允许修改范围不含 `REQUIREMENTS.md`/`API.md`/`DATABASE.md`，其 §24/§13/§11 的 `implementation_status` 仍为 `IMPLEMENTED_PENDING_USER_REVIEW`，需另行授权任务统一。
 - 本任务为纯文档修订：未修改任何运行代码/测试/配置/依赖/锁文件/SQL；未访问数据库/ZK/Kafka/源库/目标库；未执行测试或构建；未启停任何服务。
+
+### 14.4 正式验收执行与状态回写（2026-09-20，任务 `DATA-SOURCE-CREATE-EDIT-TIME-SORT-FORM-UI-ADJUSTMENT-FORMAL-ACCEPTANCE-001`）
+
+- **触发**：`DS-AC-183~199`（17 条）在真实前端 + 真实后端 + 真实 Oracle 开发库 + 受控验收数据（`RUN_TAG=FACC002`，运行源 `db1cfda7...`）与真实 Chrome（CDP，视口 1440×900）下端到端执行，`PASS=17/FAIL=0/BLOCKED=0/NOT_RUN=0`。标签 `120px` 右对齐、测试连接左边界对齐、标签 `14px/500/#3f3f46` 与作用域、新增态红星与空密码中文拦截、编辑态无星号与掩码、`创建`/`保存` 文案与常态/悬停/聚焦/按下视觉、取消/测试连接/其他弹窗/其他路由无外溢均以**真实浏览器计算样式**证据记录；`DS-AC-198` 的**禁用态**采用 `is-disabled` 类定向自动化 + 计算样式 + 构建产物 CSS 佐证，**不声称**为完整端到端运行态证据。
+- **§13 标题与状态块更新**：标题更新为「（`APPROVED`，`IMPLEMENTED_PENDING_FINAL_ACCEPTANCE`，正式验收已在本地真实环境执行且 17 条全部 `PASS`）」；`implementation_status` 由 `IMPLEMENTED_PENDING_FORMAL_ACCEPTANCE` 更新为 `IMPLEMENTED_PENDING_FINAL_ACCEPTANCE`，`formal_acceptance_execution_status` 由 `NOT_RUN` 更新为 `EXECUTED_PASSED_LOCAL`，`new_adjustment_acceptance_status` 由 `ALL_NOT_RUN` 更新为 `PASS_17_OF_17`，并新增 `final_acceptance_status=NOT_ACCEPTED_PENDING_PROJECT_OWNER`。
+- **§13.0~§13.6 既有 UI 设计正文逐字零变化**；`DS-REQ-178~188` 编号与正文零变化；`DS-AC-183~199` 编号、关联需求、前置条件、操作步骤、预期结果零变化，仅状态列由 `NOT_RUN` 更新为 `PASS`。
+- **边界**：本轮 `EXECUTED_PASSED_LOCAL` **不构成**最终验收，**不得**写为 `ACCEPTED`/`IMPLEMENTED_ACCEPTED`/`final_acceptance_status=ACCEPTED`/生产可用；上一轮 `DS-AC-116~140`（25 条 `NOT_RUN`）与已最终接受的 `DS-AC-141~182`（42 条 `PASS`、`final_acceptance_status=ACCEPTED`）状态未改变；既有 `PASS=113/FAIL=0/BLOCKED=2/NOT_RUN=0` 与 `DS-AC-104`/`DS-AC-108` 两个 `BLOCKED` 逐字保留；未修改业务代码/测试/配置/依赖/锁文件/SQL；未访问数据库/ZK/Kafka/业务源库/目标库（浏览器证据采集只读、不写入）。报告：`reports/DATA-SOURCE-CREATE-EDIT-TIME-SORT-FORM-UI-ADJUSTMENT-FORMAL-ACCEPTANCE-001.md`。

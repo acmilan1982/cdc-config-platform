@@ -728,11 +728,11 @@
 - **边界**：该 `ACCEPTED` **仅**适用于本轮当前接口与字段契约，**不**把数据源管理 Feature 整体正式验收状态改为 `ACCEPTED`；既有 `PASS=113/FAIL=0/BLOCKED=2/NOT_RUN=0` 与两个 `BLOCKED`、上一轮 `DS-AC-116~140`（25 条全部 `NOT_RUN`）均未改变。
 - 本任务未访问数据库/ZK/Kafka/源库/目标库；未启动服务；未重跑测试或构建；未修改业务代码/测试/配置/依赖/锁文件。
 
-## 13. 新增/修改时间字段维护、列表默认排序与主弹窗表单视觉调整的接口影响（`APPROVED`，`IMPLEMENTED_PENDING_FORMAL_ACCEPTANCE`）
+## 13. 新增/修改时间字段维护、列表默认排序与主弹窗表单视觉调整的接口影响（`APPROVED`，`IMPLEMENTED_PENDING_FINAL_ACCEPTANCE`，正式验收已在本地真实环境执行且 17 条全部 `PASS`）
 
-> 分层状态：`adjustment_document_status=APPROVED`、`adjustment_baseline_status=APPROVED`、`adjustment_api_status=APPROVED`、`implementation_authorization_status=GRANTED_IN_THIS_TASK`、`implementation_status=IMPLEMENTED_PENDING_FORMAL_ACCEPTANCE`、`formal_acceptance_execution_status=NOT_RUN`、`new_adjustment_acceptance_status=ALL_NOT_RUN`、`project_owner_visual_review_status=PASS`、`password_false_required_defect_status=FIXED_CONFIRMED`。本轮验收 `DS-AC-183~199`（17 条）全部 `NOT_RUN`。
+> 分层状态：`adjustment_document_status=APPROVED`、`adjustment_baseline_status=APPROVED`、`adjustment_api_status=APPROVED`、`implementation_authorization_status=GRANTED_IN_THIS_TASK`、`implementation_status=IMPLEMENTED_PENDING_FINAL_ACCEPTANCE`、`formal_acceptance_execution_status=EXECUTED_PASSED_LOCAL`、`new_adjustment_acceptance_status=PASS_17_OF_17`、`final_acceptance_status=NOT_ACCEPTED_PENDING_PROJECT_OWNER`、`project_owner_visual_review_status=PASS`、`password_false_required_defect_status=FIXED_CONFIRMED`。本轮验收 `DS-AC-183~199`（17 条）已于 2026-09-20 正式验收执行：`PASS=17/FAIL=0/BLOCKED=0/NOT_RUN=0`。
 >
-> `project_owner_visual_review_status=PASS` 仅代表项目负责人 2026-09-20 在真实运行页面完成**页面目测/功能复测并通过**（原话“我试了，新增修改都没有问题了。”），**不等于**正式验收执行；`DS-AC-183~199`（17 条）仍**全部 `NOT_RUN`**，`formal_acceptance_execution_status=NOT_RUN` 未改变。
+> `project_owner_visual_review_status=PASS` 仅代表项目负责人 2026-09-20 在真实运行页面完成**页面目测/功能复测并通过**（原话“我试了，新增修改都没有问题了。”）。本轮 `EXECUTED_PASSED_LOCAL` **不构成**最终验收，**不得**写为 `ACCEPTED`/`IMPLEMENTED_ACCEPTED`/`final_acceptance_status=ACCEPTED`/生产可用；最终验收决定权属项目负责人，前置为 ChatGPT 从远程 Git 的正式验收复审。
 
 ### 13.1 接口数量与契约概括
 
@@ -813,3 +813,11 @@ ORDER BY UPDATE_TIME DESC NULLS LAST, INSERT_TIME DESC NULLS LAST, DATA_SOURCE_I
 - **历史记录保护**：§9/§11 各轮变更记录中描述当时状态的 `IMPLEMENTED_PENDING_USER_REVIEW` 作为历史事实**逐字保留**，未做全文件机械替换；上一轮 `DS-AC-116~140` 所属 §9 的当前状态**保持** `IMPLEMENTED_PENDING_USER_REVIEW` 不变。
 - **边界**：`formal_acceptance_execution_status=NOT_RUN`、`new_adjustment_acceptance_status=ALL_NOT_RUN` 保持不变；`DS-AC-183~199`（17 条）仍全部 `NOT_RUN`；既有 `PASS=113/FAIL=0/BLOCKED=2/NOT_RUN=0`、`DS-AC-104`/`DS-AC-108` 两个 `BLOCKED` 逐字保留；已最终接受的 `DS-AC-141~182`（42 条 `PASS`）状态未改变；数据源管理 Feature 整体正式验收状态未改变；未写为 `PASS_17_OF_17`/`IMPLEMENTED_ACCEPTED`/`ACCEPTED`/生产可用。
 - **纯文档边界**：未修改任何运行代码/测试/配置/依赖/锁文件/SQL；未执行测试或构建；未访问数据库/ZK/Kafka/业务源库/目标库；未调用任何 HTTP 接口；未启停任何服务。报告：`reports/DATA-SOURCE-CREATE-EDIT-TIME-SORT-FORM-UI-ADJUSTMENT-001-R3.md`。
+
+### 14.3 正式验收执行与状态回写（2026-09-20，任务 `DATA-SOURCE-CREATE-EDIT-TIME-SORT-FORM-UI-ADJUSTMENT-FORMAL-ACCEPTANCE-001`）
+
+- **触发**：`DS-AC-183~199`（17 条）在真实后端 + 真实 Oracle 开发库 + 真实浏览器 + 受控验收数据（`RUN_TAG=FACC002`，运行源 `db1cfda7...`）下端到端执行，`PASS=17/FAIL=0/BLOCKED=0/NOT_RUN=0`。
+- **§13 标题与状态块更新**：标题由「（`APPROVED`，`IMPLEMENTED_PENDING_FORMAL_ACCEPTANCE`）」更新为「（`APPROVED`，`IMPLEMENTED_PENDING_FINAL_ACCEPTANCE`，正式验收已在本地真实环境执行且 17 条全部 `PASS`）」；分层状态 `implementation_status` 由 `IMPLEMENTED_PENDING_FORMAL_ACCEPTANCE` 更新为 `IMPLEMENTED_PENDING_FINAL_ACCEPTANCE`，`formal_acceptance_execution_status` 由 `NOT_RUN` 更新为 `EXECUTED_PASSED_LOCAL`，`new_adjustment_acceptance_status` 由 `ALL_NOT_RUN` 更新为 `PASS_17_OF_17`，并新增 `final_acceptance_status=NOT_ACCEPTED_PENDING_PROJECT_OWNER`。
+- **§13 技术正文逐字冻结**：§13.1 接口数量、§13.2~§13.5 的路径、方法、参数、请求体、响应、错误码、说明文案、排序子句与 §13.6 追踪表**零变化**；`DS-REQ-178~188` 编号与正文未改，`DS-AC-183~199` 编号、关联需求、前置条件、操作步骤、预期结果未改，仅状态列由 `NOT_RUN` 更新为 `PASS`。
+- **数据库**：写操作经项目负责人明确批准（`GRANTED_BY_PROJECT_OWNER_FOR_AGENT_CREATED_DATA_ONLY`）；自建数据已按精确主键白名单清理（残留 `0`），既有 36 条主表与 10 条延伸表记录规范化快照四个 SHA-256 **逐字节一致**；未执行 DDL/存量清洗。
+- **边界**：本轮 `EXECUTED_PASSED_LOCAL` **不构成**最终验收，`DS-AC-183~199` 已全部 `PASS` 但**不得**写为 `ACCEPTED`/`IMPLEMENTED_ACCEPTED`/`final_acceptance_status=ACCEPTED`/生产可用；既有 `PASS=113/FAIL=0/BLOCKED=2/NOT_RUN=0`、`DS-AC-104`/`DS-AC-108` 两个 `BLOCKED` 逐字保留；上一轮 `DS-AC-116~140`（25 条 `NOT_RUN`）与已最终接受的 `DS-AC-141~182`（42 条 `PASS`、`final_acceptance_status=ACCEPTED`）状态未改变；未修改业务代码/测试/配置/依赖/锁文件/SQL；未访问 ZooKeeper 写、Kafka、业务源库、目标库。报告：`reports/DATA-SOURCE-CREATE-EDIT-TIME-SORT-FORM-UI-ADJUSTMENT-FORMAL-ACCEPTANCE-001.md`。
