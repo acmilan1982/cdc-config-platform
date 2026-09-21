@@ -70,6 +70,44 @@ pilot_page_selection_status=NOT_DECIDED
 - **计数口径**：原正式验收 17 项、补充正式验收 21 项；补充 21 项**包含**原 17 项在纠正后提交上的
   重新重放，两者是**包含关系而非并列关系**，**不得**把两者相加累计为“独立用例总数”；权威验收覆盖为补充验收 `21/21` PASS。
 
+## 列表表格视觉模板基线入口（草案）
+
+列表表格视觉模板基线（**草案，待项目负责人审阅**）：[docs/baseline/list-table-visual-template/](./list-table-visual-template/README.md)。
+该模板面向**页面主列表表格**：表头、正文、间距、边框、行高策略、长文本与扩展边界。
+由纯文档任务 `LIST-TABLE-VISUAL-TEMPLATE-BASELINE-001` 建立；**仅**建立草案、
+盘点候选页面与文档导航，**未**实现公共代码、**未**迁移任何页面。
+
+主要入口：
+
+- 目标、适用范围、参考实现与状态：[list-table-visual-template/README.md](./list-table-visual-template/README.md)
+- 模板职责与候选实现方案（未定案）：[list-table-visual-template/DESIGN.md](./list-table-visual-template/DESIGN.md)
+- 参考实现视觉事实与可提取规则：[list-table-visual-template/UI.md](./list-table-visual-template/UI.md)
+- 全量 `el-table` 盘点矩阵与候选分类：[list-table-visual-template/MIGRATION.md](./list-table-visual-template/MIGRATION.md)
+
+当前状态：
+
+```text
+list_table_visual_template_document_status=DRAFT_PENDING_USER_REVIEW
+list_table_visual_template_design_status=BASELINE_DRAFT_ONLY
+shared_implementation_design_status=NOT_STARTED
+shared_implementation_status=NOT_STARTED
+reference_page=数据源管理
+reference_page_integration_status=NOT_STARTED
+page_migration_status=NOT_STARTED
+page_migration_authorization_status=NOT_GRANTED
+candidate_inventory_status=COMPLETED_PENDING_USER_REVIEW
+```
+
+- **参考实现**：数据源管理主列表（`/config/data-source`）是**参考实现事实来源**，
+  **不是**可直接复制的业务页面；其列定义、状态标签语义、行操作与固定列均属该 Feature 专属。
+- **与查询列表页模板的关系**：两层**正交、可组合**——查询列表页模板覆盖**页面层**
+  （标题 / 查询区 / 结果区 / 刷新工具栏 / 请求交互），本模板覆盖**表格层**
+  （表头 / 正文 / 间距 / 边框 / 行高 / 长文本 / 扩展边界）。本模板**不并入**前者、
+  **不**扩大前者适用范围、**不**改写其已批准规范。
+- **授权边界**：本模板当前为**草案**，**不具有强制规范效力**；
+  **未实现**、**未批准**、**未授权任何页面迁移**。未来每个页面需**独立评估、
+  独立授权、独立实现、独立目测、独立验收**。
+
 ## 文档权威边界
 
 - 项目级基线（本目录）与 Feature 级基线（docs/features/）承载正式结论；`docs/baseline-work/` 等过程材料不冒充正式基线（CLAUDE.md §3.3）。

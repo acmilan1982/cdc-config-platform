@@ -68,6 +68,20 @@ Router (Vue Router 4) + Layouts (MainLayout)
 
 来源: 代码包结构、03_CURRENT_IMPLEMENTATION_AUDIT.md
 
+**前端公共能力分层（两个正交层次）**
+
+在 Views 层之上，项目级基线另有**两个正交、可组合的前端公共能力层**，二者职责不重叠：
+
+| 层 | 目录 | 职责 | 当前状态 |
+|---|---|---|---|
+| 页面模板层 | `docs/baseline/query-list-page-template/` | 页面标题、查询区、结果区外壳、刷新工具栏、请求交互 | 已批准；阶段一公共组件已实现并通过正式验收 |
+| 表格视觉模板层 | `docs/baseline/list-table-visual-template/` | 列表主表的表头、正文、间距、边框、行高策略、长文本与扩展边界 | **仅草案**（`DRAFT_PENDING_USER_REVIEW`），未实现、未批准、未授权迁移 |
+
+- 两层**正交且可组合**：页面按独立评估结果决定是否组合使用两层；
+- 表格视觉模板层当前**只存在文档草案**，**不得**被理解为代码已实现
+  （`shared_implementation_status=NOT_STARTED`）；
+- 表格视觉模板层**不并入**页面模板层，也**不**扩大其只读查询列表页的适用范围。
+
 ---
 
 ## 3. 模块关系

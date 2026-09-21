@@ -350,6 +350,40 @@
 
 来源: PROJECT-BASELINE-AND-DOCUMENTATION-RECOVERY-001 §8.7、docs/features/README.md 状态口径
 
+### 查询列表页模板 (Query List Page Template)
+**项目级前端公共能力基线**，位于 `docs/baseline/query-list-page-template/`，覆盖**页面层**：
+页面标题、查询区、结果区外壳、刷新工具栏与请求交互。已批准并已实现阶段一公共组件，
+参考页为“源库快照状态”。其适用范围为**只读查询列表页**。
+**不等同于**页面迁移授权。
+
+来源: docs/baseline/query-list-page-template/README.md
+
+### 列表表格视觉模板 (List Table Visual Template)
+**项目级前端公共能力基线（当前为草案）**，位于 `docs/baseline/list-table-visual-template/`，
+覆盖**表格层**：页面**主列表表格**的表头、正文、间距、边框、行高策略、长文本与扩展边界。
+参考实现为数据源管理主列表（`/config/data-source`）。
+当前为 `DRAFT_PENDING_USER_REVIEW`，**未实现**、**未批准**、**未授权任何页面迁移**，
+**不具有强制规范效力**。与查询列表页模板是**正交、可组合**的两层，
+**只覆盖页面主列表**，不自动覆盖弹窗表格、详情子表、确认表格或大屏/复合视图内嵌表。
+
+来源: docs/baseline/list-table-visual-template/README.md
+
+### 参考页接入 (Reference Page Integration)
+**把一个已接受的功能页面改造为等价使用公共组件 / 模板的过程**，
+要求接入前后业务行为与视觉几何**等价**。
+它是**实现行为**，**不等同于**页面迁移，也**不**自动授权其他页面迁移；
+参考页本身仍属其 Feature 专属，不是可直接复制的业务页面。
+
+来源: docs/baseline/query-list-page-template/SHARED_COMPONENT_DESIGN.md、docs/baseline/list-table-visual-template/README.md
+
+### 页面迁移 (Page Migration)
+**把一个既有业务页面改为使用项目级模板 / 公共组件的行为**。
+迁移必须**逐页独立评估、独立授权、独立实现、独立目测、独立验收**；
+模板文档批准与公共组件最终接受**不构成**迁移授权。
+未获明确授权时，只允许评估，**不得**实施迁移，也**不得**更新任何页面的迁移状态。
+
+来源: docs/baseline/query-list-page-template/MIGRATION.md、CLAUDE.md §3.4
+
 ---
 
 ## 文档级变更记录
@@ -358,3 +392,4 @@
 |---|---|---|
 | 2026-08-29 | 数据源管理 Feature 已批准规则同步：删除“数据源”术语中 EXTEND 为 1:1 扩展信息的描述；新增“目标库命名策略”术语（源库 0..N、每条关联一个业务必填目标库、`(DATA_SOURCE_ID, TARGET_DATA_SOURCE_ID)` 组合逻辑唯一、第一版无 DDL）；“当前事实/目标规则/当前差异”示例更新为已批准规则（无主键/唯一约束不是未落实一对一的差异，第一版无 DDL 为已批准边界） | DATA-SOURCE-BASELINE-IMPACT-ALIGNMENT-001（已批准业务规则向权威项目基线同步；纯文档任务，数据库物理结构和当前代码无变化） |
 | 2026-08-30 | R1 修订：`DATA_SUB_ID` 术语主键事实同步——已只读核验为数据库真实主键（`PK_CDC_DATA_SUBSCRIBE`，`DATABASE_VERIFIED`），原 D01（PENDING_DECISION）关闭；未改写订阅 CRUD 未实现、管理平台只读、订阅记录人工维护等当前实现事实 | DATA-SUBSCRIPTION-REQUIREMENTS-BASELINE-001-R1（ChatGPT 复审 CHANGES_REQUIRED 定向修订；纯文档任务，未访问数据库、未执行 DDL） |
+| 2026-09-21 | 文档体系术语新增四项：“查询列表页模板”“列表表格视觉模板”“参考页接入”“页面迁移”，明确两层模板职责正交及“模板批准 ≠ 迁移授权”的概念边界 | LIST-TABLE-VISUAL-TEMPLATE-BASELINE-001（纯文档任务） |

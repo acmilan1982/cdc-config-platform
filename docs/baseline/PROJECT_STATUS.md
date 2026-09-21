@@ -277,6 +277,17 @@ CDC_DATA_SOURCE 另被日志查询的 selectAllDataSources 读取用于过滤条
 - 基线是长期文档资产，不通过聊天记忆替代；
 - 基线维护触发条件已在各文件头声明。
 
+### 10.4 列表表格视觉模板基线草案状态
+
+- 独立草案基线 `docs/baseline/list-table-visual-template/` 于 2026-09-21 由
+  纯文档任务 `LIST-TABLE-VISUAL-TEMPLATE-BASELINE-001` 建立；
+- **参考页**：数据源管理主列表（`/config/data-source`）；
+- **当前状态**：`DRAFT_PENDING_USER_REVIEW` / `BASELINE_DRAFT_ONLY`，
+  **未实现**、**未批准**、**未授权任何页面迁移**；
+- **下一入口**：`CHATGPT_REMOTE_GIT_LIST_TABLE_VISUAL_TEMPLATE_BASELINE_REVIEW_THEN_PROJECT_OWNER_APPROVAL`；
+- 与查询列表页模板基线是**正交、可组合**的两层（页面层 / 表格层）；
+- 该草案与六份项目级基线的正式状态**无关**，不影响六份基线的 `APPROVED` 状态。
+
 来源: 本任务执行记录、已批准数据库基线
 
 ---
@@ -287,3 +298,4 @@ CDC_DATA_SOURCE 另被日志查询的 selectAllDataSources 读取用于过滤条
 |---|---|---|
 | 2026-08-29 | 数据源管理 Feature 已批准规则同步：§9.3 R01 更新为已批准的源库 0..N 命名策略关系；§9.4 原 R01（是否约束每数据源一条扩展配置）`PENDING_DECISION` 关闭；§9.2 数据源两表分类由“后端闭环/前端缺口”调整为“旧后端候选实现/新目标未实现”，明确区分“已有旧后端候选实现”与“批准的新目标尚未实现、前端仍占位”；§1.1/§1.2 数据源行补充“旧候选实现”说明；分类合计与表数自洽不变；数据库物理事实与当前代码事实保留 | DATA-SOURCE-BASELINE-IMPACT-ALIGNMENT-001（已批准业务规则向权威项目基线同步；纯文档任务，数据库物理结构和当前代码无变化） |
 | 2026-08-30 | R1 修订：§9.4 原 D01（是否将 `CDC_DATA_SUBSCRIBE.DATA_SUB_ID` 设置为主键）关闭——DATA_SUB_ID 已为数据库真实主键（`PK_CDC_DATA_SUBSCRIBE`，`DATABASE_VERIFIED`），从 PENDING_DECISION 候选表移除并记录关闭原因；订阅 CRUD 未实现、管理平台只读、订阅记录人工维护等当前实现事实保留 | DATA-SUBSCRIPTION-REQUIREMENTS-BASELINE-001-R1（ChatGPT 复审 CHANGES_REQUIRED 定向修订；纯文档任务，未访问数据库、未执行 DDL） |
+| 2026-09-21 | 新增 §10.4：记录独立的“列表表格视觉模板”基线草案状态（`DRAFT_PENDING_USER_REVIEW`，未实现、未批准、未授权迁移，参考页为数据源管理主列表）；与查询列表页模板基线为正交、可组合的两层 | LIST-TABLE-VISUAL-TEMPLATE-BASELINE-001（纯文档任务，未修改代码、Feature 文档或其他基线状态） |
