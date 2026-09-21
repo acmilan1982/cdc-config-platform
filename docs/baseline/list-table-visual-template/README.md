@@ -33,7 +33,8 @@ new_baseline_path=docs/baseline/list-table-visual-template/
 > **只表示**草案正文已产出、**等待项目负责人审阅**，
 > **不表示**已批准、**不表示**已实现、**不表示**任何页面已迁移。
 > `APPROVED` / `IMPLEMENTED` / `ACCEPTED` / `PAGE_MIGRATION_STARTED`
-> 均**未被写入**本目录任何文档。
+> 等词**仅用于否定性边界说明**（例如“不得把草案写成已批准”），
+> 均**未**被设置为本目录的当前状态、批准结论、实现结论、验收结论或页面迁移状态。
 
 ## 1. 本模板的目标
 
@@ -73,7 +74,9 @@ new_baseline_path=docs/baseline/list-table-visual-template/
 - 业务列的名称、数量、顺序、列宽与 `min-width`；
 - 数据获取、loading/错误处理、分页策略；
 - 行操作按钮、固定列的取舍；
-- 状态标签的配色与文案。
+- 状态标签的配色与文案；
+- **序号列**（是否存在、列宽、编号算法、对齐、字号、颜色、等宽数字）；
+- **空态**（文案、层级、是否区分“无数据”与“查询无结果”）。
 
 ## 4. 主要参考实现
 
@@ -153,14 +156,19 @@ reference_table_class=.data-table
 
 ### 7.4 标记计数（本草案冻结基线）
 
-本目录建立时，三个标记的出现次数如下（含本文件 §7 中作为定义出现的实例）；
-后续修订必须**显式**记录计数变化：
+本目录三个标记的出现次数如下（含本文件 §7 中作为定义出现的实例，
+以及核验命令自身中的字面量）；后续修订必须**显式**记录计数变化：
 
-| 标记 | 计数 |
-| --- | --- |
-| `LIST_TABLE_REFERENCE_FACT` | 32 |
-| `LIST_TABLE_TEMPLATE_DRAFT` | 38 |
-| `LIST_TABLE_PROPOSED_NOT_IMPLEMENTED` | 13 |
+| 标记 | R0 建立时 | R1 修订后（当前） |
+| --- | --- | --- |
+| `LIST_TABLE_REFERENCE_FACT` | 32 | 34 |
+| `LIST_TABLE_TEMPLATE_DRAFT` | 38 | 47 |
+| `LIST_TABLE_PROPOSED_NOT_IMPLEMENTED` | 13 | 15 |
+
+R1 计数变化原因：正文修订（`UI.md` §2 改写、`DESIGN.md` §2/§7 补充、
+本文件 §3 与状态表述修改）与新增 R1 报告
+（`reports/LIST-TABLE-VISUAL-TEMPLATE-BASELINE-001-R1.md`）；
+三个标记均**未**被删除或重命名。
 
 核验命令（在仓库根执行）：
 
@@ -222,3 +230,6 @@ next_step=CHATGPT_REMOTE_GIT_LIST_TABLE_VISUAL_TEMPLATE_BASELINE_REVIEW_THEN_PRO
 
 - 2026-09-21，建立列表表格视觉模板基线草案
   （`LIST-TABLE-VISUAL-TEMPLATE-BASELINE-001`，纯文档任务）。
+- 2026-09-21，R1 定向修订（`LIST-TABLE-VISUAL-TEMPLATE-BASELINE-001-R1`，纯文档任务）：
+  统一“序号列”与“空态”职责口径（默认属 Feature，参考实现事实保留，不作为公共默认规则）；
+  修正本文件状态表述为准确口径。详见 `reports/LIST-TABLE-VISUAL-TEMPLATE-BASELINE-001-R1.md`。
