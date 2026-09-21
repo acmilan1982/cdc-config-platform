@@ -1,0 +1,30 @@
+/* 列表表格视觉模板 · 公共视觉预设源（全仓唯一来源）。
+ *
+ * 契约：显式根类 `.lt-main-table` + 9 个 `--lt-*` 有限令牌。
+ * 公共层**不声明**任何 `--lt-*` 的值——令牌只出现在 `var(--lt-*, 默认值)` 的内联
+ * 回退中，因此令牌的最终值只可能来自启用页面的局部覆盖，与 CSS 声明顺序无关。
+ * 全部 Element Plus 内部选择器均由根类前置限定，文件中不含任何全局规则；
+ * 未带该根类的表格不匹配本文件任何规则，其计算样式不受影响。
+ */
+
+.lt-main-table {
+  width: var(--lt-table-width, 100%);
+  --el-table-border-color: var(--lt-border-color, #f4f4f5);
+  --el-table-header-text-color: var(--lt-header-text-color, #71717a);
+  --el-table-header-bg-color: var(--lt-header-bg-color, #ffffff);
+}
+
+.lt-main-table :deep(.el-table__header th .cell) {
+  font-size: var(--lt-header-font-size, 12px);
+  font-weight: var(--lt-header-font-weight, 600);
+  color: var(--lt-header-text-color, #71717a);
+  letter-spacing: var(--lt-header-letter-spacing, 0.01em);
+}
+
+.lt-main-table :deep(td.el-table__cell) {
+  padding: var(--lt-body-cell-padding, 12px 0);
+}
+
+.lt-main-table :deep(th.el-table__cell) {
+  padding: var(--lt-header-cell-padding, 11px 0);
+}
