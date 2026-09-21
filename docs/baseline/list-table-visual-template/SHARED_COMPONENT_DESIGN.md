@@ -1,4 +1,4 @@
-# 列表表格视觉模板公共实现 · 详细设计（草案，待 ChatGPT 复审与项目负责人批准）
+# 列表表格视觉模板公共实现 · 详细设计（已批准）
 
 ```text
 list_table_visual_template_document_status=APPROVED
@@ -10,8 +10,8 @@ approved_baseline_source_commit=575379895c4c57fd3df7e0d0ce27c1f6841d2f17
 baseline_approval_closeout_commit=7b16919ea9a7ac2a1196e302e987e5e355689c31
 baseline_approval_closeout_r1_commit=e8eb68e368313aa501eb5f7158f6e95975b2077b
 
-shared_implementation_design_status=DRAFT_PENDING_CHATGPT_AND_PROJECT_OWNER_REVIEW
-shared_implementation_design_approval_status=NOT_APPROVED
+shared_implementation_design_status=APPROVED
+shared_implementation_design_approval_status=APPROVED
 shared_implementation_status=NOT_STARTED
 reference_page_integration_status=NOT_STARTED
 formal_acceptance_execution_status=NOT_RUN
@@ -22,46 +22,70 @@ candidate_inventory_status=COMPLETED_APPROVED_AS_BASELINE_INVENTORY
 design_task=LIST-TABLE-VISUAL-TEMPLATE-SHARED-IMPLEMENTATION-DESIGN-001
 design_task_type=DOCS_ONLY_SHARED_IMPLEMENTATION_DETAILED_DESIGN
 design_base_commit_id=e8eb68e368313aa501eb5f7158f6e95975b2077b
+design_revision_chain=d7ae5af54e62bba20373681f9f55fc7fb67f39a7(R0)_f8d84657e939a4b02316457b543976a847b0775b(R1)_e72264de14a9483aae5593435f818ea65c5116e0(R2)
+chatgpt_remote_r2_review=REVIEW_PASS
+blocking_finding_count=0
+project_owner_design_approval_status=APPROVED
+project_owner_design_approval_date=2026-09-21
+approval_scope=SHARED_IMPLEMENTATION_DETAILED_DESIGN_ONLY
+approved_design_source_commit=e72264de14a9483aae5593435f818ea65c5116e0
 reference_source_commit=10b1d3e39d03dbb78ea409d486f1f3e80c12fc3e
-selected_implementation_architecture=CANDIDATE_8_4_COMBINATION_EXPLICIT_ROOT_CLASS_CSS_PRESET_PLUS_LIMITED_CSS_CUSTOM_PROPERTY_TOKENS
-selected_implementation_architecture_status=PROPOSED_PENDING_REVIEW
+selected_implementation_architecture=EXPLICIT_ROOT_CLASS_CSS_PRESET_WITH_LIMITED_CSS_CUSTOM_PROPERTY_TOKENS
+selected_implementation_architecture_status=APPROVED
 introduces_vue_wrapper_component=NO
 adds_extra_dom_layer=NO
 ```
 
-> 本文件是**公共实现详细设计草案**：已对已批准基线的四个候选方案作出**唯一、可实施、
-> 可验证、可回滚**的设计结论，但该结论**尚未**获得 ChatGPT 远程 Git 复审与
-> 项目负责人明确批准。
+> 本文件是**公共实现详细设计**，已对已批准基线的四个候选方案作出**唯一、可实施、
+> 可验证、可回滚**的设计结论，并经 ChatGPT 远程 Git R2 复审 `REVIEW_PASS`
+> 与项目负责人于 `2026-09-21` 批准
+> （`approval_scope=SHARED_IMPLEMENTATION_DETAILED_DESIGN_ONLY`）。
 >
-> `shared_implementation_design_status=DRAFT_PENDING_CHATGPT_AND_PROJECT_OWNER_REVIEW`
-> **只表示**本设计文件已产出并进入待复审状态。它**不表示**：
-> 设计已批准、公共代码已实现、任何公共文件/类名/令牌已存在、
-> 数据源管理参考页已接入、任何页面已迁移。
+> `shared_implementation_design_status=APPROVED`
+> **只表示**本详细设计**文档**已获批准。它**不表示**：
+> 公共代码已实现、任何公共文件/类名/令牌已存在、
+> 数据源管理参考页已接入、任何页面已迁移、正式验收已执行。
+>
+> 本次批准**明确不覆盖**：创建 `frontend/src/styles/list-table/` 或任何代码文件、
+> 修改 `DataSourcePage.vue` 或任何测试文件、公共实现开工、参考页接入开工、
+> 任何业务页面迁移、正式验收执行、生产可用。
 >
 > 本任务**未创建**任何 CSS / Vue / Composable / TypeScript / 路由文件，
 > **未修改** `frontend/**`、`backend/**`、测试、配置、依赖或锁文件，
 > **未修改**任何业务页面，**未运行**测试、构建或浏览器验证，
 > **未访问**数据库 / ZooKeeper / Kafka / 业务源库 / 目标库。
 >
-> 未获后续明确批准前，**不得**修改任何代码。
+> **未经项目负责人后续再次明确批准，不得修改任何代码。**
 
 ## 0. 本文件的标记与边界
 
 ### 0.1 唯一标记
 
-`LIST_TABLE_SHARED_DESIGN_DRAFT` —— 本文件全文只使用**一个**当前设计决策标记：
+`LIST_TABLE_SHARED_DESIGN_APPROVED` —— 本文件全文只使用**一个**当前设计决策标记：
 
 ```text
-LIST_TABLE_SHARED_DESIGN_DRAFT
+LIST_TABLE_SHARED_DESIGN_APPROVED
 ```
 
-含义：**已经形成唯一详细设计结论，但尚未获得 ChatGPT 复审和项目负责人批准**。
+含义：**已经形成唯一详细设计结论，并已经 ChatGPT 远程 R2 复审 `REVIEW_PASS`
+及项目负责人批准**（`approval_scope=SHARED_IMPLEMENTATION_DETAILED_DESIGN_ONLY`）。
 
-本文件**不**使用 `LIST_TABLE_SHARED_DESIGN_APPROVED`（该值在本轮**不存在**），
-也**不**复用 `LIST_TABLE_TEMPLATE_APPROVED` 冒充详细设计已批准。
-已批准基线的三类标记（参考事实 / 已批准模板规则 / 候选未实现）属四份规范文档，
+该标记**只**描述**详细设计文档**的批准状态，它**不**表示：
+
+- 公共实现已开始（`shared_implementation_status=NOT_STARTED`）；
+- 数据源管理参考页已接入（`reference_page_integration_status=NOT_STARTED`）；
+- 任何页面已迁移（`page_migration_status=NOT_STARTED / NOT_GRANTED`）；
+- 测试或构建已执行、正式验收已完成。
+
+本文件**不**复用模板基线标记冒充详细设计已批准——
+模板基线标记属四份规范文档，描述的是**模板规则**的批准，两者**不得**合并为模糊状态。
+已批准基线的三类标记（参考事实 / 已批准模板规则 / 候选未实现）亦属四份规范文档，
 本文件引用它们时只写“已批准模板规则（`README.md` §7.2）”等**引用语**，
 **不**新增这三类标记实例，因此**不改变**四份规范文档 `22 / 0 / 42 / 11` 的计数。
+
+历史状态说明：本文件在**收口前**的草案阶段使用带 `_DRAFT` 后缀的草案标记；
+该字面量**仍逐字保留**在 R0 / R1 / R2 三份历史执行报告中，属**历史事实**，
+**不得**回写、改名或全局替换（详见 §11.4）。本文件**当前正文内不再出现**该草案字面量。
 
 ### 0.2 事实来源与核验方式
 
@@ -90,7 +114,7 @@ reference_source_commit=10b1d3e39d03dbb78ea409d486f1f3e80c12fc3e
 
 ### 0.3 本轮不做的事
 
-`LIST_TABLE_SHARED_DESIGN_DRAFT` —— 本任务**不**：
+`LIST_TABLE_SHARED_DESIGN_APPROVED` —— 本任务**不**：
 
 - 创建任何 CSS / Vue / Composable / TypeScript / 路由文件；
 - 修改 `frontend/**`、`backend/**`、`docs/features/**`、`query-list-page-template/**`；
@@ -107,7 +131,7 @@ reference_source_commit=10b1d3e39d03dbb78ea409d486f1f3e80c12fc3e
 
 ### 1.1 目标
 
-`LIST_TABLE_SHARED_DESIGN_DRAFT` —— 本设计要回答的问题，以及本轮给出的答案：
+`LIST_TABLE_SHARED_DESIGN_APPROVED` —— 本设计要回答的问题，以及本轮给出的答案：
 
 | 问题 | 本轮答案位置 |
 | --- | --- |
@@ -126,7 +150,7 @@ reference_source_commit=10b1d3e39d03dbb78ea409d486f1f3e80c12fc3e
 
 ### 1.2 非目标
 
-`LIST_TABLE_SHARED_DESIGN_DRAFT`：
+`LIST_TABLE_SHARED_DESIGN_APPROVED`：
 
 1. **不实现**任何样式文件、常量模块或组件；
 2. **不接入**数据源管理参考页，**不修改**其任何 DOM、类名或样式；
@@ -138,7 +162,7 @@ reference_source_commit=10b1d3e39d03dbb78ea409d486f1f3e80c12fc3e
 
 ### 1.3 适用范围
 
-`LIST_TABLE_SHARED_DESIGN_DRAFT` —— 本设计与已批准基线一致，只面向**页面的主列表表格**：
+`LIST_TABLE_SHARED_DESIGN_APPROVED` —— 本设计与已批准基线一致，只面向**页面的主列表表格**：
 
 - **适用**：页面结果区中承载该页面主要业务记录集的那一张 `el-table`；
 - **不适用**（已批准基线 `README.md` §3）：弹窗内表格、详情子表、确认表格、
@@ -152,7 +176,7 @@ reference_source_commit=10b1d3e39d03dbb78ea409d486f1f3e80c12fc3e
 
 ### 2.1 参考实现主表的局部样式事实
 
-`LIST_TABLE_SHARED_DESIGN_DRAFT` —— 参考实现
+`LIST_TABLE_SHARED_DESIGN_APPROVED` —— 参考实现
 `frontend/src/views/data-source/DataSourcePage.vue` 中，与“表格视觉模板”相关的
 局部样式**只有以下 4 个规则组**（全部位于第 1656 行开始的 `<style scoped>` 块内）：
 
@@ -168,7 +192,7 @@ reference_source_commit=10b1d3e39d03dbb78ea409d486f1f3e80c12fc3e
 `.naming-*`、`.strategy-*`、`.editor-*`、`.row-more*`、`.biz-attr-*`、
 以及第 2050 行**非 scoped** 的 `.ds-more-popper` 全局块。
 
-`LIST_TABLE_SHARED_DESIGN_DRAFT` —— 表格元素本身（第 81–85 行）为：
+`LIST_TABLE_SHARED_DESIGN_APPROVED` —— 表格元素本身（第 81–85 行）为：
 
 ```html
 <el-table :data="rows" class="data-table" @row-dblclick="onRowDoubleClick">
@@ -180,14 +204,14 @@ reference_source_commit=10b1d3e39d03dbb78ea409d486f1f3e80c12fc3e
 
 ### 2.2 全仓 `el-table` 使用点与业务类名前缀
 
-`LIST_TABLE_SHARED_DESIGN_DRAFT` —— 复核命令与实测结果（与已批准基线一致，**不变量**）：
+`LIST_TABLE_SHARED_DESIGN_APPROVED` —— 复核命令与实测结果（与已批准基线一致，**不变量**）：
 
 ```bash
 grep -rnP '<el-table(?![-_])' frontend/src --include=*.vue | wc -l   # 15
 grep -rlP '<el-table(?![-_])' frontend/src --include=*.vue | wc -l   # 14
 ```
 
-`LIST_TABLE_SHARED_DESIGN_DRAFT` —— 现有业务表格根类前缀（**必须回避**）：
+`LIST_TABLE_SHARED_DESIGN_APPROVED` —— 现有业务表格根类前缀（**必须回避**）：
 
 ```text
 .data-table      前端 DataSourcePage.vue 主表（参考实现）
@@ -206,7 +230,7 @@ grep -rlP '<el-table(?![-_])' frontend/src --include=*.vue | wc -l   # 14
 这是本设计**唯一带技术风险**的环节，因此以真实构建插件的源码行为为唯一依据，
 不凭印象推断。
 
-`LIST_TABLE_SHARED_DESIGN_DRAFT` —— 已在
+`LIST_TABLE_SHARED_DESIGN_APPROVED` —— 已在
 `frontend/node_modules/@vitejs/plugin-vue/dist/index.mjs` 中逐行核实：
 
 1. `<style scoped src="…">` 的**外部文件内容会被读取**并作为样式模块代码
@@ -222,7 +246,7 @@ grep -rlP '<el-table(?![-_])' frontend/src --include=*.vue | wc -l   # 14
 `<style scoped src="…">` 引用，会被正确编译为带作用域属性的选择器；
 `@/styles/…` 与 `./relative.css` 两种写法均可解析。
 
-`LIST_TABLE_SHARED_DESIGN_DRAFT` —— 仓库内**已有同形态先例**（qlpt 阶段一已实现并验收）：
+`LIST_TABLE_SHARED_DESIGN_APPROVED` —— 仓库内**已有同形态先例**（qlpt 阶段一已实现并验收）：
 
 ```text
 frontend/src/components/query-list/query-list-spinner.css
@@ -233,18 +257,18 @@ frontend/src/components/query-list/query-list-spinner.css
 `shared-layer.spec.ts` 明确断言该形态的契约是“**一份来源被两个消费者引用**”，
 而**不是**“两份副本内容一致”。本设计沿用同一形态。
 
-`LIST_TABLE_SHARED_DESIGN_DRAFT` —— 与先例的**唯一差别**：qlpt 的
+`LIST_TABLE_SHARED_DESIGN_APPROVED` —— 与先例的**唯一差别**：qlpt 的
 `query-list-spinner.css` 刻意**不含** `:deep(...)`（`shared-layer.spec.ts` 断言
 `not.toMatch(/!important|:deep\(|::v-deep/)`），因此先例**未**证明 `:deep(...)`
 在外部文件中的行为。本设计不据此推断，而是回到 §2.3 第 1–4 条**插件源码事实**：
 `:deep(...)` 的变换发生在 `compileStyle` 阶段，与样式来源（内联 / 外部文件）无关。
 
-`LIST_TABLE_SHARED_DESIGN_DRAFT` —— 若实现阶段仍出现与本节不符的行为，属**设计前置事实失效**：
+`LIST_TABLE_SHARED_DESIGN_APPROVED` —— 若实现阶段仍出现与本节不符的行为，属**设计前置事实失效**：
 实现任务必须**停止**并报告，**不得**在未重新评审的情况下改用全局样式绕行。
 
 ### 2.4 样式令牌与作用域约定现状
 
-`LIST_TABLE_SHARED_DESIGN_DRAFT` —— 全仓现状（只读实测）：
+`LIST_TABLE_SHARED_DESIGN_APPROVED` —— 全仓现状（只读实测）：
 
 ```text
 CSS Module              不存在
@@ -257,13 +281,13 @@ SFC 作用域              所有页面样式使用 <style scoped>；仅 DataSou
 路径别名                vite.config.ts: resolve.alias['@'] = <repo>/frontend/src
 ```
 
-`LIST_TABLE_SHARED_DESIGN_DRAFT` —— `lt-` 前缀（类名与 `--lt-` 令牌）经全仓检索
+`LIST_TABLE_SHARED_DESIGN_APPROVED` —— `lt-` 前缀（类名与 `--lt-` 令牌）经全仓检索
 **未被占用**，与 `.data-table` / `.dss-*` / `.toff-*` / `.cc-*` / `.config-table` /
 `ql-*` **无交集**。
 
 ### 2.5 现有测试框架能力边界
 
-`LIST_TABLE_SHARED_DESIGN_DRAFT` —— 必须如实区分“能校验”与“不能校验”，
+`LIST_TABLE_SHARED_DESIGN_APPROVED` —— 必须如实区分“能校验”与“不能校验”，
 不得让设计依赖做不到的验证：
 
 | 能力 | 结论 | 依据 |
@@ -277,7 +301,7 @@ SFC 作用域              所有页面样式使用 <style scoped>；仅 DataSou
 | 断言构建产物 CSS 文本 | **能**（构建后读取 `dist/assets/*.css`） | 属阶段一实现任务的构建产物检查 |
 | 断言真实浏览器计算样式与几何 | **能**，但**必须**在阶段一由**真实浏览器**执行，**不是** vitest | qlpt 已批准的等价接入口径 |
 
-`LIST_TABLE_SHARED_DESIGN_DRAFT` —— 其中以下六项属**运行时事实**，
+`LIST_TABLE_SHARED_DESIGN_APPROVED` —— 其中以下六项属**运行时事实**，
 一律**不得**写成 jsdom / vitest 能够直接证明的结论，
 **必须**由**真实浏览器**承接（§7.4 / §7.5），本条与 §7.2 / §7.4 / §7.5 **同口径**：
 
@@ -291,14 +315,14 @@ SFC 作用域              所有页面样式使用 <style scoped>；仅 DataSou
 6. 元素几何、行高与外接矩形是否相同。
 ```
 
-`LIST_TABLE_SHARED_DESIGN_DRAFT` —— 由此产生一条**硬约束**：
+`LIST_TABLE_SHARED_DESIGN_APPROVED` —— 由此产生一条**硬约束**：
 本模板的“视觉等价”**不能**用单元测试证明，只能用
 “源码文本静态契约 + 真实浏览器计算样式逐值比对”**两段合成**证明。
 §7 的验证矩阵据此分层，不得把两者混为一谈。
 
 ### 2.6 参考实现的既有测试保护
 
-`LIST_TABLE_SHARED_DESIGN_DRAFT` —— `frontend/src/views/data-source/dataSource.spec.ts`
+`LIST_TABLE_SHARED_DESIGN_APPROVED` —— `frontend/src/views/data-source/dataSource.spec.ts`
 （2734 行）已固化的、与本模板**相关**的断言（未来接入时**必须继续通过**）：
 
 | 断言 | 位置 |
@@ -312,13 +336,13 @@ SFC 作用域              所有页面样式使用 <style scoped>；仅 DataSou
 | SFC `<style scoped>` 块可被正则提取（`scopedStyleBlock()`） | 第 932–942 行 |
 | `:deep(.editor-dialog …)` 限定性断言（存在性口径） | 第 945–952 行 |
 
-`LIST_TABLE_SHARED_DESIGN_DRAFT` —— **关键推论**：第 899–901 行的
+`LIST_TABLE_SHARED_DESIGN_APPROVED` —— **关键推论**：第 899–901 行的
 `.data-table .el-table__header-wrapper th` 断言要求参考页**继续保留**
 `class="data-table"`；因此公共启用**必须**是**追加**一个类，而**不是**替换原类（见 §4.2、§6 第 3 项）。
 
 ### 2.7 基准提交相对关系
 
-`LIST_TABLE_SHARED_DESIGN_DRAFT` —— `reference_source_commit`（`10b1d3e`）与
+`LIST_TABLE_SHARED_DESIGN_APPROVED` —— `reference_source_commit`（`10b1d3e`）与
 设计任务 `design_base_commit_id`（`e8eb68e`）之间，`frontend/**` **零改动**：
 
 ```bash
@@ -334,7 +358,7 @@ git diff --quiet 10b1d3e39d03dbb78ea409d486f1f3e80c12fc3e e8eb68e368313aa501eb5f
 
 ### 3.1 复核表
 
-`LIST_TABLE_SHARED_DESIGN_DRAFT` —— 对已批准基线 `DESIGN.md` §8.1–§8.4 的四个候选
+`LIST_TABLE_SHARED_DESIGN_APPROVED` —— 对已批准基线 `DESIGN.md` §8.1–§8.4 的四个候选
 逐项复核，**每项给出采纳或拒绝**，不再并列：
 
 | 候选 | 能否承载 §2.1 的 4 个规则组 | 能否做到显式启用 | 能否零全局泄漏 | 能否受控覆盖 | 结论 |
@@ -346,7 +370,7 @@ git diff --quiet 10b1d3e39d03dbb78ea409d486f1f3e80c12fc3e e8eb68e368313aa501eb5f
 
 ### 3.2 唯一结论
 
-`LIST_TABLE_SHARED_DESIGN_DRAFT` —— 本设计选择**候选 8.4：组合方式**，并给出准确形态名称：
+`LIST_TABLE_SHARED_DESIGN_APPROVED` —— 本设计选择**候选 8.4：组合方式**，并给出准确形态名称：
 
 ```text
 selected_implementation_architecture=
@@ -366,7 +390,7 @@ selected_implementation_architecture=
 
 ### 3.3 为什么拒绝另外三种
 
-`LIST_TABLE_SHARED_DESIGN_DRAFT`：
+`LIST_TABLE_SHARED_DESIGN_APPROVED`：
 
 - **拒绝 8.1（纯预设、无令牌）**：§4.4 中的 9 项视觉值必须可被 Feature
   **逐项、可枚举**地覆盖；纯类名方案下，Feature 若只想改表头字号，
@@ -397,7 +421,7 @@ selected_implementation_architecture=
 
 ### 3.4 是否引入组件 / 是否新增 DOM 层 / 如何透传 `el-table` 契约
 
-`LIST_TABLE_SHARED_DESIGN_DRAFT`：
+`LIST_TABLE_SHARED_DESIGN_APPROVED`：
 
 - `introduces_vue_wrapper_component=NO`；
 - `adds_extra_dom_layer=NO`——公共层**不渲染任何节点**；
@@ -414,16 +438,16 @@ selected_implementation_architecture=
 
 ### 3.5 为什么不与 qlpt 公共组件形成超级组件或职责重叠
 
-`LIST_TABLE_SHARED_DESIGN_DRAFT` —— 两层按已批准基线 `README.md` §5 正交：
+`LIST_TABLE_SHARED_DESIGN_APPROVED` —— 两层按已批准基线 `README.md` §5 正交：
 
-| 维度 | qlpt 公共层（已批准、已实现） | 本模板公共层（本草案） |
+| 维度 | qlpt 公共层（已批准、已实现） | 本模板公共层（本详细设计） |
 | --- | --- | --- |
 | 覆盖对象 | 页面层：标题 / 查询区 / 结果区 / 刷新工具栏 / 请求交互 | 表格层：表头 / 正文 / 间距 / 边框 / 行高策略 / 长文本边界 |
 | 产物形态 | 6 个 Vue 组件 + 1 个 composable + 1 个共享 CSS | **1 个共享 CSS 预设 + 1 个常量模块**（**无**组件、**无**逻辑） |
 | 是否渲染节点 | 是（页面骨架与容器） | **否**（不渲染任何节点） |
 | 对 `el-table` 的处置 | **留在 Feature**（qlpt 明确不覆盖 `el-table` 内部结构类） | **新开一层**，且只由 Feature 显式选择是否套用 |
 
-`LIST_TABLE_SHARED_DESIGN_DRAFT` —— 因此：
+`LIST_TABLE_SHARED_DESIGN_APPROVED` —— 因此：
 
 - 本模板**不**并入 `QueryListResultPanel`，**不**改写其契约，
   **不**向 qlpt 公共层注入表格样式；qlpt 公共组件**不会**自动获得表格视觉模板；
@@ -434,7 +458,7 @@ selected_implementation_architecture=
 
 ### 3.6 显式启用、零全局泄漏与最小回滚的落地方式（结论概述）
 
-`LIST_TABLE_SHARED_DESIGN_DRAFT` —— 三者的实现方式（细节见 §4.2 / §4.6 / §9.2）：
+`LIST_TABLE_SHARED_DESIGN_APPROVED` —— 三者的实现方式（细节见 §4.2 / §4.6 / §9.2）：
 
 - **显式启用**：页面在自身 SFC 中**写一行** `<style scoped src="…">`，
   并在**该表格的 `el-table` 根元素**上追加公共根类。
@@ -454,7 +478,7 @@ selected_implementation_architecture=
 
 ### 4.1 未来文件布局
 
-`LIST_TABLE_SHARED_DESIGN_DRAFT` —— 阶段一未来**可能**创建的精确路径（**本任务未创建**）：
+`LIST_TABLE_SHARED_DESIGN_APPROVED` —— 阶段一未来**可能**创建的精确路径（**本任务未创建**）：
 
 ```text
 frontend/src/styles/list-table/
@@ -462,7 +486,7 @@ frontend/src/styles/list-table/
 └── index.ts                 # 公共常量模块：根类名常量与令牌名清单（不含任何样式）
 ```
 
-`LIST_TABLE_SHARED_DESIGN_DRAFT` —— 布局理由与边界：
+`LIST_TABLE_SHARED_DESIGN_APPROVED` —— 布局理由与边界：
 
 - 选择 `frontend/src/styles/` 而非 `frontend/src/components/`：
   本产物**不是组件**，放进 `components/` 会在语义上错误归因
@@ -478,7 +502,7 @@ frontend/src/styles/list-table/
 
 ### 4.2 显式启用方式
 
-`LIST_TABLE_SHARED_DESIGN_DRAFT` —— 以下为**设计伪代码**，
+`LIST_TABLE_SHARED_DESIGN_APPROVED` —— 以下为**设计伪代码**，
 `reference_page_integration_status=NOT_STARTED`，**尚未实现**，**不得**据此认为代码已存在：
 
 ```vue
@@ -507,7 +531,7 @@ import { LT_MAIN_TABLE_CLASS } from '@/styles/list-table'
 </style>
 ```
 
-`LIST_TABLE_SHARED_DESIGN_DRAFT` —— 契约要点：
+`LIST_TABLE_SHARED_DESIGN_APPROVED` —— 契约要点：
 
 | 项 | 规则 |
 | --- | --- |
@@ -518,7 +542,7 @@ import { LT_MAIN_TABLE_CLASS } from '@/styles/list-table'
 | 一个表格能否同时带公共类与业务类 | **允许且推荐**——这正是分层的实现方式；两者**只允许**各自声明自己的属性（§4.5） |
 | `el-table` 上的绑定方式 | `:class="['<业务类>', LT_MAIN_TABLE_CLASS]"` 或 `class="<业务类> lt-main-table"`，二者等价 |
 
-`LIST_TABLE_SHARED_DESIGN_DRAFT` —— **禁止的隐式启用方式**（任一出现即视为设计违规）：
+`LIST_TABLE_SHARED_DESIGN_APPROVED` —— **禁止的隐式启用方式**（任一出现即视为设计违规）：
 
 ```text
 1. 在 frontend/src/styles/global.css 或 main.ts 中 import / @import 公共预设；
@@ -532,7 +556,7 @@ import { LT_MAIN_TABLE_CLASS } from '@/styles/list-table'
 
 ### 4.3 类名与命名空间
 
-`LIST_TABLE_SHARED_DESIGN_DRAFT`：
+`LIST_TABLE_SHARED_DESIGN_APPROVED`：
 
 | 对象 | 规则 | 阶段一取值 |
 | --- | --- | --- |
@@ -543,7 +567,7 @@ import { LT_MAIN_TABLE_CLASS } from '@/styles/list-table'
 | 禁止选择的业务类名前缀 | `.data-table`、`.naming-table`、`.dss-*`、`.toff-*`、`.cc-*`、`.config-table`、`.ds-*`、`.empty-*`、`.query-*`、`.q-*` | 公共源文件中**不得**出现上述任一字符串 |
 | 与 Element Plus 内部类的交互边界 | 只允许在**公共根类限定**下使用 `:deep(...)` 命中 `el-table__header th .cell`、`td.el-table__cell`、`th.el-table__cell`；**不得**命中 `el-table__row`、`el-table__body`、选中态、hover 态或任何业务状态类；**不得**定义 `.el-*` 类本身 | 见 §4.4 与 §4.6 |
 
-`LIST_TABLE_SHARED_DESIGN_DRAFT` —— 阶段一内部辅助类为 `0` 是一条**可断言的事实**：
+`LIST_TABLE_SHARED_DESIGN_APPROVED` —— 阶段一内部辅助类为 `0` 是一条**可断言的事实**：
 本模板的全部已批准纪律（宽度 / 表头排版 / 上下内边距 / 边框色 / 表头背景）
 **只需要**根类 + EP 令牌 + 3 条 `:deep` 规则即可完整表达；
 “状态标记不得改变行高”属**禁止性纪律**（公共层不固定行高、不约束单元格内容），
@@ -551,7 +575,7 @@ import { LT_MAIN_TABLE_CLASS } from '@/styles/list-table'
 
 ### 4.4 公共视觉令牌表
 
-`LIST_TABLE_SHARED_DESIGN_DRAFT` —— 以下是**全部** 9 个公共令牌，
+`LIST_TABLE_SHARED_DESIGN_APPROVED` —— 以下是**全部** 9 个公共令牌，
 逐项给出默认值、来源、使用选择器、是否允许 Feature 覆盖及覆盖方式。
 
 **公共层声明的值均为参考实现既有事实**（§2.1），**不**新增任何未经量测的视觉值。
@@ -568,7 +592,7 @@ import { LT_MAIN_TABLE_CLASS } from '@/styles/list-table'
 | 8 | `--lt-header-cell-padding` | `11px 0` | §2.1 规则组 4 | `:deep(th.el-table__cell)` | **能** | 同上 |
 | 9 | `--lt-body-cell-padding` | `12px 0` | §2.1 规则组 3 | `:deep(td.el-table__cell)` | **能** | 同上 |
 
-`LIST_TABLE_SHARED_DESIGN_DRAFT` —— 公共源文件中的消费形态（**设计伪代码，未实现**）：
+`LIST_TABLE_SHARED_DESIGN_APPROVED` —— 公共源文件中的消费形态（**设计伪代码，未实现**）：
 
 ```css
 /* frontend/src/styles/list-table/list-table-visual.css（未来阶段一，伪代码，未实现） */
@@ -595,13 +619,13 @@ import { LT_MAIN_TABLE_CLASS } from '@/styles/list-table'
 }
 ```
 
-`LIST_TABLE_SHARED_DESIGN_DRAFT` —— **公共层不定义令牌本身**：
+`LIST_TABLE_SHARED_DESIGN_APPROVED` —— **公共层不定义令牌本身**：
 `--lt-*` 只出现在 `var(--lt-…, 默认值)` 的**内联回退**中，
 **不**在 `.lt-main-table`、`:root`、`html`、`body` 上声明 `--lt-*: 值`。
 这一条是 §4.5 优先级无歧义的**唯一前提**，也是 qlpt 已实现先例
 （`left: var(--ql-btn-spinner-inset, 2px)` + 页面局部 `'--ql-btn-spinner-inset': '3px'`）的同款做法。
 
-`LIST_TABLE_SHARED_DESIGN_DRAFT` —— 对**未在参考实现中显式定义**的 15 项评估清单，
+`LIST_TABLE_SHARED_DESIGN_APPROVED` —— 对**未在参考实现中显式定义**的 15 项评估清单，
 逐项必须落到三种处置之一，**不得凭印象编造**：
 
 | 评估项 | 处置 | 理由 |
@@ -622,7 +646,7 @@ import { LT_MAIN_TABLE_CLASS } from '@/styles/list-table'
 | 长文本省略 | **不由公共层定义** | 参考实现依赖 Element Plus 内建 `show-overflow-tooltip`（`UI.md` §1.9）；属字段语义，`DESIGN.md` §6 明确“Tooltip 由字段语义决定” |
 | Tooltip | **不由公共层定义** | 同上；且 Tooltip 机制与延迟属 Feature（`DESIGN.md` §6.5、`UI.md` §3.8 相邻口径） |
 
-`LIST_TABLE_SHARED_DESIGN_DRAFT` —— 汇总计数（可断言）：
+`LIST_TABLE_SHARED_DESIGN_APPROVED` —— 汇总计数（可断言）：
 
 ```text
 lt_token_count=9
@@ -633,7 +657,7 @@ lt_new_invented_visual_value_count=0
 
 ### 4.5 Feature 覆盖契约
 
-`LIST_TABLE_SHARED_DESIGN_DRAFT`：
+`LIST_TABLE_SHARED_DESIGN_APPROVED`：
 
 **（1）Feature 能覆盖哪些令牌**
 
@@ -660,7 +684,7 @@ lt_new_invented_visual_value_count=0
 
 **（4）优先级（公共默认值 / 公共类 / Feature 类 / Element Plus 变量）**
 
-`LIST_TABLE_SHARED_DESIGN_DRAFT` —— 由于 §4.4 的“公共层不定义令牌本身”前提，
+`LIST_TABLE_SHARED_DESIGN_APPROVED` —— 由于 §4.4 的“公共层不定义令牌本身”前提，
 优先级是**单一确定**的，不依赖任何声明顺序：
 
 ```text
@@ -674,7 +698,7 @@ Element Plus    = 仅在其自身未被公共层声明的表格令牌上继续�
 
 **（5）如何避免依赖偶然的 CSS 加载顺序**
 
-`LIST_TABLE_SHARED_DESIGN_DRAFT` —— 这是本设计相对基线候选的**关键改进**，
+`LIST_TABLE_SHARED_DESIGN_APPROVED` —— 这是本设计相对基线候选的**关键改进**，
 必须显式写清，因为“公共类与业务类在同一元素上”天然存在同特异性竞争：
 
 - **已消除的竞争**：公共层**不**声明 `--lt-*` 的值，因此“Feature 覆盖令牌”
@@ -691,7 +715,7 @@ Element Plus    = 仅在其自身未被公共层声明的表格令牌上继续�
 
 **（6）如何检测覆盖泄漏到其他页面**
 
-`LIST_TABLE_SHARED_DESIGN_DRAFT`：
+`LIST_TABLE_SHARED_DESIGN_APPROVED`：
 
 1. 覆盖声明必须写在**业务根类**限定下（`.data-table { --lt-*: … }`），
    而业务根类是**页面级唯一**的，因此作用域天然限定在该表格子树；
@@ -708,7 +732,7 @@ Element Plus    = 仅在其自身未被公共层声明的表格令牌上继续�
 
 ### 4.6 作用域与零泄漏规则
 
-`LIST_TABLE_SHARED_DESIGN_DRAFT` —— 公共源文件必须满足以下**可执行**规则
+`LIST_TABLE_SHARED_DESIGN_APPROVED` —— 公共源文件必须满足以下**可执行**规则
 （每条都在 §7.1 有对应静态断言）：
 
 ```text
@@ -726,7 +750,7 @@ L7  不出现路由元数据、页面自动识别、或任何 JS/TS 运行时副
 L8  不出现 !important。
 ```
 
-`LIST_TABLE_SHARED_DESIGN_DRAFT` —— 由此得到的**零泄漏性质**：
+`LIST_TABLE_SHARED_DESIGN_APPROVED` —— 由此得到的**零泄漏性质**：
 
 | 未启用对象 | 为什么不受影响 |
 | --- | --- |
@@ -736,7 +760,7 @@ L8  不出现 !important。
 | 全站其他页面 | 公共源文件只被显式引用的页面加载；即便被打包进同一 CSS 文件，`[data-v-*]` 属性限定也使其**不可能**命中其他页面 |
 | 未启用页面的 `--lt-*` | 公共层不声明 `--lt-*`（L4），未启用页面也无 Feature 声明 → 令牌**未被声明（读数为空）**，消费属性同样不匹配公共规则 |
 
-`LIST_TABLE_SHARED_DESIGN_DRAFT` —— **负向验证设计**：在不添加公共根类时，
+`LIST_TABLE_SHARED_DESIGN_APPROVED` —— **负向验证设计**：在不添加公共根类时，
 公共样式在某节点上的**匹配规则数必须为 0**，且其表格相关计算样式与基准**逐值相同**
 （§7.5 / §7.6）。
 
@@ -744,7 +768,7 @@ L8  不出现 !important。
 
 ## 5. 必须保护的 Feature 专属内容
 
-`LIST_TABLE_SHARED_DESIGN_DRAFT` —— 公共层**不得**吸收以下内容
+`LIST_TABLE_SHARED_DESIGN_APPROVED` —— 公共层**不得**吸收以下内容
 （已批准基线 `DESIGN.md` §2 / §7、`UI.md` §3、任务提示词 §9 一致）。
 本设计**逐项确认不纳入**，且**不为其预留公共默认值或公共类名**：
 
@@ -763,14 +787,14 @@ L8  不出现 !important。
 12. qlpt 页面壳层、查询区、结果区、刷新工具栏与请求状态。
 ```
 
-`LIST_TABLE_SHARED_DESIGN_DRAFT` —— 公共层**只**提供：
+`LIST_TABLE_SHARED_DESIGN_APPROVED` —— 公共层**只**提供：
 
 ```text
 (a) 已批准的视觉基础纪律：宽度 / 表头排版与背景 / 上下内边距 / 边框色 / 行高边界；
 (b) 受控覆盖能力：9 个 --lt-* 令牌（§4.4）与 §4.5 的覆盖契约。
 ```
 
-`LIST_TABLE_SHARED_DESIGN_DRAFT` —— 特别是：
+`LIST_TABLE_SHARED_DESIGN_APPROVED` —— 特别是：
 **序号列与空态**在本设计中被明确**排除**（`DESIGN.md` §2 / §7、`UI.md` §2 的
 “默认属 Feature”结论）。它们**不**出现在 §4.4 的令牌表中，
 **不**出现在 §4.1 的文件布局中，**不**获得任何 `lt-` 类名。
@@ -781,7 +805,7 @@ L8  不出现 !important。
 
 ## 6. 数据源管理参考页等价接入设计
 
-`LIST_TABLE_SHARED_DESIGN_DRAFT` —— 本节为**后续独立实现任务**的逐项迁移清单。
+`LIST_TABLE_SHARED_DESIGN_APPROVED` —— 本节为**后续独立实现任务**的逐项迁移清单。
 `reference_page_integration_status=NOT_STARTED`，**本任务不执行**。
 
 **1. 未来应由公共层承载的现有 `.data-table` 规则（自 Feature 删除）**
@@ -907,14 +931,14 @@ td.el-table__cell：padding-top / padding-right / padding-bottom / padding-left
 
 ---
 
-## 7. 测试与验收设计（本轮只设计，不执行）
+## 7. 测试与验收设计（本设计只设计，不执行）
 
-`LIST_TABLE_SHARED_DESIGN_DRAFT` —— 以下为**阶段一实现任务**应执行的验证矩阵。
+`LIST_TABLE_SHARED_DESIGN_APPROVED` —— 以下为**阶段一实现任务**应执行的验证矩阵。
 **本设计任务不执行其中任何一项**。分层依据见 §2.5（jsdom 不能做层叠与几何断言）。
 
 ### 7.1 静态契约测试（可在 vitest 中执行）
 
-`LIST_TABLE_SHARED_DESIGN_DRAFT` —— 建议新增
+`LIST_TABLE_SHARED_DESIGN_APPROVED` —— 建议新增
 `frontend/src/styles/list-table/list-table-visual.spec.ts`（阶段一创建，**本轮不创建**），
 断言对象为**源码文本**（先例：`shared-layer.spec.ts`）：
 
@@ -935,7 +959,7 @@ td.el-table__cell：padding-top / padding-right / padding-bottom / padding-left
 
 ### 7.2 组件或单元测试（可在 vitest 中执行）
 
-`LIST_TABLE_SHARED_DESIGN_DRAFT` —— 本节**只**包含 jsdom 能**可靠**验证的内容：
+`LIST_TABLE_SHARED_DESIGN_APPROVED` —— 本节**只**包含 jsdom 能**可靠**验证的内容：
 **DOM 结构、类名、源码声明、组件契约与既有交互**。
 凡涉及 CSS 自定义属性解析、层叠结果、选择器实际匹配数或几何的结论，
 按 §2.5 归入 §7.4 / §7.5 的**真实浏览器**验证，**不得**写在本节。
@@ -949,14 +973,14 @@ td.el-table__cell：padding-top / padding-right / padding-bottom / padding-left
 | 5 | 数据源管理**原有全部交互测试保持通过**（`dataSource.spec.ts` 真跑，不弱化、不删除断言） | 既有交互保护 |
 | 6 | `dataSource.spec.ts` 的 `scopedStyleBlock()` 仍能提取到 scoped 块（即保留一个 scoped 块，`<style scoped src>` 不会取代它） | 既有测试兼容性 |
 
-`LIST_TABLE_SHARED_DESIGN_DRAFT` —— 本节**明确不**断言（改由 §7.4 / §7.5 承接）：
+`LIST_TABLE_SHARED_DESIGN_APPROVED` —— 本节**明确不**断言（改由 §7.4 / §7.5 承接）：
 `--lt-*` **自定义属性本身是否有值**、**消费属性**的最终计算值、
 Feature 覆盖是否**实际只影响当前表格**、
 同页**另一张**未覆盖表格的计算样式是否未受影响、元素几何 / 行高 / 外接矩形是否相同。
 
 ### 7.3 构建产物检查（阶段一，构建后读取产物）
 
-`LIST_TABLE_SHARED_DESIGN_DRAFT`：
+`LIST_TABLE_SHARED_DESIGN_APPROVED`：
 
 | # | 断言 |
 | --- | --- |
@@ -968,14 +992,14 @@ Feature 覆盖是否**实际只影响当前表格**、
 
 ### 7.4 真实浏览器计算样式（阶段一，真实浏览器，非 vitest）
 
-`LIST_TABLE_SHARED_DESIGN_DRAFT` —— 见 §6 第 6/7 项的逐值清单，至少覆盖：
+`LIST_TABLE_SHARED_DESIGN_APPROVED` —— 见 §6 第 6/7 项的逐值清单，至少覆盖：
 `width`；`--el-table-border-color`；`--el-table-header-text-color`；
 `--el-table-header-bg-color`；表头 `font-size / font-weight / color / letter-spacing`；
 `th / td` 上下内边距；表头高度、首行高度与表格外接矩形；
 长文本省略与 Tooltip 行为不变；视口 `1440×900` 与 `1920×1080`；页面缩放 `100%`。
 判定阈值**严格 0**，并提供**反向控制**（注入 `≥0.001px` 位移必须使断言非零退出）。
 
-`LIST_TABLE_SHARED_DESIGN_DRAFT` —— 本节**同时承接** §2.5 / §7.2 移出的
+`LIST_TABLE_SHARED_DESIGN_APPROVED` —— 本节**同时承接** §2.5 / §7.2 移出的
 **Feature 覆盖隔离**类运行时事实，均为**真实浏览器**判定，**不是** vitest：
 
 | # | 运行时断言 | 期望 |
@@ -987,7 +1011,7 @@ Feature 覆盖是否**实际只影响当前表格**、
 | E | Feature **显式覆盖的令牌本身**：`getComputedStyle(target).getPropertyValue('--lt-xxx')` | 读到 **Feature 声明值**（**仅限被覆盖的那几个令牌**） |
 | F | **未被覆盖的令牌本身**：`getComputedStyle(target).getPropertyValue('--lt-xxx')` | **为空**——这是**正确**结果，**不得**判为失败 |
 
-`LIST_TABLE_SHARED_DESIGN_DRAFT` —— 上表把**两个不同层级**严格拆开，
+`LIST_TABLE_SHARED_DESIGN_APPROVED` —— 上表把**两个不同层级**严格拆开，
 不得混为一谈（这是本轮修订的核心）：
 
 ```text
@@ -999,7 +1023,7 @@ Feature 覆盖是否**实际只影响当前表格**、
       有覆盖 → 覆盖值（A）；无覆盖 → var(--lt-*, fallback) 的公共默认值（C / D）
 ```
 
-`LIST_TABLE_SHARED_DESIGN_DRAFT` —— 由此产生一条**判定纪律**：
+`LIST_TABLE_SHARED_DESIGN_APPROVED` —— 由此产生一条**判定纪律**：
 
 ```text
 不得以「--lt-* 非空」作为「模板是否已启用」的通用判据。
@@ -1008,14 +1032,14 @@ Feature 覆盖是否**实际只影响当前表格**、
 「是否启用模板」只由根元素 className 是否含 lt-main-table 判定（§7.2 第 1/2 项）。
 ```
 
-`LIST_TABLE_SHARED_DESIGN_DRAFT` —— 与之配套的**架构约束**（不得为迎合断言而改动）：
+`LIST_TABLE_SHARED_DESIGN_APPROVED` —— 与之配套的**架构约束**（不得为迎合断言而改动）：
 **不得**让公共层在 `.lt-main-table` 上预先声明 9 个 `--lt-*` 默认值，
 那会引入「公共声明 vs Feature 声明」的同属性竞争，破坏 §4.5（4）的
 加载顺序无关原则。
 
 ### 7.5 负向页面矩阵（阶段一，真实浏览器）
 
-`LIST_TABLE_SHARED_DESIGN_DRAFT` —— 至少选取：
+`LIST_TABLE_SHARED_DESIGN_APPROVED` —— 至少选取：
 
 ```text
 1. 数据源管理命名策略弹窗表（.naming-table，同文件内第二张 el-table）
@@ -1032,11 +1056,11 @@ Feature 覆盖是否**实际只影响当前表格**、
 §6 第 6 项计算样式（消费属性最终值）与基准**逐值相同**、
 且构建产物不存在可命中它们的全局规则。
 
-`LIST_TABLE_SHARED_DESIGN_DRAFT` —— 本节是 §2.5 / §7.2 移出的
+`LIST_TABLE_SHARED_DESIGN_APPROVED` —— 本节是 §2.5 / §7.2 移出的
 「未启用页面 `--lt-*` 读数为空」「公共规则实际匹配数为 `0`」「未启用页计算样式不变」
 三项运行时事实的**唯一承接处**；这三项**不得**回写为 vitest 结论。
 
-`LIST_TABLE_SHARED_DESIGN_DRAFT` —— **边界的完整口径**（三态必须并列写清，
+`LIST_TABLE_SHARED_DESIGN_APPROVED` —— **边界的完整口径**（三态必须并列写清，
 不得只写其中一态，也不得把「令牌非空」当作启用判据）：
 
 | 状态 | `--lt-*` 自定义属性本身 | 消费属性的最终值 |
@@ -1047,7 +1071,7 @@ Feature 覆盖是否**实际只影响当前表格**、
 
 ### 7.6 覆盖点与零泄漏的反向控制
 
-`LIST_TABLE_SHARED_DESIGN_DRAFT`：
+`LIST_TABLE_SHARED_DESIGN_APPROVED`：
 
 | # | 反向控制 | 期望 |
 | --- | --- | --- |
@@ -1059,7 +1083,7 @@ Feature 覆盖是否**实际只影响当前表格**、
 
 ### 7.7 回滚验证
 
-`LIST_TABLE_SHARED_DESIGN_DRAFT` —— 按 §9.2 执行回滚后必须满足：
+`LIST_TABLE_SHARED_DESIGN_APPROVED` —— 按 §9.2 执行回滚后必须满足：
 参考页恢复接入前状态；其他页面无变化；无残留令牌与未使用 import；
 前端测试与构建继续通过。回滚验证与接入验证使用**同一组**计算样式清单，
 以保证可比。
@@ -1068,7 +1092,7 @@ Feature 覆盖是否**实际只影响当前表格**、
 
 ## 8. 实现阶段拆分
 
-`LIST_TABLE_SHARED_DESIGN_DRAFT` —— 阶段拆分如下。**本轮不执行任何阶段**。
+`LIST_TABLE_SHARED_DESIGN_APPROVED` —— 阶段拆分如下。**本轮不执行任何阶段**。
 
 ### 8.1 阶段一：公共实现 + 数据源管理参考页等价接入
 
@@ -1090,11 +1114,11 @@ Feature 覆盖是否**实际只影响当前表格**、
 
 ### 8.2 阶段二：逐页迁移
 
-`LIST_TABLE_SHARED_DESIGN_DRAFT` —— 只有阶段一完成**正式验收与最终接受**后，
+`LIST_TABLE_SHARED_DESIGN_APPROVED` —— 只有阶段一完成**正式验收与最终接受**后，
 才能从 `MIGRATION.md` 的矩阵中逐页选择。每个页面必须
 **单独提示词、单独授权、单独实现、单独目测、单独验收**。
 
-`LIST_TABLE_SHARED_DESIGN_DRAFT` —— 本详细设计**不预先选择**探针端管理、数据订阅
+`LIST_TABLE_SHARED_DESIGN_APPROVED` —— 本详细设计**不预先选择**探针端管理、数据订阅
 或任何其他页面作为首个迁移对象。`MIGRATION.md` 的
 `CANDIDATE_HIGH` 排序**不等于**项目负责人批准的迁移顺序，
 `page_migration_authorization_status` 继续保持 `NOT_GRANTED`。
@@ -1105,7 +1129,7 @@ Feature 覆盖是否**实际只影响当前表格**、
 
 ### 9.1 风险清单
 
-`LIST_TABLE_SHARED_DESIGN_DRAFT`：
+`LIST_TABLE_SHARED_DESIGN_APPROVED`：
 
 | # | 风险 | 影响 | 缓解 |
 | --- | --- | --- | --- |
@@ -1123,7 +1147,7 @@ Feature 覆盖是否**实际只影响当前表格**、
 
 ### 9.2 回滚设计
 
-`LIST_TABLE_SHARED_DESIGN_DRAFT`：
+`LIST_TABLE_SHARED_DESIGN_APPROVED`：
 
 1. **回滚粒度**：阶段一实现任务必须组织为两个可独立回退的提交单元——
    “**新增公共层**”与“**参考页等价接入**”。回滚接入提交即可让参考页回到原实现，
@@ -1140,7 +1164,7 @@ Feature 覆盖是否**实际只影响当前表格**、
 
 ## 10. 与四份已批准模板文档的关系
 
-`LIST_TABLE_SHARED_DESIGN_DRAFT` —— 本文件是四份已批准模板文档的**下游详细设计草案**：
+`LIST_TABLE_SHARED_DESIGN_APPROVED` —— 本文件是四份已批准模板文档的**下游详细设计**：
 
 - 四份模板文档仍是**已批准基线**（`APPROVED` / `BASELINE_APPROVED`），
   本文件**不修改**其规范内容，也**不改变**其标记计数 `22 / 0 / 42 / 11`；
@@ -1148,12 +1172,13 @@ Feature 覆盖是否**实际只影响当前表格**、
   与基线 `DESIGN.md` §8“不定案”的状态**不是矛盾**：
   基线的“不定案”约束的是**基线任务自身**，并明确把定案交给
   “后续 `SHARED_COMPONENT_DESIGN` 类任务”；本文件正是该任务，
-  且结论**仍需**ChatGPT 复审与项目负责人批准后才生效；
+  其结论已获 ChatGPT 远程 R2 复审 `REVIEW_PASS` 与项目负责人批准；
 - 四份模板文档新增的最小状态同步与导航见各自文件（§15 范围）；
-  `DESIGN.md` §8 **只新增**指向本草案的交叉引用，
+  `DESIGN.md` §8 **只新增**指向本详细设计的交叉引用，
   **不**把候选方案改写为已批准实现方案；
-- 本文件状态为 `DRAFT_PENDING_CHATGPT_AND_PROJECT_OWNER_REVIEW`，
-  **未批准、未实现**；批准前**不得**修改任何代码。
+- 本文件详细设计状态为 `APPROVED`（`approval_scope=SHARED_IMPLEMENTATION_DETAILED_DESIGN_ONLY`），
+  但公共实现**仍未开始**、参考页**仍未接入**、页面迁移**仍未授权**；
+  **未经项目负责人再次明确批准，不得修改任何代码。**
 
 ---
 
@@ -1161,11 +1186,14 @@ Feature 覆盖是否**实际只影响当前表格**、
 
 ### 11.1 标记
 
-`LIST_TABLE_SHARED_DESIGN_DRAFT` —— 本文件全文只使用该一个标记（§0.1）。
-**不使用** `LIST_TABLE_SHARED_DESIGN_APPROVED`（本轮不存在该值），
-**不**复用 `LIST_TABLE_TEMPLATE_APPROVED` 冒充详细设计已批准。
+`LIST_TABLE_SHARED_DESIGN_APPROVED` —— 本文件全文只使用该一个标记（§0.1）。
 
-`LIST_TABLE_SHARED_DESIGN_DRAFT` —— 该字面量的**标记定义域只有本文件**：
+本文件**不**复用模板基线标记冒充详细设计已批准：
+模板基线标记（四份规范文档中的 `LIST_TABLE_TEMPLATE_APPROVED`）描述的是
+**模板规则**的批准，与本文件的**详细设计**批准是**两个独立状态**，
+**不得**合并、替代或推导。
+
+`LIST_TABLE_SHARED_DESIGN_APPROVED` —— 该字面量的**标记定义域只有本文件**：
 
 - 四份已批准规范文档（`README.md` / `DESIGN.md` / `UI.md` / `MIGRATION.md`）
   **不含**该字面量（其计数口径与 `22 / 0 / 42 / 11` 保持不变）；
@@ -1177,13 +1205,17 @@ Feature 覆盖是否**实际只影响当前表格**、
 
 ### 11.2 计数与核验命令
 
-`LIST_TABLE_SHARED_DESIGN_DRAFT` —— 实测计数（见 §11.3）。
+`LIST_TABLE_SHARED_DESIGN_APPROVED` —— 实测计数（见 §11.3）。
 核验命令用**字符串拼接**构造字面量，避免核验命令自身的文本被计入：
 
 ```bash
-design_marker="LIST_TABLE_SHARED_DESIGN_""DRAFT"
-grep -ohF "$design_marker" \
+approved_marker="LIST_TABLE_SHARED_DESIGN_""APPROVED"
+grep -ohF "$approved_marker" \
   docs/baseline/list-table-visual-template/SHARED_COMPONENT_DESIGN.md | wc -l
+
+draft_marker="LIST_TABLE_SHARED_DESIGN_""DRAFT"
+grep -ohF "$draft_marker" \
+  docs/baseline/list-table-visual-template/SHARED_COMPONENT_DESIGN.md | wc -l   # 期望 0
 ```
 
 同时复核四份已批准规范文档的计数与候选盘点不变量：
@@ -1208,28 +1240,36 @@ grep -rnP '<el-table(?![-_])' frontend/src --include=*.vue | wc -l   # 期望 15
 grep -rlP '<el-table(?![-_])' frontend/src --include=*.vue | wc -l   # 期望 14
 ```
 
-### 11.3 实测计数（本设计任务 2026-09-21，R2 修订后复测）
+### 11.3 实测计数（2026-09-21，批准收口后复测）
 
 ```text
-LIST_TABLE_SHARED_DESIGN_DRAFT（本文件）            = 79
-LIST_TABLE_SHARED_DESIGN_DRAFT（四份规范文档）       = 0
-LIST_TABLE_REFERENCE_FACT（四份规范文档）            = 22
-LIST_TABLE_TEMPLATE_DRAFT（四份规范文档）            = 0
-LIST_TABLE_TEMPLATE_APPROVED（四份规范文档）         = 42
-LIST_TABLE_PROPOSED_NOT_IMPLEMENTED（四份规范文档）  = 11
-el_table_usage_count                                = 15
-el_table_file_count                                 = 14
+LIST_TABLE_SHARED_DESIGN_APPROVED（本文件·当前规范正文）  = 79
+草案标记（本文件·当前规范正文）                        = 0
+已批准标记（四份规范文档）                             = 0
+LIST_TABLE_REFERENCE_FACT（四份规范文档）              = 22
+LIST_TABLE_TEMPLATE_DRAFT（四份规范文档）              = 0
+LIST_TABLE_TEMPLATE_APPROVED（四份规范文档）           = 42
+LIST_TABLE_PROPOSED_NOT_IMPLEMENTED（四份规范文档）    = 11
+el_table_usage_count                                  = 15
+el_table_file_count                                   = 14
 ```
 
-`LIST_TABLE_SHARED_DESIGN_DRAFT` —— 上述计数为**实测值**，
+`LIST_TABLE_SHARED_DESIGN_APPROVED` —— 上述计数为**实测值**，
 非人为堆叠：每个标记实例都对应本文件中一个**真实的设计决策段落**。
+
+**计数口径（不得混算）**：
+
+- “本文件·当前规范正文”**只统计本文件当前正文**，不包含 R0 / R1 / R2 三份历史报告；
+- 目录级 `grep -r` 若覆盖 `reports/`，会额外命中历史报告中的**草案字面量**，
+  那是**历史事实**，**不得**与当前正文计数相加，也**不得**作为批准判断依据。
 
 本标记 —— **计数变更说明（逐轮实测，非硬编码）**：
 
 ```text
-R0（提交 d7ae5af）   = 71
-R1（提交 f8d8465）   = 75   （+4）
-R2（本轮）           = 79   （+4）
+R0（提交 d7ae5af）  草案标记 = 71
+R1（提交 f8d8465）  草案标记 = 75   （+4）
+R2（提交 e72264d）  草案标记 = 79   （+4）
+收口（本次）        草案标记 = 0，已批准标记 = 79（1:1 转换）
 ```
 
 - **R1 `+4` 来源**（测试分层修订）：§2.5 运行时事实清单、
@@ -1240,3 +1280,19 @@ R2（本轮）           = 79   （+4）
 
 复核方式：`79` 个实例分布在 `79` 个**互不相同**的行上（每行恰 `1` 个），
 不存在同句叠加凑数的情形。四份规范文档的 `22 / 0 / 42 / 11` **未受影响**。
+
+### 11.4 历史报告中的草案字面量（逐字保留，不回写）
+
+`LIST_TABLE_SHARED_DESIGN_APPROVED` —— 本次批准收口**只**转换**本文件当前正文**中的标记，
+**不**触碰任何历史记录：
+
+| 文件 | 内容性质 | 本任务处置 |
+| --- | --- | --- |
+| `reports/LIST-TABLE-VISUAL-TEMPLATE-SHARED-IMPLEMENTATION-DESIGN-001.md` | R0 设计任务执行报告（当时为草案状态） | **逐字保留，未修改** |
+| `reports/LIST-TABLE-VISUAL-TEMPLATE-SHARED-IMPLEMENTATION-DESIGN-001-R1.md` | R1 定向修订报告 | **逐字保留，未修改** |
+| `reports/LIST-TABLE-VISUAL-TEMPLATE-SHARED-IMPLEMENTATION-DESIGN-001-R2.md` | R2 定向修订报告 | **逐字保留，未修改** |
+| `reports/LIST-TABLE-VISUAL-TEMPLATE-BASELINE-001*.md` 等更早报告 | 基线阶段报告 | **逐字保留，未修改** |
+
+这些报告产生时的**草案状态、复审结论与标记字面量**属**历史事实**：
+它们描述的是**当时**的状态，**不得**因本次批准而全局替换、回写或“修正”为已批准。
+读取历史报告时，必须以其**产生时点**的状态理解，不得与当前 `APPROVED` 状态混读。

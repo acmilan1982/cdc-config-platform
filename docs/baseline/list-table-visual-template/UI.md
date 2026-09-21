@@ -9,13 +9,25 @@ project_owner_approval_status=APPROVED
 project_owner_approval_date=2026-09-21
 approval_scope=BASELINE_CONTENT_ONLY
 approved_baseline_source_commit=575379895c4c57fd3df7e0d0ce27c1f6841d2f17
-shared_implementation_design_status=DRAFT_PENDING_CHATGPT_AND_PROJECT_OWNER_REVIEW
-shared_implementation_design_approval_status=NOT_APPROVED
+shared_implementation_design_status=APPROVED
+shared_implementation_design_approval_status=APPROVED
 shared_implementation_status=NOT_STARTED
 reference_page_integration_status=NOT_STARTED
 formal_acceptance_execution_status=NOT_RUN
 page_migration_status=NOT_STARTED
 page_migration_authorization_status=NOT_GRANTED
+```
+
+批准证据链（详细设计）：
+
+```text
+R0 设计提交=d7ae5af54e62bba20373681f9f55fc7fb67f39a7
+R1 定向修订提交=f8d84657e939a4b02316457b543976a847b0775b
+R2 定向修订提交=e72264de14a9483aae5593435f818ea65c5116e0
+ChatGPT 远程 R2 复审=REVIEW_PASS
+blocking_finding_count=0
+项目负责人详细设计批准日期=2026-09-21
+详细设计批准范围=SHARED_IMPLEMENTATION_DETAILED_DESIGN_ONLY
 ```
 
 > 本文档以参考实现**真实源码**为依据，分三层记录：

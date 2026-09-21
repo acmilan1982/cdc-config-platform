@@ -9,14 +9,26 @@ project_owner_approval_status=APPROVED
 project_owner_approval_date=2026-09-21
 approval_scope=BASELINE_CONTENT_ONLY
 approved_baseline_source_commit=575379895c4c57fd3df7e0d0ce27c1f6841d2f17
-shared_implementation_design_status=DRAFT_PENDING_CHATGPT_AND_PROJECT_OWNER_REVIEW
-shared_implementation_design_approval_status=NOT_APPROVED
+shared_implementation_design_status=APPROVED
+shared_implementation_design_approval_status=APPROVED
 shared_implementation_status=NOT_STARTED
 reference_page_integration_status=NOT_STARTED
 formal_acceptance_execution_status=NOT_RUN
 page_migration_status=NOT_STARTED
 page_migration_authorization_status=NOT_GRANTED
 candidate_inventory_status=COMPLETED_APPROVED_AS_BASELINE_INVENTORY
+```
+
+批准证据链（详细设计）：
+
+```text
+R0 设计提交=d7ae5af54e62bba20373681f9f55fc7fb67f39a7
+R1 定向修订提交=f8d84657e939a4b02316457b543976a847b0775b
+R2 定向修订提交=e72264de14a9483aae5593435f818ea65c5116e0
+ChatGPT 远程 R2 复审=REVIEW_PASS
+blocking_finding_count=0
+项目负责人详细设计批准日期=2026-09-21
+详细设计批准范围=SHARED_IMPLEMENTATION_DETAILED_DESIGN_ONLY
 ```
 
 > 本文档产出**候选盘点与评估结果**，该盘点已作为**基线盘点结果**随基线内容一并批准；
@@ -154,11 +166,15 @@ NEEDS_SEPARATE_EVALUATION=1
 
 1. 本基线经 ChatGPT 远程 Git 复审 —— **已完成**（R1 `REVIEW_PASS`）；
 2. 项目负责人批准基线内容 —— **已完成**（2026-09-21，`BASELINE_CONTENT_ONLY`）；
-3. 公共实现详细设计与批准 —— **未开始**；
+3. 公共实现详细设计与批准 —— **已完成**（ChatGPT 远程 R2 复审 `REVIEW_PASS`、
+   `blocking_finding_count=0`；项目负责人于 2026-09-21 批准，
+   `approval_scope=SHARED_IMPLEMENTATION_DETAILED_DESIGN_ONLY`）；
 4. 公共实现与数据源管理参考页等价接入 —— **未开始**；
 5. 公共实现正式验收与最终接受 —— **未运行**；
 6. 之后才逐页选择并单独授权 —— **未授权**。
 
-第 1、2 条完成**只**意味着**基线内容**已批准；第 3–6 条**均未开始**，
-**不得**把上述不同层级合并成模糊的“已完成”。本轮**未**选择首个迁移页面，
+第 1、2、3 条完成**只**意味着**基线内容**与**详细设计文档**已批准；
+第 4–6 条**均未开始**，**不得**把上述不同层级合并成模糊的“已完成”。
+**批准详细设计 ≠ 批准实现 ≠ 批准参考页接入 ≠ 批准页面迁移。**
+本轮**未**选择首个迁移页面，
 **未**为探针端管理、数据订阅或任何页面生成实施任务。

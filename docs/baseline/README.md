@@ -85,7 +85,7 @@ pilot_page_selection_status=NOT_DECIDED
 - 模板职责与候选实现方案（未定案）：[list-table-visual-template/DESIGN.md](./list-table-visual-template/DESIGN.md)
 - 参考实现视觉事实与可提取规则：[list-table-visual-template/UI.md](./list-table-visual-template/UI.md)
 - 全量 `el-table` 盘点矩阵与候选分类：[list-table-visual-template/MIGRATION.md](./list-table-visual-template/MIGRATION.md)
-- 公共实现详细设计（**草案，待 ChatGPT 复审与项目负责人批准**，未批准、未实现）：[list-table-visual-template/SHARED_COMPONENT_DESIGN.md](./list-table-visual-template/SHARED_COMPONENT_DESIGN.md)
+- 公共实现详细设计（**已批准**，未实现）：[list-table-visual-template/SHARED_COMPONENT_DESIGN.md](./list-table-visual-template/SHARED_COMPONENT_DESIGN.md)
 
 当前状态：
 
@@ -96,8 +96,8 @@ project_owner_approval_status=APPROVED
 project_owner_approval_date=2026-09-21
 approval_scope=BASELINE_CONTENT_ONLY
 approved_baseline_source_commit=575379895c4c57fd3df7e0d0ce27c1f6841d2f17
-shared_implementation_design_status=DRAFT_PENDING_CHATGPT_AND_PROJECT_OWNER_REVIEW
-shared_implementation_design_approval_status=NOT_APPROVED
+shared_implementation_design_status=APPROVED
+shared_implementation_design_approval_status=APPROVED
 shared_implementation_status=NOT_STARTED
 reference_page=数据源管理
 reference_page_integration_status=NOT_STARTED
@@ -108,10 +108,13 @@ candidate_inventory_status=COMPLETED_APPROVED_AS_BASELINE_INVENTORY
 ```
 
 **批准基线 ≠ 批准详细设计 ≠ 批准实现 ≠ 批准参考页接入 ≠ 批准页面迁移**：
-公共实现详细设计已产出**草案**（`DRAFT_PENDING_CHATGPT_AND_PROJECT_OWNER_REVIEW`、
-`NOT_APPROVED`），公共实现**未开始**，参考页接入**未开始**，
-任何页面迁移**未授权**。下一步**只**允许对该草案进行 **ChatGPT 远程 Git 复审**，
-再由**项目负责人**决定是否批准；**未经批准不得修改任何代码**。
+公共实现详细设计已**获批**（ChatGPT 远程 R2 复审 `REVIEW_PASS`、
+`blocking_finding_count=0`，项目负责人于 2026-09-21 批准，
+`approval_scope=SHARED_IMPLEMENTATION_DETAILED_DESIGN_ONLY`），
+但公共实现**未开始**，参考页接入**未开始**，
+任何页面迁移**未授权**。下一步**只**允许准备“公共实现 + 数据源管理参考页等价接入”的
+**独立任务提示词**并提交**项目负责人确认**；
+**未经项目负责人再次明确批准不得修改任何代码**。
 
 - **参考实现**：数据源管理主列表（`/config/data-source`）是**参考实现事实来源**，
   **不是**可直接复制的业务页面；其列定义、状态标签语义、行操作与固定列均属该 Feature 专属。
@@ -119,7 +122,7 @@ candidate_inventory_status=COMPLETED_APPROVED_AS_BASELINE_INVENTORY
   （标题 / 查询区 / 结果区 / 刷新工具栏 / 请求交互），本模板覆盖**表格层**
   （表头 / 正文 / 间距 / 边框 / 行高 / 长文本 / 扩展边界）。本模板**不并入**前者、
   **不**扩大前者适用范围、**不**改写其已批准规范。
-- **授权边界**：本模板**基线内容已批准**；公共实现详细设计仅为**待复审草案**，
+- **授权边界**：本模板**基线内容已批准**，公共实现**详细设计已批准**（仅设计文档），
   公共实现**尚未开始**，数据源管理参考页**尚未接入**，**任何页面迁移均未授权**。
   未来每个页面需**独立评估、独立授权、独立实现、独立目测、独立验收**。
 

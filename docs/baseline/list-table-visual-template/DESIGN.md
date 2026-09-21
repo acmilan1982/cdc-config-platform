@@ -9,13 +9,25 @@ project_owner_approval_status=APPROVED
 project_owner_approval_date=2026-09-21
 approval_scope=BASELINE_CONTENT_ONLY
 approved_baseline_source_commit=575379895c4c57fd3df7e0d0ce27c1f6841d2f17
-shared_implementation_design_status=DRAFT_PENDING_CHATGPT_AND_PROJECT_OWNER_REVIEW
-shared_implementation_design_approval_status=NOT_APPROVED
+shared_implementation_design_status=APPROVED
+shared_implementation_design_approval_status=APPROVED
 shared_implementation_status=NOT_STARTED
 reference_page_integration_status=NOT_STARTED
 formal_acceptance_execution_status=NOT_RUN
 page_migration_status=NOT_STARTED
 page_migration_authorization_status=NOT_GRANTED
+```
+
+批准证据链（详细设计）：
+
+```text
+R0 设计提交=d7ae5af54e62bba20373681f9f55fc7fb67f39a7
+R1 定向修订提交=f8d84657e939a4b02316457b543976a847b0775b
+R2 定向修订提交=e72264de14a9483aae5593435f818ea65c5116e0
+ChatGPT 远程 R2 复审=REVIEW_PASS
+blocking_finding_count=0
+项目负责人详细设计批准日期=2026-09-21
+详细设计批准范围=SHARED_IMPLEMENTATION_DETAILED_DESIGN_ONLY
 ```
 
 > 本文档只做**模板基线级设计**，**不**锁定最终实现形态。
@@ -165,13 +177,14 @@ page_migration_authorization_status=NOT_GRANTED
 `LIST_TABLE_PROPOSED_NOT_IMPLEMENTED` —— 以下为候选方案，**均未实现**，
 且**本轮不得**选择其一作为最终方案。最终方案由后续详细设计任务决定。
 
-> **交叉引用（下游详细设计草案）**：独立任务
+> **交叉引用（下游详细设计，已批准）**：独立任务
 > `LIST-TABLE-VISUAL-TEMPLATE-SHARED-IMPLEMENTATION-DESIGN-001` 已产出
 > `SHARED_COMPONENT_DESIGN.md`，对本节四个候选作出**唯一技术结论**
 > （候选 §8.4 组合方式：显式根类 CSS 预设 + 有限 CSS 自定义属性令牌）。
-> 该结论状态为 `DRAFT_PENDING_CHATGPT_AND_PROJECT_OWNER_REVIEW` /
-> `NOT_APPROVED` ——**尚未**获得 ChatGPT 远程复审与项目负责人批准，
-> 公共实现**未实现**、参考页**未接入**、页面**未迁移**。
+> 该结论已经 ChatGPT 远程 R2 复审 `REVIEW_PASS`（`blocking_finding_count=0`），
+> 并由项目负责人于 2026-09-21 批准
+> （`approval_scope=SHARED_IMPLEMENTATION_DETAILED_DESIGN_ONLY`）。
+> 但**批准详细设计 ≠ 批准实现**：公共实现**未开始**、参考页**未接入**、页面**未迁移**。
 >
 > 本节 §8.1–§8.5 的候选描述**保持原样**，**不**因该草案而改写为已批准实现方案；
 > 本节“本文档不对任一方案定案”（§8.5）对本**基线文档自身**仍然有效。

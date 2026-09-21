@@ -287,16 +287,20 @@ CDC_DATA_SOURCE 另被日志查询的 selectAllDataSources 读取用于过滤条
   （`REVIEW_PASS`、`blocking_finding_count=0`）并由项目负责人于 2026-09-21 批准
   （`approval_scope=BASELINE_CONTENT_ONLY`，
   批准源提交 `575379895c4c57fd3df7e0d0ce27c1f6841d2f17`）；
-- **批准范围**：**仅基线内容**。公共实现详细设计已由独立任务产出**草案**
-  （`docs/baseline/list-table-visual-template/SHARED_COMPONENT_DESIGN.md`），
-  状态为 `DRAFT_PENDING_CHATGPT_AND_PROJECT_OWNER_REVIEW` /
-  `shared_implementation_design_approval_status=NOT_APPROVED`；
+- **批准范围**：**基线内容**，以及此后**单独批准**的**公共实现详细设计文档**。
+  详细设计（`docs/baseline/list-table-visual-template/SHARED_COMPONENT_DESIGN.md`）
+  经 ChatGPT 远程 R2 复审（`REVIEW_PASS`、`blocking_finding_count=0`）后，
+  由项目负责人于 2026-09-21 批准（`approval_scope=SHARED_IMPLEMENTATION_DETAILED_DESIGN_ONLY`，
+  批准源提交 `e72264de14a9483aae5593435f818ea65c5116e0`），
+  状态为 `shared_implementation_design_status=APPROVED` /
+  `shared_implementation_design_approval_status=APPROVED`；
+  但**批准详细设计 ≠ 批准实现**：
   `shared_implementation_status` / `reference_page_integration_status` 仍为 `NOT_STARTED`，
   `formal_acceptance_execution_status=NOT_RUN`，
   `page_migration_status=NOT_STARTED`、`page_migration_authorization_status=NOT_GRANTED`；
-- **下一入口**：`CHATGPT_REMOTE_GIT_SHARED_IMPLEMENTATION_DESIGN_REVIEW_THEN_PROJECT_OWNER_DESIGN_APPROVAL`
-  （详细设计草案须先经 ChatGPT 远程 Git 复审，再由项目负责人决定是否批准；
-  **未经批准不得修改代码**，也不得进入公共实现、参考页接入或页面迁移）；
+- **下一入口**：`PUBLIC_IMPLEMENTATION_AND_REFERENCE_PAGE_EQUIVALENT_INTEGRATION_TASK_PENDING_SEPARATE_PROMPT_AND_PROJECT_OWNER_APPROVAL`
+  （下一步**只**允许准备“公共实现 + 数据源管理参考页等价接入”的独立任务提示词并提交项目负责人确认；
+  **未经项目负责人再次明确批准不得修改代码**，也不得进入公共实现、参考页接入或页面迁移）；
 - 与查询列表页模板基线是**正交、可组合**的两层（页面层 / 表格层）；
 - 该基线与六份项目级基线的正式状态**无关**，不影响六份基线的 `APPROVED` 状态。
 
@@ -313,3 +317,4 @@ CDC_DATA_SOURCE 另被日志查询的 selectAllDataSources 读取用于过滤条
 | 2026-09-21 | 新增 §10.4：记录独立的“列表表格视觉模板”基线草案状态（`DRAFT_PENDING_USER_REVIEW`，未实现、未批准、未授权迁移，参考页为数据源管理主列表）；与查询列表页模板基线为正交、可组合的两层 | LIST-TABLE-VISUAL-TEMPLATE-BASELINE-001（纯文档任务，未修改代码、Feature 文档或其他基线状态） |
 | 2026-09-21 | §10.4 当前状态更新为 `APPROVED` / `BASELINE_APPROVED`：基线内容经 ChatGPT 远程 R1 复审（`REVIEW_PASS`）并由项目负责人批准（`BASELINE_CONTENT_ONLY`）；公共实现详细设计、公共实现、参考页接入均为 `NOT_STARTED`，正式验收 `NOT_RUN`，页面迁移 `NOT_STARTED` / `NOT_GRANTED`；下一入口改为公共实现详细设计任务 | LIST-TABLE-VISUAL-TEMPLATE-BASELINE-APPROVAL-CLOSEOUT-001（纯文档任务，未修改代码、测试、配置或依赖） |
 | 2026-09-21 | §10.4 当前阶段推进：新增 `docs/baseline/list-table-visual-template/SHARED_COMPONENT_DESIGN.md` 详细设计草案（`DRAFT_PENDING_CHATGPT_AND_PROJECT_OWNER_REVIEW` / `NOT_APPROVED`，对四个候选作出唯一结论：显式根类 CSS 预设 + 有限 CSS 自定义属性令牌）；公共实现、参考页接入仍 `NOT_STARTED`，正式验收 `NOT_RUN`，页面迁移 `NOT_STARTED` / `NOT_GRANTED`；下一入口改为“ChatGPT 远程复审 → 项目负责人设计批准” | LIST-TABLE-VISUAL-TEMPLATE-SHARED-IMPLEMENTATION-DESIGN-001（纯文档任务，未修改代码、测试、配置、依赖或任何业务页面） |
+| 2026-09-21 | §10.4 详细设计批准收口：经 R1 / R2 定向修订后，ChatGPT 远程 R2 复审 `REVIEW_PASS`（`blocking_finding_count=0`），项目负责人于 2026-09-21 批准公共实现详细设计（`approval_scope=SHARED_IMPLEMENTATION_DETAILED_DESIGN_ONLY`，批准源提交 `e72264de1`）；§10.4 状态块改为 `shared_implementation_design_status=APPROVED` / `shared_implementation_design_approval_status=APPROVED`；**批准详细设计 ≠ 批准实现**：公共实现、参考页接入仍 `NOT_STARTED`，正式验收 `NOT_RUN`，页面迁移 `NOT_STARTED` / `NOT_GRANTED`；下一入口改为“公共实现 + 数据源管理参考页等价接入”独立任务待提示词与项目负责人批准 | LIST-TABLE-VISUAL-TEMPLATE-SHARED-IMPLEMENTATION-DESIGN-APPROVAL-CLOSEOUT-001（纯文档任务，未修改代码、测试、配置、依赖或任何业务页面） |
