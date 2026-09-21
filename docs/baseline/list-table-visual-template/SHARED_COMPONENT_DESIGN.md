@@ -277,6 +277,19 @@ SFC 作用域              所有页面样式使用 <style scoped>；仅 DataSou
 | 断言构建产物 CSS 文本 | **能**（构建后读取 `dist/assets/*.css`） | 属阶段一实现任务的构建产物检查 |
 | 断言真实浏览器计算样式与几何 | **能**，但**必须**在阶段一由**真实浏览器**执行，**不是** vitest | qlpt 已批准的等价接入口径 |
 
+`LIST_TABLE_SHARED_DESIGN_DRAFT` —— 其中以下六项属**运行时事实**，
+一律**不得**写成 jsdom / vitest 能够直接证明的结论，
+**必须**由**真实浏览器**承接（§7.4 / §7.5），本条与 §7.2 / §7.4 / §7.5 **同口径**：
+
+```text
+1. --lt-* 是否可解析；
+2. CSS 变量的最终计算值；
+3. Feature 覆盖是否实际只影响目标表格；
+4. 同页另一张未覆盖表格的计算样式是否未受影响；
+5. 公共规则在给定页面上的实际匹配数（含负向页面「应为 0」）；
+6. 元素几何、行高与外接矩形是否相同。
+```
+
 `LIST_TABLE_SHARED_DESIGN_DRAFT` —— 由此产生一条**硬约束**：
 本模板的“视觉等价”**不能**用单元测试证明，只能用
 “源码文本静态契约 + 真实浏览器计算样式逐值比对”**两段合成**证明。
@@ -496,7 +509,7 @@ import { LT_MAIN_TABLE_CLASS } from '@/styles/list-table'
 
 | 项 | 规则 |
 | --- | --- |
-| import 方式 | 类名常量：`import { LT_MAIN_TABLE_CLASS } from '@/styles/list-table'`；样式：`<style scoped src="@/styles/list-table/list-table-visual.css">`（可写等价的 `./…` 相对路径） |
+| import 方式 | 类名常量：`import { LT_MAIN_TABLE_CLASS } from '@/styles/list-table'`；样式：`<style scoped src="@/styles/list-table/list-table-visual.css">`（也可使用从具体消费 SFC 所在目录正确解析到公共 CSS 文件的相对路径；该路径随消费 SFC 位置而变，**不是**所有消费页面都可直接使用的固定路径） |
 | 模板根类 | `lt-main-table`，且**必须**声明在 `el-table` 的**根元素**上 |
 | 导出名称 | `LT_MAIN_TABLE_CLASS`（根类名常量）、`LT_TABLE_VISUAL_TOKENS`（令牌名只读清单） |
 | 是否保留 Feature 原类名 | **必须保留**（参考页 `data-table` 被既有测试断言依赖，见 §2.6） |
@@ -920,18 +933,23 @@ td.el-table__cell：padding-top / padding-right / padding-bottom / padding-left
 
 ### 7.2 组件或单元测试（可在 vitest 中执行）
 
-`LIST_TABLE_SHARED_DESIGN_DRAFT`：
+`LIST_TABLE_SHARED_DESIGN_DRAFT` —— 本节**只**包含 jsdom 能**可靠**验证的内容：
+**DOM 结构、类名、源码声明、组件契约与既有交互**。
+凡涉及 CSS 自定义属性解析、层叠结果、选择器实际匹配数或几何的结论，
+按 §2.5 归入 §7.4 / §7.5 的**真实浏览器**验证，**不得**写在本节。
 
-| # | 断言 |
-| --- | --- |
-| 1 | 显式启用时表格根元素 className 同时含业务类与公共类 |
-| 2 | 未启用时（移除公共类）表格根元素 className 不含公共类，且 `--lt-*` 不可解析 |
-| 3 | Feature 覆盖只作用于当前表格：同一挂载中另一张未覆盖表格的元素不受影响 |
-| 4 | Props / Slots / Events / Ref 行为不被破坏：`@row-dblclick`、`#empty`、
-`show-overflow-tooltip`、`fixed="right"`、`data` 渲染与 `ref` 均保持 |
-| 5 | 数据源管理**原有全部交互测试保持通过**（`dataSource.spec.ts` 真跑，不弱化、不删除断言） |
-| 6 | `dataSource.spec.ts` 的 `scopedStyleBlock()` 仍能提取到 scoped 块
-（即保留一个 scoped 块，`<style scoped src>` 不会取代它） |
+| # | 断言 | 性质 |
+| --- | --- | --- |
+| 1 | 显式启用时表格根元素 className **同时含**业务类与公共类 | DOM 类名结构 |
+| 2 | 未启用时，表格根元素 className **不含**公共类；且源码及节点上**不存在**该表格的 `--lt-*` Feature 覆盖声明 | DOM 类名 + 源码静态结构（**不涉及 CSS 求值**） |
+| 3 | Feature 覆盖以**静态结构**受检：覆盖声明出现在预期源码（消费 SFC 的 scoped 块）或预期表格节点的作用域内，且**未**对其他表格节点重复声明 | 源码/节点静态结构（**不判定实际生效范围**） |
+| 4 | Props / Slots / Events / Ref 行为不被破坏：`@row-dblclick`、`#empty`、`show-overflow-tooltip`、`fixed="right"`、`data` 渲染与 `ref` 均保持 | 组件契约 |
+| 5 | 数据源管理**原有全部交互测试保持通过**（`dataSource.spec.ts` 真跑，不弱化、不删除断言） | 既有交互保护 |
+| 6 | `dataSource.spec.ts` 的 `scopedStyleBlock()` 仍能提取到 scoped 块（即保留一个 scoped 块，`<style scoped src>` 不会取代它） | 既有测试兼容性 |
+
+`LIST_TABLE_SHARED_DESIGN_DRAFT` —— 本节**明确不**断言（改由 §7.4 / §7.5 承接）：
+`--lt-*` 是否**可解析**、CSS 变量的**最终计算值**、Feature 覆盖是否**实际只影响当前表格**、
+同页**另一张**未覆盖表格的计算样式是否未受影响、元素几何 / 行高 / 外接矩形是否相同。
 
 ### 7.3 构建产物检查（阶段一，构建后读取产物）
 
@@ -954,6 +972,17 @@ td.el-table__cell：padding-top / padding-right / padding-bottom / padding-left
 长文本省略与 Tooltip 行为不变；视口 `1440×900` 与 `1920×1080`；页面缩放 `100%`。
 判定阈值**严格 0**，并提供**反向控制**（注入 `≥0.001px` 位移必须使断言非零退出）。
 
+`LIST_TABLE_SHARED_DESIGN_DRAFT` —— 本节**同时承接** §2.5 / §7.2 移出的
+**Feature 覆盖隔离**类运行时事实，均为**真实浏览器**判定，**不是** vitest：
+
+| # | 运行时断言 | 期望 |
+| --- | --- | --- |
+| A | Feature 在目标表格上声明 `--lt-*` 覆盖后，该表格计算样式**按覆盖值生效** | 逐值等于预期覆盖值 |
+| B | 同页**另一张未覆盖**表格（如同文件内的 `.naming-table` 弹窗表）计算样式**未受影响** | 与基准逐值相同 |
+| C | 目标表格上**未被覆盖**的其余令牌仍取公共默认值 | 逐值与 §4.4 默认值相同 |
+| D | 移除 Feature 覆盖后，目标表格**回到公共默认值** | 与未覆盖基准逐值相同 |
+| E | 目标表格上的 `--lt-*` 在**运行时被解析**（非 `unset` / 空值） | 解析成功且取到预期值 |
+
 ### 7.5 负向页面矩阵（阶段一，真实浏览器）
 
 `LIST_TABLE_SHARED_DESIGN_DRAFT` —— 至少选取：
@@ -968,8 +997,12 @@ td.el-table__cell：padding-top / padding-right / padding-bottom / padding-left
 7. 日志查询主表与故障历史下钻列表（补充，可选）
 ```
 
-验证它们在**未显式启用**时：公共规则匹配数 `0`、`--lt-*` 不可解析、
+验证它们在**未显式启用**时：公共规则匹配数 `0`、`--lt-*` **实际不可解析**、
 §6 第 6 项计算样式与基准**逐值相同**、且构建产物不存在可命中它们的全局规则。
+
+`LIST_TABLE_SHARED_DESIGN_DRAFT` —— 本节是 §2.5 / §7.2 移出的
+「未启用页面 `--lt-*` 不可解析」「公共规则实际匹配数为 `0`」「未启用页计算样式不变」
+三项运行时事实的**唯一承接处**；这三项**不得**回写为 vitest 结论。
 
 ### 7.6 覆盖点与零泄漏的反向控制
 
@@ -1091,11 +1124,15 @@ td.el-table__cell：padding-top / padding-right / padding-bottom / padding-left
 **不使用** `LIST_TABLE_SHARED_DESIGN_APPROVED`（本轮不存在该值），
 **不**复用 `LIST_TABLE_TEMPLATE_APPROVED` 冒充详细设计已批准。
 
-`LIST_TABLE_SHARED_DESIGN_DRAFT` —— 该字面量**只出现在本文件**：
+`LIST_TABLE_SHARED_DESIGN_DRAFT` —— 该字面量的**标记定义域只有本文件**：
 
 - 四份已批准规范文档（`README.md` / `DESIGN.md` / `UI.md` / `MIGRATION.md`）
   **不含**该字面量（其计数口径与 `22 / 0 / 42 / 11` 保持不变）；
-- 标记计数以**本文件**为唯一定义域，避免与其他目录的冻结计数产生歧义。
+- 标记计数以**本文件**为唯一定义域，避免与其他目录的冻结计数产生歧义；
+- **计数口径说明**：本计数只统计**本文件内作为设计决策标记使用**的实例。
+  任务提示词与执行报告中对本标记的**引用**（如在计数表中复述该字面量）
+  属**过程材料**，不构成规范文件中的标记实例，不计入本计数，
+  也不改变四份规范文档的冻结计数。
 
 ### 11.2 计数与核验命令
 
@@ -1130,10 +1167,10 @@ grep -rnP '<el-table(?![-_])' frontend/src --include=*.vue | wc -l   # 期望 15
 grep -rlP '<el-table(?![-_])' frontend/src --include=*.vue | wc -l   # 期望 14
 ```
 
-### 11.3 实测计数（本设计任务，2026-09-21）
+### 11.3 实测计数（本设计任务 2026-09-21，R1 修订后复测）
 
 ```text
-LIST_TABLE_SHARED_DESIGN_DRAFT（本文件）            = 71
+LIST_TABLE_SHARED_DESIGN_DRAFT（本文件）            = 75
 LIST_TABLE_SHARED_DESIGN_DRAFT（四份规范文档）       = 0
 LIST_TABLE_REFERENCE_FACT（四份规范文档）            = 22
 LIST_TABLE_TEMPLATE_DRAFT（四份规范文档）            = 0
@@ -1145,3 +1182,10 @@ el_table_file_count                                 = 14
 
 `LIST_TABLE_SHARED_DESIGN_DRAFT` —— 上述计数为**实测值**，
 非人为堆叠：每个标记实例都对应本文件中一个**真实的设计决策段落**。
+
+本标记 —— **计数变更说明（R1）**：
+原提交 `d7ae5af` 实测为 `71`，R1 修订后复测为 **`75`**，增量 `+4` 全部来自
+本次测试分层修订新增的设计决策段落——§2.5 运行时事实清单、
+§7.2 分层口径说明、§7.4 Feature 覆盖隔离表、§7.5 承接归属说明，**各 `+1`**。
+复核方式：`75` 个实例分布在 `75` 个**互不相同**的行上（每行恰 `1` 个），
+不存在同句叠加凑数的情形。四份规范文档的 `22 / 0 / 42 / 11` **未受影响**。
