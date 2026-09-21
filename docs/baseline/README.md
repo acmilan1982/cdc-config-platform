@@ -70,12 +70,14 @@ pilot_page_selection_status=NOT_DECIDED
 - **计数口径**：原正式验收 17 项、补充正式验收 21 项；补充 21 项**包含**原 17 项在纠正后提交上的
   重新重放，两者是**包含关系而非并列关系**，**不得**把两者相加累计为“独立用例总数”；权威验收覆盖为补充验收 `21/21` PASS。
 
-## 列表表格视觉模板基线入口（草案）
+## 列表表格视觉模板基线入口
 
-列表表格视觉模板基线（**草案，待项目负责人审阅**）：[docs/baseline/list-table-visual-template/](./list-table-visual-template/README.md)。
+列表表格视觉模板基线（**基线内容已批准**）：[docs/baseline/list-table-visual-template/](./list-table-visual-template/README.md)。
 该模板面向**页面主列表表格**：表头、正文、间距、边框、行高策略、长文本与扩展边界。
-由纯文档任务 `LIST-TABLE-VISUAL-TEMPLATE-BASELINE-001` 建立；**仅**建立草案、
-盘点候选页面与文档导航，**未**实现公共代码、**未**迁移任何页面。
+由纯文档任务 `LIST-TABLE-VISUAL-TEMPLATE-BASELINE-001` 建立、R1 定向修订后，
+经 ChatGPT 远程 Git R1 复审（`REVIEW_PASS`）并由项目负责人于 2026-09-21 批准
+（`approval_scope=BASELINE_CONTENT_ONLY`）。批准**只**覆盖**基线内容**，
+**未**实现公共代码、**未**接入参考页、**未**迁移任何页面。
 
 主要入口：
 
@@ -87,16 +89,26 @@ pilot_page_selection_status=NOT_DECIDED
 当前状态：
 
 ```text
-list_table_visual_template_document_status=DRAFT_PENDING_USER_REVIEW
-list_table_visual_template_design_status=BASELINE_DRAFT_ONLY
+list_table_visual_template_document_status=APPROVED
+list_table_visual_template_design_status=BASELINE_APPROVED
+project_owner_approval_status=APPROVED
+project_owner_approval_date=2026-09-21
+approval_scope=BASELINE_CONTENT_ONLY
+approved_baseline_source_commit=575379895c4c57fd3df7e0d0ce27c1f6841d2f17
 shared_implementation_design_status=NOT_STARTED
 shared_implementation_status=NOT_STARTED
 reference_page=数据源管理
 reference_page_integration_status=NOT_STARTED
+formal_acceptance_execution_status=NOT_RUN
 page_migration_status=NOT_STARTED
 page_migration_authorization_status=NOT_GRANTED
-candidate_inventory_status=COMPLETED_PENDING_USER_REVIEW
+candidate_inventory_status=COMPLETED_APPROVED_AS_BASELINE_INVENTORY
 ```
+
+**批准基线 ≠ 批准实现 ≠ 批准参考页接入 ≠ 批准页面迁移**：
+公共实现详细设计与公共实现**均未开始**，参考页接入**未开始**，
+任何页面迁移**未授权**。下一步**只**允许开展独立的**公共实现详细设计任务**，
+且详细设计产出后**必须重新提交项目负责人确认**。
 
 - **参考实现**：数据源管理主列表（`/config/data-source`）是**参考实现事实来源**，
   **不是**可直接复制的业务页面；其列定义、状态标签语义、行操作与固定列均属该 Feature 专属。

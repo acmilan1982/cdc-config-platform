@@ -1,11 +1,18 @@
-# 列表表格视觉模板 · 设计（基线草案）
+# 列表表格视觉模板 · 设计（已批准基线）
 
 ```text
-list_table_visual_template_document_status=DRAFT_PENDING_USER_REVIEW
-list_table_visual_template_design_status=BASELINE_DRAFT_ONLY
+list_table_visual_template_document_status=APPROVED
+list_table_visual_template_design_status=BASELINE_APPROVED
+chatgpt_remote_r1_review_status=REVIEW_PASS
+blocking_finding_count=0
+project_owner_approval_status=APPROVED
+project_owner_approval_date=2026-09-21
+approval_scope=BASELINE_CONTENT_ONLY
+approved_baseline_source_commit=575379895c4c57fd3df7e0d0ce27c1f6841d2f17
 shared_implementation_design_status=NOT_STARTED
 shared_implementation_status=NOT_STARTED
 reference_page_integration_status=NOT_STARTED
+formal_acceptance_execution_status=NOT_RUN
 page_migration_status=NOT_STARTED
 page_migration_authorization_status=NOT_GRANTED
 ```
@@ -13,12 +20,14 @@ page_migration_authorization_status=NOT_GRANTED
 > 本文档只做**模板基线级设计**，**不**锁定最终实现形态。
 > 最终实现方案（CSS 预设 / CSS 变量 / Vue 轻包装 / 组合方式）必须由**后续独立**
 > `SHARED_COMPONENT_DESIGN` 类任务决定，本任务**不得**提前定案。
-> 本文档中的所有模板规则均为 `LIST_TABLE_TEMPLATE_DRAFT`（**未批准**），
-> 所有实现方案均为 `LIST_TABLE_PROPOSED_NOT_IMPLEMENTED`（**未实现**）。
+> 本文档中的模板规则均为 `LIST_TABLE_TEMPLATE_APPROVED`——经 ChatGPT 远程 Git R1 复审
+> 并由项目负责人批准的**已批准模板规则**，作为后续公共实现详细设计**必须遵守的基线**；
+> 所有实现方案均为 `LIST_TABLE_PROPOSED_NOT_IMPLEMENTED`
+> （**未实现、未批准最终技术形态**）。
 
 ## 1. 模板职责
 
-`LIST_TABLE_TEMPLATE_DRAFT` —— 本模板负责**主列表表格的基础视觉与结构纪律**：
+`LIST_TABLE_TEMPLATE_APPROVED` —— 本模板负责**主列表表格的基础视觉与结构纪律**：
 
 1. **表头纪律**：表头背景、表头文字的字号 / 字重 / 颜色 / 字距、表头单元格上下内边距；
 2. **正文纪律**：正文基础字号 / 颜色、正文单元格上下内边距；
@@ -29,7 +38,7 @@ page_migration_authorization_status=NOT_GRANTED
 7. **作用域纪律**：显式启用、作用域隔离、对未启用页面零样式泄漏；
 8. **可覆盖纪律**：公共默认值可被 Feature **局部覆盖**，且覆盖方式受控、可回滚。
 
-`LIST_TABLE_TEMPLATE_DRAFT` —— 本模板**不**负责：
+`LIST_TABLE_TEMPLATE_APPROVED` —— 本模板**不**负责：
 
 - 页面壳层、查询区、结果区、刷新工具栏与请求交互（属 `query-list-page-template`）；
 - 业务列定义、列宽、数据模型与状态语义（属 Feature，见 §2）；
@@ -37,7 +46,7 @@ page_migration_authorization_status=NOT_GRANTED
 
 ## 2. Feature 保留职责
 
-`LIST_TABLE_TEMPLATE_DRAFT` —— 以下**必须**由业务 Feature 保留，公共层**不得**为其提供默认值：
+`LIST_TABLE_TEMPLATE_APPROVED` —— 以下**必须**由业务 Feature 保留，公共层**不得**为其提供默认值：
 
 | 保留项 | 说明 |
 | --- | --- |
@@ -54,18 +63,18 @@ page_migration_authorization_status=NOT_GRANTED
 | Loading | 是否 `v-loading`、以及 loading 文案 |
 | 错误处理 | 请求失败提示文案与重试策略 |
 
-`LIST_TABLE_TEMPLATE_DRAFT` —— 其中**序号列**与**空态**两项额外明确：
+`LIST_TABLE_TEMPLATE_APPROVED` —— 其中**序号列**与**空态**两项额外明确：
 公共模板**不**要求所有主列表必须具有序号列，**不**默认注入数据源管理现有的
 `width=70` / `align=center` / `13px` / `#71717a` / `tabular-nums`，
 也**不**规定所有主列表必须使用两级空态。这些若被认为具有复用价值，
-只能作为**可选扩展能力**由后续详细设计另行评估，本基线草案**不**提前定案。
+只能作为**可选扩展能力**由后续详细设计另行评估，本基线**不**提前定案。
 
-`LIST_TABLE_TEMPLATE_DRAFT` —— 本模板**只**收敛“表格长什么样”的共性纪律，
+`LIST_TABLE_TEMPLATE_APPROVED` —— 本模板**只**收敛“表格长什么样”的共性纪律，
 **不**收敛“表格装什么、怎么交互”。
 
 ## 3. 显式启用与作用域隔离
 
-`LIST_TABLE_TEMPLATE_DRAFT`：
+`LIST_TABLE_TEMPLATE_APPROVED`：
 
 1. **显式启用**：模板能力必须由页面**显式**启用（例如显式应用预设类 / 显式导入包装 /
    显式声明令牌），**不得**通过全局样式或全局选择器隐式作用到所有 `el-table`；
@@ -84,7 +93,7 @@ page_migration_authorization_status=NOT_GRANTED
 
 ## 4. 公共默认值与 Feature 局部覆盖
 
-`LIST_TABLE_TEMPLATE_DRAFT`：
+`LIST_TABLE_TEMPLATE_APPROVED`：
 
 - 模板提供**公共默认值**（表头 / 正文 / 边框 / 间距的默认纪律）；
 - Feature 可在**自身作用域内局部覆盖**默认值（业务确有差异时）；
@@ -98,7 +107,7 @@ page_migration_authorization_status=NOT_GRANTED
 
 ## 5. 行高策略
 
-`LIST_TABLE_TEMPLATE_DRAFT`：
+`LIST_TABLE_TEMPLATE_APPROVED`：
 
 1. **默认行高**：模板对主列表给出**内容驱动**的默认行为，
    即不强制固定行高，让行高随单元格内容自然撑开；
@@ -112,7 +121,7 @@ page_migration_authorization_status=NOT_GRANTED
 
 ## 6. 长文本、省略与 Tooltip
 
-`LIST_TABLE_TEMPLATE_DRAFT`：
+`LIST_TABLE_TEMPLATE_APPROVED`：
 
 1. **单行省略**：对需要保持单行的长文本字段，采用**单行省略**
    （`overflow: hidden; text-overflow: ellipsis; white-space: nowrap`）的纪律；
@@ -127,7 +136,7 @@ page_migration_authorization_status=NOT_GRANTED
 
 ## 7. 不得未经评估抽成公共业务语义的内容
 
-`LIST_TABLE_TEMPLATE_DRAFT` —— 以下**不得**未经独立评估就抽象为公共业务语义：
+`LIST_TABLE_TEMPLATE_APPROVED` —— 以下**不得**未经独立评估就抽象为公共业务语义：
 
 - **选中态**（如某页面 `#ecf5ff` 底色 + `inset 3px 0 0` 左侧条）；
 - **异常态**（如某页面的警告色行底色）；
@@ -138,17 +147,17 @@ page_migration_authorization_status=NOT_GRANTED
 - **“停用 / 异常”标记**的 pill 几何与配色；
 - **“更多”操作**的展开行为与呈现。
 
-`LIST_TABLE_TEMPLATE_DRAFT` —— 以上内容在参考实现中**存在**，
+`LIST_TABLE_TEMPLATE_APPROVED` —— 以上内容在参考实现中**存在**，
 但它们是**某个 Feature 的业务语义**（比如“停用”“异常”是数据源管理特有的状态），
 **不得**因为“看起来可复用”就提升为公共规范。
 如未来确需复用，必须由**独立任务**逐项评估其**语义是否普适**、
 **是否会造成跨页面语义污染**，并**独立授权**。
 
-`LIST_TABLE_TEMPLATE_DRAFT` —— 其中**序号列**与**空态**两项的职责边界同见 §2，
+`LIST_TABLE_TEMPLATE_APPROVED` —— 其中**序号列**与**空态**两项的职责边界同见 §2，
 结论一致：二者**默认属 Feature**；公共模板**不**要求主列表必须有序号列，
 **不**默认注入数据源管理的既有序号列数值，也**不**要求主列表必须使用两级空态。
 后续详细设计如认为其样式具有复用价值，只能作为**可选扩展能力**另行评估，
-**不得**在本基线草案中提前定案。
+**不得**在本基线中提前定案。
 
 ## 8. 候选实现方案对比（不定案）
 
@@ -209,15 +218,16 @@ page_migration_authorization_status=NOT_GRANTED
   “不做超级组件、不做薄包装”结论存在张力，需重新论证；
 - 无论采用哪种，**必须**满足 §3 的显式启用与零泄漏要求；
 - **本文档不对任一方案定案**。最终方案由后续 `SHARED_COMPONENT_DESIGN` 类任务
-  基于本轮草案与真实源码决定。
+  基于**本已批准基线**与真实源码决定，并**必须重新提交项目负责人确认**；
+  **未经确认不得修改任何代码**。
 
 ## 9. 本轮明确不做的事
 
-`LIST_TABLE_TEMPLATE_DRAFT`：
+`LIST_TABLE_TEMPLATE_APPROVED`：
 
 - 不创建任何 CSS 文件、CSS 变量、Vue 组件、Composable、类型或路由元数据；
 - 不修改 `frontend/**`、`backend/**`、测试代码、配置、依赖或锁文件；
 - 不修改数据源管理页面或任何其他页面；
 - 不执行测试、构建、浏览器或服务操作；
-- 不把草案写成已批准，不把候选方案写成已实现；
+- 不把候选实现方案写成已实现，也不把候选实现方案写成已批准的实现设计；
 - 不把数据源管理当前视觉上升为全部页面必须遵守的既定规范。

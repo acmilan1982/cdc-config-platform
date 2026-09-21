@@ -359,11 +359,14 @@
 来源: docs/baseline/query-list-page-template/README.md
 
 ### 列表表格视觉模板 (List Table Visual Template)
-**项目级前端公共能力基线（当前为草案）**，位于 `docs/baseline/list-table-visual-template/`，
+**项目级前端公共能力基线（基线内容已批准）**，位于 `docs/baseline/list-table-visual-template/`，
 覆盖**表格层**：页面**主列表表格**的表头、正文、间距、边框、行高策略、长文本与扩展边界。
 参考实现为数据源管理主列表（`/config/data-source`）。
-当前为 `DRAFT_PENDING_USER_REVIEW`，**未实现**、**未批准**、**未授权任何页面迁移**，
-**不具有强制规范效力**。与查询列表页模板是**正交、可组合**的两层，
+当前状态为 `APPROVED` / `BASELINE_APPROVED`——经 ChatGPT 远程 Git R1 复审
+（`REVIEW_PASS`）并由项目负责人于 2026-09-21 批准（`approval_scope=BASELINE_CONTENT_ONLY`）。
+**批准基线 ≠ 批准实现**：公共实现**未实现**、参考页**未接入**、
+任何页面迁移**未授权**（`page_migration_status=NOT_STARTED`、
+`page_migration_authorization_status=NOT_GRANTED`）。与查询列表页模板是**正交、可组合**的两层，
 **只覆盖页面主列表**，不自动覆盖弹窗表格、详情子表、确认表格或大屏/复合视图内嵌表。
 
 来源: docs/baseline/list-table-visual-template/README.md
@@ -393,3 +396,4 @@
 | 2026-08-29 | 数据源管理 Feature 已批准规则同步：删除“数据源”术语中 EXTEND 为 1:1 扩展信息的描述；新增“目标库命名策略”术语（源库 0..N、每条关联一个业务必填目标库、`(DATA_SOURCE_ID, TARGET_DATA_SOURCE_ID)` 组合逻辑唯一、第一版无 DDL）；“当前事实/目标规则/当前差异”示例更新为已批准规则（无主键/唯一约束不是未落实一对一的差异，第一版无 DDL 为已批准边界） | DATA-SOURCE-BASELINE-IMPACT-ALIGNMENT-001（已批准业务规则向权威项目基线同步；纯文档任务，数据库物理结构和当前代码无变化） |
 | 2026-08-30 | R1 修订：`DATA_SUB_ID` 术语主键事实同步——已只读核验为数据库真实主键（`PK_CDC_DATA_SUBSCRIBE`，`DATABASE_VERIFIED`），原 D01（PENDING_DECISION）关闭；未改写订阅 CRUD 未实现、管理平台只读、订阅记录人工维护等当前实现事实 | DATA-SUBSCRIPTION-REQUIREMENTS-BASELINE-001-R1（ChatGPT 复审 CHANGES_REQUIRED 定向修订；纯文档任务，未访问数据库、未执行 DDL） |
 | 2026-09-21 | 文档体系术语新增四项：“查询列表页模板”“列表表格视觉模板”“参考页接入”“页面迁移”，明确两层模板职责正交及“模板批准 ≠ 迁移授权”的概念边界 | LIST-TABLE-VISUAL-TEMPLATE-BASELINE-001（纯文档任务） |
+| 2026-09-21 | “列表表格视觉模板”术语状态由“当前为草案”更新为基线内容已批准（`APPROVED` / `BASELINE_APPROVED`，`BASELINE_CONTENT_ONLY`）；明确公共实现未实现、参考页未接入、页面迁移未授权 | LIST-TABLE-VISUAL-TEMPLATE-BASELINE-APPROVAL-CLOSEOUT-001（纯文档任务） |

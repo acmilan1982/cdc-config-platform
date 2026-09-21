@@ -506,8 +506,10 @@ data_source_list_page_selective_integration_acceptance_status=ALL_NOT_RUN
 本节为**追加式交叉引用**，**不**改变本文件的逐页评估结论、推荐迁移顺序、
 每页独立任务要求、已接受参考页保护或任何迁移状态。
 
-- 另有独立草案基线：`docs/baseline/list-table-visual-template/`，
-  当前为 `DRAFT_PENDING_USER_REVIEW`，**未实现**、**未批准**、**未授权任何页面迁移**。
+- 另有独立基线：`docs/baseline/list-table-visual-template/`，
+  其**基线内容已批准**（`APPROVED` / `BASELINE_APPROVED`，
+  `approval_scope=BASELINE_CONTENT_ONLY`，2026-09-21）；但**公共实现未开始**、
+  **参考页未接入**、**未授权任何页面迁移**。
 - **职责正交**：本文件评估的是**页面模板层**（查询区 / 结果区 / 刷新工具栏 / 请求交互）
   是否适用；表格视觉模板层评估的是**列表主表**的表头、正文、间距、边框、行高策略、
   长文本与扩展边界。二者互不替代、互不重叠。
@@ -515,11 +517,16 @@ data_source_list_page_selective_integration_acceptance_status=ALL_NOT_RUN
 - 未来迁移**本文件范围内**的查询列表页时，应**同时**评估是否适用该表格视觉模板；
   但两层的迁移评估与授权**各自独立**，本文件的任何迁移授权
   **不**自动覆盖表格视觉模板，反之亦然。
-- 该表格视觉模板当前为草案，**不具有强制规范效力**；
-  其候选页面矩阵（含弹窗表 / 详情子表 / 确认表 / 大屏·复合内嵌表的排除结论）
-  见其 `MIGRATION.md`，**不**改变本文件的分类与排除原则。
+- 该表格视觉模板的**基线规则已批准**，但**公共实现、参考页接入和页面迁移
+  均未开始或未授权**；其候选页面矩阵（含弹窗表 / 详情子表 / 确认表 /
+  大屏·复合内嵌表的排除结论）见其 `MIGRATION.md`，
+  **不**改变本文件的分类与排除原则，也**不**授权任何页面迁移。
 
 边界：本条记录**不代表**本文件任何迁移状态变化；
 `page_migration_status` 保持 `NOT_STARTED`、
 `page_migration_authorization_status` 保持 `NOT_GRANTED`、
 `pilot_page_selection_status` 保持 `NOT_DECIDED`。
+上述状态描述于 2026-09-21 随
+`LIST-TABLE-VISUAL-TEMPLATE-BASELINE-APPROVAL-CLOSEOUT-001` 更新为批准态口径，
+本文件的逐页评估结论、推荐迁移顺序、每页独立任务要求、已接受参考页保护、
+冻结标记计数**均未改变**。

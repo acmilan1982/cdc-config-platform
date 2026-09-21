@@ -643,9 +643,12 @@ worktree 数量 `70/71`）；R1 纯文档纠正任务
 本节为**追加式交叉引用**，**不**改变本目录任何已批准规范、已接受状态、
 公共组件契约或冻结标记计数；也**不**扩大本模板的适用范围。
 
-- 另有独立草案基线：`docs/baseline/list-table-visual-template/`，
-  由纯文档任务 `LIST-TABLE-VISUAL-TEMPLATE-BASELINE-001` 建立，当前为
-  `DRAFT_PENDING_USER_REVIEW`，**未实现**、**未批准**、**未授权任何页面迁移**。
+- 另有独立基线：`docs/baseline/list-table-visual-template/`，
+  由纯文档任务 `LIST-TABLE-VISUAL-TEMPLATE-BASELINE-001` 建立、R1 定向修订。
+  其**基线内容已批准**（`APPROVED` / `BASELINE_APPROVED`，
+  `approval_scope=BASELINE_CONTENT_ONLY`，2026-09-21，经 ChatGPT 远程 R1 复审
+  `REVIEW_PASS`）；但**公共实现未开始**、**参考页未接入**、
+  **未授权任何页面迁移**。
 - **职责正交**：本目录（页面模板层）覆盖页面标题、查询区、结果区外壳、
   刷新工具栏与请求交互；该目录（表格视觉模板层）覆盖列表主表的表头、正文、
   间距、边框、行高策略、长文本与扩展边界。两层互不替代、互不重叠。
@@ -655,9 +658,13 @@ worktree 数量 `70/71`）；R1 纯文档纠正任务
   本模板的适用范围（只读查询列表页）**不**因此扩大。
 - 未来迁移**查询列表页**时，应**同时**评估是否适用该表格视觉模板；
   但两层的评估与授权各自独立，任一授权**不**自动扩展到另一层。
-  该表格视觉模板当前仍为草案，故其**不具有强制规范效力**。
+  该表格视觉模板的**基线规则已批准**，但**公共实现、参考页接入和页面迁移
+  均未开始或未授权**；其批准**不**改变本目录的任何状态。
 
 边界：本条记录**不代表**本目录的任何状态变化，**不代表**任何页面迁移已获授权；
 本目录 `page_migration_status` 保持 `NOT_STARTED`、
 `page_migration_authorization_status` 保持 `NOT_GRANTED`、
 `pilot_page_selection_status` 保持 `NOT_DECIDED`。
+上述状态描述于 2026-09-21 随
+`LIST-TABLE-VISUAL-TEMPLATE-BASELINE-APPROVAL-CLOSEOUT-001` 更新为批准态口径，
+本目录的已批准规范、公共组件契约、验收结论、迁移授权状态与冻结标记计数**均未改变**。

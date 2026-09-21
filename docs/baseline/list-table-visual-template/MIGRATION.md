@@ -1,17 +1,25 @@
-# 列表表格视觉模板 · 迁移盘点（基线草案）
+# 列表表格视觉模板 · 迁移盘点（已批准基线）
 
 ```text
-list_table_visual_template_document_status=DRAFT_PENDING_USER_REVIEW
-list_table_visual_template_design_status=BASELINE_DRAFT_ONLY
+list_table_visual_template_document_status=APPROVED
+list_table_visual_template_design_status=BASELINE_APPROVED
+chatgpt_remote_r1_review_status=REVIEW_PASS
+blocking_finding_count=0
+project_owner_approval_status=APPROVED
+project_owner_approval_date=2026-09-21
+approval_scope=BASELINE_CONTENT_ONLY
+approved_baseline_source_commit=575379895c4c57fd3df7e0d0ce27c1f6841d2f17
 shared_implementation_design_status=NOT_STARTED
 shared_implementation_status=NOT_STARTED
 reference_page_integration_status=NOT_STARTED
+formal_acceptance_execution_status=NOT_RUN
 page_migration_status=NOT_STARTED
 page_migration_authorization_status=NOT_GRANTED
-candidate_inventory_status=COMPLETED_PENDING_USER_REVIEW
+candidate_inventory_status=COMPLETED_APPROVED_AS_BASELINE_INVENTORY
 ```
 
-> 本文档只产出**候选与评估结果**，**不**授权、**不**实施任何迁移。
+> 本文档产出**候选盘点与评估结果**，该盘点已作为**基线盘点结果**随基线内容一并批准；
+> 但批准的是**盘点事实与边界规则**，**不**授权、**不**实施任何迁移。
 > `page_migration_status=NOT_STARTED`、`page_migration_authorization_status=NOT_GRANTED`
 > 在本轮**未改变**。
 
@@ -80,6 +88,10 @@ NEEDS_SEPARATE_EVALUATION=1
 `LIST_TABLE_REFERENCE_FACT` —— 页面主列表合计 `1 + 4 + 3 + 0 = 8` 个；
 非主列表（被排除）合计 `6 + 1 = 7` 个；`8 + 7 = 15`，与使用点总数一致，**无遗漏、无重复**。
 
+`LIST_TABLE_TEMPLATE_APPROVED` —— 上述盘点与分类已作为**基线盘点结果**批准
+（`candidate_inventory_status=COMPLETED_APPROVED_AS_BASELINE_INVENTORY`）；
+但**任何候选分类都不等于迁移授权**，也**不**代表已选择首个迁移页面。
+
 ## 3. 判断依据
 
 `LIST_TABLE_REFERENCE_FACT`：
@@ -111,7 +123,7 @@ NEEDS_SEPARATE_EVALUATION=1
 
 ## 5. 与 `query-list-page-template` 的关系
 
-`LIST_TABLE_TEMPLATE_DRAFT` —— 两层**正交、可组合**（见 `README.md` §5）：
+`LIST_TABLE_TEMPLATE_APPROVED` —— 两层**正交、可组合**（见 `README.md` §5）：
 
 - qlpt 的 `MIGRATION.md` 在评估查询列表页模板迁移时，
   **不会**自动覆盖表格内部视觉；
@@ -127,21 +139,25 @@ NEEDS_SEPARATE_EVALUATION=1
 
 ## 6. 迁移授权与边界（严格）
 
-`LIST_TABLE_TEMPLATE_DRAFT` —— 本轮**只**形成候选与评估结果，**明确不**：
+`LIST_TABLE_TEMPLATE_APPROVED` —— 本基线**只**形成候选盘点与评估结果，**明确不**：
 
 - 把任何页面写成已迁移；
 - 授权任何页面迁移；
 - 为探针端管理、数据订阅或任何页面预先生成实施任务；
 - 把候选优先级等同于项目负责人批准的迁移顺序。
 
-`LIST_TABLE_TEMPLATE_DRAFT` —— **未来每个页面需要独立评估、独立授权、独立实现、
+`LIST_TABLE_TEMPLATE_APPROVED` —— **未来每个页面需要独立评估、独立授权、独立实现、
 独立目测和独立验收**；实际迁移页面**可能多于两个**。
 
-`LIST_TABLE_PROPOSED_NOT_IMPLEMENTED` —— 未来迁移任务的**前置条件**：
+`LIST_TABLE_PROPOSED_NOT_IMPLEMENTED` —— 未来迁移任务的**前置条件**及当前状态：
 
-1. 本基线草案经 ChatGPT 远程 Git 复审；
-2. 项目负责人批准基线；
-3. 公共实现详细设计与批准；
-4. 公共实现与数据源管理参考页等价接入；
-5. 公共实现正式验收与最终接受；
-6. 之后才逐页选择并单独授权。
+1. 本基线经 ChatGPT 远程 Git 复审 —— **已完成**（R1 `REVIEW_PASS`）；
+2. 项目负责人批准基线内容 —— **已完成**（2026-09-21，`BASELINE_CONTENT_ONLY`）；
+3. 公共实现详细设计与批准 —— **未开始**；
+4. 公共实现与数据源管理参考页等价接入 —— **未开始**；
+5. 公共实现正式验收与最终接受 —— **未运行**；
+6. 之后才逐页选择并单独授权 —— **未授权**。
+
+第 1、2 条完成**只**意味着**基线内容**已批准；第 3–6 条**均未开始**，
+**不得**把上述不同层级合并成模糊的“已完成”。本轮**未**选择首个迁移页面，
+**未**为探针端管理、数据订阅或任何页面生成实施任务。

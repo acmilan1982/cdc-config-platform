@@ -75,11 +75,13 @@ Router (Vue Router 4) + Layouts (MainLayout)
 | 层 | 目录 | 职责 | 当前状态 |
 |---|---|---|---|
 | 页面模板层 | `docs/baseline/query-list-page-template/` | 页面标题、查询区、结果区外壳、刷新工具栏、请求交互 | 已批准；阶段一公共组件已实现并通过正式验收 |
-| 表格视觉模板层 | `docs/baseline/list-table-visual-template/` | 列表主表的表头、正文、间距、边框、行高策略、长文本与扩展边界 | **仅草案**（`DRAFT_PENDING_USER_REVIEW`），未实现、未批准、未授权迁移 |
+| 表格视觉模板层 | `docs/baseline/list-table-visual-template/` | 列表主表的表头、正文、间距、边框、行高策略、长文本与扩展边界 | **基线规则已批准**（`BASELINE_APPROVED`）；公共实现详细设计未开始；未实现；未授权页面迁移 |
 
 - 两层**正交且可组合**：页面按独立评估结果决定是否组合使用两层；
-- 表格视觉模板层当前**只存在文档草案**，**不得**被理解为代码已实现
-  （`shared_implementation_status=NOT_STARTED`）；
+- 表格视觉模板层的**基线规则已批准**（`approval_scope=BASELINE_CONTENT_ONLY`），
+  但**公共实现详细设计与公共实现均未开始**（`shared_implementation_design_status` /
+  `shared_implementation_status` 均为 `NOT_STARTED`），
+  **不得**被理解为已存在公共组件或公共契约；
 - 表格视觉模板层**不并入**页面模板层，也**不**扩大其只读查询列表页的适用范围。
 
 ---

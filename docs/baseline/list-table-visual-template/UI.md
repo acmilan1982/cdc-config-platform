@@ -1,16 +1,26 @@
-# 列表表格视觉模板 · UI（基线草案）
+# 列表表格视觉模板 · UI（已批准基线）
 
 ```text
-list_table_visual_template_document_status=DRAFT_PENDING_USER_REVIEW
-list_table_visual_template_design_status=BASELINE_DRAFT_ONLY
+list_table_visual_template_document_status=APPROVED
+list_table_visual_template_design_status=BASELINE_APPROVED
+chatgpt_remote_r1_review_status=REVIEW_PASS
+blocking_finding_count=0
+project_owner_approval_status=APPROVED
+project_owner_approval_date=2026-09-21
+approval_scope=BASELINE_CONTENT_ONLY
+approved_baseline_source_commit=575379895c4c57fd3df7e0d0ce27c1f6841d2f17
 shared_implementation_design_status=NOT_STARTED
 shared_implementation_status=NOT_STARTED
+reference_page_integration_status=NOT_STARTED
+formal_acceptance_execution_status=NOT_RUN
+page_migration_status=NOT_STARTED
+page_migration_authorization_status=NOT_GRANTED
 ```
 
 > 本文档以参考实现**真实源码**为依据，分三层记录：
 > §1 参考实现（数据源管理主表）**当前事实**（`LIST_TABLE_REFERENCE_FACT`）；
-> §2 可提升为**草案模板规则**的视觉内容（`LIST_TABLE_TEMPLATE_DRAFT`）；
-> §3 必须**保留为 Feature 专属**的内容（`LIST_TABLE_TEMPLATE_DRAFT`）。
+> §2 可提升为**已批准模板规则**的视觉内容（`LIST_TABLE_TEMPLATE_APPROVED`）；
+> §3 必须**保留为 Feature 专属**的内容（`LIST_TABLE_TEMPLATE_APPROVED`）。
 >
 > 本文档**不**凭 Element Plus 默认印象填写“真实计算值”。
 > 源码未显式定义、又无法在纯文档任务中可靠确认的值，一律标注为
@@ -201,9 +211,9 @@ shared_implementation_status=NOT_STARTED
 
 ---
 
-## 2. 可提升为草案模板规则的内容
+## 2. 可提升为已批准模板规则的内容
 
-`LIST_TABLE_TEMPLATE_DRAFT` —— 从 §1 参考事实中，**可以**提取为“列表主表视觉纪律”的部分：
+`LIST_TABLE_TEMPLATE_APPROVED` —— 从 §1 参考事实中，**可以**提取为“列表主表视觉纪律”的部分：
 
 1. **表头排版纪律**：表头文字**次级灰 + 加粗 + 小字号 + 微字距**
    （参考事实 `12px / 600 / #71717a / 0.01em`）；
@@ -220,7 +230,7 @@ shared_implementation_status=NOT_STARTED
 8. **状态标记纪律**：行内容允许**内联小型标记**（如胶囊 / 标签），
    且**不得**改变所在行的行高（参考实现以固定 `20px` 高度实现）。
 
-`LIST_TABLE_TEMPLATE_DRAFT` —— 以下两项**明确不**纳入本草案的公共规则，
+`LIST_TABLE_TEMPLATE_APPROVED` —— 以下两项**明确不**纳入本基线的公共规则，
 其职责**默认属 Feature**（与 `DESIGN.md` §2、§7 一致）：
 
 - **序号列**：是否存在序号列，以及序号列的列宽、编号算法、是否居中、字号、颜色、
@@ -229,22 +239,23 @@ shared_implementation_status=NOT_STARTED
   `width=70` / `align=center` / `13px` / `#71717a` / `tabular-nums`
   （该组数值仅是**参考实现事实**，见 §1.5）。
   后续详细设计如认为序号列样式具有复用价值，只能把它作为**可选扩展能力**另行评估，
-  **不得**在本基线草案中提前定案。
+  **不得**在本基线中提前定案。
 - **空态**：空态文案、文案层级、以及是否区分“无数据”与“查询无结果”，
   均由 Feature 决定。本模板**不**规定所有主列表必须使用两级空态，
   **不**内置任何业务空态文案，也**不**强制单行 / 两级结构。
   数据源管理现有的两级空态（见 §1.8）仅是**参考实现事实**，
   不作为公共默认规则。后续详细设计如需提供空态视觉扩展点，应另行设计。
 
-`LIST_TABLE_TEMPLATE_DRAFT` —— 以上是**草案规则**，**未批准**、**无强制效力**。
+`LIST_TABLE_TEMPLATE_APPROVED` —— 以上是**已批准模板规则**，作为后续公共实现
+详细设计必须遵守的基线；但**规则批准 ≠ 实现批准**。
 其中“可提取”不代表数值可直接成为公共默认值；具体数值是否上收为公共令牌，
-由后续详细设计决定（见 `DESIGN.md` §4、§8）。
+仍由后续详细设计决定（见 `DESIGN.md` §4、§8）。
 
 ---
 
 ## 3. 必须保留为 Feature 专属的内容
 
-`LIST_TABLE_TEMPLATE_DRAFT` —— 以下内容**不得**被本模板抽成公共规则：
+`LIST_TABLE_TEMPLATE_APPROVED` —— 以下内容**不得**被本模板抽成公共规则：
 
 ### 3.1 业务列与列宽
 
@@ -299,7 +310,7 @@ shared_implementation_status=NOT_STARTED
 
 ### 3.10 响应式、可访问性与无全局泄漏
 
-`LIST_TABLE_TEMPLATE_DRAFT` —— 本模板**必须**满足：
+`LIST_TABLE_TEMPLATE_APPROVED` —— 本模板**必须**满足：
 
 - **响应式**：模板不得破坏页面的响应式布局；表格宽度策略由 Feature 决定，
   模板只保证其自身规则不引入固定像素宽度；
@@ -308,5 +319,5 @@ shared_implementation_status=NOT_STARTED
 - **无全局泄漏**：模板类与令牌**不得**定义在 `:root` / `body`，
   **不得**新增全局样式块（见 `DESIGN.md` §3）。
 
-`LIST_TABLE_TEMPLATE_DRAFT` —— 上述三项在**详细设计**阶段必须给出
+`LIST_TABLE_TEMPLATE_APPROVED` —— 上述三项在**详细设计**阶段必须给出
 可验证的检查方式（静态检查 + 计算样式逐路由断言 + 负向控制）。
