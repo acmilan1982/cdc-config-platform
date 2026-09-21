@@ -9,7 +9,8 @@ project_owner_approval_status=APPROVED
 project_owner_approval_date=2026-09-21
 approval_scope=BASELINE_CONTENT_ONLY
 approved_baseline_source_commit=575379895c4c57fd3df7e0d0ce27c1f6841d2f17
-shared_implementation_design_status=NOT_STARTED
+shared_implementation_design_status=DRAFT_PENDING_CHATGPT_AND_PROJECT_OWNER_REVIEW
+shared_implementation_design_approval_status=NOT_APPROVED
 shared_implementation_status=NOT_STARTED
 reference_page_integration_status=NOT_STARTED
 formal_acceptance_execution_status=NOT_RUN
@@ -52,14 +53,17 @@ blocking_finding_count=0
 > **模板基线内容已批准**（`approval_scope=BASELINE_CONTENT_ONLY`）。
 >
 > **批准基线 ≠ 批准实现 ≠ 批准参考页接入 ≠ 批准页面迁移**：
-> `shared_implementation_design_status`、`shared_implementation_status`、
-> `reference_page_integration_status` 均保持 `NOT_STARTED`，
-> `formal_acceptance_execution_status` 保持 `NOT_RUN`，
+> `shared_implementation_design_status` 已由独立设计任务推进为
+> `DRAFT_PENDING_CHATGPT_AND_PROJECT_OWNER_REVIEW`
+> （`shared_implementation_design_approval_status=NOT_APPROVED`）——
+> 该值**只**表示**详细设计草案已产出并进入待复审状态**；
+> `shared_implementation_status`、`reference_page_integration_status`
+> 仍保持 `NOT_STARTED`，`formal_acceptance_execution_status` 保持 `NOT_RUN`，
 > `page_migration_status` 保持 `NOT_STARTED`，
 > `page_migration_authorization_status` 保持 `NOT_GRANTED`。
 > 本目录**未**被设置为实现结论、验收结论或页面迁移状态；
 > `IMPLEMENTED` / `ACCEPTED` / `PAGE_MIGRATION_STARTED` 等词
-> **仅用于否定性边界说明**。
+> **仅用于否定性边界说明**；详细设计状态也**不是** `APPROVED`。
 
 ## 1. 本模板的目标
 
@@ -173,12 +177,17 @@ reference_table_class=.data-table
 
 `LIST_TABLE_TEMPLATE_APPROVED` —— 批准的是**基线规则**，**不是**实现方案：
 
-- 候选实现方案仍未确定（见 `DESIGN.md` §8）；
-- 公共实现详细设计与公共实现均**未开始**（`NOT_STARTED`）；
+- `DESIGN.md` §8 的候选实现方案在**本基线**中**仍未定案**（见该节 §8.5）；
+  其唯一技术结论由**独立详细设计草案** `SHARED_COMPONENT_DESIGN.md` 作出，
+  但该结论**尚未**经 ChatGPT 复审与项目负责人批准（见 §8、§9）；
+- 公共实现详细设计**仍在待复审状态**
+  （`shared_implementation_design_status=DRAFT_PENDING_CHATGPT_AND_PROJECT_OWNER_REVIEW`，
+  `..._approval_status=NOT_APPROVED`）；公共实现本身**未开始**（`NOT_STARTED`）；
 - 数据源管理参考页**尚未接入**任何公共实现（`NOT_STARTED`）；
 - **没有任何**业务页面获得迁移授权（`NOT_GRANTED`）。
 
-规则批准**不等于**代码已经实现，**不等于**任何页面已经接入。
+规则批准**不等于**代码已经实现，**不等于**任何页面已经接入，
+**也不等于**详细设计已批准。
 
 ### 7.3 `LIST_TABLE_PROPOSED_NOT_IMPLEMENTED`
 
@@ -248,13 +257,23 @@ grep -ohF "$draft_marker" "${core_docs[@]}" | wc -l   # 期望 0
 | `DESIGN.md` | 模板职责与 Feature 保留职责、启用与作用域隔离、行高与长文本策略、候选实现方案对比（不定案） |
 | `UI.md` | 参考实现主表当前事实、可提升为已批准模板规则的视觉内容、必须保留为 Feature 专属的内容 |
 | `MIGRATION.md` | 全量 `el-table` 使用点盘点矩阵、候选分类、逐页独立评估与授权要求 |
+| `SHARED_COMPONENT_DESIGN.md` | **公共实现详细设计草案**：四个候选的唯一结论、公共契约、Feature 保护项、参考页等价接入清单、验证与回滚设计（**待复审，未批准、未实现**） |
 | `reports/LIST-TABLE-VISUAL-TEMPLATE-BASELINE-001.md` | R0 建立任务的执行报告与校验证据（**历史报告，保留草案态标记，不修改**） |
 | `reports/LIST-TABLE-VISUAL-TEMPLATE-BASELINE-001-R1.md` | R1 定向修订执行报告（**历史报告，保留草案态标记，不修改**） |
-| `reports/LIST-TABLE-VISUAL-TEMPLATE-BASELINE-APPROVAL-CLOSEOUT-001.md` | 基线内容批准收口报告（本次） |
+| `reports/LIST-TABLE-VISUAL-TEMPLATE-BASELINE-APPROVAL-CLOSEOUT-001.md` | 基线内容批准收口报告（历史执行报告，不修改） |
+| `reports/LIST-TABLE-VISUAL-TEMPLATE-SHARED-IMPLEMENTATION-DESIGN-001.md` | 公共实现详细设计任务的执行报告（本次） |
 
-**本目录当前不包含 `SHARED_COMPONENT_DESIGN.md`**：公共实现形态尚未经过详细设计
-与批准，因此本轮不产出该文件。待公共实现形态经**后续独立详细设计任务**决定
-并经项目负责人批准后，由**后续独立任务**创建。
+`SHARED_COMPONENT_DESIGN.md` 是**设计草案**，不是已批准设计：
+
+- 其状态为 `DRAFT_PENDING_CHATGPT_AND_PROJECT_OWNER_REVIEW` /
+  `NOT_APPROVED`，**不得**被当作已批准设计、已实现代码或生产可用产物；
+- 该文件沿用仓库既有文件名习惯，但其内容**不是**组件设计——
+  唯一结论是一个 **CSS 样式预设 + 有限 CSS 自定义属性令牌**的方案
+  （不引入 Vue 包装组件、不新增 DOM 层），准确术语以该文件 §0.1 / §3.2 为准；
+- 该文件使用**独立**的设计决策标记，其计数**不**计入本 README §7.4 的四份规范文档口径，
+  也**不**包含本文件的草案态规则标记；
+- 该草案的批准与实现**必须**由**后续独立任务**承担，
+  且**未经批准不得修改任何代码**。
 
 ## 9. 后续阶段与授权边界
 
@@ -264,24 +283,26 @@ grep -ohF "$draft_marker" "${core_docs[@]}" | wc -l   # 期望 0
 | --- | --- | --- |
 | 1 | ChatGPT 远程 Git 基线复审 | 已完成（R1 复审结论 `REVIEW_PASS`，`blocking_finding_count=0`） |
 | 2 | 项目负责人批准基线内容 | 已完成（2026-09-21，`approval_scope=BASELINE_CONTENT_ONLY`） |
-| 3 | 公共实现**详细设计**（未来 `SHARED_COMPONENT_DESIGN` 类任务）与批准 | **未开始**（`shared_implementation_design_status=NOT_STARTED`） |
+| 3 | 公共实现**详细设计**（`SHARED_COMPONENT_DESIGN.md`）与批准 | **草案已产出、待复审**（`shared_implementation_design_status=DRAFT_PENDING_CHATGPT_AND_PROJECT_OWNER_REVIEW`、`..._approval_status=NOT_APPROVED`）；**尚未批准** |
 | 4 | 公共实现与数据源管理参考页**等价接入** | **未开始**（`reference_page_integration_status=NOT_STARTED`） |
 | 5 | 公共实现**正式验收**与最终接受 | **未运行**（`formal_acceptance_execution_status=NOT_RUN`） |
 | 6 | 从 `MIGRATION.md` 矩阵中**逐页选择**并**单独授权**迁移 | **未授权**（`page_migration_authorization_status=NOT_GRANTED`） |
 
-第 1、2 步完成**只**意味着**模板基线内容**已批准；第 3–6 步**均未开始**，
+第 1、2 步完成**只**意味着**模板基线内容**已批准；第 3 步**只**完成到
+“草案待复审”，**尚未批准**；第 4–6 步**均未开始**，
 **不得**把上述不同层级合并成模糊的“已完成”。
 
 当前唯一下一入口：
 
 ```text
-next_step=SHARED_IMPLEMENTATION_DETAILED_DESIGN_TASK_PENDING_SEPARATE_PROMPT_AND_APPROVAL
+next_step=CHATGPT_REMOTE_GIT_SHARED_IMPLEMENTATION_DESIGN_REVIEW_THEN_PROJECT_OWNER_DESIGN_APPROVAL
 ```
 
-`LIST_TABLE_PROPOSED_NOT_IMPLEMENTED` —— 下一步**只**允许开展独立的
-**公共实现详细设计任务**（未来 `SHARED_COMPONENT_DESIGN` 类任务）；
-详细设计产出后**必须重新提交项目负责人确认**，**未经确认不得修改任何代码**。
-本目录**不**内置该详细设计，本轮也**不**新建 `SHARED_COMPONENT_DESIGN.md`。
+`LIST_TABLE_PROPOSED_NOT_IMPLEMENTED` —— 下一步**只**允许对
+`SHARED_COMPONENT_DESIGN.md` 进行 **ChatGPT 远程 Git 复审**，
+再由**项目负责人**决定是否批准该详细设计；
+**未经批准不得修改任何代码**，也**不得**进入公共实现、参考页接入或页面迁移。
+本目录**不**内置已批准的详细设计，`SHARED_COMPONENT_DESIGN.md` 当前为**草案**。
 
 `LIST_TABLE_TEMPLATE_APPROVED` —— 授权边界：在**项目负责人明确授权之前**，
 **不得**实施迁移、**不得**更新任何页面的迁移状态、**不得**为任何具体页面
@@ -314,3 +335,14 @@ next_step=SHARED_IMPLEMENTATION_DETAILED_DESIGN_TASK_PENDING_SEPARATE_PROMPT_AND
   `LIST_TABLE_TEMPLATE_APPROVED`；标记计数改为“规范正文 / 历史报告”分层口径。
   公共实现详细设计、公共实现、参考页接入与页面迁移**均未批准**。
   详见 `reports/LIST-TABLE-VISUAL-TEMPLATE-BASELINE-APPROVAL-CLOSEOUT-001.md`。
+- 2026-09-21，公共实现详细设计草案产出
+  （`LIST-TABLE-VISUAL-TEMPLATE-SHARED-IMPLEMENTATION-DESIGN-001`，纯文档任务）：
+  新增 `SHARED_COMPONENT_DESIGN.md`（**草案，待 ChatGPT 复审与项目负责人批准**），
+  对 `DESIGN.md` §8 的四个候选作出**唯一结论**
+  （显式根类 CSS 预设 + 有限 CSS 自定义属性令牌；**不**引入 Vue 包装组件、
+  **不**新增 DOM 层）；四份规范性文档状态块增加
+  `shared_implementation_design_status=DRAFT_PENDING_CHATGPT_AND_PROJECT_OWNER_REVIEW`
+  与 `shared_implementation_design_approval_status=NOT_APPROVED`。
+  公共实现、参考页接入与页面迁移**仍全部未开始/未授权**；
+  已批准基线标记计数 `22 / 0 / 42 / 11` 与候选盘点 `15 / 14` **均未改变**。
+  详见 `reports/LIST-TABLE-VISUAL-TEMPLATE-SHARED-IMPLEMENTATION-DESIGN-001.md`。
