@@ -238,8 +238,15 @@ BUILD_ARTIFACT_SCAN ok=true
 | 2 | 参考页接入 + 验证证据 + 文档回写 | `DataSourcePage.vue`、`dataSource.spec.ts`、`docs/baseline/list-table-visual-template/reports/**`、`docs/baseline/{README,PROJECT_STATUS}.md`、`docs/baseline/list-table-visual-template/README.md`、本报告 |
 
 - 两个提交的真实 commit id 见本任务结果块与 `git log`；
-- 回滚验证按 §10 的约束，**未**使用 `reset --hard` / `checkout .` / `clean -f`，**未**改写历史；
-- 本次**未**迁移任何其他页面。
+- **回滚能力验证**（在 `/tmp` 的本地临时克隆中模拟，未触碰已推送分支）：
+  `git revert --no-commit c6d752c`（仅回退接入提交）与
+  `git revert --no-commit f984035`（仅回退公共层提交）**均干净应用**；
+  整任务回滚按逆序 2 → 1 执行即完全还原。仅回退公共层会让仍引用该预设的参考页失去样式来源，
+  这是「先加层、后消费层」的固有顺序，故整任务回滚须逆序进行，特此说明；
+- 回滚验证按 §十 的约束，**未**使用 `reset --hard` / `checkout .` / `clean -f`，**未**改写历史；
+- 本次**未**迁移任何其他页面；
+- 另有**第三个纯记录提交**：§十二 要求从最终提交重启服务，故在重启后同步本报告 §8 的
+  服务 PID 与日志路径（只改文档，不含代码）。
 
 ## 7. 文档回写（§十一）
 
@@ -261,11 +268,16 @@ shared_implementation_design_status=APPROVED        （保持不变）
 
 ## 8. 服务与外部访问（§十二 / §十九）
 
-| 服务 | 监听 | PID | 工作目录 | 日志 |
+| 服务 | 监听 | PID（最终，自最终提交重启后） | 工作目录 | 日志 |
 | --- | --- | --- | --- | --- |
 | 后端（未修改） | `127.0.0.1:8080` | 6789 | `/agent/cdc-config-platform/backend` | `/tmp/ltvt-001/backend.log` |
-| 前端（实现侧，验收入口） | `0.0.0.0:5173` | 7132 | `/agent/cdc-config-platform/frontend` | `/tmp/ltvt-001/impl-frontend.log` |
-| 前端（基线副本，仅验证用） | `0.0.0.0:5174` | 7062 | `/tmp/ltvt-baseline/frontend` | `/tmp/ltvt-001/baseline-frontend.log` |
+| 前端（实现侧，验收入口） | `0.0.0.0:5173` | 包装 13026 / 监听 13040 | `/agent/cdc-config-platform/frontend` | `/tmp/ltvt-001/impl-frontend-final.log` |
+
+- 验证期间另有基线副本前端（`0.0.0.0:5174`，PID 7062，工作目录 `/tmp/ltvt-baseline/frontend`）
+  与 headless Chrome（CDP 9222，PID 7289）；两者均为验证专用，
+  **验证结束后已按精确 PID 停止**，不属于交付运行态。
+- 前端已在提交完成后**从最终提交重新启动**（§十二），当前工作树与 `HEAD` 一致
+  （`git diff HEAD -- frontend/ docs/baseline/` 为空）。
 
 供项目负责人目测的 URL：
 
@@ -276,8 +288,8 @@ http://192.168.174.70:5173/config/data-source
 服务保持运行等待验收；停止命令（按精确 PID，未使用 `pkill`/`killall`/模糊匹配）：
 
 ```bash
-kill 7132      # 实现侧前端（验收完成后）
-kill 6789      # 后端
+kill 13026 13040   # 实现侧前端（验收完成后）
+kill 6789          # 后端
 ```
 
 **验证边界**：本机 `curl --noproxy '*'` 对 `127.0.0.1:5173` 请求成功；
