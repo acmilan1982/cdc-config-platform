@@ -1,0 +1,408 @@
+{
+  "ok": true,
+  "failedChecks": [],
+  "checks": {
+    "C_fallback_header_color": true,
+    "C_fallback_header_font_size": true,
+    "C_fallback_header_font_weight": true,
+    "C_fallback_header_letter_spacing": true,
+    "C_fallback_th_padding": true,
+    "C_fallback_td_padding": true,
+    "C_fallback_ep_tokens": true,
+    "C_fallback_table_width": true,
+    "C_enabled_by_class_not_token": true,
+    "C_unused_table_not_enabled": true,
+    "C_unused_table_tokens_empty": true,
+    "A_override_consumed_header_color": true,
+    "A_override_consumed_ep_token": true,
+    "E_token_reads_override": true,
+    "B_unused_table_unaffected": true,
+    "B_unused_table_still_no_public_class": true,
+    "B_unused_table_tokens_still_empty": true,
+    "D_restored_header_color": true,
+    "D_restored_ep_token": true,
+    "F_token_empty_after_restore": true,
+    "F_no_inline_override_left": true,
+    "RC1_bare_selector_observable": true,
+    "RC2_root_token_observable": true,
+    "cleanup_no_injected_style": true,
+    "cleanup_values_back_to_default": true
+  },
+  "raw": {
+    "noOverride": {
+      "enabled": {
+        "rootClassName": "el-table--fit el-table--scrollable-x el-table--enable-row-transition el-table el-table--layout-fixed data-table lt-main-table is-scrolling-left",
+        "hasPublicClass": true,
+        "consumes": {
+          "headerColor": "rgb(113, 113, 122)",
+          "headerFontSize": "12px",
+          "headerFontWeight": "600",
+          "headerLetterSpacing": "0.12px",
+          "thPadding": "11px 0px",
+          "tdPadding": "12px 0px",
+          "bodyCellColor": "rgb(96, 98, 102)",
+          "elTableHeaderTextColor": "#71717a",
+          "elTableHeaderBgColor": "#ffffff",
+          "elTableBorderColor": "#f4f4f5"
+        },
+        "ltTokens": {
+          "--lt-table-width": "",
+          "--lt-border-color": "",
+          "--lt-header-bg-color": "",
+          "--lt-header-text-color": "",
+          "--lt-header-font-size": "",
+          "--lt-header-font-weight": "",
+          "--lt-header-letter-spacing": "",
+          "--lt-header-cell-padding": "",
+          "--lt-body-cell-padding": ""
+        }
+      },
+      "unused": {
+        "rootClassName": "el-table--fit el-table--fluid-height el-table el-table--layout-fixed naming-table is-scrolling-none",
+        "hasPublicClass": false,
+        "consumes": {
+          "headerColor": "rgb(144, 147, 153)",
+          "headerFontSize": "14px",
+          "headerFontWeight": "600",
+          "headerLetterSpacing": "normal",
+          "thPadding": "8px 0px",
+          "tdPadding": null,
+          "bodyCellColor": null,
+          "elTableHeaderTextColor": "#909399",
+          "elTableHeaderBgColor": "#fff",
+          "elTableBorderColor": "#ebeef5"
+        },
+        "ltTokens": {
+          "--lt-table-width": "",
+          "--lt-border-color": "",
+          "--lt-header-bg-color": "",
+          "--lt-header-text-color": "",
+          "--lt-header-font-size": "",
+          "--lt-header-font-weight": "",
+          "--lt-header-letter-spacing": "",
+          "--lt-header-cell-padding": "",
+          "--lt-body-cell-padding": ""
+        }
+      },
+      "injectedStyleCount": 0,
+      "inlineOverridePresent": false
+    },
+    "namingDefault": {
+      "rootClassName": "el-table--fit el-table--fluid-height el-table el-table--layout-fixed naming-table is-scrolling-none",
+      "hasPublicClass": false,
+      "consumes": {
+        "headerColor": "rgb(144, 147, 153)",
+        "headerFontSize": "14px",
+        "headerFontWeight": "600",
+        "headerLetterSpacing": "normal",
+        "thPadding": "8px 0px",
+        "tdPadding": null,
+        "bodyCellColor": null,
+        "elTableHeaderTextColor": "#909399",
+        "elTableHeaderBgColor": "#fff",
+        "elTableBorderColor": "#ebeef5"
+      },
+      "ltTokens": {
+        "--lt-table-width": "",
+        "--lt-border-color": "",
+        "--lt-header-bg-color": "",
+        "--lt-header-text-color": "",
+        "--lt-header-font-size": "",
+        "--lt-header-font-weight": "",
+        "--lt-header-letter-spacing": "",
+        "--lt-header-cell-padding": "",
+        "--lt-body-cell-padding": ""
+      }
+    },
+    "overridden": {
+      "enabled": {
+        "rootClassName": "el-table--fit el-table--scrollable-x el-table--enable-row-transition el-table el-table--layout-fixed data-table lt-main-table is-scrolling-left",
+        "hasPublicClass": true,
+        "consumes": {
+          "headerColor": "rgb(1, 2, 3)",
+          "headerFontSize": "12px",
+          "headerFontWeight": "600",
+          "headerLetterSpacing": "0.12px",
+          "thPadding": "11px 0px",
+          "tdPadding": "12px 0px",
+          "bodyCellColor": "rgb(96, 98, 102)",
+          "elTableHeaderTextColor": "rgb(1, 2, 3)",
+          "elTableHeaderBgColor": "#ffffff",
+          "elTableBorderColor": "#f4f4f5"
+        },
+        "ltTokens": {
+          "--lt-table-width": "",
+          "--lt-border-color": "",
+          "--lt-header-bg-color": "",
+          "--lt-header-text-color": "rgb(1, 2, 3)",
+          "--lt-header-font-size": "",
+          "--lt-header-font-weight": "",
+          "--lt-header-letter-spacing": "",
+          "--lt-header-cell-padding": "",
+          "--lt-body-cell-padding": ""
+        }
+      },
+      "unused": {
+        "rootClassName": "el-table--fit el-table--fluid-height el-table el-table--layout-fixed naming-table is-scrolling-none",
+        "hasPublicClass": false,
+        "consumes": {
+          "headerColor": "rgb(144, 147, 153)",
+          "headerFontSize": "14px",
+          "headerFontWeight": "600",
+          "headerLetterSpacing": "normal",
+          "thPadding": "8px 0px",
+          "tdPadding": null,
+          "bodyCellColor": null,
+          "elTableHeaderTextColor": "#909399",
+          "elTableHeaderBgColor": "#fff",
+          "elTableBorderColor": "#ebeef5"
+        },
+        "ltTokens": {
+          "--lt-table-width": "",
+          "--lt-border-color": "",
+          "--lt-header-bg-color": "",
+          "--lt-header-text-color": "",
+          "--lt-header-font-size": "",
+          "--lt-header-font-weight": "",
+          "--lt-header-letter-spacing": "",
+          "--lt-header-cell-padding": "",
+          "--lt-body-cell-padding": ""
+        }
+      },
+      "injectedStyleCount": 0,
+      "inlineOverridePresent": true
+    },
+    "restored": {
+      "enabled": {
+        "rootClassName": "el-table--fit el-table--scrollable-x el-table--enable-row-transition el-table el-table--layout-fixed data-table lt-main-table is-scrolling-left",
+        "hasPublicClass": true,
+        "consumes": {
+          "headerColor": "rgb(113, 113, 122)",
+          "headerFontSize": "12px",
+          "headerFontWeight": "600",
+          "headerLetterSpacing": "0.12px",
+          "thPadding": "11px 0px",
+          "tdPadding": "12px 0px",
+          "bodyCellColor": "rgb(96, 98, 102)",
+          "elTableHeaderTextColor": "#71717a",
+          "elTableHeaderBgColor": "#ffffff",
+          "elTableBorderColor": "#f4f4f5"
+        },
+        "ltTokens": {
+          "--lt-table-width": "",
+          "--lt-border-color": "",
+          "--lt-header-bg-color": "",
+          "--lt-header-text-color": "",
+          "--lt-header-font-size": "",
+          "--lt-header-font-weight": "",
+          "--lt-header-letter-spacing": "",
+          "--lt-header-cell-padding": "",
+          "--lt-body-cell-padding": ""
+        }
+      },
+      "unused": {
+        "rootClassName": "el-table--fit el-table--fluid-height el-table el-table--layout-fixed naming-table is-scrolling-none",
+        "hasPublicClass": false,
+        "consumes": {
+          "headerColor": "rgb(144, 147, 153)",
+          "headerFontSize": "14px",
+          "headerFontWeight": "600",
+          "headerLetterSpacing": "normal",
+          "thPadding": "8px 0px",
+          "tdPadding": null,
+          "bodyCellColor": null,
+          "elTableHeaderTextColor": "#909399",
+          "elTableHeaderBgColor": "#fff",
+          "elTableBorderColor": "#ebeef5"
+        },
+        "ltTokens": {
+          "--lt-table-width": "",
+          "--lt-border-color": "",
+          "--lt-header-bg-color": "",
+          "--lt-header-text-color": "",
+          "--lt-header-font-size": "",
+          "--lt-header-font-weight": "",
+          "--lt-header-letter-spacing": "",
+          "--lt-header-cell-padding": "",
+          "--lt-body-cell-padding": ""
+        }
+      },
+      "injectedStyleCount": 0,
+      "inlineOverridePresent": false
+    },
+    "bareSelectorReverseControl": {
+      "enabled": {
+        "rootClassName": "el-table--fit el-table--scrollable-x el-table--enable-row-transition el-table el-table--layout-fixed data-table lt-main-table is-scrolling-left",
+        "hasPublicClass": true,
+        "consumes": {
+          "headerColor": "rgb(113, 113, 122)",
+          "headerFontSize": "12px",
+          "headerFontWeight": "600",
+          "headerLetterSpacing": "0.12px",
+          "thPadding": "11px 0px",
+          "tdPadding": "12px 0px",
+          "bodyCellColor": "rgb(9, 9, 9)",
+          "elTableHeaderTextColor": "#71717a",
+          "elTableHeaderBgColor": "#ffffff",
+          "elTableBorderColor": "#f4f4f5"
+        },
+        "ltTokens": {
+          "--lt-table-width": "",
+          "--lt-border-color": "",
+          "--lt-header-bg-color": "",
+          "--lt-header-text-color": "",
+          "--lt-header-font-size": "",
+          "--lt-header-font-weight": "",
+          "--lt-header-letter-spacing": "",
+          "--lt-header-cell-padding": "",
+          "--lt-body-cell-padding": ""
+        }
+      },
+      "unused": {
+        "rootClassName": "el-table--fit el-table--fluid-height el-table el-table--layout-fixed naming-table is-scrolling-none",
+        "hasPublicClass": false,
+        "consumes": {
+          "headerColor": "rgb(144, 147, 153)",
+          "headerFontSize": "14px",
+          "headerFontWeight": "600",
+          "headerLetterSpacing": "normal",
+          "thPadding": "8px 0px",
+          "tdPadding": null,
+          "bodyCellColor": null,
+          "elTableHeaderTextColor": "#909399",
+          "elTableHeaderBgColor": "#fff",
+          "elTableBorderColor": "#ebeef5"
+        },
+        "ltTokens": {
+          "--lt-table-width": "",
+          "--lt-border-color": "",
+          "--lt-header-bg-color": "",
+          "--lt-header-text-color": "",
+          "--lt-header-font-size": "",
+          "--lt-header-font-weight": "",
+          "--lt-header-letter-spacing": "",
+          "--lt-header-cell-padding": "",
+          "--lt-body-cell-padding": ""
+        }
+      },
+      "injectedStyleCount": 1,
+      "inlineOverridePresent": false
+    },
+    "rootTokenReverseControl": {
+      "enabled": {
+        "rootClassName": "el-table--fit el-table--scrollable-x el-table--enable-row-transition el-table el-table--layout-fixed data-table lt-main-table is-scrolling-left",
+        "hasPublicClass": true,
+        "consumes": {
+          "headerColor": "rgb(113, 113, 122)",
+          "headerFontSize": "99px",
+          "headerFontWeight": "600",
+          "headerLetterSpacing": "0.99px",
+          "thPadding": "11px 0px",
+          "tdPadding": "12px 0px",
+          "bodyCellColor": "rgb(9, 9, 9)",
+          "elTableHeaderTextColor": "#71717a",
+          "elTableHeaderBgColor": "#ffffff",
+          "elTableBorderColor": "#f4f4f5"
+        },
+        "ltTokens": {
+          "--lt-table-width": "",
+          "--lt-border-color": "",
+          "--lt-header-bg-color": "",
+          "--lt-header-text-color": "",
+          "--lt-header-font-size": "99px",
+          "--lt-header-font-weight": "",
+          "--lt-header-letter-spacing": "",
+          "--lt-header-cell-padding": "",
+          "--lt-body-cell-padding": ""
+        }
+      },
+      "unused": {
+        "rootClassName": "el-table--fit el-table--fluid-height el-table el-table--layout-fixed naming-table is-scrolling-none",
+        "hasPublicClass": false,
+        "consumes": {
+          "headerColor": "rgb(144, 147, 153)",
+          "headerFontSize": "14px",
+          "headerFontWeight": "600",
+          "headerLetterSpacing": "normal",
+          "thPadding": "8px 0px",
+          "tdPadding": null,
+          "bodyCellColor": null,
+          "elTableHeaderTextColor": "#909399",
+          "elTableHeaderBgColor": "#fff",
+          "elTableBorderColor": "#ebeef5"
+        },
+        "ltTokens": {
+          "--lt-table-width": "",
+          "--lt-border-color": "",
+          "--lt-header-bg-color": "",
+          "--lt-header-text-color": "",
+          "--lt-header-font-size": "99px",
+          "--lt-header-font-weight": "",
+          "--lt-header-letter-spacing": "",
+          "--lt-header-cell-padding": "",
+          "--lt-body-cell-padding": ""
+        }
+      },
+      "injectedStyleCount": 2,
+      "inlineOverridePresent": false
+    },
+    "afterCleanup": {
+      "enabled": {
+        "rootClassName": "el-table--fit el-table--scrollable-x el-table--enable-row-transition el-table el-table--layout-fixed data-table lt-main-table is-scrolling-left",
+        "hasPublicClass": true,
+        "consumes": {
+          "headerColor": "rgb(113, 113, 122)",
+          "headerFontSize": "12px",
+          "headerFontWeight": "600",
+          "headerLetterSpacing": "0.12px",
+          "thPadding": "11px 0px",
+          "tdPadding": "12px 0px",
+          "bodyCellColor": "rgb(96, 98, 102)",
+          "elTableHeaderTextColor": "#71717a",
+          "elTableHeaderBgColor": "#ffffff",
+          "elTableBorderColor": "#f4f4f5"
+        },
+        "ltTokens": {
+          "--lt-table-width": "",
+          "--lt-border-color": "",
+          "--lt-header-bg-color": "",
+          "--lt-header-text-color": "",
+          "--lt-header-font-size": "",
+          "--lt-header-font-weight": "",
+          "--lt-header-letter-spacing": "",
+          "--lt-header-cell-padding": "",
+          "--lt-body-cell-padding": ""
+        }
+      },
+      "unused": {
+        "rootClassName": "el-table--fit el-table--fluid-height el-table el-table--layout-fixed naming-table is-scrolling-none",
+        "hasPublicClass": false,
+        "consumes": {
+          "headerColor": "rgb(144, 147, 153)",
+          "headerFontSize": "14px",
+          "headerFontWeight": "600",
+          "headerLetterSpacing": "normal",
+          "thPadding": "8px 0px",
+          "tdPadding": null,
+          "bodyCellColor": null,
+          "elTableHeaderTextColor": "#909399",
+          "elTableHeaderBgColor": "#fff",
+          "elTableBorderColor": "#ebeef5"
+        },
+        "ltTokens": {
+          "--lt-table-width": "",
+          "--lt-border-color": "",
+          "--lt-header-bg-color": "",
+          "--lt-header-text-color": "",
+          "--lt-header-font-size": "",
+          "--lt-header-font-weight": "",
+          "--lt-header-letter-spacing": "",
+          "--lt-header-cell-padding": "",
+          "--lt-body-cell-padding": ""
+        }
+      },
+      "injectedStyleCount": 0,
+      "inlineOverridePresent": false
+    }
+  }
+}

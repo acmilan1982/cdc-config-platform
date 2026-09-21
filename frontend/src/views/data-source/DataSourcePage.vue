@@ -80,7 +80,7 @@
       <template #body>
         <el-table
           :data="rows"
-          class="data-table"
+          :class="['data-table', LT_MAIN_TABLE_CLASS]"
           @row-dblclick="onRowDoubleClick"
         >
           <template #empty>
@@ -474,6 +474,7 @@ import {
   QueryListQueryPanel,
   QueryListResultPanel,
 } from '@/components/query-list'
+import { LT_MAIN_TABLE_CLASS } from '@/styles/list-table'
 import {
   createDataSource,
   createNamingStrategy,
@@ -1653,6 +1654,10 @@ onMounted(() => {
 })
 </script>
 
+<!-- 主列表表格视觉模板：显式引用公共预设源（显式启用，非全局），
+     并由 el-table 根元素上的并列类 `lt-main-table` 启用。 -->
+<style scoped src="@/styles/list-table/list-table-visual.css"></style>
+
 <style scoped>
 /* 页面外壳、查询区容器、查询/重置按钮与结果卡片盒模型全部由公共层提供
    （.ql-page / .ql-q-panel / .ql-actions / .ql-result-panel）；本文件只保留 Feature 专属字段组、
@@ -1757,28 +1762,9 @@ onMounted(() => {
   font-size: 12px;
 }
 
-/* 行高与表头/正文字号对齐“源库快照状态”页（DS-REQ-146）：局部收紧 EP 表令牌，作用仅限本表 */
-.data-table {
-  width: 100%;
-  --el-table-border-color: #f4f4f5;
-  --el-table-header-text-color: #71717a;
-  --el-table-header-bg-color: #ffffff;
-}
-
-.data-table :deep(.el-table__header th .cell) {
-  font-size: 12px;
-  font-weight: 600;
-  color: #71717a;
-  letter-spacing: 0.01em;
-}
-
-.data-table :deep(td.el-table__cell) {
-  padding: 12px 0;
-}
-
-.data-table :deep(th.el-table__cell) {
-  padding: 11px 0;
-}
+/* 主列表的表头/正文基础视觉纪律（表格宽度、EP 表令牌、表头排版、单元格上下内边距）
+   已由公共预设 `@/styles/list-table/list-table-visual.css`（根类见其导出常量）等价承担
+   （DS-REQ-146）；本块只保留数据源管理 Feature 专属样式，不保留同义副本。 */
 
 /* 序号列：固定窄宽、居中，与参考页同款等宽数字弱化色（DS-REQ-142） */
 .ds-seq {

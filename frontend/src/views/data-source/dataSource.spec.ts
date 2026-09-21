@@ -2732,3 +2732,106 @@ describe('命名策略单选卡片（DS-REQ-115）', () => {
     wrapper.unmount()
   })
 })
+
+describe('列表表格视觉模板：数据源管理参考页等价接入（SHARED_COMPONENT_DESIGN §7.2）', () => {
+  /**
+   * 该 SFC 源码全文。测试环境不注入 SFC 样式，故公共预设引入方式与「无令牌覆盖」
+   * 只能按源码静态结构受检；消费属性的实际计算值不在本块断言（§2.5 归真实浏览器）。
+   */
+  function pageSource(): string {
+    return readFileSync(
+      resolve(process.cwd(), 'src/views/data-source/DataSourcePage.vue'),
+      'utf-8',
+    )
+  }
+
+  it('显式启用：主列表根元素 className 同时含业务类与公共类（§7.2 断言 1）', async () => {
+    const wrapper = await mountPage()
+
+    const root = wrapper.find('.data-table')
+    expect(root.exists()).toBe(true)
+    expect(root.classes()).toContain('data-table')
+    expect(root.classes()).toContain('lt-main-table')
+    // 公共类并列追加在同一根元素上，而非新增 DOM 层
+    expect(wrapper.find('.data-table.lt-main-table').element).toBe(root.element)
+
+    wrapper.unmount()
+  })
+
+  it('未启用表格：命名策略弹窗表根元素不含公共类，且公共类全页仅一处（§7.2 断言 2/3）', async () => {
+    const wrapper = await mountPage()
+    await clickRowMenuAction(wrapper, 0, '目标库命名策略')
+
+    const naming = wrapper.find('.naming-table')
+    expect(naming.exists()).toBe(true)
+    expect(naming.classes()).toContain('naming-table')
+    expect(naming.classes()).not.toContain('lt-main-table')
+    expect(wrapper.find('.naming-table.lt-main-table').exists()).toBe(false)
+    // 命名表与主列表是两个独立根元素
+    expect(wrapper.find('.data-table').element).not.toBe(naming.element)
+    // 公共类未对其他表格节点重复声明
+    expect(wrapper.findAll('.lt-main-table').length).toBe(1)
+
+    wrapper.unmount()
+  })
+
+  it('本页不声明任何公共令牌覆盖，令牌取值来源唯一（§7.2 断言 2/3）', () => {
+    const source = pageSource()
+    expect(source).not.toMatch(/--lt-[\w-]+\s*:/)
+  })
+
+  it('以 <style scoped src> 显式引入公共预设，且保留原有内联 scoped 块（§7.1）', () => {
+    const source = pageSource()
+    expect(source).toContain(
+      '<style scoped src="@/styles/list-table/list-table-visual.css"></style>',
+    )
+    expect(source).toMatch(/<style scoped>/)
+  })
+
+  it('被公共层逐值等价替代的四组局部基础规则已不再重复声明（单一发布者，§7.1 第 5 条）', () => {
+    const source = pageSource()
+    // 表格宽度、EP 表令牌、表头排版、表头/正文单元格内边距不得在本页留同义副本
+    expect(source).not.toContain('--el-table-')
+    expect(source).not.toContain('.el-table__header th .cell')
+    expect(source).not.toContain('td.el-table__cell')
+    expect(source).not.toContain('th.el-table__cell')
+  })
+
+  it('公共类接入不改变主列表组件契约：data 渲染、列定义与固定列（§7.2 断言 4）', async () => {
+    const wrapper = await mountPage()
+
+    const table = wrapper
+      .findAllComponents({ name: 'ElTable' })
+      .find((c) => c.classes().includes('data-table'))
+    expect(table).toBeTruthy()
+
+    // data prop 渲染未受影响
+    expect((table!.props('data') as unknown[]).length).toBe(2)
+
+    // 列定义、顺序与固定列保持
+    const columns = table!.findAllComponents({ name: 'ElTableColumn' })
+    expect(columns.length).toBe(10)
+    expect(columns[0].props('label')).toBe('序号')
+    const last = columns[columns.length - 1]
+    expect(last.props('label')).toBe('操作')
+    expect(last.props('fixed')).toBe('right')
+
+    // show-overflow-tooltip 列定义保持（实际 tooltip 渲染由既有测试覆盖）
+    const tooltipColumns = columns.filter((c) => c.props('showOverflowTooltip') === true)
+    expect(tooltipColumns.length).toBeGreaterThan(0)
+
+    wrapper.unmount()
+  })
+
+  it('scopedStyleBlock() 仍能提取到原内联 scoped 块（§7.2 断言 6）', () => {
+    const source = pageSource()
+    const matched = source.match(/<style scoped>([\s\S]*?)<\/style>/)
+    expect(matched).not.toBeNull()
+
+    const block = matched![1] ?? ''
+    expect(block.length).toBeGreaterThan(0)
+    // 提取到的仍是页面专属样式的内联块，而非外部公共预设
+    expect(block).toContain('.editor-form')
+    expect(block).not.toContain('lt-main-table')
+  })
+})

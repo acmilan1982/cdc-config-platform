@@ -1,0 +1,85 @@
+{
+  "ok": true,
+  "dist": "/agent/cdc-config-platform/frontend/dist",
+  "baselineDist": "/tmp/ltvt-baseline/frontend/dist",
+  "implRuleCount": 4080,
+  "baselineRuleCount": 4080,
+  "newRuleCount": 4,
+  "removedRuleCount": 4,
+  "publicRuleFiles": [
+    "assets/DataSourcePage-DonW-FIj.css"
+  ],
+  "failedChecks": [],
+  "checks": {
+    "public_rules_are_exactly_4": true,
+    "public_rules_in_single_chunk": true,
+    "public_chunk_is_data_source_page": true,
+    "public_chunk_has_no_unqualified_ep_rule": true,
+    "no_new_global_rule": true,
+    "removed_rules_are_only_the_replaced_local_ones": true,
+    "no_token_declaration_in_artifact": true,
+    "no_root_scope_token_declaration": true,
+    "token_literals_only_in_enabled_page_css": true,
+    "no_token_literal_in_any_js": true
+  },
+  "detail": {
+    "newRules": [
+      {
+        "selector": ".lt-main-table[data-v-2d647f7a]",
+        "file": "assets/DataSourcePage-DonW-FIj.css"
+      },
+      {
+        "selector": ".lt-main-table[data-v-2d647f7a] .el-table__header th .cell",
+        "file": "assets/DataSourcePage-DonW-FIj.css"
+      },
+      {
+        "selector": ".lt-main-table[data-v-2d647f7a] td.el-table__cell",
+        "file": "assets/DataSourcePage-DonW-FIj.css"
+      },
+      {
+        "selector": ".lt-main-table[data-v-2d647f7a] th.el-table__cell",
+        "file": "assets/DataSourcePage-DonW-FIj.css"
+      }
+    ],
+    "removedRules": [
+      {
+        "selector": ".data-table[data-v-9c65c310]",
+        "file": "assets/DataSourcePage-D-BNKJE-.css"
+      },
+      {
+        "selector": ".data-table[data-v-9c65c310] .el-table__header th .cell",
+        "file": "assets/DataSourcePage-D-BNKJE-.css"
+      },
+      {
+        "selector": ".data-table[data-v-9c65c310] td.el-table__cell",
+        "file": "assets/DataSourcePage-D-BNKJE-.css"
+      },
+      {
+        "selector": ".data-table[data-v-9c65c310] th.el-table__cell",
+        "file": "assets/DataSourcePage-D-BNKJE-.css"
+      }
+    ],
+    "unqualifiedInPublicChunk": [],
+    "newGlobalRules": [],
+    "removedNotDataTable": [],
+    "tokenDeclarations": [],
+    "rootScopeTokenDeclarations": [],
+    "tokenLiteralFiles": [
+      {
+        "file": "assets/DataSourcePage-DonW-FIj.css",
+        "tokens": [
+          "--lt-table-width",
+          "--lt-border-color",
+          "--lt-header-bg-color",
+          "--lt-header-text-color",
+          "--lt-header-font-size",
+          "--lt-header-font-weight",
+          "--lt-header-letter-spacing",
+          "--lt-header-cell-padding",
+          "--lt-body-cell-padding"
+        ],
+        "isCss": true
+      }
+    ]
+  }
+}

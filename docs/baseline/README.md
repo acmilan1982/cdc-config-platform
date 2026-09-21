@@ -76,8 +76,10 @@ pilot_page_selection_status=NOT_DECIDED
 该模板面向**页面主列表表格**：表头、正文、间距、边框、行高策略、长文本与扩展边界。
 由纯文档任务 `LIST-TABLE-VISUAL-TEMPLATE-BASELINE-001` 建立、R1 定向修订后，
 经 ChatGPT 远程 Git R1 复审（`REVIEW_PASS`）并由项目负责人于 2026-09-21 批准
-（`approval_scope=BASELINE_CONTENT_ONLY`）。批准**只**覆盖**基线内容**，
-**未**实现公共代码、**未**接入参考页、**未**迁移任何页面。
+（`approval_scope=BASELINE_CONTENT_ONLY`）。批准**只**覆盖**基线内容**；
+公共代码与数据源管理**主列表**的等价接入随后由独立实施任务实现
+（`IMPLEMENTED_PENDING_USER_REVIEW`，**尚未通过正式验收**），
+**未**迁移任何页面。
 
 主要入口：
 
@@ -85,7 +87,7 @@ pilot_page_selection_status=NOT_DECIDED
 - 模板职责与候选实现方案（未定案）：[list-table-visual-template/DESIGN.md](./list-table-visual-template/DESIGN.md)
 - 参考实现视觉事实与可提取规则：[list-table-visual-template/UI.md](./list-table-visual-template/UI.md)
 - 全量 `el-table` 盘点矩阵与候选分类：[list-table-visual-template/MIGRATION.md](./list-table-visual-template/MIGRATION.md)
-- 公共实现详细设计（**已批准**，未实现）：[list-table-visual-template/SHARED_COMPONENT_DESIGN.md](./list-table-visual-template/SHARED_COMPONENT_DESIGN.md)
+- 公共实现详细设计（**已批准**；实现已落地待复核）：[list-table-visual-template/SHARED_COMPONENT_DESIGN.md](./list-table-visual-template/SHARED_COMPONENT_DESIGN.md)
 
 当前状态：
 
@@ -98,22 +100,23 @@ approval_scope=BASELINE_CONTENT_ONLY
 approved_baseline_source_commit=575379895c4c57fd3df7e0d0ce27c1f6841d2f17
 shared_implementation_design_status=APPROVED
 shared_implementation_design_approval_status=APPROVED
-shared_implementation_status=NOT_STARTED
+shared_implementation_status=IMPLEMENTED_PENDING_USER_REVIEW
 reference_page=数据源管理
-reference_page_integration_status=NOT_STARTED
+reference_page_integration_status=IMPLEMENTED_PENDING_USER_REVIEW
 formal_acceptance_execution_status=NOT_RUN
 page_migration_status=NOT_STARTED
 page_migration_authorization_status=NOT_GRANTED
 candidate_inventory_status=COMPLETED_APPROVED_AS_BASELINE_INVENTORY
 ```
 
-**批准基线 ≠ 批准详细设计 ≠ 批准实现 ≠ 批准参考页接入 ≠ 批准页面迁移**：
+**批准基线 ≠ 批准详细设计 ≠ 批准实现 ≠ 通过正式验收 ≠ 批准页面迁移**：
 公共实现详细设计已**获批**（ChatGPT 远程 R2 复审 `REVIEW_PASS`、
 `blocking_finding_count=0`，项目负责人于 2026-09-21 批准，
-`approval_scope=SHARED_IMPLEMENTATION_DETAILED_DESIGN_ONLY`），
-但公共实现**未开始**，参考页接入**未开始**，
-任何页面迁移**未授权**。下一步**只**允许准备“公共实现 + 数据源管理参考页等价接入”的
-**独立任务提示词**并提交**项目负责人确认**；
+`approval_scope=SHARED_IMPLEMENTATION_DETAILED_DESIGN_ONLY`）；
+公共实现与数据源管理**主列表**的等价接入已**实现**
+（`IMPLEMENTED_PENDING_USER_REVIEW`），但**尚未通过正式验收**，
+任何页面迁移**未授权**。下一步**只**允许项目负责人对已实现内容做**目测复核**，
+并据其结论准备正式验收的独立任务；
 **未经项目负责人再次明确批准不得修改任何代码**。
 
 - **参考实现**：数据源管理主列表（`/config/data-source`）是**参考实现事实来源**，

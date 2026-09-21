@@ -1,0 +1,49 @@
+{
+  "ok": true,
+  "controlDir": "/tmp/ltvt-controls",
+  "note": "第 4 项反向控制（≥0.001px 几何偏移）见 browser/judgement-negative-control.json；裸选择器/:root 的运行时注入形态见 browser/fallback-override.json",
+  "expectationNote": "期望 exitCode：副本保真 S0=0（不得自造假失败），三项违规 S1/S2/S3=1",
+  "unmet": [],
+  "controls": {
+    "S0_copy_is_faithful_static": {
+      "exitCode": 0,
+      "failedTests": [],
+      "summary": "Tests  12 passed (12)",
+      "tail": "\n RUN  v1.6.1 /tmp/ltvt-controls\n\n ✓ src/styles/list-table/list-table-visual.spec.ts  (12 tests) 87ms\n\n Test Files  1 passed (1)\n      Tests  12 passed (12)\n   Start at  00:31:49\n   Duration  980ms (transform 81ms, setup 32ms, collect 51ms, tests 87ms, environment 474ms, prepare 102ms)\n\n"
+    },
+    "S0_copy_is_faithful_page": {
+      "exitCode": 0,
+      "failedTests": [],
+      "summary": "Tests  1 passed | 115 skipped (116)",
+      "tail": "\n RUN  v1.6.1 /tmp/ltvt-controls\n\n ✓ src/views/data-source/dataSource.spec.ts  (116 tests | 115 skipped) 7ms\n\n Test Files  1 passed (1)\n      Tests  1 passed | 115 skipped (116)\n   Start at  00:31:51\n   Duration  3.10s (transform 1.06s, setup 40ms, collect 2.19s, tests 7ms, environment 525ms, prepare 95ms)\n\n"
+    },
+    "S1_bare_ep_selector": {
+      "exitCode": 1,
+      "failedTests": [
+        "列表表格视觉模板公共层契约（§4.1 / §6） > 5. 不存在裸 Element Plus 选择器，也不存在 :root / html / body / * 规则"
+      ],
+      "summary": "Tests  1 failed | 11 passed (12)",
+      "tail": "al.spec.ts  (12 tests | 1 failed) 65ms\n   ❯ src/styles/list-table/list-table-visual.spec.ts > 列表表格视觉模板公共层契约（§4.1 / §6） > 5. 不存在裸 Element Plus 选择器，也不存在 :root / html / body / * 规则\n     → td.el-table__cell: expected 'td.el-table__cell' to contain '.lt-main-table'\n\n Test Files  1 failed (1)\n      Tests  1 failed | 11 passed (12)\n   Start at  00:31:55\n   Duration  1.01s (transform 84ms, setup 32ms, collect 64ms, tests 65ms, environment 478ms, prepare 91ms)\n\n⎯⎯⎯⎯⎯⎯⎯ Failed Tests 1 ⎯⎯⎯⎯⎯⎯⎯\n\n FAIL  src/styles/list-table/list-table-visual.spec.ts > 列表表格视觉模板公共层契约（§4.1 / §6） > 5. 不存在裸 Element Plus 选择器，也不存在 :root / html / body / * 规则\nAssertionError: td.el-table__cell: expected 'td.el-table__cell' to contain '.lt-main-table'\n\n- Expected\n+ Received\n\n- .lt-main-table\n+ td.el-table__cell\n\n ❯ src/styles/list-table/list-table-visual.spec.ts:131:36\n    129|     for (const { selector } of rules(css())) {\n    130|       if (/\\.el-table/.test(selector)) {\n    131|         expect(selector, selector).toContain(ROOT_CLASS_SELECTOR)\n       |                                    ^\n    132|       }\n    133|       expect(selector, selector).not.toMatch(/(^|[\\s,>+~])(:root|html|…\n\n⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯[1/1]⎯\n\n",
+      "detected": true
+    },
+    "S2_root_token_declaration": {
+      "exitCode": 1,
+      "failedTests": [
+        "列表表格视觉模板公共层契约（§4.1 / §6） > 4. 公共层不声明任何 --lt-* 的值（只允许出现在 var() 内联回退中）",
+        "列表表格视觉模板公共层契约（§4.1 / §6） > 5. 不存在裸 Element Plus 选择器，也不存在 :root / html / body / * 规则"
+      ],
+      "summary": "Tests  2 failed | 10 passed (12)",
+      "tail": "er-letter-spacing, 0.01em);\n}\n\n.lt-main-table :deep(td.el-table__cell) {\n  padding: var(--lt-body-cell-padding, 12px 0);\n}\n\n.lt-main-table :deep(th.el-table__cell) {\n  padding: var(--lt-header-cell-padding, 11px 0);\n}\n\n\n:root {\n  --lt-header-font-size: 12px;\n}\n\"\n\n ❯ src/styles/list-table/list-table-visual.spec.ts:125:23\n    123| \n    124|   it('4. 公共层不声明任何 --lt-* 的值（只允许出现在 var() 内联回退中）…\n    125|     expect(css()).not.toMatch(/--lt-[\\w-]+\\s*:/)\n       |                       ^\n    126|   })\n    127| \n\n⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯[1/2]⎯\n\n FAIL  src/styles/list-table/list-table-visual.spec.ts > 列表表格视觉模板公共层契约（§4.1 / §6） > 5. 不存在裸 Element Plus 选择器，也不存在 :root / html / body / * 规则\nAssertionError: :root: expected ':root' not to match /(^|[\\s,>+~])(:root|html|body|\\*)([\\s,…/\n\n- Expected: \n/(^|[\\s,>+~])(:root|html|body|\\*)([\\s,>+~:.]|$)/\n\n+ Received: \n\":root\"\n\n ❯ src/styles/list-table/list-table-visual.spec.ts:133:38\n    131|         expect(selector, selector).toContain(ROOT_CLASS_SELECTOR)\n    132|       }\n    133|       expect(selector, selector).not.toMatch(/(^|[\\s,>+~])(:root|html|…\n       |                                      ^\n    134|     }\n    135|   })\n\n⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯[2/2]⎯\n\n",
+      "detected": true
+    },
+    "S3_duplicate_synonymous_rules": {
+      "exitCode": 1,
+      "failedTests": [
+        "列表表格视觉模板：数据源管理参考页等价接入（SHARED_COMPONENT_DESIGN §7.2） > 被公共层逐值等价替代的四组局部基础规则已不再重复声明（单一发布者，§7.1 第 5 条）"
+      ],
+      "summary": "Tests  1 failed | 115 skipped (116)",
+      "tail": "-el-text-color-secondary);\n+ }\n+ </style>\n+\n+ <!-- “更多”下拉菜单（Teleport 到 body，故必须为全局作用域并只限定在本页 popper-class 命名空间内）：\n+      删除项为红色危险样式，但不改变删除的业务语义（DS-REQ-133）；菜单不含编辑项。 -->\n+ <style>\n+ .ds-more-popper .el-dropdown-menu__item.ds-more-danger {\n+   color: var(--el-color-danger);\n+ }\n+\n+ .ds-more-popper .el-dropdown-menu__item.ds-more-danger.is-disabled,\n+ .ds-more-popper .el-dropdown-menu__item.ds-more-danger.is-disabled:hover {\n+   color: var(--el-color-danger-light-5);\n+ }\n+\n+ /* “停用”为警示色（琥珀），与红色“删除”可区分（DS-REQ-164） */\n+ .ds-more-popper .el-dropdown-menu__item.ds-more-warning {\n+   color: #b45309;\n+ }\n+\n+ .ds-more-popper .el-dropdown-menu__item.ds-more-warning.is-disabled,\n+ .ds-more-popper .el-dropdown-menu__item.ds-more-warning.is-disabled:hover {\n+   color: #f0b775;\n+ }\n+ </style>\n+\n\n ❯ src/views/data-source/dataSource.spec.ts:2794:24\n    2792|     const source = pageSource()\n    2793|     // 表格宽度、EP 表令牌、表头排版、表头/正文单元格内边距不得在本页…\n    2794|     expect(source).not.toContain('--el-table-')\n       |                        ^\n    2795|     expect(source).not.toContain('.el-table__header th .cell')\n    2796|     expect(source).not.toContain('td.el-table__cell')\n\n⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯[1/1]⎯\n\n",
+      "detected": true
+    }
+  }
+}
