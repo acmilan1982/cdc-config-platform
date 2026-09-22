@@ -75,7 +75,7 @@ Router (Vue Router 4) + Layouts (MainLayout)
 | 层 | 目录 | 职责 | 当前状态 |
 |---|---|---|---|
 | 页面模板层 | `docs/baseline/query-list-page-template/` | 页面标题、查询区、结果区外壳、刷新工具栏、请求交互 | 已批准；阶段一公共组件已实现并通过正式验收 |
-| 表格视觉模板层 | `docs/baseline/list-table-visual-template/` | 列表主表的表头、正文、间距、边框、行高策略、长文本与扩展边界 | **基线规则已批准**（`BASELINE_APPROVED`）；公共实现详细设计已批准；公共实现与数据源管理主列表接入已实现、目测通过（2026-09-22）并通过本地正式验收（`EXECUTED_PASSED_LOCAL`，14/14 PASS）、待项目负责人最终接受（`IMPLEMENTED_PENDING_FINAL_ACCEPTANCE`）；未授权页面迁移 |
+| 表格视觉模板层 | `docs/baseline/list-table-visual-template/` | 列表主表的表头、正文、间距、边框、行高策略、长文本与扩展边界 | **基线规则已批准**（`BASELINE_APPROVED`）；公共实现详细设计已批准；公共实现与数据源管理主列表接入已实现、目测通过（2026-09-22）、正式验收 14/14 PASS，并已由项目负责人于 2026-09-22 **最终接受并关闭**（`IMPLEMENTED_ACCEPTED` / `ACCEPTED_BY_PROJECT_OWNER`）；未授权页面迁移 |
 
 - 两层**正交且可组合**：页面按独立评估结果决定是否组合使用两层；
 - 表格视觉模板层的**基线规则已批准**（`approval_scope=BASELINE_CONTENT_ONLY`），
@@ -83,15 +83,19 @@ Router (Vue Router 4) + Layouts (MainLayout)
   （`shared_implementation_design_status=APPROVED`，
   `approval_scope=SHARED_IMPLEMENTATION_DETAILED_DESIGN_ONLY`）；
   公共实现与数据源管理**主列表**的等价接入**已实现**、经项目负责人于 2026-09-22 **目测通过**，
-  并由独立正式验收任务完成**本地正式验收**
-  （`shared_implementation_status=IMPLEMENTED_PENDING_FINAL_ACCEPTANCE`、
-  `reference_page_integration_status=IMPLEMENTED_PENDING_FINAL_ACCEPTANCE`、
+  并由独立正式验收任务完成**本地正式验收**（`EXECUTED_PASSED_LOCAL`，14/14 PASS），
+  ChatGPT 远程复审该正式验收提交结论为 `REVIEW_PASS`、`blocking_finding_count=0`，
+  项目负责人随后于 2026-09-22 **最终接受并收口**
+  （`shared_implementation_status=IMPLEMENTED_ACCEPTED`、
+  `reference_page_integration_status=IMPLEMENTED_ACCEPTED`、
   `project_owner_visual_review_status=PASS`、
-  `formal_acceptance_execution_status=EXECUTED_PASSED_LOCAL`，14/14 PASS），
-  但**尚未**作最终接受决定
-  （`final_acceptance_status=NOT_ACCEPTED_PENDING_PROJECT_OWNER`），
-  且**未授权**任何页面迁移（`page_migration_status=NOT_STARTED` /
+  `final_acceptance_status=ACCEPTED_BY_PROJECT_OWNER`、
+  `project_owner_final_acceptance_decision=APPROVED`），
+  且**最终接受范围仅限**公共实现与数据源管理参考页等价接入，
+  **未授权**任何页面迁移（`page_migration_status=NOT_STARTED` /
   `page_migration_authorization_status=NOT_GRANTED`）；
+  最终接受**不等于**已迁移或批准迁移任何其他业务页面——每页仍需独立评估、独立授权、
+  独立实施与独立验收；
   该实现**不是**公共组件——它是一个**显式根类 CSS 预设 + 有限 CSS 自定义属性令牌**的公共层
   （不引入 Vue 包装组件、不新增 DOM 层），**未启用页面零样式泄漏**；
 - 表格视觉模板层**不并入**页面模板层，也**不**扩大其只读查询列表页的适用范围。

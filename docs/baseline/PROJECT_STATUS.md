@@ -297,21 +297,31 @@ CDC_DATA_SOURCE 另被日志查询的 selectAllDataSources 读取用于过滤条
   但**批准详细设计 ≠ 批准实现**。公共实现与数据源管理**主列表**的等价接入随后由
   独立实施任务 `LIST-TABLE-VISUAL-TEMPLATE-SHARED-IMPLEMENTATION-AND-DATA-SOURCE-REFERENCE-INTEGRATION-001`
   实现：`shared_implementation_status` / `reference_page_integration_status` 现为
-  `IMPLEMENTED_PENDING_FINAL_ACCEPTANCE`；
+  `IMPLEMENTED_ACCEPTED`；
   项目负责人已于 `2026-09-22` 打开 `http://192.168.174.70:5173/config/data-source`
   **目测复核通过**（`project_owner_visual_review_status=PASS` /
   `project_owner_visual_review_date=2026-09-22`）；
   随后独立正式验收任务
   `LIST-TABLE-VISUAL-TEMPLATE-SHARED-IMPLEMENTATION-FORMAL-ACCEPTANCE-001`
   以 `b36c521`（实现 `284b263`）为受验对象、以接入前提交 `ae6439b` 为基准，
-  执行 `LTVT-FA-001`～`014` 共 14 条，结果 **14 PASS / 0 FAIL / 0 BLOCKED / 0 NOT_RUN**：
-  `formal_acceptance_execution_status=EXECUTED_PASSED_LOCAL`；
-  **本地正式验收通过只表示 Agent 侧在隔离环境完成验收，不等于项目负责人最终接受**：
-  `final_acceptance_status=NOT_ACCEPTED_PENDING_PROJECT_OWNER`，
-  `page_migration_status=NOT_STARTED`、`page_migration_authorization_status=NOT_GRANTED`；
-- **下一入口**：先由 ChatGPT 复审远程正式验收提交，再由项目负责人决定是否最终接受
-  （`CHATGPT_REMOTE_GIT_FORMAL_ACCEPTANCE_REVIEW_THEN_PROJECT_OWNER_FINAL_ACCEPTANCE_DECISION`；
-  **未经项目负责人再次明确批准不得修改代码**，也不得进入页面迁移）；
+  执行 `LTVT-FA-001`～`014` 共 14 条，结果 **14 PASS / 0 FAIL / 0 BLOCKED / 0 NOT_RUN**
+  （`formal_acceptance_execution_status=EXECUTED_PASSED_LOCAL`）；
+  ChatGPT 从远程 Git 对该正式验收提交 `8501416e750c7eb8547c7f922b1bed3545c7cb17`
+  的复审结论为 `REVIEW_PASS`、`blocking_finding_count=0`；
+  项目负责人随后于 `2026-09-22` **最终接受并收口**（纯文档任务
+  `LIST-TABLE-VISUAL-TEMPLATE-SHARED-IMPLEMENTATION-FINAL-ACCEPTANCE-CLOSEOUT-001`）：
+  `final_acceptance_status=ACCEPTED_BY_PROJECT_OWNER`、
+  `project_owner_final_acceptance_decision=APPROVED`、
+  `shared_implementation_project_owner_acceptance_status=APPROVED`、
+  `shared_implementation_completion_status=COMPLETED`、
+  `pending_project_owner_acceptance=NO`；
+- **最终接受范围**：**仅限**「列表表格视觉模板公共实现 + 数据源管理参考页等价接入」。
+  **不**代表批准探针端管理、数据订阅或任何其他业务页面迁移；
+  任何页面迁移仍须**独立评估、独立授权、独立实施和验收**
+  （`page_migration_status=NOT_STARTED`、`page_migration_authorization_status=NOT_GRANTED`）；
+- **下一入口**：`NONE_SHARED_IMPLEMENTATION_FINAL_ACCEPTED_AND_CLOSED_NO_PAGE_MIGRATION_AUTHORIZED`
+  （公共实现与参考页接入已接受并关闭，**无**后续入口；**未经项目负责人再次明确批准
+  不得修改代码**，也不得进入页面迁移）；
 - 与查询列表页模板基线是**正交、可组合**的两层（页面层 / 表格层）；
 - 该基线与六份项目级基线的正式状态**无关**，不影响六份基线的 `APPROVED` 状态。
 
@@ -332,3 +342,4 @@ CDC_DATA_SOURCE 另被日志查询的 selectAllDataSources 读取用于过滤条
 | 2026-09-22 | §10.4 公共实现与参考页等价接入落地：新增公共视觉预设 `frontend/src/styles/list-table/list-table-visual.css`（+ `index.ts` 常量、静态契约测试），数据源管理**主列表**追加公共类 `lt-main-table` 并以 `<style scoped src>` 引入、删除被逐值等价替代的四组局部基础规则；`shared_implementation_status` / `reference_page_integration_status` 改为 `IMPLEMENTED_PENDING_USER_REVIEW`；**待复核 ≠ 已验收**：`formal_acceptance_execution_status` 保持 `NOT_RUN`，页面迁移 `NOT_STARTED` / `NOT_GRANTED`，详细设计保持 `APPROVED`；下一入口改为项目负责人目测复核与正式验收任务 | LIST-TABLE-VISUAL-TEMPLATE-SHARED-IMPLEMENTATION-AND-DATA-SOURCE-REFERENCE-INTEGRATION-001（代码实现任务；未迁移任何其他页面，未修改后端、数据库或 qlpt 契约） |
 | 2026-09-22 | §10.4 项目负责人目测通过收口：ChatGPT 远程 R2 复审 `REVIEW_PASS`（`blocking_finding_count=0`）后，项目负责人于 `2026-09-22` 打开 `http://192.168.174.70:5173/config/data-source` 目测复核，结论“没啥问题”，`project_owner_visual_review_status=PASS`；`shared_implementation_status` / `reference_page_integration_status` 由 `IMPLEMENTED_PENDING_USER_REVIEW` 推进为 `IMPLEMENTED_PENDING_FORMAL_ACCEPTANCE`；**目测通过 ≠ 正式验收**：`formal_acceptance_execution_status` 保持 `NOT_RUN`、`final_acceptance_status=NOT_ACCEPTED_PENDING_FORMAL_ACCEPTANCE`，页面迁移 `NOT_STARTED` / `NOT_GRANTED`，详细设计保持 `APPROVED`；下一入口改为**单独授权**的正式验收任务（需另立提示词） | LIST-TABLE-VISUAL-TEMPLATE-SHARED-IMPLEMENTATION-VISUAL-REVIEW-CLOSEOUT-001（纯文档任务，未修改代码、测试、配置、依赖、证据或历史报告；未执行正式验收，未授权迁移） |
 | 2026-09-22 | §10.4 公共实现与参考页接入**正式验收**执行通过：以 `b36c521`（实现 `284b263`，`backend/frontend` 零差异）为受验对象，基准取自接入前提交 `ae6439b` 的隔离副本，执行 `LTVT-FA-001`～`014` 共 14 条，结果 **14 PASS / 0 FAIL / 0 BLOCKED / 0 NOT_RUN**（定向 2/128、全量 57/1063、构建成功且产物仅新增 4 条带根类规则；1440×900 / 1920×1080 计算样式与几何严格 0 差异；fallback/覆盖 A–F、负向页面矩阵、六类反向控制、隔离回滚均通过）；`formal_acceptance_execution_status=EXECUTED_PASSED_LOCAL`，`shared_implementation_status` / `reference_page_integration_status` 推进为 `IMPLEMENTED_PENDING_FINAL_ACCEPTANCE`；**本地正式验收通过 ≠ 项目负责人最终接受**：`final_acceptance_status=NOT_ACCEPTED_PENDING_PROJECT_OWNER`，页面迁移 `NOT_STARTED` / `NOT_GRANTED`，详细设计保持 `APPROVED`；下一入口改为“ChatGPT 复审远程正式验收提交 → 项目负责人最终接受决定” | LIST-TABLE-VISUAL-TEMPLATE-SHARED-IMPLEMENTATION-FORMAL-ACCEPTANCE-001（前端正式验收任务；未修改业务代码、测试、配置、依赖或锁文件；未迁移任何页面；未作最终接受） |
+| 2026-09-22 | §10.4 公共实现与参考页接入**最终验收收口**：ChatGPT 从远程 Git 对正式验收提交 `8501416e750c7eb8547c7f922b1bed3545c7cb17` 的复审结论为 `REVIEW_PASS`、`blocking_finding_count=0`；项目负责人于 `2026-09-22` 作出**最终接受**决定，`final_acceptance_status=ACCEPTED_BY_PROJECT_OWNER`、`shared_implementation_completion_status=COMPLETED`、`project_owner_final_acceptance_decision=APPROVED`、`pending_project_owner_acceptance=NO`，`shared_implementation_status` / `reference_page_integration_status` 推进为 `IMPLEMENTED_ACCEPTED`；**本次最终接受范围仅限**「列表表格视觉模板公共实现 + 数据源管理参考页等价接入」，**不**代表批准探针端管理、数据订阅或任何其他业务页面迁移；页面迁移保持 `NOT_STARTED` / `NOT_GRANTED`，详细设计保持 `APPROVED`；下一入口置为 `NONE_SHARED_IMPLEMENTATION_FINAL_ACCEPTED_AND_CLOSED_NO_PAGE_MIGRATION_AUTHORIZED` | LIST-TABLE-VISUAL-TEMPLATE-SHARED-IMPLEMENTATION-FINAL-ACCEPTANCE-CLOSEOUT-001（纯文档收口任务；未修改代码、测试、配置、依赖、锁文件、证据或历史报告；未迁移任何页面） |

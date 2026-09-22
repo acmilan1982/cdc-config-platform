@@ -324,17 +324,18 @@ npm test           # vitest run（log-query 等已含组件测试）
     新建或调整页面主列表时应**评估复用**其已批准规则；
   - 若业务差异确实不适用，必须**记录差异与理由**，**不得**静默复制一套平行实现；
   - 该模板的**公共实现与数据源管理主列表的等价接入已实现**，
-    经项目负责人于 `2026-09-22` **目测通过**，并由独立正式验收任务完成**本地正式验收**
-    （`shared_implementation_status=IMPLEMENTED_PENDING_FINAL_ACCEPTANCE`、
-    `reference_page_integration_status=IMPLEMENTED_PENDING_FINAL_ACCEPTANCE`、
-    `project_owner_visual_review_status=PASS`、
+    经项目负责人于 `2026-09-22` **目测通过**，由独立正式验收任务完成**本地正式验收**
+    （`project_owner_visual_review_status=PASS`、
     `formal_acceptance_execution_status=EXECUTED_PASSED_LOCAL`，14/14 PASS），
-    即公共视觉预设层**已存在**（显式根类 CSS 预设 + 有限 CSS 自定义属性令牌，
+    并由项目负责人于 `2026-09-22` **最终接受并关闭**
+    （`shared_implementation_status=IMPLEMENTED_ACCEPTED`、
+    `reference_page_integration_status=IMPLEMENTED_ACCEPTED`、
+    `final_acceptance_status=ACCEPTED_BY_PROJECT_OWNER`），
+    即公共视觉预设层**已存在且已获最终接受**（显式根类 CSS 预设 + 有限 CSS 自定义属性令牌，
     **不是** Vue 公共组件、**不**新增 DOM 层）——新建或调整页面主列表时
     可在该已批准边界内**评估显式复用**；
-  - 但该实现**尚未**作最终接受决定
-    （`final_acceptance_status=NOT_ACCEPTED_PENDING_PROJECT_OWNER`），
-    本地正式验收通过**不等于**已存在“已最终接受 / 生产可用”的公共能力；
+  - 本次最终接受范围**仅限**公共实现与数据源管理参考页等价接入，
+    **不**代表批准探针端管理、数据订阅或其他任何业务页面迁移；
   - “评估复用”**不**构成既有页面迁移授权：任何既有页面迁移仍需**单独批准**，
     当前**没有任何**页面迁移获得授权（`page_migration_authorization_status=NOT_GRANTED`）。
 - 同理，查询列表页的**新建、结构性调整、公共交互修改或既有页面迁移评估**

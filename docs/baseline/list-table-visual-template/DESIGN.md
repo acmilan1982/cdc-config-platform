@@ -11,8 +11,8 @@ approval_scope=BASELINE_CONTENT_ONLY
 approved_baseline_source_commit=575379895c4c57fd3df7e0d0ce27c1f6841d2f17
 shared_implementation_design_status=APPROVED
 shared_implementation_design_approval_status=APPROVED
-shared_implementation_status=IMPLEMENTED_PENDING_FINAL_ACCEPTANCE
-reference_page_integration_status=IMPLEMENTED_PENDING_FINAL_ACCEPTANCE
+shared_implementation_status=IMPLEMENTED_ACCEPTED
+reference_page_integration_status=IMPLEMENTED_ACCEPTED
 project_owner_visual_review_status=PASS
 project_owner_visual_review_date=2026-09-22
 formal_acceptance_execution_status=EXECUTED_PASSED_LOCAL
@@ -20,9 +20,18 @@ formal_acceptance_pass_count=14
 formal_acceptance_fail_count=0
 formal_acceptance_blocked_count=0
 formal_acceptance_not_run_count=0
-final_acceptance_status=NOT_ACCEPTED_PENDING_PROJECT_OWNER
+chatgpt_remote_formal_acceptance_review_status=REVIEW_PASS
+chatgpt_remote_formal_acceptance_review_blocking_finding_count=0
+chatgpt_remote_formal_acceptance_reviewed_commit=8501416e750c7eb8547c7f922b1bed3545c7cb17
+shared_implementation_project_owner_acceptance_status=APPROVED
+final_acceptance_status=ACCEPTED_BY_PROJECT_OWNER
+shared_implementation_completion_status=COMPLETED
+project_owner_final_acceptance_decision=APPROVED
+project_owner_final_acceptance_date=2026-09-22
+pending_project_owner_acceptance=NO
 page_migration_status=NOT_STARTED
 page_migration_authorization_status=NOT_GRANTED
+final_acceptance_scope=SHARED_IMPLEMENTATION_AND_DATA_SOURCE_REFERENCE_PAGE_INTEGRATION_ONLY
 ```
 
 批准证据链（详细设计）：
@@ -46,8 +55,8 @@ blocking_finding_count=0
 > `LIST_TABLE_REFERENCE_FACT` —— §8 四个候选的**最终结论**已由下游详细设计与实现落地确定：
 > §8.1 显式 CSS 预设、§8.2 CSS 变量**部分采纳**，各作组合方案（§8.4）的一半；
 > §8.3 Vue 轻包装组件**被否决、未实现**；
-> §8.4 组合方式**唯一采纳并已实现**、目测通过、本地正式验收通过
-> （`shared_implementation_status=IMPLEMENTED_PENDING_FINAL_ACCEPTANCE`，
+> §8.4 组合方式**唯一采纳并已实现**、目测通过、本地正式验收通过、经项目负责人最终接受
+> （`shared_implementation_status=IMPLEMENTED_ACCEPTED`，
 > 唯一技术架构见 `SHARED_COMPONENT_DESIGN.md`）。
 > 本基线候选段自身**不承担**下游详细设计的批准状态。
 
@@ -213,9 +222,9 @@ Feature 专属的 scoped 规则仍按 §2 的职责边界保留，
 > （`approval_scope=SHARED_IMPLEMENTATION_DETAILED_DESIGN_ONLY`）。
 > 在**该批准当时**，批准的是设计文档而非实现：公共实现、参考页接入当时均未开始，
 > 页面迁移当时未授权；随后该设计已由独立实现任务落地，项目负责人已于 2026-09-22 目测通过，
-> 并由独立正式验收任务完成本地正式验收
-> （`shared_implementation_status=IMPLEMENTED_PENDING_FINAL_ACCEPTANCE`），
-> 但**仍待项目负责人最终接受**、页面**仍未**迁移。
+> 并由独立正式验收任务完成本地正式验收，最终由项目负责人于 2026-09-22 **最终接受并关闭**
+> （`shared_implementation_status=IMPLEMENTED_ACCEPTED`，
+> `final_acceptance_status=ACCEPTED_BY_PROJECT_OWNER`），但页面**仍未**迁移。
 >
 > 因此：§8.1 / §8.2 是**已被采纳的组合方案组成部分**、§8.3 是**被否决且未实现**的候选、
 > §8.4 是**唯一采纳且已实现**的技术架构；本节各候选**不再**被统称为“均未实现”。
@@ -263,8 +272,8 @@ Feature 专属的 scoped 规则仍按 §2 的职责边界保留，
 
 ### 8.4 组合方式
 
-最终结论：**唯一采纳，并已实现、目测通过、本地正式验收通过**——`EXPLICIT_ROOT_CLASS_CSS_PRESET_WITH_LIMITED_CSS_CUSTOM_PROPERTY_TOKENS`；
-当前 `shared_implementation_status=IMPLEMENTED_PENDING_FINAL_ACCEPTANCE`（待项目负责人最终接受）。
+最终结论：**唯一采纳，并已实现、目测通过、本地正式验收通过、经项目负责人最终接受**——`EXPLICIT_ROOT_CLASS_CSS_PRESET_WITH_LIMITED_CSS_CUSTOM_PROPERTY_TOKENS`；
+当前 `shared_implementation_status=IMPLEMENTED_ACCEPTED`。
 
 | 维度 | 评估 |
 | --- | --- |
@@ -290,10 +299,10 @@ Feature 专属的 scoped 规则仍按 §2 的职责边界保留，
   （§8.1 与 §8.2 各作其一半，§8.3 被否决），已获 ChatGPT 远程 R2 复审 `REVIEW_PASS`
   并由项目负责人于 2026-09-21 批准；**其实现随后已由独立任务落地**，
   项目负责人已于 2026-09-22 目测通过，并由独立正式验收任务完成本地正式验收
-  （`shared_implementation_status=IMPLEMENTED_PENDING_FINAL_ACCEPTANCE`，
-  `formal_acceptance_execution_status=EXECUTED_PASSED_LOCAL`，14/14 PASS），
-  目前**仍待项目负责人最终接受**
-  （`final_acceptance_status=NOT_ACCEPTED_PENDING_PROJECT_OWNER`），
+  （`formal_acceptance_execution_status=EXECUTED_PASSED_LOCAL`，14/14 PASS），
+  再由项目负责人于 2026-09-22 **最终接受并关闭**
+  （`shared_implementation_status=IMPLEMENTED_ACCEPTED`，
+  `final_acceptance_status=ACCEPTED_BY_PROJECT_OWNER`），
   页面迁移**仍未授权**（`page_migration_status=NOT_STARTED` /
   `page_migration_authorization_status=NOT_GRANTED`）；
   因此**未经项目负责人再次明确批准不得修改任何代码**。

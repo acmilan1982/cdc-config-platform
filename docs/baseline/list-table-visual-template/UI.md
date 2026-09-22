@@ -11,8 +11,8 @@ approval_scope=BASELINE_CONTENT_ONLY
 approved_baseline_source_commit=575379895c4c57fd3df7e0d0ce27c1f6841d2f17
 shared_implementation_design_status=APPROVED
 shared_implementation_design_approval_status=APPROVED
-shared_implementation_status=IMPLEMENTED_PENDING_FINAL_ACCEPTANCE
-reference_page_integration_status=IMPLEMENTED_PENDING_FINAL_ACCEPTANCE
+shared_implementation_status=IMPLEMENTED_ACCEPTED
+reference_page_integration_status=IMPLEMENTED_ACCEPTED
 project_owner_visual_review_status=PASS
 project_owner_visual_review_date=2026-09-22
 formal_acceptance_execution_status=EXECUTED_PASSED_LOCAL
@@ -20,9 +20,18 @@ formal_acceptance_pass_count=14
 formal_acceptance_fail_count=0
 formal_acceptance_blocked_count=0
 formal_acceptance_not_run_count=0
-final_acceptance_status=NOT_ACCEPTED_PENDING_PROJECT_OWNER
+chatgpt_remote_formal_acceptance_review_status=REVIEW_PASS
+chatgpt_remote_formal_acceptance_review_blocking_finding_count=0
+chatgpt_remote_formal_acceptance_reviewed_commit=8501416e750c7eb8547c7f922b1bed3545c7cb17
+shared_implementation_project_owner_acceptance_status=APPROVED
+final_acceptance_status=ACCEPTED_BY_PROJECT_OWNER
+shared_implementation_completion_status=COMPLETED
+project_owner_final_acceptance_decision=APPROVED
+project_owner_final_acceptance_date=2026-09-22
+pending_project_owner_acceptance=NO
 page_migration_status=NOT_STARTED
 page_migration_authorization_status=NOT_GRANTED
+final_acceptance_scope=SHARED_IMPLEMENTATION_AND_DATA_SOURCE_REFERENCE_PAGE_INTEGRATION_ONLY
 ```
 
 批准证据链（详细设计）：
@@ -270,8 +279,9 @@ blocking_finding_count=0
 详细设计必须遵守的基线；但**规则批准 ≠ 通过正式验收**。
 其中“可提取”不代表数值可直接成为公共默认值；具体哪些数值上收为公共令牌，
 由后续详细设计决定（见 `DESIGN.md` §4、§8），该设计已由独立任务落地、经项目负责人于 2026-09-22 目测通过，
-并通过本地正式验收
-（`shared_implementation_status=IMPLEMENTED_PENDING_FINAL_ACCEPTANCE`，**待项目负责人最终接受**）。
+通过本地正式验收，并由项目负责人于 2026-09-22 最终接受并关闭
+（`shared_implementation_status=IMPLEMENTED_ACCEPTED`，
+`final_acceptance_status=ACCEPTED_BY_PROJECT_OWNER`）。
 
 ---
 

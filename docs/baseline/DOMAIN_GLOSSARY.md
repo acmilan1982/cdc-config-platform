@@ -366,15 +366,19 @@
 （`REVIEW_PASS`）并由项目负责人于 2026-09-21 批准（`approval_scope=BASELINE_CONTENT_ONLY`）。
 其公共实现**详细设计已批准**（`shared_implementation_design_status=APPROVED`）；
 公共实现与数据源管理主列表的**等价接入已实现**，经项目负责人于 2026-09-22 **目测通过**，
-并由独立正式验收任务完成**本地正式验收**
-（`shared_implementation_status=IMPLEMENTED_PENDING_FINAL_ACCEPTANCE`、
-`reference_page_integration_status=IMPLEMENTED_PENDING_FINAL_ACCEPTANCE`、
+并由独立正式验收任务完成**本地正式验收**（`EXECUTED_PASSED_LOCAL`，14/14 PASS），
+ChatGPT 远程复审该正式验收提交结论为 `REVIEW_PASS`、`blocking_finding_count=0`，
+项目负责人随后于 2026-09-22 **最终接受并收口**
+（`shared_implementation_status=IMPLEMENTED_ACCEPTED`、
+`reference_page_integration_status=IMPLEMENTED_ACCEPTED`、
 `project_owner_visual_review_status=PASS`、
-`formal_acceptance_execution_status=EXECUTED_PASSED_LOCAL`，14/14 PASS），
-**尚未**作最终接受决定（`final_acceptance_status=NOT_ACCEPTED_PENDING_PROJECT_OWNER`）；
+`final_acceptance_status=ACCEPTED_BY_PROJECT_OWNER`）；
+**最终接受范围仅限**公共实现与数据源管理参考页等价接入，
 任何页面迁移**未授权**（`page_migration_status=NOT_STARTED`、
 `page_migration_authorization_status=NOT_GRANTED`）。
-**详细设计批准 / 实现落地 / 目测通过 / 本地正式验收通过 ≠ 项目负责人最终接受 ≠ 页面迁移授权**。与查询列表页模板是**正交、可组合**的两层，
+**详细设计批准 / 实现落地 / 目测通过 / 正式验收通过 / 项目负责人最终接受 ≠ 页面迁移授权**；
+最终接受**不代表**批准探针端管理、数据订阅或其他任何业务页面迁移。
+与查询列表页模板是**正交、可组合**的两层，
 **只覆盖页面主列表**，不自动覆盖弹窗表格、详情子表、确认表格或大屏/复合视图内嵌表。
 
 来源: docs/baseline/list-table-visual-template/README.md

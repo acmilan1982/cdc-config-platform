@@ -78,8 +78,9 @@ pilot_page_selection_status=NOT_DECIDED
 经 ChatGPT 远程 Git R1 复审（`REVIEW_PASS`）并由项目负责人于 2026-09-21 批准
 （`approval_scope=BASELINE_CONTENT_ONLY`）。批准**只**覆盖**基线内容**；
 公共代码与数据源管理**主列表**的等价接入随后由独立实施任务实现，
-经项目负责人于 2026-09-22 目测通过，并已完成本地正式验收
-（`IMPLEMENTED_PENDING_FINAL_ACCEPTANCE`，**待项目负责人最终接受**），
+经项目负责人于 2026-09-22 目测通过，已完成本地正式验收，
+并由项目负责人于 2026-09-22 **最终接受并关闭**
+（`IMPLEMENTED_ACCEPTED`，`final_acceptance_status=ACCEPTED_BY_PROJECT_OWNER`）；
 **未**迁移任何页面。
 
 主要入口：
@@ -101,9 +102,9 @@ approval_scope=BASELINE_CONTENT_ONLY
 approved_baseline_source_commit=575379895c4c57fd3df7e0d0ce27c1f6841d2f17
 shared_implementation_design_status=APPROVED
 shared_implementation_design_approval_status=APPROVED
-shared_implementation_status=IMPLEMENTED_PENDING_FINAL_ACCEPTANCE
+shared_implementation_status=IMPLEMENTED_ACCEPTED
 reference_page=数据源管理
-reference_page_integration_status=IMPLEMENTED_PENDING_FINAL_ACCEPTANCE
+reference_page_integration_status=IMPLEMENTED_ACCEPTED
 project_owner_visual_review_status=PASS
 project_owner_visual_review_date=2026-09-22
 formal_acceptance_execution_status=EXECUTED_PASSED_LOCAL
@@ -111,25 +112,39 @@ formal_acceptance_pass_count=14
 formal_acceptance_fail_count=0
 formal_acceptance_blocked_count=0
 formal_acceptance_not_run_count=0
-final_acceptance_status=NOT_ACCEPTED_PENDING_PROJECT_OWNER
+chatgpt_remote_formal_acceptance_review_status=REVIEW_PASS
+chatgpt_remote_formal_acceptance_review_blocking_finding_count=0
+chatgpt_remote_formal_acceptance_reviewed_commit=8501416e750c7eb8547c7f922b1bed3545c7cb17
+shared_implementation_project_owner_acceptance_status=APPROVED
+final_acceptance_status=ACCEPTED_BY_PROJECT_OWNER
+shared_implementation_completion_status=COMPLETED
+project_owner_final_acceptance_decision=APPROVED
+project_owner_final_acceptance_date=2026-09-22
+pending_project_owner_acceptance=NO
 page_migration_status=NOT_STARTED
 page_migration_authorization_status=NOT_GRANTED
 candidate_inventory_status=COMPLETED_APPROVED_AS_BASELINE_INVENTORY
+final_acceptance_scope=SHARED_IMPLEMENTATION_AND_DATA_SOURCE_REFERENCE_PAGE_INTEGRATION_ONLY
+current_next_entry=NONE_SHARED_IMPLEMENTATION_FINAL_ACCEPTED_AND_CLOSED_NO_PAGE_MIGRATION_AUTHORIZED
 ```
 
-**批准基线 ≠ 批准详细设计 ≠ 批准实现 ≠ 通过正式验收 ≠ 批准页面迁移**：
+**批准基线 ≠ 批准详细设计 ≠ 批准实现 ≠ 通过正式验收 ≠ 项目负责人最终接受 ≠ 批准页面迁移**：
 公共实现详细设计已**获批**（ChatGPT 远程 R2 复审 `REVIEW_PASS`、
 `blocking_finding_count=0`，项目负责人于 2026-09-21 批准，
 `approval_scope=SHARED_IMPLEMENTATION_DETAILED_DESIGN_ONLY`）；
 公共实现与数据源管理**主列表**的等价接入已**实现**、经项目负责人于 2026-09-22 目测**通过**，
-并由独立正式验收任务 `LIST-TABLE-VISUAL-TEMPLATE-SHARED-IMPLEMENTATION-FORMAL-ACCEPTANCE-001`
+由独立正式验收任务 `LIST-TABLE-VISUAL-TEMPLATE-SHARED-IMPLEMENTATION-FORMAL-ACCEPTANCE-001`
 完成**本地正式验收**（`formal_acceptance_execution_status=EXECUTED_PASSED_LOCAL`，
-14/14 PASS，`fail=0 / blocked=0 / not_run=0`；
-`shared_implementation_status` / `reference_page_integration_status` 均为
-`IMPLEMENTED_PENDING_FINAL_ACCEPTANCE`，`project_owner_visual_review_status=PASS`），
-但**尚未**作最终接受决定（`final_acceptance_status=NOT_ACCEPTED_PENDING_PROJECT_OWNER`），
-任何页面迁移**未授权**。下一步**只**允许先由 ChatGPT 复审远程正式验收提交，
-再由项目负责人决定是否最终接受并执行独立收口；
+14/14 PASS，`fail=0 / blocked=0 / not_run=0`），
+再由独立收口任务 `LIST-TABLE-VISUAL-TEMPLATE-SHARED-IMPLEMENTATION-FINAL-ACCEPTANCE-CLOSEOUT-001`
+记录 ChatGPT 对正式验收提交 `8501416e750c7eb8547c7f922b1bed3545c7cb17` 的复审结论
+（`REVIEW_PASS`、`blocking_finding_count=0`），并由项目负责人于 2026-09-22
+**最终接受并关闭**该实现
+（`shared_implementation_status` / `reference_page_integration_status` 均为
+`IMPLEMENTED_ACCEPTED`，`final_acceptance_status=ACCEPTED_BY_PROJECT_OWNER`）。
+**本次最终接受范围仅限**公共实现与数据源管理参考页等价接入，
+**不**代表批准探针端管理、数据订阅或其他任何业务页面迁移；
+任何页面迁移**未授权**（`page_migration_authorization_status=NOT_GRANTED`）。
 **未经项目负责人再次明确批准不得修改任何代码、不得迁移任何页面**。
 
 - **参考实现**：数据源管理主列表（`/config/data-source`）是**参考实现事实来源**，
@@ -139,9 +154,10 @@ candidate_inventory_status=COMPLETED_APPROVED_AS_BASELINE_INVENTORY
   （表头 / 正文 / 间距 / 边框 / 行高 / 长文本 / 扩展边界）。本模板**不并入**前者、
   **不**扩大前者适用范围、**不**改写其已批准规范。
 - **授权边界**：本模板**基线内容已批准**，公共实现**详细设计已批准**（仅设计文档），
-  公共实现与数据源管理参考页接入**已实现、目测通过、本地正式验收已通过**
-  （`IMPLEMENTED_PENDING_FINAL_ACCEPTANCE`，**待项目负责人最终接受**），
-  **任何页面迁移均未授权**。
+  公共实现与数据源管理参考页接入**已实现、目测通过、本地正式验收通过，并经项目负责人最终接受**
+  （`IMPLEMENTED_ACCEPTED`，`final_acceptance_status=ACCEPTED_BY_PROJECT_OWNER`）；
+  本次最终接受范围**仅限**公共实现与数据源管理参考页等价接入，
+  **任何其他页面迁移均未授权**。
   未来每个页面需**独立评估、独立授权、独立实现、独立目测、独立验收**。
 
 ## 文档权威边界
