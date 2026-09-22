@@ -1,0 +1,685 @@
+{
+  "ok": true,
+  "pageCount": 8,
+  "pages": [
+    "data-source-naming-dialog-table",
+    "probe-client-config-main-table",
+    "data-subscribe-main-table",
+    "data-source-run-state-main-table",
+    "topic-offset-main-table",
+    "server-config-save-confirm-dialog-table",
+    "log-query-main-table",
+    "job-failure-history-list-table"
+  ],
+  "notes": {
+    "log-query-main-table": "TABLE_NOT_RENDERED (baseline=TABLE_NOT_RENDERED, impl=TABLE_NOT_RENDERED) note=日志查询功能暂未开放",
+    "job-failure-history-list-table": "TABLE_NOT_RENDERED (baseline=TABLE_NOT_RENDERED, impl=TABLE_NOT_RENDERED) note="
+  },
+  "maxComputedStyleDiff": 0,
+  "maxGeometryDiff": 0,
+  "failureCount": 0,
+  "failures": [],
+  "failedChecks": [],
+  "checks": {
+    "data-source-naming-dialog-table.impl_public_rule_outside_enabled_root_0": true,
+    "data-source-naming-dialog-table.baseline_public_rule_outside_enabled_root_0": true,
+    "data-source-naming-dialog-table.impl_no_lt_token_declared": true,
+    "data-source-naming-dialog-table.baseline_no_lt_token_declared": true,
+    "data-source-naming-dialog-table.target_has_no_public_class": true,
+    "data-source-naming-dialog-table.target_tokens_empty": true,
+    "data-source-naming-dialog-table.same_table_structure": true,
+    "probe-client-config-main-table.impl_no_public_class_root": true,
+    "probe-client-config-main-table.baseline_no_public_class_root": true,
+    "probe-client-config-main-table.impl_public_rule_match_0": true,
+    "probe-client-config-main-table.baseline_public_rule_match_0": true,
+    "probe-client-config-main-table.impl_public_rule_outside_enabled_root_0": true,
+    "probe-client-config-main-table.baseline_public_rule_outside_enabled_root_0": true,
+    "probe-client-config-main-table.impl_no_lt_token_declared": true,
+    "probe-client-config-main-table.baseline_no_lt_token_declared": true,
+    "probe-client-config-main-table.target_has_no_public_class": true,
+    "probe-client-config-main-table.target_tokens_empty": true,
+    "probe-client-config-main-table.same_table_structure": true,
+    "data-subscribe-main-table.impl_no_public_class_root": true,
+    "data-subscribe-main-table.baseline_no_public_class_root": true,
+    "data-subscribe-main-table.impl_public_rule_match_0": true,
+    "data-subscribe-main-table.baseline_public_rule_match_0": true,
+    "data-subscribe-main-table.impl_public_rule_outside_enabled_root_0": true,
+    "data-subscribe-main-table.baseline_public_rule_outside_enabled_root_0": true,
+    "data-subscribe-main-table.impl_no_lt_token_declared": true,
+    "data-subscribe-main-table.baseline_no_lt_token_declared": true,
+    "data-subscribe-main-table.target_has_no_public_class": true,
+    "data-subscribe-main-table.target_tokens_empty": true,
+    "data-subscribe-main-table.same_table_structure": true,
+    "data-source-run-state-main-table.impl_no_public_class_root": true,
+    "data-source-run-state-main-table.baseline_no_public_class_root": true,
+    "data-source-run-state-main-table.impl_public_rule_match_0": true,
+    "data-source-run-state-main-table.baseline_public_rule_match_0": true,
+    "data-source-run-state-main-table.impl_public_rule_outside_enabled_root_0": true,
+    "data-source-run-state-main-table.baseline_public_rule_outside_enabled_root_0": true,
+    "data-source-run-state-main-table.impl_no_lt_token_declared": true,
+    "data-source-run-state-main-table.baseline_no_lt_token_declared": true,
+    "data-source-run-state-main-table.target_has_no_public_class": true,
+    "data-source-run-state-main-table.target_tokens_empty": true,
+    "data-source-run-state-main-table.same_table_structure": true,
+    "topic-offset-main-table.impl_no_public_class_root": true,
+    "topic-offset-main-table.baseline_no_public_class_root": true,
+    "topic-offset-main-table.impl_public_rule_match_0": true,
+    "topic-offset-main-table.baseline_public_rule_match_0": true,
+    "topic-offset-main-table.impl_public_rule_outside_enabled_root_0": true,
+    "topic-offset-main-table.baseline_public_rule_outside_enabled_root_0": true,
+    "topic-offset-main-table.impl_no_lt_token_declared": true,
+    "topic-offset-main-table.baseline_no_lt_token_declared": true,
+    "topic-offset-main-table.target_has_no_public_class": true,
+    "topic-offset-main-table.target_tokens_empty": true,
+    "topic-offset-main-table.same_table_structure": true,
+    "server-config-save-confirm-dialog-table.impl_no_public_class_root": true,
+    "server-config-save-confirm-dialog-table.baseline_no_public_class_root": true,
+    "server-config-save-confirm-dialog-table.impl_public_rule_match_0": true,
+    "server-config-save-confirm-dialog-table.baseline_public_rule_match_0": true,
+    "server-config-save-confirm-dialog-table.impl_public_rule_outside_enabled_root_0": true,
+    "server-config-save-confirm-dialog-table.baseline_public_rule_outside_enabled_root_0": true,
+    "server-config-save-confirm-dialog-table.impl_no_lt_token_declared": true,
+    "server-config-save-confirm-dialog-table.baseline_no_lt_token_declared": true,
+    "server-config-save-confirm-dialog-table.target_has_no_public_class": true,
+    "server-config-save-confirm-dialog-table.target_tokens_empty": true,
+    "server-config-save-confirm-dialog-table.same_table_structure": true,
+    "log-query-main-table.impl_no_public_class_root": true,
+    "log-query-main-table.baseline_no_public_class_root": true,
+    "job-failure-history-list-table.impl_no_public_class_root": true,
+    "job-failure-history-list-table.baseline_no_public_class_root": true
+  },
+  "raw": {
+    "data-source-naming-dialog-table": {
+      "baseline": {
+        "elTableRootCount": 2,
+        "publicClassRootCount": 0,
+        "anyRootHasLtToken": false,
+        "publicRuleMatchTotal": 0,
+        "publicRuleMatchOutsideRootTotal": 0,
+        "publicRuleMatches": {
+          ".lt-main-table": 0,
+          ".lt-main-table .el-table__header th .cell": 0,
+          ".lt-main-table td.el-table__cell": 0,
+          ".lt-main-table th.el-table__cell": 0
+        },
+        "targetSample": {
+          "className": "el-table--fit el-table--fluid-height el-table el-table--layout-fixed naming-table is-scrolling-none",
+          "publicClass": false,
+          "elTableBorderColor": "#ebeef5",
+          "elTableHeaderTextColor": "#909399",
+          "elTableHeaderBgColor": "#fff",
+          "headerFontSize": "14px",
+          "headerFontWeight": "600",
+          "headerColor": "rgb(144, 147, 153)",
+          "headerLetterSpacing": "normal",
+          "thPadding": "8px 0px",
+          "tdPadding": null,
+          "headerColCount": 7,
+          "bodyRowCount": 0,
+          "headerRowRect": {
+            "x": 211,
+            "y": 191.390625,
+            "w": 960,
+            "h": 40
+          },
+          "tokens": {
+            "--lt-table-width": "",
+            "--lt-border-color": "",
+            "--lt-header-bg-color": "",
+            "--lt-header-text-color": "",
+            "--lt-header-font-size": "",
+            "--lt-header-font-weight": "",
+            "--lt-header-letter-spacing": "",
+            "--lt-header-cell-padding": "",
+            "--lt-body-cell-padding": ""
+          }
+        }
+      },
+      "impl": {
+        "elTableRootCount": 2,
+        "publicClassRootCount": 1,
+        "anyRootHasLtToken": false,
+        "publicRuleMatchTotal": 381,
+        "publicRuleMatchOutsideRootTotal": 0,
+        "publicRuleMatches": {
+          ".lt-main-table": 1,
+          ".lt-main-table .el-table__header th .cell": 10,
+          ".lt-main-table td.el-table__cell": 360,
+          ".lt-main-table th.el-table__cell": 10
+        },
+        "targetSample": {
+          "className": "el-table--fit el-table--fluid-height el-table el-table--layout-fixed naming-table is-scrolling-none",
+          "publicClass": false,
+          "elTableBorderColor": "#ebeef5",
+          "elTableHeaderTextColor": "#909399",
+          "elTableHeaderBgColor": "#fff",
+          "headerFontSize": "14px",
+          "headerFontWeight": "600",
+          "headerColor": "rgb(144, 147, 153)",
+          "headerLetterSpacing": "normal",
+          "thPadding": "8px 0px",
+          "tdPadding": null,
+          "headerColCount": 7,
+          "bodyRowCount": 0,
+          "headerRowRect": {
+            "x": 211,
+            "y": 191.390625,
+            "w": 960,
+            "h": 40
+          },
+          "tokens": {
+            "--lt-table-width": "",
+            "--lt-border-color": "",
+            "--lt-header-bg-color": "",
+            "--lt-header-text-color": "",
+            "--lt-header-font-size": "",
+            "--lt-header-font-weight": "",
+            "--lt-header-letter-spacing": "",
+            "--lt-header-cell-padding": "",
+            "--lt-body-cell-padding": ""
+          }
+        }
+      }
+    },
+    "probe-client-config-main-table": {
+      "baseline": {
+        "elTableRootCount": 1,
+        "publicClassRootCount": 0,
+        "anyRootHasLtToken": false,
+        "publicRuleMatchTotal": 0,
+        "publicRuleMatchOutsideRootTotal": 0,
+        "publicRuleMatches": {
+          ".lt-main-table": 0,
+          ".lt-main-table .el-table__header th .cell": 0,
+          ".lt-main-table td.el-table__cell": 0,
+          ".lt-main-table th.el-table__cell": 0
+        },
+        "targetSample": {
+          "className": "el-table--fit el-table--enable-row-hover el-table--enable-row-transition el-table el-table--layout-fixed cc-table is-scrolling-none",
+          "publicClass": false,
+          "elTableBorderColor": "#ebeef5",
+          "elTableHeaderTextColor": "#909399",
+          "elTableHeaderBgColor": "#fff",
+          "headerFontSize": "14px",
+          "headerFontWeight": "600",
+          "headerColor": "rgb(144, 147, 153)",
+          "headerLetterSpacing": "normal",
+          "thPadding": "8px 0px",
+          "tdPadding": "8px 0px",
+          "headerColCount": 5,
+          "bodyRowCount": 16,
+          "headerRowRect": {
+            "x": 261,
+            "y": 287.984375,
+            "w": 1138,
+            "h": 40
+          },
+          "tokens": {
+            "--lt-table-width": "",
+            "--lt-border-color": "",
+            "--lt-header-bg-color": "",
+            "--lt-header-text-color": "",
+            "--lt-header-font-size": "",
+            "--lt-header-font-weight": "",
+            "--lt-header-letter-spacing": "",
+            "--lt-header-cell-padding": "",
+            "--lt-body-cell-padding": ""
+          }
+        }
+      },
+      "impl": {
+        "elTableRootCount": 1,
+        "publicClassRootCount": 0,
+        "anyRootHasLtToken": false,
+        "publicRuleMatchTotal": 0,
+        "publicRuleMatchOutsideRootTotal": 0,
+        "publicRuleMatches": {
+          ".lt-main-table": 0,
+          ".lt-main-table .el-table__header th .cell": 0,
+          ".lt-main-table td.el-table__cell": 0,
+          ".lt-main-table th.el-table__cell": 0
+        },
+        "targetSample": {
+          "className": "el-table--fit el-table--enable-row-hover el-table--enable-row-transition el-table el-table--layout-fixed cc-table is-scrolling-none",
+          "publicClass": false,
+          "elTableBorderColor": "#ebeef5",
+          "elTableHeaderTextColor": "#909399",
+          "elTableHeaderBgColor": "#fff",
+          "headerFontSize": "14px",
+          "headerFontWeight": "600",
+          "headerColor": "rgb(144, 147, 153)",
+          "headerLetterSpacing": "normal",
+          "thPadding": "8px 0px",
+          "tdPadding": "8px 0px",
+          "headerColCount": 5,
+          "bodyRowCount": 16,
+          "headerRowRect": {
+            "x": 261,
+            "y": 287.984375,
+            "w": 1138,
+            "h": 40
+          },
+          "tokens": {
+            "--lt-table-width": "",
+            "--lt-border-color": "",
+            "--lt-header-bg-color": "",
+            "--lt-header-text-color": "",
+            "--lt-header-font-size": "",
+            "--lt-header-font-weight": "",
+            "--lt-header-letter-spacing": "",
+            "--lt-header-cell-padding": "",
+            "--lt-body-cell-padding": ""
+          }
+        }
+      }
+    },
+    "data-subscribe-main-table": {
+      "baseline": {
+        "elTableRootCount": 1,
+        "publicClassRootCount": 0,
+        "anyRootHasLtToken": false,
+        "publicRuleMatchTotal": 0,
+        "publicRuleMatchOutsideRootTotal": 0,
+        "publicRuleMatches": {
+          ".lt-main-table": 0,
+          ".lt-main-table .el-table__header th .cell": 0,
+          ".lt-main-table td.el-table__cell": 0,
+          ".lt-main-table th.el-table__cell": 0
+        },
+        "targetSample": {
+          "className": "el-table--fit el-table--enable-row-transition el-table el-table--layout-fixed is-scrolling-none",
+          "publicClass": false,
+          "elTableBorderColor": "#ebeef5",
+          "elTableHeaderTextColor": "#909399",
+          "elTableHeaderBgColor": "#fff",
+          "headerFontSize": "14px",
+          "headerFontWeight": "600",
+          "headerColor": "rgb(144, 147, 153)",
+          "headerLetterSpacing": "normal",
+          "thPadding": "8px 0px",
+          "tdPadding": "8px 0px",
+          "headerColCount": 6,
+          "bodyRowCount": 1,
+          "headerRowRect": {
+            "x": 281,
+            "y": 235,
+            "w": 1098,
+            "h": 40
+          },
+          "tokens": {
+            "--lt-table-width": "",
+            "--lt-border-color": "",
+            "--lt-header-bg-color": "",
+            "--lt-header-text-color": "",
+            "--lt-header-font-size": "",
+            "--lt-header-font-weight": "",
+            "--lt-header-letter-spacing": "",
+            "--lt-header-cell-padding": "",
+            "--lt-body-cell-padding": ""
+          }
+        }
+      },
+      "impl": {
+        "elTableRootCount": 1,
+        "publicClassRootCount": 0,
+        "anyRootHasLtToken": false,
+        "publicRuleMatchTotal": 0,
+        "publicRuleMatchOutsideRootTotal": 0,
+        "publicRuleMatches": {
+          ".lt-main-table": 0,
+          ".lt-main-table .el-table__header th .cell": 0,
+          ".lt-main-table td.el-table__cell": 0,
+          ".lt-main-table th.el-table__cell": 0
+        },
+        "targetSample": {
+          "className": "el-table--fit el-table--enable-row-transition el-table el-table--layout-fixed is-scrolling-none",
+          "publicClass": false,
+          "elTableBorderColor": "#ebeef5",
+          "elTableHeaderTextColor": "#909399",
+          "elTableHeaderBgColor": "#fff",
+          "headerFontSize": "14px",
+          "headerFontWeight": "600",
+          "headerColor": "rgb(144, 147, 153)",
+          "headerLetterSpacing": "normal",
+          "thPadding": "8px 0px",
+          "tdPadding": "8px 0px",
+          "headerColCount": 6,
+          "bodyRowCount": 1,
+          "headerRowRect": {
+            "x": 281,
+            "y": 235,
+            "w": 1098,
+            "h": 40
+          },
+          "tokens": {
+            "--lt-table-width": "",
+            "--lt-border-color": "",
+            "--lt-header-bg-color": "",
+            "--lt-header-text-color": "",
+            "--lt-header-font-size": "",
+            "--lt-header-font-weight": "",
+            "--lt-header-letter-spacing": "",
+            "--lt-header-cell-padding": "",
+            "--lt-body-cell-padding": ""
+          }
+        }
+      }
+    },
+    "data-source-run-state-main-table": {
+      "baseline": {
+        "elTableRootCount": 1,
+        "publicClassRootCount": 0,
+        "anyRootHasLtToken": false,
+        "publicRuleMatchTotal": 0,
+        "publicRuleMatchOutsideRootTotal": 0,
+        "publicRuleMatches": {
+          ".lt-main-table": 0,
+          ".lt-main-table .el-table__header th .cell": 0,
+          ".lt-main-table td.el-table__cell": 0,
+          ".lt-main-table th.el-table__cell": 0
+        },
+        "targetSample": {
+          "className": "el-table--fit el-table--enable-row-hover el-table--enable-row-transition el-table el-table--layout-fixed dss-table is-scrolling-none",
+          "publicClass": false,
+          "elTableBorderColor": "#f4f4f5",
+          "elTableHeaderTextColor": "#71717a",
+          "elTableHeaderBgColor": "#ffffff",
+          "headerFontSize": "12px",
+          "headerFontWeight": "600",
+          "headerColor": "rgb(113, 113, 122)",
+          "headerLetterSpacing": "0.12px",
+          "thPadding": "11px 0px",
+          "tdPadding": "12px 0px",
+          "headerColCount": 7,
+          "bodyRowCount": 30,
+          "headerRowRect": {
+            "x": 292,
+            "y": 346.5,
+            "w": 1175,
+            "h": 46
+          },
+          "tokens": {
+            "--lt-table-width": "",
+            "--lt-border-color": "",
+            "--lt-header-bg-color": "",
+            "--lt-header-text-color": "",
+            "--lt-header-font-size": "",
+            "--lt-header-font-weight": "",
+            "--lt-header-letter-spacing": "",
+            "--lt-header-cell-padding": "",
+            "--lt-body-cell-padding": ""
+          }
+        }
+      },
+      "impl": {
+        "elTableRootCount": 1,
+        "publicClassRootCount": 0,
+        "anyRootHasLtToken": false,
+        "publicRuleMatchTotal": 0,
+        "publicRuleMatchOutsideRootTotal": 0,
+        "publicRuleMatches": {
+          ".lt-main-table": 0,
+          ".lt-main-table .el-table__header th .cell": 0,
+          ".lt-main-table td.el-table__cell": 0,
+          ".lt-main-table th.el-table__cell": 0
+        },
+        "targetSample": {
+          "className": "el-table--fit el-table--enable-row-hover el-table--enable-row-transition el-table el-table--layout-fixed dss-table is-scrolling-none",
+          "publicClass": false,
+          "elTableBorderColor": "#f4f4f5",
+          "elTableHeaderTextColor": "#71717a",
+          "elTableHeaderBgColor": "#ffffff",
+          "headerFontSize": "12px",
+          "headerFontWeight": "600",
+          "headerColor": "rgb(113, 113, 122)",
+          "headerLetterSpacing": "0.12px",
+          "thPadding": "11px 0px",
+          "tdPadding": "12px 0px",
+          "headerColCount": 7,
+          "bodyRowCount": 30,
+          "headerRowRect": {
+            "x": 292,
+            "y": 346.5,
+            "w": 1175,
+            "h": 46
+          },
+          "tokens": {
+            "--lt-table-width": "",
+            "--lt-border-color": "",
+            "--lt-header-bg-color": "",
+            "--lt-header-text-color": "",
+            "--lt-header-font-size": "",
+            "--lt-header-font-weight": "",
+            "--lt-header-letter-spacing": "",
+            "--lt-header-cell-padding": "",
+            "--lt-body-cell-padding": ""
+          }
+        }
+      }
+    },
+    "topic-offset-main-table": {
+      "baseline": {
+        "elTableRootCount": 1,
+        "publicClassRootCount": 0,
+        "anyRootHasLtToken": false,
+        "publicRuleMatchTotal": 0,
+        "publicRuleMatchOutsideRootTotal": 0,
+        "publicRuleMatches": {
+          ".lt-main-table": 0,
+          ".lt-main-table .el-table__header th .cell": 0,
+          ".lt-main-table td.el-table__cell": 0,
+          ".lt-main-table th.el-table__cell": 0
+        },
+        "targetSample": {
+          "className": "el-table--fit el-table--border el-table--scrollable-x el-table el-table--layout-fixed toff-table is-scrolling-left",
+          "publicClass": false,
+          "elTableBorderColor": "#ebeef5",
+          "elTableHeaderTextColor": "#909399",
+          "elTableHeaderBgColor": "#fff",
+          "headerFontSize": "14px",
+          "headerFontWeight": "600",
+          "headerColor": "rgb(48, 49, 51)",
+          "headerLetterSpacing": "normal",
+          "thPadding": "8px 0px",
+          "tdPadding": "8px 0px",
+          "headerColCount": 8,
+          "bodyRowCount": 150,
+          "headerRowRect": {
+            "x": 260,
+            "y": 299.5,
+            "w": 1370,
+            "h": 40
+          },
+          "tokens": {
+            "--lt-table-width": "",
+            "--lt-border-color": "",
+            "--lt-header-bg-color": "",
+            "--lt-header-text-color": "",
+            "--lt-header-font-size": "",
+            "--lt-header-font-weight": "",
+            "--lt-header-letter-spacing": "",
+            "--lt-header-cell-padding": "",
+            "--lt-body-cell-padding": ""
+          }
+        }
+      },
+      "impl": {
+        "elTableRootCount": 1,
+        "publicClassRootCount": 0,
+        "anyRootHasLtToken": false,
+        "publicRuleMatchTotal": 0,
+        "publicRuleMatchOutsideRootTotal": 0,
+        "publicRuleMatches": {
+          ".lt-main-table": 0,
+          ".lt-main-table .el-table__header th .cell": 0,
+          ".lt-main-table td.el-table__cell": 0,
+          ".lt-main-table th.el-table__cell": 0
+        },
+        "targetSample": {
+          "className": "el-table--fit el-table--border el-table--scrollable-x el-table el-table--layout-fixed toff-table is-scrolling-left",
+          "publicClass": false,
+          "elTableBorderColor": "#ebeef5",
+          "elTableHeaderTextColor": "#909399",
+          "elTableHeaderBgColor": "#fff",
+          "headerFontSize": "14px",
+          "headerFontWeight": "600",
+          "headerColor": "rgb(48, 49, 51)",
+          "headerLetterSpacing": "normal",
+          "thPadding": "8px 0px",
+          "tdPadding": "8px 0px",
+          "headerColCount": 8,
+          "bodyRowCount": 150,
+          "headerRowRect": {
+            "x": 260,
+            "y": 299.5,
+            "w": 1370,
+            "h": 40
+          },
+          "tokens": {
+            "--lt-table-width": "",
+            "--lt-border-color": "",
+            "--lt-header-bg-color": "",
+            "--lt-header-text-color": "",
+            "--lt-header-font-size": "",
+            "--lt-header-font-weight": "",
+            "--lt-header-letter-spacing": "",
+            "--lt-header-cell-padding": "",
+            "--lt-body-cell-padding": ""
+          }
+        }
+      }
+    },
+    "server-config-save-confirm-dialog-table": {
+      "baseline": {
+        "elTableRootCount": 2,
+        "publicClassRootCount": 0,
+        "anyRootHasLtToken": false,
+        "publicRuleMatchTotal": 0,
+        "publicRuleMatchOutsideRootTotal": 0,
+        "publicRuleMatches": {
+          ".lt-main-table": 0,
+          ".lt-main-table .el-table__header th .cell": 0,
+          ".lt-main-table td.el-table__cell": 0,
+          ".lt-main-table th.el-table__cell": 0
+        },
+        "targetSample": {
+          "className": "el-table--fit el-table--border el-table--enable-row-hover el-table--enable-row-transition el-table--small el-table el-table--layout-fixed confirm-table is-scrolling-none",
+          "publicClass": false,
+          "elTableBorderColor": "#ebeef5",
+          "elTableHeaderTextColor": "#909399",
+          "elTableHeaderBgColor": "#fff",
+          "headerFontSize": "12px",
+          "headerFontWeight": "600",
+          "headerColor": "rgb(144, 147, 153)",
+          "headerLetterSpacing": "normal",
+          "thPadding": "4px 0px",
+          "tdPadding": "4px 0px",
+          "headerColCount": 3,
+          "bodyRowCount": 1,
+          "headerRowRect": {
+            "x": 416,
+            "y": 161.1875,
+            "w": 608,
+            "h": 32
+          },
+          "tokens": {
+            "--lt-table-width": "",
+            "--lt-border-color": "",
+            "--lt-header-bg-color": "",
+            "--lt-header-text-color": "",
+            "--lt-header-font-size": "",
+            "--lt-header-font-weight": "",
+            "--lt-header-letter-spacing": "",
+            "--lt-header-cell-padding": "",
+            "--lt-body-cell-padding": ""
+          }
+        }
+      },
+      "impl": {
+        "elTableRootCount": 2,
+        "publicClassRootCount": 0,
+        "anyRootHasLtToken": false,
+        "publicRuleMatchTotal": 0,
+        "publicRuleMatchOutsideRootTotal": 0,
+        "publicRuleMatches": {
+          ".lt-main-table": 0,
+          ".lt-main-table .el-table__header th .cell": 0,
+          ".lt-main-table td.el-table__cell": 0,
+          ".lt-main-table th.el-table__cell": 0
+        },
+        "targetSample": {
+          "className": "el-table--fit el-table--border el-table--enable-row-hover el-table--enable-row-transition el-table--small el-table el-table--layout-fixed confirm-table is-scrolling-none",
+          "publicClass": false,
+          "elTableBorderColor": "#ebeef5",
+          "elTableHeaderTextColor": "#909399",
+          "elTableHeaderBgColor": "#fff",
+          "headerFontSize": "12px",
+          "headerFontWeight": "600",
+          "headerColor": "rgb(144, 147, 153)",
+          "headerLetterSpacing": "normal",
+          "thPadding": "4px 0px",
+          "tdPadding": "4px 0px",
+          "headerColCount": 3,
+          "bodyRowCount": 1,
+          "headerRowRect": {
+            "x": 416,
+            "y": 161.1875,
+            "w": 608,
+            "h": 32
+          },
+          "tokens": {
+            "--lt-table-width": "",
+            "--lt-border-color": "",
+            "--lt-header-bg-color": "",
+            "--lt-header-text-color": "",
+            "--lt-header-font-size": "",
+            "--lt-header-font-weight": "",
+            "--lt-header-letter-spacing": "",
+            "--lt-header-cell-padding": "",
+            "--lt-body-cell-padding": ""
+          }
+        }
+      }
+    },
+    "log-query-main-table": {
+      "baseline": {
+        "status": "TABLE_NOT_RENDERED",
+        "elTableRootCount": 0,
+        "publicClassRootCount": 0,
+        "publicRuleMatchTotal": 0,
+        "anyRootHasLtToken": false,
+        "targetSample": null,
+        "pageNote": "日志查询功能暂未开放"
+      },
+      "impl": {
+        "status": "TABLE_NOT_RENDERED",
+        "elTableRootCount": 0,
+        "publicClassRootCount": 0,
+        "publicRuleMatchTotal": 0,
+        "anyRootHasLtToken": false,
+        "targetSample": null,
+        "pageNote": "日志查询功能暂未开放"
+      }
+    },
+    "job-failure-history-list-table": {
+      "baseline": {
+        "status": "TABLE_NOT_RENDERED",
+        "elTableRootCount": 0,
+        "publicClassRootCount": 0,
+        "publicRuleMatchTotal": 0,
+        "anyRootHasLtToken": false,
+        "targetSample": null,
+        "pageNote": null
+      },
+      "impl": {
+        "status": "TABLE_NOT_RENDERED",
+        "elTableRootCount": 0,
+        "publicClassRootCount": 0,
+        "publicRuleMatchTotal": 0,
+        "anyRootHasLtToken": false,
+        "targetSample": null,
+        "pageNote": null
+      }
+    }
+  }
+}

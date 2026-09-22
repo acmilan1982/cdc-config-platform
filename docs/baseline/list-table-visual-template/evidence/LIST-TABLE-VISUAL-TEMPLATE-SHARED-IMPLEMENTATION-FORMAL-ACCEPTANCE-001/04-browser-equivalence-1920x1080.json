@@ -1,0 +1,531 @@
+{
+  "generatedAt": "2026-09-22T05:39:18.386Z",
+  "pagePath": "/config/data-source",
+  "baselineBaseUrl": "http://127.0.0.1:5174",
+  "implBaseUrl": "http://127.0.0.1:5173",
+  "tool": "reports/evidence/LIST-TABLE-VISUAL-TEMPLATE-SHARED-IMPLEMENTATION-AND-DATA-SOURCE-REFERENCE-INTEGRATION-001/scripts/{sample-equivalence.mjs,judge-equivalence.mjs}",
+  "viewportKey": "1920x1080",
+  "samples": {
+    "baselineA": {
+      "url": "http://127.0.0.1:5174/config/data-source",
+      "viewport": {
+        "innerWidth": 1920,
+        "innerHeight": 1080,
+        "devicePixelRatio": 1,
+        "visualViewportScale": 1,
+        "clientWidth": 1920,
+        "clientHeight": 1080
+      },
+      "main": {
+        "rootClassName": "el-table--fit el-table--enable-row-transition el-table el-table--layout-fixed data-table is-scrolling-none",
+        "mainTableHasPublicClass": false,
+        "tableWidth": "1556px",
+        "tableViewportWidth": 1556,
+        "tableLayout": "fixed",
+        "elTableBorderColor": "#f4f4f5",
+        "elTableHeaderTextColor": "#71717a",
+        "elTableHeaderBgColor": "#ffffff",
+        "headerFontSize": "12px",
+        "headerFontWeight": "600",
+        "headerColor": "rgb(113, 113, 122)",
+        "headerLetterSpacing": "0.12px",
+        "thPadding": "11px 0px 11px 0px",
+        "tdPadding": "12px 0px 12px 0px",
+        "headerBackgroundColor": "rgb(255, 255, 255)",
+        "rootRect": {
+          "x": 292,
+          "y": 308.5,
+          "w": 1556,
+          "h": 1774,
+          "top": 308.5,
+          "left": 292,
+          "right": 1848,
+          "bottom": 2082.5
+        },
+        "headerWrapperRect": {
+          "x": 292,
+          "y": 308.5,
+          "w": 1556,
+          "h": 46,
+          "top": 308.5,
+          "left": 292,
+          "right": 1848,
+          "bottom": 354.5
+        },
+        "headerRowRect": {
+          "x": 292,
+          "y": 308.5,
+          "w": 1556,
+          "h": 46,
+          "top": 308.5,
+          "left": 292,
+          "right": 1848,
+          "bottom": 354.5
+        },
+        "firstRowRect": {
+          "x": 292,
+          "y": 354.5,
+          "w": 1556,
+          "h": 48,
+          "top": 354.5,
+          "left": 292,
+          "right": 1848,
+          "bottom": 402.5
+        },
+        "firstCellRect": {
+          "x": 292,
+          "y": 354.5,
+          "w": 70,
+          "h": 48,
+          "top": 354.5,
+          "left": 292,
+          "right": 362,
+          "bottom": 402.5
+        },
+        "bodyRowCount": 36,
+        "tooltipCellCount": 180,
+        "longTextOverflow": "ellipsis",
+        "ltTokens": {
+          "--lt-table-width": "",
+          "--lt-border-color": "",
+          "--lt-header-bg-color": "",
+          "--lt-header-text-color": "",
+          "--lt-header-font-size": "",
+          "--lt-header-font-weight": "",
+          "--lt-header-letter-spacing": "",
+          "--lt-header-cell-padding": "",
+          "--lt-body-cell-padding": ""
+        }
+      },
+      "naming": {
+        "rootClassName": "el-table--fit el-table--fluid-height el-table el-table--layout-fixed naming-table is-scrolling-none",
+        "namingTableHasPublicClass": false,
+        "elTableBorderColor": "#ebeef5",
+        "elTableHeaderTextColor": "#909399",
+        "elTableHeaderBgColor": "#fff",
+        "headerFontSize": "14px",
+        "headerFontWeight": "600",
+        "headerColor": "rgb(144, 147, 153)",
+        "headerLetterSpacing": "normal",
+        "thPadding": "8px 0px",
+        "tdPadding": null,
+        "bodyRowCount": 0,
+        "headerCellCount": 7,
+        "rootRect": {
+          "x": 451,
+          "y": 218.390625,
+          "w": 1018,
+          "h": 100,
+          "top": 218.390625,
+          "left": 451,
+          "right": 1469,
+          "bottom": 318.390625
+        },
+        "headerRowRect": {
+          "x": 451,
+          "y": 218.390625,
+          "w": 960,
+          "h": 40,
+          "top": 218.390625,
+          "left": 451,
+          "right": 1411,
+          "bottom": 258.390625
+        },
+        "firstRowRect": null,
+        "ltTokens": {
+          "--lt-table-width": "",
+          "--lt-border-color": "",
+          "--lt-header-bg-color": "",
+          "--lt-header-text-color": "",
+          "--lt-header-font-size": "",
+          "--lt-header-font-weight": "",
+          "--lt-header-letter-spacing": "",
+          "--lt-header-cell-padding": "",
+          "--lt-body-cell-padding": ""
+        }
+      },
+      "publicRuleMatches": {
+        ".lt-main-table": {
+          "count": 0,
+          "outsideRoot": 0,
+          "distinctElTableRoots": 0
+        },
+        ".lt-main-table .el-table__header th .cell": {
+          "count": 0,
+          "outsideRoot": 0,
+          "distinctElTableRoots": 0
+        },
+        ".lt-main-table td.el-table__cell": {
+          "count": 0,
+          "outsideRoot": 0,
+          "distinctElTableRoots": 0
+        },
+        ".lt-main-table th.el-table__cell": {
+          "count": 0,
+          "outsideRoot": 0,
+          "distinctElTableRoots": 0
+        }
+      }
+    },
+    "baselineB": {
+      "url": "http://127.0.0.1:5174/config/data-source",
+      "viewport": {
+        "innerWidth": 1920,
+        "innerHeight": 1080,
+        "devicePixelRatio": 1,
+        "visualViewportScale": 1,
+        "clientWidth": 1920,
+        "clientHeight": 1080
+      },
+      "main": {
+        "rootClassName": "el-table--fit el-table--enable-row-transition el-table el-table--layout-fixed data-table is-scrolling-none",
+        "mainTableHasPublicClass": false,
+        "tableWidth": "1556px",
+        "tableViewportWidth": 1556,
+        "tableLayout": "fixed",
+        "elTableBorderColor": "#f4f4f5",
+        "elTableHeaderTextColor": "#71717a",
+        "elTableHeaderBgColor": "#ffffff",
+        "headerFontSize": "12px",
+        "headerFontWeight": "600",
+        "headerColor": "rgb(113, 113, 122)",
+        "headerLetterSpacing": "0.12px",
+        "thPadding": "11px 0px 11px 0px",
+        "tdPadding": "12px 0px 12px 0px",
+        "headerBackgroundColor": "rgb(255, 255, 255)",
+        "rootRect": {
+          "x": 292,
+          "y": 308.5,
+          "w": 1556,
+          "h": 1774,
+          "top": 308.5,
+          "left": 292,
+          "right": 1848,
+          "bottom": 2082.5
+        },
+        "headerWrapperRect": {
+          "x": 292,
+          "y": 308.5,
+          "w": 1556,
+          "h": 46,
+          "top": 308.5,
+          "left": 292,
+          "right": 1848,
+          "bottom": 354.5
+        },
+        "headerRowRect": {
+          "x": 292,
+          "y": 308.5,
+          "w": 1556,
+          "h": 46,
+          "top": 308.5,
+          "left": 292,
+          "right": 1848,
+          "bottom": 354.5
+        },
+        "firstRowRect": {
+          "x": 292,
+          "y": 354.5,
+          "w": 1556,
+          "h": 48,
+          "top": 354.5,
+          "left": 292,
+          "right": 1848,
+          "bottom": 402.5
+        },
+        "firstCellRect": {
+          "x": 292,
+          "y": 354.5,
+          "w": 70,
+          "h": 48,
+          "top": 354.5,
+          "left": 292,
+          "right": 362,
+          "bottom": 402.5
+        },
+        "bodyRowCount": 36,
+        "tooltipCellCount": 180,
+        "longTextOverflow": "ellipsis",
+        "ltTokens": {
+          "--lt-table-width": "",
+          "--lt-border-color": "",
+          "--lt-header-bg-color": "",
+          "--lt-header-text-color": "",
+          "--lt-header-font-size": "",
+          "--lt-header-font-weight": "",
+          "--lt-header-letter-spacing": "",
+          "--lt-header-cell-padding": "",
+          "--lt-body-cell-padding": ""
+        }
+      },
+      "naming": {
+        "rootClassName": "el-table--fit el-table--fluid-height el-table el-table--layout-fixed naming-table is-scrolling-none",
+        "namingTableHasPublicClass": false,
+        "elTableBorderColor": "#ebeef5",
+        "elTableHeaderTextColor": "#909399",
+        "elTableHeaderBgColor": "#fff",
+        "headerFontSize": "14px",
+        "headerFontWeight": "600",
+        "headerColor": "rgb(144, 147, 153)",
+        "headerLetterSpacing": "normal",
+        "thPadding": "8px 0px",
+        "tdPadding": null,
+        "bodyRowCount": 0,
+        "headerCellCount": 7,
+        "rootRect": {
+          "x": 451,
+          "y": 218.390625,
+          "w": 1018,
+          "h": 100,
+          "top": 218.390625,
+          "left": 451,
+          "right": 1469,
+          "bottom": 318.390625
+        },
+        "headerRowRect": {
+          "x": 451,
+          "y": 218.390625,
+          "w": 960,
+          "h": 40,
+          "top": 218.390625,
+          "left": 451,
+          "right": 1411,
+          "bottom": 258.390625
+        },
+        "firstRowRect": null,
+        "ltTokens": {
+          "--lt-table-width": "",
+          "--lt-border-color": "",
+          "--lt-header-bg-color": "",
+          "--lt-header-text-color": "",
+          "--lt-header-font-size": "",
+          "--lt-header-font-weight": "",
+          "--lt-header-letter-spacing": "",
+          "--lt-header-cell-padding": "",
+          "--lt-body-cell-padding": ""
+        }
+      },
+      "publicRuleMatches": {
+        ".lt-main-table": {
+          "count": 0,
+          "outsideRoot": 0,
+          "distinctElTableRoots": 0
+        },
+        ".lt-main-table .el-table__header th .cell": {
+          "count": 0,
+          "outsideRoot": 0,
+          "distinctElTableRoots": 0
+        },
+        ".lt-main-table td.el-table__cell": {
+          "count": 0,
+          "outsideRoot": 0,
+          "distinctElTableRoots": 0
+        },
+        ".lt-main-table th.el-table__cell": {
+          "count": 0,
+          "outsideRoot": 0,
+          "distinctElTableRoots": 0
+        }
+      }
+    },
+    "impl": {
+      "url": "http://127.0.0.1:5173/config/data-source",
+      "viewport": {
+        "innerWidth": 1920,
+        "innerHeight": 1080,
+        "devicePixelRatio": 1,
+        "visualViewportScale": 1,
+        "clientWidth": 1920,
+        "clientHeight": 1080
+      },
+      "main": {
+        "rootClassName": "el-table--fit el-table--enable-row-transition el-table el-table--layout-fixed data-table lt-main-table is-scrolling-none",
+        "mainTableHasPublicClass": true,
+        "tableWidth": "1556px",
+        "tableViewportWidth": 1556,
+        "tableLayout": "fixed",
+        "elTableBorderColor": "#f4f4f5",
+        "elTableHeaderTextColor": "#71717a",
+        "elTableHeaderBgColor": "#ffffff",
+        "headerFontSize": "12px",
+        "headerFontWeight": "600",
+        "headerColor": "rgb(113, 113, 122)",
+        "headerLetterSpacing": "0.12px",
+        "thPadding": "11px 0px 11px 0px",
+        "tdPadding": "12px 0px 12px 0px",
+        "headerBackgroundColor": "rgb(255, 255, 255)",
+        "rootRect": {
+          "x": 292,
+          "y": 308.5,
+          "w": 1556,
+          "h": 1774,
+          "top": 308.5,
+          "left": 292,
+          "right": 1848,
+          "bottom": 2082.5
+        },
+        "headerWrapperRect": {
+          "x": 292,
+          "y": 308.5,
+          "w": 1556,
+          "h": 46,
+          "top": 308.5,
+          "left": 292,
+          "right": 1848,
+          "bottom": 354.5
+        },
+        "headerRowRect": {
+          "x": 292,
+          "y": 308.5,
+          "w": 1556,
+          "h": 46,
+          "top": 308.5,
+          "left": 292,
+          "right": 1848,
+          "bottom": 354.5
+        },
+        "firstRowRect": {
+          "x": 292,
+          "y": 354.5,
+          "w": 1556,
+          "h": 48,
+          "top": 354.5,
+          "left": 292,
+          "right": 1848,
+          "bottom": 402.5
+        },
+        "firstCellRect": {
+          "x": 292,
+          "y": 354.5,
+          "w": 70,
+          "h": 48,
+          "top": 354.5,
+          "left": 292,
+          "right": 362,
+          "bottom": 402.5
+        },
+        "bodyRowCount": 36,
+        "tooltipCellCount": 180,
+        "longTextOverflow": "ellipsis",
+        "ltTokens": {
+          "--lt-table-width": "",
+          "--lt-border-color": "",
+          "--lt-header-bg-color": "",
+          "--lt-header-text-color": "",
+          "--lt-header-font-size": "",
+          "--lt-header-font-weight": "",
+          "--lt-header-letter-spacing": "",
+          "--lt-header-cell-padding": "",
+          "--lt-body-cell-padding": ""
+        }
+      },
+      "naming": {
+        "rootClassName": "el-table--fit el-table--fluid-height el-table el-table--layout-fixed naming-table is-scrolling-none",
+        "namingTableHasPublicClass": false,
+        "elTableBorderColor": "#ebeef5",
+        "elTableHeaderTextColor": "#909399",
+        "elTableHeaderBgColor": "#fff",
+        "headerFontSize": "14px",
+        "headerFontWeight": "600",
+        "headerColor": "rgb(144, 147, 153)",
+        "headerLetterSpacing": "normal",
+        "thPadding": "8px 0px",
+        "tdPadding": null,
+        "bodyRowCount": 0,
+        "headerCellCount": 7,
+        "rootRect": {
+          "x": 451,
+          "y": 218.390625,
+          "w": 1018,
+          "h": 100,
+          "top": 218.390625,
+          "left": 451,
+          "right": 1469,
+          "bottom": 318.390625
+        },
+        "headerRowRect": {
+          "x": 451,
+          "y": 218.390625,
+          "w": 960,
+          "h": 40,
+          "top": 218.390625,
+          "left": 451,
+          "right": 1411,
+          "bottom": 258.390625
+        },
+        "firstRowRect": null,
+        "ltTokens": {
+          "--lt-table-width": "",
+          "--lt-border-color": "",
+          "--lt-header-bg-color": "",
+          "--lt-header-text-color": "",
+          "--lt-header-font-size": "",
+          "--lt-header-font-weight": "",
+          "--lt-header-letter-spacing": "",
+          "--lt-header-cell-padding": "",
+          "--lt-body-cell-padding": ""
+        }
+      },
+      "publicRuleMatches": {
+        ".lt-main-table": {
+          "count": 1,
+          "outsideRoot": 0,
+          "distinctElTableRoots": 1
+        },
+        ".lt-main-table .el-table__header th .cell": {
+          "count": 10,
+          "outsideRoot": 0,
+          "distinctElTableRoots": 1
+        },
+        ".lt-main-table td.el-table__cell": {
+          "count": 360,
+          "outsideRoot": 0,
+          "distinctElTableRoots": 1
+        },
+        ".lt-main-table th.el-table__cell": {
+          "count": 10,
+          "outsideRoot": 0,
+          "distinctElTableRoots": 1
+        }
+      }
+    }
+  },
+  "judgement": {
+    "ok": true,
+    "maxDifference": {
+      "mainComputedStyle": 0,
+      "mainGeometry": 0,
+      "namingComputedStyle": 0,
+      "namingGeometry": 0
+    },
+    "failureCount": 0,
+    "subpixelNoiseCount": 0,
+    "injectPx": 0,
+    "normalizeDecimals": 3,
+    "noiseFloorPx": 0,
+    "failedChecks": [],
+    "checks": {
+      "baselineA_main_no_public_class": true,
+      "impl_main_has_public_class": true,
+      "baselineA_main_business_class_kept": true,
+      "impl_main_business_class_kept": true,
+      "baselineA_naming_no_public_class": true,
+      "impl_naming_no_public_class": true,
+      "impl_public_root_match_count_eq_1": true,
+      "impl_public_root_single_el_table": true,
+      "impl_descendant_rules_no_leak": true,
+      "baselineA_public_rules_match_0": true,
+      "impl_tokens_empty_on_enabled_table": true,
+      "impl_tokens_empty_on_naming_table": true,
+      "baselineA_tokens_empty_on_main_table": true,
+      "viewport_matches": true,
+      "viewport_size_is_requested": true,
+      "device_pixel_ratio_1": true,
+      "visual_viewport_scale_1": true,
+      "tooltip_cell_count_positive": true,
+      "tooltip_cell_count_unchanged": true,
+      "long_text_ellipsis": true,
+      "body_row_count_unchanged": true
+    }
+  }
+}

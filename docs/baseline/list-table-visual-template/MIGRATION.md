@@ -11,12 +11,16 @@ approval_scope=BASELINE_CONTENT_ONLY
 approved_baseline_source_commit=575379895c4c57fd3df7e0d0ce27c1f6841d2f17
 shared_implementation_design_status=APPROVED
 shared_implementation_design_approval_status=APPROVED
-shared_implementation_status=IMPLEMENTED_PENDING_FORMAL_ACCEPTANCE
-reference_page_integration_status=IMPLEMENTED_PENDING_FORMAL_ACCEPTANCE
+shared_implementation_status=IMPLEMENTED_PENDING_FINAL_ACCEPTANCE
+reference_page_integration_status=IMPLEMENTED_PENDING_FINAL_ACCEPTANCE
 project_owner_visual_review_status=PASS
 project_owner_visual_review_date=2026-09-22
-formal_acceptance_execution_status=NOT_RUN
-final_acceptance_status=NOT_ACCEPTED_PENDING_FORMAL_ACCEPTANCE
+formal_acceptance_execution_status=EXECUTED_PASSED_LOCAL
+formal_acceptance_pass_count=14
+formal_acceptance_fail_count=0
+formal_acceptance_blocked_count=0
+formal_acceptance_not_run_count=0
+final_acceptance_status=NOT_ACCEPTED_PENDING_PROJECT_OWNER
 page_migration_status=NOT_STARTED
 page_migration_authorization_status=NOT_GRANTED
 candidate_inventory_status=COMPLETED_APPROVED_AS_BASELINE_INVENTORY
@@ -37,11 +41,12 @@ blocking_finding_count=0
 > 本文档产出**候选盘点与评估结果**，该盘点已作为**基线盘点结果**随基线内容一并批准；
 > 但批准的是**盘点事实与边界规则**，**不**授权、**不**实施任何迁移。
 > 公共实现与数据源管理参考页接入随后已由独立实施任务落地，
-> 并经项目负责人于 2026-09-22 目测通过
-> （`shared_implementation_status=IMPLEMENTED_PENDING_FORMAL_ACCEPTANCE`、
-> `reference_page_integration_status=IMPLEMENTED_PENDING_FORMAL_ACCEPTANCE`，
-> `project_owner_visual_review_status=PASS`），
-> 但**尚未**通过正式验收；`page_migration_status=NOT_STARTED`、
+> 经项目负责人于 2026-09-22 目测通过，并通过本地正式验收
+> （`shared_implementation_status=IMPLEMENTED_PENDING_FINAL_ACCEPTANCE`、
+> `reference_page_integration_status=IMPLEMENTED_PENDING_FINAL_ACCEPTANCE`，
+> `project_owner_visual_review_status=PASS`，
+> `formal_acceptance_execution_status=EXECUTED_PASSED_LOCAL`），
+> 但**仍待项目负责人最终接受**；`page_migration_status=NOT_STARTED`、
 > `page_migration_authorization_status=NOT_GRANTED`
 > 在本轮**未改变**。
 
@@ -178,16 +183,17 @@ NEEDS_SEPARATE_EVALUATION=1
 3. 公共实现详细设计与批准 —— **已完成**（ChatGPT 远程 R2 复审 `REVIEW_PASS`、
    `blocking_finding_count=0`；项目负责人于 2026-09-21 批准，
    `approval_scope=SHARED_IMPLEMENTATION_DETAILED_DESIGN_ONLY`）；
-4. 公共实现与数据源管理参考页等价接入及项目负责人目测 —— **已实现且目测通过（2026-09-22），待正式验收**
-   （`IMPLEMENTED_PENDING_FORMAL_ACCEPTANCE`；`project_owner_visual_review_status=PASS`）；
-5. 公共实现正式验收与最终接受 —— **未运行**（`formal_acceptance_execution_status=NOT_RUN`，
-   `final_acceptance_status=NOT_ACCEPTED_PENDING_FORMAL_ACCEPTANCE`，最终接受**尚未决定**）；
+4. 公共实现与数据源管理参考页等价接入及项目负责人目测 —— **已实现且目测通过（2026-09-22）**
+   （`IMPLEMENTED_PENDING_FINAL_ACCEPTANCE`；`project_owner_visual_review_status=PASS`）；
+5. 公共实现正式验收与最终接受 —— **本地正式验收已通过（14/14 PASS，
+   `formal_acceptance_execution_status=EXECUTED_PASSED_LOCAL`），最终接受未决定**
+   （`final_acceptance_status=NOT_ACCEPTED_PENDING_PROJECT_OWNER`）；
 6. 之后才逐页选择并单独授权 —— **未授权**（`page_migration_status=NOT_STARTED`、
    `page_migration_authorization_status=NOT_GRANTED`）。
 
 第 1、2、3 条完成**只**意味着**基线内容**与**详细设计文档**已批准；
-第 4 条已实现且目测通过但**未**通过正式验收，第 5、6 条**仍未运行/未授权**，
-**不得**把上述不同层级合并成模糊的“已完成”。
-**批准详细设计 ≠ 批准实现 ≠ 目测通过 ≠ 通过正式验收 ≠ 批准页面迁移。**
+第 4 条已实现且目测通过，第 5 条的**正式验收**已在本地执行并通过但**最终接受未决定**，
+第 6 条**仍未授权**，**不得**把上述不同层级合并成模糊的“已完成”。
+**批准详细设计 ≠ 批准实现 ≠ 目测通过 ≠ 通过正式验收（本地） ≠ 项目负责人最终接受 ≠ 批准页面迁移。**
 本轮**未**选择首个迁移页面，
 **未**为探针端管理、数据订阅或任何页面生成实施任务。
