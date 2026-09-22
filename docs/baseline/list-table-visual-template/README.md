@@ -11,9 +11,12 @@ approval_scope=BASELINE_CONTENT_ONLY
 approved_baseline_source_commit=575379895c4c57fd3df7e0d0ce27c1f6841d2f17
 shared_implementation_design_status=APPROVED
 shared_implementation_design_approval_status=APPROVED
-shared_implementation_status=IMPLEMENTED_PENDING_USER_REVIEW
-reference_page_integration_status=IMPLEMENTED_PENDING_USER_REVIEW
+shared_implementation_status=IMPLEMENTED_PENDING_FORMAL_ACCEPTANCE
+reference_page_integration_status=IMPLEMENTED_PENDING_FORMAL_ACCEPTANCE
+project_owner_visual_review_status=PASS
+project_owner_visual_review_date=2026-09-22
 formal_acceptance_execution_status=NOT_RUN
+final_acceptance_status=NOT_ACCEPTED_PENDING_FORMAL_ACCEPTANCE
 page_migration_status=NOT_STARTED
 page_migration_authorization_status=NOT_GRANTED
 candidate_inventory_status=COMPLETED_APPROVED_AS_BASELINE_INVENTORY
@@ -60,10 +63,13 @@ blocking_finding_count=0
 >
 > `shared_implementation_status` 与 `reference_page_integration_status` 已由独立实施任务
 > `LIST-TABLE-VISUAL-TEMPLATE-SHARED-IMPLEMENTATION-AND-DATA-SOURCE-REFERENCE-INTEGRATION-001`
-> 推进为 `IMPLEMENTED_PENDING_USER_REVIEW`——该值**只**表示**代码已按下述设计实现并完成
-> Agent 侧等价验证，等待项目负责人目测复核**，
+> 推进为 `IMPLEMENTED_PENDING_FORMAL_ACCEPTANCE`——该值**只**表示**代码已按下述设计实现并完成
+> Agent 侧等价验证，且项目负责人已于 2026-09-22 目测通过
+> （`project_owner_visual_review_status=PASS`，页面入口
+> `http://192.168.174.70:5173/config/data-source`），**等待正式验收**，
 > **不**表示已通过正式验收、**不**表示已被接受、**不**表示生产可用；
 > 因此 `formal_acceptance_execution_status` 保持 `NOT_RUN`，
+> `final_acceptance_status` 为 `NOT_ACCEPTED_PENDING_FORMAL_ACCEPTANCE`，
 > `page_migration_status` 保持 `NOT_STARTED`，
 > `page_migration_authorization_status` 保持 `NOT_GRANTED`。
 > 本目录**未**被设置为验收结论或页面迁移状态；
@@ -203,16 +209,16 @@ reference_table_class=.data-table
   §8.1 / §8.2 **部分采纳**为其两半，§8.3 **被否决**；
   该结论已经 ChatGPT 远程 R2 复审 `REVIEW_PASS` 与项目负责人批准
   （`approval_scope=SHARED_IMPLEMENTATION_DETAILED_DESIGN_ONLY`，见 §8、§9），
-  并已由独立实施任务**落地**（待项目负责人目测复核 / 待正式验收）；
+  并已由独立实施任务**落地**（项目负责人已于 2026-09-22 目测通过，待正式验收）；
 - 公共实现详细设计**已批准**（`shared_implementation_design_status=APPROVED`，
   `..._approval_status=APPROVED`）；公共实现已按该设计落地
-  （`shared_implementation_status=IMPLEMENTED_PENDING_USER_REVIEW`）；
+  （`shared_implementation_status=IMPLEMENTED_PENDING_FORMAL_ACCEPTANCE`）；
 - 数据源管理**主列表**已作为参考页接入公共实现
-  （`reference_page_integration_status=IMPLEMENTED_PENDING_USER_REVIEW`）；
+  （`reference_page_integration_status=IMPLEMENTED_PENDING_FORMAL_ACCEPTANCE`）；
 - **没有任何**业务页面获得迁移授权（`NOT_GRANTED`）。
 
-规则批准**不等于**通过正式验收；公共实现与参考页接入**已落地**
-（`IMPLEMENTED_PENDING_USER_REVIEW`），但该状态**不等于**已通过正式验收或已被接受。
+规则批准**不等于**通过正式验收；公共实现与参考页接入**已落地且目测通过**
+（`IMPLEMENTED_PENDING_FORMAL_ACCEPTANCE`），但该状态**不等于**已通过正式验收或已被接受。
 
 ### 7.3 `LIST_TABLE_PROPOSED_NOT_IMPLEMENTED`
 
@@ -297,10 +303,10 @@ grep -ohF "$draft_marker" "${core_docs[@]}" | wc -l   # 期望 0
 | 文件 | 内容 |
 | --- | --- |
 | `README.md` | 本文件：状态、目标、范围、参考实现、与 qlpt 的关系、标记分层、导航与变更记录 |
-| `DESIGN.md` | 模板职责与 Feature 保留职责、启用与作用域隔离、行高与长文本策略、候选实现方案对比（**基线任务当时不定案**；下游已选 §8.4 并已落地，待目测 / 待正式验收） |
+| `DESIGN.md` | 模板职责与 Feature 保留职责、启用与作用域隔离、行高与长文本策略、候选实现方案对比（**基线任务当时不定案**；下游已选 §8.4 并已落地，**目测已通过**，待正式验收） |
 | `UI.md` | 参考实现主表当前事实、可提升为已批准模板规则的视觉内容、必须保留为 Feature 专属的内容 |
 | `MIGRATION.md` | 全量 `el-table` 使用点盘点矩阵、候选分类、逐页独立评估与授权要求 |
-| `SHARED_COMPONENT_DESIGN.md` | **公共实现详细设计（已批准）**：四个候选的唯一结论、公共契约、Feature 保护项、参考页等价接入清单、验证与回滚设计（`approval_scope=SHARED_IMPLEMENTATION_DETAILED_DESIGN_ONLY`；**批准的是设计文档**，该设计随后已由独立实施任务落地，当前 `IMPLEMENTED_PENDING_USER_REVIEW`，**尚未**通过正式验收） |
+| `SHARED_COMPONENT_DESIGN.md` | **公共实现详细设计（已批准）**：四个候选的唯一结论、公共契约、Feature 保护项、参考页等价接入清单、验证与回滚设计（`approval_scope=SHARED_IMPLEMENTATION_DETAILED_DESIGN_ONLY`；**批准的是设计文档**，该设计随后已由独立实施任务落地，**目测已通过**，当前 `IMPLEMENTED_PENDING_FORMAL_ACCEPTANCE`，**尚未**通过正式验收） |
 | `reports/LIST-TABLE-VISUAL-TEMPLATE-BASELINE-001.md` | R0 建立任务的执行报告与校验证据（**历史报告，保留草案态标记，不修改**） |
 | `reports/LIST-TABLE-VISUAL-TEMPLATE-BASELINE-001-R1.md` | R1 定向修订执行报告（**历史报告，保留草案态标记，不修改**） |
 | `reports/LIST-TABLE-VISUAL-TEMPLATE-BASELINE-APPROVAL-CLOSEOUT-001.md` | 基线内容批准收口报告（历史执行报告，不修改） |
@@ -308,14 +314,16 @@ grep -ohF "$draft_marker" "${core_docs[@]}" | wc -l   # 期望 0
 | `reports/LIST-TABLE-VISUAL-TEMPLATE-SHARED-IMPLEMENTATION-DESIGN-001-R1.md` | 详细设计 R1 定向修订执行报告（**历史报告，不修改**） |
 | `reports/LIST-TABLE-VISUAL-TEMPLATE-SHARED-IMPLEMENTATION-DESIGN-001-R2.md` | 详细设计 R2 定向修订执行报告（**历史报告，不修改**） |
 | `reports/LIST-TABLE-VISUAL-TEMPLATE-SHARED-IMPLEMENTATION-DESIGN-APPROVAL-CLOSEOUT-001.md` | 详细设计批准收口报告（历史执行报告，不修改） |
-| `reports/LIST-TABLE-VISUAL-TEMPLATE-SHARED-IMPLEMENTATION-AND-DATA-SOURCE-REFERENCE-INTEGRATION-001.md` | 公共实现与数据源管理参考页等价接入执行报告（含验证证据索引；`IMPLEMENTED_PENDING_USER_REVIEW`） |
+| `reports/LIST-TABLE-VISUAL-TEMPLATE-SHARED-IMPLEMENTATION-AND-DATA-SOURCE-REFERENCE-INTEGRATION-001.md` | 公共实现与数据源管理参考页等价接入执行报告（**历史执行报告，不修改**；其记录的状态为当时的 `IMPLEMENTED_PENDING_USER_REVIEW`） |
+| `reports/LIST-TABLE-VISUAL-TEMPLATE-SHARED-IMPLEMENTATION-VISUAL-REVIEW-CLOSEOUT-001.md` | 项目负责人目测通过收口报告（本任务产出） |
 | `reports/evidence/LIST-TABLE-VISUAL-TEMPLATE-SHARED-IMPLEMENTATION-AND-DATA-SOURCE-REFERENCE-INTEGRATION-001/` | 本次等价验证的真实浏览器证据与可复现脚本（`browser/*.json` + `scripts/*.mjs`） |
 
 `SHARED_COMPONENT_DESIGN.md` 是**已批准的详细设计**：
 
 - 其状态为 `shared_implementation_design_status=APPROVED` /
   `shared_implementation_design_approval_status=APPROVED`；
-  该设计的代码已由独立实施任务落地（`shared_implementation_status=IMPLEMENTED_PENDING_USER_REVIEW`），
+  该设计的代码已由独立实施任务落地，项目负责人已于 2026-09-22 目测通过，
+  当前 `shared_implementation_status=IMPLEMENTED_PENDING_FORMAL_ACCEPTANCE`，
   但**仍不是**已通过正式验收或生产可用的产物——`formal_acceptance_execution_status` 保持 `NOT_RUN`；
 - 该文件沿用仓库既有文件名习惯，但其内容**不是**组件设计——
   唯一结论是一个 **CSS 样式预设 + 有限 CSS 自定义属性令牌**的方案
@@ -324,7 +332,7 @@ grep -ohF "$draft_marker" "${core_docs[@]}" | wc -l   # 期望 0
   的四份规范文档口径，也**不**包含本文件的草案态规则标记；
 - 该设计的**实现**已由后续独立实施任务承担并落地
   （`LIST-TABLE-VISUAL-TEMPLATE-SHARED-IMPLEMENTATION-AND-DATA-SOURCE-REFERENCE-INTEGRATION-001`，
-  见 §11 变更记录），当前状态为 `IMPLEMENTED_PENDING_USER_REVIEW`；
+  见 §11 变更记录），目测已通过，当前状态为 `IMPLEMENTED_PENDING_FORMAL_ACCEPTANCE`；
   后续任何**代码修改**仍**未经项目负责人再次明确批准不得进行**。
 
 ## 9. 后续阶段与授权边界
@@ -336,23 +344,23 @@ grep -ohF "$draft_marker" "${core_docs[@]}" | wc -l   # 期望 0
 | 1 | ChatGPT 远程 Git 基线复审 | 已完成（R1 复审结论 `REVIEW_PASS`，`blocking_finding_count=0`） |
 | 2 | 项目负责人批准基线内容 | 已完成（2026-09-21，`approval_scope=BASELINE_CONTENT_ONLY`） |
 | 3 | 公共实现**详细设计**（`SHARED_COMPONENT_DESIGN.md`）与批准 | **已完成**（ChatGPT 远程 R2 复审 `REVIEW_PASS`、`blocking_finding_count=0`；项目负责人于 2026-09-21 批准，`approval_scope=SHARED_IMPLEMENTATION_DETAILED_DESIGN_ONLY`） |
-| 4 | 公共实现与数据源管理参考页**等价接入** | **已实现，待项目负责人复核**（`shared_implementation_status=IMPLEMENTED_PENDING_USER_REVIEW`、`reference_page_integration_status=IMPLEMENTED_PENDING_USER_REVIEW`） |
-| 5 | 公共实现**正式验收**与最终接受 | **未运行**（`formal_acceptance_execution_status=NOT_RUN`） |
+| 4 | 公共实现与数据源管理参考页**等价接入**及**项目负责人目测** | **已实现且目测通过（2026-09-22），待正式验收**（`shared_implementation_status=IMPLEMENTED_PENDING_FORMAL_ACCEPTANCE`、`reference_page_integration_status=IMPLEMENTED_PENDING_FORMAL_ACCEPTANCE`、`project_owner_visual_review_status=PASS`） |
+| 5 | 公共实现**正式验收**与最终接受 | **未运行**（`formal_acceptance_execution_status=NOT_RUN`；`final_acceptance_status=NOT_ACCEPTED_PENDING_FORMAL_ACCEPTANCE`） |
 | 6 | 从 `MIGRATION.md` 矩阵中**逐页选择**并**单独授权**迁移 | **未授权**（`page_migration_authorization_status=NOT_GRANTED`） |
 
 第 1、2、3 步完成**只**意味着**模板基线内容**与**详细设计文档**已批准；
-第 4 步的产出是**待复核的实现与等价验证证据**，**不是**验收结论；
+第 4 步的产出是**已落地且目测通过的实现与等价验证证据**，**不是**验收结论；
 第 5 步**未运行**、第 6 步**未授权**，**不得**把上述不同层级合并成模糊的“已完成”。
-**批准详细设计 ≠ 批准实现 ≠ 通过正式验收 ≠ 批准参考页接入 ≠ 批准页面迁移。**
+**批准详细设计 ≠ 批准实现 ≠ 目测通过 ≠ 通过正式验收 ≠ 批准参考页接入 ≠ 批准页面迁移。**
 
 当前唯一下一入口：
 
 ```text
-next_step=SHARED_IMPLEMENTATION_AND_REFERENCE_PAGE_INTEGRATION_PROJECT_OWNER_VISUAL_REVIEW_AND_FORMAL_ACCEPTANCE_TASK_PENDING_SEPARATE_PROMPT
+next_step=LIST_TABLE_VISUAL_TEMPLATE_SHARED_IMPLEMENTATION_FORMAL_ACCEPTANCE_TASK_PENDING_SEPARATE_PROMPT
 ```
 
-`LIST_TABLE_PROPOSED_NOT_IMPLEMENTED` —— 下一步**只**允许由项目负责人对已实现内容做**目测复核**，
-并据其结论准备**正式验收**的独立任务；
+`LIST_TABLE_PROPOSED_NOT_IMPLEMENTED` —— 下一步**只**允许筹备并执行**正式验收**的独立任务，
+该任务**必须另立提示词并获得项目负责人单独授权**；
 **未经项目负责人再次明确批准不得修改任何代码**，也**不得**选择或迁移其他业务页面。
 
 `LIST_TABLE_TEMPLATE_APPROVED` —— 授权边界：在**项目负责人明确授权之前**，
@@ -364,8 +372,8 @@ next_step=SHARED_IMPLEMENTATION_AND_REFERENCE_PAGE_INTEGRATION_PROJECT_OWNER_VIS
 ## 10. 使用本模板的注意事项
 
 - 本模板的**基线规则已批准**，可作为新建或调整页面主列表时的**评估依据**；
-- **规则批准 ≠ 实现通过验收**：公共实现已落地并经 Agent 侧等价验证，状态为
-  `IMPLEMENTED_PENDING_USER_REVIEW`（尚未通过正式验收），仅数据源管理主列表接入；
+- **规则批准 ≠ 实现通过验收**：公共实现已落地并经 Agent 侧等价验证、项目负责人目测通过，
+  状态为 `IMPLEMENTED_PENDING_FORMAL_ACCEPTANCE`（尚未通过正式验收），仅数据源管理主列表接入；
 - 数据源管理当前视觉是**参考实现**，**不得**自动上升为全部页面必须遵守的既定规范；
 - 参考实现的列定义、状态标签语义、行操作、固定列、双击行为均属其 Feature 专属；
 - 本模板**未**定义、**未**测量、**未**修改任何行高、字号或颜色的“权威值”；
@@ -442,3 +450,21 @@ next_step=SHARED_IMPLEMENTATION_AND_REFERENCE_PAGE_INTEGRATION_PROJECT_OWNER_VIS
   保留不改，只代表当时真实状态。
   代码、测试、服务、原实现报告、R1 报告与浏览器证据**均未改动**。
   详见 `reports/LIST-TABLE-VISUAL-TEMPLATE-SHARED-IMPLEMENTATION-AND-DATA-SOURCE-REFERENCE-INTEGRATION-001-R2.md`。
+- 2026-09-22，项目负责人目测通过收口
+  （`LIST-TABLE-VISUAL-TEMPLATE-SHARED-IMPLEMENTATION-VISUAL-REVIEW-CLOSEOUT-001`，纯文档任务）：
+  ChatGPT 远程 R2 复审结论 `REVIEW_PASS`、`blocking_finding_count=0`；
+  项目负责人于 `2026-09-22` 打开
+  `http://192.168.174.70:5173/config/data-source` 目测复核，结论为“没啥问题”，
+  正式记录 `project_owner_visual_review_status=PASS`（`project_owner_visual_review_date=2026-09-22`）。
+  公共实现与参考页接入状态由 `IMPLEMENTED_PENDING_USER_REVIEW` 推进为
+  `IMPLEMENTED_PENDING_FORMAL_ACCEPTANCE`（**目测通过 ≠ 正式验收**）：
+  `formal_acceptance_execution_status` 保持 `NOT_RUN`、
+  `final_acceptance_status=NOT_ACCEPTED_PENDING_FORMAL_ACCEPTANCE`，
+  `page_migration_status` 保持 `NOT_STARTED`、
+  `page_migration_authorization_status` 保持 `NOT_GRANTED`，
+  `shared_implementation_design_status` 保持 `APPROVED`。
+  目测结论**不**表示正式验收已执行、**不**表示已作最终接受决定、**不**表示生产可用，
+  也**不**授权迁移任何其他业务页面。
+  下一入口改为**单独授权的正式验收任务**（需另立提示词并获项目负责人单独授权）。
+  代码、测试、配置、依赖、锁文件、证据与历史报告**均未改动**。
+  详见 `reports/LIST-TABLE-VISUAL-TEMPLATE-SHARED-IMPLEMENTATION-VISUAL-REVIEW-CLOSEOUT-001.md`。

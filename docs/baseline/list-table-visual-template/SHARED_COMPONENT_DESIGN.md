@@ -12,9 +12,12 @@ baseline_approval_closeout_r1_commit=e8eb68e368313aa501eb5f7158f6e95975b2077b
 
 shared_implementation_design_status=APPROVED
 shared_implementation_design_approval_status=APPROVED
-shared_implementation_status=IMPLEMENTED_PENDING_USER_REVIEW
-reference_page_integration_status=IMPLEMENTED_PENDING_USER_REVIEW
+shared_implementation_status=IMPLEMENTED_PENDING_FORMAL_ACCEPTANCE
+reference_page_integration_status=IMPLEMENTED_PENDING_FORMAL_ACCEPTANCE
+project_owner_visual_review_status=PASS
+project_owner_visual_review_date=2026-09-22
 formal_acceptance_execution_status=NOT_RUN
+final_acceptance_status=NOT_ACCEPTED_PENDING_FORMAL_ACCEPTANCE
 page_migration_status=NOT_STARTED
 page_migration_authorization_status=NOT_GRANTED
 candidate_inventory_status=COMPLETED_APPROVED_AS_BASELINE_INVENTORY
@@ -47,12 +50,15 @@ adds_extra_dom_layer=NO
 > 数据源管理参考页已接入、任何页面已迁移、正式验收已执行。
 >
 > **随后该设计已由独立实现任务落地**：公共层与数据源管理参考页等价接入均已实现
-> （`shared_implementation_status=IMPLEMENTED_PENDING_USER_REVIEW`、
-> `reference_page_integration_status=IMPLEMENTED_PENDING_USER_REVIEW`，
+> （`shared_implementation_status=IMPLEMENTED_PENDING_FORMAL_ACCEPTANCE`、
+> `reference_page_integration_status=IMPLEMENTED_PENDING_FORMAL_ACCEPTANCE`，
 > `LIST-TABLE-VISUAL-TEMPLATE-SHARED-IMPLEMENTATION-AND-DATA-SOURCE-REFERENCE-INTEGRATION-001`），
-> 当前**等待项目负责人目测复核**（`project_owner_visual_review_status=NOT_RUN_PENDING_USER`）。
+> 且项目负责人已于 `2026-09-22` **目测通过**
+> （`project_owner_visual_review_status=PASS`，页面入口
+> `http://192.168.174.70:5173/config/data-source`）。
 > 这**不代表**正式验收已执行：
-> `formal_acceptance_execution_status=NOT_RUN`，最终接受**尚未决定**；
+> `formal_acceptance_execution_status=NOT_RUN`，
+> `final_acceptance_status=NOT_ACCEPTED_PENDING_FORMAL_ACCEPTANCE`，最终接受**尚未决定**；
 > 页面迁移仍 `NOT_STARTED` / `NOT_GRANTED`。
 > 本文件的下述设计伪代码与阶段清单保留为**已批准设计依据**，
 > 其中“未来阶段一”一类措辞描述的是**设计当时**的规划，**已**由上述独立任务落地。
@@ -89,15 +95,16 @@ LIST_TABLE_SHARED_DESIGN_APPROVED
 - 测试或构建已执行、正式验收已完成。
 
 随后公共实现与数据源管理参考页接入已由独立实施任务落地
-（`shared_implementation_status=IMPLEMENTED_PENDING_USER_REVIEW`、
-`reference_page_integration_status=IMPLEMENTED_PENDING_USER_REVIEW`），
-当前待项目负责人目测复核；正式验收仍 `NOT_RUN`、页面迁移仍 `NOT_STARTED / NOT_GRANTED`。
+（`shared_implementation_status=IMPLEMENTED_PENDING_FORMAL_ACCEPTANCE`、
+`reference_page_integration_status=IMPLEMENTED_PENDING_FORMAL_ACCEPTANCE`），
+并经项目负责人于 2026-09-22 目测通过；
+正式验收仍 `NOT_RUN`、页面迁移仍 `NOT_STARTED / NOT_GRANTED`。
 
 本文件**不**复用模板基线标记冒充详细设计已批准——
 模板基线标记属四份规范文档，描述的是**模板规则**的批准，两者**不得**合并为模糊状态。
 已批准基线的三类标记（参考事实 / 已批准模板规则 / 候选未实现）亦属四份规范文档，
 本文件引用它们时只写“已批准模板规则（`README.md` §7.2）”等**引用语**，
-**不**新增这三类标记实例，因此**不改变**四份规范文档 `22 / 0 / 42 / 11` 的计数。
+**不**新增这三类标记实例，因此**不改变**四份规范文档 `26 / 0 / 42 / 7` 的计数。
 
 历史状态说明：本文件在**收口前**的草案阶段使用带 `_DRAFT` 后缀的草案标记；
 该字面量**仍逐字保留**在 R0 / R1 / R2 三份历史执行报告中，属**历史事实**，
@@ -145,14 +152,14 @@ reference_source_commit=10b1d3e39d03dbb78ea409d486f1f3e80c12fc3e
 
 ```text
 详细设计                     已批准（APPROVED）
-公共实现                     IMPLEMENTED_PENDING_USER_REVIEW —— 已实现，待项目负责人目测复核
-数据源管理参考页接入         IMPLEMENTED_PENDING_USER_REVIEW —— 已接入，待项目负责人目测复核
-正式验收                     NOT_RUN —— 未执行，最终接受尚未决定
+公共实现                     IMPLEMENTED_PENDING_FORMAL_ACCEPTANCE —— 已实现且目测通过（2026-09-22），待正式验收
+数据源管理参考页接入         IMPLEMENTED_PENDING_FORMAL_ACCEPTANCE —— 已接入且目测通过（2026-09-22），待正式验收
+正式验收                     NOT_RUN —— 未执行；NOT_ACCEPTED_PENDING_FORMAL_ACCEPTANCE，最终接受尚未决定
 页面迁移                     NOT_STARTED / NOT_GRANTED —— 未开始、未授权
 ```
 
 （“详细设计 已批准”是**该收口任务**的结果；公共实现与参考页接入的状态
-由**后续独立实施任务**推进，见本文件导语与 §11。）
+由**后续独立实施任务**推进，目测结论由**目测收口任务**回写，见本文件导语与 §11。）
 
 ---
 
@@ -509,7 +516,7 @@ selected_implementation_architecture=
 
 `LIST_TABLE_SHARED_DESIGN_APPROVED` —— 阶段一需创建的精确路径
 （**设计任务当时未创建**；随后已由独立实施任务按此布局创建，当前
-`shared_implementation_status=IMPLEMENTED_PENDING_USER_REVIEW`）：
+`shared_implementation_status=IMPLEMENTED_PENDING_FORMAL_ACCEPTANCE`）：
 
 ```text
 frontend/src/styles/list-table/
@@ -534,8 +541,8 @@ frontend/src/styles/list-table/
 ### 4.2 显式启用方式
 
 `LIST_TABLE_SHARED_DESIGN_APPROVED` —— 以下为**设计伪代码**（**已批准设计依据**）。
-该接入随后**已**由独立实施任务落地
-（`reference_page_integration_status=IMPLEMENTED_PENDING_USER_REVIEW`）；
+该接入随后**已**由独立实施任务落地，并经项目负责人于 2026-09-22 目测通过
+（`reference_page_integration_status=IMPLEMENTED_PENDING_FORMAL_ACCEPTANCE`）；
 下方伪代码保留以说明**设计意图**，接入的**实际形态**以真实源码与实现报告为准：
 
 ```vue
@@ -840,9 +847,10 @@ L8  不出现 !important。
 ## 6. 数据源管理参考页等价接入设计
 
 `LIST_TABLE_SHARED_DESIGN_APPROVED` —— 本节为**后续独立实现任务**的逐项迁移清单
-（**设计任务当时不执行**）；该接入随后**已**由独立实施任务落地
-（`reference_page_integration_status=IMPLEMENTED_PENDING_USER_REVIEW`，
-`project_owner_visual_review_status=NOT_RUN_PENDING_USER`）。
+（**设计任务当时不执行**）；该接入随后**已**由独立实施任务落地，
+并经项目负责人于 2026-09-22 目测通过
+（`reference_page_integration_status=IMPLEMENTED_PENDING_FORMAL_ACCEPTANCE`，
+`project_owner_visual_review_status=PASS`）。
 下方条目保留为**已批准设计依据**，实际接入结果见真实源码与实现报告。
 
 **1. 应由公共层承载的现有 `.data-table` 规则（自 Feature 删除；已按此执行）**
@@ -1131,7 +1139,7 @@ Feature 覆盖是否**实际只影响当前表格**、
 
 `LIST_TABLE_SHARED_DESIGN_APPROVED` —— 阶段拆分如下
 （设计任务当时**未执行任何阶段**；**阶段一随后已由独立实施任务落地**，
-当前待项目负责人目测复核，正式验收仍 `NOT_RUN`；阶段二仍未授权）：
+并经项目负责人于 2026-09-22 目测通过，正式验收仍 `NOT_RUN`；阶段二仍未授权）：
 
 ### 8.1 阶段一：公共实现 + 数据源管理参考页等价接入
 
@@ -1206,7 +1214,7 @@ Feature 覆盖是否**实际只影响当前表格**、
 `LIST_TABLE_SHARED_DESIGN_APPROVED` —— 本文件是四份已批准模板文档的**下游详细设计**：
 
 - 四份模板文档仍是**已批准基线**（`APPROVED` / `BASELINE_APPROVED`），
-  本文件**不修改**其规范内容，也**不改变**其标记计数 `22 / 0 / 42 / 11`；
+  本文件**不修改**其规范内容，也**不改变**其标记计数 `26 / 0 / 42 / 7`；
 - 本文件对候选清单的结论（§3）是**逐项带证据的定案**，
   与基线 `DESIGN.md` §8“不定案”的状态**不是矛盾**：
   基线的“不定案”约束的是**基线任务自身**，并明确把定案交给
@@ -1216,11 +1224,12 @@ Feature 覆盖是否**实际只影响当前表格**、
   `DESIGN.md` §8 **只新增**指向本详细设计的交叉引用，
   **不**把候选方案改写为已批准实现方案；
 - 本文件详细设计状态为 `APPROVED`（`approval_scope=SHARED_IMPLEMENTATION_DETAILED_DESIGN_ONLY`）；
-  公共实现与参考页接入随后已由独立实施任务落地
-  （`shared_implementation_status=IMPLEMENTED_PENDING_USER_REVIEW`、
-  `reference_page_integration_status=IMPLEMENTED_PENDING_USER_REVIEW`），
-  当前待项目负责人目测复核；正式验收仍 `NOT_RUN`（最终接受尚未决定）、
-  页面迁移**仍未授权**（`NOT_STARTED` / `NOT_GRANTED`）；
+  公共实现与参考页接入随后已由独立实施任务落地，并经项目负责人于 2026-09-22 目测通过
+  （`shared_implementation_status=IMPLEMENTED_PENDING_FORMAL_ACCEPTANCE`、
+  `reference_page_integration_status=IMPLEMENTED_PENDING_FORMAL_ACCEPTANCE`，
+  `project_owner_visual_review_status=PASS`）；
+  正式验收仍 `NOT_RUN`（`final_acceptance_status=NOT_ACCEPTED_PENDING_FORMAL_ACCEPTANCE`，
+  最终接受尚未决定）、页面迁移**仍未授权**（`NOT_STARTED` / `NOT_GRANTED`）；
   **未经项目负责人再次明确批准，不得修改任何代码。**
 
 ---
@@ -1239,7 +1248,7 @@ Feature 覆盖是否**实际只影响当前表格**、
 `LIST_TABLE_SHARED_DESIGN_APPROVED` —— 该字面量的**标记定义域只有本文件**：
 
 - 四份已批准规范文档（`README.md` / `DESIGN.md` / `UI.md` / `MIGRATION.md`）
-  **不含**该字面量（其计数口径与 `22 / 0 / 42 / 11` 保持不变）；
+  **不含**该字面量（其计数口径为 `26 / 0 / 42 / 7`）；
 - 标记计数以**本文件**为唯一定义域，避免与其他目录的冻结计数产生歧义；
 - **计数口径说明**：本计数只统计**本文件内作为设计决策标记使用**的实例。
   任务提示词与执行报告中对本标记的**引用**（如在计数表中复述该字面量）
@@ -1323,6 +1332,14 @@ R2（提交 e72264d）  草案标记 = 79   （+4）
 
 复核方式：`79` 个实例分布在 `79` 个**互不相同**的行上（每行恰 `1` 个），
 不存在同句叠加凑数的情形。四份规范文档的 `22 / 0 / 42 / 11` **未受影响**。
+
+**目测收口后复测（2026-09-22）**：目测通过收口**未**新增或删除任何标记实例
+（只同步当前阶段状态），因此本文件与四份规范文档的计数与上表**逐值相同**：
+本文件已批准标记 `79` / 草案态 `0`；
+四份规范文档参考事实标记 `26`、草案态规则标记 `0`、
+已批准模板规则标记 `42`、候选未实现标记 `7`；候选盘点 `15 / 14`。
+上表（2026-09-21）的 `22 / 0 / 42 / 11` 是**实现前时点**的历史实测，保留不改；
+当前规范计数为 `26 / 0 / 42 / 7`。
 
 ### 11.4 历史报告中的草案字面量（逐字保留，不回写）
 

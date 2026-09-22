@@ -75,17 +75,19 @@ Router (Vue Router 4) + Layouts (MainLayout)
 | 层 | 目录 | 职责 | 当前状态 |
 |---|---|---|---|
 | 页面模板层 | `docs/baseline/query-list-page-template/` | 页面标题、查询区、结果区外壳、刷新工具栏、请求交互 | 已批准；阶段一公共组件已实现并通过正式验收 |
-| 表格视觉模板层 | `docs/baseline/list-table-visual-template/` | 列表主表的表头、正文、间距、边框、行高策略、长文本与扩展边界 | **基线规则已批准**（`BASELINE_APPROVED`）；公共实现详细设计已批准；公共实现与数据源管理主列表接入已实现、待项目负责人目测复核（`IMPLEMENTED_PENDING_USER_REVIEW`）；正式验收未运行；未授权页面迁移 |
+| 表格视觉模板层 | `docs/baseline/list-table-visual-template/` | 列表主表的表头、正文、间距、边框、行高策略、长文本与扩展边界 | **基线规则已批准**（`BASELINE_APPROVED`）；公共实现详细设计已批准；公共实现与数据源管理主列表接入已实现且目测通过（2026-09-22）、待正式验收（`IMPLEMENTED_PENDING_FORMAL_ACCEPTANCE`）；正式验收未运行；未授权页面迁移 |
 
 - 两层**正交且可组合**：页面按独立评估结果决定是否组合使用两层；
 - 表格视觉模板层的**基线规则已批准**（`approval_scope=BASELINE_CONTENT_ONLY`），
   其**公共实现详细设计已批准**
   （`shared_implementation_design_status=APPROVED`，
   `approval_scope=SHARED_IMPLEMENTATION_DETAILED_DESIGN_ONLY`）；
-  公共实现与数据源管理**主列表**的等价接入**已实现**
-  （`shared_implementation_status=IMPLEMENTED_PENDING_USER_REVIEW`、
-  `reference_page_integration_status=IMPLEMENTED_PENDING_USER_REVIEW`），
-  但**尚未**通过正式验收（`formal_acceptance_execution_status=NOT_RUN`），
+  公共实现与数据源管理**主列表**的等价接入**已实现**且经项目负责人于 2026-09-22 **目测通过**
+  （`shared_implementation_status=IMPLEMENTED_PENDING_FORMAL_ACCEPTANCE`、
+  `reference_page_integration_status=IMPLEMENTED_PENDING_FORMAL_ACCEPTANCE`、
+  `project_owner_visual_review_status=PASS`），
+  但**尚未**通过正式验收（`formal_acceptance_execution_status=NOT_RUN`，
+  `final_acceptance_status=NOT_ACCEPTED_PENDING_FORMAL_ACCEPTANCE`），
   且**未授权**任何页面迁移（`page_migration_status=NOT_STARTED` /
   `page_migration_authorization_status=NOT_GRANTED`）；
   该实现**不是**公共组件——它是一个**显式根类 CSS 预设 + 有限 CSS 自定义属性令牌**的公共层

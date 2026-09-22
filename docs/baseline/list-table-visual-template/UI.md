@@ -11,9 +11,12 @@ approval_scope=BASELINE_CONTENT_ONLY
 approved_baseline_source_commit=575379895c4c57fd3df7e0d0ce27c1f6841d2f17
 shared_implementation_design_status=APPROVED
 shared_implementation_design_approval_status=APPROVED
-shared_implementation_status=IMPLEMENTED_PENDING_USER_REVIEW
-reference_page_integration_status=IMPLEMENTED_PENDING_USER_REVIEW
+shared_implementation_status=IMPLEMENTED_PENDING_FORMAL_ACCEPTANCE
+reference_page_integration_status=IMPLEMENTED_PENDING_FORMAL_ACCEPTANCE
+project_owner_visual_review_status=PASS
+project_owner_visual_review_date=2026-09-22
 formal_acceptance_execution_status=NOT_RUN
+final_acceptance_status=NOT_ACCEPTED_PENDING_FORMAL_ACCEPTANCE
 page_migration_status=NOT_STARTED
 page_migration_authorization_status=NOT_GRANTED
 ```
@@ -262,8 +265,8 @@ blocking_finding_count=0
 `LIST_TABLE_TEMPLATE_APPROVED` —— 以上是**已批准模板规则**，作为公共实现
 详细设计必须遵守的基线；但**规则批准 ≠ 通过正式验收**。
 其中“可提取”不代表数值可直接成为公共默认值；具体哪些数值上收为公共令牌，
-由后续详细设计决定（见 `DESIGN.md` §4、§8），该设计已由独立任务落地
-（`shared_implementation_status=IMPLEMENTED_PENDING_USER_REVIEW`，**尚未**通过正式验收）。
+由后续详细设计决定（见 `DESIGN.md` §4、§8），该设计已由独立任务落地并经项目负责人于 2026-09-22 目测通过
+（`shared_implementation_status=IMPLEMENTED_PENDING_FORMAL_ACCEPTANCE`，**尚未**通过正式验收）。
 
 ---
 

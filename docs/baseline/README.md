@@ -77,17 +77,18 @@ pilot_page_selection_status=NOT_DECIDED
 由纯文档任务 `LIST-TABLE-VISUAL-TEMPLATE-BASELINE-001` 建立、R1 定向修订后，
 经 ChatGPT 远程 Git R1 复审（`REVIEW_PASS`）并由项目负责人于 2026-09-21 批准
 （`approval_scope=BASELINE_CONTENT_ONLY`）。批准**只**覆盖**基线内容**；
-公共代码与数据源管理**主列表**的等价接入随后由独立实施任务实现
-（`IMPLEMENTED_PENDING_USER_REVIEW`，**尚未通过正式验收**），
+公共代码与数据源管理**主列表**的等价接入随后由独立实施任务实现，
+并经项目负责人于 2026-09-22 目测通过
+（`IMPLEMENTED_PENDING_FORMAL_ACCEPTANCE`，**尚未通过正式验收**），
 **未**迁移任何页面。
 
 主要入口：
 
 - 目标、适用范围、参考实现与状态：[list-table-visual-template/README.md](./list-table-visual-template/README.md)
-- 模板职责与候选实现方案（未定案）：[list-table-visual-template/DESIGN.md](./list-table-visual-template/DESIGN.md)
+- 模板职责与候选实现方案（基线当时未定案；下游已定案并落地）：[list-table-visual-template/DESIGN.md](./list-table-visual-template/DESIGN.md)
 - 参考实现视觉事实与可提取规则：[list-table-visual-template/UI.md](./list-table-visual-template/UI.md)
 - 全量 `el-table` 盘点矩阵与候选分类：[list-table-visual-template/MIGRATION.md](./list-table-visual-template/MIGRATION.md)
-- 公共实现详细设计（**已批准**；实现已落地待复核）：[list-table-visual-template/SHARED_COMPONENT_DESIGN.md](./list-table-visual-template/SHARED_COMPONENT_DESIGN.md)
+- 公共实现详细设计（**已批准**；实现已落地且目测通过，待正式验收）：[list-table-visual-template/SHARED_COMPONENT_DESIGN.md](./list-table-visual-template/SHARED_COMPONENT_DESIGN.md)
 
 当前状态：
 
@@ -100,10 +101,13 @@ approval_scope=BASELINE_CONTENT_ONLY
 approved_baseline_source_commit=575379895c4c57fd3df7e0d0ce27c1f6841d2f17
 shared_implementation_design_status=APPROVED
 shared_implementation_design_approval_status=APPROVED
-shared_implementation_status=IMPLEMENTED_PENDING_USER_REVIEW
+shared_implementation_status=IMPLEMENTED_PENDING_FORMAL_ACCEPTANCE
 reference_page=数据源管理
-reference_page_integration_status=IMPLEMENTED_PENDING_USER_REVIEW
+reference_page_integration_status=IMPLEMENTED_PENDING_FORMAL_ACCEPTANCE
+project_owner_visual_review_status=PASS
+project_owner_visual_review_date=2026-09-22
 formal_acceptance_execution_status=NOT_RUN
+final_acceptance_status=NOT_ACCEPTED_PENDING_FORMAL_ACCEPTANCE
 page_migration_status=NOT_STARTED
 page_migration_authorization_status=NOT_GRANTED
 candidate_inventory_status=COMPLETED_APPROVED_AS_BASELINE_INVENTORY
@@ -113,10 +117,13 @@ candidate_inventory_status=COMPLETED_APPROVED_AS_BASELINE_INVENTORY
 公共实现详细设计已**获批**（ChatGPT 远程 R2 复审 `REVIEW_PASS`、
 `blocking_finding_count=0`，项目负责人于 2026-09-21 批准，
 `approval_scope=SHARED_IMPLEMENTATION_DETAILED_DESIGN_ONLY`）；
-公共实现与数据源管理**主列表**的等价接入已**实现**
-（`IMPLEMENTED_PENDING_USER_REVIEW`），但**尚未通过正式验收**，
-任何页面迁移**未授权**。下一步**只**允许项目负责人对已实现内容做**目测复核**，
-并据其结论准备正式验收的独立任务；
+公共实现与数据源管理**主列表**的等价接入已**实现**并经项目负责人于 2026-09-22 目测**通过**
+（`IMPLEMENTED_PENDING_FORMAL_ACCEPTANCE`，
+`project_owner_visual_review_status=PASS`），但**尚未通过正式验收**
+（`formal_acceptance_execution_status=NOT_RUN`，
+`final_acceptance_status=NOT_ACCEPTED_PENDING_FORMAL_ACCEPTANCE`），
+任何页面迁移**未授权**。下一步**只**允许筹备并执行**正式验收**的独立任务，
+该任务**必须另立提示词并获得项目负责人单独授权**；
 **未经项目负责人再次明确批准不得修改任何代码**。
 
 - **参考实现**：数据源管理主列表（`/config/data-source`）是**参考实现事实来源**，
@@ -126,8 +133,8 @@ candidate_inventory_status=COMPLETED_APPROVED_AS_BASELINE_INVENTORY
   （表头 / 正文 / 间距 / 边框 / 行高 / 长文本 / 扩展边界）。本模板**不并入**前者、
   **不**扩大前者适用范围、**不**改写其已批准规范。
 - **授权边界**：本模板**基线内容已批准**，公共实现**详细设计已批准**（仅设计文档），
-  公共实现与数据源管理参考页接入**已实现、待项目负责人目测复核**
-  （`IMPLEMENTED_PENDING_USER_REVIEW`，**尚未**通过正式验收），
+  公共实现与数据源管理参考页接入**已实现且目测通过、待正式验收**
+  （`IMPLEMENTED_PENDING_FORMAL_ACCEPTANCE`，**尚未**通过正式验收），
   **任何页面迁移均未授权**。
   未来每个页面需**独立评估、独立授权、独立实现、独立目测、独立验收**。
 
