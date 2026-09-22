@@ -530,3 +530,71 @@ data_source_list_page_selective_integration_acceptance_status=ALL_NOT_RUN
 `LIST-TABLE-VISUAL-TEMPLATE-BASELINE-APPROVAL-CLOSEOUT-001` 更新为批准态口径，
 本文件的逐页评估结论、推荐迁移顺序、每页独立任务要求、已接受参考页保护、
 冻结标记计数**均未改变**。
+
+## 探针端管理列表页选择性接入授权记录（`2026-09-22` 授权 / `2026-09-22` 记录）
+
+本节为**追加**记录，不改写上方任何历史结论、状态块与授权/批准记录。
+上方 §1~§7 及 `2026-09-17`、`2026-09-18/19`、`2026-09-21` 各时点记录的正文保持原样。
+
+### 授权事实
+
+- 授权日期：`2026-09-22`；授权人：项目负责人（在当前会话中明确指定）。
+- 授权内容：`探针端管理`（`/config/client`）**整个页面**按项目现行查询列表页模板
+  进行**页面级选择性接入**。
+- 授权对象：`探针端管理`（`/config/client`）**单页**，且**仅限**该页。
+- 授权性质：**页面范围化**的选择性接入授权，与 §1.1 / §5 的通用排除原则并行生效，
+  走“另立任务评估 + 项目负责人明确授权”的**页面级授权例外**路径，
+  **不是**模板级“页面迁移”。
+
+### 与上方 §1.1 / §5 既有结论的关系（必须显式记录，不得静默覆盖）
+
+- §1.1 分类表与 §5 将“含新增 / 编辑 / 删除的配置管理页面”列为
+  **“不适合直接套用 / 不纳入迁移范围”**；该通用判断**本轮不被改写、继续有效**。
+- 本轮是项目负责人明确授权下的**单页例外**：`探针端管理` 仍是包含
+  新增、编辑、删除、启用、停用的配置管理页；页面层只复用适用部分，
+  Feature 专属写操作、弹窗、业务校验、行级操作与并发语义仍由本 Feature 自己承担。
+- **本页明确不接入刷新能力**：不出现自动刷新、立即刷新、刷新倒计时或最近刷新时间；
+  该模板的刷新工具栏按“可选（OPT-IN）”处理，本轮**不**接入 `QueryListRefreshToolbar`
+  组件，也不新增任何等价刷新控件。本页复用边界与数据源管理参考页的一致：
+  页面外壳、查询条件容器、查询 / 重置动作、结果卡片等公共组件。
+
+### 当前状态（本次记录时点的权威事实）
+
+```text
+client_config_page_selective_integration_task=CLIENT-CONFIG-QUERY-LIST-AND-LIST-TABLE-ADJUSTMENT-BASELINE-001
+client_config_page_selective_integration_authorization_date=2026-09-22
+client_config_page_selective_integration_authorization_status=GRANTED_BY_PROJECT_OWNER_FOR_THIS_PAGE_ONLY
+client_config_page_selective_integration_document_status=DRAFT_PENDING_USER_REVIEW
+client_config_page_selective_integration_implementation_status=NOT_STARTED
+client_config_page_selective_integration_visual_review_status=NOT_PERFORMED
+client_config_page_selective_integration_acceptance_status=ALL_NOT_RUN
+client_config_page_no_refresh_capability=YES
+```
+
+### 边界（明确不得）
+
+- **不得**把本页接入写成模板已迁移：模板级 `page_migration_status` 保持
+  `NOT_STARTED`，`page_migration_authorization_status` 保持 `NOT_GRANTED`，
+  `pilot_page_selection_status` 保持 `NOT_DECIDED`。
+- **不得**写成“所有页面已授权”：本授权**只**覆盖 `探针端管理`（`/config/client`）单页；
+  本轮**没有**授权任何其他页面，也**没有**选定任何试点页面。
+- **不得**把本轮草案写成已批准、已实现、已测试、已目测或已正式验收：当前仅为
+  `DRAFT_PENDING_USER_REVIEW` / `NOT_STARTED` / `NOT_RUN`，下一入口是
+  ChatGPT 从远程 Git 的独立复审，**不是**直接实现。
+- **不得**改写 `2026-09-18/19` 数据源管理授权与批准记录、`2026-09-17` 各时点记录、
+  “源库快照状态”参考页历史，以及 §1.1 / §5 的通用排除原则。
+- **不得**由本记录推导出刷新工具栏已成为任何页面的必选能力。
+
+## 与“列表表格视觉模板”的迁移关系（追加记录，2026-09-22）
+
+本节为**追加式交叉引用**，**不**改变本文件的逐页评估结论、推荐迁移顺序、
+每页独立任务要求、已接受参考页保护或任何迁移状态。
+
+- 同一个页面级调整草案（`CLIENT-CONFIG-QUERY-LIST-AND-LIST-TABLE-ADJUSTMENT-BASELINE-001`）
+  同时为 `探针端管理`（`/config/client`）**单页**评估了表格视觉模板层的接入；
+  对应的表格层授权记录见
+  `docs/baseline/list-table-visual-template/MIGRATION.md` 的 `2026-09-22` 追加记录。
+- **授权独立**：二层**正交、可组合**，但两层的页面级授权**各自独立记录**；
+  本文件的本轮记录**不**自动构成表格层的授权，反之亦然。
+- 本轮两层的适用范围均**只**覆盖 `/config/client` 单页；
+  两层各自的模板级全局迁移状态**均不变**。

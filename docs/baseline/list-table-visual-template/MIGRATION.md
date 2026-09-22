@@ -214,3 +214,78 @@ NEEDS_SEPARATE_EVALUATION=1
 **不**代表批准探针端管理、数据订阅或其他任何业务页面迁移；
 本轮**未**选择首个迁移页面，
 **未**为探针端管理、数据订阅或任何页面生成实施任务。
+
+## 探针端管理主列表接入授权记录（`2026-09-22` 授权 / `2026-09-22` 记录）
+
+本节为**追加**记录，不改写上方任何历史结论、状态块、候选矩阵与 §4 保护清单。
+上方 §1~§6 及既有各时点记录的正文保持原样。
+
+### 授权事实
+
+- 授权日期：`2026-09-22`；授权人：项目负责人（在当前会话中明确指定）。
+- 授权内容：`探针端管理`（`/config/client`）**页面主列表**接入列表表格视觉模板。
+- 授权对象：`探针端管理`（`/config/client`）**单页的主列表**，且**仅限**该页。
+- 授权性质：**页面范围化**的接入授权，与 §6“未来每个页面需要独立评估、独立授权、
+  独立实现、独立目测和独立验收”一致；**不是**模板级“页面迁移”授权。
+
+### 覆盖范围（只覆盖主列表）
+
+- 本授权**只**覆盖该页**主列表**（页面结果区承载主要业务记录集的 `el-table`）。
+- **不得**把该页新增 / 编辑弹窗或其**内部控件**纳入本模板范围；弹窗与弹窗内控件
+  仍由该 Feature 自己承担视觉与交互纪律。
+- 接入方式沿用已批准的公共实现契约（追加显式根类 + `scoped` 引入该模板 CSS），
+  不新增 Vue 包装组件、不新增额外 DOM 层、不引入全局泄漏。
+
+### 与 §4 保护清单的关系（必须显式记录，不得静默覆盖）
+
+- §4 中“探针端管理主表”一行列举的**必须保护**项包含
+  “多选与选中态（`#ecf5ff` + `inset 3px 0 0`）**批量工具栏**”。
+- 项目负责人本轮已明确**取消**该页的“删除所选”按钮，因此 §4 中
+  “批量工具栏必须保护”这一项被本轮业务决定**部分替代**：
+  该页此后**不再有批量工具栏**，后续以本 Feature **获批后的**调整基线为准。
+- **不得反向改写历史盘点记录**：§4 原文保持原样，本轮不改写它，
+  本节只追加说明“该保护项已被业务决定部分替代”这一事实与其生效条件
+  （须待本 Feature 调整基线获批）。
+- §4 中其余同页保护项（固定行高、`@row-click` / `@row-dblclick` 行为等）
+  **不由本轮替代**，仍须在实现时逐项评估并保护。
+
+### 当前状态（本次记录时点的权威事实）
+
+```text
+client_config_main_list_integration_task=CLIENT-CONFIG-QUERY-LIST-AND-LIST-TABLE-ADJUSTMENT-BASELINE-001
+client_config_main_list_integration_authorization_date=2026-09-22
+client_config_main_list_integration_authorization_status=GRANTED_BY_PROJECT_OWNER_FOR_THIS_PAGE_MAIN_LIST_ONLY
+client_config_main_list_integration_document_status=DRAFT_PENDING_USER_REVIEW
+client_config_main_list_integration_implementation_status=NOT_STARTED
+client_config_main_list_integration_visual_review_status=NOT_PERFORMED
+client_config_main_list_integration_acceptance_status=ALL_NOT_RUN
+client_config_main_list_integration_scope=MAIN_LIST_ONLY_MODALS_EXCLUDED
+```
+
+### 边界（明确不得）
+
+- **不得**把本页主列表接入写成模板已迁移：模板级 `page_migration_status` 保持
+  `NOT_STARTED`，`page_migration_authorization_status` 保持 `NOT_GRANTED`，
+  `pilot_page_selection_status` 保持 `NOT_DECIDED`（§6 第 6 条仍为“未授权”）。
+- **不得**写成“所有页面已授权”：本授权**只**覆盖 `探针端管理`（`/config/client`）单页主列表；
+  本轮**没有**授权任何其他页面，也**没有**选定任何试点页面。
+- **不得**把本轮草案写成已批准、已实现、已测试、已目测或已正式验收：当前仅为
+  `DRAFT_PENDING_USER_REVIEW` / `NOT_STARTED` / `NOT_RUN`，下一入口是
+  ChatGPT 从远程 Git 的独立复审，**不是**直接实现。
+- **不得**把本记录解释为公共实现或数据源管理参考页最终接受事实的改变：
+  公共实现与参考页接入仍为 `IMPLEMENTED_ACCEPTED`、
+  `final_acceptance_status=ACCEPTED_BY_PROJECT_OWNER`，均不变。
+
+## 与 `query-list-page-template` 的页面级交叉引用（追加记录，`2026-09-22`）
+
+本节为**追加式交叉引用**，**不**改变本文件的候选矩阵、分类计数、
+§4 保护清单、§6 授权边界或任何迁移状态。
+
+- 同一个页面级调整草案（`CLIENT-CONFIG-QUERY-LIST-AND-LIST-TABLE-ADJUSTMENT-BASELINE-001`）
+  同时为 `探针端管理`（`/config/client`）**单页**评估了查询列表页模板层的接入；
+  对应的页面层授权记录见
+  `docs/baseline/query-list-page-template/MIGRATION.md` 的 `2026-09-22` 追加记录。
+- **授权独立**：二层**正交、可组合**（见 §5），但两层的页面级授权**各自独立记录**；
+  本记录**不**自动构成页面层的授权，反之亦然。
+- 本轮两层的适用范围均**只**覆盖 `/config/client` 单页；
+  两层各自的模板级全局迁移状态**均不变**。

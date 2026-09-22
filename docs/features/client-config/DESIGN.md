@@ -16,8 +16,8 @@
 | R1 任务 | `CLIENT-CONFIG-DESIGN-BASELINE-001-R1`（正式设计复审驱动的定向修订，纯文档） |
 | R1 复审结论 | ChatGPT 正式复审：`CHANGES_REQUIRED`（R1-01~R1-09；本文件落实 R1-02~R1-08 的业务/数据流修订，R1-01/09 的编号与过程核验见本文件元数据、§12 与 R1 执行报告） |
 | R1 基线提交 | `21f4729c43d146426e8d4f1b2d6b667cfcf160ff` |
-| 依据需求 | `REQUIREMENTS.md`：`CCFG-REQ-001~090`，文档状态 `APPROVED` |
-| 依据验收 | `ACCEPTANCE.md`：`CCFG-AC-001~076`，全部 `NOT_RUN`，文档状态 `APPROVED`（批准的是验收标准，不是验收执行结果） |
+| 依据需求 | `REQUIREMENTS.md`：`CCFG-REQ-001~103`（其中 `001~090` 为 `APPROVED`，`091~103` 为本轮页面级调整新增草案 `DRAFT_PENDING_USER_REVIEW`） |
+| 依据验收 | `ACCEPTANCE.md`：`CCFG-AC-001~089`（既有 76 + 本轮新增 13），全部 `NOT_RUN`（批准的是验收标准，不是验收执行结果） |
 | 创建日期 | 2026-09-03 |
 | R1 日期 | 2026-09-04 |
 | 并发调整任务 | `CLIENT-CONFIG-DESIGN-CONCURRENCY-ADJUSTMENT-001`（依据重新批准的需求/验收并发口径，定向清除过时显式表锁设计的纯文档任务） |
@@ -30,8 +30,12 @@
 | 批准对象 | 提交 `ba7c5e917b1b9d08208c3e1ceb31285407f5fd5e` 下的本文件及其全部设计定义 |
 | 批准收口任务 | `CLIENT-CONFIG-DESIGN-CONCURRENCY-ADJUSTMENT-APPROVAL-001` |
 | 批准边界 | 设计获批不代表代码已实现、已测试或验收已执行通过 |
-| 设计编号 | `CCFG-DESIGN-001 ~ CCFG-DESIGN-037`，连续、唯一、不可复用；每个设计编号恰有一个定义行，其余同编号出现一律视为引用而非定义 |
-| PENDING_USER_CONFIRMATION | `0`（本设计不存在由已批准需求无法推导、必须由项目负责人另行决定的业务或用户可见语义；R1 确定性修订全部落实且未发现新的业务歧义；2026-09-04 并发口径定向调整亦未引入需另行决定的新语义） |
+| 设计编号 | `CCFG-DESIGN-001 ~ CCFG-DESIGN-046`，连续、唯一、不可复用；每个设计编号恰有一个定义行，其余同编号出现一律视为引用而非定义。其中 `001~037` 为已批准设计基线，`038~046` 为本轮页面级调整新增草案（见 §13） |
+| PENDING_USER_CONFIRMATION | `0`（**已批准部分** `CCFG-DESIGN-001~037` 不存在由已批准需求无法推导、必须由项目负责人另行决定的业务或用户可见语义；R1 确定性修订全部落实且未发现新的业务歧义；2026-09-04 并发口径定向调整亦未引入需另行决定的新语义。**本轮新增草案部分**见 §13：本轮设计项本身无新增待确认设计空档，但本轮需求侧存在 1 项 `PENDING_USER_CONFIRMATION`（行单选/选中视觉与“已选择：{探针ID}”的去留，见 `REQUIREMENTS.md` §11 第 1 项），该事项属需求决策、不属本设计空档，本设计按“暂保留”承接） |
+| 本轮调整任务 | `CLIENT-CONFIG-QUERY-LIST-AND-LIST-TABLE-ADJUSTMENT-BASELINE-001`（页面级模板选择性接入与列表调整草案，纯文档，2026-09-22，见 §13） |
+| 本轮调整基线状态 | `DRAFT_PENDING_USER_REVIEW` |
+| 本轮调整实现状态 | `NOT_STARTED` |
+| 本轮正式验收执行状态 | `NOT_RUN` |
 | 配套文档 | `API.md`（`CCFG-API-*`）、`UI.md`（`CCFG-UI-*`）、`DATABASE.md`（`CCFG-DB-*`），与本文件状态相同，接口路径、字段名、状态值、错误码、事务边界与本文件一致 |
 
 R1 修订目标（不改已批准 90 条需求与 76 条验收、不进入代码实现、不做设计批准收口）：在 §12 追踪矩阵改为全称编号并修正初版 API 重复定义统计口径（`R1-01`）；固定“E1 `dataSources` 恒按原存储顺序返回、前端仅计算非持久化前三项投影”的单一顺序契约（`R1-02`，见 CCFG-DESIGN-014）；固定 `CLIENT_DESC` 原文保存、Trim 仅判空、按实际保存原文计 UTF-8 字节（`R1-03`，见 CCFG-DESIGN-028/030）；补齐关键词字面量 LIKE 转义（`R1-04`，见 CCFG-DESIGN-007 与 DATABASE.md）；删除未批准的数据源 ID“其他非法字符”限制（`R1-05`）；补齐 `CATEGORY_MISMATCH`/`TYPE_MISMATCH` 历史候选资格变化异常（`R1-06`，见 CCFG-DESIGN-035）；补齐含逗号历史配置的不可逆歧义处理（`R1-07`，见 CCFG-DESIGN-036）；补齐历史 `CLIENT_DESC` 为 NULL/空白的契约（`R1-08`，见 CCFG-DESIGN-037）。
@@ -41,7 +45,7 @@ R1 修订目标（不改已批准 90 条需求与 76 条验收、不进入代码
 ## 2. 范围与状态边界
 
 - 本设计只建立逻辑设计草案，不实现代码，不执行测试，不连接数据库，不修改任何数据库基线（`docs/database/` 零改动），不执行 DDL/DML。
-- 已批准需求 `CCFG-REQ-001~090` 是唯一业务语义来源。本设计不增加、弱化、替换或重新解释任何需求；对本 Feature 无法从需求推导的技术空档给出唯一确定方案，不保留“方案 A/B 待定”。
+- 已批准需求 `CCFG-REQ-001~090` 是唯一业务语义来源；本轮页面级调整新增草案需求 `CCFG-REQ-091~103`（`DRAFT_PENDING_USER_REVIEW`）在本轮为设计输入，但**尚未批准**，本设计对应新增项（`CCFG-DESIGN-038~046`）同为草案。本设计不增加、弱化、替换或重新解释任何需求；对本 Feature 无法从需求推导的技术空档给出唯一确定方案，不保留“方案 A/B 待定”。
 - 本 Feature 只维护 `CDC_CLIENT_MULTIPLE` 配置，不直接启停、重启或通知 `sync-client`；不操作 ZooKeeper、Kafka、Topic 或运行进程；不连接源 Oracle 数据源、不读取 Schema/表结构。
 - 接口、页面反馈不得承诺配置对运行中进程“实时生效”“已启停”“已重启”。
 - 所有候选代码类名、文件名均为实现阶段建议（标注“待建”），本任务不创建、不宣称已存在。
@@ -95,7 +99,7 @@ R1 修订目标（不改已批准 90 条需求与 76 条验收、不进入代码
 | CCFG-DESIGN-018 | 删除流程（E5）：以探针 ID 定位，在短事务内直接物理 `DELETE` 该记录；不检查、不修改、不级联该探针与其他表/进程/ZooKeeper/Kafka 的关系；删除行数必须为 1，否则回滚并报“探针不存在或已删除”。删除成功后前端刷新列表并清空选中。 | CCFG-REQ-026、CCFG-REQ-027、CCFG-REQ-028 | CCFG-AC-020、CCFG-AC-021 |
 | CCFG-DESIGN-019 | 停用流程（E7）：二次确认由前端负责；后端在短事务内仅把目标记录 `FG_ACTIVE` 更新为 `0`，行数必须为 1；历史数据源异常（停用/不存在/含逗号）不阻断停用。 | CCFG-REQ-030、CCFG-REQ-032、CCFG-REQ-035 | CCFG-AC-023、CCFG-AC-024、CCFG-AC-027 |
 | CCFG-DESIGN-020 | 启用流程（E6）：一般不弹确认；后端在单个普通短事务内、目标 `UPDATE` 前重新读取 `CDC_CLIENT_MULTIPLE` 全部记录：读取目标记录并校验状态（非 `0/1` 直接拒绝，见 CCFG-DESIGN-021），执行与新增/编辑相同的当次数据源唯一分配检查（自排除目标记录自身）；仅重复分配冲突阻断启用（`40941`），其他数据源异常不阻断 → 未发现阻断则仅把 `FG_ACTIVE` 更新为 `1`，行数必须为 1，任一步失败整笔回滚。该当次检查不消除检查与写入之间的并发竞态。防止历史异常记录绕过新增/编辑规则。 | CCFG-REQ-031、CCFG-REQ-032、CCFG-REQ-035、CCFG-REQ-072 | CCFG-AC-022、CCFG-AC-024、CCFG-AC-027、CCFG-AC-059 |
-| CCFG-DESIGN-021 | 非 `0/1` 状态边界：`fgActive` 非 `0/1` 的记录列表可见并显示原始状态值（`ABNORMAL`）；允许的操作仅限删除与停用（停用需二次确认并把 `FG_ACTIVE` 置 `0`）；接口层对这类记录的“启用”直接拒绝（错误码 `40240`）；状态列不提供“启用”操作；如需回到启用须先停用归 `0` 再启用（后者才触发唯一分配校验）。 | CCFG-REQ-033、CCFG-REQ-034 | CCFG-AC-025、CCFG-AC-026 |
+| CCFG-DESIGN-021 | 非 `0/1` 状态边界：`fgActive` 非 `0/1` 的记录列表可见并显示原始状态值（`ABNORMAL`）；允许的操作仅限删除与停用（停用需二次确认并把 `FG_ACTIVE` 置 `0`）；接口层对这类记录的“启用”直接拒绝（错误码 `40240`）；状态列不提供“启用”操作（**【本轮定向修订 · 待批准】** 该项的**入口位置**已由 §13 `CCFG-DESIGN-041` 改为“操作”列“更多”下拉中不出现“启用”项，语义不变）；如需回到启用须先停用归 `0` 再启用（后者才触发唯一分配校验）。 | CCFG-REQ-033、CCFG-REQ-034 | CCFG-AC-025、CCFG-AC-026 |
 | CCFG-DESIGN-022 | 写操作原子性与行数校验：新增/编辑/删除/启停均校验受影响行数必须等于 1；请求内校验失败、业务冲突（`40940`/`40941`/`40942` 等）、更新行数异常或任意校验失败时整笔回滚，不存在部分写入；编辑保存整体成功或整体失败。本 Feature 无“锁等待超时”失败分支（该专用路径已随并发口径调整删除，见 §7）；写前检查与 DML 之间的竞态非本项失败分支。 | CCFG-REQ-049、CCFG-REQ-074 | CCFG-AC-040、CCFG-AC-061 |
 
 ## 7. 并发边界与写前检查：确定方案
@@ -132,12 +136,15 @@ R1 修订目标（不改已批准 90 条需求与 76 条验收、不进入代码
 
 ## 11. PENDING_USER_CONFIRMATION 记录
 
-- 数量：`0`。
-- 本设计全部用户可见语义与业务规则均可由已批准需求 `CCFG-REQ-001~090` 推导，未发现必须由项目负责人另行决定、且需求无法推导的业务或用户可见空档。
+- **已批准设计部分（`CCFG-DESIGN-001~037`）数量：`0`。** 本设计全部用户可见语义与业务规则均可由已批准需求 `CCFG-REQ-001~090` 推导，未发现必须由项目负责人另行决定、且需求无法推导的业务或用户可见空档。
+- **本轮新增设计部分（`CCFG-DESIGN-038~046`）新增设计空档：`0`。** 本轮设计项均可由 `CCFG-REQ-091~103` 推导；不新增需要项目负责人另行决定的设计方案选择。
+- **转记（1 项，属需求决策、不属设计空档）**：本轮需求侧存在 1 项 `PENDING_USER_CONFIRMATION`——取消“删除所选”后，行单选与选中行视觉、以及“已选择：{探针ID}”提示文字是否保留（见 `REQUIREMENTS.md` §11 第 1 项）。本设计按“**暂保留**”承接（`CCFG-DESIGN-040`）：未获项目负责人明确确认前，**不得**按下调（取消）实现。该项不影响本设计的 `PENDING_USER_CONFIRMATION` 计数（`0`），因为它是需求决策而非设计空档。
 
 ## 12. 追踪矩阵（设计项 → 需求/验收）
 
-> 下列矩阵汇总四份设计文档（`DESIGN.md`/`API.md`/`UI.md`/`DATABASE.md`）对 90 条需求与 76 条验收的覆盖。逐文档的“设计项→需求/验收”列已在各文档对应表内给出；本表用于一次性核对 90/90 与 76/76 覆盖。
+> 下列矩阵汇总四份设计文档（`DESIGN.md`/`API.md`/`UI.md`/`DATABASE.md`）对 103 条需求与 89 条验收的覆盖。逐文档的“设计项→需求/验收”列已在各文档对应表内给出；本表用于一次性核对 **103/103** 与 **89/89** 覆盖。
+>
+> 说明：本轮页面级调整（`CCFG-REQ-091~103`、`CCFG-AC-077~089`）**只**涉及 `DESIGN.md`（新增 `CCFG-DESIGN-038~046`）与 `UI.md`（新增 `CCFG-UI-027~...`），**不**修改 `API.md` 与 `DATABASE.md`（本轮判定为无需变更，见执行报告）。因此新增需求/验收的覆盖项**只**出现 `CCFG-DESIGN-*` 与 `CCFG-UI-*` 编号，属预期而非缺项。
 
 ### 12.1 需求覆盖矩阵（REQ → 覆盖设计项）
 
@@ -233,6 +240,19 @@ R1 修订目标（不改已批准 90 条需求与 76 条验收、不进入代码
 | CCFG-REQ-088 | CCFG-DESIGN-032、CCFG-DESIGN-034、CCFG-API-003、CCFG-API-020、CCFG-DB-019 |
 | CCFG-REQ-089 | CCFG-DESIGN-032、CCFG-DESIGN-034、CCFG-API-003、CCFG-API-020、CCFG-DB-019 |
 | CCFG-REQ-090 | CCFG-DESIGN-001、CCFG-DESIGN-002、CCFG-DESIGN-004、CCFG-DESIGN-026、CCFG-DESIGN-032、CCFG-DESIGN-034、CCFG-API-002、CCFG-API-003、CCFG-API-020、CCFG-UI-021、CCFG-DB-007、CCFG-DB-017、CCFG-DB-018、CCFG-DB-020 |
+| CCFG-REQ-091 | CCFG-DESIGN-038、CCFG-UI-027 |
+| CCFG-REQ-092 | CCFG-DESIGN-039、CCFG-UI-033 |
+| CCFG-REQ-093 | CCFG-DESIGN-040、CCFG-UI-029 |
+| CCFG-REQ-094 | CCFG-DESIGN-040、CCFG-DESIGN-043、CCFG-UI-029 |
+| CCFG-REQ-095 | CCFG-DESIGN-041、CCFG-UI-028、CCFG-UI-032 |
+| CCFG-REQ-096 | CCFG-DESIGN-041、CCFG-DESIGN-043、CCFG-UI-028、CCFG-UI-032 |
+| CCFG-REQ-097 | CCFG-DESIGN-041、CCFG-DESIGN-045、CCFG-UI-032 |
+| CCFG-REQ-098 | CCFG-DESIGN-041、CCFG-DESIGN-042、CCFG-DESIGN-043、CCFG-UI-032 |
+| CCFG-REQ-099 | CCFG-DESIGN-046、CCFG-UI-028 |
+| CCFG-REQ-100 | CCFG-DESIGN-044、CCFG-UI-028、CCFG-UI-030 |
+| CCFG-REQ-101 | CCFG-DESIGN-045、CCFG-UI-028、CCFG-UI-031 |
+| CCFG-REQ-102 | CCFG-DESIGN-045、CCFG-UI-035 |
+| CCFG-REQ-103 | CCFG-DESIGN-038、CCFG-DESIGN-042、CCFG-DESIGN-043、CCFG-UI-034 |
 
 ### 12.2 验收覆盖矩阵（AC → 覆盖设计项）
 
@@ -314,7 +334,36 @@ R1 修订目标（不改已批准 90 条需求与 76 条验收、不进入代码
 | CCFG-AC-074 | CCFG-DESIGN-032、CCFG-DESIGN-034、CCFG-API-003、CCFG-API-020、CCFG-DB-019 |
 | CCFG-AC-075 | CCFG-DESIGN-032、CCFG-DESIGN-034、CCFG-API-003、CCFG-API-020、CCFG-DB-019 |
 | CCFG-AC-076 | CCFG-DESIGN-001、CCFG-DESIGN-002、CCFG-DESIGN-004、CCFG-DESIGN-026、CCFG-DESIGN-032、CCFG-DESIGN-034、CCFG-API-003、CCFG-API-020、CCFG-UI-021、CCFG-DB-007、CCFG-DB-017、CCFG-DB-018、CCFG-DB-020 |
-## 13. 变更记录
+| CCFG-AC-077 | CCFG-DESIGN-038、CCFG-UI-027 |
+| CCFG-AC-078 | CCFG-DESIGN-039、CCFG-UI-033 |
+| CCFG-AC-079 | CCFG-DESIGN-040、CCFG-UI-029 |
+| CCFG-AC-080 | CCFG-DESIGN-040、CCFG-DESIGN-043、CCFG-UI-029 |
+| CCFG-AC-081 | CCFG-DESIGN-041、CCFG-UI-028 |
+| CCFG-AC-082 | CCFG-DESIGN-041、CCFG-DESIGN-043、CCFG-UI-028、CCFG-UI-032 |
+| CCFG-AC-083 | CCFG-DESIGN-041、CCFG-DESIGN-045、CCFG-UI-032 |
+| CCFG-AC-084 | CCFG-DESIGN-041、CCFG-DESIGN-042、CCFG-DESIGN-043、CCFG-UI-032 |
+| CCFG-AC-085 | CCFG-DESIGN-046、CCFG-UI-028 |
+| CCFG-AC-086 | CCFG-DESIGN-044、CCFG-UI-028、CCFG-UI-030 |
+| CCFG-AC-087 | CCFG-DESIGN-045、CCFG-UI-028、CCFG-UI-031 |
+| CCFG-AC-088 | CCFG-DESIGN-045、CCFG-UI-035 |
+| CCFG-AC-089 | CCFG-DESIGN-038、CCFG-DESIGN-042、CCFG-UI-034 |
+## 13. 页面级模板选择性接入与列表调整（本轮新增 · `DRAFT_PENDING_USER_REVIEW`）
+
+> 本节为本轮页面级调整新增设计项（`CCFG-DESIGN-038~046`），**尚未批准**（`DRAFT_PENDING_USER_REVIEW`）、**尚未实现**（`NOT_STARTED`）、**尚未执行验收**（`NOT_RUN`）。设计编号在本文件既有最大编号 `CCFG-DESIGN-037` 之后连续新增，**不**复用旧编号、**不**重排历史编号。本节只覆盖 `/config/client` 单页；任务开始前既有实现事实为 `IMPLEMENTED_PENDING_USER_ACCEPTANCE`，本轮不改写、不抹除。**本设计不得替代模板迁移授权**：两个模板目录的页面级授权记录见 `docs/baseline/query-list-page-template/MIGRATION.md` 与 `docs/baseline/list-table-visual-template/MIGRATION.md` 的本轮追加记录，模板级全局迁移状态保持 `NOT_STARTED` / `NOT_GRANTED`。
+
+| 设计编号 | 设计决定 | 覆盖需求 | 覆盖验收 |
+|---|---|---|---|
+| CCFG-DESIGN-038 | 页面层选择性接入边界：页面的页面壳、标题与描述、查询区、查询/重置动作、结果区、错误槽与 Loading 稳定性复用已批准“查询列表页模板”的公共组件（页面壳 / 查询面板 / 查询与重置动作 / 结果面板）；**不**接入刷新工具栏组件；模板只提供页面层结构与交互，本 Feature 的 CRUD 写操作、新增/编辑弹窗、业务校验、行级操作与并发语义仍由本 Feature 自身承担，不被模板接管或改写。 | CCFG-REQ-091 | CCFG-AC-077 |
+| CCFG-DESIGN-039 | 无刷新能力（确定性方案）：页面**不**注册任何轮询定时器、**不**渲染刷新按钮 / 刷新倒计时 / “最近刷新时间”；删除成功后与查询成功后的列表重载一律走既有的普通查询数据流（同 CCFG-DESIGN-005），**不**新增独立“刷新”动作、**不**新增刷新专用接口或组件。既有查询 / 重置 / 首入自动查询 / 失败可重试语义不变。 | CCFG-REQ-028、CCFG-REQ-092 | CCFG-AC-021、CCFG-AC-078 |
+| CCFG-DESIGN-040 | 结果区头部组合：结果区头部采用“左侧摘要 / 右侧操作”布局，“新增探针”按钮置于头部**最右侧**（与数据源管理参考页的右侧新增按钮位置一致）；移除原左侧工具栏写操作按钮；**取消**“删除所选”按钮及与之绑定的禁用判定与选中计数显示逻辑。行单选与“已选择：{探针ID}”提示文字按 `PENDING_USER_CONFIRMATION`（`REQUIREMENTS.md` §11 第 1 项）暂按保留处理，实现前须获得项目负责人明确确认。 | CCFG-REQ-021、CCFG-REQ-022、CCFG-REQ-093、CCFG-REQ-094 | CCFG-AC-017、CCFG-AC-079、CCFG-AC-080 |
+| CCFG-DESIGN-041 | 操作列与事件边界：主列表最右侧新增**固定**“操作”列，唯一文字入口为“更多”下拉；该入口及其下拉项的 `click` 与 `dblclick` 必须**阻止冒泡**到行，避免误触发 `@row-dblclick`（打开编辑弹窗）或 `@row-click`（改变选中）；下拉命令按 `fgActive` 决定条目——`'1'` → {停用, 删除}，`'0'` → {启用, 删除}，非 `0/1`（`ABNORMAL`，见 CCFG-DESIGN-006/021）→ 仅 {停用, 删除}，不提供“启用”。删除 / 停用 / 启用命令沿用既有 E5 / E7 / E6 与二次确认语义，仅入口位置变化。 | CCFG-REQ-095、CCFG-REQ-096、CCFG-REQ-097、CCFG-REQ-098 | CCFG-AC-018、CCFG-AC-019、CCFG-AC-082、CCFG-AC-083 |
+| CCFG-DESIGN-042 | 行级忙碌与防重复：下拉命令执行期间对该行进入**行级**忙碌状态（禁用该行的“更多”入口或对应命令项），禁止同一下拉项重复提交；沿用既有写操作防重复与失败复位契约（CCFG-DESIGN-022、CCFG-DESIGN-031），不引入全局锁、不阻塞其他行的独立操作。 | CCFG-REQ-085、CCFG-REQ-098 | CCFG-AC-071、CCFG-AC-084 |
+| CCFG-DESIGN-043 | 写接口复用（确定性方案）：删除复用既有 E5 删除接口、停用复用 E7、启用复用 E6；**不**新增批量删除接口，**不**新增任何批量删除的前端调用路径；删除成功后重新加载列表并清空选中沿用 CCFG-DESIGN-018；后端契约、错误码与写前校验（CCFG-DESIGN-023）零改动。 | CCFG-REQ-094、CCFG-REQ-096、CCFG-REQ-098 | CCFG-AC-080、CCFG-AC-082、CCFG-AC-084 |
+| CCFG-DESIGN-044 | 序号列计算：第一列“序号”为**纯前端展示列**，按当前列表数据数组顺序以 `index + 1` 计算并渲染；不参与接口契约、不写入数据库、不参与排序与过滤；因页面不分页故连续；查询 / 重置后重新加载 / 数据集替换后按新数组顺序重新连续编号。 | CCFG-REQ-100 | CCFG-AC-086 |
+| CCFG-DESIGN-045 | 探针 ID 停用标记与异常可见性：`fgActive === '0'` 时在“探针 ID”单元格内、探针 ID 之后渲染“停用”标记，`fgActive === '1'` 时不渲染；标记的几何（内联布局、上下留白、高度、圆角）与配色沿用数据源管理参考页“数据源 ID”标记的等价实现（不复制其业务语义）。非 `0/1` 历史异常仍按 CCFG-DESIGN-006 判定为 `ABNORMAL` 且**必须携带原始 `fgActive` 值保持可见**（延续 CCFG-DESIGN-021 与需求 `CCFG-REQ-033/102`）；取消“状态”列后，异常可见性由该异常呈现承担，**不得**静默丢失；操作下拉按 CCFG-DESIGN-041 对该类记录只提供 {停用, 删除}。若实现阶段无法在不改变既有可见性的前提下完成标记迁移，必须作为显式待确认项上报，不得静默降级。 | CCFG-REQ-033、CCFG-REQ-034、CCFG-REQ-097、CCFG-REQ-101、CCFG-REQ-102 | CCFG-AC-083、CCFG-AC-087、CCFG-AC-088 |
+| CCFG-DESIGN-046 | 列表表格视觉模板接入与技术隔离：主列表 `el-table` 根元素**追加**模板显式根类并**保留**原有业务类，样式通过 scoped 方式引入模板 CSS 预设；模板公共层只声明“令牌默认回退值”、**不**声明具体令牌值，**不**新增全局样式块（不得定义在 `:root`/`body`），**不**使用 `!important`，**不**新增 Vue 包装组件、**不**新增额外 DOM 层；模板只作用于页面主列表（`el-table` 根元素），新增/编辑弹窗及其内部控件（含弹窗内表格）**不**接入该模板。 | CCFG-REQ-099 | CCFG-AC-085 |
+
+## 14. 变更记录
 
 | 日期 | 变更 | 依据 |
 |---|---|---|
@@ -322,3 +371,4 @@ R1 修订目标（不改已批准 90 条需求与 76 条验收、不进入代码
 | 2026-09-04 | R1 定向修订（设计编号扩为 `CCFG-DESIGN-001~037`，共 37 条，仍连续唯一）：`CCFG-DESIGN-007` 补关键词字面量 LIKE 转义（R1-04）；`CCFG-DESIGN-010/011` 扩展 CSV 歧义与 `CATEGORY_MISMATCH`/`TYPE_MISMATCH`/行级 `COMMA_PROTOCOL_AMBIGUOUS` 异常模型；`CCFG-DESIGN-014` 统一“接口原顺序 + 前端非持久化前三项投影”单一顺序契约（R1-02）；`CCFG-DESIGN-028/030` 固定 `CLIENT_DESC` 原文保存/Trim 仅判空/按原文计字节（R1-03）；新增 `CCFG-DESIGN-035/036/037`（历史候选资格变化异常、含逗号不可逆歧义、历史 NULL 描述契约）；`CCFG-DESIGN-033` 补 R1 测试场景。文档状态保持 `DRAFT_PENDING_USER_REVIEW`，`PENDING_USER_CONFIRMATION=0`；§12 追踪矩阵改用全称编号并按其逐行覆盖重建 | CLIENT-CONFIG-DESIGN-BASELINE-001-R1（正式复审 `CHANGES_REQUIRED` 定向修订；纯文档任务，未实现、未执行验收） |
 | 2026-09-04 | 并发口径定向调整（`CLIENT-CONFIG-DESIGN-CONCURRENCY-ADJUSTMENT-001`，纯文档）：依据重新批准的需求/验收并发口径清除过时显式表锁设计。`CCFG-DESIGN-001` Service 职责去掉表级锁编排；`CCFG-DESIGN-016/017/020` 新增/编辑/启用改为“普通短事务 + DML 前全量重读 + 当次尽力写前检查 + 立即 DML”；`CCFG-DESIGN-022` 删除“锁等待超时”失败分支；§7 整体重写为“并发边界与写前检查”：`CCFG-DESIGN-023` 权威写前检查流程、`024` 明确不执行显式表锁/无专用锁等待错误、`025` 技术取舍（不用 JVM/分布式/行锁/表锁/DDL 串行化）、`026` 无主动锁无 DDL 边界、`027` 接受极端并发双成功边界；`CCFG-DESIGN-033` 删除表锁超时 `50050` 测试并改并发测试口径。原表锁/`ORA-30006→50050`/“并发最多一个成功”方案已过时且未获批准。文档状态保持 `DRAFT_PENDING_USER_REVIEW`，`PENDING_USER_CONFIRMATION=0`；不新增/删除/重排设计编号，覆盖保持 90/90 与 76/76 | CLIENT-CONFIG-DESIGN-CONCURRENCY-ADJUSTMENT-001（设计草案并发口径定向调整；纯文档任务，未实现、未执行验收） |
 | 2026-09-04 | 批准收口（`CLIENT-CONFIG-DESIGN-CONCURRENCY-ADJUSTMENT-APPROVAL-001`，纯文档）：文档状态由 `DRAFT_PENDING_USER_REVIEW` 收口为 `APPROVED`，`PENDING_USER_CONFIRMATION=0`；批准对象为提交 `ba7c5e917b1b9d08208c3e1ceb31285407f5fd5e` 下的本文件及其全部设计定义。37 条 `CCFG-DESIGN-*` 业务定义行相对批准提交逐字零差异，仅状态与批准元数据变化；批准的是设计基线，不代表代码已实现、已测试或验收已执行通过（实现状态仍 `NOT_STARTED`，76 条验收仍全部 `NOT_RUN`） | ChatGPT 正式复审 `CHATGPT_FORMAL_DESIGN_CONCURRENCY_ADJUSTMENT_REVIEW` 结论 `APPROVED`（提交 `ba7c5e9...`），项目负责人于 2026-09-04 明确回复“批准” |
+| 2026-09-22 | 页面级调整草案（`CLIENT-CONFIG-QUERY-LIST-AND-LIST-TABLE-ADJUSTMENT-BASELINE-001`）：新增 §13 页面级模板选择性接入与列表调整设计（`CCFG-DESIGN-038~046`，9 条，追加在既有最大编号 `037` 之后，不重排历史编号）——`038` 页面层选择性接入边界（复用页面壳/查询面板/查询重置动作/结果面板，不接入刷新工具栏，Feature 写操作不被接管）、`039` 无刷新能力（不注册轮询、不渲染刷新按钮/倒计时/最近刷新时间，重载走既有查询数据流）、`040` 结果区头部组合（新增按钮右侧、取消“删除所选”及其禁用/计数逻辑、行选中按 PENDING 暂保留）、`041` 操作列与事件边界（最右固定“操作”列“更多”下拉、入口与下拉项阻止冒泡不触发行 dblclick/click、按 `fgActive` 决定条目、异常仅 {停用, 删除}、沿用 E5/E7/E6 与二次确认）、`042` 行级忙碌与防重复、`043` 写接口复用（不新增批量删除接口或调用）、`044` 序号列纯前端 `index+1` 计算、`045` 探针 ID 停用标记与异常可见性不丢失、`046` 列表表格视觉模板接入与技术隔离（追加显式根类 + scoped 引入，仅主列表，弹窗不接入，无全局泄漏/无 `!important`/无包装组件/无额外 DOM）。§12 追踪矩阵更新为 **103/103** 与 **89/89**。**状态**：新增元数据分层行（`adjustment_baseline_status=DRAFT_PENDING_USER_REVIEW`、`adjustment_implementation_status=NOT_STARTED`、本轮正式验收 `NOT_RUN`）；任务开始前既有实现事实仍为 `IMPLEMENTED_PENDING_USER_ACCEPTANCE`，本轮不改写、不抹除；`CCFG-DESIGN-001~037` 业务定义原文保留不改写（仅 `CCFG-DESIGN-021` 追加一条“入口位置由 §13 取代”的定向修订标注，语义不变）。`PENDING_USER_CONFIRMATION`：设计空档 `0`，转记需求侧 1 项（见 §11）。下一入口 `CHATGPT_REMOTE_BASELINE_REVIEW`（**不是**直接进入实现） | `CLIENT-CONFIG-QUERY-LIST-AND-LIST-TABLE-ADJUSTMENT-BASELINE-001`（项目负责人已确认的页面级调整决定驱动的草案；纯文档任务，未实现代码、未执行验收、未获批模板迁移授权） |
