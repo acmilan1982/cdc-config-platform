@@ -323,8 +323,14 @@ npm test           # vitest run（log-query 等已含组件测试）
   - 该模板**基线内容已批准**（`APPROVED` / `BASELINE_APPROVED`），
     新建或调整页面主列表时应**评估复用**其已批准规则；
   - 若业务差异确实不适用，必须**记录差异与理由**，**不得**静默复制一套平行实现；
-  - 但该模板的**公共实现尚未开始**（`shared_implementation_status=NOT_STARTED`），
-    **不得**据此认为已存在可复用的公共组件；
+  - 该模板的**公共实现与数据源管理主列表的等价接入已实现**
+    （`shared_implementation_status=IMPLEMENTED_PENDING_USER_REVIEW`、
+    `reference_page_integration_status=IMPLEMENTED_PENDING_USER_REVIEW`），
+    即公共视觉预设层**已存在**（显式根类 CSS 预设 + 有限 CSS 自定义属性令牌，
+    **不是** Vue 公共组件、**不**新增 DOM 层）——新建或调整页面主列表时
+    可在该已批准边界内**评估显式复用**；
+  - 但该实现**尚未**通过正式验收（`formal_acceptance_execution_status=NOT_RUN`），
+    **不得**据此认为已存在“已验收 / 生产可用”的公共能力；
   - “评估复用”**不**构成既有页面迁移授权：任何既有页面迁移仍需**单独批准**，
     当前**没有任何**页面迁移获得授权（`page_migration_authorization_status=NOT_GRANTED`）。
 - 同理，查询列表页的**新建、结构性调整、公共交互修改或既有页面迁移评估**

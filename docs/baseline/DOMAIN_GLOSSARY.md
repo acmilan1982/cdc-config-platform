@@ -364,9 +364,14 @@
 参考实现为数据源管理主列表（`/config/data-source`）。
 当前状态为 `APPROVED` / `BASELINE_APPROVED`——经 ChatGPT 远程 Git R1 复审
 （`REVIEW_PASS`）并由项目负责人于 2026-09-21 批准（`approval_scope=BASELINE_CONTENT_ONLY`）。
-**批准基线 ≠ 批准实现**：公共实现**未实现**、参考页**未接入**、
+其公共实现**详细设计已批准**（`shared_implementation_design_status=APPROVED`）；
+公共实现与数据源管理主列表的**等价接入已实现、待项目负责人目测复核**
+（`shared_implementation_status=IMPLEMENTED_PENDING_USER_REVIEW`、
+`reference_page_integration_status=IMPLEMENTED_PENDING_USER_REVIEW`），
+**尚未**通过正式验收（`formal_acceptance_execution_status=NOT_RUN`）；
 任何页面迁移**未授权**（`page_migration_status=NOT_STARTED`、
-`page_migration_authorization_status=NOT_GRANTED`）。与查询列表页模板是**正交、可组合**的两层，
+`page_migration_authorization_status=NOT_GRANTED`）。
+**详细设计批准 / 实现落地 ≠ 通过正式验收 ≠ 页面迁移授权**。与查询列表页模板是**正交、可组合**的两层，
 **只覆盖页面主列表**，不自动覆盖弹窗表格、详情子表、确认表格或大屏/复合视图内嵌表。
 
 来源: docs/baseline/list-table-visual-template/README.md

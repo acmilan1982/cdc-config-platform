@@ -12,8 +12,8 @@ baseline_approval_closeout_r1_commit=e8eb68e368313aa501eb5f7158f6e95975b2077b
 
 shared_implementation_design_status=APPROVED
 shared_implementation_design_approval_status=APPROVED
-shared_implementation_status=NOT_STARTED
-reference_page_integration_status=NOT_STARTED
+shared_implementation_status=IMPLEMENTED_PENDING_USER_REVIEW
+reference_page_integration_status=IMPLEMENTED_PENDING_USER_REVIEW
 formal_acceptance_execution_status=NOT_RUN
 page_migration_status=NOT_STARTED
 page_migration_authorization_status=NOT_GRANTED
@@ -42,15 +42,26 @@ adds_extra_dom_layer=NO
 > （`approval_scope=SHARED_IMPLEMENTATION_DETAILED_DESIGN_ONLY`）。
 >
 > `shared_implementation_design_status=APPROVED`
-> **只表示**本详细设计**文档**已获批准。它**不表示**：
+> **只表示**本详细设计**文档**已获批准。在**详细设计批准当时**，它**不表示**：
 > 公共代码已实现、任何公共文件/类名/令牌已存在、
 > 数据源管理参考页已接入、任何页面已迁移、正式验收已执行。
 >
-> 本次批准**明确不覆盖**：创建 `frontend/src/styles/list-table/` 或任何代码文件、
+> **随后该设计已由独立实现任务落地**：公共层与数据源管理参考页等价接入均已实现
+> （`shared_implementation_status=IMPLEMENTED_PENDING_USER_REVIEW`、
+> `reference_page_integration_status=IMPLEMENTED_PENDING_USER_REVIEW`，
+> `LIST-TABLE-VISUAL-TEMPLATE-SHARED-IMPLEMENTATION-AND-DATA-SOURCE-REFERENCE-INTEGRATION-001`），
+> 当前**等待项目负责人目测复核**（`project_owner_visual_review_status=NOT_RUN_PENDING_USER`）。
+> 这**不代表**正式验收已执行：
+> `formal_acceptance_execution_status=NOT_RUN`，最终接受**尚未决定**；
+> 页面迁移仍 `NOT_STARTED` / `NOT_GRANTED`。
+> 本文件的下述设计伪代码与阶段清单保留为**已批准设计依据**，
+> 其中“未来阶段一”一类措辞描述的是**设计当时**的规划，**已**由上述独立任务落地。
+>
+> 本次设计批准**当时明确不覆盖**：创建 `frontend/src/styles/list-table/` 或任何代码文件、
 > 修改 `DataSourcePage.vue` 或任何测试文件、公共实现开工、参考页接入开工、
 > 任何业务页面迁移、正式验收执行、生产可用。
 >
-> 本任务**未创建**任何 CSS / Vue / Composable / TypeScript / 路由文件，
+> 设计任务**当时未创建**任何 CSS / Vue / Composable / TypeScript / 路由文件，
 > **未修改** `frontend/**`、`backend/**`、测试、配置、依赖或锁文件，
 > **未修改**任何业务页面，**未运行**测试、构建或浏览器验证，
 > **未访问**数据库 / ZooKeeper / Kafka / 业务源库 / 目标库。
@@ -70,12 +81,17 @@ LIST_TABLE_SHARED_DESIGN_APPROVED
 含义：**已经形成唯一详细设计结论，并已经 ChatGPT 远程 R2 复审 `REVIEW_PASS`
 及项目负责人批准**（`approval_scope=SHARED_IMPLEMENTATION_DETAILED_DESIGN_ONLY`）。
 
-该标记**只**描述**详细设计文档**的批准状态，它**不**表示：
+该标记**只**描述**详细设计文档**的批准状态。在**详细设计批准当时**，它**不**表示：
 
-- 公共实现已开始（`shared_implementation_status=NOT_STARTED`）；
-- 数据源管理参考页已接入（`reference_page_integration_status=NOT_STARTED`）；
+- 公共实现已开始（当时 `shared_implementation_status=NOT_STARTED`）；
+- 数据源管理参考页已接入（当时 `reference_page_integration_status=NOT_STARTED`）；
 - 任何页面已迁移（`page_migration_status=NOT_STARTED / NOT_GRANTED`）；
 - 测试或构建已执行、正式验收已完成。
+
+随后公共实现与数据源管理参考页接入已由独立实施任务落地
+（`shared_implementation_status=IMPLEMENTED_PENDING_USER_REVIEW`、
+`reference_page_integration_status=IMPLEMENTED_PENDING_USER_REVIEW`），
+当前待项目负责人目测复核；正式验收仍 `NOT_RUN`、页面迁移仍 `NOT_STARTED / NOT_GRANTED`。
 
 本文件**不**复用模板基线标记冒充详细设计已批准——
 模板基线标记属四份规范文档，描述的是**模板规则**的批准，两者**不得**合并为模糊状态。
@@ -128,12 +144,15 @@ reference_source_commit=10b1d3e39d03dbb78ea409d486f1f3e80c12fc3e
 当前状态分层（不得混读、不得合并为笼统的“已完成”）：
 
 ```text
-详细设计                     已批准（APPROVED，本收口任务的结果）
-公共实现                     NOT_STARTED —— 仍未开始
-数据源管理参考页接入         NOT_STARTED —— 仍未接入
-正式验收                     NOT_RUN —— 未执行
+详细设计                     已批准（APPROVED）
+公共实现                     IMPLEMENTED_PENDING_USER_REVIEW —— 已实现，待项目负责人目测复核
+数据源管理参考页接入         IMPLEMENTED_PENDING_USER_REVIEW —— 已接入，待项目负责人目测复核
+正式验收                     NOT_RUN —— 未执行，最终接受尚未决定
 页面迁移                     NOT_STARTED / NOT_GRANTED —— 未开始、未授权
 ```
+
+（“详细设计 已批准”是**该收口任务**的结果；公共实现与参考页接入的状态
+由**后续独立实施任务**推进，见本文件导语与 §11。）
 
 ---
 
@@ -488,7 +507,9 @@ selected_implementation_architecture=
 
 ### 4.1 未来文件布局
 
-`LIST_TABLE_SHARED_DESIGN_APPROVED` —— 阶段一未来**可能**创建的精确路径（**本任务未创建**）：
+`LIST_TABLE_SHARED_DESIGN_APPROVED` —— 阶段一需创建的精确路径
+（**设计任务当时未创建**；随后已由独立实施任务按此布局创建，当前
+`shared_implementation_status=IMPLEMENTED_PENDING_USER_REVIEW`）：
 
 ```text
 frontend/src/styles/list-table/
@@ -512,11 +533,13 @@ frontend/src/styles/list-table/
 
 ### 4.2 显式启用方式
 
-`LIST_TABLE_SHARED_DESIGN_APPROVED` —— 以下为**设计伪代码**，
-`reference_page_integration_status=NOT_STARTED`，**尚未实现**，**不得**据此认为代码已存在：
+`LIST_TABLE_SHARED_DESIGN_APPROVED` —— 以下为**设计伪代码**（**已批准设计依据**）。
+该接入随后**已**由独立实施任务落地
+（`reference_page_integration_status=IMPLEMENTED_PENDING_USER_REVIEW`）；
+下方伪代码保留以说明**设计意图**，接入的**实际形态**以真实源码与实现报告为准：
 
 ```vue
-<!-- frontend/src/views/data-source/DataSourcePage.vue（未来阶段一，伪代码，未实现） -->
+<!-- frontend/src/views/data-source/DataSourcePage.vue（设计伪代码；实际接入已由独立实施任务落地） -->
 <script setup lang="ts">
 import { LT_MAIN_TABLE_CLASS } from '@/styles/list-table'
 </script>
@@ -602,10 +625,11 @@ import { LT_MAIN_TABLE_CLASS } from '@/styles/list-table'
 | 8 | `--lt-header-cell-padding` | `11px 0` | §2.1 规则组 4 | `:deep(th.el-table__cell)` | **能** | 同上 |
 | 9 | `--lt-body-cell-padding` | `12px 0` | §2.1 规则组 3 | `:deep(td.el-table__cell)` | **能** | 同上 |
 
-`LIST_TABLE_SHARED_DESIGN_APPROVED` —— 公共源文件中的消费形态（**设计伪代码，未实现**）：
+`LIST_TABLE_SHARED_DESIGN_APPROVED` —— 公共源文件中的消费形态
+（**已批准设计依据**；该文件随后已由独立实施任务创建）：
 
 ```css
-/* frontend/src/styles/list-table/list-table-visual.css（未来阶段一，伪代码，未实现） */
+/* frontend/src/styles/list-table/list-table-visual.css（设计伪代码；实际实现见真实源码） */
 .lt-main-table {
   width: var(--lt-table-width, 100%);
   --el-table-border-color: var(--lt-border-color, #f4f4f5);
@@ -815,10 +839,13 @@ L8  不出现 !important。
 
 ## 6. 数据源管理参考页等价接入设计
 
-`LIST_TABLE_SHARED_DESIGN_APPROVED` —— 本节为**后续独立实现任务**的逐项迁移清单。
-`reference_page_integration_status=NOT_STARTED`，**本任务不执行**。
+`LIST_TABLE_SHARED_DESIGN_APPROVED` —— 本节为**后续独立实现任务**的逐项迁移清单
+（**设计任务当时不执行**）；该接入随后**已**由独立实施任务落地
+（`reference_page_integration_status=IMPLEMENTED_PENDING_USER_REVIEW`，
+`project_owner_visual_review_status=NOT_RUN_PENDING_USER`）。
+下方条目保留为**已批准设计依据**，实际接入结果见真实源码与实现报告。
 
-**1. 未来应由公共层承载的现有 `.data-table` 规则（自 Feature 删除）**
+**1. 应由公共层承载的现有 `.data-table` 规则（自 Feature 删除；已按此执行）**
 
 | 位置 | 选择器 | 移交后由谁声明 |
 | --- | --- | --- |
@@ -1102,11 +1129,13 @@ Feature 覆盖是否**实际只影响当前表格**、
 
 ## 8. 实现阶段拆分
 
-`LIST_TABLE_SHARED_DESIGN_APPROVED` —— 阶段拆分如下。**本轮不执行任何阶段**。
+`LIST_TABLE_SHARED_DESIGN_APPROVED` —— 阶段拆分如下
+（设计任务当时**未执行任何阶段**；**阶段一随后已由独立实施任务落地**，
+当前待项目负责人目测复核，正式验收仍 `NOT_RUN`；阶段二仍未授权）：
 
 ### 8.1 阶段一：公共实现 + 数据源管理参考页等价接入
 
-未来**独立任务**（另立提示词、独立授权）才允许：
+**已由独立任务**（另立提示词、独立授权）执行；该提示词授权：
 
 ```text
 1. 创建 §4.1 的两个公共文件（样式源 + 常量模块）；
@@ -1186,8 +1215,12 @@ Feature 覆盖是否**实际只影响当前表格**、
 - 四份模板文档新增的最小状态同步与导航见各自文件（§15 范围）；
   `DESIGN.md` §8 **只新增**指向本详细设计的交叉引用，
   **不**把候选方案改写为已批准实现方案；
-- 本文件详细设计状态为 `APPROVED`（`approval_scope=SHARED_IMPLEMENTATION_DETAILED_DESIGN_ONLY`），
-  但公共实现**仍未开始**、参考页**仍未接入**、页面迁移**仍未授权**；
+- 本文件详细设计状态为 `APPROVED`（`approval_scope=SHARED_IMPLEMENTATION_DETAILED_DESIGN_ONLY`）；
+  公共实现与参考页接入随后已由独立实施任务落地
+  （`shared_implementation_status=IMPLEMENTED_PENDING_USER_REVIEW`、
+  `reference_page_integration_status=IMPLEMENTED_PENDING_USER_REVIEW`），
+  当前待项目负责人目测复核；正式验收仍 `NOT_RUN`（最终接受尚未决定）、
+  页面迁移**仍未授权**（`NOT_STARTED` / `NOT_GRANTED`）；
   **未经项目负责人再次明确批准，不得修改任何代码。**
 
 ---

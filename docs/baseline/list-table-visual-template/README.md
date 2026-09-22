@@ -302,8 +302,10 @@ grep -ohF "$draft_marker" "${core_docs[@]}" | wc -l   # 期望 0
   （不引入 Vue 包装组件、不新增 DOM 层），准确术语以该文件 §0.1 / §3.2 为准；
 - 该文件使用**独立**的设计决策标记（批准态），其计数**不**计入本 README §7.4
   的四份规范文档口径，也**不**包含本文件的草案态规则标记；
-- 该设计的**实现**必须由**后续独立任务**承担，
-  且**未经项目负责人再次明确批准不得修改任何代码**。
+- 该设计的**实现**已由后续独立实施任务承担并落地
+  （`LIST-TABLE-VISUAL-TEMPLATE-SHARED-IMPLEMENTATION-AND-DATA-SOURCE-REFERENCE-INTEGRATION-001`，
+  见 §11 变更记录），当前状态为 `IMPLEMENTED_PENDING_USER_REVIEW`；
+  后续任何**代码修改**仍**未经项目负责人再次明确批准不得进行**。
 
 ## 9. 后续阶段与授权边界
 
@@ -320,7 +322,7 @@ grep -ohF "$draft_marker" "${core_docs[@]}" | wc -l   # 期望 0
 
 第 1、2、3 步完成**只**意味着**模板基线内容**与**详细设计文档**已批准；
 第 4 步的产出是**待复核的实现与等价验证证据**，**不是**验收结论；
-第 5、6 步**均未开始**，**不得**把上述不同层级合并成模糊的“已完成”。
+第 5 步**未运行**、第 6 步**未授权**，**不得**把上述不同层级合并成模糊的“已完成”。
 **批准详细设计 ≠ 批准实现 ≠ 通过正式验收 ≠ 批准参考页接入 ≠ 批准页面迁移。**
 
 当前唯一下一入口：
@@ -385,6 +387,9 @@ next_step=SHARED_IMPLEMENTATION_AND_REFERENCE_PAGE_INTEGRATION_PROJECT_OWNER_VIS
   `SHARED_COMPONENT_DESIGN.md` 当前规范正文的设计决策标记统一转换为**已批准态**
   （草案标记 `0` / 已批准标记 `79`；该标记的定义域**只有** `SHARED_COMPONENT_DESIGN.md`
   一份文档，本文件及其他三份规范文档**不含**该字面量）。
+  在详细设计批准收口当时，**批准详细设计 ≠ 批准实现**：公共实现、参考页接入与页面迁移
+  **当时仍全部未开始/未授权**；已批准基线标记计数 `22 / 0 / 42 / 11` 与候选盘点 `15 / 14` 未改变。
+  详见 `reports/LIST-TABLE-VISUAL-TEMPLATE-SHARED-IMPLEMENTATION-DESIGN-APPROVAL-CLOSEOUT-001.md`。
 - 2026-09-22，公共实现与数据源管理参考页等价接入
   （`LIST-TABLE-VISUAL-TEMPLATE-SHARED-IMPLEMENTATION-AND-DATA-SOURCE-REFERENCE-INTEGRATION-001`，
   代码实现任务，分两个可独立回滚的提交）：
@@ -395,7 +400,6 @@ next_step=SHARED_IMPLEMENTATION_AND_REFERENCE_PAGE_INTEGRATION_PROJECT_OWNER_VIS
   `IMPLEMENTED_PENDING_USER_REVIEW`；`formal_acceptance_execution_status` 保持 `NOT_RUN`，
   `page_migration_status` 保持 `NOT_STARTED`、`page_migration_authorization_status` 保持 `NOT_GRANTED`，
   `shared_implementation_design_status` 保持 `APPROVED`。
+  本次实现**不等于**通过正式验收：`formal_acceptance_execution_status` 为 `NOT_RUN`，
+  最终接受**尚未决定**；页面迁移仍 `NOT_STARTED` / `NOT_GRANTED`。
   详见 `reports/LIST-TABLE-VISUAL-TEMPLATE-SHARED-IMPLEMENTATION-AND-DATA-SOURCE-REFERENCE-INTEGRATION-001.md`。
-  **批准详细设计 ≠ 批准实现**：公共实现、参考页接入与页面迁移**仍全部未开始/未授权**；
-  已批准基线标记计数 `22 / 0 / 42 / 11` 与候选盘点 `15 / 14` **均未改变**。
-  详见 `reports/LIST-TABLE-VISUAL-TEMPLATE-SHARED-IMPLEMENTATION-DESIGN-APPROVAL-CLOSEOUT-001.md`。

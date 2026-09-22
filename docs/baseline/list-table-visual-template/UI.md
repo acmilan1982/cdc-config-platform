@@ -11,8 +11,8 @@ approval_scope=BASELINE_CONTENT_ONLY
 approved_baseline_source_commit=575379895c4c57fd3df7e0d0ce27c1f6841d2f17
 shared_implementation_design_status=APPROVED
 shared_implementation_design_approval_status=APPROVED
-shared_implementation_status=NOT_STARTED
-reference_page_integration_status=NOT_STARTED
+shared_implementation_status=IMPLEMENTED_PENDING_USER_REVIEW
+reference_page_integration_status=IMPLEMENTED_PENDING_USER_REVIEW
 formal_acceptance_execution_status=NOT_RUN
 page_migration_status=NOT_STARTED
 page_migration_authorization_status=NOT_GRANTED
@@ -259,10 +259,11 @@ blocking_finding_count=0
   数据源管理现有的两级空态（见 §1.8）仅是**参考实现事实**，
   不作为公共默认规则。后续详细设计如需提供空态视觉扩展点，应另行设计。
 
-`LIST_TABLE_TEMPLATE_APPROVED` —— 以上是**已批准模板规则**，作为后续公共实现
-详细设计必须遵守的基线；但**规则批准 ≠ 实现批准**。
-其中“可提取”不代表数值可直接成为公共默认值；具体数值是否上收为公共令牌，
-仍由后续详细设计决定（见 `DESIGN.md` §4、§8）。
+`LIST_TABLE_TEMPLATE_APPROVED` —— 以上是**已批准模板规则**，作为公共实现
+详细设计必须遵守的基线；但**规则批准 ≠ 通过正式验收**。
+其中“可提取”不代表数值可直接成为公共默认值；具体哪些数值上收为公共令牌，
+由后续详细设计决定（见 `DESIGN.md` §4、§8），该设计已由独立任务落地
+（`shared_implementation_status=IMPLEMENTED_PENDING_USER_REVIEW`，**尚未**通过正式验收）。
 
 ---
 

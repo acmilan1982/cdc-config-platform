@@ -11,8 +11,8 @@ approval_scope=BASELINE_CONTENT_ONLY
 approved_baseline_source_commit=575379895c4c57fd3df7e0d0ce27c1f6841d2f17
 shared_implementation_design_status=APPROVED
 shared_implementation_design_approval_status=APPROVED
-shared_implementation_status=NOT_STARTED
-reference_page_integration_status=NOT_STARTED
+shared_implementation_status=IMPLEMENTED_PENDING_USER_REVIEW
+reference_page_integration_status=IMPLEMENTED_PENDING_USER_REVIEW
 formal_acceptance_execution_status=NOT_RUN
 page_migration_status=NOT_STARTED
 page_migration_authorization_status=NOT_GRANTED
@@ -33,7 +33,11 @@ blocking_finding_count=0
 
 > 本文档产出**候选盘点与评估结果**，该盘点已作为**基线盘点结果**随基线内容一并批准；
 > 但批准的是**盘点事实与边界规则**，**不**授权、**不**实施任何迁移。
-> `page_migration_status=NOT_STARTED`、`page_migration_authorization_status=NOT_GRANTED`
+> 公共实现与数据源管理参考页接入随后已由独立实施任务落地
+> （`shared_implementation_status=IMPLEMENTED_PENDING_USER_REVIEW`、
+> `reference_page_integration_status=IMPLEMENTED_PENDING_USER_REVIEW`），
+> 但**尚未**通过正式验收；`page_migration_status=NOT_STARTED`、
+> `page_migration_authorization_status=NOT_GRANTED`
 > 在本轮**未改变**。
 
 基准提交：`10b1d3e39d03dbb78ea409d486f1f3e80c12fc3e`
@@ -169,12 +173,16 @@ NEEDS_SEPARATE_EVALUATION=1
 3. 公共实现详细设计与批准 —— **已完成**（ChatGPT 远程 R2 复审 `REVIEW_PASS`、
    `blocking_finding_count=0`；项目负责人于 2026-09-21 批准，
    `approval_scope=SHARED_IMPLEMENTATION_DETAILED_DESIGN_ONLY`）；
-4. 公共实现与数据源管理参考页等价接入 —— **未开始**；
-5. 公共实现正式验收与最终接受 —— **未运行**；
-6. 之后才逐页选择并单独授权 —— **未授权**。
+4. 公共实现与数据源管理参考页等价接入 —— **已实现，待项目负责人目测复核**
+   （`IMPLEMENTED_PENDING_USER_REVIEW`；`project_owner_visual_review_status=NOT_RUN_PENDING_USER`）；
+5. 公共实现正式验收与最终接受 —— **未运行**（`formal_acceptance_execution_status=NOT_RUN`，
+   最终接受**尚未决定**）；
+6. 之后才逐页选择并单独授权 —— **未授权**（`page_migration_status=NOT_STARTED`、
+   `page_migration_authorization_status=NOT_GRANTED`）。
 
 第 1、2、3 条完成**只**意味着**基线内容**与**详细设计文档**已批准；
-第 4–6 条**均未开始**，**不得**把上述不同层级合并成模糊的“已完成”。
-**批准详细设计 ≠ 批准实现 ≠ 批准参考页接入 ≠ 批准页面迁移。**
+第 4 条已实现但**未**通过正式验收，第 5、6 条**仍未运行/未授权**，
+**不得**把上述不同层级合并成模糊的“已完成”。
+**批准详细设计 ≠ 批准实现 ≠ 通过正式验收 ≠ 批准页面迁移。**
 本轮**未**选择首个迁移页面，
 **未**为探针端管理、数据订阅或任何页面生成实施任务。

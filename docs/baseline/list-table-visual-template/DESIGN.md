@@ -11,8 +11,8 @@ approval_scope=BASELINE_CONTENT_ONLY
 approved_baseline_source_commit=575379895c4c57fd3df7e0d0ce27c1f6841d2f17
 shared_implementation_design_status=APPROVED
 shared_implementation_design_approval_status=APPROVED
-shared_implementation_status=NOT_STARTED
-reference_page_integration_status=NOT_STARTED
+shared_implementation_status=IMPLEMENTED_PENDING_USER_REVIEW
+reference_page_integration_status=IMPLEMENTED_PENDING_USER_REVIEW
 formal_acceptance_execution_status=NOT_RUN
 page_migration_status=NOT_STARTED
 page_migration_authorization_status=NOT_GRANTED
@@ -32,12 +32,13 @@ blocking_finding_count=0
 
 > 本文档只做**模板基线级设计**，**不**在本基线任务内锁定最终实现形态。
 > 最终实现方案（CSS 预设 / CSS 变量 / Vue 轻包装 / 组合方式）由**后续独立**
-> `SHARED_COMPONENT_DESIGN` 类任务决定。
+> `SHARED_COMPONENT_DESIGN` 类任务决定——该任务已完成并获批准，其唯一技术架构
+> 随后已落地（见 §8 交叉引用）。
 > 本文档中的模板规则均为 `LIST_TABLE_TEMPLATE_APPROVED`——经 ChatGPT 远程 Git R1 复审
 > 并由项目负责人批准的**已批准模板规则**，作为后续公共实现详细设计**必须遵守的基线**；
-> 本节等处的实现方案均为 `LIST_TABLE_PROPOSED_NOT_IMPLEMENTED`
-> （**尚未实现**；本基线候选段自身**不承担**下游详细设计的批准状态，
-> 已批准的唯一技术架构见 `SHARED_COMPONENT_DESIGN.md`）。
+> 本节 §8 罗列的**替代候选方案**均为 `LIST_TABLE_PROPOSED_NOT_IMPLEMENTED`
+> （**未被采用、未实现**；本基线候选段自身**不承担**下游详细设计的批准状态，
+> 已被采用的唯一技术架构见 `SHARED_COMPONENT_DESIGN.md`）。
 
 ## 1. 模板职责
 
@@ -187,12 +188,16 @@ blocking_finding_count=0
 > 该结论已经 ChatGPT 远程 R2 复审 `REVIEW_PASS`（`blocking_finding_count=0`），
 > 并由项目负责人于 2026-09-21 批准
 > （`approval_scope=SHARED_IMPLEMENTATION_DETAILED_DESIGN_ONLY`）。
-> 但**批准详细设计 ≠ 批准实现**：公共实现**未开始**、参考页**未接入**、页面**未迁移**。
+> 在**该批准当时**，批准的是设计文档而非实现：公共实现、参考页接入当时均未开始，
+> 页面迁移当时未授权；随后该设计已由独立实现任务落地
+> （`shared_implementation_status=IMPLEMENTED_PENDING_USER_REVIEW`），
+> 但**仍未**通过正式验收，页面**仍未**迁移。
 >
 > 因此本节各候选的描述职责分层为：
 > §8.1–§8.5 的候选盘点与“**基线任务自身不定案**”仍**保持原样**，**不**改写为已批准实现方案；
-> 下游**已批准的唯一技术架构**见 `SHARED_COMPONENT_DESIGN.md`；
-> 由于公共实现仍未开始，这些候选条目**仍**保留“候选且未实现”的标记语义。
+> 下游**已批准且已落地**的唯一技术架构见 `SHARED_COMPONENT_DESIGN.md`；
+> §8.1–§8.3 的替代候选至今**未被采用**，故这些候选条目**仍**保留
+> “候选且未实现”的标记语义。
 > 详见 `SHARED_COMPONENT_DESIGN.md`。
 
 ### 8.1 显式 CSS 预设（纯类名）
@@ -251,8 +256,8 @@ blocking_finding_count=0
 - **本文档（基线任务）不对任一方案定案**。最终技术架构由后续
   `SHARED_COMPONENT_DESIGN` 类任务基于**本已批准基线**与真实源码决定，
   并**必须重新提交项目负责人确认**——该下游设计（候选 §8.4 组合方式）
-  已获 ChatGPT 远程 R2 复审 `REVIEW_PASS` 并由项目负责人于 2026-09-21 批准；
-  而**批准详细设计 ≠ 批准实现**，公共实现**仍未开始**，
+  已获 ChatGPT 远程 R2 复审 `REVIEW_PASS` 并由项目负责人于 2026-09-21 批准，
+  其实现随后已由独立任务落地（当前 `IMPLEMENTED_PENDING_USER_REVIEW`，**尚未**通过正式验收）；
   因此**未经项目负责人再次明确批准不得修改任何代码**。
 
 ## 9. 本轮明确不做的事
