@@ -197,11 +197,13 @@ reference_table_class=.data-table
 
 `LIST_TABLE_TEMPLATE_APPROVED` —— 批准的是**基线规则**，**不是**实现方案：
 
-- `DESIGN.md` §8 的候选实现方案在**本基线**中**仍未定案**（见该节 §8.5）；
-  其唯一技术结论由**独立详细设计** `SHARED_COMPONENT_DESIGN.md` 作出，
-  该结论（候选 §8.4 组合方式：显式根类 CSS 预设 + 有限 CSS 自定义属性令牌）
-  已经 ChatGPT 远程 R2 复审 `REVIEW_PASS` 与项目负责人批准
-  （`approval_scope=SHARED_IMPLEMENTATION_DETAILED_DESIGN_ONLY`，见 §8、§9）；
+- `DESIGN.md` §8 的候选实现方案在**本基线任务当时**未定案（见该节 §8.5）；
+  其唯一技术结论由**独立详细设计** `SHARED_COMPONENT_DESIGN.md` 作出：
+  候选 §8.4 组合方式（显式根类 CSS 预设 + 有限 CSS 自定义属性令牌）**唯一采纳**，
+  §8.1 / §8.2 **部分采纳**为其两半，§8.3 **被否决**；
+  该结论已经 ChatGPT 远程 R2 复审 `REVIEW_PASS` 与项目负责人批准
+  （`approval_scope=SHARED_IMPLEMENTATION_DETAILED_DESIGN_ONLY`，见 §8、§9），
+  并已由独立实施任务**落地**（待项目负责人目测复核 / 待正式验收）；
 - 公共实现详细设计**已批准**（`shared_implementation_design_status=APPROVED`，
   `..._approval_status=APPROVED`）；公共实现已按该设计落地
   （`shared_implementation_status=IMPLEMENTED_PENDING_USER_REVIEW`）；
@@ -209,20 +211,30 @@ reference_table_class=.data-table
   （`reference_page_integration_status=IMPLEMENTED_PENDING_USER_REVIEW`）；
 - **没有任何**业务页面获得迁移授权（`NOT_GRANTED`）。
 
-规则批准**不等于**代码已经实现；`IMPLEMENTED_PENDING_USER_REVIEW`
-**不等于**已通过正式验收或已被接受。
+规则批准**不等于**通过正式验收；公共实现与参考页接入**已落地**
+（`IMPLEMENTED_PENDING_USER_REVIEW`），但该状态**不等于**已通过正式验收或已被接受。
 
 ### 7.3 `LIST_TABLE_PROPOSED_NOT_IMPLEMENTED`
 
-含义：**候选实现与后续建议**——包括候选 CSS 预设、CSS 变量、Vue 轻包装、
-组合方式、目录与令牌命名等。
+含义：**未被采纳、尚未实现的候选**，以及**未来尚未执行的任务 / 建议**。
+例如：`DESIGN.md` §8 中被**否决**的候选（§8.3 Vue 轻包装组件）、
+未来逐页迁移的评估事项（见 `MIGRATION.md`）。
+
+**已采纳并已落地**的实现事实**必须**使用**参考事实标记**（见 §7.1），
+**不得**再被笼统归入本标记，具体包括：
+
+- `DESIGN.md` §8 中**部分采纳**并作为组合方案落地的 §8.1、§8.2；
+- **唯一采纳且已实现**的 §8.4 组合方式；
+- 公共目录布局与令牌命名（已由详细设计确定并由实现任务落地）。
 
 **不得**把候选实现写成已实现（`IMPLEMENTED`），也**不得**把候选实现方案
 写成已批准的实现设计。
 
-> 阅读约定：凡描述当前代码行为的内容必须标注 `LIST_TABLE_REFERENCE_FACT`；
+> 阅读约定：凡描述当前**真实源码、已批准选择结果与已落地实现事实**的内容
+> 必须标注 `LIST_TABLE_REFERENCE_FACT`；
 > 凡描述当前已批准模板规则的必须标注 `LIST_TABLE_TEMPLATE_APPROVED`；
-> 凡描述未来实现或后续任务的必须标注 `LIST_TABLE_PROPOSED_NOT_IMPLEMENTED`。
+> 凡描述**未被采纳 / 尚未实现**的候选，或未来尚未执行的任务与建议，
+> 必须标注 `LIST_TABLE_PROPOSED_NOT_IMPLEMENTED`。
 
 ### 7.4 标记计数：规范正文与历史报告分层
 
@@ -236,15 +248,23 @@ reference_table_class=.data-table
   `BASELINE_DRAFT_ONLY` 等历史状态值；这些只代表**当时阶段**的真实状态，
   **不参与**当前规范状态判断，且**不得**修改历史报告来消除这些标记。
 
-当前规范性文档计数（批准收口后实测）：
+当前规范性文档计数（**实现落地后复算**，见 §11 的 R2 变更记录）：
 
-| 标记 | 批准前 | 批准后（当前） |
-| --- | --- | --- |
-| `LIST_TABLE_REFERENCE_FACT` | 22 | 22 |
-| `LIST_TABLE_TEMPLATE_APPROVED` | 0 | 42 |
-| `LIST_TABLE_PROPOSED_NOT_IMPLEMENTED` | 11 | 11 |
+| 标记 | 批准前 | 批准收口时 | 当前（实现落地后） |
+| --- | --- | --- | --- |
+| `LIST_TABLE_REFERENCE_FACT` | 22 | 22 | 26 |
+| `LIST_TABLE_TEMPLATE_APPROVED` | 0 | 42 | 42 |
+| `LIST_TABLE_PROPOSED_NOT_IMPLEMENTED` | 11 | 11 | 7 |
 
-草案态规则标记在**规范正文**中的批准后计数为 `0`：该字面量只保留在历史报告中。
+当前口径变更来源（`22 / 0 / 42 / 11` → `26 / 0 / 42 / 7`）：
+参考事实标记 `+4`（22→26）、候选未实现标记 `-4`（11→7），
+已批准模板规则标记与草案态标记均不变（42 / 0）。
+
+`+4 / -4` 来自 `DESIGN.md` 中**四处**原本承担“已采纳候选 / 已决策技术形态”内容、
+却仍被标为候选未实现的段落，改为标注**参考事实标记**
+（文档导语、§4、§8 总导语、§8.5 对比小结），**不是**靠重复或堆叠标记凑数。
+
+草案态规则标记在**规范正文**中计数为 `0`：该字面量只保留在历史报告中。
 
 核验命令（只统计四份规范性文档，在仓库根执行）：
 
@@ -277,10 +297,10 @@ grep -ohF "$draft_marker" "${core_docs[@]}" | wc -l   # 期望 0
 | 文件 | 内容 |
 | --- | --- |
 | `README.md` | 本文件：状态、目标、范围、参考实现、与 qlpt 的关系、标记分层、导航与变更记录 |
-| `DESIGN.md` | 模板职责与 Feature 保留职责、启用与作用域隔离、行高与长文本策略、候选实现方案对比（不定案） |
+| `DESIGN.md` | 模板职责与 Feature 保留职责、启用与作用域隔离、行高与长文本策略、候选实现方案对比（**基线任务当时不定案**；下游已选 §8.4 并已落地，待目测 / 待正式验收） |
 | `UI.md` | 参考实现主表当前事实、可提升为已批准模板规则的视觉内容、必须保留为 Feature 专属的内容 |
 | `MIGRATION.md` | 全量 `el-table` 使用点盘点矩阵、候选分类、逐页独立评估与授权要求 |
-| `SHARED_COMPONENT_DESIGN.md` | **公共实现详细设计（已批准）**：四个候选的唯一结论、公共契约、Feature 保护项、参考页等价接入清单、验证与回滚设计（`approval_scope=SHARED_IMPLEMENTATION_DETAILED_DESIGN_ONLY`；**批准的是设计文档，不是实现**） |
+| `SHARED_COMPONENT_DESIGN.md` | **公共实现详细设计（已批准）**：四个候选的唯一结论、公共契约、Feature 保护项、参考页等价接入清单、验证与回滚设计（`approval_scope=SHARED_IMPLEMENTATION_DETAILED_DESIGN_ONLY`；**批准的是设计文档**，该设计随后已由独立实施任务落地，当前 `IMPLEMENTED_PENDING_USER_REVIEW`，**尚未**通过正式验收） |
 | `reports/LIST-TABLE-VISUAL-TEMPLATE-BASELINE-001.md` | R0 建立任务的执行报告与校验证据（**历史报告，保留草案态标记，不修改**） |
 | `reports/LIST-TABLE-VISUAL-TEMPLATE-BASELINE-001-R1.md` | R1 定向修订执行报告（**历史报告，保留草案态标记，不修改**） |
 | `reports/LIST-TABLE-VISUAL-TEMPLATE-BASELINE-APPROVAL-CLOSEOUT-001.md` | 基线内容批准收口报告（历史执行报告，不修改） |
@@ -376,7 +396,7 @@ next_step=SHARED_IMPLEMENTATION_AND_REFERENCE_PAGE_INTEGRATION_PROJECT_OWNER_VIS
   `shared_implementation_design_status=DRAFT_PENDING_CHATGPT_AND_PROJECT_OWNER_REVIEW`
   与 `shared_implementation_design_approval_status=NOT_APPROVED`。
   公共实现、参考页接入与页面迁移**仍全部未开始/未授权**；
-  已批准基线标记计数 `22 / 0 / 42 / 11` 与候选盘点 `15 / 14` **均未改变**。
+  已批准基线标记计数 `22 / 0 / 42 / 11` 与候选盘点 `15 / 14` **均未改变**（当时实测）。
   详见 `reports/LIST-TABLE-VISUAL-TEMPLATE-SHARED-IMPLEMENTATION-DESIGN-001.md`。
 - 2026-09-21，公共实现详细设计批准收口
   （`LIST-TABLE-VISUAL-TEMPLATE-SHARED-IMPLEMENTATION-DESIGN-APPROVAL-CLOSEOUT-001`，纯文档任务）：
@@ -388,7 +408,7 @@ next_step=SHARED_IMPLEMENTATION_AND_REFERENCE_PAGE_INTEGRATION_PROJECT_OWNER_VIS
   （草案标记 `0` / 已批准标记 `79`；该标记的定义域**只有** `SHARED_COMPONENT_DESIGN.md`
   一份文档，本文件及其他三份规范文档**不含**该字面量）。
   在详细设计批准收口当时，**批准详细设计 ≠ 批准实现**：公共实现、参考页接入与页面迁移
-  **当时仍全部未开始/未授权**；已批准基线标记计数 `22 / 0 / 42 / 11` 与候选盘点 `15 / 14` 未改变。
+  **当时仍全部未开始/未授权**；已批准基线标记计数 `22 / 0 / 42 / 11` 与候选盘点 `15 / 14` 未改变（当时实测）。
   详见 `reports/LIST-TABLE-VISUAL-TEMPLATE-SHARED-IMPLEMENTATION-DESIGN-APPROVAL-CLOSEOUT-001.md`。
 - 2026-09-22，公共实现与数据源管理参考页等价接入
   （`LIST-TABLE-VISUAL-TEMPLATE-SHARED-IMPLEMENTATION-AND-DATA-SOURCE-REFERENCE-INTEGRATION-001`，
@@ -403,3 +423,22 @@ next_step=SHARED_IMPLEMENTATION_AND_REFERENCE_PAGE_INTEGRATION_PROJECT_OWNER_VIS
   本次实现**不等于**通过正式验收：`formal_acceptance_execution_status` 为 `NOT_RUN`，
   最终接受**尚未决定**；页面迁移仍 `NOT_STARTED` / `NOT_GRANTED`。
   详见 `reports/LIST-TABLE-VISUAL-TEMPLATE-SHARED-IMPLEMENTATION-AND-DATA-SOURCE-REFERENCE-INTEGRATION-001.md`。
+- 2026-09-22，候选标记语义由**实现前口径**校正为**实现后真实口径**
+  （`LIST-TABLE-VISUAL-TEMPLATE-SHARED-IMPLEMENTATION-AND-DATA-SOURCE-REFERENCE-INTEGRATION-001-R2`，
+  纯文档定向修订）：
+  ChatGPT 远程 R1 复审结论 `CHANGES_REQUIRED`、`blocking_finding_count=1`；
+  九份权威文档的主状态对齐本身**已通过**（`r1_current_status_alignment_status=PASS`），
+  唯一阻断问题是 `DESIGN.md` §8 仍把**已采纳并已实现**的候选事实
+  继续归入候选未实现标记的“当前未实现”语义，与已批准的
+  `SHARED_COMPONENT_DESIGN.md` §3 对比表直接冲突。
+  本次将 `DESIGN.md` 中**四处**原本承担“已采纳候选 / 已决策技术形态”内容的段落
+  （文档导语、§4、§8 总导语、§8.5 对比小结）由候选未实现标记改为**参考事实标记**，
+  并在 §8.1–§8.4 各节标题下补记**最终结论**：§8.1 / §8.2 **部分采纳**
+  为组合方案的两半、§8.3 **被否决、未实现**、§8.4 **唯一采纳并已实现**
+  （`IMPLEMENTED_PENDING_USER_REVIEW`，仍待项目负责人目测与正式验收）。
+  当前规范性文档计数随之由 `22 / 0 / 42 / 11` 变为 `26 / 0 / 42 / 7`
+  （参考事实标记 `+4`、候选未实现标记 `-4`，已批准模板规则标记与草案态标记均不变）。
+  本文件 §11 与各历史报告中标注了**实现前时点**的 `22 / 0 / 42 / 11`
+  保留不改，只代表当时真实状态。
+  代码、测试、服务、原实现报告、R1 报告与浏览器证据**均未改动**。
+  详见 `reports/LIST-TABLE-VISUAL-TEMPLATE-SHARED-IMPLEMENTATION-AND-DATA-SOURCE-REFERENCE-INTEGRATION-001-R2.md`。

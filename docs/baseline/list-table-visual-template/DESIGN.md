@@ -36,9 +36,13 @@ blocking_finding_count=0
 > 随后已落地（见 §8 交叉引用）。
 > 本文档中的模板规则均为 `LIST_TABLE_TEMPLATE_APPROVED`——经 ChatGPT 远程 Git R1 复审
 > 并由项目负责人批准的**已批准模板规则**，作为后续公共实现详细设计**必须遵守的基线**；
-> 本节 §8 罗列的**替代候选方案**均为 `LIST_TABLE_PROPOSED_NOT_IMPLEMENTED`
-> （**未被采用、未实现**；本基线候选段自身**不承担**下游详细设计的批准状态，
-> 已被采用的唯一技术架构见 `SHARED_COMPONENT_DESIGN.md`）。
+> `LIST_TABLE_REFERENCE_FACT` —— §8 四个候选的**最终结论**已由下游详细设计与实现落地确定：
+> §8.1 显式 CSS 预设、§8.2 CSS 变量**部分采纳**，各作组合方案（§8.4）的一半；
+> §8.3 Vue 轻包装组件**被否决、未实现**；
+> §8.4 组合方式**唯一采纳并已实现**
+> （`shared_implementation_status=IMPLEMENTED_PENDING_USER_REVIEW`，
+> 唯一技术架构见 `SHARED_COMPONENT_DESIGN.md`）。
+> 本基线候选段自身**不承担**下游详细设计的批准状态。
 
 ## 1. 模板职责
 
@@ -117,8 +121,13 @@ blocking_finding_count=0
 - 模板**不得**为业务语义预设默认值（见 §7），因此“覆盖”只发生在**视觉纪律**层面，
   不发生在**业务语义**层面。
 
-`LIST_TABLE_PROPOSED_NOT_IMPLEMENTED` —— 覆盖的**具体技术形态**
-（是覆盖 CSS 变量、是传入 Props、还是 Feature 自带 scoped 规则）留待详细设计决定。
+`LIST_TABLE_REFERENCE_FACT` —— 覆盖的**具体技术形态**已由详细设计确定为
+**显式根类 CSS 预设 + 有限 CSS 自定义属性令牌**
+（`EXPLICIT_ROOT_CLASS_CSS_PRESET_WITH_LIMITED_CSS_CUSTOM_PROPERTY_TOKENS`），
+并已由独立实施任务落地：Feature 通过在本页表格根类内声明有限的 `--lt-*` 令牌
+**局部覆盖**，**不**传入 Props、**不**依赖 Feature 重写整条公共规则。
+Feature 专属的 scoped 规则仍按 §2 的职责边界保留，
+**不得**误写成“全部 CSS 都已公共化”。
 
 ## 5. 行高策略
 
@@ -174,17 +183,24 @@ blocking_finding_count=0
 后续详细设计如认为其样式具有复用价值，只能作为**可选扩展能力**另行评估，
 **不得**在本基线中提前定案。
 
-## 8. 候选实现方案对比（不定案）
+## 8. 候选实现方案对比（基线任务当时不定案；最终结论见 §8.5）
 
-`LIST_TABLE_PROPOSED_NOT_IMPLEMENTED` —— 以下为候选方案，**均未实现**，
-且**本基线任务内**不选择其一作为最终方案。
-本标记在本文件继续存在，含义是“**基线候选条目，且代码未实现**”，
-**不得**被解释为“下游详细设计仍未批准”。
+`LIST_TABLE_REFERENCE_FACT` —— 四个候选的**最终结论**（已由下游详细设计与实现确定）：
+
+- §8.1 显式 CSS 预设（纯类名）—— **部分采纳**，作为组合方案的一半；
+- §8.2 CSS 变量（令牌）—— **部分采纳**，作为组合方案的另一半；
+- §8.3 Vue 轻包装组件 —— **被否决、未实现**；
+- §8.4 组合方式 —— **唯一采纳并已实现**。
+
+「**本基线任务当时不选择其一作为最终方案**」是**历史事实**；
+本节各候选的**方案说明表（§8.1–§8.4）保持原有优缺点、泄漏风险、测试方式与回滚方式不变**，
+本次只修正其**当前选择 / 实现状态**，**不**把候选表改写为已批准实现方案。
 
 > **交叉引用（下游详细设计，已批准）**：独立任务
 > `LIST-TABLE-VISUAL-TEMPLATE-SHARED-IMPLEMENTATION-DESIGN-001` 已产出
 > `SHARED_COMPONENT_DESIGN.md`，对本节四个候选作出**唯一技术结论**
-> （候选 §8.4 组合方式：显式根类 CSS 预设 + 有限 CSS 自定义属性令牌）。
+> （候选 §8.4 组合方式：显式根类 CSS 预设 + 有限 CSS 自定义属性令牌），
+> 逐项复核表见其 §3（§8.1 / §8.2 部分采纳、§8.3 拒绝、§8.4 采纳）。
 > 该结论已经 ChatGPT 远程 R2 复审 `REVIEW_PASS`（`blocking_finding_count=0`），
 > 并由项目负责人于 2026-09-21 批准
 > （`approval_scope=SHARED_IMPLEMENTATION_DETAILED_DESIGN_ONLY`）。
@@ -193,14 +209,13 @@ blocking_finding_count=0
 > （`shared_implementation_status=IMPLEMENTED_PENDING_USER_REVIEW`），
 > 但**仍未**通过正式验收，页面**仍未**迁移。
 >
-> 因此本节各候选的描述职责分层为：
-> §8.1–§8.5 的候选盘点与“**基线任务自身不定案**”仍**保持原样**，**不**改写为已批准实现方案；
-> 下游**已批准且已落地**的唯一技术架构见 `SHARED_COMPONENT_DESIGN.md`；
-> §8.1–§8.3 的替代候选至今**未被采用**，故这些候选条目**仍**保留
-> “候选且未实现”的标记语义。
-> 详见 `SHARED_COMPONENT_DESIGN.md`。
+> 因此：§8.1 / §8.2 是**已被采纳的组合方案组成部分**、§8.3 是**被否决且未实现**的候选、
+> §8.4 是**唯一采纳且已实现**的技术架构；本节各候选**不再**被统称为“均未实现”。
+> 下游**已批准且已落地**的唯一技术架构详见 `SHARED_COMPONENT_DESIGN.md`。
 
 ### 8.1 显式 CSS 预设（纯类名）
+
+最终结论：**部分采纳**——作为 §8.4 组合方案的一半（承担“选择器纪律”）。
 
 | 维度 | 评估 |
 | --- | --- |
@@ -213,6 +228,8 @@ blocking_finding_count=0
 
 ### 8.2 CSS 变量（令牌）
 
+最终结论：**部分采纳**——作为 §8.4 组合方案的另一半（承担“有限受控覆盖”）。
+
 | 维度 | 评估 |
 | --- | --- |
 | 形态 | 在表格根元素上定义 `--lt-*` 令牌，业务规则消费令牌；Feature 局部覆盖令牌 |
@@ -223,6 +240,9 @@ blocking_finding_count=0
 | 回滚方式 | 删除令牌定义与消费规则 |
 
 ### 8.3 Vue 轻包装组件
+
+最终结论：**否决、未实现**（引入中间层会侵入 `el-table` 的插槽 / 事件 / `ref` 契约，
+与 qlpt 已批准的“不做超级组件、不做薄包装”结论冲突）。
 
 | 维度 | 评估 |
 | --- | --- |
@@ -235,6 +255,9 @@ blocking_finding_count=0
 
 ### 8.4 组合方式
 
+最终结论：**唯一采纳，并已实现**——`EXPLICIT_ROOT_CLASS_CSS_PRESET_WITH_LIMITED_CSS_CUSTOM_PROPERTY_TOKENS`；
+当前 `shared_implementation_status=IMPLEMENTED_PENDING_USER_REVIEW`（待项目负责人目测复核与正式验收）。
+
 | 维度 | 评估 |
 | --- | --- |
 | 形态 | “预设 CSS 类” + “有限令牌覆盖”，不引入组件 |
@@ -246,18 +269,23 @@ blocking_finding_count=0
 
 ### 8.5 对比小结
 
-`LIST_TABLE_PROPOSED_NOT_IMPLEMENTED`：
+`LIST_TABLE_REFERENCE_FACT` —— 当前选择与落地结果：
 
 - **不引入组件**的方案（8.1 / 8.2 / 8.4）泄漏风险更可控、迁移成本更低，
   但契约可表达性较弱；
 - **引入组件**的方案（8.3）契约最强，但与 qlpt 已评估的
   “不做超级组件、不做薄包装”结论存在张力，需重新论证；
 - 无论采用哪种，**必须**满足 §3 的显式启用与零泄漏要求；
-- **本文档（基线任务）不对任一方案定案**。最终技术架构由后续
+- **本基线任务当时不对任一方案定案**——这是**历史事实**。最终技术架构由后续
   `SHARED_COMPONENT_DESIGN` 类任务基于**本已批准基线**与真实源码决定，
-  并**必须重新提交项目负责人确认**——该下游设计（候选 §8.4 组合方式）
-  已获 ChatGPT 远程 R2 复审 `REVIEW_PASS` 并由项目负责人于 2026-09-21 批准，
-  其实现随后已由独立任务落地（当前 `IMPLEMENTED_PENDING_USER_REVIEW`，**尚未**通过正式验收）；
+  并已**重新提交项目负责人确认**：该下游设计选定 **§8.4 组合方式**
+  （§8.1 与 §8.2 各作其一半，§8.3 被否决），已获 ChatGPT 远程 R2 复审 `REVIEW_PASS`
+  并由项目负责人于 2026-09-21 批准；**其实现随后已由独立任务落地**
+  （`shared_implementation_status=IMPLEMENTED_PENDING_USER_REVIEW`），
+  目前**仍待项目负责人目测复核与正式验收**
+  （`formal_acceptance_execution_status=NOT_RUN`），
+  页面迁移**仍未授权**（`page_migration_status=NOT_STARTED` /
+  `page_migration_authorization_status=NOT_GRANTED`）；
   因此**未经项目负责人再次明确批准不得修改任何代码**。
 
 ## 9. 本轮明确不做的事
