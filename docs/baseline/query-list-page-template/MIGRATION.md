@@ -598,3 +598,53 @@ client_config_page_no_refresh_capability=YES
   本文件的本轮记录**不**自动构成表格层的授权，反之亦然。
 - 本轮两层的适用范围均**只**覆盖 `/config/client` 单页；
   两层各自的模板级全局迁移状态**均不变**。
+
+## 探针端管理列表页页面级调整基线批准记录（追加记录，2026-09-22）
+
+本节为**追加**记录，**不**改写上方任何历史结论、状态块与授权/批准记录。
+上方 §1~§7 及 `2026-09-17`、`2026-09-18/19`、`2026-09-21`、`2026-09-22` 草案授权
+与交叉引用各记录的正文保持原样；其中 `2026-09-22` 草案授权记录中的
+`client_config_page_selective_integration_document_status=DRAFT_PENDING_USER_REVIEW`
+属**该记录时点的历史状态**，已由本条批准记录取代，历史记录本身**不**被删除、**不**被改写、
+**不**被伪装为从未存在。
+
+### 授权与批准对象
+
+- 批准日期：`2026-09-22`；批准人：项目负责人（原话 `批准本轮探针端管理页面调整基线`）。
+- 批准任务：`CLIENT-CONFIG-QUERY-LIST-AND-LIST-TABLE-ADJUSTMENT-BASELINE-APPROVAL-CLOSEOUT-001`（纯文档）。
+- 批准依据：ChatGPT 从远程 Git 对 R3 结果提交 `5066c761f8a9400d5841222cb73b0c03f56a82d0`
+  的独立复审结论 `APPROVED`。
+- 批准对象：`探针端管理`（`/config/client`）**单页**的**页面级选择性接入**及其
+  本轮**页面调整基线**（`CCFG-REQ-091~103`、`CCFG-AC-077~089`、`CCFG-DESIGN-038~046`、`CCFG-UI-027~035`）。
+- 适用范围**只**覆盖 `/config/client` 单页；**没有**授权任何其他页面；
+  本页的页面级授权**先于**本次收口存在，本次收口**不新增、不扩大**该授权。
+
+### 本轮批准记录（权威事实）
+
+```text
+client_config_page_selective_integration_page_adjustment_baseline_status=APPROVED
+client_config_page_selective_integration_authorization_status=UNCHANGED_GRANTED_BY_PROJECT_OWNER_FOR_THIS_PAGE_ONLY
+client_config_page_selective_integration_implementation_status=NOT_STARTED
+client_config_page_selective_integration_acceptance_status=ALL_NOT_RUN
+client_config_page_selective_integration_approved_reviewed_commit=5066c761f8a9400d5841222cb73b0c03f56a82d0
+```
+
+### 边界（明确不得）
+
+- 批准的**只是页面调整基线**，**不**代表该页已实现、已测试、已目测、已验收或可上线：
+  该页实现状态仍 `NOT_STARTED`、目测状态仍 `NOT_PERFORMED`、
+  `CCFG-AC-001~089`（含 `077~089`）仍全部 `NOT_RUN`。
+- 本页**明确不接入刷新能力**：不接入 `QueryListRefreshToolbar`，也不新增任何等价刷新控件；
+  该模板的刷新工具栏仍按“可选（OPT-IN）”处理，本条**不**推导出刷新工具栏已成为任何页面的必选能力。
+- 本页仍是包含新增、编辑、删除、启用、停用的配置管理页：
+  **Feature 专属写操作、弹窗、业务校验、行级操作与并发语义仍由本 Feature 自行承担**，
+  **不**被页面层模板接管。
+- **不得**把本页接入写成模板已迁移：模板级全局状态保持不变——
+  `page_migration_status` 保持 `NOT_STARTED`、
+  `page_migration_authorization_status` 保持 `NOT_GRANTED`、
+  `pilot_page_selection_status` 保持 `NOT_DECIDED`。
+- **不得**写成“所有页面已授权”或“试点页面已选定”。
+- **不得**改写 §1.1 / §5 的通用排除原则、`2026-09-17`、`2026-09-18/19`、
+  `2026-09-21` 及 `2026-09-22` 草案授权与交叉引用各历史记录。
+- 本条**不**改变本文件的逐页评估结论、推荐迁移顺序、每页独立任务要求、
+  已接受参考页保护与冻结标记计数。

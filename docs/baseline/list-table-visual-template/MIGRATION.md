@@ -339,3 +339,63 @@ client_config_main_list_integration_scope=MAIN_LIST_ONLY_MODALS_EXCLUDED
 - **授权独立**：本修正**不**自动构成 `query-list-page-template` 页面层的授权，
   反之亦然；本次**不**修改
   `docs/baseline/query-list-page-template/MIGRATION.md`。
+
+## 探针端管理主列表页面级调整基线批准记录（追加记录，`2026-09-22`）
+
+本节为**追加**记录，**不**改写上文任何历史结论、状态块、候选矩阵、§4 保护清单、
+§5 分类计数、§6 授权边界与授权/修正记录。上文 `2026-09-22` 的
+“探针端管理主列表接入授权记录”“与 `query-list-page-template` 的页面级交叉引用”
+与“R1 修正记录”正文保持原样；其中 `client_config_main_list_integration_document_status=DRAFT_PENDING_USER_REVIEW`
+属**该等记录时点的历史状态**，已由本条批准记录取代，历史记录本身**不**被删除、
+**不**被改写、**不**被伪装为从未存在。
+
+### 授权与批准对象
+
+- 批准日期：`2026-09-22`；批准人：项目负责人（原话 `批准本轮探针端管理页面调整基线`）。
+- 批准任务：`CLIENT-CONFIG-QUERY-LIST-AND-LIST-TABLE-ADJUSTMENT-BASELINE-APPROVAL-CLOSEOUT-001`（纯文档）。
+- 批准依据：ChatGPT 从远程 Git 对 R3 结果提交 `5066c761f8a9400d5841222cb73b0c03f56a82d0`
+  的独立复审结论 `APPROVED`。
+- 批准对象：`探针端管理`（`/config/client`）**主列表**的列表表格视觉模板接入
+  及其本轮**页面调整基线**（`CCFG-REQ-091~103`、`CCFG-AC-077~089`、
+  `CCFG-DESIGN-038~046`、`CCFG-UI-027~035`）。
+- **范围只覆盖该页主列表**，**不含**新增/编辑弹窗与其内部控件；
+  该页的页面级授权**先于**本次收口存在，本次收口**不新增、不扩大**该授权；
+  **没有**授权任何其他页面。
+
+### 本轮批准记录（权威事实）
+
+```text
+client_config_main_list_visual_integration_page_adjustment_baseline_status=APPROVED
+client_config_main_list_visual_integration_authorization_status=UNCHANGED_GRANTED_BY_PROJECT_OWNER_FOR_THIS_PAGE_MAIN_LIST_ONLY
+client_config_main_list_visual_integration_implementation_status=NOT_STARTED
+client_config_main_list_visual_integration_acceptance_status=ALL_NOT_RUN
+client_config_main_list_visual_integration_approved_reviewed_commit=5066c761f8a9400d5841222cb73b0c03f56a82d0
+```
+
+### “取消批量工具栏 / 行单选 / 选中行高亮”的性质
+
+- 取消该页**批量工具栏**（含“删除所选”）、**行单选**与**选中行高亮**
+  （浅蓝底、左侧 3px 强调线、`@row-click` 改变选中、选中行集合与
+  “已选择：{探针ID}”文本）是**项目负责人针对该页批准的业务规则**，
+  随本轮页面调整基线一并获批。
+- 该取消**只**适用于 `探针端管理`（`/config/client`）**主列表**，
+  **不是**模板通用规则变化：本模板的通用规则、§4 保护清单对其余页面
+  （含数据源管理参考页）的效力**均不改变**。
+
+### 边界（明确不得）
+
+- 批准的**只是该页主列表的页面调整基线**，**不**代表该页已实现、已测试、
+  已目测、已验收或可上线：该页主列表实现状态仍 `NOT_STARTED`、
+  目测状态仍 `NOT_PERFORMED`、`CCFG-AC-001~089`（含 `077~089`）仍全部 `NOT_RUN`。
+- **不得**把本页主列表接入写成模板已迁移：模板级全局状态保持不变——
+  `page_migration_status` 保持 `NOT_STARTED`、
+  `page_migration_authorization_status` 保持 `NOT_GRANTED`、
+  `pilot_page_selection_status` 保持 `NOT_DECIDED`。
+- **不得**写成“所有页面已授权”或“试点页面已选定”。
+- **不得**把本条解释为**数据源管理参考页最终接受事实**的改变：
+  公共实现与参考页接入仍为 `IMPLEMENTED_ACCEPTED`、
+  `final_acceptance_status=ACCEPTED_BY_PROJECT_OWNER`，**均不变**。
+- **不得**改写上文 `2026-09-21` 基线批准收口、`2026-09-22` 草案授权与交叉引用、
+  R1 修正各历史记录，也**不得**改写 §4 保护清单、§5 分类计数与 §6 授权边界。
+- **授权独立**：本条**不**自动构成 `query-list-page-template` 页面层的授权，
+  反之亦然。

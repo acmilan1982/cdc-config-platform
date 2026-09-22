@@ -16,7 +16,7 @@
 | R1 任务 | `CLIENT-CONFIG-DESIGN-BASELINE-001-R1`（正式设计复审驱动的定向修订，纯文档） |
 | R1 复审结论 | ChatGPT 正式复审：`CHANGES_REQUIRED`（R1-01~R1-09；本文件落实 R1-02/R1-06/R1-07/R1-08 界面与交互修订） |
 | R1 基线提交 | `21f4729c43d146426e8d4f1b2d6b667cfcf160ff` |
-| 依据需求 | `CCFG-REQ-001~103`（`001~090` 已批准；`091~103` 为本轮调整草案，见 §15） |
+| 依据需求 | `CCFG-REQ-001~103`（`001~090` 已批准；`091~103` 为本轮调整基线，已于 2026-09-22 批准，见 §15） |
 | 依据验收 | `CCFG-AC-001~089`（全部 `NOT_RUN`） |
 | 创建日期 | 2026-09-03 |
 | R1 日期 | 2026-09-04 |
@@ -30,17 +30,18 @@
 | 批准对象 | 提交 `ba7c5e917b1b9d08208c3e1ceb31285407f5fd5e` 下的本文件及其全部界面设计定义 |
 | 批准收口任务 | `CLIENT-CONFIG-DESIGN-CONCURRENCY-ADJUSTMENT-APPROVAL-001` |
 | 批准边界 | 设计获批不代表代码已实现、已测试或验收已执行通过 |
-| 设计编号 | `CCFG-UI-001 ~ CCFG-UI-035`（`001~026` 已批准；`027~035` 为本轮新增草案，见 §15），连续、唯一、不可复用；每个设计编号恰有一个定义行 |
+| 设计编号 | `CCFG-UI-001 ~ CCFG-UI-035`（`001~026` 已批准；`027~035` 为本轮新增项，其调整基线已于 2026-09-22 批准，见 §15），连续、唯一、不可复用；每个设计编号恰有一个定义行 |
 | PENDING_USER_CONFIRMATION | `0`（R1 已清零：`CCFG-UI-004/005` 的行选中与“已选择：{探针ID}”去留、`CCFG-UI-035` 的异常 `FG_ACTIVE` 承载形式均由项目负责人本轮明确决定并冻结，见 §15） |
-| 本轮调整任务编号 | `CLIENT-CONFIG-QUERY-LIST-AND-LIST-TABLE-ADJUSTMENT-BASELINE-001`（R1 修订：`-001-R1`） |
+| 本轮调整任务编号 | `CLIENT-CONFIG-QUERY-LIST-AND-LIST-TABLE-ADJUSTMENT-BASELINE-001`（R1 修订：`-001-R1`；R2 证据纠错：`-001-R2`；R3 最小纠错：`-001-R3`；批准收口：`CLIENT-CONFIG-QUERY-LIST-AND-LIST-TABLE-ADJUSTMENT-BASELINE-APPROVAL-CLOSEOUT-001`） |
 | existing_feature_implementation_status | `IMPLEMENTED_PENDING_USER_ACCEPTANCE`（既有 Feature 实现已完成、尚待项目负责人验收；**不**因本轮草案改写） |
-| adjustment_baseline_status | `DRAFT_PENDING_USER_REVIEW`（本轮页面调整基线仍为草案，待项目负责人复审批准） |
-| adjustment_implementation_status | `NOT_STARTED`（**仅指**本轮页面级调整实现尚未开始，**不**代表既有 Feature 实现状态） |
+| adjustment_baseline_status | `APPROVED`（2026-09-22 草案建立时的 `DRAFT_PENDING_USER_REVIEW` 属历史状态；经 R1 修订与 R2/R3 证据纠错后由项目负责人于 2026-09-22 批准） |
+| adjustment_approval_status | `APPROVED_BY_PROJECT_OWNER`（`adjustment_approval_date=2026-09-22`，`adjustment_approved_reviewed_commit=5066c761f8a9400d5841222cb73b0c03f56a82d0`；批准依据见 §15 前言） |
+| adjustment_implementation_status | `NOT_STARTED`（**仅指**本轮页面级调整实现尚未开始，**不**代表既有 Feature 实现状态；批准基线**不**等于已实现） |
 | formal_acceptance_execution_status | `NOT_RUN`（本轮正式验收未执行；`CCFG-AC-001~089` 全部 `NOT_RUN`） |
-| 页面级选择性接入授权 | **已获项目负责人授权**：`/config/client` 页面级选择性接入查询列表页模板与列表表格视觉模板（查询列表页模板侧本页**不**接入刷新工具栏；列表表格视觉模板侧本页仅覆盖**主列表**，不含新增/编辑弹窗与弹窗内控件）。该授权为**页面级授权事实**，**不等于**本轮调整基线已批准，也**不**等于本轮实现已授权或已完成；模板级全局迁移状态**未变**，其他页面**未获**授权 |
+| 页面级选择性接入授权 | **已获项目负责人授权**：`/config/client` 页面级选择性接入查询列表页模板与列表表格视觉模板（查询列表页模板侧本页**不**接入刷新工具栏；列表表格视觉模板侧本页仅覆盖**主列表**，不含新增/编辑弹窗与弹窗内控件）。该授权为**页面级授权事实**，本轮批准收口**不新增、不扩大**该授权，也**不**等于本轮实现已完成；模板级全局迁移状态**未变**，其他页面**未获**授权 |
 | 本轮新增界面编号 | `CCFG-UI-027 ~ CCFG-UI-035`（9 条，见 §15） |
 | 本轮定向修订的既有界面项 | `CCFG-UI-004/005/006/018/022/024`（保留原文并标注被 `CCFG-UI-027~035` 取代/收窄的部分） |
-| 本轮下一入口 | `CHATGPT_REMOTE_BASELINE_R1_REVIEW` |
+| 本轮下一入口 | `CHATGPT_REMOTE_BASELINE_APPROVAL_CLOSEOUT_REVIEW`（原 `CHATGPT_REMOTE_BASELINE_R1_REVIEW` 已随 R1/R2/R3 复审闭环；基线经 ChatGPT 远程 R3 复审 `APPROVED` 后由项目负责人于 2026-09-22 批准） |
 | 配套文档 | `DESIGN.md`、`API.md`、`DATABASE.md` |
 
 R1 界面修订目标（不改已批准 90 条需求与 76 条验收、不进入代码实现、不做设计批准收口）：采集数据源列“直接显示前三项”明确为非持久化投影且不原地修改接口数组（`R1-02`）；红色历史异常标签与编辑回显覆盖 `CATEGORY_MISMATCH`/`TYPE_MISMATCH`（`R1-06`）；新增含逗号歧义行与历史 NULL 描述的展示/编辑契约（`R1-07/R1-08`）。
@@ -138,24 +139,32 @@ R1 界面修订目标（不改已批准 90 条需求与 76 条验收、不进入
 - 逐交互/逐文案的“覆盖需求/覆盖验收”已在上方各设计编号表内给出；完整 REQ→设计项、AC→设计项总矩阵见 `DESIGN.md` §12（本文件设计项以其 `CCFG-UI-*` 编号出现并被纳入总矩阵，保证 103/103 需求、89/89 验收可追踪）。
 - 本文件所有 `CCFG-UI-*` 编号在其表内均有唯一一行，引用可解析。
 
-## 15. 页面级模板选择性接入与列表调整（本轮新增 · `DRAFT_PENDING_USER_REVIEW`）
+## 15. 页面级模板选择性接入与列表调整（本轮新增 · 2026-09-22 批准收口为 `APPROVED`）
 
-本节为 `CLIENT-CONFIG-QUERY-LIST-AND-LIST-TABLE-ADJUSTMENT-BASELINE-001`（R1 修订）的界面草案，
+本节为 `CLIENT-CONFIG-QUERY-LIST-AND-LIST-TABLE-ADJUSTMENT-BASELINE-001`
+（R1 修订 → R2/R3 证据纠错）的界面调整基线，
 基于项目负责人逐项确认的 9 项页面调整决策，以及 R1 新增的两项明确决定
 （行选中能力整体取消、历史异常 `FG_ACTIVE` 红色 `异常：{原始值}` 展示）。
-**本节为草案，未获批准、未实现、未执行验收、未目测**；
-`adjustment_baseline_status=DRAFT_PENDING_USER_REVIEW`、
+该基线经 ChatGPT 远程 R3 复审（对象提交 `5066c761f8a9400d5841222cb73b0c03f56a82d0`）结论 `APPROVED` 后，
+项目负责人于 2026-09-22 批准，经批准收口任务
+`CLIENT-CONFIG-QUERY-LIST-AND-LIST-TABLE-ADJUSTMENT-BASELINE-APPROVAL-CLOSEOUT-001` 收口为：
+`adjustment_baseline_status=APPROVED`、
+`adjustment_approval_status=APPROVED_BY_PROJECT_OWNER`、
+`adjustment_approval_date=2026-09-22`、
+`adjustment_approved_reviewed_commit=5066c761f8a9400d5841222cb73b0c03f56a82d0`。
+**批准的是本轮页面调整基线，本轮仍 `NOT_STARTED`（未实现）、`NOT_RUN`（未执行验收）、未目测**；
 `adjustment_implementation_status=NOT_STARTED`、
 `formal_acceptance_execution_status=NOT_RUN`
 （既有 Feature 实现事实仍为 `existing_feature_implementation_status=IMPLEMENTED_PENDING_USER_ACCEPTANCE`，
-**不**因本轮草案改写）；`PENDING_USER_CONFIRMATION=0`。
+**不**因本轮调整改写）；`PENDING_USER_CONFIRMATION=0`。
+`DRAFT_PENDING_USER_REVIEW` 为本节 2026-09-22 草案建立时的历史状态，已被本次批准收口取代。
 本节只描述**主列表区**的可见结构与交互，不定义新增/编辑弹窗内部控件
 （弹窗与弹窗内控件**不**纳入列表表格视觉模板范围）。
 
 **页面级授权事实（与模板级全局状态分层）**：项目负责人**已授予** `/config/client` 的**页面级选择性接入授权**——
 查询列表页模板侧采用页面壳/查询面板/操作区/结果面板四个公共组件、**不**接入刷新工具栏组件；
 列表表格视觉模板侧仅覆盖本页**主列表**（不含新增/编辑弹窗与弹窗内控件）；**其他页面未获授权**。
-该页面级授权**不等于**本轮调整基线已批准，也**不**等于本轮实现已授权或已完成；
+该页面级授权先于本轮批准收口存在，本轮收口**不新增、不扩大**该授权，也**不**等于本轮实现已完成或已验收；
 模板级全局迁移状态**未变**（见 `docs/baseline/query-list-page-template/MIGRATION.md`
 与 `docs/baseline/list-table-visual-template/MIGRATION.md`，本文件不修改其模板级全局结论）。
 
@@ -190,6 +199,22 @@ R1 已将原 1 项待确认清零。项目负责人本轮已明确决定并冻�
 （二）历史异常 `FG_ACTIVE` 展示为**紧跟探针 ID 的红色 `异常：{原始值}`**（见 `CCFG-UI-031`/`CCFG-UI-035`）。
 两项均**不再**作为待确认项、风险项或实现自由度，不计入需求/验收编号覆盖（`CCFG-REQ`/`CCFG-AC` 编号与计数不变）。
 
+### 15.1 本轮页面级调整基线批准收口（2026-09-22，纯文档）
+
+| 项目 | 值 |
+|---|---|
+| 批准任务编号 | `CLIENT-CONFIG-QUERY-LIST-AND-LIST-TABLE-ADJUSTMENT-BASELINE-APPROVAL-CLOSEOUT-001` |
+| 批准证据链 | R0 草案提交 `fba09d17a471f7a4d1c7e56c07cfe9e6d1420dd1` → R1 修订提交 `2c2b2a71fcd049a68f86339d225f659af69e81c3` → R2 证据纠错提交 `5e0731aef0e36c1be9b87eba660e9b8c4a052555` → R3 最小纠错提交 `5066c761f8a9400d5841222cb73b0c03f56a82d0` |
+| ChatGPT 复审对象与结论 | 对象提交 `5066c761f8a9400d5841222cb73b0c03f56a82d0`；结论 `APPROVED`（远程 R3 复审） |
+| 项目负责人批准 | 2026-09-22 明确回复“批准本轮探针端管理页面调整基线” |
+| 批准对象 | `CCFG-UI-027~035`（含 R1 两项冻结决定：行选中能力整体取消；历史异常 `FG_ACTIVE` 紧跟探针 ID 的红色 `异常：{原始值}`）及本轮定向修订口径 |
+| 状态变化 | 仅 `adjustment_baseline_status`：`DRAFT_PENDING_USER_REVIEW` → `APPROVED`；新增 `adjustment_approval_status=APPROVED_BY_PROJECT_OWNER` |
+| 保持不变的计数与状态 | `CCFG-UI-001~035` 共 35 条（连续、唯一）；`CCFG-AC-001~089` 共 89 条仍全部 `NOT_RUN`；需求 103 条、验收 89 条、设计 46 条、界面 35 条；`existing_feature_implementation_status=IMPLEMENTED_PENDING_USER_ACCEPTANCE`；`adjustment_implementation_status=NOT_STARTED`；`formal_acceptance_execution_status=NOT_RUN`；`PENDING_USER_CONFIRMATION=0`。35 条界面定义行相对批准提交逐字零差异，仅状态、批准元数据与变更记录变化 |
+| 下一入口 | `CHATGPT_REMOTE_BASELINE_APPROVAL_CLOSEOUT_REVIEW`（通过后方可进入独立实现任务；本收口**不**启动实现） |
+
+批准对象**仅为本轮页面调整基线**，**不**代表代码已实现、已测试、已目测或验收已执行通过；
+`API.md`/`DATABASE.md` 本轮**未**修改；模板级全局迁移状态**未变**。
+
 ## 16. 变更记录
 
 | 日期 | 变更 | 依据 |
@@ -203,3 +228,6 @@ R1 已将原 1 项待确认清零。项目负责人本轮已明确决定并冻�
 | 2026-09-05 | R2 实现纠偏最小口径补充（`CLIENT-CONFIG-LIST-UI-ADJUSTMENT-001-R2`，项目负责人 R1 目测后发现的“采集数据源”标签文字未稳定居中的实现纠偏）：现有基线已覆盖单行/尺寸/省略/Tooltip，未显式覆盖标签文字居中；仅向受影响界面项 `CCFG-UI-008` 追加一句“标签内文字水平、垂直居中（各态一致、不依赖字体基线、不用脆弱位移凑居中、不破坏单行省略/`+N` 点击区）”的最小口径。界面编号与数量 26 条保持不变、不新增/删除/重排；未改新增/编辑弹窗（CCFG-UI-013/014/015/016/017）与后端/接口/全局体系；实现状态 `IMPLEMENTED_PENDING_USER_ACCEPTANCE`；未执行验收（76 条仍全部 `NOT_RUN`） | `CLIENT-CONFIG-LIST-UI-ADJUSTMENT-001-R2`（项目负责人 1K 目测发现问题后下达的实现纠偏任务；纯前端列表实现/测试纠偏，未执行验收） |
 | 2026-09-22 | 页面级查询列表页模板 + 列表表格视觉模板选择性接入调整草案（`CLIENT-CONFIG-QUERY-LIST-AND-LIST-TABLE-ADJUSTMENT-BASELINE-001`，纯文档）：新增 §15 与 `CCFG-UI-027~035`（9 条，界面编号扩为 `CCFG-UI-001~035`）：页面层选择性接入（`027`）、列顺序改为 序号｜探针 ID｜探针描述｜采集数据源｜数据源数量｜操作（`028`）、结果区头部右侧“新增探针”并取消“删除所选”（`029`）、新增序号列（`030`）、探针 ID 停用标记（`031`）、最右固定操作列“更多”下拉与条目顺序及警告/危险样式（`032`）、无刷新区域（`033`）、空状态与错误状态（`034`）、异常 `FG_ACTIVE` 可见性保护与行选中按 PENDING 暂保留（`035`）。`CCFG-UI-004/005/006/018/022/024` 部分口径被取代或收窄，原文保留不改写；新增/编辑弹窗与弹窗内控件**不**纳入列表表格视觉模板范围。本轮草案**基线状态** `DRAFT_PENDING_USER_REVIEW`、**实现状态** `NOT_STARTED`、**正式验收执行状态** `NOT_RUN`；既有实现事实仍为 `IMPLEMENTED_PENDING_USER_ACCEPTANCE`，**不**因本轮草案被改写；R0 当日登记的行选中待确认项（含“已选择：{探针ID}”存续问题）**已由下方 2026-09-22 R1 记录取代并清零**，本条仅为 R0 当日历史记录；下一入口 `CHATGPT_REMOTE_BASELINE_REVIEW`（已由 R1 记录改为 `CHATGPT_REMOTE_BASELINE_R1_REVIEW`）；本轮**不**修改 `API.md`/`DATABASE.md`、**不**修改任何代码、**不**执行验收、**不**做批准收口 | 项目负责人于当前会话逐项确认的 9 项页面调整决策（本轮为草案，未批准、未实现、未执行验收、未目测） |
 | 2026-09-22 | R1 偏差修正（`CLIENT-CONFIG-QUERY-LIST-AND-LIST-TABLE-ADJUSTMENT-BASELINE-001-R1`，纯文档）：① 冻结项目负责人两项决定——取消“删除所选”后**行单选/选中行高亮/“已选择：{探针ID}”整体取消**（`CCFG-UI-029`/`CCFG-UI-035`，并定向清理 `CCFG-UI-004`/`CCFG-UI-005` 的“仍有效/PENDING”表述）；**历史异常 `FG_ACTIVE` → 紧跟探针 ID 的红色 `异常：{原始值}`**（`CCFG-UI-031`/`CCFG-UI-035`，删除“承载形式由实现阶段确定”的表述）；② `CCFG-UI-032` 的“不改变行选中态”改为“不产生任何选中视觉”，并明确打开/关闭/执行下拉均不改变也不依赖行选中态；③ 元数据与 §15 补**页面级选择性接入授权**事实（`/config/client` 页面级已获授权、模板级全局状态未变、其他页面未授权），并与“本轮基线未批准/本轮未实现”分层；④ 四层状态统一为 `existing_feature_implementation_status=IMPLEMENTED_PENDING_USER_ACCEPTANCE` / `adjustment_baseline_status=DRAFT_PENDING_USER_REVIEW` / `adjustment_implementation_status=NOT_STARTED` / `formal_acceptance_execution_status=NOT_RUN`；⑤ `PENDING_USER_CONFIRMATION` 由 `1` 清零为 `0`，下一入口改为 `CHATGPT_REMOTE_BASELINE_R1_REVIEW`。界面编号与数量 `CCFG-UI-001~035`（35 条）保持连续、唯一、不新增/删除/重排；本轮草案仍**未**批准、**未**实现、**未**执行验收；**不**修改 `API.md`/`DATABASE.md`、**不**修改任何代码 | `CLIENT-CONFIG-QUERY-LIST-AND-LIST-TABLE-ADJUSTMENT-BASELINE-001-R1`（ChatGPT 对 R0 的复审结论 `CHANGES_REQUIRED` 驱动的定向偏差修正，含项目负责人两项冻结决定；纯文档任务，未运行测试/构建/浏览器，未执行验收） |
+| 2026-09-22 | R2 证据纠错（`CLIENT-CONFIG-QUERY-LIST-AND-LIST-TABLE-ADJUSTMENT-BASELINE-001-R2`，纯文档）：ChatGPT 对 R1 远程提交 `2c2b2a71fcd049a68f86339d225f659af69e81c3` 的复审结论为 `CHANGES_REQUIRED`，仅涉 R1 执行报告的三处追踪证据表述，不涉业务规则。本文件**未修改**；界面编号与数量 `CCFG-UI-001~035`（35 条）与业务定义行零变化；`adjustment_baseline_status` 保持 `DRAFT_PENDING_USER_REVIEW`；下一入口 `CHATGPT_REMOTE_BASELINE_R3_REVIEW` | `CLIENT-CONFIG-QUERY-LIST-AND-LIST-TABLE-ADJUSTMENT-BASELINE-001-R2`（纯文档追加式证据纠错；未运行测试/构建/浏览器，未执行验收） |
+| 2026-09-22 | R3 最小证据纠错（`CLIENT-CONFIG-QUERY-LIST-AND-LIST-TABLE-ADJUSTMENT-BASELINE-001-R3`，纯文档）：ChatGPT 对 R2 远程提交 `5e0731aef0e36c1be9b87eba660e9b8c4a052555` 的复审结论为 `CHANGES_REQUIRED`，仅涉两处文字证据（`ACCEPTANCE.md` §1.4 说明文字、R2 报告 §8 异常菜单摘要）。本文件**未修改**；界面编号与数量 `CCFG-UI-001~035`（35 条）与业务定义行零变化；`adjustment_baseline_status` 保持 `DRAFT_PENDING_USER_REVIEW`；下一入口 `CHATGPT_REMOTE_BASELINE_R3_REVIEW` | `CLIENT-CONFIG-QUERY-LIST-AND-LIST-TABLE-ADJUSTMENT-BASELINE-001-R3`（纯文档最小证据纠错；未运行测试/构建/浏览器，未执行验收） |
+| 2026-09-22 | 页面级调整基线**批准收口**（`CLIENT-CONFIG-QUERY-LIST-AND-LIST-TABLE-ADJUSTMENT-BASELINE-APPROVAL-CLOSEOUT-001`，纯文档）：ChatGPT 从远程 Git 对 R3 结果提交 `5066c761f8a9400d5841222cb73b0c03f56a82d0` 的复审结论为 `APPROVED`，项目负责人于 2026-09-22 明确回复原话 `批准本轮探针端管理页面调整基线`；本轮调整基线**状态变化仅为** `adjustment_baseline_status` 由 `DRAFT_PENDING_USER_REVIEW` 变为 `APPROVED`（并新增 `adjustment_approval_status=APPROVED_BY_PROJECT_OWNER`、`adjustment_approval_date=2026-09-22`、`adjustment_approved_reviewed_commit=5066c761f8a9400d5841222cb73b0c03f56a82d0`）。界面编号与数量 `CCFG-UI-001~035`（35 条）保持连续、唯一、不新增/删除/重排；35 条界面定义行相对批准提交逐字零差异；`existing_feature_implementation_status=IMPLEMENTED_PENDING_USER_ACCEPTANCE`、`adjustment_implementation_status=NOT_STARTED`、`formal_acceptance_execution_status=NOT_RUN`、`PENDING_USER_CONFIRMATION=0` 均保持不变；89 条验收仍全部 `NOT_RUN`；**不**修改 `API.md`/`DATABASE.md`、**不**修改任何代码、**不**执行验收；下一入口 `CHATGPT_REMOTE_BASELINE_APPROVAL_CLOSEOUT_REVIEW` | 项目负责人 2026-09-22 批准（原话 `批准本轮探针端管理页面调整基线`）；依据 ChatGPT 远程 R3 复审 `APPROVED`（对象提交 `5066c761f8a9400d5841222cb73b0c03f56a82d0`）；批准的是页面调整基线，不代表已实现、已测试、已目测或验收已通过 |
