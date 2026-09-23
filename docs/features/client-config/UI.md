@@ -16,8 +16,8 @@
 | R1 任务 | `CLIENT-CONFIG-DESIGN-BASELINE-001-R1`（正式设计复审驱动的定向修订，纯文档） |
 | R1 复审结论 | ChatGPT 正式复审：`CHANGES_REQUIRED`（R1-01~R1-09；本文件落实 R1-02/R1-06/R1-07/R1-08 界面与交互修订） |
 | R1 基线提交 | `21f4729c43d146426e8d4f1b2d6b667cfcf160ff` |
-| 依据需求 | `CCFG-REQ-001~103`（`001~090` 已批准；`091~103` 为本轮调整基线，已于 2026-09-22 批准，见 §15） |
-| 依据验收 | `CCFG-AC-001~089`（全部 `NOT_RUN`） |
+| 依据需求 | `CCFG-REQ-001~112`（`001~090` 已批准；`091~103` 为本轮调整基线，已于 2026-09-22 批准，见 §15；`104~112` 为第二轮 V2 草案新增需求，当前 `DRAFT_PENDING_USER_REVIEW`，见 §16） |
+| 依据验收 | `CCFG-AC-001~104`（第一轮 `001~089` 与第二轮 V2 草案 `090~104` 执行状态**全部** `NOT_RUN`） |
 | 创建日期 | 2026-09-03 |
 | R1 日期 | 2026-09-04 |
 | 并发调整任务 | `CLIENT-CONFIG-DESIGN-CONCURRENCY-ADJUSTMENT-001`（依据重新批准的需求/验收并发口径，定向清除过时显式表锁设计的纯文档任务） |
@@ -30,7 +30,7 @@
 | 批准对象 | 提交 `ba7c5e917b1b9d08208c3e1ceb31285407f5fd5e` 下的本文件及其全部界面设计定义 |
 | 批准收口任务 | `CLIENT-CONFIG-DESIGN-CONCURRENCY-ADJUSTMENT-APPROVAL-001` |
 | 批准边界 | 设计获批不代表代码已实现、已测试或验收已执行通过 |
-| 设计编号 | `CCFG-UI-001 ~ CCFG-UI-035`（`001~026` 已批准；`027~035` 为本轮新增项，其调整基线已于 2026-09-22 批准，见 §15），连续、唯一、不可复用；每个设计编号恰有一个定义行 |
+| 设计编号 | `CCFG-UI-001 ~ CCFG-UI-042`（`001~026` 已批准；`027~035` 为第一轮新增项，其调整基线已于 2026-09-22 批准，见 §15；`036~042` 为第二轮 V2 草案新增项，当前 `DRAFT_PENDING_USER_REVIEW`，见 §16），连续、唯一、不可复用；每个设计编号恰有一个定义行 |
 | PENDING_USER_CONFIRMATION | `0`（R1 已清零：`CCFG-UI-004/005` 的行选中与“已选择：{探针ID}”去留、`CCFG-UI-035` 的异常 `FG_ACTIVE` 承载形式均由项目负责人本轮明确决定并冻结，见 §15） |
 | 本轮调整任务编号 | `CLIENT-CONFIG-QUERY-LIST-AND-LIST-TABLE-ADJUSTMENT-BASELINE-001`（R1 修订：`-001-R1`；R2 证据纠错：`-001-R2`；R3 最小纠错：`-001-R3`；批准收口：`CLIENT-CONFIG-QUERY-LIST-AND-LIST-TABLE-ADJUSTMENT-BASELINE-APPROVAL-CLOSEOUT-001`） |
 | existing_feature_implementation_status | `IMPLEMENTED_PENDING_USER_ACCEPTANCE`（既有 Feature 实现已完成、尚待项目负责人验收；**不**因本轮页面调整改写） |
@@ -42,6 +42,9 @@
 | 本轮新增界面编号 | `CCFG-UI-027 ~ CCFG-UI-035`（9 条，见 §15） |
 | 本轮定向修订的既有界面项 | `CCFG-UI-004/005/006/018/022/024`（保留原文并标注被 `CCFG-UI-027~035` 取代/收窄的部分） |
 | 本轮下一入口 | `CHATGPT_REMOTE_BASELINE_APPROVAL_CLOSEOUT_R2_REVIEW`（ChatGPT 远程独立复审本次 R2 状态/入口纠错的结果提交；历史入口 `CHATGPT_REMOTE_BASELINE_APPROVAL_CLOSEOUT_REVIEW` 已完成并返回 `CHANGES_REQUIRED`，原 `CHATGPT_REMOTE_BASELINE_R1_REVIEW` 已随 R1/R2/R3 复审闭环；基线经 ChatGPT 远程 R3 复审 `APPROVED` 后由项目负责人于 2026-09-22 批准） |
+| 第二轮 V2 视觉调整基线状态 | `adjustment2_baseline_status=DRAFT_PENDING_USER_REVIEW`（第二轮主列表视觉调整草案，依据项目负责人已确认的五项视觉调整决定，见 §16；**用户确认五项 ≠ 文档已批准**） |
+| 第二轮 V2 视觉调整实现状态 | `adjustment2_implementation_status=NOT_STARTED`（本轮 V2 草案**未**进入实现） |
+| 第二轮 V2 正式验收执行状态 | `formal_acceptance_execution_status=NOT_RUN`（`CCFG-AC-001~104` 共 104 条全部 `NOT_RUN`，其中 `CCFG-AC-090~104` 为本轮 V2 新增用例） |
 | 配套文档 | `DESIGN.md`、`API.md`、`DATABASE.md` |
 
 R1 界面修订目标（不改已批准 90 条需求与 76 条验收、不进入代码实现、不做设计批准收口）：采集数据源列“直接显示前三项”明确为非持久化投影且不原地修改接口数组（`R1-02`）；红色历史异常标签与编辑回显覆盖 `CATEGORY_MISMATCH`/`TYPE_MISMATCH`（`R1-06`）；新增含逗号歧义行与历史 NULL 描述的展示/编辑契约（`R1-07/R1-08`）。
@@ -136,7 +139,7 @@ R1 界面修订目标（不改已批准 90 条需求与 76 条验收、不进入
 
 ## 14. 关联矩阵
 
-- 逐交互/逐文案的“覆盖需求/覆盖验收”已在上方各设计编号表内给出；完整 REQ→设计项、AC→设计项总矩阵见 `DESIGN.md` §12（本文件设计项以其 `CCFG-UI-*` 编号出现并被纳入总矩阵，保证 103/103 需求、89/89 验收可追踪）。
+- 逐交互/逐文案的“覆盖需求/覆盖验收”已在上方各设计编号表内给出；完整 REQ→设计项、AC→设计项总矩阵见 `DESIGN.md` §12（本文件设计项以其 `CCFG-UI-*` 编号出现并被纳入总矩阵，保证 112/112 需求、104/104 验收可追踪）。
 - 本文件所有 `CCFG-UI-*` 编号在其表内均有唯一一行，引用可解析。
 
 ## 15. 页面级模板选择性接入与列表调整（本轮新增 · 2026-09-22 批准收口为 `APPROVED`）
@@ -216,7 +219,50 @@ R1 已将原 1 项待确认清零。项目负责人本轮已明确决定并冻�
 批准对象**仅为本轮页面调整基线**，**不**代表代码已实现、已测试、已目测或验收已执行通过；
 `API.md`/`DATABASE.md` 本轮**未**修改；模板级全局迁移状态**未变**。
 
-## 16. 变更记录
+## 16. 探针端管理主列表视觉调整（第二轮 V2 草案 · 2026-09-23 · `DRAFT_PENDING_USER_REVIEW`）
+
+本节为 `CLIENT-CONFIG-VISUAL-FOLLOWUP-BASELINE-001-V2` 的**第二轮主列表视觉调整基线草案**，
+依据项目负责人查看 `/config/client` 与 `/config/data-source` 页面后**已明确确认的五项调整决定**建立。
+**状态分层**：本节草案基线 `adjustment2_baseline_status=DRAFT_PENDING_USER_REVIEW`、
+本轮实现 `adjustment2_implementation_status=NOT_STARTED`、
+本轮正式验收 `formal_acceptance_execution_status=NOT_RUN`；
+§15（`CCFG-UI-027~035`）此前获批基线保持 `APPROVED`，既有实现事实保持
+`existing_feature_implementation_status=IMPLEMENTED_PENDING_USER_ACCEPTANCE`。
+**项目负责人对五项产品决策的聊天确认不等于本节草案已复审或已批准，更不等于已实现或已验收**；
+`CCFG-UI-001~035` 的既有定义行**逐字节不改**，本节与既有界面项冲突处一律按“本节定向修订”处理并保留原文。
+
+**时序说明（不改写历史）**：§15 及其关联元数据记录的下一页入口
+`CHATGPT_REMOTE_CLIENT_CONFIG_PAGE_ADJUSTMENT_IMPLEMENTATION_REVIEW` 反映的是 2026-09-23 实现完成时点的等待状态；
+该远程代码复审**其后已经发生并已通过**，属该入口的已完成事实。本节不擦除该历史记录，也不宣布页面最终接受或视觉验收通过。
+
+**参考来源的效力边界**：参考页 `/config/data-source`（`frontend/src/views/data-source/DataSourcePage.vue`）
+与公共表格视觉预设（`frontend/src/styles/list-table/list-table-visual.css`）是本次视觉对照的**真实来源**；
+项目负责人提供的操作列示意图体现**期望目标**，但截图**不是**测试通过证据。
+参考页仅作视觉对照，本节**不**修改数据源管理的代码、文档、状态、行为与模板级全局配置。
+
+| 设计编号 | 设计决定 | 覆盖需求 | 覆盖验收 |
+|---|---|---|---|
+| CCFG-UI-036 | 结果区最右侧“新增探针”按钮由蓝色主按钮改为与参考页“新增数据源”同款的**黑色实心**主按钮：保留加号图标、按钮文案、结果区头部最右侧位置与既有新增行为；**不**顺带改变“查询”“重置”等按钮；默认/Hover/聚焦/禁用视觉以参考页实际样式为准（参考实现事实：`#09090b` 底与边框、`#ffffff` 文字、圆角 6px、字重 500，Hover/聚焦 `#27272a`，按下 `#18181b`；`:not(.is-disabled)` 限定仅正常态换色，禁用态沿用 Element Plus 既有禁用视觉），不自行发明配色。 | CCFG-REQ-104 | CCFG-AC-090 |
+| CCFG-UI-037 | “探针 ID”单元格的 **ID 正文文本**采用参考页“数据源 ID”同款字重与颜色（参考实现事实：字重 600、颜色 `#09090b`，可沿用等宽字体族与表格数字对齐）。ID 之后的“停用”标识与历史异常原值标识**保持各自现行语义与视觉**（`CCFG-UI-031`/`CCFG-UI-035` 不变），**不**对整列文本或标识笼统加粗改色；ID 单行省略、完整值 Tooltip 与点击/键盘编辑入口行为不变。 | CCFG-REQ-105 | CCFG-AC-091 |
+| CCFG-UI-038 | 探针主列表行高跟随参考页“数据源管理”主列表的**实际行高规则**：**移除**本页对主列表行的固定像素行高，改由公共表格视觉预设的单元格上下内边距与内容共同决定（参考页未声明固定行高）；**不**凭截图写死像素值、**不**改动全局模板或公共预设本身。缩行后探针 ID 三态标识、采集数据源标签、行级提示、`+N` 与“操作”列入口仍可读可点；行双击编辑、探针 ID 键盘编辑、表头与最右固定列正常；新增/编辑弹窗内表格**不**受影响。 | CCFG-REQ-106 | CCFG-AC-092、CCFG-AC-093 |
+| CCFG-UI-039 | “采集数据源”标签借用参考页“角色”标签视觉语言（参考实现事实：高度 20px、字号 12px、字重 600、圆角 4px、无边框、柔和底色），并采用**绿色／红色／中性色**三态：该数据源存在既有 `anomalies` → **红色**并保留异常原因与冲突探针 Tooltip；否则整行存在 `COMMA_PROTOCOL_AMBIGUOUS` → **中性色**且**不**暗示关联已确认正常；否则 → **绿色**（语义为“当前未检测到异常”，**不是**“目标库”角色）。红色异常**不**因整行歧义降级为中性色；整行级歧义提示保留。标签尺寸/字号/内边距变更后，实现阶段必须同步核准单行可见数量与 `+N` 的**测量盒模型**（重算测量基准），避免遮挡或误计数。采集数据源列既有语义**保持**不变：ORG／ID 回退、异常项优先、最多直接显示 6 个、窄列溢出 `+N` 与展开完整清单（去重后按原存储顺序、异常项不隐藏）——`CCFG-UI-011`/`CCFG-UI-012` 语义零改动，仅观感随标签尺寸与配色变化。 | CCFG-REQ-107、CCFG-REQ-108、CCFG-REQ-109 | CCFG-AC-094、CCFG-AC-095、CCFG-AC-096、CCFG-AC-097、CCFG-AC-098、CCFG-AC-099 |
+| CCFG-UI-040 | 最右侧固定“操作”列的**全部行**唯一入口由“更多”文字改为**水平三点图标（Ellipsis）**，不保留“部分行文字、部分行图标”的过渡状态；图标具有足够命中区域、明确键盘焦点与可访问名称（如“更多操作：{探针ID}”）。下拉条目与业务语义保持 `CCFG-UI-032` 不变：启用行“停用＋删除”、停用行“启用＋删除”、历史异常原值行“停用＋删除”（**不**出现“启用”）。 | CCFG-REQ-110 | CCFG-AC-100 |
+| CCFG-UI-041 | 三点图标单击展开的菜单采用柔和圆角、弥散阴影、适当内边距、清晰 Hover／焦点反馈，并以**分隔线**将红色警示“删除”单独隔开（“停用”为警告语义，条目顺序仍为先“停用/启用”后“删除”）；菜单可键盘操作、禁用态可辨识；点击/双击触发器与菜单内任意交互均**不**冒泡触发行双击编辑；接近右边缘或滚动时菜单**不**被裁切。二次确认、接口、行级忙碌与失败行为保持 `CCFG-UI-018`/`CCFG-UI-019`/`CCFG-UI-020`/`CCFG-UI-023` 不变。 | CCFG-REQ-111 | CCFG-AC-101、CCFG-AC-102、CCFG-AC-103 |
+| CCFG-UI-042 | 本轮**不改项与回归边界**：“探针描述”列宽维持现状、长文本单行省略（描述通常由已分配数据源的 `DATA_SOURCE_ORG` 组成，数据源另在“采集数据源”列逐项展示）；查询条件、**刷新能力缺席**（`CCFG-UI-033` 不变）、六列顺序（`CCFG-UI-028` 不变）、CRUD 合同、Tooltip 业务信息与新增/编辑弹窗功能不因本轮视觉调整改变；标签与行高变更必须覆盖**正常视口与窄视口**下完整单行的可读性以及 `+N` 的可见性、可点击性。 | CCFG-REQ-112 | CCFG-AC-093、CCFG-AC-104 |
+
+本节与既有界面项的关系：`CCFG-UI-004`/`CCFG-UI-029`（新增按钮为蓝色主按钮）、
+`CCFG-UI-005`/`CCFG-UI-007`（常规行视觉高度约 58~64px）、
+`CCFG-UI-007`/`CCFG-UI-010`（采集数据源标签尺寸与异常红色语义）、
+`CCFG-UI-032`（操作列唯一**文字**入口“更多”）的部分口径被本节 `CCFG-UI-036~042`
+**定向修订**；上述既有条目原文**保留不改写**，其被修订范围以本节为准。
+其余界面项（查询区 `CCFG-UI-003`、探针 ID 三态标识 `CCFG-UI-031`/`CCFG-UI-035`、
+序号列 `CCFG-UI-030`、空状态与错误状态 `CCFG-UI-034`、文案表 `CCFG-UI-020`/`CCFG-UI-021`、
+新增/编辑弹窗 `CCFG-UI-013~017`、候选控件 `CCFG-UI-016`）本轮**不变**。
+
+**本轮 V2 `PENDING_USER_CONFIRMATION`（0 项）**：五项调整均由项目负责人已明确确认，
+本节不新增需要项目负责人另行决定的视觉或交互空档；`PENDING_USER_CONFIRMATION` 保持 **0**。
+
+## 17. 变更记录
 
 | 日期 | 变更 | 依据 |
 |---|---|---|
@@ -233,3 +279,4 @@ R1 已将原 1 项待确认清零。项目负责人本轮已明确决定并冻�
 | 2026-09-22 | R3 最小证据纠错（`CLIENT-CONFIG-QUERY-LIST-AND-LIST-TABLE-ADJUSTMENT-BASELINE-001-R3`，纯文档）：ChatGPT 对 R2 远程提交 `5e0731aef0e36c1be9b87eba660e9b8c4a052555` 的复审结论为 `CHANGES_REQUIRED`，仅涉两处文字证据（`ACCEPTANCE.md` §1.4 说明文字、R2 报告 §8 异常菜单摘要）。本文件**未修改**；界面编号与数量 `CCFG-UI-001~035`（35 条）与业务定义行零变化；`adjustment_baseline_status` 保持 `DRAFT_PENDING_USER_REVIEW`；下一入口 `CHATGPT_REMOTE_BASELINE_R3_REVIEW` | `CLIENT-CONFIG-QUERY-LIST-AND-LIST-TABLE-ADJUSTMENT-BASELINE-001-R3`（纯文档最小证据纠错；未运行测试/构建/浏览器，未执行验收） |
 | 2026-09-22 | 页面级调整基线**批准收口**（`CLIENT-CONFIG-QUERY-LIST-AND-LIST-TABLE-ADJUSTMENT-BASELINE-APPROVAL-CLOSEOUT-001`，纯文档）：ChatGPT 从远程 Git 对 R3 结果提交 `5066c761f8a9400d5841222cb73b0c03f56a82d0` 的复审结论为 `APPROVED`，项目负责人于 2026-09-22 明确回复原话 `批准本轮探针端管理页面调整基线`；本轮调整基线**状态变化仅为** `adjustment_baseline_status` 由 `DRAFT_PENDING_USER_REVIEW` 变为 `APPROVED`（并新增 `adjustment_approval_status=APPROVED_BY_PROJECT_OWNER`、`adjustment_approval_date=2026-09-22`、`adjustment_approved_reviewed_commit=5066c761f8a9400d5841222cb73b0c03f56a82d0`）。界面编号与数量 `CCFG-UI-001~035`（35 条）保持连续、唯一、不新增/删除/重排；35 条界面定义行相对批准提交逐字零差异；`existing_feature_implementation_status=IMPLEMENTED_PENDING_USER_ACCEPTANCE`、`adjustment_implementation_status=NOT_STARTED`、`formal_acceptance_execution_status=NOT_RUN`、`PENDING_USER_CONFIRMATION=0` 均保持不变；89 条验收仍全部 `NOT_RUN`；**不**修改 `API.md`/`DATABASE.md`、**不**修改任何代码、**不**执行验收；下一入口 `CHATGPT_REMOTE_BASELINE_APPROVAL_CLOSEOUT_REVIEW` | 项目负责人 2026-09-22 批准（原话 `批准本轮探针端管理页面调整基线`）；依据 ChatGPT 远程 R3 复审 `APPROVED`（对象提交 `5066c761f8a9400d5841222cb73b0c03f56a82d0`）；批准的是页面调整基线，不代表已实现、已测试、已目测或验收已通过 |
 | 2026-09-23 | 页面级调整**实现**（`CLIENT-CONFIG-QUERY-LIST-AND-LIST-TABLE-ADJUSTMENT-IMPLEMENTATION-001`，前端实现任务）：按已批准基线实现 `/config/client` 单页调整，`adjustment_implementation_status` 由 `NOT_STARTED` 变为 `IMPLEMENTED_PENDING_CHATGPT_REVIEW`。落地 `CCFG-UI-027~035`：主列表六列固定顺序 序号｜探针 ID｜探针描述｜采集数据源｜数据源数量｜操作（最右固定）、结果区左侧摘要与右侧“新增探针”、取消“删除所选”与行选中视觉、探针 ID 三态标识（`'1'` 无标记 / `'0'` 与数据源管理同款“停用”标记 / 其余历史异常红色 `异常：{原始值}` 且不可见单空白以可见定界符如实呈现）、“更多”菜单条目与事件边界、主表视觉预设接入（仅主表）、空态与失败提示及重试。**本文件不改变任何界面业务定义**：界面编号与数量 `CCFG-UI-001~035`（35 条）保持连续、唯一、不新增/删除/重排，定义行相对起始提交**逐字节零变化**；89 条验收仍全部 `NOT_RUN`；`API.md`/`DATABASE.md` 未修改；两套模板的模板级全局状态（`NOT_STARTED`/`NOT_GRANTED`/`NOT_DECIDED`）不变；浏览器只读实机目测因运行条件不具备记为 `BROWSER_BLOCKED_RUNTIME_UNAVAILABLE`，未伪造截图或视觉通过结论；下一入口 `CHATGPT_REMOTE_CLIENT_CONFIG_PAGE_ADJUSTMENT_IMPLEMENTATION_REVIEW` | `CLIENT-CONFIG-QUERY-LIST-AND-LIST-TABLE-ADJUSTMENT-IMPLEMENTATION-001`（前端实现任务；未修改公共模板实现、数据源管理参考页、路由/菜单、API 类型与接口、后端代码、数据库对象/DDL、构建依赖；未执行正式验收或最终接受） |
+| 2026-09-23 | 第二轮主列表视觉调整**草案**（`CLIENT-CONFIG-VISUAL-FOLLOWUP-BASELINE-001-V2`，纯文档）：依据项目负责人查看 `/config/client` 与 `/config/data-source` 页面后已明确确认的五项视觉调整决定，新增 §16 与 `CCFG-UI-036~042`（7 条，界面编号扩为 `CCFG-UI-001~042`）——`036` 新增按钮黑色实心（保留加号/文案/最右位置/新增行为，不改查询/重置）、`037` 探针 ID 正文字重与颜色对齐数据源 ID（标识语义与视觉保持）、`038` 行高跟随参考页主列表实际规则（移除固定像素行高、由公共预设内边距与内容决定，不改全局模板）、`039` 采集数据源标签借用角色标签视觉语言 + 绿/红/中性色三态与优先级（异常不因行级歧义降级；尺寸变更须同步核准测量盒模型）、`040` 操作列“更多”**全部行**统一改为水平三点图标（命中区域/键盘焦点/可访问名称）、`041` 三点菜单视觉与分隔线隔离红色删除及键盘可访问与事件边界、`042` 不改项与正常/窄视口回归边界。**定向修订** `CCFG-UI-004/005/007/010/029/032` 相关部分口径（原文保留不改写，被修订范围以 §16 为准）。**元数据**：新增第二轮 V2 分层行（`adjustment2_baseline_status=DRAFT_PENDING_USER_REVIEW`、实现 `NOT_STARTED`、验收 `NOT_RUN`），依据需求/验收/设计编号范围同步更新；§14 关联矩阵计数更新为 112/112、104/104；另在本节补**时序说明**（§15 历史“等待 ChatGPT 实现复审”入口其后已复审通过，属该入口已完成事实，不擦除历史、不宣布最终接受）。**计数与边界**：`CCFG-UI-001~035`（35 条）定义行**逐字节零变化**、不新增/删除/重排；验收由 89 条增至 **104 条**（`CCFG-AC-090~104` 全部 `NOT_RUN`）；`PENDING_USER_CONFIRMATION=0`；**不**修改 `API.md`/`DATABASE.md`、**不**修改任何代码/测试/前端源文件、**不**改 `docs/baseline/**` 与模板级全局状态；下一入口 `CHATGPT_REMOTE_CLIENT_CONFIG_VISUAL_FOLLOWUP_BASELINE_V2_REVIEW` | `CLIENT-CONFIG-VISUAL-FOLLOWUP-BASELINE-001-V2`（项目负责人已确认的五项视觉调整决策驱动的**草案**；纯文档任务，未实现代码、未运行测试/构建/浏览器/服务、未访问数据库/ZooKeeper/Kafka、未执行正式验收或最终接受；用户同意五项 ≠ 文档已批准 ≠ 已实现 ≠ 已验收） |
