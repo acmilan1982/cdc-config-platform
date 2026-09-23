@@ -399,3 +399,49 @@ client_config_main_list_visual_integration_approved_reviewed_commit=5066c761f8a9
   R1 修正各历史记录，也**不得**改写 §4 保护清单、§5 分类计数与 §6 授权边界。
 - **授权独立**：本条**不**自动构成 `query-list-page-template` 页面层的授权，
   反之亦然。
+
+## 探针端管理主列表页面级调整实现记录（追加记录，2026-09-23）
+
+### 实施事实
+
+- 实施任务：`CLIENT-CONFIG-QUERY-LIST-AND-LIST-TABLE-ADJUSTMENT-IMPLEMENTATION-001`（前端实现任务）。
+- 起始提交：`40d28125de5d7977936a35bca193ccf4489d65b7`。
+- 实施对象：`探针端管理`（`/config/client`）**主列表**的列表表格视觉模板等价接入。
+  实际发生表格层接入的前端文件仅
+  `frontend/src/views/client-config/ClientConfigPage.vue` 与
+  `frontend/src/views/client-config/ClientConfigPage.spec.ts`（两个文件）。
+- 接入方式：主表以显式根类 `lt-main-table` 接入，
+  并以 `<style scoped src="@/styles/list-table/list-table-visual.css"></style>`
+  在本页范围内引入预设样式；新增/编辑弹窗及其内部控件**未**接入该根类；
+  未使用 `!important`、未产生全局泄漏、未引入包装表格组件或额外 DOM 层。
+
+### 本页主列表实现记录（权威事实）
+
+```text
+client_config_main_list_visual_integration_page_adjustment_baseline_status=APPROVED
+client_config_main_list_visual_integration_authorization_status=UNCHANGED_GRANTED_BY_PROJECT_OWNER_FOR_THIS_PAGE_MAIN_LIST_ONLY
+client_config_main_list_visual_integration_implementation_status=IMPLEMENTED_PENDING_CHATGPT_REVIEW
+client_config_main_list_visual_integration_scope=MAIN_LIST_ONLY_MODALS_EXCLUDED
+client_config_main_list_visual_integration_acceptance_status=ALL_NOT_RUN
+client_config_main_list_visual_integration_implementation_task=CLIENT-CONFIG-QUERY-LIST-AND-LIST-TABLE-ADJUSTMENT-IMPLEMENTATION-001
+client_config_main_list_visual_integration_implementation_base_commit=40d28125de5d7977936a35bca193ccf4489d65b7
+```
+
+### 边界（明确不得）
+
+- 实现的**只是该页主列表**的视觉等价接入；**不**代表该页已目测、已验收或可上线：
+  该页主列表实现状态为 `IMPLEMENTED_PENDING_CHATGPT_REVIEW`、
+  目测状态仍 `NOT_PERFORMED`、`CCFG-AC-001~089`（含 `077~089`）仍全部 `NOT_RUN`。
+- 本次接入**未**覆盖新增/编辑弹窗或弹窗内控件，**不**扩大本模板的适用范围。
+- **不得**把本页主列表接入写成模板已迁移：模板级全局状态保持不变——
+  `page_migration_status` 保持 `NOT_STARTED`、
+  `page_migration_authorization_status` 保持 `NOT_GRANTED`、
+  `pilot_page_selection_status` 保持 `NOT_DECIDED`。
+- **不得**写成“所有页面已授权”或“试点页面已选定”。
+- **不得**把本条解释为**数据源管理参考页最终接受事实**的改变：
+  公共实现与参考页接入仍为 `IMPLEMENTED_ACCEPTED`、
+  `final_acceptance_status=ACCEPTED_BY_PROJECT_OWNER`，**均不变**。
+- **不得**改写上文 `2026-09-21` 基线批准收口、`2026-09-22` 草案授权、R1 修正
+  与页面级调整基线批准各历史记录，也**不得**改写 §4 保护清单、§5 分类计数与 §6 授权边界。
+- **授权独立**：本条**不**自动构成 `query-list-page-template` 页面层的授权，
+  反之亦然。

@@ -9,7 +9,7 @@
 | 既有路由 | `/config/client`（保持不变） |
 | 目标文档 | `docs/features/client-config/UI.md` |
 | 文档状态 | `APPROVED`（界面设计正式批准：ChatGPT 对提交 `ba7c5e9...` 的设计并发口径调整结果正式复审 `APPROVED`，项目负责人于 2026-09-04 明确回复“批准”，经批准收口任务 `CLIENT-CONFIG-DESIGN-CONCURRENCY-ADJUSTMENT-APPROVAL-001` 收口为 `APPROVED`，可用于后续实现；批准的是设计基线，不代表代码已实现、已测试或验收已执行通过） |
-| 实现状态 | 分层口径：`existing_feature_implementation_status=IMPLEMENTED_PENDING_USER_ACCEPTANCE`（既有 Feature 实现已完成、尚待项目负责人验收）；`adjustment_baseline_status=APPROVED`（本轮页面级调整基线已于 2026-09-22 经项目负责人批准收口，批准前为 `DRAFT_PENDING_USER_REVIEW`）；`adjustment_implementation_status=NOT_STARTED`（仅指本轮页面级调整实现尚未开始）；`formal_acceptance_execution_status=NOT_RUN`。旧单层 `NOT_STARTED`（本设计只定义目标界面与交互）属历史事实，不代表当前既有实现状态 |
+| 实现状态 | 分层口径：`existing_feature_implementation_status=IMPLEMENTED_PENDING_USER_ACCEPTANCE`（既有 Feature 实现已完成、尚待项目负责人验收）；`adjustment_baseline_status=APPROVED`（本轮页面级调整基线已于 2026-09-22 经项目负责人批准收口，批准前为 `DRAFT_PENDING_USER_REVIEW`）；`adjustment_implementation_status=IMPLEMENTED_PENDING_CHATGPT_REVIEW`（仅指本轮页面级调整实现已于 2026-09-23 由 `CLIENT-CONFIG-QUERY-LIST-AND-LIST-TABLE-ADJUSTMENT-IMPLEMENTATION-001` 完成并停在 ChatGPT 远程复审入口，**不**代表已目测、已验收或已接受）；`formal_acceptance_execution_status=NOT_RUN`。旧单层 `NOT_STARTED`（本设计只定义目标界面与交互）属历史事实，不代表当前既有实现状态 |
 | 初版任务 | `CLIENT-CONFIG-DESIGN-BASELINE-001`（阶段 4 设计基线，纯文档） |
 | 初版基线提交 | `cecfdd5478df8b82ba39c083553ea8dd7ead48e8` |
 | 初版设计提交 | `21f4729c43d146426e8d4f1b2d6b667cfcf160ff` |
@@ -36,7 +36,7 @@
 | existing_feature_implementation_status | `IMPLEMENTED_PENDING_USER_ACCEPTANCE`（既有 Feature 实现已完成、尚待项目负责人验收；**不**因本轮页面调整改写） |
 | adjustment_baseline_status | `APPROVED`（2026-09-22 草案建立时的 `DRAFT_PENDING_USER_REVIEW` 属历史状态；经 R1 修订与 R2/R3 证据纠错后由项目负责人于 2026-09-22 批准） |
 | adjustment_approval_status | `APPROVED_BY_PROJECT_OWNER`（`adjustment_approval_date=2026-09-22`，`adjustment_approved_reviewed_commit=5066c761f8a9400d5841222cb73b0c03f56a82d0`；批准依据见 §15 前言） |
-| adjustment_implementation_status | `NOT_STARTED`（**仅指**本轮页面级调整实现尚未开始，**不**代表既有 Feature 实现状态；批准基线**不**等于已实现） |
+| adjustment_implementation_status | `IMPLEMENTED_PENDING_CHATGPT_REVIEW`（本轮页面级调整实现已于 2026-09-23 完成，**不**代表既有 Feature 实现状态；**不**等于已目测、已验收或已接受） |
 | formal_acceptance_execution_status | `NOT_RUN`（本轮正式验收未执行；`CCFG-AC-001~089` 全部 `NOT_RUN`） |
 | 页面级选择性接入授权 | **已获项目负责人授权**：`/config/client` 页面级选择性接入查询列表页模板与列表表格视觉模板（查询列表页模板侧本页**不**接入刷新工具栏；列表表格视觉模板侧本页仅覆盖**主列表**，不含新增/编辑弹窗与弹窗内控件）。该授权为**页面级授权事实**，本轮批准收口**不新增、不扩大**该授权，也**不**等于本轮实现已完成；模板级全局迁移状态**未变**，其他页面**未获**授权 |
 | 本轮新增界面编号 | `CCFG-UI-027 ~ CCFG-UI-035`（9 条，见 §15） |
@@ -152,8 +152,9 @@ R1 界面修订目标（不改已批准 90 条需求与 76 条验收、不进入
 `adjustment_approval_status=APPROVED_BY_PROJECT_OWNER`、
 `adjustment_approval_date=2026-09-22`、
 `adjustment_approved_reviewed_commit=5066c761f8a9400d5841222cb73b0c03f56a82d0`。
-**批准的是本轮页面调整基线，本轮仍 `NOT_STARTED`（未实现）、`NOT_RUN`（未执行验收）、未目测**；
-`adjustment_implementation_status=NOT_STARTED`、
+**批准的是本轮页面调整基线；批准时点本轮仍 `NOT_STARTED`（未实现）、`NOT_RUN`（未执行验收）、未目测**；
+本轮调整实现随后已于 2026-09-23 完成（`adjustment_implementation_status=IMPLEMENTED_PENDING_CHATGPT_REVIEW`，
+**不**代表已目测、已验收或已接受）；
 `formal_acceptance_execution_status=NOT_RUN`
 （既有 Feature 实现事实仍为 `existing_feature_implementation_status=IMPLEMENTED_PENDING_USER_ACCEPTANCE`，
 **不**因本轮调整改写）；`PENDING_USER_CONFIRMATION=0`。
@@ -231,3 +232,4 @@ R1 已将原 1 项待确认清零。项目负责人本轮已明确决定并冻�
 | 2026-09-22 | R2 证据纠错（`CLIENT-CONFIG-QUERY-LIST-AND-LIST-TABLE-ADJUSTMENT-BASELINE-001-R2`，纯文档）：ChatGPT 对 R1 远程提交 `2c2b2a71fcd049a68f86339d225f659af69e81c3` 的复审结论为 `CHANGES_REQUIRED`，仅涉 R1 执行报告的三处追踪证据表述，不涉业务规则。本文件**未修改**；界面编号与数量 `CCFG-UI-001~035`（35 条）与业务定义行零变化；`adjustment_baseline_status` 保持 `DRAFT_PENDING_USER_REVIEW`；下一入口 `CHATGPT_REMOTE_BASELINE_R3_REVIEW` | `CLIENT-CONFIG-QUERY-LIST-AND-LIST-TABLE-ADJUSTMENT-BASELINE-001-R2`（纯文档追加式证据纠错；未运行测试/构建/浏览器，未执行验收） |
 | 2026-09-22 | R3 最小证据纠错（`CLIENT-CONFIG-QUERY-LIST-AND-LIST-TABLE-ADJUSTMENT-BASELINE-001-R3`，纯文档）：ChatGPT 对 R2 远程提交 `5e0731aef0e36c1be9b87eba660e9b8c4a052555` 的复审结论为 `CHANGES_REQUIRED`，仅涉两处文字证据（`ACCEPTANCE.md` §1.4 说明文字、R2 报告 §8 异常菜单摘要）。本文件**未修改**；界面编号与数量 `CCFG-UI-001~035`（35 条）与业务定义行零变化；`adjustment_baseline_status` 保持 `DRAFT_PENDING_USER_REVIEW`；下一入口 `CHATGPT_REMOTE_BASELINE_R3_REVIEW` | `CLIENT-CONFIG-QUERY-LIST-AND-LIST-TABLE-ADJUSTMENT-BASELINE-001-R3`（纯文档最小证据纠错；未运行测试/构建/浏览器，未执行验收） |
 | 2026-09-22 | 页面级调整基线**批准收口**（`CLIENT-CONFIG-QUERY-LIST-AND-LIST-TABLE-ADJUSTMENT-BASELINE-APPROVAL-CLOSEOUT-001`，纯文档）：ChatGPT 从远程 Git 对 R3 结果提交 `5066c761f8a9400d5841222cb73b0c03f56a82d0` 的复审结论为 `APPROVED`，项目负责人于 2026-09-22 明确回复原话 `批准本轮探针端管理页面调整基线`；本轮调整基线**状态变化仅为** `adjustment_baseline_status` 由 `DRAFT_PENDING_USER_REVIEW` 变为 `APPROVED`（并新增 `adjustment_approval_status=APPROVED_BY_PROJECT_OWNER`、`adjustment_approval_date=2026-09-22`、`adjustment_approved_reviewed_commit=5066c761f8a9400d5841222cb73b0c03f56a82d0`）。界面编号与数量 `CCFG-UI-001~035`（35 条）保持连续、唯一、不新增/删除/重排；35 条界面定义行相对批准提交逐字零差异；`existing_feature_implementation_status=IMPLEMENTED_PENDING_USER_ACCEPTANCE`、`adjustment_implementation_status=NOT_STARTED`、`formal_acceptance_execution_status=NOT_RUN`、`PENDING_USER_CONFIRMATION=0` 均保持不变；89 条验收仍全部 `NOT_RUN`；**不**修改 `API.md`/`DATABASE.md`、**不**修改任何代码、**不**执行验收；下一入口 `CHATGPT_REMOTE_BASELINE_APPROVAL_CLOSEOUT_REVIEW` | 项目负责人 2026-09-22 批准（原话 `批准本轮探针端管理页面调整基线`）；依据 ChatGPT 远程 R3 复审 `APPROVED`（对象提交 `5066c761f8a9400d5841222cb73b0c03f56a82d0`）；批准的是页面调整基线，不代表已实现、已测试、已目测或验收已通过 |
+| 2026-09-23 | 页面级调整**实现**（`CLIENT-CONFIG-QUERY-LIST-AND-LIST-TABLE-ADJUSTMENT-IMPLEMENTATION-001`，前端实现任务）：按已批准基线实现 `/config/client` 单页调整，`adjustment_implementation_status` 由 `NOT_STARTED` 变为 `IMPLEMENTED_PENDING_CHATGPT_REVIEW`。落地 `CCFG-UI-027~035`：主列表六列固定顺序 序号｜探针 ID｜探针描述｜采集数据源｜数据源数量｜操作（最右固定）、结果区左侧摘要与右侧“新增探针”、取消“删除所选”与行选中视觉、探针 ID 三态标识（`'1'` 无标记 / `'0'` 与数据源管理同款“停用”标记 / 其余历史异常红色 `异常：{原始值}` 且不可见单空白以可见定界符如实呈现）、“更多”菜单条目与事件边界、主表视觉预设接入（仅主表）、空态与失败提示及重试。**本文件不改变任何界面业务定义**：界面编号与数量 `CCFG-UI-001~035`（35 条）保持连续、唯一、不新增/删除/重排，定义行相对起始提交**逐字节零变化**；89 条验收仍全部 `NOT_RUN`；`API.md`/`DATABASE.md` 未修改；两套模板的模板级全局状态（`NOT_STARTED`/`NOT_GRANTED`/`NOT_DECIDED`）不变；浏览器只读实机目测因运行条件不具备记为 `BROWSER_BLOCKED_RUNTIME_UNAVAILABLE`，未伪造截图或视觉通过结论；下一入口 `CHATGPT_REMOTE_CLIENT_CONFIG_PAGE_ADJUSTMENT_IMPLEMENTATION_REVIEW` | `CLIENT-CONFIG-QUERY-LIST-AND-LIST-TABLE-ADJUSTMENT-IMPLEMENTATION-001`（前端实现任务；未修改公共模板实现、数据源管理参考页、路由/菜单、API 类型与接口、后端代码、数据库对象/DDL、构建依赖；未执行正式验收或最终接受） |

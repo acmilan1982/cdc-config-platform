@@ -1,211 +1,215 @@
 <template>
-  <div class="cc-page">
-    <!-- 页面标题与说明（CCFG-UI-001/002：统一“探针端管理”） -->
-    <header class="cc-header">
-      <h2 class="cc-title">探针端管理</h2>
-      <p class="cc-subtitle">维护 sync-client 探针及其采集数据源配置</p>
-    </header>
-
-    <!-- 首次查询失败且从未成功：整区错误态 + 重试（CCFG-UI-012） -->
-    <div v-if="firstLoadFailed" class="cc-page-state cc-page-state--error" role="alert">
-      <p class="cc-page-state-title">列表加载失败</p>
-      <p class="cc-page-state-desc">暂时无法获取探针列表，请重新加载或稍后重试。</p>
-      <el-button type="primary" plain :loading="listLoading" @click="loadList">重新加载</el-button>
-    </div>
-
-    <template v-else>
-      <!-- 独立查询区（CCFG-UI-002/003：外部标签 + 控件，无搜索图标） -->
-      <div class="cc-query">
-        <div class="cc-query-item">
-          <span class="cc-query-label">探针信息</span>
-          <el-input
-            v-model="queryKeyword"
-            class="cc-query-keyword"
-            placeholder="请输入探针 ID 或探针描述"
-            clearable
-            @keyup.enter="onQuery"
-          />
-        </div>
-        <div class="cc-query-item">
-          <span class="cc-query-label">探针状态</span>
-          <el-select v-model="queryStatus" class="cc-query-status">
-            <el-option label="全部" value="ALL" />
-            <el-option label="启用" value="ENABLED" />
-            <el-option label="停用" value="DISABLED" />
-          </el-select>
-        </div>
-        <div class="cc-query-actions">
-          <el-button type="primary" class="cc-query-btn" @click="onQuery">查询</el-button>
-          <el-button class="cc-query-btn" @click="onReset">重置</el-button>
-        </div>
+  <!-- 页面外壳、查询区容器、查询/重置动作与结果卡片来自查询列表页模板的四个公共组件
+       （CCFG-REQ-091/CCFG-DESIGN-038）：本页只持有 Feature 文案、查询草稿与生效条件、
+       请求与错误语义、表格与行操作、三个业务弹窗。默认槽内容逐一成为 .ql-page 直接子节点。 -->
+  <QueryListPageShell
+    title="探针端管理"
+    description="维护 sync-client 探针及其采集数据源配置"
+  >
+    <!-- 查询区：探针信息 + 探针状态，操作组由公共查询/重置动作组件提供；本页无刷新能力（CCFG-UI-033） -->
+    <QueryListQueryPanel>
+      <div class="cc-q-group">
+        <span class="cc-q-label">探针信息</span>
+        <el-input
+          v-model="queryKeyword"
+          class="cc-q-keyword"
+          placeholder="请输入探针 ID 或探针描述"
+          clearable
+          @keyup.enter="onQuery"
+        />
       </div>
+      <div class="cc-q-group">
+        <span class="cc-q-label">探针状态</span>
+        <el-select v-model="queryStatus" class="cc-q-status">
+          <el-option label="全部" value="ALL" />
+          <el-option label="启用" value="ENABLED" />
+          <el-option label="停用" value="DISABLED" />
+        </el-select>
+      </div>
+      <template #actions>
+        <QueryListActions :query-loading="listLoading" @query="onQuery" @reset="onReset" />
+      </template>
+    </QueryListQueryPanel>
 
-      <!-- 独立表格卡片：工具栏 + 数据表格（CCFG-UI-002/004/005） -->
-      <div class="cc-table-card">
-        <div class="cc-toolbar">
-          <div class="cc-toolbar-left">
-            <el-button type="primary" class="cc-btn-add" @click="openCreate">
-              <el-icon class="cc-btn-icon"><Plus /></el-icon>新增探针
-            </el-button>
-            <el-button
-              class="cc-btn-delete"
-              :class="{ 'cc-btn-delete--armed': selectedClientId !== null }"
-              :disabled="selectedClientId === null"
-              :loading="deleteBusy"
-              @click="onDelete"
-            >
-              <el-icon class="cc-btn-icon"><Delete /></el-icon>删除所选
-            </el-button>
-            <span v-if="selectedClientId !== null" class="cc-selected">已选择：{{ selectedClientId }}</span>
-          </div>
-        </div>
-
-        <!-- 已有成功结果后的刷新失败：非遮挡提示 + 按已生效条件重试（R1-05） -->
-        <div v-if="refreshFailed" class="cc-refresh-warn" role="status">
-          <span class="cc-refresh-text">刷新失败：当前仍展示上一次成功结果，请点击“重试”重新加载。</span>
+    <!-- 结果区：头部（左摘要 / 最右“新增探针”）→ 固定错误槽 → 固定分隔线 → 表格 body -->
+    <QueryListResultPanel v-loading="listLoading">
+      <template #summary>
+        <span class="cc-result-count">共 {{ listRows.length }} 条</span>
+      </template>
+      <template #toolbar>
+        <el-button type="primary" class="cc-btn-add" @click="openCreate">
+          <el-icon class="cc-btn-icon"><Plus /></el-icon>新增探针
+        </el-button>
+      </template>
+      <template #error>
+        <div v-if="listFailed" class="cc-load-error" role="alert">
+          <span class="cc-load-error-text">列表加载失败，请重试。</span>
           <el-button size="small" :loading="listLoading" @click="loadList">重试</el-button>
         </div>
+      </template>
+      <template #body>
+        <!-- 主列表显式接入列表表格视觉模板（根类 + scoped 预设），弹窗内表格不接入（CCFG-REQ-099） -->
+        <el-table
+          class="cc-table"
+          :class="[LT_MAIN_TABLE_CLASS]"
+          :data="listRows"
+          empty-text="暂无符合条件的探针"
+          @row-dblclick="onRowDblClick"
+        >
+          <el-table-column label="序号" width="70" align="center" class-name="cc-col-seq">
+            <template #default="{ $index }">
+              <span class="cc-seq">{{ $index + 1 }}</span>
+            </template>
+          </el-table-column>
 
+          <el-table-column label="探针 ID" width="176" class-name="cc-col-id">
+            <template #default="{ row }">
+              <div class="cc-id-cell">
+                <span
+                  class="cc-id"
+                  tabindex="0"
+                  role="button"
+                  :aria-label="`编辑探针 ${row.clientId}`"
+                  @keydown="onRowKeyEdit($event, row)"
+                  @mouseenter="onIdEnter($event, row)"
+                  @mouseleave="onTipLeave"
+                >{{ row.clientId }}</span>
+                <!-- FG_ACTIVE 三态：'1' 不显示；'0' 显示与数据源管理“数据源 ID”同款“停用”标识；
+                     其余历史异常值显示红色 `异常：{原始值}`（CCFG-UI-031/CCFG-UI-035） -->
+                <span v-if="idState(row) === 'off'" class="cc-inactive-mark">停用</span>
+                <span
+                  v-else-if="idState(row) === 'abnormal'"
+                  class="cc-abnormal-mark"
+                  @mouseenter="onAbnormalEnter($event, row)"
+                  @mouseleave="onTipLeave"
+                >{{ abnormalBadgeText(row) }}</span>
+              </div>
+            </template>
+          </el-table-column>
 
-      <!-- 数据表格（CCFG-UI-005/022，无操作列/无分页/无自动刷新） -->
-      <el-table
-        v-loading="listLoading"
-        class="cc-table"
-        :data="listRows"
-        :row-class-name="rowClassName"
-        empty-text="暂无符合条件的探针"
-        @row-click="onRowClick"
-        @row-dblclick="onRowDblClick"
-      >
-        <el-table-column label="探针 ID" width="176" class-name="cc-col-id">
-          <template #default="{ row }">
-            <span
-              class="cc-id"
-              tabindex="0"
-              role="button"
-              :aria-label="`编辑探针 ${row.clientId}`"
-              @keydown="onRowKeyEdit($event, row)"
-              @mouseenter="onIdEnter($event, row)"
-              @mouseleave="onTipLeave"
-            >{{ row.clientId }}</span>
-          </template>
-        </el-table-column>
+          <el-table-column label="探针描述" width="300">
+            <template #default="{ row }">
+              <span
+                class="cc-desc"
+                :class="{ 'cc-desc--empty': isBlankDesc(row) }"
+                @mouseenter="onDescEnter($event, row)"
+                @mouseleave="onTipLeave"
+              >{{ isBlankDesc(row) ? '—' : row.clientDesc }}</span>
+            </template>
+          </el-table-column>
 
-        <el-table-column label="探针描述" width="300">
-          <template #default="{ row }">
-            <span
-              class="cc-desc"
-              :class="{ 'cc-desc--empty': isBlankDesc(row) }"
-              @mouseenter="onDescEnter($event, row)"
-              @mouseleave="onTipLeave"
-            >{{ isBlankDesc(row) ? '—' : row.clientDesc }}</span>
-          </template>
-        </el-table-column>
+          <el-table-column label="采集数据源" min-width="260">
+            <template #default="{ row }">
+              <div
+                class="cc-src"
+                :data-client-id="row.clientId"
+                :ref="(el) => setSrcEl(el as HTMLElement | null, row.clientId)"
+              >
+                <span
+                  v-if="isRowAmbiguous(row)"
+                  class="cc-rowbad"
+                  @mouseenter="onTipEnter($event, tipForRowbad(row))"
+                  @mouseleave="onTipLeave"
+                ><span class="cc-txt">含逗号歧义</span></span>
 
-        <el-table-column label="采集数据源" min-width="260">
-          <template #default="{ row }">
-            <div
-              class="cc-src"
-              :data-client-id="row.clientId"
-              :ref="(el) => setSrcEl(el as HTMLElement | null, row.clientId)"
-            >
+                <span
+                  v-for="(ds, idx) in orderedSources(row)"
+                  :key="`${row.clientId}-${ds.dataSourceId}-${idx}`"
+                  v-show="idx < shownCount(row)"
+                  class="cc-dstag"
+                  :class="{ 'cc-dstag--bad': ds.anomalies.length }"
+                  @mouseenter="onTipEnter($event, tipForDs(ds))"
+                  @mouseleave="onTipLeave"
+                ><span class="cc-txt">{{ dsBodyText(ds) }}</span></span>
+
+                <el-popover
+                  v-if="hiddenCount(row) > 0"
+                  placement="top"
+                  :width="380"
+                  trigger="click"
+                  @show="clearTip"
+                >
+                  <template #reference>
+                    <span class="cc-more"><span class="cc-txt">+{{ hiddenCount(row) }}</span></span>
+                  </template>
+                  <div class="cc-full-list">
+                    <p v-if="isRowAmbiguous(row)" class="cc-full-note">
+                      以下为普通 CSV 解析的展示结果（行级含逗号歧义），非已确定分配。
+                    </p>
+                    <ul>
+                      <li
+                        v-for="ds in row.dataSources"
+                        :key="`${row.clientId}-full-${ds.dataSourceId}`"
+                        class="cc-full-item"
+                      >
+                        <span v-if="hasOrg(ds)" class="cc-full-org">{{ ds.org }}</span>
+                        <span v-if="hasOrg(ds)" class="cc-full-id">{{ ds.dataSourceId }}</span>
+                        <span v-if="ds.anomalies.length" class="cc-full-bad">
+                          {{ anomalyText(ds.anomalies, ds.conflictClientIds) }}
+                        </span>
+                        <span v-if="!hasOrg(ds)" class="cc-full-org">{{ ds.dataSourceId }}</span>
+                      </li>
+                    </ul>
+                  </div>
+                </el-popover>
+              </div>
+            </template>
+          </el-table-column>
+
+          <el-table-column label="数据源数量" width="110" align="center">
+            <template #default="{ row }">
+              <span class="cc-count">{{ row.dataSourceCount }}</span>
               <span
                 v-if="isRowAmbiguous(row)"
-                class="cc-rowbad"
-                @mouseenter="onTipEnter($event, tipForRowbad(row))"
+                class="cc-count-note"
+                @mouseenter="onTipEnter($event, { lines: [{ text: '普通 CSV 解析的展示结果（行级含逗号歧义，非已确定分配）', tone: 'muted' }] })"
                 @mouseleave="onTipLeave"
-              ><span class="cc-txt">含逗号歧义</span></span>
+              >（展示）</span>
+            </template>
+          </el-table-column>
 
-              <span
-                v-for="(ds, idx) in orderedSources(row)"
-                :key="`${row.clientId}-${ds.dataSourceId}-${idx}`"
-                v-show="idx < shownCount(row)"
-                class="cc-dstag"
-                :class="{ 'cc-dstag--bad': ds.anomalies.length }"
-                @mouseenter="onTipEnter($event, tipForDs(ds))"
-                @mouseleave="onTipLeave"
-              ><span class="cc-txt">{{ dsBodyText(ds) }}</span></span>
-
-              <el-popover
-                v-if="hiddenCount(row) > 0"
-                placement="top"
-                :width="380"
+          <!-- 最右固定“操作”列：唯一文字入口“更多”；入口与菜单的 click/dblclick 均不冒泡到行双击（CCFG-UI-032） -->
+          <el-table-column label="操作" width="110" fixed="right">
+            <template #default="{ row }">
+              <el-dropdown
                 trigger="click"
-                @show="clearTip"
+                popper-class="cc-more-popper"
+                @command="(command: string) => onRowCommand(command, row)"
+                @click.stop
+                @dblclick.stop
               >
-                <template #reference>
-                  <span class="cc-more"><span class="cc-txt">+{{ hiddenCount(row) }}</span></span>
+                <span class="cc-more-link" @click.stop @dblclick.stop>
+                  更多<el-icon class="cc-more-icon"><ArrowDown /></el-icon>
+                </span>
+                <template #dropdown>
+                  <el-dropdown-menu>
+                    <!-- 条目顺序固定为先“停用/启用”、后“删除”；历史异常行只提供“停用”与“删除” -->
+                    <el-dropdown-item
+                      v-if="idState(row) !== 'off'"
+                      command="disable"
+                      class="cc-more-warning"
+                      :disabled="rowBusy(row)"
+                    >停用</el-dropdown-item>
+                    <el-dropdown-item
+                      v-else
+                      command="enable"
+                      :disabled="rowBusy(row)"
+                    >启用</el-dropdown-item>
+                    <el-dropdown-item
+                      command="delete"
+                      class="cc-more-danger"
+                      :disabled="rowBusy(row)"
+                    >删除</el-dropdown-item>
+                  </el-dropdown-menu>
                 </template>
-                <div class="cc-full-list">
-                  <p v-if="isRowAmbiguous(row)" class="cc-full-note">
-                    以下为普通 CSV 解析的展示结果（行级含逗号歧义），非已确定分配。
-                  </p>
-                  <ul>
-                    <li
-                      v-for="ds in row.dataSources"
-                      :key="`${row.clientId}-full-${ds.dataSourceId}`"
-                      class="cc-full-item"
-                    >
-                      <span v-if="hasOrg(ds)" class="cc-full-org">{{ ds.org }}</span>
-                      <span v-if="hasOrg(ds)" class="cc-full-id">{{ ds.dataSourceId }}</span>
-                      <span v-if="ds.anomalies.length" class="cc-full-bad">
-                        {{ anomalyText(ds.anomalies, ds.conflictClientIds) }}
-                      </span>
-                      <span v-if="!hasOrg(ds)" class="cc-full-org">{{ ds.dataSourceId }}</span>
-                    </li>
-                  </ul>
-                </div>
-              </el-popover>
-            </div>
-          </template>
-        </el-table-column>
+              </el-dropdown>
+            </template>
+          </el-table-column>
+        </el-table>
+      </template>
+    </QueryListResultPanel>
 
-        <el-table-column label="数据源数量" width="110" align="center">
-          <template #default="{ row }">
-            <span class="cc-count">{{ row.dataSourceCount }}</span>
-            <span
-              v-if="isRowAmbiguous(row)"
-              class="cc-count-note"
-              @mouseenter="onTipEnter($event, { lines: [{ text: '普通 CSV 解析的展示结果（行级含逗号歧义，非已确定分配）', tone: 'muted' }] })"
-              @mouseleave="onTipLeave"
-            >（展示）</span>
-          </template>
-        </el-table-column>
-
-        <el-table-column label="状态" width="160">
-          <template #default="{ row }">
-            <span class="cc-status-cell">
-              <el-tag size="small" :type="statusType(row)" class="cc-state-tag" :disable-transitions="true">
-                {{ statusText(row) }}
-              </el-tag>
-              <el-button
-                v-if="canToggle(row, 'disable')"
-                link
-                type="danger"
-                class="cc-op"
-                :disabled="opBusy === `disable:${row.clientId}`"
-                @click="onDisable(row)"
-              >
-                {{ opBusy === `disable:${row.clientId}` ? '停用中…' : '停用' }}
-              </el-button>
-              <el-button
-                v-else-if="canToggle(row, 'enable')"
-                link
-                type="primary"
-                class="cc-op"
-                :disabled="opBusy === `enable:${row.clientId}`"
-                @click="onEnable(row)"
-              >
-                {{ opBusy === `enable:${row.clientId}` ? '启用中…' : '启用' }}
-              </el-button>
-            </span>
-          </template>
-        </el-table-column>
-      </el-table>
-      </div>
-    </template>
-
-    <!-- 新增/编辑弹窗（CCFG-UI-013/014/015/016/017） -->
+    <!-- 新增/编辑弹窗（CCFG-UI-013/014/015/016/017）：不接入列表表格视觉模板 -->
     <el-dialog
       v-model="dialogOpen"
       class="cc-dialog"
@@ -363,13 +367,20 @@
         >{{ ln.text }}</p>
       </div>
     </Teleport>
-  </div>
+  </QueryListPageShell>
 </template>
 
 <script setup lang="ts">
 import { computed, nextTick, onBeforeUnmount, onMounted, reactive, ref } from 'vue'
 import { ElMessage, ElMessageBox } from 'element-plus'
-import { Delete, Plus } from '@element-plus/icons-vue'
+import { ArrowDown, Plus } from '@element-plus/icons-vue'
+import {
+  QueryListActions,
+  QueryListPageShell,
+  QueryListQueryPanel,
+  QueryListResultPanel,
+} from '@/components/query-list'
+import { LT_MAIN_TABLE_CLASS } from '@/styles/list-table'
 import { descNeedsTip, measureChipWidth, packChips } from './listLayout'
 import {
   createClient,
@@ -388,17 +399,6 @@ const DS_GAP = 8
 const DS_MAX_VISIBLE = 6
 const MORE_SLOT_TEXT = '+88'
 const TIP_DELAY_MS = 240
-
-/** 空白点击取消选择的保护集：命中其中任一（含祖先）的点击不取消当前选择（R1 §5.3）。
- * 覆盖 Element Plus Teleport 浮层（对话框/确认框/下拉/浮层）、原生与 EP 控件、
- * 整张表格（行点击语义自行切换选择）与数据源标签/`+N`/行级歧义所在的行区域。 */
-const BLANK_CLEAR_PROTECTED =
-  '.el-overlay,.el-dialog,.el-message-box,.el-message,.el-popper,.el-popover,' +
-  '.el-select-dropdown,.el-dropdown-menu,.el-notification,' +
-  'button,input,select,textarea,a,[contenteditable="true"],' +
-  '.el-button,.el-input,.el-textarea,.el-select,.el-radio,.el-checkbox,.el-switch,' +
-  '.el-radio-button,.el-checkbox-button,' +
-  '.cc-table,.cc-single-tip'
 
 const ID_PATTERN = /^[A-Za-z0-9][A-Za-z0-9._-]{0,31}$/
 
@@ -464,65 +464,38 @@ function hasOrg(ds: DataSourceViewItem): boolean {
   return (ds.org ?? '').trim().length > 0
 }
 
-function statusText(row: ClientListItemVO): string {
-  if (row.fgActive === '1') return '启用'
-  if (row.fgActive === '0') return '停用'
-  return `异常（原始值=${row.fgActive}）`
+// ------------------------------------------------- 探针 ID 三态标识（不归一化原始值）
+
+/** `FG_ACTIVE` 原始字符串三态：'1' 无标识、'0' 停用标识、其余为历史异常（CCFG-REQ-101）。 */
+function idState(row: ClientListItemVO): 'on' | 'off' | 'abnormal' {
+  if (row.fgActive === '1') return 'on'
+  if (row.fgActive === '0') return 'off'
+  return 'abnormal'
 }
 
-function statusType(row: ClientListItemVO): 'success' | 'info' | 'danger' {
-  if (row.fgActive === '1') return 'success'
-  if (row.fgActive === '0') return 'info'
-  return 'danger'
+/** 单个不可见空白字符（含零宽字符）需以可见定界呈现，保证可辨认、可核对（CCFG-UI-035）。 */
+function isInvisibleOnly(value: unknown): boolean {
+  return typeof value === 'string' && value.length > 0 && /^[\s​‌‍﻿]+$/.test(value)
 }
 
-function canToggle(row: ClientListItemVO, action: 'enable' | 'disable'): boolean {
-  if (action === 'disable') return row.fgActive === '1' || row.fgActive !== '0'
-  return row.fgActive === '0'
+/** 历史异常固定文案 `异常：{原始值}`；原始值原样展示，不静默转换、不隐藏值（CCFG-REQ-102）。 */
+function abnormalBadgeText(row: ClientListItemVO): string {
+  const raw: unknown = row.fgActive
+  const shown = isInvisibleOnly(raw) ? `"${String(raw)}"` : String(raw)
+  return `异常：${shown}`
 }
 
 // ------------------------------------------------------------------ 列表状态
 
 const listRows = ref<ClientListItemVO[]>([])
 const listLoading = ref(false)
-const listLoadedOnce = ref(false)
 const listFailed = ref(false)
 let listSeq = 0
-const selectedClientId = ref<string | null>(null)
 
 const queryKeyword = ref('')
 const queryStatus = ref<ClientStatusFilter>('ALL')
 const appliedKeyword = ref<string | undefined>(undefined)
 const appliedStatus = ref<ClientStatusFilter>('ALL')
-
-const firstLoadFailed = computed(
-  () => listFailed.value && !listLoadedOnce.value && listRows.value.length === 0,
-)
-
-/** 已有成功结果后再次查询/刷新失败：保留旧列表，在表格上方给出非遮挡提示（R1-05）。 */
-const refreshFailed = computed(() => listFailed.value && listLoadedOnce.value)
-
-const rowClassName = ({ row }: { row: ClientListItemVO }) =>
-  selectedClientId.value === row.clientId ? 'cc-row--selected' : ''
-
-function clearSelection(): void {
-  selectedClientId.value = null
-}
-
-function onRowClick(row: ClientListItemVO): void {
-  // 单击行：选中该行（另一行直接切换）。同一样在“空白点击”语义下由 clearSelection 显式清除，
-  // 点击行内空白也按“切换/保持选中”处理，不在行点击里做二次清除（R1 §5.3）。
-  selectedClientId.value = row.clientId
-}
-
-/** 点击页面非交互空白区域（不在保护集内）时取消当前选择（R1 §5.3）。 */
-function onPageBlankClick(event: MouseEvent): void {
-  if (selectedClientId.value === null) return
-  const target = event.target
-  if (!(target instanceof Element)) return
-  if (target.closest(BLANK_CLEAR_PROTECTED)) return
-  clearSelection()
-}
 
 function onRowDblClick(row: ClientListItemVO): void {
   openEdit(row)
@@ -543,12 +516,11 @@ function onQuery(): void {
   void loadList()
 }
 
+/** 重置只清空查询控件：不发请求、不动当前已生效条件与已展示结果（CCFG-UI-003）。 */
 function onReset(): void {
   clearTip()
   queryKeyword.value = ''
   queryStatus.value = 'ALL'
-  clearSelection()
-  // 恢复默认条件；不自动触发查询、不覆盖当前已生效列表（CCFG-UI-003）
 }
 
 async function loadList(): Promise<void> {
@@ -562,10 +534,6 @@ async function loadList(): Promise<void> {
     if (res.code === 200) {
       listRows.value = res.data?.items ?? []
       shownMap.clear()
-      listLoadedOnce.value = true
-      // 查询、列表重新加载或数据集替换后清除选择（R1 §5.3/§5.6；删除与新增/编辑保存
-      // 后经 loadList 复用同一入口清除，避免残留指向已变化数据的选中行）。
-      clearSelection()
       // 数据渲染并完成真实布局后，按各容器实际宽度重新打包单行布局；
       // 不依赖 ResizeObserver 是否恰好再触发（行元素复用且宽度不变时 RO 不再回调，
       // 否则会退回“全部直接展示”，窄列下既无 +N 又溢出被裁切）。
@@ -574,6 +542,7 @@ async function loadList(): Promise<void> {
         if (seq === listSeq) recomputeAllRows()
       }
     } else {
+      // 失败保留上一次成功结果（不清空 listRows），仅提示失败并提供重试（CCFG-UI-012/034）
       listFailed.value = true
     }
   } catch (e) {
@@ -585,50 +554,37 @@ async function loadList(): Promise<void> {
 }
 
 function onDialogClosed(): void {
-  // 弹窗关闭仅保留当前选中行，不做其他副作用
+  // 弹窗关闭无额外副作用
 }
 
-// ------------------------------------------------------------------ 删除
+// ------------------------------------------------------------------ 行操作（“更多”下拉）
 
-const deleteBusy = ref(false)
+/** 行级忙碌：按探针 ID 记录在途行，只锁对应行，其他行的独立操作不被阻塞（CCFG-DESIGN-042）。 */
+const busyClientIds = reactive(new Set<string>())
 
-async function onDelete(): Promise<void> {
-  const clientId = selectedClientId.value
-  if (clientId === null || deleteBusy.value) return
-  try {
-    await ElMessageBox.confirm(`确定删除探针 ${clientId} 吗？该操作不可恢复。`, '删除探针', {
-      confirmButtonText: '删除',
-      cancelButtonText: '取消',
-      type: 'warning',
-    })
-  } catch (e) {
-    return
-  }
-  deleteBusy.value = true
-  try {
-    const res = await deleteClient(clientId)
-    if (res.code === 200) {
-      ElMessage.success('删除成功')
-      clearSelection()
-      await loadList()
-    } else {
-      ElMessage.error(res.message || '删除失败')
-    }
-  } catch (e) {
-    ElMessage.error('删除失败，请检查网络后重试。')
-  } finally {
-    deleteBusy.value = false
+function rowBusy(row: ClientListItemVO): boolean {
+  return busyClientIds.has(row.clientId)
+}
+
+function markBusy(clientId: string, busy: boolean): void {
+  if (busy) busyClientIds.add(clientId)
+  else busyClientIds.delete(clientId)
+}
+
+function onRowCommand(command: string, row: ClientListItemVO): void {
+  if (command === 'enable') {
+    void onEnable(row)
+  } else if (command === 'disable') {
+    void onDisable(row)
+  } else if (command === 'delete') {
+    void onDelete(row)
   }
 }
 
-// ------------------------------------------------------------------ 启停
-
-const opBusy = ref<string | null>(null)
-
+/** 启用：维持既有免二次确认语义，直接调 E6（CCFG-UI-018）。 */
 async function onEnable(row: ClientListItemVO): Promise<void> {
-  const key = `enable:${row.clientId}`
-  if (opBusy.value) return
-  opBusy.value = key
+  if (rowBusy(row)) return
+  markBusy(row.clientId, true)
   try {
     const res = await enableClient(row.clientId)
     if (res.code === 200) {
@@ -640,13 +596,14 @@ async function onEnable(row: ClientListItemVO): Promise<void> {
   } catch (e) {
     ElMessage.error('启用失败，请检查网络后重试。')
   } finally {
-    opBusy.value = null
+    markBusy(row.clientId, false)
   }
 }
 
+/** 停用：二次确认后调 E7；确认阶段即置忙，防止同一行重复提交（CCFG-REQ-098）。 */
 async function onDisable(row: ClientListItemVO): Promise<void> {
-  const key = `disable:${row.clientId}`
-  if (opBusy.value) return
+  if (rowBusy(row)) return
+  markBusy(row.clientId, true)
   try {
     await ElMessageBox.confirm(
       `确定停用探针 ${row.clientId} 吗？停用后该探针不再按启用状态命中。`,
@@ -658,9 +615,9 @@ async function onDisable(row: ClientListItemVO): Promise<void> {
       },
     )
   } catch (e) {
+    markBusy(row.clientId, false)
     return
   }
-  opBusy.value = key
   try {
     const res = await disableClient(row.clientId)
     if (res.code === 200) {
@@ -672,7 +629,36 @@ async function onDisable(row: ClientListItemVO): Promise<void> {
   } catch (e) {
     ElMessage.error('停用失败，请检查网络后重试。')
   } finally {
-    opBusy.value = null
+    markBusy(row.clientId, false)
+  }
+}
+
+/** 删除：二次确认后调 E5，成功按已生效条件重载（CCFG-DESIGN-043）。 */
+async function onDelete(row: ClientListItemVO): Promise<void> {
+  if (rowBusy(row)) return
+  markBusy(row.clientId, true)
+  try {
+    await ElMessageBox.confirm(`确定删除探针 ${row.clientId} 吗？该操作不可恢复。`, '删除探针', {
+      confirmButtonText: '删除',
+      cancelButtonText: '取消',
+      type: 'warning',
+    })
+  } catch (e) {
+    markBusy(row.clientId, false)
+    return
+  }
+  try {
+    const res = await deleteClient(row.clientId)
+    if (res.code === 200) {
+      ElMessage.success('删除成功')
+      await loadList()
+    } else {
+      ElMessage.error(res.message || '删除失败')
+    }
+  } catch (e) {
+    ElMessage.error('删除失败，请检查网络后重试。')
+  } finally {
+    markBusy(row.clientId, false)
   }
 }
 
@@ -895,7 +881,6 @@ async function submitDialog(): Promise<void> {
     if (res.code === 200) {
       ElMessage.success(isEdit ? '编辑成功' : '新增成功')
       dialogOpen.value = false
-      // 保存即数据集替换：loadList 成功入口统一清除选择（R1 §5.3）。
       await loadList()
     } else {
       ElMessage.error(res.message || (isEdit ? '编辑失败' : '新增失败'))
@@ -1123,10 +1108,14 @@ function onIdEnter(event: MouseEvent, row: ClientListItemVO): void {
   }
 }
 
+/** 异常标识完整文案经 Tooltip 可见：列宽不足被截断时仍可核对原始值（CCFG-UI-035）。 */
+function onAbnormalEnter(event: MouseEvent, row: ClientListItemVO): void {
+  const el = event.currentTarget
+  if (!(el instanceof HTMLElement)) return
+  scheduleTip(el, [{ text: abnormalBadgeText(row), tone: 'bad' }])
+}
+
 onMounted(() => {
-  // 空白点击取消选择：单个窗口级 click 监听（冒泡阶段），仅对保护集之外的非交互空白生效，
-  // 卸载时移除（R1 §5.3）。
-  window.addEventListener('click', onPageBlankClick)
   if (typeof ResizeObserver !== 'undefined') {
     rowObserver = new ResizeObserver((entries) => {
       for (const entry of entries) {
@@ -1147,7 +1136,6 @@ onMounted(() => {
 
 onBeforeUnmount(() => {
   clearTip()
-  window.removeEventListener('click', onPageBlankClick)
   if (resizeHandler) window.removeEventListener('resize', resizeHandler)
   rowObserver?.disconnect()
   rowObserver = null
@@ -1156,128 +1144,41 @@ onBeforeUnmount(() => {
 })
 </script>
 
+<!-- 主列表表格视觉模板：显式引用公共预设源（显式启用，非全局），
+     并由 el-table 根元素上的并列类 `lt-main-table` 启用（CCFG-REQ-099）。 -->
+<style scoped src="@/styles/list-table/list-table-visual.css"></style>
+
 <style scoped>
-.cc-page {
-  display: flex;
-  flex-direction: column;
-  gap: 12px;
-}
-
-.cc-header {
-  flex-shrink: 0;
-}
-
-.cc-title {
-  margin: 0;
-  font-size: 22px;
-  font-weight: 600;
-  color: #303133;
-}
-
-.cc-subtitle {
-  margin: 4px 0 0;
-  font-size: 13px;
-  color: #909399;
-}
-
-.cc-page-state {
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  justify-content: center;
-  gap: 6px;
-  padding: 40px 0;
-}
-
-.cc-page-state--error {
-  color: #909399;
-}
-
-.cc-page-state-title {
-  margin: 0;
-  font-size: 15px;
-  font-weight: 600;
-  color: #303133;
-}
-
-.cc-page-state-desc {
-  margin: 0 0 6px;
-  font-size: 13px;
-  color: #909399;
-}
-
-/* 查询区：独立卡片，外部标签 + 控件（CCFG-UI-002/003，无搜索图标） */
-.cc-query {
-  display: flex;
-  align-items: center;
-  flex-wrap: wrap;
-  gap: 12px 16px;
-  padding: 14px 16px;
-  border: 1px solid #e4e7ed;
-  border-radius: 8px;
-  background: #fff;
-}
-
-.cc-query-item {
+/* 页面外壳、查询区容器、查询/重置动作与结果卡片盒模型全部由公共层提供
+   （.ql-page / .ql-q-panel / .ql-actions / .ql-result-panel）；本文件只保留 Feature 专属
+   字段组、结果区摘要、错误槽内容与表格样式，不复制公共层等价 CSS。 */
+.cc-q-group {
   display: inline-flex;
   align-items: center;
-  gap: 8px;
+  gap: 6px;
+  flex: 0 0 auto;
 }
 
-.cc-query-label {
-  flex-shrink: 0;
-  font-size: 14px;
-  font-weight: 500;
-  color: #303133;
+.cc-q-label {
+  flex: 0 0 auto;
+  font-size: 13px;
+  color: var(--el-text-color-regular);
+  white-space: nowrap;
 }
 
-.cc-query-keyword {
+.cc-q-keyword {
   width: 300px;
 }
 
-.cc-query-keyword :deep(.el-input__wrapper) {
-  height: 36px;
-}
-
-.cc-query-status {
+.cc-q-status {
   width: 150px;
 }
 
-.cc-query-status :deep(.el-select__wrapper) {
-  min-height: 36px;
-}
-
-.cc-query-actions {
-  display: inline-flex;
-  align-items: center;
-  gap: 10px;
-  margin-left: 4px;
-}
-
-.cc-query-btn {
-  height: 36px;
-}
-
-/* 独立表格卡片：工具栏 + 表格（CCFG-UI-002/004/005） */
-.cc-table-card {
-  border: 1px solid #e4e7ed;
-  border-radius: 8px;
-  background: #fff;
-}
-
-.cc-toolbar {
-  display: flex;
-  align-items: center;
-  justify-content: space-between;
-  gap: 8px;
-  padding: 10px 16px;
-  border-bottom: 1px solid #e4e7ed;
-}
-
-.cc-toolbar-left {
-  display: flex;
-  align-items: center;
-  gap: 10px;
+/* 结果区左上角摘要：共 n 条 */
+.cc-result-count {
+  font-size: 14px;
+  font-weight: 600;
+  color: var(--el-text-color-primary);
 }
 
 .cc-btn-icon {
@@ -1285,81 +1186,93 @@ onBeforeUnmount(() => {
   font-size: 14px;
 }
 
-.cc-btn-delete--armed {
-  color: #f56c6c;
-  border-color: #f56c6c;
-  background: #fff;
-}
-
-.cc-btn-delete--armed:hover,
-.cc-btn-delete--armed:focus {
-  color: #fff;
-  background: #f56c6c;
-  border-color: #f56c6c;
-}
-
-.cc-selected {
-  margin-left: 4px;
-  font-size: 13px;
-  color: #606266;
-}
-
-.cc-refresh-warn {
+/* 错误槽内容：失败提示 + 重试，不出现“刷新/重新加载”等本页已取消的刷新语义控件 */
+.cc-load-error {
   display: flex;
   align-items: center;
   gap: 12px;
-  padding: 6px 10px;
-  border: 1px solid #e6a23c;
-  border-radius: 6px;
-  background: #fdf6ec;
   font-size: 13px;
-  color: #b88230;
+  color: var(--el-color-danger);
 }
 
-.cc-refresh-text {
-  flex: 1;
+.cc-load-error-text {
+  flex: 0 1 auto;
   min-width: 0;
 }
 
-/* 选中行视觉：明显但克制的浅蓝背景 + 首单元格左侧约 3px 蓝色强调线（inset box-shadow，
-   不改布局）；选中态不被普通悬停覆盖，普通悬停比选中更淡；键盘聚焦不吞（R1 §5.2） */
+/* 行高约 60px（CCFG-UI-005）；普通行悬停与双击编辑由 Element Plus 与 @row-dblclick 承担，
+   本页已无行选中态，故不保留任何选中/hover 覆盖规则 */
 .cc-table :deep(.el-table__row) {
   height: 60px;
 }
 
-.cc-table :deep(.el-table__body tr.el-table__row.cc-row--selected > td.el-table__cell) {
-  background-color: #ecf5ff;
+/* 序号列：展示派生值，按当前展示数组 $index + 1 连续编号（CCFG-REQ-100） */
+.cc-seq {
+  font-size: 13px;
+  color: #71717a;
+  font-variant-numeric: tabular-nums;
 }
 
-.cc-table :deep(.el-table__body tr.el-table__row.cc-row--selected:hover > td.el-table__cell) {
-  background-color: #ecf5ff;
-}
-
-.cc-table :deep(
-  .el-table__body tr.el-table__row.cc-row--selected > td.el-table__cell:first-child
-) {
-  box-shadow: inset 3px 0 0 #409eff;
-}
-
-.cc-table :deep(
-  .el-table__body tr.el-table__row:not(.cc-row--selected):hover > td.el-table__cell
-) {
-  background-color: #f2f6ff;
+/* 探针 ID 单元格：ID 文本 + 三态标识同行；标识不得挤压/覆盖最右固定“操作”列 */
+.cc-id-cell {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  min-width: 0;
+  overflow: hidden;
 }
 
 .cc-id {
-  display: inline-block;
-  max-width: 100%;
+  flex: 0 1 auto;
+  min-width: 0;
   overflow: hidden;
   text-overflow: ellipsis;
   white-space: nowrap;
-  vertical-align: bottom;
   cursor: pointer;
 }
 
 .cc-id:focus-visible {
   outline: 1px solid var(--el-color-primary);
   outline-offset: 1px;
+}
+
+/* 停用标识：与数据源管理主列表“数据源 ID”后的“停用”标识同一视觉语言（CCFG-UI-031） */
+.cc-inactive-mark {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  flex: 0 0 auto;
+  box-sizing: border-box;
+  padding: 0 6px;
+  height: 20px;
+  border-radius: 4px;
+  background: #fee2e2;
+  color: #991b1b;
+  font-size: 11px;
+  font-weight: 700;
+  line-height: 1;
+  white-space: nowrap;
+}
+
+/* 历史异常标识：红色、固定文案 `异常：{原始值}`；文字本身承载语义，不只靠颜色（CCFG-REQ-102）。
+   列宽不足时随本列省略号截断，完整值经单实例 Tooltip 可见（CCFG-UI-035）。 */
+.cc-abnormal-mark {
+  display: inline-block;
+  flex: 0 1 auto;
+  min-width: 0;
+  box-sizing: border-box;
+  max-width: 100%;
+  padding: 0 6px;
+  height: 20px;
+  border-radius: 4px;
+  background: #fee2e2;
+  color: #b91c1c;
+  font-size: 11px;
+  font-weight: 700;
+  line-height: 20px;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
 }
 
 .cc-desc {
@@ -1461,6 +1374,19 @@ onBeforeUnmount(() => {
   background: #d9ecff;
 }
 
+/* 最右固定“操作”列唯一文字入口“更多” */
+.cc-more-link {
+  display: inline-flex;
+  align-items: center;
+  gap: 2px;
+  cursor: pointer;
+  color: var(--el-color-primary);
+}
+
+.cc-more-icon {
+  font-size: 12px;
+}
+
 /* 页面级单实例悬停 Tooltip：Teleport 到 body，pointer-events:none（CCFG-UI-005/008） */
 .cc-single-tip {
   position: fixed;
@@ -1536,20 +1462,6 @@ onBeforeUnmount(() => {
   margin-left: 2px;
   font-size: 12px;
   color: #e6a23c;
-}
-
-.cc-status-cell {
-  display: inline-flex;
-  align-items: center;
-  gap: 10px;
-}
-
-.cc-state-tag {
-  cursor: default;
-}
-
-.cc-op {
-  padding: 0;
 }
 
 .cc-dialog :deep(.el-dialog__body) {
@@ -1733,5 +1645,28 @@ onBeforeUnmount(() => {
   margin: 10px 0 0;
   font-size: 13px;
   color: #f56c6c;
+}
+</style>
+
+<!-- “更多”下拉菜单（Teleport 到 body，故必须为全局作用域并只限定在本页 popper-class 命名空间内）：
+     条目顺序为先“停用/启用”、后“删除”；“停用”为警告语义、“删除”为危险语义（CCFG-UI-032）。
+     下拉内不出现状态标签、不出现批量操作。 -->
+<style>
+.cc-more-popper .el-dropdown-menu__item.cc-more-danger {
+  color: var(--el-color-danger);
+}
+
+.cc-more-popper .el-dropdown-menu__item.cc-more-danger.is-disabled,
+.cc-more-popper .el-dropdown-menu__item.cc-more-danger.is-disabled:hover {
+  color: var(--el-color-danger-light-5);
+}
+
+.cc-more-popper .el-dropdown-menu__item.cc-more-warning {
+  color: #b45309;
+}
+
+.cc-more-popper .el-dropdown-menu__item.cc-more-warning.is-disabled,
+.cc-more-popper .el-dropdown-menu__item.cc-more-warning.is-disabled:hover {
+  color: #f0b775;
 }
 </style>

@@ -648,3 +648,51 @@ client_config_page_selective_integration_approved_reviewed_commit=5066c761f8a940
   `2026-09-21` 及 `2026-09-22` 草案授权与交叉引用各历史记录。
 - 本条**不**改变本文件的逐页评估结论、推荐迁移顺序、每页独立任务要求、
   已接受参考页保护与冻结标记计数。
+
+## 探针端管理列表页页面级调整实现记录（追加记录，2026-09-23）
+
+### 实施事实
+
+- 实施任务：`CLIENT-CONFIG-QUERY-LIST-AND-LIST-TABLE-ADJUSTMENT-IMPLEMENTATION-001`（前端实现任务）。
+- 起始提交：`40d28125de5d7977936a35bca193ccf4489d65b7`（本页页面调整基线获批后由独立实现任务承接）。
+- 实施对象：`探针端管理`（`/config/client`）**单页**的**页面级选择性接入**实现。
+  实际发生页面层接入的前端文件仅
+  `frontend/src/views/client-config/ClientConfigPage.vue` 与
+  `frontend/src/views/client-config/ClientConfigPage.spec.ts`（两个文件）。
+- 接入内容：`QueryListPageShell` / `QueryListQueryPanel` / `QueryListActions` /
+  `QueryListResultPanel` 四个页面层公共组件；查询区保留“探针信息”与“探针状态”，
+  查询/重置由 `QueryListActions` 承载。
+- **本页仍明确不接入刷新能力**：未接入 `QueryListRefreshToolbar`，未新增倒计时、
+  最近刷新时间或任何等价刷新控件；写操作后重载走既有查询数据流。
+
+### 本页实现记录（权威事实）
+
+```text
+client_config_page_selective_integration_page_adjustment_baseline_status=APPROVED
+client_config_page_selective_integration_authorization_status=UNCHANGED_GRANTED_BY_PROJECT_OWNER_FOR_THIS_PAGE_ONLY
+client_config_page_selective_integration_implementation_status=IMPLEMENTED_PENDING_CHATGPT_REVIEW
+client_config_page_no_refresh_capability=YES
+client_config_page_selective_integration_acceptance_status=ALL_NOT_RUN
+client_config_page_selective_integration_implementation_task=CLIENT-CONFIG-QUERY-LIST-AND-LIST-TABLE-ADJUSTMENT-IMPLEMENTATION-001
+client_config_page_selective_integration_implementation_base_commit=40d28125de5d7977936a35bca193ccf4489d65b7
+```
+
+### 边界（明确不得）
+
+- 实现的**只是**该页的页面层接入；**不**代表该页已目测、已验收或可上线：
+  该页实现状态为 `IMPLEMENTED_PENDING_CHATGPT_REVIEW`、
+  目测状态仍 `NOT_PERFORMED`、`CCFG-AC-001~089`（含 `077~089`）仍全部 `NOT_RUN`。
+- 本页**仍不接入**刷新能力：本次实现**不**改变“刷新工具栏为可选（OPT-IN）”的模板结论，
+  也**不**推导出刷新工具栏已成为任何页面的必选能力。
+- 本页仍是包含新增、编辑、删除、启用、停用的配置管理页：
+  **Feature 专属写操作、弹窗、业务校验、行级操作与并发语义仍由该 Feature 自行承担**，
+  **不**被页面层模板接管。
+- **不得**把本页接入写成模板已迁移：模板级全局状态保持不变——
+  `page_migration_status` 保持 `NOT_STARTED`、
+  `page_migration_authorization_status` 保持 `NOT_GRANTED`、
+  `pilot_page_selection_status` 保持 `NOT_DECIDED`。
+- **不得**写成“所有页面已授权”或“试点页面已选定”。
+- **不得**改写 §1.1 / §5 的通用排除原则、`2026-09-17`、`2026-09-18/19`、
+  `2026-09-21` 及各 `2026-09-22` 授权/批准/交叉引用历史记录。
+- 本条**不**改变本文件的逐页评估结论、推荐迁移顺序、每页独立任务要求、
+  已接受参考页保护与冻结标记计数。
