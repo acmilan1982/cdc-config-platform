@@ -32,7 +32,7 @@
 | 需求→验收覆盖 | 103/103（100%） |
 | 页面级授权 | `/config/client` 的页面级选择性接入授权**已获得**（查询列表页模板：仅该单页且明确不启用刷新能力；列表表格视觉模板：仅该单页主列表）；两套模板的模板级全局迁移授权仍未授予；本次批准收口**不新增、不扩大**该授权范围，页面级授权与基线批准**均不等于**实现已获授权或已完成 |
 | `PENDING_USER_CONFIRMATION` | 0（R0 登记的 1 项行选择待确认已由项目负责人 R1 决定关闭，见 `REQUIREMENTS.md` §11） |
-| 下一入口 | `CHATGPT_REMOTE_BASELINE_APPROVAL_CLOSEOUT_REVIEW`（**不是**直接进入实现或验收执行；历史上的 `CHATGPT_REMOTE_BASELINE_R1_REVIEW` 入口已被取代） |
+| 下一入口 | `CHATGPT_REMOTE_BASELINE_APPROVAL_CLOSEOUT_R2_REVIEW`（ChatGPT 远程独立复审本次 R2 状态/入口纠错的结果提交；**不是**直接进入实现或验收执行；历史入口 `CHATGPT_REMOTE_BASELINE_APPROVAL_CLOSEOUT_REVIEW`（已完成）与更早的 `CHATGPT_REMOTE_BASELINE_R1_REVIEW` 均已被取代） |
 
 ### 1.4 本轮修订的既有用例（R1 修正后的完整清单）
 
@@ -55,7 +55,7 @@
 | 批准对象 | `CCFG-AC-077~089`（13 条新增）及本轮对既有验收（`CCFG-AC-002/009/016/017/018/019/020/021/022/023/025/026/032/082/087/088/089`）的定向修订；R1 冻结的两项项目负责人决定（取消行单选/选中高亮/“已选择：{探针ID}”；异常 `FG_ACTIVE` 红色 `异常：{原始值}`，异常行“更多”仅含“停用”和“删除”）。**仅限** `/config/client` 单页，**不**扩大到 API、数据库契约、其他页面或模板级全局迁移 |
 | 状态变化 | 仅 `adjustment_baseline_status` 由 `DRAFT_PENDING_USER_REVIEW` 变为 `APPROVED`（并记录 `adjustment_approval_status=APPROVED_BY_PROJECT_OWNER`）；验收用例本身**零变化** |
 | 保持不变的计数与状态 | `CCFG-AC-001~089`（89 条）编号连续唯一、定义行逐字节零变化；**89 条执行状态全部保持 `NOT_RUN`**；覆盖 103/103；`PENDING_USER_CONFIRMATION=0`；`adjustment_implementation_status=NOT_STARTED`；`formal_acceptance_execution_status=NOT_RUN`。**批准的是验收标准，不是验收执行结果** |
-| 下一入口 | `CHATGPT_REMOTE_BASELINE_APPROVAL_CLOSEOUT_REVIEW`（只有该远程复审通过后，才进入独立页面调整实现任务） |
+| 下一入口 | 2026-09-22 批准收口时的**历史入口**：`CHATGPT_REMOTE_BASELINE_APPROVAL_CLOSEOUT_REVIEW`（该远程复审已完成并返回 `CHANGES_REQUIRED`）；**当前下一入口**为 `CHATGPT_REMOTE_BASELINE_APPROVAL_CLOSEOUT_R2_REVIEW`（只有该复审通过后，才进入独立页面调整实现任务） |
 
 ### 1.1 批准信息（2026-09-03 旧口径批准历史；本轮并发口径调整不在该次批准范围内，见 §1.2）
 

@@ -62,7 +62,7 @@
 | 本轮定向修订的既有需求 | `CCFG-REQ-011/020/021/022/023/025/028/029/034/042`（见各条内联标记与 §10 变更记录） |
 | 受影响的验收用例 | 见 `ACCEPTANCE.md`（修订既有用例 + 新增 `CCFG-AC-077~089`，全部 `NOT_RUN`） |
 | `PENDING_USER_CONFIRMATION` | 0（R0 登记的 1 项行选择待确认事项已由项目负责人 R1 决定关闭，见 §11） |
-| 下一入口 | `CHATGPT_REMOTE_BASELINE_APPROVAL_CLOSEOUT_REVIEW`（ChatGPT 远程独立复审本次批准收口；**不是**直接进入实现；历史上的 `CHATGPT_REMOTE_BASELINE_R1_REVIEW` 入口已被取代） |
+| 下一入口 | `CHATGPT_REMOTE_BASELINE_APPROVAL_CLOSEOUT_R2_REVIEW`（ChatGPT 远程独立复审本次 R2 状态/入口纠错的结果提交；**不是**直接进入实现；历史入口 `CHATGPT_REMOTE_BASELINE_APPROVAL_CLOSEOUT_REVIEW`（2026-09-22 批准收口设定，已完成并返回 `CHANGES_REQUIRED`）与更早的 `CHATGPT_REMOTE_BASELINE_R1_REVIEW` 均已被取代） |
 
 **旧实现事实不在本轮被改写**：本轮任务开始前，本 Feature 的实际实现状态为 `IMPLEMENTED_PENDING_USER_ACCEPTANCE`（既有实现已完成、尚待项目负责人验收，来源见 `reports/CLIENT-CONFIG-LIST-UI-ADJUSTMENT-001-R2.md` 与 `reports/CLIENT-CONFIG-USER-ACCEPTANCE-PREPARATION-001-R1.md`）；该事实保持原样记录，本轮不抹除、不覆盖，也不因为它存在而把本轮调整基线视为“已实现”。既有 76 条验收用例（`CCFG-AC-001~076`）在本轮**仍全部为 `NOT_RUN`**，本轮新增用例同样 `NOT_RUN`。
 
@@ -81,7 +81,7 @@
 | 批准对象 | `CCFG-REQ-091~103` 及本轮对既有需求（`CCFG-REQ-011/020/021/022/023/025/028/029/034/042`）的定向修订；R1 冻结的两项项目负责人决定（取消行单选/选中高亮/“已选择：{探针ID}”；异常 `FG_ACTIVE` 红色 `异常：{原始值}`，异常行“更多”仅含“停用”和“删除”）。**仅限** `/config/client` 单页，**不**扩大到 API、数据库契约、其他页面或模板级全局迁移 |
 | 状态变化 | 仅 `adjustment_baseline_status` 由 `DRAFT_PENDING_USER_REVIEW` 变为 `APPROVED`（并记录 `adjustment_approval_status=APPROVED_BY_PROJECT_OWNER`）；`adjustment_approval_date=2026-09-22`；`adjustment_approved_reviewed_commit=5066c761f8a9400d5841222cb73b0c03f56a82d0` |
 | 保持不变的计数与状态 | 需求编号 `CCFG-REQ-001~103`（103 条）与业务定义行零变化；验收 89 条全部 `NOT_RUN`；覆盖 103/103；`PENDING_USER_CONFIRMATION=0`；`adjustment_implementation_status=NOT_STARTED` |
-| 下一入口 | `CHATGPT_REMOTE_BASELINE_APPROVAL_CLOSEOUT_REVIEW`（只有该远程复审通过后，才进入独立页面调整实现任务） |
+| 下一入口 | 2026-09-22 批准收口时的**历史入口**：`CHATGPT_REMOTE_BASELINE_APPROVAL_CLOSEOUT_REVIEW`（该远程复审已完成并返回 `CHANGES_REQUIRED`）；**当前下一入口**为 `CHATGPT_REMOTE_BASELINE_APPROVAL_CLOSEOUT_R2_REVIEW`（只有该复审通过后，才进入独立页面调整实现任务） |
 
 本文件区分以下分层，避免把“当前事实”“本 Feature 目标”“批准后待同步项”混淆：
 

@@ -29,7 +29,7 @@ adjustment_approved_reviewed_commit=5066c761f8a9400d5841222cb73b0c03f56a82d0
 adjustment_implementation_status=NOT_STARTED
 formal_acceptance_execution_status=NOT_RUN
 PENDING_USER_CONFIRMATION=0
-next_entry=CHATGPT_REMOTE_BASELINE_APPROVAL_CLOSEOUT_REVIEW
+next_entry=CHATGPT_REMOTE_BASELINE_APPROVAL_CLOSEOUT_R2_REVIEW
 ```
 
 - **历史状态与当前状态必须区分（不得删除或伪装 R0/R1/R2/R3 记录）**：本轮新增/修订条款在批准前曾为 `DRAFT_PENDING_USER_REVIEW`；R1 阶段 ChatGPT 对 R0 的复审结论为 `CHANGES_REQUIRED`、R2 阶段对 R1 为 `CHANGES_REQUIRED`、R3 阶段对 R2 为 `CHANGES_REQUIRED`，R3 结果随后获 ChatGPT `APPROVED` 并由项目负责人批准。当前 `adjustment_baseline_status=APPROVED` 只表示**页面调整基线**获批，**不**表示页面已实现、已目测、已测试或验收已通过。
@@ -49,7 +49,7 @@ next_entry=CHATGPT_REMOTE_BASELINE_APPROVAL_CLOSEOUT_REVIEW
 | 批准对象 | `CCFG-REQ-091~103` 及本轮对既有需求的定向修订；`CCFG-AC-077~089` 及本轮对既有验收的定向修订；`CCFG-DESIGN-038~046` 及相关定向修订；`CCFG-UI-027~035` 及相关定向修订；R1 冻结的两项项目负责人决定（取消行单选/选中高亮/“已选择：{探针ID}”；异常 `FG_ACTIVE` 红色 `异常：{原始值}`，异常行“更多”仅含“停用”和“删除”）。**仅限** `/config/client` 单页，**不**扩大到 API、数据库契约、其他页面或模板级全局迁移 |
 | 状态变化 | 仅 `adjustment_baseline_status` 由 `DRAFT_PENDING_USER_REVIEW` 变为 `APPROVED`（并记录 `adjustment_approval_status=APPROVED_BY_PROJECT_OWNER`） |
 | 保持不变的计数与状态 | 需求/验收/设计/UI 定义 103/89/46/35；89 条验收全部 `NOT_RUN`；覆盖 103/103；`PENDING_USER_CONFIRMATION=0`；`adjustment_implementation_status=NOT_STARTED`；`formal_acceptance_execution_status=NOT_RUN` |
-| 下一入口 | `CHATGPT_REMOTE_BASELINE_APPROVAL_CLOSEOUT_REVIEW`（只有该远程复审通过后，才进入独立页面调整实现任务） |
+| 下一入口 | 2026-09-22 批准收口时的**历史入口**：`CHATGPT_REMOTE_BASELINE_APPROVAL_CLOSEOUT_REVIEW`（该远程复审已完成并返回 `CHANGES_REQUIRED`，由 R1/R2 纠错任务承接）；**当前下一入口**为 `CHATGPT_REMOTE_BASELINE_APPROVAL_CLOSEOUT_R2_REVIEW`（只有该复审通过后，才进入独立页面调整实现任务） |
 
 ## 2. 文档导航
 
@@ -100,4 +100,4 @@ next_entry=CHATGPT_REMOTE_BASELINE_APPROVAL_CLOSEOUT_REVIEW
 
 设计并发口径调整任务 `CLIENT-CONFIG-DESIGN-CONCURRENCY-ADJUSTMENT-001` 已于 2026-09-04 完成（纯文档）：从四份设计草案（`DESIGN.md`/`API.md`/`UI.md`/`DATABASE.md`）中移除已过时的 `LOCK TABLE ... WAIT 5`、`ORA-30006→50050` 及并发“最多一个成功”等设计，按已重新批准的需求并发口径调整设计并发表述（需求与验收已随本轮并发口径调整重新批准，ChatGPT 对 R1 结果提交 `f2a4d7d...` 正式复审 `APPROVED`，项目负责人于 2026-09-04 明确回复“批准”，`REQUIREMENTS.md`/`ACCEPTANCE.md` 已收口为 `APPROVED`）。设计并发口径调整结果已于 2026-09-04 完成正式设计复审与批准收口：ChatGPT 对提交 `ba7c5e9...` 的设计并发口径调整结果正式复审（`CHATGPT_FORMAL_DESIGN_CONCURRENCY_ADJUSTMENT_REVIEW`）结论 `APPROVED`，项目负责人于 2026-09-04 明确回复“批准”，四份设计文档经批准收口任务 `CLIENT-CONFIG-DESIGN-CONCURRENCY-ADJUSTMENT-APPROVAL-001` 收口为 `APPROVED`、`PENDING_USER_CONFIRMATION=0`，整体标记为 `APPROVED_READY_FOR_IMPLEMENTATION`（对应报告见 §2 导航）。下一入口为 `CLIENT_CONFIG_IMPLEMENTATION`：以已批准的需求（90 条）、验收（76 条、全部 `NOT_RUN`）与四份设计（37/20/26/22）为唯一业务基线进入实现阶段；该实现随后已完成（见 §4 既有实现事实 `IMPLEMENTED_PENDING_USER_ACCEPTANCE`），76 条验收保持全部 `NOT_RUN`；不得把已批准设计写成测试已通过或验收已通过。
 
-**当前下一入口（2026-09-22 批准收口起，覆盖以上历史入口）**：`CHATGPT_REMOTE_BASELINE_APPROVAL_CLOSEOUT_REVIEW`。本轮页面级调整基线（`CLIENT-CONFIG-QUERY-LIST-AND-LIST-TABLE-ADJUSTMENT-BASELINE-001`，经 R1 修订、R2/R3 证据纠错）已由项目负责人于 2026-09-22 批准（`adjustment_baseline_status=APPROVED`、`adjustment_approval_status=APPROVED_BY_PROJECT_OWNER`，批准依据见 §1.2），下一步须由 ChatGPT 从远程 Git 对本次批准收口结果做独立复审；**只有该复审通过后**，才进入独立页面调整实现任务。**不得**跳过该复审直接进入实现，**不得**把基线批准写成页面已实现、已测试、已目测或验收已通过，**不得**执行正式验收或最终接受。本轮调整实现状态为 `adjustment_implementation_status=NOT_STARTED`，本轮新增 `CCFG-AC-077~089` 与既有 76 条一致保持 `NOT_RUN`（合计 89 条全部 `NOT_RUN`）。页面级选择性接入授权**已授予** `/config/client`，本次批准收口**不新增、不扩大**该授权范围，该授权与基线批准**均不等于**本轮实现已授权或已完成。历史入口 `CHATGPT_REMOTE_BASELINE_R1_REVIEW`（2026-09-22 R1 阶段）已被本入口取代，对应 R1 记录保留不改写。
+**当前下一入口（R2 纠错起，覆盖以上历史入口）**：`CHATGPT_REMOTE_BASELINE_APPROVAL_CLOSEOUT_R2_REVIEW`（对象为本次 R2 状态/入口纠错的结果提交；该提交 SHA 由 ChatGPT 从远程 Git 取得，本文件不预造）。本轮页面级调整基线（`CLIENT-CONFIG-QUERY-LIST-AND-LIST-TABLE-ADJUSTMENT-BASELINE-001`，经 R1 修订、R2/R3 证据纠错）已由项目负责人于 2026-09-22 批准（`adjustment_baseline_status=APPROVED`、`adjustment_approval_status=APPROVED_BY_PROJECT_OWNER`，批准依据见 §1.2）；其后批准收口复审（`CHATGPT_REMOTE_BASELINE_APPROVAL_CLOSEOUT_REVIEW`，即 2026-09-22 批准收口设定的入口）已执行并返回 `CHANGES_REQUIRED`，由 R1、R2 纠错任务承接，故该入口属**历史入口**、已被本入口取代。下一步须由 ChatGPT 从远程 Git 对本 R2 纠错结果做独立复审；**只有该复审通过后**，才进入独立页面调整实现任务。**不得**跳过该复审直接进入实现，**不得**把基线批准写成页面已实现、已测试、已目测或验收已通过，**不得**执行正式验收或最终接受。本轮调整实现状态为 `adjustment_implementation_status=NOT_STARTED`，本轮新增 `CCFG-AC-077~089` 与既有 76 条一致保持 `NOT_RUN`（合计 89 条全部 `NOT_RUN`）。页面级选择性接入授权**已授予** `/config/client`，本次批准收口**不新增、不扩大**该授权范围，该授权与基线批准**均不等于**本轮实现已授权或已完成。更早的历史入口 `CHATGPT_REMOTE_BASELINE_R1_REVIEW`（2026-09-22 R1 阶段）保留不改写。

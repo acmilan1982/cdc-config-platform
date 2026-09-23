@@ -41,7 +41,7 @@
 | 页面级选择性接入授权 | **已获项目负责人授权**：`/config/client` 页面级选择性接入查询列表页模板与列表表格视觉模板（查询列表页模板侧本页**不**接入刷新工具栏；列表表格视觉模板侧本页仅覆盖**主列表**，不含新增/编辑弹窗与弹窗内控件）。该授权为**页面级授权事实**，本轮批准收口**不新增、不扩大**该授权，也**不**等于本轮实现已完成；模板级全局迁移状态**未变**，其他页面**未获**授权 |
 | 本轮新增界面编号 | `CCFG-UI-027 ~ CCFG-UI-035`（9 条，见 §15） |
 | 本轮定向修订的既有界面项 | `CCFG-UI-004/005/006/018/022/024`（保留原文并标注被 `CCFG-UI-027~035` 取代/收窄的部分） |
-| 本轮下一入口 | `CHATGPT_REMOTE_BASELINE_APPROVAL_CLOSEOUT_REVIEW`（原 `CHATGPT_REMOTE_BASELINE_R1_REVIEW` 已随 R1/R2/R3 复审闭环；基线经 ChatGPT 远程 R3 复审 `APPROVED` 后由项目负责人于 2026-09-22 批准） |
+| 本轮下一入口 | `CHATGPT_REMOTE_BASELINE_APPROVAL_CLOSEOUT_R2_REVIEW`（ChatGPT 远程独立复审本次 R2 状态/入口纠错的结果提交；历史入口 `CHATGPT_REMOTE_BASELINE_APPROVAL_CLOSEOUT_REVIEW` 已完成并返回 `CHANGES_REQUIRED`，原 `CHATGPT_REMOTE_BASELINE_R1_REVIEW` 已随 R1/R2/R3 复审闭环；基线经 ChatGPT 远程 R3 复审 `APPROVED` 后由项目负责人于 2026-09-22 批准） |
 | 配套文档 | `DESIGN.md`、`API.md`、`DATABASE.md` |
 
 R1 界面修订目标（不改已批准 90 条需求与 76 条验收、不进入代码实现、不做设计批准收口）：采集数据源列“直接显示前三项”明确为非持久化投影且不原地修改接口数组（`R1-02`）；红色历史异常标签与编辑回显覆盖 `CATEGORY_MISMATCH`/`TYPE_MISMATCH`（`R1-06`）；新增含逗号歧义行与历史 NULL 描述的展示/编辑契约（`R1-07/R1-08`）。
@@ -210,7 +210,7 @@ R1 已将原 1 项待确认清零。项目负责人本轮已明确决定并冻�
 | 批准对象 | `CCFG-UI-027~035`（含 R1 两项冻结决定：行选中能力整体取消；历史异常 `FG_ACTIVE` 紧跟探针 ID 的红色 `异常：{原始值}`）及本轮定向修订口径 |
 | 状态变化 | 仅 `adjustment_baseline_status`：`DRAFT_PENDING_USER_REVIEW` → `APPROVED`；新增 `adjustment_approval_status=APPROVED_BY_PROJECT_OWNER` |
 | 保持不变的计数与状态 | `CCFG-UI-001~035` 共 35 条（连续、唯一）；`CCFG-AC-001~089` 共 89 条仍全部 `NOT_RUN`；需求 103 条、验收 89 条、设计 46 条、界面 35 条；`existing_feature_implementation_status=IMPLEMENTED_PENDING_USER_ACCEPTANCE`；`adjustment_implementation_status=NOT_STARTED`；`formal_acceptance_execution_status=NOT_RUN`；`PENDING_USER_CONFIRMATION=0`。35 条界面定义行相对批准提交逐字零差异，仅状态、批准元数据与变更记录变化 |
-| 下一入口 | `CHATGPT_REMOTE_BASELINE_APPROVAL_CLOSEOUT_REVIEW`（通过后方可进入独立实现任务；本收口**不**启动实现） |
+| 下一入口 | 2026-09-22 批准收口时的**历史入口**：`CHATGPT_REMOTE_BASELINE_APPROVAL_CLOSEOUT_REVIEW`（该远程复审已完成并返回 `CHANGES_REQUIRED`）；**当前下一入口**为 `CHATGPT_REMOTE_BASELINE_APPROVAL_CLOSEOUT_R2_REVIEW`（通过后方可进入独立实现任务；本收口**不**启动实现） |
 
 批准对象**仅为本轮页面调整基线**，**不**代表代码已实现、已测试、已目测或验收已执行通过；
 `API.md`/`DATABASE.md` 本轮**未**修改；模板级全局迁移状态**未变**。
