@@ -37,6 +37,7 @@ import {
   updateClient,
 } from '@/api/clientConfig'
 import ClientConfigPage from '@/views/client-config/ClientConfigPage.vue'
+import { CHIP_BOX } from '@/views/client-config/listLayout'
 
 const mockedList = vi.mocked(fetchClientList)
 const mockedOptions = vi.mocked(fetchDataSourceOptions)
@@ -52,9 +53,10 @@ const DS_PAGE_PATH = resolve(process.cwd(), 'src/views/data-source/DataSourcePag
 /** 本页 SFC 源码：测试环境不注入 SFC 样式，公共预设引入方式与页面令牌只能按源码静态结构受检。 */
 const SFC_SOURCE = readFileSync(PAGE_PATH, 'utf-8')
 
-/** 提取某个选择器的声明块（首个匹配）。 */
+/** 提取某个选择器的声明块（首个匹配）。选择器按字面量处理，正则元字符全部转义。 */
 function cssBlock(source: string, selector: string): string {
-  const m = source.match(new RegExp(`${selector.replace(/\./g, '\\.')}\\s*\\{([^}]*)\\}`, 'm'))
+  const escaped = selector.replace(/[.*+?^${}()|[\]\\]/g, '\\$&')
+  const m = source.match(new RegExp(`${escaped}\\s*\\{([^}]*)\\}`, 'm'))
   return m ? m[1] : ''
 }
 
@@ -66,6 +68,17 @@ function declarations(block: string): string[] {
     .filter((d) => d.length > 0)
     .sort()
 }
+
+/** 取某声明块中单个属性的值（首个匹配），用于跨组件“同款视觉”的逐属性比较。 */
+function declValue(block: string, prop: string): string {
+  const m = block.match(new RegExp(`(?:^|;)\\s*${prop}\\s*:\\s*([^;]+)`, 'm'))
+  return m ? m[1].trim() : ''
+}
+
+/** 本页 SFC 样式块源码与参考页（数据源管理）SFC 样式块源码。 */
+const DS_PAGE_SOURCE = readFileSync(DS_PAGE_PATH, 'utf-8')
+/** 参考页“角色”标签的盒模型声明块来源（`.data-table :deep(.el-tag)`）。 */
+const DS_TAG_BLOCK = cssBlock(DS_PAGE_SOURCE, '.data-table :deep(.el-tag)')
 
 // ------------------------------------------------------------------ fixtures
 
@@ -567,7 +580,7 @@ describe('主列表六列顺序、序号与无选中机制（CCFG-REQ-100、CCFG
     wrapper.unmount()
   })
 
-  it('组件：最后一列为最右固定“操作”列，唯一文字入口为“更多”', async () => {
+  it('组件：最后一列为最右固定“操作”列，唯一入口为水平三点图标而非“更多”文字', async () => {
     const wrapper = await mountPage([enabledRow, disabledRow])
     const columns = wrapper.findAllComponents({ name: 'ElTable' })[0].findAllComponents({
       name: 'ElTableColumn',
@@ -575,7 +588,14 @@ describe('主列表六列顺序、序号与无选中机制（CCFG-REQ-100、CCFG
     const last = columns[columns.length - 1]
     expect(last.props('label')).toBe('操作')
     expect(last.props('fixed')).toBe('right')
-    expect(wrapper.findAll('.cc-more-link').map((l) => l.text().trim())).toEqual(['更多', '更多'])
+    const links = wrapper.findAll('.cc-more-link')
+    expect(links).toHaveLength(2)
+    // 全部行为图标入口，不存在仍显示“更多”文字的过渡态（CCFG-REQ-110/CCFG-UI-040）
+    for (const link of links) {
+      expect(link.text().trim()).toBe('')
+      expect(link.find('.cc-more-icon').exists()).toBe(true)
+    }
+    expect(wrapper.text()).not.toContain('更多')
     wrapper.unmount()
   })
 
@@ -724,6 +744,59 @@ describe('“更多”菜单三态条目（CCFG-REQ-103、CCFG-UI-032）', () =>
     expect(SFC_SOURCE).toContain('var(--el-color-danger)')
     expect(SFC_SOURCE).toContain('.cc-more-popper .el-dropdown-menu__item.cc-more-warning')
     wrapper.unmount()
+  })
+
+  it('组件：三点图标触发器具备 role/tabindex/可访问名称与键盘焦点（CCFG-REQ-110）', async () => {
+    const wrapper = await mountPage([enabledRow, disabledRow])
+    const links = wrapper.findAll('.cc-more-link')
+    expect(links.map((l) => l.attributes('role'))).toEqual(['button', 'button'])
+    expect(links.map((l) => l.attributes('tabindex'))).toEqual(['0', '0'])
+    expect(links[0].attributes('aria-label')).toBe('更多操作：probe-a')
+    expect(links[1].attributes('aria-label')).toBe('更多操作：probe-b')
+    // 命中区域与键盘焦点样式由本页声明，不依赖 EP 默认
+    const css = cssBlock(SFC_SOURCE, '.cc-more-link')
+    expect(css).toContain('width: 28px')
+    expect(css).toContain('height: 28px')
+    expect(SFC_SOURCE).toContain('.cc-more-link:focus-visible')
+    wrapper.unmount()
+  })
+
+  it('组件：键盘 Enter / Space 可打开三点菜单（不依赖鼠标）', async () => {
+    const wrapper = await mountPage([enabledRow])
+    const trigger = wrapper.findAll('.cc-more-link')[0]
+    ;(trigger.element as HTMLElement).focus()
+    await trigger.trigger('keydown', { key: 'Enter' })
+    await new Promise((resolve) => setTimeout(resolve, 0))
+    await nextTick()
+    expect(trigger.element.getAttribute('aria-expanded')).toBe('true')
+    expect(rowMenuLabels(wrapper, 0)).toEqual(['停用', '删除'])
+    wrapper.unmount()
+  })
+
+  it('组件：菜单以分隔线单独隔开红色“删除”，且条目顺序为先“停用/启用”后“删除”', async () => {
+    const wrapper = await mountPage([enabledRow])
+    await openRowMenu(wrapper, 0)
+    const menuId = wrapper.findAll('.cc-more-link')[0].attributes('aria-controls')!
+    const menu = document.getElementById(menuId)!
+    const separator = menu.querySelector('.el-dropdown-menu__item--divided')
+    expect(separator).not.toBeNull()
+    expect(separator!.getAttribute('role')).toBe('separator')
+    // 分隔线位于“停用”之后、“删除”之前
+    const order = Array.from(
+      menu.querySelectorAll('.el-dropdown-menu__item, .el-dropdown-menu__item--divided'),
+    ).map((el) => (el.textContent ?? '').trim() || '|')
+    expect(order).toEqual(['停用', '|', '删除'])
+    wrapper.unmount()
+  })
+
+  it('静态：菜单 popper 声明柔和圆角、弥散阴影与圆角内边距，且危险/警告色不被交互态覆盖', () => {
+    expect(SFC_SOURCE).toContain('.cc-more-popper.el-popper')
+    expect(SFC_SOURCE).toContain('border-radius: 8px')
+    expect(SFC_SOURCE).toContain('box-shadow: 0 6px 16px rgba(0, 0, 0, 0.12)')
+    expect(SFC_SOURCE).toContain('.cc-more-popper .el-dropdown-menu__item--divided')
+    expect(SFC_SOURCE).toContain(
+      '.cc-more-popper .el-dropdown-menu__item.cc-more-danger:not(.is-disabled):hover',
+    )
   })
 })
 
@@ -997,31 +1070,101 @@ describe('标签文字水平/垂直居中与统一承载（R2 §3/§6）', () =>
     return { carriers, ownText }
   }
 
-  it('静态：“采集数据源”严格单行 + 放大标签 + 约 60px 行高（不再固定预留两行）', () => {
+  it('静态：“采集数据源”严格单行，且本页不再写死固定像素行高（CCFG-UI-038）', () => {
     const srcCss = cssBlock(SFC_SOURCE, '.cc-src')
     expect(srcCss).toContain('flex-wrap: nowrap')
     expect(srcCss).not.toContain('flex-wrap: wrap')
     expect(srcCss).toContain('overflow: hidden')
-    expect(srcCss).not.toContain('height: 50px')
-    // :deep 选择器含正则特殊字符，直接对源码断言存在性与行高值
-    expect(SFC_SOURCE).toContain('.cc-table :deep(.el-table__row)')
-    expect(SFC_SOURCE).toContain('height: 60px')
+    // 行高改由公共预设的单元格上下内边距 + 内容决定，本页不得再声明固定行高
+    expect(srcCss).not.toContain('height:')
+    expect(SFC_SOURCE).not.toContain('.cc-table :deep(.el-table__row)')
+    expect(SFC_SOURCE).not.toContain('height: 60px')
+    // 也不得新增行高令牌或改动公共预设本身
+    expect(SFC_SOURCE).not.toMatch(/--lt-[\w-]+\s*:/)
     const dstagCss = cssBlock(SFC_SOURCE, '.cc-dstag')
-    expect(dstagCss).toContain('height: 27px')
-    expect(dstagCss).toContain('font-size: 14px')
-    expect(dstagCss).toContain('padding: 0 10px')
+    expect(dstagCss).toContain('height: 20px')
+    expect(dstagCss).toContain('font-size: 12px')
+    expect(dstagCss).toContain('padding: 0 9px')
     const moreCss = cssBlock(SFC_SOURCE, '.cc-more')
-    expect(moreCss).toContain('font-size: 14px')
+    expect(moreCss).toContain('height: 20px')
+    expect(moreCss).toContain('font-size: 12px')
+  })
+
+  it('静态：标签盒模型与参考页“角色”标签逐属性一致（高/字号/字重/圆角/无边框/内边距）', () => {
+    const dstagCss = cssBlock(SFC_SOURCE, '.cc-dstag')
+    expect(DS_TAG_BLOCK.length).toBeGreaterThan(0)
+    for (const prop of ['height', 'font-size', 'font-weight', 'border-radius', 'border', 'padding']) {
+      expect(declValue(dstagCss, prop)).toBe(declValue(DS_TAG_BLOCK, prop))
+    }
+    // 参考页基准值本身未漂移
+    expect(declValue(DS_TAG_BLOCK, 'height')).toBe('20px')
+    expect(declValue(DS_TAG_BLOCK, 'font-size')).toBe('12px')
+    expect(declValue(DS_TAG_BLOCK, 'font-weight')).toBe('600')
+    expect(declValue(DS_TAG_BLOCK, 'border')).toBe('none')
+  })
+
+  it('静态：测量盒模型与标签声明同步校准，避免 +N 误计数（CCFG-REQ-107）', () => {
+    const dstagCss = cssBlock(SFC_SOURCE, '.cc-dstag')
+    expect(CHIP_BOX.fontSize).toBe(declValue(dstagCss, 'font-size'))
+    expect(CHIP_BOX.fontWeight).toBe(declValue(dstagCss, 'font-weight'))
+    expect(CHIP_BOX.lineHeight).toBe(declValue(dstagCss, 'height'))
+    expect(`${CHIP_BOX.paddingX}px`).toBe(declValue(dstagCss, 'padding').split(' ')[1])
+    expect(CHIP_BOX.borderWidth).toBe(0)
+  })
+
+  it('静态：`+N` 槽位与标签同盒模型，为 +N 预留的宽度同样按此基准测量（CCFG-REQ-107/109）', () => {
+    const moreCss = cssBlock(SFC_SOURCE, '.cc-more')
+    // 标签与 +N 槽位的盒模型必须一致，否则打包预留量与实际占位不符会出现遮挡或误计数
+    expect(declValue(moreCss, 'font-size')).toBe(CHIP_BOX.fontSize)
+    expect(declValue(moreCss, 'font-weight')).toBe(CHIP_BOX.fontWeight)
+    expect(declValue(moreCss, 'height')).toBe(CHIP_BOX.lineHeight)
+    expect(declValue(moreCss, 'padding')).toBe(declValue(cssBlock(SFC_SOURCE, '.cc-dstag'), 'padding'))
+    expect(declValue(moreCss, 'border')).toBe('none')
+  })
+
+  it('组件：`+N` 数值随测量宽度重算，且宽度基准变更后不残留旧值（CCFG-REQ-109）', async () => {
+    const savedRO = (globalThis as { ResizeObserver?: unknown }).ResizeObserver
+    ;(globalThis as { ResizeObserver: unknown }).ResizeObserver = FakeResizeObserver as never
+    try {
+      const names = Array.from({ length: 7 }, (_, i) => `机构M${i + 1}`)
+      const wrapper = await mountPage([overflowRow])
+      // 宽容器：直接展示上限 6、+1
+      names.forEach((t) => chipWidthRegistry.set(t, 40))
+      chipWidthRegistry.set('+88', 30)
+      lastFakeRO!.emit(1000)
+      await nextTick()
+      expect(wrapper.find('.cc-more').text()).toBe('+1')
+      // 同容器下标签变宽（如标签盒模型/字重变化导致）：直接展示项减少，+N 数值随之增大
+      names.forEach((t) => chipWidthRegistry.set(t, 200))
+      lastFakeRO!.emit(1000)
+      await nextTick()
+      const shownAfter = wrapper
+        .findAll('.cc-dstag')
+        .filter((t) => !(t.attributes('style') ?? '').includes('display: none')).length
+      expect(shownAfter).toBeLessThan(6)
+      expect(wrapper.find('.cc-more').text()).toBe(`+${7 - shownAfter}`)
+      wrapper.unmount()
+    } finally {
+      ;(globalThis as unknown as { ResizeObserver?: unknown }).ResizeObserver = savedRO
+      chipWidthRegistry.clear()
+      lastFakeRO = null
+    }
   })
 
   it('静态：正常/异常/原始ID/`+N` 四类标签统一为 flex 双向居中，模板正文统一装入 .cc-txt', () => {
-    for (const sel of ['.cc-dstag', '.cc-rowbad', '.cc-more']) {
+    // 数据源标签与 `+N` 槽位改用紧凑盒模型（左右 9px）；行级歧义警示保持原有内边距不变
+    for (const sel of ['.cc-dstag', '.cc-more']) {
       const css = cssBlock(SFC_SOURCE, sel)
       expect(css).toContain('display: inline-flex')
       expect(css).toContain('align-items: center')
       expect(css).toContain('justify-content: center')
-      expect(css).toContain('padding: 0 10px')
+      expect(css).toContain('padding: 0 9px')
     }
+    const rowbadCss = cssBlock(SFC_SOURCE, '.cc-rowbad')
+    expect(rowbadCss).toContain('display: inline-flex')
+    expect(rowbadCss).toContain('align-items: center')
+    expect(rowbadCss).toContain('justify-content: center')
+    expect(rowbadCss).toContain('padding: 0 10px')
     // 模板：行级歧义标识、数据源标签正文、动态 +N 的文字都包进内层 .cc-txt
     expect(SFC_SOURCE).toContain('class="cc-txt">含逗号歧义')
     expect(SFC_SOURCE).toContain('<span class="cc-txt">{{ dsBodyText(ds) }}</span>')
@@ -1123,6 +1266,91 @@ describe('标签文字水平/垂直居中与统一承载（R2 §3/§6）', () =>
     expect(wrapper.findAll('.cc-row--selected')).toHaveLength(0)
     expect(wrapper.text()).not.toContain('已选择')
     wrapper.unmount()
+  })
+})
+
+// ============================================================ 采集数据源标签三态取色
+
+describe('采集数据源标签三态取色与优先级（CCFG-REQ-108、CCFG-UI-039）', () => {
+  /** 整行含逗号歧义、但其数据源本身无项级异常：标签不得暗示“已确认为正常”。 */
+  const ambiguousPlainRow = row(
+    'probe-amb2',
+    '歧义无异常探针',
+    '1',
+    [view('ds-plain', '机构P', '库P')],
+    { rowAnomalies: ['COMMA_PROTOCOL_AMBIGUOUS'] },
+  )
+
+  it('组件：既无项级异常也无行级歧义 → 基础绿色态 cc-dstag--ok（仅表示未检测到异常）', async () => {
+    const wrapper = await mountPage([row('probe-ok', '正常探针', '1', [healthyDs])])
+    const tags = wrapper.findAll('.cc-dstag')
+    expect(tags).toHaveLength(1)
+    expect(tags[0].text().trim()).toBe('中心医院')
+    expect(tags[0].classes()).toContain('cc-dstag--ok')
+    expect(tags[0].classes()).not.toContain('cc-dstag--bad')
+    expect(tags[0].classes()).not.toContain('cc-dstag--neutral')
+    wrapper.unmount()
+  })
+
+  it('组件：项级 anomalies 优先于行级歧义 → 红色，不因整行歧义降级为中性色', async () => {
+    const wrapper = await mountPage([ambiguousRow])
+    // 前提：该行确实带行级 COMMA_PROTOCOL_AMBIGUOUS，但其数据源各带 NOT_FOUND
+    expect(wrapper.find('.cc-rowbad').exists()).toBe(true)
+    const tags = wrapper.findAll('.cc-dstag')
+    expect(tags.length).toBeGreaterThan(0)
+    for (const t of tags) {
+      expect(t.classes()).toContain('cc-dstag--bad')
+      expect(t.classes()).not.toContain('cc-dstag--neutral')
+    }
+    wrapper.unmount()
+  })
+
+  it('组件：无项级异常但整行存在 COMMA_PROTOCOL_AMBIGUOUS → 中性色', async () => {
+    const wrapper = await mountPage([ambiguousPlainRow])
+    const tag = wrapper.findAll('.cc-dstag').find((t) => t.text().trim() === '机构P')!
+    expect(tag.classes()).toContain('cc-dstag--neutral')
+    expect(tag.classes()).not.toContain('cc-dstag--bad')
+    wrapper.unmount()
+  })
+
+  it('组件：同一行内优先级逐项独立（项级异常红、整行歧义中性可同排）', async () => {
+    const mixedRow = row(
+      'probe-mixed',
+      '混合探针',
+      '1',
+      [view('ds-a2', '机构A2', '库A2', ['NOT_FOUND']), view('ds-b2', '机构B2', '库B2')],
+      { rowAnomalies: ['COMMA_PROTOCOL_AMBIGUOUS'] },
+    )
+    const wrapper = await mountPage([mixedRow])
+    const bad = wrapper.findAll('.cc-dstag').find((t) => t.text().trim() === '机构A2')!
+    const neutral = wrapper.findAll('.cc-dstag').find((t) => t.text().trim() === '机构B2')!
+    expect(bad.classes()).toContain('cc-dstag--bad')
+    expect(neutral.classes()).toContain('cc-dstag--neutral')
+    wrapper.unmount()
+  })
+
+  it('静态：三态底色/文字色成对声明，绿=未检测到异常、红=项级异常、中性=整行歧义', () => {
+    const ok = cssBlock(SFC_SOURCE, '.cc-dstag')
+    expect(declValue(ok, 'background')).toBe('#ecfdf5')
+    expect(declValue(ok, 'color')).toBe('#047857')
+    const bad = cssBlock(SFC_SOURCE, '.cc-dstag--bad')
+    expect(declValue(bad, 'background')).toBe('#fef0f0')
+    expect(declValue(bad, 'color')).toBe('#d54949')
+    const neutral = cssBlock(SFC_SOURCE, '.cc-dstag--neutral')
+    expect(declValue(neutral, 'background')).toBe('#f4f4f5')
+    expect(declValue(neutral, 'color')).toBe('#606266')
+    // 中性色必须区别于“未检测到异常”的绿与“异常”的红
+    expect(declValue(neutral, 'background')).not.toBe(declValue(ok, 'background'))
+    expect(declValue(neutral, 'background')).not.toBe(declValue(bad, 'background'))
+  })
+
+  it('静态：独立的行级歧义警示仍为红色，与标签三态解耦（工具提示文案不变）', () => {
+    const rowbad = cssBlock(SFC_SOURCE, '.cc-rowbad')
+    expect(declValue(rowbad, 'background')).toBe('#fef0f0')
+    expect(declValue(rowbad, 'color')).toBe('#d54949')
+    expect(declValue(rowbad, 'border')).toContain('#f1a7a7')
+    // 行级警示文案保持不变，且不随标签三态一并降级
+    expect(SFC_SOURCE).toContain('class="cc-txt">含逗号歧义')
   })
 })
 

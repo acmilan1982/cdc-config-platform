@@ -81,10 +81,26 @@ export function descNeedsTip(clientWidth: number, scrollWidth: number): boolean 
 
 export interface ChipStyleOptions {
   fontSize?: string
+  fontWeight?: string
   lineHeight?: string
   paddingX?: number
   borderWidth?: number
   maxEm?: number
+}
+
+/**
+ * 采集数据源列标签的测量盒模型基准，必须与页面 `.cc-dstag` / `.cc-more` 的声明保持一致：
+ * 高度 20px、字号 12px、字重 600、圆角 4px、无边框、左右内边距 9px
+ * （参考页“角色”标签视觉语言，CCFG-UI-039）。标签盒模型变更后必须同步更新本基准，
+ * 否则宽度估算偏差会导致标签遮挡或 `+N` 误计数（CCFG-REQ-107/CCFG-DESIGN-050）。
+ */
+export const CHIP_BOX: ChipStyleOptions = {
+  fontSize: '12px',
+  fontWeight: '600',
+  lineHeight: '20px',
+  paddingX: 9,
+  borderWidth: 0,
+  maxEm: 10,
 }
 
 /**
@@ -94,6 +110,7 @@ export interface ChipStyleOptions {
 export function measureChipWidth(text: string, opts: ChipStyleOptions = {}): number {
   if (typeof document === 'undefined') return 0
   const fontSize = opts.fontSize ?? '14px'
+  const fontWeight = opts.fontWeight ?? '400'
   const lineHeight = opts.lineHeight ?? '27px'
   const paddingX = opts.paddingX ?? 10
   const borderWidth = opts.borderWidth ?? 1
@@ -108,6 +125,7 @@ export function measureChipWidth(text: string, opts: ChipStyleOptions = {}): num
     'box-sizing:border-box',
     'display:inline-block',
     `font-size:${fontSize}`,
+    `font-weight:${fontWeight}`,
     `line-height:${lineHeight}`,
     `padding:0 ${paddingX}px`,
     `border:${borderWidth}px solid transparent`,

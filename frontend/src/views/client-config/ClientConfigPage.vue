@@ -37,7 +37,7 @@
         <span class="cc-result-count">共 {{ listRows.length }} 条</span>
       </template>
       <template #toolbar>
-        <el-button type="primary" class="cc-btn-add" @click="openCreate">
+        <el-button class="cc-btn-add" @click="openCreate">
           <el-icon class="cc-btn-icon"><Plus /></el-icon>新增探针
         </el-button>
       </template>
@@ -117,7 +117,7 @@
                   :key="`${row.clientId}-${ds.dataSourceId}-${idx}`"
                   v-show="idx < shownCount(row)"
                   class="cc-dstag"
-                  :class="{ 'cc-dstag--bad': ds.anomalies.length }"
+                  :class="`cc-dstag--${dsTagState(row, ds)}`"
                   @mouseenter="onTipEnter($event, tipForDs(ds))"
                   @mouseleave="onTipLeave"
                 ><span class="cc-txt">{{ dsBodyText(ds) }}</span></span>
@@ -168,22 +168,32 @@
             </template>
           </el-table-column>
 
-          <!-- 最右固定“操作”列：唯一文字入口“更多”；入口与菜单的 click/dblclick 均不冒泡到行双击（CCFG-UI-032） -->
+          <!-- 最右固定“操作”列：唯一入口为水平三点图标（CCFG-UI-040）；入口与菜单的 click/dblclick
+               均不冒泡到行双击，菜单靠右对齐以避免贴近右边缘时被裁切（CCFG-UI-041） -->
           <el-table-column label="操作" width="110" fixed="right">
             <template #default="{ row }">
               <el-dropdown
                 trigger="click"
+                placement="bottom-end"
                 popper-class="cc-more-popper"
                 @command="(command: string) => onRowCommand(command, row)"
                 @click.stop
                 @dblclick.stop
               >
-                <span class="cc-more-link" @click.stop @dblclick.stop>
-                  更多<el-icon class="cc-more-icon"><ArrowDown /></el-icon>
+                <span
+                  class="cc-more-link"
+                  role="button"
+                  tabindex="0"
+                  :aria-label="`更多操作：${row.clientId}`"
+                  @click.stop
+                  @dblclick.stop
+                >
+                  <el-icon class="cc-more-icon"><MoreFilled /></el-icon>
                 </span>
                 <template #dropdown>
                   <el-dropdown-menu>
-                    <!-- 条目顺序固定为先“停用/启用”、后“删除”；历史异常行只提供“停用”与“删除” -->
+                    <!-- 条目顺序固定为先“停用/启用”、后“删除”；历史异常行只提供“停用”与“删除”；
+                         “删除”以分隔线单独隔开（CCFG-UI-041） -->
                     <el-dropdown-item
                       v-if="idState(row) !== 'off'"
                       command="disable"
@@ -197,6 +207,7 @@
                     >启用</el-dropdown-item>
                     <el-dropdown-item
                       command="delete"
+                      divided
                       class="cc-more-danger"
                       :disabled="rowBusy(row)"
                     >删除</el-dropdown-item>
@@ -373,7 +384,7 @@
 <script setup lang="ts">
 import { computed, nextTick, onBeforeUnmount, onMounted, reactive, ref } from 'vue'
 import { ElMessage, ElMessageBox } from 'element-plus'
-import { ArrowDown, Plus } from '@element-plus/icons-vue'
+import { MoreFilled, Plus } from '@element-plus/icons-vue'
 import {
   QueryListActions,
   QueryListPageShell,
@@ -381,7 +392,7 @@ import {
   QueryListResultPanel,
 } from '@/components/query-list'
 import { LT_MAIN_TABLE_CLASS } from '@/styles/list-table'
-import { descNeedsTip, measureChipWidth, packChips } from './listLayout'
+import { CHIP_BOX, descNeedsTip, measureChipWidth, packChips } from './listLayout'
 import {
   createClient,
   deleteClient,
@@ -462,6 +473,20 @@ function dsBodyText(ds: DataSourceViewItem): string {
 
 function hasOrg(ds: DataSourceViewItem): boolean {
   return (ds.org ?? '').trim().length > 0
+}
+
+/** 采集数据源标签三态：'ok' 绿 / 'neutral' 中性 / 'bad' 红（CCFG-REQ-108/CCFG-UI-039）。 */
+type DsTagState = 'ok' | 'neutral' | 'bad'
+
+/**
+ * 标签取色优先级自高至低：① 该数据源存在项级 `anomalies` → 红；② 否则整行存在
+ * `COMMA_PROTOCOL_AMBIGUOUS` → 中性（不得暗示已确认为正常）；③ 否则 → 绿（仅表示
+ * 当前未检测到异常）。红色不因整行歧义降级为中性色。
+ */
+function dsTagState(row: ClientListItemVO, ds: DataSourceViewItem): DsTagState {
+  if (ds.anomalies.length > 0) return 'bad'
+  if (isRowAmbiguous(row)) return 'neutral'
+  return 'ok'
 }
 
 // ------------------------------------------------- 探针 ID 三态标识（不归一化原始值）
@@ -939,8 +964,9 @@ function recomputeRow(clientId: string, containerWidth: number, srcEl?: HTMLElem
     const rb = el.querySelector<HTMLElement>('.cc-rowbad')
     if (rb && rb.offsetWidth > 0) avail = Math.max(0, avail - rb.offsetWidth - DS_GAP)
   }
-  const widths = dss.map((ds) => measureChipWidth(dsBodyText(ds)))
-  const moreWidth = measureChipWidth(MORE_SLOT_TEXT) || 40
+  // 标签与 `+N` 槽位都按当前紧凑盒模型（CHIP_BOX）测量，与实际渲染宽度一致（CCFG-REQ-107）。
+  const widths = dss.map((ds) => measureChipWidth(dsBodyText(ds), CHIP_BOX))
+  const moreWidth = measureChipWidth(MORE_SLOT_TEXT, CHIP_BOX) || 40
   const { shown } = packChips({
     widths,
     containerWidth: avail,
@@ -1181,6 +1207,29 @@ onBeforeUnmount(() => {
   color: var(--el-text-color-primary);
 }
 
+/* “新增探针”：黑色实心主按钮，与参考页“新增数据源”同款（CCFG-REQ-104/CCFG-UI-036）。
+   `:not(.is-disabled)` 限定仅正常态换色，禁用态沿用 Element Plus 既有禁用视觉。 */
+.cc-btn-add:not(.is-disabled) {
+  background: #09090b;
+  border-color: #09090b;
+  color: #ffffff;
+  border-radius: 6px;
+  font-weight: 500;
+}
+
+.cc-btn-add:not(.is-disabled):hover,
+.cc-btn-add:not(.is-disabled):focus {
+  background: #27272a;
+  border-color: #27272a;
+  color: #ffffff;
+}
+
+.cc-btn-add:not(.is-disabled):active {
+  background: #18181b;
+  border-color: #18181b;
+  color: #ffffff;
+}
+
 .cc-btn-icon {
   margin-right: 2px;
   font-size: 14px;
@@ -1200,11 +1249,10 @@ onBeforeUnmount(() => {
   min-width: 0;
 }
 
-/* 行高约 60px（CCFG-UI-005）；普通行悬停与双击编辑由 Element Plus 与 @row-dblclick 承担，
-   本页已无行选中态，故不保留任何选中/hover 覆盖规则 */
-.cc-table :deep(.el-table__row) {
-  height: 60px;
-}
+/* 本页不再为行声明固定像素行高：行高由公共表格视觉预设的单元格上下内边距
+   （`var(--lt-body-cell-padding, 12px 0)`）与行内容共同决定，与参考页“数据源管理”实际规则一致
+   （CCFG-REQ-106/CCFG-DESIGN-049/CCFG-UI-038）。普通行悬停与双击编辑由 Element Plus 与
+   @row-dblclick 承担；本页已无行选中态，故不保留任何选中/hover 覆盖规则 */
 
 /* 序号列：展示派生值，按当前展示数组 $index + 1 连续编号（CCFG-REQ-100） */
 .cc-seq {
@@ -1222,12 +1270,16 @@ onBeforeUnmount(() => {
   overflow: hidden;
 }
 
+/* 探针 ID 正文：字重与颜色对齐参考页“数据源 ID”（CCFG-REQ-105/CCFG-UI-037）；
+   其后的“停用”与历史异常标识保持各自现行视觉，不随本规则加粗改色。 */
 .cc-id {
   flex: 0 1 auto;
   min-width: 0;
   overflow: hidden;
   text-overflow: ellipsis;
   white-space: nowrap;
+  font-weight: 600;
+  color: #09090b;
   cursor: pointer;
 }
 
@@ -1288,15 +1340,15 @@ onBeforeUnmount(() => {
   color: #909399;
 }
 
-/* 采集数据源：单行展示，行高约 60px、标签高约 27px；永不折行/换第二行，
-   超出单行实际可容纳数与数量上限（6）的以动态 `+N` 表示（CCFG-UI-004/007，R1 §5.4/§5.6） */
+/* 采集数据源：单行展示，永不折行/换第二行，超出单行实际可容纳数与数量上限（6）的以
+   动态 `+N` 表示（CCFG-UI-004/007，R1 §5.4/§5.6）。不声明固定高度：行高交由单元格内边距
+   与内容决定（CCFG-UI-038），故本容器高度随标签/行级歧义标识的实际内容自适应。 */
 .cc-src {
   display: flex;
   align-items: center;
   flex-wrap: nowrap;
   gap: 8px;
   min-width: 0;
-  height: 30px;
   overflow: hidden;
 }
 
@@ -1330,40 +1382,53 @@ onBeforeUnmount(() => {
   text-overflow: ellipsis;
 }
 
+/* 采集数据源标签：借用参考页“角色”标签视觉语言（高 20px、12px/600、圆角 4px、无边框、
+   柔和底色，CCFG-REQ-107/CCFG-UI-039）。底色/文字色按三态由 `cc-dstag--ok|neutral|bad` 决定；
+   基础块即绿色态，其语义为“当前未检测到异常”。 */
 .cc-dstag {
   display: inline-flex;
   align-items: center;
   justify-content: center;
   box-sizing: border-box;
-  height: 27px;
+  height: 20px;
   max-width: 10em;
-  padding: 0 10px;
-  border: 1px solid #d9dee7;
+  padding: 0 9px;
+  border: none;
   border-radius: 4px;
-  background: #fff;
-  font-size: 14px;
-  color: #303133;
+  background: #ecfdf5;
+  font-size: 12px;
+  font-weight: 600;
+  color: #047857;
   overflow: hidden;
   flex-shrink: 0;
 }
 
+/* ① 该项存在既有 anomalies → 红色（优先于整行歧义，不因歧义降级为中性色） */
 .cc-dstag--bad {
-  border-color: #f1a7a7;
   background: #fef0f0;
   color: #d54949;
 }
 
+/* ② 无项级异常但整行含 COMMA_PROTOCOL_AMBIGUOUS → 中性色，不暗示该关联已确认为正常 */
+.cc-dstag--neutral {
+  background: #f4f4f5;
+  color: #606266;
+}
+
+/* 动态 `+N` 槽位：与本列标签同一紧凑盒模型，保持单行观感与行高一致；
+   仍是点击交互入口（CCFG-REQ-109）。 */
 .cc-more {
   display: inline-flex;
   align-items: center;
   justify-content: center;
   box-sizing: border-box;
-  height: 27px;
-  padding: 0 10px;
-  border: 1px solid #b3d8ff;
+  height: 20px;
+  padding: 0 9px;
+  border: none;
   border-radius: 4px;
-  background: #ecf5ff;
-  font-size: 14px;
+  background: #f4f4f5;
+  font-size: 12px;
+  font-weight: 600;
   color: #409eff;
   white-space: nowrap;
   cursor: pointer;
@@ -1371,20 +1436,34 @@ onBeforeUnmount(() => {
 }
 
 .cc-more:hover {
-  background: #d9ecff;
+  background: #e9e9eb;
 }
 
-/* 最右固定“操作”列唯一文字入口“更多” */
+/* 最右固定“操作”列唯一入口：水平三点图标（CCFG-REQ-110/CCFG-UI-040）。
+   命中区域按 28×28 提供，键盘焦点可见；可访问名称由触发器上的 aria-label 提供。 */
 .cc-more-link {
   display: inline-flex;
   align-items: center;
-  gap: 2px;
-  cursor: pointer;
+  justify-content: center;
+  box-sizing: border-box;
+  width: 28px;
+  height: 28px;
+  border-radius: 6px;
   color: var(--el-color-primary);
+  cursor: pointer;
+}
+
+.cc-more-link:hover {
+  background: #ecf5ff;
+}
+
+.cc-more-link:focus-visible {
+  outline: 2px solid var(--el-color-primary);
+  outline-offset: 1px;
 }
 
 .cc-more-icon {
-  font-size: 12px;
+  font-size: 18px;
 }
 
 /* 页面级单实例悬停 Tooltip：Teleport 到 body，pointer-events:none（CCFG-UI-005/008） */
@@ -1649,11 +1728,42 @@ onBeforeUnmount(() => {
 </style>
 
 <!-- “更多”下拉菜单（Teleport 到 body，故必须为全局作用域并只限定在本页 popper-class 命名空间内）：
-     条目顺序为先“停用/启用”、后“删除”；“停用”为警告语义、“删除”为危险语义（CCFG-UI-032）。
-     下拉内不出现状态标签、不出现批量操作。 -->
+     条目顺序为先“停用/启用”、后“删除”；“停用”为警告语义、“删除”为危险语义并以分隔线单独隔开
+     （CCFG-UI-041）。柔和圆角、弥散阴影、适当内边距与清晰 Hover／焦点反馈；下拉内不出现状态标签、
+     不出现批量操作。 -->
 <style>
+.cc-more-popper.el-popper {
+  border-radius: 8px;
+  box-shadow: 0 6px 16px rgba(0, 0, 0, 0.12), 0 2px 8px rgba(0, 0, 0, 0.06);
+}
+
+.cc-more-popper .el-dropdown-menu {
+  border-radius: 8px;
+  padding: 4px;
+}
+
+.cc-more-popper .el-dropdown-menu__item {
+  border-radius: 6px;
+  padding: 6px 12px;
+}
+
+.cc-more-popper .el-dropdown-menu__item--divided {
+  margin: 4px 0;
+}
+
 .cc-more-popper .el-dropdown-menu__item.cc-more-danger {
   color: var(--el-color-danger);
+}
+
+/* Hover／焦点反馈沿用 Element Plus 既有高亮，但危险/警告语义色在任何交互态下都不被覆盖 */
+.cc-more-popper .el-dropdown-menu__item.cc-more-danger:not(.is-disabled):hover,
+.cc-more-popper .el-dropdown-menu__item.cc-more-danger:not(.is-disabled):focus {
+  color: var(--el-color-danger);
+}
+
+.cc-more-popper .el-dropdown-menu__item.cc-more-warning:not(.is-disabled):hover,
+.cc-more-popper .el-dropdown-menu__item.cc-more-warning:not(.is-disabled):focus {
+  color: #b45309;
 }
 
 .cc-more-popper .el-dropdown-menu__item.cc-more-danger.is-disabled,
