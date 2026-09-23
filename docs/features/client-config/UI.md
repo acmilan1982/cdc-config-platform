@@ -9,7 +9,7 @@
 | 既有路由 | `/config/client`（保持不变） |
 | 目标文档 | `docs/features/client-config/UI.md` |
 | 文档状态 | `APPROVED`（界面设计正式批准：ChatGPT 对提交 `ba7c5e9...` 的设计并发口径调整结果正式复审 `APPROVED`，项目负责人于 2026-09-04 明确回复“批准”，经批准收口任务 `CLIENT-CONFIG-DESIGN-CONCURRENCY-ADJUSTMENT-APPROVAL-001` 收口为 `APPROVED`，可用于后续实现；批准的是设计基线，不代表代码已实现、已测试或验收已执行通过） |
-| 实现状态 | 分层口径：`existing_feature_implementation_status=IMPLEMENTED_PENDING_USER_ACCEPTANCE`（既有 Feature 实现已完成、尚待项目负责人验收）；`adjustment_baseline_status=DRAFT_PENDING_USER_REVIEW`；`adjustment_implementation_status=NOT_STARTED`（仅指本轮页面级调整实现尚未开始）；`formal_acceptance_execution_status=NOT_RUN`。旧单层 `NOT_STARTED`（本设计只定义目标界面与交互）属历史事实，不代表当前既有实现状态 |
+| 实现状态 | 分层口径：`existing_feature_implementation_status=IMPLEMENTED_PENDING_USER_ACCEPTANCE`（既有 Feature 实现已完成、尚待项目负责人验收）；`adjustment_baseline_status=APPROVED`（本轮页面级调整基线已于 2026-09-22 经项目负责人批准收口，批准前为 `DRAFT_PENDING_USER_REVIEW`）；`adjustment_implementation_status=NOT_STARTED`（仅指本轮页面级调整实现尚未开始）；`formal_acceptance_execution_status=NOT_RUN`。旧单层 `NOT_STARTED`（本设计只定义目标界面与交互）属历史事实，不代表当前既有实现状态 |
 | 初版任务 | `CLIENT-CONFIG-DESIGN-BASELINE-001`（阶段 4 设计基线，纯文档） |
 | 初版基线提交 | `cecfdd5478df8b82ba39c083553ea8dd7ead48e8` |
 | 初版设计提交 | `21f4729c43d146426e8d4f1b2d6b667cfcf160ff` |
@@ -33,7 +33,7 @@
 | 设计编号 | `CCFG-UI-001 ~ CCFG-UI-035`（`001~026` 已批准；`027~035` 为本轮新增项，其调整基线已于 2026-09-22 批准，见 §15），连续、唯一、不可复用；每个设计编号恰有一个定义行 |
 | PENDING_USER_CONFIRMATION | `0`（R1 已清零：`CCFG-UI-004/005` 的行选中与“已选择：{探针ID}”去留、`CCFG-UI-035` 的异常 `FG_ACTIVE` 承载形式均由项目负责人本轮明确决定并冻结，见 §15） |
 | 本轮调整任务编号 | `CLIENT-CONFIG-QUERY-LIST-AND-LIST-TABLE-ADJUSTMENT-BASELINE-001`（R1 修订：`-001-R1`；R2 证据纠错：`-001-R2`；R3 最小纠错：`-001-R3`；批准收口：`CLIENT-CONFIG-QUERY-LIST-AND-LIST-TABLE-ADJUSTMENT-BASELINE-APPROVAL-CLOSEOUT-001`） |
-| existing_feature_implementation_status | `IMPLEMENTED_PENDING_USER_ACCEPTANCE`（既有 Feature 实现已完成、尚待项目负责人验收；**不**因本轮草案改写） |
+| existing_feature_implementation_status | `IMPLEMENTED_PENDING_USER_ACCEPTANCE`（既有 Feature 实现已完成、尚待项目负责人验收；**不**因本轮页面调整改写） |
 | adjustment_baseline_status | `APPROVED`（2026-09-22 草案建立时的 `DRAFT_PENDING_USER_REVIEW` 属历史状态；经 R1 修订与 R2/R3 证据纠错后由项目负责人于 2026-09-22 批准） |
 | adjustment_approval_status | `APPROVED_BY_PROJECT_OWNER`（`adjustment_approval_date=2026-09-22`，`adjustment_approved_reviewed_commit=5066c761f8a9400d5841222cb73b0c03f56a82d0`；批准依据见 §15 前言） |
 | adjustment_implementation_status | `NOT_STARTED`（**仅指**本轮页面级调整实现尚未开始，**不**代表既有 Feature 实现状态；批准基线**不**等于已实现） |

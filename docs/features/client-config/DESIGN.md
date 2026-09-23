@@ -9,14 +9,14 @@
 | 既有路由 | `/config/client`（保持不变） |
 | 目标文档 | `docs/features/client-config/DESIGN.md` |
 | 文档状态 | `APPROVED`（设计基线正式批准：ChatGPT 对提交 `ba7c5e9...` 的设计并发口径调整结果正式复审 `APPROVED`，项目负责人于 2026-09-04 明确回复“批准”，经批准收口任务 `CLIENT-CONFIG-DESIGN-CONCURRENCY-ADJUSTMENT-APPROVAL-001` 收口为 `APPROVED`，可用于后续实现；批准的是设计基线，不代表代码已实现、已测试或验收已执行通过） |
-| 实现状态 | 分层口径：`existing_feature_implementation_status=IMPLEMENTED_PENDING_USER_ACCEPTANCE`（既有 Feature 实现已完成、尚待项目负责人验收）；`adjustment_baseline_status=DRAFT_PENDING_USER_REVIEW`；`adjustment_implementation_status=NOT_STARTED`（仅指本轮页面级调整实现尚未开始）；`formal_acceptance_execution_status=NOT_RUN`。旧单层 `NOT_STARTED`（本设计只落盘目标逻辑方案）属历史事实，不代表当前既有实现状态 |
+| 实现状态 | 分层口径：`existing_feature_implementation_status=IMPLEMENTED_PENDING_USER_ACCEPTANCE`（既有 Feature 实现已完成、尚待项目负责人验收）；`adjustment_baseline_status=APPROVED`（本轮页面级调整基线已于 2026-09-22 经项目负责人批准收口，批准前为 `DRAFT_PENDING_USER_REVIEW`）；`adjustment_implementation_status=NOT_STARTED`（仅指本轮页面级调整实现尚未开始）；`formal_acceptance_execution_status=NOT_RUN`。旧单层 `NOT_STARTED`（本设计只落盘目标逻辑方案）属历史事实，不代表当前既有实现状态 |
 | 初版任务 | `CLIENT-CONFIG-DESIGN-BASELINE-001`（阶段 4 设计基线，纯文档） |
 | 初版基线提交 | `cecfdd5478df8b82ba39c083553ea8dd7ead48e8`（初版设计任务开始前 `origin/develop` 与本地 HEAD 一致的实际起点） |
 | 初版设计提交 | `21f4729c43d146426e8d4f1b2d6b667cfcf160ff`（初版四文档设计草案提交，ChatGPT 正式复审对象） |
 | R1 任务 | `CLIENT-CONFIG-DESIGN-BASELINE-001-R1`（正式设计复审驱动的定向修订，纯文档） |
 | R1 复审结论 | ChatGPT 正式复审：`CHANGES_REQUIRED`（R1-01~R1-09；本文件落实 R1-02~R1-08 的业务/数据流修订，R1-01/09 的编号与过程核验见本文件元数据、§12 与 R1 执行报告） |
 | R1 基线提交 | `21f4729c43d146426e8d4f1b2d6b667cfcf160ff` |
-| 依据需求 | `REQUIREMENTS.md`：`CCFG-REQ-001~103`（其中 `001~090` 为 `APPROVED`，`091~103` 为本轮页面级调整新增草案 `DRAFT_PENDING_USER_REVIEW`） |
+| 依据需求 | `REQUIREMENTS.md`：`CCFG-REQ-001~103`（其中 `001~090` 为 `APPROVED`，`091~103` 为本轮页面级调整新增需求，已随本轮页面调整基线于 2026-09-22 批准，批准前为 `DRAFT_PENDING_USER_REVIEW`） |
 | 依据验收 | `ACCEPTANCE.md`：`CCFG-AC-001~089`（既有 76 + 本轮新增 13），全部 `NOT_RUN`（批准的是验收标准，不是验收执行结果） |
 | 创建日期 | 2026-09-03 |
 | R1 日期 | 2026-09-04 |
@@ -30,15 +30,15 @@
 | 批准对象 | 提交 `ba7c5e917b1b9d08208c3e1ceb31285407f5fd5e` 下的本文件及其全部设计定义 |
 | 批准收口任务 | `CLIENT-CONFIG-DESIGN-CONCURRENCY-ADJUSTMENT-APPROVAL-001` |
 | 批准边界 | 设计获批不代表代码已实现、已测试或验收已执行通过 |
-| 设计编号 | `CCFG-DESIGN-001 ~ CCFG-DESIGN-046`，连续、唯一、不可复用；每个设计编号恰有一个定义行，其余同编号出现一律视为引用而非定义。其中 `001~037` 为已批准设计基线，`038~046` 为本轮页面级调整新增草案（见 §13） |
-| PENDING_USER_CONFIRMATION | `0`（**已批准部分** `CCFG-DESIGN-001~037` 不存在由已批准需求无法推导、必须由项目负责人另行决定的业务或用户可见语义；R1 确定性修订全部落实且未发现新的业务歧义；2026-09-04 并发口径定向调整亦未引入需另行决定的新语义。**本轮新增草案部分**见 §13：本轮设计项本身无新增待确认设计空档；需求侧 R0 曾转记的 1 项 `PENDING_USER_CONFIRMATION`（行单选/选中视觉与“已选择：{探针ID}”的去留）已由项目负责人于 R1 **明确决定全部取消**，该事项关闭，本设计与需求侧均不再保留待确认项） |
+| 设计编号 | `CCFG-DESIGN-001 ~ CCFG-DESIGN-046`，连续、唯一、不可复用；每个设计编号恰有一个定义行，其余同编号出现一律视为引用而非定义。其中 `001~037` 为已批准设计基线，`038~046` 为本轮页面级调整新增设计项，已随本轮页面调整基线于 2026-09-22 批准（见 §13） |
+| PENDING_USER_CONFIRMATION | `0`（**已批准部分** `CCFG-DESIGN-001~037` 不存在由已批准需求无法推导、必须由项目负责人另行决定的业务或用户可见语义；R1 确定性修订全部落实且未发现新的业务歧义；2026-09-04 并发口径定向调整亦未引入需另行决定的新语义。**本轮新增部分**见 §13：本轮设计项本身无新增待确认设计空档；需求侧 R0 曾转记的 1 项 `PENDING_USER_CONFIRMATION`（行单选/选中视觉与“已选择：{探针ID}”的去留）已由项目负责人于 R1 **明确决定全部取消**，该事项关闭，本设计与需求侧均不再保留待确认项） |
 | 本轮调整任务 | `CLIENT-CONFIG-QUERY-LIST-AND-LIST-TABLE-ADJUSTMENT-BASELINE-001`（页面级模板选择性接入与列表调整草案，纯文档，2026-09-22，见 §13）；`...-BASELINE-001-R1`（该草案的定向纠错与项目负责人决定回填，纯文档，2026-09-22，冻结“取消全部选择能力”与 `FG_ACTIVE` 三态红色异常标识）；`...-BASELINE-001-R2`（R1 报告证据纠错，2026-09-22）；`...-BASELINE-001-R3`（R2 报告摘要最小证据纠错，2026-09-22）；`CLIENT-CONFIG-QUERY-LIST-AND-LIST-TABLE-ADJUSTMENT-BASELINE-APPROVAL-CLOSEOUT-001`（页面级调整基线批准收口，纯文档，2026-09-22，见 §13 前言） |
 | `existing_feature_implementation_status` | `IMPLEMENTED_PENDING_USER_ACCEPTANCE`（既有 Feature 实现已完成、尚待项目负责人验收；**不得**写成 `NOT_STARTED`） |
 | `adjustment_baseline_status` | `APPROVED`（2026-09-22 草案建立时的 `DRAFT_PENDING_USER_REVIEW` 属历史状态；经 R1 修订与 R2/R3 证据纠错后由项目负责人于 2026-09-22 批准） |
 | `adjustment_approval_status` | `APPROVED_BY_PROJECT_OWNER`（`adjustment_approval_date=2026-09-22`，`adjustment_approved_reviewed_commit=5066c761f8a9400d5841222cb73b0c03f56a82d0`；批准对象与本 Design 的 §13 设计项见 §13 前言） |
 | `adjustment_implementation_status` | `NOT_STARTED`（仅指本轮页面级调整实现尚未开始；批准基线**不**等于已实现） |
 | `formal_acceptance_execution_status` | `NOT_RUN` |
-| 页面级授权 | `/config/client` 的页面级选择性接入授权**已获得**（查询列表页模板：仅该单页且明确不启用刷新能力；列表表格视觉模板：仅该单页主列表）；两套模板的模板级全局迁移授权仍未授予（`page_migration_status=NOT_STARTED`、`page_migration_authorization_status=NOT_GRANTED`、`pilot_page_selection_status=NOT_DECIDED` 保持不变）；页面级授权 ≠ 本草案已批准 ≠ 实现已获授权或已完成 |
+| 页面级授权 | `/config/client` 的页面级选择性接入授权**已获得**（查询列表页模板：仅该单页且明确不启用刷新能力；列表表格视觉模板：仅该单页主列表）；两套模板的模板级全局迁移授权仍未授予（`page_migration_status=NOT_STARTED`、`page_migration_authorization_status=NOT_GRANTED`、`pilot_page_selection_status=NOT_DECIDED` 保持不变）；该页面级授权与本次页面级调整基线批准均**不**代表本轮实现已获授权、已完成或已验收（`adjustment_implementation_status=NOT_STARTED`、`formal_acceptance_execution_status=NOT_RUN`） |
 | 配套文档 | `API.md`（`CCFG-API-*`）、`UI.md`（`CCFG-UI-*`）、`DATABASE.md`（`CCFG-DB-*`），与本文件状态相同，接口路径、字段名、状态值、错误码、事务边界与本文件一致 |
 
 R1 修订目标（不改已批准 90 条需求与 76 条验收、不进入代码实现、不做设计批准收口）：在 §12 追踪矩阵改为全称编号并修正初版 API 重复定义统计口径（`R1-01`）；固定“E1 `dataSources` 恒按原存储顺序返回、前端仅计算非持久化前三项投影”的单一顺序契约（`R1-02`，见 CCFG-DESIGN-014）；固定 `CLIENT_DESC` 原文保存、Trim 仅判空、按实际保存原文计 UTF-8 字节（`R1-03`，见 CCFG-DESIGN-028/030）；补齐关键词字面量 LIKE 转义（`R1-04`，见 CCFG-DESIGN-007 与 DATABASE.md）；删除未批准的数据源 ID“其他非法字符”限制（`R1-05`）；补齐 `CATEGORY_MISMATCH`/`TYPE_MISMATCH` 历史候选资格变化异常（`R1-06`，见 CCFG-DESIGN-035）；补齐含逗号历史配置的不可逆歧义处理（`R1-07`，见 CCFG-DESIGN-036）；补齐历史 `CLIENT_DESC` 为 NULL/空白的契约（`R1-08`，见 CCFG-DESIGN-037）。
@@ -47,8 +47,8 @@ R1 修订目标（不改已批准 90 条需求与 76 条验收、不进入代码
 
 ## 2. 范围与状态边界
 
-- 本设计只建立逻辑设计草案，不实现代码，不执行测试，不连接数据库，不修改任何数据库基线（`docs/database/` 零改动），不执行 DDL/DML。
-- 已批准需求 `CCFG-REQ-001~090` 是唯一业务语义来源；本轮页面级调整新增草案需求 `CCFG-REQ-091~103`（`DRAFT_PENDING_USER_REVIEW`）在本轮为设计输入，但**尚未批准**，本设计对应新增项（`CCFG-DESIGN-038~046`）同为草案。本设计不增加、弱化、替换或重新解释任何需求；对本 Feature 无法从需求推导的技术空档给出唯一确定方案，不保留“方案 A/B 待定”。
+- 本设计只建立逻辑设计方案，不实现代码，不执行测试，不连接数据库，不修改任何数据库基线（`docs/database/` 零改动），不执行 DDL/DML。
+- 已批准需求 `CCFG-REQ-001~090` 与本轮已批准新增需求 `CCFG-REQ-091~103`（已随本轮页面调整基线于 2026-09-22 批准，批准前为 `DRAFT_PENDING_USER_REVIEW`）是业务语义来源；本设计对应新增项 `CCFG-DESIGN-038~046` 同随该基线批准，但实现仍为 `NOT_STARTED`、验收仍为 `NOT_RUN`。本设计不增加、弱化、替换或重新解释任何需求；对本 Feature 无法从需求推导的技术空档给出唯一确定方案，不保留“方案 A/B 待定”。
 - 本 Feature 只维护 `CDC_CLIENT_MULTIPLE` 配置，不直接启停、重启或通知 `sync-client`；不操作 ZooKeeper、Kafka、Topic 或运行进程；不连接源 Oracle 数据源、不读取 Schema/表结构。
 - 接口、页面反馈不得承诺配置对运行中进程“实时生效”“已启停”“已重启”。
 - 所有候选代码类名、文件名均为实现阶段建议（标注“待建”），本任务不创建、不宣称已存在。
