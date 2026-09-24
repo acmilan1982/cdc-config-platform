@@ -127,6 +127,7 @@
                   placement="top"
                   :width="380"
                   trigger="click"
+                  :popper-options="FULL_LIST_POPPER_OPTIONS"
                   @show="clearTip"
                 >
                   <template #reference>
@@ -137,17 +138,18 @@
                       以下为普通 CSV 解析的展示结果（行级含逗号歧义），非已确定分配。
                     </p>
                     <ul>
+                      <!-- 两级信息（CCFG-REQ-113/CCFG-DESIGN-054）：主行为机构名称，次行以可见前缀
+                           `数据源 ID：` 引导完整原始 ID；机构名缺失时只把原始 ID 放主行，不再重复次行 -->
                       <li
                         v-for="ds in row.dataSources"
                         :key="`${row.clientId}-full-${ds.dataSourceId}`"
                         class="cc-full-item"
                       >
-                        <span v-if="hasOrg(ds)" class="cc-full-org">{{ ds.org }}</span>
-                        <span v-if="hasOrg(ds)" class="cc-full-id">{{ ds.dataSourceId }}</span>
+                        <span class="cc-full-org">{{ hasOrg(ds) ? ds.org : ds.dataSourceId }}</span>
+                        <span v-if="hasOrg(ds)" class="cc-full-id">数据源 ID：{{ ds.dataSourceId }}</span>
                         <span v-if="ds.anomalies.length" class="cc-full-bad">
                           {{ anomalyText(ds.anomalies, ds.conflictClientIds) }}
                         </span>
-                        <span v-if="!hasOrg(ds)" class="cc-full-org">{{ ds.dataSourceId }}</span>
                       </li>
                     </ul>
                   </div>
@@ -225,7 +227,7 @@
       v-model="dialogOpen"
       class="cc-dialog"
       :title="mode === 'edit' ? '编辑探针' : '新增探针'"
-      width="680px"
+      width="900px"
       :close-on-click-modal="false"
       @closed="onDialogClosed"
     >
@@ -351,6 +353,7 @@
         <el-button :disabled="submitting" @click="dialogOpen = false">取消</el-button>
         <el-button
           type="primary"
+          class="cc-dialog-submit"
           :disabled="saveBlockReason !== null || submitting"
           :loading="submitting"
           @click="submitDialog"
@@ -410,6 +413,38 @@ const DS_GAP = 8
 const DS_MAX_VISIBLE = 6
 const MORE_SLOT_TEXT = '+88'
 const TIP_DELAY_MS = 240
+
+/**
+ * `+N` 完整清单弹层的 Popper 碰撞选项（CCFG-REQ-115/CCFG-DESIGN-055/CCFG-UI-044）。
+ *
+ * 清单按内容自然增高（不设固定最大高度、不设内部滚动），高度可能超过锚点上方与下方的
+ * 可用空间。Popper v2 的 `preventOverflow` 对 `top`/`bottom` 定位只在 `altAxis`（此处的
+ * **竖直**轴）上做贴边避让，而 Element Plus 只传了 `padding`、把 `altAxis` 留在默认 `false`，
+ * 于是“上下都放不下”时既不翻转也不避让：首行 9 项清单在 1440×900 下保持 `top` 并被视口
+ * 上缘裁掉前面数项（真实浏览器实测 overflow top ≈ -166px）。
+ *
+ * 这里打开 `altAxis` 并把碰撞边界显式定为**视口**：`placement="top"` 仍为首选方向，顶部
+ * 放不下时先由 `flip` 翻转到底部，两个方向都放不下时再由 `preventOverflow` 沿竖直方向
+ * 贴边避让，把整份清单收进视口内可读。仅调整碰撞处理，不改变清单内容与顺序、`+N` 语义、
+ * 主表行高，也不引入内部滚动或固定最大高度。
+ */
+type FullListPopperModifier = { name: string; options?: Record<string, unknown> }
+
+const FULL_LIST_POPPER_OPTIONS: { modifiers: FullListPopperModifier[] } = {
+  modifiers: [
+    {
+      name: 'preventOverflow',
+      options: {
+        boundary: 'viewport',
+        rootBoundary: 'viewport',
+        mainAxis: true,
+        altAxis: true,
+        tether: false,
+        padding: 8,
+      },
+    },
+  ],
+}
 
 const ID_PATTERN = /^[A-Za-z0-9][A-Za-z0-9._-]{0,31}$/
 
@@ -1503,18 +1538,26 @@ onBeforeUnmount(() => {
   color: #d4d7dd;
 }
 
-.cc-full-list {
-  max-height: 320px;
-  overflow-y: auto;
-}
+/* +N 完整清单按内容自然增高：不设内部滚动、不设固定最大高度
+   （CCFG-REQ-115/CCFG-DESIGN-055/CCFG-UI-044）。该“无内部滚动”决定仅适用于本清单，
+   不影响新增／编辑弹窗及其候选列表的受控滚动。 */
 
 .cc-full-list ul {
   margin: 4px 0;
   padding-left: 16px;
 }
 
+/* 清单项两级信息：主行为机构名称（机构名缺失时即原始 ID），次行以较弱样式显示
+   `数据源 ID：` + 完整原始 ID；两级各占一行、不连读成同一字符串；项间以浅分隔线与间距
+   区分，长 ID 允许在项内换行（CCFG-REQ-113/CCFG-DESIGN-054/CCFG-UI-043）。 */
 .cc-full-item {
   line-height: 1.6;
+  padding: 6px 0;
+  overflow-wrap: anywhere;
+}
+
+.cc-full-item + .cc-full-item {
+  border-top: 1px solid #f0f0f0;
 }
 
 .cc-full-note {
@@ -1524,15 +1567,18 @@ onBeforeUnmount(() => {
 }
 
 .cc-full-org {
+  display: block;
   font-weight: 600;
 }
 
+/* 项级异常／冲突探针信息：保留在项内独立一行，维持既有红色警示语义（CCFG-REQ-114）。 */
 .cc-full-bad {
+  display: block;
   color: #f56c6c;
-  margin: 0 6px;
 }
 
 .cc-full-id {
+  display: block;
   color: #909399;
   font-size: 12px;
 }
@@ -1541,6 +1587,38 @@ onBeforeUnmount(() => {
   margin-left: 2px;
   font-size: 12px;
   color: #e6a23c;
+}
+
+/* 弹窗（新增／编辑共用同一实例）桌面目标宽度约 900px，由 el-dialog 的 width 属性给出；
+   并受视口限制保留左右安全间距——窄视口按可用空间收缩、不横向溢出
+   （CCFG-REQ-116/CCFG-DESIGN-056/CCFG-UI-045）。 */
+:deep(.cc-dialog) {
+  max-width: calc(100vw - 48px);
+}
+
+/* 主提交按钮对齐数据源管理 `.editor-submit-button` 的黑色实心视觉
+   （CCFG-REQ-120/CCFG-DESIGN-059/CCFG-UI-047）。`:not(.is-disabled)` 限定仅正常态换色，
+   禁用态与 loading 态沿用 Element Plus 既有视觉、不被正常态规则覆盖；
+   仅此主按钮改色，“取消”“自动生成”“修改探针 ID”不跟随变黑。 */
+.cc-dialog-submit:not(.is-disabled) {
+  background: #09090b;
+  border-color: #09090b;
+  color: #ffffff;
+  border-radius: 6px;
+  font-weight: 500;
+}
+
+.cc-dialog-submit:not(.is-disabled):hover,
+.cc-dialog-submit:not(.is-disabled):focus {
+  background: #27272a;
+  border-color: #27272a;
+  color: #ffffff;
+}
+
+.cc-dialog-submit:not(.is-disabled):active {
+  background: #18181b;
+  border-color: #18181b;
+  color: #ffffff;
 }
 
 .cc-dialog :deep(.el-dialog__body) {
@@ -1561,11 +1639,15 @@ onBeforeUnmount(() => {
   align-items: flex-start;
 }
 
+/* 配置项名称标签对齐参考页 `/config/data-source` 新增／编辑主弹窗标签
+   （`.editor-dialog .el-form-item__label`：14px / 500 / #3f3f46）；沿用页面默认无衬线字体族，
+   不套用主表探针 ID 的等宽粗体样式；必填红星与校验语义保留（CCFG-REQ-119/CCFG-UI-046）。 */
 .cc-form-label {
   flex: 0 0 84px;
   padding-top: 6px;
   font-size: 14px;
-  color: #606266;
+  font-weight: 500;
+  color: #3f3f46;
 }
 
 .cc-form-label::before {
@@ -1630,6 +1712,16 @@ onBeforeUnmount(() => {
   min-width: 0;
 }
 
+/* 横向比例：“可选数据源”略宽于“已选”，以改善机构名称、`DATA_SOURCE_ID` 与
+   不可选择原因的可读性（CCFG-REQ-117/CCFG-DESIGN-057/CCFG-UI-045）。 */
+.cc-pane--options {
+  flex: 1.15;
+}
+
+.cc-pane--chosen {
+  flex: 1;
+}
+
 .cc-pane-title {
   margin: 0 0 6px;
   font-size: 13px;
@@ -1641,8 +1733,10 @@ onBeforeUnmount(() => {
   margin-bottom: 6px;
 }
 
+/* 候选数据源可见高度提高，使一次能显示的条数多于调整前；空间不足时仍为受控滚动
+   （该受控滚动仅限弹窗候选区，`+N` 清单的“无内部滚动”规则不适用于此，CCFG-REQ-117）。 */
 .cc-opt-list {
-  max-height: 200px;
+  max-height: 260px;
   overflow-y: auto;
 }
 
@@ -1703,8 +1797,9 @@ onBeforeUnmount(() => {
   color: #f56c6c;
 }
 
+/* 已选区可见高度与候选区同步提高（受控滚动保留，CCFG-REQ-117）。 */
 .cc-pane--chosen .cc-chosen-list {
-  max-height: 200px;
+  max-height: 260px;
   overflow-y: auto;
   display: flex;
   flex-direction: column;
@@ -1742,9 +1837,12 @@ onBeforeUnmount(() => {
   padding: 4px;
 }
 
+/* 菜单条目统一字重：危险项“删除”不加粗，与“启用／停用”保持一致；危险语义仅由红色文字、
+   上方分隔线与 Hover／焦点反馈承载（CCFG-REQ-122/CCFG-DESIGN-060/CCFG-UI-049）。 */
 .cc-more-popper .el-dropdown-menu__item {
   border-radius: 6px;
   padding: 6px 12px;
+  font-weight: 400;
 }
 
 .cc-more-popper .el-dropdown-menu__item--divided {

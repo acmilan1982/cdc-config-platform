@@ -1858,13 +1858,17 @@ describe('空描述 Tooltip、滚动边界与键盘编辑入口（R1-06）', () 
     wrapper.unmount()
   })
 
-  it('静态：弹窗内容区与 +N 完整清单设置视口安全最大高度与内部纵向滚动', () => {
+  it('静态：弹窗内容区保留受控滚动；+N 完整清单不设固定最大高度与内部滚动（第三轮修订）', () => {
     const formCss = cssBlock(SFC_SOURCE, '.cc-form')
     expect(formCss).toContain('overflow-y: auto')
     expect(formCss).toMatch(/max-height:\s*calc\(100vh/)
-    const fullListCss = cssBlock(SFC_SOURCE, '.cc-full-list')
-    expect(fullListCss).toContain('max-height: 320px')
-    expect(fullListCss).toContain('overflow-y: auto')
+    // `+N` 完整清单按内容自然增高（CCFG-REQ-115/CCFG-DESIGN-055/CCFG-UI-044）：
+    // `.cc-full-list` 已无专属规则块，且不得经任何以该选择器开头的规则重新引入
+    // 固定最大高度或内部滚动。此处为静态令牌检查，非浏览器计算样式。
+    expect(cssBlock(SFC_SOURCE, '.cc-full-list')).toBe('')
+    expect(SFC_SOURCE).not.toMatch(/\.cc-full-list[^{]*\{[^}]*max-height/)
+    expect(SFC_SOURCE).not.toMatch(/\.cc-full-list[^{]*\{[^}]*overflow-y/)
+    expect(SFC_SOURCE).not.toContain('max-height: 320px')
   })
 })
 
@@ -1978,5 +1982,239 @@ describe('数据源与描述 Tooltip：单实例与内容（CCFG-UI-005/008/009�
     await tag.trigger('mouseleave')
     await sleep(10)
     wrapper.unmount()
+  })
+})
+
+// ============================================================ 第三轮视觉调整
+
+/**
+ * 第三轮 `+N` 清单与新增／编辑弹窗视觉调整（CCFG-REQ-113~122 / CCFG-DESIGN-054~060 /
+ * CCFG-UI-043~049）。组件用例验证清单项内容与弹窗文案／按钮边界；样式令牌用例为**静态**
+ * 源码检查，不冒充浏览器计算样式，也不代表正式验收。
+ */
+describe('第三轮：+N 清单两级信息与弹窗视觉（CCFG-REQ-113~122 / CCFG-UI-043~049）', () => {
+  // 7 个数据源（> 单行上限 6）→ 必然出现 `+N`；其中一项机构名缺失、一项带项级异常与冲突探针。
+  const thirdRoundSources = [
+    view('ds-t1', '机构一号', '库一号'),
+    view('no-org-t', null, '无机构名库'),
+    view('ds-t2', '机构二号', '库二号', ['ASSIGNED_TO_MULTIPLE_CLIENTS'], ['hosp-900']),
+    view('ds-t3', '机构三号', '库三号'),
+    view('ds-t4', '机构四号', '库四号'),
+    view('ds-t5', '机构五号', '库五号'),
+    view('ds-t6', '机构六号', '库六号'),
+  ]
+  const thirdRoundRow = row('probe-t3', '第三轮探针', '1', thirdRoundSources)
+  const thirdRoundAmbiguousRow = row('probe-t3-amb', '第三轮歧义探针', '1', thirdRoundSources, {
+    possibleCommaDataSourceIds: ['ds-t1,no-org-t'],
+    rowAnomalies: ['COMMA_PROTOCOL_AMBIGUOUS'],
+  })
+
+  /** 点击 `+N` 打开完整清单（清单 Teleport 到 body），返回清单项元素。 */
+  async function openFullList(w: PageWrapper): Promise<HTMLElement[]> {
+    await w.find('.cc-more').trigger('click')
+    await flushPromises()
+    await sleep(60)
+    return Array.from(document.querySelectorAll<HTMLElement>('.cc-full-item'))
+  }
+
+  it('组件：清单主行为机构名、次行以可见前缀“数据源 ID：”引导完整 ID，保持接口原顺序', async () => {
+    const wrapper = await mountPage([thirdRoundRow])
+    const items = await openFullList(wrapper)
+    expect(items).toHaveLength(7)
+    // 主信息行：机构名存在时为机构名；缺失时以原始 ID 作主信息。顺序为接口原存储顺序。
+    expect(items.map((el) => el.querySelector('.cc-full-org')?.textContent?.trim())).toEqual([
+      '机构一号',
+      'no-org-t',
+      '机构二号',
+      '机构三号',
+      '机构四号',
+      '机构五号',
+      '机构六号',
+    ])
+    // 次信息行：仅机构名存在时输出，前缀可见且与值有明确分隔
+    expect(items.map((el) => el.querySelector('.cc-full-id')?.textContent?.trim() ?? null)).toEqual([
+      '数据源 ID：ds-t1',
+      null,
+      '数据源 ID：ds-t2',
+      '数据源 ID：ds-t3',
+      '数据源 ID：ds-t4',
+      '数据源 ID：ds-t5',
+      '数据源 ID：ds-t6',
+    ])
+    wrapper.unmount()
+  })
+
+  it('组件：机构名缺失项只把原始 ID 作主信息，不重复显示同一 ID', async () => {
+    const wrapper = await mountPage([thirdRoundRow])
+    const items = await openFullList(wrapper)
+    const noOrgItem = items.find(
+      (el) => el.querySelector('.cc-full-org')?.textContent?.trim() === 'no-org-t',
+    )
+    expect(noOrgItem).toBeTruthy()
+    // 不再输出同一 ID 的次信息行
+    expect(noOrgItem!.querySelector('.cc-full-id')).toBeNull()
+    const occurrences = (noOrgItem!.textContent ?? '').split('no-org-t').length - 1
+    expect(occurrences).toBe(1)
+    wrapper.unmount()
+  })
+
+  it('组件：项级异常与冲突探针信息仍保留在项内，红色语义类不变', async () => {
+    const wrapper = await mountPage([thirdRoundRow])
+    const items = await openFullList(wrapper)
+    const badItem = items.find((el) => el.querySelector('.cc-full-bad'))
+    expect(badItem).toBeTruthy()
+    expect(badItem!.querySelector('.cc-full-org')?.textContent?.trim()).toBe('机构二号')
+    expect(badItem!.querySelector('.cc-full-bad')?.textContent).toContain(
+      '已分配给其他探针：hosp-900',
+    )
+    wrapper.unmount()
+  })
+
+  it('组件：行级含逗号歧义的清单提示文案与事实边界逐字保留', async () => {
+    const wrapper = await mountPage([thirdRoundAmbiguousRow])
+    const items = await openFullList(wrapper)
+    expect(items).toHaveLength(7)
+    const note = document.querySelector('.cc-full-note')
+    expect(note).not.toBeNull()
+    expect(note!.textContent?.trim()).toBe(
+      '以下为普通 CSV 解析的展示结果（行级含逗号歧义），非已确定分配。',
+    )
+    wrapper.unmount()
+  })
+
+  it('组件：新增/编辑主提交按钮文案保持“创建/保存”，且仅主按钮带 cc-dialog-submit', async () => {
+    const wrapper = await mountPage([enabledRow])
+    await openCreate(wrapper)
+    const createBtn = exactButton(wrapper, '创建')!
+    expect(createBtn.classes()).toContain('cc-dialog-submit')
+    expect(exactButton(wrapper, '取消')!.classes()).not.toContain('cc-dialog-submit')
+    expect(exactButton(wrapper, '自动生成')!.classes()).not.toContain('cc-dialog-submit')
+    expect(exactButton(wrapper, '保存')).toBeUndefined()
+    // 新增模式：探针 ID 直接可编辑，不出现“修改探针 ID”开关
+    expect(exactButton(wrapper, '修改探针 ID')).toBeUndefined()
+    expect(wrapper.find('.cc-id-control input').attributes('disabled')).toBeUndefined()
+    wrapper.unmount()
+
+    const editWrapper = await mountPage([enabledRow])
+    await openEdit(editWrapper, enabledRow)
+    const saveBtn = exactButton(editWrapper, '保存')!
+    expect(saveBtn.classes()).toContain('cc-dialog-submit')
+    const toggle = exactButton(editWrapper, '修改探针 ID')!
+    expect(toggle).toBeTruthy()
+    expect(toggle.classes()).not.toContain('cc-dialog-submit')
+    editWrapper.unmount()
+  })
+
+  it('组件：主提交按钮禁用边界——无已选数据源时禁用并呈 is-disabled', async () => {
+    const wrapper = await mountPage([enabledRow])
+    await openCreate(wrapper)
+    const btn = exactButton(wrapper, '创建')!
+    expect(btn.attributes('disabled')).toBeDefined()
+    expect(btn.classes()).toContain('is-disabled')
+    wrapper.unmount()
+  })
+
+  it('静态：弹窗宽度 900px 且以 max-width 受视口限制保留左右安全间距', () => {
+    expect(SFC_SOURCE).toContain('width="900px"')
+    expect(SFC_SOURCE).not.toContain('width="680px"')
+    expect(declValue(cssBlock(SFC_SOURCE, ':deep(.cc-dialog)'), 'max-width')).toBe(
+      'calc(100vw - 48px)',
+    )
+  })
+
+  it('静态：配置项名称标签令牌对齐参考页（14px / 500 / #3f3f46，无等宽字体）', () => {
+    const label = cssBlock(SFC_SOURCE, '.cc-form-label')
+    expect(declValue(label, 'font-size')).toBe('14px')
+    expect(declValue(label, 'font-weight')).toBe('500')
+    expect(declValue(label, 'color')).toBe('#3f3f46')
+    expect(label).not.toContain('monospace')
+    // 必填红色星号与校验语义保留
+    expect(SFC_SOURCE).toContain('.cc-form-label::before')
+  })
+
+  it('静态：主提交按钮黑色实心令牌，正常态配色由 :not(.is-disabled) 限定', () => {
+    const submit = cssBlock(SFC_SOURCE, '.cc-dialog-submit:not(.is-disabled)')
+    expect(declValue(submit, 'background')).toBe('#09090b')
+    expect(declValue(submit, 'border-color')).toBe('#09090b')
+    expect(declValue(submit, 'color')).toBe('#ffffff')
+    expect(declValue(submit, 'border-radius')).toBe('6px')
+    expect(declValue(submit, 'font-weight')).toBe('500')
+    expect(SFC_SOURCE).toContain('.cc-dialog-submit:not(.is-disabled):hover')
+    expect(SFC_SOURCE).toContain('.cc-dialog-submit:not(.is-disabled):active')
+    expect(SFC_SOURCE).toContain('#27272a')
+    expect(SFC_SOURCE).toContain('#18181b')
+    // 不借助 !important 强行覆盖禁用态
+    expect(SFC_SOURCE).not.toContain('!important')
+  })
+
+  it('静态：清单两级各占一行，项间以浅分隔线区分', () => {
+    expect(declValue(cssBlock(SFC_SOURCE, '.cc-full-org'), 'display')).toBe('block')
+    expect(declValue(cssBlock(SFC_SOURCE, '.cc-full-id'), 'display')).toBe('block')
+    expect(cssBlock(SFC_SOURCE, '.cc-full-item + .cc-full-item')).toContain('border-top')
+  })
+
+  it('静态：“可选数据源”宽于“已选”，两区可见高度均较调整前提高且保持受控滚动', () => {
+    const optionsFlex = Number(declValue(cssBlock(SFC_SOURCE, '.cc-pane--options'), 'flex'))
+    const chosenFlex = Number(declValue(cssBlock(SFC_SOURCE, '.cc-pane--chosen'), 'flex'))
+    expect(Number.isFinite(optionsFlex)).toBe(true)
+    expect(Number.isFinite(chosenFlex)).toBe(true)
+    expect(optionsFlex).toBeGreaterThan(chosenFlex)
+
+    const optListHeight = Number(
+      declValue(cssBlock(SFC_SOURCE, '.cc-opt-list'), 'max-height').replace('px', ''),
+    )
+    const chosenListHeight = Number(
+      declValue(cssBlock(SFC_SOURCE, '.cc-pane--chosen .cc-chosen-list'), 'max-height').replace(
+        'px',
+        '',
+      ),
+    )
+    expect(optListHeight).toBeGreaterThan(200)
+    expect(chosenListHeight).toBeGreaterThan(200)
+    // 候选区受控滚动保留（仅弹窗内，与 +N 清单“不内部滚动”互不冲突）
+    expect(cssBlock(SFC_SOURCE, '.cc-opt-list')).toContain('overflow-y: auto')
+  })
+
+  it('静态：菜单条目统一字重，“删除”不加粗、危险语义由颜色与分隔线承载', () => {
+    const sharedItem = cssBlock(SFC_SOURCE, '.cc-more-popper .el-dropdown-menu__item')
+    expect(declValue(sharedItem, 'font-weight')).toBe('400')
+    const dangerRule = cssBlock(SFC_SOURCE, '.cc-more-popper .el-dropdown-menu__item.cc-more-danger')
+    // 危险项规则只承载颜色，不声明字重，故不覆盖共享的 400
+    expect(declValue(dangerRule, 'font-weight')).toBe('')
+    expect(declValue(dangerRule, 'color')).toBe('var(--el-color-danger)')
+  })
+
+  /**
+   * R1 裁切回归护栏。**jsdom 无法计算 Popper 的实际 placement 与矩形**，因此本用例只断言
+   * 组件确实把碰撞处理参数交给了 Element Plus／Popper：`placement` 仍以 `top` 为首选方向，
+   * 且 `preventOverflow` 打开了 `altAxis`（Popper v2 中 `top`/`bottom` 定位的**竖直**贴边
+   * 避让轴，EP 默认 `false`——这正是首行 9 项在 1440×900 被视口上缘裁掉约 166px 的根因），
+   * 并把边界显式定为视口。真实翻转／避让行为由浏览器几何断言脚本作为可执行证据，见
+   * `docs/features/client-config/reports/CLIENT-CONFIG-POPOVER-AND-DIALOG-VISUAL-IMPLEMENTATION-001-R1.md`。
+   */
+  it('组件：+N 弹层以 top 为首选方向，且显式开启视口边界与竖直贴边避让（防 R1 裁切回归）', async () => {
+    const wrapper = await mountPage([thirdRoundRow])
+    const popover = wrapper.findComponent({ name: 'ElPopover' })
+    expect(popover.exists()).toBe(true)
+    expect(popover.props('placement')).toBe('top')
+    const options = popover.props('popperOptions') as {
+      modifiers?: Array<{ name: string; options?: Record<string, unknown> }>
+    }
+    const preventOverflow = options?.modifiers?.find((m) => m.name === 'preventOverflow')
+    expect(preventOverflow).toBeTruthy()
+    // top/bottom 定位下竖直方向贴边避让由 altAxis 控制，必须显式开启
+    expect(preventOverflow!.options?.altAxis).toBe(true)
+    expect(preventOverflow!.options?.boundary).toBe('viewport')
+    expect(preventOverflow!.options?.rootBoundary).toBe('viewport')
+    expect(preventOverflow!.options?.tether).toBe(false)
+    wrapper.unmount()
+  })
+
+  it('静态：+N 弹层绑定碰撞选项常量，不借助固定最大高度或内部滚动“解决”高度', () => {
+    expect(SFC_SOURCE).toContain(':popper-options="FULL_LIST_POPPER_OPTIONS"')
+    expect(SFC_SOURCE).toContain('altAxis: true')
+    expect(SFC_SOURCE).toContain("boundary: 'viewport'")
+    // 清单仍按内容自然增高
+    expect(cssBlock(SFC_SOURCE, '.cc-full-list')).toBe('')
   })
 })
