@@ -75,6 +75,17 @@ function declValue(block: string, prop: string): string {
   return m ? m[1].trim() : ''
 }
 
+/**
+ * 同 {@link cssBlock}，但用于**多选择器分组**规则（如
+ * `.cc-dialog-submit.is-loading, .cc-dialog-submit.is-loading:hover, … { … }`）：
+ * 命中以该选择器开头的一项后，连同其余同级选择器一起取到 `{ … }` 声明块。
+ */
+function cssGroupBlock(source: string, selector: string): string {
+  const escaped = selector.replace(/[.*+?^${}()|[\]\\]/g, '\\$&')
+  const m = source.match(new RegExp(`(?:^|[,\\n])\\s*${escaped}\\s*(?:,[^{}]*)?\\{([^}]*)\\}`, 'm'))
+  return m ? m[1] : ''
+}
+
 /** 本页 SFC 样式块源码与参考页（数据源管理）SFC 样式块源码。 */
 const DS_PAGE_SOURCE = readFileSync(DS_PAGE_PATH, 'utf-8')
 /** 参考页“角色”标签的盒模型声明块来源（`.data-table :deep(.el-tag)`）。 */
@@ -2624,5 +2635,131 @@ describe('第四轮：字段级校验与主按钮口径（CCFG-REQ-123~136）', 
     )
     expect(SFC_SOURCE).not.toContain('220px')
     expect(SFC_SOURCE).not.toContain('64px')
+  })
+})
+
+// ============================================================ 第一轮纠偏（R1）：主提交按钮加载态去掉蓝黑跳色
+// CCFG-REQ-120/124 / CCFG-AC-115/120 / CCFG-DESIGN-059/062 / CCFG-UI-047/051
+//
+// 背景：Element Plus 在 `is-loading` 时同时置 `is-disabled`，其
+// `.el-button.is-disabled` 把 `--el-button-disabled-bg-color`（主色浅色 5 级
+// `#a0cfff`，浅蓝）刷到底色上，于是黑色常态在挂起瞬间跳到浅蓝。纠偏只做一件事：
+// 为 `.cc-dialog-submit.is-loading` 增加**仅加载态**的定向深灰黑系样式。
+//
+// jsdom 不注入 SFC 样式，因此“实际颜色”由 SFC 源码声明块受检（加载态声明块 + 无浅蓝
+// 令牌/无全局覆盖/无 !important）；真实浏览器下的 computed 色值三态证据见
+// `docs/features/client-config/reports/CLIENT-CONFIG-CREATE-EDIT-DIALOG-VALIDATION-IMPLEMENTATION-001-R1.md`。
+
+describe('第一轮纠偏（R1）：主提交按钮加载态保持黑色系（CCFG-REQ-120/124）', () => {
+  it('静态：加载态定向声明为黑色系深灰，且覆盖 hover/focus/active 不给浅蓝留入口', () => {
+    const loading = cssGroupBlock(SFC_SOURCE, '.cc-dialog-submit.is-loading')
+    expect(loading).not.toBe('')
+    // 黑系深灰底 + 白字：与常态 #09090b 同族，明显区别于 EP 主色浅蓝
+    expect(declValue(loading, 'background')).toBe('#3f3f46')
+    expect(declValue(loading, 'border-color')).toBe('#3f3f46')
+    expect(declValue(loading, 'color')).toBe('#ffffff')
+    expect(declValue(loading, 'border-radius')).toBe('6px')
+    expect(declValue(loading, 'font-weight')).toBe('500')
+    // 与“仍可点击的黑色常态”区分：加载态不可重复点击
+    expect(declValue(loading, 'cursor')).toBe('not-allowed')
+
+    // 分组内显式带上 hover/focus/active，防止 EP 的 `.el-button.is-disabled:hover`
+    // 在指针悬停时把浅蓝重新刷回
+    expect(SFC_SOURCE).toContain('.cc-dialog-submit.is-loading:hover')
+    expect(SFC_SOURCE).toContain('.cc-dialog-submit.is-loading:focus')
+    expect(SFC_SOURCE).toContain('.cc-dialog-submit.is-loading:active')
+
+    // EP 用 30% 白遮罩 `.el-button.is-loading:before` 冲淡底色，须在本按钮加载态内置为透明
+    const mask = cssBlock(SFC_SOURCE, '.cc-dialog-submit.is-loading::before')
+    expect(declValue(mask, 'background-color')).toBe('transparent')
+  })
+
+  it('静态：纠偏不引入浅蓝令牌、全局覆盖或 !important，选择器仍仅限定本主按钮', () => {
+    // 浅蓝来源与主色令牌不得出现在本页样式里（防止有人改回“禁用即主色浅色”）
+    expect(SFC_SOURCE).not.toContain('#a0cfff')
+    expect(SFC_SOURCE).not.toContain('--el-color-primary-light-5')
+    expect(SFC_SOURCE).not.toContain('--el-button-disabled-bg-color')
+    // 不得改成全局按钮覆盖，也不得靠 !important 抢优先级
+    expect(SFC_SOURCE).not.toContain('.el-button.is-loading')
+    expect(SFC_SOURCE).not.toContain('!important')
+    // 正常态仍由 :not(.is-disabled) 限定（历史条款的作用域说明保持）
+    expect(SFC_SOURCE).toContain('.cc-dialog-submit:not(.is-disabled)')
+  })
+
+  it('新增：常态黑色可点击 → 挂起 is-loading 且防重复 → 结束后恢复常态（CCFG-AC-120）', async () => {
+    const w = await mountPage([enabledRow])
+    await openCreate(w)
+    await fillValidCreate(w)
+
+    // ① 常态：黑色可点击（不预禁用、不加载）
+    const idle = exactButton(w, '创建')!
+    expect(idle.attributes('disabled')).toBeUndefined()
+    expect(idle.classes()).not.toContain('is-disabled')
+    expect(idle.classes()).not.toContain('is-loading')
+
+    // ② 挂起：is-loading + 防重复点击
+    let release: (v: ApiResponse<null>) => void = () => {}
+    mockedCreate.mockImplementation(
+      () => new Promise<ApiResponse<null>>((resolve) => (release = resolve)) as never,
+    )
+    await exactButton(w, '创建')!.trigger('click')
+    const pending = exactButton(w, '创建')!
+    expect(pending.classes()).toContain('is-loading')
+    expect(pending.classes()).toContain('is-disabled')
+    expect(pending.attributes('disabled')).toBeDefined()
+
+    await pending.trigger('click')
+    await pending.trigger('click')
+    expect(mockedCreate).toHaveBeenCalledTimes(1)
+
+    // ③ 结束：请求返回后按钮复位为常态
+    release(okNull())
+    await flushPromises()
+    expect(messageSpy.success).toHaveBeenCalledWith('新增成功')
+    // 成功后弹窗关闭，重开校验按钮已无加载/禁用残留
+    await openCreate(w)
+    const restored = exactButton(w, '创建')!
+    expect(restored.classes()).not.toContain('is-loading')
+    expect(restored.classes()).not.toContain('is-disabled')
+    expect(restored.attributes('disabled')).toBeUndefined()
+    w.unmount()
+  })
+
+  it('编辑：常态黑色可点击 → 挂起 is-loading 且防重复 → 失败后恢复常态（CCFG-AC-115/120）', async () => {
+    const editRow = row('probe-edit', '编辑探针', '1', [healthyDs])
+    const w = await mountPage([editRow])
+    await openEdit(w, editRow)
+
+    // ① 常态：黑色可点击
+    const idle = exactButton(w, '保存')!
+    expect(idle.classes()).toContain('cc-dialog-submit')
+    expect(idle.attributes('disabled')).toBeUndefined()
+    expect(idle.classes()).not.toContain('is-disabled')
+    expect(idle.classes()).not.toContain('is-loading')
+
+    // ② 挂起：is-loading + 防重复点击
+    let reject: (e: unknown) => void = () => {}
+    mockedUpdate.mockImplementation(
+      () => new Promise<ApiResponse<null>>((_, rej) => (reject = rej)) as never,
+    )
+    await exactButton(w, '保存')!.trigger('click')
+    const pending = exactButton(w, '保存')!
+    expect(pending.classes()).toContain('is-loading')
+    expect(pending.classes()).toContain('is-disabled')
+    expect(pending.attributes('disabled')).toBeDefined()
+
+    await pending.trigger('click')
+    await pending.trigger('click')
+    expect(mockedUpdate).toHaveBeenCalledTimes(1)
+
+    // ③ 结束：请求失败后弹窗保持打开且按钮恢复黑色可点击常态
+    reject(new Error('network down'))
+    await flushPromises()
+    expect(messageSpy.error).toHaveBeenCalledWith('编辑失败，请检查网络后重试。')
+    const restored = exactButton(w, '保存')!
+    expect(restored.classes()).not.toContain('is-loading')
+    expect(restored.classes()).not.toContain('is-disabled')
+    expect(restored.attributes('disabled')).toBeUndefined()
+    w.unmount()
   })
 })

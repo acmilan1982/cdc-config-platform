@@ -1812,6 +1812,31 @@ onBeforeUnmount(() => {
   color: #ffffff;
 }
 
+/* 提交请求处理中的加载态：仍为黑色系深灰，避免正常态黑色与 Element Plus
+   主色蓝之间跳色；以略浅于常态的深灰底 + 加载图标 + 不可重复点击游标与
+   “可点击的黑色常态”区分，白字与加载图标保持可读。选择器仅限定本主提交
+   按钮的加载态（不新增全局覆盖，也不强制提升优先级），`:loading="submitting"`
+   与 `:disabled="submitting"` 的防重复提交逻辑不变。
+   CCFG-REQ-120/124、CCFG-AC-115/120、CCFG-DESIGN-059/062、CCFG-UI-047/051。 */
+.cc-dialog-submit.is-loading,
+.cc-dialog-submit.is-loading:hover,
+.cc-dialog-submit.is-loading:focus,
+.cc-dialog-submit.is-loading:active {
+  background: #3f3f46;
+  border-color: #3f3f46;
+  color: #ffffff;
+  border-radius: 6px;
+  font-weight: 500;
+  cursor: not-allowed;
+}
+
+/* Element Plus 在加载态以 30% 白色遮罩涂抹按钮（其 `is-loading:before` 伪元素
+   的 `--el-mask-color-extra-light`）；在深色加载态下该遮罩会冲淡底色并削弱与
+   常态的对比，故在本按钮的加载态内置为透明。 */
+.cc-dialog-submit.is-loading::before {
+  background-color: transparent;
+}
+
 .cc-dialog :deep(.el-dialog__body) {
   padding-top: 8px;
 }
