@@ -234,12 +234,17 @@
       <div class="cc-form">
         <div class="cc-form-item">
           <span class="cc-form-label">探针 ID</span>
-          <div class="cc-form-control">
+          <div
+            ref="idControlEl"
+            class="cc-form-control cc-field"
+            :class="{ 'cc-field--error': idFieldError !== null }"
+          >
             <div class="cc-id-control">
               <el-input
                 v-if="!clientIdLocked"
-                v-model="clientIdDraft"
+                v-model="clientIdModel"
                 placeholder="1~32 位字母、数字、点、下划线或连字符"
+                :maxlength="ID_MAX_LENGTH"
                 :disabled="submitting"
               />
               <el-input v-else :model-value="clientIdDraft" disabled data-locked="true" />
@@ -255,29 +260,41 @@
             >
               {{ clientIdLocked ? '修改探针 ID' : '取消修改' }}
             </el-button>
+            <div class="cc-field-feedback">
+              <p v-if="idFieldError" class="cc-field-error" role="alert">{{ idFieldError }}</p>
+            </div>
           </div>
         </div>
 
         <div class="cc-form-item">
           <span class="cc-form-label">探针描述</span>
-          <div class="cc-form-control cc-desc-row">
-            <el-input
-              v-model="clientDescDraft"
-              type="textarea"
-              :rows="2"
-              placeholder="探针用途描述（UTF-8 原文不超过 1024 字节）"
-              :disabled="submitting"
-            />
-            <el-button class="cc-autogen" @click="onAutoGenerate">
-              自动生成
-            </el-button>
+          <div
+            ref="descControlEl"
+            class="cc-form-control cc-field"
+            :class="{ 'cc-field--error': descFieldError !== null }"
+          >
+            <div class="cc-desc-row">
+              <el-input
+                v-model="clientDescModel"
+                type="textarea"
+                :rows="2"
+                placeholder="探针用途描述（最多 256 个字符）"
+                :disabled="submitting"
+              />
+              <el-button class="cc-autogen" @click="onAutoGenerate">
+                自动生成
+              </el-button>
+            </div>
+            <div class="cc-field-feedback">
+              <p v-if="descFieldError" class="cc-field-error" role="alert">{{ descFieldError }}</p>
+            </div>
           </div>
         </div>
 
         <div class="cc-form-item">
           <span class="cc-form-label">采集数据源</span>
-          <div class="cc-form-control cc-source-field">
-            <div class="cc-split">
+          <div ref="sourceControlEl" class="cc-form-control cc-source-field">
+            <div class="cc-split" :class="{ 'cc-split--error': sourceFieldInvalid }">
               <!-- 候选池（CCFG-UI-016） -->
               <div class="cc-pane cc-pane--options">
                 <p class="cc-pane-title">可选数据源</p>
@@ -343,18 +360,26 @@
                 </div>
               </div>
             </div>
+            <div class="cc-field-feedback">
+              <p
+                v-if="sourceFeedback"
+                class="cc-field-feedback__text"
+                :class="sourceFeedback.tone === 'error' ? 'cc-field-error' : 'cc-field-hint'"
+                :role="sourceFeedback.tone === 'error' ? 'alert' : 'note'"
+              >
+                {{ sourceFeedback.text }}
+              </p>
+            </div>
           </div>
         </div>
       </div>
-
-      <p v-if="saveBlockReason" class="cc-save-hint" role="note">{{ saveBlockReason }}</p>
 
       <template #footer>
         <el-button :disabled="submitting" @click="dialogOpen = false">取消</el-button>
         <el-button
           type="primary"
           class="cc-dialog-submit"
-          :disabled="saveBlockReason !== null || submitting"
+          :disabled="submitting"
           :loading="submitting"
           @click="submitDialog"
         >
@@ -385,7 +410,7 @@
 </template>
 
 <script setup lang="ts">
-import { computed, nextTick, onBeforeUnmount, onMounted, reactive, ref } from 'vue'
+import { computed, nextTick, onBeforeUnmount, onMounted, reactive, ref, watch } from 'vue'
 import { ElMessage, ElMessageBox } from 'element-plus'
 import { MoreFilled, Plus } from '@element-plus/icons-vue'
 import {
@@ -448,6 +473,18 @@ const FULL_LIST_POPPER_OPTIONS: { modifiers: FullListPopperModifier[] } = {
 
 const ID_PATTERN = /^[A-Za-z0-9][A-Za-z0-9._-]{0,31}$/
 
+/** 探针 ID 输入层上限（ASCII 规则，原生 maxlength 即可，CCFG-REQ-131/CCFG-DESIGN-069）。 */
+const ID_MAX_LENGTH = 32
+
+/** 探针描述界面输入层上限：按 Unicode 完整字符（码点）计数（CCFG-REQ-132/CCFG-DESIGN-070）。 */
+const DESC_MAX_CHARS = 256
+
+/** 服务端错误码 → 字段归属映射（API.md §9，仅归属既有错误码，不新增/更改错误码）。
+ * 历史异常阻断 `40942`、候选加载失败与无法归属的错误码不在映射内，保留全局提示（CCFG-UI-052）。 */
+const ID_ERROR_CODES = new Set([40100, 40101, 40940])
+const DESC_ERROR_CODES = new Set([40102])
+const SOURCE_ERROR_CODES = new Set([40103, 40104, 40105, 40941])
+
 const ANOMALY_TEXT: Record<string, string> = {
   INACTIVE: '已停用',
   NOT_FOUND: '不存在',
@@ -469,6 +506,16 @@ function javaTrim(value: string): string {
 
 function utf8Bytes(value: string): number {
   return new TextEncoder().encode(value).length
+}
+
+/**
+ * 按 Unicode 完整字符（码点）截断：`Array.from` 按码点迭代，代理对（含四字节 Emoji 等补充平面字符）
+ * 不会在中间被切开（CCFG-REQ-132/CCFG-REQ-133/CCFG-REQ-134、CCFG-DESIGN-070/071）。
+ * 原生 `maxlength` 按 UTF-16 code unit 计数，对这些字符会误算，故统一走本函数。
+ */
+function truncateCodePoints(value: string, max: number): string {
+  const chars = Array.from(value)
+  return chars.length <= max ? value : chars.slice(0, max).join('')
 }
 
 function anomalyText(anomalies: string[], conflictClientIds: string[]): string {
@@ -742,6 +789,38 @@ const chosen = ref<ChosenItem[]>([])
 const optionSearch = ref('')
 const submitting = ref(false)
 
+/** 字段级错误状态与“本次弹窗会话是否已尝试提交”（CCFG-REQ-123/127、CCFG-DESIGN-061/065）。
+ * `submitAttempted` 只活在本次弹窗会话内，`resetDialog()` 重新打开时复位，不写持久化状态。 */
+const idFieldError = ref<string | null>(null)
+const descFieldError = ref<string | null>(null)
+const sourceFieldError = ref<string | null>(null)
+const submitAttempted = ref(false)
+const idControlEl = ref<HTMLElement | null>(null)
+const descControlEl = ref<HTMLElement | null>(null)
+const sourceControlEl = ref<HTMLElement | null>(null)
+
+/**
+ * 输入层上限（前端输入限制，不替代后端校验）：
+ * - 探针 ID 为 ASCII 规则，除原生 `maxlength=32` 外同口径截断，手工输入与粘贴一致
+ *   （CCFG-REQ-131/CCFG-DESIGN-069/CCFG-UI-058）。
+ * - 探针描述按 Unicode 完整字符计数、只保留前 256 个字符；不使用原生 `maxlength`（按 UTF-16
+ *   code unit 计数会误算四字节字符并可能拆开代理对）（CCFG-REQ-132/CCFG-DESIGN-070/CCFG-UI-059）。
+ * 两者都只是长度截断，不做字符剥离或替换，非法字符仍由提交时的字段级错误指出。
+ */
+const clientIdModel = computed({
+  get: () => clientIdDraft.value,
+  set: (value: string) => {
+    clientIdDraft.value = value.slice(0, ID_MAX_LENGTH)
+  },
+})
+
+const clientDescModel = computed({
+  get: () => clientDescDraft.value,
+  set: (value: string) => {
+    clientDescDraft.value = truncateCodePoints(value, DESC_MAX_CHARS)
+  },
+})
+
 const options = ref<DataSourceOptionVO[]>([])
 const optionsLoading = ref(false)
 const optionsLoadFailed = ref(false)
@@ -802,7 +881,9 @@ function openEdit(row: ClientListItemVO): void {
   editRow.value = row
   clientIdLocked.value = true
   clientIdDraft.value = row.clientId
-  clientDescDraft.value = row.clientDesc ?? ''
+  // 历史 `CLIENT_DESC` 超过 256 字符时，只把前 256 个完整字符回显为本次编辑草稿；
+  // 打开弹窗不写数据库、不改动列表原记录（CCFG-REQ-134/CCFG-DESIGN-071）。
+  clientDescDraft.value = truncateCodePoints(row.clientDesc ?? '', DESC_MAX_CHARS)
   chosen.value = row.dataSources.map((d) => ({
     dataSourceId: d.dataSourceId,
     org: d.org,
@@ -823,6 +904,11 @@ function resetDialog(): void {
   chosen.value = []
   optionSearch.value = ''
   submitting.value = false
+  // 关闭后重新打开不得残留上一会话的字段错误与“已尝试提交”状态（CCFG-REQ-123/127）
+  idFieldError.value = null
+  descFieldError.value = null
+  sourceFieldError.value = null
+  submitAttempted.value = false
   options.value = []
   optionsLoading.value = false
   optionsLoadFailed.value = false
@@ -858,6 +944,8 @@ function toggleClientIdLock(): void {
     if (editRow.value) clientIdDraft.value = editRow.value.clientId
     clientIdLocked.value = true
   }
+  // 解锁／取消修改后不得残留上一个锁定态的 ID 错误：按当前草稿重新判定
+  idFieldError.value = validateClientId()
 }
 
 /** 编辑歧义行：选择集与原始 CSV 解析结果完全一致时视为“尚未清除歧义”。 */
@@ -871,17 +959,106 @@ const ambiguityNotCleared = computed(() => {
 
 const hasAnomalousChosen = computed(() => chosen.value.some((c) => c.anomalies.length > 0))
 
-const saveBlockReason = computed<string | null>(() => {
-  if (chosen.value.length === 0) return '至少选择 1 个数据源'
-  // 行级含逗号歧义优先于项级异常提示：歧义是根因，项级异常多为歧义解析的派生结果
-  if (mode.value === 'edit' && ambiguityNotCleared.value) {
+/** 编辑模式既有的保存前业务阻断（CCFG-REQ-049/CCFG-UI-017）：本轮只改变呈现与按钮口径，
+ * 判定内容不变——歧义优先于项级异常（歧义是根因，项级异常多为歧义解析的派生结果）。 */
+const editBlockReason = computed<string | null>(() => {
+  if (mode.value !== 'edit') return null
+  if (ambiguityNotCleared.value) {
     return '原配置含英文逗号歧义：请移除歧义展示项并重新选择合法候选后再保存'
   }
-  if (mode.value === 'edit' && hasAnomalousChosen.value) {
+  if (hasAnomalousChosen.value) {
     return '存在异常数据源（见红色标记），请先移除异常项后再保存'
   }
   return null
 })
+
+/** 字段级校验：探针 ID（沿用 CCFG-REQ-037/038 判定内容，不新增保存条件）。 */
+function validateClientId(): string | null {
+  const finalId = javaTrim(clientIdDraft.value)
+  if (finalId.length === 0) return '探针 ID 不能为空。'
+  if (!ID_PATTERN.test(finalId)) {
+    return '探针 ID 格式不正确：须为 1~32 位字母、数字、点、下划线或连字符，且以字母或数字开头。'
+  }
+  return null
+}
+
+/** 字段级校验：探针描述（Trim 仅判空，原文按 UTF-8 字节 `<=1024` 预校验，CCFG-REQ-039/059）。 */
+function validateDesc(): string | null {
+  const desc = clientDescDraft.value
+  if (javaTrim(desc).length === 0) return '探针描述不能为空。'
+  if (utf8Bytes(desc) > 1024) {
+    return '探针描述原文超过 1024 字节（UTF-8），请缩短后再保存。'
+  }
+  return null
+}
+
+/**
+ * “采集数据源”字段反馈区的唯一文案与语气（CCFG-REQ-126/127、CCFG-UI-053/054/055）：
+ * 业务阻断（歧义／异常项）与服务端归属错误为红色错误态；未选数据源且尚未尝试提交为中性灰色说明；
+ * 已尝试提交仍未选则为红色错误态。三者共用同一反馈区与同一稳定空间。
+ */
+const sourceFeedback = computed<{ text: string; tone: 'neutral' | 'error' } | null>(() => {
+  if (editBlockReason.value) return { text: editBlockReason.value, tone: 'error' }
+  if (sourceFieldError.value) return { text: sourceFieldError.value, tone: 'error' }
+  if (chosen.value.length === 0) {
+    return {
+      text: '至少选择 1 个数据源',
+      tone: submitAttempted.value ? 'error' : 'neutral',
+    }
+  }
+  return null
+})
+
+/** 数据源选择区域是否呈红色错误边框（与反馈区的错误态一致）。 */
+const sourceFieldInvalid = computed(() => sourceFeedback.value?.tone === 'error')
+
+/**
+ * 把可明确归属字段的服务端错误落到该字段下方；无法归属的错误返回 false 由调用方走全局提示
+ * （CCFG-REQ-125、CCFG-UI-052、CCFG-DESIGN-063）。不新增、不改写任何错误码。
+ */
+function applyServerFieldError(code: number, message: string): boolean {
+  const text = message || '保存失败'
+  if (ID_ERROR_CODES.has(code)) {
+    idFieldError.value = text
+    return true
+  }
+  if (DESC_ERROR_CODES.has(code)) {
+    descFieldError.value = text
+    return true
+  }
+  if (SOURCE_ERROR_CODES.has(code)) {
+    sourceFieldError.value = text
+    return true
+  }
+  return false
+}
+
+/** 定位到第一个错误字段：优先聚焦可聚焦控件；锁定态不可聚焦时退化为滚动到该字段。 */
+async function focusFirstError(): Promise<void> {
+  await nextTick()
+  const candidates: Array<[boolean, HTMLElement | null]> = [
+    [idFieldError.value !== null, idControlEl.value],
+    [descFieldError.value !== null, descControlEl.value],
+    [sourceFieldInvalid.value, sourceControlEl.value],
+  ]
+  const hit = candidates.find(([hasError, el]) => hasError && el !== null)
+  if (!hit) return
+  const host = hit[1] as HTMLElement
+  const input = host.querySelector<HTMLInputElement | HTMLTextAreaElement>('input, textarea')
+  if (input && !input.disabled) {
+    input.focus()
+    return
+  }
+  try {
+    host.scrollIntoView({ block: 'nearest' })
+  } catch {
+    // jsdom 无布局：忽略滚动定位，几何行为由真实浏览器核对
+  }
+}
+
+function clearServerFieldErrors(): void {
+  sourceFieldError.value = null
+}
 
 function onAutoGenerate(): void {
   if (chosen.value.length === 0) {
@@ -893,41 +1070,37 @@ function onAutoGenerate(): void {
     ElMessage.warning(`数据源（${missing.dataSourceId}）无机构名称，自动生成失败。`)
     return
   }
+  // 先按原有选择顺序生成完整描述，再直接保留前 256 个完整字符写入草稿；
+  // 超过 256 字符不失败、不弹超长提示（末尾机构名或分隔符可能被截断，为明确接受的截断行为），
+  // 最终草稿仍由提交时的判空与 UTF-8 字节校验把关（CCFG-REQ-133/CCFG-DESIGN-070）。
   const generated = chosen.value.map((c) => (c.org ?? '').trim()).join(',')
   if (javaTrim(generated).length === 0) {
     ElMessage.warning('自动生成失败：结果为空白。')
     return
   }
-  if (utf8Bytes(generated) > 1024) {
-    ElMessage.warning('自动生成失败：生成描述超过 1024 字节（UTF-8）。')
-    return
-  }
-  clientDescDraft.value = generated
+  clientDescDraft.value = truncateCodePoints(generated, DESC_MAX_CHARS)
 }
 
 async function submitDialog(): Promise<void> {
-  if (mode.value === null || submitting.value || saveBlockReason.value !== null) return
-  const finalClientId = javaTrim(clientIdDraft.value)
-  if (finalClientId.length === 0) {
-    ElMessage.warning('探针 ID 不能为空。')
-    return
-  }
-  if (!ID_PATTERN.test(finalClientId)) {
-    ElMessage.warning('探针 ID 格式不正确：须为 1~32 位字母、数字、点、下划线或连字符，且以字母或数字开头。')
-    return
-  }
-  const desc = clientDescDraft.value
-  if (javaTrim(desc).length === 0) {
-    ElMessage.warning('探针描述不能为空。')
-    return
-  }
-  if (utf8Bytes(desc) > 1024) {
-    ElMessage.warning('探针描述去除首尾空白后非空，但原文超过 1024 字节（UTF-8），请缩短后再保存。')
+  if (mode.value === null || submitting.value) return
+  submitAttempted.value = true
+  clearServerFieldErrors()
+  // 一次校验全部字段：逐字段显示各自错误，不做“提前 return 只报第一个”
+  idFieldError.value = validateClientId()
+  descFieldError.value = validateDesc()
+  const blocked =
+    idFieldError.value !== null ||
+    descFieldError.value !== null ||
+    chosen.value.length === 0 ||
+    editBlockReason.value !== null
+  if (blocked) {
+    // 点击后就地反馈并以字段级错误拒绝写入；反馈不可见时定位到第一个错误
+    await focusFirstError()
     return
   }
   const request = {
-    clientId: finalClientId,
-    clientDesc: desc,
+    clientId: javaTrim(clientIdDraft.value),
+    clientDesc: clientDescDraft.value,
     dataSourceIds: chosen.value.map((c) => c.dataSourceId),
   }
   const originalClientId = editRow.value?.clientId
@@ -942,8 +1115,11 @@ async function submitDialog(): Promise<void> {
       ElMessage.success(isEdit ? '编辑成功' : '新增成功')
       dialogOpen.value = false
       await loadList()
-    } else {
+    } else if (!applyServerFieldError(res.code, res.message)) {
+      // 网络不可用或无法归属到具体字段的系统错误保留全局提示（CCFG-REQ-125）
       ElMessage.error(res.message || (isEdit ? '编辑失败' : '新增失败'))
+    } else {
+      await focusFirstError()
     }
   } catch (e) {
     ElMessage.error(isEdit ? '编辑失败，请检查网络后重试。' : '新增失败，请检查网络后重试。')
@@ -951,6 +1127,21 @@ async function submitDialog(): Promise<void> {
     submitting.value = false
   }
 }
+
+// 逐字段修正：只清除／更新该字段自己的错误，其他字段的错误保持（CCFG-REQ-123/CCFG-UI-050）。
+watch(clientIdDraft, () => {
+  if (idFieldError.value !== null) idFieldError.value = validateClientId()
+})
+watch(clientDescDraft, () => {
+  if (descFieldError.value !== null) descFieldError.value = validateDesc()
+})
+watch(
+  chosen,
+  () => {
+    if (sourceFieldError.value !== null) sourceFieldError.value = null
+  },
+  { deep: true },
+)
 
 // ------------------------------------------------- 单行动态 +N 布局
 // 决策依赖真实元素尺寸：用 ResizeObserver 观察每个采集数据源单元格，取到容器宽度后
@@ -1641,13 +1832,16 @@ onBeforeUnmount(() => {
 
 /* 配置项名称标签对齐参考页 `/config/data-source` 新增／编辑主弹窗标签
    （`.editor-dialog .el-form-item__label`：14px / 500 / #3f3f46）；沿用页面默认无衬线字体族，
-   不套用主表探针 ID 的等宽粗体样式；必填红星与校验语义保留（CCFG-REQ-119/CCFG-UI-046）。 */
+   不套用主表探针 ID 的等宽粗体样式；必填红星与校验语义保留（CCFG-REQ-119/CCFG-UI-046）。
+   标签列宽固定并右对齐：右边缘整齐、左边缘允许参差，红星仍在名称前
+   （CCFG-REQ-130/CCFG-DESIGN-068/CCFG-UI-057）。 */
 .cc-form-label {
   flex: 0 0 84px;
   padding-top: 6px;
   font-size: 14px;
   font-weight: 500;
   color: #3f3f46;
+  text-align: right;
 }
 
 .cc-form-label::before {
@@ -1697,10 +1891,55 @@ onBeforeUnmount(() => {
   width: 100%;
 }
 
+/* 字段级错误态：控件红色边框（CCFG-REQ-123/CCFG-DESIGN-061/CCFG-UI-050）。
+   输入框与文本域沿用 Element Plus 的 inset box-shadow 边框表现，聚焦态仍保持红色。 */
+.cc-field--error :deep(.el-input__wrapper),
+.cc-field--error :deep(.el-input__wrapper.is-focus),
+.cc-field--error :deep(.el-textarea__inner),
+.cc-field--error :deep(.el-textarea__inner:focus) {
+  box-shadow: 0 0 0 1px var(--el-color-danger) inset;
+}
+
+/* 字段反馈区预留稳定空间：选中／取消选择与普通错误状态切换时弹窗底边与页脚不明显跳动
+   （CCFG-REQ-128/CCFG-DESIGN-066/CCFG-UI-055）。用最小高度而非固定高度，
+   需要换行的真实错误文案完整可读、不裁剪（不设 overflow:hidden、不固定单行高度）。 */
+.cc-field-feedback {
+  min-height: 20px;
+  margin-top: 2px;
+}
+
+.cc-field-feedback__text {
+  margin: 0;
+  font-size: 13px;
+  line-height: 1.4;
+  overflow-wrap: anywhere;
+}
+
+.cc-field-error {
+  margin: 0;
+  font-size: 13px;
+  line-height: 1.4;
+  color: var(--el-color-danger);
+  overflow-wrap: anywhere;
+}
+
+.cc-field-hint {
+  margin: 0;
+  font-size: 13px;
+  line-height: 1.4;
+  color: #909399;
+  overflow-wrap: anywhere;
+}
+
 .cc-split {
   display: flex;
   gap: 10px;
   width: 100%;
+}
+
+/* “采集数据源”选择区域整体呈错误态：红色边框（CCFG-REQ-123/CCFG-UI-054）。 */
+.cc-split--error .cc-pane {
+  border-color: var(--el-color-danger);
 }
 
 .cc-pane {
@@ -1813,12 +2052,6 @@ onBeforeUnmount(() => {
 
 .cc-chip--bad {
   border-color: var(--el-color-danger);
-}
-
-.cc-save-hint {
-  margin: 10px 0 0;
-  font-size: 13px;
-  color: #f56c6c;
 }
 </style>
 

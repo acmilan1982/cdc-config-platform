@@ -1542,8 +1542,15 @@ describe('行级含逗号歧义（CCFG-UI-026）', () => {
     expect(wrapper.text()).toContain('（展示）')
 
     await openEdit(wrapper, ambiguousRow)
-    expect(exactButton(wrapper, '保存')!.attributes('disabled')).toBeDefined()
+    // 第四轮起主提交按钮不再因业务阻断预先禁用：点击后就地反馈且仍拒绝写入（CCFG-REQ-124/CCFG-REQ-125）
+    const saveBtn = exactButton(wrapper, '保存')!
+    expect(saveBtn.attributes('disabled')).toBeUndefined()
+    expect(saveBtn.classes()).not.toContain('is-disabled')
     expect(wrapper.text()).toContain('原配置含英文逗号歧义')
+    expect(wrapper.find('.cc-split--error').exists()).toBe(true)
+    await saveBtn.trigger('click')
+    await flushPromises()
+    expect(mockedUpdate).not.toHaveBeenCalled()
 
     // 清除全部歧义展示项（每次移除后重新查询 chip），再选择合法候选
     while (wrapper.findAll('.cc-chip').length) {
@@ -1552,7 +1559,11 @@ describe('行级含逗号歧义（CCFG-UI-026）', () => {
     }
     await optionByText(wrapper, '中心医院')!.trigger('click')
     await nextTick()
-    expect(exactButton(wrapper, '保存')!.attributes('disabled')).toBeUndefined()
+    expect(wrapper.text()).not.toContain('原配置含英文逗号歧义')
+    expect(wrapper.find('.cc-split--error').exists()).toBe(false)
+    await exactButton(wrapper, '保存')!.trigger('click')
+    await flushPromises()
+    expect(mockedUpdate).toHaveBeenCalledTimes(1)
     wrapper.unmount()
   })
 })
@@ -1678,14 +1689,22 @@ describe('编辑弹窗与历史异常回显（CCFG-UI-014/017/025）', () => {
     const badChip = wrapper.findAll('.cc-chip--bad').find((c) => c.text().includes('ds-old'))
     expect(badChip).toBeTruthy()
     const saveBtn = exactButton(wrapper, '保存')!
-    expect(saveBtn.attributes('disabled')).toBeDefined()
+    expect(saveBtn.attributes('disabled')).toBeUndefined()
+    expect(saveBtn.classes()).not.toContain('is-disabled')
     expect(wrapper.text()).toContain('存在异常数据源')
+
+    // 异常数据源阻断不再预禁用主按钮：点击后原地点出数据源字段错误并拒绝写库
+    await saveBtn.trigger('click')
+    await flushPromises()
+    expect(mockedUpdate).not.toHaveBeenCalled()
+    expect(wrapper.find('.cc-split--error').exists()).toBe(true)
+    expect(wrapper.find('.cc-field-error').exists()).toBe(true)
 
     // 移除异常项：点该 chip 的关闭图标
     await badChip!.find('.el-tag__close').trigger('click')
     await nextTick()
     expect(wrapper.find('.cc-pane--chosen').text()).not.toContain('ds-old')
-    expect(exactButton(wrapper, '保存')!.attributes('disabled')).toBeUndefined()
+    expect(wrapper.find('.cc-split--error').exists()).toBe(false)
 
     await exactButton(wrapper, '保存')!.trigger('click')
     await flushPromises()
@@ -2105,12 +2124,18 @@ describe('第三轮：+N 清单两级信息与弹窗视觉（CCFG-REQ-113~122 / 
     editWrapper.unmount()
   })
 
-  it('组件：主提交按钮禁用边界——无已选数据源时禁用并呈 is-disabled', async () => {
+  it('组件：主提交按钮常态不预禁用——未选数据源时点击就地报错且拒绝写库', async () => {
     const wrapper = await mountPage([enabledRow])
     await openCreate(wrapper)
     const btn = exactButton(wrapper, '创建')!
-    expect(btn.attributes('disabled')).toBeDefined()
-    expect(btn.classes()).toContain('is-disabled')
+    expect(btn.attributes('disabled')).toBeUndefined()
+    expect(btn.classes()).not.toContain('is-disabled')
+
+    await btn.trigger('click')
+    await flushPromises()
+    expect(mockedCreate).not.toHaveBeenCalled()
+    expect(wrapper.find('.cc-split--error').exists()).toBe(true)
+    expect(sourceFeedbackOf(wrapper)).toEqual({ text: '至少选择 1 个数据源', tone: 'error' })
     wrapper.unmount()
   })
 
@@ -2216,5 +2241,388 @@ describe('第三轮：+N 清单两级信息与弹窗视觉（CCFG-REQ-113~122 / 
     expect(SFC_SOURCE).toContain("boundary: 'viewport'")
     // 清单仍按内容自然增高
     expect(cssBlock(SFC_SOURCE, '.cc-full-list')).toBe('')
+  })
+})
+
+// ============================================================ 第四轮：创建/编辑弹窗校验与视觉
+// CCFG-REQ-123~136 / CCFG-AC-118~135 / CCFG-DESIGN-061~071 / CCFG-UI-050~059
+//
+// 本节断言落在真实渲染的 DOM 与 mock 的写接口调用上（不做源码字串镜像）；弹窗水平居中、
+// 反馈区几何稳定性等依赖真实布局的结论由真实浏览器另行核对（见实现报告）。
+
+function failNull(code: number, message: string): ApiResponse<null> {
+  return { code, message, timestamp: '', data: null }
+}
+
+/** 取包含某内部节点（`.cc-id-control` / `.cc-desc-row` / `.cc-split`）的字段容器。 */
+function fieldContainer(w: PageWrapper, innerSelector: string): HTMLElement | null {
+  const inner = w.find(innerSelector)
+  return inner.exists()
+    ? (inner.element.closest('.cc-field, .cc-source-field') as HTMLElement | null)
+    : null
+}
+
+/** 某字段容器内的红色错误文本（无则 null）。 */
+function fieldErrorText(w: PageWrapper, innerSelector: string): string | null {
+  const err = fieldContainer(w, innerSelector)?.querySelector('.cc-field-error')
+  return err ? (err.textContent ?? '').trim() : null
+}
+
+/** 某字段是否呈红色错误态：ID/描述看容器类，数据源看选择区域类。 */
+function fieldInvalid(w: PageWrapper, innerSelector: string): boolean {
+  const container = fieldContainer(w, innerSelector)
+  if (!container) return false
+  return (
+    container.classList.contains('cc-field--error') ||
+    container.querySelector('.cc-split--error') !== null
+  )
+}
+
+/** “采集数据源”反馈区当前文案与语气（灰 neutral / 红 error / 无 null）。 */
+function sourceFeedbackOf(w: PageWrapper): { text: string; tone: 'neutral' | 'error' | null } {
+  const el = fieldContainer(w, '.cc-split')?.querySelector('.cc-field-feedback__text')
+  if (!el) return { text: '', tone: null }
+  return {
+    text: (el.textContent ?? '').trim(),
+    tone: el.className.includes('cc-field-error') ? 'error' : 'neutral',
+  }
+}
+
+const idError = (w: PageWrapper) => fieldErrorText(w, '.cc-id-control')
+const descError = (w: PageWrapper) => fieldErrorText(w, '.cc-desc-row')
+
+/** 填一份全部合法的“新增”表单：合法 ID、非空描述、一个可选数据源。 */
+async function fillValidCreate(w: PageWrapper, id = 'probe-new', desc = '中心用途') {
+  await w.find('.cc-id-control input').setValue(id)
+  await w.find('.cc-desc-row textarea').setValue(desc)
+  await optionByText(w, '中心医院')!.trigger('click')
+  await nextTick()
+}
+
+describe('第四轮：字段级校验与主按钮口径（CCFG-REQ-123~136）', () => {
+  it('新增：一次提交同时报三项字段错误，逐项修正只清除该项（CCFG-AC-118/CCFG-REQ-123）', async () => {
+    const w = await mountPage([enabledRow])
+    await openCreate(w)
+    await w.find('.cc-id-control input').setValue('9bad!')
+    await nextTick()
+
+    await exactButton(w, '创建')!.trigger('click')
+    await flushPromises()
+
+    expect(mockedCreate).not.toHaveBeenCalled()
+    expect(idError(w)).toContain('探针 ID 格式不正确')
+    expect(descError(w)).toBe('探针描述不能为空。')
+    expect(sourceFeedbackOf(w)).toEqual({ text: '至少选择 1 个数据源', tone: 'error' })
+    expect(fieldInvalid(w, '.cc-id-control')).toBe(true)
+    expect(fieldInvalid(w, '.cc-desc-row')).toBe(true)
+    expect(fieldInvalid(w, '.cc-split')).toBe(true)
+    // 字段级错误不得用顶部全局提示替代或重复
+    expect(messageSpy.error).not.toHaveBeenCalled()
+    expect(messageSpy.warning).not.toHaveBeenCalled()
+
+    // 只修 ID → 仅 ID 错误消失，其余保持
+    await w.find('.cc-id-control input').setValue('probe-new')
+    await nextTick()
+    expect(idError(w)).toBeNull()
+    expect(fieldInvalid(w, '.cc-id-control')).toBe(false)
+    expect(descError(w)).toBe('探针描述不能为空。')
+    expect(sourceFeedbackOf(w).tone).toBe('error')
+
+    // 只修描述 → 仅描述错误消失，数据源错误仍在
+    await w.find('.cc-desc-row textarea').setValue('中心用途')
+    await nextTick()
+    expect(descError(w)).toBeNull()
+    expect(sourceFeedbackOf(w).tone).toBe('error')
+
+    // 选中数据源 → 反馈消失并放行写库
+    await optionByText(w, '中心医院')!.trigger('click')
+    await nextTick()
+    expect(sourceFeedbackOf(w).tone).toBeNull()
+    await exactButton(w, '创建')!.trigger('click')
+    await flushPromises()
+    expect(mockedCreate).toHaveBeenCalledTimes(1)
+    expect(mockedCreate).toHaveBeenCalledWith({
+      clientId: 'probe-new',
+      clientDesc: '中心用途',
+      dataSourceIds: ['ds-ok1'],
+    })
+    w.unmount()
+  })
+
+  it('新增：提交被阻断时定位到第一个错误字段（CCFG-AC-118）', async () => {
+    const w = await mountPage([enabledRow])
+    await openCreate(w)
+    await exactButton(w, '创建')!.trigger('click')
+    await flushPromises()
+    expect(document.activeElement).toBe(w.find('.cc-id-control input').element)
+    w.unmount()
+  })
+
+  it('编辑：解锁后改空 ID 报字段错误，取消修改恢复原 ID 并清除该错误（CCFG-AC-119）', async () => {
+    const w = await mountPage([enabledRow])
+    await openEdit(w, enabledRow)
+    expect(idError(w)).toBeNull()
+
+    await exactButton(w, '修改探针 ID')!.trigger('click')
+    await nextTick()
+    const editable = w.find('.cc-id-control input:not([data-locked])')
+    expect(editable.exists()).toBe(true)
+    await editable.setValue('')
+    await nextTick()
+
+    await exactButton(w, '保存')!.trigger('click')
+    await flushPromises()
+    expect(mockedUpdate).not.toHaveBeenCalled()
+    expect(idError(w)).toBe('探针 ID 不能为空。')
+
+    await exactButton(w, '取消修改')!.trigger('click')
+    await nextTick()
+    expect(idError(w)).toBeNull()
+    const locked = w.find('.cc-id-control input')
+    expect((locked.element as HTMLInputElement).value).toBe('probe-a')
+    expect(locked.attributes('data-locked')).toBeDefined()
+    w.unmount()
+  })
+
+  it('服务端错误码按既有错误码落到对应字段，不可归属错误仍全局（CCFG-AC-121/CCFG-REQ-125）', async () => {
+    const w = await mountPage([enabledRow])
+    await openCreate(w)
+    await fillValidCreate(w)
+    const submit = async () => {
+      await exactButton(w, '创建')!.trigger('click')
+      await flushPromises()
+    }
+
+    mockedCreate.mockResolvedValue(failNull(40940, '探针 ID 已存在'))
+    await submit()
+    expect(idError(w)).toBe('探针 ID 已存在')
+    expect(descError(w)).toBeNull()
+    expect(sourceFeedbackOf(w).tone).toBeNull()
+    expect(messageSpy.error).not.toHaveBeenCalled()
+
+    mockedCreate.mockResolvedValue(failNull(40102, '探针描述为空白或过长'))
+    await submit()
+    expect(idError(w)).toBeNull()
+    expect(descError(w)).toBe('探针描述为空白或过长')
+    expect(messageSpy.error).not.toHaveBeenCalled()
+
+    mockedCreate.mockResolvedValue(failNull(40941, '数据源已被其他探针占用'))
+    await submit()
+    expect(descError(w)).toBeNull()
+    expect(sourceFeedbackOf(w)).toEqual({ text: '数据源已被其他探针占用', tone: 'error' })
+    expect(fieldInvalid(w, '.cc-split')).toBe(true)
+    expect(messageSpy.error).not.toHaveBeenCalled()
+
+    // 历史异常阻断 40942 不在字段映射内：保留全局提示，不落到数据源字段
+    mockedCreate.mockResolvedValue(failNull(40942, '存在异常数据源，已阻断保存'))
+    await submit()
+    expect(messageSpy.error).toHaveBeenCalledWith('存在异常数据源，已阻断保存')
+    expect(sourceFeedbackOf(w).tone).toBeNull()
+
+    // 无法归属的系统错误码同样走全局提示
+    mockedCreate.mockResolvedValue(failNull(50000, '系统内部错误'))
+    await submit()
+    expect(messageSpy.error).toHaveBeenCalledWith('系统内部错误')
+    expect(idError(w)).toBeNull()
+    expect(descError(w)).toBeNull()
+    expect(sourceFeedbackOf(w).tone).toBeNull()
+    w.unmount()
+  })
+
+  it('主按钮：常态不预禁用，提交中防重复点击（CCFG-AC-120/CCFG-REQ-124）', async () => {
+    const w = await mountPage([enabledRow])
+    await openCreate(w)
+    const btn = exactButton(w, '创建')!
+    expect(btn.classes()).toContain('cc-dialog-submit')
+    expect(btn.attributes('disabled')).toBeUndefined()
+    expect(btn.classes()).not.toContain('is-disabled')
+
+    await fillValidCreate(w)
+    expect(exactButton(w, '创建')!.attributes('disabled')).toBeUndefined()
+    expect(exactButton(w, '创建')!.classes()).not.toContain('is-disabled')
+
+    let release: (v: ApiResponse<null>) => void = () => {}
+    mockedCreate.mockImplementation(
+      () => new Promise<ApiResponse<null>>((resolve) => (release = resolve)) as never,
+    )
+    await exactButton(w, '创建')!.trigger('click')
+    const loadingBtn = exactButton(w, '创建')!
+    expect(loadingBtn.classes()).toContain('is-loading')
+    expect(loadingBtn.attributes('disabled')).toBeDefined()
+
+    await loadingBtn.trigger('click')
+    expect(mockedCreate).toHaveBeenCalledTimes(1)
+
+    release(okNull())
+    await flushPromises()
+    expect(messageSpy.success).toHaveBeenCalledWith('新增成功')
+    w.unmount()
+  })
+
+  it('采集数据源提示：灰→红→隐藏→恢复，重开会话复位（CCFG-AC-122/123）', async () => {
+    const w = await mountPage([enabledRow])
+    await openCreate(w)
+    expect(sourceFeedbackOf(w)).toEqual({ text: '至少选择 1 个数据源', tone: 'neutral' })
+    expect(fieldInvalid(w, '.cc-split')).toBe(false)
+
+    await exactButton(w, '创建')!.trigger('click')
+    await flushPromises()
+    expect(sourceFeedbackOf(w)).toEqual({ text: '至少选择 1 个数据源', tone: 'error' })
+    expect(fieldInvalid(w, '.cc-split')).toBe(true)
+
+    await optionByText(w, '中心医院')!.trigger('click')
+    await nextTick()
+    expect(sourceFeedbackOf(w).tone).toBeNull()
+
+    await w.find('.cc-chip .el-tag__close').trigger('click')
+    await nextTick()
+    expect(sourceFeedbackOf(w)).toEqual({ text: '至少选择 1 个数据源', tone: 'error' })
+
+    // 关闭后重新打开：会话内“已尝试提交”状态复位，回到中性灰色说明
+    await exactButton(w, '取消')!.trigger('click')
+    await nextTick()
+    await openCreate(w)
+    expect(sourceFeedbackOf(w)).toEqual({ text: '至少选择 1 个数据源', tone: 'neutral' })
+    expect(fieldInvalid(w, '.cc-split')).toBe(false)
+    w.unmount()
+  })
+
+  it('探针 ID：手输/粘贴上限 32，非法字符不被静默剥离（CCFG-AC-128/129/CCFG-REQ-131）', async () => {
+    const w = await mountPage([enabledRow])
+    await openCreate(w)
+    const input = w.find('.cc-id-control input')
+    expect(input.attributes('maxlength')).toBe('32')
+
+    await input.setValue('a'.repeat(40))
+    await nextTick()
+    expect((input.element as HTMLInputElement).value).toBe('a'.repeat(32))
+
+    await input.setValue('9bad!')
+    await nextTick()
+    expect((input.element as HTMLInputElement).value).toBe('9bad!')
+    await exactButton(w, '创建')!.trigger('click')
+    await flushPromises()
+    expect(mockedCreate).not.toHaveBeenCalled()
+    expect(idError(w)).toContain('格式不正确')
+    w.unmount()
+  })
+
+  it('探针描述：按完整字符截断到 256，汉字与补充平面字符均不被拆开（CCFG-AC-130/CCFG-REQ-132）', async () => {
+    const w = await mountPage([enabledRow])
+    await openCreate(w)
+    const ta = w.find('.cc-desc-row textarea')
+
+    await ta.setValue('甲'.repeat(300))
+    await nextTick()
+    expect(Array.from((ta.element as HTMLTextAreaElement).value)).toHaveLength(256)
+
+    await ta.setValue('😀'.repeat(300))
+    await nextTick()
+    const emoji = (ta.element as HTMLTextAreaElement).value
+    expect(Array.from(emoji)).toHaveLength(256)
+    // 无孤立代理项：四字节字符未被截断切开
+    expect(/[\uD800-\uDBFF](?![\uDC00-\uDFFF])/.test(emoji)).toBe(false)
+    expect(/(?<![\uD800-\uDBFF])[\uDC00-\uDFFF]/.test(emoji)).toBe(false)
+
+    // 256 个汉字完整保留并可直接保存（UTF-8 768 字节 < 1024，不触发字节错误）
+    const cjk = '甲'.repeat(256)
+    await ta.setValue(cjk)
+    await w.find('.cc-id-control input').setValue('probe-256')
+    await optionByText(w, '中心医院')!.trigger('click')
+    await nextTick()
+    await exactButton(w, '创建')!.trigger('click')
+    await flushPromises()
+    expect(mockedCreate).toHaveBeenCalledWith({
+      clientId: 'probe-256',
+      clientDesc: cjk,
+      dataSourceIds: ['ds-ok1'],
+    })
+    expect(messageSpy.error).not.toHaveBeenCalled()
+    w.unmount()
+  })
+
+  it('自动生成：先按选择顺序拼完整描述再截 256，不弹超长错误（CCFG-AC-132/CCFG-REQ-133）', async () => {
+    const longOptions: DataSourceOptionVO[] = [
+      { dataSourceId: 'ds-l1', org: 'A'.repeat(150), dataSourceName: 'L1', selectable: true, notSelectableReason: null, occupiedByClientIds: [] },
+      { dataSourceId: 'ds-l2', org: 'B'.repeat(150), dataSourceName: 'L2', selectable: true, notSelectableReason: null, occupiedByClientIds: [] },
+    ]
+    mockedOptions.mockResolvedValue(okOptions(longOptions))
+    const w = await mountRaw()
+    await openCreate(w)
+    await optionByText(w, 'A'.repeat(150))!.trigger('click')
+    await nextTick()
+    await optionByText(w, 'B'.repeat(150))!.trigger('click')
+    await nextTick()
+    await exactButton(w, '自动生成')!.trigger('click')
+    await nextTick()
+
+    const expected = ('A'.repeat(150) + ',' + 'B'.repeat(150)).slice(0, 256)
+    const value = (w.find('.cc-desc-row textarea').element as HTMLTextAreaElement).value
+    expect(value).toBe(expected)
+    expect(Array.from(value)).toHaveLength(256)
+    expect(value.startsWith('A'.repeat(150) + ',')).toBe(true)
+    expect(messageSpy.warning).not.toHaveBeenCalled()
+    expect(messageSpy.error).not.toHaveBeenCalled()
+    w.unmount()
+  })
+
+  it('编辑历史描述超 256：只回显前 256 完整字符作草稿，关闭不写库，保存只提交草稿（CCFG-AC-133/CCFG-REQ-134）', async () => {
+    const longDesc = '甲'.repeat(300)
+    const longRow = row('probe-long', longDesc, '1', [healthyDs])
+    const w = await mountPage([longRow])
+    await openEdit(w, longRow)
+    const textarea = () => w.find('.cc-desc-row textarea').element as HTMLTextAreaElement
+    expect(Array.from(textarea().value)).toHaveLength(256)
+    // 打开弹窗不得改写列表原记录
+    expect(longRow.clientDesc).toBe(longDesc)
+    expect(longRow.clientDesc).toHaveLength(300)
+
+    await exactButton(w, '取消')!.trigger('click')
+    await nextTick()
+    expect(mockedUpdate).not.toHaveBeenCalled()
+
+    await openEdit(w, longRow)
+    expect(Array.from(textarea().value)).toHaveLength(256)
+    await exactButton(w, '保存')!.trigger('click')
+    await flushPromises()
+    expect(mockedUpdate).toHaveBeenCalledWith('probe-long', {
+      clientId: 'probe-long',
+      clientDesc: '甲'.repeat(256),
+      dataSourceIds: ['ds-ok1'],
+    })
+    expect(messageSpy.error).not.toHaveBeenCalled()
+    w.unmount()
+  })
+
+  it('编辑历史歧义阻断：字段级红色反馈拒绝保存，不落全局提示（CCFG-AC-121/CCFG-REQ-124）', async () => {
+    const w = await mountPage([ambiguousRow])
+    await openEdit(w, ambiguousRow)
+    const btn = exactButton(w, '保存')!
+    expect(btn.attributes('disabled')).toBeUndefined()
+    await btn.trigger('click')
+    await flushPromises()
+    expect(mockedUpdate).not.toHaveBeenCalled()
+    expect(sourceFeedbackOf(w).text).toContain('原配置含英文逗号歧义')
+    expect(sourceFeedbackOf(w).tone).toBe('error')
+    expect(fieldInvalid(w, '.cc-split')).toBe(true)
+    expect(messageSpy.error).not.toHaveBeenCalled()
+    expect(messageSpy.warning).not.toHaveBeenCalled()
+    w.unmount()
+  })
+
+  it('静态：描述占位文案、标签右对齐、反馈区预留而不裁切、弹窗样式无侧栏偏移（CCFG-REQ-126/129、CCFG-UI-055/059）', () => {
+    expect(SFC_SOURCE).toContain('探针用途描述（最多 256 个字符）')
+    expect(declValue(cssBlock(SFC_SOURCE, '.cc-form-label'), 'text-align')).toBe('right')
+
+    const feedback = cssBlock(SFC_SOURCE, '.cc-field-feedback')
+    expect(declValue(feedback, 'min-height')).not.toBe('')
+    expect(feedback).not.toContain('overflow: hidden')
+
+    // 弹窗宽度与窄视口安全间距保持既有口径；样式不得硬编码侧栏宽度补偿
+    expect(declValue(cssBlock(SFC_SOURCE, ':deep(.cc-dialog)'), 'max-width')).toBe(
+      'calc(100vw - 48px)',
+    )
+    expect(SFC_SOURCE).not.toContain('220px')
+    expect(SFC_SOURCE).not.toContain('64px')
   })
 })
