@@ -624,12 +624,18 @@ describe('主列表六列顺序、序号与无选中机制（CCFG-REQ-100、CCFG
     wrapper.unmount()
   })
 
-  it('静态：页面源码不含行选中状态、行单击事件、选中样式与批量删除入口', () => {
-    expect(SFC_SOURCE).not.toContain('row-click')
-    expect(SFC_SOURCE).not.toContain('selectedClientId')
-    expect(SFC_SOURCE).not.toContain('cc-row--selected')
+  it('静态：固定选中只用页面内单个可为空探针 ID，无批量选择与任何持久化写入', () => {
+    // 第五轮 CCFG-REQ-142/CCFG-DESIGN-077：单个可为空 ID，仅本页实例内存活
+    expect(SFC_SOURCE).toContain('@row-click="onRowClick"')
+    expect(SFC_SOURCE).toContain('const selectedClientId = ref<string | null>(null)')
+    expect(SFC_SOURCE).toContain("'cc-row--selected'")
+    // 不恢复复选框、多选、已选集合与批量删除入口
     expect(SFC_SOURCE).not.toContain('删除所选')
     expect(SFC_SOURCE).not.toContain('已选择：')
+    expect(SFC_SOURCE).not.toContain('el-checkbox')
+    // 不写 URL／localStorage／sessionStorage／路由：源码内不得出现存储或历史写入 API
+    expect(SFC_SOURCE).not.toMatch(/(?:localStorage|sessionStorage|window\.location|history)\.\w+/)
+    expect(SFC_SOURCE).not.toContain('setItem')
   })
 
   it('组件：取消独立“状态”列后，行内不再出现启停文字按钮', async () => {
@@ -814,22 +820,55 @@ describe('“更多”菜单三态条目（CCFG-REQ-103、CCFG-UI-032）', () =>
 // ============================================================ 行操作行为
 
 describe('行操作：启用 / 停用 / 删除（CCFG-REQ-098、CCFG-DESIGN-042/043、CCFG-UI-018/020）', () => {
-  it('启用：无二次确认，直接调用既有 E6，成功后按已生效条件重载', async () => {
+  it('启用：先二次确认（正文仅含探针 ID），确认后调用既有 E6 且只发一次写请求', async () => {
     const wrapper = await mountPage([disabledRow])
     await clickRowMenuAction(wrapper, 0, '启用')
-    expect(confirmSpy).not.toHaveBeenCalled()
+    // 第五轮 CCFG-REQ-141/CCFG-UI-063：启用新增二次确认，标题与按钮文案精确
+    expect(confirmSpy).toHaveBeenCalledTimes(1)
+    expect(confirmSpy.mock.calls[0][0]).toBe('确定启用探针 probe-b 吗？')
+    // ElMessageBox.confirm(message, title, options)
+    expect(confirmSpy.mock.calls[0][1]).toBe('启用探针')
+    expect(confirmSpy.mock.calls[0][2]).toMatchObject({
+      confirmButtonText: '启用',
+      cancelButtonText: '取消',
+    })
     expect(mockedEnable).toHaveBeenCalledWith('probe-b')
+    expect(mockedEnable).toHaveBeenCalledTimes(1)
     expect(messageSpy.success).toHaveBeenCalledWith('启用成功')
     expect(mockedList).toHaveBeenCalledTimes(2)
     wrapper.unmount()
   })
 
-  it('停用：二次确认正文含探针 ID，确认后调用既有 E7', async () => {
+  it('启用：取消或关闭确认框不发出启用写请求，行忙碌复位（CCFG-REQ-141）', async () => {
+    confirmSpy.mockRejectedValueOnce('cancel')
+    const wrapper = await mountPage([disabledRow])
+    await clickRowMenuAction(wrapper, 0, '启用')
+    expect(confirmSpy).toHaveBeenCalledTimes(1)
+    expect(mockedEnable).not.toHaveBeenCalled()
+    expect(messageSpy.success).not.toHaveBeenCalledWith('启用成功')
+    expect(mockedList).toHaveBeenCalledTimes(1)
+    await openRowMenu(wrapper, 0)
+    const item = rowMenuItems(wrapper, 0).find((el) => (el.textContent ?? '').trim() === '启用')!
+    expect(item.className).not.toContain('is-disabled')
+    wrapper.unmount()
+  })
+
+  it('停用：二次确认正文精确到探针 ID，不再声称“不再按启用状态命中”（CCFG-REQ-139/140）', async () => {
     const wrapper = await mountPage([enabledRow])
     await clickRowMenuAction(wrapper, 0, '停用')
     expect(confirmSpy).toHaveBeenCalledTimes(1)
-    expect(confirmSpy.mock.calls[0][0]).toContain('确定停用探针 probe-a 吗？')
+    expect(confirmSpy.mock.calls[0][0]).toBe('确定停用探针 probe-a 吗？')
+    // ElMessageBox.confirm(message, title, options)
+    expect(confirmSpy.mock.calls[0][1]).toBe('停用探针')
+    expect(confirmSpy.mock.calls[0][2]).toMatchObject({
+      confirmButtonText: '停用',
+      cancelButtonText: '取消',
+    })
+    // 不显示已删除的旧正文，也不声称停用立即停止进程／采集任务
+    expect(SFC_SOURCE).not.toContain('不再按启用状态命中')
+    expect(SFC_SOURCE).not.toContain('立即停止')
     expect(mockedDisable).toHaveBeenCalledWith('probe-a')
+    expect(mockedDisable).toHaveBeenCalledTimes(1)
     expect(messageSpy.success).toHaveBeenCalledWith('停用成功')
     wrapper.unmount()
   })
@@ -1179,7 +1218,10 @@ describe('标签文字水平/垂直居中与统一承载（R2 §3/§6）', () =>
     // 模板：行级歧义标识、数据源标签正文、动态 +N 的文字都包进内层 .cc-txt
     expect(SFC_SOURCE).toContain('class="cc-txt">含逗号歧义')
     expect(SFC_SOURCE).toContain('<span class="cc-txt">{{ dsBodyText(ds) }}</span>')
-    expect(SFC_SOURCE).toContain('class="cc-more"><span class="cc-txt">+{{ hiddenCount(row) }}')
+    // `+N` 正文同样包进内层 `.cc-txt`；本轮为它补上与标签一致的 click/dblclick 冒泡隔离
+    expect(SFC_SOURCE).toContain('class="cc-more"')
+    expect(SFC_SOURCE).toContain('@click.stop')
+    expect(SFC_SOURCE).toContain('class="cc-txt">+{{ hiddenCount(row) }}')
   })
 
   it('静态：内层 .cc-txt 是统一块级文字载体（单行+统一行高）；居中不是位置偏移补丁', () => {
@@ -2761,5 +2803,399 @@ describe('第一轮纠偏（R1）：主提交按钮加载态保持黑色系（CC
     expect(restored.classes()).not.toContain('is-disabled')
     expect(restored.attributes('disabled')).toBeUndefined()
     w.unmount()
+  })
+})
+
+// ============================================================ 第五轮：弹窗间距、启停确认与主列表单行固定选中
+// CCFG-REQ-137~147 / CCFG-AC-140~146 / CCFG-DESIGN-072~082 / CCFG-UI-060~070
+
+describe('第五轮：共用弹窗水平间距与字段节奏（CCFG-REQ-137/138、CCFG-DESIGN-072/073、CCFG-UI-060/061）', () => {
+  it('静态：标签右缘→控件左缘统一 12px；字段间留白交由反馈区稳定占位，不再叠加字段级 gap', () => {
+    // 页面作用域统一表单布局：三项标签右缘与对应控件左缘统一 12px
+    expect(declValue(cssBlock(SFC_SOURCE, '.cc-form-item'), 'gap')).toBe('12px')
+    // 字段级 gap 已移除：字段间留白只由 `.cc-field-feedback` 的稳定占位承担（不新增像素值掩盖节奏）
+    expect(cssBlock(SFC_SOURCE, '.cc-form')).not.toContain('gap')
+    // 标签列宽与右对齐不变；控件为 flex:1，多出的 12px 从控件宽度扣除，右边界保持原布局位置
+    expect(declValue(cssBlock(SFC_SOURCE, '.cc-form-label'), 'flex')).toBe('0 0 84px')
+    expect(declValue(cssBlock(SFC_SOURCE, '.cc-form-label'), 'text-align')).toBe('right')
+    expect(declValue(cssBlock(SFC_SOURCE, '.cc-form-control'), 'flex')).toBe('1')
+    // 反馈区稳定占位与长错误换行可读口径不变（不裁切）
+    const feedback = cssBlock(SFC_SOURCE, '.cc-field-feedback')
+    expect(declValue(feedback, 'min-height')).not.toBe('')
+    expect(feedback).not.toContain('overflow: hidden')
+    // 弹窗宽度与窄视口安全间距口径不变；不写死弹窗高度、不写死侧栏补偿宽度、不靠 !important
+    expect(SFC_SOURCE).toContain('width="900px"')
+    expect(declValue(cssBlock(SFC_SOURCE, ':deep(.cc-dialog)'), 'max-width')).toBe(
+      'calc(100vw - 48px)',
+    )
+    expect(SFC_SOURCE).not.toContain('220px')
+    expect(SFC_SOURCE).not.toContain('!important')
+  })
+
+  it('组件：新增与编辑共用同一套三字段结构，提示态切换不增减弹窗底部按钮（CCFG-REQ-139）', async () => {
+    const w = await mountPage([enabledRow])
+    const fieldShape = (root: PageWrapper) =>
+      root.findAll('.cc-form-item').map((item) => ({
+        label: item.find('.cc-form-label').text(),
+        hasControl: item.find('.cc-form-control').exists(),
+        hasFeedback: item.find('.cc-field-feedback').exists(),
+      }))
+    const dialogButtons = (root: PageWrapper) =>
+      root.find('.cc-dialog').findAll('button').map((b) => b.text().trim())
+
+    await openCreate(w)
+    const created = fieldShape(w)
+    expect(created.map((i) => i.label)).toEqual(['探针 ID', '探针描述', '采集数据源'])
+    expect(created.every((i) => i.hasControl && i.hasFeedback)).toBe(true)
+    const buttonsIdle = dialogButtons(w)
+    // 触发三项字段级报错：外框与底部按钮集合不得因提示态切换而增减（不突跳）
+    await exactButton(w, '创建')!.trigger('click')
+    await flushPromises()
+    expect(sourceFeedbackOf(w).tone).toBe('error')
+    expect(dialogButtons(w)).toEqual(buttonsIdle)
+    w.unmount()
+
+    const w2 = await mountPage([enabledRow])
+    await openEdit(w2, enabledRow)
+    expect(fieldShape(w2).map((i) => i.label)).toEqual(['探针 ID', '探针描述', '采集数据源'])
+    expect(w2.find('.cc-dialog').text()).toContain('编辑探针')
+    w2.unmount()
+  })
+})
+
+describe('第五轮：主列表单行固定选中（CCFG-REQ-142~146、CCFG-DESIGN-077~081、CCFG-UI-065~069）', () => {
+  /** 略大于实现的 260ms 单击取消判定窗口。 */
+  const CANCEL_WINDOW_MS = 320
+
+  const tableVm = (w: PageWrapper) => w.findComponent({ name: 'ElTable' }).vm
+
+  /** 一次真实行单击：EP 的 `row-click` 携带 PointerEvent，`detail` 为连续点击计数。 */
+  async function clickRow(w: PageWrapper, rowData: ClientListItemVO, detail = 1) {
+    tableVm(w).$emit('row-click', rowData, null, { detail })
+    await nextTick()
+  }
+
+  /** 一次真实双击：两次 click（detail 1／2）+ dblclick，与浏览器事件顺序一致。 */
+  async function dblClickRow(w: PageWrapper, rowData: ClientListItemVO) {
+    await clickRow(w, rowData, 1)
+    await clickRow(w, rowData, 2)
+    tableVm(w).$emit('row-dblclick', rowData)
+    await nextTick()
+    await flushPromises()
+  }
+
+  const selectedRow = (w: PageWrapper) => w.find('.cc-row--selected')
+
+  it('左键单击：未选中行固定 → 重复单击同一行取消 → 单击其他行转移，全表同时最多一行', async () => {
+    const w = await mountPage([enabledRow, disabledRow])
+    expect(w.findAll('.cc-row--selected')).toHaveLength(0)
+
+    await clickRow(w, enabledRow)
+    expect(w.findAll('.cc-row--selected')).toHaveLength(1)
+    expect(selectedRow(w).text()).toContain('probe-a')
+
+    // 单击另一行：立即转移，原行不再固定
+    await clickRow(w, disabledRow)
+    expect(w.findAll('.cc-row--selected')).toHaveLength(1)
+    expect(selectedRow(w).text()).toContain('probe-b')
+
+    // 再次单击同一行：判定窗口内保持固定（不抖动），窗口后取消
+    await clickRow(w, disabledRow)
+    expect(selectedRow(w).text()).toContain('probe-b')
+    await sleep(CANCEL_WINDOW_MS)
+    expect(w.findAll('.cc-row--selected')).toHaveLength(0)
+    w.unmount()
+  })
+
+  it('探针 ID 文字的普通左键单击与点击其他普通行内容一致地切换固定选中（CCFG-AC-141 ⑥）', async () => {
+    const w = await mountPage([enabledRow, disabledRow])
+    // `.cc-id` 未被事件隔离，其 click 会照常冒泡到行（不属于需隔离的真行内交互控件）
+    expect(SFC_SOURCE).not.toMatch(/class="cc-id"[\s\S]{0,400}?@click\.stop/)
+    const idCell = w.findAll('.cc-id').find((s) => s.text() === 'probe-b')!
+    await idCell.trigger('click')
+    await flushPromises()
+    expect(w.findAll('.cc-row--selected')).toHaveLength(1)
+    await sleep(CANCEL_WINDOW_MS)
+    w.unmount()
+  })
+
+  it('快速连续单击：转移到新行后，早先的取消计时器不得清掉新固定行', async () => {
+    const w = await mountPage([enabledRow, disabledRow])
+    await clickRow(w, enabledRow)
+    await clickRow(w, enabledRow) // 进入 A 的取消判定窗口
+    await clickRow(w, disabledRow) // 立刻转移到 B，须撤销 A 的待定取消
+    await sleep(CANCEL_WINDOW_MS)
+    expect(w.findAll('.cc-row--selected')).toHaveLength(1)
+    expect(selectedRow(w).text()).toContain('probe-b')
+    w.unmount()
+  })
+
+  it('双击原未固定行：该行固定高亮且打开编辑，第二次点击不反向取消（CCFG-AC-142 a）', async () => {
+    const w = await mountPage([enabledRow, disabledRow])
+    await dblClickRow(w, disabledRow)
+    expect(w.findAll('.cc-row--selected')).toHaveLength(1)
+    expect(selectedRow(w).text()).toContain('probe-b')
+    expect(w.find('.cc-dialog').text()).toContain('编辑探针')
+    expect(mockedOptions).toHaveBeenCalledWith('probe-b')
+    w.unmount()
+  })
+
+  it('双击原已固定行：继续固定高亮并打开编辑，双击窗口后也不被取消（CCFG-AC-142 b）', async () => {
+    const w = await mountPage([enabledRow])
+    await clickRow(w, enabledRow)
+    expect(selectedRow(w).text()).toContain('probe-a')
+
+    await dblClickRow(w, enabledRow)
+    expect(w.findAll('.cc-row--selected')).toHaveLength(1)
+    expect(selectedRow(w).text()).toContain('probe-a')
+    expect(w.find('.cc-dialog').text()).toContain('编辑探针')
+    await sleep(CANCEL_WINDOW_MS)
+    expect(selectedRow(w).text()).toContain('probe-a')
+    w.unmount()
+  })
+
+  it('已固定 A 时双击 B：固定选中转移到 B 并打开 B 编辑，迟到计时器不回写旧行（CCFG-AC-142 c）', async () => {
+    const w = await mountPage([enabledRow, disabledRow])
+    await clickRow(w, enabledRow)
+    expect(selectedRow(w).text()).toContain('probe-a')
+
+    await dblClickRow(w, disabledRow)
+    expect(w.findAll('.cc-row--selected')).toHaveLength(1)
+    expect(selectedRow(w).text()).toContain('probe-b')
+    expect(w.find('.cc-dialog').text()).toContain('编辑探针')
+    expect(mockedOptions).toHaveBeenCalledWith('probe-b')
+    await sleep(CANCEL_WINDOW_MS)
+    expect(selectedRow(w).text()).toContain('probe-b')
+    expect(w.findAll('.cc-row--selected')).toHaveLength(1)
+    w.unmount()
+  })
+
+  it('探针 ID 键盘 Enter／Space 仍编辑，且不产生普通鼠标点击、不切换固定选中（CCFG-AC-142 d）', async () => {
+    const w = await mountPage([enabledRow, disabledRow])
+    await clickRow(w, enabledRow)
+    const idCell = w.findAll('.cc-id').find((s) => s.text() === 'probe-b')!
+    await idCell.trigger('keydown', { key: ' ', code: 'Space' })
+    await flushPromises()
+    expect(w.find('.cc-dialog').text()).toContain('编辑探针')
+    expect(mockedOptions).toHaveBeenCalledWith('probe-b')
+    // 键盘编辑入口不产生普通鼠标点击：固定选中仍在 A
+    expect(w.findAll('.cc-row--selected')).toHaveLength(1)
+    expect(selectedRow(w).text()).toContain('probe-a')
+    w.unmount()
+  })
+
+  it('反复“单击固定 → 双击编辑 → 取消关闭”后，选中状态与用户最后一次操作一致（CCFG-AC-142 ④）', async () => {
+    const w = await mountPage([enabledRow, disabledRow])
+    for (let i = 0; i < 3; i += 1) {
+      await clickRow(w, enabledRow)
+      expect(selectedRow(w).text()).toContain('probe-a')
+      await dblClickRow(w, enabledRow)
+      expect(selectedRow(w).text()).toContain('probe-a')
+      await exactButton(w, '取消')!.trigger('click')
+      await flushPromises()
+      await sleep(CANCEL_WINDOW_MS)
+      expect(selectedRow(w).text()).toContain('probe-a')
+    }
+    // 最后一次操作改为固定 B：不得残留 A
+    await clickRow(w, disabledRow)
+    await dblClickRow(w, disabledRow)
+    await sleep(CANCEL_WINDOW_MS)
+    expect(w.findAll('.cc-row--selected')).toHaveLength(1)
+    expect(selectedRow(w).text()).toContain('probe-b')
+    await exactButton(w, '取消')!.trigger('click')
+    await flushPromises()
+    w.unmount()
+  })
+
+  it('真行内交互控件不因冒泡切换固定选中，也不误触发行双击编辑（CCFG-AC-143）', async () => {
+    const w = await mountPage([abnormalRow, ambiguousRow])
+    await clickRow(w, abnormalRow)
+    expect(selectedRow(w).text()).toContain('probe-x')
+
+    const isolated = ['.cc-abnormal-mark', '.cc-rowbad', '.cc-count-note', '.cc-more-link']
+    for (const selector of isolated) {
+      const el = w.find(selector)
+      expect(el.exists(), selector).toBe(true)
+      await el.trigger('click')
+      await el.trigger('dblclick')
+      await flushPromises()
+    }
+    // 固定选中保持不变，且行双击编辑未被误触发
+    expect(w.findAll('.cc-row--selected')).toHaveLength(1)
+    expect(selectedRow(w).text()).toContain('probe-x')
+    expect(w.find('.cc-dialog').exists()).toBe(false)
+    expect(mockedOptions).not.toHaveBeenCalled()
+    w.unmount()
+  })
+
+  it('首次进入不保留任何固定选中（CCFG-AC-144）', async () => {
+    const w = await mountPage([enabledRow, disabledRow])
+    expect(w.findAll('.cc-row--selected')).toHaveLength(0)
+    w.unmount()
+  })
+
+  it('“查询”与失败后“重试”等普通重载清除此前固定选中（CCFG-AC-144）', async () => {
+    mockedList
+      .mockResolvedValueOnce(okList([enabledRow, disabledRow])) // 首次加载
+      .mockResolvedValueOnce(okList([enabledRow, disabledRow])) // 查询（成功）
+      .mockRejectedValueOnce(new Error('network down')) // 查询（失败）
+      .mockResolvedValueOnce(okList([enabledRow, disabledRow])) // 重试（成功）
+    const w = await mountRaw()
+    await clickRow(w, enabledRow)
+    expect(selectedRow(w).text()).toContain('probe-a')
+
+    // ① 查询触发普通重载 → 清除
+    await exactButton(w, '查询')!.trigger('click')
+    await flushPromises()
+    expect(mockedList).toHaveBeenCalledTimes(2)
+    expect(w.findAll('.cc-row--selected')).toHaveLength(0)
+
+    // ② 制造加载失败：失败态下重新固定一行，再点击“重试” → 重载同样清除
+    await exactButton(w, '查询')!.trigger('click')
+    await flushPromises()
+    expect(mockedList).toHaveBeenCalledTimes(3)
+    expect(w.find('.cc-load-error').exists()).toBe(true)
+    await clickRow(w, disabledRow)
+    expect(selectedRow(w).text()).toContain('probe-b')
+    await exactButton(w, '重试')!.trigger('click')
+    await flushPromises()
+    expect(mockedList).toHaveBeenCalledTimes(4)
+    expect(w.findAll('.cc-row--selected')).toHaveLength(0)
+    w.unmount()
+  })
+
+  it('单独“重置”只清空查询控件：不发起请求，也不清除固定选中（CCFG-AC-144）', async () => {
+    const w = await mountPage([enabledRow, disabledRow])
+    await clickRow(w, enabledRow)
+    expect(selectedRow(w).text()).toContain('probe-a')
+
+    await exactButton(w, '重置')!.trigger('click')
+    await flushPromises()
+    expect(mockedList).toHaveBeenCalledTimes(1)
+    expect(selectedRow(w).text()).toContain('probe-a')
+    w.unmount()
+  })
+
+  it('页面不新增刷新按钮、自动刷新、轮询与最近刷新时间（CCFG-AC-144）', async () => {
+    const w = await mountPage([enabledRow])
+    expect(exactButton(w, '刷新')).toBeUndefined()
+    expect(w.text()).not.toContain('最近刷新')
+    expect(w.text()).not.toContain('自动刷新')
+    expect(SFC_SOURCE).not.toContain('setInterval')
+    w.unmount()
+  })
+
+  it('停用成功重载：目标仍在结果中则固定目标行，即便操作前固定的是另一行（CCFG-AC-145 ①）', async () => {
+    const w = await mountPage([enabledRow, disabledRow])
+    await clickRow(w, disabledRow)
+    expect(selectedRow(w).text()).toContain('probe-b')
+
+    await clickRowMenuAction(w, 0, '停用')
+    expect(messageSpy.success).toHaveBeenCalledWith('停用成功')
+    expect(mockedList).toHaveBeenCalledTimes(2)
+    expect(w.findAll('.cc-row--selected')).toHaveLength(1)
+    expect(selectedRow(w).text()).toContain('probe-a')
+    w.unmount()
+  })
+
+  it('停用成功重载：目标被当前状态筛选过滤掉则清除固定选中，不保留看不见的已选行（CCFG-AC-145 ②）', async () => {
+    mockedList
+      .mockResolvedValueOnce(okList([enabledRow]))
+      .mockResolvedValueOnce(okList([disabledRow]))
+    const w = await mountRaw()
+    await clickRow(w, enabledRow)
+    expect(selectedRow(w).text()).toContain('probe-a')
+
+    await clickRowMenuAction(w, 0, '停用')
+    expect(messageSpy.success).toHaveBeenCalledWith('停用成功')
+    expect(w.findAll('.cc-row--selected')).toHaveLength(0)
+    w.unmount()
+  })
+
+  it('启用成功重载：目标仍在结果中则固定目标行（CCFG-AC-145 ①）', async () => {
+    const w = await mountPage([enabledRow, disabledRow])
+    await clickRow(w, enabledRow)
+    expect(selectedRow(w).text()).toContain('probe-a')
+
+    await clickRowMenuAction(w, 1, '启用')
+    expect(messageSpy.success).toHaveBeenCalledWith('启用成功')
+    expect(w.findAll('.cc-row--selected')).toHaveLength(1)
+    expect(selectedRow(w).text()).toContain('probe-b')
+    w.unmount()
+  })
+
+  it('启停取消确认与启停失败均保留原有固定选中（CCFG-AC-145 ③④）', async () => {
+    const w = await mountPage([enabledRow, disabledRow])
+    await clickRow(w, disabledRow)
+    expect(selectedRow(w).text()).toContain('probe-b')
+
+    // 启用确认取消（index 1 为停用行）：不写请求、保留固定选中
+    confirmSpy.mockRejectedValueOnce('cancel')
+    await clickRowMenuAction(w, 1, '启用')
+    expect(mockedEnable).not.toHaveBeenCalled()
+    expect(selectedRow(w).text()).toContain('probe-b')
+
+    // 停用失败（index 0 为启用行）：保留固定选中，不重载
+    mockedDisable.mockRejectedValueOnce(new Error('network down'))
+    await clickRowMenuAction(w, 0, '停用')
+    expect(messageSpy.error).toHaveBeenCalledWith('停用失败，请检查网络后重试。')
+    expect(selectedRow(w).text()).toContain('probe-b')
+    w.unmount()
+  })
+
+  it('删除成功重载清除固定选中；删除取消保留原有固定选中（CCFG-AC-145 ⑤⑥）', async () => {
+    const w = await mountPage([enabledRow, disabledRow])
+    await clickRow(w, enabledRow)
+    expect(selectedRow(w).text()).toContain('probe-a')
+
+    confirmSpy.mockRejectedValueOnce('cancel')
+    await clickRowMenuAction(w, 1, '删除')
+    expect(mockedDelete).not.toHaveBeenCalled()
+    expect(selectedRow(w).text()).toContain('probe-a')
+
+    await clickRowMenuAction(w, 1, '删除')
+    expect(mockedDelete).toHaveBeenCalledWith('probe-b')
+    expect(messageSpy.success).toHaveBeenCalledWith('删除成功')
+    expect(w.findAll('.cc-row--selected')).toHaveLength(0)
+    w.unmount()
+  })
+
+  it('普通重载撤销待定的单击取消：迟到的计时器不复活已不可见的选中行（CCFG-REQ-145）', async () => {
+    const w = await mountPage([enabledRow, disabledRow])
+    await clickRow(w, enabledRow)
+    await clickRow(w, enabledRow) // 进入取消判定窗口
+
+    await exactButton(w, '查询')!.trigger('click')
+    await flushPromises()
+    expect(w.findAll('.cc-row--selected')).toHaveLength(0)
+    // 计时器即使迟到也不得把选中行写回
+    await sleep(CANCEL_WINDOW_MS)
+    expect(w.findAll('.cc-row--selected')).toHaveLength(0)
+    w.unmount()
+  })
+
+  it('静态：固定高亮与悬停使用可区分视觉层级，且悬停不改变固定高亮底色（CCFG-AC-141 ⑤/CCFG-UI-065）', () => {
+    const ns = ':deep(.cc-table .el-table__body '
+    // el-table 行单击会自带 `current-row` 底色，须归零，否则固定高亮之外还叠一层 EP 当前行底色
+    expect(
+      declValue(cssBlock(SFC_SOURCE, `${ns}tr.current-row > td.el-table__cell)`), 'background-color'),
+    ).toBe('transparent')
+
+    const selectedBg = declValue(
+      cssBlock(SFC_SOURCE, `${ns}tr.cc-row--selected > td.el-table__cell)`),
+      'background-color',
+    )
+    expect(selectedBg).not.toBe('')
+    // 悬停自身／其他行都不得改变固定高亮底色：悬停态取同一底色
+    expect(
+      declValue(
+        cssBlock(SFC_SOURCE, `${ns}tr.cc-row--selected:hover > td.el-table__cell)`),
+        'background-color',
+      ),
+    ).toBe(selectedBg)
+    // 固定选中另以左缘强调线带与悬停区分
+    expect(SFC_SOURCE).toContain('tr.cc-row--selected > td.el-table__cell:first-child')
+    expect(SFC_SOURCE).toContain('box-shadow')
+    expect(SFC_SOURCE).not.toContain('!important')
   })
 })

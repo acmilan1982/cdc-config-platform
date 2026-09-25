@@ -48,12 +48,16 @@
         </div>
       </template>
       <template #body>
-        <!-- 主列表显式接入列表表格视觉模板（根类 + scoped 预设），弹窗内表格不接入（CCFG-REQ-099） -->
+        <!-- 主列表显式接入列表表格视觉模板（根类 + scoped 预设），弹窗内表格不接入（CCFG-REQ-099）。
+             行单击切换“唯一一行固定选中”（页面会话内本地状态），行双击进入编辑，二者按
+             CCFG-DESIGN-078 的判定规则协调；固定选中行以 row-class-name 加类，不改行内结构。 -->
         <el-table
           class="cc-table"
           :class="[LT_MAIN_TABLE_CLASS]"
           :data="listRows"
           empty-text="暂无符合条件的探针"
+          :row-class-name="rowClassName"
+          @row-click="onRowClick"
           @row-dblclick="onRowDblClick"
         >
           <el-table-column label="序号" width="70" align="center" class-name="cc-col-seq">
@@ -75,13 +79,17 @@
                   @mouseleave="onTipLeave"
                 >{{ row.clientId }}</span>
                 <!-- FG_ACTIVE 三态：'1' 不显示；'0' 显示与数据源管理“数据源 ID”同款“停用”标识；
-                     其余历史异常值显示红色 `异常：{原始值}`（CCFG-UI-031/CCFG-UI-035） -->
+                     其余历史异常值显示红色 `异常：{原始值}`（CCFG-UI-031/CCFG-UI-035）。
+                     异常标识自带悬停 Tooltip，属真行内交互控件：其 click/dblclick 不冒泡到行，
+                     既不切换固定选中也不误触发行双击编辑（CCFG-DESIGN-079/CCFG-UI-067）。 -->
                 <span v-if="idState(row) === 'off'" class="cc-inactive-mark">停用</span>
                 <span
                   v-else-if="idState(row) === 'abnormal'"
                   class="cc-abnormal-mark"
                   @mouseenter="onAbnormalEnter($event, row)"
                   @mouseleave="onTipLeave"
+                  @click.stop
+                  @dblclick.stop
                 >{{ abnormalBadgeText(row) }}</span>
               </div>
             </template>
@@ -110,6 +118,8 @@
                   class="cc-rowbad"
                   @mouseenter="onTipEnter($event, tipForRowbad(row))"
                   @mouseleave="onTipLeave"
+                  @click.stop
+                  @dblclick.stop
                 ><span class="cc-txt">含逗号歧义</span></span>
 
                 <span
@@ -120,8 +130,12 @@
                   :class="`cc-dstag--${dsTagState(row, ds)}`"
                   @mouseenter="onTipEnter($event, tipForDs(ds))"
                   @mouseleave="onTipLeave"
+                  @click.stop
+                  @dblclick.stop
                 ><span class="cc-txt">{{ dsBodyText(ds) }}</span></span>
 
+                <!-- `+N` 与数据源标签 Tooltip 触发器等真行内交互控件的 click/dblclick 不冒泡到行，
+                     不切换固定选中、也不误触发行双击编辑（CCFG-DESIGN-079/CCFG-UI-067）。 -->
                 <el-popover
                   v-if="hiddenCount(row) > 0"
                   placement="top"
@@ -131,7 +145,11 @@
                   @show="clearTip"
                 >
                   <template #reference>
-                    <span class="cc-more"><span class="cc-txt">+{{ hiddenCount(row) }}</span></span>
+                    <span
+                      class="cc-more"
+                      @click.stop
+                      @dblclick.stop
+                    ><span class="cc-txt">+{{ hiddenCount(row) }}</span></span>
                   </template>
                   <div class="cc-full-list">
                     <p v-if="isRowAmbiguous(row)" class="cc-full-note">
@@ -166,6 +184,8 @@
                 class="cc-count-note"
                 @mouseenter="onTipEnter($event, { lines: [{ text: '普通 CSV 解析的展示结果（行级含逗号歧义，非已确定分配）', tone: 'muted' }] })"
                 @mouseleave="onTipLeave"
+                @click.stop
+                @dblclick.stop
               >（展示）</span>
             </template>
           </el-table-column>
@@ -604,7 +624,54 @@ const queryStatus = ref<ClientStatusFilter>('ALL')
 const appliedKeyword = ref<string | undefined>(undefined)
 const appliedStatus = ref<ClientStatusFilter>('ALL')
 
+/**
+ * 固定选中（CCFG-REQ-142/CCFG-DESIGN-077/CCFG-UI-065）：当前页面会话内**唯一一行**的视觉定位状态，
+ * 实现为一个可为空的单个探针 ID。该值只活在本页实例内，不写 URL／`localStorage`／`sessionStorage`／
+ * 接口／数据库，也不是启用／停用／删除入口的前置条件；不构成任何批量或业务选择能力。
+ */
+const selectedClientId = ref<string | null>(null)
+
+/**
+ * 单击取消固定选中的判定窗口（毫秒）。行双击由两次 `click` 组成（CCFG-DESIGN-078）：
+ * “固定／转移”始终**立即**生效；只有“再次点击同一行取消”被推迟到本窗口，
+ * 以便双击达成时由 `row-dblclick` 先取消该待定取消动作，从而不把已固定行误取消、不留抖动。
+ * 该计时器只可能把**同一个**探针 ID 清空，且清空前复检其仍是当前固定选中，故不会“复活不可见选中行”。
+ */
+const CLICK_CANCEL_DELAY_MS = 260
+let pendingCancelTimer: ReturnType<typeof setTimeout> | undefined
+
+/** 取消待定的“单击取消固定选中”，并（可选）记录该次待取消的探针 ID。 */
+function cancelPendingRowClick(): void {
+  if (pendingCancelTimer !== undefined) {
+    clearTimeout(pendingCancelTimer)
+    pendingCancelTimer = undefined
+  }
+}
+
+/** 行单击：切换唯一一行固定选中。双击所含的第二次及以后点击不参与切换（`event.detail > 1`）。 */
+function onRowClick(row: ClientListItemVO, _column: unknown, event: MouseEvent): void {
+  if (event && event.detail > 1) return
+  cancelPendingRowClick()
+  if (selectedClientId.value !== row.clientId) {
+    selectedClientId.value = row.clientId
+    return
+  }
+  const target = row.clientId
+  pendingCancelTimer = setTimeout(() => {
+    pendingCancelTimer = undefined
+    if (selectedClientId.value === target) selectedClientId.value = null
+  }, CLICK_CANCEL_DELAY_MS)
+}
+
+/** 固定选中行加类，供页面作用域样式渲染行高亮；最多一行。 */
+function rowClassName({ row }: { row: ClientListItemVO }): string {
+  return row.clientId === selectedClientId.value ? 'cc-row--selected' : ''
+}
+
 function onRowDblClick(row: ClientListItemVO): void {
+  // 双击为编辑入口：先撤销待定的“单击取消”，再保持该行固定选中并进入编辑（CCFG-DESIGN-078）。
+  cancelPendingRowClick()
+  selectedClientId.value = row.clientId
   openEdit(row)
 }
 
@@ -630,8 +697,30 @@ function onReset(): void {
   queryStatus.value = 'ALL'
 }
 
+/**
+ * 下一次列表加载成功后要“按稳定探针 ID 重新固定”的目标（仅启停成功自身触发的重载会设置，
+ * CCFG-REQ-146/CCFG-DESIGN-081）。其余普通重载一律清除固定选中（CCFG-REQ-145/CCFG-DESIGN-080）。
+ */
+let reselectAfterLoad: string | null = null
+
+/**
+ * 列表重载后的固定选中口径：先撤销待定的单击动作（不让迟到的点击计时器写回旧行），
+ * 再在“本次重载由启停成功触发且目标仍在当前结果中”时固定目标行，否则清除固定选中。
+ */
+function applySelectionAfterReload(): void {
+  cancelPendingRowClick()
+  const target = reselectAfterLoad
+  reselectAfterLoad = null
+  selectedClientId.value =
+    target !== null && listRows.value.some((r) => r.clientId === target) ? target : null
+}
+
 async function loadList(): Promise<void> {
   clearTip()
+  cancelPendingRowClick()
+  // 普通重载（首次加载、查询、失败后重试及其他非启停成功触发的重载）先清除此前固定选中；
+  // 启停成功自身触发的重载是唯一例外：由 reselectAfterLoad 记下目标 ID，加载成功后按 ID 重新固定。
+  if (reselectAfterLoad === null) selectedClientId.value = null
   const seq = ++listSeq
   listLoading.value = true
   listFailed.value = false
@@ -640,6 +729,7 @@ async function loadList(): Promise<void> {
     if (seq !== listSeq) return
     if (res.code === 200) {
       listRows.value = res.data?.items ?? []
+      applySelectionAfterReload()
       shownMap.clear()
       // 数据渲染并完成真实布局后，按各容器实际宽度重新打包单行布局；
       // 不依赖 ResizeObserver 是否恰好再触发（行元素复用且宽度不变时 RO 不再回调，
@@ -651,10 +741,14 @@ async function loadList(): Promise<void> {
     } else {
       // 失败保留上一次成功结果（不清空 listRows），仅提示失败并提供重试（CCFG-UI-012/034）
       listFailed.value = true
+      // 启停成功的“按 ID 重新固定”只对本次重载有效：本次未成功即作废，
+      // 否则迟到的目标会在之后某次普通重载里复活一个用户没点过的选中行（CCFG-REQ-146）。
+      reselectAfterLoad = null
     }
   } catch (e) {
     if (seq !== listSeq) return
     listFailed.value = true
+    reselectAfterLoad = null
   } finally {
     if (seq === listSeq) listLoading.value = false
   }
@@ -688,14 +782,25 @@ function onRowCommand(command: string, row: ClientListItemVO): void {
   }
 }
 
-/** 启用：维持既有免二次确认语义，直接调 E6（CCFG-UI-018）。 */
+/** 启用：先二次确认（新增步骤，CCFG-REQ-141），确认后才调 E6；确认阶段即置忙，防止同一行重复提交。 */
 async function onEnable(row: ClientListItemVO): Promise<void> {
   if (rowBusy(row)) return
   markBusy(row.clientId, true)
   try {
+    await ElMessageBox.confirm(`确定启用探针 ${row.clientId} 吗？`, '启用探针', {
+      confirmButtonText: '启用',
+      cancelButtonText: '取消',
+    })
+  } catch (e) {
+    // 取消或关闭确认框：不发出启用写请求，也不改变原有固定选中
+    markBusy(row.clientId, false)
+    return
+  }
+  try {
     const res = await enableClient(row.clientId)
     if (res.code === 200) {
       ElMessage.success('启用成功')
+      reselectAfterLoad = row.clientId
       await loadList()
     } else {
       ElMessage.error(res.message || '启用失败')
@@ -707,20 +812,16 @@ async function onEnable(row: ClientListItemVO): Promise<void> {
   }
 }
 
-/** 停用：二次确认后调 E7；确认阶段即置忙，防止同一行重复提交（CCFG-REQ-098）。 */
+/** 停用：二次确认后调 E7；确认阶段即置忙，防止同一行重复提交（CCFG-REQ-098/140）。 */
 async function onDisable(row: ClientListItemVO): Promise<void> {
   if (rowBusy(row)) return
   markBusy(row.clientId, true)
   try {
-    await ElMessageBox.confirm(
-      `确定停用探针 ${row.clientId} 吗？停用后该探针不再按启用状态命中。`,
-      '停用探针',
-      {
-        confirmButtonText: '停用',
-        cancelButtonText: '取消',
-        type: 'warning',
-      },
-    )
+    await ElMessageBox.confirm(`确定停用探针 ${row.clientId} 吗？`, '停用探针', {
+      confirmButtonText: '停用',
+      cancelButtonText: '取消',
+      type: 'warning',
+    })
   } catch (e) {
     markBusy(row.clientId, false)
     return
@@ -729,6 +830,7 @@ async function onDisable(row: ClientListItemVO): Promise<void> {
     const res = await disableClient(row.clientId)
     if (res.code === 200) {
       ElMessage.success('停用成功')
+      reselectAfterLoad = row.clientId
       await loadList()
     } else {
       ElMessage.error(res.message || '停用失败')
@@ -867,6 +969,7 @@ const filteredOptions = computed(() => {
 
 function openCreate(): void {
   clearTip()
+  cancelPendingRowClick()
   resetDialog()
   mode.value = 'create'
   clientIdLocked.value = false
@@ -876,6 +979,7 @@ function openCreate(): void {
 
 function openEdit(row: ClientListItemVO): void {
   clearTip()
+  cancelPendingRowClick()
   resetDialog()
   mode.value = 'edit'
   editRow.value = row
@@ -1388,6 +1492,7 @@ onMounted(() => {
 
 onBeforeUnmount(() => {
   clearTip()
+  cancelPendingRowClick()
   if (resizeHandler) window.removeEventListener('resize', resizeHandler)
   rowObserver?.disconnect()
   rowObserver = null
@@ -1475,10 +1580,37 @@ onBeforeUnmount(() => {
   min-width: 0;
 }
 
-/* 本页不再为行声明固定像素行高：行高由公共表格视觉预设的单元格上下内边距
+/* 本页不为行声明固定像素行高：行高由公共表格视觉预设的单元格上下内边距
    （`var(--lt-body-cell-padding, 12px 0)`）与行内容共同决定，与参考页“数据源管理”实际规则一致
-   （CCFG-REQ-106/CCFG-DESIGN-049/CCFG-UI-038）。普通行悬停与双击编辑由 Element Plus 与
-   @row-dblclick 承担；本页已无行选中态，故不保留任何选中/hover 覆盖规则 */
+   （CCFG-REQ-106/CCFG-DESIGN-049/CCFG-UI-038）。普通悬停仍是 Element Plus 既有的浅色临时高亮
+   （移走即消失），行双击编辑由 @row-dblclick 承担。 */
+
+/* 固定选中行（CCFG-REQ-142/CCFG-DESIGN-077/CCFG-UI-065）：页面会话内最多一行，视觉层级明显
+   强于普通悬停——更实的蓝色底 + 首格左侧强调线；配色与强调线为本轮页面作用域的新参数，
+   不沿用已取消选择能力的历史参数、不写死与侧栏宽度相关的偏移。选择器以 `:deep` 限定在本页
+   表格根类 `.cc-table` 内并提高特异性（不借助强制声明）以压过 Element Plus 的行悬停
+   与“当前行”底色，使固定选中在悬停其他行或悬停自身时都清晰可辨。
+   兼容浏览器：本项目前端以 Chromium 系现代浏览器为目标（见 docs/baseline/ENVIRONMENT.md）。 */
+/* 本页不提供“当前行”语义：el-table 在行单击时会自行落下 `current-row` 底色，若不归零，
+   则“再次点击同一行取消固定选中”后仍会残留蓝色行底。本规则与下方固定选中规则**同特异性**，
+   故置于其**前**，使两者同时命中时由固定选中规则按源码顺序胜出。 */
+:deep(.cc-table .el-table__body tr.current-row > td.el-table__cell) {
+  background-color: transparent;
+}
+
+:deep(.cc-table .el-table__body tr.cc-row--selected > td.el-table__cell) {
+  background-color: #e8f0fd;
+}
+
+/* 悬停自身时仍保持固定选中底色（不被临时悬停高亮盖过） */
+:deep(.cc-table .el-table__body tr.cc-row--selected:hover > td.el-table__cell) {
+  background-color: #e8f0fd;
+}
+
+/* 固定选中行的左侧强调线：只画在首格，避免每格一条线 */
+:deep(.cc-table .el-table__body tr.cc-row--selected > td.el-table__cell:first-child) {
+  box-shadow: inset 3px 0 0 0 #1d4ed8;
+}
 
 /* 序号列：展示派生值，按当前展示数组 $index + 1 连续编号（CCFG-REQ-100） */
 .cc-seq {
@@ -1841,18 +1973,27 @@ onBeforeUnmount(() => {
   padding-top: 8px;
 }
 
+/* 字段纵向节奏（CCFG-REQ-138/CCFG-DESIGN-073/CCFG-UI-061）：以参考页“新增数据源”弹窗的
+   配置项节奏为参照。本页每个字段都带 `.cc-field-feedback` 的稳定占位（min-height + margin，见下），
+   它已独自提供字段间的可见留白；原先再叠加的字段 `gap: 14px` 会把三个字段的间距推到参考页节奏的
+   约两倍，故移除该层叠加（不新增像素值），只保留反馈区提供的稳定间隔与受控滚动。
+   反馈区、红色框／文字反馈与长文案换行口径均不变。 */
 .cc-form {
   display: flex;
   flex-direction: column;
-  gap: 14px;
   /* CCFG-UI-024：内容区相对视口安全高度，超出内部纵向滚动 */
   max-height: calc(100vh - 240px);
   overflow-y: auto;
 }
 
+/* 水平间距（CCFG-REQ-137/CCFG-DESIGN-072/CCFG-UI-060）：标签列宽与三项控件左边界由
+   本项 flex 行统一决定——标签右缘与控件左缘之间统一留 12px，标签仍右对齐，
+   三项控件左边界继续对齐；控件为 `flex: 1`，多出的 12px 从控件宽度中扣除，
+   故控件右边界保持调整前布局位置。不改单个输入框宽度、不改公共组件、不引入全局样式。 */
 .cc-form-item {
   display: flex;
   align-items: flex-start;
+  gap: 12px;
 }
 
 /* 配置项名称标签对齐参考页 `/config/data-source` 新增／编辑主弹窗标签
