@@ -16,8 +16,8 @@
 | R1 任务 | `CLIENT-CONFIG-DESIGN-BASELINE-001-R1`（正式设计复审驱动的定向修订，纯文档） |
 | R1 复审结论 | ChatGPT 正式复审：`CHANGES_REQUIRED`（R1-01~R1-09；本文件落实 R1-02~R1-08 的业务/数据流修订，R1-01/09 的编号与过程核验见本文件元数据、§12 与 R1 执行报告） |
 | R1 基线提交 | `21f4729c43d146426e8d4f1b2d6b667cfcf160ff` |
-| 依据需求 | `REQUIREMENTS.md`：`CCFG-REQ-001~136`（其中 `001~090` 为 `APPROVED`，`091~103` 为第一轮页面级调整新增需求，已随该轮基线于 2026-09-22 批准，批准前为 `DRAFT_PENDING_USER_REVIEW`；`104~112` 为第二轮 V2 新增需求，当前 `adjustment2_baseline_status=APPROVED`（2026-09-23 批准收口，批准前为 `DRAFT_PENDING_USER_REVIEW`），见 §14；`113~122` 为第三轮 `+N` 清单与新增／编辑弹窗视觉调整新增需求，当前 `adjustment3_baseline_status=APPROVED`（2026-09-23 批准收口），见 §15；`123~136` 为**第四轮**新增／编辑弹窗校验与交互调整新增需求，当前 `adjustment4_baseline_status=APPROVED`（2026-09-24 批准收口，批准前为 `DRAFT_PENDING_USER_REVIEW`），见 §16；`137~147` 为**第五轮**弹窗间距、启停确认文案与列表单行选中调整新增需求，当前 `adjustment5_baseline_status=APPROVED`（2026-09-26 批准收口，草案建立时点为 `DRAFT_PENDING_USER_REVIEW`／`NOT_APPROVED`），见 §17） |
-| 依据验收 | `ACCEPTANCE.md`：`CCFG-AC-001~146`（既有 76 + 第一轮新增 13 + 第二轮新增 15 + 第三轮新增 13 + 第四轮新增 18 + 第五轮草案新增 11），全部 `NOT_RUN`（批准的是验收标准，不是验收执行结果） |
+| 依据需求 | `REQUIREMENTS.md`：`CCFG-REQ-001~152`（其中 `001~090` 为 `APPROVED`，`091~103` 为第一轮页面级调整新增需求，已随该轮基线于 2026-09-22 批准，批准前为 `DRAFT_PENDING_USER_REVIEW`；`104~112` 为第二轮 V2 新增需求，当前 `adjustment2_baseline_status=APPROVED`（2026-09-23 批准收口，批准前为 `DRAFT_PENDING_USER_REVIEW`），见 §14；`113~122` 为第三轮 `+N` 清单与新增／编辑弹窗视觉调整新增需求，当前 `adjustment3_baseline_status=APPROVED`（2026-09-23 批准收口），见 §15；`123~136` 为**第四轮**新增／编辑弹窗校验与交互调整新增需求，当前 `adjustment4_baseline_status=APPROVED`（2026-09-24 批准收口，批准前为 `DRAFT_PENDING_USER_REVIEW`），见 §16；`137~147` 为**第五轮**弹窗间距、启停确认文案与列表单行选中调整新增需求，当前 `adjustment5_baseline_status=APPROVED`（2026-09-26 批准收口，草案建立时点为 `DRAFT_PENDING_USER_REVIEW`／`NOT_APPROVED`），见 §17；`148~152` 为**第六轮**行高亮与启停确认按钮视觉调整新增需求，当前 `adjustment6_baseline_status=DRAFT_PENDING_USER_REVIEW`（2026-09-26 草案建立，尚未复审、尚未批准），见 §18） |
+| 依据验收 | `ACCEPTANCE.md`：`CCFG-AC-001~154`（既有 76 + 第一轮新增 13 + 第二轮新增 15 + 第三轮新增 13 + 第四轮新增 18 + 第五轮新增 11 + 第六轮草案新增 8），全部 `NOT_RUN`（批准的是验收标准，不是验收执行结果；其中第六轮 `CCFG-AC-147~154` 为纯文档草案新增、尚未复审、尚未批准） |
 | 创建日期 | 2026-09-03 |
 | R1 日期 | 2026-09-04 |
 | 并发调整任务 | `CLIENT-CONFIG-DESIGN-CONCURRENCY-ADJUSTMENT-001`（依据重新批准的需求/验收并发口径，定向清除过时显式表锁设计的纯文档任务） |
@@ -30,7 +30,7 @@
 | 批准对象 | 提交 `ba7c5e917b1b9d08208c3e1ceb31285407f5fd5e` 下的本文件及其全部设计定义 |
 | 批准收口任务 | `CLIENT-CONFIG-DESIGN-CONCURRENCY-ADJUSTMENT-APPROVAL-001` |
 | 批准边界 | 设计获批不代表代码已实现、已测试或验收已执行通过 |
-| 设计编号 | `CCFG-DESIGN-001 ~ CCFG-DESIGN-082`，连续、唯一、不可复用；每个设计编号恰有一个定义行，其余同编号出现一律视为引用而非定义。其中 `001~037` 为已批准设计基线，`038~046` 为第一轮页面级调整新增设计项，已随该轮基线于 2026-09-22 批准（见 §13）；`047~053` 为第二轮 V2 新增设计项，当前 `APPROVED`（2026-09-23 批准收口，批准前为 `DRAFT_PENDING_USER_REVIEW`；见 §14）；`054~060` 为第三轮 `+N` 清单与新增／编辑弹窗视觉调整新增设计项，当前 `APPROVED`（2026-09-23 批准收口；见 §15）；`061~071` 为**第四轮**新增／编辑弹窗校验与交互调整新增设计项，当前 `adjustment4_baseline_status=APPROVED`（2026-09-24 批准收口，批准前为 `DRAFT_PENDING_USER_REVIEW`；见 §16）；`072~082` 为**第五轮**弹窗间距、启停确认文案与列表单行选中调整新增设计项，当前 `adjustment5_baseline_status=APPROVED`（2026-09-26 批准收口，草案建立时点为 `DRAFT_PENDING_USER_REVIEW`／`NOT_APPROVED`；见 §17） |
+| 设计编号 | `CCFG-DESIGN-001 ~ CCFG-DESIGN-087`，连续、唯一、不可复用；每个设计编号恰有一个定义行，其余同编号出现一律视为引用而非定义。其中 `001~037` 为已批准设计基线，`038~046` 为第一轮页面级调整新增设计项，已随该轮基线于 2026-09-22 批准（见 §13）；`047~053` 为第二轮 V2 新增设计项，当前 `APPROVED`（2026-09-23 批准收口，批准前为 `DRAFT_PENDING_USER_REVIEW`；见 §14）；`054~060` 为第三轮 `+N` 清单与新增／编辑弹窗视觉调整新增设计项，当前 `APPROVED`（2026-09-23 批准收口；见 §15）；`061~071` 为**第四轮**新增／编辑弹窗校验与交互调整新增设计项，当前 `adjustment4_baseline_status=APPROVED`（2026-09-24 批准收口，批准前为 `DRAFT_PENDING_USER_REVIEW`；见 §16）；`072~082` 为**第五轮**弹窗间距、启停确认文案与列表单行选中调整新增设计项，当前 `adjustment5_baseline_status=APPROVED`（2026-09-26 批准收口，草案建立时点为 `DRAFT_PENDING_USER_REVIEW`／`NOT_APPROVED`；见 §17）；`083~087` 为**第六轮**行高亮与启停确认按钮视觉调整新增设计项，当前 `adjustment6_baseline_status=DRAFT_PENDING_USER_REVIEW`（2026-09-26 草案建立，尚未复审、尚未批准；见 §18） |
 | PENDING_USER_CONFIRMATION | `0`（**已批准部分** `CCFG-DESIGN-001~037` 不存在由已批准需求无法推导、必须由项目负责人另行决定的业务或用户可见语义；R1 确定性修订全部落实且未发现新的业务歧义；2026-09-04 并发口径定向调整亦未引入需另行决定的新语义。**本轮新增部分**见 §13：本轮设计项本身无新增待确认设计空档；需求侧 R0 曾转记的 1 项 `PENDING_USER_CONFIRMATION`（行单选/选中视觉与“已选择：{探针ID}”的去留）已由项目负责人于 R1 **明确决定全部取消**，该事项关闭，本设计与需求侧均不再保留待确认项） |
 | 本轮调整任务 | `CLIENT-CONFIG-QUERY-LIST-AND-LIST-TABLE-ADJUSTMENT-BASELINE-001`（页面级模板选择性接入与列表调整草案，纯文档，2026-09-22，见 §13）；`...-BASELINE-001-R1`（该草案的定向纠错与项目负责人决定回填，纯文档，2026-09-22，冻结“取消全部选择能力”与 `FG_ACTIVE` 三态红色异常标识）；`...-BASELINE-001-R2`（R1 报告证据纠错，2026-09-22）；`...-BASELINE-001-R3`（R2 报告摘要最小证据纠错，2026-09-22）；`CLIENT-CONFIG-QUERY-LIST-AND-LIST-TABLE-ADJUSTMENT-BASELINE-APPROVAL-CLOSEOUT-001`（页面级调整基线批准收口，纯文档，2026-09-22，见 §13 前言） |
 | `existing_feature_implementation_status` | `IMPLEMENTED_PENDING_USER_ACCEPTANCE`（既有 Feature 实现已完成、尚待项目负责人验收；**不得**写成 `NOT_STARTED`） |
@@ -47,7 +47,12 @@
 | 第五轮调整批准状态 | `adjustment5_approval_status=APPROVED_BY_PROJECT_OWNER`（`adjustment5_approval_date=2026-09-26`、`adjustment5_approved_reviewed_commit=26647a5d4706e5bc408447a261ac99c48818ad93`；草案时点曾为 `NOT_APPROVED`，属历史时点；项目负责人的三项决定确认**不**等于草案已批准，本次批准对象为**基线文档**） |
 | 第五轮调整实现状态 | `adjustment5_implementation_status=IMPLEMENTED_PENDING_CHATGPT_REVIEW`（2026-09-26 由 `CLIENT-CONFIG-DIALOG-SPACING-ROW-SELECTION-AND-CONFIRM-COPY-IMPLEMENTATION-001` 实现 `/config/client` 前端页面级调整，定向测试与前端构建通过、并已做只读数据／接口桩下的真实浏览器核对，**当前停在 ChatGPT 远程代码复审入口**；批准收口时点的 `NOT_STARTED` 属历史时点。实现完成 ≠ 已目测／已验收／已接受） |
 | 第五轮正式验收执行状态 | `adjustment5_formal_acceptance_execution_status=NOT_RUN`（`CCFG-AC-136~146` 共 11 条全部 `NOT_RUN`；本轮**仅定义验收，不运行正式验收**） |
-| 第五轮现行下一入口 | `CHATGPT_REMOTE_CLIENT_CONFIG_DIALOG_SPACING_ROW_SELECTION_CONFIRM_COPY_IMPLEMENTATION_R1_REVIEW`（第五轮实现 R1 定向纠错后的远程**代码**复审入口（对象为实现 R1 结果提交）；**不是**直接进入正式验收，且**不**代表页面已目测或正式验收通过）；历史入口 `CHATGPT_REMOTE_CLIENT_CONFIG_DIALOG_SPACING_ROW_SELECTION_CONFIRM_COPY_BASELINE_APPROVAL_CLOSEOUT_REVIEW`（批准收口远程文档复审入口，其远程复审已通过并据以进入第五轮实现；R4 入口 `CHATGPT_REMOTE_CLIENT_CONFIG_DIALOG_SPACING_ROW_SELECTION_CONFIRM_COPY_BASELINE_R4_REVIEW`（其远程复审已返回 `APPROVED`，据以获项目负责人 2026-09-26 批准）及其更早的 R3／R2／R1／R0 入口均属**历史入口**；远程批准收口复审通过后**方**可另行立项进入代码实现，且该复审**不**代表页面已目测或正式验收通过） |
+| 第五轮下一入口（历史归档） | `CHATGPT_REMOTE_CLIENT_CONFIG_DIALOG_SPACING_ROW_SELECTION_CONFIRM_COPY_IMPLEMENTATION_R1_REVIEW`（第五轮实现 R1 定向纠错后的远程**代码**复审入口（对象为实现 R1 结果提交）；**不是**直接进入正式验收，且**不**代表页面已目测或正式验收通过）；历史入口 `CHATGPT_REMOTE_CLIENT_CONFIG_DIALOG_SPACING_ROW_SELECTION_CONFIRM_COPY_BASELINE_APPROVAL_CLOSEOUT_REVIEW`（批准收口远程文档复审入口，其远程复审已通过并据以进入第五轮实现；R4 入口 `CHATGPT_REMOTE_CLIENT_CONFIG_DIALOG_SPACING_ROW_SELECTION_CONFIRM_COPY_BASELINE_R4_REVIEW`（其远程复审已返回 `APPROVED`，据以获项目负责人 2026-09-26 批准）及其更早的 R3／R2／R1／R0 入口均属**历史入口**；远程批准收口复审通过后**方**可另行立项进入代码实现，且该复审**不**代表页面已目测或正式验收通过） |
+| 第六轮行高亮与启停确认按钮视觉调整基线状态（草案） | `adjustment6_baseline_status=DRAFT_PENDING_USER_REVIEW`（2026-09-26 草案建立；依据项目负责人已明确确认的两项视觉方向；尚未远程复审、尚未批准；见 §18） |
+| 第六轮调整批准状态 | `adjustment6_approval_status=NOT_APPROVED`（草案建立时点） |
+| 第六轮调整实现状态 | `adjustment6_implementation_status=NOT_STARTED`（本轮仅建立纯文档草案，**不**进入代码实现） |
+| 第六轮正式验收执行状态 | `adjustment6_formal_acceptance_execution_status=NOT_RUN`（`CCFG-AC-147~154` 共 8 条全部 `NOT_RUN`；本轮**仅定义验收，不运行正式验收**） |
+| 第六轮现行下一入口 | `CHATGPT_REMOTE_CLIENT_CONFIG_ROW_HIGHLIGHT_AND_CONFIRM_BUTTON_VISUAL_BASELINE_REVIEW`（第六轮草案的远程**基线文档**复审入口；**不是**直接进入实现或验收，且**不**代表页面已目测或正式验收通过）；第五轮 `CHATGPT_REMOTE_CLIENT_CONFIG_DIALOG_SPACING_ROW_SELECTION_CONFIRM_COPY_IMPLEMENTATION_R1_REVIEW` 入口在本草案建立后转为**历史入口**（其远程代码复审仍待推进，第五轮已实现事实与状态**不回退**） |
 | 配套文档 | `API.md`（`CCFG-API-*`）、`UI.md`（`CCFG-UI-*`）、`DATABASE.md`（`CCFG-DB-*`），与本文件状态相同，接口路径、字段名、状态值、错误码、事务边界与本文件一致 |
 
 R1 修订目标（不改已批准 90 条需求与 76 条验收、不进入代码实现、不做设计批准收口）：在 §12 追踪矩阵改为全称编号并修正初版 API 重复定义统计口径（`R1-01`）；固定“E1 `dataSources` 恒按原存储顺序返回、前端仅计算非持久化前三项投影”的单一顺序契约（`R1-02`，见 CCFG-DESIGN-014）；固定 `CLIENT_DESC` 原文保存、Trim 仅判空、按实际保存原文计 UTF-8 字节（`R1-03`，见 CCFG-DESIGN-028/030）；补齐关键词字面量 LIKE 转义（`R1-04`，见 CCFG-DESIGN-007 与 DATABASE.md）；删除未批准的数据源 ID“其他非法字符”限制（`R1-05`）；补齐 `CATEGORY_MISMATCH`/`TYPE_MISMATCH` 历史候选资格变化异常（`R1-06`，见 CCFG-DESIGN-035）；补齐含逗号历史配置的不可逆歧义处理（`R1-07`，见 CCFG-DESIGN-036）；补齐历史 `CLIENT_DESC` 为 NULL/空白的契约（`R1-08`，见 CCFG-DESIGN-037）。
@@ -157,7 +162,7 @@ R1 修订目标（不改已批准 90 条需求与 76 条验收、不进入代码
 
 ## 12. 追踪矩阵（设计项 → 需求/验收）
 
-> 下列矩阵汇总四份设计文档（`DESIGN.md`/`API.md`/`UI.md`/`DATABASE.md`）对 **147** 条需求与 **146** 条验收的覆盖。逐文档的“设计项→需求/验收”列已在各文档对应表内给出；本表用于一次性核对 **147/147** 与 **146/146** 覆盖。
+> 下列矩阵汇总四份设计文档（`DESIGN.md`/`API.md`/`UI.md`/`DATABASE.md`）对 **152** 条需求与 **154** 条验收的覆盖。逐文档的“设计项→需求/验收”列已在各文档对应表内给出；本表用于一次性核对 **152/152** 与 **154/154** 覆盖。（第六轮新增 `CCFG-DESIGN-083~087`／`CCFG-UI-071~075` 覆盖 `CCFG-REQ-148~152` 与 `CCFG-AC-147~154`，见 §18 与 `UI.md` §20。）
 >
 > 说明：第一轮页面级调整（`CCFG-REQ-091~103`、`CCFG-AC-077~089`）**只**涉及 `DESIGN.md`（新增 `CCFG-DESIGN-038~046`）与 `UI.md`（新增 `CCFG-UI-027~035`）；第二轮 V2 主列表视觉调整草案（`CCFG-REQ-104~112`、`CCFG-AC-090~104`）**只**涉及 `DESIGN.md`（新增 `CCFG-DESIGN-047~053`）与 `UI.md`（新增 `CCFG-UI-036~042`）；第三轮 `+N` 清单与新增／编辑弹窗视觉调整草案（`CCFG-REQ-113~122`、`CCFG-AC-105~117`）**只**涉及 `DESIGN.md`（新增 `CCFG-DESIGN-054~060`）与 `UI.md`（新增 `CCFG-UI-043~049`，并定向标注 `CCFG-UI-009`/`CCFG-UI-024`）；第四轮新增／编辑弹窗校验与交互调整（2026-09-24 批准收口为 `APPROVED`；`CCFG-REQ-123~136`、`CCFG-AC-118~135`）**只**涉及 `DESIGN.md`（新增 `CCFG-DESIGN-061~071`）与 `UI.md`（新增 `CCFG-UI-050~059`，并定向标注 `CCFG-UI-013`/`CCFG-UI-015`/`CCFG-UI-017`）。**第五轮**弹窗间距、启停确认文案与列表单行选中调整草案（`adjustment5_baseline_status=DRAFT_PENDING_USER_REVIEW`；`CCFG-REQ-137~147`、`CCFG-AC-136~146`）**只**涉及 `DESIGN.md`（新增 `CCFG-DESIGN-072~082`，并定向标注 `CCFG-DESIGN-018`/`019`/`020`/`040`/`041`/`043`）与 `UI.md`（新增 `CCFG-UI-060~070`，并定向标注 `CCFG-UI-004`/`005`/`018`/`020`）。**五轮**均**不**修改 `API.md` 与 `DATABASE.md`（判定为无需变更，见执行报告）。因此这些新增需求/验收的覆盖项**只**出现 `CCFG-DESIGN-*` 与 `CCFG-UI-*` 编号，属预期而非缺项。
 >
@@ -314,6 +319,11 @@ R1 修订目标（不改已批准 90 条需求与 76 条验收、不进入代码
 | CCFG-REQ-145 | CCFG-DESIGN-080、CCFG-UI-068 |
 | CCFG-REQ-146 | CCFG-DESIGN-081、CCFG-UI-069 |
 | CCFG-REQ-147 | CCFG-DESIGN-082、CCFG-UI-070 |
+| CCFG-REQ-148 | CCFG-DESIGN-083、CCFG-UI-071 |
+| CCFG-REQ-149 | CCFG-DESIGN-084、CCFG-UI-072 |
+| CCFG-REQ-150 | CCFG-DESIGN-085、CCFG-DESIGN-086、CCFG-UI-074 |
+| CCFG-REQ-151 | CCFG-DESIGN-087、CCFG-UI-073 |
+| CCFG-REQ-152 | CCFG-DESIGN-087、CCFG-UI-075 |
 
 ### 12.2 验收覆盖矩阵（AC → 覆盖设计项）
 
@@ -465,6 +475,14 @@ R1 修订目标（不改已批准 90 条需求与 76 条验收、不进入代码
 | CCFG-AC-144 | CCFG-DESIGN-080、CCFG-UI-068 |
 | CCFG-AC-145 | CCFG-DESIGN-081、CCFG-UI-069 |
 | CCFG-AC-146 | CCFG-DESIGN-082、CCFG-UI-070 |
+| CCFG-AC-147 | CCFG-DESIGN-083、CCFG-UI-071 |
+| CCFG-AC-148 | CCFG-DESIGN-084、CCFG-UI-072 |
+| CCFG-AC-149 | CCFG-DESIGN-084、CCFG-UI-073 |
+| CCFG-AC-150 | CCFG-DESIGN-084、CCFG-UI-073 |
+| CCFG-AC-151 | CCFG-DESIGN-085、CCFG-DESIGN-086、CCFG-UI-074 |
+| CCFG-AC-152 | CCFG-DESIGN-086、CCFG-UI-074 |
+| CCFG-AC-153 | CCFG-DESIGN-086、CCFG-DESIGN-087、CCFG-UI-073 |
+| CCFG-AC-154 | CCFG-DESIGN-087、CCFG-UI-075 |
 
 ## 13. 页面级模板选择性接入与列表调整（本轮新增 · 2026-09-22 批准收口为 `APPROVED`）
 
@@ -580,7 +598,25 @@ R1 修订目标（不改已批准 90 条需求与 76 条验收、不进入代码
 | CCFG-DESIGN-081 | **启停成功重载的唯一例外与删除结果**：启用／停用**成功后自身触发**的列表更新，若目标探针仍在当前列表（**含状态筛选为“全部”时目标仍在结果中**），按**稳定探针 ID** 固定选中该行（即使操作前另一行被选中）；若因当前**状态筛选**生效条件而不再显示（如“启用”条件下停用、“停用”条件下启用后按该条件重载），则**清除**固定选中、**不**保留“看不见的已选行”。**取消确认或启停失败**不改变原有选中；**删除成功**触发的重载清除固定选中（`CCFG-DESIGN-018`／`CCFG-DESIGN-043`），**删除取消／失败**不改变原有选中。 **【R1 定向修订 · 待复审】** “不再显示”以**状态筛选**构造（可执行），与 `CCFG-REQ-146`／`CCFG-UI-069`／`CCFG-AC-145` 的“仍显示／已过滤／取消／失败／删除”分支一致；**不**改后端筛选或排序、**不**新增刷新按钮。 | CCFG-REQ-146 | CCFG-AC-145 |
 | CCFG-DESIGN-082 | **边界与不恢复项**：单行固定选中**仅在当前页面会话内**有效，**不**改启用／停用／删除／编辑的 API 契约、**不**引入额外持久化字段、**不**修改列表过滤或排序规则；本决策为 `/config/client` **页面级**口径，**不**提炼为通用模板、**不**修改两套模板的模板级全局状态（保持 `NOT_STARTED` / `NOT_GRANTED` / `NOT_DECIDED`）；明确**不**恢复**旧的批量或业务选择能力**（选择状态集合、复选框／多选、“删除所选”、批量操作、“已选择：{探针ID}”文字与后端选择状态）。 **【R1 定向修订 · 待复审】** 本条禁止**收窄为旧的批量或业务选择能力**；本轮**允许**仅在当前页面会话内保存**一个可为空的单个探针 ID**（`selectedClientId` 或同义值）作为固定高亮的**本地**状态，该值不写入 URL／`localStorage`／`sessionStorage`／接口／数据库、不作为启用／停用／删除入口的前置条件。 | CCFG-REQ-147 | CCFG-AC-146 |
 
-## 18. 变更记录
+## 18. 行高亮与启停确认按钮视觉调整（第六轮 · 2026-09-26 草案建立 · `CLIENT-CONFIG-ROW-HIGHLIGHT-AND-CONFIRM-BUTTON-VISUAL-BASELINE-001`）
+
+> 本节为**第六轮**主列表**行高亮**（悬停与固定选中改中性灰阶）与**启用／停用确认框主确认按钮**（改黑底白字）视觉调整新增设计项（`CCFG-DESIGN-083~087`，共 5 条），依据**项目负责人已明确确认的两项视觉方向**建立**草案**。`/config/data-source`（数据源管理）在本轮**不**参与、**不**修改；本节规则**只**作用于 `/config/client` 页面，**不**提炼为通用弹窗模板、**不**修改 `docs/baseline/**` 的模板级全局状态、**不**修改全局 Element Plus 按钮主题。
+
+> **状态分层（草案）**：`adjustment6_baseline_status=DRAFT_PENDING_USER_REVIEW`、`adjustment6_approval_status=NOT_APPROVED`、`adjustment6_implementation_status=NOT_STARTED`、`adjustment6_formal_acceptance_execution_status=NOT_RUN`。第五轮 `adjustment5_baseline_status=APPROVED` 与其已实现事实**不回退**。
+
+> **编号与方向**：本节编号（`CCFG-DESIGN-083~087`）在本文件既有最大编号 `082` 之后连续新增，**不**复用旧编号、**不**重排历史编号；**不**新增定向修订行、**不**改写任何既有设计定义行（`CCFG-DESIGN-001~082` 本轮**零变化**）。第五轮 `CCFG-DESIGN-077~082` 只要求悬停与固定选中“使用**可区分视觉层级**”而**未固定配色**，本节 `CCFG-DESIGN-083/084` 仅**细化**该视觉，**不**改变其交互语义。
+
+| 设计编号 | 设计决定 | 覆盖需求 | 覆盖验收 |
+|---|---|---|---|
+| CCFG-DESIGN-083 | **中性灰阶三态 token 与作用域优先级**：为 `/config/client` 主列表定义**同一中性灰体系**的悬停态与固定选中态——悬停**很浅中性灰**、固定选中**略深中性灰**、固定选中行左侧**深灰／近黑细强调线**。草案建议值：悬停 `#f4f4f5`、固定选中 `#eceef0`、强调线 `#18181b`。实现前必须先核对本页现有色值、公共样式（查询列表页模板与 Element Plus 变量）**优先级**与真实截图效果，再确定精确值；若采用更合适的同体系中性色，须说明依据并保持两态**可区分**。**不**得把红色／绿色数据源状态标签改为灰色。样式须落在**页面作用域**（`:deep` 或弹窗专用 class），**不**使用全局覆盖。 | CCFG-REQ-148 | CCFG-AC-147 |
+| CCFG-DESIGN-084 | **固定选中行的层级、固定后再悬停与可读性约束**：固定选中视觉须**明显强于**普通悬停且**不被后续悬停覆盖**——固定行**再悬停**维持固定底色与强调线、**无颜色跳动**；其他行悬停**不**改变已固定行。实现上应使固定选中规则在选择器特异性／源码顺序上**优先于**悬停规则，并重置 Element Plus 默认行悬停底色（`.el-table__body tr:hover > td`）；沿用第五轮既有做法——把 `current-row` 底色归零并置于固定选中规则**之前**，使“再次点击同一行取消固定选中”后不残留底色。含**红／绿数据源标签**与**异常提示**的行在悬停与固定选中下文本与标签对比度必须足够、**清晰可读**，**窄视口**下同样成立；存在行键盘焦点时，键盘焦点态必须与悬停、固定选中**三者可区分**且**不消失**。 | CCFG-REQ-149 | CCFG-AC-148、CCFG-AC-149、CCFG-AC-150 |
+| CCFG-DESIGN-085 | **启停确认框主确认按钮的作用域落地（规避 Teleport 破坏 scoped 样式）**：`ElMessageBox`（启用／停用确认框）由 Element Plus 经 **Teleport 渲染到 `body`**，页面 `scoped` 样式**不**作用于其内容；因此本轮**不**得依赖页面 `scoped` 规则改其主按钮，**不**得使用全局 Element Plus 主题覆盖或全局 `!important`。落地方案：仅为**启用／停用**两个确认框传入**弹窗专用 class**，并在**非 scoped（或弹窗专用作用域）**样式块中以该 class 下钻到主按钮选择器（如 `.cc-confirm--enable .el-message-box__btns .el-button--primary`），**仅**改**主确认按钮**。实现须复用本页既有**黑色主操作按钮 token**（正常 `#09090b`、文字 `#ffffff`、悬停/焦点 `#27272a`、按下 `#18181b`、处理中 `#3f3f46`，`border-radius: 6px`、`font-weight: 500`），并沿用 `:not(.is-disabled)` 之类**状态作用域**，**不**影响“取消”次要按钮、**不**创建通用弹窗模板。 | CCFG-REQ-150 | CCFG-AC-151 |
+| CCFG-DESIGN-086 | **主确认按钮状态矩阵与可访问性**：启用／停用确认框主确认按钮须覆盖**正常、悬停、按下、键盘焦点、处理中**五态的**黑底白字**表现（与 `CCFG-DESIGN-062` 同类矩阵口径）：各态均**可辨识、可访问**，状态之间以**明度／层次**区分而非换色系，**不**得出现蓝色底或蓝黑跳色；**处理中**须保持可辨识且不可重复提交（不新增全局覆盖、不强制提升优先级）；键盘焦点轮廓必须保留、不得因覆盖而丢失。 | CCFG-REQ-150 | CCFG-AC-151、CCFG-AC-152、CCFG-AC-153 |
+| CCFG-DESIGN-087 | **边界与不变范围**：主列表悬停／固定选中与启停确认框主按钮的**视觉调整**，**不**改变任何已批准行为（`CCFG-DESIGN-077~082`）与 R1 后的**请求私有重选参数**实现；**删除确认框**及其危险操作警示色、**其他页面**确认框、**全局 Element Plus 按钮主题**、两套模板全局状态与 `docs/baseline/**` **均不变**；**不**新增通用弹窗模板、**不**引入复选框／多选／批量／持久化选择、**不**改 API 契约与列表过滤排序。 | CCFG-REQ-151、CCFG-REQ-152 | CCFG-AC-153、CCFG-AC-154 |
+
+**本节与既有设计的关系**：`CCFG-DESIGN-083/084` 只**细化**第五轮 `CCFG-DESIGN-077` 的悬停与固定选中视觉配色（中性灰阶），**不**改变其三态与单行上限语义；`CCFG-DESIGN-085/086` 只改启用／停用确认框**主确认按钮**视觉，`CCFG-DESIGN-075/076` 的确认文案、标题、按钮层级与二次确认语义**不变**；`CCFG-DESIGN-087` 明确本轮**只改视觉**的边界。本轮**不**改 `API.md`／`DATABASE.md`、**不**改任何业务代码／测试、**不**改 `docs/baseline/**` 与两套模板全局状态。
+
+## 19. 变更记录
 
 | 日期 | 变更 | 依据 |
 |---|---|---|
@@ -613,3 +649,4 @@ R1 修订目标（不改已批准 90 条需求与 76 条验收、不进入代码
 | 2026-09-26 | 弹窗间距、启停确认文案与列表单行选中调整基线**批准收口**（`CLIENT-CONFIG-DIALOG-SPACING-ROW-SELECTION-AND-CONFIRM-COPY-BASELINE-APPROVAL-CLOSEOUT-001`，纯文档）：R0 草案提交 `3f1fdd423df4377c59c73dad968d65b592b5e717` 的 ChatGPT 远程复审为 `CHANGES_REQUIRED`，R1～R4 纠错提交 `43016ffcf57b602100ddc94d26b4aba6ccf6262e`／`9b729ec07f5903656365f704acef38261a136c53`／`5bca41a0028ce3addeda2597bdec4af8766ff447`／`26647a5d4706e5bc408447a261ac99c48818ad93` 依次经远程复审，末次对 R4 提交的远程**基线文档复审**为 `APPROVED`，项目负责人于 2026-09-26 明确回复“批准”。本文件据此把 §17 第五轮分层收口为 `adjustment5_baseline_status=APPROVED`、`adjustment5_approval_status=APPROVED_BY_PROJECT_OWNER`、`adjustment5_approval_date=2026-09-26`、`adjustment5_approved_reviewed_commit=26647a5d4706e5bc408447a261ac99c48818ad93`，`adjustment5_implementation_status` 仍 `NOT_STARTED`、`adjustment5_formal_acceptance_execution_status` 仍 `NOT_RUN`、146 条验收仍全部 `NOT_RUN`。**本文件不修改任何设计定义行**（`CCFG-DESIGN-001~082` 相对 R4 提交 `26647a5` **逐字节零变化**）；批准的是**基线文档**，**不**代表已实现、已目测或正式验收通过；现行下一入口为 `CHATGPT_REMOTE_CLIENT_CONFIG_DIALOG_SPACING_ROW_SELECTION_CONFIRM_COPY_BASELINE_APPROVAL_CLOSEOUT_REVIEW`。 |
 | 2026-09-26 | 第五轮弹窗间距、启停确认文案与列表单行选中调整**实现**（`CLIENT-CONFIG-DIALOG-SPACING-ROW-SELECTION-AND-CONFIRM-COPY-IMPLEMENTATION-001`，前端实现任务）：按已批准基线实现 `CCFG-DESIGN-072~082` 所述 `/config/client` 页面级调整——新增／编辑弹窗配置项标签与控件水平约 12px 间距、三控件左缘对齐与统一纵向节奏、反馈区稳定占位（红边框／红文案、长错误可换行，新建与编辑双模式一致，同视口提示态切换不引起弹窗与底部按钮跳动）；停用确认文案收窄为 `确定停用探针 {探针ID} 吗？` 与**新增启用二次确认**（取消／关闭不发启用写请求、一次点击只发一次请求）；主列表以页面会话内**可空单个探针 ID** 本地状态实现**仅一行固定选中**（不写 URL／`localStorage`／`sessionStorage`／接口／数据库），悬浮临时高亮与固定高亮分层、双击编辑与两次 `click` 协同、探针 ID 普通左键单击遵循普通行内容规则、行内控件不因冒泡切换固定选中亦不误触编辑、常规重载清空旧高亮且启停成功按可见性重选、异步竞态不复活不可见选中行。`adjustment5_implementation_status` 由 `NOT_STARTED` 变为 `IMPLEMENTED_PENDING_CHATGPT_REVIEW`（该任务时点之前的 `NOT_STARTED` 属历史时点），`adjustment5_baseline_status=APPROVED` 不变。**本文件不修改任何设计定义行**（`CCFG-DESIGN-001~082` 相对批准收口提交 `c179f712c9de4865dd81d02ee8a6a996083b2f96` 逐字节零变化，即相对 R4 提交 `26647a5` 亦零变化）；实现 **不**等于已目测、已验收或已接受；现行下一入口为 `CHATGPT_REMOTE_CLIENT_CONFIG_DIALOG_SPACING_ROW_SELECTION_CONFIRM_COPY_IMPLEMENTATION_R1_REVIEW`（远程代码复审通过后仍**不等于**已目测／已验收／已接受，正式验收须另行执行）。 |
 | 2026-09-26 | 第五轮弹窗间距、启停确认文案与列表单行选中调整**实现 R1 定向纠错**（`CLIENT-CONFIG-DIALOG-SPACING-ROW-SELECTION-AND-CONFIRM-COPY-IMPLEMENTATION-001-R1`，前端纠错任务）：ChatGPT 从远程 Git 对第五轮实现提交 `c082b344edb70e5428a9186a782eceb8495dee2e` 的远程**代码**复审结论为 `CHANGES_REQUIRED`（**仅一处**：启停成功触发的列表重载与用户普通查询／其他普通重载交错时，原实现用**跨请求共享**的 `reselectAfterLoad` 传递“成功后按 ID 重选”意图，普通重载可能读到、保留或恢复该意图，致查询发起时未按 `CCFG-REQ-145` 清选、查询成功后误固定启停目标行；序号机制只忽略过期**响应**，不能阻止新请求误用旧请求的重选意图）；已由 `CLIENT-CONFIG-DIALOG-SPACING-ROW-SELECTION-AND-CONFIRM-COPY-IMPLEMENTATION-001-R1` 定向修复——重选意图改为**仅由启停成功所触发的单次列表请求的私有参数**携带，普通 `loadList()` 一律在发起时清选，只有该请求自身的最新成功响应才按**其自己的**目标 ID 决定重选或清空，过期响应不回写、失败不遗留意图；定向测试 `ClientConfigPage.spec.ts` **168/168 通过**（含 5 条确定性延迟响应交错用例），全量前端测试与 `npm run build` 通过。`adjustment5_implementation_status` 仍为 `IMPLEMENTED_PENDING_CHATGPT_REVIEW`（**不**因修复改变），146 条验收仍全部 `NOT_RUN`；本轮**未**执行正式验收与项目负责人目测。 |
+| 2026-09-26 | 行高亮与启停确认按钮视觉调整**基线草案**（`CLIENT-CONFIG-ROW-HIGHLIGHT-AND-CONFIRM-BUTTON-VISUAL-BASELINE-001`，纯文档）：依据项目负责人已明确确认的两项视觉方向，新增 §18 与 `CCFG-DESIGN-083~087`（5 条，追加在既有最大编号 `082` 之后，不重排历史编号）——`083` 悬停／固定选中中性灰阶三态 token 与作用域优先级（草案建议值悬停 `#f4f4f5`、固定选中 `#eceef0`、强调线 `#18181b`；先核对现有色值与公共样式优先级再定值；不把红／绿标签改灰；页面作用域、无全局覆盖）、`084` 固定选中层级、固定后再悬停无跳动、其他行悬停不影响固定行、含红／绿标签与异常提示的行及窄视口清晰可读、键盘焦点三态可区分且不消失（重置 EP 默认行悬停底、沿用 `current-row` 归零且置于固定选中规则之前）、`085` 启用／停用确认框主确认按钮经**弹窗专用 class** 落地以规避 `ElMessageBox` 经 Teleport 渲染到 `body` 导致页面 scoped 样式失效（非 scoped／弹窗专用作用域下钻主按钮，复用黑色主按钮 token `#09090b`／`#ffffff`／`#27272a`／`#18181b`／`#3f3f46`，`:not(.is-disabled)` 状态作用域，不影响“取消”，不创建通用弹窗模板）、`086` 主确认按钮正常／悬停／按下／键盘焦点／处理中五态黑底白字、可辨识可访问、无蓝底或蓝黑跳色、处理中不可重复提交、焦点轮廓保留、不强制提升优先级、`087` 边界与不变范围（不改 `CCFG-DESIGN-077~082` 与 R1 后请求私有重选参数；删除确认框及危险色、其他页面确认框、全局 Element Plus 按钮主题、两套模板全局状态与 `docs/baseline/**` 均不变）。**本文件不修改任何既有设计定义行**（`CCFG-DESIGN-001~082` 相对本节起始提交逐字节零变化），**不**新增定向修订行；§12 追踪矩阵更新为 **152/152** 需求、**154/154** 验收；`adjustment6_baseline_status=DRAFT_PENDING_USER_REVIEW`、`adjustment6_approval_status=NOT_APPROVED`、`adjustment6_implementation_status=NOT_STARTED`、`adjustment6_formal_acceptance_execution_status=NOT_RUN`；第五轮 `adjustment5_baseline_status=APPROVED` 与已实现事实**不回退**；下一入口 `CHATGPT_REMOTE_CLIENT_CONFIG_ROW_HIGHLIGHT_AND_CONFIRM_BUTTON_VISUAL_BASELINE_REVIEW`（草案复审入口，**不是**直接进入实现或验收） | `CLIENT-CONFIG-ROW-HIGHLIGHT-AND-CONFIRM-BUTTON-VISUAL-BASELINE-001`（项目负责人已确认的两项视觉方向驱动的**纯文档草案**；未实现代码、未运行测试/构建/浏览器/服务、未访问数据库/ZooKeeper/Kafka、未执行正式验收或最终接受） |
