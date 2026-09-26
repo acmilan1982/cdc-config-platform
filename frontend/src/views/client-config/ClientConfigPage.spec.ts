@@ -3376,11 +3376,60 @@ describe('第六轮：主列表行高亮中性灰阶（CCFG-REQ-148/149、CCFG-D
       'background-color',
     )
     expect(hoverBg).toBe('#f4f4f5')
-    expect(fixedBg).toBe('#eceef0')
+    expect(fixedBg).toBe('#e1e4e8')
     // 悬停与固定选中是两个可区分层级，且都不沿用已取消的蓝色配
     expect(hoverBg).not.toBe(fixedBg)
     expect(hoverBg).not.toMatch(/e8f0fd|1d4ed8/)
     expect(fixedBg).not.toMatch(/e8f0fd|1d4ed8/)
+  })
+
+  it('静态：固定选中底色明显深于悬停底色且两者均为浅中性灰（区分度回归）', () => {
+    /** 由 `#rrggbb` 求 sRGB 相对亮度（WCAG 口径）。 */
+    function luminance(hex: string): number {
+      const ch = [1, 3, 5].map((i) => {
+        const v = parseInt(hex.slice(i, i + 2), 16) / 255
+        return v <= 0.03928 ? v / 12.92 : ((v + 0.055) / 1.055) ** 2.4
+      })
+      return 0.2126 * ch[0] + 0.7152 * ch[1] + 0.0722 * ch[2]
+    }
+    /** 三通道极差：≤ 8 视为中性灰（无色相偏色）。 */
+    const channelSpread = (hex: string): number => {
+      const ch = [1, 3, 5].map((i) => parseInt(hex.slice(i, i + 2), 16))
+      return Math.max(...ch) - Math.min(...ch)
+    }
+
+    const hoverBg = declValue(cssBlock(SFC_SOURCE, `${NS}tr:hover > td.el-table__cell)`), 'background-color')
+    const fixedBg = declValue(
+      cssBlock(SFC_SOURCE, `${NS}tr.cc-row--selected > td.el-table__cell)`),
+      'background-color',
+    )
+
+    // 两态均为浅中性灰（保持“浅灰底”方向，不做深色底）
+    expect(luminance(hoverBg)).toBeGreaterThan(0.85)
+    expect(luminance(fixedBg)).toBeGreaterThan(0.6)
+    expect(channelSpread(hoverBg)).toBeLessThanOrEqual(8)
+    expect(channelSpread(fixedBg)).toBeLessThanOrEqual(8)
+    // 固定态必须“明显深于”悬停态：本项为项目负责人目测反馈（两态过于接近）的回归护栏
+    expect(luminance(hoverBg) - luminance(fixedBg)).toBeGreaterThanOrEqual(0.08)
+  })
+
+  it('静态：固定底色规则作用于行内全部单元格，不把底色收窄到个别单元格', () => {
+    // “操作”为最右固定列，EP 对其单元格只做 `background: inherit`；若把固定底色写死在
+    // `:first-child` 等子集上，固定列就会与其余单元格底色不一致。
+    expect(SFC_SOURCE).toContain(`${NS}tr.cc-row--selected > td.el-table__cell) {`)
+    expect(
+      declValue(
+        cssBlock(SFC_SOURCE, `${NS}tr.cc-row--selected > td.el-table__cell)`),
+        'background',
+      ),
+    ).toBe('')
+    // 首格规则只负责左缘强调线，不单独再写一层底色
+    expect(
+      declValue(
+        cssBlock(SFC_SOURCE, `${NS}tr.cc-row--selected > td.el-table__cell:first-child)`),
+        'background-color',
+      ),
+    ).toBe('')
   })
 
   it('静态：固定选中行保留左缘深灰／近黑细强调线，且固定后再悬停底色不跳变', () => {
@@ -3438,6 +3487,12 @@ describe('第六轮：主列表行高亮中性灰阶（CCFG-REQ-148/149、CCFG-D
     await clickRow(w, disabledRow)
     await sleep(CANCEL_WINDOW_MS)
     expect(w.findAll('.cc-row--selected')).toHaveLength(0)
+
+    // 取消后仅剩普通态／悬停态，可再次正常固定（取消不是不可逆的死状态）
+    await clickRow(w, disabledRow)
+    await sleep(CANCEL_WINDOW_MS)
+    expect(w.findAll('.cc-row--selected')).toHaveLength(1)
+    expect(w.findAll('.cc-row--selected')[0].text()).toContain('probe-b')
     w.unmount()
   })
 })

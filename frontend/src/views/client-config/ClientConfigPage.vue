@@ -1597,7 +1597,9 @@ onBeforeUnmount(() => {
 
 /* 固定选中行（CCFG-REQ-142/148/149/CCFG-DESIGN-077/083/084/CCFG-UI-065/071/072）：页面会话内最多一行，
    视觉层级明显强于普通悬停。本轮改用中性灰阶——普通悬停很浅中性灰（`#f4f4f5`）、固定选中略深中性灰
-   （`#eceef0`）+ 首格左侧深灰／近黑细强调线（`#18181b`），两态可区分且非蓝底／非蓝线。
+   （`#e1e4e8`）+ 首格左侧深灰／近黑细强调线（`#18181b`），两态可区分且非蓝底／非蓝线。
+   固定底色先取 `#eceef0`，项目负责人目测反馈与悬停 `#f4f4f5` 区分不足，故定向加深为 `#e1e4e8`
+   （`CLIENT-CONFIG-ROW-HIGHLIGHT-VISUAL-DISTINCTION-IMPLEMENTATION-001-R1`）。
    配色与强调线为本轮页面作用域的新参数，不沿用已取消选择能力的历史参数、不写死与侧栏宽度相关的偏移。
    选择器以 `:deep` 限定在本页表格根类 `.cc-table` 内；本页 scoped 会为每条规则前置 `[data-v-*]` 属性选择器，
    使这些规则的特异性压过 Element Plus 的行悬停（`tr.hover-row`／`:hover`）与“当前行”底色（`tr.current-row`），
@@ -1621,12 +1623,12 @@ onBeforeUnmount(() => {
 /* 固定选中：略深中性灰，鼠标移出仍保持；规则特异性高于上方悬停规则，
    故悬停其他行不改变已固定行（CCFG-UI-072）。 */
 :deep(.cc-table .el-table__body tr.cc-row--selected > td.el-table__cell) {
-  background-color: #eceef0;
+  background-color: #e1e4e8;
 }
 
 /* 悬停自身时仍保持固定选中底色（不被临时悬停高亮盖过、不产生颜色跳动） */
 :deep(.cc-table .el-table__body tr.cc-row--selected:hover > td.el-table__cell) {
-  background-color: #eceef0;
+  background-color: #e1e4e8;
 }
 
 /* 固定选中行的左侧强调线：只画在首格，避免每格一条线 */
