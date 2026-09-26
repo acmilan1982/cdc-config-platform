@@ -788,7 +788,9 @@ function onRowCommand(command: string, row: ClientListItemVO): void {
   }
 }
 
-/** 启用：先二次确认（新增步骤，CCFG-REQ-141），确认后才调 E6；确认阶段即置忙，防止同一行重复提交。 */
+/** 启用：先二次确认（新增步骤，CCFG-REQ-141），确认后才调 E6；确认阶段即置忙，防止同一行重复提交。
+ *  确认框带专用 class `cc-confirm--enable`（CCFG-REQ-150/CCFG-DESIGN-085/CCFG-UI-074），
+ *  仅用于把该弹窗主确认按钮渲染为黑底白字，不改变关闭顺序、文案与取消行为。 */
 async function onEnable(row: ClientListItemVO): Promise<void> {
   if (rowBusy(row)) return
   markBusy(row.clientId, true)
@@ -796,6 +798,7 @@ async function onEnable(row: ClientListItemVO): Promise<void> {
     await ElMessageBox.confirm(`确定启用探针 ${row.clientId} 吗？`, '启用探针', {
       confirmButtonText: '启用',
       cancelButtonText: '取消',
+      customClass: 'cc-confirm--enable',
     })
   } catch (e) {
     // 取消或关闭确认框：不发出启用写请求，也不改变原有固定选中
@@ -817,7 +820,9 @@ async function onEnable(row: ClientListItemVO): Promise<void> {
   }
 }
 
-/** 停用：二次确认后调 E7；确认阶段即置忙，防止同一行重复提交（CCFG-REQ-098/140）。 */
+/** 停用：二次确认后调 E7；确认阶段即置忙，防止同一行重复提交（CCFG-REQ-098/140）。
+ *  确认框带专用 class `cc-confirm--disable`（CCFG-REQ-150/CCFG-DESIGN-085/CCFG-UI-074），
+ *  仅用于把该弹窗主确认按钮渲染为黑底白字，不改变关闭顺序、文案与取消行为。 */
 async function onDisable(row: ClientListItemVO): Promise<void> {
   if (rowBusy(row)) return
   markBusy(row.clientId, true)
@@ -826,6 +831,7 @@ async function onDisable(row: ClientListItemVO): Promise<void> {
       confirmButtonText: '停用',
       cancelButtonText: '取消',
       type: 'warning',
+      customClass: 'cc-confirm--disable',
     })
   } catch (e) {
     markBusy(row.clientId, false)
@@ -1586,34 +1592,46 @@ onBeforeUnmount(() => {
 
 /* 本页不为行声明固定像素行高：行高由公共表格视觉预设的单元格上下内边距
    （`var(--lt-body-cell-padding, 12px 0)`）与行内容共同决定，与参考页“数据源管理”实际规则一致
-   （CCFG-REQ-106/CCFG-DESIGN-049/CCFG-UI-038）。普通悬停仍是 Element Plus 既有的浅色临时高亮
-   （移走即消失），行双击编辑由 @row-dblclick 承担。 */
+   （CCFG-REQ-106/CCFG-DESIGN-049/CCFG-UI-038）。普通悬停为本轮定义的很浅中性灰底（移走即恢复，
+   CCFG-REQ-148/CCFG-UI-071），行双击编辑由 @row-dblclick 承担。 */
 
-/* 固定选中行（CCFG-REQ-142/CCFG-DESIGN-077/CCFG-UI-065）：页面会话内最多一行，视觉层级明显
-   强于普通悬停——更实的蓝色底 + 首格左侧强调线；配色与强调线为本轮页面作用域的新参数，
-   不沿用已取消选择能力的历史参数、不写死与侧栏宽度相关的偏移。选择器以 `:deep` 限定在本页
-   表格根类 `.cc-table` 内并提高特异性（不借助强制声明）以压过 Element Plus 的行悬停
-   与“当前行”底色，使固定选中在悬停其他行或悬停自身时都清晰可辨。
+/* 固定选中行（CCFG-REQ-142/148/149/CCFG-DESIGN-077/083/084/CCFG-UI-065/071/072）：页面会话内最多一行，
+   视觉层级明显强于普通悬停。本轮改用中性灰阶——普通悬停很浅中性灰（`#f4f4f5`）、固定选中略深中性灰
+   （`#eceef0`）+ 首格左侧深灰／近黑细强调线（`#18181b`），两态可区分且非蓝底／非蓝线。
+   配色与强调线为本轮页面作用域的新参数，不沿用已取消选择能力的历史参数、不写死与侧栏宽度相关的偏移。
+   选择器以 `:deep` 限定在本页表格根类 `.cc-table` 内；本页 scoped 会为每条规则前置 `[data-v-*]` 属性选择器，
+   使这些规则的特异性压过 Element Plus 的行悬停（`tr.hover-row`／`:hover`）与“当前行”底色（`tr.current-row`），
+   不借助强制声明，使固定选中在悬停其他行或悬停自身时都清晰可辨、不跳变。
    兼容浏览器：本项目前端以 Chromium 系现代浏览器为目标（见 docs/baseline/ENVIRONMENT.md）。 */
 /* 本页不提供“当前行”语义：el-table 在行单击时会自行落下 `current-row` 底色，若不归零，
-   则“再次点击同一行取消固定选中”后仍会残留蓝色行底。本规则与下方固定选中规则**同特异性**，
+   则“再次点击同一行取消固定选中”后仍会残留行底。本规则与下方固定选中规则**同特异性**，
    故置于其**前**，使两者同时命中时由固定选中规则按源码顺序胜出。 */
 :deep(.cc-table .el-table__body tr.current-row > td.el-table__cell) {
   background-color: transparent;
 }
 
-:deep(.cc-table .el-table__body tr.cc-row--selected > td.el-table__cell) {
-  background-color: #e8f0fd;
+/* 普通行悬停：很浅中性灰，仅指针停留时显示、移开即恢复（CCFG-UI-071）。
+   本页“操作”为最右固定列，EP 因此把该表标为 complex 且不落 `el-table--enable-row-hover`；
+   悬停实际由 EP 的 `tr.hover-row`（JS 切换）与 `:hover` 伪类呈现，本规则特异性高于二者，
+   故本页悬停底色以此处中性灰为准。 */
+:deep(.cc-table .el-table__body tr:hover > td.el-table__cell) {
+  background-color: #f4f4f5;
 }
 
-/* 悬停自身时仍保持固定选中底色（不被临时悬停高亮盖过） */
+/* 固定选中：略深中性灰，鼠标移出仍保持；规则特异性高于上方悬停规则，
+   故悬停其他行不改变已固定行（CCFG-UI-072）。 */
+:deep(.cc-table .el-table__body tr.cc-row--selected > td.el-table__cell) {
+  background-color: #eceef0;
+}
+
+/* 悬停自身时仍保持固定选中底色（不被临时悬停高亮盖过、不产生颜色跳动） */
 :deep(.cc-table .el-table__body tr.cc-row--selected:hover > td.el-table__cell) {
-  background-color: #e8f0fd;
+  background-color: #eceef0;
 }
 
 /* 固定选中行的左侧强调线：只画在首格，避免每格一条线 */
 :deep(.cc-table .el-table__body tr.cc-row--selected > td.el-table__cell:first-child) {
-  box-shadow: inset 3px 0 0 0 #1d4ed8;
+  box-shadow: inset 3px 0 0 0 #18181b;
 }
 
 /* 序号列：展示派生值，按当前展示数组 $index + 1 连续编号（CCFG-REQ-100） */
@@ -2279,5 +2297,61 @@ onBeforeUnmount(() => {
 .cc-more-popper .el-dropdown-menu__item.cc-more-warning.is-disabled,
 .cc-more-popper .el-dropdown-menu__item.cc-more-warning.is-disabled:hover {
   color: #f0b775;
+}
+</style>
+
+<!-- 启用／停用确认框主确认按钮：黑底白字，与本页黑色主操作按钮协调
+     （CCFG-REQ-150/CCFG-DESIGN-085/086/CCFG-UI-074/075）。
+     `ElMessageBox` 由 Element Plus 经 **Teleport 渲染到 `body`**，页面 `scoped` 样式不作用于其内容，
+     故此处为**非 scoped** 块；但它只以两个弹窗专用 class（`cc-confirm--enable`／`cc-confirm--disable`）
+     严格限定，且仅下钻到 `.el-message-box__btns .el-button--primary`——**只**改主确认按钮，
+     不触碰“取消”次要按钮，不写全局覆盖、不使用任何强制声明、不修改全局 Element Plus 主题、
+     不创建通用弹窗模板。删除确认框不带这两个 class，因而不受本块任何影响。
+     状态作用域沿用 `:not(.is-disabled)`；仅当组件**确实出现**加载态时按已批准矩阵保持深灰黑体系
+     （`#3f3f46`）、不跳蓝。 -->
+<style>
+.cc-confirm--enable .el-message-box__btns .el-button--primary:not(.is-disabled),
+.cc-confirm--disable .el-message-box__btns .el-button--primary:not(.is-disabled) {
+  background: #09090b;
+  border-color: #09090b;
+  color: #ffffff;
+  border-radius: 6px;
+  font-weight: 500;
+}
+
+.cc-confirm--enable .el-message-box__btns .el-button--primary:not(.is-disabled):hover,
+.cc-confirm--enable .el-message-box__btns .el-button--primary:not(.is-disabled):focus,
+.cc-confirm--disable .el-message-box__btns .el-button--primary:not(.is-disabled):hover,
+.cc-confirm--disable .el-message-box__btns .el-button--primary:not(.is-disabled):focus {
+  background: #27272a;
+  border-color: #27272a;
+  color: #ffffff;
+}
+
+.cc-confirm--enable .el-message-box__btns .el-button--primary:not(.is-disabled):active,
+.cc-confirm--disable .el-message-box__btns .el-button--primary:not(.is-disabled):active {
+  background: #18181b;
+  border-color: #18181b;
+  color: #ffffff;
+}
+
+/* 处理中（加载）态：仅当组件确实现该真实状态时生效，保持深灰黑体系、不出现蓝黑跳色。 */
+.cc-confirm--enable .el-message-box__btns .el-button--primary.is-loading,
+.cc-confirm--enable .el-message-box__btns .el-button--primary.is-loading:hover,
+.cc-confirm--enable .el-message-box__btns .el-button--primary.is-loading:focus,
+.cc-confirm--enable .el-message-box__btns .el-button--primary.is-loading:active,
+.cc-confirm--disable .el-message-box__btns .el-button--primary.is-loading,
+.cc-confirm--disable .el-message-box__btns .el-button--primary.is-loading:hover,
+.cc-confirm--disable .el-message-box__btns .el-button--primary.is-loading:focus,
+.cc-confirm--disable .el-message-box__btns .el-button--primary.is-loading:active {
+  background: #3f3f46;
+  border-color: #3f3f46;
+  color: #ffffff;
+}
+
+/* Element Plus 在加载态用 30% 白遮罩伪元素冲淡底色，须在本主按钮加载态内置为透明。 */
+.cc-confirm--enable .el-message-box__btns .el-button--primary.is-loading::before,
+.cc-confirm--disable .el-message-box__btns .el-button--primary.is-loading::before {
+  background-color: transparent;
 }
 </style>

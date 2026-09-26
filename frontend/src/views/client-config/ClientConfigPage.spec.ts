@@ -3352,3 +3352,223 @@ describe('第五轮：主列表单行固定选中（CCFG-REQ-142~146、CCFG-DESI
     expect(SFC_SOURCE).not.toContain('!important')
   })
 })
+
+// ============================================================ 第六轮：行高亮中性灰阶与启停确认按钮
+// CCFG-REQ-148~152 / CCFG-AC-147~154 / CCFG-DESIGN-083~087 / CCFG-UI-071~075
+
+describe('第六轮：主列表行高亮中性灰阶（CCFG-REQ-148/149、CCFG-DESIGN-083/084、CCFG-UI-071/072/073）', () => {
+  /** 本页行样式全部落在页面作用域，选择器以 `:deep` 限定在表格根类 `.cc-table` 内。 */
+  const NS = ':deep(.cc-table .el-table__body '
+  /** 略大于实现的 260ms 单击取消判定窗口。 */
+  const CANCEL_WINDOW_MS = 320
+
+  const tableVm = (w: PageWrapper) => w.findComponent({ name: 'ElTable' }).vm
+
+  async function clickRow(w: PageWrapper, rowData: ClientListItemVO, detail = 1) {
+    tableVm(w).$emit('row-click', rowData, null, { detail })
+    await nextTick()
+  }
+
+  it('静态：普通悬停很浅中性灰、固定选中略深中性灰，两态可区分且均非蓝色配', () => {
+    const hoverBg = declValue(cssBlock(SFC_SOURCE, `${NS}tr:hover > td.el-table__cell)`), 'background-color')
+    const fixedBg = declValue(
+      cssBlock(SFC_SOURCE, `${NS}tr.cc-row--selected > td.el-table__cell)`),
+      'background-color',
+    )
+    expect(hoverBg).toBe('#f4f4f5')
+    expect(fixedBg).toBe('#eceef0')
+    // 悬停与固定选中是两个可区分层级，且都不沿用已取消的蓝色配
+    expect(hoverBg).not.toBe(fixedBg)
+    expect(hoverBg).not.toMatch(/e8f0fd|1d4ed8/)
+    expect(fixedBg).not.toMatch(/e8f0fd|1d4ed8/)
+  })
+
+  it('静态：固定选中行保留左缘深灰／近黑细强调线，且固定后再悬停底色不跳变', () => {
+    expect(
+      declValue(
+        cssBlock(SFC_SOURCE, `${NS}tr.cc-row--selected > td.el-table__cell:first-child)`),
+        'box-shadow',
+      ),
+    ).toBe('inset 3px 0 0 0 #18181b')
+    // 固定行再被悬停时取与固定态相同的底色（不产生颜色跳动）
+    const fixedBg = declValue(
+      cssBlock(SFC_SOURCE, `${NS}tr.cc-row--selected > td.el-table__cell)`),
+      'background-color',
+    )
+    expect(
+      declValue(
+        cssBlock(SFC_SOURCE, `${NS}tr.cc-row--selected:hover > td.el-table__cell)`),
+        'background-color',
+      ),
+    ).toBe(fixedBg)
+  })
+
+  it('静态：固定选中源码顺序后于悬停规则、current-row 归零在最前，保证固定态优先', () => {
+    const zero = SFC_SOURCE.indexOf(`${NS}tr.current-row > td.el-table__cell)`)
+    const hover = SFC_SOURCE.indexOf(`${NS}tr:hover > td.el-table__cell)`)
+    const fixed = SFC_SOURCE.indexOf(`${NS}tr.cc-row--selected > td.el-table__cell)`)
+    const fixedHover = SFC_SOURCE.indexOf(`${NS}tr.cc-row--selected:hover > td.el-table__cell)`)
+    expect(zero).toBeGreaterThan(-1)
+    // 归零在前、悬停其后：取消固定选中后该行悬停仍显示普通灰底，不残留行底
+    expect(hover).toBeGreaterThan(zero)
+    // 固定选中多带一个 `.cc-row--selected` 类（特异性更高）且源码顺序在后
+    expect(fixed).toBeGreaterThan(hover)
+    expect(fixedHover).toBeGreaterThan(fixed)
+  })
+
+  it('静态：行样式落在页面 scoped 块内，不声明公共令牌、不使用强制声明或全局覆盖', () => {
+    const scopedBlocks = SFC_SOURCE.match(/<style scoped>[\s\S]*?<\/style>/g) ?? []
+    expect(scopedBlocks.some((b) => b.includes(`${NS}tr.cc-row--selected`))).toBe(true)
+    expect(SFC_SOURCE).not.toMatch(/--lt-[\w-]+\s*:/)
+    expect(SFC_SOURCE).not.toContain('!important')
+    // 行内状态标签（红／绿数据源标签、异常标识）不因本轮行底色而变灰
+    expect(SFC_SOURCE).not.toContain('.cc-dstag--ok.is-selected')
+  })
+
+  it('组件：视觉调整不改变单行固定选中行为——同时最多一行、再次单击取消', async () => {
+    const w = await mountPage([enabledRow, disabledRow])
+    await clickRow(w, enabledRow)
+    expect(w.findAll('.cc-row--selected')).toHaveLength(1)
+    expect(w.findAll('.cc-row--selected')[0].text()).toContain('probe-a')
+
+    await clickRow(w, disabledRow)
+    expect(w.findAll('.cc-row--selected')).toHaveLength(1)
+    expect(w.findAll('.cc-row--selected')[0].text()).toContain('probe-b')
+
+    await clickRow(w, disabledRow)
+    await sleep(CANCEL_WINDOW_MS)
+    expect(w.findAll('.cc-row--selected')).toHaveLength(0)
+    w.unmount()
+  })
+})
+
+describe('第六轮：启停确认框主确认按钮黑底白字（CCFG-REQ-150/152、CCFG-DESIGN-085/086/087、CCFG-UI-074/075）', () => {
+  /** 只作用于启用／停用确认框主确认按钮的专用选择器片段。 */
+  const BTNS = '.el-message-box__btns .el-button--primary'
+
+  /** 承载专用样式的**非 scoped** 块（Teleport 到 body 的弹窗只能靠专用 class 命中）。 */
+  function confirmBlock(): string {
+    const blocks = SFC_SOURCE.match(/<style>[\s\S]*?<\/style>/g) ?? []
+    return blocks.find((b) => b.includes('.cc-confirm--enable')) ?? ''
+  }
+
+  it('静态：专用样式位于非 scoped 块、仅由两个专用 class 限定到主按钮，页面 scoped 块不含该样式', () => {
+    const block = confirmBlock()
+    expect(block).not.toBe('')
+    // scoped 样式对 Teleport 到 body 的弹窗无效，故不得写在页面 scoped 块里
+    const scopedBlocks = SFC_SOURCE.match(/<style scoped>[\s\S]*?<\/style>/g) ?? []
+    expect(scopedBlocks.some((b) => b.includes('cc-confirm--'))).toBe(false)
+    // 仅命中启用／停用两个弹窗的主确认按钮；取消次要按钮不在范围
+    expect(block).toContain(`.cc-confirm--enable ${BTNS}`)
+    expect(block).toContain(`.cc-confirm--disable ${BTNS}`)
+    expect(block).not.toContain('.el-button--default')
+    // 保留键盘焦点轮廓、不使用强制声明
+    expect(block).not.toMatch(/outline\s*:\s*none/)
+    expect(block).not.toContain('!important')
+  })
+
+  it('静态：正常黑底白字、悬停/焦点与按下为深灰黑系、处理中为 #3f3f46，均不跳蓝', () => {
+    const block = confirmBlock()
+    const normal = cssGroupBlock(block, `.cc-confirm--enable ${BTNS}:not(.is-disabled)`)
+    expect(declValue(normal, 'background')).toBe('#09090b')
+    expect(declValue(normal, 'border-color')).toBe('#09090b')
+    expect(declValue(normal, 'color')).toBe('#ffffff')
+    expect(declValue(normal, 'border-radius')).toBe('6px')
+    expect(declValue(normal, 'font-weight')).toBe('500')
+
+    expect(
+      declValue(cssGroupBlock(block, `.cc-confirm--enable ${BTNS}:not(.is-disabled):hover`), 'background'),
+    ).toBe('#27272a')
+    expect(
+      declValue(cssGroupBlock(block, `.cc-confirm--enable ${BTNS}:not(.is-disabled):active`), 'background'),
+    ).toBe('#18181b')
+    expect(declValue(cssGroupBlock(block, `.cc-confirm--enable ${BTNS}.is-loading`), 'background')).toBe(
+      '#3f3f46',
+    )
+    // 加载态的 EP 半透明白遮罩须被内置为透明，否则深灰底被冲淡
+    expect(
+      declValue(
+        cssGroupBlock(block, `.cc-confirm--enable ${BTNS}.is-loading::before`),
+        'background-color',
+      ),
+    ).toBe('transparent')
+
+    // 不得引入 EP 主色浅蓝或蓝黑跳色
+    expect(block).not.toMatch(/a0cfff|409eff|--el-color-primary/)
+    // 停用确认框口径与启用一致
+    expect(declValue(cssGroupBlock(block, `.cc-confirm--disable ${BTNS}:not(.is-disabled)`), 'background')).toBe(
+      '#09090b',
+    )
+  })
+
+  it('组件：启用确认框传入 cc-confirm--enable，按钮文案与“取消”次要层级不变', async () => {
+    const w = await mountPage([disabledRow])
+    await clickRowMenuAction(w, 0, '启用')
+    expect(confirmSpy).toHaveBeenCalledTimes(1)
+    expect(confirmSpy.mock.calls[0][0]).toBe('确定启用探针 probe-b 吗？')
+    expect(confirmSpy.mock.calls[0][1]).toBe('启用探针')
+    const opts = confirmSpy.mock.calls[0][2] as Record<string, unknown>
+    expect(opts.customClass).toBe('cc-confirm--enable')
+    expect(opts.confirmButtonText).toBe('启用')
+    expect(opts.cancelButtonText).toBe('取消')
+    w.unmount()
+  })
+
+  it('组件：停用确认框传入 cc-confirm--disable，并保留 warning 语义与既有文案', async () => {
+    const w = await mountPage([enabledRow])
+    await clickRowMenuAction(w, 0, '停用')
+    expect(confirmSpy).toHaveBeenCalledTimes(1)
+    expect(confirmSpy.mock.calls[0][0]).toBe('确定停用探针 probe-a 吗？')
+    expect(confirmSpy.mock.calls[0][1]).toBe('停用探针')
+    const opts = confirmSpy.mock.calls[0][2] as Record<string, unknown>
+    expect(opts.customClass).toBe('cc-confirm--disable')
+    expect(opts.type).toBe('warning')
+    expect(opts.confirmButtonText).toBe('停用')
+    expect(opts.cancelButtonText).toBe('取消')
+    w.unmount()
+  })
+
+  it('组件：删除确认框不带任何专用 class，维持 warning 语义与删除文案（边界不变）', async () => {
+    const w = await mountPage([enabledRow])
+    await clickRowMenuAction(w, 0, '删除')
+    expect(confirmSpy).toHaveBeenCalledTimes(1)
+    expect(confirmSpy.mock.calls[0][0]).toBe('确定删除探针 probe-a 吗？该操作不可恢复。')
+    expect(confirmSpy.mock.calls[0][1]).toBe('删除探针')
+    const opts = confirmSpy.mock.calls[0][2] as Record<string, unknown>
+    expect(opts.customClass).toBeUndefined()
+    expect(opts.type).toBe('warning')
+    expect(opts.confirmButtonText).toBe('删除')
+    expect(opts.cancelButtonText).toBe('取消')
+    // 专用样式只有启用／停用两个 class，删除弹窗不可能被命中
+    expect(SFC_SOURCE).not.toContain('cc-confirm--delete')
+    w.unmount()
+  })
+
+  it('Teleport：真实确认框渲染到 body，专用 class 落在弹窗根元素、主按钮位于 __btns 内', async () => {
+    confirmSpy.mockRestore()
+    const pending = ElMessageBox.confirm('确定启用探针 probe-b 吗？', '启用探针', {
+      confirmButtonText: '启用',
+      cancelButtonText: '取消',
+      customClass: 'cc-confirm--enable',
+    })
+    void pending.catch(() => undefined)
+    await nextTick()
+    await flushPromises()
+
+    const box = document.querySelector('.el-message-box.cc-confirm--enable')
+    expect(box).not.toBeNull()
+    // 弹窗 Teleport 到 body（不在挂载组件内），故专用样式必须写在非 scoped 块
+    expect(box!.closest('body')).toBe(document.body)
+
+    const primary = box!.querySelector(BTNS)
+    expect(primary).not.toBeNull()
+    expect((primary as HTMLElement).textContent?.trim()).toBe('启用')
+    // “取消”是次要按钮，不被仅作用于主按钮的专用选择器命中
+    const cancel = box!.querySelector('.el-message-box__btns .el-button:not(.el-button--primary)')
+    expect(cancel).not.toBeNull()
+    expect((cancel as HTMLElement).textContent?.trim()).toBe('取消')
+
+    ElMessageBox.close()
+    await flushPromises()
+  })
+})
