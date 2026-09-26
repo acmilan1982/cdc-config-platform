@@ -44,7 +44,7 @@
       <template #error>
         <div v-if="listFailed" class="cc-load-error" role="alert">
           <span class="cc-load-error-text">列表加载失败，请重试。</span>
-          <el-button size="small" :loading="listLoading" @click="loadList">重试</el-button>
+          <el-button size="small" :loading="listLoading" @click="loadList()">重试</el-button>
         </div>
       </template>
       <template #body>
@@ -698,29 +698,37 @@ function onReset(): void {
 }
 
 /**
- * 下一次列表加载成功后要“按稳定探针 ID 重新固定”的目标（仅启停成功自身触发的重载会设置，
- * CCFG-REQ-146/CCFG-DESIGN-081）。其余普通重载一律清除固定选中（CCFG-REQ-145/CCFG-DESIGN-080）。
- */
-let reselectAfterLoad: string | null = null
-
-/**
  * 列表重载后的固定选中口径：先撤销待定的单击动作（不让迟到的点击计时器写回旧行），
- * 再在“本次重载由启停成功触发且目标仍在当前结果中”时固定目标行，否则清除固定选中。
+ * 再在“本次重载由启停成功触发（`reselectTarget` 非空）且目标仍在当前结果中”时固定目标行，
+ * 否则清除固定选中。
+ *
+ * `reselectTarget` 是**本次请求私有的**意图，由调用方显式传入，不跨请求共享：普通重载传 `null`
+ * 一律清选，因此并发的普通查询／重试／删除成功／新增编辑成功重载不会继承或消费启停请求的重选意图
+ * （CCFG-REQ-145/CCFG-DESIGN-080 与 CCFG-REQ-146/CCFG-DESIGN-081 的边界）。
  */
-function applySelectionAfterReload(): void {
+function applySelectionAfterReload(reselectTarget: string | null): void {
   cancelPendingRowClick()
-  const target = reselectAfterLoad
-  reselectAfterLoad = null
   selectedClientId.value =
-    target !== null && listRows.value.some((r) => r.clientId === target) ? target : null
+    reselectTarget !== null && listRows.value.some((r) => r.clientId === reselectTarget)
+      ? reselectTarget
+      : null
 }
 
-async function loadList(): Promise<void> {
+/**
+ * 加载列表。
+ *
+ * `reselectTarget` 语义（默认 `null` = 普通重载）：
+ * - `null`：首次加载、用户“查询”、失败后“重试”、删除成功、新增／编辑成功及其他非启停成功触发的重载，
+ *   都会在**发起时同步清除**此前固定选中（CCFG-REQ-145）。
+ * - 非空：**仅**启停成功后自身触发的那一次重载携带该目标 ID（CCFG-REQ-146，本页唯一例外）；
+ *   发起时不清除旧选中，且只有本次请求**自身的最新、成功**响应才会按该 ID 在当前结果中重选或清空。
+ *   被更新的请求（`seq !== listSeq`）不会回写选中；本请求失败也不把该意图留给后续任何请求。
+ */
+async function loadList(reselectTarget: string | null = null): Promise<void> {
   clearTip()
   cancelPendingRowClick()
-  // 普通重载（首次加载、查询、失败后重试及其他非启停成功触发的重载）先清除此前固定选中；
-  // 启停成功自身触发的重载是唯一例外：由 reselectAfterLoad 记下目标 ID，加载成功后按 ID 重新固定。
-  if (reselectAfterLoad === null) selectedClientId.value = null
+  // 普通重载一律先清除此前固定选中；只有启停成功自身触发的重载（携带目标 ID）才保留旧选中待重选。
+  if (reselectTarget === null) selectedClientId.value = null
   const seq = ++listSeq
   listLoading.value = true
   listFailed.value = false
@@ -729,7 +737,7 @@ async function loadList(): Promise<void> {
     if (seq !== listSeq) return
     if (res.code === 200) {
       listRows.value = res.data?.items ?? []
-      applySelectionAfterReload()
+      applySelectionAfterReload(reselectTarget)
       shownMap.clear()
       // 数据渲染并完成真实布局后，按各容器实际宽度重新打包单行布局；
       // 不依赖 ResizeObserver 是否恰好再触发（行元素复用且宽度不变时 RO 不再回调，
@@ -739,16 +747,14 @@ async function loadList(): Promise<void> {
         if (seq === listSeq) recomputeAllRows()
       }
     } else {
-      // 失败保留上一次成功结果（不清空 listRows），仅提示失败并提供重试（CCFG-UI-012/034）
+      // 失败保留上一次成功结果（不清空 listRows），仅提示失败并提供重试（CCFG-UI-012/034）。
+      // 启停成功的“按 ID 重新固定”只对本次请求有效：本次未成功即作废，意图只存在于本次调用的局部参数中，
+      // 不会泄漏给之后某次普通重载去复活一个用户没点过的选中行（CCFG-REQ-146）。
       listFailed.value = true
-      // 启停成功的“按 ID 重新固定”只对本次重载有效：本次未成功即作废，
-      // 否则迟到的目标会在之后某次普通重载里复活一个用户没点过的选中行（CCFG-REQ-146）。
-      reselectAfterLoad = null
     }
   } catch (e) {
     if (seq !== listSeq) return
     listFailed.value = true
-    reselectAfterLoad = null
   } finally {
     if (seq === listSeq) listLoading.value = false
   }
@@ -800,8 +806,7 @@ async function onEnable(row: ClientListItemVO): Promise<void> {
     const res = await enableClient(row.clientId)
     if (res.code === 200) {
       ElMessage.success('启用成功')
-      reselectAfterLoad = row.clientId
-      await loadList()
+      await loadList(row.clientId)
     } else {
       ElMessage.error(res.message || '启用失败')
     }
@@ -830,8 +835,7 @@ async function onDisable(row: ClientListItemVO): Promise<void> {
     const res = await disableClient(row.clientId)
     if (res.code === 200) {
       ElMessage.success('停用成功')
-      reselectAfterLoad = row.clientId
-      await loadList()
+      await loadList(row.clientId)
     } else {
       ElMessage.error(res.message || '停用失败')
     }

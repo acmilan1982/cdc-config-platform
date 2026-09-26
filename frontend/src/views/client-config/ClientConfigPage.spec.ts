@@ -2886,6 +2886,17 @@ describe('第五轮：主列表单行固定选中（CCFG-REQ-142~146、CCFG-DESI
 
   const selectedRow = (w: PageWrapper) => w.find('.cc-row--selected')
 
+  /** 由测试精确控制“请求启动／响应完成”顺序的挂起响应（确定性地复现请求交错）。 */
+  function deferred<T>() {
+    let resolve!: (value: T) => void
+    let reject!: (reason?: unknown) => void
+    const promise = new Promise<T>((res, rej) => {
+      resolve = res
+      reject = rej
+    })
+    return { promise, resolve, reject }
+  }
+
   it('左键单击：未选中行固定 → 重复单击同一行取消 → 单击其他行转移，全表同时最多一行', async () => {
     const w = await mountPage([enabledRow, disabledRow])
     expect(w.findAll('.cc-row--selected')).toHaveLength(0)
@@ -3170,6 +3181,148 @@ describe('第五轮：主列表单行固定选中（CCFG-REQ-142~146、CCFG-DESI
     expect(w.findAll('.cc-row--selected')).toHaveLength(0)
     // 计时器即使迟到也不得把选中行写回
     await sleep(CANCEL_WINDOW_MS)
+    expect(w.findAll('.cc-row--selected')).toHaveLength(0)
+    w.unmount()
+  })
+
+  it('启停重载在途时发起普通查询：查询发起即清选、查询成功后无固定选中，迟到的启停列表响应不恢复（CCFG-REQ-145/146）', async () => {
+    const pendingAdminReload = deferred<ApiResponse<ClientListVO>>()
+    const pendingQueryReload = deferred<ApiResponse<ClientListVO>>()
+    mockedList
+      .mockResolvedValueOnce(okList([enabledRow, disabledRow])) // 首次加载
+      .mockReturnValueOnce(pendingAdminReload.promise) // 停用成功自身触发的重载（响应挂起）
+      .mockReturnValueOnce(pendingQueryReload.promise) // 用户“查询”发起的普通重载（最新请求）
+    const w = await mountRaw()
+    await clickRow(w, enabledRow)
+    expect(selectedRow(w).text()).toContain('probe-a')
+
+    // ① 停用成功 → 发起携带目标 probe-a 的启停重载；响应尚未返回
+    await clickRowMenuAction(w, 0, '停用')
+    expect(messageSpy.success).toHaveBeenCalledWith('停用成功')
+    expect(mockedList).toHaveBeenCalledTimes(2)
+    // 启停重载在途期间，原固定选中暂未被清除（唯一例外不按普通重载处理）
+    expect(selectedRow(w).text()).toContain('probe-a')
+
+    // ② 用户点“查询” → 普通重载成为最新请求，发起时即清除旧固定选中
+    await exactButton(w, '查询')!.trigger('click')
+    expect(mockedList).toHaveBeenCalledTimes(3)
+    expect(w.findAll('.cc-row--selected')).toHaveLength(0)
+
+    // ③ 查询成功且结果仍含 probe-a：普通重载不得继承启停目标、不得重新固定 A
+    pendingQueryReload.resolve(okList([enabledRow, disabledRow]))
+    await flushPromises()
+    expect(w.findAll('.cc-row--selected')).toHaveLength(0)
+
+    // ④ 过期的启停列表响应随后到达（结果同样含 probe-a）：不得回写、不得恢复 A
+    pendingAdminReload.resolve(okList([enabledRow, disabledRow]))
+    await flushPromises()
+    expect(w.findAll('.cc-row--selected')).toHaveLength(0)
+    w.unmount()
+  })
+
+  it('启停重载在途时另一普通重载（删除成功）不继承启停重选目标（CCFG-REQ-145）', async () => {
+    const pendingAdminReload = deferred<ApiResponse<ClientListVO>>()
+    const pendingDeleteReload = deferred<ApiResponse<ClientListVO>>()
+    mockedList
+      .mockResolvedValueOnce(okList([enabledRow, disabledRow])) // 首次加载
+      .mockReturnValueOnce(pendingAdminReload.promise) // 停用成功自身触发的重载（挂起）
+      .mockReturnValueOnce(pendingDeleteReload.promise) // 删除成功触发的普通重载（最新请求）
+    const w = await mountRaw()
+    await clickRow(w, enabledRow)
+    expect(selectedRow(w).text()).toContain('probe-a')
+
+    await clickRowMenuAction(w, 0, '停用') // 启停重载在途
+    expect(mockedList).toHaveBeenCalledTimes(2)
+    expect(selectedRow(w).text()).toContain('probe-a')
+
+    // 另一行的删除成功 → 普通重载成为最新请求，发起时清除固定选中
+    await clickRowMenuAction(w, 1, '删除')
+    expect(messageSpy.success).toHaveBeenCalledWith('删除成功')
+    expect(mockedList).toHaveBeenCalledTimes(3)
+    expect(w.findAll('.cc-row--selected')).toHaveLength(0)
+
+    // 删除成功重载按 CCFG-REQ-145 清选：即使结果仍含 probe-a 也不固定
+    pendingDeleteReload.resolve(okList([enabledRow]))
+    await flushPromises()
+    expect(w.findAll('.cc-row--selected')).toHaveLength(0)
+
+    // 过期的启停响应到达也不得恢复 probe-a
+    pendingAdminReload.resolve(okList([enabledRow, disabledRow]))
+    await flushPromises()
+    expect(w.findAll('.cc-row--selected')).toHaveLength(0)
+    w.unmount()
+  })
+
+  it('启停重载在途时普通查询失败：发起即清选、失败保留上次结果且不重选，迟到启停响应不恢复（CCFG-REQ-145）', async () => {
+    const pendingAdminReload = deferred<ApiResponse<ClientListVO>>()
+    const pendingQueryReload = deferred<ApiResponse<ClientListVO>>()
+    mockedList
+      .mockResolvedValueOnce(okList([enabledRow, disabledRow])) // 首次加载
+      .mockReturnValueOnce(pendingAdminReload.promise) // 停用成功自身触发的重载（挂起）
+      .mockReturnValueOnce(pendingQueryReload.promise) // “查询”发起的普通重载（最新请求）
+    const w = await mountRaw()
+    await clickRow(w, enabledRow)
+    await clickRowMenuAction(w, 0, '停用')
+    expect(mockedList).toHaveBeenCalledTimes(2)
+
+    await exactButton(w, '查询')!.trigger('click')
+    expect(w.findAll('.cc-row--selected')).toHaveLength(0)
+
+    // 查询失败：按既有规则提示失败、保留上一次成功结果，但不得固定任何行
+    pendingQueryReload.resolve(failList(500, 'boom'))
+    await flushPromises()
+    expect(w.find('.cc-load-error').exists()).toBe(true)
+    expect(w.findAll('.cc-row--selected')).toHaveLength(0)
+
+    pendingAdminReload.resolve(okList([enabledRow, disabledRow]))
+    await flushPromises()
+    expect(w.findAll('.cc-row--selected')).toHaveLength(0)
+    w.unmount()
+  })
+
+  it('多个启停重载交错：最终固定行由最新有效请求自身的目标决定，过期请求不回写（CCFG-REQ-146）', async () => {
+    const pendingDisable = deferred<ApiResponse<ClientListVO>>()
+    const pendingEnable = deferred<ApiResponse<ClientListVO>>()
+    mockedList
+      .mockResolvedValueOnce(okList([enabledRow, disabledRow])) // 首次加载
+      .mockReturnValueOnce(pendingDisable.promise) // 停用 probe-a 自身重载（目标 probe-a）
+      .mockReturnValueOnce(pendingEnable.promise) // 启用 probe-b 自身重载（目标 probe-b，最新）
+    const w = await mountRaw()
+    expect(w.findAll('.cc-row--selected')).toHaveLength(0)
+
+    await clickRowMenuAction(w, 0, '停用') // 目标 probe-a
+    await clickRowMenuAction(w, 1, '启用') // 目标 probe-b，成为最新请求
+    expect(mockedList).toHaveBeenCalledTimes(3)
+
+    // 过期的停用响应（结果含 probe-a）先到：不得固定 probe-a
+    pendingDisable.resolve(okList([enabledRow, disabledRow]))
+    await flushPromises()
+    expect(w.findAll('.cc-row--selected')).toHaveLength(0)
+
+    // 最新的启用响应到达：按其自身目标 probe-b 固定（结果含 probe-b）
+    pendingEnable.resolve(okList([enabledRow, disabledRow]))
+    await flushPromises()
+    expect(w.findAll('.cc-row--selected')).toHaveLength(1)
+    expect(selectedRow(w).text()).toContain('probe-b')
+    w.unmount()
+  })
+
+  it('启停写请求失败不把重选意图留给后续普通重载：之后“查询”不固定任何行（CCFG-REQ-146）', async () => {
+    mockedDisable.mockRejectedValueOnce(new Error('network down'))
+    const w = await mountPage([enabledRow, disabledRow])
+    await clickRow(w, enabledRow)
+    expect(selectedRow(w).text()).toContain('probe-a')
+
+    // ① 停用写请求失败：保留原有固定选中（既有规则）
+    await clickRowMenuAction(w, 0, '停用')
+    expect(messageSpy.error).toHaveBeenCalledWith('停用失败，请检查网络后重试。')
+    expect(mockedList).toHaveBeenCalledTimes(1)
+    expect(selectedRow(w).text()).toContain('probe-a')
+
+    // ② 随后普通“查询”：只按普通重载清选，不因此前失败的目标固定任何行
+    await exactButton(w, '查询')!.trigger('click')
+    await flushPromises()
+    expect(mockedList).toHaveBeenCalledTimes(2)
     expect(w.findAll('.cc-row--selected')).toHaveLength(0)
     w.unmount()
   })
