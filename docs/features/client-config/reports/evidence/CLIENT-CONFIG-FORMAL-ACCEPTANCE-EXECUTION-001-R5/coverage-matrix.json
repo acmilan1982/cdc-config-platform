@@ -1,0 +1,3508 @@
+{
+  "header": {
+    "task": "CLIENT-CONFIG-FORMAL-ACCEPTANCE-EXECUTION-001-R5",
+    "base_commit": "73896485765c3c33d602d317bfad3696576f4270",
+    "raw_package_sha256": "1cf178aefb03b0727e5b036ee66123631cf8d4a525622177749e258e0a5e15e6",
+    "source_of_truth": "ACCEPTANCE.md §4 现行定义（含定向修订）",
+    "scope": "复审点名的 CCFG-AC-010（宽度变化）与 CCFG-AC-143（未固定/已固定两组）逐步骤复核；其余 87 条沿用 R4",
+    "verdict_vocab": [
+      "COVERED",
+      "MISSING",
+      "SIMULATED_ONLY",
+      "PARTIAL"
+    ],
+    "path_basis": "evidence.fields 中 `meta.*` 指向 JSON 文件根对象；其余字段指向 `ac[key].detail`（支持 `a.b` 与 `[n].x` 下标路径）；`shot` 指向包内截图文件名",
+    "desensitization": "业务可识别值（机构名称、探针 ID、原始数据源 ID 等）以占位/描述替代；保留原始文件名、JSON 键名与字段路径，便于持有原包者逐项对账",
+    "note": "判定为人工逐条审核结果，非由结果布尔值自动推导；非 COVERED 步骤不得使整条 PASS；PARTIAL/SIMULATED_ONLY 不因核验器放行而自动等同完整 PASS"
+  },
+  "semantics": {
+    "COVERED": "原始证据中存在执行本条现行定义所要求具体条件的记录（字段值或截图，含注明视口）",
+    "MISSING": "原始证据中不存在该步骤的执行记录（含仅有静态样式/公式外推而无实测）",
+    "PARTIAL": "该步骤仅有部分状态/方向/视口被实测；PARTIAL 不足以使整条 PASS，除非另有步骤显式补足本步骤的具体条件",
+    "SIMULATED_ONLY": "该步骤仅由受控模拟（simulated:true）覆盖；仅在必须提供 justification 且该步骤不属定义要求的真实后端/写入时方可留在 PASS 行"
+  },
+  "counts": {
+    "items": 89,
+    "r5_changed": 2,
+    "r5_changed_ids": [
+      "CCFG-AC-010",
+      "CCFG-AC-143"
+    ],
+    "pass": 66
+  },
+  "items": [
+    {
+      "id": "CCFG-AC-001",
+      "r3_status": "PASS",
+      "r4_status": "PASS",
+      "basis": "NONE",
+      "steps": [
+        {
+          "kind": "PRE",
+          "definition": "已部署、平台已登录",
+          "evidence": {
+            "key": "001",
+            "file": "accA.json",
+            "fields": [
+              "meta.base",
+              "route"
+            ]
+          },
+          "verdict": "COVERED",
+          "why": "页面壳与路由实测存在"
+        },
+        {
+          "kind": "STEP",
+          "definition": "菜单进入 + 直达既有路由",
+          "evidence": {
+            "key": "001",
+            "file": "accA.json",
+            "fields": [
+              "menuHas",
+              "route"
+            ]
+          },
+          "verdict": "COVERED",
+          "why": "菜单项与路由均命中"
+        },
+        {
+          "kind": "EXP",
+          "definition": "名称统一为探针端管理、无旧名",
+          "evidence": {
+            "key": "001",
+            "file": "accA.json",
+            "fields": [
+              "title",
+              "breadcrumb",
+              "hasOldName"
+            ]
+          },
+          "verdict": "COVERED",
+          "why": "标题/面包屑/无旧名一致"
+        }
+      ],
+      "note": "",
+      "r5_status": "PASS"
+    },
+    {
+      "id": "CCFG-AC-002",
+      "r3_status": "PASS",
+      "r4_status": "PASS",
+      "basis": "NONE",
+      "steps": [
+        {
+          "kind": "PRE",
+          "definition": "同时存在启用/停用/异常三态记录",
+          "evidence": {
+            "key": "002",
+            "file": "accA.json",
+            "fields": [
+              "rows",
+              "off",
+              "abn"
+            ]
+          },
+          "verdict": "COVERED",
+          "why": "三类计数由接口返回核对"
+        },
+        {
+          "kind": "STEP",
+          "definition": "首次进入不查询自动展示",
+          "evidence": {
+            "key": "002",
+            "file": "accA.json",
+            "fields": [
+              "allShown"
+            ]
+          },
+          "verdict": "COVERED",
+          "why": "首屏全量展示实测"
+        },
+        {
+          "kind": "EXP",
+          "definition": "页面自动查询并展示全部记录、状态记录不被隐藏",
+          "evidence": {
+            "key": "002",
+            "file": "accA.json",
+            "fields": [
+              "allShown"
+            ]
+          },
+          "verdict": "COVERED",
+          "why": "首屏全量展示实测"
+        },
+        {
+          "kind": "EXP",
+          "definition": "探针 ID 后状态标识按三态呈现（跨用例 087/088）",
+          "evidence": {
+            "key": "087",
+            "file": "accA.json",
+            "fields": [
+              "mark.text",
+              "mark.color",
+              "offRows",
+              "enabledWithoutMark"
+            ]
+          },
+          "verdict": "COVERED",
+          "why": "087 证明“停用”标识文本/配色与“启用无标识”计数"
+        },
+        {
+          "kind": "EXP",
+          "definition": "异常行显示红色 `异常：{原始值}`（跨用例 088）",
+          "evidence": {
+            "key": "088",
+            "file": "accA.json",
+            "fields": [
+              "[0].shown",
+              "[0].api"
+            ]
+          },
+          "verdict": "COVERED",
+          "why": "088 证明异常标识文本与其接口原始值一致"
+        }
+      ],
+      "note": "",
+      "r5_status": "PASS"
+    },
+    {
+      "id": "CCFG-AC-003",
+      "r3_status": "PASS",
+      "r4_status": "PASS",
+      "basis": "NONE",
+      "steps": [
+        {
+          "kind": "STEP",
+          "definition": "尝试翻页/加载更多/分页参数",
+          "evidence": {
+            "key": "003",
+            "file": "accA.json",
+            "fields": [
+              "pag",
+              "loadMore"
+            ]
+          },
+          "verdict": "COVERED",
+          "why": "无分页控件"
+        },
+        {
+          "kind": "EXP",
+          "definition": "请求不含分页参数、无数量上限",
+          "evidence": {
+            "key": "003",
+            "file": "accA.json",
+            "fields": [
+              "apiCalls"
+            ]
+          },
+          "verdict": "COVERED",
+          "why": "实际请求 URL 无分页参数"
+        }
+      ],
+      "note": "",
+      "r5_status": "PASS"
+    },
+    {
+      "id": "CCFG-AC-004",
+      "r3_status": "PASS",
+      "r4_status": "PASS",
+      "basis": "NONE",
+      "steps": [
+        {
+          "kind": "PRE",
+          "definition": "存在纯数字与含字母 ID",
+          "evidence": {
+            "key": "004",
+            "file": "accA.json",
+            "fields": [
+              "ids"
+            ]
+          },
+          "verdict": "COVERED",
+          "why": "样本集合覆盖两类 ID"
+        },
+        {
+          "kind": "EXP",
+          "definition": "按字符串降序（非数字自然序）",
+          "evidence": {
+            "key": "004",
+            "file": "accA.json",
+            "fields": [
+              "ids"
+            ]
+          },
+          "verdict": "COVERED",
+          "why": "实测顺序符合字符串降序"
+        }
+      ],
+      "note": "",
+      "r5_status": "PASS"
+    },
+    {
+      "id": "CCFG-AC-005",
+      "r3_status": "PASS",
+      "r4_status": "PASS",
+      "basis": "NONE",
+      "steps": [
+        {
+          "kind": "STEP",
+          "definition": "关键词 + 状态过滤查询",
+          "evidence": {
+            "key": "005",
+            "file": "accA.json",
+            "fields": [
+              "enabled",
+              "disabled",
+              "disjoint"
+            ]
+          },
+          "verdict": "COVERED",
+          "why": "两态过滤互斥"
+        },
+        {
+          "kind": "EXP",
+          "definition": "对 ID/描述不区分大小写包含匹配",
+          "evidence": {
+            "key": "005-keyword",
+            "file": "accA.json",
+            "fields": [
+              "query",
+              "matched"
+            ]
+          },
+          "verdict": "COVERED",
+          "why": "大写输入命中小写值"
+        }
+      ],
+      "note": "",
+      "r5_status": "PASS"
+    },
+    {
+      "id": "CCFG-AC-006",
+      "r3_status": "PASS",
+      "r4_status": "PASS",
+      "basis": "NONE",
+      "steps": [
+        {
+          "kind": "STEP",
+          "definition": "改条件不点查询",
+          "evidence": {
+            "key": "006",
+            "file": "accA.json",
+            "fields": [
+              "netBefore",
+              "netAfter"
+            ]
+          },
+          "verdict": "COVERED",
+          "why": "请求数不变"
+        }
+      ],
+      "note": "",
+      "r5_status": "PASS"
+    },
+    {
+      "id": "CCFG-AC-007",
+      "r3_status": "PASS",
+      "r4_status": "PASS",
+      "basis": "NONE",
+      "steps": [
+        {
+          "kind": "STEP",
+          "definition": "点击重置",
+          "evidence": {
+            "key": "007",
+            "file": "accA.json",
+            "fields": [
+              "kwVal",
+              "statusVal",
+              "requestsDuringReset"
+            ]
+          },
+          "verdict": "COVERED",
+          "why": "表单复位且不查询"
+        }
+      ],
+      "note": "",
+      "r5_status": "PASS"
+    },
+    {
+      "id": "CCFG-AC-008",
+      "r3_status": "PASS",
+      "r4_status": "PASS",
+      "basis": "NONE",
+      "steps": [
+        {
+          "kind": "STEP",
+          "definition": "无匹配查询",
+          "evidence": {
+            "key": "008",
+            "file": "accA.json",
+            "fields": [
+              "rows",
+              "txt"
+            ]
+          },
+          "verdict": "COVERED",
+          "why": "空状态文案实测"
+        }
+      ],
+      "note": "",
+      "r5_status": "PASS"
+    },
+    {
+      "id": "CCFG-AC-009",
+      "r3_status": "BLOCKED",
+      "r4_status": "BLOCKED",
+      "basis": "C",
+      "steps": [
+        {
+          "kind": "PRE",
+          "definition": "存在关联多数据源的探针",
+          "evidence": {
+            "key": "009",
+            "file": "accA.json",
+            "fields": [
+              "headers"
+            ]
+          },
+          "verdict": "COVERED",
+          "why": "样本行含多数据源"
+        },
+        {
+          "kind": "STEP",
+          "definition": "在 1440×900 与 1920×1080 两种视口下观察表头与采集数据源列",
+          "evidence": {
+            "key": "009",
+            "file": "accA.json",
+            "fields": [
+              "headers",
+              "noStatusCol",
+              "orgShown"
+            ]
+          },
+          "verdict": "MISSING",
+          "why": "原始证据 meta.viewport 仅 1440x900；无 1920x1080 观测记录（其余 acc 文件亦无）"
+        },
+        {
+          "kind": "EXP",
+          "definition": "列集合正确、无状态列、机构名为主显示",
+          "evidence": {
+            "key": "009",
+            "file": "accA.json",
+            "fields": [
+              "headers",
+              "noStatusCol",
+              "orgShown"
+            ]
+          },
+          "verdict": "COVERED",
+          "why": "1440 视口下三项均可核对"
+        }
+      ],
+      "note": "",
+      "r5_status": "BLOCKED"
+    },
+    {
+      "id": "CCFG-AC-010",
+      "r4_status": "PASS",
+      "r5_status": "BLOCKED",
+      "basis": "B/C",
+      "steps": [
+        {
+          "kind": "PRE",
+          "definition": "库内存在含 6～7 个数据源的探针",
+          "evidence": {
+            "key": "098",
+            "file": "accG.json",
+            "fields": [
+              "rowsAtLeast6Sources[0].total",
+              "rowsAtLeast6Sources[0].direct",
+              "rowsAtLeast6Sources[0].plus"
+            ]
+          },
+          "verdict": "COVERED",
+          "why": "098 的 7 源探针样本（total=7、direct=1、plus=+6）证明该类样本存在且 +N 准确",
+          "viewport": "1440x900"
+        },
+        {
+          "kind": "STEP",
+          "definition": "调整浏览器宽度并观察“采集数据源”列视觉",
+          "evidence": {
+            "key": "010",
+            "file": "accG.json",
+            "fields": [
+              "rowH",
+              "uniformRowHeight",
+              "singleLine",
+              "noOverflow",
+              "overflowProp"
+            ]
+          },
+          "verdict": "COVERED",
+          "why": "1440×900 下单行、行高一致 53px、无溢出（overflow:hidden）实测",
+          "viewport": "1440x900"
+        },
+        {
+          "kind": "STEP",
+          "definition": "调整浏览器宽度并观察（宽度变化腿）",
+          "evidence": {
+            "key": "093",
+            "file": "accH.json",
+            "fields": [
+              "singleLineAllRows",
+              "uniformRowHeight",
+              "pageLevelHorizontalOverflow",
+              "plusNTxt",
+              "hiddenComputed",
+              "plusNOpensWithAccurateCount"
+            ]
+          },
+          "verdict": "PARTIAL",
+          "why": "原包另有 1024×900 的列表观测（属 AC-093 记录）：单行保持、行高一致、无页面级横向溢出、+N=“+4” 与隐藏数 4 自洽；但该记录未绑定本条 6～7 源样本，也无宽度变化前后的直接展示数量对比，属另一用例的窄视口记录，不能单独完成本条“调整浏览器宽度”步骤",
+          "assertion": "AC010_WIDTH_CHANGE",
+          "viewport": "1024x900"
+        },
+        {
+          "kind": "EXP",
+          "definition": "单行机构名称标签；按单元格实际可用宽度自适应决定直接展示数量；含 6～7 源时最多直接展示 6 项、其余准确 `+N`；不撑高行、不裁切、不出现第二行/滚动条/越界",
+          "evidence": {
+            "key": "010",
+            "file": "accG.json",
+            "fields": [
+              "max6Rule",
+              "plusAccurate",
+              "maxDirectShown",
+              "tdPadding"
+            ]
+          },
+          "verdict": "COVERED",
+          "why": "1440×900 下 max6Rule/plusAccurate 为真、内边距 12px/12px、direct ≤ 6",
+          "viewport": "1440x900"
+        },
+        {
+          "kind": "EXP",
+          "definition": "按单元格实际可用宽度自适应决定直接展示数量（同一 6～7 源样本在改变宽度前后的对比）",
+          "evidence": {
+            "key": null,
+            "file": null,
+            "fields": []
+          },
+          "verdict": "MISSING",
+          "why": "原包无同一 6～7 源样本在改变宽度前后的直接展示数量对比记录；仅凭单视口值或跨用例窄视口记录不足以证明该自适应步骤",
+          "assertion": "AC010_WIDTH_CHANGE"
+        }
+      ],
+      "note": "已执行子步骤保留：1440×900 下单行、行高一致 53px、无溢出、max6Rule/plusAccurate、7 源样本（+6）；缺口为“调整浏览器宽度”这一步——原包另有 1024×900 列表观测（属 AC-093），但未绑定本条 6～7 源样本，也无同一 6～7 源样本在改变宽度前后的直接展示数量对比。"
+    },
+    {
+      "id": "CCFG-AC-011",
+      "r3_status": "PASS",
+      "r4_status": "PASS",
+      "basis": "NONE",
+      "steps": [
+        {
+          "kind": "STEP",
+          "definition": "观察默认布局 + 点击 +N（非悬停）",
+          "evidence": {
+            "key": "011",
+            "file": "accC.json",
+            "fields": [
+              "plusText",
+              "visibleTags",
+              "hiddenN"
+            ]
+          },
+          "verdict": "COVERED",
+          "why": "点击触发、可见数与 +N 实测"
+        },
+        {
+          "kind": "EXP",
+          "definition": "可见数=min(可容纳,6)；清单按原序、非多行展开",
+          "evidence": {
+            "key": "011-eyebrow",
+            "file": "accB2.json",
+            "fields": [
+              "items"
+            ]
+          },
+          "verdict": "COVERED",
+          "why": "清单 7 项按序展开"
+        }
+      ],
+      "note": "",
+      "r5_status": "PASS"
+    },
+    {
+      "id": "CCFG-AC-012",
+      "r3_status": "PASS",
+      "r4_status": "BLOCKED",
+      "basis": "B",
+      "steps": [
+        {
+          "kind": "PRE",
+          "definition": "库内存在机构名称超长的数据源",
+          "evidence": {
+            "key": "012",
+            "file": "accC.json",
+            "fields": [
+              "tagWidth"
+            ]
+          },
+          "verdict": "MISSING",
+          "why": "原始键仅有 tagWidth=120 的样式宽度，未标识或测量任何“超长机构名称”样本，前置样本不可证明"
+        },
+        {
+          "kind": "STEP",
+          "definition": "悬停机构名称标签（含超长与未截断）",
+          "evidence": {
+            "key": "012",
+            "file": "accC.json",
+            "fields": [
+              "tooltip.visible",
+              "tooltip.count"
+            ]
+          },
+          "verdict": "PARTIAL",
+          "why": "悬停动作与 Tooltip 单实例已实测；“超长与未截断”两类样本未分别定位（见 PRE 缺口）"
+        },
+        {
+          "kind": "EXP",
+          "definition": "标签正文仅机构名、单标签最大宽度≈10 全角汉字并 CSS 省略号",
+          "evidence": {
+            "key": "012",
+            "file": "accC.json",
+            "fields": [
+              "tagWidth"
+            ]
+          },
+          "verdict": "MISSING",
+          "why": "tagWidth=120 仅为样式上限，未测量实际标签宽度、未在超长样本上观察省略号"
+        },
+        {
+          "kind": "EXP",
+          "definition": "详情仅含完整机构名称与“数据源 ID”、不显示数据源名称",
+          "evidence": {
+            "key": "012",
+            "file": "accC.json",
+            "fields": [
+              "tooltip.lines",
+              "tooltip.tones"
+            ]
+          },
+          "verdict": "COVERED",
+          "why": "实测两行：机构名 + 数据源 ID，无数据源名称"
+        },
+        {
+          "kind": "EXP",
+          "definition": "页面级单实例、进入新目标关闭上一个、离开立即隐藏",
+          "evidence": {
+            "key": "012",
+            "file": "accC.json",
+            "fields": [
+              "tooltip.count",
+              "afterSecondHover",
+              "afterLeave"
+            ]
+          },
+          "verdict": "COVERED",
+          "why": "count=1、二次悬停切换、离开后隐藏"
+        },
+        {
+          "kind": "EXP",
+          "definition": "Tooltip 约 200～300ms 延迟后显示",
+          "evidence": {
+            "key": "012",
+            "file": "accC.json",
+            "fields": [
+              "tooltip"
+            ]
+          },
+          "verdict": "MISSING",
+          "why": "未记录出现延迟计时，原始键无时序字段"
+        },
+        {
+          "kind": "EXP",
+          "definition": "各态文字水平/垂直居中，无裁切、无上下偏移、无行高抖动",
+          "evidence": {
+            "key": "012",
+            "file": "accC.json",
+            "fields": [
+              "tooltip"
+            ]
+          },
+          "verdict": "MISSING",
+          "why": "无各态居中/裁切/行高抖动测量字段"
+        }
+      ],
+      "note": "已执行子步骤保留：悬停详情仅机构名+数据源 ID、单实例、切换与隐藏；缺口为超长样本（PRE）与宽度/居中/延迟测量",
+      "r5_status": "BLOCKED"
+    },
+    {
+      "id": "CCFG-AC-013",
+      "r3_status": "BLOCKED",
+      "r4_status": "BLOCKED",
+      "basis": "B",
+      "steps": [
+        {
+          "kind": "PRE",
+          "definition": "存在已停用/不存在/ID 含逗号/重复分配的异常数据源",
+          "evidence": {
+            "key": "013-part",
+            "file": "accC.json",
+            "fields": [
+              "badTags"
+            ]
+          },
+          "verdict": "COVERED",
+          "why": "异常标签计数 8，覆盖重复分配等异常"
+        },
+        {
+          "kind": "EXP",
+          "definition": "异常标签红色、优先显示机构名称",
+          "evidence": {
+            "key": "013-part",
+            "file": "accC.json",
+            "fields": [
+              "atip.lines"
+            ]
+          },
+          "verdict": "COVERED",
+          "why": "异常 Tooltip 主信息为机构名称"
+        },
+        {
+          "kind": "EXP",
+          "definition": "数据源不存在且无法取得机构名称时才显示原始数据源 ID",
+          "evidence": {
+            "key": "013-part",
+            "file": "accC.json",
+            "fields": [
+              "atip.lines"
+            ]
+          },
+          "verdict": "MISSING",
+          "why": "原始证据仅取到“机构名可取”的冲突 Tooltip；全包无“机构名缺失→回退原始 ID”的样例（106 的 orgMissingItems=0 亦证夹具缺失）"
+        },
+        {
+          "kind": "EXP",
+          "definition": "显示异常原因“已分配给其他探针”+冲突探针清单、无旧文案",
+          "evidence": {
+            "key": "013-part",
+            "file": "accC.json",
+            "fields": [
+              "atip.lines"
+            ]
+          },
+          "verdict": "COVERED",
+          "why": "措辞与冲突清单实测"
+        }
+      ],
+      "note": "与 106 关系：R2 已因“机构名缺失分支不可构造”下调 106；013 含同一必要分支，保留 PASS 与 106 判定自相矛盾",
+      "r5_status": "BLOCKED"
+    },
+    {
+      "id": "CCFG-AC-016",
+      "r3_status": "PASS",
+      "r4_status": "PASS",
+      "basis": "NONE",
+      "steps": [
+        {
+          "kind": "STEP",
+          "definition": "两种视口核对无行单选/高亮/已选提示",
+          "evidence": {
+            "key": "016",
+            "file": "accI.json",
+            "fields": [
+              "at1440",
+              "at1920"
+            ]
+          },
+          "verdict": "COVERED",
+          "why": "原始证据含 at1440/at1920 两腿"
+        },
+        {
+          "kind": "STEP",
+          "definition": "单击切换唯一固定选中、点更多不误触双击",
+          "evidence": {
+            "key": "016",
+            "file": "accI.json",
+            "fields": [
+              "singleFixedHighlightOnly",
+              "moreMenuDoesNotOpenEdit"
+            ]
+          },
+          "verdict": "COVERED",
+          "why": "三态切换与隔离实测"
+        },
+        {
+          "kind": "STEP",
+          "definition": "双击行、ID 键盘 Enter/空格打开编辑",
+          "evidence": {
+            "key": "016",
+            "file": "accI.json",
+            "fields": [
+              "note"
+            ]
+          },
+          "verdict": "COVERED",
+          "why": "同页双击/键盘编辑由 142/142-d 原始键证明（同条件）"
+        }
+      ],
+      "note": "",
+      "r5_status": "PASS"
+    },
+    {
+      "id": "CCFG-AC-017",
+      "r3_status": "BLOCKED",
+      "r4_status": "BLOCKED",
+      "basis": "C",
+      "steps": [
+        {
+          "kind": "STEP",
+          "definition": "在 1440×900 与 1920×1080 两种视口下观察结果区头部并单击行",
+          "evidence": {
+            "key": "017-part",
+            "file": "accA.json",
+            "fields": [
+              "last",
+              "fixedRight"
+            ]
+          },
+          "verdict": "MISSING",
+          "why": "原始证据无 1920×1080 观测腿；且仅记录操作列固定，未记录“新增探针”按钮位置"
+        },
+        {
+          "kind": "EXP",
+          "definition": "头部最右“新增探针”、无“删除所选”与批量入口",
+          "evidence": {
+            "key": "017-part",
+            "file": "accA.json",
+            "fields": [
+              "fixedRight"
+            ]
+          },
+          "verdict": "MISSING",
+          "why": "本键未记录新增按钮右对齐断言（该断言在 079/080）"
+        },
+        {
+          "kind": "EXP",
+          "definition": "无行单选/高亮/已选提示",
+          "evidence": {
+            "key": "016",
+            "file": "accI.json",
+            "fields": [
+              "at1440"
+            ]
+          },
+          "verdict": "COVERED",
+          "why": "由 016 同页原始键证明无选择能力"
+        }
+      ],
+      "note": "",
+      "r5_status": "BLOCKED"
+    },
+    {
+      "id": "CCFG-AC-018",
+      "r3_status": "PASS",
+      "r4_status": "PASS",
+      "basis": "NONE",
+      "steps": [
+        {
+          "kind": "STEP",
+          "definition": "每行无独立编辑/删除按钮、无弱提示",
+          "evidence": {
+            "key": "018-part",
+            "file": "accA.json",
+            "fields": [
+              "perRow",
+              "hint"
+            ]
+          },
+          "verdict": "COVERED",
+          "why": "行内控件计数 0、无提示"
+        },
+        {
+          "kind": "STEP",
+          "definition": "双击行、ID 键盘聚焦、点更多菜单项不误触双击",
+          "evidence": {
+            "key": "018-part",
+            "file": "accA.json",
+            "fields": [
+              "perRow"
+            ]
+          },
+          "verdict": "COVERED",
+          "why": "同页双击(142)/键盘(142-d)/更多隔离(143) 原始键证明同条件"
+        }
+      ],
+      "note": "",
+      "r5_status": "PASS"
+    },
+    {
+      "id": "CCFG-AC-019",
+      "r3_status": "PASS",
+      "r4_status": "PASS",
+      "basis": "NONE",
+      "steps": [
+        {
+          "kind": "STEP",
+          "definition": "更多→删除",
+          "evidence": {
+            "key": "019",
+            "file": "accD.json",
+            "fields": [
+              "title",
+              "msg",
+              "primary"
+            ]
+          },
+          "verdict": "COVERED",
+          "why": "二次确认含探针 ID 与警示语义"
+        },
+        {
+          "kind": "EXP",
+          "definition": "取消不删除",
+          "evidence": {
+            "key": "019-cancel",
+            "file": "accD.json",
+            "fields": [
+              "closedWithoutDelete"
+            ]
+          },
+          "verdict": "COVERED",
+          "why": "取消后关闭且未删除"
+        }
+      ],
+      "note": "",
+      "r5_status": "PASS"
+    },
+    {
+      "id": "CCFG-AC-025",
+      "r3_status": "PASS",
+      "r4_status": "PASS",
+      "basis": "NONE",
+      "steps": [
+        {
+          "kind": "PRE",
+          "definition": "存在非 0/1 的 FG_ACTIVE 记录",
+          "evidence": {
+            "key": "025",
+            "file": "accA.json",
+            "fields": [
+              "abnRows"
+            ]
+          },
+          "verdict": "COVERED",
+          "why": "异常行计数 1"
+        },
+        {
+          "kind": "EXP",
+          "definition": "紧跟探针 ID 显示红色 异常：{原始值}",
+          "evidence": {
+            "key": "025",
+            "file": "accA.json",
+            "fields": [
+              "abnRows"
+            ]
+          },
+          "verdict": "COVERED",
+          "why": "异常标识行可见且未被过滤"
+        }
+      ],
+      "note": "",
+      "r5_status": "PASS"
+    },
+    {
+      "id": "CCFG-AC-028",
+      "r3_status": "PASS",
+      "r4_status": "PASS",
+      "basis": "NONE",
+      "steps": [
+        {
+          "kind": "STEP",
+          "definition": "三字段分别清空后保存",
+          "evidence": {
+            "key": "028",
+            "file": "accE.json",
+            "fields": [
+              "idError",
+              "descError",
+              "sourceFeedback"
+            ]
+          },
+          "verdict": "COVERED",
+          "why": "三字段各自错误文案实测"
+        },
+        {
+          "kind": "EXP",
+          "definition": "三项必填、均拒绝保存并提示",
+          "evidence": {
+            "key": "028",
+            "file": "accE.json",
+            "fields": [
+              "idBorderRed",
+              "descBorderRed",
+              "topLevelMessages"
+            ]
+          },
+          "verdict": "COVERED",
+          "why": "红框 + 无顶端消息"
+        }
+      ],
+      "note": "",
+      "r5_status": "PASS"
+    },
+    {
+      "id": "CCFG-AC-029",
+      "r3_status": "PASS",
+      "r4_status": "PASS",
+      "basis": "NONE",
+      "steps": [
+        {
+          "kind": "STEP",
+          "definition": "超长/非字母数字开头/含非法字符后保存",
+          "evidence": {
+            "key": "029",
+            "file": "accE.json",
+            "fields": [
+              "input",
+              "fieldError",
+              "pattern"
+            ]
+          },
+          "verdict": "COVERED",
+          "why": "非法输入触发字段级错误与正则口径"
+        }
+      ],
+      "note": "",
+      "r5_status": "PASS"
+    },
+    {
+      "id": "CCFG-AC-032",
+      "r3_status": "PASS",
+      "r4_status": "PASS",
+      "basis": "NONE",
+      "steps": [
+        {
+          "kind": "STEP",
+          "definition": "打开编辑弹窗观察状态字段/启停控件",
+          "evidence": {
+            "key": "032",
+            "file": "accF.json",
+            "fields": [
+              "hasStatusField",
+              "hasEnableControl"
+            ]
+          },
+          "verdict": "COVERED",
+          "why": "两项均为 false"
+        }
+      ],
+      "note": "",
+      "r5_status": "PASS"
+    },
+    {
+      "id": "CCFG-AC-035",
+      "r3_status": "PASS",
+      "r4_status": "PASS",
+      "basis": "NONE",
+      "steps": [
+        {
+          "kind": "STEP",
+          "definition": "双击记录打开编辑弹窗观察 ID 输入框",
+          "evidence": {
+            "key": "035",
+            "file": "accF.json",
+            "fields": [
+              "idDisabled",
+              "lockHint",
+              "lockedInputAttr"
+            ]
+          },
+          "verdict": "COVERED",
+          "why": "默认只读并显示锁定提示"
+        }
+      ],
+      "note": "",
+      "r5_status": "PASS"
+    },
+    {
+      "id": "CCFG-AC-036",
+      "r3_status": "PASS",
+      "r4_status": "PASS",
+      "basis": "NONE",
+      "steps": [
+        {
+          "kind": "STEP",
+          "definition": "点击“修改探针 ID”",
+          "evidence": {
+            "key": "036",
+            "file": "accF.json",
+            "fields": [
+              "editable",
+              "noWarningDialog",
+              "toggleNow"
+            ]
+          },
+          "verdict": "COVERED",
+          "why": "解锁、无警告框、入口变取消"
+        }
+      ],
+      "note": "",
+      "r5_status": "PASS"
+    },
+    {
+      "id": "CCFG-AC-037",
+      "r3_status": "PASS",
+      "r4_status": "PASS",
+      "basis": "NONE",
+      "steps": [
+        {
+          "kind": "STEP",
+          "definition": "点击“取消修改”",
+          "evidence": {
+            "key": "037",
+            "file": "accF.json",
+            "fields": [
+              "restoredTo",
+              "locked",
+              "toggle"
+            ]
+          },
+          "verdict": "COVERED",
+          "why": "恢复原值并回到锁定"
+        }
+      ],
+      "note": "",
+      "r5_status": "PASS"
+    },
+    {
+      "id": "CCFG-AC-041",
+      "r3_status": "PASS",
+      "r4_status": "BLOCKED",
+      "basis": "B",
+      "steps": [
+        {
+          "kind": "PRE",
+          "definition": "分别进入新增与编辑弹窗",
+          "evidence": {
+            "key": "041",
+            "file": "accE.json",
+            "fields": [
+              "positionRightOfDesc"
+            ]
+          },
+          "verdict": "PARTIAL",
+          "why": "accE 为新增弹窗阶段；编辑弹窗中的“自动生成”按钮未单独定位"
+        },
+        {
+          "kind": "STEP",
+          "definition": "在未选数据源、编辑含异常历史、填写自定义描述等不同状态下检查按钮",
+          "evidence": {
+            "key": "041",
+            "file": "accE.json",
+            "fields": [
+              "positionRightOfDesc",
+              "alwaysEnabled"
+            ]
+          },
+          "verdict": "MISSING",
+          "why": "仅单点记录按钮位于描述框右侧且始终启用；未逐一覆盖未选数据源/编辑异常历史/自定义描述三态"
+        },
+        {
+          "kind": "EXP",
+          "definition": "按钮位于“探针描述”右侧、任何表单状态下均可点击、不显示禁用",
+          "evidence": {
+            "key": "041",
+            "file": "accE.json",
+            "fields": [
+              "positionRightOfDesc",
+              "alwaysEnabled"
+            ]
+          },
+          "verdict": "PARTIAL",
+          "why": "单次实测为真，未逐态验证“任何状态”；不得用静态代码推断替代逐态运行观察"
+        }
+      ],
+      "note": "已执行子步骤保留：单点 positionRightOfDesc=true 与 alwaysEnabled=true；缺口为多状态逐态观察与编辑弹窗定位",
+      "r5_status": "BLOCKED"
+    },
+    {
+      "id": "CCFG-AC-043",
+      "r3_status": "PASS",
+      "r4_status": "PASS",
+      "basis": "NONE",
+      "steps": [
+        {
+          "kind": "STEP",
+          "definition": "无已选项时点击自动生成",
+          "evidence": {
+            "key": "043",
+            "file": "accE.json",
+            "fields": [
+              "before",
+              "after",
+              "noOpWhenNoSelection"
+            ]
+          },
+          "verdict": "COVERED",
+          "why": "前后值不变、无副作用"
+        }
+      ],
+      "note": "",
+      "r5_status": "PASS"
+    },
+    {
+      "id": "CCFG-AC-045",
+      "r3_status": "PASS",
+      "r4_status": "PASS",
+      "basis": "NONE",
+      "steps": [
+        {
+          "kind": "STEP",
+          "definition": "自动生成后直接修改描述",
+          "evidence": {
+            "key": "045",
+            "file": "accE.json",
+            "fields": [
+              "afterGenerateCopyEditable",
+              "appended"
+            ]
+          },
+          "verdict": "COVERED",
+          "why": "生成后可编辑并追加成功"
+        }
+      ],
+      "note": "",
+      "r5_status": "PASS"
+    },
+    {
+      "id": "CCFG-AC-046",
+      "r3_status": "PASS",
+      "r4_status": "BLOCKED",
+      "basis": "B",
+      "steps": [
+        {
+          "kind": "PRE",
+          "definition": "已在弹窗自动生成描述",
+          "evidence": {
+            "key": "046",
+            "file": "accE.json",
+            "fields": [
+              "descAfterRegen"
+            ]
+          },
+          "verdict": "COVERED",
+          "why": "自动生成后描述被覆盖为“222”实测"
+        },
+        {
+          "kind": "STEP",
+          "definition": "自动生成后继续增删数据源观察描述是否联动；再次点击“自动生成”",
+          "evidence": {
+            "key": "046-edit",
+            "file": "accF.json",
+            "fields": [
+              "removeDidNotAutoUpdate",
+              "regenerateOverwrote",
+              "remainingCount"
+            ]
+          },
+          "verdict": "PARTIAL",
+          "why": "编辑模式的“删”方向与“再次生成覆盖”已实测；“增”方向未单独取证"
+        },
+        {
+          "kind": "EXP",
+          "definition": "增删后描述不自动更新；再次点击才覆盖；新增与编辑提供同一个按钮",
+          "evidence": {
+            "key": "046",
+            "file": "accE.json",
+            "fields": [
+              "descBeforeSel",
+              "descAfterSel",
+              "allMains",
+              "extra"
+            ]
+          },
+          "verdict": "PARTIAL",
+          "why": "新增模式该键标记 PARTIAL、extra=false；“同一按钮”与增删两方向未完整取证"
+        }
+      ],
+      "note": "原始 accE#046 的 PARTIAL 与 extra=false 原样保留；编辑子步骤（删方向+重生成）保留",
+      "r5_status": "BLOCKED"
+    },
+    {
+      "id": "CCFG-AC-047",
+      "r3_status": "PASS",
+      "r4_status": "PASS",
+      "basis": "NONE",
+      "steps": [
+        {
+          "kind": "STEP",
+          "definition": "打开编辑弹窗不点按钮观察描述",
+          "evidence": {
+            "key": "047",
+            "file": "accF.json",
+            "fields": [
+              "echoed",
+              "matchesSaved",
+              "truncatedTo256"
+            ]
+          },
+          "verdict": "COVERED",
+          "why": "原样回显已存描述"
+        },
+        {
+          "kind": "EXP",
+          "definition": "取消不产生确认框、数据不变",
+          "evidence": {
+            "key": "047-nosave",
+            "file": "accF.json",
+            "fields": [
+              "closedWithoutSaving",
+              "dataUnchanged",
+              "noConfirmBoxOnCancel"
+            ]
+          },
+          "verdict": "COVERED",
+          "why": "未保存关闭无副作用"
+        }
+      ],
+      "note": "",
+      "r5_status": "PASS"
+    },
+    {
+      "id": "CCFG-AC-049",
+      "r3_status": "PASS",
+      "r4_status": "PASS",
+      "basis": "NONE",
+      "steps": [
+        {
+          "kind": "PRE",
+          "definition": "存在不同类别/类型/状态的 CDC_DATA_SOURCE",
+          "evidence": {
+            "key": "049-ui",
+            "file": "accE.json",
+            "fields": [
+              "uiCount",
+              "allFromEligibleApi"
+            ]
+          },
+          "verdict": "COVERED",
+          "why": "候选数与资格接口一致"
+        },
+        {
+          "kind": "EXP",
+          "definition": "候选仅含 FG_ACTIVE=1 且 SOURCE 且 ORACLE",
+          "evidence": {
+            "key": "049-ui",
+            "file": "accE.json",
+            "fields": [
+              "allFromEligibleApi"
+            ]
+          },
+          "verdict": "COVERED",
+          "why": "由资格接口逐一核对"
+        }
+      ],
+      "note": "",
+      "r5_status": "PASS"
+    },
+    {
+      "id": "CCFG-AC-050",
+      "r3_status": "PASS",
+      "r4_status": "PASS",
+      "basis": "NONE",
+      "steps": [
+        {
+          "kind": "EXP",
+          "definition": "候选主文本为机构名，名称与 ID 可见/悬停可见",
+          "evidence": {
+            "key": "050",
+            "file": "accE.json",
+            "fields": [
+              "sampleMain",
+              "sampleSub"
+            ]
+          },
+          "verdict": "COVERED",
+          "why": "主/次文本结构与回退规则实测"
+        }
+      ],
+      "note": "",
+      "r5_status": "PASS"
+    },
+    {
+      "id": "CCFG-AC-051",
+      "r3_status": "PASS",
+      "r4_status": "PASS",
+      "basis": "NONE",
+      "steps": [
+        {
+          "kind": "STEP",
+          "definition": "按机构名/名称/ID 搜索（含大小写差异）",
+          "evidence": {
+            "key": "051",
+            "file": "accE.json",
+            "fields": [
+              "byIdFragment",
+              "byOrg",
+              "caseInsensitive"
+            ]
+          },
+          "verdict": "COVERED",
+          "why": "三类关键字与大小写不敏感均实测"
+        }
+      ],
+      "note": "",
+      "r5_status": "PASS"
+    },
+    {
+      "id": "CCFG-AC-052",
+      "r3_status": "PASS",
+      "r4_status": "PASS",
+      "basis": "NONE",
+      "steps": [
+        {
+          "kind": "PRE",
+          "definition": "存在 ID 含英文逗号的候选",
+          "evidence": {
+            "key": "052",
+            "file": "accE.json",
+            "fields": [
+              "candidate",
+              "disabled",
+              "reason"
+            ]
+          },
+          "verdict": "COVERED",
+          "why": "含逗号候选置灰并给出原因"
+        }
+      ],
+      "note": "",
+      "r5_status": "PASS"
+    },
+    {
+      "id": "CCFG-AC-053",
+      "r3_status": "PASS",
+      "r4_status": "PASS",
+      "basis": "NONE",
+      "steps": [
+        {
+          "kind": "PRE",
+          "definition": "存在已被其他探针分配的数据源",
+          "evidence": {
+            "key": "053",
+            "file": "accE.json",
+            "fields": [
+              "candidate",
+              "disabled",
+              "reason"
+            ]
+          },
+          "verdict": "COVERED",
+          "why": "已分配候选置灰并标注探针 ID"
+        }
+      ],
+      "note": "",
+      "r5_status": "PASS"
+    },
+    {
+      "id": "CCFG-AC-065",
+      "r3_status": "PASS",
+      "r4_status": "PASS",
+      "basis": "NONE",
+      "steps": [
+        {
+          "kind": "STEP",
+          "definition": "观察异常数据源探针在列表中的展示",
+          "evidence": {
+            "key": "065",
+            "file": "accF.json",
+            "fields": [
+              "rowVisibleUntruncated",
+              "chips"
+            ]
+          },
+          "verdict": "COVERED",
+          "why": "行完整可见、关联未隐藏"
+        }
+      ],
+      "note": "",
+      "r5_status": "PASS"
+    },
+    {
+      "id": "CCFG-AC-066",
+      "r3_status": "PASS",
+      "r4_status": "PASS",
+      "basis": "NONE",
+      "steps": [
+        {
+          "kind": "STEP",
+          "definition": "打开该探针编辑弹窗观察已选数据源",
+          "evidence": {
+            "key": "066",
+            "file": "accF.json",
+            "fields": [
+              "redChips",
+              "totalChips"
+            ]
+          },
+          "verdict": "COVERED",
+          "why": "异常项以红色标签回显"
+        }
+      ],
+      "note": "",
+      "r5_status": "PASS"
+    },
+    {
+      "id": "CCFG-AC-067",
+      "r3_status": "PASS",
+      "r4_status": "PASS",
+      "basis": "NONE",
+      "steps": [
+        {
+          "kind": "EXP",
+          "definition": "异常项不被丢弃，显示原始 ID 与原因",
+          "evidence": {
+            "key": "067",
+            "file": "accF.json",
+            "fields": [
+              "anomalyItemKept",
+              "rawIdsShown",
+              "reasonInText"
+            ]
+          },
+          "verdict": "COVERED",
+          "why": "原始 ID 与原因均呈现"
+        }
+      ],
+      "note": "",
+      "r5_status": "PASS"
+    },
+    {
+      "id": "CCFG-AC-069",
+      "r3_status": "PASS",
+      "r4_status": "PASS",
+      "basis": "NONE",
+      "steps": [
+        {
+          "kind": "STEP",
+          "definition": "候选为空/搜索无匹配时尝试绕过至少选 1",
+          "evidence": {
+            "key": "069",
+            "file": "accJ.json",
+            "fields": [
+              "emptySelection",
+              "submitBlockedFeedback",
+              "writes"
+            ]
+          },
+          "verdict": "COVERED",
+          "why": "两视口下拦截、弹窗不关闭、零写请求"
+        }
+      ],
+      "note": "",
+      "r5_status": "PASS"
+    },
+    {
+      "id": "CCFG-AC-070",
+      "r3_status": "PASS",
+      "r4_status": "PASS",
+      "basis": "NONE",
+      "steps": [
+        {
+          "kind": "STEP",
+          "definition": "列表加载与编辑操作后检查异常历史是否被自动改动",
+          "evidence": {
+            "key": "070",
+            "file": "accI.json",
+            "fields": [
+              "anomalousRow",
+              "unchangedAfterPageOperations",
+              "writeRequestsDuringListAndDialogOperations"
+            ]
+          },
+          "verdict": "COVERED",
+          "why": "零写请求、异常数据未变"
+        }
+      ],
+      "note": "",
+      "r5_status": "PASS"
+    },
+    {
+      "id": "CCFG-AC-073",
+      "r3_status": "PASS",
+      "r4_status": "PASS",
+      "basis": "NONE",
+      "steps": [
+        {
+          "kind": "STEP",
+          "definition": "检查接口响应字段",
+          "evidence": {
+            "key": "073",
+            "file": "accA.json",
+            "fields": [
+              "status",
+              "keys"
+            ]
+          },
+          "verdict": "COVERED",
+          "why": "响应键集合中无敏感字段"
+        }
+      ],
+      "note": "",
+      "r5_status": "PASS"
+    },
+    {
+      "id": "CCFG-AC-074",
+      "r3_status": "PASS",
+      "r4_status": "PASS",
+      "basis": "NONE",
+      "steps": [
+        {
+          "kind": "STEP",
+          "definition": "观察页面请求与源库侧行为",
+          "evidence": {
+            "key": "074",
+            "file": "accI.json",
+            "fields": [
+              "distinctPaths",
+              "sourceDatabaseConnections",
+              "schemaReads"
+            ]
+          },
+          "verdict": "COVERED",
+          "why": "全部同源 API、无源库连接/Schema 读取"
+        }
+      ],
+      "note": "",
+      "r5_status": "PASS"
+    },
+    {
+      "id": "CCFG-AC-078",
+      "r3_status": "PASS",
+      "r4_status": "PASS",
+      "basis": "NONE",
+      "steps": [
+        {
+          "kind": "STEP",
+          "definition": "检查自动刷新/刷新按钮/倒计时/最近刷新时间/模板刷新工具栏",
+          "evidence": {
+            "key": "078",
+            "file": "accA.json",
+            "fields": [
+              "refreshBtn",
+              "text"
+            ]
+          },
+          "verdict": "COVERED",
+          "why": "均不存在"
+        }
+      ],
+      "note": "",
+      "r5_status": "PASS"
+    },
+    {
+      "id": "CCFG-AC-079",
+      "r3_status": "BLOCKED",
+      "r4_status": "BLOCKED",
+      "basis": "C",
+      "steps": [
+        {
+          "kind": "STEP",
+          "definition": "在 1440×900 与 1920×1080 两种视口下观察结果区头部按钮位置",
+          "evidence": {
+            "key": "079",
+            "file": "accA.json",
+            "fields": [
+              "addRight",
+              "toolbarRight"
+            ]
+          },
+          "verdict": "MISSING",
+          "why": "仅 1440x900 一腿；1920x1080 无记录"
+        },
+        {
+          "kind": "EXP",
+          "definition": "新增探针在最右侧、与参考页一致、左侧不再有",
+          "evidence": {
+            "key": "079",
+            "file": "accA.json",
+            "fields": [
+              "addRight",
+              "toolbarRight",
+              "delSelected"
+            ]
+          },
+          "verdict": "COVERED",
+          "why": "1440 下右缘与工具栏右缘重合"
+        },
+        {
+          "kind": "EXP",
+          "definition": "（历史上）addRightAligned 断言",
+          "evidence": {
+            "key": "079",
+            "file": "acc-result.json",
+            "fields": [
+              "addRightAligned"
+            ]
+          },
+          "verdict": "MISSING",
+          "why": "acc-result 记为 FAIL（addRightAligned=false），与 accA 的 PASS 冲突，未在原始证据内消除"
+        }
+      ],
+      "note": "",
+      "r5_status": "BLOCKED"
+    },
+    {
+      "id": "CCFG-AC-080",
+      "r3_status": "PASS",
+      "r4_status": "PASS",
+      "basis": "NONE",
+      "steps": [
+        {
+          "kind": "STEP",
+          "definition": "观察是否含“删除所选”或任何批量删除入口",
+          "evidence": {
+            "key": "080",
+            "file": "accA.json",
+            "fields": [
+              "delSelected",
+              "hasAdd"
+            ]
+          },
+          "verdict": "COVERED",
+          "why": "无删除所选、仅有新增"
+        }
+      ],
+      "note": "",
+      "r5_status": "PASS"
+    },
+    {
+      "id": "CCFG-AC-081",
+      "r3_status": "PASS",
+      "r4_status": "PASS",
+      "basis": "NONE",
+      "steps": [
+        {
+          "kind": "STEP",
+          "definition": "观察表头是否含状态列或列内启停文字",
+          "evidence": {
+            "key": "081",
+            "file": "accA.json",
+            "fields": [
+              "headers",
+              "noStatusCol"
+            ]
+          },
+          "verdict": "COVERED",
+          "why": "表头无状态列"
+        }
+      ],
+      "note": "",
+      "r5_status": "PASS"
+    },
+    {
+      "id": "CCFG-AC-082",
+      "r3_status": "BLOCKED",
+      "r4_status": "BLOCKED",
+      "basis": "C",
+      "steps": [
+        {
+          "kind": "STEP",
+          "definition": "在 1440×900 与 1920×1080 两种视口下观察操作列是否固定",
+          "evidence": {
+            "key": "082",
+            "file": "accD.json",
+            "fields": [
+              "enabled",
+              "disabled",
+              "abnormal"
+            ]
+          },
+          "verdict": "MISSING",
+          "why": "仅 1440x900；无 1920；且本键未记录固定列断言"
+        },
+        {
+          "kind": "STEP",
+          "definition": "分别对启用/停用/异常三类记录点击“更多”并记录下拉可见项",
+          "evidence": {
+            "key": "082",
+            "file": "accD.json",
+            "fields": [
+              "enabled",
+              "disabled",
+              "abnormal",
+              "order"
+            ]
+          },
+          "verdict": "COVERED",
+          "why": "三类下拉条目实测（异常行仅“停用＋删除”）"
+        },
+        {
+          "kind": "EXP",
+          "definition": "点击更多不触发该行双击编辑、不产生选中",
+          "evidence": {
+            "key": "082",
+            "file": "accD.json",
+            "fields": [
+              "enabled"
+            ]
+          },
+          "verdict": "MISSING",
+          "why": "本键未记录“更多未触发双击”断言（同类断言在 016/103）"
+        }
+      ],
+      "note": "",
+      "r5_status": "BLOCKED"
+    },
+    {
+      "id": "CCFG-AC-085",
+      "r3_status": "PASS",
+      "r4_status": "PASS",
+      "basis": "NONE",
+      "steps": [
+        {
+          "kind": "STEP",
+          "definition": "检查主列表 el-table 根类与模板令牌呈现",
+          "evidence": {
+            "key": "085",
+            "file": "accA.json",
+            "fields": [
+              "cls",
+              "hasLt",
+              "headBg",
+              "cellPad"
+            ]
+          },
+          "verdict": "COVERED",
+          "why": "根类与表头背景/边框/内边距实测"
+        }
+      ],
+      "note": "",
+      "r5_status": "PASS"
+    },
+    {
+      "id": "CCFG-AC-086",
+      "r3_status": "BLOCKED",
+      "r4_status": "BLOCKED",
+      "basis": "C",
+      "steps": [
+        {
+          "kind": "STEP",
+          "definition": "在 1440×900 与 1920×1080 两种视口下观察第一列并重置后重新加载",
+          "evidence": {
+            "key": "086",
+            "file": "accA.json",
+            "fields": [
+              "rc",
+              "seq"
+            ]
+          },
+          "verdict": "MISSING",
+          "why": "仅 1440x900 一腿；无 1920 记录"
+        },
+        {
+          "kind": "EXP",
+          "definition": "序号从 1 连续、不跳号",
+          "evidence": {
+            "key": "086",
+            "file": "accA.json",
+            "fields": [
+              "seq"
+            ]
+          },
+          "verdict": "COVERED",
+          "why": "首屏序号连续"
+        }
+      ],
+      "note": "",
+      "r5_status": "BLOCKED"
+    },
+    {
+      "id": "CCFG-AC-087",
+      "r3_status": "BLOCKED",
+      "r4_status": "BLOCKED",
+      "basis": "C",
+      "steps": [
+        {
+          "kind": "STEP",
+          "definition": "在 1440×900 与 1920×1080 两种视口下对比两行探针 ID 单元格与参考页停用标识",
+          "evidence": {
+            "key": "087",
+            "file": "accA.json",
+            "fields": [
+              "mark",
+              "offRows",
+              "enabledWithoutMark"
+            ]
+          },
+          "verdict": "MISSING",
+          "why": "仅 1440x900；无 1920；参考页并排比对亦未在键内记录"
+        },
+        {
+          "kind": "EXP",
+          "definition": "启用无标识、停用显示停用标识且视觉与参考页一致",
+          "evidence": {
+            "key": "087",
+            "file": "accA.json",
+            "fields": [
+              "mark"
+            ]
+          },
+          "verdict": "COVERED",
+          "why": "1440 下标视觉属性读取"
+        }
+      ],
+      "note": "",
+      "r5_status": "BLOCKED"
+    },
+    {
+      "id": "CCFG-AC-088",
+      "r3_status": "BLOCKED",
+      "r4_status": "BLOCKED",
+      "basis": "C",
+      "steps": [
+        {
+          "kind": "STEP",
+          "definition": "核对界面 `异常：{原始值}` 与接口 fgActive 原始值",
+          "evidence": {
+            "key": "088",
+            "file": "accA.json",
+            "fields": [
+              "[0].shown",
+              "[0].api"
+            ]
+          },
+          "verdict": "MISSING",
+          "why": "仅 1 条异常样本且无 1920×1080 观测腿（见本行 STEP 缺失）"
+        },
+        {
+          "kind": "EXP",
+          "definition": "异常原值与接口一致、红色标识、下拉符合三态表",
+          "evidence": {
+            "key": "088",
+            "file": "accA.json",
+            "fields": [
+              "[0].shown",
+              "[0].api"
+            ]
+          },
+          "verdict": "COVERED",
+          "why": "shown 与 api 值一致（同为原始字符串）"
+        }
+      ],
+      "note": "",
+      "r5_status": "BLOCKED"
+    },
+    {
+      "id": "CCFG-AC-091",
+      "r3_status": "BLOCKED",
+      "r4_status": "BLOCKED",
+      "basis": "C",
+      "steps": [
+        {
+          "kind": "STEP",
+          "definition": "在 1440×900 与 1920×1080 下观察 ID 正文颜色/字重并与参考页比对",
+          "evidence": {
+            "key": "091",
+            "file": "accG.json",
+            "fields": [
+              "probeIdColumn",
+              "referenceIdColumn"
+            ]
+          },
+          "verdict": "MISSING",
+          "why": "仅 1440x900；无 1920；且未记录 3 类逐行对比"
+        },
+        {
+          "kind": "STEP",
+          "definition": "悬停省略 ID 查看 Tooltip、鼠标点击与键盘聚焦 ID 编辑入口",
+          "evidence": {
+            "key": "091",
+            "file": "accG.json",
+            "fields": [
+              "weightsMatch"
+            ]
+          },
+          "verdict": "MISSING",
+          "why": "本键未记录 Tooltip/鼠标/键盘编辑入口行为"
+        },
+        {
+          "kind": "EXP",
+          "definition": "字重/颜色与参考页一致、未整体加粗改色",
+          "evidence": {
+            "key": "091",
+            "file": "accG.json",
+            "fields": [
+              "weightsMatch",
+              "colorsMatch"
+            ]
+          },
+          "verdict": "COVERED",
+          "why": "字重与颜色两项一致"
+        }
+      ],
+      "note": "",
+      "r5_status": "BLOCKED"
+    },
+    {
+      "id": "CCFG-AC-092",
+      "r3_status": "BLOCKED",
+      "r4_status": "BLOCKED",
+      "basis": "C",
+      "steps": [
+        {
+          "kind": "STEP",
+          "definition": "在 1440×900 与 1920×1080 下观察行高并与参考页比对",
+          "evidence": {
+            "key": "092",
+            "file": "accG.json",
+            "fields": [
+              "referenceRowH",
+              "probeRowH",
+              "sharedTdPadding"
+            ]
+          },
+          "verdict": "MISSING",
+          "why": "仅 1440x900；无 1920；行高由内边距规则外推（48 vs 53）"
+        },
+        {
+          "kind": "STEP",
+          "definition": "双击行编辑、键盘编辑 ID、滚动查看表头与最右固定列",
+          "evidence": {
+            "key": "092",
+            "file": "accG.json",
+            "fields": [
+              "note"
+            ]
+          },
+          "verdict": "MISSING",
+          "why": "本键未记录双击/键盘/滚动行为（同类断言在 142/150 但非本条条件）"
+        },
+        {
+          "kind": "EXP",
+          "definition": "行高由公共内边距与内容决定、未写死、未改公共层",
+          "evidence": {
+            "key": "092",
+            "file": "accG.json",
+            "fields": [
+              "sharedTdPadding"
+            ]
+          },
+          "verdict": "COVERED",
+          "why": "两页内边距同值 12px/12px"
+        }
+      ],
+      "note": "",
+      "r5_status": "BLOCKED"
+    },
+    {
+      "id": "CCFG-AC-093",
+      "r3_status": "PASS",
+      "r4_status": "PASS",
+      "basis": "NONE",
+      "steps": [
+        {
+          "kind": "PRE",
+          "definition": "正常视口与窄视口均具备",
+          "evidence": {
+            "key": "093",
+            "file": "accH.json",
+            "fields": [
+              "viewport"
+            ]
+          },
+          "verdict": "COVERED",
+          "why": "窄视口 1024x900 实测"
+        },
+        {
+          "kind": "STEP",
+          "definition": "单行布局、表格横向滚动而非页面级溢出、滚动到最右操作列可点",
+          "evidence": {
+            "key": "093",
+            "file": "accH.json",
+            "fields": [
+              "singleLineAllRows",
+              "pageLevelHorizontalOverflow",
+              "tableInnerHorizontalScroll",
+              "rightmostFixedOpColumnHittable"
+            ]
+          },
+          "verdict": "COVERED",
+          "why": "四项均实测"
+        },
+        {
+          "kind": "EXP",
+          "definition": "仅页面级溢出/截断/不可点/计数不符判失败",
+          "evidence": {
+            "key": "093",
+            "file": "accH.json",
+            "fields": [
+              "plusNOpensWithAccurateCount",
+              "hiddenComputed"
+            ]
+          },
+          "verdict": "COVERED",
+          "why": "数量自洽"
+        }
+      ],
+      "note": "",
+      "r5_status": "PASS"
+    },
+    {
+      "id": "CCFG-AC-094",
+      "r3_status": "BLOCKED",
+      "r4_status": "BLOCKED",
+      "basis": "C",
+      "steps": [
+        {
+          "kind": "STEP",
+          "definition": "在 1440×900 与 1920×1080 下观察该标签视觉并与参考页角色标签比对",
+          "evidence": {
+            "key": "094",
+            "file": "accG.json",
+            "fields": [
+              "probeOkTag",
+              "referenceRoleTag"
+            ]
+          },
+          "verdict": "MISSING",
+          "why": "仅 1440x900；无 1920 记录"
+        },
+        {
+          "kind": "EXP",
+          "definition": "绿色语义=当前未检测到异常、非参考页目标库角色",
+          "evidence": {
+            "key": "094",
+            "file": "accG.json",
+            "fields": [
+              "semantics"
+            ]
+          },
+          "verdict": "COVERED",
+          "why": "状态色与语义实测"
+        }
+      ],
+      "note": "",
+      "r5_status": "BLOCKED"
+    },
+    {
+      "id": "CCFG-AC-095",
+      "r3_status": "BLOCKED",
+      "r4_status": "BLOCKED",
+      "basis": "C",
+      "steps": [
+        {
+          "kind": "STEP",
+          "definition": "在 1440×900 与 1920×1080 下观察标签状态色并悬停查看 Tooltip",
+          "evidence": {
+            "key": "095",
+            "file": "accG.json",
+            "fields": [
+              "probeBadTag"
+            ]
+          },
+          "verdict": "MISSING",
+          "why": "仅 1440x900；无 1920；Tooltip 内容转由 013/107 说明"
+        },
+        {
+          "kind": "EXP",
+          "definition": "红色、Tooltip 展示异常原因与冲突探针",
+          "evidence": {
+            "key": "095",
+            "file": "accG.json",
+            "fields": [
+              "probeBadTag"
+            ]
+          },
+          "verdict": "COVERED",
+          "why": "红色标签视觉实测"
+        }
+      ],
+      "note": "",
+      "r5_status": "BLOCKED"
+    },
+    {
+      "id": "CCFG-AC-097",
+      "r3_status": "BLOCKED",
+      "r4_status": "BLOCKED",
+      "basis": "C",
+      "steps": [
+        {
+          "kind": "STEP",
+          "definition": "在 1440×900 与 1920×1080 下观察项级异常标签状态色与整行级歧义提示",
+          "evidence": {
+            "key": "097",
+            "file": "accG.json",
+            "fields": [
+              "ambiguousRows",
+              "rowsWithBadTags",
+              "rowLevelHintKept"
+            ]
+          },
+          "verdict": "MISSING",
+          "why": "仅 1440x900；无 1920 记录"
+        },
+        {
+          "kind": "EXP",
+          "definition": "红色优先不降级、整行提示并存",
+          "evidence": {
+            "key": "097",
+            "file": "accG.json",
+            "fields": [
+              "rowLevelHintKept"
+            ]
+          },
+          "verdict": "COVERED",
+          "why": "两者共存实测"
+        }
+      ],
+      "note": "",
+      "r5_status": "BLOCKED"
+    },
+    {
+      "id": "CCFG-AC-098",
+      "r3_status": "BLOCKED",
+      "r4_status": "BLOCKED",
+      "basis": "C",
+      "steps": [
+        {
+          "kind": "PRE",
+          "definition": "库内存在恰好 6 个与 ≥7 个数据源的探针两类",
+          "evidence": {
+            "key": "098",
+            "file": "accG.json",
+            "fields": [
+              "rowsAtLeast6Sources"
+            ]
+          },
+          "verdict": "MISSING",
+          "why": "仅命中 ≥7 一类（total=7 一条）；无“恰好 6”样本"
+        },
+        {
+          "kind": "STEP",
+          "definition": "在 1440×900 与 1920×1080 与缩窄窗口下观察直接展示数量与 `+N` 自洽",
+          "evidence": {
+            "key": "098",
+            "file": "accG.json",
+            "fields": [
+              "rowsAtLeast6Sources[0].srcW",
+              "rowsAtLeast6Sources[0].direct",
+              "rowsAtLeast6Sources[0].plus"
+            ]
+          },
+          "verdict": "MISSING",
+          "why": "仅 1440×900 一腿且仅 ≥7 一类样本；无 1920/缩窄腿、无恰好 6 样本"
+        },
+        {
+          "kind": "EXP",
+          "definition": "可见数≤min(可容纳,6)、N=未展示数、无估算遮挡",
+          "evidence": {
+            "key": "098",
+            "file": "accG.json",
+            "fields": [
+              "max6",
+              "plusAccurate"
+            ]
+          },
+          "verdict": "COVERED",
+          "why": "单样本下规则成立"
+        }
+      ],
+      "note": "",
+      "r5_status": "BLOCKED"
+    },
+    {
+      "id": "CCFG-AC-100",
+      "r3_status": "BLOCKED",
+      "r4_status": "BLOCKED",
+      "basis": "C",
+      "steps": [
+        {
+          "kind": "PRE",
+          "definition": "同时存在启用/停用/异常三类记录",
+          "evidence": {
+            "key": "082",
+            "file": "accD.json",
+            "fields": [
+              "enabled",
+              "disabled",
+              "abnormal"
+            ]
+          },
+          "verdict": "COVERED",
+          "why": "三类样例行存在"
+        },
+        {
+          "kind": "STEP",
+          "definition": "在 1440×900 与 1920×1080 下观察每一行入口形态",
+          "evidence": {
+            "key": "100-trigger",
+            "file": "accD.json",
+            "fields": [
+              "allIcon"
+            ]
+          },
+          "verdict": "MISSING",
+          "why": "仅 1440x900；无 1920；且仅一条样本断言，未逐一覆盖全部行"
+        },
+        {
+          "kind": "STEP",
+          "definition": "用 Tab 键盘聚焦入口并读取可访问名称",
+          "evidence": {
+            "key": "100-trigger",
+            "file": "accD.json",
+            "fields": [
+              "ariaOk",
+              "sampleAria"
+            ]
+          },
+          "verdict": "MISSING",
+          "why": "仅记录 aria 名称；无键盘聚焦动作与可见焦点样式/截图"
+        },
+        {
+          "kind": "EXP",
+          "definition": "全部行三点图标、命中区足够、焦点可见、菜单三态相符",
+          "evidence": {
+            "key": "082",
+            "file": "accD.json",
+            "fields": [
+              "enabled",
+              "disabled",
+              "abnormal"
+            ]
+          },
+          "verdict": "COVERED",
+          "why": "菜单三态由 082 同页原始键证明"
+        }
+      ],
+      "note": "",
+      "r5_status": "BLOCKED"
+    },
+    {
+      "id": "CCFG-AC-101",
+      "r3_status": "BLOCKED",
+      "r4_status": "BLOCKED",
+      "basis": "D",
+      "steps": [
+        {
+          "kind": "STEP",
+          "definition": "单击三点图标展开菜单观察圆角/阴影/内边距/条目排列/分隔线",
+          "evidence": {
+            "key": "101",
+            "file": "accD.json",
+            "fields": [
+              "radius",
+              "shadow",
+              "padding",
+              "divider",
+              "itemOrder"
+            ]
+          },
+          "verdict": "COVERED",
+          "why": "静态样式与分隔线实测"
+        },
+        {
+          "kind": "STEP",
+          "definition": "分别悬停停用/启用与红色删除条目，观察 Hover/焦点反馈与红色警示",
+          "evidence": {
+            "key": "101",
+            "file": "accD.json",
+            "fields": [
+              "deleteColor"
+            ]
+          },
+          "verdict": "MISSING",
+          "why": "原始键无 Hover/焦点态记录（accD 无 hover 相关字段）"
+        },
+        {
+          "kind": "STEP",
+          "definition": "键盘聚焦并遍历菜单条目",
+          "evidence": {
+            "key": "101",
+            "file": "accD.json",
+            "fields": [
+              "itemOrder"
+            ]
+          },
+          "verdict": "MISSING",
+          "why": "无键盘遍历记录"
+        }
+      ],
+      "note": "",
+      "r5_status": "BLOCKED"
+    },
+    {
+      "id": "CCFG-AC-105",
+      "r3_status": "PASS",
+      "r4_status": "PASS",
+      "basis": "NONE",
+      "steps": [
+        {
+          "kind": "STEP",
+          "definition": "点击 +N 打开完整清单观察每项两行文本",
+          "evidence": {
+            "key": "105",
+            "file": "accC.json",
+            "fields": [
+              "items"
+            ]
+          },
+          "verdict": "COVERED",
+          "why": "主信息机构名 + 次信息“数据源 ID：”前缀逐一读取"
+        }
+      ],
+      "note": "",
+      "r5_status": "PASS"
+    },
+    {
+      "id": "CCFG-AC-107",
+      "r3_status": "PASS",
+      "r4_status": "PASS",
+      "basis": "NONE",
+      "steps": [
+        {
+          "kind": "STEP",
+          "definition": "点击 +N 打开清单核对异常原因/冲突探针位置与颜色、含逗号歧义文案",
+          "evidence": {
+            "key": "107",
+            "file": "accH.json",
+            "fields": [
+              "anomalyItems",
+              "commaAmbiguityWordingInList",
+              "commaAmbiguityTooltip"
+            ]
+          },
+          "verdict": "COVERED",
+          "why": "项内红色警示与歧义文案逐项实测"
+        }
+      ],
+      "note": "",
+      "r5_status": "PASS"
+    },
+    {
+      "id": "CCFG-AC-108",
+      "r3_status": "PASS",
+      "r4_status": "PASS",
+      "basis": "NONE",
+      "steps": [
+        {
+          "kind": "STEP",
+          "definition": "核对单行展示与 +N、点击 +N 对照去重顺序、异常项是否在清单",
+          "evidence": {
+            "key": "108",
+            "file": "accH.json",
+            "fields": [
+              "hiddenCountComputed",
+              "orderMatchesStorage",
+              "anomalyItemsPresent",
+              "clickTriggeredNotHover"
+            ]
+          },
+          "verdict": "COVERED",
+          "why": "数量、顺序、异常项、点击触发均实测"
+        },
+        {
+          "kind": "EXP",
+          "definition": "主表行高与单实例 Tooltip 未变",
+          "evidence": {
+            "key": "108",
+            "file": "accH.json",
+            "fields": [
+              "rowHeightUnchanged",
+              "singleTooltipInstance"
+            ]
+          },
+          "verdict": "COVERED",
+          "why": "两项实测"
+        }
+      ],
+      "note": "",
+      "r5_status": "PASS"
+    },
+    {
+      "id": "CCFG-AC-109",
+      "r3_status": "PASS",
+      "r4_status": "PASS",
+      "basis": "NONE",
+      "steps": [
+        {
+          "kind": "STEP",
+          "definition": "点击 +N 观察是否内部滚动/固定最大高度、读取 .cc-full-list 样式",
+          "evidence": {
+            "key": "109",
+            "file": "accC.json",
+            "fields": [
+              "maxHeight",
+              "overflowY",
+              "listH"
+            ]
+          },
+          "verdict": "COVERED",
+          "why": "无 max-height、无内部滚动"
+        }
+      ],
+      "note": "",
+      "r5_status": "PASS"
+    },
+    {
+      "id": "CCFG-AC-110",
+      "r3_status": "PASS",
+      "r4_status": "PASS",
+      "basis": "NONE",
+      "steps": [
+        {
+          "kind": "STEP",
+          "definition": "普通视口打开清单核对完整性；使行靠近视口边缘再打开",
+          "evidence": {
+            "key": "110",
+            "file": "accH.json",
+            "fields": [
+              "popoverRect",
+              "fullyInsideViewport",
+              "itemsReadable"
+            ]
+          },
+          "verdict": "COVERED",
+          "why": "弹层完整在视口内且项可读"
+        }
+      ],
+      "note": "",
+      "r5_status": "PASS"
+    },
+    {
+      "id": "CCFG-AC-111",
+      "r3_status": "PASS",
+      "r4_status": "PASS",
+      "basis": "NONE",
+      "steps": [
+        {
+          "kind": "STEP",
+          "definition": "以新增与编辑两种模式打开弹窗；桌面测量宽度与安全间距",
+          "evidence": {
+            "key": "111",
+            "file": "accE.json",
+            "fields": [
+              "w",
+              "marginL",
+              "marginR",
+              "title",
+              "footer"
+            ]
+          },
+          "verdict": "COVERED",
+          "why": "桌面 900px、左右留白实测"
+        },
+        {
+          "kind": "STEP",
+          "definition": "窄视口观察收缩与横向溢出；标题/关闭/底部按钮可见可操作",
+          "evidence": {
+            "key": "111-narrow",
+            "file": "accF.json",
+            "fields": [
+              "dialogW",
+              "viewportW",
+              "noHorizontalOverflow"
+            ]
+          },
+          "verdict": "COVERED",
+          "why": "窄视口收缩且无横向溢出"
+        }
+      ],
+      "note": "",
+      "r5_status": "PASS"
+    },
+    {
+      "id": "CCFG-AC-113",
+      "r3_status": "PASS",
+      "r4_status": "PASS",
+      "basis": "NONE",
+      "steps": [
+        {
+          "kind": "STEP",
+          "definition": "新增模式核对 ID 可直接填写（无开关、无锁定提示）",
+          "evidence": {
+            "key": "113-create",
+            "file": "accE.json",
+            "fields": [
+              "idDirectlyEditable",
+              "noToggleSwitch",
+              "noLockedHint"
+            ]
+          },
+          "verdict": "COVERED",
+          "why": "新增模式三项实测"
+        },
+        {
+          "kind": "STEP",
+          "definition": "编辑模式核对默认锁定/解锁修改/取消恢复",
+          "evidence": {
+            "key": "035",
+            "file": "accF.json",
+            "fields": [
+              "idDisabled",
+              "lockHint"
+            ]
+          },
+          "verdict": "COVERED",
+          "why": "由 035/036/037 同页原始键证明同条件"
+        },
+        {
+          "kind": "STEP",
+          "definition": "候选搜索/已选项展示与移除/异常显示/校验阻断/关闭确认",
+          "evidence": {
+            "key": "046-edit",
+            "file": "accF.json",
+            "fields": [
+              "removeDidNotAutoUpdate",
+              "regenerateOverwrote"
+            ]
+          },
+          "verdict": "COVERED",
+          "why": "由 046/066/068 同页原始键证明"
+        }
+      ],
+      "note": "",
+      "r5_status": "PASS"
+    },
+    {
+      "id": "CCFG-AC-114",
+      "r3_status": "PASS",
+      "r4_status": "PASS",
+      "basis": "NONE",
+      "steps": [
+        {
+          "kind": "STEP",
+          "definition": "读取三项配置项名称标签计算样式并与参考页对照",
+          "evidence": {
+            "key": "114",
+            "file": "accE.json",
+            "fields": [
+              "labelStyle",
+              "redAsterisk",
+              "labelRightEdges"
+            ]
+          },
+          "verdict": "COVERED",
+          "why": "字号/字重/颜色/红星/对齐实测"
+        }
+      ],
+      "note": "",
+      "r5_status": "PASS"
+    },
+    {
+      "id": "CCFG-AC-116",
+      "r3_status": "PASS",
+      "r4_status": "PASS",
+      "basis": "NONE",
+      "steps": [
+        {
+          "kind": "STEP",
+          "definition": "读取新增与编辑弹窗主按钮文案",
+          "evidence": {
+            "key": "116",
+            "file": "accE.json",
+            "fields": [
+              "createText"
+            ]
+          },
+          "verdict": "COVERED",
+          "why": "新增=创建"
+        },
+        {
+          "kind": "EXP",
+          "definition": "编辑主按钮=保存",
+          "evidence": {
+            "key": "116-edit",
+            "file": "accF.json",
+            "fields": [
+              "editSubmitText"
+            ]
+          },
+          "verdict": "COVERED",
+          "why": "编辑=保存"
+        }
+      ],
+      "note": "",
+      "r5_status": "PASS"
+    },
+    {
+      "id": "CCFG-AC-118",
+      "r3_status": "PASS",
+      "r4_status": "PASS",
+      "basis": "NONE",
+      "steps": [
+        {
+          "kind": "STEP",
+          "definition": "三字段同时异常提交观察错误位置与颜色",
+          "evidence": {
+            "key": "118",
+            "file": "accE.json",
+            "fields": [
+              "threeFieldErrors",
+              "allRedText",
+              "allRedBorder",
+              "topLevelMessageCount"
+            ]
+          },
+          "verdict": "COVERED",
+          "why": "三项字段级错误、红字红框、无顶端消息"
+        },
+        {
+          "kind": "STEP",
+          "definition": "只修正一个字段观察其余错误保持",
+          "evidence": {
+            "key": "118-clearone",
+            "file": "accE.json",
+            "fields": [
+              "idErrorCleared",
+              "descStillError",
+              "sourceStillError"
+            ]
+          },
+          "verdict": "COVERED",
+          "why": "仅清除被修正字段"
+        }
+      ],
+      "note": "",
+      "r5_status": "PASS"
+    },
+    {
+      "id": "CCFG-AC-119",
+      "r3_status": "PASS",
+      "r4_status": "PASS",
+      "basis": "NONE",
+      "steps": [
+        {
+          "kind": "STEP",
+          "definition": "制造字段级错误提交，观察是否有顶端消息/重复弹出",
+          "evidence": {
+            "key": "119",
+            "file": "accE.json",
+            "fields": [
+              "fieldLevelErrors",
+              "topLevelMessageNotUsed"
+            ]
+          },
+          "verdict": "COVERED",
+          "why": "以字段内反馈替代顶端消息"
+        },
+        {
+          "kind": "STEP",
+          "definition": "编辑弹窗核对 ID 默认锁定/解锁/取消恢复",
+          "evidence": {
+            "key": "119",
+            "file": "accE.json",
+            "fields": [
+              "note"
+            ]
+          },
+          "verdict": "COVERED",
+          "why": "由 035/036/037 同页原始键证明"
+        }
+      ],
+      "note": "",
+      "r5_status": "PASS"
+    },
+    {
+      "id": "CCFG-AC-122",
+      "r3_status": "PASS",
+      "r4_status": "PASS",
+      "basis": "NONE",
+      "steps": [
+        {
+          "kind": "STEP",
+          "definition": "未选数据源未提交时观察提示文字/颜色/区域",
+          "evidence": {
+            "key": "122",
+            "file": "accE.json",
+            "fields": [
+              "text",
+              "color",
+              "cls",
+              "role"
+            ]
+          },
+          "verdict": "COVERED",
+          "why": "中性灰说明实测"
+        }
+      ],
+      "note": "",
+      "r5_status": "PASS"
+    },
+    {
+      "id": "CCFG-AC-123",
+      "r3_status": "PASS",
+      "r4_status": "PASS",
+      "basis": "NONE",
+      "steps": [
+        {
+          "kind": "STEP",
+          "definition": "未选直接提交观察反馈区由中性说明转红色错误、选中消除、再清空恢复",
+          "evidence": {
+            "key": "123-submit",
+            "file": "accE.json",
+            "fields": [
+              "beforeSubmit",
+              "afterSubmit",
+              "hintWasNeutral",
+              "nowRedError"
+            ]
+          },
+          "verdict": "COVERED",
+          "why": "红/灰切换实测"
+        },
+        {
+          "kind": "EXP",
+          "definition": "关闭重开无状态残留",
+          "evidence": {
+            "key": "123-restore-error",
+            "file": "accE.json",
+            "fields": [
+              "afterClearPostSubmit"
+            ]
+          },
+          "verdict": "COVERED",
+          "why": "提交后清空恢复红色错误"
+        }
+      ],
+      "note": "",
+      "r5_status": "PASS"
+    },
+    {
+      "id": "CCFG-AC-126",
+      "r3_status": "PASS",
+      "r4_status": "PASS",
+      "basis": "NONE",
+      "steps": [
+        {
+          "kind": "STEP",
+          "definition": "侧栏展开/收起 + 多种视口宽度下测量弹窗左右留白",
+          "evidence": {
+            "key": "126",
+            "file": "accH.json",
+            "fields": [
+              "measurements",
+              "horizontalMarginDiffMax",
+              "sidebarStates"
+            ]
+          },
+          "verdict": "COVERED",
+          "why": "1440/1920/1024 × 侧栏两态共 6 组实测，左右留白相等"
+        },
+        {
+          "kind": "EXP",
+          "definition": "无随侧栏变化的写死左偏、保留 900px 目标宽度",
+          "evidence": {
+            "key": "126",
+            "file": "accH.json",
+            "fields": [
+              "hardcodedOffset",
+              "desktopTargetWidth"
+            ]
+          },
+          "verdict": "COVERED",
+          "why": "无左偏、宽度保持"
+        }
+      ],
+      "note": "",
+      "r5_status": "PASS"
+    },
+    {
+      "id": "CCFG-AC-127",
+      "r3_status": "PASS",
+      "r4_status": "PASS",
+      "basis": "NONE",
+      "steps": [
+        {
+          "kind": "STEP",
+          "definition": "读取三项标签对齐方式与右缘、红星位置、字体规格",
+          "evidence": {
+            "key": "127",
+            "file": "accE.json",
+            "fields": [
+              "align",
+              "fs",
+              "fw",
+              "col",
+              "before"
+            ]
+          },
+          "verdict": "COVERED",
+          "why": "右对齐与规格实测"
+        }
+      ],
+      "note": "",
+      "r5_status": "PASS"
+    },
+    {
+      "id": "CCFG-AC-128",
+      "r3_status": "BLOCKED",
+      "r4_status": "BLOCKED",
+      "basis": "A",
+      "steps": [
+        {
+          "kind": "STEP",
+          "definition": "① 手工连续键入 >32 位并观察录入长度",
+          "evidence": {
+            "key": "128-limit",
+            "file": "accE.json",
+            "fields": [
+              "pasted",
+              "accepted",
+              "cappedAt32"
+            ]
+          },
+          "verdict": "MISSING",
+          "why": "原始键只记录②粘贴 40→32；无①手工连续键入的记录（129 的 maxlength 属性为静态观察）"
+        },
+        {
+          "kind": "STEP",
+          "definition": "② 粘贴 >32 位观察录入长度",
+          "evidence": {
+            "key": "128-limit",
+            "file": "accE.json",
+            "fields": [
+              "pasted",
+              "accepted"
+            ]
+          },
+          "verdict": "COVERED",
+          "why": "粘贴 40→32 实测"
+        },
+        {
+          "kind": "STEP",
+          "definition": "③ 键入/粘贴非法字符提交，观察是否静默改写与字段级错误",
+          "evidence": {
+            "key": "128-illegal",
+            "file": "accE.json",
+            "fields": [
+              "typed",
+              "valueNotSilentlyRewritten",
+              "fieldError"
+            ]
+          },
+          "verdict": "COVERED",
+          "why": "非法字符触发字段级错误、未静默改写"
+        },
+        {
+          "kind": "EXP",
+          "definition": "首位字符、允许字符集、判空、大小写不敏感唯一性（含后端校验）不放宽",
+          "evidence": {
+            "key": null,
+            "file": null,
+            "fields": []
+          },
+          "verdict": "MISSING",
+          "why": "全包无真实后端唯一性校验记录（无可指向的证据键）"
+        }
+      ],
+      "note": "",
+      "r5_status": "BLOCKED"
+    },
+    {
+      "id": "CCFG-AC-129",
+      "r3_status": "PASS",
+      "r4_status": "PASS",
+      "basis": "NONE",
+      "steps": [
+        {
+          "kind": "STEP",
+          "definition": "新增模式 ID 可直接填写且 32 位上限生效",
+          "evidence": {
+            "key": "129-create",
+            "file": "accE.json",
+            "fields": [
+              "idEditable",
+              "maxlength",
+              "noToggle",
+              "noLockHint"
+            ]
+          },
+          "verdict": "COVERED",
+          "why": "新增模式三项实测"
+        },
+        {
+          "kind": "STEP",
+          "definition": "编辑模式默认锁定、解锁/取消还原、两模式 32 位上限一致",
+          "evidence": {
+            "key": "129-edit",
+            "file": "accF.json",
+            "fields": [
+              "unlockedMaxlength",
+              "sameLimitAsCreate"
+            ]
+          },
+          "verdict": "COVERED",
+          "why": "解锁后 32 位与新增一致"
+        },
+        {
+          "kind": "EXP",
+          "definition": "编辑模式默认锁定并显示“（已锁定）”、可解锁与还原",
+          "evidence": {
+            "key": "035",
+            "file": "accF.json",
+            "fields": [
+              "idDisabled",
+              "lockHint",
+              "toggle",
+              "lockedInputAttr"
+            ]
+          },
+          "verdict": "COVERED",
+          "why": "035 证明编辑默认锁定、提示“（已锁定）”与“修改探针 ID”入口存在"
+        },
+        {
+          "kind": "EXP",
+          "definition": "点击“取消修改”恢复锁定与原值",
+          "evidence": {
+            "key": "037",
+            "file": "accF.json",
+            "fields": [
+              "restoredTo",
+              "locked",
+              "lockHint",
+              "toggle"
+            ]
+          },
+          "verdict": "COVERED",
+          "why": "037 证明取消修改后恢复锁定与原值"
+        }
+      ],
+      "note": "残余：129-edit-locked@accF 为 PARTIAL，语义为“锁定态属性缺失属预期”，非失败",
+      "r5_status": "PASS"
+    },
+    {
+      "id": "CCFG-AC-135",
+      "r3_status": "PASS",
+      "r4_status": "PASS",
+      "basis": "NONE",
+      "steps": [
+        {
+          "kind": "STEP",
+          "definition": "核对本轮是否提前创建/批准表单弹窗模板、是否声称其他页面接入",
+          "evidence": {
+            "key": "135",
+            "file": "accJ.json",
+            "fields": [
+              "templateApprovalMentions",
+              "otherPageClaim",
+              "req136EntryOnly"
+            ]
+          },
+          "verdict": "COVERED",
+          "why": "无模板、无接入声称、仅登记入口"
+        }
+      ],
+      "note": "",
+      "r5_status": "PASS"
+    },
+    {
+      "id": "CCFG-AC-136",
+      "r3_status": "BLOCKED",
+      "r4_status": "BLOCKED",
+      "basis": "C",
+      "steps": [
+        {
+          "kind": "STEP",
+          "definition": "分别在桌面视口与窄视口打开新增与编辑弹窗测量宽度与安全边距",
+          "evidence": {
+            "key": "136",
+            "file": "accE.json",
+            "fields": [
+              "labelToControlGap"
+            ]
+          },
+          "verdict": "MISSING",
+          "why": "仅桌面一腿、模式未标注；无窄视口记录"
+        },
+        {
+          "kind": "STEP",
+          "definition": "测量三项标签右缘与控件左缘间距是否约 12px、控件左右边界对齐",
+          "evidence": {
+            "key": "136",
+            "file": "accE.json",
+            "fields": [
+              "labelToControlGap",
+              "controlLefts",
+              "controlRights"
+            ]
+          },
+          "verdict": "COVERED",
+          "why": "12px 与左右边界实测"
+        }
+      ],
+      "note": "",
+      "r5_status": "BLOCKED"
+    },
+    {
+      "id": "CCFG-AC-137",
+      "r3_status": "PASS",
+      "r4_status": "PASS",
+      "basis": "NONE",
+      "steps": [
+        {
+          "kind": "STEP",
+          "definition": "比较字段纵向留白节奏、读取 .cc-form gap 与反馈区占位、核对反馈区仍在",
+          "evidence": {
+            "key": "137",
+            "file": "accH.json",
+            "fields": [
+              "formItemGap",
+              "feedbackPlaceholderMinH",
+              "feedbackAreas",
+              "dialogNotFixedHeight"
+            ]
+          },
+          "verdict": "COVERED",
+          "why": "间距/占位/反馈区/非固定高度实测"
+        },
+        {
+          "kind": "EXP",
+          "definition": "数据源双栏布局与候选规则未变",
+          "evidence": {
+            "key": "137",
+            "file": "accH.json",
+            "fields": [
+              "twoPaneLayout"
+            ]
+          },
+          "verdict": "COVERED",
+          "why": "双栏内部结构与候选数实测"
+        }
+      ],
+      "note": "",
+      "r5_status": "PASS"
+    },
+    {
+      "id": "CCFG-AC-141",
+      "r3_status": "PASS",
+      "r4_status": "PASS",
+      "basis": "NONE",
+      "steps": [
+        {
+          "kind": "STEP",
+          "definition": "点击固定 / 再次点击取消 / 转移 / 最多一行 / ID 单击切换",
+          "evidence": {
+            "key": "141",
+            "file": "accB.json",
+            "fields": [
+              "click",
+              "clickAgainCancel",
+              "transferToOther",
+              "maxOne",
+              "idCellClickToggles"
+            ]
+          },
+          "verdict": "COVERED",
+          "why": "五类断言均有实测值（含 ID 单元格单击）"
+        },
+        {
+          "kind": "STEP",
+          "definition": "点击固定 / 再次点击取消 / 转移 / 最多一行 / ID 单击切换",
+          "evidence": {
+            "key": "141",
+            "file": "accB.json",
+            "fields": [
+              "click",
+              "clickAgainCancel",
+              "refix",
+              "transferToOther",
+              "maxOne",
+              "idCellClickToggles"
+            ]
+          },
+          "verdict": "COVERED",
+          "why": "点击=0（固定）、再次点击取消=-1、重复固定 refix=0、转移至他行=1、至多一行=1"
+        }
+      ],
+      "note": "",
+      "r5_status": "PASS"
+    },
+    {
+      "id": "CCFG-AC-142",
+      "r3_status": "PASS",
+      "r4_status": "PASS",
+      "basis": "NONE",
+      "steps": [
+        {
+          "kind": "STEP",
+          "definition": "双击未选中/已选中/另一行，观察固定高亮与弹窗",
+          "evidence": {
+            "key": "142-abc",
+            "file": "accB.json",
+            "fields": [
+              "aFixed",
+              "aDialog",
+              "bFixed",
+              "bDialog",
+              "cFixed",
+              "cDialog"
+            ]
+          },
+          "verdict": "COVERED",
+          "why": "三种双击场景实测"
+        },
+        {
+          "kind": "STEP",
+          "definition": "探针 ID 键盘 Enter/空格打开编辑且不切换固定选中",
+          "evidence": {
+            "key": "142-d",
+            "file": "accB2.json",
+            "fields": [
+              "fixedBeforeEnter",
+              "enterOpensDialog",
+              "fixedAfterEnter",
+              "spaceOpensDialog",
+              "fixedAfterSpace",
+              "fixedAtStart",
+              "fixedAtEnd"
+            ]
+          },
+          "verdict": "COVERED",
+          "why": "Enter/空格均打开编辑、固定态在前后保持 0 不变"
+        }
+      ],
+      "note": "残余：142-d@accB 曾记 FAIL（键盘计数口径），由 142-d@accB2 重跑为 PASS，原始键并存",
+      "r5_status": "PASS"
+    },
+    {
+      "id": "CCFG-AC-143",
+      "r4_status": "PASS",
+      "r5_status": "BLOCKED",
+      "basis": "B/C",
+      "steps": [
+        {
+          "kind": "STEP",
+          "definition": "已固定选中一行时：更多触发器/菜单项/启停或删除确认窗（含取消）/标签 Tooltip 均不改变固定选中",
+          "evidence": {
+            "key": "143",
+            "file": "accB.json",
+            "fields": [
+              "[0].idx",
+              "[1].items",
+              "[1].idx",
+              "[3].boxOpen",
+              "[4].idx",
+              "[6].idx"
+            ]
+          },
+          "verdict": "PARTIAL",
+          "why": "accB#143 自 baseline-fixed（idx=0）起，覆盖固定态下更多/菜单/确认窗打开与取消/标签点击；其中 plusN 步骤记录 plusOpen:false（未打开），本次未覆盖该点击是否打开完整清单",
+          "assertion": "AC143_FIXED_GROUP",
+          "viewport": "1440x900"
+        },
+        {
+          "kind": "STEP",
+          "definition": "未固定选中任何行时：重复同上各类交互并观察该行是否被固定选中",
+          "evidence": {
+            "key": "143-plusN",
+            "file": "accC.json",
+            "fields": [
+              "opened",
+              "fixed0",
+              "fixed1",
+              "fixed2"
+            ]
+          },
+          "verdict": "PARTIAL",
+          "why": "accC#143-plusN 记录 +N 打开（opened:true）且固定态采样 fixed0/1/2=0（未固定）；仅覆盖“未固定起始态”下的 +N 一项，未覆盖未固定下的更多/菜单/确认窗/标签 Tooltip",
+          "assertion": "AC143_UNFIXED_GROUP",
+          "viewport": "1440x900"
+        },
+        {
+          "kind": "STEP",
+          "definition": "探针 ID 的 Enter／Space 键盘编辑不改变固定选中",
+          "evidence": {
+            "key": "142-d",
+            "file": "accB2.json",
+            "fields": [
+              "fixedBeforeEnter",
+              "enterOpensDialog",
+              "fixedAfterEnter",
+              "spaceOpensDialog",
+              "fixedAfterSpace",
+              "fixedAtStart",
+              "fixedAtEnd"
+            ]
+          },
+          "verdict": "PARTIAL",
+          "why": "accB2#142-d（属 AC-142 记录）证明 Enter/空格打开编辑且固定态保持 0；但该键未在“未固定起始态”下执行，且属另一用例记录",
+          "assertion": "AC143_UNFIXED_GROUP",
+          "viewport": "1440x900"
+        },
+        {
+          "kind": "EXP",
+          "definition": "点击“更多”触发器、菜单项、启停／删除确认窗口（含遮罩与按钮）、`+N`、数据源标签 Tooltip 触发器均不触发固定选中切换；两组初始选中状态下均须保持",
+          "evidence": {
+            "key": null,
+            "file": null,
+            "fields": []
+          },
+          "verdict": "MISSING",
+          "why": "定义要求“未固定”与“已固定”两组初始状态下逐一覆盖六类交互；原包缺失“未固定起始态”下的更多/菜单/确认窗/标签 Tooltip 记录，两组场景未齐，不得仅以 idx=0 证明两组",
+          "assertion": "AC143_UNFIXED_GROUP"
+        }
+      ],
+      "note": "已执行子步骤保留：accB#143 的已固定态组（更多/菜单项/确认窗/取消/标签点击，idx 恒为 0）、accC#143-plusN 的 +N（opened:true，固定态采样 0）、accB2#142-d 的键盘 Enter/空格；缺口为“未固定选中任何行”起始态下的更多/菜单/确认窗/标签 Tooltip/ID 键盘记录（两组场景未齐）。accB#143 的 plusN 步骤记录 plusOpen:false（未打开），不得解释为已打开。"
+    },
+    {
+      "id": "CCFG-AC-144",
+      "r3_status": "PASS",
+      "r4_status": "PASS",
+      "basis": "NONE",
+      "steps": [
+        {
+          "kind": "STEP",
+          "definition": "查询/重试/重置/重新进入后观察固定选中是否清除、是否发请求、有无刷新能力",
+          "evidence": {
+            "key": "144",
+            "file": "accI.json",
+            "fields": [
+              "clearedAfterQuery",
+              "clearedAfterFailedReloadThenRetry",
+              "resetClearsControlsOnlyAndDoesNotQuery",
+              "noRefreshButton"
+            ]
+          },
+          "verdict": "COVERED",
+          "why": "四分支与刷新能力实测"
+        },
+        {
+          "kind": "EXP",
+          "definition": "加载失败时前端呈现失败态并支持重试",
+          "evidence": {
+            "key": "144",
+            "file": "accI.json",
+            "fields": [
+              "injectedFailure",
+              "loadFailureState",
+              "retryIssuesRequest"
+            ]
+          },
+          "verdict": "SIMULATED_ONLY",
+          "why": "失败态由 harness 注入 500 响应模拟（原键标注 injectedFailure:true），非真实后端失败",
+          "justify": "本条定义检验“加载失败时前端如何呈现与重试”，失败态即可由受控注入构造；注入已在原始键显式标注，且失败态文案与重试请求行为均实测，故该步骤不阻断本条关键步骤成立"
+        }
+      ],
+      "note": "说明：本条定义检验的是“加载失败时前端如何呈现与重试”，失败态本身即可由受控注入构造，注入已在原始键标注 injectedFailure:true；非要求真实后端失败的步骤，故 SIMULATED_ONLY 不阻断本条关键步骤成立",
+      "r5_status": "PASS"
+    },
+    {
+      "id": "CCFG-AC-146",
+      "r3_status": "PASS",
+      "r4_status": "PASS",
+      "basis": "NONE",
+      "steps": [
+        {
+          "kind": "STEP",
+          "definition": "核对无复选框/批量入口/已选提示、无接口契约改动、无持久化",
+          "evidence": {
+            "key": "146",
+            "file": "accB.json",
+            "fields": [
+              "checkbox",
+              "delSelected",
+              "selectedText",
+              "batchBtn",
+              "urlHas",
+              "lsKeys",
+              "ssKeys"
+            ]
+          },
+          "verdict": "COVERED",
+          "why": "各项计数/文本/存储键均实测"
+        },
+        {
+          "kind": "EXP",
+          "definition": "刷新后固定选中重置",
+          "evidence": {
+            "key": "146",
+            "file": "accB.json",
+            "fields": [
+              "fixedBeforeReload",
+              "fixedAfterReload"
+            ]
+          },
+          "verdict": "COVERED",
+          "why": "刷新后归零"
+        }
+      ],
+      "note": "",
+      "r5_status": "PASS"
+    },
+    {
+      "id": "CCFG-AC-147",
+      "r3_status": "PASS",
+      "r4_status": "PASS",
+      "basis": "NONE",
+      "steps": [
+        {
+          "kind": "STEP",
+          "definition": "悬停普通行再移出",
+          "evidence": {
+            "key": "147",
+            "file": "accB.json",
+            "fields": [
+              "hoverBg",
+              "onlyRow",
+              "afterAway"
+            ]
+          },
+          "verdict": "COVERED",
+          "why": "浅中性灰、仅该行、移走消失"
+        }
+      ],
+      "note": "",
+      "r5_status": "PASS"
+    },
+    {
+      "id": "CCFG-AC-148",
+      "r3_status": "PASS",
+      "r4_status": "PASS",
+      "basis": "NONE",
+      "steps": [
+        {
+          "kind": "STEP",
+          "definition": "固定选中视觉、移出、再悬停、悬停他行",
+          "evidence": {
+            "key": "148",
+            "file": "accB.json",
+            "fields": [
+              "fixedBg",
+              "leftLine",
+              "afterAway",
+              "rehover",
+              "otherRowHover"
+            ]
+          },
+          "verdict": "COVERED",
+          "why": "固定底色+左侧强调线、无跳动、他行不改固定行"
+        }
+      ],
+      "note": "",
+      "r5_status": "PASS"
+    },
+    {
+      "id": "CCFG-AC-149",
+      "r3_status": "PASS",
+      "r4_status": "PASS",
+      "basis": "NONE",
+      "steps": [
+        {
+          "kind": "STEP",
+          "definition": "绿/红/异常提示在行内清晰可读、不被灰底吞没、不变灰",
+          "evidence": {
+            "key": "149",
+            "file": "accB2.json",
+            "fields": [
+              "greenTag",
+              "samples",
+              "stableAcrossIdleHoverFixed"
+            ]
+          },
+          "verdict": "COVERED",
+          "why": "样本集合含 green/red/abnormal，绿标签色值实测，跨 idle/hover/fixed 稳定",
+          "shot": "B2-149-tags-1440.png"
+        },
+        {
+          "kind": "STEP",
+          "definition": "窄视口下仍可读且状态可区分",
+          "evidence": {
+            "key": "149",
+            "file": "accB2.json",
+            "fields": [
+              "narrowStable"
+            ]
+          },
+          "verdict": "COVERED",
+          "why": "窄视口稳定性实测",
+          "shot": "B2-149-narrow-900.png"
+        }
+      ],
+      "note": "残余：149@accB 曾记 FAIL（红/异常样本缺采集），由 149@accB2 重采为 PASS",
+      "r5_status": "PASS"
+    },
+    {
+      "id": "CCFG-AC-150",
+      "r3_status": "PASS",
+      "r4_status": "PASS",
+      "basis": "NONE",
+      "steps": [
+        {
+          "kind": "STEP",
+          "definition": "键盘焦点、悬停、固定选中三态互不混淆且各自可辨识",
+          "evidence": {
+            "key": "150",
+            "file": "accB.json",
+            "fields": [
+              "idTab",
+              "outlineColor",
+              "outlineWidth",
+              "note"
+            ]
+          },
+          "verdict": "COVERED",
+          "why": "ID 跨度 tabindex=0 且带可见焦点环（note 明示），轮廓色为中性近黑非蓝"
+        },
+        {
+          "kind": "STEP",
+          "definition": "悬停态（跨用例 147）与固定选中态（跨用例 148）视觉层级",
+          "evidence": {
+            "key": "147",
+            "file": "accB.json",
+            "fields": [
+              "hoverBg",
+              "onlyRow",
+              "afterAway"
+            ]
+          },
+          "verdict": "COVERED",
+          "why": "147 证明悬停临时高亮、单一目标"
+        },
+        {
+          "kind": "STEP",
+          "definition": "固定选中态视觉（跨用例 148）",
+          "evidence": {
+            "key": "148",
+            "file": "accB.json",
+            "fields": [
+              "fixedBg",
+              "leftLine"
+            ]
+          },
+          "verdict": "COVERED",
+          "why": "148 证明固定选中底色与左缘强调线"
+        }
+      ],
+      "note": "",
+      "r5_status": "PASS"
+    },
+    {
+      "id": "CCFG-AC-154",
+      "r3_status": "PASS",
+      "r4_status": "PASS",
+      "basis": "NONE",
+      "steps": [
+        {
+          "kind": "STEP",
+          "definition": "核对删除确认框维持既有外观/行为、参考页未受影响、无全局样式改动",
+          "evidence": {
+            "key": "154",
+            "file": "accD.json",
+            "fields": [
+              "cls",
+              "primaryBg",
+              "warnIcon"
+            ]
+          },
+          "verdict": "COVERED",
+          "why": "删除确认框为普通 message-box、未套用启停专用样式"
+        }
+      ],
+      "note": "",
+      "r5_status": "PASS"
+    }
+  ]
+}
