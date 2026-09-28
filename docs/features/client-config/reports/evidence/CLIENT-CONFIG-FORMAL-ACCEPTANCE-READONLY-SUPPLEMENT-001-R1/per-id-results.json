@@ -1,0 +1,2266 @@
+{
+  "task": "CLIENT-CONFIG-FORMAL-ACCEPTANCE-READONLY-SUPPLEMENT-001-R1",
+  "branch": "develop",
+  "base_commit": "b81284fd8a46b9c1bc99792d202456971e1ce50d",
+  "task_type": "readonly_supplement_evidence_closure",
+  "raw_archive": {
+    "filename": "CLIENT-CONFIG-FORMAL-ACCEPTANCE-READONLY-SUPPLEMENT-001-R1-evidence.tar.gz",
+    "sha256": "4e00afb0976a98516df4999a5bfbed3bad77b9f4249c7e9ef177b8c36b5a969e",
+    "size_bytes": 2886352,
+    "committed": false,
+    "contains": [
+      "probeE.mjs",
+      "probeF.mjs",
+      "probeE-result.json",
+      "probeF-result.json",
+      "shots/*.png"
+    ],
+    "note": "仓库外原始产物归档，仅哈希与文件名入仓；不含数据库连接信息、内网主机/端口、账号口令或令牌"
+  },
+  "repo_external_artifacts": {
+    "dir": "/tmp/fa-ro-supplement-001-r1",
+    "shot_count": 20,
+    "raw_result_files": [
+      "probeE-result.json",
+      "probeF-result.json"
+    ],
+    "note": "完整原始结果与截图位于执行机器临时目录（仓库外）；仓库内只放脱敏摘录及其哈希（SHA256SUMS.txt）"
+  },
+  "review_directive": "CHANGES_REQUIRED（远程复审 b81284f）：提交范围与 154 条验收定义保护成立，CCFG-AC-041 可保留；CCFG-AC-100 与 CCFG-AC-143 的现有证据缺少定义要求的关键操作",
+  "network_write_interception": {
+    "installed_before_navigation": true,
+    "allowed_methods": [
+      "GET",
+      "HEAD",
+      "OPTIONS"
+    ],
+    "blocked_methods": [
+      "POST",
+      "PUT",
+      "PATCH",
+      "DELETE"
+    ],
+    "per_script_blocked_request_count": {
+      "probeE.mjs": 0,
+      "probeF.mjs": 0
+    },
+    "blocked_request_count": 0,
+    "note": "probeE.mjs / probeF.mjs 均先安装 /api/** 拦截再导航；实测非 GET 请求到达后端计数均为 0"
+  },
+  "counts": {
+    "before": {
+      "PASS": 69,
+      "FAIL": 0,
+      "BLOCKED": 70,
+      "NOT_RUN": 15,
+      "total": 154
+    },
+    "after": {
+      "PASS": 69,
+      "FAIL": 0,
+      "BLOCKED": 70,
+      "NOT_RUN": 15,
+      "total": 154
+    }
+  },
+  "changed_ids": [],
+  "reverified_ids": [
+    "CCFG-AC-100",
+    "CCFG-AC-143"
+  ],
+  "per_id": [
+    {
+      "id": "CCFG-AC-100",
+      "status_before": "PASS",
+      "status_after": "PASS",
+      "review_gap_closed": "上轮仅读取入口 tabindex/aria-label/图标结构，未执行真实 Tab 聚焦；本轮以真实键盘 Tab 导航补齐",
+      "definition_requirement": "1440×900 与 1920×1080 下观察“操作”列每一行入口形态；单击 '1'/'0'/异常三类行读取菜单条目；Tab 聚焦并读取可访问名称。入口须为水平三点图标（无“更多”文字）、焦点可见、可访问名称清晰、菜单与 FG_ACTIVE 三态严格相符",
+      "precondition_covered": true,
+      "steps_executed": [
+        "两视口逐行读取全部 16 行入口形态 / 可访问名称 / tabindex / 图标",
+        "三态代表行（FG_ACTIVE=1 / 0 / 异常）分别单击入口并读取菜单条目",
+        "从 BODY 起真实按 Tab 键逐步前进，直到三类代表行的三点入口逐一获得焦点，记录每次落点与焦点可见样式"
+      ],
+      "evidence": {
+        "script": "probeE.mjs",
+        "keys": [
+          "AC100_1440x900",
+          "AC100_1920x1080"
+        ]
+      },
+      "observed": {
+        "probeE_1440x900": {
+          "viewport": "1440x900",
+          "rowCount": 16,
+          "allEntriesAreThreeDotIcon": true,
+          "anyEntryShowsMoreWord": false,
+          "distinctRowStates": [
+            "1",
+            "0",
+            "abnormal"
+          ],
+          "perRowEntryCatalogue": [
+            {
+              "idx": 1,
+              "clientId": "hosp-012",
+              "hasThreeDotIcon": true,
+              "linkTextEmpty": true,
+              "containsMoreWord": false,
+              "tabindex": "0",
+              "role": "button",
+              "ariaLabel": "更多操作：hosp-012",
+              "stateGuess": "1",
+              "abnormalBadge": null
+            },
+            {
+              "idx": 2,
+              "clientId": "hosp-008",
+              "hasThreeDotIcon": true,
+              "linkTextEmpty": true,
+              "containsMoreWord": false,
+              "tabindex": "0",
+              "role": "button",
+              "ariaLabel": "更多操作：hosp-008",
+              "stateGuess": "0",
+              "abnormalBadge": null
+            },
+            {
+              "idx": 3,
+              "clientId": "hosp-007",
+              "hasThreeDotIcon": true,
+              "linkTextEmpty": true,
+              "containsMoreWord": false,
+              "tabindex": "0",
+              "role": "button",
+              "ariaLabel": "更多操作：hosp-007",
+              "stateGuess": "0",
+              "abnormalBadge": null
+            },
+            {
+              "idx": 4,
+              "clientId": "hosp-0061",
+              "hasThreeDotIcon": true,
+              "linkTextEmpty": true,
+              "containsMoreWord": false,
+              "tabindex": "0",
+              "role": "button",
+              "ariaLabel": "更多操作：hosp-0061",
+              "stateGuess": "0",
+              "abnormalBadge": null
+            },
+            {
+              "idx": 5,
+              "clientId": "hosp-006",
+              "hasThreeDotIcon": true,
+              "linkTextEmpty": true,
+              "containsMoreWord": false,
+              "tabindex": "0",
+              "role": "button",
+              "ariaLabel": "更多操作：hosp-006",
+              "stateGuess": "0",
+              "abnormalBadge": null
+            },
+            {
+              "idx": 6,
+              "clientId": "hosp-002",
+              "hasThreeDotIcon": true,
+              "linkTextEmpty": true,
+              "containsMoreWord": false,
+              "tabindex": "0",
+              "role": "button",
+              "ariaLabel": "更多操作：hosp-002",
+              "stateGuess": "0",
+              "abnormalBadge": null
+            },
+            {
+              "idx": 7,
+              "clientId": "hosp-001",
+              "hasThreeDotIcon": true,
+              "linkTextEmpty": true,
+              "containsMoreWord": false,
+              "tabindex": "0",
+              "role": "button",
+              "ariaLabel": "更多操作：hosp-001",
+              "stateGuess": "0",
+              "abnormalBadge": null
+            },
+            {
+              "idx": 8,
+              "clientId": "c-dssr1-0906-e",
+              "hasThreeDotIcon": true,
+              "linkTextEmpty": true,
+              "containsMoreWord": false,
+              "tabindex": "0",
+              "role": "button",
+              "ariaLabel": "更多操作：c-dssr1-0906-e",
+              "stateGuess": "0",
+              "abnormalBadge": null
+            },
+            {
+              "idx": 9,
+              "clientId": "c-dssr1-0906-d",
+              "hasThreeDotIcon": true,
+              "linkTextEmpty": true,
+              "containsMoreWord": false,
+              "tabindex": "0",
+              "role": "button",
+              "ariaLabel": "更多操作：c-dssr1-0906-d",
+              "stateGuess": "0",
+              "abnormalBadge": null
+            },
+            {
+              "idx": 10,
+              "clientId": "c-dssr1-0906-c",
+              "hasThreeDotIcon": true,
+              "linkTextEmpty": true,
+              "containsMoreWord": false,
+              "tabindex": "0",
+              "role": "button",
+              "ariaLabel": "更多操作：c-dssr1-0906-c",
+              "stateGuess": "0",
+              "abnormalBadge": null
+            },
+            {
+              "idx": 11,
+              "clientId": "c-dssr1-0906-b",
+              "hasThreeDotIcon": true,
+              "linkTextEmpty": true,
+              "containsMoreWord": false,
+              "tabindex": "0",
+              "role": "button",
+              "ariaLabel": "更多操作：c-dssr1-0906-b",
+              "stateGuess": "0",
+              "abnormalBadge": null
+            },
+            {
+              "idx": 12,
+              "clientId": "c-dssr1-0906-a",
+              "hasThreeDotIcon": true,
+              "linkTextEmpty": true,
+              "containsMoreWord": false,
+              "tabindex": "0",
+              "role": "button",
+              "ariaLabel": "更多操作：c-dssr1-0906-a",
+              "stateGuess": "0",
+              "abnormalBadge": null
+            },
+            {
+              "idx": 13,
+              "clientId": "CCFG-AC-R1-ON",
+              "hasThreeDotIcon": true,
+              "linkTextEmpty": true,
+              "containsMoreWord": false,
+              "tabindex": "0",
+              "role": "button",
+              "ariaLabel": "更多操作：CCFG-AC-R1-ON",
+              "stateGuess": "0",
+              "abnormalBadge": null
+            },
+            {
+              "idx": 14,
+              "clientId": "CCFG-AC-R1-OFF",
+              "hasThreeDotIcon": true,
+              "linkTextEmpty": true,
+              "containsMoreWord": false,
+              "tabindex": "0",
+              "role": "button",
+              "ariaLabel": "更多操作：CCFG-AC-R1-OFF",
+              "stateGuess": "0",
+              "abnormalBadge": null
+            },
+            {
+              "idx": 15,
+              "clientId": "CCFG-AC-R1-HIST-COM",
+              "hasThreeDotIcon": true,
+              "linkTextEmpty": true,
+              "containsMoreWord": false,
+              "tabindex": "0",
+              "role": "button",
+              "ariaLabel": "更多操作：CCFG-AC-R1-HIST-COM",
+              "stateGuess": "0",
+              "abnormalBadge": null
+            },
+            {
+              "idx": 16,
+              "clientId": "CCFG-AC-R1-ABN",
+              "hasThreeDotIcon": true,
+              "linkTextEmpty": true,
+              "containsMoreWord": false,
+              "tabindex": "0",
+              "role": "button",
+              "ariaLabel": "更多操作：CCFG-AC-R1-ABN",
+              "stateGuess": "abnormal",
+              "abnormalBadge": "异常：X"
+            }
+          ],
+          "threeStateMenuReadByClick": {
+            "one": [
+              "停用",
+              "删除"
+            ],
+            "zero": [
+              "启用",
+              "删除"
+            ],
+            "abnormal": [
+              "停用",
+              "删除"
+            ]
+          },
+          "realTabTraversal": {
+            "startActiveElement": "BODY",
+            "note": "从 BODY（无焦点）起按真实 Tab 键逐步前进，记录每一次落点",
+            "totalTabsPressed": 38,
+            "reachedAllThreeRepresentativeEntries": true,
+            "arrivals": {
+              "zero": {
+                "reachedAtTab": 12,
+                "activeElementIsTargetEntry": true,
+                "ariaLabel": "更多操作：hosp-001",
+                "role": "button",
+                "tabindex": "0",
+                "focusVisible": true,
+                "computedFocusStyle": {
+                  "outline": "2px solid rgb(64, 158, 255)",
+                  "boxShadow": "none",
+                  "backgroundColor": "rgba(0, 0, 0, 0)"
+                },
+                "previousLanding": {
+                  "cls": "cc-id",
+                  "inRow": "hosp-001",
+                  "isId": true
+                }
+              },
+              "abnormal": {
+                "reachedAtTab": 30,
+                "activeElementIsTargetEntry": true,
+                "ariaLabel": "更多操作：CCFG-AC-R1-ABN",
+                "role": "button",
+                "tabindex": "0",
+                "focusVisible": true,
+                "computedFocusStyle": {
+                  "outline": "2px solid rgb(64, 158, 255)",
+                  "boxShadow": "none",
+                  "backgroundColor": "rgba(0, 0, 0, 0)"
+                },
+                "previousLanding": {
+                  "cls": "cc-id",
+                  "inRow": "CCFG-AC-R1-ABN",
+                  "isId": true
+                }
+              },
+              "one": {
+                "reachedAtTab": 38,
+                "activeElementIsTargetEntry": true,
+                "ariaLabel": "更多操作：hosp-012",
+                "role": "button",
+                "tabindex": "0",
+                "focusVisible": true,
+                "computedFocusStyle": {
+                  "outline": "2px solid rgb(64, 158, 255)",
+                  "boxShadow": "none",
+                  "backgroundColor": "rgb(236, 245, 255)"
+                },
+                "previousLanding": {
+                  "cls": "cc-id",
+                  "inRow": "hosp-012",
+                  "isId": true
+                }
+              }
+            },
+            "landingSequence": [
+              {
+                "tab": 1,
+                "tag": "SPAN",
+                "cls": "cc-id",
+                "inRowClientId": "hosp-008",
+                "isId": true,
+                "isMoreLink": false,
+                "aria": "编辑探针 hosp-008",
+                "focusVisible": true
+              },
+              {
+                "tab": 2,
+                "tag": "SPAN",
+                "cls": "cc-more-link el-tooltip__trigger el-tooltip__trigger",
+                "inRowClientId": "hosp-008",
+                "isId": false,
+                "isMoreLink": true,
+                "aria": "更多操作：hosp-008",
+                "focusVisible": true
+              },
+              {
+                "tab": 3,
+                "tag": "SPAN",
+                "cls": "cc-id",
+                "inRowClientId": "hosp-007",
+                "isId": true,
+                "isMoreLink": false,
+                "aria": "编辑探针 hosp-007",
+                "focusVisible": true
+              },
+              {
+                "tab": 4,
+                "tag": "SPAN",
+                "cls": "cc-more-link el-tooltip__trigger el-tooltip__trigger",
+                "inRowClientId": "hosp-007",
+                "isId": false,
+                "isMoreLink": true,
+                "aria": "更多操作：hosp-007",
+                "focusVisible": true
+              },
+              {
+                "tab": 5,
+                "tag": "SPAN",
+                "cls": "cc-id",
+                "inRowClientId": "hosp-0061",
+                "isId": true,
+                "isMoreLink": false,
+                "aria": "编辑探针 hosp-0061",
+                "focusVisible": true
+              },
+              {
+                "tab": 6,
+                "tag": "SPAN",
+                "cls": "cc-more-link el-tooltip__trigger el-tooltip__trigger",
+                "inRowClientId": "hosp-0061",
+                "isId": false,
+                "isMoreLink": true,
+                "aria": "更多操作：hosp-0061",
+                "focusVisible": true
+              },
+              {
+                "tab": 7,
+                "tag": "SPAN",
+                "cls": "cc-id",
+                "inRowClientId": "hosp-006",
+                "isId": true,
+                "isMoreLink": false,
+                "aria": "编辑探针 hosp-006",
+                "focusVisible": true
+              },
+              {
+                "tab": 8,
+                "tag": "SPAN",
+                "cls": "cc-more-link el-tooltip__trigger el-tooltip__trigger",
+                "inRowClientId": "hosp-006",
+                "isId": false,
+                "isMoreLink": true,
+                "aria": "更多操作：hosp-006",
+                "focusVisible": true
+              },
+              {
+                "tab": 9,
+                "tag": "SPAN",
+                "cls": "cc-id",
+                "inRowClientId": "hosp-002",
+                "isId": true,
+                "isMoreLink": false,
+                "aria": "编辑探针 hosp-002",
+                "focusVisible": true
+              },
+              {
+                "tab": 10,
+                "tag": "SPAN",
+                "cls": "cc-more-link el-tooltip__trigger el-tooltip__trigger",
+                "inRowClientId": "hosp-002",
+                "isId": false,
+                "isMoreLink": true,
+                "aria": "更多操作：hosp-002",
+                "focusVisible": true
+              },
+              {
+                "tab": 11,
+                "tag": "SPAN",
+                "cls": "cc-id",
+                "inRowClientId": "hosp-001",
+                "isId": true,
+                "isMoreLink": false,
+                "aria": "编辑探针 hosp-001",
+                "focusVisible": true
+              },
+              {
+                "tab": 12,
+                "tag": "SPAN",
+                "cls": "cc-more-link el-tooltip__trigger el-tooltip__trigger",
+                "inRowClientId": "hosp-001",
+                "isId": false,
+                "isMoreLink": true,
+                "aria": "更多操作：hosp-001",
+                "focusVisible": true
+              },
+              {
+                "tab": 13,
+                "tag": "SPAN",
+                "cls": "cc-id",
+                "inRowClientId": "c-dssr1-0906-e",
+                "isId": true,
+                "isMoreLink": false,
+                "aria": "编辑探针 c-dssr1-0906-e",
+                "focusVisible": true
+              },
+              {
+                "tab": 14,
+                "tag": "SPAN",
+                "cls": "cc-more-link el-tooltip__trigger el-tooltip__trigger",
+                "inRowClientId": "c-dssr1-0906-e",
+                "isId": false,
+                "isMoreLink": true,
+                "aria": "更多操作：c-dssr1-0906-e",
+                "focusVisible": true
+              },
+              {
+                "tab": 15,
+                "tag": "SPAN",
+                "cls": "cc-id",
+                "inRowClientId": "c-dssr1-0906-d",
+                "isId": true,
+                "isMoreLink": false,
+                "aria": "编辑探针 c-dssr1-0906-d",
+                "focusVisible": true
+              },
+              {
+                "tab": 16,
+                "tag": "SPAN",
+                "cls": "cc-more-link el-tooltip__trigger el-tooltip__trigger",
+                "inRowClientId": "c-dssr1-0906-d",
+                "isId": false,
+                "isMoreLink": true,
+                "aria": "更多操作：c-dssr1-0906-d",
+                "focusVisible": true
+              },
+              {
+                "tab": 17,
+                "tag": "SPAN",
+                "cls": "cc-id",
+                "inRowClientId": "c-dssr1-0906-c",
+                "isId": true,
+                "isMoreLink": false,
+                "aria": "编辑探针 c-dssr1-0906-c",
+                "focusVisible": true
+              },
+              {
+                "tab": 18,
+                "tag": "SPAN",
+                "cls": "cc-more-link el-tooltip__trigger el-tooltip__trigger",
+                "inRowClientId": "c-dssr1-0906-c",
+                "isId": false,
+                "isMoreLink": true,
+                "aria": "更多操作：c-dssr1-0906-c",
+                "focusVisible": true
+              },
+              {
+                "tab": 19,
+                "tag": "SPAN",
+                "cls": "cc-id",
+                "inRowClientId": "c-dssr1-0906-b",
+                "isId": true,
+                "isMoreLink": false,
+                "aria": "编辑探针 c-dssr1-0906-b",
+                "focusVisible": true
+              },
+              {
+                "tab": 20,
+                "tag": "SPAN",
+                "cls": "cc-more-link el-tooltip__trigger el-tooltip__trigger",
+                "inRowClientId": "c-dssr1-0906-b",
+                "isId": false,
+                "isMoreLink": true,
+                "aria": "更多操作：c-dssr1-0906-b",
+                "focusVisible": true
+              },
+              {
+                "tab": 21,
+                "tag": "SPAN",
+                "cls": "cc-id",
+                "inRowClientId": "c-dssr1-0906-a",
+                "isId": true,
+                "isMoreLink": false,
+                "aria": "编辑探针 c-dssr1-0906-a",
+                "focusVisible": true
+              },
+              {
+                "tab": 22,
+                "tag": "SPAN",
+                "cls": "cc-more-link el-tooltip__trigger el-tooltip__trigger",
+                "inRowClientId": "c-dssr1-0906-a",
+                "isId": false,
+                "isMoreLink": true,
+                "aria": "更多操作：c-dssr1-0906-a",
+                "focusVisible": true
+              },
+              {
+                "tab": 23,
+                "tag": "SPAN",
+                "cls": "cc-id",
+                "inRowClientId": "CCFG-AC-R1-ON",
+                "isId": true,
+                "isMoreLink": false,
+                "aria": "编辑探针 CCFG-AC-R1-ON",
+                "focusVisible": true
+              },
+              {
+                "tab": 24,
+                "tag": "SPAN",
+                "cls": "cc-more-link el-tooltip__trigger el-tooltip__trigger",
+                "inRowClientId": "CCFG-AC-R1-ON",
+                "isId": false,
+                "isMoreLink": true,
+                "aria": "更多操作：CCFG-AC-R1-ON",
+                "focusVisible": true
+              },
+              {
+                "tab": 25,
+                "tag": "SPAN",
+                "cls": "cc-id",
+                "inRowClientId": "CCFG-AC-R1-OFF",
+                "isId": true,
+                "isMoreLink": false,
+                "aria": "编辑探针 CCFG-AC-R1-OFF",
+                "focusVisible": true
+              },
+              {
+                "tab": 26,
+                "tag": "SPAN",
+                "cls": "cc-more-link el-tooltip__trigger el-tooltip__trigger",
+                "inRowClientId": "CCFG-AC-R1-OFF",
+                "isId": false,
+                "isMoreLink": true,
+                "aria": "更多操作：CCFG-AC-R1-OFF",
+                "focusVisible": true
+              },
+              {
+                "tab": 27,
+                "tag": "SPAN",
+                "cls": "cc-id",
+                "inRowClientId": "CCFG-AC-R1-HIST-COM",
+                "isId": true,
+                "isMoreLink": false,
+                "aria": "编辑探针 CCFG-AC-R1-HIST-COM",
+                "focusVisible": true
+              },
+              {
+                "tab": 28,
+                "tag": "SPAN",
+                "cls": "cc-more-link el-tooltip__trigger el-tooltip__trigger",
+                "inRowClientId": "CCFG-AC-R1-HIST-COM",
+                "isId": false,
+                "isMoreLink": true,
+                "aria": "更多操作：CCFG-AC-R1-HIST-COM",
+                "focusVisible": true
+              },
+              {
+                "tab": 29,
+                "tag": "SPAN",
+                "cls": "cc-id",
+                "inRowClientId": "CCFG-AC-R1-ABN",
+                "isId": true,
+                "isMoreLink": false,
+                "aria": "编辑探针 CCFG-AC-R1-ABN",
+                "focusVisible": true
+              },
+              {
+                "tab": 30,
+                "tag": "SPAN",
+                "cls": "cc-more-link el-tooltip__trigger el-tooltip__trigger",
+                "inRowClientId": "CCFG-AC-R1-ABN",
+                "isId": false,
+                "isMoreLink": true,
+                "aria": "更多操作：CCFG-AC-R1-ABN",
+                "focusVisible": true
+              },
+              {
+                "tab": 31,
+                "tag": "BODY",
+                "cls": "",
+                "inRowClientId": null,
+                "isId": false,
+                "isMoreLink": false,
+                "aria": null,
+                "focusVisible": false
+              },
+              {
+                "tab": 32,
+                "tag": "INPUT",
+                "cls": "el-input__inner",
+                "inRowClientId": null,
+                "isId": false,
+                "isMoreLink": false,
+                "aria": null,
+                "focusVisible": true
+              },
+              {
+                "tab": 33,
+                "tag": "INPUT",
+                "cls": "el-select__input",
+                "inRowClientId": null,
+                "isId": false,
+                "isMoreLink": false,
+                "aria": null,
+                "focusVisible": true
+              },
+              {
+                "tab": 34,
+                "tag": "BUTTON",
+                "cls": "el-button el-button--primary ql-actions__query",
+                "inRowClientId": null,
+                "isId": false,
+                "isMoreLink": false,
+                "aria": null,
+                "focusVisible": true
+              },
+              {
+                "tab": 35,
+                "tag": "BUTTON",
+                "cls": "el-button ql-actions__reset",
+                "inRowClientId": null,
+                "isId": false,
+                "isMoreLink": false,
+                "aria": null,
+                "focusVisible": true
+              },
+              {
+                "tab": 36,
+                "tag": "BUTTON",
+                "cls": "el-button cc-btn-add",
+                "inRowClientId": null,
+                "isId": false,
+                "isMoreLink": false,
+                "aria": null,
+                "focusVisible": true
+              },
+              {
+                "tab": 37,
+                "tag": "SPAN",
+                "cls": "cc-id",
+                "inRowClientId": "hosp-012",
+                "isId": true,
+                "isMoreLink": false,
+                "aria": "编辑探针 hosp-012",
+                "focusVisible": true
+              },
+              {
+                "tab": 38,
+                "tag": "SPAN",
+                "cls": "cc-more-link el-tooltip__trigger el-tooltip__trigger",
+                "inRowClientId": "hosp-012",
+                "isId": false,
+                "isMoreLink": true,
+                "aria": "更多操作：hosp-012",
+                "focusVisible": true
+              }
+            ]
+          }
+        },
+        "probeE_1920x1080": {
+          "viewport": "1920x1080",
+          "rowCount": 16,
+          "allEntriesAreThreeDotIcon": true,
+          "anyEntryShowsMoreWord": false,
+          "distinctRowStates": [
+            "1",
+            "0",
+            "abnormal"
+          ],
+          "perRowEntryCatalogue": [
+            {
+              "idx": 1,
+              "clientId": "hosp-012",
+              "hasThreeDotIcon": true,
+              "linkTextEmpty": true,
+              "containsMoreWord": false,
+              "tabindex": "0",
+              "role": "button",
+              "ariaLabel": "更多操作：hosp-012",
+              "stateGuess": "1",
+              "abnormalBadge": null
+            },
+            {
+              "idx": 2,
+              "clientId": "hosp-008",
+              "hasThreeDotIcon": true,
+              "linkTextEmpty": true,
+              "containsMoreWord": false,
+              "tabindex": "0",
+              "role": "button",
+              "ariaLabel": "更多操作：hosp-008",
+              "stateGuess": "0",
+              "abnormalBadge": null
+            },
+            {
+              "idx": 3,
+              "clientId": "hosp-007",
+              "hasThreeDotIcon": true,
+              "linkTextEmpty": true,
+              "containsMoreWord": false,
+              "tabindex": "0",
+              "role": "button",
+              "ariaLabel": "更多操作：hosp-007",
+              "stateGuess": "0",
+              "abnormalBadge": null
+            },
+            {
+              "idx": 4,
+              "clientId": "hosp-0061",
+              "hasThreeDotIcon": true,
+              "linkTextEmpty": true,
+              "containsMoreWord": false,
+              "tabindex": "0",
+              "role": "button",
+              "ariaLabel": "更多操作：hosp-0061",
+              "stateGuess": "0",
+              "abnormalBadge": null
+            },
+            {
+              "idx": 5,
+              "clientId": "hosp-006",
+              "hasThreeDotIcon": true,
+              "linkTextEmpty": true,
+              "containsMoreWord": false,
+              "tabindex": "0",
+              "role": "button",
+              "ariaLabel": "更多操作：hosp-006",
+              "stateGuess": "0",
+              "abnormalBadge": null
+            },
+            {
+              "idx": 6,
+              "clientId": "hosp-002",
+              "hasThreeDotIcon": true,
+              "linkTextEmpty": true,
+              "containsMoreWord": false,
+              "tabindex": "0",
+              "role": "button",
+              "ariaLabel": "更多操作：hosp-002",
+              "stateGuess": "0",
+              "abnormalBadge": null
+            },
+            {
+              "idx": 7,
+              "clientId": "hosp-001",
+              "hasThreeDotIcon": true,
+              "linkTextEmpty": true,
+              "containsMoreWord": false,
+              "tabindex": "0",
+              "role": "button",
+              "ariaLabel": "更多操作：hosp-001",
+              "stateGuess": "0",
+              "abnormalBadge": null
+            },
+            {
+              "idx": 8,
+              "clientId": "c-dssr1-0906-e",
+              "hasThreeDotIcon": true,
+              "linkTextEmpty": true,
+              "containsMoreWord": false,
+              "tabindex": "0",
+              "role": "button",
+              "ariaLabel": "更多操作：c-dssr1-0906-e",
+              "stateGuess": "0",
+              "abnormalBadge": null
+            },
+            {
+              "idx": 9,
+              "clientId": "c-dssr1-0906-d",
+              "hasThreeDotIcon": true,
+              "linkTextEmpty": true,
+              "containsMoreWord": false,
+              "tabindex": "0",
+              "role": "button",
+              "ariaLabel": "更多操作：c-dssr1-0906-d",
+              "stateGuess": "0",
+              "abnormalBadge": null
+            },
+            {
+              "idx": 10,
+              "clientId": "c-dssr1-0906-c",
+              "hasThreeDotIcon": true,
+              "linkTextEmpty": true,
+              "containsMoreWord": false,
+              "tabindex": "0",
+              "role": "button",
+              "ariaLabel": "更多操作：c-dssr1-0906-c",
+              "stateGuess": "0",
+              "abnormalBadge": null
+            },
+            {
+              "idx": 11,
+              "clientId": "c-dssr1-0906-b",
+              "hasThreeDotIcon": true,
+              "linkTextEmpty": true,
+              "containsMoreWord": false,
+              "tabindex": "0",
+              "role": "button",
+              "ariaLabel": "更多操作：c-dssr1-0906-b",
+              "stateGuess": "0",
+              "abnormalBadge": null
+            },
+            {
+              "idx": 12,
+              "clientId": "c-dssr1-0906-a",
+              "hasThreeDotIcon": true,
+              "linkTextEmpty": true,
+              "containsMoreWord": false,
+              "tabindex": "0",
+              "role": "button",
+              "ariaLabel": "更多操作：c-dssr1-0906-a",
+              "stateGuess": "0",
+              "abnormalBadge": null
+            },
+            {
+              "idx": 13,
+              "clientId": "CCFG-AC-R1-ON",
+              "hasThreeDotIcon": true,
+              "linkTextEmpty": true,
+              "containsMoreWord": false,
+              "tabindex": "0",
+              "role": "button",
+              "ariaLabel": "更多操作：CCFG-AC-R1-ON",
+              "stateGuess": "0",
+              "abnormalBadge": null
+            },
+            {
+              "idx": 14,
+              "clientId": "CCFG-AC-R1-OFF",
+              "hasThreeDotIcon": true,
+              "linkTextEmpty": true,
+              "containsMoreWord": false,
+              "tabindex": "0",
+              "role": "button",
+              "ariaLabel": "更多操作：CCFG-AC-R1-OFF",
+              "stateGuess": "0",
+              "abnormalBadge": null
+            },
+            {
+              "idx": 15,
+              "clientId": "CCFG-AC-R1-HIST-COM",
+              "hasThreeDotIcon": true,
+              "linkTextEmpty": true,
+              "containsMoreWord": false,
+              "tabindex": "0",
+              "role": "button",
+              "ariaLabel": "更多操作：CCFG-AC-R1-HIST-COM",
+              "stateGuess": "0",
+              "abnormalBadge": null
+            },
+            {
+              "idx": 16,
+              "clientId": "CCFG-AC-R1-ABN",
+              "hasThreeDotIcon": true,
+              "linkTextEmpty": true,
+              "containsMoreWord": false,
+              "tabindex": "0",
+              "role": "button",
+              "ariaLabel": "更多操作：CCFG-AC-R1-ABN",
+              "stateGuess": "abnormal",
+              "abnormalBadge": "异常：X"
+            }
+          ],
+          "threeStateMenuReadByClick": {
+            "one": [
+              "停用",
+              "删除"
+            ],
+            "zero": [
+              "启用",
+              "删除"
+            ],
+            "abnormal": [
+              "停用",
+              "删除"
+            ]
+          },
+          "realTabTraversal": {
+            "startActiveElement": "BODY",
+            "note": "从 BODY（无焦点）起按真实 Tab 键逐步前进，记录每一次落点",
+            "totalTabsPressed": 38,
+            "reachedAllThreeRepresentativeEntries": true,
+            "arrivals": {
+              "zero": {
+                "reachedAtTab": 12,
+                "activeElementIsTargetEntry": true,
+                "ariaLabel": "更多操作：hosp-001",
+                "role": "button",
+                "tabindex": "0",
+                "focusVisible": true,
+                "computedFocusStyle": {
+                  "outline": "2px solid rgb(64, 158, 255)",
+                  "boxShadow": "none",
+                  "backgroundColor": "rgba(0, 0, 0, 0)"
+                },
+                "previousLanding": {
+                  "cls": "cc-id",
+                  "inRow": "hosp-001",
+                  "isId": true
+                }
+              },
+              "abnormal": {
+                "reachedAtTab": 30,
+                "activeElementIsTargetEntry": true,
+                "ariaLabel": "更多操作：CCFG-AC-R1-ABN",
+                "role": "button",
+                "tabindex": "0",
+                "focusVisible": true,
+                "computedFocusStyle": {
+                  "outline": "2px solid rgb(64, 158, 255)",
+                  "boxShadow": "none",
+                  "backgroundColor": "rgba(0, 0, 0, 0)"
+                },
+                "previousLanding": {
+                  "cls": "cc-id",
+                  "inRow": "CCFG-AC-R1-ABN",
+                  "isId": true
+                }
+              },
+              "one": {
+                "reachedAtTab": 38,
+                "activeElementIsTargetEntry": true,
+                "ariaLabel": "更多操作：hosp-012",
+                "role": "button",
+                "tabindex": "0",
+                "focusVisible": true,
+                "computedFocusStyle": {
+                  "outline": "2px solid rgb(64, 158, 255)",
+                  "boxShadow": "none",
+                  "backgroundColor": "rgba(0, 0, 0, 0)"
+                },
+                "previousLanding": {
+                  "cls": "cc-id",
+                  "inRow": "hosp-012",
+                  "isId": true
+                }
+              }
+            },
+            "landingSequence": [
+              {
+                "tab": 1,
+                "tag": "SPAN",
+                "cls": "cc-id",
+                "inRowClientId": "hosp-008",
+                "isId": true,
+                "isMoreLink": false,
+                "aria": "编辑探针 hosp-008",
+                "focusVisible": true
+              },
+              {
+                "tab": 2,
+                "tag": "SPAN",
+                "cls": "cc-more-link el-tooltip__trigger el-tooltip__trigger",
+                "inRowClientId": "hosp-008",
+                "isId": false,
+                "isMoreLink": true,
+                "aria": "更多操作：hosp-008",
+                "focusVisible": true
+              },
+              {
+                "tab": 3,
+                "tag": "SPAN",
+                "cls": "cc-id",
+                "inRowClientId": "hosp-007",
+                "isId": true,
+                "isMoreLink": false,
+                "aria": "编辑探针 hosp-007",
+                "focusVisible": true
+              },
+              {
+                "tab": 4,
+                "tag": "SPAN",
+                "cls": "cc-more-link el-tooltip__trigger el-tooltip__trigger",
+                "inRowClientId": "hosp-007",
+                "isId": false,
+                "isMoreLink": true,
+                "aria": "更多操作：hosp-007",
+                "focusVisible": true
+              },
+              {
+                "tab": 5,
+                "tag": "SPAN",
+                "cls": "cc-id",
+                "inRowClientId": "hosp-0061",
+                "isId": true,
+                "isMoreLink": false,
+                "aria": "编辑探针 hosp-0061",
+                "focusVisible": true
+              },
+              {
+                "tab": 6,
+                "tag": "SPAN",
+                "cls": "cc-more-link el-tooltip__trigger el-tooltip__trigger",
+                "inRowClientId": "hosp-0061",
+                "isId": false,
+                "isMoreLink": true,
+                "aria": "更多操作：hosp-0061",
+                "focusVisible": true
+              },
+              {
+                "tab": 7,
+                "tag": "SPAN",
+                "cls": "cc-id",
+                "inRowClientId": "hosp-006",
+                "isId": true,
+                "isMoreLink": false,
+                "aria": "编辑探针 hosp-006",
+                "focusVisible": true
+              },
+              {
+                "tab": 8,
+                "tag": "SPAN",
+                "cls": "cc-more-link el-tooltip__trigger el-tooltip__trigger",
+                "inRowClientId": "hosp-006",
+                "isId": false,
+                "isMoreLink": true,
+                "aria": "更多操作：hosp-006",
+                "focusVisible": true
+              },
+              {
+                "tab": 9,
+                "tag": "SPAN",
+                "cls": "cc-id",
+                "inRowClientId": "hosp-002",
+                "isId": true,
+                "isMoreLink": false,
+                "aria": "编辑探针 hosp-002",
+                "focusVisible": true
+              },
+              {
+                "tab": 10,
+                "tag": "SPAN",
+                "cls": "cc-more-link el-tooltip__trigger el-tooltip__trigger",
+                "inRowClientId": "hosp-002",
+                "isId": false,
+                "isMoreLink": true,
+                "aria": "更多操作：hosp-002",
+                "focusVisible": true
+              },
+              {
+                "tab": 11,
+                "tag": "SPAN",
+                "cls": "cc-id",
+                "inRowClientId": "hosp-001",
+                "isId": true,
+                "isMoreLink": false,
+                "aria": "编辑探针 hosp-001",
+                "focusVisible": true
+              },
+              {
+                "tab": 12,
+                "tag": "SPAN",
+                "cls": "cc-more-link el-tooltip__trigger el-tooltip__trigger",
+                "inRowClientId": "hosp-001",
+                "isId": false,
+                "isMoreLink": true,
+                "aria": "更多操作：hosp-001",
+                "focusVisible": true
+              },
+              {
+                "tab": 13,
+                "tag": "SPAN",
+                "cls": "cc-id",
+                "inRowClientId": "c-dssr1-0906-e",
+                "isId": true,
+                "isMoreLink": false,
+                "aria": "编辑探针 c-dssr1-0906-e",
+                "focusVisible": true
+              },
+              {
+                "tab": 14,
+                "tag": "SPAN",
+                "cls": "cc-more-link el-tooltip__trigger el-tooltip__trigger",
+                "inRowClientId": "c-dssr1-0906-e",
+                "isId": false,
+                "isMoreLink": true,
+                "aria": "更多操作：c-dssr1-0906-e",
+                "focusVisible": true
+              },
+              {
+                "tab": 15,
+                "tag": "SPAN",
+                "cls": "cc-id",
+                "inRowClientId": "c-dssr1-0906-d",
+                "isId": true,
+                "isMoreLink": false,
+                "aria": "编辑探针 c-dssr1-0906-d",
+                "focusVisible": true
+              },
+              {
+                "tab": 16,
+                "tag": "SPAN",
+                "cls": "cc-more-link el-tooltip__trigger el-tooltip__trigger",
+                "inRowClientId": "c-dssr1-0906-d",
+                "isId": false,
+                "isMoreLink": true,
+                "aria": "更多操作：c-dssr1-0906-d",
+                "focusVisible": true
+              },
+              {
+                "tab": 17,
+                "tag": "SPAN",
+                "cls": "cc-id",
+                "inRowClientId": "c-dssr1-0906-c",
+                "isId": true,
+                "isMoreLink": false,
+                "aria": "编辑探针 c-dssr1-0906-c",
+                "focusVisible": true
+              },
+              {
+                "tab": 18,
+                "tag": "SPAN",
+                "cls": "cc-more-link el-tooltip__trigger el-tooltip__trigger",
+                "inRowClientId": "c-dssr1-0906-c",
+                "isId": false,
+                "isMoreLink": true,
+                "aria": "更多操作：c-dssr1-0906-c",
+                "focusVisible": true
+              },
+              {
+                "tab": 19,
+                "tag": "SPAN",
+                "cls": "cc-id",
+                "inRowClientId": "c-dssr1-0906-b",
+                "isId": true,
+                "isMoreLink": false,
+                "aria": "编辑探针 c-dssr1-0906-b",
+                "focusVisible": true
+              },
+              {
+                "tab": 20,
+                "tag": "SPAN",
+                "cls": "cc-more-link el-tooltip__trigger el-tooltip__trigger",
+                "inRowClientId": "c-dssr1-0906-b",
+                "isId": false,
+                "isMoreLink": true,
+                "aria": "更多操作：c-dssr1-0906-b",
+                "focusVisible": true
+              },
+              {
+                "tab": 21,
+                "tag": "SPAN",
+                "cls": "cc-id",
+                "inRowClientId": "c-dssr1-0906-a",
+                "isId": true,
+                "isMoreLink": false,
+                "aria": "编辑探针 c-dssr1-0906-a",
+                "focusVisible": true
+              },
+              {
+                "tab": 22,
+                "tag": "SPAN",
+                "cls": "cc-more-link el-tooltip__trigger el-tooltip__trigger",
+                "inRowClientId": "c-dssr1-0906-a",
+                "isId": false,
+                "isMoreLink": true,
+                "aria": "更多操作：c-dssr1-0906-a",
+                "focusVisible": true
+              },
+              {
+                "tab": 23,
+                "tag": "SPAN",
+                "cls": "cc-id",
+                "inRowClientId": "CCFG-AC-R1-ON",
+                "isId": true,
+                "isMoreLink": false,
+                "aria": "编辑探针 CCFG-AC-R1-ON",
+                "focusVisible": true
+              },
+              {
+                "tab": 24,
+                "tag": "SPAN",
+                "cls": "cc-more-link el-tooltip__trigger el-tooltip__trigger",
+                "inRowClientId": "CCFG-AC-R1-ON",
+                "isId": false,
+                "isMoreLink": true,
+                "aria": "更多操作：CCFG-AC-R1-ON",
+                "focusVisible": true
+              },
+              {
+                "tab": 25,
+                "tag": "SPAN",
+                "cls": "cc-id",
+                "inRowClientId": "CCFG-AC-R1-OFF",
+                "isId": true,
+                "isMoreLink": false,
+                "aria": "编辑探针 CCFG-AC-R1-OFF",
+                "focusVisible": true
+              },
+              {
+                "tab": 26,
+                "tag": "SPAN",
+                "cls": "cc-more-link el-tooltip__trigger el-tooltip__trigger",
+                "inRowClientId": "CCFG-AC-R1-OFF",
+                "isId": false,
+                "isMoreLink": true,
+                "aria": "更多操作：CCFG-AC-R1-OFF",
+                "focusVisible": true
+              },
+              {
+                "tab": 27,
+                "tag": "SPAN",
+                "cls": "cc-id",
+                "inRowClientId": "CCFG-AC-R1-HIST-COM",
+                "isId": true,
+                "isMoreLink": false,
+                "aria": "编辑探针 CCFG-AC-R1-HIST-COM",
+                "focusVisible": true
+              },
+              {
+                "tab": 28,
+                "tag": "SPAN",
+                "cls": "cc-more-link el-tooltip__trigger el-tooltip__trigger",
+                "inRowClientId": "CCFG-AC-R1-HIST-COM",
+                "isId": false,
+                "isMoreLink": true,
+                "aria": "更多操作：CCFG-AC-R1-HIST-COM",
+                "focusVisible": true
+              },
+              {
+                "tab": 29,
+                "tag": "SPAN",
+                "cls": "cc-id",
+                "inRowClientId": "CCFG-AC-R1-ABN",
+                "isId": true,
+                "isMoreLink": false,
+                "aria": "编辑探针 CCFG-AC-R1-ABN",
+                "focusVisible": true
+              },
+              {
+                "tab": 30,
+                "tag": "SPAN",
+                "cls": "cc-more-link el-tooltip__trigger el-tooltip__trigger",
+                "inRowClientId": "CCFG-AC-R1-ABN",
+                "isId": false,
+                "isMoreLink": true,
+                "aria": "更多操作：CCFG-AC-R1-ABN",
+                "focusVisible": true
+              },
+              {
+                "tab": 31,
+                "tag": "BODY",
+                "cls": "",
+                "inRowClientId": null,
+                "isId": false,
+                "isMoreLink": false,
+                "aria": null,
+                "focusVisible": false
+              },
+              {
+                "tab": 32,
+                "tag": "INPUT",
+                "cls": "el-input__inner",
+                "inRowClientId": null,
+                "isId": false,
+                "isMoreLink": false,
+                "aria": null,
+                "focusVisible": true
+              },
+              {
+                "tab": 33,
+                "tag": "INPUT",
+                "cls": "el-select__input",
+                "inRowClientId": null,
+                "isId": false,
+                "isMoreLink": false,
+                "aria": null,
+                "focusVisible": true
+              },
+              {
+                "tab": 34,
+                "tag": "BUTTON",
+                "cls": "el-button el-button--primary ql-actions__query",
+                "inRowClientId": null,
+                "isId": false,
+                "isMoreLink": false,
+                "aria": null,
+                "focusVisible": true
+              },
+              {
+                "tab": 35,
+                "tag": "BUTTON",
+                "cls": "el-button ql-actions__reset",
+                "inRowClientId": null,
+                "isId": false,
+                "isMoreLink": false,
+                "aria": null,
+                "focusVisible": true
+              },
+              {
+                "tab": 36,
+                "tag": "BUTTON",
+                "cls": "el-button cc-btn-add",
+                "inRowClientId": null,
+                "isId": false,
+                "isMoreLink": false,
+                "aria": null,
+                "focusVisible": true
+              },
+              {
+                "tab": 37,
+                "tag": "SPAN",
+                "cls": "cc-id",
+                "inRowClientId": "hosp-012",
+                "isId": true,
+                "isMoreLink": false,
+                "aria": "编辑探针 hosp-012",
+                "focusVisible": true
+              },
+              {
+                "tab": 38,
+                "tag": "SPAN",
+                "cls": "cc-more-link el-tooltip__trigger el-tooltip__trigger",
+                "inRowClientId": "hosp-012",
+                "isId": false,
+                "isMoreLink": true,
+                "aria": "更多操作：hosp-012",
+                "focusVisible": true
+              }
+            ]
+          }
+        },
+        "cross_viewport_consistent": true
+      },
+      "verdict": "COVERED",
+      "remaining_gap": null
+    },
+    {
+      "id": "CCFG-AC-143",
+      "status_before": "PASS",
+      "status_after": "PASS",
+      "review_gap_closed": "上轮在整组菜单循环结束后才读取一次固定行，无法排除中间操作发生短暂错误切换；本轮对每个原子动作之后立即取独立快照，两组初始状态各一条完整逐步时间线",
+      "definition_requirement": "未固定任何行时分别操作①三点触发器②菜单条目（含启停/删除确认窗并取消）③+N（打开完整清单）④标签 Tooltip⑤探针 ID Enter/Space 键盘编辑，观察是否切换选中；再固定一行重复，核对固定不变；“点击更多及菜单项不触发行双击编辑”边界保持",
+      "precondition_covered": true,
+      "steps_executed": [
+        "未固定起始态（固定 ID=null）：①~⑤ 全序列，每个原子动作后立即快照",
+        "已固定起始态（CCFG-AC-R1-ON）：①~⑤ 全序列，每个原子动作后立即快照",
+        "补充分支：渲染“停用/删除”的行（hosp-012）在未固定/已固定两种起始态下执行 启用/停用 → 确认窗 → 取消"
+      ],
+      "evidence": {
+        "script": "probeF.mjs",
+        "keys": [
+          "timeline[scope=unfixed]",
+          "timeline[scope=fixed]",
+          "timeline[scope=secondary-unfixed]",
+          "timeline[scope=secondary-fixed]"
+        ]
+      },
+      "observed": {
+        "primaryTarget": "CCFG-AC-R1-ON",
+        "secondaryTarget": "hosp-012",
+        "unfixed_timeline_all_steps_fixedId_null": true,
+        "fixed_timeline_all_steps_fixedId_unchanged": true,
+        "no_transient_selection_change": true,
+        "trigger_or_menuItem_opened_edit_dialog": false,
+        "confirm_windows": {
+          "enable": {
+            "title": "启用探针",
+            "btns": [
+              "取消",
+              "启用"
+            ]
+          },
+          "disable": {
+            "title": "停用探针",
+            "btns": [
+              "取消",
+              "停用"
+            ]
+          },
+          "delete": {
+            "title": "删除探针",
+            "btns": [
+              "取消",
+              "删除"
+            ]
+          }
+        },
+        "plusN": {
+          "plusText": "+6",
+          "popoverOpened": true,
+          "fullListItems": 7,
+          "plusOpen_false_not_counted": true
+        },
+        "tooltip": {
+          "tagText": "CCFG-AC-R1-人工验收机构01",
+          "tipShown": true,
+          "tipLeftAfterMouseMove": true
+        },
+        "id_keyboard": {
+          "enter_opens_edit_dialog": true,
+          "space_opens_edit_dialog": true
+        },
+        "per_action_timeline": [
+          {
+            "seq": 1,
+            "scope": "unfixed",
+            "action": "baseline",
+            "fixedProbeId": null,
+            "confirmOpen": false,
+            "menuOpen": false,
+            "popoverOpen": false,
+            "tooltipOpen": false,
+            "editDialogOpen": false
+          },
+          {
+            "seq": 2,
+            "scope": "unfixed",
+            "action": "trigger:before",
+            "fixedProbeId": null,
+            "confirmOpen": false,
+            "menuOpen": false,
+            "popoverOpen": false,
+            "tooltipOpen": false,
+            "editDialogOpen": false
+          },
+          {
+            "seq": 3,
+            "scope": "unfixed",
+            "action": "trigger:opened",
+            "fixedProbeId": null,
+            "confirmOpen": false,
+            "menuOpen": true,
+            "popoverOpen": false,
+            "tooltipOpen": false,
+            "editDialogOpen": false,
+            "menuOpened": true,
+            "menuItems": [
+              "启用",
+              "删除"
+            ]
+          },
+          {
+            "seq": 4,
+            "scope": "unfixed",
+            "action": "trigger:closed",
+            "fixedProbeId": null,
+            "confirmOpen": false,
+            "menuOpen": false,
+            "popoverOpen": false,
+            "tooltipOpen": false,
+            "editDialogOpen": false
+          },
+          {
+            "seq": 5,
+            "scope": "unfixed",
+            "action": "item-enable-or-disable:menu-opened",
+            "fixedProbeId": null,
+            "confirmOpen": false,
+            "menuOpen": true,
+            "popoverOpen": false,
+            "tooltipOpen": false,
+            "editDialogOpen": false,
+            "menuItems": [
+              "启用",
+              "删除"
+            ],
+            "itemIndex": 0,
+            "itemLabel": "启用"
+          },
+          {
+            "seq": 6,
+            "scope": "unfixed",
+            "action": "item-enable-or-disable:confirm-opened",
+            "fixedProbeId": null,
+            "confirmOpen": true,
+            "menuOpen": false,
+            "popoverOpen": false,
+            "tooltipOpen": false,
+            "editDialogOpen": false,
+            "itemLabel": "启用",
+            "confirmOpened": true,
+            "confirm": {
+              "title": "启用探针",
+              "btns": [
+                "取消",
+                "启用"
+              ]
+            },
+            "editDialogOpened": false
+          },
+          {
+            "seq": 7,
+            "scope": "unfixed",
+            "action": "item-enable-or-disable:cancelled",
+            "fixedProbeId": null,
+            "confirmOpen": false,
+            "menuOpen": false,
+            "popoverOpen": false,
+            "tooltipOpen": false,
+            "editDialogOpen": false,
+            "itemLabel": "启用"
+          },
+          {
+            "seq": 8,
+            "scope": "unfixed",
+            "action": "item-delete:menu-opened",
+            "fixedProbeId": null,
+            "confirmOpen": false,
+            "menuOpen": true,
+            "popoverOpen": false,
+            "tooltipOpen": false,
+            "editDialogOpen": false,
+            "menuItems": [
+              "启用",
+              "删除"
+            ],
+            "itemIndex": 1,
+            "itemLabel": "删除"
+          },
+          {
+            "seq": 9,
+            "scope": "unfixed",
+            "action": "item-delete:confirm-opened",
+            "fixedProbeId": null,
+            "confirmOpen": true,
+            "menuOpen": false,
+            "popoverOpen": false,
+            "tooltipOpen": false,
+            "editDialogOpen": false,
+            "itemLabel": "删除",
+            "confirmOpened": true,
+            "confirm": {
+              "title": "删除探针",
+              "btns": [
+                "取消",
+                "删除"
+              ]
+            },
+            "editDialogOpened": false
+          },
+          {
+            "seq": 10,
+            "scope": "unfixed",
+            "action": "item-delete:cancelled",
+            "fixedProbeId": null,
+            "confirmOpen": false,
+            "menuOpen": false,
+            "popoverOpen": false,
+            "tooltipOpen": false,
+            "editDialogOpen": false,
+            "itemLabel": "删除"
+          },
+          {
+            "seq": 11,
+            "scope": "unfixed",
+            "action": "plusN:before",
+            "fixedProbeId": null,
+            "confirmOpen": false,
+            "menuOpen": false,
+            "popoverOpen": false,
+            "tooltipOpen": false,
+            "editDialogOpen": false
+          },
+          {
+            "seq": 12,
+            "scope": "unfixed",
+            "action": "plusN:opened",
+            "fixedProbeId": null,
+            "confirmOpen": false,
+            "menuOpen": false,
+            "popoverOpen": true,
+            "tooltipOpen": false,
+            "editDialogOpen": false,
+            "plusText": "+6",
+            "popoverOpened": true,
+            "fullListItems": 7
+          },
+          {
+            "seq": 13,
+            "scope": "unfixed",
+            "action": "plusN:closed",
+            "fixedProbeId": null,
+            "confirmOpen": false,
+            "menuOpen": false,
+            "popoverOpen": false,
+            "tooltipOpen": false,
+            "editDialogOpen": false
+          },
+          {
+            "seq": 14,
+            "scope": "unfixed",
+            "action": "tooltip:shown",
+            "fixedProbeId": null,
+            "confirmOpen": false,
+            "menuOpen": false,
+            "popoverOpen": false,
+            "tooltipOpen": true,
+            "editDialogOpen": false,
+            "tagText": "CCFG-AC-R1-人工验收机构01",
+            "tipVisible": true
+          },
+          {
+            "seq": 15,
+            "scope": "unfixed",
+            "action": "tooltip:left",
+            "fixedProbeId": null,
+            "confirmOpen": false,
+            "menuOpen": false,
+            "popoverOpen": false,
+            "tooltipOpen": false,
+            "editDialogOpen": false
+          },
+          {
+            "seq": 16,
+            "scope": "unfixed",
+            "action": "id-Enter:before",
+            "fixedProbeId": null,
+            "confirmOpen": false,
+            "menuOpen": false,
+            "popoverOpen": false,
+            "tooltipOpen": false,
+            "editDialogOpen": false,
+            "focusedAria": "编辑探针 CCFG-AC-R1-ON"
+          },
+          {
+            "seq": 17,
+            "scope": "unfixed",
+            "action": "id-Enter:dialog-opened",
+            "fixedProbeId": null,
+            "confirmOpen": false,
+            "menuOpen": false,
+            "popoverOpen": false,
+            "tooltipOpen": false,
+            "editDialogOpen": true,
+            "dialogOpened": true
+          },
+          {
+            "seq": 18,
+            "scope": "unfixed",
+            "action": "id-Enter:closed",
+            "fixedProbeId": null,
+            "confirmOpen": false,
+            "menuOpen": false,
+            "popoverOpen": false,
+            "tooltipOpen": false,
+            "editDialogOpen": false
+          },
+          {
+            "seq": 19,
+            "scope": "unfixed",
+            "action": "id-Space:before",
+            "fixedProbeId": null,
+            "confirmOpen": false,
+            "menuOpen": false,
+            "popoverOpen": false,
+            "tooltipOpen": false,
+            "editDialogOpen": false,
+            "focusedAria": "编辑探针 CCFG-AC-R1-ON"
+          },
+          {
+            "seq": 20,
+            "scope": "unfixed",
+            "action": "id-Space:dialog-opened",
+            "fixedProbeId": null,
+            "confirmOpen": false,
+            "menuOpen": false,
+            "popoverOpen": false,
+            "tooltipOpen": false,
+            "editDialogOpen": true,
+            "dialogOpened": true
+          },
+          {
+            "seq": 21,
+            "scope": "unfixed",
+            "action": "id-Space:closed",
+            "fixedProbeId": null,
+            "confirmOpen": false,
+            "menuOpen": false,
+            "popoverOpen": false,
+            "tooltipOpen": false,
+            "editDialogOpen": false
+          },
+          {
+            "seq": 22,
+            "scope": "fixed",
+            "action": "fix-target",
+            "fixedProbeId": "CCFG-AC-R1-ON",
+            "confirmOpen": false,
+            "menuOpen": false,
+            "popoverOpen": false,
+            "tooltipOpen": false,
+            "editDialogOpen": false
+          },
+          {
+            "seq": 23,
+            "scope": "fixed",
+            "action": "trigger:before",
+            "fixedProbeId": "CCFG-AC-R1-ON",
+            "confirmOpen": false,
+            "menuOpen": false,
+            "popoverOpen": false,
+            "tooltipOpen": false,
+            "editDialogOpen": false
+          },
+          {
+            "seq": 24,
+            "scope": "fixed",
+            "action": "trigger:opened",
+            "fixedProbeId": "CCFG-AC-R1-ON",
+            "confirmOpen": false,
+            "menuOpen": true,
+            "popoverOpen": false,
+            "tooltipOpen": false,
+            "editDialogOpen": false,
+            "menuOpened": true,
+            "menuItems": [
+              "启用",
+              "删除"
+            ]
+          },
+          {
+            "seq": 25,
+            "scope": "fixed",
+            "action": "trigger:closed",
+            "fixedProbeId": "CCFG-AC-R1-ON",
+            "confirmOpen": false,
+            "menuOpen": false,
+            "popoverOpen": false,
+            "tooltipOpen": false,
+            "editDialogOpen": false
+          },
+          {
+            "seq": 26,
+            "scope": "fixed",
+            "action": "item-enable-or-disable:menu-opened",
+            "fixedProbeId": "CCFG-AC-R1-ON",
+            "confirmOpen": false,
+            "menuOpen": true,
+            "popoverOpen": false,
+            "tooltipOpen": false,
+            "editDialogOpen": false,
+            "menuItems": [
+              "启用",
+              "删除"
+            ],
+            "itemIndex": 0,
+            "itemLabel": "启用"
+          },
+          {
+            "seq": 27,
+            "scope": "fixed",
+            "action": "item-enable-or-disable:confirm-opened",
+            "fixedProbeId": "CCFG-AC-R1-ON",
+            "confirmOpen": true,
+            "menuOpen": false,
+            "popoverOpen": false,
+            "tooltipOpen": false,
+            "editDialogOpen": false,
+            "itemLabel": "启用",
+            "confirmOpened": true,
+            "confirm": {
+              "title": "启用探针",
+              "btns": [
+                "取消",
+                "启用"
+              ]
+            },
+            "editDialogOpened": false
+          },
+          {
+            "seq": 28,
+            "scope": "fixed",
+            "action": "item-enable-or-disable:cancelled",
+            "fixedProbeId": "CCFG-AC-R1-ON",
+            "confirmOpen": false,
+            "menuOpen": false,
+            "popoverOpen": false,
+            "tooltipOpen": false,
+            "editDialogOpen": false,
+            "itemLabel": "启用"
+          },
+          {
+            "seq": 29,
+            "scope": "fixed",
+            "action": "item-delete:menu-opened",
+            "fixedProbeId": "CCFG-AC-R1-ON",
+            "confirmOpen": false,
+            "menuOpen": true,
+            "popoverOpen": false,
+            "tooltipOpen": false,
+            "editDialogOpen": false,
+            "menuItems": [
+              "启用",
+              "删除"
+            ],
+            "itemIndex": 1,
+            "itemLabel": "删除"
+          },
+          {
+            "seq": 30,
+            "scope": "fixed",
+            "action": "item-delete:confirm-opened",
+            "fixedProbeId": "CCFG-AC-R1-ON",
+            "confirmOpen": true,
+            "menuOpen": false,
+            "popoverOpen": false,
+            "tooltipOpen": false,
+            "editDialogOpen": false,
+            "itemLabel": "删除",
+            "confirmOpened": true,
+            "confirm": {
+              "title": "删除探针",
+              "btns": [
+                "取消",
+                "删除"
+              ]
+            },
+            "editDialogOpened": false
+          },
+          {
+            "seq": 31,
+            "scope": "fixed",
+            "action": "item-delete:cancelled",
+            "fixedProbeId": "CCFG-AC-R1-ON",
+            "confirmOpen": false,
+            "menuOpen": false,
+            "popoverOpen": false,
+            "tooltipOpen": false,
+            "editDialogOpen": false,
+            "itemLabel": "删除"
+          },
+          {
+            "seq": 32,
+            "scope": "fixed",
+            "action": "plusN:before",
+            "fixedProbeId": "CCFG-AC-R1-ON",
+            "confirmOpen": false,
+            "menuOpen": false,
+            "popoverOpen": false,
+            "tooltipOpen": false,
+            "editDialogOpen": false
+          },
+          {
+            "seq": 33,
+            "scope": "fixed",
+            "action": "plusN:opened",
+            "fixedProbeId": "CCFG-AC-R1-ON",
+            "confirmOpen": false,
+            "menuOpen": false,
+            "popoverOpen": true,
+            "tooltipOpen": false,
+            "editDialogOpen": false,
+            "plusText": "+6",
+            "popoverOpened": true,
+            "fullListItems": 7
+          },
+          {
+            "seq": 34,
+            "scope": "fixed",
+            "action": "plusN:closed",
+            "fixedProbeId": "CCFG-AC-R1-ON",
+            "confirmOpen": false,
+            "menuOpen": false,
+            "popoverOpen": false,
+            "tooltipOpen": false,
+            "editDialogOpen": false
+          },
+          {
+            "seq": 35,
+            "scope": "fixed",
+            "action": "tooltip:shown",
+            "fixedProbeId": "CCFG-AC-R1-ON",
+            "confirmOpen": false,
+            "menuOpen": false,
+            "popoverOpen": false,
+            "tooltipOpen": true,
+            "editDialogOpen": false,
+            "tagText": "CCFG-AC-R1-人工验收机构01",
+            "tipVisible": true
+          },
+          {
+            "seq": 36,
+            "scope": "fixed",
+            "action": "tooltip:left",
+            "fixedProbeId": "CCFG-AC-R1-ON",
+            "confirmOpen": false,
+            "menuOpen": false,
+            "popoverOpen": false,
+            "tooltipOpen": false,
+            "editDialogOpen": false
+          },
+          {
+            "seq": 37,
+            "scope": "fixed",
+            "action": "id-Enter:before",
+            "fixedProbeId": "CCFG-AC-R1-ON",
+            "confirmOpen": false,
+            "menuOpen": false,
+            "popoverOpen": false,
+            "tooltipOpen": false,
+            "editDialogOpen": false,
+            "focusedAria": "编辑探针 CCFG-AC-R1-ON"
+          },
+          {
+            "seq": 38,
+            "scope": "fixed",
+            "action": "id-Enter:dialog-opened",
+            "fixedProbeId": "CCFG-AC-R1-ON",
+            "confirmOpen": false,
+            "menuOpen": false,
+            "popoverOpen": false,
+            "tooltipOpen": false,
+            "editDialogOpen": true,
+            "dialogOpened": true
+          },
+          {
+            "seq": 39,
+            "scope": "fixed",
+            "action": "id-Enter:closed",
+            "fixedProbeId": "CCFG-AC-R1-ON",
+            "confirmOpen": false,
+            "menuOpen": false,
+            "popoverOpen": false,
+            "tooltipOpen": false,
+            "editDialogOpen": false
+          },
+          {
+            "seq": 40,
+            "scope": "fixed",
+            "action": "id-Space:before",
+            "fixedProbeId": "CCFG-AC-R1-ON",
+            "confirmOpen": false,
+            "menuOpen": false,
+            "popoverOpen": false,
+            "tooltipOpen": false,
+            "editDialogOpen": false,
+            "focusedAria": "编辑探针 CCFG-AC-R1-ON"
+          },
+          {
+            "seq": 41,
+            "scope": "fixed",
+            "action": "id-Space:dialog-opened",
+            "fixedProbeId": "CCFG-AC-R1-ON",
+            "confirmOpen": false,
+            "menuOpen": false,
+            "popoverOpen": false,
+            "tooltipOpen": false,
+            "editDialogOpen": true,
+            "dialogOpened": true
+          },
+          {
+            "seq": 42,
+            "scope": "fixed",
+            "action": "id-Space:closed",
+            "fixedProbeId": "CCFG-AC-R1-ON",
+            "confirmOpen": false,
+            "menuOpen": false,
+            "popoverOpen": false,
+            "tooltipOpen": false,
+            "editDialogOpen": false
+          },
+          {
+            "seq": 43,
+            "scope": "fixed",
+            "action": "baseline-end",
+            "fixedProbeId": "CCFG-AC-R1-ON",
+            "confirmOpen": false,
+            "menuOpen": false,
+            "popoverOpen": false,
+            "tooltipOpen": false,
+            "editDialogOpen": false
+          },
+          {
+            "seq": 44,
+            "scope": "secondary-unfixed",
+            "action": "baseline",
+            "fixedProbeId": null,
+            "confirmOpen": false,
+            "menuOpen": false,
+            "popoverOpen": false,
+            "tooltipOpen": false,
+            "editDialogOpen": false,
+            "clearedForUnfixed": null
+          },
+          {
+            "seq": 45,
+            "scope": "secondary-unfixed",
+            "action": "trigger:before",
+            "fixedProbeId": null,
+            "confirmOpen": false,
+            "menuOpen": false,
+            "popoverOpen": false,
+            "tooltipOpen": false,
+            "editDialogOpen": false
+          },
+          {
+            "seq": 46,
+            "scope": "secondary-unfixed",
+            "action": "trigger:opened",
+            "fixedProbeId": null,
+            "confirmOpen": false,
+            "menuOpen": true,
+            "popoverOpen": false,
+            "tooltipOpen": false,
+            "editDialogOpen": false,
+            "menuOpened": true,
+            "menuItems": [
+              "停用",
+              "删除"
+            ]
+          },
+          {
+            "seq": 47,
+            "scope": "secondary-unfixed",
+            "action": "trigger:closed",
+            "fixedProbeId": null,
+            "confirmOpen": false,
+            "menuOpen": false,
+            "popoverOpen": false,
+            "tooltipOpen": false,
+            "editDialogOpen": false
+          },
+          {
+            "seq": 48,
+            "scope": "secondary-unfixed",
+            "action": "item-enable-or-disable:menu-opened",
+            "fixedProbeId": null,
+            "confirmOpen": false,
+            "menuOpen": true,
+            "popoverOpen": false,
+            "tooltipOpen": false,
+            "editDialogOpen": false,
+            "menuItems": [
+              "停用",
+              "删除"
+            ],
+            "itemIndex": 0,
+            "itemLabel": "停用"
+          },
+          {
+            "seq": 49,
+            "scope": "secondary-unfixed",
+            "action": "item-enable-or-disable:confirm-opened",
+            "fixedProbeId": null,
+            "confirmOpen": true,
+            "menuOpen": false,
+            "popoverOpen": false,
+            "tooltipOpen": false,
+            "editDialogOpen": false,
+            "itemLabel": "停用",
+            "confirmOpened": true,
+            "confirm": {
+              "title": "停用探针",
+              "btns": [
+                "取消",
+                "停用"
+              ]
+            },
+            "editDialogOpened": false
+          },
+          {
+            "seq": 50,
+            "scope": "secondary-unfixed",
+            "action": "item-enable-or-disable:cancelled",
+            "fixedProbeId": null,
+            "confirmOpen": false,
+            "menuOpen": false,
+            "popoverOpen": false,
+            "tooltipOpen": false,
+            "editDialogOpen": false,
+            "itemLabel": "停用"
+          },
+          {
+            "seq": 51,
+            "scope": "secondary-fixed",
+            "action": "fix-target",
+            "fixedProbeId": "hosp-012",
+            "confirmOpen": false,
+            "menuOpen": false,
+            "popoverOpen": false,
+            "tooltipOpen": false,
+            "editDialogOpen": false
+          },
+          {
+            "seq": 52,
+            "scope": "secondary-fixed",
+            "action": "trigger:before",
+            "fixedProbeId": "hosp-012",
+            "confirmOpen": false,
+            "menuOpen": false,
+            "popoverOpen": false,
+            "tooltipOpen": false,
+            "editDialogOpen": false
+          },
+          {
+            "seq": 53,
+            "scope": "secondary-fixed",
+            "action": "trigger:opened",
+            "fixedProbeId": "hosp-012",
+            "confirmOpen": false,
+            "menuOpen": true,
+            "popoverOpen": false,
+            "tooltipOpen": false,
+            "editDialogOpen": false,
+            "menuOpened": true,
+            "menuItems": [
+              "停用",
+              "删除"
+            ]
+          },
+          {
+            "seq": 54,
+            "scope": "secondary-fixed",
+            "action": "trigger:closed",
+            "fixedProbeId": "hosp-012",
+            "confirmOpen": false,
+            "menuOpen": false,
+            "popoverOpen": false,
+            "tooltipOpen": false,
+            "editDialogOpen": false
+          },
+          {
+            "seq": 55,
+            "scope": "secondary-fixed",
+            "action": "item-enable-or-disable:menu-opened",
+            "fixedProbeId": "hosp-012",
+            "confirmOpen": false,
+            "menuOpen": true,
+            "popoverOpen": false,
+            "tooltipOpen": false,
+            "editDialogOpen": false,
+            "menuItems": [
+              "停用",
+              "删除"
+            ],
+            "itemIndex": 0,
+            "itemLabel": "停用"
+          },
+          {
+            "seq": 56,
+            "scope": "secondary-fixed",
+            "action": "item-enable-or-disable:confirm-opened",
+            "fixedProbeId": "hosp-012",
+            "confirmOpen": true,
+            "menuOpen": false,
+            "popoverOpen": false,
+            "tooltipOpen": false,
+            "editDialogOpen": false,
+            "itemLabel": "停用",
+            "confirmOpened": true,
+            "confirm": {
+              "title": "停用探针",
+              "btns": [
+                "取消",
+                "停用"
+              ]
+            },
+            "editDialogOpened": false
+          },
+          {
+            "seq": 57,
+            "scope": "secondary-fixed",
+            "action": "item-enable-or-disable:cancelled",
+            "fixedProbeId": "hosp-012",
+            "confirmOpen": false,
+            "menuOpen": false,
+            "popoverOpen": false,
+            "tooltipOpen": false,
+            "editDialogOpen": false,
+            "itemLabel": "停用"
+          }
+        ]
+      },
+      "verdict": "COVERED",
+      "remaining_gap": null
+    }
+  ],
+  "untouched_ids_note": "本轮仅补齐 AC-100/AC-143 的证据缺口，二者由 BLOCKED 上调为 PASS 已于上轮完成（见 001 目录），本轮不改变任何状态格；其余 68 条 PASS 与 70 条 BLOCKED、15 条 NOT_RUN 保持不变",
+  "next_entry": "CHATGPT_REMOTE_CLIENT_CONFIG_FORMAL_ACCEPTANCE_READONLY_SUPPLEMENT_R1_REVIEW"
+}
