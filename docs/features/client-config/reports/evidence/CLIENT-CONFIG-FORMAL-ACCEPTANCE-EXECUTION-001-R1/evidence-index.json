@@ -1,0 +1,1850 @@
+{
+  "task": "CLIENT-CONFIG-FORMAL-ACCEPTANCE-EXECUTION-001-R1",
+  "base_commit": "beadaac6636b2d4df52849a74f05ce399bb398b1",
+  "raw_package_sha256": "1cf178aefb03b0727e5b036ee66123631cf8d4a525622177749e258e0a5e15e6",
+  "note": "脱敏证据索引：仅保留用例编号/判定/证据文件名与 JSON 键名/完成情况摘要；不含连接信息、内网主机、令牌、可识别业务数据或原始截图。原始归档未入仓。",
+  "stats": {
+    "PASS": 102,
+    "FAIL": 0,
+    "BLOCKED": 37,
+    "NOT_RUN": 15,
+    "total": 154
+  },
+  "items": [
+    {
+      "id": "CCFG-AC-001",
+      "r0_status": "PASS",
+      "r1_status": "PASS",
+      "evidence": [
+        {
+          "key": "001",
+          "file": "accA.json",
+          "sub": "PASS"
+        }
+      ]
+    },
+    {
+      "id": "CCFG-AC-002",
+      "r0_status": "PASS",
+      "r1_status": "PASS",
+      "evidence": [
+        {
+          "key": "002",
+          "file": "accA.json",
+          "sub": "PASS"
+        }
+      ]
+    },
+    {
+      "id": "CCFG-AC-003",
+      "r0_status": "PASS",
+      "r1_status": "PASS",
+      "evidence": [
+        {
+          "key": "003",
+          "file": "accA.json",
+          "sub": "PASS"
+        }
+      ]
+    },
+    {
+      "id": "CCFG-AC-004",
+      "r0_status": "PASS",
+      "r1_status": "PASS",
+      "evidence": [
+        {
+          "key": "004",
+          "file": "accA.json",
+          "sub": "PASS"
+        }
+      ]
+    },
+    {
+      "id": "CCFG-AC-005",
+      "r0_status": "PASS",
+      "r1_status": "PASS",
+      "evidence": [
+        {
+          "key": "005-keyword",
+          "file": "accA.json",
+          "sub": "PASS"
+        },
+        {
+          "key": "005",
+          "file": "accA.json",
+          "sub": "PASS"
+        }
+      ]
+    },
+    {
+      "id": "CCFG-AC-006",
+      "r0_status": "PASS",
+      "r1_status": "PASS",
+      "evidence": [
+        {
+          "key": "006",
+          "file": "accA.json",
+          "sub": "PASS"
+        }
+      ]
+    },
+    {
+      "id": "CCFG-AC-007",
+      "r0_status": "PASS",
+      "r1_status": "PASS",
+      "evidence": [
+        {
+          "key": "007",
+          "file": "accA.json",
+          "sub": "PASS"
+        }
+      ]
+    },
+    {
+      "id": "CCFG-AC-008",
+      "r0_status": "PASS",
+      "r1_status": "PASS",
+      "evidence": [
+        {
+          "key": "008",
+          "file": "accA.json",
+          "sub": "PASS"
+        }
+      ]
+    },
+    {
+      "id": "CCFG-AC-009",
+      "r0_status": "PASS",
+      "r1_status": "PASS",
+      "evidence": [
+        {
+          "key": "009",
+          "file": "accA.json",
+          "sub": "PASS"
+        }
+      ]
+    },
+    {
+      "id": "CCFG-AC-010",
+      "r0_status": "PASS",
+      "r1_status": "PASS",
+      "evidence": [
+        {
+          "key": "010",
+          "file": "accG.json",
+          "sub": "PASS"
+        }
+      ]
+    },
+    {
+      "id": "CCFG-AC-011",
+      "r0_status": "PASS",
+      "r1_status": "PASS",
+      "evidence": [
+        {
+          "key": "011-eyebrow",
+          "file": "accB2.json",
+          "sub": "PASS"
+        },
+        {
+          "key": "011",
+          "file": "accC.json",
+          "sub": "PASS"
+        }
+      ]
+    },
+    {
+      "id": "CCFG-AC-012",
+      "r0_status": "PASS",
+      "r1_status": "PASS",
+      "evidence": [
+        {
+          "key": "012",
+          "file": "accC.json",
+          "sub": "PASS"
+        }
+      ]
+    },
+    {
+      "id": "CCFG-AC-013",
+      "r0_status": "PASS",
+      "r1_status": "PASS",
+      "evidence": [
+        {
+          "key": "013-part",
+          "file": "accC.json",
+          "sub": "PASS"
+        }
+      ]
+    },
+    {
+      "id": "CCFG-AC-014",
+      "r0_status": "BLOCKED",
+      "r1_status": "BLOCKED",
+      "evidence": [
+        {
+          "key": "014",
+          "file": "accJ.json",
+          "sub": "PARTIAL"
+        }
+      ]
+    },
+    {
+      "id": "CCFG-AC-015",
+      "r0_status": "BLOCKED",
+      "r1_status": "BLOCKED",
+      "evidence": []
+    },
+    {
+      "id": "CCFG-AC-016",
+      "r0_status": "PASS",
+      "r1_status": "PASS",
+      "evidence": [
+        {
+          "key": "016",
+          "file": "accI.json",
+          "sub": "PASS"
+        }
+      ]
+    },
+    {
+      "id": "CCFG-AC-017",
+      "r0_status": "PASS",
+      "r1_status": "PASS",
+      "evidence": [
+        {
+          "key": "017-part",
+          "file": "accA.json",
+          "sub": "PASS"
+        }
+      ]
+    },
+    {
+      "id": "CCFG-AC-018",
+      "r0_status": "PASS",
+      "r1_status": "PASS",
+      "evidence": [
+        {
+          "key": "018-part",
+          "file": "accA.json",
+          "sub": "PASS"
+        }
+      ]
+    },
+    {
+      "id": "CCFG-AC-019",
+      "r0_status": "PASS",
+      "r1_status": "PASS",
+      "evidence": [
+        {
+          "key": "019",
+          "file": "accD.json",
+          "sub": "PASS"
+        },
+        {
+          "key": "019-cancel",
+          "file": "accD.json",
+          "sub": "PASS"
+        }
+      ]
+    },
+    {
+      "id": "CCFG-AC-020",
+      "r0_status": "NOT_RUN",
+      "r1_status": "NOT_RUN",
+      "evidence": []
+    },
+    {
+      "id": "CCFG-AC-021",
+      "r0_status": "NOT_RUN",
+      "r1_status": "NOT_RUN",
+      "evidence": []
+    },
+    {
+      "id": "CCFG-AC-022",
+      "r0_status": "PASS",
+      "r1_status": "PASS",
+      "evidence": [
+        {
+          "key": "022-read",
+          "file": "accJ.json",
+          "sub": "PASS"
+        }
+      ]
+    },
+    {
+      "id": "CCFG-AC-023",
+      "r0_status": "NOT_RUN",
+      "r1_status": "NOT_RUN",
+      "evidence": []
+    },
+    {
+      "id": "CCFG-AC-024",
+      "r0_status": "NOT_RUN",
+      "r1_status": "NOT_RUN",
+      "evidence": []
+    },
+    {
+      "id": "CCFG-AC-025",
+      "r0_status": "PASS",
+      "r1_status": "PASS",
+      "evidence": [
+        {
+          "key": "025",
+          "file": "accA.json",
+          "sub": "PASS"
+        }
+      ]
+    },
+    {
+      "id": "CCFG-AC-026",
+      "r0_status": "PASS",
+      "r1_status": "PASS",
+      "evidence": [
+        {
+          "key": "026",
+          "file": "accD.json",
+          "sub": "PASS"
+        }
+      ]
+    },
+    {
+      "id": "CCFG-AC-027",
+      "r0_status": "BLOCKED",
+      "r1_status": "BLOCKED",
+      "evidence": []
+    },
+    {
+      "id": "CCFG-AC-028",
+      "r0_status": "PASS",
+      "r1_status": "PASS",
+      "evidence": [
+        {
+          "key": "028",
+          "file": "accE.json",
+          "sub": "PASS"
+        }
+      ]
+    },
+    {
+      "id": "CCFG-AC-029",
+      "r0_status": "PASS",
+      "r1_status": "PASS",
+      "evidence": [
+        {
+          "key": "029",
+          "file": "accE.json",
+          "sub": "PASS"
+        }
+      ]
+    },
+    {
+      "id": "CCFG-AC-030",
+      "r0_status": "BLOCKED",
+      "r1_status": "BLOCKED",
+      "evidence": []
+    },
+    {
+      "id": "CCFG-AC-031",
+      "r0_status": "PASS",
+      "r1_status": "PASS",
+      "evidence": [
+        {
+          "key": "031",
+          "file": "accE.json",
+          "sub": "PASS"
+        }
+      ]
+    },
+    {
+      "id": "CCFG-AC-032",
+      "r0_status": "PASS",
+      "r1_status": "PASS",
+      "evidence": [
+        {
+          "key": "032",
+          "file": "accF.json",
+          "sub": "PASS"
+        }
+      ]
+    },
+    {
+      "id": "CCFG-AC-033",
+      "r0_status": "NOT_RUN",
+      "r1_status": "NOT_RUN",
+      "evidence": []
+    },
+    {
+      "id": "CCFG-AC-034",
+      "r0_status": "PASS",
+      "r1_status": "BLOCKED",
+      "evidence": [
+        {
+          "key": "034-part",
+          "file": "accI.json",
+          "sub": "PASS"
+        }
+      ],
+      "r1_reason": "定义要求“序列化长度逼近并超过 VARCHAR2(1000) 的保存被拒绝”，仅完成“未选数据源阻止保存”只读子步骤"
+    },
+    {
+      "id": "CCFG-AC-035",
+      "r0_status": "PASS",
+      "r1_status": "PASS",
+      "evidence": [
+        {
+          "key": "035",
+          "file": "accF.json",
+          "sub": "PASS"
+        }
+      ]
+    },
+    {
+      "id": "CCFG-AC-036",
+      "r0_status": "PASS",
+      "r1_status": "PASS",
+      "evidence": [
+        {
+          "key": "036",
+          "file": "accF.json",
+          "sub": "PASS"
+        }
+      ]
+    },
+    {
+      "id": "CCFG-AC-037",
+      "r0_status": "PASS",
+      "r1_status": "PASS",
+      "evidence": [
+        {
+          "key": "037",
+          "file": "accF.json",
+          "sub": "PASS"
+        }
+      ]
+    },
+    {
+      "id": "CCFG-AC-038",
+      "r0_status": "NOT_RUN",
+      "r1_status": "NOT_RUN",
+      "evidence": []
+    },
+    {
+      "id": "CCFG-AC-039",
+      "r0_status": "BLOCKED",
+      "r1_status": "BLOCKED",
+      "evidence": []
+    },
+    {
+      "id": "CCFG-AC-040",
+      "r0_status": "NOT_RUN",
+      "r1_status": "NOT_RUN",
+      "evidence": []
+    },
+    {
+      "id": "CCFG-AC-041",
+      "r0_status": "PASS",
+      "r1_status": "PASS",
+      "evidence": [
+        {
+          "key": "041",
+          "file": "accE.json",
+          "sub": "PASS"
+        }
+      ]
+    },
+    {
+      "id": "CCFG-AC-042",
+      "r0_status": "PASS",
+      "r1_status": "BLOCKED",
+      "evidence": [
+        {
+          "key": "042-part",
+          "file": "accI.json",
+          "sub": "PASS"
+        }
+      ],
+      "r1_reason": "定义要求“保存后检查请求内容与数据库表”，仅完成“自动生成本身不提交”只读子步骤"
+    },
+    {
+      "id": "CCFG-AC-043",
+      "r0_status": "PASS",
+      "r1_status": "PASS",
+      "evidence": [
+        {
+          "key": "043",
+          "file": "accE.json",
+          "sub": "PASS"
+        }
+      ]
+    },
+    {
+      "id": "CCFG-AC-044",
+      "r0_status": "PASS",
+      "r1_status": "PASS",
+      "evidence": [
+        {
+          "key": "044-edit",
+          "file": "accF.json",
+          "sub": "PASS"
+        }
+      ]
+    },
+    {
+      "id": "CCFG-AC-045",
+      "r0_status": "PASS",
+      "r1_status": "PASS",
+      "evidence": [
+        {
+          "key": "045",
+          "file": "accE.json",
+          "sub": "PASS"
+        }
+      ]
+    },
+    {
+      "id": "CCFG-AC-046",
+      "r0_status": "PASS",
+      "r1_status": "PASS",
+      "evidence": [
+        {
+          "key": "046-edit",
+          "file": "accF.json",
+          "sub": "PASS"
+        }
+      ]
+    },
+    {
+      "id": "CCFG-AC-047",
+      "r0_status": "PASS",
+      "r1_status": "PASS",
+      "evidence": [
+        {
+          "key": "047",
+          "file": "accF.json",
+          "sub": "PASS"
+        },
+        {
+          "key": "047-nosave",
+          "file": "accF.json",
+          "sub": "PASS"
+        }
+      ]
+    },
+    {
+      "id": "CCFG-AC-048",
+      "r0_status": "BLOCKED",
+      "r1_status": "BLOCKED",
+      "evidence": []
+    },
+    {
+      "id": "CCFG-AC-049",
+      "r0_status": "PASS",
+      "r1_status": "PASS",
+      "evidence": [
+        {
+          "key": "049-ui",
+          "file": "accE.json",
+          "sub": "PASS"
+        }
+      ]
+    },
+    {
+      "id": "CCFG-AC-050",
+      "r0_status": "PASS",
+      "r1_status": "PASS",
+      "evidence": [
+        {
+          "key": "050",
+          "file": "accE.json",
+          "sub": "PASS"
+        }
+      ]
+    },
+    {
+      "id": "CCFG-AC-051",
+      "r0_status": "PASS",
+      "r1_status": "PASS",
+      "evidence": [
+        {
+          "key": "051",
+          "file": "accE.json",
+          "sub": "PASS"
+        }
+      ]
+    },
+    {
+      "id": "CCFG-AC-052",
+      "r0_status": "PASS",
+      "r1_status": "PASS",
+      "evidence": [
+        {
+          "key": "052",
+          "file": "accE.json",
+          "sub": "PASS"
+        }
+      ]
+    },
+    {
+      "id": "CCFG-AC-053",
+      "r0_status": "PASS",
+      "r1_status": "PASS",
+      "evidence": [
+        {
+          "key": "053",
+          "file": "accE.json",
+          "sub": "PASS"
+        }
+      ]
+    },
+    {
+      "id": "CCFG-AC-054",
+      "r0_status": "PASS",
+      "r1_status": "PASS",
+      "evidence": [
+        {
+          "key": "054",
+          "file": "accF.json",
+          "sub": "PASS"
+        }
+      ]
+    },
+    {
+      "id": "CCFG-AC-055",
+      "r0_status": "BLOCKED",
+      "r1_status": "BLOCKED",
+      "evidence": [
+        {
+          "key": "055-search",
+          "file": "accE.json",
+          "sub": "PASS"
+        },
+        {
+          "key": "055",
+          "file": "accE.json",
+          "sub": "PARTIAL"
+        },
+        {
+          "key": "055-inj",
+          "file": "accH.json",
+          "sub": "PASS"
+        }
+      ]
+    },
+    {
+      "id": "CCFG-AC-056",
+      "r0_status": "NOT_RUN",
+      "r1_status": "NOT_RUN",
+      "evidence": []
+    },
+    {
+      "id": "CCFG-AC-057",
+      "r0_status": "NOT_RUN",
+      "r1_status": "NOT_RUN",
+      "evidence": []
+    },
+    {
+      "id": "CCFG-AC-058",
+      "r0_status": "NOT_RUN",
+      "r1_status": "NOT_RUN",
+      "evidence": []
+    },
+    {
+      "id": "CCFG-AC-059",
+      "r0_status": "BLOCKED",
+      "r1_status": "BLOCKED",
+      "evidence": []
+    },
+    {
+      "id": "CCFG-AC-060",
+      "r0_status": "NOT_RUN",
+      "r1_status": "NOT_RUN",
+      "evidence": []
+    },
+    {
+      "id": "CCFG-AC-061",
+      "r0_status": "NOT_RUN",
+      "r1_status": "NOT_RUN",
+      "evidence": []
+    },
+    {
+      "id": "CCFG-AC-062",
+      "r0_status": "NOT_RUN",
+      "r1_status": "NOT_RUN",
+      "evidence": []
+    },
+    {
+      "id": "CCFG-AC-063",
+      "r0_status": "NOT_RUN",
+      "r1_status": "NOT_RUN",
+      "evidence": []
+    },
+    {
+      "id": "CCFG-AC-064",
+      "r0_status": "NOT_RUN",
+      "r1_status": "NOT_RUN",
+      "evidence": []
+    },
+    {
+      "id": "CCFG-AC-065",
+      "r0_status": "PASS",
+      "r1_status": "PASS",
+      "evidence": [
+        {
+          "key": "065",
+          "file": "accF.json",
+          "sub": "PASS"
+        }
+      ]
+    },
+    {
+      "id": "CCFG-AC-066",
+      "r0_status": "PASS",
+      "r1_status": "PASS",
+      "evidence": [
+        {
+          "key": "066",
+          "file": "accF.json",
+          "sub": "PASS"
+        }
+      ]
+    },
+    {
+      "id": "CCFG-AC-067",
+      "r0_status": "PASS",
+      "r1_status": "PASS",
+      "evidence": [
+        {
+          "key": "067",
+          "file": "accF.json",
+          "sub": "PASS"
+        }
+      ]
+    },
+    {
+      "id": "CCFG-AC-068",
+      "r0_status": "PASS",
+      "r1_status": "PASS",
+      "evidence": [
+        {
+          "key": "068",
+          "file": "accF.json",
+          "sub": "PASS"
+        }
+      ]
+    },
+    {
+      "id": "CCFG-AC-069",
+      "r0_status": "PASS",
+      "r1_status": "PASS",
+      "evidence": [
+        {
+          "key": "069",
+          "file": "accJ.json",
+          "sub": "PASS"
+        }
+      ]
+    },
+    {
+      "id": "CCFG-AC-070",
+      "r0_status": "PASS",
+      "r1_status": "PASS",
+      "evidence": [
+        {
+          "key": "070",
+          "file": "accI.json",
+          "sub": "PASS"
+        }
+      ]
+    },
+    {
+      "id": "CCFG-AC-071",
+      "r0_status": "BLOCKED",
+      "r1_status": "BLOCKED",
+      "evidence": [
+        {
+          "key": "071",
+          "file": "accJ.json",
+          "sub": "PARTIAL"
+        }
+      ]
+    },
+    {
+      "id": "CCFG-AC-072",
+      "r0_status": "PASS",
+      "r1_status": "BLOCKED",
+      "evidence": [
+        {
+          "key": "072-part",
+          "file": "accI.json",
+          "sub": "PASS"
+        }
+      ],
+      "r1_reason": "定义要求“触发真实后端业务冲突”，仅有 harness 注入 409 的模拟证据（simulated:true）"
+    },
+    {
+      "id": "CCFG-AC-073",
+      "r0_status": "PASS",
+      "r1_status": "PASS",
+      "evidence": [
+        {
+          "key": "073",
+          "file": "accA.json",
+          "sub": "PASS"
+        }
+      ]
+    },
+    {
+      "id": "CCFG-AC-074",
+      "r0_status": "PASS",
+      "r1_status": "PASS",
+      "evidence": [
+        {
+          "key": "074",
+          "file": "accI.json",
+          "sub": "PASS"
+        }
+      ]
+    },
+    {
+      "id": "CCFG-AC-075",
+      "r0_status": "BLOCKED",
+      "r1_status": "BLOCKED",
+      "evidence": [
+        {
+          "key": "075-part",
+          "file": "accI.json",
+          "sub": "PARTIAL"
+        }
+      ]
+    },
+    {
+      "id": "CCFG-AC-076",
+      "r0_status": "PASS",
+      "r1_status": "BLOCKED",
+      "evidence": [
+        {
+          "key": "076-part",
+          "file": "accI.json",
+          "sub": "PASS"
+        }
+      ],
+      "r1_reason": "定义要求“执行新增/编辑/删除/启停”后核对数据库对象与页面文案，仅完成运行期无 DDL 请求的静态观测"
+    },
+    {
+      "id": "CCFG-AC-077",
+      "r0_status": "PASS",
+      "r1_status": "PASS",
+      "evidence": [
+        {
+          "key": "077-shell",
+          "file": "accA.json",
+          "sub": "PASS"
+        }
+      ]
+    },
+    {
+      "id": "CCFG-AC-078",
+      "r0_status": "PASS",
+      "r1_status": "PASS",
+      "evidence": [
+        {
+          "key": "078",
+          "file": "accA.json",
+          "sub": "PASS"
+        }
+      ]
+    },
+    {
+      "id": "CCFG-AC-079",
+      "r0_status": "PASS",
+      "r1_status": "PASS",
+      "evidence": [
+        {
+          "key": "079",
+          "file": "accA.json",
+          "sub": "PASS"
+        }
+      ]
+    },
+    {
+      "id": "CCFG-AC-080",
+      "r0_status": "PASS",
+      "r1_status": "PASS",
+      "evidence": [
+        {
+          "key": "080",
+          "file": "accA.json",
+          "sub": "PASS"
+        }
+      ]
+    },
+    {
+      "id": "CCFG-AC-081",
+      "r0_status": "PASS",
+      "r1_status": "PASS",
+      "evidence": [
+        {
+          "key": "081",
+          "file": "accA.json",
+          "sub": "PASS"
+        }
+      ]
+    },
+    {
+      "id": "CCFG-AC-082",
+      "r0_status": "PASS",
+      "r1_status": "PASS",
+      "evidence": [
+        {
+          "key": "082",
+          "file": "accD.json",
+          "sub": "PASS"
+        }
+      ]
+    },
+    {
+      "id": "CCFG-AC-083",
+      "r0_status": "PASS",
+      "r1_status": "PASS",
+      "evidence": [
+        {
+          "key": "083",
+          "file": "accD.json",
+          "sub": "PASS"
+        }
+      ]
+    },
+    {
+      "id": "CCFG-AC-084",
+      "r0_status": "PASS",
+      "r1_status": "BLOCKED",
+      "evidence": [
+        {
+          "key": "084-part",
+          "file": "accD.json",
+          "sub": "PASS"
+        }
+      ],
+      "r1_reason": "定义要求实际执行删除/停用/启用、慢请求重复点击与业务冲突，仅有取消路径确认语义"
+    },
+    {
+      "id": "CCFG-AC-085",
+      "r0_status": "PASS",
+      "r1_status": "PASS",
+      "evidence": [
+        {
+          "key": "085",
+          "file": "accA.json",
+          "sub": "PASS"
+        }
+      ]
+    },
+    {
+      "id": "CCFG-AC-086",
+      "r0_status": "PASS",
+      "r1_status": "PASS",
+      "evidence": [
+        {
+          "key": "086",
+          "file": "accA.json",
+          "sub": "PASS"
+        }
+      ]
+    },
+    {
+      "id": "CCFG-AC-087",
+      "r0_status": "PASS",
+      "r1_status": "PASS",
+      "evidence": [
+        {
+          "key": "087",
+          "file": "accA.json",
+          "sub": "PASS"
+        }
+      ]
+    },
+    {
+      "id": "CCFG-AC-088",
+      "r0_status": "PASS",
+      "r1_status": "PASS",
+      "evidence": [
+        {
+          "key": "088",
+          "file": "accA.json",
+          "sub": "PASS"
+        }
+      ]
+    },
+    {
+      "id": "CCFG-AC-089",
+      "r0_status": "BLOCKED",
+      "r1_status": "BLOCKED",
+      "evidence": [
+        {
+          "key": "089-part",
+          "file": "accI.json",
+          "sub": "PARTIAL"
+        }
+      ]
+    },
+    {
+      "id": "CCFG-AC-090",
+      "r0_status": "PASS",
+      "r1_status": "BLOCKED",
+      "evidence": [
+        {
+          "key": "090-static",
+          "file": "accA.json",
+          "sub": "PASS"
+        }
+      ],
+      "r1_reason": "定义以“默认/Hover/键盘聚焦/按下/禁用”多状态视觉为核心，仅完成默认态测量"
+    },
+    {
+      "id": "CCFG-AC-091",
+      "r0_status": "PASS",
+      "r1_status": "PASS",
+      "evidence": [
+        {
+          "key": "091",
+          "file": "accG.json",
+          "sub": "PASS"
+        }
+      ]
+    },
+    {
+      "id": "CCFG-AC-092",
+      "r0_status": "PASS",
+      "r1_status": "PASS",
+      "evidence": [
+        {
+          "key": "092",
+          "file": "accG.json",
+          "sub": "PASS"
+        }
+      ]
+    },
+    {
+      "id": "CCFG-AC-093",
+      "r0_status": "PASS",
+      "r1_status": "PASS",
+      "evidence": [
+        {
+          "key": "093",
+          "file": "accH.json",
+          "sub": "PASS"
+        }
+      ]
+    },
+    {
+      "id": "CCFG-AC-094",
+      "r0_status": "PASS",
+      "r1_status": "PASS",
+      "evidence": [
+        {
+          "key": "094",
+          "file": "accG.json",
+          "sub": "PASS"
+        }
+      ]
+    },
+    {
+      "id": "CCFG-AC-095",
+      "r0_status": "PASS",
+      "r1_status": "PASS",
+      "evidence": [
+        {
+          "key": "095",
+          "file": "accG.json",
+          "sub": "PASS"
+        }
+      ]
+    },
+    {
+      "id": "CCFG-AC-096",
+      "r0_status": "BLOCKED",
+      "r1_status": "BLOCKED",
+      "evidence": [
+        {
+          "key": "096",
+          "file": "accG.json",
+          "sub": "PARTIAL"
+        }
+      ]
+    },
+    {
+      "id": "CCFG-AC-097",
+      "r0_status": "PASS",
+      "r1_status": "PASS",
+      "evidence": [
+        {
+          "key": "097",
+          "file": "accG.json",
+          "sub": "PASS"
+        }
+      ]
+    },
+    {
+      "id": "CCFG-AC-098",
+      "r0_status": "PASS",
+      "r1_status": "PASS",
+      "evidence": [
+        {
+          "key": "098",
+          "file": "accG.json",
+          "sub": "PASS"
+        }
+      ]
+    },
+    {
+      "id": "CCFG-AC-099",
+      "r0_status": "PASS",
+      "r1_status": "PASS",
+      "evidence": [
+        {
+          "key": "099",
+          "file": "accG.json",
+          "sub": "PASS"
+        }
+      ]
+    },
+    {
+      "id": "CCFG-AC-100",
+      "r0_status": "PASS",
+      "r1_status": "PASS",
+      "evidence": [
+        {
+          "key": "100-trigger",
+          "file": "accD.json",
+          "sub": "PASS"
+        }
+      ]
+    },
+    {
+      "id": "CCFG-AC-101",
+      "r0_status": "PASS",
+      "r1_status": "PASS",
+      "evidence": [
+        {
+          "key": "101",
+          "file": "accD.json",
+          "sub": "PASS"
+        }
+      ]
+    },
+    {
+      "id": "CCFG-AC-102",
+      "r0_status": "PASS",
+      "r1_status": "BLOCKED",
+      "evidence": [
+        {
+          "key": "102-part",
+          "file": "accD.json",
+          "sub": "PASS"
+        }
+      ],
+      "r1_reason": "定义要求键盘完整遍历与边缘翻转避让，仅完成菜单打开与 Esc 关闭"
+    },
+    {
+      "id": "CCFG-AC-103",
+      "r0_status": "PASS",
+      "r1_status": "BLOCKED",
+      "evidence": [
+        {
+          "key": "103",
+          "file": "accD.json",
+          "sub": "PASS"
+        }
+      ],
+      "r1_reason": "定义要求删除/停用/启用各执行一次并核对接口调用/忙碌/失败复位，仅完成“不冒泡触发编辑”"
+    },
+    {
+      "id": "CCFG-AC-104",
+      "r0_status": "BLOCKED",
+      "r1_status": "BLOCKED",
+      "evidence": [
+        {
+          "key": "104-part",
+          "file": "accI.json",
+          "sub": "PARTIAL"
+        }
+      ]
+    },
+    {
+      "id": "CCFG-AC-105",
+      "r0_status": "PASS",
+      "r1_status": "PASS",
+      "evidence": [
+        {
+          "key": "105",
+          "file": "accC.json",
+          "sub": "PASS"
+        }
+      ]
+    },
+    {
+      "id": "CCFG-AC-106",
+      "r0_status": "PASS",
+      "r1_status": "PASS",
+      "evidence": [
+        {
+          "key": "106",
+          "file": "accC.json",
+          "sub": "PASS"
+        }
+      ]
+    },
+    {
+      "id": "CCFG-AC-107",
+      "r0_status": "PASS",
+      "r1_status": "PASS",
+      "evidence": [
+        {
+          "key": "107",
+          "file": "accH.json",
+          "sub": "PASS"
+        }
+      ]
+    },
+    {
+      "id": "CCFG-AC-108",
+      "r0_status": "PASS",
+      "r1_status": "PASS",
+      "evidence": [
+        {
+          "key": "108",
+          "file": "accH.json",
+          "sub": "PASS"
+        }
+      ]
+    },
+    {
+      "id": "CCFG-AC-109",
+      "r0_status": "PASS",
+      "r1_status": "PASS",
+      "evidence": [
+        {
+          "key": "109",
+          "file": "accC.json",
+          "sub": "PASS"
+        }
+      ]
+    },
+    {
+      "id": "CCFG-AC-110",
+      "r0_status": "PASS",
+      "r1_status": "PASS",
+      "evidence": [
+        {
+          "key": "110",
+          "file": "accH.json",
+          "sub": "PASS"
+        }
+      ]
+    },
+    {
+      "id": "CCFG-AC-111",
+      "r0_status": "PASS",
+      "r1_status": "PASS",
+      "evidence": [
+        {
+          "key": "111",
+          "file": "accE.json",
+          "sub": "PASS"
+        },
+        {
+          "key": "111-narrow",
+          "file": "accF.json",
+          "sub": "PASS"
+        }
+      ]
+    },
+    {
+      "id": "CCFG-AC-112",
+      "r0_status": "BLOCKED",
+      "r1_status": "BLOCKED",
+      "evidence": [
+        {
+          "key": "112",
+          "file": "accE.json",
+          "sub": "PARTIAL"
+        },
+        {
+          "key": "112-panes",
+          "file": "accE.json",
+          "sub": "PASS"
+        }
+      ]
+    },
+    {
+      "id": "CCFG-AC-113",
+      "r0_status": "PASS",
+      "r1_status": "PASS",
+      "evidence": [
+        {
+          "key": "113-create",
+          "file": "accE.json",
+          "sub": "PASS"
+        }
+      ]
+    },
+    {
+      "id": "CCFG-AC-114",
+      "r0_status": "PASS",
+      "r1_status": "PASS",
+      "evidence": [
+        {
+          "key": "114",
+          "file": "accE.json",
+          "sub": "PASS"
+        }
+      ]
+    },
+    {
+      "id": "CCFG-AC-115",
+      "r0_status": "PASS",
+      "r1_status": "BLOCKED",
+      "evidence": [
+        {
+          "key": "115-handoff",
+          "file": "accE.json",
+          "sub": "PASS"
+        }
+      ],
+      "r1_reason": "定义要求提交请求处理中的 loading 视觉与防重复提交，仅完成常态配色与换行"
+    },
+    {
+      "id": "CCFG-AC-116",
+      "r0_status": "PASS",
+      "r1_status": "PASS",
+      "evidence": [
+        {
+          "key": "116",
+          "file": "accE.json",
+          "sub": "PASS"
+        },
+        {
+          "key": "116-edit",
+          "file": "accF.json",
+          "sub": "PASS"
+        }
+      ]
+    },
+    {
+      "id": "CCFG-AC-117",
+      "r0_status": "PASS",
+      "r1_status": "BLOCKED",
+      "evidence": [
+        {
+          "key": "117",
+          "file": "accD.json",
+          "sub": "PASS"
+        }
+      ],
+      "r1_reason": "定义要求“删除”条目悬停/聚焦反馈并执行一次删除，仅完成字重/红色/分隔线"
+    },
+    {
+      "id": "CCFG-AC-118",
+      "r0_status": "PASS",
+      "r1_status": "PASS",
+      "evidence": [
+        {
+          "key": "118",
+          "file": "accE.json",
+          "sub": "PASS"
+        },
+        {
+          "key": "118-clearone",
+          "file": "accE.json",
+          "sub": "PASS"
+        }
+      ]
+    },
+    {
+      "id": "CCFG-AC-119",
+      "r0_status": "PASS",
+      "r1_status": "PASS",
+      "evidence": [
+        {
+          "key": "119",
+          "file": "accE.json",
+          "sub": "PASS"
+        }
+      ]
+    },
+    {
+      "id": "CCFG-AC-120",
+      "r0_status": "PASS",
+      "r1_status": "BLOCKED",
+      "evidence": [
+        {
+          "key": "120",
+          "file": "accE.json",
+          "sub": "PASS"
+        },
+        {
+          "key": "120-boundary",
+          "file": "accE.json",
+          "sub": "PASS"
+        }
+      ],
+      "r1_reason": "定义要求请求处理中重复提交与加载态跳色观察，仅完成常态/边界"
+    },
+    {
+      "id": "CCFG-AC-121",
+      "r0_status": "PASS",
+      "r1_status": "BLOCKED",
+      "evidence": [
+        {
+          "key": "121-part",
+          "file": "accI.json",
+          "sub": "PASS"
+        }
+      ],
+      "r1_reason": "定义要求完成一次成功保存并观察关闭与列表刷新，仅完成字段级错误位置"
+    },
+    {
+      "id": "CCFG-AC-122",
+      "r0_status": "PASS",
+      "r1_status": "PASS",
+      "evidence": [
+        {
+          "key": "122",
+          "file": "accE.json",
+          "sub": "PASS"
+        }
+      ]
+    },
+    {
+      "id": "CCFG-AC-123",
+      "r0_status": "PASS",
+      "r1_status": "PASS",
+      "evidence": [
+        {
+          "key": "123-submit",
+          "file": "accE.json",
+          "sub": "PASS"
+        },
+        {
+          "key": "123-restore-error",
+          "file": "accE.json",
+          "sub": "PASS"
+        }
+      ]
+    },
+    {
+      "id": "CCFG-AC-124",
+      "r0_status": "PASS",
+      "r1_status": "PASS",
+      "evidence": [
+        {
+          "key": "124",
+          "file": "accE.json",
+          "sub": "PASS"
+        }
+      ]
+    },
+    {
+      "id": "CCFG-AC-125",
+      "r0_status": "PASS",
+      "r1_status": "PASS",
+      "evidence": [
+        {
+          "key": "125",
+          "file": "accH.json",
+          "sub": "PASS"
+        }
+      ]
+    },
+    {
+      "id": "CCFG-AC-126",
+      "r0_status": "PASS",
+      "r1_status": "PASS",
+      "evidence": [
+        {
+          "key": "126",
+          "file": "accH.json",
+          "sub": "PASS"
+        }
+      ]
+    },
+    {
+      "id": "CCFG-AC-127",
+      "r0_status": "PASS",
+      "r1_status": "PASS",
+      "evidence": [
+        {
+          "key": "127",
+          "file": "accE.json",
+          "sub": "PASS"
+        }
+      ]
+    },
+    {
+      "id": "CCFG-AC-128",
+      "r0_status": "PASS",
+      "r1_status": "PASS",
+      "evidence": [
+        {
+          "key": "128-limit",
+          "file": "accE.json",
+          "sub": "PASS"
+        },
+        {
+          "key": "128-illegal",
+          "file": "accE.json",
+          "sub": "PASS"
+        }
+      ]
+    },
+    {
+      "id": "CCFG-AC-129",
+      "r0_status": "PASS",
+      "r1_status": "PASS",
+      "evidence": [
+        {
+          "key": "129-create",
+          "file": "accE.json",
+          "sub": "PASS"
+        },
+        {
+          "key": "129-edit-locked",
+          "file": "accF.json",
+          "sub": "PARTIAL"
+        },
+        {
+          "key": "129-edit",
+          "file": "accF.json",
+          "sub": "PASS"
+        }
+      ]
+    },
+    {
+      "id": "CCFG-AC-130",
+      "r0_status": "BLOCKED",
+      "r1_status": "BLOCKED",
+      "evidence": [
+        {
+          "key": "130",
+          "file": "accE.json",
+          "sub": "PARTIAL"
+        },
+        {
+          "key": "130-han",
+          "file": "accE.json",
+          "sub": "PASS"
+        },
+        {
+          "key": "130-emoji",
+          "file": "accE.json",
+          "sub": "PASS"
+        }
+      ]
+    },
+    {
+      "id": "CCFG-AC-131",
+      "r0_status": "BLOCKED",
+      "r1_status": "BLOCKED",
+      "evidence": [
+        {
+          "key": "131",
+          "file": "accE.json",
+          "sub": "PARTIAL"
+        }
+      ]
+    },
+    {
+      "id": "CCFG-AC-132",
+      "r0_status": "PASS",
+      "r1_status": "BLOCKED",
+      "evidence": [
+        {
+          "key": "132-part",
+          "file": "accH.json",
+          "sub": "PASS"
+        }
+      ],
+      "r1_reason": "定义要求 >256 字符截断与机构名缺失分支，当前数据集不可构造、未执行"
+    },
+    {
+      "id": "CCFG-AC-133",
+      "r0_status": "BLOCKED",
+      "r1_status": "BLOCKED",
+      "evidence": [
+        {
+          "key": "133",
+          "file": "accF.json",
+          "sub": "PARTIAL"
+        }
+      ]
+    },
+    {
+      "id": "CCFG-AC-134",
+      "r0_status": "BLOCKED",
+      "r1_status": "BLOCKED",
+      "evidence": [
+        {
+          "key": "134",
+          "file": "accJ.json",
+          "sub": "PARTIAL"
+        }
+      ]
+    },
+    {
+      "id": "CCFG-AC-135",
+      "r0_status": "PASS",
+      "r1_status": "PASS",
+      "evidence": [
+        {
+          "key": "135",
+          "file": "accJ.json",
+          "sub": "PASS"
+        }
+      ]
+    },
+    {
+      "id": "CCFG-AC-136",
+      "r0_status": "PASS",
+      "r1_status": "PASS",
+      "evidence": [
+        {
+          "key": "136",
+          "file": "accE.json",
+          "sub": "PASS"
+        }
+      ]
+    },
+    {
+      "id": "CCFG-AC-137",
+      "r0_status": "PASS",
+      "r1_status": "PASS",
+      "evidence": [
+        {
+          "key": "137",
+          "file": "accH.json",
+          "sub": "PASS"
+        }
+      ]
+    },
+    {
+      "id": "CCFG-AC-138",
+      "r0_status": "PASS",
+      "r1_status": "PASS",
+      "evidence": [
+        {
+          "key": "138-footerstable",
+          "file": "accE.json",
+          "sub": "PASS"
+        }
+      ]
+    },
+    {
+      "id": "CCFG-AC-139",
+      "r0_status": "PASS",
+      "r1_status": "BLOCKED",
+      "evidence": [
+        {
+          "key": "139",
+          "file": "accD.json",
+          "sub": "PASS"
+        }
+      ],
+      "r1_reason": "定义要求确认停用成功/失败，仅完成取消路径（noConfirmClick:true）"
+    },
+    {
+      "id": "CCFG-AC-140",
+      "r0_status": "PASS",
+      "r1_status": "BLOCKED",
+      "evidence": [
+        {
+          "key": "140",
+          "file": "accD.json",
+          "sub": "PASS"
+        }
+      ],
+      "r1_reason": "定义要求确认启用成功/失败与恰一次写请求，仅完成取消路径（noConfirmClick:true）"
+    },
+    {
+      "id": "CCFG-AC-141",
+      "r0_status": "PASS",
+      "r1_status": "PASS",
+      "evidence": [
+        {
+          "key": "141",
+          "file": "accB.json",
+          "sub": "PASS"
+        }
+      ]
+    },
+    {
+      "id": "CCFG-AC-142",
+      "r0_status": "PASS",
+      "r1_status": "PASS",
+      "evidence": [
+        {
+          "key": "142-abc",
+          "file": "accB.json",
+          "sub": "PASS"
+        },
+        {
+          "key": "142-d",
+          "file": "accB2.json",
+          "sub": "PASS"
+        }
+      ]
+    },
+    {
+      "id": "CCFG-AC-143",
+      "r0_status": "PASS",
+      "r1_status": "PASS",
+      "evidence": [
+        {
+          "key": "143",
+          "file": "accB.json",
+          "sub": "PASS"
+        },
+        {
+          "key": "143-plusN",
+          "file": "accC.json",
+          "sub": "PASS"
+        }
+      ]
+    },
+    {
+      "id": "CCFG-AC-144",
+      "r0_status": "PASS",
+      "r1_status": "PASS",
+      "evidence": [
+        {
+          "key": "144",
+          "file": "accI.json",
+          "sub": "PASS"
+        }
+      ]
+    },
+    {
+      "id": "CCFG-AC-145",
+      "r0_status": "BLOCKED",
+      "r1_status": "BLOCKED",
+      "evidence": [
+        {
+          "key": "145",
+          "file": "accJ.json",
+          "sub": "PARTIAL"
+        }
+      ]
+    },
+    {
+      "id": "CCFG-AC-146",
+      "r0_status": "PASS",
+      "r1_status": "PASS",
+      "evidence": [
+        {
+          "key": "146",
+          "file": "accB.json",
+          "sub": "PASS"
+        }
+      ]
+    },
+    {
+      "id": "CCFG-AC-147",
+      "r0_status": "PASS",
+      "r1_status": "PASS",
+      "evidence": [
+        {
+          "key": "147",
+          "file": "accB.json",
+          "sub": "PASS"
+        }
+      ]
+    },
+    {
+      "id": "CCFG-AC-148",
+      "r0_status": "PASS",
+      "r1_status": "PASS",
+      "evidence": [
+        {
+          "key": "148",
+          "file": "accB.json",
+          "sub": "PASS"
+        }
+      ]
+    },
+    {
+      "id": "CCFG-AC-149",
+      "r0_status": "PASS",
+      "r1_status": "PASS",
+      "evidence": [
+        {
+          "key": "149",
+          "file": "accB2.json",
+          "sub": "PASS"
+        }
+      ]
+    },
+    {
+      "id": "CCFG-AC-150",
+      "r0_status": "PASS",
+      "r1_status": "PASS",
+      "evidence": [
+        {
+          "key": "150",
+          "file": "accB.json",
+          "sub": "PASS"
+        }
+      ]
+    },
+    {
+      "id": "CCFG-AC-151",
+      "r0_status": "PASS",
+      "r1_status": "BLOCKED",
+      "evidence": [
+        {
+          "key": "151-static",
+          "file": "accD.json",
+          "sub": "PASS"
+        }
+      ],
+      "r1_reason": "定义要求单击确认后先关闭并恰一次写请求（NOT_RUN），仅完成四态按钮视觉"
+    },
+    {
+      "id": "CCFG-AC-152",
+      "r0_status": "PASS",
+      "r1_status": "BLOCKED",
+      "evidence": [
+        {
+          "key": "152-static",
+          "file": "accD.json",
+          "sub": "PASS"
+        }
+      ],
+      "r1_reason": "定义要求单击确认后先关闭并恰一次写请求（NOT_RUN），仅完成四态按钮视觉"
+    },
+    {
+      "id": "CCFG-AC-153",
+      "r0_status": "PASS",
+      "r1_status": "BLOCKED",
+      "evidence": [
+        {
+          "key": "153-part",
+          "file": "accI.json",
+          "sub": "PASS"
+        }
+      ],
+      "r1_reason": "定义要求启停成功后按可见性重选，仅完成无复选框/多选/批量/持久化核对"
+    },
+    {
+      "id": "CCFG-AC-154",
+      "r0_status": "PASS",
+      "r1_status": "PASS",
+      "evidence": [
+        {
+          "key": "154",
+          "file": "accD.json",
+          "sub": "PASS"
+        }
+      ]
+    }
+  ]
+}
