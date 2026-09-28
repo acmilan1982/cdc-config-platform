@@ -1,0 +1,225 @@
+{
+  "task": "CLIENT-CONFIG-FORMAL-ACCEPTANCE-READONLY-SUPPLEMENT-001",
+  "branch": "develop",
+  "base_commit": "bec9beb4ac86b715fd9709c85e8c10788db71515",
+  "task_type": "readonly_supplement",
+  "raw_archive_sha256": "1cf178aefb03b0727e5b036ee66123631cf8d4a525622177749e258e0a5e15e6",
+  "raw_archive_committed": false,
+  "network_write_interception": {
+    "installed_before_navigation": true,
+    "allowed_methods": ["GET", "HEAD", "OPTIONS"],
+    "blocked_methods": ["POST", "PUT", "PATCH", "DELETE"],
+    "blocked_request_count": 0,
+    "note": "四个探针脚本（probeA~probeD）实测非 GET 请求到达后端计数均为 0"
+  },
+  "counts": {
+    "before": {"PASS": 66, "FAIL": 0, "BLOCKED": 73, "NOT_RUN": 15, "total": 154},
+    "after": {"PASS": 69, "FAIL": 0, "BLOCKED": 70, "NOT_RUN": 15, "total": 154}
+  },
+  "changed_ids": [
+    {"id": "CCFG-AC-041", "from": "BLOCKED", "to": "PASS"},
+    {"id": "CCFG-AC-100", "from": "BLOCKED", "to": "PASS"},
+    {"id": "CCFG-AC-143", "from": "BLOCKED", "to": "PASS"}
+  ],
+  "per_id": [
+    {
+      "id": "CCFG-AC-041",
+      "status_before": "BLOCKED",
+      "status_after": "PASS",
+      "definition_requirement": "进入新增与编辑弹窗，观察‘自动生成’按钮位置；在未选数据源、编辑含异常历史、填写自定义描述等不同表单状态下检查按钮——按钮位于‘探针描述’输入框右侧，任何状态下保持可点击、不显示为禁用",
+      "precondition_covered": true,
+      "steps_executed": [
+        "新增弹窗·未选数据源：读取按钮与描述输入框几何与状态",
+        "新增弹窗·填写自定义描述：同前",
+        "编辑弹窗·CCFG-AC-R1-ABN（含异常历史）：同前",
+        "编辑弹窗·CCFG-AC-R1-HIST-COM（含异常历史）：同前"
+      ],
+      "evidence": {"script": "probeD.mjs", "keys": ["AC041.create_default", "AC041.create_customDesc", "AC041.edit_CCFG-AC-R1-ABN", "AC041.edit_CCFG-AC-R1-HIST-COM"]},
+      "observed": {"rightOfInput": true, "btnVisible": true, "disabledAttr": false, "ariaDisabled": "false", "pointerEvents": "auto", "cursor": "pointer", "all_states_identical": true},
+      "verdict": "COVERED",
+      "remaining_gap": null
+    },
+    {
+      "id": "CCFG-AC-100",
+      "status_before": "BLOCKED",
+      "status_after": "PASS",
+      "definition_requirement": "1440×900 与 1920×1080 下观察‘操作’列每一行入口形态；单击 '1'/'0'/异常三类行读取菜单条目；Tab 聚焦并读取可访问名称。入口须为水平三点图标（无‘更多’文字）、焦点可见、可访问名称清晰、菜单与 FG_ACTIVE 三态严格相符",
+      "precondition_covered": true,
+      "steps_executed": ["两视口逐行读取全部 16 行入口形态/可访问名称/tabindex", "三态行分别打开菜单并读取条目"],
+      "evidence": {"script": "probeC.mjs", "keys": ["AC100_1440x900", "AC100_1920x1080"]},
+      "observed": {"rowCount": 16, "all_rows_icon_only": true, "aria_label": "更多操作：{探针ID}", "tabindex": "0", "menu_one": ["停用", "删除"], "menu_zero": ["启用", "删除"], "menu_abnormal": ["停用", "删除"], "consistent_across_viewports": true},
+      "verdict": "COVERED",
+      "remaining_gap": null
+    },
+    {
+      "id": "CCFG-AC-143",
+      "status_before": "BLOCKED",
+      "status_after": "PASS",
+      "definition_requirement": "未固定任何行时分别操作①三点触发器②菜单条目（含启停/删除确认窗并取消）③+N（打开完整清单）④标签 Tooltip⑤探针 ID Enter/Space 键盘编辑，观察是否切换选中；再固定一行重复，核对固定不变；‘点击更多及菜单项不触发行双击编辑’边界保持",
+      "precondition_covered": true,
+      "steps_executed": ["未固定起始态：①~⑤ 全序列", "已固定起始态（CCFG-AC-R1-ON）：①~⑤ 全序列"],
+      "evidence": {"script": "probeB.mjs", "keys": ["timeline[state=unfixed]", "timeline[state=fixed]"]},
+      "observed": {"unfixed_stays_unfixed": true, "fixed_stays_CCFG-AC-R1-ON": true, "plusN": {"plusText": "+6", "popoverOpened": true}, "tooltip_visible": true, "id_enter_dialog": true, "id_space_dialog": true, "confirm_enable": {"title": "启用探针", "btns": ["取消", "启用"]}, "confirm_delete": {"title": "删除探针", "btns": ["取消", "删除"]}, "trigger_opened_edit_dialog": false, "menu_item_opened_edit_dialog": false, "plusOpen_false_not_counted_as_opened": true},
+      "verdict": "COVERED",
+      "remaining_gap": null
+    },
+    {
+      "id": "CCFG-AC-010",
+      "status_before": "BLOCKED",
+      "status_after": "BLOCKED",
+      "definition_requirement": "含 6~7 数据源探针，调整浏览器宽度观察‘采集数据源’列；常规行视觉高度约 58~64px（以实际盒模型为准），按实际可用宽度自适应决定直接展示数量，含 6~7 源时单行最多展示 6、其余以准确 +N 表示，不撑高整行、不裁切、无第二行/滚动条/越界",
+      "precondition_covered": true,
+      "steps_executed": ["7 源样本 CCFG-AC-R1-ON 在 1920×1080/1440×900/1280×800/1100×900/900×800 五个宽度的直接展示数量与 +N 对比"],
+      "evidence": {"script": "probeA.mjs", "keys": ["widthLegs"]},
+      "observed": {"1920x1080": {"shown": 5, "plus": "+2"}, "1440x900": {"shown": 1, "plus": "+6"}, "1280x800": {"shown": 1, "plus": "+6"}, "1100x900": {"shown": 1, "plus": "+6"}, "900x800": {"shown": 1, "plus": "+6"}, "rowHeight_all": 53, "containerOverflowX_all": false, "fitsInside_all": true},
+      "verdict": "PARTIAL",
+      "remaining_gap": "实测行高 53px 落在定义区间 58~64px 之外；且 CCFG-DESIGN-049/CCFG-UI-038/CCFG-REQ-106 已移除固定像素行高，改由公共单元格内边距与内容决定 -> 定义文本与已批准盒模型实质冲突，须由复审/人工裁定，不得由本任务选边"
+    },
+    {
+      "id": "CCFG-AC-012",
+      "status_before": "BLOCKED",
+      "status_after": "BLOCKED",
+      "definition_requirement": "数据源标签超长省略与 Tooltip（延迟、单实例、居中）",
+      "precondition_covered": true,
+      "steps_executed": ["标签超长省略实测", "Tooltip 触发延迟与单实例采样（60ms 间隔 / 900ms）", "逐标签垂直居中测量", "跨标签/跨行切换保持单实例"],
+      "evidence": {"script": "probeC.mjs", "keys": ["AC012.tagInfo", "AC012.tooltipAppearedAtMs", "AC012.tagStates", "AC012.stillOneAfterMove"]},
+      "observed": {"textOverflow": "ellipsis", "textEllipsis": true, "tagWidth": 120, "tooltipAppearedAtMs": 414, "tipInstanceCount": 1, "centerOffsetY_all_zero": true, "afterLeave": 0},
+      "verdict": "PARTIAL",
+      "remaining_gap": "定义含项目负责人目测项（Tooltip 外观/居中观感）；Agent 无头浏览器观测不得代替负责人目测"
+    },
+    {
+      "id": "CCFG-AC-044",
+      "status_before": "BLOCKED",
+      "status_after": "BLOCKED",
+      "definition_requirement": "已在新增/编辑弹窗按确定顺序选择多个数据源（含机构名称相同者）后点击‘自动生成’",
+      "precondition_covered": false,
+      "steps_executed": ["读取数据源可选集合现状"],
+      "evidence": {"script": "probeD.mjs", "keys": ["AC132_noSelection", "AC041.create_default"]},
+      "observed": {"selectable_data_source_count": 1, "others": "OCCUPIED（不可选）"},
+      "verdict": "MISSING",
+      "remaining_gap": "当前可选数据源仅 1 个，多源与同机构名去重前置不可构造；不得创建夹具"
+    },
+    {
+      "id": "CCFG-AC-090",
+      "status_before": "BLOCKED",
+      "status_after": "BLOCKED",
+      "definition_requirement": "新增按钮与参考页‘新增数据源’同款黑色实心按钮；含默认/悬停/焦点/禁用态",
+      "precondition_covered": true,
+      "steps_executed": ["新增按钮默认/悬停/焦点三态样式读取", "与 /config/data-source 参考页对比", "查询/重置按钮样式", "点击验证打开新增弹窗"],
+      "evidence": {"script": "probeD.mjs", "keys": ["AC090.client", "AC090.ref", "AC090.clickOpensDialog"]},
+      "observed": {"default": {"bg": "rgb(9, 9, 11)", "color": "rgb(255, 255, 255)", "radius": "6px", "fontWeight": "500", "fontSize": "14px"}, "hover_focus": {"bg": "rgb(39, 39, 42)"}, "reference_identical": true, "click_opens_dialog": "新增探针"},
+      "verdict": "PARTIAL",
+      "remaining_gap": "定义含按钮禁用态分支，当前环境无法构造禁用态；该分支缺证据。另：默认态样式读取时按钮因页面滚动位于视口外（rect top 为负），样式为计算值、与位置无关，悬停/焦点态在视口内读取"
+    },
+    {
+      "id": "CCFG-AC-098",
+      "status_before": "BLOCKED",
+      "status_after": "BLOCKED",
+      "definition_requirement": "库内存在恰好含 6 个与 ≥7 个已分配数据源的探针；1440×900 与 1920×1080 观察单行直接展示标签数量，缩窄后 +N 与可容纳数量自洽",
+      "precondition_covered": false,
+      "steps_executed": ["5 源与 7 源样本在 1920/1440/1280 三视口的直接展示数量与 +N 自洽性", "盒模型核对"],
+      "evidence": {"script": "probeC.mjs", "keys": ["AC098.samples", "probeA.rowCountsAt900"]},
+      "observed": {"seven_source": {"1920x1080": "5+2", "1440x900": "1+6", "1280x800": "1+6"}, "five_source": {"1920x1080": "5", "1440x900": "2+3", "1280x800": "1+4"}, "rowHeight_all": 53, "containerOverflowX_all": false, "dsCount_distribution": {"0": 5, "1": 7, "2": 2, "5": 1, "7": 1}},
+      "verdict": "PARTIAL",
+      "remaining_gap": "库内不存在恰好 6 个数据源的样本；‘恰好 6’分支不可构造，不得造数"
+    },
+    {
+      "id": "CCFG-AC-099",
+      "status_before": "BLOCKED",
+      "status_after": "BLOCKED",
+      "definition_requirement": "ORG/ID 回退显示；异常项优先；单行最多 6；溢出时 +N 及完整清单按去重后的原存储顺序展示且异常项不隐藏",
+      "precondition_covered": true,
+      "steps_executed": ["7 源样本 +N 点击展开完整清单并按顺序读取全部条目"],
+      "evidence": {"script": "probeC.mjs", "keys": ["AC099.sevenSource"]},
+      "observed": {"opened": true, "item_count": 7, "order": "原存储顺序 DS01..DS07", "org_and_id_shown": true},
+      "verdict": "PARTIAL",
+      "remaining_gap": "定义要求‘规范化去重后’的原存储顺序；去重语义腿未覆盖"
+    },
+    {
+      "id": "CCFG-AC-102",
+      "status_before": "BLOCKED",
+      "status_after": "BLOCKED",
+      "definition_requirement": "键盘打开/遍历/关闭三点菜单；边缘/滚动位不被裁切；禁用态条目可辨识",
+      "precondition_covered": true,
+      "steps_executed": ["焦点环读取", "Enter 打开", "方向键遍历", "Esc 关闭", "禁用条目 DOM 计数"],
+      "evidence": {"script": "probeC.mjs", "keys": ["AC102"]},
+      "observed": {"focusRing": "2px solid", "openedByEnter": true, "active_sequence": ["删除", "启用"], "closedByEsc": true, "disabledItemsInDom": 0},
+      "verdict": "PARTIAL",
+      "remaining_gap": "当前环境无行级忙碌态，禁用条目不可构造；边缘避让需特定滚动位置样本"
+    },
+    {
+      "id": "CCFG-AC-106",
+      "status_before": "BLOCKED",
+      "status_after": "BLOCKED",
+      "definition_requirement": "前置：一项缺失机构名 + 另一项有机构名称",
+      "precondition_covered": false,
+      "steps_executed": ["定位 CCFG-AC-R1-HIST-COM 并尝试其 +N"],
+      "evidence": {"script": "probeC.mjs", "keys": ["AC106.missingOrgRow"]},
+      "observed": {"opened": false, "row_org_fields": "两项机构名均为空 + 整行 COMMA_PROTOCOL_AMBIGUOUS"},
+      "verdict": "MISSING",
+      "remaining_gap": "前置不满足（无一缺一有机构名的组合）；+N 未打开按前置未满足记录，不判产品 FAIL"
+    },
+    {
+      "id": "CCFG-AC-117",
+      "status_before": "BLOCKED",
+      "status_after": "BLOCKED",
+      "definition_requirement": "菜单条目字重/颜色/分隔线/悬停焦点，并含对‘删除’条目的执行腿",
+      "precondition_covered": true,
+      "steps_executed": ["菜单结构/字重/颜色/分隔线/悬停实测"],
+      "evidence": {"script": "probeC.mjs", "keys": ["AC117.items", "AC117.deleteHover"]},
+      "observed": {"enable": {"fontWeight": "400", "color": "rgb(96, 98, 102)"}, "separator": {"borderTop": "1px solid rgb(235, 238, 245)", "role": "separator"}, "delete": {"fontWeight": "400", "color": "rgb(245, 108, 108)"}, "deleteHoverBg": "rgb(236, 245, 255)"},
+      "verdict": "PARTIAL",
+      "remaining_gap": "删除执行属写操作，需独立写授权；本任务未获批"
+    },
+    {
+      "id": "CCFG-AC-125",
+      "status_before": "BLOCKED",
+      "status_after": "BLOCKED",
+      "definition_requirement": "弹窗视口居中、提示/错误切换不引起弹窗高度/位置突变、长错误文字完整可读（可换行）",
+      "precondition_covered": true,
+      "steps_executed": ["1100×800/820×760/700×720 三视口几何与页面横向溢出测量"],
+      "evidence": {"script": "probeD.mjs", "keys": ["AC125.viewports"]},
+      "observed": {"1100x800": {"dialogW": 900, "left": 100, "overflowX": false}, "820x760": {"dialogW": 772, "left": 24, "overflowX": false}, "700x720": {"dialogW": 652, "left": 24, "overflowX": false}, "footerButtons_stable": true},
+      "verdict": "PARTIAL",
+      "remaining_gap": "当前可构造字段错误均为单行短文案（clipped:false），长错误换行腿不可构造"
+    },
+    {
+      "id": "CCFG-AC-128",
+      "status_before": "BLOCKED",
+      "status_after": "BLOCKED",
+      "definition_requirement": "探针 ID 32 位上限（输入/粘贴一致）、非法字符前端校验，含后端唯一性分支",
+      "precondition_covered": true,
+      "steps_executed": ["手动输入 40 字符", "粘贴 40 字符", "非法字符提交触发字段级校验"],
+      "evidence": {"script": "probeD.mjs", "keys": ["AC128_manualTyped", "AC128_pasted", "AC128_illegal"]},
+      "observed": {"manual_40_to": 32, "paste_40_to": 32, "illegal_typed": "ab@ c-d", "silentlyRewritten": false, "fieldError": "探针 ID 格式不正确：须为 1~32 位字母、数字、点、下划线或连字符，且以字母或数字开头。"},
+      "verdict": "PARTIAL",
+      "remaining_gap": "④ 后端唯一性分支需真实写请求，属写/授权范围，本任务未执行"
+    },
+    {
+      "id": "CCFG-AC-132",
+      "status_before": "BLOCKED",
+      "status_after": "BLOCKED",
+      "definition_requirement": "未选数据源时点‘自动生成’为 no-op；另含多可选源与超 256 字符描述分支",
+      "precondition_covered": false,
+      "steps_executed": ["未选数据源时点‘自动生成’并观察描述与提示"],
+      "evidence": {"script": "probeD.mjs", "keys": ["AC132_noSelection"]},
+      "observed": {"descUnchanged": true, "messages": []},
+      "verdict": "PARTIAL",
+      "remaining_gap": "当前可选数据源仅 1 个、无 >256 字符描述样本，其余分支不可构造"
+    },
+    {
+      "id": "CCFG-AC-138",
+      "status_before": "BLOCKED",
+      "status_after": "BLOCKED",
+      "definition_requirement": "弹窗几何在状态序列下稳定；长错误换行；窄视口全状态序列",
+      "precondition_covered": true,
+      "steps_executed": ["5 状态序列几何测量：未选数据源→选中 1 个→全部取消→提交触发错误→修正消除"],
+      "evidence": {"script": "probeD.mjs", "keys": ["AC138.sequence"]},
+      "observed": {"dialogTop_stable": 135, "dialogH_stable": 613, "footerBtnY_stable": 700, "errors_single_line_no_clip": true, "overflowX_all": false},
+      "verdict": "PARTIAL",
+      "remaining_gap": "长错误文本不可构造（同 CCFG-AC-125），换行腿缺证据"
+    }
+  ],
+  "untouched_ids_note": "其余 73 条 BLOCKED + 15 条 NOT_RUN 中的用例，其缺口为需真实业务写入、数据库级核验、特定数据/并发条件、项目负责人目测或写授权，均不在本次只读补测范围，状态保持不变",
+  "next_entry": "CHATGPT_REMOTE_CLIENT_CONFIG_FORMAL_ACCEPTANCE_READONLY_SUPPLEMENT_REVIEW"
+}
