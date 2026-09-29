@@ -395,6 +395,14 @@ grep -ohF "$cand_marker" docs/baseline/list-table-visual-template/SHARED_COMPONE
 （`page_migration_status` 仍 `NOT_STARTED`、`page_migration_authorization_status` 仍
 `NOT_GRANTED`、`pilot_page_selection_status` 仍 `NOT_DECIDED`）。
 
+> 该草案经 R1 收敛（拟修订契约，见 §12.7／§12.8）后，再经 **R2** 修正
+> （`CLIENT-CONFIG-ROW-HEIGHT-AND-OPTIONAL-ELLIPSIS-BASELINE-001-R2`，2026-09-29）：
+> §12.7 拟议断言 #11 的示例判定表达式 `new Set(css().match(/\.lt-[\w-]+/g))` **本身会命中根类**
+> `.lt-main-table`，现收敛为**先剔除根类**再断言辅助类集合（或含根类的**三元素**允许集合）的
+> **可直接实现、可复审**口径；**仅改拟议文档文本**，**不**修改
+> `frontend/src/styles/list-table/list-table-visual.spec.ts` 现行测试代码或已批准断言。
+> 该扩展仍**未**获复审、**未**获批准、**未**实现。
+
 ## 9. 后续阶段与授权边界
 
 `LIST_TABLE_TEMPLATE_APPROVED` —— 阶段路径及其当前状态：
@@ -603,3 +611,19 @@ next_step=NONE_SHARED_IMPLEMENTATION_FINAL_ACCEPTED_AND_CLOSED_NO_PAGE_MIGRATION
   `page_migration_status` 保持 `NOT_STARTED`、
   `page_migration_authorization_status` 保持 `NOT_GRANTED`。
   本 R1 为**纯文档**纠错：未修改代码、共享 CSS、测试、配置、依赖、锁文件、证据或历史报告。
+- 2026-09-29，第七轮草案 **R2 定向纠错**（`CLIENT-CONFIG-ROW-HEIGHT-AND-OPTIONAL-ELLIPSIS-BASELINE-001-R2`，
+  纯文档）——ChatGPT 从远程 Git 对 R1 提交
+  `938e7202980cf898fe5c6d1194715e3a004f994a` 的复审结论为 `CHANGES_REQUIRED`，
+  其第 ② 项指出 `SHARED_COMPONENT_DESIGN.md` §12.7 拟议断言 #11 的示例判定表达式
+  `new Set(css().match(/\.lt-[\w-]+/g))` **本身会命中根类** `.lt-main-table`，与「辅助类恰好两个」
+  不符。本 R2 **只**修 §12.7 拟议 #11 的**拟议文档文本**：把判定写成**先剔除根类**
+  （`const helperClasses = allClasses.filter((name) => name !== '.lt-main-table').sort()`；
+  `expect(helperClasses).toEqual(['.lt-row-action__cell', '.lt-row-action__ellipsis'])`）
+  或使用含根类的**三元素**允许集合，**不得**让检查表达式实际计入三类；
+  helper 数维持**拟批准后且独立实现时** `0 → 2`、**现行仍 `0`**；九个 `--lt-*` 令牌不变，
+  断言 #2/#3 与 #6 的 R1 结论不变。本 R2 **不**修改
+  `frontend/src/styles/list-table/list-table-visual.spec.ts` 的现行测试代码或已批准断言；
+  §12 候选未实现标记（通道 3）R2 后复测仍 `23`（R1 时点值保留为时点证据），
+  四份文档 `26 / 0 / 42 / 7` 与本文件批准态设计标记 `79` 均**不变**。
+  `page_migration_status` 保持 `NOT_STARTED`、`page_migration_authorization_status` 保持 `NOT_GRANTED`。
+  本 R2 为**纯文档**纠错：未修改代码、共享 CSS、测试、配置、依赖、锁文件、证据或历史报告。

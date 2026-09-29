@@ -1425,7 +1425,7 @@ R2（提交 e72264d）  草案标记 = 79   （+4）
 
 ---
 
-## 12. 待复审的可选扩展草案：行内三点入口 opt-in（2026-09-29 草案建立 → R1 定向纠错，未复审、未批准、未实现）
+## 12. 待复审的可选扩展草案：行内三点入口 opt-in（2026-09-29 草案建立 → R1 定向纠错 → R2 定向纠错，未复审、未批准、未实现）
 
 `LIST_TABLE_PROPOSED_NOT_IMPLEMENTED` —— **本节为待复审草案**，来源为探针端管理第七轮调整任务
 `CLIENT-CONFIG-ROW-HEIGHT-AND-OPTIONAL-ELLIPSIS-BASELINE-001`。项目负责人于 2026-09-29 确认的
@@ -1442,10 +1442,20 @@ R1 **只**做文档收敛：确定 opt-in 类名与挂载位置、默认**不新
 闭合候选标记计数口径、给出批准路径。**拟修订值 ≠ 现值**；已批准旧断言在草案获批并实现前
 仍为**现行事实**。R1 **不**修改任何已批准公共代码／测试，**不**实现本扩展。
 
+**R2 定向纠错（`CLIENT-CONFIG-ROW-HEIGHT-AND-OPTIONAL-ELLIPSIS-BASELINE-001-R2`）** —— ChatGPT
+从远程 Git 对 R1 提交 `938e7202980cf898fe5c6d1194715e3a004f994a` 的复审结论为
+`CHANGES_REQUIRED`，其第 ② 项指出：§12.7 拟议断言 #11 的示例判定表达式
+`new Set(css().match(/\.lt-[\w-]+/g))` **本身会命中根类 `.lt-main-table`**，与「辅助类恰好两个」
+的表述不符。R2 **只**修 §12.7 拟议 #11 的**拟议文档文本**，把判定写成**可直接实现、可复审**的
+完整口径（**先剔除根类**再断言辅助类集合，或将根类计入**三元素**允许集合），
+**不**修改 `frontend/src/styles/list-table/list-table-visual.spec.ts` 的**现行**测试代码或已批准断言；
+helper 数维持**拟批准后且独立实现时** `0 → 2`、**现行仍 `0`**；九个 `--lt-*` 令牌不变，
+§7.1 断言 #2／#3 与 #6 的 R1 结论**不变**。R2 **不**实现本扩展、**不**改任何已批准公共代码／测试。
+
 ```text
 list_table_row_action_opt_in_extension_status=DRAFT_PENDING_REMOTE_REVIEW_NOT_APPROVED
 list_table_row_action_opt_in_extension_implemented=NO
-list_table_row_action_opt_in_contract_revision=R1_CONVERGED_PENDING_REVIEW
+list_table_row_action_opt_in_contract_revision=R2_CORRECTED_PENDING_REVIEW
 page_migration_status=NOT_STARTED
 page_migration_authorization_status=NOT_GRANTED
 ```
@@ -1556,7 +1566,7 @@ Element Plus 的单元格 `.cell` 计算样式含 `overflow: hidden`，会裁切
 「更多」文字入口改三点属**另一会话、另一任务**；本节示例**不**表示该页本任务已迁移、
 已授权或已实现（`page_migration_authorization_status=NOT_GRANTED` 不变）。
 
-### 12.7 拟修订契约（R1 收敛，逐项可复审）
+### 12.7 拟修订契约（R1 收敛、R2 修正 #11 根类计数，逐项可复审）
 
 `LIST_TABLE_PROPOSED_NOT_IMPLEMENTED` —— 本节把原「待复审问题清单」收敛为**具体、可复审的
 拟修订契约**。下列「拟值」在草案获批并实现之前**均非现值**；§4.3／§4.4／§7.1／§7.2 的
@@ -1572,8 +1582,22 @@ Element Plus 的单元格 `.cell` 计算样式含 `overflow: hidden`，会裁切
 
 > 11（拟）：内部辅助类数量为 **2**——源文件中除 `.lt-main-table` 外，`lt-` 类选择器
 > **只允许**已登记的 opt-in 集合 `{.lt-row-action__cell, .lt-row-action__ellipsis}`；
-> **其他**任何 `lt-` 类选择器仍**禁止**（判定：`new Set(css().match(/\.lt-[\w-]+/g))`
-> 与登记集合逐一相符）。
+> **其他**任何 `lt-` 类选择器仍**禁止**。
+
+**判定表达式必须可直接实现、可复审**：`css().match(/\.lt-[\w-]+/g)` 的匹配结果**本身会包含根类**
+`.lt-main-table`，故**必须**先剔除根类再断言辅助类集合（或将根类计入**三元素**允许集合）；
+**不得**写「辅助类恰好两个」却让检查表达式实际计入三类。拟判定（`ROOT_CLASS_SELECTOR = '.lt-main-table'`）：
+
+```ts
+const allClasses = [...new Set(css().match(/\.lt-[\w-]+/g) ?? [])]
+const helperClasses = allClasses.filter((name) => name !== ROOT_CLASS_SELECTOR).sort()
+expect(helperClasses).toEqual(['.lt-row-action__cell', '.lt-row-action__ellipsis'])
+```
+
+（等价写法亦可，但**须**明确先剔除根类，或写成 `expect(allClasses.sort()).toEqual([ROOT_CLASS_SELECTOR, '.lt-row-action__cell', '.lt-row-action__ellipsis'])` 一类**三元素**允许集合。）
+维持**拟批准后且独立实现时** helper 数 `0 → 2`、**现行仍 `0`**；九个 `--lt-*` 令牌不变，
+§7.1 断言 #2／#3 与 (1) 中 #6 的 R1 结论**不变**。本 R2 **只修拟议文档文本**，
+**不**修改 `frontend/src/styles/list-table/list-table-visual.spec.ts` 的现行测试代码或已批准断言。
 
 **（3）§7.2 组件/单元测试的拟新增覆盖**：在**未启用**页面的表格根节点上断言
 辅助类**零匹配**、且未启用表格的 `--lt-*` 覆盖声明**不存在**（DOM 类名 + 源码静态结构，
@@ -1642,3 +1666,7 @@ grep -ohF "$cand_marker" docs/baseline/list-table-visual-template/SHARED_COMPONE
 （其中 §12 节内 `20` 处，§0.1／§11.2／§11.3 说明文字共 `3` 处）。
 R0 实测「§12 内 `15`／含 §0.1 为 `16`／文件总计 `18`」为**时点证据**，**保留不改**
 （其中 §11.3 计数块内的引用为对四份规范文档计数的引用）。
+
+实测（2026-09-29，**R2 定向纠错后复测**）：R2 **未**新增／删除任何候选未实现标记实例，
+通道 1 `26 / 0 / 42 / 7`、通道 2 本文件批准态设计标记 `79`、通道 3 本文件候选未实现标记
+`23`（§12 节内 `20` 处、其它说明 `3` 处）**均不变**；R1 时点值 `23` 保留为时点证据。
