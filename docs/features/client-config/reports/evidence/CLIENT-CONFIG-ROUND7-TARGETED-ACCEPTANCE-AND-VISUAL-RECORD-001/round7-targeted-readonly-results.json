@@ -1,0 +1,909 @@
+{
+ "task": "CLIENT-CONFIG-ROUND7-TARGETED-ACCEPTANCE-AND-VISUAL-RECORD-001",
+ "scope": "CCFG-AC-010 / 155 / 156 / 157 targeted read-only acceptance verification",
+ "base_commit": "aa942dc1a4d82d85e6933e8b0977f8736f8c5196",
+ "environment": {
+  "browser": "Playwright bundled open-source Chromium 147.0.7727.15",
+  "headless": true,
+  "viewport": {
+   "width": 1440,
+   "height": 900,
+   "deviceScaleFactor": 1
+  },
+  "frontend": "http://127.0.0.1:5173 (Vite dev server, serves current HEAD source)",
+  "backend": "http://127.0.0.1:8080 (Spring Boot, GET-only reads)"
+ },
+ "desensitization": "probe ids in aria-label replaced by <ID>; org names / raw data-source ids never captured; no screenshots",
+ "writeInterception": {
+  "policy": "before navigation, /api/** GET/HEAD/OPTIONS allowed; POST/PUT/PATCH/DELETE aborted at network layer and counted",
+  "nonGetAttempts": 0
+ },
+ "AC010_client_adaptive_by_width": {
+  "1920x1080": [
+   {
+    "idx": 1,
+    "rowH": 48,
+    "tagTotal": 1,
+    "tagVisible": 1,
+    "plusText": null,
+    "plusMatchesHidden": null,
+    "ambiguousMarker": false
+   },
+   {
+    "idx": 2,
+    "rowH": 48,
+    "tagTotal": 1,
+    "tagVisible": 1,
+    "plusText": null,
+    "plusMatchesHidden": null,
+    "ambiguousMarker": false
+   },
+   {
+    "idx": 3,
+    "rowH": 48,
+    "tagTotal": 1,
+    "tagVisible": 1,
+    "plusText": null,
+    "plusMatchesHidden": null,
+    "ambiguousMarker": false
+   },
+   {
+    "idx": 4,
+    "rowH": 48,
+    "tagTotal": 5,
+    "tagVisible": 5,
+    "plusText": null,
+    "plusMatchesHidden": null,
+    "ambiguousMarker": false
+   },
+   {
+    "idx": 5,
+    "rowH": 48,
+    "tagTotal": 1,
+    "tagVisible": 1,
+    "plusText": null,
+    "plusMatchesHidden": null,
+    "ambiguousMarker": false
+   },
+   {
+    "idx": 6,
+    "rowH": 48,
+    "tagTotal": 1,
+    "tagVisible": 1,
+    "plusText": null,
+    "plusMatchesHidden": null,
+    "ambiguousMarker": false
+   },
+   {
+    "idx": 7,
+    "rowH": 48,
+    "tagTotal": 2,
+    "tagVisible": 2,
+    "plusText": null,
+    "plusMatchesHidden": null,
+    "ambiguousMarker": false
+   },
+   {
+    "idx": 8,
+    "rowH": 48,
+    "tagTotal": 0,
+    "tagVisible": 0,
+    "plusText": null,
+    "plusMatchesHidden": null,
+    "ambiguousMarker": false
+   },
+   {
+    "idx": 9,
+    "rowH": 48,
+    "tagTotal": 0,
+    "tagVisible": 0,
+    "plusText": null,
+    "plusMatchesHidden": null,
+    "ambiguousMarker": false
+   },
+   {
+    "idx": 10,
+    "rowH": 48,
+    "tagTotal": 0,
+    "tagVisible": 0,
+    "plusText": null,
+    "plusMatchesHidden": null,
+    "ambiguousMarker": false
+   },
+   {
+    "idx": 11,
+    "rowH": 48,
+    "tagTotal": 0,
+    "tagVisible": 0,
+    "plusText": null,
+    "plusMatchesHidden": null,
+    "ambiguousMarker": false
+   },
+   {
+    "idx": 12,
+    "rowH": 48,
+    "tagTotal": 0,
+    "tagVisible": 0,
+    "plusText": null,
+    "plusMatchesHidden": null,
+    "ambiguousMarker": false
+   },
+   {
+    "idx": 13,
+    "rowH": 48,
+    "tagTotal": 7,
+    "tagVisible": 5,
+    "plusText": "+2",
+    "plusMatchesHidden": true,
+    "ambiguousMarker": false
+   },
+   {
+    "idx": 14,
+    "rowH": 48,
+    "tagTotal": 1,
+    "tagVisible": 1,
+    "plusText": null,
+    "plusMatchesHidden": null,
+    "ambiguousMarker": false
+   },
+   {
+    "idx": 15,
+    "rowH": 52,
+    "tagTotal": 2,
+    "tagVisible": 2,
+    "plusText": null,
+    "plusMatchesHidden": null,
+    "ambiguousMarker": true
+   },
+   {
+    "idx": 16,
+    "rowH": 48,
+    "tagTotal": 1,
+    "tagVisible": 1,
+    "plusText": null,
+    "plusMatchesHidden": null,
+    "ambiguousMarker": false
+   }
+  ],
+  "1440x900": [
+   {
+    "idx": 1,
+    "rowH": 48,
+    "tagTotal": 1,
+    "tagVisible": 1,
+    "plusText": null,
+    "plusMatchesHidden": null,
+    "ambiguousMarker": false
+   },
+   {
+    "idx": 2,
+    "rowH": 48,
+    "tagTotal": 1,
+    "tagVisible": 1,
+    "plusText": null,
+    "plusMatchesHidden": null,
+    "ambiguousMarker": false
+   },
+   {
+    "idx": 3,
+    "rowH": 48,
+    "tagTotal": 1,
+    "tagVisible": 1,
+    "plusText": null,
+    "plusMatchesHidden": null,
+    "ambiguousMarker": false
+   },
+   {
+    "idx": 4,
+    "rowH": 48,
+    "tagTotal": 5,
+    "tagVisible": 2,
+    "plusText": "+3",
+    "plusMatchesHidden": true,
+    "ambiguousMarker": false
+   },
+   {
+    "idx": 5,
+    "rowH": 48,
+    "tagTotal": 1,
+    "tagVisible": 1,
+    "plusText": null,
+    "plusMatchesHidden": null,
+    "ambiguousMarker": false
+   },
+   {
+    "idx": 6,
+    "rowH": 48,
+    "tagTotal": 1,
+    "tagVisible": 1,
+    "plusText": null,
+    "plusMatchesHidden": null,
+    "ambiguousMarker": false
+   },
+   {
+    "idx": 7,
+    "rowH": 48,
+    "tagTotal": 2,
+    "tagVisible": 2,
+    "plusText": null,
+    "plusMatchesHidden": null,
+    "ambiguousMarker": false
+   },
+   {
+    "idx": 8,
+    "rowH": 48,
+    "tagTotal": 0,
+    "tagVisible": 0,
+    "plusText": null,
+    "plusMatchesHidden": null,
+    "ambiguousMarker": false
+   },
+   {
+    "idx": 9,
+    "rowH": 48,
+    "tagTotal": 0,
+    "tagVisible": 0,
+    "plusText": null,
+    "plusMatchesHidden": null,
+    "ambiguousMarker": false
+   },
+   {
+    "idx": 10,
+    "rowH": 48,
+    "tagTotal": 0,
+    "tagVisible": 0,
+    "plusText": null,
+    "plusMatchesHidden": null,
+    "ambiguousMarker": false
+   },
+   {
+    "idx": 11,
+    "rowH": 48,
+    "tagTotal": 0,
+    "tagVisible": 0,
+    "plusText": null,
+    "plusMatchesHidden": null,
+    "ambiguousMarker": false
+   },
+   {
+    "idx": 12,
+    "rowH": 48,
+    "tagTotal": 0,
+    "tagVisible": 0,
+    "plusText": null,
+    "plusMatchesHidden": null,
+    "ambiguousMarker": false
+   },
+   {
+    "idx": 13,
+    "rowH": 48,
+    "tagTotal": 7,
+    "tagVisible": 1,
+    "plusText": "+6",
+    "plusMatchesHidden": true,
+    "ambiguousMarker": false
+   },
+   {
+    "idx": 14,
+    "rowH": 48,
+    "tagTotal": 1,
+    "tagVisible": 1,
+    "plusText": null,
+    "plusMatchesHidden": null,
+    "ambiguousMarker": false
+   },
+   {
+    "idx": 15,
+    "rowH": 52,
+    "tagTotal": 2,
+    "tagVisible": 2,
+    "plusText": null,
+    "plusMatchesHidden": null,
+    "ambiguousMarker": true
+   },
+   {
+    "idx": 16,
+    "rowH": 48,
+    "tagTotal": 1,
+    "tagVisible": 1,
+    "plusText": null,
+    "plusMatchesHidden": null,
+    "ambiguousMarker": false
+   }
+  ],
+  "900x800": [
+   {
+    "idx": 1,
+    "rowH": 48,
+    "tagTotal": 1,
+    "tagVisible": 1,
+    "plusText": null,
+    "plusMatchesHidden": null,
+    "ambiguousMarker": false
+   },
+   {
+    "idx": 2,
+    "rowH": 48,
+    "tagTotal": 1,
+    "tagVisible": 1,
+    "plusText": null,
+    "plusMatchesHidden": null,
+    "ambiguousMarker": false
+   },
+   {
+    "idx": 3,
+    "rowH": 48,
+    "tagTotal": 1,
+    "tagVisible": 1,
+    "plusText": null,
+    "plusMatchesHidden": null,
+    "ambiguousMarker": false
+   },
+   {
+    "idx": 4,
+    "rowH": 48,
+    "tagTotal": 5,
+    "tagVisible": 1,
+    "plusText": "+4",
+    "plusMatchesHidden": true,
+    "ambiguousMarker": false
+   },
+   {
+    "idx": 5,
+    "rowH": 48,
+    "tagTotal": 1,
+    "tagVisible": 1,
+    "plusText": null,
+    "plusMatchesHidden": null,
+    "ambiguousMarker": false
+   },
+   {
+    "idx": 6,
+    "rowH": 48,
+    "tagTotal": 1,
+    "tagVisible": 1,
+    "plusText": null,
+    "plusMatchesHidden": null,
+    "ambiguousMarker": false
+   },
+   {
+    "idx": 7,
+    "rowH": 48,
+    "tagTotal": 2,
+    "tagVisible": 2,
+    "plusText": null,
+    "plusMatchesHidden": null,
+    "ambiguousMarker": false
+   },
+   {
+    "idx": 8,
+    "rowH": 48,
+    "tagTotal": 0,
+    "tagVisible": 0,
+    "plusText": null,
+    "plusMatchesHidden": null,
+    "ambiguousMarker": false
+   },
+   {
+    "idx": 9,
+    "rowH": 48,
+    "tagTotal": 0,
+    "tagVisible": 0,
+    "plusText": null,
+    "plusMatchesHidden": null,
+    "ambiguousMarker": false
+   },
+   {
+    "idx": 10,
+    "rowH": 48,
+    "tagTotal": 0,
+    "tagVisible": 0,
+    "plusText": null,
+    "plusMatchesHidden": null,
+    "ambiguousMarker": false
+   },
+   {
+    "idx": 11,
+    "rowH": 48,
+    "tagTotal": 0,
+    "tagVisible": 0,
+    "plusText": null,
+    "plusMatchesHidden": null,
+    "ambiguousMarker": false
+   },
+   {
+    "idx": 12,
+    "rowH": 48,
+    "tagTotal": 0,
+    "tagVisible": 0,
+    "plusText": null,
+    "plusMatchesHidden": null,
+    "ambiguousMarker": false
+   },
+   {
+    "idx": 13,
+    "rowH": 48,
+    "tagTotal": 7,
+    "tagVisible": 1,
+    "plusText": "+6",
+    "plusMatchesHidden": true,
+    "ambiguousMarker": false
+   },
+   {
+    "idx": 14,
+    "rowH": 48,
+    "tagTotal": 1,
+    "tagVisible": 1,
+    "plusText": null,
+    "plusMatchesHidden": null,
+    "ambiguousMarker": false
+   },
+   {
+    "idx": 15,
+    "rowH": 52,
+    "tagTotal": 2,
+    "tagVisible": 0,
+    "plusText": "+2",
+    "plusMatchesHidden": true,
+    "ambiguousMarker": true
+   },
+   {
+    "idx": 16,
+    "rowH": 48,
+    "tagTotal": 1,
+    "tagVisible": 1,
+    "plusText": null,
+    "plusMatchesHidden": null,
+    "ambiguousMarker": false
+   }
+  ]
+ },
+ "AC155_156_client_1440x900": {
+  "rows": [
+   {
+    "idx": 1,
+    "rowH": 48,
+    "opTdIsLast": true,
+    "opTdHasOptIn": true,
+    "entryW": 28,
+    "entryH": 28,
+    "entryRadius": "6px",
+    "entryColor": "rgb(64, 158, 255)",
+    "entryCursor": "pointer",
+    "entryDisplay": "flex",
+    "entryVisible": true,
+    "boxInsideCell": true,
+    "boxInsideRow": true,
+    "vCentered": true,
+    "tagCount": 1,
+    "plusText": null
+   },
+   {
+    "idx": 2,
+    "rowH": 48,
+    "opTdIsLast": true,
+    "opTdHasOptIn": true,
+    "entryW": 28,
+    "entryH": 28,
+    "entryRadius": "6px",
+    "entryColor": "rgb(64, 158, 255)",
+    "entryCursor": "pointer",
+    "entryDisplay": "flex",
+    "entryVisible": true,
+    "boxInsideCell": true,
+    "boxInsideRow": true,
+    "vCentered": true,
+    "tagCount": 1,
+    "plusText": null
+   },
+   {
+    "idx": 3,
+    "rowH": 48,
+    "opTdIsLast": true,
+    "opTdHasOptIn": true,
+    "entryW": 28,
+    "entryH": 28,
+    "entryRadius": "6px",
+    "entryColor": "rgb(64, 158, 255)",
+    "entryCursor": "pointer",
+    "entryDisplay": "flex",
+    "entryVisible": true,
+    "boxInsideCell": true,
+    "boxInsideRow": true,
+    "vCentered": true,
+    "tagCount": 1,
+    "plusText": null
+   },
+   {
+    "idx": 4,
+    "rowH": 48,
+    "opTdIsLast": true,
+    "opTdHasOptIn": true,
+    "entryW": 28,
+    "entryH": 28,
+    "entryRadius": "6px",
+    "entryColor": "rgb(64, 158, 255)",
+    "entryCursor": "pointer",
+    "entryDisplay": "flex",
+    "entryVisible": true,
+    "boxInsideCell": true,
+    "boxInsideRow": true,
+    "vCentered": true,
+    "tagCount": 5,
+    "plusText": null
+   },
+   {
+    "idx": 5,
+    "rowH": 48,
+    "opTdIsLast": true,
+    "opTdHasOptIn": true,
+    "entryW": 28,
+    "entryH": 28,
+    "entryRadius": "6px",
+    "entryColor": "rgb(64, 158, 255)",
+    "entryCursor": "pointer",
+    "entryDisplay": "flex",
+    "entryVisible": true,
+    "boxInsideCell": true,
+    "boxInsideRow": true,
+    "vCentered": true,
+    "tagCount": 1,
+    "plusText": null
+   },
+   {
+    "idx": 6,
+    "rowH": 48,
+    "opTdIsLast": true,
+    "opTdHasOptIn": true,
+    "entryW": 28,
+    "entryH": 28,
+    "entryRadius": "6px",
+    "entryColor": "rgb(64, 158, 255)",
+    "entryCursor": "pointer",
+    "entryDisplay": "flex",
+    "entryVisible": true,
+    "boxInsideCell": true,
+    "boxInsideRow": true,
+    "vCentered": true,
+    "tagCount": 1,
+    "plusText": null
+   },
+   {
+    "idx": 7,
+    "rowH": 48,
+    "opTdIsLast": true,
+    "opTdHasOptIn": true,
+    "entryW": 28,
+    "entryH": 28,
+    "entryRadius": "6px",
+    "entryColor": "rgb(64, 158, 255)",
+    "entryCursor": "pointer",
+    "entryDisplay": "flex",
+    "entryVisible": true,
+    "boxInsideCell": true,
+    "boxInsideRow": true,
+    "vCentered": true,
+    "tagCount": 2,
+    "plusText": null
+   },
+   {
+    "idx": 8,
+    "rowH": 48,
+    "opTdIsLast": true,
+    "opTdHasOptIn": true,
+    "entryW": 28,
+    "entryH": 28,
+    "entryRadius": "6px",
+    "entryColor": "rgb(64, 158, 255)",
+    "entryCursor": "pointer",
+    "entryDisplay": "flex",
+    "entryVisible": true,
+    "boxInsideCell": true,
+    "boxInsideRow": true,
+    "vCentered": true,
+    "tagCount": 0,
+    "plusText": null
+   },
+   {
+    "idx": 9,
+    "rowH": 48,
+    "opTdIsLast": true,
+    "opTdHasOptIn": true,
+    "entryW": 28,
+    "entryH": 28,
+    "entryRadius": "6px",
+    "entryColor": "rgb(64, 158, 255)",
+    "entryCursor": "pointer",
+    "entryDisplay": "flex",
+    "entryVisible": true,
+    "boxInsideCell": true,
+    "boxInsideRow": true,
+    "vCentered": true,
+    "tagCount": 0,
+    "plusText": null
+   },
+   {
+    "idx": 10,
+    "rowH": 48,
+    "opTdIsLast": true,
+    "opTdHasOptIn": true,
+    "entryW": 28,
+    "entryH": 28,
+    "entryRadius": "6px",
+    "entryColor": "rgb(64, 158, 255)",
+    "entryCursor": "pointer",
+    "entryDisplay": "flex",
+    "entryVisible": true,
+    "boxInsideCell": true,
+    "boxInsideRow": true,
+    "vCentered": true,
+    "tagCount": 0,
+    "plusText": null
+   },
+   {
+    "idx": 11,
+    "rowH": 48,
+    "opTdIsLast": true,
+    "opTdHasOptIn": true,
+    "entryW": 28,
+    "entryH": 28,
+    "entryRadius": "6px",
+    "entryColor": "rgb(64, 158, 255)",
+    "entryCursor": "pointer",
+    "entryDisplay": "flex",
+    "entryVisible": true,
+    "boxInsideCell": true,
+    "boxInsideRow": true,
+    "vCentered": true,
+    "tagCount": 0,
+    "plusText": null
+   },
+   {
+    "idx": 12,
+    "rowH": 48,
+    "opTdIsLast": true,
+    "opTdHasOptIn": true,
+    "entryW": 28,
+    "entryH": 28,
+    "entryRadius": "6px",
+    "entryColor": "rgb(64, 158, 255)",
+    "entryCursor": "pointer",
+    "entryDisplay": "flex",
+    "entryVisible": true,
+    "boxInsideCell": true,
+    "boxInsideRow": true,
+    "vCentered": true,
+    "tagCount": 0,
+    "plusText": null
+   },
+   {
+    "idx": 13,
+    "rowH": 48,
+    "opTdIsLast": true,
+    "opTdHasOptIn": true,
+    "entryW": 28,
+    "entryH": 28,
+    "entryRadius": "6px",
+    "entryColor": "rgb(64, 158, 255)",
+    "entryCursor": "pointer",
+    "entryDisplay": "flex",
+    "entryVisible": true,
+    "boxInsideCell": true,
+    "boxInsideRow": true,
+    "vCentered": true,
+    "tagCount": 7,
+    "plusText": null
+   },
+   {
+    "idx": 14,
+    "rowH": 48,
+    "opTdIsLast": true,
+    "opTdHasOptIn": true,
+    "entryW": 28,
+    "entryH": 28,
+    "entryRadius": "6px",
+    "entryColor": "rgb(64, 158, 255)",
+    "entryCursor": "pointer",
+    "entryDisplay": "flex",
+    "entryVisible": true,
+    "boxInsideCell": true,
+    "boxInsideRow": true,
+    "vCentered": true,
+    "tagCount": 1,
+    "plusText": null
+   },
+   {
+    "idx": 15,
+    "rowH": 52,
+    "opTdIsLast": true,
+    "opTdHasOptIn": true,
+    "entryW": 28,
+    "entryH": 28,
+    "entryRadius": "6px",
+    "entryColor": "rgb(64, 158, 255)",
+    "entryCursor": "pointer",
+    "entryDisplay": "flex",
+    "entryVisible": true,
+    "boxInsideCell": true,
+    "boxInsideRow": true,
+    "vCentered": true,
+    "tagCount": 2,
+    "plusText": null
+   },
+   {
+    "idx": 16,
+    "rowH": 48,
+    "opTdIsLast": true,
+    "opTdHasOptIn": true,
+    "entryW": 28,
+    "entryH": 28,
+    "entryRadius": "6px",
+    "entryColor": "rgb(64, 158, 255)",
+    "entryCursor": "pointer",
+    "entryDisplay": "flex",
+    "entryVisible": true,
+    "boxInsideCell": true,
+    "boxInsideRow": true,
+    "vCentered": true,
+    "tagCount": 1,
+    "plusText": null
+   }
+  ],
+  "heightHistogram": {
+   "48": 15,
+   "52": 1
+  },
+  "headerThPadTop": "11px"
+ },
+ "AC156_focus": {
+  "tabReached": true,
+  "steps": 7,
+  "outline": {
+   "tag": "SPAN",
+   "isEllipsis": true,
+   "outlineStyle": "solid",
+   "outlineWidth": "2px",
+   "outlineColor": "rgb(64, 158, 255)",
+   "outlineOffset": "-2px",
+   "ariaLabel": "更多操作：<ID>"
+  }
+ },
+ "AC156_regressions_readonly": [
+  {
+   "label": "initial",
+   "rows": [
+    {
+     "idx": 1,
+     "selected": false,
+     "bg": "rgba(0, 0, 0, 0)"
+    },
+    {
+     "idx": 2,
+     "selected": false,
+     "bg": "rgba(0, 0, 0, 0)"
+    }
+   ]
+  },
+  {
+   "label": "click row1",
+   "rows": [
+    {
+     "idx": 1,
+     "selected": true,
+     "bg": "rgb(225, 228, 232)"
+    },
+    {
+     "idx": 2,
+     "selected": false,
+     "bg": "rgba(0, 0, 0, 0)"
+    }
+   ]
+  },
+  {
+   "label": "re-click row1 (expect cancel)",
+   "rows": [
+    {
+     "idx": 1,
+     "selected": false,
+     "bg": "rgb(244, 244, 245)"
+    },
+    {
+     "idx": 2,
+     "selected": false,
+     "bg": "rgba(0, 0, 0, 0)"
+    }
+   ]
+  },
+  {
+   "label": "click row1 again (expect fixed)",
+   "rows": [
+    {
+     "idx": 1,
+     "selected": true,
+     "bg": "rgb(225, 228, 232)"
+    },
+    {
+     "idx": 2,
+     "selected": false,
+     "bg": "rgba(0, 0, 0, 0)"
+    }
+   ]
+  },
+  {
+   "label": "click row2 (expect row1 off, row2 fixed)",
+   "rows": [
+    {
+     "idx": 1,
+     "selected": false,
+     "bg": "rgba(0, 0, 0, 0)"
+    },
+    {
+     "idx": 2,
+     "selected": true,
+     "bg": "rgb(225, 228, 232)"
+    }
+   ]
+  },
+  {
+   "label": "hover row3 (expect no fixed change)",
+   "rows": [
+    {
+     "idx": 1,
+     "selected": false,
+     "bg": "rgba(0, 0, 0, 0)"
+    },
+    {
+     "idx": 2,
+     "selected": true,
+     "bg": "rgb(225, 228, 232)"
+    }
+   ]
+  }
+ ],
+ "AC156_menu_isolation": {
+  "dropdownVisible": true,
+  "menuItems": [
+   "停用",
+   "删除"
+  ],
+  "editDialogOpen": false,
+  "fixedSelectedRows": 0
+ },
+ "AC156_dblclick_edit": {
+  "editDialogOpen": true,
+  "fixedSelectedRows": 1
+ },
+ "AC156_tab_reaches_ellipsis": true,
+ "AC157_optin_style_check": {
+  "optInRuleCount": 4,
+  "anyImportant": false,
+  "selectors": [
+   ".lt-main-table[data-v-093fb766] td.el-table__cell.lt-row-action__cell",
+   ".lt-main-table[data-v-093fb766] .lt-row-action__ellipsis",
+   ".lt-main-table[data-v-093fb766] .lt-row-action__ellipsis:hover",
+   ".lt-main-table[data-v-093fb766] .lt-row-action__ellipsis:focus-visible"
+  ],
+  "allScopedToMainTable": true,
+  "ruleCount": 4
+ },
+ "AC157_entry_hover": {
+  "backgroundColor": "rgb(236, 245, 255)",
+  "color": "rgb(64, 158, 255)",
+  "cursor": "pointer"
+ },
+ "AC157_not_enabled_page_datasource": {
+  "rowCount": 36,
+  "heightHistogram": {
+   "48": 36
+  },
+  "maxHeight": 48,
+  "optInCellCount": 0,
+  "optInEllipsisCount": 0,
+  "rowMoreCount": 72,
+  "hasMoreText": true,
+  "lastTdPadTop": "12px",
+  "lastTdPadBottom": "12px",
+  "lastCellH": 23,
+  "lastCellOverflow": "hidden"
+ }
+}
