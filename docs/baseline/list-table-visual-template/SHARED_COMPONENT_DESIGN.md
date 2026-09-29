@@ -1645,8 +1645,22 @@ page_migration_authorization_status=NOT_GRANTED
 `LIST_TABLE_REFERENCE_FACT` —— **已知阻力与现行终解（据实现与浏览器证据）**：
 Element Plus 的单元格 `.cell` 计算样式含 `overflow: hidden`，会裁切溢出式命中区、
 也可能裁切 `:focus-visible` 的外描边，故**未**采用「溢出扩张命中区」方向。**现行采用**
-**内边距补偿 + 盒内焦点环**：`outline: 2px solid var(--el-color-primary)` 配 `outline-offset: -2px`，
-实测描边四边与四角均落在 `28×28px` 命中区内、外侧无描边像素（证明未被 `overflow: hidden` 裁掉）。
+**内边距补偿 + 盒内焦点环**：`outline: 2px solid var(--el-color-primary)` 配 `outline-offset: -2px`
+（`28×28px` 为 **CSS 命中区**尺寸）。焦点环像素探针（`focus-ring-pixels.json`）分缩放结果：
+
+- **真实 `100%` 缩放**：命中盒 `28×28` 物理像素，描边四边与四角均落在盒内，`blueDevicePixelsOutsideBox=0`、
+  `ringOutsideMaxDevicePx=0`、`ringFullyInsideHitBoxStrict=true`（严格判定通过）。
+- **真实 `125%` 缩放**：命中盒约 `35×35` **物理**像素（`28×28` CSS px × `dpr 1.25`）；严格整数盒判定为
+  `false`、盒外计数 `blueDevicePixelsOutsideBox=27`，**全部**落在盒子**左侧紧邻的 1 个物理像素列**
+  （`ringOutsideSides={left:27, right:0, top:0, bottom:0}`、`ringOutsideMaxDevicePx=1`），而
+  **1 物理像素容差**判定为 `true`（`ringFullyInsideHitBoxWithin1DevicePx=true`）。该左边缘列源于元素左边界
+  落在**半个物理像素**上（CSS `x=969.2 × 1.25 = 1211.5` 物理 px，严格整数盒左边界取 `1212`），严格整数盒
+  把元素**自身半覆盖的边缘列**判为“盒外”，属**半像素量化归类**，**不是**产品可见的焦点环逸出。
+
+两缩放下的描边均为**闭合圆角矩形**、**四边完整可见**（周长覆盖率 100% `.857/.857/.857/.857`、
+125% `.886/.886/.943/.829`，`ringVisibleOnAllFourSides=true`），**未**被 `.cell{overflow: hidden}` 裁切
+（若被裁切，裁切侧覆盖率会显著为 0）。注意区分口径：`28×28px` 是 CSS 命中区，`35×35` 是 125% 下的物理
+像素命中盒；「严格盒外计数 `27`」不等于产品可见的焦点环逸出，「1 物理像素容差内」也不等于「严格无盒外像素」。
 设计阶段曾列为**待验证备选**的「`:has()` 限定的 `overflow: visible`」**未**被采纳，属**历史推导**，见既有报告。
 
 `LIST_TABLE_REFERENCE_FACT` —— **边界强调**：补偿**只**作用于
@@ -1760,7 +1774,7 @@ R0／R1／R2 各轮拟议文本、复审结论与旧计数见既有历史报告�
 其三点化仍属**另一独立任务**。实现状态为 `IMPLEMENTED_PENDING_CHATGPT_REVIEW`（待远程复审）；
 **实现完成 ≠ 远程代码复审通过 ≠ 项目负责人目测 ≠ 正式验收通过。**
 
-### 12.8 计数口径与核验（R2 标记纠正后收敛；R3 定向纠错后复测）
+### 12.8 计数口径与核验（R2 标记纠正后收敛；R3 定向纠错后复测；R4 焦点环证据表述纠错后复测）
 
 `LIST_TABLE_REFERENCE_FACT` —— **计数通道严格分开、互不混算**。R2 标记纠正后，本文件 §12 中
 **已落地／已批准事实**新增使用**参考事实标记**，故通道由三条扩为四条：
@@ -1887,6 +1901,22 @@ R3-01 §12.1 参考事实段不再声称公共层「已负责」禁用态外观�
 （`CCFG-AC-157` 仍 `BLOCKED`）；`CCFG-AC-010` 现行状态格为 `PASS`（只读核对，R3 未改任何状态格）；
 第七轮 opt-in 实现状态仍 `IMPLEMENTED_PENDING_CHATGPT_REVIEW`；模板级迁移状态与授权边界**未**翻转。
 **提交与推送成功 ≠ 远程复审通过。**
+
+实测（2026-09-29，**模板整理 R4 焦点环证据表述纠错后复测**，
+`LIST-TABLE-VISUAL-TEMPLATE-CLIENT-CONFIG-REFINEMENT-BASELINE-001-R4`）：R4 **只**就地修正一处——
+§12.3 的「实测描边四边与四角均落在 `28×28px` 命中区内、外侧无描边像素」是**未经缩放限定的绝对说法**，
+与 R1 证据中 **125% 时严格整数盒外 27 个蓝色物理像素**不符；R4 改为**分缩放**陈述（100% 严格盒内、
+盒外 `0`；125% 严格判定 `false`、盒外 `27` 且**全部**在左侧紧邻 1 个物理像素列、`ringOutsideMaxDevicePx=1`、
+1 物理像素容差判定 `true`），并明确该边缘列由元素左边界落在**半个物理像素**上的**量化归类**造成，
+**不是**产品可见的焦点环逸出；四边完整可见、未被 `.cell{overflow: hidden}` 裁切之结论按 R1 报告原文保留。
+复测四条通道：通道 1 四份规范文档 `28 / 0 / 42 / 8`（**不变**，R4 未改四份文档标记）；
+通道 2 本文件批准态设计标记 `79`（**不变**）；通道 3 本文件参考事实标记 `25`（**不变**，R4 仅改既有参考事实段
+内部措辞、未增删标记实例）；通道 4 本文件候选未实现标记 `10`（**不变**）。
+**边界**：§13 可选契约仍为 `DRAFT_PENDING_USER_REVIEW`；§12.1 禁用态视觉仍属**设计契约、尚未实现、尚未验收**
+（`CCFG-AC-157` 仍 `BLOCKED`）；`CCFG-AC-010` 现行状态格为 `PASS`（只读核对，R4 未改任何状态格）；
+第七轮 opt-in 实现状态仍 `IMPLEMENTED_PENDING_CHATGPT_REVIEW`；模板级迁移状态与授权边界**未**翻转。
+R4 **未**修改 R3 其它结论（§12.1 职责分层、调整前 `53px` 与现行可比行约 `48 CSS px`、`CCFG-AC-010` 现行 `PASS`、
+§13 待批准），**未**重跑浏览器、**未**新增正式验收 PASS。**提交与推送成功 ≠ 远程复审通过。**
 
 ## 13. 现行基础规则与可选扩展分层契约（本任务草案，`DRAFT_PENDING_USER_REVIEW`）
 

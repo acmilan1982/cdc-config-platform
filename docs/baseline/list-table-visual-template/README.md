@@ -768,3 +768,20 @@ next_step=NONE_SHARED_IMPLEMENTATION_FINAL_ACCEPTED_AND_CLOSED_NO_PAGE_MIGRATION
   `CHATGPT_REMOTE_LIST_TABLE_VISUAL_TEMPLATE_CLIENT_CONFIG_REFINEMENT_BASELINE_R3_REVIEW`
   （R2 入口经远程复审 `CHANGES_REQUIRED`，已为历史入口）。详见同目录
   `reports/LIST-TABLE-VISUAL-TEMPLATE-CLIENT-CONFIG-REFINEMENT-BASELINE-001-R3.md`。
+- 2026-09-29，**模板整理 R4 焦点环证据表述纠错**（`LIST-TABLE-VISUAL-TEMPLATE-CLIENT-CONFIG-REFINEMENT-BASELINE-001-R4`，
+  纯文档，单点纠错）—— ChatGPT 从远程 Git 对 R3 提交 `d6b09d811d46cb02310ae22eed661860e84652ce`
+  的文档复审结论为 `CHANGES_REQUIRED`：`SHARED_COMPONENT_DESIGN.md` §12.3 对真实 `125%` 缩放焦点环的
+  「外侧无描边像素」表述较原始证据更**绝对**。本 R4 **只**改这一处：把该绝对说法**分缩放**改写——
+  真实 `100%` 严格盒内、盒外蓝色物理像素 `0`（`ringFullyInsideHitBoxStrict=true`）；真实 `125%` 命中盒约
+  `35×35` 物理像素（`28×28` CSS × `dpr 1.25`），严格整数盒判定 `false`、盒外计数 `27`，**全部**落在盒子
+  **左侧紧邻的 1 个物理像素列**（`ringOutsideMaxDevicePx=1`，1 物理像素容差判定 `true`），该边缘列由元素
+  左边界落在**半个物理像素**上的**量化归类**造成，**不是**产品可见的焦点环逸出；四边完整可见、未被
+  `.cell{overflow: hidden}` 裁切之结论按 R1 报告原文核对并保留。标记复算：四份规范文档 `28 / 0 / 42 / 8`
+  （**不变**）；本文件批准态设计标记 `79`（**不变**）；`SHARED_COMPONENT_DESIGN.md` 参考事实标记 `25`、
+  候选未实现标记 `10`（均**不变**，R4 仅改既有参考事实段内部措辞）。R4 **未**修改 R3 其它结论
+  （§12.1 职责分层、调整前 `53px` 与现行可比行约 `48 CSS px`、`CCFG-AC-010` 现行 `PASS`、§13 待批准）；
+  **不**改任何已批准规则、**不**实施新样式、**不**批准 §13 新可选契约、**不**改任何验收状态格或新跑验收；
+  模板级状态**不变**；**不**改数据源管理页。草案链下一入口改为
+  `CHATGPT_REMOTE_LIST_TABLE_VISUAL_TEMPLATE_CLIENT_CONFIG_REFINEMENT_BASELINE_R4_REVIEW`
+  （R3 入口经远程复审 `CHANGES_REQUIRED`，已为历史入口）。详见同目录
+  `reports/LIST-TABLE-VISUAL-TEMPLATE-CLIENT-CONFIG-REFINEMENT-BASELINE-001-R4.md`。

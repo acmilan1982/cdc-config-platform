@@ -663,3 +663,46 @@ ChatGPT 从远程 Git 对本模板整理 R2 提交 `732d6df12215f0036f27dcbe8367
   第七轮 opt-in 实现状态仍为 `IMPLEMENTED_PENDING_CHATGPT_REVIEW`；本轮**未**修改任何验收状态格、**未**新跑验收；
 - **不得**把本节写成数据源管理页“更多”→三点改造的授权：该改造仍为**未来独立任务**，本 R3 **不**改该页；
 - **提交与推送成功 ≠ 远程复审通过。**
+
+## 模板整理任务 R4 焦点环证据表述纠错追加记录（`LIST-TABLE-VISUAL-TEMPLATE-CLIENT-CONFIG-REFINEMENT-BASELINE-001-R4`，追加记录，`2026-09-29`）
+
+ChatGPT 从远程 Git 对 R3 提交 `d6b09d811d46cb02310ae22eed661860e84652ce` 的文档复审为 `CHANGES_REQUIRED`：
+`SHARED_COMPONENT_DESIGN.md` §12.3 对真实 `125%` 缩放焦点环的「外侧无描边像素」表述比 R1 原始证据更**绝对**。
+本 R4 为**纯文档单点证据表述纠错**，**只**改这一处。
+
+### 修正（旧 → 新）
+
+- **旧**：§12.3「实测描边四边与四角均落在 `28×28px` 命中区内、外侧无描边像素（证明未被 `overflow: hidden`
+  裁掉）」——未限定缩放，与 R1 证据不符。
+- **新**：分缩放陈述——真实 `100%` 严格盒内、盒外蓝色物理像素 `0`（`ringFullyInsideHitBoxStrict=true`）；
+  真实 `125%` 命中盒约 `35×35` 物理像素（`28×28` CSS × `dpr 1.25`），严格整数盒判定 `false`、盒外计数 `27`、
+  `ringOutsideMaxDevicePx=1`，**全部**落在盒子**左侧紧邻的 1 个物理像素列**（`ringOutsideSides` 左 `27`、其余 `0`），
+  1 物理像素容差判定 `true`；该边缘列由元素左边界落在**半个物理像素**上（CSS `x=969.2 × 1.25 = 1211.5`、
+  严格整数盒左边界 `1212`）的**量化归类**造成，**不是**产品可见的焦点环逸出。四边完整可见
+  （覆盖率 100% `.857 ×4`、125% `.886/.886/.943/.829`）、未被 `.cell{overflow: hidden}` 裁切之结论按 R1 报告
+  原文保留。证据字段路径：`evidence/CLIENT-CONFIG-ROW-HEIGHT-AND-OPTIONAL-ELLIPSIS-IMPLEMENTATION-001-R1/focus-ring-pixels.json`
+  的 `perZoom.100/125.ring.{blueDevicePixelsOutsideBox, ringFullyInsideHitBoxStrict, ringFullyInsideHitBoxWithin1DevicePx, ringOutsideSides, ringOutsideMaxDevicePx}`。
+
+### 状态与计数（R4 后，命令实测）
+
+- 四份规范文档计数（通道 1）：**`28 / 0 / 42 / 8`**（**不变**，R4 未改四份文档的标记实例）；
+- 本文件批准态设计标记（通道 2）：`79`（**不变**）；
+- `SHARED_COMPONENT_DESIGN.md` 参考事实标记（通道 3）：`25`（**不变**，R4 仅改既有参考事实段内部措辞）；
+- `SHARED_COMPONENT_DESIGN.md` 候选未实现标记（通道 4）：`10`（**不变**）；
+- 各通道**严格不混算**；R0～R3 报告保留原样，其中关于 §12.3 焦点环「外侧无」的旧表述由本 R4 报告以
+  **errata／override** 方式承接（**不**回写历史报告）。
+- 本模板级 `current_next_entry` **仍**为
+  `NONE_SHARED_IMPLEMENTATION_FINAL_ACCEPTED_AND_CLOSED_NO_PAGE_MIGRATION_AUTHORIZED`；
+  本轮草案链的下一入口为
+  `CHATGPT_REMOTE_LIST_TABLE_VISUAL_TEMPLATE_CLIENT_CONFIG_REFINEMENT_BASELINE_R4_REVIEW`
+  （R3 入口 `..._R3_REVIEW` 已因 `CHANGES_REQUIRED` 成为**历史**入口）。
+
+### 边界（明确不得）
+
+- **不得**把本节写成模板级全局状态变化：`page_migration_status` 保持 `NOT_STARTED`、
+  `page_migration_authorization_status` 保持 `NOT_GRANTED`、`pilot_page_selection_status` 保持 `NOT_DECIDED`——**均不变**；
+- **不得**把本节写成新样式实施、§13 可选契约获批或验收状态变化：§13 仍为 `DRAFT_PENDING_USER_REVIEW`；
+  第七轮 opt-in 实现状态仍为 `IMPLEMENTED_PENDING_CHATGPT_REVIEW`；`CCFG-AC-010` 状态格仍 `PASS`、
+  `CCFG-AC-155~157` 仍 `BLOCKED`；本轮**未**修改任何验收状态格、**未**新跑验收、**未**重跑浏览器；
+- **不得**把本节写成数据源管理页“更多”→三点改造的授权：该改造仍为**未来独立任务**，本 R4 **不**改该页；
+- **提交与推送成功 ≠ 远程复审通过。**
