@@ -706,3 +706,48 @@ ChatGPT 从远程 Git 对 R3 提交 `d6b09d811d46cb02310ae22eed661860e84652ce` �
   `CCFG-AC-155~157` 仍 `BLOCKED`；本轮**未**修改任何验收状态格、**未**新跑验收、**未**重跑浏览器；
 - **不得**把本节写成数据源管理页“更多”→三点改造的授权：该改造仍为**未来独立任务**，本 R4 **不**改该页；
 - **提交与推送成功 ≠ 远程复审通过。**
+
+## 参照修正设计基线批准收口追加记录（`LIST-TABLE-VISUAL-TEMPLATE-CLIENT-CONFIG-REFINEMENT-BASELINE-APPROVAL-CLOSEOUT-001`，追加记录，`2026-09-29`）
+
+ChatGPT 从远程 Git 对 R4 提交 `aa6285f02c16e6c3806ca2759d21e16b3e0e41b1` 的复审结论为 **`APPROVED`**；
+随后项目负责人于 `2026-09-29` 在“下一步是项目负责人批准这份 R4 修订后的模板草案”的**明确批准语境**下
+回复**「继续」**，授权推进本批准收口（**如实记录**：回复原话为「继续」，语境为批准该 R4 草案；
+**不**伪引为逐字「批准」）。本任务为**纯文档批准收口**，只把 R4 修订后的**设计基线**收口为已批准。
+
+### 收口对象与状态分层
+
+- **批准对象**：R4 `aa6285f…` 所代表的**文档设计基线**，尤其 `SHARED_COMPONENT_DESIGN.md` §13 的
+  **可选单行固定高亮视觉契约**与 `DESIGN.md` §7 的**最小定向修订**；三点入口继续是**显式 opt-in**；
+- **批准态（设计基线）**：`DESIGN.md` §7 禁令范围**已收窄**为「业务语义不公共化」；§13 可选契约
+  （§13.3 外观预设与行为边界、§13.4 归属处置）为**已批准可选规则**；
+- **代码态（据现行源码核查）**：§13 可选视觉预设的**公共实现 `NOT_STARTED`**——公共层
+  `frontend/src/styles/list-table/list-table-visual.css` 与公共组件目录**未**提供任何单行固定高亮 / 行选择样式
+  或辅助类；`/config/client` 现行固定高亮属**该 Feature 页面自身**实现，**不**等于公共模板已实现；
+- **未随本轮改变的独立状态**：§12 三点 opt-in 入口代码复审状态仍 `IMPLEMENTED_PENDING_CHATGPT_REVIEW`
+  （**不**因本次 §13 批准而改为已通过）；§12.1 **禁用态视觉仍未实现、未验收**（`CCFG-AC-157` 仍 `BLOCKED`）；
+  `CCFG-AC-010` 现行状态格仍 `PASS`、`CCFG-AC-155~157` 仍 `BLOCKED`（只读核对，**未**改任何状态格）。
+
+### 标记计数（批准收口后，命令实测）
+
+- 四份规范文档（通道 1）：`28 / 0 / 42 / 8` → **`28 / 0 / 43 / 7`**（`DESIGN.md` §7 改标：已批准 `+1`、候选未实现 `-1`）；
+- `SHARED_COMPONENT_DESIGN.md` 批准态设计标记（通道 2）：`79` → **`81`**（§13 两处改标）；
+- `SHARED_COMPONENT_DESIGN.md` 参考事实标记（通道 3）：`25` → **`26`**（§13.3 新增实现状态 `+1`）；
+- `SHARED_COMPONENT_DESIGN.md` 候选未实现标记（通道 4）：`10` → **`8`**（§13 两处改标）；
+- 各通道**严格不混算**；历史（R0～R4）计数作为历史快照保留，**不**回写。
+
+### 状态与入口
+
+- 模板级 `current_next_entry` **仍**为
+  `NONE_SHARED_IMPLEMENTATION_FINAL_ACCEPTED_AND_CLOSED_NO_PAGE_MIGRATION_AUTHORIZED`（**另一状态层**）；
+- 本轮参照修正草案链**当前入口**为
+  `CHATGPT_REMOTE_LIST_TABLE_VISUAL_TEMPLATE_CLIENT_CONFIG_REFINEMENT_BASELINE_APPROVAL_CLOSEOUT_REVIEW`
+  （R4 入口经远程复审 `APPROVED`，已为**历史**入口）。
+
+### 边界（明确不得）
+
+- **不得**把本节写成模板级全局状态变化：`page_migration_status` 保持 `NOT_STARTED`、
+  `page_migration_authorization_status` 保持 `NOT_GRANTED`、`pilot_page_selection_status` 保持 `NOT_DECIDED`——**均不变**；
+- **不得**把本节写成 §13 公共实现已实现或已验收：**批准的是设计基线**，公共实现仍 `NOT_STARTED`，
+  其他页面**不**自动接入；本轮**未**修改任何验收状态格、**未**新跑验收、**未**重跑浏览器；
+- **不得**把本节写成数据源管理页“更多”→三点改造的授权：该改造仍为**未来独立任务**，本轮**不**改该页；
+- **批准设计基线 ≠ 公共扩展已实现 ≠ 目测通过 ≠ 正式验收通过 ≠ 批准页面迁移。提交推送成功 ≠ 远程复审通过。**

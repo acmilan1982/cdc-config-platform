@@ -248,6 +248,12 @@ reference_table_class=.data-table
 - 数据源管理**主列表**已作为参考页接入公共实现并经项目负责人最终接受
   （`reference_page_integration_status=IMPLEMENTED_ACCEPTED`）；
 - **没有任何**业务页面获得迁移授权（`NOT_GRANTED`）。
+- **参照修正的模板设计基线已批准（`2026-09-29`）**：`DESIGN.md` §7 的**最小定向修订**（把禁令范围收窄为
+  「业务语义不公共化」，允许与语义解耦、由页面**显式 opt-in** 的固定高亮**视觉预设**）与
+  `SHARED_COMPONENT_DESIGN.md` §13 的分层可选契约（§13.3 单行固定高亮外观预设与行为边界、§13.4 归属处置），
+  经 ChatGPT 从远程 Git 对 R4 提交 `aa6285f02c16e6c3806ca2759d21e16b3e0e41b1` 复审 `APPROVED`、
+  项目负责人于 `2026-09-29` 批准后**设计基线已批准**；**批准的是设计基线，不是实现**——
+  §13 可选视觉预设的**公共实现尚 `NOT_STARTED`**，其他页面**不**自动接入。
 
 规则批准**不等于**通过正式验收，**正式验收通过（本地）也不等于**项目负责人最终接受；
 本目录所记录的最终接受，范围**仅限**公共实现与数据源管理参考页等价接入，
@@ -273,6 +279,12 @@ reference_table_class=.data-table
 **不得**把候选实现写成已实现（`IMPLEMENTED`），也**不得**把候选实现方案
 写成已批准的实现设计。
 
+**批准态 ≠ 已实现（`2026-09-29` 参照修正批准收口）**：`DESIGN.md` §7 最小定向修订与
+`SHARED_COMPONENT_DESIGN.md` §13 分层可选契约经批准后，其**已批准设计契约**不再属本标记
+（改用已批准模板规则 / 该文件批准态设计标记）；其**尚不存在的公共实现**属**参考事实**（现行源码事实：
+公共层未提供该可选样式），亦**不**归入本标记。即：本标记现**只**覆盖**尚未实现**的禁用态视觉规则
+（§12.1）与**未来尚未执行**的任务 / 建议，**不再**用于已批准的设计契约。
+
 > 阅读约定：凡描述当前**真实源码、已批准选择结果与已落地实现事实**的内容
 > 必须标注 `LIST_TABLE_REFERENCE_FACT`；
 > 凡描述当前已批准模板规则的必须标注 `LIST_TABLE_TEMPLATE_APPROVED`；
@@ -293,11 +305,17 @@ reference_table_class=.data-table
 
 当前规范性文档计数（**每次改动后从文件复算**，见 §11 变更记录）：
 
-| 标记 | 批准前 | 批准收口时 | 实现落地后 | 整理后（2026-09-29） | **R2 纠正后（2026-09-29）** |
-| --- | --- | --- | --- | --- | --- |
-| `LIST_TABLE_REFERENCE_FACT` | 22 | 22 | 26 | 27 | **28** |
-| `LIST_TABLE_TEMPLATE_APPROVED` | 0 | 42 | 42 | 42 | **42** |
-| `LIST_TABLE_PROPOSED_NOT_IMPLEMENTED` | 11 | 11 | 7 | 8 | **8** |
+| 标记 | 批准前 | 批准收口时 | 实现落地后 | 整理后（2026-09-29） | **R2 纠正后（2026-09-29）** | **参照修正批准收口后（2026-09-29）** |
+| --- | --- | --- | --- | --- | --- | --- |
+| `LIST_TABLE_REFERENCE_FACT` | 22 | 22 | 26 | 27 | **28** | **28** |
+| `LIST_TABLE_TEMPLATE_APPROVED` | 0 | 42 | 42 | 42 | **42** | **43** |
+| `LIST_TABLE_PROPOSED_NOT_IMPLEMENTED` | 11 | 11 | 7 | 8 | **8** | **7** |
+
+**参照修正批准收口后口径（`28 / 0 / 42 / 8` → `28 / 0 / 43 / 7`）**：`DESIGN.md` §7 的**最小定向修订**
+经 ChatGPT 从远程 Git 对 R4 提交 `aa6285f02c16e6c3806ca2759d21e16b3e0e41b1` 复审 `APPROVED`、
+项目负责人于 `2026-09-29` 批准后由**候选未实现标记改标已批准模板规则**：已批准 `+1`（42→43）、
+候选未实现 `-1`（8→7）、参考事实 `28` 不变、草案态 `0` 不变。（R3 定向纠错与 R4 焦点环证据表述纠错
+均未改四份文档标记，故其口径仍为 `28 / 0 / 42 / 8`。）
 
 历史口径变更（`22 / 0 / 42 / 11` → `26 / 0 / 42 / 7`）：
 参考事实标记 `+4`（22→26）、候选未实现标记 `-4`（11→7），
@@ -346,15 +364,16 @@ grep -ohF "$draft_marker" "${core_docs[@]}" | wc -l   # 期望 0
 本目录标记与 `query-list-page-template` 的冻结计数**互不影响**：
 两套标记字面量前缀不同、目录不同，**不共享**计数。
 
-**计数通道与 §12／§13 可选扩展（R2 纠正，2026-09-29）** —— 本节的四份文档计数**只**扫描
+**计数通道与 §12／§13 可选扩展（R2 纠正、批准收口后更新，2026-09-29）** —— 本节的四份文档计数**只**扫描
 `README.md` / `DESIGN.md` / `UI.md` / `MIGRATION.md`，**不**扫描
 `SHARED_COMPONENT_DESIGN.md`。该文件 §12「已批准设计基线、已落地实现、待远程复审的可选扩展」中，
-**已落地／已批准的事实**按本节 §7.3 的阅读约定标注**参考事实标记**，**未实现**的禁用态视觉与**待批准**的
-§13 分层契约标注**候选未实现标记**（两者均只引用、不重定义）。这两类在该文件内的**独立**计数见
+**已落地／已批准的事实**按本节 §7.3 的阅读约定标注**参考事实标记**，**未实现**的禁用态视觉标注
+**候选未实现标记**；§13 分层契约经 `2026-09-29` 批准后，其**已批准设计契约**改用该文件批准态设计标记、
+其**尚不存在的公共实现**标注**参考事实标记**（上述标记均只引用、不重定义）。该文件内各独立计数见
 `SHARED_COMPONENT_DESIGN.md` §12.8，**不**并入本节
-（四份文档计数**现行**为 `28 / 0 / 42 / 8`，见 §7.4 计数表末列）；
+（四份文档计数**现行**为 `28 / 0 / 43 / 7`，见 §7.4 计数表末列）；
 「是否并入本节计数」**不再**留为未决项——**不并入**，另列独立通道。各标记通道
-（四份文档 / 本文件批准态设计标记 / 该文件参考事实标记 / 该文件候选未实现标记）**严格不混算**：
+（四份文档 / 该文件批准态设计标记 / 该文件参考事实标记 / 该文件候选未实现标记）**严格不混算**：
 
 ```bash
 # 独立通道：SHARED_COMPONENT_DESIGN.md 的参考事实标记与候选未实现标记
@@ -373,7 +392,7 @@ grep -ohF "$cand_marker" docs/baseline/list-table-visual-template/SHARED_COMPONE
 | `DESIGN.md` | 模板职责与 Feature 保留职责、启用与作用域隔离、行高与长文本策略、候选实现方案对比（**基线任务当时不定案**；下游已选 §8.4 并已落地，**目测已通过并通过本地正式验收**） |
 | `UI.md` | 参考实现主表当前事实、可提升为已批准模板规则的视觉内容、必须保留为 Feature 专属的内容 |
 | `MIGRATION.md` | 全量 `el-table` 使用点盘点矩阵、候选分类、逐页独立评估与授权要求 |
-| `SHARED_COMPONENT_DESIGN.md` | **公共实现详细设计（已批准）**：四个候选的唯一结论、公共契约、Feature 保护项、参考页等价接入清单、验证与回滚设计（`approval_scope=SHARED_IMPLEMENTATION_DETAILED_DESIGN_ONLY`；**批准的是设计文档**，该设计随后已由独立实施任务落地，**目测已通过**，**本地正式验收已通过，并已由项目负责人最终接受**）。**§12 为例外**：行内三点入口 opt-in **可选扩展**——其**设计基线**已于 2026-09-29 经 ChatGPT 远程复审 `APPROVED`、项目负责人批准（**R2 修订后口径**）；其**代码实现**已由独立任务 `CLIENT-CONFIG-ROW-HEIGHT-AND-OPTIONAL-ELLIPSIS-IMPLEMENTATION-001` 落地、`/config/client` 主列表接入，**代码复审状态**为 **`IMPLEMENTED_PENDING_CHATGPT_REVIEW`（待远程复审）**；其**已落地的现行事实**按 §7.3 阅读约定标注**参考事实标记**（**不**因待复审而标为候选未实现），其独立计数见 §12.8） |
+| `SHARED_COMPONENT_DESIGN.md` | **公共实现详细设计（已批准）**：四个候选的唯一结论、公共契约、Feature 保护项、参考页等价接入清单、验证与回滚设计（`approval_scope=SHARED_IMPLEMENTATION_DETAILED_DESIGN_ONLY`；**批准的是设计文档**，该设计随后已由独立实施任务落地，**目测已通过**，**本地正式验收已通过，并已由项目负责人最终接受**）。**§12 为例外**：行内三点入口 opt-in **可选扩展**——其**设计基线**已于 2026-09-29 经 ChatGPT 远程复审 `APPROVED`、项目负责人批准（**R2 修订后口径**）；其**代码实现**已由独立任务 `CLIENT-CONFIG-ROW-HEIGHT-AND-OPTIONAL-ELLIPSIS-IMPLEMENTATION-001` 落地、`/config/client` 主列表接入，**代码复审状态**为 **`IMPLEMENTED_PENDING_CHATGPT_REVIEW`（待远程复审）**；其**已落地的现行事实**按 §7.3 阅读约定标注**参考事实标记**（**不**因待复审而标为候选未实现），其独立计数见 §12.8）。**§13 为参照修正设计基线（已批准）**：分层可选契约（§13.3 单行固定高亮外观预设与行为边界、§13.4 归属处置）经 ChatGPT 从远程 Git 对 R4 提交 `aa6285f…` 复审 `APPROVED`、项目负责人于 2026-09-29 批准后**设计基线已批准**；其**公共实现尚 `NOT_STARTED`**（公共层未提供该可选样式），其他页面**不**自动接入 |
 | `reports/LIST-TABLE-VISUAL-TEMPLATE-BASELINE-001.md` | R0 建立任务的执行报告与校验证据（**历史报告，保留草案态标记，不修改**） |
 | `reports/LIST-TABLE-VISUAL-TEMPLATE-BASELINE-001-R1.md` | R1 定向修订执行报告（**历史报告，保留草案态标记，不修改**） |
 | `reports/LIST-TABLE-VISUAL-TEMPLATE-BASELINE-APPROVAL-CLOSEOUT-001.md` | 基线内容批准收口报告（历史执行报告，不修改） |
@@ -441,6 +460,29 @@ R2 `59617b4…` 经 ChatGPT **从远程 Git 独立复审 `APPROVED`** → 项目
 > `reference_page_integration_status` 仍 `IMPLEMENTED_ACCEPTED`、`final_acceptance_status` 仍
 > `ACCEPTED_BY_PROJECT_OWNER`。
 
+### 8.1 参照修正设计基线（`2026-09-29` 批准）—— 与 §12 三点 opt-in **分属两个状态层**
+
+**参照修正链**（与上节第七轮 §12 链**分别记录**，**不**混用）：模板定向整理
+`...-REFINEMENT-BASELINE-001` → R1 → R2 → R3 → R4，其中 R0～R3 远程复审 `CHANGES_REQUIRED`、
+R4 `aa6285f…` 复审 **`APPROVED`** → 项目负责人于 `2026-09-29` 在批准语境下回复**「继续」** →
+本收口 `...-REFINEMENT-BASELINE-APPROVAL-CLOSEOUT-001`。
+
+- **批准对象**：R4 `aa6285f02c16e6c3806ca2759d21e16b3e0e41b1` 所代表的**文档设计基线**，尤其
+  `SHARED_COMPONENT_DESIGN.md` §13 的**可选单行固定高亮视觉契约**与 `DESIGN.md` §7 的**最小定向修订**；
+- **批准态**：设计基线已批准；`DESIGN.md` §7 禁令范围**已收窄**为「业务语义不公共化」；
+- **代码状态**：§13 可选视觉预设的**公共实现 `NOT_STARTED`**（公共层未提供该可选样式或辅助类，
+  其他页面**不**自动接入）；`/config/client` 现行固定高亮属**该 Feature 页面自身**实现，**不**等于公共模板已实现；
+- **未随本轮改变的独立状态**：§12 三点 opt-in 入口代码复审仍 `IMPLEMENTED_PENDING_CHATGPT_REVIEW`；
+  §12.1 禁用态视觉仍未实现（`CCFG-AC-157` 仍 `BLOCKED`）；模板级 `current_next_entry` 仍为
+  `NONE_SHARED_IMPLEMENTATION_FINAL_ACCEPTED_AND_CLOSED_NO_PAGE_MIGRATION_AUTHORIZED`（**另一状态层**，**不**混用）。
+- **本轮草案链当前入口**：
+
+```text
+draft_chain_next_step=CHATGPT_REMOTE_LIST_TABLE_VISUAL_TEMPLATE_CLIENT_CONFIG_REFINEMENT_BASELINE_APPROVAL_CLOSEOUT_REVIEW
+```
+
+> **批准设计基线 ≠ 公共扩展已实现 ≠ 目测通过 ≠ 正式验收通过 ≠ 批准页面迁移。提交推送成功 ≠ 远程复审通过。**
+
 ## 9. 后续阶段与授权边界
 
 `LIST_TABLE_TEMPLATE_APPROVED` —— 阶段路径及其当前状态：
@@ -460,11 +502,15 @@ R2 `59617b4…` 经 ChatGPT **从远程 Git 独立复审 `APPROVED`** → 项目
 第 6 步**未授权**，**不得**把上述不同层级合并成模糊的“已完成”。
 **批准详细设计 ≠ 批准实现 ≠ 目测通过 ≠ 通过正式验收（本地） ≠ 项目负责人最终接受 ≠ 批准页面迁移。**
 
-当前唯一下一入口：
+当前唯一下一入口（**模板级公共实现 / 页面迁移状态层**，**不含**参照修正草案链）：
 
 ```text
 next_step=NONE_SHARED_IMPLEMENTATION_FINAL_ACCEPTED_AND_CLOSED_NO_PAGE_MIGRATION_AUTHORIZED
 ```
+
+（参照修正草案链的当前入口为 §8.1 的
+`draft_chain_next_step=CHATGPT_REMOTE_LIST_TABLE_VISUAL_TEMPLATE_CLIENT_CONFIG_REFINEMENT_BASELINE_APPROVAL_CLOSEOUT_REVIEW`；
+两者**分属不同状态层**，**不**混用。）
 
 `LIST_TABLE_PROPOSED_NOT_IMPLEMENTED` —— 公共实现最终接受后**没有**自动开启的后续任务；
 未来如要迁移页面，**必须**另立提示词并获得项目负责人单独授权，
@@ -785,3 +831,24 @@ next_step=NONE_SHARED_IMPLEMENTATION_FINAL_ACCEPTED_AND_CLOSED_NO_PAGE_MIGRATION
   `CHATGPT_REMOTE_LIST_TABLE_VISUAL_TEMPLATE_CLIENT_CONFIG_REFINEMENT_BASELINE_R4_REVIEW`
   （R3 入口经远程复审 `CHANGES_REQUIRED`，已为历史入口）。详见同目录
   `reports/LIST-TABLE-VISUAL-TEMPLATE-CLIENT-CONFIG-REFINEMENT-BASELINE-001-R4.md`。
+- 2026-09-29，**参照修正设计基线批准收口**（`LIST-TABLE-VISUAL-TEMPLATE-CLIENT-CONFIG-REFINEMENT-BASELINE-APPROVAL-CLOSEOUT-001`，
+  纯文档批准收口）—— ChatGPT 从远程 Git 对 R4 提交
+  `aa6285f02c16e6c3806ca2759d21e16b3e0e41b1` 的复审结论为 **`APPROVED`**；紧接着项目负责人于
+  `2026-09-29` 在“下一步是项目负责人批准这份 R4 修订后的模板草案”的**明确批准语境**下回复**「继续」**，
+  授权推进本收口（**如实记录**：回复原话为「继续」，语境为批准该 R4 草案；**不**伪引为逐字「批准」）。
+  本任务**只**把 R4 修订后的**设计基线**收口为已批准：`DESIGN.md` §7 最小定向修订由候选未实现标记
+  改标**已批准模板规则**；`SHARED_COMPONENT_DESIGN.md` §13 分层可选契约（§13.3 外观预设与行为边界、
+  §13.4 归属处置）由候选未实现标记改标该文件**批准态设计标记**，并据**现行源码核查**把
+  “公共实现尚不存在”标注**参考事实标记**。标记复算：四份规范文档 `28 / 0 / 42 / 8 → 28 / 0 / 43 / 7`
+  （已批准 `+1`、候选未实现 `-1`）；本文件批准态设计标记 `79 → 81`；参考事实标记 `25 → 26`；
+  候选未实现标记 `10 → 8`。**批准的是设计基线，不是实现**：§13 可选视觉预设的**公共实现仍
+  `NOT_STARTED`**（公共层未提供该样式），其他页面**不**自动接入；§12 三点 opt-in 入口**代码复审状态仍
+  `IMPLEMENTED_PENDING_CHATGPT_REVIEW`**（**不**因本次 §13 批准而改为已通过）；§12.1 禁用态视觉仍未实现
+  （`CCFG-AC-157` 仍 `BLOCKED`）；`CCFG-AC-010` 现行 `PASS`、`CCFG-AC-155~157` 仍 `BLOCKED`（只读核对，
+  **未**改任何状态格）；模板级状态**不变**（`page_migration_status=NOT_STARTED`、
+  `page_migration_authorization_status=NOT_GRANTED`、`pilot_page_selection_status=NOT_DECIDED`）；
+  数据源管理「更多」→三点改造仍属**后续独立任务**。R0～R4 均留作**历史时点**（R0～R3 `CHANGES_REQUIRED`、
+  R4 `APPROVED`），**不**回写。本轮草案链**当前入口**改为
+  `CHATGPT_REMOTE_LIST_TABLE_VISUAL_TEMPLATE_CLIENT_CONFIG_REFINEMENT_BASELINE_APPROVAL_CLOSEOUT_REVIEW`
+  （R4 入口经远程复审 `APPROVED`，已为**历史**入口）。详见同目录
+  `reports/LIST-TABLE-VISUAL-TEMPLATE-CLIENT-CONFIG-REFINEMENT-BASELINE-APPROVAL-CLOSEOUT-001.md`。
