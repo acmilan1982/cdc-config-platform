@@ -1,0 +1,24 @@
+# SHA-256 清单 · CLIENT-CONFIG-ROW-HEIGHT-AND-OPTIONAL-ELLIPSIS-IMPLEMENTATION-001-R1
+# 生成时间（本地）：2026-09-29 18:54:15 CST
+#
+# 一、仓库外原始产物（未脱敏，未入仓）
+#    说明：/config/client 与 /config/data-source 的整屏截图含真实业务数据（探针 ID、数据源组织名），
+#          故不入仓；已打包供项目负责人在仓库外核对。整屏 PNG 为 X11 根窗口真实物理像素。
+c27e50379a08da8e285f1b478c7251e8d7acb1ad552e7c0a00a004de3f27450d  /agent/CLIENT-CONFIG-ROW-HEIGHT-AND-OPTIONAL-ELLIPSIS-IMPLEMENTATION-001-R1-evidence.tar.gz
+0e5b7606064fdd4c990ad531bde8807d25917c20a2dd34221f00fe8b787a4dc9  /tmp/r1-zoom/out/r1-zoom-raw.json
+6747ad71b66c6624890be34d48d0a20212e75070416c5feb6ca11e741f575ab4  /tmp/r1-zoom/out/r1-zoom-summary.json
+#    以下为打包内单个文件（路径为打包内相对路径 r1-zoom-out/）
+d21a1e5c82a6fcbedb0df54bcb6a19bcffff40c5dd179b404cdc6f77a4fc6d21  r1-zoom-out/screen-zoom100.png
+086fc4ffb9de2bf80d3ac120447e0645eacfc8bd306ec1efe92cdf3f95c14cd4  r1-zoom-out/screen-zoom125.png
+35d3104c19b7843f06ae41256ef597a2ca085277aafd5b12ad6d94b3fae53bfd  r1-zoom-out/screen-datasource-zoom125.png
+c80e527394c84088d8f99dc658568e467d5579c27304a4a6f7c6f895efbefcea  r1-zoom-out/ring-100-calib.png
+16daf5ce3c757120192732d5bc8a8f19509c2d1cfe0dc0ef5605d87077d31486  r1-zoom-out/ring-125-calib.png
+#
+# 二、本目录入库文件
+9259d6bd7bb7d95512d2480d7780ee5c5c94d5fc1d739d8bf5c8c30b84c518d6  docs/features/client-config/reports/evidence/CLIENT-CONFIG-ROW-HEIGHT-AND-OPTIONAL-ELLIPSIS-IMPLEMENTATION-001-R1/README.md
+283f049793ba83f1cba81b52d39421ee3dd973345a54865b620b9096d916ecf5  docs/features/client-config/reports/evidence/CLIENT-CONFIG-ROW-HEIGHT-AND-OPTIONAL-ELLIPSIS-IMPLEMENTATION-001-R1/zoom-real-100-125.mjs
+674388e4a4b45e5a8c950860e21d48d1d1e809cd37cfcb1a8a2685df402da408  docs/features/client-config/reports/evidence/CLIENT-CONFIG-ROW-HEIGHT-AND-OPTIONAL-ELLIPSIS-IMPLEMENTATION-001-R1/zoom-helper-extension/manifest.json
+0eb6b7b341e09210a9d72ffb49f059042d3c5b103067ad5ca9b4ac59eb9b6daf  docs/features/client-config/reports/evidence/CLIENT-CONFIG-ROW-HEIGHT-AND-OPTIONAL-ELLIPSIS-IMPLEMENTATION-001-R1/zoom-helper-extension/sw.js
+b70af55d1e70630f11cd5843763b29bc9f60fb049867e919ae30864dcb4cc3e8  docs/features/client-config/reports/evidence/CLIENT-CONFIG-ROW-HEIGHT-AND-OPTIONAL-ELLIPSIS-IMPLEMENTATION-001-R1/real-zoom-results.json
+6747ad71b66c6624890be34d48d0a20212e75070416c5feb6ca11e741f575ab4  docs/features/client-config/reports/evidence/CLIENT-CONFIG-ROW-HEIGHT-AND-OPTIONAL-ELLIPSIS-IMPLEMENTATION-001-R1/real-zoom-summary.json
+310769131fa347d5479fe46616ce024f3a498b5ddce3035d541f27b108dae16e  docs/features/client-config/reports/evidence/CLIENT-CONFIG-ROW-HEIGHT-AND-OPTIONAL-ELLIPSIS-IMPLEMENTATION-001-R1/focus-ring-pixels.json

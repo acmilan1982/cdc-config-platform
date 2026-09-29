@@ -1,0 +1,678 @@
+{
+  "chromeVersion": "Chrome/147.0.0.0",
+  "extensionId": "mlfphhpffkjfpdkfolfcohmbhnboebge",
+  "cdpCaptureLimitation": {
+    "observed": "Chrome CDP Page.captureScreenshot at page zoom Z covers only innerWidth/dpr CSS px (measured 1151/1.25=920.8 CSS px at 125%), i.e. the leftmost ~80% of the CSS viewport; captureBeyondViewport and clip.scale do not change it.",
+    "consequence": "the opt-in entry lives in the fixed right operation column hugging the viewport right edge, so it is outside every CDP capture at 125%; pixel evidence at 125% therefore uses a real display capture.",
+    "measuredAt125": {
+      "innerWidth": 1151,
+      "innerHeight": 650,
+      "dpr": 1.25,
+      "cdpCapturedCssWidth": 920.8,
+      "triggerCssX": 969.2
+    }
+  },
+  "toggle": [
+    {
+      "target": 1,
+      "chromeTabsZoomBefore": 1,
+      "chromeTabsZoomAfter": 1,
+      "hostKey": "127.0.0.1:5173",
+      "dpr": 1,
+      "innerWidth": 1439,
+      "outerWidth": 1439,
+      "outerHeight": 899,
+      "vvWidth": 1439
+    },
+    {
+      "target": 1.25,
+      "chromeTabsZoomBefore": 1,
+      "chromeTabsZoomAfter": 1.25,
+      "hostKey": "127.0.0.1:5173",
+      "dpr": 1.25,
+      "innerWidth": 1151,
+      "outerWidth": 1439,
+      "outerHeight": 899,
+      "vvWidth": 1151
+    },
+    {
+      "target": 1,
+      "chromeTabsZoomBefore": 1.25,
+      "chromeTabsZoomAfter": 1,
+      "hostKey": "127.0.0.1:5173",
+      "dpr": 1,
+      "innerWidth": 1439,
+      "outerWidth": 1439,
+      "outerHeight": 899,
+      "vvWidth": 1439
+    }
+  ],
+  "zoomLegs": {
+    "100": {
+      "requestedFactor": 1,
+      "chromeTabsZoom": {
+        "tabId": 1983379785,
+        "url": "http://127.0.0.1:5173/config/client",
+        "zoom": 1
+      },
+      "dpr": 1,
+      "innerWidth": 1439,
+      "innerHeight": 812,
+      "outerWidth": 1439,
+      "outerHeight": 899,
+      "screen": {
+        "width": 1440,
+        "height": 900
+      },
+      "visualViewport": {
+        "width": 1439,
+        "height": 812,
+        "scale": 1
+      },
+      "hitBoxCssPx": {
+        "w": 28,
+        "h": 28
+      },
+      "hitBoxPhysicalPx": {
+        "w": 28,
+        "h": 28
+      }
+    },
+    "125": {
+      "requestedFactor": 1.25,
+      "chromeTabsZoom": {
+        "tabId": 1983379785,
+        "url": "http://127.0.0.1:5173/config/client",
+        "zoom": 1.25
+      },
+      "dpr": 1.25,
+      "innerWidth": 1151,
+      "innerHeight": 650,
+      "outerWidth": 1439,
+      "outerHeight": 899,
+      "screen": {
+        "width": 1440,
+        "height": 900
+      },
+      "visualViewport": {
+        "width": 1151.199951171875,
+        "height": 649.5999755859375,
+        "scale": 1
+      },
+      "hitBoxCssPx": {
+        "w": 28,
+        "h": 28
+      },
+      "hitBoxPhysicalPx": {
+        "w": 35,
+        "h": 35
+      }
+    }
+  },
+  "focus": {
+    "100": {
+      "tabReached": true,
+      "steps": 7,
+      "box": {
+        "x": 1254,
+        "y": 364,
+        "w": 28,
+        "h": 28,
+        "dpr": 1,
+        "innerWidth": 1439,
+        "screen": {
+          "w": 1440,
+          "h": 900
+        },
+        "cls": "cc-more-link lt-row-action__ellipsis el-tooltip__trigger el-tooltip__trigger",
+        "outlineStyle": "solid",
+        "outlineWidth": "2px",
+        "outlineColor": "rgb(64, 158, 255)",
+        "outlineOffset": "-2px",
+        "color": "rgb(64, 158, 255)",
+        "backgroundColor": "rgba(0, 0, 0, 0)",
+        "cellOverflow": "hidden",
+        "outlineOffsetInCssPx": -2,
+        "outlineWidthInCssPx": 2,
+        "boxWithinCell": true,
+        "tdIsLast": true,
+        "tdHasOptIn": true
+      }
+    },
+    "125": {
+      "tabReached": true,
+      "steps": 8,
+      "box": {
+        "x": 969.2000122070312,
+        "y": 363.8000183105469,
+        "w": 28,
+        "h": 28,
+        "dpr": 1.25,
+        "innerWidth": 1151,
+        "screen": {
+          "w": 1440,
+          "h": 900
+        },
+        "cls": "cc-more-link lt-row-action__ellipsis el-tooltip__trigger el-tooltip__trigger",
+        "outlineStyle": "solid",
+        "outlineWidth": "1.6px",
+        "outlineColor": "rgb(64, 158, 255)",
+        "outlineOffset": "-1.6px",
+        "color": "rgb(64, 158, 255)",
+        "backgroundColor": "rgba(0, 0, 0, 0)",
+        "cellOverflow": "hidden",
+        "outlineOffsetInCssPx": -2,
+        "outlineWidthInCssPx": 2,
+        "boxWithinCell": true,
+        "tdIsLast": true,
+        "tdHasOptIn": true
+      }
+    }
+  },
+  "ring": {
+    "100": {
+      "ok": true,
+      "method": "gnome-screenshot of X11 root window (real physical pixels), marker-calibrated",
+      "screenshot": "screen-zoom100.png",
+      "screenshotDevicePx": {
+        "w": 1440,
+        "h": 900
+      },
+      "calibration": {
+        "devicePxPerCssPx_x": 1,
+        "devicePxPerCssPx_y": 1,
+        "originX": 0,
+        "originY": 87,
+        "rendererDpr": 1,
+        "consistent": true
+      },
+      "rectCss": {
+        "x": 1254,
+        "y": 364,
+        "w": 28,
+        "h": 28
+      },
+      "rectStable": true,
+      "boxDevice": {
+        "x": 1254,
+        "y": 451,
+        "w": 28,
+        "h": 28
+      },
+      "boxDeviceInsideScreen": true,
+      "cropDevice": {
+        "x": 1251,
+        "y": 448,
+        "w": 34,
+        "h": 34
+      },
+      "deviceBluePixelsInCrop": 246,
+      "blueDevicePixelsInsideBox": 246,
+      "blueDevicePixelsOutsideBox": 0,
+      "blueDevicePixelsInterior": 51,
+      "ringDeviceBBox": {
+        "x": 1254,
+        "y": 451,
+        "w": 28,
+        "h": 28
+      },
+      "ringFullyInsideHitBoxStrict": true,
+      "ringOutsideMaxDevicePx": 0,
+      "ringOutsideSides": {
+        "left": 0,
+        "right": 0,
+        "top": 0,
+        "bottom": 0
+      },
+      "ringFullyInsideHitBoxWithin1DevicePx": true,
+      "sideCoverage": {
+        "top": 0.857,
+        "bottom": 0.857,
+        "left": 0.857,
+        "right": 0.857
+      },
+      "ringVisibleOnAllFourSides": true,
+      "asciiMapRows": 34
+    },
+    "125": {
+      "ok": true,
+      "method": "gnome-screenshot of X11 root window (real physical pixels), marker-calibrated",
+      "screenshot": "screen-zoom125.png",
+      "screenshotDevicePx": {
+        "w": 1440,
+        "h": 900
+      },
+      "calibration": {
+        "devicePxPerCssPx_x": 1.25,
+        "devicePxPerCssPx_y": 1.25,
+        "originX": 0.5,
+        "originY": 87.25,
+        "rendererDpr": 1.25,
+        "consistent": true
+      },
+      "rectCss": {
+        "x": 969.2000122070312,
+        "y": 363.8000183105469,
+        "w": 28,
+        "h": 28
+      },
+      "rectStable": true,
+      "boxDevice": {
+        "x": 1212,
+        "y": 542,
+        "w": 35,
+        "h": 35
+      },
+      "boxDeviceInsideScreen": true,
+      "cropDevice": {
+        "x": 1208,
+        "y": 538,
+        "w": 43,
+        "h": 43
+      },
+      "deviceBluePixelsInCrop": 329,
+      "blueDevicePixelsInsideBox": 302,
+      "blueDevicePixelsOutsideBox": 27,
+      "blueDevicePixelsInterior": 113,
+      "ringDeviceBBox": {
+        "x": 1211,
+        "y": 542,
+        "w": 35,
+        "h": 35
+      },
+      "ringFullyInsideHitBoxStrict": false,
+      "ringOutsideMaxDevicePx": 1,
+      "ringOutsideSides": {
+        "left": 27,
+        "right": 0,
+        "top": 0,
+        "bottom": 0
+      },
+      "ringFullyInsideHitBoxWithin1DevicePx": true,
+      "sideCoverage": {
+        "top": 0.886,
+        "bottom": 0.886,
+        "left": 0.943,
+        "right": 0.829
+      },
+      "ringVisibleOnAllFourSides": true,
+      "asciiMapRows": 34
+    }
+  },
+  "hover": {
+    "100": {
+      "ok": true,
+      "bg": "rgb(236, 245, 255)"
+    },
+    "125": {
+      "ok": true,
+      "bg": "rgb(236, 245, 255)"
+    }
+  },
+  "fixedColumn": {
+    "100": {
+      "ok": true,
+      "scrollLeft": 0,
+      "scrollWidth": 1060,
+      "clientWidth": 1060,
+      "horizontalScrollAvailable": false,
+      "triggerRectAfterScroll": {
+        "left": 1254,
+        "right": 1282,
+        "w": 28
+      },
+      "innerWidth": 1439,
+      "triggerStillInViewport": true,
+      "triggerDisplay": "flex",
+      "triggerVisibility": "visible"
+    },
+    "125": {
+      "ok": true,
+      "scrollLeft": 251.2,
+      "scrollWidth": 1026,
+      "clientWidth": 775,
+      "horizontalScrollAvailable": true,
+      "triggerRectAfterScroll": {
+        "left": 968.8,
+        "right": 996.8,
+        "w": 28
+      },
+      "innerWidth": 1151,
+      "triggerStillInViewport": true,
+      "triggerDisplay": "flex",
+      "triggerVisibility": "visible"
+    }
+  },
+  "click": {
+    "100": {
+      "row1MenuAfterTriggerClick": {
+        "visibleMenus": 1,
+        "itemCounts": [
+          2
+        ],
+        "items": [
+          "停用",
+          "删除"
+        ],
+        "popperTop": 404,
+        "row1Top": 354.5,
+        "row1Bottom": 402.5
+      },
+      "row1OwnMenuOpened": true,
+      "probePointBelowHitBoxCss": {
+        "x": 1268,
+        "y": 394
+      },
+      "afterClickBelowHitBox": {
+        "visibleMenus": 0,
+        "itemCounts": [],
+        "items": [],
+        "popperTop": null,
+        "row1Top": 354.5,
+        "row1Bottom": 402.5
+      },
+      "noMisTriggerBelowHitBox": true,
+      "row2MenuAfterTriggerClick": {
+        "visibleMenus": 1,
+        "itemCounts": [
+          2
+        ],
+        "items": [
+          "启用",
+          "删除"
+        ],
+        "popperTop": 452,
+        "row1Top": 354.5,
+        "row1Bottom": 402.5
+      },
+      "row2OwnMenuOpened": true,
+      "row1AndRow2MenusDiffer": true
+    },
+    "125": {
+      "row1MenuAfterTriggerClick": {
+        "visibleMenus": 1,
+        "itemCounts": [
+          2
+        ],
+        "items": [
+          "停用",
+          "删除"
+        ],
+        "popperTop": 404,
+        "row1Top": 354.3,
+        "row1Bottom": 402.1
+      },
+      "row1OwnMenuOpened": true,
+      "probePointBelowHitBoxCss": {
+        "x": 982.8,
+        "y": 393.8
+      },
+      "afterClickBelowHitBox": {
+        "visibleMenus": 0,
+        "itemCounts": [],
+        "items": [],
+        "popperTop": null,
+        "row1Top": 354.3,
+        "row1Bottom": 402.1
+      },
+      "noMisTriggerBelowHitBox": true,
+      "row2MenuAfterTriggerClick": {
+        "visibleMenus": 1,
+        "itemCounts": [
+          2
+        ],
+        "items": [
+          "启用",
+          "删除"
+        ],
+        "popperTop": 452,
+        "row1Top": 354.3,
+        "row1Bottom": 402.1
+      },
+      "row2OwnMenuOpened": true,
+      "row1AndRow2MenusDiffer": true
+    }
+  },
+  "normalRowHeights": {
+    "100": [
+      48,
+      48,
+      48,
+      48,
+      48,
+      48,
+      48,
+      48,
+      48,
+      48,
+      48,
+      48,
+      48,
+      48,
+      48
+    ],
+    "125": [
+      47.8,
+      47.8,
+      47.8,
+      47.8,
+      47.8,
+      47.8,
+      47.8,
+      47.8,
+      47.8,
+      47.8,
+      47.8,
+      47.8,
+      47.8,
+      47.8,
+      47.8
+    ]
+  },
+  "ambiguousRows": {
+    "100": [
+      {
+        "idx": 15,
+        "clientId": "S15",
+        "rowH": 52,
+        "opTdIsLast": true,
+        "opTdHasOptIn": true,
+        "opTdH": 52,
+        "opTdPadTop": "9.5px",
+        "opTdPadBottom": "9.5px",
+        "cellH": 28,
+        "cellOverflow": "hidden",
+        "linkHasOptIn": true,
+        "linkHasBizHook": true,
+        "linkW": 28,
+        "linkH": 28,
+        "linkRadius": "6px",
+        "linkDisplay": "flex",
+        "linkBoxInsideRow": true,
+        "linkOverlapsNextRow": false,
+        "idMarkPresent": true,
+        "idInactiveMark": true,
+        "abnormalMark": false,
+        "chipCount": 2,
+        "plusNText": null,
+        "countNoteText": "（展示）",
+        "tagTone": "bad",
+        "ambiguous": true
+      }
+    ],
+    "125": [
+      {
+        "idx": 15,
+        "clientId": "S15",
+        "rowH": 51.8,
+        "opTdIsLast": true,
+        "opTdHasOptIn": true,
+        "opTdH": 51.8,
+        "opTdPadTop": "9.5px",
+        "opTdPadBottom": "9.5px",
+        "cellH": 28,
+        "cellOverflow": "hidden",
+        "linkHasOptIn": true,
+        "linkHasBizHook": true,
+        "linkW": 28,
+        "linkH": 28,
+        "linkRadius": "6px",
+        "linkDisplay": "flex",
+        "linkBoxInsideRow": true,
+        "linkOverlapsNextRow": false,
+        "idMarkPresent": true,
+        "idInactiveMark": true,
+        "abnormalMark": false,
+        "chipCount": 2,
+        "plusNText": "+2",
+        "countNoteText": "（展示）",
+        "tagTone": "bad",
+        "ambiguous": true
+      }
+    ]
+  },
+  "marks": {
+    "100": {
+      "rowCount": 16,
+      "tagTones": {
+        "ok": 3,
+        "bad": 8,
+        "none": 5
+      },
+      "idMarkPresentAll": true,
+      "idInactiveMarkRows": 14,
+      "abnormalMarkRows": 1,
+      "chipCounts": [
+        1,
+        5,
+        2,
+        0,
+        7
+      ],
+      "plusNTexts": [
+        "+3",
+        "+6"
+      ],
+      "countNoteTexts": [
+        "（展示）"
+      ]
+    },
+    "125": {
+      "rowCount": 16,
+      "tagTones": {
+        "ok": 3,
+        "bad": 8,
+        "none": 5
+      },
+      "idMarkPresentAll": true,
+      "idInactiveMarkRows": 14,
+      "abnormalMarkRows": 1,
+      "chipCounts": [
+        1,
+        5,
+        2,
+        0,
+        7
+      ],
+      "plusNTexts": [
+        "+4",
+        "+6",
+        "+2"
+      ],
+      "countNoteTexts": [
+        "（展示）"
+      ]
+    }
+  },
+  "datasource": {
+    "100": {
+      "optInCell": 0,
+      "optInEllipsis": 0,
+      "rowMore": 36,
+      "heights": [
+        48,
+        48,
+        48,
+        48,
+        48,
+        48,
+        48,
+        48,
+        48,
+        48,
+        48,
+        48,
+        48,
+        48,
+        48,
+        48,
+        48,
+        48,
+        48,
+        48,
+        48,
+        48,
+        48,
+        48,
+        48,
+        48,
+        48,
+        48,
+        48,
+        48,
+        48,
+        48,
+        48,
+        48,
+        48,
+        48
+      ],
+      "moreText": "更多"
+    },
+    "125": {
+      "optInCell": 0,
+      "optInEllipsis": 0,
+      "rowMore": 36,
+      "heights": [
+        47.8,
+        47.8,
+        47.8,
+        47.8,
+        47.8,
+        47.8,
+        47.8,
+        47.8,
+        47.8,
+        47.8,
+        47.8,
+        47.8,
+        47.8,
+        47.8,
+        47.8,
+        47.8,
+        47.8,
+        47.8,
+        47.8,
+        47.8,
+        47.8,
+        47.8,
+        47.8,
+        47.8,
+        47.8,
+        47.8,
+        47.8,
+        47.8,
+        47.8,
+        47.8,
+        47.8,
+        47.8,
+        47.8,
+        47.8,
+        47.8,
+        47.8
+      ],
+      "moreText": "更多"
+    }
+  },
+  "writesBlocked": 0
+}

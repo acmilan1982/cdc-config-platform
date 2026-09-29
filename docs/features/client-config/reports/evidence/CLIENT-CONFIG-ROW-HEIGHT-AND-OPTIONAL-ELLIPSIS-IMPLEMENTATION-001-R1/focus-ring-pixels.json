@@ -1,0 +1,277 @@
+{
+  "note": "Focus-ring / three-dot entry physical-pixel evidence at real browser page zoom 100% and 125%. The pixel leg uses a real display capture (gnome-screenshot of the X11 root window) because Chrome CDP Page.captureScreenshot at 125% can only cover innerWidth/dpr CSS px and therefore cannot reach the fixed right operation column where the entry lives.",
+  "zoomMechanism": "chrome.tabs.setZoom() from a loaded unpacked MV3 helper extension",
+  "cdpCaptureLimitation": {
+    "observed": "Chrome CDP Page.captureScreenshot at page zoom Z covers only innerWidth/dpr CSS px (measured 1151/1.25=920.8 CSS px at 125%), i.e. the leftmost ~80% of the CSS viewport; captureBeyondViewport and clip.scale do not change it.",
+    "consequence": "the opt-in entry lives in the fixed right operation column hugging the viewport right edge, so it is outside every CDP capture at 125%; pixel evidence at 125% therefore uses a real display capture.",
+    "measuredAt125": {
+      "innerWidth": 1151,
+      "innerHeight": 650,
+      "dpr": 1.25,
+      "cdpCapturedCssWidth": 920.8,
+      "triggerCssX": 969.2
+    }
+  },
+  "perZoom": {
+    "100": {
+      "focusComputed": {
+        "tabReached": true,
+        "steps": 7,
+        "box": {
+          "x": 1254,
+          "y": 364,
+          "w": 28,
+          "h": 28,
+          "dpr": 1,
+          "innerWidth": 1439,
+          "screen": {
+            "w": 1440,
+            "h": 900
+          },
+          "cls": "cc-more-link lt-row-action__ellipsis el-tooltip__trigger el-tooltip__trigger",
+          "outlineStyle": "solid",
+          "outlineWidth": "2px",
+          "outlineColor": "rgb(64, 158, 255)",
+          "outlineOffset": "-2px",
+          "color": "rgb(64, 158, 255)",
+          "backgroundColor": "rgba(0, 0, 0, 0)",
+          "cellOverflow": "hidden",
+          "outlineOffsetInCssPx": -2,
+          "outlineWidthInCssPx": 2,
+          "boxWithinCell": true,
+          "tdIsLast": true,
+          "tdHasOptIn": true
+        }
+      },
+      "ring": {
+        "ok": true,
+        "method": "gnome-screenshot of X11 root window (real physical pixels), marker-calibrated",
+        "screenshot": "screen-zoom100.png",
+        "screenshotDevicePx": {
+          "w": 1440,
+          "h": 900
+        },
+        "calibration": {
+          "devicePxPerCssPx_x": 1,
+          "devicePxPerCssPx_y": 1,
+          "originX": 0,
+          "originY": 87,
+          "rendererDpr": 1,
+          "consistent": true
+        },
+        "rectCss": {
+          "x": 1254,
+          "y": 364,
+          "w": 28,
+          "h": 28
+        },
+        "rectStable": true,
+        "boxDevice": {
+          "x": 1254,
+          "y": 451,
+          "w": 28,
+          "h": 28
+        },
+        "boxDeviceInsideScreen": true,
+        "cropDevice": {
+          "x": 1251,
+          "y": 448,
+          "w": 34,
+          "h": 34
+        },
+        "deviceBluePixelsInCrop": 246,
+        "blueDevicePixelsInsideBox": 246,
+        "blueDevicePixelsOutsideBox": 0,
+        "blueDevicePixelsInterior": 51,
+        "ringDeviceBBox": {
+          "x": 1254,
+          "y": 451,
+          "w": 28,
+          "h": 28
+        },
+        "ringFullyInsideHitBoxStrict": true,
+        "ringOutsideMaxDevicePx": 0,
+        "ringOutsideSides": {
+          "left": 0,
+          "right": 0,
+          "top": 0,
+          "bottom": 0
+        },
+        "ringFullyInsideHitBoxWithin1DevicePx": true,
+        "sideCoverage": {
+          "top": 0.857,
+          "bottom": 0.857,
+          "left": 0.857,
+          "right": 0.857
+        },
+        "ringVisibleOnAllFourSides": true,
+        "asciiMap": [
+          "..................................",
+          "..................................",
+          ".....######################.......",
+          "....########################......",
+          "...####..................####.....",
+          "..###......................###....",
+          "..###......................###....",
+          "..##........................##....",
+          "..##........................##....",
+          "..##........................##....",
+          "..##........................##....",
+          "..##........................##....",
+          "..##........................##....",
+          "..##........................##....",
+          "..##.....##....##....##.....##....",
+          "..##....####..####..####....##....",
+          "..##....####..####..####....##....",
+          "..##....####..####..####....##....",
+          "..##........................##....",
+          "..##........................##....",
+          "..##........................##....",
+          "..##........................##....",
+          "..##........................##....",
+          "..##........................##....",
+          "..##........................##....",
+          "..###......................###....",
+          "..###......................###....",
+          "...####..................####.....",
+          "....########################......",
+          ".....######################.......",
+          "..................................",
+          "..................................",
+          "..................................",
+          ".................................."
+        ]
+      }
+    },
+    "125": {
+      "focusComputed": {
+        "tabReached": true,
+        "steps": 8,
+        "box": {
+          "x": 969.2000122070312,
+          "y": 363.8000183105469,
+          "w": 28,
+          "h": 28,
+          "dpr": 1.25,
+          "innerWidth": 1151,
+          "screen": {
+            "w": 1440,
+            "h": 900
+          },
+          "cls": "cc-more-link lt-row-action__ellipsis el-tooltip__trigger el-tooltip__trigger",
+          "outlineStyle": "solid",
+          "outlineWidth": "1.6px",
+          "outlineColor": "rgb(64, 158, 255)",
+          "outlineOffset": "-1.6px",
+          "color": "rgb(64, 158, 255)",
+          "backgroundColor": "rgba(0, 0, 0, 0)",
+          "cellOverflow": "hidden",
+          "outlineOffsetInCssPx": -2,
+          "outlineWidthInCssPx": 2,
+          "boxWithinCell": true,
+          "tdIsLast": true,
+          "tdHasOptIn": true
+        }
+      },
+      "ring": {
+        "ok": true,
+        "method": "gnome-screenshot of X11 root window (real physical pixels), marker-calibrated",
+        "screenshot": "screen-zoom125.png",
+        "screenshotDevicePx": {
+          "w": 1440,
+          "h": 900
+        },
+        "calibration": {
+          "devicePxPerCssPx_x": 1.25,
+          "devicePxPerCssPx_y": 1.25,
+          "originX": 0.5,
+          "originY": 87.25,
+          "rendererDpr": 1.25,
+          "consistent": true
+        },
+        "rectCss": {
+          "x": 969.2000122070312,
+          "y": 363.8000183105469,
+          "w": 28,
+          "h": 28
+        },
+        "rectStable": true,
+        "boxDevice": {
+          "x": 1212,
+          "y": 542,
+          "w": 35,
+          "h": 35
+        },
+        "boxDeviceInsideScreen": true,
+        "cropDevice": {
+          "x": 1208,
+          "y": 538,
+          "w": 43,
+          "h": 43
+        },
+        "deviceBluePixelsInCrop": 329,
+        "blueDevicePixelsInsideBox": 302,
+        "blueDevicePixelsOutsideBox": 27,
+        "blueDevicePixelsInterior": 113,
+        "ringDeviceBBox": {
+          "x": 1211,
+          "y": 542,
+          "w": 35,
+          "h": 35
+        },
+        "ringFullyInsideHitBoxStrict": false,
+        "ringOutsideMaxDevicePx": 1,
+        "ringOutsideSides": {
+          "left": 27,
+          "right": 0,
+          "top": 0,
+          "bottom": 0
+        },
+        "ringFullyInsideHitBoxWithin1DevicePx": true,
+        "sideCoverage": {
+          "top": 0.886,
+          "bottom": 0.886,
+          "left": 0.943,
+          "right": 0.829
+        },
+        "ringVisibleOnAllFourSides": true,
+        "asciiMap": [
+          "..................................",
+          "..................................",
+          "..................................",
+          "....#######################.......",
+          "...####.................####......",
+          "...##......................##.....",
+          "..##.......................###....",
+          "..#........................###....",
+          "..#.........................##....",
+          "..#.........................##....",
+          "..#.........................##....",
+          "..#.........................##....",
+          "..#.........................##....",
+          "..#.........................##....",
+          "..#.........................##....",
+          "..#....####...####.####.....##....",
+          "..#....#####..####.####.....##....",
+          "..#....####...####.####.....##....",
+          "..#.....###...###...###.....##....",
+          "..#.........................##....",
+          "..#.........................##....",
+          "..#.........................##....",
+          "..#.........................##....",
+          "..#.........................##....",
+          "..#.........................##....",
+          "..##.......................###....",
+          "..##.......................###....",
+          "...##......................##.....",
+          "...####..................###......",
+          "....#######################.......",
+          ".....######################.......",
+          "..................................",
+          "..................................",
+          ".................................."
+        ]
+      }
+    }
+  }
+}

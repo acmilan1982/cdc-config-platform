@@ -1,0 +1,9 @@
+{
+  "manifest_version": 3,
+  "name": "r1-zoom-helper",
+  "version": "1.0.0",
+  "description": "R1 evidence helper: exposes the real browser page-zoom API (chrome.tabs.setZoom) to the CDP harness. No network, no page access, no storage.",
+  "permissions": ["tabs"],
+  "host_permissions": ["http://127.0.0.1:5173/*"],
+  "background": { "service_worker": "sw.js" }
+}
