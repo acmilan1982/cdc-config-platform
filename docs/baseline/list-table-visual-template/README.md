@@ -338,7 +338,8 @@ grep -ohF "$draft_marker" "${core_docs[@]}" | wc -l   # 期望 0
 `README.md` / `DESIGN.md` / `UI.md` / `MIGRATION.md`，**不**扫描
 `SHARED_COMPONENT_DESIGN.md`。该文件 §12「已批准设计基线、实现待远程复审的可选扩展」按本节 §7.3 的阅读约定
 **携带候选未实现标记**（只引用、不重定义），其**独立**计数（通道 3）见
-`SHARED_COMPONENT_DESIGN.md` §12.8，**不**并入本节 `26 / 0 / 42 / 7`；
+`SHARED_COMPONENT_DESIGN.md` §12.8，**不**并入本节
+（四份文档计数**现行**为 `27 / 0 / 42 / 8`，见 §7.4 计数表末列）；
 「是否并入本节计数」**不再**留为未决项——**不并入**，另列独立通道。三条计数通道
 （四份文档 / 本文件批准态设计标记 / 本文件候选未实现标记）**严格不混算**：
 
@@ -401,32 +402,28 @@ R2 `59617b4…` 经 ChatGPT **从远程 Git 独立复审 `APPROVED`** → 项目
 - **设计基线已批准**：§12 的 opt-in 契约（确定类名 `lt-row-action__cell`／
   `lt-row-action__ellipsis`、受 `.lt-main-table` 限定、**默认不新增 `--lt-*` 令牌**、约 `28px` 命中区、
   `6px` 圆角、既有主色）按已批准设计文本解析；
-- **扩展代码尚未实现、尚未生效**：本期**没有**任何共享 CSS / 测试断言 / 页面接入因该扩展改变，
-  仍以**候选未实现标记**引用（标记定义见本文件 §7.3）；
-- 该扩展**不**改变本模板任何已批准规则、**不**改变该批准收口时点的共享 CSS 现值与测试断言——
-  收口时点 9 个 `--lt-*` 令牌、内部 helper 类 `0`、主表根类 `lt-main-table` 的 §4/§7 契约
-  保持**原值**（**现行** helper 类计数见下方 2026-09-29 更新）；拟实施时辅助类 `2` 为**未来值**；
-- 也**不**改变 §9 的阶段路径与授权边界（`page_migration_status` 仍 `NOT_STARTED`、
-  `page_migration_authorization_status` 仍 `NOT_GRANTED`、`pilot_page_selection_status` 仍 `NOT_DECIDED`）。
+- **扩展代码已实现、待远程复审**：该 opt-in 扩展已由独立实现任务
+  `CLIENT-CONFIG-ROW-HEIGHT-AND-OPTIONAL-ELLIPSIS-IMPLEMENTATION-001` 落地——公共层
+  `frontend/src/styles/list-table/list-table-visual.css` 新增仅受 `.lt-main-table` 限定的
+  `lt-row-action__cell`／`lt-row-action__ellipsis` 两条规则，`/config/client` **主列表**显式接入，
+  静态断言 #11 更新为「先剔除根类再断言辅助类集合」（#2／#3／#6 不变）。据此，**现行**
+  `lt_internal_helper_class_count` 为 **2**（`lt_token_count` 仍 **9**）；
+  实现状态为 `IMPLEMENTED_PENDING_CHATGPT_REVIEW`（**待远程复审**），故它仍按 **§7.3 候选未实现标记**
+  引用（标记定义见 §7.3，独立计数口径见 `SHARED_COMPONENT_DESIGN.md` §12.8）；
+- 该扩展**不**改变本模板任何**已批准规则**与模板级状态，也**不**改变 §9 的阶段路径与授权边界
+  （`page_migration_status` 仍 `NOT_STARTED`、`page_migration_authorization_status` 仍 `NOT_GRANTED`、
+  `pilot_page_selection_status` 仍 `NOT_DECIDED`）。
 
-> **R2 修正（`CLIENT-CONFIG-ROW-HEIGHT-AND-OPTIONAL-ELLIPSIS-BASELINE-001-R2`，2026-09-29，
-> 已并入上述获批基线）**：§12.7 拟议断言 #11 的示例判定表达式
-> `new Set(css().match(/\.lt-[\w-]+/g))` **本身会命中根类** `.lt-main-table`，现已收敛为
-> **先剔除根类**再断言辅助类集合（或含根类的**三元素**允许集合）的**可直接实现、可复审**口径。
-> 该 R2 **仅**改拟议文档文本，**不**修改 `frontend/src/styles/list-table/list-table-visual.spec.ts`
-> 现行测试代码或已批准断言。**扩展设计基线已获批 ≠ 扩展代码已实现或已生效。**
-
-**更新（2026-09-29，opt-in 代码实现后 · `CLIENT-CONFIG-ROW-HEIGHT-AND-OPTIONAL-ELLIPSIS-IMPLEMENTATION-001`）**
-—— 上述「扩展代码尚未实现、尚未生效」为**批准收口时点事实，逐字保留不改**；**现行实现状态**为
-该 opt-in 扩展**代码已落地、待远程复审**（`IMPLEMENTED_PENDING_CHATGPT_REVIEW`）：
-公共层 `frontend/src/styles/list-table/list-table-visual.css` 新增仅受 `.lt-main-table` 限定的
-`lt-row-action__cell`／`lt-row-action__ellipsis` 两条规则，`/config/client` **主列表**显式接入，
-静态断言 #11 按 R2 口径更新（#2／#3／#6 不变）。据此，现行 `lt_internal_helper_class_count` 已由
-`0` 变为 **2**（`lt_token_count` 仍 **9**）。**本模板整体状态不变**：`shared_implementation_status`／
-`reference_page_integration_status` 仍 `IMPLEMENTED_ACCEPTED`、`final_acceptance_status` 仍
-`ACCEPTED_BY_PROJECT_OWNER`；`page_migration_status` 仍 `NOT_STARTED`、
-`page_migration_authorization_status` 仍 `NOT_GRANTED`、`pilot_page_selection_status` 仍 `NOT_DECIDED`。
-**实现完成 ≠ 远程代码复审通过 ≠ 已目测 ≠ 已正式验收**；数据源管理「更多」→三点迁移仍属**另一会话、另一独立任务**。
+> **历史与批准链（2026-09-29，摘要）**：R0 `9381703…`、R1 `938e720…` 从远程 Git 复核均
+> `CHANGES_REQUIRED` → R2 `59617b4…` 经 ChatGPT 从远程 Git 独立复核 `APPROVED` → 项目负责人批准
+> 该扩展的**设计基线**（R2 修订后口径，**批准对象是设计基线，不是实现**）。R2 曾把 §12.7 #11 的
+> 示例判定表达式（会误命中根类 `.lt-main-table`）收敛为「先剔除根类再断言辅助类集合」的可实现口径，
+> 该文本现已在实现任务中落地。各轮拟议文本、旧计数（`lt_internal_helper_class_count` 阶段一 `0`、
+> 辅助类 `2` 曾为未来值）与当时「尚未实现」说明保留在既有历史报告。
+> **实现完成 ≠ 远程代码复审通过 ≠ 项目负责人目测 ≠ 正式验收通过**；数据源管理「更多」→三点迁移
+> 仍属**另一会话、另一独立任务**。**本模板整体状态不变**：`shared_implementation_status`／
+> `reference_page_integration_status` 仍 `IMPLEMENTED_ACCEPTED`、`final_acceptance_status` 仍
+> `ACCEPTED_BY_PROJECT_OWNER`。
 
 ## 9. 后续阶段与授权边界
 
@@ -696,5 +693,22 @@ next_step=NONE_SHARED_IMPLEMENTATION_FINAL_ACCEPTED_AND_CLOSED_NO_PAGE_MIGRATION
   （含能力契约表、单行固定高亮**可选契约**）。标记复算：四份规范文档 `27 / 0 / 42 / 8`、
   本文件批准态设计标记 `79`、`SHARED_COMPONENT_DESIGN.md` 候选未实现标记 `23`（§12 内 `18` 处、§13 内 `2` 处、
   其它说明 `3` 处）——候选未实现标记**净变化 `0`**（§12.6 两处草案示例改写为**现行接入事实**后迁出 `-2`，§13 新增 `+2`）。**本任务新增的可选契约状态为 `DRAFT_PENDING_USER_REVIEW`**，
-  下一入口 `CHATGPT_REMOTE_LIST_TABLE_VISUAL_TEMPLATE_CLIENT_CONFIG_REFINEMENT_BASELINE_REVIEW`；
+  下一入口 `CHATGPT_REMOTE_LIST_TABLE_VISUAL_TEMPLATE_CLIENT_CONFIG_REFINEMENT_BASELINE_REVIEW`
+  （**该入口后经远程复审 `CHANGES_REQUIRED`，已为历史入口**，由下方 R1 记录接续）；
   **模板整体状态不变**（`page_migration_status=NOT_STARTED` 等），**不**改数据源管理页。详见同目录 `reports/LIST-TABLE-VISUAL-TEMPLATE-CLIENT-CONFIG-REFINEMENT-BASELINE-001.md`。
+- 2026-09-29，**模板整理 R1 定向纠错**（`LIST-TABLE-VISUAL-TEMPLATE-CLIENT-CONFIG-REFINEMENT-BASELINE-001-R1`，
+  纯文档草案）——ChatGPT 从远程 Git 对 R0 提交 `0b43a444ab002ea21c1fe7ad4884b241c950b317`
+  的文档复审结论为 `CHANGES_REQUIRED`；本 R1 **只**就地修正三处：① 移除现行规范中的实施前示例
+  （`SHARED_COMPONENT_DESIGN.md` §12.7 由「拟修订契约」改写为**现行可执行契约**；§4.3／§4.4／§7.1 的
+  旧 `0` / 未来值就地收敛为现行值；`README.md` §8 的「扩展代码尚未实现、尚未生效」改写为现行事实）；
+  ② 统一禁用态两级职责（§12.1 与 §13.2；现行 CSS 尚无禁用视觉规则，据实记为**设计契约、尚未实现、尚未验收**）；
+  ③ 把 §13.5／`DESIGN.md` §7 的「已按…收窄」改为**拟议、待批准后生效**。标记复算三条通道**均不变**
+  （四份规范文档 `27 / 0 / 42 / 8`、本文件批准态设计标记 `79`、`SHARED_COMPONENT_DESIGN.md`
+  候选未实现标记 `23`）；R1 **未**增删任何标记实例。R0 报告的「17 项过期示例已清理」过宽结论由
+  R1 报告以 **errata／override** 承接（§12.7 等遗留示例由 R1 处理，**不**回写 R0 报告）。
+  §13 新增可选契约仍为 `DRAFT_PENDING_USER_REVIEW`；本轮草案链下一入口为
+  `CHATGPT_REMOTE_LIST_TABLE_VISUAL_TEMPLATE_CLIENT_CONFIG_REFINEMENT_BASELINE_R1_REVIEW`；
+  本模板级 `current_next_entry` 仍为
+  `NONE_SHARED_IMPLEMENTATION_FINAL_ACCEPTED_AND_CLOSED_NO_PAGE_MIGRATION_AUTHORIZED`。
+  **模板整体状态不变**（`page_migration_status=NOT_STARTED` 等），**不**改数据源管理页。详见同目录
+  `reports/LIST-TABLE-VISUAL-TEMPLATE-CLIENT-CONFIG-REFINEMENT-BASELINE-001-R1.md`。

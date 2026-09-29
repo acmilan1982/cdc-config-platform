@@ -537,4 +537,46 @@ client_config_main_list_visual_integration_implementation_base_commit=40d28125de
 - **不得**把本节写成数据源管理页“更多”→三点改造的授权：该改造仍为**未来独立任务**，本任务**不**改该页；
 - **不得**把本节新增的任何“单行固定高亮可选预设”等模板规则预先置为 `APPROVED` / `IMPLEMENTED_ACCEPTED`：
   其状态为 `DRAFT_PENDING_USER_REVIEW`，**尚待**远程复审（入口
-  `CHATGPT_REMOTE_LIST_TABLE_VISUAL_TEMPLATE_CLIENT_CONFIG_REFINEMENT_BASELINE_REVIEW`）与项目负责人批准。
+  `CHATGPT_REMOTE_LIST_TABLE_VISUAL_TEMPLATE_CLIENT_CONFIG_REFINEMENT_BASELINE_R1_REVIEW`）与项目负责人批准。
+
+## 模板整理任务 R1 定向纠错追加记录（`LIST-TABLE-VISUAL-TEMPLATE-CLIENT-CONFIG-REFINEMENT-BASELINE-001-R1`，追加记录，`2026-09-29`）
+
+> 本节为**追加式**记录，对应纯文档草案任务
+> `LIST-TABLE-VISUAL-TEMPLATE-CLIENT-CONFIG-REFINEMENT-BASELINE-001-R1`。ChatGPT 从远程 Git 对 R0
+> 提交 `0b43a444ab002ea21c1fe7ad4884b241c950b317` 的文档复审结论为 `CHANGES_REQUIRED`；
+> 本 R1 **只**就地修正三处，**不**改写上文任何历史记录与 R0 报告，**不**修改任何模板级迁移状态，**不**授权任何页面。
+
+### 三处修正（旧 → 新）
+
+1. **R1-01 移除现行规范中的实施前示例**：把 `SHARED_COMPONENT_DESIGN.md` §12.7 由「拟修订契约」正文
+   改写为**现行可执行契约**（现行值 `lt_internal_helper_class_count=2`、`lt_token_count=9`；断言 #11
+   先剔除根类再断言辅助类集合），并把 §0.1／§12 的 R0／R1／R2 历史压缩为一条摘要；
+   §4.3／§4.4／§7.1 的旧 `0` / 未来值**就地收敛**为现行值；`README.md` §8 的「扩展代码尚未实现、
+   尚未生效」改写为**现行事实**（已实现、待远程复审）。
+2. **R1-02 禁用态职责分界**：统一 `SHARED_COMPONENT_DESIGN.md` §12.1 与 §13.2——**是否 / 何时禁用、
+   权限与业务条件由 Feature 决定**；**可观察禁用态的通用视觉与可访问性呈现由公共层负责**（且仅在页面
+   显式启用该可选样式时）。据实记录：现行 CSS **尚无**禁用态视觉规则，属**设计契约、尚未实现、尚未验收**；
+   现行被禁用者为**菜单项**，`CCFG-AC-157` 该子项仍 `BLOCKED`。
+3. **R1-03 草案不得写成已生效**：把 `SHARED_COMPONENT_DESIGN.md` §13.5 与 `DESIGN.md` §7 的
+   「已按…收窄 / 已收窄」改为**拟议、待远程复审与项目负责人批准后生效**的准确时序；
+   §13 新增可选契约仍为 `DRAFT_PENDING_USER_REVIEW`。
+
+### 状态与计数（R1 后）
+
+- 四份规范文档计数（通道 1）仍 `27 / 0 / 42 / 8`（草案态规则标记 `0`）；本文件批准态设计标记（通道 2）
+  仍 `79`；`SHARED_COMPONENT_DESIGN.md` 候选未实现标记（通道 3）仍 `23`（R1 **未**增删任何标记实例）；
+- 三条通道**严格不混算**；R0 报告保留原样，其「17 项过期示例已清理」的过宽结论由 R1 报告以
+  **errata／override** 方式承接（§12.7 等遗留示例由 R1 处理，**不**回写 R0 报告）。
+- 本模板级 `current_next_entry` **仍**为
+  `NONE_SHARED_IMPLEMENTATION_FINAL_ACCEPTED_AND_CLOSED_NO_PAGE_MIGRATION_AUTHORIZED`；
+  本轮草案链的下一入口为
+  `CHATGPT_REMOTE_LIST_TABLE_VISUAL_TEMPLATE_CLIENT_CONFIG_REFINEMENT_BASELINE_R1_REVIEW`
+  （R0 入口 `..._BASELINE_REVIEW` 已因 `CHANGES_REQUIRED` 成为**历史**入口）。
+
+### 边界（明确不得）
+
+- **不得**把本节写成模板级全局状态变化：`page_migration_status` 保持 `NOT_STARTED`、
+  `page_migration_authorization_status` 保持 `NOT_GRANTED`、`pilot_page_selection_status` 保持 `NOT_DECIDED`——**均不变**；
+- **不得**把本节新增／修订的模板规则预先置为 `APPROVED` / `IMPLEMENTED_ACCEPTED`：§13 可选契约仍为
+  `DRAFT_PENDING_USER_REVIEW`；第七轮 opt-in 扩展的实现状态仍为 `IMPLEMENTED_PENDING_CHATGPT_REVIEW`；
+- **不得**把本节写成数据源管理页“更多”→三点改造的授权：该改造仍为**未来独立任务**，本 R1 **不**改该页。

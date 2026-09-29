@@ -132,38 +132,21 @@ LIST_TABLE_SHARED_DESIGN_APPROVED
 本文件引用它们时只写“已批准模板规则（`README.md` §7.2）”等**引用语**，
 **不**新增这三类标记实例，因此**不改变**四份规范文档 `26 / 0 / 42 / 7` 的计数。
 
-**第七轮可选扩展的标记例外（2026-09-29；设计基线已批准、扩展代码尚未实现）** —— 本文件新增 §12
-「行内三点入口 opt-in」可选扩展章节。该节内容为**已批准设计基线、尚未实现**，按 `README.md` §7.3 的
-阅读约定携带 `LIST_TABLE_PROPOSED_NOT_IMPLEMENTED`（该标记的**定义**仍在 `README.md` §7.3，
-本次**只引用、不重定义**）。该例外**只**落在 §12 与本节／§11 的说明文字中：§1~§10 的已批准
-详细设计正文**仍只使用**本文件唯一的批准态设计标记（其字面量见 §11.2 的拼接构造式），
-其计数（§11.3 的 `79`）**不变**；四份规范文档的核验命令（`README.md` §7.4）**不扫描本文件**，
-故 `26 / 0 / 42 / 7` 亦**不变**。§12 的**设计基线**已于 **2026-09-29** 经 ChatGPT 从远程 Git
-**独立复审 `APPROVED`**、项目负责人批准（R2 修订后口径）；**扩展代码尚未实现、尚未生效**
-（详见 §12 状态块）。
+**第七轮可选扩展的标记例外（2026-09-29）** —— 本文件 §12「行内三点入口 opt-in」可选扩展章节
+按 `README.md` §7.3 的阅读约定携带 `LIST_TABLE_PROPOSED_NOT_IMPLEMENTED`（该标记的**定义**仍在
+`README.md` §7.3，本次**只引用、不重定义**）。该例外**只**落在 §12 与本节／§11 的说明文字中：
+§1~§10 的已批准详细设计正文**仍只使用**本文件唯一的批准态设计标记（其字面量见 §11.2 的拼接构造式），
+其计数（§11.3 的 `79`）**不变**；四份规范文档的核验命令（`README.md` §7.4）**不扫描本文件**。
+§12 候选未实现标记的**独立**计数（通道 3）由 §12.8 核算，与四份规范文档计数及本文件批准态 `79`
+**互不混算**。
 
-**更新（2026-09-29，opt-in 代码实现后）** —— §12 的 opt-in 扩展代码已由独立实现任务
-`CLIENT-CONFIG-ROW-HEIGHT-AND-OPTIONAL-ELLIPSIS-IMPLEMENTATION-001` 落地并接入 `/config/client` 主列表，
-现行实现状态为 `IMPLEMENTED_PENDING_CHATGPT_REVIEW`（**待远程复审**）。上述「尚未实现／尚未生效」
-表述为**批准收口时点事实，逐字保留不改**；**现行状态**以 §12 状态块与 §12.8 实现后复测记录为准。
-因该实现**尚未经远程复审通过、亦未获项目负责人目测**，§12 仍**暂**按候选未实现标记引用
-（§12.8 通道 3 复测仍 `23`），**不**改判为参考事实标记。
-
-**R1 定向纠错后的标记范围（2026-09-29）** —— §12 的 R1 收敛（`...-BASELINE-001-R1`）
-**只**改写 §12 内文字（收敛为拟修订契约），**未**新增、删除或改动任何批准态设计标记实例，
-故本文件批准态标记计数仍 `79`；该例外**仍只**落在 §12 与本节／§11 的说明文字中。
-§12 候选未实现标记的**独立**计数（通道 3）由 §12.8 重新核算，与四份规范文档 `26 / 0 / 42 / 7`
-及本文件批准态标记 `79` **互不混算**。
-
-**第七轮可选扩展设计基线批准收口（2026-09-29）** —— 承接 R0／R1／R2 三轮（R0 `9381703…`、
-R1 `938e720…` 远程复审均 `CHANGES_REQUIRED`，R2 `59617b4cee03fe1642417cb85005b339ab0015ab`
-经 ChatGPT 从远程 Git 独立复审 `APPROVED`，项目负责人于 2026-09-29 批准）。本收口把 §12 的状态
-由「待复审草案」更新为 **`list_table_row_action_opt_in_extension_status=DESIGN_BASELINE_APPROVED_IMPLEMENTATION_NOT_STARTED`**：
-**批准对象是 §12 的设计基线（R2 修订后口径），不是扩展实现**。因此 §12 的 opt-in 契约按**已批准
-设计文本**解析，但**本期无任何共享 CSS／测试断言／页面接入**因该扩展改变，仍以候选未实现标记引用
-（§12.8 通道 3 计数本收口复测仍 `23`）。现行 9 个 `--lt-*` 令牌、内部 helper 类 `0`、
-主表根类 `lt-main-table` 的 §4／§7 契约保持**原值**；拟实施时辅助类 `2` 为**未来值**。
-`page_migration_status` 仍 `NOT_STARTED`、`page_migration_authorization_status` 仍 `NOT_GRANTED`。
+**第七轮可选扩展的历史与批准链（2026-09-29，摘要）** —— 本扩展经 `...-BASELINE-001` R0 `9381703…`、
+R1 `938e720…` 两次从远程 Git 复核均 `CHANGES_REQUIRED`，R2 `59617b4…` 经 ChatGPT 从远程 Git 独立复核
+`APPROVED`，项目负责人于 2026-09-29 批准其**设计基线**（R2 修订后口径；**批准对象是设计基线，
+不是实现**）；随后由独立实现任务
+`CLIENT-CONFIG-ROW-HEIGHT-AND-OPTIONAL-ELLIPSIS-IMPLEMENTATION-001` 落地代码（见下段）。
+各轮拟议文本、旧计数（如 `lt_internal_helper_class_count` 阶段一 `0`）与当时「尚未实现」说明属
+**时点历史**，保留在既有历史报告；**现行**取值见下段与 §12.7／§12.8。
 
 **第七轮可选扩展 opt-in 代码实现（2026-09-29；`CLIENT-CONFIG-ROW-HEIGHT-AND-OPTIONAL-ELLIPSIS-IMPLEMENTATION-001`）**
 —— 承第七轮设计基线批准收口，由探针端管理 Feature 侧的前端实现任务按**已批准设计文本**落地本 §12 的
@@ -189,13 +172,22 @@ opt-in 扩展：在 `frontend/src/styles/list-table/list-table-visual.css` 新�
 **模板定向整理（2026-09-29，`LIST-TABLE-VISUAL-TEMPLATE-CLIENT-CONFIG-REFINEMENT-BASELINE-001`，纯文档草案）**
 —— 本任务以已实现、经项目负责人目测认可的 `/config/client` 主列表为参照整理模板现行规则与可选能力，
 **删除**五份规范正文中面向现行规则的**过期示例**，并新增本文件 §13「现行基础规则与可选扩展分层契约」
-（**尚待审批**，`DRAFT_PENDING_USER_REVIEW`）。标记复算：四份规范文档 `27 / 0 / 42 / 8`、
-本文件批准态标记仍 `79`、本文件候选未实现标记 `23`（§12 内 `18`、§13 内 `2`、其它说明 `3`；净变化 `0`）。
-上文各「尚未实现／尚未生效」与「helper 类 `0`」表述仍为**其产生时点事实，逐字保留不改**；
-**现行**值以本段与 §12 状态块／§12.8 复测记录为准（`lt_token_count=9`、`lt_internal_helper_class_count=2`）。
+（**尚待审批**，`DRAFT_PENDING_USER_REVIEW`）。标记复算：四份规范文档
+（`REFERENCE_FACT / DRAFT / APPROVED / PROPOSED` 顺序）`27 / 0 / 42 / 8`、
+本文件批准态标记仍 `79`、本文件候选未实现标记 `23`（§12 内 `18`、§13 内 `2`、其它说明 `3`）。
 本任务**不**改变模板整体状态与授权边界：`page_migration_status` 仍 `NOT_STARTED`、
 `page_migration_authorization_status` 仍 `NOT_GRANTED`、`pilot_page_selection_status` 仍 `NOT_DECIDED`；
 **不**改数据源管理页（其「更多」→三点改造仍属**另一独立任务**）。
+
+**模板整理 R1 定向纠错（2026-09-29，`LIST-TABLE-VISUAL-TEMPLATE-CLIENT-CONFIG-REFINEMENT-BASELINE-001-R1`，纯文档草案）**
+—— ChatGPT 对 R0 提交 `0b43a444ab002ea21c1fe7ad4884b241c950b317` 的远程文档复审结论为
+`CHANGES_REQUIRED`，要求**只**就地修正三处：① 把 §12.7 由「拟修订契约」正文改写为**现行可执行契约**，
+并压缩 §0.1／§12 的 R0／R1／R2 历史为摘要；② 统一 §12.1 与 §13.2 的**禁用态**两级职责
+（是否 / 何时禁用由 Feature 决定，可观察禁用态的通用视觉由公共层负责；现行 CSS 尚无禁用视觉规则，
+据实记为**设计契约、尚未实现、尚未验收**）；③ 把 §13.5「已按…收窄」等表述改为**拟议、待批准后生效**
+的准确时序。上述修正**不**改任何已批准规则、**不**改标记实例计数与模板级迁移状态；
+§13 新增可选契约仍为 `DRAFT_PENDING_USER_REVIEW`。本轮**未**改数据源管理页；
+`/config/data-source` 迁移状态仍 `NOT_STARTED`／`NOT_GRANTED`。
 
 ### 0.2 事实来源与核验方式
 
@@ -692,20 +684,18 @@ import { LT_MAIN_TABLE_CLASS } from '@/styles/list-table'
 | 公共根类 | `lt-` + kebab-case 语义名 | `lt-main-table`（常量 `LT_MAIN_TABLE_CLASS`） |
 | 常量模块导出键 | `LT_` + SCREAMING_SNAKE | `LT_MAIN_TABLE_CLASS`、`LT_TABLE_VISUAL_TOKENS` |
 | CSS 自定义属性前缀 | `--lt-` | 见 §4.4 的 9 个令牌 |
-| 内部辅助类命名规则 | 若未来确需，必须为 `lt-<block>__<element>`（BEM 双下划线），且**必须**经独立评审 | **阶段一内部辅助类数量 = 0**（**2026-09-29 现行**：opt-in 扩展后为 `2`，见 §12） |
+| 内部辅助类命名规则 | 若未来确需，必须为 `lt-<block>__<element>`（BEM 双下划线），且**必须**经独立评审 | **内部辅助类数量 = 2**（`lt-row-action__cell`、`lt-row-action__ellipsis`，均受 `.lt-main-table` 限定；实现前阶段一为 `0`，见 §12.7） |
 | 禁止选择的业务类名前缀 | `.data-table`、`.naming-table`、`.dss-*`、`.toff-*`、`.cc-*`、`.config-table`、`.ds-*`、`.empty-*`、`.query-*`、`.q-*` | 公共源文件中**不得**出现上述任一字符串 |
 | 与 Element Plus 内部类的交互边界 | 只允许在**公共根类限定**下使用 `:deep(...)` 命中 `el-table__header th .cell`、`td.el-table__cell`、`th.el-table__cell`；**不得**命中 `el-table__row`、`el-table__body`、选中态、hover 态或任何业务状态类；**不得**定义 `.el-*` 类本身 | 见 §4.4 与 §4.6 |
 
-`LIST_TABLE_SHARED_DESIGN_APPROVED` —— 阶段一内部辅助类为 `0` 是一条**可断言的事实**：
-本模板的全部已批准纪律（宽度 / 表头排版 / 上下内边距 / 边框色 / 表头背景）
-**只需要**根类 + EP 令牌 + 3 条 `:deep` 规则即可完整表达；
+`LIST_TABLE_SHARED_DESIGN_APPROVED` —— 本模板的全部已批准**基础**纪律（宽度 / 表头排版 / 上下内边距 /
+边框色 / 表头背景）**只需要**根类 + EP 令牌 + 3 条 `:deep` 规则即可完整表达，不需要任何内部辅助类；
 “状态标记不得改变行高”属**禁止性纪律**（公共层不固定行高、不约束单元格内容），
-不需要任何类名（`UI.md` §3.6 的胶囊几何属 Feature，§5 已列为禁止提升项）。
-
-> **2026-09-29 现行值更正（不改上文阶段一口径）**：上句“阶段一内部辅助类为 `0`”为 **2026-09-21 阶段一**
-> 可断言语境；经第七轮 opt-in 扩展（§12）实现后，**现行** `lt_internal_helper_class_count = 2`
-> （仅 `{lt-row-action__cell, lt-row-action__ellipsis}`，均受 `.lt-main-table` 限定），`lt_token_count` 仍 `9`。
-> 现行静态断言口径见 §12.7 与 `frontend/src/styles/list-table/list-table-visual.spec.ts` #11。
+也不需要任何类名（`UI.md` §3.6 的胶囊几何属 Feature，§5 已列为禁止提升项）。
+**现行** `lt_internal_helper_class_count = 2`（仅 `{lt-row-action__cell, lt-row-action__ellipsis}`，
+均受 `.lt-main-table` 限定，来自 §12 的 opt-in 可选扩展），`lt_token_count` 仍 `9`；
+实现前阶段一计数为 `0`（历史）。现行静态断言口径见 §12.7 与
+`frontend/src/styles/list-table/list-table-visual.spec.ts` #11。
 
 ### 4.4 公共视觉令牌表
 
@@ -785,13 +775,13 @@ import { LT_MAIN_TABLE_CLASS } from '@/styles/list-table'
 
 ```text
 lt_token_count=9
-lt_internal_helper_class_count=0
+lt_internal_helper_class_count=2      # 含 §12 opt-in 的 lt-row-action__cell / lt-row-action__ellipsis
 lt_shared_declared_value_count=9      # 全部来自 §2.1 参考实现事实
 lt_new_invented_visual_value_count=0
 ```
 
-> **2026-09-29 现行值**：上列 `lt_internal_helper_class_count=0` 为**阶段一**值；
-> 第七轮 opt-in 扩展（§12）实现后为 **`2`**（`lt_token_count` 仍 `9`）。上文数字为阶段一时点事实，保留不改。
+> **计数说明**：`lt_internal_helper_class_count` 实现前阶段一为 `0`；经第七轮 opt-in 扩展（§12）实现后
+> **现行**为 `2`（`lt_token_count` 仍 `9`）。阶段一时点值属历史，保留在既有报告。
 
 ### 4.5 Feature 覆盖契约
 
@@ -1097,13 +1087,13 @@ td.el-table__cell：padding-top / padding-right / padding-bottom / padding-left
 | 8 | 不含业务文案、业务列名或状态语义 | 无“数据源/快照/同步对象/停用/异常/SOURCE/TARGET/success/warning/danger”等 |
 | 9 | 未引入路由元数据或页面自动识别 | 源文件为纯 CSS（无 `@import`、无 `.vue`、无 `router`、无 `meta.`） |
 | 10 | 无 `!important` | 断言为 0 |
-| 11 | 内部辅助类数量为 0 | 源文件中除 `.lt-main-table` 外无其他 `lt-` 类选择器 |
+| 11 | 内部辅助类数量为 2 | 源文件中除 `.lt-main-table` 外，`lt-` 类选择器**只允许**已登记的 opt-in 集合 `{.lt-row-action__cell, .lt-row-action__ellipsis}` |
 | 12 | 单一来源 | 全 `frontend/src` 中承载这些规则的 CSS 源**只有该文件一处**（先例同款扫描） |
 
-> **2026-09-29 现行口径**：上表为**阶段一**设计断言。经第七轮 opt-in 扩展（§12）实现后，**现行**静态断言 #11
-> 改为「**先剔除根类 `.lt-main-table`，再断言辅助类集合 `= {.lt-row-action__cell, .lt-row-action__ellipsis}`**」
-> （`frontend/src/styles/list-table/list-table-visual.spec.ts` #11；该单来源约束把二者视为同一辅助元素的两个命名空间元素）；
-> #2／#3／#6 **不变**。上表 `0` 为阶段一时点断言，保留不改。
+> **现行口径**：上表 #11 为**现行**断言（实现前阶段一为 `0`）：`#11` 先剔除根类 `.lt-main-table`，
+> 再断言辅助类集合 `= {.lt-row-action__cell, .lt-row-action__ellipsis}`
+> （`frontend/src/styles/list-table/list-table-visual.spec.ts` #11；该单来源约束把二者视为同一辅助元素
+> 的两个命名空间元素）；#2（令牌恰好 `9` 个）／#3（默认值逐一相符）／#6（`:deep` 由根类限定）**不变**。
 
 ### 7.2 组件或单元测试（可在 vitest 中执行）
 
@@ -1350,16 +1340,14 @@ Feature 覆盖是否**实际只影响当前表格**、
 `LIST_TABLE_SHARED_DESIGN_APPROVED` —— 本文件全文只使用该一个标记（§0.1）。
 
 **例外（2026-09-29，见 §0.1）**：§12 可选扩展按 `README.md` §7.3 携带候选未实现标记
-（设计基线已批准、扩展代码尚未实现）；
+（设计基线已批准；其 opt-in 代码**已实现**、实现状态 `IMPLEMENTED_PENDING_CHATGPT_REVIEW`，待远程复审）；
 §1~§10 已批准设计正文的“唯一标记”口径**不变**，§11.2 核验命令针对
 本文件批准态设计标记的计数**不受** §12 影响。
-**更新（2026-09-29，opt-in 代码实现后）**：上述「扩展代码尚未实现」为**收口时点事实，保留不改**；
-现行实现状态为 `IMPLEMENTED_PENDING_CHATGPT_REVIEW`（待远程复审），§12 仍**暂**按候选未实现标记引用，
-现行状态以 §12 状态块与 §12.8 实现后复测记录为准（见 §0.1 更新段）。
+现行状态以 §12 状态块与 §12.8 复测记录为准（见 §0.1）。
 
-**R1 定向纠错（2026-09-29）**：§12 收敛为**拟修订契约**后，本文件批准态设计标记计数仍 `79`
-（R1 未新增其实例）；§12 候选未实现标记的计数口径与实测值见 §12.8（通道 3，**独立**于
-四份规范文档 `26 / 0 / 42 / 7` 与本文件批准态 `79` 两条通道）。
+**§12 各项整理（2026-09-29）**：§12 各轮整理（收敛契约、实现落地、模板定向整理）**未**新增或删除
+任何批准态设计标记实例，故本文件批准态设计标记计数仍 `79`；§12 候选未实现标记的计数口径与实测值见
+§12.8（通道 3，**独立**于四份规范文档与本文件批准态 `79` 两条通道）。
 
 本文件**不**复用模板基线标记冒充详细设计已批准：
 模板基线标记（四份规范文档中的 `LIST_TABLE_TEMPLATE_APPROVED`）描述的是
@@ -1511,35 +1499,25 @@ R2（提交 e72264d）  草案标记 = 79   （+4）
 
 ---
 
-## 12. 已批准设计基线的可选扩展：行内三点入口 opt-in（2026-09-29 草案建立 → R1/R2 定向纠错 → 2026-09-29 设计基线批准收口 → 2026-09-29 opt-in 代码实现、待远程复审）
+## 12. 已批准设计基线的可选扩展：行内三点入口 opt-in
 
 `LIST_TABLE_PROPOSED_NOT_IMPLEMENTED` —— **本节为已批准设计基线的可选扩展**，来源为探针端管理
 第七轮调整任务 `CLIENT-CONFIG-ROW-HEIGHT-AND-OPTIONAL-ELLIPSIS-BASELINE-001`。产品方向为：把行内
 三点入口的**外观与通用可访问性**提炼为公共列表表格视觉模板的**显式启用（opt-in）可选能力**，
-**不**成为所有主列表的默认入口。经 R0／R1／R2 三轮复审与 **2026-09-29 设计基线批准收口**，
-本节**设计基线已获批**（状态与依据见下方状态块）；其 opt-in 扩展**已由独立实现任务**
-`CLIENT-CONFIG-ROW-HEIGHT-AND-OPTIONAL-ELLIPSIS-IMPLEMENTATION-001` **落地代码并接入 `/config/client` 主列表**
-（公共样式与 §7.1 断言 #11 已按本节 (1)(2) 拟修订文本实现），**该代码实现状态为「已完成、待远程复审」**。
-本节 opt-in 规则**现已成为**共享 CSS 与现行测试断言的一部分，但**仍不**表示任何**其他**页面已迁移
-（`/config/data-source`「更多」→三点迁移仍属另一会话、另一独立任务）。
+**不**成为所有主列表的默认入口。本节 opt-in 扩展**已落地代码并接入 `/config/client` 主列表**
+（公共样式与 §7.1 断言 #11 已实现），**现已成为**共享 CSS 与现行测试断言的一部分；本节各项取值
+均为**现行值**（见 §12.7），不再以「拟值」表述。**仍不**表示任何**其他**页面已迁移
+（`/config/data-source`「更多」→三点迁移仍属另一会话、另一独立任务）。**代码实现状态为
+`IMPLEMENTED_PENDING_CHATGPT_REVIEW`（已落地、待远程复审）**，故本节规则**仍**按 `README.md` §7.3
+的候选未实现标记引用（口径见 §12.8）。
 
-**R1 定向纠错（`CLIENT-CONFIG-ROW-HEIGHT-AND-OPTIONAL-ELLIPSIS-BASELINE-001-R1`）** —— ChatGPT
-从远程 Git 对 R0 草案提交 `9381703cf63d0e91ce5ee39cee28f907e21972ca` 的复审结论为
-`CHANGES_REQUIRED`，其第 ④ 项要求把本节原 §12.7「未决清单」收敛为**具体、可复审的拟修订契约**。
-R1 **只**做文档收敛：确定 opt-in 类名与挂载位置、默认**不新增**令牌、写出 §7.1 断言
-#6/#11 的**拟**修订文本与 §4.3／§4.4 的**生效时**计数、区分「表格行高」与「触发器自身尺寸」、
-闭合候选标记计数口径、给出批准路径。**拟修订值 ≠ 现值**；已批准旧断言在草案获批并实现前
-仍为**现行事实**。R1 **不**修改任何已批准公共代码／测试，**不**实现本扩展。
-
-**R2 定向纠错（`CLIENT-CONFIG-ROW-HEIGHT-AND-OPTIONAL-ELLIPSIS-BASELINE-001-R2`）** —— ChatGPT
-从远程 Git 对 R1 提交 `938e7202980cf898fe5c6d1194715e3a004f994a` 的复审结论为
-`CHANGES_REQUIRED`，其第 ② 项指出：§12.7 拟议断言 #11 的示例判定表达式
-`new Set(css().match(/\.lt-[\w-]+/g))` **本身会命中根类 `.lt-main-table`**，与「辅助类恰好两个」
-的表述不符。R2 **只**修 §12.7 拟议 #11 的**拟议文档文本**，把判定写成**可直接实现、可复审**的
-完整口径（**先剔除根类**再断言辅助类集合，或将根类计入**三元素**允许集合），
-**不**修改 `frontend/src/styles/list-table/list-table-visual.spec.ts` 的**现行**测试代码或已批准断言；
-helper 数维持**拟批准后且独立实现时** `0 → 2`、**现行仍 `0`**；九个 `--lt-*` 令牌不变，
-§7.1 断言 #2／#3 与 #6 的 R1 结论**不变**。R2 **不**实现本扩展、**不**改任何已批准公共代码／测试。
+**历史（R0／R1／R2 与批准链）** —— 本扩展经 `...-BASELINE-001` R0 `9381703…`、R1 `938e720…`
+两次从远程 Git 复核均 `CHANGES_REQUIRED`，R2 `59617b4…` 经 ChatGPT 从远程 Git 独立复核
+`APPROVED`；项目负责人于 2026-09-29 批准其**设计基线**（R2 修订后口径，
+`approval_scope=..._DESIGN_ONLY`，**批准对象是设计基线，不是实现**）；随后由独立实现任务
+`CLIENT-CONFIG-ROW-HEIGHT-AND-OPTIONAL-ELLIPSIS-IMPLEMENTATION-001` 落地代码。各轮拟议文本、
+旧计数与当时「尚未实现」说明**保留在既有历史报告**（含
+`reports/LIST-TABLE-VISUAL-TEMPLATE-CLIENT-CONFIG-REFINEMENT-BASELINE-001.md`），本节不再重复。
 
 ```text
 list_table_row_action_opt_in_extension_status=DESIGN_BASELINE_APPROVED_IMPLEMENTATION_IMPLEMENTED_PENDING_CHATGPT_REVIEW
@@ -1558,20 +1536,28 @@ page_migration_authorization_status=NOT_GRANTED
 
 `LIST_TABLE_PROPOSED_NOT_IMPLEMENTED` —— 公共层**只**提炼**外观与通用可访问性**：
 图标容器与**实际命中区域**、行内对齐、圆角、文字／图标颜色、hover、`focus-visible`、
-disabled、光标形态，以及与单元格行高的**协同关系**（协同方式见 §12.3）。
+光标形态，以及与单元格行高的**协同关系**（协同方式见 §12.3）。
+**禁用态的职责分界（两层规则，与 §13.2 一致）**：**是否禁用、何时禁用、权限与业务条件由 Feature
+决定**；**当入口存在可观察的禁用状态、且页面显式启用这一可选样式时**，**该禁用态在通用视觉与
+可访问性上如何呈现**（禁用色、不可点击光标、禁用时 `focus-visible` 的处理等）**由公共样式契约负责**。
+**不得**据此为现行探针三点触发器强造禁用情形——现行被禁用者是**菜单项**，`CCFG-AC-157` 该子项
+仍缺实际观察、状态仍 `BLOCKED`。**实现/验收缺口（据实记录）**：现行
+`frontend/src/styles/list-table/list-table-visual.css` **尚未**提供禁用态视觉规则，故该禁用态视觉属
+**设计契约，尚未实现、尚未验收**（不得声称已实现或已验收），其实现与验收须由后续独立任务承担。
 
 `LIST_TABLE_PROPOSED_NOT_IMPLEMENTED` —— 以下**继续由 Feature 控制**，公共层**不**固化：
 菜单项集合与顺序、业务权限与可见性、删除／启停等**语义与文案**、请求时序与幂等、
 行点击选中／双击编辑规则、Popover/Dropdown 定位与关闭时机、以及异常／歧义数据的语义与呈现
-（如探针 ID 三态、`+N`、标签 Tooltip）。
+（如探针 ID 三态、`+N`、标签 Tooltip）。其中「**是否 / 何时禁用**」是 Feature 决定的业务条件；
+公共层**只**在该禁用状态**存在且被页面显式启用**时负责其**通用视觉呈现**（见上段）。
 
-### 12.2 显式 opt-in 的落地方案（R1 收敛为确定契约、设计基线已批准、已实现待远程复审）
+### 12.2 显式 opt-in 的落地方案（确定契约、已实现）
 
 `LIST_TABLE_PROPOSED_NOT_IMPLEMENTED` —— 与既有 `lt-main-table` 作用域纪律一致，采用
-**显式 opt-in 辅助类 + 不新增令牌**的确定方案，而**不**做全局覆盖。R1 已把原
-「二选一／待评审」项收敛为下述**唯一方案**；命名与挂载位置为**确定值**，**不**再保留备选：
+**显式 opt-in 辅助类 + 不新增令牌**的确定方案，而**不**做全局覆盖。命名与挂载位置为
+**已落地的确定值**，**不**保留备选：
 
-| 对象 | 确定取值（R1 拟修订契约） | 依据 |
+| 对象 | 确定取值（现行） | 依据 |
 | --- | --- | --- |
 | opt-in 操作单元格辅助类 | `lt-row-action__cell`，显式挂载于**操作列的 `td`**（Element Plus 渲染的 `td.el-table__cell`）上 | §4.3「若未来确需内部辅助类，必须为 `lt-<block>__<element>`（BEM 双下划线），且必须经独立评审」 |
 | opt-in 三点触发器辅助类 | `lt-row-action__ellipsis`，显式挂载于三点触发器的**可见元素**上 | 同上 |
@@ -1581,16 +1567,16 @@ disabled、光标形态，以及与单元格行高的**协同关系**（协同�
 `LIST_TABLE_PROPOSED_NOT_IMPLEMENTED` —— **命名与挂载依据**：`lt-row-action__cell` 与
 `lt-row-action__ellipsis` 采用 `lt-<block>__<element>` BEM 形态（`block=row-action`，
 `element=cell`／`ellipsis`），与既有单一根类 `lt-main-table` 不冲突，且不使用任何被禁止的
-业务类名前缀（`.cc-` 等，§7.1 断言 #7）。若后续**实现阶段**发现 Element Plus 实际 DOM
-结构或既有 BEM 规则要求改名，必须在**该实现任务**中给出依据，并在**所有**引用文档中统一，
+业务类名前缀（`.cc-` 等，§7.1 断言 #7）。现行实现**未**改名；若**将来**因 Element Plus 实际 DOM
+结构或既有 BEM 规则要求改名，必须在**独立任务**中给出依据，并在**所有**引用文档中统一，
 **不得**只在代码内悄悄改名。
 
-`LIST_TABLE_PROPOSED_NOT_IMPLEMENTED` —— **该 opt-in 视觉变体的提议默认值（固定字面量，非令牌）**：
+`LIST_TABLE_PROPOSED_NOT_IMPLEMENTED` —— **该 opt-in 视觉变体的默认值（固定字面量，非令牌）**：
 命中区约 `28px × 28px`、圆角 `6px`、文字／图标色 `var(--el-color-primary)`、hover 浅底；
 这些值**直接写在 opt-in 规则中作为字面量**，**不**通过新 `--lt-*` 令牌暴露。
 因此 §7.1 断言 **#2**（令牌恰好 `9` 个）与 **#3**（默认值逐一相符）**无需修订**。
-若将来确有可调需求，须在**实现任务**中给出**准确令牌名、默认值、令牌总数**及 #2／#3 的
-拟修订文本，**不得**继续留为二选一。
+若将来确有可调需求，须在**独立任务**中给出**准确令牌名、默认值、令牌总数**及 #2／#3 的
+修订文本，**不得**继续留为二选一。
 
 `LIST_TABLE_PROPOSED_NOT_IMPLEMENTED` —— **纵向尺寸的精确边界（消解与 §4.4 行高纪律的表面冲突）**：
 公共层**不得**为**表格行**声明固定 `height`／`max-height`／`line-height`
@@ -1608,7 +1594,7 @@ disabled、光标形态，以及与单元格行高的**协同关系**（协同�
 （推导：`48 = 23 + 24 + 1`、`53 = 28 + 24 + 1`，其中 `24` 为已批准预设
 `--lt-body-cell-padding: 12px 0` 的上下和）。
 
-`LIST_TABLE_PROPOSED_NOT_IMPLEMENTED` —— 草案主张：**「操作目标约 `28×28px`」与
+`LIST_TABLE_PROPOSED_NOT_IMPLEMENTED` —— 设计主张：**「操作目标约 `28×28px`」与
 「内容驱动行高」可以同时成立**，前提是把**命中区域**与**行高贡献**分开：
 
 - **外层**随行内容节奏、**内层**保留约 `28×28px` 独立命中区；
@@ -1624,11 +1610,11 @@ Element Plus 的单元格 `.cell` 计算样式含 `overflow: hidden`，会裁切
 **默认不可行**，需改用内边距／盒内布局，或以 `:has()` 限定的 `overflow: visible`、
 `outline-offset: -2px` 等**待验证**方案。
 
-`LIST_TABLE_PROPOSED_NOT_IMPLEMENTED` —— **R1 边界强调**：行高补偿（若有）**只**作用于
+`LIST_TABLE_PROPOSED_NOT_IMPLEMENTED` —— **边界强调**：行高补偿（若有）**只**作用于
 **显式 opt-in 的操作单元格**，**不**作用于未启用页面／未启用表格，且该盒模型必须能在
 **内容驱动的常规行**内完成（`23 + 纵向内边距和` 与参考页一致，见上式推导）。
-具体数值、溢出裁切、焦点描边、缩放与窄视口表现**必须**由**后续实现任务在真实浏览器中核对**，
-本 R1 **不**执行实测、**不**以推导冒充实测结论。
+具体数值、溢出裁切、焦点描边、缩放与窄视口表现**必须**在**真实浏览器中核对**——设计阶段**不**执行实测、
+**不**以推导冒充实测结论；其实现阶段的浏览器核对记录见 §12.5 更新段与实现任务报告。
 
 ### 12.4 零泄漏论证（设计已批准、已实现待远程复审）
 
@@ -1636,22 +1622,22 @@ Element Plus 的单元格 `.cell` 计算样式含 `overflow: hidden`，会裁切
 
 - opt-in 辅助类只出现在**显式启用**的表格节点上；未启用时新规则的选择器**不匹配**；
 - 新令牌只以 `var(--lt-…, 默认值)` 内联回退消费，公共层**不**声明 `--lt-*: 值`（§4.4 纪律不变）；
-  R1 收敛后**默认不新增令牌**，故零泄漏论证更强；
+  **默认不新增令牌**，故零泄漏论证更强；
 - **不**做全局 Element Plus 覆盖、**不**硬编码页面名、**不**使用 `!important`。
 
-`LIST_TABLE_PROPOSED_NOT_IMPLEMENTED` —— **零泄漏的拟新增验证覆盖**（拟文本见 §12.7(3)）：
+`LIST_TABLE_PROPOSED_NOT_IMPLEMENTED` —— **零泄漏的验证覆盖**（见 §12.7(3)）：
 在**未启用**页面的表格根节点上断言辅助类**零匹配**（`lt-row-action__cell`／
 `lt-row-action__ellipsis` 均不出现），且未启用表格的 `--lt-*` 覆盖声明**不存在**；
 该断言属 `§7.2` 的 DOM 类名 + 源码静态结构层，**不**判定 CSS 求值结果。
 
 ### 12.5 需真实浏览器验证的风险清单（设计已批准、已实现待远程复审）
 
-`LIST_TABLE_PROPOSED_NOT_IMPLEMENTED` —— 待验证项（**本草案不执行**）：
+`LIST_TABLE_PROPOSED_NOT_IMPLEMENTED` —— 待验证项（**设计阶段不执行**；实现阶段核对见下）：
 命中区不跨行误触、不被 `overflow` 裁切、不遮挡相邻内容、焦点描边可见、
 缩放下稳定、窄视口稳定、行内垂直居中、与固定操作列共存、
 与 `+N`／探针 ID 三态／标签 Tooltip 共存。
 
-**实现后更新（2026-09-29）**：上述清单的**设计阶段「本草案不执行」表述保留不改**；
+**实现后更新（2026-09-29）**：上述清单为**设计阶段**表述；
 其**实现阶段的真实浏览器核对结果**（行高逐样本实测、`:focus-visible` 像素探针、命中区／居中、
 窄视口与缩放下不跨行误触、固定操作列、无业务写请求等，及**验证边界**）记录在
 `docs/features/client-config/reports/CLIENT-CONFIG-ROW-HEIGHT-AND-OPTIONAL-ELLIPSIS-IMPLEMENTATION-001.md`
@@ -1672,75 +1658,67 @@ Element Plus 的单元格 `.cell` 计算样式含 `overflow: hidden`，会裁切
 > 数据源管理页的「更多」文字入口**未**改动、**未**授权改造：其三点化属**另一独立任务**，
 > **不**在本节列作可复制的现行示例（`page_migration_authorization_status=NOT_GRANTED` 不变）。
 
-### 12.7 拟修订契约（R1 收敛、R2 修正 #11 根类计数，逐项可复审）
+### 12.7 现行可执行契约（已落地，逐项可复审）
 
-`LIST_TABLE_PROPOSED_NOT_IMPLEMENTED` —— 本节把原「待复审问题清单」收敛为**具体、可复审的
-拟修订契约**（该契约的**设计基线已于 2026-09-29 获批**）。下列「拟值」在扩展**实现之前**
-**均非现值**；§4.3／§4.4／§7.1／§7.2 的**已批准旧断言仍为现行事实**，
-本 R1／R2 及批准收口**均不**修改其值。
+`LIST_TABLE_PROPOSED_NOT_IMPLEMENTED` —— 本节给出该 opt-in 扩展的**现行可执行契约**（设计基线已于
+2026-09-29 获批，并已由独立实现任务 `CLIENT-CONFIG-ROW-HEIGHT-AND-OPTIONAL-ELLIPSIS-IMPLEMENTATION-001`
+落地代码）。下列取值均为**现行值**，已对照公共层源码与静态断言核对；实现前的拟议文本与旧计数
+**保留在既有历史报告**，不在本节重复。
 
-**（1）§7.1 静态断言 #6 的拟修订文本**（现行文本见 §7.1）：
+**（1）§7.1 静态断言 #6 的现行口径**（现行代码核对：`list-table-visual.spec.ts` #6）：
 
-> 6（拟）：全部 `:deep(...)` 均由 `.lt-main-table` 限定——每条含 `:deep(` 的规则，其头部
+> 6：全部 `:deep(...)` 均由 `.lt-main-table` 限定——每条含 `:deep(` 的规则，其头部
 > **必须**以 `.lt-main-table` 起头；opt-in 规则因复合限定（根类 + 辅助类）仍满足本断言，
 > **不**新增例外。
 
-**（2）§7.1 静态断言 #11 的拟修订文本**：
+**（2）§7.1 静态断言 #11 的现行口径**（现行代码核对：`list-table-visual.spec.ts` #11）：
 
-> 11（拟）：内部辅助类数量为 **2**——源文件中除 `.lt-main-table` 外，`lt-` 类选择器
+> 11：内部辅助类数量为 **2**——源文件中除 `.lt-main-table` 外，`lt-` 类选择器
 > **只允许**已登记的 opt-in 集合 `{.lt-row-action__cell, .lt-row-action__ellipsis}`；
 > **其他**任何 `lt-` 类选择器仍**禁止**。
 
-**判定表达式必须可直接实现、可复审**：`css().match(/\.lt-[\w-]+/g)` 的匹配结果**本身会包含根类**
-`.lt-main-table`，故**必须**先剔除根类再断言辅助类集合（或将根类计入**三元素**允许集合）；
-**不得**写「辅助类恰好两个」却让检查表达式实际计入三类。拟判定（`ROOT_CLASS_SELECTOR = '.lt-main-table'`）：
+**现行判定**（`ROOT_CLASS_SELECTOR = '.lt-main-table'`）——先剔除根类再断言辅助类集合：
 
 ```ts
 const allClasses = [...new Set(css().match(/\.lt-[\w-]+/g) ?? [])]
 const helperClasses = allClasses.filter((name) => name !== ROOT_CLASS_SELECTOR).sort()
 expect(helperClasses).toEqual(['.lt-row-action__cell', '.lt-row-action__ellipsis'])
+expect(allClasses.sort()).toEqual(
+  [ROOT_CLASS_SELECTOR, '.lt-row-action__cell', '.lt-row-action__ellipsis'].sort(),
+)
 ```
 
-（等价写法亦可，但**须**明确先剔除根类，或写成 `expect(allClasses.sort()).toEqual([ROOT_CLASS_SELECTOR, '.lt-row-action__cell', '.lt-row-action__ellipsis'])` 一类**三元素**允许集合。）
-维持**拟批准后且独立实现时** helper 数 `0 → 2`、**现行仍 `0`**；九个 `--lt-*` 令牌不变，
-§7.1 断言 #2／#3 与 (1) 中 #6 的 R1 结论**不变**。本 R2 **只修拟议文档文本**，
-**不**修改 `frontend/src/styles/list-table/list-table-visual.spec.ts` 的现行测试代码或已批准断言。
+（两式现行均已落地：`helperClasses` 断言为**先剔除根类**的**两元素**集合；`allClasses` 断言为含根类的
+**三元素**允许集合。判定表达式 `css().match(/\.lt-[\w-]+/g)` 的匹配结果**本身包含根类**，
+故**必须**如此处理，**不得**写「辅助类恰好两个」却让检查表达式实际计入三类。）
+现行 helper 数 `2`；九个 `--lt-*` 令牌与 #2／#3 断言**不变**
+（#2 = 令牌恰好 `9` 个；#3 = 每个令牌内联回退与 §4.4 默认值一一相符）。
 
-**（3）§7.2 组件/单元测试的拟新增覆盖**：在**未启用**页面的表格根节点上断言
+**（3）§7.2 组件/单元测试的现行覆盖**：在**未启用**页面的表格根节点上断言
 辅助类**零匹配**、且未启用表格的 `--lt-*` 覆盖声明**不存在**（DOM 类名 + 源码静态结构，
 不判 CSS 求值），与 §12.4 零泄漏论证一致。
 
-**（4）§4.3 拟修订**：把「内部辅助类命名规则」行的**阶段一取值**由「= `0`」
-于**生效时**改为「= `2`（`lt-row-action__cell`、`lt-row-action__ellipsis`）」。
+**（4）§4.3 现行取值**：「内部辅助类命名规则」行的**现行**取值 = `2`
+（`lt-row-action__cell`、`lt-row-action__ellipsis`；实现前阶段一取值为 `0`，历史见既有报告）。
 
-**（5）§4.4 拟修订**：`lt_token_count` **保持 `9`**；`lt_internal_helper_class_count`
-由 `0` 于**生效时**改为 `2`。§4.4「行高 不由公共层定义」纪律**不变**，但需补注
-「opt-in 触发器**自身**的约 `28×28px` 盒尺寸不属表格行高固定」（见 §12.2）。
+**（5）§4.4 现行计数**：`lt_token_count=9`、`lt_internal_helper_class_count=2`。§4.4
+「行高 不由公共层定义」纪律**不变**；opt-in 触发器**自身**的约 `28×28px` 盒尺寸不属表格行高固定（见 §12.2）。
 
-**（6）生效条件（拟）**：上述拟修订**仅**在该 opt-in 扩展草案获 ChatGPT 远程复审
-`APPROVED` **且**项目负责人明确批准之后，再由**独立实现任务**改写公共样式与对应静态断言时生效。
-在此之前，§4.3／§4.4／§7.1／§7.2 的**现行数值与断言文本保持现状**，本 R1 **不**修改其值。
+**（6）批准与生效（历史摘要）**：该契约经 ChatGPT 从远程 Git 复审 `APPROVED`（R2 修订后口径）与
+项目负责人 2026-09-29 批准**设计基线**后，由**独立实现任务**改写公共样式与静态断言时生效。
+R0／R1／R2 各轮拟议文本、复审结论与旧计数见既有历史报告，本节不再重复。
 
-**（7）逐项闭合**：原 §12.7 的 5 项未决问题**全部闭合**——① 命名与默认值 → 本节 (1)(2) 与 §12.2；
-② #2/#3/#6/#11 拟修订文本 → 本节 (1)(2)(5) 与 §12.2（#2/#3 因**不新增令牌**故**不需修订**）；
-③ §4.3／§4.4 计数修订 → 本节 (4)(5)；④ 内边距补偿数值与容差 → 与 `CCFG-DESIGN-088`／
-`CCFG-REQ-153`／`CCFG-AC-155` 对齐，**留待真实浏览器实测**（§12.3／§12.5）；
+**（7）逐项闭合**：原「待复审问题清单」5 项**全部闭合**——① 命名与默认值 → (1)(2) 与 §12.2；
+② #2/#3/#6/#11 现行文本 → (1)(2)(5)（#2/#3 因**不新增令牌**故**不需修订**）；
+③ §4.3／§4.4 计数 → (4)(5)；④ 内边距补偿数值与容差 → 与 `CCFG-DESIGN-088`／
+`CCFG-REQ-153`／`CCFG-AC-155` 对齐，落实于实现任务的真实浏览器核对（§12.3／§12.5）；
 ⑤ 候选标记计数口径 → §12.8。**不留**「是否二选一」「是否并入四份文档计数」一类未决项。
 
-**（8）文档/代码边界与批准路径（拟）**：基线复审（ChatGPT 远程）→ 项目负责人批准 →
-**独立实现任务**修改 `frontend/src/styles/list-table/**` 与对应静态断言、并让 `/config/client`
-**显式**接入 opt-in 类；本 R1 **只做文档**，**不得**修改已批准公共代码／测试，
-**不得**提前翻转 `/config/data-source` 迁移状态（`page_migration_status`／
-`page_migration_authorization_status` 仍 `NOT_STARTED`／`NOT_GRANTED`）。
-
-> **2026-09-29 生效后现状（不重写上文 R1／R2 与批准收口历史）**：上列各项「拟修订」已由独立实现任务
-> `CLIENT-CONFIG-ROW-HEIGHT-AND-OPTIONAL-ELLIPSIS-IMPLEMENTATION-001` 落地：
-> (1)/(2) 的 #6／#11 按本节文本实现（**现行** #11 见 `list-table-visual.spec.ts`：先剔除根类再断言辅助类集合）；
-> (4) §4.3、(5) §4.4 的辅助类计数 **`0 → 2` 已生效**，`lt_token_count` 仍 **`9`**；
-> (3) 零泄漏断言随 §12.4 论证保持。因此上文「拟值 / 现行仍 `0` / 生效时改为 `2`」应读作**实现前时点**的框架表述；
-> **现行**值以 §12.8 复测与本注为准。**(6) 生效条件**：远程复审 `APPROVED`（R2）与项目负责人批准（2026-09-29）
-> 均已完成且独立实现任务已执行，**剩余**仅实现报告的远程复审（`IMPLEMENTED_PENDING_CHATGPT_REVIEW`）。
-> **(8) 边界不变**：`/config/data-source` 迁移状态**未**翻转（`NOT_STARTED`／`NOT_GRANTED`）。
+**（8）文档/代码边界（现行）**：本契约**已**落地于 `frontend/src/styles/list-table/**` 与
+`/config/client` 主列表的**显式**接入（见 §12.6）；`/config/data-source` 迁移状态**未**翻转
+（`page_migration_status`／`page_migration_authorization_status` 仍 `NOT_STARTED`／`NOT_GRANTED`），
+其三点化仍属**另一独立任务**。实现状态为 `IMPLEMENTED_PENDING_CHATGPT_REVIEW`（待远程复审）；
+**实现完成 ≠ 远程代码复审通过 ≠ 项目负责人目测 ≠ 正式验收通过。**
 
 ### 12.8 计数口径与核验（R1 收敛）
 
@@ -1748,18 +1726,18 @@ expect(helperClasses).toEqual(['.lt-row-action__cell', '.lt-row-action__ellipsis
 
 1. **四份规范文档计数**（`README.md` §7.4 口径）：核验命令**只**扫描
    `README.md`／`DESIGN.md`／`UI.md`／`MIGRATION.md` 四份文件，**不扫描本文件**；
-   期望仍为 `26 / 0 / 42 / 7`（候选未实现标记 `7` 为四份文档内既有实例，与本文件 §12 无关）。
+   **现行**为 `27 / 0 / 42 / 8`（候选未实现标记 `8` 为四份文档内既有实例，与本文件 §12 无关）。
 2. **本文件批准态设计标记**（§11.1／§11.2 口径）：核验命令拼接构造字面量、只统计本文件；
-   期望仍为 `79`；本 R1 **未**新增、删除或改动任何批准态设计标记实例。
-3. **本文件候选未实现标记**（本 §12 通道，**独立**统计）：R1 后实测值见下，
+   **现行**为 `79`；各轮整理**未**新增、删除或改动任何批准态设计标记实例。
+3. **本文件候选未实现标记**（本 §12 通道，**独立**统计）：**现行**实测值见下，
    **不**并入通道 1 或通道 2。
 
 **原「是否并入 §7.4 计数」问题已闭合**：§12 的候选标记**不**并入四份规范文档的
-`LIST_TABLE_PROPOSED_NOT_IMPLEMENTED=7`；§12 另列独立统计与核验命令。
-R0／R1 报告中的历史实测值属**时点证据**，保留不回写；本节按 R1 后实际内容**重新核算**、不硬编码旧值。
+`LIST_TABLE_PROPOSED_NOT_IMPLEMENTED` 计数；§12 另列独立统计与核验命令。
+R0／R1 报告中的历史实测值属**时点证据**，保留不回写；本节末段按**现行**内容**重新核算**、不硬编码旧值。
 
 ```bash
-# 通道 1：四份规范文档计数（不扫描本文件）：应仍为 26 / 0 / 42 / 7
+# 通道 1：四份规范文档计数（不扫描本文件）：现行应为 27 / 0 / 42 / 8
 core_docs=(docs/baseline/list-table-visual-template/README.md \
            docs/baseline/list-table-visual-template/DESIGN.md \
            docs/baseline/list-table-visual-template/UI.md \
@@ -1797,7 +1775,7 @@ R0 实测「§12 内 `15`／含 §0.1 为 `16`／文件总计 `18`」为**时点
 参考事实／已批准实现口径）。
 
 实测（2026-09-29，**opt-in 代码实现后复测**）：独立实现任务
-`CLIENT-CONFIG-ROW-HEIGHT-AND-OPTIONAL-ELLIPSIS-IMPLEMENTATION-001` 已按本节 (1)(2)(4)(5) 的拟修订文本
+`CLIENT-CONFIG-ROW-HEIGHT-AND-OPTIONAL-ELLIPSIS-IMPLEMENTATION-001` 已按本节 (1)(2)(4)(5) 的既定文本
 落地：`frontend/src/styles/list-table/list-table-visual.css` 新增仅受 `.lt-main-table` 限定的
 `lt-row-action__cell`／`lt-row-action__ellipsis` 两条规则，`/config/client` 主列表操作列 `td` 与三点入口
 显式接入，`frontend/src/styles/list-table/list-table-visual.spec.ts` 断言 #11 改为「先剔除根类再断言辅助类
@@ -1823,6 +1801,15 @@ R0 实测「§12 内 `15`／含 §0.1 为 `16`／文件总计 `18`」为**时点
 **边界**：本文件 §13 为**尚待批准**的分层契约草案（`DRAFT_PENDING_USER_REVIEW`），
 **不**改变 §12 三点 opt-in 契约、**不**改变任何模板级迁移状态与既有验收结论。
 
+实测（2026-09-29，**模板整理 R1 定向纠错后复测**，
+`LIST-TABLE-VISUAL-TEMPLATE-CLIENT-CONFIG-REFINEMENT-BASELINE-001-R1`）：R1 **只**就地修正三处
+（§12.7 改写为现行可执行契约、§12.1／§13.2 统一禁用态两级职责、§13.5／`DESIGN.md` §7 改为拟议时序），
+并压缩 §0.1／§12 的历史为摘要；**未**新增／删除任何标记实例。复测三条通道：通道 1 四份规范文档
+`27 / 0 / 42 / 8`、通道 2 本文件批准态设计标记 `79`、通道 3 本文件候选未实现标记 `23`
+（§12 节内 `18` 处、§13 节内 `2` 处、其它说明 `3` 处）**均不变**。
+**边界**：§13 可选契约仍为 `DRAFT_PENDING_USER_REVIEW`；第七轮 opt-in 实现状态仍
+`IMPLEMENTED_PENDING_CHATGPT_REVIEW`；模板级迁移状态与授权边界**未**翻转。
+
 ## 13. 现行基础规则与可选扩展分层契约（本任务草案，`DRAFT_PENDING_USER_REVIEW`）
 
 > 本节由纯文档任务 `LIST-TABLE-VISUAL-TEMPLATE-CLIENT-CONFIG-REFINEMENT-BASELINE-001`（`2026-09-29`）整理：
@@ -1843,8 +1830,16 @@ R0 实测「§12 内 `15`／含 §0.1 为 `16`／文件总计 `18`」为**时点
 | --- | --- | --- | --- | --- | --- |
 | 表头 / 正文排版、边框、纵向内边距 | 页面表格显式挂根类 `lt-main-table` | 表头 `12px/600/#71717a/0.01em`；`td` 纵向内边距 `12px 0`、`th 11px 0`；边框色 `#f4f4f5` | 列定义、字段语义、是否覆盖 | 零匹配，计算样式与启用前逐值相同 | `list-table-visual.spec.ts` #1–#10；正式验收逐值等价 |
 | 行高（内容驱动） | 默认，无需额外声明 | 不固定 `tr` 高度；不裁切 / 不压平内容 | 业务上确有差异时可自行固定（须自担风险） | 各页各行按内容自然撑开 | 两页只读浏览器量测：可比常规行约 `48 CSS px`、歧义行 `52px` |
-| 行内三点入口（opt-in） | 页面**显式**挂 `lt-row-action__cell`（操作列 `td`）+ `lt-row-action__ellipsis`（触发器） | **仅**命中区盒模型与交互态外观：`28×28px`、圆角 `6px`、主色、`hover`、`:focus-visible` 内嵌焦点环、`cursor`、操作单元格纵向内边距补偿 `9.5px 0` | 菜单内容、启停 / 删除、权限、禁用态、异常状态、Popover 定位与请求顺序 | 零匹配（`lt-row-action__*` 计数 `0`），可继续用文字“更多”或无操作列 | `list-table-visual.spec.ts` #11（辅助类集合 = `{lt-row-action__cell, lt-row-action__ellipsis}`）、#13（仅 `ClientConfigPage.vue` 挂载）；第七轮只读证据 |
+| 行内三点入口（opt-in） | 页面**显式**挂 `lt-row-action__cell`（操作列 `td`）+ `lt-row-action__ellipsis`（触发器） | **仅**命中区盒模型与交互态外观：`28×28px`、圆角 `6px`、主色、`hover`、`:focus-visible` 内嵌焦点环、`cursor`、操作单元格纵向内边距补偿 `9.5px 0`；**当入口存在可观察禁用状态且页面显式启用该可选样式时**，其**禁用态通用视觉与可访问性呈现**（见下段；现行 CSS **尚未**提供该规则，属设计契约、尚未实现验收） | 菜单内容、启停 / 删除、权限、**是否 / 何时禁用**、异常状态、Popover 定位与请求顺序 | 零匹配（`lt-row-action__*` 计数 `0`），可继续用文字“更多”或无操作列 | `list-table-visual.spec.ts` #11（辅助类集合 = `{lt-row-action__cell, lt-row-action__ellipsis}`）、#13（仅 `ClientConfigPage.vue` 挂载）；第七轮只读证据 |
 | 单行固定高亮（opt-in，**本节新增可选契约**） | 页面**自行选择**该选项时启用（**非**默认） | 仅**可选视觉预设**外观（见 §13.3） | 选择语义、选中 ID 存放、与启停 / 删除联动、请求时序 | 不改变该页现行 `hover`；不出现固定高亮 | 第七轮只读回归（单击固定 / 再点取消 / 点他行转移 / 悬停不改固定） |
+
+**禁用态的职责分界（与 §12.1 一致）**：**是否禁用、何时禁用、权限与业务条件由 Feature 决定**；
+**当入口存在可观察的禁用状态、且页面显式启用这一可选样式时**，其在**通用视觉与可访问性**上如何呈现
+**由公共层负责**。两级规则**不**并存冲突：Feature 决定“**禁用与否**”，公共层只在该状态**存在且被显式启用**
+时决定“**长什么样**”。现行探针端管理的被禁用者是**菜单项**，并非三点触发器本身；
+`CCFG-AC-157` 该子项仍缺实际观察、状态仍 `BLOCKED`。**现行 `frontend/src/styles/list-table/list-table-visual.css`
+尚未提供禁用态视觉规则**，故该禁用态视觉属**设计契约，尚未实现、尚未验收**——不得声称已实现或已验收；
+其实现与验收须由后续独立任务承担，且**不**因此给现行探针三点触发器强造禁用情形。
 
 ### 13.3 单行固定高亮可选契约
 
@@ -1874,8 +1869,11 @@ R0 实测「§12 内 `15`／含 §0.1 为 `16`／文件总计 `18`」为**时点
 
 ### 13.5 与既有规则的关系
 
-- 本节**不**推翻 `DESIGN.md` §7 的“业务语义不得公共化”——该禁令范围已按 `DESIGN.md` §7 的
-  **最小定向修订草案**收窄为“**业务选择语义**不公共化”，**不**排除**与语义解耦的可选视觉预设**；
+- **现行已批准规则仍有效**：`DESIGN.md` §7 的“业务语义不得公共化”——**业务语义与 `hover` / 选中态
+  不得未经评估就公共化**的纪律**仍然有效**，本节**不**推翻它；
+- **拟议变更（待批准后生效）**：R0／R1 仅**拟**把与业务语义**解耦**的**固定高亮视觉**列为**显式 opt-in**
+  （`DESIGN.md` §7 的**最小定向修订草案**为**拟议**），**待远程复审与项目负责人批准后生效**；
+  在获批前，`DESIGN.md` §7 的**现行**禁令范围**不变**——**不**把该收窄写成“已收窄 / 已生效”；
 - 本节**不**改变 §12 三点 opt-in 契约，仅将其纳入统一分层契约表；
 - 本节**不**改变任何模板级迁移状态（`page_migration_status=NOT_STARTED` 等）与既有验收结论；
 - 本节**不**改动 `docs/features/client-config/**`、`docs/features/data-source-management/**`、任何历史报告、
