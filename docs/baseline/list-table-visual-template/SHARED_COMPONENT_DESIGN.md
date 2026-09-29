@@ -132,6 +132,14 @@ LIST_TABLE_SHARED_DESIGN_APPROVED
 本文件引用它们时只写“已批准模板规则（`README.md` §7.2）”等**引用语**，
 **不**新增这三类标记实例，因此**不改变**四份规范文档 `26 / 0 / 42 / 7` 的计数。
 
+**第七轮待复审草案的标记例外（2026-09-29）** —— 本文件新增 §12「待复审的可选扩展草案：
+行内三点入口 opt-in」。该节内容属**候选、未实现、未获复审**，按 `README.md` §7.3 的阅读约定
+携带 `LIST_TABLE_PROPOSED_NOT_IMPLEMENTED`（该标记的**定义**仍在 `README.md` §7.3，
+本次**只引用、不重定义**）。该例外**只**落在 §12 与本节／§11 的说明文字中：§1~§10 的已批准
+详细设计正文**仍只使用**本文件唯一的批准态设计标记（其字面量见 §11.2 的拼接构造式），
+其计数（§11.3 的 `79`）**不变**；四份规范文档的核验命令（`README.md` §7.4）**不扫描本文件**，
+故 `26 / 0 / 42 / 7` 亦**不变**。§12 **未**获远程复审、**未**获基线批准、**未**实现。
+
 历史状态说明：本文件在**收口前**的草案阶段使用带 `_DRAFT` 后缀的草案标记；
 该字面量**仍逐字保留**在 R0 / R1 / R2 三份历史执行报告中，属**历史事实**，
 **不得**回写、改名或全局替换（详见 §11.4）。本文件**当前正文内不再出现**该草案字面量。
@@ -1275,6 +1283,10 @@ Feature 覆盖是否**实际只影响当前表格**、
 
 `LIST_TABLE_SHARED_DESIGN_APPROVED` —— 本文件全文只使用该一个标记（§0.1）。
 
+**例外（2026-09-29，见 §0.1）**：§12 待复审草案按 `README.md` §7.3 携带候选未实现标记；
+§1~§10 已批准设计正文的“唯一标记”口径**不变**，§11.2 核验命令针对
+本文件批准态设计标记的计数**不受** §12 影响。
+
 本文件**不**复用模板基线标记冒充详细设计已批准：
 模板基线标记（四份规范文档中的 `LIST_TABLE_TEMPLATE_APPROVED`）描述的是
 **模板规则**的批准，与本文件的**详细设计**批准是**两个独立状态**，
@@ -1376,6 +1388,10 @@ R2（提交 e72264d）  草案标记 = 79   （+4）
 上表（2026-09-21）的 `22 / 0 / 42 / 11` 是**实现前时点**的历史实测，保留不改；
 当前规范计数为 `26 / 0 / 42 / 7`。
 
+**第七轮待复审草案加入后复测（2026-09-29）**：新增 §12 只引入候选未实现标记的实例，
+**未**新增、删除或改动任何批准态设计标记实例，故本文件已批准标记仍为 `79`、草案态 `0`；
+四份规范文档 `26 / 0 / 42 / 7` 亦不变（核验命令见 §12.8）。§12 的候选标记实例数见 §12.8。
+
 ### 11.4 历史报告中的草案字面量（逐字保留，不回写）
 
 `LIST_TABLE_SHARED_DESIGN_APPROVED` —— 本次批准收口**只**转换**本文件当前正文**中的标记，
@@ -1391,3 +1407,140 @@ R2（提交 e72264d）  草案标记 = 79   （+4）
 这些报告产生时的**草案状态、复审结论与标记字面量**属**历史事实**：
 它们描述的是**当时**的状态，**不得**因本次批准而全局替换、回写或“修正”为已批准。
 读取历史报告时，必须以其**产生时点**的状态理解，不得与当前 `APPROVED` 状态混读。
+
+---
+
+## 12. 待复审的可选扩展草案：行内三点入口 opt-in（2026-09-29，未复审、未批准、未实现）
+
+`LIST_TABLE_PROPOSED_NOT_IMPLEMENTED` —— **本节为待复审草案**，来源为探针端管理第七轮调整任务
+`CLIENT-CONFIG-ROW-HEIGHT-AND-OPTIONAL-ELLIPSIS-BASELINE-001`。项目负责人于 2026-09-29 确认的
+产品方向为：把行内三点入口的**外观与通用可访问性**提炼为公共列表表格视觉模板的
+**显式启用（opt-in）可选能力**，**不**成为所有主列表的默认入口。
+**该产品方向确认不等于本节已获 ChatGPT 远程复审或项目负责人基线批准**；本节**不**修改任何
+已批准条款，也**不**表示任何页面已迁移或任何代码已实现。
+
+```text
+list_table_row_action_opt_in_extension_status=DRAFT_PENDING_REMOTE_REVIEW_NOT_APPROVED
+list_table_row_action_opt_in_extension_implemented=NO
+page_migration_status=NOT_STARTED
+page_migration_authorization_status=NOT_GRANTED
+```
+
+### 12.1 能力边界：提炼什么、不提炼什么
+
+`LIST_TABLE_PROPOSED_NOT_IMPLEMENTED` —— 公共层**只**提炼**外观与通用可访问性**：
+图标容器与**实际命中区域**、行内对齐、圆角、文字／图标颜色、hover、`focus-visible`、
+disabled、光标形态，以及与单元格行高的**协同关系**（协同方式见 §12.3）。
+
+`LIST_TABLE_PROPOSED_NOT_IMPLEMENTED` —— 以下**继续由 Feature 控制**，公共层**不**固化：
+菜单项集合与顺序、业务权限与可见性、删除／启停等**语义与文案**、请求时序与幂等、
+行点击选中／双击编辑规则、Popover/Dropdown 定位与关闭时机、以及异常／歧义数据的语义与呈现
+（如探针 ID 三态、`+N`、标签 Tooltip）。
+
+### 12.2 显式 opt-in 的落地方案（草案，需评审）
+
+`LIST_TABLE_PROPOSED_NOT_IMPLEMENTED` —— 与既有 `lt-main-table` 作用域纪律一致，采用
+**显式 opt-in 辅助类 + 有限令牌**，而**不**做全局覆盖：
+
+| 候选 | 形态（草案，待评审） | 依据 |
+| --- | --- | --- |
+| opt-in 辅助类 | `lt-<block>__<element>`（BEM 双下划线）形态，落在**被启用页面的操作单元格**上 | §4.3「若未来确需内部辅助类，必须为 `lt-<block>__<element>` 且必须经独立评审」 |
+| 可选令牌 `--lt-row-action-size` | 草案默认 `28px` | 来源为**已批准 Feature 事实**（探针页入口约 `28×28px`） |
+| 可选令牌 `--lt-row-action-radius` | 草案默认 `6px` | 来源为探针页入口既有圆角 |
+| 可选令牌 `--lt-row-action-color` | 草案默认 `var(--el-color-primary)` | 来源为探针页入口既有文字／图标色 |
+
+`LIST_TABLE_PROPOSED_NOT_IMPLEMENTED` —— **本草案可能需要对已批准契约做受控修订**，
+逐项列为待评审问题（本节**未**修改任何条款）：
+
+1. §7.1 静态契约断言 **#2**（令牌**恰好 9 个**）与 **#3**（默认值与 §4.4 逐一相符）：
+   新增令牌会使令牌数由 `9` 变为 `9+N`，`LT_TABLE_VISUAL_TOKENS` 与 §4.4 表须同步更新；
+2. §7.1 断言 **#6**（每条 `:deep(...)` 头部必须含 `.lt-main-table`）：若 opt-in 规则以
+   「根类 + 辅助类」复合限定，须确认头部仍以 `.lt-main-table` 起头；
+3. §7.1 断言 **#11**（除 `.lt-main-table` 外无其他 `lt-` 类选择器）：新增辅助类会使该断言
+   由「数量 0」变为「数量为已登记集合」，须同步修订断言与 §4.3／§4.4 的可断言计数
+   （`lt_internal_helper_class_count=0` → `N`）；
+4. §4.4「行高**不由公共层定义**」纪律**不变**：本草案**不**声明
+   `line-height`／`height`／`max-height`，**不**为固定行高提供令牌，
+   也**不**把 `28px` 变成所有主列表的**强制最小行高**（见 §12.3）。
+
+### 12.3 与「内容驱动行高」共存的技术依据（草案）
+
+`LIST_TABLE_PROPOSED_NOT_IMPLEMENTED` —— 既有现场证据（**非本节重新实测**，来源为探针端管理
+`CCFG-AC-010` 现行 `BLOCKED` 记录与只读补测报告）：探针端管理主列表常规行约 `53px`、
+数据源管理参考页常规行约 `48px`；差异可归因于 `28×28px` 三点入口的**布局盒**撑高
+（推导：`48 = 23 + 24 + 1`、`53 = 28 + 24 + 1`，其中 `24` 为已批准预设
+`--lt-body-cell-padding: 12px 0` 的上下和）。
+
+`LIST_TABLE_PROPOSED_NOT_IMPLEMENTED` —— 草案主张：**「操作目标约 `28×28px`」与
+「内容驱动行高」可以同时成立**，前提是把**命中区域**与**行高贡献**分开：
+
+- **外层**随行内容节奏、**内层**保留约 `28×28px` 独立命中区；
+- 可选做法：对**启用该能力的操作单元格**做内边距补偿，使 `23 + 纵向内边距和` 与参考页一致，
+  常规行高**不再**由入口撑开（具体数值与容差须真实浏览器实测）；
+- **不**采用：把命中区缩小到 `23px`；用固定行高掩盖问题；用
+  `transform/translate/margin-top/padding-top/top` 等**已批准 Feature 规格禁止**
+  在该页标记上使用的位移手段。
+
+`LIST_TABLE_PROPOSED_NOT_IMPLEMENTED` —— 已知阻力（**需真实浏览器验证**）：
+Element Plus 的单元格 `.cell` 计算样式含 `overflow: hidden`，会裁切溢出式命中区，
+也可能裁切 `:focus-visible` 的外描边（`2px + 1px offset`）；故「溢出扩张命中区」方向在本模板下
+**默认不可行**，需改用内边距／盒内布局，或以 `:has()` 限定的 `overflow: visible`、
+`outline-offset: -2px` 等**待验证**方案。
+
+### 12.4 零泄漏论证（草案）
+
+`LIST_TABLE_PROPOSED_NOT_IMPLEMENTED` —— 未启用页面的**计算样式零变化**，依据：
+
+- opt-in 辅助类只出现在**显式启用**的表格节点上；未启用时新规则的选择器**不匹配**；
+- 新令牌只以 `var(--lt-…, 默认值)` 内联回退消费，公共层**不**声明 `--lt-*: 值`（§4.4 纪律不变）；
+- **不**做全局 Element Plus 覆盖、**不**硬编码页面名、**不**使用 `!important`。
+
+### 12.5 需真实浏览器验证的风险清单（草案）
+
+`LIST_TABLE_PROPOSED_NOT_IMPLEMENTED` —— 待验证项（**本草案不执行**）：
+命中区不跨行误触、不被 `overflow` 裁切、不遮挡相邻内容、焦点描边可见、
+缩放下稳定、窄视口稳定、行内垂直居中、与固定操作列共存、
+与 `+N`／探针 ID 三态／标签 Tooltip 共存。
+
+### 12.6 接入示例（**示例 ≠ 已迁移**）
+
+`LIST_TABLE_PROPOSED_NOT_IMPLEMENTED` —— **探针端管理接入示例（草案）**：在操作单元格上显式
+添加 opt-in 辅助类，并按需声明令牌；菜单项、业务权限、请求时序与重选规则**仍由该 Feature 提供**。
+
+`LIST_TABLE_PROPOSED_NOT_IMPLEMENTED` —— **数据源管理可接入示例（草案，未来）**：该页现行
+「更多」文字入口改三点属**另一会话、另一任务**；本节示例**不**表示该页本任务已迁移、
+已授权或已实现（`page_migration_authorization_status=NOT_GRANTED` 不变）。
+
+### 12.7 待复审问题清单（草案）
+
+`LIST_TABLE_PROPOSED_NOT_IMPLEMENTED` ——
+
+1. 辅助类与令牌的**最终命名与默认值**，以及令牌是否入公共层或由 Feature 覆盖；
+2. §7.1 断言 **#2/#3/#6/#11** 的**受控修订文本**与新增断言；
+3. §4.3／§4.4 可断言计数的修订（`lt_token_count`、`lt_internal_helper_class_count`）；
+4. 内边距补偿的**具体数值与容差**（须真实浏览器实测，与 `CCFG-DESIGN-088` 对齐）；
+5. 本节携带候选未实现标记的实例数是否需并入 `README.md` §7.4 的口径。
+
+### 12.8 计数与核验（草案）
+
+`LIST_TABLE_PROPOSED_NOT_IMPLEMENTED` —— 本节**不**改动任何已批准计数；核验命令：
+
+```bash
+# 四份规范文档计数（该命令不扫描本文件）：应仍为 26 / 0 / 42 / 7
+core_docs=(docs/baseline/list-table-visual-template/README.md \
+           docs/baseline/list-table-visual-template/DESIGN.md \
+           docs/baseline/list-table-visual-template/UI.md \
+           docs/baseline/list-table-visual-template/MIGRATION.md)
+for m in LIST_TABLE_REFERENCE_FACT LIST_TABLE_TEMPLATE_APPROVED LIST_TABLE_PROPOSED_NOT_IMPLEMENTED; do
+  printf "%-38s %s\n" "$m" "$(grep -ohF "$m" "${core_docs[@]}" | wc -l)"
+done
+
+# 本文件批准态设计标记计数：应仍为 79（本节不新增其实例）
+approved_marker="LIST_TABLE_SHARED_DESIGN_""APPROVED"
+grep -ohF "$approved_marker" docs/baseline/list-table-visual-template/SHARED_COMPONENT_DESIGN.md | wc -l
+```
+
+实测（2026-09-29，本节加入后）：四份规范文档 `26 / 0 / 42 / 7` 不变
+（草案态规则标记仍为 `0`）；本文件批准态设计标记 `79` 不变；本节内候选未实现标记实例数 `15`，
+含 §0.1 说明文字则为 `16`，本文件该标记全部出现次数为 `18`
+（其中 §11.3 计数块内的 `2` 处为对四份规范文档计数的引用）。

@@ -445,3 +445,53 @@ client_config_main_list_visual_integration_implementation_base_commit=40d28125de
   与页面级调整基线批准各历史记录，也**不得**改写 §4 保护清单、§5 分类计数与 §6 授权边界。
 - **授权独立**：本条**不**自动构成 `query-list-page-template` 页面层的授权，
   反之亦然。
+
+## 探针端管理主列表行高事实的时序核对（追加记录，`2026-09-29`）
+
+> 本节为**追加式**时序核对记录（对应任务
+> `CLIENT-CONFIG-ROW-HEIGHT-AND-OPTIONAL-ELLIPSIS-BASELINE-001`，纯文档草案建立），
+> **不**改写上文任何历史记录、**不**改写 §2 矩阵、§4 保护清单、§5 分类计数与 §6 授权边界，
+> **不**修改任何模板级全局迁移状态，**不**授权任何页面。
+
+### 被核对之处（上文原文保留不改写）
+
+- §2 全量盘点矩阵第 3 行（`/config/client`）的“**有：`height:60px`**”；
+- §4 保护清单“探针端管理主表”一行中的“**固定行高 `60px`**”；
+- §4 之下 R1 修正记录“修正后的保护口径”中仍被列为须保留项的“固定行高”；
+- `UI.md` §3.7 的“其他页面（如探针端管理）**显式固定** `height: 60px`”
+  （该文件已就地追加 `2026-09-29` 追注）。
+
+### 时序事实
+
+- 上述表述为 **2026-09-21 建立本模板基线时**（基准提交 `10b1d3e`）的**真实事实**；
+- 探针端管理主列表已于 **2026-09-23** 第二轮主列表视觉调整
+  （`CLIENT-CONFIG-VISUAL-FOLLOWUP-*`）中**移除固定像素行高**、改为**跟随“数据源管理”
+  参考页的实际行高规则**（见 `docs/features/client-config/REQUIREMENTS.md` 的 `CCFG-REQ-106`
+  与 `docs/features/client-config/DESIGN.md` 的 `CCFG-DESIGN-049`）；
+- 只读核对当前源码：`frontend/src/views/client-config/ClientConfigPage.vue` 的 `<el-table>`
+  **无** `:height` 属性，页内样式块**无**表格级固定行高声明（只读，未修改）；
+- 只读补测现场记录该页主列表常规行约 `53px`（属**既有现场证据**，见 `CCFG-AC-010`
+  现行 `BLOCKED`），**不**固定为 `60px`。
+
+### 修正口径（仅声明时序，不重写基线）
+
+- §2 矩阵第 3 行的“`height:60px`”与 §4 保护清单的“固定行高 `60px`”应读作
+  **2026-09-21 建立基线时点**的事实；**当前**该页主列表**不再**固定行高；
+- 探针端管理第七轮草案（`CLIENT-CONFIG-ROW-HEIGHT-AND-OPTIONAL-ELLIPSIS-BASELINE-001`）
+  进一步把“与该参考页当前实际行高协调一致、不以固定像素掩盖”列为**待复审**目标
+  （见 `SHARED_COMPONENT_DESIGN.md` §12 与该 Feature 的 `CCFG-REQ-153`）；
+- 该页的“多选与选中态”“批量工具栏”等项已被上文 `2026-09-22` R1 修正记录替代，
+  与本节无关，本节**不**重复其结论。
+
+### 边界（明确不得）
+
+- **不得**把本节写成 §2 矩阵、§4 保护清单或 §5／§6 的口径变化：上文原文保留，
+  本节**只**声明时序事实；
+- **不得**把本节写成模板级全局状态变化：`page_migration_status` 保持 `NOT_STARTED`、
+  `page_migration_authorization_status` 保持 `NOT_GRANTED`、
+  `pilot_page_selection_status` 保持 `NOT_DECIDED`——**均不变**；
+- **不得**把本节写成探针端管理已实现、已目测或已通过正式验收：该 Feature 的正式验收
+  现行统计为 `PASS 69 / FAIL 0 / BLOCKED 70 / NOT_RUN 15 = 154`（另有第七轮草案新增
+  3 条 `NOT_RUN`），整体**未**宣布通过，项目负责人**尚未**作出整体验收接受决定；
+- **不得**把本节与 `SHARED_COMPONENT_DESIGN.md` §12 的待复审草案混为一谈：
+  该草案**未**获远程复审、**未**获批准、**未**实现，本节**不**代表其已获批。

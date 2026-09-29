@@ -371,6 +371,15 @@ grep -ohF "$draft_marker" "${core_docs[@]}" | wc -l   # 期望 0
   并已由项目负责人于 2026-09-22 最终接受，当前状态为 `IMPLEMENTED_ACCEPTED`；
   后续任何**代码修改**仍**未经项目负责人再次明确批准不得进行**。
 
+**待复审的可选扩展草案（2026-09-29）** —— `SHARED_COMPONENT_DESIGN.md` 新增 §12
+「待复审的可选扩展草案：行内三点入口 opt-in」，来源为探针端管理第七轮调整草案任务
+`CLIENT-CONFIG-ROW-HEIGHT-AND-OPTIONAL-ELLIPSIS-BASELINE-001`。该草案
+**未**获 ChatGPT 远程复审、**未**获项目负责人基线批准、**未**实现；它在
+`SHARED_COMPONENT_DESIGN.md` 内以**候选未实现标记**标注（标记定义见本文件 §7.3），
+**不**改变本模板任何已批准规则，也**不**改变 §9 的阶段路径与授权边界
+（`page_migration_status` 仍 `NOT_STARTED`、`page_migration_authorization_status` 仍
+`NOT_GRANTED`、`pilot_page_selection_status` 仍 `NOT_DECIDED`）。
+
 ## 9. 后续阶段与授权边界
 
 `LIST_TABLE_TEMPLATE_APPROVED` —— 阶段路径及其当前状态：
@@ -544,3 +553,21 @@ next_step=NONE_SHARED_IMPLEMENTATION_FINAL_ACCEPTED_AND_CLOSED_NO_PAGE_MIGRATION
   `shared_implementation_design_status` 保持 `APPROVED`。
   本任务为**纯文档**收口：未修改代码、测试、配置、依赖、锁文件、证据或历史报告。
   详见 `reports/LIST-TABLE-VISUAL-TEMPLATE-SHARED-IMPLEMENTATION-FINAL-ACCEPTANCE-CLOSEOUT-001.md`。
+- 2026-09-29，新增**待复审的可选扩展草案**章节
+  （`SHARED_COMPONENT_DESIGN.md` §12「待复审的可选扩展草案：行内三点入口 opt-in」，
+  来源为探针端管理第七轮调整草案任务
+  `CLIENT-CONFIG-ROW-HEIGHT-AND-OPTIONAL-ELLIPSIS-BASELINE-001`，纯文档任务）：
+  项目负责人于 2026-09-29 确认产品方向——把行内三点入口的**外观与通用可访问性**
+  提炼为公共列表表格视觉模板的**显式启用（opt-in）可选能力**，不成为所有主列表的默认入口。
+  该草案在 `SHARED_COMPONENT_DESIGN.md` 内以**候选未实现标记**标注（标记定义见本文件 §7.3），
+  **未**获 ChatGPT 远程复审、**未**获项目负责人基线批准、**未**实现；
+  本模板的四份规范文档计数保持 `26 / 0 / 42 / 7` 不变（该草案位于
+  `SHARED_COMPONENT_DESIGN.md`，不属该计数口径），
+  `SHARED_COMPONENT_DESIGN.md` 的批准态设计标记计数亦保持 `79` 不变。
+  **本次产品方向确认 ≠ 扩展草案已获远程复审或基线批准**；
+  `page_migration_status` 保持 `NOT_STARTED`、
+  `page_migration_authorization_status` 保持 `NOT_GRANTED`、
+  `pilot_page_selection_status` 保持 `NOT_DECIDED`，
+  下一入口保持 `NONE_SHARED_IMPLEMENTATION_FINAL_ACCEPTED_AND_CLOSED_NO_PAGE_MIGRATION_AUTHORIZED`
+  （该草案的复审属**探针端管理 Feature 侧**的文档复审入口，不构成本模板的下一步）。
+  本任务为**纯文档**草案建立：未修改代码、共享 CSS、测试、配置、依赖、锁文件、证据或历史报告。
