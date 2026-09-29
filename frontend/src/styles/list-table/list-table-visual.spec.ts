@@ -170,9 +170,27 @@ describe('列表表格视觉模板公共层契约（§4.1 / §6）', () => {
     expect(css()).not.toMatch(/!important/)
   })
 
-  it('11. 内部辅助类数量为 0（除根类外无其他 lt- 类选择器）', () => {
-    const classes = [...new Set(css().match(/\.lt-[\w-]+/g) ?? [])]
-    expect(classes).toEqual([ROOT_CLASS_SELECTOR])
+  it('11. 内部辅助类恰好为两个已登记 opt-in 类（除根类外无其他 lt- 类选择器）', () => {
+    // §12.7(2)：`css().match(/\.lt-[\w-]+/g)` 的匹配结果本身包含根类，必须先剔除根类，
+    // 否则「辅助类恰好两个」的断言实际计入了三类。
+    const allClasses = [...new Set(css().match(/\.lt-[\w-]+/g) ?? [])]
+    const helperClasses = allClasses.filter((name) => name !== ROOT_CLASS_SELECTOR).sort()
+    expect(helperClasses).toEqual(['.lt-row-action__cell', '.lt-row-action__ellipsis'])
+    // 等价兜底：允许集合为「根类 + 两辅助类」三元素，不得出现第四类。
+    expect(allClasses.sort()).toEqual(
+      [ROOT_CLASS_SELECTOR, '.lt-row-action__cell', '.lt-row-action__ellipsis'].sort(),
+    )
+  })
+
+  it('13. opt-in 辅助类在业务页面中只有探针端主列表挂载（未启用页零泄漏，§12.4/§12.7(3)）', () => {
+    // 拼接构造扫描标记，避免本测试文件自身被计入。
+    const token = ['lt-row-action', '__'].join('')
+    const VIEWS_DIR = resolve(SRC_DIR, 'views')
+    const mounted = walk(VIEWS_DIR)
+      .filter((file) => file.endsWith('.vue'))
+      .filter((file) => readFileSync(file, 'utf8').includes(token))
+      .map(relative)
+    expect(mounted).toEqual(['views/client-config/ClientConfigPage.vue'])
   })
 
   it('12. 公共预设规则在全 frontend/src 中只有唯一来源文件', () => {

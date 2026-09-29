@@ -25,6 +25,38 @@
   padding: var(--lt-body-cell-padding, 12px 0);
 }
 
+/* 显式 opt-in 的行内三点入口（SHARED_COMPONENT_DESIGN §12）。仅在启用页面显式挂载
+ * `lt-row-action__cell`（操作列 td）/`lt-row-action__ellipsis`（触发器）时匹配；
+ * 视觉值与命中区为固定字面量，不经 `--lt-*` 令牌暴露，令牌数仍为 9。
+ * 只负责命中区盒模型与交互态，不承载菜单、权限、请求等业务逻辑。 */
+.lt-main-table :deep(td.el-table__cell.lt-row-action__cell) {
+  /* 仅补偿本单元格的纵向内边距，使常规行高回到内容驱动基准：
+   * 48 = 1(行底边框) + 28(入口盒) + 19(纵向内边距和)。不固定 tr 高度。 */
+  padding: 9.5px 0;
+}
+
+.lt-main-table :deep(.lt-row-action__ellipsis) {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  box-sizing: border-box;
+  width: 28px;
+  height: 28px;
+  border-radius: 6px;
+  color: var(--el-color-primary);
+  cursor: pointer;
+}
+
+.lt-main-table :deep(.lt-row-action__ellipsis:hover) {
+  background: #ecf5ff;
+}
+
+/* Element Plus 的 `.cell{overflow:hidden}` 会裁掉外描边，故焦点环内嵌于命中区内。 */
+.lt-main-table :deep(.lt-row-action__ellipsis:focus-visible) {
+  outline: 2px solid var(--el-color-primary);
+  outline-offset: -2px;
+}
+
 .lt-main-table :deep(th.el-table__cell) {
   padding: var(--lt-header-cell-padding, 11px 0);
 }

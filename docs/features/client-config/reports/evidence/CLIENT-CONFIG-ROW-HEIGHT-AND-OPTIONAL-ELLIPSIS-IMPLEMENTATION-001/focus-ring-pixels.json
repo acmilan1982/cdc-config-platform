@@ -1,0 +1,63 @@
+{
+  "tabReached": true,
+  "box": {
+    "x": 1270,
+    "y": 364,
+    "w": 28,
+    "h": 28,
+    "outlineOffset": "-2px",
+    "outlineWidth": "2px",
+    "outlineColor": "rgb(64, 158, 255)",
+    "color": "rgb(64, 158, 255)"
+  },
+  "screenshotSize": {
+    "w": 28,
+    "h": 28
+  },
+  "edgeMidpoints": {
+    "top": [
+      64,
+      158,
+      255
+    ],
+    "bottom": [
+      64,
+      158,
+      255
+    ],
+    "left": [
+      64,
+      158,
+      255
+    ],
+    "right": [
+      64,
+      158,
+      255
+    ]
+  },
+  "corners": {
+    "tl": [
+      64,
+      158,
+      255
+    ],
+    "tr": [
+      64,
+      158,
+      255
+    ],
+    "bl": [
+      64,
+      158,
+      255
+    ],
+    "br": [
+      64,
+      158,
+      255
+    ]
+  },
+  "ringVisibleOnAllFourSides": true,
+  "writesBlocked": 0
+}

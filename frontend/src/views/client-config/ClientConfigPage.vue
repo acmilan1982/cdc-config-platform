@@ -191,8 +191,16 @@
           </el-table-column>
 
           <!-- 最右固定“操作”列：唯一入口为水平三点图标（CCFG-UI-040）；入口与菜单的 click/dblclick
-               均不冒泡到行双击，菜单靠右对齐以避免贴近右边缘时被裁切（CCFG-UI-041） -->
-          <el-table-column label="操作" width="110" fixed="right">
+               均不冒泡到行双击，菜单靠右对齐以避免贴近右边缘时被裁切（CCFG-UI-041）。
+               `class-name` 显式 opt-in 公共操作单元格（`lt-row-action__cell`），命中区与交互态视觉
+               由公共层提供（CCFG-DESIGN-088/089）；EP 会同时把该类渲染到表头 th，故公共规则以
+               `td.el-table__cell` 限定，表头不受影响。 -->
+          <el-table-column
+            label="操作"
+            width="110"
+            fixed="right"
+            class-name="lt-row-action__cell"
+          >
             <template #default="{ row }">
               <el-dropdown
                 trigger="click"
@@ -203,7 +211,7 @@
                 @dblclick.stop
               >
                 <span
-                  class="cc-more-link"
+                  class="cc-more-link lt-row-action__ellipsis"
                   role="button"
                   tabindex="0"
                   :aria-label="`更多操作：${row.clientId}`"
@@ -1822,28 +1830,9 @@ onBeforeUnmount(() => {
 }
 
 /* 最右固定“操作”列唯一入口：水平三点图标（CCFG-REQ-110/CCFG-UI-040）。
-   命中区域按 28×28 提供，键盘焦点可见；可访问名称由触发器上的 aria-label 提供。 */
-.cc-more-link {
-  display: inline-flex;
-  align-items: center;
-  justify-content: center;
-  box-sizing: border-box;
-  width: 28px;
-  height: 28px;
-  border-radius: 6px;
-  color: var(--el-color-primary);
-  cursor: pointer;
-}
-
-.cc-more-link:hover {
-  background: #ecf5ff;
-}
-
-.cc-more-link:focus-visible {
-  outline: 2px solid var(--el-color-primary);
-  outline-offset: 1px;
-}
-
+   命中区、圆角、主色与 hover/focus-visible 视觉已迁移至公共层，仅在显式挂载
+   `lt-row-action__cell`／`lt-row-action__ellipsis` 时生效；本页保留 `cc-more-link`
+   作为业务选择器钩子，并可访问名称由触发器上的 aria-label 提供。 */
 .cc-more-icon {
   font-size: 18px;
 }

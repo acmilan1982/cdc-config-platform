@@ -770,11 +770,9 @@ describe('“更多”菜单三态条目（CCFG-REQ-103、CCFG-UI-032）', () =>
     expect(links.map((l) => l.attributes('tabindex'))).toEqual(['0', '0'])
     expect(links[0].attributes('aria-label')).toBe('更多操作：probe-a')
     expect(links[1].attributes('aria-label')).toBe('更多操作：probe-b')
-    // 命中区域与键盘焦点样式由本页声明，不依赖 EP 默认
-    const css = cssBlock(SFC_SOURCE, '.cc-more-link')
-    expect(css).toContain('width: 28px')
-    expect(css).toContain('height: 28px')
-    expect(SFC_SOURCE).toContain('.cc-more-link:focus-visible')
+    // 命中区域与键盘焦点样式已迁移至公共层：本页只保留业务钩子类，
+    // 不再就地声明 `.cc-more-link` 视觉规则（避免与公共层重复来源）。
+    expect(SFC_SOURCE).not.toMatch(/\.cc-more-link[^{]*\{/)
     wrapper.unmount()
   })
 
@@ -1101,6 +1099,30 @@ describe('列表表格视觉模板：探针端主列表等价接入（CCFG-REQ-0
     expect(wrapper.findAll('.cc-form-item')).toHaveLength(3)
     expect(wrapper.find('.cc-pane--chosen').exists()).toBe(true)
     expect(wrapper.find('.cc-dialog .lt-main-table').exists()).toBe(false)
+    wrapper.unmount()
+  })
+
+  it('三点入口显式 opt-in：操作列 td 挂 lt-row-action__cell，触发器挂 lt-row-action__ellipsis', async () => {
+    const wrapper = await mountPage([enabledRow, disabledRow])
+    // 操作列以 class-name 显式声明 opt-in 单元格（源码结构）。
+    expect(SFC_SOURCE).toContain('class-name="lt-row-action__cell"')
+    // Element Plus 把 column.className 渲染到每行操作单元格上。
+    const cells = wrapper.findAll('td.lt-row-action__cell')
+    expect(cells).toHaveLength(2)
+    // 触发器同时保留业务钩子类与公共 opt-in 类，业务事件隔离不变。
+    const triggers = wrapper.findAll('.cc-more-link.lt-row-action__ellipsis')
+    expect(triggers).toHaveLength(2)
+    expect(triggers.map((t) => t.attributes('role'))).toEqual(['button', 'button'])
+    wrapper.unmount()
+  })
+
+  it('未启用范围零泄漏：弹窗与参考页均不挂 opt-in 辅助类', async () => {
+    const wrapper = await mountPage()
+    await openCreate(wrapper)
+    expect(wrapper.find('.cc-dialog .lt-row-action__cell').exists()).toBe(false)
+    expect(wrapper.find('.cc-dialog .lt-row-action__ellipsis').exists()).toBe(false)
+    // 参考页（数据源管理）为只读对照，末轮仍为“更多”文字入口，不接入 opt-in。
+    expect(DS_PAGE_SOURCE).not.toContain('lt-row-action__')
     wrapper.unmount()
   })
 })

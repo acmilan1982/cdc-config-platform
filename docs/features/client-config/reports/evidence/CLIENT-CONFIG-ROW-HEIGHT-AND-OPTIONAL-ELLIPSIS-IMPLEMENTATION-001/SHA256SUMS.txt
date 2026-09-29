@@ -1,0 +1,16 @@
+# SHA-256 清单 · CLIENT-CONFIG-ROW-HEIGHT-AND-OPTIONAL-ELLIPSIS-IMPLEMENTATION-001
+# 生成时间（本地）：2026-09-29 14:05:21 CST
+#
+# 一、仓库外原始产物（未脱敏，未入仓）
+7e7710c3029f2777f78b303fde3e547260818297956c5e4630170f2f2daef32b  /tmp/rh-evidence/baseline.json
+6ed3521651a4fc0fd5ba91680ca30b998dcb017476bdba549fab48309f40de8c  /tmp/rh-evidence/after.json
+77e7cf6bdbeb8115e11386b833f189046f1ed6bcd693e8c667d65b3f9b885247  /tmp/rh-evidence/focus-ring-28x28.png
+5dba105d0e3270cc1f8efea7c543e7b4a69d8aa5b05edc9079f77457ebea1d4b  /tmp/rh-evidence/focus-ring-outer-34x34.png
+#
+# 二、本目录入库文件
+f40d71aa82f3200d5b4bfa78f25137432b169d97a136d8386c7b640b01df1b55  docs/features/client-config/reports/evidence/CLIENT-CONFIG-ROW-HEIGHT-AND-OPTIONAL-ELLIPSIS-IMPLEMENTATION-001/README.md
+2be27266eeaabbdb6d2784e12143d691352f088be72aa5df1d0d462fb1b4d5ce  docs/features/client-config/reports/evidence/CLIENT-CONFIG-ROW-HEIGHT-AND-OPTIONAL-ELLIPSIS-IMPLEMENTATION-001/measure-before.mjs
+604722e21efecd73dc376117936b990a9e7b7d14d1dbceb95ee312f7734e6a4c  docs/features/client-config/reports/evidence/CLIENT-CONFIG-ROW-HEIGHT-AND-OPTIONAL-ELLIPSIS-IMPLEMENTATION-001/measure-after.mjs
+74a43b129f697585ec089842f14c7a2214a85140465ec6b97411d4d24536dc4a  docs/features/client-config/reports/evidence/CLIENT-CONFIG-ROW-HEIGHT-AND-OPTIONAL-ELLIPSIS-IMPLEMENTATION-001/focus-ring-pixel-probe.mjs
+be9a3a510bbb1265a22b7a624066d3791e1a2ffba90d23751f6d8979ff1f0d07  docs/features/client-config/reports/evidence/CLIENT-CONFIG-ROW-HEIGHT-AND-OPTIONAL-ELLIPSIS-IMPLEMENTATION-001/row-height-results.json
+cb9dee1638d5cff9d8ea8087ef6e91effbcd1f270dca8e9a5d05b958f3762108  docs/features/client-config/reports/evidence/CLIENT-CONFIG-ROW-HEIGHT-AND-OPTIONAL-ELLIPSIS-IMPLEMENTATION-001/focus-ring-pixels.json

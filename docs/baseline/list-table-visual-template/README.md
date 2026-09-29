@@ -352,7 +352,7 @@ grep -ohF "$cand_marker" docs/baseline/list-table-visual-template/SHARED_COMPONE
 | `DESIGN.md` | 模板职责与 Feature 保留职责、启用与作用域隔离、行高与长文本策略、候选实现方案对比（**基线任务当时不定案**；下游已选 §8.4 并已落地，**目测已通过并通过本地正式验收**） |
 | `UI.md` | 参考实现主表当前事实、可提升为已批准模板规则的视觉内容、必须保留为 Feature 专属的内容 |
 | `MIGRATION.md` | 全量 `el-table` 使用点盘点矩阵、候选分类、逐页独立评估与授权要求 |
-| `SHARED_COMPONENT_DESIGN.md` | **公共实现详细设计（已批准）**：四个候选的唯一结论、公共契约、Feature 保护项、参考页等价接入清单、验证与回滚设计（`approval_scope=SHARED_IMPLEMENTATION_DETAILED_DESIGN_ONLY`；**批准的是设计文档**，该设计随后已由独立实施任务落地，**目测已通过**，**本地正式验收已通过，并已由项目负责人最终接受**）。**§12 为例外**：行内三点入口 opt-in **可选扩展**——其**设计基线**已于 2026-09-29 经 ChatGPT 远程复审 `APPROVED`、项目负责人批准（**R2 修订后口径**），但**扩展代码尚未实现、尚未生效**，仍以候选未实现标记引用，其独立计数见 §12.8） |
+| `SHARED_COMPONENT_DESIGN.md` | **公共实现详细设计（已批准）**：四个候选的唯一结论、公共契约、Feature 保护项、参考页等价接入清单、验证与回滚设计（`approval_scope=SHARED_IMPLEMENTATION_DETAILED_DESIGN_ONLY`；**批准的是设计文档**，该设计随后已由独立实施任务落地，**目测已通过**，**本地正式验收已通过，并已由项目负责人最终接受**）。**§12 为例外**：行内三点入口 opt-in **可选扩展**——其**设计基线**已于 2026-09-29 经 ChatGPT 远程复审 `APPROVED`、项目负责人批准（**R2 修订后口径**）；其**代码实现**已由独立任务 `CLIENT-CONFIG-ROW-HEIGHT-AND-OPTIONAL-ELLIPSIS-IMPLEMENTATION-001` 落地、`/config/client` 主列表接入，状态为 **`IMPLEMENTED_PENDING_CHATGPT_REVIEW`（待远程复审）**，因尚未复审通过仍以候选未实现标记引用，其独立计数见 §12.8） |
 | `reports/LIST-TABLE-VISUAL-TEMPLATE-BASELINE-001.md` | R0 建立任务的执行报告与校验证据（**历史报告，保留草案态标记，不修改**） |
 | `reports/LIST-TABLE-VISUAL-TEMPLATE-BASELINE-001-R1.md` | R1 定向修订执行报告（**历史报告，保留草案态标记，不修改**） |
 | `reports/LIST-TABLE-VISUAL-TEMPLATE-BASELINE-APPROVAL-CLOSEOUT-001.md` | 基线内容批准收口报告（历史执行报告，不修改） |
@@ -410,6 +410,18 @@ R2 `59617b4…` 经 ChatGPT **从远程 Git 独立复审 `APPROVED`** → 项目
 > **先剔除根类**再断言辅助类集合（或含根类的**三元素**允许集合）的**可直接实现、可复审**口径。
 > 该 R2 **仅**改拟议文档文本，**不**修改 `frontend/src/styles/list-table/list-table-visual.spec.ts`
 > 现行测试代码或已批准断言。**扩展设计基线已获批 ≠ 扩展代码已实现或已生效。**
+
+**更新（2026-09-29，opt-in 代码实现后 · `CLIENT-CONFIG-ROW-HEIGHT-AND-OPTIONAL-ELLIPSIS-IMPLEMENTATION-001`）**
+—— 上述「扩展代码尚未实现、尚未生效」为**批准收口时点事实，逐字保留不改**；**现行实现状态**为
+该 opt-in 扩展**代码已落地、待远程复审**（`IMPLEMENTED_PENDING_CHATGPT_REVIEW`）：
+公共层 `frontend/src/styles/list-table/list-table-visual.css` 新增仅受 `.lt-main-table` 限定的
+`lt-row-action__cell`／`lt-row-action__ellipsis` 两条规则，`/config/client` **主列表**显式接入，
+静态断言 #11 按 R2 口径更新（#2／#3／#6 不变）。据此，现行 `lt_internal_helper_class_count` 已由
+`0` 变为 **2**（`lt_token_count` 仍 **9**）。**本模板整体状态不变**：`shared_implementation_status`／
+`reference_page_integration_status` 仍 `IMPLEMENTED_ACCEPTED`、`final_acceptance_status` 仍
+`ACCEPTED_BY_PROJECT_OWNER`；`page_migration_status` 仍 `NOT_STARTED`、
+`page_migration_authorization_status` 仍 `NOT_GRANTED`、`pilot_page_selection_status` 仍 `NOT_DECIDED`。
+**实现完成 ≠ 远程代码复审通过 ≠ 已目测 ≠ 已正式验收**；数据源管理「更多」→三点迁移仍属**另一会话、另一独立任务**。
 
 ## 9. 后续阶段与授权边界
 
@@ -654,3 +666,18 @@ next_step=NONE_SHARED_IMPLEMENTATION_FINAL_ACCEPTED_AND_CLOSED_NO_PAGE_MIGRATION
   `NONE_SHARED_IMPLEMENTATION_FINAL_ACCEPTED_AND_CLOSED_NO_PAGE_MIGRATION_AUTHORIZED`
   （第七轮扩展属探针端管理 Feature 侧，其复审入口不构成本模板的下一步）。
   本收口为**纯文档**：未修改代码、共享 CSS、测试、配置、依赖、锁文件、证据或历史报告。
+- 2026-09-29，第七轮可选扩展 **opt-in 代码实现**（`CLIENT-CONFIG-ROW-HEIGHT-AND-OPTIONAL-ELLIPSIS-IMPLEMENTATION-001`，
+  前端实现任务，由探针端管理 Feature 侧发起）——按已批准设计文本在
+  `frontend/src/styles/list-table/list-table-visual.css` 落地仅受 `.lt-main-table` 根类限定的
+  `lt-row-action__cell`（操作列 `td`）与 `lt-row-action__ellipsis`（三点触发器）两条 opt-in 规则
+  （命中区约 `28×28px`、圆角 `6px`、既有主色、hover、`:focus-visible` 内嵌焦点环、光标、行高协同），
+  并同步更新 `list-table-visual.spec.ts` 静态断言 #11 为「**先剔除根类**再断言辅助类集合」的可实现口径
+  （断言 #2／#3／#6 **不变**）。据此，**现行** `lt_token_count` 仍为 **9**（默认不新增 `--lt-*` 令牌）、
+  `lt_internal_helper_class_count` 由 `0` 变为 **2**（仅 `{lt-row-action__cell, lt-row-action__ellipsis}`，
+  其他 `lt-` 类仍禁止）。**该扩展代码实现状态为「已完成、待远程复审」**（`IMPLEMENTED_PENDING_CHATGPT_REVIEW`，
+  属探针端管理 Feature 侧复审入口，**不**改本模板 `current_next_entry`）。**本模板整体状态不变**：
+  `shared_implementation_status` 与 `reference_page_integration_status` 仍 `IMPLEMENTED_ACCEPTED`、
+  `final_acceptance_status` 仍 `ACCEPTED_BY_PROJECT_OWNER`；`page_migration_status` 仍 `NOT_STARTED`、
+  `page_migration_authorization_status` 仍 `NOT_GRANTED`、`pilot_page_selection_status` 仍 `NOT_DECIDED`；
+  四份规范文档计数仍 `26 / 0 / 42 / 7`、本文件批准态设计标记仍 `79`，三条通道**不混算**。
+  **实现完成 ≠ 远程代码复审通过 ≠ 已目测 ≠ 已正式验收**；数据源管理「更多」→三点迁移仍属**另一会话、另一独立任务**。
