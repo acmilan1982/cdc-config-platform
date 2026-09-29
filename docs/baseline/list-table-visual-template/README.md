@@ -329,6 +329,21 @@ grep -ohF "$draft_marker" "${core_docs[@]}" | wc -l   # 期望 0
 本目录标记与 `query-list-page-template` 的冻结计数**互不影响**：
 两套标记字面量前缀不同、目录不同，**不共享**计数。
 
+**计数通道与 §12 草案（R1 补充，2026-09-29）** —— 本节的四份文档计数**只**扫描
+`README.md` / `DESIGN.md` / `UI.md` / `MIGRATION.md`，**不**扫描
+`SHARED_COMPONENT_DESIGN.md`。该文件 §12「待复审的可选扩展草案」按本节 §7.3 的阅读约定
+**携带候选未实现标记**（只引用、不重定义），其**独立**计数（通道 3）见
+`SHARED_COMPONENT_DESIGN.md` §12.8，**不**并入本节 `26 / 0 / 42 / 7`；
+「是否并入本节计数」**不再**留为未决项——**不并入**，另列独立通道。三条计数通道
+（四份文档 / 本文件批准态设计标记 / 本文件候选未实现标记）**严格不混算**：
+
+```bash
+# 通道 3（独立）：SHARED_COMPONENT_DESIGN.md 的候选未实现标记
+# 用字符串拼接构造字面量，避免核验命令自身被计入
+cand_marker="LIST_TABLE_PROPOSED_""NOT_IMPLEMENTED"
+grep -ohF "$cand_marker" docs/baseline/list-table-visual-template/SHARED_COMPONENT_DESIGN.md | wc -l
+```
+
 ## 8. 文档导航
 
 | 文件 | 内容 |
@@ -337,7 +352,7 @@ grep -ohF "$draft_marker" "${core_docs[@]}" | wc -l   # 期望 0
 | `DESIGN.md` | 模板职责与 Feature 保留职责、启用与作用域隔离、行高与长文本策略、候选实现方案对比（**基线任务当时不定案**；下游已选 §8.4 并已落地，**目测已通过并通过本地正式验收**） |
 | `UI.md` | 参考实现主表当前事实、可提升为已批准模板规则的视觉内容、必须保留为 Feature 专属的内容 |
 | `MIGRATION.md` | 全量 `el-table` 使用点盘点矩阵、候选分类、逐页独立评估与授权要求 |
-| `SHARED_COMPONENT_DESIGN.md` | **公共实现详细设计（已批准）**：四个候选的唯一结论、公共契约、Feature 保护项、参考页等价接入清单、验证与回滚设计（`approval_scope=SHARED_IMPLEMENTATION_DETAILED_DESIGN_ONLY`；**批准的是设计文档**，该设计随后已由独立实施任务落地，**目测已通过**，**本地正式验收已通过，并已由项目负责人最终接受**） |
+| `SHARED_COMPONENT_DESIGN.md` | **公共实现详细设计（已批准）**：四个候选的唯一结论、公共契约、Feature 保护项、参考页等价接入清单、验证与回滚设计（`approval_scope=SHARED_IMPLEMENTATION_DETAILED_DESIGN_ONLY`；**批准的是设计文档**，该设计随后已由独立实施任务落地，**目测已通过**，**本地正式验收已通过，并已由项目负责人最终接受**）。**§12 为例外**：**待复审的可选扩展草案**（行内三点入口 opt-in；R1 已收敛为**拟修订契约**，**未复审、未批准、未实现**，其候选标记独立计数见 §12.8） |
 | `reports/LIST-TABLE-VISUAL-TEMPLATE-BASELINE-001.md` | R0 建立任务的执行报告与校验证据（**历史报告，保留草案态标记，不修改**） |
 | `reports/LIST-TABLE-VISUAL-TEMPLATE-BASELINE-001-R1.md` | R1 定向修订执行报告（**历史报告，保留草案态标记，不修改**） |
 | `reports/LIST-TABLE-VISUAL-TEMPLATE-BASELINE-APPROVAL-CLOSEOUT-001.md` | 基线内容批准收口报告（历史执行报告，不修改） |
@@ -571,3 +586,20 @@ next_step=NONE_SHARED_IMPLEMENTATION_FINAL_ACCEPTED_AND_CLOSED_NO_PAGE_MIGRATION
   下一入口保持 `NONE_SHARED_IMPLEMENTATION_FINAL_ACCEPTED_AND_CLOSED_NO_PAGE_MIGRATION_AUTHORIZED`
   （该草案的复审属**探针端管理 Feature 侧**的文档复审入口，不构成本模板的下一步）。
   本任务为**纯文档**草案建立：未修改代码、共享 CSS、测试、配置、依赖、锁文件、证据或历史报告。
+- 2026-09-29，第七轮草案 **R1 定向纠错**（`CLIENT-CONFIG-ROW-HEIGHT-AND-OPTIONAL-ELLIPSIS-BASELINE-001-R1`，
+  纯文档）——ChatGPT 从远程 Git 对 R0 草案提交
+  `9381703cf63d0e91ce5ee39cee28f907e21972ca` 的复审结论为 `CHANGES_REQUIRED`，
+  其第 ④ 项要求把 `SHARED_COMPONENT_DESIGN.md` §12 的未决清单收敛为**具体可复审的拟修订契约**。
+  本 R1 在 §12 收敛：确定 opt-in 类名 `lt-row-action__cell`（操作列 `td`）与
+  `lt-row-action__ellipsis`（三点触发器，均受 `.lt-main-table` 限定）、**默认不新增 `--lt-*` 令牌**
+  （保持 9 令牌）、写出 §7.1 断言 #6/#11 的**拟**修订文本与 §4.3/§4.4 的**生效时**计数
+  （`lt_token_count=9` 不变、`lt_internal_helper_class_count` 生效时 `0→2`）、
+  区分「表格行高不得固定」与「触发器自身约 28×28px 命中区」、给出批准路径。
+  **拟修订值 ≠ 现值**；§4.3/§4.4/§7.1/§7.2 的已批准旧断言仍为现行事实，
+  该扩展**未**获复审、**未**获批准、**未**实现。计数口径在 §7.4 与
+  `SHARED_COMPONENT_DESIGN.md` §12.8 明确为**三条独立通道**（四份文档 `26 / 0 / 42 / 7` /
+  本文件批准态设计标记 `79` / §12 候选未实现标记独立统计），**不混算**；
+  因此本次 R1 后四份文档计数仍 `26 / 0 / 42 / 7`、本文件批准态 `79` 均**不变**。
+  `page_migration_status` 保持 `NOT_STARTED`、
+  `page_migration_authorization_status` 保持 `NOT_GRANTED`。
+  本 R1 为**纯文档**纠错：未修改代码、共享 CSS、测试、配置、依赖、锁文件、证据或历史报告。
