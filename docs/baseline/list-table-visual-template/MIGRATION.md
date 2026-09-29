@@ -580,3 +580,43 @@ client_config_main_list_visual_integration_implementation_base_commit=40d28125de
 - **不得**把本节新增／修订的模板规则预先置为 `APPROVED` / `IMPLEMENTED_ACCEPTED`：§13 可选契约仍为
   `DRAFT_PENDING_USER_REVIEW`；第七轮 opt-in 扩展的实现状态仍为 `IMPLEMENTED_PENDING_CHATGPT_REVIEW`；
 - **不得**把本节写成数据源管理页“更多”→三点改造的授权：该改造仍为**未来独立任务**，本 R1 **不**改该页。
+
+## 模板整理任务 R2 标记口径纠正追加记录（`LIST-TABLE-VISUAL-TEMPLATE-CLIENT-CONFIG-REFINEMENT-BASELINE-001-R2`，追加记录，`2026-09-29`）
+
+ChatGPT 从远程 Git 对本模板整理 R1 提交 `e4c16df7459440b5a9390830c06f0525a934f9b4` 的文档复审结论为
+`CHANGES_REQUIRED`：**已落地的实现事实仍被标为候选未实现**（与 `README.md` §7.3 阅读约定直接冲突）。
+本 R2 为**纯文档标记语义纠正**，**只**做以下最小改动：
+
+1. **已落地／已批准事实改标参考事实标记**：`SHARED_COMPONENT_DESIGN.md` §12 中**已落地**的 opt-in 事实
+   （已落地 CSS 规则、显式 opt-in 挂载、现行测试断言 #11、令牌数 `9`、辅助类数 `2`）由候选未实现标记
+   改标为**参考事实标记**；`README.md` §7.1 的定义与 §7.3 的阅读约定**对齐**（已批准选择结果 /
+   已落地实现事实同属参考事实标记）；`README.md` §8 中已落地事实说明一并改标。
+2. **未实现 / 待批准内容拆为独立句段并保留候选标记**：`SHARED_COMPONENT_DESIGN.md` §12.1 的
+   **禁用态视觉规则**（现行 CSS 尚无该规则）与 §13 的**待批准**分层契约保留**候选未实现标记**，
+   并注明 §12.1 禁用态视觉属**设计契约、尚未实现、尚未验收**、`CCFG-AC-157` 仍 `BLOCKED`。
+3. **删除错误推导**：删除 `README.md` §8 与 `SHARED_COMPONENT_DESIGN.md` 中
+   「因为待复审所以仍按候选未实现标记引用」的推导——`IMPLEMENTED_PENDING_CHATGPT_REVIEW` 是**复审状态**，
+   **不**等于 `NOT_IMPLEMENTED`。
+
+### 状态与计数（R2 后）
+
+- 四份规范文档计数（通道 1）：参考事实 `27 → 28`、已批准模板规则 `42`（不变）、候选未实现 `8`（不变）——
+  **`28 / 0 / 42 / 8`**；
+- 本文件批准态设计标记（通道 2）仍 `79`（**不变**）；
+- `SHARED_COMPONENT_DESIGN.md` 参考事实标记（通道 3，R2 新增）`24`；其候选未实现标记（通道 4）`23 → 10`；
+- 各通道**严格不混算**；R0／R1 与更早报告保留原样，其中关于「现行候选未实现标记」的旧结论由本 R2 报告以
+  **errata／override** 方式承接（`README.md` §7.3 口径为准，**不**回写历史报告）。
+- 本模板级 `current_next_entry` **仍**为
+  `NONE_SHARED_IMPLEMENTATION_FINAL_ACCEPTED_AND_CLOSED_NO_PAGE_MIGRATION_AUTHORIZED`；
+  本轮草案链的下一入口为
+  `CHATGPT_REMOTE_LIST_TABLE_VISUAL_TEMPLATE_CLIENT_CONFIG_REFINEMENT_BASELINE_R2_REVIEW`
+  （R1 入口 `..._R1_REVIEW`、R0 入口 `..._BASELINE_REVIEW` 均已因 `CHANGES_REQUIRED` 成为**历史**入口）。
+
+### 边界（明确不得）
+
+- **不得**把本节写成模板级全局状态变化：`page_migration_status` 保持 `NOT_STARTED`、
+  `page_migration_authorization_status` 保持 `NOT_GRANTED`、`pilot_page_selection_status` 保持 `NOT_DECIDED`——**均不变**；
+- **不得**把本节写成新样式实施或 §13 可选契约获批：§13 仍为 `DRAFT_PENDING_USER_REVIEW`；
+  第七轮 opt-in 实现状态仍为 `IMPLEMENTED_PENDING_CHATGPT_REVIEW`；
+- **不得**把本节写成数据源管理页“更多”→三点改造的授权：该改造仍为**未来独立任务**，本 R2 **不**改该页；
+- **提交与推送成功 ≠ 远程复审通过。**
