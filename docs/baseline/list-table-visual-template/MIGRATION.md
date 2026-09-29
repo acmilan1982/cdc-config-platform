@@ -495,3 +495,46 @@ client_config_main_list_visual_integration_implementation_base_commit=40d28125de
   3 条 `NOT_RUN`），整体**未**宣布通过，项目负责人**尚未**作出整体验收接受决定；
 - **不得**把本节与 `SHARED_COMPONENT_DESIGN.md` §12 的待复审草案混为一谈：
   该草案**未**获远程复审、**未**获批准、**未**实现，本节**不**代表其已获批。
+
+> **2026-09-29 后注（由本文件后续追加记录给出，不改写本节数字）**：上列
+> `PASS 69 / FAIL 0 / BLOCKED 70 / NOT_RUN 15 = 154` 与“§12 草案未获复审、未获批准、未实现”
+> 为**该节写作时点**的表述。**现行**统计与 §12 状态见下方「模板整理任务追加记录」——**以彼为准**。
+
+## 模板整理任务追加记录（`LIST-TABLE-VISUAL-TEMPLATE-CLIENT-CONFIG-REFINEMENT-BASELINE-001`，追加记录，`2026-09-29`）
+
+> 本节为**追加式**记录，对应纯文档草案任务
+> `LIST-TABLE-VISUAL-TEMPLATE-CLIENT-CONFIG-REFINEMENT-BASELINE-001`：以已实现、经项目负责人目测认可的
+> `/config/client` 主列表为参照，整理本模板现行规则与可选能力，并**删除**模板正文中的**过期示例**。
+> 本节**不**改写上文任何历史记录、§2 矩阵、§4 保护清单、§5 分类计数与 §6 授权边界，
+> **不**修改任何模板级全局迁移状态，**不**授权任何页面。
+
+### 对本文件/本目录既有记录的两处状态更正（仅追加，不回写）
+
+1. **上文“探针端管理主列表行高事实的时序核对（`2026-09-29`）”一节末尾的现行统计已过期**。
+   该节写作时点为 `PASS 69 / FAIL 0 / BLOCKED 70 / NOT_RUN 15 = 154`（另计第七轮草案 3 条 `NOT_RUN`）。
+   经第七轮定向验收（`CLIENT-CONFIG-ROUND7-TARGETED-ACCEPTANCE-AND-VISUAL-RECORD-001`，提交 `30142e2`，
+   已获 ChatGPT 远程复审 `APPROVED`），**现行统计**为
+   `PASS 70 / FAIL 0 / BLOCKED 72 / NOT_RUN 15 = 157`（`CCFG-AC-010 PASS`；`CCFG-AC-155~157 BLOCKED`）。
+   **整体验收仍未完成**，项目负责人**尚未**作出整体验收接受决定；该 `APPROVED` **仅**覆盖四条记录与目测范围，
+   **不**等于 157 条整体通过。
+2. **上文称 `SHARED_COMPONENT_DESIGN.md` §12 草案“未获远程复审、未获批准、未实现”，现应分层读作**：
+   - 三点 opt-in 的**设计基线**已获批准（第七轮 `*-BASELINE-APPROVAL-CLOSEOUT-001`）；
+   - 共享 CSS 实现已落地（`frontend/src/styles/list-table/list-table-visual.css`），
+     且 `/config/client` 已**显式 opt-in** 接入（`d93f838`，类 `lt-row-action__cell` / `lt-row-action__ellipsis`）；
+   - 其**实现报告**的远程复审状态以 `SHARED_COMPONENT_DESIGN.md` §12 状态块为准。
+
+### 过期示例的处置（本文件与同目录 `UI.md`）
+
+- 本文件 §2 矩阵第 3 行与 §4 保护清单的“固定行高 `60px`”“多选与选中态（`#ecf5ff` + `inset 3px 0 0`）”“批量工具栏”
+  为 **2026-09-21 建立基线时点**的真实盘点记录，**保留**为历史事实，**不**读作现行示例；
+- 同目录 `UI.md` §3.5 / §3.7 / §3.9 中**面向现行规则**的过时示例（`#ecf5ff` 探针选中态、探针“显式固定 `height: 60px`”）
+  已由本任务**就地删除 / 改写**为**带日期的现行事实 + 代码位置**（属草案，见本任务报告）。
+
+### 边界（明确不得）
+
+- **不得**把本节写成模板级全局状态变化：`page_migration_status` 保持 `NOT_STARTED`、
+  `page_migration_authorization_status` 保持 `NOT_GRANTED`、`pilot_page_selection_status` 保持 `NOT_DECIDED`——**均不变**；
+- **不得**把本节写成数据源管理页“更多”→三点改造的授权：该改造仍为**未来独立任务**，本任务**不**改该页；
+- **不得**把本节新增的任何“单行固定高亮可选预设”等模板规则预先置为 `APPROVED` / `IMPLEMENTED_ACCEPTED`：
+  其状态为 `DRAFT_PENDING_USER_REVIEW`，**尚待**远程复审（入口
+  `CHATGPT_REMOTE_LIST_TABLE_VISUAL_TEMPLATE_CLIENT_CONFIG_REFINEMENT_BASELINE_REVIEW`）与项目负责人批准。

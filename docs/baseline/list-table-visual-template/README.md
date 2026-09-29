@@ -285,17 +285,22 @@ reference_table_class=.data-table
   `BASELINE_DRAFT_ONLY` 等历史状态值；这些只代表**当时阶段**的真实状态，
   **不参与**当前规范状态判断，且**不得**修改历史报告来消除这些标记。
 
-当前规范性文档计数（**实现落地后复算**，见 §11 的 R2 变更记录）：
+当前规范性文档计数（**每次改动后从文件复算**，见 §11 变更记录）：
 
-| 标记 | 批准前 | 批准收口时 | 当前（实现落地后） |
-| --- | --- | --- | --- |
-| `LIST_TABLE_REFERENCE_FACT` | 22 | 22 | 26 |
-| `LIST_TABLE_TEMPLATE_APPROVED` | 0 | 42 | 42 |
-| `LIST_TABLE_PROPOSED_NOT_IMPLEMENTED` | 11 | 11 | 7 |
+| 标记 | 批准前 | 批准收口时 | 实现落地后 | 本任务整理后（2026-09-29） |
+| --- | --- | --- | --- | --- |
+| `LIST_TABLE_REFERENCE_FACT` | 22 | 22 | 26 | 27 |
+| `LIST_TABLE_TEMPLATE_APPROVED` | 0 | 42 | 42 | 42 |
+| `LIST_TABLE_PROPOSED_NOT_IMPLEMENTED` | 11 | 11 | 7 | 8 |
 
-当前口径变更来源（`22 / 0 / 42 / 11` → `26 / 0 / 42 / 7`）：
+历史口径变更（`22 / 0 / 42 / 11` → `26 / 0 / 42 / 7`）：
 参考事实标记 `+4`（22→26）、候选未实现标记 `-4`（11→7），
 已批准模板规则标记与草案态标记均不变（42 / 0）。
+
+本任务整理后口径（`26 / 0 / 42 / 7` → `27 / 0 / 42 / 8`）：
+`DESIGN.md` §5 新增一行**实测参考事实**（两页可比常规行约 `48 CSS px`）→ 参考事实 `+1`（26→27）；
+`DESIGN.md` §7 新增**最小定向修订草案**（尚待远程复审 / 负责人批准）→ 候选未实现 `+1`（7→8）；
+已批准模板规则标记与草案态标记不变（42 / 0），核验命令见上。
 
 `+4 / -4` 来自 `DESIGN.md` 中**四处**原本承担“已采纳候选 / 已决策技术形态”内容、
 却仍被标为候选未实现的段落，改为标注**参考事实标记**
@@ -331,7 +336,7 @@ grep -ohF "$draft_marker" "${core_docs[@]}" | wc -l   # 期望 0
 
 **计数通道与 §12 草案（R1 补充，2026-09-29）** —— 本节的四份文档计数**只**扫描
 `README.md` / `DESIGN.md` / `UI.md` / `MIGRATION.md`，**不**扫描
-`SHARED_COMPONENT_DESIGN.md`。该文件 §12「已批准设计基线、尚未实现的可选扩展」按本节 §7.3 的阅读约定
+`SHARED_COMPONENT_DESIGN.md`。该文件 §12「已批准设计基线、实现待远程复审的可选扩展」按本节 §7.3 的阅读约定
 **携带候选未实现标记**（只引用、不重定义），其**独立**计数（通道 3）见
 `SHARED_COMPONENT_DESIGN.md` §12.8，**不**并入本节 `26 / 0 / 42 / 7`；
 「是否并入本节计数」**不再**留为未决项——**不并入**，另列独立通道。三条计数通道
@@ -386,7 +391,7 @@ grep -ohF "$cand_marker" docs/baseline/list-table-visual-template/SHARED_COMPONE
   并已由项目负责人于 2026-09-22 最终接受，当前状态为 `IMPLEMENTED_ACCEPTED`；
   后续任何**代码修改**仍**未经项目负责人再次明确批准不得进行**。
 
-**已批准设计基线、尚未实现的可选扩展（第七轮 · 2026-09-29）** —— `SHARED_COMPONENT_DESIGN.md` §12
+**已批准设计基线、已实现待远程复审的可选扩展（第七轮 · 2026-09-29）** —— `SHARED_COMPONENT_DESIGN.md` §12
 「行内三点入口 opt-in」是列表表格视觉模板的一项**显式启用（opt-in）可选扩展**，来源为探针端管理
 第七轮调整任务 `CLIENT-CONFIG-ROW-HEIGHT-AND-OPTIONAL-ELLIPSIS-BASELINE-001`。其时序：R0 草案
 `9381703…` 远程复审 `CHANGES_REQUIRED` → R1 `938e720…` 远程复审 `CHANGES_REQUIRED` →
@@ -398,9 +403,9 @@ R2 `59617b4…` 经 ChatGPT **从远程 Git 独立复审 `APPROVED`** → 项目
   `6px` 圆角、既有主色）按已批准设计文本解析；
 - **扩展代码尚未实现、尚未生效**：本期**没有**任何共享 CSS / 测试断言 / 页面接入因该扩展改变，
   仍以**候选未实现标记**引用（标记定义见本文件 §7.3）；
-- 该扩展**不**改变本模板任何已批准规则、**不**改变现行共享 CSS 现值与测试断言——
-  现行 9 个 `--lt-*` 令牌、内部 helper 类 `0`、主表根类 `lt-main-table` 的 §4/§7 契约
-  保持**原值**；拟实施时辅助类 `2` 为**未来值**；
+- 该扩展**不**改变本模板任何已批准规则、**不**改变该批准收口时点的共享 CSS 现值与测试断言——
+  收口时点 9 个 `--lt-*` 令牌、内部 helper 类 `0`、主表根类 `lt-main-table` 的 §4/§7 契约
+  保持**原值**（**现行** helper 类计数见下方 2026-09-29 更新）；拟实施时辅助类 `2` 为**未来值**；
 - 也**不**改变 §9 的阶段路径与授权边界（`page_migration_status` 仍 `NOT_STARTED`、
   `page_migration_authorization_status` 仍 `NOT_GRANTED`、`pilot_page_selection_status` 仍 `NOT_DECIDED`）。
 
@@ -467,8 +472,10 @@ next_step=NONE_SHARED_IMPLEMENTATION_FINAL_ACCEPTED_AND_CLOSED_NO_PAGE_MIGRATION
   仅数据源管理主列表接入；
 - 数据源管理当前视觉是**参考实现**，**不得**自动上升为全部页面必须遵守的既定规范；
 - 参考实现的列定义、状态标签语义、行操作、固定列、双击行为均属其 Feature 专属；
-- 本模板**未**定义、**未**测量、**未**修改任何行高、字号或颜色的“权威值”；
-  凡参考源码未显式定义的值，均标注为“继承现状、待详细设计/浏览器量测确认”；
+- 本模板**不**为行高、字号或颜色预设**对所有表格的权威值**，也**不**以固定像素行高统一各页；
+  对参考源码未显式定义的值，按**内容驱动**与 Feature 局部覆盖处理——`2026-09-29` 已对两页
+  可比常规行完成**只读浏览器量测**（常规行约 `48 CSS px`，见 `DESIGN.md` §5），
+  **不再**以“继承现状、待详细设计 / 浏览器量测确认”作为未决占位；
 - 后续页面必须**逐页评估**，不能批量无差别套用。
 
 ## 11. 变更记录
@@ -681,3 +688,13 @@ next_step=NONE_SHARED_IMPLEMENTATION_FINAL_ACCEPTED_AND_CLOSED_NO_PAGE_MIGRATION
   `page_migration_authorization_status` 仍 `NOT_GRANTED`、`pilot_page_selection_status` 仍 `NOT_DECIDED`；
   四份规范文档计数仍 `26 / 0 / 42 / 7`、本文件批准态设计标记仍 `79`，三条通道**不混算**。
   **实现完成 ≠ 远程代码复审通过 ≠ 已目测 ≠ 已正式验收**；数据源管理「更多」→三点迁移仍属**另一会话、另一独立任务**。
+- 2026-09-29，**模板定向整理草案**（`LIST-TABLE-VISUAL-TEMPLATE-CLIENT-CONFIG-REFINEMENT-BASELINE-001`，纯文档草案）
+  —— 以已实现、经项目负责人目测认可的 `/config/client` 主列表为参照，整理本模板现行规则与可选能力，
+  **删除**五份规范正文中面向现行规则的**过期示例**（`UI.md` §3.5 探针 `#ecf5ff` 选中态、§3.7 探针“显式固定
+  `height: 60px`”、§1.2 / §1.9 “继承现状、待详细设计 / 浏览器量测确认”占位；`DESIGN.md` §7 选中态具体示例；
+  `README.md` §10 行高占位口径），并新增 `SHARED_COMPONENT_DESIGN.md` §13「现行基础规则与可选扩展分层契约」
+  （含能力契约表、单行固定高亮**可选契约**）。标记复算：四份规范文档 `27 / 0 / 42 / 8`、
+  本文件批准态设计标记 `79`、`SHARED_COMPONENT_DESIGN.md` 候选未实现标记 `23`（§12 内 `18` 处、§13 内 `2` 处、
+  其它说明 `3` 处）——候选未实现标记**净变化 `0`**（§12.6 两处草案示例改写为**现行接入事实**后迁出 `-2`，§13 新增 `+2`）。**本任务新增的可选契约状态为 `DRAFT_PENDING_USER_REVIEW`**，
+  下一入口 `CHATGPT_REMOTE_LIST_TABLE_VISUAL_TEMPLATE_CLIENT_CONFIG_REFINEMENT_BASELINE_REVIEW`；
+  **模板整体状态不变**（`page_migration_status=NOT_STARTED` 等），**不**改数据源管理页。详见同目录 `reports/LIST-TABLE-VISUAL-TEMPLATE-CLIENT-CONFIG-REFINEMENT-BASELINE-001.md`。
