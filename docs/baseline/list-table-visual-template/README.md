@@ -746,3 +746,25 @@ next_step=NONE_SHARED_IMPLEMENTATION_FINAL_ACCEPTED_AND_CLOSED_NO_PAGE_MIGRATION
   `CHATGPT_REMOTE_LIST_TABLE_VISUAL_TEMPLATE_CLIENT_CONFIG_REFINEMENT_BASELINE_R2_REVIEW`
   （R1 入口经远程复审 `CHANGES_REQUIRED`，已为历史入口）。详见同目录
   `reports/LIST-TABLE-VISUAL-TEMPLATE-CLIENT-CONFIG-REFINEMENT-BASELINE-001-R2.md`。
+- 2026-09-29，**模板整理 R3 定向纠错**（`LIST-TABLE-VISUAL-TEMPLATE-CLIENT-CONFIG-REFINEMENT-BASELINE-001-R3`，
+  纯文档）—— ChatGPT 从远程 Git 对 R2 提交 `732d6df12215f0036f27dcbe8367bbb172f1fd47`
+  的文档复审结论为 `CHANGES_REQUIRED`，指出两处：① `SHARED_COMPONENT_DESIGN.md` §12.1 的
+  **参考事实段**仍声称公共层「已负责」禁用态外观，把**尚未实现**的公共规则混入现行实现事实；
+  ② §12.3 在参考事实标记下把**调整前**的 `53px` 测量、`CCFG-AC-010` 现行 `BLOCKED` 与
+  设计阶段「可选做法／待验证」措辞误写成**现行事实**。本 R3 就这两处定向改写：
+  §12.1 参考事实段只写现行已成立的职责与代码事实（现行三点触发器**无可观察禁用场景**），
+  引用公共视觉职责时只指向上一段的**待实现设计契约**，并在 §13.2 交叉引用处澄清「拟负责／未来设计职责」；
+  §12.3 明确 `53px` 属**调整前历史测量**（同期参考页约 `48px`），另立**现行已实现**盒模型与测量
+  （opt-in 单元格 `9.5px 0`、触发器 `28×28px`、常规可比行约 `48 CSS px`、真实 `100%`／`125%` 缩放）
+  与**现行验收状态**（`CCFG-AC-010` 状态格 `PASS`、`CCFG-AC-155~157` `BLOCKED`）段，
+  把「可选做法／`:has()`／`overflow: visible` 待验证」等设计阶段内容归入**历史推导**；
+  §12.5 仅作同一时点澄清。标记复算：四份规范文档 `28 / 0 / 42 / 8`（**不变**）；
+  本文件批准态设计标记 `79`（**不变**）；`SHARED_COMPONENT_DESIGN.md` 参考事实标记 `24 → 25`、
+  候选未实现标记 `10`（**不变**）。**不**改任何已批准规则、**不**实施新样式、**不**批准 §13 新可选契约、
+  **不**改任何验收状态格或新跑验收；§13 仍为 `DRAFT_PENDING_USER_REVIEW`；
+  §12.1 禁用态视觉仍属**设计契约、尚未实现、尚未验收**（`CCFG-AC-157` 仍 `BLOCKED`）；
+  模板级状态**不变**（`page_migration_status=NOT_STARTED` 等）；**不**改数据源管理页。
+  草案链下一入口改为
+  `CHATGPT_REMOTE_LIST_TABLE_VISUAL_TEMPLATE_CLIENT_CONFIG_REFINEMENT_BASELINE_R3_REVIEW`
+  （R2 入口经远程复审 `CHANGES_REQUIRED`，已为历史入口）。详见同目录
+  `reports/LIST-TABLE-VISUAL-TEMPLATE-CLIENT-CONFIG-REFINEMENT-BASELINE-001-R3.md`。
