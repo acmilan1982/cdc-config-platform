@@ -465,7 +465,8 @@ R2 `59617b4…` 经 ChatGPT **从远程 Git 独立复审 `APPROVED`** → 项目
 **参照修正链**（与上节第七轮 §12 链**分别记录**，**不**混用）：模板定向整理
 `...-REFINEMENT-BASELINE-001` → R1 → R2 → R3 → R4，其中 R0～R3 远程复审 `CHANGES_REQUIRED`、
 R4 `aa6285f…` 复审 **`APPROVED`** → 项目负责人于 `2026-09-29` 在批准语境下回复**「继续」** →
-本收口 `...-REFINEMENT-BASELINE-APPROVAL-CLOSEOUT-001`。
+本收口 `...-REFINEMENT-BASELINE-APPROVAL-CLOSEOUT-001`（远程复审 `CHANGES_REQUIRED`，**唯一**阻塞为
+当前计数说明混入历史计数）→ 本收口 R1 `...-APPROVAL-CLOSEOUT-001-R1`（计数分层纠错）。
 
 - **批准对象**：R4 `aa6285f02c16e6c3806ca2759d21e16b3e0e41b1` 所代表的**文档设计基线**，尤其
   `SHARED_COMPONENT_DESIGN.md` §13 的**可选单行固定高亮视觉契约**与 `DESIGN.md` §7 的**最小定向修订**；
@@ -475,10 +476,14 @@ R4 `aa6285f…` 复审 **`APPROVED`** → 项目负责人于 `2026-09-29` 在批
 - **未随本轮改变的独立状态**：§12 三点 opt-in 入口代码复审仍 `IMPLEMENTED_PENDING_CHATGPT_REVIEW`；
   §12.1 禁用态视觉仍未实现（`CCFG-AC-157` 仍 `BLOCKED`）；模板级 `current_next_entry` 仍为
   `NONE_SHARED_IMPLEMENTATION_FINAL_ACCEPTED_AND_CLOSED_NO_PAGE_MIGRATION_AUTHORIZED`（**另一状态层**，**不**混用）。
+- **计数分层纠错（收口 R1）**：收口提交 `925c3a8…` 经远程复审 `CHANGES_REQUIRED`，**唯一**阻塞为
+  `SHARED_COMPONENT_DESIGN.md` 的**当前计数说明仍混入历史计数**；R1 **只**定向更正——§0.1／§10／§11.1 的
+  **现行**四份规范文档计数指向 `README.md` §7.4 的 `28 / 0 / 43 / 7`，§11.3 时点快照表去“当前”歧义，
+  §12.8 追加 R1 复测记录；**未**改批准范围、状态决定、代码或样式，四通道计数逐值不变。
 - **本轮草案链当前入口**：
 
 ```text
-draft_chain_next_step=CHATGPT_REMOTE_LIST_TABLE_VISUAL_TEMPLATE_CLIENT_CONFIG_REFINEMENT_BASELINE_APPROVAL_CLOSEOUT_REVIEW
+draft_chain_next_step=CHATGPT_REMOTE_LIST_TABLE_VISUAL_TEMPLATE_CLIENT_CONFIG_REFINEMENT_BASELINE_APPROVAL_CLOSEOUT_R1_REVIEW
 ```
 
 > **批准设计基线 ≠ 公共扩展已实现 ≠ 目测通过 ≠ 正式验收通过 ≠ 批准页面迁移。提交推送成功 ≠ 远程复审通过。**
@@ -509,7 +514,7 @@ next_step=NONE_SHARED_IMPLEMENTATION_FINAL_ACCEPTED_AND_CLOSED_NO_PAGE_MIGRATION
 ```
 
 （参照修正草案链的当前入口为 §8.1 的
-`draft_chain_next_step=CHATGPT_REMOTE_LIST_TABLE_VISUAL_TEMPLATE_CLIENT_CONFIG_REFINEMENT_BASELINE_APPROVAL_CLOSEOUT_REVIEW`；
+`draft_chain_next_step=CHATGPT_REMOTE_LIST_TABLE_VISUAL_TEMPLATE_CLIENT_CONFIG_REFINEMENT_BASELINE_APPROVAL_CLOSEOUT_R1_REVIEW`；
 两者**分属不同状态层**，**不**混用。）
 
 `LIST_TABLE_PROPOSED_NOT_IMPLEMENTED` —— 公共实现最终接受后**没有**自动开启的后续任务；
@@ -852,3 +857,15 @@ next_step=NONE_SHARED_IMPLEMENTATION_FINAL_ACCEPTED_AND_CLOSED_NO_PAGE_MIGRATION
   `CHATGPT_REMOTE_LIST_TABLE_VISUAL_TEMPLATE_CLIENT_CONFIG_REFINEMENT_BASELINE_APPROVAL_CLOSEOUT_REVIEW`
   （R4 入口经远程复审 `APPROVED`，已为**历史**入口）。详见同目录
   `reports/LIST-TABLE-VISUAL-TEMPLATE-CLIENT-CONFIG-REFINEMENT-BASELINE-APPROVAL-CLOSEOUT-001.md`。
+- 2026-09-29，**参照修正设计基线批准收口 R1 计数分层纠错**（`LIST-TABLE-VISUAL-TEMPLATE-CLIENT-CONFIG-REFINEMENT-BASELINE-APPROVAL-CLOSEOUT-001-R1`，
+  纯文档定向纠错）—— ChatGPT 对批准收口提交 `925c3a89e6841c760f918805e77a01fba1c960e0` 的远程文档复审为
+  `CHANGES_REQUIRED`，**唯一**阻塞为 `SHARED_COMPONENT_DESIGN.md` 的**当前计数说明仍混入历史计数**。
+  R1 **只**做计数分层纠错：§0.1／§10／§11.1 的**现行**四份规范文档计数由过时的 `26 / 0 / 42 / 7` 更正为
+  **现行** `28 / 0 / 43 / 7` 并指向 `README.md` §7.4；§11.3 时点快照表标签去“当前”歧义（改“2026-09-21 时点”），
+  末尾“当前规范计数”改“该时点规范计数”，并增**时点快照**总说明；§12.8 追加 R1 复测记录。**未**改批准范围、
+  状态决定、代码或样式。四条通道**均未增删标记实例**，命令实测与批准收口后**逐值相同**：四份规范文档
+  `28 / 0 / 43 / 7`、本文件批准态设计标记 `81`、参考事实标记 `26`、候选未实现标记 `8`。本轮草案链
+  **当前入口**改为
+  `CHATGPT_REMOTE_LIST_TABLE_VISUAL_TEMPLATE_CLIENT_CONFIG_REFINEMENT_BASELINE_APPROVAL_CLOSEOUT_R1_REVIEW`
+  （批准收口入口经复审 `CHANGES_REQUIRED`，已为**历史**入口）。详见同目录
+  `reports/LIST-TABLE-VISUAL-TEMPLATE-CLIENT-CONFIG-REFINEMENT-BASELINE-APPROVAL-CLOSEOUT-001-R1.md`。
