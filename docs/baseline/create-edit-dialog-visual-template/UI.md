@@ -1,4 +1,4 @@
-# 新增／编辑业务弹窗公共视觉模板 · UI（已批准基线；公共 CSS 已实现，Vue 未创建）
+# 新增／编辑业务弹窗公共视觉模板 · UI（已批准基线；公共 CSS 已实现、代码复审通过，Vue 未创建）
 
 ```text
 create_edit_dialog_visual_template_document_status=APPROVED
@@ -7,17 +7,24 @@ approval_status=APPROVED_BY_PROJECT_OWNER
 approval_date=2026-09-30
 approved_reviewed_commit=45ce16dffbf2747abeb75d4d6c43bc57165043c8
 implementation_status=PUBLIC_CSS_IMPLEMENTED_VUE_NOT_CREATED
-public_css_status=IMPLEMENTED_PENDING_CHATGPT_REMOTE_CODE_REVIEW
+public_css_status=IMPLEMENTED_PENDING_USER_ADOPTION_DECISION
+public_css_code_review_status=APPROVED
+public_css_code_review_date=2026-09-30
+public_css_code_review_objects=c8785e18dc3014396cf45534315ab0f10dbbe94d,8434b884904a34bed51a2d8364e217efb605f06c
+public_css_code_review_scope=PURE_CSS_PRESET_ROOT_CLASS_OPT_IN_17_TOKENS_REAL_EP_STATE_FIX_ZERO_PAGE_ADOPTION
+public_css_status_before_review=IMPLEMENTED_PENDING_CHATGPT_REMOTE_CODE_REVIEW
 public_vue_component_status=NOT_CREATED
 formal_acceptance_execution_status=NOT_EXECUTED
 page_adoption_authorization_status=PAGE_ADOPTION_NOT_AUTHORIZED
+page_adoption_decision_status=NOT_DECIDED_NOT_GRANTED
 migrated_page_count=0
 ```
 
 > **现行事实**部分引自两页源码；标注「**拟议**」的候选规格自 `2026-09-30` 批准后即为
 > **已批准的设计契约**——「未获批」仅适用于批准前的历史时点。
-> **实现分层**：所约定的公共 CSS 视觉规格已由独立实现任务落地（**待远程代码复审**），
-> **Vue 组件仍未创建**、**任何页面均未接入**。
+> **实现分层**：所约定的公共 CSS 视觉规格已由独立实现任务落地并**已通过远程代码复审**
+> （`public_css_code_review_status=APPROVED`）；
+> **Vue 组件仍未创建**、**任何页面均未接入**（采用决定 `NOT_DECIDED_NOT_GRANTED`）。
 > 本文件**不**给出像素级的「全局定值」——凡两页取值不同者，一律记为 **Feature 级可配置值**。
 
 ---
@@ -111,7 +118,7 @@ migrated_page_count=0
 
 ---
 
-## 4. 零泄漏约束（已批准设计；公共 CSS 已实现）
+## 4. 零泄漏约束（已批准设计；公共 CSS 已实现、代码复审通过）
 
 - 模板选择器**一律**以显式 opt-in 根类为前缀；**未接入页面零命中**（已按真实浏览器证据核验，见 `reports/`）。
 - 不新增裸全局 EP 覆盖；不使用 `!important`；不新增 `pointer-events`／`::before` 覆盖（星号除外）。

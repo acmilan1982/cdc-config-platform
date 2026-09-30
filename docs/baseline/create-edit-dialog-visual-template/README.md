@@ -1,4 +1,4 @@
-# 新增／编辑业务弹窗公共视觉模板 · 设计基线已批准；公共 CSS 已实现（待远程代码复审）
+# 新增／编辑业务弹窗公共视觉模板 · 设计基线已批准；公共 CSS 已实现、代码复审通过／待页面采用决定
 
 ```text
 create_edit_dialog_visual_template_document_status=APPROVED
@@ -7,13 +7,19 @@ create_edit_dialog_visual_template_approval_status=APPROVED_BY_PROJECT_OWNER
 create_edit_dialog_visual_template_approval_date=2026-09-30
 create_edit_dialog_visual_template_approved_reviewed_commit=45ce16dffbf2747abeb75d4d6c43bc57165043c8
 implementation_status=PUBLIC_CSS_IMPLEMENTED_VUE_NOT_CREATED
+public_css_status=IMPLEMENTED_PENDING_USER_ADOPTION_DECISION
+public_css_code_review_status=APPROVED
+public_css_code_review_date=2026-09-30
+public_css_code_review_objects=c8785e18dc3014396cf45534315ab0f10dbbe94d,8434b884904a34bed51a2d8364e217efb605f06c
+public_css_code_review_scope=PURE_CSS_PRESET_ROOT_CLASS_OPT_IN_17_TOKENS_REAL_EP_STATE_FIX_ZERO_PAGE_ADOPTION
+public_css_status_before_review=IMPLEMENTED_PENDING_CHATGPT_REMOTE_CODE_REVIEW
 page_adoption_authorization_status=PAGE_ADOPTION_NOT_AUTHORIZED
-public_css_status=IMPLEMENTED_PENDING_CHATGPT_REMOTE_CODE_REVIEW
+page_adoption_decision_status=NOT_DECIDED_NOT_GRANTED
 public_vue_component_status=NOT_CREATED
 formal_acceptance_execution_status=NOT_EXECUTED
 migrated_page_count=0
 registered_token_count=17
-current_next_entry=CHATGPT_REMOTE_CREATE_EDIT_DIALOG_VISUAL_TEMPLATE_PUBLIC_CSS_IMPLEMENTATION_R1_REVIEW
+current_next_entry=CREATE_EDIT_DIALOG_VISUAL_TEMPLATE_PAGE_ADOPTION_EVALUATION_NOT_DECIDED_NOT_GRANTED
 ```
 
 ```text
@@ -37,37 +43,46 @@ candidate_capabilities=LABEL_TYPOGRAPHY_AND_ALIGNMENT,BLACK_PRIMARY_SUBMIT_BUTTO
 >
 > **公共 CSS 已实现 ≠ 已通过远程代码复审 ≠ Vue 组件已存在 ≠ 页面已接入 ≠ 正式验收通过。**
 > 批准范围**只**覆盖**文档设计契约**。公共 CSS 预设由独立实现任务
-> `CREATE-EDIT-DIALOG-VISUAL-TEMPLATE-PUBLIC-CSS-IMPLEMENTATION-001` 落地为**纯 CSS** 公共能力
-> （`public_css_status=IMPLEMENTED_PENDING_CHATGPT_REMOTE_CODE_REVIEW`，**待远程代码复审**）；
+> `CREATE-EDIT-DIALOG-VISUAL-TEMPLATE-PUBLIC-CSS-IMPLEMENTATION-001` 落地为**纯 CSS** 公共能力，
+> 并经 R1 定向纠错（`...-R1`）：**现行代码复审状态为「已实现、代码复审通过、待页面采用决定」**
+> （`public_css_status=IMPLEMENTED_PENDING_USER_ADOPTION_DECISION`、`public_css_code_review_status=APPROVED`，
+> 复审日期 `2026-09-30`，复审对象 R0 `c8785e1`／R1 `8434b88`）；
 > **Vue 组件仍未创建**（`NOT_CREATED`）；页面接入仍 `PAGE_ADOPTION_NOT_AUTHORIZED`
-> （`migrated_page_count=0`），**未做正式验收**（`formal_acceptance_execution_status=NOT_EXECUTED`）。
+> （`migrated_page_count=0`，采用决定 `NOT_DECIDED_NOT_GRANTED`），**未做正式验收**（`formal_acceptance_execution_status=NOT_EXECUTED`）。
 > 本弹窗模板自身状态**不改变**列表表格视觉模板、
 > 查询列表页模板、探针端管理与数据源管理各自的现有状态。
+> **代码复审通过 ≠ 任何页面已接入 ≠ 正式验收通过**；本模板**未选定试点**、**未授权任何页面**。
 >
 > **时态说明**：正文中标注「**拟议**」「拟议缺省」等字样的**设计项**，
 > 自 2026-09-30 批准后即为**已批准的设计契约**。按实现分层**逐项**收敛为：
-> **公共 CSS、类名、令牌登记与静态契约测试已实现**（纯 CSS 公共能力，含隔离合成夹具真实浏览器证据，
-> 见 `reports/`；**待远程代码复审**，`IMPLEMENTED_PENDING_CHATGPT_REMOTE_CODE_REVIEW`）；
-> **Vue 公共组件仍未创建**（`NOT_CREATED`）；**页面接入未授权**（`PAGE_ADOPTION_NOT_AUTHORIZED`，`migrated_page_count=0`）；
-> **正式验收未执行**。旧文中的「拟议」「未创建」字样若描述**已落地**的 CSS／类名／令牌／测试，
+> **公共 CSS、类名、令牌登记与静态契约测试已实现**（纯 CSS 公共能力，含隔离合成夹具真实 Element Plus 浏览器证据，
+> 见 `reports/`），并**已通过远程代码复审**（`public_css_code_review_status=APPROVED`，`2026-09-30`）；
+> **Vue 公共组件仍未创建**（`NOT_CREATED`）；**页面接入未授权**（`PAGE_ADOPTION_NOT_AUTHORIZED`，`migrated_page_count=0`，
+> 采用决定 `NOT_DECIDED_NOT_GRANTED`）；**正式验收未执行**。
+> 旧文中的「拟议」「未创建」字样若描述**已落地**的 CSS／类名／令牌／测试，
 > 一律以本节分层口径为准（历史报告按原文保留）。R0／R1／R2 在**历史时点**的
-> `DRAFT_PENDING_USER_REVIEW`、`NOT_APPROVED` 与复审 `CHANGES_REQUIRED`／`APPROVED`
+> `DRAFT_PENDING_USER_REVIEW`、`NOT_APPROVED` 与复审 `CHANGES_REQUIRED`／`APPROVED`，
+> 以及 R0 公共实现复审 `CHANGES_REQUIRED`／R1 `APPROVED` 之前的 `IMPLEMENTED_PENDING_CHATGPT_REMOTE_CODE_REVIEW`，
 > **保留时序、不机械全局替换**，亦不回写历史报告。
 >
-> **复审时序**：R0 提交 `ad7a4b741714a229a8a8a250f8ee960447e33355` 远程复审 `CHANGES_REQUIRED`（两处阻塞：
+> **设计基线复审时序**：R0 提交 `ad7a4b741714a229a8a8a250f8ee960447e33355` 远程复审 `CHANGES_REQUIRED`（两处阻塞：
 > 差异值的缺省口径、真实可执行的回退路径）；R1 提交 `b8ba2f6cab713326a1fdd70a875b743c5190cbe4`
 > 定向纠错后远程复审 `CHANGES_REQUIRED`（**仅导航不一致**）；R2 提交
 > `45ce16dffbf2747abeb75d4d6c43bc57165043c8` 远程复审 **`APPROVED`**，随后由项目负责人于
 > **2026-09-30** 批准。**R2 获远程复审通过并不表示负责人在 R2 提交当时已批准**——批准时点另记 2026-09-30。
 >
-> 实现分层：公共 CSS 预设已落地（含静态契约测试与隔离合成夹具真实 Element Plus 浏览器证据，见 `reports/`）；
-> 公共 CSS 实现提交 `c8785e18dc3014396cf45534315ab0f10dbbe94d` 远程复审 `CHANGES_REQUIRED`（17 vs 15 令牌口径、
-> 现行文档时态自相矛盾、真实 EP 状态证据不足），已由 `...-R1` 任务定向纠错后**待再次远程复审**。
-> **Vue 组件仍未创建**；本实现**未修改任何业务页面**（页面接入始终未授权）。
+> **公共 CSS 代码复审时序**：实现提交 `c8785e18dc3014396cf45534315ab0f10dbbe94d`（R0）远程代码复审
+> `CHANGES_REQUIRED`（17 vs 15 令牌口径、现行文档时态自相矛盾、真实 EP 状态证据不足）；
+> R1 纠错提交 `8434b884904a34bed51a2d8364e217efb605f06c` 远程代码复审 **`APPROVED`**（时点 `2026-09-30`）。
+> 现行状态：`public_css_status=IMPLEMENTED_PENDING_USER_ADOPTION_DECISION`、`public_css_code_review_status=APPROVED`。
+> **代码复审通过不等于任何页面已接入，也不等于正式验收通过；后续页面采用为独立决定。**
 >
-> 下一入口：`CHATGPT_REMOTE_CREATE_EDIT_DIALOG_VISUAL_TEMPLATE_PUBLIC_CSS_IMPLEMENTATION_REVIEW`——
-> 由 ChatGPT **从远程 Git** 对本次**公共 CSS 实现**做独立代码复审；代码提交／推送成功
-> **不等于**远程复审通过，也**不等于**页面接入授权。
+> 实现分层：公共 CSS 预设已落地（含静态契约测试与隔离合成夹具真实 Element Plus 浏览器证据，见 `reports/`），
+> 且**已通过远程代码复审**。**Vue 组件仍未创建**；本实现**未修改任何业务页面**（页面接入始终未授权）。
+>
+> 下一入口：`CREATE_EDIT_DIALOG_VISUAL_TEMPLATE_PAGE_ADOPTION_EVALUATION_NOT_DECIDED_NOT_GRANTED`——
+> 由项目负责人就**是否、由哪个页面**采用本模板作**独立评估与授权决定**；
+> 当前**未选定试点**、`NOT_DECIDED_NOT_GRANTED`，本目录**不授权**任何页面接入。
 
 ---
 
@@ -106,13 +121,14 @@ candidate_capabilities=LABEL_TYPOGRAPHY_AND_ALIGNMENT,BLACK_PRIMARY_SUBMIT_BUTTO
 | 层 | 含义 | 书写要求 |
 |---|---|---|
 | **现行事实** | 可由**两页实际源码／已批准条款**直接核验 | 必须给出**两页各自的代码／条款位置**；不做推及全项目的概括 |
-| **拟议（设计推断）** | 本设计**提出**的公共契约、类名、令牌、可选能力 | 批准后即为**已批准设计契约**；**须**逐项标注其当前实现状态（**已实现／仍未实现**），**不得**把**仍未实现**项包装为「两页已实现」或「已落地」。公共 CSS／类名／令牌登记／静态契约测试现为**已实现**（待远程代码复审）；Vue 组件仍 `NOT_CREATED` |
+| **拟议（设计推断）** | 本设计**提出**的公共契约、类名、令牌、可选能力 | 批准后即为**已批准设计契约**；**须**逐项标注其当前实现状态（**已实现／仍未实现**），**不得**把**仍未实现**项包装为「两页已实现」或「已落地」。公共 CSS／类名／令牌登记／静态契约测试现为**已实现，且已通过远程代码复审**（`public_css_code_review_status=APPROVED`）；Vue 组件仍 `NOT_CREATED` |
 
 - 本任务**不**引入与列表表格模板相同的 `LIST_TABLE_*` 标记通道；本目录使用
   `create_edit_dialog_visual_template_*` 前缀的状态键（见文首）与本节的「现行事实／拟议」分区。
 - **已落地**的候选能力（公共 CSS 工件、7 个 `ced-*` 辅助类、17 个 `--ced-*` 令牌登记、静态契约测试）
-  标注为**已批准设计、已实现（纯 CSS 公共能力；待远程代码复审）**，其存在性**不再是** `NOT_CREATED`。
-- **仍未创建**项（Vue 公共组件）与**未授权**项（页面接入）分别标注为 `NOT_CREATED`、`PAGE_ADOPTION_NOT_AUTHORIZED`。
+  标注为**已批准设计、已实现，且已通过远程代码复审（纯 CSS 公共能力）**，其存在性**不再是** `NOT_CREATED`。
+- **仍未创建**项（Vue 公共组件）、**未授权**项（页面接入）与**未决定**项（页面采用决定）
+  分别标注为 `NOT_CREATED`、`PAGE_ADOPTION_NOT_AUTHORIZED`、`NOT_DECIDED_NOT_GRANTED`。
 
 ## 5. 证据来源（两页实际位置）
 
@@ -139,6 +155,7 @@ candidate_capabilities=LABEL_TYPOGRAPHY_AND_ALIGNMENT,BLACK_PRIMARY_SUBMIT_BUTTO
 | `reports/evidence/CREATE-EDIT-DIALOG-VISUAL-TEMPLATE-PUBLIC-CSS-IMPLEMENTATION-001/` | 上述实现的脱敏可复算浏览器证据（合成夹具、CDP 驱动、计算样式原始输出） |
 | `reports/CREATE-EDIT-DIALOG-VISUAL-TEMPLATE-PUBLIC-CSS-IMPLEMENTATION-001-R1.md` | R1 定向纠错：三处复审发现、旧→新文本／位置、令牌逐一消费点、真实 EP 状态矩阵、零接入核验与下一入口（对 R0 不准确结论作勘误，不回写 R0） |
 | `reports/evidence/CREATE-EDIT-DIALOG-VISUAL-TEMPLATE-PUBLIC-CSS-IMPLEMENTATION-001-R1/` | R1 实现的脱敏可复算浏览器证据（真实 Element Plus 样式 + 真实 Vue/EP 组件 DOM、CDP 驱动、计算样式与命中规则原始输出） |
+| `reports/CREATE-EDIT-DIALOG-VISUAL-TEMPLATE-PUBLIC-CSS-REVIEW-STATUS-SYNC-001.md` | 代码复审状态同步：门禁、复审来源与固定区间 R0→R1、状态旧→新、未变层、文件清单、静态核验、未执行项与下一入口 |
 
 ## 7. 与其他模板的关系
 
@@ -150,7 +167,8 @@ candidate_capabilities=LABEL_TYPOGRAPHY_AND_ALIGNMENT,BLACK_PRIMARY_SUBMIT_BUTTO
 ## 8. 边界声明
 
 - **公共 CSS 已实现 ≠ 已通过远程代码复审 ≠ 任何页面已接入 ≠ 正式验收通过。**
-- 本目录**不**授权任何页面接入；`PAGE_ADOPTION_NOT_AUTHORIZED` 的含义是
-  **两页均未获授权接入本模板**。将来接入须由项目负责人**单独授权**，并另立实现与验收任务。
-- **批准只覆盖设计契约**；公共 CSS 已由独立实现任务落地并**待远程代码复审**，
+  **代码复审通过（`APPROVED`, `2026-09-30`）≠ 页面已接入 ≠ 正式验收通过。**
+- 本目录**不**授权任何页面接入；`PAGE_ADOPTION_NOT_AUTHORIZED`／`NOT_DECIDED_NOT_GRANTED` 的含义是
+  **两页及其他任何页面均未获授权接入本模板，采用决定尚未作出**。将来接入须由项目负责人**单独授权**，并另立实现与验收任务。
+- **批准只覆盖设计契约**；公共 CSS 已由独立实现任务落地并**已通过远程代码复审**，
   **Vue 组件仍未创建**。**任何页面**在**获明确授权**前**不得**接入本模板、**不得**据本设计修改。

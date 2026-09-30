@@ -1,4 +1,4 @@
-# 新增／编辑业务弹窗公共视觉模板 · 迁移盘点（已批准基线；公共 CSS 已实现，Vue 未创建）
+# 新增／编辑业务弹窗公共视觉模板 · 迁移盘点（已批准基线；公共 CSS 已实现、代码复审通过，Vue 未创建）
 
 ```text
 create_edit_dialog_visual_template_document_status=APPROVED
@@ -7,16 +7,22 @@ approval_status=APPROVED_BY_PROJECT_OWNER
 approval_date=2026-09-30
 approved_reviewed_commit=45ce16dffbf2747abeb75d4d6c43bc57165043c8
 implementation_status=PUBLIC_CSS_IMPLEMENTED_VUE_NOT_CREATED
-public_css_status=IMPLEMENTED_PENDING_CHATGPT_REMOTE_CODE_REVIEW
+public_css_status=IMPLEMENTED_PENDING_USER_ADOPTION_DECISION
+public_css_code_review_status=APPROVED
+public_css_code_review_date=2026-09-30
+public_css_code_review_objects=c8785e18dc3014396cf45534315ab0f10dbbe94d,8434b884904a34bed51a2d8364e217efb605f06c
+public_css_code_review_scope=PURE_CSS_PRESET_ROOT_CLASS_OPT_IN_17_TOKENS_REAL_EP_STATE_FIX_ZERO_PAGE_ADOPTION
+public_css_status_before_review=IMPLEMENTED_PENDING_CHATGPT_REMOTE_CODE_REVIEW
 public_vue_component_status=NOT_CREATED
 formal_acceptance_execution_status=NOT_EXECUTED
 page_adoption_authorization_status=PAGE_ADOPTION_NOT_AUTHORIZED
+page_adoption_decision_status=NOT_DECIDED_NOT_GRANTED
 migrated_page_count=0
 ```
 
 > **本文件只做盘点与未来步骤设计，不实施任何迁移。** 设计契约已于 `2026-09-30` 批准；
-> 公共 CSS 预设随后已落地（**待远程代码复审**），**Vue 组件仍未创建**。
-> 当前依然 **0** 个页面接入本模板（`migrated_page_count=0`）。
+> 公共 CSS 预设随后已落地并**已通过远程代码复审**（`APPROVED`），**Vue 组件仍未创建**。
+> 当前依然 **0** 个页面接入本模板（`migrated_page_count=0`）；**采用决定尚未作出**（`NOT_DECIDED_NOT_GRANTED`）。
 
 ---
 
@@ -108,10 +114,13 @@ migrated_page_count=0
 
 ## 5. 迁移授权与边界（严格）
 
-- **当前授权状态**：`PAGE_ADOPTION_NOT_AUTHORIZED` —— **两页及其他任何页面均未获授权接入本模板**。
-- **设计基线已批准（`2026-09-30`）**，且**公共 CSS 预设已实现**（**待远程代码复审**，
-  提交 `c8785e1` 复审 `CHANGES_REQUIRED` 后已由 `...-R1` 定向纠错）；**Vue 组件仍未创建**。
+- **当前授权状态**：`PAGE_ADOPTION_NOT_AUTHORIZED` —— **两页及其他任何页面均未获授权接入本模板**；
+  **采用决定尚未作出**（`NOT_DECIDED_NOT_GRANTED`），**未选定试点**。
+- **设计基线已批准（`2026-09-30`）**，且**公共 CSS 预设已实现并已通过远程代码复审**
+  （`public_css_code_review_status=APPROVED`；R0 `c8785e1` 复审 `CHANGES_REQUIRED` 后由 `...-R1` `8434b88` 纠错并获 `APPROVED`）；
+  **Vue 组件仍未创建**。
 - 任何页面接入须**独立评估、独立授权、独立实现、独立目测、独立验收**。
-- **不得**据本设计修改页面；**不得**把「公共 CSS 已实现」读作「已通过远程代码复审」「页面已接入」或「正式验收通过」。
+- **不得**据本设计修改页面；**不得**把「公共 CSS 代码复审通过」读作「页面已接入」或「正式验收通过」；
+  隔离夹具核对**不等于**探针端或数据源管理页面的目测与验收。
 - 本模板**不**影响 `list-table-visual-template`、`query-list-page-template`
   及任何 Feature 现有状态。

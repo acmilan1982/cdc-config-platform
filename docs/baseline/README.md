@@ -70,13 +70,13 @@ pilot_page_selection_status=NOT_DECIDED
 - **计数口径**：原正式验收 17 项、补充正式验收 21 项；补充 21 项**包含**原 17 项在纠正后提交上的
   重新重放，两者是**包含关系而非并列关系**，**不得**把两者相加累计为“独立用例总数”；权威验收覆盖为补充验收 `21/21` PASS。
 
-## 新增／编辑弹窗公共视觉模板基线入口（**设计基线已批准；公共 CSS 已实现、待远程代码复审**）
+## 新增／编辑弹窗公共视觉模板基线入口（**设计基线已批准；公共 CSS 已实现、代码复审通过、待页面采用决定**）
 
 新增／编辑业务弹窗公共视觉模板设计基线**已批准**（`approval_status=APPROVED_BY_PROJECT_OWNER`）：[docs/baseline/create-edit-dialog-visual-template/](./create-edit-dialog-visual-template/README.md)。
 该模板面向**新增／编辑业务主弹窗**的视觉层（配置项标签排版、黑色主提交按钮、字段错误呈现的视觉规格、
 弹窗容器安全边距与内容滚动原则、基础可访问性视觉）。由纯文档任务 `CREATE-EDIT-DIALOG-VISUAL-TEMPLATE-BASELINE-DRAFT-001`（R0）
 建立、经 R1／R2 定向纠错后由项目负责人于 `2026-09-30` 批准（**批准范围只覆盖文档设计契约**）；
-**公共 CSS 预设已由独立实现任务落地（待远程代码复审）**、**Vue 组件未创建、0 个页面接入**。
+**公共 CSS 预设已由独立实现任务落地并已通过远程代码复审**、**Vue 组件未创建、0 个页面接入、采用决定未作出**。
 
 ```text
 create_edit_dialog_visual_template_document_status=APPROVED
@@ -85,39 +85,45 @@ create_edit_dialog_visual_template_approval_status=APPROVED_BY_PROJECT_OWNER
 create_edit_dialog_visual_template_approval_date=2026-09-30
 create_edit_dialog_visual_template_approved_reviewed_commit=45ce16dffbf2747abeb75d4d6c43bc57165043c8
 implementation_status=PUBLIC_CSS_IMPLEMENTED_VUE_NOT_CREATED
-public_css_status=IMPLEMENTED_PENDING_CHATGPT_REMOTE_CODE_REVIEW
+public_css_status=IMPLEMENTED_PENDING_USER_ADOPTION_DECISION
+public_css_code_review_status=APPROVED
+public_css_code_review_date=2026-09-30
+public_css_code_review_objects=c8785e18dc3014396cf45534315ab0f10dbbe94d,8434b884904a34bed51a2d8364e217efb605f06c
 public_vue_component_status=NOT_CREATED
 formal_acceptance_execution_status=NOT_EXECUTED
 page_adoption_authorization_status=PAGE_ADOPTION_NOT_AUTHORIZED
+page_adoption_decision_status=NOT_DECIDED_NOT_GRANTED
 migrated_page_count=0
 registered_token_count=17
-current_next_entry=CHATGPT_REMOTE_CREATE_EDIT_DIALOG_VISUAL_TEMPLATE_PUBLIC_CSS_IMPLEMENTATION_R1_REVIEW
+current_next_entry=CREATE_EDIT_DIALOG_VISUAL_TEMPLATE_PAGE_ADOPTION_EVALUATION_NOT_DECIDED_NOT_GRANTED
 ```
 
-- **当前状态**：**设计基线已批准**；**公共 CSS 预设已实现**（`IMPLEMENTED_PENDING_CHATGPT_REMOTE_CODE_REVIEW`，
-  **待 ChatGPT 远程代码复审**）、**公共 Vue 组件未创建**（`NOT_CREATED`）、
-  **任何页面均未授权接入**（`PAGE_ADOPTION_NOT_AUTHORIZED`、`migrated_page_count=0`）、
+- **当前状态**：**设计基线已批准**；**公共 CSS 预设已实现并已通过远程代码复审**
+  （`public_css_status=IMPLEMENTED_PENDING_USER_ADOPTION_DECISION`、`public_css_code_review_status=APPROVED`，
+  复审对象 R0 `c8785e1`／R1 `8434b88`）、**公共 Vue 组件未创建**（`NOT_CREATED`）、
+  **任何页面均未授权接入**（`PAGE_ADOPTION_NOT_AUTHORIZED`、`migrated_page_count=0`、采用决定 `NOT_DECIDED_NOT_GRANTED`）、
   **未做正式验收**（`formal_acceptance_execution_status=NOT_EXECUTED`）；
   本节仅为**导航补充**，权威状态块以模板目录 `README.md` 文首为准。
 - **与其它模板的关系**：与 `list-table-visual-template`（表格层）、`query-list-page-template`（页面层）
   **正交**（弹窗层），三者不互相并入、不复用彼此标记／类名／令牌命名空间。
 - **排除范围**：启用／停用／删除确认框、数据源业务属性与命名策略子弹窗、表格模板、API／后端／数据库、
   现行业务校验与提交关闭时序。
-- **下一入口**：`CHATGPT_REMOTE_CREATE_EDIT_DIALOG_VISUAL_TEMPLATE_PUBLIC_CSS_IMPLEMENTATION_R1_REVIEW`
-  ——由 ChatGPT 从远程 Git 对本次**公共 CSS 实现（R1 纠错后）**独立代码复审；
-  代码提交／推送成功**不等于**远程复审通过，**不自动授权页面接入**。
-- **公共 CSS 实现复审时序**：R0 提交 `c8785e18dc3014396cf45534315ab0f10dbbe94d` 远程代码复审
+- **下一入口**：`CREATE_EDIT_DIALOG_VISUAL_TEMPLATE_PAGE_ADOPTION_EVALUATION_NOT_DECIDED_NOT_GRANTED`
+  ——由项目负责人就**是否、由哪个页面**采用本模板作**独立评估与授权决定**；
+  当前**未选定试点**、`NOT_DECIDED_NOT_GRANTED`。**代码复审通过 ≠ 页面已接入 ≠ 正式验收通过**；本目录**不授权**任何页面接入。
+- **公共 CSS 代码复审时序**：R0 提交 `c8785e18dc3014396cf45534315ab0f10dbbe94d` 远程代码复审
   `CHANGES_REQUIRED`——**三处发现**：①令牌 17 vs 15 口径不一致（2 个 Feature 令牌登记但未被消费）；
   ②现行文档自相矛盾（状态块称已实现，正文仍标 `NOT_CREATED`）；③真实 EP 各状态浏览器证据不足
   （夹具未加载 `element-plus/dist/index.css`，禁用态取自浏览器默认样式）。
   已由 `CREATE-EDIT-DIALOG-VISUAL-TEMPLATE-PUBLIC-CSS-IMPLEMENTATION-001-R1` 定向纠错：
   **补齐 `ced-label-row`／`--ced-label-gap` 与加载态 `--ced-submit-bg-loading` 的真实消费点，令牌登记回归批准的 17 个**；
-  **逐项收敛现行文档时态**；**重建加载真实 Element Plus 样式与真实 Vue/EP 组件 DOM 的隔离夹具证据**。
-- **复审与批准时序**：R0 提交 `ad7a4b741714a229a8a8a250f8ee960447e33355` 远程复审 `CHANGES_REQUIRED`
+  **逐项收敛现行文档时态**；**重建加载真实 Element Plus 样式与真实 Vue/EP 组件 DOM 的隔离夹具证据**；
+  R1 提交 `8434b884904a34bed51a2d8364e217efb605f06c` 远程代码复审 **`APPROVED`**（时点 `2026-09-30`）。
+- **设计基线复审与批准时序**：R0 提交 `ad7a4b741714a229a8a8a250f8ee960447e33355` 远程复审 `CHANGES_REQUIRED`
   （两处阻塞：差异值缺省口径、回退路径）；R1 提交 `b8ba2f6cab713326a1fdd70a875b743c5190cbe4` 定向纠错后
   远程复审 `CHANGES_REQUIRED`（仅导航不一致）；R2 提交 `45ce16dffbf2747abeb75d4d6c43bc57165043c8`
   远程复审 **`APPROVED`**；项目负责人随后于 **`2026-09-30`** 批准设计基线。
-  **设计基线批准 ≠ 公共 CSS 已通过远程代码复审 ≠ Vue 组件已存在 ≠ 页面已接入 ≠ 正式验收通过**；
+  **设计基线批准 ≠ 公共 CSS 代码复审通过 ≠ Vue 组件已存在 ≠ 页面已接入 ≠ 正式验收通过**；
   `CHANGES_REQUIRED`／提交成功均**不等于**获批。
 
 ## 列表表格视觉模板基线入口

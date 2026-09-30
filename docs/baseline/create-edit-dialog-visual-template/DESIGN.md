@@ -1,4 +1,4 @@
-# 新增／编辑业务弹窗公共视觉模板 · 设计（已批准基线；公共 CSS 已实现，Vue 未创建）
+# 新增／编辑业务弹窗公共视觉模板 · 设计（已批准基线；公共 CSS 已实现、代码复审通过，Vue 未创建）
 
 ```text
 create_edit_dialog_visual_template_document_status=APPROVED
@@ -7,10 +7,16 @@ approval_status=APPROVED_BY_PROJECT_OWNER
 approval_date=2026-09-30
 approved_reviewed_commit=45ce16dffbf2747abeb75d4d6c43bc57165043c8
 implementation_status=PUBLIC_CSS_IMPLEMENTED_VUE_NOT_CREATED
-public_css_status=IMPLEMENTED_PENDING_CHATGPT_REMOTE_CODE_REVIEW
+public_css_status=IMPLEMENTED_PENDING_USER_ADOPTION_DECISION
+public_css_code_review_status=APPROVED
+public_css_code_review_date=2026-09-30
+public_css_code_review_objects=c8785e18dc3014396cf45534315ab0f10dbbe94d,8434b884904a34bed51a2d8364e217efb605f06c
+public_css_code_review_scope=PURE_CSS_PRESET_ROOT_CLASS_OPT_IN_17_TOKENS_REAL_EP_STATE_FIX_ZERO_PAGE_ADOPTION
+public_css_status_before_review=IMPLEMENTED_PENDING_CHATGPT_REMOTE_CODE_REVIEW
 public_vue_component_status=NOT_CREATED
 formal_acceptance_execution_status=NOT_EXECUTED
 page_adoption_authorization_status=PAGE_ADOPTION_NOT_AUTHORIZED
+page_adoption_decision_status=NOT_DECIDED_NOT_GRANTED
 migrated_page_count=0
 ```
 
@@ -18,8 +24,8 @@ migrated_page_count=0
 > 文中「**现行事实**」可由两页源码／已批准条款核验；
 > 标注「**拟议**」的设计项自批准后即为**已批准的设计契约**。
 > **实现分层（`2026-09-30` 之后）**：本设计所约定的**公共 CSS 类名／令牌／静态断言**
-> 已由独立实现任务落地（**待 ChatGPT 远程代码复审**）；
-> **公共 Vue 组件仍未创建**（`NOT_CREATED`）；**任何页面均未接入**（见文首状态块）。
+> 已由独立实现任务落地并**已通过远程代码复审**（`public_css_code_review_status=APPROVED`）；
+> **公共 Vue 组件仍未创建**（`NOT_CREATED`）；**任何页面均未接入**（采用决定 `NOT_DECIDED_NOT_GRANTED`，见文首状态块）。
 > 该分层**不改变**本设计契约内容。
 
 ---
@@ -93,8 +99,8 @@ migrated_page_count=0
 ## 3. 显式 opt-in 契约（已批准设计）
 
 > 以下为**已批准设计**。实现状态**逐项**区分：**公共 CSS 类名／令牌／静态断言已实现**
-> （纯 CSS 公共能力，**待远程代码复审**）；**Vue 公共组件仍未创建**（`NOT_CREATED`）；
-> **页面接入未授权**（任何页面均未接入）。
+> （纯 CSS 公共能力，**已通过远程代码复审**，`APPROVED`）；**Vue 公共组件仍未创建**（`NOT_CREATED`）；
+> **页面接入未授权**（任何页面均未接入，采用决定 `NOT_DECIDED_NOT_GRANTED`）。
 
 - **显式 opt-in 根类**（**已实现**）：仅在页面的**新增／编辑主弹窗**根元素上挂一个**模板命名空间的根类**
   （`ced-dialog`，`ced` = create/edit dialog）。**未挂该根类的弹窗零影响**：
@@ -156,8 +162,8 @@ migrated_page_count=0
 ## 5. 设计任务当时明确不做的事（历史时点）
 
 > 下列为 R0 设计任务的**当时范围**；设计基线随后已由**独立批准收口任务**于 `2026-09-30` 批准。
-> **公共 CSS 实现**已由独立实现任务落地（**待远程代码复审**），但**设计任务当时未做**；
-> **Vue 公共组件仍未创建**，**页面接入仍未发生**（`PAGE_ADOPTION_NOT_AUTHORIZED`）。
+> **公共 CSS 实现**已由独立实现任务落地并**已通过远程代码复审**（`APPROVED`），但**设计任务当时未做**；
+> **Vue 公共组件仍未创建**，**页面接入仍未发生**（`PAGE_ADOPTION_NOT_AUTHORIZED`，采用决定 `NOT_DECIDED_NOT_GRANTED`）。
 
 - **不**创建任何 CSS／Vue 组件／类型／断言；
 - **不**修改任何页面、测试、配置、依赖；
