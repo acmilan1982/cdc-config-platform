@@ -6,13 +6,18 @@ baseline_status=APPROVED
 approval_status=APPROVED_BY_PROJECT_OWNER
 approval_date=2026-09-30
 approved_reviewed_commit=45ce16dffbf2747abeb75d4d6c43bc57165043c8
-implementation_status=IMPLEMENTATION_NOT_STARTED
-public_css_status=NOT_CREATED
+implementation_status=PUBLIC_CSS_IMPLEMENTED_VUE_NOT_CREATED
+public_css_status=IMPLEMENTED_PENDING_CHATGPT_REMOTE_CODE_REVIEW
+public_vue_component_status=NOT_CREATED
+formal_acceptance_execution_status=NOT_EXECUTED
 page_adoption_authorization_status=PAGE_ADOPTION_NOT_AUTHORIZED
+migrated_page_count=0
 ```
 
 > **现行事实**部分引自两页源码；标注「**拟议**」的候选规格自 `2026-09-30` 批准后即为
-> **已批准的设计契约**，但仍**尚未实现**（`NOT_CREATED`）——「未获批」仅适用于批准前的历史时点。
+> **已批准的设计契约**——「未获批」仅适用于批准前的历史时点。
+> **实现分层**：所约定的公共 CSS 视觉规格已由独立实现任务落地（**待远程代码复审**），
+> **Vue 组件仍未创建**、**任何页面均未接入**。
 > 本文件**不**给出像素级的「全局定值」——凡两页取值不同者，一律记为 **Feature 级可配置值**。
 
 ---

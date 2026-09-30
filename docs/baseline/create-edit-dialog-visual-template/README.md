@@ -6,12 +6,13 @@ create_edit_dialog_visual_template_baseline_status=APPROVED
 create_edit_dialog_visual_template_approval_status=APPROVED_BY_PROJECT_OWNER
 create_edit_dialog_visual_template_approval_date=2026-09-30
 create_edit_dialog_visual_template_approved_reviewed_commit=45ce16dffbf2747abeb75d4d6c43bc57165043c8
-implementation_status=IMPLEMENTATION_NOT_STARTED
+implementation_status=PUBLIC_CSS_IMPLEMENTED_VUE_NOT_CREATED
 page_adoption_authorization_status=PAGE_ADOPTION_NOT_AUTHORIZED
-public_css_status=NOT_CREATED
+public_css_status=IMPLEMENTED_PENDING_CHATGPT_REMOTE_CODE_REVIEW
 public_vue_component_status=NOT_CREATED
+formal_acceptance_execution_status=NOT_EXECUTED
 migrated_page_count=0
-current_next_entry=CHATGPT_REMOTE_CREATE_EDIT_DIALOG_VISUAL_TEMPLATE_BASELINE_APPROVAL_CLOSEOUT_REVIEW
+current_next_entry=CHATGPT_REMOTE_CREATE_EDIT_DIALOG_VISUAL_TEMPLATE_PUBLIC_CSS_IMPLEMENTATION_REVIEW
 ```
 
 ```text
@@ -33,9 +34,12 @@ candidate_capabilities=LABEL_TYPOGRAPHY_AND_ALIGNMENT,BLACK_PRIMARY_SUBMIT_BUTTO
 > **未运行**测试、构建、浏览器或任何服务，
 > **未访问**数据库 / ZooKeeper / Kafka / 业务源库 / 目标库。
 >
-> **设计基线已批准 ≠ 公共 CSS 已存在 ≠ Vue 组件已存在 ≠ 页面已接入 ≠ 正式验收通过。**
-> 批准范围**只**覆盖**文档设计契约**；公共 CSS／Vue 组件仍 `NOT_CREATED`，
-> 页面接入仍 `PAGE_ADOPTION_NOT_AUTHORIZED`（`migrated_page_count=0`），**未做正式验收**。
+> **公共 CSS 已实现 ≠ 已通过远程代码复审 ≠ Vue 组件已存在 ≠ 页面已接入 ≠ 正式验收通过。**
+> 批准范围**只**覆盖**文档设计契约**。公共 CSS 预设由独立实现任务
+> `CREATE-EDIT-DIALOG-VISUAL-TEMPLATE-PUBLIC-CSS-IMPLEMENTATION-001` 落地为**纯 CSS** 公共能力
+> （`public_css_status=IMPLEMENTED_PENDING_CHATGPT_REMOTE_CODE_REVIEW`，**待远程代码复审**）；
+> **Vue 组件仍未创建**（`NOT_CREATED`）；页面接入仍 `PAGE_ADOPTION_NOT_AUTHORIZED`
+> （`migrated_page_count=0`），**未做正式验收**（`formal_acceptance_execution_status=NOT_EXECUTED`）。
 > 本弹窗模板自身状态**不改变**列表表格视觉模板、
 > 查询列表页模板、探针端管理与数据源管理各自的现有状态。
 >
@@ -51,9 +55,12 @@ candidate_capabilities=LABEL_TYPOGRAPHY_AND_ALIGNMENT,BLACK_PRIMARY_SUBMIT_BUTTO
 > `45ce16dffbf2747abeb75d4d6c43bc57165043c8` 远程复审 **`APPROVED`**，随后由项目负责人于
 > **2026-09-30** 批准。**R2 获远程复审通过并不表示负责人在 R2 提交当时已批准**——批准时点另记 2026-09-30。
 >
-> 下一入口：`CHATGPT_REMOTE_CREATE_EDIT_DIALOG_VISUAL_TEMPLATE_BASELINE_APPROVAL_CLOSEOUT_REVIEW`——
-> 由 ChatGPT **从远程 Git** 对本次**批准收口文档**做独立复审；通过后再**另立**公共 CSS 实现任务，
-> 页面接入须另行授权。
+> 实现分层：公共 CSS 预设已落地（含静态契约测试与隔离合成夹具浏览器证据，见 `reports/`），
+> **Vue 组件仍未创建**；本实现**未修改任何业务页面**（页面接入始终未授权）。
+>
+> 下一入口：`CHATGPT_REMOTE_CREATE_EDIT_DIALOG_VISUAL_TEMPLATE_PUBLIC_CSS_IMPLEMENTATION_REVIEW`——
+> 由 ChatGPT **从远程 Git** 对本次**公共 CSS 实现**做独立代码复审；代码提交／推送成功
+> **不等于**远程复审通过，也**不等于**页面接入授权。
 
 ---
 
@@ -120,6 +127,8 @@ candidate_capabilities=LABEL_TYPOGRAPHY_AND_ALIGNMENT,BLACK_PRIMARY_SUBMIT_BUTTO
 | `reports/CREATE-EDIT-DIALOG-VISUAL-TEMPLATE-BASELINE-DRAFT-001.md` | R0 历史快照：事实／推断分层、来源映射、冲突与待审点、变更清单、保护核验与下一入口 |
 | `reports/CREATE-EDIT-DIALOG-VISUAL-TEMPLATE-BASELINE-DRAFT-001-R1.md` | R1 定向纠错：两处阻塞、旧→新文本／位置、保护核验与下一入口（对 R0 不准确结论作勘误，不回写 R0） |
 | `reports/CREATE-EDIT-DIALOG-VISUAL-TEMPLATE-BASELINE-APPROVAL-CLOSEOUT-001.md` | 批准收口：门禁、R0→R1→R2 复审时序、项目负责人原话、批准对象与边界、状态旧→新、文件清单、保护核验与下一入口 |
+| `reports/CREATE-EDIT-DIALOG-VISUAL-TEMPLATE-PUBLIC-CSS-IMPLEMENTATION-001.md` | 公共 CSS 实现：范围与实现取舍、类名／令牌清单、静态契约测试、隔离合成夹具浏览器证据、变更文件、零影响核验、未执行项与下一入口 |
+| `reports/evidence/CREATE-EDIT-DIALOG-VISUAL-TEMPLATE-PUBLIC-CSS-IMPLEMENTATION-001/` | 上述实现的脱敏可复算浏览器证据（合成夹具、CDP 驱动、计算样式原始输出） |
 
 ## 7. 与其他模板的关系
 
@@ -130,8 +139,8 @@ candidate_capabilities=LABEL_TYPOGRAPHY_AND_ALIGNMENT,BLACK_PRIMARY_SUBMIT_BUTTO
 
 ## 8. 边界声明
 
-- **设计基线批准 ≠ 公共实现已存在 ≠ 任何页面已接入 ≠ 正式验收通过。**
+- **公共 CSS 已实现 ≠ 已通过远程代码复审 ≠ 任何页面已接入 ≠ 正式验收通过。**
 - 本目录**不**授权任何页面接入；`PAGE_ADOPTION_NOT_AUTHORIZED` 的含义是
   **两页均未获授权接入本模板**。将来接入须由项目负责人**单独授权**，并另立实现与验收任务。
-- **批准只覆盖设计契约**：公共 CSS／Vue 组件与页面接入须**另立任务**；
-  在公共实现存在且页面获授权接入前，**不得**据本设计修改任何页面。
+- **批准只覆盖设计契约**；公共 CSS 已由独立实现任务落地并**待远程代码复审**，
+  **Vue 组件仍未创建**。**任何页面**在**获明确授权**前**不得**接入本模板、**不得**据本设计修改。

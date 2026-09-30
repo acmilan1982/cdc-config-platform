@@ -6,13 +6,17 @@ baseline_status=APPROVED
 approval_status=APPROVED_BY_PROJECT_OWNER
 approval_date=2026-09-30
 approved_reviewed_commit=45ce16dffbf2747abeb75d4d6c43bc57165043c8
-implementation_status=IMPLEMENTATION_NOT_STARTED
+implementation_status=PUBLIC_CSS_IMPLEMENTED_VUE_NOT_CREATED
+public_css_status=IMPLEMENTED_PENDING_CHATGPT_REMOTE_CODE_REVIEW
+public_vue_component_status=NOT_CREATED
+formal_acceptance_execution_status=NOT_EXECUTED
 page_adoption_authorization_status=PAGE_ADOPTION_NOT_AUTHORIZED
 migrated_page_count=0
 ```
 
 > **本文件只做盘点与未来步骤设计，不实施任何迁移。** 设计契约已于 `2026-09-30` 批准；
-> 当前 **0** 个页面接入本模板（`migrated_page_count=0`），无公共 CSS／组件可被接入。
+> 公共 CSS 预设随后已落地（**待远程代码复审**），**Vue 组件仍未创建**。
+> 当前依然 **0** 个页面接入本模板（`migrated_page_count=0`）。
 
 ---
 
@@ -103,8 +107,9 @@ migrated_page_count=0
 ## 5. 迁移授权与边界（严格）
 
 - **当前授权状态**：`PAGE_ADOPTION_NOT_AUTHORIZED` —— **两页及其他任何页面均未获授权接入本模板**。
-- **设计基线已批准（`2026-09-30`）**，但**公共实现未开始**：**仍不存在**可被接入的公共 CSS／组件。
+- **设计基线已批准（`2026-09-30`）**，且**公共 CSS 预设已实现**（**待远程代码复审**）；
+  **Vue 组件仍未创建**。
 - 任何页面接入须**独立评估、独立授权、独立实现、独立目测、独立验收**。
-- **不得**据本设计创建代码或修改页面；**不得**把「设计基线已批准」读作「公共 CSS／组件已存在」或「页面已接入」。
+- **不得**据本设计修改页面；**不得**把「公共 CSS 已实现」读作「已通过远程代码复审」「页面已接入」或「正式验收通过」。
 - 本模板**不**影响 `list-table-visual-template`、`query-list-page-template`
   及任何 Feature 现有状态。

@@ -1,0 +1,95 @@
+/* 新增／编辑业务弹窗公共视觉模板 · 公共视觉预设源（全仓唯一来源）。
+ *
+ * 契约：显式根类 `ced-dialog` 为唯一 opt-in，辅以 6 个 `ced-*` 辅助类与 `--ced-*` 令牌。
+ * 本文件经前端全局入口 `main.ts` 引入一次；全部选择器均以根类前置限定，不使用裸全局
+ * Element Plus 覆盖、不使用 `!important`，未挂根类的弹窗零命中、零视觉变化。
+ *
+ * 公共层不声明任何 `--ced-*` 的值：模板自有令牌只出现在 `var(--ced-*, 默认值)` 的内联
+ * 回退中，最终值只可能来自启用页面的局部覆盖；Feature 决定值令牌（标签列宽、视口安全
+ * 边距）以 `var(--ced-*)` 无回退形式消费，值由接入页面提供，模板不臆造缺省。
+ *
+ * 边界：本层只负责视觉（标签排版、主提交按钮状态矩阵、错误呈现视觉规格、容器安全边距
+ * 原则）；不接管校验规则、请求与防重、错误码映射、提交／关闭时序、权限与业务语义；
+ * 星号为纯视觉，不生成任何校验规则或隐式 required。
+ */
+
+/* 显式 opt-in 根类：仅新增／编辑业务主弹窗根元素挂载。
+ * 保留左右视口安全边距：窄视口按可用空间收缩、不横向溢出。安全边距值属 Feature，
+ * 由接入页面通过 `--ced-dialog-safety-inset` 提供；未提供时本规则不构成约束
+ * （max-width 回退为初始值 none），不改动任何未接入弹窗。 */
+.ced-dialog {
+  max-width: calc(100vw - var(--ced-dialog-safety-inset));
+}
+
+/* 配置项标签排版（两页可比对一致）：字号／字重／颜色与右对齐。
+ * 同时覆盖 Element Plus 表单标签（如数据源管理）与页面私有表单的 `ced-form-label`
+ * 辅助类（如探针端管理）。标签列宽属 Feature：私有表单页面以
+ * `--ced-label-column-width` 提供；EP 表单页面仍由 `label-width` 属性承载。 */
+.ced-dialog .el-form-item__label,
+.ced-dialog .ced-form-label {
+  font-size: var(--ced-label-font-size, 14px);
+  font-weight: var(--ced-label-font-weight, 500);
+  color: var(--ced-label-color, #3f3f46);
+  text-align: right;
+}
+
+.ced-dialog .ced-form-label {
+  flex: 0 0 var(--ced-label-column-width);
+}
+
+/* 必填星号：纯视觉、显式 opt-in。仅在接入页面为标签（私有表单 `ced-form-label`）或
+ * 表单项（EP 表单）显式挂 `ced-required-mark` 时渲染；不写入 `required` 属性、不生成任何
+ * 校验规则或隐式必填语义。是否需要星号由 Feature 决定，模板不规定条件。 */
+.ced-dialog .ced-form-label.ced-required-mark::before,
+.ced-dialog .ced-required-mark .el-form-item__label::before {
+  content: '*';
+  color: var(--ced-required-mark-color, var(--el-color-danger));
+  margin-right: 2px;
+}
+
+/* 主提交按钮视觉状态矩阵：仅显式挂 `ced-submit` 的主提交（创建／保存）按钮；
+ * “取消”与派生按钮（自动生成、修改探针 ID、测试连接等）不跟随变黑。
+ * 正常态由 `:not(.is-disabled)` 限定：禁用态沿用 Element Plus 既有禁用视觉、不被本规则
+ * 覆盖；本层不设置也不消除任何焦点轮廓（focus-visible 保持可见）。
+ * loading 配色属 Feature 可选、两页不一致，本层不定义；可点击条件亦归 Feature。 */
+.ced-dialog .ced-submit:not(.is-disabled) {
+  background: var(--ced-submit-bg, #09090b);
+  border-color: var(--ced-submit-bg, #09090b);
+  color: var(--ced-submit-text, #ffffff);
+  border-radius: var(--ced-submit-radius, 6px);
+  font-weight: var(--ced-submit-font-weight, 500);
+}
+
+.ced-dialog .ced-submit:not(.is-disabled):hover,
+.ced-dialog .ced-submit:not(.is-disabled):focus {
+  background: var(--ced-submit-bg-hover, #27272a);
+  border-color: var(--ced-submit-bg-hover, #27272a);
+  color: var(--ced-submit-text, #ffffff);
+}
+
+.ced-dialog .ced-submit:not(.is-disabled):active {
+  background: var(--ced-submit-bg-active, #18181b);
+  border-color: var(--ced-submit-bg-active, #18181b);
+  color: var(--ced-submit-text, #ffffff);
+}
+
+/* 字段错误反馈（可选的**视觉**规格；实现模型归 Feature）。
+ * 稳定占位容器 + 错误文字 + 控件错误态红框。不创建错误业务逻辑、不强制统一页面私有
+ * 字段级反馈与 EP 校验模型；错误文案、清除时机与校验时序均归 Feature。 */
+.ced-dialog .ced-field-feedback {
+  min-height: var(--ced-feedback-min-height, 20px);
+  margin-top: 2px;
+}
+
+.ced-dialog .ced-field-error {
+  margin: 0;
+  font-size: var(--ced-error-font-size, 13px);
+  line-height: 1.4;
+  color: var(--ced-error-color, var(--el-color-danger));
+  overflow-wrap: anywhere;
+}
+
+.ced-dialog .ced-field--error .el-input__wrapper,
+.ced-dialog .ced-field--error .el-textarea__inner {
+  box-shadow: 0 0 0 1px var(--ced-error-color, var(--el-color-danger)) inset;
+}

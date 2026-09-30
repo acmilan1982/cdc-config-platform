@@ -7,15 +7,21 @@ baseline_status=APPROVED
 approval_status=APPROVED_BY_PROJECT_OWNER
 approval_date=2026-09-30
 approved_reviewed_commit=45ce16dffbf2747abeb75d4d6c43bc57165043c8
-implementation_status=IMPLEMENTATION_NOT_STARTED
-public_css_status=NOT_CREATED
+implementation_status=PUBLIC_CSS_IMPLEMENTED_VUE_NOT_CREATED
+public_css_status=IMPLEMENTED_PENDING_CHATGPT_REMOTE_CODE_REVIEW
 public_vue_component_status=NOT_CREATED
+formal_acceptance_execution_status=NOT_EXECUTED
 page_adoption_authorization_status=PAGE_ADOPTION_NOT_AUTHORIZED
+migrated_page_count=0
 ```
 
-> **本文件所载为已批准的设计契约，尚未实现。**（项目负责人 `2026-09-30` 批准设计基线）
-> 文中出现的**文件路径、类名、CSS 令牌、静态断言、测试**均为**已批准的设计目标**，
-> 其存在性一律为 `NOT_CREATED`。**不得**把本文件读作「公共 CSS 已存在」或「已落地实现」。
+> **本文件所载为已批准的设计契约。**（项目负责人 `2026-09-30` 批准设计基线）
+> **实现分层**：文中约定的**公共 CSS 文件与静态契约测试**已由独立实现任务
+> `CREATE-EDIT-DIALOG-VISUAL-TEMPLATE-PUBLIC-CSS-IMPLEMENTATION-001` 落地
+> （`public_css_status=IMPLEMENTED_PENDING_CHATGPT_REMOTE_CODE_REVIEW`，**待远程代码复审**）——
+> 实际实现与本文的**差异**（本轮未实现的 2 个 Feature 令牌、`--ced-*` 令牌登记改为 15 个）
+> 见该任务实现报告「实现取舍」节。
+> **公共 Vue 组件仍未创建**（`NOT_CREATED`），**任何页面均未接入**。
 
 ---
 
@@ -48,17 +54,16 @@ page_adoption_authorization_status=PAGE_ADOPTION_NOT_AUTHORIZED
 
 ---
 
-## 1. 未来文件布局（拟议）
-
-> 以下路径**均为拟议**，当前**不存在**。
+## 1. 文件布局（已由实现任务落地，待远程代码复审）
 
 ```text
-frontend/src/styles/dialog/create-edit-dialog-visual.css        # 拟议：公共视觉预设（纯 CSS）
-frontend/src/styles/dialog/index.ts                              # 拟议：导出根类常量等（可选）
-frontend/src/styles/dialog/create-edit-dialog-visual.spec.ts     # 拟议：静态契约测试（vitest）
+frontend/src/styles/dialog/create-edit-dialog-visual.css        # 已实现：公共视觉预设（纯 CSS）
+frontend/src/styles/dialog/index.ts                              # 已实现：导出根类常量与令牌清单
+frontend/src/styles/dialog/create-edit-dialog-visual.spec.ts     # 已实现：静态契约测试（vitest）
+frontend/src/main.ts                                             # 已修改：全局入口最小引入一次（1 行 import）
 ```
 
-- 拟**不**新增任何 `.vue` 组件；方案见 `DESIGN.md` §4（最小可行：纯 CSS 预设）。
+- 已按方案落地（`DESIGN.md` §4：最小可行纯 CSS），**未**新增任何 `.vue` 组件、**未**新增依赖或 DOM 层。
 - 若未来评估后确需局部组件，须**另立**设计修订，不在本设计承诺。
 
 ---
@@ -153,7 +158,10 @@ frontend/src/styles/dialog/create-edit-dialog-visual.spec.ts     # 拟议：静�
 
 - **真实浏览器验收**（拟议，将来由独立任务执行）：标签对齐、按钮状态矩阵、错误呈现、
   窄视口安全边距与页脚可见性。**本设计不执行任何测试。**
-- 以上编号、断言均为**拟议**，**尚未**进入任何测试文件。
+- 以上编号、断言原为**拟议**；其中静态契约部分已由实现任务落地为
+  `frontend/src/styles/dialog/create-edit-dialog-visual.spec.ts`（18 条断言），真实浏览器部分已由
+  **隔离合成夹具**（`reports/evidence/.../`）在无头 Chrome 中核对，**均待远程代码复审**。
+  **正式验收仍是独立且未执行的一步**（`formal_acceptance_execution_status=NOT_EXECUTED`）。
 
 ---
 
