@@ -70,36 +70,43 @@ pilot_page_selection_status=NOT_DECIDED
 - **计数口径**：原正式验收 17 项、补充正式验收 21 项；补充 21 项**包含**原 17 项在纠正后提交上的
   重新重放，两者是**包含关系而非并列关系**，**不得**把两者相加累计为“独立用例总数”；权威验收覆盖为补充验收 `21/21` PASS。
 
-## 新增／编辑弹窗公共视觉模板基线入口（**草案**）
+## 新增／编辑弹窗公共视觉模板基线入口（**设计基线已批准，未实现**）
 
-新增／编辑业务弹窗公共视觉模板设计基线**草案**（**未批准**）：[docs/baseline/create-edit-dialog-visual-template/](./create-edit-dialog-visual-template/README.md)。
+新增／编辑业务弹窗公共视觉模板设计基线**已批准**（`approval_status=APPROVED_BY_PROJECT_OWNER`）：[docs/baseline/create-edit-dialog-visual-template/](./create-edit-dialog-visual-template/README.md)。
 该模板面向**新增／编辑业务主弹窗**的视觉层（配置项标签排版、黑色主提交按钮、字段错误呈现的视觉规格、
-弹窗容器安全边距与内容滚动原则、基础可访问性视觉）。由纯文档任务 `CREATE-EDIT-DIALOG-VISUAL-TEMPLATE-BASELINE-DRAFT-001` 建立，
-**当前 0 个页面接入**。
+弹窗容器安全边距与内容滚动原则、基础可访问性视觉）。由纯文档任务 `CREATE-EDIT-DIALOG-VISUAL-TEMPLATE-BASELINE-DRAFT-001`（R0）
+建立、经 R1／R2 定向纠错后由项目负责人于 `2026-09-30` 批准（**批准范围只覆盖文档设计契约**）；
+**公共实现未开始、0 个页面接入**。
 
 ```text
-create_edit_dialog_visual_template_document_status=DRAFT_PENDING_USER_REVIEW
-create_edit_dialog_visual_template_baseline_status=NOT_APPROVED
+create_edit_dialog_visual_template_document_status=APPROVED
+create_edit_dialog_visual_template_baseline_status=APPROVED
+create_edit_dialog_visual_template_approval_status=APPROVED_BY_PROJECT_OWNER
+create_edit_dialog_visual_template_approval_date=2026-09-30
+create_edit_dialog_visual_template_approved_reviewed_commit=45ce16dffbf2747abeb75d4d6c43bc57165043c8
 implementation_status=IMPLEMENTATION_NOT_STARTED
 public_css_status=NOT_CREATED
 public_vue_component_status=NOT_CREATED
 page_adoption_authorization_status=PAGE_ADOPTION_NOT_AUTHORIZED
-current_next_entry=CHATGPT_REMOTE_CREATE_EDIT_DIALOG_VISUAL_TEMPLATE_BASELINE_DRAFT_R2_REVIEW
+migrated_page_count=0
+current_next_entry=CHATGPT_REMOTE_CREATE_EDIT_DIALOG_VISUAL_TEMPLATE_BASELINE_APPROVAL_CLOSEOUT_REVIEW
 ```
 
-- **草案状态**：本模板**未批准、公共 CSS／Vue 组件未创建、任何页面均未授权接入**；
+- **当前状态**：**设计基线已批准**；**公共 CSS／Vue 组件未创建**（`NOT_CREATED`）、
+  **任何页面均未授权接入**（`PAGE_ADOPTION_NOT_AUTHORIZED`、`migrated_page_count=0`）、**未做正式验收**；
   本节仅为**导航补充**，权威状态块以模板目录 `README.md` 文首为准。
 - **与其它模板的关系**：与 `list-table-visual-template`（表格层）、`query-list-page-template`（页面层）
   **正交**（弹窗层），三者不互相并入、不复用彼此标记／类名／令牌命名空间。
 - **排除范围**：启用／停用／删除确认框、数据源业务属性与命名策略子弹窗、表格模板、API／后端／数据库、
   现行业务校验与提交关闭时序。
-- **下一入口**：`CHATGPT_REMOTE_CREATE_EDIT_DIALOG_VISUAL_TEMPLATE_BASELINE_DRAFT_R2_REVIEW`
-  ——先由 ChatGPT 从远程 Git 独立复审草案（R0→R1→R2），通过后再由项目负责人批准，
-  然后另立公共实现与各页选择性接入任务。
-- **复审时序**：R0 草案提交 `ad7a4b741714a229a8a8a250f8ee960447e33355` 经远程文档复审为 `CHANGES_REQUIRED`，
-  已由 R1 提交 `b8ba2f6cab713326a1fdd70a875b743c5190cbe4` 定向纠错承接；R1 遗留的**导航入口不一致**
-  （本目录 `current_next_entry` 仍写 R0 现行入口）由本 R2 补齐。
-  **R1 尚未获 `APPROVED`，R2 待远程复审**；`CHANGES_REQUIRED`／提交成功均**不等于**获批。
+- **下一入口**：`CHATGPT_REMOTE_CREATE_EDIT_DIALOG_VISUAL_TEMPLATE_BASELINE_APPROVAL_CLOSEOUT_REVIEW`
+  ——先由 ChatGPT 从远程 Git 对本次**批准收口文档**独立复审；该文档复审通过后再独立生成公共 CSS 实现任务提示词，
+  **不自动授权页面接入**。
+- **复审与批准时序**：R0 提交 `ad7a4b741714a229a8a8a250f8ee960447e33355` 远程复审 `CHANGES_REQUIRED`
+  （两处阻塞：差异值缺省口径、回退路径）；R1 提交 `b8ba2f6cab713326a1fdd70a875b743c5190cbe4` 定向纠错后
+  远程复审 `CHANGES_REQUIRED`（仅导航不一致）；R2 提交 `45ce16dffbf2747abeb75d4d6c43bc57165043c8`
+  远程复审 **`APPROVED`**；项目负责人随后于 **`2026-09-30`** 批准设计基线。
+  **设计基线批准 ≠ 公共实现已存在 ≠ 页面已接入 ≠ 正式验收通过**；`CHANGES_REQUIRED`／提交成功均**不等于**获批。
 
 ## 列表表格视觉模板基线入口
 

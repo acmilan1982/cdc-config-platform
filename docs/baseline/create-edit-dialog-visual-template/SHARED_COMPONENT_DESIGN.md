@@ -1,19 +1,21 @@
-# 新增／编辑业务弹窗公共视觉模板 · 公共实现详细设计（**草案**，未实现）
+# 新增／编辑业务弹窗公共视觉模板 · 公共实现详细设计（**已批准设计，未实现**）
 
 ```text
-create_edit_dialog_visual_template_document_status=DRAFT_PENDING_USER_REVIEW
-shared_component_design_status=DRAFT_PENDING_USER_REVIEW
-baseline_status=NOT_APPROVED
-approval_status=NOT_APPROVED
+create_edit_dialog_visual_template_document_status=APPROVED
+shared_component_design_status=APPROVED
+baseline_status=APPROVED
+approval_status=APPROVED_BY_PROJECT_OWNER
+approval_date=2026-09-30
+approved_reviewed_commit=45ce16dffbf2747abeb75d4d6c43bc57165043c8
 implementation_status=IMPLEMENTATION_NOT_STARTED
 public_css_status=NOT_CREATED
 public_vue_component_status=NOT_CREATED
 page_adoption_authorization_status=PAGE_ADOPTION_NOT_AUTHORIZED
 ```
 
-> **本文件全部内容为拟议，尚未实现、尚未获批。**
-> 文中出现的**文件路径、类名、CSS 令牌、静态断言、测试**均为**未来拟实施目标**，
-> 其存在性一律为 `NOT_CREATED`。**不得**把本文件读作「公共 CSS 已存在」或「已批准设计」。
+> **本文件所载为已批准的设计契约，尚未实现。**（项目负责人 `2026-09-30` 批准设计基线）
+> 文中出现的**文件路径、类名、CSS 令牌、静态断言、测试**均为**已批准的设计目标**，
+> 其存在性一律为 `NOT_CREATED`。**不得**把本文件读作「公共 CSS 已存在」或「已落地实现」。
 
 ---
 
@@ -31,11 +33,13 @@ page_adoption_authorization_status=PAGE_ADOPTION_NOT_AUTHORIZED
 - **不得静默统一差异**：cc 的页面私有字段级错误与 ds 的 EP 校验 + 全局错误区**并存**，
   模板**只**提炼可共用的**视觉**，**不**强制统一实现模型。
 
-### 0.2 本设计**不**做的事
+### 0.2 设计任务当时**不**做的事（历史时点）
+
+> 设计基线其后已由**独立批准收口任务**于 `2026-09-30` 批准；公共实现与页面接入仍**未**发生。
 
 - 不创建任何 CSS／Vue 组件／类型／断言；
 - 不修改任何页面或测试；
-- 不批准基线、不授权页面接入、不给出验收结论。
+- 设计任务当时不批准基线、不授权页面接入、不给出验收结论。
 
 ### 0.3 与既有模板的关系
 
@@ -55,7 +59,7 @@ frontend/src/styles/dialog/create-edit-dialog-visual.spec.ts     # 拟议：静�
 ```
 
 - 拟**不**新增任何 `.vue` 组件；方案见 `DESIGN.md` §4（最小可行：纯 CSS 预设）。
-- 若未来评估后确需局部组件，须**另立**设计修订，不在本草案承诺。
+- 若未来评估后确需局部组件，须**另立**设计修订，不在本设计承诺。
 
 ---
 
@@ -148,7 +152,7 @@ frontend/src/styles/dialog/create-edit-dialog-visual.spec.ts     # 拟议：静�
 | #5 | 静态契约 | 接入页面已移除私有同义标签／按钮视觉规则（无重复来源） |
 
 - **真实浏览器验收**（拟议，将来由独立任务执行）：标签对齐、按钮状态矩阵、错误呈现、
-  窄视口安全边距与页脚可见性。**本草案不执行任何测试。**
+  窄视口安全边距与页脚可见性。**本设计不执行任何测试。**
 - 以上编号、断言均为**拟议**，**尚未**进入任何测试文件。
 
 ---

@@ -1,14 +1,17 @@
-# 新增／编辑业务弹窗公共视觉模板 · 设计基线草案
+# 新增／编辑业务弹窗公共视觉模板 · 已批准设计基线（未实现）
 
 ```text
-create_edit_dialog_visual_template_document_status=DRAFT_PENDING_USER_REVIEW
-create_edit_dialog_visual_template_baseline_status=NOT_APPROVED
-create_edit_dialog_visual_template_approval_status=NOT_APPROVED
+create_edit_dialog_visual_template_document_status=APPROVED
+create_edit_dialog_visual_template_baseline_status=APPROVED
+create_edit_dialog_visual_template_approval_status=APPROVED_BY_PROJECT_OWNER
+create_edit_dialog_visual_template_approval_date=2026-09-30
+create_edit_dialog_visual_template_approved_reviewed_commit=45ce16dffbf2747abeb75d4d6c43bc57165043c8
 implementation_status=IMPLEMENTATION_NOT_STARTED
 page_adoption_authorization_status=PAGE_ADOPTION_NOT_AUTHORIZED
 public_css_status=NOT_CREATED
 public_vue_component_status=NOT_CREATED
-current_next_entry=CHATGPT_REMOTE_CREATE_EDIT_DIALOG_VISUAL_TEMPLATE_BASELINE_DRAFT_R2_REVIEW
+migrated_page_count=0
+current_next_entry=CHATGPT_REMOTE_CREATE_EDIT_DIALOG_VISUAL_TEMPLATE_BASELINE_APPROVAL_CLOSEOUT_REVIEW
 ```
 
 ```text
@@ -21,31 +24,36 @@ scope=CREATE_EDIT_BUSINESS_MAIN_DIALOG_ONLY
 candidate_capabilities=LABEL_TYPOGRAPHY_AND_ALIGNMENT,BLACK_PRIMARY_SUBMIT_BUTTON,FIELD_ERROR_FEEDBACK,DIALOG_CONTAINER_AND_RESPONSIVE,A11Y_AND_INTERACTION_BOUNDARY
 ```
 
-> 本目录由**纯文档任务** `CREATE-EDIT-DIALOG-VISUAL-TEMPLATE-BASELINE-DRAFT-001` 建立，
-> 为**新增／编辑业务主弹窗**建立**可复审的设计契约草案**。
-> 本任务**未创建任何 CSS、Vue 组件、Composable、TypeScript 类型或路由元数据**，
+> 本目录由**纯文档任务** `CREATE-EDIT-DIALOG-VISUAL-TEMPLATE-BASELINE-DRAFT-001`（R0）建立，
+> 为**新增／编辑业务主弹窗**建立可复审的设计契约；经 R1／R2 定向纠错后，
+> 该**设计基线已由项目负责人于 2026-09-30 批准**（`approval_status=APPROVED_BY_PROJECT_OWNER`）。
+> 建立与纠错任务**未创建任何 CSS、Vue 组件、Composable、TypeScript 类型或路由元数据**，
 > **未修改** `frontend/**`、`backend/**`、测试代码、配置、依赖或锁文件，
 > **未修改**任何业务页面，
 > **未运行**测试、构建、浏览器或任何服务，
 > **未访问**数据库 / ZooKeeper / Kafka / 业务源库 / 目标库。
 >
-> **文档设计草案 ≠ 公共 CSS 已存在 ≠ Vue 组件已存在 ≠ 基线已批准 ≠ 页面已接入 ≠ 正式验收通过。**
-> 本目录所有状态均为**草案态**：`DRAFT_PENDING_USER_REVIEW` / `NOT_APPROVED` /
-> `IMPLEMENTATION_NOT_STARTED` / `PAGE_ADOPTION_NOT_AUTHORIZED`。
-> 这些是**本弹窗模板草案自身**的状态，**不改变**列表表格视觉模板、
+> **设计基线已批准 ≠ 公共 CSS 已存在 ≠ Vue 组件已存在 ≠ 页面已接入 ≠ 正式验收通过。**
+> 批准范围**只**覆盖**文档设计契约**；公共 CSS／Vue 组件仍 `NOT_CREATED`，
+> 页面接入仍 `PAGE_ADOPTION_NOT_AUTHORIZED`（`migrated_page_count=0`），**未做正式验收**。
+> 本弹窗模板自身状态**不改变**列表表格视觉模板、
 > 查询列表页模板、探针端管理与数据源管理各自的现有状态。
 >
-> **复审时序**：R0 草案提交 `ad7a4b741714a229a8a8a250f8ee960447e33355` 已由 ChatGPT **从远程 Git**
-> 独立复审，结论 `CHANGES_REQUIRED`（两处阻塞：差异值的缺省口径、真实可执行的回退路径）。
-> R1（纯文档定向纠错）已针对这两处修改 `DESIGN.md`／`MIGRATION.md` 并新增 R1 报告；
-> R1 复审结论为 `CHANGES_REQUIRED`（**仅导航不一致**：本目录与 `docs/baseline/README.md`
-> 的 `current_next_entry` 仍写 R0／R1 入口），该**导航遗留经 R2 纠正**。
-> R0、R1 入口仅作**历史**保留，**不再**占 `current_next_entry`。
-> **R1 尚未获批**——`CHANGES_REQUIRED` **不**等于 R1 已获 `APPROVED`。
+> **时态说明**：正文中标注「**拟议**」「拟议缺省」等字样的**设计项**，
+> 自 2026-09-30 批准后即为**已批准的设计契约**；但其**类名、令牌、静态断言与测试**仍
+> **尚未实现**（`NOT_CREATED`），**不得**读作已落地事实。R0／R1／R2 在**历史时点**的
+> `DRAFT_PENDING_USER_REVIEW`、`NOT_APPROVED` 与复审 `CHANGES_REQUIRED`／`APPROVED`
+> **保留时序、不机械全局替换**，亦不回写历史报告。
 >
-> 下一入口：`CHATGPT_REMOTE_CREATE_EDIT_DIALOG_VISUAL_TEMPLATE_BASELINE_DRAFT_R2_REVIEW`——
-> 由 ChatGPT **从远程 Git** 对 R0→R1→R2 整体草案做独立复审，通过后再由**项目负责人批准**，
-> 然后**另立**公共实现任务与各页选择性接入任务。
+> **复审时序**：R0 提交 `ad7a4b741714a229a8a8a250f8ee960447e33355` 远程复审 `CHANGES_REQUIRED`（两处阻塞：
+> 差异值的缺省口径、真实可执行的回退路径）；R1 提交 `b8ba2f6cab713326a1fdd70a875b743c5190cbe4`
+> 定向纠错后远程复审 `CHANGES_REQUIRED`（**仅导航不一致**）；R2 提交
+> `45ce16dffbf2747abeb75d4d6c43bc57165043c8` 远程复审 **`APPROVED`**，随后由项目负责人于
+> **2026-09-30** 批准。**R2 获远程复审通过并不表示负责人在 R2 提交当时已批准**——批准时点另记 2026-09-30。
+>
+> 下一入口：`CHATGPT_REMOTE_CREATE_EDIT_DIALOG_VISUAL_TEMPLATE_BASELINE_APPROVAL_CLOSEOUT_REVIEW`——
+> 由 ChatGPT **从远程 Git** 对本次**批准收口文档**做独立复审；通过后再**另立**公共 CSS 实现任务，
+> 页面接入须另行授权。
 
 ---
 
@@ -84,12 +92,12 @@ candidate_capabilities=LABEL_TYPOGRAPHY_AND_ALIGNMENT,BLACK_PRIMARY_SUBMIT_BUTTO
 | 层 | 含义 | 书写要求 |
 |---|---|---|
 | **现行事实** | 可由**两页实际源码／已批准条款**直接核验 | 必须给出**两页各自的代码／条款位置**；不做推及全项目的概括 |
-| **拟议（设计推断）** | 本草案**提出**的公共契约、类名、令牌、可选能力 | 必须显式标注「**拟议**」；**不得**包装为「两页已实现」或「已批准」 |
+| **拟议（设计推断）** | 本设计**提出**的公共契约、类名、令牌、可选能力 | 批准后即为**已批准设计契约**；仍**须**显式标注其**尚未实现**（`NOT_CREATED`），**不得**包装为「两页已实现」或「已落地」 |
 
 - 本任务**不**引入与列表表格模板相同的 `LIST_TABLE_*` 标记通道；本目录使用
-  `create_edit_dialog_visual_template_*` 前缀的草案状态键（见文首）与本节的「现行事实／拟议」分区。
+  `create_edit_dialog_visual_template_*` 前缀的状态键（见文首）与本节的「现行事实／拟议」分区。
 - 任何**未实现**的候选能力（公共 CSS、类名、CSS 令牌、静态断言、Vue 组件）
-  一律标注为**拟议**，其存在性为 `NOT_CREATED`。
+  一律标注为**已批准设计、尚未实现**，其存在性为 `NOT_CREATED`。
 
 ## 5. 证据来源（两页实际位置）
 
@@ -111,6 +119,7 @@ candidate_capabilities=LABEL_TYPOGRAPHY_AND_ALIGNMENT,BLACK_PRIMARY_SUBMIT_BUTTO
 | `MIGRATION.md` | 两页各自现状、未来选择性接入步骤与未授权状态 |
 | `reports/CREATE-EDIT-DIALOG-VISUAL-TEMPLATE-BASELINE-DRAFT-001.md` | R0 历史快照：事实／推断分层、来源映射、冲突与待审点、变更清单、保护核验与下一入口 |
 | `reports/CREATE-EDIT-DIALOG-VISUAL-TEMPLATE-BASELINE-DRAFT-001-R1.md` | R1 定向纠错：两处阻塞、旧→新文本／位置、保护核验与下一入口（对 R0 不准确结论作勘误，不回写 R0） |
+| `reports/CREATE-EDIT-DIALOG-VISUAL-TEMPLATE-BASELINE-APPROVAL-CLOSEOUT-001.md` | 批准收口：门禁、R0→R1→R2 复审时序、项目负责人原话、批准对象与边界、状态旧→新、文件清单、保护核验与下一入口 |
 
 ## 7. 与其他模板的关系
 
@@ -121,7 +130,8 @@ candidate_capabilities=LABEL_TYPOGRAPHY_AND_ALIGNMENT,BLACK_PRIMARY_SUBMIT_BUTTO
 
 ## 8. 边界声明
 
-- **草案通过远程复审 ≠ 获批 ≠ 公共实现已存在 ≠ 任何页面已接入 ≠ 正式验收通过。**
+- **设计基线批准 ≠ 公共实现已存在 ≠ 任何页面已接入 ≠ 正式验收通过。**
 - 本目录**不**授权任何页面接入；`PAGE_ADOPTION_NOT_AUTHORIZED` 的含义是
   **两页均未获授权接入本模板**。将来接入须由项目负责人**单独授权**，并另立实现与验收任务。
-- 未经项目负责人**再次明确批准**，**不得**据本草案创建任何公共 CSS、Vue 组件或修改任何页面。
+- **批准只覆盖设计契约**：公共 CSS／Vue 组件与页面接入须**另立任务**；
+  在公共实现存在且页面获授权接入前，**不得**据本设计修改任何页面。

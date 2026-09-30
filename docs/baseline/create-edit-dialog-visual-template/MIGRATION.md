@@ -1,14 +1,18 @@
-# 新增／编辑业务弹窗公共视觉模板 · 迁移盘点（草案）
+# 新增／编辑业务弹窗公共视觉模板 · 迁移盘点（已批准基线，未实现）
 
 ```text
-create_edit_dialog_visual_template_document_status=DRAFT_PENDING_USER_REVIEW
-baseline_status=NOT_APPROVED
+create_edit_dialog_visual_template_document_status=APPROVED
+baseline_status=APPROVED
+approval_status=APPROVED_BY_PROJECT_OWNER
+approval_date=2026-09-30
+approved_reviewed_commit=45ce16dffbf2747abeb75d4d6c43bc57165043c8
 implementation_status=IMPLEMENTATION_NOT_STARTED
 page_adoption_authorization_status=PAGE_ADOPTION_NOT_AUTHORIZED
 migrated_page_count=0
 ```
 
-> **本文件只做盘点与未来步骤设计，不实施任何迁移。** 当前 **0** 个页面接入本模板。
+> **本文件只做盘点与未来步骤设计，不实施任何迁移。** 设计契约已于 `2026-09-30` 批准；
+> 当前 **0** 个页面接入本模板（`migrated_page_count=0`），无公共 CSS／组件可被接入。
 
 ---
 
@@ -22,7 +26,7 @@ grep -rn '<el-dialog' views/
 
 - 盘点对象：`frontend/src/views/**` 下的 `el-dialog` 使用点。
 - 分类依据：是否属于**新增／编辑业务主弹窗**（页面主入口的增改弹窗）。
-- **本草案只对两个页面做了**源码与条款的**深入核对**：
+- **本设计只对两个页面做了**源码与条款的**深入核对**：
   探针端管理、数据源管理。其余使用点仅作**清单登记**，**未评估**（`UNASSESSED`）。
 
 ## 2. 全量盘点矩阵（现状）
@@ -33,7 +37,7 @@ grep -rn '<el-dialog' views/
 | 2 | `views/data-source/DataSourcePage.vue` | 新增数据源／编辑数据源（`class="editor-dialog" width="620px"`） | **新增／编辑主弹窗 · 在范围内** | **已深入核对**（`DESIGN.md` §1.2） |
 | 3 | `views/data-source/DataSourcePage.vue` | 业务属性（`width="560px"`） | **子弹窗 · 排除**（数据源业务属性） | 排除（记录，不评估） |
 | 4 | `views/data-source/DataSourcePage.vue` | 目标库命名策略（`label-width="110px"`） | **子弹窗 · 排除**（命名策略） | 排除（记录，不评估） |
-| 5 | `views/data-subscribe/components/SubscribeFormDialog.vue` | 新增订阅／编辑订阅 | **新增／编辑业务弹窗 · 候选（未评估）** | **未评估**（`UNASSESSED`）——组件形态、独立文件，本草案未读取其样式与条款 |
+| 5 | `views/data-subscribe/components/SubscribeFormDialog.vue` | 新增订阅／编辑订阅 | **新增／编辑业务弹窗 · 候选（未评估）** | **未评估**（`UNASSESSED`）——组件形态、独立文件，本设计未读取其样式与条款 |
 | 6 | `views/data-subscribe/components/SubscribeDetailDialog.vue` | 订阅详情 | 详情框 · 排除 | 排除 |
 | 7 | `views/data-subscribe/components/SubscribeDeleteDialog.vue` | 删除确认 | 确认框 · 排除 | 排除 |
 | 8 | `views/server-config/SaveConfirmDialog.vue` | 保存确认 | 确认框 · 排除 | 排除 |
@@ -58,7 +62,7 @@ migrated_page_count=0
 对**已获授权**的**主新增／编辑弹窗**页，拟议步骤：
 
 1. **评估**：确认该弹窗属"新增／编辑业务主弹窗"，非确认框／子弹窗；
-2. **授权**：取得项目负责人**单独明确授权**（本草案**未**授权任何页面）；
+2. **授权**：取得项目负责人**单独明确授权**（本设计基线**未**授权任何页面接入）；
 3. **接入**：在弹窗根元素挂显式 opt-in 根类（拟议 `ced-dialog`），
    并以 Feature 覆盖表达**页面级差异值**（标签列宽、弹窗宽度、安全边距、是否含全局错误区、loading 配色）；
 4. **消除私有同义规则**：**移除**该页私有的**标签排版**与**主提交按钮视觉**规则
@@ -99,8 +103,8 @@ migrated_page_count=0
 ## 5. 迁移授权与边界（严格）
 
 - **当前授权状态**：`PAGE_ADOPTION_NOT_AUTHORIZED` —— **两页及其他任何页面均未获授权接入本模板**。
-- 本草案**基线未批准、实现未开始**：不存在可被接入的公共 CSS／组件。
+- **设计基线已批准（`2026-09-30`）**，但**公共实现未开始**：**仍不存在**可被接入的公共 CSS／组件。
 - 任何页面接入须**独立评估、独立授权、独立实现、独立目测、独立验收**。
-- **不得**据本草案创建代码或修改页面；**不得**把本草案当作已批准模板引用。
+- **不得**据本设计创建代码或修改页面；**不得**把「设计基线已批准」读作「公共 CSS／组件已存在」或「页面已接入」。
 - 本模板**不**影响 `list-table-visual-template`、`query-list-page-template`
   及任何 Feature 现有状态。
