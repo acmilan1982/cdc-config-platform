@@ -1,0 +1,149 @@
+{
+  "task_code": "LIST-TABLE-OPTIONAL-SINGLE-ROW-HIGHLIGHT-PUBLIC-IMPLEMENTATION-001",
+  "kind": "runtime-cascade-verification",
+  "method": "headless Chrome + CDP (CSS.forcePseudoState for deterministic hover); real Element Plus table + real scoped-compiled list-table-visual.css",
+  "fixture": "isolated static fixture (frontend/lt-fixture.{html,vue} + lt-fixture-mount.ts, synthetic rows only, no business data); fixture params: optin=0|1 (table-level .lt-row-highlight), fixed=-1|<rowIndex> (.lt-row-highlight__row)",
+  "environment": {
+    "browser": "Chrome/148.0.7778.167 headless",
+    "vite": "5.4.21 (dev, host 0.0.0.0:5173)",
+    "cdp_port": 9222
+  },
+  "commands": [
+    "cd frontend && npx vite --host 0.0.0.0 --port 5173",
+    "/usr/bin/google-chrome --headless=new --no-sandbox --disable-gpu --no-proxy-server --remote-debugging-port=9222 --user-data-dir=/tmp/lt-chrome --window-size=1440,900 about:blank",
+    "env -u http_proxy -u https_proxy node /tmp/lt-fixture-verify.mjs"
+  ],
+  "expected_literals": {
+    "hover_bg": "rgb(244, 244, 245)",
+    "fixed_bg": "rgb(225, 228, 232)",
+    "accent": "rgb(24, 24, 27)",
+    "accent_box_shadow": "rgb(24, 24, 27) 3px 0px 0px 0px inset"
+  },
+  "measurements": {
+    "s0_noOptIn_noHover": {
+      "r1c1": {
+        "bg": "rgba(0, 0, 0, 0)",
+        "shadow": "none",
+        "color": "rgb(96, 98, 102)",
+        "cls": "el-table_1_column_1 el-table__cell"
+      },
+      "classesInDoc": 0,
+      "tableCls": "el-table--fit el-table--enable-row-transition el-table el-table--layout-fixed fx-table lt-main-table is-scrolling-none"
+    },
+    "s0_noOptIn_hover": {
+      "r1c1": {
+        "bg": "rgba(0, 0, 0, 0)",
+        "shadow": "none",
+        "color": "rgb(96, 98, 102)",
+        "cls": "el-table_1_column_1 el-table__cell"
+      }
+    },
+    "s1_optIn_noFixed_noHover": {
+      "r1c1": {
+        "bg": "rgba(0, 0, 0, 0)",
+        "shadow": "none",
+        "color": "rgb(96, 98, 102)",
+        "cls": "el-table_1_column_1 el-table__cell"
+      }
+    },
+    "s2_optIn_hoverRow1": {
+      "r1c1": {
+        "bg": "rgb(244, 244, 245)",
+        "shadow": "none",
+        "color": "rgb(96, 98, 102)",
+        "cls": "el-table_1_column_1 el-table__cell"
+      }
+    },
+    "s3_optIn_fixedRow2": {
+      "r2": {
+        "c1": {
+          "bg": "rgb(225, 228, 232)",
+          "shadow": "rgb(24, 24, 27) 3px 0px 0px 0px inset",
+          "color": "rgb(96, 98, 102)",
+          "cls": "el-table_1_column_1 el-table__cell"
+        },
+        "c2": {
+          "bg": "rgb(225, 228, 232)",
+          "shadow": "none",
+          "color": "rgb(96, 98, 102)",
+          "cls": "el-table_1_column_2 el-table__cell"
+        },
+        "c3": {
+          "bg": "rgb(225, 228, 232)",
+          "shadow": "none",
+          "color": "rgb(96, 98, 102)",
+          "cls": "el-table_1_column_3 el-table__cell"
+        },
+        "c4_fixedCol": {
+          "bg": "rgb(225, 228, 232)",
+          "shadow": "none",
+          "color": "rgb(96, 98, 102)",
+          "cls": "el-table_1_column_4 lt-row-action__cell el-table-fixed-column--right is-first-column el-table__cell"
+        }
+      },
+      "r1c1": {
+        "bg": "rgba(0, 0, 0, 0)",
+        "shadow": "none",
+        "color": "rgb(96, 98, 102)",
+        "cls": "el-table_1_column_1 el-table__cell"
+      },
+      "accentRow2": {
+        "firstCell": "rgb(24, 24, 27) 3px 0px 0px 0px inset",
+        "secondCell": "none",
+        "thirdCell": "none"
+      },
+      "fixedColumnTdClass": "el-table_1_column_4 lt-row-action__cell el-table-fixed-column--right is-first-column el-table__cell",
+      "normalRowColor": "rgb(96, 98, 102)",
+      "fixedRowColor": "rgb(96, 98, 102)",
+      "ellipsisNormal": "rgb(64, 158, 255)",
+      "ellipsisFixed": "rgb(64, 158, 255)"
+    },
+    "s4_fixedRow2_hoverRow1": {
+      "r1c1": {
+        "bg": "rgb(244, 244, 245)",
+        "shadow": "none",
+        "color": "rgb(96, 98, 102)",
+        "cls": "el-table_1_column_1 el-table__cell"
+      },
+      "r2c1": {
+        "bg": "rgb(225, 228, 232)",
+        "shadow": "rgb(24, 24, 27) 3px 0px 0px 0px inset",
+        "color": "rgb(96, 98, 102)",
+        "cls": "el-table_1_column_1 el-table__cell"
+      }
+    },
+    "s5_fixedRow2_hoverSelf": {
+      "r2c1": {
+        "bg": "rgb(225, 228, 232)",
+        "shadow": "rgb(24, 24, 27) 3px 0px 0px 0px inset",
+        "color": "rgb(96, 98, 102)",
+        "cls": "el-table_1_column_1 el-table__cell"
+      },
+      "r2c4": {
+        "bg": "rgb(225, 228, 232)",
+        "shadow": "none",
+        "color": "rgb(96, 98, 102)",
+        "cls": "el-table_1_column_4 lt-row-action__cell el-table-fixed-column--right is-first-column el-table__cell"
+      }
+    },
+    "s7_unfix": {
+      "before": "rgb(225, 228, 232)",
+      "removed": "el-table__row",
+      "after": "rgba(0, 0, 0, 0)"
+    },
+    "s8_currentRowResidual": {
+      "added": "el-table__row current-row",
+      "bg": "rgba(0, 0, 0, 0)"
+    },
+    "s9_noOptIn_hover_leakCheck": {
+      "r1c1": {
+        "bg": "rgba(0, 0, 0, 0)",
+        "shadow": "none",
+        "color": "rgb(96, 98, 102)",
+        "cls": "el-table_1_column_1 el-table__cell"
+      }
+    }
+  },
+  "assertions_raw": "=== ASSERTIONS ===\nALL PASSED",
+  "result": "ALL PASSED (31 assertions, 0 failures)"
+}

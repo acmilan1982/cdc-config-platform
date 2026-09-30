@@ -826,3 +826,57 @@ Git 对 `30e82cf` 的独立复审 `CHANGES_REQUIRED`（**唯一阻塞**），更
   `NONE_SHARED_IMPLEMENTATION_FINAL_ACCEPTED_AND_CLOSED_NO_PAGE_MIGRATION_AUTHORIZED` **均不变**；
   本次 R1 仅为**文档证据复审入口**，**不**重新进行代码复审，**不**推进 §13 公共实现或任何页面迁移。
 - **报告导航勘误 ≠ 迁移授权。**
+
+## 单行固定高亮公共可选视觉预设实现追加记录（`LIST-TABLE-OPTIONAL-SINGLE-ROW-HIGHLIGHT-PUBLIC-IMPLEMENTATION-001`，追加记录，`2026-09-30`）
+
+本任务在**已批准设计基线**（`SHARED_COMPONENT_DESIGN.md` §13.3，`2026-09-29` 批准）之上落地其**公共实现**
+（前端公共 CSS + 公共契约测试 + 最小文档同步）。**批准的是设计基线，本次落地的是公共实现**；
+`page_migration_status` 状态层**不**受影响。
+
+### 落地内容与边界
+
+- **公共层新增（两级显式 opt-in）**：`frontend/src/styles/list-table/list-table-visual.css` 新增**表级**
+  `.lt-row-highlight`（须与根类 `.lt-main-table` 并列）与**行级** `.lt-row-highlight__row`
+  （由消费页面的行类回调提供，公共层**不**推断哪一行被选）共同限定的单行固定高亮外观预设；
+- **取值**（沿用已批准设计字面量，**未**新增令牌）：普通行 `hover` `#f4f4f5`、固定行底 `#e1e4e8`、
+  固定行左缘强调 `#18181b`（`inset 3px 0 0 0`，仅首格）；固定行底色覆盖**整行每个 `td.el-table__cell`**
+  （含固定右操作列 `td`）；`current-row` 归零与固定行规则**同前导段同特异性**且归零在前，故同时命中时
+  固定行按源码顺序胜出；取消固定后不残留疑似固定底；
+- **职责边界**：公共层**只**决定“被显式标记时如何显示”，**不**保存选中 ID、**不**监听行点击、**不**实现
+  单击固定 / 再点取消 / 转移、**不**发起查询或启停请求、**不**接管事件隔离 / 权限 / 删除 / `FG_ACTIVE`；
+  选择语义与页面会话状态仍归 Feature；
+- **未改动的页面与项**：**未**修改 `ClientConfigPage.vue` 及其测试以改用公共类、**未**修改 `DataSourcePage.vue`
+  （其“更多”仍是文字入口）、**不**把任一页面写成已接入 §13；§12.1 三点触发器**禁用态视觉**仍属
+  **设计契约、尚未实现、尚未验收**（本次**未**补做、**未**制造禁用业务场景）。
+
+### 验证
+
+- 静态契约：`frontend/src/styles/list-table/list-table-visual.spec.ts` 更新允许 helper 类集合 / 作用域
+  （新增 opt-in 例外）/ 唯一来源 / 令牌数断言，并**新增** #14（未 opt-in 零泄漏）与 #15（固定压过
+  `hover` / `current-row`、左缘仅首格）；全量前端测试与含类型检查的构建通过；
+- 运行时层叠与固定列视觉：**隔离的真实浏览器夹具**（临时构造、**未**提交业务数据；headless Chrome +
+  真实 scoped 编译后的公共 CSS）记录有 / 无 opt-in 对照、普通 `hover`、固定态、固定态 `hover`、取消态、
+  固定列，**全部通过**。证据见
+  `reports/evidence/LIST-TABLE-OPTIONAL-SINGLE-ROW-HIGHLIGHT-PUBLIC-IMPLEMENTATION-001/`。
+
+### 标记与计数（命令实测）
+
+- 四份规范文档（通道 1）`28 / 0 / 43 / 7`、`SHARED_COMPONENT_DESIGN.md` 批准态设计标记（通道 2）`81`、
+  参考事实标记（通道 3）`26`、候选未实现标记（通道 4）`8`——四通道**逐值不变**（各通道严格**不**混算）；
+- `lt_token_count` 仍 **9**；`lt_internal_helper_class_count` 由 **2** 变为 **4**
+  （`{lt-row-action__cell, lt-row-action__ellipsis, lt-row-highlight, lt-row-highlight__row}`）；
+- 早前 `2026-09-30` 复审状态同步记录中的「§13 公共实现仍 `NOT_STARTED`」为**该时点表述**，现由本记录更新；
+  历史报告与四族定义行、157 条验收状态格**不**回写、**不**改动。
+
+### 状态与入口（边界）
+
+- §13 可选视觉预设的**公共实现状态**由实现提交时点值 `NOT_STARTED`（**历史值**）更新为
+  **`IMPLEMENTED_PENDING_CHATGPT_REVIEW`**（已实现、**待 ChatGPT 远程代码复审**）；
+- §12 三点入口 `IMPLEMENTED_PENDING_USER_ACCEPTANCE` **不**回退；§12.1 禁用态视觉仍未实现；
+- 模板整体已接受的旧基础实现状态（`shared_implementation_status` / `reference_page_integration_status`
+  仍 `IMPLEMENTED_ACCEPTED`、`final_acceptance_status` 仍 `ACCEPTED_BY_PROJECT_OWNER`）与页面迁移
+  `NOT_STARTED` / `NOT_GRANTED` / `NOT_DECIDED` **均不变**；模板级 `current_next_entry` 仍
+  `NONE_SHARED_IMPLEMENTATION_FINAL_ACCEPTED_AND_CLOSED_NO_PAGE_MIGRATION_AUTHORIZED`（**另一状态层**）；
+- 可选扩展链**下一入口**：`CHATGPT_REMOTE_LIST_TABLE_OPTIONAL_SINGLE_ROW_HIGHLIGHT_PUBLIC_IMPLEMENTATION_REVIEW`；
+- **实现并推送 ≠ 复审通过 ≠ 项目负责人已目测 ≠ 任何页面已接入或迁移 ≠ 正式验收通过；公共可选样式已实现
+  ≠ 页面已迁移。**

@@ -60,3 +60,41 @@
 .lt-main-table :deep(th.el-table__cell) {
   padding: var(--lt-header-cell-padding, 11px 0);
 }
+
+/* 显式 opt-in 的单行固定高亮可选视觉预设（SHARED_COMPONENT_DESIGN §13.3，设计基线已批准）。
+ * 两级 opt-in：
+ *   - 表级 `.lt-row-highlight`（与 `.lt-main-table` 同挂于表格元素）：启用本表的可选 hover 预设与
+ *     “当前行”底色归零；
+ *   - 行级 `.lt-row-highlight__row`：由消费页面在其 row-class 回调中挂到“被固定”的那一行。
+ * 公共层**不**推断哪一行被固定、**不**保存选中 ID、**不**监听点击、**不**发起请求；只提供外观层。
+ * 取值取自现行 `/config/client` 页面私有规则（hover `#f4f4f5` / 固定底 `#e1e4e8` / 首格左缘 `#18181b`），
+ * 为**可选参考字面量**，不经 `--lt-*` 令牌暴露（令牌仍为 9 个）。全部规则由根类 + 表级 opt-in 共同限定：
+ * 未启用页面与该表级类零匹配，`lt-row-highlight__row` 未挂载的行也不匹配。 */
+
+/* “当前行”底色归零：Element Plus 在行单击时可能落下 `current-row` 底色，若不归零，
+ * 取消固定后该底色会残留、看似仍被固定。本规则与本表固定行规则**同特异性**，故置于其**前**，
+ * 使两者同时命中时由固定行规则按源码顺序胜出。 */
+.lt-main-table.lt-row-highlight :deep(.el-table__body tr.current-row > td.el-table__cell) {
+  background-color: transparent;
+}
+
+/* 普通行 hover 预设：仅指针停留时显示、移开即恢复。`:not(.lt-row-highlight__row)` 使固定行
+ * 不被本规则命中，从而与固定行规则无层叠竞争。 */
+.lt-main-table.lt-row-highlight :deep(.el-table__body tr:not(.lt-row-highlight__row):hover > td.el-table__cell) {
+  background-color: #f4f4f5;
+}
+
+/* 固定行底色：覆盖整行**每个** `td.el-table__cell`（含最右固定操作列），鼠标移出仍保持。 */
+.lt-main-table.lt-row-highlight :deep(.el-table__body tr.lt-row-highlight__row > td.el-table__cell) {
+  background-color: #e1e4e8;
+}
+
+/* 固定行再次 hover：仍保持固定底色，不被临时 hover 预设盖过、不产生颜色跳动。 */
+.lt-main-table.lt-row-highlight :deep(.el-table__body tr.lt-row-highlight__row:hover > td.el-table__cell) {
+  background-color: #e1e4e8;
+}
+
+/* 固定行左缘强调线：只画在首格（首个可见单元格），每行至多一条。 */
+.lt-main-table.lt-row-highlight :deep(.el-table__body tr.lt-row-highlight__row > td.el-table__cell:first-child) {
+  box-shadow: inset 3px 0 0 0 #18181b;
+}

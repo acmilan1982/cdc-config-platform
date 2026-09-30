@@ -21,6 +21,25 @@ const CSS_PATH = join(LIST_TABLE_DIR, CSS_FILE)
 const ROOT_CLASS = 'lt-main-table'
 const ROOT_CLASS_SELECTOR = `.${ROOT_CLASS}`
 
+/**
+ * 除根类外**唯一**允许出现在公共源里的 `lt-` 辅助/opt-in 类（§12.7(2)、§13.3）。
+ * 第 11 条据此断言集合恰好相等；第 13/14 条据此扫描业务页面挂载情况。
+ * 拼接构造避免本测试文件的源码被「唯一来源」扫描误计入。
+ */
+const HELPER_CLASSES = [
+  ['lt-row-action', '__', 'cell'].join(''),
+  ['lt-row-action', '__', 'ellipsis'].join(''),
+  ['lt-row', '-highlight'].join(''),
+  ['lt-row-highlight', '__row'].join(''),
+]
+
+/** 表级 / 行级两级 opt-in 类（§13.3）：分别用于启用可选预设与标记被固定行。 */
+const ROW_HIGHLIGHT_OPT_IN_TABLE_CLASS = ['lt-row', '-highlight'].join('')
+const ROW_HIGHLIGHT_OPT_IN_ROW_CLASS = ['lt-row-highlight', '__row'].join('')
+
+/** 作用域首段中允许出现的类：根类本身，以及可与根类并列的 opt-in 类（第 6 条）。 */
+const REGISTERED_OPT_IN_CLASSES = [ROOT_CLASS, ROW_HIGHLIGHT_OPT_IN_TABLE_CLASS]
+
 const EXPECTED_TOKENS = [
   '--lt-table-width',
   '--lt-border-color',
@@ -134,11 +153,19 @@ describe('列表表格视觉模板公共层契约（§4.1 / §6）', () => {
     }
   })
 
-  it('6. 每条 :deep(...) 均由 .lt-main-table 限定', () => {
+  it('6. 每条 :deep(...) 均由 .lt-main-table 限定（可与已登记 opt-in 类并列）', () => {
     const deep = rules(css()).filter((r) => r.selector.includes(':deep('))
     expect(deep.length).toBeGreaterThan(0)
     for (const { selector } of deep) {
-      expect(selector.startsWith(`${ROOT_CLASS_SELECTOR} `), selector).toBe(true)
+      // 作用域首段必须以根类开头；允许根类与其**已登记**的 opt-in 类并列（如
+      // `.lt-main-table.lt-row-highlight`），但不得出现根类以外的其它前置类。
+      const lead = selector.split(/\s+/)[0] ?? ''
+      const leadClasses = lead.match(/\.[\w-]+/g) ?? []
+      expect(lead.startsWith(ROOT_CLASS_SELECTOR), selector).toBe(true)
+      expect(leadClasses[0], selector).toBe(ROOT_CLASS_SELECTOR)
+      for (const cls of leadClasses) {
+        expect(REGISTERED_OPT_IN_CLASSES, selector).toContain(cls.replace(/^\./, ''))
+      }
     }
   })
 
@@ -170,15 +197,15 @@ describe('列表表格视觉模板公共层契约（§4.1 / §6）', () => {
     expect(css()).not.toMatch(/!important/)
   })
 
-  it('11. 内部辅助类恰好为两个已登记 opt-in 类（除根类外无其他 lt- 类选择器）', () => {
+  it('11. 内部辅助类恰好为已登记的 opt-in 类（除根类外无其他 lt- 类选择器）', () => {
     // §12.7(2)：`css().match(/\.lt-[\w-]+/g)` 的匹配结果本身包含根类，必须先剔除根类，
-    // 否则「辅助类恰好两个」的断言实际计入了三类。
+    // 否则「辅助类恰好 N 个」的断言会多计根类。
     const allClasses = [...new Set(css().match(/\.lt-[\w-]+/g) ?? [])]
     const helperClasses = allClasses.filter((name) => name !== ROOT_CLASS_SELECTOR).sort()
-    expect(helperClasses).toEqual(['.lt-row-action__cell', '.lt-row-action__ellipsis'])
-    // 等价兜底：允许集合为「根类 + 两辅助类」三元素，不得出现第四类。
+    expect(helperClasses).toEqual(HELPER_CLASSES.map((c) => `.${c}`).sort())
+    // 等价兜底：允许集合为「根类 + 全部已登记辅助类」，不得出现未登记的类。
     expect(allClasses.sort()).toEqual(
-      [ROOT_CLASS_SELECTOR, '.lt-row-action__cell', '.lt-row-action__ellipsis'].sort(),
+      [ROOT_CLASS_SELECTOR, ...HELPER_CLASSES.map((c) => `.${c}`)].sort(),
     )
   })
 
@@ -200,5 +227,47 @@ describe('列表表格视觉模板公共层契约（§4.1 / §6）', () => {
       if (ROOT_RULE_RE.test(text) || text.includes(CONSUME_ROOT)) hits.push(relative(file))
     }
     expect(hits).toEqual([`styles/list-table/${CSS_FILE}`])
+  })
+
+  it('14. §13.3 单行固定高亮 opt-in 类在业务页面中零挂载（未启用页零泄漏）', () => {
+    const VIEWS_DIR = resolve(SRC_DIR, 'views')
+    const vueFiles = walk(VIEWS_DIR).filter((file) => file.endsWith('.vue'))
+    for (const cls of [ROW_HIGHLIGHT_OPT_IN_TABLE_CLASS, ROW_HIGHLIGHT_OPT_IN_ROW_CLASS]) {
+      const mounted = vueFiles.filter((file) => readFileSync(file, 'utf8').includes(cls)).map(relative)
+      expect(mounted, cls).toEqual([])
+    }
+  })
+
+  it('15. §13.3 预设分层契约：覆盖整行 td、固定压过 hover 与 current-row、左缘仅首格', () => {
+    const rs = rules(css())
+    const pick = (needle: string, exclude: string[] = []) => {
+      const hit = rs.find(
+        (r) => r.selector.includes(needle) && exclude.every((x) => !r.selector.includes(x)),
+      )
+      expect(hit, `缺规则：${needle}`).toBeDefined()
+      return hit!
+    }
+    const reset = pick('tr.current-row > td.el-table__cell')
+    const hoverPreset = pick(':not(.lt-row-highlight__row):hover')
+    const fixed = pick('tr.lt-row-highlight__row > td.el-table__cell', [':hover', 'first-child'])
+    const fixedHover = pick('tr.lt-row-highlight__row:hover')
+    const accent = pick('tr.lt-row-highlight__row > td.el-table__cell:first-child')
+
+    // 固定底色覆盖整行**每个** `td.el-table__cell`（选择器不回退到更窄的单元格），与最右固定列一致。
+    expect(fixed.body).toContain('background-color: #e1e4e8')
+    expect(fixed.selector).not.toContain('first-child')
+    expect(fixed.selector).not.toContain('nth-child')
+    // 「当前行」归零与固定行规则**同前导段**（同特异性），且归零在**前** → 同时命中时固定行按源码顺序胜出。
+    const lead = (s: string) => s.split(/\s+/)[0]
+    expect(lead(reset.selector)).toBe(lead(fixed.selector))
+    expect(rs.indexOf(reset)).toBeLessThan(rs.indexOf(fixed))
+    // 普通 hover 预设只作用于**非固定行**，与固定行规则无层叠竞争。
+    expect(hoverPreset.body).toContain('background-color: #f4f4f5')
+    expect(lead(hoverPreset.selector)).toBe(lead(fixed.selector))
+    // 固定行再次 hover 保持固定底色。
+    expect(fixedHover.body).toContain('background-color: #e1e4e8')
+    // 左缘强调只画在首格，每行至多一条。
+    expect(accent.selector).toContain('td.el-table__cell:first-child')
+    expect(accent.body).toContain('box-shadow: inset 3px 0 0 0 #18181b')
   })
 })
