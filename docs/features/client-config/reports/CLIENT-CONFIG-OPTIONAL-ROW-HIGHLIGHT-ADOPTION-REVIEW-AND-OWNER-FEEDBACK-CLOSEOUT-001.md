@@ -41,7 +41,7 @@
   - 起始提交 `ebf34d970d720aa124dc7a1ea94ba811dcf21584`、结束提交 `5cb8079167df82531bd7c02da301def5140e635a`（即本任务开工基准）。
   - 本次页面接入的实现提交为 `5cb8079167df82531bd7c02da301def5140e635a`。
 - **复审来源**：ChatGPT 从**远程 Git** 对该区间内的**页面接入代码**作独立**只读**复审，未修改 Git。
-- **交叉来源**：页面接入报告 `docs/features/client-config/reports/CLIENT-CONFIG-OPTIONAL-ROW-HIGHLIGHT-PUBLIC-PRESET-ADOPTION-001.md`，以及模板侧交叉报告 `docs/baseline/list-table-visual-template/reports/LIST-TABLE-OPTIONAL-ELLIPSIS-IMPLEMENTATION-REVIEW-STATUS-SYNC-001.md`。二者均为**历史报告，本任务不修改**。
+- **交叉来源**：页面接入报告 `docs/features/client-config/reports/CLIENT-CONFIG-OPTIONAL-ROW-HIGHLIGHT-PUBLIC-PRESET-ADOPTION-001.md`，以及模板侧交叉报告 `docs/baseline/list-table-visual-template/reports/LIST-TABLE-CLIENT-CONFIG-OPTIONAL-ROW-HIGHLIGHT-PUBLIC-PRESET-ADOPTION-001.md`。二者均为**历史报告，本任务不修改**。
 
 **说明**：该区间只覆盖 `/config/client` **主列表**的本次页面接入。只有该页面主列表接入，**其他页面未获本次接入授权**。
 
