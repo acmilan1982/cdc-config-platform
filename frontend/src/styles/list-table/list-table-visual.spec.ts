@@ -229,13 +229,25 @@ describe('列表表格视觉模板公共层契约（§4.1 / §6）', () => {
     expect(hits).toEqual([`styles/list-table/${CSS_FILE}`])
   })
 
-  it('14. §13.3 单行固定高亮 opt-in 类在业务页面中零挂载（未启用页零泄漏）', () => {
+  it('14. §13.3 单行固定高亮两级 opt-in 类仅探针端主列表挂载（其余页面零泄漏）', () => {
+    // 项目负责人已授权**唯一**页面级接入：`/config/client` 主列表（CLIENT-CONFIG-OPTIONAL-ROW-
+    // HIGHLIGHT-PUBLIC-PRESET-ADOPTION-001）。两级类在该页显式挂载，**其余任何页面**（含
+    // `/config/data-source`）不得挂载——否则本断言失败，可抓到意外扩散。
     const VIEWS_DIR = resolve(SRC_DIR, 'views')
     const vueFiles = walk(VIEWS_DIR).filter((file) => file.endsWith('.vue'))
-    for (const cls of [ROW_HIGHLIGHT_OPT_IN_TABLE_CLASS, ROW_HIGHLIGHT_OPT_IN_ROW_CLASS]) {
-      const mounted = vueFiles.filter((file) => readFileSync(file, 'utf8').includes(cls)).map(relative)
-      expect(mounted, cls).toEqual([])
-    }
+    const EXPECTED = ['views/client-config/ClientConfigPage.vue']
+    // 表级类（`lt-row-highlight` 亦为行级类前缀，故同时命中只挂行级的文件）。
+    const tableMounted = vueFiles
+      .filter((file) => readFileSync(file, 'utf8').includes(ROW_HIGHLIGHT_OPT_IN_TABLE_CLASS))
+      .map(relative)
+      .sort()
+    expect(tableMounted).toEqual(EXPECTED)
+    // 行级类：同样只允许该页。
+    const rowMounted = vueFiles
+      .filter((file) => readFileSync(file, 'utf8').includes(ROW_HIGHLIGHT_OPT_IN_ROW_CLASS))
+      .map(relative)
+      .sort()
+    expect(rowMounted).toEqual(EXPECTED)
   })
 
   it('15. §13.3 预设分层契约：覆盖整行 td、固定压过 hover 与 current-row、左缘仅首格', () => {

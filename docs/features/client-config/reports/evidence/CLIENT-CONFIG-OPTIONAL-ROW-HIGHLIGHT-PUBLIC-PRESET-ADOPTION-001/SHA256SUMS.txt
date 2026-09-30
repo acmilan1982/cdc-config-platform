@@ -1,0 +1,2 @@
+16e405fc94fb59b85a95bd979e38327e4f34d41ee4d96a078a861d3974c12996  verify-client-optin.mjs
+c076d0f9918fe9f3e01a12b7a0a35ffa26047f6643dec599e6a3dd62f205c78c  client-optin-results.json

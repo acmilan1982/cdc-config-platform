@@ -53,6 +53,17 @@ const DS_PAGE_PATH = resolve(process.cwd(), 'src/views/data-source/DataSourcePag
 /** 本页 SFC 源码：测试环境不注入 SFC 样式，公共预设引入方式与页面令牌只能按源码静态结构受检。 */
 const SFC_SOURCE = readFileSync(PAGE_PATH, 'utf-8')
 
+/**
+ * 公共可选高亮预设源（§13.3）：本页主列表行高亮的**唯一来源**。页面已不再保留私有等价规则，
+ * 故行高亮的取值契约改为直接核对本页所引用的公共源文件。
+ */
+const PUBLIC_CSS_SOURCE = readFileSync(
+  resolve(process.cwd(), 'src/styles/list-table/list-table-visual.css'),
+  'utf-8',
+)
+/** 公共 §13.3 规则的作用域前缀（表级 `.lt-row-highlight` 与根类并列）。 */
+const PUBLIC_NS = '.lt-main-table.lt-row-highlight :deep(.el-table__body '
+
 /** 提取某个选择器的声明块（首个匹配）。选择器按字面量处理，正则元字符全部转义。 */
 function cssBlock(source: string, selector: string): string {
   const escaped = selector.replace(/[.*+?^${}()|[\]\\]/g, '\\$&')
@@ -615,7 +626,7 @@ describe('主列表六列顺序、序号与无选中机制（CCFG-REQ-100、CCFG
     expect(wrapper.text()).not.toContain('已选择')
     expect(wrapper.text()).not.toContain('删除所选')
     expect(exactButton(wrapper, '删除所选')).toBeUndefined()
-    expect(wrapper.findAll('.cc-row--selected')).toHaveLength(0)
+    expect(wrapper.findAll('.lt-row-highlight__row')).toHaveLength(0)
     expect(wrapper.find('.el-table .el-checkbox').exists()).toBe(false)
     const columns = wrapper.findAllComponents({ name: 'ElTable' })[0].findAllComponents({
       name: 'ElTableColumn',
@@ -628,7 +639,7 @@ describe('主列表六列顺序、序号与无选中机制（CCFG-REQ-100、CCFG
     // 第五轮 CCFG-REQ-142/CCFG-DESIGN-077：单个可为空 ID，仅本页实例内存活
     expect(SFC_SOURCE).toContain('@row-click="onRowClick"')
     expect(SFC_SOURCE).toContain('const selectedClientId = ref<string | null>(null)')
-    expect(SFC_SOURCE).toContain("'cc-row--selected'")
+    expect(SFC_SOURCE).toContain("'lt-row-highlight__row'")
     // 不恢复复选框、多选、已选集合与批量删除入口
     expect(SFC_SOURCE).not.toContain('删除所选')
     expect(SFC_SOURCE).not.toContain('已选择：')
@@ -1032,7 +1043,7 @@ describe('“更多”入口事件边界与编辑入口（CCFG-UI-032、R1-06）
   it('组件：打开“更多”不产生选中视觉，也不出现已选提示', async () => {
     const wrapper = await mountPage([enabledRow])
     await openRowMenu(wrapper, 0)
-    expect(wrapper.findAll('.cc-row--selected')).toHaveLength(0)
+    expect(wrapper.findAll('.lt-row-highlight__row')).toHaveLength(0)
     expect(wrapper.text()).not.toContain('已选择')
     wrapper.unmount()
   })
@@ -1338,7 +1349,7 @@ describe('标签文字水平/垂直居中与统一承载（R2 §3/§6）', () =>
     const tag = wrapper.findAll('.cc-dstag').find((t) => t.text() === '停用机构')!
     await tag.trigger('click')
     await nextTick()
-    expect(wrapper.findAll('.cc-row--selected')).toHaveLength(0)
+    expect(wrapper.findAll('.lt-row-highlight__row')).toHaveLength(0)
     expect(wrapper.text()).not.toContain('已选择')
     wrapper.unmount()
   })
@@ -1603,7 +1614,7 @@ describe('数据源单行自适应与动态 +N（CCFG-UI-004/007~010，R1 §5.4/
     ;(item as HTMLElement).dispatchEvent(new MouseEvent('click', { bubbles: true, cancelable: true }))
     await nextTick()
     expect(wrapper.find('.cc-dialog').exists()).toBe(false)
-    expect(wrapper.findAll('.cc-row--selected')).toHaveLength(0)
+    expect(wrapper.findAll('.lt-row-highlight__row')).toHaveLength(0)
     wrapper.unmount()
   })
 })
@@ -2906,7 +2917,7 @@ describe('第五轮：主列表单行固定选中（CCFG-REQ-142~146、CCFG-DESI
     await flushPromises()
   }
 
-  const selectedRow = (w: PageWrapper) => w.find('.cc-row--selected')
+  const selectedRow = (w: PageWrapper) => w.find('.lt-row-highlight__row')
 
   /** 由测试精确控制“请求启动／响应完成”顺序的挂起响应（确定性地复现请求交错）。 */
   function deferred<T>() {
@@ -2921,22 +2932,22 @@ describe('第五轮：主列表单行固定选中（CCFG-REQ-142~146、CCFG-DESI
 
   it('左键单击：未选中行固定 → 重复单击同一行取消 → 单击其他行转移，全表同时最多一行', async () => {
     const w = await mountPage([enabledRow, disabledRow])
-    expect(w.findAll('.cc-row--selected')).toHaveLength(0)
+    expect(w.findAll('.lt-row-highlight__row')).toHaveLength(0)
 
     await clickRow(w, enabledRow)
-    expect(w.findAll('.cc-row--selected')).toHaveLength(1)
+    expect(w.findAll('.lt-row-highlight__row')).toHaveLength(1)
     expect(selectedRow(w).text()).toContain('probe-a')
 
     // 单击另一行：立即转移，原行不再固定
     await clickRow(w, disabledRow)
-    expect(w.findAll('.cc-row--selected')).toHaveLength(1)
+    expect(w.findAll('.lt-row-highlight__row')).toHaveLength(1)
     expect(selectedRow(w).text()).toContain('probe-b')
 
     // 再次单击同一行：判定窗口内保持固定（不抖动），窗口后取消
     await clickRow(w, disabledRow)
     expect(selectedRow(w).text()).toContain('probe-b')
     await sleep(CANCEL_WINDOW_MS)
-    expect(w.findAll('.cc-row--selected')).toHaveLength(0)
+    expect(w.findAll('.lt-row-highlight__row')).toHaveLength(0)
     w.unmount()
   })
 
@@ -2947,7 +2958,7 @@ describe('第五轮：主列表单行固定选中（CCFG-REQ-142~146、CCFG-DESI
     const idCell = w.findAll('.cc-id').find((s) => s.text() === 'probe-b')!
     await idCell.trigger('click')
     await flushPromises()
-    expect(w.findAll('.cc-row--selected')).toHaveLength(1)
+    expect(w.findAll('.lt-row-highlight__row')).toHaveLength(1)
     await sleep(CANCEL_WINDOW_MS)
     w.unmount()
   })
@@ -2958,7 +2969,7 @@ describe('第五轮：主列表单行固定选中（CCFG-REQ-142~146、CCFG-DESI
     await clickRow(w, enabledRow) // 进入 A 的取消判定窗口
     await clickRow(w, disabledRow) // 立刻转移到 B，须撤销 A 的待定取消
     await sleep(CANCEL_WINDOW_MS)
-    expect(w.findAll('.cc-row--selected')).toHaveLength(1)
+    expect(w.findAll('.lt-row-highlight__row')).toHaveLength(1)
     expect(selectedRow(w).text()).toContain('probe-b')
     w.unmount()
   })
@@ -2966,7 +2977,7 @@ describe('第五轮：主列表单行固定选中（CCFG-REQ-142~146、CCFG-DESI
   it('双击原未固定行：该行固定高亮且打开编辑，第二次点击不反向取消（CCFG-AC-142 a）', async () => {
     const w = await mountPage([enabledRow, disabledRow])
     await dblClickRow(w, disabledRow)
-    expect(w.findAll('.cc-row--selected')).toHaveLength(1)
+    expect(w.findAll('.lt-row-highlight__row')).toHaveLength(1)
     expect(selectedRow(w).text()).toContain('probe-b')
     expect(w.find('.cc-dialog').text()).toContain('编辑探针')
     expect(mockedOptions).toHaveBeenCalledWith('probe-b')
@@ -2979,7 +2990,7 @@ describe('第五轮：主列表单行固定选中（CCFG-REQ-142~146、CCFG-DESI
     expect(selectedRow(w).text()).toContain('probe-a')
 
     await dblClickRow(w, enabledRow)
-    expect(w.findAll('.cc-row--selected')).toHaveLength(1)
+    expect(w.findAll('.lt-row-highlight__row')).toHaveLength(1)
     expect(selectedRow(w).text()).toContain('probe-a')
     expect(w.find('.cc-dialog').text()).toContain('编辑探针')
     await sleep(CANCEL_WINDOW_MS)
@@ -2993,13 +3004,13 @@ describe('第五轮：主列表单行固定选中（CCFG-REQ-142~146、CCFG-DESI
     expect(selectedRow(w).text()).toContain('probe-a')
 
     await dblClickRow(w, disabledRow)
-    expect(w.findAll('.cc-row--selected')).toHaveLength(1)
+    expect(w.findAll('.lt-row-highlight__row')).toHaveLength(1)
     expect(selectedRow(w).text()).toContain('probe-b')
     expect(w.find('.cc-dialog').text()).toContain('编辑探针')
     expect(mockedOptions).toHaveBeenCalledWith('probe-b')
     await sleep(CANCEL_WINDOW_MS)
     expect(selectedRow(w).text()).toContain('probe-b')
-    expect(w.findAll('.cc-row--selected')).toHaveLength(1)
+    expect(w.findAll('.lt-row-highlight__row')).toHaveLength(1)
     w.unmount()
   })
 
@@ -3012,7 +3023,7 @@ describe('第五轮：主列表单行固定选中（CCFG-REQ-142~146、CCFG-DESI
     expect(w.find('.cc-dialog').text()).toContain('编辑探针')
     expect(mockedOptions).toHaveBeenCalledWith('probe-b')
     // 键盘编辑入口不产生普通鼠标点击：固定选中仍在 A
-    expect(w.findAll('.cc-row--selected')).toHaveLength(1)
+    expect(w.findAll('.lt-row-highlight__row')).toHaveLength(1)
     expect(selectedRow(w).text()).toContain('probe-a')
     w.unmount()
   })
@@ -3033,7 +3044,7 @@ describe('第五轮：主列表单行固定选中（CCFG-REQ-142~146、CCFG-DESI
     await clickRow(w, disabledRow)
     await dblClickRow(w, disabledRow)
     await sleep(CANCEL_WINDOW_MS)
-    expect(w.findAll('.cc-row--selected')).toHaveLength(1)
+    expect(w.findAll('.lt-row-highlight__row')).toHaveLength(1)
     expect(selectedRow(w).text()).toContain('probe-b')
     await exactButton(w, '取消')!.trigger('click')
     await flushPromises()
@@ -3054,7 +3065,7 @@ describe('第五轮：主列表单行固定选中（CCFG-REQ-142~146、CCFG-DESI
       await flushPromises()
     }
     // 固定选中保持不变，且行双击编辑未被误触发
-    expect(w.findAll('.cc-row--selected')).toHaveLength(1)
+    expect(w.findAll('.lt-row-highlight__row')).toHaveLength(1)
     expect(selectedRow(w).text()).toContain('probe-x')
     expect(w.find('.cc-dialog').exists()).toBe(false)
     expect(mockedOptions).not.toHaveBeenCalled()
@@ -3063,7 +3074,7 @@ describe('第五轮：主列表单行固定选中（CCFG-REQ-142~146、CCFG-DESI
 
   it('首次进入不保留任何固定选中（CCFG-AC-144）', async () => {
     const w = await mountPage([enabledRow, disabledRow])
-    expect(w.findAll('.cc-row--selected')).toHaveLength(0)
+    expect(w.findAll('.lt-row-highlight__row')).toHaveLength(0)
     w.unmount()
   })
 
@@ -3081,7 +3092,7 @@ describe('第五轮：主列表单行固定选中（CCFG-REQ-142~146、CCFG-DESI
     await exactButton(w, '查询')!.trigger('click')
     await flushPromises()
     expect(mockedList).toHaveBeenCalledTimes(2)
-    expect(w.findAll('.cc-row--selected')).toHaveLength(0)
+    expect(w.findAll('.lt-row-highlight__row')).toHaveLength(0)
 
     // ② 制造加载失败：失败态下重新固定一行，再点击“重试” → 重载同样清除
     await exactButton(w, '查询')!.trigger('click')
@@ -3093,7 +3104,7 @@ describe('第五轮：主列表单行固定选中（CCFG-REQ-142~146、CCFG-DESI
     await exactButton(w, '重试')!.trigger('click')
     await flushPromises()
     expect(mockedList).toHaveBeenCalledTimes(4)
-    expect(w.findAll('.cc-row--selected')).toHaveLength(0)
+    expect(w.findAll('.lt-row-highlight__row')).toHaveLength(0)
     w.unmount()
   })
 
@@ -3126,7 +3137,7 @@ describe('第五轮：主列表单行固定选中（CCFG-REQ-142~146、CCFG-DESI
     await clickRowMenuAction(w, 0, '停用')
     expect(messageSpy.success).toHaveBeenCalledWith('停用成功')
     expect(mockedList).toHaveBeenCalledTimes(2)
-    expect(w.findAll('.cc-row--selected')).toHaveLength(1)
+    expect(w.findAll('.lt-row-highlight__row')).toHaveLength(1)
     expect(selectedRow(w).text()).toContain('probe-a')
     w.unmount()
   })
@@ -3141,7 +3152,7 @@ describe('第五轮：主列表单行固定选中（CCFG-REQ-142~146、CCFG-DESI
 
     await clickRowMenuAction(w, 0, '停用')
     expect(messageSpy.success).toHaveBeenCalledWith('停用成功')
-    expect(w.findAll('.cc-row--selected')).toHaveLength(0)
+    expect(w.findAll('.lt-row-highlight__row')).toHaveLength(0)
     w.unmount()
   })
 
@@ -3152,7 +3163,7 @@ describe('第五轮：主列表单行固定选中（CCFG-REQ-142~146、CCFG-DESI
 
     await clickRowMenuAction(w, 1, '启用')
     expect(messageSpy.success).toHaveBeenCalledWith('启用成功')
-    expect(w.findAll('.cc-row--selected')).toHaveLength(1)
+    expect(w.findAll('.lt-row-highlight__row')).toHaveLength(1)
     expect(selectedRow(w).text()).toContain('probe-b')
     w.unmount()
   })
@@ -3189,7 +3200,7 @@ describe('第五轮：主列表单行固定选中（CCFG-REQ-142~146、CCFG-DESI
     await clickRowMenuAction(w, 1, '删除')
     expect(mockedDelete).toHaveBeenCalledWith('probe-b')
     expect(messageSpy.success).toHaveBeenCalledWith('删除成功')
-    expect(w.findAll('.cc-row--selected')).toHaveLength(0)
+    expect(w.findAll('.lt-row-highlight__row')).toHaveLength(0)
     w.unmount()
   })
 
@@ -3200,10 +3211,10 @@ describe('第五轮：主列表单行固定选中（CCFG-REQ-142~146、CCFG-DESI
 
     await exactButton(w, '查询')!.trigger('click')
     await flushPromises()
-    expect(w.findAll('.cc-row--selected')).toHaveLength(0)
+    expect(w.findAll('.lt-row-highlight__row')).toHaveLength(0)
     // 计时器即使迟到也不得把选中行写回
     await sleep(CANCEL_WINDOW_MS)
-    expect(w.findAll('.cc-row--selected')).toHaveLength(0)
+    expect(w.findAll('.lt-row-highlight__row')).toHaveLength(0)
     w.unmount()
   })
 
@@ -3228,17 +3239,17 @@ describe('第五轮：主列表单行固定选中（CCFG-REQ-142~146、CCFG-DESI
     // ② 用户点“查询” → 普通重载成为最新请求，发起时即清除旧固定选中
     await exactButton(w, '查询')!.trigger('click')
     expect(mockedList).toHaveBeenCalledTimes(3)
-    expect(w.findAll('.cc-row--selected')).toHaveLength(0)
+    expect(w.findAll('.lt-row-highlight__row')).toHaveLength(0)
 
     // ③ 查询成功且结果仍含 probe-a：普通重载不得继承启停目标、不得重新固定 A
     pendingQueryReload.resolve(okList([enabledRow, disabledRow]))
     await flushPromises()
-    expect(w.findAll('.cc-row--selected')).toHaveLength(0)
+    expect(w.findAll('.lt-row-highlight__row')).toHaveLength(0)
 
     // ④ 过期的启停列表响应随后到达（结果同样含 probe-a）：不得回写、不得恢复 A
     pendingAdminReload.resolve(okList([enabledRow, disabledRow]))
     await flushPromises()
-    expect(w.findAll('.cc-row--selected')).toHaveLength(0)
+    expect(w.findAll('.lt-row-highlight__row')).toHaveLength(0)
     w.unmount()
   })
 
@@ -3261,17 +3272,17 @@ describe('第五轮：主列表单行固定选中（CCFG-REQ-142~146、CCFG-DESI
     await clickRowMenuAction(w, 1, '删除')
     expect(messageSpy.success).toHaveBeenCalledWith('删除成功')
     expect(mockedList).toHaveBeenCalledTimes(3)
-    expect(w.findAll('.cc-row--selected')).toHaveLength(0)
+    expect(w.findAll('.lt-row-highlight__row')).toHaveLength(0)
 
     // 删除成功重载按 CCFG-REQ-145 清选：即使结果仍含 probe-a 也不固定
     pendingDeleteReload.resolve(okList([enabledRow]))
     await flushPromises()
-    expect(w.findAll('.cc-row--selected')).toHaveLength(0)
+    expect(w.findAll('.lt-row-highlight__row')).toHaveLength(0)
 
     // 过期的启停响应到达也不得恢复 probe-a
     pendingAdminReload.resolve(okList([enabledRow, disabledRow]))
     await flushPromises()
-    expect(w.findAll('.cc-row--selected')).toHaveLength(0)
+    expect(w.findAll('.lt-row-highlight__row')).toHaveLength(0)
     w.unmount()
   })
 
@@ -3288,17 +3299,17 @@ describe('第五轮：主列表单行固定选中（CCFG-REQ-142~146、CCFG-DESI
     expect(mockedList).toHaveBeenCalledTimes(2)
 
     await exactButton(w, '查询')!.trigger('click')
-    expect(w.findAll('.cc-row--selected')).toHaveLength(0)
+    expect(w.findAll('.lt-row-highlight__row')).toHaveLength(0)
 
     // 查询失败：按既有规则提示失败、保留上一次成功结果，但不得固定任何行
     pendingQueryReload.resolve(failList(500, 'boom'))
     await flushPromises()
     expect(w.find('.cc-load-error').exists()).toBe(true)
-    expect(w.findAll('.cc-row--selected')).toHaveLength(0)
+    expect(w.findAll('.lt-row-highlight__row')).toHaveLength(0)
 
     pendingAdminReload.resolve(okList([enabledRow, disabledRow]))
     await flushPromises()
-    expect(w.findAll('.cc-row--selected')).toHaveLength(0)
+    expect(w.findAll('.lt-row-highlight__row')).toHaveLength(0)
     w.unmount()
   })
 
@@ -3310,7 +3321,7 @@ describe('第五轮：主列表单行固定选中（CCFG-REQ-142~146、CCFG-DESI
       .mockReturnValueOnce(pendingDisable.promise) // 停用 probe-a 自身重载（目标 probe-a）
       .mockReturnValueOnce(pendingEnable.promise) // 启用 probe-b 自身重载（目标 probe-b，最新）
     const w = await mountRaw()
-    expect(w.findAll('.cc-row--selected')).toHaveLength(0)
+    expect(w.findAll('.lt-row-highlight__row')).toHaveLength(0)
 
     await clickRowMenuAction(w, 0, '停用') // 目标 probe-a
     await clickRowMenuAction(w, 1, '启用') // 目标 probe-b，成为最新请求
@@ -3319,12 +3330,12 @@ describe('第五轮：主列表单行固定选中（CCFG-REQ-142~146、CCFG-DESI
     // 过期的停用响应（结果含 probe-a）先到：不得固定 probe-a
     pendingDisable.resolve(okList([enabledRow, disabledRow]))
     await flushPromises()
-    expect(w.findAll('.cc-row--selected')).toHaveLength(0)
+    expect(w.findAll('.lt-row-highlight__row')).toHaveLength(0)
 
     // 最新的启用响应到达：按其自身目标 probe-b 固定（结果含 probe-b）
     pendingEnable.resolve(okList([enabledRow, disabledRow]))
     await flushPromises()
-    expect(w.findAll('.cc-row--selected')).toHaveLength(1)
+    expect(w.findAll('.lt-row-highlight__row')).toHaveLength(1)
     expect(selectedRow(w).text()).toContain('probe-b')
     w.unmount()
   })
@@ -3345,33 +3356,52 @@ describe('第五轮：主列表单行固定选中（CCFG-REQ-142~146、CCFG-DESI
     await exactButton(w, '查询')!.trigger('click')
     await flushPromises()
     expect(mockedList).toHaveBeenCalledTimes(2)
-    expect(w.findAll('.cc-row--selected')).toHaveLength(0)
+    expect(w.findAll('.lt-row-highlight__row')).toHaveLength(0)
     w.unmount()
   })
 
-  it('静态：固定高亮与悬停使用可区分视觉层级，且悬停不改变固定高亮底色（CCFG-AC-141 ⑤/CCFG-UI-065）', () => {
-    const ns = ':deep(.cc-table .el-table__body '
-    // el-table 行单击会自带 `current-row` 底色，须归零，否则固定高亮之外还叠一层 EP 当前行底色
-    expect(
-      declValue(cssBlock(SFC_SOURCE, `${ns}tr.current-row > td.el-table__cell)`), 'background-color'),
-    ).toBe('transparent')
+  it('静态：行高亮已迁移至公共 §13.3 opt-in 预设——页面仅显式启用、引公共源、无私有重复规则（CCFG-AC-141 ⑤/CCFG-UI-065）', () => {
+    // 页面显式两级 opt-in：表级类与根类并列，行级类由 `rowClassName` 提供。
+    expect(SFC_SOURCE).toContain(":class=\"[LT_MAIN_TABLE_CLASS, 'lt-row-highlight']\"")
+    expect(SFC_SOURCE).toContain("'lt-row-highlight__row'")
+    // 视觉来源为公共预设文件（唯一来源）。
+    expect(SFC_SOURCE).toContain(
+      '<style scoped src="@/styles/list-table/list-table-visual.css"></style>',
+    )
+    // 页面不再保留会与公共规则竞争或重复的私有行高亮视觉规则。
+    for (const sel of [
+      'tr.current-row > td.el-table__cell',
+      'tr:hover > td.el-table__cell',
+      'tr.cc-row--selected',
+      'el-table__body tr',
+    ]) {
+      expect(SFC_SOURCE, sel).not.toContain(sel)
+    }
+    expect(SFC_SOURCE).not.toContain('!important')
 
-    const selectedBg = declValue(
-      cssBlock(SFC_SOURCE, `${ns}tr.cc-row--selected > td.el-table__cell)`),
+    // 可区分层级与“悬停不改变固定底色”的取值契约仍由**本页所引用的公共源**承担。
+    const fixedBg = declValue(
+      cssBlock(PUBLIC_CSS_SOURCE, `${PUBLIC_NS}tr.lt-row-highlight__row > td.el-table__cell)`),
       'background-color',
     )
-    expect(selectedBg).not.toBe('')
-    // 悬停自身／其他行都不得改变固定高亮底色：悬停态取同一底色
+    expect(fixedBg).not.toBe('')
     expect(
       declValue(
-        cssBlock(SFC_SOURCE, `${ns}tr.cc-row--selected:hover > td.el-table__cell)`),
+        cssBlock(PUBLIC_CSS_SOURCE, `${PUBLIC_NS}tr.lt-row-highlight__row:hover > td.el-table__cell)`),
         'background-color',
       ),
-    ).toBe(selectedBg)
-    // 固定选中另以左缘强调线带与悬停区分
-    expect(SFC_SOURCE).toContain('tr.cc-row--selected > td.el-table__cell:first-child')
-    expect(SFC_SOURCE).toContain('box-shadow')
-    expect(SFC_SOURCE).not.toContain('!important')
+    ).toBe(fixedBg)
+    // el-table 行单击自带的 `current-row` 底色在公共预设内被归零，取消固定后不残留行底。
+    expect(
+      declValue(cssBlock(PUBLIC_CSS_SOURCE, `${PUBLIC_NS}tr.current-row > td.el-table__cell)`), 'background-color'),
+    ).toBe('transparent')
+    // 固定选中另以左缘强调线与悬停区分。
+    expect(
+      declValue(
+        cssBlock(PUBLIC_CSS_SOURCE, `${PUBLIC_NS}tr.lt-row-highlight__row > td.el-table__cell:first-child)`),
+        'box-shadow',
+      ),
+    ).toBe('inset 3px 0 0 0 #18181b')
   })
 })
 
@@ -3379,8 +3409,10 @@ describe('第五轮：主列表单行固定选中（CCFG-REQ-142~146、CCFG-DESI
 // CCFG-REQ-148~152 / CCFG-AC-147~154 / CCFG-DESIGN-083~087 / CCFG-UI-071~075
 
 describe('第六轮：主列表行高亮中性灰阶（CCFG-REQ-148/149、CCFG-DESIGN-083/084、CCFG-UI-071/072/073）', () => {
-  /** 本页行样式全部落在页面作用域，选择器以 `:deep` 限定在表格根类 `.cc-table` 内。 */
-  const NS = ':deep(.cc-table .el-table__body '
+  /**
+   * 本页行高亮视觉已迁移至公共 §13.3 opt-in 预设：页面只显式启用（表级 + 行级类）并引用公共源，
+   * 取值契约改为核对**本页所引用的公共源文件**（`PUBLIC_CSS_SOURCE` / `PUBLIC_NS`）。
+   */
   /** 略大于实现的 260ms 单击取消判定窗口。 */
   const CANCEL_WINDOW_MS = 320
 
@@ -3392,9 +3424,12 @@ describe('第六轮：主列表行高亮中性灰阶（CCFG-REQ-148/149、CCFG-D
   }
 
   it('静态：普通悬停很浅中性灰、固定选中略深中性灰，两态可区分且均非蓝色配', () => {
-    const hoverBg = declValue(cssBlock(SFC_SOURCE, `${NS}tr:hover > td.el-table__cell)`), 'background-color')
+    const hoverBg = declValue(
+      cssBlock(PUBLIC_CSS_SOURCE, `${PUBLIC_NS}tr:not(.lt-row-highlight__row):hover > td.el-table__cell)`),
+      'background-color',
+    )
     const fixedBg = declValue(
-      cssBlock(SFC_SOURCE, `${NS}tr.cc-row--selected > td.el-table__cell)`),
+      cssBlock(PUBLIC_CSS_SOURCE, `${PUBLIC_NS}tr.lt-row-highlight__row > td.el-table__cell)`),
       'background-color',
     )
     expect(hoverBg).toBe('#f4f4f5')
@@ -3420,9 +3455,12 @@ describe('第六轮：主列表行高亮中性灰阶（CCFG-REQ-148/149、CCFG-D
       return Math.max(...ch) - Math.min(...ch)
     }
 
-    const hoverBg = declValue(cssBlock(SFC_SOURCE, `${NS}tr:hover > td.el-table__cell)`), 'background-color')
+    const hoverBg = declValue(
+      cssBlock(PUBLIC_CSS_SOURCE, `${PUBLIC_NS}tr:not(.lt-row-highlight__row):hover > td.el-table__cell)`),
+      'background-color',
+    )
     const fixedBg = declValue(
-      cssBlock(SFC_SOURCE, `${NS}tr.cc-row--selected > td.el-table__cell)`),
+      cssBlock(PUBLIC_CSS_SOURCE, `${PUBLIC_NS}tr.lt-row-highlight__row > td.el-table__cell)`),
       'background-color',
     )
 
@@ -3438,17 +3476,17 @@ describe('第六轮：主列表行高亮中性灰阶（CCFG-REQ-148/149、CCFG-D
   it('静态：固定底色规则作用于行内全部单元格，不把底色收窄到个别单元格', () => {
     // “操作”为最右固定列，EP 对其单元格只做 `background: inherit`；若把固定底色写死在
     // `:first-child` 等子集上，固定列就会与其余单元格底色不一致。
-    expect(SFC_SOURCE).toContain(`${NS}tr.cc-row--selected > td.el-table__cell) {`)
+    expect(PUBLIC_CSS_SOURCE).toContain(`${PUBLIC_NS}tr.lt-row-highlight__row > td.el-table__cell) {`)
     expect(
       declValue(
-        cssBlock(SFC_SOURCE, `${NS}tr.cc-row--selected > td.el-table__cell)`),
+        cssBlock(PUBLIC_CSS_SOURCE, `${PUBLIC_NS}tr.lt-row-highlight__row > td.el-table__cell)`),
         'background',
       ),
     ).toBe('')
     // 首格规则只负责左缘强调线，不单独再写一层底色
     expect(
       declValue(
-        cssBlock(SFC_SOURCE, `${NS}tr.cc-row--selected > td.el-table__cell:first-child)`),
+        cssBlock(PUBLIC_CSS_SOURCE, `${PUBLIC_NS}tr.lt-row-highlight__row > td.el-table__cell:first-child)`),
         'background-color',
       ),
     ).toBe('')
@@ -3457,39 +3495,47 @@ describe('第六轮：主列表行高亮中性灰阶（CCFG-REQ-148/149、CCFG-D
   it('静态：固定选中行保留左缘深灰／近黑细强调线，且固定后再悬停底色不跳变', () => {
     expect(
       declValue(
-        cssBlock(SFC_SOURCE, `${NS}tr.cc-row--selected > td.el-table__cell:first-child)`),
+        cssBlock(PUBLIC_CSS_SOURCE, `${PUBLIC_NS}tr.lt-row-highlight__row > td.el-table__cell:first-child)`),
         'box-shadow',
       ),
     ).toBe('inset 3px 0 0 0 #18181b')
     // 固定行再被悬停时取与固定态相同的底色（不产生颜色跳动）
     const fixedBg = declValue(
-      cssBlock(SFC_SOURCE, `${NS}tr.cc-row--selected > td.el-table__cell)`),
+      cssBlock(PUBLIC_CSS_SOURCE, `${PUBLIC_NS}tr.lt-row-highlight__row > td.el-table__cell)`),
       'background-color',
     )
     expect(
       declValue(
-        cssBlock(SFC_SOURCE, `${NS}tr.cc-row--selected:hover > td.el-table__cell)`),
+        cssBlock(PUBLIC_CSS_SOURCE, `${PUBLIC_NS}tr.lt-row-highlight__row:hover > td.el-table__cell)`),
         'background-color',
       ),
     ).toBe(fixedBg)
   })
 
   it('静态：固定选中源码顺序后于悬停规则、current-row 归零在最前，保证固定态优先', () => {
-    const zero = SFC_SOURCE.indexOf(`${NS}tr.current-row > td.el-table__cell)`)
-    const hover = SFC_SOURCE.indexOf(`${NS}tr:hover > td.el-table__cell)`)
-    const fixed = SFC_SOURCE.indexOf(`${NS}tr.cc-row--selected > td.el-table__cell)`)
-    const fixedHover = SFC_SOURCE.indexOf(`${NS}tr.cc-row--selected:hover > td.el-table__cell)`)
+    const zero = PUBLIC_CSS_SOURCE.indexOf(`${PUBLIC_NS}tr.current-row > td.el-table__cell)`)
+    const hover = PUBLIC_CSS_SOURCE.indexOf(
+      `${PUBLIC_NS}tr:not(.lt-row-highlight__row):hover > td.el-table__cell)`,
+    )
+    const fixed = PUBLIC_CSS_SOURCE.indexOf(`${PUBLIC_NS}tr.lt-row-highlight__row > td.el-table__cell)`)
+    const fixedHover = PUBLIC_CSS_SOURCE.indexOf(
+      `${PUBLIC_NS}tr.lt-row-highlight__row:hover > td.el-table__cell)`,
+    )
     expect(zero).toBeGreaterThan(-1)
     // 归零在前、悬停其后：取消固定选中后该行悬停仍显示普通灰底，不残留行底
     expect(hover).toBeGreaterThan(zero)
-    // 固定选中多带一个 `.cc-row--selected` 类（特异性更高）且源码顺序在后
+    // 固定选中多带一个 `.lt-row-highlight__row` 类（特异性更高）且源码顺序在后
     expect(fixed).toBeGreaterThan(hover)
     expect(fixedHover).toBeGreaterThan(fixed)
   })
 
-  it('静态：行样式落在页面 scoped 块内，不声明公共令牌、不使用强制声明或全局覆盖', () => {
+  it('静态：页面自身 scoped 块已移除私有行高亮规则，不声明公共令牌、不使用强制声明或全局覆盖', () => {
+    // 页面私有 scoped 块（内联 `<style scoped>`，不含 `<style scoped src>`）不得再含行底色规则。
     const scopedBlocks = SFC_SOURCE.match(/<style scoped>[\s\S]*?<\/style>/g) ?? []
-    expect(scopedBlocks.some((b) => b.includes(`${NS}tr.cc-row--selected`))).toBe(true)
+    expect(scopedBlocks.length).toBeGreaterThan(0)
+    for (const block of scopedBlocks) {
+      expect(block).not.toContain('el-table__body tr')
+    }
     expect(SFC_SOURCE).not.toMatch(/--lt-[\w-]+\s*:/)
     expect(SFC_SOURCE).not.toContain('!important')
     // 行内状态标签（红／绿数据源标签、异常标识）不因本轮行底色而变灰
@@ -3499,22 +3545,22 @@ describe('第六轮：主列表行高亮中性灰阶（CCFG-REQ-148/149、CCFG-D
   it('组件：视觉调整不改变单行固定选中行为——同时最多一行、再次单击取消', async () => {
     const w = await mountPage([enabledRow, disabledRow])
     await clickRow(w, enabledRow)
-    expect(w.findAll('.cc-row--selected')).toHaveLength(1)
-    expect(w.findAll('.cc-row--selected')[0].text()).toContain('probe-a')
+    expect(w.findAll('.lt-row-highlight__row')).toHaveLength(1)
+    expect(w.findAll('.lt-row-highlight__row')[0].text()).toContain('probe-a')
 
     await clickRow(w, disabledRow)
-    expect(w.findAll('.cc-row--selected')).toHaveLength(1)
-    expect(w.findAll('.cc-row--selected')[0].text()).toContain('probe-b')
+    expect(w.findAll('.lt-row-highlight__row')).toHaveLength(1)
+    expect(w.findAll('.lt-row-highlight__row')[0].text()).toContain('probe-b')
 
     await clickRow(w, disabledRow)
     await sleep(CANCEL_WINDOW_MS)
-    expect(w.findAll('.cc-row--selected')).toHaveLength(0)
+    expect(w.findAll('.lt-row-highlight__row')).toHaveLength(0)
 
     // 取消后仅剩普通态／悬停态，可再次正常固定（取消不是不可逆的死状态）
     await clickRow(w, disabledRow)
     await sleep(CANCEL_WINDOW_MS)
-    expect(w.findAll('.cc-row--selected')).toHaveLength(1)
-    expect(w.findAll('.cc-row--selected')[0].text()).toContain('probe-b')
+    expect(w.findAll('.lt-row-highlight__row')).toHaveLength(1)
+    expect(w.findAll('.lt-row-highlight__row')[0].text()).toContain('probe-b')
     w.unmount()
   })
 })

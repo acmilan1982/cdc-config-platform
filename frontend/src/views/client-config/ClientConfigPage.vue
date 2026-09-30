@@ -49,11 +49,14 @@
       </template>
       <template #body>
         <!-- 主列表显式接入列表表格视觉模板（根类 + scoped 预设），弹窗内表格不接入（CCFG-REQ-099）。
-             行单击切换“唯一一行固定选中”（页面会话内本地状态），行双击进入编辑，二者按
-             CCFG-DESIGN-078 的判定规则协调；固定选中行以 row-class-name 加类，不改行内结构。 -->
+             并在此显式并列表级可选高亮 opt-in 类 `lt-row-highlight`（SHARED_COMPONENT_DESIGN §13.3）：
+             普通 hover、固定底、固定行自 hover、`current-row` 归零与左缘强调均由公共预设唯一承担，
+             本页不再保留等价私有规则。行单击切换“唯一一行固定选中”（页面会话内本地状态），
+             行双击进入编辑，二者按 CCFG-DESIGN-078 的判定规则协调；被固定行由 row-class-name
+             提供公共行级类 `lt-row-highlight__row`，不改行内结构。 -->
         <el-table
           class="cc-table"
-          :class="[LT_MAIN_TABLE_CLASS]"
+          :class="[LT_MAIN_TABLE_CLASS, 'lt-row-highlight']"
           :data="listRows"
           empty-text="暂无符合条件的探针"
           :row-class-name="rowClassName"
@@ -671,9 +674,9 @@ function onRowClick(row: ClientListItemVO, _column: unknown, event: MouseEvent):
   }, CLICK_CANCEL_DELAY_MS)
 }
 
-/** 固定选中行加类，供页面作用域样式渲染行高亮；最多一行。 */
+/** 固定选中行挂公共行级 opt-in 类，由公共 §13.3 预设渲染行高亮；最多一行。 */
 function rowClassName({ row }: { row: ClientListItemVO }): string {
-  return row.clientId === selectedClientId.value ? 'cc-row--selected' : ''
+  return row.clientId === selectedClientId.value ? 'lt-row-highlight__row' : ''
 }
 
 function onRowDblClick(row: ClientListItemVO): void {
@@ -1520,7 +1523,8 @@ onBeforeUnmount(() => {
 </script>
 
 <!-- 主列表表格视觉模板：显式引用公共预设源（显式启用，非全局），
-     并由 el-table 根元素上的并列类 `lt-main-table` 启用（CCFG-REQ-099）。 -->
+     并由 el-table 根元素上的并列类 `lt-main-table` 启用（CCFG-REQ-099）；
+     其可选单行高亮预设再由并列的 `lt-row-highlight`（表级）+ 行级 `lt-row-highlight__row` 两级 opt-in 启用。 -->
 <style scoped src="@/styles/list-table/list-table-visual.css"></style>
 
 <style scoped>
@@ -1600,49 +1604,13 @@ onBeforeUnmount(() => {
 
 /* 本页不为行声明固定像素行高：行高由公共表格视觉预设的单元格上下内边距
    （`var(--lt-body-cell-padding, 12px 0)`）与行内容共同决定，与参考页“数据源管理”实际规则一致
-   （CCFG-REQ-106/CCFG-DESIGN-049/CCFG-UI-038）。普通悬停为本轮定义的很浅中性灰底（移走即恢复，
-   CCFG-REQ-148/CCFG-UI-071），行双击编辑由 @row-dblclick 承担。 */
+   （CCFG-REQ-106/CCFG-DESIGN-049/CCFG-UI-038）。行双击编辑由 @row-dblclick 承担。 */
 
-/* 固定选中行（CCFG-REQ-142/148/149/CCFG-DESIGN-077/083/084/CCFG-UI-065/071/072）：页面会话内最多一行，
-   视觉层级明显强于普通悬停。本轮改用中性灰阶——普通悬停很浅中性灰（`#f4f4f5`）、固定选中略深中性灰
-   （`#e1e4e8`）+ 首格左侧深灰／近黑细强调线（`#18181b`），两态可区分且非蓝底／非蓝线。
-   固定底色先取 `#eceef0`，项目负责人目测反馈与悬停 `#f4f4f5` 区分不足，故定向加深为 `#e1e4e8`
-   （`CLIENT-CONFIG-ROW-HIGHLIGHT-VISUAL-DISTINCTION-IMPLEMENTATION-001-R1`）。
-   配色与强调线为本轮页面作用域的新参数，不沿用已取消选择能力的历史参数、不写死与侧栏宽度相关的偏移。
-   选择器以 `:deep` 限定在本页表格根类 `.cc-table` 内；本页 scoped 会为每条规则前置 `[data-v-*]` 属性选择器，
-   使这些规则的特异性压过 Element Plus 的行悬停（`tr.hover-row`／`:hover`）与“当前行”底色（`tr.current-row`），
-   不借助强制声明，使固定选中在悬停其他行或悬停自身时都清晰可辨、不跳变。
-   兼容浏览器：本项目前端以 Chromium 系现代浏览器为目标（见 docs/baseline/ENVIRONMENT.md）。 */
-/* 本页不提供“当前行”语义：el-table 在行单击时会自行落下 `current-row` 底色，若不归零，
-   则“再次点击同一行取消固定选中”后仍会残留行底。本规则与下方固定选中规则**同特异性**，
-   故置于其**前**，使两者同时命中时由固定选中规则按源码顺序胜出。 */
-:deep(.cc-table .el-table__body tr.current-row > td.el-table__cell) {
-  background-color: transparent;
-}
-
-/* 普通行悬停：很浅中性灰，仅指针停留时显示、移开即恢复（CCFG-UI-071）。
-   本页“操作”为最右固定列，EP 因此把该表标为 complex 且不落 `el-table--enable-row-hover`；
-   悬停实际由 EP 的 `tr.hover-row`（JS 切换）与 `:hover` 伪类呈现，本规则特异性高于二者，
-   故本页悬停底色以此处中性灰为准。 */
-:deep(.cc-table .el-table__body tr:hover > td.el-table__cell) {
-  background-color: #f4f4f5;
-}
-
-/* 固定选中：略深中性灰，鼠标移出仍保持；规则特异性高于上方悬停规则，
-   故悬停其他行不改变已固定行（CCFG-UI-072）。 */
-:deep(.cc-table .el-table__body tr.cc-row--selected > td.el-table__cell) {
-  background-color: #e1e4e8;
-}
-
-/* 悬停自身时仍保持固定选中底色（不被临时悬停高亮盖过、不产生颜色跳动） */
-:deep(.cc-table .el-table__body tr.cc-row--selected:hover > td.el-table__cell) {
-  background-color: #e1e4e8;
-}
-
-/* 固定选中行的左侧强调线：只画在首格，避免每格一条线 */
-:deep(.cc-table .el-table__body tr.cc-row--selected > td.el-table__cell:first-child) {
-  box-shadow: inset 3px 0 0 0 #18181b;
-}
+/* 行高亮（普通悬停 / 固定选中 / 固定行自悬停 / “当前行”归零 / 首格左缘强调）已迁移至公共可选视觉预设
+   （SHARED_COMPONENT_DESIGN §13.3，设计基线已批准、公共实现已远程代码复审通过）：本页仅在主列表表格根
+   显式并列挂 `lt-row-highlight`（表级 opt-in），并由 `rowClassName` 为被固定行提供
+   `lt-row-highlight__row`（行级 opt-in）。本页不再保留会与之竞争或重复的私有高亮视觉规则
+   （CCFG-REQ-142/148/149/CCFG-DESIGN-077/083/084/CCFG-UI-065/071/072）。 */
 
 /* 序号列：展示派生值，按当前展示数组 $index + 1 连续编号（CCFG-REQ-100） */
 .cc-seq {

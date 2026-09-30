@@ -1,0 +1,497 @@
+{
+  "ok": true,
+  "env": {
+    "base": "http://127.0.0.1:5173",
+    "viewports": [
+      "1440x900",
+      "1024x768"
+    ],
+    "dataSource": "READ_ONLY_SYNTHETIC_STUB"
+  },
+  "writeCount": 0,
+  "writes": [],
+  "readCallCount": 2,
+  "checks": [
+    {
+      "label": "主列表表根并列挂 lt-main-table",
+      "got": true,
+      "want": true,
+      "ok": true
+    },
+    {
+      "label": "主列表表根并列挂 lt-row-highlight（表级 opt-in）",
+      "got": true,
+      "want": true,
+      "ok": true
+    },
+    {
+      "label": "初始无固定行（行级类计数 0）",
+      "got": 0,
+      "want": 0,
+      "ok": true
+    },
+    {
+      "label": "渲染行数 = 合成 4 行",
+      "got": 4,
+      "want": 4,
+      "ok": true
+    },
+    {
+      "label": "未 hover / 未固定时行底透明",
+      "got": "rgba(0, 0, 0, 0)",
+      "want": "rgba(0, 0, 0, 0)",
+      "ok": true
+    },
+    {
+      "label": "未 opt-in 行不得出现固定底",
+      "got": "rgba(0, 0, 0, 0)",
+      "notWant": "rgb(225, 228, 232)",
+      "ok": true
+    },
+    {
+      "label": "普通行 hover 底为 #f4f4f5",
+      "got": "rgb(244, 244, 245)",
+      "want": "rgb(244, 244, 245)",
+      "ok": true
+    },
+    {
+      "label": "单击固定：第 2 行挂 lt-row-highlight__row",
+      "got": true,
+      "want": true,
+      "ok": true
+    },
+    {
+      "label": "固定行首格底为 #e1e4e8",
+      "got": "rgb(225, 228, 232)",
+      "want": "rgb(225, 228, 232)",
+      "ok": true
+    },
+    {
+      "label": "固定行最右固定列 td 同为 #e1e4e8（整行同色）",
+      "got": "rgb(225, 228, 232)",
+      "want": "rgb(225, 228, 232)",
+      "ok": true
+    },
+    {
+      "label": "固定行最右列确为 EP 固定右列",
+      "got": true,
+      "want": true,
+      "ok": true
+    },
+    {
+      "label": "固定行左缘强调仅在首格",
+      "got": "rgb(24, 24, 27) 3px 0px 0px 0px inset",
+      "want": "rgb(24, 24, 27) 3px 0px 0px 0px inset",
+      "ok": true
+    },
+    {
+      "label": "固定行次格无左缘强调",
+      "got": "none",
+      "want": "none",
+      "ok": true
+    },
+    {
+      "label": "同一时刻最多一行固定",
+      "got": 1,
+      "want": 1,
+      "ok": true
+    },
+    {
+      "label": "未固定行不受固定态影响（仍透明）",
+      "got": "rgba(0, 0, 0, 0)",
+      "want": "rgba(0, 0, 0, 0)",
+      "ok": true
+    },
+    {
+      "label": "固定行自 hover 仍保持固定底",
+      "got": "rgb(225, 228, 232)",
+      "want": "rgb(225, 228, 232)",
+      "ok": true
+    },
+    {
+      "label": "hover 其他行：该行为 hover 灰",
+      "got": "rgb(244, 244, 245)",
+      "want": "rgb(244, 244, 245)",
+      "ok": true
+    },
+    {
+      "label": "hover 其他行：固定行保持固定底",
+      "got": "rgb(225, 228, 232)",
+      "want": "rgb(225, 228, 232)",
+      "ok": true
+    },
+    {
+      "label": "取消后（鼠标仍在该行）不再显示固定底",
+      "got": "rgb(243, 243, 244)",
+      "notWant": "rgb(225, 228, 232)",
+      "ok": true
+    },
+    {
+      "label": "取消后不再挂行级类",
+      "got": false,
+      "want": false,
+      "ok": true
+    },
+    {
+      "label": "取消后不残留固定底",
+      "got": "rgba(0, 0, 0, 0)",
+      "want": "rgba(0, 0, 0, 0)",
+      "ok": true
+    },
+    {
+      "label": "取消后无残留 current-row 蓝底",
+      "got": false,
+      "want": false,
+      "ok": true
+    },
+    {
+      "label": "取消后左缘强调消失",
+      "got": "none",
+      "want": "none",
+      "ok": true
+    },
+    {
+      "label": "取消后行级类计数归零",
+      "got": 0,
+      "want": 0,
+      "ok": true
+    },
+    {
+      "label": "固定行文字色不被灰化（与未固定行一致）",
+      "got": "rgb(9, 9, 11)",
+      "want": "rgb(9, 9, 11)",
+      "ok": true
+    },
+    {
+      "label": "固定行描述色与未固定行一致",
+      "got": "rgb(96, 98, 102)",
+      "want": "rgb(96, 98, 102)",
+      "ok": true
+    },
+    {
+      "label": "三点触发器色不被灰化（固定行 = 未固定行）",
+      "got": "rgb(64, 158, 255)",
+      "want": "rgb(64, 158, 255)",
+      "ok": true
+    },
+    {
+      "label": "窄视口表根仍并列挂 lt-row-highlight",
+      "got": true,
+      "want": true,
+      "ok": true
+    },
+    {
+      "label": "窄视口单击仍只固定一行",
+      "got": 1,
+      "want": 1,
+      "ok": true
+    },
+    {
+      "label": "窄视口固定行底为 #e1e4e8",
+      "got": "rgb(225, 228, 232)",
+      "want": "rgb(225, 228, 232)",
+      "ok": true
+    },
+    {
+      "label": "窄视口固定行首格左缘强调",
+      "got": "rgb(24, 24, 27) 3px 0px 0px 0px inset",
+      "want": "rgb(24, 24, 27) 3px 0px 0px 0px inset",
+      "ok": true
+    },
+    {
+      "label": "窄视口未固定行为透明",
+      "got": "rgba(0, 0, 0, 0)",
+      "want": "rgba(0, 0, 0, 0)",
+      "ok": true
+    },
+    {
+      "label": "参考页 /config/data-source 仍挂 lt-main-table（仅根类）",
+      "got": true,
+      "want": true,
+      "ok": true
+    },
+    {
+      "label": "参考页表根未挂 lt-row-highlight",
+      "got": false,
+      "want": false,
+      "ok": true
+    },
+    {
+      "label": "参考页未挂表级 lt-row-highlight（零泄漏）",
+      "got": 0,
+      "want": 0,
+      "ok": true
+    },
+    {
+      "label": "参考页无任何行级 lt-row-highlight__row（零泄漏）",
+      "got": 0,
+      "want": 0,
+      "ok": true
+    },
+    {
+      "label": "写请求计数为零",
+      "got": 0,
+      "want": 0,
+      "ok": true
+    }
+  ],
+  "problems": [],
+  "raw": {
+    "client_1440x900": {
+      "root": {
+        "className": "el-table--fit el-table--enable-row-transition el-table el-table--layout-fixed cc-table lt-main-table lt-row-highlight is-scrolling-none",
+        "hasLtMainTable": true,
+        "hasLtRowHighlight": true,
+        "optInRowCount": 0
+      },
+      "initial": {
+        "r1": {
+          "className": "el-table__row",
+          "hasFixedOptIn": false,
+          "hasCurrentRow": false,
+          "rowH": 48,
+          "firstTdBg": "rgba(0, 0, 0, 0)",
+          "firstTdShadow": "none",
+          "secondTdShadow": "none",
+          "lastTdBg": "rgb(255, 255, 255)",
+          "lastTdFixedRight": true,
+          "textColor": "rgb(9, 9, 11)",
+          "descColor": "rgb(96, 98, 102)",
+          "ellipsisColor": "rgb(64, 158, 255)",
+          "tdCount": 6
+        },
+        "r2": {
+          "className": "el-table__row",
+          "hasFixedOptIn": false,
+          "hasCurrentRow": false,
+          "rowH": 48,
+          "firstTdBg": "rgba(0, 0, 0, 0)",
+          "firstTdShadow": "none",
+          "secondTdShadow": "none",
+          "lastTdBg": "rgb(255, 255, 255)",
+          "lastTdFixedRight": true,
+          "textColor": "rgb(9, 9, 11)",
+          "descColor": "rgb(96, 98, 102)",
+          "ellipsisColor": "rgb(64, 158, 255)",
+          "tdCount": 6
+        },
+        "r4": {
+          "className": "el-table__row",
+          "hasFixedOptIn": false,
+          "hasCurrentRow": false,
+          "rowH": 52,
+          "firstTdBg": "rgba(0, 0, 0, 0)",
+          "firstTdShadow": "none",
+          "secondTdShadow": "none",
+          "lastTdBg": "rgb(255, 255, 255)",
+          "lastTdFixedRight": true,
+          "textColor": "rgb(9, 9, 11)",
+          "descColor": "rgb(96, 98, 102)",
+          "ellipsisColor": "rgb(64, 158, 255)",
+          "tdCount": 6
+        }
+      },
+      "rowCount": 4,
+      "hoverRow1": {
+        "className": "el-table__row hover-row",
+        "hasFixedOptIn": false,
+        "hasCurrentRow": false,
+        "rowH": 48,
+        "firstTdBg": "rgb(244, 244, 245)",
+        "firstTdShadow": "none",
+        "secondTdShadow": "none",
+        "lastTdBg": "rgb(244, 244, 245)",
+        "lastTdFixedRight": true,
+        "textColor": "rgb(9, 9, 11)",
+        "descColor": "rgb(96, 98, 102)",
+        "ellipsisColor": "rgb(64, 158, 255)",
+        "tdCount": 6
+      },
+      "fixedRow2": {
+        "r2": {
+          "className": "el-table__row lt-row-highlight__row hover-row",
+          "hasFixedOptIn": true,
+          "hasCurrentRow": false,
+          "rowH": 48,
+          "firstTdBg": "rgb(225, 228, 232)",
+          "firstTdShadow": "rgb(24, 24, 27) 3px 0px 0px 0px inset",
+          "secondTdShadow": "none",
+          "lastTdBg": "rgb(225, 228, 232)",
+          "lastTdFixedRight": true,
+          "textColor": "rgb(9, 9, 11)",
+          "descColor": "rgb(96, 98, 102)",
+          "ellipsisColor": "rgb(64, 158, 255)",
+          "tdCount": 6
+        },
+        "r1": {
+          "className": "el-table__row",
+          "hasFixedOptIn": false,
+          "hasCurrentRow": false,
+          "rowH": 48,
+          "firstTdBg": "rgba(0, 0, 0, 0)",
+          "firstTdShadow": "none",
+          "secondTdShadow": "none",
+          "lastTdBg": "rgb(255, 255, 255)",
+          "lastTdFixedRight": true,
+          "textColor": "rgb(9, 9, 11)",
+          "descColor": "rgb(96, 98, 102)",
+          "ellipsisColor": "rgb(64, 158, 255)",
+          "tdCount": 6
+        },
+        "root": {
+          "className": "el-table--fit el-table--enable-row-transition el-table el-table--layout-fixed cc-table lt-main-table lt-row-highlight is-scrolling-none",
+          "hasLtMainTable": true,
+          "hasLtRowHighlight": true,
+          "optInRowCount": 1
+        }
+      },
+      "fixedRow2HoverSelf": {
+        "r2": {
+          "className": "el-table__row lt-row-highlight__row hover-row",
+          "hasFixedOptIn": true,
+          "hasCurrentRow": false,
+          "rowH": 48,
+          "firstTdBg": "rgb(225, 228, 232)",
+          "firstTdShadow": "rgb(24, 24, 27) 3px 0px 0px 0px inset",
+          "secondTdShadow": "none",
+          "lastTdBg": "rgb(225, 228, 232)",
+          "lastTdFixedRight": true,
+          "textColor": "rgb(9, 9, 11)",
+          "descColor": "rgb(96, 98, 102)",
+          "ellipsisColor": "rgb(64, 158, 255)",
+          "tdCount": 6
+        }
+      },
+      "fixedRow2HoverOther": {
+        "r1": {
+          "className": "el-table__row hover-row",
+          "hasFixedOptIn": false,
+          "hasCurrentRow": false,
+          "rowH": 48,
+          "firstTdBg": "rgb(244, 244, 245)",
+          "firstTdShadow": "none",
+          "secondTdShadow": "none",
+          "lastTdBg": "rgb(244, 244, 245)",
+          "lastTdFixedRight": true,
+          "textColor": "rgb(9, 9, 11)",
+          "descColor": "rgb(96, 98, 102)",
+          "ellipsisColor": "rgb(64, 158, 255)",
+          "tdCount": 6
+        },
+        "r2": {
+          "className": "el-table__row lt-row-highlight__row",
+          "hasFixedOptIn": true,
+          "hasCurrentRow": false,
+          "rowH": 48,
+          "firstTdBg": "rgb(225, 228, 232)",
+          "firstTdShadow": "rgb(24, 24, 27) 3px 0px 0px 0px inset",
+          "secondTdShadow": "none",
+          "lastTdBg": "rgb(225, 228, 232)",
+          "lastTdFixedRight": true,
+          "textColor": "rgb(9, 9, 11)",
+          "descColor": "rgb(96, 98, 102)",
+          "ellipsisColor": "rgb(64, 158, 255)",
+          "tdCount": 6
+        }
+      },
+      "cancelledUnderHover": {
+        "r2": {
+          "className": "el-table__row",
+          "hasFixedOptIn": false,
+          "hasCurrentRow": false,
+          "rowH": 48,
+          "firstTdBg": "rgb(243, 243, 244)",
+          "firstTdShadow": "none",
+          "secondTdShadow": "none",
+          "lastTdBg": "rgb(243, 243, 244)",
+          "lastTdFixedRight": true,
+          "textColor": "rgb(9, 9, 11)",
+          "descColor": "rgb(96, 98, 102)",
+          "ellipsisColor": "rgb(64, 158, 255)",
+          "tdCount": 6
+        }
+      },
+      "cancelled": {
+        "r2": {
+          "className": "el-table__row",
+          "hasFixedOptIn": false,
+          "hasCurrentRow": false,
+          "rowH": 48,
+          "firstTdBg": "rgba(0, 0, 0, 0)",
+          "firstTdShadow": "none",
+          "secondTdShadow": "none",
+          "lastTdBg": "rgb(255, 255, 255)",
+          "lastTdFixedRight": true,
+          "textColor": "rgb(9, 9, 11)",
+          "descColor": "rgb(96, 98, 102)",
+          "ellipsisColor": "rgb(64, 158, 255)",
+          "tdCount": 6
+        },
+        "root": {
+          "className": "el-table--fit el-table--enable-row-transition el-table el-table--layout-fixed cc-table lt-main-table lt-row-highlight is-scrolling-none",
+          "hasLtMainTable": true,
+          "hasLtRowHighlight": true,
+          "optInRowCount": 0
+        }
+      }
+    },
+    "client_narrow": {
+      "root": {
+        "className": "el-table--fit el-table--scrollable-x el-table--enable-row-transition el-table el-table--layout-fixed cc-table lt-main-table lt-row-highlight is-scrolling-left",
+        "hasLtMainTable": true,
+        "hasLtRowHighlight": true,
+        "optInRowCount": 1
+      },
+      "fixedRow3": {
+        "className": "el-table__row lt-row-highlight__row hover-row",
+        "hasFixedOptIn": true,
+        "hasCurrentRow": false,
+        "rowH": 48,
+        "firstTdBg": "rgb(225, 228, 232)",
+        "firstTdShadow": "rgb(24, 24, 27) 3px 0px 0px 0px inset",
+        "secondTdShadow": "none",
+        "lastTdBg": "rgb(225, 228, 232)",
+        "lastTdFixedRight": true,
+        "textColor": "rgb(9, 9, 11)",
+        "descColor": "rgb(96, 98, 102)",
+        "ellipsisColor": "rgb(64, 158, 255)",
+        "tdCount": 6
+      },
+      "otherRow1": {
+        "className": "el-table__row",
+        "hasFixedOptIn": false,
+        "hasCurrentRow": false,
+        "rowH": 48,
+        "firstTdBg": "rgba(0, 0, 0, 0)",
+        "firstTdShadow": "none",
+        "secondTdShadow": "none",
+        "lastTdBg": "rgb(255, 255, 255)",
+        "lastTdFixedRight": true,
+        "textColor": "rgb(9, 9, 11)",
+        "descColor": "rgb(96, 98, 102)",
+        "ellipsisColor": "rgb(64, 158, 255)",
+        "tdCount": 6
+      },
+      "rowCount": 4
+    },
+    "datasource": {
+      "found": true,
+      "className": "el-table--fit el-table--scrollable-x el-table el-table--layout-fixed data-table lt-main-table is-scrolling-left",
+      "hasLtRowHighlight": false,
+      "optInTableClassInDoc": 0,
+      "optInRowClassInDoc": 0
+    },
+    "writes": [],
+    "writeCount": 0,
+    "readCalls": [
+      {
+        "method": "GET",
+        "url": "http://127.0.0.1:5173/api/clients?status=ALL"
+      },
+      {
+        "method": "GET",
+        "url": "http://127.0.0.1:5173/api/data-sources"
+      }
+    ]
+  }
+}

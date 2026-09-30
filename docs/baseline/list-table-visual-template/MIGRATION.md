@@ -925,3 +925,68 @@ Git 对 `30e82cf` 的独立复审 `CHANGES_REQUIRED`（**唯一阻塞**），更
   **尚未决定、未授权接入**（`LIST_TABLE_OPTIONAL_HIGHLIGHT_PAGE_ADOPTION_EVALUATION_NOT_DECIDED_NOT_GRANTED`）；
   **不**是 `/config/client` 的迁移命令，也**不**是 `/config/data-source` 的三点入口改造；
 - **远程代码复审通过 ≠ 项目负责人已目测接受 ≠ 任何页面已接入或迁移 ≠ 正式验收通过。**
+
+## 探针端管理主列表接入公共可选单行高亮预设追加记录（`CLIENT-CONFIG-OPTIONAL-ROW-HIGHLIGHT-PUBLIC-PRESET-ADOPTION-001`，追加记录，`2026-09-30`）
+
+本节为**追加记录**；上方各节，尤其 `...-STATUS-SYNC-001` 节中「`/config/client` 仍用**页面私有**固定高亮规则」
+一句，为其**时点事实**，**不回写**；其现行事实由本节取代。
+
+### 接入事实与范围（唯一页面）
+
+- 经项目负责人**页面级**授权，**仅** `/config/client`（探针端管理）**主列表**接入 §13.3 公共可选单行固定高亮
+  视觉预设：表根在与根类 `.lt-main-table` 并列处显式挂表级 `.lt-row-highlight`，并由页面行类回调
+  （`rowClassName`）为被固定行提供行级 `.lt-row-highlight__row`；**弹窗内列表不接入**；
+- **其余任何页面**（含 `/config/data-source`）**未被授权**接入、仍零挂载；`/config/data-source` 的“更多”
+  仍是**文字入口**，其三点化属**另一任务**；§12.1 三点触发器**禁用态视觉**仍未实现 / 未验收；
+- 页面原有的**五条私有高亮视觉规则**（`current-row` 归零 / 普通 `hover` / 固定行底 / 固定行自 `hover` /
+  首格左缘强调）**已移除**，普通 `hover`、固定底、固定行自 `hover`、`current-row` 归零与左缘强调**全部**改由
+  公共 §13.3 预设**唯一承担**；页面**只**改变**视觉样式来源**。
+
+### 行为与取值（零改动）
+
+- 会话内 `selectedClientId`、单击固定 / 再点取消 / 点他行转移、双击编辑与两次 `click` 判定、行内控件事件隔离、
+  查询与重载发起时清选、启停成功按最新可见 ID 重选、失败 / 取消保留、请求私有 `loadList(reselectTarget)` 与
+  过期响应隔离**均保持**；**未**触发额外请求，**未**写 URL / 存储 / 接口 / 数据库，**未**改启停确认 /
+  删除语义 / 三点入口 / 弹窗；
+- 取值不变：普通 `hover` `#f4f4f5`、固定底 `#e1e4e8`、左缘 `3px #18181b`；固定与普通悬停可明显区分，
+  整行（含固定右列）同色，标签 / 文字 / 焦点不灰化，取消后无残留 `current-row` 蓝底；常规行高约 `48 CSS px`，
+  异常内容行仍内容驱动；
+- **未**修改 `list-table-visual.css` 已复审的公共规则、9 个令牌与 4 个 helper 类；**未**修改 `DataSourcePage.vue`
+  或任何其它业务页面。
+
+### 验证（定向前端测试 + 全量前端测试 + 构建 + 真实浏览器只读核对）
+
+- `ClientConfigPage.spec.ts`：保留既有单击 / 双击、确认、重载竞态与事件隔离断言；旧 `cc-row--selected` 挂载断言
+  改为公共行级类 `lt-row-highlight__row`；静态视觉断言改为核对**本页所引用的公共源**、页面**显式 opt-in**（表级 +
+  行级）与**私有重复规则已移除**；
+- `list-table-visual.spec.ts`：**#14** 由「业务页面零挂载」改为**仅** `ClientConfigPage.vue` 主列表允许两级 opt-in
+  类、**其余页面仍零**（可抓意外扩散）；**#11** 辅助类集合仍为四个、**#13** 三点入口 opt-in 范围保持、**#15**
+  分层契约保持；
+- 定向前端测试与全量前端测试、`npm run build`（含 `vue-tsc` 类型检查）**通过**；
+- 真实浏览器**只读**核对**实际** `/config/client` 页（`1440×900` 与窄视口 `1024×768`）：普通 `hover`、单击固定、
+  固定行自 `hover`、他行 `hover`、取消、固定右列、标签 / 三点焦点色与行高；对照 `/config/data-source` 保持原观感、
+  零挂载。数据使用**独立只读桩**，导航前拦截 `/api/**` 非 GET，**写请求计数为零**；证据为**脱敏合成数据**，
+  存于 `docs/features/client-config/reports/evidence/CLIENT-CONFIG-OPTIONAL-ROW-HIGHLIGHT-PUBLIC-PRESET-ADOPTION-001/`。
+  **隔离桩结果不得冒充真实业务数据页面接入结果**——本次核对对象是**真实页面组件**，仅数据为合成只读桩。
+
+### 状态与计数（命令实测）
+
+- §13.3 `list_table_optional_single_row_highlight_page_integration_status` 由 `NONE_ANY_PAGE` 更新为
+  `PARTIAL_CLIENT_CONFIG_MAIN_LIST_ONLY_ADOPTED_PENDING_CHATGPT_REVIEW_AND_OWNER_VISUAL_CHECK`；页面接入实现状态
+  记为「**已接入、待 ChatGPT 远程代码复审及负责人目测**」（**不**写成最终接受或正式验收）；
+- §13 公共实现状态 `IMPLEMENTED_PENDING_USER_ACCEPTANCE` 与 `code_review_status=APPROVED` **不**回退；本页接入
+  **不**自动扩大公共模板的默认行为；
+- 四份规范文档（通道 1）`28 / 0 / 43 / 7`、`SHARED_COMPONENT_DESIGN.md` 批准态设计标记（通道 2）`81`、
+  参考事实标记（通道 3）`26`、候选未实现标记（通道 4）`8`——四通道**逐值不变**；`lt_token_count` 仍 **9**、
+  `lt_internal_helper_class_count` 仍 **4**；
+- Feature 四族定义行 REQ `154` / AC `157` / DESIGN `89` / UI `77` 内容与**验收状态格逐字节不变**；157 条验收状态
+  按开工 Git 复算仍 `70 PASS / 0 FAIL / 72 BLOCKED / 15 NOT_RUN`（**不**声称整体验收通过）。
+
+### 未改变的模板层与下一入口
+
+- 模板级页面迁移 `page_migration_status=NOT_STARTED`、`page_migration_authorization_status=NOT_GRANTED`、
+  `pilot_page_selection_status=NOT_DECIDED` 与模板级 `current_next_entry`
+  `NONE_SHARED_IMPLEMENTATION_FINAL_ACCEPTED_AND_CLOSED_NO_PAGE_MIGRATION_AUTHORIZED` **均不变**（**另一状态层**）；
+- 可选扩展链**下一入口**：`CHATGPT_REMOTE_CLIENT_CONFIG_OPTIONAL_ROW_HIGHLIGHT_PUBLIC_PRESET_ADOPTION_REVIEW`
+  （对该页面接入的远程独立只读代码复审）；
+- **页面接入并推送 ≠ 远程代码复审通过 ≠ 项目负责人已目测接受 ≠ 其它页面已授权接入 ≠ 正式验收通过。**
