@@ -98,7 +98,7 @@ page_adoption_implementation_status=IMPLEMENTED_PENDING_CHATGPT_REMOTE_REVIEW_AN
 migrated_page_count=1
 migrated_page_count_scope=REAL_BUSINESS_PAGES_WITH_CED_DIALOG_ROOT_CLASS_OPT_IN
 registered_token_count=17
-current_next_entry=CHATGPT_REMOTE_CREATE_EDIT_DIALOG_CLIENT_CONFIG_FIRST_ADOPTION_REVIEW
+current_next_entry=CHATGPT_REMOTE_CREATE_EDIT_DIALOG_CLIENT_CONFIG_FIRST_ADOPTION_R1_REVIEW
 ```
 
 - **当前状态**：**设计基线已批准**；**公共 CSS 预设已实现并已通过远程代码复审**
@@ -113,10 +113,15 @@ current_next_entry=CHATGPT_REMOTE_CREATE_EDIT_DIALOG_CLIENT_CONFIG_FIRST_ADOPTIO
   **正交**（弹窗层），三者不互相并入、不复用彼此标记／类名／令牌命名空间。
 - **排除范围**：启用／停用／删除确认框、数据源业务属性与命名策略子弹窗、表格模板、API／后端／数据库、
   现行业务校验与提交关闭时序。
-- **下一入口**：`CHATGPT_REMOTE_CREATE_EDIT_DIALOG_CLIENT_CONFIG_FIRST_ADOPTION_REVIEW`
-  ——由 ChatGPT 从远程 Git 对 `/config/client` 新增／编辑主弹窗的**首个页面接入**代码区间作独立只读**代码复审**；
+- **页面接入代码复审时序**：R0 接入提交 `d878c3d7c95b482ee47b2d08571531cbad3b06fd` 经 ChatGPT 从远程 Git
+  复审（区间 `ab4d49766d089c741159c2c86861f6af7e74b29b..d878c3d7c95b482ee47b2d08571531cbad3b06fd`）结论为
+  `CHANGES_REQUIRED`——**产品代码接入、测试与只读浏览器证据未发现需改代码的阻塞项**，但模板设计契约仍留有
+  「页面接入未授权」等过时**现行**表述；该纯文档口径矛盾已由 R1 定向纠错任务
+  `CREATE-EDIT-DIALOG-CLIENT-CONFIG-FIRST-ADOPTION-001-R1` 修正。**R0 复审 `CHANGES_REQUIRED` 不等于整体接入 `APPROVED`。**
+- **下一入口**：`CHATGPT_REMOTE_CREATE_EDIT_DIALOG_CLIENT_CONFIG_FIRST_ADOPTION_R1_REVIEW`
+  ——由 ChatGPT 从远程 Git 对 R1 纠错后的 `/config/client` 新增／编辑主弹窗**首个页面接入**代码区间作独立只读**代码复审**；
   其余页面接入仍须**单独评估与授权**，模板级批量迁移与试点**未作出**。
-  **公共代码复审通过 ≠ 页面接入代码复审通过 ≠ 正式验收通过**；本目录**不授权**任何其他页面接入。
+  **R1 纠错提交并推送 ≠ R1 远程复审通过 ≠ 项目负责人已目测 ≠ 正式验收通过**；本目录**不授权**任何其他页面接入。
 - **公共 CSS 代码复审时序**：R0 提交 `c8785e18dc3014396cf45534315ab0f10dbbe94d` 远程代码复审
   `CHANGES_REQUIRED`——**三处发现**：①令牌 17 vs 15 口径不一致（已批准设计登记表中的 2 个 Feature 令牌 `--ced-label-gap`、`--ced-submit-bg-loading` 在 R0 未登记、未被消费）；
   ②现行文档自相矛盾（状态块称已实现，正文仍标 `NOT_CREATED`）；③真实 EP 各状态浏览器证据不足

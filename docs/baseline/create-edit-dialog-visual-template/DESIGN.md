@@ -111,7 +111,8 @@ migrated_page_count_scope=REAL_BUSINESS_PAGES_WITH_CED_DIALOG_ROOT_CLASS_OPT_IN
 - **显式 opt-in 根类**（**已实现**）：仅在页面的**新增／编辑主弹窗**根元素上挂一个**模板命名空间的根类**
   （`ced-dialog`，`ced` = create/edit dialog）。**未挂该根类的弹窗零影响**：
   模板选择器**一律**以该根类为前缀，不做裸全局 EP 覆盖、不使用 `!important`。
-- **单一视觉来源**（已批准设计；页面接入未授权）：一旦页面接入，模板负责标签排版与主提交按钮**视觉**；
+- **单一视觉来源**（已批准设计；**现行仅探针端新增／编辑主弹窗已接入**，其余页面仍未授权）：
+  接入后模板负责标签排版与主提交按钮**视觉**；
   页面**移除**其对应的私有同义视觉规则（见 `MIGRATION.md` §3 的消除步骤），
   避免「模板 + 页面私有」两份同义规则并存。
 - **缺省口径与 Feature 决定值**（已批准设计；模板令牌部分已实现）：
@@ -168,8 +169,11 @@ migrated_page_count_scope=REAL_BUSINESS_PAGES_WITH_CED_DIALOG_ROOT_CLASS_OPT_IN
 ## 5. 设计任务当时明确不做的事（历史时点）
 
 > 下列为 R0 设计任务的**当时范围**；设计基线随后已由**独立批准收口任务**于 `2026-09-30` 批准。
-> **公共 CSS 实现**已由独立实现任务落地并**已通过远程代码复审**（`APPROVED`），但**设计任务当时未做**；
-> **Vue 公共组件仍未创建**，**页面接入仍未发生**（`PAGE_ADOPTION_NOT_AUTHORIZED`，采用决定 `NOT_DECIDED_NOT_GRANTED`）。
+> **公共 CSS 实现**已由独立实现任务落地并**已通过远程代码复审**（`APPROVED`），但**设计任务当时未做**。
+> **R0 设计任务当时页面接入尚未发生**（当时 `PAGE_ADOPTION_NOT_AUTHORIZED`，采用决定 `NOT_DECIDED_NOT_GRANTED`）；
+> 其后**仅**探针端管理（`/config/client`）**新增／编辑主弹窗**已获授权并接入
+> （`migrated_page_count=1`，**待远程复审与负责人目测**），其余页面**仍未授权**。
+> **Vue 公共组件仍未创建**（现行事实）。
 
 - **不**创建任何 CSS／Vue 组件／类型／断言；
 - **不**修改任何页面、测试、配置、依赖；

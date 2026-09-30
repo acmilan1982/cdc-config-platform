@@ -21,7 +21,7 @@ formal_acceptance_execution_status=NOT_EXECUTED
 migrated_page_count=1
 migrated_page_count_scope=REAL_BUSINESS_PAGES_WITH_CED_DIALOG_ROOT_CLASS_OPT_IN
 registered_token_count=17
-current_next_entry=CHATGPT_REMOTE_CREATE_EDIT_DIALOG_CLIENT_CONFIG_FIRST_ADOPTION_REVIEW
+current_next_entry=CHATGPT_REMOTE_CREATE_EDIT_DIALOG_CLIENT_CONFIG_FIRST_ADOPTION_R1_REVIEW
 ```
 
 ```text
@@ -96,11 +96,18 @@ candidate_capabilities=LABEL_TYPOGRAPHY_AND_ALIGNMENT,BLACK_PRIMARY_SUBMIT_BUTTO
 > 且**已通过远程代码复审**。**Vue 组件仍未创建**；公共实现任务**未修改任何业务页面**
 > （页面接入在该实现任务时点未授权；其后首个页面接入见上「首个页面接入时序」）。
 >
-> 下一入口：`CHATGPT_REMOTE_CREATE_EDIT_DIALOG_CLIENT_CONFIG_FIRST_ADOPTION_REVIEW`——
-> 由 ChatGPT 从远程 Git 对本**首个页面接入**代码区间作独立只读**代码复审**；
+> **页面接入复审时序**：R0 接入提交 `d878c3d7c95b482ee47b2d08571531cbad3b06fd` 经 ChatGPT 从远程 Git
+> 复审（区间 `ab4d49766d089c741159c2c86861f6af7e74b29b..d878c3d7c95b482ee47b2d08571531cbad3b06fd`）结论为
+> `CHANGES_REQUIRED`——**产品代码接入、测试与只读浏览器证据未发现需改代码的阻塞项**，
+> 但模板设计契约仍有「页面接入未授权」等过时**现行**表述；该纯文档口径矛盾已由 R1 定向纠错任务
+> `CREATE-EDIT-DIALOG-CLIENT-CONFIG-FIRST-ADOPTION-001-R1` 修正（**不**重跑代码验收、**不**做负责人目测）。
+> **R0 复审 `CHANGES_REQUIRED` 不等于整个接入已 `APPROVED`。**
+>
+> 下一入口：`CHATGPT_REMOTE_CREATE_EDIT_DIALOG_CLIENT_CONFIG_FIRST_ADOPTION_R1_REVIEW`——
+> 由 ChatGPT 从远程 Git 对 R1 纠错后的**首个页面接入**代码区间作独立只读**代码复审**；
 > 模板级「页面迁移/试点」历史键语义为**模板级批量迁移**，与本次**单页接入**不同层，**保持原措辞**；
 > 其余页面接入仍须**独立评估、独立授权**，本目录**不授权**任何其他页面接入。
-> **页面接入并推送 ≠ 远程复审通过 ≠ 项目负责人已目测 ≠ 正式验收通过。**
+> **R1 纠错提交并推送 ≠ R1 远程复审通过 ≠ 项目负责人已目测 ≠ 正式验收通过。**
 
 ---
 
@@ -167,7 +174,7 @@ candidate_capabilities=LABEL_TYPOGRAPHY_AND_ALIGNMENT,BLACK_PRIMARY_SUBMIT_BUTTO
 | `DESIGN.md` | 可复用能力、显式 opt-in 契约、公共／Feature 归属与实现方案选择 |
 | `UI.md` | 候选视觉规格、状态矩阵、响应式与可访问性 |
 | `SHARED_COMPONENT_DESIGN.md` | 未来实现边界、作用域／零泄漏约束、可选能力与不变量 |
-| `MIGRATION.md` | 两页各自现状、未来选择性接入步骤与未授权状态 |
+| `MIGRATION.md` | 两页各自现状、选择性接入步骤，以及**首个页面接入与其他页面未授权**的分层时序 |
 | `reports/CREATE-EDIT-DIALOG-VISUAL-TEMPLATE-BASELINE-DRAFT-001.md` | R0 历史快照：事实／推断分层、来源映射、冲突与待审点、变更清单、保护核验与下一入口 |
 | `reports/CREATE-EDIT-DIALOG-VISUAL-TEMPLATE-BASELINE-DRAFT-001-R1.md` | R1 定向纠错：两处阻塞、旧→新文本／位置、保护核验与下一入口（对 R0 不准确结论作勘误，不回写 R0） |
 | `reports/CREATE-EDIT-DIALOG-VISUAL-TEMPLATE-BASELINE-APPROVAL-CLOSEOUT-001.md` | 批准收口：门禁、R0→R1→R2 复审时序、项目负责人原话、批准对象与边界、状态旧→新、文件清单、保护核验与下一入口 |
@@ -177,6 +184,7 @@ candidate_capabilities=LABEL_TYPOGRAPHY_AND_ALIGNMENT,BLACK_PRIMARY_SUBMIT_BUTTO
 | `reports/evidence/CREATE-EDIT-DIALOG-VISUAL-TEMPLATE-PUBLIC-CSS-IMPLEMENTATION-001-R1/` | R1 实现的脱敏可复算浏览器证据（真实 Element Plus 样式 + 真实 Vue/EP 组件 DOM、CDP 驱动、计算样式与命中规则原始输出） |
 | `reports/CREATE-EDIT-DIALOG-VISUAL-TEMPLATE-PUBLIC-CSS-REVIEW-STATUS-SYNC-001.md` | 代码复审状态同步：门禁、复审来源与固定区间 R0→R1、状态旧→新、未变层、文件清单、静态核验、未执行项与下一入口 |
 | `../../features/client-config/reports/CLIENT-CONFIG-CREATE-EDIT-DIALOG-FIRST-ADOPTION-001.md` | **首个页面接入**（Feature 侧交叉引用报告）：`/config/client` 新增／编辑主弹窗接入本模板的门禁、视觉归属 before→after、测试与浏览器证据、零写计数、定义与状态保护、未执行项与下一入口 |
+| `../../features/client-config/reports/CLIENT-CONFIG-CREATE-EDIT-DIALOG-FIRST-ADOPTION-001-R1.md` | **首个页面接入 R1 定向纠错**（纯文档）：R0 接入复审 `CHANGES_REQUIRED` 的过时「页面接入未授权」现行表述纠正、逐位置旧→新表、现行/历史分层、定义与状态格保护、未执行项与 R1 下一入口 |
 
 ## 7. 与其他模板的关系
 
