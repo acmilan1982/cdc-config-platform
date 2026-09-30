@@ -70,6 +70,32 @@ pilot_page_selection_status=NOT_DECIDED
 - **计数口径**：原正式验收 17 项、补充正式验收 21 项；补充 21 项**包含**原 17 项在纠正后提交上的
   重新重放，两者是**包含关系而非并列关系**，**不得**把两者相加累计为“独立用例总数”；权威验收覆盖为补充验收 `21/21` PASS。
 
+## 新增／编辑弹窗公共视觉模板基线入口（**草案**）
+
+新增／编辑业务弹窗公共视觉模板设计基线**草案**（**未批准**）：[docs/baseline/create-edit-dialog-visual-template/](./create-edit-dialog-visual-template/README.md)。
+该模板面向**新增／编辑业务主弹窗**的视觉层（配置项标签排版、黑色主提交按钮、字段错误呈现的视觉规格、
+弹窗容器安全边距与内容滚动原则、基础可访问性视觉）。由纯文档任务 `CREATE-EDIT-DIALOG-VISUAL-TEMPLATE-BASELINE-DRAFT-001` 建立，
+**当前 0 个页面接入**。
+
+```text
+create_edit_dialog_visual_template_document_status=DRAFT_PENDING_USER_REVIEW
+create_edit_dialog_visual_template_baseline_status=NOT_APPROVED
+implementation_status=IMPLEMENTATION_NOT_STARTED
+public_css_status=NOT_CREATED
+public_vue_component_status=NOT_CREATED
+page_adoption_authorization_status=PAGE_ADOPTION_NOT_AUTHORIZED
+current_next_entry=CHATGPT_REMOTE_CREATE_EDIT_DIALOG_VISUAL_TEMPLATE_BASELINE_DRAFT_REVIEW
+```
+
+- **草案状态**：本模板**未批准、公共 CSS／Vue 组件未创建、任何页面均未授权接入**；
+  本节仅为**导航补充**，权威状态块以模板目录 `README.md` 文首为准。
+- **与其它模板的关系**：与 `list-table-visual-template`（表格层）、`query-list-page-template`（页面层）
+  **正交**（弹窗层），三者不互相并入、不复用彼此标记／类名／令牌命名空间。
+- **排除范围**：启用／停用／删除确认框、数据源业务属性与命名策略子弹窗、表格模板、API／后端／数据库、
+  现行业务校验与提交关闭时序。
+- **下一入口**：`CHATGPT_REMOTE_CREATE_EDIT_DIALOG_VISUAL_TEMPLATE_BASELINE_DRAFT_REVIEW`
+  ——先由 ChatGPT 从远程 Git 独立复审草案，通过后再由项目负责人批准，然后另立公共实现与各页选择性接入任务。
+
 ## 列表表格视觉模板基线入口
 
 列表表格视觉模板基线（**基线内容已批准**）：[docs/baseline/list-table-visual-template/](./list-table-visual-template/README.md)。

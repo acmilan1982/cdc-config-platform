@@ -1,0 +1,91 @@
+# 新增／编辑业务弹窗公共视觉模板 · 迁移盘点（草案）
+
+```text
+create_edit_dialog_visual_template_document_status=DRAFT_PENDING_USER_REVIEW
+baseline_status=NOT_APPROVED
+implementation_status=IMPLEMENTATION_NOT_STARTED
+page_adoption_authorization_status=PAGE_ADOPTION_NOT_AUTHORIZED
+migrated_page_count=0
+```
+
+> **本文件只做盘点与未来步骤设计，不实施任何迁移。** 当前 **0** 个页面接入本模板。
+
+---
+
+## 1. 盘点方法（可复现）
+
+```bash
+# 全仓新增／编辑业务主弹窗候选盘点（只读）
+cd /agent/cdc-config-platform/frontend/src
+grep -rn '<el-dialog' views/
+```
+
+- 盘点对象：`frontend/src/views/**` 下的 `el-dialog` 使用点。
+- 分类依据：是否属于**新增／编辑业务主弹窗**（页面主入口的增改弹窗）。
+- **本草案只对两个页面做了**源码与条款的**深入核对**：
+  探针端管理、数据源管理。其余使用点仅作**清单登记**，**未评估**（`UNASSESSED`）。
+
+## 2. 全量盘点矩阵（现状）
+
+| # | 页面／组件 | 弹窗 | 分类 | 本任务处理 |
+|---|---|---|---|---|
+| 1 | `views/client-config/ClientConfigPage.vue` | 新增探针／编辑探针（`class="cc-dialog" width="900px"`） | **新增／编辑主弹窗 · 在范围内** | **已深入核对**（`DESIGN.md` §1.1） |
+| 2 | `views/data-source/DataSourcePage.vue` | 新增数据源／编辑数据源（`class="editor-dialog" width="620px"`） | **新增／编辑主弹窗 · 在范围内** | **已深入核对**（`DESIGN.md` §1.2） |
+| 3 | `views/data-source/DataSourcePage.vue` | 业务属性（`width="560px"`） | **子弹窗 · 排除**（数据源业务属性） | 排除（记录，不评估） |
+| 4 | `views/data-source/DataSourcePage.vue` | 目标库命名策略（`label-width="110px"`） | **子弹窗 · 排除**（命名策略） | 排除（记录，不评估） |
+| 5 | `views/data-subscribe/components/SubscribeFormDialog.vue` | 新增订阅／编辑订阅 | **新增／编辑业务弹窗 · 候选（未评估）** | **未评估**（`UNASSESSED`）——组件形态、独立文件，本草案未读取其样式与条款 |
+| 6 | `views/data-subscribe/components/SubscribeDetailDialog.vue` | 订阅详情 | 详情框 · 排除 | 排除 |
+| 7 | `views/data-subscribe/components/SubscribeDeleteDialog.vue` | 删除确认 | 确认框 · 排除 | 排除 |
+| 8 | `views/server-config/SaveConfirmDialog.vue` | 保存确认 | 确认框 · 排除 | 排除 |
+| 9 | `views/monitor/job-failure/components/ClobDetailDialog.vue` | Clob 详情 | 详情框 · 排除 | 排除 |
+| 10 | `views/log-query/components/RawMessageDialog.vue` | 原始消息 | 详情框 · 排除 | 排除 |
+| 11 | `views/log-query/components/LogDetailDialog.vue` | 日志详情 | 详情框 · 排除 | 排除 |
+
+### 2.1 分类计数（现状）
+
+```text
+in_scope_主新增编辑弹窗_已深入核对=2        # 探针端管理、数据源管理
+in_scope_候选_未评估=1                       # 数据订阅 新增/编辑订阅
+excluded_子弹窗=2                            # 数据源管理 业务属性、命名策略
+excluded_确认框或详情框=6                     # 数据订阅 详情/删除确认、服务端配置 保存确认、Job 故障 Clob 详情、日志查询 原始消息/日志详情
+migrated_page_count=0
+```
+
+> 计数为**本任务时点的只读盘点**；新增页面或弹窗后须重新盘点。**候选（未评估）不等于已判定适用**。
+
+## 3. 未来选择性接入步骤（拟议，未授权、未实施）
+
+对**已获授权**的**主新增／编辑弹窗**页，拟议步骤：
+
+1. **评估**：确认该弹窗属"新增／编辑业务主弹窗"，非确认框／子弹窗；
+2. **授权**：取得项目负责人**单独明确授权**（本草案**未**授权任何页面）；
+3. **接入**：在弹窗根元素挂显式 opt-in 根类（拟议 `ced-dialog`），
+   并以 Feature 覆盖表达**页面级差异值**（标签列宽、弹窗宽度、安全边距、是否含全局错误区、loading 配色）；
+4. **消除私有同义规则**：**移除**该页私有的**标签排版**与**主提交按钮视觉**规则
+   （如 cc 的 `.cc-form-label` 字体／对齐、`.cc-dialog-submit` 色序；
+   ds 的 `.editor-dialog .el-form-item__label`、`.editor-submit-button` 色序），
+   使公共模板成为**单一视觉来源**；
+5. **保留业务**：字段级错误**实现模型**、全局错误区、校验／请求／时序、可点击条件、
+   未保存确认、密码掩码、ID 解锁、候选项冲突、权限与提交 API **全部留在页面**；
+6. **验证**：静态契约测试（`SHARED_COMPONENT_DESIGN.md` §7）+
+   真实浏览器视觉核对；**未接入页面零影响**。
+
+## 4. 各页现状与差异摘要（现行事实）
+
+| 页 | 弹窗根类／宽度 | 表单载体 | 标签列宽 | 字段错误模型 | 全局错误区 |
+|---|---|---|---|---|---|
+| 探针端管理 | `cc-dialog` / `900px`（`max-width: calc(100vw - 48px)`） | 页面私有 flex 表单 | `84px` | 页面私有字段级（红框 + 稳定占位 + `role="alert"`） | **无** |
+| 数据源管理 | `editor-dialog` / `620px`（无 `max-width`） | EP `el-form`（`rules` / `label-width="120px"`） | `120px` | EP `el-form` 校验原生呈现 | **有**（`.form-error`，`role="alert"`） |
+
+> 两页**可比对一致**的是**标签排版**与**主提交按钮视觉令牌序列**；
+> **差异**（表单载体、标签列宽、错误模型、全局错误区、宽度、loading 配色）
+> **必须**作为 Feature 级配置或页面私有保留，**不得**由模板静默统一。
+
+## 5. 迁移授权与边界（严格）
+
+- **当前授权状态**：`PAGE_ADOPTION_NOT_AUTHORIZED` —— **两页及其他任何页面均未获授权接入本模板**。
+- 本草案**基线未批准、实现未开始**：不存在可被接入的公共 CSS／组件。
+- 任何页面接入须**独立评估、独立授权、独立实现、独立目测、独立验收**。
+- **不得**据本草案创建代码或修改页面；**不得**把本草案当作已批准模板引用。
+- 本模板**不**影响 `list-table-visual-template`、`query-list-page-template`
+  及任何 Feature 现有状态。
