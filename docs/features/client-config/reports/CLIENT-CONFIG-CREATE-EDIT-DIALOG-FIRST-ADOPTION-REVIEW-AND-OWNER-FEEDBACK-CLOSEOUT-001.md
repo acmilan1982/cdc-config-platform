@@ -86,11 +86,13 @@
 | `page_adoption_owner_manual_test_feedback_scope` | — | `CLIENT_CONFIG_CREATE_EDIT_MAIN_DIALOG_MANUAL_TEST_ONLY` |
 | `page_adoption_owner_manual_test_feedback_is_formal_acceptance` | — | `NO` |
 | `page_adoption_authorization_status` | `PAGE_ADOPTION_AUTHORIZED_CLIENT_CONFIG_CREATE_EDIT_MAIN_DIALOG_ONLY` | 不变 |
-| `public_css_status` | `IMPLEMENTED_FIRST_PAGE_ADOPTED_REVIEW_APPROVED` | 不变（公共层不回退） |
+| `public_css_status` | `IMPLEMENTED_FIRST_PAGE_ADOPTED_PENDING_REMOTE_REVIEW` | `IMPLEMENTED_FIRST_PAGE_ADOPTED_REVIEW_APPROVED` |
 | `formal_acceptance_execution_status` | `NOT_EXECUTED` | `NOT_EXECUTED`（**不变**） |
 | `migrated_page_count` | `1` | `1`（口径不变＝已挂 opt-in 根类的真实业务页数） |
 
 **旧 → 新（页面接入链）**：`PENDING_CHATGPT_REMOTE_REVIEW_AND_OWNER_VISUAL_CHECK`（接入提交时点）→ `IMPLEMENTED` + `code_review_status=APPROVED` + `owner_manual_test_feedback=NO_ISSUE_REPORTED`（本次收口现行分层值）。
+
+**模板级 `public_css_status` 旧 → 新**：基准 `bc22ada` 为 `IMPLEMENTED_FIRST_PAGE_ADOPTED_PENDING_REMOTE_REVIEW`，本次结果 `c74543f` 改为 `IMPLEMENTED_FIRST_PAGE_ADOPTED_REVIEW_APPROVED`。**公共 CSS 本体与其既有代码复审 `APPROVED` 没有回退**——`public_css_code_review_status=APPROVED` 保持不变；这里同步的是**首个页面接入复审完成后的组合状态**（该模板级状态键由「待页面接入复审」推进为「页面接入复审已通过」），**不**是公共层实现或公共层复审结论的变化。**不得**把 R0 接入提交 `d878c3d` 的 `CHANGES_REQUIRED` 误写成 `APPROVED`。
 
 **清晰区分（本任务关键）**：
 - **CEDVT 公共实现已通过复审** ≠ **本次页面接入已通过复审**。前者是公共层（`public_css_code_review_status=APPROVED`，**保持不回退**）；后者是 `/config/client` 本弹窗本次接入，其页面接入复审本次记为 `APPROVED`。二者为**不同对象**，本任务**不**把任一结论外推到对方，也**不**外推到 157 条正式验收。
@@ -159,7 +161,7 @@ CCFG-AC-155 / CCFG-AC-156 / CCFG-AC-157 = BLOCKED
 - CEDVT 公共实现 `public_css_code_review_status=APPROVED` **保持不回退**；公共 CSS 令牌／选择器／默认值**未改**；
 - `/config/data-source`（含其 `editor-dialog` 主弹窗）**未被授权**接入、仍 `ced-*` **零挂载**；其他任何页面接入**另起会话**；
 - 模板级「页面迁移／试点」历史键（`page_migration_status=NOT_STARTED`／`page_migration_authorization_status=NOT_GRANTED`／`pilot_page_selection_status=NOT_DECIDED`）语义为**模板级批量迁移**，与本次**单页接入**不同层，**保持原措辞**；
-- `/config/client` 本弹窗的字段级错误实现模型、双栏数据源选择、ID 锁定／修改、密码掩码、未保存确认、保存防重、权限与提交 API **仍属 Feature 私有行为**，**不**写成公共 CSS 或通用 Vue 组件已抽象；
+- `/config/client` 本弹窗（字段仅**探针 ID／探针描述／采集数据源**）的字段级错误实现模型、双栏数据源选择、ID 锁定／修改、未保存确认、保存防重、权限与提交 API **仍属 Feature 私有行为**，**不**写成公共 CSS 或通用 Vue 组件已抽象；
 - 正式验收 `NOT_EXECUTED`，157 条逐条状态**保持**；`CCFG-AC-010=PASS`、`CCFG-AC-155~157=BLOCKED` **保持**；
 - **推送成功 ≠ 文档收口复审通过**。
 
