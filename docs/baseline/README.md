@@ -112,7 +112,7 @@ current_next_entry=CREATE_EDIT_DIALOG_VISUAL_TEMPLATE_PAGE_ADOPTION_EVALUATION_N
   ——由项目负责人就**是否、由哪个页面**采用本模板作**独立评估与授权决定**；
   当前**未选定试点**、`NOT_DECIDED_NOT_GRANTED`。**代码复审通过 ≠ 页面已接入 ≠ 正式验收通过**；本目录**不授权**任何页面接入。
 - **公共 CSS 代码复审时序**：R0 提交 `c8785e18dc3014396cf45534315ab0f10dbbe94d` 远程代码复审
-  `CHANGES_REQUIRED`——**三处发现**：①令牌 17 vs 15 口径不一致（2 个 Feature 令牌登记但未被消费）；
+  `CHANGES_REQUIRED`——**三处发现**：①令牌 17 vs 15 口径不一致（已批准设计登记表中的 2 个 Feature 令牌 `--ced-label-gap`、`--ced-submit-bg-loading` 在 R0 未登记、未被消费）；
   ②现行文档自相矛盾（状态块称已实现，正文仍标 `NOT_CREATED`）；③真实 EP 各状态浏览器证据不足
   （夹具未加载 `element-plus/dist/index.css`，禁用态取自浏览器默认样式）。
   已由 `CREATE-EDIT-DIALOG-VISUAL-TEMPLATE-PUBLIC-CSS-IMPLEMENTATION-001-R1` 定向纠错：
