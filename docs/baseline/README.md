@@ -70,14 +70,14 @@ pilot_page_selection_status=NOT_DECIDED
 - **计数口径**：原正式验收 17 项、补充正式验收 21 项；补充 21 项**包含**原 17 项在纠正后提交上的
   重新重放，两者是**包含关系而非并列关系**，**不得**把两者相加累计为“独立用例总数”；权威验收覆盖为补充验收 `21/21` PASS。
 
-## 新增／编辑弹窗公共视觉模板基线入口（**设计基线已批准；公共 CSS 已实现、代码复审通过；首个页面已接入、待远程复审与负责人目测**）
+## 新增／编辑弹窗公共视觉模板基线入口（**设计基线已批准；公共 CSS 已实现、代码复审通过；首个页面已接入并通过远程复审，负责人已反馈人工测试无问题**）
 
 新增／编辑业务弹窗公共视觉模板设计基线**已批准**（`approval_status=APPROVED_BY_PROJECT_OWNER`）：[docs/baseline/create-edit-dialog-visual-template/](./create-edit-dialog-visual-template/README.md)。
 该模板面向**新增／编辑业务主弹窗**的视觉层（配置项标签排版、黑色主提交按钮、字段错误呈现的视觉规格、
 弹窗容器安全边距与内容滚动原则、基础可访问性视觉）。由纯文档任务 `CREATE-EDIT-DIALOG-VISUAL-TEMPLATE-BASELINE-DRAFT-001`（R0）
 建立、经 R1／R2 定向纠错后由项目负责人于 `2026-09-30` 批准（**批准范围只覆盖文档设计契约**）；
 **公共 CSS 预设已由独立实现任务落地并已通过远程代码复审**、**Vue 组件未创建**；
-项目负责人**仅**批准 `/config/client`（探针端管理）**新增／编辑业务主弹窗**首个接入（该接入**已实现、待远程代码复审与负责人目测**）；**其余页面未授权**。
+项目负责人**仅**批准 `/config/client`（探针端管理）**新增／编辑业务主弹窗**首个接入（该接入**已实现并通过远程代码复审**，负责人已作人工测试无问题反馈，**非**正式验收）；**其余页面未授权**。
 
 ```text
 create_edit_dialog_visual_template_document_status=APPROVED
@@ -86,7 +86,7 @@ create_edit_dialog_visual_template_approval_status=APPROVED_BY_PROJECT_OWNER
 create_edit_dialog_visual_template_approval_date=2026-09-30
 create_edit_dialog_visual_template_approved_reviewed_commit=45ce16dffbf2747abeb75d4d6c43bc57165043c8
 implementation_status=PUBLIC_CSS_IMPLEMENTED_VUE_NOT_CREATED
-public_css_status=IMPLEMENTED_FIRST_PAGE_ADOPTED_PENDING_REMOTE_REVIEW
+public_css_status=IMPLEMENTED_FIRST_PAGE_ADOPTED_REVIEW_APPROVED
 public_css_code_review_status=APPROVED
 public_css_code_review_date=2026-09-30
 public_css_code_review_objects=c8785e18dc3014396cf45534315ab0f10dbbe94d,8434b884904a34bed51a2d8364e217efb605f06c
@@ -94,19 +94,29 @@ public_vue_component_status=NOT_CREATED
 formal_acceptance_execution_status=NOT_EXECUTED
 page_adoption_authorization_status=PAGE_ADOPTION_AUTHORIZED_CLIENT_CONFIG_CREATE_EDIT_MAIN_DIALOG_ONLY
 page_adoption_decision_status=DECIDED_AND_GRANTED_FOR_CLIENT_CONFIG_CREATE_EDIT_MAIN_DIALOG_ONLY
-page_adoption_implementation_status=IMPLEMENTED_PENDING_CHATGPT_REMOTE_REVIEW_AND_OWNER_VISUAL_CHECK
+page_adoption_implementation_status=IMPLEMENTED
+page_adoption_code_review_status=APPROVED
+page_adoption_code_review_date=2026-09-30
+page_adoption_code_review_approved_objects=d878c3d7c95b482ee47b2d08571531cbad3b06fd,bc22adab7a655d9587049dea0318e8a64869652f
+page_adoption_code_review_r0_range=ab4d49766d089c741159c2c86861f6af7e74b29b..d878c3d7c95b482ee47b2d08571531cbad3b06fd
+page_adoption_code_review_r0_conclusion=CHANGES_REQUIRED
+page_adoption_owner_manual_test_feedback=NO_ISSUE_REPORTED
+page_adoption_owner_manual_test_feedback_date=2026-09-30
+page_adoption_owner_manual_test_feedback_scope=CLIENT_CONFIG_CREATE_EDIT_MAIN_DIALOG_MANUAL_TEST_ONLY
+page_adoption_owner_manual_test_feedback_is_formal_acceptance=NO
 migrated_page_count=1
 migrated_page_count_scope=REAL_BUSINESS_PAGES_WITH_CED_DIALOG_ROOT_CLASS_OPT_IN
 registered_token_count=17
-current_next_entry=CHATGPT_REMOTE_CREATE_EDIT_DIALOG_CLIENT_CONFIG_FIRST_ADOPTION_R1_REVIEW
+current_next_entry=CHATGPT_REMOTE_CREATE_EDIT_DIALOG_CLIENT_CONFIG_FIRST_ADOPTION_REVIEW_AND_OWNER_FEEDBACK_CLOSEOUT_REVIEW
 ```
 
 - **当前状态**：**设计基线已批准**；**公共 CSS 预设已实现并已通过远程代码复审**
-  （`public_css_status=IMPLEMENTED_FIRST_PAGE_ADOPTED_PENDING_REMOTE_REVIEW`、`public_css_code_review_status=APPROVED`，
+  （`public_css_status=IMPLEMENTED_FIRST_PAGE_ADOPTED_REVIEW_APPROVED`、`public_css_code_review_status=APPROVED`，
   复审对象 R0 `c8785e1`／R1 `8434b88`）、**公共 Vue 组件未创建**（`NOT_CREATED`）、
   **已授权并接入首个页面**（`/config/client` 新增／编辑主弹窗；
   `page_adoption_authorization_status=PAGE_ADOPTION_AUTHORIZED_CLIENT_CONFIG_CREATE_EDIT_MAIN_DIALOG_ONLY`、
-  `page_adoption_implementation_status=IMPLEMENTED_PENDING_CHATGPT_REMOTE_REVIEW_AND_OWNER_VISUAL_CHECK`、
+  `page_adoption_implementation_status=IMPLEMENTED`、`page_adoption_code_review_status=APPROVED`、
+  `page_adoption_owner_manual_test_feedback=NO_ISSUE_REPORTED`（`2026-09-30`，**非**正式验收）、
   `migrated_page_count=1`）、**其余任何页面仍未授权**、**未做正式验收**（`formal_acceptance_execution_status=NOT_EXECUTED`）；
   本节仅为**导航补充**，权威状态块以模板目录 `README.md` 文首为准。
 - **与其它模板的关系**：与 `list-table-visual-template`（表格层）、`query-list-page-template`（页面层）
@@ -117,11 +127,18 @@ current_next_entry=CHATGPT_REMOTE_CREATE_EDIT_DIALOG_CLIENT_CONFIG_FIRST_ADOPTIO
   复审（区间 `ab4d49766d089c741159c2c86861f6af7e74b29b..d878c3d7c95b482ee47b2d08571531cbad3b06fd`）结论为
   `CHANGES_REQUIRED`——**产品代码接入、测试与只读浏览器证据未发现需改代码的阻塞项**，但模板设计契约仍留有
   「页面接入未授权」等过时**现行**表述；该纯文档口径矛盾已由 R1 定向纠错任务
-  `CREATE-EDIT-DIALOG-CLIENT-CONFIG-FIRST-ADOPTION-001-R1` 修正。**R0 复审 `CHANGES_REQUIRED` 不等于整体接入 `APPROVED`。**
-- **下一入口**：`CHATGPT_REMOTE_CREATE_EDIT_DIALOG_CLIENT_CONFIG_FIRST_ADOPTION_R1_REVIEW`
-  ——由 ChatGPT 从远程 Git 对 R1 纠错后的 `/config/client` 新增／编辑主弹窗**首个页面接入**代码区间作独立只读**代码复审**；
+  `CREATE-EDIT-DIALOG-CLIENT-CONFIG-FIRST-ADOPTION-001-R1`（提交 `bc22ada`）修正，
+  该 R1 纠错经 ChatGPT 从远程 Git 独立复审（区间 `d878c3d7c95b482ee47b2d08571531cbad3b06fd..bc22adab7a655d9587049dea0318e8a64869652f`）
+  结论 **`APPROVED`**——**本次首个页面接入及 R1 文档纠错已通过远程复审**。
+  **R0 复审 `CHANGES_REQUIRED` 为历史事实，不改写为 `APPROVED`。**
+- **负责人反馈（2026-09-30）**：项目负责人原话「我人工测试过了，没有问题」——
+  **范围仅**本次 `/config/client` 新增／编辑主弹窗接入后的**实际页面人工测试**；
+  **不**推断其逐一覆盖任何 AC、视口、数据样本、数据库写入路径或其他页面，**不**构成 157 条整体正式验收通过。
+  此前主列表行高／单行高亮等反馈属**其他时点与任务**，不作本次证明。
+- **下一入口**：`CHATGPT_REMOTE_CREATE_EDIT_DIALOG_CLIENT_CONFIG_FIRST_ADOPTION_REVIEW_AND_OWNER_FEEDBACK_CLOSEOUT_REVIEW`
+  ——由 ChatGPT 从远程 Git 对**本次文档收口**作独立只读复审（R1 代码／文档复审已完成，**不再**作为现行待办）；
   其余页面接入仍须**单独评估与授权**，模板级批量迁移与试点**未作出**。
-  **R1 纠错提交并推送 ≠ R1 远程复审通过 ≠ 项目负责人已目测 ≠ 正式验收通过**；本目录**不授权**任何其他页面接入。
+  **本次文档推送成功 ≠ 文档收口远程复审通过；远程复审通过 + 负责人反馈无问题 ≠ 157 条整体正式验收通过，也不授权其他页面接入。**
 - **公共 CSS 代码复审时序**：R0 提交 `c8785e18dc3014396cf45534315ab0f10dbbe94d` 远程代码复审
   `CHANGES_REQUIRED`——**三处发现**：①令牌 17 vs 15 口径不一致（已批准设计登记表中的 2 个 Feature 令牌 `--ced-label-gap`、`--ced-submit-bg-loading` 在 R0 未登记、未被消费）；
   ②现行文档自相矛盾（状态块称已实现，正文仍标 `NOT_CREATED`）；③真实 EP 各状态浏览器证据不足

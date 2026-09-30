@@ -8,7 +8,7 @@ approval_status=APPROVED_BY_PROJECT_OWNER
 approval_date=2026-09-30
 approved_reviewed_commit=45ce16dffbf2747abeb75d4d6c43bc57165043c8
 implementation_status=PUBLIC_CSS_IMPLEMENTED_VUE_NOT_CREATED
-public_css_status=IMPLEMENTED_FIRST_PAGE_ADOPTED_PENDING_REMOTE_REVIEW
+public_css_status=IMPLEMENTED_FIRST_PAGE_ADOPTED_REVIEW_APPROVED
 public_css_code_review_status=APPROVED
 public_css_code_review_date=2026-09-30
 public_css_code_review_objects=c8785e18dc3014396cf45534315ab0f10dbbe94d,8434b884904a34bed51a2d8364e217efb605f06c
@@ -18,7 +18,16 @@ public_vue_component_status=NOT_CREATED
 formal_acceptance_execution_status=NOT_EXECUTED
 page_adoption_authorization_status=PAGE_ADOPTION_AUTHORIZED_CLIENT_CONFIG_CREATE_EDIT_MAIN_DIALOG_ONLY
 page_adoption_decision_status=DECIDED_AND_GRANTED_FOR_CLIENT_CONFIG_CREATE_EDIT_MAIN_DIALOG_ONLY
-page_adoption_implementation_status=IMPLEMENTED_PENDING_CHATGPT_REMOTE_REVIEW_AND_OWNER_VISUAL_CHECK
+page_adoption_implementation_status=IMPLEMENTED
+page_adoption_code_review_status=APPROVED
+page_adoption_code_review_date=2026-09-30
+page_adoption_code_review_approved_objects=d878c3d7c95b482ee47b2d08571531cbad3b06fd,bc22adab7a655d9587049dea0318e8a64869652f
+page_adoption_code_review_r0_range=ab4d49766d089c741159c2c86861f6af7e74b29b..d878c3d7c95b482ee47b2d08571531cbad3b06fd
+page_adoption_code_review_r0_conclusion=CHANGES_REQUIRED
+page_adoption_owner_manual_test_feedback=NO_ISSUE_REPORTED
+page_adoption_owner_manual_test_feedback_date=2026-09-30
+page_adoption_owner_manual_test_feedback_scope=CLIENT_CONFIG_CREATE_EDIT_MAIN_DIALOG_MANUAL_TEST_ONLY
+page_adoption_owner_manual_test_feedback_is_formal_acceptance=NO
 migrated_page_count=1
 migrated_page_count_scope=REAL_BUSINESS_PAGES_WITH_CED_DIALOG_ROOT_CLASS_OPT_IN
 ```
@@ -26,7 +35,7 @@ migrated_page_count_scope=REAL_BUSINESS_PAGES_WITH_CED_DIALOG_ROOT_CLASS_OPT_IN
 > **本文件所载为已批准的设计契约。**（项目负责人 `2026-09-30` 批准设计基线）
 > **实现分层**：文中约定的**公共 CSS 文件与静态契约测试**已由独立实现任务
 > `CREATE-EDIT-DIALOG-VISUAL-TEMPLATE-PUBLIC-CSS-IMPLEMENTATION-001` 落地
-> （`public_css_status=IMPLEMENTED_FIRST_PAGE_ADOPTED_PENDING_REMOTE_REVIEW`、
+> （`public_css_status=IMPLEMENTED_FIRST_PAGE_ADOPTED_REVIEW_APPROVED`、
 > `public_css_code_review_status=APPROVED`，复审日期 `2026-09-30`）。
 > R0 实现提交 `c8785e1` 远程复审 `CHANGES_REQUIRED`（**17 vs 15 令牌口径**、现行文档时态自相矛盾、
 > 真实 EP 状态证据不足）；已由 `...-R1` 任务**定向纠错**：§3 的 `ced-label-row` 与 §4 的
@@ -34,8 +43,10 @@ migrated_page_count_scope=REAL_BUSINESS_PAGES_WITH_CED_DIALOG_ROOT_CLASS_OPT_IN
 > 令牌登记**回归到本文批准的 17 个**（13 模板 + 4 Feature），不再有「已登记但未被消费」的虚令牌；
 > R1 提交 `8434b88` 远程代码复审 **`APPROVED`**。
 > **公共 Vue 组件仍未创建**（`NOT_CREATED`）；项目负责人**仅**批准 `/config/client`（探针端管理）
-> **新增／编辑业务主弹窗**首个接入（`page_adoption_implementation_status=IMPLEMENTED_PENDING_CHATGPT_REMOTE_REVIEW_AND_OWNER_VISUAL_CHECK`，
-> **已实现、待远程代码复审与负责人目测**；`migrated_page_count=1`）；**其余任何页面仍未获授权接入**。
+> **新增／编辑业务主弹窗**首个接入（`page_adoption_implementation_status=IMPLEMENTED`、
+> `page_adoption_code_review_status=APPROVED`，
+> **已实现并通过远程代码复审**，负责人已作人工测试无问题反馈；`migrated_page_count=1`）；
+> **其余任何页面仍未获授权接入**。
 
 ---
 

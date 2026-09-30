@@ -1,4 +1,4 @@
-# 新增／编辑业务弹窗公共视觉模板 · 迁移盘点（已批准基线；公共 CSS 已实现、代码复审通过；首个页面已接入，Vue 未创建）
+# 新增／编辑业务弹窗公共视觉模板 · 迁移盘点（已批准基线；公共 CSS 已实现、代码复审通过；首个页面已接入并通过远程复审，Vue 未创建）
 
 ```text
 create_edit_dialog_visual_template_document_status=APPROVED
@@ -7,7 +7,7 @@ approval_status=APPROVED_BY_PROJECT_OWNER
 approval_date=2026-09-30
 approved_reviewed_commit=45ce16dffbf2747abeb75d4d6c43bc57165043c8
 implementation_status=PUBLIC_CSS_IMPLEMENTED_VUE_NOT_CREATED
-public_css_status=IMPLEMENTED_FIRST_PAGE_ADOPTED_PENDING_REMOTE_REVIEW
+public_css_status=IMPLEMENTED_FIRST_PAGE_ADOPTED_REVIEW_APPROVED
 public_css_code_review_status=APPROVED
 public_css_code_review_date=2026-09-30
 public_css_code_review_objects=c8785e18dc3014396cf45534315ab0f10dbbe94d,8434b884904a34bed51a2d8364e217efb605f06c
@@ -17,7 +17,16 @@ public_vue_component_status=NOT_CREATED
 formal_acceptance_execution_status=NOT_EXECUTED
 page_adoption_authorization_status=PAGE_ADOPTION_AUTHORIZED_CLIENT_CONFIG_CREATE_EDIT_MAIN_DIALOG_ONLY
 page_adoption_decision_status=DECIDED_AND_GRANTED_FOR_CLIENT_CONFIG_CREATE_EDIT_MAIN_DIALOG_ONLY
-page_adoption_implementation_status=IMPLEMENTED_PENDING_CHATGPT_REMOTE_REVIEW_AND_OWNER_VISUAL_CHECK
+page_adoption_implementation_status=IMPLEMENTED
+page_adoption_code_review_status=APPROVED
+page_adoption_code_review_date=2026-09-30
+page_adoption_code_review_approved_objects=d878c3d7c95b482ee47b2d08571531cbad3b06fd,bc22adab7a655d9587049dea0318e8a64869652f
+page_adoption_code_review_r0_range=ab4d49766d089c741159c2c86861f6af7e74b29b..d878c3d7c95b482ee47b2d08571531cbad3b06fd
+page_adoption_code_review_r0_conclusion=CHANGES_REQUIRED
+page_adoption_owner_manual_test_feedback=NO_ISSUE_REPORTED
+page_adoption_owner_manual_test_feedback_date=2026-09-30
+page_adoption_owner_manual_test_feedback_scope=CLIENT_CONFIG_CREATE_EDIT_MAIN_DIALOG_MANUAL_TEST_ONLY
+page_adoption_owner_manual_test_feedback_is_formal_acceptance=NO
 migrated_page_count=1
 migrated_page_count_scope=REAL_BUSINESS_PAGES_WITH_CED_DIALOG_ROOT_CLASS_OPT_IN
 ```
@@ -25,7 +34,8 @@ migrated_page_count_scope=REAL_BUSINESS_PAGES_WITH_CED_DIALOG_ROOT_CLASS_OPT_IN
 > **本文件只做盘点与迁移时序记录。** 设计契约已于 `2026-09-30` 批准；
 > 公共 CSS 预设随后已落地并**已通过远程代码复审**（`APPROVED`），**Vue 组件仍未创建**。
 > 项目负责人已就**首个页面**作出采用决定——**仅** `/config/client`（探针端管理）**新增／编辑业务主弹窗**
-> 接入，该接入**已实现、待远程代码复审与负责人目测**（`page_adoption_implementation_status=IMPLEMENTED_PENDING_CHATGPT_REMOTE_REVIEW_AND_OWNER_VISUAL_CHECK`）；
+> 接入，该接入**已实现并通过远程代码复审**（`page_adoption_implementation_status=IMPLEMENTED`、
+> `page_adoption_code_review_status=APPROVED`，`2026-09-30`），负责人已作人工测试无问题反馈（**非**正式验收）；
 > 现行 **1** 个页面接入本模板（`migrated_page_count=1`，口径＝已挂 opt-in 根类 `ced-dialog` 的真实业务页数）。
 > **数据源管理（`/config/data-source`）弹窗及其他任何页面仍未获授权接入**；模板级批量迁移与试点未作出。
 
@@ -126,7 +136,9 @@ migrated_page_count=1                         # 口径＝已挂 opt-in 根类 ce
   `page_adoption_authorization_status=PAGE_ADOPTION_AUTHORIZED_CLIENT_CONFIG_CREATE_EDIT_MAIN_DIALOG_ONLY`，
   `page_adoption_decision_status=DECIDED_AND_GRANTED_FOR_CLIENT_CONFIG_CREATE_EDIT_MAIN_DIALOG_ONLY`——
   **仅** `/config/client`（探针端管理）**新增／编辑业务主弹窗**接入本模板，该接入
-  **已实现、待远程代码复审与负责人目测**（`migrated_page_count=1`）。
+  **已实现并通过远程代码复审**（`page_adoption_code_review_status=APPROVED`，`2026-09-30`；
+  R0 `d878c3d` 复审 `CHANGES_REQUIRED` → R1 `bc22ada` 复审 `APPROVED`），
+  负责人已作**人工测试无问题反馈**（`2026-09-30`，**非**正式验收）；`migrated_page_count=1`。
   **数据源管理（`/config/data-source`）主弹窗（`editor-dialog`）及其他任何弹窗/页面仍未获授权、未接入**；
   模板级批量迁移与试点仍**未作出**（`pilot_page_selection_status=NOT_DECIDED`）。
 - **设计基线已批准（`2026-09-30`）**，且**公共 CSS 预设已实现并已通过远程代码复审**

@@ -7,7 +7,7 @@ approval_status=APPROVED_BY_PROJECT_OWNER
 approval_date=2026-09-30
 approved_reviewed_commit=45ce16dffbf2747abeb75d4d6c43bc57165043c8
 implementation_status=PUBLIC_CSS_IMPLEMENTED_VUE_NOT_CREATED
-public_css_status=IMPLEMENTED_FIRST_PAGE_ADOPTED_PENDING_REMOTE_REVIEW
+public_css_status=IMPLEMENTED_FIRST_PAGE_ADOPTED_REVIEW_APPROVED
 public_css_code_review_status=APPROVED
 public_css_code_review_date=2026-09-30
 public_css_code_review_objects=c8785e18dc3014396cf45534315ab0f10dbbe94d,8434b884904a34bed51a2d8364e217efb605f06c
@@ -17,7 +17,16 @@ public_vue_component_status=NOT_CREATED
 formal_acceptance_execution_status=NOT_EXECUTED
 page_adoption_authorization_status=PAGE_ADOPTION_AUTHORIZED_CLIENT_CONFIG_CREATE_EDIT_MAIN_DIALOG_ONLY
 page_adoption_decision_status=DECIDED_AND_GRANTED_FOR_CLIENT_CONFIG_CREATE_EDIT_MAIN_DIALOG_ONLY
-page_adoption_implementation_status=IMPLEMENTED_PENDING_CHATGPT_REMOTE_REVIEW_AND_OWNER_VISUAL_CHECK
+page_adoption_implementation_status=IMPLEMENTED
+page_adoption_code_review_status=APPROVED
+page_adoption_code_review_date=2026-09-30
+page_adoption_code_review_approved_objects=d878c3d7c95b482ee47b2d08571531cbad3b06fd,bc22adab7a655d9587049dea0318e8a64869652f
+page_adoption_code_review_r0_range=ab4d49766d089c741159c2c86861f6af7e74b29b..d878c3d7c95b482ee47b2d08571531cbad3b06fd
+page_adoption_code_review_r0_conclusion=CHANGES_REQUIRED
+page_adoption_owner_manual_test_feedback=NO_ISSUE_REPORTED
+page_adoption_owner_manual_test_feedback_date=2026-09-30
+page_adoption_owner_manual_test_feedback_scope=CLIENT_CONFIG_CREATE_EDIT_MAIN_DIALOG_MANUAL_TEST_ONLY
+page_adoption_owner_manual_test_feedback_is_formal_acceptance=NO
 migrated_page_count=1
 migrated_page_count_scope=REAL_BUSINESS_PAGES_WITH_CED_DIALOG_ROOT_CLASS_OPT_IN
 ```
@@ -27,7 +36,7 @@ migrated_page_count_scope=REAL_BUSINESS_PAGES_WITH_CED_DIALOG_ROOT_CLASS_OPT_IN
 > **实现分层**：所约定的公共 CSS 视觉规格已由独立实现任务落地并**已通过远程代码复审**
 > （`public_css_code_review_status=APPROVED`）；
 > **Vue 组件仍未创建**；**首个页面已接入**（**仅** `/config/client` 新增／编辑主弹窗，
-> **已实现、待远程代码复审与负责人目测**；`migrated_page_count=1`），**其余页面仍未授权**。
+> **已实现并通过远程代码复审**，负责人已作人工测试无问题反馈；`migrated_page_count=1`），**其余页面仍未授权**。
 > 本文件**不**给出像素级的「全局定值」——凡两页取值不同者，一律记为 **Feature 级可配置值**。
 
 ---
