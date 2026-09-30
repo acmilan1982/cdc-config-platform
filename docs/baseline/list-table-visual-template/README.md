@@ -404,6 +404,7 @@ grep -ohF "$cand_marker" docs/baseline/list-table-visual-template/SHARED_COMPONE
 | `reports/LIST-TABLE-VISUAL-TEMPLATE-SHARED-IMPLEMENTATION-VISUAL-REVIEW-CLOSEOUT-001.md` | 项目负责人目测通过收口报告（历史执行报告，不修改） |
 | `reports/LIST-TABLE-VISUAL-TEMPLATE-SHARED-IMPLEMENTATION-FORMAL-ACCEPTANCE-001.md` | 公共实现与参考页接入**正式验收**执行报告（历史执行报告，不修改；其记录的状态为当时的 `IMPLEMENTED_PENDING_FINAL_ACCEPTANCE`，`EXECUTED_PASSED_LOCAL`，14/14 PASS） |
 | `reports/LIST-TABLE-VISUAL-TEMPLATE-SHARED-IMPLEMENTATION-FINAL-ACCEPTANCE-CLOSEOUT-001.md` | **最终验收收口报告**（本任务产出，纯文档）：记录 ChatGPT 对正式验收提交 `8501416e750c7eb8547c7f922b1bed3545c7cb17` 的复审结论 `REVIEW_PASS`、`blocking_finding_count=0` 与项目负责人最终接受决定 |
+| `reports/LIST-TABLE-OPTIONAL-ELLIPSIS-IMPLEMENTATION-REVIEW-STATUS-SYNC-001-R1.md` | 第七轮实现复审状态同步 **R1 计数勘误报告**（**本任务产出**，纯文档证据口径勘误）：覆盖同目录 `...-STATUS-SYNC-001.md` §7.1 的两处定义行计数标签（`AC 311→157`、`DESIGN 400→89`）；**不**改动 §12 代码复审 `APPROVED` 结论、四族定义行、157 条验收状态或四通道计数 |
 | `reports/evidence/LIST-TABLE-VISUAL-TEMPLATE-SHARED-IMPLEMENTATION-AND-DATA-SOURCE-REFERENCE-INTEGRATION-001/` | 实现任务等价验证的真实浏览器证据与可复现脚本（`browser/*.json` + `scripts/*.mjs`，历史证据，不修改） |
 | `evidence/LIST-TABLE-VISUAL-TEMPLATE-SHARED-IMPLEMENTATION-FORMAL-ACCEPTANCE-001/` | 本次正式验收的证据（`00`–`10`，含逐值等价、fallback/覆盖、负向矩阵、反向控制、隔离回滚） |
 
@@ -516,6 +517,31 @@ optional_extension_chain_next_step_scope=SHARED_COMPONENT_DESIGN_SECTION_13_PUBL
 ```
 
 > **批准设计基线 ≠ 公共扩展已实现 ≠ 目测通过 ≠ 正式验收通过 ≠ 批准页面迁移。提交推送成功 ≠ 远程复审通过。**
+
+### 8.2 三点入口复审状态同步 R1 计数勘误（`2026-09-30`）—— 仅证据口径，不改状态
+
+R1 任务 `LIST-TABLE-OPTIONAL-ELLIPSIS-IMPLEMENTATION-REVIEW-STATUS-SYNC-001-R1` 为**纯文档证据口径勘误**：
+同目录 `reports/LIST-TABLE-OPTIONAL-ELLIPSIS-IMPLEMENTATION-REVIEW-STATUS-SYNC-001.md` §7.1 曾把**引用/映射**
+中的同 ID 行（`ACCEPTANCE.md` 的 REQ 覆盖矩阵、`DESIGN.md` 的 REQ/AC 交叉引用表）误计入「业务定义行」，
+写成 `ACCEPTANCE: 311/311`、`DESIGN: 400/400`。按四份正式定义表**逐 ID**复算，**正确的定义行数**为：
+
+```text
+CCFG-REQ    154（REQUIREMENTS.md，ID 001–154，连续唯一）
+CCFG-AC     157（ACCEPTANCE.md，ID 001–157，连续唯一）
+CCFG-DESIGN  89（DESIGN.md，ID 001–089，连续唯一）
+CCFG-UI      77（UI.md，ID 001–077，连续唯一）
+```
+
+- **旧 → 新**：`AC 311→157`、`DESIGN 400→89`；`REQ 154`、`UI 77` 复算保持。`311`/`400` 是**混入其他 ID
+  引用行后的错误计数**，**不**是定义新增或内容变化；原报告「定义行逐字节不变」的结论**本身成立**。
+- **实际影响范围仅**：上述报告 §7.1 的**两处计数证据标签**。§12 代码复审 `APPROVED`、四族定义行零改动、
+  157 条验收逐条状态（`PASS 70 / FAIL 0 / BLOCKED 72 / NOT_RUN 15`）、四通道标记计数
+  `28/0/43/7、81、26、8`、9 令牌与 2 helper 类**均不受本纠错影响**。
+- **入口区分**：**本次 R1 文档复审**为**另立**的证据口径复审入口（远程对本次 R1 提交的只读复审），与
+  **模板级迁移入口**分属两层；模板级 `current_next_entry` **保持原值**
+  `NONE_SHARED_IMPLEMENTATION_FINAL_ACCEPTED_AND_CLOSED_NO_PAGE_MIGRATION_AUTHORIZED`，**不**因本次 R1 改变。
+- **执行边界**：原报告作为历史证据**不回写**；§12 代码复审结论、§13 公共样式 `NOT_STARTED`、禁用态未实现、
+  三点入口显式 opt-in、页面迁移未授权与 157 条验收状态**均**不因本次 R1 改变。
 
 ## 9. 后续阶段与授权边界
 
@@ -912,3 +938,13 @@ next_step=NONE_SHARED_IMPLEMENTATION_FINAL_ACCEPTED_AND_CLOSED_NO_PAGE_MIGRATION
   **未因代码复审翻转**；模板级 `current_next_entry` **不变**（`NONE_...`），数据源管理「更多」→三点改造仍属**后续独立任务**。
   **代码复审通过 ≠ 项目负责人目测接受 ≠ 正式验收通过 ≠ 批准页面迁移。** 详见同目录
   `reports/LIST-TABLE-OPTIONAL-ELLIPSIS-IMPLEMENTATION-REVIEW-STATUS-SYNC-001.md`。
+- 2026-09-30，**三点入口代码复审状态同步 R1 定义行计数勘误**（`LIST-TABLE-OPTIONAL-ELLIPSIS-IMPLEMENTATION-REVIEW-STATUS-SYNC-001-R1`，
+  纯文档证据口径勘误）—— 据 ChatGPT 对 `30e82cf` 的远程复审 `CHANGES_REQUIRED`（**唯一阻塞**），
+  更正前一条报告中 §7.1 把**引用/映射**中的同 ID 行误计入「业务定义行」造成的两处计数标签：
+  **`AC 311→157`**、**`DESIGN 400→89`**（`REQ 154`、`UI 77` 复算保持）。正确定义为
+  `154 / 157 / 89 / 77`，逐 ID 连续唯一、字节不变；`311`/`400` 属混入其他 ID 引用行的**错误计数**，
+  **不**是定义新增或内容变化，原报告「定义行逐字节不变」结论**本身成立**。本次**只**触及该报告的两处
+  计数证据标签：§12 代码复审 `APPROVED`、四族定义行零改动、157 条验收逐条状态、四通道标记计数
+  `28/0/43/7、81、26、8`、9 令牌与 2 helper 类**均不变**；模板级 `current_next_entry` **保持原值**。
+  原报告作为历史证据**不回写**。详见同目录
+  `reports/LIST-TABLE-OPTIONAL-ELLIPSIS-IMPLEMENTATION-REVIEW-STATUS-SYNC-001-R1.md`。新增 §8.2 记录本项现行纠错入口。

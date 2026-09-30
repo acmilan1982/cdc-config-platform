@@ -804,3 +804,25 @@ ChatGPT 对固定区间 `a042df08f1b29ba580ccd9b17f081352a089a995..d93f838be359d
   可选扩展链的**下一入口**指向**独立的 §13 公共可选样式实施立项 / 提示词准备**（**尚未立项**），
   **不**表示代码已实现或自动授权页面接入。
 - **代码复审通过 ≠ 项目负责人目测接受 ≠ 正式验收通过 ≠ 批准页面迁移。**
+
+## 三点入口代码复审状态同步 R1 定义行计数勘误追加记录（`LIST-TABLE-OPTIONAL-ELLIPSIS-IMPLEMENTATION-REVIEW-STATUS-SYNC-001-R1`，追加记录，`2026-09-30`）
+
+本任务为**纯文档证据口径勘误**（**不**改业务定义 / 验收状态格 / 前后端代码 / 共享 CSS / 测试 / 数据库；
+**不**运行测试 / 构建 / 浏览器；**不**启停服务；**不**访问数据库 / ZooKeeper / Kafka）。据 ChatGPT 从远程
+Git 对 `30e82cf` 的独立复审 `CHANGES_REQUIRED`（**唯一阻塞**），更正上一条追加记录所引报告
+`reports/LIST-TABLE-OPTIONAL-ELLIPSIS-IMPLEMENTATION-REVIEW-STATUS-SYNC-001.md` §7.1 的**两处**定义行计数标签：
+
+- **旧 → 新**：`ACCEPTANCE 311 → AC 157`、`DESIGN 400 → 89`（`REQ 154`、`UI 77` 复算保持）；
+  正确定义为 `154 / 157 / 89 / 77`；
+- **成因**：`311`/`400` 是把**引用/映射**中的同 ID 行（`ACCEPTANCE.md` 的 REQ 覆盖矩阵 154 行、
+  `DESIGN.md` 的 REQ 154 行与 AC 157 行交叉引用表）误计为「业务定义行」；**不**是定义新增或内容变化，
+  原报告「四族定义行逐字节不变」的结论**本身成立**（逐 ID 连续唯一、字节未变）；
+- **影响范围仅**：该报告 §7.1 的**两处计数证据标签**；§12 代码复审 `APPROVED`、四族定义行零改动、
+  157 条验收逐条状态（`PASS 70 / FAIL 0 / BLOCKED 72 / NOT_RUN 15`）、四通道标记计数
+  `28 / 0 / 43 / 7`、`81`、`26`、`8`、`lt_token_count` **9** 与 `lt_internal_helper_class_count` **2**
+  **均不受影响**；
+- **边界**：原报告作为历史证据**不回写**（其 §7.1 错误文本作为被 R1 override 的历史记录保留）；§13 公共样式
+  仍 `NOT_STARTED`、禁用态未实现、三点入口显式 opt-in、页面迁移未授权、模板级 `current_next_entry` 仍
+  `NONE_SHARED_IMPLEMENTATION_FINAL_ACCEPTED_AND_CLOSED_NO_PAGE_MIGRATION_AUTHORIZED` **均不变**；
+  本次 R1 仅为**文档证据复审入口**，**不**重新进行代码复审，**不**推进 §13 公共实现或任何页面迁移。
+- **报告导航勘误 ≠ 迁移授权。**
