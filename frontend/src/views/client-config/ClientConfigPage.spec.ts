@@ -1784,7 +1784,7 @@ describe('编辑弹窗与历史异常回显（CCFG-UI-014/017/025）', () => {
     await flushPromises()
     expect(mockedUpdate).not.toHaveBeenCalled()
     expect(wrapper.find('.cc-split--error').exists()).toBe(true)
-    expect(wrapper.find('.cc-field-error').exists()).toBe(true)
+    expect(wrapper.find('.ced-field-error').exists()).toBe(true)
 
     // 移除异常项：点该 chip 的关闭图标
     await badChip!.find('.el-tag__close').trigger('click')
@@ -2187,13 +2187,16 @@ describe('第三轮：+N 清单两级信息与弹窗视觉（CCFG-REQ-113~122 / 
     wrapper.unmount()
   })
 
-  it('组件：新增/编辑主提交按钮文案保持“创建/保存”，且仅主按钮带 cc-dialog-submit', async () => {
+  it('组件：新增/编辑主提交按钮文案保持“创建/保存”，且仅主按钮带 cc-dialog-submit + ced-submit', async () => {
     const wrapper = await mountPage([enabledRow])
     await openCreate(wrapper)
     const createBtn = exactButton(wrapper, '创建')!
     expect(createBtn.classes()).toContain('cc-dialog-submit')
+    expect(createBtn.classes()).toContain('ced-submit')
     expect(exactButton(wrapper, '取消')!.classes()).not.toContain('cc-dialog-submit')
+    expect(exactButton(wrapper, '取消')!.classes()).not.toContain('ced-submit')
     expect(exactButton(wrapper, '自动生成')!.classes()).not.toContain('cc-dialog-submit')
+    expect(exactButton(wrapper, '自动生成')!.classes()).not.toContain('ced-submit')
     expect(exactButton(wrapper, '保存')).toBeUndefined()
     // 新增模式：探针 ID 直接可编辑，不出现“修改探针 ID”开关
     expect(exactButton(wrapper, '修改探针 ID')).toBeUndefined()
@@ -2204,10 +2207,37 @@ describe('第三轮：+N 清单两级信息与弹窗视觉（CCFG-REQ-113~122 / 
     await openEdit(editWrapper, enabledRow)
     const saveBtn = exactButton(editWrapper, '保存')!
     expect(saveBtn.classes()).toContain('cc-dialog-submit')
+    expect(saveBtn.classes()).toContain('ced-submit')
     const toggle = exactButton(editWrapper, '修改探针 ID')!
     expect(toggle).toBeTruthy()
     expect(toggle.classes()).not.toContain('cc-dialog-submit')
+    expect(toggle.classes()).not.toContain('ced-submit')
     editWrapper.unmount()
+  })
+
+  it('组件：新增/编辑主弹窗已挂公共视觉预设类（根类/标签行/标签/必填星号/反馈占位/字段错误态）', async () => {
+    const w = await mountPage([enabledRow])
+    await openCreate(w)
+    // 根类：保留 cc-dialog 并追加 ced-dialog（公共预设唯一 opt-in）
+    expect(w.find('.cc-dialog.ced-dialog').exists()).toBe(true)
+    // 三个标签行、三个标签（含必填星号）、三个反馈占位
+    expect(w.findAll('.cc-form-item.ced-label-row')).toHaveLength(3)
+    const labels = w.findAll('.cc-form-label.ced-form-label.ced-required-mark')
+    expect(labels).toHaveLength(3)
+    expect(labels.map((l) => l.text())).toEqual(['探针 ID', '探针描述', '采集数据源'])
+    expect(w.findAll('.cc-field-feedback.ced-field-feedback')).toHaveLength(3)
+    // 未触发校验时无公共字段错误态
+    expect(w.findAll('.ced-field--error')).toHaveLength(0)
+    // 触发三项字段级报错：ID/描述容器挂公共错误态、错误文字挂公共错误文字类
+    await exactButton(w, '创建')!.trigger('click')
+    await flushPromises()
+    expect(w.find('.cc-id-control').element.closest('.ced-field--error')).not.toBeNull()
+    expect(w.find('.cc-desc-row').element.closest('.ced-field--error')).not.toBeNull()
+    expect(w.findAll('.ced-field-error').length).toBeGreaterThanOrEqual(2)
+    // 数据源字段错误态仍是本页专用区域类，不误挂公共字段错误态
+    expect(w.find('.cc-split--error').exists()).toBe(true)
+    expect(w.find('.cc-source-field').element.classList.contains('ced-field--error')).toBe(false)
+    w.unmount()
   })
 
   it('组件：主提交按钮常态不预禁用——未选数据源时点击就地报错且拒绝写库', async () => {
@@ -2225,35 +2255,43 @@ describe('第三轮：+N 清单两级信息与弹窗视觉（CCFG-REQ-113~122 / 
     wrapper.unmount()
   })
 
-  it('静态：弹窗宽度 900px 且以 max-width 受视口限制保留左右安全间距', () => {
+  it('静态：弹窗宽度 900px 且窄视口安全间距改由公共预设 + 本页 Feature 令牌承担', () => {
     expect(SFC_SOURCE).toContain('width="900px"')
     expect(SFC_SOURCE).not.toContain('width="680px"')
-    expect(declValue(cssBlock(SFC_SOURCE, ':deep(.cc-dialog)'), 'max-width')).toBe(
-      'calc(100vw - 48px)',
+    // 同义私有规则已移除：不再在页面声明弹窗 max-width
+    expect(SFC_SOURCE).not.toContain('calc(100vw - 48px)')
+    expect(cssBlock(SFC_SOURCE, ':deep(.cc-dialog)')).toBe('')
+    // 由公共预设 `.ced-dialog` 消费本页 Feature 令牌
+    expect(declValue(cssBlock(SFC_SOURCE, '.cc-dialog.ced-dialog'), '--ced-dialog-safety-inset')).toBe(
+      '48px',
     )
   })
 
-  it('静态：配置项名称标签令牌对齐参考页（14px / 500 / #3f3f46，无等宽字体）', () => {
+  it('静态：配置项名称标签改挂公共类并只提供 Feature 令牌（字号/字重/颜色/对齐由公共预设承担）', () => {
+    expect(SFC_SOURCE).toContain('class="cc-form-label ced-form-label ced-required-mark"')
+    // 由公共预设 `.ced-form-label` 消费本页 Feature 令牌
+    expect(declValue(cssBlock(SFC_SOURCE, '.cc-dialog.ced-dialog'), '--ced-label-column-width')).toBe(
+      '84px',
+    )
+    // 同义私有声明已移除：标签私有规则只保留与预设无关的上内边距
     const label = cssBlock(SFC_SOURCE, '.cc-form-label')
-    expect(declValue(label, 'font-size')).toBe('14px')
-    expect(declValue(label, 'font-weight')).toBe('500')
-    expect(declValue(label, 'color')).toBe('#3f3f46')
+    expect(declValue(label, 'padding-top')).toBe('6px')
+    expect(declValue(label, 'font-size')).toBe('')
+    expect(declValue(label, 'font-weight')).toBe('')
+    expect(declValue(label, 'color')).toBe('')
+    expect(declValue(label, 'text-align')).toBe('')
+    expect(declValue(label, 'flex')).toBe('')
     expect(label).not.toContain('monospace')
-    // 必填红色星号与校验语义保留
-    expect(SFC_SOURCE).toContain('.cc-form-label::before')
+    // 必填红星改由公共 `.ced-required-mark` 承担，本页不再保留同义私有 ::before
+    expect(SFC_SOURCE).not.toContain('.cc-form-label::before')
   })
 
-  it('静态：主提交按钮黑色实心令牌，正常态配色由 :not(.is-disabled) 限定', () => {
-    const submit = cssBlock(SFC_SOURCE, '.cc-dialog-submit:not(.is-disabled)')
-    expect(declValue(submit, 'background')).toBe('#09090b')
-    expect(declValue(submit, 'border-color')).toBe('#09090b')
-    expect(declValue(submit, 'color')).toBe('#ffffff')
-    expect(declValue(submit, 'border-radius')).toBe('6px')
-    expect(declValue(submit, 'font-weight')).toBe('500')
-    expect(SFC_SOURCE).toContain('.cc-dialog-submit:not(.is-disabled):hover')
-    expect(SFC_SOURCE).toContain('.cc-dialog-submit:not(.is-disabled):active')
-    expect(SFC_SOURCE).toContain('#27272a')
-    expect(SFC_SOURCE).toContain('#18181b')
+  it('静态：主提交按钮改挂公共 ced-submit，同义私有黑色令牌已移除且不借助 !important', () => {
+    expect(SFC_SOURCE).toContain('class="cc-dialog-submit ced-submit"')
+    // 同义私有声明已移除（正常态配色与禁用态隔离由公共预设 `.ced-submit` 承担）
+    expect(cssBlock(SFC_SOURCE, '.cc-dialog-submit:not(.is-disabled)')).toBe('')
+    expect(SFC_SOURCE).not.toContain('.cc-dialog-submit:not(.is-disabled):hover')
+    expect(SFC_SOURCE).not.toContain('.cc-dialog-submit:not(.is-disabled):active')
     // 不借助 !important 强行覆盖禁用态
     expect(SFC_SOURCE).not.toContain('!important')
   })
@@ -2348,18 +2386,18 @@ function fieldContainer(w: PageWrapper, innerSelector: string): HTMLElement | nu
     : null
 }
 
-/** 某字段容器内的红色错误文本（无则 null）。 */
+/** 某字段容器内的红色错误文本（无则 null）。错误文字挂公共预设类 `ced-field-error`。 */
 function fieldErrorText(w: PageWrapper, innerSelector: string): string | null {
-  const err = fieldContainer(w, innerSelector)?.querySelector('.cc-field-error')
+  const err = fieldContainer(w, innerSelector)?.querySelector('.ced-field-error')
   return err ? (err.textContent ?? '').trim() : null
 }
 
-/** 某字段是否呈红色错误态：ID/描述看容器类，数据源看选择区域类。 */
+/** 某字段是否呈红色错误态：ID/描述看容器类（公共预设 `ced-field--error`），数据源看选择区域类。 */
 function fieldInvalid(w: PageWrapper, innerSelector: string): boolean {
   const container = fieldContainer(w, innerSelector)
   if (!container) return false
   return (
-    container.classList.contains('cc-field--error') ||
+    container.classList.contains('ced-field--error') ||
     container.querySelector('.cc-split--error') !== null
   )
 }
@@ -2370,7 +2408,7 @@ function sourceFeedbackOf(w: PageWrapper): { text: string; tone: 'neutral' | 'er
   if (!el) return { text: '', tone: null }
   return {
     text: (el.textContent ?? '').trim(),
-    tone: el.className.includes('cc-field-error') ? 'error' : 'neutral',
+    tone: el.className.includes('ced-field-error') ? 'error' : 'neutral',
   }
 }
 
@@ -2696,18 +2734,18 @@ describe('第四轮：字段级校验与主按钮口径（CCFG-REQ-123~136）', 
     w.unmount()
   })
 
-  it('静态：描述占位文案、标签右对齐、反馈区预留而不裁切、弹窗样式无侧栏偏移（CCFG-REQ-126/129、CCFG-UI-055/059）', () => {
+  it('静态：描述占位文案保留，标签右对齐与反馈区稳定占位改由公共预设承担且无侧栏偏移（CCFG-REQ-126/129、CCFG-UI-055/059）', () => {
     expect(SFC_SOURCE).toContain('探针用途描述（最多 256 个字符）')
-    expect(declValue(cssBlock(SFC_SOURCE, '.cc-form-label'), 'text-align')).toBe('right')
+    // 标签右对齐与反馈区稳定占位（min-height / 不裁切）改由公共预设
+    // `.ced-form-label` / `.ced-field-feedback` 承担，本页不再声明同义私有规则
+    expect(cssBlock(SFC_SOURCE, '.cc-form-label')).not.toContain('text-align')
+    expect(cssBlock(SFC_SOURCE, '.cc-field-feedback')).toBe('')
+    expect(SFC_SOURCE).toContain('ced-field-feedback')
 
-    const feedback = cssBlock(SFC_SOURCE, '.cc-field-feedback')
-    expect(declValue(feedback, 'min-height')).not.toBe('')
-    expect(feedback).not.toContain('overflow: hidden')
-
-    // 弹窗宽度与窄视口安全间距保持既有口径；样式不得硬编码侧栏宽度补偿
-    expect(declValue(cssBlock(SFC_SOURCE, ':deep(.cc-dialog)'), 'max-width')).toBe(
-      'calc(100vw - 48px)',
-    )
+    // 弹窗宽度与窄视口安全间距改由公共预设 + 本页 Feature 令牌承担；不得硬编码侧栏宽度补偿
+    expect(
+      declValue(cssBlock(SFC_SOURCE, '.cc-dialog.ced-dialog'), '--ced-dialog-safety-inset'),
+    ).toBe('48px')
     expect(SFC_SOURCE).not.toContain('220px')
     expect(SFC_SOURCE).not.toContain('64px')
   })
@@ -2721,22 +2759,33 @@ describe('第四轮：字段级校验与主按钮口径（CCFG-REQ-123~136）', 
 // `#a0cfff`，浅蓝）刷到底色上，于是黑色常态在挂起瞬间跳到浅蓝。纠偏只做一件事：
 // 为 `.cc-dialog-submit.is-loading` 增加**仅加载态**的定向深灰黑系样式。
 //
+// 本页接入公共视觉预设后，公共 `.ced-submit.is-loading:not(.is-disabled)` 同样因本按钮
+// 加载态**同时**带 `is-disabled` 而不命中，故这条仅加载态的定向样式仍保留在页面，
+// 取值改用本页 Feature 令牌 `--ced-submit-bg-loading`。
+//
 // jsdom 不注入 SFC 样式，因此“实际颜色”由 SFC 源码声明块受检（加载态声明块 + 无浅蓝
 // 令牌/无全局覆盖/无 !important）；真实浏览器下的 computed 色值三态证据见
 // `docs/features/client-config/reports/CLIENT-CONFIG-CREATE-EDIT-DIALOG-VALIDATION-IMPLEMENTATION-001-R1.md`。
 
 describe('第一轮纠偏（R1）：主提交按钮加载态保持黑色系（CCFG-REQ-120/124）', () => {
-  it('静态：加载态定向声明为黑色系深灰，且覆盖 hover/focus/active 不给浅蓝留入口', () => {
+  it('静态：加载态消费本页 Feature 令牌保持黑色系深灰，且覆盖 hover/focus/active 不给浅蓝留入口', () => {
     const loading = cssGroupBlock(SFC_SOURCE, '.cc-dialog-submit.is-loading')
     expect(loading).not.toBe('')
-    // 黑系深灰底 + 白字：与常态 #09090b 同族，明显区别于 EP 主色浅蓝
-    expect(declValue(loading, 'background')).toBe('#3f3f46')
-    expect(declValue(loading, 'border-color')).toBe('#3f3f46')
+    // 黑系深灰底 + 白字：与常态 #09090b 同族，明显区别于 EP 主色浅蓝。
+    // 本页主按钮同时带 `is-disabled` 与 `is-loading`，公共预设的
+    // `.ced-submit.is-loading:not(.is-disabled)` 不命中，故加载态由本页按 Feature 令牌承担。
+    expect(declValue(loading, 'background')).toBe('var(--ced-submit-bg-loading, #3f3f46)')
+    expect(declValue(loading, 'border-color')).toBe('var(--ced-submit-bg-loading, #3f3f46)')
     expect(declValue(loading, 'color')).toBe('#ffffff')
     expect(declValue(loading, 'border-radius')).toBe('6px')
     expect(declValue(loading, 'font-weight')).toBe('500')
     // 与“仍可点击的黑色常态”区分：加载态不可重复点击
     expect(declValue(loading, 'cursor')).toBe('not-allowed')
+
+    // 本页提供 Feature 令牌值（公共预设对 --ced-submit-bg-loading 不声明默认值）
+    expect(
+      declValue(cssBlock(SFC_SOURCE, '.cc-dialog.ced-dialog'), '--ced-submit-bg-loading'),
+    ).toBe('#3f3f46')
 
     // 分组内显式带上 hover/focus/active，防止 EP 的 `.el-button.is-disabled:hover`
     // 在指针悬停时把浅蓝重新刷回
@@ -2757,8 +2806,9 @@ describe('第一轮纠偏（R1）：主提交按钮加载态保持黑色系（CC
     // 不得改成全局按钮覆盖，也不得靠 !important 抢优先级
     expect(SFC_SOURCE).not.toContain('.el-button.is-loading')
     expect(SFC_SOURCE).not.toContain('!important')
-    // 正常态仍由 :not(.is-disabled) 限定（历史条款的作用域说明保持）
-    expect(SFC_SOURCE).toContain('.cc-dialog-submit:not(.is-disabled)')
+    // 正常态与禁用态隔离改由公共预设 `.ced-submit` 的 :not(.is-disabled) 序列承担（本页不再声明同义规则）
+    expect(SFC_SOURCE).not.toContain('.cc-dialog-submit:not(.is-disabled)')
+    expect(SFC_SOURCE).toContain('.ced-submit')
   })
 
   it('新增：常态黑色可点击 → 挂起 is-loading 且防重复 → 结束后恢复常态（CCFG-AC-120）', async () => {
@@ -2843,24 +2893,28 @@ describe('第一轮纠偏（R1）：主提交按钮加载态保持黑色系（CC
 // CCFG-REQ-137~147 / CCFG-AC-140~146 / CCFG-DESIGN-072~082 / CCFG-UI-060~070
 
 describe('第五轮：共用弹窗水平间距与字段节奏（CCFG-REQ-137/138、CCFG-DESIGN-072/073、CCFG-UI-060/061）', () => {
-  it('静态：标签右缘→控件左缘统一 12px；字段间留白交由反馈区稳定占位，不再叠加字段级 gap', () => {
-    // 页面作用域统一表单布局：三项标签右缘与对应控件左缘统一 12px
-    expect(declValue(cssBlock(SFC_SOURCE, '.cc-form-item'), 'gap')).toBe('12px')
-    // 字段级 gap 已移除：字段间留白只由 `.cc-field-feedback` 的稳定占位承担（不新增像素值掩盖节奏）
+  it('静态：标签行/列宽/间距与反馈占位改由公共预设 + 本页 Feature 令牌承担，不叠加字段级 gap', () => {
+    // 三项标签右缘与对应控件左缘统一 12px：公共预设 `.ced-label-row` 消费本页 Feature 令牌
+    expect(declValue(cssBlock(SFC_SOURCE, '.cc-dialog.ced-dialog'), '--ced-label-gap')).toBe('12px')
+    expect(SFC_SOURCE).toContain('class="cc-form-item ced-label-row"')
+    // 同义私有 flex 行已移除
+    expect(cssBlock(SFC_SOURCE, '.cc-form-item')).toBe('')
+    // 字段级 gap 已移除：字段间留白只由公共 `.ced-field-feedback` 的稳定占位承担（不新增像素值掩盖节奏）
     expect(cssBlock(SFC_SOURCE, '.cc-form')).not.toContain('gap')
-    // 标签列宽与右对齐不变；控件为 flex:1，多出的 12px 从控件宽度扣除，右边界保持原布局位置
-    expect(declValue(cssBlock(SFC_SOURCE, '.cc-form-label'), 'flex')).toBe('0 0 84px')
-    expect(declValue(cssBlock(SFC_SOURCE, '.cc-form-label'), 'text-align')).toBe('right')
-    expect(declValue(cssBlock(SFC_SOURCE, '.cc-form-control'), 'flex')).toBe('1')
-    // 反馈区稳定占位与长错误换行可读口径不变（不裁切）
-    const feedback = cssBlock(SFC_SOURCE, '.cc-field-feedback')
-    expect(declValue(feedback, 'min-height')).not.toBe('')
-    expect(feedback).not.toContain('overflow: hidden')
-    // 弹窗宽度与窄视口安全间距口径不变；不写死弹窗高度、不写死侧栏补偿宽度、不靠 !important
-    expect(SFC_SOURCE).toContain('width="900px"')
-    expect(declValue(cssBlock(SFC_SOURCE, ':deep(.cc-dialog)'), 'max-width')).toBe(
-      'calc(100vw - 48px)',
+    // 标签列宽与右对齐改由公共预设 `.ced-form-label` 消费 Feature 令牌；控件为 flex:1 保持页面结构
+    expect(declValue(cssBlock(SFC_SOURCE, '.cc-dialog.ced-dialog'), '--ced-label-column-width')).toBe(
+      '84px',
     )
+    expect(declValue(cssBlock(SFC_SOURCE, '.cc-form-control'), 'flex')).toBe('1')
+    // 反馈区稳定占位与长错误换行可读口径改由公共预设 `.ced-field-feedback` / `.ced-field-error` 承担（不裁切）
+    expect(cssBlock(SFC_SOURCE, '.cc-field-feedback')).toBe('')
+    expect(SFC_SOURCE).toContain('ced-field-feedback')
+    expect(SFC_SOURCE).toContain('ced-field-error')
+    // 弹窗宽度与窄视口安全间距：width 属性 + 公共预设 + Feature 令牌；不写死侧栏补偿宽度、不靠 !important
+    expect(SFC_SOURCE).toContain('width="900px"')
+    expect(
+      declValue(cssBlock(SFC_SOURCE, '.cc-dialog.ced-dialog'), '--ced-dialog-safety-inset'),
+    ).toBe('48px')
     expect(SFC_SOURCE).not.toContain('220px')
     expect(SFC_SOURCE).not.toContain('!important')
   })

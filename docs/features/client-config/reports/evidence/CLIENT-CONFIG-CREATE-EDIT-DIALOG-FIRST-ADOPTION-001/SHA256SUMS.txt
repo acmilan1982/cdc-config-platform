@@ -1,0 +1,2 @@
+93e0b9e9cffed8f739000d0b790491bc5771279586892b03753f2437473ffa32  verify-dialog-adoption.mjs
+68e26a4dccec472f92e42a03543adf95e9fb1c14268989686342cb6935a102a3  dialog-adoption-results.json

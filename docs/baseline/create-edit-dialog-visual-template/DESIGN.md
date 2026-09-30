@@ -7,7 +7,7 @@ approval_status=APPROVED_BY_PROJECT_OWNER
 approval_date=2026-09-30
 approved_reviewed_commit=45ce16dffbf2747abeb75d4d6c43bc57165043c8
 implementation_status=PUBLIC_CSS_IMPLEMENTED_VUE_NOT_CREATED
-public_css_status=IMPLEMENTED_PENDING_USER_ADOPTION_DECISION
+public_css_status=IMPLEMENTED_FIRST_PAGE_ADOPTED_PENDING_REMOTE_REVIEW
 public_css_code_review_status=APPROVED
 public_css_code_review_date=2026-09-30
 public_css_code_review_objects=c8785e18dc3014396cf45534315ab0f10dbbe94d,8434b884904a34bed51a2d8364e217efb605f06c
@@ -15,9 +15,11 @@ public_css_code_review_scope=PURE_CSS_PRESET_ROOT_CLASS_OPT_IN_17_TOKENS_REAL_EP
 public_css_status_before_review=IMPLEMENTED_PENDING_CHATGPT_REMOTE_CODE_REVIEW
 public_vue_component_status=NOT_CREATED
 formal_acceptance_execution_status=NOT_EXECUTED
-page_adoption_authorization_status=PAGE_ADOPTION_NOT_AUTHORIZED
-page_adoption_decision_status=NOT_DECIDED_NOT_GRANTED
-migrated_page_count=0
+page_adoption_authorization_status=PAGE_ADOPTION_AUTHORIZED_CLIENT_CONFIG_CREATE_EDIT_MAIN_DIALOG_ONLY
+page_adoption_decision_status=DECIDED_AND_GRANTED_FOR_CLIENT_CONFIG_CREATE_EDIT_MAIN_DIALOG_ONLY
+page_adoption_implementation_status=IMPLEMENTED_PENDING_CHATGPT_REMOTE_REVIEW_AND_OWNER_VISUAL_CHECK
+migrated_page_count=1
+migrated_page_count_scope=REAL_BUSINESS_PAGES_WITH_CED_DIALOG_ROOT_CLASS_OPT_IN
 ```
 
 > 本文件是**已批准的设计基线**（项目负责人于 `2026-09-30` 批准）。
@@ -25,7 +27,9 @@ migrated_page_count=0
 > 标注「**拟议**」的设计项自批准后即为**已批准的设计契约**。
 > **实现分层（`2026-09-30` 之后）**：本设计所约定的**公共 CSS 类名／令牌／静态断言**
 > 已由独立实现任务落地并**已通过远程代码复审**（`public_css_code_review_status=APPROVED`）；
-> **公共 Vue 组件仍未创建**（`NOT_CREATED`）；**任何页面均未接入**（采用决定 `NOT_DECIDED_NOT_GRANTED`，见文首状态块）。
+> **公共 Vue 组件仍未创建**（`NOT_CREATED`）；项目负责人**仅**批准 `/config/client`（探针端管理）
+> **新增／编辑业务主弹窗**首个接入（`page_adoption_implementation_status=IMPLEMENTED_PENDING_CHATGPT_REMOTE_REVIEW_AND_OWNER_VISUAL_CHECK`，
+> **已实现、待远程代码复审与负责人目测**；`migrated_page_count=1`，见文首状态块）；**其余任何页面仍未获授权接入**。
 > 该分层**不改变**本设计契约内容。
 
 ---
@@ -100,7 +104,9 @@ migrated_page_count=0
 
 > 以下为**已批准设计**。实现状态**逐项**区分：**公共 CSS 类名／令牌／静态断言已实现**
 > （纯 CSS 公共能力，**已通过远程代码复审**，`APPROVED`）；**Vue 公共组件仍未创建**（`NOT_CREATED`）；
-> **页面接入未授权**（任何页面均未接入，采用决定 `NOT_DECIDED_NOT_GRANTED`）。
+> **首个页面已接入**（**仅** `/config/client` 新增／编辑主弹窗；
+> `page_adoption_implementation_status=IMPLEMENTED_PENDING_CHATGPT_REMOTE_REVIEW_AND_OWNER_VISUAL_CHECK`，
+> **已实现、待远程代码复审与负责人目测**；其余页面仍未授权）。
 
 - **显式 opt-in 根类**（**已实现**）：仅在页面的**新增／编辑主弹窗**根元素上挂一个**模板命名空间的根类**
   （`ced-dialog`，`ced` = create/edit dialog）。**未挂该根类的弹窗零影响**：

@@ -111,7 +111,15 @@ const IMPORT_PATH = ['styles/dialog/', 'create-edit-dialog-visual.css'].join('')
 
 /** 扫描标记一律以拼接构造，避免本测试文件自身源码被「唯一来源」扫描误计入。 */
 const CONSUME_ROOT = ['var(', '--ced-label-font-size'].join('')
-const ROOT_RULE_RE = new RegExp(`\\.${ROOT_CLASS}\\s*\\{`)
+/**
+ * 公共预设规则判据：**以根类起头**的规则（如 `.ced-dialog { … }`）。前置边界排除
+ * 接入页面用于承载 Feature 令牌的**复合**类 `.cc-dialog.ced-dialog { … }`——它不是
+ * 公共规则来源，只是本页的令牌作用域（见断言 19/20 的接入白名单与令牌集约束）。
+ */
+const ROOT_RULE_RE = new RegExp(`(?:^|[\\s,{};])\\.${ROOT_CLASS}\\s*\\{`)
+
+/** 唯一授权接入公共预设的页面（CREATE-EDIT-DIALOG-CLIENT-CONFIG-FIRST-ADOPTION-001）。 */
+const ADOPTED_VIEW = ['views/client-config/', 'ClientConfigPage.vue'].join('')
 
 function stripComments(text: string): string {
   return text.replace(/\/\*[\s\S]*?\*\//g, '')
@@ -375,22 +383,32 @@ describe('新增／编辑弹窗公共视觉模板公共层契约', () => {
     expect(loadingRule.body).not.toContain(PROBE_END_LOADING_GRAY)
   })
 
-  it('19. 未接入页面零泄漏：views 下无任何弹窗挂载 ced-dialog 根类', () => {
+  it('19. 根类 opt-in 仅限授权接入页面白名单，未授权页面零泄漏', () => {
     const VIEWS_DIR = resolve(SRC_DIR, 'views')
     const mounted = walk(VIEWS_DIR)
       .filter((file) => file.endsWith('.vue'))
       .filter((file) => readFileSync(file, 'utf8').includes(ROOT_CLASS))
       .map(relative)
-    expect(mounted).toEqual([])
+    // 仅探针端管理页新增/编辑主弹窗获授权接入；数据源管理及其他页面仍为零挂载。
+    expect(mounted).toEqual([ADOPTED_VIEW])
   })
 
-  it('20. 公共预设规则在全 frontend/src 中只有唯一来源文件', () => {
+  it('20. 公共预设规则在全 frontend/src 中只有唯一来源文件；接入页面只声明 Feature 令牌值', () => {
     const hits: string[] = []
     for (const file of walk(SRC_DIR)) {
       const text = stripComments(readFileSync(file, 'utf8'))
       if (ROOT_RULE_RE.test(text) || text.includes(CONSUME_ROOT)) hits.push(relative(file))
     }
     expect(hits).toEqual([`styles/dialog/${CSS_FILE}`])
+
+    // 授权接入页面：只允许以复合类作用域声明 4 个 Feature-owned 令牌值，
+    // 不得消费模板令牌（其默认值属公共层），也不得以根类起头定义公共规则。
+    const pageText = stripComments(readFileSync(resolve(SRC_DIR, ADOPTED_VIEW), 'utf8'))
+    const declared = [...new Set(pageText.match(/--ced-[\w-]+\s*:/g) ?? [])]
+      .map((s) => s.replace(/\s*:$/, ''))
+      .sort()
+    expect(declared).toEqual([...EXPECTED_FEATURE_TOKENS].sort())
+    expect(pageText).not.toContain(CONSUME_ROOT)
   })
 
   it('21. 公共 CSS 经前端全局入口只做一次最小引入', () => {

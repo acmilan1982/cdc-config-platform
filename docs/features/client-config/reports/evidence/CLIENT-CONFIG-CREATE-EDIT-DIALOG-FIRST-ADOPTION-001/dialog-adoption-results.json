@@ -1,0 +1,796 @@
+{
+  "meta": {
+    "chrome": "Mozilla/5.0 (X11; Linux x86_64) AppleWebKit/537.36 (KHTML, like Gecko) HeadlessChrome/147.0.7727.15 Safari/537.36",
+    "page": "http://127.0.0.1:5173/config/client",
+    "viewport": {
+      "width": 1280,
+      "height": 900
+    },
+    "syntheticStub": {
+      "clients": "/api/clients → 合成 1 行",
+      "dataSourceOptions": "/api/clients/data-source-options → 合成 2 项",
+      "otherGets": "空集合 200"
+    }
+  },
+  "checks": [
+    {
+      "name": "新增弹窗根类保留 cc-dialog 并追加 ced-dialog",
+      "ok": true,
+      "detail": "el-dialog cc-dialog ced-dialog"
+    },
+    {
+      "name": "公共预设规则来源为公共 CSS 文件（Vite dev id）",
+      "ok": true,
+      "detail": [
+        {
+          "viteDevId": "/agent/cdc-config-platform/frontend/src/styles/dialog/create-edit-dialog-visual.css",
+          "href": null,
+          "cedDialogRules": [
+            ".ced-dialog",
+            ".ced-dialog .el-form-item__label, .ced-dialog .ced-form-label",
+            ".ced-dialog .ced-form-label",
+            ".ced-dialog .ced-label-row",
+            ".ced-dialog .ced-form-label.ced-required-mark::before, .ced-dialog .ced-required-mark .el-form-item__label::before",
+            ".ced-dialog .ced-submit:not(.is-disabled)",
+            ".ced-dialog .ced-submit:not(.is-disabled):hover, .ced-dialog .ced-submit:not(.is-disabled):focus",
+            ".ced-dialog .ced-submit:not(.is-disabled):active",
+            ".ced-dialog .ced-submit.is-loading:not(.is-disabled)",
+            ".ced-dialog .ced-field-feedback",
+            ".ced-dialog .ced-field-error",
+            ".ced-dialog .ced-field--error .el-input__wrapper, .ced-dialog .ced-field--error .el-textarea__inner"
+          ]
+        },
+        {
+          "viteDevId": "/agent/cdc-config-platform/frontend/src/views/client-config/ClientConfigPage.vue?vue&type=style&index=2&lang.css",
+          "href": null,
+          "cedDialogRules": [
+            ".cc-dialog.ced-dialog"
+          ]
+        }
+      ]
+    },
+    {
+      "name": "四个 Feature 令牌由本页在真实弹窗根上提供",
+      "ok": true,
+      "detail": {
+        "labelColumnWidth": "84px",
+        "labelGap": "12px",
+        "safetyInset": "48px",
+        "submitBgLoading": "#3f3f46"
+      }
+    },
+    {
+      "name": "三个标签行/标签/必填星号/反馈占位挂公共类",
+      "ok": true,
+      "detail": {
+        "cedDialog": 1,
+        "cedLabelRow": 3,
+        "cedFormLabel": 3,
+        "cedRequiredMark": 3,
+        "cedSubmit": 1,
+        "cedFieldFeedback": 3,
+        "cedFieldError": 0,
+        "cedFieldErrorState": 0
+      }
+    },
+    {
+      "name": "仅主提交按钮挂 ced-submit（1 个）",
+      "ok": true,
+      "detail": {
+        "cedDialog": 1,
+        "cedLabelRow": 3,
+        "cedFormLabel": 3,
+        "cedRequiredMark": 3,
+        "cedSubmit": 1,
+        "cedFieldFeedback": 3,
+        "cedFieldError": 0,
+        "cedFieldErrorState": 0
+      }
+    },
+    {
+      "name": "弹窗有效宽度仍为 900px（width=\"900px\" 经 EP 的 --el-dialog-width 生效）",
+      "ok": true,
+      "detail": {
+        "dialog": {
+          "_present": true,
+          "maxWidth": "1232px",
+          "width": 900,
+          "scrollWidth": 900,
+          "clientWidth": 900
+        },
+        "rootInlineWidthProp": "900px",
+        "rootStyleAttr": "--el-dialog-width: 900px;"
+      }
+    },
+    {
+      "name": "标签字体 14px/500/#3f3f46 且右对齐、列宽 84px",
+      "ok": true,
+      "detail": {
+        "_present": true,
+        "fontSize": "14px",
+        "fontWeight": "500",
+        "color": "rgb(63, 63, 70)",
+        "textAlign": "right",
+        "flexBasis": "84px",
+        "flexGrow": "0",
+        "flexShrink": "0",
+        "paddingTop": "6px",
+        "width": "84px"
+      }
+    },
+    {
+      "name": "标签上内边距 6px（本页结构差异保留）",
+      "ok": true,
+      "detail": "6px"
+    },
+    {
+      "name": "必填星号为唯一 content:*，颜色 #f56c6c",
+      "ok": true,
+      "detail": {
+        "content": "\"*\"",
+        "color": "rgb(245, 108, 108)",
+        "marginRight": "2px"
+      }
+    },
+    {
+      "name": "标签行 flex + 12px gap（公共 .ced-label-row）",
+      "ok": true,
+      "detail": {
+        "_present": true,
+        "display": "flex",
+        "alignItems": "flex-start",
+        "gap": "12px",
+        "columnGap": "12px"
+      }
+    },
+    {
+      "name": "反馈占位 min-height 20px / margin-top 2px（公共 .ced-field-feedback）",
+      "ok": true,
+      "detail": {
+        "_present": true,
+        "minHeight": "20px",
+        "marginTop": "2px"
+      }
+    },
+    {
+      "name": "主提交按钮常态为黑色实心（公共 .ced-submit）",
+      "ok": true,
+      "detail": {
+        "_present": true,
+        "className": "el-button el-button--primary cc-dialog-submit ced-submit",
+        "hasDisabledAttr": false,
+        "isDisabledClass": false,
+        "isLoadingClass": false,
+        "backgroundColor": "rgb(9, 9, 11)",
+        "borderTopColor": "rgb(9, 9, 11)",
+        "color": "rgb(255, 255, 255)",
+        "borderRadius": "6px",
+        "fontWeight": "500",
+        "cursor": "pointer",
+        "maskBeforeBg": "rgba(0, 0, 0, 0)",
+        "maskBeforeContent": "none"
+      }
+    },
+    {
+      "name": "取消按钮不挂 ced-submit",
+      "ok": true,
+      "detail": [
+        {
+          "text": "取消",
+          "hasCedSubmit": false
+        },
+        {
+          "text": "创建",
+          "hasCedSubmit": true
+        }
+      ]
+    },
+    {
+      "name": "hover 换色 #27272a",
+      "ok": true,
+      "detail": "rgb(39, 39, 42)"
+    },
+    {
+      "name": "focus 保持 #27272a",
+      "ok": true,
+      "detail": "rgb(39, 39, 42)"
+    },
+    {
+      "name": "active 换色 #18181b",
+      "ok": true,
+      "detail": "rgb(24, 24, 27)"
+    },
+    {
+      "name": "字段错误态挂公共 ced-field--error，输入框红框",
+      "ok": true,
+      "detail": {
+        "errorContainerCount": 2,
+        "errorTextCount": 3,
+        "inputWrapperBoxShadow": "rgb(245, 108, 108) 0px 0px 0px 1px inset",
+        "longError": {
+          "fontSize": "13px",
+          "color": "rgb(245, 108, 108)",
+          "lineHeight": "18.2px",
+          "overflowWrap": "anywhere",
+          "height": 54.56,
+          "width": 244,
+          "lineCount": 3
+        }
+      }
+    },
+    {
+      "name": "错误文字挂公共 ced-field-error 且 13px / 危险色",
+      "ok": true,
+      "detail": {
+        "fontSize": "13px",
+        "color": "rgb(245, 108, 108)",
+        "lineHeight": "18.2px",
+        "overflowWrap": "anywhere",
+        "height": 54.56,
+        "width": 244,
+        "lineCount": 3
+      }
+    },
+    {
+      "name": "长错误文案在窄视口内换行（>1 行）且 overflow-wrap:anywhere",
+      "ok": true,
+      "detail": {
+        "fontSize": "13px",
+        "color": "rgb(245, 108, 108)",
+        "lineHeight": "18.2px",
+        "overflowWrap": "anywhere",
+        "height": 54.56,
+        "width": 244,
+        "lineCount": 3
+      }
+    },
+    {
+      "name": "窄视口弹窗按 --ced-dialog-safety-inset 收缩且不横向溢出",
+      "ok": true,
+      "detail": {
+        "_present": true,
+        "maxWidth": "372px",
+        "width": 372,
+        "scrollWidth": 372,
+        "clientWidth": 372
+      }
+    },
+    {
+      "name": "加载态同时带 is-loading 与 is-disabled（故公共 .is-loading:not(.is-disabled) 不命中）",
+      "ok": true,
+      "detail": {
+        "_present": true,
+        "className": "el-button el-button--primary is-disabled is-loading cc-dialog-submit ced-submit",
+        "hasDisabledAttr": true,
+        "isDisabledClass": true,
+        "isLoadingClass": true,
+        "backgroundColor": "rgb(63, 63, 70)",
+        "borderTopColor": "rgb(63, 63, 70)",
+        "color": "rgb(255, 255, 255)",
+        "borderRadius": "6px",
+        "fontWeight": "500",
+        "cursor": "not-allowed",
+        "maskBeforeBg": "rgba(0, 0, 0, 0)",
+        "maskBeforeContent": "\"\""
+      }
+    },
+    {
+      "name": "加载态背景为 Feature 令牌 #3f3f46",
+      "ok": true,
+      "detail": "rgb(63, 63, 70)"
+    },
+    {
+      "name": "加载态白字 + 不可重复点击游标",
+      "ok": true,
+      "detail": {
+        "_present": true,
+        "className": "el-button el-button--primary is-disabled is-loading cc-dialog-submit ced-submit",
+        "hasDisabledAttr": true,
+        "isDisabledClass": true,
+        "isLoadingClass": true,
+        "backgroundColor": "rgb(63, 63, 70)",
+        "borderTopColor": "rgb(63, 63, 70)",
+        "color": "rgb(255, 255, 255)",
+        "borderRadius": "6px",
+        "fontWeight": "500",
+        "cursor": "not-allowed",
+        "maskBeforeBg": "rgba(0, 0, 0, 0)",
+        "maskBeforeContent": "\"\""
+      }
+    },
+    {
+      "name": "加载态遮罩 ::before 被透明化",
+      "ok": true,
+      "detail": "rgba(0, 0, 0, 0)"
+    },
+    {
+      "name": "请求被拦截后按钮恢复黑色常态",
+      "ok": true,
+      "detail": {
+        "_present": true,
+        "className": "el-button el-button--primary cc-dialog-submit ced-submit",
+        "hasDisabledAttr": false,
+        "isDisabledClass": false,
+        "isLoadingClass": false,
+        "backgroundColor": "rgb(9, 9, 11)",
+        "borderTopColor": "rgb(9, 9, 11)",
+        "color": "rgb(255, 255, 255)",
+        "borderRadius": "6px",
+        "fontWeight": "500",
+        "cursor": "pointer",
+        "maskBeforeBg": "rgba(0, 0, 0, 0)",
+        "maskBeforeContent": "none"
+      }
+    },
+    {
+      "name": "编辑弹窗同挂根类与公共标签类",
+      "ok": true,
+      "detail": "el-dialog cc-dialog ced-dialog"
+    },
+    {
+      "name": "编辑弹窗主提交按钮（保存）仍为黑色实心且仅它挂 ced-submit；“取消”与“修改探针 ID”均不挂",
+      "ok": true,
+      "detail": {
+        "editSubmit": {
+          "_present": true,
+          "className": "el-button el-button--primary cc-dialog-submit ced-submit",
+          "hasDisabledAttr": false,
+          "isDisabledClass": false,
+          "isLoadingClass": false,
+          "backgroundColor": "rgb(9, 9, 11)",
+          "borderTopColor": "rgb(9, 9, 11)",
+          "color": "rgb(255, 255, 255)",
+          "borderRadius": "6px",
+          "fontWeight": "500",
+          "cursor": "pointer",
+          "maskBeforeBg": "rgba(0, 0, 0, 0)",
+          "maskBeforeContent": "none"
+        },
+        "footerButtons": [
+          {
+            "text": "取消",
+            "hasCedSubmit": false
+          },
+          {
+            "text": "保存",
+            "hasCedSubmit": true
+          }
+        ],
+        "idToggle": {
+          "text": "修改探针 ID",
+          "hasCedSubmit": false,
+          "hasCcSubmit": false
+        }
+      }
+    },
+    {
+      "name": "数据源管理页面 ced-* 挂载计数为 0（含打开其主弹窗后）",
+      "ok": true,
+      "detail": {
+        "cedDialogCount": 0,
+        "cedSubmitCount": 0,
+        "editorDialogClassName": "el-dialog editor-dialog",
+        "editorDialogWidth": 620,
+        "submitBg": "rgb(9, 9, 11)"
+      }
+    },
+    {
+      "name": "数据源管理主弹窗类名与提交按钮视觉未被波及",
+      "ok": true,
+      "detail": {
+        "cedDialogCount": 0,
+        "cedSubmitCount": 0,
+        "editorDialogClassName": "el-dialog editor-dialog",
+        "editorDialogWidth": 620,
+        "submitBg": "rgb(9, 9, 11)"
+      }
+    }
+  ],
+  "values": {
+    "createDialog": {
+      "provenance": {
+        "rootClassName": "el-dialog cc-dialog ced-dialog",
+        "rootStyleAttr": "--el-dialog-width: 900px;",
+        "rootInlineWidthProp": "900px",
+        "tokens": {
+          "labelColumnWidth": "84px",
+          "labelGap": "12px",
+          "safetyInset": "48px",
+          "submitBgLoading": "#3f3f46"
+        },
+        "sheets": [
+          {
+            "viteDevId": "/agent/cdc-config-platform/frontend/src/styles/dialog/create-edit-dialog-visual.css",
+            "href": null,
+            "cedDialogRules": [
+              ".ced-dialog",
+              ".ced-dialog .el-form-item__label, .ced-dialog .ced-form-label",
+              ".ced-dialog .ced-form-label",
+              ".ced-dialog .ced-label-row",
+              ".ced-dialog .ced-form-label.ced-required-mark::before, .ced-dialog .ced-required-mark .el-form-item__label::before",
+              ".ced-dialog .ced-submit:not(.is-disabled)",
+              ".ced-dialog .ced-submit:not(.is-disabled):hover, .ced-dialog .ced-submit:not(.is-disabled):focus",
+              ".ced-dialog .ced-submit:not(.is-disabled):active",
+              ".ced-dialog .ced-submit.is-loading:not(.is-disabled)",
+              ".ced-dialog .ced-field-feedback",
+              ".ced-dialog .ced-field-error",
+              ".ced-dialog .ced-field--error .el-input__wrapper, .ced-dialog .ced-field--error .el-textarea__inner"
+            ]
+          },
+          {
+            "viteDevId": "/agent/cdc-config-platform/frontend/src/views/client-config/ClientConfigPage.vue?vue&type=style&index=2&lang.css",
+            "href": null,
+            "cedDialogRules": [
+              ".cc-dialog.ced-dialog"
+            ]
+          }
+        ]
+      },
+      "counts": {
+        "cedDialog": 1,
+        "cedLabelRow": 3,
+        "cedFormLabel": 3,
+        "cedRequiredMark": 3,
+        "cedSubmit": 1,
+        "cedFieldFeedback": 3,
+        "cedFieldError": 0,
+        "cedFieldErrorState": 0
+      },
+      "staticStyles": {
+        "dialog": {
+          "_present": true,
+          "maxWidth": "1232px",
+          "width": 900,
+          "scrollWidth": 900,
+          "clientWidth": 900
+        },
+        "label": {
+          "_present": true,
+          "fontSize": "14px",
+          "fontWeight": "500",
+          "color": "rgb(63, 63, 70)",
+          "textAlign": "right",
+          "flexBasis": "84px",
+          "flexGrow": "0",
+          "flexShrink": "0",
+          "paddingTop": "6px",
+          "width": "84px"
+        },
+        "labelStar": {
+          "content": "\"*\"",
+          "color": "rgb(245, 108, 108)",
+          "marginRight": "2px"
+        },
+        "row": {
+          "_present": true,
+          "display": "flex",
+          "alignItems": "flex-start",
+          "gap": "12px",
+          "columnGap": "12px"
+        },
+        "feedback": {
+          "_present": true,
+          "minHeight": "20px",
+          "marginTop": "2px"
+        },
+        "submitText": "创建",
+        "nonTargetButtons": [
+          {
+            "text": "取消",
+            "hasCedSubmit": false
+          },
+          {
+            "text": "创建",
+            "hasCedSubmit": true
+          }
+        ],
+        "idToggle": null
+      },
+      "submitNormal": {
+        "_present": true,
+        "className": "el-button el-button--primary cc-dialog-submit ced-submit",
+        "hasDisabledAttr": false,
+        "isDisabledClass": false,
+        "isLoadingClass": false,
+        "backgroundColor": "rgb(9, 9, 11)",
+        "borderTopColor": "rgb(9, 9, 11)",
+        "color": "rgb(255, 255, 255)",
+        "borderRadius": "6px",
+        "fontWeight": "500",
+        "cursor": "pointer",
+        "maskBeforeBg": "rgba(0, 0, 0, 0)",
+        "maskBeforeContent": "none"
+      },
+      "states": {
+        "submitHover": {
+          "_present": true,
+          "className": "el-button el-button--primary cc-dialog-submit ced-submit",
+          "hasDisabledAttr": false,
+          "isDisabledClass": false,
+          "isLoadingClass": false,
+          "backgroundColor": "rgb(39, 39, 42)",
+          "borderTopColor": "rgb(39, 39, 42)",
+          "color": "rgb(255, 255, 255)",
+          "borderRadius": "6px",
+          "fontWeight": "500",
+          "cursor": "pointer",
+          "maskBeforeBg": "rgba(0, 0, 0, 0)",
+          "maskBeforeContent": "none"
+        },
+        "submitFocus": {
+          "_present": true,
+          "className": "el-button el-button--primary cc-dialog-submit ced-submit",
+          "hasDisabledAttr": false,
+          "isDisabledClass": false,
+          "isLoadingClass": false,
+          "backgroundColor": "rgb(39, 39, 42)",
+          "borderTopColor": "rgb(39, 39, 42)",
+          "color": "rgb(255, 255, 255)",
+          "borderRadius": "6px",
+          "fontWeight": "500",
+          "cursor": "pointer",
+          "maskBeforeBg": "rgba(0, 0, 0, 0)",
+          "maskBeforeContent": "none"
+        },
+        "submitActive": {
+          "_present": true,
+          "className": "el-button el-button--primary cc-dialog-submit ced-submit",
+          "hasDisabledAttr": false,
+          "isDisabledClass": false,
+          "isLoadingClass": false,
+          "backgroundColor": "rgb(24, 24, 27)",
+          "borderTopColor": "rgb(24, 24, 27)",
+          "color": "rgb(255, 255, 255)",
+          "borderRadius": "6px",
+          "fontWeight": "500",
+          "cursor": "pointer",
+          "maskBeforeBg": "rgba(0, 0, 0, 0)",
+          "maskBeforeContent": "none"
+        }
+      },
+      "errorState": {
+        "errorContainerCount": 2,
+        "errorTextCount": 3,
+        "inputWrapperBoxShadow": "rgb(245, 108, 108) 0px 0px 0px 1px inset",
+        "longError": {
+          "fontSize": "13px",
+          "color": "rgb(245, 108, 108)",
+          "lineHeight": "18.2px",
+          "overflowWrap": "anywhere",
+          "height": 54.56,
+          "width": 244,
+          "lineCount": 3
+        }
+      },
+      "narrowStatic": {
+        "dialog": {
+          "_present": true,
+          "maxWidth": "372px",
+          "width": 372,
+          "scrollWidth": 372,
+          "clientWidth": 372
+        },
+        "label": {
+          "_present": true,
+          "fontSize": "14px",
+          "fontWeight": "500",
+          "color": "rgb(63, 63, 70)",
+          "textAlign": "right",
+          "flexBasis": "84px",
+          "flexGrow": "0",
+          "flexShrink": "0",
+          "paddingTop": "6px",
+          "width": "84px"
+        },
+        "labelStar": {
+          "content": "\"*\"",
+          "color": "rgb(245, 108, 108)",
+          "marginRight": "2px"
+        },
+        "row": {
+          "_present": true,
+          "display": "flex",
+          "alignItems": "flex-start",
+          "gap": "12px",
+          "columnGap": "12px"
+        },
+        "feedback": {
+          "_present": true,
+          "minHeight": "20px",
+          "marginTop": "2px"
+        },
+        "submitText": "创建",
+        "nonTargetButtons": [
+          {
+            "text": "取消",
+            "hasCedSubmit": false
+          },
+          {
+            "text": "创建",
+            "hasCedSubmit": true
+          }
+        ],
+        "idToggle": null
+      },
+      "submitLoading": {
+        "_present": true,
+        "className": "el-button el-button--primary is-disabled is-loading cc-dialog-submit ced-submit",
+        "hasDisabledAttr": true,
+        "isDisabledClass": true,
+        "isLoadingClass": true,
+        "backgroundColor": "rgb(63, 63, 70)",
+        "borderTopColor": "rgb(63, 63, 70)",
+        "color": "rgb(255, 255, 255)",
+        "borderRadius": "6px",
+        "fontWeight": "500",
+        "cursor": "not-allowed",
+        "maskBeforeBg": "rgba(0, 0, 0, 0)",
+        "maskBeforeContent": "\"\""
+      },
+      "submitRestored": {
+        "_present": true,
+        "className": "el-button el-button--primary cc-dialog-submit ced-submit",
+        "hasDisabledAttr": false,
+        "isDisabledClass": false,
+        "isLoadingClass": false,
+        "backgroundColor": "rgb(9, 9, 11)",
+        "borderTopColor": "rgb(9, 9, 11)",
+        "color": "rgb(255, 255, 255)",
+        "borderRadius": "6px",
+        "fontWeight": "500",
+        "cursor": "pointer",
+        "maskBeforeBg": "rgba(0, 0, 0, 0)",
+        "maskBeforeContent": "none"
+      }
+    },
+    "editDialog": {
+      "provenance": {
+        "rootClassName": "el-dialog cc-dialog ced-dialog",
+        "rootStyleAttr": "--el-dialog-width: 900px;",
+        "rootInlineWidthProp": "900px",
+        "tokens": {
+          "labelColumnWidth": "84px",
+          "labelGap": "12px",
+          "safetyInset": "48px",
+          "submitBgLoading": "#3f3f46"
+        },
+        "sheets": [
+          {
+            "viteDevId": "/agent/cdc-config-platform/frontend/src/styles/dialog/create-edit-dialog-visual.css",
+            "href": null,
+            "cedDialogRules": [
+              ".ced-dialog",
+              ".ced-dialog .el-form-item__label, .ced-dialog .ced-form-label",
+              ".ced-dialog .ced-form-label",
+              ".ced-dialog .ced-label-row",
+              ".ced-dialog .ced-form-label.ced-required-mark::before, .ced-dialog .ced-required-mark .el-form-item__label::before",
+              ".ced-dialog .ced-submit:not(.is-disabled)",
+              ".ced-dialog .ced-submit:not(.is-disabled):hover, .ced-dialog .ced-submit:not(.is-disabled):focus",
+              ".ced-dialog .ced-submit:not(.is-disabled):active",
+              ".ced-dialog .ced-submit.is-loading:not(.is-disabled)",
+              ".ced-dialog .ced-field-feedback",
+              ".ced-dialog .ced-field-error",
+              ".ced-dialog .ced-field--error .el-input__wrapper, .ced-dialog .ced-field--error .el-textarea__inner"
+            ]
+          },
+          {
+            "viteDevId": "/agent/cdc-config-platform/frontend/src/views/client-config/ClientConfigPage.vue?vue&type=style&index=2&lang.css",
+            "href": null,
+            "cedDialogRules": [
+              ".cc-dialog.ced-dialog"
+            ]
+          }
+        ]
+      },
+      "staticStyles": {
+        "dialog": {
+          "_present": true,
+          "maxWidth": "1232px",
+          "width": 900,
+          "scrollWidth": 900,
+          "clientWidth": 900
+        },
+        "label": {
+          "_present": true,
+          "fontSize": "14px",
+          "fontWeight": "500",
+          "color": "rgb(63, 63, 70)",
+          "textAlign": "right",
+          "flexBasis": "84px",
+          "flexGrow": "0",
+          "flexShrink": "0",
+          "paddingTop": "6px",
+          "width": "84px"
+        },
+        "labelStar": {
+          "content": "\"*\"",
+          "color": "rgb(245, 108, 108)",
+          "marginRight": "2px"
+        },
+        "row": {
+          "_present": true,
+          "display": "flex",
+          "alignItems": "flex-start",
+          "gap": "12px",
+          "columnGap": "12px"
+        },
+        "feedback": {
+          "_present": true,
+          "minHeight": "20px",
+          "marginTop": "2px"
+        },
+        "submitText": "保存",
+        "nonTargetButtons": [
+          {
+            "text": "取消",
+            "hasCedSubmit": false
+          },
+          {
+            "text": "保存",
+            "hasCedSubmit": true
+          }
+        ],
+        "idToggle": {
+          "text": "修改探针 ID",
+          "hasCedSubmit": false,
+          "hasCcSubmit": false
+        }
+      },
+      "counts": {
+        "cedDialog": 1,
+        "cedLabelRow": 3,
+        "cedFormLabel": 3,
+        "cedRequiredMark": 3,
+        "cedSubmit": 1,
+        "cedFieldFeedback": 3,
+        "cedFieldError": 0,
+        "cedFieldErrorState": 0
+      },
+      "submit": {
+        "_present": true,
+        "className": "el-button el-button--primary cc-dialog-submit ced-submit",
+        "hasDisabledAttr": false,
+        "isDisabledClass": false,
+        "isLoadingClass": false,
+        "backgroundColor": "rgb(9, 9, 11)",
+        "borderTopColor": "rgb(9, 9, 11)",
+        "color": "rgb(255, 255, 255)",
+        "borderRadius": "6px",
+        "fontWeight": "500",
+        "cursor": "pointer",
+        "maskBeforeBg": "rgba(0, 0, 0, 0)",
+        "maskBeforeContent": "none"
+      }
+    },
+    "dataSourceReference": {
+      "beforeOpen": {
+        "cedDialog": 0,
+        "cedLabelRow": 0,
+        "cedFormLabel": 0,
+        "cedRequiredMark": 0,
+        "cedSubmit": 0,
+        "cedFieldFeedback": 0,
+        "cedFieldError": 0,
+        "cedFieldErrorState": 0
+      },
+      "afterOpen": {
+        "cedDialogCount": 0,
+        "cedSubmitCount": 0,
+        "editorDialogClassName": "el-dialog editor-dialog",
+        "editorDialogWidth": 620,
+        "submitBg": "rgb(9, 9, 11)"
+      }
+    }
+  },
+  "writeSummary": {
+    "nonGetAttempts": [
+      {
+        "method": "POST",
+        "url": "http://127.0.0.1:5173/api/clients"
+      }
+    ],
+    "nonGetReachedBackend": 0,
+    "blockedByClient": "aborted at browser routing layer, never forwarded to the Vite proxy",
+    "readGetsFulfilledByStub": 4
+  }
+}

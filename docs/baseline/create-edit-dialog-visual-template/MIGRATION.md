@@ -1,4 +1,4 @@
-# 新增／编辑业务弹窗公共视觉模板 · 迁移盘点（已批准基线；公共 CSS 已实现、代码复审通过，Vue 未创建）
+# 新增／编辑业务弹窗公共视觉模板 · 迁移盘点（已批准基线；公共 CSS 已实现、代码复审通过；首个页面已接入，Vue 未创建）
 
 ```text
 create_edit_dialog_visual_template_document_status=APPROVED
@@ -7,7 +7,7 @@ approval_status=APPROVED_BY_PROJECT_OWNER
 approval_date=2026-09-30
 approved_reviewed_commit=45ce16dffbf2747abeb75d4d6c43bc57165043c8
 implementation_status=PUBLIC_CSS_IMPLEMENTED_VUE_NOT_CREATED
-public_css_status=IMPLEMENTED_PENDING_USER_ADOPTION_DECISION
+public_css_status=IMPLEMENTED_FIRST_PAGE_ADOPTED_PENDING_REMOTE_REVIEW
 public_css_code_review_status=APPROVED
 public_css_code_review_date=2026-09-30
 public_css_code_review_objects=c8785e18dc3014396cf45534315ab0f10dbbe94d,8434b884904a34bed51a2d8364e217efb605f06c
@@ -15,14 +15,19 @@ public_css_code_review_scope=PURE_CSS_PRESET_ROOT_CLASS_OPT_IN_17_TOKENS_REAL_EP
 public_css_status_before_review=IMPLEMENTED_PENDING_CHATGPT_REMOTE_CODE_REVIEW
 public_vue_component_status=NOT_CREATED
 formal_acceptance_execution_status=NOT_EXECUTED
-page_adoption_authorization_status=PAGE_ADOPTION_NOT_AUTHORIZED
-page_adoption_decision_status=NOT_DECIDED_NOT_GRANTED
-migrated_page_count=0
+page_adoption_authorization_status=PAGE_ADOPTION_AUTHORIZED_CLIENT_CONFIG_CREATE_EDIT_MAIN_DIALOG_ONLY
+page_adoption_decision_status=DECIDED_AND_GRANTED_FOR_CLIENT_CONFIG_CREATE_EDIT_MAIN_DIALOG_ONLY
+page_adoption_implementation_status=IMPLEMENTED_PENDING_CHATGPT_REMOTE_REVIEW_AND_OWNER_VISUAL_CHECK
+migrated_page_count=1
+migrated_page_count_scope=REAL_BUSINESS_PAGES_WITH_CED_DIALOG_ROOT_CLASS_OPT_IN
 ```
 
-> **本文件只做盘点与未来步骤设计，不实施任何迁移。** 设计契约已于 `2026-09-30` 批准；
+> **本文件只做盘点与迁移时序记录。** 设计契约已于 `2026-09-30` 批准；
 > 公共 CSS 预设随后已落地并**已通过远程代码复审**（`APPROVED`），**Vue 组件仍未创建**。
-> 当前依然 **0** 个页面接入本模板（`migrated_page_count=0`）；**采用决定尚未作出**（`NOT_DECIDED_NOT_GRANTED`）。
+> 项目负责人已就**首个页面**作出采用决定——**仅** `/config/client`（探针端管理）**新增／编辑业务主弹窗**
+> 接入，该接入**已实现、待远程代码复审与负责人目测**（`page_adoption_implementation_status=IMPLEMENTED_PENDING_CHATGPT_REMOTE_REVIEW_AND_OWNER_VISUAL_CHECK`）；
+> 现行 **1** 个页面接入本模板（`migrated_page_count=1`，口径＝已挂 opt-in 根类 `ced-dialog` 的真实业务页数）。
+> **数据源管理（`/config/data-source`）弹窗及其他任何页面仍未获授权接入**；模板级批量迁移与试点未作出。
 
 ---
 
@@ -62,17 +67,20 @@ in_scope_主新增编辑弹窗_已深入核对=2        # 探针端管理、数�
 in_scope_候选_未评估=1                       # 数据订阅 新增/编辑订阅
 excluded_子弹窗=2                            # 数据源管理 业务属性、命名策略
 excluded_确认框或详情框=6                     # 数据订阅 详情/删除确认、服务端配置 保存确认、Job 故障 Clob 详情、日志查询 原始消息/日志详情
-migrated_page_count=0
+migrated_page_count=1                         # 口径＝已挂 opt-in 根类 ced-dialog 的真实业务页数（探针端管理新增／编辑主弹窗）
 ```
 
 > 计数为**本任务时点的只读盘点**；新增页面或弹窗后须重新盘点。**候选（未评估）不等于已判定适用**。
+> `migrated_page_count=1` 表示**唯一**获页面级授权并已接入的页面为**探针端管理新增／编辑主弹窗**；
+> `in_scope` 中另一页（数据源管理）仍**未获授权、未接入**。
 
-## 3. 未来选择性接入步骤（未授权、未实施）
+## 3. 选择性接入步骤（探针端管理已实施；其余页面未授权、未实施）
 
 对**已获授权**的**主新增／编辑弹窗**页，步骤：
 
 1. **评估**：确认该弹窗属"新增／编辑业务主弹窗"，非确认框／子弹窗；
-2. **授权**：取得项目负责人**单独明确授权**（本设计基线**未**授权任何页面接入）；
+2. **授权**：取得项目负责人**单独明确授权**（设计基线本身**未**授权页面接入；**现行仅** `/config/client`
+   新增／编辑主弹窗获页面级授权，见 §5），其余页面必须逐页**单独授权**；
 3. **接入**：在弹窗根元素挂显式 opt-in 根类 `ced-dialog`（**公共 CSS 已实现**），
    并以 Feature 覆盖表达**页面级差异值**（标签列宽 `--ced-label-column-width`、弹窗宽度、安全边距
    `--ced-dialog-safety-inset`、是否含全局错误区、loading 配色 `--ced-submit-bg-loading`）；
@@ -105,7 +113,7 @@ migrated_page_count=0
 
 | 页 | 弹窗根类／宽度 | 表单载体 | 标签列宽 | 字段错误模型 | 全局错误区 |
 |---|---|---|---|---|---|
-| 探针端管理 | `cc-dialog` / `900px`（`max-width: calc(100vw - 48px)`） | 页面私有 flex 表单 | `84px` | 页面私有字段级（红框 + 稳定占位 + `role="alert"`） | **无** |
+| 探针端管理（**已接入**） | `cc-dialog ced-dialog` / `900px`（公共预设 `max-width: calc(100vw - var(--ced-dialog-safety-inset))`，本页给 `48px`） | 页面私有 flex 表单 | `84px`（`--ced-label-column-width`） | 页面私有字段级（红框 + 稳定占位 + `role="alert"`） | **无** |
 | 数据源管理 | `editor-dialog` / `620px`（无 `max-width`） | EP `el-form`（`rules` / `label-width="120px"`） | `120px` | EP `el-form` 校验原生呈现 | **有**（`.form-error`，`role="alert"`） |
 
 > 两页**可比对一致**的是**标签排版**与**主提交按钮视觉令牌序列**；
@@ -114,8 +122,13 @@ migrated_page_count=0
 
 ## 5. 迁移授权与边界（严格）
 
-- **当前授权状态**：`PAGE_ADOPTION_NOT_AUTHORIZED` —— **两页及其他任何页面均未获授权接入本模板**；
-  **采用决定尚未作出**（`NOT_DECIDED_NOT_GRANTED`），**未选定试点**。
+- **当前授权状态（2026-09-30 更新）**：项目负责人已作出**首个页面级**采用决定——
+  `page_adoption_authorization_status=PAGE_ADOPTION_AUTHORIZED_CLIENT_CONFIG_CREATE_EDIT_MAIN_DIALOG_ONLY`，
+  `page_adoption_decision_status=DECIDED_AND_GRANTED_FOR_CLIENT_CONFIG_CREATE_EDIT_MAIN_DIALOG_ONLY`——
+  **仅** `/config/client`（探针端管理）**新增／编辑业务主弹窗**接入本模板，该接入
+  **已实现、待远程代码复审与负责人目测**（`migrated_page_count=1`）。
+  **数据源管理（`/config/data-source`）主弹窗（`editor-dialog`）及其他任何弹窗/页面仍未获授权、未接入**；
+  模板级批量迁移与试点仍**未作出**（`pilot_page_selection_status=NOT_DECIDED`）。
 - **设计基线已批准（`2026-09-30`）**，且**公共 CSS 预设已实现并已通过远程代码复审**
   （`public_css_code_review_status=APPROVED`；R0 `c8785e1` 复审 `CHANGES_REQUIRED` 后由 `...-R1` `8434b88` 纠错并获 `APPROVED`）；
   **Vue 组件仍未创建**。

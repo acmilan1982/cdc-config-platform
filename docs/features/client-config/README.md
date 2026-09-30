@@ -523,6 +523,55 @@ adjustment7_formal_acceptance_execution_status=NOT_RUN
   无问题、后续正式验收按既有逐条状态继续**。详见 `reports/CLIENT-CONFIG-OPTIONAL-ROW-HIGHLIGHT-PUBLIC-PRESET-ADOPTION-001.md`
   与本次收口报告 `reports/CLIENT-CONFIG-OPTIONAL-ROW-HIGHLIGHT-ADOPTION-REVIEW-AND-OWNER-FEEDBACK-CLOSEOUT-001.md`。
 
+### 1.15 第九轮 新增／编辑业务主弹窗接入公共 create-edit-dialog-visual-template 视觉预设（2026-09-30，`CREATE-EDIT-DIALOG-CLIENT-CONFIG-FIRST-ADOPTION-001`，页面接入）
+
+项目负责人已作出**页面级**决定：**目前仅 `/config/client`（探针端管理）的新增／编辑业务主弹窗**接入
+新增／编辑弹窗公共视觉模板（CEDVT；公共 CSS 已实现且已经 ChatGPT 远程代码复审 `APPROVED`），
+**其他页面**（含 `/config/data-source`）的接入留待其他会话。本次在**已批准设计基线**与**已落地、
+已远程代码复审通过**的公共实现之上，把既有公共外观接到本页**新增／编辑主弹窗**：
+
+- **接入形态**：主 `el-dialog` 根 `class="cc-dialog ced-dialog"`（在既有 `cc-dialog` 并列处追加 opt-in 根类）；
+  三个字段行挂 `ced-label-row`、标签挂 `ced-form-label` + `ced-required-mark`、反馈占位挂 `ced-field-feedback`、
+  主提交按钮挂 `ced-submit`、ID／描述控件行挂 `ced-field--error`、错误文字挂 `ced-field-error`；
+  `width="900px"` **保持**，弹窗开关与关闭确认行为**保持**；EP Teleport 到 `body` 后根类、令牌与公共样式仍作用于真实弹窗 DOM；
+- **归属迁移（仅视觉来源）**：弹窗 `max-width`、主按钮正常/hover/focus/active 色序、标签行 `display/gap`、
+  标签字体/字重/颜色/对齐/列宽、必填红星 `::before`、字段错误红框 `box-shadow`、反馈占位 `min-height/margin-top`、
+  错误文字字体色阶**全部**由公共 preset **唯一承担**；页面原有对应私有同义规则**已移除**；
+- **Feature 令牌**：本页提供四个值——`--ced-label-column-width: 84px`、`--ced-label-gap: 12px`、
+  `--ced-dialog-safety-inset: 48px`、`--ced-submit-bg-loading: #3f3f46`（在文件末**非 scoped** `.cc-dialog.ced-dialog` 块声明，
+  仅 1 条规则，不覆盖全局、不强制提升优先级）；公共 CSS 令牌/选择器/默认值**未改**；
+- **保留页面私有**：主按钮**加载态**（本页同时绑定 `:disabled="submitting"` 与 `:loading="submitting"`，
+  真实 EP 下加载态同时带 `is-disabled` 与 `is-loading`，公共 `.ced-submit.is-loading:not(.is-disabled)` **不命中**），
+  故该加载态墨色与 `::before` 白遮罩透明化按 Feature 令牌保留在本页；标签 `padding-top: 6px`、表单滚动高度、
+  控件 flex/min-width、中性提示 `cc-field-hint` 与 `cc-field-feedback__text` 差异亦保留；
+- **行为零改动**：字段、字段级校验与错误归属、错误清除时机、`role="alert"`、双栏源库选择、ID 锁定与修改、
+  自动生成、保存防重、取消／关闭确认、长文案换行、请求/响应时序**均保持**；**未**引入 `el-form`、**未**新增 Vue 组件；
+  “取消”“自动生成”“修改探针 ID”**零挂载** `ced-submit`/`cc-dialog-submit`；
+- **测试**：`ClientConfigPage.spec.ts` 保留行为断言，字段错误选择器改用公共类，提交按钮断言补充 `ced-submit`
+  与非目标按钮零挂载，静态视觉断言改为核对**本页 4 个 Feature 令牌** + **私有同义规则已移除**；
+  `create-edit-dialog-visual.spec.ts` #19 根类 opt-in 由「零挂载」改为**白名单仅本页**、#20 增加“页面声明的
+  `--ced-*` 恰为 4 个 Feature 令牌”断言。定向 `2 文件 205 用例`、全量 `58 文件 1188 用例`、`npm run build` **全部通过**；
+- **真实浏览器只读核对**：对**实际** `/config/client` 页（`1280×900` + 窄视口 `420×900`）核对新增与编辑弹窗的
+  根类/标签/星号/主按钮各可观察态/字段错误红框与文字/反馈占位/长文案换行/窄视口收缩；对照 `/config/data-source`
+  保持原观感、`ced-*` **零挂载**。数据用**独立只读桩**（合成脱敏），导航前拦截 `/api/**` 非 GET，**到达后端写计数为零**；
+  证据见 `reports/evidence/CLIENT-CONFIG-CREATE-EDIT-DIALOG-FIRST-ADOPTION-001/`（29/29 通过）；
+- **状态（分层，2026-09-30）**：页面接入**已实现、待远程代码复审与负责人目测**——
+  `create_edit_dialog_page_adoption_implementation_status`
+  =`IMPLEMENTED_PENDING_CHATGPT_REMOTE_REVIEW_AND_OWNER_VISUAL_CHECK`；
+  `create_edit_dialog_page_adoption_authorization_status`
+  =`PAGE_ADOPTION_AUTHORIZED_CLIENT_CONFIG_CREATE_EDIT_MAIN_DIALOG_ONLY`。
+  **不**写成已接受或正式验收 `PASS`；
+- **未改变的层**：CEDVT 公共实现 `code_review_status=APPROVED` **不回退**；CEDVT 公共 CSS 令牌/选择器/默认值**未改**；
+  `/config/data-source`（含其 `editor-dialog` 主弹窗）**未被授权**接入、仍 `ced-*` **零挂载**；
+  模板级「页面迁移/试点」历史键（`page_migration_status=NOT_STARTED` / `pilot_page_selection_status=NOT_DECIDED`）
+  语义为**模板级批量迁移**，与本次**单页接入**不同层，**保持原措辞**；CEDVT 模板 `migrated_page_count` 由 `0` 更新为 `1`
+  （口径＝已挂 opt-in 根类的真实业务页数）；四类定义行（REQ `154` / AC `157` / DESIGN `89` / UI `77`）内容与
+  **验收状态格逐字节不变**，157 条验收状态仍按开工 Git 复算为 `PASS 70 / FAIL 0 / BLOCKED 72 / NOT_RUN 15`；
+- **下一入口**：`CHATGPT_REMOTE_CREATE_EDIT_DIALOG_CLIENT_CONFIG_FIRST_ADOPTION_REVIEW`
+  （由 ChatGPT 从远程 Git 对本次页面接入代码区间作独立只读**代码复审**；**推送成功 ≠ 文档复审通过**）。
+  详见 `reports/CLIENT-CONFIG-CREATE-EDIT-DIALOG-FIRST-ADOPTION-001.md`。
+  **页面接入并推送 ≠ 远程代码复审通过 ≠ 项目负责人已目测 ≠ 157 条整体正式验收通过**。
+
 ## 2. 文档导航
 
 | 文档 | 职责 | 状态 |
@@ -593,6 +642,8 @@ adjustment7_formal_acceptance_execution_status=NOT_RUN
 | `reports/CLIENT-CONFIG-OPTIONAL-ROW-HIGHLIGHT-PUBLIC-PRESET-ADOPTION-001.md` | 探针端管理**主列表**接入列表表格视觉模板 §13.3 公共可选单行固定高亮预设（页面接入 + 契约测试 + 最小文档同步：**仅** `/config/client` 主列表表根并列挂表级 `lt-row-highlight`，`rowClassName` 为固定行提供行级 `lt-row-highlight__row`；页面五条私有高亮视觉规则已移除、外观由公共预设唯一承担；单击 / 双击 / 清选 / 重选等**行为零改动**；`list-table-visual.spec.ts` #14 改为**仅**该页主列表允许两级 opt-in 类；真实浏览器只读核对实际页面 + `/config/data-source` 零挂载，写请求计数 `0`；页面接入状态记为**已接入、待 ChatGPT 远程代码复审及负责人目测**；**其余页面未被授权**、模板级迁移状态与 157 条验收状态不变）执行报告 | 已建立（2026-09-30） |
 | `reports/evidence/CLIENT-CONFIG-OPTIONAL-ROW-HIGHLIGHT-PUBLIC-PRESET-ADOPTION-001/` | 本次页面接入的真实浏览器**只读**核对证据（`verify-client-optin.mjs` + `client-optin-results.json`：独立只读桩、合成脱敏数据、非 GET `/api/**` 拦截、写请求计数 `0`） | 已建立（2026-09-30） |
 | `reports/CLIENT-CONFIG-OPTIONAL-ROW-HIGHLIGHT-ADOPTION-REVIEW-AND-OWNER-FEEDBACK-CLOSEOUT-001.md` | 探针端管理主列表接入 §13.3 公共单行高亮**复审通过与负责人反馈收口**（纯文档状态同步与反馈记录：记录页面接入代码区间 `ebf34d9..5cb8079` 的 ChatGPT 远程独立**只读代码**复审 `APPROVED`（2026-09-30，范围**仅**表级/行级挂载、页面私有重复规则移除、公共预设唯一承担视觉、既有业务行为留页面、只读浏览器证据，**不**移作 157 条整体验收结论）与项目负责人 2026-09-30 原话「我试了，页面功能没问题」（**仅**记为本次接入后实际页面人工操作无问题反馈）；旧→新分层状态，提交时点值原处保留；四类定义行与 157 条验收状态格零变化 `PASS 70 / FAIL 0 / BLOCKED 72 / NOT_RUN 15 = 157`；**不**强制 `IMPLEMENTED_ACCEPTED`／整体 `PASS`）执行报告 | 已建立（2026-09-30） |
+| `reports/CLIENT-CONFIG-CREATE-EDIT-DIALOG-FIRST-ADOPTION-001.md` | 探针端管理**新增／编辑业务主弹窗**接入公共 `create-edit-dialog-visual-template` 视觉预设（页面接入 + 契约测试 + 最小文档同步：**仅** `/config/client` 主弹窗根类并列追加 `ced-dialog`，三标签行/标签/必填星号/反馈占位/字段错误态/主提交按钮挂公共辅助类，页面私有同义视觉规则移除、外观由公共 preset 唯一承担，本页提供四个 Feature 令牌；加载态因本页 `is-disabled`+`is-loading` 并存而按 Feature 令牌保留；**行为零改动**、**不**引入 `el-form`/公共 Vue 组件；`ClientConfigPage.spec.ts` 与 `create-edit-dialog-visual.spec.ts` 静态契约改为核对 Feature 令牌 + 私有同义规则移除 + 根类 opt-in 白名单；定向 `205`／全量 `1188` 用例与 `npm run build` 通过；真实浏览器只读核对实际页面新增与编辑弹窗、`/config/data-source` 零挂载、到达后端写计数 `0`；页面接入状态记为**已实现、待远程代码复审和负责人目测**；**其余页面未被授权**、模板级迁移历史键保持、157 条验收状态格不变）执行报告 | 已建立（2026-09-30） |
+| `reports/evidence/CLIENT-CONFIG-CREATE-EDIT-DIALOG-FIRST-ADOPTION-001/` | 本次页面接入的真实浏览器**只读**核对证据（`verify-dialog-adoption.mjs` + `dialog-adoption-results.json`：独立只读桩、合成脱敏数据、非 GET `/api/**` 在浏览器层拦截、`nonGetReachedBackend=0`、29/29 检查通过） | 已建立（2026-09-30） |
 
 ## 3. Feature 定位
 
@@ -647,6 +698,8 @@ adjustment7_formal_acceptance_execution_status=NOT_RUN
 - **第七轮定向验收与负责人目测记录**（2026-09-29，`CLIENT-CONFIG-ROUND7-TARGETED-ACCEPTANCE-AND-VISUAL-RECORD-001`，只读定向验收任务，对应报告见 §2 导航）：记录项目负责人于 2026-09-29 对第七轮 `/config/client` 主列表的**人工目测事实**——原话「我目测了，表格高度与“数据源管理”的表格高度一致」「我人工测试过了，没有问题了。」**仅**在两句范围内采信，作为第七轮**实际页面目测 + 人工操作无异常**反馈，**不**作为 157 条整体验收结论、**不**替代各验收条目自身前置/步骤/证据。据此对四条作**逐步骤、证据驱动的定向判定**：`CCFG-AC-010` 由 `BLOCKED` 上调为 **`PASS`**（本条现行有效定义所要求的前置/步骤/预期已被其**自身**可追溯实测覆盖——1440×900 `accG#010`/`accG#098` 单行与行高一致、无单元格溢出、`max6Rule`/`plusAccurate`/`td` 内边距 12px；只读补测 7 源样本 `CCFG-AC-R1-ON` 在 1920/1440/1280/1100/900 五宽度下直接展示数与 `+N` 自洽、无容器溢出；旧“约 58～64px”属已被取代的历史口径，**不**作为本条继续 `BLOCKED` 的归因），`CCFG-AC-155`／`CCFG-AC-156`／`CCFG-AC-157` 由 `NOT_RUN` 上调为 **`BLOCKED`**（只读可观测项已覆盖，但分别缺“超长内容行”样本、写路径回归〔启停后按稳定 ID 重选、列表重载竞态〕可测性、三点触发器**本身**的可观察禁用场景〔禁用的是菜单条目〕；**不**虚构缺失步骤、**不**人为制造禁用态，建议 `157` 的 `disabled` 澄清另立基线任务）。本轮只读浏览器补测（本机无品牌 Chromium headless，1440×900 另测 1920×1080／900×800）在网络层**先**拦截 `/api/**` 非 GET 再导航，**实测非 GET 拦截计数 `0`**；**未**改动产品代码／测试／共享 CSS／模板基线／`/config/data-source`、**未**提交有效表单、**未**点击启停/删除最终确认、**未**创建夹具、**未**访问或写数据库／ZooKeeper／Kafka。**四类定义行相对 `aa942dc` 逐字节零变化**（154／157／89／77），状态格仅此四条按判定更新；本轮统计 `PASS` **70** / `FAIL` **0** / `BLOCKED` **72** / `NOT_RUN` **15** = **157**。**负责人目测 ≠ 157 条整体正式验收通过**、**逐条定向判定 ≠ 整体收口**；**现行下一入口**为 `CHATGPT_REMOTE_CLIENT_CONFIG_ROUND7_TARGETED_ACCEPTANCE_AND_VISUAL_RECORD_REVIEW`（见 §5）。
 
 - **第七轮实现远程代码复审状态同步**（2026-09-30，`LIST-TABLE-OPTIONAL-ELLIPSIS-IMPLEMENTATION-REVIEW-STATUS-SYNC-001`，纯文档状态同步与证据留痕，对应报告见 §2 导航）：项目负责人转交 ChatGPT 对 `a042df08f1b29ba580ccd9b17f081352a089a995..d93f838be359d71ef373082a6c3a62046912b1a1` 与 `d93f838be359d71ef373082a6c3a62046912b1a1..aa942dc1a4d82d85e6933e8b0977f8736f8c5196` 的**远程独立代码复审**结论为 **`APPROVED`**（2026-09-30，只读，未改 Git）；通过范围**仅** §12 行内三点入口显式 opt-in 与第七轮探针端管理行高协同。本同步把现行复审待办 `..._IMPLEMENTATION_REVIEW`／`..._IMPLEMENTATION_R1_REVIEW` 记为**已完成、结论 `APPROVED` 的历史入口**，并把 `adjustment7_implementation_status` 由代码提交时点历史值 `IMPLEMENTED_PENDING_CHATGPT_REVIEW`（**原处保留、标注历史**）更新为**现行分层值 `IMPLEMENTED_PENDING_USER_ACCEPTANCE`**（**已实现且代码复审通过、仍待项目负责人最终接受/正式验收**）。**状态保护**：第七轮 Feature 与正式验收逐条状态**不得因代码复审翻转**——四类定义行（`REQ 154`／`AC 157`／`DESIGN 89`／`UI 77`）与 AC 逐条状态格零变化，现行统计 `PASS` **70** / `FAIL` **0** / `BLOCKED` **72** / `NOT_RUN` **15** = **157**，`CCFG-AC-010=PASS`、`CCFG-AC-155~157=BLOCKED` 保持；§13 设计基线批准事实保持、其公共可选高亮实现仍 `NOT_STARTED`；§12.1 禁用态视觉仍未实现、未验收。**边界**：**不**表示第七轮 157 条整体正式验收通过、**不**表示 §13 公共实现已实现、**不**表示模板级页面迁移获授权（`NOT_STARTED/NOT_GRANTED/NOT_DECIDED` 不变）、**不**表示数据源管理“更多”文字入口已改造。三点入口继续是**显式 opt-in**。**§12 可选扩展链的下一入口**指向独立的 **§13 公共可选样式实施立项/提示词准备**（`LIST_TABLE_OPTIONAL_HIGHLIGHT_PUBLIC_IMPLEMENTATION_INITIATION_PENDING`）。**代码复审通过 ≠ 项目负责人目测接受 ≠ 正式验收通过 ≠ 批准页面迁移。**
+
+- **第九轮 新增／编辑业务主弹窗接入公共 `create-edit-dialog-visual-template` 视觉预设**（2026-09-30，`CREATE-EDIT-DIALOG-CLIENT-CONFIG-FIRST-ADOPTION-001`，页面接入 + 契约测试 + 最小文档同步，对应报告见 §2 导航）：项目负责人作出**页面级**决定——**仅** `/config/client`（探针端管理）**新增／编辑业务主弹窗**接入已批准、已实现并通过远程代码复审的弹窗公共视觉预设（CEDVT；公共 CSS 代码复审 `APPROVED`）；在公共实现之上把既有公共外观接到本页主弹窗，`cc-dialog` 并列追加 `ced-dialog`，三标签行/标签/必填星号/反馈占位/字段错误态/主提交按钮挂公共辅助类，页面私有同义视觉规则移除、外观由公共 preset **唯一承担**，本页提供四个 Feature 令牌（`--ced-label-column-width:84px`、`--ced-label-gap:12px`、`--ced-dialog-safety-inset:48px`、`--ced-submit-bg-loading:#3f3f46`）；公共 CSS 令牌/选择器/默认值**未改**。主按钮加载态因本页 `:disabled`+`:loading` 并存（真实 EP 下同时带 `is-disabled` 与 `is-loading`）而按 Feature 令牌保留在本页（**非**公共缺陷）。**行为零改动**、**不**引入 `el-form`/公共 Vue 组件；`ClientConfigPage.spec.ts` 与 `create-edit-dialog-visual.spec.ts`（#19 根类 opt-in 白名单仅本页、#20 页面声明恰 4 个 Feature 令牌）静态契约更新。**验证事实**：定向 `2 文件 205 用例`、全量 `58 文件 1188 用例`、`npm run build` **全部通过**；真实无头浏览器只读核对实际页面新增与编辑弹窗（`1280×900` + 窄视口 `420×900`，29/29 检查通过），对照 `/config/data-source` **零挂载**且视觉未变，到达后端**写计数 `0`**。**分层状态**：`create_edit_dialog_page_adoption_implementation_status=IMPLEMENTED_PENDING_CHATGPT_REMOTE_REVIEW_AND_OWNER_VISUAL_CHECK`、`..._authorization_status=PAGE_ADOPTION_AUTHORIZED_CLIENT_CONFIG_CREATE_EDIT_MAIN_DIALOG_ONLY`（**已实现、待远程代码复审和负责人目测**，**不**写成已接受或正式验收 `PASS`）。**未改变的层**：CEDVT 公共实现 `code_review_status=APPROVED` 不回退；`/config/data-source`（含 `editor-dialog` 主弹窗）未被授权、仍 `ced-*` 零挂载；模板级迁移历史键保持原措辞，CEDVT 模板 `migrated_page_count` 由 `0` 更新为 `1`（口径＝已挂 opt-in 根类的真实业务页数）；四类定义行（`REQ 154`/`AC 157`/`DESIGN 89`/`UI 77`）与 157 条验收状态格**逐字节不变**（`PASS 70 / FAIL 0 / BLOCKED 72 / NOT_RUN 15`）。现行下一入口见 §5。
 
 ## 5. 下一入口
 
@@ -732,3 +785,5 @@ adjustment7_formal_acceptance_execution_status=NOT_RUN
 **§12 可选扩展链的下一入口（2026-09-30 复审状态同步后指定；与上方验收链的现行入口相互独立）**：`LIST_TABLE_OPTIONAL_HIGHLIGHT_PUBLIC_IMPLEMENTATION_INITIATION_PENDING`——仅指向独立的 **§13 公共可选样式实施立项/提示词准备**（范围 `SHARED_COMPONENT_DESIGN_SECTION_13_PUBLIC_IMPLEMENTATION_ONLY`）。该下一入口**仅**为 §13 公共可选单行高亮的实现立项准备，**不**误写为代码已实现、**不**自动授权任何页面接入；§13 设计基线已批准但其公共实现仍 `NOT_STARTED`，§12.1 禁用态视觉仍未实现、未验收（`CCFG-AC-157` 保持 `BLOCKED`），模板级 `page_migration_status=NOT_STARTED`／`page_migration_authorization_status=NOT_GRANTED`／`pilot_page_selection_status=NOT_DECIDED` 保持原口径，数据源管理“更多”文字入口不改。**代码复审通过 ≠ 项目负责人目测接受 ≠ 正式验收通过 ≠ 批准页面迁移。**
 
 **§13 公共可选高亮链的现行下一入口（2026-09-30 页面接入复审通过与负责人反馈收口后指定；覆盖上方同链的历史入口）**：`LIST_TABLE_OPTIONAL_HIGHLIGHT_PUBLIC_IMPLEMENTATION_INITIATION_PENDING`、`CHATGPT_REMOTE_LIST_TABLE_OPTIONAL_SINGLE_ROW_HIGHLIGHT_PUBLIC_IMPLEMENTATION_REVIEW`、页面采用评估入口 `LIST_TABLE_OPTIONAL_HIGHLIGHT_PAGE_ADOPTION_EVALUATION_NOT_DECIDED_NOT_GRANTED`，以及页面接入复审入口 `CHATGPT_REMOTE_CLIENT_CONFIG_OPTIONAL_ROW_HIGHLIGHT_PUBLIC_PRESET_ADOPTION_REVIEW`（2026-09-30 已完成、结论 `APPROVED`，**仅**覆盖本次页面接入）至此均为**已完成的历史入口**——项目负责人已作出**页面级**决定：**仅** `/config/client`（探针端管理）**主列表**本轮采用 §13.3 公共预设（`CLIENT-CONFIG-OPTIONAL-ROW-HIGHLIGHT-PUBLIC-PRESET-ADOPTION-001`，2026-09-30，见 §1.14）；接入代码复审 `APPROVED`、负责人 2026-09-30 反馈页面操作无问题，本次收口为**纯文档状态同步与反馈记录**（`CLIENT-CONFIG-OPTIONAL-ROW-HIGHLIGHT-ADOPTION-REVIEW-AND-OWNER-FEEDBACK-CLOSEOUT-001`）。本条链的**现行下一入口**为 **`CHATGPT_REMOTE_CLIENT_CONFIG_OPTIONAL_ROW_HIGHLIGHT_ADOPTION_REVIEW_AND_OWNER_FEEDBACK_CLOSEOUT_REVIEW`**（对象为本次纯文档收口的结果提交，由 ChatGPT **从远程 Git** 对本收口做独立复审）。**其余任何页面**（含 `/config/data-source`）**未被授权**接入、仍零挂载；§12.1 禁用态视觉仍未实现、未验收（`CCFG-AC-157` 保持 `BLOCKED`）；模板级 `page_migration_status=NOT_STARTED`／`page_migration_authorization_status=NOT_GRANTED`／`pilot_page_selection_status=NOT_DECIDED` 与模板级 `current_next_entry` 保持原口径。**页面接入并推送 ≠ 远程代码复审通过 ≠ 项目负责人已目测接受 ≠ 其它页面已授权接入 ≠ 正式验收通过；推送成功 ≠ 本次文档复审通过。**
+
+**弹窗视觉预设链的现行下一入口（2026-09-30 首个页面接入后指定，与上方各链相互独立）**：`CHATGPT_REMOTE_CREATE_EDIT_DIALOG_CLIENT_CONFIG_FIRST_ADOPTION_REVIEW`（对象为任务 `CREATE-EDIT-DIALOG-CLIENT-CONFIG-FIRST-ADOPTION-001` 的结果提交，由 ChatGPT **从远程 Git** 对本次**首个页面接入**代码区间作独立只读**代码复审**；**仅**覆盖 `/config/client` 新增／编辑主弹窗的接入实现，**不**移作 157 条整体验收结论）。项目负责人已作出**页面级**决定：**仅** `/config/client`（探针端管理）**新增／编辑业务主弹窗**接入公共 `create-edit-dialog-visual-template` 视觉预设（见 §1.15 与 §4）。**其余任何页面**（含 `/config/data-source` 及其 `editor-dialog` 主弹窗）**未被授权**接入本模板；CEDVT 模板级「页面迁移/试点」历史键（`page_migration_status=NOT_STARTED`／`page_migration_authorization_status=NOT_GRANTED`／`pilot_page_selection_status=NOT_DECIDED`）语义为**模板级批量迁移**、与本次**单页接入**不同层，**保持原措辞**；CEDVT 模板 `migrated_page_count` 更新为 `1`（口径＝已挂 opt-in 根类 `ced-dialog` 的真实业务页数）。`/config/data-source` 与其它未接入弹窗仍 `ced-*` 零挂载。**页面接入并推送 ≠ 远程代码复审通过 ≠ 项目负责人已目测 ≠ 157 条整体正式验收通过。**

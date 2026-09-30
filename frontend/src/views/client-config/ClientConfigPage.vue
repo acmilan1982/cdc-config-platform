@@ -256,19 +256,19 @@
     <!-- 新增/编辑弹窗（CCFG-UI-013/014/015/016/017）：不接入列表表格视觉模板 -->
     <el-dialog
       v-model="dialogOpen"
-      class="cc-dialog"
+      class="cc-dialog ced-dialog"
       :title="mode === 'edit' ? '编辑探针' : '新增探针'"
       width="900px"
       :close-on-click-modal="false"
       @closed="onDialogClosed"
     >
       <div class="cc-form">
-        <div class="cc-form-item">
-          <span class="cc-form-label">探针 ID</span>
+        <div class="cc-form-item ced-label-row">
+          <span class="cc-form-label ced-form-label ced-required-mark">探针 ID</span>
           <div
             ref="idControlEl"
             class="cc-form-control cc-field"
-            :class="{ 'cc-field--error': idFieldError !== null }"
+            :class="{ 'ced-field--error': idFieldError !== null }"
           >
             <div class="cc-id-control">
               <el-input
@@ -291,18 +291,18 @@
             >
               {{ clientIdLocked ? '修改探针 ID' : '取消修改' }}
             </el-button>
-            <div class="cc-field-feedback">
-              <p v-if="idFieldError" class="cc-field-error" role="alert">{{ idFieldError }}</p>
+            <div class="cc-field-feedback ced-field-feedback">
+              <p v-if="idFieldError" class="ced-field-error" role="alert">{{ idFieldError }}</p>
             </div>
           </div>
         </div>
 
-        <div class="cc-form-item">
-          <span class="cc-form-label">探针描述</span>
+        <div class="cc-form-item ced-label-row">
+          <span class="cc-form-label ced-form-label ced-required-mark">探针描述</span>
           <div
             ref="descControlEl"
             class="cc-form-control cc-field"
-            :class="{ 'cc-field--error': descFieldError !== null }"
+            :class="{ 'ced-field--error': descFieldError !== null }"
           >
             <div class="cc-desc-row">
               <el-input
@@ -316,14 +316,14 @@
                 自动生成
               </el-button>
             </div>
-            <div class="cc-field-feedback">
-              <p v-if="descFieldError" class="cc-field-error" role="alert">{{ descFieldError }}</p>
+            <div class="cc-field-feedback ced-field-feedback">
+              <p v-if="descFieldError" class="ced-field-error" role="alert">{{ descFieldError }}</p>
             </div>
           </div>
         </div>
 
-        <div class="cc-form-item">
-          <span class="cc-form-label">采集数据源</span>
+        <div class="cc-form-item ced-label-row">
+          <span class="cc-form-label ced-form-label ced-required-mark">采集数据源</span>
           <div ref="sourceControlEl" class="cc-form-control cc-source-field">
             <div class="cc-split" :class="{ 'cc-split--error': sourceFieldInvalid }">
               <!-- 候选池（CCFG-UI-016） -->
@@ -391,11 +391,11 @@
                 </div>
               </div>
             </div>
-            <div class="cc-field-feedback">
+            <div class="cc-field-feedback ced-field-feedback">
               <p
                 v-if="sourceFeedback"
                 class="cc-field-feedback__text"
-                :class="sourceFeedback.tone === 'error' ? 'cc-field-error' : 'cc-field-hint'"
+                :class="sourceFeedback.tone === 'error' ? 'ced-field-error' : 'cc-field-hint'"
                 :role="sourceFeedback.tone === 'error' ? 'alert' : 'note'"
               >
                 {{ sourceFeedback.text }}
@@ -409,7 +409,7 @@
         <el-button :disabled="submitting" @click="dialogOpen = false">取消</el-button>
         <el-button
           type="primary"
-          class="cc-dialog-submit"
+          class="cc-dialog-submit ced-submit"
           :disabled="submitting"
           :loading="submitting"
           @click="submitDialog"
@@ -1893,50 +1893,34 @@ onBeforeUnmount(() => {
   color: #e6a23c;
 }
 
-/* 弹窗（新增／编辑共用同一实例）桌面目标宽度约 900px，由 el-dialog 的 width 属性给出；
-   并受视口限制保留左右安全间距——窄视口按可用空间收缩、不横向溢出
-   （CCFG-REQ-116/CCFG-DESIGN-056/CCFG-UI-045）。 */
-:deep(.cc-dialog) {
-  max-width: calc(100vw - 48px);
-}
+/* 弹窗（新增／编辑共用同一实例）桌面目标宽度约 900px，仍由 el-dialog 的 width 属性给出；
+   受视口限制保留左右安全间距——窄视口按可用空间收缩、不横向溢出
+   （CCFG-REQ-116/CCFG-DESIGN-056/CCFG-UI-045）改由公共预设 `.ced-dialog`
+   （`max-width: calc(100vw - var(--ced-dialog-safety-inset))`）承担，本页只提供
+   Feature 令牌 `--ced-dialog-safety-inset: 48px`（见文件末非 scoped 令牌块）。 */
 
 /* 主提交按钮对齐数据源管理 `.editor-submit-button` 的黑色实心视觉
-   （CCFG-REQ-120/CCFG-DESIGN-059/CCFG-UI-047）。`:not(.is-disabled)` 限定仅正常态换色，
-   禁用态与 loading 态沿用 Element Plus 既有视觉、不被正常态规则覆盖；
-   仅此主按钮改色，“取消”“自动生成”“修改探针 ID”不跟随变黑。 */
-.cc-dialog-submit:not(.is-disabled) {
-  background: #09090b;
-  border-color: #09090b;
-  color: #ffffff;
-  border-radius: 6px;
-  font-weight: 500;
-}
-
-.cc-dialog-submit:not(.is-disabled):hover,
-.cc-dialog-submit:not(.is-disabled):focus {
-  background: #27272a;
-  border-color: #27272a;
-  color: #ffffff;
-}
-
-.cc-dialog-submit:not(.is-disabled):active {
-  background: #18181b;
-  border-color: #18181b;
-  color: #ffffff;
-}
+   （CCFG-REQ-120/CCFG-DESIGN-059/CCFG-UI-047）改由公共预设 `.ced-submit` 承担
+   （正常/hover/focus/active 换色与禁用态隔离均由预设的 `:not(.is-disabled)` 序列给出）。
+   仅此主按钮挂 `ced-submit`，“取消”“自动生成”“修改探针 ID”不跟随变黑。 */
 
 /* 提交请求处理中的加载态：仍为黑色系深灰，避免正常态黑色与 Element Plus
    主色蓝之间跳色；以略浅于常态的深灰底 + 加载图标 + 不可重复点击游标与
-   “可点击的黑色常态”区分，白字与加载图标保持可读。选择器仅限定本主提交
-   按钮的加载态（不新增全局覆盖，也不强制提升优先级），`:loading="submitting"`
-   与 `:disabled="submitting"` 的防重复提交逻辑不变。
-   CCFG-REQ-120/124、CCFG-AC-115/120、CCFG-DESIGN-059/062、CCFG-UI-047/051。 */
+   “可点击的黑色常态”区分，白字与加载图标保持可读。
+   CCFG-REQ-120/124、CCFG-AC-115/120、CCFG-DESIGN-059/062、CCFG-UI-047/051。
+
+   本页主按钮同时绑定 `:disabled="submitting"` 与 `:loading="submitting"`，真实 Element Plus
+   下加载态同时带 `is-disabled` 与 `is-loading`，故公共预设的
+   `.ced-submit.is-loading:not(.is-disabled)` 不会命中本按钮。这一条确为探针端专用视觉，
+   按 Feature 令牌 `--ced-submit-bg-loading` 保留在本页（仅限定本主弹窗主按钮的加载态，
+   不新增全局覆盖、不强制提升优先级）；`:loading="submitting"` 与 `:disabled="submitting"`
+   的防重复提交逻辑不变。 */
 .cc-dialog-submit.is-loading,
 .cc-dialog-submit.is-loading:hover,
 .cc-dialog-submit.is-loading:focus,
 .cc-dialog-submit.is-loading:active {
-  background: #3f3f46;
-  border-color: #3f3f46;
+  background: var(--ced-submit-bg-loading, #3f3f46);
+  border-color: var(--ced-submit-bg-loading, #3f3f46);
   color: #ffffff;
   border-radius: 6px;
   font-weight: 500;
@@ -1970,31 +1954,21 @@ onBeforeUnmount(() => {
 /* 水平间距（CCFG-REQ-137/CCFG-DESIGN-072/CCFG-UI-060）：标签列宽与三项控件左边界由
    本项 flex 行统一决定——标签右缘与控件左缘之间统一留 12px，标签仍右对齐，
    三项控件左边界继续对齐；控件为 `flex: 1`，多出的 12px 从控件宽度中扣除，
-   故控件右边界保持调整前布局位置。不改单个输入框宽度、不改公共组件、不引入全局样式。 */
-.cc-form-item {
-  display: flex;
-  align-items: flex-start;
-  gap: 12px;
-}
+   故控件右边界保持调整前布局位置。该 flex 行改由公共预设 `.ced-label-row`
+   （`display:flex; align-items:flex-start; gap: var(--ced-label-gap)`）承担，
+   本页只提供 Feature 令牌 `--ced-label-gap: 12px`。不改单个输入框宽度、不改公共组件、
+   不引入全局样式。 */
 
 /* 配置项名称标签对齐参考页 `/config/data-source` 新增／编辑主弹窗标签
    （`.editor-dialog .el-form-item__label`：14px / 500 / #3f3f46）；沿用页面默认无衬线字体族，
    不套用主表探针 ID 的等宽粗体样式；必填红星与校验语义保留（CCFG-REQ-119/CCFG-UI-046）。
    标签列宽固定并右对齐：右边缘整齐、左边缘允许参差，红星仍在名称前
-   （CCFG-REQ-130/CCFG-DESIGN-068/CCFG-UI-057）。 */
+   （CCFG-REQ-130/CCFG-DESIGN-068/CCFG-UI-057）。
+   字体/字重/颜色/右对齐与固定列宽改由公共预设 `.ced-form-label` 承担，本页只提供
+   Feature 令牌 `--ced-label-column-width: 84px`；必填红星改由公共预设 `.ced-required-mark`
+   承担（沿用页面既有无条件视觉呈现，不据此新增必填校验）。本页仅保留与预设无关的标签上内边距。 */
 .cc-form-label {
-  flex: 0 0 84px;
   padding-top: 6px;
-  font-size: 14px;
-  font-weight: 500;
-  color: #3f3f46;
-  text-align: right;
-}
-
-.cc-form-label::before {
-  content: '*';
-  color: #f56c6c;
-  margin-right: 2px;
 }
 
 .cc-form-control {
@@ -2038,35 +2012,20 @@ onBeforeUnmount(() => {
   width: 100%;
 }
 
-/* 字段级错误态：控件红色边框（CCFG-REQ-123/CCFG-DESIGN-061/CCFG-UI-050）。
-   输入框与文本域沿用 Element Plus 的 inset box-shadow 边框表现，聚焦态仍保持红色。 */
-.cc-field--error :deep(.el-input__wrapper),
-.cc-field--error :deep(.el-input__wrapper.is-focus),
-.cc-field--error :deep(.el-textarea__inner),
-.cc-field--error :deep(.el-textarea__inner:focus) {
-  box-shadow: 0 0 0 1px var(--el-color-danger) inset;
-}
+/* 字段级错误态：控件红色边框（CCFG-REQ-123/CCFG-DESIGN-061/CCFG-UI-050）改由公共预设
+   `.ced-field--error`（挂在控件包装元素上）承担，输入框与文本域沿用 Element Plus 的
+   inset box-shadow 边框表现，聚焦态仍保持红色。 */
 
 /* 字段反馈区预留稳定空间：选中／取消选择与普通错误状态切换时弹窗底边与页脚不明显跳动
-   （CCFG-REQ-128/CCFG-DESIGN-066/CCFG-UI-055）。用最小高度而非固定高度，
-   需要换行的真实错误文案完整可读、不裁剪（不设 overflow:hidden、不固定单行高度）。 */
-.cc-field-feedback {
-  min-height: 20px;
-  margin-top: 2px;
-}
+   （CCFG-REQ-128/CCFG-DESIGN-066/CCFG-UI-055）改由公共预设 `.ced-field-feedback`
+   （min-height + margin-top）承担。用最小高度而非固定高度，需要换行的真实错误文案
+   完整可读、不裁剪（不设 overflow:hidden、不固定单行高度）。 */
 
+/* 中性提示文字基架（非公共差异）：错误分支由公共预设 `.ced-field-error` 承担。 */
 .cc-field-feedback__text {
   margin: 0;
   font-size: 13px;
   line-height: 1.4;
-  overflow-wrap: anywhere;
-}
-
-.cc-field-error {
-  margin: 0;
-  font-size: 13px;
-  line-height: 1.4;
-  color: var(--el-color-danger);
   overflow-wrap: anywhere;
 }
 
@@ -2199,6 +2158,21 @@ onBeforeUnmount(() => {
 
 .cc-chip--bad {
   border-color: var(--el-color-danger);
+}
+</style>
+
+<!-- 新增／编辑业务主弹窗接入公共视觉预设 create-edit-dialog-visual-template
+     （CREATE-EDIT-DIALOG-CLIENT-CONFIG-FIRST-ADOPTION-001，授权范围仅本页新增/编辑主弹窗）：
+     `el-dialog` 由 Element Plus 经 **Teleport 渲染到 `body`**，页面 `scoped` 样式不作用于其内容，
+     故此处为**非 scoped** 块；仅由本页专用的 `.cc-dialog.ced-dialog` 严格限定，不写全局覆盖、
+     不使用任何强制声明、不修改公共预设的令牌/选择器/默认值。本页作为 Feature 只提供四个
+     Feature-owned 令牌值（公共预设对这四个令牌不声明默认值），并由真实弹窗根元素向后代继承。 -->
+<style>
+.cc-dialog.ced-dialog {
+  --ced-label-column-width: 84px;
+  --ced-label-gap: 12px;
+  --ced-dialog-safety-inset: 48px;
+  --ced-submit-bg-loading: #3f3f46;
 }
 </style>
 
