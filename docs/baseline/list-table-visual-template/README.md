@@ -392,7 +392,7 @@ grep -ohF "$cand_marker" docs/baseline/list-table-visual-template/SHARED_COMPONE
 | `DESIGN.md` | 模板职责与 Feature 保留职责、启用与作用域隔离、行高与长文本策略、候选实现方案对比（**基线任务当时不定案**；下游已选 §8.4 并已落地，**目测已通过并通过本地正式验收**） |
 | `UI.md` | 参考实现主表当前事实、可提升为已批准模板规则的视觉内容、必须保留为 Feature 专属的内容 |
 | `MIGRATION.md` | 全量 `el-table` 使用点盘点矩阵、候选分类、逐页独立评估与授权要求 |
-| `SHARED_COMPONENT_DESIGN.md` | **公共实现详细设计（已批准）**：四个候选的唯一结论、公共契约、Feature 保护项、参考页等价接入清单、验证与回滚设计（`approval_scope=SHARED_IMPLEMENTATION_DETAILED_DESIGN_ONLY`；**批准的是设计文档**，该设计随后已由独立实施任务落地，**目测已通过**，**本地正式验收已通过，并已由项目负责人最终接受**）。**§12 为例外**：行内三点入口 opt-in **可选扩展**——其**设计基线**已于 2026-09-29 经 ChatGPT 远程复审 `APPROVED`、项目负责人批准（**R2 修订后口径**）；其**代码实现**已由独立任务 `CLIENT-CONFIG-ROW-HEIGHT-AND-OPTIONAL-ELLIPSIS-IMPLEMENTATION-001` 落地、`/config/client` 主列表接入，**代码复审状态**为 **`IMPLEMENTED_PENDING_CHATGPT_REVIEW`（待远程复审）**；其**已落地的现行事实**按 §7.3 阅读约定标注**参考事实标记**（**不**因待复审而标为候选未实现），其独立计数见 §12.8）。**§13 为参照修正设计基线（已批准）**：分层可选契约（§13.3 单行固定高亮外观预设与行为边界、§13.4 归属处置）经 ChatGPT 从远程 Git 对 R4 提交 `aa6285f…` 复审 `APPROVED`、项目负责人于 2026-09-29 批准后**设计基线已批准**；其**公共实现尚 `NOT_STARTED`**（公共层未提供该可选样式），其他页面**不**自动接入 |
+| `SHARED_COMPONENT_DESIGN.md` | **公共实现详细设计（已批准）**：四个候选的唯一结论、公共契约、Feature 保护项、参考页等价接入清单、验证与回滚设计（`approval_scope=SHARED_IMPLEMENTATION_DETAILED_DESIGN_ONLY`；**批准的是设计文档**，该设计随后已由独立实施任务落地，**目测已通过**，**本地正式验收已通过，并已由项目负责人最终接受**）。**§12 为例外**：行内三点入口 opt-in **可选扩展**——其**设计基线**已于 2026-09-29 经 ChatGPT 远程复审 `APPROVED`、项目负责人批准（**R2 修订后口径**）；其**代码实现**已由独立任务 `CLIENT-CONFIG-ROW-HEIGHT-AND-OPTIONAL-ELLIPSIS-IMPLEMENTATION-001` 落地、`/config/client` 主列表接入，**代码复审状态**为 **`APPROVED`（2026-09-30，项目负责人转交的 ChatGPT 远程独立只读代码复审；复审对象为 R0 `d93f838…` 与 R1 `aa942dc1…`）**，**现行实现状态**为 **`IMPLEMENTED_PENDING_USER_ACCEPTANCE`（已实现且代码复审通过、仍待项目负责人最终接受或正式验收）**（其实现提交时点的复审待办值 `IMPLEMENTED_PENDING_CHATGPT_REVIEW` 为**历史值**）；其**已落地的现行事实**按 §7.3 阅读约定标注**参考事实标记**（**不**因复审进度而标为候选未实现），其独立计数见 §12.8）。**§13 为参照修正设计基线（已批准）**：分层可选契约（§13.3 单行固定高亮外观预设与行为边界、§13.4 归属处置）经 ChatGPT 从远程 Git 对 R4 提交 `aa6285f…` 复审 `APPROVED`、项目负责人于 2026-09-29 批准后**设计基线已批准**；其**公共实现尚 `NOT_STARTED`**（公共层未提供该可选样式），其他页面**不**自动接入 |
 | `reports/LIST-TABLE-VISUAL-TEMPLATE-BASELINE-001.md` | R0 建立任务的执行报告与校验证据（**历史报告，保留草案态标记，不修改**） |
 | `reports/LIST-TABLE-VISUAL-TEMPLATE-BASELINE-001-R1.md` | R1 定向修订执行报告（**历史报告，保留草案态标记，不修改**） |
 | `reports/LIST-TABLE-VISUAL-TEMPLATE-BASELINE-APPROVAL-CLOSEOUT-001.md` | 基线内容批准收口报告（历史执行报告，不修改） |
@@ -426,7 +426,7 @@ grep -ohF "$cand_marker" docs/baseline/list-table-visual-template/SHARED_COMPONE
   并已由项目负责人于 2026-09-22 最终接受，当前状态为 `IMPLEMENTED_ACCEPTED`；
   后续任何**代码修改**仍**未经项目负责人再次明确批准不得进行**。
 
-**已批准设计基线、已实现待远程复审的可选扩展（第七轮 · 2026-09-29）** —— `SHARED_COMPONENT_DESIGN.md` §12
+**已批准设计基线、已实现且代码复审通过的可选扩展（第七轮 · 2026-09-29；复审状态同步 2026-09-30）** —— `SHARED_COMPONENT_DESIGN.md` §12
 「行内三点入口 opt-in」是列表表格视觉模板的一项**显式启用（opt-in）可选扩展**，来源为探针端管理
 第七轮调整任务 `CLIENT-CONFIG-ROW-HEIGHT-AND-OPTIONAL-ELLIPSIS-BASELINE-001`。其时序：R0 草案
 `9381703…` 远程复审 `CHANGES_REQUIRED` → R1 `938e720…` 远程复审 `CHANGES_REQUIRED` →
@@ -442,7 +442,10 @@ R2 `59617b4…` 经 ChatGPT **从远程 Git 独立复审 `APPROVED`** → 项目
   `lt-row-action__cell`／`lt-row-action__ellipsis` 两条规则，`/config/client` **主列表**显式接入，
   静态断言 #11 更新为「先剔除根类再断言辅助类集合」（#2／#3／#6 不变）。据此，**现行**
   `lt_internal_helper_class_count` 为 **2**（`lt_token_count` 仍 **9**）。其**代码复审状态**为
-  `IMPLEMENTED_PENDING_CHATGPT_REVIEW`（**待远程复审**）——复审状态**不**等于「尚未实现」，故本节按
+  **`APPROVED`**（**2026-09-30** 项目负责人转交的 ChatGPT 远程独立只读代码复审；复审对象为
+  R0 `d93f838…` 与 R1 `aa942dc1…`），**现行实现状态**为 `IMPLEMENTED_PENDING_USER_ACCEPTANCE`
+  （已实现且代码复审通过、**仍待项目负责人最终接受或正式验收**；其实现提交时点的复审待办值
+  `IMPLEMENTED_PENDING_CHATGPT_REVIEW` 为**历史值**）——复审进度**不**等于「尚未实现」，故本节按
   §7.3 阅读约定标注**参考事实标记**，**不**再按候选未实现标记引用；独立计数口径见
   `SHARED_COMPONENT_DESIGN.md` §12.8；
 - 该扩展**不**改变本模板任何**已批准规则**与模板级状态，也**不**改变 §9 的阶段路径与授权边界
@@ -460,6 +463,16 @@ R2 `59617b4…` 经 ChatGPT **从远程 Git 独立复审 `APPROVED`** → 项目
 > `reference_page_integration_status` 仍 `IMPLEMENTED_ACCEPTED`、`final_acceptance_status` 仍
 > `ACCEPTED_BY_PROJECT_OWNER`。
 
+> **复审状态同步（2026-09-30）**：项目负责人转交 ChatGPT 对 R0 `d93f838…` 与 R1 `aa942dc1…` 的
+> **远程独立只读代码复审**结论为 **`APPROVED`**（复审时点 2026-09-30，固定区间
+> `a042df0…..d93f838…` 与 `d93f838…..aa942dc1…`），其**现行实现状态**据此由
+> `IMPLEMENTED_PENDING_CHATGPT_REVIEW` 更新为 **`IMPLEMENTED_PENDING_USER_ACCEPTANCE`**。
+> **该复审通过只覆盖 §12 与第七轮行高的代码复审**：**不**表示 157 条正式验收整体通过、**不**表示 §13
+> 公共可选高亮已实现（§13 **公共实现仍 `NOT_STARTED`**）、**不**表示 §12.1 禁用态视觉已实现
+> （`CCFG-AC-157` 仍 `BLOCKED`）、**不**授权任何页面迁移（模板级 `current_next_entry` 仍为
+> `NONE_SHARED_IMPLEMENTATION_FINAL_ACCEPTED_AND_CLOSED_NO_PAGE_MIGRATION_AUTHORIZED`）。
+> **代码复审通过 ≠ 项目负责人目测接受 ≠ 正式验收通过 ≠ 批准页面迁移。**
+
 ### 8.1 参照修正设计基线（`2026-09-29` 批准）—— 与 §12 三点 opt-in **分属两个状态层**
 
 **参照修正链**（与上节第七轮 §12 链**分别记录**，**不**混用）：模板定向整理
@@ -473,8 +486,13 @@ R4 `aa6285f…` 复审 **`APPROVED`** → 项目负责人于 `2026-09-29` 在批
 - **批准态**：设计基线已批准；`DESIGN.md` §7 禁令范围**已收窄**为「业务语义不公共化」；
 - **代码状态**：§13 可选视觉预设的**公共实现 `NOT_STARTED`**（公共层未提供该可选样式或辅助类，
   其他页面**不**自动接入）；`/config/client` 现行固定高亮属**该 Feature 页面自身**实现，**不**等于公共模板已实现；
-- **未随本轮改变的独立状态**：§12 三点 opt-in 入口代码复审仍 `IMPLEMENTED_PENDING_CHATGPT_REVIEW`；
-  §12.1 禁用态视觉仍未实现（`CCFG-AC-157` 仍 `BLOCKED`）；模板级 `current_next_entry` 仍为
+- **第七轮实现代码复审（已完成 → 历史入口）**：R0 `d93f838…` 与 R1 `aa942dc1…` 经项目负责人转交
+  ChatGPT **远程独立只读代码复审**结论 **`APPROVED`**（复审时点 2026-09-30）；§12 现行实现状态据此
+  更新为 `IMPLEMENTED_PENDING_USER_ACCEPTANCE`，实现提交时点的复审待办值 `IMPLEMENTED_PENDING_CHATGPT_REVIEW`
+  作为**历史值**保留（见 `SHARED_COMPONENT_DESIGN.md` §12 状态块与 §12.8 末段）。
+  **复审通过 ≠ 页面目测 ≠ 正式验收 ≠ 批准页面迁移**；
+- **未随本轮改变的独立状态**：§12.1 禁用态视觉仍未实现（`CCFG-AC-157` 仍 `BLOCKED`）；
+  §13 可选单行固定高亮**公共实现仍 `NOT_STARTED`**（其他页面**不**自动接入）；模板级 `current_next_entry` 仍为
   `NONE_SHARED_IMPLEMENTATION_FINAL_ACCEPTED_AND_CLOSED_NO_PAGE_MIGRATION_AUTHORIZED`（**另一状态层**，**不**混用）。
 - **计数分层纠错（收口 R1）**：收口提交 `925c3a8…` 经远程复审 `CHANGES_REQUIRED`，**唯一**阻塞为
   `SHARED_COMPONENT_DESIGN.md` 的**当前计数说明仍混入历史计数**；R1 **只**定向更正——§0.1／§10／§11.1 的
@@ -484,6 +502,17 @@ R4 `aa6285f…` 复审 **`APPROVED`** → 项目负责人于 `2026-09-29` 在批
 
 ```text
 draft_chain_next_step=CHATGPT_REMOTE_LIST_TABLE_VISUAL_TEMPLATE_CLIENT_CONFIG_REFINEMENT_BASELINE_APPROVAL_CLOSEOUT_R1_REVIEW
+```
+
+**可选扩展链（§12 opt-in / §13 公共可选高亮）的下一入口** —— §12 与第七轮行高的**代码复审**已 `APPROVED`
+（2026-09-30，见上），复审入口 `CHATGPT_REMOTE_CLIENT_CONFIG_ROW_HEIGHT_AND_OPTIONAL_ELLIPSIS_IMPLEMENTATION_REVIEW`
+与 `..._IMPLEMENTATION_R1_REVIEW` 记为**已完成的历史入口**。本条链的**下一入口**应为**独立的
+§13 公共可选样式实施立项 / 提示词准备**（**尚未立项**）——**只**指向 §13 公共可选单行固定高亮的
+**公共实现**（`NOT_STARTED`），**不**表示任何代码已实现，也**不**自动授权任何页面接入：
+
+```text
+optional_extension_chain_next_step=LIST_TABLE_OPTIONAL_HIGHLIGHT_PUBLIC_IMPLEMENTATION_INITIATION_PENDING
+optional_extension_chain_next_step_scope=SHARED_COMPONENT_DESIGN_SECTION_13_PUBLIC_IMPLEMENTATION_ONLY
 ```
 
 > **批准设计基线 ≠ 公共扩展已实现 ≠ 目测通过 ≠ 正式验收通过 ≠ 批准页面迁移。提交推送成功 ≠ 远程复审通过。**
@@ -869,3 +898,17 @@ next_step=NONE_SHARED_IMPLEMENTATION_FINAL_ACCEPTED_AND_CLOSED_NO_PAGE_MIGRATION
   `CHATGPT_REMOTE_LIST_TABLE_VISUAL_TEMPLATE_CLIENT_CONFIG_REFINEMENT_BASELINE_APPROVAL_CLOSEOUT_R1_REVIEW`
   （批准收口入口经复审 `CHANGES_REQUIRED`，已为**历史**入口）。详见同目录
   `reports/LIST-TABLE-VISUAL-TEMPLATE-CLIENT-CONFIG-REFINEMENT-BASELINE-APPROVAL-CLOSEOUT-001-R1.md`。
+- 2026-09-30，**第七轮实现远程代码复审状态同步**（`LIST-TABLE-OPTIONAL-ELLIPSIS-IMPLEMENTATION-REVIEW-STATUS-SYNC-001`，
+  纯文档状态同步与证据留痕）—— 项目负责人转交 ChatGPT 对 R0 `d93f838be359d71ef373082a6c3a62046912b1a1`
+  与 R1 `aa942dc1a4d82d85e6933e8b0977f8736f8c5196` 的**远程独立只读代码复审**结论为 **`APPROVED`**
+  （复审时点 2026-09-30，固定区间 `a042df0…..d93f838…` 与 `d93f838…..aa942dc1…`）。据此把 §12 opt-in
+  扩展的**现行实现状态**由 `IMPLEMENTED_PENDING_CHATGPT_REVIEW` 更新为 **`IMPLEMENTED_PENDING_USER_ACCEPTANCE`**
+  （已实现且代码复审通过、仍待项目负责人最终接受或正式验收），实现提交时点的复审待办值
+  `IMPLEMENTED_PENDING_CHATGPT_REVIEW` **保留为历史值**（**不**机械全局替换）；§12 状态块新增
+  `..._code_review_status=APPROVED`、`..._code_review_date=2026-09-30`、来源与两个复审区间键。四条标记通道
+  **逐值不变**（四份规范文档 `28 / 0 / 43 / 7`、本文件批准态设计标记 `81`、参考事实标记 `26`、候选未实现标记 `8`），
+  `lt_token_count` 仍 **9**、`lt_internal_helper_class_count` 仍 **2**。**边界**：§13 公共可选高亮
+  **公共实现仍 `NOT_STARTED`**；§12.1 禁用态视觉仍未实现（`CCFG-AC-157` 仍 `BLOCKED`）；第七轮 157 条验收逐条状态
+  **未因代码复审翻转**；模板级 `current_next_entry` **不变**（`NONE_...`），数据源管理「更多」→三点改造仍属**后续独立任务**。
+  **代码复审通过 ≠ 项目负责人目测接受 ≠ 正式验收通过 ≠ 批准页面迁移。** 详见同目录
+  `reports/LIST-TABLE-OPTIONAL-ELLIPSIS-IMPLEMENTATION-REVIEW-STATUS-SYNC-001.md`。

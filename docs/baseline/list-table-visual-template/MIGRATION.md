@@ -773,3 +773,34 @@ ChatGPT 对批准收口提交 `925c3a89e6841c760f918805e77a01fba1c960e0` 的远�
   `CHATGPT_REMOTE_LIST_TABLE_VISUAL_TEMPLATE_CLIENT_CONFIG_REFINEMENT_BASELINE_APPROVAL_CLOSEOUT_R1_REVIEW`
   （批准收口入口经复审 `CHANGES_REQUIRED`，已为**历史**入口）。
 - **提交推送成功 ≠ 远程复审通过。**
+
+## 第七轮实现远程代码复审状态同步追加记录（`LIST-TABLE-OPTIONAL-ELLIPSIS-IMPLEMENTATION-REVIEW-STATUS-SYNC-001`，追加记录，`2026-09-30`）
+
+本任务为**纯文档状态同步与证据留痕**（**不**改业务定义 / 前后端代码 / 共享 CSS / 测试 / 数据库；
+**不**运行测试 / 构建 / 浏览器；**不**启停服务；**不**访问数据库 / ZooKeeper / Kafka）。项目负责人转交
+ChatGPT 对固定区间 `a042df08f1b29ba580ccd9b17f081352a089a995..d93f838be359d71ef373082a6c3a62046912b1a1`
+与 `d93f838be359d71ef373082a6c3a62046912b1a1..aa942dc1a4d82d85e6933e8b0977f8736f8c5196` 的
+**远程独立只读代码复审**结论为 **`APPROVED`**（复审时点 **2026-09-30**），通过范围**仅**为
+`SHARED_COMPONENT_DESIGN.md` §12「行内三点入口显式 opt-in」与第七轮探针端管理行高协同。
+
+- **现行实现状态更新**：§12 opt-in 扩展的**现行**实现状态由 `IMPLEMENTED_PENDING_CHATGPT_REVIEW`
+  更新为 **`IMPLEMENTED_PENDING_USER_ACCEPTANCE`**（已实现且代码复审通过、**仍待项目负责人最终接受或正式验收**）；
+  实现提交时点的复审待办值 `IMPLEMENTED_PENDING_CHATGPT_REVIEW` **保留为历史值**
+  （`..._implementation_submission_status`），**不**机械全局替换；
+- **复审元数据**：§12 状态块新增 `..._code_review_status=APPROVED`、`..._code_review_date=2026-09-30`、
+  `..._code_review_source=CHATGPT_REMOTE_INDEPENDENT_CODE_REVIEW_RELAYED_BY_PROJECT_OWNER` 与两个
+  `..._code_review_range_*` 键；
+- **四通道实测（命令复算，逐值不变）**：四份规范文档 `28 / 0 / 43 / 7`、本文件批准态设计标记 `81`、
+  参考事实标记 `26`、候选未实现标记 `8`——本任务**未**增删任何标记实例；`lt_token_count` 仍 **9**、
+  `lt_internal_helper_class_count` 仍 **2**；
+- **边界**：**代码复审通过 ≠ 项目负责人目测接受 ≠ 正式验收通过 ≠ 批准页面迁移**。§13 公共可选单行固定高亮
+  **公共实现仍 `NOT_STARTED`**（其他页面**不**自动接入）；§12.1 **禁用态视觉仍属设计契约、尚未实现、尚未验收**
+  （`CCFG-AC-157` 仍 `BLOCKED`）；第七轮 157 条正式验收**逐条状态未因代码复审翻转**（`CCFG-AC-010` 仍 `PASS`、
+  `CCFG-AC-155~157` 仍 `BLOCKED`）；模板级 `page_migration_status` 仍 `NOT_STARTED` /
+  `page_migration_authorization_status` 仍 `NOT_GRANTED` / `pilot_page_selection_status` 仍 `NOT_DECIDED`，
+  模板级 `current_next_entry` 仍 `NONE_SHARED_IMPLEMENTATION_FINAL_ACCEPTED_AND_CLOSED_NO_PAGE_MIGRATION_AUTHORIZED`；
+  数据源管理「更多」→三点改造仍属**未来独立任务**（本轮**不**改该页）；
+- 本任务**不**宣布第七轮 157 条整体验收通过、**不**宣布项目负责人最终接受、**不**授权页面迁移；
+  可选扩展链的**下一入口**指向**独立的 §13 公共可选样式实施立项 / 提示词准备**（**尚未立项**），
+  **不**表示代码已实现或自动授权页面接入。
+- **代码复审通过 ≠ 项目负责人目测接受 ≠ 正式验收通过 ≠ 批准页面迁移。**

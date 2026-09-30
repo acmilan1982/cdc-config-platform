@@ -174,6 +174,15 @@ opt-in 扩展：在 `frontend/src/styles/list-table/list-table-visual.css` 新�
 `page_migration_authorization_status` 仍 `NOT_GRANTED`、`pilot_page_selection_status` 仍 `NOT_DECIDED`；
 数据源管理「更多」→三点迁移仍属**另一会话、另一独立任务**。
 
+> **复审状态同步（2026-09-30 追加，不改写以上实现时点表述）**：上段「`IMPLEMENTED_PENDING_CHATGPT_REVIEW`
+> （待远程复审）」是**实现提交时点**的真实历史值。其后，项目负责人转交 ChatGPT 对 R0 `d93f838…` 与
+> R1 `aa942dc1…` 的**远程独立只读代码复审**结论为 **`APPROVED`**（复审时点 2026-09-30，固定区间
+> `a042df0…..d93f838…` 与 `d93f838…..aa942dc1…`）。据此 **§12 现行实现状态**已更新为
+> `IMPLEMENTED_PENDING_USER_ACCEPTANCE`（**已实现且代码复审通过、仍待项目负责人最终接受或正式验收**），
+> 上述历史值保留为 `list_table_row_action_opt_in_extension_implementation_submission_status`。
+> 该复审**只**覆盖 §12 与第七轮行高的代码复审，**不**表示 157 条正式验收整体通过、**不**表示 §13
+> 公共可选高亮已实现、**不**表示 §12.1 禁用态视觉已实现、**不**授权任何页面迁移。详见 §12.8 末段。
+
 历史状态说明：本文件在**收口前**的草案阶段使用带 `_DRAFT` 后缀的草案标记；
 该字面量**仍逐字保留**在 R0 / R1 / R2 三份历史执行报告中，属**历史事实**，
 **不得**回写、改名或全局替换（详见 §11.4）。本文件**当前正文内不再出现**该草案字面量。
@@ -1533,8 +1542,12 @@ R2（提交 e72264d）  草案标记 = 79   （+4）
 **不**成为所有主列表的默认入口。本节 opt-in 扩展**已落地代码并接入 `/config/client` 主列表**
 （公共样式与 §7.1 断言 #11 已实现），**现已成为**共享 CSS 与现行测试断言的一部分；本节各项取值
 均为**现行值**（见 §12.7），不再以「拟值」表述。**设计基线**已于 2026-09-29 经项目负责人批准
-（见下方状态块），**代码复审状态**为 `IMPLEMENTED_PENDING_CHATGPT_REVIEW`（已落地、待远程复审）——
-两者**分开记载**：`IMPLEMENTED_PENDING_CHATGPT_REVIEW` 是**复审状态**，**不**表示本节规则**尚未实现**，
+（见下方状态块），**代码复审状态**为 `APPROVED`（**2026-09-30** 由项目负责人转交的 ChatGPT 远程独立
+只读代码复审结论，复审对象为 R0 `d93f838…` 与 R1 `aa942dc1…`，见 §12.8 末段）——即本节已由「已落地、
+待远程复审」推进为**已实现且代码复审通过、仍待项目负责人最终接受或正式验收**
+（`list_table_row_action_opt_in_extension_implementation_status=IMPLEMENTED_PENDING_USER_ACCEPTANCE`，
+其**实现提交时点**的复审待办值 `IMPLEMENTED_PENDING_CHATGPT_REVIEW` 作为**历史值**保留，见下方状态块）——
+**复审状态**与**实现事实**两者**分开记载**：复审进度值**不**表示本节规则**尚未实现**，
 故本节按 `README.md` §7.3 的阅读约定标注**参考事实标记**，**不**再按候选未实现标记引用。
 **本节的落地不**表示任何**其他**页面已迁移（`/config/data-source`「更多」→三点迁移仍属另一会话、另一独立任务）。
 
@@ -1547,13 +1560,19 @@ R2（提交 e72264d）  草案标记 = 79   （+4）
 `reports/LIST-TABLE-VISUAL-TEMPLATE-CLIENT-CONFIG-REFINEMENT-BASELINE-001.md`），本节不再重复。
 
 ```text
-list_table_row_action_opt_in_extension_status=DESIGN_BASELINE_APPROVED_IMPLEMENTATION_IMPLEMENTED_PENDING_CHATGPT_REVIEW
+list_table_row_action_opt_in_extension_status=DESIGN_BASELINE_APPROVED_IMPLEMENTATION_IMPLEMENTED_PENDING_USER_ACCEPTANCE
 list_table_row_action_opt_in_extension_design_approval_status=APPROVED_BY_PROJECT_OWNER
 list_table_row_action_opt_in_extension_design_approval_date=2026-09-29
 list_table_row_action_opt_in_extension_approved_reviewed_commit=59617b4cee03fe1642417cb85005b339ab0015ab
 list_table_row_action_opt_in_extension_implemented=YES
 list_table_row_action_opt_in_extension_implementation_task=CLIENT-CONFIG-ROW-HEIGHT-AND-OPTIONAL-ELLIPSIS-IMPLEMENTATION-001
-list_table_row_action_opt_in_extension_implementation_status=IMPLEMENTED_PENDING_CHATGPT_REVIEW
+list_table_row_action_opt_in_extension_implementation_status=IMPLEMENTED_PENDING_USER_ACCEPTANCE
+list_table_row_action_opt_in_extension_implementation_submission_status=IMPLEMENTED_PENDING_CHATGPT_REVIEW
+list_table_row_action_opt_in_extension_code_review_status=APPROVED
+list_table_row_action_opt_in_extension_code_review_date=2026-09-30
+list_table_row_action_opt_in_extension_code_review_source=CHATGPT_REMOTE_INDEPENDENT_CODE_REVIEW_RELAYED_BY_PROJECT_OWNER
+list_table_row_action_opt_in_extension_code_review_range_main=a042df08f1b29ba580ccd9b17f081352a089a995..d93f838be359d71ef373082a6c3a62046912b1a1
+list_table_row_action_opt_in_extension_code_review_range_r1=d93f838be359d71ef373082a6c3a62046912b1a1..aa942dc1a4d82d85e6933e8b0977f8736f8c5196
 list_table_row_action_opt_in_contract_revision=R2_CORRECTED_APPROVED
 page_migration_status=NOT_STARTED
 page_migration_authorization_status=NOT_GRANTED
@@ -1618,7 +1637,7 @@ page_migration_authorization_status=NOT_GRANTED
 **不**触及未启用页面与未启用表格，**不**把 `28px` 变成所有主列表的**强制最小行高**。
 **不得**把上述纪律笼统写成「公共层绝不声明任何 `height`」，否则与 28×28px 命中区目标冲突。
 
-### 12.3 与「内容驱动行高」共存的技术依据（设计已批准、已实现待远程复审）
+### 12.3 与「内容驱动行高」共存的技术依据（设计已批准、已实现、代码复审通过）
 
 `LIST_TABLE_REFERENCE_FACT` —— **调整前历史测量（第七轮行高调整前）**：探针端管理主列表常规行曾在
 第七轮行高调整**前**实测约 `53px`，同期数据源管理参考页常规行约 `48px`；两者差值 `5px` 可归因于
@@ -1680,7 +1699,7 @@ Element Plus 的单元格 `.cell` 计算样式含 `overflow: hidden`，会裁切
 缩放与窄视口表现已由实现任务的**真实浏览器核对**（含真实 `100%`／`125%` 缩放）记录并留有证据，
 **不**以推导冒充实测结论；核对记录见 §12.5 更新段与实现任务报告。
 
-### 12.4 零泄漏论证（设计已批准、已实现待远程复审）
+### 12.4 零泄漏论证（设计已批准、已实现、代码复审通过）
 
 `LIST_TABLE_REFERENCE_FACT` —— 未启用页面的**计算样式零变化**，依据：
 
@@ -1782,10 +1801,13 @@ R0／R1／R2 各轮拟议文本、复审结论与旧计数见既有历史报告�
 **（8）文档/代码边界（现行）**：本契约**已**落地于 `frontend/src/styles/list-table/**` 与
 `/config/client` 主列表的**显式**接入（见 §12.6）；`/config/data-source` 迁移状态**未**翻转
 （`page_migration_status`／`page_migration_authorization_status` 仍 `NOT_STARTED`／`NOT_GRANTED`），
-其三点化仍属**另一独立任务**。实现状态为 `IMPLEMENTED_PENDING_CHATGPT_REVIEW`（待远程复审）；
-**实现完成 ≠ 远程代码复审通过 ≠ 项目负责人目测 ≠ 正式验收通过。**
+其三点化仍属**另一独立任务**。实现状态为 **`IMPLEMENTED_PENDING_USER_ACCEPTANCE`**（已实现且
+**2026-09-30** 代码复审 `APPROVED`，**仍待项目负责人最终接受或正式验收**；其实现提交时点的复审待办值
+`IMPLEMENTED_PENDING_CHATGPT_REVIEW` 为**历史值**）；
+**实现完成 ≠ 代码复审通过 ≠ 项目负责人目测 ≠ 正式验收通过**——本处**只**表示代码复审已通过，
+**不**表示本节已获项目负责人接受、**不**表示 157 条正式验收完成、**不**表示页面迁移获授权。
 
-### 12.8 计数口径与核验（R2 标记纠正后收敛；R3 定向纠错后复测；R4 焦点环证据表述纠错后复测；批准收口后复测；批准收口 R1 计数分层纠错后复测）
+### 12.8 计数口径与核验（R2 标记纠正后收敛；R3 定向纠错后复测；R4 焦点环证据表述纠错后复测；批准收口后复测；批准收口 R1 计数分层纠错后复测；第七轮实现复审状态同步后复测）
 
 `LIST_TABLE_REFERENCE_FACT` —— **计数通道严格分开、互不混算**。R2 标记纠正后，本文件 §12 中
 **已落地／已批准事实**新增使用**参考事实标记**，故通道由三条扩为四条：
@@ -1962,6 +1984,28 @@ R1 **只**做计数分层纠错（不改批准范围、状态决定、代码或�
 负责人在批准语境下回复“继续”）；§13 可选高亮**公共实现仍 `NOT_STARTED`**；§12 三点 opt-in 代码复审状态仍
 `IMPLEMENTED_PENDING_CHATGPT_REVIEW`；§12.1 禁用态视觉仍未实现/未验收（`CCFG-AC-157` 仍 `BLOCKED`）；模板级页面迁移状态**未**翻转。
 **提交推送成功 ≠ 远程复审通过。**
+
+实测（2026-09-30，**第七轮实现复审状态同步后复测**，
+`LIST-TABLE-OPTIONAL-ELLIPSIS-IMPLEMENTATION-REVIEW-STATUS-SYNC-001`）：本任务为**纯文档状态同步与证据留痕**
+（**不**改业务定义／前后端代码／共享 CSS／测试／数据库），**只**把 §12 opt-in 扩展的**现行复审进度**由
+「已落地、待远程复审」同步为「**代码复审已通过、仍待项目负责人最终接受或正式验收**」：据项目负责人转交的
+ChatGPT 远程独立只读代码复审结论 **`APPROVED`**（复审对象为 R0 `d93f838be359d71ef373082a6c3a62046912b1a1`
+与 R1 `aa942dc1a4d82d85e6933e8b0977f8736f8c5196`，固定区间
+`a042df0…..d93f838…` 与 `d93f838…..aa942dc1…`），把**现行**实现状态由
+`IMPLEMENTED_PENDING_CHATGPT_REVIEW` 更新为 **`IMPLEMENTED_PENDING_USER_ACCEPTANCE`**，
+并把实现提交时点的复审待办值 `IMPLEMENTED_PENDING_CHATGPT_REVIEW` **保留为历史值**
+（`list_table_row_action_opt_in_extension_implementation_submission_status`）。**该复审通过只覆盖 §12
+与第七轮行高的代码复审**：**不**表示第七轮 157 条正式验收整体通过、**不**表示 §13 公共可选高亮已实现、
+**不**表示 §12.1 禁用态视觉已实现、**不**授权任何页面迁移。复测四条通道：通道 1 四份规范文档
+`28 / 0 / 43 / 7`（**不变**，本轮**未**改四份规范文档标记）；通道 2 本文件批准态设计标记 `81`（**不变**）；
+通道 3 本文件参考事实标记 `26`（**不变**）；通道 4 本文件候选未实现标记 `8`（**不变**）——
+本轮**未**新增／删除任何标记实例，`lt_token_count` 仍 **9**、`lt_internal_helper_class_count` 仍 **2**。
+**边界**：§13 可选高亮**公共实现仍 `NOT_STARTED`**；§12.1 禁用态视觉仍属**设计契约、尚未实现、尚未验收**
+（`CCFG-AC-157` 仍 `BLOCKED`）；第七轮验收逐条状态**未因代码复审翻转**（`CCFG-AC-010` 仍 `PASS`、
+`CCFG-AC-155~157` 仍 `BLOCKED`，统计仍 `PASS 70 / FAIL 0 / BLOCKED 72 / NOT_RUN 15`）；
+`page_migration_status` 仍 `NOT_STARTED`、`page_migration_authorization_status` 仍 `NOT_GRANTED`、
+`pilot_page_selection_status` 仍 `NOT_DECIDED`；数据源管理「更多」→三点改造仍属**后续独立任务**。
+**代码复审通过 ≠ 项目负责人目测接受 ≠ 正式验收通过 ≠ 批准页面迁移。**
 
 ## 13. 现行基础规则与可选扩展分层契约（设计基线已批准，`2026-09-29`）
 
