@@ -29,21 +29,25 @@ export const CED_DIALOG_TEMPLATE_TOKENS = [
 ] as const
 
 /**
- * Feature 决定值令牌（2）：两页取值不同，公共层不设缺省，值由接入页面提供。
- * 未提供时对应声明不构成约束（回退为初始值），不改动现有页面。
+ * Feature 决定值令牌（4）：两页取值不同，公共层不设缺省，值由接入页面提供。
+ * 未提供时对应声明不构成约束，不改动现有页面。
+ *
+ * - `--ced-label-column-width` / `--ced-dialog-safety-inset` / `--ced-label-gap`：
+ *   以 `var(--ced-*)` **无回退**消费；未提供时声明回退为初始值（无害）。
+ * - `--ced-submit-bg-loading`：以
+ *   `var(--ced-submit-bg-loading, var(--ced-submit-bg, #09090b))` 消费；未提供时回退到
+ *   主提交按钮**既有背景**（避免加载态跳色或透明），仍**不**声明任何缺省值。
  */
 export const CED_DIALOG_FEATURE_TOKENS = [
   '--ced-label-column-width',
+  '--ced-label-gap',
   '--ced-dialog-safety-inset',
+  '--ced-submit-bg-loading',
 ] as const
 
 /**
- * 全部已登记令牌（15）= 模板自有 + Feature。
+ * 全部已登记令牌（17）= 模板自有 13 + Feature 4。
  * 静态契约测试据此校验「令牌登记与 CSS 实际一致」。
- *
- * 说明：已批准设计登记表中的 `--ced-label-gap` 与 `--ced-submit-bg-loading` 本轮**未**实现——
- * 前者无纯 CSS 可复用的公共消费点（间距由页面 flex 布局／EP `label-width` 承载），
- * 后者属 Feature 可选且两页不一致、公共层不设缺省（详见实现报告「取舍」节）。
  */
 export const CED_DIALOG_TOKENS = [
   ...CED_DIALOG_TEMPLATE_TOKENS,

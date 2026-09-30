@@ -1,4 +1,4 @@
-# 新增／编辑业务弹窗公共视觉模板 · 公共实现详细设计（**已批准设计，未实现**）
+# 新增／编辑业务弹窗公共视觉模板 · 公共实现详细设计（**已批准设计；公共 CSS 已实现，Vue 未创建**）
 
 ```text
 create_edit_dialog_visual_template_document_status=APPROVED
@@ -18,9 +18,11 @@ migrated_page_count=0
 > **本文件所载为已批准的设计契约。**（项目负责人 `2026-09-30` 批准设计基线）
 > **实现分层**：文中约定的**公共 CSS 文件与静态契约测试**已由独立实现任务
 > `CREATE-EDIT-DIALOG-VISUAL-TEMPLATE-PUBLIC-CSS-IMPLEMENTATION-001` 落地
-> （`public_css_status=IMPLEMENTED_PENDING_CHATGPT_REMOTE_CODE_REVIEW`，**待远程代码复审**）——
-> 实际实现与本文的**差异**（本轮未实现的 2 个 Feature 令牌、`--ced-*` 令牌登记改为 15 个）
-> 见该任务实现报告「实现取舍」节。
+> （`public_css_status=IMPLEMENTED_PENDING_CHATGPT_REMOTE_CODE_REVIEW`，**待远程代码复审**）。
+> R0 实现提交 `c8785e1` 远程复审 `CHANGES_REQUIRED`（**17 vs 15 令牌口径**、现行文档时态自相矛盾、
+> 真实 EP 状态证据不足）；已由 `...-R1` 任务**定向纠错**：§3 的 `ced-label-row` 与 §4 的
+> `--ced-label-gap`、`--ced-submit-bg-loading` 两个 Feature 令牌补齐**真实消费点**，
+> 令牌登记**回归到本文批准的 17 个**（13 模板 + 4 Feature），不再有「已登记但未被消费」的虚令牌。
 > **公共 Vue 组件仍未创建**（`NOT_CREATED`），**任何页面均未接入**。
 
 ---
@@ -41,7 +43,7 @@ migrated_page_count=0
 
 ### 0.2 设计任务当时**不**做的事（历史时点）
 
-> 设计基线其后已由**独立批准收口任务**于 `2026-09-30` 批准；公共实现与页面接入仍**未**发生。
+> 设计基线其后已由**独立批准收口任务**于 `2026-09-30` 批准；**公共 CSS 实现**已由独立实现任务落地（**待远程代码复审**），但**设计任务当时未做**；**Vue 公共组件仍未创建**、**页面接入仍未发生**。
 
 - 不创建任何 CSS／Vue 组件／类型／断言；
 - 不修改任何页面或测试；
@@ -68,15 +70,16 @@ frontend/src/main.ts                                             # 已修改：�
 
 ---
 
-## 2. 显式 opt-in 方式（拟议）
+## 2. 显式 opt-in 方式（已实现）
 
-- 页面在**新增／编辑主弹窗**根元素挂**单一根类**（拟议 `ced-dialog`）；可选携带**数据属性**
-  （拟议 `data-ced`）用于语义标注，但**类名**为唯一 opt-in 契约。
-- 公共样式**一律**以根类为前缀，例如（拟议）：
+- 页面在**新增／编辑主弹窗**根元素挂**单一根类**（`ced-dialog`）；可选携带**数据属性**
+  （`data-ced`）用于语义标注，但**类名**为唯一 opt-in 契约。
+- 公共样式**一律**以根类为前缀，例如（**已实现**）：
 
 ```css
-/* 拟议（未创建） */
+/* 已实现（frontend/src/styles/dialog/create-edit-dialog-visual.css） */
 .ced-dialog .ced-form-label { /* 标签排版 */ }
+.ced-dialog .ced-label-row { /* 标签行（间距由 --ced-label-gap 提供） */ }
 .ced-dialog .ced-submit { /* 主提交按钮视觉 */ }
 ```
 
@@ -84,51 +87,63 @@ frontend/src/main.ts                                             # 已修改：�
 
 ---
 
-## 3. 类名与命名空间（拟议）
+## 3. 类名与命名空间（已实现）
 
 | 名称 | 用途 | 状态 |
 |---|---|---|
-| `ced-dialog` | 显式 opt-in **根类** | 拟议 · `NOT_CREATED` |
-| `ced-form-label` | 标签（供**非 EP 表单**页面挂载，如 cc） | 拟议 · `NOT_CREATED` |
-| `ced-submit` | 主提交按钮 | 拟议 · `NOT_CREATED` |
-| `ced-field-feedback` | 字段反馈稳定占位容器（供页面私有字段级反馈） | 拟议 · `NOT_CREATED` |
-| `--ced-*` | CSS 令牌命名空间 | 拟议 · `NOT_CREATED` |
+| `ced-dialog` | 显式 opt-in **根类** | **已实现** |
+| `ced-form-label` | 标签（供**非 EP 表单**页面挂载，如 cc） | **已实现** |
+| `ced-label-row` | 标签行容器：`display:flex; align-items:flex-start; gap: var(--ced-label-gap)`（供**非 EP 表单**页面的标签＋控件行） | **已实现** |
+| `ced-submit` | 主提交按钮 | **已实现** |
+| `ced-field-feedback` | 字段反馈稳定占位容器（供页面私有字段级反馈） | **已实现** |
+| `ced-field-error` | 字段错误文字（红字、可换行） | **已实现** |
+| `ced-field--error` | 控件错误态（红框 inset） | **已实现** |
+| `ced-required-mark` | 必填星号视觉（挂在 `el-form-item` 上；**纯视觉**） | **已实现** |
+| `--ced-*` | CSS 令牌命名空间 | **已实现**（17 个令牌登记，见 §4） |
 
-- **兼容 EP 表单页面**（如 ds）：拟议公共选择器**同时**支持 EP 原生标签
-  `.el-form-item__label`，在根类作用域内命中（拟议，不新增全局覆盖）。
+- **兼容 EP 表单页面**（如 ds）：公共选择器**同时**支持 EP 原生标签
+  `.el-form-item__label`，在根类作用域内命中（不新增全局覆盖）。
 - 命名空间独立于 `--lt-*`（列表表格模板）与 `--qlpt-*`（查询列表页模板，若存在）等既有命名空间。
+- **均待远程代码复审**（`IMPLEMENTED_PENDING_CHATGPT_REMOTE_CODE_REVIEW`）；**未接入页面零命中**。
 
 ---
 
-## 4. 公共视觉令牌表（拟议，全部 `NOT_CREATED`）
+## 4. 公共视觉令牌表（已实现；共 17 个 = 13 模板 + 4 Feature）
 
-| 令牌 | 拟议缺省 | 归属 | 备注 |
+> **登记口径**：17 个令牌均在 `frontend/src/styles/dialog/index.ts` 登记，且均在公共 CSS 中有**真实消费点**
+> （已由静态契约测试断言，无「已登记但未被消费」的虚令牌）。模板令牌以行内 `var(--ced-x, 缺省)` 声明缺省；
+> **4 个 Feature 令牌不声明缺省**（由接入页面提供），其中 `--ced-label-column-width`、`--ced-label-gap`、
+> `--ced-dialog-safety-inset` 以**裸 `var()`** 消费，`--ced-submit-bg-loading` 以
+> `var(--ced-submit-bg-loading, var(--ced-submit-bg, #09090b))` 消费（提供即按值呈现，未提供回退到按钮自身底色）。
+
+| 令牌 | 缺省 | 归属 | 消费点（公共 CSS 选择器 → 声明） |
 |---|---|---|---|
-| `--ced-label-font-size` | `14px` | 模板 | 两页一致 |
-| `--ced-label-font-weight` | `500` | 模板 | 两页一致 |
-| `--ced-label-color` | `#3f3f46` | 模板 | 两页一致 |
-| `--ced-label-column-width` | *（不设全局缺省）* | **Feature** | cc `84px`／ds `120px` 为现行值，**非全局定值** |
-| `--ced-label-gap` | *（不设全局缺省）* | **Feature** | cc `12px`；ds 由 `label-width` 隐含 |
-| `--ced-required-mark-color` | `var(--el-color-danger)` | 模板 | 拟议统一取危险色；cc 现为 `#f56c6c` |
-| `--ced-submit-bg` | `#09090b` | 模板 | 两页一致 |
-| `--ced-submit-bg-hover` | `#27272a` | 模板 | 两页一致 |
-| `--ced-submit-bg-active` | `#18181b` | 模板 | 两页一致 |
-| `--ced-submit-bg-loading` | *（不设全局缺省）* | **Feature 可选** | cc 现为 `#3f3f46`；ds 无 |
-| `--ced-submit-text` | `#ffffff` | 模板 | 两页一致 |
-| `--ced-submit-radius` | `6px` | 模板 | 两页一致 |
-| `--ced-submit-font-weight` | `500` | 模板 | 两页一致 |
-| `--ced-error-color` | `var(--el-color-danger)` | 模板 | 两页一致的**方向** |
-| `--ced-error-font-size` | `13px` | 模板 | cc 现为 `13px` |
-| `--ced-feedback-min-height` | `20px` | 模板（可选） | cc 现为 `20px`；用最小高度 |
-| `--ced-dialog-safety-inset` | *（不设全局缺省）* | **Feature** | cc 现为 `48px`；ds 无 |
+| `--ced-label-font-size` | `14px` | 模板 | `.ced-dialog .el-form-item__label, .ced-dialog .ced-form-label` → `font-size` |
+| `--ced-label-font-weight` | `500` | 模板 | 同上 → `font-weight` |
+| `--ced-label-color` | `#3f3f46` | 模板 | 同上 → `color` |
+| `--ced-label-column-width` | *（不设缺省）* | **Feature** | `.ced-dialog .ced-form-label` → `flex: 0 0 var(--ced-label-column-width)` |
+| `--ced-label-gap` | *（不设缺省）* | **Feature** | `.ced-dialog .ced-label-row` → `gap` |
+| `--ced-required-mark-color` | `var(--el-color-danger)` | 模板 | `.ced-dialog .ced-form-label.ced-required-mark::before, .ced-dialog .ced-required-mark .el-form-item__label::before` → `color` |
+| `--ced-submit-bg` | `#09090b` | 模板 | `.ced-dialog .ced-submit:not(.is-disabled)` → `background`/`border-color` |
+| `--ced-submit-bg-hover` | `#27272a` | 模板 | `…:not(.is-disabled):hover, …:focus` → `background`/`border-color` |
+| `--ced-submit-bg-active` | `#18181b` | 模板 | `…:not(.is-disabled):active` → `background`/`border-color` |
+| `--ced-submit-bg-loading` | *（不设缺省；回退 `--ced-submit-bg`）* | **Feature 可选** | `.ced-dialog .ced-submit.is-loading:not(.is-disabled)` → `background`/`border-color` |
+| `--ced-submit-text` | `#ffffff` | 模板 | 正常／hover／focus／active 三组 → `color` |
+| `--ced-submit-radius` | `6px` | 模板 | `.ced-dialog .ced-submit:not(.is-disabled)` → `border-radius` |
+| `--ced-submit-font-weight` | `500` | 模板 | 同上 → `font-weight` |
+| `--ced-error-color` | `var(--el-color-danger)` | 模板 | `.ced-dialog .ced-field-error` → `color`；`.ced-dialog .ced-field--error .el-input__wrapper/.el-textarea__inner` → `box-shadow` |
+| `--ced-error-font-size` | `13px` | 模板 | `.ced-dialog .ced-field-error` → `font-size` |
+| `--ced-feedback-min-height` | `20px` | 模板（可选） | `.ced-dialog .ced-field-feedback` → `min-height` |
+| `--ced-dialog-safety-inset` | *（不设缺省）* | **Feature** | `.ced-dialog` → `max-width: calc(100vw - var(--ced-dialog-safety-inset))` |
 
-> **口径**：**可比对一致**者（标签排版、主提交按钮令牌序列、错误红色方向）拟作模板缺省；
-> **两页取值不同者**（标签列宽、间距、弹窗宽度、安全边距、loading 配色）**一律**记为
-> **Feature 级可配置值**，模板**不**设全局缺省、**不**把探针端专用值当作全局默认。
+> **口径**：**可比对一致**者（标签排版、主提交按钮令牌序列、错误红色方向）作模板缺省（13 个模板令牌）；
+> **两页取值不同者**（标签列宽、间距、弹窗宽度／安全边距、loading 配色）**一律**记为
+> **Feature 级可配置值**（4 个 Feature 令牌，**不设缺省**），模板**不**把探针端专用值当作全局默认。
+> 令牌计数与「无虚令牌（已登记即有消费点）」由静态契约测试断言。
 
 ---
 
-## 5. Feature 覆盖契约（拟议）
+## 5. Feature 覆盖契约（已批准设计；页面接入未授权）
 
 - Feature 通过**在根类作用域内覆盖 `--ced-*` 变量**或**追加页面级 scoped 规则**表达差异；
   **不**复制模板的标签排版与按钮视觉规则。
@@ -138,29 +153,30 @@ frontend/src/main.ts                                             # 已修改：�
 
 ---
 
-## 6. 作用域与零泄漏规则（拟议）
+## 6. 作用域与零泄漏规则（已实现）
 
-- 所有模板选择器以根类为前缀；禁止裸全局 EP 覆盖；禁止 `!important`。
-- 拟**不**新增任何全局 CSS 变量到 `:root`（令牌仅在根类作用域内定义）。
-- 拟提供**静态契约测试**（见 §7）验证未接入页面零命中、令牌计数稳定、无 `!important`。
+- 所有模板选择器以根类为前缀；无裸全局 EP 覆盖；无 `!important`。
+- **不**新增任何全局 CSS 变量到 `:root`（令牌仅在根类作用域内定义）。
+- 已提供**静态契约测试**（见 §7）验证未接入页面零命中、令牌计数稳定、无 `!important`。
 
 ---
 
-## 7. 测试与验收设计（拟议；本设计只设计，不执行）
+## 7. 测试与验收设计（静态契约已实现；正式验收未执行）
 
-| 编号（拟议） | 类型 | 断言（拟议） |
+| 编号 | 类型 | 断言 |
 |---|---|---|
-| #1 | 静态契约 | 公共样式不含 `!important` |
-| #2 | 静态契约 | 所有 `ced-` 选择器均以 `ced-dialog` 根类为前缀（未接入零命中） |
-| #3 | 静态契约 | `--ced-*` 令牌集合与登记表一致 |
-| #4 | 组件／静态 | 仅接入页面主弹窗挂根类；未接入页面零挂载 |
-| #5 | 静态契约 | 接入页面已移除私有同义标签／按钮视觉规则（无重复来源） |
+| #1 | 静态契约 | 公共样式不含 `!important`（**已实现**） |
+| #2 | 静态契约 | 所有 `ced-` 选择器均以 `ced-dialog` 根类为前缀（未接入零命中）（**已实现**） |
+| #3 | 静态契约 | `--ced-*` 令牌集合与登记表一致（17 = 13 模板 + 4 Feature）（**已实现**） |
+| #4 | 组件／静态 | 仅接入页面主弹窗挂根类；未接入页面零挂载（**页面接入未授权**，见 `MIGRATION.md`） |
+| #5 | 静态契约 | 接入页面已移除私有同义标签／按钮视觉规则（无重复来源）（**页面接入未授权**） |
 
-- **真实浏览器验收**（拟议，将来由独立任务执行）：标签对齐、按钮状态矩阵、错误呈现、
+- **真实浏览器验收**（将来由独立任务执行）：标签对齐、按钮状态矩阵、错误呈现、
   窄视口安全边距与页脚可见性。**本设计不执行任何测试。**
-- 以上编号、断言原为**拟议**；其中静态契约部分已由实现任务落地为
-  `frontend/src/styles/dialog/create-edit-dialog-visual.spec.ts`（18 条断言），真实浏览器部分已由
-  **隔离合成夹具**（`reports/evidence/.../`）在无头 Chrome 中核对，**均待远程代码复审**。
+- 静态契约部分已由实现任务落地为 `frontend/src/styles/dialog/create-edit-dialog-visual.spec.ts`
+  （**21 条断言**）。真实浏览器部分已由 **R1 隔离合成夹具**在无头 Chrome 中，加载
+  **项目当前依赖的真实 Element Plus 样式**并用**真实 Vue／EP 组件 DOM** 核对
+  （`reports/evidence/...-R1/`），**均待远程代码复审**。
   **正式验收仍是独立且未执行的一步**（`formal_acceptance_execution_status=NOT_EXECUTED`）。
 
 ---

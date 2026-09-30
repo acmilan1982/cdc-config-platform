@@ -1,0 +1,1540 @@
+{
+  "meta": {
+    "chrome": "Google Chrome 148.0.7778.167",
+    "fixture": "http://127.0.0.1:9241/fixture.html",
+    "artifactCss": "/agent/cdc-config-platform/frontend/src/styles/dialog/create-edit-dialog-visual.css",
+    "elementPlus": "2.14.2",
+    "vue": "3.5.39",
+    "mount": {
+      "mounted": true,
+      "buttons": 8,
+      "dialog": true,
+      "error": false
+    },
+    "allowlistedRoutes": [
+      "/fixture.html",
+      "/fixture-main.js",
+      "/ced.css",
+      "/ep/index.css",
+      "/ep/index.full.mjs",
+      "/vue.js"
+    ]
+  },
+  "wide": {
+    "viewport": {
+      "innerWidth": 1280,
+      "scrollWidth": 1280
+    },
+    "epForm": {
+      "plain": {
+        "_present": true,
+        "label": {
+          "_present": true,
+          "fontSize": "14px",
+          "fontWeight": "500",
+          "color": "rgb(63, 63, 70)",
+          "textAlign": "right",
+          "backgroundColor": "rgba(0, 0, 0, 0)",
+          "backgroundImage": "none",
+          "borderTopColor": "rgb(63, 63, 70)",
+          "borderRadius": "0px",
+          "minHeight": "auto",
+          "marginTop": "0px",
+          "lineHeight": "32px",
+          "overflowWrap": "normal",
+          "boxShadow": "none",
+          "display": "flex",
+          "gap": "normal",
+          "columnGap": "normal",
+          "rowGap": "normal",
+          "alignItems": "flex-start",
+          "flexBasis": "auto",
+          "pointerEvents": "auto",
+          "position": "static",
+          "outlineStyle": "none",
+          "outlineWidth": "3px",
+          "width": "120px"
+        },
+        "star": {
+          "_present": true,
+          "fontSize": "14px",
+          "fontWeight": "500",
+          "color": "rgb(63, 63, 70)",
+          "textAlign": "right",
+          "backgroundColor": "rgba(0, 0, 0, 0)",
+          "backgroundImage": "none",
+          "borderTopColor": "rgb(63, 63, 70)",
+          "borderRadius": "0px",
+          "minHeight": "0px",
+          "marginTop": "0px",
+          "lineHeight": "32px",
+          "overflowWrap": "normal",
+          "boxShadow": "none",
+          "display": "block",
+          "gap": "normal",
+          "columnGap": "normal",
+          "rowGap": "normal",
+          "alignItems": "normal",
+          "flexBasis": "auto",
+          "pointerEvents": "auto",
+          "position": "static",
+          "outlineStyle": "none",
+          "outlineWidth": "3px",
+          "width": "auto",
+          "content": "none"
+        }
+      },
+      "marked": {
+        "_present": true,
+        "label": {
+          "_present": true,
+          "fontSize": "14px",
+          "fontWeight": "500",
+          "color": "rgb(63, 63, 70)",
+          "textAlign": "right",
+          "backgroundColor": "rgba(0, 0, 0, 0)",
+          "backgroundImage": "none",
+          "borderTopColor": "rgb(63, 63, 70)",
+          "borderRadius": "0px",
+          "minHeight": "auto",
+          "marginTop": "0px",
+          "lineHeight": "32px",
+          "overflowWrap": "normal",
+          "boxShadow": "none",
+          "display": "flex",
+          "gap": "normal",
+          "columnGap": "normal",
+          "rowGap": "normal",
+          "alignItems": "flex-start",
+          "flexBasis": "auto",
+          "pointerEvents": "auto",
+          "position": "static",
+          "outlineStyle": "none",
+          "outlineWidth": "3px",
+          "width": "120px"
+        },
+        "star": {
+          "_present": true,
+          "fontSize": "14px",
+          "fontWeight": "500",
+          "color": "rgb(245, 108, 108)",
+          "textAlign": "right",
+          "backgroundColor": "rgba(0, 0, 0, 0)",
+          "backgroundImage": "none",
+          "borderTopColor": "rgb(245, 108, 108)",
+          "borderRadius": "0px",
+          "minHeight": "auto",
+          "marginTop": "0px",
+          "lineHeight": "32px",
+          "overflowWrap": "normal",
+          "boxShadow": "none",
+          "display": "block",
+          "gap": "normal",
+          "columnGap": "normal",
+          "rowGap": "normal",
+          "alignItems": "normal",
+          "flexBasis": "auto",
+          "pointerEvents": "auto",
+          "position": "static",
+          "outlineStyle": "none",
+          "outlineWidth": "3px",
+          "width": "7px",
+          "content": "\"*\""
+        }
+      }
+    },
+    "privateForm": {
+      "label": {
+        "_present": true,
+        "fontSize": "14px",
+        "fontWeight": "500",
+        "color": "rgb(63, 63, 70)",
+        "textAlign": "right",
+        "backgroundColor": "rgba(0, 0, 0, 0)",
+        "backgroundImage": "none",
+        "borderTopColor": "rgb(63, 63, 70)",
+        "borderRadius": "0px",
+        "minHeight": "auto",
+        "marginTop": "0px",
+        "lineHeight": "normal",
+        "overflowWrap": "normal",
+        "boxShadow": "none",
+        "display": "block",
+        "gap": "normal",
+        "columnGap": "normal",
+        "rowGap": "normal",
+        "alignItems": "normal",
+        "flexBasis": "84px",
+        "pointerEvents": "auto",
+        "position": "static",
+        "outlineStyle": "none",
+        "outlineWidth": "3px",
+        "width": "84px"
+      },
+      "labelNoGap": {
+        "_present": true,
+        "fontSize": "14px",
+        "fontWeight": "500",
+        "color": "rgb(63, 63, 70)",
+        "textAlign": "right",
+        "backgroundColor": "rgba(0, 0, 0, 0)",
+        "backgroundImage": "none",
+        "borderTopColor": "rgb(63, 63, 70)",
+        "borderRadius": "0px",
+        "minHeight": "auto",
+        "marginTop": "0px",
+        "lineHeight": "normal",
+        "overflowWrap": "normal",
+        "boxShadow": "none",
+        "display": "block",
+        "gap": "normal",
+        "columnGap": "normal",
+        "rowGap": "normal",
+        "alignItems": "normal",
+        "flexBasis": "84px",
+        "pointerEvents": "auto",
+        "position": "static",
+        "outlineStyle": "none",
+        "outlineWidth": "3px",
+        "width": "84px"
+      },
+      "rowWithGap": {
+        "_present": true,
+        "fontSize": "16px",
+        "fontWeight": "400",
+        "color": "rgb(0, 0, 0)",
+        "textAlign": "start",
+        "backgroundColor": "rgba(0, 0, 0, 0)",
+        "backgroundImage": "none",
+        "borderTopColor": "rgb(0, 0, 0)",
+        "borderRadius": "0px",
+        "minHeight": "0px",
+        "marginTop": "0px",
+        "lineHeight": "normal",
+        "overflowWrap": "normal",
+        "boxShadow": "none",
+        "display": "flex",
+        "gap": "12px",
+        "columnGap": "12px",
+        "rowGap": "12px",
+        "alignItems": "flex-start",
+        "flexBasis": "auto",
+        "pointerEvents": "auto",
+        "position": "static",
+        "outlineStyle": "none",
+        "outlineWidth": "3px",
+        "width": "1280px"
+      },
+      "rowNoGap": {
+        "_present": true,
+        "fontSize": "16px",
+        "fontWeight": "400",
+        "color": "rgb(0, 0, 0)",
+        "textAlign": "start",
+        "backgroundColor": "rgba(0, 0, 0, 0)",
+        "backgroundImage": "none",
+        "borderTopColor": "rgb(0, 0, 0)",
+        "borderRadius": "0px",
+        "minHeight": "0px",
+        "marginTop": "0px",
+        "lineHeight": "normal",
+        "overflowWrap": "normal",
+        "boxShadow": "none",
+        "display": "flex",
+        "gap": "normal",
+        "columnGap": "normal",
+        "rowGap": "normal",
+        "alignItems": "flex-start",
+        "flexBasis": "auto",
+        "pointerEvents": "auto",
+        "position": "static",
+        "outlineStyle": "none",
+        "outlineWidth": "3px",
+        "width": "1280px"
+      }
+    },
+    "buttons": {
+      "normal": {
+        "_present": true,
+        "fontSize": "14px",
+        "fontWeight": "500",
+        "color": "rgb(255, 255, 255)",
+        "textAlign": "center",
+        "backgroundColor": "rgb(9, 9, 11)",
+        "backgroundImage": "none",
+        "borderTopColor": "rgb(9, 9, 11)",
+        "borderRadius": "6px",
+        "minHeight": "0px",
+        "marginTop": "0px",
+        "lineHeight": "14px",
+        "overflowWrap": "normal",
+        "boxShadow": "none",
+        "display": "inline-flex",
+        "gap": "normal",
+        "columnGap": "normal",
+        "rowGap": "normal",
+        "alignItems": "center",
+        "flexBasis": "auto",
+        "pointerEvents": "auto",
+        "position": "static",
+        "outlineStyle": "none",
+        "outlineWidth": "3px",
+        "width": "60px"
+      },
+      "disabled": {
+        "_present": true,
+        "fontSize": "14px",
+        "fontWeight": "500",
+        "color": "rgb(255, 255, 255)",
+        "textAlign": "center",
+        "backgroundColor": "rgb(160, 207, 255)",
+        "backgroundImage": "none",
+        "borderTopColor": "rgb(160, 207, 255)",
+        "borderRadius": "4px",
+        "minHeight": "0px",
+        "marginTop": "0px",
+        "lineHeight": "14px",
+        "overflowWrap": "normal",
+        "boxShadow": "none",
+        "display": "inline-flex",
+        "gap": "normal",
+        "columnGap": "normal",
+        "rowGap": "normal",
+        "alignItems": "center",
+        "flexBasis": "auto",
+        "pointerEvents": "auto",
+        "position": "static",
+        "outlineStyle": "none",
+        "outlineWidth": "3px",
+        "width": "60px"
+      },
+      "loading": {
+        "_present": true,
+        "fontSize": "14px",
+        "fontWeight": "500",
+        "color": "rgb(255, 255, 255)",
+        "textAlign": "center",
+        "backgroundColor": "rgb(9, 9, 11)",
+        "backgroundImage": "none",
+        "borderTopColor": "rgb(9, 9, 11)",
+        "borderRadius": "6px",
+        "minHeight": "0px",
+        "marginTop": "0px",
+        "lineHeight": "14px",
+        "overflowWrap": "normal",
+        "boxShadow": "none",
+        "display": "inline-flex",
+        "gap": "normal",
+        "columnGap": "normal",
+        "rowGap": "normal",
+        "alignItems": "center",
+        "flexBasis": "auto",
+        "pointerEvents": "none",
+        "position": "relative",
+        "outlineStyle": "none",
+        "outlineWidth": "3px",
+        "width": "80px"
+      },
+      "loadingBefore": {
+        "_present": true,
+        "fontSize": "14px",
+        "fontWeight": "500",
+        "color": "rgb(255, 255, 255)",
+        "textAlign": "center",
+        "backgroundColor": "rgba(255, 255, 255, 0.3)",
+        "backgroundImage": "none",
+        "borderTopColor": "rgb(255, 255, 255)",
+        "borderRadius": "6px",
+        "minHeight": "0px",
+        "marginTop": "0px",
+        "lineHeight": "14px",
+        "overflowWrap": "normal",
+        "boxShadow": "none",
+        "display": "block",
+        "gap": "normal",
+        "columnGap": "normal",
+        "rowGap": "normal",
+        "alignItems": "normal",
+        "flexBasis": "auto",
+        "pointerEvents": "none",
+        "position": "absolute",
+        "outlineStyle": "none",
+        "outlineWidth": "3px",
+        "width": "80px",
+        "content": "\"\""
+      },
+      "loadingVar": {
+        "_present": true,
+        "fontSize": "14px",
+        "fontWeight": "500",
+        "color": "rgb(255, 255, 255)",
+        "textAlign": "center",
+        "backgroundColor": "rgb(63, 63, 70)",
+        "backgroundImage": "none",
+        "borderTopColor": "rgb(63, 63, 70)",
+        "borderRadius": "6px",
+        "minHeight": "0px",
+        "marginTop": "0px",
+        "lineHeight": "14px",
+        "overflowWrap": "normal",
+        "boxShadow": "none",
+        "display": "inline-flex",
+        "gap": "normal",
+        "columnGap": "normal",
+        "rowGap": "normal",
+        "alignItems": "center",
+        "flexBasis": "auto",
+        "pointerEvents": "none",
+        "position": "relative",
+        "outlineStyle": "none",
+        "outlineWidth": "3px",
+        "width": "80px"
+      },
+      "loadingVarBefore": {
+        "_present": true,
+        "fontSize": "14px",
+        "fontWeight": "500",
+        "color": "rgb(255, 255, 255)",
+        "textAlign": "center",
+        "backgroundColor": "rgba(255, 255, 255, 0.3)",
+        "backgroundImage": "none",
+        "borderTopColor": "rgb(255, 255, 255)",
+        "borderRadius": "6px",
+        "minHeight": "0px",
+        "marginTop": "0px",
+        "lineHeight": "14px",
+        "overflowWrap": "normal",
+        "boxShadow": "none",
+        "display": "block",
+        "gap": "normal",
+        "columnGap": "normal",
+        "rowGap": "normal",
+        "alignItems": "normal",
+        "flexBasis": "auto",
+        "pointerEvents": "none",
+        "position": "absolute",
+        "outlineStyle": "none",
+        "outlineWidth": "3px",
+        "width": "80px",
+        "content": "\"\""
+      },
+      "cancel": {
+        "_present": true,
+        "fontSize": "14px",
+        "fontWeight": "500",
+        "color": "rgb(96, 98, 102)",
+        "textAlign": "center",
+        "backgroundColor": "rgb(255, 255, 255)",
+        "backgroundImage": "none",
+        "borderTopColor": "rgb(220, 223, 230)",
+        "borderRadius": "4px",
+        "minHeight": "0px",
+        "marginTop": "0px",
+        "lineHeight": "14px",
+        "overflowWrap": "normal",
+        "boxShadow": "none",
+        "display": "inline-flex",
+        "gap": "normal",
+        "columnGap": "normal",
+        "rowGap": "normal",
+        "alignItems": "center",
+        "flexBasis": "auto",
+        "pointerEvents": "auto",
+        "position": "static",
+        "outlineStyle": "none",
+        "outlineWidth": "3px",
+        "width": "60px"
+      },
+      "derived": {
+        "_present": true,
+        "fontSize": "14px",
+        "fontWeight": "500",
+        "color": "rgb(96, 98, 102)",
+        "textAlign": "center",
+        "backgroundColor": "rgb(255, 255, 255)",
+        "backgroundImage": "none",
+        "borderTopColor": "rgb(220, 223, 230)",
+        "borderRadius": "4px",
+        "minHeight": "0px",
+        "marginTop": "0px",
+        "lineHeight": "14px",
+        "overflowWrap": "normal",
+        "boxShadow": "none",
+        "display": "inline-flex",
+        "gap": "normal",
+        "columnGap": "normal",
+        "rowGap": "normal",
+        "alignItems": "center",
+        "flexBasis": "auto",
+        "pointerEvents": "auto",
+        "position": "static",
+        "outlineStyle": "none",
+        "outlineWidth": "3px",
+        "width": "88px"
+      },
+      "flags": {
+        "normal": {
+          "_present": true,
+          "hasDisabledAttr": false,
+          "isDisabledClass": false,
+          "isLoadingClass": false,
+          "className": "el-button el-button--primary ced-submit"
+        },
+        "disabled": {
+          "_present": true,
+          "hasDisabledAttr": true,
+          "isDisabledClass": true,
+          "isLoadingClass": false,
+          "className": "el-button el-button--primary is-disabled ced-submit"
+        },
+        "loading": {
+          "_present": true,
+          "hasDisabledAttr": true,
+          "isDisabledClass": false,
+          "isLoadingClass": true,
+          "className": "el-button el-button--primary is-loading ced-submit"
+        },
+        "loadingVar": {
+          "_present": true,
+          "hasDisabledAttr": true,
+          "isDisabledClass": false,
+          "isLoadingClass": true,
+          "className": "el-button el-button--primary is-loading ced-submit"
+        }
+      }
+    },
+    "plain": {
+      "label": {
+        "_present": true,
+        "fontSize": "16px",
+        "fontWeight": "400",
+        "color": "rgb(0, 0, 0)",
+        "textAlign": "start",
+        "backgroundColor": "rgba(0, 0, 0, 0)",
+        "backgroundImage": "none",
+        "borderTopColor": "rgb(0, 0, 0)",
+        "borderRadius": "0px",
+        "minHeight": "0px",
+        "marginTop": "0px",
+        "lineHeight": "normal",
+        "overflowWrap": "normal",
+        "boxShadow": "none",
+        "display": "inline",
+        "gap": "normal",
+        "columnGap": "normal",
+        "rowGap": "normal",
+        "alignItems": "normal",
+        "flexBasis": "auto",
+        "pointerEvents": "auto",
+        "position": "static",
+        "outlineStyle": "none",
+        "outlineWidth": "3px",
+        "width": "auto"
+      },
+      "row": {
+        "_present": true,
+        "fontSize": "16px",
+        "fontWeight": "400",
+        "color": "rgb(0, 0, 0)",
+        "textAlign": "start",
+        "backgroundColor": "rgba(0, 0, 0, 0)",
+        "backgroundImage": "none",
+        "borderTopColor": "rgb(0, 0, 0)",
+        "borderRadius": "0px",
+        "minHeight": "0px",
+        "marginTop": "0px",
+        "lineHeight": "normal",
+        "overflowWrap": "normal",
+        "boxShadow": "none",
+        "display": "block",
+        "gap": "normal",
+        "columnGap": "normal",
+        "rowGap": "normal",
+        "alignItems": "normal",
+        "flexBasis": "auto",
+        "pointerEvents": "auto",
+        "position": "static",
+        "outlineStyle": "none",
+        "outlineWidth": "3px",
+        "width": "1280px"
+      },
+      "rowLabel": {
+        "_present": true,
+        "fontSize": "16px",
+        "fontWeight": "400",
+        "color": "rgb(0, 0, 0)",
+        "textAlign": "start",
+        "backgroundColor": "rgba(0, 0, 0, 0)",
+        "backgroundImage": "none",
+        "borderTopColor": "rgb(0, 0, 0)",
+        "borderRadius": "0px",
+        "minHeight": "0px",
+        "marginTop": "0px",
+        "lineHeight": "normal",
+        "overflowWrap": "normal",
+        "boxShadow": "none",
+        "display": "inline",
+        "gap": "normal",
+        "columnGap": "normal",
+        "rowGap": "normal",
+        "alignItems": "normal",
+        "flexBasis": "auto",
+        "pointerEvents": "auto",
+        "position": "static",
+        "outlineStyle": "none",
+        "outlineWidth": "3px",
+        "width": "auto"
+      },
+      "submit": {
+        "_present": true,
+        "fontSize": "14px",
+        "fontWeight": "500",
+        "color": "rgb(255, 255, 255)",
+        "textAlign": "center",
+        "backgroundColor": "rgb(64, 158, 255)",
+        "backgroundImage": "none",
+        "borderTopColor": "rgb(64, 158, 255)",
+        "borderRadius": "4px",
+        "minHeight": "0px",
+        "marginTop": "0px",
+        "lineHeight": "14px",
+        "overflowWrap": "normal",
+        "boxShadow": "none",
+        "display": "inline-flex",
+        "gap": "normal",
+        "columnGap": "normal",
+        "rowGap": "normal",
+        "alignItems": "center",
+        "flexBasis": "auto",
+        "pointerEvents": "auto",
+        "position": "static",
+        "outlineStyle": "none",
+        "outlineWidth": "3px",
+        "width": "60px"
+      },
+      "loading": {
+        "_present": true,
+        "fontSize": "14px",
+        "fontWeight": "500",
+        "color": "rgb(255, 255, 255)",
+        "textAlign": "center",
+        "backgroundColor": "rgb(64, 158, 255)",
+        "backgroundImage": "none",
+        "borderTopColor": "rgb(64, 158, 255)",
+        "borderRadius": "4px",
+        "minHeight": "0px",
+        "marginTop": "0px",
+        "lineHeight": "14px",
+        "overflowWrap": "normal",
+        "boxShadow": "none",
+        "display": "inline-flex",
+        "gap": "normal",
+        "columnGap": "normal",
+        "rowGap": "normal",
+        "alignItems": "center",
+        "flexBasis": "auto",
+        "pointerEvents": "none",
+        "position": "relative",
+        "outlineStyle": "none",
+        "outlineWidth": "3px",
+        "width": "80px"
+      },
+      "submitFlags": {
+        "_present": true,
+        "hasDisabledAttr": false,
+        "isDisabledClass": false,
+        "isLoadingClass": false,
+        "className": "el-button el-button--primary ced-submit"
+      },
+      "loadingFlags": {
+        "_present": true,
+        "hasDisabledAttr": true,
+        "isDisabledClass": false,
+        "isLoadingClass": true,
+        "className": "el-button el-button--primary is-loading ced-submit"
+      }
+    },
+    "dialog": {
+      "exists": true,
+      "className": "el-dialog ced-dialog",
+      "label": {
+        "_present": true,
+        "fontSize": "14px",
+        "fontWeight": "500",
+        "color": "rgb(63, 63, 70)",
+        "textAlign": "right",
+        "backgroundColor": "rgba(0, 0, 0, 0)",
+        "backgroundImage": "none",
+        "borderTopColor": "rgb(63, 63, 70)",
+        "borderRadius": "0px",
+        "minHeight": "auto",
+        "marginTop": "0px",
+        "lineHeight": "32px",
+        "overflowWrap": "break-word",
+        "boxShadow": "none",
+        "display": "flex",
+        "gap": "normal",
+        "columnGap": "normal",
+        "rowGap": "normal",
+        "alignItems": "flex-start",
+        "flexBasis": "auto",
+        "pointerEvents": "auto",
+        "position": "static",
+        "outlineStyle": "none",
+        "outlineWidth": "3px",
+        "width": "120px"
+      },
+      "width": {
+        "width": 620
+      }
+    },
+    "counts": {
+      "cedDialog": 6,
+      "cedDialogInPlain": 0
+    }
+  },
+  "states": {
+    "hover": {
+      "observed": {
+        "matchesHover": true,
+        "matchesActive": false,
+        "matchesFocus": false,
+        "matchesFocusVisible": false
+      },
+      "style": {
+        "_present": true,
+        "backgroundColor": "rgb(39, 39, 42)",
+        "borderTopColor": "rgb(39, 39, 42)",
+        "color": "rgb(255, 255, 255)",
+        "outlineStyle": "none",
+        "outlineWidth": "3px",
+        "outlineColor": "rgb(255, 255, 255)"
+      },
+      "rules": {
+        "matched": [
+          {
+            "selector": "button",
+            "origin": "user-agent",
+            "sheet": null,
+            "declarations": []
+          },
+          {
+            "selector": "input, textarea, select, button",
+            "origin": "user-agent",
+            "sheet": null,
+            "declarations": [
+              "font-weight: ",
+              "color: fieldtext"
+            ]
+          },
+          {
+            "selector": "input[type=\"button\" i], input[type=\"submit\" i], input[type=\"reset\" i], input[type=\"file\" i]::-webkit-file-upload-button, button",
+            "origin": "user-agent",
+            "sheet": null,
+            "declarations": [
+              "cursor: default",
+              "background-color: buttonface",
+              "color: buttontext"
+            ]
+          },
+          {
+            "selector": ".el-button",
+            "origin": "regular",
+            "sheet": "http://127.0.0.1:9241/ep/index.css",
+            "declarations": [
+              "cursor: pointer",
+              "color: var(--el-button-text-color)",
+              "font-weight: var(--el-button-font-weight)",
+              "background-color: var(--el-button-bg-color)",
+              "border-color: var(--el-button-border-color)",
+              "cursor: pointer",
+              "color: var(--el-button-text-color)",
+              "font-weight: var(--el-button-font-weight)",
+              "background-color: var(--el-button-bg-color)"
+            ]
+          },
+          {
+            "selector": ".el-button",
+            "origin": "regular",
+            "sheet": "http://127.0.0.1:9241/ep/index.css",
+            "declarations": [
+              "border-radius: var(--el-border-radius-base)"
+            ]
+          },
+          {
+            "selector": ".el-button--primary",
+            "origin": "regular",
+            "sheet": "http://127.0.0.1:9241/ep/index.css",
+            "declarations": []
+          },
+          {
+            "selector": ".el-button:hover",
+            "origin": "regular",
+            "sheet": "http://127.0.0.1:9241/ep/index.css",
+            "declarations": [
+              "color: var(--el-button-hover-text-color)",
+              "border-color: var(--el-button-hover-border-color)",
+              "background-color: var(--el-button-hover-bg-color)",
+              "color: var(--el-button-hover-text-color)",
+              "background-color: var(--el-button-hover-bg-color)"
+            ]
+          },
+          {
+            "selector": ".ced-dialog .ced-submit:not(.is-disabled)",
+            "origin": "regular",
+            "sheet": "http://127.0.0.1:9241/ced.css",
+            "declarations": [
+              "background: var(--ced-submit-bg, #09090b)",
+              "border-color: var(--ced-submit-bg, #09090b)",
+              "color: var(--ced-submit-text, #ffffff)",
+              "border-radius: var(--ced-submit-radius, 6px)",
+              "font-weight: var(--ced-submit-font-weight, 500)",
+              "background-color: ",
+              "color: var(--ced-submit-text, #ffffff)",
+              "font-weight: var(--ced-submit-font-weight, 500)"
+            ]
+          },
+          {
+            "selector": ".ced-dialog .ced-submit:not(.is-disabled):hover, .ced-dialog .ced-submit:not(.is-disabled):focus",
+            "origin": "regular",
+            "sheet": "http://127.0.0.1:9241/ced.css",
+            "declarations": [
+              "background: var(--ced-submit-bg-hover, #27272a)",
+              "border-color: var(--ced-submit-bg-hover, #27272a)",
+              "color: var(--ced-submit-text, #ffffff)",
+              "background-color: ",
+              "color: var(--ced-submit-text, #ffffff)"
+            ]
+          }
+        ],
+        "pseudo": []
+      }
+    },
+    "active": {
+      "observed": {
+        "matchesHover": false,
+        "matchesActive": true,
+        "matchesFocus": false,
+        "matchesFocusVisible": false
+      },
+      "style": {
+        "_present": true,
+        "backgroundColor": "rgb(24, 24, 27)",
+        "borderTopColor": "rgb(24, 24, 27)",
+        "color": "rgb(255, 255, 255)",
+        "outlineStyle": "none",
+        "outlineWidth": "3px",
+        "outlineColor": "rgb(255, 255, 255)"
+      },
+      "rules": null
+    },
+    "focus": {
+      "observed": {
+        "matchesHover": false,
+        "matchesActive": false,
+        "matchesFocus": true,
+        "matchesFocusVisible": false
+      },
+      "style": {
+        "_present": true,
+        "backgroundColor": "rgb(39, 39, 42)",
+        "borderTopColor": "rgb(39, 39, 42)",
+        "color": "rgb(255, 255, 255)",
+        "outlineStyle": "none",
+        "outlineWidth": "3px",
+        "outlineColor": "rgb(255, 255, 255)"
+      },
+      "rules": null
+    },
+    "focusVisible": {
+      "observed": {
+        "matchesHover": false,
+        "matchesActive": false,
+        "matchesFocus": false,
+        "matchesFocusVisible": true
+      },
+      "style": {
+        "_present": true,
+        "backgroundColor": "rgb(9, 9, 11)",
+        "borderTopColor": "rgb(9, 9, 11)",
+        "color": "rgb(255, 255, 255)",
+        "outlineStyle": "solid",
+        "outlineWidth": "2px",
+        "outlineColor": "rgb(160, 207, 255)"
+      },
+      "rules": null
+    },
+    "loadingHover": {
+      "style": {
+        "_present": true,
+        "backgroundColor": "rgb(9, 9, 11)",
+        "borderTopColor": "rgb(9, 9, 11)",
+        "color": "rgb(255, 255, 255)",
+        "outlineStyle": "none",
+        "outlineWidth": "3px",
+        "outlineColor": "rgb(255, 255, 255)"
+      },
+      "rules": {
+        "matched": [
+          {
+            "selector": "button",
+            "origin": "user-agent",
+            "sheet": null,
+            "declarations": []
+          },
+          {
+            "selector": "input, textarea, select, button",
+            "origin": "user-agent",
+            "sheet": null,
+            "declarations": [
+              "font-weight: ",
+              "color: fieldtext"
+            ]
+          },
+          {
+            "selector": "input[type=\"button\" i], input[type=\"submit\" i], input[type=\"reset\" i], input[type=\"file\" i]::-webkit-file-upload-button, button",
+            "origin": "user-agent",
+            "sheet": null,
+            "declarations": [
+              "cursor: default",
+              "background-color: buttonface",
+              "color: buttontext"
+            ]
+          },
+          {
+            "selector": "input[type=\"button\" i]:disabled, input[type=\"submit\" i]:disabled, input[type=\"reset\" i]:disabled, input[type=\"file\" i]:disabled::-webkit-file-upload-button, button:disabled",
+            "origin": "user-agent",
+            "sheet": null,
+            "declarations": [
+              "background-color: light-dark(rgba(239, 239, 239, 0.3), rgba(19, 1, 1, 0.3))",
+              "color: light-dark(rgba(16, 16, 16, 0.3), rgba(255, 255, 255, 0.3))"
+            ]
+          },
+          {
+            "selector": ".el-button",
+            "origin": "regular",
+            "sheet": "http://127.0.0.1:9241/ep/index.css",
+            "declarations": [
+              "cursor: pointer",
+              "color: var(--el-button-text-color)",
+              "font-weight: var(--el-button-font-weight)",
+              "background-color: var(--el-button-bg-color)",
+              "border-color: var(--el-button-border-color)",
+              "cursor: pointer",
+              "color: var(--el-button-text-color)",
+              "font-weight: var(--el-button-font-weight)",
+              "background-color: var(--el-button-bg-color)"
+            ]
+          },
+          {
+            "selector": ".el-button",
+            "origin": "regular",
+            "sheet": "http://127.0.0.1:9241/ep/index.css",
+            "declarations": [
+              "border-radius: var(--el-border-radius-base)"
+            ]
+          },
+          {
+            "selector": ".el-button--primary",
+            "origin": "regular",
+            "sheet": "http://127.0.0.1:9241/ep/index.css",
+            "declarations": []
+          },
+          {
+            "selector": ".el-button:hover",
+            "origin": "regular",
+            "sheet": "http://127.0.0.1:9241/ep/index.css",
+            "declarations": [
+              "color: var(--el-button-hover-text-color)",
+              "border-color: var(--el-button-hover-border-color)",
+              "background-color: var(--el-button-hover-bg-color)",
+              "color: var(--el-button-hover-text-color)",
+              "background-color: var(--el-button-hover-bg-color)"
+            ]
+          },
+          {
+            "selector": ".el-button + .el-button",
+            "origin": "regular",
+            "sheet": "http://127.0.0.1:9241/ep/index.css",
+            "declarations": []
+          },
+          {
+            "selector": ".el-button.is-loading",
+            "origin": "regular",
+            "sheet": "http://127.0.0.1:9241/ep/index.css",
+            "declarations": [
+              "pointer-events: none",
+              "position: relative",
+              "pointer-events: none",
+              "position: relative"
+            ]
+          },
+          {
+            "selector": ".ced-dialog .ced-submit:not(.is-disabled)",
+            "origin": "regular",
+            "sheet": "http://127.0.0.1:9241/ced.css",
+            "declarations": [
+              "background: var(--ced-submit-bg, #09090b)",
+              "border-color: var(--ced-submit-bg, #09090b)",
+              "color: var(--ced-submit-text, #ffffff)",
+              "border-radius: var(--ced-submit-radius, 6px)",
+              "font-weight: var(--ced-submit-font-weight, 500)",
+              "background-color: ",
+              "color: var(--ced-submit-text, #ffffff)",
+              "font-weight: var(--ced-submit-font-weight, 500)"
+            ]
+          },
+          {
+            "selector": ".ced-dialog .ced-submit:not(.is-disabled):hover, .ced-dialog .ced-submit:not(.is-disabled):focus",
+            "origin": "regular",
+            "sheet": "http://127.0.0.1:9241/ced.css",
+            "declarations": [
+              "background: var(--ced-submit-bg-hover, #27272a)",
+              "border-color: var(--ced-submit-bg-hover, #27272a)",
+              "color: var(--ced-submit-text, #ffffff)",
+              "background-color: ",
+              "color: var(--ced-submit-text, #ffffff)"
+            ]
+          },
+          {
+            "selector": ".ced-dialog .ced-submit.is-loading:not(.is-disabled)",
+            "origin": "regular",
+            "sheet": "http://127.0.0.1:9241/ced.css",
+            "declarations": [
+              "background: var(--ced-submit-bg-loading, var(--ced-submit-bg, #09090b))",
+              "border-color: var(--ced-submit-bg-loading, var(--ced-submit-bg, #09090b))",
+              "background-color: "
+            ]
+          }
+        ],
+        "pseudo": [
+          {
+            "pseudoType": "before",
+            "matched": []
+          }
+        ]
+      }
+    },
+    "disabledHover": {
+      "style": {
+        "_present": true,
+        "backgroundColor": "rgb(160, 207, 255)",
+        "borderTopColor": "rgb(160, 207, 255)",
+        "color": "rgb(255, 255, 255)",
+        "outlineStyle": "none",
+        "outlineWidth": "3px",
+        "outlineColor": "rgb(255, 255, 255)"
+      },
+      "rules": {
+        "matched": [
+          {
+            "selector": "button",
+            "origin": "user-agent",
+            "sheet": null,
+            "declarations": []
+          },
+          {
+            "selector": "input, textarea, select, button",
+            "origin": "user-agent",
+            "sheet": null,
+            "declarations": [
+              "font-weight: ",
+              "color: fieldtext"
+            ]
+          },
+          {
+            "selector": "input[type=\"button\" i], input[type=\"submit\" i], input[type=\"reset\" i], input[type=\"file\" i]::-webkit-file-upload-button, button",
+            "origin": "user-agent",
+            "sheet": null,
+            "declarations": [
+              "cursor: default",
+              "background-color: buttonface",
+              "color: buttontext"
+            ]
+          },
+          {
+            "selector": "input[type=\"button\" i]:disabled, input[type=\"submit\" i]:disabled, input[type=\"reset\" i]:disabled, input[type=\"file\" i]:disabled::-webkit-file-upload-button, button:disabled",
+            "origin": "user-agent",
+            "sheet": null,
+            "declarations": [
+              "background-color: light-dark(rgba(239, 239, 239, 0.3), rgba(19, 1, 1, 0.3))",
+              "color: light-dark(rgba(16, 16, 16, 0.3), rgba(255, 255, 255, 0.3))"
+            ]
+          },
+          {
+            "selector": ".el-button",
+            "origin": "regular",
+            "sheet": "http://127.0.0.1:9241/ep/index.css",
+            "declarations": [
+              "cursor: pointer",
+              "color: var(--el-button-text-color)",
+              "font-weight: var(--el-button-font-weight)",
+              "background-color: var(--el-button-bg-color)",
+              "border-color: var(--el-button-border-color)",
+              "cursor: pointer",
+              "color: var(--el-button-text-color)",
+              "font-weight: var(--el-button-font-weight)",
+              "background-color: var(--el-button-bg-color)"
+            ]
+          },
+          {
+            "selector": ".el-button",
+            "origin": "regular",
+            "sheet": "http://127.0.0.1:9241/ep/index.css",
+            "declarations": [
+              "border-radius: var(--el-border-radius-base)"
+            ]
+          },
+          {
+            "selector": ".el-button--primary",
+            "origin": "regular",
+            "sheet": "http://127.0.0.1:9241/ep/index.css",
+            "declarations": []
+          },
+          {
+            "selector": ".el-button:hover",
+            "origin": "regular",
+            "sheet": "http://127.0.0.1:9241/ep/index.css",
+            "declarations": [
+              "color: var(--el-button-hover-text-color)",
+              "border-color: var(--el-button-hover-border-color)",
+              "background-color: var(--el-button-hover-bg-color)",
+              "color: var(--el-button-hover-text-color)",
+              "background-color: var(--el-button-hover-bg-color)"
+            ]
+          },
+          {
+            "selector": ".el-button + .el-button",
+            "origin": "regular",
+            "sheet": "http://127.0.0.1:9241/ep/index.css",
+            "declarations": []
+          },
+          {
+            "selector": ".el-button.is-disabled, .el-button.is-disabled:hover",
+            "origin": "regular",
+            "sheet": "http://127.0.0.1:9241/ep/index.css",
+            "declarations": [
+              "color: var(--el-button-disabled-text-color)",
+              "cursor: not-allowed",
+              "background-color: var(--el-button-disabled-bg-color)",
+              "border-color: var(--el-button-disabled-border-color)",
+              "color: var(--el-button-disabled-text-color)",
+              "cursor: not-allowed",
+              "background-color: var(--el-button-disabled-bg-color)"
+            ]
+          }
+        ],
+        "pseudo": []
+      }
+    }
+  },
+  "narrow": {
+    "innerWidth": 400,
+    "opted": {
+      "_present": true,
+      "width": 352,
+      "maxWidth": "352px",
+      "scrollWidth": 352,
+      "clientWidth": 352
+    },
+    "plain": {
+      "_present": true,
+      "width": 400,
+      "maxWidth": "none",
+      "scrollWidth": 400,
+      "clientWidth": 400
+    }
+  },
+  "matched": {
+    "loadingButton": {
+      "matched": [
+        {
+          "selector": "button",
+          "origin": "user-agent",
+          "sheet": null,
+          "declarations": []
+        },
+        {
+          "selector": "input, textarea, select, button",
+          "origin": "user-agent",
+          "sheet": null,
+          "declarations": [
+            "font-weight: ",
+            "color: fieldtext"
+          ]
+        },
+        {
+          "selector": "input[type=\"button\" i], input[type=\"submit\" i], input[type=\"reset\" i], input[type=\"file\" i]::-webkit-file-upload-button, button",
+          "origin": "user-agent",
+          "sheet": null,
+          "declarations": [
+            "cursor: default",
+            "background-color: buttonface",
+            "color: buttontext"
+          ]
+        },
+        {
+          "selector": "input[type=\"button\" i]:disabled, input[type=\"submit\" i]:disabled, input[type=\"reset\" i]:disabled, input[type=\"file\" i]:disabled::-webkit-file-upload-button, button:disabled",
+          "origin": "user-agent",
+          "sheet": null,
+          "declarations": [
+            "background-color: light-dark(rgba(239, 239, 239, 0.3), rgba(19, 1, 1, 0.3))",
+            "color: light-dark(rgba(16, 16, 16, 0.3), rgba(255, 255, 255, 0.3))"
+          ]
+        },
+        {
+          "selector": ".el-button",
+          "origin": "regular",
+          "sheet": "http://127.0.0.1:9241/ep/index.css",
+          "declarations": [
+            "cursor: pointer",
+            "color: var(--el-button-text-color)",
+            "font-weight: var(--el-button-font-weight)",
+            "background-color: var(--el-button-bg-color)",
+            "border-color: var(--el-button-border-color)",
+            "cursor: pointer",
+            "color: var(--el-button-text-color)",
+            "font-weight: var(--el-button-font-weight)",
+            "background-color: var(--el-button-bg-color)"
+          ]
+        },
+        {
+          "selector": ".el-button",
+          "origin": "regular",
+          "sheet": "http://127.0.0.1:9241/ep/index.css",
+          "declarations": [
+            "border-radius: var(--el-border-radius-base)"
+          ]
+        },
+        {
+          "selector": ".el-button--primary",
+          "origin": "regular",
+          "sheet": "http://127.0.0.1:9241/ep/index.css",
+          "declarations": []
+        },
+        {
+          "selector": ".el-button + .el-button",
+          "origin": "regular",
+          "sheet": "http://127.0.0.1:9241/ep/index.css",
+          "declarations": []
+        },
+        {
+          "selector": ".el-button.is-loading",
+          "origin": "regular",
+          "sheet": "http://127.0.0.1:9241/ep/index.css",
+          "declarations": [
+            "pointer-events: none",
+            "position: relative",
+            "pointer-events: none",
+            "position: relative"
+          ]
+        },
+        {
+          "selector": ".ced-dialog .ced-submit:not(.is-disabled)",
+          "origin": "regular",
+          "sheet": "http://127.0.0.1:9241/ced.css",
+          "declarations": [
+            "background: var(--ced-submit-bg, #09090b)",
+            "border-color: var(--ced-submit-bg, #09090b)",
+            "color: var(--ced-submit-text, #ffffff)",
+            "border-radius: var(--ced-submit-radius, 6px)",
+            "font-weight: var(--ced-submit-font-weight, 500)",
+            "background-color: ",
+            "color: var(--ced-submit-text, #ffffff)",
+            "font-weight: var(--ced-submit-font-weight, 500)"
+          ]
+        },
+        {
+          "selector": ".ced-dialog .ced-submit.is-loading:not(.is-disabled)",
+          "origin": "regular",
+          "sheet": "http://127.0.0.1:9241/ced.css",
+          "declarations": [
+            "background: var(--ced-submit-bg-loading, var(--ced-submit-bg, #09090b))",
+            "border-color: var(--ced-submit-bg-loading, var(--ced-submit-bg, #09090b))",
+            "background-color: "
+          ]
+        }
+      ],
+      "pseudo": [
+        {
+          "pseudoType": "before",
+          "matched": []
+        }
+      ]
+    },
+    "loadingButtonVar": {
+      "matched": [
+        {
+          "selector": "button",
+          "origin": "user-agent",
+          "sheet": null,
+          "declarations": []
+        },
+        {
+          "selector": "input, textarea, select, button",
+          "origin": "user-agent",
+          "sheet": null,
+          "declarations": [
+            "font-weight: ",
+            "color: fieldtext"
+          ]
+        },
+        {
+          "selector": "input[type=\"button\" i], input[type=\"submit\" i], input[type=\"reset\" i], input[type=\"file\" i]::-webkit-file-upload-button, button",
+          "origin": "user-agent",
+          "sheet": null,
+          "declarations": [
+            "cursor: default",
+            "background-color: buttonface",
+            "color: buttontext"
+          ]
+        },
+        {
+          "selector": "input[type=\"button\" i]:disabled, input[type=\"submit\" i]:disabled, input[type=\"reset\" i]:disabled, input[type=\"file\" i]:disabled::-webkit-file-upload-button, button:disabled",
+          "origin": "user-agent",
+          "sheet": null,
+          "declarations": [
+            "background-color: light-dark(rgba(239, 239, 239, 0.3), rgba(19, 1, 1, 0.3))",
+            "color: light-dark(rgba(16, 16, 16, 0.3), rgba(255, 255, 255, 0.3))"
+          ]
+        },
+        {
+          "selector": ".el-button",
+          "origin": "regular",
+          "sheet": "http://127.0.0.1:9241/ep/index.css",
+          "declarations": [
+            "cursor: pointer",
+            "color: var(--el-button-text-color)",
+            "font-weight: var(--el-button-font-weight)",
+            "background-color: var(--el-button-bg-color)",
+            "border-color: var(--el-button-border-color)",
+            "cursor: pointer",
+            "color: var(--el-button-text-color)",
+            "font-weight: var(--el-button-font-weight)",
+            "background-color: var(--el-button-bg-color)"
+          ]
+        },
+        {
+          "selector": ".el-button",
+          "origin": "regular",
+          "sheet": "http://127.0.0.1:9241/ep/index.css",
+          "declarations": [
+            "border-radius: var(--el-border-radius-base)"
+          ]
+        },
+        {
+          "selector": ".el-button--primary",
+          "origin": "regular",
+          "sheet": "http://127.0.0.1:9241/ep/index.css",
+          "declarations": []
+        },
+        {
+          "selector": ".el-button.is-loading",
+          "origin": "regular",
+          "sheet": "http://127.0.0.1:9241/ep/index.css",
+          "declarations": [
+            "pointer-events: none",
+            "position: relative",
+            "pointer-events: none",
+            "position: relative"
+          ]
+        },
+        {
+          "selector": ".ced-dialog .ced-submit:not(.is-disabled)",
+          "origin": "regular",
+          "sheet": "http://127.0.0.1:9241/ced.css",
+          "declarations": [
+            "background: var(--ced-submit-bg, #09090b)",
+            "border-color: var(--ced-submit-bg, #09090b)",
+            "color: var(--ced-submit-text, #ffffff)",
+            "border-radius: var(--ced-submit-radius, 6px)",
+            "font-weight: var(--ced-submit-font-weight, 500)",
+            "background-color: ",
+            "color: var(--ced-submit-text, #ffffff)",
+            "font-weight: var(--ced-submit-font-weight, 500)"
+          ]
+        },
+        {
+          "selector": ".ced-dialog .ced-submit.is-loading:not(.is-disabled)",
+          "origin": "regular",
+          "sheet": "http://127.0.0.1:9241/ced.css",
+          "declarations": [
+            "background: var(--ced-submit-bg-loading, var(--ced-submit-bg, #09090b))",
+            "border-color: var(--ced-submit-bg-loading, var(--ced-submit-bg, #09090b))",
+            "background-color: "
+          ]
+        }
+      ],
+      "pseudo": [
+        {
+          "pseudoType": "before",
+          "matched": []
+        }
+      ]
+    },
+    "disabledButton": {
+      "matched": [
+        {
+          "selector": "button",
+          "origin": "user-agent",
+          "sheet": null,
+          "declarations": []
+        },
+        {
+          "selector": "input, textarea, select, button",
+          "origin": "user-agent",
+          "sheet": null,
+          "declarations": [
+            "font-weight: ",
+            "color: fieldtext"
+          ]
+        },
+        {
+          "selector": "input[type=\"button\" i], input[type=\"submit\" i], input[type=\"reset\" i], input[type=\"file\" i]::-webkit-file-upload-button, button",
+          "origin": "user-agent",
+          "sheet": null,
+          "declarations": [
+            "cursor: default",
+            "background-color: buttonface",
+            "color: buttontext"
+          ]
+        },
+        {
+          "selector": "input[type=\"button\" i]:disabled, input[type=\"submit\" i]:disabled, input[type=\"reset\" i]:disabled, input[type=\"file\" i]:disabled::-webkit-file-upload-button, button:disabled",
+          "origin": "user-agent",
+          "sheet": null,
+          "declarations": [
+            "background-color: light-dark(rgba(239, 239, 239, 0.3), rgba(19, 1, 1, 0.3))",
+            "color: light-dark(rgba(16, 16, 16, 0.3), rgba(255, 255, 255, 0.3))"
+          ]
+        },
+        {
+          "selector": ".el-button",
+          "origin": "regular",
+          "sheet": "http://127.0.0.1:9241/ep/index.css",
+          "declarations": [
+            "cursor: pointer",
+            "color: var(--el-button-text-color)",
+            "font-weight: var(--el-button-font-weight)",
+            "background-color: var(--el-button-bg-color)",
+            "border-color: var(--el-button-border-color)",
+            "cursor: pointer",
+            "color: var(--el-button-text-color)",
+            "font-weight: var(--el-button-font-weight)",
+            "background-color: var(--el-button-bg-color)"
+          ]
+        },
+        {
+          "selector": ".el-button",
+          "origin": "regular",
+          "sheet": "http://127.0.0.1:9241/ep/index.css",
+          "declarations": [
+            "border-radius: var(--el-border-radius-base)"
+          ]
+        },
+        {
+          "selector": ".el-button--primary",
+          "origin": "regular",
+          "sheet": "http://127.0.0.1:9241/ep/index.css",
+          "declarations": []
+        },
+        {
+          "selector": ".el-button + .el-button",
+          "origin": "regular",
+          "sheet": "http://127.0.0.1:9241/ep/index.css",
+          "declarations": []
+        },
+        {
+          "selector": ".el-button.is-disabled, .el-button.is-disabled:hover",
+          "origin": "regular",
+          "sheet": "http://127.0.0.1:9241/ep/index.css",
+          "declarations": [
+            "color: var(--el-button-disabled-text-color)",
+            "cursor: not-allowed",
+            "background-color: var(--el-button-disabled-bg-color)",
+            "border-color: var(--el-button-disabled-border-color)",
+            "color: var(--el-button-disabled-text-color)",
+            "cursor: not-allowed",
+            "background-color: var(--el-button-disabled-bg-color)"
+          ]
+        }
+      ],
+      "pseudo": []
+    },
+    "normalButton": {
+      "matched": [
+        {
+          "selector": "button",
+          "origin": "user-agent",
+          "sheet": null,
+          "declarations": []
+        },
+        {
+          "selector": "input, textarea, select, button",
+          "origin": "user-agent",
+          "sheet": null,
+          "declarations": [
+            "font-weight: ",
+            "color: fieldtext"
+          ]
+        },
+        {
+          "selector": "input[type=\"button\" i], input[type=\"submit\" i], input[type=\"reset\" i], input[type=\"file\" i]::-webkit-file-upload-button, button",
+          "origin": "user-agent",
+          "sheet": null,
+          "declarations": [
+            "cursor: default",
+            "background-color: buttonface",
+            "color: buttontext"
+          ]
+        },
+        {
+          "selector": ".el-button",
+          "origin": "regular",
+          "sheet": "http://127.0.0.1:9241/ep/index.css",
+          "declarations": [
+            "cursor: pointer",
+            "color: var(--el-button-text-color)",
+            "font-weight: var(--el-button-font-weight)",
+            "background-color: var(--el-button-bg-color)",
+            "border-color: var(--el-button-border-color)",
+            "cursor: pointer",
+            "color: var(--el-button-text-color)",
+            "font-weight: var(--el-button-font-weight)",
+            "background-color: var(--el-button-bg-color)"
+          ]
+        },
+        {
+          "selector": ".el-button",
+          "origin": "regular",
+          "sheet": "http://127.0.0.1:9241/ep/index.css",
+          "declarations": [
+            "border-radius: var(--el-border-radius-base)"
+          ]
+        },
+        {
+          "selector": ".el-button--primary",
+          "origin": "regular",
+          "sheet": "http://127.0.0.1:9241/ep/index.css",
+          "declarations": []
+        },
+        {
+          "selector": ".ced-dialog .ced-submit:not(.is-disabled)",
+          "origin": "regular",
+          "sheet": "http://127.0.0.1:9241/ced.css",
+          "declarations": [
+            "background: var(--ced-submit-bg, #09090b)",
+            "border-color: var(--ced-submit-bg, #09090b)",
+            "color: var(--ced-submit-text, #ffffff)",
+            "border-radius: var(--ced-submit-radius, 6px)",
+            "font-weight: var(--ced-submit-font-weight, 500)",
+            "background-color: ",
+            "color: var(--ced-submit-text, #ffffff)",
+            "font-weight: var(--ced-submit-font-weight, 500)"
+          ]
+        }
+      ],
+      "pseudo": []
+    }
+  }
+}

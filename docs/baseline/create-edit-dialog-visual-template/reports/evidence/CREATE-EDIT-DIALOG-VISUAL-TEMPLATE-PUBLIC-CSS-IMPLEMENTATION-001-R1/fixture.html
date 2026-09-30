@@ -1,0 +1,104 @@
+<!doctype html>
+<html lang="zh-CN">
+<head>
+<meta charset="utf-8">
+<title>CEDVT R1 隔离夹具 · 真实 Element Plus 样式 + 真实 Vue/EP 组件 DOM</title>
+
+<!-- 项目当前依赖的真实 Element Plus 样式（element-plus/dist/index.css，由 driver 静态白名单服务） -->
+<link rel="stylesheet" href="/ep/index.css">
+<!-- 仓库中已提交的公共 CSS 工件（原样服务，不经改写） -->
+<link rel="stylesheet" href="/ced.css">
+
+<!-- 浏览器原生 import map：把裸模块名指向 node_modules 中的真实发行版文件 -->
+<script type="importmap">
+{
+  "imports": {
+    "vue": "/vue.js",
+    "element-plus": "/ep/index.full.mjs"
+  }
+}
+</script>
+
+<style>
+  /* 夹具自身的页面级私有样式，用于模拟「接入页面的私有控件布局」，
+     不属于公共模板，也不参与任何断言。 */
+  html, body { margin: 0; padding: 0; }
+  body { font-family: system-ui, sans-serif; }
+  .fx-block { margin: 0 0 12px; }
+  .fx-control { flex: 1; min-width: 0; }
+  .fx-label { width: 900px; }
+</style>
+</head>
+<body>
+
+<div id="app">
+  <!-- A. 显式 opt-in：真实 el-form / el-form-item / el-input（EP 标签路径） -->
+  <div id="opt-ep" class="ced-dialog fx-label fx-block"
+       style="--ced-dialog-safety-inset: 48px;">
+    <el-form label-width="120px" label-position="right">
+      <el-form-item label="字段标识"><el-input model-value="x"></el-input></el-form-item>
+      <el-form-item id="ep-item-plain" label="字段二"><el-input model-value="y"></el-input></el-form-item>
+      <!-- 星号显式 opt-in：标记挂在 el-form-item 上 -->
+      <el-form-item id="ep-item-marked" class="ced-required-mark" label="字段三">
+        <el-input model-value="z"></el-input>
+      </el-form-item>
+    </el-form>
+  </div>
+
+  <!-- B. 显式 opt-in：页面私有 flex 表单 + 标签行（Feature 提供 --ced-label-gap） -->
+  <div id="opt-private" class="ced-dialog fx-block"
+       style="--ced-label-gap: 12px; --ced-label-column-width: 84px;">
+    <div id="row-with-gap" class="ced-label-row">
+      <span id="lbl-private" class="ced-form-label">字段名称</span>
+      <div class="fx-control"><el-input model-value="x"></el-input></div>
+    </div>
+  </div>
+
+  <!-- C. 显式 opt-in：同一标签行结构，但 Feature 未提供 --ced-label-gap -->
+  <div id="opt-private-nogap" class="ced-dialog fx-block"
+       style="--ced-label-column-width: 84px;">
+    <div id="row-no-gap" class="ced-label-row">
+      <span id="lbl-private-nogap" class="ced-form-label">字段名称</span>
+      <div class="fx-control"><el-input model-value="x"></el-input></div>
+    </div>
+  </div>
+
+  <!-- D. 显式 opt-in：主提交按钮状态矩阵（真实 el-button） -->
+  <div id="opt-buttons" class="ced-dialog fx-block">
+    <el-button id="btn-normal" class="ced-submit" type="primary">创建</el-button>
+    <el-button id="btn-disabled" class="ced-submit" type="primary" disabled>创建</el-button>
+    <el-button id="btn-loading" class="ced-submit" type="primary" loading>创建</el-button>
+    <el-button id="btn-cancel">取消</el-button>
+    <el-button id="btn-derived">次要按钮</el-button>
+  </div>
+
+  <!-- E. 显式 opt-in 且 Feature 提供 --ced-submit-bg-loading。
+         此处仅演示「提供即按值呈现」；该值不是公共缺省（公共 CSS 源中不含此字面量，
+         由静态契约测试断言）。 -->
+  <div id="opt-loading-var" class="ced-dialog fx-block"
+       style="--ced-submit-bg-loading: #3f3f46;">
+    <el-button id="btn-loading-var" class="ced-submit" type="primary" loading>创建</el-button>
+  </div>
+
+  <!-- F. 对照：未挂 opt-in 根类（公共层必须零命中、零视觉变化） -->
+  <div id="plain" class="plain-dialog fx-block">
+    <span id="plain-lbl" class="ced-form-label">字段名称</span>
+    <div id="plain-row" class="ced-label-row" style="--ced-label-gap: 12px;">
+      <span id="plain-row-lbl" class="ced-form-label">字段名称</span>
+      <div class="fx-control"><el-input model-value="p"></el-input></div>
+    </div>
+    <el-button id="plain-submit" class="ced-submit" type="primary">创建</el-button>
+    <el-button id="plain-loading" class="ced-submit" type="primary" loading>创建</el-button>
+  </div>
+
+  <!-- G. 页面真实接入形态：真实 el-dialog（Teleport 到 body）+ 根类 -->
+  <el-dialog id="dlg-opted" class="ced-dialog" :model-value="true" title="标题" width="620px">
+    <el-form label-width="120px" label-position="right">
+      <el-form-item id="dlg-item" label="字段标识"><el-input model-value="d"></el-input></el-form-item>
+    </el-form>
+  </el-dialog>
+</div>
+
+<script type="module" src="/fixture-main.js"></script>
+</body>
+</html>

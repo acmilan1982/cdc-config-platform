@@ -1,12 +1,13 @@
 /* 新增／编辑业务弹窗公共视觉模板 · 公共视觉预设源（全仓唯一来源）。
  *
- * 契约：显式根类 `ced-dialog` 为唯一 opt-in，辅以 6 个 `ced-*` 辅助类与 `--ced-*` 令牌。
+ * 契约：显式根类 `ced-dialog` 为唯一 opt-in，辅以 7 个 `ced-*` 辅助类与 17 个 `--ced-*` 令牌。
  * 本文件经前端全局入口 `main.ts` 引入一次；全部选择器均以根类前置限定，不使用裸全局
  * Element Plus 覆盖、不使用 `!important`，未挂根类的弹窗零命中、零视觉变化。
  *
  * 公共层不声明任何 `--ced-*` 的值：模板自有令牌只出现在 `var(--ced-*, 默认值)` 的内联
- * 回退中，最终值只可能来自启用页面的局部覆盖；Feature 决定值令牌（标签列宽、视口安全
- * 边距）以 `var(--ced-*)` 无回退形式消费，值由接入页面提供，模板不臆造缺省。
+ * 回退中，最终值只可能来自启用页面的局部覆盖；Feature 决定值令牌（标签列宽、标签－控件
+ * 间距、视口安全边距、loading 配色）由接入页面提供，模板不臆造缺省——除 loading 需回退到
+ * 按钮既有背景以避免加载态跳色外，一律以 `var(--ced-*)` 无回退形式消费。
  *
  * 边界：本层只负责视觉（标签排版、主提交按钮状态矩阵、错误呈现视觉规格、容器安全边距
  * 原则）；不接管校验规则、请求与防重、错误码映射、提交／关闭时序、权限与业务语义；
@@ -37,6 +38,17 @@
   flex: 0 0 var(--ced-label-column-width);
 }
 
+/* 标签行（可选 opt-in 的**纯 CSS** 承载，非布局组件）：仅当接入页面为「标签行」容器
+ * 显式挂 `ced-label-row` 时生效——由本层提供 flex 行与对齐，间距取 `--ced-label-gap`。
+ * 该令牌属 Feature、公共层**不设缺省**：未提供时间距回退为初始值（0），不改变页面既有
+ * 布局；本层**不**把 Element Plus 的 `label-width` 属性或页面既有布局强制统一为同一间距。
+ * 未挂该辅助类的表单行不受影响。 */
+.ced-dialog .ced-label-row {
+  display: flex;
+  align-items: flex-start;
+  gap: var(--ced-label-gap);
+}
+
 /* 必填星号：纯视觉、显式 opt-in。仅在接入页面为标签（私有表单 `ced-form-label`）或
  * 表单项（EP 表单）显式挂 `ced-required-mark` 时渲染；不写入 `required` 属性、不生成任何
  * 校验规则或隐式必填语义。是否需要星号由 Feature 决定，模板不规定条件。 */
@@ -51,7 +63,9 @@
  * “取消”与派生按钮（自动生成、修改探针 ID、测试连接等）不跟随变黑。
  * 正常态由 `:not(.is-disabled)` 限定：禁用态沿用 Element Plus 既有禁用视觉、不被本规则
  * 覆盖；本层不设置也不消除任何焦点轮廓（focus-visible 保持可见）。
- * loading 配色属 Feature 可选、两页不一致，本层不定义；可点击条件亦归 Feature。 */
+ * Element Plus 的加载态按钮**不带** `is-disabled` 类（仅带 HTML `disabled` 属性），故正常态
+ * 规则会命中加载态；加载态配色因此由下方专属规则显式接管（见 `is-loading` 一节）。
+ * 可点击条件归 Feature。 */
 .ced-dialog .ced-submit:not(.is-disabled) {
   background: var(--ced-submit-bg, #09090b);
   border-color: var(--ced-submit-bg, #09090b);
@@ -71,6 +85,18 @@
   background: var(--ced-submit-bg-active, #18181b);
   border-color: var(--ced-submit-bg-active, #18181b);
   color: var(--ced-submit-text, #ffffff);
+}
+
+/* 主提交按钮加载态（Feature 可选的**配色接口**，两页不一致）。
+ * 级联语义：Feature 提供 `--ced-submit-bg-loading` 则按该值呈现；未提供时回退到主提交按钮
+ * **既有背景**（`--ced-submit-bg`，即正常态值）——加载态背景与常态一致，不产生跳色，也**不会**
+ * 回退为初始值（透明）而破坏按钮视觉。本层**不**触碰 Element Plus 加载态自身的
+ * `.is-loading` 处理（`pointer-events: none`、`position: relative` 与其 `::before` 白色遮罩），
+ * 亦**不**把探针端专用灰度设为公共缺省。选择器与 hover／focus／active 变体同序特异度且
+ * 位于其后，故加载态优先于这些状态生效。 */
+.ced-dialog .ced-submit.is-loading:not(.is-disabled) {
+  background: var(--ced-submit-bg-loading, var(--ced-submit-bg, #09090b));
+  border-color: var(--ced-submit-bg-loading, var(--ced-submit-bg, #09090b));
 }
 
 /* 字段错误反馈（可选的**视觉**规格；实现模型归 Feature）。

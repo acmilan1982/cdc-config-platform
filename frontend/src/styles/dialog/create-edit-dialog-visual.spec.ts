@@ -13,7 +13,8 @@ import {
  * 新增／编辑业务弹窗公共视觉模板公共层静态契约（SHARED_COMPONENT_DESIGN §7 断言 1–5 的实现化）。
  *
  * 本文件只断言「源码文本」，不涉及 CSS 求值、层叠、选择器实际匹配数或几何：
- * jsdom 不实现层叠与布局，这些运行时事实由隔离合成夹具在真实浏览器承接（见实现报告）。
+ * jsdom 不实现层叠与布局，这些运行时事实由隔离夹具在真实浏览器（真实 Element Plus
+ * 样式与真实 Vue／EP 组件 DOM）审核（见 R1 报告与 reports/evidence/）。
  */
 
 const DIALOG_DIR = resolve(process.cwd(), 'src/styles/dialog')
@@ -29,6 +30,7 @@ const ROOT_CLASS_SELECTOR = `.${ROOT_CLASS}`
 /** 根类之外**唯一**允许出现在公共源里的 `ced-*` 辅助/opt-in 类。拼接构造避免自扫描。 */
 const HELPER_CLASSES = [
   ['ced-', 'form-label'].join(''),
+  ['ced-', 'label-row'].join(''),
   ['ced-', 'submit'].join(''),
   ['ced-', 'field-feedback'].join(''),
   ['ced-', 'field-error'].join(''),
@@ -55,7 +57,20 @@ const EXPECTED_TEMPLATE_TOKENS = [
   '--ced-feedback-min-height',
 ]
 
-const EXPECTED_FEATURE_TOKENS = ['--ced-label-column-width', '--ced-dialog-safety-inset']
+/** 已批准设计登记的 Feature 决定值令牌（4）：公共层一律不设缺省。 */
+const EXPECTED_FEATURE_TOKENS = [
+  '--ced-label-column-width',
+  '--ced-label-gap',
+  '--ced-dialog-safety-inset',
+  '--ced-submit-bg-loading',
+]
+
+/** 以**无回退** `var()` 消费的 Feature 令牌（值由接入页面提供；未提供时回退为初始值）。 */
+const FEATURE_TOKENS_WITHOUT_FALLBACK = [
+  '--ced-label-column-width',
+  '--ced-label-gap',
+  '--ced-dialog-safety-inset',
+]
 
 /** 逐模板令牌公共默认值：全部取自两页可比对一致的既有值，不得发明新视觉值。 */
 const EXPECTED_TEMPLATE_DEFAULTS: Record<string, string> = {
@@ -73,6 +88,9 @@ const EXPECTED_TEMPLATE_DEFAULTS: Record<string, string> = {
   '--ced-error-font-size': '13px',
   '--ced-feedback-min-height': '20px',
 }
+
+/** 探针端专用加载灰度：**不得**成为公共缺省（loading 配色属 Feature 可选、两页不一致）。 */
+const PROBE_END_LOADING_GRAY = ['#3f', '3f46'].join('')
 
 /** 公共层不得选择的业务类名前缀。 */
 const FORBIDDEN_PREFIXES = [
@@ -104,10 +122,11 @@ function css(): string {
 }
 
 /** 扁平 CSS 规则拆分（本预设无嵌套块，仅顶层规则）。 */
-function rules(text: string): Array<{ selector: string; body: string }> {
+function rules(text: string): Array<{ selector: string; body: string; index: number }> {
   return [...text.matchAll(/([^{}]+)\{([^{}]*)\}/g)].map((m) => ({
     selector: (m[1] ?? '').trim(),
     body: m[2] ?? '',
+    index: m.index ?? 0,
   }))
 }
 
@@ -117,6 +136,12 @@ function selectorList(selectorText: string): string[] {
     .split(',')
     .map((s) => s.trim())
     .filter(Boolean)
+}
+
+/** 读一条规则体内某个声明的原样值（`null` 表示该声明不存在）。 */
+function declaration(body: string, property: string): string | null {
+  const m = body.match(new RegExp(`(?:^|;)\\s*${property}\\s*:\\s*([^;]+)`))
+  return m ? (m[1] ?? '').trim() : null
 }
 
 function walk(dir: string, out: string[] = []): string[] {
@@ -140,14 +165,14 @@ describe('新增／编辑弹窗公共视觉模板公共层契约', () => {
     expect(css()).toContain(ROOT_CLASS_SELECTOR)
   })
 
-  it('2. 令牌登记与已批准设计一致：模板自有 13 + Feature 2 = 15', () => {
+  it('2. 令牌登记与已批准设计一致：模板自有 13 + Feature 4 = 17', () => {
     expect([...CED_DIALOG_TEMPLATE_TOKENS]).toEqual(EXPECTED_TEMPLATE_TOKENS)
     expect([...CED_DIALOG_FEATURE_TOKENS]).toEqual(EXPECTED_FEATURE_TOKENS)
     expect([...CED_DIALOG_TOKENS]).toEqual([
       ...EXPECTED_TEMPLATE_TOKENS,
       ...EXPECTED_FEATURE_TOKENS,
     ])
-    expect(CED_DIALOG_TOKENS).toHaveLength(15)
+    expect(CED_DIALOG_TOKENS).toHaveLength(17)
   })
 
   it('3. 令牌登记与 CSS 实际一致（不多不少）', () => {
@@ -163,22 +188,61 @@ describe('新增／编辑弹窗公共视觉模板公共层契约', () => {
     }
   })
 
-  it('5. Feature 决定值令牌以无回退形式消费（公共层不臆造缺省）', () => {
+  it('5. 三个 Feature 令牌以无回退 var() 消费，且公共层不臆造缺省', () => {
     const text = css()
-    for (const token of EXPECTED_FEATURE_TOKENS) {
-      const bare = `var(${token})`
-      expect(text, `${token} 应以无回退 var() 消费`).toContain(bare)
-      expect(text, `${token} 不得带缺省值`).not.toMatch(
-        new RegExp(`var\\(${token}\\s*,`),
-      )
+    for (const token of FEATURE_TOKENS_WITHOUT_FALLBACK) {
+      expect(text, `${token} 应以无回退 var() 消费`).toContain(`var(${token})`)
+      expect(text, `${token} 不得带缺省值`).not.toMatch(new RegExp(`var\\(${token}\\s*,`))
     }
   })
 
-  it('6. 公共层不声明任何 --ced-* 的值（只允许出现在 var() 内联回退中）', () => {
+  it('6. --ced-label-gap 确有可用消费点：标签行辅助类以无缺省 gap 消费', () => {
+    const rs = rules(css())
+    const gapRules = rs.filter((r) => r.selector.includes(HELPER_CLASSES[1]!)) // ced-label-row
+    expect(gapRules).toHaveLength(1)
+    const [row] = gapRules
+    expect(row!.selector).toContain(ROOT_CLASS_SELECTOR)
+    expect(declaration(row!.body, 'gap')).toBe('var(--ced-label-gap)')
+    // 间距值只能来自 Feature，不得写死任何长度字面量。
+    expect(row!.body).not.toMatch(/\d+(px|rem|em)\b/)
+    // 未提供变量时间距回退为初始值，不得出现探针端 12px 之类的公共缺省。
+    expect(row!.body).not.toContain('12px')
+  })
+
+  it('7. --ced-submit-bg-loading 确有可用消费点，且级联回退到主提交按钮既有背景', () => {
+    const rs = rules(css())
+    const loadingRules = rs.filter((r) => r.selector.includes('is-loading'))
+    expect(loadingRules).toHaveLength(1)
+    const [loading] = loadingRules
+    // 加载态由专属规则显式接管：仅限主提交按钮、根类内、且保留禁用保护。
+    expect(loading.selector).toContain(ROOT_CLASS_SELECTOR)
+    expect(loading.selector).toContain(HELPER_CLASSES[2]!) // ced-submit
+    expect(loading.selector).toContain('is-loading')
+    expect(loading.selector).toContain(':not(.is-disabled)')
+    // 提供变量则按值呈现；未提供则回退到按钮既有背景（正常态令牌），既不透明也不写死灰度。
+    const expected = 'var(--ced-submit-bg-loading, var(--ced-submit-bg, #09090b))'
+    expect(declaration(loading.body, 'background')).toBe(expected)
+    expect(declaration(loading.body, 'border-color')).toBe(expected)
+    expect(loading.body).not.toContain('transparent')
+    expect(loading.body).not.toContain(PROBE_END_LOADING_GRAY)
+    // 加载态必须排在正常／hover／focus／active 之后，才能在同等特异度下取得优先。
+    const normal = rs.find(
+      (r) => r.selector === `${ROOT_CLASS_SELECTOR} .ced-submit:not(.is-disabled)`,
+    )
+    expect(normal, '正常态规则缺失').toBeTruthy()
+    expect(loading.index).toBeGreaterThan(normal!.index)
+    for (const state of [':hover', ':focus', ':active']) {
+      const rule = rs.find((r) => r.selector.includes(`.ced-submit:not(.is-disabled)${state}`))
+      expect(rule, `${state} 规则缺失`).toBeTruthy()
+      expect(loading.index).toBeGreaterThan(rule!.index)
+    }
+  })
+
+  it('8. 公共层不声明任何 --ced-* 的值（只允许出现在 var() 内联回退中）', () => {
     expect(css()).not.toMatch(/--ced-[\w-]+\s*:/)
   })
 
-  it('7. 每条规则的选择器均由根类前置限定；无裸 EP 选择器、无 :root/html/body/* 规则', () => {
+  it('9. 每条规则的选择器均由根类前置限定；无裸 EP 选择器、无 :root/html/body/* 规则', () => {
     for (const { selector } of rules(css())) {
       for (const one of selectorList(selector)) {
         // 作用域首段必须以根类开头，且首段只允许出现根类本身。
@@ -198,14 +262,14 @@ describe('新增／编辑弹窗公共视觉模板公共层契约', () => {
     }
   })
 
-  it('8. 不出现任何禁止的业务类名前缀', () => {
+  it('10. 不出现任何禁止的业务类名前缀', () => {
     const text = css()
     for (const prefix of FORBIDDEN_PREFIXES) {
       expect(text, prefix).not.toContain(prefix)
     }
   })
 
-  it('9. 不出现业务文案、业务列名或状态语义命名', () => {
+  it('11. 不出现业务文案、业务列名或状态语义命名', () => {
     const text = css()
     expect(text).not.toMatch(/数据源|快照|同步对象|停用|异常|序号|角色|主机|端口|用户名|探针/)
     expect(text).not.toMatch(/\bSOURCE\b|\bTARGET\b/)
@@ -214,7 +278,7 @@ describe('新增／编辑弹窗公共视觉模板公共层契约', () => {
     expect(text.replace(/--el-color-danger/g, '')).not.toMatch(/\bdanger\b/)
   })
 
-  it('10. 公共源为纯 CSS，不含 @import／.vue／路由元数据或隐式启用入口', () => {
+  it('12. 公共源为纯 CSS，不含 @import／.vue／路由元数据或隐式启用入口', () => {
     const text = css()
     expect(text).not.toMatch(/@import/)
     expect(text).not.toMatch(/\.vue\b/)
@@ -224,14 +288,14 @@ describe('新增／编辑弹窗公共视觉模板公共层契约', () => {
     expect(readFileSync(join(DIALOG_DIR, CONSTANTS_FILE), 'utf8')).not.toMatch(/^\s*import\b/m)
   })
 
-  it('11. 不含 !important，也不消除焦点轮廓', () => {
+  it('13. 不含 !important，也不消除焦点轮廓', () => {
     const text = css()
     expect(text).not.toMatch(/!important/)
     expect(text).not.toMatch(/outline\s*:\s*none/)
     expect(text).not.toMatch(/outline\s*:\s*0\b/)
   })
 
-  it('12. 内部辅助类恰好为已登记的辅助类（除根类外无其他 ced- 类选择器）', () => {
+  it('14. 内部辅助类恰好为已登记的辅助类（除根类外无其他 ced- 类选择器）', () => {
     const allClasses = [...new Set(css().match(/\.ced-[\w-]+/g) ?? [])]
     const helperClasses = allClasses.filter((name) => name !== ROOT_CLASS_SELECTOR).sort()
     expect(helperClasses).toEqual(HELPER_CLASSES.map((c) => `.${c}`).sort())
@@ -240,7 +304,7 @@ describe('新增／编辑弹窗公共视觉模板公共层契约', () => {
     )
   })
 
-  it('13. 主提交按钮作用边界：正常/hover/focus/active 均受 :not(.is-disabled) 限定，不触碰 loading', () => {
+  it('15. 主提交按钮作用边界：各可见态均受 :not(.is-disabled) 限定，禁用保护保留', () => {
     const rs = rules(css())
     const submitRules = rs.filter((r) => r.selector.includes('.ced-submit'))
     expect(submitRules.length).toBeGreaterThan(0)
@@ -254,8 +318,6 @@ describe('新增／编辑弹窗公共视觉模板公共层契约', () => {
     expect(hasState(/\.ced-submit:not\(\.is-disabled\):hover/)).toBe(true)
     expect(hasState(/\.ced-submit:not\(\.is-disabled\):focus/)).toBe(true)
     expect(hasState(/\.ced-submit:not\(\.is-disabled\):active/)).toBe(true)
-    // 公共层不定义 loading 配色、不触碰 is-loading（loading 属 Feature 可选、两页不一致）。
-    expect(css()).not.toContain('is-loading')
     // 黑色实心只应用于显式 .ced-submit：出现 #09090b 的规则必限定 .ced-submit。
     for (const r of rs.filter((r) => r.body.includes('#09090b'))) {
       expect(r.selector, r.selector).toContain('.ced-submit')
@@ -267,12 +329,32 @@ describe('新增／编辑弹窗公共视觉模板公共层契约', () => {
     expect(hover.body).toContain('var(--ced-submit-bg-hover, #27272a)')
   })
 
-  it('14. 必填星号只受显式 opt-in 控制，且不产生校验规则或隐式 required', () => {
+  it('16. 加载态不触碰 Element Plus 内建 loading 视觉（遮罩/pointer-events/定位）', () => {
+    const text = css()
+    // EP 以 `.is-loading { pointer-events: none; position: relative }` + `::before` 白遮罩承载加载态；
+    // 公共层只允许接管配色，不得改写这些内建处理。
+    expect(text).not.toMatch(/pointer-events\s*:/)
+    const rs = rules(css())
+    for (const r of rs) {
+      if (r.selector.includes('is-loading')) {
+        expect(r.body, r.selector).not.toContain('position')
+        expect(r.body, r.selector).not.toContain('::before')
+        expect(r.body, r.selector).not.toContain(':before')
+        expect(r.body, r.selector).not.toContain('background-color')
+      }
+      // 任何 `::before` 规则都只能是星号规则（由断言 17 完整校验）。
+      if (/::?before/.test(r.selector)) {
+        expect(r.selector, r.selector).toContain(HELPER_CLASSES[6]!) // ced-required-mark
+      }
+    }
+  })
+
+  it('17. 必填星号只受显式 opt-in 控制，且不产生校验规则或隐式 required', () => {
     const rs = rules(css())
     const contentRules = rs.filter((r) => /\bcontent\s*:/.test(r.body))
     expect(contentRules.length).toBe(1)
     for (const r of contentRules) {
-      expect(r.selector, r.selector).toContain(HELPER_CLASSES[5]!) // ced-required-mark
+      expect(r.selector, r.selector).toContain(HELPER_CLASSES[6]!) // ced-required-mark
       expect(r.body).toContain("content: '*'")
       expect(r.body).toContain('var(--ced-required-mark-color, var(--el-color-danger))')
     }
@@ -283,14 +365,17 @@ describe('新增／编辑弹窗公共视觉模板公共层契约', () => {
     expect(text).not.toMatch(/is-required/)
   })
 
-  it('15. 公共层不硬编码两页差异值（标签列宽／弹窗宽度／安全边距字面量）', () => {
+  it('18. 公共层不硬编码两页差异值（标签列宽／弹窗宽度／安全边距／加载灰度字面量）', () => {
     const text = css()
     for (const literal of FORBIDDEN_DIVERGENT_LITERALS) {
       expect(text, literal).not.toContain(literal)
     }
+    // `#3f3f46` 仅可作标签颜色默认值；不得作为加载态灰度缺省。
+    const loadingRule = rules(text).find((r) => r.selector.includes('is-loading'))!
+    expect(loadingRule.body).not.toContain(PROBE_END_LOADING_GRAY)
   })
 
-  it('16. 未接入页面零泄漏：views 下无任何弹窗挂载 ced-dialog 根类', () => {
+  it('19. 未接入页面零泄漏：views 下无任何弹窗挂载 ced-dialog 根类', () => {
     const VIEWS_DIR = resolve(SRC_DIR, 'views')
     const mounted = walk(VIEWS_DIR)
       .filter((file) => file.endsWith('.vue'))
@@ -299,7 +384,7 @@ describe('新增／编辑弹窗公共视觉模板公共层契约', () => {
     expect(mounted).toEqual([])
   })
 
-  it('17. 公共预设规则在全 frontend/src 中只有唯一来源文件', () => {
+  it('20. 公共预设规则在全 frontend/src 中只有唯一来源文件', () => {
     const hits: string[] = []
     for (const file of walk(SRC_DIR)) {
       const text = stripComments(readFileSync(file, 'utf8'))
@@ -308,7 +393,7 @@ describe('新增／编辑弹窗公共视觉模板公共层契约', () => {
     expect(hits).toEqual([`styles/dialog/${CSS_FILE}`])
   })
 
-  it('18. 公共 CSS 经前端全局入口只做一次最小引入', () => {
+  it('21. 公共 CSS 经前端全局入口只做一次最小引入', () => {
     const importing = walk(SRC_DIR)
       .filter((file) => readFileSync(file, 'utf8').includes(IMPORT_PATH))
       .map(relative)

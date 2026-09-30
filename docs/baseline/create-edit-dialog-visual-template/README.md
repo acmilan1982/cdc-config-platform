@@ -1,4 +1,4 @@
-# 新增／编辑业务弹窗公共视觉模板 · 已批准设计基线（未实现）
+# 新增／编辑业务弹窗公共视觉模板 · 设计基线已批准；公共 CSS 已实现（待远程代码复审）
 
 ```text
 create_edit_dialog_visual_template_document_status=APPROVED
@@ -12,7 +12,8 @@ public_css_status=IMPLEMENTED_PENDING_CHATGPT_REMOTE_CODE_REVIEW
 public_vue_component_status=NOT_CREATED
 formal_acceptance_execution_status=NOT_EXECUTED
 migrated_page_count=0
-current_next_entry=CHATGPT_REMOTE_CREATE_EDIT_DIALOG_VISUAL_TEMPLATE_PUBLIC_CSS_IMPLEMENTATION_REVIEW
+registered_token_count=17
+current_next_entry=CHATGPT_REMOTE_CREATE_EDIT_DIALOG_VISUAL_TEMPLATE_PUBLIC_CSS_IMPLEMENTATION_R1_REVIEW
 ```
 
 ```text
@@ -44,8 +45,12 @@ candidate_capabilities=LABEL_TYPOGRAPHY_AND_ALIGNMENT,BLACK_PRIMARY_SUBMIT_BUTTO
 > 查询列表页模板、探针端管理与数据源管理各自的现有状态。
 >
 > **时态说明**：正文中标注「**拟议**」「拟议缺省」等字样的**设计项**，
-> 自 2026-09-30 批准后即为**已批准的设计契约**；但其**类名、令牌、静态断言与测试**仍
-> **尚未实现**（`NOT_CREATED`），**不得**读作已落地事实。R0／R1／R2 在**历史时点**的
+> 自 2026-09-30 批准后即为**已批准的设计契约**。按实现分层**逐项**收敛为：
+> **公共 CSS、类名、令牌登记与静态契约测试已实现**（纯 CSS 公共能力，含隔离合成夹具真实浏览器证据，
+> 见 `reports/`；**待远程代码复审**，`IMPLEMENTED_PENDING_CHATGPT_REMOTE_CODE_REVIEW`）；
+> **Vue 公共组件仍未创建**（`NOT_CREATED`）；**页面接入未授权**（`PAGE_ADOPTION_NOT_AUTHORIZED`，`migrated_page_count=0`）；
+> **正式验收未执行**。旧文中的「拟议」「未创建」字样若描述**已落地**的 CSS／类名／令牌／测试，
+> 一律以本节分层口径为准（历史报告按原文保留）。R0／R1／R2 在**历史时点**的
 > `DRAFT_PENDING_USER_REVIEW`、`NOT_APPROVED` 与复审 `CHANGES_REQUIRED`／`APPROVED`
 > **保留时序、不机械全局替换**，亦不回写历史报告。
 >
@@ -55,7 +60,9 @@ candidate_capabilities=LABEL_TYPOGRAPHY_AND_ALIGNMENT,BLACK_PRIMARY_SUBMIT_BUTTO
 > `45ce16dffbf2747abeb75d4d6c43bc57165043c8` 远程复审 **`APPROVED`**，随后由项目负责人于
 > **2026-09-30** 批准。**R2 获远程复审通过并不表示负责人在 R2 提交当时已批准**——批准时点另记 2026-09-30。
 >
-> 实现分层：公共 CSS 预设已落地（含静态契约测试与隔离合成夹具浏览器证据，见 `reports/`），
+> 实现分层：公共 CSS 预设已落地（含静态契约测试与隔离合成夹具真实 Element Plus 浏览器证据，见 `reports/`）；
+> 公共 CSS 实现提交 `c8785e18dc3014396cf45534315ab0f10dbbe94d` 远程复审 `CHANGES_REQUIRED`（17 vs 15 令牌口径、
+> 现行文档时态自相矛盾、真实 EP 状态证据不足），已由 `...-R1` 任务定向纠错后**待再次远程复审**。
 > **Vue 组件仍未创建**；本实现**未修改任何业务页面**（页面接入始终未授权）。
 >
 > 下一入口：`CHATGPT_REMOTE_CREATE_EDIT_DIALOG_VISUAL_TEMPLATE_PUBLIC_CSS_IMPLEMENTATION_REVIEW`——
@@ -99,12 +106,13 @@ candidate_capabilities=LABEL_TYPOGRAPHY_AND_ALIGNMENT,BLACK_PRIMARY_SUBMIT_BUTTO
 | 层 | 含义 | 书写要求 |
 |---|---|---|
 | **现行事实** | 可由**两页实际源码／已批准条款**直接核验 | 必须给出**两页各自的代码／条款位置**；不做推及全项目的概括 |
-| **拟议（设计推断）** | 本设计**提出**的公共契约、类名、令牌、可选能力 | 批准后即为**已批准设计契约**；仍**须**显式标注其**尚未实现**（`NOT_CREATED`），**不得**包装为「两页已实现」或「已落地」 |
+| **拟议（设计推断）** | 本设计**提出**的公共契约、类名、令牌、可选能力 | 批准后即为**已批准设计契约**；**须**逐项标注其当前实现状态（**已实现／仍未实现**），**不得**把**仍未实现**项包装为「两页已实现」或「已落地」。公共 CSS／类名／令牌登记／静态契约测试现为**已实现**（待远程代码复审）；Vue 组件仍 `NOT_CREATED` |
 
 - 本任务**不**引入与列表表格模板相同的 `LIST_TABLE_*` 标记通道；本目录使用
   `create_edit_dialog_visual_template_*` 前缀的状态键（见文首）与本节的「现行事实／拟议」分区。
-- 任何**未实现**的候选能力（公共 CSS、类名、CSS 令牌、静态断言、Vue 组件）
-  一律标注为**已批准设计、尚未实现**，其存在性为 `NOT_CREATED`。
+- **已落地**的候选能力（公共 CSS 工件、7 个 `ced-*` 辅助类、17 个 `--ced-*` 令牌登记、静态契约测试）
+  标注为**已批准设计、已实现（纯 CSS 公共能力；待远程代码复审）**，其存在性**不再是** `NOT_CREATED`。
+- **仍未创建**项（Vue 公共组件）与**未授权**项（页面接入）分别标注为 `NOT_CREATED`、`PAGE_ADOPTION_NOT_AUTHORIZED`。
 
 ## 5. 证据来源（两页实际位置）
 
@@ -113,7 +121,7 @@ candidate_capabilities=LABEL_TYPOGRAPHY_AND_ALIGNMENT,BLACK_PRIMARY_SUBMIT_BUTTO
 | 探针端管理 | `frontend/src/views/client-config/ClientConfigPage.vue` | `<el-dialog class="cc-dialog" width="900px">`（约 257 行） | `docs/features/client-config/{REQUIREMENTS,ACCEPTANCE,DESIGN,UI}.md`：`CCFG-REQ-116/119/120/123/124/128/130/137/138`、`CCFG-UI-045/046/047/050/051/055/057`、`CCFG-DESIGN-056/059/061/062/066/068/072/073` |
 | 数据源管理 | `frontend/src/views/data-source/DataSourcePage.vue` | `<el-dialog class="editor-dialog" width="620px">`（约 190 行） | `docs/features/data-source-management/REQUIREMENTS.md`：`DS-REQ-185/186/187`（及该 Feature 已批准基线） |
 
-详细的一致与差异见 `DESIGN.md` 与 `MIGRATION.md`；公共契约拟议见 `SHARED_COMPONENT_DESIGN.md`；候选视觉规格见 `UI.md`。
+详细的一致与差异见 `DESIGN.md` 与 `MIGRATION.md`；公共契约（已批准设计、已实现）见 `SHARED_COMPONENT_DESIGN.md`；视觉规格见 `UI.md`。
 
 ## 6. 文档导航
 
@@ -129,6 +137,8 @@ candidate_capabilities=LABEL_TYPOGRAPHY_AND_ALIGNMENT,BLACK_PRIMARY_SUBMIT_BUTTO
 | `reports/CREATE-EDIT-DIALOG-VISUAL-TEMPLATE-BASELINE-APPROVAL-CLOSEOUT-001.md` | 批准收口：门禁、R0→R1→R2 复审时序、项目负责人原话、批准对象与边界、状态旧→新、文件清单、保护核验与下一入口 |
 | `reports/CREATE-EDIT-DIALOG-VISUAL-TEMPLATE-PUBLIC-CSS-IMPLEMENTATION-001.md` | 公共 CSS 实现：范围与实现取舍、类名／令牌清单、静态契约测试、隔离合成夹具浏览器证据、变更文件、零影响核验、未执行项与下一入口 |
 | `reports/evidence/CREATE-EDIT-DIALOG-VISUAL-TEMPLATE-PUBLIC-CSS-IMPLEMENTATION-001/` | 上述实现的脱敏可复算浏览器证据（合成夹具、CDP 驱动、计算样式原始输出） |
+| `reports/CREATE-EDIT-DIALOG-VISUAL-TEMPLATE-PUBLIC-CSS-IMPLEMENTATION-001-R1.md` | R1 定向纠错：三处复审发现、旧→新文本／位置、令牌逐一消费点、真实 EP 状态矩阵、零接入核验与下一入口（对 R0 不准确结论作勘误，不回写 R0） |
+| `reports/evidence/CREATE-EDIT-DIALOG-VISUAL-TEMPLATE-PUBLIC-CSS-IMPLEMENTATION-001-R1/` | R1 实现的脱敏可复算浏览器证据（真实 Element Plus 样式 + 真实 Vue/EP 组件 DOM、CDP 驱动、计算样式与命中规则原始输出） |
 
 ## 7. 与其他模板的关系
 

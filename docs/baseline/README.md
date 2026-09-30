@@ -90,7 +90,8 @@ public_vue_component_status=NOT_CREATED
 formal_acceptance_execution_status=NOT_EXECUTED
 page_adoption_authorization_status=PAGE_ADOPTION_NOT_AUTHORIZED
 migrated_page_count=0
-current_next_entry=CHATGPT_REMOTE_CREATE_EDIT_DIALOG_VISUAL_TEMPLATE_PUBLIC_CSS_IMPLEMENTATION_REVIEW
+registered_token_count=17
+current_next_entry=CHATGPT_REMOTE_CREATE_EDIT_DIALOG_VISUAL_TEMPLATE_PUBLIC_CSS_IMPLEMENTATION_R1_REVIEW
 ```
 
 - **当前状态**：**设计基线已批准**；**公共 CSS 预设已实现**（`IMPLEMENTED_PENDING_CHATGPT_REMOTE_CODE_REVIEW`，
@@ -102,9 +103,16 @@ current_next_entry=CHATGPT_REMOTE_CREATE_EDIT_DIALOG_VISUAL_TEMPLATE_PUBLIC_CSS_
   **正交**（弹窗层），三者不互相并入、不复用彼此标记／类名／令牌命名空间。
 - **排除范围**：启用／停用／删除确认框、数据源业务属性与命名策略子弹窗、表格模板、API／后端／数据库、
   现行业务校验与提交关闭时序。
-- **下一入口**：`CHATGPT_REMOTE_CREATE_EDIT_DIALOG_VISUAL_TEMPLATE_PUBLIC_CSS_IMPLEMENTATION_REVIEW`
-  ——由 ChatGPT 从远程 Git 对本次**公共 CSS 实现**独立代码复审；
+- **下一入口**：`CHATGPT_REMOTE_CREATE_EDIT_DIALOG_VISUAL_TEMPLATE_PUBLIC_CSS_IMPLEMENTATION_R1_REVIEW`
+  ——由 ChatGPT 从远程 Git 对本次**公共 CSS 实现（R1 纠错后）**独立代码复审；
   代码提交／推送成功**不等于**远程复审通过，**不自动授权页面接入**。
+- **公共 CSS 实现复审时序**：R0 提交 `c8785e18dc3014396cf45534315ab0f10dbbe94d` 远程代码复审
+  `CHANGES_REQUIRED`——**三处发现**：①令牌 17 vs 15 口径不一致（2 个 Feature 令牌登记但未被消费）；
+  ②现行文档自相矛盾（状态块称已实现，正文仍标 `NOT_CREATED`）；③真实 EP 各状态浏览器证据不足
+  （夹具未加载 `element-plus/dist/index.css`，禁用态取自浏览器默认样式）。
+  已由 `CREATE-EDIT-DIALOG-VISUAL-TEMPLATE-PUBLIC-CSS-IMPLEMENTATION-001-R1` 定向纠错：
+  **补齐 `ced-label-row`／`--ced-label-gap` 与加载态 `--ced-submit-bg-loading` 的真实消费点，令牌登记回归批准的 17 个**；
+  **逐项收敛现行文档时态**；**重建加载真实 Element Plus 样式与真实 Vue/EP 组件 DOM 的隔离夹具证据**。
 - **复审与批准时序**：R0 提交 `ad7a4b741714a229a8a8a250f8ee960447e33355` 远程复审 `CHANGES_REQUIRED`
   （两处阻塞：差异值缺省口径、回退路径）；R1 提交 `b8ba2f6cab713326a1fdd70a875b743c5190cbe4` 定向纠错后
   远程复审 `CHANGES_REQUIRED`（仅导航不一致）；R2 提交 `45ce16dffbf2747abeb75d4d6c43bc57165043c8`
