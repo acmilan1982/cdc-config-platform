@@ -880,3 +880,48 @@ Git 对 `30e82cf` 的独立复审 `CHANGES_REQUIRED`（**唯一阻塞**），更
 - 可选扩展链**下一入口**：`CHATGPT_REMOTE_LIST_TABLE_OPTIONAL_SINGLE_ROW_HIGHLIGHT_PUBLIC_IMPLEMENTATION_REVIEW`；
 - **实现并推送 ≠ 复审通过 ≠ 项目负责人已目测 ≠ 任何页面已接入或迁移 ≠ 正式验收通过；公共可选样式已实现
   ≠ 页面已迁移。**
+
+## 单行固定高亮公共可选视觉预设代码复审通过状态同步追加记录（`LIST-TABLE-OPTIONAL-SINGLE-ROW-HIGHLIGHT-PUBLIC-REVIEW-STATUS-SYNC-001`，追加记录，`2026-09-30`）
+
+本任务为**纯文档状态同步与证据留痕**，**不**改任何产品代码、测试、业务页面或验收定义，
+`page_migration_status` 状态层**不**受影响。
+
+### 复审事实与对象范围
+
+- ChatGPT 从**远程 Git** 独立核对区间
+  `5fa0edd6d6dc13868a085e15c54db0c48f69a763..f35fb5a91fa872402d23a0ce2656a3d3719aa157`，
+  对 `SHARED_COMPONENT_DESIGN.md` §13.3 公共可选单行固定高亮视觉预设的**代码复审结论为 `APPROVED`**
+  （复审时点 `2026-09-30`）；
+- **复审范围**：公共 CSS、公共契约测试、隔离合成数据浏览器证据与必要文档；新增的是**表级**
+  `.lt-row-highlight`（与 `.lt-main-table` 并列）加**行级** `.lt-row-highlight__row` 的双层显式 opt-in，
+  未修改任何业务页面；`f35fb5a` 产品代码在远程 Git 中仍为当前版本（其后无改动 CSS / spec 的提交）。
+
+### 状态变更与未改变项
+
+- **旧 → 新**：§13 公共实现的**现行状态**由实现提交时点值 `IMPLEMENTED_PENDING_CHATGPT_REVIEW`
+  （**历史时点值，保留并标注，不机械全局替换**）更新为 **`IMPLEMENTED_PENDING_USER_ACCEPTANCE`**
+  （**已实现且远程代码复审通过、尚待项目负责人接受或采用决定**），并单列 `code_review_status=APPROVED`、
+  复审时点 `2026-09-30`、对象区间与来源；
+- **未改变的层**：§12 三点入口 `IMPLEMENTED_PENDING_USER_ACCEPTANCE` **不**回退；§12.1 触发器**禁用态视觉**
+  仍未实现 / 未验收；§13 **设计基线**保持已批准；§13 公共样式**已实现且代码复审通过**，但 `/config/client`
+  仍用**页面私有**固定高亮规则、`/config/data-source` **未**接入且“更多”文字入口**未**改；
+  **隔离夹具不得记为真实业务页面接入**；
+- **未改变的模板层**：模板基础实现早先的 `IMPLEMENTED_ACCEPTED` / `ACCEPTED_BY_PROJECT_OWNER` 范围保持原样；
+  模板级页面迁移 `NOT_STARTED` / `NOT_GRANTED` / `NOT_DECIDED` 与模板级 `current_next_entry` 保持原值；
+  Feature 四族定义行与 157 条验收状态格**一字不动**（按 Git 对象复算 `PASS 70 / FAIL 0 / BLOCKED 72 / NOT_RUN 15`）；
+- **未执行项**：本任务**未**运行测试 / 构建 / 浏览器，**未**启停服务，**未**访问数据库 / ZooKeeper / Kafka；
+  **未**改动 `frontend/**`、`backend/**`、`docs/features/**`、任何配置、历史报告、测试或证据。
+
+### 标记与计数（命令实测）
+
+- 四份规范文档（通道 1）`28 / 0 / 43 / 7`、`SHARED_COMPONENT_DESIGN.md` 批准态设计标记（通道 2）`81`、
+  参考事实标记（通道 3）`26`、候选未实现标记（通道 4）`8`——四通道**逐值不变**（各通道严格**不**混算）；
+- `lt_token_count` 仍 **9**；`lt_internal_helper_class_count` 仍 **4**
+  （`{lt-row-action__cell, lt-row-action__ellipsis, lt-row-highlight, lt-row-highlight__row}`）。
+
+### 下一入口（边界）
+
+- 可选扩展链**下一入口**：**独立评估某个页面是否采用 §13 公共预设**——
+  **尚未决定、未授权接入**（`LIST_TABLE_OPTIONAL_HIGHLIGHT_PAGE_ADOPTION_EVALUATION_NOT_DECIDED_NOT_GRANTED`）；
+  **不**是 `/config/client` 的迁移命令，也**不**是 `/config/data-source` 的三点入口改造；
+- **远程代码复审通过 ≠ 项目负责人已目测接受 ≠ 任何页面已接入或迁移 ≠ 正式验收通过。**

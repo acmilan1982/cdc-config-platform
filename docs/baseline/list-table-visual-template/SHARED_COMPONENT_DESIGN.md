@@ -141,7 +141,9 @@ LIST_TABLE_SHARED_DESIGN_APPROVED
 **§13 分层契约经 `2026-09-29` 批准后**：其**已批准的设计契约**改用本文件唯一的批准态设计标记
 （其字面量见 §11.2 的拼接构造式），其**公共实现的状态**据实标注参考事实标记——**批准态与代码状态分列，不混同**。
 （该实现在 `2026-09-29` 批准时**尚不存在**；随后由独立任务 `LIST-TABLE-OPTIONAL-SINGLE-ROW-HIGHLIGHT-PUBLIC-IMPLEMENTATION-001`
-于 `2026-09-30` 落地，现行状态 `IMPLEMENTED_PENDING_CHATGPT_REVIEW`，见 §13.3。其**辅助类**现行计数由 `2` 变为 `4`。）
+于 `2026-09-30` 落地，并经 ChatGPT 从远程 Git 对该实现提交的**独立只读代码复审**结论 `APPROVED`，
+**现行**状态为 `IMPLEMENTED_PENDING_USER_ACCEPTANCE`（已实现且代码复审通过、尚待项目负责人接受或采用决定），
+见 §13.3。其**辅助类**现行计数由 `2` 变为 `4`。）
 **不再**因「代码待远程复审」把**已落地事实**标为候选未实现——
 `IMPLEMENTED_PENDING_CHATGPT_REVIEW` 是**复审状态**，**不**等于 `NOT_IMPLEMENTED`（`README.md` §7.3）。
 该标记例外**只**落在 §12、§13.3（其实现状态）与本节／§11 的说明文字中：§1~§10 已批准详细设计正文**仍只使用**
@@ -187,8 +189,8 @@ opt-in 扩展：在 `frontend/src/styles/list-table/list-table-visual.css` 新�
 > **现行计数与 §13 状态更新（2026-09-30 追加）**：§13.3 公共可选单行固定高亮实现落地后，
 > **现行** `lt_internal_helper_class_count` 由 **2** 变为 **4**（`{lt-row-action__cell,
 > lt-row-action__ellipsis, lt-row-highlight, lt-row-highlight__row}`），`lt_token_count` 仍 **9**；
-> §13 公共实现状态见 §13.3（`IMPLEMENTED_PENDING_CHATGPT_REVIEW`）。上述 §12 段落中的 `2` 为
-> **该实现时点值**，**不**回写。
+> §13 公共实现状态见 §13.3（现行 `IMPLEMENTED_PENDING_USER_ACCEPTANCE`，即已实现且远程代码复审通过）。
+> 上述 §12 段落中的 `2` 为**该实现时点值**，**不**回写。
 
 历史状态说明：本文件在**收口前**的草案阶段使用带 `_DRAFT` 后缀的草案标记；
 该字面量**仍逐字保留**在 R0 / R1 / R2 三份历史执行报告中，属**历史事实**，
@@ -2022,9 +2024,11 @@ ChatGPT 远程独立只读代码复审结论 **`APPROVED`**（复审对象为 R0
 > `aa6285f02c16e6c3806ca2759d21e16b3e0e41b1` 复审 `APPROVED`、项目负责人于 `2026-09-29` 批准后
 > **设计基线已批准**；**不**改变 §0–§12 任何已批准规则与既有状态。
 > **批准的是设计基线（可选契约的范围与边界），不是实现**：§13 可选视觉预设的**公共实现**已由独立任务
-> `LIST-TABLE-OPTIONAL-SINGLE-ROW-HIGHLIGHT-PUBLIC-IMPLEMENTATION-001`（`2026-09-30`）落地，
-> 现行状态 `IMPLEMENTED_PENDING_CHATGPT_REVIEW`（**已实现、待 ChatGPT 远程代码复审**；其实现提交时点值为
-> `NOT_STARTED`，见 §13.3），其他页面**不**自动接入。
+> `LIST-TABLE-OPTIONAL-SINGLE-ROW-HIGHLIGHT-PUBLIC-IMPLEMENTATION-001`（`2026-09-30`）落地，并经 ChatGPT
+> 从远程 Git 对该实现提交的**独立只读代码复审**结论 `APPROVED`（`2026-09-30`），现行状态
+> `IMPLEMENTED_PENDING_USER_ACCEPTANCE`（**已实现且远程代码复审通过、尚待项目负责人接受或采用决定**；
+> 其实现提交时点值为 `IMPLEMENTED_PENDING_CHATGPT_REVIEW`、批准时点值为 `NOT_STARTED`，均属历史，见 §13.3），
+> 其他页面**不**自动接入。
 
 ### 13.1 分层原则
 
@@ -2040,7 +2044,7 @@ ChatGPT 远程独立只读代码复审结论 **`APPROVED`**（复审对象为 R0
 | 表头 / 正文排版、边框、纵向内边距 | 页面表格显式挂根类 `lt-main-table` | 表头 `12px/600/#71717a/0.01em`；`td` 纵向内边距 `12px 0`、`th 11px 0`；边框色 `#f4f4f5` | 列定义、字段语义、是否覆盖 | 零匹配，计算样式与启用前逐值相同 | `list-table-visual.spec.ts` #1–#10；正式验收逐值等价 |
 | 行高（内容驱动） | 默认，无需额外声明 | 不固定 `tr` 高度；不裁切 / 不压平内容 | 业务上确有差异时可自行固定（须自担风险） | 各页各行按内容自然撑开 | 两页只读浏览器量测：可比常规行约 `48 CSS px`、歧义行 `52px` |
 | 行内三点入口（opt-in） | 页面**显式**挂 `lt-row-action__cell`（操作列 `td`）+ `lt-row-action__ellipsis`（触发器） | **仅**命中区盒模型与交互态外观：`28×28px`、圆角 `6px`、主色、`hover`、`:focus-visible` 内嵌焦点环、`cursor`、操作单元格纵向内边距补偿 `9.5px 0`；**当入口存在可观察禁用状态且页面显式启用该可选样式时**，其**禁用态通用视觉与可访问性呈现**（见下段；现行 CSS **尚未**提供该规则，属设计契约、尚未实现验收） | 菜单内容、启停 / 删除、权限、**是否 / 何时禁用**、异常状态、Popover 定位与请求顺序 | 零匹配（`lt-row-action__*` 计数 `0`），可继续用文字“更多”或无操作列 | `list-table-visual.spec.ts` #11（辅助类集合 = `{lt-row-action__cell, lt-row-action__ellipsis}`）、#13（仅 `ClientConfigPage.vue` 挂载）；第七轮只读证据 |
-| 单行固定高亮（opt-in，**已批准可选契约**；公共实现已落地、状态 `IMPLEMENTED_PENDING_CHATGPT_REVIEW`） | 页面**自行选择**该选项时启用（**非**默认）：表级 `.lt-row-highlight`（与根类并列）+ 行级 `.lt-row-highlight__row`（页面行类回调提供） | 仅**可选视觉预设**外观（见 §13.3） | 选择语义、选中 ID 存放、与启停 / 删除联动、请求时序 | 不改变该页现行 `hover`；不出现固定高亮 | `list-table-visual.spec.ts` #14（未 opt-in 零泄漏）、#15（固定压过 hover / `current-row`、左缘仅首格）；隔离真实浏览器夹具层叠核对（无业务数据）；第七轮只读回归（单击固定 / 再点取消 / 点他行转移 / 悬停不改固定，均为 `/config/client` Feature 自身实现） |
+| 单行固定高亮（opt-in，**已批准可选契约**；公共实现已落地、代码复审通过、现行状态 `IMPLEMENTED_PENDING_USER_ACCEPTANCE`） | 页面**自行选择**该选项时启用（**非**默认）：表级 `.lt-row-highlight`（与根类并列）+ 行级 `.lt-row-highlight__row`（页面行类回调提供） | 仅**可选视觉预设**外观（见 §13.3） | 选择语义、选中 ID 存放、与启停 / 删除联动、请求时序 | 不改变该页现行 `hover`；不出现固定高亮 | `list-table-visual.spec.ts` #14（未 opt-in 零泄漏）、#15（固定压过 hover / `current-row`、左缘仅首格）；隔离真实浏览器夹具层叠核对（无业务数据）；第七轮只读回归（单击固定 / 再点取消 / 点他行转移 / 悬停不改固定，均为 `/config/client` Feature 自身实现；该页仍用**页面私有**固定高亮规则，**未**接入本公共类） |
 
 **禁用态的职责分界（与 §12.1 一致）**：**是否禁用、何时禁用、权限与业务条件由 Feature 决定**；
 **当入口存在可观察的禁用状态、且页面显式启用这一可选样式时**，其在**通用视觉与可访问性**上如何呈现
@@ -2083,23 +2087,28 @@ ChatGPT 远程独立只读代码复审结论 **`APPROVED`**（复审对象为 R0
 高亮行为仍属**该 Feature 页面自身**的实现（其选择语义、状态与请求时序由页面持有，本次**未**改该页、**未**把其
 写成已接入公共类），**不**等于该页已采用本节公共样式或通用行选择逻辑。
 
-本节状态为**设计基线已批准、公共扩展实现已落地**。据此，§13 可选视觉预设的公共实现状态由实现提交时点的
-`NOT_STARTED`（**历史值**）更新为 **`IMPLEMENTED_PENDING_CHATGPT_REVIEW`**（已实现、**待 ChatGPT 远程代码复审**）：
+本节状态为**设计基线已批准、公共扩展实现已落地且远程代码复审通过**。据此，§13 可选视觉预设的公共实现状态
+由实现提交时点的 `IMPLEMENTED_PENDING_CHATGPT_REVIEW`（**历史值**）更新为
+**`IMPLEMENTED_PENDING_USER_ACCEPTANCE`**（已实现且远程代码复审通过、**尚待项目负责人接受或采用决定**）：
 
 ```text
-list_table_optional_single_row_highlight_status=DESIGN_BASELINE_APPROVED_IMPLEMENTATION_IMPLEMENTED_PENDING_CHATGPT_REVIEW
+list_table_optional_single_row_highlight_status=DESIGN_BASELINE_APPROVED_IMPLEMENTATION_IMPLEMENTED_PENDING_USER_ACCEPTANCE
 list_table_optional_single_row_highlight_design_approval_status=APPROVED_BY_PROJECT_OWNER
 list_table_optional_single_row_highlight_design_approval_date=2026-09-29
 list_table_optional_single_row_highlight_implementation_task=LIST-TABLE-OPTIONAL-SINGLE-ROW-HIGHLIGHT-PUBLIC-IMPLEMENTATION-001
-list_table_optional_single_row_highlight_implementation_status=IMPLEMENTED_PENDING_CHATGPT_REVIEW
-list_table_optional_single_row_highlight_implementation_submission_status=NOT_STARTED
-list_table_optional_single_row_highlight_code_review_status=NOT_YET_REVIEWED
+list_table_optional_single_row_highlight_implementation_status=IMPLEMENTED_PENDING_USER_ACCEPTANCE
+list_table_optional_single_row_highlight_implementation_submission_status=IMPLEMENTED_PENDING_CHATGPT_REVIEW
+list_table_optional_single_row_highlight_implementation_initial_status=NOT_STARTED
+list_table_optional_single_row_highlight_code_review_status=APPROVED
+list_table_optional_single_row_highlight_code_review_date=2026-09-30
+list_table_optional_single_row_highlight_code_review_source=CHATGPT_REMOTE_INDEPENDENT_CODE_REVIEW_RELAYED_BY_PROJECT_OWNER
+list_table_optional_single_row_highlight_code_review_range=5fa0edd6d6dc13868a085e15c54db0c48f69a763..f35fb5a91fa872402d23a0ce2656a3d3719aa157
 list_table_optional_single_row_highlight_page_integration_status=NONE_ANY_PAGE
 lt_token_count=9
 lt_internal_helper_class_count=4
 ```
 
-**该实现完成 ≠ 远程代码复审通过 ≠ 已目测 ≠ 任何页面已接入或迁移 ≠ 已正式验收**；本次**未**修改
+**该实现完成 ≠ 已目测接受 ≠ 任何页面已接入或迁移 ≠ 已正式验收**（远程代码复审已通过，仅此一项已翻转）；本次**未**修改
 `ClientConfigPage.vue` 及其测试与 `DataSourcePage.vue`，**未**改 §12.1 禁用态视觉（仍属设计契约、尚未实现、尚未验收），
 也**未**改变模板级迁移状态（`page_migration_status=NOT_STARTED` 等）。
 
@@ -2119,7 +2128,8 @@ lt_internal_helper_class_count=4
   列为**显式 opt-in** 的可选视觉预设，即 `DESIGN.md` §7 的**最小定向修订**，经 ChatGPT 从远程 Git 对
   R4 提交 `aa6285f…` 复审 `APPROVED`、项目负责人于 `2026-09-29` 批准后**已生效**：`DESIGN.md` §7
   上列两行的禁令范围**已收窄**为“业务语义不公共化”，**不**排除该可选视觉预设。**收窄的是设计基线**；
-  其公共实现已由独立任务（`2026-09-30`）落地、状态 `IMPLEMENTED_PENDING_CHATGPT_REVIEW`（见 §13.3）；
+  其公共实现已由独立任务（`2026-09-30`）落地、并经远程代码复审 `APPROVED`，现行状态
+  `IMPLEMENTED_PENDING_USER_ACCEPTANCE`（见 §13.3）；
   获批前的“拟议 / 尚待批准”表述保留在既有历史报告，**不**回写；
 - 本节**不**改变 §12 三点 opt-in 契约，仅将其纳入统一分层契约表；
 - 本节**不**改变任何模板级迁移状态（`page_migration_status=NOT_STARTED` 等）与既有验收结论；
