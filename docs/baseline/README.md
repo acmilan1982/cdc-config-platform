@@ -84,7 +84,7 @@ implementation_status=IMPLEMENTATION_NOT_STARTED
 public_css_status=NOT_CREATED
 public_vue_component_status=NOT_CREATED
 page_adoption_authorization_status=PAGE_ADOPTION_NOT_AUTHORIZED
-current_next_entry=CHATGPT_REMOTE_CREATE_EDIT_DIALOG_VISUAL_TEMPLATE_BASELINE_DRAFT_REVIEW
+current_next_entry=CHATGPT_REMOTE_CREATE_EDIT_DIALOG_VISUAL_TEMPLATE_BASELINE_DRAFT_R2_REVIEW
 ```
 
 - **草案状态**：本模板**未批准、公共 CSS／Vue 组件未创建、任何页面均未授权接入**；
@@ -93,8 +93,13 @@ current_next_entry=CHATGPT_REMOTE_CREATE_EDIT_DIALOG_VISUAL_TEMPLATE_BASELINE_DR
   **正交**（弹窗层），三者不互相并入、不复用彼此标记／类名／令牌命名空间。
 - **排除范围**：启用／停用／删除确认框、数据源业务属性与命名策略子弹窗、表格模板、API／后端／数据库、
   现行业务校验与提交关闭时序。
-- **下一入口**：`CHATGPT_REMOTE_CREATE_EDIT_DIALOG_VISUAL_TEMPLATE_BASELINE_DRAFT_REVIEW`
-  ——先由 ChatGPT 从远程 Git 独立复审草案，通过后再由项目负责人批准，然后另立公共实现与各页选择性接入任务。
+- **下一入口**：`CHATGPT_REMOTE_CREATE_EDIT_DIALOG_VISUAL_TEMPLATE_BASELINE_DRAFT_R2_REVIEW`
+  ——先由 ChatGPT 从远程 Git 独立复审草案（R0→R1→R2），通过后再由项目负责人批准，
+  然后另立公共实现与各页选择性接入任务。
+- **复审时序**：R0 草案提交 `ad7a4b741714a229a8a8a250f8ee960447e33355` 经远程文档复审为 `CHANGES_REQUIRED`，
+  已由 R1 提交 `b8ba2f6cab713326a1fdd70a875b743c5190cbe4` 定向纠错承接；R1 遗留的**导航入口不一致**
+  （本目录 `current_next_entry` 仍写 R0 现行入口）由本 R2 补齐。
+  **R1 尚未获 `APPROVED`，R2 待远程复审**；`CHANGES_REQUIRED`／提交成功均**不等于**获批。
 
 ## 列表表格视觉模板基线入口
 
