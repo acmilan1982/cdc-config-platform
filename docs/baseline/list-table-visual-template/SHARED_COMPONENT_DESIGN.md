@@ -195,7 +195,10 @@ opt-in 扩展：在 `frontend/src/styles/list-table/list-table-visual.css` 新�
 > **§13 页面接入现状（2026-09-30 追加）**：经项目负责人**页面级**授权，`/config/client`（探针端管理）**主列表**
 > 已接入 §13.3 公共可选单行固定高亮预设（表级 `.lt-row-highlight` 与根类并列 + 行级
 > `.lt-row-highlight__row`），页面私有高亮视觉规则已移除，外观由公共预设唯一承担；
-> 其状态记为「**已接入、待 ChatGPT 远程代码复审及负责人目测**」（见 §13.3）。**其余任何页面**（含
+> 其**接入代码**已经 ChatGPT 从远程 Git 独立只读代码复审、结论 `APPROVED`（2026-09-30，区间
+> `ebf34d9…..5cb8079…`），项目负责人亦于 2026-09-30 反馈「我试了，页面功能没问题」；现行分层状态见 §13.3
+> （`..._page_integration_status=PARTIAL_CLIENT_CONFIG_MAIN_LIST_ONLY_ADOPTED_REVIEW_APPROVED_OWNER_FEEDBACK_OK_PENDING_FORMAL_ACCEPTANCE`，
+> **仍待正式验收**）。**其余任何页面**（含
 > `/config/data-source`）**未被授权**接入，仍零挂载。这是**页面的可选采用**，**不**改变模板默认行为，
 > **不**扩大公共 CSS 的默认生效范围；模板级迁移状态（`page_migration_status=NOT_STARTED` 等）
 > 与模板级 `current_next_entry` **仍为原值**（**另一状态层**，见 §6）。
@@ -2112,18 +2115,36 @@ list_table_optional_single_row_highlight_code_review_status=APPROVED
 list_table_optional_single_row_highlight_code_review_date=2026-09-30
 list_table_optional_single_row_highlight_code_review_source=CHATGPT_REMOTE_INDEPENDENT_CODE_REVIEW_RELAYED_BY_PROJECT_OWNER
 list_table_optional_single_row_highlight_code_review_range=5fa0edd6d6dc13868a085e15c54db0c48f69a763..f35fb5a91fa872402d23a0ce2656a3d3719aa157
-list_table_optional_single_row_highlight_page_integration_status=PARTIAL_CLIENT_CONFIG_MAIN_LIST_ONLY_ADOPTED_PENDING_CHATGPT_REVIEW_AND_OWNER_VISUAL_CHECK
+list_table_optional_single_row_highlight_page_integration_status=PARTIAL_CLIENT_CONFIG_MAIN_LIST_ONLY_ADOPTED_REVIEW_APPROVED_OWNER_FEEDBACK_OK_PENDING_FORMAL_ACCEPTANCE
+list_table_optional_single_row_highlight_page_integration_submission_status=PARTIAL_CLIENT_CONFIG_MAIN_LIST_ONLY_ADOPTED_PENDING_CHATGPT_REVIEW_AND_OWNER_VISUAL_CHECK
+list_table_optional_single_row_highlight_page_integration_code_review_status=APPROVED
+list_table_optional_single_row_highlight_page_integration_code_review_date=2026-09-30
+list_table_optional_single_row_highlight_page_integration_code_review_source=CHATGPT_REMOTE_INDEPENDENT_CODE_REVIEW_RELAYED_BY_PROJECT_OWNER
+list_table_optional_single_row_highlight_page_integration_code_review_range=ebf34d970d720aa124dc7a1ea94ba811dcf21584..5cb8079167df82531bd7c02da301def5140e635a
+list_table_optional_single_row_highlight_page_integration_owner_feedback_status=OWNER_REPORTED_ACTUAL_PAGE_OPERATION_OK
+list_table_optional_single_row_highlight_page_integration_owner_feedback_date=2026-09-30
+list_table_optional_single_row_highlight_page_integration_formal_acceptance_status=NOT_RUN
 list_table_optional_single_row_highlight_page_integration_task=CLIENT-CONFIG-OPTIONAL-ROW-HIGHLIGHT-PUBLIC-PRESET-ADOPTION-001
 lt_token_count=9
 lt_internal_helper_class_count=4
 ```
 
 **该实现完成 ≠ 已目测接受 ≠ 任何页面已迁移 ≠ 已正式验收**（远程代码复审已通过，仅此一项已翻转）。页面接入层面：
-经项目负责人**页面级**授权，**仅** `/config/client`（探针端管理）**主列表**采用本节公共预设（弹窗内列表**不**接入），
-其状态为「**已接入、待 ChatGPT 远程代码复审及负责人目测**」，**不**等于已通过远程复审、已目测接受或正式验收通过；
+经项目负责人**页面级**授权，**仅** `/config/client`（探针端管理）**主列表**采用本节公共预设（弹窗内列表**不**接入）。
+其**接入代码**已经 ChatGPT 从远程 Git 对固定区间
+`ebf34d970d720aa124dc7a1ea94ba811dcf21584..5cb8079167df82531bd7c02da301def5140e635a` 做**独立只读代码复审**、
+结论 **`APPROVED`**（复审时点 **2026-09-30**），项目负责人亦于 2026-09-30 运行实际页面后反馈
+「**我试了，页面功能没问题**」——**仅**记录为**本次接入后实际页面人工操作无问题**的反馈，**不**推断负责人已逐项测试、
+已批准模板级页面迁移或已对 157 条验收作整体接受决定。据此页面接入**现行分层状态**为
+`PARTIAL_CLIENT_CONFIG_MAIN_LIST_ONLY_ADOPTED_REVIEW_APPROVED_OWNER_FEEDBACK_OK_PENDING_FORMAL_ACCEPTANCE`
+（已接入、接入代码远程复审 `APPROVED`、负责人已反馈页面操作无问题、**仍待正式验收**；其提交时点值
+`..._PENDING_CHATGPT_REVIEW_AND_OWNER_VISUAL_CHECK` 保留为 `..._page_integration_submission_status` **历史值**）。
+注意区分两层：**§13 公共实现**与**本次 `/config/client` 主列表接入**各自的一次复审**均已 `APPROVED`**，但两者
+**都**只是代码复审结论，**均不等于**项目负责人最终接受或正式验收通过。
 **其余任何页面**（含 `/config/data-source`）**未被授权**接入，仍零挂载。本次**未**修改
 `DataSourcePage.vue`，**未**改 §12.1 禁用态视觉（仍属设计契约、尚未实现、尚未验收），
 也**未**改变模板级迁移状态（`page_migration_status=NOT_STARTED` 等）与模板级 `current_next_entry`。
+**页面接入及其代码复审通过 ≠ 正式验收通过；本 Feature 157 条验收状态格未被本任务翻转。**
 
 ### 13.4 其余探针页特征的归属
 
