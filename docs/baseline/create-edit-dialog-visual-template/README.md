@@ -8,7 +8,7 @@ implementation_status=IMPLEMENTATION_NOT_STARTED
 page_adoption_authorization_status=PAGE_ADOPTION_NOT_AUTHORIZED
 public_css_status=NOT_CREATED
 public_vue_component_status=NOT_CREATED
-current_next_entry=CHATGPT_REMOTE_CREATE_EDIT_DIALOG_VISUAL_TEMPLATE_BASELINE_DRAFT_REVIEW
+current_next_entry=CHATGPT_REMOTE_CREATE_EDIT_DIALOG_VISUAL_TEMPLATE_BASELINE_DRAFT_R1_REVIEW
 ```
 
 ```text
@@ -35,8 +35,13 @@ candidate_capabilities=LABEL_TYPOGRAPHY_AND_ALIGNMENT,BLACK_PRIMARY_SUBMIT_BUTTO
 > 这些是**本弹窗模板草案自身**的状态，**不改变**列表表格视觉模板、
 > 查询列表页模板、探针端管理与数据源管理各自的现有状态。
 >
-> 下一入口：`CHATGPT_REMOTE_CREATE_EDIT_DIALOG_VISUAL_TEMPLATE_BASELINE_DRAFT_REVIEW`——
-> 先由 ChatGPT **从远程 Git** 对草案做独立复审，通过后再由**项目负责人批准**，
+> **复审时序**：R0 草案提交 `ad7a4b741714a229a8a8a250f8ee960447e33355` 已由 ChatGPT **从远程 Git**
+> 独立复审，结论 `CHANGES_REQUIRED`（两处阻塞：差异值的缺省口径、真实可执行的回退路径）。
+> R1（纯文档定向纠错）已针对这两处修改 `DESIGN.md`／`MIGRATION.md` 并新增 R1 报告；
+> **R1 尚未获批**——`CHANGES_REQUIRED` **不**等于 R1 已获 `APPROVED`。
+>
+> 下一入口：`CHATGPT_REMOTE_CREATE_EDIT_DIALOG_VISUAL_TEMPLATE_BASELINE_DRAFT_R1_REVIEW`——
+> 先由 ChatGPT **从远程 Git** 对 R1 做独立复审，通过后再由**项目负责人批准**，
 > 然后**另立**公共实现任务与各页选择性接入任务。
 
 ---
@@ -101,7 +106,8 @@ candidate_capabilities=LABEL_TYPOGRAPHY_AND_ALIGNMENT,BLACK_PRIMARY_SUBMIT_BUTTO
 | `UI.md` | 候选视觉规格、状态矩阵、响应式与可访问性 |
 | `SHARED_COMPONENT_DESIGN.md` | 未来实现边界、作用域／零泄漏约束、可选能力与不变量 |
 | `MIGRATION.md` | 两页各自现状、未来选择性接入步骤与未授权状态 |
-| `reports/CREATE-EDIT-DIALOG-VISUAL-TEMPLATE-BASELINE-DRAFT-001.md` | 事实／推断分层、来源映射、冲突与待审点、变更清单、保护核验与下一入口 |
+| `reports/CREATE-EDIT-DIALOG-VISUAL-TEMPLATE-BASELINE-DRAFT-001.md` | R0 历史快照：事实／推断分层、来源映射、冲突与待审点、变更清单、保护核验与下一入口 |
+| `reports/CREATE-EDIT-DIALOG-VISUAL-TEMPLATE-BASELINE-DRAFT-001-R1.md` | R1 定向纠错：两处阻塞、旧→新文本／位置、保护核验与下一入口（对 R0 不准确结论作勘误，不回写 R0） |
 
 ## 7. 与其他模板的关系
 
