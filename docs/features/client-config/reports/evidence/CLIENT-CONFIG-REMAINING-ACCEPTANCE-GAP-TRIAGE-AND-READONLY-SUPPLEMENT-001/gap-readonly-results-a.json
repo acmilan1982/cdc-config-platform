@@ -1,0 +1,525 @@
+{
+ "task": "CLIENT-CONFIG-REMAINING-ACCEPTANCE-GAP-TRIAGE-AND-READONLY-SUPPLEMENT-001",
+ "mode": "readonly-browser-probe",
+ "scope": "/config/client only",
+ "browser": {
+  "engine": "chromium",
+  "version": "147.0.7727.15",
+  "headless": true
+ },
+ "frontend": "http://127.0.0.1:5173",
+ "writeInterception": {
+  "policy": "/api/** GET/HEAD/OPTIONS allow; POST/PUT/PATCH/DELETE abort and count",
+  "nonGetAttempts": 0,
+  "attempts": []
+ },
+ "list1440": {
+  "rootClassList": "el-table--fit el-table--enable-row-transition el-table el-table--layout-fixed cc-table lt-main-table lt-row-highlight is-scrolling-none",
+  "headers": [
+   "序号",
+   "探针 ID",
+   "探针描述",
+   "采集数据源",
+   "数据源数量",
+   "操作"
+  ],
+  "hasStatusColumn": false,
+  "seqHeader": "序号",
+  "seqValues": [
+   "1",
+   "2",
+   "3",
+   "4",
+   "5",
+   "6",
+   "7",
+   "8",
+   "9",
+   "10",
+   "11",
+   "12",
+   "13",
+   "14",
+   "15",
+   "16"
+  ],
+  "seqContinuousFrom1": true,
+  "rowCount": 16,
+  "heightHistogram": {
+   "48": 15,
+   "52": 1
+  },
+  "wrappedRows": [],
+  "tagStats": [
+   {
+    "idx": 1,
+    "tagCount": 1,
+    "plusText": null
+   },
+   {
+    "idx": 2,
+    "tagCount": 1,
+    "plusText": null
+   },
+   {
+    "idx": 3,
+    "tagCount": 1,
+    "plusText": null
+   },
+   {
+    "idx": 4,
+    "tagCount": 5,
+    "plusText": "+3"
+   },
+   {
+    "idx": 5,
+    "tagCount": 1,
+    "plusText": null
+   },
+   {
+    "idx": 6,
+    "tagCount": 1,
+    "plusText": null
+   },
+   {
+    "idx": 7,
+    "tagCount": 2,
+    "plusText": null
+   },
+   {
+    "idx": 8,
+    "tagCount": 0,
+    "plusText": null
+   },
+   {
+    "idx": 9,
+    "tagCount": 0,
+    "plusText": null
+   },
+   {
+    "idx": 10,
+    "tagCount": 0,
+    "plusText": null
+   },
+   {
+    "idx": 11,
+    "tagCount": 0,
+    "plusText": null
+   },
+   {
+    "idx": 12,
+    "tagCount": 0,
+    "plusText": null
+   },
+   {
+    "idx": 13,
+    "tagCount": 7,
+    "plusText": "+6"
+   },
+   {
+    "idx": 14,
+    "tagCount": 1,
+    "plusText": null
+   },
+   {
+    "idx": 15,
+    "tagCount": 2,
+    "plusText": null
+   },
+   {
+    "idx": 16,
+    "tagCount": 1,
+    "plusText": null
+   }
+  ],
+  "addBtn": {
+   "text": "新增探针",
+   "rightmostInToolbar": true,
+   "right": 1368,
+   "toolbarRight": 1368,
+   "summaryRight": 343.36
+  },
+  "batchAbsence": {
+   "hasCheckboxColumn": false,
+   "hasRowCheckbox": false,
+   "hasDeleteSelectedText": false,
+   "hasBatchWord": false,
+   "hasSelectedHint": false
+  },
+  "hasOptionSearch": false,
+  "queryPanel": {
+   "hasKeyword": true,
+   "hasStatusSelect": true,
+   "hasRefresh": false,
+   "hasQueryBtn": true,
+   "hasResetBtn": true
+  }
+ },
+ "resetRenumber": {
+  "afterQuery": {
+   "rowCount": 0,
+   "seqValues": []
+  },
+  "afterResetNoQuery": {
+   "rowCount": 0,
+   "keywordValue": ""
+  },
+  "afterResetThenQuery": {
+   "rowCount": 16,
+   "seqValues": [
+    "1",
+    "2",
+    "3",
+    "4",
+    "5",
+    "6",
+    "7",
+    "8",
+    "9",
+    "10",
+    "11",
+    "12",
+    "13",
+    "14",
+    "15",
+    "16"
+   ],
+   "continuousFrom1": true
+  }
+ },
+ "menu": {
+  "visible": true,
+  "popperRadius": "8px",
+  "popperShadow": "rgba(0, 0, 0, 0.12) 0px 6px 16px 0px, rgba(0, 0, 0, 0.06) 0px 2px 8px 0px",
+  "menuRadius": "8px",
+  "menuPadding": "4px",
+  "itemTexts": [
+   "启用",
+   "删除"
+  ],
+  "items": [
+   {
+    "text": "启用",
+    "className": "el-dropdown-menu__item",
+    "fontWeight": "400",
+    "color": "rgb(96, 98, 102)",
+    "isDisabled": false,
+    "divided": false,
+    "borderTopWidth": "0px",
+    "borderTopStyle": "none",
+    "borderTopColor": "rgb(96, 98, 102)",
+    "marginTop": "0px",
+    "borderRadius": "6px",
+    "padding": "6px 12px"
+   },
+   {
+    "text": "删除",
+    "className": "cc-more-danger el-dropdown-menu__item",
+    "fontWeight": "400",
+    "color": "rgb(245, 108, 108)",
+    "isDisabled": false,
+    "divided": false,
+    "borderTopWidth": "0px",
+    "borderTopStyle": "none",
+    "borderTopColor": "rgb(245, 108, 108)",
+    "marginTop": "0px",
+    "borderRadius": "6px",
+    "padding": "6px 12px"
+   }
+  ],
+  "disabledCount": 0
+ },
+ "menuHover": {
+  "error": null,
+  "dangerColor": "rgb(245, 108, 108)"
+ },
+ "menuKeyboard": {
+  "openedByEnter": true,
+  "traversal": [
+   {
+    "text": "启用",
+    "isMenuItem": true,
+    "isDisabled": false
+   },
+   {
+    "text": "删除",
+    "isMenuItem": true,
+    "isDisabled": false
+   },
+   {
+    "text": "启用",
+    "isMenuItem": true,
+    "isDisabled": false
+   },
+   {
+    "text": "删除",
+    "isMenuItem": true,
+    "isDisabled": false
+   }
+  ],
+  "closedByEsc": false
+ },
+ "menuClipping": {
+  "lastRowCount": 16,
+  "popper": {
+   "inViewport": true,
+   "right": 0,
+   "viewportW": 1440,
+   "viewportH": 900,
+   "placement": "bottom-end"
+  }
+ },
+ "dialog": {
+  "dialogWidth": 900,
+  "labelGaps": [
+   {
+    "label": "探针 ID",
+    "gapPx": 12,
+    "ctrlLeft": 382,
+    "labelRight": 370
+   },
+   {
+    "label": "探针描述",
+    "gapPx": 12,
+    "ctrlLeft": 382,
+    "labelRight": 370
+   },
+   {
+    "label": "采集数据源",
+    "gapPx": 12,
+    "ctrlLeft": 382,
+    "labelRight": 370
+   }
+  ],
+  "idInput": {
+   "maxlengthAttr": "32"
+  },
+  "desc": {
+   "placeholder": "探针用途描述（最多 256 个字符）"
+  },
+  "submit": {
+   "text": "创建",
+   "bg": "rgb(9, 9, 11)",
+   "color": "rgb(255, 255, 255)",
+   "radius": "6px",
+   "fontWeight": "500",
+   "hasIsDisabled": false
+  },
+  "cancelBtn": {
+   "text": "取消",
+   "bg": "rgb(255, 255, 255)"
+  },
+  "toggleBtn": null,
+  "paneWidths": {
+   "options": 406,
+   "chosen": 356
+  },
+  "paneHeights": {
+   "options": 343,
+   "chosen": 343
+  }
+ },
+ "idTyped": {
+  "typedRequested": 40,
+  "actualLength": 32
+ },
+ "descTyped": {
+  "typedRequested": 300,
+  "actualLength": 256,
+  "allHan": true
+ },
+ "emptySubmit": {
+  "errors": [
+   {
+    "text": "探针 ID 不能为空。",
+    "h": 18,
+    "role": "alert"
+   },
+   {
+    "text": "探针描述不能为空。",
+    "h": 18,
+    "role": "alert"
+   },
+   {
+    "text": "至少选择 1 个数据源",
+    "h": 18,
+    "role": "alert"
+   }
+  ],
+  "errorCount": 3,
+  "sourceFeedback": true,
+  "dialogBottomDeltaPx": 0
+ },
+ "writesAfterEmptySubmit": 0,
+ "confirm": {
+  "customClass": "el-message-box cc-confirm--enable",
+  "title": "启用探针",
+  "bodyHasProbePhrase": true,
+  "buttons": [
+   {
+    "text": "取消",
+    "primary": false,
+    "bg": "rgb(255, 255, 255)",
+    "color": "rgb(96, 98, 102)"
+   },
+   {
+    "text": "启用",
+    "primary": true,
+    "bg": "rgb(39, 39, 42)",
+    "color": "rgb(255, 255, 255)"
+   }
+  ],
+  "primary": {
+   "bg": "rgb(39, 39, 42)",
+   "color": "rgb(255, 255, 255)",
+   "radius": "6px",
+   "hasIsDisabled": false
+  }
+ },
+ "confirmKind": "启用",
+ "confirmCanceled": true,
+ "writesAfterConfirmCancel": 0,
+ "confirmWritesDelta": 0,
+ "list1920": {
+  "rootClassList": "el-table--fit el-table--enable-row-transition el-table el-table--layout-fixed cc-table lt-main-table lt-row-highlight is-scrolling-none",
+  "headers": [
+   "序号",
+   "探针 ID",
+   "探针描述",
+   "采集数据源",
+   "数据源数量",
+   "操作"
+  ],
+  "hasStatusColumn": false,
+  "seqHeader": "序号",
+  "seqValues": [
+   "1",
+   "2",
+   "3",
+   "4",
+   "5",
+   "6",
+   "7",
+   "8",
+   "9",
+   "10",
+   "11",
+   "12",
+   "13",
+   "14",
+   "15",
+   "16"
+  ],
+  "seqContinuousFrom1": true,
+  "rowCount": 16,
+  "heightHistogram": {
+   "48": 15,
+   "52": 1
+  },
+  "wrappedRows": [],
+  "tagStats": [
+   {
+    "idx": 1,
+    "tagCount": 1,
+    "plusText": null
+   },
+   {
+    "idx": 2,
+    "tagCount": 1,
+    "plusText": null
+   },
+   {
+    "idx": 3,
+    "tagCount": 1,
+    "plusText": null
+   },
+   {
+    "idx": 4,
+    "tagCount": 5,
+    "plusText": null
+   },
+   {
+    "idx": 5,
+    "tagCount": 1,
+    "plusText": null
+   },
+   {
+    "idx": 6,
+    "tagCount": 1,
+    "plusText": null
+   },
+   {
+    "idx": 7,
+    "tagCount": 2,
+    "plusText": null
+   },
+   {
+    "idx": 8,
+    "tagCount": 0,
+    "plusText": null
+   },
+   {
+    "idx": 9,
+    "tagCount": 0,
+    "plusText": null
+   },
+   {
+    "idx": 10,
+    "tagCount": 0,
+    "plusText": null
+   },
+   {
+    "idx": 11,
+    "tagCount": 0,
+    "plusText": null
+   },
+   {
+    "idx": 12,
+    "tagCount": 0,
+    "plusText": null
+   },
+   {
+    "idx": 13,
+    "tagCount": 7,
+    "plusText": "+2"
+   },
+   {
+    "idx": 14,
+    "tagCount": 1,
+    "plusText": null
+   },
+   {
+    "idx": 15,
+    "tagCount": 2,
+    "plusText": null
+   },
+   {
+    "idx": 16,
+    "tagCount": 1,
+    "plusText": null
+   }
+  ],
+  "addBtn": {
+   "text": "新增探针",
+   "rightmostInToolbar": true,
+   "right": 1848,
+   "toolbarRight": 1848,
+   "summaryRight": 343.36
+  },
+  "batchAbsence": {
+   "hasCheckboxColumn": false,
+   "hasRowCheckbox": false,
+   "hasDeleteSelectedText": false,
+   "hasBatchWord": false,
+   "hasSelectedHint": false
+  },
+  "hasOptionSearch": true,
+  "queryPanel": {
+   "hasKeyword": true,
+   "hasStatusSelect": true,
+   "hasRefresh": false,
+   "hasQueryBtn": true,
+   "hasResetBtn": true
+  }
+ }
+}

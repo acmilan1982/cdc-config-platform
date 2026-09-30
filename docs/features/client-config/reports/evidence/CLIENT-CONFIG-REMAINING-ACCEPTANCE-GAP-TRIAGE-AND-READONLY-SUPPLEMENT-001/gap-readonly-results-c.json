@@ -1,0 +1,405 @@
+{
+ "task": "...SUPPLEMENT-001",
+ "probe": "C",
+ "mode": "readonly-browser-probe",
+ "scope": "/config/client only",
+ "browser": {
+  "engine": "chromium",
+  "version": "147.0.7727.15",
+  "headless": true
+ },
+ "writeInterception": {
+  "policy": "non-GET /api/** abort+count",
+  "nonGetAttempts": 0,
+  "attempts": []
+ },
+ "census": [
+  {
+   "idx": 1,
+   "inactiveMark": true,
+   "abnormalMark": false,
+   "abnormalText": null,
+   "tagCount": 1,
+   "plus": null,
+   "ambiguous": false
+  },
+  {
+   "idx": 2,
+   "inactiveMark": true,
+   "abnormalMark": false,
+   "abnormalText": null,
+   "tagCount": 1,
+   "plus": null,
+   "ambiguous": false
+  },
+  {
+   "idx": 3,
+   "inactiveMark": true,
+   "abnormalMark": false,
+   "abnormalText": null,
+   "tagCount": 1,
+   "plus": null,
+   "ambiguous": false
+  },
+  {
+   "idx": 4,
+   "inactiveMark": true,
+   "abnormalMark": false,
+   "abnormalText": null,
+   "tagCount": 5,
+   "plus": "+3",
+   "ambiguous": false
+  },
+  {
+   "idx": 5,
+   "inactiveMark": true,
+   "abnormalMark": false,
+   "abnormalText": null,
+   "tagCount": 1,
+   "plus": null,
+   "ambiguous": false
+  },
+  {
+   "idx": 6,
+   "inactiveMark": true,
+   "abnormalMark": false,
+   "abnormalText": null,
+   "tagCount": 1,
+   "plus": null,
+   "ambiguous": false
+  },
+  {
+   "idx": 7,
+   "inactiveMark": true,
+   "abnormalMark": false,
+   "abnormalText": null,
+   "tagCount": 2,
+   "plus": null,
+   "ambiguous": false
+  },
+  {
+   "idx": 8,
+   "inactiveMark": true,
+   "abnormalMark": false,
+   "abnormalText": null,
+   "tagCount": 0,
+   "plus": null,
+   "ambiguous": false
+  },
+  {
+   "idx": 9,
+   "inactiveMark": true,
+   "abnormalMark": false,
+   "abnormalText": null,
+   "tagCount": 0,
+   "plus": null,
+   "ambiguous": false
+  },
+  {
+   "idx": 10,
+   "inactiveMark": true,
+   "abnormalMark": false,
+   "abnormalText": null,
+   "tagCount": 0,
+   "plus": null,
+   "ambiguous": false
+  },
+  {
+   "idx": 11,
+   "inactiveMark": true,
+   "abnormalMark": false,
+   "abnormalText": null,
+   "tagCount": 0,
+   "plus": null,
+   "ambiguous": false
+  },
+  {
+   "idx": 12,
+   "inactiveMark": true,
+   "abnormalMark": false,
+   "abnormalText": null,
+   "tagCount": 0,
+   "plus": null,
+   "ambiguous": false
+  },
+  {
+   "idx": 13,
+   "inactiveMark": true,
+   "abnormalMark": false,
+   "abnormalText": null,
+   "tagCount": 7,
+   "plus": "+6",
+   "ambiguous": false
+  },
+  {
+   "idx": 14,
+   "inactiveMark": true,
+   "abnormalMark": false,
+   "abnormalText": null,
+   "tagCount": 1,
+   "plus": null,
+   "ambiguous": false
+  },
+  {
+   "idx": 15,
+   "inactiveMark": true,
+   "abnormalMark": false,
+   "abnormalText": null,
+   "tagCount": 2,
+   "plus": null,
+   "ambiguous": true
+  },
+  {
+   "idx": 16,
+   "inactiveMark": false,
+   "abnormalMark": true,
+   "abnormalText": "异常：X",
+   "tagCount": 1,
+   "plus": null,
+   "ambiguous": false
+  }
+ ],
+ "ellipsis": {
+  "total": 16,
+  "visible": 16
+ },
+ "menuRow1": {
+  "open": true,
+  "placement": "bottom-end",
+  "rect": {
+   "l": 1236,
+   "t": 404,
+   "r": 1298,
+   "b": 491
+  },
+  "menuChildren": [
+   {
+    "tag": "LI",
+    "role": "menuitem",
+    "text": "启用",
+    "borderTopWidth": "0px",
+    "borderTopStyle": "none",
+    "height": 34,
+    "margin": "0px"
+   },
+   {
+    "tag": "LI",
+    "role": "separator",
+    "text": "",
+    "borderTopWidth": "1px",
+    "borderTopStyle": "solid",
+    "height": 1,
+    "margin": "4px 0px"
+   },
+   {
+    "tag": "LI",
+    "role": "menuitem",
+    "text": "删除",
+    "borderTopWidth": "0px",
+    "borderTopStyle": "none",
+    "height": 34,
+    "margin": "0px"
+   }
+  ],
+  "separatorCount": 1,
+  "itemTexts": [
+   "启用",
+   "删除"
+  ],
+  "itemColors": [
+   {
+    "text": "启用",
+    "color": "rgb(96, 98, 102)",
+    "fontWeight": "400"
+   },
+   {
+    "text": "删除",
+    "color": "rgb(245, 108, 108)",
+    "fontWeight": "400"
+   }
+  ],
+  "borderRadius": "8px",
+  "boxShadow": "rgba(0, 0, 0, 0.12) 0px 6px 16px 0px, rgba(0, 0, 0, 0.06) 0px 2px 8px 0px",
+  "menuPadding": "4px"
+ },
+ "menuRow4": {
+  "open": true,
+  "placement": "bottom-end",
+  "rect": {
+   "l": 1236,
+   "t": 548,
+   "r": 1298,
+   "b": 635
+  },
+  "menuChildren": [
+   {
+    "tag": "LI",
+    "role": "menuitem",
+    "text": "启用",
+    "borderTopWidth": "0px",
+    "borderTopStyle": "none",
+    "height": 34,
+    "margin": "0px"
+   },
+   {
+    "tag": "LI",
+    "role": "separator",
+    "text": "",
+    "borderTopWidth": "1px",
+    "borderTopStyle": "solid",
+    "height": 1,
+    "margin": "4px 0px"
+   },
+   {
+    "tag": "LI",
+    "role": "menuitem",
+    "text": "删除",
+    "borderTopWidth": "0px",
+    "borderTopStyle": "none",
+    "height": 34,
+    "margin": "0px"
+   }
+  ],
+  "separatorCount": 1,
+  "itemTexts": [
+   "启用",
+   "删除"
+  ],
+  "itemColors": [
+   {
+    "text": "启用",
+    "color": "rgb(96, 98, 102)",
+    "fontWeight": "400"
+   },
+   {
+    "text": "删除",
+    "color": "rgb(245, 108, 108)",
+    "fontWeight": "400"
+   }
+  ],
+  "borderRadius": "8px",
+  "boxShadow": "rgba(0, 0, 0, 0.12) 0px 6px 16px 0px, rgba(0, 0, 0, 0.06) 0px 2px 8px 0px",
+  "menuPadding": "4px"
+ },
+ "menuRow13": {
+  "open": true,
+  "placement": "bottom-end",
+  "rect": {
+   "l": 1236,
+   "t": 689,
+   "r": 1298,
+   "b": 776
+  },
+  "menuChildren": [
+   {
+    "tag": "LI",
+    "role": "menuitem",
+    "text": "启用",
+    "borderTopWidth": "0px",
+    "borderTopStyle": "none",
+    "height": 34,
+    "margin": "0px"
+   },
+   {
+    "tag": "LI",
+    "role": "separator",
+    "text": "",
+    "borderTopWidth": "1px",
+    "borderTopStyle": "solid",
+    "height": 1,
+    "margin": "4px 0px"
+   },
+   {
+    "tag": "LI",
+    "role": "menuitem",
+    "text": "删除",
+    "borderTopWidth": "0px",
+    "borderTopStyle": "none",
+    "height": 34,
+    "margin": "0px"
+   }
+  ],
+  "separatorCount": 1,
+  "itemTexts": [
+   "启用",
+   "删除"
+  ],
+  "itemColors": [
+   {
+    "text": "启用",
+    "color": "rgb(96, 98, 102)",
+    "fontWeight": "400"
+   },
+   {
+    "text": "删除",
+    "color": "rgb(245, 108, 108)",
+    "fontWeight": "400"
+   }
+  ],
+  "borderRadius": "8px",
+  "boxShadow": "rgba(0, 0, 0, 0.12) 0px 6px 16px 0px, rgba(0, 0, 0, 0.06) 0px 2px 8px 0px",
+  "menuPadding": "4px"
+ },
+ "menuLastRow": {
+  "open": true,
+  "placement": "top",
+  "rect": {
+   "l": 1253,
+   "t": 698,
+   "r": 1315,
+   "b": 785
+  },
+  "menuChildren": [
+   {
+    "tag": "LI",
+    "role": "menuitem",
+    "text": "停用",
+    "borderTopWidth": "0px",
+    "borderTopStyle": "none",
+    "height": 34,
+    "margin": "0px"
+   },
+   {
+    "tag": "LI",
+    "role": "separator",
+    "text": "",
+    "borderTopWidth": "1px",
+    "borderTopStyle": "solid",
+    "height": 1,
+    "margin": "4px 0px"
+   },
+   {
+    "tag": "LI",
+    "role": "menuitem",
+    "text": "删除",
+    "borderTopWidth": "0px",
+    "borderTopStyle": "none",
+    "height": 34,
+    "margin": "0px"
+   }
+  ],
+  "separatorCount": 1,
+  "itemTexts": [
+   "停用",
+   "删除"
+  ],
+  "itemColors": [
+   {
+    "text": "停用",
+    "color": "rgb(180, 83, 9)",
+    "fontWeight": "400"
+   },
+   {
+    "text": "删除",
+    "color": "rgb(245, 108, 108)",
+    "fontWeight": "400"
+   }
+  ],
+  "borderRadius": "8px",
+  "boxShadow": "rgba(0, 0, 0, 0.12) 0px 6px 16px 0px, rgba(0, 0, 0, 0.06) 0px 2px 8px 0px",
+  "menuPadding": "4px",
+  "vw": 1440,
+  "vh": 900,
+  "visibleTriggerIndex": 15
+ }
+}

@@ -1,0 +1,52 @@
+{
+ "task": "...SUPPLEMENT-001",
+ "probe": "D",
+ "mode": "readonly-browser-probe",
+ "scope": "/config/client only",
+ "browser": {
+  "engine": "chromium",
+  "version": "147.0.7727.15",
+  "headless": true
+ },
+ "writeInterception": {
+  "policy": "non-GET /api/** abort+count",
+  "nonGetAttempts": 0,
+  "attempts": []
+ },
+ "pagination": {
+  "elPaginationCount": 0,
+  "pageSizeSelect": false,
+  "totalTexts": [
+   "共 16 条"
+  ]
+ },
+ "menuHoverAndFocus": {
+  "warningNormal": "rgb(180, 83, 9)",
+  "warningHover": "rgb(180, 83, 9)",
+  "itemFocus": {
+   "isMenuItem": true,
+   "bg": "rgb(236, 245, 255)",
+   "color": "rgb(245, 108, 108)",
+   "outline": "none 3px rgb(245, 108, 108)"
+  }
+ },
+ "idInserted": {
+  "requested": 40,
+  "actual": 32
+ },
+ "idIllegalTyped": {
+  "value": "ab cd@中文",
+  "hasSpace": true,
+  "hasAt": true,
+  "hasCJK": true
+ },
+ "idIllegalSubmit": {
+  "fieldErrors": [
+   "探针 ID 格式不正确：须为 1~32 位字母、数字、点、下划线或连字符，且以字母或数字开头。",
+   "探针描述不能为空。",
+   "至少选择 1 个数据源"
+  ],
+  "inputValueNow": "ab cd@中文"
+ },
+ "writesAfterProbeD": 0
+}

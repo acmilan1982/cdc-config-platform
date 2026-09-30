@@ -1,0 +1,93 @@
+{
+ "task": "...SUPPLEMENT-001",
+ "probe": "F",
+ "mode": "readonly-browser-probe",
+ "scope": "/config/client only",
+ "browser": {
+  "engine": "chromium",
+  "version": "147.0.7727.15",
+  "headless": true,
+  "viewport": "1440x900"
+ },
+ "writeInterception": {
+  "policy": "non-GET /api/** abort+count",
+  "nonGetAttempts": 0,
+  "attempts": []
+ },
+ "opColumn": {
+  "cell": {
+   "position": "sticky",
+   "right": "0px",
+   "left": "auto",
+   "overflow": "visible",
+   "cls": "el-table_1_column_6 lt-row-action__cell el-table-fixed-column--right is-first-column is-leaf el-table__cell",
+   "rectRight": 1368
+  },
+  "lastTh": {
+   "position": "sticky",
+   "right": "0px",
+   "left": "auto",
+   "overflow": "visible",
+   "cls": "el-table_1_column_6 lt-row-action__cell el-table-fixed-column--right is-first-column is-leaf el-table__cell",
+   "rectRight": 1368
+  },
+  "fixedClassPresent": true
+ },
+ "opColumnScroll": {
+  "maxScrollLeft": 0,
+  "movedRight": 72,
+  "stillInViewport": true
+ },
+ "abnormal1440": {
+  "idx": 15,
+  "markText": "异常：X",
+  "markColor": "rgb(185, 28, 28)",
+  "markBg": "rgb(254, 226, 226)",
+  "markRadius": "4px",
+  "markFontSize": "11px",
+  "markFontWeight": "700",
+  "markHeight": 20,
+  "markWidth": 45,
+  "gapIdToMark": 6,
+  "sameRowTop": true,
+  "idText": "<ID>"
+ },
+ "menuFill": {
+  "itemTexts": [
+   "停用",
+   "删除"
+  ],
+  "normal": [
+   {
+    "t": "停用",
+    "bg": "rgba(0, 0, 0, 0)",
+    "color": "rgb(180, 83, 9)"
+   },
+   {
+    "t": "删除",
+    "bg": "rgba(0, 0, 0, 0)",
+    "color": "rgb(245, 108, 108)"
+   }
+  ],
+  "dangerHover": {
+   "bg": "rgb(236, 245, 255)",
+   "color": "rgb(245, 108, 108)"
+  },
+  "warningHover": {
+   "bg": "rgb(236, 245, 255)",
+   "color": "rgb(180, 83, 9)"
+  },
+  "focus": {
+   "t": "删除",
+   "isItem": true,
+   "bg": "rgb(236, 245, 255)",
+   "color": "rgb(245, 108, 108)"
+  }
+ },
+ "apiFgActive": {
+  "status": 200,
+  "count": 0,
+  "sample": []
+ },
+ "writesAfterProbeF": 0
+}

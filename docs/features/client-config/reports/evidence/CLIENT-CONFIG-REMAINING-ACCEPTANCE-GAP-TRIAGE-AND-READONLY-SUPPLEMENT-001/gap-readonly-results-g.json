@@ -1,0 +1,45 @@
+{
+ "task": "...SUPPLEMENT-001",
+ "probe": "G",
+ "mode": "readonly-browser-probe",
+ "scope": "/config/client only",
+ "browser": {
+  "engine": "chromium",
+  "version": "147.0.7727.15",
+  "headless": true,
+  "viewport": "1440x900"
+ },
+ "writeInterception": {
+  "policy": "non-GET /api/** abort+count",
+  "nonGetAttempts": 0,
+  "attempts": []
+ },
+ "offRowIdx": 0,
+ "items": [
+  {
+   "t": "启用",
+   "cls": "el-dropdown-menu__item",
+   "bg": "rgba(0, 0, 0, 0)",
+   "color": "rgb(96, 98, 102)",
+   "fw": "400"
+  },
+  {
+   "t": "删除",
+   "cls": "cc-more-danger el-dropdown-menu__item",
+   "bg": "rgba(0, 0, 0, 0)",
+   "color": "rgb(245, 108, 108)",
+   "fw": "400"
+  }
+ ],
+ "enableHover": {
+  "bg": "rgb(236, 245, 255)",
+  "color": "rgb(64, 158, 255)"
+ },
+ "focus": {
+  "t": "删除",
+  "isItem": true,
+  "bg": "rgb(236, 245, 255)",
+  "color": "rgb(245, 108, 108)"
+ },
+ "writesAfterProbeG": 0
+}

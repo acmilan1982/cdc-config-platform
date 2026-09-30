@@ -1,0 +1,87 @@
+{
+ "task": "...SUPPLEMENT-001",
+ "probe": "E",
+ "mode": "readonly-browser-probe",
+ "scope": "/config/client only",
+ "browser": {
+  "engine": "chromium",
+  "version": "147.0.7727.15",
+  "headless": true
+ },
+ "writeInterception": {
+  "policy": "non-GET /api/** abort+count",
+  "nonGetAttempts": 0,
+  "attempts": []
+ },
+ "editFromRow": {
+  "title": "编辑探针",
+  "idInputLocked": true,
+  "idValue": "<ID>",
+  "toggleText": "修改探针 ID"
+ },
+ "editOpenedIdMatchesRow": true,
+ "idToggle": {
+  "before": {
+   "locked": true,
+   "disabled": true
+  },
+  "after": {
+   "locked": false,
+   "disabled": false,
+   "value": "<ID>",
+   "toggleText": "取消修改"
+  }
+ },
+ "optionPool": {
+  "total": 13,
+  "selectable": 1,
+  "disabled": 12,
+  "reasons": [
+   "已分配给：<ID>",
+   "已分配给：<ID>、<ID>、h",
+   "ID 含英文逗号，不可选择",
+   "已分配给：<ID>",
+   "已分配给：<ID>",
+   "已分配给：<ID>、<ID>"
+  ]
+ },
+ "autoGenerate": {
+  "confirmDialogShown": false,
+  "desc": "<ORG>",
+  "chosenCount": 1,
+  "pickedOrgs": [
+   "<ORG>"
+  ],
+  "chosenBefore": [
+   "<ORG>"
+  ],
+  "descHasSpaceAfterComma": false,
+  "descHasDoubleComma": false,
+  "fragmentCount": 1
+ },
+ "nonLinkage": {
+  "descBefore": "<ORG>",
+  "descChangedAfterRemove": false,
+  "afterRemove": {
+   "desc": "<ORG>",
+   "chips": 0
+  },
+  "afterReclick": {
+   "desc": "<ORG>",
+   "chips": 0
+  }
+ },
+ "abnormalRow": {
+  "idx": 15,
+  "markText": "异常：X",
+  "idText": "<ID>",
+  "menu": {
+   "open": true,
+   "itemTexts": [
+    "停用",
+    "删除"
+   ]
+  }
+ },
+ "writesAfterProbeE": 0
+}

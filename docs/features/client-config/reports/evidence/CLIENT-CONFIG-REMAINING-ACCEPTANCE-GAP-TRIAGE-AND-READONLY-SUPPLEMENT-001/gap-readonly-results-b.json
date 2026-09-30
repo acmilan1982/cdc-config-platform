@@ -1,0 +1,108 @@
+{
+ "task": "CLIENT-CONFIG-REMAINING-ACCEPTANCE-GAP-TRIAGE-AND-READONLY-SUPPLEMENT-001",
+ "probe": "B",
+ "mode": "readonly-browser-probe",
+ "scope": "/config/client only",
+ "browser": {
+  "engine": "chromium",
+  "version": "147.0.7727.15",
+  "headless": true
+ },
+ "writeInterception": {
+  "policy": "non-GET /api/** abort+count",
+  "nonGetAttempts": 0,
+  "attempts": []
+ },
+ "rowClassification": {
+  "enabledIdx": null,
+  "disabledIdx": 0,
+  "abnormalIdx": 15,
+  "rowCount": 16
+ },
+ "menuEnabled": {
+  "error": "TimeoutError: page.waitForSelector: Timeout 5000ms exceeded.\nCall log:\n\u001b[2m  - waiting for locator('.cc-more-popper .el-dropdown-menu__item') to be visible\u001b[22m\n\u001b[2m    15 × locator resolved to 32 ele"
+ },
+ "menuHoverEnabled": {
+  "dangerHoverColor": "rgb(245, 108, 108)"
+ },
+ "menuKeyboardEnabled": {
+  "openedByEnter": true,
+  "traversal": [
+   {
+    "text": "删除",
+    "isMenuItem": true
+   },
+   {
+    "text": "启用",
+    "isMenuItem": true
+   },
+   {
+    "text": "删除",
+    "isMenuItem": true
+   },
+   {
+    "text": "启用",
+    "isMenuItem": true
+   },
+   {
+    "text": "删除",
+    "isMenuItem": true
+   }
+  ],
+  "focusBeforeEsc": {
+   "cls": "cc-more-danger el-dropdown-menu__item",
+   "isMenuItem": true
+  },
+  "closedByEsc": true
+ },
+ "menuClippingLast": {
+  "error": "TimeoutError: page.waitForSelector: Timeout 5000ms exceeded.\nCall log:\n\u001b[2m  - waiting for locator('.cc-more-popper .el-dropdown-menu__item') to be visible\u001b[22m\n\u001b[2m    15 × locator resolved to 32 ele"
+ },
+ "confirmEnabled": {
+  "customClass": "el-message-box cc-confirm--enable",
+  "title": "启用探针",
+  "bodyMatches": true,
+  "btnTexts": [
+   "取消",
+   "启用"
+  ],
+  "primaryNormal": {
+   "bg": "rgb(39, 39, 42)",
+   "color": "rgb(255, 255, 255)",
+   "radius": "6px",
+   "fontWeight": "500",
+   "isPrimary": true
+  },
+  "cancel": {
+   "bg": "rgb(255, 255, 255)",
+   "color": "rgb(96, 98, 102)"
+  }
+ },
+ "confirmKind": "启用",
+ "confirmCanceled": true,
+ "confirmWritesDelta": 0,
+ "editDialog": {
+  "title": "编辑探针",
+  "submit": {
+   "bg": "rgb(9, 9, 11)",
+   "color": "rgb(255, 255, 255)",
+   "text": "保存"
+  },
+  "cancel": {
+   "bg": "rgb(255, 255, 255)",
+   "color": "rgb(96, 98, 102)",
+   "text": "取消"
+  },
+  "autogen": {
+   "bg": "rgb(255, 255, 255)",
+   "color": "rgb(96, 98, 102)",
+   "text": "自动生成"
+  },
+  "idToggle": {
+   "bg": "rgba(0, 0, 0, 0)",
+   "color": "rgb(64, 158, 255)",
+   "text": "修改探针 ID"
+  },
+  "idInputDisabled": true
+ }
+}
