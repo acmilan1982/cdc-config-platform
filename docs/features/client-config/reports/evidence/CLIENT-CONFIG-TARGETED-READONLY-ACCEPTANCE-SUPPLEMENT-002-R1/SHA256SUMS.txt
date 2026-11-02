@@ -1,0 +1,4 @@
+bce7ffd6a36363d3bd8a4e695cc662b2d81523967a37036200ccfbd889ddc2ab  env-and-version.txt
+d00393204b9f39cf40765efb95f36bb9cb00f641cd3a8604ccc5b7e31450234a  probe-r1-dialog.cjs
+9d40665cf65a6a14c6771c6a4aca79fde7955c6c72fd97c1c7480e601c07df22  r1-dialog-results.json
+3c588b580fdfa8487583d997b8e0c4f3bdfd50ab769e0b8bcc2cd48e3658be13  README.md

@@ -493,6 +493,26 @@
 
 **定向只读补测 ≠ 写授权 ≠ 157 条整体验收通过 ≠ 批准其他页面接入或迁移。**
 
+### 1.28 探针端管理定向只读验收补测 002-R1 状态块（2026-11-02；`CLIENT-CONFIG-TARGETED-READONLY-ACCEPTANCE-SUPPLEMENT-002-R1`）
+
+| 项目 | 值 |
+|---|---|
+| 执行任务 | `CLIENT-CONFIG-TARGETED-READONLY-ACCEPTANCE-SUPPLEMENT-002-R1`（**真实浏览器只读补证**；基线 `c0a3c1d`；范围**仅** `/config/client`；**零**业务写入、**未**建夹具、**未**改库/ZooKeeper/Kafka） |
+| 触发 | ChatGPT 远程复审 `d925899..c0a3c1d` 结论 `CHANGES_REQUIRED`：`CCFG-AC-124` 编辑模式缺完整五步、`CCFG-AC-130` 用 `page.fill()` 充当“粘贴” |
+| 目标 AC | **仅** `CCFG-AC-124`、`CCFG-AC-130`（不重跑 12 条全量探针，不改定义与产品代码） |
+| R1-01 `CCFG-AC-124` | **编辑模式**三视口补齐 `未选(0)→选中1→全部取消(0)→本地红色错误→修正消除`；已选数 `0,1,0,0,1`、错误数 `0,0,0,1,0`、每视口弹窗底边与底部按钮 y **唯一值（零跳动）**；提交仅触发**本地**业务校验（`nonGetAttempts=0`），非系统/API 错误 |
+| R1-02 `CCFG-AC-130` | **真实剪贴板粘贴**（`navigator.clipboard.writeText` + 真实 `Control+V`，`isTrusted=true`/`insertFromPaste`，1440×900）：300 汉字 / 混合 200 汉字+100😀 / 跨 256 边界 255 汉字+1😀 均截断至 **256 完整字符**且**无孤立代理项**；配合既有手输 258→256、256 允许、提示文案证据 |
+| 状态格变化（本 R1 相对 base） | **无**：两项补证后 `CCFG-AC-124`、`CCFG-AC-130` 均**维持 `PASS`**；`changed_ids=[]`；§4 状态格零改动 |
+| 原 002 轮次累计 `changed_ids`（相对 `d925899`） | `[CCFG-AC-009, CCFG-AC-017, CCFG-AC-088, CCFG-AC-101, CCFG-AC-124, CCFG-AC-130, CCFG-AC-136]`（不变） |
+| 本轮统计（据实际状态格复算） | `PASS` **78** / `FAIL` **0** / `BLOCKED` **64** / `NOT_RUN` **15** = **157** |
+| 与 R0 结论覆盖 | R0「AC-124 编辑两模式完整五步」「`fill` 覆盖粘贴」两条结论由本 R1 覆盖；R0 报告/脚本/JSON 作为历史快照**不回写** |
+| `CCFG-AC-092` 边界 | “本轮未新增跨页对照”**仅为执行边界**，非现行新缺口；已审跨页行高历史证据仍有效；其 `BLOCKED` 仅因缺超长 ID/描述样本（`maxClientIdLen=19`、`maxDescLen=152`），本轮不改状态 |
+| 定义保护 | **未**修改任何 AC 定义单元、需求/设计/UI/模板基线、源码、CSS、测试或其他功能文档；`CCFG-AC-001~157` 编号完整、唯一、连续 |
+| 报告与证据 | 报告 `docs/features/client-config/reports/CLIENT-CONFIG-TARGETED-READONLY-ACCEPTANCE-SUPPLEMENT-002-R1.md`；证据 `docs/features/client-config/reports/evidence/CLIENT-CONFIG-TARGETED-READONLY-ACCEPTANCE-SUPPLEMENT-002-R1/`（探针 + 脱敏结果 + `env-and-version.txt` + `README.md` + `SHA256SUMS.txt`） |
+| 下一入口 | `CHATGPT_REMOTE_CLIENT_CONFIG_TARGETED_READONLY_ACCEPTANCE_SUPPLEMENT_002_R1_REVIEW` |
+
+**R1 只读补证 ≠ 写授权 ≠ 157 条整体验收通过 ≠ 批准其他页面接入或迁移。**
+
 ### 1.1 批准信息（2026-09-03 旧口径批准历史；本轮并发口径调整不在该次批准范围内，见 §1.2）
 
 | 项目 | 值 |

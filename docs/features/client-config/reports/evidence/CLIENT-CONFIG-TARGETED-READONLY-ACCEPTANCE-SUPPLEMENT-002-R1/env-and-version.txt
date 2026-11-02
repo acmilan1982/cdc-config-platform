@@ -1,0 +1,17 @@
+# CLIENT-CONFIG-TARGETED-READONLY-ACCEPTANCE-SUPPLEMENT-002-R1 运行现场
+captured_at_utc=2026-11-02T05:30:51Z
+git_head=c0a3c1d5784133704e7883e3df16b055a9a189e6
+git_branch=develop
+last_backend_src_commit=807a5a5 2026-09-20 15:48:52 +0800
+last_frontend_src_commit=d878c3d 2026-09-30 17:12:07 +0800
+backend_jar=backend/target/cdc-config-platform-backend-1.0.0-SNAPSHOT.jar
+backend_jar_mtime=2026-09-22T04:21:27Z
+backend_jar_sha256=efdbea827b6ab84dd47105d2cc130f0bc3c5b70dc78cc626b6421e1f9750a459
+backend_pid=4758
+backend_listen=0.0.0.0:8080
+frontend_pid=4790
+frontend_listen=0.0.0.0:5173
+node_version=v24.17.0
+java_version=java version "1.8.0_202"
+browser=chromium 147.0.7727.15 headless=true
+probe_output=r1-dialog-results.json
