@@ -657,6 +657,20 @@ adjustment7_formal_acceptance_execution_status=NOT_RUN
 
 **R1 只读补证 ≠ 写授权 ≠ 157 条整体验收通过 ≠ 批准其他页面接入或迁移。**
 
+### 1.19 探针端管理剩余验收可执行方案草案（2026-11-02，`CLIENT-CONFIG-REMAINING-ACCEPTANCE-ENABLEMENT-PLAN-DRAFT-001`，纯文档方案准备）
+
+- **性质**：**纯文档**。不执行业务写入、不改已批准定义、不重判验收状态；不跑测试/构建/lint/浏览器、不启停服务、不访问数据库/ZooKeeper/Kafka。
+- **基线**：`develop` @ `096ba40630618c8304f0a203aae033adb9a4c85a`（002-R1 只读补证已由 ChatGPT 远程复审 `APPROVED`）；剩余集合从实际 Git 对象复算为 **79 条**（`BLOCKED 64 + NOT_RUN 15`），不从旧 87 条缺口矩阵照抄。
+- **定义拟文（草案，未生效）**：`CCFG-AC-090`（新增按钮禁用态）与 `CCFG-AC-157`（三点触发器 `disabled`）——静态核对确认当前无实际可达的禁用条件：新增按钮无 `:disabled`/权限门，无候选数据源时仅打开空候选弹窗；三点触发器无 `disabled`/`aria-disabled`，被禁用者是**下拉菜单项**；公共 CSS 无禁用规则。按 `SHARED_COMPONENT_DESIGN` §12.1/§13.2 区分「当前页面可观察状态」与「公共能力未来条件性契约」，拟文状态 `DRAFT_PENDING_REVIEW` / `NOT_APPROVED`，**不**为测样式人为制造禁用业务行为。
+- **样本依赖计划**：从 79 条中筛出 **37 条**真正依赖样本者，逐条给出「缺失步骤 / 精确样本条件 / 历史证据 / 当前可用性 / 只读可补 / 仍需写授权」；严格区分数源计数（恰好 6 源 vs ≥7 源）、字节边界（1024 UTF-8 字节）与字符边界（>256 生成）、同机构名（仅服务不去重分支）。当前可用性一律标注「本轮未核实」。
+- **首批受控写方案（仅准备）**：建议首先评估「指定专用测试探针的启用/停用往返与重选」，经源码核实 E6/E7 等真实接口；因新增默认 `FG_ACTIVE=1` 会使配置生效，方案明确隔离前提与回退。**专用对象未绑定、隔离条件未成立，结论 `NOT_READY`**；所有写执行均 `NOT_REQUESTED`/`NOT_EXECUTED`。
+- **状态**：`changed_ids=[]`；统计保持 `PASS 78 / FAIL 0 / BLOCKED 64 / NOT_RUN 15 = 157`。
+- **笔误修复**：同步更正 `CLIENT-CONFIG-TARGETED-READONLY-ACCEPTANCE-SUPPLEMENT-002-R1.md` §1 时间关系为「jar 时间晚于末次 `backend/src` 提交」（jar 2026-09-22，源码提交 2026-09-20）。
+- **下一入口**：`CHATGPT_REMOTE_CLIENT_CONFIG_REMAINING_ACCEPTANCE_ENABLEMENT_PLAN_DRAFT_REVIEW`。
+- 报告：`reports/CLIENT-CONFIG-REMAINING-ACCEPTANCE-ENABLEMENT-PLAN-DRAFT-001.md`。
+
+**方案草案 ≠ 样本具备 ≠ 写授权 ≠ 正式验收通过 ≠ 已批准定义。**
+
 ## 2. 文档导航
 
 | 文档 | 职责 | 状态 |
@@ -740,6 +754,7 @@ adjustment7_formal_acceptance_execution_status=NOT_RUN
 | `reports/CLIENT-CONFIG-TARGETED-READONLY-ACCEPTANCE-SUPPLEMENT-002-R1.md` | 探针端管理**定向只读验收补测 002-R1**（仅补 `CCFG-AC-124` 编辑模式完整五步 + `CCFG-AC-130` 真实剪贴板粘贴；`CCFG-AC-124` 三视口 `0→1→0→错误→修正` 零跳动、提交仅触发本地校验 `nonGetAttempts=0`；`CCFG-AC-130` 真实 `Control+V`，`isTrusted=true`/`insertFromPaste`，三用例均截断至 256 完整字符且无孤立代理项；两项维持 `PASS`，本 R1 `changed_ids=[]`，统计仍 `78/0/64/15=157`；R0「编辑两模式完整五步」「fill 覆盖粘贴」结论由本 R1 覆盖）执行报告 | 已建立（2026-11-02，下一入口 `CHATGPT_REMOTE_CLIENT_CONFIG_TARGETED_READONLY_ACCEPTANCE_SUPPLEMENT_002_R1_REVIEW`） |
 | `reports/evidence/CLIENT-CONFIG-TARGETED-READONLY-ACCEPTANCE-SUPPLEMENT-002-R1/` | 定向只读验收补测 002-R1 的**脱敏、可追溯**证据（`probe-r1-dialog.cjs` 探针 + `r1-dialog-results.json` 脱敏结果 + `env-and-version.txt` + `SHA256SUMS.txt` + `README.md`；导航前拦截 `/api/**` 非 GET，`nonGetAttempts=0`；真实剪贴板粘贴事件 `isTrusted=true`/`insertFromPaste`） | 已建立（2026-11-02） |
 | `reports/evidence/CLIENT-CONFIG-REMAINING-ACCEPTANCE-GAP-TRIAGE-AND-READONLY-SUPPLEMENT-001/` | 本次只读补测的**脱敏、可追溯**证据（`probe-gaps-a.cjs` … `probe-gaps-g.cjs` 共 7 条只读探针脚本 + `gap-readonly-results-a.json` … `-g.json` 脱敏机读结果 + `SHA256SUMS.txt` + 索引 `README.md`；导航前拦截 `/api/**` 非 GET，各探针 `nonGetAttempts=0`；不含真实业务数据与原始整屏截图） | 已建立（2026-09-30） |
+| `reports/CLIENT-CONFIG-REMAINING-ACCEPTANCE-ENABLEMENT-PLAN-DRAFT-001.md` | 探针端管理**剩余验收可执行方案草案**（纯文档、不执行写入、不改定义、不重判状态：`CCFG-AC-090`/`CCFG-AC-157` 定义适用性拟文 `DRAFT_PENDING_REVIEW`/`NOT_APPROVED`；79 条剩余中 37 条样本依赖计划；首批受控写方案 `NOT_READY`〔专用对象未绑定、隔离未成立，写执行 `NOT_REQUESTED`/`NOT_EXECUTED`〕；含待决定问题、时点/证据来源与 79 条集合校验〔64 BLOCKED + 15 NOT_RUN〕；同步修复 002-R1 §1 时间关系笔误） | 已建立（2026-11-02，下一入口 `CHATGPT_REMOTE_CLIENT_CONFIG_REMAINING_ACCEPTANCE_ENABLEMENT_PLAN_DRAFT_REVIEW`） |
 
 ## 3. Feature 定位
 
@@ -802,6 +817,8 @@ adjustment7_formal_acceptance_execution_status=NOT_RUN
 - **定向只读验收补测 002**（2026-10-01，`CLIENT-CONFIG-TARGETED-READONLY-ACCEPTANCE-SUPPLEMENT-002`，真实浏览器只读补测，对应报告见 §2 导航）：仅 `/config/client`，12 条目标 AC；4 个只读探针在网络层**先**阻断 `/api/**` 非 GET（四探针 `nonGetAttempts=0`），视口 1440×900/1920×1080/900×800；**7 条 `BLOCKED→PASS`**（`CCFG-AC-009/017/088/101/124/130/136`），**5 条保持 `BLOCKED`**（`092`/`112` 缺超长样本、`103`/`151` 缺写路径腿、`115` 缺 `submitting` 加载态与写步骤）；`changed_ids=[CCFG-AC-009, CCFG-AC-017, CCFG-AC-088, CCFG-AC-101, CCFG-AC-124, CCFG-AC-130, CCFG-AC-136]`，本轮统计 `PASS` **78** / `FAIL` **0** / `BLOCKED` **64** / `NOT_RUN` **15** = **157**；`CCFG-AC-136` 跨页前置复用历史证据、**未**新采集跨页证据；**未**改产品代码/测试/共享 CSS/模板基线/其他功能文档，**未**提交有效表单、**未**点击启停/删除最终确认、**未**建夹具、**未**写库或 ZooKeeper/Kafka、**未**启停服务；**定向只读补测 ≠ 写授权 ≠ 157 条整体验收通过**。现行下一入口见 §5 末段。
 
 - **定向只读验收补测 002-R1**（2026-11-02，`CLIENT-CONFIG-TARGETED-READONLY-ACCEPTANCE-SUPPLEMENT-002-R1`，真实浏览器只读补证，对应报告见 §2 导航）：仅补 `CCFG-AC-124`（编辑模式完整五步）与 `CCFG-AC-130`（真实剪贴板粘贴）。`CCFG-AC-124` 编辑模式三视口补齐 `未选(0)→选中1→全部取消(0)→本地错误→修正消除`，已选数 `0,1,0,0,1`、错误数 `0,0,0,1,0`、弹窗底边与底部按钮 y 每视口唯一值（零跳动），提交仅触发本地业务校验（`nonGetAttempts=0`）；`CCFG-AC-130` 以真实 `navigator.clipboard.writeText` + 真实 `Control+V` 粘贴（`isTrusted=true`/`insertFromPaste`），300 汉字 / 混合 200 汉字+100😀 / 跨 256 边界 255 汉字+1😀 均截断至 **256 完整字符**且无孤立代理项。两项**维持 `PASS`**，本 R1 相对 base `changed_ids=[]`，原 002 轮次累计 `changed_ids` 7 条不变，统计仍 `PASS` **78** / `FAIL` **0** / `BLOCKED` **64** / `NOT_RUN` **15** = **157**；R0「AC-124 编辑两模式完整五步」「`fill` 覆盖粘贴」结论由本 R1 覆盖；R0 报告/脚本/JSON 作为历史快照不回写；`CCFG-AC-092` 的“未新增跨页对照”仅为执行边界、非现行新缺口。**R1 只读补证 ≠ 写授权 ≠ 157 条整体验收通过**。现行下一入口见 §5 末段。
+
+- **剩余验收可执行方案草案**（2026-11-02，`CLIENT-CONFIG-REMAINING-ACCEPTANCE-ENABLEMENT-PLAN-DRAFT-001`，纯文档方案准备，对应报告见 §2 导航）：仅 `/config/client`。对 `CCFG-AC-090`（新增按钮禁用态）与 `CCFG-AC-157`（三点触发器 `disabled`）静态核对现行定义、源码与已审证据，确认当前**无实际可达禁用条件**（新增按钮无 `:disabled`/权限门、无候选源时仅打开空候选弹窗；三点触发器无 `disabled`/`aria-disabled`，被禁用者是菜单项；公共 CSS 无禁用规则），据此给出区分「当前可观察状态」与「公共能力未来条件性契约」的拟文，状态 `DRAFT_PENDING_REVIEW`/`NOT_APPROVED`，**不**为测样式人为制造禁用业务行为。样本依赖计划覆盖 79 条剩余中 **37 条**真正依赖样本者，逐条列明缺失步骤、精确样本条件、历史证据、当前可用性（「本轮未核实」）、只读可补与仍需写授权部分，严格区分恰好 6 源/≥7 源、1024 字节边界/>256 字符生成、同机构名不去重分支。首批受控写方案经源码核实 E6/E7 等真实接口，建议优先评估「指定专用测试探针的启用/停用往返与重选」；因新增默认 `FG_ACTIVE=1` 使配置生效，明确隔离与回退前提；**专用对象未绑定、隔离未成立，结论 `NOT_READY`**，写执行 `NOT_REQUESTED`/`NOT_EXECUTED`。`changed_ids=[]`，统计仍 `PASS 78 / FAIL 0 / BLOCKED 64 / NOT_RUN 15 = 157`；四类定义行、157 个状态格、公共模板均**未改**。**方案草案 ≠ 样本具备 ≠ 写授权 ≠ 正式验收通过 ≠ 已批准定义。**
 
 ## 5. 下一入口
 
@@ -895,3 +912,5 @@ adjustment7_formal_acceptance_execution_status=NOT_RUN
 **定向只读验收补测链的现行下一入口（2026-10-01，`CLIENT-CONFIG-TARGETED-READONLY-ACCEPTANCE-SUPPLEMENT-002` 起；与本文件其他链相互独立，上方 R3 缺口盘点链的复审入口仍按其自身段落保留）**：`CHATGPT_REMOTE_CLIENT_CONFIG_TARGETED_READONLY_ACCEPTANCE_SUPPLEMENT_002_REVIEW`（对象为本任务 `CLIENT-CONFIG-TARGETED-READONLY-ACCEPTANCE-SUPPLEMENT-002` 的结果提交，由 ChatGPT **从远程 Git** 对报告与脱敏证据做独立**只读**复审）。本任务在真实运行页面上对 12 条目标 AC（`CCFG-AC-009/017/088/092/101/103/112/115/124/130/136/151`）做只读补测：**首次导航前**在网络层阻断全部 `/api/**` 非 GET，**四探针 `nonGetAttempts=0`**；**7 条 `BLOCKED→PASS`**（`009/017/088/101/124/130/136`），**5 条保持 `BLOCKED`**（`092`/`112` 缺超长样本、`103`/`151` 缺写路径腿、`115` 缺 `submitting` 加载态与写步骤）；`changed_ids=[CCFG-AC-009, CCFG-AC-017, CCFG-AC-088, CCFG-AC-101, CCFG-AC-124, CCFG-AC-130, CCFG-AC-136]`，本轮统计 `PASS` **78** / `FAIL` **0** / `BLOCKED` **64** / `NOT_RUN` **15** = **157**；`CCFG-AC-136` 的 `/config/data-source` 跨页前置**复用已入仓历史证据**、本轮**未**新采集跨页证据、**未**请求跨页授权；**未**改产品代码/测试/共享 CSS/模板基线/其他功能文档，**未**提交有效表单、**未**点击启停/删除最终确认、**未**建夹具、**未**写库或 ZooKeeper/Kafka、**未**启停服务。**定向只读补测 ≠ 写授权 ≠ 157 条整体验收通过 ≠ 批准其他页面接入或迁移。**
 
 **定向只读验收补测链 002-R1 的现行下一入口（2026-11-02，`CLIENT-CONFIG-TARGETED-READONLY-ACCEPTANCE-SUPPLEMENT-002-R1`；上一条 002 复审入口按其自身段落保留为历史）**：`CHATGPT_REMOTE_CLIENT_CONFIG_TARGETED_READONLY_ACCEPTANCE_SUPPLEMENT_002_R1_REVIEW`（对象为 R1 补证任务的结果提交，由 ChatGPT **从远程 Git** 对报告与脱敏证据做独立**只读**复审）。R1 仅补两项：`CCFG-AC-124` 编辑模式三视口完整五步 `0→1→0→本地错误→修正`（零跳动、`nonGetAttempts=0`）与 `CCFG-AC-130` 真实剪贴板 `Control+V` 粘贴（`isTrusted=true`/`insertFromPaste`，三用例截断至 256 完整字符、无孤立代理项）；两项维持 `PASS`，本 R1 `changed_ids=[]`，统计仍 `PASS` **78** / `FAIL` **0** / `BLOCKED` **64** / `NOT_RUN` **15** = **157**；R0「编辑两模式完整五步」「`fill` 覆盖粘贴」结论由本 R1 覆盖。**R1 只读补证 ≠ 写授权 ≠ 157 条整体验收通过 ≠ 批准其他页面接入或迁移。**
+
+**剩余验收可执行方案草案链的现行下一入口（2026-11-02，`CLIENT-CONFIG-REMAINING-ACCEPTANCE-ENABLEMENT-PLAN-DRAFT-001` 起；与本文件其他链相互独立，上方 002-R1 复审入口按其自身段落保留为历史）**：`CHATGPT_REMOTE_CLIENT_CONFIG_REMAINING_ACCEPTANCE_ENABLEMENT_PLAN_DRAFT_REVIEW`（对象为本纯文档草案任务的结果提交，由 ChatGPT **从远程 Git** 对定义拟文、样本依赖计划与首批写方案做独立复审）。本任务**未执行**任何业务写入、**未**修改权威定义行与 157 个状态格、**未**启动/停止服务、**未**访问数据库/ZooKeeper/Kafka；拟文状态 `DRAFT_PENDING_REVIEW`/`NOT_APPROVED`，首批写方案 `NOT_READY`，写执行 `NOT_REQUESTED`/`NOT_EXECUTED`。只有后续独立复审与负责人对具体草案/写方案作出决定后，才进入相应批准收口或执行任务；本任务不制造任何批准事件。

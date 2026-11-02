@@ -17,7 +17,7 @@
 | HEAD（base） | `c0a3c1d5784133704e7883e3df16b055a9a189e6` |
 | `origin/develop` / 远端 `refs/heads/develop` | 均等于 `c0a3c1d…`（未推进、无分叉） |
 | 任务前工作区 | 仅 `.claude/settings.local.json`(M)、`docs/prompts/`(??)、`runtime-logs/`(??) 等无关内容，保持原样 |
-| 后端 | 本次以仓库既有 `java -jar backend/target/cdc-config-platform-backend-1.0.0-SNAPSHOT.jar` START-ONLY 启动；PID 4758，监听 `0.0.0.0:8080`；jar 早于末次 `backend/src` 提交（`807a5a5` 2026-09-20），无更新后端源码 |
+| 后端 | 本次以仓库既有 `java -jar backend/target/cdc-config-platform-backend-1.0.0-SNAPSHOT.jar` START-ONLY 启动；PID 4758，监听 `0.0.0.0:8080`；jar 时间晚于末次 `backend/src` 提交（`807a5a5` 2026-09-20），无更新后端源码 |
 | 前端 | 本次以 `npm run dev` START-ONLY 启动；PID 4790，监听 `0.0.0.0:5173`；Vite 直接服务当前工作树（末次 `frontend/src` 提交 `d878c3d`） |
 | 浏览器 | Chromium `147.0.7727.15`，`headless=true`，`deviceScaleFactor=1` |
 | 环境 | JDK `1.8.0_202`、Node `v24.17.0`；详见证据 `env-and-version.txt` |
