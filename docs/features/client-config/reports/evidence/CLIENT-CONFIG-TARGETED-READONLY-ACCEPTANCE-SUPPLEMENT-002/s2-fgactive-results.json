@@ -1,0 +1,47 @@
+{
+  "task": "CLIENT-CONFIG-TARGETED-READONLY-ACCEPTANCE-SUPPLEMENT-002",
+  "probe": "AC-088 fgActive raw-value correlation",
+  "mode": "readonly-browser-probe",
+  "browser": {
+    "engine": "chromium",
+    "version": "147.0.7727.15",
+    "headless": true
+  },
+  "frontend": "http://127.0.0.1:5173",
+  "apiAbnormalCount": 1,
+  "apiAbnormalMasked": [
+    {
+      "len": 1,
+      "isStandardFlag": false
+    }
+  ],
+  "writeInterception": {
+    "policy": "/api/** GET/HEAD/OPTIONS allow; POST/PUT/PATCH/DELETE abort+count",
+    "nonGetAttempts": 0,
+    "attempts": []
+  },
+  "viewports": {
+    "1440x900": {
+      "abnormalRowsFound": 1,
+      "allMatch": true,
+      "detail": [
+        {
+          "shownLength": 4,
+          "shownPrefix": "异常：",
+          "matchesApi": true
+        }
+      ]
+    },
+    "1920x1080": {
+      "abnormalRowsFound": 1,
+      "allMatch": true,
+      "detail": [
+        {
+          "shownLength": 4,
+          "shownPrefix": "异常：",
+          "matchesApi": true
+        }
+      ]
+    }
+  }
+}

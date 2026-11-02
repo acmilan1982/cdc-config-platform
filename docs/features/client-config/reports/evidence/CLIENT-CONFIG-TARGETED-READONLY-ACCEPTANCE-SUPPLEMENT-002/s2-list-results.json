@@ -1,0 +1,938 @@
+{
+ "task": "CLIENT-CONFIG-TARGETED-READONLY-ACCEPTANCE-SUPPLEMENT-002",
+ "probe": "list-level (AC-009/017/088/101/103)",
+ "mode": "readonly-browser-probe",
+ "browser": {
+  "engine": "chromium",
+  "version": "147.0.7727.15",
+  "headless": true
+ },
+ "frontend": "http://127.0.0.1:5173",
+ "writeInterception": {
+  "policy": "/api/** GET/HEAD/OPTIONS allow; POST/PUT/PATCH/DELETE abort+count",
+  "nonGetAttempts": 0,
+  "attempts": []
+ },
+ "viewports": {
+  "1440x900": {
+   "structure": {
+    "headers": [
+     "序号",
+     "探针 ID",
+     "探针描述",
+     "采集数据源",
+     "数据源数量",
+     "操作"
+    ],
+    "hasStatusColumn": false,
+    "rowCount": 16,
+    "rowHeightHistogram": {
+     "48": 15,
+     "52": 1
+    },
+    "highlightRows": [],
+    "addBtn": {
+     "text": "新增探针",
+     "right": 1368,
+     "toolbarRight": 1368
+    },
+    "batchAbsence": {
+     "hasSelectionColumn": false,
+     "hasRowCheckbox": false,
+     "hasDeleteSelected": false,
+     "hasBatchWord": false,
+     "hasSelectedHint": false
+    },
+    "headersRightmost": "操作"
+   },
+   "dataSourceColumn": [
+    {
+     "idx": 1,
+     "present": true,
+     "visibleTagCount": 1,
+     "tagTotalInDom": 1,
+     "plusText": null,
+     "rowAmbiguousMarker": null,
+     "apiOrgPresent": 1,
+     "tagsMatchingOrg": 1,
+     "tagsMatchingRawIdWhenOrgMissing": 0,
+     "allVisibleTagsMatchOrgWhereOrgExists": true
+    },
+    {
+     "idx": 2,
+     "present": true,
+     "visibleTagCount": 1,
+     "tagTotalInDom": 1,
+     "plusText": null,
+     "rowAmbiguousMarker": null,
+     "apiOrgPresent": 1,
+     "tagsMatchingOrg": 1,
+     "tagsMatchingRawIdWhenOrgMissing": 0,
+     "allVisibleTagsMatchOrgWhereOrgExists": true
+    },
+    {
+     "idx": 3,
+     "present": true,
+     "visibleTagCount": 1,
+     "tagTotalInDom": 1,
+     "plusText": null,
+     "rowAmbiguousMarker": null,
+     "apiOrgPresent": 1,
+     "tagsMatchingOrg": 1,
+     "tagsMatchingRawIdWhenOrgMissing": 0,
+     "allVisibleTagsMatchOrgWhereOrgExists": true
+    },
+    {
+     "idx": 4,
+     "present": true,
+     "visibleTagCount": 2,
+     "tagTotalInDom": 5,
+     "plusText": "+3",
+     "rowAmbiguousMarker": null,
+     "apiOrgPresent": 5,
+     "tagsMatchingOrg": 2,
+     "tagsMatchingRawIdWhenOrgMissing": 0,
+     "allVisibleTagsMatchOrgWhereOrgExists": false
+    },
+    {
+     "idx": 5,
+     "present": true,
+     "visibleTagCount": 1,
+     "tagTotalInDom": 1,
+     "plusText": null,
+     "rowAmbiguousMarker": null,
+     "apiOrgPresent": 1,
+     "tagsMatchingOrg": 1,
+     "tagsMatchingRawIdWhenOrgMissing": 0,
+     "allVisibleTagsMatchOrgWhereOrgExists": true
+    },
+    {
+     "idx": 6,
+     "present": true,
+     "visibleTagCount": 1,
+     "tagTotalInDom": 1,
+     "plusText": null,
+     "rowAmbiguousMarker": null,
+     "apiOrgPresent": 1,
+     "tagsMatchingOrg": 1,
+     "tagsMatchingRawIdWhenOrgMissing": 0,
+     "allVisibleTagsMatchOrgWhereOrgExists": true
+    },
+    {
+     "idx": 7,
+     "present": true,
+     "visibleTagCount": 2,
+     "tagTotalInDom": 2,
+     "plusText": null,
+     "rowAmbiguousMarker": null,
+     "apiOrgPresent": 2,
+     "tagsMatchingOrg": 2,
+     "tagsMatchingRawIdWhenOrgMissing": 0,
+     "allVisibleTagsMatchOrgWhereOrgExists": true
+    },
+    {
+     "idx": 8,
+     "present": true,
+     "visibleTagCount": 0,
+     "tagTotalInDom": 0,
+     "plusText": null,
+     "rowAmbiguousMarker": null,
+     "apiOrgPresent": 0,
+     "tagsMatchingOrg": 0,
+     "tagsMatchingRawIdWhenOrgMissing": 0,
+     "allVisibleTagsMatchOrgWhereOrgExists": true
+    },
+    {
+     "idx": 9,
+     "present": true,
+     "visibleTagCount": 0,
+     "tagTotalInDom": 0,
+     "plusText": null,
+     "rowAmbiguousMarker": null,
+     "apiOrgPresent": 0,
+     "tagsMatchingOrg": 0,
+     "tagsMatchingRawIdWhenOrgMissing": 0,
+     "allVisibleTagsMatchOrgWhereOrgExists": true
+    },
+    {
+     "idx": 10,
+     "present": true,
+     "visibleTagCount": 0,
+     "tagTotalInDom": 0,
+     "plusText": null,
+     "rowAmbiguousMarker": null,
+     "apiOrgPresent": 0,
+     "tagsMatchingOrg": 0,
+     "tagsMatchingRawIdWhenOrgMissing": 0,
+     "allVisibleTagsMatchOrgWhereOrgExists": true
+    },
+    {
+     "idx": 11,
+     "present": true,
+     "visibleTagCount": 0,
+     "tagTotalInDom": 0,
+     "plusText": null,
+     "rowAmbiguousMarker": null,
+     "apiOrgPresent": 0,
+     "tagsMatchingOrg": 0,
+     "tagsMatchingRawIdWhenOrgMissing": 0,
+     "allVisibleTagsMatchOrgWhereOrgExists": true
+    },
+    {
+     "idx": 12,
+     "present": true,
+     "visibleTagCount": 0,
+     "tagTotalInDom": 0,
+     "plusText": null,
+     "rowAmbiguousMarker": null,
+     "apiOrgPresent": 0,
+     "tagsMatchingOrg": 0,
+     "tagsMatchingRawIdWhenOrgMissing": 0,
+     "allVisibleTagsMatchOrgWhereOrgExists": true
+    },
+    {
+     "idx": 13,
+     "present": true,
+     "visibleTagCount": 1,
+     "tagTotalInDom": 7,
+     "plusText": "+6",
+     "rowAmbiguousMarker": null,
+     "apiOrgPresent": 7,
+     "tagsMatchingOrg": 1,
+     "tagsMatchingRawIdWhenOrgMissing": 0,
+     "allVisibleTagsMatchOrgWhereOrgExists": false
+    },
+    {
+     "idx": 14,
+     "present": true,
+     "visibleTagCount": 1,
+     "tagTotalInDom": 1,
+     "plusText": null,
+     "rowAmbiguousMarker": null,
+     "apiOrgPresent": 1,
+     "tagsMatchingOrg": 1,
+     "tagsMatchingRawIdWhenOrgMissing": 0,
+     "allVisibleTagsMatchOrgWhereOrgExists": true
+    },
+    {
+     "idx": 15,
+     "present": true,
+     "visibleTagCount": 2,
+     "tagTotalInDom": 2,
+     "plusText": null,
+     "rowAmbiguousMarker": "含逗号歧义",
+     "apiOrgPresent": 0,
+     "tagsMatchingOrg": 0,
+     "tagsMatchingRawIdWhenOrgMissing": 2,
+     "allVisibleTagsMatchOrgWhereOrgExists": true
+    },
+    {
+     "idx": 16,
+     "present": true,
+     "visibleTagCount": 1,
+     "tagTotalInDom": 1,
+     "plusText": null,
+     "rowAmbiguousMarker": null,
+     "apiOrgPresent": 1,
+     "tagsMatchingOrg": 1,
+     "tagsMatchingRawIdWhenOrgMissing": 0,
+     "allVisibleTagsMatchOrgWhereOrgExists": true
+    }
+   ],
+   "idMarkers": [
+    {
+     "idx": 1,
+     "hasInactiveMark": true,
+     "inactiveText": "停用",
+     "abnormal": null
+    },
+    {
+     "idx": 2,
+     "hasInactiveMark": true,
+     "inactiveText": "停用",
+     "abnormal": null
+    },
+    {
+     "idx": 3,
+     "hasInactiveMark": true,
+     "inactiveText": "停用",
+     "abnormal": null
+    },
+    {
+     "idx": 4,
+     "hasInactiveMark": true,
+     "inactiveText": "停用",
+     "abnormal": null
+    },
+    {
+     "idx": 5,
+     "hasInactiveMark": true,
+     "inactiveText": "停用",
+     "abnormal": null
+    },
+    {
+     "idx": 6,
+     "hasInactiveMark": true,
+     "inactiveText": "停用",
+     "abnormal": null
+    },
+    {
+     "idx": 7,
+     "hasInactiveMark": true,
+     "inactiveText": "停用",
+     "abnormal": null
+    },
+    {
+     "idx": 8,
+     "hasInactiveMark": true,
+     "inactiveText": "停用",
+     "abnormal": null
+    },
+    {
+     "idx": 9,
+     "hasInactiveMark": true,
+     "inactiveText": "停用",
+     "abnormal": null
+    },
+    {
+     "idx": 10,
+     "hasInactiveMark": true,
+     "inactiveText": "停用",
+     "abnormal": null
+    },
+    {
+     "idx": 11,
+     "hasInactiveMark": true,
+     "inactiveText": "停用",
+     "abnormal": null
+    },
+    {
+     "idx": 12,
+     "hasInactiveMark": true,
+     "inactiveText": "停用",
+     "abnormal": null
+    },
+    {
+     "idx": 13,
+     "hasInactiveMark": true,
+     "inactiveText": "停用",
+     "abnormal": null
+    },
+    {
+     "idx": 14,
+     "hasInactiveMark": true,
+     "inactiveText": "停用",
+     "abnormal": null
+    },
+    {
+     "idx": 15,
+     "hasInactiveMark": true,
+     "inactiveText": "停用",
+     "abnormal": null
+    },
+    {
+     "idx": 16,
+     "hasInactiveMark": false,
+     "inactiveText": null,
+     "abnormal": {
+      "textPrefix": "异常：",
+      "textLength": 4,
+      "color": "rgb(185, 28, 28)",
+      "fontSize": "11px",
+      "fontWeight": "700",
+      "bg": "rgb(254, 226, 226)",
+      "contrastVsWhite": 6.47,
+      "marginLeft": "0px",
+      "gapFromIdRight": 6,
+      "insideRow": true,
+      "overlapsActionCell": false,
+      "offsetParentVisible": true
+     }
+    }
+   ],
+   "abnormalRowCount": 1,
+   "abnormalRowMenu": {
+    "itemTexts": [
+     "停用",
+     "删除"
+    ],
+    "itemCount": 2,
+    "separatorCount": 1,
+    "menuBorderRadius": "8px",
+    "menuBoxShadow": "none",
+    "popperBoxShadow": "rgba(0, 0, 0, 0.12) 0px 6px 16px 0px, rgba(0, 0, 0, 0.06) 0px 2px 8px 0px",
+    "popperBorderRadius": "8px",
+    "menuPadding": "4px",
+    "separatorMarkup": {
+     "cls": "el-dropdown-menu__item--divided",
+     "borderTop": "1px solid rgb(235, 238, 245)",
+     "height": 0.9962158203125
+    },
+    "itemPadding": "6px 12px",
+    "itemFontWeight": "400",
+    "dangerColor": "rgb(245, 108, 108)",
+    "dangerIsDivided": false
+   },
+   "rowClick": {
+    "afterFirstClick": {
+     "highlightRows": [
+      1
+     ],
+     "addBtnIsRightmostInToolbar": true
+    },
+    "afterSecondClickSame": {
+     "highlightRows": []
+    },
+    "afterClickOtherRow": {
+     "highlightRows": [
+      3
+     ]
+    }
+   },
+   "menu": {
+    "itemTexts": [
+     "启用",
+     "删除"
+    ],
+    "itemCount": 2,
+    "separatorCount": 1,
+    "menuBorderRadius": "8px",
+    "menuBoxShadow": "none",
+    "popperBoxShadow": "rgba(0, 0, 0, 0.12) 0px 6px 16px 0px, rgba(0, 0, 0, 0.06) 0px 2px 8px 0px",
+    "popperBorderRadius": "8px",
+    "menuPadding": "4px",
+    "separatorMarkup": {
+     "cls": "el-dropdown-menu__item--divided",
+     "borderTop": "1px solid rgb(235, 238, 245)",
+     "height": 0.99822998046875
+    },
+    "itemPadding": "6px 12px",
+    "itemFontWeight": "400",
+    "dangerColor": "rgb(245, 108, 108)",
+    "dangerIsDivided": false
+   },
+   "menuHoverNonDanger": {
+    "text": "启用",
+    "bg": "rgb(236, 245, 255)",
+    "color": "rgb(64, 158, 255)",
+    "fontWeight": "400"
+   },
+   "keyboardMenu": {
+    "focusTrigger": {
+     "isEllipsisTrigger": true,
+     "outline": "2px solid rgb(64, 158, 255)"
+    },
+    "steps": [
+     {
+      "isMenuItem": true,
+      "text": "启用",
+      "bg": "rgb(236, 245, 255)",
+      "color": "rgb(64, 158, 255)",
+      "outline": "3px none rgb(64, 158, 255)"
+     },
+     {
+      "isMenuItem": true,
+      "text": "删除",
+      "bg": "rgb(236, 245, 255)",
+      "color": "rgb(245, 108, 108)",
+      "outline": "3px none rgb(245, 108, 108)"
+     }
+    ],
+    "note": "open menu -> hover an item -> ArrowDown moves real keyboard focus (EP roving focus group, loop)"
+   },
+   "keyboardMenuAbnormal": {
+    "isMenuItem": true,
+    "text": "停用",
+    "bg": "rgb(236, 245, 255)",
+    "color": "rgb(180, 83, 9)",
+    "outline": "3px none rgb(180, 83, 9)"
+   },
+   "rowEventIsolation": {
+    "editDialogOpened": false,
+    "sequence": [
+     {
+      "action": "singleClickTrigger",
+      "editDialog": {
+       "visible": false,
+       "title": null
+      }
+     },
+     {
+      "action": "doubleClickTrigger",
+      "editDialog": {
+       "visible": false,
+       "title": null
+      }
+     },
+     {
+      "action": "doubleClickMenuItem",
+      "editDialog": {
+       "visible": false,
+       "title": null
+      }
+     }
+    ]
+   }
+  },
+  "1920x1080": {
+   "structure": {
+    "headers": [
+     "序号",
+     "探针 ID",
+     "探针描述",
+     "采集数据源",
+     "数据源数量",
+     "操作"
+    ],
+    "hasStatusColumn": false,
+    "rowCount": 16,
+    "rowHeightHistogram": {
+     "48": 15,
+     "52": 1
+    },
+    "highlightRows": [],
+    "addBtn": {
+     "text": "新增探针",
+     "right": 1848,
+     "toolbarRight": 1848
+    },
+    "batchAbsence": {
+     "hasSelectionColumn": false,
+     "hasRowCheckbox": false,
+     "hasDeleteSelected": false,
+     "hasBatchWord": false,
+     "hasSelectedHint": false
+    },
+    "headersRightmost": "操作"
+   },
+   "dataSourceColumn": [
+    {
+     "idx": 1,
+     "present": true,
+     "visibleTagCount": 1,
+     "tagTotalInDom": 1,
+     "plusText": null,
+     "rowAmbiguousMarker": null,
+     "apiOrgPresent": 1,
+     "tagsMatchingOrg": 1,
+     "tagsMatchingRawIdWhenOrgMissing": 0,
+     "allVisibleTagsMatchOrgWhereOrgExists": true
+    },
+    {
+     "idx": 2,
+     "present": true,
+     "visibleTagCount": 1,
+     "tagTotalInDom": 1,
+     "plusText": null,
+     "rowAmbiguousMarker": null,
+     "apiOrgPresent": 1,
+     "tagsMatchingOrg": 1,
+     "tagsMatchingRawIdWhenOrgMissing": 0,
+     "allVisibleTagsMatchOrgWhereOrgExists": true
+    },
+    {
+     "idx": 3,
+     "present": true,
+     "visibleTagCount": 1,
+     "tagTotalInDom": 1,
+     "plusText": null,
+     "rowAmbiguousMarker": null,
+     "apiOrgPresent": 1,
+     "tagsMatchingOrg": 1,
+     "tagsMatchingRawIdWhenOrgMissing": 0,
+     "allVisibleTagsMatchOrgWhereOrgExists": true
+    },
+    {
+     "idx": 4,
+     "present": true,
+     "visibleTagCount": 5,
+     "tagTotalInDom": 5,
+     "plusText": null,
+     "rowAmbiguousMarker": null,
+     "apiOrgPresent": 5,
+     "tagsMatchingOrg": 5,
+     "tagsMatchingRawIdWhenOrgMissing": 0,
+     "allVisibleTagsMatchOrgWhereOrgExists": true
+    },
+    {
+     "idx": 5,
+     "present": true,
+     "visibleTagCount": 1,
+     "tagTotalInDom": 1,
+     "plusText": null,
+     "rowAmbiguousMarker": null,
+     "apiOrgPresent": 1,
+     "tagsMatchingOrg": 1,
+     "tagsMatchingRawIdWhenOrgMissing": 0,
+     "allVisibleTagsMatchOrgWhereOrgExists": true
+    },
+    {
+     "idx": 6,
+     "present": true,
+     "visibleTagCount": 1,
+     "tagTotalInDom": 1,
+     "plusText": null,
+     "rowAmbiguousMarker": null,
+     "apiOrgPresent": 1,
+     "tagsMatchingOrg": 1,
+     "tagsMatchingRawIdWhenOrgMissing": 0,
+     "allVisibleTagsMatchOrgWhereOrgExists": true
+    },
+    {
+     "idx": 7,
+     "present": true,
+     "visibleTagCount": 2,
+     "tagTotalInDom": 2,
+     "plusText": null,
+     "rowAmbiguousMarker": null,
+     "apiOrgPresent": 2,
+     "tagsMatchingOrg": 2,
+     "tagsMatchingRawIdWhenOrgMissing": 0,
+     "allVisibleTagsMatchOrgWhereOrgExists": true
+    },
+    {
+     "idx": 8,
+     "present": true,
+     "visibleTagCount": 0,
+     "tagTotalInDom": 0,
+     "plusText": null,
+     "rowAmbiguousMarker": null,
+     "apiOrgPresent": 0,
+     "tagsMatchingOrg": 0,
+     "tagsMatchingRawIdWhenOrgMissing": 0,
+     "allVisibleTagsMatchOrgWhereOrgExists": true
+    },
+    {
+     "idx": 9,
+     "present": true,
+     "visibleTagCount": 0,
+     "tagTotalInDom": 0,
+     "plusText": null,
+     "rowAmbiguousMarker": null,
+     "apiOrgPresent": 0,
+     "tagsMatchingOrg": 0,
+     "tagsMatchingRawIdWhenOrgMissing": 0,
+     "allVisibleTagsMatchOrgWhereOrgExists": true
+    },
+    {
+     "idx": 10,
+     "present": true,
+     "visibleTagCount": 0,
+     "tagTotalInDom": 0,
+     "plusText": null,
+     "rowAmbiguousMarker": null,
+     "apiOrgPresent": 0,
+     "tagsMatchingOrg": 0,
+     "tagsMatchingRawIdWhenOrgMissing": 0,
+     "allVisibleTagsMatchOrgWhereOrgExists": true
+    },
+    {
+     "idx": 11,
+     "present": true,
+     "visibleTagCount": 0,
+     "tagTotalInDom": 0,
+     "plusText": null,
+     "rowAmbiguousMarker": null,
+     "apiOrgPresent": 0,
+     "tagsMatchingOrg": 0,
+     "tagsMatchingRawIdWhenOrgMissing": 0,
+     "allVisibleTagsMatchOrgWhereOrgExists": true
+    },
+    {
+     "idx": 12,
+     "present": true,
+     "visibleTagCount": 0,
+     "tagTotalInDom": 0,
+     "plusText": null,
+     "rowAmbiguousMarker": null,
+     "apiOrgPresent": 0,
+     "tagsMatchingOrg": 0,
+     "tagsMatchingRawIdWhenOrgMissing": 0,
+     "allVisibleTagsMatchOrgWhereOrgExists": true
+    },
+    {
+     "idx": 13,
+     "present": true,
+     "visibleTagCount": 5,
+     "tagTotalInDom": 7,
+     "plusText": "+2",
+     "rowAmbiguousMarker": null,
+     "apiOrgPresent": 7,
+     "tagsMatchingOrg": 5,
+     "tagsMatchingRawIdWhenOrgMissing": 0,
+     "allVisibleTagsMatchOrgWhereOrgExists": false
+    },
+    {
+     "idx": 14,
+     "present": true,
+     "visibleTagCount": 1,
+     "tagTotalInDom": 1,
+     "plusText": null,
+     "rowAmbiguousMarker": null,
+     "apiOrgPresent": 1,
+     "tagsMatchingOrg": 1,
+     "tagsMatchingRawIdWhenOrgMissing": 0,
+     "allVisibleTagsMatchOrgWhereOrgExists": true
+    },
+    {
+     "idx": 15,
+     "present": true,
+     "visibleTagCount": 2,
+     "tagTotalInDom": 2,
+     "plusText": null,
+     "rowAmbiguousMarker": "含逗号歧义",
+     "apiOrgPresent": 0,
+     "tagsMatchingOrg": 0,
+     "tagsMatchingRawIdWhenOrgMissing": 2,
+     "allVisibleTagsMatchOrgWhereOrgExists": true
+    },
+    {
+     "idx": 16,
+     "present": true,
+     "visibleTagCount": 1,
+     "tagTotalInDom": 1,
+     "plusText": null,
+     "rowAmbiguousMarker": null,
+     "apiOrgPresent": 1,
+     "tagsMatchingOrg": 1,
+     "tagsMatchingRawIdWhenOrgMissing": 0,
+     "allVisibleTagsMatchOrgWhereOrgExists": true
+    }
+   ],
+   "idMarkers": [
+    {
+     "idx": 1,
+     "hasInactiveMark": true,
+     "inactiveText": "停用",
+     "abnormal": null
+    },
+    {
+     "idx": 2,
+     "hasInactiveMark": true,
+     "inactiveText": "停用",
+     "abnormal": null
+    },
+    {
+     "idx": 3,
+     "hasInactiveMark": true,
+     "inactiveText": "停用",
+     "abnormal": null
+    },
+    {
+     "idx": 4,
+     "hasInactiveMark": true,
+     "inactiveText": "停用",
+     "abnormal": null
+    },
+    {
+     "idx": 5,
+     "hasInactiveMark": true,
+     "inactiveText": "停用",
+     "abnormal": null
+    },
+    {
+     "idx": 6,
+     "hasInactiveMark": true,
+     "inactiveText": "停用",
+     "abnormal": null
+    },
+    {
+     "idx": 7,
+     "hasInactiveMark": true,
+     "inactiveText": "停用",
+     "abnormal": null
+    },
+    {
+     "idx": 8,
+     "hasInactiveMark": true,
+     "inactiveText": "停用",
+     "abnormal": null
+    },
+    {
+     "idx": 9,
+     "hasInactiveMark": true,
+     "inactiveText": "停用",
+     "abnormal": null
+    },
+    {
+     "idx": 10,
+     "hasInactiveMark": true,
+     "inactiveText": "停用",
+     "abnormal": null
+    },
+    {
+     "idx": 11,
+     "hasInactiveMark": true,
+     "inactiveText": "停用",
+     "abnormal": null
+    },
+    {
+     "idx": 12,
+     "hasInactiveMark": true,
+     "inactiveText": "停用",
+     "abnormal": null
+    },
+    {
+     "idx": 13,
+     "hasInactiveMark": true,
+     "inactiveText": "停用",
+     "abnormal": null
+    },
+    {
+     "idx": 14,
+     "hasInactiveMark": true,
+     "inactiveText": "停用",
+     "abnormal": null
+    },
+    {
+     "idx": 15,
+     "hasInactiveMark": true,
+     "inactiveText": "停用",
+     "abnormal": null
+    },
+    {
+     "idx": 16,
+     "hasInactiveMark": false,
+     "inactiveText": null,
+     "abnormal": {
+      "textPrefix": "异常：",
+      "textLength": 4,
+      "color": "rgb(185, 28, 28)",
+      "fontSize": "11px",
+      "fontWeight": "700",
+      "bg": "rgb(254, 226, 226)",
+      "contrastVsWhite": 6.47,
+      "marginLeft": "0px",
+      "gapFromIdRight": 6,
+      "insideRow": true,
+      "overlapsActionCell": false,
+      "offsetParentVisible": true
+     }
+    }
+   ],
+   "abnormalRowCount": 1,
+   "abnormalRowMenu": {
+    "itemTexts": [
+     "停用",
+     "删除"
+    ],
+    "itemCount": 2,
+    "separatorCount": 1,
+    "menuBorderRadius": "8px",
+    "menuBoxShadow": "none",
+    "popperBoxShadow": "rgba(0, 0, 0, 0.12) 0px 6px 16px 0px, rgba(0, 0, 0, 0.06) 0px 2px 8px 0px",
+    "popperBorderRadius": "8px",
+    "menuPadding": "4px",
+    "separatorMarkup": {
+     "cls": "el-dropdown-menu__item--divided",
+     "borderTop": "1px solid rgb(235, 238, 245)",
+     "height": 0.99932861328125
+    },
+    "itemPadding": "6px 12px",
+    "itemFontWeight": "400",
+    "dangerColor": "rgb(245, 108, 108)",
+    "dangerIsDivided": false
+   },
+   "rowClick": {
+    "afterFirstClick": {
+     "highlightRows": [
+      1
+     ],
+     "addBtnIsRightmostInToolbar": true
+    },
+    "afterSecondClickSame": {
+     "highlightRows": []
+    },
+    "afterClickOtherRow": {
+     "highlightRows": [
+      3
+     ]
+    }
+   },
+   "menu": {
+    "itemTexts": [
+     "启用",
+     "删除"
+    ],
+    "itemCount": 2,
+    "separatorCount": 1,
+    "menuBorderRadius": "8px",
+    "menuBoxShadow": "none",
+    "popperBoxShadow": "rgba(0, 0, 0, 0.12) 0px 6px 16px 0px, rgba(0, 0, 0, 0.06) 0px 2px 8px 0px",
+    "popperBorderRadius": "8px",
+    "menuPadding": "4px",
+    "separatorMarkup": {
+     "cls": "el-dropdown-menu__item--divided",
+     "borderTop": "1px solid rgb(235, 238, 245)",
+     "height": 0.9962158203125
+    },
+    "itemPadding": "6px 12px",
+    "itemFontWeight": "400",
+    "dangerColor": "rgb(245, 108, 108)",
+    "dangerIsDivided": false
+   },
+   "menuHoverNonDanger": {
+    "text": "启用",
+    "bg": "rgb(236, 245, 255)",
+    "color": "rgb(64, 158, 255)",
+    "fontWeight": "400"
+   },
+   "keyboardMenu": {
+    "focusTrigger": {
+     "isEllipsisTrigger": true,
+     "outline": "2px solid rgb(64, 158, 255)"
+    },
+    "steps": [
+     {
+      "isMenuItem": true,
+      "text": "启用",
+      "bg": "rgb(236, 245, 255)",
+      "color": "rgb(64, 158, 255)",
+      "outline": "3px none rgb(64, 158, 255)"
+     },
+     {
+      "isMenuItem": true,
+      "text": "删除",
+      "bg": "rgb(236, 245, 255)",
+      "color": "rgb(245, 108, 108)",
+      "outline": "3px none rgb(245, 108, 108)"
+     }
+    ],
+    "note": "open menu -> hover an item -> ArrowDown moves real keyboard focus (EP roving focus group, loop)"
+   },
+   "keyboardMenuAbnormal": {
+    "isMenuItem": true,
+    "text": "停用",
+    "bg": "rgb(236, 245, 255)",
+    "color": "rgb(180, 83, 9)",
+    "outline": "3px none rgb(180, 83, 9)"
+   },
+   "rowEventIsolation": {
+    "editDialogOpened": false,
+    "sequence": [
+     {
+      "action": "singleClickTrigger",
+      "editDialog": {
+       "visible": false,
+       "title": null
+      }
+     },
+     {
+      "action": "doubleClickTrigger",
+      "editDialog": {
+       "visible": false,
+       "title": null
+      }
+     },
+     {
+      "action": "doubleClickMenuItem",
+      "editDialog": {
+       "visible": false,
+       "title": null
+      }
+     }
+    ]
+   }
+  }
+ }
+}

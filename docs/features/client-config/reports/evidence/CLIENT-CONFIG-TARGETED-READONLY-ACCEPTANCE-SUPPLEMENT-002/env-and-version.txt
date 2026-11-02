@@ -1,0 +1,15 @@
+# Runtime & version context (read-only capture)
+captured_at_utc=2026-09-30T16:29:15Z
+git_head=d925899e9072acf5f5e4146e1a5fcdef566486fa
+git_branch=develop
+backend_jar=2026-09-22T12:21:27Z backend/target/cdc-config-platform-backend-1.0.0-SNAPSHOT.jar
+backend_jar_sha256=efdbea827b6ab84dd47105d2cc130f0bc3c5b70dc78cc626b6421e1f9750a459
+last_backend_src_commit=807a5a58e373e522fe8b591569e22728a6662ed6 2026-09-20T15:48:52+08:00
+last_frontend_src_commit=d878c3d7c95b482ee47b2d08571531cbad3b06fd 2026-09-30T17:12:07+08:00
+backend_pid=7137
+frontend_pid=7191
+backend_listen=*:8080
+frontend_listen=0.0.0.0:5173
+node_version=v24.17.0
+java_version=java version "1.8.0_202"
+frontend_render_mode=vite dev server serving working tree (git HEAD == served source)

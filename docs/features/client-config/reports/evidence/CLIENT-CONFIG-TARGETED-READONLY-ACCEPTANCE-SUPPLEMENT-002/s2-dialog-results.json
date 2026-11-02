@@ -1,0 +1,3443 @@
+{
+  "task": "CLIENT-CONFIG-TARGETED-READONLY-ACCEPTANCE-SUPPLEMENT-002",
+  "probe": "dialog-level (AC-092/112/115/124/130/136)",
+  "mode": "readonly-browser-probe",
+  "browser": {
+    "engine": "chromium",
+    "version": "147.0.7727.15",
+    "headless": true
+  },
+  "frontend": "http://127.0.0.1:5173",
+  "writeInterception": {
+    "policy": "/api/** GET/HEAD/OPTIONS allow; POST/PUT/PATCH/DELETE abort+count",
+    "nonGetAttempts": 0,
+    "attempts": []
+  },
+  "viewports": {
+    "1440x900": {
+      "ac092": {
+        "listRowHeightHistogram": {
+          "48": 15,
+          "52": 1
+        },
+        "hasRowHeightTokenInCss": null,
+        "fixedCol": {
+          "position": "sticky",
+          "stickyRight": "0px",
+          "tdPosition": "sticky",
+          "tdRight": "0px"
+        },
+        "ellipsisCellCount": 0
+      },
+      "create": {
+        "snapOpen": {
+          "dialog": {
+            "x": 270,
+            "y": 135,
+            "w": 900,
+            "h": 613.188,
+            "right": 1170,
+            "bottom": 748.188
+          },
+          "dialogMaxWidth": "1392px",
+          "labelColumnWidthToken": "84px",
+          "labelGapToken": "12px",
+          "safetyInsetToken": "48px",
+          "title": "新增探针",
+          "footer": {
+            "x": 286,
+            "y": 684.188,
+            "w": 868,
+            "h": 48,
+            "right": 1154,
+            "bottom": 732.188
+          },
+          "footerButtons": [
+            {
+              "text": "取消",
+              "x": 1022,
+              "y": 700.188,
+              "w": 60,
+              "h": 32,
+              "right": 1082,
+              "bottom": 732.188
+            },
+            {
+              "text": "创建",
+              "x": 1094,
+              "y": 700.188,
+              "w": 60,
+              "h": 32,
+              "right": 1154,
+              "bottom": 732.188
+            }
+          ],
+          "chosenCount": 0,
+          "badChipCount": 0,
+          "sourceFeedback": {
+            "text": "至少选择 1 个数据源",
+            "tone": "hint",
+            "role": "note"
+          },
+          "idFieldError": false,
+          "idErrorText": "",
+          "errCount": 0
+        },
+        "labels": [
+          {
+            "label": "探针 ID",
+            "labelFontSize": "14px",
+            "labelFontWeight": "500",
+            "labelColor": "rgb(63, 63, 70)",
+            "labelTextAlign": "right",
+            "labelStarContent": "\"*\"",
+            "labelStarColor": "rgb(245, 108, 108)",
+            "labelRect": {
+              "x": 286,
+              "y": 191.391,
+              "w": 84,
+              "h": 28.391,
+              "right": 370
+            },
+            "controlRect": {
+              "x": 382,
+              "y": 191.391,
+              "w": 772,
+              "h": 54,
+              "right": 1154
+            },
+            "gapLabelRightToControlLeft": 12,
+            "inputInlineStyleWidth": "",
+            "hasRequiredMarkClass": true
+          },
+          {
+            "label": "探针描述",
+            "labelFontSize": "14px",
+            "labelFontWeight": "500",
+            "labelColor": "rgb(63, 63, 70)",
+            "labelTextAlign": "right",
+            "labelStarContent": "\"*\"",
+            "labelStarColor": "rgb(245, 108, 108)",
+            "labelRect": {
+              "x": 286,
+              "y": 245.391,
+              "w": 84,
+              "h": 28.391,
+              "right": 370
+            },
+            "controlRect": {
+              "x": 382,
+              "y": 245.391,
+              "w": 772,
+              "h": 74,
+              "right": 1154
+            },
+            "gapLabelRightToControlLeft": 12,
+            "inputInlineStyleWidth": "",
+            "hasRequiredMarkClass": true
+          },
+          {
+            "label": "采集数据源",
+            "labelFontSize": "14px",
+            "labelFontWeight": "500",
+            "labelColor": "rgb(63, 63, 70)",
+            "labelTextAlign": "right",
+            "labelStarContent": "\"*\"",
+            "labelStarColor": "rgb(245, 108, 108)",
+            "labelRect": {
+              "x": 286,
+              "y": 319.391,
+              "w": 84,
+              "h": 28.391,
+              "right": 370
+            },
+            "controlRect": {
+              "x": 382,
+              "y": 319.391,
+              "w": 772,
+              "h": 364.797,
+              "right": 1154
+            },
+            "gapLabelRightToControlLeft": 12,
+            "inputInlineStyleWidth": "",
+            "hasRequiredMarkClass": true
+          }
+        ],
+        "sourcePanes": {
+          "splitRect": {
+            "x": 382,
+            "y": 319.391,
+            "w": 772,
+            "h": 342.797,
+            "right": 1154,
+            "bottom": 662.188
+          },
+          "splitDisplay": "flex",
+          "splitFlexDirection": "row",
+          "splitGap": "10px",
+          "splitHeight": 342.797,
+          "optionsPaneRect": {
+            "x": 382,
+            "y": 319.391,
+            "w": 406.328,
+            "h": 342.797,
+            "right": 788.328,
+            "bottom": 662.188
+          },
+          "chosenPaneRect": {
+            "x": 798.328,
+            "y": 319.391,
+            "w": 355.672,
+            "h": 342.797,
+            "right": 1154,
+            "bottom": 662.188
+          },
+          "optionsWiderThanChosen": true,
+          "optionsMinusChosenPx": 50.656,
+          "paneGapPx": 10,
+          "optList": {
+            "scrollHeight": 914,
+            "clientHeight": 260,
+            "overflowY": "auto",
+            "scrollable": true
+          },
+          "optCount": 13,
+          "disabledOptCount": 12,
+          "reasonTexts": [
+            "已分配给：<ID>",
+            "已分配给：<ID>、<ID>、<ID>、<ID>"
+          ],
+          "fontMain": "13px",
+          "fontSub": "12px",
+          "fontSubColor": "rgb(144, 147, 153)",
+          "fontReason": "12px",
+          "fontReasonColor": "rgb(230, 162, 60)",
+          "optRowHeight": 67.781,
+          "dialogRect": {
+            "x": 270,
+            "y": 135,
+            "w": 900,
+            "h": 613.188,
+            "right": 1170,
+            "bottom": 748.188
+          },
+          "overflowsDialog": false
+        },
+        "submitStates": {
+          "normal": {
+            "exists": true,
+            "disabled": false,
+            "bg": "rgb(9, 9, 11)",
+            "color": "rgb(255, 255, 255)",
+            "borderRadius": "6px",
+            "fontWeight": "500",
+            "borderColor": "rgb(9, 9, 11)",
+            "outline": "3px rgb(255, 255, 255)",
+            "isActiveEl": false,
+            "activeElClass": "el-dialog cc-dialog ced-dialog"
+          },
+          "hover": {
+            "exists": true,
+            "disabled": false,
+            "bg": "rgb(39, 39, 42)",
+            "color": "rgb(255, 255, 255)",
+            "borderRadius": "6px",
+            "fontWeight": "500",
+            "borderColor": "rgb(39, 39, 42)",
+            "outline": "3px rgb(255, 255, 255)",
+            "isActiveEl": false,
+            "activeElClass": "el-dialog cc-dialog ced-dialog"
+          },
+          "pressed": {
+            "exists": true,
+            "disabled": false,
+            "bg": "rgb(24, 24, 27)",
+            "color": "rgb(255, 255, 255)",
+            "borderRadius": "6px",
+            "fontWeight": "500",
+            "borderColor": "rgb(24, 24, 27)",
+            "outline": "3px rgb(255, 255, 255)",
+            "isActiveEl": true,
+            "activeElClass": "el-button el-button--primary cc-dialog-submit ced-submit"
+          },
+          "focusTab": {
+            "exists": true,
+            "disabled": false,
+            "bg": "rgb(39, 39, 42)",
+            "color": "rgb(255, 255, 255)",
+            "borderRadius": "6px",
+            "fontWeight": "500",
+            "borderColor": "rgb(39, 39, 42)",
+            "outline": "2px rgb(160, 207, 255)",
+            "isActiveEl": true,
+            "activeElClass": "el-button el-button--primary cc-dialog-submit ced-submit"
+          },
+          "focusJs": {
+            "exists": true,
+            "disabled": false,
+            "bg": "rgb(39, 39, 42)",
+            "color": "rgb(255, 255, 255)",
+            "borderRadius": "6px",
+            "fontWeight": "500",
+            "borderColor": "rgb(39, 39, 42)",
+            "outline": "2px rgb(160, 207, 255)",
+            "isActiveEl": true,
+            "activeElClass": "el-button el-button--primary cc-dialog-submit ced-submit"
+          },
+          "tabFrom": "取消"
+        },
+        "secondary": {
+          "cancel": {
+            "exists": true,
+            "disabled": false,
+            "bg": "rgb(255, 255, 255)",
+            "color": "rgb(96, 98, 102)",
+            "borderRadius": "4px",
+            "fontWeight": "500",
+            "borderColor": "rgb(220, 223, 230)",
+            "outline": "3px rgb(96, 98, 102)",
+            "isActiveEl": false,
+            "activeElClass": "el-button el-button--primary cc-dialog-submit ced-submit"
+          },
+          "autogen": {
+            "exists": true,
+            "disabled": false,
+            "bg": "rgb(255, 255, 255)",
+            "color": "rgb(96, 98, 102)",
+            "borderRadius": "4px",
+            "fontWeight": "500",
+            "borderColor": "rgb(220, 223, 230)",
+            "outline": "3px rgb(96, 98, 102)",
+            "isActiveEl": false,
+            "activeElClass": "el-button el-button--primary cc-dialog-submit ced-submit"
+          }
+        },
+        "dialogHasInnerTable": false
+      },
+      "ac130": {
+        "placeholderAndLimits": {
+          "placeholder": "探针用途描述（最多 256 个字符）",
+          "maxlengthAttr": null,
+          "valueCodePoints": 0,
+          "valueUtf16Units": 0,
+          "utf8Bytes": 0,
+          "lastCodePoint": null,
+          "lastIsLoneSurrogate": false,
+          "hasLoneSurrogateAnywhere": false
+        },
+        "t_300han": {
+          "placeholder": "探针用途描述（最多 256 个字符）",
+          "maxlengthAttr": null,
+          "valueCodePoints": 256,
+          "valueUtf16Units": 256,
+          "utf8Bytes": 768,
+          "lastCodePoint": 20013,
+          "lastIsLoneSurrogate": false,
+          "hasLoneSurrogateAnywhere": false
+        },
+        "t_256han": {
+          "placeholder": "探针用途描述（最多 256 个字符）",
+          "maxlengthAttr": null,
+          "valueCodePoints": 256,
+          "valueUtf16Units": 256,
+          "utf8Bytes": 768,
+          "lastCodePoint": 20013,
+          "lastIsLoneSurrogate": false,
+          "hasLoneSurrogateAnywhere": false
+        },
+        "t_mixed": {
+          "placeholder": "探针用途描述（最多 256 个字符）",
+          "maxlengthAttr": null,
+          "valueCodePoints": 256,
+          "valueUtf16Units": 312,
+          "utf8Bytes": 824,
+          "lastCodePoint": 128512,
+          "lastIsLoneSurrogate": false,
+          "hasLoneSurrogateAnywhere": false
+        },
+        "t_boundary": {
+          "placeholder": "探针用途描述（最多 256 个字符）",
+          "maxlengthAttr": null,
+          "valueCodePoints": 256,
+          "valueUtf16Units": 257,
+          "utf8Bytes": 769,
+          "lastCodePoint": 128512,
+          "lastIsLoneSurrogate": false,
+          "hasLoneSurrogateAnywhere": false
+        },
+        "t_handType": {
+          "placeholder": "探针用途描述（最多 256 个字符）",
+          "maxlengthAttr": null,
+          "valueCodePoints": 256,
+          "valueUtf16Units": 256,
+          "utf8Bytes": 768,
+          "lastCodePoint": 20013,
+          "lastIsLoneSurrogate": false,
+          "hasLoneSurrogateAnywhere": false
+        }
+      },
+      "ac124_create": [
+        {
+          "state": "S0-unselected",
+          "dialog": {
+            "x": 270,
+            "y": 135,
+            "w": 900,
+            "h": 613.188,
+            "right": 1170,
+            "bottom": 748.188
+          },
+          "dialogMaxWidth": "1392px",
+          "labelColumnWidthToken": "84px",
+          "labelGapToken": "12px",
+          "safetyInsetToken": "48px",
+          "title": "新增探针",
+          "footer": {
+            "x": 286,
+            "y": 684.188,
+            "w": 868,
+            "h": 48,
+            "right": 1154,
+            "bottom": 732.188
+          },
+          "footerButtons": [
+            {
+              "text": "取消",
+              "x": 1022,
+              "y": 700.188,
+              "w": 60,
+              "h": 32,
+              "right": 1082,
+              "bottom": 732.188
+            },
+            {
+              "text": "创建",
+              "x": 1094,
+              "y": 700.188,
+              "w": 60,
+              "h": 32,
+              "right": 1154,
+              "bottom": 732.188
+            }
+          ],
+          "chosenCount": 0,
+          "badChipCount": 0,
+          "sourceFeedback": {
+            "text": "至少选择 1 个数据源",
+            "tone": "hint",
+            "role": "note"
+          },
+          "idFieldError": false,
+          "idErrorText": "",
+          "errCount": 0
+        },
+        {
+          "state": "S1-one-selected",
+          "dialog": {
+            "x": 270,
+            "y": 135,
+            "w": 900,
+            "h": 613.188,
+            "right": 1170,
+            "bottom": 748.188
+          },
+          "dialogMaxWidth": "1392px",
+          "labelColumnWidthToken": "84px",
+          "labelGapToken": "12px",
+          "safetyInsetToken": "48px",
+          "title": "新增探针",
+          "footer": {
+            "x": 286,
+            "y": 684.188,
+            "w": 868,
+            "h": 48,
+            "right": 1154,
+            "bottom": 732.188
+          },
+          "footerButtons": [
+            {
+              "text": "取消",
+              "x": 1022,
+              "y": 700.188,
+              "w": 60,
+              "h": 32,
+              "right": 1082,
+              "bottom": 732.188
+            },
+            {
+              "text": "创建",
+              "x": 1094,
+              "y": 700.188,
+              "w": 60,
+              "h": 32,
+              "right": 1154,
+              "bottom": 732.188
+            }
+          ],
+          "chosenCount": 1,
+          "badChipCount": 0,
+          "sourceFeedback": null,
+          "idFieldError": false,
+          "idErrorText": "",
+          "errCount": 0
+        },
+        {
+          "state": "S2-all-cleared",
+          "dialog": {
+            "x": 270,
+            "y": 135,
+            "w": 900,
+            "h": 613.188,
+            "right": 1170,
+            "bottom": 748.188
+          },
+          "dialogMaxWidth": "1392px",
+          "labelColumnWidthToken": "84px",
+          "labelGapToken": "12px",
+          "safetyInsetToken": "48px",
+          "title": "新增探针",
+          "footer": {
+            "x": 286,
+            "y": 684.188,
+            "w": 868,
+            "h": 48,
+            "right": 1154,
+            "bottom": 732.188
+          },
+          "footerButtons": [
+            {
+              "text": "取消",
+              "x": 1022,
+              "y": 700.188,
+              "w": 60,
+              "h": 32,
+              "right": 1082,
+              "bottom": 732.188
+            },
+            {
+              "text": "创建",
+              "x": 1094,
+              "y": 700.188,
+              "w": 60,
+              "h": 32,
+              "right": 1154,
+              "bottom": 732.188
+            }
+          ],
+          "chosenCount": 0,
+          "badChipCount": 0,
+          "sourceFeedback": {
+            "text": "至少选择 1 个数据源",
+            "tone": "hint",
+            "role": "note"
+          },
+          "idFieldError": false,
+          "idErrorText": "",
+          "errCount": 0
+        },
+        {
+          "state": "S3-submit-error",
+          "dialog": {
+            "x": 270,
+            "y": 135,
+            "w": 900,
+            "h": 613.188,
+            "right": 1170,
+            "bottom": 748.188
+          },
+          "dialogMaxWidth": "1392px",
+          "labelColumnWidthToken": "84px",
+          "labelGapToken": "12px",
+          "safetyInsetToken": "48px",
+          "title": "新增探针",
+          "footer": {
+            "x": 286,
+            "y": 684.188,
+            "w": 868,
+            "h": 48,
+            "right": 1154,
+            "bottom": 732.188
+          },
+          "footerButtons": [
+            {
+              "text": "取消",
+              "x": 1022,
+              "y": 700.188,
+              "w": 60,
+              "h": 32,
+              "right": 1082,
+              "bottom": 732.188
+            },
+            {
+              "text": "创建",
+              "x": 1094,
+              "y": 700.188,
+              "w": 60,
+              "h": 32,
+              "right": 1154,
+              "bottom": 732.188
+            }
+          ],
+          "chosenCount": 0,
+          "badChipCount": 0,
+          "sourceFeedback": {
+            "text": "至少选择 1 个数据源",
+            "tone": "error",
+            "role": "alert"
+          },
+          "idFieldError": false,
+          "idErrorText": "探针 ID 不能为空。",
+          "errCount": 2
+        },
+        {
+          "state": "S4-corrected",
+          "dialog": {
+            "x": 270,
+            "y": 135,
+            "w": 900,
+            "h": 613.188,
+            "right": 1170,
+            "bottom": 748.188
+          },
+          "dialogMaxWidth": "1392px",
+          "labelColumnWidthToken": "84px",
+          "labelGapToken": "12px",
+          "safetyInsetToken": "48px",
+          "title": "新增探针",
+          "footer": {
+            "x": 286,
+            "y": 684.188,
+            "w": 868,
+            "h": 48,
+            "right": 1154,
+            "bottom": 732.188
+          },
+          "footerButtons": [
+            {
+              "text": "取消",
+              "x": 1022,
+              "y": 700.188,
+              "w": 60,
+              "h": 32,
+              "right": 1082,
+              "bottom": 732.188
+            },
+            {
+              "text": "创建",
+              "x": 1094,
+              "y": 700.188,
+              "w": 60,
+              "h": 32,
+              "right": 1154,
+              "bottom": 732.188
+            }
+          ],
+          "chosenCount": 1,
+          "badChipCount": 0,
+          "sourceFeedback": null,
+          "idFieldError": false,
+          "idErrorText": "",
+          "errCount": 0
+        }
+      ],
+      "edit": {
+        "snapOpen": {
+          "dialog": {
+            "x": 270,
+            "y": 135,
+            "w": 900,
+            "h": 635.578,
+            "right": 1170,
+            "bottom": 770.578
+          },
+          "dialogMaxWidth": "1392px",
+          "labelColumnWidthToken": "84px",
+          "labelGapToken": "12px",
+          "safetyInsetToken": "48px",
+          "title": "编辑探针",
+          "footer": {
+            "x": 286,
+            "y": 706.578,
+            "w": 868,
+            "h": 48,
+            "right": 1154,
+            "bottom": 754.578
+          },
+          "footerButtons": [
+            {
+              "text": "取消",
+              "x": 1022,
+              "y": 722.578,
+              "w": 60,
+              "h": 32,
+              "right": 1082,
+              "bottom": 754.578
+            },
+            {
+              "text": "保存",
+              "x": 1094,
+              "y": 722.578,
+              "w": 60,
+              "h": 32,
+              "right": 1154,
+              "bottom": 754.578
+            }
+          ],
+          "chosenCount": 7,
+          "badChipCount": 0,
+          "sourceFeedback": null,
+          "idFieldError": false,
+          "idErrorText": "",
+          "errCount": 0
+        },
+        "labels": [
+          {
+            "label": "探针 ID",
+            "labelFontSize": "14px",
+            "labelFontWeight": "500",
+            "labelColor": "rgb(63, 63, 70)",
+            "labelTextAlign": "right",
+            "labelStarContent": "\"*\"",
+            "labelStarColor": "rgb(245, 108, 108)",
+            "labelRect": {
+              "x": 286,
+              "y": 191.391,
+              "w": 84,
+              "h": 28.391,
+              "right": 370
+            },
+            "controlRect": {
+              "x": 382,
+              "y": 191.391,
+              "w": 772,
+              "h": 76.391,
+              "right": 1154
+            },
+            "gapLabelRightToControlLeft": 12,
+            "inputInlineStyleWidth": "",
+            "hasRequiredMarkClass": true
+          },
+          {
+            "label": "探针描述",
+            "labelFontSize": "14px",
+            "labelFontWeight": "500",
+            "labelColor": "rgb(63, 63, 70)",
+            "labelTextAlign": "right",
+            "labelStarContent": "\"*\"",
+            "labelStarColor": "rgb(245, 108, 108)",
+            "labelRect": {
+              "x": 286,
+              "y": 267.781,
+              "w": 84,
+              "h": 28.391,
+              "right": 370
+            },
+            "controlRect": {
+              "x": 382,
+              "y": 267.781,
+              "w": 772,
+              "h": 74,
+              "right": 1154
+            },
+            "gapLabelRightToControlLeft": 12,
+            "inputInlineStyleWidth": "",
+            "hasRequiredMarkClass": true
+          },
+          {
+            "label": "采集数据源",
+            "labelFontSize": "14px",
+            "labelFontWeight": "500",
+            "labelColor": "rgb(63, 63, 70)",
+            "labelTextAlign": "right",
+            "labelStarContent": "\"*\"",
+            "labelStarColor": "rgb(245, 108, 108)",
+            "labelRect": {
+              "x": 286,
+              "y": 341.781,
+              "w": 84,
+              "h": 28.391,
+              "right": 370
+            },
+            "controlRect": {
+              "x": 382,
+              "y": 341.781,
+              "w": 772,
+              "h": 364.797,
+              "right": 1154
+            },
+            "gapLabelRightToControlLeft": 12,
+            "inputInlineStyleWidth": "",
+            "hasRequiredMarkClass": true
+          }
+        ],
+        "sourcePanes": {
+          "splitRect": {
+            "x": 382,
+            "y": 341.781,
+            "w": 772,
+            "h": 342.797,
+            "right": 1154,
+            "bottom": 684.578
+          },
+          "splitDisplay": "flex",
+          "splitFlexDirection": "row",
+          "splitGap": "10px",
+          "splitHeight": 342.797,
+          "optionsPaneRect": {
+            "x": 382,
+            "y": 341.781,
+            "w": 406.328,
+            "h": 342.797,
+            "right": 788.328,
+            "bottom": 684.578
+          },
+          "chosenPaneRect": {
+            "x": 798.328,
+            "y": 341.781,
+            "w": 355.672,
+            "h": 342.797,
+            "right": 1154,
+            "bottom": 684.578
+          },
+          "optionsWiderThanChosen": true,
+          "optionsMinusChosenPx": 50.656,
+          "paneGapPx": 10,
+          "optList": {
+            "scrollHeight": 783,
+            "clientHeight": 260,
+            "overflowY": "auto",
+            "scrollable": true
+          },
+          "optCount": 13,
+          "disabledOptCount": 12,
+          "reasonTexts": [
+            "已分配给：<ID>",
+            "已分配给：<ID>、<ID>、<ID>、<ID>"
+          ],
+          "fontMain": "13px",
+          "fontSub": "12px",
+          "fontSubColor": "rgb(144, 147, 153)",
+          "fontReason": "12px",
+          "fontReasonColor": "rgb(230, 162, 60)",
+          "optRowHeight": 67.781,
+          "dialogRect": {
+            "x": 270,
+            "y": 135,
+            "w": 900,
+            "h": 635.578,
+            "right": 1170,
+            "bottom": 770.578
+          },
+          "overflowsDialog": false
+        },
+        "idKeyboard": {
+          "inputDisabledBefore": true,
+          "toggleText": "修改探针 ID",
+          "hasLockHint": true
+        },
+        "idKeyboardAfterToggle": {
+          "inputDisabled": false,
+          "toggleText": "取消修改",
+          "hasLockHint": false
+        },
+        "idKeyboardAfterType": {
+          "focused": true,
+          "valueLen": 14,
+          "caretAtEnd": true
+        },
+        "submitStates": {
+          "normal": {
+            "exists": true,
+            "disabled": false,
+            "bg": "rgb(9, 9, 11)",
+            "color": "rgb(255, 255, 255)",
+            "borderRadius": "6px",
+            "fontWeight": "500",
+            "borderColor": "rgb(9, 9, 11)",
+            "outline": "3px rgb(255, 255, 255)",
+            "isActiveEl": false,
+            "activeElClass": "el-input__inner"
+          },
+          "hover": {
+            "exists": true,
+            "disabled": false,
+            "bg": "rgb(39, 39, 42)",
+            "color": "rgb(255, 255, 255)",
+            "borderRadius": "6px",
+            "fontWeight": "500",
+            "borderColor": "rgb(39, 39, 42)",
+            "outline": "3px rgb(255, 255, 255)",
+            "isActiveEl": false,
+            "activeElClass": "el-input__inner"
+          },
+          "pressed": {
+            "exists": true,
+            "disabled": false,
+            "bg": "rgb(24, 24, 27)",
+            "color": "rgb(255, 255, 255)",
+            "borderRadius": "6px",
+            "fontWeight": "500",
+            "borderColor": "rgb(24, 24, 27)",
+            "outline": "3px rgb(255, 255, 255)",
+            "isActiveEl": true,
+            "activeElClass": "el-button el-button--primary cc-dialog-submit ced-submit"
+          },
+          "focusTab": {
+            "exists": true,
+            "disabled": false,
+            "bg": "rgb(39, 39, 42)",
+            "color": "rgb(255, 255, 255)",
+            "borderRadius": "6px",
+            "fontWeight": "500",
+            "borderColor": "rgb(39, 39, 42)",
+            "outline": "2px rgb(160, 207, 255)",
+            "isActiveEl": true,
+            "activeElClass": "el-button el-button--primary cc-dialog-submit ced-submit"
+          },
+          "focusJs": {
+            "exists": true,
+            "disabled": false,
+            "bg": "rgb(39, 39, 42)",
+            "color": "rgb(255, 255, 255)",
+            "borderRadius": "6px",
+            "fontWeight": "500",
+            "borderColor": "rgb(39, 39, 42)",
+            "outline": "2px rgb(160, 207, 255)",
+            "isActiveEl": true,
+            "activeElClass": "el-button el-button--primary cc-dialog-submit ced-submit"
+          },
+          "tabFrom": "取消"
+        },
+        "idToggleStyle": {
+          "exists": true,
+          "disabled": false,
+          "bg": "rgba(0, 0, 0, 0)",
+          "color": "rgb(64, 158, 255)",
+          "borderRadius": "4px",
+          "fontWeight": "500",
+          "borderColor": "rgba(0, 0, 0, 0)",
+          "outline": "3px rgb(64, 158, 255)",
+          "isActiveEl": false,
+          "activeElClass": "el-button el-button--primary cc-dialog-submit ced-submit"
+        },
+        "secondary": {
+          "cancel": {
+            "exists": true,
+            "disabled": false,
+            "bg": "rgb(255, 255, 255)",
+            "color": "rgb(96, 98, 102)",
+            "borderRadius": "4px",
+            "fontWeight": "500",
+            "borderColor": "rgb(220, 223, 230)",
+            "outline": "3px rgb(96, 98, 102)",
+            "isActiveEl": false,
+            "activeElClass": "el-button el-button--primary cc-dialog-submit ced-submit"
+          }
+        }
+      },
+      "ac124_edit": [
+        {
+          "state": "E0-edit-open",
+          "dialog": {
+            "x": 270,
+            "y": 135,
+            "w": 900,
+            "h": 635.578,
+            "right": 1170,
+            "bottom": 770.578
+          },
+          "dialogMaxWidth": "1392px",
+          "labelColumnWidthToken": "84px",
+          "labelGapToken": "12px",
+          "safetyInsetToken": "48px",
+          "title": "编辑探针",
+          "footer": {
+            "x": 286,
+            "y": 706.578,
+            "w": 868,
+            "h": 48,
+            "right": 1154,
+            "bottom": 754.578
+          },
+          "footerButtons": [
+            {
+              "text": "取消",
+              "x": 1022,
+              "y": 722.578,
+              "w": 60,
+              "h": 32,
+              "right": 1082,
+              "bottom": 754.578
+            },
+            {
+              "text": "保存",
+              "x": 1094,
+              "y": 722.578,
+              "w": 60,
+              "h": 32,
+              "right": 1154,
+              "bottom": 754.578
+            }
+          ],
+          "chosenCount": 7,
+          "badChipCount": 0,
+          "sourceFeedback": null,
+          "idFieldError": false,
+          "idErrorText": "",
+          "errCount": 0
+        },
+        {
+          "state": "E1-all-cleared",
+          "dialog": {
+            "x": 270,
+            "y": 135,
+            "w": 900,
+            "h": 635.578,
+            "right": 1170,
+            "bottom": 770.578
+          },
+          "dialogMaxWidth": "1392px",
+          "labelColumnWidthToken": "84px",
+          "labelGapToken": "12px",
+          "safetyInsetToken": "48px",
+          "title": "编辑探针",
+          "footer": {
+            "x": 286,
+            "y": 706.578,
+            "w": 868,
+            "h": 48,
+            "right": 1154,
+            "bottom": 754.578
+          },
+          "footerButtons": [
+            {
+              "text": "取消",
+              "x": 1022,
+              "y": 722.578,
+              "w": 60,
+              "h": 32,
+              "right": 1082,
+              "bottom": 754.578
+            },
+            {
+              "text": "保存",
+              "x": 1094,
+              "y": 722.578,
+              "w": 60,
+              "h": 32,
+              "right": 1154,
+              "bottom": 754.578
+            }
+          ],
+          "chosenCount": 0,
+          "badChipCount": 0,
+          "sourceFeedback": {
+            "text": "至少选择 1 个数据源",
+            "tone": "hint",
+            "role": "note"
+          },
+          "idFieldError": false,
+          "idErrorText": "",
+          "errCount": 0
+        },
+        {
+          "state": "E2-submit-error",
+          "dialog": {
+            "x": 270,
+            "y": 135,
+            "w": 900,
+            "h": 635.578,
+            "right": 1170,
+            "bottom": 770.578
+          },
+          "dialogMaxWidth": "1392px",
+          "labelColumnWidthToken": "84px",
+          "labelGapToken": "12px",
+          "safetyInsetToken": "48px",
+          "title": "编辑探针",
+          "footer": {
+            "x": 286,
+            "y": 706.578,
+            "w": 868,
+            "h": 48,
+            "right": 1154,
+            "bottom": 754.578
+          },
+          "footerButtons": [
+            {
+              "text": "取消",
+              "x": 1022,
+              "y": 722.578,
+              "w": 60,
+              "h": 32,
+              "right": 1082,
+              "bottom": 754.578
+            },
+            {
+              "text": "保存",
+              "x": 1094,
+              "y": 722.578,
+              "w": 60,
+              "h": 32,
+              "right": 1154,
+              "bottom": 754.578
+            }
+          ],
+          "chosenCount": 0,
+          "badChipCount": 0,
+          "sourceFeedback": {
+            "text": "至少选择 1 个数据源",
+            "tone": "error",
+            "role": "alert"
+          },
+          "idFieldError": false,
+          "idErrorText": "至少选择 1 个数据源",
+          "errCount": 1
+        },
+        {
+          "state": "E3-corrected",
+          "dialog": {
+            "x": 270,
+            "y": 135,
+            "w": 900,
+            "h": 635.578,
+            "right": 1170,
+            "bottom": 770.578
+          },
+          "dialogMaxWidth": "1392px",
+          "labelColumnWidthToken": "84px",
+          "labelGapToken": "12px",
+          "safetyInsetToken": "48px",
+          "title": "编辑探针",
+          "footer": {
+            "x": 286,
+            "y": 706.578,
+            "w": 868,
+            "h": 48,
+            "right": 1154,
+            "bottom": 754.578
+          },
+          "footerButtons": [
+            {
+              "text": "取消",
+              "x": 1022,
+              "y": 722.578,
+              "w": 60,
+              "h": 32,
+              "right": 1082,
+              "bottom": 754.578
+            },
+            {
+              "text": "保存",
+              "x": 1094,
+              "y": 722.578,
+              "w": 60,
+              "h": 32,
+              "right": 1154,
+              "bottom": 754.578
+            }
+          ],
+          "chosenCount": 1,
+          "badChipCount": 0,
+          "sourceFeedback": null,
+          "idFieldError": false,
+          "idErrorText": "",
+          "errCount": 0
+        }
+      ]
+    },
+    "1920x1080": {
+      "ac092": {
+        "listRowHeightHistogram": {
+          "48": 15,
+          "52": 1
+        },
+        "hasRowHeightTokenInCss": null,
+        "fixedCol": {
+          "position": "sticky",
+          "stickyRight": "0px",
+          "tdPosition": "sticky",
+          "tdRight": "0px"
+        },
+        "ellipsisCellCount": 0
+      },
+      "create": {
+        "snapOpen": {
+          "dialog": {
+            "x": 510,
+            "y": 162,
+            "w": 900,
+            "h": 613.188,
+            "right": 1410,
+            "bottom": 775.188
+          },
+          "dialogMaxWidth": "1872px",
+          "labelColumnWidthToken": "84px",
+          "labelGapToken": "12px",
+          "safetyInsetToken": "48px",
+          "title": "新增探针",
+          "footer": {
+            "x": 526,
+            "y": 711.188,
+            "w": 868,
+            "h": 48,
+            "right": 1394,
+            "bottom": 759.188
+          },
+          "footerButtons": [
+            {
+              "text": "取消",
+              "x": 1262,
+              "y": 727.188,
+              "w": 60,
+              "h": 32,
+              "right": 1322,
+              "bottom": 759.188
+            },
+            {
+              "text": "创建",
+              "x": 1334,
+              "y": 727.188,
+              "w": 60,
+              "h": 32,
+              "right": 1394,
+              "bottom": 759.188
+            }
+          ],
+          "chosenCount": 0,
+          "badChipCount": 0,
+          "sourceFeedback": {
+            "text": "至少选择 1 个数据源",
+            "tone": "hint",
+            "role": "note"
+          },
+          "idFieldError": false,
+          "idErrorText": "",
+          "errCount": 0
+        },
+        "labels": [
+          {
+            "label": "探针 ID",
+            "labelFontSize": "14px",
+            "labelFontWeight": "500",
+            "labelColor": "rgb(63, 63, 70)",
+            "labelTextAlign": "right",
+            "labelStarContent": "\"*\"",
+            "labelStarColor": "rgb(245, 108, 108)",
+            "labelRect": {
+              "x": 526,
+              "y": 218.391,
+              "w": 84,
+              "h": 28.391,
+              "right": 610
+            },
+            "controlRect": {
+              "x": 622,
+              "y": 218.391,
+              "w": 772,
+              "h": 54,
+              "right": 1394
+            },
+            "gapLabelRightToControlLeft": 12,
+            "inputInlineStyleWidth": "",
+            "hasRequiredMarkClass": true
+          },
+          {
+            "label": "探针描述",
+            "labelFontSize": "14px",
+            "labelFontWeight": "500",
+            "labelColor": "rgb(63, 63, 70)",
+            "labelTextAlign": "right",
+            "labelStarContent": "\"*\"",
+            "labelStarColor": "rgb(245, 108, 108)",
+            "labelRect": {
+              "x": 526,
+              "y": 272.391,
+              "w": 84,
+              "h": 28.391,
+              "right": 610
+            },
+            "controlRect": {
+              "x": 622,
+              "y": 272.391,
+              "w": 772,
+              "h": 74,
+              "right": 1394
+            },
+            "gapLabelRightToControlLeft": 12,
+            "inputInlineStyleWidth": "",
+            "hasRequiredMarkClass": true
+          },
+          {
+            "label": "采集数据源",
+            "labelFontSize": "14px",
+            "labelFontWeight": "500",
+            "labelColor": "rgb(63, 63, 70)",
+            "labelTextAlign": "right",
+            "labelStarContent": "\"*\"",
+            "labelStarColor": "rgb(245, 108, 108)",
+            "labelRect": {
+              "x": 526,
+              "y": 346.391,
+              "w": 84,
+              "h": 28.391,
+              "right": 610
+            },
+            "controlRect": {
+              "x": 622,
+              "y": 346.391,
+              "w": 772,
+              "h": 364.797,
+              "right": 1394
+            },
+            "gapLabelRightToControlLeft": 12,
+            "inputInlineStyleWidth": "",
+            "hasRequiredMarkClass": true
+          }
+        ],
+        "sourcePanes": {
+          "splitRect": {
+            "x": 622,
+            "y": 346.391,
+            "w": 772,
+            "h": 342.797,
+            "right": 1394,
+            "bottom": 689.188
+          },
+          "splitDisplay": "flex",
+          "splitFlexDirection": "row",
+          "splitGap": "10px",
+          "splitHeight": 342.797,
+          "optionsPaneRect": {
+            "x": 622,
+            "y": 346.391,
+            "w": 406.328,
+            "h": 342.797,
+            "right": 1028.328,
+            "bottom": 689.188
+          },
+          "chosenPaneRect": {
+            "x": 1038.328,
+            "y": 346.391,
+            "w": 355.672,
+            "h": 342.797,
+            "right": 1394,
+            "bottom": 689.188
+          },
+          "optionsWiderThanChosen": true,
+          "optionsMinusChosenPx": 50.656,
+          "paneGapPx": 10,
+          "optList": {
+            "scrollHeight": 914,
+            "clientHeight": 260,
+            "overflowY": "auto",
+            "scrollable": true
+          },
+          "optCount": 13,
+          "disabledOptCount": 12,
+          "reasonTexts": [
+            "已分配给：<ID>",
+            "已分配给：<ID>、<ID>、<ID>、<ID>"
+          ],
+          "fontMain": "13px",
+          "fontSub": "12px",
+          "fontSubColor": "rgb(144, 147, 153)",
+          "fontReason": "12px",
+          "fontReasonColor": "rgb(230, 162, 60)",
+          "optRowHeight": 67.781,
+          "dialogRect": {
+            "x": 510,
+            "y": 162,
+            "w": 900,
+            "h": 613.188,
+            "right": 1410,
+            "bottom": 775.188
+          },
+          "overflowsDialog": false
+        },
+        "submitStates": {
+          "normal": {
+            "exists": true,
+            "disabled": false,
+            "bg": "rgb(9, 9, 11)",
+            "color": "rgb(255, 255, 255)",
+            "borderRadius": "6px",
+            "fontWeight": "500",
+            "borderColor": "rgb(9, 9, 11)",
+            "outline": "3px rgb(255, 255, 255)",
+            "isActiveEl": false,
+            "activeElClass": "el-dialog cc-dialog ced-dialog"
+          },
+          "hover": {
+            "exists": true,
+            "disabled": false,
+            "bg": "rgb(39, 39, 42)",
+            "color": "rgb(255, 255, 255)",
+            "borderRadius": "6px",
+            "fontWeight": "500",
+            "borderColor": "rgb(39, 39, 42)",
+            "outline": "3px rgb(255, 255, 255)",
+            "isActiveEl": false,
+            "activeElClass": "el-dialog cc-dialog ced-dialog"
+          },
+          "pressed": {
+            "exists": true,
+            "disabled": false,
+            "bg": "rgb(24, 24, 27)",
+            "color": "rgb(255, 255, 255)",
+            "borderRadius": "6px",
+            "fontWeight": "500",
+            "borderColor": "rgb(24, 24, 27)",
+            "outline": "3px rgb(255, 255, 255)",
+            "isActiveEl": true,
+            "activeElClass": "el-button el-button--primary cc-dialog-submit ced-submit"
+          },
+          "focusTab": {
+            "exists": true,
+            "disabled": false,
+            "bg": "rgb(39, 39, 42)",
+            "color": "rgb(255, 255, 255)",
+            "borderRadius": "6px",
+            "fontWeight": "500",
+            "borderColor": "rgb(39, 39, 42)",
+            "outline": "2px rgb(160, 207, 255)",
+            "isActiveEl": true,
+            "activeElClass": "el-button el-button--primary cc-dialog-submit ced-submit"
+          },
+          "focusJs": {
+            "exists": true,
+            "disabled": false,
+            "bg": "rgb(39, 39, 42)",
+            "color": "rgb(255, 255, 255)",
+            "borderRadius": "6px",
+            "fontWeight": "500",
+            "borderColor": "rgb(39, 39, 42)",
+            "outline": "2px rgb(160, 207, 255)",
+            "isActiveEl": true,
+            "activeElClass": "el-button el-button--primary cc-dialog-submit ced-submit"
+          },
+          "tabFrom": "取消"
+        },
+        "secondary": {
+          "cancel": {
+            "exists": true,
+            "disabled": false,
+            "bg": "rgb(255, 255, 255)",
+            "color": "rgb(96, 98, 102)",
+            "borderRadius": "4px",
+            "fontWeight": "500",
+            "borderColor": "rgb(220, 223, 230)",
+            "outline": "3px rgb(96, 98, 102)",
+            "isActiveEl": false,
+            "activeElClass": "el-button el-button--primary cc-dialog-submit ced-submit"
+          },
+          "autogen": {
+            "exists": true,
+            "disabled": false,
+            "bg": "rgb(255, 255, 255)",
+            "color": "rgb(96, 98, 102)",
+            "borderRadius": "4px",
+            "fontWeight": "500",
+            "borderColor": "rgb(220, 223, 230)",
+            "outline": "3px rgb(96, 98, 102)",
+            "isActiveEl": false,
+            "activeElClass": "el-button el-button--primary cc-dialog-submit ced-submit"
+          }
+        },
+        "dialogHasInnerTable": false
+      },
+      "ac130": {
+        "placeholderAndLimits": {
+          "placeholder": "探针用途描述（最多 256 个字符）",
+          "maxlengthAttr": null,
+          "valueCodePoints": 0,
+          "valueUtf16Units": 0,
+          "utf8Bytes": 0,
+          "lastCodePoint": null,
+          "lastIsLoneSurrogate": false,
+          "hasLoneSurrogateAnywhere": false
+        },
+        "t_300han": {
+          "placeholder": "探针用途描述（最多 256 个字符）",
+          "maxlengthAttr": null,
+          "valueCodePoints": 256,
+          "valueUtf16Units": 256,
+          "utf8Bytes": 768,
+          "lastCodePoint": 20013,
+          "lastIsLoneSurrogate": false,
+          "hasLoneSurrogateAnywhere": false
+        },
+        "t_256han": {
+          "placeholder": "探针用途描述（最多 256 个字符）",
+          "maxlengthAttr": null,
+          "valueCodePoints": 256,
+          "valueUtf16Units": 256,
+          "utf8Bytes": 768,
+          "lastCodePoint": 20013,
+          "lastIsLoneSurrogate": false,
+          "hasLoneSurrogateAnywhere": false
+        },
+        "t_mixed": {
+          "placeholder": "探针用途描述（最多 256 个字符）",
+          "maxlengthAttr": null,
+          "valueCodePoints": 256,
+          "valueUtf16Units": 312,
+          "utf8Bytes": 824,
+          "lastCodePoint": 128512,
+          "lastIsLoneSurrogate": false,
+          "hasLoneSurrogateAnywhere": false
+        },
+        "t_boundary": {
+          "placeholder": "探针用途描述（最多 256 个字符）",
+          "maxlengthAttr": null,
+          "valueCodePoints": 256,
+          "valueUtf16Units": 257,
+          "utf8Bytes": 769,
+          "lastCodePoint": 128512,
+          "lastIsLoneSurrogate": false,
+          "hasLoneSurrogateAnywhere": false
+        },
+        "t_handType": {
+          "placeholder": "探针用途描述（最多 256 个字符）",
+          "maxlengthAttr": null,
+          "valueCodePoints": 256,
+          "valueUtf16Units": 256,
+          "utf8Bytes": 768,
+          "lastCodePoint": 20013,
+          "lastIsLoneSurrogate": false,
+          "hasLoneSurrogateAnywhere": false
+        }
+      },
+      "ac124_create": [
+        {
+          "state": "S0-unselected",
+          "dialog": {
+            "x": 510,
+            "y": 162,
+            "w": 900,
+            "h": 613.188,
+            "right": 1410,
+            "bottom": 775.188
+          },
+          "dialogMaxWidth": "1872px",
+          "labelColumnWidthToken": "84px",
+          "labelGapToken": "12px",
+          "safetyInsetToken": "48px",
+          "title": "新增探针",
+          "footer": {
+            "x": 526,
+            "y": 711.188,
+            "w": 868,
+            "h": 48,
+            "right": 1394,
+            "bottom": 759.188
+          },
+          "footerButtons": [
+            {
+              "text": "取消",
+              "x": 1262,
+              "y": 727.188,
+              "w": 60,
+              "h": 32,
+              "right": 1322,
+              "bottom": 759.188
+            },
+            {
+              "text": "创建",
+              "x": 1334,
+              "y": 727.188,
+              "w": 60,
+              "h": 32,
+              "right": 1394,
+              "bottom": 759.188
+            }
+          ],
+          "chosenCount": 0,
+          "badChipCount": 0,
+          "sourceFeedback": {
+            "text": "至少选择 1 个数据源",
+            "tone": "hint",
+            "role": "note"
+          },
+          "idFieldError": false,
+          "idErrorText": "",
+          "errCount": 0
+        },
+        {
+          "state": "S1-one-selected",
+          "dialog": {
+            "x": 510,
+            "y": 162,
+            "w": 900,
+            "h": 613.188,
+            "right": 1410,
+            "bottom": 775.188
+          },
+          "dialogMaxWidth": "1872px",
+          "labelColumnWidthToken": "84px",
+          "labelGapToken": "12px",
+          "safetyInsetToken": "48px",
+          "title": "新增探针",
+          "footer": {
+            "x": 526,
+            "y": 711.188,
+            "w": 868,
+            "h": 48,
+            "right": 1394,
+            "bottom": 759.188
+          },
+          "footerButtons": [
+            {
+              "text": "取消",
+              "x": 1262,
+              "y": 727.188,
+              "w": 60,
+              "h": 32,
+              "right": 1322,
+              "bottom": 759.188
+            },
+            {
+              "text": "创建",
+              "x": 1334,
+              "y": 727.188,
+              "w": 60,
+              "h": 32,
+              "right": 1394,
+              "bottom": 759.188
+            }
+          ],
+          "chosenCount": 1,
+          "badChipCount": 0,
+          "sourceFeedback": null,
+          "idFieldError": false,
+          "idErrorText": "",
+          "errCount": 0
+        },
+        {
+          "state": "S2-all-cleared",
+          "dialog": {
+            "x": 510,
+            "y": 162,
+            "w": 900,
+            "h": 613.188,
+            "right": 1410,
+            "bottom": 775.188
+          },
+          "dialogMaxWidth": "1872px",
+          "labelColumnWidthToken": "84px",
+          "labelGapToken": "12px",
+          "safetyInsetToken": "48px",
+          "title": "新增探针",
+          "footer": {
+            "x": 526,
+            "y": 711.188,
+            "w": 868,
+            "h": 48,
+            "right": 1394,
+            "bottom": 759.188
+          },
+          "footerButtons": [
+            {
+              "text": "取消",
+              "x": 1262,
+              "y": 727.188,
+              "w": 60,
+              "h": 32,
+              "right": 1322,
+              "bottom": 759.188
+            },
+            {
+              "text": "创建",
+              "x": 1334,
+              "y": 727.188,
+              "w": 60,
+              "h": 32,
+              "right": 1394,
+              "bottom": 759.188
+            }
+          ],
+          "chosenCount": 0,
+          "badChipCount": 0,
+          "sourceFeedback": {
+            "text": "至少选择 1 个数据源",
+            "tone": "hint",
+            "role": "note"
+          },
+          "idFieldError": false,
+          "idErrorText": "",
+          "errCount": 0
+        },
+        {
+          "state": "S3-submit-error",
+          "dialog": {
+            "x": 510,
+            "y": 162,
+            "w": 900,
+            "h": 613.188,
+            "right": 1410,
+            "bottom": 775.188
+          },
+          "dialogMaxWidth": "1872px",
+          "labelColumnWidthToken": "84px",
+          "labelGapToken": "12px",
+          "safetyInsetToken": "48px",
+          "title": "新增探针",
+          "footer": {
+            "x": 526,
+            "y": 711.188,
+            "w": 868,
+            "h": 48,
+            "right": 1394,
+            "bottom": 759.188
+          },
+          "footerButtons": [
+            {
+              "text": "取消",
+              "x": 1262,
+              "y": 727.188,
+              "w": 60,
+              "h": 32,
+              "right": 1322,
+              "bottom": 759.188
+            },
+            {
+              "text": "创建",
+              "x": 1334,
+              "y": 727.188,
+              "w": 60,
+              "h": 32,
+              "right": 1394,
+              "bottom": 759.188
+            }
+          ],
+          "chosenCount": 0,
+          "badChipCount": 0,
+          "sourceFeedback": {
+            "text": "至少选择 1 个数据源",
+            "tone": "error",
+            "role": "alert"
+          },
+          "idFieldError": false,
+          "idErrorText": "探针 ID 不能为空。",
+          "errCount": 2
+        },
+        {
+          "state": "S4-corrected",
+          "dialog": {
+            "x": 510,
+            "y": 162,
+            "w": 900,
+            "h": 613.188,
+            "right": 1410,
+            "bottom": 775.188
+          },
+          "dialogMaxWidth": "1872px",
+          "labelColumnWidthToken": "84px",
+          "labelGapToken": "12px",
+          "safetyInsetToken": "48px",
+          "title": "新增探针",
+          "footer": {
+            "x": 526,
+            "y": 711.188,
+            "w": 868,
+            "h": 48,
+            "right": 1394,
+            "bottom": 759.188
+          },
+          "footerButtons": [
+            {
+              "text": "取消",
+              "x": 1262,
+              "y": 727.188,
+              "w": 60,
+              "h": 32,
+              "right": 1322,
+              "bottom": 759.188
+            },
+            {
+              "text": "创建",
+              "x": 1334,
+              "y": 727.188,
+              "w": 60,
+              "h": 32,
+              "right": 1394,
+              "bottom": 759.188
+            }
+          ],
+          "chosenCount": 1,
+          "badChipCount": 0,
+          "sourceFeedback": null,
+          "idFieldError": false,
+          "idErrorText": "",
+          "errCount": 0
+        }
+      ],
+      "edit": {
+        "snapOpen": {
+          "dialog": {
+            "x": 510,
+            "y": 162,
+            "w": 900,
+            "h": 635.578,
+            "right": 1410,
+            "bottom": 797.578
+          },
+          "dialogMaxWidth": "1872px",
+          "labelColumnWidthToken": "84px",
+          "labelGapToken": "12px",
+          "safetyInsetToken": "48px",
+          "title": "编辑探针",
+          "footer": {
+            "x": 526,
+            "y": 733.578,
+            "w": 868,
+            "h": 48,
+            "right": 1394,
+            "bottom": 781.578
+          },
+          "footerButtons": [
+            {
+              "text": "取消",
+              "x": 1262,
+              "y": 749.578,
+              "w": 60,
+              "h": 32,
+              "right": 1322,
+              "bottom": 781.578
+            },
+            {
+              "text": "保存",
+              "x": 1334,
+              "y": 749.578,
+              "w": 60,
+              "h": 32,
+              "right": 1394,
+              "bottom": 781.578
+            }
+          ],
+          "chosenCount": 7,
+          "badChipCount": 0,
+          "sourceFeedback": null,
+          "idFieldError": false,
+          "idErrorText": "",
+          "errCount": 0
+        },
+        "labels": [
+          {
+            "label": "探针 ID",
+            "labelFontSize": "14px",
+            "labelFontWeight": "500",
+            "labelColor": "rgb(63, 63, 70)",
+            "labelTextAlign": "right",
+            "labelStarContent": "\"*\"",
+            "labelStarColor": "rgb(245, 108, 108)",
+            "labelRect": {
+              "x": 526,
+              "y": 218.391,
+              "w": 84,
+              "h": 28.391,
+              "right": 610
+            },
+            "controlRect": {
+              "x": 622,
+              "y": 218.391,
+              "w": 772,
+              "h": 76.391,
+              "right": 1394
+            },
+            "gapLabelRightToControlLeft": 12,
+            "inputInlineStyleWidth": "",
+            "hasRequiredMarkClass": true
+          },
+          {
+            "label": "探针描述",
+            "labelFontSize": "14px",
+            "labelFontWeight": "500",
+            "labelColor": "rgb(63, 63, 70)",
+            "labelTextAlign": "right",
+            "labelStarContent": "\"*\"",
+            "labelStarColor": "rgb(245, 108, 108)",
+            "labelRect": {
+              "x": 526,
+              "y": 294.781,
+              "w": 84,
+              "h": 28.391,
+              "right": 610
+            },
+            "controlRect": {
+              "x": 622,
+              "y": 294.781,
+              "w": 772,
+              "h": 74,
+              "right": 1394
+            },
+            "gapLabelRightToControlLeft": 12,
+            "inputInlineStyleWidth": "",
+            "hasRequiredMarkClass": true
+          },
+          {
+            "label": "采集数据源",
+            "labelFontSize": "14px",
+            "labelFontWeight": "500",
+            "labelColor": "rgb(63, 63, 70)",
+            "labelTextAlign": "right",
+            "labelStarContent": "\"*\"",
+            "labelStarColor": "rgb(245, 108, 108)",
+            "labelRect": {
+              "x": 526,
+              "y": 368.781,
+              "w": 84,
+              "h": 28.391,
+              "right": 610
+            },
+            "controlRect": {
+              "x": 622,
+              "y": 368.781,
+              "w": 772,
+              "h": 364.797,
+              "right": 1394
+            },
+            "gapLabelRightToControlLeft": 12,
+            "inputInlineStyleWidth": "",
+            "hasRequiredMarkClass": true
+          }
+        ],
+        "sourcePanes": {
+          "splitRect": {
+            "x": 622,
+            "y": 368.781,
+            "w": 772,
+            "h": 342.797,
+            "right": 1394,
+            "bottom": 711.578
+          },
+          "splitDisplay": "flex",
+          "splitFlexDirection": "row",
+          "splitGap": "10px",
+          "splitHeight": 342.797,
+          "optionsPaneRect": {
+            "x": 622,
+            "y": 368.781,
+            "w": 406.328,
+            "h": 342.797,
+            "right": 1028.328,
+            "bottom": 711.578
+          },
+          "chosenPaneRect": {
+            "x": 1038.328,
+            "y": 368.781,
+            "w": 355.672,
+            "h": 342.797,
+            "right": 1394,
+            "bottom": 711.578
+          },
+          "optionsWiderThanChosen": true,
+          "optionsMinusChosenPx": 50.656,
+          "paneGapPx": 10,
+          "optList": {
+            "scrollHeight": 783,
+            "clientHeight": 260,
+            "overflowY": "auto",
+            "scrollable": true
+          },
+          "optCount": 13,
+          "disabledOptCount": 12,
+          "reasonTexts": [
+            "已分配给：<ID>",
+            "已分配给：<ID>、<ID>、<ID>、<ID>"
+          ],
+          "fontMain": "13px",
+          "fontSub": "12px",
+          "fontSubColor": "rgb(144, 147, 153)",
+          "fontReason": "12px",
+          "fontReasonColor": "rgb(230, 162, 60)",
+          "optRowHeight": 67.781,
+          "dialogRect": {
+            "x": 510,
+            "y": 162,
+            "w": 900,
+            "h": 635.578,
+            "right": 1410,
+            "bottom": 797.578
+          },
+          "overflowsDialog": false
+        },
+        "idKeyboard": {
+          "inputDisabledBefore": true,
+          "toggleText": "修改探针 ID",
+          "hasLockHint": true
+        },
+        "idKeyboardAfterToggle": {
+          "inputDisabled": false,
+          "toggleText": "取消修改",
+          "hasLockHint": false
+        },
+        "idKeyboardAfterType": {
+          "focused": true,
+          "valueLen": 14,
+          "caretAtEnd": true
+        },
+        "submitStates": {
+          "normal": {
+            "exists": true,
+            "disabled": false,
+            "bg": "rgb(9, 9, 11)",
+            "color": "rgb(255, 255, 255)",
+            "borderRadius": "6px",
+            "fontWeight": "500",
+            "borderColor": "rgb(9, 9, 11)",
+            "outline": "3px rgb(255, 255, 255)",
+            "isActiveEl": false,
+            "activeElClass": "el-input__inner"
+          },
+          "hover": {
+            "exists": true,
+            "disabled": false,
+            "bg": "rgb(39, 39, 42)",
+            "color": "rgb(255, 255, 255)",
+            "borderRadius": "6px",
+            "fontWeight": "500",
+            "borderColor": "rgb(39, 39, 42)",
+            "outline": "3px rgb(255, 255, 255)",
+            "isActiveEl": false,
+            "activeElClass": "el-input__inner"
+          },
+          "pressed": {
+            "exists": true,
+            "disabled": false,
+            "bg": "rgb(24, 24, 27)",
+            "color": "rgb(255, 255, 255)",
+            "borderRadius": "6px",
+            "fontWeight": "500",
+            "borderColor": "rgb(24, 24, 27)",
+            "outline": "3px rgb(255, 255, 255)",
+            "isActiveEl": true,
+            "activeElClass": "el-button el-button--primary cc-dialog-submit ced-submit"
+          },
+          "focusTab": {
+            "exists": true,
+            "disabled": false,
+            "bg": "rgb(39, 39, 42)",
+            "color": "rgb(255, 255, 255)",
+            "borderRadius": "6px",
+            "fontWeight": "500",
+            "borderColor": "rgb(39, 39, 42)",
+            "outline": "2px rgb(160, 207, 255)",
+            "isActiveEl": true,
+            "activeElClass": "el-button el-button--primary cc-dialog-submit ced-submit"
+          },
+          "focusJs": {
+            "exists": true,
+            "disabled": false,
+            "bg": "rgb(39, 39, 42)",
+            "color": "rgb(255, 255, 255)",
+            "borderRadius": "6px",
+            "fontWeight": "500",
+            "borderColor": "rgb(39, 39, 42)",
+            "outline": "2px rgb(160, 207, 255)",
+            "isActiveEl": true,
+            "activeElClass": "el-button el-button--primary cc-dialog-submit ced-submit"
+          },
+          "tabFrom": "取消"
+        },
+        "idToggleStyle": {
+          "exists": true,
+          "disabled": false,
+          "bg": "rgba(0, 0, 0, 0)",
+          "color": "rgb(64, 158, 255)",
+          "borderRadius": "4px",
+          "fontWeight": "500",
+          "borderColor": "rgba(0, 0, 0, 0)",
+          "outline": "3px rgb(64, 158, 255)",
+          "isActiveEl": false,
+          "activeElClass": "el-button el-button--primary cc-dialog-submit ced-submit"
+        },
+        "secondary": {
+          "cancel": {
+            "exists": true,
+            "disabled": false,
+            "bg": "rgb(255, 255, 255)",
+            "color": "rgb(96, 98, 102)",
+            "borderRadius": "4px",
+            "fontWeight": "500",
+            "borderColor": "rgb(220, 223, 230)",
+            "outline": "3px rgb(96, 98, 102)",
+            "isActiveEl": false,
+            "activeElClass": "el-button el-button--primary cc-dialog-submit ced-submit"
+          }
+        }
+      },
+      "ac124_edit": [
+        {
+          "state": "E0-edit-open",
+          "dialog": {
+            "x": 510,
+            "y": 162,
+            "w": 900,
+            "h": 635.578,
+            "right": 1410,
+            "bottom": 797.578
+          },
+          "dialogMaxWidth": "1872px",
+          "labelColumnWidthToken": "84px",
+          "labelGapToken": "12px",
+          "safetyInsetToken": "48px",
+          "title": "编辑探针",
+          "footer": {
+            "x": 526,
+            "y": 733.578,
+            "w": 868,
+            "h": 48,
+            "right": 1394,
+            "bottom": 781.578
+          },
+          "footerButtons": [
+            {
+              "text": "取消",
+              "x": 1262,
+              "y": 749.578,
+              "w": 60,
+              "h": 32,
+              "right": 1322,
+              "bottom": 781.578
+            },
+            {
+              "text": "保存",
+              "x": 1334,
+              "y": 749.578,
+              "w": 60,
+              "h": 32,
+              "right": 1394,
+              "bottom": 781.578
+            }
+          ],
+          "chosenCount": 7,
+          "badChipCount": 0,
+          "sourceFeedback": null,
+          "idFieldError": false,
+          "idErrorText": "",
+          "errCount": 0
+        },
+        {
+          "state": "E1-all-cleared",
+          "dialog": {
+            "x": 510,
+            "y": 162,
+            "w": 900,
+            "h": 635.578,
+            "right": 1410,
+            "bottom": 797.578
+          },
+          "dialogMaxWidth": "1872px",
+          "labelColumnWidthToken": "84px",
+          "labelGapToken": "12px",
+          "safetyInsetToken": "48px",
+          "title": "编辑探针",
+          "footer": {
+            "x": 526,
+            "y": 733.578,
+            "w": 868,
+            "h": 48,
+            "right": 1394,
+            "bottom": 781.578
+          },
+          "footerButtons": [
+            {
+              "text": "取消",
+              "x": 1262,
+              "y": 749.578,
+              "w": 60,
+              "h": 32,
+              "right": 1322,
+              "bottom": 781.578
+            },
+            {
+              "text": "保存",
+              "x": 1334,
+              "y": 749.578,
+              "w": 60,
+              "h": 32,
+              "right": 1394,
+              "bottom": 781.578
+            }
+          ],
+          "chosenCount": 0,
+          "badChipCount": 0,
+          "sourceFeedback": {
+            "text": "至少选择 1 个数据源",
+            "tone": "hint",
+            "role": "note"
+          },
+          "idFieldError": false,
+          "idErrorText": "",
+          "errCount": 0
+        },
+        {
+          "state": "E2-submit-error",
+          "dialog": {
+            "x": 510,
+            "y": 162,
+            "w": 900,
+            "h": 635.578,
+            "right": 1410,
+            "bottom": 797.578
+          },
+          "dialogMaxWidth": "1872px",
+          "labelColumnWidthToken": "84px",
+          "labelGapToken": "12px",
+          "safetyInsetToken": "48px",
+          "title": "编辑探针",
+          "footer": {
+            "x": 526,
+            "y": 733.578,
+            "w": 868,
+            "h": 48,
+            "right": 1394,
+            "bottom": 781.578
+          },
+          "footerButtons": [
+            {
+              "text": "取消",
+              "x": 1262,
+              "y": 749.578,
+              "w": 60,
+              "h": 32,
+              "right": 1322,
+              "bottom": 781.578
+            },
+            {
+              "text": "保存",
+              "x": 1334,
+              "y": 749.578,
+              "w": 60,
+              "h": 32,
+              "right": 1394,
+              "bottom": 781.578
+            }
+          ],
+          "chosenCount": 0,
+          "badChipCount": 0,
+          "sourceFeedback": {
+            "text": "至少选择 1 个数据源",
+            "tone": "error",
+            "role": "alert"
+          },
+          "idFieldError": false,
+          "idErrorText": "至少选择 1 个数据源",
+          "errCount": 1
+        },
+        {
+          "state": "E3-corrected",
+          "dialog": {
+            "x": 510,
+            "y": 162,
+            "w": 900,
+            "h": 635.578,
+            "right": 1410,
+            "bottom": 797.578
+          },
+          "dialogMaxWidth": "1872px",
+          "labelColumnWidthToken": "84px",
+          "labelGapToken": "12px",
+          "safetyInsetToken": "48px",
+          "title": "编辑探针",
+          "footer": {
+            "x": 526,
+            "y": 733.578,
+            "w": 868,
+            "h": 48,
+            "right": 1394,
+            "bottom": 781.578
+          },
+          "footerButtons": [
+            {
+              "text": "取消",
+              "x": 1262,
+              "y": 749.578,
+              "w": 60,
+              "h": 32,
+              "right": 1322,
+              "bottom": 781.578
+            },
+            {
+              "text": "保存",
+              "x": 1334,
+              "y": 749.578,
+              "w": 60,
+              "h": 32,
+              "right": 1394,
+              "bottom": 781.578
+            }
+          ],
+          "chosenCount": 1,
+          "badChipCount": 0,
+          "sourceFeedback": null,
+          "idFieldError": false,
+          "idErrorText": "",
+          "errCount": 0
+        }
+      ]
+    },
+    "900x800": {
+      "ac092": {
+        "listRowHeightHistogram": {
+          "48": 15,
+          "52": 1
+        },
+        "hasRowHeightTokenInCss": null,
+        "fixedCol": {
+          "position": "sticky",
+          "stickyRight": "0px",
+          "tdPosition": "sticky",
+          "tdRight": "0px"
+        },
+        "ellipsisCellCount": 0
+      },
+      "create": {
+        "snapOpen": {
+          "dialog": {
+            "x": 24,
+            "y": 120,
+            "w": 852,
+            "h": 613.188,
+            "right": 876,
+            "bottom": 733.188
+          },
+          "dialogMaxWidth": "852px",
+          "labelColumnWidthToken": "84px",
+          "labelGapToken": "12px",
+          "safetyInsetToken": "48px",
+          "title": "新增探针",
+          "footer": {
+            "x": 40,
+            "y": 669.188,
+            "w": 820,
+            "h": 48,
+            "right": 860,
+            "bottom": 717.188
+          },
+          "footerButtons": [
+            {
+              "text": "取消",
+              "x": 728,
+              "y": 685.188,
+              "w": 60,
+              "h": 32,
+              "right": 788,
+              "bottom": 717.188
+            },
+            {
+              "text": "创建",
+              "x": 800,
+              "y": 685.188,
+              "w": 60,
+              "h": 32,
+              "right": 860,
+              "bottom": 717.188
+            }
+          ],
+          "chosenCount": 0,
+          "badChipCount": 0,
+          "sourceFeedback": {
+            "text": "至少选择 1 个数据源",
+            "tone": "hint",
+            "role": "note"
+          },
+          "idFieldError": false,
+          "idErrorText": "",
+          "errCount": 0
+        },
+        "labels": [
+          {
+            "label": "探针 ID",
+            "labelFontSize": "14px",
+            "labelFontWeight": "500",
+            "labelColor": "rgb(63, 63, 70)",
+            "labelTextAlign": "right",
+            "labelStarContent": "\"*\"",
+            "labelStarColor": "rgb(245, 108, 108)",
+            "labelRect": {
+              "x": 40,
+              "y": 176.391,
+              "w": 84,
+              "h": 28.391,
+              "right": 124
+            },
+            "controlRect": {
+              "x": 136,
+              "y": 176.391,
+              "w": 724,
+              "h": 54,
+              "right": 860
+            },
+            "gapLabelRightToControlLeft": 12,
+            "inputInlineStyleWidth": "",
+            "hasRequiredMarkClass": true
+          },
+          {
+            "label": "探针描述",
+            "labelFontSize": "14px",
+            "labelFontWeight": "500",
+            "labelColor": "rgb(63, 63, 70)",
+            "labelTextAlign": "right",
+            "labelStarContent": "\"*\"",
+            "labelStarColor": "rgb(245, 108, 108)",
+            "labelRect": {
+              "x": 40,
+              "y": 230.391,
+              "w": 84,
+              "h": 28.391,
+              "right": 124
+            },
+            "controlRect": {
+              "x": 136,
+              "y": 230.391,
+              "w": 724,
+              "h": 74,
+              "right": 860
+            },
+            "gapLabelRightToControlLeft": 12,
+            "inputInlineStyleWidth": "",
+            "hasRequiredMarkClass": true
+          },
+          {
+            "label": "采集数据源",
+            "labelFontSize": "14px",
+            "labelFontWeight": "500",
+            "labelColor": "rgb(63, 63, 70)",
+            "labelTextAlign": "right",
+            "labelStarContent": "\"*\"",
+            "labelStarColor": "rgb(245, 108, 108)",
+            "labelRect": {
+              "x": 40,
+              "y": 304.391,
+              "w": 84,
+              "h": 28.391,
+              "right": 124
+            },
+            "controlRect": {
+              "x": 136,
+              "y": 304.391,
+              "w": 724,
+              "h": 364.797,
+              "right": 860
+            },
+            "gapLabelRightToControlLeft": 12,
+            "inputInlineStyleWidth": "",
+            "hasRequiredMarkClass": true
+          }
+        ],
+        "sourcePanes": {
+          "splitRect": {
+            "x": 136,
+            "y": 304.391,
+            "w": 724,
+            "h": 342.797,
+            "right": 860,
+            "bottom": 647.188
+          },
+          "splitDisplay": "flex",
+          "splitFlexDirection": "row",
+          "splitGap": "10px",
+          "splitHeight": 342.797,
+          "optionsPaneRect": {
+            "x": 136,
+            "y": 304.391,
+            "w": 380.656,
+            "h": 342.797,
+            "right": 516.656,
+            "bottom": 647.188
+          },
+          "chosenPaneRect": {
+            "x": 526.656,
+            "y": 304.391,
+            "w": 333.344,
+            "h": 342.797,
+            "right": 860,
+            "bottom": 647.188
+          },
+          "optionsWiderThanChosen": true,
+          "optionsMinusChosenPx": 47.312,
+          "paneGapPx": 10,
+          "optList": {
+            "scrollHeight": 914,
+            "clientHeight": 260,
+            "overflowY": "auto",
+            "scrollable": true
+          },
+          "optCount": 13,
+          "disabledOptCount": 12,
+          "reasonTexts": [
+            "已分配给：<ID>",
+            "已分配给：<ID>、<ID>、<ID>、<ID>"
+          ],
+          "fontMain": "13px",
+          "fontSub": "12px",
+          "fontSubColor": "rgb(144, 147, 153)",
+          "fontReason": "12px",
+          "fontReasonColor": "rgb(230, 162, 60)",
+          "optRowHeight": 67.781,
+          "dialogRect": {
+            "x": 24,
+            "y": 120,
+            "w": 852,
+            "h": 613.188,
+            "right": 876,
+            "bottom": 733.188
+          },
+          "overflowsDialog": false
+        },
+        "submitStates": {
+          "normal": {
+            "exists": true,
+            "disabled": false,
+            "bg": "rgb(9, 9, 11)",
+            "color": "rgb(255, 255, 255)",
+            "borderRadius": "6px",
+            "fontWeight": "500",
+            "borderColor": "rgb(9, 9, 11)",
+            "outline": "3px rgb(255, 255, 255)",
+            "isActiveEl": false,
+            "activeElClass": "el-dialog cc-dialog ced-dialog"
+          },
+          "hover": {
+            "exists": true,
+            "disabled": false,
+            "bg": "rgb(39, 39, 42)",
+            "color": "rgb(255, 255, 255)",
+            "borderRadius": "6px",
+            "fontWeight": "500",
+            "borderColor": "rgb(39, 39, 42)",
+            "outline": "3px rgb(255, 255, 255)",
+            "isActiveEl": false,
+            "activeElClass": "el-dialog cc-dialog ced-dialog"
+          },
+          "pressed": {
+            "exists": true,
+            "disabled": false,
+            "bg": "rgb(24, 24, 27)",
+            "color": "rgb(255, 255, 255)",
+            "borderRadius": "6px",
+            "fontWeight": "500",
+            "borderColor": "rgb(24, 24, 27)",
+            "outline": "3px rgb(255, 255, 255)",
+            "isActiveEl": true,
+            "activeElClass": "el-button el-button--primary cc-dialog-submit ced-submit"
+          },
+          "focusTab": {
+            "exists": true,
+            "disabled": false,
+            "bg": "rgb(39, 39, 42)",
+            "color": "rgb(255, 255, 255)",
+            "borderRadius": "6px",
+            "fontWeight": "500",
+            "borderColor": "rgb(39, 39, 42)",
+            "outline": "2px rgb(160, 207, 255)",
+            "isActiveEl": true,
+            "activeElClass": "el-button el-button--primary cc-dialog-submit ced-submit"
+          },
+          "focusJs": {
+            "exists": true,
+            "disabled": false,
+            "bg": "rgb(39, 39, 42)",
+            "color": "rgb(255, 255, 255)",
+            "borderRadius": "6px",
+            "fontWeight": "500",
+            "borderColor": "rgb(39, 39, 42)",
+            "outline": "2px rgb(160, 207, 255)",
+            "isActiveEl": true,
+            "activeElClass": "el-button el-button--primary cc-dialog-submit ced-submit"
+          },
+          "tabFrom": "取消"
+        },
+        "secondary": {
+          "cancel": {
+            "exists": true,
+            "disabled": false,
+            "bg": "rgb(255, 255, 255)",
+            "color": "rgb(96, 98, 102)",
+            "borderRadius": "4px",
+            "fontWeight": "500",
+            "borderColor": "rgb(220, 223, 230)",
+            "outline": "3px rgb(96, 98, 102)",
+            "isActiveEl": false,
+            "activeElClass": "el-button el-button--primary cc-dialog-submit ced-submit"
+          },
+          "autogen": {
+            "exists": true,
+            "disabled": false,
+            "bg": "rgb(255, 255, 255)",
+            "color": "rgb(96, 98, 102)",
+            "borderRadius": "4px",
+            "fontWeight": "500",
+            "borderColor": "rgb(220, 223, 230)",
+            "outline": "3px rgb(96, 98, 102)",
+            "isActiveEl": false,
+            "activeElClass": "el-button el-button--primary cc-dialog-submit ced-submit"
+          }
+        },
+        "dialogHasInnerTable": false
+      },
+      "ac130": {
+        "placeholderAndLimits": {
+          "placeholder": "探针用途描述（最多 256 个字符）",
+          "maxlengthAttr": null,
+          "valueCodePoints": 0,
+          "valueUtf16Units": 0,
+          "utf8Bytes": 0,
+          "lastCodePoint": null,
+          "lastIsLoneSurrogate": false,
+          "hasLoneSurrogateAnywhere": false
+        },
+        "t_300han": {
+          "placeholder": "探针用途描述（最多 256 个字符）",
+          "maxlengthAttr": null,
+          "valueCodePoints": 256,
+          "valueUtf16Units": 256,
+          "utf8Bytes": 768,
+          "lastCodePoint": 20013,
+          "lastIsLoneSurrogate": false,
+          "hasLoneSurrogateAnywhere": false
+        },
+        "t_256han": {
+          "placeholder": "探针用途描述（最多 256 个字符）",
+          "maxlengthAttr": null,
+          "valueCodePoints": 256,
+          "valueUtf16Units": 256,
+          "utf8Bytes": 768,
+          "lastCodePoint": 20013,
+          "lastIsLoneSurrogate": false,
+          "hasLoneSurrogateAnywhere": false
+        },
+        "t_mixed": {
+          "placeholder": "探针用途描述（最多 256 个字符）",
+          "maxlengthAttr": null,
+          "valueCodePoints": 256,
+          "valueUtf16Units": 312,
+          "utf8Bytes": 824,
+          "lastCodePoint": 128512,
+          "lastIsLoneSurrogate": false,
+          "hasLoneSurrogateAnywhere": false
+        },
+        "t_boundary": {
+          "placeholder": "探针用途描述（最多 256 个字符）",
+          "maxlengthAttr": null,
+          "valueCodePoints": 256,
+          "valueUtf16Units": 257,
+          "utf8Bytes": 769,
+          "lastCodePoint": 128512,
+          "lastIsLoneSurrogate": false,
+          "hasLoneSurrogateAnywhere": false
+        },
+        "t_handType": {
+          "placeholder": "探针用途描述（最多 256 个字符）",
+          "maxlengthAttr": null,
+          "valueCodePoints": 256,
+          "valueUtf16Units": 256,
+          "utf8Bytes": 768,
+          "lastCodePoint": 20013,
+          "lastIsLoneSurrogate": false,
+          "hasLoneSurrogateAnywhere": false
+        }
+      },
+      "ac124_create": [
+        {
+          "state": "S0-unselected",
+          "dialog": {
+            "x": 24,
+            "y": 120,
+            "w": 852,
+            "h": 613.188,
+            "right": 876,
+            "bottom": 733.188
+          },
+          "dialogMaxWidth": "852px",
+          "labelColumnWidthToken": "84px",
+          "labelGapToken": "12px",
+          "safetyInsetToken": "48px",
+          "title": "新增探针",
+          "footer": {
+            "x": 40,
+            "y": 669.188,
+            "w": 820,
+            "h": 48,
+            "right": 860,
+            "bottom": 717.188
+          },
+          "footerButtons": [
+            {
+              "text": "取消",
+              "x": 728,
+              "y": 685.188,
+              "w": 60,
+              "h": 32,
+              "right": 788,
+              "bottom": 717.188
+            },
+            {
+              "text": "创建",
+              "x": 800,
+              "y": 685.188,
+              "w": 60,
+              "h": 32,
+              "right": 860,
+              "bottom": 717.188
+            }
+          ],
+          "chosenCount": 0,
+          "badChipCount": 0,
+          "sourceFeedback": {
+            "text": "至少选择 1 个数据源",
+            "tone": "hint",
+            "role": "note"
+          },
+          "idFieldError": false,
+          "idErrorText": "",
+          "errCount": 0
+        },
+        {
+          "state": "S1-one-selected",
+          "dialog": {
+            "x": 24,
+            "y": 120,
+            "w": 852,
+            "h": 613.188,
+            "right": 876,
+            "bottom": 733.188
+          },
+          "dialogMaxWidth": "852px",
+          "labelColumnWidthToken": "84px",
+          "labelGapToken": "12px",
+          "safetyInsetToken": "48px",
+          "title": "新增探针",
+          "footer": {
+            "x": 40,
+            "y": 669.188,
+            "w": 820,
+            "h": 48,
+            "right": 860,
+            "bottom": 717.188
+          },
+          "footerButtons": [
+            {
+              "text": "取消",
+              "x": 728,
+              "y": 685.188,
+              "w": 60,
+              "h": 32,
+              "right": 788,
+              "bottom": 717.188
+            },
+            {
+              "text": "创建",
+              "x": 800,
+              "y": 685.188,
+              "w": 60,
+              "h": 32,
+              "right": 860,
+              "bottom": 717.188
+            }
+          ],
+          "chosenCount": 1,
+          "badChipCount": 0,
+          "sourceFeedback": null,
+          "idFieldError": false,
+          "idErrorText": "",
+          "errCount": 0
+        },
+        {
+          "state": "S2-all-cleared",
+          "dialog": {
+            "x": 24,
+            "y": 120,
+            "w": 852,
+            "h": 613.188,
+            "right": 876,
+            "bottom": 733.188
+          },
+          "dialogMaxWidth": "852px",
+          "labelColumnWidthToken": "84px",
+          "labelGapToken": "12px",
+          "safetyInsetToken": "48px",
+          "title": "新增探针",
+          "footer": {
+            "x": 40,
+            "y": 669.188,
+            "w": 820,
+            "h": 48,
+            "right": 860,
+            "bottom": 717.188
+          },
+          "footerButtons": [
+            {
+              "text": "取消",
+              "x": 728,
+              "y": 685.188,
+              "w": 60,
+              "h": 32,
+              "right": 788,
+              "bottom": 717.188
+            },
+            {
+              "text": "创建",
+              "x": 800,
+              "y": 685.188,
+              "w": 60,
+              "h": 32,
+              "right": 860,
+              "bottom": 717.188
+            }
+          ],
+          "chosenCount": 0,
+          "badChipCount": 0,
+          "sourceFeedback": {
+            "text": "至少选择 1 个数据源",
+            "tone": "hint",
+            "role": "note"
+          },
+          "idFieldError": false,
+          "idErrorText": "",
+          "errCount": 0
+        },
+        {
+          "state": "S3-submit-error",
+          "dialog": {
+            "x": 24,
+            "y": 120,
+            "w": 852,
+            "h": 613.188,
+            "right": 876,
+            "bottom": 733.188
+          },
+          "dialogMaxWidth": "852px",
+          "labelColumnWidthToken": "84px",
+          "labelGapToken": "12px",
+          "safetyInsetToken": "48px",
+          "title": "新增探针",
+          "footer": {
+            "x": 40,
+            "y": 669.188,
+            "w": 820,
+            "h": 48,
+            "right": 860,
+            "bottom": 717.188
+          },
+          "footerButtons": [
+            {
+              "text": "取消",
+              "x": 728,
+              "y": 685.188,
+              "w": 60,
+              "h": 32,
+              "right": 788,
+              "bottom": 717.188
+            },
+            {
+              "text": "创建",
+              "x": 800,
+              "y": 685.188,
+              "w": 60,
+              "h": 32,
+              "right": 860,
+              "bottom": 717.188
+            }
+          ],
+          "chosenCount": 0,
+          "badChipCount": 0,
+          "sourceFeedback": {
+            "text": "至少选择 1 个数据源",
+            "tone": "error",
+            "role": "alert"
+          },
+          "idFieldError": false,
+          "idErrorText": "探针 ID 不能为空。",
+          "errCount": 2
+        },
+        {
+          "state": "S4-corrected",
+          "dialog": {
+            "x": 24,
+            "y": 120,
+            "w": 852,
+            "h": 613.188,
+            "right": 876,
+            "bottom": 733.188
+          },
+          "dialogMaxWidth": "852px",
+          "labelColumnWidthToken": "84px",
+          "labelGapToken": "12px",
+          "safetyInsetToken": "48px",
+          "title": "新增探针",
+          "footer": {
+            "x": 40,
+            "y": 669.188,
+            "w": 820,
+            "h": 48,
+            "right": 860,
+            "bottom": 717.188
+          },
+          "footerButtons": [
+            {
+              "text": "取消",
+              "x": 728,
+              "y": 685.188,
+              "w": 60,
+              "h": 32,
+              "right": 788,
+              "bottom": 717.188
+            },
+            {
+              "text": "创建",
+              "x": 800,
+              "y": 685.188,
+              "w": 60,
+              "h": 32,
+              "right": 860,
+              "bottom": 717.188
+            }
+          ],
+          "chosenCount": 1,
+          "badChipCount": 0,
+          "sourceFeedback": null,
+          "idFieldError": false,
+          "idErrorText": "",
+          "errCount": 0
+        }
+      ],
+      "edit": {
+        "snapOpen": {
+          "dialog": {
+            "x": 24,
+            "y": 120,
+            "w": 852,
+            "h": 635.578,
+            "right": 876,
+            "bottom": 755.578
+          },
+          "dialogMaxWidth": "852px",
+          "labelColumnWidthToken": "84px",
+          "labelGapToken": "12px",
+          "safetyInsetToken": "48px",
+          "title": "编辑探针",
+          "footer": {
+            "x": 40,
+            "y": 691.578,
+            "w": 820,
+            "h": 48,
+            "right": 860,
+            "bottom": 739.578
+          },
+          "footerButtons": [
+            {
+              "text": "取消",
+              "x": 728,
+              "y": 707.578,
+              "w": 60,
+              "h": 32,
+              "right": 788,
+              "bottom": 739.578
+            },
+            {
+              "text": "保存",
+              "x": 800,
+              "y": 707.578,
+              "w": 60,
+              "h": 32,
+              "right": 860,
+              "bottom": 739.578
+            }
+          ],
+          "chosenCount": 7,
+          "badChipCount": 0,
+          "sourceFeedback": null,
+          "idFieldError": false,
+          "idErrorText": "",
+          "errCount": 0
+        },
+        "labels": [
+          {
+            "label": "探针 ID",
+            "labelFontSize": "14px",
+            "labelFontWeight": "500",
+            "labelColor": "rgb(63, 63, 70)",
+            "labelTextAlign": "right",
+            "labelStarContent": "\"*\"",
+            "labelStarColor": "rgb(245, 108, 108)",
+            "labelRect": {
+              "x": 40,
+              "y": 176.391,
+              "w": 84,
+              "h": 28.391,
+              "right": 124
+            },
+            "controlRect": {
+              "x": 136,
+              "y": 176.391,
+              "w": 724,
+              "h": 76.391,
+              "right": 860
+            },
+            "gapLabelRightToControlLeft": 12,
+            "inputInlineStyleWidth": "",
+            "hasRequiredMarkClass": true
+          },
+          {
+            "label": "探针描述",
+            "labelFontSize": "14px",
+            "labelFontWeight": "500",
+            "labelColor": "rgb(63, 63, 70)",
+            "labelTextAlign": "right",
+            "labelStarContent": "\"*\"",
+            "labelStarColor": "rgb(245, 108, 108)",
+            "labelRect": {
+              "x": 40,
+              "y": 252.781,
+              "w": 84,
+              "h": 28.391,
+              "right": 124
+            },
+            "controlRect": {
+              "x": 136,
+              "y": 252.781,
+              "w": 724,
+              "h": 74,
+              "right": 860
+            },
+            "gapLabelRightToControlLeft": 12,
+            "inputInlineStyleWidth": "",
+            "hasRequiredMarkClass": true
+          },
+          {
+            "label": "采集数据源",
+            "labelFontSize": "14px",
+            "labelFontWeight": "500",
+            "labelColor": "rgb(63, 63, 70)",
+            "labelTextAlign": "right",
+            "labelStarContent": "\"*\"",
+            "labelStarColor": "rgb(245, 108, 108)",
+            "labelRect": {
+              "x": 40,
+              "y": 326.781,
+              "w": 84,
+              "h": 28.391,
+              "right": 124
+            },
+            "controlRect": {
+              "x": 136,
+              "y": 326.781,
+              "w": 724,
+              "h": 364.797,
+              "right": 860
+            },
+            "gapLabelRightToControlLeft": 12,
+            "inputInlineStyleWidth": "",
+            "hasRequiredMarkClass": true
+          }
+        ],
+        "sourcePanes": {
+          "splitRect": {
+            "x": 136,
+            "y": 326.781,
+            "w": 724,
+            "h": 342.797,
+            "right": 860,
+            "bottom": 669.578
+          },
+          "splitDisplay": "flex",
+          "splitFlexDirection": "row",
+          "splitGap": "10px",
+          "splitHeight": 342.797,
+          "optionsPaneRect": {
+            "x": 136,
+            "y": 326.781,
+            "w": 380.656,
+            "h": 342.797,
+            "right": 516.656,
+            "bottom": 669.578
+          },
+          "chosenPaneRect": {
+            "x": 526.656,
+            "y": 326.781,
+            "w": 333.344,
+            "h": 342.797,
+            "right": 860,
+            "bottom": 669.578
+          },
+          "optionsWiderThanChosen": true,
+          "optionsMinusChosenPx": 47.312,
+          "paneGapPx": 10,
+          "optList": {
+            "scrollHeight": 783,
+            "clientHeight": 260,
+            "overflowY": "auto",
+            "scrollable": true
+          },
+          "optCount": 13,
+          "disabledOptCount": 12,
+          "reasonTexts": [
+            "已分配给：<ID>",
+            "已分配给：<ID>、<ID>、<ID>、<ID>"
+          ],
+          "fontMain": "13px",
+          "fontSub": "12px",
+          "fontSubColor": "rgb(144, 147, 153)",
+          "fontReason": "12px",
+          "fontReasonColor": "rgb(230, 162, 60)",
+          "optRowHeight": 67.781,
+          "dialogRect": {
+            "x": 24,
+            "y": 120,
+            "w": 852,
+            "h": 635.578,
+            "right": 876,
+            "bottom": 755.578
+          },
+          "overflowsDialog": false
+        },
+        "idKeyboard": {
+          "inputDisabledBefore": true,
+          "toggleText": "修改探针 ID",
+          "hasLockHint": true
+        },
+        "idKeyboardAfterToggle": {
+          "inputDisabled": false,
+          "toggleText": "取消修改",
+          "hasLockHint": false
+        },
+        "idKeyboardAfterType": {
+          "focused": true,
+          "valueLen": 14,
+          "caretAtEnd": true
+        },
+        "submitStates": {
+          "normal": {
+            "exists": true,
+            "disabled": false,
+            "bg": "rgb(9, 9, 11)",
+            "color": "rgb(255, 255, 255)",
+            "borderRadius": "6px",
+            "fontWeight": "500",
+            "borderColor": "rgb(9, 9, 11)",
+            "outline": "3px rgb(255, 255, 255)",
+            "isActiveEl": false,
+            "activeElClass": "el-input__inner"
+          },
+          "hover": {
+            "exists": true,
+            "disabled": false,
+            "bg": "rgb(39, 39, 42)",
+            "color": "rgb(255, 255, 255)",
+            "borderRadius": "6px",
+            "fontWeight": "500",
+            "borderColor": "rgb(39, 39, 42)",
+            "outline": "3px rgb(255, 255, 255)",
+            "isActiveEl": false,
+            "activeElClass": "el-input__inner"
+          },
+          "pressed": {
+            "exists": true,
+            "disabled": false,
+            "bg": "rgb(24, 24, 27)",
+            "color": "rgb(255, 255, 255)",
+            "borderRadius": "6px",
+            "fontWeight": "500",
+            "borderColor": "rgb(24, 24, 27)",
+            "outline": "3px rgb(255, 255, 255)",
+            "isActiveEl": true,
+            "activeElClass": "el-button el-button--primary cc-dialog-submit ced-submit"
+          },
+          "focusTab": {
+            "exists": true,
+            "disabled": false,
+            "bg": "rgb(39, 39, 42)",
+            "color": "rgb(255, 255, 255)",
+            "borderRadius": "6px",
+            "fontWeight": "500",
+            "borderColor": "rgb(39, 39, 42)",
+            "outline": "2px rgb(160, 207, 255)",
+            "isActiveEl": true,
+            "activeElClass": "el-button el-button--primary cc-dialog-submit ced-submit"
+          },
+          "focusJs": {
+            "exists": true,
+            "disabled": false,
+            "bg": "rgb(39, 39, 42)",
+            "color": "rgb(255, 255, 255)",
+            "borderRadius": "6px",
+            "fontWeight": "500",
+            "borderColor": "rgb(39, 39, 42)",
+            "outline": "2px rgb(160, 207, 255)",
+            "isActiveEl": true,
+            "activeElClass": "el-button el-button--primary cc-dialog-submit ced-submit"
+          },
+          "tabFrom": "取消"
+        },
+        "idToggleStyle": {
+          "exists": true,
+          "disabled": false,
+          "bg": "rgba(0, 0, 0, 0)",
+          "color": "rgb(64, 158, 255)",
+          "borderRadius": "4px",
+          "fontWeight": "500",
+          "borderColor": "rgba(0, 0, 0, 0)",
+          "outline": "3px rgb(64, 158, 255)",
+          "isActiveEl": false,
+          "activeElClass": "el-button el-button--primary cc-dialog-submit ced-submit"
+        },
+        "secondary": {
+          "cancel": {
+            "exists": true,
+            "disabled": false,
+            "bg": "rgb(255, 255, 255)",
+            "color": "rgb(96, 98, 102)",
+            "borderRadius": "4px",
+            "fontWeight": "500",
+            "borderColor": "rgb(220, 223, 230)",
+            "outline": "3px rgb(96, 98, 102)",
+            "isActiveEl": false,
+            "activeElClass": "el-button el-button--primary cc-dialog-submit ced-submit"
+          }
+        }
+      },
+      "ac124_edit": [
+        {
+          "state": "E0-edit-open",
+          "dialog": {
+            "x": 24,
+            "y": 120,
+            "w": 852,
+            "h": 635.578,
+            "right": 876,
+            "bottom": 755.578
+          },
+          "dialogMaxWidth": "852px",
+          "labelColumnWidthToken": "84px",
+          "labelGapToken": "12px",
+          "safetyInsetToken": "48px",
+          "title": "编辑探针",
+          "footer": {
+            "x": 40,
+            "y": 691.578,
+            "w": 820,
+            "h": 48,
+            "right": 860,
+            "bottom": 739.578
+          },
+          "footerButtons": [
+            {
+              "text": "取消",
+              "x": 728,
+              "y": 707.578,
+              "w": 60,
+              "h": 32,
+              "right": 788,
+              "bottom": 739.578
+            },
+            {
+              "text": "保存",
+              "x": 800,
+              "y": 707.578,
+              "w": 60,
+              "h": 32,
+              "right": 860,
+              "bottom": 739.578
+            }
+          ],
+          "chosenCount": 7,
+          "badChipCount": 0,
+          "sourceFeedback": null,
+          "idFieldError": false,
+          "idErrorText": "",
+          "errCount": 0
+        },
+        {
+          "state": "E1-all-cleared",
+          "dialog": {
+            "x": 24,
+            "y": 120,
+            "w": 852,
+            "h": 635.578,
+            "right": 876,
+            "bottom": 755.578
+          },
+          "dialogMaxWidth": "852px",
+          "labelColumnWidthToken": "84px",
+          "labelGapToken": "12px",
+          "safetyInsetToken": "48px",
+          "title": "编辑探针",
+          "footer": {
+            "x": 40,
+            "y": 691.578,
+            "w": 820,
+            "h": 48,
+            "right": 860,
+            "bottom": 739.578
+          },
+          "footerButtons": [
+            {
+              "text": "取消",
+              "x": 728,
+              "y": 707.578,
+              "w": 60,
+              "h": 32,
+              "right": 788,
+              "bottom": 739.578
+            },
+            {
+              "text": "保存",
+              "x": 800,
+              "y": 707.578,
+              "w": 60,
+              "h": 32,
+              "right": 860,
+              "bottom": 739.578
+            }
+          ],
+          "chosenCount": 0,
+          "badChipCount": 0,
+          "sourceFeedback": {
+            "text": "至少选择 1 个数据源",
+            "tone": "hint",
+            "role": "note"
+          },
+          "idFieldError": false,
+          "idErrorText": "",
+          "errCount": 0
+        },
+        {
+          "state": "E2-submit-error",
+          "dialog": {
+            "x": 24,
+            "y": 120,
+            "w": 852,
+            "h": 635.578,
+            "right": 876,
+            "bottom": 755.578
+          },
+          "dialogMaxWidth": "852px",
+          "labelColumnWidthToken": "84px",
+          "labelGapToken": "12px",
+          "safetyInsetToken": "48px",
+          "title": "编辑探针",
+          "footer": {
+            "x": 40,
+            "y": 691.578,
+            "w": 820,
+            "h": 48,
+            "right": 860,
+            "bottom": 739.578
+          },
+          "footerButtons": [
+            {
+              "text": "取消",
+              "x": 728,
+              "y": 707.578,
+              "w": 60,
+              "h": 32,
+              "right": 788,
+              "bottom": 739.578
+            },
+            {
+              "text": "保存",
+              "x": 800,
+              "y": 707.578,
+              "w": 60,
+              "h": 32,
+              "right": 860,
+              "bottom": 739.578
+            }
+          ],
+          "chosenCount": 0,
+          "badChipCount": 0,
+          "sourceFeedback": {
+            "text": "至少选择 1 个数据源",
+            "tone": "error",
+            "role": "alert"
+          },
+          "idFieldError": false,
+          "idErrorText": "至少选择 1 个数据源",
+          "errCount": 1
+        },
+        {
+          "state": "E3-corrected",
+          "dialog": {
+            "x": 24,
+            "y": 120,
+            "w": 852,
+            "h": 635.578,
+            "right": 876,
+            "bottom": 755.578
+          },
+          "dialogMaxWidth": "852px",
+          "labelColumnWidthToken": "84px",
+          "labelGapToken": "12px",
+          "safetyInsetToken": "48px",
+          "title": "编辑探针",
+          "footer": {
+            "x": 40,
+            "y": 691.578,
+            "w": 820,
+            "h": 48,
+            "right": 860,
+            "bottom": 739.578
+          },
+          "footerButtons": [
+            {
+              "text": "取消",
+              "x": 728,
+              "y": 707.578,
+              "w": 60,
+              "h": 32,
+              "right": 788,
+              "bottom": 739.578
+            },
+            {
+              "text": "保存",
+              "x": 800,
+              "y": 707.578,
+              "w": 60,
+              "h": 32,
+              "right": 860,
+              "bottom": 739.578
+            }
+          ],
+          "chosenCount": 1,
+          "badChipCount": 0,
+          "sourceFeedback": null,
+          "idFieldError": false,
+          "idErrorText": "",
+          "errCount": 0
+        }
+      ]
+    }
+  },
+  "sampleFacts": {
+    "multiSourceClean": true,
+    "anomalousRows": 8,
+    "ambiguousRows": 1,
+    "maxDescLen": 152,
+    "maxClientIdLen": 19,
+    "maxDsIdLen": 32,
+    "maxOrgLen": 19,
+    "counts": [
+      1,
+      1,
+      1,
+      5,
+      1,
+      1,
+      2,
+      0,
+      0,
+      0,
+      0,
+      0,
+      7,
+      1,
+      2,
+      1
+    ],
+    "multiSourceWithAnomaly": true
+  },
+  "editTargetResolved": true
+}

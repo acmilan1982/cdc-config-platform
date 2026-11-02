@@ -1,0 +1,330 @@
+{
+  "task": "CLIENT-CONFIG-TARGETED-READONLY-ACCEPTANCE-SUPPLEMENT-002",
+  "probe": "AC-151 enable/disable confirm primary button",
+  "mode": "readonly-browser-probe",
+  "browser": {
+    "engine": "chromium",
+    "version": "147.0.7727.15",
+    "headless": true
+  },
+  "frontend": "http://127.0.0.1:5173",
+  "targets": {
+    "offRowIdx": 1,
+    "onRowIdx": 16
+  },
+  "writeInterception": {
+    "policy": "/api/** GET/HEAD/OPTIONS allow; POST/PUT/PATCH/DELETE abort+count",
+    "nonGetAttempts": 0,
+    "attempts": []
+  },
+  "viewports": {
+    "1440x900": {
+      "enableMenuItems": [
+        "启用",
+        "删除"
+      ],
+      "enableBox": {
+        "title": "启用探针",
+        "bodyMasked": "确定启用探针 <ID> 吗？",
+        "buttons": [
+          "取消",
+          "启用"
+        ],
+        "confirmClassNamesPresent": [
+          "el-message-box cc-confirm--enable"
+        ],
+        "bodyNoProbeId": false
+      },
+      "enablePrimary": {
+        "normal": {
+          "exists": true,
+          "disabled": false,
+          "loading": false,
+          "bg": "rgb(9, 9, 11)",
+          "color": "rgb(255, 255, 255)",
+          "borderRadius": "6px",
+          "fontWeight": "500",
+          "borderColor": "rgb(9, 9, 11)",
+          "outline": "3px rgb(255, 255, 255)",
+          "isActiveEl": false
+        },
+        "autoFocusResting": {
+          "exists": true,
+          "disabled": false,
+          "loading": false,
+          "bg": "rgb(39, 39, 42)",
+          "color": "rgb(255, 255, 255)",
+          "borderRadius": "6px",
+          "fontWeight": "500",
+          "borderColor": "rgb(39, 39, 42)",
+          "outline": "3px rgb(255, 255, 255)",
+          "isActiveEl": true
+        },
+        "hover": {
+          "exists": true,
+          "disabled": false,
+          "loading": false,
+          "bg": "rgb(39, 39, 42)",
+          "color": "rgb(255, 255, 255)",
+          "borderRadius": "6px",
+          "fontWeight": "500",
+          "borderColor": "rgb(39, 39, 42)",
+          "outline": "3px rgb(255, 255, 255)",
+          "isActiveEl": false
+        },
+        "pressed": {
+          "exists": true,
+          "disabled": false,
+          "loading": false,
+          "bg": "rgb(24, 24, 27)",
+          "color": "rgb(255, 255, 255)",
+          "borderRadius": "6px",
+          "fontWeight": "500",
+          "borderColor": "rgb(24, 24, 27)",
+          "outline": "3px rgb(255, 255, 255)",
+          "isActiveEl": true
+        },
+        "focusTab": {
+          "exists": true,
+          "disabled": false,
+          "loading": false,
+          "bg": "rgb(39, 39, 42)",
+          "color": "rgb(255, 255, 255)",
+          "borderRadius": "6px",
+          "fontWeight": "500",
+          "borderColor": "rgb(39, 39, 42)",
+          "outline": "2px rgb(160, 207, 255)",
+          "isActiveEl": true
+        }
+      },
+      "disableBox": {
+        "title": "停用探针",
+        "bodyMasked": "确定停用探针 <ID> 吗？",
+        "buttons": [
+          "取消",
+          "停用"
+        ],
+        "confirmClassNamesPresent": [
+          "el-message-box cc-confirm--disable"
+        ],
+        "bodyNoProbeId": false
+      },
+      "disablePrimary": {
+        "normal": {
+          "exists": true,
+          "disabled": false,
+          "loading": false,
+          "bg": "rgb(9, 9, 11)",
+          "color": "rgb(255, 255, 255)",
+          "borderRadius": "6px",
+          "fontWeight": "500",
+          "borderColor": "rgb(9, 9, 11)",
+          "outline": "3px rgb(255, 255, 255)",
+          "isActiveEl": false
+        },
+        "autoFocusResting": {
+          "exists": true,
+          "disabled": false,
+          "loading": false,
+          "bg": "rgb(39, 39, 42)",
+          "color": "rgb(255, 255, 255)",
+          "borderRadius": "6px",
+          "fontWeight": "500",
+          "borderColor": "rgb(39, 39, 42)",
+          "outline": "3px rgb(255, 255, 255)",
+          "isActiveEl": true
+        },
+        "hover": {
+          "exists": true,
+          "disabled": false,
+          "loading": false,
+          "bg": "rgb(39, 39, 42)",
+          "color": "rgb(255, 255, 255)",
+          "borderRadius": "6px",
+          "fontWeight": "500",
+          "borderColor": "rgb(39, 39, 42)",
+          "outline": "3px rgb(255, 255, 255)",
+          "isActiveEl": false
+        },
+        "pressed": {
+          "exists": true,
+          "disabled": false,
+          "loading": false,
+          "bg": "rgb(24, 24, 27)",
+          "color": "rgb(255, 255, 255)",
+          "borderRadius": "6px",
+          "fontWeight": "500",
+          "borderColor": "rgb(24, 24, 27)",
+          "outline": "3px rgb(255, 255, 255)",
+          "isActiveEl": true
+        },
+        "focusTab": {
+          "exists": true,
+          "disabled": false,
+          "loading": false,
+          "bg": "rgb(39, 39, 42)",
+          "color": "rgb(255, 255, 255)",
+          "borderRadius": "6px",
+          "fontWeight": "500",
+          "borderColor": "rgb(39, 39, 42)",
+          "outline": "2px rgb(160, 207, 255)",
+          "isActiveEl": true
+        }
+      }
+    },
+    "1920x1080": {
+      "enableMenuItems": [
+        "启用",
+        "删除"
+      ],
+      "enableBox": {
+        "title": "启用探针",
+        "bodyMasked": "确定启用探针 <ID> 吗？",
+        "buttons": [
+          "取消",
+          "启用"
+        ],
+        "confirmClassNamesPresent": [
+          "el-message-box cc-confirm--enable"
+        ],
+        "bodyNoProbeId": false
+      },
+      "enablePrimary": {
+        "normal": {
+          "exists": true,
+          "disabled": false,
+          "loading": false,
+          "bg": "rgb(9, 9, 11)",
+          "color": "rgb(255, 255, 255)",
+          "borderRadius": "6px",
+          "fontWeight": "500",
+          "borderColor": "rgb(9, 9, 11)",
+          "outline": "3px rgb(255, 255, 255)",
+          "isActiveEl": false
+        },
+        "autoFocusResting": {
+          "exists": true,
+          "disabled": false,
+          "loading": false,
+          "bg": "rgb(39, 39, 42)",
+          "color": "rgb(255, 255, 255)",
+          "borderRadius": "6px",
+          "fontWeight": "500",
+          "borderColor": "rgb(39, 39, 42)",
+          "outline": "3px rgb(255, 255, 255)",
+          "isActiveEl": true
+        },
+        "hover": {
+          "exists": true,
+          "disabled": false,
+          "loading": false,
+          "bg": "rgb(39, 39, 42)",
+          "color": "rgb(255, 255, 255)",
+          "borderRadius": "6px",
+          "fontWeight": "500",
+          "borderColor": "rgb(39, 39, 42)",
+          "outline": "3px rgb(255, 255, 255)",
+          "isActiveEl": false
+        },
+        "pressed": {
+          "exists": true,
+          "disabled": false,
+          "loading": false,
+          "bg": "rgb(24, 24, 27)",
+          "color": "rgb(255, 255, 255)",
+          "borderRadius": "6px",
+          "fontWeight": "500",
+          "borderColor": "rgb(24, 24, 27)",
+          "outline": "3px rgb(255, 255, 255)",
+          "isActiveEl": true
+        },
+        "focusTab": {
+          "exists": true,
+          "disabled": false,
+          "loading": false,
+          "bg": "rgb(39, 39, 42)",
+          "color": "rgb(255, 255, 255)",
+          "borderRadius": "6px",
+          "fontWeight": "500",
+          "borderColor": "rgb(39, 39, 42)",
+          "outline": "2px rgb(160, 207, 255)",
+          "isActiveEl": true
+        }
+      },
+      "disableBox": {
+        "title": "停用探针",
+        "bodyMasked": "确定停用探针 <ID> 吗？",
+        "buttons": [
+          "取消",
+          "停用"
+        ],
+        "confirmClassNamesPresent": [
+          "el-message-box cc-confirm--disable"
+        ],
+        "bodyNoProbeId": false
+      },
+      "disablePrimary": {
+        "normal": {
+          "exists": true,
+          "disabled": false,
+          "loading": false,
+          "bg": "rgb(9, 9, 11)",
+          "color": "rgb(255, 255, 255)",
+          "borderRadius": "6px",
+          "fontWeight": "500",
+          "borderColor": "rgb(9, 9, 11)",
+          "outline": "3px rgb(255, 255, 255)",
+          "isActiveEl": false
+        },
+        "autoFocusResting": {
+          "exists": true,
+          "disabled": false,
+          "loading": false,
+          "bg": "rgb(39, 39, 42)",
+          "color": "rgb(255, 255, 255)",
+          "borderRadius": "6px",
+          "fontWeight": "500",
+          "borderColor": "rgb(39, 39, 42)",
+          "outline": "3px rgb(255, 255, 255)",
+          "isActiveEl": true
+        },
+        "hover": {
+          "exists": true,
+          "disabled": false,
+          "loading": false,
+          "bg": "rgb(39, 39, 42)",
+          "color": "rgb(255, 255, 255)",
+          "borderRadius": "6px",
+          "fontWeight": "500",
+          "borderColor": "rgb(39, 39, 42)",
+          "outline": "3px rgb(255, 255, 255)",
+          "isActiveEl": false
+        },
+        "pressed": {
+          "exists": true,
+          "disabled": false,
+          "loading": false,
+          "bg": "rgb(24, 24, 27)",
+          "color": "rgb(255, 255, 255)",
+          "borderRadius": "6px",
+          "fontWeight": "500",
+          "borderColor": "rgb(24, 24, 27)",
+          "outline": "3px rgb(255, 255, 255)",
+          "isActiveEl": true
+        },
+        "focusTab": {
+          "exists": true,
+          "disabled": false,
+          "loading": false,
+          "bg": "rgb(39, 39, 42)",
+          "color": "rgb(255, 255, 255)",
+          "borderRadius": "6px",
+          "fontWeight": "500",
+          "borderColor": "rgb(39, 39, 42)",
+          "outline": "2px rgb(160, 207, 255)",
+          "isActiveEl": true
+        }
+      }
+    }
+  }
+}
