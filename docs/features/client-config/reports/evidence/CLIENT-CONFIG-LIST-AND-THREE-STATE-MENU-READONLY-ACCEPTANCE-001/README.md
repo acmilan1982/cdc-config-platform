@@ -32,7 +32,11 @@
 
 - `../CLIENT-CONFIG-TARGETED-READONLY-ACCEPTANCE-SUPPLEMENT-002/`
   - `s2-list-results.json`：两视口表头/状态列缺席/操作列最右/菜单项/异常行菜单/事件隔离；
-  - `s2-confirm-results.json`：启用/停用确认框标题、掩码正文、按钮。
+  - `s2-confirm-results.json`：启用/停用确认框标题、掩码正文、按钮；
+  - `s2-dialog-results.json`：两桌面视口主列表操作列实际浏览器计算样式
+    （`viewports["1440x900"].ac092.fixedCol`、`viewports["1920x1080"].ac092.fixedCol`
+    均为 `position=sticky`、`stickyRight=0px`、`tdPosition=sticky`、`tdRight=0px`；
+    采集脚本 `probe-s2-dialog.cjs:342-348` 取 `.cc-table th/td.lt-row-action__cell`）。
 - `../CLIENT-CONFIG-T02-CONTROLLED-UI-TOGGLE-ACCEPTANCE-001/`
   - `ui-toggle-results.json`：B0–B7、写门禁、取消 0 写、启用/停用菜单与确认框、成功后标记变化、最终 `FG_ACTIVE='0'`；
   - `sql-window-extract.txt`：恰 2 条单行 `UPDATE`，无其他写语句。
@@ -47,7 +51,7 @@
 `frontend/src/views/client-config/ClientConfigPage.vue`：
 
 - 列顺序：序号｜探针 ID｜探针描述｜采集数据源｜数据源数量｜操作；无状态列；
-- 操作列 `fixed="right"`，唯一入口为三点图标，`role=button`、`tabindex=0`、`aria-label="更多操作：{clientId}"`；
+- 操作列 `fixed="right"`（与 `s2-dialog-results.json` 的历史计算样式一致），唯一入口为三点图标，`role=button`、`tabindex=0`、`aria-label="更多操作：{clientId}"`；
 - 下拉：`idState !== 'off'` → 停用，否则 → 启用；删除始终存在；
 - 触发器和菜单项均 `@click.stop` / `@dblclick.stop`；
 - 探针 ID 后：`'0'` → 停用标记；异常 → `异常：{原始值}`；`'1'` → 无标记。
@@ -58,8 +62,9 @@
   “启用与停用各若干条”前置未成立（历史仅 1 条启用；`若干条` 无已批准数量阈值），且当前
   样本因服务不可用无法重读。
 - `CCFG-AC-082`：维持 `BLOCKED`。历史快照各自缺少三态中的一态，R4 矩阵引用的
-  `accD.json` 原始包在仓库外、不可读取真实键；当前三态共存前置无法确认；固定列仅有源码
-  推导，未在本轮两视口实测。
+  `accD.json` 原始包在仓库外、不可读取真实键；当前三态共存前置无法确认。固定列已有两桌面
+  视口历史计算样式（`s2-dialog-results.json` 的 `ac092.fixedCol`）且与源码一致，不构成
+  独立阻断；本轮未重测。
 - 无直接反例，故不判 `FAIL`；`changed_ids=[]`，统计仍 `PASS 83 / FAIL 0 / BLOCKED 60 / NOT_RUN 14 = 157`。
 
 **定向只读验收 ≠ 写授权 ≠ 157 条整体验收通过 ≠ 批准其他页面接入或迁移。**

@@ -3,6 +3,13 @@
   "base_commit": "4354e3083e00b995819b967eb860e93024089a3a",
   "generated_at_utc": "2026-11-03T11:25:23Z",
   "nature": "Read-only matrix built by reading real keys in already-committed evidence plus current source derivation. No live API sample and no live browser observation this round: backend :8080 and frontend :5173 were not listening and the task forbids starting them.",
+  "r1_correction": {
+    "date": "2026-11-03",
+    "issue": "Initial version wrongly stated the fixed action column had only source-derived evidence and no runtime observation.",
+    "fix": "Added already-committed s2-dialog-results.json computed-style keys (viewports.*.ac092.fixedCol) measured on the main list action column; the fixed column is not a standalone blocker. AC status cells unchanged.",
+    "evidence": "docs/features/client-config/reports/evidence/CLIENT-CONFIG-TARGETED-READONLY-ACCEPTANCE-SUPPLEMENT-002/s2-dialog-results.json",
+    "not_claimed": "Full post-horizontal-scroll geometry/visibility testing; this round did not re-observe live."
+  },
   "live_legs": {
     "get_api_clients_status_ALL": "NOT_EXECUTED_SERVICE_DOWN",
     "browser_two_viewports": "NOT_EXECUTED_SERVICE_DOWN",
@@ -117,11 +124,11 @@
     "step_atoms": [
       {
         "atom": "两视口观察最右侧操作列是否固定",
-        "evidence_file": "s2-list-results.json; ClientConfigPage.vue",
-        "keys": ["viewports.1440x900.structure.headersRightmost=操作", "viewports.1920x1080.structure.headersRightmost=操作", "ClientConfigPage.vue lines 201-205: el-table-column label=操作 width=110 fixed=right"],
-        "observation": "Both viewports recorded 操作 as the rightmost header; current source declares fixed=\"right\". The historical JSON does not contain an explicit fixed-column assertion.",
-        "coverage": "PARTIAL_HISTORICAL+SOURCE_DERIVED",
-        "limitation": "Fixed attribute was not recorded as a runtime key; source derivation is not a live observation."
+        "evidence_file": "s2-list-results.json; s2-dialog-results.json; ClientConfigPage.vue",
+        "keys": ["s2-list: viewports.1440x900.structure.headersRightmost=操作", "s2-list: viewports.1920x1080.structure.headersRightmost=操作", "s2-dialog: viewports.1440x900.ac092.fixedCol={position:sticky, stickyRight:0px, tdPosition:sticky, tdRight:0px}", "s2-dialog: viewports.1920x1080.ac092.fixedCol={position:sticky, stickyRight:0px, tdPosition:sticky, tdRight:0px}", "s2-dialog probe-s2-dialog.cjs lines 342-348 measures .cc-table th/td.lt-row-action__cell", "ClientConfigPage.vue lines 201-205: el-table-column label=操作 width=110 fixed=right"],
+        "observation": "s2-list proves 操作 is the rightmost header. s2-dialog records actual browser computed styles for the main list action-column header and cell at both desktop viewports: position=sticky and right=0px. Current source declares fixed=\"right\", consistent with that runtime evidence.",
+        "coverage": "COVERED_HISTORICAL+SOURCE_DERIVED",
+        "limitation": "The stored computed styles do not claim full post-horizontal-scroll geometry/visibility testing; not re-observed this round."
       },
       {
         "atom": "分别对启用、停用、异常三类记录点击更多并记录下拉可见项",
@@ -135,11 +142,11 @@
     "expectation_atoms": [
       {
         "atom": "最右固定操作列，唯一文字入口为更多（现行已批准修订：三点图标，可访问名称 更多操作：<ID>）",
-        "evidence_file": "s2-list-results.json; round7-targeted-readonly-results.json; ClientConfigPage.vue",
-        "keys": ["s2-list: structure.headersRightmost=操作", "ROUND7: AC156_regressions_readonly[?] / AC156_menu_isolation", "ClientConfigPage.vue lines 216-225 role=button tabindex=0 aria-label=更多操作：<ID>"],
-        "observation": "Current approved revision replaced the text entry with a three-dot icon carrying aria-label 更多操作：<ID>; this is the approved temporal supersession of the older 文字更多 wording, not a new defect.",
-        "coverage": "SOURCE_DERIVED",
-        "limitation": "Definition text still contains 文字更多; resolved as approved revision, not changed in this task."
+        "evidence_file": "s2-list-results.json; s2-dialog-results.json; round7-targeted-readonly-results.json; ClientConfigPage.vue",
+        "keys": ["s2-list: structure.headersRightmost=操作", "s2-dialog: viewports.1440x900.ac092.fixedCol and viewports.1920x1080.ac092.fixedCol = {position:sticky, stickyRight:0px, tdPosition:sticky, tdRight:0px}", "ROUND7: AC156_regressions_readonly[?] / AC156_menu_isolation", "ClientConfigPage.vue lines 216-225 role=button tabindex=0 aria-label=更多操作：<ID>"],
+        "observation": "The fixed action column has historical browser computed styles at both desktop viewports (sticky, right 0px on header and cell). Current approved revision replaced the text entry with a three-dot icon carrying aria-label 更多操作：<ID>; this is the approved temporal supersession of the older 文字更多 wording, not a new defect.",
+        "coverage": "COVERED_HISTORICAL+SOURCE_DERIVED",
+        "limitation": "Computed styles do not claim full post-horizontal-scroll geometry/visibility testing; not re-observed this round. Definition text still contains 文字更多; resolved as approved revision, not changed in this task."
       },
       {
         "atom": "下拉条目严格符合三态表：'1'→{删除,停用}，'0'→{删除,启用}，异常→仅{删除,停用}且无启用；任何行都含删除",
@@ -160,8 +167,7 @@
     ],
     "blocking_gaps": [
       "Current three-state simultaneity precondition is not established: services were down, so the current FG_ACTIVE histogram could not be read.",
-      "No single in-repo snapshot contains enabled + disabled + abnormal together; the raw formal-acceptance package cited by R4 (accD.json) is repository-external and unavailable for a real key read.",
-      "Live two-viewport fixed-column observation could not be performed; current fixed=\"right\" is source-derived only."
+      "No single in-repo snapshot contains enabled + disabled + abnormal together; the raw formal-acceptance package cited by R4 (accD.json) is repository-external and unavailable for a real key read."
     ]
   },
   "definition_revision_notes": [

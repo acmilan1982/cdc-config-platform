@@ -21,7 +21,9 @@
 两条 `BLOCKED` 的根因不同：
 
 - **AC-022**：步骤与预期大多有历史证据，但前置“启用与停用探针**各若干条**”未成立——历史快照仅观察到 1 条启用；`若干条` 无已批准的数量阈值；且当前样本因服务不可用无法重读。
-- **AC-082**：前置“库内**同时**存在 `'1'`、`'0'` 与异常三态记录”在当前不可确认；已入仓历史快照各自缺少三态中的一态，不能跨时点拼接；R4 矩阵引用的 `accD.json` 原始包在仓库外、不可读取真实键；固定操作列仅有源码推导，未在本轮两视口实测。
+- **AC-082**：前置“库内**同时**存在 `'1'`、`'0'` 与异常三态记录”在当前不可确认；已入仓历史快照各自缺少三态中的一态，不能跨时点拼接；R4 矩阵引用的 `accD.json` 原始包在仓库外、不可读取真实键。
+
+**R1 勘误（2026-11-03）**：初版误将固定操作列记为“仅源码推导、缺运行时实测”。已入仓的 `s2-dialog-results.json` 在两桌面视口记录了主列表操作列的实际浏览器计算样式（`viewports["1440x900"].ac092.fixedCol` 与 `viewports["1920x1080"].ac092.fixedCol`：`position=sticky`、`stickyRight=0px`、`tdPosition=sticky`、`tdRight=0px`），现据实补入 §3.2；固定列不构成独立阻断，结论与状态格不变。
 
 ## 1. 开工核对
 
@@ -86,14 +88,14 @@
 | AC | 原子前置 / 步骤 / 预期 | 已有证据文件及实际键 | 当前补采 | 覆盖结论与限制 |
 |---|---|---|---|---|
 | 082 | 前置：库内**同时**存在 `'1'`、`'0'` 与非 `'0'/'1'` 异常状态记录 | `readiness-results.json`：`fg_active_histogram={exact_0:15, exact_1:1, other:0}`（无异常）；`s2-list-results.json`：`abnormalRowCount=1`、`idMarkers[15].hasInactiveMark=false` 且带异常标记（有停用+异常，但无启用行标记）；`T02/ui-toggle-results.json`：`steps.B4.fg_active='1'` 仅存在于其自身往返期间、`steps.B7.fg_active='0'` 终态 | 未读取当前样本 | 各时点**至少缺一态**；R4 矩阵引用的 `accD.json#082` 原始包在仓库外（`evidence-index.json.raw_package_sha256=1cf178…`），本机无文件可读真实键；不同时点快照不得拼接 → **未成立** |
-| 082 | 步骤：两视口观察最右侧操作列是否固定 | `s2-list-results.json`：`viewports.1440x900.structure.headersRightmost=操作`、`1920x1080` 同；`ClientConfigPage.vue:201-205`：`el-table-column label="操作" width="110" fixed="right"` | 未运行浏览器 | 历史键只证明“操作”为最右表头，**未记录 fixed 断言**；`fixed="right"` 为**源码推导** → **部分（历史）+ 源码推导** |
+| 082 | 步骤：两视口观察最右侧操作列是否固定 | `s2-list-results.json`：`viewports.1440x900.structure.headersRightmost=操作`、`1920x1080` 同（仅证明“操作”为最右表头）；`s2-dialog-results.json`：`viewports["1440x900"].ac092.fixedCol` 与 `viewports["1920x1080"].ac092.fixedCol` 均为 `{position:"sticky", stickyRight:"0px", tdPosition:"sticky", tdRight:"0px"}`（采集脚本 `probe-s2-dialog.cjs:342-348` 取 `.cc-table th/td.lt-row-action__cell`）；`ClientConfigPage.vue:201-205`：`el-table-column label="操作" width="110" fixed="right"` | 未运行浏览器 | 两桌面视口已有主列表操作列的历史浏览器**计算样式**（表头与单元格均 `position=sticky`、`right=0px`），与当前源码 `fixed="right"` 一致；该证据不覆盖水平滚动后的全部几何/可见性，本轮未重测 → **已覆盖（历史）+ 源码推导** |
 | 082 | 步骤：分别对启用/停用/异常三类记录点“更多”并记录可见项 | `s2-list-results.json`：`viewports.*.menu.itemTexts=[启用,删除]`（停用行）、`viewports.*.abnormalRowMenu.itemTexts=[停用,删除]`（异常行）；`T02/ui-toggle-results.json`：`steps.B5.menu.menu_items=[停用,删除]`（启用后） | 未打开菜单 | 三类菜单**分别**有记录，但来自不同快照/任务，非同一三态页面 → **部分（历史）** |
 | 082 | 预期：下拉严格符合三态表，任何状态行均含“删除”，异常行无“启用” | 同上 + `ClientConfigPage.vue:230-246`：`idState(row)!=='off'` → 停用，否则 → 启用；`删除` 始终渲染 | 源码推导 | 逐态观察一致；无同一快照三态菜单 → **部分（历史）+ 源码推导** |
 | 082 | 预期：点击“更多”及菜单项不触发该行双击编辑 | `s2-list-results.json`：`rowEventIsolation.editDialogOpened=false`、`sequence=[singleClickTrigger,doubleClickTrigger,doubleClickMenuItem]`；`ROUND7/round7-targeted-readonly-results.json`：`AC156_menu_isolation.editDialogOpen=false` | 未运行浏览器 | **已覆盖（历史）** |
 | 082 | 预期：点击“更多”不产生选中视觉 | `ROUND7/round7-targeted-readonly-results.json`：`AC156_menu_isolation.fixedSelectedRows=0`；负向对照 `AC156_dblclick_edit.fixedSelectedRows=1`（行双击仍编辑） | 未运行浏览器 | **已覆盖（历史）**；第五轮已恢复“行内容点击固定选中”，但菜单入口已隔离，观测为 0 |
 | 082 | 当前样本 | 无 | `GET /api/clients?status=ALL` = HTTP `000` | **未覆盖（服务不可用）** |
 
-**AC-082 判定**：`BLOCKED`。三态同时存在的前置在当前不可确认，历史快照不能拼接；固定列缺少本轮运行时两视口实测；因此不满足整条 `PASS`。无直接反例，故不判 `FAIL`。
+**AC-082 判定**：`BLOCKED`。三态同时存在的前置在当前不可确认，历史快照不能拼接，当前样本不可读；因此不满足整条 `PASS`。固定列已有两桌面视口历史计算样式且与源码一致，不构成独立阻断。无直接反例，故不判 `FAIL`。
 
 ## 4. 当前样本核查（未执行，如实记录）
 
@@ -125,7 +127,7 @@ GET /api/clients?status=ALL  -> HTTP 000
 本轮只做了两类替代核对，均明确标注性质：
 
 1. **历史真实浏览器证据复用**（§3 表中的 `已覆盖（历史）` 项）——这些是既往真实页面观察，不是本轮观察；
-2. **当前源码推导**——`fixed="right"`、下拉条目分支、ID 三态标记、事件 `click.stop`/`dblclick.stop`，均来自 `ClientConfigPage.vue`，不等于运行时实测。
+2. **当前源码推导**——下拉条目分支、ID 三态标记、事件 `click.stop`/`dblclick.stop`，均来自 `ClientConfigPage.vue`，不等于运行时实测；固定列 `fixed="right"` 另有两桌面视口历史浏览器计算样式（见 §3.2），源码与之一致。
 
 对于 AC-082 的“更多”文字入口：当前源码为三点图标（`role=button`、`tabindex=0`、`aria-label=更多操作：{clientId}`），与第八轮已批准修订一致；本轮按提示词要求记录已批准时序，不因旧定义残留“文字更多”擅改产品或宣告新缺陷。
 
@@ -137,11 +139,11 @@ GET /api/clients?status=ALL  -> HTTP 000
 | AC 编号 | `CCFG-AC-001~157` 完整、唯一、连续 |
 | 状态格总数 | 157 |
 | 本轮状态格变化 | **无**；`changed_ids=[]` |
-| 未变状态格 | 155 条与 base 一致（含 AC-022、AC-082 自身也维持 `BLOCKED`） |
+| 未变状态格 | 其余 155 条与 base 一致；目标 AC-022、AC-082 两格亦维持原值 `BLOCKED`；合计 157 格一致（R1 勘误未改状态格） |
 | 统计复算 | `PASS 83 / FAIL 0 / BLOCKED 60 / NOT_RUN 14 = 157` |
 | 定义单元 | 相对 base 逐字节不变（本轮未改任何 AC 定义行） |
 | `git diff --check` | 通过 |
-| 白名单 | 仅修改 `ACCEPTANCE.md`、`README.md`；新建本报告与证据目录 |
+| 白名单 | 初版仅修改 `ACCEPTANCE.md`、`README.md`；新建本报告与证据目录。R1 勘误仅改本报告、证据目录 `static-evidence-matrix.json`、证据目录 `README.md`、`SHA256SUMS`，未改 `ACCEPTANCE.md`、功能 `README.md` 与历史采集 JSON/脚本 |
 | 脱敏 | 无真实 ID／描述／机构／数据源 ID／凭据／连接串／原始 API 响应／业务整屏截图入仓 |
 | 新证据 SHA-256 | `evidence/.../SHA256SUMS` 已生成并本地校验通过 |
 | 历史报告/证据 | 原样保留，未回写 |
@@ -165,7 +167,8 @@ GET /api/clients?status=ALL  -> HTTP 000
 
 ## 8. Git
 
-- 单次提交，逐路径暂存；提交/推送范围仅本任务报告、证据目录、`ACCEPTANCE.md`、`README.md`。
+- 初版单次提交，逐路径暂存；提交/推送范围仅本任务报告、证据目录、`ACCEPTANCE.md`、`README.md`。
+- R1 勘误另做单次提交，逐路径暂存；范围仅本报告、`static-evidence-matrix.json`、证据目录 `README.md`、`SHA256SUMS`。
 - 推送前核对远端与普通快进条件；禁止强推；推送后核对 local / `origin/develop` / 远端三方 SHA。
 - 提交与推送结果见最终 `AGENT_TASK_RESULT` 块；本报告不预填自身 SHA。
 
