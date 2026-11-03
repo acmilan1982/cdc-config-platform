@@ -1,0 +1,50 @@
+task_code=CLIENT-CONFIG-DISABLED-APPLICABILITY-TARGETED-READONLY-ACCEPTANCE-001
+collection_time=2026-11-03T13:35:23+08:00
+mode=read-only targeted acceptance (browser probe only; no business writes)
+
+# Git (read-only)
+branch=develop
+base_commit=16bccbd65aa78dea206a3944e220ad50d7d822f9
+head_at_collection=16bccbd65aa78dea206a3944e220ad50d7d822f9
+origin_develop_at_collection=16bccbd65aa78dea206a3944e220ad50d7d822f9
+remote_refs_heads_develop_at_collection=16bccbd65aa78dea206a3944e220ad50d7d822f9
+frontend_src_last_commit=d878c3d7c95b482ee47b2d08571531cbad3b06fd (2026-09-30 17:12:07 +0800)
+backend_src_last_commit=807a5a58e373e522fe8b591569e22728a6662ed6 (2026-09-20 15:48:52 +0800)
+list_table_visual_css_last_commit=f35fb5a91fa872402d23a0ce2656a3d3719aa157 (2026-09-30 13:08:53 +0800)
+datasource_page_last_commit=c6d752c6ef3e0817e2d55110820d38a5e43ddeef (2026-09-22 00:38:47 +0800)
+query_list_actions_last_commit=d1cd3b1fffb56b50793e576a369325e94063cabc (2026-09-17 13:03:18 +0800)
+
+# Services (already running before this task; reused, not restarted/stopped)
+frontend_pid=8141
+frontend_process=node /agent/cdc-config-platform/frontend/node_modules/.bin/vite
+frontend_listen=0.0.0.0:5173
+frontend_serves=Vite dev server serving the working tree at HEAD (same accepted observation mode as prior read-only rounds); no build was run; frontend dist not used
+backend_pid=8120
+backend_process=java -jar target/cdc-config-platform-backend-1.0.0-SNAPSHOT.jar
+backend_listen=*:8080 (0.0.0.0)
+backend_jar=backend/target/cdc-config-platform-backend-1.0.0-SNAPSHOT.jar
+backend_jar_mtime=2026-09-22 12:21:27.228469068 +0800
+backend_jar_sha256=efdbea827b6ab84dd47105d2cc130f0bc3c5b70dc78cc626b6421e1f9750a459
+artifact_limit=jar mtime+sha256 recorded; source-to-artifact equivalence cannot be proven by timestamp alone. This task performs no backend write and the observed behaviors are frontend-rendered; no claim is made that the jar exactly matches backend source HEAD.
+
+# Toolchain
+node=v24.17.0
+npm=11.13.0
+java=java version "1.8.0_202"
+playwright_core_dir=/root/.hermes/hermes-agent/node_modules/playwright-core
+browser_cache=/root/.cache/ms-playwright/chromium-1217
+browser=chromium 147.0.7727.15 (headless, --no-sandbox)
+device_scale_factor=1
+viewports=1440x900, 1920x1080
+
+# Probe command
+command=PLAYWRIGHT_CORE_DIR=/root/.hermes/hermes-agent/node_modules/playwright-core node docs/features/client-config/reports/evidence/CLIENT-CONFIG-DISABLED-APPLICABILITY-TARGETED-READONLY-ACCEPTANCE-001/probe-disabled-applicability.mjs
+
+# Network interception (installed on the browser context BEFORE the first navigation)
+policy=context.route('**/api/**'): GET/HEAD/OPTIONS -> continue; POST/PUT/PATCH/DELETE -> abort('blockedbyclient') and count
+nonGetAttempts=0
+attempts=[]
+
+# Scope
+scope=only /config/client plus its create dialog and row menu; no other feature page was opened, tested or modified
+cross_page=not executed this round; AC-157 non-enabled-page requirement reuses committed historical evidence only

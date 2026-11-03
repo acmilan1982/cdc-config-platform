@@ -1,0 +1,435 @@
+{
+  "task": "CLIENT-CONFIG-DISABLED-APPLICABILITY-TARGETED-READONLY-ACCEPTANCE-001",
+  "mode": "readonly-browser-probe",
+  "browser": "chromium 147.0.7727.15",
+  "deviceScaleFactor": 1,
+  "frontend": "http://127.0.0.1:5173",
+  "writeInterception": {
+    "installedBeforeNavigation": true,
+    "policy": "/api/** GET/HEAD/OPTIONS allow; POST/PUT/PATCH/DELETE abort+count",
+    "nonGetAttempts": 0,
+    "attempts": []
+  },
+  "viewports": {
+    "1440x900": {
+      "viewport": "1440x900",
+      "ac090": {
+        "default": {
+          "text": "新增探针",
+          "hasSvgIcon": true,
+          "iconClass": "el-icon cc-btn-icon",
+          "disabledAttr": false,
+          "isDisabledClass": false,
+          "rect": {
+            "right": 1368,
+            "width": 104,
+            "height": 32
+          },
+          "panelRight": 1384,
+          "headerRight": 1384,
+          "toolbarRight": 1368,
+          "isLastInToolbar": true,
+          "styles": {
+            "backgroundColor": "rgb(9, 9, 11)",
+            "borderTopColor": "rgb(9, 9, 11)",
+            "borderTopWidth": "1px",
+            "color": "rgb(255, 255, 255)",
+            "borderRadius": "6px",
+            "fontWeight": "500",
+            "fontSize": "14px",
+            "cursor": "pointer"
+          }
+        },
+        "hover": {
+          "matchesHover": true,
+          "backgroundColor": "rgb(39, 39, 42)",
+          "borderTopColor": "rgb(39, 39, 42)",
+          "color": "rgb(255, 255, 255)"
+        },
+        "keyboardFocus": {
+          "reachedByTab": true,
+          "tabSteps": 38,
+          "activeTag": "BUTTON",
+          "styles": {
+            "backgroundColor": "rgb(39, 39, 42)",
+            "borderTopColor": "rgb(39, 39, 42)",
+            "color": "rgb(255, 255, 255)",
+            "outlineStyle": "solid",
+            "outlineColor": "rgb(160, 207, 255)"
+          }
+        },
+        "active": {
+          "backgroundColor": "rgb(24, 24, 27)",
+          "borderTopColor": "rgb(24, 24, 27)",
+          "color": "rgb(255, 255, 255)"
+        },
+        "clickOpensDialog": {
+          "visible": true,
+          "title": "新增探针"
+        },
+        "queryReset": {
+          "query": {
+            "text": "查询",
+            "width": 62,
+            "height": 32,
+            "backgroundColor": "rgb(9, 9, 11)",
+            "borderTopColor": "rgb(9, 9, 11)",
+            "color": "rgb(255, 255, 255)",
+            "borderRadius": "6px",
+            "hasAddClass": false,
+            "disabledAttr": false,
+            "ariaDisabled": null
+          },
+          "reset": {
+            "text": "重置",
+            "width": 62,
+            "height": 32,
+            "backgroundColor": "rgb(228, 228, 231)",
+            "borderTopColor": "rgba(0, 0, 0, 0)",
+            "color": "rgb(63, 63, 70)",
+            "borderRadius": "6px",
+            "hasAddClass": false,
+            "disabledAttr": false,
+            "ariaDisabled": null
+          }
+        }
+      },
+      "ac157": {
+        "structure": {
+          "triggerCount": 16,
+          "optInCellCount": 16,
+          "rowCount": 16,
+          "rowHeightHistogram": {
+            "48": 15,
+            "52": 1
+          },
+          "trigger": {
+            "rect": {
+              "x": 1270,
+              "y": 364,
+              "width": 28,
+              "height": 28,
+              "right": 1298,
+              "bottom": 392
+            },
+            "borderRadius": "6px",
+            "color": "rgb(64, 158, 255)",
+            "cursor": "pointer",
+            "display": "flex",
+            "role": "button",
+            "tabindex": "0",
+            "ariaLabelMasked": "更多操作：<ID>",
+            "hasDisabledAttr": false,
+            "hasAriaDisabled": false,
+            "isDisabledClass": false,
+            "cellRect": {
+              "width": 110,
+              "height": 48
+            },
+            "rowRect": {
+              "width": 1076,
+              "height": 48
+            },
+            "boxInsideCell": true,
+            "boxInsideRow": true,
+            "vCentered": true
+          }
+        },
+        "keyboard": {
+          "reachedByTab": true,
+          "tabStepsFromPreviousFocus": 2,
+          "activeTag": "SPAN",
+          "activeRole": "button",
+          "focusVisible": {
+            "outlineStyle": "solid",
+            "outlineWidth": "2px",
+            "outlineColor": "rgb(64, 158, 255)",
+            "outlineOffset": "-2px"
+          }
+        },
+        "hover": {
+          "matchesHover": true,
+          "backgroundColor": "rgb(236, 245, 255)",
+          "color": "rgb(64, 158, 255)",
+          "cursor": "pointer"
+        },
+        "menu": {
+          "visible": true,
+          "items": [
+            {
+              "text": "停用",
+              "disabledAttr": "false",
+              "isDisabledClass": false
+            },
+            {
+              "text": "删除",
+              "disabledAttr": "false",
+              "isDisabledClass": false
+            }
+          ]
+        },
+        "featureOwnership": {
+          "ariaLabelPresent": true,
+          "publicLayerInjectsMenu": false,
+          "note": "menu items/commands are rendered by ClientConfigPage.vue; public CSS has no menu/permission/request rules"
+        }
+      },
+      "sourceChecks": {
+        "optInRules": [
+          {
+            "selector": ".lt-main-table[data-v-093fb766] td.el-table__cell.lt-row-action__cell",
+            "cssText": "padding: 9.5px 0px;",
+            "hasImportant": false
+          },
+          {
+            "selector": ".lt-main-table[data-v-093fb766] .lt-row-action__ellipsis",
+            "cssText": "display: inline-flex; align-items: center; justify-content: center; box-sizing: border-box; width: 28px; height: 28px; border-radius: 6px; color: var(--el-color-primary); cursor: pointer;",
+            "hasImportant": false
+          },
+          {
+            "selector": ".lt-main-table[data-v-093fb766] .lt-row-action__ellipsis:hover",
+            "cssText": "background: rgb(236, 245, 255);",
+            "hasImportant": false
+          },
+          {
+            "selector": ".lt-main-table[data-v-093fb766] .lt-row-action__ellipsis:focus-visible",
+            "cssText": "outline: 2px solid var(--el-color-primary); outline-offset: -2px;",
+            "hasImportant": false
+          }
+        ],
+        "styleTagKinds": [
+          "link",
+          "style",
+          "style",
+          "style",
+          "style",
+          "style",
+          "style",
+          "style",
+          "style",
+          "style",
+          "style",
+          "style",
+          "style",
+          "style",
+          "style",
+          "style",
+          "style",
+          "style",
+          "style",
+          "style"
+        ]
+      }
+    },
+    "1920x1080": {
+      "viewport": "1920x1080",
+      "ac090": {
+        "default": {
+          "text": "新增探针",
+          "hasSvgIcon": true,
+          "iconClass": "el-icon cc-btn-icon",
+          "disabledAttr": false,
+          "isDisabledClass": false,
+          "rect": {
+            "right": 1848,
+            "width": 104,
+            "height": 32
+          },
+          "panelRight": 1864,
+          "headerRight": 1864,
+          "toolbarRight": 1848,
+          "isLastInToolbar": true,
+          "styles": {
+            "backgroundColor": "rgb(9, 9, 11)",
+            "borderTopColor": "rgb(9, 9, 11)",
+            "borderTopWidth": "1px",
+            "color": "rgb(255, 255, 255)",
+            "borderRadius": "6px",
+            "fontWeight": "500",
+            "fontSize": "14px",
+            "cursor": "pointer"
+          }
+        },
+        "hover": {
+          "matchesHover": true,
+          "backgroundColor": "rgb(39, 39, 42)",
+          "borderTopColor": "rgb(39, 39, 42)",
+          "color": "rgb(255, 255, 255)"
+        },
+        "keyboardFocus": {
+          "reachedByTab": true,
+          "tabSteps": 5,
+          "activeTag": "BUTTON",
+          "styles": {
+            "backgroundColor": "rgb(39, 39, 42)",
+            "borderTopColor": "rgb(39, 39, 42)",
+            "color": "rgb(255, 255, 255)",
+            "outlineStyle": "solid",
+            "outlineColor": "rgb(160, 207, 255)"
+          }
+        },
+        "active": {
+          "backgroundColor": "rgb(24, 24, 27)",
+          "borderTopColor": "rgb(24, 24, 27)",
+          "color": "rgb(255, 255, 255)"
+        },
+        "clickOpensDialog": {
+          "visible": true,
+          "title": "新增探针"
+        },
+        "queryReset": {
+          "query": {
+            "text": "查询",
+            "width": 62,
+            "height": 32,
+            "backgroundColor": "rgb(9, 9, 11)",
+            "borderTopColor": "rgb(9, 9, 11)",
+            "color": "rgb(255, 255, 255)",
+            "borderRadius": "6px",
+            "hasAddClass": false,
+            "disabledAttr": false,
+            "ariaDisabled": null
+          },
+          "reset": {
+            "text": "重置",
+            "width": 62,
+            "height": 32,
+            "backgroundColor": "rgb(228, 228, 231)",
+            "borderTopColor": "rgba(0, 0, 0, 0)",
+            "color": "rgb(63, 63, 70)",
+            "borderRadius": "6px",
+            "hasAddClass": false,
+            "disabledAttr": false,
+            "ariaDisabled": null
+          }
+        }
+      },
+      "ac157": {
+        "structure": {
+          "triggerCount": 16,
+          "optInCellCount": 16,
+          "rowCount": 16,
+          "rowHeightHistogram": {
+            "48": 15,
+            "52": 1
+          },
+          "trigger": {
+            "rect": {
+              "x": 1750,
+              "y": 364,
+              "width": 28,
+              "height": 28,
+              "right": 1778,
+              "bottom": 392
+            },
+            "borderRadius": "6px",
+            "color": "rgb(64, 158, 255)",
+            "cursor": "pointer",
+            "display": "flex",
+            "role": "button",
+            "tabindex": "0",
+            "ariaLabelMasked": "更多操作：<ID>",
+            "hasDisabledAttr": false,
+            "hasAriaDisabled": false,
+            "isDisabledClass": false,
+            "cellRect": {
+              "width": 110,
+              "height": 48
+            },
+            "rowRect": {
+              "width": 1556,
+              "height": 48
+            },
+            "boxInsideCell": true,
+            "boxInsideRow": true,
+            "vCentered": true
+          }
+        },
+        "keyboard": {
+          "reachedByTab": true,
+          "tabStepsFromPreviousFocus": 2,
+          "activeTag": "SPAN",
+          "activeRole": "button",
+          "focusVisible": {
+            "outlineStyle": "solid",
+            "outlineWidth": "2px",
+            "outlineColor": "rgb(64, 158, 255)",
+            "outlineOffset": "-2px"
+          }
+        },
+        "hover": {
+          "matchesHover": true,
+          "backgroundColor": "rgb(236, 245, 255)",
+          "color": "rgb(64, 158, 255)",
+          "cursor": "pointer"
+        },
+        "menu": {
+          "visible": true,
+          "items": [
+            {
+              "text": "停用",
+              "disabledAttr": "false",
+              "isDisabledClass": false
+            },
+            {
+              "text": "删除",
+              "disabledAttr": "false",
+              "isDisabledClass": false
+            }
+          ]
+        },
+        "featureOwnership": {
+          "ariaLabelPresent": true,
+          "publicLayerInjectsMenu": false,
+          "note": "menu items/commands are rendered by ClientConfigPage.vue; public CSS has no menu/permission/request rules"
+        }
+      },
+      "sourceChecks": {
+        "optInRules": [
+          {
+            "selector": ".lt-main-table[data-v-093fb766] td.el-table__cell.lt-row-action__cell",
+            "cssText": "padding: 9.5px 0px;",
+            "hasImportant": false
+          },
+          {
+            "selector": ".lt-main-table[data-v-093fb766] .lt-row-action__ellipsis",
+            "cssText": "display: inline-flex; align-items: center; justify-content: center; box-sizing: border-box; width: 28px; height: 28px; border-radius: 6px; color: var(--el-color-primary); cursor: pointer;",
+            "hasImportant": false
+          },
+          {
+            "selector": ".lt-main-table[data-v-093fb766] .lt-row-action__ellipsis:hover",
+            "cssText": "background: rgb(236, 245, 255);",
+            "hasImportant": false
+          },
+          {
+            "selector": ".lt-main-table[data-v-093fb766] .lt-row-action__ellipsis:focus-visible",
+            "cssText": "outline: 2px solid var(--el-color-primary); outline-offset: -2px;",
+            "hasImportant": false
+          }
+        ],
+        "styleTagKinds": [
+          "link",
+          "style",
+          "style",
+          "style",
+          "style",
+          "style",
+          "style",
+          "style",
+          "style",
+          "style",
+          "style",
+          "style",
+          "style",
+          "style",
+          "style",
+          "style",
+          "style",
+          "style",
+          "style",
+          "style"
+        ]
+      }
+    }
+  }
+}
