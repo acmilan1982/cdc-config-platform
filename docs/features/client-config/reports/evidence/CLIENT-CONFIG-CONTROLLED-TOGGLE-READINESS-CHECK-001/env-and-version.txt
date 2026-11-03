@@ -1,0 +1,51 @@
+task_code=CLIENT-CONFIG-CONTROLLED-TOGGLE-READINESS-CHECK-001
+collection_time=2026-11-03T13:44:46+08:00
+collection_time_utc=2026-11-03T05:44:46Z
+mode=read-only readiness check (GET only; no browser; no business writes)
+
+# Git (read-only)
+branch=develop
+base_commit=07851c44cb6be104e8b84a03d70cdac4e6a9ec80
+head_at_collection=07851c44cb6be104e8b84a03d70cdac4e6a9ec80
+origin_develop_at_collection=07851c44cb6be104e8b84a03d70cdac4e6a9ec80
+remote_refs_heads_develop_at_collection=07851c44cb6be104e8b84a03d70cdac4e6a9ec80
+backend_src_last_commit=807a5a58e373e522fe8b591569e22728a6662ed6 (2026-09-20 15:48:52 +0800)
+clientconfig_backend_src_last_commit=84d3cdc (2026-09-05 02:12:16 +0800)
+clientconfig_page_src_last_commit=d878c3d (2026-09-30 17:12:07 +0800)
+frontend_api_clientConfig_last_commit=3d4cec1 (2026-09-05 00:29:42 +0800)
+
+# Services (already running before this task; reused, not started/stopped/restarted/built)
+frontend_pid=8141
+frontend_process=node /agent/cdc-config-platform/frontend/node_modules/.bin/vite
+frontend_listen=0.0.0.0:5173
+frontend_serves=Vite dev server serving the working tree at HEAD; no build was run
+backend_pid=8120
+backend_process=java -jar target/cdc-config-platform-backend-1.0.0-SNAPSHOT.jar
+backend_listen=*:8080 (0.0.0.0)
+backend_jar=backend/target/cdc-config-platform-backend-1.0.0-SNAPSHOT.jar
+backend_jar_mtime=2026-09-22 12:21:27.228469068 +0800
+backend_jar_sha256=efdbea827b6ab84dd47105d2cc130f0bc3c5b70dc78cc626b6421e1f9750a459
+artifact_limit=jar mtime+sha256 recorded; source-to-artifact equivalence cannot be proven by timestamp alone. The clientconfig backend source last changed 2026-09-05 and backend/src last changed 2026-09-20, both before the jar mtime, but no independent artifact-source comparison was performed.
+
+# Toolchain / runtime probe
+node=v24.17.0
+probe_runtime=Node.js global fetch (GET only)
+browser=not used (no browser navigation; no cross-page access)
+api_base=http://127.0.0.1:8080
+
+# Request discipline
+method_policy=GET only; the probe script contains no write-method branch
+endpoints_called=GET /api/clients?status=ALL; GET /api/clients/data-source-options?excludeClientId=<raw clientId>
+requests_total=3 (1 list + 2 data-source-options)
+write_requests=0
+interception=no browser network interception was installed because no browser was started
+audit_limit=script-only GET does not constitute a database-level zero-write audit
+
+# Desensitization
+evidence_scope=aliases T01/T02 and S01..; counts, booleans, exclusion reasons
+mapping_storage=outside repository, mode 600, path disclosed only in the final execution reply
+business_values_excluded=real clientId, clientDesc, org, dataSourceId tokens, connection strings, raw API responses
+
+# Scope
+scope=only /config/client feature read paths; only existing GET APIs
+not_executed=enable/disable/save/delete; database/ZooKeeper/Kafka; fixtures; tests/build/lint/type-check; service start/stop

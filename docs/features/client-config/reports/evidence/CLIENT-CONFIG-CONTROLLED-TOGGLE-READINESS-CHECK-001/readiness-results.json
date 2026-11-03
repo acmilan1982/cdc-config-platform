@@ -1,0 +1,132 @@
+{
+  "task_code": "CLIENT-CONFIG-CONTROLLED-TOGGLE-READINESS-CHECK-001",
+  "branch": "develop",
+  "api_base": "http://127.0.0.1:8080",
+  "method_policy": "GET only; the probe contains no write-method branch",
+  "endpoints_called": [
+    "GET /api/clients?status=ALL",
+    "GET /api/clients/data-source-options?excludeClientId=<raw clientId>"
+  ],
+  "requests": [
+    {
+      "method": "GET",
+      "path": "/api/clients"
+    },
+    {
+      "method": "GET",
+      "path": "/api/clients/data-source-options"
+    },
+    {
+      "method": "GET",
+      "path": "/api/clients/data-source-options"
+    }
+  ],
+  "write_requests": 0,
+  "list_total_rows": 16,
+  "fg_active_histogram": {
+    "exact_0": 15,
+    "exact_1": 1,
+    "other": 0
+  },
+  "exclusion_reason_counts": {
+    "FG_ACTIVE_NOT_EXACT_0": 1,
+    "SOURCE_ANOMALY": 8,
+    "SOURCE_CONFLICT": 7,
+    "NO_DATA_SOURCE_TOKEN": 5,
+    "ROW_ANOMALY": 1,
+    "COMMA_AMBIGUITY": 1
+  },
+  "eligible_before_cap": 2,
+  "candidates": [
+    {
+      "alias": "T01",
+      "fgActiveWas": "0",
+      "statusWas": "DISABLED",
+      "dataSourceCount": 7,
+      "distinctTokenCount": 7,
+      "rowAnomalies": 0,
+      "possibleCommaDataSourceIds": 0,
+      "perSourceAnomalies": 0,
+      "perSourceConflicts": 0,
+      "e2ExcludeUsed": true,
+      "e2TokenFacts": [
+        {
+          "tokenAlias": "S01",
+          "presentInE2": true,
+          "selectable": true,
+          "notSelectableReason": null,
+          "occupiedByCount": 0
+        },
+        {
+          "tokenAlias": "S02",
+          "presentInE2": true,
+          "selectable": true,
+          "notSelectableReason": null,
+          "occupiedByCount": 0
+        },
+        {
+          "tokenAlias": "S03",
+          "presentInE2": true,
+          "selectable": true,
+          "notSelectableReason": null,
+          "occupiedByCount": 0
+        },
+        {
+          "tokenAlias": "S04",
+          "presentInE2": true,
+          "selectable": true,
+          "notSelectableReason": null,
+          "occupiedByCount": 0
+        },
+        {
+          "tokenAlias": "S05",
+          "presentInE2": true,
+          "selectable": true,
+          "notSelectableReason": null,
+          "occupiedByCount": 0
+        },
+        {
+          "tokenAlias": "S06",
+          "presentInE2": true,
+          "selectable": true,
+          "notSelectableReason": null,
+          "occupiedByCount": 0
+        },
+        {
+          "tokenAlias": "S07",
+          "presentInE2": true,
+          "selectable": true,
+          "notSelectableReason": null,
+          "occupiedByCount": 0
+        }
+      ],
+      "e2AllTokensSelectable": true
+    },
+    {
+      "alias": "T02",
+      "fgActiveWas": "0",
+      "statusWas": "DISABLED",
+      "dataSourceCount": 1,
+      "distinctTokenCount": 1,
+      "rowAnomalies": 0,
+      "possibleCommaDataSourceIds": 0,
+      "perSourceAnomalies": 0,
+      "perSourceConflicts": 0,
+      "e2ExcludeUsed": true,
+      "e2TokenFacts": [
+        {
+          "tokenAlias": "S01",
+          "presentInE2": true,
+          "selectable": true,
+          "notSelectableReason": null,
+          "occupiedByCount": 0
+        }
+      ],
+      "e2AllTokensSelectable": true
+    }
+  ],
+  "e2_request_count": 2,
+  "candidate_count": 2,
+  "technical_readiness": "ELIGIBLE_CANDIDATE_FOUND",
+  "note": "Aliases only; real clientId/desc/org/connection values are not included. E1 conflictClientIds and E2 results are point-in-time snapshots, not concurrency guarantees."
+}
