@@ -749,6 +749,18 @@ adjustment7_formal_acceptance_execution_status=NOT_RUN
 
 **受控往返 ≠ 数据库级零写审计 ≠ CAS 证明 ≠ 157 条整体验收通过 ≠ 批准其他页面接入或迁移。**
 
+### 1.26 探针端管理恢复分支加固与下一批计划（2026-11-03，`CLIENT-CONFIG-TOGGLE-PROBE-RECOVERY-HARDENING-AND-NEXT-BATCH-PLAN-001`，纯文档 + 离线验证）
+
+- **性质**：修正 T02 验收探针“页面恢复失败直接转 API 停用”的未执行恢复分支风险；不重跑真实启停、不访问业务接口/页面/DB/ZK/Kafka/sync-client、不运行真实探针、不改产品代码与任何 AC 状态。
+- **预算修正**：启用 1 / 正常停用 1 / 额外恢复停用 1，总写尝试 ≤3，浏览器门禁与 API 恢复共用同一同步账本；请求放行前同步占预算，放行后无论成功/超时/断连/解析失败均计一次且不自动重试；页面已放行的写不再补发 API。
+- **切换与判定**：只有页面未放行写、无在途、无待确认时才允许 API 备用；切换前重读精确 T02 身份、`FG_ACTIVE`、业务前像与在途状态；仅最终 GET 满足原业务前像且 `FG_ACTIVE='0'` 才宣称恢复成功。
+- **离线验证**：`node --test offline-recovery.test.mjs`，17/17 通过、退出码 0；覆盖无恢复、页面未发写失败后 API 一次、页面已放行后 GET 为 0 不补发、结果未知即停、超时/断连/解析失败仍占预算、身份/漂移/状态/预算停止、并发不超额、页面完成但 GET 未证实、正常成功路径 enable1+disable1。
+- **边界**：离线通过不证明真实故障恢复已验证；修正版脚本为“供未来使用”，未产生原历史 JSON，不得替换原证据脚本。
+- **下一批建议**：以 AC-022 / AC-082 / AC-103 / AC-156 为主的探针端小批次，优先“两视口三点菜单 + T02 有序启停形成 `'1'` 行”真实观察，复用既有写授权但需独立执行提示词；不重新盘点全部 74 条剩余项。
+- 报告：`reports/CLIENT-CONFIG-TOGGLE-PROBE-RECOVERY-HARDENING-AND-NEXT-BATCH-PLAN-001.md`；证据：`reports/evidence/CLIENT-CONFIG-TOGGLE-PROBE-RECOVERY-HARDENING-AND-NEXT-BATCH-PLAN-001/`。
+
+**恢复分支加固 ≠ 真实故障恢复已验证 ≠ 新 AC 判 PASS ≠ 157 条整体验收通过 ≠ 批准其他页面接入或迁移。**
+
 ## 2. 文档导航
 
 | 文档 | 职责 | 状态 |
@@ -911,6 +923,8 @@ adjustment7_formal_acceptance_execution_status=NOT_RUN
 
 - **T02 受控页面启停往返验收**（2026-11-03，`CLIENT-CONFIG-T02-CONTROLLED-UI-TOGGLE-ACCEPTANCE-001`，真实页面受控启停，对应报告见 §2 导航）：按负责人授权仅操作 T02，完成启用→停用往返；门禁仅放行精确路径 PUT enable/disable，写尝试 2（各 1 次）、恢复 0、阻断非 GET 0；两次取消均 0 写；后端 SQL 恰 2 条单行 UPDATE；最终 `FG_ACTIVE='0'`、业务字段与前像一致。`CCFG-AC-023/151/152` 判 `PASS`，统计 `PASS 83 / FAIL 0 / BLOCKED 60 / NOT_RUN 14 = 157`；其余相关 AC 仅记录证据与剩余缺口。**受控往返 ≠ 数据库级零写审计 ≠ CAS 证明 ≠ 157 条整体验收通过。**
 
+- **恢复分支加固与下一批计划**（2026-11-03，`CLIENT-CONFIG-TOGGLE-PROBE-RECOVERY-HARDENING-AND-NEXT-BATCH-PLAN-001`，纯文档 + 纯离线验证，对应报告见 §2 导航）：只读 Git/源码/文档，仅新增修正版探针、共享恢复协调/预算模块、离线故障模拟与下一批计划；不重跑真实启停、不访问业务接口/页面/DB/ZK/Kafka/sync-client、不运行真实探针、不改产品代码与任何 AC 状态，原 T02 证据目录与原报告逐字节保留。修正原恢复分支“页面抛错即转 API 停用、未重读身份/前像/在途/预算”的风险：统一同步写预算（enable 1 + disable 1 + recovery-disable 1，总 ≤3，浏览器门禁与 API 共用同一账本，放行即计、不因超时/断连/解析失败退款且不自动重试）；页面已放行写后不再补发 API，结果未知即停；仅最终 GET 满足原业务前像且 `FG_ACTIVE='0'` 才宣称恢复成功。离线 `node --test offline-recovery.test.mjs` **17/17 通过、退出码 0**，覆盖 9 类必需场景与并发/总预算边界。`changed_ids=[]`，四态仍 `PASS 83 / FAIL 0 / BLOCKED 60 / NOT_RUN 14 = 157`，剩余 74，定义行仍 `REQ154 / AC157 / DESIGN89 / UI77`；业务写尝试 0、DB/ZK 写 `NOT_REQUESTED`。**离线通过 ≠ 真实故障恢复已验证 ≠ 新 AC 判 PASS ≠ 157 条整体验收通过。**
+
 ## 5. 下一入口
 
 设计并发口径调整任务 `CLIENT-CONFIG-DESIGN-CONCURRENCY-ADJUSTMENT-001` 已于 2026-09-04 完成（纯文档）：从四份设计草案（`DESIGN.md`/`API.md`/`UI.md`/`DATABASE.md`）中移除已过时的 `LOCK TABLE ... WAIT 5`、`ORA-30006→50050` 及并发“最多一个成功”等设计，按已重新批准的需求并发口径调整设计并发表述（需求与验收已随本轮并发口径调整重新批准，ChatGPT 对 R1 结果提交 `f2a4d7d...` 正式复审 `APPROVED`，项目负责人于 2026-09-04 明确回复“批准”，`REQUIREMENTS.md`/`ACCEPTANCE.md` 已收口为 `APPROVED`）。设计并发口径调整结果已于 2026-09-04 完成正式设计复审与批准收口：ChatGPT 对提交 `ba7c5e9...` 的设计并发口径调整结果正式复审（`CHATGPT_FORMAL_DESIGN_CONCURRENCY_ADJUSTMENT_REVIEW`）结论 `APPROVED`，项目负责人于 2026-09-04 明确回复“批准”，四份设计文档经批准收口任务 `CLIENT-CONFIG-DESIGN-CONCURRENCY-ADJUSTMENT-APPROVAL-001` 收口为 `APPROVED`、`PENDING_USER_CONFIRMATION=0`，整体标记为 `APPROVED_READY_FOR_IMPLEMENTATION`（对应报告见 §2 导航）。下一入口为 `CLIENT_CONFIG_IMPLEMENTATION`：以已批准的需求（90 条）、验收（76 条、全部 `NOT_RUN`）与四份设计（37/20/26/22）为唯一业务基线进入实现阶段；该实现随后已完成（见 §4 既有实现事实 `IMPLEMENTED_PENDING_USER_ACCEPTANCE`），76 条验收保持全部 `NOT_RUN`；不得把已批准设计写成测试已通过或验收已通过。
@@ -1016,4 +1030,6 @@ adjustment7_formal_acceptance_execution_status=NOT_RUN
 
 **探针端管理受控启停前只读就绪核查的历史下一入口（已由 T02 受控往返验收复审入口承接；2026-11-03，`CLIENT-CONFIG-CONTROLLED-TOGGLE-READINESS-CHECK-001`；上一条 AC-090/AC-157 定向只读验收复审入口按其自身段落保留为历史）**：`CHATGPT_REMOTE_CLIENT_CONFIG_CONTROLLED_TOGGLE_READINESS_CHECK_REVIEW`（对象为本只读就绪核查 + 纯文档方案任务的结果提交，由 ChatGPT **从远程 Git** 对报告与脱敏证据做独立**只读**复审）。本任务仅调用既有 GET 接口（列表 1 次 + 每候选 `data-source-options?excludeClientId=<原始 clientId>` 1 次，`write_requests=0`），未使用浏览器；技术候选 `T01`（7 源）/`T02`（1 源），`technical_readiness=ELIGIBLE_CANDIDATE_FOUND`，但负责人绑定、隔离确认、独占窗口与写授权均 PENDING，`write_authorization_status=NOT_REQUESTED`、`write_execution_status=NOT_EXECUTED`、`overall_readiness=NOT_READY_PENDING_OWNER_CONFIRMATION`。A/B 两批独立可选、各 2 写（合计 4），以 `<OWNER_BOUND_CLIENT_ID>` 占位，**不是**可运行写脚本；`changed_ids=[]`，四态仍 `PASS 80 / FAIL 0 / BLOCKED 62 / NOT_RUN 15 = 157`，剩余 77，定义行仍 `REQ154 / AC157 / DESIGN89 / UI77`。**只读就绪核查 ≠ 写授权 ≠ 对象已绑定 ≠ 正式验收通过；复审通过并获负责人明确授权前不得执行任何启停写操作。**
 
-**探针端管理 T02 受控页面启停往返验收的现行下一入口（2026-11-03，`CLIENT-CONFIG-T02-CONTROLLED-UI-TOGGLE-ACCEPTANCE-001`；上一条受控启停前只读就绪核查复审入口按其自身段落保留为历史）**：`CHATGPT_REMOTE_CLIENT_CONFIG_T02_CONTROLLED_UI_TOGGLE_ACCEPTANCE_REVIEW`（对象为本真实页面受控启停往返任务的结果提交，由 ChatGPT **从远程 Git** 对报告、脱敏证据与三条状态格改动做独立复审）。本任务仅操作 T02，成功路径 2 次写（enable/disable 各 1）、取消 0 写、恢复 0 写、最终 `FG_ACTIVE='0'`；判定 `CCFG-AC-023/151/152` 为 `PASS`，统计 `PASS 83 / FAIL 0 / BLOCKED 60 / NOT_RUN 14 = 157`。**受控往返 ≠ 数据库级零写审计 ≠ CAS 证明 ≠ 157 条整体验收通过。**
+**探针端管理 T02 受控页面启停往返验收的历史下一入口（已由恢复分支加固与下一批计划复审入口承接；2026-11-03，`CLIENT-CONFIG-T02-CONTROLLED-UI-TOGGLE-ACCEPTANCE-001`；上一条受控启停前只读就绪核查复审入口按其自身段落保留为历史）**：`CHATGPT_REMOTE_CLIENT_CONFIG_T02_CONTROLLED_UI_TOGGLE_ACCEPTANCE_REVIEW`（对象为本真实页面受控启停往返任务的结果提交，由 ChatGPT **从远程 Git** 对报告、脱敏证据与三条状态格改动做独立复审）。本任务仅操作 T02，成功路径 2 次写（enable/disable 各 1）、取消 0 写、恢复 0 写、最终 `FG_ACTIVE='0'`；判定 `CCFG-AC-023/151/152` 为 `PASS`，统计 `PASS 83 / FAIL 0 / BLOCKED 60 / NOT_RUN 14 = 157`。**受控往返 ≠ 数据库级零写审计 ≠ CAS 证明 ≠ 157 条整体验收通过。**
+
+**探针端管理恢复分支加固与下一批计划的现行下一入口（2026-11-03，`CLIENT-CONFIG-TOGGLE-PROBE-RECOVERY-HARDENING-AND-NEXT-BATCH-PLAN-001`；上一条 T02 受控往返复审入口按其自身段落保留为历史）**：`CHATGPT_REMOTE_CLIENT_CONFIG_TOGGLE_PROBE_RECOVERY_HARDENING_AND_NEXT_BATCH_PLAN_REVIEW`（对象为本任务的结果提交，由 ChatGPT **从远程 Git** 对报告、修正版探针与共享模块、离线验证证据及下一批计划做独立复审）。本任务只读 Git/源码/文档，仅修改授权的验收辅助脚本与计划：不访问业务接口/真实页面/DB/ZK/Kafka/sync-client、不启停服务、不运行真实探针、不改产品代码与任何 AC 状态；原 T02 证据目录与原报告逐字节保留。修正恢复分支为统一同步写预算（enable1 + disable1 + recovery-disable1，总 ≤3，浏览器门禁与 API 共用账本），页面已放行写后不再补发 API，仅最终 GET 满足原业务前像且 `FG_ACTIVE='0'` 才宣称恢复成功。离线 `node --test` **17/17 通过、退出码 0**，覆盖 9 类必需场景与并发/边界；**离线通过不证明真实故障恢复已验证**。`changed_ids=[]`，四态仍 `PASS 83 / FAIL 0 / BLOCKED 60 / NOT_RUN 14 = 157`，剩余 74，定义行仍 `REQ154 / AC157 / DESIGN89 / UI77`；业务写尝试 0。下一批建议以 AC-022 / AC-082 / AC-103 / AC-156 为主，优先两视口三点菜单 + T02 有序启停形成 `'1'` 行的真实观察，复用既有专用测试对象授权但须独立执行提示词。**恢复分支加固 ≠ 真实故障恢复已验证 ≠ 新 AC 判 PASS ≠ 157 条整体验收通过。**
