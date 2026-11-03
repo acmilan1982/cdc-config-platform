@@ -1,0 +1,74 @@
+CLIENT-CONFIG-T02-CONTROLLED-UI-TOGGLE-ACCEPTANCE-001 — environment and version record
+========================================================================================
+
+Task / branch
+-------------
+task_code        : CLIENT-CONFIG-T02-CONTROLLED-UI-TOGGLE-ACCEPTANCE-001
+repository       : /agent/cdc-config-platform
+branch           : develop
+base commit      : 63bbbde57132a498b02a4d011295e5fc072f2408  (local HEAD at task start)
+remote develop   : 63bbbde57132a498b02a4d011295e5fc072f2408  (git ls-remote origin refs/heads/develop)
+worktree at start: only pre-existing unrelated entries were present and were not touched:
+                   M .claude/settings.local.json ; ?? docs/prompts/ ; ?? runtime-logs/
+                   (none staged or committed by this task)
+
+Services (reused as-is; START-ONLY was NOT triggered; no start/stop/restart/build)
+-----------------------------------------------------------------------------------
+backend          : java -jar target/cdc-config-platform-backend-1.0.0-SNAPSHOT.jar
+                   pid 8120, started 2026-11-03 13:28:30 CST, LISTEN *:8080
+frontend         : node frontend/node_modules/.bin/vite
+                   pid 8141, started 2026-11-03 13:28:30 CST, LISTEN 0.0.0.0:5173
+page used        : http://127.0.0.1:5173/config/client (headless, local)
+backend API      : http://127.0.0.1:8080 (same origin proxy path used by the page)
+runtime status   : both services were already running before this task and were
+                   neither stopped nor restarted.
+
+Toolchain / browser
+-------------------
+JDK              : 1.8.0_202 (the running backend process)
+Node.js          : v24.17.0
+browser engine   : Playwright-core Chromium 147.0.7727.15, headless=true
+viewports        : 1440x900 (primary, single round-trip) and
+                   1920x1080 (read-only B0 regression only), deviceScaleFactor=1
+tooling note     : playwright-core was resolved from the pre-installed
+                   /root/.hermes/hermes-agent/node_modules via a temporary
+                   /tmp/t02run/node_modules symlink; no npm install, no build,
+                   no source/CSS/test/dependency/config change.
+artifacts        : backend jar and frontend dev server were pre-existing; no
+                   rebuild was performed, so this run reflects those artifacts.
+
+Request gate / write budget
+---------------------------
+Gate installed before the first navigation (context.route('**/api/**')).
+  - GET / HEAD / OPTIONS : allowed as needed (read-only)
+  - PUT enable  : allowed only in phase B3, at most 1
+  - PUT disable : allowed only in phase B6, at most 1; recovery allowance 1 unused
+  - any other non-GET /api/** : aborted and counted
+Observed: write_attempts = 2 (1 enable + 1 disable), recovery = 0,
+          blocked_non_get_count = 0, total write budget used 2 of 3.
+No pre-confirmation write was released. The recovery allowance was not used.
+
+Sensitive-data placement
+------------------------
+The real alias->clientId mapping, the T02 pre-image, and the raw run log remain
+outside the repository under /root/cdc-controlled-toggle-readiness-001/ with mode
+600. This evidence directory and the report refer to the target only as "T02" and
+to its source as an alias; they contain no real clientId, description,
+organization, credential, token, or connection string.
+
+Execution boundaries (what this run did NOT do)
+-----------------------------------------------
+- no create/edit/delete of any object; no data-source configuration change
+- no direct SQL; no database / ZooKeeper / Kafka access
+- no sync-client operation or process inspection
+- no source/CSS/test/dependency/config change; no other feature page visited
+- no mock, fixture, DOM/CSS injection, business-state manipulation, or fault
+  injection for slow/failure legs
+- no test suite, build, lint, or type-check (doc/evidence task scope)
+- no claim of database-level zero-write audit or CAS behavior
+
+Time base
+---------
+Run timestamps in ui-toggle-results.json are UTC ISO-8601
+(2026-11-03T05:59:08.310Z .. 05:59:27.116Z).
+Backend log uses CST (UTC+8), i.e. 13:59:08 .. 13:59:27.

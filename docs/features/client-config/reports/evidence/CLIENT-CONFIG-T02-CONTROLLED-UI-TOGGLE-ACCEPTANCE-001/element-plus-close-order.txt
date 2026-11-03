@@ -1,0 +1,58 @@
+Element Plus close-order source excerpt (installed 2.14.2)
+=========================================================
+
+Why this excerpt exists
+-----------------------
+The runtime close observer shows the dialog DOM becoming non-visible about
+220–240 ms AFTER the write request, because the leave transition runs while the
+request is in flight. To make the ordering auditable from the committed evidence
+(node_modules is not versioned), the exact installed `doClose`/`handleAction`/
+`onAction` code is recorded here. No file was modified.
+
+File A: frontend/node_modules/element-plus/es/components/message-box/src/index.vue_vue_type_script_lang.mjs
+------------------------------------------------------------------------------
+ 163  function doClose() {
+ 164      if (!visible.value) return;
+ 165      visible.value = false;
+ 166      nextTick(() => {
+ 167          if (state.action) emit("action", state.action);
+ 168      });
+ 169  }
+ ...
+ 180  const handleAction = (action) => {
+ 181      if (props.boxType === "prompt" && action === "confirm" && !validate()) return;
+ 182      state.action = action;
+ 183      if (state.beforeClose) state.beforeClose?.(action, state, doClose);
+ 184      else doClose();
+ 185  };
+
+File B: frontend/node_modules/element-plus/es/components/message-box/src/messageBox.mjs
+------------------------------------------------------------------------------
+  45  options.onAction = (action) => {
+  46      const currentMsg = messageInstance.get(vm);
+  47      let resolve;
+  48      if (options.showInput) resolve = {
+  49          value: vm.inputValue,
+  50          action
+  51      };
+  52      else resolve = action;
+  53      if (options.callback) options.callback(resolve, instance.proxy);
+  54      else if (action === "cancel" || action === "close") if (options.distinguishCancelAndClose && action !== "cancel") currentMsg.reject("close");
+  55      else currentMsg.reject("cancel");
+  56      else currentMsg.resolve(resolve);
+  57  };
+
+Order derived from the installed code
+-------------------------------------
+click -> handleAction('confirm') -> doClose():
+    visible.value = false            (synchronous, before any request)
+    nextTick(emit('action'))
+        -> options.onAction -> currentMsg.resolve(...)
+            -> page's `await ElMessageBox.confirm(...)` resumes
+                -> enableClient()/disableClient()  (write request)
+
+Therefore the close state transition precedes the write request. The dialog's
+DOM/visibility teardown is governed by the leave transition
+(`--el-transition-duration`, default 0.3 s) and completes after the request.
+This is the exact overlap recorded in ui-toggle-results.json
+(B3/B6 `close_before_request=false`, `close_observer.firstHiddenAt`).

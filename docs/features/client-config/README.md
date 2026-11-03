@@ -738,6 +738,17 @@ adjustment7_formal_acceptance_execution_status=NOT_RUN
 
 **只读就绪核查 ≠ 写授权 ≠ 对象已绑定 ≠ 157 条整体验收通过。**
 
+### 1.25 探针端管理 T02 受控页面启停往返验收（2026-11-03，`CLIENT-CONFIG-T02-CONTROLLED-UI-TOGGLE-ACCEPTANCE-001`，真实页面受控启停）
+
+- **性质**：按负责人授权对 T02 执行一次真实页面启用→停用往返；基线 `develop` @ `63bbbde57132a498b02a4d011295e5fc072f2408`，仅访问 `/config/client`；T01 未操作。
+- **门禁与写入**：首次导航前安装 `/api/**` 门禁；仅放行 T02 精确路径的 PUT enable（B3）/ disable（B6）；写尝试 2（各 1 次，HTTP 200），恢复写 0，阻断非 GET 0；后端 SQL 窗口恰 2 条单行 UPDATE（各 `Updates: 1`），无其他写语句。
+- **取消与还原**：B2/B5 取消均 0 写；B7 业务字段与前像逐字段一致，最终 `FG_ACTIVE='0'`、`status=DISABLED`、`停用` 标记恢复，列表仍 16 行。
+- **判定**：`CCFG-AC-023`、`CCFG-AC-151`、`CCFG-AC-152` 均判 `PASS`；`changed_ids=[CCFG-AC-023, CCFG-AC-151, CCFG-AC-152]`；统计 `PASS 83 / FAIL 0 / BLOCKED 60 / NOT_RUN 14 = 157`；其余相关 AC 仅记录证据，不改状态。
+- **限制**：确认框关闭状态转换先于写请求，DOM 离场过渡与请求重叠约 220–240 ms；无弹窗内处理中按钮态；不声称数据库级零写审计或 CAS。
+- 报告：`reports/CLIENT-CONFIG-T02-CONTROLLED-UI-TOGGLE-ACCEPTANCE-001.md`；证据：`reports/evidence/CLIENT-CONFIG-T02-CONTROLLED-UI-TOGGLE-ACCEPTANCE-001/`。
+
+**受控往返 ≠ 数据库级零写审计 ≠ CAS 证明 ≠ 157 条整体验收通过 ≠ 批准其他页面接入或迁移。**
+
 ## 2. 文档导航
 
 | 文档 | 职责 | 状态 |
@@ -898,6 +909,8 @@ adjustment7_formal_acceptance_execution_status=NOT_RUN
 
 - **受控启停前只读就绪核查**（2026-11-03，`CLIENT-CONFIG-CONTROLLED-TOGGLE-READINESS-CHECK-001`，只读就绪核查 + 纯文档方案，对应报告见 §2 导航）：仅 `/config/client`，仅调用 `GET /api/clients?status=ALL`（1 次）与 `GET /api/clients/data-source-options?excludeClientId=<原始 clientId>`（每个候选 1 次，共 2 次），`write_requests=0`，未使用浏览器。列表 16 行，`FG_ACTIVE` 精确 `'0'` 15 行、`'1'` 1 行；技术初筛得 2 个候选——`T01`（7 源）、`T02`（1 源），每个关联源 E1 `anomalies=[]`/`conflictClientIds=[]`，E2 自排除下均存在且 `selectable=true`，`technical_readiness=ELIGIBLE_CANDIDATE_FOUND`。排除原因聚合（非互斥）：`FG_ACTIVE_NOT_EXACT_0` 1 / `SOURCE_ANOMALY` 8 / `SOURCE_CONFLICT` 7 / `NO_DATA_SOURCE_TOKEN` 5 / `ROW_ANOMALY` 1 / `COMMA_AMBIGUITY` 1。负责人绑定、隔离确认、独占窗口与写授权均 PENDING，`write_authorization_status=NOT_REQUESTED`、`write_execution_status=NOT_EXECUTED`，`overall_readiness=NOT_READY_PENDING_OWNER_CONFIRMATION`。方案给出**独立可选**的 A（API 往返 E1→E2→E6→E1→E7→E1，成功路径 2 写）与 B（UI 往返，启用/停用各"取消 0 + 确认 1"，成功路径 2 写），均以 `<OWNER_BOUND_CLIENT_ID>` 占位，**不是**可运行写脚本；两批各自重新满足前置，若都执行合计 4 次写。**未**执行任何写请求、**未**测试/构建/lint/类型检查、**未**访问数据库/ZooKeeper/Kafka、**未**启停服务；`changed_ids=[]`，四态仍 `PASS 80 / FAIL 0 / BLOCKED 62 / NOT_RUN 15 = 157`，剩余 77。**只读就绪核查 ≠ 写授权 ≠ 对象已绑定 ≠ 157 条整体验收通过。**
 
+- **T02 受控页面启停往返验收**（2026-11-03，`CLIENT-CONFIG-T02-CONTROLLED-UI-TOGGLE-ACCEPTANCE-001`，真实页面受控启停，对应报告见 §2 导航）：按负责人授权仅操作 T02，完成启用→停用往返；门禁仅放行精确路径 PUT enable/disable，写尝试 2（各 1 次）、恢复 0、阻断非 GET 0；两次取消均 0 写；后端 SQL 恰 2 条单行 UPDATE；最终 `FG_ACTIVE='0'`、业务字段与前像一致。`CCFG-AC-023/151/152` 判 `PASS`，统计 `PASS 83 / FAIL 0 / BLOCKED 60 / NOT_RUN 14 = 157`；其余相关 AC 仅记录证据与剩余缺口。**受控往返 ≠ 数据库级零写审计 ≠ CAS 证明 ≠ 157 条整体验收通过。**
+
 ## 5. 下一入口
 
 设计并发口径调整任务 `CLIENT-CONFIG-DESIGN-CONCURRENCY-ADJUSTMENT-001` 已于 2026-09-04 完成（纯文档）：从四份设计草案（`DESIGN.md`/`API.md`/`UI.md`/`DATABASE.md`）中移除已过时的 `LOCK TABLE ... WAIT 5`、`ORA-30006→50050` 及并发“最多一个成功”等设计，按已重新批准的需求并发口径调整设计并发表述（需求与验收已随本轮并发口径调整重新批准，ChatGPT 对 R1 结果提交 `f2a4d7d...` 正式复审 `APPROVED`，项目负责人于 2026-09-04 明确回复“批准”，`REQUIREMENTS.md`/`ACCEPTANCE.md` 已收口为 `APPROVED`）。设计并发口径调整结果已于 2026-09-04 完成正式设计复审与批准收口：ChatGPT 对提交 `ba7c5e9...` 的设计并发口径调整结果正式复审（`CHATGPT_FORMAL_DESIGN_CONCURRENCY_ADJUSTMENT_REVIEW`）结论 `APPROVED`，项目负责人于 2026-09-04 明确回复“批准”，四份设计文档经批准收口任务 `CLIENT-CONFIG-DESIGN-CONCURRENCY-ADJUSTMENT-APPROVAL-001` 收口为 `APPROVED`、`PENDING_USER_CONFIRMATION=0`，整体标记为 `APPROVED_READY_FOR_IMPLEMENTATION`（对应报告见 §2 导航）。下一入口为 `CLIENT_CONFIG_IMPLEMENTATION`：以已批准的需求（90 条）、验收（76 条、全部 `NOT_RUN`）与四份设计（37/20/26/22）为唯一业务基线进入实现阶段；该实现随后已完成（见 §4 既有实现事实 `IMPLEMENTED_PENDING_USER_ACCEPTANCE`），76 条验收保持全部 `NOT_RUN`；不得把已批准设计写成测试已通过或验收已通过。
@@ -1001,4 +1014,6 @@ adjustment7_formal_acceptance_execution_status=NOT_RUN
 
 **探针端管理 AC-090 / AC-157 定向只读验收的现行下一入口（2026-11-03，`CLIENT-CONFIG-DISABLED-APPLICABILITY-TARGETED-READONLY-ACCEPTANCE-001`；上一条禁用态适用性基线修订复审入口按其自身段落保留为历史）**：`CHATGPT_REMOTE_CLIENT_CONFIG_DISABLED_APPLICABILITY_TARGETED_READONLY_ACCEPTANCE_REVIEW`（对象为本真实浏览器只读定向验收任务的结果提交，由 ChatGPT **从远程 Git** 独立复审）。本任务仅访问 `/config/client` 及其新增弹窗、行菜单，按 2026-11-03 适用性说明对 `CCFG-AC-090`、`CCFG-AC-157` 逐步骤核对并复用已入仓历史证据；1 个只读探针在首次导航前拦截 `/api/**` 非 GET，`nonGetAttempts=0`，未提交有效表单、未点击启停/删除最终确认、未跨页访问、未建夹具或写库。`CCFG-AC-090`、`CCFG-AC-157` 均 `BLOCKED`→`PASS`，`changed_ids=[CCFG-AC-090, CCFG-AC-157]`，其余 155 个状态格不变；四态由 `PASS 78 / FAIL 0 / BLOCKED 64 / NOT_RUN 15` 更新为 `PASS` **80** / `FAIL` **0** / `BLOCKED` **62** / `NOT_RUN` **15** = **157**；定义行仍 `REQ154 / AC157 / DESIGN89 / UI77`。写方案 `NOT_READY`，写执行 `NOT_REQUESTED`/`NOT_EXECUTED`。**定向只读验收 ≠ 写授权 ≠ 157 条整体验收通过 ≠ 批准其他页面接入或迁移；提交/推送成功不代表远程复审通过。**
 
-**探针端管理受控启停前只读就绪核查的现行下一入口（2026-11-03，`CLIENT-CONFIG-CONTROLLED-TOGGLE-READINESS-CHECK-001`；上一条 AC-090/AC-157 定向只读验收复审入口按其自身段落保留为历史）**：`CHATGPT_REMOTE_CLIENT_CONFIG_CONTROLLED_TOGGLE_READINESS_CHECK_REVIEW`（对象为本只读就绪核查 + 纯文档方案任务的结果提交，由 ChatGPT **从远程 Git** 对报告与脱敏证据做独立**只读**复审）。本任务仅调用既有 GET 接口（列表 1 次 + 每候选 `data-source-options?excludeClientId=<原始 clientId>` 1 次，`write_requests=0`），未使用浏览器；技术候选 `T01`（7 源）/`T02`（1 源），`technical_readiness=ELIGIBLE_CANDIDATE_FOUND`，但负责人绑定、隔离确认、独占窗口与写授权均 PENDING，`write_authorization_status=NOT_REQUESTED`、`write_execution_status=NOT_EXECUTED`、`overall_readiness=NOT_READY_PENDING_OWNER_CONFIRMATION`。A/B 两批独立可选、各 2 写（合计 4），以 `<OWNER_BOUND_CLIENT_ID>` 占位，**不是**可运行写脚本；`changed_ids=[]`，四态仍 `PASS 80 / FAIL 0 / BLOCKED 62 / NOT_RUN 15 = 157`，剩余 77，定义行仍 `REQ154 / AC157 / DESIGN89 / UI77`。**只读就绪核查 ≠ 写授权 ≠ 对象已绑定 ≠ 正式验收通过；复审通过并获负责人明确授权前不得执行任何启停写操作。**
+**探针端管理受控启停前只读就绪核查的历史下一入口（已由 T02 受控往返验收复审入口承接；2026-11-03，`CLIENT-CONFIG-CONTROLLED-TOGGLE-READINESS-CHECK-001`；上一条 AC-090/AC-157 定向只读验收复审入口按其自身段落保留为历史）**：`CHATGPT_REMOTE_CLIENT_CONFIG_CONTROLLED_TOGGLE_READINESS_CHECK_REVIEW`（对象为本只读就绪核查 + 纯文档方案任务的结果提交，由 ChatGPT **从远程 Git** 对报告与脱敏证据做独立**只读**复审）。本任务仅调用既有 GET 接口（列表 1 次 + 每候选 `data-source-options?excludeClientId=<原始 clientId>` 1 次，`write_requests=0`），未使用浏览器；技术候选 `T01`（7 源）/`T02`（1 源），`technical_readiness=ELIGIBLE_CANDIDATE_FOUND`，但负责人绑定、隔离确认、独占窗口与写授权均 PENDING，`write_authorization_status=NOT_REQUESTED`、`write_execution_status=NOT_EXECUTED`、`overall_readiness=NOT_READY_PENDING_OWNER_CONFIRMATION`。A/B 两批独立可选、各 2 写（合计 4），以 `<OWNER_BOUND_CLIENT_ID>` 占位，**不是**可运行写脚本；`changed_ids=[]`，四态仍 `PASS 80 / FAIL 0 / BLOCKED 62 / NOT_RUN 15 = 157`，剩余 77，定义行仍 `REQ154 / AC157 / DESIGN89 / UI77`。**只读就绪核查 ≠ 写授权 ≠ 对象已绑定 ≠ 正式验收通过；复审通过并获负责人明确授权前不得执行任何启停写操作。**
+
+**探针端管理 T02 受控页面启停往返验收的现行下一入口（2026-11-03，`CLIENT-CONFIG-T02-CONTROLLED-UI-TOGGLE-ACCEPTANCE-001`；上一条受控启停前只读就绪核查复审入口按其自身段落保留为历史）**：`CHATGPT_REMOTE_CLIENT_CONFIG_T02_CONTROLLED_UI_TOGGLE_ACCEPTANCE_REVIEW`（对象为本真实页面受控启停往返任务的结果提交，由 ChatGPT **从远程 Git** 对报告、脱敏证据与三条状态格改动做独立复审）。本任务仅操作 T02，成功路径 2 次写（enable/disable 各 1）、取消 0 写、恢复 0 写、最终 `FG_ACTIVE='0'`；判定 `CCFG-AC-023/151/152` 为 `PASS`，统计 `PASS 83 / FAIL 0 / BLOCKED 60 / NOT_RUN 14 = 157`。**受控往返 ≠ 数据库级零写审计 ≠ CAS 证明 ≠ 157 条整体验收通过。**

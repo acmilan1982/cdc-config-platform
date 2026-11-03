@@ -1,0 +1,75 @@
+CLIENT-CONFIG-T02-CONTROLLED-UI-TOGGLE-ACCEPTANCE-001 — backend SQL window extract
+====================================================================================
+
+Source       : runtime-logs/CLIENT-CONFIG-DISABLED-APPLICABILITY-TARGETED-READONLY-ACCEPTANCE-001/backend.log
+               (gitignored runtime stdout of the already-running backend, pid 8120)
+Window       : 2026-11-03 13:59:09.345 – 13:59:27.064 (CST, UTC+8)
+Correlation  : UI run 2026-11-03T05:59:08.310Z – 05:59:27.116Z (UTC);
+               backend log uses local time (UTC+8).
+Desensitized : the exact T02 clientId is replaced with <T02>; no description,
+               organization, credential, or connection string appears below.
+
+Key assertion (verified over this window):
+  - exactly 2 UPDATE statements, both single-row (Updates: 1):
+      * FG_ACTIVE=1 for <T02>  (enable, B3)
+      * FG_ACTIVE=0 for <T02>  (disable, B6)
+  - no INSERT / DELETE / MERGE / DDL / other write statement in the window;
+  - list reloads are SELECTs only (Total: 16 rows each).
+  - The two cancellation legs (B2, B5) produced no UPDATE statement.
+
+--- raw window (desensitized) ------------------------------------------------------
+
+2026-11-03 13:59:09.345 DEBUG 8120 --- [nio-8080-exec-1] c.b.c.c.m.C.selectByKeywordAndStatus     : ==>  Preparing: SELECT CLIENT_ID, CLIENT_DESC, DATA_SOURCE_ID, FG_ACTIVE FROM CDC_CLIENT_MULTIPLE ORDER BY CLIENT_ID DESC
+2026-11-03 13:59:09.346 DEBUG 8120 --- [nio-8080-exec-1] c.b.c.c.m.C.selectByKeywordAndStatus     : ==> Parameters:
+2026-11-03 13:59:09.348 DEBUG 8120 --- [nio-8080-exec-1] c.b.c.c.m.C.selectByKeywordAndStatus     : <==      Total: 16
+2026-11-03 13:59:09.348 DEBUG 8120 --- [nio-8080-exec-1] c.b.c.c.m.C.selectSafeAll                : ==>  Preparing: SELECT DATA_SOURCE_ID, DATA_SOURCE_NAME, DATA_SOURCE_CATEGORY, DATA_SOURCE_TYPE, DATA_SOURCE_ORG, FG_ACTIVE FROM CDC_DATA_SOURCE ORDER BY DATA_SOURCE_ID
+2026-11-03 13:59:09.349 DEBUG 8120 --- [nio-8080-exec-1] c.b.c.c.m.C.selectSafeAll                : ==> Parameters:
+2026-11-03 13:59:09.351 DEBUG 8120 --- [nio-8080-exec-1] c.b.c.c.m.C.selectSafeAll                : <==      Total: 37
+2026-11-03 13:59:10.946 DEBUG 8120 --- [nio-8080-exec-3] c.b.c.c.m.C.selectByKeywordAndStatus     : ==>  Preparing: SELECT CLIENT_ID, CLIENT_DESC, DATA_SOURCE_ID, FG_ACTIVE FROM CDC_CLIENT_MULTIPLE ORDER BY CLIENT_ID DESC
+2026-11-03 13:59:10.946 DEBUG 8120 --- [nio-8080-exec-3] c.b.c.c.m.C.selectByKeywordAndStatus     : ==> Parameters:
+2026-11-03 13:59:10.948 DEBUG 8120 --- [nio-8080-exec-3] c.b.c.c.m.C.selectByKeywordAndStatus     : <==      Total: 16
+2026-11-03 13:59:10.948 DEBUG 8120 --- [nio-8080-exec-3] c.b.c.c.m.C.selectSafeAll                : ==>  Preparing: SELECT DATA_SOURCE_ID, DATA_SOURCE_NAME, DATA_SOURCE_CATEGORY, DATA_SOURCE_TYPE, DATA_SOURCE_ORG, FG_ACTIVE FROM CDC_DATA_SOURCE ORDER BY DATA_SOURCE_ID
+2026-11-03 13:59:10.948 DEBUG 8120 --- [nio-8080-exec-3] c.b.c.c.m.C.selectSafeAll                : ==> Parameters:
+2026-11-03 13:59:10.951 DEBUG 8120 --- [nio-8080-exec-3] c.b.c.c.m.C.selectSafeAll                : <==      Total: 37
+2026-11-03 13:59:21.982 DEBUG 8120 --- [nio-8080-exec-4] c.b.c.c.m.C.selectFullScan               : ==>  Preparing: SELECT CLIENT_ID, CLIENT_DESC, DATA_SOURCE_ID, FG_ACTIVE FROM CDC_CLIENT_MULTIPLE ORDER BY CLIENT_ID
+2026-11-03 13:59:21.983 DEBUG 8120 --- [nio-8080-exec-4] c.b.c.c.m.C.selectFullScan               : ==> Parameters:
+2026-11-03 13:59:21.985 DEBUG 8120 --- [nio-8080-exec-4] c.b.c.c.m.C.selectFullScan               : <==      Total: 16
+2026-11-03 13:59:21.985 DEBUG 8120 --- [nio-8080-exec-4] c.b.c.c.m.C.selectSafeAll                : ==>  Preparing: SELECT DATA_SOURCE_ID, DATA_SOURCE_NAME, DATA_SOURCE_CATEGORY, DATA_SOURCE_TYPE, DATA_SOURCE_ORG, FG_ACTIVE FROM CDC_DATA_SOURCE ORDER BY DATA_SOURCE_ID
+2026-11-03 13:59:21.986 DEBUG 8120 --- [nio-8080-exec-4] c.b.c.c.m.C.selectSafeAll                : ==> Parameters:
+2026-11-03 13:59:21.990 DEBUG 8120 --- [nio-8080-exec-4] c.b.c.c.m.C.selectSafeAll                : <==      Total: 37
+2026-11-03 13:59:21.998 DEBUG 8120 --- [nio-8080-exec-4] c.b.c.c.m.CdcClientConfigMapper.update   : ==>  Preparing: UPDATE CDC_CLIENT_MULTIPLE SET FG_ACTIVE=? WHERE (CLIENT_ID = ?)
+2026-11-03 13:59:21.999 DEBUG 8120 --- [nio-8080-exec-4] c.b.c.c.m.CdcClientConfigMapper.update   : ==> Parameters: 1(String), <T02>(String)
+2026-11-03 13:59:22.010 DEBUG 8120 --- [nio-8080-exec-4] c.b.c.c.m.CdcClientConfigMapper.update   : <==    Updates: 1
+2026-11-03 13:59:22.041 DEBUG 8120 --- [nio-8080-exec-5] c.b.c.c.m.C.selectByKeywordAndStatus     : ==>  Preparing: SELECT CLIENT_ID, CLIENT_DESC, DATA_SOURCE_ID, FG_ACTIVE FROM CDC_CLIENT_MULTIPLE ORDER BY CLIENT_ID DESC
+2026-11-03 13:59:22.041 DEBUG 8120 --- [nio-8080-exec-5] c.b.c.c.m.C.selectByKeywordAndStatus     : ==> Parameters:
+2026-11-03 13:59:22.043 DEBUG 8120 --- [nio-8080-exec-5] c.b.c.c.m.C.selectByKeywordAndStatus     : <==      Total: 16
+2026-11-03 13:59:22.044 DEBUG 8120 --- [nio-8080-exec-5] c.b.c.c.m.C.selectSafeAll                : ==>  Preparing: SELECT DATA_SOURCE_ID, DATA_SOURCE_NAME, DATA_SOURCE_CATEGORY, DATA_SOURCE_TYPE, DATA_SOURCE_ORG, FG_ACTIVE FROM CDC_DATA_SOURCE ORDER BY DATA_SOURCE_ID
+2026-11-03 13:59:22.044 DEBUG 8120 --- [nio-8080-exec-5] c.b.c.c.m.C.selectSafeAll                : ==> Parameters:
+2026-11-03 13:59:22.048 DEBUG 8120 --- [nio-8080-exec-5] c.b.c.c.m.C.selectSafeAll                : <==      Total: 37
+2026-11-03 13:59:22.649 DEBUG 8120 --- [nio-8080-exec-6] c.b.c.c.m.C.selectByKeywordAndStatus     : ==>  Preparing: SELECT CLIENT_ID, CLIENT_DESC, DATA_SOURCE_ID, FG_ACTIVE FROM CDC_CLIENT_MULTIPLE ORDER BY CLIENT_ID DESC
+2026-11-03 13:59:22.649 DEBUG 8120 --- [nio-8080-exec-6] c.b.c.c.m.C.selectByKeywordAndStatus     : ==> Parameters:
+2026-11-03 13:59:22.651 DEBUG 8120 --- [nio-8080-exec-6] c.b.c.c.m.C.selectByKeywordAndStatus     : <==      Total: 16
+2026-11-03 13:59:22.652 DEBUG 8120 --- [nio-8080-exec-6] c.b.c.c.m.C.selectSafeAll                : ==>  Preparing: SELECT DATA_SOURCE_ID, DATA_SOURCE_NAME, DATA_SOURCE_CATEGORY, DATA_SOURCE_TYPE, DATA_SOURCE_ORG, FG_ACTIVE FROM CDC_DATA_SOURCE ORDER BY DATA_SOURCE_ID
+2026-11-03 13:59:22.652 DEBUG 8120 --- [nio-8080-exec-6] c.b.c.c.m.C.selectSafeAll                : ==> Parameters:
+2026-11-03 13:59:22.654 DEBUG 8120 --- [nio-8080-exec-6] c.b.c.c.m.C.selectSafeAll                : <==      Total: 37
+2026-11-03 13:59:26.535 DEBUG 8120 --- [nio-8080-exec-7] c.b.c.c.m.CdcClientConfigMapper.update   : ==>  Preparing: UPDATE CDC_CLIENT_MULTIPLE SET FG_ACTIVE=? WHERE (CLIENT_ID = ?)
+2026-11-03 13:59:26.535 DEBUG 8120 --- [nio-8080-exec-7] c.b.c.c.m.CdcClientConfigMapper.update   : ==> Parameters: 0(String), <T02>(String)
+2026-11-03 13:59:26.536 DEBUG 8120 --- [nio-8080-exec-7] c.b.c.c.m.CdcClientConfigMapper.update   : <==    Updates: 1
+2026-11-03 13:59:26.567 DEBUG 8120 --- [nio-8080-exec-8] c.b.c.c.m.C.selectByKeywordAndStatus     : ==>  Preparing: SELECT CLIENT_ID, CLIENT_DESC, DATA_SOURCE_ID, FG_ACTIVE FROM CDC_CLIENT_MULTIPLE ORDER BY CLIENT_ID DESC
+2026-11-03 13:59:26.567 DEBUG 8120 --- [nio-8080-exec-8] c.b.c.c.m.C.selectByKeywordAndStatus     : ==> Parameters:
+2026-11-03 13:59:26.570 DEBUG 8120 --- [nio-8080-exec-8] c.b.c.c.m.C.selectByKeywordAndStatus     : <==      Total: 16
+2026-11-03 13:59:26.571 DEBUG 8120 --- [nio-8080-exec-8] c.b.c.c.m.C.selectSafeAll                : ==>  Preparing: SELECT DATA_SOURCE_ID, DATA_SOURCE_NAME, DATA_SOURCE_CATEGORY, DATA_SOURCE_TYPE, DATA_SOURCE_ORG, FG_ACTIVE FROM CDC_DATA_SOURCE ORDER BY DATA_SOURCE_ID
+2026-11-03 13:59:26.571 DEBUG 8120 --- [nio-8080-exec-8] c.b.c.c.m.C.selectSafeAll                : ==> Parameters:
+2026-11-03 13:59:26.576 DEBUG 8120 --- [nio-8080-exec-8] c.b.c.c.m.C.selectSafeAll                : <==      Total: 37
+2026-11-03 13:59:27.056 DEBUG 8120 --- [nio-8080-exec-9] c.b.c.c.m.C.selectByKeywordAndStatus     : ==>  Preparing: SELECT CLIENT_ID, CLIENT_DESC, DATA_SOURCE_ID, FG_ACTIVE FROM CDC_CLIENT_MULTIPLE ORDER BY CLIENT_ID DESC
+2026-11-03 13:59:27.056 DEBUG 8120 --- [nio-8080-exec-9] c.b.c.c.m.C.selectByKeywordAndStatus     : ==> Parameters:
+2026-11-03 13:59:27.059 DEBUG 8120 --- [nio-8080-exec-9] c.b.c.c.m.C.selectByKeywordAndStatus     : <==      Total: 16
+2026-11-03 13:59:27.060 DEBUG 8120 --- [nio-8080-exec-9] c.b.c.c.m.C.selectSafeAll                : ==>  Preparing: SELECT DATA_SOURCE_ID, DATA_SOURCE_NAME, DATA_SOURCE_CATEGORY, DATA_SOURCE_TYPE, DATA_SOURCE_ORG, FG_ACTIVE FROM CDC_DATA_SOURCE ORDER BY DATA_SOURCE_ID
+2026-11-03 13:59:27.060 DEBUG 8120 --- [nio-8080-exec-9] c.b.c.c.m.C.selectSafeAll                : ==> Parameters:
+2026-11-03 13:59:27.064 DEBUG 8120 --- [nio-8080-exec-9] c.b.c.c.m.C.selectSafeAll                : <==      Total: 37
+
+--- observation boundary ----------------------------------------------------------
+This extract proves the SQL issued by the observed backend process in the stated
+window. It is not a database-level audit of all sessions and cannot exclude writes
+from unrelated sessions outside this window. No other operator activity was observed
+by the request gate, and the aggregate list size stayed 16 throughout.

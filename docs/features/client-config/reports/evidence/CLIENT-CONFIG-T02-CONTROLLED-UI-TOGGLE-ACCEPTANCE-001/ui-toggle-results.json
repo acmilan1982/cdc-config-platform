@@ -1,0 +1,718 @@
+{
+  "task_code": "CLIENT-CONFIG-T02-CONTROLLED-UI-TOGGLE-ACCEPTANCE-001",
+  "started_at": "2026-11-03T05:59:08.310Z",
+  "finished_at": "2026-11-03T05:59:27.116Z",
+  "alias": "T02",
+  "id_length": 14,
+  "browser": {
+    "engine": "chromium",
+    "version": "147.0.7727.15",
+    "headless": true
+  },
+  "viewports": {
+    "primary": "1440x900",
+    "regression": "1920x1080"
+  },
+  "gate": {
+    "contexts": [
+      {
+        "label": "expanded-1920x1080-readonly",
+        "installed_at": "2026-11-03T05:59:08.411Z",
+        "request_count": 0
+      },
+      {
+        "label": "primary-1440x900",
+        "installed_at": "2026-11-03T05:59:10.356Z",
+        "request_count": 2
+      }
+    ],
+    "blocked_non_get_count": 0,
+    "blocked_non_get": [],
+    "write_attempts_count": 2,
+    "write_attempts": [
+      {
+        "phase": "B3-enable-confirm",
+        "method": "PUT",
+        "path_template": "/api/clients/{T02}/enable",
+        "kind": "enable",
+        "at_iso": "2026-11-03T05:59:21.962Z",
+        "out_of_browser": false,
+        "state_at_request": {
+          "at": 1793685561961,
+          "messageBoxExists": true,
+          "messageBoxDisplay": "inline-block",
+          "messageBoxVisibility": "visible",
+          "overlayExists": true,
+          "overlayDisplay": "block",
+          "overlayVisibility": "visible",
+          "active": {
+            "tag": "LI",
+            "cls": "el-dropdown-menu__item is-disabled",
+            "text": "启用"
+          }
+        }
+      },
+      {
+        "phase": "B6-disable-confirm",
+        "method": "PUT",
+        "path_template": "/api/clients/{T02}/disable",
+        "kind": "disable",
+        "at_iso": "2026-11-03T05:59:26.522Z",
+        "out_of_browser": false,
+        "state_at_request": {
+          "at": 1793685566521,
+          "messageBoxExists": true,
+          "messageBoxDisplay": "inline-block",
+          "messageBoxVisibility": "visible",
+          "overlayExists": true,
+          "overlayDisplay": "block",
+          "overlayVisibility": "visible",
+          "active": {
+            "tag": "LI",
+            "cls": "cc-more-warning el-dropdown-menu__item is-disabled",
+            "text": "停用"
+          }
+        }
+      }
+    ],
+    "allowed_by_budget": {
+      "enable": 1,
+      "disable": 1,
+      "recovery": 0
+    },
+    "violations": []
+  },
+  "steps": {
+    "B0_1920": {
+      "viewport": "1920x1080",
+      "rows": 16,
+      "summary": "共 16 条",
+      "t02_visible": true,
+      "marker_present": true,
+      "selected": false,
+      "menu_trigger_present": true,
+      "id_exact": true,
+      "writes": 0,
+      "blocked_non_get": 0
+    },
+    "B0": {
+      "viewport": "1440x900",
+      "filter_status_control_value": "",
+      "filter_keyword_control_value": "",
+      "rows_initial": 16,
+      "summary_text": "共 16 条",
+      "t02": {
+        "index": 13,
+        "marker_present": true,
+        "selected": false,
+        "menu_trigger_present": true,
+        "id_exact": true
+      },
+      "initial_selected_count": 0,
+      "writes": 0,
+      "blocked_non_get": 0,
+      "after_row_click": {
+        "t02_selected": true,
+        "total_selected": 1
+      }
+    },
+    "B1": {
+      "menu": {
+        "menu_items": [
+          "启用",
+          "删除"
+        ],
+        "clicked": "启用"
+      },
+      "dialog": {
+        "title": "启用探针",
+        "message": "确定启用探针 {T02} 吗？",
+        "message_contains_exact_id": true,
+        "message_id_occurrences": 1,
+        "button_texts": [
+          "取消",
+          "启用"
+        ],
+        "primary_text": "启用",
+        "primary_count": 1,
+        "non_primary_text": "取消",
+        "primary_classes": "el-button el-button--primary",
+        "cancel_classes": "el-button"
+      },
+      "states": {
+        "normal": {
+          "bg": "rgb(9, 9, 11)",
+          "color": "rgb(255, 255, 255)",
+          "borderColor": "rgb(9, 9, 11)",
+          "outline": "none 3px rgb(255, 255, 255)",
+          "boxShadow": "none",
+          "classes": "el-button el-button--primary",
+          "disabled": false,
+          "text": "启用",
+          "rect": {
+            "x": 858,
+            "y": 470,
+            "w": 60,
+            "h": 32
+          }
+        },
+        "hover": {
+          "bg": "rgb(39, 39, 42)",
+          "color": "rgb(255, 255, 255)",
+          "borderColor": "rgb(39, 39, 42)",
+          "outline": "none 3px rgb(255, 255, 255)",
+          "boxShadow": "none",
+          "classes": "el-button el-button--primary",
+          "disabled": false,
+          "text": "启用",
+          "rect": {
+            "x": 858,
+            "y": 470,
+            "w": 60,
+            "h": 32
+          }
+        },
+        "pressed": {
+          "bg": "rgb(24, 24, 27)",
+          "color": "rgb(255, 255, 255)",
+          "borderColor": "rgb(24, 24, 27)",
+          "outline": "none 3px rgb(255, 255, 255)",
+          "boxShadow": "none",
+          "classes": "el-button el-button--primary",
+          "disabled": false,
+          "text": "启用",
+          "rect": {
+            "x": 858,
+            "y": 470,
+            "w": 60,
+            "h": 32
+          }
+        },
+        "focus_via_keyboard_reached": true,
+        "focus_sequence": [
+          {
+            "isPrimary": true,
+            "tag": "BUTTON",
+            "cls": "el-button el-button--primary",
+            "text": "启用"
+          },
+          {
+            "isPrimary": false,
+            "tag": "BUTTON",
+            "cls": "el-button",
+            "text": "取消"
+          },
+          {
+            "isPrimary": true,
+            "tag": "BUTTON",
+            "cls": "el-button el-button--primary",
+            "text": "启用"
+          }
+        ],
+        "focus_style": {
+          "bg": "rgb(39, 39, 42)",
+          "color": "rgb(255, 255, 255)",
+          "borderColor": "rgb(39, 39, 42)",
+          "outline": "solid 2px rgb(160, 207, 255)",
+          "boxShadow": "none",
+          "classes": "el-button el-button--primary",
+          "disabled": false,
+          "text": "启用",
+          "rect": {
+            "x": 858,
+            "y": 470,
+            "w": 60,
+            "h": 32
+          }
+        },
+        "cancel_style": {
+          "bg": "rgb(255, 255, 255)",
+          "color": "rgb(96, 98, 102)",
+          "borderColor": "rgb(220, 223, 230)",
+          "outline": "solid 2px rgb(160, 207, 255)",
+          "boxShadow": "none",
+          "classes": "el-button",
+          "disabled": false,
+          "text": "取消",
+          "rect": {
+            "x": 786,
+            "y": 470,
+            "w": 60,
+            "h": 32
+          }
+        },
+        "dialog_still_visible_after_pressed_release": true,
+        "writes_during_observation": 0,
+        "bg_family": {
+          "normal": {
+            "r": 9,
+            "g": 9,
+            "b": 11,
+            "isBlackish": true,
+            "isBlue": false
+          },
+          "hover": {
+            "r": 39,
+            "g": 39,
+            "b": 42,
+            "isBlackish": true,
+            "isBlue": false
+          },
+          "pressed": {
+            "r": 24,
+            "g": 24,
+            "b": 27,
+            "isBlackish": true,
+            "isBlue": false
+          },
+          "focus": {
+            "r": 39,
+            "g": 39,
+            "b": 42,
+            "isBlackish": true,
+            "isBlue": false
+          }
+        },
+        "color_white": {
+          "normal": "rgb(255, 255, 255)",
+          "hover": "rgb(255, 255, 255)",
+          "pressed": "rgb(255, 255, 255)",
+          "focus": "rgb(255, 255, 255)"
+        }
+      },
+      "selected_after_observe": true,
+      "writes": 0,
+      "blocked_non_get": 0
+    },
+    "B2": {
+      "cancel_clicked": true,
+      "writes_delta": 0,
+      "blocked_delta": 0,
+      "state_before": {
+        "index": 13,
+        "marker_present": true,
+        "selected": true,
+        "menu_trigger_present": true,
+        "id_exact": true
+      },
+      "state_after": {
+        "index": 13,
+        "marker_present": true,
+        "selected": true,
+        "menu_trigger_present": true,
+        "id_exact": true
+      },
+      "marker_still_present": true,
+      "selection_unchanged": true,
+      "dialog_hidden": true
+    },
+    "B3": {
+      "dialog_before_confirm": {
+        "title": "启用探针",
+        "message": "确定启用探针 {T02} 吗？",
+        "message_contains_exact_id": true,
+        "message_id_occurrences": 1,
+        "button_texts": [
+          "取消",
+          "启用"
+        ],
+        "primary_text": "启用",
+        "primary_count": 1,
+        "non_primary_text": "取消",
+        "primary_classes": "el-button el-button--primary",
+        "cancel_classes": "el-button"
+      },
+      "click_at": 1793685561960,
+      "confirm_response_status": 200,
+      "reload_response_status": 200,
+      "close_observer": {
+        "installedAt": 1793685561869,
+        "installedPerf": 11475.400000000373,
+        "initialVisible": true,
+        "firstHiddenAt": 1793685562201,
+        "firstHiddenPerf": 11807.400000000373,
+        "event_count": 17,
+        "last_events": [
+          {
+            "t": 1793685562183,
+            "p": 11789.5,
+            "visible": true,
+            "mb": true
+          },
+          {
+            "t": 1793685562195,
+            "p": 11801.300000000745,
+            "visible": true,
+            "mb": true
+          },
+          {
+            "t": 1793685562197,
+            "p": 11803.300000000745,
+            "visible": true,
+            "mb": true
+          },
+          {
+            "t": 1793685562201,
+            "p": 11807.300000000745,
+            "visible": false,
+            "mb": false
+          },
+          {
+            "t": 1793685562214,
+            "p": 11820.099999999627,
+            "visible": false,
+            "mb": false
+          },
+          {
+            "t": 1793685562455,
+            "p": 12060.900000000373,
+            "visible": false,
+            "mb": false
+          }
+        ]
+      },
+      "close_before_request": false,
+      "dialog_state_at_request": {
+        "at": 1793685561961,
+        "messageBoxExists": true,
+        "messageBoxDisplay": "inline-block",
+        "messageBoxVisibility": "visible",
+        "overlayExists": true,
+        "overlayDisplay": "block",
+        "overlayVisibility": "visible",
+        "active": {
+          "tag": "LI",
+          "cls": "el-dropdown-menu__item is-disabled",
+          "text": "启用"
+        }
+      },
+      "enable_write_attempts_in_phase": 1,
+      "enable_write_attempts_total": 1,
+      "t02_after_reload": {
+        "index": 13,
+        "marker_present": false,
+        "selected": true,
+        "menu_trigger_present": true,
+        "id_exact": true
+      },
+      "busy_menu_observable": false,
+      "busy_menu_manufactured": false,
+      "writes": 1,
+      "blocked_non_get": 0
+    },
+    "B4": {
+      "http": 200,
+      "code": 200,
+      "diff_fields": [
+        "fgActive",
+        "status"
+      ],
+      "allowed_diff": [
+        "fgActive",
+        "status"
+      ],
+      "forbidden_diff": [],
+      "fg_active": "1",
+      "status": "ENABLED"
+    },
+    "B5": {
+      "menu": {
+        "menu_items": [
+          "停用",
+          "删除"
+        ],
+        "clicked": "停用"
+      },
+      "dialog": {
+        "title": "停用探针",
+        "message": "确定停用探针 {T02} 吗？",
+        "message_contains_exact_id": true,
+        "message_id_occurrences": 1,
+        "button_texts": [
+          "取消",
+          "停用"
+        ],
+        "primary_text": "停用",
+        "primary_count": 1,
+        "non_primary_text": "取消",
+        "primary_classes": "el-button el-button--primary",
+        "cancel_classes": "el-button"
+      },
+      "states": {
+        "normal": {
+          "bg": "rgb(9, 9, 11)",
+          "color": "rgb(255, 255, 255)",
+          "borderColor": "rgb(9, 9, 11)",
+          "outline": "none 3px rgb(255, 255, 255)",
+          "boxShadow": "none",
+          "classes": "el-button el-button--primary",
+          "disabled": false,
+          "text": "停用",
+          "rect": {
+            "x": 858,
+            "y": 470,
+            "w": 60,
+            "h": 32
+          }
+        },
+        "hover": {
+          "bg": "rgb(39, 39, 42)",
+          "color": "rgb(255, 255, 255)",
+          "borderColor": "rgb(39, 39, 42)",
+          "outline": "none 3px rgb(255, 255, 255)",
+          "boxShadow": "none",
+          "classes": "el-button el-button--primary",
+          "disabled": false,
+          "text": "停用",
+          "rect": {
+            "x": 858,
+            "y": 470,
+            "w": 60,
+            "h": 32
+          }
+        },
+        "pressed": {
+          "bg": "rgb(24, 24, 27)",
+          "color": "rgb(255, 255, 255)",
+          "borderColor": "rgb(24, 24, 27)",
+          "outline": "none 3px rgb(255, 255, 255)",
+          "boxShadow": "none",
+          "classes": "el-button el-button--primary",
+          "disabled": false,
+          "text": "停用",
+          "rect": {
+            "x": 858,
+            "y": 470,
+            "w": 60,
+            "h": 32
+          }
+        },
+        "focus_via_keyboard_reached": true,
+        "focus_sequence": [
+          {
+            "isPrimary": true,
+            "tag": "BUTTON",
+            "cls": "el-button el-button--primary",
+            "text": "停用"
+          },
+          {
+            "isPrimary": false,
+            "tag": "BUTTON",
+            "cls": "el-button",
+            "text": "取消"
+          },
+          {
+            "isPrimary": true,
+            "tag": "BUTTON",
+            "cls": "el-button el-button--primary",
+            "text": "停用"
+          }
+        ],
+        "focus_style": {
+          "bg": "rgb(39, 39, 42)",
+          "color": "rgb(255, 255, 255)",
+          "borderColor": "rgb(39, 39, 42)",
+          "outline": "solid 2px rgb(160, 207, 255)",
+          "boxShadow": "none",
+          "classes": "el-button el-button--primary",
+          "disabled": false,
+          "text": "停用",
+          "rect": {
+            "x": 858,
+            "y": 470,
+            "w": 60,
+            "h": 32
+          }
+        },
+        "cancel_style": {
+          "bg": "rgb(255, 255, 255)",
+          "color": "rgb(96, 98, 102)",
+          "borderColor": "rgb(220, 223, 230)",
+          "outline": "solid 2px rgb(160, 207, 255)",
+          "boxShadow": "none",
+          "classes": "el-button",
+          "disabled": false,
+          "text": "取消",
+          "rect": {
+            "x": 786,
+            "y": 470,
+            "w": 60,
+            "h": 32
+          }
+        },
+        "dialog_still_visible_after_pressed_release": true,
+        "writes_during_observation": 0,
+        "bg_family": {
+          "normal": {
+            "r": 9,
+            "g": 9,
+            "b": 11,
+            "isBlackish": true,
+            "isBlue": false
+          },
+          "hover": {
+            "r": 39,
+            "g": 39,
+            "b": 42,
+            "isBlackish": true,
+            "isBlue": false
+          },
+          "pressed": {
+            "r": 24,
+            "g": 24,
+            "b": 27,
+            "isBlackish": true,
+            "isBlue": false
+          },
+          "focus": {
+            "r": 39,
+            "g": 39,
+            "b": 42,
+            "isBlackish": true,
+            "isBlue": false
+          }
+        },
+        "color_white": {
+          "normal": "rgb(255, 255, 255)",
+          "hover": "rgb(255, 255, 255)",
+          "pressed": "rgb(255, 255, 255)",
+          "focus": "rgb(255, 255, 255)"
+        }
+      },
+      "cancel": {
+        "writes_delta": 0,
+        "state_before": {
+          "index": 13,
+          "marker_present": false,
+          "selected": true,
+          "menu_trigger_present": true,
+          "id_exact": true
+        },
+        "state_after": {
+          "index": 13,
+          "marker_present": false,
+          "selected": true,
+          "menu_trigger_present": true,
+          "id_exact": true
+        },
+        "marker_still_absent": true,
+        "selection_unchanged": true,
+        "dialog_hidden": true
+      },
+      "writes": 1,
+      "blocked_non_get": 0
+    },
+    "B6": {
+      "dialog_before_confirm": {
+        "title": "停用探针",
+        "message": "确定停用探针 {T02} 吗？",
+        "message_contains_exact_id": true,
+        "message_id_occurrences": 1,
+        "button_texts": [
+          "取消",
+          "停用"
+        ],
+        "primary_text": "停用",
+        "primary_count": 1,
+        "non_primary_text": "取消",
+        "primary_classes": "el-button el-button--primary",
+        "cancel_classes": "el-button"
+      },
+      "click_at": 1793685566523,
+      "confirm_response_status": 200,
+      "reload_response_status": 200,
+      "close_observer": {
+        "installedAt": 1793685566442,
+        "installedPerf": 16048.599999999627,
+        "initialVisible": true,
+        "firstHiddenAt": 1793685566744,
+        "firstHiddenPerf": 16349.900000000373,
+        "event_count": 17,
+        "last_events": [
+          {
+            "t": 1793685566688,
+            "p": 16294.199999999255,
+            "visible": true,
+            "mb": true
+          },
+          {
+            "t": 1793685566721,
+            "p": 16327.300000000745,
+            "visible": true,
+            "mb": true
+          },
+          {
+            "t": 1793685566723,
+            "p": 16329.400000000373,
+            "visible": true,
+            "mb": true
+          },
+          {
+            "t": 1793685566744,
+            "p": 16349.900000000373,
+            "visible": false,
+            "mb": false
+          },
+          {
+            "t": 1793685566775,
+            "p": 16381.199999999255,
+            "visible": false,
+            "mb": false
+          },
+          {
+            "t": 1793685566825,
+            "p": 16431.199999999255,
+            "visible": false,
+            "mb": false
+          }
+        ]
+      },
+      "close_before_request": false,
+      "dialog_state_at_request": {
+        "at": 1793685566521,
+        "messageBoxExists": true,
+        "messageBoxDisplay": "inline-block",
+        "messageBoxVisibility": "visible",
+        "overlayExists": true,
+        "overlayDisplay": "block",
+        "overlayVisibility": "visible",
+        "active": {
+          "tag": "LI",
+          "cls": "cc-more-warning el-dropdown-menu__item is-disabled",
+          "text": "停用"
+        }
+      },
+      "disable_write_attempts_in_phase": 1,
+      "disable_write_attempts_total": 1,
+      "t02_after_reload": {
+        "index": 13,
+        "marker_present": true,
+        "selected": true,
+        "menu_trigger_present": true,
+        "id_exact": true
+      },
+      "writes": 2,
+      "blocked_non_get": 0
+    },
+    "B7": {
+      "http": 200,
+      "code": 200,
+      "diff_fields": [],
+      "business_fields_identical": true,
+      "fg_active": "0",
+      "status": "DISABLED"
+    }
+  },
+  "fatal": null,
+  "recovery": {
+    "used": 0,
+    "via": null,
+    "ui_error": null,
+    "result": null
+  },
+  "flags": {
+    "enable_committed": true,
+    "disable_committed": true,
+    "final_fg_active": "0"
+  }
+}
