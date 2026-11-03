@@ -1,0 +1,176 @@
+{
+  "task_code": "CLIENT-CONFIG-LIST-AND-THREE-STATE-MENU-READONLY-ACCEPTANCE-001",
+  "base_commit": "4354e3083e00b995819b967eb860e93024089a3a",
+  "generated_at_utc": "2026-11-03T11:25:23Z",
+  "nature": "Read-only matrix built by reading real keys in already-committed evidence plus current source derivation. No live API sample and no live browser observation this round: backend :8080 and frontend :5173 were not listening and the task forbids starting them.",
+  "live_legs": {
+    "get_api_clients_status_ALL": "NOT_EXECUTED_SERVICE_DOWN",
+    "browser_two_viewports": "NOT_EXECUTED_SERVICE_DOWN",
+    "api_non_get_gate": "NOT_INSTALLED_NO_NAVIGATION",
+    "business_write_attempts": 0
+  },
+  "service_check": {
+    "backend_http": "000",
+    "frontend_http": "000",
+    "listeners_8080_5173": "none",
+    "detail": "env-and-service-check.txt"
+  },
+  "coverage_vocabulary": {
+    "COVERED_HISTORICAL": "Real keys from an earlier committed read-only/write task cover this atom; not re-run this round.",
+    "PARTIAL_HISTORICAL": "Earlier keys cover part of the atom, or cover it only in a separate snapshot/time.",
+    "SOURCE_DERIVED": "Current source code shows the behavior; this is derivation, not runtime observation.",
+    "NOT_ESTABLISHED_CURRENT": "No current sample or single-snapshot evidence establishes the atom.",
+    "UNEQUIVOCAL_COUNTEREXAMPLE": "A direct observed counterexample; none found."
+  },
+  "ac_022": {
+    "definition_status_cell": "BLOCKED",
+    "result": "BLOCKED",
+    "precondition_atoms": [
+      {
+        "atom": "目标功能已实现并部署",
+        "evidence_file": "frontend/src/views/client-config/ClientConfigPage.vue",
+        "keys": ["lines 57-65 el-table", "lines 66-99 序号/探针 ID columns", "lines 201-249 操作 column + dropdown"],
+        "observation": "Source for the list page is present in the working tree; a live deployment could not be verified because both services were down.",
+        "coverage": "SOURCE_DERIVED",
+        "limitation": "Deployment/running state not observable this round."
+      },
+      {
+        "atom": "列表含启用与停用探针各若干条",
+        "evidence_file": "docs/features/client-config/reports/evidence/CLIENT-CONFIG-CONTROLLED-TOGGLE-READINESS-CHECK-001/readiness-results.json",
+        "keys": ["list_total_rows=16", "fg_active_histogram.exact_0=15", "fg_active_histogram.exact_1=1", "fg_active_histogram.other=0", "note=point-in-time snapshot"],
+        "observation": "Historical snapshot had 15 exact '0' rows and 1 exact '1' row; only one enabled row was observed.",
+        "coverage": "NOT_ESTABLISHED_CURRENT",
+        "limitation": "Only one enabled row in the cited snapshot; the definition says 启用与停用探针各若干条 ('several each'). No approved numeric interpretation of 若干条 exists, and the current list could not be re-read."
+      }
+    ],
+    "step_atoms": [
+      {
+        "atom": "两视口观察列表是否仍有状态列",
+        "evidence_file": "docs/features/client-config/reports/evidence/CLIENT-CONFIG-TARGETED-READONLY-ACCEPTANCE-SUPPLEMENT-002/s2-list-results.json",
+        "keys": ["viewports.1440x900.structure.headers", "viewports.1440x900.structure.hasStatusColumn=false", "viewports.1920x1080.structure.headers", "viewports.1920x1080.structure.hasStatusColumn=false"],
+        "observation": "At both 1440x900 and 1920x1080 the headers were [序号, 探针 ID, 探针描述, 采集数据源, 数据源数量, 操作]; no status column.",
+        "coverage": "COVERED_HISTORICAL",
+        "limitation": "Earlier read-only snapshot; not re-observed this round."
+      },
+      {
+        "atom": "停用记录最右侧操作列更多下拉点击启用",
+        "evidence_file": "docs/features/client-config/reports/evidence/CLIENT-CONFIG-TARGETED-READONLY-ACCEPTANCE-SUPPLEMENT-002/s2-list-results.json; docs/features/client-config/reports/evidence/CLIENT-CONFIG-T02-CONTROLLED-UI-TOGGLE-ACCEPTANCE-001/ui-toggle-results.json",
+        "keys": ["s2-list: viewports.1440x900.menu.itemTexts=[启用,删除]", "s2-list: viewports.1920x1080.menu.itemTexts=[启用,删除]", "T02: steps.B1.menu.menu_items=[启用,删除]"],
+        "observation": "The disabled-row more menu exposed 启用 and 删除 in both cited tasks.",
+        "coverage": "COVERED_HISTORICAL",
+        "limitation": "The exact row identity/capture time is per-snapshot; menu was not re-opened this round."
+      }
+    ],
+    "expectation_atoms": [
+      {
+        "atom": "列表无状态列，无列内启用/停用文字操作",
+        "evidence_file": "s2-list-results.json; ClientConfigPage.vue",
+        "keys": ["structure.headers", "structure.batchAbsence.hasRowCheckbox=false", "ClientConfigPage.vue lines 66-205 column definitions"],
+        "observation": "No status column in either viewport's headers; source defines only 序号/探针 ID/探针描述/采集数据源/数据源数量/操作.",
+        "coverage": "COVERED_HISTORICAL+SOURCE_DERIVED",
+        "limitation": "Runtime not re-observed."
+      },
+      {
+        "atom": "启用新增二次确认（确定启用探针 {探针ID} 吗？/标题 启用探针 / 按钮 取消,启用）",
+        "evidence_file": "s2-confirm-results.json; T02 ui-toggle-results.json",
+        "keys": ["s2-confirm: viewports.1440x900.enableBox.title=启用探针", "s2-confirm: enableBox.bodyMasked=确定启用探针 <ID> 吗？", "s2-confirm: enableBox.buttons=[取消,启用]", "T02: steps.B1.dialog.message_contains_exact_id=true", "T02: steps.B1.dialog.button_texts=[取消,启用]"],
+        "observation": "Both cited evidence sets recorded the enable confirmation title, masked body, and buttons.",
+        "coverage": "COVERED_HISTORICAL",
+        "limitation": "Not re-opened this round."
+      },
+      {
+        "atom": "取消确认不调用启用接口",
+        "evidence_file": "T02 ui-toggle-results.json",
+        "keys": ["steps.B2.cancel_clicked=true", "steps.B2.writes_delta=0", "steps.B2.blocked_delta=0", "steps.B2.dialog_hidden=true"],
+        "observation": "Canceling the enable dialog produced zero write requests and zero blocked non-GET requests.",
+        "coverage": "COVERED_HISTORICAL",
+        "limitation": "Reviewed write-path evidence reused; not re-executed."
+      },
+      {
+        "atom": "启用成功后状态变为启用，探针 ID 后停用标记消失；仅 FG_ACTIVE 变化",
+        "evidence_file": "T02 ui-toggle-results.json; T02 sql-window-extract.txt",
+        "keys": ["steps.B3.t02_after_reload.marker_present=false", "steps.B4.fg_active=1", "steps.B4.status=ENABLED", "steps.B4.diff_fields=[fgActive,status]", "gate.write_attempts[0].kind=enable", "sql: UPDATE CDC_CLIENT_MULTIPLE SET FG_ACTIVE=? WHERE CLIENT_ID=? Updates:1", "steps.B7.fg_active=0", "steps.B7.business_fields_identical=true"],
+        "observation": "A real reviewed enable→disable round-trip on alias T02 showed the marker disappearing after enable, FG_ACTIVE='1'/ENABLED, and one single-row UPDATE; the later disable restored '0'/DISABLED.",
+        "coverage": "COVERED_HISTORICAL",
+        "limitation": "Reused reviewed T02 write evidence; no enable was performed this round."
+      }
+    ],
+    "blocking_gaps": [
+      "Current list sample unavailable: GET /api/clients?status=ALL returned HTTP 000 and no listener existed on 8080.",
+      "Precondition 启用与停用各若干条 is not established: the cited historical snapshot contains 1 enabled row and 15 disabled rows; 若干条 has no approved numeric threshold.",
+      "Live two-viewport re-observation could not be performed (frontend :5173 down)."
+    ]
+  },
+  "ac_082": {
+    "definition_status_cell": "BLOCKED",
+    "result": "BLOCKED",
+    "precondition_atoms": [
+      {
+        "atom": "库内同时存在 FG_ACTIVE='1'、'0' 与非 '0'/'1' 异常状态的记录",
+        "evidence_file": "readiness-results.json; s2-list-results.json; T02 ui-toggle-results.json",
+        "keys": ["readiness: fg_active_histogram={exact_0:15, exact_1:1, other:0}", "s2-list: abnormalRowCount=1 (1440x900/1920x1080)", "s2-list: idMarkers[15].hasInactiveMark=false + abnormal present", "T02: steps.B4.fg_active=1 during the round-trip", "T02: steps.B7.fg_active=0 final"],
+        "observation": "Each cited snapshot is missing at least one of the three states: readiness had no abnormal row, s2-list shows disabled + abnormal but no enabled-row marker, and T02's enabled state existed only during its own round-trip.",
+        "coverage": "NOT_ESTABLISHED_CURRENT",
+        "limitation": "No single in-repo snapshot shows all three states simultaneously. The R4 coverage matrix cites accD.json#082, but that raw package is repository-external (raw_package_sha256 in evidence-index.json) and unavailable for a real key read; a matrix summary is not a substitute. Different-time snapshots must not be spliced."
+      }
+    ],
+    "step_atoms": [
+      {
+        "atom": "两视口观察最右侧操作列是否固定",
+        "evidence_file": "s2-list-results.json; ClientConfigPage.vue",
+        "keys": ["viewports.1440x900.structure.headersRightmost=操作", "viewports.1920x1080.structure.headersRightmost=操作", "ClientConfigPage.vue lines 201-205: el-table-column label=操作 width=110 fixed=right"],
+        "observation": "Both viewports recorded 操作 as the rightmost header; current source declares fixed=\"right\". The historical JSON does not contain an explicit fixed-column assertion.",
+        "coverage": "PARTIAL_HISTORICAL+SOURCE_DERIVED",
+        "limitation": "Fixed attribute was not recorded as a runtime key; source derivation is not a live observation."
+      },
+      {
+        "atom": "分别对启用、停用、异常三类记录点击更多并记录下拉可见项",
+        "evidence_file": "s2-list-results.json; T02 ui-toggle-results.json",
+        "keys": ["s2-list: viewports.*.menu.itemTexts=[启用,删除] (disabled row)", "s2-list: viewports.*.abnormalRowMenu.itemTexts=[停用,删除]", "T02: steps.B5.menu.menu_items=[停用,删除] after enable"],
+        "observation": "Disabled-row menu, abnormal-row menu, and enabled-row menu shapes were each recorded, but in separate snapshots/tasks.",
+        "coverage": "PARTIAL_HISTORICAL",
+        "limitation": "Menus were not observed together on one three-state page; not re-opened this round."
+      }
+    ],
+    "expectation_atoms": [
+      {
+        "atom": "最右固定操作列，唯一文字入口为更多（现行已批准修订：三点图标，可访问名称 更多操作：<ID>）",
+        "evidence_file": "s2-list-results.json; round7-targeted-readonly-results.json; ClientConfigPage.vue",
+        "keys": ["s2-list: structure.headersRightmost=操作", "ROUND7: AC156_regressions_readonly[?] / AC156_menu_isolation", "ClientConfigPage.vue lines 216-225 role=button tabindex=0 aria-label=更多操作：<ID>"],
+        "observation": "Current approved revision replaced the text entry with a three-dot icon carrying aria-label 更多操作：<ID>; this is the approved temporal supersession of the older 文字更多 wording, not a new defect.",
+        "coverage": "SOURCE_DERIVED",
+        "limitation": "Definition text still contains 文字更多; resolved as approved revision, not changed in this task."
+      },
+      {
+        "atom": "下拉条目严格符合三态表：'1'→{删除,停用}，'0'→{删除,启用}，异常→仅{删除,停用}且无启用；任何行都含删除",
+        "evidence_file": "s2-list-results.json; T02 ui-toggle-results.json; ClientConfigPage.vue",
+        "keys": ["s2-list: menu.itemTexts=[启用,删除]", "s2-list: abnormalRowMenu.itemTexts=[停用,删除]", "T02: B1 [启用,删除], B5 [停用,删除]", "ClientConfigPage.vue lines 230-246: idState!=='off'→停用 else→启用; delete always"],
+        "observation": "Every recorded menu contained 删除; disabled→启用+删除; enabled and abnormal→停用+删除; abnormal menu had no 启用.",
+        "coverage": "COVERED_HISTORICAL+SOURCE_DERIVED",
+        "limitation": "Per-state observations are from different times; no single simultaneous three-state menu capture."
+      },
+      {
+        "atom": "点击更多及其菜单项不触发双击编辑、不产生选中视觉",
+        "evidence_file": "s2-list-results.json; round7-targeted-readonly-results.json",
+        "keys": ["s2-list: rowEventIsolation.editDialogOpened=false", "s2-list: rowEventIsolation.sequence=[singleClickTrigger,doubleClickTrigger,doubleClickMenuItem]", "ROUND7: AC156_menu_isolation.editDialogOpen=false", "ROUND7: AC156_menu_isolation.fixedSelectedRows=0", "ROUND7: AC156_dblclick_edit.editDialogOpen=true (row double-click still edits - negative control)"],
+        "observation": "Opening the menu and double-clicking the trigger/menu item did not open the edit dialog; opening the menu left fixedSelectedRows=0.",
+        "coverage": "COVERED_HISTORICAL",
+        "limitation": "Not re-observed this round; the negative control confirms row double-click still edits as expected."
+      }
+    ],
+    "blocking_gaps": [
+      "Current three-state simultaneity precondition is not established: services were down, so the current FG_ACTIVE histogram could not be read.",
+      "No single in-repo snapshot contains enabled + disabled + abnormal together; the raw formal-acceptance package cited by R4 (accD.json) is repository-external and unavailable for a real key read.",
+      "Live two-viewport fixed-column observation could not be performed; current fixed=\"right\" is source-derived only."
+    ]
+  },
+  "definition_revision_notes": [
+    "AC-022 fifth-round revision: enable now requires a secondary confirmation; canceling it must not call the enable API. Cited by CCFG-AC-140 / CCFG-REQ-141 and implemented source.",
+    "AC-082 'text 更多' vs current three-dot icon: the later approved round (CCFG-AC-156 / ROUND7 evidence) replaced the text entry with a three-dot icon (aria-label 更多操作：<ID>). This task records the approved temporal supersession and does not modify the definition or declare a defect.",
+    "AC-082 'no selection visual': the fifth-round page-level revision restored a fixed single-row highlight for row-content clicks; the menu trigger/menu items are explicitly isolated and were observed with fixedSelectedRows=0."
+  ],
+  "desensitization": {
+    "aliases_used": ["T01", "T02", "<ID>", "S01..S07"],
+    "not_included": ["real clientId", "client description", "organization", "data-source ids", "credentials", "connection strings", "raw API responses", "screenshots"]
+  }
+}

@@ -1,0 +1,51 @@
+CLIENT-CONFIG-LIST-AND-THREE-STATE-MENU-READONLY-ACCEPTANCE-001 — environment and service check
+================================================================================================
+
+Purpose
+-------
+This task was required to reuse the already-running frontend/backend without
+starting, stopping, restarting or building them. This file records the read-only
+availability check performed at task start. Because neither service was
+listening, the live GET sample and live two-viewport browser observations could
+not be performed; they are reported as unexecuted, not as observed facts.
+
+Values (captured 2026-11-03T11:25:23Z)
+--------------------------------------
+repo                    = /agent/cdc-config-platform
+branch                  = develop
+HEAD                    = 4354e3083e00b995819b967eb860e93024089a3a
+origin/develop          = 4354e3083e00b995819b967eb860e93024089a3a
+remote develop (ls-remote, earlier same session)
+                        = 4354e3083e00b995819b967eb860e93024089a3a
+expected base           = 4354e3083e00b995819b967eb860e93024089a3a
+node                    = v24.17.0
+
+Commands and results (proxy bypassed; server has http_proxy set)
+-----------------------------------------------------------------
+$ curl --noproxy '*' -s -o /dev/null -w '%{http_code}' --max-time 3 \
+    'http://127.0.0.1:8080/api/clients?status=ALL'
+000
+
+$ curl --noproxy '*' -s -o /dev/null -w '%{http_code}' --max-time 3 \
+    'http://127.0.0.1:5173/config/client'
+000
+
+$ (ss -ltnp || netstat -ltnp) | grep -E ':(8080|5173)\b'
+(no output)
+
+Interpretation
+--------------
+- HTTP 000 means no successful connection could be established.
+- No process was listening on 8080 or 5173 at check time.
+- The task prompt forbids starting/stopping/restarting the services, so no
+  service was started and no build was run.
+- Consequently:
+  * no live GET /api/clients?status=ALL sample was read this round;
+  * no browser context was opened for /config/client this round;
+  * no /api/** gate was installed because there was no navigation to gate;
+  * no business write was attempted (business_write_attempts=0).
+
+Browser/tooling available (not used this round)
+-----------------------------------------------
+- Playwright-core and Chromium builds are present on the host from prior tasks.
+- They were deliberately not launched because the target services were down.
