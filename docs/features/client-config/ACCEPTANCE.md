@@ -638,9 +638,9 @@
 |---|---|---|
 | 前置：目标功能已实现并部署 | 前序任务开工时后端/前端可访问，列表 16 行（前序报告 §1、§6） | 满足 |
 | 前置：列表含启用与停用探针各若干条 | `steps.B3_post_enable_1440` / `steps.B5_readonly_1920`：同一时点 `ui_enabled_rows=2`、`ui_disabled_rows=14`；负责人已明确“各至少 2 条” | 满足（数量口径已确认） |
-| 步骤：两种视口观察是否仍有“状态”列 | `steps.B3_post_enable_1440.has_status_column=false`、`steps.B5_readonly_1920.has_status_column=false` | 满足 |
+| 步骤：两种视口观察是否仍有“状态”列 | `steps.B3_post_enable_1440.table.has_status_column=false`、`steps.B5_readonly_1920.table.has_status_column=false` | 满足 |
 | 步骤：停用记录“更多”下拉点击“启用” | `steps.B3_post_enable_1440.menus_disabled` 含 `["启用","删除"]`（多行）；`steps.B2_enable` 为真实菜单→确认后执行 | 满足 |
-| 预期：无状态列、无列内启停文字操作 | 两者 `has_status_column=false`、`inline_toggle_count=0` | 满足 |
+| 预期：无状态列、无列内启停文字操作 | `steps.B3_post_enable_1440.table.has_status_column=false`、`steps.B5_readonly_1920.table.has_status_column=false`、`steps.B3_post_enable_1440.table.inline_toggle_count=0`、`steps.B5_readonly_1920.table.inline_toggle_count=0` | 满足 |
 | 预期：启用二次确认（标题/正文/按钮） | `steps.B2_enable`：title “启用探针”、`message_contains_exact_id=true`（目标 ID）、buttons `["取消","启用"]` | 满足 |
 | 预期：取消确认不调用启用接口 | `steps.B3_post_enable_1440` / `steps.B5_readonly_1920` 各取消周期 `writes_delta=0`；`blocked_non_get=0` | 满足（浏览器门禁计数，非库级零写审计） |
 | 预期：启用成功后状态变启用、“停用”标记消失 | `steps.B2_enable`：`put_status=200`、`reload_status=200`、`marker_after=false`；`steps.B4_post_enable_diff`：`fg_active="1"` | 满足 |
