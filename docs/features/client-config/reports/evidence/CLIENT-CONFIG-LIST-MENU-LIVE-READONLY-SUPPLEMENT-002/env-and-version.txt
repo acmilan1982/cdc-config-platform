@@ -1,0 +1,49 @@
+# Runtime & version context (read-only live round)
+captured_at_local=2026-11-03
+git_branch=develop
+git_head=1c87312f8afb5ba4e4367120b4ace6b7dfa96216
+base_commit=1c87312f8afb5ba4e4367120b4ace6b7dfa96216
+
+backend_start=STARTED_BY_THIS_TASK (no prior listener on 8080)
+backend_command=java -jar target/cdc-config-platform-backend-1.0.0-SNAPSHOT.jar
+backend_pid=8210
+backend_listen=*:8080
+backend_jar=backend/target/cdc-config-platform-backend-1.0.0-SNAPSHOT.jar
+backend_jar_sha256=efdbea827b6ab84dd47105d2cc130f0bc3c5b70dc78cc626b6421e1f9750a459
+backend_jar_mtime=2026-09-22T12:21:27+08:00
+last_backend_src_commit=807a5a58e373e522fe8b591569e22728a6662ed6 2026-09-20T15:48:52+08:00
+backend_profile=dev
+backend_log=runtime-logs/CLIENT-CONFIG-LIST-MENU-LIVE-READONLY-SUPPLEMENT-002/backend-8080.log
+
+frontend_start=STARTED_BY_THIS_TASK (no prior listener on 5173)
+frontend_command=npm run dev -- --host 0.0.0.0 --port 5173
+frontend_pid=8371
+frontend_listen=0.0.0.0:5173
+last_frontend_src_commit=d878c3d7c95b482ee47b2d08571531cbad3b06fd 2026-09-30T17:12:07+08:00
+frontend_render_mode=vite dev server serving the working tree; working tree frontend/src is clean at git HEAD
+frontend_log=runtime-logs/CLIENT-CONFIG-LIST-MENU-LIVE-READONLY-SUPPLEMENT-002/frontend-5173.log
+
+node_version=v24.17.0
+java_version=java version "1.8.0_202"
+local_front_url=http://127.0.0.1:5173/config/client
+lan_front_url=http://192.168.174.70:5173/config/client
+backend_url=http://192.168.174.70:8080
+external_reachability=NOT_TESTED (LAN URL derived from listener; no firewall/network verification)
+
+browser_engine=chromium (playwright-core)
+browser_executable=/root/.cache/ms-playwright/chromium-1217/chrome-linux64/chrome
+browser_headless=true
+
+raw_sample_file=/tmp/live-supp002/clients.json (mode 600, repository-external)
+database_access=NONE
+zookeeper_access=NONE
+kafka_access=NONE
+business_writes=0
+non_get_api_attempts_browser_context=0
+
+# Notes / limitations
+# - The existing jar predates this task and was not rebuilt (task forbids builds).
+#   Last backend source commit is older than the jar mtime, so the jar is not older
+#   than backend source; this is compatibility evidence, not a proof of bit-identical rebuild.
+# - Vite serves the working tree directly; frontend/src had no local modifications.
+# - Success-path enable legs are reused from the reviewed T02 evidence, not re-executed.

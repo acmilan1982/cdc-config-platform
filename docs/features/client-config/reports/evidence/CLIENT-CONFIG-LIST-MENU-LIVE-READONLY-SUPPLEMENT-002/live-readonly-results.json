@@ -1,0 +1,513 @@
+{
+  "task": "CLIENT-CONFIG-LIST-MENU-LIVE-READONLY-SUPPLEMENT-002",
+  "mode": "readonly-live-browser-probe",
+  "base": "1c87312f8afb5ba4e4367120b4ace6b7dfa96216",
+  "frontend": "http://127.0.0.1:5173",
+  "browser": {
+    "engine": "chromium",
+    "executable": "/root/.cache/ms-playwright/chromium-1217/chrome-linux64/chrome",
+    "headless": true
+  },
+  "gate": {
+    "policy": "/api/** GET/HEAD/OPTIONS allow; other methods abort+count",
+    "nonGetAttempts": 0,
+    "attempts": []
+  },
+  "sample": {
+    "totalRows": 16,
+    "fgActiveCounts": {
+      "exact_1": 1,
+      "exact_0": 15,
+      "abnormal_non_0_1": 0
+    },
+    "aliases": [
+      {
+        "alias": "T01",
+        "state": "enabled"
+      },
+      {
+        "alias": "T02",
+        "state": "disabled"
+      },
+      {
+        "alias": "T03",
+        "state": "disabled"
+      },
+      {
+        "alias": "T04",
+        "state": "disabled"
+      },
+      {
+        "alias": "T05",
+        "state": "disabled"
+      },
+      {
+        "alias": "T06",
+        "state": "disabled"
+      },
+      {
+        "alias": "T07",
+        "state": "disabled"
+      },
+      {
+        "alias": "T08",
+        "state": "disabled"
+      },
+      {
+        "alias": "T09",
+        "state": "disabled"
+      },
+      {
+        "alias": "T10",
+        "state": "disabled"
+      },
+      {
+        "alias": "T11",
+        "state": "disabled"
+      },
+      {
+        "alias": "T12",
+        "state": "disabled"
+      },
+      {
+        "alias": "T13",
+        "state": "disabled"
+      },
+      {
+        "alias": "T14",
+        "state": "disabled"
+      },
+      {
+        "alias": "T15",
+        "state": "disabled"
+      },
+      {
+        "alias": "T16",
+        "state": "disabled"
+      }
+    ],
+    "note": "Sample read live before the browser probe; counts are exact string FG_ACTIVE classification."
+  },
+  "viewports": {
+    "1440x900": {
+      "gate": {
+        "nonGetAttempts": 0,
+        "attempts": []
+      },
+      "structure": {
+        "headers": [
+          "序号",
+          "探针 ID",
+          "探针描述",
+          "采集数据源",
+          "数据源数量",
+          "操作"
+        ],
+        "hasStatusColumn": false,
+        "headersRightmost": "操作",
+        "actionColClassPresent": true,
+        "fixedCol": {
+          "th": {
+            "position": "sticky",
+            "right": "0px"
+          },
+          "td": {
+            "position": "sticky",
+            "right": "0px"
+          }
+        },
+        "horizontal": {
+          "scrollWidth": 1076,
+          "clientWidth": 1076,
+          "overflow": false,
+          "scrolledToMax": false,
+          "actionTdVisibleAtMaxScroll": null,
+          "actionTdVisibleWithoutOverflow": true
+        }
+      },
+      "markers": {
+        "rows": [
+          {
+            "alias": "T01",
+            "hasInactiveMark": false,
+            "hasAbnormalMark": false
+          },
+          {
+            "alias": "T02",
+            "hasInactiveMark": true,
+            "hasAbnormalMark": false
+          },
+          {
+            "alias": "T03",
+            "hasInactiveMark": true,
+            "hasAbnormalMark": false
+          },
+          {
+            "alias": "T04",
+            "hasInactiveMark": true,
+            "hasAbnormalMark": false
+          },
+          {
+            "alias": "T05",
+            "hasInactiveMark": true,
+            "hasAbnormalMark": false
+          },
+          {
+            "alias": "T06",
+            "hasInactiveMark": true,
+            "hasAbnormalMark": false
+          },
+          {
+            "alias": "T07",
+            "hasInactiveMark": true,
+            "hasAbnormalMark": false
+          },
+          {
+            "alias": "T08",
+            "hasInactiveMark": true,
+            "hasAbnormalMark": false
+          },
+          {
+            "alias": "T09",
+            "hasInactiveMark": true,
+            "hasAbnormalMark": false
+          },
+          {
+            "alias": "T10",
+            "hasInactiveMark": true,
+            "hasAbnormalMark": false
+          },
+          {
+            "alias": "T11",
+            "hasInactiveMark": true,
+            "hasAbnormalMark": false
+          },
+          {
+            "alias": "T12",
+            "hasInactiveMark": true,
+            "hasAbnormalMark": false
+          },
+          {
+            "alias": "T13",
+            "hasInactiveMark": true,
+            "hasAbnormalMark": false
+          },
+          {
+            "alias": "T14",
+            "hasInactiveMark": true,
+            "hasAbnormalMark": false
+          },
+          {
+            "alias": "T15",
+            "hasInactiveMark": true,
+            "hasAbnormalMark": false
+          },
+          {
+            "alias": "T16",
+            "hasInactiveMark": true,
+            "hasAbnormalMark": false
+          }
+        ],
+        "disabledRowsWithMark": 15,
+        "disabledRowsWithoutMark": 0,
+        "enabledRowsWithMark": 0,
+        "abnormalRowsWithMark": 0
+      },
+      "menus": {
+        "disabledRow": {
+          "alias": "T02",
+          "itemTexts": [
+            "启用",
+            "删除"
+          ],
+          "editDialogOpened": false,
+          "fixedSelectedRowsAfterOpen": 0,
+          "containsDelete": true,
+          "containsEnable": true,
+          "containsDisable": false
+        },
+        "enabledRow": {
+          "alias": "T01",
+          "itemTexts": [
+            "停用",
+            "删除"
+          ],
+          "editDialogOpened": false,
+          "fixedSelectedRowsAfterOpen": 0,
+          "containsDelete": true,
+          "containsEnable": false,
+          "containsDisable": true
+        },
+        "abnormalRow": "NOT_EXECUTED_NO_ABNORMAL_FG_ACTIVE_ROW_IN_CURRENT_SAMPLE"
+      },
+      "events": {
+        "hover": {
+          "backgroundColorBefore": "rgba(0, 0, 0, 0)",
+          "backgroundColorDuringHover": "rgba(244, 244, 245, 0.83)",
+          "backgroundColorAfter": "rgba(0, 0, 0, 0)",
+          "hoverChangedBackground": true,
+          "hoverReverted": true,
+          "fixedSelectedRowsDuringHover": 0
+        },
+        "triggerDoubleClick": {
+          "editDialogOpened": false,
+          "fixedSelectedRows": 0
+        },
+        "menuContainerClick": {
+          "editDialogOpened": false,
+          "fixedSelectedRows": 0,
+          "confirmBoxOpened": false
+        }
+      },
+      "confirmations": {
+        "enable": {
+          "openedAfterMenuClick": true,
+          "title": "启用探针",
+          "bodyContainsExactId": true,
+          "bodyMasked": "确定启用探针 <ID> 吗？",
+          "buttons": [
+            "取消",
+            "启用"
+          ],
+          "editDialogOpenedByMenuItemClick": false,
+          "fixedSelectedRowsWhileOpen": 0,
+          "nonGetAttemptsDelta": 0,
+          "messageBoxHiddenAfterCancel": true,
+          "fixedSelectedRowsAfterCancel": 0,
+          "editDialogOpenedAfterCancel": false
+        },
+        "disable": {
+          "openedAfterMenuClick": true,
+          "title": "停用探针",
+          "bodyContainsExactId": true,
+          "bodyMasked": "确定停用探针 <ID> 吗？",
+          "buttons": [
+            "取消",
+            "停用"
+          ],
+          "editDialogOpenedByMenuItemClick": false,
+          "fixedSelectedRowsWhileOpen": 0,
+          "nonGetAttemptsDelta": 0,
+          "messageBoxHiddenAfterCancel": true,
+          "fixedSelectedRowsAfterCancel": 0,
+          "editDialogOpenedAfterCancel": false
+        }
+      },
+      "final": {
+        "nonGetAttempts": 0,
+        "editDialogOpened": false,
+        "fixedSelectedRows": 0
+      }
+    },
+    "1920x1080": {
+      "gate": {
+        "nonGetAttempts": 0,
+        "attempts": []
+      },
+      "structure": {
+        "headers": [
+          "序号",
+          "探针 ID",
+          "探针描述",
+          "采集数据源",
+          "数据源数量",
+          "操作"
+        ],
+        "hasStatusColumn": false,
+        "headersRightmost": "操作",
+        "actionColClassPresent": true,
+        "fixedCol": {
+          "th": {
+            "position": "sticky",
+            "right": "0px"
+          },
+          "td": {
+            "position": "sticky",
+            "right": "0px"
+          }
+        },
+        "horizontal": {
+          "scrollWidth": 1556,
+          "clientWidth": 1556,
+          "overflow": false,
+          "scrolledToMax": false,
+          "actionTdVisibleAtMaxScroll": null,
+          "actionTdVisibleWithoutOverflow": true
+        }
+      },
+      "markers": {
+        "rows": [
+          {
+            "alias": "T01",
+            "hasInactiveMark": false,
+            "hasAbnormalMark": false
+          },
+          {
+            "alias": "T02",
+            "hasInactiveMark": true,
+            "hasAbnormalMark": false
+          },
+          {
+            "alias": "T03",
+            "hasInactiveMark": true,
+            "hasAbnormalMark": false
+          },
+          {
+            "alias": "T04",
+            "hasInactiveMark": true,
+            "hasAbnormalMark": false
+          },
+          {
+            "alias": "T05",
+            "hasInactiveMark": true,
+            "hasAbnormalMark": false
+          },
+          {
+            "alias": "T06",
+            "hasInactiveMark": true,
+            "hasAbnormalMark": false
+          },
+          {
+            "alias": "T07",
+            "hasInactiveMark": true,
+            "hasAbnormalMark": false
+          },
+          {
+            "alias": "T08",
+            "hasInactiveMark": true,
+            "hasAbnormalMark": false
+          },
+          {
+            "alias": "T09",
+            "hasInactiveMark": true,
+            "hasAbnormalMark": false
+          },
+          {
+            "alias": "T10",
+            "hasInactiveMark": true,
+            "hasAbnormalMark": false
+          },
+          {
+            "alias": "T11",
+            "hasInactiveMark": true,
+            "hasAbnormalMark": false
+          },
+          {
+            "alias": "T12",
+            "hasInactiveMark": true,
+            "hasAbnormalMark": false
+          },
+          {
+            "alias": "T13",
+            "hasInactiveMark": true,
+            "hasAbnormalMark": false
+          },
+          {
+            "alias": "T14",
+            "hasInactiveMark": true,
+            "hasAbnormalMark": false
+          },
+          {
+            "alias": "T15",
+            "hasInactiveMark": true,
+            "hasAbnormalMark": false
+          },
+          {
+            "alias": "T16",
+            "hasInactiveMark": true,
+            "hasAbnormalMark": false
+          }
+        ],
+        "disabledRowsWithMark": 15,
+        "disabledRowsWithoutMark": 0,
+        "enabledRowsWithMark": 0,
+        "abnormalRowsWithMark": 0
+      },
+      "menus": {
+        "disabledRow": {
+          "alias": "T02",
+          "itemTexts": [
+            "启用",
+            "删除"
+          ],
+          "editDialogOpened": false,
+          "fixedSelectedRowsAfterOpen": 0,
+          "containsDelete": true,
+          "containsEnable": true,
+          "containsDisable": false
+        },
+        "enabledRow": {
+          "alias": "T01",
+          "itemTexts": [
+            "停用",
+            "删除"
+          ],
+          "editDialogOpened": false,
+          "fixedSelectedRowsAfterOpen": 0,
+          "containsDelete": true,
+          "containsEnable": false,
+          "containsDisable": true
+        },
+        "abnormalRow": "NOT_EXECUTED_NO_ABNORMAL_FG_ACTIVE_ROW_IN_CURRENT_SAMPLE"
+      },
+      "events": {
+        "hover": {
+          "backgroundColorBefore": "rgba(0, 0, 0, 0)",
+          "backgroundColorDuringHover": "rgba(244, 244, 245, 0.83)",
+          "backgroundColorAfter": "rgba(0, 0, 0, 0)",
+          "hoverChangedBackground": true,
+          "hoverReverted": true,
+          "fixedSelectedRowsDuringHover": 0
+        },
+        "triggerDoubleClick": {
+          "editDialogOpened": false,
+          "fixedSelectedRows": 0
+        },
+        "menuContainerClick": {
+          "editDialogOpened": false,
+          "fixedSelectedRows": 0,
+          "confirmBoxOpened": false
+        }
+      },
+      "confirmations": {
+        "enable": {
+          "openedAfterMenuClick": true,
+          "title": "启用探针",
+          "bodyContainsExactId": true,
+          "bodyMasked": "确定启用探针 <ID> 吗？",
+          "buttons": [
+            "取消",
+            "启用"
+          ],
+          "editDialogOpenedByMenuItemClick": false,
+          "fixedSelectedRowsWhileOpen": 0,
+          "nonGetAttemptsDelta": 0,
+          "messageBoxHiddenAfterCancel": true,
+          "fixedSelectedRowsAfterCancel": 0,
+          "editDialogOpenedAfterCancel": false
+        },
+        "disable": {
+          "openedAfterMenuClick": true,
+          "title": "停用探针",
+          "bodyContainsExactId": true,
+          "bodyMasked": "确定停用探针 <ID> 吗？",
+          "buttons": [
+            "取消",
+            "停用"
+          ],
+          "editDialogOpenedByMenuItemClick": false,
+          "fixedSelectedRowsWhileOpen": 0,
+          "nonGetAttemptsDelta": 0,
+          "messageBoxHiddenAfterCancel": true,
+          "fixedSelectedRowsAfterCancel": 0,
+          "editDialogOpenedAfterCancel": false
+        }
+      },
+      "final": {
+        "nonGetAttempts": 0,
+        "editDialogOpened": false,
+        "fixedSelectedRows": 0
+      }
+    }
+  }
+}
