@@ -826,6 +826,17 @@ adjustment7_formal_acceptance_execution_status=NOT_RUN
 
 **数量口径确认 ≠ 157 条整体验收通过 ≠ 其他 AC 通过 ≠ 新的写入授权；静态证据重判 ≠ 本轮重新运行真实采集。**
 
+### 1.32 探针端管理描述保存边界定向验收（2026-11-03，`CLIENT-CONFIG-DESCRIPTION-SAVE-BOUNDARY-ACCEPTANCE-001`，只读前置阻断）
+
+- **性质**：仅 `/config/client` 的 `CCFG-AC-131`；**只读前置检索即触发任务前置停止**，未进入 S1–S5，未执行任何业务写入。
+- **身份绑定**：仅从仓库外候选映射 `T02` 精确绑定为别名 `OWNER_TEST_B`，不按列表顺序/行号；精确行匹配 1。
+- **只读前置通过项**：`fgActive='0'`、`status=DISABLED`、无行/源异常、无分配冲突、源集合与映射 token 一致、自排除候选源存在且 `selectable=true`、无占用。
+- **决定性阻断**：原描述为 **NULL**（响应无 `clientDesc`、全局 Jackson `non_null`、前序 readiness 前像亦为 null）；授权编辑接口 `PUT /api/clients/{originalClientId}` 将 null/空/纯空白描述归一为空并以业务码 `40102` 拒绝，授权范围内无任何 API 可写回 NULL，故任何编辑都不可逆；按任务前置“原值无法通过已知安全方式恢复则停止、不覆盖原记录”停止。
+- **结果**：业务写尝试 **0**、恢复写尝试 **0**；未做浏览器导航；原描述未被触碰；`CCFG-AC-131` 维持 `BLOCKED`；`changed_ids=[]`；统计 `PASS 84 / FAIL 0 / BLOCKED 59 / NOT_RUN 14 = 157`（未变）；四族 `REQ154 / AC157 / DESIGN89 / UI77`。
+- **证据**：`reports/evidence/CLIENT-CONFIG-DESCRIPTION-SAVE-BOUNDARY-ACCEPTANCE-001/`（脱敏；原始前像仅仓库外 600）；报告 `reports/CLIENT-CONFIG-DESCRIPTION-SAVE-BOUNDARY-ACCEPTANCE-001.md`。
+
+**前置阻断 ≠ 验收通过 ≠ 整体接受；未执行任何业务写入。**
+
 ## 2. 文档导航
 
 | 文档 | 职责 | 状态 |
@@ -921,6 +932,7 @@ adjustment7_formal_acceptance_execution_status=NOT_RUN
 | `reports/evidence/CLIENT-CONFIG-LIST-MENU-LIVE-READONLY-SUPPLEMENT-002/` | 本次只读补采的**脱敏、可追溯**证据（`probe-live-readonly.cjs` 只读探针 + `live-readonly-results.json` 脱敏结果〔当前样本直方图、两视口结构/标记/菜单/确认框/事件隔离、`nonGetAttempts=0`〕+ `env-and-version.txt` + `SHA256SUMS` + `README.md`；真实 ID/描述/机构/源 ID/凭据/连接串/原始 API 响应/业务整屏截图不入仓，别名→完整 ID 映射在仓库外 `600` 文件） | 已建立（2026-11-03） |
 | `reports/CLIENT-CONFIG-AC022-CONTROLLED-MULTIROW-ACCEPTANCE-001.md` | 探针端管理 **AC-022 受控多行样本补齐与定向验收**（单对象真实页面启用→两视口多行观察→停用恢复；业务写尝试 2；AC-022 维持 `BLOCKED`，仅剩“各若干条”口径待明确） | 已建立（2026-11-03） |
 | `reports/evidence/CLIENT-CONFIG-AC022-CONTROLLED-MULTIROW-ACCEPTANCE-001/` | 本次受控多行的**脱敏、可追溯**证据（`probe-ac022-multirow.mjs` + `AC022-multirow-results.json` + `verify-preconditions.mjs` + `precondition-T02.json` + `env-and-version.txt` + `SHA256SUMS` + `README.md`；真实 ID/前像/原始运行摘要在仓库外 mode 600） | 已建立（2026-11-03） |
+| `reports/CLIENT-CONFIG-DESCRIPTION-SAVE-BOUNDARY-ACCEPTANCE-001.md` | 探针端管理 **描述保存边界定向验收前置阻断**（只读前置：T02 精确绑定为 `OWNER_TEST_B`、`fgActive=0`、无异常/无冲突/源可选；阻断：原描述 NULL 且编辑接口拒绝空描述 `40102`，无法安全恢复，按前置停止且未写入；业务写 0；`CCFG-AC-131` 维持 `BLOCKED`；统计不变；脱敏证据见同目录 `evidence/`） | 已建立（2026-11-03，前置阻断，未完成验收） |
 | `reports/CLIENT-CONFIG-AC022-QUANTITY-CLARIFICATION-AND-EVIDENCE-REASSESSMENT-001.md` | 探针端管理 **AC-022 数量口径确认与既有证据重判**（纯文档静态重判；负责人 2026-11-03 明确“各至少 2 条”，逐原子复用前序真实 JSON 键；AC-022 `BLOCKED`→`PASS`，`changed_ids=[CCFG-AC-022]`，统计 `PASS 84 / FAIL 0 / BLOCKED 59 / NOT_RUN 14 = 157`；未重新运行采集/写入） | 已建立（2026-11-03；下一入口 `CHATGPT_REMOTE_CLIENT_CONFIG_AC022_QUANTITY_CLARIFICATION_AND_EVIDENCE_REASSESSMENT_REVIEW`） |
 
 ## 3. Feature 定位
@@ -1123,3 +1135,5 @@ adjustment7_formal_acceptance_execution_status=NOT_RUN
 **探针端管理 AC-022 受控多行样本补齐与定向验收的历史下一入口（已由 AC-022 数量口径确认与既有证据重判复审入口承接；2026-11-03，`CLIENT-CONFIG-AC022-CONTROLLED-MULTIROW-ACCEPTANCE-001`；上一条启动后列表/菜单只读补采复审入口已按其自身段落保留为历史）**：`CHATGPT_REMOTE_CLIENT_CONFIG_AC022_CONTROLLED_MULTIROW_ACCEPTANCE_REVIEW`。本轮仅对 `/config/client` 的 `CCFG-AC-022` 做单个原授权对象的真实页面启用→两视口多行观察→停用恢复：同一时点 **2 启用 / 14 停用**，业务写尝试 **2**（enable 1/disable 1/recovery 0），最终 GET `FG_ACTIVE='0'` 且业务字段零差异，**原业务状态已恢复**。`CCFG-AC-022` 仍为 `BLOCKED`（仅剩“各若干条”数量口径无批准阈值，不强判 `PASS`），`changed_ids=[]`，统计 `PASS 83 / FAIL 0 / BLOCKED 60 / NOT_RUN 14 = 157`。**受控启停 ≠ 157 条整体验收通过 ≠ 批准其他页面接入或迁移；“多行快照已取得” ≠ “若干条口径已批准”；提交/推送成功不代表远程复审通过。**
 
 **探针端管理 AC-022 数量口径确认与既有证据重判的现行下一入口（2026-11-03，`CLIENT-CONFIG-AC022-QUANTITY-CLARIFICATION-AND-EVIDENCE-REASSESSMENT-001`；上一条 AC-022 受控多行复审入口已按其自身段落保留为历史）**：`CHATGPT_REMOTE_CLIENT_CONFIG_AC022_QUANTITY_CLARIFICATION_AND_EVIDENCE_REASSESSMENT_REVIEW`（对象为本纯文档静态重判任务的结果提交，由 ChatGPT **从远程 Git** 对报告、状态格改动与定义行逐字节保护做独立复审）。本任务不重新运行业务验收、不启停服务、不做业务写入、不访问其他功能页面：负责人 2026-11-03 明确“各至少 2 条”后，逐原子复用前序 `CLIENT-CONFIG-AC022-CONTROLLED-MULTIROW-ACCEPTANCE-001` 的真实 JSON 键（同一时点 2 启用/14 停用；启用二次确认目标 ID 匹配、取消零写、仅 `fgActive`/`status` 变化、停用恢复；写尝试 enable 1/disable 1/recovery 0；`write_ledger.unsettled=2` 为门禁预留、不伪写为全部结算；真实故障恢复未执行），判定 `CCFG-AC-022` `BLOCKED`→`PASS`，`changed_ids=[CCFG-AC-022]`，统计 `PASS` **84** / `FAIL` **0** / `BLOCKED` **59** / `NOT_RUN` **14** = **157**；除 AC-022 状态 token 外 157 定义行逐字节不变，其余 156 个状态格不变；`CCFG-AC-082` 维持 `BLOCKED`（未制造异常值）。**数量口径确认 ≠ 157 条整体验收通过 ≠ 其他 AC 通过 ≠ 新的写入授权；静态证据重判 ≠ 本轮重新运行真实采集；提交/推送成功不代表远程复审通过。**
+
+**探针端管理描述保存边界定向验收的现行下一入口（2026-11-03，`CLIENT-CONFIG-DESCRIPTION-SAVE-BOUNDARY-ACCEPTANCE-001`；与本文件其他链相互独立，上方 AC-022 复审入口仍按其自身段落保留）**：`CHATGPT_REMOTE_CLIENT_CONFIG_DESCRIPTION_SAVE_BOUNDARY_ACCEPTANCE_REVIEW`（本任务在只读前置阶段因原描述 NULL 不可安全恢复而停止，未执行任何业务写入；该入口用于远程复审前置阻断证据与文档，**不**代表 `CCFG-AC-131` 已通过或整体已接受）。

@@ -652,6 +652,25 @@
 
 **数量口径确认 ≠ 157 条整体验收通过 ≠ 其他 AC 通过 ≠ 其他页面授权 ≠ 新的写入授权；静态证据重判 ≠ 本轮重新运行真实采集。**
 
+### 1.35 探针端管理描述保存边界定向验收前置阻断状态块（2026-11-03；`CLIENT-CONFIG-DESCRIPTION-SAVE-BOUNDARY-ACCEPTANCE-001`）
+
+| 项目 | 值 |
+|---|---|
+| 执行任务 | `CLIENT-CONFIG-DESCRIPTION-SAVE-BOUNDARY-ACCEPTANCE-001`（仅 `CCFG-AC-131`；只读前置检索即触发任务前置停止，未进入 S1–S5） |
+| 目标对象 | 别名 `OWNER_TEST_B`（仓库外候选映射 `T02` 精确绑定；不按列表顺序/行号；身份 SHA256 见证据） |
+| 只读前置（通过项） | 精确行匹配 `1`；`fgActive='0'`；`status=DISABLED`；`rowAnomalies=[]`；源无异常/无冲突；源集合与映射 token 一致；自排除候选源存在且 `selectable=true`、无占用 |
+| 阻断项 | 原描述为 **NULL**（只读 GET 无 `clientDesc` 字段；全局 Jackson `default-property-inclusion=non_null`；前序 readiness 前像独立记录 `clientDesc=null`） |
+| 不可恢复依据 | 授权编辑接口 `PUT /api/clients/{originalClientId}` 将 null/空/纯空白描述归一为空并以业务码 `40102`（`INVALID_CLIENT_DESC`）拒绝（`ClientConfigServiceImpl.normalizePayload` L532–537；`ClientConfigErrorCode` L18/L42）；无任何授权 API 可把该列写回 NULL，故任何有界编辑都不可逆 |
+| 处置 | 按任务前置“当前原值无法通过已知安全方式恢复，停止本批，不覆盖原记录”停止；业务写尝试 **0**；未做浏览器导航；未发送任何 `POST/PUT/PATCH/DELETE` |
+| 原描述状态 | 未被触碰，仍为 NULL；未报告 `RESTORED`（无写入即无恢复动作） |
+| 目标 AC 判定 | `CCFG-AC-131` 维持 **`BLOCKED`**（缺原值可恢复前提及 S1–S5 执行证据）；不预填 PASS |
+| `changed_ids` | `[]`（无状态 token 变化） |
+| 统计 | `PASS` **84** / `FAIL` **0** / `BLOCKED` **59** / `NOT_RUN` **14** = **157**（未变） |
+| 定义保护 | 157 条定义行与全部状态格逐字节不变；四族 `REQ154 / AC157 / DESIGN89 / UI77` |
+| 证据 | `reports/evidence/CLIENT-CONFIG-DESCRIPTION-SAVE-BOUNDARY-ACCEPTANCE-001/`（脱敏；原始前像仓库外 600） |
+
+**前置阻断 ≠ 验收通过 ≠ 整体接受；未执行任何业务写入。**
+
 ### 1.1 批准信息（2026-09-03 旧口径批准历史；本轮并发口径调整不在该次批准范围内，见 §1.2）
 
 | 项目 | 值 |
@@ -1113,3 +1132,4 @@
 | 2026-11-03 | 探针端管理**启动后列表/菜单只读补采**（`CLIENT-CONFIG-LIST-MENU-LIVE-READONLY-SUPPLEMENT-002`，按任务授权 START-ONLY 启动缺失的前后端后真实浏览器只读观察，**不**构建、**不**改产品、**不**执行任何业务写入）：开工 8080/5173 均无监听，按授权以既有 jar 启动后端（PID `8210`，`*:8080`）与 Vite dev（PID `8371`，`0.0.0.0:5173`）并保持运行；`GET /api/clients?status=ALL` 实测 `total_rows=16`，精确分类 `FG_ACTIVE='1'` **1**、`'0'` **15**、非 `'0'/'1'` 异常 **0**；两视口 `1440×900`／`1920×1080` 表头均无“状态”列、“操作”为最右固定列（`position=sticky`、`right=0px`），15/15 停用行带“停用”标记，停用行菜单 `[启用, 删除]`、启用行菜单 `[停用, 删除]`，启用/停用确认框标题/正文/按钮符合且仅取消，双击三点与点击菜单容器不打开编辑弹窗、固定选中行数 **0**；浏览器 context 级 `/api/**` 门禁 GET/HEAD/OPTIONS 放行、其余 abort 计数，两视口 `nonGetAttempts=0`（非库级零写审计）。**判定**：`CCFG-AC-022`、`CCFG-AC-082` 均**维持 `BLOCKED`**——AC-022 页面步骤/预期已本轮实测、成功态变化腿复用 T02 已审证据，唯一缺口是前置“启用与停用探针各若干条”当前启用仅 1 条且无已批准数量阈值（不擅自降为一条）；AC-082 固定列/两态菜单/事件隔离已实测，但三态同存前置不成立（当前异常 **0**，异常类菜单/标记未执行，不造样本、不拼接历史快照）；两条无直接反例，不判 `FAIL`。`changed_ids=[]`，未改任何状态格或定义行；统计保持 `PASS` **83** / `FAIL` **0** / `BLOCKED` **60** / `NOT_RUN` **14** = **157**；定义行 `REQ154 / AC157 / DESIGN89 / UI77` 相对 base `1c87312` 逐字节不变。**未**改产品源码/测试/样式/配置/依赖/模板/定义，**未**运行测试、构建、lint、类型检查，**未**访问数据库/ZooKeeper/Kafka/sync-client；业务写尝试 **0**。**只读补采 ≠ 写授权 ≠ 157 条整体验收通过 ≠ 批准其他页面接入或迁移。** | `CLIENT-CONFIG-LIST-MENU-LIVE-READONLY-SUPPLEMENT-002` |
 | 2026-11-03 | 探针端管理 **AC-022 受控多行样本补齐与定向验收**（`CLIENT-CONFIG-AC022-CONTROLLED-MULTIROW-ACCEPTANCE-001`，仅 `/config/client` 的 `CCFG-AC-022`）：沿用负责人对 T01/T02 的专用测试对象授权，仅按仓库外原 readiness 映射（报告别名 OWNER_TEST_B=原 T02）以完整 clientId 精确绑定，**未**用上一轮列表顺序 `T01..T16` 冒充身份。开工快照 16 行（`'1'`=1 / `'0'`=15 / 异常=0），目标为精确 `'0'` 且业务前像零漂移、无行异常、E1 无异常/冲突、E2 自排除可选。按决策 B 通过真实页面菜单→二次确认单击启用一次，取得**同一时点 2 启用 / 14 停用**多行快照，在 1440×900 与 1920×1080 记录标记与 GET 逐行一致、无“状态”列、最右操作列 `sticky/right=0`、多行菜单两态、多个停用行取消确认零写；随后经真实页面停用一次恢复。业务写尝试 **2**（enable 1 / disable 1 / recovery 0），被阻断非 GET **0**，写预算上限 3。恢复协调器已按 `4354e30` fail-closed 修订集成但本轮未触发真实故障注入。**业务结果：最终 GET `FG_ACTIVE='0'`、6 个业务字段零差异、“停用”标记恢复，原业务状态已恢复（不以 Git 状态替代）。** `CCFG-AC-022` **维持 `BLOCKED`**：本轮已补齐多行两态证据并重跑成功态变化腿，仅剩“各若干条”数量口径无经批准阈值，按约定不以“至少 2 条”充当正式阈值、不强判 `PASS`；无直接反例，不判 `FAIL`。AC-082 及其余 155 条不变；`changed_ids=[]`；统计 `PASS 83 / FAIL 0 / BLOCKED 60 / NOT_RUN 14 = 157`；定义行相对 base 逐字节不变。数据库直写 / ZooKeeper 写 `NOT_REQUESTED`；未保存/删除、未改关联源、未新增样本、未制造异常值；未访问 DB/ZK/Kafka/sync-client；未运行测试/构建/lint/类型检查。证据见证据目录（脚本、脱敏 JSON、环境/版本、索引、SHA256SUMS）。 | `CLIENT-CONFIG-AC022-CONTROLLED-MULTIROW-ACCEPTANCE-001` |
 | 2026-11-03 | 探针端管理 **AC-022 数量口径确认与既有证据重判**（`CLIENT-CONFIG-AC022-QUANTITY-CLARIFICATION-AND-EVIDENCE-REASSESSMENT-001`，**纯文档静态重判**）：负责人 2026-11-03 明确回复——**“AC-022 的‘启用与停用各若干条’按各至少 2 条理解，本轮样本满足前置。”** 采信范围仅限 AC-022 前置数量解释与该轮样本；保留定义行“各若干条”原文，不推断 157 条整体接受或其他 AC/页面授权。静态校验前序任务 `CLIENT-CONFIG-AC022-CONTROLLED-MULTIROW-ACCEPTANCE-001` 的证据哈希与真实 JSON 键（同一时点 2 启用/14 停用；`B2_enable`、`B3_post_enable_1440`、`B4_post_enable_diff`、`B5_readonly_1920`、`B6_disable`、`B7_final`；写尝试 enable 1/disable 1/recovery 0，取消周期 `writes_delta=0`；`write_ledger` 的 `unsettled=2` 为门禁预留，不伪写为全部已结算；恢复分支未执行）。判定 `CCFG-AC-022` **`BLOCKED`→`PASS`**，依据为负责人数量解释 + 前序真实证据，非照抄提示词或借用其他 AC 状态；`changed_ids=[CCFG-AC-022]`。统计由 `PASS 83 / FAIL 0 / BLOCKED 60 / NOT_RUN 14` 更新为 `PASS` **84** / `FAIL` **0** / `BLOCKED` **59** / `NOT_RUN` **14** = **157**；除 AC-022 状态 token 外 157 定义行逐字节不变，其余 156 个状态格不变；`CCFG-AC-082` 维持 `BLOCKED`（未制造异常值）。未重新运行业务验收/测试/构建/lint/类型检查/浏览器/探针，未启停服务，未访问业务接口/DB/ZK/Kafka/sync-client，未新增或修改证据目录。**数量口径确认 ≠ 157 条整体验收通过 ≠ 其他 AC 通过 ≠ 新的写入授权。** | `CLIENT-CONFIG-AC022-QUANTITY-CLARIFICATION-AND-EVIDENCE-REASSESSMENT-001` |
+| 2026-11-03 | 探针端管理 **描述保存边界定向验收前置阻断**（`CLIENT-CONFIG-DESCRIPTION-SAVE-BOUNDARY-ACCEPTANCE-001`，仅 `/config/client` 的 `CCFG-AC-131`，**只读前置检索即停止，未执行任何业务写入**）：沿用负责人对 T01/T02 的专用测试对象授权，仅按仓库外候选映射 `T02` 精确绑定为别名 `OWNER_TEST_B`（不按列表顺序/行号）；只读 GET 确认精确行唯一、`fgActive='0'`、`status=DISABLED`、无行/源异常、无分配冲突、源集合与映射 token 一致、自排除候选源 `selectable=true` 且无占用。**决定性阻断**：原描述为 **NULL**（响应无 `clientDesc`、全局 `non_null`、前序 readiness 前像亦记录 `clientDesc=null`），而授权编辑接口 `PUT /api/clients/{originalClientId}` 将 null/空/纯空白描述归一为空并以业务码 `40102` 拒绝，授权范围内无任何 API 可把该列写回 NULL，故任何有界编辑都不可逆；按任务前置“当前原值无法通过已知安全方式恢复，停止本批，不覆盖原记录”停止。业务写尝试 **0**、恢复写尝试 **0**，未做浏览器导航，未发送任何 `POST/PUT/PATCH/DELETE`，原描述未被触碰。`CCFG-AC-131` 维持 **`BLOCKED`**，`changed_ids=[]`；统计 `PASS 84 / FAIL 0 / BLOCKED 59 / NOT_RUN 14 = 157`（未变），四族 `REQ154 / AC157 / DESIGN89 / UI77`，其余定义行与状态格逐字节不变，`CCFG-AC-082` 维持 `BLOCKED`；脱敏证据见 `reports/evidence/CLIENT-CONFIG-DESCRIPTION-SAVE-BOUNDARY-ACCEPTANCE-001/`（原始前像仅仓库外 600）。**本任务未执行 S1–S5、未完成 AC-131、未宣布远程复审通过或整体接受** | `CLIENT-CONFIG-DESCRIPTION-SAVE-BOUNDARY-ACCEPTANCE-001` |

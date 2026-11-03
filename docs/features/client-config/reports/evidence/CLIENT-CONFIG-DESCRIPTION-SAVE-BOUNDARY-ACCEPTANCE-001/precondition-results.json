@@ -1,0 +1,73 @@
+{
+  "capturedAt": "2026-11-03T13:00:15Z",
+  "decision": {
+    "ac131Status": "BLOCKED",
+    "businessWritesAttempted": 0,
+    "preconditionsPassed": false,
+    "reason": "ORIGINAL_DESC_NULL_CANNOT_BE_RESTORED",
+    "writesBlockedBeforeSend": true
+  },
+  "http": {
+    "dataSourceOptionsBusinessCode": 200,
+    "dataSourceOptionsStatus": 200,
+    "dataSourceOptionsTotal": 13,
+    "listBusinessCode": 200,
+    "listStatus": 200,
+    "totalRows": 16
+  },
+  "mode": "readonly-get-precondition-only",
+  "preImage": {
+    "clientDescBlank": false,
+    "clientDescCodepoints": null,
+    "clientDescIsNull": true,
+    "clientDescPresent": false,
+    "clientDescUtf8Bytes": null,
+    "dataSourceAnomaliesCount": 0,
+    "dataSourceConflictCount": 0,
+    "dataSourceCount": 1,
+    "fgActive": "0",
+    "mappingTokenSha256List": [
+      "eb36a85cbc06528000f182e5c8f5913ce1deb51f9ba4afff9b9ac40ba37ec805"
+    ],
+    "rawDataSourceIdsSha256": "eb36a85cbc06528000f182e5c8f5913ce1deb51f9ba4afff9b9ac40ba37ec805",
+    "rowAnomaliesCount": 0,
+    "sourceTokenSha256List": [
+      "eb36a85cbc06528000f182e5c8f5913ce1deb51f9ba4afff9b9ac40ba37ec805"
+    ],
+    "status": "DISABLED"
+  },
+  "preconditions": {
+    "allMappingTokensPresentSelectableUnoccupied": true,
+    "dataSourceAnomaliesEmpty": true,
+    "dataSourceConflictsEmpty": true,
+    "exactRowMatchCount": 1,
+    "fgActiveIsZero": true,
+    "identityBoundFromCandidateMap": true,
+    "originalDescPresent": false,
+    "originalDescRestorableViaAuthorizedEditApi": false,
+    "rowAnomaliesEmpty": true,
+    "sourceSetMatchesMapping": true,
+    "statusIsDisabled": true
+  },
+  "restoration": {
+    "backendRejectsEmptyDesc": true,
+    "emptyDescBusinessCode": 40102,
+    "explanation": "Original description is NULL. The authorized edit endpoint (PUT /api/clients/{originalClientId}) normalizes null/empty/whitespace-only descriptions to empty and rejects them with business code 40102 (INVALID_CLIENT_DESC). No authorized API can write the column back to NULL, so any bounded edit would be irreversible.",
+    "restoreFeasible": false,
+    "stopReason": "ORIGINAL_DESC_NULL_CANNOT_BE_RESTORED"
+  },
+  "target": {
+    "alias": "OWNER_TEST_B",
+    "clientIdSha256": "efa33d71cddc350a90445ea52aa885c1d8c447430b55c27be01b3f3955140efd"
+  },
+  "task": "CLIENT-CONFIG-DESCRIPTION-SAVE-BOUNDARY-ACCEPTANCE-001",
+  "tokenChecks": [
+    {
+      "conflictCount": 0,
+      "occupied": false,
+      "present": true,
+      "selectable": true,
+      "tokenSha256": "eb36a85cbc06528000f182e5c8f5913ce1deb51f9ba4afff9b9ac40ba37ec805"
+    }
+  ]
+}

@@ -1,0 +1,24 @@
+# CLIENT-CONFIG-DESCRIPTION-SAVE-BOUNDARY-ACCEPTANCE-001 运行现场
+# 仅只读 GET 前置检索；未启动/停止服务，未构建，未安装依赖，未改配置。
+captured_at_utc=2026-11-03T13:00:15Z
+git_head=42a0aa2f880f4c14a117c500cc3038e32209ba3f
+git_branch=develop
+candidate_map=/root/cdc-controlled-toggle-readiness-001/candidate-map.json (mode 600, identity source)
+target_alias=OWNER_TEST_B (candidate-map alias T02)
+backend_jar=backend/target/cdc-config-platform-backend-1.0.0-SNAPSHOT.jar
+backend_jar_mtime=2026-09-22T12:21:27+0800
+backend_jar_sha256=efdbea827b6ab84dd47105d2cc130f0bc3c5b70dc78cc626b6421e1f9750a459
+backend_pid=8210
+backend_started=2026-11-03 19:47:16 +0800
+backend_listen=*:8080
+backend_url=http://127.0.0.1:8080
+frontend_pid=8371
+frontend_started=2026-11-03 19:47:33 +0800
+frontend_listen=0.0.0.0:5173
+frontend_url=http://127.0.0.1:5173
+java_version=java version "1.8.0_202"
+node_version=v24.17.0
+browser=NOT_USED (stopped before first navigation after precondition failure)
+probe=probe-description-save-preconditions.py
+probe_output=precondition-results.json
+raw_snapshot_dir=/root/cdc-description-save-boundary-001 (repo-external, mode 700/600)
