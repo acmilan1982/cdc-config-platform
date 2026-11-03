@@ -6,6 +6,7 @@
 > 性质：**纯文档定向纠错**。**不执行任何业务写入，不修改已批准定义，不重判验收状态，不创建样本，不连接数据库、不调用业务接口、不运行浏览器、不启停服务。**
 > 所有写执行项仍为 `NOT_REQUESTED / NOT_EXECUTED`；定义拟文仍为 `DRAFT_PENDING_REVIEW / NOT_APPROVED`；首批写方案仍为 `NOT_READY`。
 > 关系：R0 报告 `CLIENT-CONFIG-REMAINING-ACCEPTANCE-ENABLEMENT-PLAN-DRAFT-001.md` 作为**历史快照保留不回写**；本 R1 报告逐位置覆盖 R0 的对应缺陷，不覆盖权威定义与 157 个状态格。
+> **R2 修订注（`CLIENT-CONFIG-REMAINING-ACCEPTANCE-ENABLEMENT-PLAN-DRAFT-001-R2`）**：本文件由 R2 任务**原位最小修订**，起点 `develop` @ `46e367932437848945ab91c4f657d5125dc2429b`。**原 R1 复审入口 `CHATGPT_REMOTE_CLIENT_CONFIG_REMAINING_ACCEPTANCE_ENABLEMENT_PLAN_DRAFT_R1_REVIEW` 标为历史；现行复审入口为 `CHATGPT_REMOTE_CLIENT_CONFIG_REMAINING_ACCEPTANCE_ENABLEMENT_PLAN_DRAFT_R2_REVIEW`。** R2 仅修正 §4.2 证据复用口径（区分“已有可追溯证据 / 本批新增或需回归 / 本批不执行但此前已覆盖 / 现行仍缺”），撤回“未 PASS/NOT_RUN ⇒ 无历史证据”的推导，并收敛 §3.1 成功路径终态与 §3.5 `dataSources[]` 字段；**不表示 R2 已 `APPROVED`**，不改变任何定义、状态或写执行。
 
 ---
 
@@ -51,11 +52,11 @@
 
 R1 要求在两种方案中二选一。本报告选择**方案 A**：
 
-- **首批对象严格限定原值 `FG_ACTIVE='0'`**，顺序固定 `enable→disable`，最终回到 `'0'`，**恢复原值有保证**。
+- **首批对象严格限定原值 `FG_ACTIVE='0'`**，顺序固定 `enable→disable`；**成功路径的终态为原值 `'0'`**。若 E6/E7 请求失败或发生读后写竞态，按 §3.4/§3.7 停止并报告，**不能保证所有情况下都恢复原值**（不声称绝对恢复）。
 - **原值 `'1'` 的对象明确排除在首批之外**，不进入本批 W-A/W-B；它不是“已批准”或“可立即执行”的对象。若未来要覆盖原 `'1'`，须另立批次并使用 `disable→enable` 反向顺序（本报告不展开为可执行方案）。
 - 不选方案 B（完整写两分支），因为首批越少分支越可审；在原 `'0'` 单一分支上把对象、前像、停止条件与回退写实，比同时维护两条分支更不容易在恢复时丢失原状态。
 
-**W-A 与 W-B 的关系**：W-A 是 API 写腿（无浏览器），W-B 是同对象的 UI 确认/重载/重选腿（浏览器、后续独立授权）。两者都以原 `'0'` 为前提；W-B 的顺序由**当前/原值**决定，原 `'0'` 时同样为 `enable→disable`。两阶段合并执行后仍回到原 `'0'`，不允许丢失原状态。
+**W-A 与 W-B 的关系**：W-A 是 API 写腿（无浏览器），W-B 是同对象的 UI 确认/重载/重选腿（浏览器、后续独立授权）。两者都以原 `'0'` 为前提；W-B 的顺序由**当前/原值**决定，原 `'0'` 时同样为 `enable→disable`。两阶段合并执行**成功时**回到原 `'0'`；请求失败或竞态按 §3.4/§3.7 停止并报告，不声称无条件恢复。
 
 ### 3.2 对象与状态模型（首批专用对象）
 
@@ -91,7 +92,7 @@ R1 要求在两种方案中二选一。本报告选择**方案 A**：
 
 | 步 | 操作 | 请求/次数 | 期望 | 前像/核对 | 停止条件 |
 |---|---|---|---|---|---|
-| A0 | 运行前快照 | `GET /api/clients?status=ALL`（或按关键词），1 次只读 | 返回 200；找到唯一目标行 | 记录 `clientId`、`clientDesc`、`rawDataSourceIds`、`dataSourceIds[]`（含 `dataSourceId`/`org`/`anomalies`/`conflictClientIds`）、`fgActive`、`status`；确认 `fgActive='0'` | 找不到、重复命中、`fgActive≠'0'`、任一 token 的 `conflictClientIds` 非空 |
+| A0 | 运行前快照 | `GET /api/clients?status=ALL`（或按关键词），1 次只读 | 返回 200；找到唯一目标行 | 记录 `clientId`、`clientDesc`、`rawDataSourceIds`、`dataSources[]`（含 `dataSourceId`/`org`/`dataSourceName`/`anomalies`/`conflictClientIds`）、`possibleCommaDataSourceIds`、`rowAnomalies`、`dataSourceCount`、`fgActive`、`status`；确认 `fgActive='0'` | 找不到、重复命中、`fgActive≠'0'`、任一 token 的 `conflictClientIds` 非空 |
 | A1 | 候选/占用复核 | `GET /api/clients/data-source-options?excludeClientId=<原始 clientId>`，1 次只读 | 目标 token 的具体可判定性按 §3.3 | 记录候选是否存在、`notSelectableReason`；**不以缺席判定无占用** | 任何 token 在 E1 显示他人占用，或异常无法解释 |
 | A2 | 启用 | `PUT /api/clients/{clientId}/enable`，**无请求体**，1 次写 | 成功 `code=200`；影响 1 行，`FG_ACTIVE '0'→'1'` | 变更字段**仅** `FG_ACTIVE` | 返回 40240/40440/40941 或其他非预期码；影响行数≠1；出现未计划请求 |
 | A3 | 启用后核对 | `GET /api/clients?status=ALL`，1 次只读 | `fgActive='1'`；其他字段与 A0 一致 | 逐字段比对 A0 | 任何非 `FG_ACTIVE` 字段变化、目标消失、出现占用冲突 |
@@ -143,37 +144,45 @@ R1 要求在两种方案中二选一。本报告选择**方案 A**：
 4. **AC-115 不映射到 W-B**：`onEnable/onDisable` 使用 `busyClientIds/rowBusy`；`submitDialog` 才设置 `submitting`。E6/E7 往返不会触发 AC-115 的保存加载态。保存写另立后续批次。
 5. **AC-156 分两类**：行高/命中区/焦点/窄视口/真实 125% 缩放已有已审历史证据，**首批不重跑、可复用**；**现行仍缺**的是“多次重载响应交错”的竞态，顺序单请求不能宣称覆盖。
 
-### 4.2 纠正后的覆盖表（逐条按定义）
+### 4.2 纠正后的覆盖表（四类证据口径）
 
-> 列义：`本批可补` = 首批 W-A/W-B 实际能执行的步骤；`本批不含` = 按该 AC 自身定义仍缺、且本批不执行的步骤；`既有可复用` = 已审历史证据（不重跑）；`未来可判性` = 是否可能在既有证据 + 本批完整步骤后覆盖全部要求。**本轮不翻任何状态。**
+> **列义（R2 起）**：
+> - **已有可追溯的实际证据**：已入仓、可回指的验收证据（文件 + JSON 键 + 观察内容）；不因该 AC 当前为 `BLOCKED`/`NOT_RUN` 而清零。
+> - **本批新增采集/需回归的步骤**：首批 W-A/W-B 计划实际执行的步骤，或需在真实对象上回归的既有观察。
+> - **本批不执行但此前已覆盖（复用，不重跑）**：本批不执行、但已有客观证据可直接复用的步骤。
+> - **现行仍缺（本批不能补）**：按该 AC 自身定义确实仍缺、且首批对象/授权/边界内不能补齐的步骤。
+> - **未来可判性**：既有证据 + 本批完整步骤后能否由未来独立任务覆盖全部要求。**本轮不翻任何状态。**
+>
+> 证据简称：`002` = `reports/evidence/CLIENT-CONFIG-TARGETED-READONLY-ACCEPTANCE-SUPPLEMENT-002/`（采集 `2026-09-30T16:29:15Z`）；`round7` = `reports/evidence/CLIENT-CONFIG-ROUND7-TARGETED-ACCEPTANCE-AND-VISUAL-RECORD-001/round7-targeted-readonly-results.json`；`zoom` = `reports/evidence/CLIENT-CONFIG-ROW-HEIGHT-AND-OPTIONAL-ELLIPSIS-IMPLEMENTATION-001-R1/real-zoom-summary.json`。**验收状态（`BLOCKED`/`NOT_RUN`）不是证据；不得以状态格替代证据检索。**
 
-| AC | 本批可补 | 本批不含（按自身定义） | 既有可复用 | 未来可判性 |
-|---|---|---|---|---|
-| `CCFG-AC-022` | E6 启用写；E1 观察 `FG_ACTIVE='1'`；两视口无“状态”列；下拉“启用”、确认、成功后“停用”标记消失 | 定义前置“列表含启用与停用探针**各若干条**”未满足（首批只有一个原 `'0'` 对象） | 无（本条未 PASS） | 不能仅凭本批判整条；需多行启停样本 |
-| `CCFG-AC-023` | W-B 先 E6 形成启用行，再执行停用：确认框含探针 ID、确认后 `FG_ACTIVE='0'`、状态变停用、标记出现；入口在“更多”下拉 | 无（按定义步骤可由 W-B 完整执行；启用行由本批 E6 形成） | 无（NOT_RUN） | **可供未来独立重判**（本批完整步骤后可能覆盖全部要求）；本轮不翻状态 |
-| `CCFG-AC-024` | E6 启用写；E1 观察 `FG_ACTIVE='1'` | 定义要求观察“与该探针对应进程”并证明未直接启停/重启/通知 `sync-client`、未操作 ZK/Kafka；本批**不授权**进程/ZK/Kafka 观察 | 无（NOT_RUN） | 不能仅凭本批判整条；缺进程/ZK/Kafka 腿 |
-| `CCFG-AC-026` | **不覆盖**（异常对象不在首批） | 异常 `FG_ACTIVE` 记录的下拉无“启用”、停用归零、删除 | 历史夹具仅为历史观察 | 不能；需异常对象与 E5/E7 授权 |
-| `CCFG-AC-027` | **不覆盖**（正常对象不具异常数据源前置） | 关联停用/不存在/逗号/重复分配数据源的停用/删除/启用阻断 | 历史夹具仅为历史观察 | 不能；需异常数据源对象与写授权 |
-| `CCFG-AC-082` | 原 `'0'` 行下拉；E6 后短暂 `'1'` 行下拉；两视口“操作”列固定；点击“更多”不触发双击编辑、无选中视觉 | 定义要求**同时存在** `'1'`、`'0'` 与非 `0/1` **异常**三类记录；首批无异常行、无三类共存 | 无 | 不能仅凭本批判整条；需异常样本与三类共存 |
-| `CCFG-AC-083` | **不覆盖**（异常对象不在首批） | 异常行下拉只含删除/停用、不含启用；停用后归 `0` | 历史夹具仅为历史观察 | 不能；需异常对象与 E7 授权 |
-| `CCFG-AC-084` | E6/E7 的启用/停用确认与写语义；取消/确认路径；确认框先关闭后请求 | 定义要求执行**删除**；制造**请求慢与重复点击**；制造**业务冲突**；观察失败反馈与复位 | 无 | 不能；缺删除、慢请求、冲突与失败分支 |
-| `CCFG-AC-103` | 单击/双击三点触发器、菜单内交互不冒泡打开编辑；启用/停用的取消/确认路径；一次确认一次写 | 定义要求对**删除/停用/启用各执行一次**（含取消与确认）；失败复位；行级忙碌期间入口/条目禁用、不重复提交——慢请求下才可稳定观察 | 无 | 不能；缺删除、失败复位、慢请求忙碌观察 |
-| `CCFG-AC-115` | **不覆盖**（启停走 `busyClientIds/rowBusy`，非 `submitting`） | 新增/编辑弹窗**主提交按钮**的正常/悬停/聚焦/按下、`submitting` 加载态、不重复提交、不蓝黑跳色；需保存写 | 无 | 不能；保存写另立后续批次 |
-| `CCFG-AC-139` | 先 E6 形成 `'1'` 行；停用确认标题/正文/按钮；取消 0 写、状态不变；确认成功 `FG_ACTIVE='0'` | 定义要求**制造一次停用失败**（业务冲突或网络错误），观察失败提示与状态不变 | 无 | 不能；缺失败分支 |
-| `CCFG-AC-140` | 原 `'0'` 行；启用确认标题/正文/按钮；取消 0 写、状态与固定选中不变；确认恰 1 次写、成功 `'1'` | 定义要求**制造一次启用失败**（重复分配冲突或网络错误），观察失败提示与状态不变；可计数写请求 | 无 | 不能；缺失败分支 |
-| `CCFG-AC-145` | 单行固定选中；取消确认不改变选中；在状态筛选“启用/停用”下启停后按可见性清除/固定选中 | 定义前置“列表含**多条**启用/停用探针”；步骤①对 A 行选中、对**另一行 B** 启停；删除成功/取消/失败分支；启停失败分支 | 无 | 不能；缺多行 A/B、删除与失败分支 |
-| `CCFG-AC-151` | 原 `'0'` 行；启用确认按钮正常/悬停/按下/键盘焦点；取消 0 写；单击确认后先关闭、恰 1 次 E6 | 无（按定义步骤可由 W-B 完整执行） | 无 | **可供未来独立重判**；本轮不翻状态 |
-| `CCFG-AC-152` | 先 E6 形成 `'1'` 行；停用确认按钮正常/悬停/按下/键盘焦点；取消 0 写、列表不变；单击确认后先关闭、恰 1 次 E7 | 无（按定义步骤可由 W-B 完整执行） | 无 | **可供未来独立重判**；本轮不翻状态 |
-| `CCFG-AC-153` | 单行固定选中/再次取消/双击编辑/行内控件事件隔离；启用/停用成功重载后的重选；页面无复选框/多选/批量入口 | 定义要求核对**多条**探针下点击其他行转移选中；普通查询/重试/删除成功等普通重载清除选中；首批单对象、无删除与重试 | 无 | 不能；缺多行转移、删除成功重载、重试 |
-| `CCFG-AC-156` | 一次启用确认与重载、一次停用确认与重载；单次重载后的固定选中；单击/再次取消/双击/键盘/菜单事件隔离；悬停与固定配色 | 定义期望中的**多次重载响应交错**竞态：顺序单请求无法制造/证明交错；本批不宣称覆盖 | 行高/命中区/焦点/窄视口/真实 125% 缩放已有已审历史证据，**首批不重跑、可复用**，不列为“仍缺” | 不能仅凭本批判整条；缺多次重载交错 |
+| AC | 已有可追溯的实际证据（来源+内容） | 本批新增采集/需回归的步骤 | 本批不执行但此前已覆盖（复用，不重跑） | 现行仍缺（本批不能补） | 未来可判性 |
+|---|---|---|---|---|---|
+| `CCFG-AC-022` | `002 s2-list-results.json → viewports.*.structure`：`hasStatusColumn=false`、六列表头；`menu.itemTexts=["启用","删除"]`（停用行）；`idMarkers` 第 1–15 行为“停用”标记；`002 s2-confirm-results.json → viewports.*.enableBox`（标题/正文/按钮）与 `enablePrimary` 各态。 | W-B 对原 `'0'` 行执行“更多→启用”确认：确认框先关闭、恰 1 次 E6、E1 `fgActive='1'`、重载后 ID 后“停用”标记消失；两视口 1440×900/1920×1080 观察。 | 无“状态”列观察、停用行下拉观察、确认框结构与主按钮视觉观察、标记视觉观察——002 已覆盖，不重跑（执行时若回归视觉，属计划回归而非首次覆盖）。 | 定义前置“列表含启用与停用探针**各若干条**”未满足：首批仅一个原 `'0'` 对象，启用后只有短期一条 `'1'`；多行稳定样本仍缺。 | 不能仅凭本批判整条；需多行启停样本后独立重判。 |
+| `CCFG-AC-023` | `002 s2-confirm-results.json → viewports.*.disableBox`（标题“停用探针”、正文、按钮“取消/停用”、`cc-confirm--disable`）与 `disablePrimary` 各态；`writeInterception.nonGetAttempts=0` 与探针 `cancelBox`（`probe-s2-confirm.cjs` 157/165 行）表明取消观察 0 写；`002 s2-list-results.json → viewports.*.abnormalRowMenu.itemTexts=["停用","删除"]`（该观察取自异常行 `idx=16`）。 | W-B 先 E6 形成真实 `'1'` 行；在真实 `'1'` 行回归停用确认框（此前 `disableBox` 取自异常行）；取消 0 写；单击确认 → 先关闭后请求、恰 1 次 E7、E1 `fgActive='0'`、ID 后“停用”标记出现、列表重载。 | 停用确认框标题/正文/按钮与主按钮各视觉态、取消不写的观察——002 已覆盖；真实 `'1'` 行回归属本批计划回归。 | —（按本条定义，W-B 形成 `'1'` 行后可完整执行；不以 `NOT_RUN` 推导“无历史证据”）。 | **可供未来独立重判**；本轮不翻状态。 |
+| `CCFG-AC-024` | `002 s2-confirm-results.json → viewports.*.enableBox`/`enablePrimary`（原 `'0'` 行 `targets.offRowIdx=1`）与 `writeInterception.nonGetAttempts=0`；`002 s2-list-results.json → viewports.*.menu.itemTexts=["启用","删除"]`。 | W-A E6 写 + E1 `fgActive='1'`；W-B 启用确认成功。 | 启用确认框/主按钮视觉观察、菜单条目观察、取消 0 写观察——002 已覆盖。 | 与该探针对应进程的观察；证明未直接启停/重启/通知 `sync-client`、未操作 ZooKeeper/Kafka——本批不授权。 | 不能仅凭本批判整条；缺进程/ZK/Kafka 腿。 |
+| `CCFG-AC-026` | `002 s2-list-results.json → viewports.*.idMarkers[15]`：`abnormal` 为“异常：”红标；`viewports.*.abnormalRowMenu.itemTexts=["停用","删除"]`（无“启用”）；`abnormalRowCount=1`。 | 本批不采集（异常对象不在首批；E6 对非 `0/1` 返回 40240，且无 API 恢复异常原值）。 | 异常红标视觉观察、异常行下拉条目（无“启用”）观察——002 已覆盖。 | 异常记录 E7 停用归 `'0'`、E5 删除；首批不执行且无安全恢复路径。 | 不能；需异常对象与 E7/E5 授权。 |
+| `CCFG-AC-027` | `002 s2-dialog-results.json → sampleFacts`：`anomalousRows=8`、`ambiguousRows=1`、`multiSourceWithAnomaly=true`；`002 s2-list-results.json → idMarkers` 异常红标与 `abnormalRowMenu` 条目。 | 本批不采集（正常对象不具备“关联停用/不存在/含逗号/重复分配数据源、状态为启用”的前置）。 | 异常/歧义样本存在性观察、行级异常标记与菜单观察——002 已覆盖；不借用相邻 AC 的 `PASS`。 | 状态为启用的异常数据源探针上的 E7 停用、E5 删除、E6 启用（含重复分配冲突阻断）。 | 不能；需此类对象与写授权。 |
+| `CCFG-AC-082` | `002 s2-list-results.json → viewports.*.structure.headersRightmost="操作"`、六列表头；`menu.itemTexts=["启用","删除"]`（`'0'` 行）；`abnormalRowMenu.itemTexts=["停用","删除"]`（异常行）；`rowEventIsolation.editDialogOpened=false`；`rowClick` 固定选中/再次取消/切换他行；三视口 1440×900/1920×1080/900×800。 | W-B E6 形成 `'1'` 行后读取该行下拉（应为“停用/删除”）；确认 `'1'`、`'0'`、异常三类共存；点击“更多”无选中视觉、不触发双击编辑。 | 最右固定“操作”列观察、`'0'` 行与异常行下拉观察、菜单事件隔离观察——002 已覆盖，不重跑。 | —（执行时若异常行或 `'0'` 行样本漂移，则该项需重判；本批未执行前不声称已覆盖）。 | **可供未来独立重判**（E6 后三类共存；异常行既有）。 |
+| `CCFG-AC-083` | `002 s2-list-results.json → viewports.*.idMarkers[15].abnormal`（“异常：”红标）与 `abnormalRowMenu.itemTexts=["停用","删除"]`（无“启用”）。 | 本批不采集（异常对象不在首批）。 | 异常行下拉条目（无“启用”）观察——002 已覆盖。 | 异常记录 E7 停用后 `FG_ACTIVE→0`、E5 删除；首批不执行且无安全恢复路径。 | 不能；需异常对象与 E7/E5 授权。 |
+| `CCFG-AC-084` | `002 s2-list-results.json → menu.itemTexts=["启用","删除"]`、`abnormalRowMenu.itemTexts=["停用","删除"]`、`menuHoverNonDanger`、`keyboardMenu`；`002 s2-confirm-results.json → enableBox`/`disableBox`/`enablePrimary`/`disablePrimary`；`writeInterception.nonGetAttempts=0`。 | W-B 启用/停用各一次确认；确认框先关闭后请求、恰 1 次写；取消 0 写；成功后状态。 | 菜单条目观察、确认框结构与主按钮视觉观察、取消 0 写观察——002 已覆盖。 | E5 删除；慢请求与重复点击；业务冲突失败反馈与行级忙碌复位。 | 不能；缺删除、慢请求、冲突与失败分支。 |
+| `CCFG-AC-103` | `002 s2-list-results.json → viewports.*.rowEventIsolation`：`singleClickTrigger`/`doubleClickTrigger`/`doubleClickMenuItem` 三者 `editDialog.visible=false`；`rowClick` 固定选中行为；`keyboardMenu`；`002 s2-confirm-results.json` 的 `cancelBox` 与 `writeInterception.nonGetAttempts=0`（取消 0 写）；`enableBox`/`disableBox`。 | W-B 启用/停用各一次确认，观察恰 1 次写；取消 0 写；若执行时出现真实行级忙碌，记录入口/条目禁用与不重复提交（慢请求不在首批）。 | 单击/双击触发器、菜单项区域双击不误开编辑；取消确认 0 写——002 已覆盖。 | E5 删除；失败复位；慢请求下行级忙碌禁用与不重复提交。 | 不能；缺删除、失败复位、慢请求忙碌观察。 |
+| `CCFG-AC-115` | `002 s2-dialog-results.json → viewports.*.create.submitStates` 与 `edit.submitStates`：`normal` bg `rgb(9, 9, 11)`、`hover` `rgb(39, 39, 42)`、`pressed` `rgb(24, 24, 27)`、`focusTab`（`tabFrom="取消"`）`rgb(39, 39, 42)`；`secondary.cancel`/`secondary.autogen` bg `rgb(255, 255, 255)`、color `rgb(96, 98, 102)`、border `rgb(220, 223, 230)`；`edit.idToggleStyle` bg `rgba(0, 0, 0, 0)`、color `rgb(64, 158, 255)`；`edit.idKeyboard`（`inputDisabledBefore=true`、`toggleText="修改探针 ID"`、`hasLockHint=true`）。 | 本批不采集（启停走 `busyClientIds/rowBusy`，非 `submitting`；保存 loading 另立后续批次）。 | 新增/编辑主提交按钮正常、Hover、按下、真实 Tab 焦点观察；次要按钮非黑观察；修改探针 ID 未变黑观察——002 已覆盖，不重跑。 | 保存请求中的 `submitting`/`loading` 外观、loading 期间不可重复提交、无蓝黑跳色；需保存写与请求延迟。 | 不能；保存写另立后续批次。 |
+| `CCFG-AC-139` | `002 s2-confirm-results.json → viewports.*.disableBox`（标题/正文/按钮/`cc-confirm--disable`）与 `disablePrimary` 各态；`cancelBox` + `writeInterception.nonGetAttempts=0`；`002 s2-list-results.json → abnormalRowMenu`（取自异常行 `idx=16`）。 | W-B 先 E6 形成真实 `'1'` 行；停用确认：取消 0 写、状态不变；单击确认 → 先关闭后请求、恰 1 次 E7、成功后 `'0'` 与“停用”标记出现；在真实 `'1'` 行回归确认框。 | 停用确认框结构/视觉观察、取消 0 写观察——002 已覆盖；真实 `'1'` 行回归属本批计划回归。 | 制造一次停用失败（业务冲突或网络错误）的失败提示与状态不变。 | 不能；缺失败分支。 |
+| `CCFG-AC-140` | `002 s2-confirm-results.json → targets.offRowIdx=1`（真实 `'0'` 行）、`enableBox`（标题/正文/按钮/`cc-confirm--enable`）、`enablePrimary` 各态；`cancelBox` + `writeInterception.nonGetAttempts=0`；`002 s2-list-results.json → menu.itemTexts=["启用","删除"]`、`structure.idMarkers` 第 1–15 行“停用”标记。 | W-B 原 `'0'` 行：确认框读取、取消 0 写、固定选中不变；单击确认 → 先关闭后请求、恰 1 次 E6、成功后 `'1'`、标记消失。 | 确认框结构/视觉观察、取消 0 写观察、菜单条目观察——002 已覆盖。 | 制造一次启用失败（重复分配冲突或网络错误）的失败提示与状态不变；连续操作不重复请求的失败/慢请求分支。 | 不能；成功与写计数腿本批可补，失败分支仍缺。 |
+| `CCFG-AC-145` | `002 s2-list-results.json → rowClick.afterFirstClick.highlightRows=[1]`、`afterSecondClickSame=[]`、`afterClickOtherRow=[3]`；`structure.batchAbsence`（`hasSelectionColumn=false`/`hasRowCheckbox=false`/`hasDeleteSelected=false`/`hasBatchWord=false`/`hasSelectedHint=false`）；`rowEventIsolation`；`keyboardMenu`。 | W-B 单行固定选中；取消确认不改变选中；启停成功后按可见性重选（单对象）。 | 单行固定/再次取消/切换他行观察、无复选框/多选/批量入口观察、行内控件事件隔离观察——002 已覆盖。 | 多条探针下对另一行 B 启停的 A/B 转移；状态筛选下目标消失清除选中；删除成功/取消/失败；启停失败分支。 | 不能；缺多行 A/B、删除与失败分支。 |
+| `CCFG-AC-151` | `002 s2-confirm-results.json → targets.offRowIdx=1`（真实 `'0'` 行）、`enableBox`（标题“启用探针”、正文 `确定启用探针 <ID> 吗？`、按钮“取消/启用”、`cc-confirm--enable`）、`enablePrimary` 的 `normal`/`autoFocusResting`/`hover`/`pressed`/`focusTab`（黑底白字、焦点环 `2px rgb(160, 207, 255)`）；`cancelBox` + `writeInterception.nonGetAttempts=0`；`002 s2-list-results.json → menu.itemTexts=["启用","删除"]`。 | W-B 原 `'0'` 行实际单击“启用”：确认框先关闭、随后恰 1 次 E6、成功后 `'1'`、标记消失；一次确认只写一次。 | 主确认按钮正常/悬停/按下/键盘焦点各态观察、标题/正文/按钮文案观察、取消 0 写观察——002 已覆盖，不重跑（如需视觉回归，属计划回归，不是此前未覆盖）。 | —（按本条定义，既有证据 + W-B 完整步骤可覆盖全部要求；本轮未执行，不预判）。 | **可供未来独立重判**；本轮不翻状态。 |
+| `CCFG-AC-152` | `002 s2-confirm-results.json → disableBox`（标题“停用探针”、正文 `确定停用探针 <ID> 吗？`、按钮“取消/停用”、`cc-confirm--disable`）、`disablePrimary` 的 `normal`/`autoFocusResting`/`hover`/`pressed`/`focusTab`（黑底白字、焦点环）；`cancelBox` + `writeInterception.nonGetAttempts=0`；注意 `targets.onRowIdx=16` 为异常行，不是真实 `'1'` 行。 | W-B 先 E6 形成真实 `'1'` 行；停用确认实际单击 → 先关闭后请求、恰 1 次 E7、成功后 `'0'`、标记出现；在真实 `'1'` 行回归确认框视觉。 | 停用确认框标题/正文/按钮观察、主按钮各态观察、取消 0 写观察——002 已覆盖；真实 `'1'` 行上的视觉回归属本批计划回归，不是首次覆盖。 | —（按本条定义，W-B 形成 `'1'` 行后可完整执行）。 | **可供未来独立重判**；本轮不翻状态。 |
+| `CCFG-AC-153` | `002 s2-list-results.json → rowClick`（单行固定/再次取消/切换他行）、`structure.batchAbsence`、`rowEventIsolation`、`keyboardMenu`；`round7 → AC156_menu_isolation`（`editDialogOpen=false`）、`AC156_dblclick_edit`（`editDialogOpen=true`）。 | W-B 启停成功后普通重载的单对象重选；取消确认不改变选中。 | 单行固定/取消/切换观察、双击编辑观察、行内控件事件隔离观察、无复选框/多选/批量入口观察——002/round7 已覆盖。 | 多条探针下点击其他行转移（A/B）；普通查询/重试/删除成功等普通重载清除选中；删除成功重载；多行启停重选。 | 不能；缺多行、删除与重试。 |
+| `CCFG-AC-156` | `round7 → AC155_156_client_1440x900.rows[]`：`rowH=48`、`entryW/H=28`、`entryRadius="6px"`、`vCentered=true`、`boxInsideCell=true`、`boxInsideRow=true`；`AC156_focus`：`tabReached=true`、`outline=2px solid rgb(64, 158, 255)`、`outlineOffset="-2px"`、`ariaLabel="更多操作：<ID>"`；`AC156_regressions_readonly`；`AC156_menu_isolation`（`editDialogOpen=false`、`fixedSelectedRows=0`）；`AC156_dblclick_edit`（`editDialogOpen=true`、`fixedSelectedRows=1`）；`AC156_tab_reaches_ellipsis=true`；`zoom → zoomLegs.100/125.hitBoxCssPx` 均 `28×28`，125% 物理 `35×35`。 | W-B 一次启用确认与重载、一次停用确认与重载；单次重载后的固定选中；单击/取消/双击/键盘/菜单事件隔离回归观察。 | 行高/命中区/焦点/窄视口/真实 125% 缩放观察、单击固定/取消/切换观察、菜单隔离观察、双击编辑观察——round7/zoom 已覆盖，不重跑。 | 多次重载响应交错竞态（顺序单请求无法制造/证明交错）；写操作触发的多次重载竞态。 | 不能仅凭本批判整条；缺多次重载交错。 |
 
-**明确排除**：`CCFG-AC-026`、`CCFG-AC-027`、`CCFG-AC-083`（异常对象/异常数据源）与 `CCFG-AC-115`（保存 loading）不在首批覆盖表内。**首批不含**删除（E5）、失败注入、慢请求、进程/ZooKeeper/Kafka 观察、跨页对照、异常/歧义样本、恰好 6 源/字节边界/>256 生成样本。
+**明确排除**：`CCFG-AC-026`、`CCFG-AC-027`、`CCFG-AC-083`（异常对象/异常数据源）与 `CCFG-AC-115`（保存 loading）不在首批**执行**范围；其既有 002 可复用证据仍按下表复用，不因排除而清零。**首批不含**删除（E5）、失败注入、慢请求、进程/ZooKeeper/Kafka 观察、跨页对照、异常/歧义样本**的新采集**、恰好 6 源/字节边界/>256 生成样本的新采集。
 
 ### 4.3 不预置“所有 AC 都只能部分取证”
 
-- 上表逐条写的是**该 AC 自身定义下本批实际不含的步骤**，不是统一套用的“部分取证”结论。
-- `CCFG-AC-023`/`151`/`152` 在既有证据 + 本批完整步骤后，**可能**覆盖全部要求，因此只写“可供未来独立重判”；本轮仍不翻任何状态。
+- 上表逐条写的是**四类证据口径下的实际状态**，不把“本批不执行”直接等同于“按自身定义仍缺”，也不统一套用“部分取证”结论。
+- `CCFG-AC-023`/`082`/`151`/`152` 在既有证据 + 本批完整步骤后，**可能**覆盖全部要求，因此只写“可供未来独立重判”；本轮仍不翻任何状态。
 - 其余条目写出的缺口均有定义原文依据（多行样本、异常样本、删除、失败注入、慢请求、进程观察、多次重载交错等），**不为维持 `BLOCKED` 虚构新缺口**。
+- 本表各行均检索到至少一项可复用证据并已给出文件/JSON 键；**未使用状态格（`BLOCKED`/`NOT_RUN`）推导“无历史证据”**。仅当确实查不到可复用证据时才写“未找到”并注明检索范围；本表无此类“未找到”行。
 - 任何 AC 是否 `PASS`，由未来独立验收任务按完整定义重新判定；本报告不制造状态变更。
 
 ---
@@ -435,6 +444,9 @@ R5 的 `STEP MISSING` 属当时时点结论，不再冒充现行缺口。
 - **首批写方案**：`NOT_READY`；所有写 `NOT_REQUESTED / NOT_EXECUTED`
 - **未决项**：专用对象未绑定、隔离未成立、E1/E2 占用未实测、失败注入/慢请求未授权、API-017 与源码错误码差异待裁定、002 与 002-R1 jar 时间戳差异待裁定、AC-098 恰好 6 源样本当前可用性未知
 - **未执行项**：测试/构建/lint/浏览器/服务启停/数据库/接口/ZooKeeper/Kafka 全部未执行
-- **下一入口**：`CHATGPT_REMOTE_CLIENT_CONFIG_REMAINING_ACCEPTANCE_ENABLEMENT_PLAN_DRAFT_R1_REVIEW`
+- **下一入口（R1，历史）**：`CHATGPT_REMOTE_CLIENT_CONFIG_REMAINING_ACCEPTANCE_ENABLEMENT_PLAN_DRAFT_R1_REVIEW`（已由本 R2 修订承接，保留为历史）
+- **现行下一入口（R2）**：`CHATGPT_REMOTE_CLIENT_CONFIG_REMAINING_ACCEPTANCE_ENABLEMENT_PLAN_DRAFT_R2_REVIEW`
 
-**R1 草案 ≠ 定义获批 ≠ 样本具备 ≠ 写授权 ≠ 157 条整体验收通过；推送 ≠ 复审通过 ≠ 草案批准 ≠ 写授权。**
+**R2 修订记录（`CLIENT-CONFIG-REMAINING-ACCEPTANCE-ENABLEMENT-PLAN-DRAFT-001-R2`）**：本报告由 R2 任务原位修订，R2 base 为 `develop` @ `46e367932437848945ab91c4f657d5125dc2429b`；R1 的 base `37f30b730bace8eb97371578a3fd1071bbb494db` 与 R1 任务结果作为历史保留。R2 只修正 §4.2 四类证据口径、撤回状态推导并收敛 §3.1/§3.5，**不**表示 R2 已 `APPROVED`，不改变任何定义、状态或写执行；R2 结果提交见推送后的最终 `AGENT_TASK_RESULT`。
+
+**R1 草案 ≠ 定义获批 ≠ 样本具备 ≠ 写授权 ≠ 157 条整体验收通过；推送 ≠ 复审通过 ≠ 草案批准 ≠ 写授权。R2 修订同样不等于 `APPROVED`。**
