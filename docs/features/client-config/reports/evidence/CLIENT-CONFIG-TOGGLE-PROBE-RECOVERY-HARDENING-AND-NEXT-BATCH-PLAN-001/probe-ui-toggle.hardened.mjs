@@ -41,6 +41,7 @@ import {
   createRecoveryCoordinator,
   RECOVERY_ACTIONS,
 } from './recovery-coordinator.mjs'
+import { readPageState } from './page-state-adapter.mjs'
 
 const MAP = '/root/cdc-controlled-toggle-readiness-001/candidate-map.json'
 const PRE = '/root/cdc-controlled-toggle-readiness-001/pre-image-T02.json'
@@ -729,29 +730,35 @@ const main = async () => {
             const d = compareRows(preimage, cur.row)
             return { identityOk: true, exact: true, fgActive: cur.row.fgActive, businessDrift: d.forbidden, raw: cur }
           },
-          getPageState: async () => {
-            let pendingConfirm = false
-            try {
-              pendingConfirm = await page.evaluate(() => {
-                const mb = document.querySelector('.el-message-box')
-                if (!mb) return false
-                const ov = mb.closest('.el-overlay')
-                if (!ov) return mb.offsetParent !== null
-                const cs = getComputedStyle(ov)
-                return cs.display !== 'none' && cs.visibility !== 'hidden'
-              })
-            } catch (_) {
-              pendingConfirm = false
-            }
-            return {
-              writeAllowed: false,
-              // A normal disable that was allowed but has not returned is the
-              // only in-flight write recovery cares about. A recovery write is
-              // detected from the shared ledger inside pageAttempt instead.
-              inFlight: run.disable_outstanding === true,
-              pendingConfirm,
-            }
-          },
+          getPageState: () => readPageState({
+            // The page read is the ONLY source of pendingConfirm. If the page or
+            // context is gone, evaluate throws and the adapter returns unknown
+            // (never false), so recovery stops instead of treating it as safe.
+            evaluate: () => page.evaluate(() => {
+              const mb = document.querySelector('.el-message-box')
+              if (!mb) return false
+              const ov = mb.closest('.el-overlay')
+              if (!ov) return mb.offsetParent !== null
+              const cs = getComputedStyle(ov)
+              return cs.display !== 'none' && cs.visibility !== 'hidden'
+            }),
+            // writeAllowed/inFlight come from the shared ledger and the real
+            // request lifecycle, not a fixed literal.
+            lifecycle: () => {
+              const snap = ledger.snapshot()
+              const recoveryReserved = snap.entries.some(
+                (e) => e.kind === 'recovery-disable' && e.outcome === 'reserved',
+              )
+              return {
+                // A page-gate recovery write was allowed; the gate forwards it
+                // without inspecting the response, so its result is unknown.
+                writeAllowed: snap.counts['recovery-disable'] > 0,
+                // A normal disable allowed but not returned, or a recovery write
+                // whose result is still unknown, is genuinely in flight.
+                inFlight: run.disable_outstanding === true || recoveryReserved,
+              }
+            },
+          }),
           pageAttempt: async () => {
             setPhase('RECOVERY')
             const before = ledger.snapshot().counts['recovery-disable']
@@ -771,20 +778,10 @@ const main = async () => {
           apiWrite: async () => {
             const ac = new AbortController()
             const timer = setTimeout(() => ac.abort(), 15000)
-            let r
-            try {
-              r = await fetch(API + PATH_DISABLE, { method: 'PUT', signal: ac.signal })
-            } catch (eF) {
-              const err = new Error(String(eF.message || eF))
-              err.code = eF.name === 'AbortError' ? 'timeout' : 'disconnect'
-              throw err
-            } finally {
-              clearTimeout(timer)
-            }
-            let j = null
-            let parsed = true
-            try { j = await r.json() } catch (_) { parsed = false }
-            run.write_attempts.push({
+            // Record the attempt BEFORE the request leaves, so a timeout,
+            // disconnect or parse failure still appears in write_attempts and
+            // the summary never under-reports a write as zero.
+            const attempt = {
               phase: 'RECOVERY',
               method: 'PUT',
               path_template: '/api/clients/{T02}/disable',
@@ -792,11 +789,33 @@ const main = async () => {
               at: Date.now(),
               at_iso: new Date().toISOString(),
               out_of_browser: true,
-              status: r.status,
-              code: j?.code ?? null,
-            })
-            if (!parsed) return { outcome: 'parse-error', status: r.status }
-            return { outcome: r.ok ? 'success' : 'http-error', status: r.status, code: j?.code ?? null }
+              status: null,
+              code: null,
+              outcome: 'pending',
+            }
+            run.write_attempts.push(attempt)
+            let r
+            try {
+              r = await fetch(API + PATH_DISABLE, { method: 'PUT', signal: ac.signal })
+            } catch (eF) {
+              attempt.outcome = eF.name === 'AbortError' ? 'timeout' : 'disconnect'
+              const err = new Error(String(eF.message || eF))
+              err.code = attempt.outcome
+              throw err
+            } finally {
+              clearTimeout(timer)
+            }
+            attempt.status = r.status
+            let j = null
+            let parsed = true
+            try { j = await r.json() } catch (_) { parsed = false }
+            attempt.code = j?.code ?? null
+            if (!parsed) {
+              attempt.outcome = 'parse-error'
+              return { outcome: 'parse-error', status: r.status }
+            }
+            attempt.outcome = r.ok ? 'success' : 'http-error'
+            return { outcome: attempt.outcome, status: r.status, code: j?.code ?? null }
           },
         })
 
@@ -832,6 +851,7 @@ const main = async () => {
           http_outcome: rec.httpOutcome ?? null,
           fg_active_after: rec.final ? rec.final.fgActive : null,
           forbidden_diff_after: rec.final ? rec.final.businessDrift : null,
+          limitation: rec.limitation ?? null,
           ledger: rec.ledger || snapEnd,
         }
       }

@@ -19,9 +19,14 @@
 //     the fact and never refund the attempt;
 //   * reads (GET/HEAD/OPTIONS) must never reserve.
 //
-// Coordinator contract (see prompt section 3.3):
-//   * the page write is only attempted when the page gate reports no allowed
-//     write, no in-flight request and no pending confirm;
+// Coordinator contract (see prompt sections 2 and 3):
+//   * the page state is an explicit known/unknown envelope from the shared
+//     page-state adapter; unknown is never treated as safe;
+//   * identity safety requires explicit identityOk===true && exact===true, and
+//     business safety requires an explicit businessDrift array; missing or
+//     malformed values stop recovery instead of being read as "safe";
+//   * the API is only considered when the page state is known and every flag
+//     (writeAllowed / inFlight / pendingConfirm) is exactly false;
 //   * once the page has allowed a write, the API is never used for that same
 //     recovery: we re-read and report instead;
 //   * the API fallback reserves budget synchronously immediately before the
@@ -29,6 +34,12 @@
 //   * recovery success is only claimed by a final read that shows the original
 //     business pre-image and FG_ACTIVE === '0'. A click or HTTP 200 is never
 //     enough on its own.
+
+import {
+  unknownPageState,
+  isPageStateKnown,
+  pageStateAllowsApiSwitch,
+} from './page-state-adapter.mjs';
 
 export const WRITE_KINDS = Object.freeze(['enable', 'disable', 'recovery-disable']);
 
@@ -43,6 +54,7 @@ export const API_OUTCOMES = Object.freeze([
 
 export const RECOVERY_ACTIONS = Object.freeze({
   ALREADY_RESTORED: 'ALREADY_RESTORED',
+  RESTORED_BY_READ: 'RESTORED_BY_READ',
   RECOVERED_VIA_PAGE: 'RECOVERED_VIA_PAGE',
   RECOVERED_VIA_API: 'RECOVERED_VIA_API',
   STOP: 'STOP',
@@ -135,7 +147,7 @@ export function createRecoveryCoordinator(options = {}) {
     readSnapshot,
     pageAttempt = null,
     apiWrite,
-    getPageState = async () => ({ writeAllowed: false, inFlight: false, pendingConfirm: false }),
+    getPageState,
     budgetKind = 'recovery-disable',
     allowPageAttempt = true,
   } = options;
@@ -143,36 +155,89 @@ export function createRecoveryCoordinator(options = {}) {
   if (!ledger) throw new Error('createRecoveryCoordinator requires a ledger');
   if (typeof readSnapshot !== 'function') throw new Error('createRecoveryCoordinator requires readSnapshot()');
   if (typeof apiWrite !== 'function') throw new Error('createRecoveryCoordinator requires apiWrite()');
+  // A missing page-state adapter must never silently stand in for a safe state.
+  if (typeof getPageState !== 'function') {
+    throw new Error('createRecoveryCoordinator requires getPageState()');
+  }
 
   function stop(reason, extra = {}) {
     return { action: RECOVERY_ACTIONS.STOP, recovered: false, reason, apiSend: false, ...extra };
   }
 
+  // An adapter throw is unknown, never safe.
+  async function pageState() {
+    try {
+      return await getPageState();
+    } catch (e) {
+      return unknownPageState('GET_PAGE_STATE_THREW', String((e && e.message) || e));
+    }
+  }
+
+  // Identity and business-preimage safety require explicit evidence. Missing
+  // `identityOk`/`exact` is not `true`, and a missing/non-array `businessDrift`
+  // is not "no drift" — both surface as unknown and stop recovery.
   async function verifyOnce() {
-    const raw = await readSnapshot();
-    const identityOk = !!(raw && raw.identityOk !== false && raw.exact !== false);
+    let raw;
+    try {
+      raw = await readSnapshot();
+    } catch (e) {
+      return {
+        raw: null,
+        identityOk: false,
+        fgActive: undefined,
+        businessDrift: null,
+        readError: String((e && e.message) || e),
+      };
+    }
+    const identityOk = !!(raw && raw.identityOk === true && raw.exact === true);
     const fgActive = raw ? raw.fgActive : undefined;
-    let businessDrift = [];
-    if (Array.isArray(raw && raw.businessDrift)) businessDrift = raw.businessDrift.slice();
-    else if (raw && raw.businessDrift) businessDrift = [raw.businessDrift];
+    const businessDrift = raw && Array.isArray(raw.businessDrift) ? raw.businessDrift.slice() : null;
     return { raw, identityOk, fgActive, businessDrift };
+  }
+
+  function restored(v) {
+    return !!(
+      v.identityOk &&
+      v.businessDrift !== null &&
+      v.businessDrift.length === 0 &&
+      v.fgActive === '0'
+    );
+  }
+
+  async function recoveredByRead(vu, extra = {}) {
+    return {
+      action: RECOVERY_ACTIONS.RESTORED_BY_READ,
+      recovered: true,
+      reason: null,
+      apiSend: false,
+      final: vu.raw,
+      limitation: 'result unconfirmed by channel; final read shows 0 but in-flight/pending could not be excluded',
+      ...extra,
+    };
   }
 
   async function recover() {
     const v0 = await verifyOnce();
     if (!v0.identityOk) return stop('IDENTITY_UNKNOWN', { final: v0.raw });
+    if (v0.businessDrift === null) return stop('BUSINESS_DRIFT_UNKNOWN', { final: v0.raw });
 
     if (v0.fgActive === '0') {
-      if (v0.businessDrift.length === 0) {
-        return {
-          action: RECOVERY_ACTIONS.ALREADY_RESTORED,
-          recovered: true,
-          reason: null,
-          apiSend: false,
-          final: v0.raw,
-        };
+      if (v0.businessDrift.length > 0) {
+        return stop('BUSINESS_DRIFT', { final: v0.raw, businessDrift: v0.businessDrift });
       }
-      return stop('BUSINESS_DRIFT', { final: v0.raw, businessDrift: v0.businessDrift });
+      // No write is needed. Report honestly whether the page could be confirmed
+      // idle; a possibly in-flight request is not claimed to have safely ended.
+      const ps = await pageState();
+      const idle = pageStateAllowsApiSwitch(ps);
+      return {
+        action: RECOVERY_ACTIONS.ALREADY_RESTORED,
+        recovered: true,
+        reason: null,
+        apiSend: false,
+        final: v0.raw,
+        pageState: ps,
+        limitation: idle ? null : 'already 0 at read time; page idle (in-flight/pending) could not be confirmed',
+      };
     }
 
     if (v0.fgActive !== '1') return stop('STATE_UNKNOWN', { final: v0.raw });
@@ -180,11 +245,17 @@ export function createRecoveryCoordinator(options = {}) {
       return stop('BUSINESS_DRIFT', { final: v0.raw, businessDrift: v0.businessDrift });
     }
 
-    // A page write may already have been allowed before we were called.
-    const ps0 = await getPageState();
-    if (ps0.writeAllowed || ps0.inFlight || ps0.pendingConfirm) {
+    // A page write may already have been allowed before we were called. Only an
+    // explicitly known, fully-idle page state lets recovery consider a switch.
+    const ps0 = await pageState();
+    if (!isPageStateKnown(ps0)) {
+      const vu = await verifyOnce();
+      if (restored(vu)) return recoveredByRead(vu, { pageState: ps0 });
+      return stop('PAGE_STATE_UNKNOWN', { final: vu.raw, pageState: ps0 });
+    }
+    if (!pageStateAllowsApiSwitch(ps0)) {
       const v1 = await verifyOnce();
-      if (v1.identityOk && v1.fgActive === '0' && v1.businessDrift.length === 0) {
+      if (restored(v1)) {
         return {
           action: RECOVERY_ACTIONS.RECOVERED_VIA_PAGE,
           recovered: true,
@@ -192,6 +263,7 @@ export function createRecoveryCoordinator(options = {}) {
           apiSend: false,
           final: v1.raw,
           pageState: ps0,
+          limitation: 'restored at read time while the page reported an in-flight/pending write; that request could not be confirmed settled',
         };
       }
       return stop('PAGE_IN_FLIGHT_OR_PENDING', { final: v1.raw, pageState: ps0 });
@@ -199,17 +271,28 @@ export function createRecoveryCoordinator(options = {}) {
 
     if (allowPageAttempt && typeof pageAttempt === 'function') {
       let pr;
+      let threw = false;
       try {
         pr = await pageAttempt();
       } catch (e) {
-        pr = { sent: false, error: String((e && e.message) || e) };
+        threw = true;
+        pr = { error: String((e && e.message) || e) };
       }
 
-      if (pr && pr.sent) {
+      // If we cannot prove the page did NOT allow a write, do not fall back to
+      // the API: a thrown attempt or a non-boolean `sent` is unknown, not "not
+      // sent". Only a confirming read can end this safely.
+      if (threw || !pr || typeof pr.sent !== 'boolean') {
+        const vu = await verifyOnce();
+        if (restored(vu)) return recoveredByRead(vu, { pageAttempt: pr });
+        return stop(threw ? 'PAGE_ATTEMPT_FAILED' : 'PAGE_SEND_UNKNOWN', { final: vu.raw, pageAttempt: pr });
+      }
+
+      if (pr.sent === true) {
         // The page already allowed a write for this recovery. Never add an API
         // request; only a fresh read can tell us what happened.
         const v2 = await verifyOnce();
-        if (v2.identityOk && v2.fgActive === '0' && v2.businessDrift.length === 0) {
+        if (restored(v2)) {
           return {
             action: RECOVERY_ACTIONS.RECOVERED_VIA_PAGE,
             recovered: true,
@@ -217,15 +300,17 @@ export function createRecoveryCoordinator(options = {}) {
             apiSend: false,
             final: v2.raw,
             pageAttempt: pr,
+            limitation: 'page write outcome inferred from the final read; the gate did not inspect the response',
           };
         }
         return stop('PAGE_WROTE_UNCONFIRMED', { final: v2.raw, pageAttempt: pr });
       }
 
-      // Page failed without sending anything: re-read and re-verify before the
-      // API is even considered as a fallback for this same recovery.
+      // Page explicitly did not send: re-read and re-verify before the API is
+      // even considered as a fallback for this same recovery.
       const v3 = await verifyOnce();
       if (!v3.identityOk) return stop('IDENTITY_UNKNOWN', { final: v3.raw, pageAttempt: pr });
+      if (v3.businessDrift === null) return stop('BUSINESS_DRIFT_UNKNOWN', { final: v3.raw, pageAttempt: pr });
       if (v3.fgActive === '0') {
         if (v3.businessDrift.length === 0) {
           return {
@@ -245,9 +330,14 @@ export function createRecoveryCoordinator(options = {}) {
       }
     }
 
-    // Re-check the page just before switching channels.
-    const ps1 = await getPageState();
-    if (ps1.writeAllowed || ps1.inFlight || ps1.pendingConfirm) {
+    // Re-check the page just before switching channels: unknown still blocks.
+    const ps1 = await pageState();
+    if (!isPageStateKnown(ps1)) {
+      const vu = await verifyOnce();
+      if (restored(vu)) return recoveredByRead(vu, { pageState: ps1 });
+      return stop('PAGE_STATE_UNKNOWN', { final: vu.raw, pageState: ps1 });
+    }
+    if (!pageStateAllowsApiSwitch(ps1)) {
       return stop('PAGE_IN_FLIGHT_OR_PENDING', { pageState: ps1 });
     }
 
@@ -276,7 +366,7 @@ export function createRecoveryCoordinator(options = {}) {
 
     // Only the final read decides whether recovery is real.
     const v4 = await verifyOnce();
-    const recovered = v4.identityOk && v4.fgActive === '0' && v4.businessDrift.length === 0;
+    const recovered = restored(v4);
     if (!recovered) {
       return stop('API_WRITE_UNCONFIRMED', {
         final: v4.raw,
