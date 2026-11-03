@@ -1,0 +1,51 @@
+Task: CLIENT-CONFIG-AC022-CONTROLLED-MULTIROW-ACCEPTANCE-001
+Branch: develop
+Base / HEAD at task start: 1e72e4e39c01ea136cd7e0f3dcf6504a4de6939b
+origin/develop and remote refs/heads/develop: 1e72e4e39c01ea136cd7e0f3dcf6504a4de6939b (three-way equal)
+
+Worktree at start: only pre-existing " M .claude/settings.local.json" plus untracked docs/prompts/ and runtime-logs/.
+None of those were modified, staged, or committed. No reset/clean/stash/pull/fetch/merge/rebase.
+
+Toolchain:
+- JDK 1.8.0_202
+- Node v24.17.0 / npm 11.13.0
+- playwright-core Chromium 147.0.7727.15 (headless, --no-sandbox --disable-dev-shm-usage --no-proxy-server)
+  Note: ESM resolved playwright-core through a gitignored `node_modules` symlink pointing at
+  /root/.hermes/hermes-agent/node_modules during the run; the symlink was removed before commit.
+
+Services (started by the prior task, reused without restart):
+- Backend: pid 8210, `java -jar target/cdc-config-platform-backend-1.0.0-SNAPSHOT.jar`,
+  listening *:8080; jar mtime 2026-09-22 12:21,
+  sha256 efdbea827b6ab84dd47105d2cc130f0bc3c5b70dc78cc626b6421e1f9750a459
+- Frontend: pid 8371, `vite --host 0.0.0.0 --port 5173`, listening 0.0.0.0:5173;
+  frontend/src last commit d878c3d
+- URLs: page http://192.168.174.70:5173/config/client ; API http://192.168.174.70:8080
+  (local probes used 127.0.0.1). External network reachability was not tested.
+
+Identity source (sole):
+- /root/cdc-controlled-toggle-readiness-001/candidate-map.json
+  outside repo, mode 600, task_code CLIENT-CONFIG-CONTROLLED-TOGGLE-READINESS-CHECK-001.
+- Report aliases: OWNER_TEST_A = original mapping T01; OWNER_TEST_B = original mapping T02.
+  This run used T02 / OWNER_TEST_B only. The list-order T01..T16 aliases from the previous
+  live supplement were NOT used for identity.
+- Pre-image: /root/cdc-controlled-toggle-readiness-001/pre-image-T02.json (outside repo, mode 600).
+- Raw run summary: /root/cdc-ac022-multirow-001/probe-raw.json (mode 600);
+  B0 pre-image: /root/cdc-ac022-multirow-001/b0-preimage-T02.json (mode 600).
+
+Write budget (shared synchronous ledger, browser gate + API recovery):
+- caps: enable 1 / disable 1 / recovery-disable 1 / total 3
+- used: enable 1, disable 1, recovery 0 (total 2); no retry, no refund
+- Allowed non-GET requests: only the exact encoded T02 PUT enable/disable paths, in named phases.
+- Context-level **/api/** gate installed BEFORE the first navigation on every context;
+  GET/HEAD/OPTIONS allowed; every other non-GET aborted and counted.
+
+Time base:
+- Probe run 2026-11-03T12:18:59Z .. 12:19:25Z UTC (CST 2026-11-03 20:18..20:19).
+- Business writes: PUT .../enable at 12:19:12.686Z, PUT .../disable at 12:19:24.850Z.
+
+Boundaries:
+- No DB / ZooKeeper / Kafka / sync-client access; no direct DB or ZK write.
+- No product source/styles/tests/deps/config/template changes; no build/test/lint/type-check.
+- Business toggles were driven by the real page menu -> secondary confirm, single click each.
+- Business restoration is judged only by the final GET (fgActive='0' and business fields
+  identical); the Git commit state is not used as a substitute.

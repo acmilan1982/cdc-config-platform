@@ -799,6 +799,20 @@ adjustment7_formal_acceptance_execution_status=NOT_RUN
 
 **只读补采 ≠ 写授权 ≠ 157 条整体验收通过 ≠ 批准其他页面接入或迁移；两条维持 `BLOCKED` 是有效结果。**
 
+### 1.30 探针端管理 AC-022 受控多行样本补齐与定向验收（2026-11-03，`CLIENT-CONFIG-AC022-CONTROLLED-MULTIROW-ACCEPTANCE-001`，真实页面受控启停）
+
+- **性质**：仅针对 `/config/client` 的 `CCFG-AC-022`，以一个原授权测试对象做**一次**真实页面启用→观察→停用；基线 `develop` @ `1e72e4e39c01ea136cd7e0f3dcf6504a4de6939b`；未构建、未改产品、未访问其他功能页面。
+- **授权与身份**：沿用负责人“T01/T02 为专用测试对象可任意操作”的授权；唯一身份来源 `/root/cdc-controlled-toggle-readiness-001/candidate-map.json`（仓库外 mode 600），以完整 clientId 精确绑定。别名 **OWNER_TEST_A**=原映射 `T01`、**OWNER_TEST_B**=原映射 `T02`；本轮只用 OWNER_TEST_B；**未**用上一轮列表顺序 `T01..T16` 冒充身份。
+- **前置与决策**：开工 16 行（`'1'`=1/`'0'`=15/异常=0）；目标精确 `'0'`、业务前像零漂移、无行异常、E1 无异常/冲突、E2 自排除可选。按决策 B 临时启用 OWNER_TEST_B，取得同一时点 **2 启用 / 14 停用** 多行快照。
+- **执行与观察**：真实页面菜单→二次确认单击启用一次、停用一次；两视口（1440×900/1920×1080）标记与 GET 逐行一致、无“状态”列、最右操作列 `sticky`/`right=0px`、多行菜单两态、多个停用行取消确认零写；启用后仅 `fgActive`/`status` 变化。
+- **门禁与预算**：context 级 `/api/**` 门禁首次导航前安装；共享账本 `enable 1 / disable 1 / recovery 1 / total 3`。业务写尝试 **2**（enable 1/disable 1/recovery 0），阻断非 GET **0**。恢复协调器按 `4354e30` fail-closed 修订集成，本轮未触发真实故障注入。
+- **业务结果**：最终 GET `FG_ACTIVE='0'`、业务字段零差异、“停用”标记恢复 → **原业务状态已恢复**（以最终 GET 判定，不以 Git 状态替代）。
+- **判定与状态保护**：`CCFG-AC-022` **维持 `BLOCKED`**——多行两态证据已补齐、成功态变化腿已重跑，仅剩“各若干条”数量口径无经批准阈值，不以“至少 2 条”充当正式阈值、不强判 `PASS`；无直接反例，不判 `FAIL`。AC-082 及其余 155 条不变，`changed_ids=[]`，四态仍 `PASS 83 / FAIL 0 / BLOCKED 60 / NOT_RUN 14 = 157`，定义行逐字节不变。
+- **下一入口**：`CHATGPT_REMOTE_CLIENT_CONFIG_AC022_CONTROLLED_MULTIROW_ACCEPTANCE_REVIEW`。
+- 报告：`reports/CLIENT-CONFIG-AC022-CONTROLLED-MULTIROW-ACCEPTANCE-001.md`；证据：`reports/evidence/CLIENT-CONFIG-AC022-CONTROLLED-MULTIROW-ACCEPTANCE-001/`。
+
+**受控启停 ≠ 157 条整体验收通过 ≠ 批准其他页面接入或迁移；“多行快照已取得” ≠ “若干条口径已批准”。**
+
 ## 2. 文档导航
 
 | 文档 | 职责 | 状态 |
@@ -892,6 +906,8 @@ adjustment7_formal_acceptance_execution_status=NOT_RUN
 | `reports/evidence/CLIENT-CONFIG-LIST-AND-THREE-STATE-MENU-READONLY-ACCEPTANCE-001/` | 本次定向只读验收的**脱敏、可追溯**证据（`env-and-service-check.txt` 环境与服务可用性检查 + `static-evidence-matrix.json` 逐原子证据矩阵〔已有证据文件+实际键+覆盖等级+限制〕+ `README.md` + `SHA256SUMS`；不含真实 ID/描述/机构/源 ID/凭据/连接串/原始 API 响应/业务整屏截图） | 已建立（2026-11-03） |
 | `reports/CLIENT-CONFIG-LIST-MENU-LIVE-READONLY-SUPPLEMENT-002.md` | 探针端管理**启动后列表/菜单只读补采**（按授权 START-ONLY 启动缺失的前后端后真实浏览器只读观察；后端 PID `8210`/`*:8080`、前端 PID `8371`/`0.0.0.0:5173`，未构建；`GET /api/clients?status=ALL` 16 行 = `'1'` 1 / `'0'` 15 / 异常 0；两视口无状态列、固定操作列、两态菜单与启停确认取消、事件隔离；两视口 `nonGetAttempts=0`；`CCFG-AC-022`/`CCFG-AC-082` 均**维持 `BLOCKED`**，`changed_ids=[]`，四态仍 `PASS 83 / FAIL 0 / BLOCKED 60 / NOT_RUN 14 = 157`；未写库、未访问 DB/ZK/Kafka/sync-client） | 已建立（2026-11-03，真实浏览器只读补采；下一入口 `CHATGPT_REMOTE_CLIENT_CONFIG_LIST_MENU_LIVE_READONLY_SUPPLEMENT_002_REVIEW`） |
 | `reports/evidence/CLIENT-CONFIG-LIST-MENU-LIVE-READONLY-SUPPLEMENT-002/` | 本次只读补采的**脱敏、可追溯**证据（`probe-live-readonly.cjs` 只读探针 + `live-readonly-results.json` 脱敏结果〔当前样本直方图、两视口结构/标记/菜单/确认框/事件隔离、`nonGetAttempts=0`〕+ `env-and-version.txt` + `SHA256SUMS` + `README.md`；真实 ID/描述/机构/源 ID/凭据/连接串/原始 API 响应/业务整屏截图不入仓，别名→完整 ID 映射在仓库外 `600` 文件） | 已建立（2026-11-03） |
+| `reports/CLIENT-CONFIG-AC022-CONTROLLED-MULTIROW-ACCEPTANCE-001.md` | 探针端管理 **AC-022 受控多行样本补齐与定向验收**（单对象真实页面启用→两视口多行观察→停用恢复；业务写尝试 2；AC-022 维持 `BLOCKED`，仅剩“各若干条”口径待明确） | 已建立（2026-11-03） |
+| `reports/evidence/CLIENT-CONFIG-AC022-CONTROLLED-MULTIROW-ACCEPTANCE-001/` | 本次受控多行的**脱敏、可追溯**证据（`probe-ac022-multirow.mjs` + `AC022-multirow-results.json` + `verify-preconditions.mjs` + `precondition-T02.json` + `env-and-version.txt` + `SHA256SUMS` + `README.md`；真实 ID/前像/原始运行摘要在仓库外 mode 600） | 已建立（2026-11-03） |
 
 ## 3. Feature 定位
 
@@ -972,6 +988,8 @@ adjustment7_formal_acceptance_execution_status=NOT_RUN
 - **列表与三态菜单定向只读验收**（2026-11-03，`CLIENT-CONFIG-LIST-AND-THREE-STATE-MENU-READONLY-ACCEPTANCE-001`，定向只读验收，对应报告见 §2 导航）：按 AC-022、AC-082 完整定义建立逐原子证据矩阵。开工 `GET /api/clients?status=ALL` 与 `/config/client` 均 HTTP `000`、8080/5173 无监听，故复用已入仓历史真实 JSON 键与当前源码推导，**未**读取当前样本、**未**启动浏览器、**未**安装 `/api/**` 门禁、**未**执行任何业务写入。`CCFG-AC-022` 维持 `BLOCKED`（“各若干条”完整前置未成立、当前样本不可读），`CCFG-AC-082` 维持 `BLOCKED`（三态同存前置当前不可确认、历史快照各缺一态、固定列无运行时实测）；无直接反例，不判 `FAIL`。`changed_ids=[]`，四态仍 `PASS 83 / FAIL 0 / BLOCKED 60 / NOT_RUN 14 = 157`，定义行仍 `REQ154 / AC157 / DESIGN89 / UI77`；业务写尝试 0，DB/ZK 写 `NOT_REQUESTED`。**定向只读验收 ≠ 写授权 ≠ 157 条整体验收通过 ≠ 批准其他页面接入或迁移。**
 
 - **启动后列表/菜单只读补采**（2026-11-03，`CLIENT-CONFIG-LIST-MENU-LIVE-READONLY-SUPPLEMENT-002`，真实浏览器只读补采，对应报告见 §2 导航）：按任务授权 START-ONLY 启动开工时缺失的服务（后端 PID `8210`/`*:8080`、前端 PID `8371`/`0.0.0.0:5173`，以既有 jar 启动、未构建），并在真实无头 Chromium 中对 `/config/client` 做两视口只读观察。`GET /api/clients?status=ALL` 实测 16 行 = `FG_ACTIVE='1'` **1** / `'0'` **15** / 非 `'0'/'1'` 异常 **0**。`1440×900`／`1920×1080`：无“状态”列、“操作”为最右固定列（`sticky`/`right=0`）、停用行 15/15 带标记、停用行菜单 `[启用, 删除]`、启用行菜单 `[停用, 删除]`、启用/停用确认框标题/正文/按钮符合且仅取消、双击三点/点击菜单容器不打开编辑弹窗、固定选中行数 0、无横向溢出；浏览器 context 级 `/api/**` 非 GET 门禁 `nonGetAttempts=0`。`CCFG-AC-022` 维持 `BLOCKED`（前置“各若干条”当前启用仅 1 条且无已批准阈值，不擅自降为一条），`CCFG-AC-082` 维持 `BLOCKED`（三态同存前置不成立、异常 **0**、异常类菜单未执行，不造样本、不拼接历史快照）；无直接反例，不判 `FAIL`。`changed_ids=[]`，四态仍 `PASS 83 / FAIL 0 / BLOCKED 60 / NOT_RUN 14 = 157`，定义行仍 `REQ154 / AC157 / DESIGN89 / UI77`；业务写尝试 0，数据库直写/ZooKeeper 写 `NOT_REQUESTED`。**未**启用/停用/保存/删除任何探针、**未**访问其他功能页面/DB/ZK/Kafka/sync-client、**未**运行测试/构建/lint/类型检查。**只读补采 ≠ 写授权 ≠ 157 条整体验收通过 ≠ 批准其他页面接入或迁移。**
+
+- **AC-022 受控多行样本补齐与定向验收**（2026-11-03，`CLIENT-CONFIG-AC022-CONTROLLED-MULTIROW-ACCEPTANCE-001`，真实页面受控启停，对应报告见 §2 导航）：仅按仓库外原 readiness 映射（报告别名 OWNER_TEST_B=原 T02）以完整 clientId 精确绑定，经真实页面菜单→二次确认单击启用一次，取得同一时点 **2 启用 / 14 停用**快照，在 1440×900/1920×1080 记录标记与 GET 逐行一致、无“状态”列、最右操作列固定、多行菜单两态、多行取消确认零写；随后真实页面停用一次恢复。业务写尝试 **2**（enable 1/disable 1/recovery 0），阻断非 GET **0**；最终 GET `FG_ACTIVE='0'`、业务字段零差异、标记恢复，**原业务状态已恢复**。`CCFG-AC-022` **维持 `BLOCKED`**：多行两态证据已补齐、成功态变化腿已重跑，仅剩“各若干条”数量口径无经批准阈值，不以“至少 2 条”充当正式阈值、不强判 `PASS`；无直接反例，不判 `FAIL`。AC-082 及其余 155 条不变，`changed_ids=[]`，四态仍 `PASS 83 / FAIL 0 / BLOCKED 60 / NOT_RUN 14 = 157`，定义行逐字节不变；数据库直写/ZooKeeper 写 `NOT_REQUESTED`。
 
 ## 5. 下一入口
 
@@ -1086,4 +1104,6 @@ adjustment7_formal_acceptance_execution_status=NOT_RUN
 
 **探针端管理列表与三态菜单定向只读验收的历史下一入口（已由启动后列表/菜单只读补采复审入口承接；2026-11-03，`CLIENT-CONFIG-LIST-AND-THREE-STATE-MENU-READONLY-ACCEPTANCE-001`；上一条恢复分支 R1 复审入口已按其自身段落保留为历史）**：`CHATGPT_REMOTE_CLIENT_CONFIG_LIST_AND_THREE_STATE_MENU_READONLY_ACCEPTANCE_REVIEW`（对象为本定向只读验收任务的结果提交，由 ChatGPT **从远程 Git** 对报告与脱敏证据做独立**只读**复审）。本任务按 AC-022、AC-082 完整定义建立逐原子证据矩阵；开工 `GET /api/clients?status=ALL` 与 `/config/client` 均 HTTP `000`、8080/5173 无监听，故复用已入仓历史真实 JSON 键与当前源码推导，**未**读取当前样本、**未**启动浏览器、**未**安装 `/api/**` 门禁、**未**执行任何业务写入。`CCFG-AC-022` 维持 `BLOCKED`（“各若干条”完整前置未成立、`若干条` 无已批准数量阈值、当前样本不可读），`CCFG-AC-082` 维持 `BLOCKED`（三态同存前置当前不可确认、历史快照各缺一态、固定列无本轮两视口运行时实测）；无直接反例，不判 `FAIL`。`changed_ids=[]`，四态仍 `PASS 83 / FAIL 0 / BLOCKED 60 / NOT_RUN 14 = 157`，剩余 74，定义行仍 `REQ154 / AC157 / DESIGN89 / UI77`；业务写尝试 0，DB/ZK 写 `NOT_REQUESTED`。**定向只读验收 ≠ 写授权 ≠ 157 条整体验收通过 ≠ 批准其他页面接入或迁移；提交/推送成功不代表远程复审通过。**
 
-**探针端管理启动后列表/菜单只读补采的现行下一入口（2026-11-03，`CLIENT-CONFIG-LIST-MENU-LIVE-READONLY-SUPPLEMENT-002`；上一条列表与三态菜单定向只读验收复审入口已按其自身段落保留为历史）**：`CHATGPT_REMOTE_CLIENT_CONFIG_LIST_MENU_LIVE_READONLY_SUPPLEMENT_002_REVIEW`（对象为本只读补采任务的结果提交，由 ChatGPT **从远程 Git** 对报告与脱敏证据做独立**只读**复审）。本任务按授权 START-ONLY 启动开工时缺失的服务（后端 PID `8210`/`*:8080`、前端 PID `8371`/`0.0.0.0:5173`，以既有 jar 启动、未构建、保持运行），在真实无头 Chromium 中对 `/config/client` 做两视口只读观察；`GET /api/clients?status=ALL` 实测 16 行 = `'1'` 1 / `'0'` 15 / 异常 0；两视口无状态列、操作列为最右固定列、两态菜单与启停确认（仅取消）、事件隔离均符合，浏览器 context 级 `/api/**` 非 GET 门禁 `nonGetAttempts=0`。`CCFG-AC-022` 维持 `BLOCKED`（前置“各若干条”当前启用仅 1 条且无已批准阈值），`CCFG-AC-082` 维持 `BLOCKED`（三态同存前置不成立、异常 0、异常类菜单未执行）；无直接反例，不判 `FAIL`。`changed_ids=[]`，四态仍 `PASS 83 / FAIL 0 / BLOCKED 60 / NOT_RUN 14 = 157`，剩余 74，定义行仍 `REQ154 / AC157 / DESIGN89 / UI77`；业务写尝试 0，数据库直写/ZooKeeper 写 `NOT_REQUESTED`。**只读补采 ≠ 写授权 ≠ 157 条整体验收通过 ≠ 批准其他页面接入或迁移；提交/推送成功不代表远程复审通过。**
+**探针端管理启动后列表/菜单只读补采的此前下一入口（2026-11-03，`CLIENT-CONFIG-LIST-MENU-LIVE-READONLY-SUPPLEMENT-002`；上一条列表与三态菜单定向只读验收复审入口已按其自身段落保留为历史）**：`CHATGPT_REMOTE_CLIENT_CONFIG_LIST_MENU_LIVE_READONLY_SUPPLEMENT_002_REVIEW`（对象为本只读补采任务的结果提交，由 ChatGPT **从远程 Git** 对报告与脱敏证据做独立**只读**复审）。本任务按授权 START-ONLY 启动开工时缺失的服务（后端 PID `8210`/`*:8080`、前端 PID `8371`/`0.0.0.0:5173`，以既有 jar 启动、未构建、保持运行），在真实无头 Chromium 中对 `/config/client` 做两视口只读观察；`GET /api/clients?status=ALL` 实测 16 行 = `'1'` 1 / `'0'` 15 / 异常 0；两视口无状态列、操作列为最右固定列、两态菜单与启停确认（仅取消）、事件隔离均符合，浏览器 context 级 `/api/**` 非 GET 门禁 `nonGetAttempts=0`。`CCFG-AC-022` 维持 `BLOCKED`（前置“各若干条”当前启用仅 1 条且无已批准阈值），`CCFG-AC-082` 维持 `BLOCKED`（三态同存前置不成立、异常 0、异常类菜单未执行）；无直接反例，不判 `FAIL`。`changed_ids=[]`，四态仍 `PASS 83 / FAIL 0 / BLOCKED 60 / NOT_RUN 14 = 157`，剩余 74，定义行仍 `REQ154 / AC157 / DESIGN89 / UI77`；业务写尝试 0，数据库直写/ZooKeeper 写 `NOT_REQUESTED`。**只读补采 ≠ 写授权 ≠ 157 条整体验收通过 ≠ 批准其他页面接入或迁移；提交/推送成功不代表远程复审通过。**
+
+**探针端管理 AC-022 受控多行样本补齐与定向验收的现行下一入口（2026-11-03，`CLIENT-CONFIG-AC022-CONTROLLED-MULTIROW-ACCEPTANCE-001`；上一条启动后列表/菜单只读补采复审入口已按其自身段落保留为历史）**：`CHATGPT_REMOTE_CLIENT_CONFIG_AC022_CONTROLLED_MULTIROW_ACCEPTANCE_REVIEW`。本轮仅对 `/config/client` 的 `CCFG-AC-022` 做单个原授权对象的真实页面启用→两视口多行观察→停用恢复：同一时点 **2 启用 / 14 停用**，业务写尝试 **2**（enable 1/disable 1/recovery 0），最终 GET `FG_ACTIVE='0'` 且业务字段零差异，**原业务状态已恢复**。`CCFG-AC-022` 仍为 `BLOCKED`（仅剩“各若干条”数量口径无批准阈值，不强判 `PASS`），`changed_ids=[]`，统计 `PASS 83 / FAIL 0 / BLOCKED 60 / NOT_RUN 14 = 157`。**受控启停 ≠ 157 条整体验收通过 ≠ 批准其他页面接入或迁移；“多行快照已取得” ≠ “若干条口径已批准”；提交/推送成功不代表远程复审通过。**

@@ -1,0 +1,54 @@
+{
+  "ok_readonly_only": true,
+  "requests": [
+    "GET /api/clients",
+    "GET /api/clients/data-source-options"
+  ],
+  "list_total": 16,
+  "fg_histogram": {
+    "exact_0": 15,
+    "exact_1": 1,
+    "other": 0
+  },
+  "t02": {
+    "alias": "T02",
+    "id_len": 14,
+    "fgActive": "0",
+    "status": "DISABLED",
+    "dataSourceCount": 1,
+    "rawDataSourceIds_present": true,
+    "rowAnomalies": 0,
+    "possibleCommaDataSourceIds": 0,
+    "tokenCount": 1,
+    "tokenSetMatchesPreimage": true
+  },
+  "e1_row_sources": [
+    {
+      "token": "S01",
+      "anomalies": 0,
+      "conflictClientIds": 0
+    }
+  ],
+  "e2_self_exclusion_used": true,
+  "e2_tokens": [
+    {
+      "token": "S01",
+      "present": true,
+      "selectable": true,
+      "occupiedByCount": 0,
+      "notSelectableReason": null
+    }
+  ],
+  "business_drift_fields": [],
+  "preconditions": {
+    "exact_zero": true,
+    "identity_exact": true,
+    "no_business_drift": true,
+    "no_row_anomaly": true,
+    "no_comma_ambiguity": true,
+    "no_e1_source_anomaly": true,
+    "no_e1_source_conflict": true,
+    "e2_all_present_selectable": true
+  },
+  "safe_to_proceed": true
+}

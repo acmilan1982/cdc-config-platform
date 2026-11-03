@@ -1,0 +1,534 @@
+{
+  "task_code": "CLIENT-CONFIG-AC022-CONTROLLED-MULTIROW-ACCEPTANCE-001",
+  "started_at": "2026-11-03T12:18:59.386Z",
+  "finished_at": "2026-11-03T12:19:25.668Z",
+  "alias": "T02",
+  "id_length": 14,
+  "browser": {
+    "engine": "chromium",
+    "version": "147.0.7727.15",
+    "headless": true
+  },
+  "viewports": {
+    "primary": "1440x900",
+    "regression": "1920x1080"
+  },
+  "gates": [
+    {
+      "label": "primary-1440x900",
+      "installed_at": "2026-11-03T12:19:00.034Z",
+      "request_count": 2
+    },
+    {
+      "label": "expanded-1920x1080-readonly",
+      "installed_at": "2026-11-03T12:19:19.132Z",
+      "request_count": 0
+    }
+  ],
+  "write_attempts_count": 2,
+  "write_attempts_by_kind": {
+    "enable": 1,
+    "disable": 1,
+    "recovery": 0
+  },
+  "write_attempts": [
+    {
+      "phase": "ENABLE_CONFIRM",
+      "method": "PUT",
+      "path_template": "/api/clients/{T02}/enable",
+      "kind": "enable",
+      "at_iso": "2026-11-03T12:19:12.560Z",
+      "out_of_browser": false
+    },
+    {
+      "phase": "DISABLE_CONFIRM",
+      "method": "PUT",
+      "path_template": "/api/clients/{T02}/disable",
+      "kind": "disable",
+      "at_iso": "2026-11-03T12:19:24.803Z",
+      "out_of_browser": false
+    }
+  ],
+  "blocked_non_get_count": 0,
+  "blocked_non_get": [],
+  "api_responses": [
+    {
+      "method": "PUT",
+      "path_template": "/api/clients/{T02}/enable",
+      "status": 200,
+      "code": 200,
+      "at_iso": "2026-11-03T12:19:12.686Z"
+    },
+    {
+      "method": "PUT",
+      "path_template": "/api/clients/{T02}/disable",
+      "status": 200,
+      "code": 200,
+      "at_iso": "2026-11-03T12:19:24.850Z"
+    }
+  ],
+  "request_failures": [],
+  "write_ledger": {
+    "caps": {
+      "enable": 1,
+      "disable": 1,
+      "recovery-disable": 1,
+      "total": 3
+    },
+    "counts": {
+      "enable": 1,
+      "disable": 1,
+      "recovery-disable": 0
+    },
+    "total": 2,
+    "totalRemaining": 1,
+    "remaining": {
+      "enable": 0,
+      "disable": 0,
+      "recovery-disable": 1
+    },
+    "attempts": 2,
+    "unsettled": 2,
+    "entries": [
+      {
+        "seq": 1,
+        "kind": "enable",
+        "meta": {
+          "phase": "ENABLE_CONFIRM",
+          "method": "PUT",
+          "path_template": "/api/clients/{T02}/enable",
+          "source": "browser-gate",
+          "label": "primary-1440x900"
+        },
+        "reservedAt": 1793708352560,
+        "outcome": "reserved",
+        "detail": null,
+        "settledAt": null
+      },
+      {
+        "seq": 2,
+        "kind": "disable",
+        "meta": {
+          "phase": "DISABLE_CONFIRM",
+          "method": "PUT",
+          "path_template": "/api/clients/{T02}/disable",
+          "source": "browser-gate",
+          "label": "primary-1440x900"
+        },
+        "reservedAt": 1793708364803,
+        "outcome": "reserved",
+        "detail": null,
+        "settledAt": null
+      }
+    ]
+  },
+  "steps": {
+    "B0": {
+      "viewport": "1440x900",
+      "get_total": 16,
+      "get_fg_histogram": {
+        "exact_0": 15,
+        "exact_1": 1,
+        "other": 0
+      },
+      "t02": {
+        "row_index": 13,
+        "marker_present": true,
+        "fg_active": "0",
+        "status": "DISABLED",
+        "data_source_count": 1
+      },
+      "ui_row_count": 16,
+      "ui_disabled_marked": 15,
+      "ui_enabled_unmarked": 1,
+      "table": {
+        "headers": [
+          "序号",
+          "探针 ID",
+          "探针描述",
+          "采集数据源",
+          "数据源数量",
+          "操作"
+        ],
+        "has_status_column": false,
+        "rightmost_header": "操作",
+        "action_cell_style": {
+          "position": "sticky",
+          "right": "0px"
+        },
+        "horizontal_overflow": {
+          "scrollWidth": 1076,
+          "clientWidth": 1076
+        },
+        "inline_action_texts_nonempty": 0,
+        "inline_toggle_count": 0
+      },
+      "writes": 0,
+      "blocked_non_get": 0
+    },
+    "B1_pre_enable_cancel": {
+      "observations": [
+        {
+          "row_index": 1,
+          "menu_items": [
+            "启用",
+            "删除"
+          ],
+          "dialog": {
+            "title": "启用探针",
+            "message_contains_exact_id": false,
+            "message_id_occurrences": 0,
+            "button_texts": [
+              "取消",
+              "启用"
+            ],
+            "primary_text": "启用",
+            "primary_count": 1
+          },
+          "writes_delta": 0,
+          "dialog_hidden": true
+        },
+        {
+          "row_index": 2,
+          "menu_items": [
+            "启用",
+            "删除"
+          ],
+          "dialog": {
+            "title": "启用探针",
+            "message_contains_exact_id": false,
+            "message_id_occurrences": 0,
+            "button_texts": [
+              "取消",
+              "启用"
+            ],
+            "primary_text": "启用",
+            "primary_count": 1
+          },
+          "writes_delta": 0,
+          "dialog_hidden": true
+        }
+      ],
+      "writes_total": 0
+    },
+    "B2_enable": {
+      "row_index": 13,
+      "menu_items": [
+        "启用",
+        "删除"
+      ],
+      "dialog": {
+        "title": "启用探针",
+        "message_contains_exact_id": true,
+        "message_id_occurrences": 1,
+        "button_texts": [
+          "取消",
+          "启用"
+        ],
+        "primary_text": "启用",
+        "primary_count": 1
+      },
+      "put_status": 200,
+      "reload_status": 200,
+      "marker_after": false,
+      "phase_write_attempts": 1
+    },
+    "B3_post_enable_1440": {
+      "viewport": "1440x900",
+      "get_fg_histogram": {
+        "exact_0": 14,
+        "exact_1": 2,
+        "other": 0
+      },
+      "ui_enabled_rows": 2,
+      "ui_disabled_rows": 14,
+      "marker_vs_get_mismatches": 0,
+      "t02_row_index": 13,
+      "t02_is_enabled": true,
+      "enabled_aliases_sample": [
+        "row#0",
+        "row#13"
+      ],
+      "disabled_aliases_sample": [
+        "row#1",
+        "row#2",
+        "row#3"
+      ],
+      "table": {
+        "headers": [
+          "序号",
+          "探针 ID",
+          "探针描述",
+          "采集数据源",
+          "数据源数量",
+          "操作"
+        ],
+        "has_status_column": false,
+        "rightmost_header": "操作",
+        "action_cell_style": {
+          "position": "sticky",
+          "right": "0px"
+        },
+        "horizontal_overflow": {
+          "scrollWidth": 1076,
+          "clientWidth": 1076
+        },
+        "inline_action_texts_nonempty": 0,
+        "inline_toggle_count": 0
+      },
+      "menus_enabled": [
+        {
+          "row_index": 0,
+          "items": [
+            "停用",
+            "删除"
+          ],
+          "is_t02": false
+        },
+        {
+          "row_index": 13,
+          "items": [
+            "停用",
+            "删除"
+          ],
+          "is_t02": true
+        }
+      ],
+      "menus_disabled": [
+        {
+          "row_index": 1,
+          "items": [
+            "启用",
+            "删除"
+          ]
+        },
+        {
+          "row_index": 2,
+          "items": [
+            "启用",
+            "删除"
+          ]
+        }
+      ],
+      "disabled_cancel_cycles": [
+        {
+          "row_index": 1,
+          "menu_items": [
+            "启用",
+            "删除"
+          ],
+          "dialog": {
+            "title": "启用探针",
+            "message_contains_exact_id": false,
+            "message_id_occurrences": 0,
+            "button_texts": [
+              "取消",
+              "启用"
+            ],
+            "primary_text": "启用",
+            "primary_count": 1
+          },
+          "writes_delta": 0,
+          "dialog_hidden": true
+        },
+        {
+          "row_index": 2,
+          "menu_items": [
+            "启用",
+            "删除"
+          ],
+          "dialog": {
+            "title": "启用探针",
+            "message_contains_exact_id": false,
+            "message_id_occurrences": 0,
+            "button_texts": [
+              "取消",
+              "启用"
+            ],
+            "primary_text": "启用",
+            "primary_count": 1
+          },
+          "writes_delta": 0,
+          "dialog_hidden": true
+        }
+      ],
+      "enabled_disable_cancel": {
+        "row_index": 13,
+        "menu_items": [
+          "停用",
+          "删除"
+        ],
+        "dialog": {
+          "title": "停用探针",
+          "message_contains_exact_id": true,
+          "message_id_occurrences": 1,
+          "button_texts": [
+            "取消",
+            "停用"
+          ],
+          "primary_text": "停用",
+          "primary_count": 1
+        },
+        "writes_delta": 0,
+        "dialog_hidden": true
+      },
+      "writes_total": 1,
+      "blocked_non_get": 0
+    },
+    "B4_post_enable_diff": {
+      "http": 200,
+      "code": 200,
+      "total": 16,
+      "fg_active": "1",
+      "status": "ENABLED",
+      "diff_fields": [
+        "fgActive",
+        "status"
+      ],
+      "allowed": [
+        "fgActive",
+        "status"
+      ],
+      "forbidden": [],
+      "business_identical": true
+    },
+    "B5_readonly_1920": {
+      "viewport": "1920x1080",
+      "ui_enabled_rows": 2,
+      "ui_disabled_rows": 14,
+      "marker_vs_get_mismatches": 0,
+      "t02_row_index": 13,
+      "t02_is_enabled": true,
+      "enabled_aliases_sample": [
+        "row#0",
+        "row#13"
+      ],
+      "disabled_aliases_sample": [
+        "row#1",
+        "row#2",
+        "row#3"
+      ],
+      "table": {
+        "headers": [
+          "序号",
+          "探针 ID",
+          "探针描述",
+          "采集数据源",
+          "数据源数量",
+          "操作"
+        ],
+        "has_status_column": false,
+        "rightmost_header": "操作",
+        "action_cell_style": {
+          "position": "sticky",
+          "right": "0px"
+        },
+        "horizontal_overflow": {
+          "scrollWidth": 1556,
+          "clientWidth": 1556
+        },
+        "inline_action_texts_nonempty": 0,
+        "inline_toggle_count": 0
+      },
+      "menus_enabled": [
+        {
+          "row_index": 0,
+          "items": [
+            "停用",
+            "删除"
+          ],
+          "is_t02": false
+        },
+        {
+          "row_index": 13,
+          "items": [
+            "停用",
+            "删除"
+          ],
+          "is_t02": true
+        }
+      ],
+      "menus_disabled": [
+        {
+          "row_index": 1,
+          "items": [
+            "启用",
+            "删除"
+          ]
+        },
+        {
+          "row_index": 2,
+          "items": [
+            "启用",
+            "删除"
+          ]
+        }
+      ],
+      "disabled_cancel_cycle": {
+        "row_index": 1,
+        "menu_items": [
+          "启用",
+          "删除"
+        ],
+        "dialog": {
+          "title": "启用探针",
+          "message_contains_exact_id": false,
+          "message_id_occurrences": 0,
+          "button_texts": [
+            "取消",
+            "启用"
+          ],
+          "primary_text": "启用",
+          "primary_count": 1
+        },
+        "writes_delta": 0,
+        "dialog_hidden": true
+      },
+      "writes_total": 1
+    },
+    "B6_disable": {
+      "row_index": 13,
+      "menu_items": [
+        "停用",
+        "删除"
+      ],
+      "dialog": {
+        "title": "停用探针",
+        "message_contains_exact_id": true,
+        "message_id_occurrences": 1,
+        "button_texts": [
+          "取消",
+          "停用"
+        ],
+        "primary_text": "停用",
+        "primary_count": 1
+      },
+      "put_status": 200,
+      "reload_status": 200,
+      "marker_after": true,
+      "phase_write_attempts": 1
+    },
+    "B7_final": {
+      "http": 200,
+      "code": 200,
+      "total": 16,
+      "fg_active": "0",
+      "status": "DISABLED",
+      "diff_fields": [],
+      "allowed": [],
+      "forbidden": [],
+      "business_identical": true,
+      "restored": true,
+      "ui_marker_restored": true
+    }
+  },
+  "fatal": null,
+  "recovery_error": null,
+  "recovery_used": 0,
+  "flags": {
+    "enable_committed": true,
+    "disable_committed": true,
+    "final_fg_active": "0",
+    "restored": true
+  }
+}
