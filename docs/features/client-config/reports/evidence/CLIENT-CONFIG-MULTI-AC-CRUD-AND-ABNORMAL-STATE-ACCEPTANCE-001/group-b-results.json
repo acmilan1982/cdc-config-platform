@@ -1,0 +1,204 @@
+{
+  "task": "CLIENT-CONFIG-MULTI-AC-CRUD-AND-ABNORMAL-STATE-ACCEPTANCE-001",
+  "group": "B",
+  "frontend": "http://127.0.0.1:5173",
+  "browser": {
+    "engine": "chromium",
+    "executable": "/root/.cache/ms-playwright/chromium-1217/chrome-linux64/chrome",
+    "headless": true
+  },
+  "ledger": [
+    {
+      "method": "PUT",
+      "path": "/api/clients/MULTIAC-ID1",
+      "body": {
+        "clientId": "MULTIAC-id1",
+        "clientDesc": "MULTIAC synthetic fixture: probe-ID edit sample. Not a real runtime probe.",
+        "dataSourceIds": [
+          "CCFG-AC-R1-DS07"
+        ]
+      }
+    },
+    {
+      "method": "PUT",
+      "path": "/api/clients/MULTIAC-id1",
+      "body": {
+        "clientId": "multiAC-ID2",
+        "clientDesc": "MULTIAC synthetic fixture: probe-ID edit sample. Not a real runtime probe.",
+        "dataSourceIds": [
+          "CCFG-AC-R1-DS07"
+        ]
+      }
+    },
+    {
+      "method": "PUT",
+      "path": "/api/clients/MULTIAC-id1",
+      "body": {
+        "clientId": "-MULTIAC-BAD"
+      },
+      "businessCode": 40101,
+      "directBackend": true
+    },
+    {
+      "method": "PUT",
+      "path": "/api/clients/MULTIAC-id1",
+      "body": {
+        "clientId": "MULTIAC-ID2",
+        "clientDesc": "MULTIAC synthetic fixture: probe-ID edit sample. Not a real runtime probe.",
+        "dataSourceIds": [
+          "CCFG-AC-R1-DS07"
+        ]
+      }
+    },
+    {
+      "method": "PUT",
+      "path": "/api/clients/MULTIAC-id1",
+      "body": {
+        "clientId": "MULTIAC-ID1X",
+        "clientDesc": "MULTIAC synthetic fixture: probe-ID edit sample. Not a real runtime probe.",
+        "dataSourceIds": [
+          "CCFG-AC-R1-DS07"
+        ]
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/api/clients",
+      "body": {
+        "clientId": "MULTIAC-OCC",
+        "dataSourceIds": [
+          "CCFG-AC-R1-DS06"
+        ]
+      },
+      "businessCode": 200,
+      "directBackend": true
+    },
+    {
+      "method": "PUT",
+      "path": "/api/clients/MULTIAC-ID1X",
+      "body": {
+        "clientId": "MULTIAC-ID1Y",
+        "clientDesc": "MULTIAC edited description that must NOT persist after a rejected atomic save",
+        "dataSourceIds": [
+          "CCFG-AC-R1-DS07",
+          "CCFG-AC-R1-DS06"
+        ]
+      }
+    }
+  ],
+  "optionsRequests": [
+    "http://127.0.0.1:5173/api/clients/data-source-options?excludeClientId=MULTIAC-ID1",
+    "http://127.0.0.1:5173/api/clients/data-source-options?excludeClientId=MULTIAC-ID1",
+    "http://127.0.0.1:5173/api/clients/data-source-options?excludeClientId=MULTIAC-id1",
+    "http://127.0.0.1:5173/api/clients/data-source-options?excludeClientId=MULTIAC-id1",
+    "http://127.0.0.1:5173/api/clients/data-source-options?excludeClientId=MULTIAC-id1",
+    "http://127.0.0.1:5173/api/clients/data-source-options?excludeClientId=MULTIAC-id1",
+    "http://127.0.0.1:5173/api/clients/data-source-options?excludeClientId=MULTIAC-ID1X"
+  ],
+  "ac039": {
+    "step1": {
+      "save": {
+        "http": 200,
+        "code": 200,
+        "message": "success"
+      },
+      "oldIdPresent": false,
+      "newIdPersisted": true,
+      "persistedSources": [
+        "CCFG-AC-R1-DS07"
+      ]
+    },
+    "step2": {
+      "save": {
+        "http": 200,
+        "code": 40940,
+        "message": "探针 ID 已存在冲突（不区分大小写），请更换探针 ID。"
+      },
+      "fieldError": "探针 ID 已存在冲突（不区分大小写），请更换探针 ID。",
+      "originalUnchanged": true
+    },
+    "step3": {
+      "nonGetDelta": 0,
+      "idError": "探针 ID 格式不正确：须为 1~32 位字母、数字、点、下划线或连字符，且以字母或数字开头。",
+      "backendDirect": {
+        "http": 200,
+        "code": 40101,
+        "message": "探针 ID 格式不正确：须为 1~32 位字母、数字、点、下划线或连字符，且以字母或数字开头。"
+      },
+      "originalUnchanged": true
+    },
+    "step4": {
+      "save": {
+        "http": 200,
+        "code": 40940,
+        "message": "探针 ID 已存在冲突（不区分大小写），请更换探针 ID。"
+      },
+      "fieldError": "探针 ID 已存在冲突（不区分大小写），请更换探针 ID。",
+      "originalUnchanged": true
+    },
+    "step5": {
+      "save": {
+        "http": 200,
+        "code": 200,
+        "message": "success"
+      },
+      "newIdPersisted": true,
+      "oldIdAbsent": true
+    }
+  },
+  "ac054": {
+    "optionsRequestUrl": "http://127.0.0.1:5173/api/clients/data-source-options?excludeClientId=MULTIAC-ID1",
+    "optionsExcludeEqualsOriginalId": true,
+    "draftIdChangedUnsavedTo": "MULTIAC-ID1R",
+    "ownSourceDs07Present": true,
+    "ownSourceDs07Disabled": true,
+    "ownSourceDs07ReasonNotEmpty": false,
+    "chosenChipCount": 1
+  },
+  "ac060": {
+    "save": {
+      "http": 200,
+      "code": 200,
+      "message": "success"
+    },
+    "newIdPersisted": true,
+    "sources": [
+      "CCFG-AC-R1-DS07"
+    ],
+    "oldIdAbsent": true
+  },
+  "ac040": {
+    "occupyingCreate": {
+      "http": 200,
+      "code": 200
+    },
+    "ds06SelectableInStaleList": true,
+    "chosenBeforeSave": [
+      "CCFG-AC-R1-人工验收机构07",
+      "CCFG-AC-R1-人工验收机构06"
+    ],
+    "save": {
+      "http": 200,
+      "code": 40941,
+      "message": "数据源“CCFG-AC-R1-人工验收机构06（CCFG-AC-R1-DS06）”已分配给探针：MULTIAC-OCC，不能重复分配。"
+    },
+    "sourceFieldError": "数据源“CCFG-AC-R1-人工验收机构06（CCFG-AC-R1-DS06）”已分配给探针：MULTIAC-OCC，不能重复分配。",
+    "afterRejectedSave": {
+      "idStillOriginal": true,
+      "newIdAbsent": true,
+      "descExactUnchanged": true,
+      "sourcesUnchanged": [
+        "CCFG-AC-R1-DS07"
+      ]
+    },
+    "originalUnchanged": {
+      "idStillOriginal": true,
+      "newIdAbsent": true,
+      "descExactUnchanged": true,
+      "sourcesUnchanged": [
+        "CCFG-AC-R1-DS07"
+      ]
+    }
+  },
+  "errors": []
+}

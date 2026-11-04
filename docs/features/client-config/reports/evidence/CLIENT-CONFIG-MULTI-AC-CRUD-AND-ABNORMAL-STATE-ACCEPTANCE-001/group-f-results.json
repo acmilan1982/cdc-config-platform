@@ -1,0 +1,172 @@
+{
+  "task": "CLIENT-CONFIG-MULTI-AC-CRUD-AND-ABNORMAL-STATE-ACCEPTANCE-001",
+  "group": "F",
+  "frontend": "http://127.0.0.1:5173",
+  "browser": {
+    "engine": "chromium",
+    "executable": "/root/.cache/ms-playwright/chromium-1217/chrome-linux64/chrome",
+    "headless": true
+  },
+  "ledger": [
+    {
+      "method": "DELETE",
+      "path": "/api/clients/MULTIAC-DEL1"
+    },
+    {
+      "method": "PUT",
+      "path": "/api/clients/MULTIAC-F145A/disable"
+    },
+    {
+      "method": "PUT",
+      "path": "/api/clients/MULTIAC-OFF1/disable"
+    },
+    {
+      "method": "PUT",
+      "path": "/api/clients/MULTIAC-ENC/enable"
+    },
+    {
+      "method": "DELETE",
+      "path": "/api/clients/MULTIAC-DEL2"
+    },
+    {
+      "method": "DELETE",
+      "path": "/api/clients/MULTIAC-F145D"
+    }
+  ],
+  "injections": [
+    {
+      "kind": "network-abort",
+      "target": "DELETE /api/clients/MULTIAC-F145D",
+      "reachedBackend": false
+    }
+  ],
+  "ac020": {
+    "before": {
+      "rowPresent": true,
+      "rowFg": "0",
+      "selectedBefore": []
+    },
+    "menuItems": [
+      "启用",
+      "删除"
+    ],
+    "confirm": {
+      "title": "删除探针",
+      "body": "确定删除探针 MULTIAC-DEL1 吗？该操作不可恢复。",
+      "buttons": [
+        "取消",
+        "删除"
+      ]
+    },
+    "after": {
+      "http": 200,
+      "code": 200,
+      "rowPresent": false,
+      "messages": [
+        "删除成功"
+      ]
+    }
+  },
+  "ac145": {
+    "b1": {
+      "selectionStartedAt": [
+        "MULTIAC-DEL3"
+      ],
+      "confirm": {
+        "title": "停用探针",
+        "body": "确定停用探针 MULTIAC-F145A 吗？",
+        "buttons": [
+          "取消",
+          "停用"
+        ]
+      },
+      "result": {
+        "menuItems": [
+          "停用",
+          "删除"
+        ],
+        "code": 200,
+        "targetFg": "0",
+        "selectionAfter": [
+          "MULTIAC-F145A"
+        ]
+      }
+    },
+    "b2": {
+      "queryUrl": "http://127.0.0.1:5173/api/clients?status=ENABLED",
+      "off1VisibleUnderEnabled": true,
+      "selectionBefore": [
+        "MULTIAC-OFF1"
+      ],
+      "result": {
+        "code": 200,
+        "reloadUrl": "http://127.0.0.1:5173/api/clients?status=ENABLED",
+        "off1VisibleAfter": false,
+        "selectionAfter": []
+      }
+    },
+    "b3": {
+      "selectionBefore": [
+        "MULTIAC-E139A"
+      ],
+      "result": {
+        "enableWritesDelta": 0,
+        "targetFg": "0",
+        "selectionAfter": [
+          "MULTIAC-E139A"
+        ]
+      }
+    },
+    "b4": {
+      "selectionBefore": [
+        "MULTIAC-ENC"
+      ],
+      "result": {
+        "code": 40941,
+        "message": "数据源“CCFG-AC-R1-人工验收机构08（CCFG-AC-R1-DS08）”已分配给探针：MULTIAC-CONFA，不能重复分配。",
+        "targetFg": "0",
+        "selectionAfter": [
+          "MULTIAC-ENC"
+        ],
+        "messages": [
+          "数据源“CCFG-AC-R1-人工验收机构08（CCFG-AC-R1-DS08）”已分配给探针：MULTIAC-CONFA，不能重复分配。"
+        ]
+      }
+    },
+    "b5": {
+      "selectionBefore": [
+        "MULTIAC-DEL2"
+      ],
+      "result": {
+        "code": 200,
+        "rowPresent": false,
+        "selectionAfter": []
+      }
+    },
+    "b6": {
+      "cancelSelectionBefore": [
+        "MULTIAC-DEL3"
+      ],
+      "cancelResult": {
+        "rowPresent": true,
+        "selectionAfter": [
+          "MULTIAC-DEL3"
+        ]
+      },
+      "failureSelectionBefore": [
+        "MULTIAC-F145D"
+      ],
+      "failureResult": {
+        "rowPresent": true,
+        "selectionAfter": [
+          "MULTIAC-F145D"
+        ],
+        "messages": [
+          "Network Error",
+          "删除失败，请检查网络后重试。"
+        ]
+      }
+    }
+  },
+  "errors": []
+}

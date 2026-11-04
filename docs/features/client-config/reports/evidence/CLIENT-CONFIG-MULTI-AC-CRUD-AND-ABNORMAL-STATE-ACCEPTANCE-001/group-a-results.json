@@ -1,0 +1,153 @@
+{
+  "task": "CLIENT-CONFIG-MULTI-AC-CRUD-AND-ABNORMAL-STATE-ACCEPTANCE-001",
+  "group": "A",
+  "frontend": "http://127.0.0.1:5173",
+  "browser": {
+    "engine": "chromium",
+    "executable": "/root/.cache/ms-playwright/chromium-1217/chrome-linux64/chrome",
+    "headless": true
+  },
+  "ledger": [
+    {
+      "method": "POST",
+      "path": "/api/clients",
+      "body": {
+        "clientId": "MULTIAC-NEW1",
+        "clientDesc": "MULTIAC synthetic create sample created through the real UI. Not a real runtime probe.",
+        "dataSourceIds": [
+          "CCFG-AC-R1-DS01"
+        ]
+      }
+    },
+    {
+      "method": "PUT",
+      "path": "/api/clients/MULTIAC-DESC",
+      "body": {
+        "clientId": "MULTIAC-DESC",
+        "clientDesc": "测测测测测测测测测测测测测测测测测测测测测测测测测测测测测测测测测测测测测测测测测测测测测测测测测测测测测测测测测测测测测测测测测测测测测测测测测测测测测测测测测测测测测测测测测测测测测测测测测测测测测测测测测测测测测测测测测测测测测测测测测测测测测测测测测测测测测测测测测测测测测测测测测测测测测测测测测测测测测测测测测测测测测测测测测测测测测测测测测测测测测测测测测测测测测测测测测测测测测测测测测测测测测测测测测测测测测测测测测测测测测测测测测测测测测测测测测测测测测测测测测测测测测测测测测测测测测测测测",
+        "dataSourceIds": [
+          "77711"
+        ]
+      }
+    },
+    {
+      "method": "PUT",
+      "path": "/api/clients/MULTIAC-DESC",
+      "body": {
+        "clientId": "MULTIAC-DESC",
+        "clientDesc": "😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀",
+        "dataSourceIds": [
+          "77711"
+        ]
+      }
+    },
+    {
+      "method": "PUT",
+      "path": "/api/clients/MULTIAC-DESC",
+      "body": {
+        "clientDescBytes": 1028,
+        "codePoints": 257
+      },
+      "businessCode": 40102,
+      "injected": "none (direct backend call)"
+    },
+    {
+      "method": "PUT",
+      "path": "/api/clients/MULTIAC-DESC",
+      "body": {
+        "clientId": "MULTIAC-DESC",
+        "clientDesc": "  MULTIAC padded description  ",
+        "dataSourceIds": [
+          "77711"
+        ]
+      }
+    }
+  ],
+  "ac031": {
+    "form": {
+      "labels": [
+        "探针 ID",
+        "探针描述",
+        "采集数据源"
+      ],
+      "hasStatusLabel": false,
+      "hasStatusSelect": false
+    },
+    "chosenCount": 1,
+    "createResponse": {
+      "http": 200,
+      "code": 200,
+      "message": "success"
+    },
+    "createdRow": {
+      "present": true,
+      "clientId": "MULTIAC-NEW1",
+      "fgActive": "1",
+      "status": "ENABLED",
+      "dataSourceIds": [
+        "CCFG-AC-R1-DS01"
+      ],
+      "descByteLength": 86
+    },
+    "fgActiveIsOne": true
+  },
+  "ac131": {
+    "s1": {
+      "inputCodePoints": 256,
+      "save": {
+        "http": 200,
+        "code": 200,
+        "message": "success"
+      },
+      "persisted": {
+        "codePoints": 256,
+        "utf8Bytes": 768,
+        "exactMatch": true
+      }
+    },
+    "s2": {
+      "inputCodePoints": 256,
+      "save": {
+        "http": 200,
+        "code": 200,
+        "message": "success"
+      },
+      "persisted": {
+        "codePoints": 256,
+        "utf8Bytes": 1024,
+        "exactMatch": true
+      }
+    },
+    "s3": {
+      "requestUtf8Bytes": 1028,
+      "http": 200,
+      "code": 40102,
+      "message": "探针描述不能为空，或去除首尾空白后的原文超过 1024 字节（UTF-8）。",
+      "noPartialWrite": true
+    },
+    "s4": {
+      "save": {
+        "http": 200,
+        "code": 200,
+        "message": "success"
+      },
+      "persisted": {
+        "exactMatch": true,
+        "leadingSpaces": true,
+        "trailingSpaces": true,
+        "utf8Bytes": 30
+      }
+    },
+    "s5": {
+      "liveInput": {
+        "hanziInputCodePoints": 300,
+        "hanziFinalCodePoints": 256,
+        "emojiInputCodePoints": 300,
+        "emojiFinalCodePoints": 256,
+        "emojiLoneSurrogate": false
+      },
+      "reviewedEvidenceReuse": "CLIENT-CONFIG-TARGETED-READONLY-ACCEPTANCE-SUPPLEMENT-002-R1 r1-dialog-results.json clipboard.cases.han300/mixed (keys verified before reuse)"
+    }
+  },
+  "errors": []
+}

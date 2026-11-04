@@ -1,0 +1,292 @@
+{
+  "task": "CLIENT-CONFIG-MULTI-AC-CRUD-AND-ABNORMAL-STATE-ACCEPTANCE-001",
+  "group": "E",
+  "frontend": "http://127.0.0.1:5173",
+  "browser": {
+    "engine": "chromium",
+    "executable": "/root/.cache/ms-playwright/chromium-1217/chrome-linux64/chrome",
+    "headless": true
+  },
+  "ledger": [
+    {
+      "method": "PUT",
+      "path": "/api/clients/MULTIAC-E139A/disable"
+    },
+    {
+      "method": "PUT",
+      "path": "/api/clients/MULTIAC-E139F/disable"
+    },
+    {
+      "method": "PUT",
+      "path": "/api/clients/MULTIAC-OFF1/enable"
+    },
+    {
+      "method": "PUT",
+      "path": "/api/clients/MULTIAC-ENC/enable"
+    },
+    {
+      "method": "PUT",
+      "path": "/api/clients/MULTIAC-DESC"
+    }
+  ],
+  "injections": [
+    {
+      "kind": "network-abort",
+      "target": "PUT /api/clients/MULTIAC-E139F/disable",
+      "reachedBackend": false
+    },
+    {
+      "kind": "request-delay",
+      "target": "PUT /api/clients/MULTIAC-DESC",
+      "delayMs": 1800,
+      "reachedBackend": true
+    }
+  ],
+  "ac139": {
+    "menuBefore": [
+      "停用",
+      "删除"
+    ],
+    "cancel": {
+      "confirm": {
+        "title": "停用探针",
+        "body": "确定停用探针 MULTIAC-E139A 吗？",
+        "buttons": [
+          "取消",
+          "停用"
+        ]
+      },
+      "writeDelta": 0,
+      "fgAfterCancel": "1"
+    },
+    "success": {
+      "http": 200,
+      "code": 200,
+      "fgAfter": "0",
+      "inactiveMark": "停用",
+      "messages": [
+        "停用成功"
+      ]
+    },
+    "failure": {
+      "fgAfter": "1",
+      "inactiveMarkPresent": false,
+      "messages": [
+        "Network Error",
+        "停用失败，请检查网络后重试。"
+      ]
+    }
+  },
+  "ac140": {
+    "menuBefore": [
+      "启用",
+      "删除"
+    ],
+    "cancel": {
+      "confirm": {
+        "title": "启用探针",
+        "body": "确定启用探针 MULTIAC-OFF1 吗？",
+        "buttons": [
+          "取消",
+          "启用"
+        ]
+      },
+      "enableWrites": 0,
+      "fgAfterCancel": "0",
+      "selectionBefore": [
+        "MULTIAC-OFF1"
+      ],
+      "selectionAfter": [
+        "MULTIAC-OFF1"
+      ]
+    },
+    "success": {
+      "http": 200,
+      "code": 200,
+      "enableWritesDelta": 1,
+      "fgAfter": "1",
+      "inactiveMarkCount": 0,
+      "selectionAfter": [
+        "MULTIAC-OFF1"
+      ],
+      "messages": [
+        "启用成功"
+      ]
+    },
+    "failure": {
+      "http": 200,
+      "code": 40941,
+      "message": "数据源“CCFG-AC-R1-人工验收机构08（CCFG-AC-R1-DS08）”已分配给探针：MULTIAC-CONFA，不能重复分配。",
+      "fgAfter": "0",
+      "messages": [
+        "数据源“CCFG-AC-R1-人工验收机构08（CCFG-AC-R1-DS08）”已分配给探针：MULTIAC-CONFA，不能重复分配。"
+      ]
+    }
+  },
+  "ac115": {
+    "normal": {
+      "backgroundColor": "rgb(9, 9, 11)",
+      "borderColor": "rgb(9, 9, 11)",
+      "color": "rgb(255, 255, 255)",
+      "borderRadius": "6px",
+      "fontWeight": "500",
+      "cursor": "pointer",
+      "classes": "el-button el-button--primary cc-dialog-submit ced-submit",
+      "disabledAttr": false,
+      "text": "创建",
+      "rect": {
+        "x": 1094,
+        "y": 700.1875,
+        "width": 60,
+        "height": 32,
+        "top": 700.1875,
+        "right": 1154,
+        "bottom": 732.1875,
+        "left": 1094
+      }
+    },
+    "secondaryCreate": {
+      "footer": [
+        {
+          "text": "取消",
+          "backgroundColor": "rgb(255, 255, 255)",
+          "color": "rgb(96, 98, 102)",
+          "borderColor": "rgb(220, 223, 230)"
+        },
+        {
+          "text": "创建",
+          "backgroundColor": "rgb(9, 9, 11)",
+          "color": "rgb(255, 255, 255)",
+          "borderColor": "rgb(9, 9, 11)"
+        }
+      ],
+      "autoGenerate": {
+        "backgroundColor": "rgb(255, 255, 255)",
+        "color": "rgb(96, 98, 102)",
+        "text": "自动生成"
+      }
+    },
+    "hover": {
+      "backgroundColor": "rgb(39, 39, 42)"
+    },
+    "focus": {
+      "backgroundColor": "rgb(39, 39, 42)"
+    },
+    "active": {
+      "backgroundColor": "rgb(24, 24, 27)"
+    },
+    "incompleteForm": {
+      "writeDelta": 0,
+      "fieldErrorCount": 3,
+      "fieldErrors": [
+        "探针 ID 不能为空。",
+        "探针描述不能为空。",
+        "至少选择 1 个数据源"
+      ],
+      "submitStillBlackAndClickable": {
+        "backgroundColor": "rgb(39, 39, 42)",
+        "borderColor": "rgb(39, 39, 42)",
+        "color": "rgb(255, 255, 255)",
+        "borderRadius": "6px",
+        "fontWeight": "500",
+        "cursor": "pointer",
+        "classes": "el-button el-button--primary cc-dialog-submit ced-submit",
+        "disabledAttr": false,
+        "text": "创建",
+        "rect": {
+          "x": 1094,
+          "y": 700.1875,
+          "width": 60,
+          "height": 32,
+          "top": 700.1875,
+          "right": 1154,
+          "bottom": 732.1875,
+          "left": 1094
+        }
+      }
+    },
+    "secondaryEdit": {
+      "footer": [
+        {
+          "text": "取消",
+          "backgroundColor": "rgb(255, 255, 255)",
+          "color": "rgb(96, 98, 102)",
+          "borderColor": "rgb(220, 223, 230)"
+        },
+        {
+          "text": "保存",
+          "backgroundColor": "rgb(9, 9, 11)",
+          "color": "rgb(255, 255, 255)",
+          "borderColor": "rgb(9, 9, 11)"
+        }
+      ],
+      "autoGenerate": {
+        "backgroundColor": "rgb(255, 255, 255)",
+        "color": "rgb(96, 98, 102)",
+        "text": "自动生成"
+      },
+      "idToggle": {
+        "backgroundColor": "rgba(0, 0, 0, 0)",
+        "color": "rgb(64, 158, 255)",
+        "text": "修改探针 ID"
+      }
+    },
+    "editDialogSubmitNormal": {
+      "backgroundColor": "rgb(9, 9, 11)",
+      "borderColor": "rgb(9, 9, 11)",
+      "color": "rgb(255, 255, 255)",
+      "borderRadius": "6px",
+      "fontWeight": "500",
+      "cursor": "pointer",
+      "classes": "el-button el-button--primary cc-dialog-submit ced-submit",
+      "disabledAttr": false,
+      "text": "保存",
+      "rect": {
+        "x": 1094,
+        "y": 722.578125,
+        "width": 60,
+        "height": 32,
+        "top": 722.578125,
+        "right": 1154,
+        "bottom": 754.578125,
+        "left": 1094
+      }
+    },
+    "submitting": {
+      "inFlight": {
+        "style": {
+          "backgroundColor": "rgb(63, 63, 70)",
+          "borderColor": "rgb(63, 63, 70)",
+          "color": "rgb(255, 255, 255)",
+          "borderRadius": "6px",
+          "fontWeight": "500",
+          "cursor": "not-allowed",
+          "classes": "el-button el-button--primary is-disabled is-loading cc-dialog-submit ced-submit",
+          "disabledAttr": true,
+          "text": "保存",
+          "rect": {
+            "x": 1074,
+            "y": 722.578125,
+            "width": 80,
+            "height": 32,
+            "top": 722.578125,
+            "right": 1154,
+            "bottom": 754.578125,
+            "left": 1074
+          }
+        },
+        "loadingVisible": 1,
+        "textWhileLoading": "保存"
+      },
+      "http": 200,
+      "code": 200,
+      "saveWritesDelta": 1,
+      "dialogClosed": true,
+      "descPersisted": true,
+      "messages": [
+        "编辑成功"
+      ]
+    }
+  },
+  "errors": []
+}

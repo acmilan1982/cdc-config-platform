@@ -1,0 +1,29 @@
+{
+  "task": "CLIENT-CONFIG-MULTI-AC-CRUD-AND-ABNORMAL-STATE-ACCEPTANCE-001",
+  "check": "AC-054",
+  "optionsRequests": [
+    "http://127.0.0.1:5173/api/clients/data-source-options?excludeClientId=MULTIAC-ID1X"
+  ],
+  "observations": {
+    "originalId": "MULTIAC-ID1X",
+    "draftIdChangedUnsavedTo": "MULTIAC-ID1R",
+    "optionsRequestUrl": "http://127.0.0.1:5173/api/clients/data-source-options?excludeClientId=MULTIAC-ID1X",
+    "optionsExcludeEqualsOriginalId": true,
+    "whileChosen": {
+      "disabledWhileChosen": true,
+      "disabledClass": false,
+      "reasonText": null,
+      "apiSelectable": true,
+      "apiOccupiedBy": []
+    },
+    "afterChipRemoved": {
+      "disabledAfterChipRemoved": false,
+      "disabledClassAfterChipRemoved": false,
+      "reasonTextAfterChipRemoved": null
+    },
+    "ownSourceSelectableAfterDeselect": true,
+    "noOccupiedReasonShown": true,
+    "chosenCountAfterReAdd": 1
+  },
+  "errors": []
+}

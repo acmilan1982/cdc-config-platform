@@ -1,0 +1,50 @@
+=== Retained MULTIAC-* synthetic fixtures at end of execution (owner: no cleanup required) ===
+
+CLIENT_ID	 FG DATA_SOURCE_ID     CLIENT_DESC
+---------------- -- ------------------ ------------------------------------------------------------------------
+MULTIAC-ABN1	 2  CCFG-AC-R1-DS03    MULTIAC synthetic fixture: abnormal FG_ACTIVE=2 for three-state menu che
+				       cks. Not a real runtime probe.
+
+MULTIAC-ABN2	 0  CCFG-AC-R1-DS04    MULTIAC synthetic fixture: abnormal FG_ACTIVE=2 for disable-via-UI check
+				       . Not a real runtime probe.
+
+MULTIAC-CONFA	 1  CCFG-AC-R1-DS08    MULTIAC synthetic fixture: source occupancy owner for conflict checks. N
+				       ot a real runtime probe.
+
+MULTIAC-DEL3	 0		       MULTIAC synthetic fixture: deletable probe for AC-145 delete cancel/fail
+				       ure selection checks. Not a real runtime probe.
+
+MULTIAC-DESC	 0  77711	       MULTIAC AC-115 loading observation description
+MULTIAC-E139A	 0		       MULTIAC synthetic fixture: AC-139 cancel/success disable path. Not a rea
+				       l runtime probe.
+
+MULTIAC-E139F	 1		       MULTIAC synthetic fixture: AC-139 disable failure injection target. Not
+				       a real runtime probe.
+
+MULTIAC-ENC	 0  CCFG-AC-R1-DS08    MULTIAC synthetic fixture: disabled probe holding a source already owned
+					by MULTIAC-CONFA, to force a real enable-time 40941 conflict. Not a rea
+				       l runtime probe.
+
+MULTIAC-F145A	 0		       MULTIAC synthetic fixture: AC-145 toggle-success reselect target. Not a
+				       real runtime probe.
+
+MULTIAC-F145D	 0		       MULTIAC synthetic fixture: AC-145 delete-failure selection retention tar
+				       get. Not a real runtime probe.
+
+MULTIAC-ID1X	 0  CCFG-AC-R1-DS07    MULTIAC synthetic fixture: probe-ID edit sample. Not a real runtime prob
+				       e.
+
+MULTIAC-ID2	 0		       MULTIAC synthetic fixture: probe-ID conflict target. Not a real runtime
+				       probe.
+
+MULTIAC-NEW1	 1  CCFG-AC-R1-DS01    MULTIAC synthetic create sample created through the real UI. Not a real
+				       runtime probe.
+
+MULTIAC-OFF1	 0  CCFG-AC-R1-DS02    MULTIAC synthetic fixture: disabled probe for enable-confirmation checks
+				       . Not a real runtime probe.
+
+=== Total MULTIAC-* rows ===
+
+TOTAL_MULTIAC_ROWS
+------------------
+		14

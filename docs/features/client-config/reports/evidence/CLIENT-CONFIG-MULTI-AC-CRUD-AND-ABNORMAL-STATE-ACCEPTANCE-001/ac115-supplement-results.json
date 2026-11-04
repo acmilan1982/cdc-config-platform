@@ -1,0 +1,35 @@
+{
+  "task": "CLIENT-CONFIG-MULTI-AC-CRUD-AND-ABNORMAL-STATE-ACCEPTANCE-001",
+  "check": "AC-115 pointer-away base state",
+  "writes": [],
+  "errors": [],
+  "baseBeforeClick": {
+    "backgroundColor": "rgb(9, 9, 11)",
+    "borderColor": "rgb(9, 9, 11)",
+    "color": "rgb(255, 255, 255)",
+    "borderRadius": "6px",
+    "fontWeight": "500",
+    "cursor": "pointer",
+    "classes": "el-button el-button--primary cc-dialog-submit ced-submit",
+    "disabledAttr": false,
+    "text": "创建"
+  },
+  "fieldErrorCount": 3,
+  "fieldErrors": [
+    "探针 ID 不能为空。",
+    "探针描述不能为空。",
+    "至少选择 1 个数据源"
+  ],
+  "baseAfterPointerAway": {
+    "backgroundColor": "rgb(9, 9, 11)",
+    "borderColor": "rgb(9, 9, 11)",
+    "color": "rgb(255, 255, 255)",
+    "borderRadius": "6px",
+    "fontWeight": "500",
+    "cursor": "pointer",
+    "classes": "el-button el-button--primary cc-dialog-submit ced-submit",
+    "disabledAttr": false,
+    "text": "创建"
+  },
+  "writeCount": 0
+}

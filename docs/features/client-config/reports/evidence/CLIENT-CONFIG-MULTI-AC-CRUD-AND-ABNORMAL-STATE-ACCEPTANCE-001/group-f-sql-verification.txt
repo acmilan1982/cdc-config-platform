@@ -1,0 +1,38 @@
+=== AC-020 deleted MULTIAC-DEL1 (expect 0 rows) ===
+=== AC-145 branch5 deleted MULTIAC-DEL2 (expect 0 rows) ===
+=== AC-145 branch6 cancel/failure rows (expect both present, fg 0) ===
+
+CLIENT_ID	 FG_
+---------------- ---
+MULTIAC-DEL3	 0
+MULTIAC-F145D	 0
+=== AC-145 branch1/2 targets (expect F145A fg 0, OFF1 fg 0) ===
+
+CLIENT_ID	 FG_
+---------------- ---
+MULTIAC-F145A	 0
+MULTIAC-OFF1	 0
+=== AC-139 targets (E139A success fg 0; E139F failure unchanged fg 1) ===
+
+CLIENT_ID	 FG_
+---------------- ---
+MULTIAC-E139A	 0
+MULTIAC-E139F	 1
+=== Group D abnormal targets (ABN2 disabled fg 0; ABN3 deleted) ===
+
+CLIENT_ID	 FG_
+---------------- ---
+MULTIAC-ABN2	 0
+=== AC-140 conflict row unchanged (ENC fg 0) ===
+
+CLIENT_ID	 FG_
+---------------- ---
+MULTIAC-ENC	 0
+=== AC-115 persisted description ===
+
+CLIENT_ID	 FG_
+---------------- ---
+CLIENT_DESC
+------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
+MULTIAC-DESC	 0
+MULTIAC AC-115 loading observation description

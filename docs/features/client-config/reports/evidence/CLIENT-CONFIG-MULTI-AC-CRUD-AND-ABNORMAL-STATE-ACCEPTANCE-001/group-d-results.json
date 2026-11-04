@@ -1,0 +1,198 @@
+{
+  "task": "CLIENT-CONFIG-MULTI-AC-CRUD-AND-ABNORMAL-STATE-ACCEPTANCE-001",
+  "group": "D",
+  "frontend": "http://127.0.0.1:5173",
+  "browser": {
+    "engine": "chromium",
+    "executable": "/root/.cache/ms-playwright/chromium-1217/chrome-linux64/chrome",
+    "headless": true
+  },
+  "ledger": [
+    {
+      "method": "PUT",
+      "path": "/api/clients/MULTIAC-ABN2/disable",
+      "body": null
+    },
+    {
+      "method": "DELETE",
+      "path": "/api/clients/MULTIAC-ABN3",
+      "body": null
+    }
+  ],
+  "viewports": {
+    "1440x900": {
+      "structure": {
+        "headers": [
+          "序号",
+          "探针 ID",
+          "探针描述",
+          "采集数据源",
+          "数据源数量",
+          "操作"
+        ],
+        "rightmostHeader": "操作",
+        "actionClassPresent": true,
+        "actionThPosition": "sticky",
+        "actionThRight": "0px",
+        "actionTdPosition": "sticky",
+        "viewportWidth": 1440,
+        "horizontal": {
+          "scrollWidth": 1076,
+          "clientWidth": 1076
+        }
+      },
+      "menus": {
+        "enabled": {
+          "id": "MULTIAC-NEW1",
+          "items": [
+            "停用",
+            "删除"
+          ],
+          "containsDelete": true,
+          "containsEnable": false,
+          "containsDisable": true,
+          "editDialogOpened": false,
+          "selectedRows": 0
+        },
+        "disabled": {
+          "id": "MULTIAC-OFF1",
+          "items": [
+            "启用",
+            "删除"
+          ],
+          "containsDelete": true,
+          "containsEnable": true,
+          "containsDisable": false,
+          "editDialogOpened": false,
+          "selectedRows": 0
+        },
+        "abnormal": {
+          "id": "MULTIAC-ABN1",
+          "items": [
+            "停用",
+            "删除"
+          ],
+          "containsDelete": true,
+          "containsEnable": false,
+          "containsDisable": true,
+          "editDialogOpened": false,
+          "selectedRows": 0
+        }
+      }
+    },
+    "1920x1080": {
+      "structure": {
+        "headers": [
+          "序号",
+          "探针 ID",
+          "探针描述",
+          "采集数据源",
+          "数据源数量",
+          "操作"
+        ],
+        "rightmostHeader": "操作",
+        "actionClassPresent": true,
+        "actionThPosition": "sticky",
+        "actionThRight": "0px",
+        "actionTdPosition": "sticky",
+        "viewportWidth": 1920,
+        "horizontal": {
+          "scrollWidth": 1556,
+          "clientWidth": 1556
+        }
+      },
+      "menus": {
+        "enabled": {
+          "id": "MULTIAC-NEW1",
+          "items": [
+            "停用",
+            "删除"
+          ],
+          "containsDelete": true,
+          "containsEnable": false,
+          "containsDisable": true,
+          "editDialogOpened": false,
+          "selectedRows": 0
+        },
+        "disabled": {
+          "id": "MULTIAC-OFF1",
+          "items": [
+            "启用",
+            "删除"
+          ],
+          "containsDelete": true,
+          "containsEnable": true,
+          "containsDisable": false,
+          "editDialogOpened": false,
+          "selectedRows": 0
+        },
+        "abnormal": {
+          "id": "MULTIAC-ABN1",
+          "items": [
+            "停用",
+            "删除"
+          ],
+          "containsDelete": true,
+          "containsEnable": false,
+          "containsDisable": true,
+          "editDialogOpened": false,
+          "selectedRows": 0
+        }
+      }
+    }
+  },
+  "ac082": {
+    "snapshotBefore": {
+      "new1Fg": "1",
+      "off1Fg": "0",
+      "abn1Fg": "2",
+      "abn2Fg": "2",
+      "abn3Fg": "2",
+      "simultaneousThreeStates": true
+    }
+  },
+  "ac026": {
+    "disable": {
+      "menuBefore": [
+        "停用",
+        "删除"
+      ],
+      "confirm": {
+        "title": "停用探针",
+        "body": "确定停用探针 MULTIAC-ABN2 吗？",
+        "buttons": [
+          "取消",
+          "停用"
+        ]
+      },
+      "response": {
+        "code": 200
+      },
+      "fgActiveAfter": "0",
+      "menuAfter": [
+        "启用",
+        "删除"
+      ]
+    },
+    "delete": {
+      "menuBefore": [
+        "停用",
+        "删除"
+      ],
+      "confirm": {
+        "title": "删除探针",
+        "body": "确定删除探针 MULTIAC-ABN3 吗？该操作不可恢复。",
+        "buttons": [
+          "取消",
+          "删除"
+        ]
+      },
+      "response": {
+        "code": 200
+      },
+      "rowStillPresent": false,
+      "siblingAbn1StillPresent": true
+    }
+  },
+  "errors": []
+}

@@ -1,0 +1,148 @@
+{
+  "task": "CLIENT-CONFIG-MULTI-AC-CRUD-AND-ABNORMAL-STATE-ACCEPTANCE-001",
+  "group": "C",
+  "frontend": "http://127.0.0.1:5173",
+  "browser": {
+    "engine": "chromium",
+    "executable": "/root/.cache/ms-playwright/chromium-1217/chrome-linux64/chrome",
+    "headless": true
+  },
+  "ledger": [
+    {
+      "method": "POST",
+      "path": "/api/clients",
+      "body": {
+        "clientId": "MULTIAC-CONFB",
+        "dataSourceIds": [
+          "CCFG-AC-R1-DS08"
+        ]
+      },
+      "businessCode": 40941,
+      "directBackend": true
+    },
+    {
+      "method": "POST",
+      "path": "/api/clients",
+      "body": {
+        "clientId": "MULTIAC-CONFC",
+        "dataSourceIds": [
+          "CCFG-AC-R1-DS06",
+          "CCFG-AC-R1-DS08"
+        ]
+      },
+      "businessCode": 40941,
+      "directBackend": true
+    },
+    {
+      "method": "PUT",
+      "path": "/api/clients/MULTIAC-DESC",
+      "body": {
+        "clientId": "MULTIAC-DESC",
+        "clientDesc": "MULTIAC temporary desc before body mutation",
+        "dataSourceIds": [
+          "77711"
+        ]
+      }
+    },
+    {
+      "method": "PUT",
+      "path": "/api/clients/MULTIAC-DESC",
+      "body": {
+        "clientId": "MULTIAC-DESC",
+        "clientDesc": "MULTIAC description that must not persist after network abort",
+        "dataSourceIds": [
+          "77711"
+        ]
+      }
+    },
+    {
+      "method": "PUT",
+      "path": "/api/clients/MULTIAC-DESC",
+      "body": {
+        "clientId": "MULTIAC-DESC",
+        "clientDesc": "MULTIAC successful save sample after feedback checks",
+        "dataSourceIds": [
+          "77711"
+        ]
+      }
+    }
+  ],
+  "injections": [
+    {
+      "kind": "request-body-mutation",
+      "target": "PUT /api/clients/MULTIAC-DESC",
+      "field": "clientDesc",
+      "utf8Bytes": 1028
+    },
+    {
+      "kind": "network-abort",
+      "target": "PUT /api/clients/MULTIAC-DESC",
+      "reachedBackend": false
+    }
+  ],
+  "ac058": {
+    "createAttempt": {
+      "http": 200,
+      "code": 40941,
+      "message": "数据源“CCFG-AC-R1-人工验收机构08（CCFG-AC-R1-DS08）”已分配给探针：MULTIAC-CONFA、MULTIAC-ENC，不能重复分配。"
+    },
+    "rowCreated": false,
+    "sourceStillOwned": {
+      "selectable": false,
+      "reason": "OCCUPIED",
+      "occupiedBy": [
+        "MULTIAC-CONFA",
+        "MULTIAC-ENC"
+      ]
+    }
+  },
+  "ac061": {
+    "ds06Before": {
+      "selectable": true,
+      "occupiedBy": []
+    },
+    "createAttempt": {
+      "http": 200,
+      "code": 40941,
+      "message": "数据源“CCFG-AC-R1-人工验收机构08（CCFG-AC-R1-DS08）”已分配给探针：MULTIAC-CONFA、MULTIAC-ENC，不能重复分配。"
+    },
+    "rowCreated": false,
+    "ds06After": {
+      "selectable": true,
+      "occupiedBy": []
+    },
+    "noPartialWrite": true
+  },
+  "ac062": {
+    "message": "数据源“CCFG-AC-R1-人工验收机构08（CCFG-AC-R1-DS08）”已分配给探针：MULTIAC-CONFA、MULTIAC-ENC，不能重复分配。",
+    "containsOrg": true,
+    "containsSourceId": true,
+    "containsConflictProbeId": true
+  },
+  "ac121": {
+    "descOverLimit": {
+      "code": 40102,
+      "message": "探针描述不能为空，或去除首尾空白后的原文超过 1024 字节（UTF-8）。",
+      "fieldError": "探针描述不能为空，或去除首尾空白后的原文超过 1024 字节（UTF-8）。",
+      "dialogStillOpen": true
+    },
+    "networkAbort": {
+      "globalMessage": "Network Error",
+      "fieldErrorCount": 0,
+      "dialogStillOpen": true,
+      "dbUnchanged": true
+    },
+    "success": {
+      "code": 200,
+      "dialogClosed": true,
+      "listReloaded": true,
+      "descPersisted": true
+    },
+    "reusedFieldErrorEvidence": {
+      "idConflict": "group-b-results.json ac039.step2/step4 fieldError shown under the probe-ID field",
+      "sourceConflict": "group-b-results.json ac040.sourceFieldError shown under the collection-source field",
+      "conditionsPreserved": "empty desc / ID uniqueness / source allocation / 1024-byte limit exercised in groups A and B"
+    }
+  },
+  "errors": []
+}

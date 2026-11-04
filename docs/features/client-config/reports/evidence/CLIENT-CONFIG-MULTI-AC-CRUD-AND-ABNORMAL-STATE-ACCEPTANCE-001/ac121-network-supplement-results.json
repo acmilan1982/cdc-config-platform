@@ -1,0 +1,19 @@
+{
+  "task": "CLIENT-CONFIG-MULTI-AC-CRUD-AND-ABNORMAL-STATE-ACCEPTANCE-001",
+  "check": "AC-121 network global feedback",
+  "injections": [
+    {
+      "kind": "network-abort",
+      "target": "PUT /api/clients/MULTIAC-DESC",
+      "reachedBackend": false
+    }
+  ],
+  "errors": [],
+  "messages": [
+    "Network Error",
+    "编辑失败，请检查网络后重试。"
+  ],
+  "fieldErrorCount": 0,
+  "dialogStillOpen": true,
+  "globalFeedbackPresent": true
+}
