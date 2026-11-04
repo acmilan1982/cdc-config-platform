@@ -1,0 +1,49 @@
+{
+  "layout": {
+    "optionsPane": {
+      "width": 380.66,
+      "height": 342.8,
+      "clientHeight": 341,
+      "scrollHeight": 341,
+      "overflowY": "visible",
+      "overflowX": "visible"
+    },
+    "chosenPane": {
+      "width": 333.34,
+      "height": 342.8,
+      "clientHeight": 341,
+      "scrollHeight": 341,
+      "overflowY": "visible",
+      "overflowX": "visible"
+    },
+    "optList": {
+      "width": 362.66,
+      "height": 260,
+      "clientHeight": 260,
+      "scrollHeight": 8727,
+      "overflowY": "auto",
+      "overflowX": "auto"
+    },
+    "chosenList": {
+      "width": 315.34,
+      "height": 36.8,
+      "clientHeight": 37,
+      "scrollHeight": 37,
+      "overflowY": "auto",
+      "overflowX": "auto"
+    },
+    "dialog": {
+      "width": 852,
+      "height": 613.19,
+      "clientHeight": 613,
+      "scrollHeight": 613,
+      "overflowY": "visible",
+      "overflowX": "visible"
+    },
+    "viewport": {
+      "w": 900,
+      "h": 800
+    },
+    "docScrollWidth": 900
+  }
+}

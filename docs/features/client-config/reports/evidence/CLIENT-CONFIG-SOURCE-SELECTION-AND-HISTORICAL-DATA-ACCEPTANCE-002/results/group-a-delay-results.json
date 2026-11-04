@@ -1,0 +1,86 @@
+{
+  "x01": {
+    "label": "PAMB2/X01 anomaly+ambiguity",
+    "enterToShowMs": 238,
+    "raw": {
+      "enter": 8584.800000000745,
+      "show": 8822.700000000186,
+      "hide": null
+    },
+    "visibleTips": 1,
+    "lines": [
+      [
+        "X01 Disabled Org",
+        "数据源 ID：S2AC-X01",
+        "异常原因：已停用",
+        "异常原因：已分配给其他探针",
+        "冲突探针：S2AC-P8A"
+      ]
+    ]
+  },
+  "d17": {
+    "label": "P68/D17 normal",
+    "enterToShowMs": 241,
+    "raw": {
+      "enter": 9898,
+      "show": 10138.800000000745,
+      "hide": null
+    },
+    "visibleTips": 1,
+    "lines": [
+      [
+        "D17 Org",
+        "数据源 ID：S2AC-D17"
+      ]
+    ]
+  },
+  "occ": {
+    "label": "POCCV/conflict",
+    "enterToShowMs": 239,
+    "raw": {
+      "enter": 11198.200000000186,
+      "show": 11437.600000000559,
+      "hide": null
+    },
+    "visibleTips": 1,
+    "lines": [
+      [
+        "OccupyOrg05",
+        "数据源 ID：S2AC-O05",
+        "异常原因：已分配给其他探针",
+        "冲突探针：S2AC-PMA、S2AC-PMB"
+      ]
+    ]
+  },
+  "rowbad": {
+    "label": "PAMB1/row-ambiguity badge",
+    "enterToShowMs": 241,
+    "raw": {
+      "enter": 12513.700000000186,
+      "show": 12754.600000000559,
+      "hide": null
+    },
+    "visibleTips": 1,
+    "lines": [
+      [
+        "行级存在英文逗号歧义（历史 CSV），非已确定分配",
+        "列表按普通 CSV 解析展示，请进入编辑确认实际分配"
+      ]
+    ]
+  },
+  "countNote": {
+    "label": "PAMB1/count note",
+    "enterToShowMs": 239,
+    "raw": {
+      "enter": 13815.700000000186,
+      "show": 14054.300000000745,
+      "hide": null
+    },
+    "visibleTips": 1,
+    "lines": [
+      [
+        "普通 CSV 解析的展示结果（行级含逗号歧义，非已确定分配）"
+      ]
+    ]
+  }
+}

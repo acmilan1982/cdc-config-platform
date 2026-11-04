@@ -1,0 +1,170 @@
+{
+  "cases": {
+    "gen1": {
+      "chosen": [
+        "SAME-ORG-S2AC",
+        "SAME-ORG-S2AC",
+        "Mixed Case Org S2AC",
+        "Padded Org S2AC",
+        "OrgWith,CommaS2AC"
+      ],
+      "generated": {
+        "value": "SAME-ORG-S2AC,SAME-ORG-S2AC,Mixed Case Org S2AC,Padded Org S2AC,OrgWith,CommaS2AC",
+        "warnings": [],
+        "confirmBoxes": 0,
+        "requestDelta": 0
+      },
+      "expected": "SAME-ORG-S2AC,SAME-ORG-S2AC,Mixed Case Org S2AC,Padded Org S2AC,OrgWith,CommaS2AC",
+      "match": true,
+      "expectedBytes": 81
+    },
+    "noAutoUpdate": {
+      "afterAdd": "SAME-ORG-S2AC,SAME-ORG-S2AC,Mixed Case Org S2AC,Padded Org S2AC,OrgWith,CommaS2AC",
+      "afterRemove": "SAME-ORG-S2AC,SAME-ORG-S2AC,Mixed Case Org S2AC,Padded Org S2AC,OrgWith,CommaS2AC",
+      "unchangedAfterAdd": true,
+      "unchangedAfterRemove": true
+    },
+    "order": {
+      "orderA": "Mixed Case Org S2AC,一二三四五六七八九十",
+      "orderB": "一二三四五六七八九十,Mixed Case Org S2AC",
+      "distinct": true
+    },
+    "editAuto": {
+      "title": "编辑探针",
+      "descEcho": "SAME-ORG-S2AC,SAME-ORG-S2AC,Mixed Case Org S2AC,Padded Org S2AC,OrgWith,CommaS2AC",
+      "autoButtonCount": 1,
+      "generated": "SAME-ORG-S2AC,SAME-ORG-S2AC,Mixed Case Org S2AC,Padded Org S2AC,OrgWith,CommaS2AC,LongOrgS2AC-ABCDEFGHIJKLMNOPQRST",
+      "changed": true
+    },
+    "longExact": {
+      "chosenCount": 16,
+      "fullCodePoints": 1024,
+      "fullBytes": 1024,
+      "expectedFirst256": "LongS2AC-L01-XXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXX,LongS2AC-L02-XXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXX,LongS2AC-L03-XXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXX,LongS2AC-L04-XXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXX",
+      "actualValue": "LongS2AC-L01-XXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXX,LongS2AC-L02-XXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXX,LongS2AC-L03-XXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXX,LongS2AC-L04-XXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXX",
+      "actualCodePoints": 256,
+      "actualBytes": 256,
+      "isPrefix": true,
+      "warnings": [],
+      "confirmBoxes": 0
+    },
+    "longOver": {
+      "chosenCount": 16,
+      "fullCodePoints": 1039,
+      "fullBytes": 1039,
+      "actualValue": "LongS2AC-L01-XXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXX,LongS2AC-L02-XXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXX,LongS2AC-L03-XXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXX,LongS2AC-L04-XXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXX",
+      "actualCodePoints": 256,
+      "actualBytes": 256,
+      "isPrefix": true,
+      "warnings": [],
+      "confirmBoxes": 0
+    },
+    "emoji": {
+      "fullCodePoints": 321,
+      "fullBytes": 324,
+      "valueCodePoints": 256,
+      "valueBytes": 259,
+      "lastCodePoint": "1f600",
+      "hasLoneSurrogate": false,
+      "isPrefix": true,
+      "warnings": [],
+      "confirmBoxes": 0
+    },
+    "missingOrg": {
+      "generated": {
+        "value": "KEEP ORIGINAL S2AC",
+        "warnings": [
+          "数据源（S2AC-N15）无机构名称，自动生成失败。"
+        ],
+        "confirmBoxes": 0,
+        "requestDelta": 0
+      },
+      "kept": true,
+      "mentionsId": true
+    },
+    "noSources": {
+      "generated": {
+        "value": "KEEP EMPTY S2AC",
+        "warnings": [
+          "数据源（S2AC-N15）无机构名称，自动生成失败。"
+        ],
+        "confirmBoxes": 0,
+        "requestDelta": 0
+      },
+      "unchanged": true,
+      "warnings": [
+        "数据源（S2AC-N15）无机构名称，自动生成失败。"
+      ],
+      "requestDelta": 0
+    }
+  },
+  "expected": {
+    "optionCount": 133
+  },
+  "write": {
+    "saveAuto": {
+      "requestBodies": [
+        {
+          "method": "POST",
+          "url": "http://127.0.0.1:5173/api/clients",
+          "body": "{\"clientId\":\"S2AC-PAUTO\",\"clientDesc\":\"SAME-ORG-S2AC,SAME-ORG-S2AC,Mixed Case Org S2AC,Padded Org S2AC,OrgWith,CommaS2AC\",\"dataSourceIds\":[\"S2AC-N04\",\"S2AC-N14\",\"S2AC-N06\",\"S2AC-N05\",\"S2AC-N10\"]}"
+        },
+        {
+          "method": "GET",
+          "url": "http://127.0.0.1:5173/api/clients?status=ALL",
+          "body": null
+        }
+      ],
+      "httpStatus": 200,
+      "response": {
+        "code": 200,
+        "message": "success",
+        "timestamp": "2026-11-04T13:49:08.544"
+      },
+      "dialogVisibleAfter": false,
+      "generatedValue": "SAME-ORG-S2AC,SAME-ORG-S2AC,Mixed Case Org S2AC,Padded Org S2AC,OrgWith,CommaS2AC"
+    }
+  },
+  "requestLog": [
+    {
+      "method": "GET",
+      "url": "http://127.0.0.1:5173/api/clients?status=ALL",
+      "body": null
+    },
+    {
+      "method": "GET",
+      "url": "http://127.0.0.1:5173/api/clients/data-source-options",
+      "body": null
+    },
+    {
+      "method": "POST",
+      "url": "http://127.0.0.1:5173/api/clients",
+      "body": "{\"clientId\":\"S2AC-PAUTO\",\"clientDesc\":\"SAME-ORG-S2AC,SAME-ORG-S2AC,Mixed Case Org S2AC,Padded Org S2AC,OrgWith,CommaS2AC\",\"dataSourceIds\":[\"S2AC-N04\",\"S2AC-N14\",\"S2AC-N06\",\"S2AC-N05\",\"S2AC-N10\"]}"
+    },
+    {
+      "method": "GET",
+      "url": "http://127.0.0.1:5173/api/clients?status=ALL",
+      "body": null
+    },
+    {
+      "method": "GET",
+      "url": "http://127.0.0.1:5173/api/clients/data-source-options?excludeClientId=S2AC-PAUTO",
+      "body": null
+    },
+    {
+      "method": "GET",
+      "url": "http://127.0.0.1:5173/api/clients/data-source-options",
+      "body": null
+    },
+    {
+      "method": "GET",
+      "url": "http://127.0.0.1:5173/api/clients/data-source-options",
+      "body": null
+    },
+    {
+      "method": "GET",
+      "url": "http://127.0.0.1:5173/api/clients/data-source-options",
+      "body": null
+    }
+  ]
+}

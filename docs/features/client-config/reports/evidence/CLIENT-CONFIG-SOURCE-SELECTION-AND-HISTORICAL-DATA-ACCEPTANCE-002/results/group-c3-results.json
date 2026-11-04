@@ -1,0 +1,19 @@
+{
+  "option": {
+    "found": true,
+    "charCodes": null
+  },
+  "optionText": "S2AC-TE01S2AC NAME · S2AC-TE01",
+  "chipTexts": [
+    "S2AC-TE01"
+  ],
+  "result": {
+    "value": "KEEP TRIMEMPTY S2AC",
+    "messages": [
+      "数据源（S2AC-TE01）无机构名称，自动生成失败。"
+    ],
+    "confirmBoxes": 0,
+    "requestDelta": 0,
+    "unchanged": true
+  }
+}

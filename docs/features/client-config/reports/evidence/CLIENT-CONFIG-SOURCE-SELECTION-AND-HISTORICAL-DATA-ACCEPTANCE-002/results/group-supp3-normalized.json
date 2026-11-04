@@ -1,0 +1,18 @@
+{
+  "request": {
+    "clientId": "S2AC-PNORM",
+    "clientDesc": "S2AC normalized duplicate probe",
+    "dataSourceIds": [
+      " S2AC-O05 ",
+      "",
+      "S2AC-O05",
+      " S2AC-O05 "
+    ]
+  },
+  "status": 200,
+  "json": {
+    "code": 40941,
+    "message": "数据源“OccupyOrg05（S2AC-O05）”已分配给探针：S2AC-PMA、S2AC-PMB、S2AC-POCCV，不能重复分配。",
+    "timestamp": "2026-11-04T13:57:57.237"
+  }
+}

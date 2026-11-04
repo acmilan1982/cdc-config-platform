@@ -1,0 +1,78 @@
+{
+  "normalizedDuplicate": {
+    "status": 200,
+    "json": {
+      "code": 40941,
+      "message": "数据源“OccupyOrg05（S2AC-O05）”已分配给探针：S2AC-PMA、S2AC-PMB、S2AC-POCCV，不能重复分配。",
+      "timestamp": "2026-11-04T14:09:43.341"
+    }
+  },
+  "S2AC-PAMB1": {
+    "count": "2",
+    "rowbad": [
+      {
+        "text": "含逗号歧义",
+        "visible": true
+      }
+    ],
+    "countNote": "（展示）",
+    "tags": [
+      {
+        "text": "TokenS2AMOrg",
+        "cls": "cc-dstag cc-dstag--neutral",
+        "width": 107.13
+      },
+      {
+        "text": "TokenC02Org",
+        "cls": "cc-dstag cc-dstag--neutral",
+        "width": 95.8
+      }
+    ],
+    "srcScroll": {
+      "clientWidth": 766,
+      "scrollWidth": 766
+    }
+  },
+  "S2AC-PAMB2": {
+    "count": "3",
+    "rowbad": [
+      {
+        "text": "含逗号歧义",
+        "visible": true
+      }
+    ],
+    "countNote": "（展示）",
+    "tags": [
+      {
+        "text": "X01 Disabled Org",
+        "cls": "cc-dstag cc-dstag--bad",
+        "width": 117.38
+      },
+      {
+        "text": "TokenSourceS2AC",
+        "cls": "cc-dstag cc-dstag--neutral",
+        "width": 120
+      },
+      {
+        "text": "TokenC01Org",
+        "cls": "cc-dstag cc-dstag--neutral",
+        "width": 95.8
+      }
+    ],
+    "srcScroll": {
+      "clientWidth": 766,
+      "scrollWidth": 766
+    }
+  },
+  "trimEmptyOption": {
+    "found": true,
+    "text": "S2AC-TE01S2AC NAME · S2AC-TE01"
+  },
+  "trimEmpty": {
+    "value": "KEEP TRIMEMPTY S2AC",
+    "messages": [
+      "数据源（S2AC-TE01）无机构名称，自动生成失败。"
+    ],
+    "requestDelta": 0
+  }
+}

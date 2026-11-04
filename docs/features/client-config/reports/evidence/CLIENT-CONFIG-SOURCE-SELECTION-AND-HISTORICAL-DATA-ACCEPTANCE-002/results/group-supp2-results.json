@@ -1,0 +1,72 @@
+{
+  "bad": {
+    "P8A_X01": {
+      "text": "X01 Disabled Org",
+      "cls": "cc-dstag cc-dstag--bad",
+      "color": "rgb(213, 73, 73)",
+      "bg": "rgb(254, 240, 240)",
+      "width": 117.38,
+      "height": 20,
+      "display": "flex",
+      "alignItems": "center",
+      "justifyContent": "center",
+      "truncated": false
+    },
+    "PAMB2_X01": {
+      "text": "X01 Disabled Org",
+      "cls": "cc-dstag cc-dstag--bad",
+      "color": "rgb(213, 73, 73)",
+      "bg": "rgb(254, 240, 240)",
+      "width": 117.38,
+      "height": 20,
+      "display": "flex",
+      "alignItems": "center",
+      "justifyContent": "center",
+      "truncated": false
+    }
+  },
+  "neutral": {
+    "PAMB2_second": {
+      "text": "TokenSourceS2AC",
+      "cls": "cc-dstag cc-dstag--neutral",
+      "color": "rgb(96, 98, 102)",
+      "bg": "rgb(244, 244, 245)",
+      "width": 0,
+      "height": 0,
+      "display": "none",
+      "alignItems": "center",
+      "justifyContent": "center",
+      "truncated": false
+    },
+    "PAMB1_first": {
+      "text": "TokenS2AMOrg",
+      "cls": "cc-dstag cc-dstag--neutral",
+      "color": "rgb(96, 98, 102)",
+      "bg": "rgb(244, 244, 245)",
+      "width": 107.13,
+      "height": 20,
+      "display": "flex",
+      "alignItems": "center",
+      "justifyContent": "center",
+      "truncated": false
+    }
+  },
+  "options": {
+    "listHeight": 260,
+    "count": 173,
+    "firstTenHeights": [
+      67.78,
+      67.78,
+      67.78,
+      67.78,
+      67.78,
+      67.78,
+      67.78,
+      67.78,
+      67.78,
+      67.78
+    ],
+    "fullyVisible": 3,
+    "visibleOrPartial": 4
+  }
+}

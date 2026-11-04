@@ -1,0 +1,330 @@
+{
+  "labels": {
+    "ok": {
+      "text": "DOne Org",
+      "cls": "cc-dstag cc-dstag--ok",
+      "width": 74.67,
+      "height": 20,
+      "maxWidth": "120px",
+      "display": "flex",
+      "alignItems": "center",
+      "justifyContent": "center",
+      "overflow": "hidden",
+      "whiteSpace": "normal",
+      "padding": "0px 9px",
+      "fontSize": "12px",
+      "txtOverflow": "hidden",
+      "txtTextOverflow": "ellipsis",
+      "txtClientWidth": 57,
+      "txtScrollWidth": 57,
+      "truncated": false
+    },
+    "bad": {
+      "text": "D17 Org",
+      "cls": "cc-dstag cc-dstag--ok",
+      "width": 64.69,
+      "height": 20,
+      "maxWidth": "120px",
+      "display": "flex",
+      "alignItems": "center",
+      "justifyContent": "center",
+      "overflow": "hidden",
+      "whiteSpace": "normal",
+      "padding": "0px 9px",
+      "fontSize": "12px",
+      "txtOverflow": "hidden",
+      "txtTextOverflow": "ellipsis",
+      "txtClientWidth": 47,
+      "txtScrollWidth": 47,
+      "truncated": false
+    },
+    "rawId": {
+      "text": "S2AC-N09",
+      "cls": "cc-dstag cc-dstag--ok",
+      "width": 76.03,
+      "height": 20,
+      "maxWidth": "120px",
+      "display": "flex",
+      "alignItems": "center",
+      "justifyContent": "center",
+      "overflow": "hidden",
+      "whiteSpace": "normal",
+      "padding": "0px 9px",
+      "fontSize": "12px",
+      "txtOverflow": "hidden",
+      "txtTextOverflow": "ellipsis",
+      "txtClientWidth": 58,
+      "txtScrollWidth": 58,
+      "truncated": false
+    },
+    "longOrg": {
+      "text": "LongOrgD30-ABCDEFGHIJKLMNOPQRSTUV",
+      "cls": "cc-dstag cc-dstag--ok",
+      "width": 120,
+      "height": 20,
+      "maxWidth": "120px",
+      "display": "flex",
+      "alignItems": "center",
+      "justifyContent": "center",
+      "overflow": "hidden",
+      "whiteSpace": "normal",
+      "padding": "0px 9px",
+      "fontSize": "12px",
+      "txtOverflow": "hidden",
+      "txtTextOverflow": "ellipsis",
+      "txtClientWidth": 102,
+      "txtScrollWidth": 257,
+      "truncated": true
+    },
+    "more": {
+      "text": "+7",
+      "width": 31.69,
+      "height": 20,
+      "display": "flex",
+      "alignItems": "center",
+      "justifyContent": "center"
+    },
+    "rowHeights": {
+      "P6": 48,
+      "P68": 48,
+      "PNOORG": 48,
+      "PELL": 48,
+      "P8": 48
+    },
+    "longOrgTip": {
+      "delayMs": 354,
+      "tips": [
+        {
+          "visible": true,
+          "lines": [
+            {
+              "text": "LongOrgD30-ABCDEFGHIJKLMNOPQRSTUV",
+              "cls": "cc-single-line cc-single-line--main"
+            },
+            {
+              "text": "数据源 ID：S2AC-D30",
+              "cls": "cc-single-line cc-single-line--muted"
+            }
+          ],
+          "rect": {
+            "x": 771.6640625,
+            "y": 408,
+            "w": 276.671875,
+            "h": 48
+          }
+        }
+      ]
+    }
+  },
+  "notFound": {
+    "tags": [
+      {
+        "text": "S2AC-MISSING",
+        "cls": "cc-dstag cc-dstag--bad"
+      },
+      {
+        "text": "D18 Org",
+        "cls": "cc-dstag cc-dstag--ok"
+      }
+    ],
+    "count": "2",
+    "tip": {
+      "delayMs": 303,
+      "tips": [
+        {
+          "visible": true,
+          "lines": [
+            {
+              "text": "S2AC-MISSING",
+              "cls": "cc-single-line cc-single-line--main"
+            },
+            {
+              "text": "异常原因：不存在",
+              "cls": "cc-single-line cc-single-line--bad"
+            }
+          ],
+          "rect": {
+            "x": 843.9921875,
+            "y": 76,
+            "w": 116.015625,
+            "h": 48
+          }
+        }
+      ]
+    }
+  },
+  "dupRow": {
+    "tags": [
+      {
+        "text": "D15 Org",
+        "cls": "cc-dstag cc-dstag--bad"
+      },
+      {
+        "text": "D16 Org",
+        "cls": "cc-dstag cc-dstag--ok"
+      }
+    ],
+    "count": "2",
+    "note": null,
+    "tip": {
+      "delayMs": 303,
+      "tips": [
+        {
+          "visible": true,
+          "lines": [
+            {
+              "text": "D15 Org",
+              "cls": "cc-single-line cc-single-line--main"
+            },
+            {
+              "text": "数据源 ID：S2AC-D15",
+              "cls": "cc-single-line cc-single-line--muted"
+            },
+            {
+              "text": "异常原因：行内重复",
+              "cls": "cc-single-line cc-single-line--bad"
+            }
+          ],
+          "rect": {
+            "x": 811.6484375,
+            "y": 310,
+            "w": 140.703125,
+            "h": 66
+          }
+        }
+      ]
+    }
+  },
+  "countCap": {
+    "request": {
+      "count": 40,
+      "serializedBytes": 359
+    },
+    "status": 200,
+    "json": {
+      "code": 200,
+      "message": "success",
+      "timestamp": "2026-11-04T13:54:23.035"
+    }
+  },
+  "reorderLong": {
+    "orderA": [
+      "S2AC-L01",
+      "S2AC-L02",
+      "S2AC-L03",
+      "S2AC-L04",
+      "S2AC-L05"
+    ],
+    "fullAChars": 324,
+    "fullABytes": 324,
+    "expectedA": "LongS2AC-L01-XXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXX,LongS2AC-L02-XXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXX,LongS2AC-L03-XXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXX,LongS2AC-L04-XXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXX",
+    "actualA": "LongS2AC-L01-XXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXX,LongS2AC-L02-XXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXX,LongS2AC-L03-XXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXX,LongS2AC-L04-XXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXX",
+    "matchA": true,
+    "warningsA": [],
+    "orderB": [
+      "S2AC-L05",
+      "S2AC-L04",
+      "S2AC-L03",
+      "S2AC-L02",
+      "S2AC-L01"
+    ],
+    "fullBChars": 324,
+    "fullBBytes": 324,
+    "expectedB": "LongS2AC-L05-XXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXX,LongS2AC-L04-XXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXX,LongS2AC-L03-XXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXX,LongS2AC-L02-XXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXX",
+    "actualB": "LongS2AC-L05-XXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXX,LongS2AC-L04-XXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXX,LongS2AC-L03-XXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXX,LongS2AC-L02-XXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXX",
+    "matchB": true,
+    "warningsB": [],
+    "distinct": true,
+    "actualAChars": 256,
+    "actualABytes": 256,
+    "actualBChars": 256,
+    "actualBBytes": 256,
+    "requestDeltaA": 0,
+    "requestDeltaB": 0
+  },
+  "dialogLayout": {
+    "optionsPane": {
+      "width": 406.33,
+      "height": 342.8,
+      "clientHeight": 341,
+      "scrollHeight": 341,
+      "overflowY": "visible",
+      "overflowX": "visible"
+    },
+    "chosenPane": {
+      "width": 355.67,
+      "height": 342.8,
+      "clientHeight": 341,
+      "scrollHeight": 341,
+      "overflowY": "visible",
+      "overflowX": "visible"
+    },
+    "optList": {
+      "width": 388.33,
+      "height": 260,
+      "clientHeight": 260,
+      "scrollHeight": 12200,
+      "overflowY": "auto",
+      "overflowX": "auto"
+    },
+    "chosenList": {
+      "width": 337.67,
+      "height": 36.8,
+      "clientHeight": 37,
+      "scrollHeight": 37,
+      "overflowY": "auto",
+      "overflowX": "auto"
+    },
+    "dialog": {
+      "width": 900,
+      "height": 613.19,
+      "clientHeight": 613,
+      "scrollHeight": 613,
+      "overflowY": "visible",
+      "overflowX": "visible"
+    },
+    "totalOptions": 173,
+    "fullyVisibleOptions": 3,
+    "viewport": {
+      "w": 1440,
+      "h": 900
+    },
+    "docScrollWidth": 1440,
+    "widthRelation": {
+      "options": 406.33,
+      "chosen": 355.67,
+      "optionsWider": true
+    },
+    "longIdOption": {
+      "text": "CapOrg01S2AC NAME · S2AC-CAP-00000000000000000000001 已分配给：S2AC-PCAP",
+      "title": "CapOrg01（S2AC NAME）S2AC-CAP-00000000000000000000001",
+      "main": {
+        "width": 62.14,
+        "clientWidth": 62,
+        "scrollWidth": 62,
+        "truncated": false,
+        "whiteSpace": "normal",
+        "textOverflow": "clip"
+      },
+      "sub": {
+        "width": 297.53,
+        "height": 16.8,
+        "clientWidth": 298,
+        "scrollWidth": 298,
+        "truncated": false,
+        "whiteSpace": "normal",
+        "textOverflow": "clip",
+        "lineHeight": "16.8px"
+      }
+    },
+    "occupiedOption": {
+      "text": "OccupyOrg05S2AC NAME · S2AC-O05 已分配给：S2AC-PMA、S2AC-PMB、S2AC-POCCV",
+      "disabled": true,
+      "reasonText": "已分配给：S2AC-PMA、S2AC-PMB、S2AC-POCCV",
+      "reasonWidth": 284.72,
+      "reasonHeight": 16.8,
+      "reasonScrollWidth": 285,
+      "reasonClientWidth": 285
+    }
+  }
+}

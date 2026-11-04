@@ -1,0 +1,37 @@
+{
+  "reopenEcho": {
+    "codePoints": 256,
+    "bytes": 768,
+    "isPrefix256": true
+  },
+  "save": {
+    "httpStatus": 200,
+    "response": {
+      "code": 200,
+      "message": "success",
+      "timestamp": "2026-11-04T13:56:03.329"
+    },
+    "requests": [
+      {
+        "method": "PUT",
+        "url": "http://127.0.0.1:5173/api/clients/S2AC-PLONG",
+        "body": "{\"clientId\":\"S2AC-PLONG\",\"clientDesc\":\"长长长长长长长长长长长长长长长长长长长长长长长长长长长长长长长长长长长长长长长长长长长长长长长长长长长长长长长长长长长长长长长长长长长长长长长长长长长长长长长长长长长长长长长长长长长长长长长长长长长长长长长长长长长长长长长长长长长长长长长长长长长长长长长长长长长长长长长长长长长长长长长长长长长长长长长长长长长长长长长长长长长长长长长长长长长长长长长长长长长长长长长长长长长长长长长长长长长长长长长长长长长长长长长长长长长长长长长长长长长长长长长长长长长长长长长长长长长长长长长长长长长长长长长长长长长长长长长长\",\"dataSourceIds\":[\"S2AC-D19\"]}"
+      },
+      {
+        "method": "GET",
+        "url": "http://127.0.0.1:5173/api/clients?status=ALL",
+        "body": null
+      }
+    ],
+    "dialogVisibleAfter": false
+  },
+  "persisted": {
+    "codePoints": 256,
+    "bytes": 768,
+    "equalsPrefix256": true,
+    "tail": "长长长长长长长长长长长长"
+  },
+  "listAfterSave": {
+    "codePoints": 256
+  }
+}

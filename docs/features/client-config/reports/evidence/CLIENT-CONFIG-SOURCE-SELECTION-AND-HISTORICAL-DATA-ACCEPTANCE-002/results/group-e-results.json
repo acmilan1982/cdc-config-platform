@@ -1,0 +1,35 @@
+{
+  "initial": {
+    "codePoints": 297,
+    "bytes": 873,
+    "tail": "长长长-S2ACLONG",
+    "hashLike": null,
+    "listText": "长长长长长长长长长长长长长长长长长长长长长长长长长长长长长长长长长长长长长长长长长长长长长长长长长长长长长长长长长长长长长长长长长长长长长长长长长长长长长长长长长长长长长长长长长长长长长长长长长长长长长长长长长长长长长长长长长长长长长长长长长长长长长长长长长长长长长长长长长长长长长长长长长长长长长长长长长长长长长长长长长长长长长长长长长长长长长长长长长长长长长长长长长长长长长长长长长长长长长长长长长长长长长长长长长长长长长长长长长长长长长长长长长长长长长长长长长长长长长长长长长长长长长长长长长长长长长长长长长长长长长长长长长长长长长长长长长长长长长长长长长长长长长长长长-S2ACLONG",
+    "listCodePoints": 297
+  },
+  "openEdit": {
+    "echoCodePoints": 256,
+    "echoBytes": 768,
+    "isPrefix256": true,
+    "echoTail": "长长长长长长长长长长长长",
+    "requestDelta": [
+      {
+        "method": "GET",
+        "url": "http://127.0.0.1:5173/api/clients/data-source-options?excludeClientId=S2AC-PLONG",
+        "body": null
+      }
+    ],
+    "writeRequests": []
+  },
+  "afterCancel": {
+    "dialogVisible": false
+  },
+  "afterCloseReload": {
+    "listCodePoints": 297,
+    "listEqualsInitial": true,
+    "apiCodePoints": 297,
+    "apiBytes": 873,
+    "apiEqualsInitial": true,
+    "tail": "长长长-S2ACLONG"
+  }
+}

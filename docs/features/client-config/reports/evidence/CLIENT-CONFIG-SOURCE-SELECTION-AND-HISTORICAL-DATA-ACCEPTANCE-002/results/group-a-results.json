@@ -1,0 +1,725 @@
+{
+  "viewport": "1440x900",
+  "snapshots": {
+    "S2AC-P6": {
+      "clientId": "S2AC-P6",
+      "countText": "6",
+      "countNote": null,
+      "rowBadge": null,
+      "moreText": null,
+      "tags": [
+        {
+          "text": "DOne Org",
+          "cls": "cc-dstag cc-dstag--ok",
+          "color": "rgb(4, 120, 87)",
+          "background": "rgb(236, 253, 245)",
+          "display": "flex",
+          "alignItems": "center",
+          "justifyContent": "center",
+          "maxWidth": "120px",
+          "textOverflow": "ellipsis",
+          "overflow": "hidden",
+          "txtClientWidth": 57,
+          "txtScrollWidth": 57,
+          "truncated": false
+        },
+        {
+          "text": "D-Two Org",
+          "cls": "cc-dstag cc-dstag--ok",
+          "color": "rgb(4, 120, 87)",
+          "background": "rgb(236, 253, 245)",
+          "display": "flex",
+          "alignItems": "center",
+          "justifyContent": "center",
+          "maxWidth": "120px",
+          "textOverflow": "ellipsis",
+          "overflow": "hidden",
+          "txtClientWidth": 60,
+          "txtScrollWidth": 60,
+          "truncated": false
+        },
+        {
+          "text": "D-Three Org",
+          "cls": "cc-dstag cc-dstag--ok",
+          "color": "rgb(4, 120, 87)",
+          "background": "rgb(236, 253, 245)",
+          "display": "flex",
+          "alignItems": "center",
+          "justifyContent": "center",
+          "maxWidth": "120px",
+          "textOverflow": "ellipsis",
+          "overflow": "hidden",
+          "txtClientWidth": 70,
+          "txtScrollWidth": 70,
+          "truncated": false
+        },
+        {
+          "text": "D-Four Org",
+          "cls": "cc-dstag cc-dstag--ok",
+          "color": "rgb(4, 120, 87)",
+          "background": "rgb(236, 253, 245)",
+          "display": "flex",
+          "alignItems": "center",
+          "justifyContent": "center",
+          "maxWidth": "120px",
+          "textOverflow": "ellipsis",
+          "overflow": "hidden",
+          "txtClientWidth": 64,
+          "txtScrollWidth": 64,
+          "truncated": false
+        },
+        {
+          "text": "D-Five Org",
+          "cls": "cc-dstag cc-dstag--ok",
+          "color": "rgb(4, 120, 87)",
+          "background": "rgb(236, 253, 245)",
+          "display": "flex",
+          "alignItems": "center",
+          "justifyContent": "center",
+          "maxWidth": "120px",
+          "textOverflow": "ellipsis",
+          "overflow": "hidden",
+          "txtClientWidth": 61,
+          "txtScrollWidth": 61,
+          "truncated": false
+        },
+        {
+          "text": "D-Six Org",
+          "cls": "cc-dstag cc-dstag--ok",
+          "color": "rgb(4, 120, 87)",
+          "background": "rgb(236, 253, 245)",
+          "display": "flex",
+          "alignItems": "center",
+          "justifyContent": "center",
+          "maxWidth": "120px",
+          "textOverflow": "ellipsis",
+          "overflow": "hidden",
+          "txtClientWidth": 55,
+          "txtScrollWidth": 55,
+          "truncated": false
+        }
+      ]
+    },
+    "S2AC-P8": {
+      "clientId": "S2AC-P8",
+      "countText": "8",
+      "countNote": null,
+      "rowBadge": null,
+      "moreText": "+2",
+      "tags": [
+        {
+          "text": "一二三四五六七八九十",
+          "cls": "cc-dstag cc-dstag--ok",
+          "color": "rgb(4, 120, 87)",
+          "background": "rgb(236, 253, 245)",
+          "display": "flex",
+          "alignItems": "center",
+          "justifyContent": "center",
+          "maxWidth": "120px",
+          "textOverflow": "ellipsis",
+          "overflow": "hidden",
+          "txtClientWidth": 102,
+          "txtScrollWidth": 120,
+          "truncated": true
+        },
+        {
+          "text": "LongOrgD08-ABCDEFGHIJKLMNOPQRSTUV",
+          "cls": "cc-dstag cc-dstag--ok",
+          "color": "rgb(4, 120, 87)",
+          "background": "rgb(236, 253, 245)",
+          "display": "flex",
+          "alignItems": "center",
+          "justifyContent": "center",
+          "maxWidth": "120px",
+          "textOverflow": "ellipsis",
+          "overflow": "hidden",
+          "txtClientWidth": 102,
+          "txtScrollWidth": 257,
+          "truncated": true
+        },
+        {
+          "text": "D9 Mid Org",
+          "cls": "cc-dstag cc-dstag--ok",
+          "color": "rgb(4, 120, 87)",
+          "background": "rgb(236, 253, 245)",
+          "display": "flex",
+          "alignItems": "center",
+          "justifyContent": "center",
+          "maxWidth": "120px",
+          "textOverflow": "ellipsis",
+          "overflow": "hidden",
+          "txtClientWidth": 64,
+          "txtScrollWidth": 64,
+          "truncated": false
+        },
+        {
+          "text": "D-Ten Org",
+          "cls": "cc-dstag cc-dstag--ok",
+          "color": "rgb(4, 120, 87)",
+          "background": "rgb(236, 253, 245)",
+          "display": "flex",
+          "alignItems": "center",
+          "justifyContent": "center",
+          "maxWidth": "120px",
+          "textOverflow": "ellipsis",
+          "overflow": "hidden",
+          "txtClientWidth": 58,
+          "txtScrollWidth": 58,
+          "truncated": false
+        },
+        {
+          "text": "D-Eleven Org",
+          "cls": "cc-dstag cc-dstag--ok",
+          "color": "rgb(4, 120, 87)",
+          "background": "rgb(236, 253, 245)",
+          "display": "flex",
+          "alignItems": "center",
+          "justifyContent": "center",
+          "maxWidth": "120px",
+          "textOverflow": "ellipsis",
+          "overflow": "hidden",
+          "txtClientWidth": 76,
+          "txtScrollWidth": 76,
+          "truncated": false
+        },
+        {
+          "text": "D-Twelve Org",
+          "cls": "cc-dstag cc-dstag--ok",
+          "color": "rgb(4, 120, 87)",
+          "background": "rgb(236, 253, 245)",
+          "display": "flex",
+          "alignItems": "center",
+          "justifyContent": "center",
+          "maxWidth": "120px",
+          "textOverflow": "ellipsis",
+          "overflow": "hidden",
+          "txtClientWidth": 76,
+          "txtScrollWidth": 76,
+          "truncated": false
+        },
+        {
+          "text": "D-Thirteen Org",
+          "cls": "cc-dstag cc-dstag--ok",
+          "color": "rgb(4, 120, 87)",
+          "background": "rgb(236, 253, 245)",
+          "display": "none",
+          "alignItems": "center",
+          "justifyContent": "center",
+          "maxWidth": "120px",
+          "textOverflow": "ellipsis",
+          "overflow": "hidden",
+          "txtClientWidth": 0,
+          "txtScrollWidth": 0,
+          "truncated": false
+        },
+        {
+          "text": "D-Fourteen Org",
+          "cls": "cc-dstag cc-dstag--ok",
+          "color": "rgb(4, 120, 87)",
+          "background": "rgb(236, 253, 245)",
+          "display": "none",
+          "alignItems": "center",
+          "justifyContent": "center",
+          "maxWidth": "120px",
+          "textOverflow": "ellipsis",
+          "overflow": "hidden",
+          "txtClientWidth": 0,
+          "txtScrollWidth": 0,
+          "truncated": false
+        }
+      ]
+    },
+    "S2AC-PAMB1": {
+      "clientId": "S2AC-PAMB1",
+      "countText": "2",
+      "countNote": "（展示）",
+      "rowBadge": "含逗号歧义",
+      "moreText": null,
+      "tags": [
+        {
+          "text": "TokenS2AMOrg",
+          "cls": "cc-dstag cc-dstag--neutral",
+          "color": "rgb(96, 98, 102)",
+          "background": "rgb(244, 244, 245)",
+          "display": "flex",
+          "alignItems": "center",
+          "justifyContent": "center",
+          "maxWidth": "120px",
+          "textOverflow": "ellipsis",
+          "overflow": "hidden",
+          "txtClientWidth": 89,
+          "txtScrollWidth": 89,
+          "truncated": false
+        },
+        {
+          "text": "TokenC02Org",
+          "cls": "cc-dstag cc-dstag--neutral",
+          "color": "rgb(96, 98, 102)",
+          "background": "rgb(244, 244, 245)",
+          "display": "flex",
+          "alignItems": "center",
+          "justifyContent": "center",
+          "maxWidth": "120px",
+          "textOverflow": "ellipsis",
+          "overflow": "hidden",
+          "txtClientWidth": 78,
+          "txtScrollWidth": 78,
+          "truncated": false
+        }
+      ]
+    },
+    "S2AC-PAMB2": {
+      "clientId": "S2AC-PAMB2",
+      "countText": "3",
+      "countNote": "（展示）",
+      "rowBadge": "含逗号歧义",
+      "moreText": null,
+      "tags": [
+        {
+          "text": "X01 Disabled Org",
+          "cls": "cc-dstag cc-dstag--bad",
+          "color": "rgb(213, 73, 73)",
+          "background": "rgb(254, 240, 240)",
+          "display": "flex",
+          "alignItems": "center",
+          "justifyContent": "center",
+          "maxWidth": "120px",
+          "textOverflow": "ellipsis",
+          "overflow": "hidden",
+          "txtClientWidth": 99,
+          "txtScrollWidth": 99,
+          "truncated": false
+        },
+        {
+          "text": "TokenSourceS2AC",
+          "cls": "cc-dstag cc-dstag--neutral",
+          "color": "rgb(96, 98, 102)",
+          "background": "rgb(244, 244, 245)",
+          "display": "flex",
+          "alignItems": "center",
+          "justifyContent": "center",
+          "maxWidth": "120px",
+          "textOverflow": "ellipsis",
+          "overflow": "hidden",
+          "txtClientWidth": 102,
+          "txtScrollWidth": 107,
+          "truncated": true
+        },
+        {
+          "text": "TokenC01Org",
+          "cls": "cc-dstag cc-dstag--neutral",
+          "color": "rgb(96, 98, 102)",
+          "background": "rgb(244, 244, 245)",
+          "display": "flex",
+          "alignItems": "center",
+          "justifyContent": "center",
+          "maxWidth": "120px",
+          "textOverflow": "ellipsis",
+          "overflow": "hidden",
+          "txtClientWidth": 78,
+          "txtScrollWidth": 78,
+          "truncated": false
+        }
+      ]
+    },
+    "S2AC-P68": {
+      "clientId": "S2AC-P68",
+      "countText": "2",
+      "countNote": null,
+      "rowBadge": null,
+      "moreText": null,
+      "tags": [
+        {
+          "text": "X02 Category Target Org",
+          "cls": "cc-dstag cc-dstag--bad",
+          "color": "rgb(213, 73, 73)",
+          "background": "rgb(254, 240, 240)",
+          "display": "flex",
+          "alignItems": "center",
+          "justifyContent": "center",
+          "maxWidth": "120px",
+          "textOverflow": "ellipsis",
+          "overflow": "hidden",
+          "txtClientWidth": 102,
+          "txtScrollWidth": 140,
+          "truncated": true
+        },
+        {
+          "text": "D17 Org",
+          "cls": "cc-dstag cc-dstag--ok",
+          "color": "rgb(4, 120, 87)",
+          "background": "rgb(236, 253, 245)",
+          "display": "flex",
+          "alignItems": "center",
+          "justifyContent": "center",
+          "maxWidth": "120px",
+          "textOverflow": "ellipsis",
+          "overflow": "hidden",
+          "txtClientWidth": 47,
+          "txtScrollWidth": 47,
+          "truncated": false
+        }
+      ]
+    },
+    "S2AC-PNOORG": {
+      "clientId": "S2AC-PNOORG",
+      "countText": "2",
+      "countNote": null,
+      "rowBadge": null,
+      "moreText": null,
+      "tags": [
+        {
+          "text": "S2AC-N09",
+          "cls": "cc-dstag cc-dstag--ok",
+          "color": "rgb(4, 120, 87)",
+          "background": "rgb(236, 253, 245)",
+          "display": "flex",
+          "alignItems": "center",
+          "justifyContent": "center",
+          "maxWidth": "120px",
+          "textOverflow": "ellipsis",
+          "overflow": "hidden",
+          "txtClientWidth": 58,
+          "txtScrollWidth": 58,
+          "truncated": false
+        },
+        {
+          "text": "D20 Org",
+          "cls": "cc-dstag cc-dstag--ok",
+          "color": "rgb(4, 120, 87)",
+          "background": "rgb(236, 253, 245)",
+          "display": "flex",
+          "alignItems": "center",
+          "justifyContent": "center",
+          "maxWidth": "120px",
+          "textOverflow": "ellipsis",
+          "overflow": "hidden",
+          "txtClientWidth": 47,
+          "txtScrollWidth": 47,
+          "truncated": false
+        }
+      ]
+    },
+    "S2AC-PH1": {
+      "clientId": "S2AC-PH1",
+      "countText": "2",
+      "countNote": null,
+      "rowBadge": null,
+      "moreText": null,
+      "tags": [
+        {
+          "text": "D15 Org",
+          "cls": "cc-dstag cc-dstag--bad",
+          "color": "rgb(213, 73, 73)",
+          "background": "rgb(254, 240, 240)",
+          "display": "flex",
+          "alignItems": "center",
+          "justifyContent": "center",
+          "maxWidth": "120px",
+          "textOverflow": "ellipsis",
+          "overflow": "hidden",
+          "txtClientWidth": 47,
+          "txtScrollWidth": 47,
+          "truncated": false
+        },
+        {
+          "text": "D16 Org",
+          "cls": "cc-dstag cc-dstag--ok",
+          "color": "rgb(4, 120, 87)",
+          "background": "rgb(236, 253, 245)",
+          "display": "flex",
+          "alignItems": "center",
+          "justifyContent": "center",
+          "maxWidth": "120px",
+          "textOverflow": "ellipsis",
+          "overflow": "hidden",
+          "txtClientWidth": 47,
+          "txtScrollWidth": 47,
+          "truncated": false
+        }
+      ]
+    },
+    "S2AC-POCCV": {
+      "clientId": "S2AC-POCCV",
+      "countText": "1",
+      "countNote": null,
+      "rowBadge": null,
+      "moreText": null,
+      "tags": [
+        {
+          "text": "OccupyOrg05",
+          "cls": "cc-dstag cc-dstag--bad",
+          "color": "rgb(213, 73, 73)",
+          "background": "rgb(254, 240, 240)",
+          "display": "flex",
+          "alignItems": "center",
+          "justifyContent": "center",
+          "maxWidth": "120px",
+          "textOverflow": "ellipsis",
+          "overflow": "hidden",
+          "txtClientWidth": 79,
+          "txtScrollWidth": 79,
+          "truncated": false
+        }
+      ]
+    }
+  },
+  "tooltips": {
+    "ambTagOrder": [
+      "X01 Disabled Org",
+      "TokenSourceS2AC",
+      "TokenC01Org"
+    ],
+    "ambFirst": {
+      "delayMs": 6034,
+      "tips": [
+        {
+          "visible": true,
+          "lines": [
+            {
+              "text": "X01 Disabled Org",
+              "cls": "cc-single-line cc-single-line--main"
+            },
+            {
+              "text": "数据源 ID：S2AC-X01",
+              "cls": "cc-single-line cc-single-line--muted"
+            },
+            {
+              "text": "异常原因：已停用",
+              "cls": "cc-single-line cc-single-line--bad"
+            },
+            {
+              "text": "异常原因：已分配给其他探针",
+              "cls": "cc-single-line cc-single-line--bad"
+            },
+            {
+              "text": "冲突探针：S2AC-P8A",
+              "cls": "cc-single-line cc-single-line--bad"
+            }
+          ],
+          "rect": {
+            "x": 920.9921875,
+            "y": 76,
+            "w": 176.015625,
+            "h": 102
+          }
+        }
+      ]
+    },
+    "ambShownTagCount": 1,
+    "switchVisibleTags": 2,
+    "switchFirst": {
+      "delayMs": 299,
+      "tips": [
+        {
+          "visible": true,
+          "lines": [
+            {
+              "text": "X02 Category Target Org",
+              "cls": "cc-single-line cc-single-line--main"
+            },
+            {
+              "text": "数据源 ID：S2AC-X02",
+              "cls": "cc-single-line cc-single-line--muted"
+            },
+            {
+              "text": "异常原因：类别非 SOURCE",
+              "cls": "cc-single-line cc-single-line--bad"
+            }
+          ],
+          "rect": {
+            "x": 824.65625,
+            "y": 220,
+            "w": 170.6875,
+            "h": 66
+          }
+        }
+      ]
+    },
+    "switchSecondDelayMs": {
+      "delayMs": 353,
+      "tips": [
+        {
+          "visible": true,
+          "lines": [
+            {
+              "text": "D17 Org",
+              "cls": "cc-single-line cc-single-line--main"
+            },
+            {
+              "text": "数据源 ID：S2AC-D17",
+              "cls": "cc-single-line cc-single-line--muted"
+            }
+          ],
+          "rect": {
+            "x": 939.6484375,
+            "y": 238,
+            "w": 140.703125,
+            "h": 48
+          }
+        }
+      ],
+      "visible": 1
+    },
+    "rapidSwitch": {
+      "tips": [
+        {
+          "visible": true,
+          "lines": [
+            {
+              "text": "D17 Org",
+              "cls": "cc-single-line cc-single-line--main"
+            },
+            {
+              "text": "数据源 ID：S2AC-D17",
+              "cls": "cc-single-line cc-single-line--muted"
+            }
+          ],
+          "rect": {
+            "x": 939.6484375,
+            "y": 238,
+            "w": 140.703125,
+            "h": 48
+          }
+        }
+      ],
+      "visible": 1
+    },
+    "afterLeave": {
+      "tips": [],
+      "visible": 0
+    },
+    "conflict": {
+      "delayMs": 319,
+      "tips": [
+        {
+          "visible": true,
+          "lines": [
+            {
+              "text": "OccupyOrg05",
+              "cls": "cc-single-line cc-single-line--main"
+            },
+            {
+              "text": "数据源 ID：S2AC-O05",
+              "cls": "cc-single-line cc-single-line--muted"
+            },
+            {
+              "text": "异常原因：已分配给其他探针",
+              "cls": "cc-single-line cc-single-line--bad"
+            },
+            {
+              "text": "冲突探针：S2AC-PMA、S2AC-PMB",
+              "cls": "cc-single-line cc-single-line--bad"
+            }
+          ],
+          "rect": {
+            "x": 790.6484375,
+            "y": 372,
+            "w": 214.703125,
+            "h": 84
+          }
+        }
+      ]
+    },
+    "conflictText": "OccupyOrg05 | 数据源 ID：S2AC-O05 | 异常原因：已分配给其他探针 | 冲突探针：S2AC-PMA、S2AC-PMB",
+    "missingOrgTagTexts": [
+      "S2AC-N09",
+      "D20 Org"
+    ],
+    "missingOrg": {
+      "delayMs": 348,
+      "tips": [
+        {
+          "visible": true,
+          "lines": [
+            {
+              "text": "S2AC-N09",
+              "cls": "cc-single-line cc-single-line--main"
+            }
+          ],
+          "rect": {
+            "x": 848.984375,
+            "y": 522,
+            "w": 78.03125,
+            "h": 30
+          }
+        }
+      ]
+    },
+    "longOrg": {
+      "delayMs": 305,
+      "tips": [
+        {
+          "visible": true,
+          "lines": [
+            {
+              "text": "LongOrgD30-ABCDEFGHIJKLMNOPQRSTUV",
+              "cls": "cc-single-line cc-single-line--main"
+            },
+            {
+              "text": "数据源 ID：S2AC-D30",
+              "cls": "cc-single-line cc-single-line--muted"
+            }
+          ],
+          "rect": {
+            "x": 771.6640625,
+            "y": 796,
+            "w": 276.671875,
+            "h": 48
+          }
+        }
+      ]
+    }
+  },
+  "selection": {
+    "selectedBefore": [],
+    "selectedAfterIdClick": [
+      "S2AC-P6"
+    ],
+    "selectedAfterTagClick": [
+      "S2AC-P6"
+    ]
+  },
+  "writeLeg": {
+    "request": {
+      "clientId": "S2AC-P14",
+      "clientDesc": "S2AC serialization probe",
+      "dataSourceIds": [
+        " S2AC-N02 ",
+        "",
+        "S2AC-N02",
+        "S2AC-N03"
+      ]
+    },
+    "httpStatus": 200,
+    "response": {
+      "code": 200,
+      "message": "success",
+      "timestamp": "2026-11-04T13:39:30.517"
+    }
+  },
+  "requestLog": [
+    {
+      "method": "GET",
+      "url": "http://127.0.0.1:5173/api/clients?status=ALL",
+      "body": null
+    }
+  ],
+  "colorStates": {
+    "neutral": {
+      "cls": "cc-dstag cc-dstag--neutral",
+      "color": "rgb(96, 98, 102)",
+      "bg": "rgb(244, 244, 245)"
+    },
+    "ok": {
+      "cls": "cc-dstag cc-dstag--ok",
+      "color": "rgb(4, 120, 87)",
+      "bg": "rgb(236, 253, 245)"
+    },
+    "bad": {
+      "cls": "cc-dstag cc-dstag--bad",
+      "color": "rgb(213, 73, 73)",
+      "bg": "rgb(254, 240, 240)"
+    }
+  }
+}

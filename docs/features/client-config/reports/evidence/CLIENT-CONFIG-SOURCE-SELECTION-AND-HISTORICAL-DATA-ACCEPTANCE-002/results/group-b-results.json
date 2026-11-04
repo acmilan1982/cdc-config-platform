@@ -1,0 +1,2320 @@
+{
+  "viewports": {
+    "1440x900": {
+      "probes": {
+        "S2AC-P6": {
+          "geometry": {
+            "clientId": "S2AC-P6",
+            "countText": "6",
+            "container": {
+              "width": 286,
+              "clientWidth": 286,
+              "scrollWidth": 286
+            },
+            "totalTags": 6,
+            "visibleCount": 2,
+            "visible": [
+              {
+                "text": "DOne Org",
+                "left": 850,
+                "right": 924.7,
+                "width": 74.67,
+                "cls": "cc-dstag cc-dstag--ok"
+              },
+              {
+                "text": "D-Two Org",
+                "left": 932.7,
+                "right": 1011.1,
+                "width": 78.44,
+                "cls": "cc-dstag cc-dstag--ok"
+              }
+            ],
+            "chipWidths": [
+              {
+                "text": "DOne Org",
+                "width": 74.67
+              },
+              {
+                "text": "D-Two Org",
+                "width": 78.44
+              },
+              {
+                "text": "D-Three Org",
+                "width": 88.02
+              },
+              {
+                "text": "D-Four Org",
+                "width": 82
+              },
+              {
+                "text": "D-Five Org",
+                "width": 79.34
+              },
+              {
+                "text": "D-Six Org",
+                "width": 73.34
+              }
+            ],
+            "more": {
+              "text": "+4",
+              "left": 1019.1,
+              "right": 1050.8,
+              "width": 31.69
+            },
+            "rowbad": null,
+            "gaps": [
+              8
+            ]
+          },
+          "check": {
+            "expectedShown": 2,
+            "expectedHidden": 4,
+            "avail": 286,
+            "actualShown": 2,
+            "matches": true,
+            "noOverlap": true,
+            "gapOk": true,
+            "lastToMore": 8,
+            "visibleMaxOk": true
+          }
+        },
+        "S2AC-P8": {
+          "geometry": {
+            "clientId": "S2AC-P8",
+            "countText": "8",
+            "container": {
+              "width": 286,
+              "clientWidth": 286,
+              "scrollWidth": 286
+            },
+            "totalTags": 8,
+            "visibleCount": 1,
+            "visible": [
+              {
+                "text": "一二三四五六七八九十",
+                "left": 850,
+                "right": 970,
+                "width": 120,
+                "cls": "cc-dstag cc-dstag--ok"
+              }
+            ],
+            "chipWidths": [
+              {
+                "text": "一二三四五六七八九十",
+                "width": 120
+              },
+              {
+                "text": "LongOrgD08-ABCDEFGHIJKLMNOPQRSTUV",
+                "width": 120
+              },
+              {
+                "text": "D9 Mid Org",
+                "width": 82.02
+              },
+              {
+                "text": "D-Ten Org",
+                "width": 75.78
+              },
+              {
+                "text": "D-Eleven Org",
+                "width": 94.03
+              },
+              {
+                "text": "D-Twelve Org",
+                "width": 94.47
+              },
+              {
+                "text": "D-Thirteen Org",
+                "width": 102.67
+              },
+              {
+                "text": "D-Fourteen Org",
+                "width": 106.67
+              }
+            ],
+            "more": {
+              "text": "+7",
+              "left": 978,
+              "right": 1009.7,
+              "width": 31.69
+            },
+            "rowbad": null,
+            "gaps": []
+          },
+          "check": {
+            "expectedShown": 1,
+            "expectedHidden": 7,
+            "avail": 286,
+            "actualShown": 1,
+            "matches": true,
+            "noOverlap": true,
+            "gapOk": true,
+            "lastToMore": 8,
+            "visibleMaxOk": true
+          }
+        },
+        "S2AC-P8A": {
+          "geometry": {
+            "clientId": "S2AC-P8A",
+            "countText": "8",
+            "container": {
+              "width": 286,
+              "clientWidth": 286,
+              "scrollWidth": 286
+            },
+            "totalTags": 8,
+            "visibleCount": 2,
+            "visible": [
+              {
+                "text": "X01 Disabled Org",
+                "left": 850,
+                "right": 967.4,
+                "width": 117.38,
+                "cls": "cc-dstag cc-dstag--bad"
+              },
+              {
+                "text": "D22 Extra Org",
+                "left": 975.4,
+                "right": 1073.4,
+                "width": 98.05,
+                "cls": "cc-dstag cc-dstag--ok"
+              }
+            ],
+            "chipWidths": [
+              {
+                "text": "X01 Disabled Org",
+                "width": 117.38
+              },
+              {
+                "text": "D22 Extra Org",
+                "width": 98.05
+              },
+              {
+                "text": "D23 Extra Org",
+                "width": 98.05
+              },
+              {
+                "text": "D24 Extra Org",
+                "width": 98.05
+              },
+              {
+                "text": "D25 Extra Org",
+                "width": 98.05
+              },
+              {
+                "text": "D26 Extra Org",
+                "width": 98.05
+              },
+              {
+                "text": "D27 Extra Org",
+                "width": 98.05
+              },
+              {
+                "text": "D28 Extra Org",
+                "width": 98.05
+              }
+            ],
+            "more": {
+              "text": "+6",
+              "left": 1081.4,
+              "right": 1113.1,
+              "width": 31.69
+            },
+            "rowbad": null,
+            "gaps": [
+              8
+            ]
+          },
+          "check": {
+            "expectedShown": 2,
+            "expectedHidden": 6,
+            "avail": 286,
+            "actualShown": 2,
+            "matches": true,
+            "noOverlap": true,
+            "gapOk": true,
+            "lastToMore": 8,
+            "visibleMaxOk": true
+          }
+        },
+        "S2AC-PNOORG8": {
+          "geometry": {
+            "clientId": "S2AC-PNOORG8",
+            "countText": "8",
+            "container": {
+              "width": 286,
+              "clientWidth": 286,
+              "scrollWidth": 286
+            },
+            "totalTags": 8,
+            "visibleCount": 2,
+            "visible": [
+              {
+                "text": "S2AC-N13",
+                "left": 850,
+                "right": 926,
+                "width": 76.03,
+                "cls": "cc-dstag cc-dstag--ok"
+              },
+              {
+                "text": "D32 Pane Org",
+                "left": 934,
+                "right": 1030.7,
+                "width": 96.7,
+                "cls": "cc-dstag cc-dstag--ok"
+              }
+            ],
+            "chipWidths": [
+              {
+                "text": "S2AC-N13",
+                "width": 76.03
+              },
+              {
+                "text": "D32 Pane Org",
+                "width": 96.7
+              },
+              {
+                "text": "D33 Pane Org",
+                "width": 96.7
+              },
+              {
+                "text": "D34 Pane Org",
+                "width": 96.7
+              },
+              {
+                "text": "D35 Pane Org",
+                "width": 96.7
+              },
+              {
+                "text": "D36 Pane Org",
+                "width": 96.7
+              },
+              {
+                "text": "D37 Pane Org",
+                "width": 96.7
+              },
+              {
+                "text": "D38 Pane Org",
+                "width": 96.7
+              }
+            ],
+            "more": {
+              "text": "+6",
+              "left": 1038.7,
+              "right": 1070.4,
+              "width": 31.69
+            },
+            "rowbad": null,
+            "gaps": [
+              8
+            ]
+          },
+          "check": {
+            "expectedShown": 2,
+            "expectedHidden": 6,
+            "avail": 286,
+            "actualShown": 2,
+            "matches": true,
+            "noOverlap": true,
+            "gapOk": true,
+            "lastToMore": 8,
+            "visibleMaxOk": true
+          }
+        },
+        "S2AC-PAMB1": {
+          "geometry": {
+            "clientId": "S2AC-PAMB1",
+            "countText": "2",
+            "container": {
+              "width": 286,
+              "clientWidth": 286,
+              "scrollWidth": 286
+            },
+            "totalTags": 2,
+            "visibleCount": 1,
+            "visible": [
+              {
+                "text": "TokenS2AMOrg",
+                "left": 950,
+                "right": 1057.1,
+                "width": 107.13,
+                "cls": "cc-dstag cc-dstag--neutral"
+              }
+            ],
+            "chipWidths": [
+              {
+                "text": "TokenS2AMOrg",
+                "width": 107.13
+              },
+              {
+                "text": "TokenC02Org",
+                "width": 95.8
+              }
+            ],
+            "more": {
+              "text": "+1",
+              "left": 1065.1,
+              "right": 1096.8,
+              "width": 31.69
+            },
+            "rowbad": {
+              "text": "含逗号歧义",
+              "width": 92
+            },
+            "gaps": []
+          },
+          "check": {
+            "expectedShown": 1,
+            "expectedHidden": 1,
+            "avail": 186,
+            "actualShown": 1,
+            "matches": true,
+            "noOverlap": true,
+            "gapOk": true,
+            "lastToMore": 8,
+            "visibleMaxOk": true
+          }
+        },
+        "S2AC-PAMB2": {
+          "geometry": {
+            "clientId": "S2AC-PAMB2",
+            "countText": "3",
+            "container": {
+              "width": 286,
+              "clientWidth": 286,
+              "scrollWidth": 286
+            },
+            "totalTags": 3,
+            "visibleCount": 1,
+            "visible": [
+              {
+                "text": "X01 Disabled Org",
+                "left": 950,
+                "right": 1067.4,
+                "width": 117.38,
+                "cls": "cc-dstag cc-dstag--bad"
+              }
+            ],
+            "chipWidths": [
+              {
+                "text": "X01 Disabled Org",
+                "width": 117.38
+              },
+              {
+                "text": "TokenSourceS2AC",
+                "width": 120
+              },
+              {
+                "text": "TokenC01Org",
+                "width": 95.8
+              }
+            ],
+            "more": {
+              "text": "+2",
+              "left": 1075.4,
+              "right": 1107.1,
+              "width": 31.69
+            },
+            "rowbad": {
+              "text": "含逗号歧义",
+              "width": 92
+            },
+            "gaps": []
+          },
+          "check": {
+            "expectedShown": 1,
+            "expectedHidden": 2,
+            "avail": 186,
+            "actualShown": 1,
+            "matches": true,
+            "noOverlap": true,
+            "gapOk": true,
+            "lastToMore": 8,
+            "visibleMaxOk": true
+          }
+        },
+        "S2AC-P68": {
+          "geometry": {
+            "clientId": "S2AC-P68",
+            "countText": "2",
+            "container": {
+              "width": 286,
+              "clientWidth": 286,
+              "scrollWidth": 286
+            },
+            "totalTags": 2,
+            "visibleCount": 2,
+            "visible": [
+              {
+                "text": "X02 Category Target Org",
+                "left": 850,
+                "right": 970,
+                "width": 120,
+                "cls": "cc-dstag cc-dstag--bad"
+              },
+              {
+                "text": "D17 Org",
+                "left": 978,
+                "right": 1042.7,
+                "width": 64.69,
+                "cls": "cc-dstag cc-dstag--ok"
+              }
+            ],
+            "chipWidths": [
+              {
+                "text": "X02 Category Target Org",
+                "width": 120
+              },
+              {
+                "text": "D17 Org",
+                "width": 64.69
+              }
+            ],
+            "more": null,
+            "rowbad": null,
+            "gaps": [
+              8
+            ]
+          },
+          "check": {
+            "expectedShown": 2,
+            "expectedHidden": 0,
+            "avail": 286,
+            "actualShown": 2,
+            "matches": true,
+            "noOverlap": true,
+            "gapOk": true,
+            "lastToMore": null,
+            "visibleMaxOk": true
+          }
+        }
+      },
+      "colorStates": {
+        "ok": {
+          "cls": "cc-dstag cc-dstag--ok",
+          "color": "rgb(4, 120, 87)",
+          "bg": "rgb(236, 253, 245)"
+        },
+        "neutral": {
+          "cls": "cc-dstag cc-dstag--neutral",
+          "color": "rgb(96, 98, 102)",
+          "bg": "rgb(244, 244, 245)"
+        },
+        "badAmb": {
+          "cls": "cc-dstag cc-dstag--bad",
+          "color": "rgb(213, 73, 73)",
+          "bg": "rgb(254, 240, 240)"
+        }
+      },
+      "fullList": {
+        "P8": {
+          "before": {
+            "visibleLists": 0
+          },
+          "afterHover": {
+            "visibleLists": 0
+          },
+          "afterClick": [
+            {
+              "note": null,
+              "items": [
+                {
+                  "org": "一二三四五六七八九十",
+                  "id": "数据源 ID：S2AC-D07",
+                  "bad": null,
+                  "hasSecondLine": true
+                },
+                {
+                  "org": "LongOrgD08-ABCDEFGHIJKLMNOPQRSTUV",
+                  "id": "数据源 ID：S2AC-D08",
+                  "bad": null,
+                  "hasSecondLine": true
+                },
+                {
+                  "org": "D9 Mid Org",
+                  "id": "数据源 ID：S2AC-D09",
+                  "bad": null,
+                  "hasSecondLine": true
+                },
+                {
+                  "org": "D-Ten Org",
+                  "id": "数据源 ID：S2AC-D10",
+                  "bad": null,
+                  "hasSecondLine": true
+                },
+                {
+                  "org": "D-Eleven Org",
+                  "id": "数据源 ID：S2AC-D11",
+                  "bad": null,
+                  "hasSecondLine": true
+                },
+                {
+                  "org": "D-Twelve Org",
+                  "id": "数据源 ID：S2AC-D12",
+                  "bad": null,
+                  "hasSecondLine": true
+                },
+                {
+                  "org": "D-Thirteen Org",
+                  "id": "数据源 ID：S2AC-D13",
+                  "bad": null,
+                  "hasSecondLine": true
+                },
+                {
+                  "org": "D-Fourteen Org",
+                  "id": "数据源 ID：S2AC-D14",
+                  "bad": null,
+                  "hasSecondLine": true
+                }
+              ]
+            }
+          ],
+          "selectedAfterClick": [],
+          "afterClose": 1
+        },
+        "P8A": {
+          "before": {
+            "visibleLists": 1
+          },
+          "afterHover": {
+            "visibleLists": 0
+          },
+          "afterClick": [
+            {
+              "note": null,
+              "items": [
+                {
+                  "org": "D22 Extra Org",
+                  "id": "数据源 ID：S2AC-D22",
+                  "bad": null,
+                  "hasSecondLine": true
+                },
+                {
+                  "org": "D23 Extra Org",
+                  "id": "数据源 ID：S2AC-D23",
+                  "bad": null,
+                  "hasSecondLine": true
+                },
+                {
+                  "org": "D24 Extra Org",
+                  "id": "数据源 ID：S2AC-D24",
+                  "bad": null,
+                  "hasSecondLine": true
+                },
+                {
+                  "org": "D25 Extra Org",
+                  "id": "数据源 ID：S2AC-D25",
+                  "bad": null,
+                  "hasSecondLine": true
+                },
+                {
+                  "org": "D26 Extra Org",
+                  "id": "数据源 ID：S2AC-D26",
+                  "bad": null,
+                  "hasSecondLine": true
+                },
+                {
+                  "org": "D27 Extra Org",
+                  "id": "数据源 ID：S2AC-D27",
+                  "bad": null,
+                  "hasSecondLine": true
+                },
+                {
+                  "org": "D28 Extra Org",
+                  "id": "数据源 ID：S2AC-D28",
+                  "bad": null,
+                  "hasSecondLine": true
+                },
+                {
+                  "org": "X01 Disabled Org",
+                  "id": "数据源 ID：S2AC-X01",
+                  "bad": "已停用；已分配给其他探针：S2AC-PAMB2",
+                  "hasSecondLine": true
+                }
+              ]
+            }
+          ],
+          "selectedAfterClick": [],
+          "afterClose": 1
+        },
+        "PNOORG8": {
+          "before": {
+            "visibleLists": 1
+          },
+          "afterHover": {
+            "visibleLists": 0
+          },
+          "afterClick": [
+            {
+              "note": null,
+              "items": [
+                {
+                  "org": "S2AC-N13",
+                  "id": null,
+                  "bad": null,
+                  "hasSecondLine": false
+                },
+                {
+                  "org": "D32 Pane Org",
+                  "id": "数据源 ID：S2AC-D32",
+                  "bad": null,
+                  "hasSecondLine": true
+                },
+                {
+                  "org": "D33 Pane Org",
+                  "id": "数据源 ID：S2AC-D33",
+                  "bad": null,
+                  "hasSecondLine": true
+                },
+                {
+                  "org": "D34 Pane Org",
+                  "id": "数据源 ID：S2AC-D34",
+                  "bad": null,
+                  "hasSecondLine": true
+                },
+                {
+                  "org": "D35 Pane Org",
+                  "id": "数据源 ID：S2AC-D35",
+                  "bad": null,
+                  "hasSecondLine": true
+                },
+                {
+                  "org": "D36 Pane Org",
+                  "id": "数据源 ID：S2AC-D36",
+                  "bad": null,
+                  "hasSecondLine": true
+                },
+                {
+                  "org": "D37 Pane Org",
+                  "id": "数据源 ID：S2AC-D37",
+                  "bad": null,
+                  "hasSecondLine": true
+                },
+                {
+                  "org": "D38 Pane Org",
+                  "id": "数据源 ID：S2AC-D38",
+                  "bad": null,
+                  "hasSecondLine": true
+                }
+              ]
+            }
+          ],
+          "selectedAfterClick": [],
+          "afterClose": 1
+        }
+      },
+      "missingOrgLabelTexts": [
+        "S2AC-N13",
+        "D32 Pane Org",
+        "D33 Pane Org",
+        "D34 Pane Org",
+        "D35 Pane Org",
+        "D36 Pane Org",
+        "D37 Pane Org",
+        "D38 Pane Org"
+      ],
+      "missingOrgTip": [
+        {
+          "visible": true,
+          "lines": [
+            {
+              "text": "S2AC-N13",
+              "cls": "cc-single-line cc-single-line--main"
+            }
+          ],
+          "rect": {
+            "x": 848.984375,
+            "y": 426,
+            "w": 78.03125,
+            "h": 30
+          }
+        }
+      ]
+    },
+    "1920x1080": {
+      "probes": {
+        "S2AC-P6": {
+          "geometry": {
+            "clientId": "S2AC-P6",
+            "countText": "6",
+            "container": {
+              "width": 766,
+              "clientWidth": 766,
+              "scrollWidth": 766
+            },
+            "totalTags": 6,
+            "visibleCount": 6,
+            "visible": [
+              {
+                "text": "DOne Org",
+                "left": 850,
+                "right": 924.7,
+                "width": 74.67,
+                "cls": "cc-dstag cc-dstag--ok"
+              },
+              {
+                "text": "D-Two Org",
+                "left": 932.7,
+                "right": 1011.1,
+                "width": 78.44,
+                "cls": "cc-dstag cc-dstag--ok"
+              },
+              {
+                "text": "D-Three Org",
+                "left": 1019.1,
+                "right": 1107.1,
+                "width": 88.02,
+                "cls": "cc-dstag cc-dstag--ok"
+              },
+              {
+                "text": "D-Four Org",
+                "left": 1115.1,
+                "right": 1197.1,
+                "width": 82,
+                "cls": "cc-dstag cc-dstag--ok"
+              },
+              {
+                "text": "D-Five Org",
+                "left": 1205.1,
+                "right": 1284.5,
+                "width": 79.34,
+                "cls": "cc-dstag cc-dstag--ok"
+              },
+              {
+                "text": "D-Six Org",
+                "left": 1292.5,
+                "right": 1365.8,
+                "width": 73.34,
+                "cls": "cc-dstag cc-dstag--ok"
+              }
+            ],
+            "chipWidths": [
+              {
+                "text": "DOne Org",
+                "width": 74.67
+              },
+              {
+                "text": "D-Two Org",
+                "width": 78.44
+              },
+              {
+                "text": "D-Three Org",
+                "width": 88.02
+              },
+              {
+                "text": "D-Four Org",
+                "width": 82
+              },
+              {
+                "text": "D-Five Org",
+                "width": 79.34
+              },
+              {
+                "text": "D-Six Org",
+                "width": 73.34
+              }
+            ],
+            "more": null,
+            "rowbad": null,
+            "gaps": [
+              8,
+              8,
+              8,
+              8,
+              8
+            ]
+          },
+          "check": {
+            "expectedShown": 6,
+            "expectedHidden": 0,
+            "avail": 766,
+            "actualShown": 6,
+            "matches": true,
+            "noOverlap": true,
+            "gapOk": true,
+            "lastToMore": null,
+            "visibleMaxOk": true
+          }
+        },
+        "S2AC-P8": {
+          "geometry": {
+            "clientId": "S2AC-P8",
+            "countText": "8",
+            "container": {
+              "width": 766,
+              "clientWidth": 766,
+              "scrollWidth": 766
+            },
+            "totalTags": 8,
+            "visibleCount": 6,
+            "visible": [
+              {
+                "text": "一二三四五六七八九十",
+                "left": 850,
+                "right": 970,
+                "width": 120,
+                "cls": "cc-dstag cc-dstag--ok"
+              },
+              {
+                "text": "LongOrgD08-ABCDEFGHIJKLMNOPQRSTUV",
+                "left": 978,
+                "right": 1098,
+                "width": 120,
+                "cls": "cc-dstag cc-dstag--ok"
+              },
+              {
+                "text": "D9 Mid Org",
+                "left": 1106,
+                "right": 1188,
+                "width": 82.02,
+                "cls": "cc-dstag cc-dstag--ok"
+              },
+              {
+                "text": "D-Ten Org",
+                "left": 1196,
+                "right": 1271.8,
+                "width": 75.78,
+                "cls": "cc-dstag cc-dstag--ok"
+              },
+              {
+                "text": "D-Eleven Org",
+                "left": 1279.8,
+                "right": 1373.8,
+                "width": 94.03,
+                "cls": "cc-dstag cc-dstag--ok"
+              },
+              {
+                "text": "D-Twelve Org",
+                "left": 1381.8,
+                "right": 1476.3,
+                "width": 94.47,
+                "cls": "cc-dstag cc-dstag--ok"
+              }
+            ],
+            "chipWidths": [
+              {
+                "text": "一二三四五六七八九十",
+                "width": 120
+              },
+              {
+                "text": "LongOrgD08-ABCDEFGHIJKLMNOPQRSTUV",
+                "width": 120
+              },
+              {
+                "text": "D9 Mid Org",
+                "width": 82.02
+              },
+              {
+                "text": "D-Ten Org",
+                "width": 75.78
+              },
+              {
+                "text": "D-Eleven Org",
+                "width": 94.03
+              },
+              {
+                "text": "D-Twelve Org",
+                "width": 94.47
+              },
+              {
+                "text": "D-Thirteen Org",
+                "width": 102.67
+              },
+              {
+                "text": "D-Fourteen Org",
+                "width": 106.67
+              }
+            ],
+            "more": {
+              "text": "+2",
+              "left": 1484.3,
+              "right": 1516,
+              "width": 31.69
+            },
+            "rowbad": null,
+            "gaps": [
+              8,
+              8,
+              8,
+              8,
+              8
+            ]
+          },
+          "check": {
+            "expectedShown": 6,
+            "expectedHidden": 2,
+            "avail": 766,
+            "actualShown": 6,
+            "matches": true,
+            "noOverlap": true,
+            "gapOk": true,
+            "lastToMore": 8,
+            "visibleMaxOk": true
+          }
+        },
+        "S2AC-P8A": {
+          "geometry": {
+            "clientId": "S2AC-P8A",
+            "countText": "8",
+            "container": {
+              "width": 766,
+              "clientWidth": 766,
+              "scrollWidth": 766
+            },
+            "totalTags": 8,
+            "visibleCount": 6,
+            "visible": [
+              {
+                "text": "X01 Disabled Org",
+                "left": 850,
+                "right": 967.4,
+                "width": 117.38,
+                "cls": "cc-dstag cc-dstag--bad"
+              },
+              {
+                "text": "D22 Extra Org",
+                "left": 975.4,
+                "right": 1073.4,
+                "width": 98.05,
+                "cls": "cc-dstag cc-dstag--ok"
+              },
+              {
+                "text": "D23 Extra Org",
+                "left": 1081.4,
+                "right": 1179.5,
+                "width": 98.05,
+                "cls": "cc-dstag cc-dstag--ok"
+              },
+              {
+                "text": "D24 Extra Org",
+                "left": 1187.5,
+                "right": 1285.5,
+                "width": 98.05,
+                "cls": "cc-dstag cc-dstag--ok"
+              },
+              {
+                "text": "D25 Extra Org",
+                "left": 1293.5,
+                "right": 1391.6,
+                "width": 98.05,
+                "cls": "cc-dstag cc-dstag--ok"
+              },
+              {
+                "text": "D26 Extra Org",
+                "left": 1399.6,
+                "right": 1497.6,
+                "width": 98.05,
+                "cls": "cc-dstag cc-dstag--ok"
+              }
+            ],
+            "chipWidths": [
+              {
+                "text": "X01 Disabled Org",
+                "width": 117.38
+              },
+              {
+                "text": "D22 Extra Org",
+                "width": 98.05
+              },
+              {
+                "text": "D23 Extra Org",
+                "width": 98.05
+              },
+              {
+                "text": "D24 Extra Org",
+                "width": 98.05
+              },
+              {
+                "text": "D25 Extra Org",
+                "width": 98.05
+              },
+              {
+                "text": "D26 Extra Org",
+                "width": 98.05
+              },
+              {
+                "text": "D27 Extra Org",
+                "width": 98.05
+              },
+              {
+                "text": "D28 Extra Org",
+                "width": 98.05
+              }
+            ],
+            "more": {
+              "text": "+2",
+              "left": 1505.6,
+              "right": 1537.3,
+              "width": 31.69
+            },
+            "rowbad": null,
+            "gaps": [
+              8,
+              8,
+              8,
+              8,
+              8
+            ]
+          },
+          "check": {
+            "expectedShown": 6,
+            "expectedHidden": 2,
+            "avail": 766,
+            "actualShown": 6,
+            "matches": true,
+            "noOverlap": true,
+            "gapOk": true,
+            "lastToMore": 8,
+            "visibleMaxOk": true
+          }
+        },
+        "S2AC-PNOORG8": {
+          "geometry": {
+            "clientId": "S2AC-PNOORG8",
+            "countText": "8",
+            "container": {
+              "width": 766,
+              "clientWidth": 766,
+              "scrollWidth": 766
+            },
+            "totalTags": 8,
+            "visibleCount": 6,
+            "visible": [
+              {
+                "text": "S2AC-N13",
+                "left": 850,
+                "right": 926,
+                "width": 76.03,
+                "cls": "cc-dstag cc-dstag--ok"
+              },
+              {
+                "text": "D32 Pane Org",
+                "left": 934,
+                "right": 1030.7,
+                "width": 96.7,
+                "cls": "cc-dstag cc-dstag--ok"
+              },
+              {
+                "text": "D33 Pane Org",
+                "left": 1038.7,
+                "right": 1135.4,
+                "width": 96.7,
+                "cls": "cc-dstag cc-dstag--ok"
+              },
+              {
+                "text": "D34 Pane Org",
+                "left": 1143.4,
+                "right": 1240.1,
+                "width": 96.7,
+                "cls": "cc-dstag cc-dstag--ok"
+              },
+              {
+                "text": "D35 Pane Org",
+                "left": 1248.1,
+                "right": 1344.8,
+                "width": 96.7,
+                "cls": "cc-dstag cc-dstag--ok"
+              },
+              {
+                "text": "D36 Pane Org",
+                "left": 1352.8,
+                "right": 1449.5,
+                "width": 96.7,
+                "cls": "cc-dstag cc-dstag--ok"
+              }
+            ],
+            "chipWidths": [
+              {
+                "text": "S2AC-N13",
+                "width": 76.03
+              },
+              {
+                "text": "D32 Pane Org",
+                "width": 96.7
+              },
+              {
+                "text": "D33 Pane Org",
+                "width": 96.7
+              },
+              {
+                "text": "D34 Pane Org",
+                "width": 96.7
+              },
+              {
+                "text": "D35 Pane Org",
+                "width": 96.7
+              },
+              {
+                "text": "D36 Pane Org",
+                "width": 96.7
+              },
+              {
+                "text": "D37 Pane Org",
+                "width": 96.7
+              },
+              {
+                "text": "D38 Pane Org",
+                "width": 96.7
+              }
+            ],
+            "more": {
+              "text": "+2",
+              "left": 1457.5,
+              "right": 1489.2,
+              "width": 31.69
+            },
+            "rowbad": null,
+            "gaps": [
+              8,
+              8,
+              8,
+              8,
+              8
+            ]
+          },
+          "check": {
+            "expectedShown": 6,
+            "expectedHidden": 2,
+            "avail": 766,
+            "actualShown": 6,
+            "matches": true,
+            "noOverlap": true,
+            "gapOk": true,
+            "lastToMore": 8,
+            "visibleMaxOk": true
+          }
+        },
+        "S2AC-PAMB1": {
+          "geometry": {
+            "clientId": "S2AC-PAMB1",
+            "countText": "2",
+            "container": {
+              "width": 766,
+              "clientWidth": 766,
+              "scrollWidth": 766
+            },
+            "totalTags": 2,
+            "visibleCount": 2,
+            "visible": [
+              {
+                "text": "TokenS2AMOrg",
+                "left": 950,
+                "right": 1057.1,
+                "width": 107.13,
+                "cls": "cc-dstag cc-dstag--neutral"
+              },
+              {
+                "text": "TokenC02Org",
+                "left": 1065.1,
+                "right": 1160.9,
+                "width": 95.8,
+                "cls": "cc-dstag cc-dstag--neutral"
+              }
+            ],
+            "chipWidths": [
+              {
+                "text": "TokenS2AMOrg",
+                "width": 107.13
+              },
+              {
+                "text": "TokenC02Org",
+                "width": 95.8
+              }
+            ],
+            "more": null,
+            "rowbad": {
+              "text": "含逗号歧义",
+              "width": 92
+            },
+            "gaps": [
+              8
+            ]
+          },
+          "check": {
+            "expectedShown": 2,
+            "expectedHidden": 0,
+            "avail": 666,
+            "actualShown": 2,
+            "matches": true,
+            "noOverlap": true,
+            "gapOk": true,
+            "lastToMore": null,
+            "visibleMaxOk": true
+          }
+        },
+        "S2AC-PAMB2": {
+          "geometry": {
+            "clientId": "S2AC-PAMB2",
+            "countText": "3",
+            "container": {
+              "width": 766,
+              "clientWidth": 766,
+              "scrollWidth": 766
+            },
+            "totalTags": 3,
+            "visibleCount": 3,
+            "visible": [
+              {
+                "text": "X01 Disabled Org",
+                "left": 950,
+                "right": 1067.4,
+                "width": 117.38,
+                "cls": "cc-dstag cc-dstag--bad"
+              },
+              {
+                "text": "TokenSourceS2AC",
+                "left": 1075.4,
+                "right": 1195.4,
+                "width": 120,
+                "cls": "cc-dstag cc-dstag--neutral"
+              },
+              {
+                "text": "TokenC01Org",
+                "left": 1203.4,
+                "right": 1299.2,
+                "width": 95.8,
+                "cls": "cc-dstag cc-dstag--neutral"
+              }
+            ],
+            "chipWidths": [
+              {
+                "text": "X01 Disabled Org",
+                "width": 117.38
+              },
+              {
+                "text": "TokenSourceS2AC",
+                "width": 120
+              },
+              {
+                "text": "TokenC01Org",
+                "width": 95.8
+              }
+            ],
+            "more": null,
+            "rowbad": {
+              "text": "含逗号歧义",
+              "width": 92
+            },
+            "gaps": [
+              8,
+              8
+            ]
+          },
+          "check": {
+            "expectedShown": 3,
+            "expectedHidden": 0,
+            "avail": 666,
+            "actualShown": 3,
+            "matches": true,
+            "noOverlap": true,
+            "gapOk": true,
+            "lastToMore": null,
+            "visibleMaxOk": true
+          }
+        },
+        "S2AC-P68": {
+          "geometry": {
+            "clientId": "S2AC-P68",
+            "countText": "2",
+            "container": {
+              "width": 766,
+              "clientWidth": 766,
+              "scrollWidth": 766
+            },
+            "totalTags": 2,
+            "visibleCount": 2,
+            "visible": [
+              {
+                "text": "X02 Category Target Org",
+                "left": 850,
+                "right": 970,
+                "width": 120,
+                "cls": "cc-dstag cc-dstag--bad"
+              },
+              {
+                "text": "D17 Org",
+                "left": 978,
+                "right": 1042.7,
+                "width": 64.69,
+                "cls": "cc-dstag cc-dstag--ok"
+              }
+            ],
+            "chipWidths": [
+              {
+                "text": "X02 Category Target Org",
+                "width": 120
+              },
+              {
+                "text": "D17 Org",
+                "width": 64.69
+              }
+            ],
+            "more": null,
+            "rowbad": null,
+            "gaps": [
+              8
+            ]
+          },
+          "check": {
+            "expectedShown": 2,
+            "expectedHidden": 0,
+            "avail": 766,
+            "actualShown": 2,
+            "matches": true,
+            "noOverlap": true,
+            "gapOk": true,
+            "lastToMore": null,
+            "visibleMaxOk": true
+          }
+        }
+      },
+      "colorStates": {
+        "ok": {
+          "cls": "cc-dstag cc-dstag--ok",
+          "color": "rgb(4, 120, 87)",
+          "bg": "rgb(236, 253, 245)"
+        },
+        "neutral": {
+          "cls": "cc-dstag cc-dstag--neutral",
+          "color": "rgb(96, 98, 102)",
+          "bg": "rgb(244, 244, 245)"
+        },
+        "badAmb": {
+          "cls": "cc-dstag cc-dstag--bad",
+          "color": "rgb(213, 73, 73)",
+          "bg": "rgb(254, 240, 240)"
+        }
+      },
+      "fullList": {
+        "P8": {
+          "before": {
+            "visibleLists": 0
+          },
+          "afterHover": {
+            "visibleLists": 0
+          },
+          "afterClick": [
+            {
+              "note": null,
+              "items": [
+                {
+                  "org": "一二三四五六七八九十",
+                  "id": "数据源 ID：S2AC-D07",
+                  "bad": null,
+                  "hasSecondLine": true
+                },
+                {
+                  "org": "LongOrgD08-ABCDEFGHIJKLMNOPQRSTUV",
+                  "id": "数据源 ID：S2AC-D08",
+                  "bad": null,
+                  "hasSecondLine": true
+                },
+                {
+                  "org": "D9 Mid Org",
+                  "id": "数据源 ID：S2AC-D09",
+                  "bad": null,
+                  "hasSecondLine": true
+                },
+                {
+                  "org": "D-Ten Org",
+                  "id": "数据源 ID：S2AC-D10",
+                  "bad": null,
+                  "hasSecondLine": true
+                },
+                {
+                  "org": "D-Eleven Org",
+                  "id": "数据源 ID：S2AC-D11",
+                  "bad": null,
+                  "hasSecondLine": true
+                },
+                {
+                  "org": "D-Twelve Org",
+                  "id": "数据源 ID：S2AC-D12",
+                  "bad": null,
+                  "hasSecondLine": true
+                },
+                {
+                  "org": "D-Thirteen Org",
+                  "id": "数据源 ID：S2AC-D13",
+                  "bad": null,
+                  "hasSecondLine": true
+                },
+                {
+                  "org": "D-Fourteen Org",
+                  "id": "数据源 ID：S2AC-D14",
+                  "bad": null,
+                  "hasSecondLine": true
+                }
+              ]
+            }
+          ],
+          "selectedAfterClick": [],
+          "afterClose": 1
+        },
+        "P8A": {
+          "before": {
+            "visibleLists": 1
+          },
+          "afterHover": {
+            "visibleLists": 0
+          },
+          "afterClick": [
+            {
+              "note": null,
+              "items": [
+                {
+                  "org": "D22 Extra Org",
+                  "id": "数据源 ID：S2AC-D22",
+                  "bad": null,
+                  "hasSecondLine": true
+                },
+                {
+                  "org": "D23 Extra Org",
+                  "id": "数据源 ID：S2AC-D23",
+                  "bad": null,
+                  "hasSecondLine": true
+                },
+                {
+                  "org": "D24 Extra Org",
+                  "id": "数据源 ID：S2AC-D24",
+                  "bad": null,
+                  "hasSecondLine": true
+                },
+                {
+                  "org": "D25 Extra Org",
+                  "id": "数据源 ID：S2AC-D25",
+                  "bad": null,
+                  "hasSecondLine": true
+                },
+                {
+                  "org": "D26 Extra Org",
+                  "id": "数据源 ID：S2AC-D26",
+                  "bad": null,
+                  "hasSecondLine": true
+                },
+                {
+                  "org": "D27 Extra Org",
+                  "id": "数据源 ID：S2AC-D27",
+                  "bad": null,
+                  "hasSecondLine": true
+                },
+                {
+                  "org": "D28 Extra Org",
+                  "id": "数据源 ID：S2AC-D28",
+                  "bad": null,
+                  "hasSecondLine": true
+                },
+                {
+                  "org": "X01 Disabled Org",
+                  "id": "数据源 ID：S2AC-X01",
+                  "bad": "已停用；已分配给其他探针：S2AC-PAMB2",
+                  "hasSecondLine": true
+                }
+              ]
+            }
+          ],
+          "selectedAfterClick": [],
+          "afterClose": 1
+        },
+        "PNOORG8": {
+          "before": {
+            "visibleLists": 1
+          },
+          "afterHover": {
+            "visibleLists": 0
+          },
+          "afterClick": [
+            {
+              "note": null,
+              "items": [
+                {
+                  "org": "S2AC-N13",
+                  "id": null,
+                  "bad": null,
+                  "hasSecondLine": false
+                },
+                {
+                  "org": "D32 Pane Org",
+                  "id": "数据源 ID：S2AC-D32",
+                  "bad": null,
+                  "hasSecondLine": true
+                },
+                {
+                  "org": "D33 Pane Org",
+                  "id": "数据源 ID：S2AC-D33",
+                  "bad": null,
+                  "hasSecondLine": true
+                },
+                {
+                  "org": "D34 Pane Org",
+                  "id": "数据源 ID：S2AC-D34",
+                  "bad": null,
+                  "hasSecondLine": true
+                },
+                {
+                  "org": "D35 Pane Org",
+                  "id": "数据源 ID：S2AC-D35",
+                  "bad": null,
+                  "hasSecondLine": true
+                },
+                {
+                  "org": "D36 Pane Org",
+                  "id": "数据源 ID：S2AC-D36",
+                  "bad": null,
+                  "hasSecondLine": true
+                },
+                {
+                  "org": "D37 Pane Org",
+                  "id": "数据源 ID：S2AC-D37",
+                  "bad": null,
+                  "hasSecondLine": true
+                },
+                {
+                  "org": "D38 Pane Org",
+                  "id": "数据源 ID：S2AC-D38",
+                  "bad": null,
+                  "hasSecondLine": true
+                }
+              ]
+            }
+          ],
+          "selectedAfterClick": [],
+          "afterClose": 1
+        }
+      },
+      "missingOrgLabelTexts": [
+        "S2AC-N13",
+        "D32 Pane Org",
+        "D33 Pane Org",
+        "D34 Pane Org",
+        "D35 Pane Org",
+        "D36 Pane Org",
+        "D37 Pane Org",
+        "D38 Pane Org"
+      ],
+      "missingOrgTip": [
+        {
+          "visible": true,
+          "lines": [
+            {
+              "text": "S2AC-N13",
+              "cls": "cc-single-line cc-single-line--main"
+            }
+          ],
+          "rect": {
+            "x": 848.984375,
+            "y": 516,
+            "w": 78.03125,
+            "h": 30
+          }
+        }
+      ]
+    },
+    "900x800": {
+      "probes": {
+        "S2AC-P6": {
+          "geometry": {
+            "clientId": "S2AC-P6",
+            "countText": "6",
+            "container": {
+              "width": 236,
+              "clientWidth": 236,
+              "scrollWidth": 236
+            },
+            "totalTags": 6,
+            "visibleCount": 2,
+            "visible": [
+              {
+                "text": "DOne Org",
+                "left": 850,
+                "right": 924.7,
+                "width": 74.67,
+                "cls": "cc-dstag cc-dstag--ok"
+              },
+              {
+                "text": "D-Two Org",
+                "left": 932.7,
+                "right": 1011.1,
+                "width": 78.44,
+                "cls": "cc-dstag cc-dstag--ok"
+              }
+            ],
+            "chipWidths": [
+              {
+                "text": "DOne Org",
+                "width": 74.67
+              },
+              {
+                "text": "D-Two Org",
+                "width": 78.44
+              },
+              {
+                "text": "D-Three Org",
+                "width": 88.02
+              },
+              {
+                "text": "D-Four Org",
+                "width": 82
+              },
+              {
+                "text": "D-Five Org",
+                "width": 79.34
+              },
+              {
+                "text": "D-Six Org",
+                "width": 73.34
+              }
+            ],
+            "more": {
+              "text": "+4",
+              "left": 1019.1,
+              "right": 1050.8,
+              "width": 31.69
+            },
+            "rowbad": null,
+            "gaps": [
+              8
+            ]
+          },
+          "check": {
+            "expectedShown": 2,
+            "expectedHidden": 4,
+            "avail": 236,
+            "actualShown": 2,
+            "matches": true,
+            "noOverlap": true,
+            "gapOk": true,
+            "lastToMore": 8,
+            "visibleMaxOk": true
+          }
+        },
+        "S2AC-P8": {
+          "geometry": {
+            "clientId": "S2AC-P8",
+            "countText": "8",
+            "container": {
+              "width": 236,
+              "clientWidth": 236,
+              "scrollWidth": 236
+            },
+            "totalTags": 8,
+            "visibleCount": 1,
+            "visible": [
+              {
+                "text": "一二三四五六七八九十",
+                "left": 850,
+                "right": 970,
+                "width": 120,
+                "cls": "cc-dstag cc-dstag--ok"
+              }
+            ],
+            "chipWidths": [
+              {
+                "text": "一二三四五六七八九十",
+                "width": 120
+              },
+              {
+                "text": "LongOrgD08-ABCDEFGHIJKLMNOPQRSTUV",
+                "width": 120
+              },
+              {
+                "text": "D9 Mid Org",
+                "width": 82.02
+              },
+              {
+                "text": "D-Ten Org",
+                "width": 75.78
+              },
+              {
+                "text": "D-Eleven Org",
+                "width": 94.03
+              },
+              {
+                "text": "D-Twelve Org",
+                "width": 94.47
+              },
+              {
+                "text": "D-Thirteen Org",
+                "width": 102.67
+              },
+              {
+                "text": "D-Fourteen Org",
+                "width": 106.67
+              }
+            ],
+            "more": {
+              "text": "+7",
+              "left": 978,
+              "right": 1009.7,
+              "width": 31.69
+            },
+            "rowbad": null,
+            "gaps": []
+          },
+          "check": {
+            "expectedShown": 1,
+            "expectedHidden": 7,
+            "avail": 236,
+            "actualShown": 1,
+            "matches": true,
+            "noOverlap": true,
+            "gapOk": true,
+            "lastToMore": 8,
+            "visibleMaxOk": true
+          }
+        },
+        "S2AC-P8A": {
+          "geometry": {
+            "clientId": "S2AC-P8A",
+            "countText": "8",
+            "container": {
+              "width": 236,
+              "clientWidth": 236,
+              "scrollWidth": 236
+            },
+            "totalTags": 8,
+            "visibleCount": 1,
+            "visible": [
+              {
+                "text": "X01 Disabled Org",
+                "left": 850,
+                "right": 967.4,
+                "width": 117.38,
+                "cls": "cc-dstag cc-dstag--bad"
+              }
+            ],
+            "chipWidths": [
+              {
+                "text": "X01 Disabled Org",
+                "width": 117.38
+              },
+              {
+                "text": "D22 Extra Org",
+                "width": 98.05
+              },
+              {
+                "text": "D23 Extra Org",
+                "width": 98.05
+              },
+              {
+                "text": "D24 Extra Org",
+                "width": 98.05
+              },
+              {
+                "text": "D25 Extra Org",
+                "width": 98.05
+              },
+              {
+                "text": "D26 Extra Org",
+                "width": 98.05
+              },
+              {
+                "text": "D27 Extra Org",
+                "width": 98.05
+              },
+              {
+                "text": "D28 Extra Org",
+                "width": 98.05
+              }
+            ],
+            "more": {
+              "text": "+7",
+              "left": 975.4,
+              "right": 1007.1,
+              "width": 31.69
+            },
+            "rowbad": null,
+            "gaps": []
+          },
+          "check": {
+            "expectedShown": 1,
+            "expectedHidden": 7,
+            "avail": 236,
+            "actualShown": 1,
+            "matches": true,
+            "noOverlap": true,
+            "gapOk": true,
+            "lastToMore": 8,
+            "visibleMaxOk": true
+          }
+        },
+        "S2AC-PNOORG8": {
+          "geometry": {
+            "clientId": "S2AC-PNOORG8",
+            "countText": "8",
+            "container": {
+              "width": 236,
+              "clientWidth": 236,
+              "scrollWidth": 236
+            },
+            "totalTags": 8,
+            "visibleCount": 2,
+            "visible": [
+              {
+                "text": "S2AC-N13",
+                "left": 850,
+                "right": 926,
+                "width": 76.03,
+                "cls": "cc-dstag cc-dstag--ok"
+              },
+              {
+                "text": "D32 Pane Org",
+                "left": 934,
+                "right": 1030.7,
+                "width": 96.7,
+                "cls": "cc-dstag cc-dstag--ok"
+              }
+            ],
+            "chipWidths": [
+              {
+                "text": "S2AC-N13",
+                "width": 76.03
+              },
+              {
+                "text": "D32 Pane Org",
+                "width": 96.7
+              },
+              {
+                "text": "D33 Pane Org",
+                "width": 96.7
+              },
+              {
+                "text": "D34 Pane Org",
+                "width": 96.7
+              },
+              {
+                "text": "D35 Pane Org",
+                "width": 96.7
+              },
+              {
+                "text": "D36 Pane Org",
+                "width": 96.7
+              },
+              {
+                "text": "D37 Pane Org",
+                "width": 96.7
+              },
+              {
+                "text": "D38 Pane Org",
+                "width": 96.7
+              }
+            ],
+            "more": {
+              "text": "+6",
+              "left": 1038.7,
+              "right": 1070.4,
+              "width": 31.69
+            },
+            "rowbad": null,
+            "gaps": [
+              8
+            ]
+          },
+          "check": {
+            "expectedShown": 2,
+            "expectedHidden": 6,
+            "avail": 236,
+            "actualShown": 2,
+            "matches": true,
+            "noOverlap": true,
+            "gapOk": true,
+            "lastToMore": 8,
+            "visibleMaxOk": true
+          }
+        },
+        "S2AC-PAMB1": {
+          "geometry": {
+            "clientId": "S2AC-PAMB1",
+            "countText": "2",
+            "container": {
+              "width": 236,
+              "clientWidth": 236,
+              "scrollWidth": 236
+            },
+            "totalTags": 2,
+            "visibleCount": 0,
+            "visible": [],
+            "chipWidths": [
+              {
+                "text": "TokenS2AMOrg",
+                "width": 107.13
+              },
+              {
+                "text": "TokenC02Org",
+                "width": 95.8
+              }
+            ],
+            "more": {
+              "text": "+2",
+              "left": 950,
+              "right": 981.7,
+              "width": 31.69
+            },
+            "rowbad": {
+              "text": "含逗号歧义",
+              "width": 92
+            },
+            "gaps": []
+          },
+          "check": {
+            "expectedShown": 0,
+            "expectedHidden": 2,
+            "avail": 136,
+            "actualShown": 0,
+            "matches": true,
+            "noOverlap": true,
+            "gapOk": true,
+            "lastToMore": null,
+            "visibleMaxOk": true
+          }
+        },
+        "S2AC-PAMB2": {
+          "geometry": {
+            "clientId": "S2AC-PAMB2",
+            "countText": "3",
+            "container": {
+              "width": 236,
+              "clientWidth": 236,
+              "scrollWidth": 236
+            },
+            "totalTags": 3,
+            "visibleCount": 0,
+            "visible": [],
+            "chipWidths": [
+              {
+                "text": "X01 Disabled Org",
+                "width": 117.38
+              },
+              {
+                "text": "TokenSourceS2AC",
+                "width": 120
+              },
+              {
+                "text": "TokenC01Org",
+                "width": 95.8
+              }
+            ],
+            "more": {
+              "text": "+3",
+              "left": 950,
+              "right": 981.7,
+              "width": 31.69
+            },
+            "rowbad": {
+              "text": "含逗号歧义",
+              "width": 92
+            },
+            "gaps": []
+          },
+          "check": {
+            "expectedShown": 0,
+            "expectedHidden": 3,
+            "avail": 136,
+            "actualShown": 0,
+            "matches": true,
+            "noOverlap": true,
+            "gapOk": true,
+            "lastToMore": null,
+            "visibleMaxOk": true
+          }
+        },
+        "S2AC-P68": {
+          "geometry": {
+            "clientId": "S2AC-P68",
+            "countText": "2",
+            "container": {
+              "width": 236,
+              "clientWidth": 236,
+              "scrollWidth": 236
+            },
+            "totalTags": 2,
+            "visibleCount": 2,
+            "visible": [
+              {
+                "text": "X02 Category Target Org",
+                "left": 850,
+                "right": 970,
+                "width": 120,
+                "cls": "cc-dstag cc-dstag--bad"
+              },
+              {
+                "text": "D17 Org",
+                "left": 978,
+                "right": 1042.7,
+                "width": 64.69,
+                "cls": "cc-dstag cc-dstag--ok"
+              }
+            ],
+            "chipWidths": [
+              {
+                "text": "X02 Category Target Org",
+                "width": 120
+              },
+              {
+                "text": "D17 Org",
+                "width": 64.69
+              }
+            ],
+            "more": null,
+            "rowbad": null,
+            "gaps": [
+              8
+            ]
+          },
+          "check": {
+            "expectedShown": 2,
+            "expectedHidden": 0,
+            "avail": 236,
+            "actualShown": 2,
+            "matches": true,
+            "noOverlap": true,
+            "gapOk": true,
+            "lastToMore": null,
+            "visibleMaxOk": true
+          }
+        }
+      },
+      "colorStates": {
+        "ok": {
+          "cls": "cc-dstag cc-dstag--ok",
+          "color": "rgb(4, 120, 87)",
+          "bg": "rgb(236, 253, 245)"
+        },
+        "neutral": {
+          "cls": "cc-dstag cc-dstag--neutral",
+          "color": "rgb(96, 98, 102)",
+          "bg": "rgb(244, 244, 245)"
+        },
+        "badAmb": {
+          "cls": "cc-dstag cc-dstag--bad",
+          "color": "rgb(213, 73, 73)",
+          "bg": "rgb(254, 240, 240)"
+        }
+      },
+      "fullList": {
+        "P8": {
+          "before": {
+            "visibleLists": 0
+          },
+          "afterHover": {
+            "visibleLists": 0
+          },
+          "afterClick": [
+            {
+              "note": null,
+              "items": [
+                {
+                  "org": "一二三四五六七八九十",
+                  "id": "数据源 ID：S2AC-D07",
+                  "bad": null,
+                  "hasSecondLine": true
+                },
+                {
+                  "org": "LongOrgD08-ABCDEFGHIJKLMNOPQRSTUV",
+                  "id": "数据源 ID：S2AC-D08",
+                  "bad": null,
+                  "hasSecondLine": true
+                },
+                {
+                  "org": "D9 Mid Org",
+                  "id": "数据源 ID：S2AC-D09",
+                  "bad": null,
+                  "hasSecondLine": true
+                },
+                {
+                  "org": "D-Ten Org",
+                  "id": "数据源 ID：S2AC-D10",
+                  "bad": null,
+                  "hasSecondLine": true
+                },
+                {
+                  "org": "D-Eleven Org",
+                  "id": "数据源 ID：S2AC-D11",
+                  "bad": null,
+                  "hasSecondLine": true
+                },
+                {
+                  "org": "D-Twelve Org",
+                  "id": "数据源 ID：S2AC-D12",
+                  "bad": null,
+                  "hasSecondLine": true
+                },
+                {
+                  "org": "D-Thirteen Org",
+                  "id": "数据源 ID：S2AC-D13",
+                  "bad": null,
+                  "hasSecondLine": true
+                },
+                {
+                  "org": "D-Fourteen Org",
+                  "id": "数据源 ID：S2AC-D14",
+                  "bad": null,
+                  "hasSecondLine": true
+                }
+              ]
+            }
+          ],
+          "selectedAfterClick": [],
+          "afterClose": 1
+        },
+        "P8A": {
+          "before": {
+            "visibleLists": 1
+          },
+          "afterHover": {
+            "visibleLists": 0
+          },
+          "afterClick": [
+            {
+              "note": null,
+              "items": [
+                {
+                  "org": "D22 Extra Org",
+                  "id": "数据源 ID：S2AC-D22",
+                  "bad": null,
+                  "hasSecondLine": true
+                },
+                {
+                  "org": "D23 Extra Org",
+                  "id": "数据源 ID：S2AC-D23",
+                  "bad": null,
+                  "hasSecondLine": true
+                },
+                {
+                  "org": "D24 Extra Org",
+                  "id": "数据源 ID：S2AC-D24",
+                  "bad": null,
+                  "hasSecondLine": true
+                },
+                {
+                  "org": "D25 Extra Org",
+                  "id": "数据源 ID：S2AC-D25",
+                  "bad": null,
+                  "hasSecondLine": true
+                },
+                {
+                  "org": "D26 Extra Org",
+                  "id": "数据源 ID：S2AC-D26",
+                  "bad": null,
+                  "hasSecondLine": true
+                },
+                {
+                  "org": "D27 Extra Org",
+                  "id": "数据源 ID：S2AC-D27",
+                  "bad": null,
+                  "hasSecondLine": true
+                },
+                {
+                  "org": "D28 Extra Org",
+                  "id": "数据源 ID：S2AC-D28",
+                  "bad": null,
+                  "hasSecondLine": true
+                },
+                {
+                  "org": "X01 Disabled Org",
+                  "id": "数据源 ID：S2AC-X01",
+                  "bad": "已停用；已分配给其他探针：S2AC-PAMB2",
+                  "hasSecondLine": true
+                }
+              ]
+            }
+          ],
+          "selectedAfterClick": [],
+          "afterClose": 1
+        },
+        "PNOORG8": {
+          "before": {
+            "visibleLists": 0
+          },
+          "afterHover": {
+            "visibleLists": 0
+          },
+          "afterClick": [
+            {
+              "note": null,
+              "items": [
+                {
+                  "org": "S2AC-N13",
+                  "id": null,
+                  "bad": null,
+                  "hasSecondLine": false
+                },
+                {
+                  "org": "D32 Pane Org",
+                  "id": "数据源 ID：S2AC-D32",
+                  "bad": null,
+                  "hasSecondLine": true
+                },
+                {
+                  "org": "D33 Pane Org",
+                  "id": "数据源 ID：S2AC-D33",
+                  "bad": null,
+                  "hasSecondLine": true
+                },
+                {
+                  "org": "D34 Pane Org",
+                  "id": "数据源 ID：S2AC-D34",
+                  "bad": null,
+                  "hasSecondLine": true
+                },
+                {
+                  "org": "D35 Pane Org",
+                  "id": "数据源 ID：S2AC-D35",
+                  "bad": null,
+                  "hasSecondLine": true
+                },
+                {
+                  "org": "D36 Pane Org",
+                  "id": "数据源 ID：S2AC-D36",
+                  "bad": null,
+                  "hasSecondLine": true
+                },
+                {
+                  "org": "D37 Pane Org",
+                  "id": "数据源 ID：S2AC-D37",
+                  "bad": null,
+                  "hasSecondLine": true
+                },
+                {
+                  "org": "D38 Pane Org",
+                  "id": "数据源 ID：S2AC-D38",
+                  "bad": null,
+                  "hasSecondLine": true
+                }
+              ]
+            }
+          ],
+          "selectedAfterClick": [],
+          "afterClose": 1
+        }
+      },
+      "missingOrgLabelTexts": [
+        "S2AC-N13",
+        "D32 Pane Org",
+        "D33 Pane Org",
+        "D34 Pane Org",
+        "D35 Pane Org",
+        "D36 Pane Org",
+        "D37 Pane Org",
+        "D38 Pane Org"
+      ],
+      "missingOrgTip": [
+        {
+          "visible": true,
+          "lines": [
+            {
+              "text": "S2AC-N13",
+              "cls": "cc-single-line cc-single-line--main"
+            }
+          ],
+          "rect": {
+            "x": 414.984375,
+            "y": 376,
+            "w": 78.03125,
+            "h": 30
+          }
+        }
+      ]
+    }
+  }
+}

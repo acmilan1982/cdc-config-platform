@@ -1,0 +1,62 @@
+{
+  "S2AC-PAMB1": {
+    "count": "2",
+    "rowbad": {
+      "text": "含逗号歧义",
+      "visible": true,
+      "width": 92
+    },
+    "countNote": "（展示）",
+    "tags": [
+      {
+        "text": "TokenS2AMOrg",
+        "cls": "cc-dstag cc-dstag--neutral",
+        "display": "flex",
+        "width": 107.13
+      },
+      {
+        "text": "TokenC02Org",
+        "cls": "cc-dstag cc-dstag--neutral",
+        "display": "flex",
+        "width": 95.8
+      }
+    ],
+    "srcScroll": {
+      "clientWidth": 766,
+      "scrollWidth": 766
+    }
+  },
+  "S2AC-PAMB2": {
+    "count": "3",
+    "rowbad": {
+      "text": "含逗号歧义",
+      "visible": true,
+      "width": 92
+    },
+    "countNote": "（展示）",
+    "tags": [
+      {
+        "text": "X01 Disabled Org",
+        "cls": "cc-dstag cc-dstag--bad",
+        "display": "flex",
+        "width": 117.38
+      },
+      {
+        "text": "TokenSourceS2AC",
+        "cls": "cc-dstag cc-dstag--neutral",
+        "display": "flex",
+        "width": 120
+      },
+      {
+        "text": "TokenC01Org",
+        "cls": "cc-dstag cc-dstag--neutral",
+        "display": "flex",
+        "width": 95.8
+      }
+    ],
+    "srcScroll": {
+      "clientWidth": 766,
+      "scrollWidth": 766
+    }
+  }
+}

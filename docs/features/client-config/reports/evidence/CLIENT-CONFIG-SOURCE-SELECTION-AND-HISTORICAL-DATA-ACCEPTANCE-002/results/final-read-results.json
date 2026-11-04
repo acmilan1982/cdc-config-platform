@@ -1,0 +1,191 @@
+{
+  "1440": {
+    "P14": {
+      "count": "2",
+      "tags": [
+        {
+          "text": "北京协和医学中心",
+          "cls": "cc-dstag cc-dstag--ok",
+          "display": "flex",
+          "width": 114.02
+        },
+        {
+          "text": "SAME-ORG-S2AC",
+          "cls": "cc-dstag cc-dstag--ok",
+          "display": "flex",
+          "width": 120
+        }
+      ]
+    },
+    "PH1": {
+      "count": "2",
+      "tags": [
+        {
+          "text": "D15 Org",
+          "cls": "cc-dstag cc-dstag--bad",
+          "display": "flex",
+          "width": 64.69
+        },
+        {
+          "text": "D16 Org",
+          "cls": "cc-dstag cc-dstag--ok",
+          "display": "flex",
+          "width": 64.69
+        }
+      ],
+      "rowbad": []
+    },
+    "PAMB1": {
+      "count": "2",
+      "countNote": "（展示）",
+      "rowbad": [
+        {
+          "text": "含逗号歧义",
+          "visible": true,
+          "width": 92
+        }
+      ],
+      "tags": [
+        {
+          "text": "TokenS2AMOrg",
+          "cls": "cc-dstag cc-dstag--neutral",
+          "display": "flex",
+          "width": 107.13
+        },
+        {
+          "text": "TokenC02Org",
+          "cls": "cc-dstag cc-dstag--neutral",
+          "display": "none",
+          "width": 0
+        }
+      ]
+    },
+    "PAMB2": {
+      "count": "3",
+      "countNote": "（展示）",
+      "rowbad": [
+        {
+          "text": "含逗号歧义",
+          "visible": true,
+          "width": 92
+        }
+      ],
+      "tags": [
+        {
+          "text": "X01 Disabled Org",
+          "cls": "cc-dstag cc-dstag--bad",
+          "display": "flex",
+          "width": 117.38
+        },
+        {
+          "text": "TokenSourceS2AC",
+          "cls": "cc-dstag cc-dstag--neutral",
+          "display": "none",
+          "width": 0
+        },
+        {
+          "text": "TokenC01Org",
+          "cls": "cc-dstag cc-dstag--neutral",
+          "display": "none",
+          "width": 0
+        }
+      ]
+    }
+  },
+  "1920": {
+    "P14": {
+      "count": "2",
+      "tags": [
+        {
+          "text": "北京协和医学中心",
+          "cls": "cc-dstag cc-dstag--ok",
+          "display": "flex",
+          "width": 114.02
+        },
+        {
+          "text": "SAME-ORG-S2AC",
+          "cls": "cc-dstag cc-dstag--ok",
+          "display": "flex",
+          "width": 120
+        }
+      ]
+    },
+    "PH1": {
+      "count": "2",
+      "tags": [
+        {
+          "text": "D15 Org",
+          "cls": "cc-dstag cc-dstag--bad",
+          "display": "flex",
+          "width": 64.69
+        },
+        {
+          "text": "D16 Org",
+          "cls": "cc-dstag cc-dstag--ok",
+          "display": "flex",
+          "width": 64.69
+        }
+      ],
+      "rowbad": []
+    },
+    "PAMB1": {
+      "count": "2",
+      "countNote": "（展示）",
+      "rowbad": [
+        {
+          "text": "含逗号歧义",
+          "visible": true,
+          "width": 92
+        }
+      ],
+      "tags": [
+        {
+          "text": "TokenS2AMOrg",
+          "cls": "cc-dstag cc-dstag--neutral",
+          "display": "flex",
+          "width": 107.13
+        },
+        {
+          "text": "TokenC02Org",
+          "cls": "cc-dstag cc-dstag--neutral",
+          "display": "flex",
+          "width": 95.8
+        }
+      ]
+    },
+    "PAMB2": {
+      "count": "3",
+      "countNote": "（展示）",
+      "rowbad": [
+        {
+          "text": "含逗号歧义",
+          "visible": true,
+          "width": 92
+        }
+      ],
+      "tags": [
+        {
+          "text": "X01 Disabled Org",
+          "cls": "cc-dstag cc-dstag--bad",
+          "display": "flex",
+          "width": 117.38
+        },
+        {
+          "text": "TokenSourceS2AC",
+          "cls": "cc-dstag cc-dstag--neutral",
+          "display": "flex",
+          "width": 120
+        },
+        {
+          "text": "TokenC01Org",
+          "cls": "cc-dstag cc-dstag--neutral",
+          "display": "flex",
+          "width": 95.8
+        }
+      ]
+    }
+  },
+  "apiP14": {
+    "clientDesc": "S2AC serialization probe"
+  }
+}
