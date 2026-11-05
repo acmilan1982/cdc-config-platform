@@ -36,6 +36,8 @@
 - 被拒绝的写请求未产生行或字段变化，包括 `S2AC-POCCNEW`、`S2AC-PEDIT`、`S2AC-PO7TRY`、`S2AC-PO4TRY`、`S2AC-PDIS2` 启用与两次 `S2AC-PNORM` 规范化重复提交。
 - 按授权**不清理、不恢复**；本报告不报告 `RESTORED`。
 
+R1 更正指针（2026-11-05）：本报告 §2/§6 的 193 INSERT + 2 COMMIT 为脚本文本口径，不是实际执行次数；实际执行计数、仅重放语句与不可复算项见 `CLIENT-CONFIG-SOURCE-SELECTION-AND-HISTORICAL-DATA-ACCEPTANCE-002-R1.md` §6。R0 历史探针依赖错误、缺失 CSV 索引、“无 mock”表述与复现顺序已在 R1 证据目录定向修正；R0 运行 JSON/SQL 输出未改写。AC-034/AC-057 的 R1 逐原子补证见同一 R1 报告 §3/§4。
+
 详细样本清单与终态：`reports/evidence/CLIENT-CONFIG-SOURCE-SELECTION-AND-HISTORICAL-DATA-ACCEPTANCE-002/samples-and-final-state.md`。
 
 ## 3. 执行方式与服务

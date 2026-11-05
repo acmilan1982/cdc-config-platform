@@ -711,6 +711,24 @@
 
 **批次执行 ≠ 整体验收；合成样本与冲突样本按授权保留，未清理。**
 
+### 1.38 探针端管理数据源选择与历史数据验收 R1 定向补证状态块（2026-11-05；`CLIENT-CONFIG-SOURCE-SELECTION-AND-HISTORICAL-DATA-ACCEPTANCE-002-R1`）
+
+| 项目 | 值 |
+|---|---|
+| 执行任务 | `CLIENT-CONFIG-SOURCE-SELECTION-AND-HISTORICAL-DATA-ACCEPTANCE-002-R1`（仅补证 `CCFG-AC-034`、`CCFG-AC-057`，其余 22 项不重跑） |
+| 基线 | `develop` / `6c72727b4e77efc15034af0dc44242e15ced094f`（开工时本地、`origin/develop`、远端一致） |
+| `CCFG-AC-034` | 维持 **`PASS`**：32 个真实存在、类别/启用正确、未被占用的合成源序列化 1055 字节；真实新增页提交发出 1 个请求并由后端返回 `40105`、页面同步红色反馈；真实 API 同集合同样 `40105`，独立回读与 SQL 均无行；1000 字节成功腿经真实编辑 API 重新保存并回读仍为 1000 字节 |
+| `CCFG-AC-057` | 维持 **`PASS`**：真实创建启用探针 A 持有 S/R → 真实停用后 A=`0` 且仍持有 S、候选仍指向 A → B 分配 S 被 `40941` 阻断且反馈指向 A、无部分写入 → 真实编辑 A 移除 S 保留 R → B 成功取得 S、独立回读确认 A 仅持有 R 且候选指向 B |
+| 数据变更 | 新增 34 条合成数据源 + 2 条合成探针（A/B）；`S2AC-R1OVER` 无行；按负责人授权不清理、不恢复；未修改既有 37 条数据源 |
+| 执行计数 | R1：DML 34 次 INSERT 全部成功 + 1 次 COMMIT 成功；业务写请求 10 次（成功 5、预期拒绝 5）；注入 0；探针重跑 1 次（首轮回读解析错误，写请求已单独计数）。R0：脚本文本 193 INSERT + 2 COMMIT；业务 API 18 次（8 成功/10 拒绝）可由响应复算；实际直接 DML 与 COMMIT 次数无法从现存记录复算（`PARTIALLY_VERIFIED`），不以推算值替换 |
+| 证据修正 | 保留 R0 运行 JSON/SQL 与历史探针字节；R1 目录提供依赖修正副本（`require('../probe-lib.cjs')`，静态校验通过、未执行）；补入 R0 真实采集的两份合成 CSV（2026-11-04 14:07）；R0 README 的 mock 表述与复现顺序已定向修正 |
+| `changed_ids` | `[]`（两项均无状态 token 变化，统计仍 `PASS 125 / FAIL 0 / BLOCKED 27 / NOT_RUN 5 = 157`） |
+| 定义保护 | 157 条定义行与全部状态格不变；四族 `REQ154 / AC157 / DESIGN89 / UI77` 不变；未修改产品源码/CSS/测试/依赖/配置/模板、其他 Feature 或 REQ/DESIGN/UI/API/DATABASE |
+| 状态边界 | 本块仅记录两项定向补证；补证完成/推送成功**不等于**远程复审通过，也**不等于** 157 条整体验收通过或 Feature 正式接受；未清理/恢复，故不报告 `RESTORED` |
+| 下一入口 | `CHATGPT_REMOTE_CLIENT_CONFIG_SOURCE_SELECTION_AND_HISTORICAL_DATA_ACCEPTANCE_002_R1_REVIEW` |
+
+**批次补证 ≠ 整体验收；R1 合成样本按授权保留，未清理。**
+
 ### 1.1 批准信息（2026-09-03 旧口径批准历史；本轮并发口径调整不在该次批准范围内，见 §1.2）
 
 | 项目 | 值 |
@@ -1174,3 +1192,4 @@
 | 2026-11-03 | 探针端管理 **AC-022 数量口径确认与既有证据重判**（`CLIENT-CONFIG-AC022-QUANTITY-CLARIFICATION-AND-EVIDENCE-REASSESSMENT-001`，**纯文档静态重判**）：负责人 2026-11-03 明确回复——**“AC-022 的‘启用与停用各若干条’按各至少 2 条理解，本轮样本满足前置。”** 采信范围仅限 AC-022 前置数量解释与该轮样本；保留定义行“各若干条”原文，不推断 157 条整体接受或其他 AC/页面授权。静态校验前序任务 `CLIENT-CONFIG-AC022-CONTROLLED-MULTIROW-ACCEPTANCE-001` 的证据哈希与真实 JSON 键（同一时点 2 启用/14 停用；`B2_enable`、`B3_post_enable_1440`、`B4_post_enable_diff`、`B5_readonly_1920`、`B6_disable`、`B7_final`；写尝试 enable 1/disable 1/recovery 0，取消周期 `writes_delta=0`；`write_ledger` 的 `unsettled=2` 为门禁预留，不伪写为全部已结算；恢复分支未执行）。判定 `CCFG-AC-022` **`BLOCKED`→`PASS`**，依据为负责人数量解释 + 前序真实证据，非照抄提示词或借用其他 AC 状态；`changed_ids=[CCFG-AC-022]`。统计由 `PASS 83 / FAIL 0 / BLOCKED 60 / NOT_RUN 14` 更新为 `PASS` **84** / `FAIL` **0** / `BLOCKED` **59** / `NOT_RUN` **14** = **157**；除 AC-022 状态 token 外 157 定义行逐字节不变，其余 156 个状态格不变；`CCFG-AC-082` 维持 `BLOCKED`（未制造异常值）。未重新运行业务验收/测试/构建/lint/类型检查/浏览器/探针，未启停服务，未访问业务接口/DB/ZK/Kafka/sync-client，未新增或修改证据目录。**数量口径确认 ≠ 157 条整体验收通过 ≠ 其他 AC 通过 ≠ 新的写入授权。** | `CLIENT-CONFIG-AC022-QUANTITY-CLARIFICATION-AND-EVIDENCE-REASSESSMENT-001` |
 | 2026-11-03 | 探针端管理 **描述保存边界定向验收前置阻断**（`CLIENT-CONFIG-DESCRIPTION-SAVE-BOUNDARY-ACCEPTANCE-001`，仅 `/config/client` 的 `CCFG-AC-131`，**只读前置检索即停止，未执行任何业务写入**）：沿用负责人对 T01/T02 的专用测试对象授权，仅按仓库外候选映射 `T02` 精确绑定为别名 `OWNER_TEST_B`（不按列表顺序/行号）；只读 GET 确认精确行唯一、`fgActive='0'`、`status=DISABLED`、无行/源异常、无分配冲突、源集合与映射 token 一致、自排除候选源 `selectable=true` 且无占用。**决定性阻断**：原描述为 **NULL**（响应无 `clientDesc`、全局 `non_null`、前序 readiness 前像亦记录 `clientDesc=null`），而授权编辑接口 `PUT /api/clients/{originalClientId}` 将 null/空/纯空白描述归一为空并以业务码 `40102` 拒绝，授权范围内无任何 API 可把该列写回 NULL，故任何有界编辑都不可逆；按任务前置“当前原值无法通过已知安全方式恢复，停止本批，不覆盖原记录”停止。业务写尝试 **0**、恢复写尝试 **0**，未做浏览器导航，未发送任何 `POST/PUT/PATCH/DELETE`，原描述未被触碰。`CCFG-AC-131` 维持 **`BLOCKED`**，`changed_ids=[]`；统计 `PASS 84 / FAIL 0 / BLOCKED 59 / NOT_RUN 14 = 157`（未变），四族 `REQ154 / AC157 / DESIGN89 / UI77`，其余定义行与状态格逐字节不变，`CCFG-AC-082` 维持 `BLOCKED`；脱敏证据见 `reports/evidence/CLIENT-CONFIG-DESCRIPTION-SAVE-BOUNDARY-ACCEPTANCE-001/`（原始前像仅仓库外 600）。**本任务未执行 S1–S5、未完成 AC-131、未宣布远程复审通过或整体接受** | `CLIENT-CONFIG-DESCRIPTION-SAVE-BOUNDARY-ACCEPTANCE-001` |
 | 2026-11-04 | 探针端管理**数据源选择与历史数据验收**（`CLIENT-CONFIG-SOURCE-SELECTION-AND-HISTORICAL-DATA-ACCEPTANCE-002`，真实页面/真实后端批量验收，**不**执行 157 条整体正式验收）：对 `CCFG-AC-012/013/014/015/034/042/044/046/048/055/056/057/059/063/068/095/096/097/098/099/106/112/132/133` 共 24 条逐条执行并判定 `PASS`；新增 164 条合成数据源与 29 条合成探针、18 次真实业务写请求（成功 8、按预期拒绝 10），既有 37 条数据源按六字段比对缺失 0/变化 0；按负责人授权不清理、不恢复。**状态变化仅为** 24 个目标状态 token 由 `BLOCKED`（21）或 `NOT_RUN`（3）变为 `PASS`，其余 133 个状态格与 157 条定义行逐字节不变；统计由 `PASS 101 / FAIL 0 / BLOCKED 48 / NOT_RUN 8` 变为 `PASS 125 / FAIL 0 / BLOCKED 27 / NOT_RUN 5 = 157`；本批通过**不等于**整体验收通过或 Feature 正式接受 | `docs/prompts/client-config/CLIENT-CONFIG-SOURCE-SELECTION-AND-HISTORICAL-DATA-ACCEPTANCE-002-Agent-Prompt.md`；证据见 `reports/evidence/CLIENT-CONFIG-SOURCE-SELECTION-AND-HISTORICAL-DATA-ACCEPTANCE-002/`；报告见 `reports/CLIENT-CONFIG-SOURCE-SELECTION-AND-HISTORICAL-DATA-ACCEPTANCE-002.md` |
+| 2026-11-05 | 探针端管理**数据源选择与历史数据验收 R1 定向补证**（`CLIENT-CONFIG-SOURCE-SELECTION-AND-HISTORICAL-DATA-ACCEPTANCE-002-R1`，真实页面/真实后端，仅两项）：按远程复审 `CHANGES_REQUIRED` 对 `CCFG-AC-034` 补“真实存在且可选源超 1000 字节”的 UI 与 API 双重拒绝（1055B→`40105`、无持久化）及 1000B 成功腿刷新；对 `CCFG-AC-057` 补“先停用再分配”全过程（A 停用后仍占用 S→B `40941`→A 编辑移除 S→B 成功取得 S）。两项均维持 `PASS`，`changed_ids=[]`；统计 `PASS 125 / FAIL 0 / BLOCKED 27 / NOT_RUN 5 = 157`（未变），四族 `REQ154 / AC157 / DESIGN89 / UI77` 不变。证据可复现性：R0 探针依赖修正副本统一指向 `probe-lib.cjs`、补入 2026-11-04 14:07 真实采集的两份合成 CSV、修正 mock 表述与合并 SQL 复现顺序；R0 运行 JSON/SQL 未改写。计数勘误：R0 的 193 INSERT + 2 COMMIT 为脚本文本口径，实际 DML/COMMIT 次数无法精确复算（`PARTIALLY_VERIFIED`），业务 API 18 次可按响应复算；R1 独立记账为 34 INSERT + 1 COMMIT、10 次业务写（5 成功/5 拒绝）。按授权不清理、不恢复；**补证完成 ≠ 远程复审通过 ≠ 157 条整体验收通过** | `docs/prompts/client-config/CLIENT-CONFIG-SOURCE-SELECTION-AND-HISTORICAL-DATA-ACCEPTANCE-002-R1-Agent-Prompt.md`；报告见 `reports/CLIENT-CONFIG-SOURCE-SELECTION-AND-HISTORICAL-DATA-ACCEPTANCE-002-R1.md`；证据见 `reports/evidence/CLIENT-CONFIG-SOURCE-SELECTION-AND-HISTORICAL-DATA-ACCEPTANCE-002-R1/` |

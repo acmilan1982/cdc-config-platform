@@ -1,0 +1,5 @@
+R1 preexisting CDC_DATA_SOURCE check (2026-11-05 13:08:38 CST)
+baseline snapshot: /root/ccfg-s2-evidence/preexisting-data-source-snapshot.txt (37 rows, R0 pre-work, repo-external)
+compared fields: DATA_SOURCE_ID|DATA_SOURCE_ORG|DATA_SOURCE_NAME|DATA_SOURCE_TYPE|DATA_SOURCE_CATEGORY|FG_ACTIVE
+result: old=37 new=37 missing=0 changed=0
+scope: only the six listed fields; not a whole-row proof

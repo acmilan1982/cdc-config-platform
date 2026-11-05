@@ -1,0 +1,217 @@
+{
+  "task": "CLIENT-CONFIG-SOURCE-SELECTION-AND-HISTORICAL-DATA-ACCEPTANCE-002-R1",
+  "ac": "CCFG-AC-057",
+  "executedAt": "2026-11-05T04:23:52.436Z",
+  "ids": {
+    "A": "S2AC-R1A",
+    "B": "S2AC-R1B",
+    "S": "S2AC-R1S1",
+    "R": "S2AC-R1R1"
+  },
+  "precondition": {
+    "s": {
+      "dataSourceId": "S2AC-R1S1",
+      "selectable": true,
+      "notSelectableReason": null,
+      "occupiedByClientIds": []
+    },
+    "r": {
+      "dataSourceId": "S2AC-R1R1",
+      "selectable": true,
+      "notSelectableReason": null,
+      "occupiedByClientIds": []
+    },
+    "aRowBefore": {
+      "status": 200,
+      "row": null
+    },
+    "bRowBefore": {
+      "status": 200,
+      "row": null
+    }
+  },
+  "createA": {
+    "status": 200,
+    "json": {
+      "code": 200,
+      "message": "success",
+      "timestamp": "2026-11-05T12:24:01.600"
+    }
+  },
+  "aAfterCreate": {
+    "status": 200,
+    "row": {
+      "clientId": "S2AC-R1A",
+      "clientDesc": "S2AC R1 AC-057 holder A",
+      "status": "ENABLED",
+      "fgActive": "1",
+      "dataSourceCount": 2,
+      "rawDataSourceIds": "S2AC-R1S1,S2AC-R1R1",
+      "possibleCommaDataSourceIds": [],
+      "rowAnomalies": [],
+      "dataSources": [
+        {
+          "dataSourceId": "S2AC-R1S1",
+          "org": "R1Ac057SourceS",
+          "dataSourceName": "S2AC R1 NAME",
+          "anomalies": [],
+          "conflictClientIds": []
+        },
+        {
+          "dataSourceId": "S2AC-R1R1",
+          "org": "R1Ac057SourceR",
+          "dataSourceName": "S2AC R1 NAME",
+          "anomalies": [],
+          "conflictClientIds": []
+        }
+      ]
+    }
+  },
+  "disableA": {
+    "status": 200,
+    "json": {
+      "code": 200,
+      "message": "success",
+      "timestamp": "2026-11-05T12:24:01.670"
+    }
+  },
+  "aAfterDisable": {
+    "status": 200,
+    "row": {
+      "clientId": "S2AC-R1A",
+      "clientDesc": "S2AC R1 AC-057 holder A",
+      "status": "DISABLED",
+      "fgActive": "0",
+      "dataSourceCount": 2,
+      "rawDataSourceIds": "S2AC-R1S1,S2AC-R1R1",
+      "possibleCommaDataSourceIds": [],
+      "rowAnomalies": [],
+      "dataSources": [
+        {
+          "dataSourceId": "S2AC-R1S1",
+          "org": "R1Ac057SourceS",
+          "dataSourceName": "S2AC R1 NAME",
+          "anomalies": [],
+          "conflictClientIds": []
+        },
+        {
+          "dataSourceId": "S2AC-R1R1",
+          "org": "R1Ac057SourceR",
+          "dataSourceName": "S2AC R1 NAME",
+          "anomalies": [],
+          "conflictClientIds": []
+        }
+      ]
+    }
+  },
+  "sCandidateWhileDisabled": {
+    "dataSourceId": "S2AC-R1S1",
+    "selectable": false,
+    "notSelectableReason": "OCCUPIED",
+    "occupiedByClientIds": [
+      "S2AC-R1A"
+    ]
+  },
+  "createBBlocked": {
+    "status": 200,
+    "json": {
+      "code": 40941,
+      "message": "数据源“R1Ac057SourceS（S2AC-R1S1）”已分配给探针：S2AC-R1A，不能重复分配。",
+      "timestamp": "2026-11-05T12:24:01.768"
+    }
+  },
+  "bAfterBlocked": {
+    "status": 200,
+    "row": null
+  },
+  "editARemoveS": {
+    "status": 200,
+    "json": {
+      "code": 200,
+      "message": "success",
+      "timestamp": "2026-11-05T12:24:01.853"
+    }
+  },
+  "aAfterEdit": {
+    "status": 200,
+    "row": {
+      "clientId": "S2AC-R1A",
+      "clientDesc": "S2AC R1 AC-057 holder A",
+      "status": "DISABLED",
+      "fgActive": "0",
+      "dataSourceCount": 1,
+      "rawDataSourceIds": "S2AC-R1R1",
+      "possibleCommaDataSourceIds": [],
+      "rowAnomalies": [],
+      "dataSources": [
+        {
+          "dataSourceId": "S2AC-R1R1",
+          "org": "R1Ac057SourceR",
+          "dataSourceName": "S2AC R1 NAME",
+          "anomalies": [],
+          "conflictClientIds": []
+        }
+      ]
+    }
+  },
+  "createB": {
+    "status": 200,
+    "json": {
+      "code": 200,
+      "message": "success",
+      "timestamp": "2026-11-05T12:24:01.935"
+    }
+  },
+  "bAfterCreate": {
+    "status": 200,
+    "row": {
+      "clientId": "S2AC-R1B",
+      "clientDesc": "S2AC R1 AC-057 probe B",
+      "status": "ENABLED",
+      "fgActive": "1",
+      "dataSourceCount": 1,
+      "rawDataSourceIds": "S2AC-R1S1",
+      "possibleCommaDataSourceIds": [],
+      "rowAnomalies": [],
+      "dataSources": [
+        {
+          "dataSourceId": "S2AC-R1S1",
+          "org": "R1Ac057SourceS",
+          "dataSourceName": "S2AC R1 NAME",
+          "anomalies": [],
+          "conflictClientIds": []
+        }
+      ]
+    }
+  },
+  "aFinal": {
+    "status": 200,
+    "row": {
+      "clientId": "S2AC-R1A",
+      "clientDesc": "S2AC R1 AC-057 holder A",
+      "status": "DISABLED",
+      "fgActive": "0",
+      "dataSourceCount": 1,
+      "rawDataSourceIds": "S2AC-R1R1",
+      "possibleCommaDataSourceIds": [],
+      "rowAnomalies": [],
+      "dataSources": [
+        {
+          "dataSourceId": "S2AC-R1R1",
+          "org": "R1Ac057SourceR",
+          "dataSourceName": "S2AC R1 NAME",
+          "anomalies": [],
+          "conflictClientIds": []
+        }
+      ]
+    }
+  },
+  "sCandidateFinal": {
+    "dataSourceId": "S2AC-R1S1",
+    "selectable": false,
+    "notSelectableReason": "OCCUPIED",
+    "occupiedByClientIds": [
+      "S2AC-R1B"
+    ]
+  }
+}

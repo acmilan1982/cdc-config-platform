@@ -1,0 +1,20 @@
+R1 legacy probe dependency check (2026-11-05 12:27:13 CST)
+source: ../CLIENT-CONFIG-SOURCE-SELECTION-AND-HISTORICAL-DATA-ACCEPTANCE-002/probes/*.cjs
+transformations: require('./lib.cjs') -> require('../probe-lib.cjs'); require('./probe-lib.cjs') -> require('../probe-lib.cjs')
+probe-lib.cjs sha256: 1628c6fffabfe4a055f1c17529054536137c977d51287984a5a992644e52ca2f
+R0 probe-lib.cjs sha256: 1628c6fffabfe4a055f1c17529054536137c977d51287984a5a992644e52ca2f
+
+SYNTAX_OK probe-final-read.cjs require=require('../probe-lib.cjs')
+SYNTAX_OK probe-group-a.cjs require=require('../probe-lib.cjs')
+SYNTAX_OK probe-group-a-delay.cjs require=require('../probe-lib.cjs')
+SYNTAX_OK probe-group-b.cjs require=require('../probe-lib.cjs')
+SYNTAX_OK probe-group-c2.cjs require=require('../probe-lib.cjs')
+SYNTAX_OK probe-group-c.cjs require=require('../probe-lib.cjs')
+SYNTAX_OK probe-group-d.cjs require=require('../probe-lib.cjs')
+SYNTAX_OK probe-group-e2.cjs require=require('../probe-lib.cjs')
+SYNTAX_OK probe-group-e.cjs require=require('../probe-lib.cjs')
+SYNTAX_OK probe-group-supp2.cjs require=require('../probe-lib.cjs')
+SYNTAX_OK probe-group-supp.cjs require=require('../probe-lib.cjs')
+SYNTAX_OK probe-supplements.cjs require=require('../probe-lib.cjs')
+
+probe-lib target exists: YES

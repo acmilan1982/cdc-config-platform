@@ -1,0 +1,337 @@
+{
+  "task": "CLIENT-CONFIG-SOURCE-SELECTION-AND-HISTORICAL-DATA-ACCEPTANCE-002-R1",
+  "ac": "CCFG-AC-034",
+  "executedAt": "2026-11-05T04:22:27.040Z",
+  "ids": [
+    "S2AC-R1O-00000000000000000000001",
+    "S2AC-R1O-00000000000000000000002",
+    "S2AC-R1O-00000000000000000000003",
+    "S2AC-R1O-00000000000000000000004",
+    "S2AC-R1O-00000000000000000000005",
+    "S2AC-R1O-00000000000000000000006",
+    "S2AC-R1O-00000000000000000000007",
+    "S2AC-R1O-00000000000000000000008",
+    "S2AC-R1O-00000000000000000000009",
+    "S2AC-R1O-00000000000000000000010",
+    "S2AC-R1O-00000000000000000000011",
+    "S2AC-R1O-00000000000000000000012",
+    "S2AC-R1O-00000000000000000000013",
+    "S2AC-R1O-00000000000000000000014",
+    "S2AC-R1O-00000000000000000000015",
+    "S2AC-R1O-00000000000000000000016",
+    "S2AC-R1O-00000000000000000000017",
+    "S2AC-R1O-00000000000000000000018",
+    "S2AC-R1O-00000000000000000000019",
+    "S2AC-R1O-00000000000000000000020",
+    "S2AC-R1O-00000000000000000000021",
+    "S2AC-R1O-00000000000000000000022",
+    "S2AC-R1O-00000000000000000000023",
+    "S2AC-R1O-00000000000000000000024",
+    "S2AC-R1O-00000000000000000000025",
+    "S2AC-R1O-00000000000000000000026",
+    "S2AC-R1O-00000000000000000000027",
+    "S2AC-R1O-00000000000000000000028",
+    "S2AC-R1O-00000000000000000000029",
+    "S2AC-R1O-00000000000000000000030",
+    "S2AC-R1O-00000000000000000000031",
+    "S2AC-R1O-00000000000000000000032"
+  ],
+  "precondition": {
+    "requestedCount": 34,
+    "returned": 34,
+    "allSelectable": true,
+    "optionFields": [
+      {
+        "dataSourceId": "S2AC-R1O-00000000000000000000001",
+        "selectable": true,
+        "notSelectableReason": null,
+        "occupiedByClientIds": []
+      },
+      {
+        "dataSourceId": "S2AC-R1O-00000000000000000000002",
+        "selectable": true,
+        "notSelectableReason": null,
+        "occupiedByClientIds": []
+      },
+      {
+        "dataSourceId": "S2AC-R1O-00000000000000000000003",
+        "selectable": true,
+        "notSelectableReason": null,
+        "occupiedByClientIds": []
+      },
+      {
+        "dataSourceId": "S2AC-R1O-00000000000000000000004",
+        "selectable": true,
+        "notSelectableReason": null,
+        "occupiedByClientIds": []
+      },
+      {
+        "dataSourceId": "S2AC-R1O-00000000000000000000005",
+        "selectable": true,
+        "notSelectableReason": null,
+        "occupiedByClientIds": []
+      },
+      {
+        "dataSourceId": "S2AC-R1O-00000000000000000000006",
+        "selectable": true,
+        "notSelectableReason": null,
+        "occupiedByClientIds": []
+      },
+      {
+        "dataSourceId": "S2AC-R1O-00000000000000000000007",
+        "selectable": true,
+        "notSelectableReason": null,
+        "occupiedByClientIds": []
+      },
+      {
+        "dataSourceId": "S2AC-R1O-00000000000000000000008",
+        "selectable": true,
+        "notSelectableReason": null,
+        "occupiedByClientIds": []
+      },
+      {
+        "dataSourceId": "S2AC-R1O-00000000000000000000009",
+        "selectable": true,
+        "notSelectableReason": null,
+        "occupiedByClientIds": []
+      },
+      {
+        "dataSourceId": "S2AC-R1O-00000000000000000000010",
+        "selectable": true,
+        "notSelectableReason": null,
+        "occupiedByClientIds": []
+      },
+      {
+        "dataSourceId": "S2AC-R1O-00000000000000000000011",
+        "selectable": true,
+        "notSelectableReason": null,
+        "occupiedByClientIds": []
+      },
+      {
+        "dataSourceId": "S2AC-R1O-00000000000000000000012",
+        "selectable": true,
+        "notSelectableReason": null,
+        "occupiedByClientIds": []
+      },
+      {
+        "dataSourceId": "S2AC-R1O-00000000000000000000013",
+        "selectable": true,
+        "notSelectableReason": null,
+        "occupiedByClientIds": []
+      },
+      {
+        "dataSourceId": "S2AC-R1O-00000000000000000000014",
+        "selectable": true,
+        "notSelectableReason": null,
+        "occupiedByClientIds": []
+      },
+      {
+        "dataSourceId": "S2AC-R1O-00000000000000000000015",
+        "selectable": true,
+        "notSelectableReason": null,
+        "occupiedByClientIds": []
+      },
+      {
+        "dataSourceId": "S2AC-R1O-00000000000000000000016",
+        "selectable": true,
+        "notSelectableReason": null,
+        "occupiedByClientIds": []
+      },
+      {
+        "dataSourceId": "S2AC-R1O-00000000000000000000017",
+        "selectable": true,
+        "notSelectableReason": null,
+        "occupiedByClientIds": []
+      },
+      {
+        "dataSourceId": "S2AC-R1O-00000000000000000000018",
+        "selectable": true,
+        "notSelectableReason": null,
+        "occupiedByClientIds": []
+      },
+      {
+        "dataSourceId": "S2AC-R1O-00000000000000000000019",
+        "selectable": true,
+        "notSelectableReason": null,
+        "occupiedByClientIds": []
+      },
+      {
+        "dataSourceId": "S2AC-R1O-00000000000000000000020",
+        "selectable": true,
+        "notSelectableReason": null,
+        "occupiedByClientIds": []
+      },
+      {
+        "dataSourceId": "S2AC-R1O-00000000000000000000021",
+        "selectable": true,
+        "notSelectableReason": null,
+        "occupiedByClientIds": []
+      },
+      {
+        "dataSourceId": "S2AC-R1O-00000000000000000000022",
+        "selectable": true,
+        "notSelectableReason": null,
+        "occupiedByClientIds": []
+      },
+      {
+        "dataSourceId": "S2AC-R1O-00000000000000000000023",
+        "selectable": true,
+        "notSelectableReason": null,
+        "occupiedByClientIds": []
+      },
+      {
+        "dataSourceId": "S2AC-R1O-00000000000000000000024",
+        "selectable": true,
+        "notSelectableReason": null,
+        "occupiedByClientIds": []
+      },
+      {
+        "dataSourceId": "S2AC-R1O-00000000000000000000025",
+        "selectable": true,
+        "notSelectableReason": null,
+        "occupiedByClientIds": []
+      },
+      {
+        "dataSourceId": "S2AC-R1O-00000000000000000000026",
+        "selectable": true,
+        "notSelectableReason": null,
+        "occupiedByClientIds": []
+      },
+      {
+        "dataSourceId": "S2AC-R1O-00000000000000000000027",
+        "selectable": true,
+        "notSelectableReason": null,
+        "occupiedByClientIds": []
+      },
+      {
+        "dataSourceId": "S2AC-R1O-00000000000000000000028",
+        "selectable": true,
+        "notSelectableReason": null,
+        "occupiedByClientIds": []
+      },
+      {
+        "dataSourceId": "S2AC-R1O-00000000000000000000029",
+        "selectable": true,
+        "notSelectableReason": null,
+        "occupiedByClientIds": []
+      },
+      {
+        "dataSourceId": "S2AC-R1O-00000000000000000000030",
+        "selectable": true,
+        "notSelectableReason": null,
+        "occupiedByClientIds": []
+      },
+      {
+        "dataSourceId": "S2AC-R1O-00000000000000000000031",
+        "selectable": true,
+        "notSelectableReason": null,
+        "occupiedByClientIds": []
+      },
+      {
+        "dataSourceId": "S2AC-R1O-00000000000000000000032",
+        "selectable": true,
+        "notSelectableReason": null,
+        "occupiedByClientIds": []
+      },
+      {
+        "dataSourceId": "S2AC-R1R1",
+        "selectable": true,
+        "notSelectableReason": null,
+        "occupiedByClientIds": []
+      },
+      {
+        "dataSourceId": "S2AC-R1S1",
+        "selectable": true,
+        "notSelectableReason": null,
+        "occupiedByClientIds": []
+      }
+    ],
+    "serializedBytes": 1055,
+    "serializedFormula": "32 ids x 32 chars + 31 commas = 1055"
+  },
+  "uiOver": {
+    "chosenCount": 32,
+    "chosenTextsSample": [
+      "R1OverOrg01",
+      "R1OverOrg02"
+    ],
+    "optionCountAfterFinalSearch": 1,
+    "requests": [
+      {
+        "method": "POST",
+        "url": "http://127.0.0.1:5173/api/clients",
+        "body": "{\"clientId\":\"S2AC-R1OVER\",\"clientDesc\":\"S2AC R1 over capacity probe\",\"dataSourceIds\":[\"S2AC-R1O-00000000000000000000001\",\"S2AC-R1O-00000000000000000000002\",\"S2AC-R1O-00000000000000000000003\",\"S2AC-R1O-00000000000000000000004\",\"S2AC-R1O-00000000000000000000005\",\"S2AC-R1O-00000000000000000000006\",\"S2AC-R1O-00000000000000000000007\",\"S2AC-R1O-00000000000000000000008\",\"S2AC-R1O-00000000000000000000009\",\"S2AC-R1O-00000000000000000000010\",\"S2AC-R1O-00000000000000000000011\",\"S2AC-R1O-00000000000000000000012\",\"S2AC-R1O-00000000000000000000013\",\"S2AC-R1O-00000000000000000000014\",\"S2AC-R1O-00000000000000000000015\",\"S2AC-R1O-00000000000000000000016\",\"S2AC-R1O-00000000000000000000017\",\"S2AC-R1O-00000000000000000000018\",\"S2AC-R1O-00000000000000000000019\",\"S2AC-R1O-00000000000000000000020\",\"S2AC-R1O-00000000000000000000021\",\"S2AC-R1O-00000000000000000000022\",\"S2AC-R1O-00000000000000000000023\",\"S2AC-R1O-00000000000000000000024\",\"S2AC-R1O-00000000000000000000025\",\"S2AC-R1O-00000000000000000000026\",\"S2AC-R1O-00000000000000000000027\",\"S2AC-R1O-00000000000000000000028\",\"S2AC-R1O-00000000000000000000029\",\"S2AC-R1O-00000000000000000000030\",\"S2AC-R1O-00000000000000000000031\",\"S2AC-R1O-00000000000000000000032\"]}"
+      }
+    ],
+    "feedback": [
+      {
+        "text": "数据源序列化结果超过 1000 字节（UTF-8），请减少选择。",
+        "cls": "cc-field-feedback__text ced-field-error",
+        "visible": true
+      }
+    ],
+    "response": {
+      "httpStatus": 200,
+      "responseJson": {
+        "code": 40105,
+        "message": "数据源序列化结果超过 1000 字节（UTF-8），请减少选择。",
+        "timestamp": "2026-11-05T12:22:47.200"
+      }
+    }
+  },
+  "apiOver": {
+    "status": 200,
+    "json": {
+      "code": 40105,
+      "message": "数据源序列化结果超过 1000 字节（UTF-8），请减少选择。",
+      "timestamp": "2026-11-05T12:22:48.320"
+    },
+    "serializedBytes": 1055
+  },
+  "noPersistence": {
+    "listStatus": 200,
+    "listShape": "data.items[]",
+    "rowPresent": false,
+    "row": null,
+    "totalRows": 59
+  },
+  "exact1000Reuse": {
+    "source": "R0 results/group-d-results.json -> capacity.exact",
+    "rowPresent": true,
+    "fgActive": "0",
+    "rawDataSourceIdsBytes": 1000,
+    "dataSourceCount": 31
+  },
+  "requestLog": [
+    {
+      "method": "GET",
+      "url": "http://127.0.0.1:5173/api/clients?status=ALL",
+      "body": null
+    },
+    {
+      "method": "GET",
+      "url": "http://127.0.0.1:8080/api/clients/data-source-options",
+      "body": null
+    },
+    {
+      "method": "GET",
+      "url": "http://127.0.0.1:5173/api/clients/data-source-options",
+      "body": null
+    },
+    {
+      "method": "POST",
+      "url": "http://127.0.0.1:5173/api/clients",
+      "body": "{\"clientId\":\"S2AC-R1OVER\",\"clientDesc\":\"S2AC R1 over capacity probe\",\"dataSourceIds\":[\"S2AC-R1O-00000000000000000000001\",\"S2AC-R1O-00000000000000000000002\",\"S2AC-R1O-00000000000000000000003\",\"S2AC-R1O-00000000000000000000004\",\"S2AC-R1O-00000000000000000000005\",\"S2AC-R1O-00000000000000000000006\",\"S2AC-R1O-00000000000000000000007\",\"S2AC-R1O-00000000000000000000008\",\"S2AC-R1O-00000000000000000000009\",\"S2AC-R1O-00000000000000000000010\",\"S2AC-R1O-00000000000000000000011\",\"S2AC-R1O-00000000000000000000012\",\"S2AC-R1O-00000000000000000000013\",\"S2AC-R1O-00000000000000000000014\",\"S2AC-R1O-00000000000000000000015\",\"S2AC-R1O-00000000000000000000016\",\"S2AC-R1O-00000000000000000000017\",\"S2AC-R1O-00000000000000000000018\",\"S2AC-R1O-00000000000000000000019\",\"S2AC-R1O-00000000000000000000020\",\"S2AC-R1O-00000000000000000000021\",\"S2AC-R1O-00000000000000000000022\",\"S2AC-R1O-00000000000000000000023\",\"S2AC-R1O-00000000000000000000024\",\"S2AC-R1O-00000000000000000000025\",\"S2AC-R1O-00000000000000000000026\",\"S2AC-R1O-00000000000000000000027\",\"S2AC-R1O-00000000000000000000028\",\"S2AC-R1O-00000000000000000000029\",\"S2AC-R1O-00000000000000000000030\",\"S2AC-R1O-00000000000000000000031\",\"S2AC-R1O-00000000000000000000032\"]}"
+    },
+    {
+      "method": "POST",
+      "url": "http://127.0.0.1:8080/api/clients",
+      "body": "{\"clientId\":\"S2AC-R1OVER\",\"clientDesc\":\"S2AC R1 over capacity probe\",\"dataSourceIds\":[\"S2AC-R1O-00000000000000000000001\",\"S2AC-R1O-00000000000000000000002\",\"S2AC-R1O-00000000000000000000003\",\"S2AC-R1O-00000000000000000000004\",\"S2AC-R1O-00000000000000000000005\",\"S2AC-R1O-00000000000000000000006\",\"S2AC-R1O-00000000000000000000007\",\"S2AC-R1O-00000000000000000000008\",\"S2AC-R1O-00000000000000000000009\",\"S2AC-R1O-00000000000000000000010\",\"S2AC-R1O-00000000000000000000011\",\"S2AC-R1O-00000000000000000000012\",\"S2AC-R1O-00000000000000000000013\",\"S2AC-R1O-00000000000000000000014\",\"S2AC-R1O-00000000000000000000015\",\"S2AC-R1O-00000000000000000000016\",\"S2AC-R1O-00000000000000000000017\",\"S2AC-R1O-00000000000000000000018\",\"S2AC-R1O-00000000000000000000019\",\"S2AC-R1O-00000000000000000000020\",\"S2AC-R1O-00000000000000000000021\",\"S2AC-R1O-00000000000000000000022\",\"S2AC-R1O-00000000000000000000023\",\"S2AC-R1O-00000000000000000000024\",\"S2AC-R1O-00000000000000000000025\",\"S2AC-R1O-00000000000000000000026\",\"S2AC-R1O-00000000000000000000027\",\"S2AC-R1O-00000000000000000000028\",\"S2AC-R1O-00000000000000000000029\",\"S2AC-R1O-00000000000000000000030\",\"S2AC-R1O-00000000000000000000031\",\"S2AC-R1O-00000000000000000000032\"]}"
+    },
+    {
+      "method": "GET",
+      "url": "http://127.0.0.1:8080/api/clients?status=ALL",
+      "body": null
+    }
+  ]
+}
