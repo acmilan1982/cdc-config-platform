@@ -1,0 +1,57 @@
+{
+  "ac": "CCFG-AC-038",
+  "oldId": "c-dssr1-0906-b",
+  "newId": "S3AC-C038-RENAMED",
+  "source": "S3AC-S038-1",
+  "pre": {
+    "apiRow": {
+      "clientId": "c-dssr1-0906-b",
+      "clientDesc": "快照页测试探针B，请勿启用",
+      "status": "DISABLED",
+      "fgActive": "0",
+      "dataSourceCount": 0,
+      "possibleCommaDataSourceIds": [],
+      "rowAnomalies": [],
+      "dataSources": []
+    },
+    "pageRowExists": true
+  },
+  "dialog": {
+    "title": "编辑探针",
+    "lockedInitially": 1,
+    "idDraftValue": "S3AC-C038-RENAMED",
+    "optionVisible": true,
+    "optionDisabled": false,
+    "chosenText": "S3AC-ORG"
+  },
+  "response": {
+    "status": 200,
+    "body": "{\"code\":200,\"message\":\"success\",\"timestamp\":\"2026-11-05T13:35:37.034\"}",
+    "url": "http://127.0.0.1:5173/api/clients/c-dssr1-0906-b"
+  },
+  "post": {
+    "oldRow": null,
+    "newRow": {
+      "clientId": "S3AC-C038-RENAMED",
+      "clientDesc": "快照页测试探针B，请勿启用",
+      "status": "DISABLED",
+      "fgActive": "0",
+      "dataSourceCount": 1,
+      "rawDataSourceIds": "S3AC-S038-1",
+      "possibleCommaDataSourceIds": [],
+      "rowAnomalies": [],
+      "dataSources": [
+        {
+          "dataSourceId": "S3AC-S038-1",
+          "org": "S3AC-ORG",
+          "dataSourceName": "S3AC synthetic source",
+          "anomalies": [],
+          "conflictClientIds": []
+        }
+      ]
+    },
+    "apiCount": 72,
+    "newPageRowExists": true,
+    "oldPageRowExists": false
+  }
+}

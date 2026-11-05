@@ -1,0 +1,251 @@
+{
+  "ac": "CCFG-AC-027",
+  "disable": [
+    {
+      "kind": "disable",
+      "id": "S3AC-C027IA",
+      "anomaly": "INACTIVE",
+      "src": "S3AC-S027-INACT",
+      "pre": {
+        "status": "ENABLED",
+        "fgActive": "1"
+      },
+      "box": {
+        "title": "停用探针",
+        "content": "确定停用探针 S3AC-C027IA 吗？",
+        "buttons": [
+          "取消",
+          "停用"
+        ],
+        "customClass": "el-message-box cc-confirm--disable",
+        "visible": true
+      },
+      "response": {
+        "status": 200,
+        "body": "{\"code\":200,\"message\":\"success\",\"timestamp\":\"2026-11-05T13:32:55.338\"}",
+        "url": "http://127.0.0.1:5173/api/clients/S3AC-C027IA/disable"
+      },
+      "post": {
+        "status": "DISABLED",
+        "fgActive": "0"
+      },
+      "error": null,
+      "message": "停用成功"
+    },
+    {
+      "kind": "disable",
+      "id": "S3AC-C027NA",
+      "anomaly": "NOT_FOUND",
+      "src": "S3AC-S027-MISS1",
+      "pre": {
+        "status": "ENABLED",
+        "fgActive": "1"
+      },
+      "box": {
+        "title": "停用探针",
+        "content": "确定停用探针 S3AC-C027NA 吗？",
+        "buttons": [
+          "取消",
+          "停用"
+        ],
+        "customClass": "el-message-box cc-confirm--disable",
+        "visible": true
+      },
+      "response": {
+        "status": 200,
+        "body": "{\"code\":200,\"message\":\"success\",\"timestamp\":\"2026-11-05T13:33:01.442\"}",
+        "url": "http://127.0.0.1:5173/api/clients/S3AC-C027NA/disable"
+      },
+      "post": {
+        "status": "DISABLED",
+        "fgActive": "0"
+      },
+      "error": null,
+      "message": "停用成功"
+    },
+    {
+      "kind": "disable",
+      "id": "S3AC-C027CA",
+      "anomaly": "COMMA_IN_ID",
+      "src": "S3AC27A,COM1",
+      "pre": {
+        "status": "ENABLED",
+        "fgActive": "1"
+      },
+      "box": {
+        "title": "停用探针",
+        "content": "确定停用探针 S3AC-C027CA 吗？",
+        "buttons": [
+          "取消",
+          "停用"
+        ],
+        "customClass": "el-message-box cc-confirm--disable",
+        "visible": true
+      },
+      "response": {
+        "status": 200,
+        "body": "{\"code\":200,\"message\":\"success\",\"timestamp\":\"2026-11-05T13:33:03.968\"}",
+        "url": "http://127.0.0.1:5173/api/clients/S3AC-C027CA/disable"
+      },
+      "post": {
+        "status": "DISABLED",
+        "fgActive": "0"
+      },
+      "error": null,
+      "message": "停用成功"
+    },
+    {
+      "kind": "disable",
+      "id": "S3AC-C027DA",
+      "anomaly": "DUPLICATE",
+      "src": "S3AC-S027-DUPP",
+      "pre": {
+        "status": "ENABLED",
+        "fgActive": "1"
+      },
+      "box": {
+        "title": "停用探针",
+        "content": "确定停用探针 S3AC-C027DA 吗？",
+        "buttons": [
+          "取消",
+          "停用"
+        ],
+        "customClass": "el-message-box cc-confirm--disable",
+        "visible": true
+      },
+      "response": {
+        "status": 200,
+        "body": "{\"code\":200,\"message\":\"success\",\"timestamp\":\"2026-11-05T13:33:07.526\"}",
+        "url": "http://127.0.0.1:5173/api/clients/S3AC-C027DA/disable"
+      },
+      "post": {
+        "status": "DISABLED",
+        "fgActive": "0"
+      },
+      "error": null,
+      "message": null
+    }
+  ],
+  "delete": [
+    {
+      "kind": "delete",
+      "id": "S3AC-C027IB",
+      "anomaly": "INACTIVE",
+      "src": "S3AC-S027-INACT2",
+      "pre": {
+        "status": "ENABLED",
+        "fgActive": "1"
+      },
+      "box": {
+        "title": "删除探针",
+        "content": "确定删除探针 S3AC-C027IB 吗？该操作不可恢复。",
+        "buttons": [
+          "取消",
+          "删除"
+        ],
+        "customClass": "el-message-box",
+        "visible": true
+      },
+      "response": {
+        "status": 200,
+        "body": "{\"code\":200,\"message\":\"success\",\"timestamp\":\"2026-11-05T13:33:41.916\"}",
+        "url": "http://127.0.0.1:5173/api/clients/S3AC-C027IB"
+      },
+      "post": {
+        "exists": false
+      },
+      "error": null,
+      "message": "删除成功"
+    },
+    {
+      "kind": "delete",
+      "id": "S3AC-C027NB",
+      "anomaly": "NOT_FOUND",
+      "src": "S3AC-S027-MISS2",
+      "pre": {
+        "status": "ENABLED",
+        "fgActive": "1"
+      },
+      "box": {
+        "title": "删除探针",
+        "content": "确定删除探针 S3AC-C027NB 吗？该操作不可恢复。",
+        "buttons": [
+          "取消",
+          "删除"
+        ],
+        "customClass": "el-message-box",
+        "visible": true
+      },
+      "response": {
+        "status": 200,
+        "body": "{\"code\":200,\"message\":\"success\",\"timestamp\":\"2026-11-05T13:33:46.398\"}",
+        "url": "http://127.0.0.1:5173/api/clients/S3AC-C027NB"
+      },
+      "post": {
+        "exists": false
+      },
+      "error": null,
+      "message": "删除成功"
+    },
+    {
+      "kind": "delete",
+      "id": "S3AC-C027CB",
+      "anomaly": "COMMA_IN_ID",
+      "src": "S3AC27B,COM2",
+      "pre": {
+        "status": "ENABLED",
+        "fgActive": "1"
+      },
+      "box": {
+        "title": "删除探针",
+        "content": "确定删除探针 S3AC-C027CB 吗？该操作不可恢复。",
+        "buttons": [
+          "取消",
+          "删除"
+        ],
+        "customClass": "el-message-box",
+        "visible": true
+      },
+      "response": {
+        "status": 200,
+        "body": "{\"code\":200,\"message\":\"success\",\"timestamp\":\"2026-11-05T13:33:48.936\"}",
+        "url": "http://127.0.0.1:5173/api/clients/S3AC-C027CB"
+      },
+      "post": {
+        "exists": false
+      },
+      "error": null,
+      "message": "删除成功"
+    },
+    {
+      "kind": "delete",
+      "id": "S3AC-C027DB",
+      "anomaly": "DUPLICATE",
+      "src": "S3AC-S027-DUPP",
+      "pre": {
+        "status": "ENABLED",
+        "fgActive": "1"
+      },
+      "box": {
+        "title": "删除探针",
+        "content": "确定删除探针 S3AC-C027DB 吗？该操作不可恢复。",
+        "buttons": [
+          "取消",
+          "删除"
+        ],
+        "customClass": "el-message-box",
+        "visible": true
+      },
+      "response": {
+        "status": 200,
+        "body": "{\"code\":200,\"message\":\"success\",\"timestamp\":\"2026-11-05T13:33:52.652\"}",
+        "url": "http://127.0.0.1:5173/api/clients/S3AC-C027DB"
+      },
+      "post": {
+        "exists": false
+      },
+      "error": null,
+      "message": null
+    }
+  ]
+}

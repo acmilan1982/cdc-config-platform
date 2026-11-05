@@ -1,0 +1,48 @@
+{
+  "total": 78,
+  "rows": [
+    {
+      "clientId": "S3AC-C064-EE-A",
+      "rawDataSourceIds": "S3AC-S064-EE-A0",
+      "anomalies": [
+        []
+      ]
+    },
+    {
+      "clientId": "S3AC-C064-EE-B",
+      "rawDataSourceIds": "S3AC-S064-EE-B0",
+      "anomalies": [
+        []
+      ]
+    },
+    {
+      "clientId": "S3AC-C064-IE-A",
+      "rawDataSourceIds": "S3AC-S064-IE-A0",
+      "anomalies": [
+        []
+      ]
+    }
+  ],
+  "sourceHolders": [
+    {
+      "source": "S3AC-S064-II",
+      "holders": []
+    },
+    {
+      "source": "S3AC-S064-EE-T",
+      "holders": []
+    },
+    {
+      "source": "S3AC-S064-IE-T",
+      "holders": []
+    },
+    {
+      "source": "S3AC-S030R-1",
+      "holders": []
+    },
+    {
+      "source": "S3AC-S030R-2",
+      "holders": []
+    }
+  ]
+}

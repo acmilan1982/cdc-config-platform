@@ -1,0 +1,12 @@
+ZooKeeper read-only observation (only `ls /bsoft-cdc/clients`; no create/set/delete).
+Server: 10.19.16.111:2181 (client 3.4.14).
+
+2026-11-05 13:36:30 (after AC-021/024/027/038 operations, before concurrency)
+WatchedEvent state:SyncConnected
+[hosp-012]
+
+2026-11-05 13:40:27 (after AC-064/AC-030 concurrency)
+WatchedEvent state:SyncConnected
+[hosp-012]
+
+Comparison: identical child list; no synthetic probe ID (S3AC-*, race-001/RACE-001) was created.

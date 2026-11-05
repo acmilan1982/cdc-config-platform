@@ -1,0 +1,43 @@
+# Static checks (read-only, executed 2026-11-05)
+
+## 1. Forbidden side-effect tokens in backend clientconfig package
+$ grep -rniE "create table|alter table|drop table|create index|foreign key|lock table|zookeeper|kafka|sync-client|sync-server|processbuilder|restart" backend/src/main/java/com/bsoft/cdcconfig/clientconfig/
+(no matches; exit 1)
+
+## 2. Transaction boundaries (declarative @Transactional only; no explicit LOCK TABLE)
+$ grep -rn "@Transactional" backend/src/main/java/com/bsoft/cdcconfig/clientconfig/
+backend/src/main/java/com/bsoft/cdcconfig/clientconfig/service/impl/ClientConfigServiceImpl.java:190:    @Transactional(rollbackFor = Exception.class)
+backend/src/main/java/com/bsoft/cdcconfig/clientconfig/service/impl/ClientConfigServiceImpl.java:216:    @Transactional(rollbackFor = Exception.class)
+backend/src/main/java/com/bsoft/cdcconfig/clientconfig/service/impl/ClientConfigServiceImpl.java:247:    @Transactional(rollbackFor = Exception.class)
+backend/src/main/java/com/bsoft/cdcconfig/clientconfig/service/impl/ClientConfigServiceImpl.java:259:    @Transactional(rollbackFor = Exception.class)
+backend/src/main/java/com/bsoft/cdcconfig/clientconfig/service/impl/ClientConfigServiceImpl.java:295:    @Transactional(rollbackFor = Exception.class)
+
+## 3. Migration / Flyway / Liquibase artifacts under backend/
+$ find backend -iname "*flyway*" -o -iname "*liquibase*" -o -iname "*migration*"
+(none)
+
+## 4. Schema metadata diff (before fixtures vs after acceptance)
+$ diff /tmp/s3ac/snap/schema-metadata2.txt /tmp/s3ac/snap/schema-metadata2-post.txt
+(identical)
+
+## 5. Pre-existing data-source rows (235) diff before vs after
+$ diff preexisting-data-sources.txt <first 235 lines of final-checks.txt>
+(identical)
+
+## 6. Page feedback strings (no realtime sync-client claim)
+$ grep -n "ElMessage.success" frontend/src/views/client-config/ClientConfigPage.vue
+822:      ElMessage.success('启用成功')
+854:      ElMessage.success('停用成功')
+883:      ElMessage.success('删除成功')
+1240:      ElMessage.success(isEdit ? '编辑成功' : '新增成功')
+
+## 7. Controller endpoint map (all delegate to service methods; no side channel)
+$ grep -n "@RequestMapping|@GetMapping|@PostMapping|@PutMapping|@DeleteMapping" backend/src/main/java/com/bsoft/cdcconfig/clientconfig/controller/ClientConfigController.java
+37:@RequestMapping("/api/clients")
+49:    @GetMapping
+59:    @GetMapping("/data-source-options")
+67:    @PostMapping
+74:    @PutMapping("/{originalClientId}")
+83:    @DeleteMapping("/{clientId}")
+91:    @PutMapping("/{clientId}/enable")
+99:    @PutMapping("/{clientId}/disable")

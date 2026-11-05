@@ -1,0 +1,111 @@
+{
+  "ac": "CCFG-AC-021",
+  "target": "c-dssr1-0906-a",
+  "steps": [
+    {
+      "step": "select-row",
+      "selected": [
+        "c-dssr1-0906-a"
+      ]
+    },
+    {
+      "step": "cancel",
+      "boxTitle": "删除探针",
+      "content": "确定删除探针 c-dssr1-0906-a 吗？该操作不可恢复。",
+      "buttons": [
+        "取消",
+        "删除"
+      ],
+      "deleteRequests": 0,
+      "rowStillExists": true,
+      "selected": [
+        "c-dssr1-0906-a"
+      ]
+    }
+  ],
+  "pre": {
+    "pageRowExists": true,
+    "pageVisibleIdCount": 1,
+    "apiRow": {
+      "clientId": "c-dssr1-0906-a",
+      "clientDesc": "快照页测试探针A，请勿启用。长描述用于验证页面 Tooltip 与列宽截断：某市第一人民医院信息中心CDC采集探针（专用快照页测试实例，请勿启用其进行任何真实数据同步）。继续追加说明文字以拉长描述，确认列表单元格超长时显示省略号并可由 Tooltip 完整阅读；本条仅供源库快照状态只读页面视觉验证使用。",
+      "status": "DISABLED",
+      "fgActive": "0",
+      "dataSourceCount": 0,
+      "possibleCommaDataSourceIds": [],
+      "rowAnomalies": [],
+      "dataSources": []
+    },
+    "apiCount": 77,
+    "selectedAfterClick": [
+      "c-dssr1-0906-a"
+    ]
+  },
+  "cancel": {
+    "box": {
+      "title": "删除探针",
+      "content": "确定删除探针 c-dssr1-0906-a 吗？该操作不可恢复。",
+      "buttons": [
+        "取消",
+        "删除"
+      ],
+      "customClass": "el-message-box",
+      "visible": true
+    },
+    "newCalls": [],
+    "deleteRequests": 0,
+    "rowStillExists": true,
+    "selectedAfterCancel": [
+      "c-dssr1-0906-a"
+    ]
+  },
+  "confirm": {
+    "box": {
+      "title": "删除探针",
+      "content": "确定删除探针 c-dssr1-0906-a 吗？该操作不可恢复。",
+      "buttons": [
+        "取消",
+        "删除"
+      ],
+      "customClass": "el-message-box",
+      "visible": true
+    },
+    "deleteResponse": {
+      "status": 200,
+      "body": "{\"code\":200,\"message\":\"success\",\"timestamp\":\"2026-11-05T13:31:48.939\"}",
+      "url": "http://127.0.0.1:5173/api/clients/c-dssr1-0906-a"
+    },
+    "newCalls": [
+      {
+        "method": "DELETE",
+        "url": "http://127.0.0.1:5173/api/clients/c-dssr1-0906-a",
+        "status": 200,
+        "response": {
+          "code": 200,
+          "message": "success"
+        }
+      },
+      {
+        "method": "GET",
+        "url": "http://127.0.0.1:5173/api/clients?status=ALL",
+        "status": 200,
+        "response": {
+          "code": 200,
+          "message": "success",
+          "dataItems": 76
+        }
+      }
+    ]
+  },
+  "post": {
+    "apiRow": null,
+    "apiCount": 76,
+    "listReloaded": true
+  },
+  "association": {
+    "source": "ac021-postcheck.txt",
+    "clientRowAfter": 0,
+    "runStateRowsAfter": 5,
+    "runStateRowsSnapshot": "snap/runstate-c-dssr1.txt"
+  }
+}

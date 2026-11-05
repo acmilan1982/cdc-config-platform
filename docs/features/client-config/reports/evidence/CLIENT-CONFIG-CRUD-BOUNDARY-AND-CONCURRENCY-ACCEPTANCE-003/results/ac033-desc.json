@@ -1,0 +1,134 @@
+{
+  "ac": "CCFG-AC-033",
+  "page": {
+    "emptyDesc": {
+      "writtenValue": "   ",
+      "fieldErrors": [
+        "探针描述不能为空。"
+      ],
+      "postDelta": 0,
+      "rowExistsLater": false
+    },
+    "emojiBoundary": {
+      "inputMethod": "keyboard.insertText (real input events, not paste)",
+      "typedCodepoints": 256,
+      "typedUtf8Bytes": 1024,
+      "utf16Units": 512,
+      "surrogatePairIntact": true,
+      "response": {
+        "status": 200,
+        "body": "{\"code\":200,\"message\":\"success\",\"timestamp\":\"2026-11-05T13:37:25.781\"}"
+      },
+      "postDelta": 1
+    }
+  },
+  "api": [
+    {
+      "name": "ascii1024",
+      "clientId": "S3AC-C033-A1024",
+      "codepoints": 1024,
+      "utf8Bytes": 1024,
+      "expected": 200,
+      "httpStatus": 200,
+      "responseCode": 200,
+      "rowCreated": true,
+      "storedDescEqualsRequest": true,
+      "listCountBefore": 73,
+      "listCountAfter": 74
+    },
+    {
+      "name": "ascii1025",
+      "clientId": "S3AC-C033-A1025",
+      "codepoints": 1025,
+      "utf8Bytes": 1025,
+      "expected": 40102,
+      "httpStatus": 200,
+      "responseCode": 40102,
+      "rowCreated": false,
+      "storedDescEqualsRequest": null,
+      "listCountBefore": 74,
+      "listCountAfter": 74
+    },
+    {
+      "name": "mixed825cp1025b",
+      "clientId": "S3AC-C033-MIX",
+      "codepoints": 825,
+      "utf8Bytes": 1025,
+      "expected": 40102,
+      "httpStatus": 200,
+      "responseCode": 40102,
+      "rowCreated": false,
+      "storedDescEqualsRequest": null,
+      "listCountBefore": 74,
+      "listCountAfter": 74
+    },
+    {
+      "name": "emoji256_1024b",
+      "clientId": "S3AC-C033-EMOJIAPI",
+      "codepoints": 256,
+      "utf8Bytes": 1024,
+      "expected": 200,
+      "httpStatus": 200,
+      "responseCode": 200,
+      "rowCreated": true,
+      "storedDescEqualsRequest": true,
+      "listCountBefore": 74,
+      "listCountAfter": 75
+    },
+    {
+      "name": "emoji257_1028b",
+      "clientId": "S3AC-C033-EMOJI257",
+      "codepoints": 257,
+      "utf8Bytes": 1028,
+      "expected": 40102,
+      "httpStatus": 200,
+      "responseCode": 40102,
+      "rowCreated": false,
+      "storedDescEqualsRequest": null,
+      "listCountBefore": 75,
+      "listCountAfter": 75
+    },
+    {
+      "name": "rawSpaces",
+      "clientId": "S3AC-C033-RAW",
+      "codepoints": 12,
+      "utf8Bytes": 12,
+      "expected": 200,
+      "httpStatus": 200,
+      "responseCode": 200,
+      "rowCreated": true,
+      "storedDescEqualsRequest": true,
+      "listCountBefore": 75,
+      "listCountAfter": 76
+    }
+  ],
+  "post": {
+    "itemsCount": 76,
+    "targetRows": [
+      {
+        "clientId": "S3AC-C033-RAW",
+        "clientDesc": "  S3AC raw  ",
+        "dataSourceCount": 1,
+        "rawDataSourceIds": "S3AC-S033-3"
+      },
+      {
+        "clientId": "S3AC-C033-EMOJIAPI",
+        "clientDesc": "😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀",
+        "dataSourceCount": 1,
+        "rawDataSourceIds": "S3AC-S033-F3"
+      },
+      {
+        "clientId": "S3AC-C033-EMOJI",
+        "clientDesc": "😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀",
+        "dataSourceCount": 1,
+        "rawDataSourceIds": "S3AC-S033-1"
+      },
+      {
+        "clientId": "S3AC-C033-A1024",
+        "clientDesc": "AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA",
+        "dataSourceCount": 1,
+        "rawDataSourceIds": "S3AC-S033-2"
+      }
+    ]
+  }
+}

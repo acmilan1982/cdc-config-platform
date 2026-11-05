@@ -1,0 +1,389 @@
+{
+  "ac": [
+    "CCFG-AC-064",
+    "CCFG-AC-030"
+  ],
+  "method": "two independent http.request sockets, body buffered, both .end() released from a single setImmediate gate; no server-side synchronization, no artificial locks",
+  "scenarios": {
+    "insertInsert": {
+      "scenario": "insert×insert",
+      "requests": [
+        {
+          "label": "A",
+          "method": "POST",
+          "path": "/api/clients",
+          "status": 200,
+          "response": {
+            "code": 200,
+            "message": "success",
+            "timestamp": "2026-11-05T13:39:06.657"
+          },
+          "sendDeltaMs": 5,
+          "responseMs": 57
+        },
+        {
+          "label": "B",
+          "method": "POST",
+          "path": "/api/clients",
+          "status": 200,
+          "response": {
+            "code": 200,
+            "message": "success",
+            "timestamp": "2026-11-05T13:39:06.655"
+          },
+          "sendDeltaMs": 4,
+          "responseMs": 53
+        }
+      ],
+      "rows": [
+        {
+          "clientId": "S3AC-C064-II-A",
+          "clientDesc": "S3AC AC-064 insert/insert A (synthetic)",
+          "status": "ENABLED",
+          "fgActive": "1",
+          "dataSourceCount": 1,
+          "rawDataSourceIds": "S3AC-S064-II",
+          "possibleCommaDataSourceIds": [],
+          "rowAnomalies": [],
+          "dataSources": [
+            {
+              "dataSourceId": "S3AC-S064-II",
+              "org": "S3AC-ORG",
+              "dataSourceName": "S3AC synthetic source",
+              "anomalies": [
+                "ASSIGNED_TO_MULTIPLE_CLIENTS"
+              ],
+              "conflictClientIds": [
+                "S3AC-C064-II-B"
+              ]
+            }
+          ]
+        },
+        {
+          "clientId": "S3AC-C064-II-B",
+          "clientDesc": "S3AC AC-064 insert/insert B (synthetic)",
+          "status": "ENABLED",
+          "fgActive": "1",
+          "dataSourceCount": 1,
+          "rawDataSourceIds": "S3AC-S064-II",
+          "possibleCommaDataSourceIds": [],
+          "rowAnomalies": [],
+          "dataSources": [
+            {
+              "dataSourceId": "S3AC-S064-II",
+              "org": "S3AC-ORG",
+              "dataSourceName": "S3AC synthetic source",
+              "anomalies": [
+                "ASSIGNED_TO_MULTIPLE_CLIENTS"
+              ],
+              "conflictClientIds": [
+                "S3AC-C064-II-A"
+              ]
+            }
+          ]
+        }
+      ],
+      "listAfterCount": 80
+    },
+    "editEdit": {
+      "scenario": "edit×edit",
+      "requests": [
+        {
+          "label": "A",
+          "method": "PUT",
+          "path": "/api/clients/S3AC-C064-EE-A",
+          "status": 200,
+          "response": {
+            "code": 200,
+            "message": "success",
+            "timestamp": "2026-11-05T13:39:07.318"
+          },
+          "sendDeltaMs": 2,
+          "responseMs": 47
+        },
+        {
+          "label": "B",
+          "method": "PUT",
+          "path": "/api/clients/S3AC-C064-EE-B",
+          "status": 200,
+          "response": {
+            "code": 200,
+            "message": "success",
+            "timestamp": "2026-11-05T13:39:07.310"
+          },
+          "sendDeltaMs": 2,
+          "responseMs": 39
+        }
+      ],
+      "rows": [
+        {
+          "clientId": "S3AC-C064-EE-A",
+          "clientDesc": "S3AC AC-064 edit/edit A (synthetic)",
+          "status": "DISABLED",
+          "fgActive": "0",
+          "dataSourceCount": 1,
+          "rawDataSourceIds": "S3AC-S064-EE-T",
+          "possibleCommaDataSourceIds": [],
+          "rowAnomalies": [],
+          "dataSources": [
+            {
+              "dataSourceId": "S3AC-S064-EE-T",
+              "org": "S3AC-ORG",
+              "dataSourceName": "S3AC synthetic source",
+              "anomalies": [
+                "ASSIGNED_TO_MULTIPLE_CLIENTS"
+              ],
+              "conflictClientIds": [
+                "S3AC-C064-EE-B"
+              ]
+            }
+          ]
+        },
+        {
+          "clientId": "S3AC-C064-EE-B",
+          "clientDesc": "S3AC AC-064 edit/edit B (synthetic)",
+          "status": "DISABLED",
+          "fgActive": "0",
+          "dataSourceCount": 1,
+          "rawDataSourceIds": "S3AC-S064-EE-T",
+          "possibleCommaDataSourceIds": [],
+          "rowAnomalies": [],
+          "dataSources": [
+            {
+              "dataSourceId": "S3AC-S064-EE-T",
+              "org": "S3AC-ORG",
+              "dataSourceName": "S3AC synthetic source",
+              "anomalies": [
+                "ASSIGNED_TO_MULTIPLE_CLIENTS"
+              ],
+              "conflictClientIds": [
+                "S3AC-C064-EE-A"
+              ]
+            }
+          ]
+        }
+      ],
+      "listAfterCount": 80
+    },
+    "insertEdit": {
+      "scenario": "insert×edit",
+      "requests": [
+        {
+          "label": "insert",
+          "method": "POST",
+          "path": "/api/clients",
+          "status": 200,
+          "response": {
+            "code": 200,
+            "message": "success",
+            "timestamp": "2026-11-05T13:39:07.874"
+          },
+          "sendDeltaMs": 1,
+          "responseMs": 26
+        },
+        {
+          "label": "edit",
+          "method": "PUT",
+          "path": "/api/clients/S3AC-C064-IE-A",
+          "status": 200,
+          "response": {
+            "code": 200,
+            "message": "success",
+            "timestamp": "2026-11-05T13:39:07.878"
+          },
+          "sendDeltaMs": 1,
+          "responseMs": 30
+        }
+      ],
+      "rows": [
+        {
+          "clientId": "S3AC-C064-IE-A",
+          "clientDesc": "S3AC AC-064 insert/edit existing A (synthetic)",
+          "status": "DISABLED",
+          "fgActive": "0",
+          "dataSourceCount": 1,
+          "rawDataSourceIds": "S3AC-S064-IE-T",
+          "possibleCommaDataSourceIds": [],
+          "rowAnomalies": [],
+          "dataSources": [
+            {
+              "dataSourceId": "S3AC-S064-IE-T",
+              "org": "S3AC-ORG",
+              "dataSourceName": "S3AC synthetic source",
+              "anomalies": [
+                "ASSIGNED_TO_MULTIPLE_CLIENTS"
+              ],
+              "conflictClientIds": [
+                "S3AC-C064-IE-B"
+              ]
+            }
+          ]
+        },
+        {
+          "clientId": "S3AC-C064-IE-B",
+          "clientDesc": "S3AC AC-064 insert/edit new B (synthetic)",
+          "status": "ENABLED",
+          "fgActive": "1",
+          "dataSourceCount": 1,
+          "rawDataSourceIds": "S3AC-S064-IE-T",
+          "possibleCommaDataSourceIds": [],
+          "rowAnomalies": [],
+          "dataSources": [
+            {
+              "dataSourceId": "S3AC-S064-IE-T",
+              "org": "S3AC-ORG",
+              "dataSourceName": "S3AC synthetic source",
+              "anomalies": [
+                "ASSIGNED_TO_MULTIPLE_CLIENTS"
+              ],
+              "conflictClientIds": [
+                "S3AC-C064-IE-A"
+              ]
+            }
+          ]
+        }
+      ],
+      "listAfterCount": 81
+    },
+    "raceIds": {
+      "scenario": "AC-030 race-001/RACE-001",
+      "requests": [
+        {
+          "label": "lower",
+          "method": "POST",
+          "path": "/api/clients",
+          "status": 200,
+          "response": {
+            "code": 200,
+            "message": "success",
+            "timestamp": "2026-11-05T13:39:08.432"
+          },
+          "sendDeltaMs": 1,
+          "responseMs": 28
+        },
+        {
+          "label": "upper",
+          "method": "POST",
+          "path": "/api/clients",
+          "status": 200,
+          "response": {
+            "code": 200,
+            "message": "success",
+            "timestamp": "2026-11-05T13:39:08.427"
+          },
+          "sendDeltaMs": 1,
+          "responseMs": 23
+        }
+      ],
+      "rows": [
+        {
+          "clientId": "race-001",
+          "clientDesc": "S3AC AC-030 concurrency lower-case (synthetic)",
+          "status": "ENABLED",
+          "fgActive": "1",
+          "dataSourceCount": 1,
+          "rawDataSourceIds": "S3AC-S030R-1",
+          "possibleCommaDataSourceIds": [],
+          "rowAnomalies": [],
+          "dataSources": [
+            {
+              "dataSourceId": "S3AC-S030R-1",
+              "org": "S3AC-ORG",
+              "dataSourceName": "S3AC synthetic source",
+              "anomalies": [],
+              "conflictClientIds": []
+            }
+          ]
+        },
+        {
+          "clientId": "RACE-001",
+          "clientDesc": "S3AC AC-030 concurrency upper-case (synthetic)",
+          "status": "ENABLED",
+          "fgActive": "1",
+          "dataSourceCount": 1,
+          "rawDataSourceIds": "S3AC-S030R-2",
+          "possibleCommaDataSourceIds": [],
+          "rowAnomalies": [],
+          "dataSources": [
+            {
+              "dataSourceId": "S3AC-S030R-2",
+              "org": "S3AC-ORG",
+              "dataSourceName": "S3AC synthetic source",
+              "anomalies": [],
+              "conflictClientIds": []
+            }
+          ]
+        }
+      ],
+      "caseInsensitiveRows": [
+        "race-001",
+        "RACE-001"
+      ],
+      "listAfterCount": 83
+    },
+    "duplicateDisplay": [
+      {
+        "clientId": "S3AC-C064-II-B",
+        "raw": "S3AC-S064-II",
+        "anomalies": [
+          {
+            "id": "S3AC-S064-II",
+            "anomalies": [
+              "ASSIGNED_TO_MULTIPLE_CLIENTS"
+            ],
+            "conflicts": [
+              "S3AC-C064-II-A"
+            ]
+          }
+        ]
+      },
+      {
+        "clientId": "S3AC-C064-II-A",
+        "raw": "S3AC-S064-II",
+        "anomalies": [
+          {
+            "id": "S3AC-S064-II",
+            "anomalies": [
+              "ASSIGNED_TO_MULTIPLE_CLIENTS"
+            ],
+            "conflicts": [
+              "S3AC-C064-II-B"
+            ]
+          }
+        ]
+      }
+    ]
+  },
+  "duplicateDisplay": [
+    {
+      "clientId": "S3AC-C064-II-B",
+      "raw": "S3AC-S064-II",
+      "anomalies": [
+        {
+          "id": "S3AC-S064-II",
+          "anomalies": [
+            "ASSIGNED_TO_MULTIPLE_CLIENTS"
+          ],
+          "conflicts": [
+            "S3AC-C064-II-A"
+          ]
+        }
+      ]
+    },
+    {
+      "clientId": "S3AC-C064-II-A",
+      "raw": "S3AC-S064-II",
+      "anomalies": [
+        {
+          "id": "S3AC-S064-II",
+          "anomalies": [
+            "ASSIGNED_TO_MULTIPLE_CLIENTS"
+          ],
+          "conflicts": [
+            "S3AC-C064-II-B"
+          ]
+        }
+      ]
+    }
+  ]
+}

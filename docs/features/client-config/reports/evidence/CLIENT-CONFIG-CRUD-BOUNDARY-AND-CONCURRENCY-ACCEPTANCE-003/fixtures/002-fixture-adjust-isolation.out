@@ -1,0 +1,45 @@
+
+1 row created.
+
+
+1 row created.
+
+
+1 row updated.
+
+
+1 row updated.
+
+
+1 row updated.
+
+
+1 row updated.
+
+
+1 row updated.
+
+
+Commit complete.
+
+
+CLIENT_ID||'|'||DATA_SOURCE_ID||'|'||FG_ACTIVE
+--------------------------------------------------------------------------------
+S3AC-C027CA|S3AC27A,COM1|1
+S3AC-C027CB|S3AC27B,COM2|1
+S3AC-C027CC|S3AC27C,COM3|0
+S3AC-C027DA|S3AC-S027-DUPP|1
+S3AC-C027DB|S3AC-S027-DUPP|1
+S3AC-C027DC|S3AC-S027-DUPP|0
+S3AC-C027IA|S3AC-S027-INACT|1
+S3AC-C027IB|S3AC-S027-INACT2|1
+S3AC-C027IC|S3AC-S027-INACT3|0
+S3AC-C027NA|S3AC-S027-MISS1|1
+S3AC-C027NB|S3AC-S027-MISS2|1
+
+CLIENT_ID||'|'||DATA_SOURCE_ID||'|'||FG_ACTIVE
+--------------------------------------------------------------------------------
+S3AC-C027NC|S3AC-S027-MISS3|0
+
+12 rows selected.
+

@@ -1,0 +1,109 @@
+{
+  "ac": "CCFG-AC-024",
+  "target": "S3AC-C024-OFF",
+  "pre": {
+    "apiRow": {
+      "clientId": "S3AC-C024-OFF",
+      "clientDesc": "S3AC AC-024 enable-confirm fixture (synthetic)",
+      "status": "DISABLED",
+      "fgActive": "0",
+      "dataSourceCount": 1,
+      "rawDataSourceIds": "S3AC-S024-1",
+      "possibleCommaDataSourceIds": [],
+      "rowAnomalies": [],
+      "dataSources": [
+        {
+          "dataSourceId": "S3AC-S024-1",
+          "org": "S3AC-ORG",
+          "dataSourceName": "S3AC synthetic source",
+          "anomalies": [],
+          "conflictClientIds": []
+        }
+      ]
+    },
+    "pageRowExists": true
+  },
+  "cancel": {
+    "box": {
+      "title": "启用探针",
+      "content": "确定启用探针 S3AC-C024-OFF 吗？",
+      "buttons": [
+        "取消",
+        "启用"
+      ],
+      "customClass": "el-message-box cc-confirm--enable",
+      "visible": true
+    },
+    "newCalls": [],
+    "putRequests": 0,
+    "rowStillDisabled": true
+  },
+  "confirm": {
+    "box": {
+      "title": "启用探针",
+      "content": "确定启用探针 S3AC-C024-OFF 吗？",
+      "buttons": [
+        "取消",
+        "启用"
+      ],
+      "customClass": "el-message-box cc-confirm--enable",
+      "visible": true
+    },
+    "enableResponse": {
+      "status": 200,
+      "body": "{\"code\":200,\"message\":\"success\",\"timestamp\":\"2026-11-05T13:32:26.380\"}",
+      "url": "http://127.0.0.1:5173/api/clients/S3AC-C024-OFF/enable"
+    },
+    "newCalls": [
+      {
+        "method": "PUT",
+        "url": "http://127.0.0.1:5173/api/clients/S3AC-C024-OFF/enable",
+        "status": 200,
+        "requestBody": "null",
+        "response": {
+          "code": 200,
+          "message": "success"
+        }
+      },
+      {
+        "method": "GET",
+        "url": "http://127.0.0.1:5173/api/clients?status=ALL",
+        "status": 200,
+        "response": {
+          "code": 200,
+          "message": "success",
+          "dataItems": 76
+        }
+      }
+    ],
+    "selectedAfterReload": [
+      "S3AC-C024-OFF"
+    ],
+    "rowShowsEnabled": true
+  },
+  "post": {
+    "apiRow": {
+      "clientId": "S3AC-C024-OFF",
+      "clientDesc": "S3AC AC-024 enable-confirm fixture (synthetic)",
+      "status": "ENABLED",
+      "fgActive": "1",
+      "dataSourceCount": 1,
+      "rawDataSourceIds": "S3AC-S024-1",
+      "possibleCommaDataSourceIds": [],
+      "rowAnomalies": [],
+      "dataSources": [
+        {
+          "dataSourceId": "S3AC-S024-1",
+          "org": "S3AC-ORG",
+          "dataSourceName": "S3AC synthetic source",
+          "anomalies": [],
+          "conflictClientIds": []
+        }
+      ]
+    }
+  },
+  "sourceStateAfter": {
+    "source": "ac024-postcheck.txt",
+    "line": "SOURCE_STATE|S3AC-S024-1|1"
+  }
+}

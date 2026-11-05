@@ -1,0 +1,102 @@
+2026-11-05 13:39:04.666 DEBUG 3327 --- [nio-8080-exec-7] c.b.c.c.m.C.selectByKeywordAndStatus     : ==>  Preparing: SELECT CLIENT_ID, CLIENT_DESC, DATA_SOURCE_ID, FG_ACTIVE FROM CDC_CLIENT_MULTIPLE ORDER BY CLIENT_ID DESC
+2026-11-05 13:39:04.666 DEBUG 3327 --- [nio-8080-exec-7] c.b.c.c.m.C.selectByKeywordAndStatus     : ==> Parameters: 
+2026-11-05 13:39:04.672 DEBUG 3327 --- [nio-8080-exec-7] c.b.c.c.m.C.selectByKeywordAndStatus     : <==      Total: 78
+2026-11-05 13:39:04.672 DEBUG 3327 --- [nio-8080-exec-7] c.b.c.c.m.C.selectSafeAll                : ==>  Preparing: SELECT DATA_SOURCE_ID, DATA_SOURCE_NAME, DATA_SOURCE_CATEGORY, DATA_SOURCE_TYPE, DATA_SOURCE_ORG, FG_ACTIVE FROM CDC_DATA_SOURCE ORDER BY DATA_SOURCE_ID
+2026-11-05 13:39:04.672 DEBUG 3327 --- [nio-8080-exec-7] c.b.c.c.m.C.selectSafeAll                : ==> Parameters: 
+2026-11-05 13:39:04.684 DEBUG 3327 --- [nio-8080-exec-7] c.b.c.c.m.C.selectSafeAll                : <==      Total: 266
+2026-11-05 13:39:06.610 DEBUG 3327 --- [io-8080-exec-10] c.b.c.c.m.C.selectFullScan               : ==>  Preparing: SELECT CLIENT_ID, CLIENT_DESC, DATA_SOURCE_ID, FG_ACTIVE FROM CDC_CLIENT_MULTIPLE ORDER BY CLIENT_ID
+2026-11-05 13:39:06.610 DEBUG 3327 --- [nio-8080-exec-9] c.b.c.c.m.C.selectFullScan               : ==>  Preparing: SELECT CLIENT_ID, CLIENT_DESC, DATA_SOURCE_ID, FG_ACTIVE FROM CDC_CLIENT_MULTIPLE ORDER BY CLIENT_ID
+2026-11-05 13:39:06.610 DEBUG 3327 --- [io-8080-exec-10] c.b.c.c.m.C.selectFullScan               : ==> Parameters: 
+2026-11-05 13:39:06.610 DEBUG 3327 --- [nio-8080-exec-9] c.b.c.c.m.C.selectFullScan               : ==> Parameters: 
+2026-11-05 13:39:06.615 DEBUG 3327 --- [nio-8080-exec-9] c.b.c.c.m.C.selectFullScan               : <==      Total: 78
+2026-11-05 13:39:06.615 DEBUG 3327 --- [io-8080-exec-10] c.b.c.c.m.C.selectFullScan               : <==      Total: 78
+2026-11-05 13:39:06.615 DEBUG 3327 --- [nio-8080-exec-9] c.b.c.c.m.C.selectSafeAll                : ==>  Preparing: SELECT DATA_SOURCE_ID, DATA_SOURCE_NAME, DATA_SOURCE_CATEGORY, DATA_SOURCE_TYPE, DATA_SOURCE_ORG, FG_ACTIVE FROM CDC_DATA_SOURCE ORDER BY DATA_SOURCE_ID
+2026-11-05 13:39:06.616 DEBUG 3327 --- [io-8080-exec-10] c.b.c.c.m.C.selectSafeAll                : ==>  Preparing: SELECT DATA_SOURCE_ID, DATA_SOURCE_NAME, DATA_SOURCE_CATEGORY, DATA_SOURCE_TYPE, DATA_SOURCE_ORG, FG_ACTIVE FROM CDC_DATA_SOURCE ORDER BY DATA_SOURCE_ID
+2026-11-05 13:39:06.616 DEBUG 3327 --- [nio-8080-exec-9] c.b.c.c.m.C.selectSafeAll                : ==> Parameters: 
+2026-11-05 13:39:06.616 DEBUG 3327 --- [io-8080-exec-10] c.b.c.c.m.C.selectSafeAll                : ==> Parameters: 
+2026-11-05 13:39:06.649 DEBUG 3327 --- [nio-8080-exec-9] c.b.c.c.m.C.selectSafeAll                : <==      Total: 266
+2026-11-05 13:39:06.650 DEBUG 3327 --- [nio-8080-exec-9] c.b.c.c.m.CdcClientConfigMapper.insert   : ==>  Preparing: INSERT INTO CDC_CLIENT_MULTIPLE ( CLIENT_ID, CLIENT_DESC, DATA_SOURCE_ID, FG_ACTIVE ) VALUES ( ?, ?, ?, ? )
+2026-11-05 13:39:06.650 DEBUG 3327 --- [io-8080-exec-10] c.b.c.c.m.C.selectSafeAll                : <==      Total: 266
+2026-11-05 13:39:06.651 DEBUG 3327 --- [nio-8080-exec-9] c.b.c.c.m.CdcClientConfigMapper.insert   : ==> Parameters: S3AC-C064-II-B(String), S3AC AC-064 insert/insert B (synthetic)(String), S3AC-S064-II(String), 1(String)
+2026-11-05 13:39:06.651 DEBUG 3327 --- [io-8080-exec-10] c.b.c.c.m.CdcClientConfigMapper.insert   : ==>  Preparing: INSERT INTO CDC_CLIENT_MULTIPLE ( CLIENT_ID, CLIENT_DESC, DATA_SOURCE_ID, FG_ACTIVE ) VALUES ( ?, ?, ?, ? )
+2026-11-05 13:39:06.653 DEBUG 3327 --- [io-8080-exec-10] c.b.c.c.m.CdcClientConfigMapper.insert   : ==> Parameters: S3AC-C064-II-A(String), S3AC AC-064 insert/insert A (synthetic)(String), S3AC-S064-II(String), 1(String)
+2026-11-05 13:39:06.653 DEBUG 3327 --- [nio-8080-exec-9] c.b.c.c.m.CdcClientConfigMapper.insert   : <==    Updates: 1
+2026-11-05 13:39:06.655 DEBUG 3327 --- [io-8080-exec-10] c.b.c.c.m.CdcClientConfigMapper.insert   : <==    Updates: 1
+2026-11-05 13:39:07.248 DEBUG 3327 --- [nio-8080-exec-1] c.b.c.c.m.C.selectByKeywordAndStatus     : ==>  Preparing: SELECT CLIENT_ID, CLIENT_DESC, DATA_SOURCE_ID, FG_ACTIVE FROM CDC_CLIENT_MULTIPLE ORDER BY CLIENT_ID DESC
+2026-11-05 13:39:07.248 DEBUG 3327 --- [nio-8080-exec-1] c.b.c.c.m.C.selectByKeywordAndStatus     : ==> Parameters: 
+2026-11-05 13:39:07.252 DEBUG 3327 --- [nio-8080-exec-1] c.b.c.c.m.C.selectByKeywordAndStatus     : <==      Total: 80
+2026-11-05 13:39:07.252 DEBUG 3327 --- [nio-8080-exec-1] c.b.c.c.m.C.selectSafeAll                : ==>  Preparing: SELECT DATA_SOURCE_ID, DATA_SOURCE_NAME, DATA_SOURCE_CATEGORY, DATA_SOURCE_TYPE, DATA_SOURCE_ORG, FG_ACTIVE FROM CDC_DATA_SOURCE ORDER BY DATA_SOURCE_ID
+2026-11-05 13:39:07.252 DEBUG 3327 --- [nio-8080-exec-1] c.b.c.c.m.C.selectSafeAll                : ==> Parameters: 
+2026-11-05 13:39:07.261 DEBUG 3327 --- [nio-8080-exec-1] c.b.c.c.m.C.selectSafeAll                : <==      Total: 266
+2026-11-05 13:39:07.274 DEBUG 3327 --- [nio-8080-exec-2] c.b.c.c.m.C.selectFullScan               : ==>  Preparing: SELECT CLIENT_ID, CLIENT_DESC, DATA_SOURCE_ID, FG_ACTIVE FROM CDC_CLIENT_MULTIPLE ORDER BY CLIENT_ID
+2026-11-05 13:39:07.274 DEBUG 3327 --- [nio-8080-exec-2] c.b.c.c.m.C.selectFullScan               : ==> Parameters: 
+2026-11-05 13:39:07.277 DEBUG 3327 --- [nio-8080-exec-3] c.b.c.c.m.C.selectFullScan               : ==>  Preparing: SELECT CLIENT_ID, CLIENT_DESC, DATA_SOURCE_ID, FG_ACTIVE FROM CDC_CLIENT_MULTIPLE ORDER BY CLIENT_ID
+2026-11-05 13:39:07.277 DEBUG 3327 --- [nio-8080-exec-3] c.b.c.c.m.C.selectFullScan               : ==> Parameters: 
+2026-11-05 13:39:07.279 DEBUG 3327 --- [nio-8080-exec-2] c.b.c.c.m.C.selectFullScan               : <==      Total: 80
+2026-11-05 13:39:07.280 DEBUG 3327 --- [nio-8080-exec-2] c.b.c.c.m.C.selectSafeAll                : ==>  Preparing: SELECT DATA_SOURCE_ID, DATA_SOURCE_NAME, DATA_SOURCE_CATEGORY, DATA_SOURCE_TYPE, DATA_SOURCE_ORG, FG_ACTIVE FROM CDC_DATA_SOURCE ORDER BY DATA_SOURCE_ID
+2026-11-05 13:39:07.280 DEBUG 3327 --- [nio-8080-exec-2] c.b.c.c.m.C.selectSafeAll                : ==> Parameters: 
+2026-11-05 13:39:07.282 DEBUG 3327 --- [nio-8080-exec-3] c.b.c.c.m.C.selectFullScan               : <==      Total: 80
+2026-11-05 13:39:07.282 DEBUG 3327 --- [nio-8080-exec-3] c.b.c.c.m.C.selectSafeAll                : ==>  Preparing: SELECT DATA_SOURCE_ID, DATA_SOURCE_NAME, DATA_SOURCE_CATEGORY, DATA_SOURCE_TYPE, DATA_SOURCE_ORG, FG_ACTIVE FROM CDC_DATA_SOURCE ORDER BY DATA_SOURCE_ID
+2026-11-05 13:39:07.283 DEBUG 3327 --- [nio-8080-exec-3] c.b.c.c.m.C.selectSafeAll                : ==> Parameters: 
+2026-11-05 13:39:07.296 DEBUG 3327 --- [nio-8080-exec-3] c.b.c.c.m.C.selectSafeAll                : <==      Total: 266
+2026-11-05 13:39:07.298 DEBUG 3327 --- [nio-8080-exec-3] c.b.c.c.m.CdcClientConfigMapper.update   : ==>  Preparing: UPDATE CDC_CLIENT_MULTIPLE SET CLIENT_ID=?,CLIENT_DESC=?,DATA_SOURCE_ID=? WHERE (CLIENT_ID = ?)
+2026-11-05 13:39:07.299 DEBUG 3327 --- [nio-8080-exec-2] c.b.c.c.m.C.selectSafeAll                : <==      Total: 266
+2026-11-05 13:39:07.301 DEBUG 3327 --- [nio-8080-exec-2] c.b.c.c.m.CdcClientConfigMapper.update   : ==>  Preparing: UPDATE CDC_CLIENT_MULTIPLE SET CLIENT_ID=?,CLIENT_DESC=?,DATA_SOURCE_ID=? WHERE (CLIENT_ID = ?)
+2026-11-05 13:39:07.301 DEBUG 3327 --- [nio-8080-exec-2] c.b.c.c.m.CdcClientConfigMapper.update   : ==> Parameters: S3AC-C064-EE-A(String), S3AC AC-064 edit/edit A (synthetic)(String), S3AC-S064-EE-T(String), S3AC-C064-EE-A(String)
+2026-11-05 13:39:07.299 DEBUG 3327 --- [nio-8080-exec-3] c.b.c.c.m.CdcClientConfigMapper.update   : ==> Parameters: S3AC-C064-EE-B(String), S3AC AC-064 edit/edit B (synthetic)(String), S3AC-S064-EE-T(String), S3AC-C064-EE-B(String)
+2026-11-05 13:39:07.308 DEBUG 3327 --- [nio-8080-exec-3] c.b.c.c.m.CdcClientConfigMapper.update   : <==    Updates: 1
+2026-11-05 13:39:07.310 DEBUG 3327 --- [nio-8080-exec-2] c.b.c.c.m.CdcClientConfigMapper.update   : <==    Updates: 1
+2026-11-05 13:39:07.827 DEBUG 3327 --- [nio-8080-exec-4] c.b.c.c.m.C.selectByKeywordAndStatus     : ==>  Preparing: SELECT CLIENT_ID, CLIENT_DESC, DATA_SOURCE_ID, FG_ACTIVE FROM CDC_CLIENT_MULTIPLE ORDER BY CLIENT_ID DESC
+2026-11-05 13:39:07.827 DEBUG 3327 --- [nio-8080-exec-4] c.b.c.c.m.C.selectByKeywordAndStatus     : ==> Parameters: 
+2026-11-05 13:39:07.833 DEBUG 3327 --- [nio-8080-exec-4] c.b.c.c.m.C.selectByKeywordAndStatus     : <==      Total: 80
+2026-11-05 13:39:07.834 DEBUG 3327 --- [nio-8080-exec-4] c.b.c.c.m.C.selectSafeAll                : ==>  Preparing: SELECT DATA_SOURCE_ID, DATA_SOURCE_NAME, DATA_SOURCE_CATEGORY, DATA_SOURCE_TYPE, DATA_SOURCE_ORG, FG_ACTIVE FROM CDC_DATA_SOURCE ORDER BY DATA_SOURCE_ID
+2026-11-05 13:39:07.834 DEBUG 3327 --- [nio-8080-exec-4] c.b.c.c.m.C.selectSafeAll                : ==> Parameters: 
+2026-11-05 13:39:07.844 DEBUG 3327 --- [nio-8080-exec-4] c.b.c.c.m.C.selectSafeAll                : <==      Total: 266
+2026-11-05 13:39:07.851 DEBUG 3327 --- [nio-8080-exec-6] c.b.c.c.m.C.selectFullScan               : ==>  Preparing: SELECT CLIENT_ID, CLIENT_DESC, DATA_SOURCE_ID, FG_ACTIVE FROM CDC_CLIENT_MULTIPLE ORDER BY CLIENT_ID
+2026-11-05 13:39:07.851 DEBUG 3327 --- [nio-8080-exec-6] c.b.c.c.m.C.selectFullScan               : ==> Parameters: 
+2026-11-05 13:39:07.855 DEBUG 3327 --- [nio-8080-exec-5] c.b.c.c.m.C.selectFullScan               : ==>  Preparing: SELECT CLIENT_ID, CLIENT_DESC, DATA_SOURCE_ID, FG_ACTIVE FROM CDC_CLIENT_MULTIPLE ORDER BY CLIENT_ID
+2026-11-05 13:39:07.855 DEBUG 3327 --- [nio-8080-exec-5] c.b.c.c.m.C.selectFullScan               : ==> Parameters: 
+2026-11-05 13:39:07.858 DEBUG 3327 --- [nio-8080-exec-6] c.b.c.c.m.C.selectFullScan               : <==      Total: 80
+2026-11-05 13:39:07.858 DEBUG 3327 --- [nio-8080-exec-6] c.b.c.c.m.C.selectSafeAll                : ==>  Preparing: SELECT DATA_SOURCE_ID, DATA_SOURCE_NAME, DATA_SOURCE_CATEGORY, DATA_SOURCE_TYPE, DATA_SOURCE_ORG, FG_ACTIVE FROM CDC_DATA_SOURCE ORDER BY DATA_SOURCE_ID
+2026-11-05 13:39:07.859 DEBUG 3327 --- [nio-8080-exec-6] c.b.c.c.m.C.selectSafeAll                : ==> Parameters: 
+2026-11-05 13:39:07.859 DEBUG 3327 --- [nio-8080-exec-5] c.b.c.c.m.C.selectFullScan               : <==      Total: 80
+2026-11-05 13:39:07.860 DEBUG 3327 --- [nio-8080-exec-5] c.b.c.c.m.C.selectSafeAll                : ==>  Preparing: SELECT DATA_SOURCE_ID, DATA_SOURCE_NAME, DATA_SOURCE_CATEGORY, DATA_SOURCE_TYPE, DATA_SOURCE_ORG, FG_ACTIVE FROM CDC_DATA_SOURCE ORDER BY DATA_SOURCE_ID
+2026-11-05 13:39:07.860 DEBUG 3327 --- [nio-8080-exec-5] c.b.c.c.m.C.selectSafeAll                : ==> Parameters: 
+2026-11-05 13:39:07.869 DEBUG 3327 --- [nio-8080-exec-6] c.b.c.c.m.C.selectSafeAll                : <==      Total: 266
+2026-11-05 13:39:07.870 DEBUG 3327 --- [nio-8080-exec-6] c.b.c.c.m.CdcClientConfigMapper.insert   : ==>  Preparing: INSERT INTO CDC_CLIENT_MULTIPLE ( CLIENT_ID, CLIENT_DESC, DATA_SOURCE_ID, FG_ACTIVE ) VALUES ( ?, ?, ?, ? )
+2026-11-05 13:39:07.871 DEBUG 3327 --- [nio-8080-exec-6] c.b.c.c.m.CdcClientConfigMapper.insert   : ==> Parameters: S3AC-C064-IE-B(String), S3AC AC-064 insert/edit new B (synthetic)(String), S3AC-S064-IE-T(String), 1(String)
+2026-11-05 13:39:07.871 DEBUG 3327 --- [nio-8080-exec-6] c.b.c.c.m.CdcClientConfigMapper.insert   : <==    Updates: 1
+2026-11-05 13:39:07.871 DEBUG 3327 --- [nio-8080-exec-5] c.b.c.c.m.C.selectSafeAll                : <==      Total: 266
+2026-11-05 13:39:07.873 DEBUG 3327 --- [nio-8080-exec-5] c.b.c.c.m.CdcClientConfigMapper.update   : ==>  Preparing: UPDATE CDC_CLIENT_MULTIPLE SET CLIENT_ID=?,CLIENT_DESC=?,DATA_SOURCE_ID=? WHERE (CLIENT_ID = ?)
+2026-11-05 13:39:07.873 DEBUG 3327 --- [nio-8080-exec-5] c.b.c.c.m.CdcClientConfigMapper.update   : ==> Parameters: S3AC-C064-IE-A(String), S3AC AC-064 insert/edit existing A (synthetic)(String), S3AC-S064-IE-T(String), S3AC-C064-IE-A(String)
+2026-11-05 13:39:07.874 DEBUG 3327 --- [nio-8080-exec-5] c.b.c.c.m.CdcClientConfigMapper.update   : <==    Updates: 1
+2026-11-05 13:39:08.384 DEBUG 3327 --- [nio-8080-exec-8] c.b.c.c.m.C.selectByKeywordAndStatus     : ==>  Preparing: SELECT CLIENT_ID, CLIENT_DESC, DATA_SOURCE_ID, FG_ACTIVE FROM CDC_CLIENT_MULTIPLE ORDER BY CLIENT_ID DESC
+2026-11-05 13:39:08.384 DEBUG 3327 --- [nio-8080-exec-8] c.b.c.c.m.C.selectByKeywordAndStatus     : ==> Parameters: 
+2026-11-05 13:39:08.388 DEBUG 3327 --- [nio-8080-exec-8] c.b.c.c.m.C.selectByKeywordAndStatus     : <==      Total: 81
+2026-11-05 13:39:08.389 DEBUG 3327 --- [nio-8080-exec-8] c.b.c.c.m.C.selectSafeAll                : ==>  Preparing: SELECT DATA_SOURCE_ID, DATA_SOURCE_NAME, DATA_SOURCE_CATEGORY, DATA_SOURCE_TYPE, DATA_SOURCE_ORG, FG_ACTIVE FROM CDC_DATA_SOURCE ORDER BY DATA_SOURCE_ID
+2026-11-05 13:39:08.389 DEBUG 3327 --- [nio-8080-exec-8] c.b.c.c.m.C.selectSafeAll                : ==> Parameters: 
+2026-11-05 13:39:08.401 DEBUG 3327 --- [nio-8080-exec-8] c.b.c.c.m.C.selectSafeAll                : <==      Total: 266
+2026-11-05 13:39:08.407 DEBUG 3327 --- [nio-8080-exec-7] c.b.c.c.m.C.selectFullScan               : ==>  Preparing: SELECT CLIENT_ID, CLIENT_DESC, DATA_SOURCE_ID, FG_ACTIVE FROM CDC_CLIENT_MULTIPLE ORDER BY CLIENT_ID
+2026-11-05 13:39:08.407 DEBUG 3327 --- [nio-8080-exec-7] c.b.c.c.m.C.selectFullScan               : ==> Parameters: 
+2026-11-05 13:39:08.408 DEBUG 3327 --- [nio-8080-exec-9] c.b.c.c.m.C.selectFullScan               : ==>  Preparing: SELECT CLIENT_ID, CLIENT_DESC, DATA_SOURCE_ID, FG_ACTIVE FROM CDC_CLIENT_MULTIPLE ORDER BY CLIENT_ID
+2026-11-05 13:39:08.408 DEBUG 3327 --- [nio-8080-exec-9] c.b.c.c.m.C.selectFullScan               : ==> Parameters: 
+2026-11-05 13:39:08.412 DEBUG 3327 --- [nio-8080-exec-7] c.b.c.c.m.C.selectFullScan               : <==      Total: 81
+2026-11-05 13:39:08.412 DEBUG 3327 --- [nio-8080-exec-7] c.b.c.c.m.C.selectSafeAll                : ==>  Preparing: SELECT DATA_SOURCE_ID, DATA_SOURCE_NAME, DATA_SOURCE_CATEGORY, DATA_SOURCE_TYPE, DATA_SOURCE_ORG, FG_ACTIVE FROM CDC_DATA_SOURCE ORDER BY DATA_SOURCE_ID
+2026-11-05 13:39:08.412 DEBUG 3327 --- [nio-8080-exec-7] c.b.c.c.m.C.selectSafeAll                : ==> Parameters: 
+2026-11-05 13:39:08.412 DEBUG 3327 --- [nio-8080-exec-9] c.b.c.c.m.C.selectFullScan               : <==      Total: 81
+2026-11-05 13:39:08.412 DEBUG 3327 --- [nio-8080-exec-9] c.b.c.c.m.C.selectSafeAll                : ==>  Preparing: SELECT DATA_SOURCE_ID, DATA_SOURCE_NAME, DATA_SOURCE_CATEGORY, DATA_SOURCE_TYPE, DATA_SOURCE_ORG, FG_ACTIVE FROM CDC_DATA_SOURCE ORDER BY DATA_SOURCE_ID
+2026-11-05 13:39:08.412 DEBUG 3327 --- [nio-8080-exec-9] c.b.c.c.m.C.selectSafeAll                : ==> Parameters: 
+2026-11-05 13:39:08.421 DEBUG 3327 --- [nio-8080-exec-9] c.b.c.c.m.C.selectSafeAll                : <==      Total: 266
+2026-11-05 13:39:08.421 DEBUG 3327 --- [nio-8080-exec-9] c.b.c.c.m.CdcClientConfigMapper.insert   : ==>  Preparing: INSERT INTO CDC_CLIENT_MULTIPLE ( CLIENT_ID, CLIENT_DESC, DATA_SOURCE_ID, FG_ACTIVE ) VALUES ( ?, ?, ?, ? )
+2026-11-05 13:39:08.422 DEBUG 3327 --- [nio-8080-exec-9] c.b.c.c.m.CdcClientConfigMapper.insert   : ==> Parameters: RACE-001(String), S3AC AC-030 concurrency upper-case (synthetic)(String), S3AC-S030R-2(String), 1(String)
+2026-11-05 13:39:08.423 DEBUG 3327 --- [nio-8080-exec-7] c.b.c.c.m.C.selectSafeAll                : <==      Total: 266
+2026-11-05 13:39:08.424 DEBUG 3327 --- [nio-8080-exec-7] c.b.c.c.m.CdcClientConfigMapper.insert   : ==>  Preparing: INSERT INTO CDC_CLIENT_MULTIPLE ( CLIENT_ID, CLIENT_DESC, DATA_SOURCE_ID, FG_ACTIVE ) VALUES ( ?, ?, ?, ? )
+2026-11-05 13:39:08.424 DEBUG 3327 --- [nio-8080-exec-9] c.b.c.c.m.CdcClientConfigMapper.insert   : <==    Updates: 1
+2026-11-05 13:39:08.426 DEBUG 3327 --- [nio-8080-exec-7] c.b.c.c.m.CdcClientConfigMapper.insert   : ==> Parameters: race-001(String), S3AC AC-030 concurrency lower-case (synthetic)(String), S3AC-S030R-1(String), 1(String)
+2026-11-05 13:39:08.427 DEBUG 3327 --- [nio-8080-exec-7] c.b.c.c.m.CdcClientConfigMapper.insert   : <==    Updates: 1
+2026-11-05 13:39:08.940 DEBUG 3327 --- [io-8080-exec-10] c.b.c.c.m.C.selectByKeywordAndStatus     : ==>  Preparing: SELECT CLIENT_ID, CLIENT_DESC, DATA_SOURCE_ID, FG_ACTIVE FROM CDC_CLIENT_MULTIPLE ORDER BY CLIENT_ID DESC
+2026-11-05 13:39:08.940 DEBUG 3327 --- [io-8080-exec-10] c.b.c.c.m.C.selectByKeywordAndStatus     : ==> Parameters: 
+2026-11-05 13:39:08.944 DEBUG 3327 --- [io-8080-exec-10] c.b.c.c.m.C.selectByKeywordAndStatus     : <==      Total: 83
+2026-11-05 13:39:08.945 DEBUG 3327 --- [io-8080-exec-10] c.b.c.c.m.C.selectSafeAll                : ==>  Preparing: SELECT DATA_SOURCE_ID, DATA_SOURCE_NAME, DATA_SOURCE_CATEGORY, DATA_SOURCE_TYPE, DATA_SOURCE_ORG, FG_ACTIVE FROM CDC_DATA_SOURCE ORDER BY DATA_SOURCE_ID
+2026-11-05 13:39:08.945 DEBUG 3327 --- [io-8080-exec-10] c.b.c.c.m.C.selectSafeAll                : ==> Parameters: 
+2026-11-05 13:39:08.956 DEBUG 3327 --- [io-8080-exec-10] c.b.c.c.m.C.selectSafeAll                : <==      Total: 266

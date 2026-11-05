@@ -1,0 +1,137 @@
+{
+  "ac": "CCFG-AC-030",
+  "sequential": {
+    "preExisting": [],
+    "baseSource": {
+      "visible": true,
+      "disabled": false,
+      "text": "S3AC-ORG\nS3AC synthetic source · S3AC-S030-1"
+    },
+    "createResponse": {
+      "status": 200,
+      "body": "{\"code\":200,\"message\":\"success\",\"timestamp\":\"2026-11-05T13:37:52.060\"}",
+      "url": "http://127.0.0.1:5173/api/clients"
+    },
+    "pageAttempts": [
+      {
+        "id": "probe-001",
+        "response": {
+          "status": 200,
+          "body": {
+            "code": 40940,
+            "message": "探针 ID 已存在冲突（不区分大小写），请更换探针 ID。",
+            "timestamp": "2026-11-05T13:37:54.690"
+          }
+        },
+        "fieldErrors": [
+          "探针 ID 已存在冲突（不区分大小写），请更换探针 ID。"
+        ],
+        "sourceOption": {
+          "visible": true,
+          "disabled": false,
+          "text": "S3AC-ORG\nS3AC synthetic source · S3AC-S030-F1"
+        }
+      },
+      {
+        "id": "Probe-001",
+        "response": {
+          "status": 200,
+          "body": {
+            "code": 40940,
+            "message": "探针 ID 已存在冲突（不区分大小写），请更换探针 ID。",
+            "timestamp": "2026-11-05T13:37:56.621"
+          }
+        },
+        "fieldErrors": [
+          "探针 ID 已存在冲突（不区分大小写），请更换探针 ID。"
+        ],
+        "sourceOption": {
+          "visible": true,
+          "disabled": false,
+          "text": "S3AC-ORG\nS3AC synthetic source · S3AC-S030-F2"
+        }
+      },
+      {
+        "id": "PROBE-001",
+        "response": {
+          "status": 200,
+          "body": {
+            "code": 40940,
+            "message": "探针 ID 已存在冲突（不区分大小写），请更换探针 ID。",
+            "timestamp": "2026-11-05T13:37:58.575"
+          }
+        },
+        "fieldErrors": [
+          "探针 ID 已存在冲突（不区分大小写），请更换探针 ID。"
+        ],
+        "sourceOption": {
+          "visible": true,
+          "disabled": false,
+          "text": "S3AC-ORG\nS3AC synthetic source · S3AC-S030-F3"
+        }
+      }
+    ],
+    "bypass": {
+      "httpStatus": 200,
+      "body": {
+        "code": 40940,
+        "message": "探针 ID 已存在冲突（不区分大小写），请更换探针 ID。",
+        "timestamp": "2026-11-05T13:37:59.749"
+      }
+    },
+    "mixedSource": {
+      "visible": true,
+      "disabled": false,
+      "text": "S3AC-ORG\nS3AC synthetic source · S3AC-S030-2"
+    },
+    "mixedCreateResponse": {
+      "status": 200,
+      "body": "{\"code\":200,\"message\":\"success\",\"timestamp\":\"2026-11-05T13:38:00.641\"}",
+      "url": "http://127.0.0.1:5173/api/clients"
+    },
+    "after": {
+      "baseRow": {
+        "clientId": "probe-001",
+        "clientDesc": "S3AC AC-030 sequential base probe-001 (synthetic)",
+        "status": "ENABLED",
+        "fgActive": "1",
+        "dataSourceCount": 1,
+        "rawDataSourceIds": "S3AC-S030-1",
+        "possibleCommaDataSourceIds": [],
+        "rowAnomalies": [],
+        "dataSources": [
+          {
+            "dataSourceId": "S3AC-S030-1",
+            "org": "S3AC-ORG",
+            "dataSourceName": "S3AC synthetic source",
+            "anomalies": [],
+            "conflictClientIds": []
+          }
+        ]
+      },
+      "mixedRow": {
+        "clientId": "S3AC-C030-MiXeD",
+        "clientDesc": "S3AC AC-030 mixed-case preservation (synthetic)",
+        "status": "ENABLED",
+        "fgActive": "1",
+        "dataSourceCount": 1,
+        "rawDataSourceIds": "S3AC-S030-2",
+        "possibleCommaDataSourceIds": [],
+        "rowAnomalies": [],
+        "dataSources": [
+          {
+            "dataSourceId": "S3AC-S030-2",
+            "org": "S3AC-ORG",
+            "dataSourceName": "S3AC synthetic source",
+            "anomalies": [],
+            "conflictClientIds": []
+          }
+        ]
+      },
+      "caseInsensitiveCount": 1
+    }
+  },
+  "concurrent": {
+    "note": "see probe-ac030-concurrent.cjs"
+  }
+}

@@ -1,0 +1,2 @@
+S3AC-C024-OFF|S3AC AC-024 enable-confirm fixture (synthetic)|S3AC-S024-1|1|46
+SOURCE_STATE|S3AC-S024-1|1

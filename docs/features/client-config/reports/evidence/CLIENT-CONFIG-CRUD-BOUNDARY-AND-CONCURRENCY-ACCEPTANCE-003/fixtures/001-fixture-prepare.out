@@ -1,0 +1,155 @@
+
+1 row created.
+
+
+1 row created.
+
+
+1 row created.
+
+
+1 row created.
+
+
+1 row created.
+
+
+1 row created.
+
+
+1 row created.
+
+
+1 row created.
+
+
+1 row created.
+
+
+1 row created.
+
+
+1 row created.
+
+
+1 row created.
+
+
+1 row created.
+
+
+1 row created.
+
+
+1 row created.
+
+
+1 row created.
+
+
+1 row created.
+
+
+1 row created.
+
+
+1 row created.
+
+
+1 row created.
+
+
+1 row created.
+
+
+1 row created.
+
+
+1 row created.
+
+
+1 row created.
+
+
+1 row created.
+
+
+1 row created.
+
+
+1 row created.
+
+
+1 row created.
+
+
+1 row created.
+
+
+1 row created.
+
+
+1 row created.
+
+
+1 row created.
+
+
+1 row created.
+
+
+1 row created.
+
+
+1 row created.
+
+
+1 row created.
+
+
+1 row created.
+
+
+1 row created.
+
+
+1 row created.
+
+
+1 row created.
+
+
+1 row created.
+
+
+1 row created.
+
+
+1 row created.
+
+
+1 row created.
+
+
+Commit complete.
+
+
+'SOURCE_TOTAL|'||COUNT(*)
+-----------------------------------------------------
+SOURCE_TOTAL|263
+
+
+'CLIENT_TOTAL|'||COUNT(*)
+-----------------------------------------------------
+CLIENT_TOTAL|77
+
+
+'S3AC_SOURCES|'||COUNT(*)
+-----------------------------------------------------
+S3AC_SOURCES|28
+
+
+'S3AC_CLIENTS|'||COUNT(*)
+-----------------------------------------------------
+S3AC_CLIENTS|16
+

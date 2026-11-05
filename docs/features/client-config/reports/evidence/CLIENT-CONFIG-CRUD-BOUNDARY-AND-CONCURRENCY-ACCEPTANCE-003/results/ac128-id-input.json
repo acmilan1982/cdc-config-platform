@@ -1,0 +1,177 @@
+{
+  "ac": "CCFG-AC-128",
+  "page": {
+    "typed": {
+      "method": "keyboard.type (real key events)",
+      "inputUtf16Units": 32,
+      "codepoints": 32,
+      "finalValue": "AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA",
+      "truncatedTo32": true
+    },
+    "paste": {
+      "method": "clipboard write + Control+V (real paste event)",
+      "supported": true,
+      "inputUtf16Units": 32,
+      "codepoints": 32,
+      "finalValue": "BBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBB",
+      "truncatedTo32": true
+    },
+    "chosenSource": "S3AC-ORG"
+  },
+  "illegalPage": [
+    {
+      "id": "ab cd",
+      "label": "space-inside",
+      "inputMethod": "keyboard.type (real key events; clear via script fill)",
+      "finalValue": "ab cd",
+      "fieldErrors": [
+        "探针 ID 格式不正确：须为 1~32 位字母、数字、点、下划线或连字符，且以字母或数字开头。"
+      ],
+      "postDelta": 0
+    },
+    {
+      "id": "中文ABC",
+      "label": "chinese",
+      "inputMethod": "keyboard.type (real key events; clear via script fill)",
+      "finalValue": "中文ABC",
+      "fieldErrors": [
+        "探针 ID 格式不正确：须为 1~32 位字母、数字、点、下划线或连字符，且以字母或数字开头。"
+      ],
+      "postDelta": 0
+    },
+    {
+      "id": "ab@cd",
+      "label": "at-sign",
+      "inputMethod": "keyboard.type (real key events; clear via script fill)",
+      "finalValue": "ab@cd",
+      "fieldErrors": [
+        "探针 ID 格式不正确：须为 1~32 位字母、数字、点、下划线或连字符，且以字母或数字开头。"
+      ],
+      "postDelta": 0
+    },
+    {
+      "id": "ab,cd",
+      "label": "english-comma",
+      "inputMethod": "keyboard.type (real key events; clear via script fill)",
+      "finalValue": "ab,cd",
+      "fieldErrors": [
+        "探针 ID 格式不正确：须为 1~32 位字母、数字、点、下划线或连字符，且以字母或数字开头。"
+      ],
+      "postDelta": 0
+    },
+    {
+      "id": "-abc",
+      "label": "illegal-first-char",
+      "inputMethod": "keyboard.type (real key events; clear via script fill)",
+      "finalValue": "-abc",
+      "fieldErrors": [
+        "探针 ID 格式不正确：须为 1~32 位字母、数字、点、下划线或连字符，且以字母或数字开头。"
+      ],
+      "postDelta": 0
+    },
+    {
+      "id": "   ",
+      "label": "blank-only",
+      "inputMethod": "keyboard.type (real key events; clear via script fill)",
+      "finalValue": "   ",
+      "fieldErrors": [
+        "探针 ID 不能为空。"
+      ],
+      "postDelta": 0
+    },
+    {
+      "id": "",
+      "label": "empty",
+      "inputMethod": "script assignment empty",
+      "finalValue": "",
+      "fieldErrors": [
+        "探针 ID 不能为空。"
+      ],
+      "postDelta": 0
+    }
+  ],
+  "apiBypass": [
+    {
+      "id": "ab cd",
+      "label": "space-inside",
+      "httpStatus": 200,
+      "responseCode": 40101,
+      "responseMessage": "探针 ID 格式不正确：须为 1~32 位字母、数字、点、下划线或连字符，且以字母或数字开头。",
+      "listDelta": 0
+    },
+    {
+      "id": "中文ABC",
+      "label": "chinese",
+      "httpStatus": 200,
+      "responseCode": 40101,
+      "responseMessage": "探针 ID 格式不正确：须为 1~32 位字母、数字、点、下划线或连字符，且以字母或数字开头。",
+      "listDelta": 0
+    },
+    {
+      "id": "ab@cd",
+      "label": "at-sign",
+      "httpStatus": 200,
+      "responseCode": 40101,
+      "responseMessage": "探针 ID 格式不正确：须为 1~32 位字母、数字、点、下划线或连字符，且以字母或数字开头。",
+      "listDelta": 0
+    },
+    {
+      "id": "ab,cd",
+      "label": "english-comma",
+      "httpStatus": 200,
+      "responseCode": 40101,
+      "responseMessage": "探针 ID 格式不正确：须为 1~32 位字母、数字、点、下划线或连字符，且以字母或数字开头。",
+      "listDelta": 0
+    },
+    {
+      "id": "-abc",
+      "label": "illegal-first-char",
+      "httpStatus": 200,
+      "responseCode": 40101,
+      "responseMessage": "探针 ID 格式不正确：须为 1~32 位字母、数字、点、下划线或连字符，且以字母或数字开头。",
+      "listDelta": 0
+    },
+    {
+      "id": "   ",
+      "label": "blank-only",
+      "httpStatus": 200,
+      "responseCode": 40100,
+      "responseMessage": "探针 ID 不能为空。",
+      "listDelta": 0
+    },
+    {
+      "id": "",
+      "label": "empty",
+      "httpStatus": 200,
+      "responseCode": 40100,
+      "responseMessage": "探针 ID 不能为空。",
+      "listDelta": 0
+    },
+    {
+      "id": "CCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCC",
+      "label": "33-chars",
+      "httpStatus": 200,
+      "responseCode": 40101,
+      "responseMessage": "探针 ID 格式不正确：须为 1~32 位字母、数字、点、下划线或连字符，且以字母或数字开头。",
+      "listDelta": 0
+    }
+  ],
+  "conflictEvidence": {
+    "file": "ac030-sequential.json",
+    "keys": [
+      "sequential.pageAttempts",
+      "sequential.bypass"
+    ],
+    "codes": [
+      40940,
+      40940,
+      40940,
+      40940
+    ]
+  },
+  "post": {
+    "probe001": [
+      "probe-001"
+    ]
+  }
+}

@@ -1,0 +1,143 @@
+{
+  "ac": "CCFG-AC-027",
+  "allow": [
+    {
+      "id": "S3AC-C027IC",
+      "anomaly": "INACTIVE",
+      "src": "S3AC-S027-INACT3",
+      "pre": {
+        "status": "DISABLED",
+        "fgActive": "0",
+        "desc": "S3AC AC-027 inactive source, disabled, enable-allowed target (synthetic)",
+        "raw": "S3AC-S027-INACT3"
+      },
+      "box": {
+        "title": "启用探针",
+        "content": "确定启用探针 S3AC-C027IC 吗？",
+        "buttons": [
+          "取消",
+          "启用"
+        ],
+        "customClass": "el-message-box cc-confirm--enable",
+        "visible": true
+      },
+      "response": {
+        "status": 200,
+        "body": "{\"code\":200,\"message\":\"success\",\"timestamp\":\"2026-11-05T13:34:45.503\"}",
+        "url": "http://127.0.0.1:5173/api/clients/S3AC-C027IC/enable"
+      },
+      "post": {
+        "status": "ENABLED",
+        "fgActive": "1",
+        "desc": "S3AC AC-027 inactive source, disabled, enable-allowed target (synthetic)",
+        "raw": "S3AC-S027-INACT3"
+      },
+      "message": "启用成功",
+      "error": null
+    },
+    {
+      "id": "S3AC-C027NC",
+      "anomaly": "NOT_FOUND",
+      "src": "S3AC-S027-MISS3",
+      "pre": {
+        "status": "DISABLED",
+        "fgActive": "0",
+        "desc": "S3AC AC-027 missing source, disabled, enable-allowed target (synthetic)",
+        "raw": "S3AC-S027-MISS3"
+      },
+      "box": {
+        "title": "启用探针",
+        "content": "确定启用探针 S3AC-C027NC 吗？",
+        "buttons": [
+          "取消",
+          "启用"
+        ],
+        "customClass": "el-message-box cc-confirm--enable",
+        "visible": true
+      },
+      "response": {
+        "status": 200,
+        "body": "{\"code\":200,\"message\":\"success\",\"timestamp\":\"2026-11-05T13:34:49.330\"}",
+        "url": "http://127.0.0.1:5173/api/clients/S3AC-C027NC/enable"
+      },
+      "post": {
+        "status": "ENABLED",
+        "fgActive": "1",
+        "desc": "S3AC AC-027 missing source, disabled, enable-allowed target (synthetic)",
+        "raw": "S3AC-S027-MISS3"
+      },
+      "message": "启用成功",
+      "error": null
+    },
+    {
+      "id": "S3AC-C027CC",
+      "anomaly": "COMMA_IN_ID",
+      "src": "S3AC27C,COM3",
+      "pre": {
+        "status": "DISABLED",
+        "fgActive": "0",
+        "desc": "S3AC AC-027 comma source, disabled, enable-allowed target (synthetic)",
+        "raw": "S3AC27C,COM3"
+      },
+      "box": {
+        "title": "启用探针",
+        "content": "确定启用探针 S3AC-C027CC 吗？",
+        "buttons": [
+          "取消",
+          "启用"
+        ],
+        "customClass": "el-message-box cc-confirm--enable",
+        "visible": true
+      },
+      "response": {
+        "status": 200,
+        "body": "{\"code\":200,\"message\":\"success\",\"timestamp\":\"2026-11-05T13:34:53.134\"}",
+        "url": "http://127.0.0.1:5173/api/clients/S3AC-C027CC/enable"
+      },
+      "post": {
+        "status": "ENABLED",
+        "fgActive": "1",
+        "desc": "S3AC AC-027 comma source, disabled, enable-allowed target (synthetic)",
+        "raw": "S3AC27C,COM3"
+      },
+      "message": "启用成功",
+      "error": null
+    }
+  ],
+  "reject": [
+    {
+      "id": "S3AC-C027DC",
+      "anomaly": "DUPLICATE",
+      "src": "S3AC-S027-DUPP",
+      "pre": {
+        "status": "DISABLED",
+        "fgActive": "0",
+        "desc": "S3AC AC-027 duplicate holder C, disabled, enable-reject target (synthetic)",
+        "raw": "S3AC-S027-DUPP"
+      },
+      "box": {
+        "title": "启用探针",
+        "content": "确定启用探针 S3AC-C027DC 吗？",
+        "buttons": [
+          "取消",
+          "启用"
+        ],
+        "customClass": "el-message-box cc-confirm--enable",
+        "visible": true
+      },
+      "response": {
+        "status": 200,
+        "body": "{\"code\":40941,\"message\":\"数据源“S3AC-ORG（S3AC-S027-DUPP）”已分配给探针：S3AC-C027DA，不能重复分配。\",\"timestamp\":\"2026-11-05T13:34:57.599\"}",
+        "url": "http://127.0.0.1:5173/api/clients/S3AC-C027DC/enable"
+      },
+      "post": {
+        "status": "DISABLED",
+        "fgActive": "0",
+        "desc": "S3AC AC-027 duplicate holder C, disabled, enable-reject target (synthetic)",
+        "raw": "S3AC-S027-DUPP"
+      },
+      "message": "数据源“S3AC-ORG（S3AC-S027-DUPP）”已分配给探针：S3AC-C027DA，不能重复分配。",
+      "error": null
+    }
+  ]
+}
