@@ -35,7 +35,8 @@
 | `results/runstate-c-dssr1.txt` | AC-021/038 所用历史探针的既有运行态关联快照（5 + 4 + 5 行） |
 | `results/schema-metadata-final.txt` | 验收后列/约束元数据（无 FK、无新增唯一索引、无 DDL） |
 | `results/static-checks.txt` | 源码静态核对（无 DDL/锁表/ZK/Kafka/进程调用；页面反馈文案） |
-| `results/zk-clients-before-after.txt` | `/bsoft-cdc/clients` 两次只读观察均为 `[hosp-012]` |
+| `results/concurrency-postcheck.txt` | 原执行 13:40 留存的并发终态独立 SQL 输出（R1 补入，未改写） |
+| `results/zk-clients-before-after.txt` | `/bsoft-cdc/clients` 两次只读 `ls` 均在主 CRUD 之后（并发窗口前后），节点名列表均为 `[zk-client-01]`（匿名化） |
 | `results/backend-log-concurrency-window.txt` | 并发窗口后端 SQL 日志摘录（每请求先全量预检，无锁表） |
 | `sql/*.sql` | 上述独立回读所用 SQL（只读） |
 | `SHA256SUMS` | 本目录文件校验和 |
@@ -46,8 +47,8 @@
 - 所有夹具对象带 `S3AC` 批次标识；写前用精确 ID 核对不存在（`000-precheck.sql`）。
 - 验收业务动作全部经真实页面或真实 `/api/clients*`，持久化用独立 GET/SELECT 回读。
 - 合成值仅为占位：主机 `10.255.255.1`、用户 `s3ac`、密码 `s3ac-synthetic`（非真实凭据，且不会被连接测试）。
-- 夹具 DML 合计：44 + 7 + 1 = **52 条 DML**（47 INSERT + 5 UPDATE + 3 COMMIT）。
-- 既有 235 条数据源六字段逐字节未变；既有非合成探针未被修改。
+- 夹具 DML 合计：44 + 7 + 1 = **52 条 DML**（47 INSERT + 5 UPDATE），另有 3 次 COMMIT；合计 **55 条 DML/事务控制语句**（COMMIT 不计 DML）。
+- 既有 235 条数据源在验收前后比对的**六个字段一致**；不声明整行逐字节不变。R1 对真实机构名、内网地址与真实标识做确定性假名替换后，按同一匿名键复核前 235 行仍逐行相同、行数不变。既有非合成探针未被修改。
 
 ## 3. 业务写尝试账本
 
@@ -80,3 +81,11 @@
 - 运行侧（`sync-client`/`sync-server` 进程、Kafka、真实 ZK 写入）未调用、未模拟；AC-075/076 对“其他进程”的结论由静态源码核对 + 可观察的 DB/ZK 零变化支持，属于**可验证范围**结论。
 - 按负责人授权，两表测试数据不清理、不恢复，不报告 `RESTORED`。
 - 报告与证据不预填自身提交 SHA，不宣告远程复审通过。
+
+## 6. R1 定向更正与脱敏（2026-11-05）
+
+- 本目录中 `results/preexisting-data-sources.txt`、`results/final-checks.txt`、`results/zk-clients-before-after.txt`、`environment-and-versions.md`、`README.md` 经 R1 脱敏或口径修正；其余 003 运行证据字节未改。
+- 脱敏规则：真实机构名 → `ORG-<sha256前12位>`；含内网地址的连接别名 → `SRCNAME-<...>`；真实长十六进制标识 → `SRC-<...>`；ZK 主机 → `ZK_HOST`、节点名 → `zk-client-01`。同一真实对象映射一致；未入仓映射表或原始快照。
+- 合成样本（S2AC/dssr1/S3AC 等）与占位地址 `10.255.255.1` 保留；`results/ac021-delete.json` 中“某市第一人民医院”为合成描述，保留。
+- `results/concurrency-postcheck.txt` 为 R1 补入的原执行留存输出（SHA256 `4c8b90a5b6c9be99516ebedca9198fd91f2f334a4dcdbcb9f8e016254b560e23`）。
+- R1 报告与补证：`../../CLIENT-CONFIG-CRUD-BOUNDARY-AND-CONCURRENCY-ACCEPTANCE-003-R1.md`、`../CLIENT-CONFIG-CRUD-BOUNDARY-AND-CONCURRENCY-ACCEPTANCE-003-R1/`。

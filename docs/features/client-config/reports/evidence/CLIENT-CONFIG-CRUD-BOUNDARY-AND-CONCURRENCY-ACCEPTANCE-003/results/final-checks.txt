@@ -1,10 +1,10 @@
-1111|mysql-192.168.1.11|target|DORIS|doirs库|0
-111111111111111111111111|oracle-10.19.12.33|source|ORACLE|10.19.12.33医院-请勿修改|0
-112-source-19c|oracle-业务库33|source|ORACLE|孝感市第一人民医院|1
+1111|SRCNAME-d247b9883ba7|target|DORIS|doirs库|0
+111111111111111111111111|SRCNAME-977ed36f4ffd|source|ORACLE|ORG-a5a62ea603d6|0
+112-source-19c|oracle-业务库33|source|ORACLE|ORG-62f46b38305c|1
 112-target-19c|oracle-业务库33|target|ORACLE|目标库-oracle|1
 199-source|业务库|SOURCE|ORACLE|业务库|0
-5905f1ce83024410836b40ca0ebfc446|oracle-业务库33|source|ORACLE|杭州市第一人民医院|1
-5905f1ce83024410836b40ca0ebfc477|oracle-10.19.12.33|target|ORACLE|杭州市第一人民医院|0
+SRC-c8e68cd5e62f|oracle-业务库33|source|ORACLE|ORG-2ca380adc720|1
+SRC-516093983503|SRCNAME-977ed36f4ffd|target|ORACLE|ORG-2ca380adc720|0
 66|77|TARGET|MYSQL|22|1
 77711|22211|SOURCE|ORACLE|222|1
 C01|S2AC NAME|SOURCE|ORACLE|TokenC01Org|1
@@ -214,25 +214,25 @@ S2AC-X02|S2AC NAME|target|ORACLE|X02 Category Target Org|1
 S2AC-X03|S2AC NAME|SOURCE|MYSQL|X03 Type Mysql Org|1
 S2AM|S2AC NAME|SOURCE|ORACLE|TokenS2AMOrg|1
 S2AM,C02|S2AC NAME|SOURCE|ORACLE|CommaIdOrg2S2AC|1
-a31a1a6e542747ea8bcbfb12bd43b6b9|mysql-目标库11|target|MYSQL|台州医院东院区|0
-company-target-doris-v4|mysql-192.168.1.11|target|DORIS|doirs库|1
-company-target-mysql-5|mysql-192.168.1.11|target|MYSQL|mysql库|1
+SRC-67413e7064cd|mysql-目标库11|target|MYSQL|ORG-3ac369bb8bf9|0
+company-target-doris-v4|SRCNAME-d247b9883ba7|target|DORIS|doirs库|1
+company-target-mysql-5|SRCNAME-d247b9883ba7|target|MYSQL|mysql库|1
 fail-db|业务库|SOURCE|ORACLE|连不上的库|0
 mock7|业务库|SOURCE|ORACLE|mock7-业务库|0
 mock8|业务库|SOURCE|ORACLE|mock8-业务库|0
 mock9|业务库|SOURCE|ORACLE|mock9-业务库|0
 my-19c|oracle-业务库33|source|ORACLE|本机的oracle|1
-my-target-doris-v4|mysql-192.168.1.11|target|DORIS|doirs库|0
+my-target-doris-v4|SRCNAME-d247b9883ba7|target|DORIS|doirs库|0
 s-dssr1-0906-1|dssr1-s1|SOURCE|ORACLE|SNAPSHOT-TEST-某市一院信息中心源库-DONOTUSE|0
 s-dssr1-0906-2|dssr1-s2|SOURCE|ORACLE|SNAPSHOT-TEST-某市一院信息中心源库-DONOTUSE|0
 s-dssr1-0906-3|dssr1-s3|SOURCE|ORACLE|SNAPSHOT-TEST-某市二院信息中心源库-DONOTUSE|0
 s-dssr1-0906-4|dssr1-s4|TARGET|ORACLE|SNAPSHOT-TEST-目标侧某中心源库-DONOTUSE|0
 s-dssr1-0906-5|dssr1-s5||ORACLE|SNAPSHOT-TEST-第三方平台源库-DONOTUSE|0
-target-doris-v3|mysql-192.168.1.11|target|DORIS|doirs库|0
-target-doris-v4|mysql-192.168.1.11|target|DORIS|doirs库|1
+target-doris-v3|SRCNAME-d247b9883ba7|target|DORIS|doirs库|0
+target-doris-v4|SRCNAME-d247b9883ba7|target|DORIS|doirs库|1
 target-mysql-5|oracle-目标库15|target|MYSQL|mysql库|0
 target-oracle|oracle-目标库15|target|ORACLE|oracle库|0
-target-oracle-WJW|oracle-10.19.12.33|target|ORACLE|杭州市第一人民医院|0
+target-oracle-WJW|SRCNAME-977ed36f4ffd|target|ORACLE|ORG-2ca380adc720|0
 ASSOC_FAILURE_EVENT|0
 ASSOC_HANDLE_LOG|0
 ASSOC_RUN_STATE_S3AC|0

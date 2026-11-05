@@ -22,7 +22,11 @@ $ diff /tmp/s3ac/snap/schema-metadata2.txt /tmp/s3ac/snap/schema-metadata2-post.
 
 ## 5. Pre-existing data-source rows (235) diff before vs after
 $ diff preexisting-data-sources.txt <first 235 lines of final-checks.txt>
-(identical)
+(identical at execution time)
+R1 (2026-11-05): after deterministic pseudonymization of real institution names, intranet
+addresses and real identifiers, the same comparison remains line-by-line identical for the
+first 235 rows (235 rows in both files). Claim limited to the six compared fields, not
+whole-row byte equality.
 
 ## 6. Page feedback strings (no realtime sync-client claim)
 $ grep -n "ElMessage.success" frontend/src/views/client-config/ClientConfigPage.vue

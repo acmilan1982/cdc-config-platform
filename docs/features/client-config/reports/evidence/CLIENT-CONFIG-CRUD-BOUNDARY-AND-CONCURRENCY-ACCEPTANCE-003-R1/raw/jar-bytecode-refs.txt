@@ -1,0 +1,76 @@
+# Running-jar bytecode reference check (read-only, 2026-11-05)
+
+- Running jar: `backend/target/cdc-config-platform-backend-1.0.0-SNAPSHOT.jar`
+- SHA256: `efdbea827b6ab84dd47105d2cc130f0bc3c5b70dc78cc626b6421e1f9750a459`
+- Jar mtime: 2026-09-22 12:21
+- Feature source last change: `84d3cdcf663a7f0890bcaea2199aa1622a3915ce` (2026-09-05)
+
+## Commands
+
+```
+$ unzip -q -o <jar> 'BOOT-INF/classes/com/bsoft/cdcconfig/clientconfig/*' -d /tmp/r1/jarcls2
+$ javap -p -c -classpath /tmp/r1/jarcls2/BOOT-INF/classes \
+    com.bsoft.cdcconfig.clientconfig.service.impl.ClientConfigServiceImpl > service.javap
+$ javap -p -c -classpath /tmp/r1/jarcls2/BOOT-INF/classes \
+    com.bsoft.cdcconfig.clientconfig.controller.ClientConfigController > controller.javap
+```
+
+## Service -> mapper method references (bytecode)
+
+```
+1 CdcClientConfigMapper.deleteById
+1 CdcClientConfigMapper.insert
+1 CdcClientConfigMapper.selectByKeywordAndStatus
+4 CdcClientConfigMapper.selectFullScan
+3 CdcClientConfigMapper.update
+5 CdcDataSourceMapper.selectSafeAll
+```
+
+## Controller -> service method references (bytecode)
+
+```
+1 ClientConfigService.create
+1 ClientConfigService.dataSourceOptions
+1 ClientConfigService.delete
+1 ClientConfigService.disable
+1 ClientConfigService.enable
+1 ClientConfigService.list
+1 ClientConfigService.update
+```
+
+## Package-qualified types referenced by the Service class
+
+```
+com/bsoft/cdcconfig/clientconfig/entity/CdcClientConfig
+com/bsoft/cdcconfig/clientconfig/entity/CdcDataSource
+com/bsoft/cdcconfig/clientconfig/exception/ClientConfigErrorCode
+com/bsoft/cdcconfig/clientconfig/helper/ClientConfigDataUtil
+com/bsoft/cdcconfig/clientconfig/helper/ClientConfigDataUtil$CsvParseResult
+com/bsoft/cdcconfig/clientconfig/mapper/CdcClientConfigMapper
+com/bsoft/cdcconfig/clientconfig/mapper/CdcDataSourceMapper
+com/bsoft/cdcconfig/clientconfig/model/dto/CreateClientRequest
+com/bsoft/cdcconfig/clientconfig/model/dto/UpdateClientRequest
+com/bsoft/cdcconfig/clientconfig/model/query/ClientStatus
+com/bsoft/cdcconfig/clientconfig/model/vo/ClientConfigDataSourceOptionVO
+com/bsoft/cdcconfig/clientconfig/model/vo/ClientListItemVO
+com/bsoft/cdcconfig/clientconfig/model/vo/ClientListVO
+com/bsoft/cdcconfig/clientconfig/model/vo/DataSourceViewItemVO
+com/bsoft/cdcconfig/clientconfig/service/impl/ClientConfigServiceImpl$1
+com/bsoft/cdcconfig/clientconfig/service/impl/ClientConfigServiceImpl$NormalizedPayload
+com/bsoft/cdcconfig/common/exception/BusinessException
+```
+
+## Forbidden-token scan over the two javap dumps
+
+```
+$ grep -rciE 'zookeeper|kafka|ProcessBuilder|Runtime\.exec|sync-client|sync-server|restart|jdbcTemplate|DataSource_SCN|CDC_STATS|FAILURE_EVENT|EXECUTION_PLAN' service.javap controller.javap
+service.javap:0
+controller.javap:0
+```
+
+## Boundary
+
+- The two Mapper SQL statements are fixed annotations; this scan covers the extracted class
+  references, not runtime proxies.
+- Only the two mappers above are referenced; no third table, ZK/Kafka, process, statistics,
+  SCN, execution-plan or failure-event reference appears in the clientconfig classes.

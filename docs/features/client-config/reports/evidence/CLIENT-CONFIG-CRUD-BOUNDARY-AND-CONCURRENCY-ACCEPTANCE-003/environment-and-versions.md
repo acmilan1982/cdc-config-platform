@@ -29,7 +29,7 @@
 | Playwright Core | 1.59.1（服务器既有 `node_modules`） |
 | Chromium | Google Chrome for Testing 147.0.7727.15（headless） |
 | 数据库 | Oracle 开发库 19c，Schema `CDC`（复用项目既有连接；本目录不写入凭据） |
-| ZooKeeper | 10.19.16.111:2181，客户端 3.4.14，只读 `ls /bsoft-cdc/clients` |
+| ZooKeeper | `ZK_HOST:2181`（主机已在证据中匿名化），客户端 3.4.14，只读 `ls /bsoft-cdc/clients` |
 
 ## 3. 验证边界
 

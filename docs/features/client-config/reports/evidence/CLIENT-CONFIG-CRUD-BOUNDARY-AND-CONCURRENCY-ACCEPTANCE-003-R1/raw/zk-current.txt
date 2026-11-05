@@ -1,0 +1,13 @@
+# Current read-only ZooKeeper observation (R1)
+
+- Command: `${ZOOKEEPER_HOME}/bin/zkCli.sh -server ZK_HOST:2181 ls /bsoft-cdc/clients`
+- Time: 2026-11-05 14:22:38
+- Result: `[zk-client-01]`
+- Client: ZooKeeper 3.4.14
+
+## Boundary
+
+- Read-only `ls` only; no create/set/delete and no write API.
+- Host and node name are anonymized for evidence storage.
+- This is a current child-name listing. It is not a pre-CRUD snapshot, and it does not show
+  node data or child data; it cannot establish content equality over the acceptance window.

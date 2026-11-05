@@ -1,12 +1,13 @@
 ZooKeeper read-only observation (only `ls /bsoft-cdc/clients`; no create/set/delete).
-Server: 10.19.16.111:2181 (client 3.4.14).
+Server: ZK_HOST:2181 (client 3.4.14). Host anonymized for evidence storage.
 
-2026-11-05 13:36:30 (after AC-021/024/027/038 operations, before concurrency)
+2026-11-05 13:36:30 (observation point: after the main AC-021/024/027/038 CRUD operations, before the AC-064/AC-030 concurrency window; not a pre-CRUD snapshot)
 WatchedEvent state:SyncConnected
-[hosp-012]
+[zk-client-01]
 
-2026-11-05 13:40:27 (after AC-064/AC-030 concurrency)
+2026-11-05 13:40:27 (observation point: after the AC-064/AC-030 concurrency window)
 WatchedEvent state:SyncConnected
-[hosp-012]
+[zk-client-01]
 
-Comparison: identical child list; no synthetic probe ID (S3AC-*, race-001/RACE-001) was created.
+Comparison: the two observed child-name lists are identical; no synthetic probe ID (S3AC-*, race-001/RACE-001) was created.
+Boundary: both readings are `ls` observations of child names only. This does not establish the node data or child data at those times, and neither reading is a pre-CRUD snapshot.

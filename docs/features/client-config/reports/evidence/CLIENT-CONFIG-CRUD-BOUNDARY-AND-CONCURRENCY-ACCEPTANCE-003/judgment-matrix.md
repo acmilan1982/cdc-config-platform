@@ -6,9 +6,10 @@
 
 - 前置：`c-dssr1-0906-a` 为 Agent 在 `data-source-snapshot-status` 任务中创建的合成探针（`docs/features/data-source-snapshot-status/evidence/DATA-SOURCE-SNAPSHOT-STATUS-IMPLEMENTATION-001-R1/db/002-insert-master.sql`），验收前有 5 条 `CDC_DATA_SOURCE_RUN_STATE` 关联（`results/runstate-c-dssr1.txt`）。
 - 动作：固定选中该行 → 打开删除菜单 → 取消；再次打开 → 确认删除。
-- 实际：取消框标题/正文/按钮正确，`deleteRequests=0`，行仍在，固定选中仍为该行；确认 `DELETE /api/clients/c-dssr1-0906-a` HTTP 200，随后 `GET ?status=ALL` 重载；`post.apiRow=null`、`apiCount=77→76`；SQL 回读 `CLIENT_ROW|0`、`RUNSTATE_ROWS|5` 且 5 行逐字段未变，其他探针 76、其他源 265；ZK 仍为 `[hosp-012]`。
+- 实际：取消框标题/正文/按钮正确，`deleteRequests=0`，行仍在，固定选中仍为该行；确认 `DELETE /api/clients/c-dssr1-0906-a` HTTP 200，随后 `GET ?status=ALL` 重载；`post.apiRow=null`、`apiCount=77→76`；SQL 回读 `CLIENT_ROW|0`、`RUNSTATE_ROWS|5` 且 5 行逐字段未变，其他探针 76、其他源 265；ZK 子节点名列表仍为 `[zk-client-01]`（匿名化；该观察在并发窗口前，非 CRUD 前快照）。
 - 证据键：`results/ac021-delete.json`（`cancel`、`confirm.deleteResponse`、`post`）、`results/ac021-postcheck.txt`、`results/zk-clients-before-after.txt`。
-- 覆盖：取消、确认、物理删除、关联零级联。删除成功后的固定选中清除属 `CCFG-AC-144` 的独立定义，本轮只观察取消保留选中。
+- 删除成功后固定选中清除：本轮未当场观察，引用前序真实证据 `../CLIENT-CONFIG-MULTI-AC-CRUD-AND-ABNORMAL-STATE-ACCEPTANCE-001/group-f-results.json` 的 `ac145.b5`（提交 `242cc5cf878216ef6e020effc539ee742c87a35c`；`selectionBefore=["MULTIAC-DEL2"]`，删除成功后 `rowPresent=false`、`selectionAfter=[]`）。
+- 覆盖：取消、确认、物理删除、关联零级联。删除成功后的固定选中清除属 `CCFG-AC-144` 的独立定义，本轮只观察取消保留选中；清除分支按上述前序证据引用，不声称是 003 当场观察。
 
 ## CCFG-AC-024 启用确认与仅 FG_ACTIVE→1 — PASS
 
@@ -45,7 +46,7 @@
 
 - 前置：`c-dssr1-0906-b` 为既有 Agent 合成探针，有 4 条运行态关联（同 `002-insert-master.sql`；`results/runstate-c-dssr1.txt`）。
 - 动作：编辑页解除 ID 锁定 → 改为 `S3AC-C038-RENAMED` → 选择源 → 保存。
-- 实际：`PUT /api/clients/c-dssr1-0906-b` 200；旧行不存在、新行存在且描述保留；运行态仍为旧 ID 下 4 行、新 ID 下 0 行，逐字段未变；ZK 仍 `[hosp-012]`；源行数不变。
+- 实际：`PUT /api/clients/c-dssr1-0906-b` 200；旧行不存在、新行存在且描述保留；运行态仍为旧 ID 下 4 行、新 ID 下 0 行，逐字段未变；ZK 子节点名列表仍为 `[zk-client-01]`（匿名化；并发窗口前观察，非 CRUD 前快照）；源行数不变。
 - 证据键：`results/ac038-rename.json`、`results/ac038-postcheck.txt`。
 - 覆盖：ID 修改成功、物理键迁移仅限本表、其他表/ZK 零级联。
 
@@ -53,22 +54,31 @@
 
 - 前置：`S3AC-S064-II`、`S3AC-S064-EE-T`、`S3AC-S064-IE-T` 三个争抢源均无持有者；两个编辑目标各自持不同且不冲突的源（`EE-A0`/`EE-B0`/`IE-A0`）。
 - 动作：两个独立 `http.request` socket 在同一个 `setImmediate` 门闩后同时放行：insert×insert、edit×edit、insert×edit 各一组。
-- 实际：三组均两笔 200；发送时刻差 1–5 ms，响应耗时 23–57 ms；终态每源各两行；列表对重复分配显示 `ASSIGNED_TO_MULTIPLE_CLIENTS` 及冲突探针列表；后端日志每个线程先 `selectFullScan` + `selectSafeAll` 再 DML；源码无 `LOCK TABLE`，无锁等待超时。
-- 证据键：`results/concurrency.json`（`scenarios.insertInsert/editEdit/insertEdit`、`duplicateDisplay`）、`results/pre-concurrency.json`、`results/concurrency-postcheck.txt`、`results/backend-log-concurrency-window.txt`、`results/static-checks.txt`。
+- 实际：三组均两笔 200；发送时刻差 1–5 ms，响应耗时 23–57 ms；终态每源各两行；**列表 API 返回**（`duplicateDisplay`）含 `ASSIGNED_TO_MULTIPLE_CLIENTS` 及冲突探针列表；后端日志每个线程先 `selectFullScan` + `selectSafeAll` 再 DML；源码无 `LOCK TABLE`，无锁等待超时。
+- 证据键：`results/concurrency.json`（`scenarios.insertInsert/editEdit/insertEdit`、`duplicateDisplay`）、`results/pre-concurrency.json`、`results/concurrency-postcheck.txt`（原执行 13:40 留存输出，R1 补入）、`results/backend-log-concurrency-window.txt`、`results/static-checks.txt`。
+- 口径：异常字段来自 API 列表响应；本轮未另行采集浏览器渲染截图，不把该返回扩大表述为已单独验证的页面渲染。
 - 覆盖：双成功允许路径、写前检查、无人工锁、重复分配展示。
 
-## CCFG-AC-075 不处理失败事件/句柄日志/ZK/统计/其他进程级联 — PASS（可验证范围）
+## CCFG-AC-075 不处理失败事件/句柄日志/ZK/统计/其他进程级联 — PASS
 
-- 动作：完成新增、编辑、删除、启用、停用五类真实操作后观察接口与对象。
-- 实际：`CDC_JOB_FAILURE_EVENT`、`CDC_JOB_FAILURE_HANDLE_LOG`、`CDC_DATA_SOURCE_SCN`、`CDC_EXECUTION_PLAN` 对 `S3AC%`、`c-dssr1-%`、`PROBE-001`、`RACE-001` 计数均为 0；`CDC_DATA_SOURCE_RUN_STATE` 仅保留既有 `c-dssr1` 29 行（删除/改名未级联）；ZK 两次均为 `[hosp-012]`；clientconfig 源码无失败事件/句柄日志/ZK/Kafka/统计表/进程调用路径。
-- 证据键：`results/association-postcheck.txt`、`results/final-checks.txt`、`results/zk-clients-before-after.txt`、`results/static-checks.txt`。
-- 边界：「其他进程」的运行侧不可直接观测；结论基于“源码无调用路径 + 可观察 DB/ZK 零变化”，不声称已模拟或调用运行侧。
+- 动作：完成新增、编辑、删除、启用、停用五类真实操作后观察接口与对象；R1 另做固定源码/运行 jar 字节码核对与当前只读补证。
+- 源码路径：Controller 7 个端点全部委托 Service；Service 仅调用 `CdcClientConfigMapper`（`selectByKeywordAndStatus`/`selectFullScan`/`insert`/`update`/`deleteById`）与 `CdcDataSourceMapper.selectSafeAll`，只触达 `CDC_CLIENT_MULTIPLE` 与 `CDC_DATA_SOURCE`；运行 jar 字节码无 ZK/Kafka/进程/统计表/失败事件/SCN/执行计划引用。
+- 003 运行证据：`association-postcheck.txt` 前缀谓词为 `S3AC%` 与 `c-dssr1-%`，**不覆盖** `probe-001`/`race-001`/`RACE-001`；该前缀范围内失败事件、句柄日志、SCN、执行计划均为 0，运行态 c-dssr1 前缀 29 行；ZK 两次 `ls` 均在主 CRUD 之后（并发窗口前后），非 CRUD 前快照，仅证明子节点名列表相同。
+- R1 精确 ID 补证（2026-11-05 14:22:25）：覆盖全部 S3AC 批次、`c-dssr1-0906-a/-b`、`S3AC-C038-RENAMED`、`probe-001`、`race-001`、`RACE-001` 共 33 个客户端 ID；失败事件/句柄日志/SCN/执行计划均 0；运行态 9 行（a=5、b=4），表总数 30。
+- 统计表：6 个统计对象均无 `CLIENT_ID`/`DATA_SOURCE_ID` 列，仅 `DIM_TYPE/DIM_VALUE`，无直接关联键；结果表与 WATERMARK 当前 0 行、TASK_CONFIG 1 行，未做对象级匹配或全库扫描；SCN/执行计划不替代统计表。
+- 证据键：`results/association-postcheck.txt`、`results/final-checks.txt`、`results/zk-clients-before-after.txt`、`results/static-checks.txt`；R1 evidence 目录（精确 ID、元数据、字节码引用）。
+- 未观测范围：「其他进程」（sync-client/sync-server 运行侧）未调用、未模拟、不可直接观测；无 CRUD 前 ZK 快照与连续内容观测。未发现直接反例，按定义判 PASS，不以“可验证范围内 PASS”替代整项判定。
 
 ## CCFG-AC-076 无物理外键/唯一索引/关联表/迁移/DDL，页面不声称实时生效 — PASS
 
-- 实际：验收前后 Oracle 元数据逐字节一致（两表列定义、约束名与类型不变；仅主键 P 与 NOT NULL C，无 FK，无新增唯一索引/关联表）；`backend/` 无 Flyway/Liquibase/migration 产物；clientconfig 源码无 DDL/LOCK 语句；页面成功反馈仅为「新增成功/编辑成功/删除成功/启用成功/停用成功」，无“已实时作用于 sync-client”类文案。
-- 证据键：`results/schema-metadata-final.txt`、`results/static-checks.txt`、`results/ac024-enable.json`、`results/ac021-delete.json`。
-- 覆盖：物理模型不变、无 DDL、页面文案边界。
+- 原证据勘误：`results/schema-metadata-final.txt` 的 `CHECK_CONDITIONS` 分节把 LONG 列拼接，实际为 `ORA-00932` 报错，且原查询未覆盖独立唯一索引；错误输出保留为历史事实。
+- 列/约束：两表 4 + 17 列；13:26 与 13:36 导出逐字节相同；仅 2 主键 + 10 个 NOT NULL 检查约束（`SEARCH_CONDITION_VC` 重取，均为 `"列" IS NOT NULL`）。
+- 索引：13:25（夹具/CRUD 前）与 14:22（当前）一致，共 6 个，含独立唯一索引 `PK_CDC_DATA_SOURCE`；`IDX_CDC_DATA_SOURCE_ID_ACTIVE` 为 NONUNIQUE 复合列并支撑 `PK_CDC_DATA_SOURCE` 约束；无新增唯一索引/约束。
+- 外键/触发器/关联表：前后均无外键（schema 级 0）、无触发器；相关表创建时间均为 2026-10-22 或 2026-11-04，两表 `LAST_DDL_TIME` 为 2026-10-22 16:53:22，未落在验收日。
+- 迁移/DDL：`backend/` 无 Flyway/Liquibase/migration 产物；clientconfig 源码无 DDL/LOCK。
+- 页面反馈：成功提示仅为「新增成功/编辑成功/删除成功/启用成功/停用成功」，无“已实时作用于 sync-client”类文案。
+- 证据键：`results/schema-metadata-final.txt`（含失败查询）、`results/static-checks.txt`、`results/ac024-enable.json`、`results/ac021-delete.json`；R1 补证见 R1 evidence 目录。
+- 覆盖：物理模型不变、无 DDL、页面文案边界；历史不变由真实前后导出与早于验收日的 DDL 时间支持，不仅凭当前快照。
 
 ## CCFG-AC-128 探针 ID 输入边界 — PASS
 
