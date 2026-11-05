@@ -1,0 +1,33 @@
+# 004 验收环境与版本快照
+
+采集时间：2026-11-05（本地时区）
+服务器：验收服务器（主机地址按任务脱敏要求不在仓库内记录；本文件不记录凭据）
+
+## 代码与 Git
+- 仓库：/agent/cdc-config-platform
+- 分支：develop
+- 开工/验收基线 commit：968c1e57534d1fc6392ea499a0860a901fded6ab
+- origin/develop：968c1e57534d1fc6392ea499a0860a901fded6ab（一致）
+- 工作区开工状态：M .claude/settings.local.json；?? docs/prompts/；?? runtime-logs/（均未暂存）
+
+## 运行产物
+- 后端：java -jar backend/target/cdc-config-platform-backend-1.0.0-SNAPSHOT.jar --spring.profiles.active=dev
+  - PID：3327；启动：2026-11-05 12:20:02
+  - 监听：*:8080；HTTP 探活 GET /api/clients?status=ALL → 200
+  - jar SHA256：efdbea827b6ab84dd47105d2cc130f0bc3c5b70dc78cc626b6421e1f9750a459
+- 前端：node frontend/node_modules/.bin/vite --host 0.0.0.0 --port 5173
+  - PID：3385；启动：2026-11-05 12:20:06
+  - 监听：0.0.0.0:5173；HTTP 探活 GET /config/client → 200
+  - 复用既有运行进程，未重启、未构建
+
+## 运行时与工具
+- Node：v24.17.0；npm：11.13.0
+- Java：1.8.0_202（JDK 8）
+- 浏览器：Google Chrome for Testing 147.0.7727.15（Playwright Chromium 构建 chromium-1217，headless）
+- 自动化：playwright-core（/root/.hermes/hermes-agent/node_modules/playwright-core）
+- 视口：1440×900、1920×1080（另 1024×900 窄视口）；DPR=1；页面缩放 100%（真实缩放分支复用 E5-R1 的 100→125→100 记录）
+
+## 测量口径
+- 行高：tr.getBoundingClientRect().height 未取整值。
+- 参考页数据：仅引用仓库已入仓、同浏览器/同 DPR/同缩放/同视口的可追溯历史证据（见 reference-evidence-index.md）。
+- 本任务未打开“数据源管理”或其他功能页面；未修改产品源码/配置。

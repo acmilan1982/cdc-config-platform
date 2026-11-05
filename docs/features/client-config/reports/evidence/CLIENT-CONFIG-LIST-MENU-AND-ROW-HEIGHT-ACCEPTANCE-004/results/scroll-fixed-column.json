@@ -1,0 +1,602 @@
+{
+  "mode": "readonly-scroll-dialog",
+  "gate": {
+    "nonGetAttempts": 0,
+    "attempts": []
+  },
+  "errors": [],
+  "flows": {
+    "baseline": {
+      "contentArea": {
+        "scrollTop": 0,
+        "scrollLeft": 0,
+        "clientH": 852,
+        "scrollH": 4759,
+        "clientW": 1220,
+        "scrollW": 1220
+      },
+      "wrap": {
+        "scrollTop": 0,
+        "scrollLeft": 0,
+        "clientH": 4388,
+        "scrollH": 4388,
+        "clientW": 1076,
+        "scrollW": 1076,
+        "rect": {
+          "l": 292,
+          "r": 1368,
+          "t": 354.5,
+          "b": 4742.5,
+          "w": 1076,
+          "h": 4388
+        }
+      },
+      "headWrap": {
+        "l": 292,
+        "r": 1368,
+        "t": 308.5,
+        "b": 354.5,
+        "w": 1076,
+        "h": 46
+      },
+      "bodyWrap": {
+        "l": 292,
+        "r": 1368,
+        "t": 354.5,
+        "b": 4742.5,
+        "w": 1076,
+        "h": 4388
+      },
+      "lastTh": {
+        "l": 1258,
+        "r": 1368,
+        "t": 308.5,
+        "b": 354.5,
+        "w": 110,
+        "h": 46
+      },
+      "lastTd": {
+        "l": 1258,
+        "r": 1368,
+        "t": 354.5,
+        "b": 402.5,
+        "w": 110,
+        "h": 48
+      },
+      "firstTd": {
+        "l": 292,
+        "r": 362,
+        "t": 354.5,
+        "b": 402.5,
+        "w": 70,
+        "h": 48
+      },
+      "opTd": {
+        "l": 1258,
+        "r": 1368,
+        "t": 354.5,
+        "b": 402.5,
+        "w": 110,
+        "h": 48
+      },
+      "thCount": 6,
+      "headerCells": [
+        {
+          "text": "序号",
+          "left": 292,
+          "right": 362
+        },
+        {
+          "text": "探针 ID",
+          "left": 362,
+          "right": 538
+        },
+        {
+          "text": "探针描述",
+          "left": 538,
+          "right": 838
+        },
+        {
+          "text": "采集数据源",
+          "left": 838,
+          "right": 1148
+        },
+        {
+          "text": "数据源数量",
+          "left": 1148,
+          "right": 1258
+        },
+        {
+          "text": "操作",
+          "left": 1258,
+          "right": 1368
+        }
+      ],
+      "rowCount": 91,
+      "rowTop": 354.5,
+      "vh": 900,
+      "vw": 1440,
+      "docScroll": {
+        "html": 0,
+        "body": 0,
+        "h": 900
+      }
+    },
+    "vscroll1500": {
+      "contentArea": {
+        "scrollTop": 1500,
+        "scrollLeft": 0,
+        "clientH": 852,
+        "scrollH": 4759,
+        "clientW": 1220,
+        "scrollW": 1220
+      },
+      "wrap": {
+        "scrollTop": 0,
+        "scrollLeft": 0,
+        "clientH": 4388,
+        "scrollH": 4388,
+        "clientW": 1076,
+        "scrollW": 1076,
+        "rect": {
+          "l": 292,
+          "r": 1368,
+          "t": -1145.5,
+          "b": 3242.5,
+          "w": 1076,
+          "h": 4388
+        }
+      },
+      "headWrap": {
+        "l": 292,
+        "r": 1368,
+        "t": -1191.5,
+        "b": -1145.5,
+        "w": 1076,
+        "h": 46
+      },
+      "bodyWrap": {
+        "l": 292,
+        "r": 1368,
+        "t": -1145.5,
+        "b": 3242.5,
+        "w": 1076,
+        "h": 4388
+      },
+      "lastTh": {
+        "l": 1258,
+        "r": 1368,
+        "t": -1191.5,
+        "b": -1145.5,
+        "w": 110,
+        "h": 46
+      },
+      "lastTd": {
+        "l": 1258,
+        "r": 1368,
+        "t": -1145.5,
+        "b": -1097.5,
+        "w": 110,
+        "h": 48
+      },
+      "firstTd": {
+        "l": 292,
+        "r": 362,
+        "t": -1145.5,
+        "b": -1097.5,
+        "w": 70,
+        "h": 48
+      },
+      "opTd": {
+        "l": 1258,
+        "r": 1368,
+        "t": -1145.5,
+        "b": -1097.5,
+        "w": 110,
+        "h": 48
+      },
+      "thCount": 6,
+      "headerCells": [
+        {
+          "text": "序号",
+          "left": 292,
+          "right": 362
+        },
+        {
+          "text": "探针 ID",
+          "left": 362,
+          "right": 538
+        },
+        {
+          "text": "探针描述",
+          "left": 538,
+          "right": 838
+        },
+        {
+          "text": "采集数据源",
+          "left": 838,
+          "right": 1148
+        },
+        {
+          "text": "数据源数量",
+          "left": 1148,
+          "right": 1258
+        },
+        {
+          "text": "操作",
+          "left": 1258,
+          "right": 1368
+        }
+      ],
+      "rowCount": 91,
+      "rowTop": -1145.5,
+      "vh": 900,
+      "vw": 1440,
+      "docScroll": {
+        "html": 0,
+        "body": 0,
+        "h": 900
+      }
+    },
+    "narrow1024": {
+      "contentArea": {
+        "scrollTop": 0,
+        "scrollLeft": 0,
+        "clientH": 852,
+        "scrollH": 4799,
+        "clientW": 804,
+        "scrollW": 804
+      },
+      "wrap": {
+        "scrollTop": 0,
+        "scrollLeft": 0,
+        "clientH": 4388,
+        "scrollH": 4388,
+        "clientW": 660,
+        "scrollW": 1026,
+        "rect": {
+          "l": 292,
+          "r": 952,
+          "t": 394.5,
+          "b": 4782.5,
+          "w": 660,
+          "h": 4388
+        }
+      },
+      "headWrap": {
+        "l": 292,
+        "r": 952,
+        "t": 348.5,
+        "b": 394.5,
+        "w": 660,
+        "h": 46
+      },
+      "bodyWrap": {
+        "l": 292,
+        "r": 952,
+        "t": 394.5,
+        "b": 4782.5,
+        "w": 660,
+        "h": 4388
+      },
+      "lastTh": {
+        "l": 842,
+        "r": 952,
+        "t": 348.5,
+        "b": 394.5,
+        "w": 110,
+        "h": 46
+      },
+      "lastTd": {
+        "l": 842,
+        "r": 952,
+        "t": 394.5,
+        "b": 442.5,
+        "w": 110,
+        "h": 48
+      },
+      "firstTd": {
+        "l": 292,
+        "r": 362,
+        "t": 394.5,
+        "b": 442.5,
+        "w": 70,
+        "h": 48
+      },
+      "opTd": {
+        "l": 842,
+        "r": 952,
+        "t": 394.5,
+        "b": 442.5,
+        "w": 110,
+        "h": 48
+      },
+      "thCount": 6,
+      "headerCells": [
+        {
+          "text": "序号",
+          "left": 292,
+          "right": 362
+        },
+        {
+          "text": "探针 ID",
+          "left": 362,
+          "right": 538
+        },
+        {
+          "text": "探针描述",
+          "left": 538,
+          "right": 838
+        },
+        {
+          "text": "采集数据源",
+          "left": 838,
+          "right": 1098
+        },
+        {
+          "text": "数据源数量",
+          "left": 1098,
+          "right": 1208
+        },
+        {
+          "text": "操作",
+          "left": 842,
+          "right": 952
+        }
+      ],
+      "rowCount": 91,
+      "rowTop": 394.5,
+      "vh": 900,
+      "vw": 1024,
+      "docScroll": {
+        "html": 0,
+        "body": 0,
+        "h": 900
+      },
+      "hscroll": {
+        "before": 0,
+        "after": 366,
+        "clientW": 660,
+        "scrollW": 1026
+      },
+      "hscrollState": {
+        "contentArea": {
+          "scrollTop": 0,
+          "scrollLeft": 0,
+          "clientH": 852,
+          "scrollH": 4799,
+          "clientW": 804,
+          "scrollW": 804
+        },
+        "wrap": {
+          "scrollTop": 0,
+          "scrollLeft": 366,
+          "clientH": 4388,
+          "scrollH": 4388,
+          "clientW": 660,
+          "scrollW": 1026,
+          "rect": {
+            "l": 292,
+            "r": 952,
+            "t": 394.5,
+            "b": 4782.5,
+            "w": 660,
+            "h": 4388
+          }
+        },
+        "headWrap": {
+          "l": 292,
+          "r": 952,
+          "t": 348.5,
+          "b": 394.5,
+          "w": 660,
+          "h": 46
+        },
+        "bodyWrap": {
+          "l": 292,
+          "r": 952,
+          "t": 394.5,
+          "b": 4782.5,
+          "w": 660,
+          "h": 4388
+        },
+        "lastTh": {
+          "l": 842,
+          "r": 952,
+          "t": 348.5,
+          "b": 394.5,
+          "w": 110,
+          "h": 46
+        },
+        "lastTd": {
+          "l": 842,
+          "r": 952,
+          "t": 394.5,
+          "b": 442.5,
+          "w": 110,
+          "h": 48
+        },
+        "firstTd": {
+          "l": -74,
+          "r": -4,
+          "t": 394.5,
+          "b": 442.5,
+          "w": 70,
+          "h": 48
+        },
+        "opTd": {
+          "l": 842,
+          "r": 952,
+          "t": 394.5,
+          "b": 442.5,
+          "w": 110,
+          "h": 48
+        },
+        "thCount": 6,
+        "headerCells": [
+          {
+            "text": "序号",
+            "left": -74,
+            "right": -4
+          },
+          {
+            "text": "探针 ID",
+            "left": -4,
+            "right": 172
+          },
+          {
+            "text": "探针描述",
+            "left": 172,
+            "right": 472
+          },
+          {
+            "text": "采集数据源",
+            "left": 472,
+            "right": 732
+          },
+          {
+            "text": "数据源数量",
+            "left": 732,
+            "right": 842
+          },
+          {
+            "text": "操作",
+            "left": 842,
+            "right": 952
+          }
+        ],
+        "rowCount": 91,
+        "rowTop": 394.5,
+        "vh": 900,
+        "vw": 1024,
+        "docScroll": {
+          "html": 0,
+          "body": 0,
+          "h": 900
+        }
+      }
+    },
+    "dialog": {
+      "open": true,
+      "tableCount": 0,
+      "rowHeights": [],
+      "mainTableInside": false
+    },
+    "mainAfterDialog": {
+      "contentArea": {
+        "scrollTop": 0,
+        "scrollLeft": 0,
+        "clientH": 852,
+        "scrollH": 4759,
+        "clientW": 1220,
+        "scrollW": 1220
+      },
+      "wrap": {
+        "scrollTop": 0,
+        "scrollLeft": 0,
+        "clientH": 4388,
+        "scrollH": 4388,
+        "clientW": 1076,
+        "scrollW": 1076,
+        "rect": {
+          "l": 292,
+          "r": 1368,
+          "t": 354.5,
+          "b": 4742.5,
+          "w": 1076,
+          "h": 4388
+        }
+      },
+      "headWrap": {
+        "l": 292,
+        "r": 1368,
+        "t": 308.5,
+        "b": 354.5,
+        "w": 1076,
+        "h": 46
+      },
+      "bodyWrap": {
+        "l": 292,
+        "r": 1368,
+        "t": 354.5,
+        "b": 4742.5,
+        "w": 1076,
+        "h": 4388
+      },
+      "lastTh": {
+        "l": 1258,
+        "r": 1368,
+        "t": 308.5,
+        "b": 354.5,
+        "w": 110,
+        "h": 46
+      },
+      "lastTd": {
+        "l": 1258,
+        "r": 1368,
+        "t": 354.5,
+        "b": 402.5,
+        "w": 110,
+        "h": 48
+      },
+      "firstTd": {
+        "l": 292,
+        "r": 362,
+        "t": 354.5,
+        "b": 402.5,
+        "w": 70,
+        "h": 48
+      },
+      "opTd": {
+        "l": 1258,
+        "r": 1368,
+        "t": 354.5,
+        "b": 402.5,
+        "w": 110,
+        "h": 48
+      },
+      "thCount": 6,
+      "headerCells": [
+        {
+          "text": "序号",
+          "left": 292,
+          "right": 362
+        },
+        {
+          "text": "探针 ID",
+          "left": 362,
+          "right": 538
+        },
+        {
+          "text": "探针描述",
+          "left": 538,
+          "right": 838
+        },
+        {
+          "text": "采集数据源",
+          "left": 838,
+          "right": 1148
+        },
+        {
+          "text": "数据源数量",
+          "left": 1148,
+          "right": 1258
+        },
+        {
+          "text": "操作",
+          "left": 1258,
+          "right": 1368
+        }
+      ],
+      "rowCount": 91,
+      "rowTop": 354.5,
+      "vh": 900,
+      "vw": 1440,
+      "docScroll": {
+        "html": 0,
+        "body": 0,
+        "h": 900
+      }
+    }
+  }
+}

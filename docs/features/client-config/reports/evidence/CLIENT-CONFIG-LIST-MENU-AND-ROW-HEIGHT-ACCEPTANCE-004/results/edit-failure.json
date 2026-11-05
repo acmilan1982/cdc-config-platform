@@ -1,0 +1,40 @@
+{
+  "task": "004",
+  "mode": "write-gated-live-edit-failure",
+  "gate": {
+    "nonGetAttempts": 1,
+    "blocked": [],
+    "injected": [
+      {
+        "m": "PUT",
+        "path": "/api/clients/CCFG004-NEW1"
+      }
+    ]
+  },
+  "flows": {
+    "editFailure": {
+      "beforeBtn": {
+        "cls": "el-button el-button--primary cc-dialog-submit ced-submit",
+        "disabled": false,
+        "text": "保存"
+      },
+      "pendingBtn": {
+        "cls": "el-button el-button--primary is-disabled is-loading cc-dialog-submit ced-submit",
+        "disabled": true,
+        "text": "保存"
+      },
+      "requestFailed": true,
+      "dialogOpen": true,
+      "messages": [
+        "Network Error",
+        "编辑失败，请检查网络后重试。"
+      ],
+      "fieldErrors": [],
+      "rowAfter": {
+        "present": true,
+        "desc": "CCFG004 synthetic edit-success sample through the real UI (updated). Not a real runtime probe."
+      }
+    }
+  },
+  "errors": []
+}

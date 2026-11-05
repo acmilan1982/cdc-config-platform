@@ -1,0 +1,300 @@
+{
+  "task": "CLIENT-CONFIG-LIST-MENU-AND-ROW-HEIGHT-ACCEPTANCE-004",
+  "mode": "write-gated-live",
+  "gate": {
+    "nonGetAttempts": 11,
+    "blocked": [],
+    "forwarded": [
+      {
+        "method": "POST",
+        "path": "/api/clients",
+        "clientId": "CCFG004-ON"
+      },
+      {
+        "method": "POST",
+        "path": "/api/clients",
+        "clientId": "CCFG004-VICTIM"
+      },
+      {
+        "method": "POST",
+        "path": "/api/clients",
+        "clientId": "CCFG004-NEW1"
+      },
+      {
+        "method": "PUT",
+        "path": "/api/clients/CCFG004-NEW1",
+        "clientId": "CCFG004-NEW1"
+      },
+      {
+        "method": "PUT",
+        "path": "/api/clients/CCFG004-ON/disable",
+        "clientId": "CCFG004-ON"
+      },
+      {
+        "method": "PUT",
+        "path": "/api/clients/CCFG004-OFF/enable",
+        "clientId": "CCFG004-OFF"
+      },
+      {
+        "method": "DELETE",
+        "path": "/api/clients/CCFG004-DEL",
+        "clientId": "CCFG004-DEL"
+      },
+      {
+        "method": "PUT",
+        "path": "/api/clients/CCFG004-ABN/disable",
+        "clientId": "CCFG004-ABN"
+      },
+      {
+        "method": "PUT",
+        "path": "/api/clients/CCFG004-NEW1/disable",
+        "clientId": "CCFG004-NEW1"
+      }
+    ],
+    "injected": [
+      {
+        "method": "DELETE",
+        "path": "/api/clients/CCFG004-DEL2",
+        "clientId": "CCFG004-DEL2"
+      },
+      {
+        "method": "PUT",
+        "path": "/api/clients/CCFG004-OFF2/enable",
+        "clientId": "CCFG004-OFF2"
+      }
+    ]
+  },
+  "counts": {
+    "forwarded:POST /api/clients": 3,
+    "forwarded:PUT /api/clients/CCFG004-NEW1": 1,
+    "forwarded:PUT /api/clients/CCFG004-ON/disable": 1,
+    "forwarded:PUT /api/clients/CCFG004-OFF/enable": 1,
+    "forwarded:DELETE /api/clients/CCFG004-DEL": 1,
+    "injected:DELETE /api/clients/CCFG004-DEL2": 1,
+    "injected:PUT /api/clients/CCFG004-OFF2/enable": 1,
+    "forwarded:PUT /api/clients/CCFG004-ABN/disable": 1,
+    "forwarded:PUT /api/clients/CCFG004-NEW1/disable": 1
+  },
+  "direct": [
+    {
+      "method": "POST",
+      "path": "/api/clients",
+      "clientId": "CCFG004-HOLDER",
+      "dataSourceIds": [
+        "CCFG004-DS-A"
+      ],
+      "http": 200,
+      "code": 200
+    }
+  ],
+  "errors": [],
+  "flows": {
+    "baseline": {
+      "rows": 90,
+      "fixed": []
+    },
+    "ac072_40940": {
+      "http": 200,
+      "code": 40940,
+      "message": "探针 ID 已存在冲突（不区分大小写），请更换探针 ID。",
+      "dialogStillOpen": true,
+      "fieldErrors": [
+        "探针 ID 已存在冲突（不区分大小写），请更换探针 ID。"
+      ],
+      "backendRowCount": 90,
+      "baselineRowCount": 90
+    },
+    "ac072_40941": {
+      "http": 200,
+      "code": 40941,
+      "message": "数据源“CCFG004 Synthetic Org A（CCFG004-DS-A）”已分配给探针：CCFG004-HOLDER，不能重复分配。",
+      "containsOrg": true,
+      "containsSourceId": true,
+      "containsHolderId": true,
+      "fieldErrors": [
+        "数据源“CCFG004 Synthetic Org A（CCFG004-DS-A）”已分配给探针：CCFG004-HOLDER，不能重复分配。"
+      ],
+      "toast": [],
+      "victimCreated": false
+    },
+    "ac071_create": {
+      "pendingButton": {
+        "disabled": true,
+        "cls": "el-button el-button--primary is-disabled is-loading cc-dialog-submit ced-submit",
+        "text": "创建",
+        "spinnerCount": 1
+      },
+      "duplicateSubmitDispatched": true,
+      "writeCountForNew1": 1,
+      "http": 200,
+      "code": 200,
+      "toast": [
+        "新增成功"
+      ],
+      "dialogClosed": true,
+      "row": {
+        "present": true,
+        "fgActive": "1",
+        "sources": [
+          "CCFG004-DS-B"
+        ]
+      }
+    },
+    "ac071_edit": {
+      "pendingButton": {
+        "disabled": true,
+        "cls": "el-button el-button--primary is-disabled is-loading cc-dialog-submit ced-submit",
+        "text": "保存",
+        "spinnerCount": 1
+      },
+      "writeCount": 1,
+      "http": 200,
+      "code": 200,
+      "toast": [
+        "编辑成功"
+      ],
+      "descPersisted": true
+    },
+    "ac084_disable_cancel": {
+      "menuItems": [
+        "停用",
+        "删除"
+      ],
+      "confirm": {
+        "title": "停用探针",
+        "body": "确定停用探针 CCFG004-ON 吗？",
+        "buttons": [
+          "取消",
+          "停用"
+        ]
+      },
+      "writesDelta": 0,
+      "fgAfter": "1",
+      "selectionAfter": [
+        "CCFG004-ON"
+      ]
+    },
+    "ac071_disable": {
+      "http": 200,
+      "code": 200,
+      "writeCount": 1,
+      "toast": [],
+      "fgAfter": "0",
+      "inactiveMark": "停用",
+      "selectionBefore": [
+        "CCFG004-ON"
+      ],
+      "selectionAfter": [
+        "CCFG004-ON"
+      ],
+      "dialogOpenedByMenu": false
+    },
+    "ac071_enable": {
+      "menuItems": [
+        "启用",
+        "删除"
+      ],
+      "confirm": {
+        "title": "启用探针",
+        "body": "确定启用探针 CCFG004-OFF 吗？",
+        "buttons": [
+          "取消",
+          "启用"
+        ]
+      },
+      "http": 200,
+      "code": 200,
+      "writeCount": 1,
+      "toast": [],
+      "fgAfter": "1",
+      "inactiveMarkCount": 0,
+      "selectionAfter": [
+        "CCFG004-OFF"
+      ]
+    },
+    "ac071_delete_cancel": {
+      "confirm": {
+        "title": "删除探针",
+        "body": "确定删除探针 CCFG004-DEL 吗？该操作不可恢复。",
+        "buttons": [
+          "取消",
+          "删除"
+        ]
+      },
+      "writesDelta": 0,
+      "rowPresent": true,
+      "selectionAfter": [
+        "CCFG004-DEL"
+      ]
+    },
+    "ac071_delete": {
+      "http": 200,
+      "code": 200,
+      "writeCount": 1,
+      "toast": [
+        "删除成功"
+      ],
+      "rowPresent": false,
+      "selectionAfter": []
+    },
+    "ac083": {
+      "menuItems": [
+        "停用",
+        "删除"
+      ],
+      "hasEnable": false,
+      "confirm": {
+        "title": "停用探针",
+        "body": "确定停用探针 CCFG004-ABN 吗？",
+        "buttons": [
+          "取消",
+          "停用"
+        ]
+      },
+      "disableHttp": 200,
+      "disableCode": 200,
+      "fgAfter": "0",
+      "inactiveMark": "停用",
+      "toast": [
+        "停用成功"
+      ]
+    },
+    "ac153_filteredOut": {
+      "filteredVisibleBefore": true,
+      "selectionBefore": [
+        "CCFG004-NEW1"
+      ],
+      "disableHttp": 200,
+      "disableCode": 200,
+      "new1VisibleAfter": false,
+      "selectionAfter": [],
+      "toast": [
+        "停用成功"
+      ]
+    },
+    "ac103_isolation": {
+      "dialogAfterSingleTrigger": false,
+      "dialogAfterDblTrigger": false,
+      "selectionBefore": [],
+      "selectionAfter": []
+    },
+    "ac084_delete_failure": {
+      "injected": true,
+      "toast": [],
+      "rowPresent": true,
+      "fgAfter": "1",
+      "selectionAfter": [
+        "CCFG004-DEL2"
+      ]
+    },
+    "ac084_enable_failure": {
+      "injected": true,
+      "toast": [],
+      "fgAfter": "0",
+      "selectionAfter": [
+        "CCFG004-OFF2"
+      ]
+    }
+  },
+  "note": "Busy-menu readings from this probe were timing-invalid; see write-timing-busy-toast.json (probeF) for valid busy-state evidence."
+}

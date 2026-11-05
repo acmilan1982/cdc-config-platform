@@ -1,0 +1,196 @@
+{
+  "mode": "readonly-live-c",
+  "gate": {
+    "nonGetAttempts": 0,
+    "attempts": []
+  },
+  "gateFinal": {
+    "nonGetAttempts": 0,
+    "attempts": []
+  },
+  "errors": [],
+  "initial": {
+    "label": "initial",
+    "maskVisible": false,
+    "queryBtnClass": "el-button el-button--primary ql-actions__query",
+    "queryBtnDisabled": false,
+    "spinnerVisible": true,
+    "errorVisible": false,
+    "errorText": null,
+    "retryVisible": false,
+    "rowCount": 89,
+    "fixedCount": 0,
+    "fixedIds": [],
+    "headerTop": 308.5,
+    "bodyTop": 354.5,
+    "windowScrollY": 0,
+    "docScrollTop": 0,
+    "innerHeight": 900
+  },
+  "beforeDelay": {
+    "label": "before-delay",
+    "maskVisible": false,
+    "queryBtnClass": "el-button el-button--primary ql-actions__query",
+    "queryBtnDisabled": false,
+    "spinnerVisible": true,
+    "errorVisible": false,
+    "errorText": null,
+    "retryVisible": false,
+    "rowCount": 89,
+    "fixedCount": 1,
+    "fixedIds": [
+      "CCFG004-ON"
+    ],
+    "headerTop": 308.5,
+    "bodyTop": 354.5,
+    "windowScrollY": 0,
+    "docScrollTop": 0,
+    "innerHeight": 900
+  },
+  "delay": {
+    "listReq": 2,
+    "rowCount": 89,
+    "samples": [
+      {
+        "label": "delay+120ms",
+        "maskVisible": true,
+        "spinnerVisible": true,
+        "errorVisible": false,
+        "retryVisible": false,
+        "rowCount": 89,
+        "fixedCount": 0,
+        "headerTop": 308.5,
+        "bodyTop": 354.5
+      },
+      {
+        "label": "delay+620ms",
+        "maskVisible": true,
+        "spinnerVisible": true,
+        "errorVisible": false,
+        "retryVisible": false,
+        "rowCount": 89,
+        "fixedCount": 0,
+        "headerTop": 308.5,
+        "bodyTop": 354.5
+      },
+      {
+        "label": "delay+1070ms",
+        "maskVisible": true,
+        "spinnerVisible": true,
+        "errorVisible": false,
+        "retryVisible": false,
+        "rowCount": 89,
+        "fixedCount": 0,
+        "headerTop": 308.5,
+        "bodyTop": 354.5
+      },
+      {
+        "label": "delay-done",
+        "maskVisible": false,
+        "spinnerVisible": true,
+        "errorVisible": false,
+        "retryVisible": false,
+        "rowCount": 89,
+        "fixedCount": 0,
+        "headerTop": 308.5,
+        "bodyTop": 354.5
+      }
+    ]
+  },
+  "beforeFailure": {
+    "label": "before-failure",
+    "maskVisible": false,
+    "queryBtnClass": "el-button el-button--primary ql-actions__query",
+    "queryBtnDisabled": false,
+    "spinnerVisible": true,
+    "errorVisible": false,
+    "errorText": null,
+    "retryVisible": false,
+    "rowCount": 89,
+    "fixedCount": 1,
+    "fixedIds": [
+      "CCFG004-ON"
+    ],
+    "headerTop": 308.5,
+    "bodyTop": 354.5,
+    "windowScrollY": 0,
+    "docScrollTop": 0,
+    "innerHeight": 900
+  },
+  "failure": {
+    "label": "after-failure",
+    "maskVisible": false,
+    "queryBtnClass": "el-button el-button--primary ql-actions__query",
+    "queryBtnDisabled": false,
+    "spinnerVisible": true,
+    "errorVisible": true,
+    "errorText": "列表加载失败，请重试。 重试",
+    "retryVisible": true,
+    "rowCount": 89,
+    "fixedCount": 0,
+    "fixedIds": [],
+    "headerTop": 310.5,
+    "bodyTop": 356.5,
+    "windowScrollY": 0,
+    "docScrollTop": 0,
+    "innerHeight": 900,
+    "listReqDelta": 1,
+    "rowsRetained": 89
+  },
+  "retryPending": {
+    "label": "retry+120ms",
+    "maskVisible": true,
+    "queryBtnClass": "el-button el-button--primary ql-actions__query",
+    "queryBtnDisabled": false,
+    "spinnerVisible": true,
+    "errorVisible": false,
+    "errorText": null,
+    "retryVisible": false,
+    "rowCount": 89,
+    "fixedCount": 0,
+    "fixedIds": [],
+    "headerTop": 308.5,
+    "bodyTop": 354.5,
+    "windowScrollY": 0,
+    "docScrollTop": 0,
+    "innerHeight": 900
+  },
+  "retryDone": {
+    "label": "retry-done",
+    "maskVisible": false,
+    "queryBtnClass": "el-button el-button--primary ql-actions__query",
+    "queryBtnDisabled": false,
+    "spinnerVisible": true,
+    "errorVisible": false,
+    "errorText": null,
+    "retryVisible": false,
+    "rowCount": 89,
+    "fixedCount": 0,
+    "fixedIds": [],
+    "headerTop": 308.5,
+    "bodyTop": 354.5,
+    "windowScrollY": 0,
+    "docScrollTop": 0,
+    "innerHeight": 900,
+    "listReqDelta": 1
+  },
+  "finalListReq": 4,
+  "getLog": [
+    {
+      "n": 1,
+      "path": "/api/clients?status=ALL"
+    },
+    {
+      "n": 2,
+      "path": "/api/clients?status=ALL"
+    },
+    {
+      "n": 3,
+      "path": "/api/clients?status=ALL"
+    },
+    {
+      "n": 4,
+      "path": "/api/clients?status=ALL"
+    }
+  ]
+}

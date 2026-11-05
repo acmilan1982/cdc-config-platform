@@ -1,0 +1,136 @@
+{
+  "mode": "toast-timing-with-2000ms-controlled-delay",
+  "gate": {
+    "write": 2
+  },
+  "events": [
+    {
+      "t": 11239,
+      "ev": "request-start",
+      "path": "/api/clients/CCFG004-HOLDER/disable"
+    },
+    {
+      "t": 11242,
+      "ev": "confirm-clicked"
+    },
+    {
+      "t": 13239,
+      "ev": "forwarding"
+    },
+    {
+      "t": 13274,
+      "ev": "response",
+      "path": "/api/clients/CCFG004-HOLDER/disable",
+      "status": 200
+    },
+    {
+      "t": 19016,
+      "ev": "request-start",
+      "path": "/api/clients/CCFG004-HOLDER/enable"
+    },
+    {
+      "t": 19070,
+      "ev": "response",
+      "path": "/api/clients/CCFG004-HOLDER/enable",
+      "status": 200
+    }
+  ],
+  "toast": {
+    "text": "停用成功",
+    "responseAtMs": 13274,
+    "firstVisibleAtMs": 14065,
+    "lastFullyVisibleAtMs": 16200,
+    "offsetAfterResponseMs": 791,
+    "sampleCount": 30,
+    "intervals": [
+      {
+        "t": 14065,
+        "display": "flex",
+        "opacity": "1",
+        "height": 38
+      },
+      {
+        "t": 14278,
+        "display": "flex",
+        "opacity": "1",
+        "height": 38
+      },
+      {
+        "t": 14537,
+        "display": "flex",
+        "opacity": "1",
+        "height": 38
+      },
+      {
+        "t": 14746,
+        "display": "flex",
+        "opacity": "1",
+        "height": 38
+      },
+      {
+        "t": 14955,
+        "display": "flex",
+        "opacity": "1",
+        "height": 38
+      },
+      {
+        "t": 15162,
+        "display": "flex",
+        "opacity": "1",
+        "height": 38
+      },
+      {
+        "t": 15370,
+        "display": "flex",
+        "opacity": "1",
+        "height": 38
+      },
+      {
+        "t": 15577,
+        "display": "flex",
+        "opacity": "1",
+        "height": 38
+      },
+      {
+        "t": 15784,
+        "display": "flex",
+        "opacity": "1",
+        "height": 38
+      },
+      {
+        "t": 15991,
+        "display": "flex",
+        "opacity": "1",
+        "height": 38
+      },
+      {
+        "t": 16200,
+        "display": "flex",
+        "opacity": "1",
+        "height": 38
+      },
+      {
+        "t": 16408,
+        "display": "flex",
+        "opacity": "0.25894",
+        "height": 38
+      },
+      {
+        "t": 16614,
+        "display": "flex",
+        "opacity": "0",
+        "height": 38
+      }
+    ]
+  },
+  "rowState": {
+    "present": true,
+    "mark": "停用",
+    "hl": true
+  },
+  "restore": {
+    "present": true,
+    "mark": ""
+  },
+  "errors": []
+}

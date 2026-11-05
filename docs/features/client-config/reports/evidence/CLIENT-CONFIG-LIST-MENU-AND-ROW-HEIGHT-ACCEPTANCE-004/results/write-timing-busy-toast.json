@@ -1,0 +1,431 @@
+{
+  "task": "CLIENT-CONFIG-LIST-MENU-AND-ROW-HEIGHT-ACCEPTANCE-004",
+  "mode": "write-gated-live-timing",
+  "counts": {
+    "forwarded:PUT /api/clients/CCFG004-HOLDER/disable": 1,
+    "forwarded:PUT /api/clients/CCFG004-HOLDER/enable": 1,
+    "injected:PUT /api/clients/CCFG004-OFF/disable": 1,
+    "injected:DELETE /api/clients/CCFG004-DEL2": 1,
+    "injected:PUT /api/clients/CCFG004-OFF2/enable": 1
+  },
+  "gate": {
+    "nonGetAttempts": 5,
+    "blocked": [],
+    "forwarded": [
+      {
+        "method": "PUT",
+        "path": "/api/clients/CCFG004-HOLDER/disable",
+        "clientId": "CCFG004-HOLDER"
+      },
+      {
+        "method": "PUT",
+        "path": "/api/clients/CCFG004-HOLDER/enable",
+        "clientId": "CCFG004-HOLDER"
+      }
+    ],
+    "injected": [
+      {
+        "method": "PUT",
+        "path": "/api/clients/CCFG004-OFF/disable",
+        "clientId": "CCFG004-OFF"
+      },
+      {
+        "method": "DELETE",
+        "path": "/api/clients/CCFG004-DEL2",
+        "clientId": "CCFG004-DEL2"
+      },
+      {
+        "method": "PUT",
+        "path": "/api/clients/CCFG004-OFF2/enable",
+        "clientId": "CCFG004-OFF2"
+      }
+    ]
+  },
+  "final": {
+    "rows": 91,
+    "fixed": [
+      "CCFG004-OFF2"
+    ],
+    "counts": {
+      "forwarded:PUT /api/clients/CCFG004-HOLDER/disable": 1,
+      "forwarded:PUT /api/clients/CCFG004-HOLDER/enable": 1,
+      "injected:PUT /api/clients/CCFG004-OFF/disable": 1,
+      "injected:DELETE /api/clients/CCFG004-DEL2": 1,
+      "injected:PUT /api/clients/CCFG004-OFF2/enable": 1
+    },
+    "gate": {
+      "nonGetAttempts": 5,
+      "blocked": [],
+      "forwarded": [
+        {
+          "method": "PUT",
+          "path": "/api/clients/CCFG004-HOLDER/disable",
+          "clientId": "CCFG004-HOLDER"
+        },
+        {
+          "method": "PUT",
+          "path": "/api/clients/CCFG004-HOLDER/enable",
+          "clientId": "CCFG004-HOLDER"
+        }
+      ],
+      "injected": [
+        {
+          "method": "PUT",
+          "path": "/api/clients/CCFG004-OFF/disable",
+          "clientId": "CCFG004-OFF"
+        },
+        {
+          "method": "DELETE",
+          "path": "/api/clients/CCFG004-DEL2",
+          "clientId": "CCFG004-DEL2"
+        },
+        {
+          "method": "PUT",
+          "path": "/api/clients/CCFG004-OFF2/enable",
+          "clientId": "CCFG004-OFF2"
+        }
+      ]
+    }
+  },
+  "flows": {
+    "baseline": {
+      "rows": 91,
+      "fixed": []
+    },
+    "disable_slow": {
+      "confirm": {
+        "title": "停用探针",
+        "body": "确定停用探针 CCFG004-HOLDER 吗？",
+        "buttons": [
+          "取消",
+          "停用"
+        ]
+      },
+      "busyMenu": [
+        {
+          "role": "menuitem",
+          "cls": "cc-more-warning el-dropdown-menu__item is-disabled",
+          "text": "停用",
+          "ariaDisabled": "true",
+          "tabIndex": 0,
+          "cursor": "not-allowed",
+          "opacity": "1"
+        },
+        {
+          "role": "separator",
+          "cls": "el-dropdown-menu__item--divided",
+          "text": "",
+          "ariaDisabled": null,
+          "tabIndex": -1,
+          "cursor": "auto",
+          "opacity": "1"
+        },
+        {
+          "role": "menuitem",
+          "cls": "cc-more-danger el-dropdown-menu__item is-disabled",
+          "text": "删除",
+          "ariaDisabled": "true",
+          "tabIndex": -1,
+          "cursor": "not-allowed",
+          "opacity": "1"
+        }
+      ],
+      "triggerDuringBusy": {
+        "cls": "cc-more-link lt-row-action__ellipsis el-tooltip__trigger el-tooltip__trigger",
+        "ariaDisabled": null,
+        "tabIndex": 0,
+        "pointerEvents": "auto",
+        "cursor": "pointer",
+        "opacity": "1"
+      },
+      "duplicateAttempt": {
+        "clicked": true,
+        "cls": "cc-more-warning el-dropdown-menu__item is-disabled",
+        "ariaDisabled": "true",
+        "writesDelta": 0
+      },
+      "otherRowMenu": [
+        {
+          "text": "启用",
+          "ariaDisabled": "false",
+          "cls": "el-dropdown-menu__item"
+        },
+        {
+          "text": "删除",
+          "ariaDisabled": "false",
+          "cls": "cc-more-danger el-dropdown-menu__item"
+        }
+      ],
+      "http": 200,
+      "toastAtResponse": [],
+      "rowAfter": {
+        "present": true,
+        "highlighted": true,
+        "inactiveMark": "停用",
+        "abnormalMark": null
+      },
+      "fixedAfter": [
+        "CCFG004-HOLDER"
+      ],
+      "writeCount": 1
+    },
+    "enable_slow": {
+      "confirm": {
+        "title": "启用探针",
+        "body": "确定启用探针 CCFG004-HOLDER 吗？",
+        "buttons": [
+          "取消",
+          "启用"
+        ]
+      },
+      "busyMenu": [
+        {
+          "role": "menuitem",
+          "cls": "el-dropdown-menu__item is-disabled",
+          "text": "启用",
+          "ariaDisabled": "true",
+          "tabIndex": 0,
+          "cursor": "not-allowed",
+          "opacity": "1"
+        },
+        {
+          "role": "separator",
+          "cls": "el-dropdown-menu__item--divided",
+          "text": "",
+          "ariaDisabled": null,
+          "tabIndex": -1,
+          "cursor": "auto",
+          "opacity": "1"
+        },
+        {
+          "role": "menuitem",
+          "cls": "cc-more-danger el-dropdown-menu__item is-disabled",
+          "text": "删除",
+          "ariaDisabled": "true",
+          "tabIndex": -1,
+          "cursor": "not-allowed",
+          "opacity": "1"
+        }
+      ],
+      "duplicateAttempt": {
+        "clicked": true,
+        "cls": "el-dropdown-menu__item is-disabled",
+        "ariaDisabled": "true",
+        "writesDelta": 0
+      },
+      "http": 200,
+      "toastAtResponse": [
+        "启用成功"
+      ],
+      "rowAfter": {
+        "present": true,
+        "highlighted": true,
+        "inactiveMark": null,
+        "abnormalMark": null
+      },
+      "fixedAfter": [
+        "CCFG004-HOLDER"
+      ],
+      "writeCount": 1
+    },
+    "disable_failure": {
+      "confirm": {
+        "title": "停用探针",
+        "body": "确定停用探针 CCFG004-OFF 吗？",
+        "buttons": [
+          "取消",
+          "停用"
+        ]
+      },
+      "requestFailed": true,
+      "busyMenu": [
+        {
+          "role": "menuitem",
+          "cls": "cc-more-warning el-dropdown-menu__item is-disabled",
+          "text": "停用",
+          "ariaDisabled": "true",
+          "tabIndex": -1,
+          "cursor": "not-allowed",
+          "opacity": "1"
+        },
+        {
+          "role": "separator",
+          "cls": "el-dropdown-menu__item--divided",
+          "text": "",
+          "ariaDisabled": null,
+          "tabIndex": -1,
+          "cursor": "auto",
+          "opacity": "1"
+        },
+        {
+          "role": "menuitem",
+          "cls": "cc-more-danger el-dropdown-menu__item is-disabled",
+          "text": "删除",
+          "ariaDisabled": "true",
+          "tabIndex": -1,
+          "cursor": "not-allowed",
+          "opacity": "1"
+        }
+      ],
+      "toast": [
+        "Network Error",
+        "停用失败，请检查网络后重试。"
+      ],
+      "rowAfter": {
+        "present": true,
+        "highlighted": true,
+        "inactiveMark": null,
+        "abnormalMark": null
+      },
+      "fixedAfter": [
+        "CCFG004-OFF"
+      ],
+      "menuAfterReset": [
+        {
+          "text": "停用",
+          "ariaDisabled": "false",
+          "cls": "cc-more-warning el-dropdown-menu__item"
+        },
+        {
+          "text": "删除",
+          "ariaDisabled": "false",
+          "cls": "cc-more-danger el-dropdown-menu__item"
+        }
+      ],
+      "writeCount": 1
+    },
+    "delete_failure": {
+      "confirm": {
+        "title": "删除探针",
+        "body": "确定删除探针 CCFG004-DEL2 吗？该操作不可恢复。",
+        "buttons": [
+          "取消",
+          "删除"
+        ]
+      },
+      "requestFailed": true,
+      "busyMenu": [
+        {
+          "role": "menuitem",
+          "cls": "cc-more-warning el-dropdown-menu__item is-disabled",
+          "text": "停用",
+          "ariaDisabled": "true",
+          "tabIndex": -1,
+          "cursor": "not-allowed",
+          "opacity": "1"
+        },
+        {
+          "role": "separator",
+          "cls": "el-dropdown-menu__item--divided",
+          "text": "",
+          "ariaDisabled": null,
+          "tabIndex": -1,
+          "cursor": "auto",
+          "opacity": "1"
+        },
+        {
+          "role": "menuitem",
+          "cls": "cc-more-danger el-dropdown-menu__item is-disabled",
+          "text": "删除",
+          "ariaDisabled": "true",
+          "tabIndex": -1,
+          "cursor": "not-allowed",
+          "opacity": "1"
+        }
+      ],
+      "toast": [
+        "Network Error",
+        "删除失败，请检查网络后重试。"
+      ],
+      "rowAfter": {
+        "present": true,
+        "highlighted": true,
+        "inactiveMark": null,
+        "abnormalMark": null
+      },
+      "fixedAfter": [
+        "CCFG004-DEL2"
+      ],
+      "menuAfterReset": [
+        {
+          "text": "停用",
+          "ariaDisabled": "false",
+          "cls": "cc-more-warning el-dropdown-menu__item"
+        },
+        {
+          "text": "删除",
+          "ariaDisabled": "false",
+          "cls": "cc-more-danger el-dropdown-menu__item"
+        }
+      ],
+      "writeCount": 1
+    },
+    "enable_failure": {
+      "confirm": {
+        "title": "启用探针",
+        "body": "确定启用探针 CCFG004-OFF2 吗？",
+        "buttons": [
+          "取消",
+          "启用"
+        ]
+      },
+      "requestFailed": true,
+      "busyMenu": [
+        {
+          "role": "menuitem",
+          "cls": "el-dropdown-menu__item is-disabled",
+          "text": "启用",
+          "ariaDisabled": "true",
+          "tabIndex": -1,
+          "cursor": "not-allowed",
+          "opacity": "1"
+        },
+        {
+          "role": "separator",
+          "cls": "el-dropdown-menu__item--divided",
+          "text": "",
+          "ariaDisabled": null,
+          "tabIndex": -1,
+          "cursor": "auto",
+          "opacity": "1"
+        },
+        {
+          "role": "menuitem",
+          "cls": "cc-more-danger el-dropdown-menu__item is-disabled",
+          "text": "删除",
+          "ariaDisabled": "true",
+          "tabIndex": -1,
+          "cursor": "not-allowed",
+          "opacity": "1"
+        }
+      ],
+      "toast": [
+        "Network Error",
+        "启用失败，请检查网络后重试。"
+      ],
+      "rowAfter": {
+        "present": true,
+        "highlighted": true,
+        "inactiveMark": "停用",
+        "abnormalMark": null
+      },
+      "fixedAfter": [
+        "CCFG004-OFF2"
+      ],
+      "menuAfterReset": [
+        {
+          "text": "启用",
+          "ariaDisabled": "false",
+          "cls": "el-dropdown-menu__item"
+        },
+        {
+          "text": "删除",
+          "ariaDisabled": "false",
+          "cls": "cc-more-danger el-dropdown-menu__item"
+        }
+      ],
+      "writeCount": 1
+    }
+  },
+  "errors": []
+}

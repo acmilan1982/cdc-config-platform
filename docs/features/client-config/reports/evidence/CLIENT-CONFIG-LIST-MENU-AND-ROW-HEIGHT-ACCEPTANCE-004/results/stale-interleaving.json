@@ -1,0 +1,121 @@
+{
+  "mode": "stale-get-interleaving",
+  "gate": {
+    "nonGetAttempts": 2,
+    "blocked": [],
+    "forwarded": [
+      {
+        "method": "PUT",
+        "path": "/api/clients/CCFG004-HOLDER/disable"
+      },
+      {
+        "method": "PUT",
+        "path": "/api/clients/CCFG004-HOLDER/enable"
+      }
+    ]
+  },
+  "errors": [],
+  "listRequests": [
+    {
+      "idx": 1,
+      "path": "/api/clients",
+      "startedAt": 1146,
+      "respondedAt": 1177,
+      "held": false
+    },
+    {
+      "idx": 2,
+      "path": "/api/clients",
+      "startedAt": 12590,
+      "respondedAt": 15235,
+      "held": true
+    },
+    {
+      "idx": 3,
+      "path": "/api/clients",
+      "startedAt": 14409,
+      "respondedAt": 14920,
+      "held": false
+    },
+    {
+      "idx": 4,
+      "path": "/api/clients",
+      "startedAt": 17760,
+      "respondedAt": 18257,
+      "held": false
+    }
+  ],
+  "flows": {
+    "baseline": {
+      "rows": 91,
+      "fixed": [],
+      "mask": false
+    },
+    "selected": {
+      "rows": 91,
+      "fixed": [
+        "CCFG004-HOLDER"
+      ],
+      "mask": false
+    },
+    "confirm": {
+      "title": "停用探针",
+      "body": "确定停用探针 CCFG004-HOLDER 吗？"
+    },
+    "queryClick": {
+      "at": 12647,
+      "disabled": false
+    },
+    "afterQueryStart": {
+      "rows": 91,
+      "fixed": [],
+      "mask": true
+    },
+    "afterB": {
+      "at": 15226,
+      "rows": 91,
+      "fixed": [
+        "CCFG004-HOLDER"
+      ],
+      "mask": true,
+      "holder": {
+        "present": true,
+        "mark": "停用",
+        "hl": true
+      }
+    },
+    "afterLateA": {
+      "at": 16448,
+      "rows": 91,
+      "fixed": [
+        "CCFG004-HOLDER"
+      ],
+      "mask": false,
+      "holder": {
+        "present": true,
+        "mark": "停用",
+        "hl": true
+      }
+    },
+    "order": {
+      "A_idx": 2,
+      "B_idx": 3,
+      "A_startedAt": 12590,
+      "B_startedAt": 14409,
+      "A_respondedAt": 15235,
+      "B_respondedAt": 14920,
+      "A_held": true,
+      "A_startedBeforeB": true,
+      "A_deliveredAfterB": true,
+      "confirmedAt": 10885
+    },
+    "toast": [
+      "停用成功"
+    ],
+    "restored": {
+      "present": true,
+      "mark": "",
+      "hl": true
+    }
+  }
+}
