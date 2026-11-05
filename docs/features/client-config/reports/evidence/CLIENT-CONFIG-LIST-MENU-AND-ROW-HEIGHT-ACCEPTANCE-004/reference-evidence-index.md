@@ -4,7 +4,7 @@
 
 | 代号 | 提交 | 路径 / JSON 键 | 本批用途 | 条件与边界 |
 |---|---|---|---|---|
-| E1 | 242cc5c（2026-11-04） | `reports/evidence/CLIENT-CONFIG-MULTI-AC-CRUD-AND-ABNORMAL-STATE-ACCEPTANCE-001/group-b-results.json`（AC-082/115/121/139/140/145） | 三态菜单、提交加载/防重、反馈、启停确认、删除清选 | 当时真实页面；本批对 071/072/083/084/103/153 的关键分支重新实测，未直接套用旧判定 |
+| E1 | 242cc5c（2026-11-04） | `reports/evidence/CLIENT-CONFIG-MULTI-AC-CRUD-AND-ABNORMAL-STATE-ACCEPTANCE-001/`：`group-c-results.json`（`ac121`）、`group-d-results.json`（`ac082`）、`group-e-results.json`（`ac115`/`ac139`/`ac140`）、`group-f-results.json`（`ac145`）；AC-115 另有 `ac115-supplement-results.json` | 三态菜单、提交加载/防重、反馈、启停确认、删除清选 | 当时真实页面；本批对 071/072/083/084/103/153 的关键分支重新实测，未直接套用旧判定；004-R1 已按上述精确键位更正笼统引用 |
 | E2 | 6c72727 / e0b0048 | `reports/evidence/CLIENT-CONFIG-SOURCE-SELECTION-AND-HISTORICAL-DATA-ACCEPTANCE-002-R1/`（results、probes、SQL） | 标签、+N、Tooltip、超长内容、选择边界 | 历史实测仅作回归对照；本批已用 A/B/D 重新覆盖 |
 | E3 | 2721969 / 968c1e5 | `reports/evidence/CLIENT-CONFIG-CRUD-BOUNDARY-AND-CONCURRENCY-ACCEPTANCE-003-R1/` | 真实 CRUD、异常动作、业务冲突、并发边界 | 并发业务写入 ≠ 列表响应时序交错；后者由本批 E 探针单独验证 |
 | E4 | c0a3c1d（文件级） | `reports/evidence/CLIENT-CONFIG-TARGETED-READONLY-ACCEPTANCE-SUPPLEMENT-002/s2-list-results.json` 等 | 列表、菜单键盘/边缘、事件隔离、两视口固定列、弹窗 | 只读；本批 B/H 复测当前版本 |

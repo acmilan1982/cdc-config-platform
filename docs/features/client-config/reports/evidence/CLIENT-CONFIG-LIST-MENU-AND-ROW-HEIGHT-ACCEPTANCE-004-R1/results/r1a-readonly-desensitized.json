@@ -1,0 +1,688 @@
+{
+  "task": "CLIENT-CONFIG-LIST-MENU-AND-ROW-HEIGHT-ACCEPTANCE-004-R1",
+  "mode": "readonly-live",
+  "browser": {
+    "engine": "chromium",
+    "version": "147.0.7727.15",
+    "headless": true
+  },
+  "viewport": {
+    "width": 1440,
+    "height": 900
+  },
+  "dpr": 1,
+  "gate": {
+    "policy": "/api/** GET/HEAD/OPTIONS allow; others abort+count",
+    "nonGetAttempts": 0,
+    "attempts": []
+  },
+  "dialogDoubleClick": {
+    "trial1_del2": {
+      "rowId": "CCFG004-DEL2",
+      "rowIndex": 85,
+      "pre": {
+        "dialogCount": 0,
+        "visibleDialogCount": 0,
+        "dialogs": [],
+        "aStyleFirstDialog": null,
+        "messageBox": null,
+        "messageBoxCount": 0,
+        "fixed": []
+      },
+      "menuItems": [
+        "停用",
+        "删除"
+      ],
+      "deleteItem": {
+        "text": "删除",
+        "role": "menuitem",
+        "cls": "cc-more-danger el-dropdown-menu__item",
+        "disabled": false,
+        "ariaDisabled": "false",
+        "fontWeight": "400",
+        "color": "rgb(245, 108, 108)",
+        "bg": "rgba(0, 0, 0, 0)",
+        "rect": {
+          "x": 1241,
+          "y": 641,
+          "w": 52,
+          "h": 34
+        }
+      },
+      "target": {
+        "x": 1267,
+        "y": 658
+      },
+      "hitBefore": {
+        "tag": "LI",
+        "cls": "cc-more-danger el-dropdown-menu__item",
+        "text": "删除"
+      },
+      "after": {
+        "dialogCount": 0,
+        "visibleDialogCount": 0,
+        "dialogs": [],
+        "aStyleFirstDialog": null,
+        "messageBox": null,
+        "messageBoxCount": 0,
+        "fixed": []
+      },
+      "events": [
+        {
+          "t": "click",
+          "tag": "LI",
+          "cls": "cc-more-danger el-dropdown-menu__item",
+          "text": "删除",
+          "inMenu": true,
+          "inRow": false,
+          "rowId": null
+        },
+        {
+          "t": "click",
+          "tag": "DIV",
+          "cls": "el-overlay-message-box",
+          "text": "删除探针确定删除探针 CCFG004-DEL2 ",
+          "inMenu": false,
+          "inRow": false,
+          "rowId": null
+        },
+        {
+          "t": "dblclick",
+          "tag": "DIV",
+          "cls": "el-overlay-message-box",
+          "text": "删除探针确定删除探针 CCFG004-DEL2 ",
+          "inMenu": false,
+          "inRow": false,
+          "rowId": null
+        }
+      ],
+      "afterCleanup": {
+        "dialogCount": 0,
+        "visibleDialogCount": 0,
+        "dialogs": [],
+        "aStyleFirstDialog": null,
+        "messageBox": null,
+        "messageBoxCount": 0,
+        "fixed": []
+      }
+    },
+    "trial2_off": {
+      "rowId": "CCFG004-OFF",
+      "rowIndex": 81,
+      "pre": {
+        "dialogCount": 0,
+        "visibleDialogCount": 0,
+        "dialogs": [],
+        "aStyleFirstDialog": null,
+        "messageBox": null,
+        "messageBoxCount": 0,
+        "fixed": []
+      },
+      "menuItems": [
+        "停用",
+        "删除"
+      ],
+      "deleteItem": {
+        "text": "删除",
+        "role": "menuitem",
+        "cls": "cc-more-danger el-dropdown-menu__item",
+        "disabled": false,
+        "ariaDisabled": "false",
+        "fontWeight": "400",
+        "color": "rgb(245, 108, 108)",
+        "bg": "rgba(0, 0, 0, 0)",
+        "rect": {
+          "x": 1241,
+          "y": 449,
+          "w": 52,
+          "h": 34
+        }
+      },
+      "target": {
+        "x": 1267,
+        "y": 466
+      },
+      "hitBefore": {
+        "tag": "LI",
+        "cls": "cc-more-danger el-dropdown-menu__item",
+        "text": "删除"
+      },
+      "after": {
+        "dialogCount": 0,
+        "visibleDialogCount": 0,
+        "dialogs": [],
+        "aStyleFirstDialog": null,
+        "messageBox": null,
+        "messageBoxCount": 0,
+        "fixed": []
+      },
+      "events": [
+        {
+          "t": "click",
+          "tag": "LI",
+          "cls": "cc-more-danger el-dropdown-menu__item",
+          "text": "删除",
+          "inMenu": true,
+          "inRow": false,
+          "rowId": null
+        },
+        {
+          "t": "click",
+          "tag": "DIV",
+          "cls": "el-overlay-message-box",
+          "text": "删除探针确定删除探针 CCFG004-OFF 吗",
+          "inMenu": false,
+          "inRow": false,
+          "rowId": null
+        },
+        {
+          "t": "dblclick",
+          "tag": "DIV",
+          "cls": "el-overlay-message-box",
+          "text": "删除探针确定删除探针 CCFG004-OFF 吗",
+          "inMenu": false,
+          "inRow": false,
+          "rowId": null
+        }
+      ],
+      "afterCleanup": {
+        "dialogCount": 0,
+        "visibleDialogCount": 0,
+        "dialogs": [],
+        "aStyleFirstDialog": null,
+        "messageBox": null,
+        "messageBoxCount": 0,
+        "fixed": []
+      }
+    }
+  },
+  "focus": {
+    "rowId": "CCFG004-ON",
+    "steps": [
+      {
+        "step": "afterEnter",
+        "active": {
+          "tag": "LI",
+          "role": "menuitem",
+          "cls": "el-dropdown-menu__item",
+          "text": "启用",
+          "tabIndex": 0,
+          "bg": "rgb(236, 245, 255)",
+          "color": "rgb(64, 158, 255)",
+          "outline": "rgb(64, 158, 255) none 3px"
+        },
+        "menuOpen": true
+      },
+      {
+        "step": "ArrowDown<1>",
+        "active": {
+          "tag": "LI",
+          "role": "menuitem",
+          "cls": "cc-more-danger el-dropdown-menu__item",
+          "text": "删除",
+          "tabIndex": 0,
+          "bg": "rgb(236, 245, 255)",
+          "color": "rgb(245, 108, 108)",
+          "outline": "rgb(245, 108, 108) none 3px"
+        },
+        "menuOpen": true
+      },
+      {
+        "step": "ArrowDown<2>",
+        "active": {
+          "tag": "LI",
+          "role": "menuitem",
+          "cls": "el-dropdown-menu__item",
+          "text": "启用",
+          "tabIndex": 0,
+          "bg": "rgb(236, 245, 255)",
+          "color": "rgb(64, 158, 255)",
+          "outline": "rgb(64, 158, 255) none 3px"
+        },
+        "menuOpen": true
+      },
+      {
+        "step": "ArrowDown<3>",
+        "active": {
+          "tag": "LI",
+          "role": "menuitem",
+          "cls": "cc-more-danger el-dropdown-menu__item",
+          "text": "删除",
+          "tabIndex": 0,
+          "bg": "rgb(236, 245, 255)",
+          "color": "rgb(245, 108, 108)",
+          "outline": "rgb(245, 108, 108) none 3px"
+        },
+        "menuOpen": true
+      },
+      {
+        "step": "ArrowDown<4>",
+        "active": {
+          "tag": "LI",
+          "role": "menuitem",
+          "cls": "el-dropdown-menu__item",
+          "text": "启用",
+          "tabIndex": 0,
+          "bg": "rgb(236, 245, 255)",
+          "color": "rgb(64, 158, 255)",
+          "outline": "rgb(64, 158, 255) none 3px"
+        },
+        "menuOpen": true
+      },
+      {
+        "step": "Tab",
+        "active": {
+          "tag": "SPAN",
+          "role": "button",
+          "cls": "cc-more-link lt-row-action__ellipsis el-tooltip__trigger el-tooltip__trigger",
+          "text": "",
+          "tabIndex": 0,
+          "bg": "rgba(0, 0, 0, 0)",
+          "color": "rgb(64, 158, 255)",
+          "outline": "rgb(64, 158, 255) solid 2px"
+        },
+        "menuOpen": true
+      },
+      {
+        "step": "Shift+Tab",
+        "active": {
+          "tag": "SPAN",
+          "role": "button",
+          "cls": "cc-id",
+          "text": "ROW-08",
+          "tabIndex": 0,
+          "bg": "rgba(0, 0, 0, 0)",
+          "color": "rgb(9, 9, 11)",
+          "outline": "rgb(64, 158, 255) solid 1px"
+        },
+        "menuOpen": false
+      },
+      {
+        "step": "reopened",
+        "active": {
+          "tag": "LI",
+          "role": "menuitem",
+          "cls": "el-dropdown-menu__item",
+          "text": "启用",
+          "tabIndex": 0,
+          "bg": "rgb(236, 245, 255)",
+          "color": "rgb(64, 158, 255)",
+          "outline": "rgb(64, 158, 255) none 3px"
+        },
+        "menuOpen": true
+      },
+      {
+        "step": "domFocusDelete(mouseAway)",
+        "active": {
+          "tag": "LI",
+          "role": "menuitem",
+          "cls": "cc-more-danger el-dropdown-menu__item",
+          "text": "删除",
+          "tabIndex": 0,
+          "bg": "rgb(236, 245, 255)",
+          "color": "rgb(245, 108, 108)",
+          "outline": "rgb(245, 108, 108) none 3px"
+        },
+        "menuOpen": true
+      }
+    ],
+    "deleteIsActiveByKeyboard": false,
+    "domFocusFallback": {
+      "applied": true,
+      "tag": "LI",
+      "role": "menuitem",
+      "cls": "cc-more-danger el-dropdown-menu__item",
+      "text": "删除",
+      "tabIndex": -1,
+      "bg": "rgb(236, 245, 255)",
+      "color": "rgb(245, 108, 108)",
+      "outline": "rgb(245, 108, 108) none 3px"
+    },
+    "menuStyles": {
+      "items": [
+        {
+          "text": "启用",
+          "role": "menuitem",
+          "cls": "el-dropdown-menu__item",
+          "tabIndex": -1,
+          "fontWeight": "400",
+          "color": "rgb(96, 98, 102)",
+          "bg": "rgba(0, 0, 0, 0)",
+          "outline": "rgb(96, 98, 102) none 3px",
+          "borderTopWidth": "0px",
+          "borderTopStyle": "none",
+          "borderTopColor": "rgb(96, 98, 102)",
+          "marginTop": "0px",
+          "h": 34
+        },
+        {
+          "text": "",
+          "role": "separator",
+          "cls": "el-dropdown-menu__item--divided",
+          "tabIndex": -1,
+          "fontWeight": "400",
+          "color": "rgb(48, 49, 51)",
+          "bg": "rgba(0, 0, 0, 0)",
+          "outline": "rgb(48, 49, 51) none 3px",
+          "borderTopWidth": "1px",
+          "borderTopStyle": "solid",
+          "borderTopColor": "rgb(235, 238, 245)",
+          "marginTop": "4px",
+          "h": 1
+        },
+        {
+          "text": "删除",
+          "role": "menuitem",
+          "cls": "cc-more-danger el-dropdown-menu__item",
+          "tabIndex": 0,
+          "fontWeight": "400",
+          "color": "rgb(245, 108, 108)",
+          "bg": "rgb(236, 245, 255)",
+          "outline": "rgb(245, 108, 108) none 3px",
+          "borderTopWidth": "0px",
+          "borderTopStyle": "none",
+          "borderTopColor": "rgb(245, 108, 108)",
+          "marginTop": "0px",
+          "h": 34
+        }
+      ]
+    },
+    "deleteHover": {
+      "bg": "rgb(236, 245, 255)",
+      "color": "rgb(245, 108, 108)"
+    },
+    "afterMouseAway": {
+      "tag": "LI",
+      "role": "menuitem",
+      "cls": "cc-more-danger el-dropdown-menu__item",
+      "text": "删除",
+      "tabIndex": -1,
+      "bg": "rgb(236, 245, 255)",
+      "color": "rgb(245, 108, 108)",
+      "outline": "rgb(245, 108, 108) none 3px"
+    },
+    "nonGetAttempts": 0
+  },
+  "errors": [],
+  "initial": {
+    "dialogCount": 0,
+    "visibleDialogCount": 0,
+    "dialogs": [],
+    "aStyleFirstDialog": null,
+    "messageBox": null,
+    "messageBoxCount": 0,
+    "fixed": []
+  },
+  "singleClickControl": {
+    "rowId": "CCFG004-DEL2",
+    "menuItems": [
+      "停用",
+      "删除"
+    ],
+    "deleteItem": {
+      "text": "删除",
+      "role": "menuitem",
+      "cls": "cc-more-danger el-dropdown-menu__item",
+      "disabled": false,
+      "ariaDisabled": "false",
+      "fontWeight": "400",
+      "color": "rgb(245, 108, 108)",
+      "bg": "rgba(0, 0, 0, 0)",
+      "rect": {
+        "x": 1241,
+        "y": 641,
+        "w": 52,
+        "h": 34
+      }
+    },
+    "after": {
+      "dialogCount": 0,
+      "visibleDialogCount": 0,
+      "dialogs": [],
+      "aStyleFirstDialog": null,
+      "messageBox": {
+        "title": "删除探针",
+        "body": "确定删除探针 CCFG004-DEL2 吗？该操作不可恢复。",
+        "buttons": [
+          "",
+          "取消",
+          "删除"
+        ]
+      },
+      "messageBoxCount": 1,
+      "fixed": []
+    },
+    "afterClose": {
+      "dialogCount": 0,
+      "visibleDialogCount": 0,
+      "dialogs": [],
+      "aStyleFirstDialog": null,
+      "messageBox": null,
+      "messageBoxCount": 0,
+      "fixed": []
+    }
+  },
+  "aSequenceReplication": {
+    "step0_initial": {
+      "dialogCount": 0,
+      "visibleDialogCount": 0,
+      "dialogs": [],
+      "aStyleFirstDialog": null,
+      "messageBox": null,
+      "messageBoxCount": 0,
+      "fixed": []
+    },
+    "step1_afterDblEdit": {
+      "rowId": "ROW-06",
+      "state": {
+        "dialogCount": 1,
+        "visibleDialogCount": 1,
+        "dialogs": [
+          {
+            "display": "block",
+            "h": 635.58,
+            "title": "编辑探针",
+            "overlayDisplay": "block",
+            "overlayPointer": "auto",
+            "overlayH": 900
+          }
+        ],
+        "aStyleFirstDialog": {
+          "display": "block",
+          "h": 635.58
+        },
+        "messageBox": null,
+        "messageBoxCount": 0,
+        "fixed": [
+          "ROW-06"
+        ]
+      }
+    },
+    "step2_afterClose1": {
+      "closeResult": "ok",
+      "state": {
+        "dialogCount": 1,
+        "visibleDialogCount": 0,
+        "dialogs": [
+          {
+            "display": "block",
+            "h": 0,
+            "title": "编辑探针",
+            "overlayDisplay": "none",
+            "overlayPointer": "auto",
+            "overlayH": 0
+          }
+        ],
+        "aStyleFirstDialog": {
+          "display": "block",
+          "h": 0
+        },
+        "messageBox": null,
+        "messageBoxCount": 0,
+        "fixed": [
+          "ROW-06"
+        ]
+      }
+    },
+    "step3_afterKbEdit": {
+      "rowId": "ROW-07",
+      "state": {
+        "dialogCount": 1,
+        "visibleDialogCount": 1,
+        "dialogs": [
+          {
+            "display": "block",
+            "h": 635.58,
+            "title": "编辑探针",
+            "overlayDisplay": "block",
+            "overlayPointer": "auto",
+            "overlayH": 900
+          }
+        ],
+        "aStyleFirstDialog": {
+          "display": "block",
+          "h": 635.58
+        },
+        "messageBox": null,
+        "messageBoxCount": 0,
+        "fixed": [
+          "ROW-06"
+        ]
+      }
+    },
+    "step4_afterClose2": {
+      "closeResult": "ok",
+      "state": {
+        "dialogCount": 1,
+        "visibleDialogCount": 0,
+        "dialogs": [
+          {
+            "display": "block",
+            "h": 0,
+            "title": "编辑探针",
+            "overlayDisplay": "none",
+            "overlayPointer": "auto",
+            "overlayH": 0
+          }
+        ],
+        "aStyleFirstDialog": {
+          "display": "block",
+          "h": 0
+        },
+        "messageBox": null,
+        "messageBoxCount": 0,
+        "fixed": [
+          "ROW-06"
+        ]
+      }
+    },
+    "step5_menu": {
+      "rowId": "ROW-08",
+      "clickResult": "ok",
+      "menuOpen": true,
+      "state": {
+        "dialogCount": 1,
+        "visibleDialogCount": 0,
+        "dialogs": [
+          {
+            "display": "block",
+            "h": 0,
+            "title": "编辑探针",
+            "overlayDisplay": "none",
+            "overlayPointer": "auto",
+            "overlayH": 0
+          }
+        ],
+        "aStyleFirstDialog": {
+          "display": "block",
+          "h": 0
+        },
+        "messageBox": null,
+        "messageBoxCount": 0,
+        "fixed": [
+          "ROW-06"
+        ]
+      }
+    },
+    "step6_afterDeleteDbl": {
+      "items": [
+        "启用",
+        "删除"
+      ],
+      "dblResult": "TimeoutError: locator.dblclick: Timeout 5000ms exceeded.\nCall log:\n\u001b[2m  - waiting for locator('.cc-more-popper .el-dropdown-menu__item').filter({ hasText: '删除' }).first()\u001b[22m\n\u001b[2m    - locator resolved to <li tabindex=\"-1\" role=\"menuitem\"",
+      "state": {
+        "dialogCount": 1,
+        "visibleDialogCount": 0,
+        "dialogs": [
+          {
+            "display": "block",
+            "h": 0,
+            "title": "编辑探针",
+            "overlayDisplay": "none",
+            "overlayPointer": "auto",
+            "overlayH": 0
+          }
+        ],
+        "aStyleFirstDialog": {
+          "display": "block",
+          "h": 0
+        },
+        "messageBox": null,
+        "messageBoxCount": 0,
+        "fixed": [
+          "ROW-06"
+        ]
+      }
+    },
+    "step7_cancelled": {
+      "dialogCount": 1,
+      "visibleDialogCount": 0,
+      "dialogs": [
+        {
+          "display": "block",
+          "h": 0,
+          "title": "编辑探针",
+          "overlayDisplay": "none",
+          "overlayPointer": "auto",
+          "overlayH": 0
+        }
+      ],
+      "aStyleFirstDialog": {
+        "display": "block",
+        "h": 0
+      },
+      "messageBox": null,
+      "messageBoxCount": 0,
+      "fixed": [
+        "ROW-06"
+      ]
+    }
+  },
+  "finalState": {
+    "dialogCount": 1,
+    "visibleDialogCount": 0,
+    "dialogs": [
+      {
+        "display": "block",
+        "h": 0,
+        "title": "编辑探针",
+        "overlayDisplay": "none",
+        "overlayPointer": "auto",
+        "overlayH": 0
+      }
+    ],
+    "aStyleFirstDialog": {
+      "display": "block",
+      "h": 0
+    },
+    "messageBox": null,
+    "messageBoxCount": 0,
+    "fixed": [
+      "ROW-06"
+    ]
+  },
+  "nonGetAttemptsFinal": 0,
+  "desensitization": {
+    "note": "真实 clientId 仅按序列行动作位置替换为 ROW-06/07/08；原始映射不随仓库分发。其余为合成探针 ID。"
+  }
+}

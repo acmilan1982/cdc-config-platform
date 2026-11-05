@@ -1,0 +1,254 @@
+{
+  "task": "CLIENT-CONFIG-LIST-MENU-AND-ROW-HEIGHT-ACCEPTANCE-004-R1",
+  "mode": "write-gated-live-dedup",
+  "browser": {
+    "engine": "chromium",
+    "version": "147.0.7727.15",
+    "headless": true
+  },
+  "viewport": {
+    "width": 1440,
+    "height": 900
+  },
+  "dpr": 1,
+  "gate": {
+    "policy": "GET/HEAD/OPTIONS allow; PUT /api/clients/CCFG004-NEW1 and DELETE /api/clients/CCFG004-DEL2 delayed+forwarded; others abort+count",
+    "attempts": [
+      {
+        "m": "PUT",
+        "path": "/api/clients/CCFG004-NEW1",
+        "t": 1793883054470
+      },
+      {
+        "m": "DELETE",
+        "path": "/api/clients/CCFG004-DEL2",
+        "t": 1793883062797
+      }
+    ],
+    "forwarded": [
+      {
+        "m": "PUT",
+        "path": "/api/clients/CCFG004-NEW1",
+        "tStart": 1793883054470,
+        "tForward": 1793883059470,
+        "tComplete": 1793883059919
+      },
+      {
+        "m": "DELETE",
+        "path": "/api/clients/CCFG004-DEL2",
+        "tStart": 1793883062797,
+        "tForward": 1793883067798,
+        "tComplete": 1793883067850
+      }
+    ],
+    "injected": [],
+    "blocked": [],
+    "nonGetAttempts": 2
+  },
+  "flows": {
+    "edit": {
+      "targetId": "CCFG004-NEW1",
+      "descBefore": "CCFG004 synthetic edit-success sample through the real UI (updated). Not a real runtime probe.",
+      "busyState": {
+        "dialogVisible": true,
+        "submit": {
+          "disabled": true,
+          "cls": "el-button el-button--primary is-disabled is-loading cc-dialog-submit ced-submit",
+          "text": "保存",
+          "rect": {
+            "x": 1074,
+            "y": 722.6,
+            "w": 80,
+            "h": 32
+          }
+        },
+        "messageBox": null,
+        "fixed": [
+          "CCFG004-NEW1"
+        ]
+      },
+      "duplicateAction": {
+        "t": 1793883055183,
+        "hit": {
+          "tag": "FOOTER",
+          "cls": "el-dialog__footer",
+          "text": "取消保存"
+        },
+        "buttonState": {
+          "disabled": true,
+          "cls": "el-button el-button--primary is-disabled is-loading cc-dialog-submit ced-submit",
+          "text": "保存",
+          "rect": {
+            "x": 1074,
+            "y": 722.6,
+            "w": 80,
+            "h": 32
+          }
+        },
+        "deltaAttempts": [
+          {
+            "m": "PUT",
+            "path": "/api/clients/CCFG004-NEW1",
+            "t": 1793883054470
+          }
+        ]
+      },
+      "putCount": 1,
+      "response": {
+        "status": 200,
+        "code": 200,
+        "t": 1793883059955
+      },
+      "dialogClosed": true,
+      "toast": [
+        "编辑成功"
+      ],
+      "readback": {
+        "total": 91,
+        "present": true,
+        "fgActive": "0",
+        "desc": "CCFG004-R1 synthetic edit through the real UI during busy-window dedup check. Not a real runtime probe.",
+        "sources": [
+          "CCFG004-DS-B"
+        ]
+      },
+      "descExpected": "CCFG004-R1 synthetic edit through the real UI during busy-window dedup check. Not a real runtime probe."
+    },
+    "delete": {
+      "targetId": "CCFG004-DEL2",
+      "menuItemsBefore": [
+        "停用",
+        "删除"
+      ],
+      "confirmBox": {
+        "title": "删除探针",
+        "body": "确定删除探针 CCFG004-DEL2 吗？该操作不可恢复。",
+        "buttons": [
+          "",
+          "取消",
+          "删除"
+        ]
+      },
+      "busyMenuItems": [
+        {
+          "text": "停用",
+          "disabled": true,
+          "ariaDisabled": "true",
+          "cursor": "not-allowed"
+        },
+        {
+          "text": "删除",
+          "disabled": true,
+          "ariaDisabled": "true",
+          "cursor": "not-allowed"
+        }
+      ],
+      "duplicateAction": {
+        "performed": true,
+        "t": 1793883064279,
+        "hit": {
+          "tag": "LI",
+          "cls": "cc-more-danger el-dropdown-menu__item is-disabled",
+          "text": "删除"
+        },
+        "deltaAttempts": [
+          {
+            "m": "DELETE",
+            "path": "/api/clients/CCFG004-DEL2",
+            "t": 1793883062797
+          }
+        ],
+        "menuStillOpen": true
+      },
+      "deleteCount": 1,
+      "response": {
+        "status": 200,
+        "code": 200,
+        "t": 1793883067892
+      },
+      "toast": [
+        "删除成功"
+      ],
+      "rowPresentInUi": false,
+      "fixed": [],
+      "readback": {
+        "total": 90,
+        "present": false,
+        "fgActive": null,
+        "desc": null,
+        "sources": []
+      }
+    }
+  },
+  "errors": [],
+  "timing": {
+    "PUT /api/clients/CCFG004-NEW1": {
+      "status": 200,
+      "code": 200,
+      "t": 1793883059955
+    },
+    "DELETE /api/clients/CCFG004-DEL2": {
+      "status": 200,
+      "code": 200,
+      "t": 1793883067892
+    }
+  },
+  "baseline": {
+    "edit": {
+      "total": 91,
+      "present": true,
+      "fgActive": "0",
+      "desc": "CCFG004 synthetic edit-success sample through the real UI (updated). Not a real runtime probe.",
+      "sources": [
+        "CCFG004-DS-B"
+      ]
+    },
+    "del": {
+      "total": 91,
+      "present": true,
+      "fgActive": "1",
+      "desc": "CCFG004 synthetic fixture: delete failure/reset target. Not a real runtime probe.",
+      "sources": []
+    }
+  },
+  "final": {
+    "edit": {
+      "total": 90,
+      "present": true,
+      "fgActive": "0",
+      "desc": "CCFG004-R1 synthetic edit through the real UI during busy-window dedup check. Not a real runtime probe.",
+      "sources": [
+        "CCFG004-DS-B"
+      ]
+    },
+    "del": {
+      "total": 90,
+      "present": false,
+      "fgActive": null,
+      "desc": null,
+      "sources": []
+    }
+  },
+  "gateSummary": {
+    "nonGetAttempts": 2,
+    "forwarded": [
+      {
+        "m": "PUT",
+        "path": "/api/clients/CCFG004-NEW1",
+        "tStart": 1793883054470,
+        "tForward": 1793883059470,
+        "tComplete": 1793883059919
+      },
+      {
+        "m": "DELETE",
+        "path": "/api/clients/CCFG004-DEL2",
+        "tStart": 1793883062797,
+        "tForward": 1793883067798,
+        "tComplete": 1793883067850
+      }
+    ],
+    "injected": [],
+    "blocked": []
+  },
+  "note": "全部目标为合成探针 CCFG004-NEW1 / CCFG004-DEL2；无真实业务 ID。"
+}

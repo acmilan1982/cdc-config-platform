@@ -1,0 +1,31 @@
+# 004-R1 验收环境与版本快照
+
+采集时间：2026-11-05（本地时区）
+服务器：验收服务器（主机地址按任务脱敏要求不在仓库内记录；本文件不记录凭据）
+
+## 代码与 Git
+- 仓库：/agent/cdc-config-platform
+- 分支：develop
+- 开工/核验基线 commit：11041911d05df65804aafd67ea9fa1cec03ce5db
+- origin/develop：11041911d05df65804aafd67ea9fa1cec03ce5db（一致）
+- 工作区开工状态：M .claude/settings.local.json；?? docs/prompts/；?? runtime-logs/（均与本任务无关，未暂存）
+
+## 运行产物（复用，未重启/未构建）
+- 后端：java -jar backend/target/cdc-config-platform-backend-1.0.0-SNAPSHOT.jar --spring.profiles.active=dev
+  - PID：3327；监听 *:8080；探活 GET /api/clients?status=ALL → 200
+- 前端：node frontend/node_modules/.bin/vite --host 0.0.0.0 --port 5173
+  - PID：3385；监听 0.0.0.0:5173；探活 GET /config/client → 200
+- 页面范围：仅 /config/client；未访问或测试数据源管理及其他页面
+
+## 运行时与工具
+- 浏览器：Chrome for Testing 147.0.7727.15（Playwright Chromium 构建 chromium-1217，headless）
+- 自动化：playwright-core（/root/.hermes/hermes-agent/node_modules/playwright-core）
+- 视口：1440×900；DPR=1；页面缩放 100%
+
+## 写门禁
+- R1A（只读）：首次导航前对 `**/api/**` 安装门禁，GET/HEAD/OPTIONS 放行，其余 abort+计数；实测 nonGetAttempts=0。
+- R1B（写）：同一门禁策略，仅放行两条精确端点——`PUT /api/clients/CCFG004-NEW1` 与 `DELETE /api/clients/CCFG004-DEL2`，均延迟 5000ms 后转发；其余非 GET abort+计数；实测 nonGetAttempts=2、forwarded=2、injected=0、blocked=0。
+- 白名单绑定方式：方法 + 精确路径（路径参数即完整目标 ID）；编辑表单只改动描述字段，`ClientSaveRequest` 其余字段沿用弹窗原值。
+
+## 已知边界
+- R1B 的请求体未在脚本内逐字段记录；编辑动作仅修改 `.cc-desc-row textarea`，独立回读确认描述落库、`FG_ACTIVE` 与数据源集合未变。
