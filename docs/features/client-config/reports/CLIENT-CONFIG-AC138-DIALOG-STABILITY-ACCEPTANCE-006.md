@@ -1,20 +1,21 @@
 # CLIENT-CONFIG-AC138-DIALOG-STABILITY-ACCEPTANCE-006｜探针弹窗稳定性补测
 
 - 任务：`CLIENT-CONFIG-AC138-DIALOG-STABILITY-ACCEPTANCE-006`
-- 固定基线：`2a2760a96a74ab10ece5fa8d061b8639c6eadf19`（`develop`，005-R2 远端复审通过）
+- 006 固定基线：`2a2760a96a74ab10ece5fa8d061b8639c6eadf19`（`develop`，005-R2 远端复审通过）
+- R1 勘误基线：`bc5840d1933b0558bd2c0d195bac94f8cf743649`（`develop`，006 远端复审 `CHANGES_REQUIRED`）
 - 验收对象：`CCFG-AC-138` / `CCFG-REQ-139`
 - 页面范围：仅 `/config/client`
 - 证据目录：`docs/features/client-config/reports/evidence/CLIENT-CONFIG-AC138-DIALOG-STABILITY-ACCEPTANCE-006/`
-- 下一入口：`CHATGPT_REMOTE_CLIENT_CONFIG_AC138_DIALOG_STABILITY_ACCEPTANCE_006_REVIEW`
+- 现行下一入口：`CHATGPT_REMOTE_CLIENT_CONFIG_AC138_DIALOG_STABILITY_ACCEPTANCE_006_R1_REVIEW`
 
 ## 1. 结论
 
 | AC | 判定 | 依据摘要 |
 |---|---|---|
-| `CCFG-AC-138` | **PASS** | 两个已确认视口（1K 1920×1080、2K 2560×1440，侧栏展开）的六步序列几何变化量全部为 `0.00px`；长错误两行完整可读、无硬裁剪；布局为内容驱动高度 + 响应式表单最大高度/受控滚动，未发现固定弹窗高度或侧栏宽度硬编码偏移 |
+| `CCFG-AC-138` | **FAIL** | 常规六步序列在两个已确认视口（1K 1920×1080、2K 2560×1440，侧栏展开）的几何变化量全部为 `0.00px`；但两行长错误出现时，两视口 `dialogHeight`、`dialogBottom`、`submitY` 均相对基线位移 `+16.37px`。原条款要求提示与错误状态切换不得造成弹窗高度或位置突变，且没有多行错误例外；长错误可读性通过不能抵消稳定性不通过，故整体判 FAIL |
 
 - `changed_ids=[CCFG-AC-138]`
-- 验收统计：`PASS 153 / FAIL 0 / BLOCKED 4 / NOT_RUN 0 = 157`（`CCFG-AC-079/087/091/094` 保持 `BLOCKED`）
+- 验收统计：`PASS 152 / FAIL 1 / BLOCKED 4 / NOT_RUN 0 = 157`（`CCFG-AC-079/087/091/094` 保持 `BLOCKED`）
 - 不标记 Feature 正式接受。
 
 ## 2. 已确认的验收条件与环境
@@ -109,9 +110,11 @@
 
 该视口表单达到 `max-height:480px`，两行错误由**表单内部受控滚动**吸收，对话框高度不变；滚动 `29px` 后两行完整可读。该场景为当前运行的补充证据，不替代两个已确认视口。
 
-### 4.5 关于 `16.37px`
+### 4.5 关于 `16.37px`（R1 纠正）
 
-两行文字实际高 `36.375px`，反馈区预留 `20px`，差值 `16.375px`（实测四舍五入为 `16.37px`）。在 1K/2K 表单未达最大高度时，对话框按内容自然增高；在 1024×720 下由受控滚动吸收。这是 AC-138 所要求的“长错误完整可读、不硬裁剪”的直接结果，不是固定单行高度或 `overflow:hidden`，也不是用固定弹窗高度制造“看起来稳定”。六步提示/错误切换序列本身的几何变化为 `0`；长错误的上边与水平位置固定，修正后完全回退。
+两行文字实际高 `36.375px`，反馈区预留 `20px`，差值 `16.375px`（实测四舍五入为 `16.37px`）。在 1K/2K 表单未达最大高度时，对话框按内容自然增高：`dialogTop`、`dialogLeft` 不变，但 `dialogHeight`、`dialogBottom`、`submitY` 均相对长错误出现前基线位移 `+16.37px`；在 1024×720 下则由受控滚动吸收，几何变化为 `0`。
+
+006 原判曾把这 `16.37px` 解释为“长错误完整可读所必需、因此符合稳定性条款”。**R1 撤回该解释**：AC-138/REQ-139 明确要求提示与错误状态切换**不造成弹窗高度或位置突变**（上下边与底部按钮纵坐标稳定），原条款**没有**多行错误例外。内容驱动增高说明它不是固定弹窗高度或侧栏硬编码偏移，但不能豁免位移本身——错误显示期间弹窗下边与底部按钮确实发生了 `+16.37px` 位移。可读性条款通过不能抵消稳定性条款不通过，故 AC-138 整体判 **FAIL**。
 
 ## 5. 静态布局核对（固定高度 / 侧栏偏移）
 
@@ -130,20 +133,21 @@
 
 AC-138 条款逐项对应：
 
-1. **同一已确认视口、同一序列、逐步记录纵/横坐标**：1K、2K 各自完整执行六步，`summary.deltas.maxAbs` 全 `0`。
-2. **提示与错误状态切换不造成弹窗高度或位置突变**：六步中灰/隐藏/红切换均不变几何；上边、下边、按钮坐标稳定。
-3. **长错误完整可读、不被硬裁剪**：两视口均 2 行、行框均在表单可视区，`overflow:visible`、`overflow-wrap:anywhere`，无祖先硬裁剪；1024 补充场景滚动 29px 后两行可读。
-4. **允许响应式布局与受控滚动**：1K/2K 内容驱动高度，1024 表单受控滚动。
-5. **不得写死侧栏偏移或固定弹窗高度**：源码与计算样式均未发现；居中为视口居中（`margin:auto`），垂直为 `15vh`。
+1. **同一已确认视口、同一序列、逐步记录纵/横坐标**：1K、2K 各自完整执行六步，`sequence1920x1080.summary.deltas.maxAbs` 与 `sequence2560x1440.summary.deltas.maxAbs` 全 `0`。符合。
+2. **提示与错误状态切换不造成弹窗高度或位置突变**：常规灰/隐藏/红切换的六步几何稳定；但两行长错误出现时，`longError1920x1080.geometryDelta.afterVsBefore` 与 `longError2560x1440.geometryDelta.afterVsBefore` 的 `dialogHeight`、`dialogBottom`、`submitY` 均为 `+16.37`，即错误显示期间弹窗下边与底部按钮发生纵向位移。**不符合。**
+3. **长错误完整可读、不被硬裁剪**：两视口均 2 行、行框均在表单可视区，`overflow:visible`、`overflow-wrap:anywhere`，无祖先硬裁剪；1024 补充场景滚动 29px 后两行可读。符合。
+4. **允许响应式布局与受控滚动**：1K/2K 内容驱动高度，1024 表单受控滚动。符合。
+5. **不得写死侧栏偏移或固定弹窗高度**：源码与计算样式均未发现；居中为视口居中（`margin:auto`），垂直为 `15vh`。符合。
 
-限制（如实记录，不吞掉）：
+限制与改判依据（如实记录，不吞掉）：
 
-- 两行长错误在 1K/2K 使对话框下边与底部按钮下移 `16.37px`（上边不动），修正后归零；这是 2 行内容超出 20px 预留占位的确定性结果，属“长错误完整可读”所必需，非固定高度/侧栏偏移。
-- 1024×720 为补充视口，不是负责人确认的主/补充验收条件；主判定只基于 1K/2K。
+- 两行长错误在 1K/2K 使对话框下边与底部按钮下移 `16.37px`（上边不动），修正后归零；内容驱动增高可以解释位移成因，但原条款没有多行错误例外，位移事实违反“不造成弹窗高度或位置突变”。
+- 可读性通过、响应式布局合规、无固定高度/侧栏硬编码，均不能抵消第 2 项的稳定性不通过；故 AC-138 整体判 **FAIL**。
+- 1024×720 为补充视口，不是负责人确认的主/补充验收条件；且该补充视口的 `0` 位移不能替代两个已确认视口中的 `+16.37px` 事实。
 - 长错误为浏览器内本地回放（来源 005 真实记录），不是本轮真实后端响应；真实错误渲染路径与错误码映射未改动。
 - 本轮未做数据库级核对；AC-138 为前端布局/可读性条款，且本轮零写，无 DB 核对对象。
 
-**判定：PASS。**
+**判定：FAIL。**
 
 ## 7. 网络与写入台账
 
@@ -157,12 +161,15 @@ AC-138 条款逐项对应：
 ## 8. 验收统计与定义保护
 
 - 从 `ACCEPTANCE.md` 独立复算：157 个 AC ID 连续唯一。
-- 开工 `PASS 152 / FAIL 0 / BLOCKED 5 / NOT_RUN 0`；本轮仅 `CCFG-AC-138` 由 `BLOCKED` 更新为 `PASS`，变为 **`PASS 153 / FAIL 0 / BLOCKED 4 / NOT_RUN 0 = 157`**。
+- 006 开工统计为 `PASS 152 / FAIL 0 / BLOCKED 5 / NOT_RUN 0`；006 原将 `CCFG-AC-138` 由 `BLOCKED` 更新为 `PASS`（`PASS 153 / FAIL 0 / BLOCKED 4 / NOT_RUN 0 = 157`），该结果已被 R1 取代。
+- R1 现行统计：`CCFG-AC-138` 由 `PASS` 改判为 `FAIL`，即 **`PASS 152 / FAIL 1 / BLOCKED 4 / NOT_RUN 0 = 157`**。
 - `CCFG-AC-079/087/091/094` 保持 `BLOCKED`；其余状态格不变；157 条定义行逐字节不变。
-- `ACCEPTANCE.md` 仅修改 AC-138 状态格；未改功能接受状态，未改其他 Feature/模板/产品代码/配置。
+- `ACCEPTANCE.md` 本轮仅将 AC-138 状态格 `PASS → FAIL`；未改功能接受状态，未改其他 Feature/模板/产品代码/配置。
 - 未标记 Feature 正式接受。
 
 ## 9. 变更文件
+
+### 006（历史，已提交并推送）
 
 - `docs/features/client-config/reports/CLIENT-CONFIG-AC138-DIALOG-STABILITY-ACCEPTANCE-006.md`（新建）
 - `docs/features/client-config/reports/evidence/CLIENT-CONFIG-AC138-DIALOG-STABILITY-ACCEPTANCE-006/`（新建）
@@ -171,6 +178,22 @@ AC-138 条款逐项对应：
 - `docs/features/client-config/ACCEPTANCE.md`（仅 AC-138 状态格）
 - `docs/features/client-config/README.md`（追加本轮报告入口一行）
 
+### R1 勘误（本轮）
+
+- `docs/features/client-config/ACCEPTANCE.md`（仅 AC-138 状态格 `PASS → FAIL`）
+- `docs/features/client-config/reports/CLIENT-CONFIG-AC138-DIALOG-STABILITY-ACCEPTANCE-006.md`（本文件：结论、条款对照、统计改判，撤回 16.37px 符合稳定性的解释，追加 R1 勘误记录）
+- `docs/features/client-config/README.md`（仅修正 006 段落的现行状态、统计与复审入口）
+- 006 证据目录、原始 JSON、探针与 `SHA256SUMS` **逐字节保留**，未改动。
+
 ## 10. 下一入口
 
-`CHATGPT_REMOTE_CLIENT_CONFIG_AC138_DIALOG_STABILITY_ACCEPTANCE_006_REVIEW`
+`CHATGPT_REMOTE_CLIENT_CONFIG_AC138_DIALOG_STABILITY_ACCEPTANCE_006_R1_REVIEW`
+
+## 11. R1 勘误记录（2026-11-06）
+
+- **006 原判**：`CCFG-AC-138` = `PASS`（提交 `bc5840d` 并推送）；当时把两行长错误造成的 `+16.37px` 视为“长错误完整可读所必需”，未计为稳定性失败。
+- **远端复审**：`CHANGES_REQUIRED`。指出原条款要求提示与错误状态切换时弹窗下边和底部按钮纵坐标稳定，没有多行错误例外。
+- **纠正结论**：`CCFG-AC-138` = **`FAIL`**；`changed_ids=[CCFG-AC-138]`；统计 `PASS 152 / FAIL 1 / BLOCKED 4 / NOT_RUN 0 = 157`。
+- **证据键**：`sections.sequence1920x1080.summary.deltas.maxAbs`、`sections.sequence2560x1440.summary.deltas.maxAbs` 全 `0`；`sections.longError1920x1080.geometryDelta.afterVsBefore`、`sections.longError2560x1440.geometryDelta.afterVsBefore` 的 `dialogHeight`/`dialogBottom`/`submitY` = `+16.37`，`dialogTop`/`dialogLeft`/`submitX` = `0`；`correctedVsBefore` 全 `0`；`sections.longError1024x720Supplement.geometryDelta` 全 `0`（补充场景，不替代已确认视口）。
+- **本轮性质**：纯文档勘误；未启动浏览器或服务、未构建、未运行探针、未调用业务 API、未读写数据库/夹具、未改产品代码或配置。006 原始证据逐字节保留。
+- 006 原 `PASS` 判定仅作为已被 R1 取代的历史记录保留。
