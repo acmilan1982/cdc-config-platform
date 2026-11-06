@@ -11,8 +11,8 @@
 
 | AC | 判定 | 依据摘要 |
 |---|---|---|
-| `CCFG-AC-120` | **PASS** | 新增“创建”与编辑“保存”的常态/hover/focus/active 计算样式均符合已批准值；表单不完整时按钮可点击、点击显示字段错误且零非 GET；真实 5000 ms 延迟下忙碌态清楚可辨、无蓝黑跳色、重复点击零新增请求；编辑忙碌态复用 004-R1；参考页对照采用已入仓运行证据 |
-| `CCFG-AC-125` | **PASS** | 真实后端 `40941` 长错误在 1440×900 与 1024×720 均完整换行可读；逐祖先无硬裁剪；表单受控内部滚动后两行均在可视区；文档无异常横向溢出；窄视口弹窗可操作并可关闭 |
+| `CCFG-AC-120` | **PASS** | 新增“创建”与编辑“保存”的常态/hover/focus/active 计算样式均符合已批准值；表单不完整时按钮可点击、点击显示字段错误且零非 GET；新增模式真实 5000 ms 延迟多时点采样显示忙碌态清楚可辨、无蓝黑跳色、重复点击零新增请求；编辑模式由 004-R1 真实 `PUT` 防重证据与固定提交 `242cc5c` 的编辑忙碌快照共同支持；参考页对照采用已入仓运行证据 |
+| `CCFG-AC-125` | **PASS** | 真实后端 `40941` 长错误在 1440×900 与 1024×720 均完整换行可读；错误盒未被祖先的滚动/溢出限制截断；表单受控内部滚动后两行均在可视区；文档无异常横向溢出；窄视口弹窗可操作并可关闭 |
 | `CCFG-AC-134` | **PASS** | 新增与编辑两种模式均完成键盘输入、真实粘贴、自动生成、取消全部、提交失败、修正、关闭重开；候选 API 与 DB 互证（夹具前 238=238、夹具后 239=239）；已分配提示、逗号禁选、选择顺序、编辑锁定语义成立；`POST /api/clients` 冲突 `40941`、成功 `200/200` 并独立回读；编辑保存复用 004-R1 的真实 `PUT` 证据；固定 Git 区间审计显示参考页/其他 Feature/全局组件/后端/DB 定义/两套模板全局状态未被改动 |
 | `CCFG-AC-138` | **BLOCKED**（本地部分完成） | 同视口 6 步几何在 1440×900（展开/收起）与 1024×720（展开）均稳定，长错误完整可读，未发现固定弹窗高度或写死侧栏偏移；但“项目负责人已确认当前稳定状态的相同视口（含展开/收起侧栏）”这一前置在已入仓记录中无可追溯确认，故整项保留 `BLOCKED` |
 
@@ -41,7 +41,7 @@
 
 ## 3. `CCFG-AC-120`：主提交按钮外观与提交态
 
-证据键：`A` = `results/probeA-readonly.json`，`B` = `results/probeB-write.json`，`R1` = `reports/evidence/CLIENT-CONFIG-LIST-MENU-AND-ROW-HEIGHT-ACCEPTANCE-004-R1/results/r1b-write-dedup.json`。
+证据键：`A` = `results/probeA-readonly.json`（005 只读探针结果，基线 `85d0f61` 入仓），`B` = `results/probeB-write.json`（005 受控写探针结果，同一基线），`R1` = `reports/evidence/CLIENT-CONFIG-LIST-MENU-AND-ROW-HEIGHT-ACCEPTANCE-004-R1/results/r1b-write-dedup.json`（004-R1 入仓，基线 `11041911d05df65804aafd67ea9fa1cec03ce5db`），`E2` = 固定提交 `242cc5cf878216ef6e020effc539ee742c87a35c` 的 `reports/evidence/CLIENT-CONFIG-MULTI-AC-CRUD-AND-ABNORMAL-STATE-ACCEPTANCE-001/group-e-results.json`。
 
 ### 3.1 计算样式（创建“创建”与编辑“保存”分列）
 
@@ -61,10 +61,17 @@
 
 ### 3.3 忙碌态与防重复
 
-- 创建（真实后端请求，门禁延迟 5000 ms）：`B.sections.busy.snapshots` 在 129/557/2113/3656 ms 均显示 `is-disabled is-loading`、spinner=1、底色 `rgb(63,63,70)`、文字 `#ffffff`、`pointer-events:none`；`blueDetected=false`。
-- 忙碌期真实鼠标重复点击命中 `.el-dialog__footer`；门禁记录 `POST` 总数=2（冲突 + 成功），无额外请求；已输入 ID 在忙碌期保持不变。
-- 成功后对话框关闭，MutationObserver 捕获“新增成功”toast。
-- 编辑忙碌态复用 `R1.flows.edit.busyState/duplicateAction/putCount/response/readback`：延迟 `PUT`、`is-disabled is-loading`、重复点击命中 footer、`putCount=1`、200/200、回读一致。
+**新增模式**（“创建”按钮）：
+
+- `B.sections.busy` 是受控 5000 ms 网络延迟下的多时点快照（`gateDelayMs=5000`、`isRealHttpDelay=true`）。`B.sections.busy.snapshots` 在 129/557/2113/3656 ms 均显示 `el-button--primary is-disabled is-loading cc-dialog-submit ced-submit`、`spinnerCount=1`、底色/边框 `rgb(63,63,70)`、文字 `rgb(255,255,255)`、`cursor=not-allowed`、`pointer-events:none`；`distinctBackgrounds=['rgb(63,63,70)']`、`blueDetected=false`。
+- 忙碌期真实鼠标重复点击命中 `.el-dialog__footer`；`B.sections.requestLedger` 中 `apiRequestMethods.POST=2`（冲突 + 成功），无额外请求；`B.sections.busy.successForwardedCount=1`；忙碌期已输入 ID 保持不变（`B.sections.busy.snapshots[2].typedWhileBusy.unchanged=true`）。
+- 成功后对话框关闭，MutationObserver 捕获“新增成功”toast（`B.sections.busy.afterResponse.observedToasts`）。
+- **边界**：5000 ms 是受控网络延迟注入；上述多时点采样只属于新增模式，编辑模式未执行同样的多时点采样。
+
+**编辑模式**（“保存”按钮；并列两份已入仓证据）：
+
+- ① `R1.flows.edit`（004-R1 真实延迟 `PUT`）：`busyState.submit.disabled=true`、`cls` 含 `is-disabled is-loading`、按钮文字“保存”；`duplicateAction` 的真实鼠标重复操作命中 `.el-dialog__footer`，其 `deltaAttempts` 中唯一一条 `PUT /api/clients/CCFG004-NEW1` 的时间戳 `1793883054470` **早于**重复点击时间戳 `1793883055183`，即它是已存在的首笔请求，不是重复动作新增的第二笔；`putCount=1`；`response` 200/200；`readback` 描述与数据源一致。
+- ② `E2.ac115.submitting.inFlight`（固定提交 `242cc5c`）：`loadingVisible=1`、`textWhileLoading="保存"`、`style.backgroundColor/borderColor="rgb(63, 63, 70)"`、`style.color="rgb(255, 255, 255)"`、`disabledAttr=true`。该记录是编辑忙碌态快照，**不是**完整颜色时序。
 
 **判定：PASS。** `CCFG-AC-115` 的既有 `PASS` 保留，不重判；其“提交处理中暂不可重复提交”口径与本条并存无冲突。
 
@@ -76,12 +83,12 @@
 |---|---|---|
 | 真实可触发长错误 | `B.sections.conflict` | 业务码 `40941`；文本与期望全文一致；归属“采集数据源”字段 |
 | 正常视口换行可读 | `B.sections.conflict.wideBeforeScroll` | 1440×900：2 行，行宽 731.03 / 140.13；表单区 191.39–700.56（clientHeight 509、scrollHeight 509、scrollTop 0）；错误盒完整可见 |
-| 无硬裁剪 | `B.sections.conflict.ancestors`、`A.sections.layoutStatic` | 错误文本 `overflow=visible`、`overflow-wrap:anywhere`；逐祖先无 `overflow:hidden` 硬裁剪 |
-| 窄视口可读（受控滚动） | `B.sections.conflict.narrowBeforeScroll/narrowScroll/narrowAfterScroll` | 1024×720：表单 164.39–644.39（clientHeight 480）；`scrollTop=29` 后错误盒 608.19–644.56，两行盒 609.19–624.19、627.38–642.38 均位于可视区 |
-| 无异常横向溢出 | `B.sections.conflict.doc` | 1440：`scrollWidth=clientWidth=1440`；1024：`1024=1024`；`horizontalOverflow=false` |
+| 无硬裁剪 | `B.sections.conflict.wideBeforeScroll.ancestors`、`B.sections.conflict.narrowBeforeScroll.ancestors`、`B.sections.conflict.narrowAfterScroll.ancestors`、`A.sections.layoutStatic` | 错误文本 `overflow=visible`、`overflow-wrap:anywhere`；直接反馈/控件祖先（`P`、`.cc-field-feedback`、`.cc-form-control`）均 `overflow=visible`。祖先链中确实存在滚动/溢出限制：`.cc-form`、`.el-overlay-dialog`、`.el-overlay`、`.content-area` 为 `overflow:auto`，`.main-layout` 为 `overflow:hidden`；这些限制未截断错误盒，错误盒与两行行盒均在弹窗/表单可视区内完整显示 |
+| 窄视口可读（受控滚动） | `B.sections.conflict.narrowBeforeScroll` / `narrowScroll` / `narrowAfterScroll`（`form`、`pRect`、`lines`、`lines[].insideFormViewport`） | 1024×720：表单 164.39–644.39（clientHeight 480、scrollHeight 509、`overflowY=auto`）；滚动前错误盒 637.19–673.56，超出表单底边；`narrowScroll.formScrollTop=29` 后 `narrowAfterScroll.pRect` 608.19–644.56，两行盒 609.19–624.19、627.38–642.38 均 `insideFormViewport=true` |
+| 无异常横向溢出 | `B.sections.conflict.wideBeforeScroll.doc`、`B.sections.conflict.narrowBeforeScroll.doc`、`B.sections.conflict.narrowAfterScroll.doc` | 1440：`scrollWidth=clientWidth=1440`；1024：`scrollWidth=clientWidth=1024`；两视口 `horizontalOverflow=false` |
 | 窄视口可操作/关闭 | `A` 窄视口序列 + `closeDialogIfOpen` | 1024 下可选中/取消数据源、提交触发错误、点击“取消”关闭 |
 
-表单为受控内部滚动（弹窗内既有布局），不构成整页横向溢出；两种视口下均无文档级横向滚动。
+表单为受控内部滚动（`.cc-form` 的 `overflowY=auto`），不构成整页横向溢出；两种视口的 `doc.horizontalOverflow` 均为 false，无文档级横向滚动。
 
 **判定：PASS。**
 
@@ -91,11 +98,11 @@
 
 | 子步骤 | 新增证据键 | 编辑证据键 | 实测 |
 |---|---|---|---|
-| 键盘输入 | `A.sections.ac134Create.keyboard` | `A.sections.ac134Edit.keyboard` | 新增键入 `CCFG005-KB1`；编辑解锁后键入 `CCFG005-NEW-EDIT-KB` |
+| 键盘输入 | `A.sections.ac134Create.keyboard` | `A.sections.ac134Edit.keyboard` | 新增键入 `CCFG005-KB1`；编辑在弹窗的**描述框**清空后键盘输入（`action="clear textarea + keyboard.type(delay=10)"`），`descValue="CCFG005-NEW-EDIT-KB"`；该值写入描述草稿，未写入探针 ID 字段，不用于证明改名 |
 | 真实剪贴板粘贴 | `A.sections.ac134Create.paste` | `A.sections.ac134Edit.paste` | `navigator.clipboard.writeText` + Ctrl+V；分别得到 `PASTE-005-描述样本`、`EDIT-PASTE-005`（非脚本赋值） |
 | 自动生成与顺序 | `A.sections.ac134Create.autoGenerate/autoGenerateReverse` | `A.sections.ac134Edit.autoGenerate` | 新增 DS06→DS05 与反向，描述顺序与选择顺序一致；编辑顺序正确 |
 | 取消全部 / 提交失败 / 修正 / 重开 | `A.sections.ac134Create.cancelAll/submitFailure/corrected/reopen` | `A.sections.ac134Edit.cancelAllSubmitFailure/corrected/reopen` | 中性提示 → 红色错误 → 修正清除 → 重开为空/恢复原值；各步 `nonGet=0` |
-| 编辑锁定/解锁/再锁定 | — | `A.sections.ac134Edit.initial/unlocked/relocked` | 初始“（已锁定）”；“修改探针 ID”解锁；可再锁定 |
+| 编辑锁定/解锁/再锁定 | — | `A.sections.ac134Edit.initial/unlocked/relocked` | `initial`：`idLocked=true`、`lockHint="（已锁定）"`、`toggleText="修改探针 ID"`、`idValue="CCFG004-NEW1"`；`unlocked`：`inputEditable=true`、`toggleText="取消修改"`、值保持 `CCFG004-NEW1`；`relocked`：`idLocked=true`、`toggleText="修改探针 ID"`、值仍为 `CCFG004-NEW1` |
 
 ### 5.2 候选资格与选择规则
 
@@ -137,7 +144,7 @@
 | 1440×900，侧栏展开，6 步序列 | `A.sections.ac125Ac138.wide` | 高度恒 613.19、top 恒 135、提交按钮 y 恒 700.19；反馈 灰→隐藏→灰→红→隐藏；每步 `nonGet=0` |
 | 1440×900，侧栏收起 | `A.sections.ac125Ac138.wideCollapsed` | 与展开态相同几何；无水平溢出 |
 | 1024×720，侧栏展开 | `A.sections.ac125Ac138.narrow` | 高度恒 600.39、top 恒 108、提交按钮 y 恒 660.39；无水平溢出 |
-| 长错误分支 | `B.sections.conflict` | 真实 `40941` 两行可读；窄视口受控滚动；无硬裁剪 |
+| 长错误分支 | `B.sections.conflict` | 真实 `40941` 两行可读；窄视口受控滚动；错误盒未被祖先滚动/溢出限制截断 |
 | 固定高度/侧栏偏移 | `A.sections.ac125Ac138.*.fixedDialogHeightCss`、`dialogCentering.delta=0` | 高度内容驱动；水平居中 delta=0；未发现写死侧栏偏移 |
 
 ### 6.2 阻断原因
@@ -190,4 +197,16 @@
 
 ## 10. 下一入口
 
-`CHATGPT_REMOTE_CLIENT_CONFIG_DIALOG_ACCEPTANCE_005_REVIEW`
+`CHATGPT_REMOTE_CLIENT_CONFIG_DIALOG_ACCEPTANCE_005_R1_REVIEW`
+
+## 11. R1 勘误记录（2026-11-06）
+
+本次仅做文档/引用勘误与静态核验，未重跑探针、未调用业务 API、未读写数据库、未启停服务。判定维持：`CCFG-AC-120/125/134` PASS、`CCFG-AC-138` BLOCKED。
+
+| 编号 | 旧写法 | 新写法 | 证据路径与键 |
+|---|---|---|---|
+| R1-01 | 将新增模式的 `B.sections.busy` 多时点采样视为已覆盖编辑模式；编辑忙碌态仅笼统“复用 004-R1” | 新增模式明确为 `B.sections.busy` 多时点采样（5000 ms 受控延迟）；编辑模式并列两份证据：`R1.flows.edit`（`busyState`/`duplicateAction`/`putCount`，`deltaAttempts` 首笔 PUT 时间戳早于重复点击，非第二笔）与 `E2.ac115.submitting.inFlight`（`loadingVisible=1`、底色/边框 `rgb(63,63,70)`、白字；仅为忙碌快照，非完整颜色时序） | `results/probeB-write.json → sections.busy`、`sections.requestLedger`；`...004-R1/results/r1b-write-dedup.json → flows.edit`；提交 `242cc5c` 的 `...MULTI-AC-CRUD.../group-e-results.json → ac115.submitting.inFlight` |
+| R1-02 | `B.sections.conflict.ancestors`、`B.sections.conflict.doc`（不存在） | 改为各快照内的实际字段：`wideBeforeScroll/narrowBeforeScroll/narrowAfterScroll.ancestors` 与同名快照的 `.doc`；并如实记录祖先链存在 `.cc-form`/`.el-overlay*`/`.content-area` 的 `overflow:auto` 与 `.main-layout` 的 `overflow:hidden`，但其未截断错误盒 | `results/probeB-write.json → sections.conflict.wideBeforeScroll/narrowBeforeScroll/narrowAfterScroll`（`.ancestors`、`.doc`、`.form`、`.pRect`、`.lines`） |
+| R1-03 | “编辑解锁后键入 `CCFG005-NEW-EDIT-KB`” | 改为“在编辑弹窗的描述框清空后键盘输入”，值写入描述草稿，未写入探针 ID 字段，不用于证明改名 | `results/probeA-readonly.json → sections.ac134Edit.keyboard`（`action`、`descValue`）；锁定/解锁/再锁定另引 `initial`/`unlocked`/`relocked` |
+
+勘误文件：本报告、`evidence/.../reference-evidence-index.md`、`evidence/.../four-item-matrix.md`、`evidence/.../SHA256SUMS`。原始 JSON、探针、SQL、台账与其他批次文件逐字节保留。

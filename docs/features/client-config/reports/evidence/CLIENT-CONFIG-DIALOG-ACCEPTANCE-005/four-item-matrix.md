@@ -14,7 +14,7 @@
 | 编辑表单不完整仍可点击 | `A.sections.ac120Edit.afterIncompleteClick` | 描述错误显示；`nonGetAttempts=0` | PASS |
 | 创建忙碌态（真实延迟 5000 ms） | `B.sections.busy.snapshots`（129/557/2113/3656 ms） | `is-disabled is-loading`、spinner=1、底色 `rgb(63,63,70)`、无蓝色；`blueDetected=false` | PASS |
 | 忙碌期防重复 | `B.sections.busy` + `B.sections.requestLedger` | 真实鼠标重复点击命中 `FOOTER`；`POST` 总数=2（冲突+成功），无额外请求；忙碌期输入值不变 | PASS |
-| 编辑忙碌态（复用 004-R1） | `…004-R1/results/r1b-write-dedup.json` → `flows.edit.busyState/duplicateAction/putCount/response/readback` | 延迟 PUT；`is-disabled is-loading`；重复点击命中 FOOTER；`putCount=1`；200/200；回读一致 | PASS（复用） |
+| 编辑忙碌态（004-R1 + 固定提交 `242cc5c`） | `…004-R1/results/r1b-write-dedup.json` → `flows.edit.busyState/duplicateAction/putCount/response/readback`；固定提交 `242cc5c` 的 `…MULTI-AC-CRUD…/group-e-results.json` → `ac115.submitting.inFlight` | 延迟 PUT；`is-disabled is-loading`；重复点击命中 FOOTER；`deltaAttempts` 唯一 PUT 早于重复点击（首笔，非第二笔）；`putCount=1`；200/200；回读一致；`inFlight` 快照 `loadingVisible=1`、`rgb(63,63,70)`/白字（非完整颜色时序） | PASS（复用） |
 | 参考页对照 | `reference-evidence-index.md` §1 | 数据源页常态/hover/focus/active 值与本次一致；参考实现 `807a5a5` 自该提交起样式未变；Chrome 148 vs 147 差异已记录 | PASS |
 | AC-115 关系 | 不重判 | AC-115 既有 PASS 保留 | 不适用 |
 
@@ -27,8 +27,8 @@
 | 真实可触发长错误 | `B.sections.conflict` | 真实后端 40941；文本 = 期望全文；归属“采集数据源”字段 | PASS |
 | 正常视口换行与可读 | `B.sections.conflict.wideBeforeScroll` | 1440×900：2 行（行宽 731.03 / 140.13），行盒均在表单可视区内，无滚动；`overflow=visible` | PASS |
 | 窄视口可读（受控滚动后） | `B.sections.conflict.narrowBeforeScroll` / `narrowScroll` / `narrowAfterScroll` | 1024×720：2 行；表单 `clientHeight=480`、`scrollHeight=509`；`scrollTop=29` 后两行盒均位于表单可视区（609.19–624.19、627.38–642.38） | PASS |
-| 无硬裁剪 | `B...ancestors`、`A.sections.layoutStatic` | 错误文本 `overflow=visible`、`overflow-wrap:anywhere`；逐祖先无 `overflow:hidden` 硬裁剪；表单为受控内部滚动 | PASS |
-| 无异常横向溢出 | `B...doc`（两种视口） | 1440: `scrollWidth=clientWidth=1440`；1024: `1024=1024`；`horizontalOverflow=false` | PASS |
+| 无硬裁剪 | `B.sections.conflict.wideBeforeScroll.ancestors` / `narrowBeforeScroll.ancestors` / `narrowAfterScroll.ancestors`、`A.sections.layoutStatic` | 错误文本 `overflow=visible`、`overflow-wrap:anywhere`；直接反馈/控件祖先均 visible；`.cc-form`/`.el-overlay*`/`.content-area` 为 `overflow:auto`、`.main-layout` 为 `overflow:hidden`，但未截断错误盒；表单为受控内部滚动 | PASS |
+| 无异常横向溢出 | `B.sections.conflict.wideBeforeScroll.doc` / `narrowBeforeScroll.doc` / `narrowAfterScroll.doc` | 1440: `scrollWidth=clientWidth=1440`；1024: `scrollWidth=clientWidth=1024`；`horizontalOverflow=false` | PASS |
 | 窄视口弹窗可操作/关闭 | `A` 窄视口序列 + `closeDialogIfOpen` | 1024 下可选中/取消数据源、提交触发错误、点击“取消”关闭 | PASS |
 
 **AC-125 判定：PASS。**
@@ -61,7 +61,7 @@
 | 同视口 6 步序列（1440×900，侧栏展开） | `A.sections.ac125Ac138.wide` | 高度恒 613.19、top 恒 135、提交按钮 y 恒 700.19；反馈路径 灰→隐藏→灰→红→隐藏；每步 `nonGet=0` | 本地通过 |
 | 同视口 6 步序列（1440×900，侧栏收起） | `A.sections.ac125Ac138.wideCollapsed` | 与展开态相同的几何；无水平溢出 | 本地通过 |
 | 窄视口序列（1024×720，侧栏展开） | `A.sections.ac125Ac138.narrow` | 高度恒 600.39、top 恒 108、提交按钮 y 恒 660.39；无水平溢出 | 本地通过 |
-| 长错误分支可读 | `B.sections.conflict` | 真实 40941 两行可读；窄视口受控滚动；无硬裁剪 | 本地通过 |
+| 长错误分支可读 | `B.sections.conflict` | 真实 40941 两行可读；窄视口受控滚动；错误盒未被祖先滚动/溢出限制截断 | 本地通过 |
 | 固定高度/侧栏偏移 | `A.sections.ac125Ac138.*.fixedDialogHeightCss`、`dialogCentering.delta=0` | 高度为内容驱动；弹窗水平居中 delta=0；未发现写死侧栏偏移 | 本地通过 |
 
 **AC-138 判定：BLOCKED（本地部分已完成）。**

@@ -26,7 +26,13 @@
 - 键：`values.createDialog.submitNormal`、`values.createDialog.states.submitHover/submitFocus/submitActive`、`values.createDialog.submitLoading`、`values.editDialog.submit`
 - 运行条件：Chrome 147.0.7727.15，视口 1280×900
 - 值：常态 `rgb(9,9,11)` / `#fff` / `6px` / `500`；hover/focus `rgb(39,39,42)`；active `rgb(24,24,27)`；loading `rgb(63,63,70)` + `is-loading` + spinner
-- 与本次实测一致；本次新增真实 HTTP 忙碌窗口、防重复与独立回读。
+- 与本次实测的创建模式一致；本次新增真实 HTTP 忙碌窗口、防重复与独立回读。
+
+### 2.1 AC-120 忙碌态来源分列（新增 vs 编辑）
+
+- **新增模式**：`docs/features/client-config/reports/evidence/CLIENT-CONFIG-DIALOG-ACCEPTANCE-005/results/probeB-write.json → sections.busy`（`snapshots` 在 129/557/2113/3656 ms；`gateDelayMs=5000`、`isRealHttpDelay=true`；`blueDetected=false`）与 `sections.requestLedger`（`apiRequestMethods.POST=2`）。5000 ms 为受控网络延迟；多时点采样仅覆盖新增模式。
+- **编辑模式 ①**：`docs/features/client-config/reports/evidence/CLIENT-CONFIG-LIST-MENU-AND-ROW-HEIGHT-ACCEPTANCE-004-R1/results/r1b-write-dedup.json → flows.edit`（`busyState`、`duplicateAction`、`putCount=1`、`response` 200/200、`readback`）。`duplicateAction.deltaAttempts` 中唯一一条 `PUT /api/clients/CCFG004-NEW1` 的时间戳 `1793883054470` 早于重复点击 `1793883055183`，是已存在的首笔请求，不是第二笔。
+- **编辑模式 ②**：固定提交 `242cc5cf878216ef6e020effc539ee742c87a35c` 的 `docs/features/client-config/reports/evidence/CLIENT-CONFIG-MULTI-AC-CRUD-AND-ABNORMAL-STATE-ACCEPTANCE-001/group-e-results.json → ac115.submitting.inFlight`：`loadingVisible=1`、`textWhileLoading="保存"`、`backgroundColor/borderColor="rgb(63, 63, 70)"`、`color="rgb(255, 255, 255)"`。该记录是编辑忙碌态快照，不是完整颜色时序。
 
 ## 3. AC-134 参考页与范围不变性
 
