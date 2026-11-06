@@ -1,0 +1,1291 @@
+{
+  "meta": {
+    "probe": "probeB-write",
+    "startedAt": "2026-11-06T05:21:16.308Z",
+    "base": "http://127.0.0.1:5173",
+    "gate": "strict POST /api/clients whitelist by synthetic clientId + exact dataSourceIds; all other non-GET aborted",
+    "pageScope": "/config/client only",
+    "finishedAt": "2026-11-06T05:22:05.552Z"
+  },
+  "gate": {
+    "forwarded": [
+      {
+        "kind": "conflict",
+        "method": "POST",
+        "path": "/api/clients",
+        "body": {
+          "clientId": "CCFG005-NEW",
+          "clientDesc": "CCFG005 dialog create synthetic sample",
+          "dataSourceIds": [
+            "CCFG005-DS-LONG-0123456789ABCDE"
+          ]
+        }
+      },
+      {
+        "kind": "success-busy",
+        "method": "POST",
+        "path": "/api/clients",
+        "body": {
+          "clientId": "CCFG005-NEW",
+          "clientDesc": "CCFG005 dialog create synthetic sample",
+          "dataSourceIds": [
+            "CCFG-AC-R1-DS06"
+          ]
+        },
+        "delayMs": 5000
+      }
+    ],
+    "aborted": [],
+    "apiRequests": [
+      {
+        "method": "GET",
+        "path": "/src/api/clientConfig.ts"
+      },
+      {
+        "method": "GET",
+        "path": "/api/clients"
+      },
+      {
+        "method": "GET",
+        "path": "/api/clients/data-source-options"
+      },
+      {
+        "method": "POST",
+        "path": "/api/clients"
+      },
+      {
+        "method": "POST",
+        "path": "/api/clients"
+      },
+      {
+        "method": "GET",
+        "path": "/api/clients"
+      }
+    ],
+    "responses": [
+      {
+        "status": 200,
+        "path": "/api/clients",
+        "requestBody": {
+          "clientId": "CCFG005-NEW",
+          "clientDesc": "CCFG005 dialog create synthetic sample",
+          "dataSourceIds": [
+            "CCFG005-DS-LONG-0123456789ABCDE"
+          ]
+        },
+        "body": {
+          "code": 40941,
+          "message": "数据源“CCFG005超长机构名称用于错误换行验证样本（CCFG005-DS-LONG-0123456789ABCDE）”已分配给探针：CCFG005-OCC1，不能重复分配。",
+          "timestamp": "2026-11-06T13:21:27.194"
+        }
+      },
+      {
+        "status": 200,
+        "path": "/api/clients",
+        "requestBody": {
+          "clientId": "CCFG005-NEW",
+          "clientDesc": "CCFG005 dialog create synthetic sample",
+          "dataSourceIds": [
+            "CCFG-AC-R1-DS06"
+          ]
+        },
+        "body": {
+          "code": 200,
+          "message": "success",
+          "timestamp": "2026-11-06T13:21:35.682"
+        }
+      }
+    ]
+  },
+  "directWrites": [
+    {
+      "status": 200,
+      "body": {
+        "code": 200,
+        "message": "success",
+        "timestamp": "2026-11-06T13:21:27.074"
+      },
+      "ms": 43,
+      "request": {
+        "clientId": "CCFG005-OCC1",
+        "clientDesc": "CCFG005 synthetic occupier",
+        "dataSourceIds": [
+          "CCFG005-DS-LONG-0123456789ABCDE"
+        ]
+      }
+    }
+  ],
+  "sections": {
+    "setup": {
+      "longOptionBeforeOccupation": {
+        "present": true,
+        "disabled": false,
+        "reason": null
+      },
+      "apiBeforeOccupation": {
+        "long": {
+          "dataSourceId": "CCFG005-DS-LONG-0123456789ABCDE",
+          "org": "CCFG005超长机构名称用于错误换行验证样本",
+          "dataSourceName": "CCFG005 Long Org Source",
+          "selectable": true,
+          "occupiedByClientIds": []
+        },
+        "excludedPresent": [],
+        "excludedIdsChecked": [
+          "CCFG005-DS-OFF",
+          "CCFG005-DS-ABN",
+          "CCFG005-DS-CAT",
+          "CCFG005-DS-TYP"
+        ],
+        "total": 239
+      },
+      "chosen": [
+        "CCFG005超长机构名称用于错误换行验证样本"
+      ],
+      "optionsLoadedBeforeOccupation": true,
+      "optionsAfterOccupation": {
+        "dataSourceId": "CCFG005-DS-LONG-0123456789ABCDE",
+        "org": "CCFG005超长机构名称用于错误换行验证样本",
+        "dataSourceName": "CCFG005 Long Org Source",
+        "selectable": false,
+        "notSelectableReason": "OCCUPIED",
+        "occupiedByClientIds": [
+          "CCFG005-OCC1"
+        ]
+      }
+    },
+    "conflict": {
+      "expectedMessage": "数据源“CCFG005超长机构名称用于错误换行验证样本（CCFG005-DS-LONG-0123456789ABCDE）”已分配给探针：CCFG005-OCC1，不能重复分配。",
+      "messageMatches": true,
+      "wideBeforeScroll": {
+        "label": "wide-before-scroll",
+        "viewport": {
+          "width": 1440,
+          "height": 900,
+          "dpr": 1
+        },
+        "text": "数据源“CCFG005超长机构名称用于错误换行验证样本（CCFG005-DS-LONG-0123456789ABCDE）”已分配给探针：CCFG005-OCC1，不能重复分配。",
+        "toneClass": "cc-field-feedback__text ced-field-error",
+        "pStyle": {
+          "fontSize": "13px",
+          "lineHeight": "18.2px",
+          "color": "rgb(245, 108, 108)",
+          "overflow": "visible",
+          "overflowWrap": "anywhere",
+          "height": "36.375px",
+          "whiteSpace": "normal"
+        },
+        "pRect": {
+          "top": 664.19,
+          "left": 382,
+          "right": 1154,
+          "bottom": 700.56,
+          "width": 772,
+          "height": 36.38
+        },
+        "boxRect": {
+          "top": 664.19,
+          "left": 382,
+          "right": 1154,
+          "bottom": 700.56,
+          "width": 772,
+          "height": 36.38
+        },
+        "lineCount": 2,
+        "lines": [
+          {
+            "top": 665.19,
+            "left": 382,
+            "width": 731.03,
+            "height": 15
+          },
+          {
+            "top": 683.38,
+            "left": 382,
+            "width": 140.13,
+            "height": 15
+          }
+        ],
+        "ancestors": [
+          {
+            "tag": "P",
+            "cls": "cc-field-feedback__text ced-field-error",
+            "clientWidth": 772,
+            "scrollWidth": 772,
+            "clientHeight": 36,
+            "scrollHeight": 36,
+            "overflowX": "visible",
+            "overflowY": "visible"
+          },
+          {
+            "tag": "DIV",
+            "cls": "cc-field-feedback ced-field-feedback",
+            "clientWidth": 772,
+            "scrollWidth": 772,
+            "clientHeight": 36,
+            "scrollHeight": 36,
+            "overflowX": "visible",
+            "overflowY": "visible"
+          },
+          {
+            "tag": "DIV",
+            "cls": "cc-form-control cc-source-field",
+            "clientWidth": 772,
+            "scrollWidth": 772,
+            "clientHeight": 381,
+            "scrollHeight": 381,
+            "overflowX": "visible",
+            "overflowY": "visible"
+          },
+          {
+            "tag": "DIV",
+            "cls": "cc-form-item ced-label-row",
+            "clientWidth": 868,
+            "scrollWidth": 868,
+            "clientHeight": 381,
+            "scrollHeight": 381,
+            "overflowX": "visible",
+            "overflowY": "visible"
+          },
+          {
+            "tag": "DIV",
+            "cls": "cc-form",
+            "clientWidth": 868,
+            "scrollWidth": 868,
+            "clientHeight": 509,
+            "scrollHeight": 509,
+            "overflowX": "auto",
+            "overflowY": "auto"
+          },
+          {
+            "tag": "DIV",
+            "cls": "el-dialog__body",
+            "clientWidth": 868,
+            "scrollWidth": 868,
+            "clientHeight": 509,
+            "scrollHeight": 509,
+            "overflowX": "visible",
+            "overflowY": "visible"
+          },
+          {
+            "tag": "DIV",
+            "cls": "el-dialog cc-dialog ced-dialog",
+            "clientWidth": 900,
+            "scrollWidth": 900,
+            "clientHeight": 630,
+            "scrollHeight": 630,
+            "overflowX": "visible",
+            "overflowY": "visible"
+          },
+          {
+            "tag": "DIV",
+            "cls": "el-overlay-dialog",
+            "clientWidth": 1440,
+            "scrollWidth": 1440,
+            "clientHeight": 900,
+            "scrollHeight": 900,
+            "overflowX": "auto",
+            "overflowY": "auto"
+          },
+          {
+            "tag": "DIV",
+            "cls": "el-overlay el-modal-dialog",
+            "clientWidth": 1440,
+            "scrollWidth": 1440,
+            "clientHeight": 900,
+            "scrollHeight": 900,
+            "overflowX": "auto",
+            "overflowY": "auto"
+          },
+          {
+            "tag": "DIV",
+            "cls": "ql-page",
+            "clientWidth": 1140,
+            "scrollWidth": 1140,
+            "clientHeight": 4639,
+            "scrollHeight": 4639,
+            "overflowX": "visible",
+            "overflowY": "visible"
+          },
+          {
+            "tag": "DIV",
+            "cls": "content-card",
+            "clientWidth": 1180,
+            "scrollWidth": 1180,
+            "clientHeight": 4679,
+            "scrollHeight": 4679,
+            "overflowX": "visible",
+            "overflowY": "visible"
+          },
+          {
+            "tag": "DIV",
+            "cls": "content-area",
+            "clientWidth": 1220,
+            "scrollWidth": 1220,
+            "clientHeight": 852,
+            "scrollHeight": 4711,
+            "overflowX": "auto",
+            "overflowY": "auto"
+          },
+          {
+            "tag": "DIV",
+            "cls": "layout-right",
+            "clientWidth": 1220,
+            "scrollWidth": 1220,
+            "clientHeight": 900,
+            "scrollHeight": 900,
+            "overflowX": "visible",
+            "overflowY": "visible"
+          },
+          {
+            "tag": "DIV",
+            "cls": "main-layout",
+            "clientWidth": 1440,
+            "scrollWidth": 1440,
+            "clientHeight": 900,
+            "scrollHeight": 900,
+            "overflowX": "hidden",
+            "overflowY": "hidden"
+          },
+          {
+            "tag": "DIV",
+            "cls": "",
+            "clientWidth": 1440,
+            "scrollWidth": 1440,
+            "clientHeight": 900,
+            "scrollHeight": 900,
+            "overflowX": "visible",
+            "overflowY": "visible"
+          }
+        ],
+        "form": {
+          "top": 191.39,
+          "bottom": 700.56,
+          "clientHeight": 509,
+          "scrollHeight": 509,
+          "scrollTop": 0,
+          "overflowY": "auto",
+          "maxHeight": "660px"
+        },
+        "dialog": {
+          "top": 135,
+          "left": 270,
+          "right": 1170,
+          "bottom": 764.56,
+          "width": 900,
+          "height": 629.56
+        },
+        "submit": {
+          "top": 716.56,
+          "left": 1094,
+          "right": 1154,
+          "bottom": 748.56,
+          "width": 60,
+          "height": 32
+        },
+        "submitDisabled": false,
+        "doc": {
+          "scrollWidth": 1440,
+          "clientWidth": 1440,
+          "horizontalOverflow": false
+        },
+        "sourceSplitClass": "cc-split cc-split--error"
+      },
+      "wideScroll": {
+        "formRect": {
+          "top": 191.39,
+          "bottom": 700.56
+        },
+        "pRect": {
+          "top": 664.19,
+          "bottom": 700.56
+        },
+        "fullyInsideFormViewport": true,
+        "lines": [
+          {
+            "top": 665.19,
+            "bottom": 680.19,
+            "insideFormViewport": true
+          },
+          {
+            "top": 683.38,
+            "bottom": 698.38,
+            "insideFormViewport": true
+          }
+        ],
+        "formScrollTop": 0
+      },
+      "wideAfterScroll": {
+        "label": "wide-after-scroll",
+        "viewport": {
+          "width": 1440,
+          "height": 900,
+          "dpr": 1
+        },
+        "text": "数据源“CCFG005超长机构名称用于错误换行验证样本（CCFG005-DS-LONG-0123456789ABCDE）”已分配给探针：CCFG005-OCC1，不能重复分配。",
+        "toneClass": "cc-field-feedback__text ced-field-error",
+        "pStyle": {
+          "fontSize": "13px",
+          "lineHeight": "18.2px",
+          "color": "rgb(245, 108, 108)",
+          "overflow": "visible",
+          "overflowWrap": "anywhere",
+          "height": "36.375px",
+          "whiteSpace": "normal"
+        },
+        "pRect": {
+          "top": 664.19,
+          "left": 382,
+          "right": 1154,
+          "bottom": 700.56,
+          "width": 772,
+          "height": 36.38
+        },
+        "boxRect": {
+          "top": 664.19,
+          "left": 382,
+          "right": 1154,
+          "bottom": 700.56,
+          "width": 772,
+          "height": 36.38
+        },
+        "lineCount": 2,
+        "lines": [
+          {
+            "top": 665.19,
+            "left": 382,
+            "width": 731.03,
+            "height": 15
+          },
+          {
+            "top": 683.38,
+            "left": 382,
+            "width": 140.13,
+            "height": 15
+          }
+        ],
+        "ancestors": [
+          {
+            "tag": "P",
+            "cls": "cc-field-feedback__text ced-field-error",
+            "clientWidth": 772,
+            "scrollWidth": 772,
+            "clientHeight": 36,
+            "scrollHeight": 36,
+            "overflowX": "visible",
+            "overflowY": "visible"
+          },
+          {
+            "tag": "DIV",
+            "cls": "cc-field-feedback ced-field-feedback",
+            "clientWidth": 772,
+            "scrollWidth": 772,
+            "clientHeight": 36,
+            "scrollHeight": 36,
+            "overflowX": "visible",
+            "overflowY": "visible"
+          },
+          {
+            "tag": "DIV",
+            "cls": "cc-form-control cc-source-field",
+            "clientWidth": 772,
+            "scrollWidth": 772,
+            "clientHeight": 381,
+            "scrollHeight": 381,
+            "overflowX": "visible",
+            "overflowY": "visible"
+          },
+          {
+            "tag": "DIV",
+            "cls": "cc-form-item ced-label-row",
+            "clientWidth": 868,
+            "scrollWidth": 868,
+            "clientHeight": 381,
+            "scrollHeight": 381,
+            "overflowX": "visible",
+            "overflowY": "visible"
+          },
+          {
+            "tag": "DIV",
+            "cls": "cc-form",
+            "clientWidth": 868,
+            "scrollWidth": 868,
+            "clientHeight": 509,
+            "scrollHeight": 509,
+            "overflowX": "auto",
+            "overflowY": "auto"
+          },
+          {
+            "tag": "DIV",
+            "cls": "el-dialog__body",
+            "clientWidth": 868,
+            "scrollWidth": 868,
+            "clientHeight": 509,
+            "scrollHeight": 509,
+            "overflowX": "visible",
+            "overflowY": "visible"
+          },
+          {
+            "tag": "DIV",
+            "cls": "el-dialog cc-dialog ced-dialog",
+            "clientWidth": 900,
+            "scrollWidth": 900,
+            "clientHeight": 630,
+            "scrollHeight": 630,
+            "overflowX": "visible",
+            "overflowY": "visible"
+          },
+          {
+            "tag": "DIV",
+            "cls": "el-overlay-dialog",
+            "clientWidth": 1440,
+            "scrollWidth": 1440,
+            "clientHeight": 900,
+            "scrollHeight": 900,
+            "overflowX": "auto",
+            "overflowY": "auto"
+          },
+          {
+            "tag": "DIV",
+            "cls": "el-overlay el-modal-dialog",
+            "clientWidth": 1440,
+            "scrollWidth": 1440,
+            "clientHeight": 900,
+            "scrollHeight": 900,
+            "overflowX": "auto",
+            "overflowY": "auto"
+          },
+          {
+            "tag": "DIV",
+            "cls": "ql-page",
+            "clientWidth": 1140,
+            "scrollWidth": 1140,
+            "clientHeight": 4639,
+            "scrollHeight": 4639,
+            "overflowX": "visible",
+            "overflowY": "visible"
+          },
+          {
+            "tag": "DIV",
+            "cls": "content-card",
+            "clientWidth": 1180,
+            "scrollWidth": 1180,
+            "clientHeight": 4679,
+            "scrollHeight": 4679,
+            "overflowX": "visible",
+            "overflowY": "visible"
+          },
+          {
+            "tag": "DIV",
+            "cls": "content-area",
+            "clientWidth": 1220,
+            "scrollWidth": 1220,
+            "clientHeight": 852,
+            "scrollHeight": 4711,
+            "overflowX": "auto",
+            "overflowY": "auto"
+          },
+          {
+            "tag": "DIV",
+            "cls": "layout-right",
+            "clientWidth": 1220,
+            "scrollWidth": 1220,
+            "clientHeight": 900,
+            "scrollHeight": 900,
+            "overflowX": "visible",
+            "overflowY": "visible"
+          },
+          {
+            "tag": "DIV",
+            "cls": "main-layout",
+            "clientWidth": 1440,
+            "scrollWidth": 1440,
+            "clientHeight": 900,
+            "scrollHeight": 900,
+            "overflowX": "hidden",
+            "overflowY": "hidden"
+          },
+          {
+            "tag": "DIV",
+            "cls": "",
+            "clientWidth": 1440,
+            "scrollWidth": 1440,
+            "clientHeight": 900,
+            "scrollHeight": 900,
+            "overflowX": "visible",
+            "overflowY": "visible"
+          }
+        ],
+        "form": {
+          "top": 191.39,
+          "bottom": 700.56,
+          "clientHeight": 509,
+          "scrollHeight": 509,
+          "scrollTop": 0,
+          "overflowY": "auto",
+          "maxHeight": "660px"
+        },
+        "dialog": {
+          "top": 135,
+          "left": 270,
+          "right": 1170,
+          "bottom": 764.56,
+          "width": 900,
+          "height": 629.56
+        },
+        "submit": {
+          "top": 716.56,
+          "left": 1094,
+          "right": 1154,
+          "bottom": 748.56,
+          "width": 60,
+          "height": 32
+        },
+        "submitDisabled": false,
+        "doc": {
+          "scrollWidth": 1440,
+          "clientWidth": 1440,
+          "horizontalOverflow": false
+        },
+        "sourceSplitClass": "cc-split cc-split--error"
+      },
+      "narrowBeforeScroll": {
+        "label": "narrow-before-scroll",
+        "viewport": {
+          "width": 1024,
+          "height": 720,
+          "dpr": 1
+        },
+        "text": "数据源“CCFG005超长机构名称用于错误换行验证样本（CCFG005-DS-LONG-0123456789ABCDE）”已分配给探针：CCFG005-OCC1，不能重复分配。",
+        "toneClass": "cc-field-feedback__text ced-field-error",
+        "pStyle": {
+          "fontSize": "13px",
+          "lineHeight": "18.2px",
+          "color": "rgb(245, 108, 108)",
+          "overflow": "visible",
+          "overflowWrap": "anywhere",
+          "height": "36.375px",
+          "whiteSpace": "normal"
+        },
+        "pRect": {
+          "top": 637.19,
+          "left": 174,
+          "right": 946,
+          "bottom": 673.56,
+          "width": 772,
+          "height": 36.38
+        },
+        "boxRect": {
+          "top": 637.19,
+          "left": 174,
+          "right": 946,
+          "bottom": 673.56,
+          "width": 772,
+          "height": 36.38
+        },
+        "lineCount": 2,
+        "lines": [
+          {
+            "top": 638.19,
+            "left": 174,
+            "width": 731.03,
+            "height": 15
+          },
+          {
+            "top": 656.38,
+            "left": 174,
+            "width": 140.13,
+            "height": 15
+          }
+        ],
+        "ancestors": [
+          {
+            "tag": "P",
+            "cls": "cc-field-feedback__text ced-field-error",
+            "clientWidth": 772,
+            "scrollWidth": 772,
+            "clientHeight": 36,
+            "scrollHeight": 36,
+            "overflowX": "visible",
+            "overflowY": "visible"
+          },
+          {
+            "tag": "DIV",
+            "cls": "cc-field-feedback ced-field-feedback",
+            "clientWidth": 772,
+            "scrollWidth": 772,
+            "clientHeight": 36,
+            "scrollHeight": 36,
+            "overflowX": "visible",
+            "overflowY": "visible"
+          },
+          {
+            "tag": "DIV",
+            "cls": "cc-form-control cc-source-field",
+            "clientWidth": 772,
+            "scrollWidth": 772,
+            "clientHeight": 381,
+            "scrollHeight": 381,
+            "overflowX": "visible",
+            "overflowY": "visible"
+          },
+          {
+            "tag": "DIV",
+            "cls": "cc-form-item ced-label-row",
+            "clientWidth": 868,
+            "scrollWidth": 868,
+            "clientHeight": 381,
+            "scrollHeight": 381,
+            "overflowX": "visible",
+            "overflowY": "visible"
+          },
+          {
+            "tag": "DIV",
+            "cls": "cc-form",
+            "clientWidth": 868,
+            "scrollWidth": 868,
+            "clientHeight": 480,
+            "scrollHeight": 509,
+            "overflowX": "auto",
+            "overflowY": "auto"
+          },
+          {
+            "tag": "DIV",
+            "cls": "el-dialog__body",
+            "clientWidth": 868,
+            "scrollWidth": 868,
+            "clientHeight": 480,
+            "scrollHeight": 480,
+            "overflowX": "visible",
+            "overflowY": "visible"
+          },
+          {
+            "tag": "DIV",
+            "cls": "el-dialog cc-dialog ced-dialog",
+            "clientWidth": 900,
+            "scrollWidth": 900,
+            "clientHeight": 600,
+            "scrollHeight": 600,
+            "overflowX": "visible",
+            "overflowY": "visible"
+          },
+          {
+            "tag": "DIV",
+            "cls": "el-overlay-dialog",
+            "clientWidth": 1024,
+            "scrollWidth": 1024,
+            "clientHeight": 720,
+            "scrollHeight": 758,
+            "overflowX": "auto",
+            "overflowY": "auto"
+          },
+          {
+            "tag": "DIV",
+            "cls": "el-overlay el-modal-dialog",
+            "clientWidth": 1024,
+            "scrollWidth": 1024,
+            "clientHeight": 720,
+            "scrollHeight": 720,
+            "overflowX": "auto",
+            "overflowY": "auto"
+          },
+          {
+            "tag": "DIV",
+            "cls": "ql-page",
+            "clientWidth": 724,
+            "scrollWidth": 724,
+            "clientHeight": 4679,
+            "scrollHeight": 4679,
+            "overflowX": "visible",
+            "overflowY": "visible"
+          },
+          {
+            "tag": "DIV",
+            "cls": "content-card",
+            "clientWidth": 764,
+            "scrollWidth": 764,
+            "clientHeight": 4719,
+            "scrollHeight": 4719,
+            "overflowX": "visible",
+            "overflowY": "visible"
+          },
+          {
+            "tag": "DIV",
+            "cls": "content-area",
+            "clientWidth": 804,
+            "scrollWidth": 804,
+            "clientHeight": 672,
+            "scrollHeight": 4751,
+            "overflowX": "auto",
+            "overflowY": "auto"
+          },
+          {
+            "tag": "DIV",
+            "cls": "layout-right",
+            "clientWidth": 804,
+            "scrollWidth": 804,
+            "clientHeight": 720,
+            "scrollHeight": 720,
+            "overflowX": "visible",
+            "overflowY": "visible"
+          },
+          {
+            "tag": "DIV",
+            "cls": "main-layout",
+            "clientWidth": 1024,
+            "scrollWidth": 1024,
+            "clientHeight": 720,
+            "scrollHeight": 720,
+            "overflowX": "hidden",
+            "overflowY": "hidden"
+          },
+          {
+            "tag": "DIV",
+            "cls": "",
+            "clientWidth": 1024,
+            "scrollWidth": 1024,
+            "clientHeight": 720,
+            "scrollHeight": 720,
+            "overflowX": "visible",
+            "overflowY": "visible"
+          }
+        ],
+        "form": {
+          "top": 164.39,
+          "bottom": 644.39,
+          "clientHeight": 480,
+          "scrollHeight": 509,
+          "scrollTop": 0,
+          "overflowY": "auto",
+          "maxHeight": "480px"
+        },
+        "dialog": {
+          "top": 108,
+          "left": 62,
+          "right": 962,
+          "bottom": 708.39,
+          "width": 900,
+          "height": 600.39
+        },
+        "submit": {
+          "top": 660.39,
+          "left": 886,
+          "right": 946,
+          "bottom": 692.39,
+          "width": 60,
+          "height": 32
+        },
+        "submitDisabled": false,
+        "doc": {
+          "scrollWidth": 1024,
+          "clientWidth": 1024,
+          "horizontalOverflow": false
+        },
+        "sourceSplitClass": "cc-split cc-split--error"
+      },
+      "narrowScroll": {
+        "formRect": {
+          "top": 164.39,
+          "bottom": 644.39
+        },
+        "pRect": {
+          "top": 608.19,
+          "bottom": 644.56
+        },
+        "fullyInsideFormViewport": true,
+        "lines": [
+          {
+            "top": 609.19,
+            "bottom": 624.19,
+            "insideFormViewport": true
+          },
+          {
+            "top": 627.38,
+            "bottom": 642.38,
+            "insideFormViewport": true
+          }
+        ],
+        "formScrollTop": 29
+      },
+      "narrowAfterScroll": {
+        "label": "narrow-after-scroll",
+        "viewport": {
+          "width": 1024,
+          "height": 720,
+          "dpr": 1
+        },
+        "text": "数据源“CCFG005超长机构名称用于错误换行验证样本（CCFG005-DS-LONG-0123456789ABCDE）”已分配给探针：CCFG005-OCC1，不能重复分配。",
+        "toneClass": "cc-field-feedback__text ced-field-error",
+        "pStyle": {
+          "fontSize": "13px",
+          "lineHeight": "18.2px",
+          "color": "rgb(245, 108, 108)",
+          "overflow": "visible",
+          "overflowWrap": "anywhere",
+          "height": "36.375px",
+          "whiteSpace": "normal"
+        },
+        "pRect": {
+          "top": 608.19,
+          "left": 174,
+          "right": 946,
+          "bottom": 644.56,
+          "width": 772,
+          "height": 36.38
+        },
+        "boxRect": {
+          "top": 608.19,
+          "left": 174,
+          "right": 946,
+          "bottom": 644.56,
+          "width": 772,
+          "height": 36.38
+        },
+        "lineCount": 2,
+        "lines": [
+          {
+            "top": 609.19,
+            "left": 174,
+            "width": 731.03,
+            "height": 15
+          },
+          {
+            "top": 627.38,
+            "left": 174,
+            "width": 140.13,
+            "height": 15
+          }
+        ],
+        "ancestors": [
+          {
+            "tag": "P",
+            "cls": "cc-field-feedback__text ced-field-error",
+            "clientWidth": 772,
+            "scrollWidth": 772,
+            "clientHeight": 36,
+            "scrollHeight": 36,
+            "overflowX": "visible",
+            "overflowY": "visible"
+          },
+          {
+            "tag": "DIV",
+            "cls": "cc-field-feedback ced-field-feedback",
+            "clientWidth": 772,
+            "scrollWidth": 772,
+            "clientHeight": 36,
+            "scrollHeight": 36,
+            "overflowX": "visible",
+            "overflowY": "visible"
+          },
+          {
+            "tag": "DIV",
+            "cls": "cc-form-control cc-source-field",
+            "clientWidth": 772,
+            "scrollWidth": 772,
+            "clientHeight": 381,
+            "scrollHeight": 381,
+            "overflowX": "visible",
+            "overflowY": "visible"
+          },
+          {
+            "tag": "DIV",
+            "cls": "cc-form-item ced-label-row",
+            "clientWidth": 868,
+            "scrollWidth": 868,
+            "clientHeight": 381,
+            "scrollHeight": 381,
+            "overflowX": "visible",
+            "overflowY": "visible"
+          },
+          {
+            "tag": "DIV",
+            "cls": "cc-form",
+            "clientWidth": 868,
+            "scrollWidth": 868,
+            "clientHeight": 480,
+            "scrollHeight": 509,
+            "overflowX": "auto",
+            "overflowY": "auto"
+          },
+          {
+            "tag": "DIV",
+            "cls": "el-dialog__body",
+            "clientWidth": 868,
+            "scrollWidth": 868,
+            "clientHeight": 480,
+            "scrollHeight": 480,
+            "overflowX": "visible",
+            "overflowY": "visible"
+          },
+          {
+            "tag": "DIV",
+            "cls": "el-dialog cc-dialog ced-dialog",
+            "clientWidth": 900,
+            "scrollWidth": 900,
+            "clientHeight": 600,
+            "scrollHeight": 600,
+            "overflowX": "visible",
+            "overflowY": "visible"
+          },
+          {
+            "tag": "DIV",
+            "cls": "el-overlay-dialog",
+            "clientWidth": 1024,
+            "scrollWidth": 1024,
+            "clientHeight": 720,
+            "scrollHeight": 758,
+            "overflowX": "auto",
+            "overflowY": "auto"
+          },
+          {
+            "tag": "DIV",
+            "cls": "el-overlay el-modal-dialog",
+            "clientWidth": 1024,
+            "scrollWidth": 1024,
+            "clientHeight": 720,
+            "scrollHeight": 720,
+            "overflowX": "auto",
+            "overflowY": "auto"
+          },
+          {
+            "tag": "DIV",
+            "cls": "ql-page",
+            "clientWidth": 724,
+            "scrollWidth": 724,
+            "clientHeight": 4679,
+            "scrollHeight": 4679,
+            "overflowX": "visible",
+            "overflowY": "visible"
+          },
+          {
+            "tag": "DIV",
+            "cls": "content-card",
+            "clientWidth": 764,
+            "scrollWidth": 764,
+            "clientHeight": 4719,
+            "scrollHeight": 4719,
+            "overflowX": "visible",
+            "overflowY": "visible"
+          },
+          {
+            "tag": "DIV",
+            "cls": "content-area",
+            "clientWidth": 804,
+            "scrollWidth": 804,
+            "clientHeight": 672,
+            "scrollHeight": 4751,
+            "overflowX": "auto",
+            "overflowY": "auto"
+          },
+          {
+            "tag": "DIV",
+            "cls": "layout-right",
+            "clientWidth": 804,
+            "scrollWidth": 804,
+            "clientHeight": 720,
+            "scrollHeight": 720,
+            "overflowX": "visible",
+            "overflowY": "visible"
+          },
+          {
+            "tag": "DIV",
+            "cls": "main-layout",
+            "clientWidth": 1024,
+            "scrollWidth": 1024,
+            "clientHeight": 720,
+            "scrollHeight": 720,
+            "overflowX": "hidden",
+            "overflowY": "hidden"
+          },
+          {
+            "tag": "DIV",
+            "cls": "",
+            "clientWidth": 1024,
+            "scrollWidth": 1024,
+            "clientHeight": 720,
+            "scrollHeight": 720,
+            "overflowX": "visible",
+            "overflowY": "visible"
+          }
+        ],
+        "form": {
+          "top": 164.39,
+          "bottom": 644.39,
+          "clientHeight": 480,
+          "scrollHeight": 509,
+          "scrollTop": 29,
+          "overflowY": "auto",
+          "maxHeight": "480px"
+        },
+        "dialog": {
+          "top": 108,
+          "left": 62,
+          "right": 962,
+          "bottom": 708.39,
+          "width": 900,
+          "height": 600.39
+        },
+        "submit": {
+          "top": 660.39,
+          "left": 886,
+          "right": 946,
+          "bottom": 692.39,
+          "width": 60,
+          "height": 32
+        },
+        "submitDisabled": false,
+        "doc": {
+          "scrollWidth": 1024,
+          "clientWidth": 1024,
+          "horizontalOverflow": false
+        },
+        "sourceSplitClass": "cc-split cc-split--error"
+      }
+    },
+    "correction": {
+      "afterRemove": {
+        "feedbackText": "至少选择 1 个数据源",
+        "chosenCount": 0
+      },
+      "afterSelectSafe": {
+        "feedbackText": null,
+        "feedbackCount": 0,
+        "chosen": [
+          "CCFG-AC-R1-人工验收机构06"
+        ],
+        "submitDisabled": false
+      }
+    },
+    "busy": {
+      "gateDelayMs": 5000,
+      "gateStartedAt": 1793942490648,
+      "isRealHttpDelay": true,
+      "snapshots": [
+        {
+          "atMs": 129,
+          "label": "busy-early",
+          "text": "创建",
+          "className": "el-button el-button--primary is-disabled is-loading cc-dialog-submit ced-submit",
+          "hasIsLoadingClass": true,
+          "hasIsDisabledClass": true,
+          "disabledAttr": true,
+          "spinnerCount": 1,
+          "style": {
+            "backgroundColor": "rgb(63, 63, 70)",
+            "borderColor": "rgb(63, 63, 70)",
+            "color": "rgb(255, 255, 255)",
+            "borderRadius": "6px",
+            "fontWeight": "500",
+            "cursor": "not-allowed",
+            "pointerEvents": "none"
+          },
+          "hit": {
+            "tag": "FOOTER",
+            "cls": "el-dialog__footer"
+          }
+        },
+        {
+          "atMs": 557,
+          "note": "after duplicate click",
+          "label": "busy-after-duplicate-click",
+          "text": "创建",
+          "className": "el-button el-button--primary is-disabled is-loading cc-dialog-submit ced-submit",
+          "hasIsLoadingClass": true,
+          "hasIsDisabledClass": true,
+          "disabledAttr": true,
+          "spinnerCount": 1,
+          "style": {
+            "backgroundColor": "rgb(63, 63, 70)",
+            "borderColor": "rgb(63, 63, 70)",
+            "color": "rgb(255, 255, 255)",
+            "borderRadius": "6px",
+            "fontWeight": "500",
+            "cursor": "not-allowed",
+            "pointerEvents": "none"
+          }
+        },
+        {
+          "atMs": 2113,
+          "label": "busy-mid",
+          "text": "创建",
+          "className": "el-button el-button--primary is-disabled is-loading cc-dialog-submit ced-submit",
+          "hasIsLoadingClass": true,
+          "hasIsDisabledClass": true,
+          "disabledAttr": true,
+          "spinnerCount": 1,
+          "style": {
+            "backgroundColor": "rgb(63, 63, 70)",
+            "borderColor": "rgb(63, 63, 70)",
+            "color": "rgb(255, 255, 255)",
+            "borderRadius": "6px",
+            "fontWeight": "500",
+            "cursor": "not-allowed",
+            "pointerEvents": "none"
+          },
+          "typedWhileBusy": {
+            "inputBefore": "CCFG005-NEW",
+            "inputAfter": "CCFG005-NEW",
+            "unchanged": true
+          }
+        },
+        {
+          "atMs": 3656,
+          "label": "busy-late",
+          "text": "创建",
+          "className": "el-button el-button--primary is-disabled is-loading cc-dialog-submit ced-submit",
+          "hasIsLoadingClass": true,
+          "hasIsDisabledClass": true,
+          "disabledAttr": true,
+          "spinnerCount": 1,
+          "style": {
+            "backgroundColor": "rgb(63, 63, 70)",
+            "borderColor": "rgb(63, 63, 70)",
+            "color": "rgb(255, 255, 255)",
+            "borderRadius": "6px",
+            "fontWeight": "500",
+            "cursor": "not-allowed",
+            "pointerEvents": "none"
+          }
+        }
+      ],
+      "distinctBackgrounds": [
+        "rgb(63, 63, 70)"
+      ],
+      "blueDetected": false,
+      "successForwardedCount": 1,
+      "afterResponse": {
+        "dialogVisible": false,
+        "toast": null,
+        "observedToasts": [
+          "新增成功"
+        ],
+        "gateForwardedTotal": 2
+      }
+    },
+    "readback": {
+      "api": {
+        "clientId": "CCFG005-NEW",
+        "clientDesc": "CCFG005 dialog create synthetic sample",
+        "fgActive": "1",
+        "status": "ENABLED",
+        "dataSources": [
+          {
+            "dataSourceId": "CCFG-AC-R1-DS06",
+            "org": "CCFG-AC-R1-人工验收机构06"
+          }
+        ],
+        "rawDataSourceIds": "CCFG-AC-R1-DS06"
+      },
+      "listRowText": "81 CCFG005-NEW CCFG005 dialog create synthetic sample CCFG-AC-R1-人工验收机构06 1"
+    },
+    "requestLedger": {
+      "conflictForwardedCount": 1,
+      "successForwardedCount": 1,
+      "aborted": [],
+      "apiRequestMethods": {
+        "GET": 4,
+        "POST": 2
+      }
+    }
+  }
+}

@@ -1,0 +1,14 @@
+4e4b9fc3934f187282073fbf1a2a7941d0add26e5b51912684faa97660e171d3  ./environment-and-version.txt
+3c45f5b6d197e672be7d7dd13aa237547e41ccbbbc801017e37cc13a18d7bbd1  ./fixture-ledger.md
+1199fa668dcb16f31ac3d4fa57bc82210e792cfc9675c2440584391c7ae033c4  ./four-item-matrix.md
+e941eb9cc67a2fcf068d23e88b31f4f0add866c9eef44f24a5e92a6a57ae05e8  ./probes/probeA-readonly.cjs
+df5510041c0f1590f43fa485b3edcdd8c49cfdc1a12a80dedaca65ec3a093143  ./probes/probeB-write.cjs
+428e640ab808d567c826e2ab30f8dd6ccd9da23f998e873a6020e822a93f6c09  ./probes/probeC-git-audit.cjs
+ced37456a7b814c9ede9661801a9d3983a6c83397c304afe8e69e7637f519c7d  ./README.md
+2cb8608e659474a10c726570584b9f6795c6f28ef1ae1d5a62d3d0416d928a42  ./reference-evidence-index.md
+719de847868cf7f02d28b29c572c56924ec426cb43c91c61033641dcca60e7c7  ./results/ac134-git-audit.json
+8252a660e9ce94debb15470a0e0d9f7aaf8f4b913fd8ac1bba4f4c215d176836  ./results/ac138-precondition-search.txt
+831bc75e44939c8d25fe8380be68cb5c39296e6e7f6b921c398591bb506df035  ./results/probeA-readonly.json
+bf5e4f6120a82338bb9adb51748f5da6f4cb28c15dd817f6d1da7f9d767cd29c  ./results/probeB-write.json
+b13a032e5e19f90e5926d96dce97b5e1be7ff3b22557c6ece90bd2e674df8741  ./sql/fixture-prepare-005.sql
+2eca250dd17ae7a33cfbe88a0b8fd4b31e1747cbc426c41511255772c1613fb7  ./write-ledger.md

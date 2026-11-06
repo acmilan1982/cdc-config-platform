@@ -1,0 +1,193 @@
+# 探针端管理新增／编辑弹窗专项验收（005）
+
+- 任务编号：`CLIENT-CONFIG-DIALOG-ACCEPTANCE-005`
+- 基线：`9b1bf9f309b9a2afd635bb408b490f62546b2dff`（`develop`）
+- 页面范围：仅 `/config/client`；未打开、操作或测试 `/config/data-source` 或其他功能页面
+- 判定对象：`CCFG-AC-120`、`CCFG-AC-125`、`CCFG-AC-134`、`CCFG-AC-138`
+- 证据目录：`reports/evidence/CLIENT-CONFIG-DIALOG-ACCEPTANCE-005/`
+- 下一入口：`CHATGPT_REMOTE_CLIENT_CONFIG_DIALOG_ACCEPTANCE_005_REVIEW`
+
+## 1. 结论
+
+| AC | 判定 | 依据摘要 |
+|---|---|---|
+| `CCFG-AC-120` | **PASS** | 新增“创建”与编辑“保存”的常态/hover/focus/active 计算样式均符合已批准值；表单不完整时按钮可点击、点击显示字段错误且零非 GET；真实 5000 ms 延迟下忙碌态清楚可辨、无蓝黑跳色、重复点击零新增请求；编辑忙碌态复用 004-R1；参考页对照采用已入仓运行证据 |
+| `CCFG-AC-125` | **PASS** | 真实后端 `40941` 长错误在 1440×900 与 1024×720 均完整换行可读；逐祖先无硬裁剪；表单受控内部滚动后两行均在可视区；文档无异常横向溢出；窄视口弹窗可操作并可关闭 |
+| `CCFG-AC-134` | **PASS** | 新增与编辑两种模式均完成键盘输入、真实粘贴、自动生成、取消全部、提交失败、修正、关闭重开；候选 API 与 DB 互证（夹具前 238=238、夹具后 239=239）；已分配提示、逗号禁选、选择顺序、编辑锁定语义成立；`POST /api/clients` 冲突 `40941`、成功 `200/200` 并独立回读；编辑保存复用 004-R1 的真实 `PUT` 证据；固定 Git 区间审计显示参考页/其他 Feature/全局组件/后端/DB 定义/两套模板全局状态未被改动 |
+| `CCFG-AC-138` | **BLOCKED**（本地部分完成） | 同视口 6 步几何在 1440×900（展开/收起）与 1024×720（展开）均稳定，长错误完整可读，未发现固定弹窗高度或写死侧栏偏移；但“项目负责人已确认当前稳定状态的相同视口（含展开/收起侧栏）”这一前置在已入仓记录中无可追溯确认，故整项保留 `BLOCKED` |
+
+- `changed_ids=[CCFG-AC-120, CCFG-AC-125, CCFG-AC-134]`；`CCFG-AC-138` 及全部非目标状态格不变。
+- 统计由 `PASS 149 / FAIL 0 / BLOCKED 8 / NOT_RUN 0` 更新为 **`PASS 152 / FAIL 0 / BLOCKED 5 / NOT_RUN 0 = 157`**。
+- `CCFG-AC-115` 既有 `PASS` 未重判。
+- **本批通过 ≠ 远程复审通过 ≠ 157 条整体正式验收通过 ≠ Feature 正式接受；提交/推送成功不代表远程复审通过。**
+
+## 2. 环境与执行边界
+
+| 项 | 值 |
+|---|---|
+| 分支 / 基线 | `develop` / `9b1bf9f309b9a2afd635bb408b490f62546b2dff` |
+| 后端 | 复用 PID `3215`，`*:8080`，`GET /api/clients?status=ALL` → 200 |
+| 后端产物 | `target/cdc-config-platform-backend-1.0.0-SNAPSHOT.jar`，SHA-256 `efdbea827b6ab84dd47105d2cc130f0bc3c5b70dc78cc626b6421e1f9750a459` |
+| 前端 | 复用 PID `3348`，Vite `0.0.0.0:5173`，`GET /config/client` → 200 |
+| 浏览器 | Chrome for Testing `147.0.7727.15`（Playwright headless，chromium-1217） |
+| 视口 / DPR / 缩放 | 1440×900、1024×720；DPR 1；100% |
+| 侧栏状态 | 展开 / 收起（仅 AC-138 几何序列） |
+| 数据库计数 | 夹具前 90 探针 / 268 源 / 238 资格；最终 92 探针 / 273 源 / 239 资格 |
+| 服务入口 | `http://192.168.174.70:5173/config/client` |
+| 停止命令 | `kill 3348 3215` |
+| 未做 | 未构建、未重启/启停服务、未改产品源码/测试/依赖/模板/配置、未跑全量测试/lint、未操作 ZK/Kafka、未连接源库、未访问其他页面 |
+
+网络门禁在首次导航前安装：只读探针拒绝一切非 GET/HEAD/OPTIONS 业务请求并计数（实测 `nonGetAttempts=0`）；写探针仅放行两类精确 `POST /api/clients`（合成 `CCFG005-NEW` + 校验过的 `dataSourceIds`），成功类延迟 5000 ms 以形成忙碌窗口，最终运行 `aborted=[]`。受控注入仅为网络层延迟，未伪造请求体/响应，未修改 DOM/CSS。
+
+## 3. `CCFG-AC-120`：主提交按钮外观与提交态
+
+证据键：`A` = `results/probeA-readonly.json`，`B` = `results/probeB-write.json`，`R1` = `reports/evidence/CLIENT-CONFIG-LIST-MENU-AND-ROW-HEIGHT-ACCEPTANCE-004-R1/results/r1b-write-dedup.json`。
+
+### 3.1 计算样式（创建“创建”与编辑“保存”分列）
+
+| 子步骤 | 证据键 | 实测 |
+|---|---|---|
+| 创建常态 | `A.sections.ac120Create.normal` | 底色/边框 `rgb(9,9,11)`、文字 `rgb(255,255,255)`、圆角 `6px`、字重 `500`、`cursor=pointer` |
+| 创建 hover | `A.sections.ac120Create.hover` | `rgb(39,39,42)` |
+| 创建键盘 focus-visible | `A.sections.ac120Create.keyboardFocus` | `rgb(39,39,42)`、`focusVisible=true`、Tab 可达 1 次 |
+| 创建按下 | `A.sections.ac120Create.active` | `rgb(24,24,27)`（mousedown/up 之间采样） |
+| 编辑常态 / hover / focus / active | `A.sections.ac120Edit.normal/hover/keyboardFocus/active` | 与创建模式同值；按钮文字“保存” |
+| 参考页对照 | `reference-evidence-index.md` §1 | 已入仓运行证据 `935478a` §3.3 同值；参考实现 `807a5a5` 起样式未变（blame 核对）；Chrome 148 vs 147 差异已记录 |
+
+### 3.2 表单不完整时的可点击性
+
+- 创建：`A.sections.ac120Create.preClickDisabled=false`；点击后显示“探针 ID 不能为空。”“探针描述不能为空。”与“至少选择 1 个数据源”，提交按钮仍可点击，`nonGetAttempts=0`。
+- 编辑：`A.sections.ac120Edit.afterIncompleteClick` 显示描述字段错误，`nonGetAttempts=0`，按钮未被预先禁用。
+
+### 3.3 忙碌态与防重复
+
+- 创建（真实后端请求，门禁延迟 5000 ms）：`B.sections.busy.snapshots` 在 129/557/2113/3656 ms 均显示 `is-disabled is-loading`、spinner=1、底色 `rgb(63,63,70)`、文字 `#ffffff`、`pointer-events:none`；`blueDetected=false`。
+- 忙碌期真实鼠标重复点击命中 `.el-dialog__footer`；门禁记录 `POST` 总数=2（冲突 + 成功），无额外请求；已输入 ID 在忙碌期保持不变。
+- 成功后对话框关闭，MutationObserver 捕获“新增成功”toast。
+- 编辑忙碌态复用 `R1.flows.edit.busyState/duplicateAction/putCount/response/readback`：延迟 `PUT`、`is-disabled is-loading`、重复点击命中 footer、`putCount=1`、200/200、回读一致。
+
+**判定：PASS。** `CCFG-AC-115` 的既有 `PASS` 保留，不重判；其“提交处理中暂不可重复提交”口径与本条并存无冲突。
+
+## 4. `CCFG-AC-125`：换行错误可读性与窄视口
+
+真实错误来源：先由页面外真实 `POST /api/clients` 建立 `CCFG005-OCC1` 对合成源 `CCFG005-DS-LONG-0123456789ABCDE` 的占用，再由浏览器提交同一源，后端返回真实业务码 `40941`（未伪造长文本，未改 DOM/CSS）。
+
+| 子步骤 | 证据键 | 实测 |
+|---|---|---|
+| 真实可触发长错误 | `B.sections.conflict` | 业务码 `40941`；文本与期望全文一致；归属“采集数据源”字段 |
+| 正常视口换行可读 | `B.sections.conflict.wideBeforeScroll` | 1440×900：2 行，行宽 731.03 / 140.13；表单区 191.39–700.56（clientHeight 509、scrollHeight 509、scrollTop 0）；错误盒完整可见 |
+| 无硬裁剪 | `B.sections.conflict.ancestors`、`A.sections.layoutStatic` | 错误文本 `overflow=visible`、`overflow-wrap:anywhere`；逐祖先无 `overflow:hidden` 硬裁剪 |
+| 窄视口可读（受控滚动） | `B.sections.conflict.narrowBeforeScroll/narrowScroll/narrowAfterScroll` | 1024×720：表单 164.39–644.39（clientHeight 480）；`scrollTop=29` 后错误盒 608.19–644.56，两行盒 609.19–624.19、627.38–642.38 均位于可视区 |
+| 无异常横向溢出 | `B.sections.conflict.doc` | 1440：`scrollWidth=clientWidth=1440`；1024：`1024=1024`；`horizontalOverflow=false` |
+| 窄视口可操作/关闭 | `A` 窄视口序列 + `closeDialogIfOpen` | 1024 下可选中/取消数据源、提交触发错误、点击“取消”关闭 |
+
+表单为受控内部滚动（弹窗内既有布局），不构成整页横向溢出；两种视口下均无文档级横向滚动。
+
+**判定：PASS。**
+
+## 5. `CCFG-AC-134`：新增／编辑全链与候选规则
+
+### 5.1 两种模式矩阵
+
+| 子步骤 | 新增证据键 | 编辑证据键 | 实测 |
+|---|---|---|---|
+| 键盘输入 | `A.sections.ac134Create.keyboard` | `A.sections.ac134Edit.keyboard` | 新增键入 `CCFG005-KB1`；编辑解锁后键入 `CCFG005-NEW-EDIT-KB` |
+| 真实剪贴板粘贴 | `A.sections.ac134Create.paste` | `A.sections.ac134Edit.paste` | `navigator.clipboard.writeText` + Ctrl+V；分别得到 `PASTE-005-描述样本`、`EDIT-PASTE-005`（非脚本赋值） |
+| 自动生成与顺序 | `A.sections.ac134Create.autoGenerate/autoGenerateReverse` | `A.sections.ac134Edit.autoGenerate` | 新增 DS06→DS05 与反向，描述顺序与选择顺序一致；编辑顺序正确 |
+| 取消全部 / 提交失败 / 修正 / 重开 | `A.sections.ac134Create.cancelAll/submitFailure/corrected/reopen` | `A.sections.ac134Edit.cancelAllSubmitFailure/corrected/reopen` | 中性提示 → 红色错误 → 修正清除 → 重开为空/恢复原值；各步 `nonGet=0` |
+| 编辑锁定/解锁/再锁定 | — | `A.sections.ac134Edit.initial/unlocked/relocked` | 初始“（已锁定）”；“修改探针 ID”解锁；可再锁定 |
+
+### 5.2 候选资格与选择规则
+
+- `A.sections.ac134Candidates`：API 总数 238、DOM 238；禁用 164（158 OCCUPIED + 6 COMMA）。
+- 夹具前 `B.sections.setup.apiBeforeOccupation` 238 = DB 资格行 238；夹具后 239 = 239。
+- 停用（`FG_ACTIVE=0`）、异常（`X`）、非 `SOURCE`、非 `ORACLE` 的 005 样本均不在候选 API。
+- 已分配提示：`CCFG004-DS-A` 显示“已分配给：CCFG004-HOLDER”；`CCFG004-DS-B` 显示“已分配给：CCFG004-NEW1”；占用后 `occupiedByClientIds=['CCFG005-OCC1']`，`40941` 文案含 `CCFG005-OCC1`。
+- `CCFG-AC-R1-COM,ID` 禁用，原因“ID 含英文逗号，不可选择”。
+- `DS05/DS06` 可选，选择顺序与自动生成顺序一致。
+
+### 5.3 保存接口与回读
+
+- `B.gate.responses`：冲突提交 `POST /api/clients` → HTTP 200、业务码 `40941`；成功提交 → HTTP 200、业务码 `200`。
+- 独立 `GET /api/clients?status=ALL` 回读 `CCFG005-NEW`：`fgActive=1`、`status=ENABLED`、`dataSources=[CCFG-AC-R1-DS06]`；列表行文本包含该 ID 与机构名。
+- 必要 SELECT 核对 `CDC_CLIENT_MULTIPLE` 中 2 行合成探针与 `CDC_DATA_SOURCE` 中 5 个夹具。
+- 编辑真实保存复用 `R1.flows.edit`：`PUT /api/clients/CCFG004-NEW1` 延迟转发，200/200，描述与数据源回读一致。
+
+### 5.4 参考页与范围不变性
+
+固定 Git 区间审计（探针 C，`results/ac134-git-audit.json`）区间 `3d4cec1^..9b1bf9f`，102 个 client-config 归属提交：
+
+- `referencePageTouchedByClientConfig=[]`
+- `otherFeatureTouchedByClientConfig=[]`
+- `globalComponentsTouchedByClientConfig=[]`
+- `backendOutsideClientConfigTouchedByClientConfig=[]`
+- `dbDefinitionTouchedByClientConfig=[]`
+- client-config 工作区相对基线的 `backend frontend` diff 为空
+
+参考页运行时覆盖引用已入仓证据（`reference-evidence-index.md` §3），本任务未做跨页操作。共享模板路径仅含已批准的首次接入/收口文档与显式 opt-in 的限定 CSS，未新增全局令牌或全局覆盖。
+
+**判定：PASS。**
+
+## 6. `CCFG-AC-138`：弹窗稳定性与长错误
+
+### 6.1 本地执行结果
+
+| 条件 | 证据键 | 实测 |
+|---|---|---|
+| 1440×900，侧栏展开，6 步序列 | `A.sections.ac125Ac138.wide` | 高度恒 613.19、top 恒 135、提交按钮 y 恒 700.19；反馈 灰→隐藏→灰→红→隐藏；每步 `nonGet=0` |
+| 1440×900，侧栏收起 | `A.sections.ac125Ac138.wideCollapsed` | 与展开态相同几何；无水平溢出 |
+| 1024×720，侧栏展开 | `A.sections.ac125Ac138.narrow` | 高度恒 600.39、top 恒 108、提交按钮 y 恒 660.39；无水平溢出 |
+| 长错误分支 | `B.sections.conflict` | 真实 `40941` 两行可读；窄视口受控滚动；无硬裁剪 |
+| 固定高度/侧栏偏移 | `A.sections.ac125Ac138.*.fixedDialogHeightCss`、`dialogCentering.delta=0` | 高度内容驱动；水平居中 delta=0；未发现写死侧栏偏移 |
+
+### 6.2 阻断原因
+
+定义前置“项目负责人已确认当前稳定状态的相同视口（含展开/收起侧栏）”在 `ACCEPTANCE.md`、`README.md`、`REQUIREMENTS.md`、`DESIGN.md`、`UI.md` 与历史报告中的检索结果（`results/ac138-precondition-search.txt`）均未找到具体视口+侧栏组合的负责人确认记录。按任务规则，关键前置不足时整项保留 `BLOCKED`，本地几何与长错误证据不能替代该确认。
+
+**最小补证条件**：由项目负责人明确确认当前稳定视口与侧栏状态组合（例如 1440×900 + 侧栏展开），并在该条件下重跑同一 6 步序列；本次 1440×900 展开/收起与 1024×720 的本地证据可作为补证基础。
+
+**判定：BLOCKED（本地部分已完成）。**
+
+## 7. 写入与夹具台账
+
+详细记录见 `write-ledger.md` 与 `fixture-ledger.md`。
+
+| 类别 | 数量 |
+|---|---|
+| 业务 API 非 GET 尝试（全部运行） | 10 |
+| 其中真实成功写 | 6 |
+| 其中真实后端预期拒绝 | 4 |
+| 最终证据运行尝试 | 3（占用建立 200/200；冲突 200/40941；成功 200/200） |
+| 前端零写（只读探针 A 非 GET） | 0 |
+| 忙碌期重复点击新增请求 | 0 |
+| 夹具 INSERT | 5 |
+| 夹具 DELETE | 2（合计删除 4 行） |
+| 夹具 DML 语句合计 | 7 |
+| COMMIT（事务控制，不计入 DML） | 3 |
+| 保留的合成数据源 / 探针 | 5 / 2 |
+
+- 夹具 SQL 与被测业务写严格分开：5 个数据源由 SQL*Plus 写入，2 个合成探针由产品 API 写入。
+- 受控注入仅 5000 ms 网络延迟；`40941` 为真实后端业务码，非伪造响应。
+- 未执行 DDL；未对其他表执行 DML；未写 ZK/Kafka；未连接源库；未启停或操作运行侧进程。
+- 测试数据按任务约定保留，不要求清理或恢复，不报告 `RESTORED`。
+
+## 8. 验收定义完整性与 Git 检查
+
+- `CCFG-AC-001~157` 共 157 条，编号连续且唯一；`CCFG-REQ-001~154`（154）、`CCFG-DESIGN-001~089`（89）、`CCFG-UI-001~077`（77）数量不变。
+- 定义行与状态格仅 `CCFG-AC-120/125/134` 三个状态 token 由 `BLOCKED` 改为 `PASS`；其余非目标状态格不变；批准状态与基线状态不变。
+- `CCFG-AC-138` 保持 `BLOCKED`；此前 004 批次保留的 `CCFG-AC-079/087/091/094` 未被本任务触碰。
+- README 追加 005 入口段落，未改写历史统计。
+- `git diff --check` 通过（无空白错误）。
+
+## 9. 边界与限制
+
+- 仅 `/config/client`；参考页条件仅来自可溯源的已入仓运行证据，未打开、操作或测试参考页或其他页面。
+- 未改产品代码、测试、依赖、配置、模板或其他 Feature；未构建、未重启服务、未跑全量测试/lint。
+- 证据均已脱敏：不含数据库凭据、真实连接信息、原始业务记录或整屏截图。
+- Chrome 148（参考页已入仓证据）与 Chrome 147（本机实测）的版本差异已记录，计算样式值一致，不构成阻断。
+- 窄视口可读性依赖表单受控内部滚动；这是已批准布局允许的行为，不视为异常横向溢出。
+- 本地部分完成不等同于整项 `PASS`；`CCFG-AC-138` 仍需负责人确认前置。
+
+## 10. 下一入口
+
+`CHATGPT_REMOTE_CLIENT_CONFIG_DIALOG_ACCEPTANCE_005_REVIEW`

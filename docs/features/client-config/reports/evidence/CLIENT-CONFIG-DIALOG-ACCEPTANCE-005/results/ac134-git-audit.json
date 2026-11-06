@@ -1,0 +1,1385 @@
+{
+  "meta": {
+    "probe": "probeC-git-audit",
+    "purpose": "AC-134 fixed-range audit: reference page / other features / global components / backend / DB definitions / two templates",
+    "repo": "/agent/cdc-config-platform",
+    "startedAt": "2026-11-06T05:19:27.377Z"
+  },
+  "range": {
+    "baseRef": "3d4cec1^",
+    "baseCommit": "44fbe95d390abee9eccabb30e915de6f4900ce51",
+    "headRef": "9b1bf9f",
+    "headCommit": "9b1bf9f309b9a2afd635bb408b490f62546b2dff"
+  },
+  "ownedPaths": [
+    "docs/features/client-config/",
+    "frontend/src/views/client-config/",
+    "backend/src/main/java/com/bsoft/cdcconfig/clientconfig/",
+    "backend/src/test/java/com/bsoft/cdcconfig/clientconfig/",
+    "frontend/src/api/clientConfig.ts",
+    "frontend/src/api/clientConfig.spec.ts",
+    "frontend/src/types/clientConfig.ts",
+    "frontend/src/config/menu.ts",
+    "frontend/src/config/menu.spec.ts",
+    "frontend/src/router/index.ts"
+  ],
+  "clientConfigCommitCount": 102,
+  "clientConfigCommits": [
+    {
+      "sha": "9b1bf9f",
+      "subject": "docs(client-config): add 004-R1 menu isolation, dedup and focus re-assessment [CLIENT-CONFIG-LIST-MENU-AND-ROW-HEIGHT-AC",
+      "fileCount": 13,
+      "outsideOwned": []
+    },
+    {
+      "sha": "1104191",
+      "subject": "docs(client-config): accept 18 list, menu and row-height items [CLIENT-CONFIG-LIST-MENU-AND-ROW-HEIGHT-ACCEPTANCE-004]",
+      "fileCount": 26,
+      "outsideOwned": []
+    },
+    {
+      "sha": "968c1e5",
+      "subject": "docs(client-config): complete CRUD boundary and concurrency acceptance R1 [CLIENT-CONFIG-CRUD-BOUNDARY-AND-CONCURRENCY-A",
+      "fileCount": 31,
+      "outsideOwned": []
+    },
+    {
+      "sha": "2721969",
+      "subject": "docs(client-config): accept 10 CRUD boundary and concurrency items [CLIENT-CONFIG-CRUD-BOUNDARY-AND-CONCURRENCY-ACCEPTAN",
+      "fileCount": 59,
+      "outsideOwned": []
+    },
+    {
+      "sha": "e0b0048",
+      "subject": "docs(client-config): supplement AC-034/AC-057 evidence and correct R0 counts [CLIENT-CONFIG-SOURCE-SELECTION-AND-HISTORI",
+      "fileCount": 39,
+      "outsideOwned": []
+    },
+    {
+      "sha": "6c72727",
+      "subject": "docs(client-config): accept 24 source-selection and historical-data items [CLIENT-CONFIG-SOURCE-SELECTION-AND-HISTORICAL",
+      "fileCount": 44,
+      "outsideOwned": []
+    },
+    {
+      "sha": "242cc5c",
+      "subject": "docs(client-config): accept 17 multi-AC CRUD and abnormal-state items [CLIENT-CONFIG-MULTI-AC-CRUD-AND-ABNORMAL-STATE-AC",
+      "fileCount": 29,
+      "outsideOwned": []
+    },
+    {
+      "sha": "2304e31",
+      "subject": "docs(client-config): record AC-131 description save boundary precondition blocker [CLIENT-CONFIG-DESCRIPTION-SAVE-BOUNDA",
+      "fileCount": 8,
+      "outsideOwned": []
+    },
+    {
+      "sha": "42a0aa2",
+      "subject": "docs(client-config): correct AC-022 evidence JSON paths to table layer [CLIENT-CONFIG-AC022-QUANTITY-CLARIFICATION-AND-E",
+      "fileCount": 2,
+      "outsideOwned": []
+    },
+    {
+      "sha": "e9b10b1",
+      "subject": "docs(client-config): confirm AC-022 quantity scope and reassess evidence as PASS [CLIENT-CONFIG-AC022-QUANTITY-CLARIFICA",
+      "fileCount": 3,
+      "outsideOwned": []
+    },
+    {
+      "sha": "c63e675",
+      "subject": "docs(client-config): controlled AC-022 multi-row sample round-trip [CLIENT-CONFIG-AC022-CONTROLLED-MULTIROW-ACCEPTANCE-0",
+      "fileCount": 10,
+      "outsideOwned": []
+    },
+    {
+      "sha": "1e72e4e",
+      "subject": "docs(client-config): live read-only list/menu supplement after service start [CLIENT-CONFIG-LIST-MENU-LIVE-READONLY-SUPP",
+      "fileCount": 8,
+      "outsideOwned": []
+    },
+    {
+      "sha": "1c87312",
+      "subject": "docs(client-config): correct fixed-column evidence in read-only acceptance [CLIENT-CONFIG-LIST-AND-THREE-STATE-MENU-READ",
+      "fileCount": 4,
+      "outsideOwned": []
+    },
+    {
+      "sha": "e30f902",
+      "subject": "docs(client-config): read-only acceptance of list and three-state menu [CLIENT-CONFIG-LIST-AND-THREE-STATE-MENU-READONLY",
+      "fileCount": 7,
+      "outsideOwned": []
+    },
+    {
+      "sha": "4354e30",
+      "subject": "docs(client-config): fail-closed probe recovery state and R1 plan correction [CLIENT-CONFIG-TOGGLE-PROBE-RECOVERY-HARDEN",
+      "fileCount": 9,
+      "outsideOwned": []
+    },
+    {
+      "sha": "236c50a",
+      "subject": "docs(client-config): harden toggle probe recovery branch and plan next batch [CLIENT-CONFIG-TOGGLE-PROBE-RECOVERY-HARDEN",
+      "fileCount": 8,
+      "outsideOwned": []
+    },
+    {
+      "sha": "1af1cdf",
+      "subject": "docs(client-config): controlled T02 UI toggle round-trip acceptance [CLIENT-CONFIG-T02-CONTROLLED-UI-TOGGLE-ACCEPTANCE-0",
+      "fileCount": 10,
+      "outsideOwned": []
+    },
+    {
+      "sha": "63bbbde",
+      "subject": "docs(client-config): controlled toggle readiness check [CLIENT-CONFIG-CONTROLLED-TOGGLE-READINESS-CHECK-001]",
+      "fileCount": 7,
+      "outsideOwned": []
+    },
+    {
+      "sha": "07851c4",
+      "subject": "docs(client-config): targeted read-only acceptance of AC-090/157 [CLIENT-CONFIG-DISABLED-APPLICABILITY-TARGETED-READONLY",
+      "fileCount": 8,
+      "outsideOwned": []
+    },
+    {
+      "sha": "16bccbd",
+      "subject": "docs(client-config): R1 correction distinguishing historical draft wording from current three-dot status [CLIENT-CONFIG-",
+      "fileCount": 1,
+      "outsideOwned": []
+    },
+    {
+      "sha": "716b7c8",
+      "subject": "docs(client-config): land AC-090/157 disabled-state applicability notes [CLIENT-CONFIG-DISABLED-STATE-APPLICABILITY-BASE",
+      "fileCount": 6,
+      "outsideOwned": []
+    },
+    {
+      "sha": "cf149b9",
+      "subject": "docs(client-config): R2 evidence reuse semantics correction of remaining acceptance enablement plan draft [CLIENT-CONFIG",
+      "fileCount": 2,
+      "outsideOwned": []
+    },
+    {
+      "sha": "46e3679",
+      "subject": "docs(client-config): R1 targeted correction of remaining-acceptance enablement plan draft [CLIENT-CONFIG-REMAINING-ACCEP",
+      "fileCount": 2,
+      "outsideOwned": []
+    },
+    {
+      "sha": "37f30b7",
+      "subject": "docs(client-config): remaining acceptance enablement plan draft [CLIENT-CONFIG-REMAINING-ACCEPTANCE-ENABLEMENT-PLAN-DRAF",
+      "fileCount": 3,
+      "outsideOwned": []
+    },
+    {
+      "sha": "096ba40",
+      "subject": "docs(client-config): R1 real-paste and edit-sequence re-evidence for AC-124/130 [CLIENT-CONFIG-TARGETED-READONLY-ACCEPTA",
+      "fileCount": 8,
+      "outsideOwned": []
+    },
+    {
+      "sha": "c0a3c1d",
+      "subject": "docs(client-config): targeted read-only acceptance supplement 002 [CLIENT-CONFIG-TARGETED-READONLY-ACCEPTANCE-SUPPLEMENT",
+      "fileCount": 14,
+      "outsideOwned": []
+    },
+    {
+      "sha": "d925899",
+      "subject": "docs(client-config): R3 single-point correction of CCFG-AC-098 historical-evidence timeline [CLIENT-CONFIG-REMAINING-ACC",
+      "fileCount": 2,
+      "outsideOwned": []
+    },
+    {
+      "sha": "ca94fad",
+      "subject": "docs(client-config): R2 targeted correction of sample gaps and minimal executable conditions [CLIENT-CONFIG-REMAINING-AC",
+      "fileCount": 2,
+      "outsideOwned": []
+    },
+    {
+      "sha": "598c69d",
+      "subject": "docs(client-config): R1 targeted correction of remaining acceptance-gap triage report [CLIENT-CONFIG-REMAINING-ACCEPTANC",
+      "fileCount": 2,
+      "outsideOwned": []
+    },
+    {
+      "sha": "b712d9a",
+      "subject": "docs(client-config): remaining acceptance gap triage and read-only supplement [CLIENT-CONFIG-REMAINING-ACCEPTANCE-GAP-TR",
+      "fileCount": 19,
+      "outsideOwned": []
+    },
+    {
+      "sha": "e1c2ea5",
+      "subject": "docs(client-config): correct closeout report public_css_status and dialog field facts [CREATE-EDIT-DIALOG-CLIENT-CONFIG-",
+      "fileCount": 1,
+      "outsideOwned": []
+    },
+    {
+      "sha": "c74543f",
+      "subject": "docs(create-edit-dialog-visual-template): record first-page adoption review chain and owner feedback [CREATE-EDIT-DIALOG",
+      "fileCount": 8,
+      "outsideOwned": [
+        {
+          "file": "docs/baseline/README.md",
+          "category": "baseline-index (approved first-adoption round)"
+        },
+        {
+          "file": "docs/baseline/create-edit-dialog-visual-template/DESIGN.md",
+          "category": "create-edit-dialog-template-doc (approved first-adoption round)"
+        },
+        {
+          "file": "docs/baseline/create-edit-dialog-visual-template/MIGRATION.md",
+          "category": "create-edit-dialog-template-doc (approved first-adoption round)"
+        },
+        {
+          "file": "docs/baseline/create-edit-dialog-visual-template/README.md",
+          "category": "create-edit-dialog-template-doc (approved first-adoption round)"
+        },
+        {
+          "file": "docs/baseline/create-edit-dialog-visual-template/SHARED_COMPONENT_DESIGN.md",
+          "category": "create-edit-dialog-template-doc (approved first-adoption round)"
+        },
+        {
+          "file": "docs/baseline/create-edit-dialog-visual-template/UI.md",
+          "category": "create-edit-dialog-template-doc (approved first-adoption round)"
+        }
+      ]
+    },
+    {
+      "sha": "bc22ada",
+      "subject": "docs(client-config): R1 targeted doc correction for create-edit-dialog first page adoption [CREATE-EDIT-DIALOG-CLIENT-CO",
+      "fileCount": 6,
+      "outsideOwned": [
+        {
+          "file": "docs/baseline/README.md",
+          "category": "baseline-index (approved first-adoption round)"
+        },
+        {
+          "file": "docs/baseline/create-edit-dialog-visual-template/DESIGN.md",
+          "category": "create-edit-dialog-template-doc (approved first-adoption round)"
+        },
+        {
+          "file": "docs/baseline/create-edit-dialog-visual-template/README.md",
+          "category": "create-edit-dialog-template-doc (approved first-adoption round)"
+        },
+        {
+          "file": "docs/baseline/create-edit-dialog-visual-template/SHARED_COMPONENT_DESIGN.md",
+          "category": "create-edit-dialog-template-doc (approved first-adoption round)"
+        }
+      ]
+    },
+    {
+      "sha": "d878c3d",
+      "subject": "feat(client-config): adopt create-edit-dialog-visual-template public CSS preset on /config/client create-edit dialog [CR",
+      "fileCount": 15,
+      "outsideOwned": [
+        {
+          "file": "docs/baseline/README.md",
+          "category": "baseline-index (approved first-adoption round)"
+        },
+        {
+          "file": "docs/baseline/create-edit-dialog-visual-template/DESIGN.md",
+          "category": "create-edit-dialog-template-doc (approved first-adoption round)"
+        },
+        {
+          "file": "docs/baseline/create-edit-dialog-visual-template/MIGRATION.md",
+          "category": "create-edit-dialog-template-doc (approved first-adoption round)"
+        },
+        {
+          "file": "docs/baseline/create-edit-dialog-visual-template/README.md",
+          "category": "create-edit-dialog-template-doc (approved first-adoption round)"
+        },
+        {
+          "file": "docs/baseline/create-edit-dialog-visual-template/SHARED_COMPONENT_DESIGN.md",
+          "category": "create-edit-dialog-template-doc (approved first-adoption round)"
+        },
+        {
+          "file": "docs/baseline/create-edit-dialog-visual-template/UI.md",
+          "category": "create-edit-dialog-template-doc (approved first-adoption round)"
+        },
+        {
+          "file": "frontend/src/styles/dialog/create-edit-dialog-visual.spec.ts",
+          "category": "dialog-preset-spec (approved first-adoption round)"
+        }
+      ]
+    },
+    {
+      "sha": "d5c12f3",
+      "subject": "docs(client-config): fix template-side cross-reference path in row-highlight closeout report [CLIENT-CONFIG-OPTIONAL-ROW",
+      "fileCount": 1,
+      "outsideOwned": []
+    },
+    {
+      "sha": "a07d17e",
+      "subject": "docs(client-config): record row-highlight page-adoption remote review APPROVED and owner feedback closeout [CLIENT-CONFI",
+      "fileCount": 5,
+      "outsideOwned": [
+        {
+          "file": "docs/baseline/list-table-visual-template/MIGRATION.md",
+          "category": "list-table-template-doc (template-side rounds)"
+        },
+        {
+          "file": "docs/baseline/list-table-visual-template/README.md",
+          "category": "list-table-template-doc (template-side rounds)"
+        },
+        {
+          "file": "docs/baseline/list-table-visual-template/SHARED_COMPONENT_DESIGN.md",
+          "category": "list-table-template-doc (template-side rounds)"
+        }
+      ]
+    },
+    {
+      "sha": "5cb8079",
+      "subject": "feat(client-config): adopt §13 public optional single-row highlight preset on main list [CLIENT-CONFIG-OPTIONAL-ROW-HIGH",
+      "fileCount": 17,
+      "outsideOwned": [
+        {
+          "file": "docs/baseline/list-table-visual-template/MIGRATION.md",
+          "category": "list-table-template-doc (template-side rounds)"
+        },
+        {
+          "file": "docs/baseline/list-table-visual-template/README.md",
+          "category": "list-table-template-doc (template-side rounds)"
+        },
+        {
+          "file": "docs/baseline/list-table-visual-template/SHARED_COMPONENT_DESIGN.md",
+          "category": "list-table-template-doc (template-side rounds)"
+        },
+        {
+          "file": "docs/baseline/list-table-visual-template/reports/LIST-TABLE-CLIENT-CONFIG-OPTIONAL-ROW-HIGHLIGHT-PUBLIC-PRESET-ADOPTION-001.md",
+          "category": "list-table-template-doc (template-side rounds)"
+        },
+        {
+          "file": "frontend/src/styles/list-table/list-table-visual.spec.ts",
+          "category": "list-table-preset-optin (approved template-side round)"
+        }
+      ]
+    },
+    {
+      "sha": "e9a34e2",
+      "subject": "docs(list-table-visual-template): R1 count-layer correction — separate current from historical counts [LIST-TABLE-VISUAL",
+      "fileCount": 4,
+      "outsideOwned": [
+        {
+          "file": "docs/baseline/list-table-visual-template/MIGRATION.md",
+          "category": "list-table-template-doc (template-side rounds)"
+        },
+        {
+          "file": "docs/baseline/list-table-visual-template/README.md",
+          "category": "list-table-template-doc (template-side rounds)"
+        },
+        {
+          "file": "docs/baseline/list-table-visual-template/SHARED_COMPONENT_DESIGN.md",
+          "category": "list-table-template-doc (template-side rounds)"
+        },
+        {
+          "file": "docs/baseline/list-table-visual-template/reports/LIST-TABLE-VISUAL-TEMPLATE-CLIENT-CONFIG-REFINEMENT-BASELINE-APPROVAL-CLOSEOUT-001-R1.md",
+          "category": "list-table-template-doc (template-side rounds)"
+        }
+      ]
+    },
+    {
+      "sha": "925c3a8",
+      "subject": "docs(list-table-visual-template): approve reference-correction design baseline and close out [LIST-TABLE-VISUAL-TEMPLATE",
+      "fileCount": 6,
+      "outsideOwned": [
+        {
+          "file": "docs/baseline/list-table-visual-template/DESIGN.md",
+          "category": "list-table-template-doc (template-side rounds)"
+        },
+        {
+          "file": "docs/baseline/list-table-visual-template/MIGRATION.md",
+          "category": "list-table-template-doc (template-side rounds)"
+        },
+        {
+          "file": "docs/baseline/list-table-visual-template/README.md",
+          "category": "list-table-template-doc (template-side rounds)"
+        },
+        {
+          "file": "docs/baseline/list-table-visual-template/SHARED_COMPONENT_DESIGN.md",
+          "category": "list-table-template-doc (template-side rounds)"
+        },
+        {
+          "file": "docs/baseline/list-table-visual-template/UI.md",
+          "category": "list-table-template-doc (template-side rounds)"
+        },
+        {
+          "file": "docs/baseline/list-table-visual-template/reports/LIST-TABLE-VISUAL-TEMPLATE-CLIENT-CONFIG-REFINEMENT-BASELINE-APPROVAL-CLOSEOUT-001.md",
+          "category": "list-table-template-doc (template-side rounds)"
+        }
+      ]
+    },
+    {
+      "sha": "aa6285f",
+      "subject": "docs(list-table-template): R4 focus-ring evidence wording correction [LIST-TABLE-VISUAL-TEMPLATE-CLIENT-CONFIG-REFINEMEN",
+      "fileCount": 4,
+      "outsideOwned": [
+        {
+          "file": "docs/baseline/list-table-visual-template/MIGRATION.md",
+          "category": "list-table-template-doc (template-side rounds)"
+        },
+        {
+          "file": "docs/baseline/list-table-visual-template/README.md",
+          "category": "list-table-template-doc (template-side rounds)"
+        },
+        {
+          "file": "docs/baseline/list-table-visual-template/SHARED_COMPONENT_DESIGN.md",
+          "category": "list-table-template-doc (template-side rounds)"
+        },
+        {
+          "file": "docs/baseline/list-table-visual-template/reports/LIST-TABLE-VISUAL-TEMPLATE-CLIENT-CONFIG-REFINEMENT-BASELINE-001-R4.md",
+          "category": "list-table-template-doc (template-side rounds)"
+        }
+      ]
+    },
+    {
+      "sha": "d6b09d8",
+      "subject": "docs(list-table-template): R3 targeted corrections to client-config refinement baseline draft [LIST-TABLE-VISUAL-TEMPLAT",
+      "fileCount": 4,
+      "outsideOwned": [
+        {
+          "file": "docs/baseline/list-table-visual-template/MIGRATION.md",
+          "category": "list-table-template-doc (template-side rounds)"
+        },
+        {
+          "file": "docs/baseline/list-table-visual-template/README.md",
+          "category": "list-table-template-doc (template-side rounds)"
+        },
+        {
+          "file": "docs/baseline/list-table-visual-template/SHARED_COMPONENT_DESIGN.md",
+          "category": "list-table-template-doc (template-side rounds)"
+        },
+        {
+          "file": "docs/baseline/list-table-visual-template/reports/LIST-TABLE-VISUAL-TEMPLATE-CLIENT-CONFIG-REFINEMENT-BASELINE-001-R3.md",
+          "category": "list-table-template-doc (template-side rounds)"
+        }
+      ]
+    },
+    {
+      "sha": "732d6df",
+      "subject": "docs(list-table-template): R2 targeted marker-semantics correction [LIST-TABLE-VISUAL-TEMPLATE-CLIENT-CONFIG-REFINEMENT-",
+      "fileCount": 4,
+      "outsideOwned": [
+        {
+          "file": "docs/baseline/list-table-visual-template/MIGRATION.md",
+          "category": "list-table-template-doc (template-side rounds)"
+        },
+        {
+          "file": "docs/baseline/list-table-visual-template/README.md",
+          "category": "list-table-template-doc (template-side rounds)"
+        },
+        {
+          "file": "docs/baseline/list-table-visual-template/SHARED_COMPONENT_DESIGN.md",
+          "category": "list-table-template-doc (template-side rounds)"
+        },
+        {
+          "file": "docs/baseline/list-table-visual-template/reports/LIST-TABLE-VISUAL-TEMPLATE-CLIENT-CONFIG-REFINEMENT-BASELINE-001-R2.md",
+          "category": "list-table-template-doc (template-side rounds)"
+        }
+      ]
+    },
+    {
+      "sha": "e4c16df",
+      "subject": "docs(list-table-template): R1 targeted corrections to refinement draft [LIST-TABLE-VISUAL-TEMPLATE-CLIENT-CONFIG-REFINEM",
+      "fileCount": 5,
+      "outsideOwned": [
+        {
+          "file": "docs/baseline/list-table-visual-template/DESIGN.md",
+          "category": "list-table-template-doc (template-side rounds)"
+        },
+        {
+          "file": "docs/baseline/list-table-visual-template/MIGRATION.md",
+          "category": "list-table-template-doc (template-side rounds)"
+        },
+        {
+          "file": "docs/baseline/list-table-visual-template/README.md",
+          "category": "list-table-template-doc (template-side rounds)"
+        },
+        {
+          "file": "docs/baseline/list-table-visual-template/SHARED_COMPONENT_DESIGN.md",
+          "category": "list-table-template-doc (template-side rounds)"
+        },
+        {
+          "file": "docs/baseline/list-table-visual-template/reports/LIST-TABLE-VISUAL-TEMPLATE-CLIENT-CONFIG-REFINEMENT-BASELINE-001-R1.md",
+          "category": "list-table-template-doc (template-side rounds)"
+        }
+      ]
+    },
+    {
+      "sha": "0b43a44",
+      "subject": "docs(list-table-template): tidy rules, delete outdated examples, add layering contract draft [LIST-TABLE-VISUAL-TEMPLATE",
+      "fileCount": 6,
+      "outsideOwned": [
+        {
+          "file": "docs/baseline/list-table-visual-template/DESIGN.md",
+          "category": "list-table-template-doc (template-side rounds)"
+        },
+        {
+          "file": "docs/baseline/list-table-visual-template/MIGRATION.md",
+          "category": "list-table-template-doc (template-side rounds)"
+        },
+        {
+          "file": "docs/baseline/list-table-visual-template/README.md",
+          "category": "list-table-template-doc (template-side rounds)"
+        },
+        {
+          "file": "docs/baseline/list-table-visual-template/SHARED_COMPONENT_DESIGN.md",
+          "category": "list-table-template-doc (template-side rounds)"
+        },
+        {
+          "file": "docs/baseline/list-table-visual-template/UI.md",
+          "category": "list-table-template-doc (template-side rounds)"
+        },
+        {
+          "file": "docs/baseline/list-table-visual-template/reports/LIST-TABLE-VISUAL-TEMPLATE-CLIENT-CONFIG-REFINEMENT-BASELINE-001.md",
+          "category": "list-table-template-doc (template-side rounds)"
+        }
+      ]
+    },
+    {
+      "sha": "30142e2",
+      "subject": "docs(client-config): record round-7 targeted acceptance and owner visual inspection [CLIENT-CONFIG-ROUND7-TARGETED-ACCEP",
+      "fileCount": 9,
+      "outsideOwned": []
+    },
+    {
+      "sha": "aa942dc",
+      "subject": "docs(client-config): add R1 real 100%/125% browser-zoom verification evidence [CLIENT-CONFIG-ROW-HEIGHT-AND-OPTIONAL-ELL",
+      "fileCount": 10,
+      "outsideOwned": []
+    },
+    {
+      "sha": "d93f838",
+      "subject": "feat(client-config): implement row-height and optional ellipsis opt-in [CLIENT-CONFIG-ROW-HEIGHT-AND-OPTIONAL-ELLIPSIS-I",
+      "fileCount": 19,
+      "outsideOwned": [
+        {
+          "file": "docs/baseline/list-table-visual-template/README.md",
+          "category": "list-table-template-doc (template-side rounds)"
+        },
+        {
+          "file": "docs/baseline/list-table-visual-template/SHARED_COMPONENT_DESIGN.md",
+          "category": "list-table-template-doc (template-side rounds)"
+        },
+        {
+          "file": "frontend/src/styles/list-table/list-table-visual.css",
+          "category": "list-table-preset-optin (approved template-side round)"
+        },
+        {
+          "file": "frontend/src/styles/list-table/list-table-visual.spec.ts",
+          "category": "list-table-preset-optin (approved template-side round)"
+        }
+      ]
+    },
+    {
+      "sha": "a042df0",
+      "subject": "docs(client-config): close out 7th-round row-height and optional-ellipsis baseline as APPROVED [CLIENT-CONFIG-ROW-HEIGHT",
+      "fileCount": 8,
+      "outsideOwned": [
+        {
+          "file": "docs/baseline/list-table-visual-template/README.md",
+          "category": "list-table-template-doc (template-side rounds)"
+        },
+        {
+          "file": "docs/baseline/list-table-visual-template/SHARED_COMPONENT_DESIGN.md",
+          "category": "list-table-template-doc (template-side rounds)"
+        }
+      ]
+    },
+    {
+      "sha": "59617b4",
+      "subject": "docs(client-config): R2 targeted corrections to row-height and optional ellipsis baseline draft [CLIENT-CONFIG-ROW-HEIGH",
+      "fileCount": 5,
+      "outsideOwned": [
+        {
+          "file": "docs/baseline/list-table-visual-template/README.md",
+          "category": "list-table-template-doc (template-side rounds)"
+        },
+        {
+          "file": "docs/baseline/list-table-visual-template/SHARED_COMPONENT_DESIGN.md",
+          "category": "list-table-template-doc (template-side rounds)"
+        }
+      ]
+    },
+    {
+      "sha": "938e720",
+      "subject": "docs(client-config): R1 targeted corrections to row-height and optional ellipsis baseline draft [CLIENT-CONFIG-ROW-HEIGH",
+      "fileCount": 8,
+      "outsideOwned": [
+        {
+          "file": "docs/baseline/list-table-visual-template/README.md",
+          "category": "list-table-template-doc (template-side rounds)"
+        },
+        {
+          "file": "docs/baseline/list-table-visual-template/SHARED_COMPONENT_DESIGN.md",
+          "category": "list-table-template-doc (template-side rounds)"
+        }
+      ]
+    },
+    {
+      "sha": "9381703",
+      "subject": "docs(client-config): draft row-height and optional ellipsis entry baseline plus template optional extension [CLIENT-CONF",
+      "fileCount": 10,
+      "outsideOwned": [
+        {
+          "file": "docs/baseline/list-table-visual-template/MIGRATION.md",
+          "category": "list-table-template-doc (template-side rounds)"
+        },
+        {
+          "file": "docs/baseline/list-table-visual-template/README.md",
+          "category": "list-table-template-doc (template-side rounds)"
+        },
+        {
+          "file": "docs/baseline/list-table-visual-template/SHARED_COMPONENT_DESIGN.md",
+          "category": "list-table-template-doc (template-side rounds)"
+        },
+        {
+          "file": "docs/baseline/list-table-visual-template/UI.md",
+          "category": "list-table-template-doc (template-side rounds)"
+        }
+      ]
+    },
+    {
+      "sha": "576123d",
+      "subject": "docs(client-config): close AC-100/AC-143 read-only evidence gaps for R1 supplement [CLIENT-CONFIG-FORMAL-ACCEPTANCE-READ",
+      "fileCount": 8,
+      "outsideOwned": []
+    },
+    {
+      "sha": "b81284f",
+      "subject": "docs(client-config): record read-only formal-acceptance supplement results [CLIENT-CONFIG-FORMAL-ACCEPTANCE-READONLY-SUP",
+      "fileCount": 10,
+      "outsideOwned": []
+    },
+    {
+      "sha": "bec9beb",
+      "subject": "docs(client-config): re-adjudicate AC-010 width-change and AC-143 two initial fix states to BLOCKED [CLIENT-CONFIG-FORMA",
+      "fileCount": 10,
+      "outsideOwned": []
+    },
+    {
+      "sha": "7389648",
+      "subject": "docs(client-config): re-adjudicate 012/041/046 and repair R3 evidence index [CLIENT-CONFIG-FORMAL-ACCEPTANCE-EXECUTION-0",
+      "fileCount": 10,
+      "outsideOwned": []
+    },
+    {
+      "sha": "dca1a5b",
+      "subject": "docs(client-config): build per-step coverage matrix and correct 18 formal acceptance statuses [CLIENT-CONFIG-FORMAL-ACCE",
+      "fileCount": 10,
+      "outsideOwned": []
+    },
+    {
+      "sha": "999de14",
+      "subject": "docs(client-config): extend formal acceptance re-review and correct 13 statuses [CLIENT-CONFIG-FORMAL-ACCEPTANCE-EXECUTI",
+      "fileCount": 7,
+      "outsideOwned": []
+    },
+    {
+      "sha": "5f36601",
+      "subject": "docs(client-config): correct formal acceptance statuses from independent evidence re-review [CLIENT-CONFIG-FORMAL-ACCEPT",
+      "fileCount": 7,
+      "outsideOwned": []
+    },
+    {
+      "sha": "beadaac",
+      "subject": "docs(client-config): record formal acceptance execution results for 154 cases [CLIENT-CONFIG-FORMAL-ACCEPTANCE-EXECUTION",
+      "fileCount": 3,
+      "outsideOwned": []
+    },
+    {
+      "sha": "aaaca77",
+      "subject": "feat(client-config): deepen fixed-row background to separate it from hover gray [CLIENT-CONFIG-ROW-HIGHLIGHT-VISUAL-DIST",
+      "fileCount": 8,
+      "outsideOwned": []
+    },
+    {
+      "sha": "778fae1",
+      "subject": "feat(client-config): implement round-6 neutral-gray row highlight and enable/disable confirm primary button [CLIENT-CONF",
+      "fileCount": 8,
+      "outsideOwned": []
+    },
+    {
+      "sha": "15ea667",
+      "subject": "docs(client-config): close out round-6 row highlight and confirm-button visual baseline approval [CLIENT-CONFIG-ROW-HIGH",
+      "fileCount": 6,
+      "outsideOwned": []
+    },
+    {
+      "sha": "113bfe3",
+      "subject": "docs(client-config): correct round-6 baseline R1 facts and executability [CLIENT-CONFIG-ROW-HIGHLIGHT-AND-CONFIRM-BUTTON",
+      "fileCount": 6,
+      "outsideOwned": []
+    },
+    {
+      "sha": "4ec52b4",
+      "subject": "docs(client-config): establish round-6 row-highlight and confirm-button visual baseline draft [CLIENT-CONFIG-ROW-HIGHLIG",
+      "fileCount": 6,
+      "outsideOwned": []
+    },
+    {
+      "sha": "b609303",
+      "subject": "fix(client-config): confine start/stop reselection intent to its own list request [CLIENT-CONFIG-DIALOG-SPACING-ROW-SELE",
+      "fileCount": 8,
+      "outsideOwned": []
+    },
+    {
+      "sha": "c082b34",
+      "subject": "feat(client-config): implement round-5 dialog spacing, enable/disable confirm copy and single-row fixed selection [CLIEN",
+      "fileCount": 8,
+      "outsideOwned": []
+    },
+    {
+      "sha": "c179f71",
+      "subject": "docs(client-config): record round-5 dialog spacing, row selection and confirm-copy baseline approval closeout [CLIENT-CO",
+      "fileCount": 6,
+      "outsideOwned": []
+    },
+    {
+      "sha": "26647a5",
+      "subject": "docs(client-config): correct 15 misspelled round-5 historical review entries [CLIENT-CONFIG-DIALOG-SPACING-ROW-SELECTION",
+      "fileCount": 6,
+      "outsideOwned": []
+    },
+    {
+      "sha": "5bca41a",
+      "subject": "docs(client-config): correct R2 report counting-label evidence for round-5 dialog spacing baseline [CLIENT-CONFIG-DIALOG",
+      "fileCount": 6,
+      "outsideOwned": []
+    },
+    {
+      "sha": "9b729ec",
+      "subject": "docs(client-config): fix round-5 double-click acceptance conflict [CLIENT-CONFIG-DIALOG-SPACING-ROW-SELECTION-AND-CONFIR",
+      "fileCount": 6,
+      "outsideOwned": []
+    },
+    {
+      "sha": "43016ff",
+      "subject": "docs(client-config): apply R1 corrections to round-5 dialog spacing, confirm copy and row selection baseline [CLIENT-CON",
+      "fileCount": 6,
+      "outsideOwned": []
+    },
+    {
+      "sha": "3f1fdd4",
+      "subject": "docs(client-config): establish round-5 dialog spacing, confirm copy and row selection baseline [CLIENT-CONFIG-DIALOG-SPA",
+      "fileCount": 6,
+      "outsideOwned": []
+    },
+    {
+      "sha": "0c30b15",
+      "subject": "fix(client-config): keep dialog main submit button black during submit loading [CLIENT-CONFIG-CREATE-EDIT-DIALOG-VALIDAT",
+      "fileCount": 8,
+      "outsideOwned": []
+    },
+    {
+      "sha": "9da9620",
+      "subject": "feat(client-config): implement round-4 create/edit dialog validation [CLIENT-CONFIG-CREATE-EDIT-DIALOG-VALIDATION-IMPLEM",
+      "fileCount": 8,
+      "outsideOwned": []
+    },
+    {
+      "sha": "b35ea69",
+      "subject": "docs(client-config): record round-4 dialog validation baseline approval closeout [CLIENT-CONFIG-CREATE-EDIT-DIALOG-VALID",
+      "fileCount": 6,
+      "outsideOwned": []
+    },
+    {
+      "sha": "9daf038",
+      "subject": "docs(client-config): apply R1 corrections to round-4 dialog validation baseline [CLIENT-CONFIG-CREATE-EDIT-DIALOG-VALIDA",
+      "fileCount": 6,
+      "outsideOwned": []
+    },
+    {
+      "sha": "51be9aa",
+      "subject": "docs(client-config): establish round-4 create/edit dialog validation baseline [CLIENT-CONFIG-CREATE-EDIT-DIALOG-VALIDATI",
+      "fileCount": 6,
+      "outsideOwned": []
+    },
+    {
+      "sha": "cb9009a",
+      "subject": "docs(client-config): correct README §1.8 references and R1 timing [CLIENT-CONFIG-POPOVER-AND-DIALOG-VISUAL-REMOTE-REVIEW",
+      "fileCount": 1,
+      "outsideOwned": []
+    },
+    {
+      "sha": "6cf7a55",
+      "subject": "feat(client-config): implement round-3 popover and dialog visual adjustment [CLIENT-CONFIG-POPOVER-AND-DIALOG-VISUAL-IMP",
+      "fileCount": 9,
+      "outsideOwned": []
+    },
+    {
+      "sha": "cf0817f",
+      "subject": "docs(client-config): record third-round visual baseline approval closeout [CLIENT-CONFIG-POPOVER-AND-DIALOG-VISUAL-BASEL",
+      "fileCount": 6,
+      "outsideOwned": []
+    },
+    {
+      "sha": "1df0ef7",
+      "subject": "docs(client-config): apply R1 corrections to third-round visual baseline [CLIENT-CONFIG-POPOVER-AND-DIALOG-VISUAL-BASELI",
+      "fileCount": 6,
+      "outsideOwned": []
+    },
+    {
+      "sha": "a585071",
+      "subject": "docs(client-config): draft popover and dialog visual baseline [CLIENT-CONFIG-POPOVER-AND-DIALOG-VISUAL-BASELINE-001]",
+      "fileCount": 6,
+      "outsideOwned": []
+    },
+    {
+      "sha": "fecf5a0",
+      "subject": "feat(client-config): implement round-2 main-list visual followup [CLIENT-CONFIG-VISUAL-FOLLOWUP-IMPLEMENTATION-001]",
+      "fileCount": 9,
+      "outsideOwned": []
+    },
+    {
+      "sha": "81bb8f1",
+      "subject": "docs(client-config): approve round-2 five-item visual adjustment baseline [CLIENT-CONFIG-VISUAL-FOLLOWUP-BASELINE-APPROV",
+      "fileCount": 6,
+      "outsideOwned": []
+    },
+    {
+      "sha": "3830cba",
+      "subject": "docs(client-config): correct V2 review findings R1 [CLIENT-CONFIG-VISUAL-FOLLOWUP-BASELINE-001-V2-R1]",
+      "fileCount": 6,
+      "outsideOwned": []
+    },
+    {
+      "sha": "328a7ac",
+      "subject": "docs(client-config): draft round-2 main-list visual adjustment baseline [CLIENT-CONFIG-VISUAL-FOLLOWUP-BASELINE-001-V2]",
+      "fileCount": 6,
+      "outsideOwned": []
+    },
+    {
+      "sha": "de23b68",
+      "subject": "feat(client-config): implement query-list and list-table page adjustment [CLIENT-CONFIG-QUERY-LIST-AND-LIST-TABLE-ADJUST",
+      "fileCount": 10,
+      "outsideOwned": [
+        {
+          "file": "docs/baseline/list-table-visual-template/MIGRATION.md",
+          "category": "list-table-template-doc (template-side rounds)"
+        },
+        {
+          "file": "docs/baseline/query-list-page-template/MIGRATION.md",
+          "category": "query-list-template-migration-doc (page migration status only)"
+        }
+      ]
+    },
+    {
+      "sha": "40d2812",
+      "subject": "docs(client-config): correct approval review entry and evidence [CLIENT-CONFIG-QUERY-LIST-AND-LIST-TABLE-ADJUSTMENT-BASE",
+      "fileCount": 6,
+      "outsideOwned": []
+    },
+    {
+      "sha": "26134a0",
+      "subject": "docs(client-config): fix approval closeout status consistency [CLIENT-CONFIG-QUERY-LIST-AND-LIST-TABLE-ADJUSTMENT-BASELI",
+      "fileCount": 6,
+      "outsideOwned": []
+    },
+    {
+      "sha": "f86d4e8",
+      "subject": "docs(client-config): approve page adjustment baseline [CLIENT-CONFIG-QUERY-LIST-AND-LIST-TABLE-ADJUSTMENT-BASELINE-APPRO",
+      "fileCount": 8,
+      "outsideOwned": [
+        {
+          "file": "docs/baseline/list-table-visual-template/MIGRATION.md",
+          "category": "list-table-template-doc (template-side rounds)"
+        },
+        {
+          "file": "docs/baseline/query-list-page-template/MIGRATION.md",
+          "category": "query-list-template-migration-doc (page migration status only)"
+        }
+      ]
+    },
+    {
+      "sha": "5066c76",
+      "subject": "docs(client-config): correct acceptance evidence wording R3 [CLIENT-CONFIG-QUERY-LIST-AND-LIST-TABLE-ADJUSTMENT-BASELINE",
+      "fileCount": 2,
+      "outsideOwned": []
+    },
+    {
+      "sha": "5e0731a",
+      "subject": "docs(client-config): add R1 evidence correction report R2 [CLIENT-CONFIG-QUERY-LIST-AND-LIST-TABLE-ADJUSTMENT-BASELINE-0",
+      "fileCount": 1,
+      "outsideOwned": []
+    },
+    {
+      "sha": "2c2b2a7",
+      "subject": "docs(client-config): correct page adjustment baseline draft R1 [CLIENT-CONFIG-QUERY-LIST-AND-LIST-TABLE-ADJUSTMENT-BASEL",
+      "fileCount": 7,
+      "outsideOwned": [
+        {
+          "file": "docs/baseline/list-table-visual-template/MIGRATION.md",
+          "category": "list-table-template-doc (template-side rounds)"
+        }
+      ]
+    },
+    {
+      "sha": "fba09d1",
+      "subject": "docs(client-config): draft query-list and table visual adjustment baseline [CLIENT-CONFIG-QUERY-LIST-AND-LIST-TABLE-ADJU",
+      "fileCount": 8,
+      "outsideOwned": [
+        {
+          "file": "docs/baseline/list-table-visual-template/MIGRATION.md",
+          "category": "list-table-template-doc (template-side rounds)"
+        },
+        {
+          "file": "docs/baseline/query-list-page-template/MIGRATION.md",
+          "category": "query-list-template-migration-doc (page migration status only)"
+        }
+      ]
+    },
+    {
+      "sha": "a9567f4",
+      "subject": "fix(client-config): stable data source tag text centering via .cc-txt carrier [CLIENT-CONFIG-LIST-UI-ADJUSTMENT-001-R2]",
+      "fileCount": 6,
+      "outsideOwned": []
+    },
+    {
+      "sha": "5a3a2f5",
+      "subject": "fix(client-config): R1 list review - single-line datasource +N, selection visual, blank click [CLIENT-CONFIG-LIST-UI-ADJ",
+      "fileCount": 8,
+      "outsideOwned": []
+    },
+    {
+      "sha": "fc4d033",
+      "subject": "feat(client-config): adjust probe list page layout and interactions [CLIENT-CONFIG-LIST-UI-ADJUSTMENT-001]",
+      "fileCount": 8,
+      "outsideOwned": []
+    },
+    {
+      "sha": "28bd09e",
+      "subject": "docs(client-config): prepare user acceptance environment R1 [CLIENT-CONFIG-USER-ACCEPTANCE-PREPARATION-001-R1]",
+      "fileCount": 1,
+      "outsideOwned": []
+    },
+    {
+      "sha": "84d3cdc",
+      "subject": "fix(client-config): resolve MyBatis type alias collision [CLIENT-CONFIG-BACKEND-STARTUP-ALIAS-COLLISION-FIX-001]",
+      "fileCount": 9,
+      "outsideOwned": []
+    },
+    {
+      "sha": "4021577",
+      "subject": "docs(client-config): report backend startup blocker [CLIENT-CONFIG-USER-ACCEPTANCE-PREPARATION-001]",
+      "fileCount": 1,
+      "outsideOwned": []
+    },
+    {
+      "sha": "e1c5116",
+      "subject": "fix(client-config): address formal review findings [CLIENT-CONFIG-IMPLEMENTATION-001-R1]",
+      "fileCount": 6,
+      "outsideOwned": []
+    },
+    {
+      "sha": "3d4cec1",
+      "subject": "feat(client-config): implement probe management [CLIENT-CONFIG-IMPLEMENTATION-001]",
+      "fileCount": 29,
+      "outsideOwned": []
+    }
+  ],
+  "outsideOwnedFiles": [
+    {
+      "commit": "c74543f",
+      "file": "docs/baseline/README.md",
+      "category": "baseline-index (approved first-adoption round)"
+    },
+    {
+      "commit": "c74543f",
+      "file": "docs/baseline/create-edit-dialog-visual-template/DESIGN.md",
+      "category": "create-edit-dialog-template-doc (approved first-adoption round)"
+    },
+    {
+      "commit": "c74543f",
+      "file": "docs/baseline/create-edit-dialog-visual-template/MIGRATION.md",
+      "category": "create-edit-dialog-template-doc (approved first-adoption round)"
+    },
+    {
+      "commit": "c74543f",
+      "file": "docs/baseline/create-edit-dialog-visual-template/README.md",
+      "category": "create-edit-dialog-template-doc (approved first-adoption round)"
+    },
+    {
+      "commit": "c74543f",
+      "file": "docs/baseline/create-edit-dialog-visual-template/SHARED_COMPONENT_DESIGN.md",
+      "category": "create-edit-dialog-template-doc (approved first-adoption round)"
+    },
+    {
+      "commit": "c74543f",
+      "file": "docs/baseline/create-edit-dialog-visual-template/UI.md",
+      "category": "create-edit-dialog-template-doc (approved first-adoption round)"
+    },
+    {
+      "commit": "bc22ada",
+      "file": "docs/baseline/README.md",
+      "category": "baseline-index (approved first-adoption round)"
+    },
+    {
+      "commit": "bc22ada",
+      "file": "docs/baseline/create-edit-dialog-visual-template/DESIGN.md",
+      "category": "create-edit-dialog-template-doc (approved first-adoption round)"
+    },
+    {
+      "commit": "bc22ada",
+      "file": "docs/baseline/create-edit-dialog-visual-template/README.md",
+      "category": "create-edit-dialog-template-doc (approved first-adoption round)"
+    },
+    {
+      "commit": "bc22ada",
+      "file": "docs/baseline/create-edit-dialog-visual-template/SHARED_COMPONENT_DESIGN.md",
+      "category": "create-edit-dialog-template-doc (approved first-adoption round)"
+    },
+    {
+      "commit": "d878c3d",
+      "file": "docs/baseline/README.md",
+      "category": "baseline-index (approved first-adoption round)"
+    },
+    {
+      "commit": "d878c3d",
+      "file": "docs/baseline/create-edit-dialog-visual-template/DESIGN.md",
+      "category": "create-edit-dialog-template-doc (approved first-adoption round)"
+    },
+    {
+      "commit": "d878c3d",
+      "file": "docs/baseline/create-edit-dialog-visual-template/MIGRATION.md",
+      "category": "create-edit-dialog-template-doc (approved first-adoption round)"
+    },
+    {
+      "commit": "d878c3d",
+      "file": "docs/baseline/create-edit-dialog-visual-template/README.md",
+      "category": "create-edit-dialog-template-doc (approved first-adoption round)"
+    },
+    {
+      "commit": "d878c3d",
+      "file": "docs/baseline/create-edit-dialog-visual-template/SHARED_COMPONENT_DESIGN.md",
+      "category": "create-edit-dialog-template-doc (approved first-adoption round)"
+    },
+    {
+      "commit": "d878c3d",
+      "file": "docs/baseline/create-edit-dialog-visual-template/UI.md",
+      "category": "create-edit-dialog-template-doc (approved first-adoption round)"
+    },
+    {
+      "commit": "d878c3d",
+      "file": "frontend/src/styles/dialog/create-edit-dialog-visual.spec.ts",
+      "category": "dialog-preset-spec (approved first-adoption round)"
+    },
+    {
+      "commit": "a07d17e",
+      "file": "docs/baseline/list-table-visual-template/MIGRATION.md",
+      "category": "list-table-template-doc (template-side rounds)"
+    },
+    {
+      "commit": "a07d17e",
+      "file": "docs/baseline/list-table-visual-template/README.md",
+      "category": "list-table-template-doc (template-side rounds)"
+    },
+    {
+      "commit": "a07d17e",
+      "file": "docs/baseline/list-table-visual-template/SHARED_COMPONENT_DESIGN.md",
+      "category": "list-table-template-doc (template-side rounds)"
+    },
+    {
+      "commit": "5cb8079",
+      "file": "docs/baseline/list-table-visual-template/MIGRATION.md",
+      "category": "list-table-template-doc (template-side rounds)"
+    },
+    {
+      "commit": "5cb8079",
+      "file": "docs/baseline/list-table-visual-template/README.md",
+      "category": "list-table-template-doc (template-side rounds)"
+    },
+    {
+      "commit": "5cb8079",
+      "file": "docs/baseline/list-table-visual-template/SHARED_COMPONENT_DESIGN.md",
+      "category": "list-table-template-doc (template-side rounds)"
+    },
+    {
+      "commit": "5cb8079",
+      "file": "docs/baseline/list-table-visual-template/reports/LIST-TABLE-CLIENT-CONFIG-OPTIONAL-ROW-HIGHLIGHT-PUBLIC-PRESET-ADOPTION-001.md",
+      "category": "list-table-template-doc (template-side rounds)"
+    },
+    {
+      "commit": "5cb8079",
+      "file": "frontend/src/styles/list-table/list-table-visual.spec.ts",
+      "category": "list-table-preset-optin (approved template-side round)"
+    },
+    {
+      "commit": "e9a34e2",
+      "file": "docs/baseline/list-table-visual-template/MIGRATION.md",
+      "category": "list-table-template-doc (template-side rounds)"
+    },
+    {
+      "commit": "e9a34e2",
+      "file": "docs/baseline/list-table-visual-template/README.md",
+      "category": "list-table-template-doc (template-side rounds)"
+    },
+    {
+      "commit": "e9a34e2",
+      "file": "docs/baseline/list-table-visual-template/SHARED_COMPONENT_DESIGN.md",
+      "category": "list-table-template-doc (template-side rounds)"
+    },
+    {
+      "commit": "e9a34e2",
+      "file": "docs/baseline/list-table-visual-template/reports/LIST-TABLE-VISUAL-TEMPLATE-CLIENT-CONFIG-REFINEMENT-BASELINE-APPROVAL-CLOSEOUT-001-R1.md",
+      "category": "list-table-template-doc (template-side rounds)"
+    },
+    {
+      "commit": "925c3a8",
+      "file": "docs/baseline/list-table-visual-template/DESIGN.md",
+      "category": "list-table-template-doc (template-side rounds)"
+    },
+    {
+      "commit": "925c3a8",
+      "file": "docs/baseline/list-table-visual-template/MIGRATION.md",
+      "category": "list-table-template-doc (template-side rounds)"
+    },
+    {
+      "commit": "925c3a8",
+      "file": "docs/baseline/list-table-visual-template/README.md",
+      "category": "list-table-template-doc (template-side rounds)"
+    },
+    {
+      "commit": "925c3a8",
+      "file": "docs/baseline/list-table-visual-template/SHARED_COMPONENT_DESIGN.md",
+      "category": "list-table-template-doc (template-side rounds)"
+    },
+    {
+      "commit": "925c3a8",
+      "file": "docs/baseline/list-table-visual-template/UI.md",
+      "category": "list-table-template-doc (template-side rounds)"
+    },
+    {
+      "commit": "925c3a8",
+      "file": "docs/baseline/list-table-visual-template/reports/LIST-TABLE-VISUAL-TEMPLATE-CLIENT-CONFIG-REFINEMENT-BASELINE-APPROVAL-CLOSEOUT-001.md",
+      "category": "list-table-template-doc (template-side rounds)"
+    },
+    {
+      "commit": "aa6285f",
+      "file": "docs/baseline/list-table-visual-template/MIGRATION.md",
+      "category": "list-table-template-doc (template-side rounds)"
+    },
+    {
+      "commit": "aa6285f",
+      "file": "docs/baseline/list-table-visual-template/README.md",
+      "category": "list-table-template-doc (template-side rounds)"
+    },
+    {
+      "commit": "aa6285f",
+      "file": "docs/baseline/list-table-visual-template/SHARED_COMPONENT_DESIGN.md",
+      "category": "list-table-template-doc (template-side rounds)"
+    },
+    {
+      "commit": "aa6285f",
+      "file": "docs/baseline/list-table-visual-template/reports/LIST-TABLE-VISUAL-TEMPLATE-CLIENT-CONFIG-REFINEMENT-BASELINE-001-R4.md",
+      "category": "list-table-template-doc (template-side rounds)"
+    },
+    {
+      "commit": "d6b09d8",
+      "file": "docs/baseline/list-table-visual-template/MIGRATION.md",
+      "category": "list-table-template-doc (template-side rounds)"
+    },
+    {
+      "commit": "d6b09d8",
+      "file": "docs/baseline/list-table-visual-template/README.md",
+      "category": "list-table-template-doc (template-side rounds)"
+    },
+    {
+      "commit": "d6b09d8",
+      "file": "docs/baseline/list-table-visual-template/SHARED_COMPONENT_DESIGN.md",
+      "category": "list-table-template-doc (template-side rounds)"
+    },
+    {
+      "commit": "d6b09d8",
+      "file": "docs/baseline/list-table-visual-template/reports/LIST-TABLE-VISUAL-TEMPLATE-CLIENT-CONFIG-REFINEMENT-BASELINE-001-R3.md",
+      "category": "list-table-template-doc (template-side rounds)"
+    },
+    {
+      "commit": "732d6df",
+      "file": "docs/baseline/list-table-visual-template/MIGRATION.md",
+      "category": "list-table-template-doc (template-side rounds)"
+    },
+    {
+      "commit": "732d6df",
+      "file": "docs/baseline/list-table-visual-template/README.md",
+      "category": "list-table-template-doc (template-side rounds)"
+    },
+    {
+      "commit": "732d6df",
+      "file": "docs/baseline/list-table-visual-template/SHARED_COMPONENT_DESIGN.md",
+      "category": "list-table-template-doc (template-side rounds)"
+    },
+    {
+      "commit": "732d6df",
+      "file": "docs/baseline/list-table-visual-template/reports/LIST-TABLE-VISUAL-TEMPLATE-CLIENT-CONFIG-REFINEMENT-BASELINE-001-R2.md",
+      "category": "list-table-template-doc (template-side rounds)"
+    },
+    {
+      "commit": "e4c16df",
+      "file": "docs/baseline/list-table-visual-template/DESIGN.md",
+      "category": "list-table-template-doc (template-side rounds)"
+    },
+    {
+      "commit": "e4c16df",
+      "file": "docs/baseline/list-table-visual-template/MIGRATION.md",
+      "category": "list-table-template-doc (template-side rounds)"
+    },
+    {
+      "commit": "e4c16df",
+      "file": "docs/baseline/list-table-visual-template/README.md",
+      "category": "list-table-template-doc (template-side rounds)"
+    },
+    {
+      "commit": "e4c16df",
+      "file": "docs/baseline/list-table-visual-template/SHARED_COMPONENT_DESIGN.md",
+      "category": "list-table-template-doc (template-side rounds)"
+    },
+    {
+      "commit": "e4c16df",
+      "file": "docs/baseline/list-table-visual-template/reports/LIST-TABLE-VISUAL-TEMPLATE-CLIENT-CONFIG-REFINEMENT-BASELINE-001-R1.md",
+      "category": "list-table-template-doc (template-side rounds)"
+    },
+    {
+      "commit": "0b43a44",
+      "file": "docs/baseline/list-table-visual-template/DESIGN.md",
+      "category": "list-table-template-doc (template-side rounds)"
+    },
+    {
+      "commit": "0b43a44",
+      "file": "docs/baseline/list-table-visual-template/MIGRATION.md",
+      "category": "list-table-template-doc (template-side rounds)"
+    },
+    {
+      "commit": "0b43a44",
+      "file": "docs/baseline/list-table-visual-template/README.md",
+      "category": "list-table-template-doc (template-side rounds)"
+    },
+    {
+      "commit": "0b43a44",
+      "file": "docs/baseline/list-table-visual-template/SHARED_COMPONENT_DESIGN.md",
+      "category": "list-table-template-doc (template-side rounds)"
+    },
+    {
+      "commit": "0b43a44",
+      "file": "docs/baseline/list-table-visual-template/UI.md",
+      "category": "list-table-template-doc (template-side rounds)"
+    },
+    {
+      "commit": "0b43a44",
+      "file": "docs/baseline/list-table-visual-template/reports/LIST-TABLE-VISUAL-TEMPLATE-CLIENT-CONFIG-REFINEMENT-BASELINE-001.md",
+      "category": "list-table-template-doc (template-side rounds)"
+    },
+    {
+      "commit": "d93f838",
+      "file": "docs/baseline/list-table-visual-template/README.md",
+      "category": "list-table-template-doc (template-side rounds)"
+    },
+    {
+      "commit": "d93f838",
+      "file": "docs/baseline/list-table-visual-template/SHARED_COMPONENT_DESIGN.md",
+      "category": "list-table-template-doc (template-side rounds)"
+    },
+    {
+      "commit": "d93f838",
+      "file": "frontend/src/styles/list-table/list-table-visual.css",
+      "category": "list-table-preset-optin (approved template-side round)"
+    },
+    {
+      "commit": "d93f838",
+      "file": "frontend/src/styles/list-table/list-table-visual.spec.ts",
+      "category": "list-table-preset-optin (approved template-side round)"
+    },
+    {
+      "commit": "a042df0",
+      "file": "docs/baseline/list-table-visual-template/README.md",
+      "category": "list-table-template-doc (template-side rounds)"
+    },
+    {
+      "commit": "a042df0",
+      "file": "docs/baseline/list-table-visual-template/SHARED_COMPONENT_DESIGN.md",
+      "category": "list-table-template-doc (template-side rounds)"
+    },
+    {
+      "commit": "59617b4",
+      "file": "docs/baseline/list-table-visual-template/README.md",
+      "category": "list-table-template-doc (template-side rounds)"
+    },
+    {
+      "commit": "59617b4",
+      "file": "docs/baseline/list-table-visual-template/SHARED_COMPONENT_DESIGN.md",
+      "category": "list-table-template-doc (template-side rounds)"
+    },
+    {
+      "commit": "938e720",
+      "file": "docs/baseline/list-table-visual-template/README.md",
+      "category": "list-table-template-doc (template-side rounds)"
+    },
+    {
+      "commit": "938e720",
+      "file": "docs/baseline/list-table-visual-template/SHARED_COMPONENT_DESIGN.md",
+      "category": "list-table-template-doc (template-side rounds)"
+    },
+    {
+      "commit": "9381703",
+      "file": "docs/baseline/list-table-visual-template/MIGRATION.md",
+      "category": "list-table-template-doc (template-side rounds)"
+    },
+    {
+      "commit": "9381703",
+      "file": "docs/baseline/list-table-visual-template/README.md",
+      "category": "list-table-template-doc (template-side rounds)"
+    },
+    {
+      "commit": "9381703",
+      "file": "docs/baseline/list-table-visual-template/SHARED_COMPONENT_DESIGN.md",
+      "category": "list-table-template-doc (template-side rounds)"
+    },
+    {
+      "commit": "9381703",
+      "file": "docs/baseline/list-table-visual-template/UI.md",
+      "category": "list-table-template-doc (template-side rounds)"
+    },
+    {
+      "commit": "de23b68",
+      "file": "docs/baseline/list-table-visual-template/MIGRATION.md",
+      "category": "list-table-template-doc (template-side rounds)"
+    },
+    {
+      "commit": "de23b68",
+      "file": "docs/baseline/query-list-page-template/MIGRATION.md",
+      "category": "query-list-template-migration-doc (page migration status only)"
+    },
+    {
+      "commit": "f86d4e8",
+      "file": "docs/baseline/list-table-visual-template/MIGRATION.md",
+      "category": "list-table-template-doc (template-side rounds)"
+    },
+    {
+      "commit": "f86d4e8",
+      "file": "docs/baseline/query-list-page-template/MIGRATION.md",
+      "category": "query-list-template-migration-doc (page migration status only)"
+    },
+    {
+      "commit": "2c2b2a7",
+      "file": "docs/baseline/list-table-visual-template/MIGRATION.md",
+      "category": "list-table-template-doc (template-side rounds)"
+    },
+    {
+      "commit": "fba09d1",
+      "file": "docs/baseline/list-table-visual-template/MIGRATION.md",
+      "category": "list-table-template-doc (template-side rounds)"
+    },
+    {
+      "commit": "fba09d1",
+      "file": "docs/baseline/query-list-page-template/MIGRATION.md",
+      "category": "query-list-template-migration-doc (page migration status only)"
+    }
+  ],
+  "unclassifiedOutsideFiles": [],
+  "checks": {
+    "referencePageTouchedByClientConfig": [],
+    "otherFeatureTouchedByClientConfig": [],
+    "globalComponentsTouchedByClientConfig": [],
+    "backendOutsideClientConfigTouchedByClientConfig": [],
+    "dbDefinitionTouchedByClientConfig": [],
+    "productWorktreeDiffSinceBaseline": ""
+  },
+  "note": "Client-config commits that touch shared-template paths are limited to (a) the approved create-edit-dialog first-adoption documentation/spec round and (b) the approved list-table opt-in round whose CSS diff adds only .lt-main-table-scoped opt-in classes without new --lt-* tokens, global overrides or !important."
+}

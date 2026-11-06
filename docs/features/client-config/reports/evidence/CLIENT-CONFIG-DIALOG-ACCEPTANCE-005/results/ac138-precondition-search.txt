@@ -1,0 +1,29 @@
+CCFG-AC-138 prerequisite search — 2026-11-06
+
+Requirement (CCFG-AC-138 / CCFG-REQ-139):
+  "项目负责人已确认当前稳定状态的相同视口（含展开/收起侧栏）"
+
+Commands executed (repo /agent/cdc-config-platform):
+  grep -rn "项目负责人已确认\|已确认当前稳定状态\|负责人.*视口\|负责人.*侧栏" \
+    docs/features/client-config/{ACCEPTANCE,README,REQUIREMENTS,DESIGN,UI}.md
+  grep -rn "AC-138" docs/features/client-config/reports/*.md
+
+Findings:
+1. CCFG-REQ-139 and CCFG-AC-138 restate the prerequisite but do not name a
+   specific viewport size or sidebar state.
+2. Historical reports (e.g. CLIENT-CONFIG-FORMAL-ACCEPTANCE-EXECUTION-001,
+   CLIENT-CONFIG-FORMAL-ACCEPTANCE-READONLY-SUPPLEMENT-001,
+   CLIENT-CONFIG-REMAINING-ACCEPTANCE-GAP-TRIAGE-AND-READONLY-SUPPLEMENT-001)
+   record measurements at 1440x900 and similar viewports, but none records a
+   project-owner confirmation of a stable viewport + sidebar combination for
+   this AC.
+3. No other committed record in docs/features/client-config was found that
+   supplies that confirmation.
+
+Conclusion:
+  The AC-138 prerequisite is NOT verifiable from committed records. The local
+  part (same-viewport 6-step geometry, long-error readability, absence of a
+  fixed dialog height or sidebar-width offset) was executed and is recorded in
+  results/probeA-readonly.json and results/probeB-write.json, but AC-138 must
+  remain BLOCKED until the owner confirms the stable viewport + sidebar state
+  and the sequence is repeated under that confirmed condition.

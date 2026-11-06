@@ -1,0 +1,45 @@
+CLIENT-CONFIG-DIALOG-ACCEPTANCE-005 — runtime environment
+Captured: 2026-11-06 (Asia/Shanghai)
+Repository: /agent/cdc-config-platform
+Branch: develop
+Task baseline HEAD: 9b1bf9f309b9a2afd635bb408b490f62546b2dff
+origin/develop at task start: same
+Remote develop at task start: same
+
+Backend (reused healthy service, START-ONLY — not built by this task)
+  PID: 3215
+  command: java -jar target/cdc-config-platform-backend-1.0.0-SNAPSHOT.jar --spring.profiles.active=dev
+  cwd: /agent/cdc-config-platform/backend
+  jar: target/cdc-config-platform-backend-1.0.0-SNAPSHOT.jar
+  jar SHA256: efdbea827b6ab84dd47105d2cc130f0bc3c5b70dc78cc626b6421e1f9750a459
+  jar mtime: 2026-09-22 12:21
+  listen: *:8080
+  checks: GET /api/health -> 200; GET /api/clients?status=ALL -> 200
+
+Frontend (reused Vite dev server — not rebuilt by this task)
+  PID: 3348
+  command: node node_modules/.bin/vite --host 0.0.0.0 --port 5173
+  cwd: /agent/cdc-config-platform/frontend
+  source: worktree at HEAD 9b1bf9f; product diff since baseline: empty
+  listen: 0.0.0.0:5173
+  checks: GET http://127.0.0.1:5173/config/client -> 200;
+          GET http://192.168.174.70:5173/config/client -> 200
+
+Browser automation
+  Playwright Core: /root/.hermes/hermes-agent/node_modules/playwright-core
+  Browser: Chrome for Testing 147.0.7727.15 (headless)
+  Executable: /root/.cache/ms-playwright/chromium-1217/chrome-linux64/chrome
+  Viewports: 1440x900 DPR 1 (sidebar expanded / collapsed); 1024x720 DPR 1 (sidebar expanded)
+  Zoom: 100%; clipboard read/write permissions granted for the paste checks
+
+Node.js: v24.17.0
+
+Database (Oracle 19c development schema; connection details intentionally omitted from committed evidence)
+  Before 005 fixtures: 90 client rows, 268 data-source rows, 238 eligible candidates
+  After 005 fixtures: 92 client rows, 273 data-source rows, 239 eligible candidates
+  Candidate predicate on the server: FG_ACTIVE='1' AND UPPER(DATA_SOURCE_CATEGORY)='SOURCE'
+                                     AND UPPER(DATA_SOURCE_TYPE)='ORACLE'
+  Cross-check: DB eligible count 239 = GET /api/clients/data-source-options total 239
+
+Services are left running for visual review. Stop only when requested:
+  kill 3348 3215
