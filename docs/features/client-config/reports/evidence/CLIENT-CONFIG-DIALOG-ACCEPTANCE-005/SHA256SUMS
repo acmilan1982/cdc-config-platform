@@ -1,6 +1,6 @@
 4e4b9fc3934f187282073fbf1a2a7941d0add26e5b51912684faa97660e171d3  ./environment-and-version.txt
 3c45f5b6d197e672be7d7dd13aa237547e41ccbbbc801017e37cc13a18d7bbd1  ./fixture-ledger.md
-2ff63d20d508fb54f12be119468c680166e07b902400fa0e769ad38ff1a19f7d  ./four-item-matrix.md
+513f52e3f5a2951ebf61f92d43c4eca2bbff3ef69d5e28d09ce1cc646eba8990  ./four-item-matrix.md
 e941eb9cc67a2fcf068d23e88b31f4f0add866c9eef44f24a5e92a6a57ae05e8  ./probes/probeA-readonly.cjs
 df5510041c0f1590f43fa485b3edcdd8c49cfdc1a12a80dedaca65ec3a093143  ./probes/probeB-write.cjs
 428e640ab808d567c826e2ab30f8dd6ccd9da23f998e873a6020e822a93f6c09  ./probes/probeC-git-audit.cjs

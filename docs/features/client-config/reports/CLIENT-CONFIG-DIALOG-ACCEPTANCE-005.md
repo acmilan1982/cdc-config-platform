@@ -12,7 +12,7 @@
 | AC | 判定 | 依据摘要 |
 |---|---|---|
 | `CCFG-AC-120` | **PASS** | 新增“创建”与编辑“保存”的常态/hover/focus/active 计算样式均符合已批准值；表单不完整时按钮可点击、点击显示字段错误且零非 GET；新增模式真实 5000 ms 延迟多时点采样显示忙碌态清楚可辨、无蓝黑跳色、重复点击零新增请求；编辑模式由 004-R1 真实 `PUT` 防重证据与固定提交 `242cc5c` 的编辑忙碌快照共同支持；参考页对照采用已入仓运行证据 |
-| `CCFG-AC-125` | **PASS** | 真实后端 `40941` 长错误在 1440×900 与 1024×720 均完整换行可读；错误盒未被祖先的滚动/溢出限制截断；表单受控内部滚动后两行均在可视区；文档无异常横向溢出；窄视口弹窗可操作并可关闭 |
+| `CCFG-AC-125` | **PASS** | 真实后端 `40941` 长错误在 1440×900 与 1024×720 均完整换行可读；窄视口表单内部滚动 29px 后两行文字均在可视区（`narrowScroll.lines[].insideFormViewport` 均为 true）；错误盒底边 644.56px 比表单可视区底边 644.39px 低 0.17px，属错误盒几何、不影响两行文字可读；文档无异常横向溢出；窄视口弹窗可操作并可关闭 |
 | `CCFG-AC-134` | **PASS** | 新增与编辑两种模式均完成键盘输入、真实粘贴、自动生成、取消全部、提交失败、修正、关闭重开；候选 API 与 DB 互证（夹具前 238=238、夹具后 239=239）；已分配提示、逗号禁选、选择顺序、编辑锁定语义成立；`POST /api/clients` 冲突 `40941`、成功 `200/200` 并独立回读；编辑保存复用 004-R1 的真实 `PUT` 证据；固定 Git 区间审计显示参考页/其他 Feature/全局组件/后端/DB 定义/两套模板全局状态未被改动 |
 | `CCFG-AC-138` | **BLOCKED**（本地部分完成） | 同视口 6 步几何在 1440×900（展开/收起）与 1024×720（展开）均稳定，长错误完整可读，未发现固定弹窗高度或写死侧栏偏移；但“项目负责人已确认当前稳定状态的相同视口（含展开/收起侧栏）”这一前置在已入仓记录中无可追溯确认，故整项保留 `BLOCKED` |
 
@@ -82,9 +82,9 @@
 | 子步骤 | 证据键 | 实测 |
 |---|---|---|
 | 真实可触发长错误 | `B.sections.conflict` | 业务码 `40941`；文本与期望全文一致；归属“采集数据源”字段 |
-| 正常视口换行可读 | `B.sections.conflict.wideBeforeScroll` | 1440×900：2 行，行宽 731.03 / 140.13；表单区 191.39–700.56（clientHeight 509、scrollHeight 509、scrollTop 0）；错误盒完整可见 |
-| 无硬裁剪 | `B.sections.conflict.wideBeforeScroll.ancestors`、`B.sections.conflict.narrowBeforeScroll.ancestors`、`B.sections.conflict.narrowAfterScroll.ancestors`、`A.sections.layoutStatic` | 错误文本 `overflow=visible`、`overflow-wrap:anywhere`；直接反馈/控件祖先（`P`、`.cc-field-feedback`、`.cc-form-control`）均 `overflow=visible`。祖先链中确实存在滚动/溢出限制：`.cc-form`、`.el-overlay-dialog`、`.el-overlay`、`.content-area` 为 `overflow:auto`，`.main-layout` 为 `overflow:hidden`；这些限制未截断错误盒，错误盒与两行行盒均在弹窗/表单可视区内完整显示 |
-| 窄视口可读（受控滚动） | `B.sections.conflict.narrowBeforeScroll` / `narrowScroll` / `narrowAfterScroll`（`form`、`pRect`、`lines`、`lines[].insideFormViewport`） | 1024×720：表单 164.39–644.39（clientHeight 480、scrollHeight 509、`overflowY=auto`）；滚动前错误盒 637.19–673.56，超出表单底边；`narrowScroll.formScrollTop=29` 后 `narrowAfterScroll.pRect` 608.19–644.56，两行盒 609.19–624.19、627.38–642.38 均 `insideFormViewport=true` |
+| 正常视口换行可读 | `B.sections.conflict.wideBeforeScroll` | 1440×900：2 行，行宽 731.03 / 140.13；表单区 191.39–700.56（clientHeight 509、scrollHeight 509、scrollTop 0）；错误盒与两行文字均在表单可视区内（`pRect.bottom=700.56` 与 `form.bottom=700.56` 相同） |
+| 无硬裁剪 | `B.sections.conflict.wideBeforeScroll.ancestors`、`B.sections.conflict.narrowBeforeScroll.ancestors`、`B.sections.conflict.narrowAfterScroll.ancestors`、`A.sections.layoutStatic` | 错误文本 `overflow=visible`、`overflow-wrap:anywhere`；直接反馈/控件祖先（`P`、`.cc-field-feedback`、`.cc-form-control`）均 `overflow=visible`。祖先链中确实存在滚动/溢出限制：`.cc-form`、`.el-overlay-dialog`、`.el-overlay`、`.content-area` 为 `overflow:auto`，`.main-layout` 为 `overflow:hidden`；这些限制未对两行错误文字造成硬裁剪：`narrowScroll.lines[].insideFormViewport` 两值均为 true（609.19–624.19、627.38–642.38）；错误盒底边 644.56px 比表单可视区底边 644.39px 低 0.17px，属错误盒几何而非文字可读性 |
+| 窄视口可读（受控滚动） | `B.sections.conflict.narrowBeforeScroll` / `narrowScroll` / `narrowAfterScroll`（`form`、`pRect`、`lines`） | 1024×720：表单 164.39–644.39（clientHeight 480、scrollHeight 509、`overflowY=auto`）；滚动前错误盒 637.19–673.56，超出表单底边；`narrowScroll.formScrollTop=29` 后 `narrowScroll.lines[].insideFormViewport` 两值均为 true（609.19–624.19、627.38–642.38），两行文字完整可读；`narrowAfterScroll.lines[]` 只记录 `top/left/width/height`，无 `insideFormViewport`；`narrowAfterScroll.pRect.bottom=644.56` 比 `form.bottom=644.39` 低 0.17px |
 | 无异常横向溢出 | `B.sections.conflict.wideBeforeScroll.doc`、`B.sections.conflict.narrowBeforeScroll.doc`、`B.sections.conflict.narrowAfterScroll.doc` | 1440：`scrollWidth=clientWidth=1440`；1024：`scrollWidth=clientWidth=1024`；两视口 `horizontalOverflow=false` |
 | 窄视口可操作/关闭 | `A` 窄视口序列 + `closeDialogIfOpen` | 1024 下可选中/取消数据源、提交触发错误、点击“取消”关闭 |
 
@@ -144,7 +144,7 @@
 | 1440×900，侧栏展开，6 步序列 | `A.sections.ac125Ac138.wide` | 高度恒 613.19、top 恒 135、提交按钮 y 恒 700.19；反馈 灰→隐藏→灰→红→隐藏；每步 `nonGet=0` |
 | 1440×900，侧栏收起 | `A.sections.ac125Ac138.wideCollapsed` | 与展开态相同几何；无水平溢出 |
 | 1024×720，侧栏展开 | `A.sections.ac125Ac138.narrow` | 高度恒 600.39、top 恒 108、提交按钮 y 恒 660.39；无水平溢出 |
-| 长错误分支 | `B.sections.conflict` | 真实 `40941` 两行可读；窄视口受控滚动；错误盒未被祖先滚动/溢出限制截断 |
+| 长错误分支 | `B.sections.conflict` | 真实 `40941` 两行可读；窄视口受控滚动 29px 后两行文字均在表单可视区（`narrowScroll.lines[].insideFormViewport` 均为 true）；错误盒底边 644.56px 比表单底边 644.39px 低 0.17px |
 | 固定高度/侧栏偏移 | `A.sections.ac125Ac138.*.fixedDialogHeightCss`、`dialogCentering.delta=0` | 高度内容驱动；水平居中 delta=0；未发现写死侧栏偏移 |
 
 ### 6.2 阻断原因
@@ -197,7 +197,7 @@
 
 ## 10. 下一入口
 
-`CHATGPT_REMOTE_CLIENT_CONFIG_DIALOG_ACCEPTANCE_005_R1_REVIEW`
+`CHATGPT_REMOTE_CLIENT_CONFIG_DIALOG_ACCEPTANCE_005_R2_REVIEW`
 
 ## 11. R1 勘误记录（2026-11-06）
 
@@ -206,7 +206,18 @@
 | 编号 | 旧写法 | 新写法 | 证据路径与键 |
 |---|---|---|---|
 | R1-01 | 将新增模式的 `B.sections.busy` 多时点采样视为已覆盖编辑模式；编辑忙碌态仅笼统“复用 004-R1” | 新增模式明确为 `B.sections.busy` 多时点采样（5000 ms 受控延迟）；编辑模式并列两份证据：`R1.flows.edit`（`busyState`/`duplicateAction`/`putCount`，`deltaAttempts` 首笔 PUT 时间戳早于重复点击，非第二笔）与 `E2.ac115.submitting.inFlight`（`loadingVisible=1`、底色/边框 `rgb(63,63,70)`、白字；仅为忙碌快照，非完整颜色时序） | `results/probeB-write.json → sections.busy`、`sections.requestLedger`；`...004-R1/results/r1b-write-dedup.json → flows.edit`；提交 `242cc5c` 的 `...MULTI-AC-CRUD.../group-e-results.json → ac115.submitting.inFlight` |
-| R1-02 | `B.sections.conflict.ancestors`、`B.sections.conflict.doc`（不存在） | 改为各快照内的实际字段：`wideBeforeScroll/narrowBeforeScroll/narrowAfterScroll.ancestors` 与同名快照的 `.doc`；并如实记录祖先链存在 `.cc-form`/`.el-overlay*`/`.content-area` 的 `overflow:auto` 与 `.main-layout` 的 `overflow:hidden`，但其未截断错误盒 | `results/probeB-write.json → sections.conflict.wideBeforeScroll/narrowBeforeScroll/narrowAfterScroll`（`.ancestors`、`.doc`、`.form`、`.pRect`、`.lines`） |
+| R1-02 | `B.sections.conflict.ancestors`、`B.sections.conflict.doc`（不存在） | 改为各快照内的实际字段：`wideBeforeScroll/narrowBeforeScroll/narrowAfterScroll.ancestors` 与同名快照的 `.doc`；并如实记录祖先链存在 `.cc-form`/`.el-overlay*`/`.content-area` 的 `overflow:auto` 与 `.main-layout` 的 `overflow:hidden`；这些限制未对两行错误文字造成硬裁剪，错误盒底边 644.56px 比表单可视区底边 644.39px 低 0.17px（R2 进一步精确） | `results/probeB-write.json → sections.conflict.wideBeforeScroll/narrowBeforeScroll/narrowAfterScroll`（`.ancestors`、`.doc`、`.form`、`.pRect`、`.lines`） |
 | R1-03 | “编辑解锁后键入 `CCFG005-NEW-EDIT-KB`” | 改为“在编辑弹窗的描述框清空后键盘输入”，值写入描述草稿，未写入探针 ID 字段，不用于证明改名 | `results/probeA-readonly.json → sections.ac134Edit.keyboard`（`action`、`descValue`）；锁定/解锁/再锁定另引 `initial`/`unlocked`/`relocked` |
 
 勘误文件：本报告、`evidence/.../reference-evidence-index.md`、`evidence/.../four-item-matrix.md`、`evidence/.../SHA256SUMS`。原始 JSON、探针、SQL、台账与其他批次文件逐字节保留。
+
+## 12. R2 勘误记录（2026-11-06）
+
+本轮仅做 AC-125 窄视口证据表述修正与静态核验，未重跑探针、未调用业务 API、未读写数据库、未启停服务。`CCFG-AC-125` 维持 PASS；`CCFG-AC-138` 与 `CCFG-AC-079/087/091/094` 维持 BLOCKED。
+
+| 编号 | 旧写法 | 新写法 | 证据路径与键 |
+|---|---|---|---|
+| R2-01 | 将 `insideFormViewport` 归到 `narrowAfterScroll.lines[]`，并暗示窄视口整个错误盒完全位于可视区 | `insideFormViewport` 仅存在于 `narrowScroll.lines[]`（两值均为 true，坐标 609.19–624.19、627.38–642.38）；`narrowAfterScroll.lines[]` 只记录 `top/left/width/height`，无该字段。表单滚动 29px 后两行文字完整可读；错误盒底边 644.56px，表单可视区底边 644.39px，低 0.17px | `results/probeB-write.json → sections.conflict.narrowScroll.formScrollTop`、`.narrowScroll.lines[].insideFormViewport`、`.narrowAfterScroll.lines[]`、`.narrowAfterScroll.pRect.bottom`、`.narrowAfterScroll.form.bottom` |
+| R2-02 | 摘要、AC-125 表、R1 勘误说明及 AC-138 复用句中的“错误盒未截断/完整显示” | 区分错误盒几何与两行文字可读性：两行文字未被硬裁剪且均在表单可视区内；错误盒底边比表单可视区底边低 0.17px。正常视口与无整页横向溢出的既有结论保留 | 同上 |
+
+勘误文件：本报告、`evidence/.../four-item-matrix.md`、`evidence/.../SHA256SUMS`。证据索引、原始 JSON、探针、SQL、台账、其他批次与 `ACCEPTANCE.md` 逐字节保留。
