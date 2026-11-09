@@ -2,18 +2,31 @@
 
 - 任务编号：`CLIENT-CONFIG-AC091-ABNORMAL-STATE-LIVE-ACCEPTANCE-010`
 - 分支：`develop`
-- 固定基线：`9371e932ecd2fb2eab9861a6c1e383c0dd9ecec1`（009 结果提交）
-- 依据：`docs/prompts/client-config/CLIENT-CONFIG-AC091-ABNORMAL-STATE-LIVE-ACCEPTANCE-010-Agent-Prompt.md`
+- 原执行基线：`9371e932ecd2fb2eab9861a6c1e383c0dd9ecec1`（009 结果提交）
+- R1 勘误基线：`77f4e623e76dc117215061a5e04944c8d14b0e8d`（010 结果提交）
+- 依据：`docs/prompts/client-config/CLIENT-CONFIG-AC091-ABNORMAL-STATE-LIVE-ACCEPTANCE-010-Agent-Prompt.md`（010 原任务）；`docs/prompts/client-config/CLIENT-CONFIG-AC091-ABNORMAL-STATE-LIVE-ACCEPTANCE-010-R1-Agent-Prompt.md`（R1 勘误）
 - 证据目录：`docs/features/client-config/reports/evidence/CLIENT-CONFIG-AC091-ABNORMAL-STATE-LIVE-ACCEPTANCE-010/`
-- 下一入口：`CHATGPT_REMOTE_CLIENT_CONFIG_AC091_ABNORMAL_STATE_LIVE_ACCEPTANCE_010_REVIEW`
+- 现行判定：**`CCFG-AC-091 = FAIL`**（R1 勘误，2026-11-09）
+- 下一入口：`CHATGPT_REMOTE_CLIENT_CONFIG_AC091_ABNORMAL_STATE_LIVE_ACCEPTANCE_010_R1_REVIEW`
 
-## 1. 结论
+## 1. 结论（R1 勘误后）
 
-`CCFG-AC-091` 由 `BLOCKED` 更新为 **`PASS`**。原条款全部成立：三种 `FG_ACTIVE` 状态 ID 正文的颜色与字重在 1440×900、1920×1080 下均与参考页「数据源 ID」正文一致；停用与异常标识保持各自现行语义与视觉；单行省略、完整 Tooltip、鼠标与键盘编辑入口均保持。
+`CCFG-AC-091` 现行判定为 **`FAIL`**。R1 将 010 原判 `PASS` 勘误为 `FAIL`；010 原 `PASS` 结论与 `157 PASS` 统计作为已被取代的历史结果保留于 §1.1。
 
-本轮唯一阻塞项（库内缺少 `FG_ACTIVE` 非 `'0'`/`'1'` 样本）已在负责人授权下用单行合成夹具补齐并现场复测。
+判据：AC-091 要求历史异常标识按 `CCFG-AC-088` 保持原值可辨认。010 首个合成样本 `CCFG010-ABN1`（12 字符 ID）在 176px 列内使标识被省略为「异常…」，状态原值 `X` 不可见——这是实际观察到的反例；随后缩短为 `CCFG010X` 的短样本通过，并不能消除该反例。因此 AC-091 整体判 `FAIL`。`CCFG-AC-088` 本轮不改判，两条关联留待同一修复任务回归。
 
-验收统计更新为 **157 PASS / 0 FAIL / 0 BLOCKED / 0 NOT_RUN = 157**。本报告不自行标记 Feature 正式接受。
+现行统计 **156 PASS / 1 FAIL / 0 BLOCKED / 0 NOT_RUN = 157**；唯一 FAIL 为 `CCFG-AC-091`。本报告不自行标记 Feature 正式接受。
+
+### 1.1 010 原结论（已被 R1 取代）
+
+`CCFG-AC-091` 由 `BLOCKED` 更新为 `PASS`。原条款在短样本范围内成立：三种 `FG_ACTIVE` 状态 ID 正文的颜色与字重在 1440×900、1920×1080 下均与参考页「数据源 ID」正文一致；停用与异常标识保持各自现行语义与视觉；单行省略、完整 Tooltip、鼠标与键盘编辑入口均保持。原验收统计为 **157 PASS / 0 FAIL / 0 BLOCKED / 0 NOT_RUN = 157**。
+
+### 1.2 R1 勘误说明
+
+- **长样本反例**：首个合成样本 `CCFG010-ABN1` 在 176px 列内使异常标识显示为「异常…」，原始值 `X` 被截断、不可辨认。该观察记录于 `sql-fixture-ledger.txt` §3 DML #2、§4 更新动因及原报告 §4，**没有**对应的逐视口截图或原始几何 JSON 入仓，不得将其写成已入仓的长样本证据。
+- **短样本通过范围**：缩短 ID 后的 `CCFG010X` 在 1440×900、1920×1080 均完整显示红色「异常：X」，`client.measurements.ac091.abnormal` 提供该短样本证据。三态 ID 正文字重/颜色、参考页对照、长 ID（普通 ID）Tooltip 与鼠标/键盘入口的通过观察继续有效，但各自样本范围不变。
+- **条款依据**：AC-091 明确「红色 `异常：{原始值}` 仍按 `CCFG-AC-088` 呈现」，而 AC-088 要求标识的超长处理「使界面上的原始值可辨认、可核对」。长样本原值被截断与该要求直接冲突，故 AC-091 判 `FAIL`；短样本通过不消除反例。
+- **边界**：本轮只做文档勘误，未改代码、未启停服务、未运行浏览器或测试、未访问业务 API、未读写数据库、未改样本；010 原始证据目录（含 SQL 台账、探针、截图、JSON 与 `SHA256SUMS`）逐字节保留。产品布局修复及复测另立任务。
 
 ## 2. 授权与边界
 
@@ -70,7 +83,7 @@
 
 条款要点：ID 正文文本的颜色与字重与参考页「数据源 ID」一致（可辨识、与单元格背景有足够对比度）；「停用」与异常原值标识保持各自现行语义与视觉；整列未笼统加粗或改色；单行省略、完整值 Tooltip、鼠标与键盘编辑入口保持不变。
 
-两视口实测值完全一致。证据键见 `evidence-index.md` 第 2 节；原始值见 `raw/client-091-1440x900.json`、`raw/client-091-1920x1080.json`。
+两视口实测值完全一致。**本节结论仅覆盖短样本 `CCFG010X`**（§6.3 的长 ID 用例为普通 ID，只验证 ID 单行省略与完整 Tooltip，不等于异常标识长样本）；长样本 `CCFG010-ABN1` 的反例见 §1.2。证据键见 `evidence-index.md` 第 2 节；原始值见 `raw/client-091-1440x900.json`、`raw/client-091-1920x1080.json`。
 
 ### 6.1 ID 正文与参考页比对
 
@@ -98,7 +111,7 @@
 | 异常标识独立于正文 | `separateElementFromIdBody=true`、`idBodyContainsMarkText=false`、`markColorEqualsBodyColor=false`、`markWeightEqualsBodyWeight=false` | 同左 | `...abnormal.mark.*` |
 | 标识间距 / 垂直居中 | `offsetFromIdRight=6`、`centerYDeltaFromId=0` | 同左 | `...disabled.mark.*`、`...abnormal.mark.*` |
 
-结论：启用状态无任何标识；停用状态仅有「停用」；异常状态完整显示红色「异常：X」，原始值 `X` 未被归一化，标识为独立元素且未复用正文颜色/字重。
+结论（短样本 `CCFG010X`）：启用状态无任何标识；停用状态仅有「停用」；异常状态完整显示红色「异常：X」，原始值 `X` 未被归一化，标识为独立元素且未复用正文颜色/字重。该通过不覆盖长样本反例（见 §1.2）。
 
 ### 6.3 长 ID 省略与 Tooltip
 
@@ -136,15 +149,18 @@
 
 ## 9. 157 条定义与状态保护
 
-- 状态变化集合：仅 `CCFG-AC-091` 由 `BLOCKED` → `PASS`；其余 156 个状态格未变。
-- 157 条验收定义（含 `CCFG-AC-091` 条款文本）未修改。
-- 007/009 原始证据目录未改动。
-- `CCFG-AC-091` 更新后统计：**PASS 157 / FAIL 0 / BLOCKED 0 / NOT_RUN 0 = 157**；ID 连续唯一（`CCFG-AC-001`～`CCFG-AC-157`）。
+- R1 状态变化集合：仅 `CCFG-AC-091` 由 `PASS` → `FAIL`；其余 156 个状态格未变；`changed_ids=[CCFG-AC-091]`。
+- 157 条验收定义（含 `CCFG-AC-091`、`CCFG-AC-088` 条款文本）未修改。
+- 010 原始证据目录（`reports/evidence/CLIENT-CONFIG-AC091-ABNORMAL-STATE-LIVE-ACCEPTANCE-010/`）相对固定基线无差异；007/009 原始证据目录未改动。
+- 现行统计：**PASS 156 / FAIL 1 / BLOCKED 0 / NOT_RUN 0 = 157**；唯一 FAIL 为 `CCFG-AC-091`；ID 连续唯一（`CCFG-AC-001`～`CCFG-AC-157`）。
+- 将 `CCFG-AC-091` 状态反向替换（`FAIL`→`PASS`）后，验收表与固定基线 `77f4e62` 逐字节一致。
+- 历史：010 原将 `CCFG-AC-091` 由 `BLOCKED` 改判 `PASS`、统计 `PASS 157`，该结果已被本 R1 取代。
 - 本报告不自行标记 Feature 正式接受。
 
 ## 10. 交付与校验边界
 
-- 证据文件：`probes/`、`environment-and-version.txt`、`sql-fixture-ledger.txt`、`raw/`、`network/`、`samples/`、`screenshots/`、`evidence-index.md`、`SHA256SUMS`。
-- 提交前校验 JSON、证据引用、SHA256、脱敏、157 个连续唯一 ID、状态变化集合及 `git diff --check` / `git diff --cached --check`。
-- 逐路径暂存；不纳入 `.claude/settings.local.json`、`docs/prompts/**`、`runtime-logs/**`。单次提交后普通快进推送，并核对本地/上游/远端三方 SHA 一致，不强推。
+- 证据文件（010 原有，R1 未改动）：`probes/`、`environment-and-version.txt`、`sql-fixture-ledger.txt`、`raw/`、`network/`、`samples/`、`screenshots/`、`evidence-index.md`、`SHA256SUMS`。
+- R1 提交前校验：`sha256sum -c SHA256SUMS`；证据目录相对固定基线无差异；157 个连续唯一 ID；状态变化集合仅 `CCFG-AC-091`；反向替换后验收表与固定基线逐字节一致；`git diff --check` / `git diff --cached --check`。
+- R1 仅逐路径暂存 `ACCEPTANCE.md`、本报告与 `README.md`；不纳入 `.claude/settings.local.json`、`docs/prompts/**`、`runtime-logs/**`。单次提交后普通快进推送，并核对本地/上游/远端三方 SHA 一致，不强推。
+- 本轮为纯文档勘误：未启动浏览器/服务、未构建/运行测试、未调用业务 API、未读写数据库或夹具；`fixture_dml_operations=0`、`business_write_count=0`。
 - 现场通过/提交推送成功 ≠ 远程复审通过 ≠ 157 条整体验收通过 ≠ Feature 正式接受。
