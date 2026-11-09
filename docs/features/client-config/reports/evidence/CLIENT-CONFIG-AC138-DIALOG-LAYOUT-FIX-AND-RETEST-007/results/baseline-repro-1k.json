@@ -1,0 +1,5083 @@
+{
+  "meta": {
+    "probe": "probeA-ac138-fix",
+    "task": "CLIENT-CONFIG-AC138-DIALOG-LAYOUT-FIX-AND-RETEST-007",
+    "mode": "baseline",
+    "startedAt": "2026-11-09T04:21:21.352Z",
+    "base": "http://127.0.0.1:5173",
+    "browser": "/root/.cache/ms-playwright/chromium-1217/chrome-linux64/chrome",
+    "pageScope": "/config/client only",
+    "editClientId": "probe-001",
+    "gate": "context.route **/api/** before first navigation; GET/HEAD/OPTIONS forwarded; other methods aborted and counted; the long-error submit is fulfilled locally with the 005-recorded 40941 body; backend non-GET forwarded = 0",
+    "serviceWorkers": "blocked",
+    "browserVersion": "147.0.7727.15",
+    "listRowCount": 92,
+    "finishedAt": "2026-11-09T04:22:00.810Z"
+  },
+  "gate": {
+    "apiRequests": [
+      {
+        "scenario": "create1920x1080",
+        "step": "navigate",
+        "method": "GET",
+        "url": "/src/api/clientConfig.ts"
+      },
+      {
+        "scenario": "create1920x1080",
+        "step": "navigate",
+        "method": "GET",
+        "url": "/api/clients"
+      },
+      {
+        "scenario": "create1920x1080",
+        "step": "sequence-open",
+        "method": "GET",
+        "url": "/api/clients/data-source-options"
+      },
+      {
+        "scenario": "create1920x1080",
+        "step": "long-open",
+        "method": "GET",
+        "url": "/api/clients/data-source-options"
+      },
+      {
+        "scenario": "create1920x1080",
+        "step": "long-submit",
+        "method": "POST",
+        "url": "/api/clients"
+      },
+      {
+        "scenario": "edit1920x1080",
+        "step": "navigate",
+        "method": "GET",
+        "url": "/src/api/clientConfig.ts"
+      },
+      {
+        "scenario": "edit1920x1080",
+        "step": "navigate",
+        "method": "GET",
+        "url": "/api/clients"
+      },
+      {
+        "scenario": "edit1920x1080",
+        "step": "sequence-open",
+        "method": "GET",
+        "url": "/api/clients/data-source-options"
+      },
+      {
+        "scenario": "edit1920x1080",
+        "step": "long-open",
+        "method": "GET",
+        "url": "/api/clients/data-source-options"
+      },
+      {
+        "scenario": "edit1920x1080",
+        "step": "long-submit",
+        "method": "PUT",
+        "url": "/api/clients/probe-001"
+      }
+    ],
+    "nonGetAttempts": [
+      {
+        "scenario": "create1920x1080",
+        "step": "long-submit",
+        "method": "POST",
+        "url": "/api/clients",
+        "postData": "{\"clientId\":\"CCFG007-LONG-1920\",\"clientDesc\":\"CCFG007 1920 长错误回放样本\",\"dataSourceIds\":[\"CCFG-AC-R1-DS05\"]}",
+        "forwarded": false,
+        "outcome": "replayed-locally"
+      },
+      {
+        "scenario": "edit1920x1080",
+        "step": "long-submit",
+        "method": "PUT",
+        "url": "/api/clients/probe-001",
+        "postData": "{\"clientId\":\"probe-001\",\"clientDesc\":\"S3AC AC-030 sequential base probe-001 (synthetic)\",\"dataSourceIds\":[\"S3AC-S030-1\"]}",
+        "forwarded": false,
+        "outcome": "replayed-locally"
+      }
+    ],
+    "nonGetTotal": 2,
+    "backendNonGetForwarded": 0
+  },
+  "replay": {
+    "source": "docs/features/client-config/reports/evidence/CLIENT-CONFIG-DIALOG-ACCEPTANCE-005/results/probeB-write.json → gate.responses[0].body",
+    "body": {
+      "code": 40941,
+      "message": "数据源“CCFG005超长机构名称用于错误换行验证样本（CCFG005-DS-LONG-0123456789ABCDE）”已分配给探针：CCFG005-OCC1，不能重复分配。",
+      "timestamp": "2026-11-06T13:21:27.194"
+    },
+    "forwardedToBackend": false,
+    "interceptions": [
+      {
+        "scenario": "create1920x1080",
+        "at": "2026-11-09T04:21:40.521Z",
+        "method": "POST",
+        "path": "/api/clients",
+        "requestBody": "{\"clientId\":\"CCFG007-LONG-1920\",\"clientDesc\":\"CCFG007 1920 长错误回放样本\",\"dataSourceIds\":[\"CCFG-AC-R1-DS05\"]}",
+        "outcome": "replayed-locally",
+        "forwardedToBackend": false,
+        "responseCode": 40941
+      },
+      {
+        "scenario": "edit1920x1080",
+        "at": "2026-11-09T04:21:57.168Z",
+        "method": "PUT",
+        "path": "/api/clients/probe-001",
+        "requestBody": "{\"clientId\":\"probe-001\",\"clientDesc\":\"S3AC AC-030 sequential base probe-001 (synthetic)\",\"dataSourceIds\":[\"S3AC-S030-1\"]}",
+        "outcome": "replayed-locally",
+        "forwardedToBackend": false,
+        "responseCode": 40941
+      }
+    ]
+  },
+  "sections": {
+    "create1920x1080": {
+      "scene": "create @ 1920x1080",
+      "mode": "create",
+      "focus": "full",
+      "viewport": {
+        "width": 1920,
+        "height": 1080
+      },
+      "sidebarExpanded": true,
+      "steps": [
+        {
+          "label": "opened",
+          "viewport": {
+            "innerWidth": 1920,
+            "innerHeight": 1080,
+            "dpr": 1,
+            "visualViewportWidth": 1920,
+            "visualViewportHeight": 1080,
+            "zoomPercent": 100,
+            "screenWidth": 1920,
+            "screenHeight": 1080
+          },
+          "sidebar": {
+            "collapsed": false,
+            "rect": {
+              "x": 0,
+              "y": 0,
+              "top": 0,
+              "left": 0,
+              "right": 220,
+              "bottom": 1080,
+              "width": 220,
+              "height": 1080
+            }
+          },
+          "contentArea": {
+            "x": 220,
+            "y": 48,
+            "top": 48,
+            "left": 220,
+            "right": 1920,
+            "bottom": 1080,
+            "width": 1700,
+            "height": 1032
+          },
+          "dialog": {
+            "x": 510,
+            "y": 162,
+            "top": 162,
+            "left": 510,
+            "right": 1410,
+            "bottom": 775.19,
+            "width": 900,
+            "height": 613.19
+          },
+          "dialogVisible": true,
+          "dialogTitle": "新增探针",
+          "dialogStyle": {
+            "width": "900px",
+            "height": "613.188px",
+            "maxWidth": "1872px",
+            "maxHeight": "none",
+            "marginTop": "162px",
+            "marginBottom": "50px",
+            "position": "relative",
+            "top": "0px",
+            "left": "0px"
+          },
+          "dialogCentering": {
+            "viewportCenterDelta": 0,
+            "contentAreaCenterDelta": -110
+          },
+          "form": {
+            "rect": {
+              "x": 526,
+              "y": 218.39,
+              "top": 218.39,
+              "left": 526,
+              "right": 1394,
+              "bottom": 711.19,
+              "width": 868,
+              "height": 492.8
+            },
+            "clientHeight": 493,
+            "scrollHeight": 493,
+            "scrollTop": 0,
+            "overflowY": "auto",
+            "maxHeight": "840px",
+            "scrollable": false
+          },
+          "feedback": {
+            "exists": true,
+            "text": "至少选择 1 个数据源",
+            "toneClass": "cc-field-feedback__text cc-field-hint",
+            "style": {
+              "fontSize": "13px",
+              "lineHeight": "18.2px",
+              "color": "rgb(144, 147, 153)",
+              "overflow": "visible",
+              "overflowWrap": "anywhere",
+              "height": "18.1875px",
+              "whiteSpace": "normal"
+            },
+            "boxExists": true,
+            "boxRect": {
+              "x": 622,
+              "y": 691.19,
+              "top": 691.19,
+              "left": 622,
+              "right": 1394,
+              "bottom": 711.19,
+              "width": 772,
+              "height": 20
+            },
+            "boxStyle": {
+              "minHeight": "20px",
+              "height": "20px"
+            },
+            "pRect": {
+              "x": 622,
+              "y": 691.19,
+              "top": 691.19,
+              "left": 622,
+              "right": 1394,
+              "bottom": 709.38,
+              "width": 772,
+              "height": 18.19
+            },
+            "lineCount": 1,
+            "lines": [
+              {
+                "top": 692.19,
+                "left": 622,
+                "width": 118.47,
+                "height": 15,
+                "insideFormViewport": true
+              }
+            ],
+            "allLinesInsideFormViewport": true
+          },
+          "submit": {
+            "rect": {
+              "x": 1334,
+              "y": 727.19,
+              "top": 727.19,
+              "left": 1334,
+              "right": 1394,
+              "bottom": 759.19,
+              "width": 60,
+              "height": 32
+            },
+            "text": "创建",
+            "disabled": false,
+            "className": "el-button el-button--primary cc-dialog-submit ced-submit",
+            "hit": {
+              "tag": "SPAN",
+              "cls": "",
+              "isSubmitOrChild": true
+            }
+          },
+          "chosenCount": 0,
+          "sourceSplitErrorClass": "cc-split",
+          "doc": {
+            "scrollWidth": 1920,
+            "clientWidth": 1920,
+            "horizontalOverflow": false
+          }
+        },
+        {
+          "label": "initial-no-source-stable",
+          "viewport": {
+            "innerWidth": 1920,
+            "innerHeight": 1080,
+            "dpr": 1,
+            "visualViewportWidth": 1920,
+            "visualViewportHeight": 1080,
+            "zoomPercent": 100,
+            "screenWidth": 1920,
+            "screenHeight": 1080
+          },
+          "sidebar": {
+            "collapsed": false,
+            "rect": {
+              "x": 0,
+              "y": 0,
+              "top": 0,
+              "left": 0,
+              "right": 220,
+              "bottom": 1080,
+              "width": 220,
+              "height": 1080
+            }
+          },
+          "contentArea": {
+            "x": 220,
+            "y": 48,
+            "top": 48,
+            "left": 220,
+            "right": 1920,
+            "bottom": 1080,
+            "width": 1700,
+            "height": 1032
+          },
+          "dialog": {
+            "x": 510,
+            "y": 162,
+            "top": 162,
+            "left": 510,
+            "right": 1410,
+            "bottom": 775.19,
+            "width": 900,
+            "height": 613.19
+          },
+          "dialogVisible": true,
+          "dialogTitle": "新增探针",
+          "dialogStyle": {
+            "width": "900px",
+            "height": "613.188px",
+            "maxWidth": "1872px",
+            "maxHeight": "none",
+            "marginTop": "162px",
+            "marginBottom": "50px",
+            "position": "relative",
+            "top": "0px",
+            "left": "0px"
+          },
+          "dialogCentering": {
+            "viewportCenterDelta": 0,
+            "contentAreaCenterDelta": -110
+          },
+          "form": {
+            "rect": {
+              "x": 526,
+              "y": 218.39,
+              "top": 218.39,
+              "left": 526,
+              "right": 1394,
+              "bottom": 711.19,
+              "width": 868,
+              "height": 492.8
+            },
+            "clientHeight": 493,
+            "scrollHeight": 493,
+            "scrollTop": 0,
+            "overflowY": "auto",
+            "maxHeight": "840px",
+            "scrollable": false
+          },
+          "feedback": {
+            "exists": true,
+            "text": "至少选择 1 个数据源",
+            "toneClass": "cc-field-feedback__text cc-field-hint",
+            "style": {
+              "fontSize": "13px",
+              "lineHeight": "18.2px",
+              "color": "rgb(144, 147, 153)",
+              "overflow": "visible",
+              "overflowWrap": "anywhere",
+              "height": "18.1875px",
+              "whiteSpace": "normal"
+            },
+            "boxExists": true,
+            "boxRect": {
+              "x": 622,
+              "y": 691.19,
+              "top": 691.19,
+              "left": 622,
+              "right": 1394,
+              "bottom": 711.19,
+              "width": 772,
+              "height": 20
+            },
+            "boxStyle": {
+              "minHeight": "20px",
+              "height": "20px"
+            },
+            "pRect": {
+              "x": 622,
+              "y": 691.19,
+              "top": 691.19,
+              "left": 622,
+              "right": 1394,
+              "bottom": 709.38,
+              "width": 772,
+              "height": 18.19
+            },
+            "lineCount": 1,
+            "lines": [
+              {
+                "top": 692.19,
+                "left": 622,
+                "width": 118.47,
+                "height": 15,
+                "insideFormViewport": true
+              }
+            ],
+            "allLinesInsideFormViewport": true
+          },
+          "submit": {
+            "rect": {
+              "x": 1334,
+              "y": 727.19,
+              "top": 727.19,
+              "left": 1334,
+              "right": 1394,
+              "bottom": 759.19,
+              "width": 60,
+              "height": 32
+            },
+            "text": "创建",
+            "disabled": false,
+            "className": "el-button el-button--primary cc-dialog-submit ced-submit",
+            "hit": {
+              "tag": "SPAN",
+              "cls": "",
+              "isSubmitOrChild": true
+            }
+          },
+          "chosenCount": 0,
+          "sourceSplitErrorClass": "cc-split",
+          "doc": {
+            "scrollWidth": 1920,
+            "clientWidth": 1920,
+            "horizontalOverflow": false
+          }
+        },
+        {
+          "label": "selected-1",
+          "viewport": {
+            "innerWidth": 1920,
+            "innerHeight": 1080,
+            "dpr": 1,
+            "visualViewportWidth": 1920,
+            "visualViewportHeight": 1080,
+            "zoomPercent": 100,
+            "screenWidth": 1920,
+            "screenHeight": 1080
+          },
+          "sidebar": {
+            "collapsed": false,
+            "rect": {
+              "x": 0,
+              "y": 0,
+              "top": 0,
+              "left": 0,
+              "right": 220,
+              "bottom": 1080,
+              "width": 220,
+              "height": 1080
+            }
+          },
+          "contentArea": {
+            "x": 220,
+            "y": 48,
+            "top": 48,
+            "left": 220,
+            "right": 1920,
+            "bottom": 1080,
+            "width": 1700,
+            "height": 1032
+          },
+          "dialog": {
+            "x": 510,
+            "y": 162,
+            "top": 162,
+            "left": 510,
+            "right": 1410,
+            "bottom": 775.19,
+            "width": 900,
+            "height": 613.19
+          },
+          "dialogVisible": true,
+          "dialogTitle": "新增探针",
+          "dialogStyle": {
+            "width": "900px",
+            "height": "613.188px",
+            "maxWidth": "1872px",
+            "maxHeight": "none",
+            "marginTop": "162px",
+            "marginBottom": "50px",
+            "position": "relative",
+            "top": "0px",
+            "left": "0px"
+          },
+          "dialogCentering": {
+            "viewportCenterDelta": 0,
+            "contentAreaCenterDelta": -110
+          },
+          "form": {
+            "rect": {
+              "x": 526,
+              "y": 218.39,
+              "top": 218.39,
+              "left": 526,
+              "right": 1394,
+              "bottom": 711.19,
+              "width": 868,
+              "height": 492.8
+            },
+            "clientHeight": 493,
+            "scrollHeight": 493,
+            "scrollTop": 0,
+            "overflowY": "auto",
+            "maxHeight": "840px",
+            "scrollable": false
+          },
+          "feedback": {
+            "exists": false,
+            "text": null,
+            "toneClass": null,
+            "style": null,
+            "boxExists": true,
+            "boxRect": {
+              "x": 622,
+              "y": 691.19,
+              "top": 691.19,
+              "left": 622,
+              "right": 1394,
+              "bottom": 711.19,
+              "width": 772,
+              "height": 20
+            },
+            "boxStyle": {
+              "minHeight": "20px",
+              "height": "20px"
+            },
+            "pRect": null,
+            "lineCount": 0,
+            "lines": [],
+            "allLinesInsideFormViewport": false
+          },
+          "submit": {
+            "rect": {
+              "x": 1334,
+              "y": 727.19,
+              "top": 727.19,
+              "left": 1334,
+              "right": 1394,
+              "bottom": 759.19,
+              "width": 60,
+              "height": 32
+            },
+            "text": "创建",
+            "disabled": false,
+            "className": "el-button el-button--primary cc-dialog-submit ced-submit",
+            "hit": {
+              "tag": "SPAN",
+              "cls": "",
+              "isSubmitOrChild": true
+            }
+          },
+          "chosenCount": 1,
+          "sourceSplitErrorClass": "cc-split",
+          "doc": {
+            "scrollWidth": 1920,
+            "clientWidth": 1920,
+            "horizontalOverflow": false
+          }
+        },
+        {
+          "label": "cancelled-all",
+          "viewport": {
+            "innerWidth": 1920,
+            "innerHeight": 1080,
+            "dpr": 1,
+            "visualViewportWidth": 1920,
+            "visualViewportHeight": 1080,
+            "zoomPercent": 100,
+            "screenWidth": 1920,
+            "screenHeight": 1080
+          },
+          "sidebar": {
+            "collapsed": false,
+            "rect": {
+              "x": 0,
+              "y": 0,
+              "top": 0,
+              "left": 0,
+              "right": 220,
+              "bottom": 1080,
+              "width": 220,
+              "height": 1080
+            }
+          },
+          "contentArea": {
+            "x": 220,
+            "y": 48,
+            "top": 48,
+            "left": 220,
+            "right": 1920,
+            "bottom": 1080,
+            "width": 1700,
+            "height": 1032
+          },
+          "dialog": {
+            "x": 510,
+            "y": 162,
+            "top": 162,
+            "left": 510,
+            "right": 1410,
+            "bottom": 775.19,
+            "width": 900,
+            "height": 613.19
+          },
+          "dialogVisible": true,
+          "dialogTitle": "新增探针",
+          "dialogStyle": {
+            "width": "900px",
+            "height": "613.188px",
+            "maxWidth": "1872px",
+            "maxHeight": "none",
+            "marginTop": "162px",
+            "marginBottom": "50px",
+            "position": "relative",
+            "top": "0px",
+            "left": "0px"
+          },
+          "dialogCentering": {
+            "viewportCenterDelta": 0,
+            "contentAreaCenterDelta": -110
+          },
+          "form": {
+            "rect": {
+              "x": 526,
+              "y": 218.39,
+              "top": 218.39,
+              "left": 526,
+              "right": 1394,
+              "bottom": 711.19,
+              "width": 868,
+              "height": 492.8
+            },
+            "clientHeight": 493,
+            "scrollHeight": 493,
+            "scrollTop": 0,
+            "overflowY": "auto",
+            "maxHeight": "840px",
+            "scrollable": false
+          },
+          "feedback": {
+            "exists": true,
+            "text": "至少选择 1 个数据源",
+            "toneClass": "cc-field-feedback__text cc-field-hint",
+            "style": {
+              "fontSize": "13px",
+              "lineHeight": "18.2px",
+              "color": "rgb(144, 147, 153)",
+              "overflow": "visible",
+              "overflowWrap": "anywhere",
+              "height": "18.1875px",
+              "whiteSpace": "normal"
+            },
+            "boxExists": true,
+            "boxRect": {
+              "x": 622,
+              "y": 691.19,
+              "top": 691.19,
+              "left": 622,
+              "right": 1394,
+              "bottom": 711.19,
+              "width": 772,
+              "height": 20
+            },
+            "boxStyle": {
+              "minHeight": "20px",
+              "height": "20px"
+            },
+            "pRect": {
+              "x": 622,
+              "y": 691.19,
+              "top": 691.19,
+              "left": 622,
+              "right": 1394,
+              "bottom": 709.38,
+              "width": 772,
+              "height": 18.19
+            },
+            "lineCount": 1,
+            "lines": [
+              {
+                "top": 692.19,
+                "left": 622,
+                "width": 118.47,
+                "height": 15,
+                "insideFormViewport": true
+              }
+            ],
+            "allLinesInsideFormViewport": true
+          },
+          "submit": {
+            "rect": {
+              "x": 1334,
+              "y": 727.19,
+              "top": 727.19,
+              "left": 1334,
+              "right": 1394,
+              "bottom": 759.19,
+              "width": 60,
+              "height": 32
+            },
+            "text": "创建",
+            "disabled": false,
+            "className": "el-button el-button--primary cc-dialog-submit ced-submit",
+            "hit": {
+              "tag": "SPAN",
+              "cls": "",
+              "isSubmitOrChild": true
+            }
+          },
+          "chosenCount": 0,
+          "sourceSplitErrorClass": "cc-split",
+          "doc": {
+            "scrollWidth": 1920,
+            "clientWidth": 1920,
+            "horizontalOverflow": false
+          }
+        },
+        {
+          "label": "after-submit-no-source-red",
+          "viewport": {
+            "innerWidth": 1920,
+            "innerHeight": 1080,
+            "dpr": 1,
+            "visualViewportWidth": 1920,
+            "visualViewportHeight": 1080,
+            "zoomPercent": 100,
+            "screenWidth": 1920,
+            "screenHeight": 1080
+          },
+          "sidebar": {
+            "collapsed": false,
+            "rect": {
+              "x": 0,
+              "y": 0,
+              "top": 0,
+              "left": 0,
+              "right": 220,
+              "bottom": 1080,
+              "width": 220,
+              "height": 1080
+            }
+          },
+          "contentArea": {
+            "x": 220,
+            "y": 48,
+            "top": 48,
+            "left": 220,
+            "right": 1920,
+            "bottom": 1080,
+            "width": 1700,
+            "height": 1032
+          },
+          "dialog": {
+            "x": 510,
+            "y": 162,
+            "top": 162,
+            "left": 510,
+            "right": 1410,
+            "bottom": 775.19,
+            "width": 900,
+            "height": 613.19
+          },
+          "dialogVisible": true,
+          "dialogTitle": "新增探针",
+          "dialogStyle": {
+            "width": "900px",
+            "height": "613.188px",
+            "maxWidth": "1872px",
+            "maxHeight": "none",
+            "marginTop": "162px",
+            "marginBottom": "50px",
+            "position": "relative",
+            "top": "0px",
+            "left": "0px"
+          },
+          "dialogCentering": {
+            "viewportCenterDelta": 0,
+            "contentAreaCenterDelta": -110
+          },
+          "form": {
+            "rect": {
+              "x": 526,
+              "y": 218.39,
+              "top": 218.39,
+              "left": 526,
+              "right": 1394,
+              "bottom": 711.19,
+              "width": 868,
+              "height": 492.8
+            },
+            "clientHeight": 493,
+            "scrollHeight": 493,
+            "scrollTop": 0,
+            "overflowY": "auto",
+            "maxHeight": "840px",
+            "scrollable": false
+          },
+          "feedback": {
+            "exists": true,
+            "text": "至少选择 1 个数据源",
+            "toneClass": "cc-field-feedback__text ced-field-error",
+            "style": {
+              "fontSize": "13px",
+              "lineHeight": "18.2px",
+              "color": "rgb(245, 108, 108)",
+              "overflow": "visible",
+              "overflowWrap": "anywhere",
+              "height": "18.1875px",
+              "whiteSpace": "normal"
+            },
+            "boxExists": true,
+            "boxRect": {
+              "x": 622,
+              "y": 691.19,
+              "top": 691.19,
+              "left": 622,
+              "right": 1394,
+              "bottom": 711.19,
+              "width": 772,
+              "height": 20
+            },
+            "boxStyle": {
+              "minHeight": "20px",
+              "height": "20px"
+            },
+            "pRect": {
+              "x": 622,
+              "y": 691.19,
+              "top": 691.19,
+              "left": 622,
+              "right": 1394,
+              "bottom": 709.38,
+              "width": 772,
+              "height": 18.19
+            },
+            "lineCount": 1,
+            "lines": [
+              {
+                "top": 692.19,
+                "left": 622,
+                "width": 118.47,
+                "height": 15,
+                "insideFormViewport": true
+              }
+            ],
+            "allLinesInsideFormViewport": true
+          },
+          "submit": {
+            "rect": {
+              "x": 1334,
+              "y": 727.19,
+              "top": 727.19,
+              "left": 1334,
+              "right": 1394,
+              "bottom": 759.19,
+              "width": 60,
+              "height": 32
+            },
+            "text": "创建",
+            "disabled": false,
+            "className": "el-button el-button--primary cc-dialog-submit ced-submit",
+            "hit": {
+              "tag": "SPAN",
+              "cls": "",
+              "isSubmitOrChild": true
+            }
+          },
+          "chosenCount": 0,
+          "sourceSplitErrorClass": "cc-split cc-split--error",
+          "doc": {
+            "scrollWidth": 1920,
+            "clientWidth": 1920,
+            "horizontalOverflow": false
+          }
+        },
+        {
+          "label": "corrected",
+          "viewport": {
+            "innerWidth": 1920,
+            "innerHeight": 1080,
+            "dpr": 1,
+            "visualViewportWidth": 1920,
+            "visualViewportHeight": 1080,
+            "zoomPercent": 100,
+            "screenWidth": 1920,
+            "screenHeight": 1080
+          },
+          "sidebar": {
+            "collapsed": false,
+            "rect": {
+              "x": 0,
+              "y": 0,
+              "top": 0,
+              "left": 0,
+              "right": 220,
+              "bottom": 1080,
+              "width": 220,
+              "height": 1080
+            }
+          },
+          "contentArea": {
+            "x": 220,
+            "y": 48,
+            "top": 48,
+            "left": 220,
+            "right": 1920,
+            "bottom": 1080,
+            "width": 1700,
+            "height": 1032
+          },
+          "dialog": {
+            "x": 510,
+            "y": 162,
+            "top": 162,
+            "left": 510,
+            "right": 1410,
+            "bottom": 775.19,
+            "width": 900,
+            "height": 613.19
+          },
+          "dialogVisible": true,
+          "dialogTitle": "新增探针",
+          "dialogStyle": {
+            "width": "900px",
+            "height": "613.188px",
+            "maxWidth": "1872px",
+            "maxHeight": "none",
+            "marginTop": "162px",
+            "marginBottom": "50px",
+            "position": "relative",
+            "top": "0px",
+            "left": "0px"
+          },
+          "dialogCentering": {
+            "viewportCenterDelta": 0,
+            "contentAreaCenterDelta": -110
+          },
+          "form": {
+            "rect": {
+              "x": 526,
+              "y": 218.39,
+              "top": 218.39,
+              "left": 526,
+              "right": 1394,
+              "bottom": 711.19,
+              "width": 868,
+              "height": 492.8
+            },
+            "clientHeight": 493,
+            "scrollHeight": 493,
+            "scrollTop": 0,
+            "overflowY": "auto",
+            "maxHeight": "840px",
+            "scrollable": false
+          },
+          "feedback": {
+            "exists": false,
+            "text": null,
+            "toneClass": null,
+            "style": null,
+            "boxExists": true,
+            "boxRect": {
+              "x": 622,
+              "y": 691.19,
+              "top": 691.19,
+              "left": 622,
+              "right": 1394,
+              "bottom": 711.19,
+              "width": 772,
+              "height": 20
+            },
+            "boxStyle": {
+              "minHeight": "20px",
+              "height": "20px"
+            },
+            "pRect": null,
+            "lineCount": 0,
+            "lines": [],
+            "allLinesInsideFormViewport": false
+          },
+          "submit": {
+            "rect": {
+              "x": 1334,
+              "y": 727.19,
+              "top": 727.19,
+              "left": 1334,
+              "right": 1394,
+              "bottom": 759.19,
+              "width": 60,
+              "height": 32
+            },
+            "text": "创建",
+            "disabled": false,
+            "className": "el-button el-button--primary cc-dialog-submit ced-submit",
+            "hit": {
+              "tag": "SPAN",
+              "cls": "",
+              "isSubmitOrChild": true
+            }
+          },
+          "chosenCount": 1,
+          "sourceSplitErrorClass": "cc-split",
+          "doc": {
+            "scrollWidth": 1920,
+            "clientWidth": 1920,
+            "horizontalOverflow": false
+          }
+        }
+      ],
+      "summary": {
+        "viewport": {
+          "innerWidth": 1920,
+          "innerHeight": 1080,
+          "dpr": 1,
+          "visualViewportWidth": 1920,
+          "visualViewportHeight": 1080,
+          "zoomPercent": 100,
+          "screenWidth": 1920,
+          "screenHeight": 1080
+        },
+        "sidebar": {
+          "collapsed": false,
+          "rect": {
+            "x": 0,
+            "y": 0,
+            "top": 0,
+            "left": 0,
+            "right": 220,
+            "bottom": 1080,
+            "width": 220,
+            "height": 1080
+          }
+        },
+        "dialogHeightMin": 613.19,
+        "dialogHeightMax": 613.19,
+        "dialogTopMin": 162,
+        "dialogTopMax": 162,
+        "submitYMin": 727.19,
+        "submitYMax": 727.19,
+        "horizontalOverflowAny": false,
+        "submitHittableEveryStep": true,
+        "dialogVisibleEveryStep": true,
+        "feedbackTonePath": [
+          {
+            "label": "opened",
+            "text": "至少选择 1 个数据源",
+            "toneClass": "cc-field-feedback__text cc-field-hint",
+            "lineCount": 1,
+            "boxHeight": 20
+          },
+          {
+            "label": "initial-no-source-stable",
+            "text": "至少选择 1 个数据源",
+            "toneClass": "cc-field-feedback__text cc-field-hint",
+            "lineCount": 1,
+            "boxHeight": 20
+          },
+          {
+            "label": "selected-1",
+            "text": null,
+            "toneClass": null,
+            "lineCount": 0,
+            "boxHeight": 20
+          },
+          {
+            "label": "cancelled-all",
+            "text": "至少选择 1 个数据源",
+            "toneClass": "cc-field-feedback__text cc-field-hint",
+            "lineCount": 1,
+            "boxHeight": 20
+          },
+          {
+            "label": "after-submit-no-source-red",
+            "text": "至少选择 1 个数据源",
+            "toneClass": "cc-field-feedback__text ced-field-error",
+            "lineCount": 1,
+            "boxHeight": 20
+          },
+          {
+            "label": "corrected",
+            "text": null,
+            "toneClass": null,
+            "lineCount": 0,
+            "boxHeight": 20
+          }
+        ],
+        "deltas": {
+          "relativeTo": "initial-no-source-stable",
+          "labels": [
+            "opened",
+            "initial-no-source-stable",
+            "selected-1",
+            "cancelled-all",
+            "after-submit-no-source-red",
+            "corrected"
+          ],
+          "series": {
+            "dialogTop": [
+              0,
+              0,
+              0,
+              0,
+              0,
+              0
+            ],
+            "dialogBottom": [
+              0,
+              0,
+              0,
+              0,
+              0,
+              0
+            ],
+            "dialogLeft": [
+              0,
+              0,
+              0,
+              0,
+              0,
+              0
+            ],
+            "dialogRight": [
+              0,
+              0,
+              0,
+              0,
+              0,
+              0
+            ],
+            "dialogHeight": [
+              0,
+              0,
+              0,
+              0,
+              0,
+              0
+            ],
+            "submitX": [
+              0,
+              0,
+              0,
+              0,
+              0,
+              0
+            ],
+            "submitY": [
+              0,
+              0,
+              0,
+              0,
+              0,
+              0
+            ]
+          },
+          "maxAbs": {
+            "dialogTop": 0,
+            "dialogBottom": 0,
+            "dialogLeft": 0,
+            "dialogRight": 0,
+            "dialogHeight": 0,
+            "submitX": 0,
+            "submitY": 0
+          }
+        },
+        "redTransition": {
+          "sampleCount": 54,
+          "durationMs": 876.4,
+          "dialogTop": {
+            "min": 162,
+            "max": 162,
+            "maxAbsVsBefore": 0
+          },
+          "dialogBottom": {
+            "min": 775.19,
+            "max": 775.19,
+            "maxAbsVsBefore": 0
+          },
+          "dialogHeight": {
+            "min": 613.19,
+            "max": 613.19,
+            "maxAbsVsBefore": 0
+          },
+          "submitY": {
+            "min": 727.19,
+            "max": 727.19,
+            "maxAbsVsBefore": 0
+          },
+          "frames": [
+            {
+              "t": 0.5,
+              "top": 162,
+              "bottom": 775.19,
+              "height": 613.19,
+              "submitY": 727.19,
+              "feedback": "至少选择 1 个数据源"
+            },
+            {
+              "t": 9.5,
+              "top": 162,
+              "bottom": 775.19,
+              "height": 613.19,
+              "submitY": 727.19,
+              "feedback": "至少选择 1 个数据源"
+            },
+            {
+              "t": 26.2,
+              "top": 162,
+              "bottom": 775.19,
+              "height": 613.19,
+              "submitY": 727.19,
+              "feedback": "至少选择 1 个数据源"
+            },
+            {
+              "t": 43.3,
+              "top": 162,
+              "bottom": 775.19,
+              "height": 613.19,
+              "submitY": 727.19,
+              "feedback": "至少选择 1 个数据源"
+            },
+            {
+              "t": 69.5,
+              "top": 162,
+              "bottom": 775.19,
+              "height": 613.19,
+              "submitY": 727.19,
+              "feedback": "至少选择 1 个数据源"
+            },
+            {
+              "t": 76.1,
+              "top": 162,
+              "bottom": 775.19,
+              "height": 613.19,
+              "submitY": 727.19,
+              "feedback": "至少选择 1 个数据源"
+            },
+            {
+              "t": 93.7,
+              "top": 162,
+              "bottom": 775.19,
+              "height": 613.19,
+              "submitY": 727.19,
+              "feedback": "至少选择 1 个数据源"
+            },
+            {
+              "t": 109.8,
+              "top": 162,
+              "bottom": 775.19,
+              "height": 613.19,
+              "submitY": 727.19,
+              "feedback": "至少选择 1 个数据源"
+            },
+            {
+              "t": 126.8,
+              "top": 162,
+              "bottom": 775.19,
+              "height": 613.19,
+              "submitY": 727.19,
+              "feedback": "至少选择 1 个数据源"
+            },
+            {
+              "t": 143,
+              "top": 162,
+              "bottom": 775.19,
+              "height": 613.19,
+              "submitY": 727.19,
+              "feedback": "至少选择 1 个数据源"
+            },
+            {
+              "t": 159.9,
+              "top": 162,
+              "bottom": 775.19,
+              "height": 613.19,
+              "submitY": 727.19,
+              "feedback": "至少选择 1 个数据源"
+            },
+            {
+              "t": 176.6,
+              "top": 162,
+              "bottom": 775.19,
+              "height": 613.19,
+              "submitY": 727.19,
+              "feedback": "至少选择 1 个数据源"
+            },
+            {
+              "t": 192.9,
+              "top": 162,
+              "bottom": 775.19,
+              "height": 613.19,
+              "submitY": 727.19,
+              "feedback": "至少选择 1 个数据源"
+            },
+            {
+              "t": 211.5,
+              "top": 162,
+              "bottom": 775.19,
+              "height": 613.19,
+              "submitY": 727.19,
+              "feedback": "至少选择 1 个数据源"
+            },
+            {
+              "t": 226.4,
+              "top": 162,
+              "bottom": 775.19,
+              "height": 613.19,
+              "submitY": 727.19,
+              "feedback": "至少选择 1 个数据源"
+            },
+            {
+              "t": 242.8,
+              "top": 162,
+              "bottom": 775.19,
+              "height": 613.19,
+              "submitY": 727.19,
+              "feedback": "至少选择 1 个数据源"
+            },
+            {
+              "t": 259.9,
+              "top": 162,
+              "bottom": 775.19,
+              "height": 613.19,
+              "submitY": 727.19,
+              "feedback": "至少选择 1 个数据源"
+            },
+            {
+              "t": 276.7,
+              "top": 162,
+              "bottom": 775.19,
+              "height": 613.19,
+              "submitY": 727.19,
+              "feedback": "至少选择 1 个数据源"
+            },
+            {
+              "t": 293.5,
+              "top": 162,
+              "bottom": 775.19,
+              "height": 613.19,
+              "submitY": 727.19,
+              "feedback": "至少选择 1 个数据源"
+            },
+            {
+              "t": 310,
+              "top": 162,
+              "bottom": 775.19,
+              "height": 613.19,
+              "submitY": 727.19,
+              "feedback": "至少选择 1 个数据源"
+            },
+            {
+              "t": 326.1,
+              "top": 162,
+              "bottom": 775.19,
+              "height": 613.19,
+              "submitY": 727.19,
+              "feedback": "至少选择 1 个数据源"
+            },
+            {
+              "t": 343.8,
+              "top": 162,
+              "bottom": 775.19,
+              "height": 613.19,
+              "submitY": 727.19,
+              "feedback": "至少选择 1 个数据源"
+            },
+            {
+              "t": 360,
+              "top": 162,
+              "bottom": 775.19,
+              "height": 613.19,
+              "submitY": 727.19,
+              "feedback": "至少选择 1 个数据源"
+            },
+            {
+              "t": 376,
+              "top": 162,
+              "bottom": 775.19,
+              "height": 613.19,
+              "submitY": 727.19,
+              "feedback": "至少选择 1 个数据源"
+            },
+            {
+              "t": 393.2,
+              "top": 162,
+              "bottom": 775.19,
+              "height": 613.19,
+              "submitY": 727.19,
+              "feedback": "至少选择 1 个数据源"
+            },
+            {
+              "t": 412.2,
+              "top": 162,
+              "bottom": 775.19,
+              "height": 613.19,
+              "submitY": 727.19,
+              "feedback": "至少选择 1 个数据源"
+            },
+            {
+              "t": 426.8,
+              "top": 162,
+              "bottom": 775.19,
+              "height": 613.19,
+              "submitY": 727.19,
+              "feedback": "至少选择 1 个数据源"
+            },
+            {
+              "t": 443.1,
+              "top": 162,
+              "bottom": 775.19,
+              "height": 613.19,
+              "submitY": 727.19,
+              "feedback": "至少选择 1 个数据源"
+            },
+            {
+              "t": 459.9,
+              "top": 162,
+              "bottom": 775.19,
+              "height": 613.19,
+              "submitY": 727.19,
+              "feedback": "至少选择 1 个数据源"
+            },
+            {
+              "t": 476.8,
+              "top": 162,
+              "bottom": 775.19,
+              "height": 613.19,
+              "submitY": 727.19,
+              "feedback": "至少选择 1 个数据源"
+            },
+            {
+              "t": 492.9,
+              "top": 162,
+              "bottom": 775.19,
+              "height": 613.19,
+              "submitY": 727.19,
+              "feedback": "至少选择 1 个数据源"
+            },
+            {
+              "t": 509.3,
+              "top": 162,
+              "bottom": 775.19,
+              "height": 613.19,
+              "submitY": 727.19,
+              "feedback": "至少选择 1 个数据源"
+            },
+            {
+              "t": 526.4,
+              "top": 162,
+              "bottom": 775.19,
+              "height": 613.19,
+              "submitY": 727.19,
+              "feedback": "至少选择 1 个数据源"
+            },
+            {
+              "t": 542.9,
+              "top": 162,
+              "bottom": 775.19,
+              "height": 613.19,
+              "submitY": 727.19,
+              "feedback": "至少选择 1 个数据源"
+            },
+            {
+              "t": 560.4,
+              "top": 162,
+              "bottom": 775.19,
+              "height": 613.19,
+              "submitY": 727.19,
+              "feedback": "至少选择 1 个数据源"
+            },
+            {
+              "t": 576.3,
+              "top": 162,
+              "bottom": 775.19,
+              "height": 613.19,
+              "submitY": 727.19,
+              "feedback": "至少选择 1 个数据源"
+            },
+            {
+              "t": 592.6,
+              "top": 162,
+              "bottom": 775.19,
+              "height": 613.19,
+              "submitY": 727.19,
+              "feedback": "至少选择 1 个数据源"
+            },
+            {
+              "t": 610,
+              "top": 162,
+              "bottom": 775.19,
+              "height": 613.19,
+              "submitY": 727.19,
+              "feedback": "至少选择 1 个数据源"
+            },
+            {
+              "t": 626.2,
+              "top": 162,
+              "bottom": 775.19,
+              "height": 613.19,
+              "submitY": 727.19,
+              "feedback": "至少选择 1 个数据源"
+            },
+            {
+              "t": 642.6,
+              "top": 162,
+              "bottom": 775.19,
+              "height": 613.19,
+              "submitY": 727.19,
+              "feedback": "至少选择 1 个数据源"
+            },
+            {
+              "t": 659.7,
+              "top": 162,
+              "bottom": 775.19,
+              "height": 613.19,
+              "submitY": 727.19,
+              "feedback": "至少选择 1 个数据源"
+            },
+            {
+              "t": 676.3,
+              "top": 162,
+              "bottom": 775.19,
+              "height": 613.19,
+              "submitY": 727.19,
+              "feedback": "至少选择 1 个数据源"
+            },
+            {
+              "t": 693.3,
+              "top": 162,
+              "bottom": 775.19,
+              "height": 613.19,
+              "submitY": 727.19,
+              "feedback": "至少选择 1 个数据源"
+            },
+            {
+              "t": 710.3,
+              "top": 162,
+              "bottom": 775.19,
+              "height": 613.19,
+              "submitY": 727.19,
+              "feedback": "至少选择 1 个数据源"
+            },
+            {
+              "t": 726,
+              "top": 162,
+              "bottom": 775.19,
+              "height": 613.19,
+              "submitY": 727.19,
+              "feedback": "至少选择 1 个数据源"
+            },
+            {
+              "t": 743.2,
+              "top": 162,
+              "bottom": 775.19,
+              "height": 613.19,
+              "submitY": 727.19,
+              "feedback": "至少选择 1 个数据源"
+            },
+            {
+              "t": 759.6,
+              "top": 162,
+              "bottom": 775.19,
+              "height": 613.19,
+              "submitY": 727.19,
+              "feedback": "至少选择 1 个数据源"
+            },
+            {
+              "t": 776.7,
+              "top": 162,
+              "bottom": 775.19,
+              "height": 613.19,
+              "submitY": 727.19,
+              "feedback": "至少选择 1 个数据源"
+            },
+            {
+              "t": 793.1,
+              "top": 162,
+              "bottom": 775.19,
+              "height": 613.19,
+              "submitY": 727.19,
+              "feedback": "至少选择 1 个数据源"
+            },
+            {
+              "t": 809.6,
+              "top": 162,
+              "bottom": 775.19,
+              "height": 613.19,
+              "submitY": 727.19,
+              "feedback": "至少选择 1 个数据源"
+            },
+            {
+              "t": 826.7,
+              "top": 162,
+              "bottom": 775.19,
+              "height": 613.19,
+              "submitY": 727.19,
+              "feedback": "至少选择 1 个数据源"
+            },
+            {
+              "t": 842.9,
+              "top": 162,
+              "bottom": 775.19,
+              "height": 613.19,
+              "submitY": 727.19,
+              "feedback": "至少选择 1 个数据源"
+            },
+            {
+              "t": 859.5,
+              "top": 162,
+              "bottom": 775.19,
+              "height": 613.19,
+              "submitY": 727.19,
+              "feedback": "至少选择 1 个数据源"
+            },
+            {
+              "t": 876.4,
+              "top": 162,
+              "bottom": 775.19,
+              "height": 613.19,
+              "submitY": 727.19,
+              "feedback": "至少选择 1 个数据源"
+            }
+          ]
+        }
+      },
+      "longError": {
+        "scene": "create",
+        "replay": {
+          "source": "docs/features/client-config/reports/evidence/CLIENT-CONFIG-DIALOG-ACCEPTANCE-005/results/probeB-write.json → gate.responses[0].body",
+          "expected": {
+            "method": "POST",
+            "path": "/api/clients"
+          },
+          "forwardedToBackend": false,
+          "interceptions": [
+            {
+              "scenario": "create1920x1080",
+              "at": "2026-11-09T04:21:40.521Z",
+              "method": "POST",
+              "path": "/api/clients",
+              "requestBody": "{\"clientId\":\"CCFG007-LONG-1920\",\"clientDesc\":\"CCFG007 1920 长错误回放样本\",\"dataSourceIds\":[\"CCFG-AC-R1-DS05\"]}",
+              "outcome": "replayed-locally",
+              "forwardedToBackend": false,
+              "responseCode": 40941
+            }
+          ]
+        },
+        "before": {
+          "label": "before-error",
+          "viewport": {
+            "innerWidth": 1920,
+            "innerHeight": 1080,
+            "dpr": 1,
+            "visualViewportWidth": 1920,
+            "visualViewportHeight": 1080,
+            "zoomPercent": 100,
+            "screenWidth": 1920,
+            "screenHeight": 1080
+          },
+          "sidebar": {
+            "collapsed": false,
+            "rect": {
+              "x": 0,
+              "y": 0,
+              "top": 0,
+              "left": 0,
+              "right": 220,
+              "bottom": 1080,
+              "width": 220,
+              "height": 1080
+            }
+          },
+          "contentArea": {
+            "x": 220,
+            "y": 48,
+            "top": 48,
+            "left": 220,
+            "right": 1920,
+            "bottom": 1080,
+            "width": 1700,
+            "height": 1032
+          },
+          "dialog": {
+            "x": 510,
+            "y": 162,
+            "top": 162,
+            "left": 510,
+            "right": 1410,
+            "bottom": 775.19,
+            "width": 900,
+            "height": 613.19
+          },
+          "dialogVisible": true,
+          "dialogTitle": "新增探针",
+          "dialogStyle": {
+            "width": "900px",
+            "height": "613.188px",
+            "maxWidth": "1872px",
+            "maxHeight": "none",
+            "marginTop": "162px",
+            "marginBottom": "50px",
+            "position": "relative",
+            "top": "0px",
+            "left": "0px"
+          },
+          "dialogCentering": {
+            "viewportCenterDelta": 0,
+            "contentAreaCenterDelta": -110
+          },
+          "form": {
+            "rect": {
+              "x": 526,
+              "y": 218.39,
+              "top": 218.39,
+              "left": 526,
+              "right": 1394,
+              "bottom": 711.19,
+              "width": 868,
+              "height": 492.8
+            },
+            "clientHeight": 493,
+            "scrollHeight": 493,
+            "scrollTop": 0,
+            "overflowY": "auto",
+            "maxHeight": "840px",
+            "scrollable": false
+          },
+          "feedback": {
+            "exists": false,
+            "text": null,
+            "toneClass": null,
+            "style": null,
+            "boxExists": true,
+            "boxRect": {
+              "x": 622,
+              "y": 691.19,
+              "top": 691.19,
+              "left": 622,
+              "right": 1394,
+              "bottom": 711.19,
+              "width": 772,
+              "height": 20
+            },
+            "boxStyle": {
+              "minHeight": "20px",
+              "height": "20px"
+            },
+            "pRect": null,
+            "lineCount": 0,
+            "lines": [],
+            "allLinesInsideFormViewport": false
+          },
+          "submit": {
+            "rect": {
+              "x": 1334,
+              "y": 727.19,
+              "top": 727.19,
+              "left": 1334,
+              "right": 1394,
+              "bottom": 759.19,
+              "width": 60,
+              "height": 32
+            },
+            "text": "创建",
+            "disabled": false,
+            "className": "el-button el-button--primary cc-dialog-submit ced-submit",
+            "hit": {
+              "tag": "SPAN",
+              "cls": "",
+              "isSubmitOrChild": true
+            }
+          },
+          "chosenCount": 1,
+          "sourceSplitErrorClass": "cc-split",
+          "doc": {
+            "scrollWidth": 1920,
+            "clientWidth": 1920,
+            "horizontalOverflow": false
+          }
+        },
+        "after": {
+          "label": "after-error",
+          "viewport": {
+            "innerWidth": 1920,
+            "innerHeight": 1080,
+            "dpr": 1,
+            "visualViewportWidth": 1920,
+            "visualViewportHeight": 1080,
+            "zoomPercent": 100,
+            "screenWidth": 1920,
+            "screenHeight": 1080
+          },
+          "sidebar": {
+            "collapsed": false,
+            "rect": {
+              "x": 0,
+              "y": 0,
+              "top": 0,
+              "left": 0,
+              "right": 220,
+              "bottom": 1080,
+              "width": 220,
+              "height": 1080
+            }
+          },
+          "contentArea": {
+            "x": 220,
+            "y": 48,
+            "top": 48,
+            "left": 220,
+            "right": 1920,
+            "bottom": 1080,
+            "width": 1700,
+            "height": 1032
+          },
+          "dialog": {
+            "x": 510,
+            "y": 162,
+            "top": 162,
+            "left": 510,
+            "right": 1410,
+            "bottom": 791.56,
+            "width": 900,
+            "height": 629.56
+          },
+          "dialogVisible": true,
+          "dialogTitle": "新增探针",
+          "dialogStyle": {
+            "width": "900px",
+            "height": "629.562px",
+            "maxWidth": "1872px",
+            "maxHeight": "none",
+            "marginTop": "162px",
+            "marginBottom": "50px",
+            "position": "relative",
+            "top": "0px",
+            "left": "0px"
+          },
+          "dialogCentering": {
+            "viewportCenterDelta": 0,
+            "contentAreaCenterDelta": -110
+          },
+          "form": {
+            "rect": {
+              "x": 526,
+              "y": 218.39,
+              "top": 218.39,
+              "left": 526,
+              "right": 1394,
+              "bottom": 727.56,
+              "width": 868,
+              "height": 509.17
+            },
+            "clientHeight": 509,
+            "scrollHeight": 509,
+            "scrollTop": 0,
+            "overflowY": "auto",
+            "maxHeight": "840px",
+            "scrollable": false
+          },
+          "feedback": {
+            "exists": true,
+            "text": "数据源“CCFG005超长机构名称用于错误换行验证样本（CCFG005-DS-LONG-0123456789ABCDE）”已分配给探针：CCFG005-OCC1，不能重复分配。",
+            "toneClass": "cc-field-feedback__text ced-field-error",
+            "style": {
+              "fontSize": "13px",
+              "lineHeight": "18.2px",
+              "color": "rgb(245, 108, 108)",
+              "overflow": "visible",
+              "overflowWrap": "anywhere",
+              "height": "36.375px",
+              "whiteSpace": "normal"
+            },
+            "boxExists": true,
+            "boxRect": {
+              "x": 622,
+              "y": 691.19,
+              "top": 691.19,
+              "left": 622,
+              "right": 1394,
+              "bottom": 727.56,
+              "width": 772,
+              "height": 36.38
+            },
+            "boxStyle": {
+              "minHeight": "20px",
+              "height": "36.375px"
+            },
+            "pRect": {
+              "x": 622,
+              "y": 691.19,
+              "top": 691.19,
+              "left": 622,
+              "right": 1394,
+              "bottom": 727.56,
+              "width": 772,
+              "height": 36.38
+            },
+            "lineCount": 2,
+            "lines": [
+              {
+                "top": 692.19,
+                "left": 622,
+                "width": 731.03,
+                "height": 15,
+                "insideFormViewport": true
+              },
+              {
+                "top": 710.38,
+                "left": 622,
+                "width": 140.13,
+                "height": 15,
+                "insideFormViewport": true
+              }
+            ],
+            "allLinesInsideFormViewport": true
+          },
+          "submit": {
+            "rect": {
+              "x": 1334,
+              "y": 743.56,
+              "top": 743.56,
+              "left": 1334,
+              "right": 1394,
+              "bottom": 775.56,
+              "width": 60,
+              "height": 32
+            },
+            "text": "创建",
+            "disabled": false,
+            "className": "el-button el-button--primary cc-dialog-submit ced-submit",
+            "hit": {
+              "tag": "SPAN",
+              "cls": "",
+              "isSubmitOrChild": true
+            }
+          },
+          "chosenCount": 1,
+          "sourceSplitErrorClass": "cc-split cc-split--error",
+          "doc": {
+            "scrollWidth": 1920,
+            "clientWidth": 1920,
+            "horizontalOverflow": false
+          }
+        },
+        "afterScroll": null,
+        "corrected": {
+          "label": "corrected",
+          "viewport": {
+            "innerWidth": 1920,
+            "innerHeight": 1080,
+            "dpr": 1,
+            "visualViewportWidth": 1920,
+            "visualViewportHeight": 1080,
+            "zoomPercent": 100,
+            "screenWidth": 1920,
+            "screenHeight": 1080
+          },
+          "sidebar": {
+            "collapsed": false,
+            "rect": {
+              "x": 0,
+              "y": 0,
+              "top": 0,
+              "left": 0,
+              "right": 220,
+              "bottom": 1080,
+              "width": 220,
+              "height": 1080
+            }
+          },
+          "contentArea": {
+            "x": 220,
+            "y": 48,
+            "top": 48,
+            "left": 220,
+            "right": 1920,
+            "bottom": 1080,
+            "width": 1700,
+            "height": 1032
+          },
+          "dialog": {
+            "x": 510,
+            "y": 162,
+            "top": 162,
+            "left": 510,
+            "right": 1410,
+            "bottom": 775.19,
+            "width": 900,
+            "height": 613.19
+          },
+          "dialogVisible": true,
+          "dialogTitle": "新增探针",
+          "dialogStyle": {
+            "width": "900px",
+            "height": "613.188px",
+            "maxWidth": "1872px",
+            "maxHeight": "none",
+            "marginTop": "162px",
+            "marginBottom": "50px",
+            "position": "relative",
+            "top": "0px",
+            "left": "0px"
+          },
+          "dialogCentering": {
+            "viewportCenterDelta": 0,
+            "contentAreaCenterDelta": -110
+          },
+          "form": {
+            "rect": {
+              "x": 526,
+              "y": 218.39,
+              "top": 218.39,
+              "left": 526,
+              "right": 1394,
+              "bottom": 711.19,
+              "width": 868,
+              "height": 492.8
+            },
+            "clientHeight": 493,
+            "scrollHeight": 493,
+            "scrollTop": 0,
+            "overflowY": "auto",
+            "maxHeight": "840px",
+            "scrollable": false
+          },
+          "feedback": {
+            "exists": false,
+            "text": null,
+            "toneClass": null,
+            "style": null,
+            "boxExists": true,
+            "boxRect": {
+              "x": 622,
+              "y": 691.19,
+              "top": 691.19,
+              "left": 622,
+              "right": 1394,
+              "bottom": 711.19,
+              "width": 772,
+              "height": 20
+            },
+            "boxStyle": {
+              "minHeight": "20px",
+              "height": "20px"
+            },
+            "pRect": null,
+            "lineCount": 0,
+            "lines": [],
+            "allLinesInsideFormViewport": false
+          },
+          "submit": {
+            "rect": {
+              "x": 1334,
+              "y": 727.19,
+              "top": 727.19,
+              "left": 1334,
+              "right": 1394,
+              "bottom": 759.19,
+              "width": 60,
+              "height": 32
+            },
+            "text": "创建",
+            "disabled": false,
+            "className": "el-button el-button--primary cc-dialog-submit ced-submit",
+            "hit": {
+              "tag": "SPAN",
+              "cls": "",
+              "isSubmitOrChild": true
+            }
+          },
+          "chosenCount": 2,
+          "sourceSplitErrorClass": "cc-split",
+          "doc": {
+            "scrollWidth": 1920,
+            "clientWidth": 1920,
+            "horizontalOverflow": false
+          }
+        },
+        "textEqualsRecorded": true,
+        "lineCount": 2,
+        "wrapped": true,
+        "afterAllLinesInsideFormViewport": true,
+        "afterScrollAllLinesInsideFormViewport": null,
+        "submitHittableAfter": true,
+        "submitHittableAfterScroll": null,
+        "horizontalOverflowAfter": false,
+        "feedbackStyle": {
+          "fontSize": "13px",
+          "lineHeight": "18.2px",
+          "color": "rgb(245, 108, 108)",
+          "overflow": "visible",
+          "overflowWrap": "anywhere",
+          "height": "36.375px",
+          "whiteSpace": "normal"
+        },
+        "feedbackBoxStyle": {
+          "minHeight": "20px",
+          "height": "36.375px"
+        },
+        "reservedBoxHeight": 36.38,
+        "reservedBoxMinHeight": "20px",
+        "geometryDelta": {
+          "afterVsBefore": {
+            "dialogTop": 0,
+            "dialogBottom": 16.37,
+            "dialogHeight": 16.37,
+            "dialogLeft": 0,
+            "dialogRight": 0,
+            "submitX": 0,
+            "submitY": 16.37
+          },
+          "correctedVsBefore": {
+            "dialogTop": 0,
+            "dialogBottom": 0,
+            "dialogHeight": 0,
+            "dialogLeft": 0,
+            "dialogRight": 0,
+            "submitX": 0,
+            "submitY": 0
+          }
+        },
+        "transition": {
+          "sampleCount": 53,
+          "durationMs": 881.2,
+          "dialogTop": {
+            "min": 162,
+            "max": 162,
+            "maxAbsVsBefore": 0
+          },
+          "dialogBottom": {
+            "min": 775.19,
+            "max": 791.56,
+            "maxAbsVsBefore": 16.37
+          },
+          "dialogHeight": {
+            "min": 613.19,
+            "max": 629.56,
+            "maxAbsVsBefore": 16.37
+          },
+          "submitY": {
+            "min": 727.19,
+            "max": 743.56,
+            "maxAbsVsBefore": 16.37
+          },
+          "frames": [
+            {
+              "t": 14.7,
+              "top": 162,
+              "bottom": 775.19,
+              "height": 613.19,
+              "submitY": 727.19,
+              "feedback": null
+            },
+            {
+              "t": 30.8,
+              "top": 162,
+              "bottom": 775.19,
+              "height": 613.19,
+              "submitY": 727.19,
+              "feedback": null
+            },
+            {
+              "t": 50.9,
+              "top": 162,
+              "bottom": 775.19,
+              "height": 613.19,
+              "submitY": 727.19,
+              "feedback": null
+            },
+            {
+              "t": 70.8,
+              "top": 162,
+              "bottom": 791.56,
+              "height": 629.56,
+              "submitY": 743.56,
+              "feedback": "数据源“CCFG005超长机构名称用于错误换行验"
+            },
+            {
+              "t": 81.4,
+              "top": 162,
+              "bottom": 791.56,
+              "height": 629.56,
+              "submitY": 743.56,
+              "feedback": "数据源“CCFG005超长机构名称用于错误换行验"
+            },
+            {
+              "t": 97.6,
+              "top": 162,
+              "bottom": 791.56,
+              "height": 629.56,
+              "submitY": 743.56,
+              "feedback": "数据源“CCFG005超长机构名称用于错误换行验"
+            },
+            {
+              "t": 114.9,
+              "top": 162,
+              "bottom": 791.56,
+              "height": 629.56,
+              "submitY": 743.56,
+              "feedback": "数据源“CCFG005超长机构名称用于错误换行验"
+            },
+            {
+              "t": 131.6,
+              "top": 162,
+              "bottom": 791.56,
+              "height": 629.56,
+              "submitY": 743.56,
+              "feedback": "数据源“CCFG005超长机构名称用于错误换行验"
+            },
+            {
+              "t": 147.5,
+              "top": 162,
+              "bottom": 791.56,
+              "height": 629.56,
+              "submitY": 743.56,
+              "feedback": "数据源“CCFG005超长机构名称用于错误换行验"
+            },
+            {
+              "t": 164.4,
+              "top": 162,
+              "bottom": 791.56,
+              "height": 629.56,
+              "submitY": 743.56,
+              "feedback": "数据源“CCFG005超长机构名称用于错误换行验"
+            },
+            {
+              "t": 181.4,
+              "top": 162,
+              "bottom": 791.56,
+              "height": 629.56,
+              "submitY": 743.56,
+              "feedback": "数据源“CCFG005超长机构名称用于错误换行验"
+            },
+            {
+              "t": 197.3,
+              "top": 162,
+              "bottom": 791.56,
+              "height": 629.56,
+              "submitY": 743.56,
+              "feedback": "数据源“CCFG005超长机构名称用于错误换行验"
+            },
+            {
+              "t": 214.5,
+              "top": 162,
+              "bottom": 791.56,
+              "height": 629.56,
+              "submitY": 743.56,
+              "feedback": "数据源“CCFG005超长机构名称用于错误换行验"
+            },
+            {
+              "t": 231.2,
+              "top": 162,
+              "bottom": 791.56,
+              "height": 629.56,
+              "submitY": 743.56,
+              "feedback": "数据源“CCFG005超长机构名称用于错误换行验"
+            },
+            {
+              "t": 248.1,
+              "top": 162,
+              "bottom": 791.56,
+              "height": 629.56,
+              "submitY": 743.56,
+              "feedback": "数据源“CCFG005超长机构名称用于错误换行验"
+            },
+            {
+              "t": 264.3,
+              "top": 162,
+              "bottom": 791.56,
+              "height": 629.56,
+              "submitY": 743.56,
+              "feedback": "数据源“CCFG005超长机构名称用于错误换行验"
+            },
+            {
+              "t": 281.3,
+              "top": 162,
+              "bottom": 791.56,
+              "height": 629.56,
+              "submitY": 743.56,
+              "feedback": "数据源“CCFG005超长机构名称用于错误换行验"
+            },
+            {
+              "t": 298.1,
+              "top": 162,
+              "bottom": 791.56,
+              "height": 629.56,
+              "submitY": 743.56,
+              "feedback": "数据源“CCFG005超长机构名称用于错误换行验"
+            },
+            {
+              "t": 313.9,
+              "top": 162,
+              "bottom": 791.56,
+              "height": 629.56,
+              "submitY": 743.56,
+              "feedback": "数据源“CCFG005超长机构名称用于错误换行验"
+            },
+            {
+              "t": 331.3,
+              "top": 162,
+              "bottom": 791.56,
+              "height": 629.56,
+              "submitY": 743.56,
+              "feedback": "数据源“CCFG005超长机构名称用于错误换行验"
+            },
+            {
+              "t": 347.9,
+              "top": 162,
+              "bottom": 791.56,
+              "height": 629.56,
+              "submitY": 743.56,
+              "feedback": "数据源“CCFG005超长机构名称用于错误换行验"
+            },
+            {
+              "t": 364.8,
+              "top": 162,
+              "bottom": 791.56,
+              "height": 629.56,
+              "submitY": 743.56,
+              "feedback": "数据源“CCFG005超长机构名称用于错误换行验"
+            },
+            {
+              "t": 380.7,
+              "top": 162,
+              "bottom": 791.56,
+              "height": 629.56,
+              "submitY": 743.56,
+              "feedback": "数据源“CCFG005超长机构名称用于错误换行验"
+            },
+            {
+              "t": 397.8,
+              "top": 162,
+              "bottom": 791.56,
+              "height": 629.56,
+              "submitY": 743.56,
+              "feedback": "数据源“CCFG005超长机构名称用于错误换行验"
+            },
+            {
+              "t": 414.6,
+              "top": 162,
+              "bottom": 791.56,
+              "height": 629.56,
+              "submitY": 743.56,
+              "feedback": "数据源“CCFG005超长机构名称用于错误换行验"
+            },
+            {
+              "t": 430.6,
+              "top": 162,
+              "bottom": 791.56,
+              "height": 629.56,
+              "submitY": 743.56,
+              "feedback": "数据源“CCFG005超长机构名称用于错误换行验"
+            },
+            {
+              "t": 447.5,
+              "top": 162,
+              "bottom": 791.56,
+              "height": 629.56,
+              "submitY": 743.56,
+              "feedback": "数据源“CCFG005超长机构名称用于错误换行验"
+            },
+            {
+              "t": 464.5,
+              "top": 162,
+              "bottom": 791.56,
+              "height": 629.56,
+              "submitY": 743.56,
+              "feedback": "数据源“CCFG005超长机构名称用于错误换行验"
+            },
+            {
+              "t": 481.5,
+              "top": 162,
+              "bottom": 791.56,
+              "height": 629.56,
+              "submitY": 743.56,
+              "feedback": "数据源“CCFG005超长机构名称用于错误换行验"
+            },
+            {
+              "t": 497.5,
+              "top": 162,
+              "bottom": 791.56,
+              "height": 629.56,
+              "submitY": 743.56,
+              "feedback": "数据源“CCFG005超长机构名称用于错误换行验"
+            },
+            {
+              "t": 514.4,
+              "top": 162,
+              "bottom": 791.56,
+              "height": 629.56,
+              "submitY": 743.56,
+              "feedback": "数据源“CCFG005超长机构名称用于错误换行验"
+            },
+            {
+              "t": 531.2,
+              "top": 162,
+              "bottom": 791.56,
+              "height": 629.56,
+              "submitY": 743.56,
+              "feedback": "数据源“CCFG005超长机构名称用于错误换行验"
+            },
+            {
+              "t": 547.2,
+              "top": 162,
+              "bottom": 791.56,
+              "height": 629.56,
+              "submitY": 743.56,
+              "feedback": "数据源“CCFG005超长机构名称用于错误换行验"
+            },
+            {
+              "t": 564.1,
+              "top": 162,
+              "bottom": 791.56,
+              "height": 629.56,
+              "submitY": 743.56,
+              "feedback": "数据源“CCFG005超长机构名称用于错误换行验"
+            },
+            {
+              "t": 581.1,
+              "top": 162,
+              "bottom": 791.56,
+              "height": 629.56,
+              "submitY": 743.56,
+              "feedback": "数据源“CCFG005超长机构名称用于错误换行验"
+            },
+            {
+              "t": 598.2,
+              "top": 162,
+              "bottom": 791.56,
+              "height": 629.56,
+              "submitY": 743.56,
+              "feedback": "数据源“CCFG005超长机构名称用于错误换行验"
+            },
+            {
+              "t": 614.8,
+              "top": 162,
+              "bottom": 791.56,
+              "height": 629.56,
+              "submitY": 743.56,
+              "feedback": "数据源“CCFG005超长机构名称用于错误换行验"
+            },
+            {
+              "t": 631.1,
+              "top": 162,
+              "bottom": 791.56,
+              "height": 629.56,
+              "submitY": 743.56,
+              "feedback": "数据源“CCFG005超长机构名称用于错误换行验"
+            },
+            {
+              "t": 648.1,
+              "top": 162,
+              "bottom": 791.56,
+              "height": 629.56,
+              "submitY": 743.56,
+              "feedback": "数据源“CCFG005超长机构名称用于错误换行验"
+            },
+            {
+              "t": 664.2,
+              "top": 162,
+              "bottom": 791.56,
+              "height": 629.56,
+              "submitY": 743.56,
+              "feedback": "数据源“CCFG005超长机构名称用于错误换行验"
+            },
+            {
+              "t": 680.9,
+              "top": 162,
+              "bottom": 791.56,
+              "height": 629.56,
+              "submitY": 743.56,
+              "feedback": "数据源“CCFG005超长机构名称用于错误换行验"
+            },
+            {
+              "t": 697.9,
+              "top": 162,
+              "bottom": 791.56,
+              "height": 629.56,
+              "submitY": 743.56,
+              "feedback": "数据源“CCFG005超长机构名称用于错误换行验"
+            },
+            {
+              "t": 713.9,
+              "top": 162,
+              "bottom": 791.56,
+              "height": 629.56,
+              "submitY": 743.56,
+              "feedback": "数据源“CCFG005超长机构名称用于错误换行验"
+            },
+            {
+              "t": 730.8,
+              "top": 162,
+              "bottom": 791.56,
+              "height": 629.56,
+              "submitY": 743.56,
+              "feedback": "数据源“CCFG005超长机构名称用于错误换行验"
+            },
+            {
+              "t": 748,
+              "top": 162,
+              "bottom": 791.56,
+              "height": 629.56,
+              "submitY": 743.56,
+              "feedback": "数据源“CCFG005超长机构名称用于错误换行验"
+            },
+            {
+              "t": 764.7,
+              "top": 162,
+              "bottom": 791.56,
+              "height": 629.56,
+              "submitY": 743.56,
+              "feedback": "数据源“CCFG005超长机构名称用于错误换行验"
+            },
+            {
+              "t": 780.9,
+              "top": 162,
+              "bottom": 791.56,
+              "height": 629.56,
+              "submitY": 743.56,
+              "feedback": "数据源“CCFG005超长机构名称用于错误换行验"
+            },
+            {
+              "t": 797.7,
+              "top": 162,
+              "bottom": 791.56,
+              "height": 629.56,
+              "submitY": 743.56,
+              "feedback": "数据源“CCFG005超长机构名称用于错误换行验"
+            },
+            {
+              "t": 814.5,
+              "top": 162,
+              "bottom": 791.56,
+              "height": 629.56,
+              "submitY": 743.56,
+              "feedback": "数据源“CCFG005超长机构名称用于错误换行验"
+            },
+            {
+              "t": 830.5,
+              "top": 162,
+              "bottom": 791.56,
+              "height": 629.56,
+              "submitY": 743.56,
+              "feedback": "数据源“CCFG005超长机构名称用于错误换行验"
+            },
+            {
+              "t": 847.6,
+              "top": 162,
+              "bottom": 791.56,
+              "height": 629.56,
+              "submitY": 743.56,
+              "feedback": "数据源“CCFG005超长机构名称用于错误换行验"
+            },
+            {
+              "t": 864.6,
+              "top": 162,
+              "bottom": 791.56,
+              "height": 629.56,
+              "submitY": 743.56,
+              "feedback": "数据源“CCFG005超长机构名称用于错误换行验"
+            },
+            {
+              "t": 881.2,
+              "top": 162,
+              "bottom": 791.56,
+              "height": 629.56,
+              "submitY": 743.56,
+              "feedback": "数据源“CCFG005超长机构名称用于错误换行验"
+            }
+          ]
+        },
+        "requestBody": "{\"clientId\":\"CCFG007-LONG-1920\",\"clientDesc\":\"CCFG007 1920 长错误回放样本\",\"dataSourceIds\":[\"CCFG-AC-R1-DS05\"]}"
+      },
+      "network": {
+        "nonGetAttempts": [
+          {
+            "scenario": "create1920x1080",
+            "step": "long-submit",
+            "method": "POST",
+            "url": "/api/clients",
+            "postData": "{\"clientId\":\"CCFG007-LONG-1920\",\"clientDesc\":\"CCFG007 1920 长错误回放样本\",\"dataSourceIds\":[\"CCFG-AC-R1-DS05\"]}",
+            "forwarded": false,
+            "outcome": "replayed-locally"
+          }
+        ]
+      },
+      "gate": {
+        "nonGetInScenario": 1,
+        "backendNonGetForwarded": 0
+      }
+    },
+    "edit1920x1080": {
+      "scene": "edit @ 1920x1080",
+      "mode": "edit",
+      "focus": "full",
+      "viewport": {
+        "width": 1920,
+        "height": 1080
+      },
+      "sidebarExpanded": true,
+      "steps": [
+        {
+          "label": "opened",
+          "viewport": {
+            "innerWidth": 1920,
+            "innerHeight": 1080,
+            "dpr": 1,
+            "visualViewportWidth": 1920,
+            "visualViewportHeight": 1080,
+            "zoomPercent": 100,
+            "screenWidth": 1920,
+            "screenHeight": 1080
+          },
+          "sidebar": {
+            "collapsed": false,
+            "rect": {
+              "x": 0,
+              "y": 0,
+              "top": 0,
+              "left": 0,
+              "right": 220,
+              "bottom": 1080,
+              "width": 220,
+              "height": 1080
+            }
+          },
+          "contentArea": {
+            "x": 220,
+            "y": 48,
+            "top": 48,
+            "left": 220,
+            "right": 1920,
+            "bottom": 1080,
+            "width": 1700,
+            "height": 1032
+          },
+          "dialog": {
+            "x": 510,
+            "y": 162,
+            "top": 162,
+            "left": 510,
+            "right": 1410,
+            "bottom": 797.58,
+            "width": 900,
+            "height": 635.58
+          },
+          "dialogVisible": true,
+          "dialogTitle": "编辑探针",
+          "dialogStyle": {
+            "width": "900px",
+            "height": "635.578px",
+            "maxWidth": "1872px",
+            "maxHeight": "none",
+            "marginTop": "162px",
+            "marginBottom": "50px",
+            "position": "relative",
+            "top": "0px",
+            "left": "0px"
+          },
+          "dialogCentering": {
+            "viewportCenterDelta": 0,
+            "contentAreaCenterDelta": -110
+          },
+          "form": {
+            "rect": {
+              "x": 526,
+              "y": 218.39,
+              "top": 218.39,
+              "left": 526,
+              "right": 1394,
+              "bottom": 733.58,
+              "width": 868,
+              "height": 515.19
+            },
+            "clientHeight": 515,
+            "scrollHeight": 515,
+            "scrollTop": 0,
+            "overflowY": "auto",
+            "maxHeight": "840px",
+            "scrollable": false
+          },
+          "feedback": {
+            "exists": false,
+            "text": null,
+            "toneClass": null,
+            "style": null,
+            "boxExists": true,
+            "boxRect": {
+              "x": 622,
+              "y": 713.58,
+              "top": 713.58,
+              "left": 622,
+              "right": 1394,
+              "bottom": 733.58,
+              "width": 772,
+              "height": 20
+            },
+            "boxStyle": {
+              "minHeight": "20px",
+              "height": "20px"
+            },
+            "pRect": null,
+            "lineCount": 0,
+            "lines": [],
+            "allLinesInsideFormViewport": false
+          },
+          "submit": {
+            "rect": {
+              "x": 1334,
+              "y": 749.58,
+              "top": 749.58,
+              "left": 1334,
+              "right": 1394,
+              "bottom": 781.58,
+              "width": 60,
+              "height": 32
+            },
+            "text": "保存",
+            "disabled": false,
+            "className": "el-button el-button--primary cc-dialog-submit ced-submit",
+            "hit": {
+              "tag": "SPAN",
+              "cls": "",
+              "isSubmitOrChild": true
+            }
+          },
+          "chosenCount": 1,
+          "sourceSplitErrorClass": "cc-split",
+          "doc": {
+            "scrollWidth": 1920,
+            "clientWidth": 1920,
+            "horizontalOverflow": false
+          }
+        },
+        {
+          "label": "initial-no-source-stable",
+          "viewport": {
+            "innerWidth": 1920,
+            "innerHeight": 1080,
+            "dpr": 1,
+            "visualViewportWidth": 1920,
+            "visualViewportHeight": 1080,
+            "zoomPercent": 100,
+            "screenWidth": 1920,
+            "screenHeight": 1080
+          },
+          "sidebar": {
+            "collapsed": false,
+            "rect": {
+              "x": 0,
+              "y": 0,
+              "top": 0,
+              "left": 0,
+              "right": 220,
+              "bottom": 1080,
+              "width": 220,
+              "height": 1080
+            }
+          },
+          "contentArea": {
+            "x": 220,
+            "y": 48,
+            "top": 48,
+            "left": 220,
+            "right": 1920,
+            "bottom": 1080,
+            "width": 1700,
+            "height": 1032
+          },
+          "dialog": {
+            "x": 510,
+            "y": 162,
+            "top": 162,
+            "left": 510,
+            "right": 1410,
+            "bottom": 797.58,
+            "width": 900,
+            "height": 635.58
+          },
+          "dialogVisible": true,
+          "dialogTitle": "编辑探针",
+          "dialogStyle": {
+            "width": "900px",
+            "height": "635.578px",
+            "maxWidth": "1872px",
+            "maxHeight": "none",
+            "marginTop": "162px",
+            "marginBottom": "50px",
+            "position": "relative",
+            "top": "0px",
+            "left": "0px"
+          },
+          "dialogCentering": {
+            "viewportCenterDelta": 0,
+            "contentAreaCenterDelta": -110
+          },
+          "form": {
+            "rect": {
+              "x": 526,
+              "y": 218.39,
+              "top": 218.39,
+              "left": 526,
+              "right": 1394,
+              "bottom": 733.58,
+              "width": 868,
+              "height": 515.19
+            },
+            "clientHeight": 515,
+            "scrollHeight": 515,
+            "scrollTop": 0,
+            "overflowY": "auto",
+            "maxHeight": "840px",
+            "scrollable": false
+          },
+          "feedback": {
+            "exists": true,
+            "text": "至少选择 1 个数据源",
+            "toneClass": "cc-field-feedback__text cc-field-hint",
+            "style": {
+              "fontSize": "13px",
+              "lineHeight": "18.2px",
+              "color": "rgb(144, 147, 153)",
+              "overflow": "visible",
+              "overflowWrap": "anywhere",
+              "height": "18.1875px",
+              "whiteSpace": "normal"
+            },
+            "boxExists": true,
+            "boxRect": {
+              "x": 622,
+              "y": 713.58,
+              "top": 713.58,
+              "left": 622,
+              "right": 1394,
+              "bottom": 733.58,
+              "width": 772,
+              "height": 20
+            },
+            "boxStyle": {
+              "minHeight": "20px",
+              "height": "20px"
+            },
+            "pRect": {
+              "x": 622,
+              "y": 713.58,
+              "top": 713.58,
+              "left": 622,
+              "right": 1394,
+              "bottom": 731.77,
+              "width": 772,
+              "height": 18.19
+            },
+            "lineCount": 1,
+            "lines": [
+              {
+                "top": 714.58,
+                "left": 622,
+                "width": 118.47,
+                "height": 15,
+                "insideFormViewport": true
+              }
+            ],
+            "allLinesInsideFormViewport": true
+          },
+          "submit": {
+            "rect": {
+              "x": 1334,
+              "y": 749.58,
+              "top": 749.58,
+              "left": 1334,
+              "right": 1394,
+              "bottom": 781.58,
+              "width": 60,
+              "height": 32
+            },
+            "text": "保存",
+            "disabled": false,
+            "className": "el-button el-button--primary cc-dialog-submit ced-submit",
+            "hit": {
+              "tag": "SPAN",
+              "cls": "",
+              "isSubmitOrChild": true
+            }
+          },
+          "chosenCount": 0,
+          "sourceSplitErrorClass": "cc-split",
+          "doc": {
+            "scrollWidth": 1920,
+            "clientWidth": 1920,
+            "horizontalOverflow": false
+          }
+        },
+        {
+          "label": "selected-1",
+          "viewport": {
+            "innerWidth": 1920,
+            "innerHeight": 1080,
+            "dpr": 1,
+            "visualViewportWidth": 1920,
+            "visualViewportHeight": 1080,
+            "zoomPercent": 100,
+            "screenWidth": 1920,
+            "screenHeight": 1080
+          },
+          "sidebar": {
+            "collapsed": false,
+            "rect": {
+              "x": 0,
+              "y": 0,
+              "top": 0,
+              "left": 0,
+              "right": 220,
+              "bottom": 1080,
+              "width": 220,
+              "height": 1080
+            }
+          },
+          "contentArea": {
+            "x": 220,
+            "y": 48,
+            "top": 48,
+            "left": 220,
+            "right": 1920,
+            "bottom": 1080,
+            "width": 1700,
+            "height": 1032
+          },
+          "dialog": {
+            "x": 510,
+            "y": 162,
+            "top": 162,
+            "left": 510,
+            "right": 1410,
+            "bottom": 797.58,
+            "width": 900,
+            "height": 635.58
+          },
+          "dialogVisible": true,
+          "dialogTitle": "编辑探针",
+          "dialogStyle": {
+            "width": "900px",
+            "height": "635.578px",
+            "maxWidth": "1872px",
+            "maxHeight": "none",
+            "marginTop": "162px",
+            "marginBottom": "50px",
+            "position": "relative",
+            "top": "0px",
+            "left": "0px"
+          },
+          "dialogCentering": {
+            "viewportCenterDelta": 0,
+            "contentAreaCenterDelta": -110
+          },
+          "form": {
+            "rect": {
+              "x": 526,
+              "y": 218.39,
+              "top": 218.39,
+              "left": 526,
+              "right": 1394,
+              "bottom": 733.58,
+              "width": 868,
+              "height": 515.19
+            },
+            "clientHeight": 515,
+            "scrollHeight": 515,
+            "scrollTop": 0,
+            "overflowY": "auto",
+            "maxHeight": "840px",
+            "scrollable": false
+          },
+          "feedback": {
+            "exists": false,
+            "text": null,
+            "toneClass": null,
+            "style": null,
+            "boxExists": true,
+            "boxRect": {
+              "x": 622,
+              "y": 713.58,
+              "top": 713.58,
+              "left": 622,
+              "right": 1394,
+              "bottom": 733.58,
+              "width": 772,
+              "height": 20
+            },
+            "boxStyle": {
+              "minHeight": "20px",
+              "height": "20px"
+            },
+            "pRect": null,
+            "lineCount": 0,
+            "lines": [],
+            "allLinesInsideFormViewport": false
+          },
+          "submit": {
+            "rect": {
+              "x": 1334,
+              "y": 749.58,
+              "top": 749.58,
+              "left": 1334,
+              "right": 1394,
+              "bottom": 781.58,
+              "width": 60,
+              "height": 32
+            },
+            "text": "保存",
+            "disabled": false,
+            "className": "el-button el-button--primary cc-dialog-submit ced-submit",
+            "hit": {
+              "tag": "SPAN",
+              "cls": "",
+              "isSubmitOrChild": true
+            }
+          },
+          "chosenCount": 1,
+          "sourceSplitErrorClass": "cc-split",
+          "doc": {
+            "scrollWidth": 1920,
+            "clientWidth": 1920,
+            "horizontalOverflow": false
+          }
+        },
+        {
+          "label": "cancelled-all",
+          "viewport": {
+            "innerWidth": 1920,
+            "innerHeight": 1080,
+            "dpr": 1,
+            "visualViewportWidth": 1920,
+            "visualViewportHeight": 1080,
+            "zoomPercent": 100,
+            "screenWidth": 1920,
+            "screenHeight": 1080
+          },
+          "sidebar": {
+            "collapsed": false,
+            "rect": {
+              "x": 0,
+              "y": 0,
+              "top": 0,
+              "left": 0,
+              "right": 220,
+              "bottom": 1080,
+              "width": 220,
+              "height": 1080
+            }
+          },
+          "contentArea": {
+            "x": 220,
+            "y": 48,
+            "top": 48,
+            "left": 220,
+            "right": 1920,
+            "bottom": 1080,
+            "width": 1700,
+            "height": 1032
+          },
+          "dialog": {
+            "x": 510,
+            "y": 162,
+            "top": 162,
+            "left": 510,
+            "right": 1410,
+            "bottom": 797.58,
+            "width": 900,
+            "height": 635.58
+          },
+          "dialogVisible": true,
+          "dialogTitle": "编辑探针",
+          "dialogStyle": {
+            "width": "900px",
+            "height": "635.578px",
+            "maxWidth": "1872px",
+            "maxHeight": "none",
+            "marginTop": "162px",
+            "marginBottom": "50px",
+            "position": "relative",
+            "top": "0px",
+            "left": "0px"
+          },
+          "dialogCentering": {
+            "viewportCenterDelta": 0,
+            "contentAreaCenterDelta": -110
+          },
+          "form": {
+            "rect": {
+              "x": 526,
+              "y": 218.39,
+              "top": 218.39,
+              "left": 526,
+              "right": 1394,
+              "bottom": 733.58,
+              "width": 868,
+              "height": 515.19
+            },
+            "clientHeight": 515,
+            "scrollHeight": 515,
+            "scrollTop": 0,
+            "overflowY": "auto",
+            "maxHeight": "840px",
+            "scrollable": false
+          },
+          "feedback": {
+            "exists": true,
+            "text": "至少选择 1 个数据源",
+            "toneClass": "cc-field-feedback__text cc-field-hint",
+            "style": {
+              "fontSize": "13px",
+              "lineHeight": "18.2px",
+              "color": "rgb(144, 147, 153)",
+              "overflow": "visible",
+              "overflowWrap": "anywhere",
+              "height": "18.1875px",
+              "whiteSpace": "normal"
+            },
+            "boxExists": true,
+            "boxRect": {
+              "x": 622,
+              "y": 713.58,
+              "top": 713.58,
+              "left": 622,
+              "right": 1394,
+              "bottom": 733.58,
+              "width": 772,
+              "height": 20
+            },
+            "boxStyle": {
+              "minHeight": "20px",
+              "height": "20px"
+            },
+            "pRect": {
+              "x": 622,
+              "y": 713.58,
+              "top": 713.58,
+              "left": 622,
+              "right": 1394,
+              "bottom": 731.77,
+              "width": 772,
+              "height": 18.19
+            },
+            "lineCount": 1,
+            "lines": [
+              {
+                "top": 714.58,
+                "left": 622,
+                "width": 118.47,
+                "height": 15,
+                "insideFormViewport": true
+              }
+            ],
+            "allLinesInsideFormViewport": true
+          },
+          "submit": {
+            "rect": {
+              "x": 1334,
+              "y": 749.58,
+              "top": 749.58,
+              "left": 1334,
+              "right": 1394,
+              "bottom": 781.58,
+              "width": 60,
+              "height": 32
+            },
+            "text": "保存",
+            "disabled": false,
+            "className": "el-button el-button--primary cc-dialog-submit ced-submit",
+            "hit": {
+              "tag": "SPAN",
+              "cls": "",
+              "isSubmitOrChild": true
+            }
+          },
+          "chosenCount": 0,
+          "sourceSplitErrorClass": "cc-split",
+          "doc": {
+            "scrollWidth": 1920,
+            "clientWidth": 1920,
+            "horizontalOverflow": false
+          }
+        },
+        {
+          "label": "after-submit-no-source-red",
+          "viewport": {
+            "innerWidth": 1920,
+            "innerHeight": 1080,
+            "dpr": 1,
+            "visualViewportWidth": 1920,
+            "visualViewportHeight": 1080,
+            "zoomPercent": 100,
+            "screenWidth": 1920,
+            "screenHeight": 1080
+          },
+          "sidebar": {
+            "collapsed": false,
+            "rect": {
+              "x": 0,
+              "y": 0,
+              "top": 0,
+              "left": 0,
+              "right": 220,
+              "bottom": 1080,
+              "width": 220,
+              "height": 1080
+            }
+          },
+          "contentArea": {
+            "x": 220,
+            "y": 48,
+            "top": 48,
+            "left": 220,
+            "right": 1920,
+            "bottom": 1080,
+            "width": 1700,
+            "height": 1032
+          },
+          "dialog": {
+            "x": 510,
+            "y": 162,
+            "top": 162,
+            "left": 510,
+            "right": 1410,
+            "bottom": 797.58,
+            "width": 900,
+            "height": 635.58
+          },
+          "dialogVisible": true,
+          "dialogTitle": "编辑探针",
+          "dialogStyle": {
+            "width": "900px",
+            "height": "635.578px",
+            "maxWidth": "1872px",
+            "maxHeight": "none",
+            "marginTop": "162px",
+            "marginBottom": "50px",
+            "position": "relative",
+            "top": "0px",
+            "left": "0px"
+          },
+          "dialogCentering": {
+            "viewportCenterDelta": 0,
+            "contentAreaCenterDelta": -110
+          },
+          "form": {
+            "rect": {
+              "x": 526,
+              "y": 218.39,
+              "top": 218.39,
+              "left": 526,
+              "right": 1394,
+              "bottom": 733.58,
+              "width": 868,
+              "height": 515.19
+            },
+            "clientHeight": 515,
+            "scrollHeight": 515,
+            "scrollTop": 0,
+            "overflowY": "auto",
+            "maxHeight": "840px",
+            "scrollable": false
+          },
+          "feedback": {
+            "exists": true,
+            "text": "至少选择 1 个数据源",
+            "toneClass": "cc-field-feedback__text ced-field-error",
+            "style": {
+              "fontSize": "13px",
+              "lineHeight": "18.2px",
+              "color": "rgb(245, 108, 108)",
+              "overflow": "visible",
+              "overflowWrap": "anywhere",
+              "height": "18.1875px",
+              "whiteSpace": "normal"
+            },
+            "boxExists": true,
+            "boxRect": {
+              "x": 622,
+              "y": 713.58,
+              "top": 713.58,
+              "left": 622,
+              "right": 1394,
+              "bottom": 733.58,
+              "width": 772,
+              "height": 20
+            },
+            "boxStyle": {
+              "minHeight": "20px",
+              "height": "20px"
+            },
+            "pRect": {
+              "x": 622,
+              "y": 713.58,
+              "top": 713.58,
+              "left": 622,
+              "right": 1394,
+              "bottom": 731.77,
+              "width": 772,
+              "height": 18.19
+            },
+            "lineCount": 1,
+            "lines": [
+              {
+                "top": 714.58,
+                "left": 622,
+                "width": 118.47,
+                "height": 15,
+                "insideFormViewport": true
+              }
+            ],
+            "allLinesInsideFormViewport": true
+          },
+          "submit": {
+            "rect": {
+              "x": 1334,
+              "y": 749.58,
+              "top": 749.58,
+              "left": 1334,
+              "right": 1394,
+              "bottom": 781.58,
+              "width": 60,
+              "height": 32
+            },
+            "text": "保存",
+            "disabled": false,
+            "className": "el-button el-button--primary cc-dialog-submit ced-submit",
+            "hit": {
+              "tag": "SPAN",
+              "cls": "",
+              "isSubmitOrChild": true
+            }
+          },
+          "chosenCount": 0,
+          "sourceSplitErrorClass": "cc-split cc-split--error",
+          "doc": {
+            "scrollWidth": 1920,
+            "clientWidth": 1920,
+            "horizontalOverflow": false
+          }
+        },
+        {
+          "label": "corrected",
+          "viewport": {
+            "innerWidth": 1920,
+            "innerHeight": 1080,
+            "dpr": 1,
+            "visualViewportWidth": 1920,
+            "visualViewportHeight": 1080,
+            "zoomPercent": 100,
+            "screenWidth": 1920,
+            "screenHeight": 1080
+          },
+          "sidebar": {
+            "collapsed": false,
+            "rect": {
+              "x": 0,
+              "y": 0,
+              "top": 0,
+              "left": 0,
+              "right": 220,
+              "bottom": 1080,
+              "width": 220,
+              "height": 1080
+            }
+          },
+          "contentArea": {
+            "x": 220,
+            "y": 48,
+            "top": 48,
+            "left": 220,
+            "right": 1920,
+            "bottom": 1080,
+            "width": 1700,
+            "height": 1032
+          },
+          "dialog": {
+            "x": 510,
+            "y": 162,
+            "top": 162,
+            "left": 510,
+            "right": 1410,
+            "bottom": 797.58,
+            "width": 900,
+            "height": 635.58
+          },
+          "dialogVisible": true,
+          "dialogTitle": "编辑探针",
+          "dialogStyle": {
+            "width": "900px",
+            "height": "635.578px",
+            "maxWidth": "1872px",
+            "maxHeight": "none",
+            "marginTop": "162px",
+            "marginBottom": "50px",
+            "position": "relative",
+            "top": "0px",
+            "left": "0px"
+          },
+          "dialogCentering": {
+            "viewportCenterDelta": 0,
+            "contentAreaCenterDelta": -110
+          },
+          "form": {
+            "rect": {
+              "x": 526,
+              "y": 218.39,
+              "top": 218.39,
+              "left": 526,
+              "right": 1394,
+              "bottom": 733.58,
+              "width": 868,
+              "height": 515.19
+            },
+            "clientHeight": 515,
+            "scrollHeight": 515,
+            "scrollTop": 0,
+            "overflowY": "auto",
+            "maxHeight": "840px",
+            "scrollable": false
+          },
+          "feedback": {
+            "exists": false,
+            "text": null,
+            "toneClass": null,
+            "style": null,
+            "boxExists": true,
+            "boxRect": {
+              "x": 622,
+              "y": 713.58,
+              "top": 713.58,
+              "left": 622,
+              "right": 1394,
+              "bottom": 733.58,
+              "width": 772,
+              "height": 20
+            },
+            "boxStyle": {
+              "minHeight": "20px",
+              "height": "20px"
+            },
+            "pRect": null,
+            "lineCount": 0,
+            "lines": [],
+            "allLinesInsideFormViewport": false
+          },
+          "submit": {
+            "rect": {
+              "x": 1334,
+              "y": 749.58,
+              "top": 749.58,
+              "left": 1334,
+              "right": 1394,
+              "bottom": 781.58,
+              "width": 60,
+              "height": 32
+            },
+            "text": "保存",
+            "disabled": false,
+            "className": "el-button el-button--primary cc-dialog-submit ced-submit",
+            "hit": {
+              "tag": "SPAN",
+              "cls": "",
+              "isSubmitOrChild": true
+            }
+          },
+          "chosenCount": 1,
+          "sourceSplitErrorClass": "cc-split",
+          "doc": {
+            "scrollWidth": 1920,
+            "clientWidth": 1920,
+            "horizontalOverflow": false
+          }
+        }
+      ],
+      "summary": {
+        "viewport": {
+          "innerWidth": 1920,
+          "innerHeight": 1080,
+          "dpr": 1,
+          "visualViewportWidth": 1920,
+          "visualViewportHeight": 1080,
+          "zoomPercent": 100,
+          "screenWidth": 1920,
+          "screenHeight": 1080
+        },
+        "sidebar": {
+          "collapsed": false,
+          "rect": {
+            "x": 0,
+            "y": 0,
+            "top": 0,
+            "left": 0,
+            "right": 220,
+            "bottom": 1080,
+            "width": 220,
+            "height": 1080
+          }
+        },
+        "dialogHeightMin": 635.58,
+        "dialogHeightMax": 635.58,
+        "dialogTopMin": 162,
+        "dialogTopMax": 162,
+        "submitYMin": 749.58,
+        "submitYMax": 749.58,
+        "horizontalOverflowAny": false,
+        "submitHittableEveryStep": true,
+        "dialogVisibleEveryStep": true,
+        "feedbackTonePath": [
+          {
+            "label": "opened",
+            "text": null,
+            "toneClass": null,
+            "lineCount": 0,
+            "boxHeight": 20
+          },
+          {
+            "label": "initial-no-source-stable",
+            "text": "至少选择 1 个数据源",
+            "toneClass": "cc-field-feedback__text cc-field-hint",
+            "lineCount": 1,
+            "boxHeight": 20
+          },
+          {
+            "label": "selected-1",
+            "text": null,
+            "toneClass": null,
+            "lineCount": 0,
+            "boxHeight": 20
+          },
+          {
+            "label": "cancelled-all",
+            "text": "至少选择 1 个数据源",
+            "toneClass": "cc-field-feedback__text cc-field-hint",
+            "lineCount": 1,
+            "boxHeight": 20
+          },
+          {
+            "label": "after-submit-no-source-red",
+            "text": "至少选择 1 个数据源",
+            "toneClass": "cc-field-feedback__text ced-field-error",
+            "lineCount": 1,
+            "boxHeight": 20
+          },
+          {
+            "label": "corrected",
+            "text": null,
+            "toneClass": null,
+            "lineCount": 0,
+            "boxHeight": 20
+          }
+        ],
+        "deltas": {
+          "relativeTo": "initial-no-source-stable",
+          "labels": [
+            "opened",
+            "initial-no-source-stable",
+            "selected-1",
+            "cancelled-all",
+            "after-submit-no-source-red",
+            "corrected"
+          ],
+          "series": {
+            "dialogTop": [
+              0,
+              0,
+              0,
+              0,
+              0,
+              0
+            ],
+            "dialogBottom": [
+              0,
+              0,
+              0,
+              0,
+              0,
+              0
+            ],
+            "dialogLeft": [
+              0,
+              0,
+              0,
+              0,
+              0,
+              0
+            ],
+            "dialogRight": [
+              0,
+              0,
+              0,
+              0,
+              0,
+              0
+            ],
+            "dialogHeight": [
+              0,
+              0,
+              0,
+              0,
+              0,
+              0
+            ],
+            "submitX": [
+              0,
+              0,
+              0,
+              0,
+              0,
+              0
+            ],
+            "submitY": [
+              0,
+              0,
+              0,
+              0,
+              0,
+              0
+            ]
+          },
+          "maxAbs": {
+            "dialogTop": 0,
+            "dialogBottom": 0,
+            "dialogLeft": 0,
+            "dialogRight": 0,
+            "dialogHeight": 0,
+            "submitX": 0,
+            "submitY": 0
+          }
+        },
+        "redTransition": {
+          "sampleCount": 53,
+          "durationMs": 871.7,
+          "dialogTop": {
+            "min": 162,
+            "max": 162,
+            "maxAbsVsBefore": 0
+          },
+          "dialogBottom": {
+            "min": 797.58,
+            "max": 797.58,
+            "maxAbsVsBefore": 0
+          },
+          "dialogHeight": {
+            "min": 635.58,
+            "max": 635.58,
+            "maxAbsVsBefore": 0
+          },
+          "submitY": {
+            "min": 749.58,
+            "max": 749.58,
+            "maxAbsVsBefore": 0
+          },
+          "frames": [
+            {
+              "t": 7.2,
+              "top": 162,
+              "bottom": 797.58,
+              "height": 635.58,
+              "submitY": 749.58,
+              "feedback": "至少选择 1 个数据源"
+            },
+            {
+              "t": 21.4,
+              "top": 162,
+              "bottom": 797.58,
+              "height": 635.58,
+              "submitY": 749.58,
+              "feedback": "至少选择 1 个数据源"
+            },
+            {
+              "t": 38,
+              "top": 162,
+              "bottom": 797.58,
+              "height": 635.58,
+              "submitY": 749.58,
+              "feedback": "至少选择 1 个数据源"
+            },
+            {
+              "t": 58.1,
+              "top": 162,
+              "bottom": 797.58,
+              "height": 635.58,
+              "submitY": 749.58,
+              "feedback": "至少选择 1 个数据源"
+            },
+            {
+              "t": 71.2,
+              "top": 162,
+              "bottom": 797.58,
+              "height": 635.58,
+              "submitY": 749.58,
+              "feedback": "至少选择 1 个数据源"
+            },
+            {
+              "t": 88.1,
+              "top": 162,
+              "bottom": 797.58,
+              "height": 635.58,
+              "submitY": 749.58,
+              "feedback": "至少选择 1 个数据源"
+            },
+            {
+              "t": 104.9,
+              "top": 162,
+              "bottom": 797.58,
+              "height": 635.58,
+              "submitY": 749.58,
+              "feedback": "至少选择 1 个数据源"
+            },
+            {
+              "t": 121.2,
+              "top": 162,
+              "bottom": 797.58,
+              "height": 635.58,
+              "submitY": 749.58,
+              "feedback": "至少选择 1 个数据源"
+            },
+            {
+              "t": 138,
+              "top": 162,
+              "bottom": 797.58,
+              "height": 635.58,
+              "submitY": 749.58,
+              "feedback": "至少选择 1 个数据源"
+            },
+            {
+              "t": 155.1,
+              "top": 162,
+              "bottom": 797.58,
+              "height": 635.58,
+              "submitY": 749.58,
+              "feedback": "至少选择 1 个数据源"
+            },
+            {
+              "t": 171.3,
+              "top": 162,
+              "bottom": 797.58,
+              "height": 635.58,
+              "submitY": 749.58,
+              "feedback": "至少选择 1 个数据源"
+            },
+            {
+              "t": 188,
+              "top": 162,
+              "bottom": 797.58,
+              "height": 635.58,
+              "submitY": 749.58,
+              "feedback": "至少选择 1 个数据源"
+            },
+            {
+              "t": 204.8,
+              "top": 162,
+              "bottom": 797.58,
+              "height": 635.58,
+              "submitY": 749.58,
+              "feedback": "至少选择 1 个数据源"
+            },
+            {
+              "t": 220.9,
+              "top": 162,
+              "bottom": 797.58,
+              "height": 635.58,
+              "submitY": 749.58,
+              "feedback": "至少选择 1 个数据源"
+            },
+            {
+              "t": 237.9,
+              "top": 162,
+              "bottom": 797.58,
+              "height": 635.58,
+              "submitY": 749.58,
+              "feedback": "至少选择 1 个数据源"
+            },
+            {
+              "t": 254.9,
+              "top": 162,
+              "bottom": 797.58,
+              "height": 635.58,
+              "submitY": 749.58,
+              "feedback": "至少选择 1 个数据源"
+            },
+            {
+              "t": 271.1,
+              "top": 162,
+              "bottom": 797.58,
+              "height": 635.58,
+              "submitY": 749.58,
+              "feedback": "至少选择 1 个数据源"
+            },
+            {
+              "t": 287.9,
+              "top": 162,
+              "bottom": 797.58,
+              "height": 635.58,
+              "submitY": 749.58,
+              "feedback": "至少选择 1 个数据源"
+            },
+            {
+              "t": 304.6,
+              "top": 162,
+              "bottom": 797.58,
+              "height": 635.58,
+              "submitY": 749.58,
+              "feedback": "至少选择 1 个数据源"
+            },
+            {
+              "t": 320.9,
+              "top": 162,
+              "bottom": 797.58,
+              "height": 635.58,
+              "submitY": 749.58,
+              "feedback": "至少选择 1 个数据源"
+            },
+            {
+              "t": 337.9,
+              "top": 162,
+              "bottom": 797.58,
+              "height": 635.58,
+              "submitY": 749.58,
+              "feedback": "至少选择 1 个数据源"
+            },
+            {
+              "t": 356.3,
+              "top": 162,
+              "bottom": 797.58,
+              "height": 635.58,
+              "submitY": 749.58,
+              "feedback": "至少选择 1 个数据源"
+            },
+            {
+              "t": 370.9,
+              "top": 162,
+              "bottom": 797.58,
+              "height": 635.58,
+              "submitY": 749.58,
+              "feedback": "至少选择 1 个数据源"
+            },
+            {
+              "t": 387.8,
+              "top": 162,
+              "bottom": 797.58,
+              "height": 635.58,
+              "submitY": 749.58,
+              "feedback": "至少选择 1 个数据源"
+            },
+            {
+              "t": 404.7,
+              "top": 162,
+              "bottom": 797.58,
+              "height": 635.58,
+              "submitY": 749.58,
+              "feedback": "至少选择 1 个数据源"
+            },
+            {
+              "t": 421.1,
+              "top": 162,
+              "bottom": 797.58,
+              "height": 635.58,
+              "submitY": 749.58,
+              "feedback": "至少选择 1 个数据源"
+            },
+            {
+              "t": 438,
+              "top": 162,
+              "bottom": 797.58,
+              "height": 635.58,
+              "submitY": 749.58,
+              "feedback": "至少选择 1 个数据源"
+            },
+            {
+              "t": 454.6,
+              "top": 162,
+              "bottom": 797.58,
+              "height": 635.58,
+              "submitY": 749.58,
+              "feedback": "至少选择 1 个数据源"
+            },
+            {
+              "t": 471,
+              "top": 162,
+              "bottom": 797.58,
+              "height": 635.58,
+              "submitY": 749.58,
+              "feedback": "至少选择 1 个数据源"
+            },
+            {
+              "t": 487.8,
+              "top": 162,
+              "bottom": 797.58,
+              "height": 635.58,
+              "submitY": 749.58,
+              "feedback": "至少选择 1 个数据源"
+            },
+            {
+              "t": 504.8,
+              "top": 162,
+              "bottom": 797.58,
+              "height": 635.58,
+              "submitY": 749.58,
+              "feedback": "至少选择 1 个数据源"
+            },
+            {
+              "t": 521.1,
+              "top": 162,
+              "bottom": 797.58,
+              "height": 635.58,
+              "submitY": 749.58,
+              "feedback": "至少选择 1 个数据源"
+            },
+            {
+              "t": 538.1,
+              "top": 162,
+              "bottom": 797.58,
+              "height": 635.58,
+              "submitY": 749.58,
+              "feedback": "至少选择 1 个数据源"
+            },
+            {
+              "t": 554.7,
+              "top": 162,
+              "bottom": 797.58,
+              "height": 635.58,
+              "submitY": 749.58,
+              "feedback": "至少选择 1 个数据源"
+            },
+            {
+              "t": 571.1,
+              "top": 162,
+              "bottom": 797.58,
+              "height": 635.58,
+              "submitY": 749.58,
+              "feedback": "至少选择 1 个数据源"
+            },
+            {
+              "t": 587.7,
+              "top": 162,
+              "bottom": 797.58,
+              "height": 635.58,
+              "submitY": 749.58,
+              "feedback": "至少选择 1 个数据源"
+            },
+            {
+              "t": 604.6,
+              "top": 162,
+              "bottom": 797.58,
+              "height": 635.58,
+              "submitY": 749.58,
+              "feedback": "至少选择 1 个数据源"
+            },
+            {
+              "t": 621.1,
+              "top": 162,
+              "bottom": 797.58,
+              "height": 635.58,
+              "submitY": 749.58,
+              "feedback": "至少选择 1 个数据源"
+            },
+            {
+              "t": 637.7,
+              "top": 162,
+              "bottom": 797.58,
+              "height": 635.58,
+              "submitY": 749.58,
+              "feedback": "至少选择 1 个数据源"
+            },
+            {
+              "t": 654.6,
+              "top": 162,
+              "bottom": 797.58,
+              "height": 635.58,
+              "submitY": 749.58,
+              "feedback": "至少选择 1 个数据源"
+            },
+            {
+              "t": 671.7,
+              "top": 162,
+              "bottom": 797.58,
+              "height": 635.58,
+              "submitY": 749.58,
+              "feedback": "至少选择 1 个数据源"
+            },
+            {
+              "t": 687.9,
+              "top": 162,
+              "bottom": 797.58,
+              "height": 635.58,
+              "submitY": 749.58,
+              "feedback": "至少选择 1 个数据源"
+            },
+            {
+              "t": 704.7,
+              "top": 162,
+              "bottom": 797.58,
+              "height": 635.58,
+              "submitY": 749.58,
+              "feedback": "至少选择 1 个数据源"
+            },
+            {
+              "t": 721.5,
+              "top": 162,
+              "bottom": 797.58,
+              "height": 635.58,
+              "submitY": 749.58,
+              "feedback": "至少选择 1 个数据源"
+            },
+            {
+              "t": 737.9,
+              "top": 162,
+              "bottom": 797.58,
+              "height": 635.58,
+              "submitY": 749.58,
+              "feedback": "至少选择 1 个数据源"
+            },
+            {
+              "t": 754.8,
+              "top": 162,
+              "bottom": 797.58,
+              "height": 635.58,
+              "submitY": 749.58,
+              "feedback": "至少选择 1 个数据源"
+            },
+            {
+              "t": 771.6,
+              "top": 162,
+              "bottom": 797.58,
+              "height": 635.58,
+              "submitY": 749.58,
+              "feedback": "至少选择 1 个数据源"
+            },
+            {
+              "t": 787.8,
+              "top": 162,
+              "bottom": 797.58,
+              "height": 635.58,
+              "submitY": 749.58,
+              "feedback": "至少选择 1 个数据源"
+            },
+            {
+              "t": 804.6,
+              "top": 162,
+              "bottom": 797.58,
+              "height": 635.58,
+              "submitY": 749.58,
+              "feedback": "至少选择 1 个数据源"
+            },
+            {
+              "t": 821.4,
+              "top": 162,
+              "bottom": 797.58,
+              "height": 635.58,
+              "submitY": 749.58,
+              "feedback": "至少选择 1 个数据源"
+            },
+            {
+              "t": 837.7,
+              "top": 162,
+              "bottom": 797.58,
+              "height": 635.58,
+              "submitY": 749.58,
+              "feedback": "至少选择 1 个数据源"
+            },
+            {
+              "t": 854.5,
+              "top": 162,
+              "bottom": 797.58,
+              "height": 635.58,
+              "submitY": 749.58,
+              "feedback": "至少选择 1 个数据源"
+            },
+            {
+              "t": 871.7,
+              "top": 162,
+              "bottom": 797.58,
+              "height": 635.58,
+              "submitY": 749.58,
+              "feedback": "至少选择 1 个数据源"
+            }
+          ]
+        }
+      },
+      "longError": {
+        "scene": "edit",
+        "replay": {
+          "source": "docs/features/client-config/reports/evidence/CLIENT-CONFIG-DIALOG-ACCEPTANCE-005/results/probeB-write.json → gate.responses[0].body",
+          "expected": {
+            "method": "PUT",
+            "path": "/api/clients/probe-001"
+          },
+          "forwardedToBackend": false,
+          "interceptions": [
+            {
+              "scenario": "edit1920x1080",
+              "at": "2026-11-09T04:21:57.168Z",
+              "method": "PUT",
+              "path": "/api/clients/probe-001",
+              "requestBody": "{\"clientId\":\"probe-001\",\"clientDesc\":\"S3AC AC-030 sequential base probe-001 (synthetic)\",\"dataSourceIds\":[\"S3AC-S030-1\"]}",
+              "outcome": "replayed-locally",
+              "forwardedToBackend": false,
+              "responseCode": 40941
+            }
+          ]
+        },
+        "before": {
+          "label": "before-error",
+          "viewport": {
+            "innerWidth": 1920,
+            "innerHeight": 1080,
+            "dpr": 1,
+            "visualViewportWidth": 1920,
+            "visualViewportHeight": 1080,
+            "zoomPercent": 100,
+            "screenWidth": 1920,
+            "screenHeight": 1080
+          },
+          "sidebar": {
+            "collapsed": false,
+            "rect": {
+              "x": 0,
+              "y": 0,
+              "top": 0,
+              "left": 0,
+              "right": 220,
+              "bottom": 1080,
+              "width": 220,
+              "height": 1080
+            }
+          },
+          "contentArea": {
+            "x": 220,
+            "y": 48,
+            "top": 48,
+            "left": 220,
+            "right": 1920,
+            "bottom": 1080,
+            "width": 1700,
+            "height": 1032
+          },
+          "dialog": {
+            "x": 510,
+            "y": 162,
+            "top": 162,
+            "left": 510,
+            "right": 1410,
+            "bottom": 797.58,
+            "width": 900,
+            "height": 635.58
+          },
+          "dialogVisible": true,
+          "dialogTitle": "编辑探针",
+          "dialogStyle": {
+            "width": "900px",
+            "height": "635.578px",
+            "maxWidth": "1872px",
+            "maxHeight": "none",
+            "marginTop": "162px",
+            "marginBottom": "50px",
+            "position": "relative",
+            "top": "0px",
+            "left": "0px"
+          },
+          "dialogCentering": {
+            "viewportCenterDelta": 0,
+            "contentAreaCenterDelta": -110
+          },
+          "form": {
+            "rect": {
+              "x": 526,
+              "y": 218.39,
+              "top": 218.39,
+              "left": 526,
+              "right": 1394,
+              "bottom": 733.58,
+              "width": 868,
+              "height": 515.19
+            },
+            "clientHeight": 515,
+            "scrollHeight": 515,
+            "scrollTop": 0,
+            "overflowY": "auto",
+            "maxHeight": "840px",
+            "scrollable": false
+          },
+          "feedback": {
+            "exists": false,
+            "text": null,
+            "toneClass": null,
+            "style": null,
+            "boxExists": true,
+            "boxRect": {
+              "x": 622,
+              "y": 713.58,
+              "top": 713.58,
+              "left": 622,
+              "right": 1394,
+              "bottom": 733.58,
+              "width": 772,
+              "height": 20
+            },
+            "boxStyle": {
+              "minHeight": "20px",
+              "height": "20px"
+            },
+            "pRect": null,
+            "lineCount": 0,
+            "lines": [],
+            "allLinesInsideFormViewport": false
+          },
+          "submit": {
+            "rect": {
+              "x": 1334,
+              "y": 749.58,
+              "top": 749.58,
+              "left": 1334,
+              "right": 1394,
+              "bottom": 781.58,
+              "width": 60,
+              "height": 32
+            },
+            "text": "保存",
+            "disabled": false,
+            "className": "el-button el-button--primary cc-dialog-submit ced-submit",
+            "hit": {
+              "tag": "SPAN",
+              "cls": "",
+              "isSubmitOrChild": true
+            }
+          },
+          "chosenCount": 1,
+          "sourceSplitErrorClass": "cc-split",
+          "doc": {
+            "scrollWidth": 1920,
+            "clientWidth": 1920,
+            "horizontalOverflow": false
+          }
+        },
+        "after": {
+          "label": "after-error",
+          "viewport": {
+            "innerWidth": 1920,
+            "innerHeight": 1080,
+            "dpr": 1,
+            "visualViewportWidth": 1920,
+            "visualViewportHeight": 1080,
+            "zoomPercent": 100,
+            "screenWidth": 1920,
+            "screenHeight": 1080
+          },
+          "sidebar": {
+            "collapsed": false,
+            "rect": {
+              "x": 0,
+              "y": 0,
+              "top": 0,
+              "left": 0,
+              "right": 220,
+              "bottom": 1080,
+              "width": 220,
+              "height": 1080
+            }
+          },
+          "contentArea": {
+            "x": 220,
+            "y": 48,
+            "top": 48,
+            "left": 220,
+            "right": 1920,
+            "bottom": 1080,
+            "width": 1700,
+            "height": 1032
+          },
+          "dialog": {
+            "x": 510,
+            "y": 162,
+            "top": 162,
+            "left": 510,
+            "right": 1410,
+            "bottom": 813.95,
+            "width": 900,
+            "height": 651.95
+          },
+          "dialogVisible": true,
+          "dialogTitle": "编辑探针",
+          "dialogStyle": {
+            "width": "900px",
+            "height": "651.953px",
+            "maxWidth": "1872px",
+            "maxHeight": "none",
+            "marginTop": "162px",
+            "marginBottom": "50px",
+            "position": "relative",
+            "top": "0px",
+            "left": "0px"
+          },
+          "dialogCentering": {
+            "viewportCenterDelta": 0,
+            "contentAreaCenterDelta": -110
+          },
+          "form": {
+            "rect": {
+              "x": 526,
+              "y": 218.39,
+              "top": 218.39,
+              "left": 526,
+              "right": 1394,
+              "bottom": 749.95,
+              "width": 868,
+              "height": 531.56
+            },
+            "clientHeight": 532,
+            "scrollHeight": 532,
+            "scrollTop": 0,
+            "overflowY": "auto",
+            "maxHeight": "840px",
+            "scrollable": false
+          },
+          "feedback": {
+            "exists": true,
+            "text": "数据源“CCFG005超长机构名称用于错误换行验证样本（CCFG005-DS-LONG-0123456789ABCDE）”已分配给探针：CCFG005-OCC1，不能重复分配。",
+            "toneClass": "cc-field-feedback__text ced-field-error",
+            "style": {
+              "fontSize": "13px",
+              "lineHeight": "18.2px",
+              "color": "rgb(245, 108, 108)",
+              "overflow": "visible",
+              "overflowWrap": "anywhere",
+              "height": "36.375px",
+              "whiteSpace": "normal"
+            },
+            "boxExists": true,
+            "boxRect": {
+              "x": 622,
+              "y": 713.58,
+              "top": 713.58,
+              "left": 622,
+              "right": 1394,
+              "bottom": 749.95,
+              "width": 772,
+              "height": 36.38
+            },
+            "boxStyle": {
+              "minHeight": "20px",
+              "height": "36.375px"
+            },
+            "pRect": {
+              "x": 622,
+              "y": 713.58,
+              "top": 713.58,
+              "left": 622,
+              "right": 1394,
+              "bottom": 749.95,
+              "width": 772,
+              "height": 36.38
+            },
+            "lineCount": 2,
+            "lines": [
+              {
+                "top": 714.58,
+                "left": 622,
+                "width": 731.03,
+                "height": 15,
+                "insideFormViewport": true
+              },
+              {
+                "top": 732.77,
+                "left": 622,
+                "width": 140.13,
+                "height": 15,
+                "insideFormViewport": true
+              }
+            ],
+            "allLinesInsideFormViewport": true
+          },
+          "submit": {
+            "rect": {
+              "x": 1334,
+              "y": 765.95,
+              "top": 765.95,
+              "left": 1334,
+              "right": 1394,
+              "bottom": 797.95,
+              "width": 60,
+              "height": 32
+            },
+            "text": "保存",
+            "disabled": false,
+            "className": "el-button el-button--primary cc-dialog-submit ced-submit",
+            "hit": {
+              "tag": "SPAN",
+              "cls": "",
+              "isSubmitOrChild": true
+            }
+          },
+          "chosenCount": 1,
+          "sourceSplitErrorClass": "cc-split cc-split--error",
+          "doc": {
+            "scrollWidth": 1920,
+            "clientWidth": 1920,
+            "horizontalOverflow": false
+          }
+        },
+        "afterScroll": null,
+        "corrected": {
+          "label": "corrected",
+          "viewport": {
+            "innerWidth": 1920,
+            "innerHeight": 1080,
+            "dpr": 1,
+            "visualViewportWidth": 1920,
+            "visualViewportHeight": 1080,
+            "zoomPercent": 100,
+            "screenWidth": 1920,
+            "screenHeight": 1080
+          },
+          "sidebar": {
+            "collapsed": false,
+            "rect": {
+              "x": 0,
+              "y": 0,
+              "top": 0,
+              "left": 0,
+              "right": 220,
+              "bottom": 1080,
+              "width": 220,
+              "height": 1080
+            }
+          },
+          "contentArea": {
+            "x": 220,
+            "y": 48,
+            "top": 48,
+            "left": 220,
+            "right": 1920,
+            "bottom": 1080,
+            "width": 1700,
+            "height": 1032
+          },
+          "dialog": {
+            "x": 510,
+            "y": 162,
+            "top": 162,
+            "left": 510,
+            "right": 1410,
+            "bottom": 797.58,
+            "width": 900,
+            "height": 635.58
+          },
+          "dialogVisible": true,
+          "dialogTitle": "编辑探针",
+          "dialogStyle": {
+            "width": "900px",
+            "height": "635.578px",
+            "maxWidth": "1872px",
+            "maxHeight": "none",
+            "marginTop": "162px",
+            "marginBottom": "50px",
+            "position": "relative",
+            "top": "0px",
+            "left": "0px"
+          },
+          "dialogCentering": {
+            "viewportCenterDelta": 0,
+            "contentAreaCenterDelta": -110
+          },
+          "form": {
+            "rect": {
+              "x": 526,
+              "y": 218.39,
+              "top": 218.39,
+              "left": 526,
+              "right": 1394,
+              "bottom": 733.58,
+              "width": 868,
+              "height": 515.19
+            },
+            "clientHeight": 515,
+            "scrollHeight": 515,
+            "scrollTop": 0,
+            "overflowY": "auto",
+            "maxHeight": "840px",
+            "scrollable": false
+          },
+          "feedback": {
+            "exists": false,
+            "text": null,
+            "toneClass": null,
+            "style": null,
+            "boxExists": true,
+            "boxRect": {
+              "x": 622,
+              "y": 713.58,
+              "top": 713.58,
+              "left": 622,
+              "right": 1394,
+              "bottom": 733.58,
+              "width": 772,
+              "height": 20
+            },
+            "boxStyle": {
+              "minHeight": "20px",
+              "height": "20px"
+            },
+            "pRect": null,
+            "lineCount": 0,
+            "lines": [],
+            "allLinesInsideFormViewport": false
+          },
+          "submit": {
+            "rect": {
+              "x": 1334,
+              "y": 749.58,
+              "top": 749.58,
+              "left": 1334,
+              "right": 1394,
+              "bottom": 781.58,
+              "width": 60,
+              "height": 32
+            },
+            "text": "保存",
+            "disabled": false,
+            "className": "el-button el-button--primary cc-dialog-submit ced-submit",
+            "hit": {
+              "tag": "SPAN",
+              "cls": "",
+              "isSubmitOrChild": true
+            }
+          },
+          "chosenCount": 2,
+          "sourceSplitErrorClass": "cc-split",
+          "doc": {
+            "scrollWidth": 1920,
+            "clientWidth": 1920,
+            "horizontalOverflow": false
+          }
+        },
+        "textEqualsRecorded": true,
+        "lineCount": 2,
+        "wrapped": true,
+        "afterAllLinesInsideFormViewport": true,
+        "afterScrollAllLinesInsideFormViewport": null,
+        "submitHittableAfter": true,
+        "submitHittableAfterScroll": null,
+        "horizontalOverflowAfter": false,
+        "feedbackStyle": {
+          "fontSize": "13px",
+          "lineHeight": "18.2px",
+          "color": "rgb(245, 108, 108)",
+          "overflow": "visible",
+          "overflowWrap": "anywhere",
+          "height": "36.375px",
+          "whiteSpace": "normal"
+        },
+        "feedbackBoxStyle": {
+          "minHeight": "20px",
+          "height": "36.375px"
+        },
+        "reservedBoxHeight": 36.38,
+        "reservedBoxMinHeight": "20px",
+        "geometryDelta": {
+          "afterVsBefore": {
+            "dialogTop": 0,
+            "dialogBottom": 16.37,
+            "dialogHeight": 16.37,
+            "dialogLeft": 0,
+            "dialogRight": 0,
+            "submitX": 0,
+            "submitY": 16.37
+          },
+          "correctedVsBefore": {
+            "dialogTop": 0,
+            "dialogBottom": 0,
+            "dialogHeight": 0,
+            "dialogLeft": 0,
+            "dialogRight": 0,
+            "submitX": 0,
+            "submitY": 0
+          }
+        },
+        "transition": {
+          "sampleCount": 53,
+          "durationMs": 873.4,
+          "dialogTop": {
+            "min": 162,
+            "max": 162,
+            "maxAbsVsBefore": 0
+          },
+          "dialogBottom": {
+            "min": 797.58,
+            "max": 813.95,
+            "maxAbsVsBefore": 16.37
+          },
+          "dialogHeight": {
+            "min": 635.58,
+            "max": 651.95,
+            "maxAbsVsBefore": 16.37
+          },
+          "submitY": {
+            "min": 749.58,
+            "max": 765.95,
+            "maxAbsVsBefore": 16.37
+          },
+          "frames": [
+            {
+              "t": 7.2,
+              "top": 162,
+              "bottom": 797.58,
+              "height": 635.58,
+              "submitY": 749.58,
+              "feedback": null
+            },
+            {
+              "t": 24.4,
+              "top": 162,
+              "bottom": 797.58,
+              "height": 635.58,
+              "submitY": 749.58,
+              "feedback": null
+            },
+            {
+              "t": 41,
+              "top": 162,
+              "bottom": 797.58,
+              "height": 635.58,
+              "submitY": 749.58,
+              "feedback": null
+            },
+            {
+              "t": 58.9,
+              "top": 162,
+              "bottom": 797.58,
+              "height": 635.58,
+              "submitY": 749.58,
+              "feedback": null
+            },
+            {
+              "t": 79.1,
+              "top": 162,
+              "bottom": 813.95,
+              "height": 651.95,
+              "submitY": 765.95,
+              "feedback": "数据源“CCFG005超长机构名称用于错误换行验"
+            },
+            {
+              "t": 92,
+              "top": 162,
+              "bottom": 813.95,
+              "height": 651.95,
+              "submitY": 765.95,
+              "feedback": "数据源“CCFG005超长机构名称用于错误换行验"
+            },
+            {
+              "t": 107.4,
+              "top": 162,
+              "bottom": 813.95,
+              "height": 651.95,
+              "submitY": 765.95,
+              "feedback": "数据源“CCFG005超长机构名称用于错误换行验"
+            },
+            {
+              "t": 124.4,
+              "top": 162,
+              "bottom": 813.95,
+              "height": 651.95,
+              "submitY": 765.95,
+              "feedback": "数据源“CCFG005超长机构名称用于错误换行验"
+            },
+            {
+              "t": 140.5,
+              "top": 162,
+              "bottom": 813.95,
+              "height": 651.95,
+              "submitY": 765.95,
+              "feedback": "数据源“CCFG005超长机构名称用于错误换行验"
+            },
+            {
+              "t": 157.8,
+              "top": 162,
+              "bottom": 813.95,
+              "height": 651.95,
+              "submitY": 765.95,
+              "feedback": "数据源“CCFG005超长机构名称用于错误换行验"
+            },
+            {
+              "t": 173.7,
+              "top": 162,
+              "bottom": 813.95,
+              "height": 651.95,
+              "submitY": 765.95,
+              "feedback": "数据源“CCFG005超长机构名称用于错误换行验"
+            },
+            {
+              "t": 190.7,
+              "top": 162,
+              "bottom": 813.95,
+              "height": 651.95,
+              "submitY": 765.95,
+              "feedback": "数据源“CCFG005超长机构名称用于错误换行验"
+            },
+            {
+              "t": 207.8,
+              "top": 162,
+              "bottom": 813.95,
+              "height": 651.95,
+              "submitY": 765.95,
+              "feedback": "数据源“CCFG005超长机构名称用于错误换行验"
+            },
+            {
+              "t": 223.8,
+              "top": 162,
+              "bottom": 813.95,
+              "height": 651.95,
+              "submitY": 765.95,
+              "feedback": "数据源“CCFG005超长机构名称用于错误换行验"
+            },
+            {
+              "t": 240.8,
+              "top": 162,
+              "bottom": 813.95,
+              "height": 651.95,
+              "submitY": 765.95,
+              "feedback": "数据源“CCFG005超长机构名称用于错误换行验"
+            },
+            {
+              "t": 256.8,
+              "top": 162,
+              "bottom": 813.95,
+              "height": 651.95,
+              "submitY": 765.95,
+              "feedback": "数据源“CCFG005超长机构名称用于错误换行验"
+            },
+            {
+              "t": 274.1,
+              "top": 162,
+              "bottom": 813.95,
+              "height": 651.95,
+              "submitY": 765.95,
+              "feedback": "数据源“CCFG005超长机构名称用于错误换行验"
+            },
+            {
+              "t": 291,
+              "top": 162,
+              "bottom": 813.95,
+              "height": 651.95,
+              "submitY": 765.95,
+              "feedback": "数据源“CCFG005超长机构名称用于错误换行验"
+            },
+            {
+              "t": 307.2,
+              "top": 162,
+              "bottom": 813.95,
+              "height": 651.95,
+              "submitY": 765.95,
+              "feedback": "数据源“CCFG005超长机构名称用于错误换行验"
+            },
+            {
+              "t": 324.2,
+              "top": 162,
+              "bottom": 813.95,
+              "height": 651.95,
+              "submitY": 765.95,
+              "feedback": "数据源“CCFG005超长机构名称用于错误换行验"
+            },
+            {
+              "t": 340.3,
+              "top": 162,
+              "bottom": 813.95,
+              "height": 651.95,
+              "submitY": 765.95,
+              "feedback": "数据源“CCFG005超长机构名称用于错误换行验"
+            },
+            {
+              "t": 357.3,
+              "top": 162,
+              "bottom": 813.95,
+              "height": 651.95,
+              "submitY": 765.95,
+              "feedback": "数据源“CCFG005超长机构名称用于错误换行验"
+            },
+            {
+              "t": 373.5,
+              "top": 162,
+              "bottom": 813.95,
+              "height": 651.95,
+              "submitY": 765.95,
+              "feedback": "数据源“CCFG005超长机构名称用于错误换行验"
+            },
+            {
+              "t": 390.4,
+              "top": 162,
+              "bottom": 813.95,
+              "height": 651.95,
+              "submitY": 765.95,
+              "feedback": "数据源“CCFG005超长机构名称用于错误换行验"
+            },
+            {
+              "t": 407.4,
+              "top": 162,
+              "bottom": 813.95,
+              "height": 651.95,
+              "submitY": 765.95,
+              "feedback": "数据源“CCFG005超长机构名称用于错误换行验"
+            },
+            {
+              "t": 423.5,
+              "top": 162,
+              "bottom": 813.95,
+              "height": 651.95,
+              "submitY": 765.95,
+              "feedback": "数据源“CCFG005超长机构名称用于错误换行验"
+            },
+            {
+              "t": 440.5,
+              "top": 162,
+              "bottom": 813.95,
+              "height": 651.95,
+              "submitY": 765.95,
+              "feedback": "数据源“CCFG005超长机构名称用于错误换行验"
+            },
+            {
+              "t": 457,
+              "top": 162,
+              "bottom": 813.95,
+              "height": 651.95,
+              "submitY": 765.95,
+              "feedback": "数据源“CCFG005超长机构名称用于错误换行验"
+            },
+            {
+              "t": 474.2,
+              "top": 162,
+              "bottom": 813.95,
+              "height": 651.95,
+              "submitY": 765.95,
+              "feedback": "数据源“CCFG005超长机构名称用于错误换行验"
+            },
+            {
+              "t": 490.8,
+              "top": 162,
+              "bottom": 813.95,
+              "height": 651.95,
+              "submitY": 765.95,
+              "feedback": "数据源“CCFG005超长机构名称用于错误换行验"
+            },
+            {
+              "t": 507.1,
+              "top": 162,
+              "bottom": 813.95,
+              "height": 651.95,
+              "submitY": 765.95,
+              "feedback": "数据源“CCFG005超长机构名称用于错误换行验"
+            },
+            {
+              "t": 524.7,
+              "top": 162,
+              "bottom": 813.95,
+              "height": 651.95,
+              "submitY": 765.95,
+              "feedback": "数据源“CCFG005超长机构名称用于错误换行验"
+            },
+            {
+              "t": 540.4,
+              "top": 162,
+              "bottom": 813.95,
+              "height": 651.95,
+              "submitY": 765.95,
+              "feedback": "数据源“CCFG005超长机构名称用于错误换行验"
+            },
+            {
+              "t": 557.5,
+              "top": 162,
+              "bottom": 813.95,
+              "height": 651.95,
+              "submitY": 765.95,
+              "feedback": "数据源“CCFG005超长机构名称用于错误换行验"
+            },
+            {
+              "t": 574.4,
+              "top": 162,
+              "bottom": 813.95,
+              "height": 651.95,
+              "submitY": 765.95,
+              "feedback": "数据源“CCFG005超长机构名称用于错误换行验"
+            },
+            {
+              "t": 590.6,
+              "top": 162,
+              "bottom": 813.95,
+              "height": 651.95,
+              "submitY": 765.95,
+              "feedback": "数据源“CCFG005超长机构名称用于错误换行验"
+            },
+            {
+              "t": 606.9,
+              "top": 162,
+              "bottom": 813.95,
+              "height": 651.95,
+              "submitY": 765.95,
+              "feedback": "数据源“CCFG005超长机构名称用于错误换行验"
+            },
+            {
+              "t": 623.9,
+              "top": 162,
+              "bottom": 813.95,
+              "height": 651.95,
+              "submitY": 765.95,
+              "feedback": "数据源“CCFG005超长机构名称用于错误换行验"
+            },
+            {
+              "t": 640.4,
+              "top": 162,
+              "bottom": 813.95,
+              "height": 651.95,
+              "submitY": 765.95,
+              "feedback": "数据源“CCFG005超长机构名称用于错误换行验"
+            },
+            {
+              "t": 657.5,
+              "top": 162,
+              "bottom": 813.95,
+              "height": 651.95,
+              "submitY": 765.95,
+              "feedback": "数据源“CCFG005超长机构名称用于错误换行验"
+            },
+            {
+              "t": 673.6,
+              "top": 162,
+              "bottom": 813.95,
+              "height": 651.95,
+              "submitY": 765.95,
+              "feedback": "数据源“CCFG005超长机构名称用于错误换行验"
+            },
+            {
+              "t": 690.7,
+              "top": 162,
+              "bottom": 813.95,
+              "height": 651.95,
+              "submitY": 765.95,
+              "feedback": "数据源“CCFG005超长机构名称用于错误换行验"
+            },
+            {
+              "t": 707.5,
+              "top": 162,
+              "bottom": 813.95,
+              "height": 651.95,
+              "submitY": 765.95,
+              "feedback": "数据源“CCFG005超长机构名称用于错误换行验"
+            },
+            {
+              "t": 723.7,
+              "top": 162,
+              "bottom": 813.95,
+              "height": 651.95,
+              "submitY": 765.95,
+              "feedback": "数据源“CCFG005超长机构名称用于错误换行验"
+            },
+            {
+              "t": 740.7,
+              "top": 162,
+              "bottom": 813.95,
+              "height": 651.95,
+              "submitY": 765.95,
+              "feedback": "数据源“CCFG005超长机构名称用于错误换行验"
+            },
+            {
+              "t": 756.9,
+              "top": 162,
+              "bottom": 813.95,
+              "height": 651.95,
+              "submitY": 765.95,
+              "feedback": "数据源“CCFG005超长机构名称用于错误换行验"
+            },
+            {
+              "t": 774.1,
+              "top": 162,
+              "bottom": 813.95,
+              "height": 651.95,
+              "submitY": 765.95,
+              "feedback": "数据源“CCFG005超长机构名称用于错误换行验"
+            },
+            {
+              "t": 790.4,
+              "top": 162,
+              "bottom": 813.95,
+              "height": 651.95,
+              "submitY": 765.95,
+              "feedback": "数据源“CCFG005超长机构名称用于错误换行验"
+            },
+            {
+              "t": 806.9,
+              "top": 162,
+              "bottom": 813.95,
+              "height": 651.95,
+              "submitY": 765.95,
+              "feedback": "数据源“CCFG005超长机构名称用于错误换行验"
+            },
+            {
+              "t": 823.4,
+              "top": 162,
+              "bottom": 813.95,
+              "height": 651.95,
+              "submitY": 765.95,
+              "feedback": "数据源“CCFG005超长机构名称用于错误换行验"
+            },
+            {
+              "t": 840.2,
+              "top": 162,
+              "bottom": 813.95,
+              "height": 651.95,
+              "submitY": 765.95,
+              "feedback": "数据源“CCFG005超长机构名称用于错误换行验"
+            },
+            {
+              "t": 857.2,
+              "top": 162,
+              "bottom": 813.95,
+              "height": 651.95,
+              "submitY": 765.95,
+              "feedback": "数据源“CCFG005超长机构名称用于错误换行验"
+            },
+            {
+              "t": 873.4,
+              "top": 162,
+              "bottom": 813.95,
+              "height": 651.95,
+              "submitY": 765.95,
+              "feedback": "数据源“CCFG005超长机构名称用于错误换行验"
+            }
+          ]
+        },
+        "requestBody": "{\"clientId\":\"probe-001\",\"clientDesc\":\"S3AC AC-030 sequential base probe-001 (synthetic)\",\"dataSourceIds\":[\"S3AC-S030-1\"]}"
+      },
+      "network": {
+        "nonGetAttempts": [
+          {
+            "scenario": "edit1920x1080",
+            "step": "long-submit",
+            "method": "PUT",
+            "url": "/api/clients/probe-001",
+            "postData": "{\"clientId\":\"probe-001\",\"clientDesc\":\"S3AC AC-030 sequential base probe-001 (synthetic)\",\"dataSourceIds\":[\"S3AC-S030-1\"]}",
+            "forwarded": false,
+            "outcome": "replayed-locally"
+          }
+        ]
+      },
+      "gate": {
+        "nonGetInScenario": 1,
+        "backendNonGetForwarded": 0
+      }
+    }
+  }
+}

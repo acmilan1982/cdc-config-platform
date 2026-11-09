@@ -3749,3 +3749,33 @@ describe('第六轮：启停确认框主确认按钮黑底白字（CCFG-REQ-150/
     await flushPromises()
   })
 })
+
+describe('第七轮：AC-138 反馈区两行预留（CCFG-AC-138 / CCFG-REQ-139）', () => {
+  const DIALOG_CSS_SOURCE = readFileSync(
+    resolve(process.cwd(), 'src/styles/dialog/create-edit-dialog-visual.css'),
+    'utf-8',
+  )
+
+  it('静态：采集数据源反馈区复用公共占位令牌按两行行高预留，不裁剪、不固定弹窗高度', () => {
+    const css = cssBlock(SFC_SOURCE, '.cc-source-field > .ced-field-feedback')
+    expect(declValue(css, '--ced-feedback-min-height')).toBe('calc(2 * 1.4 * 13px)')
+    // 只覆盖公共预设的最小占位令牌：不新增 overflow/固定 height，长文案仍自然换行
+    expect(css).not.toContain('overflow')
+    expect(declValue(css, 'height')).toBe('')
+    // 公共预设仍以 min-height 消费该令牌，公共模板未被改写
+    expect(DIALOG_CSS_SOURCE).toContain('min-height: var(--ced-feedback-min-height, 20px)')
+  })
+
+  it('组件：采集数据源反馈占位是其字段容器的直接子元素，三项字段反馈占位仍各自独立', async () => {
+    const w = await mountPage([enabledRow])
+    await openCreate(w)
+    const field = w.find('.cc-source-field')
+    expect(field.exists()).toBe(true)
+    const feedback = field.findAll('.ced-field-feedback')
+    expect(feedback).toHaveLength(1)
+    expect(feedback[0].element.parentElement).toBe(field.element)
+    expect(feedback[0].classes()).toContain('cc-field-feedback')
+    expect(w.findAll('.cc-field-feedback.ced-field-feedback')).toHaveLength(3)
+    w.unmount()
+  })
+})

@@ -2012,6 +2012,14 @@ onBeforeUnmount(() => {
   width: 100%;
 }
 
+/* AC-138（CCFG-REQ-139）：采集数据源反馈区按两行错误行高预留（13px × 1.4 × 2），
+   两行 40941 长错误出现／清除时弹窗高度与底部按钮不再位移。复用公共预设
+   `.ced-field-feedback` 的最小占位能力，只在本页本字段覆盖其令牌；超过两行时
+   仍正常换行，由表单响应式最大高度与内部受控滚动承接，不裁剪、不固定弹窗高度。 */
+.cc-source-field > .ced-field-feedback {
+  --ced-feedback-min-height: calc(2 * 1.4 * 13px);
+}
+
 /* 字段级错误态：控件红色边框（CCFG-REQ-123/CCFG-DESIGN-061/CCFG-UI-050）改由公共预设
    `.ced-field--error`（挂在控件包装元素上）承担，输入框与文本域沿用 Element Plus 的
    inset box-shadow 边框表现，聚焦态仍保持红色。 */

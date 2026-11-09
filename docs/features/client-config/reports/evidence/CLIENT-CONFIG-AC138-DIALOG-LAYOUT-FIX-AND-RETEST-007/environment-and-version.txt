@@ -1,0 +1,68 @@
+CLIENT-CONFIG-AC138-DIALOG-LAYOUT-FIX-AND-RETEST-007 — 环境与版本记录
+============================================================
+
+任务：CLIENT-CONFIG-AC138-DIALOG-LAYOUT-FIX-AND-RETEST-007
+基线：ed41449cba8a6d6738deb4c52f456939999992ef（develop，006-R1 纯文档勘误）
+测量对象：/config/client 新增／编辑主弹窗（CCFG-AC-138 / CCFG-REQ-139）
+执行时间：2026-11-09 12:21–12:24（+0800）
+执行机：Linux 5.14.0-611.47.1.el9_7.x86_64 x86_64 GNU/Linux（Red-Hat-01）
+工作区：/agent/cdc-config-platform
+
+产品源码来源与版本确认
+----------------------
+- Git HEAD：ed41449cba8a6d6738deb4c52f456939999992ef（develop），远端 origin/develop 同 SHA。
+- 本轮修复为工作区未提交改动：frontend/src/views/client-config/ClientConfigPage.vue
+  在 .cc-source-field 下新增页面局部覆盖：
+    .cc-source-field > .ced-field-feedback {
+      --ced-feedback-min-height: calc(2 * 1.4 * 13px);
+    }
+  复用公共预设 .ced-field-feedback 的 min-height 消费机制，未改公共模板 CSS。
+- 实际运行的 Vite 服务返回的 ClientConfigPage.vue style 模块（index=1，scoped=093fb766）
+  已包含上述规则（--ced-feedback-min-height: calc(2 * 1.4 * 13px)），确认复测页面加载的
+  是修复后代码，不是旧页面；该模块当时 md5 = 83ef7118a9e3f5b97df671bd0b0f515b。
+- 修复前基线复现（baseline-repro-1k.json）是在临时移除该页面局部块、并确认服务端 style
+  模块不含 --ced-feedback-min-height 后采集；恢复修复后再次确认服务端模块含该令牌。
+
+服务
+----
+- 后端：java -jar target/cdc-config-platform-backend-1.0.0-SNAPSHOT.jar
+        --spring.profiles.active=dev，监听 *:8080；
+        进程 PID 4429（启动壳 PID 4427，本任务自行启动）。
+  健康检查：GET http://127.0.0.1:8080/api/clients → HTTP 200。
+- 前端：node node_modules/.bin/vite --host 0.0.0.0 --port 5173，监听 0.0.0.0:5173；
+        进程 PID 4495（启动壳 PID 4494，本任务自行启动）。
+  健康检查：GET http://127.0.0.1:5173/config/client → HTTP 200。
+  页面入口：http://192.168.174.70:5173/config/client
+- 运行日志：/agent/cdc-config-platform/runtime-logs/backend-007.log、
+            /agent/cdc-config-platform/runtime-logs/frontend-007.log（工作区保留，未入仓）。
+- 前端 Vite HMR 日志在 12:20–12:22 记录 ClientConfigPage.vue style 模块更新，与探针时间吻合。
+
+浏览器与视口
+------------
+- 浏览器：Chrome for Testing 147.0.7727.15（headless），
+          路径 /root/.cache/ms-playwright/chromium-1217/chrome-linux64/chrome；
+          与 006 复测使用的浏览器版本一致。
+- DPR = 1；缩放 100%（visualViewport.scale = 1）；侧栏展开，实际宽度 220px；
+  内容区左边界 220px。
+- 主验收：1920×1080（innerWidth/innerHeight 实测一致）。
+- 补充：2560×1440（实测一致）。
+- 回归：1024×720（实测一致；仅用于长错误可读性、按钮可操作与横向溢出检查）。
+- 各视口 dialogStyle：width=900px；max-width 依次 1872px / 2512px / 976px；
+  max-height=none；margin-top 依次 162px / 216px / 108px。
+  （弹窗未固定高度；窄视口由公共 .ced-dialog 安全边距收缩，未横向溢出。）
+
+工具链
+------
+- Node v24.17.0；npm 11.13.0；Vite 5（项目既有依赖，未新增依赖）。
+- Playwright Core：/root/.hermes/hermes-agent/node_modules/playwright-core。
+- 前端定向前端测试：npx vitest run src/views/client-config/ClientConfigPage.spec.ts → 186/186，通过。
+- 前端构建：npm run build（vue-tsc --noEmit + vite build）→ 成功（约 15.21s），仅有既有
+  chunk-size 警告，无类型错误。
+
+安全与范围
+----------
+- 探针仅访问 /config/client 页面与其必要的只读接口；未访问数据源管理页。
+- 未直连数据库、未执行任何 DML/DDL、未创建夹具；未操作 ZooKeeper/Kafka。
+- 浏览器网络门禁在首次导航前安装：GET/HEAD/OPTIONS 放行；业务非 GET 仅按实际 URL
+  精确匹配并本地回放 005 记录的 40941 响应，其余非 GET 中止；后端非 GET 转发 = 0。
+- 服务 worker 已显式禁用（serviceWorkers: 'block'）。
