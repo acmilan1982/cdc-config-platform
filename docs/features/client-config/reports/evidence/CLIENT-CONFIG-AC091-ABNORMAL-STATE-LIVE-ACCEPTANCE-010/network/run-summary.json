@@ -1,0 +1,40 @@
+{
+  "task": "CLIENT-CONFIG-AC091-ABNORMAL-STATE-LIVE-ACCEPTANCE-010",
+  "startedAt": "2026-11-09T05:51:03.743Z",
+  "baseUrl": "http://127.0.0.1:5173",
+  "browserVersion": "147.0.7727.15",
+  "executable": "/root/.cache/ms-playwright/chromium-1217/chrome-linux64/chrome",
+  "serviceWorkers": "block",
+  "allowlistedReadOnlyApis": [
+    "/api/clients",
+    "/api/clients/data-source-options",
+    "/api/data-sources"
+  ],
+  "viewports": [
+    {
+      "name": "1440x900",
+      "width": 1440,
+      "height": 900
+    },
+    {
+      "name": "1920x1080",
+      "width": 1920,
+      "height": 1080
+    }
+  ],
+  "samples": {
+    "clientEnabled": "probe-001",
+    "clientDisabled": "hosp-008",
+    "clientAbnormal": "CCFG010X",
+    "clientLong": "CCFG004-LONGID-0123456789ABCDEFG",
+    "dsEnabled": "77711",
+    "dsInactive": "s-dssr1-0906-1"
+  },
+  "fixture": {
+    "clientId": "CCFG010X",
+    "originalClientId": "CCFG010-ABN1",
+    "fgActive": "X",
+    "source": "single-row INSERT authorized by task prompt on 2026-11-09, then exact-PK UPDATE to shorten synthetic ID"
+  },
+  "finishedAt": "2026-11-09T05:51:36.233Z"
+}

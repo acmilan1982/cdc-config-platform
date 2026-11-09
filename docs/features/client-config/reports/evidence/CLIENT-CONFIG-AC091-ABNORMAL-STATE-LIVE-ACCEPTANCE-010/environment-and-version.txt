@@ -1,0 +1,58 @@
+CLIENT-CONFIG-AC091-ABNORMAL-STATE-LIVE-ACCEPTANCE-010 环境与版本记录
+采集日期：2026-11-09（Asia/Shanghai, +0800）
+
+一、Git 与仓库
+- 工作目录：/agent/cdc-config-platform（有效 Git 仓库）
+- 分支：develop
+- HEAD：9371e932ecd2fb2eab9861a6c1e383c0dd9ecec1（009 结果提交，任务固定基线）
+- origin/develop（git ls-remote）：9371e932ecd2fb2eab9861a6c1e383c0dd9ecec1
+- 开工工作区：仅既有未跟踪/本地修改（.claude/settings.local.json、docs/prompts/、runtime-logs/），未纳入本轮
+
+二、主机与语言运行时
+- 内核：Linux 5.14.0-611.47.1.el9_7.x86_64
+- JDK：1.8.0_202（/usr/java/latest）
+- Node.js：v24.17.0（/opt/node）
+- npm：11.13.0
+
+三、后端服务（本任务自行启动，任务结束后停止）
+- 启动命令：java -jar target/cdc-config-platform-backend-1.0.0-SNAPSHOT.jar --spring.profiles.active=dev
+- 实际监听进程 PID：15727（后台包装 PID 15725）；启动时间：2026-11-09 13:48:28 +0800
+- 监听：*:8080；健康检查 http://127.0.0.1:8080/actuator/health = 200
+- Jar：backend/target/cdc-config-platform-backend-1.0.0-SNAPSHOT.jar
+  - mtime：2026-09-22 12:21 +0800
+  - SHA256：efdbea827b6ab84dd47105d2cc130f0bc3c5b70dc78cc626b6421e1f9750a459
+  - 说明：使用既有产物，未重新构建
+- 配置来源：application.yml 激活 dev；application-dev.yml 指向 CLAUDE.md §11 指定的开发库与开发 ZooKeeper（连接串不入仓），未接入生产、未改配置
+- 日志：runtime-logs/ac091-abnormal-010/backend.log（gitignored，不提交）
+  - 浏览器采集期间业务 SQL 仅 SELECT（Preparing: SELECT 37 次）
+  - Preparing: INSERT/UPDATE/DELETE/MERGE = 0（夹具 DML 由 SQL*Plus 直连执行，见 sql-fixture-ledger.txt）
+  - ERROR/Exception = 0
+
+四、前端服务（本任务自行启动，任务结束后停止）
+- 启动命令：node node_modules/.bin/vite --host 0.0.0.0 --port 5173
+- 实际监听进程 PID：15772（后台包装 PID 15770）；启动时间：2026-11-09 13:48:29 +0800
+- 监听：0.0.0.0:5173；本机 http://127.0.0.1:5173/ = 200
+- 前端版本来源：Vite 开发服务器直接服务当前工作区源码（HEAD 9371e93），未构建、未改代码
+- 日志：runtime-logs/ac091-abnormal-010/frontend.log（gitignored，不提交）
+
+五、浏览器与采集条件
+- 浏览器：Chrome for Testing 147.0.7727.15（headless），executablePath=/root/.cache/ms-playwright/chromium-1217/chrome-linux64/chrome
+- 驱动：playwright-core（/root/.hermes/hermes-agent/node_modules/playwright-core）
+- 视口：1440×900 与 1920×1080（CSS 视口，innerWidth/innerHeight 实测与设定一致，两页均一致）
+- DPR：1（两视口 devicePixelRatio=1）；visualViewport.scale=1（100% 缩放）
+- 侧栏：展开（.sidebar 无 collapsed 类，实测宽 220px），两页/两视口一致
+- 字体：document.fonts.status=loaded；两页一致
+- service worker：context 级 serviceWorkers='block'，页面 navigator.serviceWorker.controller=null
+- 网络门禁：首次导航前安装 context.route；只放行同源静态资源 GET 与三条只读 API GET（/api/clients、/api/clients/data-source-options、/api/data-sources）；其余全部 abort
+- 请求台账：见 network/ledger-1440x900.json、network/ledger-1920x1080.json
+  - 每视口 121 条：静态 GET 117、只读 API GET 4（clients 1、data-source-options 2、data-sources 1）
+  - 阻断 0、业务非 GET 转发 0、越界 API/外部请求 0、浏览器错误 0
+- 采集时间（UTC）：2026-11-09T05:51:03.743Z ～ 2026-11-09T05:51:36.233Z；本地 13:51
+
+六、页面与样本
+- 探针端：http://127.0.0.1:5173/config/client
+- 参考页：http://127.0.0.1:5173/config/data-source（只读对照 ID 正文）
+- 三态样本：probe-001（'1' 启用）、hosp-008（'0' 停用）、CCFG010X（'X' 异常，本任务合成）
+- 长 ID：CCFG004-LONGID-0123456789ABCDEFG（省略与 Tooltip）
+- 参考页：77711（启用）、s-dssr1-0906-1（停用）
+- 夹具：1 条合成记录按授权留存，详见 sql-fixture-ledger.txt；脱敏依据见 samples/sample-basis.json
