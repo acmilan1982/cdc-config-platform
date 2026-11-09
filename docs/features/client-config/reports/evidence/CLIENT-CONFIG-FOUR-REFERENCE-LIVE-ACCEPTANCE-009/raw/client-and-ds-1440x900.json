@@ -1,0 +1,1908 @@
+{
+  "viewport": {
+    "name": "1440x900",
+    "width": 1440,
+    "height": 900
+  },
+  "browserVersion": "147.0.7727.15",
+  "ledger": [
+    {
+      "method": "GET",
+      "url": "http://127.0.0.1:5173/config/client",
+      "resourceType": "document",
+      "allowed": true,
+      "reason": "static"
+    },
+    {
+      "method": "GET",
+      "url": "http://127.0.0.1:5173/@vite/client",
+      "resourceType": "script",
+      "allowed": true,
+      "reason": "static"
+    },
+    {
+      "method": "GET",
+      "url": "http://127.0.0.1:5173/src/main.ts",
+      "resourceType": "script",
+      "allowed": true,
+      "reason": "static"
+    },
+    {
+      "method": "GET",
+      "url": "http://127.0.0.1:5173/node_modules/.vite/deps/vue.js?v=46e20f96",
+      "resourceType": "script",
+      "allowed": true,
+      "reason": "static"
+    },
+    {
+      "method": "GET",
+      "url": "http://127.0.0.1:5173/node_modules/.vite/deps/element-plus.js?v=46e20f96",
+      "resourceType": "script",
+      "allowed": true,
+      "reason": "static"
+    },
+    {
+      "method": "GET",
+      "url": "http://127.0.0.1:5173/node_modules/element-plus/dist/index.css",
+      "resourceType": "script",
+      "allowed": true,
+      "reason": "static"
+    },
+    {
+      "method": "GET",
+      "url": "http://127.0.0.1:5173/node_modules/.vite/deps/element-plus_es_locale_lang_zh-cn.js?v=46e20f96",
+      "resourceType": "script",
+      "allowed": true,
+      "reason": "static"
+    },
+    {
+      "method": "GET",
+      "url": "http://127.0.0.1:5173/src/App.vue",
+      "resourceType": "script",
+      "allowed": true,
+      "reason": "static"
+    },
+    {
+      "method": "GET",
+      "url": "http://127.0.0.1:5173/src/router/index.ts",
+      "resourceType": "script",
+      "allowed": true,
+      "reason": "static"
+    },
+    {
+      "method": "GET",
+      "url": "http://127.0.0.1:5173/src/stores/index.ts",
+      "resourceType": "script",
+      "allowed": true,
+      "reason": "static"
+    },
+    {
+      "method": "GET",
+      "url": "http://127.0.0.1:5173/src/styles/global.css",
+      "resourceType": "script",
+      "allowed": true,
+      "reason": "static"
+    },
+    {
+      "method": "GET",
+      "url": "http://127.0.0.1:5173/src/styles/dialog/create-edit-dialog-visual.css",
+      "resourceType": "script",
+      "allowed": true,
+      "reason": "static"
+    },
+    {
+      "method": "GET",
+      "url": "http://127.0.0.1:5173/node_modules/vite/dist/client/env.mjs",
+      "resourceType": "script",
+      "allowed": true,
+      "reason": "static"
+    },
+    {
+      "method": "GET",
+      "url": "http://127.0.0.1:5173/node_modules/.vite/deps/chunk-J5D6QMP7.js?v=46e20f96",
+      "resourceType": "script",
+      "allowed": true,
+      "reason": "static"
+    },
+    {
+      "method": "GET",
+      "url": "http://127.0.0.1:5173/node_modules/.vite/deps/chunk-G3PMV62Z.js?v=46e20f96",
+      "resourceType": "script",
+      "allowed": true,
+      "reason": "static"
+    },
+    {
+      "method": "GET",
+      "url": "http://127.0.0.1:5173/node_modules/.vite/deps/vue-router.js?v=46e20f96",
+      "resourceType": "script",
+      "allowed": true,
+      "reason": "static"
+    },
+    {
+      "method": "GET",
+      "url": "http://127.0.0.1:5173/src/layouts/MainLayout.vue",
+      "resourceType": "script",
+      "allowed": true,
+      "reason": "static"
+    },
+    {
+      "method": "GET",
+      "url": "http://127.0.0.1:5173/@id/__x00__plugin-vue:export-helper",
+      "resourceType": "script",
+      "allowed": true,
+      "reason": "static"
+    },
+    {
+      "method": "GET",
+      "url": "http://127.0.0.1:5173/node_modules/.vite/deps/pinia.js?v=46e20f96",
+      "resourceType": "script",
+      "allowed": true,
+      "reason": "static"
+    },
+    {
+      "method": "GET",
+      "url": "http://127.0.0.1:5173/node_modules/.vite/deps/chunk-YFT6OQ5R.js?v=46e20f96",
+      "resourceType": "script",
+      "allowed": true,
+      "reason": "static"
+    },
+    {
+      "method": "GET",
+      "url": "http://127.0.0.1:5173/src/stores/app.ts",
+      "resourceType": "script",
+      "allowed": true,
+      "reason": "static"
+    },
+    {
+      "method": "GET",
+      "url": "http://127.0.0.1:5173/src/layouts/Sidebar.vue",
+      "resourceType": "script",
+      "allowed": true,
+      "reason": "static"
+    },
+    {
+      "method": "GET",
+      "url": "http://127.0.0.1:5173/src/layouts/HeaderBar.vue",
+      "resourceType": "script",
+      "allowed": true,
+      "reason": "static"
+    },
+    {
+      "method": "GET",
+      "url": "http://127.0.0.1:5173/src/layouts/MainLayout.vue?vue&type=style&index=0&scoped=22686b16&lang.css",
+      "resourceType": "script",
+      "allowed": true,
+      "reason": "static"
+    },
+    {
+      "method": "GET",
+      "url": "http://127.0.0.1:5173/src/config/menu.ts",
+      "resourceType": "script",
+      "allowed": true,
+      "reason": "static"
+    },
+    {
+      "method": "GET",
+      "url": "http://127.0.0.1:5173/src/views/log-query/reinitBus.ts",
+      "resourceType": "script",
+      "allowed": true,
+      "reason": "static"
+    },
+    {
+      "method": "GET",
+      "url": "http://127.0.0.1:5173/src/layouts/Sidebar.vue?vue&type=style&index=0&scoped=cc56cb04&lang.css",
+      "resourceType": "script",
+      "allowed": true,
+      "reason": "static"
+    },
+    {
+      "method": "GET",
+      "url": "http://127.0.0.1:5173/node_modules/.vite/deps/@element-plus_icons-vue.js?v=46e20f96",
+      "resourceType": "script",
+      "allowed": true,
+      "reason": "static"
+    },
+    {
+      "method": "GET",
+      "url": "http://127.0.0.1:5173/src/layouts/HeaderBar.vue?vue&type=style&index=0&scoped=ddbc33b4&lang.css",
+      "resourceType": "script",
+      "allowed": true,
+      "reason": "static"
+    },
+    {
+      "method": "GET",
+      "url": "http://127.0.0.1:5173/node_modules/.vite/deps/chunk-YTRRJBUP.js?v=46e20f96",
+      "resourceType": "script",
+      "allowed": true,
+      "reason": "static"
+    },
+    {
+      "method": "GET",
+      "url": "http://127.0.0.1:5173/node_modules/.vite/deps/chunk-Q6SH2LQN.js?v=46e20f96",
+      "resourceType": "script",
+      "allowed": true,
+      "reason": "static"
+    },
+    {
+      "method": "GET",
+      "url": "http://127.0.0.1:5173/src/views/client-config/ClientConfigPage.vue",
+      "resourceType": "script",
+      "allowed": true,
+      "reason": "static"
+    },
+    {
+      "method": "GET",
+      "url": "http://127.0.0.1:5173/src/components/query-list/index.ts",
+      "resourceType": "script",
+      "allowed": true,
+      "reason": "static"
+    },
+    {
+      "method": "GET",
+      "url": "http://127.0.0.1:5173/src/styles/list-table/index.ts",
+      "resourceType": "script",
+      "allowed": true,
+      "reason": "static"
+    },
+    {
+      "method": "GET",
+      "url": "http://127.0.0.1:5173/src/views/client-config/listLayout.ts",
+      "resourceType": "script",
+      "allowed": true,
+      "reason": "static"
+    },
+    {
+      "method": "GET",
+      "url": "http://127.0.0.1:5173/src/api/clientConfig.ts",
+      "resourceType": "script",
+      "allowed": true,
+      "reason": "static"
+    },
+    {
+      "method": "GET",
+      "url": "http://127.0.0.1:5173/src/styles/list-table/list-table-visual.css?vue&type=style&index=0&src=093fb766&scoped=093fb766&lang.css",
+      "resourceType": "script",
+      "allowed": true,
+      "reason": "static"
+    },
+    {
+      "method": "GET",
+      "url": "http://127.0.0.1:5173/src/views/client-config/ClientConfigPage.vue?vue&type=style&index=1&scoped=093fb766&lang.css",
+      "resourceType": "script",
+      "allowed": true,
+      "reason": "static"
+    },
+    {
+      "method": "GET",
+      "url": "http://127.0.0.1:5173/src/views/client-config/ClientConfigPage.vue?vue&type=style&index=2&lang.css",
+      "resourceType": "script",
+      "allowed": true,
+      "reason": "static"
+    },
+    {
+      "method": "GET",
+      "url": "http://127.0.0.1:5173/src/views/client-config/ClientConfigPage.vue?vue&type=style&index=3&lang.css",
+      "resourceType": "script",
+      "allowed": true,
+      "reason": "static"
+    },
+    {
+      "method": "GET",
+      "url": "http://127.0.0.1:5173/src/views/client-config/ClientConfigPage.vue?vue&type=style&index=4&lang.css",
+      "resourceType": "script",
+      "allowed": true,
+      "reason": "static"
+    },
+    {
+      "method": "GET",
+      "url": "http://127.0.0.1:5173/vite.svg",
+      "resourceType": "other",
+      "allowed": true,
+      "reason": "static"
+    },
+    {
+      "method": "GET",
+      "url": "http://127.0.0.1:5173/src/components/query-list/QueryListPageShell.vue",
+      "resourceType": "script",
+      "allowed": true,
+      "reason": "static"
+    },
+    {
+      "method": "GET",
+      "url": "http://127.0.0.1:5173/src/components/query-list/QueryListQueryPanel.vue",
+      "resourceType": "script",
+      "allowed": true,
+      "reason": "static"
+    },
+    {
+      "method": "GET",
+      "url": "http://127.0.0.1:5173/src/components/query-list/QueryListActions.vue",
+      "resourceType": "script",
+      "allowed": true,
+      "reason": "static"
+    },
+    {
+      "method": "GET",
+      "url": "http://127.0.0.1:5173/src/components/query-list/QueryListResultPanel.vue",
+      "resourceType": "script",
+      "allowed": true,
+      "reason": "static"
+    },
+    {
+      "method": "GET",
+      "url": "http://127.0.0.1:5173/src/components/query-list/QueryListRefreshToolbar.vue",
+      "resourceType": "script",
+      "allowed": true,
+      "reason": "static"
+    },
+    {
+      "method": "GET",
+      "url": "http://127.0.0.1:5173/src/components/query-list/QueryListTooltipHost.vue",
+      "resourceType": "script",
+      "allowed": true,
+      "reason": "static"
+    },
+    {
+      "method": "GET",
+      "url": "http://127.0.0.1:5173/src/composables/query-list/useQueryListTooltip.ts",
+      "resourceType": "script",
+      "allowed": true,
+      "reason": "static"
+    },
+    {
+      "method": "GET",
+      "url": "http://127.0.0.1:5173/src/services/http.ts",
+      "resourceType": "script",
+      "allowed": true,
+      "reason": "static"
+    },
+    {
+      "method": "GET",
+      "url": "http://127.0.0.1:5173/src/components/query-list/QueryListPageShell.vue?vue&type=style&index=0&scoped=d1dfb007&lang.css",
+      "resourceType": "script",
+      "allowed": true,
+      "reason": "static"
+    },
+    {
+      "method": "GET",
+      "url": "http://127.0.0.1:5173/src/components/query-list/QueryListQueryPanel.vue?vue&type=style&index=0&scoped=590ed958&lang.css",
+      "resourceType": "script",
+      "allowed": true,
+      "reason": "static"
+    },
+    {
+      "method": "GET",
+      "url": "http://127.0.0.1:5173/src/components/query-list/QueryListActions.vue?vue&type=style&index=0&scoped=c3792fcc&lang.css",
+      "resourceType": "script",
+      "allowed": true,
+      "reason": "static"
+    },
+    {
+      "method": "GET",
+      "url": "http://127.0.0.1:5173/src/components/query-list/query-list-spinner.css?vue&type=style&index=1&src=c3792fcc&scoped=c3792fcc&lang.css",
+      "resourceType": "script",
+      "allowed": true,
+      "reason": "static"
+    },
+    {
+      "method": "GET",
+      "url": "http://127.0.0.1:5173/src/components/query-list/QueryListResultPanel.vue?vue&type=style&index=0&scoped=6a4c8a4f&lang.css",
+      "resourceType": "script",
+      "allowed": true,
+      "reason": "static"
+    },
+    {
+      "method": "GET",
+      "url": "http://127.0.0.1:5173/node_modules/.vite/deps/axios.js?v=46e20f96",
+      "resourceType": "script",
+      "allowed": true,
+      "reason": "static"
+    },
+    {
+      "method": "GET",
+      "url": "http://127.0.0.1:5173/src/components/query-list/QueryListRefreshToolbar.vue?vue&type=style&index=0&scoped=92468505&lang.css",
+      "resourceType": "script",
+      "allowed": true,
+      "reason": "static"
+    },
+    {
+      "method": "GET",
+      "url": "http://127.0.0.1:5173/src/components/query-list/query-list-spinner.css?vue&type=style&index=1&src=92468505&scoped=92468505&lang.css",
+      "resourceType": "script",
+      "allowed": true,
+      "reason": "static"
+    },
+    {
+      "method": "GET",
+      "url": "http://127.0.0.1:5173/src/components/query-list/QueryListTooltipHost.vue?vue&type=style&index=0&scoped=5ce3ff40&lang.css",
+      "resourceType": "script",
+      "allowed": true,
+      "reason": "static"
+    },
+    {
+      "method": "GET",
+      "url": "http://127.0.0.1:5173/api/clients?status=ALL",
+      "resourceType": "xhr",
+      "allowed": true,
+      "reason": "readonly-api-get"
+    },
+    {
+      "method": "GET",
+      "url": "http://127.0.0.1:5173/api/clients/data-source-options?excludeClientId=probe-001",
+      "resourceType": "xhr",
+      "allowed": true,
+      "reason": "readonly-api-get"
+    },
+    {
+      "method": "GET",
+      "url": "http://127.0.0.1:5173/api/clients/data-source-options?excludeClientId=probe-001",
+      "resourceType": "xhr",
+      "allowed": true,
+      "reason": "readonly-api-get"
+    },
+    {
+      "method": "GET",
+      "url": "http://127.0.0.1:5173/api/clients/data-source-options?excludeClientId=probe-001",
+      "resourceType": "xhr",
+      "allowed": true,
+      "reason": "readonly-api-get"
+    },
+    {
+      "method": "GET",
+      "url": "http://127.0.0.1:5173/config/data-source",
+      "resourceType": "document",
+      "allowed": true,
+      "reason": "static"
+    },
+    {
+      "method": "GET",
+      "url": "http://127.0.0.1:5173/@vite/client",
+      "resourceType": "script",
+      "allowed": true,
+      "reason": "static"
+    },
+    {
+      "method": "GET",
+      "url": "http://127.0.0.1:5173/src/main.ts",
+      "resourceType": "script",
+      "allowed": true,
+      "reason": "static"
+    },
+    {
+      "method": "GET",
+      "url": "http://127.0.0.1:5173/node_modules/vite/dist/client/env.mjs",
+      "resourceType": "script",
+      "allowed": true,
+      "reason": "static"
+    },
+    {
+      "method": "GET",
+      "url": "http://127.0.0.1:5173/node_modules/.vite/deps/vue.js?v=46e20f96",
+      "resourceType": "script",
+      "allowed": true,
+      "reason": "static"
+    },
+    {
+      "method": "GET",
+      "url": "http://127.0.0.1:5173/node_modules/.vite/deps/element-plus.js?v=46e20f96",
+      "resourceType": "script",
+      "allowed": true,
+      "reason": "static"
+    },
+    {
+      "method": "GET",
+      "url": "http://127.0.0.1:5173/node_modules/element-plus/dist/index.css",
+      "resourceType": "script",
+      "allowed": true,
+      "reason": "static"
+    },
+    {
+      "method": "GET",
+      "url": "http://127.0.0.1:5173/node_modules/.vite/deps/element-plus_es_locale_lang_zh-cn.js?v=46e20f96",
+      "resourceType": "script",
+      "allowed": true,
+      "reason": "static"
+    },
+    {
+      "method": "GET",
+      "url": "http://127.0.0.1:5173/src/App.vue",
+      "resourceType": "script",
+      "allowed": true,
+      "reason": "static"
+    },
+    {
+      "method": "GET",
+      "url": "http://127.0.0.1:5173/src/router/index.ts",
+      "resourceType": "script",
+      "allowed": true,
+      "reason": "static"
+    },
+    {
+      "method": "GET",
+      "url": "http://127.0.0.1:5173/src/stores/index.ts",
+      "resourceType": "script",
+      "allowed": true,
+      "reason": "static"
+    },
+    {
+      "method": "GET",
+      "url": "http://127.0.0.1:5173/src/styles/global.css",
+      "resourceType": "script",
+      "allowed": true,
+      "reason": "static"
+    },
+    {
+      "method": "GET",
+      "url": "http://127.0.0.1:5173/src/styles/dialog/create-edit-dialog-visual.css",
+      "resourceType": "script",
+      "allowed": true,
+      "reason": "static"
+    },
+    {
+      "method": "GET",
+      "url": "http://127.0.0.1:5173/node_modules/.vite/deps/chunk-J5D6QMP7.js?v=46e20f96",
+      "resourceType": "script",
+      "allowed": true,
+      "reason": "static"
+    },
+    {
+      "method": "GET",
+      "url": "http://127.0.0.1:5173/node_modules/.vite/deps/chunk-G3PMV62Z.js?v=46e20f96",
+      "resourceType": "script",
+      "allowed": true,
+      "reason": "static"
+    },
+    {
+      "method": "GET",
+      "url": "http://127.0.0.1:5173/node_modules/.vite/deps/vue-router.js?v=46e20f96",
+      "resourceType": "script",
+      "allowed": true,
+      "reason": "static"
+    },
+    {
+      "method": "GET",
+      "url": "http://127.0.0.1:5173/src/layouts/MainLayout.vue",
+      "resourceType": "script",
+      "allowed": true,
+      "reason": "static"
+    },
+    {
+      "method": "GET",
+      "url": "http://127.0.0.1:5173/@id/__x00__plugin-vue:export-helper",
+      "resourceType": "script",
+      "allowed": true,
+      "reason": "static"
+    },
+    {
+      "method": "GET",
+      "url": "http://127.0.0.1:5173/node_modules/.vite/deps/pinia.js?v=46e20f96",
+      "resourceType": "script",
+      "allowed": true,
+      "reason": "static"
+    },
+    {
+      "method": "GET",
+      "url": "http://127.0.0.1:5173/src/stores/app.ts",
+      "resourceType": "script",
+      "allowed": true,
+      "reason": "static"
+    },
+    {
+      "method": "GET",
+      "url": "http://127.0.0.1:5173/src/layouts/Sidebar.vue",
+      "resourceType": "script",
+      "allowed": true,
+      "reason": "static"
+    },
+    {
+      "method": "GET",
+      "url": "http://127.0.0.1:5173/src/layouts/HeaderBar.vue",
+      "resourceType": "script",
+      "allowed": true,
+      "reason": "static"
+    },
+    {
+      "method": "GET",
+      "url": "http://127.0.0.1:5173/src/layouts/MainLayout.vue?vue&type=style&index=0&scoped=22686b16&lang.css",
+      "resourceType": "script",
+      "allowed": true,
+      "reason": "static"
+    },
+    {
+      "method": "GET",
+      "url": "http://127.0.0.1:5173/node_modules/.vite/deps/chunk-YFT6OQ5R.js?v=46e20f96",
+      "resourceType": "script",
+      "allowed": true,
+      "reason": "static"
+    },
+    {
+      "method": "GET",
+      "url": "http://127.0.0.1:5173/src/config/menu.ts",
+      "resourceType": "script",
+      "allowed": true,
+      "reason": "static"
+    },
+    {
+      "method": "GET",
+      "url": "http://127.0.0.1:5173/src/views/log-query/reinitBus.ts",
+      "resourceType": "script",
+      "allowed": true,
+      "reason": "static"
+    },
+    {
+      "method": "GET",
+      "url": "http://127.0.0.1:5173/src/layouts/Sidebar.vue?vue&type=style&index=0&scoped=cc56cb04&lang.css",
+      "resourceType": "script",
+      "allowed": true,
+      "reason": "static"
+    },
+    {
+      "method": "GET",
+      "url": "http://127.0.0.1:5173/node_modules/.vite/deps/@element-plus_icons-vue.js?v=46e20f96",
+      "resourceType": "script",
+      "allowed": true,
+      "reason": "static"
+    },
+    {
+      "method": "GET",
+      "url": "http://127.0.0.1:5173/src/layouts/HeaderBar.vue?vue&type=style&index=0&scoped=ddbc33b4&lang.css",
+      "resourceType": "script",
+      "allowed": true,
+      "reason": "static"
+    },
+    {
+      "method": "GET",
+      "url": "http://127.0.0.1:5173/node_modules/.vite/deps/chunk-YTRRJBUP.js?v=46e20f96",
+      "resourceType": "script",
+      "allowed": true,
+      "reason": "static"
+    },
+    {
+      "method": "GET",
+      "url": "http://127.0.0.1:5173/node_modules/.vite/deps/chunk-Q6SH2LQN.js?v=46e20f96",
+      "resourceType": "script",
+      "allowed": true,
+      "reason": "static"
+    },
+    {
+      "method": "GET",
+      "url": "http://127.0.0.1:5173/src/views/data-source/DataSourcePage.vue",
+      "resourceType": "script",
+      "allowed": true,
+      "reason": "static"
+    },
+    {
+      "method": "GET",
+      "url": "http://127.0.0.1:5173/vite.svg",
+      "resourceType": "other",
+      "allowed": true,
+      "reason": "static"
+    },
+    {
+      "method": "GET",
+      "url": "http://127.0.0.1:5173/node_modules/.vite/deps/async-validator.js?v=46e20f96",
+      "resourceType": "script",
+      "allowed": true,
+      "reason": "static"
+    },
+    {
+      "method": "GET",
+      "url": "http://127.0.0.1:5173/src/views/data-source/draggableDialog.ts",
+      "resourceType": "script",
+      "allowed": true,
+      "reason": "static"
+    },
+    {
+      "method": "GET",
+      "url": "http://127.0.0.1:5173/src/components/query-list/index.ts",
+      "resourceType": "script",
+      "allowed": true,
+      "reason": "static"
+    },
+    {
+      "method": "GET",
+      "url": "http://127.0.0.1:5173/src/styles/list-table/index.ts",
+      "resourceType": "script",
+      "allowed": true,
+      "reason": "static"
+    },
+    {
+      "method": "GET",
+      "url": "http://127.0.0.1:5173/src/api/dataSource.ts",
+      "resourceType": "script",
+      "allowed": true,
+      "reason": "static"
+    },
+    {
+      "method": "GET",
+      "url": "http://127.0.0.1:5173/src/styles/list-table/list-table-visual.css?vue&type=style&index=0&src=814877e4&scoped=814877e4&lang.css",
+      "resourceType": "script",
+      "allowed": true,
+      "reason": "static"
+    },
+    {
+      "method": "GET",
+      "url": "http://127.0.0.1:5173/src/views/data-source/DataSourcePage.vue?vue&type=style&index=1&scoped=814877e4&lang.css",
+      "resourceType": "script",
+      "allowed": true,
+      "reason": "static"
+    },
+    {
+      "method": "GET",
+      "url": "http://127.0.0.1:5173/src/views/data-source/DataSourcePage.vue?vue&type=style&index=2&lang.css",
+      "resourceType": "script",
+      "allowed": true,
+      "reason": "static"
+    },
+    {
+      "method": "GET",
+      "url": "http://127.0.0.1:5173/src/components/query-list/QueryListPageShell.vue",
+      "resourceType": "script",
+      "allowed": true,
+      "reason": "static"
+    },
+    {
+      "method": "GET",
+      "url": "http://127.0.0.1:5173/src/components/query-list/QueryListQueryPanel.vue",
+      "resourceType": "script",
+      "allowed": true,
+      "reason": "static"
+    },
+    {
+      "method": "GET",
+      "url": "http://127.0.0.1:5173/src/components/query-list/QueryListActions.vue",
+      "resourceType": "script",
+      "allowed": true,
+      "reason": "static"
+    },
+    {
+      "method": "GET",
+      "url": "http://127.0.0.1:5173/src/components/query-list/QueryListResultPanel.vue",
+      "resourceType": "script",
+      "allowed": true,
+      "reason": "static"
+    },
+    {
+      "method": "GET",
+      "url": "http://127.0.0.1:5173/src/components/query-list/QueryListRefreshToolbar.vue",
+      "resourceType": "script",
+      "allowed": true,
+      "reason": "static"
+    },
+    {
+      "method": "GET",
+      "url": "http://127.0.0.1:5173/src/components/query-list/QueryListTooltipHost.vue",
+      "resourceType": "script",
+      "allowed": true,
+      "reason": "static"
+    },
+    {
+      "method": "GET",
+      "url": "http://127.0.0.1:5173/src/composables/query-list/useQueryListTooltip.ts",
+      "resourceType": "script",
+      "allowed": true,
+      "reason": "static"
+    },
+    {
+      "method": "GET",
+      "url": "http://127.0.0.1:5173/src/services/http.ts",
+      "resourceType": "script",
+      "allowed": true,
+      "reason": "static"
+    },
+    {
+      "method": "GET",
+      "url": "http://127.0.0.1:5173/src/components/query-list/QueryListPageShell.vue?vue&type=style&index=0&scoped=d1dfb007&lang.css",
+      "resourceType": "script",
+      "allowed": true,
+      "reason": "static"
+    },
+    {
+      "method": "GET",
+      "url": "http://127.0.0.1:5173/src/components/query-list/QueryListQueryPanel.vue?vue&type=style&index=0&scoped=590ed958&lang.css",
+      "resourceType": "script",
+      "allowed": true,
+      "reason": "static"
+    },
+    {
+      "method": "GET",
+      "url": "http://127.0.0.1:5173/src/components/query-list/QueryListActions.vue?vue&type=style&index=0&scoped=c3792fcc&lang.css",
+      "resourceType": "script",
+      "allowed": true,
+      "reason": "static"
+    },
+    {
+      "method": "GET",
+      "url": "http://127.0.0.1:5173/src/components/query-list/query-list-spinner.css?vue&type=style&index=1&src=c3792fcc&scoped=c3792fcc&lang.css",
+      "resourceType": "script",
+      "allowed": true,
+      "reason": "static"
+    },
+    {
+      "method": "GET",
+      "url": "http://127.0.0.1:5173/src/components/query-list/QueryListResultPanel.vue?vue&type=style&index=0&scoped=6a4c8a4f&lang.css",
+      "resourceType": "script",
+      "allowed": true,
+      "reason": "static"
+    },
+    {
+      "method": "GET",
+      "url": "http://127.0.0.1:5173/node_modules/.vite/deps/axios.js?v=46e20f96",
+      "resourceType": "script",
+      "allowed": true,
+      "reason": "static"
+    },
+    {
+      "method": "GET",
+      "url": "http://127.0.0.1:5173/src/components/query-list/QueryListRefreshToolbar.vue?vue&type=style&index=0&scoped=92468505&lang.css",
+      "resourceType": "script",
+      "allowed": true,
+      "reason": "static"
+    },
+    {
+      "method": "GET",
+      "url": "http://127.0.0.1:5173/src/components/query-list/query-list-spinner.css?vue&type=style&index=1&src=92468505&scoped=92468505&lang.css",
+      "resourceType": "script",
+      "allowed": true,
+      "reason": "static"
+    },
+    {
+      "method": "GET",
+      "url": "http://127.0.0.1:5173/src/components/query-list/QueryListTooltipHost.vue?vue&type=style&index=0&scoped=5ce3ff40&lang.css",
+      "resourceType": "script",
+      "allowed": true,
+      "reason": "static"
+    },
+    {
+      "method": "GET",
+      "url": "http://127.0.0.1:5173/api/data-sources",
+      "resourceType": "xhr",
+      "allowed": true,
+      "reason": "readonly-api-get"
+    }
+  ],
+  "client": {
+    "env": {
+      "href": "http://127.0.0.1:5173/config/client",
+      "title": "CDC 配置管理平台",
+      "innerWidth": 1440,
+      "innerHeight": 900,
+      "outerWidth": 1440,
+      "outerHeight": 900,
+      "devicePixelRatio": 1,
+      "visualViewportScale": 1,
+      "fontsStatus": "loaded",
+      "bodyFontSize": "14px",
+      "serviceWorkerControlled": false,
+      "sidebar": {
+        "collapsedClass": false,
+        "width": 220,
+        "rect": {
+          "x": 0,
+          "y": 0,
+          "width": 220,
+          "height": 900
+        }
+      },
+      "userAgent": "Mozilla/5.0 (X11; Linux x86_64) AppleWebKit/537.36 (KHTML, like Gecko) HeadlessChrome/147.0.0.0 Safari/537.36",
+      "platform": "Linux x86_64",
+      "collectedAt": "2026-11-09T05:37:21.612Z"
+    },
+    "measurements": {
+      "ac079": {
+        "header": {
+          "x": 276,
+          "y": 229.5,
+          "left": 276,
+          "top": 229.5,
+          "right": 1384,
+          "bottom": 275.5,
+          "width": 1108,
+          "height": 46
+        },
+        "summary": {
+          "x": 292,
+          "y": 246.3,
+          "left": 292,
+          "top": 246.3,
+          "right": 343.36,
+          "bottom": 268.69,
+          "width": 51.36,
+          "height": 22.39
+        },
+        "toolbar": {
+          "x": 1264,
+          "y": 241.5,
+          "left": 1264,
+          "top": 241.5,
+          "right": 1368,
+          "bottom": 273.5,
+          "width": 104,
+          "height": 32
+        },
+        "addButton": {
+          "text": "新增探针",
+          "rect": {
+            "x": 1264,
+            "y": 241.5,
+            "left": 1264,
+            "top": 241.5,
+            "right": 1368,
+            "bottom": 273.5,
+            "width": 104,
+            "height": 32
+          },
+          "isToolbarLastElement": true,
+          "countOnPage": 1,
+          "countInsideHeader": 1,
+          "countInsideSummary": 0,
+          "noButtonRightOfItInHeader": true
+        },
+        "gaps": {
+          "buttonRightToToolbarRight": 0,
+          "buttonRightToHeaderRight": 16,
+          "toolbarRightToHeaderRight": 16
+        },
+        "leftAreaHasAddButton": false
+      },
+      "ac087": {
+        "headers": [
+          "序号",
+          "探针 ID",
+          "探针描述",
+          "采集数据源",
+          "数据源数量",
+          "操作"
+        ],
+        "seqIndex": 0,
+        "idHeaderIndex": 1,
+        "idColumnFollowsSeq": true,
+        "enabled": {
+          "seqText": "2",
+          "seqCellRect": {
+            "x": 292,
+            "y": 402.5,
+            "left": 292,
+            "top": 402.5,
+            "right": 362,
+            "bottom": 450.5,
+            "width": 70,
+            "height": 48
+          },
+          "idCellRect": {
+            "x": 362,
+            "y": 402.5,
+            "left": 362,
+            "top": 402.5,
+            "right": 538,
+            "bottom": 450.5,
+            "width": 176,
+            "height": 48
+          },
+          "idCellClass": "el-table_1_column_2 cc-col-id el-table__cell",
+          "idRect": {
+            "x": 374,
+            "y": 414.5,
+            "left": 374,
+            "top": 414.5,
+            "right": 440.92,
+            "bottom": 437.5,
+            "width": 66.92,
+            "height": 23
+          },
+          "idText": "probe-001",
+          "cellIndex": {
+            "seq": 0,
+            "id": 1
+          },
+          "cellCount": 6,
+          "hasInactiveMark": false,
+          "hasAbnormalMark": false,
+          "mark": null,
+          "opsCellRect": {
+            "x": 1258,
+            "y": 402.5,
+            "left": 1258,
+            "top": 402.5,
+            "right": 1368,
+            "bottom": 450.5,
+            "width": 110,
+            "height": 48
+          },
+          "rowRect": {
+            "x": 292,
+            "y": 402.5,
+            "left": 292,
+            "top": 402.5,
+            "right": 1368,
+            "bottom": 450.5,
+            "width": 1076,
+            "height": 48
+          },
+          "markOverlapsOpsCell": null,
+          "markRightWithinIdCell": null
+        },
+        "disabled": {
+          "seqText": "4",
+          "seqCellRect": {
+            "x": 292,
+            "y": 498.5,
+            "left": 292,
+            "top": 498.5,
+            "right": 362,
+            "bottom": 546.5,
+            "width": 70,
+            "height": 48
+          },
+          "idCellRect": {
+            "x": 362,
+            "y": 498.5,
+            "left": 362,
+            "top": 498.5,
+            "right": 538,
+            "bottom": 546.5,
+            "width": 176,
+            "height": 48
+          },
+          "idCellClass": "el-table_1_column_2 cc-col-id el-table__cell",
+          "idRect": {
+            "x": 374,
+            "y": 510.5,
+            "left": 374,
+            "top": 510.5,
+            "right": 435.47,
+            "bottom": 533.5,
+            "width": 61.47,
+            "height": 23
+          },
+          "idText": "hosp-008",
+          "cellIndex": {
+            "seq": 0,
+            "id": 1
+          },
+          "cellCount": 6,
+          "hasInactiveMark": true,
+          "hasAbnormalMark": false,
+          "mark": {
+            "kind": "inactive",
+            "text": "停用",
+            "rect": {
+              "x": 441.47,
+              "y": 512,
+              "left": 441.47,
+              "top": 512,
+              "right": 475.47,
+              "bottom": 532,
+              "width": 34,
+              "height": 20
+            },
+            "style": {
+              "display": "flex",
+              "align-items": "center",
+              "justify-content": "center",
+              "box-sizing": "border-box",
+              "height": "20px",
+              "line-height": "11px",
+              "padding": "0px 6px",
+              "margin": "0px",
+              "border": "0px none rgb(153, 27, 27)",
+              "border-radius": "4px",
+              "background-color": "rgb(254, 226, 226)",
+              "color": "rgb(153, 27, 27)",
+              "font-size": "11px",
+              "font-weight": "700",
+              "font-family": "-apple-system, BlinkMacSystemFont, \"Segoe UI\", \"PingFang SC\", \"Hiragino Sans GB\", \"Microsoft YaHei\", \"Helvetica Neue\", Helvetica, Arial, sans-serif",
+              "vertical-align": "baseline"
+            },
+            "offsetFromIdRight": 6,
+            "centerYDeltaFromId": 0,
+            "cellContentCenterYDelta": -0.5,
+            "rowCenterYDelta": -0.5
+          },
+          "opsCellRect": {
+            "x": 1258,
+            "y": 498.5,
+            "left": 1258,
+            "top": 498.5,
+            "right": 1368,
+            "bottom": 546.5,
+            "width": 110,
+            "height": 48
+          },
+          "rowRect": {
+            "x": 292,
+            "y": 498.5,
+            "left": 292,
+            "top": 498.5,
+            "right": 1368,
+            "bottom": 546.5,
+            "width": 1076,
+            "height": 48
+          },
+          "markOverlapsOpsCell": false,
+          "markRightWithinIdCell": true
+        },
+        "idsAlignedAcrossStates": 0
+      },
+      "ac091": {
+        "enabled": {
+          "text": "probe-001",
+          "rect": {
+            "x": 374,
+            "y": 414.5,
+            "left": 374,
+            "top": 414.5,
+            "right": 440.92,
+            "bottom": 437.5,
+            "width": 66.92,
+            "height": 23
+          },
+          "style": {
+            "color": "rgb(9, 9, 11)",
+            "font-weight": "600",
+            "font-size": "14px",
+            "font-family": "-apple-system, BlinkMacSystemFont, \"Segoe UI\", \"PingFang SC\", \"Hiragino Sans GB\", \"Microsoft YaHei\", \"Helvetica Neue\", Helvetica, Arial, sans-serif",
+            "background-color": "rgba(0, 0, 0, 0)",
+            "overflow": "hidden",
+            "text-overflow": "ellipsis",
+            "white-space": "nowrap",
+            "line-height": "23px",
+            "letter-spacing": "normal"
+          },
+          "cellStyle": {
+            "background-color": "rgba(0, 0, 0, 0)",
+            "padding": "12px 0px",
+            "font-size": "14px",
+            "font-weight": "400",
+            "color": "rgb(96, 98, 102)"
+          },
+          "effectiveCellBackground": {
+            "value": "rgb(255, 255, 255)",
+            "sourceTag": "TR",
+            "sourceClass": "el-table__row"
+          },
+          "clientWidth": 67,
+          "scrollWidth": 67,
+          "truncated": false
+        },
+        "disabled": {
+          "text": "hosp-008",
+          "rect": {
+            "x": 374,
+            "y": 510.5,
+            "left": 374,
+            "top": 510.5,
+            "right": 435.47,
+            "bottom": 533.5,
+            "width": 61.47,
+            "height": 23
+          },
+          "style": {
+            "color": "rgb(9, 9, 11)",
+            "font-weight": "600",
+            "font-size": "14px",
+            "font-family": "-apple-system, BlinkMacSystemFont, \"Segoe UI\", \"PingFang SC\", \"Hiragino Sans GB\", \"Microsoft YaHei\", \"Helvetica Neue\", Helvetica, Arial, sans-serif",
+            "background-color": "rgba(0, 0, 0, 0)",
+            "overflow": "hidden",
+            "text-overflow": "ellipsis",
+            "white-space": "nowrap",
+            "line-height": "23px",
+            "letter-spacing": "normal"
+          },
+          "cellStyle": {
+            "background-color": "rgba(0, 0, 0, 0)",
+            "padding": "12px 0px",
+            "font-size": "14px",
+            "font-weight": "400",
+            "color": "rgb(96, 98, 102)"
+          },
+          "effectiveCellBackground": {
+            "value": "rgb(255, 255, 255)",
+            "sourceTag": "TR",
+            "sourceClass": "el-table__row"
+          },
+          "clientWidth": 61,
+          "scrollWidth": 61,
+          "truncated": false
+        },
+        "abnormal": null,
+        "abnormalSamplePresent": false,
+        "longId": {
+          "text": "CCFG004-LONGID-0123456789ABCDEFG",
+          "rect": {
+            "x": 374,
+            "y": 4462.5,
+            "left": 374,
+            "top": 4462.5,
+            "right": 526,
+            "bottom": 4485.5,
+            "width": 152,
+            "height": 23
+          },
+          "style": {
+            "color": "rgb(9, 9, 11)",
+            "font-weight": "600",
+            "font-size": "14px",
+            "font-family": "-apple-system, BlinkMacSystemFont, \"Segoe UI\", \"PingFang SC\", \"Hiragino Sans GB\", \"Microsoft YaHei\", \"Helvetica Neue\", Helvetica, Arial, sans-serif",
+            "background-color": "rgba(0, 0, 0, 0)",
+            "overflow": "hidden",
+            "text-overflow": "ellipsis",
+            "white-space": "nowrap",
+            "line-height": "23px",
+            "letter-spacing": "normal"
+          },
+          "cellStyle": {
+            "background-color": "rgba(0, 0, 0, 0)",
+            "padding": "12px 0px",
+            "font-size": "14px",
+            "font-weight": "400",
+            "color": "rgb(96, 98, 102)"
+          },
+          "effectiveCellBackground": {
+            "value": "rgb(255, 255, 255)",
+            "sourceTag": "TR",
+            "sourceClass": "el-table__row"
+          },
+          "clientWidth": 152,
+          "scrollWidth": 274,
+          "truncated": true
+        },
+        "ambiguousRowPresent": true,
+        "statesAvailableFromData": {
+          "on": true,
+          "off": true,
+          "abnormal": false
+        }
+      },
+      "ac094": {
+        "sampleRow": "probe-001",
+        "rowHasRowbad": false,
+        "tag": {
+          "className": "cc-dstag cc-dstag--ok",
+          "text": "S3AC-ORG",
+          "rect": {
+            "x": 850,
+            "y": 416,
+            "left": 850,
+            "top": 416,
+            "right": 931.34,
+            "bottom": 436,
+            "width": 81.34,
+            "height": 20
+          },
+          "style": {
+            "display": "flex",
+            "align-items": "center",
+            "justify-content": "center",
+            "box-sizing": "border-box",
+            "height": "20px",
+            "line-height": "23px",
+            "padding": "0px 9px",
+            "margin": "0px",
+            "border": "0px none rgb(4, 120, 87)",
+            "border-width": "0px",
+            "border-style": "none",
+            "border-color": "rgb(4, 120, 87)",
+            "border-radius": "4px",
+            "background-color": "rgb(236, 253, 245)",
+            "color": "rgb(4, 120, 87)",
+            "font-size": "12px",
+            "font-weight": "600",
+            "font-family": "-apple-system, BlinkMacSystemFont, \"Segoe UI\", \"PingFang SC\", \"Hiragino Sans GB\", \"Microsoft YaHei\", \"Helvetica Neue\", Helvetica, Arial, sans-serif",
+            "vertical-align": "baseline",
+            "overflow": "hidden",
+            "text-overflow": "clip",
+            "white-space": "normal"
+          },
+          "clientWidth": 81,
+          "scrollWidth": 81,
+          "clientHeight": 20,
+          "scrollHeight": 20,
+          "clipped": false,
+          "textBox": {
+            "x": 859,
+            "y": 420,
+            "left": 859,
+            "top": 420,
+            "right": 922.34,
+            "bottom": 432,
+            "width": 63.34,
+            "height": 12
+          },
+          "textInsideTag": true,
+          "gaps": {
+            "left": 9,
+            "right": 9,
+            "top": 4,
+            "bottom": 4
+          },
+          "horizontalCenterDelta": 0,
+          "verticalCenterDelta": 0
+        },
+        "tagStateClassPresent": true
+      }
+    },
+    "longIdTooltip": {
+      "exists": true,
+      "visible": true,
+      "text": "CCFG004-LONGID-0123456789ABCDEFG",
+      "rect": {
+        "x": 322.625,
+        "y": 470,
+        "width": 254.75,
+        "height": 30
+      },
+      "role": "tooltip"
+    },
+    "keyboardFocus": {
+      "found": true,
+      "tabIndex": 0,
+      "role": "button",
+      "ariaLabel": "编辑探针 probe-001",
+      "activeElementIsId": true,
+      "outline": "rgb(64, 158, 255) solid 1px"
+    },
+    "mouseEditEntry": {
+      "via": "row-dblclick-desc",
+      "visible": true,
+      "title": "编辑探针",
+      "rect": {
+        "x": 270,
+        "y": 135,
+        "width": 900,
+        "height": 651.96875
+      },
+      "postFormPresent": false,
+      "closedWithoutSave": true
+    },
+    "idDblClickEditEntry": {
+      "via": "id-dblclick",
+      "visible": true,
+      "title": "编辑探针",
+      "rect": {
+        "x": 270,
+        "y": 135,
+        "width": 900,
+        "height": 651.96875
+      },
+      "postFormPresent": false,
+      "closedWithoutSave": true
+    },
+    "keyboardEditEntry": {
+      "via": "id-focus-enter",
+      "visible": true,
+      "title": "编辑探针",
+      "rect": {
+        "x": 270,
+        "y": 135,
+        "width": 900,
+        "height": 651.96875
+      },
+      "postFormPresent": false,
+      "closedWithoutSave": true
+    }
+  },
+  "dataSource": {
+    "env": {
+      "href": "http://127.0.0.1:5173/config/data-source",
+      "title": "CDC 配置管理平台",
+      "innerWidth": 1440,
+      "innerHeight": 900,
+      "outerWidth": 1440,
+      "outerHeight": 900,
+      "devicePixelRatio": 1,
+      "visualViewportScale": 1,
+      "fontsStatus": "loaded",
+      "bodyFontSize": "14px",
+      "serviceWorkerControlled": false,
+      "sidebar": {
+        "collapsedClass": false,
+        "width": 220,
+        "rect": {
+          "x": 0,
+          "y": 0,
+          "width": 220,
+          "height": 900
+        }
+      },
+      "userAgent": "Mozilla/5.0 (X11; Linux x86_64) AppleWebKit/537.36 (KHTML, like Gecko) HeadlessChrome/147.0.0.0 Safari/537.36",
+      "platform": "Linux x86_64",
+      "collectedAt": "2026-11-09T05:37:32.172Z"
+    },
+    "measurements": {
+      "ac079": {
+        "header": {
+          "x": 276,
+          "y": 229.5,
+          "left": 276,
+          "top": 229.5,
+          "right": 1384,
+          "bottom": 275.5,
+          "width": 1108,
+          "height": 46
+        },
+        "summary": {
+          "x": 292,
+          "y": 246.3,
+          "left": 292,
+          "top": 246.3,
+          "right": 351.14,
+          "bottom": 268.69,
+          "width": 59.14,
+          "height": 22.39
+        },
+        "toolbar": {
+          "x": 1248,
+          "y": 241.5,
+          "left": 1248,
+          "top": 241.5,
+          "right": 1368,
+          "bottom": 273.5,
+          "width": 120,
+          "height": 32
+        },
+        "addButton": {
+          "text": "新增数据源",
+          "rect": {
+            "x": 1248,
+            "y": 241.5,
+            "left": 1248,
+            "top": 241.5,
+            "right": 1368,
+            "bottom": 273.5,
+            "width": 120,
+            "height": 32
+          },
+          "isToolbarLastElement": true,
+          "countOnPage": 1,
+          "countInsideHeader": 1,
+          "countInsideSummary": 0,
+          "noButtonRightOfItInHeader": true
+        },
+        "gaps": {
+          "buttonRightToToolbarRight": 0,
+          "buttonRightToHeaderRight": 16,
+          "toolbarRightToHeaderRight": 16
+        },
+        "leftAreaHasAddButton": false
+      },
+      "ac087": {
+        "headers": [
+          "序号",
+          "数据源ID",
+          "数据源名称",
+          "角色",
+          "类型",
+          "主机",
+          "端口",
+          "Service Name/数据库名",
+          "用户名",
+          "操作"
+        ],
+        "seqIndex": 0,
+        "idHeaderIndex": 1,
+        "idColumnFollowsSeq": true,
+        "enabled": {
+          "seqText": "1",
+          "seqCellRect": {
+            "x": 292,
+            "y": 377.5,
+            "left": 292,
+            "top": 377.5,
+            "right": 362,
+            "bottom": 425.5,
+            "width": 70,
+            "height": 48
+          },
+          "idCellRect": {
+            "x": 374,
+            "y": 390.5,
+            "left": 374,
+            "top": 390.5,
+            "right": 488,
+            "bottom": 411.5,
+            "width": 114,
+            "height": 21
+          },
+          "idRect": {
+            "x": 374,
+            "y": 390.5,
+            "left": 374,
+            "top": 390.5,
+            "right": 416.02,
+            "bottom": 411.5,
+            "width": 42.02,
+            "height": 21
+          },
+          "idText": "77711",
+          "cellIndex": {
+            "seq": 0,
+            "id": 1
+          },
+          "cellCount": 10,
+          "hasInactiveMark": false,
+          "hasAbnormalMark": false,
+          "mark": null,
+          "opsCellRect": {
+            "x": 1258,
+            "y": 377.5,
+            "left": 1258,
+            "top": 377.5,
+            "right": 1368,
+            "bottom": 425.5,
+            "width": 110,
+            "height": 48
+          },
+          "rowRect": {
+            "x": 292,
+            "y": 377.5,
+            "left": 292,
+            "top": 377.5,
+            "right": 1382,
+            "bottom": 425.5,
+            "width": 1090,
+            "height": 48
+          },
+          "markOverlapsOpsCell": null,
+          "markRightWithinIdCell": null
+        },
+        "disabled": {
+          "seqText": "2",
+          "seqCellRect": {
+            "x": 292,
+            "y": 425.5,
+            "left": 292,
+            "top": 425.5,
+            "right": 362,
+            "bottom": 473.5,
+            "width": 70,
+            "height": 48
+          },
+          "idCellRect": {
+            "x": 374,
+            "y": 438.5,
+            "left": 374,
+            "top": 438.5,
+            "right": 488,
+            "bottom": 459.5,
+            "width": 114,
+            "height": 21
+          },
+          "idRect": {
+            "x": 374,
+            "y": 438.5,
+            "left": 374,
+            "top": 438.5,
+            "right": 448,
+            "bottom": 459.5,
+            "width": 74,
+            "height": 21
+          },
+          "idText": "s-dssr1-0906-1",
+          "cellIndex": {
+            "seq": 0,
+            "id": 1
+          },
+          "cellCount": 10,
+          "hasInactiveMark": true,
+          "hasAbnormalMark": false,
+          "mark": {
+            "kind": "inactive",
+            "text": "停用",
+            "rect": {
+              "x": 454,
+              "y": 439,
+              "left": 454,
+              "top": 439,
+              "right": 488,
+              "bottom": 459,
+              "width": 34,
+              "height": 20
+            },
+            "style": {
+              "display": "flex",
+              "align-items": "center",
+              "justify-content": "center",
+              "box-sizing": "border-box",
+              "height": "20px",
+              "line-height": "11px",
+              "padding": "0px 6px",
+              "margin": "0px",
+              "border": "0px none rgb(153, 27, 27)",
+              "border-radius": "4px",
+              "background-color": "rgb(254, 226, 226)",
+              "color": "rgb(153, 27, 27)",
+              "font-size": "11px",
+              "font-weight": "700",
+              "font-family": "-apple-system, BlinkMacSystemFont, \"Segoe UI\", \"PingFang SC\", \"Hiragino Sans GB\", \"Microsoft YaHei\", \"Helvetica Neue\", Helvetica, Arial, sans-serif",
+              "vertical-align": "baseline"
+            },
+            "offsetFromIdRight": 6,
+            "centerYDeltaFromId": 0,
+            "cellContentCenterYDelta": 0,
+            "rowCenterYDelta": -0.5
+          },
+          "opsCellRect": {
+            "x": 1258,
+            "y": 425.5,
+            "left": 1258,
+            "top": 425.5,
+            "right": 1368,
+            "bottom": 473.5,
+            "width": 110,
+            "height": 48
+          },
+          "rowRect": {
+            "x": 292,
+            "y": 425.5,
+            "left": 292,
+            "top": 425.5,
+            "right": 1382,
+            "bottom": 473.5,
+            "width": 1090,
+            "height": 48
+          },
+          "markOverlapsOpsCell": false,
+          "markRightWithinIdCell": true
+        },
+        "idsAlignedAcrossStates": 0
+      },
+      "ac091": {
+        "enabled": {
+          "text": "77711",
+          "rect": {
+            "x": 374,
+            "y": 390.5,
+            "left": 374,
+            "top": 390.5,
+            "right": 416.02,
+            "bottom": 411.5,
+            "width": 42.02,
+            "height": 21
+          },
+          "style": {
+            "color": "rgb(9, 9, 11)",
+            "font-weight": "600",
+            "font-size": "14px",
+            "font-family": "\"SF Mono\", \"JetBrains Mono\", Menlo, Consolas, \"Liberation Mono\", monospace",
+            "background-color": "rgba(0, 0, 0, 0)",
+            "overflow": "hidden",
+            "text-overflow": "ellipsis",
+            "white-space": "nowrap",
+            "line-height": "21px",
+            "letter-spacing": "normal",
+            "font-variant-numeric": "tabular-nums"
+          },
+          "cellStyle": {
+            "background-color": "rgba(0, 0, 0, 0)",
+            "padding": "0px",
+            "font-size": "14px",
+            "font-weight": "400",
+            "color": "rgb(96, 98, 102)"
+          },
+          "effectiveCellBackground": {
+            "value": "rgb(255, 255, 255)",
+            "sourceTag": "TR",
+            "sourceClass": "el-table__row"
+          },
+          "clientWidth": 42,
+          "scrollWidth": 42,
+          "truncated": false
+        },
+        "inactive": {
+          "text": "s-dssr1-0906-1",
+          "rect": {
+            "x": 374,
+            "y": 438.5,
+            "left": 374,
+            "top": 438.5,
+            "right": 448,
+            "bottom": 459.5,
+            "width": 74,
+            "height": 21
+          },
+          "style": {
+            "color": "rgb(9, 9, 11)",
+            "font-weight": "600",
+            "font-size": "14px",
+            "font-family": "\"SF Mono\", \"JetBrains Mono\", Menlo, Consolas, \"Liberation Mono\", monospace",
+            "background-color": "rgba(0, 0, 0, 0)",
+            "overflow": "hidden",
+            "text-overflow": "ellipsis",
+            "white-space": "nowrap",
+            "line-height": "21px",
+            "letter-spacing": "normal",
+            "font-variant-numeric": "tabular-nums"
+          },
+          "cellStyle": {
+            "background-color": "rgba(0, 0, 0, 0)",
+            "padding": "0px",
+            "font-size": "14px",
+            "font-weight": "400",
+            "color": "rgb(96, 98, 102)"
+          },
+          "effectiveCellBackground": {
+            "value": "rgb(255, 255, 255)",
+            "sourceTag": "TR",
+            "sourceClass": "el-table__row"
+          },
+          "clientWidth": 74,
+          "scrollWidth": 118,
+          "truncated": true
+        },
+        "longId": {
+          "text": "5905f1ce83024410836b40ca0ebfc446",
+          "rect": {
+            "x": 374,
+            "y": 1158.5,
+            "left": 374,
+            "top": 1158.5,
+            "right": 488,
+            "bottom": 1179.5,
+            "width": 114,
+            "height": 21
+          },
+          "style": {
+            "color": "rgb(9, 9, 11)",
+            "font-weight": "600",
+            "font-size": "14px",
+            "font-family": "\"SF Mono\", \"JetBrains Mono\", Menlo, Consolas, \"Liberation Mono\", monospace",
+            "background-color": "rgba(0, 0, 0, 0)",
+            "overflow": "hidden",
+            "text-overflow": "ellipsis",
+            "white-space": "nowrap",
+            "line-height": "21px",
+            "letter-spacing": "normal",
+            "font-variant-numeric": "tabular-nums"
+          },
+          "cellStyle": {
+            "background-color": "rgba(0, 0, 0, 0)",
+            "padding": "0px",
+            "font-size": "14px",
+            "font-weight": "400",
+            "color": "rgb(96, 98, 102)"
+          },
+          "effectiveCellBackground": {
+            "value": "rgb(255, 255, 255)",
+            "sourceTag": "TR",
+            "sourceClass": "el-table__row"
+          },
+          "clientWidth": 114,
+          "scrollWidth": 269,
+          "truncated": true
+        }
+      },
+      "ac094": {
+        "sourceTagRow": "s-dssr1-0906-1",
+        "targetTagRow": "s-dssr1-0906-4",
+        "sourceTag": {
+          "text": "源库",
+          "className": "el-tag el-tag--warning el-tag--small el-tag--light",
+          "rect": {
+            "x": 654,
+            "y": 439.8,
+            "left": 654,
+            "top": 439.8,
+            "right": 696.02,
+            "bottom": 459.8,
+            "width": 42.02,
+            "height": 20
+          },
+          "style": {
+            "display": "inline-flex",
+            "align-items": "center",
+            "justify-content": "center",
+            "box-sizing": "border-box",
+            "height": "20px",
+            "line-height": "20px",
+            "padding": "0px 9px",
+            "margin": "0px",
+            "border": "0px none rgb(180, 83, 9)",
+            "border-width": "0px",
+            "border-style": "none",
+            "border-color": "rgb(180, 83, 9)",
+            "border-radius": "4px",
+            "background-color": "rgb(254, 243, 199)",
+            "color": "rgb(180, 83, 9)",
+            "font-size": "12px",
+            "font-weight": "600",
+            "font-family": "-apple-system, BlinkMacSystemFont, \"Segoe UI\", \"PingFang SC\", \"Hiragino Sans GB\", \"Microsoft YaHei\", \"Helvetica Neue\", Helvetica, Arial, sans-serif",
+            "vertical-align": "middle",
+            "overflow": "visible",
+            "text-overflow": "clip",
+            "white-space": "nowrap"
+          },
+          "clientWidth": 42,
+          "scrollWidth": 42,
+          "clientHeight": 20,
+          "scrollHeight": 20,
+          "clipped": false,
+          "textBox": {
+            "x": 663,
+            "y": 439.8,
+            "left": 663,
+            "top": 439.8,
+            "right": 687.02,
+            "bottom": 459.8,
+            "width": 24.02,
+            "height": 20
+          },
+          "textInsideTag": true,
+          "gaps": {
+            "left": 9,
+            "right": 9,
+            "top": 0,
+            "bottom": 0
+          },
+          "horizontalCenterDelta": 0,
+          "verticalCenterDelta": 0
+        },
+        "targetTag": {
+          "text": "目标库",
+          "className": "el-tag el-tag--success el-tag--small el-tag--light",
+          "rect": {
+            "x": 654,
+            "y": 583.8,
+            "left": 654,
+            "top": 583.8,
+            "right": 708.02,
+            "bottom": 603.8,
+            "width": 54.02,
+            "height": 20
+          },
+          "style": {
+            "display": "inline-flex",
+            "align-items": "center",
+            "justify-content": "center",
+            "box-sizing": "border-box",
+            "height": "20px",
+            "line-height": "20px",
+            "padding": "0px 9px",
+            "margin": "0px",
+            "border": "0px none rgb(4, 120, 87)",
+            "border-width": "0px",
+            "border-style": "none",
+            "border-color": "rgb(4, 120, 87)",
+            "border-radius": "4px",
+            "background-color": "rgb(236, 253, 245)",
+            "color": "rgb(4, 120, 87)",
+            "font-size": "12px",
+            "font-weight": "600",
+            "font-family": "-apple-system, BlinkMacSystemFont, \"Segoe UI\", \"PingFang SC\", \"Hiragino Sans GB\", \"Microsoft YaHei\", \"Helvetica Neue\", Helvetica, Arial, sans-serif",
+            "vertical-align": "middle",
+            "overflow": "visible",
+            "text-overflow": "clip",
+            "white-space": "nowrap"
+          },
+          "clientWidth": 54,
+          "scrollWidth": 54,
+          "clientHeight": 20,
+          "scrollHeight": 20,
+          "clipped": false,
+          "textBox": {
+            "x": 663,
+            "y": 583.8,
+            "left": 663,
+            "top": 583.8,
+            "right": 699.02,
+            "bottom": 603.8,
+            "width": 36.02,
+            "height": 20
+          },
+          "textInsideTag": true,
+          "gaps": {
+            "left": 9,
+            "right": 9,
+            "top": 0,
+            "bottom": 0
+          },
+          "horizontalCenterDelta": 0,
+          "verticalCenterDelta": 0
+        }
+      }
+    }
+  },
+  "backendNonGetForwarded": 0,
+  "errors": [],
+  "finishedAt": "2026-11-09T05:37:33.060Z"
+}

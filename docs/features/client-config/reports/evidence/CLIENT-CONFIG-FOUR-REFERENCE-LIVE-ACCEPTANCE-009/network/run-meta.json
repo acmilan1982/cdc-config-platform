@@ -1,0 +1,36 @@
+{
+  "task": "CLIENT-CONFIG-FOUR-REFERENCE-LIVE-ACCEPTANCE-009",
+  "startedAt": "2026-11-09T05:37:12.619Z",
+  "baseUrl": "http://127.0.0.1:5173",
+  "browserVersion": "147.0.7727.15",
+  "executable": "/root/.cache/ms-playwright/chromium-1217/chrome-linux64/chrome",
+  "serviceWorkers": "block",
+  "allowlistedReadOnlyApis": [
+    "/api/clients",
+    "/api/clients/data-source-options",
+    "/api/data-sources"
+  ],
+  "viewports": [
+    {
+      "name": "1440x900",
+      "width": 1440,
+      "height": 900
+    },
+    {
+      "name": "1920x1080",
+      "width": 1920,
+      "height": 1080
+    }
+  ],
+  "samples": {
+    "clientEnabled": "probe-001",
+    "clientDisabled": "hosp-008",
+    "clientLong": "CCFG004-LONGID-0123456789ABCDEFG",
+    "clientAmbiguous": "CCFG-AC-R1-HIST-COM",
+    "dsEnabled": "77711",
+    "dsInactive": "s-dssr1-0906-1",
+    "dsLong": "5905f1ce83024410836b40ca0ebfc446",
+    "dsSourceTag": "s-dssr1-0906-1",
+    "dsTargetTag": "s-dssr1-0906-4"
+  }
+}

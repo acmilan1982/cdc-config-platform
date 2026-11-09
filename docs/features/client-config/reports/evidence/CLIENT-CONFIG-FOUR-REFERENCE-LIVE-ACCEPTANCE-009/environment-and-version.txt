@@ -1,0 +1,55 @@
+CLIENT-CONFIG-FOUR-REFERENCE-LIVE-ACCEPTANCE-009 环境与版本记录
+采集日期：2026-11-09（Asia/Shanghai, +0800）
+
+一、Git 与仓库
+- 工作目录：/agent/cdc-config-platform（有效 Git 仓库）
+- 分支：develop
+- HEAD：5539f18f71664391007cb1fae084fad9970dd9ed
+- origin/develop（git ls-remote）：5539f18f71664391007cb1fae084fad9970dd9ed
+- 开工工作区：仅既有未跟踪/本地修改（.claude/settings.local.json、docs/prompts/、runtime-logs/），未纳入本轮
+
+二、主机与语言运行时
+- 内核：Linux 5.14.0-611.47.1.el9_7.x86_64
+- JDK：1.8.0_202（/usr/java/latest）
+- Node.js：v24.17.0（/opt/node）
+- npm：11.13.0
+
+三、后端服务（本任务自行启动，任务结束后停止）
+- 命令：java -jar target/cdc-config-platform-backend-1.0.0-SNAPSHOT.jar --spring.profiles.active=dev
+- PID：11706；启动时间：2026-11-09 13:29:03 +0800
+- 监听：*:8080；健康检查 http://127.0.0.1:8080/actuator/health = 200
+- Jar：backend/target/cdc-config-platform-backend-1.0.0-SNAPSHOT.jar
+  - mtime：2026-09-22 12:21:27 +0800
+  - SHA256：efdbea827b6ab84dd47105d2cc130f0bc3c5b70dc78cc626b6421e1f9750a459
+  - 说明：使用既有产物，未重新构建；jar mtime 不证明与工作区源码逐字节一致
+- 配置来源：application.yml 激活 dev；application-dev.yml 指向开发环境（Oracle 192.168.174.65:1521 / Schema CDC；ZooKeeper 10.19.16.111:2181），未接入生产、未改配置
+- 日志：runtime-logs/four-reference-live-009/backend.log（gitignored，不提交）
+  - 本轮浏览器/只读 GET 期间业务 SQL 仅 SELECT；Preparing: INSERT/UPDATE/DELETE/MERGE = 0
+  - 13:32:18 两条 ERROR 为对本机大响应只读 GET 提前关闭管道导致的 ClientAbortException（Broken pipe），非页面/业务失败
+
+四、前端服务（本任务自行启动，任务结束后停止）
+- 命令：node node_modules/.bin/vite --host 0.0.0.0 --port 5173
+- PID：11817；启动时间：2026-11-09 13:29:22 +0800
+- 监听：0.0.0.0:5173；本机 http://127.0.0.1:5173/ = 200；网络入口 http://192.168.174.70:5173/
+- 前端版本来源：Vite 开发服务器直接服务当前工作区源码（HEAD 5539f18），未构建、未改代码
+- 日志：runtime-logs/four-reference-live-009/frontend.log（gitignored，不提交）
+
+五、浏览器与采集条件
+- 浏览器：Chrome for Testing 147.0.7727.15（headless），executablePath=/root/.cache/ms-playwright/chromium-1217/chrome-linux64/chrome
+- 驱动：playwright-core（/root/.hermes/hermes-agent/node_modules/playwright-core）
+- 视口：1440×900 与 1920×1080（CSS 视口，innerWidth/innerHeight 实测与设定一致）
+- DPR：1（两视口 devicePixelRatio=1）；visualViewport.scale=1（100% 缩放）
+- 侧栏：展开（.sidebar 无 collapsed 类，实测宽 220px），两页/两视口一致
+- 字体：document.fonts.status=loaded；两页一致
+- service worker：context 级 serviceWorkers='block'，页面 navigator.serviceWorker.controller=null
+- 网络门禁：首次导航前安装 context.route；只放行同源静态资源 GET 与三条只读 API GET（/api/clients、/api/clients/data-source-options、/api/data-sources）；其余全部 abort
+- 请求台账：见 network/ledger-1440x900.json、network/ledger-1920x1080.json
+  - 每视口 122 条：静态 GET 117、只读 API GET 5（clients 1、data-source-options 3、data-sources 1）
+  - 阻断 0、业务非 GET 转发 0、其他页面/越界 API 0
+
+六、页面与样本（仅读取现有样本）
+- 探针端：http://127.0.0.1:5173/config/client
+- 参考页：http://127.0.0.1:5173/config/data-source（本轮授权开放，只读对照）
+- 样本：probe-001（启用、无异常）、hosp-008（停用）、CCFG004-LONGID-0123456789ABCDEFG（长 ID）、CCFG-AC-R1-HIST-COM（整行逗号歧义，仅用于排除 094 样本）
+- 参考页样本：77711（启用）、s-dssr1-0906-1（停用/源库）、s-dssr1-0906-4（目标库）、5905f1ce83024410836b40ca0ebfc446（长 ID）
+- 脱敏依据：samples/sample-basis.json；未创建/修改任何业务数据，未直连数据库

@@ -1,0 +1,124 @@
+{
+  "collectedAt": "2026-11-09T05:37:12.338Z",
+  "endpoints": {
+    "clients": {
+      "status": 200,
+      "total": 92,
+      "fgActiveValues": [
+        "1",
+        "0"
+      ],
+      "samples": {
+        "enabled": {
+          "clientId": "probe-001",
+          "status": "ENABLED",
+          "fgActive": "1",
+          "rowAnomalies": [],
+          "possibleCommaDataSourceIds": [],
+          "dataSources": [
+            {
+              "dataSourceId": "S3AC-S030-1",
+              "org": "S3AC-ORG",
+              "anomalies": []
+            }
+          ]
+        },
+        "disabled": {
+          "clientId": "hosp-008",
+          "status": "DISABLED",
+          "fgActive": "0",
+          "rowAnomalies": [],
+          "possibleCommaDataSourceIds": [],
+          "dataSources": [
+            {
+              "dataSourceId": "5905f1ce83024410836b40ca0ebfc446",
+              "org": "[REDACTED]",
+              "anomalies": [
+                "ASSIGNED_TO_MULTIPLE_CLIENTS"
+              ]
+            }
+          ]
+        },
+        "long": {
+          "clientId": "CCFG004-LONGID-0123456789ABCDEFG",
+          "status": "ENABLED",
+          "fgActive": "1",
+          "rowAnomalies": [],
+          "possibleCommaDataSourceIds": [],
+          "dataSources": []
+        },
+        "ambiguous": {
+          "clientId": "CCFG-AC-R1-HIST-COM",
+          "status": "DISABLED",
+          "fgActive": "0",
+          "rowAnomalies": [
+            "COMMA_PROTOCOL_AMBIGUOUS"
+          ],
+          "possibleCommaDataSourceIds": [
+            "CCFG-AC-R1-COM,ID"
+          ],
+          "dataSources": [
+            {
+              "dataSourceId": "CCFG-AC-R1-COM",
+              "anomalies": [
+                "NOT_FOUND"
+              ]
+            },
+            {
+              "dataSourceId": "ID",
+              "anomalies": [
+                "NOT_FOUND"
+              ]
+            }
+          ]
+        }
+      }
+    },
+    "dataSources": {
+      "status": 200,
+      "total": 273,
+      "fgActiveValues": [
+        "1",
+        "0",
+        "X"
+      ],
+      "samples": {
+        "enabled": {
+          "dataSourceId": "77711",
+          "dataSourceName": "22211",
+          "dataSourceCategory": "SOURCE",
+          "dataSourceType": "ORACLE",
+          "fgActive": "1"
+        },
+        "inactive": {
+          "dataSourceId": "s-dssr1-0906-1",
+          "dataSourceName": "dssr1-s1",
+          "dataSourceCategory": "SOURCE",
+          "dataSourceType": "ORACLE",
+          "fgActive": "0"
+        },
+        "long": {
+          "dataSourceId": "5905f1ce83024410836b40ca0ebfc446",
+          "dataSourceName": "oracle-业务库33",
+          "dataSourceCategory": "SOURCE",
+          "dataSourceType": "ORACLE",
+          "fgActive": "1"
+        },
+        "sourceTag": {
+          "dataSourceId": "s-dssr1-0906-1",
+          "dataSourceName": "dssr1-s1",
+          "dataSourceCategory": "SOURCE",
+          "dataSourceType": "ORACLE",
+          "fgActive": "0"
+        },
+        "targetTag": {
+          "dataSourceId": "s-dssr1-0906-4",
+          "dataSourceName": "dssr1-s4",
+          "dataSourceCategory": "TARGET",
+          "dataSourceType": "ORACLE",
+          "fgActive": "0"
+        }
+      }
+    }
+  }
+}
