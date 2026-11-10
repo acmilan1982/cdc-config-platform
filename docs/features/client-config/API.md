@@ -8,6 +8,7 @@
 | Feature 标识 | `client-config` |
 | 既有路由 | `/config/client`（保持不变） |
 | 目标文档 | `docs/features/client-config/API.md` |
+| 现行状态（2026-11-10 正式验收收口） | implementation_status=IMPLEMENTED_ACCEPTED；formal_acceptance_status=ACCEPTED；formal_acceptance_execution_status=PASS（PASS 157 / FAIL 0 / BLOCKED 0 / NOT_RUN 0 = 157，changed_ids=[]）；final_acceptance_status=ACCEPTED_BY_PROJECT_OWNER；人工试用=负责人反馈「我测试过了，没什么问题」（未推定逐项执行 157 项）；依据提交 `8ff227deea08a598f98ff4b81e3236dd8e836191`（011 远端复审 `APPROVED`）与 `reports/CLIENT-CONFIG-FORMAL-ACCEPTANCE-CLOSEOUT-013.md`；本行优先于其下历史分层/历史时点表述，历史记录原样保留 |
 | 文档状态 | `APPROVED`（接口契约正式批准：ChatGPT 对提交 `ba7c5e9...` 的设计并发口径调整结果正式复审 `APPROVED`，项目负责人于 2026-09-04 明确回复“批准”，经批准收口任务 `CLIENT-CONFIG-DESIGN-CONCURRENCY-ADJUSTMENT-APPROVAL-001` 收口为 `APPROVED`，可用于后续实现；批准的是设计基线，不代表代码已实现、已测试或验收已执行通过） |
 | 实现状态 | `NOT_STARTED`（本契约只定义目标接口，不代表任何接口已经实现） |
 | 初版任务 | `CLIENT-CONFIG-DESIGN-BASELINE-001`（阶段 4 设计基线，纯文档） |
