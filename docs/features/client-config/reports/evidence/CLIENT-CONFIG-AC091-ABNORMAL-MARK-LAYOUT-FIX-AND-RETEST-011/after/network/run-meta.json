@@ -1,0 +1,55 @@
+{
+  "task": "CLIENT-CONFIG-AC091-ABNORMAL-MARK-LAYOUT-FIX-AND-RETEST-011",
+  "startedAt": "2026-11-10T05:19:05.338Z",
+  "baseUrl": "http://127.0.0.1:5173",
+  "browserVersion": "147.0.7727.15",
+  "executable": "/root/.cache/ms-playwright/chromium-1217/chrome-linux64/chrome",
+  "serviceWorkers": "block",
+  "allowlistedReadOnlyApis": [
+    "/api/clients",
+    "/api/clients/data-source-options",
+    "/api/data-sources"
+  ],
+  "viewports": [
+    {
+      "name": "1440x900",
+      "width": 1440,
+      "height": 900
+    },
+    {
+      "name": "1920x1080",
+      "width": 1920,
+      "height": 1080
+    }
+  ],
+  "samples": {
+    "enabled": "hosp-012",
+    "disabled": "hosp-008",
+    "abnormalShort": "CCFG012X",
+    "abnormal12": "CCFG010-ABN1",
+    "abnormalMax": "CCFG011-ABNORMAL-LENGTH-MAX-6789",
+    "normalLong": "CCFG004-LONGID-0123456789ABCDEFG",
+    "dsEnabled": "77711",
+    "dsInactive": "s-dssr1-0906-1"
+  },
+  "fixture": {
+    "source": "authorized synthetic rows on CDC_CLIENT_MULTIPLE, fgActive=X",
+    "rows": [
+      {
+        "clientId": "CCFG012X",
+        "idLength": 8,
+        "fgActive": "X"
+      },
+      {
+        "clientId": "CCFG010-ABN1",
+        "idLength": 12,
+        "fgActive": "X"
+      },
+      {
+        "clientId": "CCFG011-ABNORMAL-LENGTH-MAX-6789",
+        "idLength": 32,
+        "fgActive": "X"
+      }
+    ]
+  }
+}

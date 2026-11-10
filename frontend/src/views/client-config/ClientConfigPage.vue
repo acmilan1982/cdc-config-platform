@@ -1665,13 +1665,12 @@ onBeforeUnmount(() => {
 }
 
 /* 历史异常标识：红色、固定文案 `异常：{原始值}`；文字本身承载语义，不只靠颜色（CCFG-REQ-102）。
-   列宽不足时随本列省略号截断，完整值经单实例 Tooltip 可见（CCFG-UI-035）。 */
+   标识承载需核对的原始值，故不参与收缩、不省略：列宽不足时由同行的 ID 正文单行省略，
+   标识始终按内容完整显示（CCFG-REQ-105/CCFG-UI-035）。 */
 .cc-abnormal-mark {
   display: inline-block;
-  flex: 0 1 auto;
-  min-width: 0;
+  flex: 0 0 auto;
   box-sizing: border-box;
-  max-width: 100%;
   padding: 0 6px;
   height: 20px;
   border-radius: 4px;
@@ -1680,8 +1679,6 @@ onBeforeUnmount(() => {
   font-size: 11px;
   font-weight: 700;
   line-height: 20px;
-  overflow: hidden;
-  text-overflow: ellipsis;
   white-space: nowrap;
 }
 

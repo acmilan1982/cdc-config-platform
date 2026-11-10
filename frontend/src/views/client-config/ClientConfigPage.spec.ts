@@ -721,13 +721,19 @@ describe('探针 ID 三态标识（CCFG-REQ-101/102、CCFG-UI-031/035）', () =>
     wrapper.unmount()
   })
 
-  it('静态：异常标识限宽省略而不挤压最右固定“操作”列', () => {
-    const css = cssBlock(SFC_SOURCE, '.cc-abnormal-mark')
-    expect(css).toContain('max-width: 100%')
-    expect(css).toContain('overflow: hidden')
-    expect(css).toContain('text-overflow: ellipsis')
-    expect(css).toContain('white-space: nowrap')
-    expect(css).toContain('flex: 0 1 auto')
+  it('静态：异常标识按内容完整显示、不收缩省略，由 ID 正文承担省略', () => {
+    const mark = cssBlock(SFC_SOURCE, '.cc-abnormal-mark')
+    expect(mark).toContain('flex: 0 0 auto')
+    expect(mark).toContain('white-space: nowrap')
+    // 标识承载需核对的原始值，不得靠裁切/省略隐藏
+    expect(mark).not.toContain('max-width: 100%')
+    expect(mark).not.toContain('overflow: hidden')
+    expect(mark).not.toContain('text-overflow: ellipsis')
+    // ID 正文是可收缩、可单行省略的一侧，完整值由既有 Tooltip 提供
+    const id = cssBlock(SFC_SOURCE, '.cc-id')
+    expect(id).toContain('flex: 0 1 auto')
+    expect(id).toContain('min-width: 0')
+    expect(id).toContain('text-overflow: ellipsis')
     // 承载 ID 与标识的单元格自身负责裁切
     expect(cssBlock(SFC_SOURCE, '.cc-id-cell')).toContain('overflow: hidden')
   })

@@ -1,0 +1,55 @@
+CLIENT-CONFIG-AC091-ABNORMAL-MARK-LAYOUT-FIX-AND-RETEST-011
+数据库夹具与写操作分账（脱敏；不含连接串/凭据）
+
+授权
+- 负责人原话授权：「允许agent对CDC_CLIENT_MULTIPLE表做任何操作，缺少样本让agent自己加」。
+- 执行前只读核对目标为项目 CLAUDE.md §11 指定的 Oracle 开发库 CDC schema
+  （USER=CDC、DB_NAME=prod、SERVER_HOST=snoopy-linux），与开发地址一致。
+
+执行前只读现场
+- 列：CLIENT_ID VARCHAR2(32) NOT NULL（PK）、CLIENT_DESC VARCHAR2(1024) NULL、
+  DATA_SOURCE_ID VARCHAR2(1024) NULL、FG_ACTIVE VARCHAR2(1) NOT NULL。
+- 约束：PK_CDC_CLIENT_MULTIPLE(CLIENT_ID)；SYS_C007660(CLIENT_ID) NOT NULL；
+  SYS_C007661(FG_ACTIVE) NOT NULL；FG_ACTIVE 无 CHECK 枚举约束。
+- 写前分布：'0' 92 行、'1' 1 行，合计 93 行，无 'X' 行。
+- 既有无状态可用样本：hosp-012 ('1')；hosp-008 ('0')。
+- 010 曾创建的 CCFG010X 在本次开工前已被外部改为 '0'（probe-001、hosp-008 亦为 '0'）。
+  本任务未覆盖或回写任何既有行，改为新增独立合成异常样本。
+
+DML（本任务执行；SQL*Plus 直连，与浏览器请求分账）
+- DML #1: INSERT 合成行
+  INSERT INTO CDC_CLIENT_MULTIPLE (CLIENT_ID, CLIENT_DESC, DATA_SOURCE_ID, FG_ACTIVE)
+  VALUES ('CCFG012X','AC091 layout short abnormal sample',NULL,'X');
+  影响 1 行。
+- DML #2: INSERT 合成行
+  INSERT INTO CDC_CLIENT_MULTIPLE (CLIENT_ID, CLIENT_DESC, DATA_SOURCE_ID, FG_ACTIVE)
+  VALUES ('CCFG010-ABN1','AC091 layout 12-char abnormal sample',NULL,'X');
+  影响 1 行（12 字符原反例，用于复现裁切）。
+- DML #3: INSERT 合成行
+  INSERT INTO CDC_CLIENT_MULTIPLE (CLIENT_ID, CLIENT_DESC, DATA_SOURCE_ID, FG_ACTIVE)
+  VALUES ('CCFG011-ABNORMAL-LENGTH-MAX-6789','AC091 layout max-length abnormal sample',NULL,'X');
+  影响 1 行（32 字符，CLIENT_ID VARCHAR2(32) 上限）。
+- 事务控制：COMMIT ×1。
+- 直接 DML 操作数：3；事务控制语句：1；累计影响行数：3（三条独立合成行）。
+
+回读（只读，API + SQL*Plus）
+- API /api/clients?status=ALL：总 96 行；fgActive 分布 '0' 92、'1' 1、'X' 3；
+  三条异常样本 status=ABNORMAL，fgActive 原样为 'X'（未归一化）。
+- SQL*Plus：CCFG012X(8)='X'、CCFG010-ABN1(12)='X'、
+  CCFG011-ABNORMAL-LENGTH-MAX-6789(32)='X'。
+
+前后对比一致性
+- 改前/改后探针使用同一组 ID 与同一原始状态（'X'），未缩短 ID、未改状态、未改列宽。
+
+留存
+- 保留 3 条合成记录：
+  CCFG012X / CCFG010-ABN1 / CCFG011-ABNORMAL-LENGTH-MAX-6789，fgActive='X'，
+  DATA_SOURCE_ID=NULL，CLIENT_ID 精确主键，可识别且不关联实际运行对象。
+- 回滚语句（备查，未执行）：
+  DELETE FROM CDC_CLIENT_MULTIPLE
+   WHERE CLIENT_ID IN ('CCFG012X','CCFG010-ABN1','CCFG011-ABNORMAL-LENGTH-MAX-6789');
+  COMMIT;
+
+业务写入
+- 浏览器复测期间业务 API 写入（POST/PUT/DELETE）0；编辑弹窗均取消关闭、未保存。
+- 未在数据源管理页写入；未修改业务旧行、其他表、表结构、配置、ZooKeeper、Kafka 或同步进程。

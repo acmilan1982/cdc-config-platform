@@ -1,0 +1,882 @@
+{
+  "viewport": {
+    "name": "1440x900",
+    "width": 1440,
+    "height": 900
+  },
+  "browserVersion": "147.0.7727.15",
+  "entries": [
+    {
+      "method": "GET",
+      "url": "http://127.0.0.1:5173/config/client",
+      "resourceType": "document",
+      "allowed": true,
+      "reason": "static"
+    },
+    {
+      "method": "GET",
+      "url": "http://127.0.0.1:5173/@vite/client",
+      "resourceType": "script",
+      "allowed": true,
+      "reason": "static"
+    },
+    {
+      "method": "GET",
+      "url": "http://127.0.0.1:5173/src/main.ts",
+      "resourceType": "script",
+      "allowed": true,
+      "reason": "static"
+    },
+    {
+      "method": "GET",
+      "url": "http://127.0.0.1:5173/node_modules/.vite/deps/vue.js?v=46e20f96",
+      "resourceType": "script",
+      "allowed": true,
+      "reason": "static"
+    },
+    {
+      "method": "GET",
+      "url": "http://127.0.0.1:5173/node_modules/.vite/deps/element-plus.js?v=46e20f96",
+      "resourceType": "script",
+      "allowed": true,
+      "reason": "static"
+    },
+    {
+      "method": "GET",
+      "url": "http://127.0.0.1:5173/node_modules/element-plus/dist/index.css",
+      "resourceType": "script",
+      "allowed": true,
+      "reason": "static"
+    },
+    {
+      "method": "GET",
+      "url": "http://127.0.0.1:5173/node_modules/.vite/deps/element-plus_es_locale_lang_zh-cn.js?v=46e20f96",
+      "resourceType": "script",
+      "allowed": true,
+      "reason": "static"
+    },
+    {
+      "method": "GET",
+      "url": "http://127.0.0.1:5173/src/App.vue",
+      "resourceType": "script",
+      "allowed": true,
+      "reason": "static"
+    },
+    {
+      "method": "GET",
+      "url": "http://127.0.0.1:5173/src/router/index.ts",
+      "resourceType": "script",
+      "allowed": true,
+      "reason": "static"
+    },
+    {
+      "method": "GET",
+      "url": "http://127.0.0.1:5173/src/stores/index.ts",
+      "resourceType": "script",
+      "allowed": true,
+      "reason": "static"
+    },
+    {
+      "method": "GET",
+      "url": "http://127.0.0.1:5173/src/styles/global.css",
+      "resourceType": "script",
+      "allowed": true,
+      "reason": "static"
+    },
+    {
+      "method": "GET",
+      "url": "http://127.0.0.1:5173/src/styles/dialog/create-edit-dialog-visual.css",
+      "resourceType": "script",
+      "allowed": true,
+      "reason": "static"
+    },
+    {
+      "method": "GET",
+      "url": "http://127.0.0.1:5173/node_modules/vite/dist/client/env.mjs",
+      "resourceType": "script",
+      "allowed": true,
+      "reason": "static"
+    },
+    {
+      "method": "GET",
+      "url": "http://127.0.0.1:5173/node_modules/.vite/deps/chunk-J5D6QMP7.js?v=46e20f96",
+      "resourceType": "script",
+      "allowed": true,
+      "reason": "static"
+    },
+    {
+      "method": "GET",
+      "url": "http://127.0.0.1:5173/node_modules/.vite/deps/chunk-G3PMV62Z.js?v=46e20f96",
+      "resourceType": "script",
+      "allowed": true,
+      "reason": "static"
+    },
+    {
+      "method": "GET",
+      "url": "http://127.0.0.1:5173/node_modules/.vite/deps/vue-router.js?v=46e20f96",
+      "resourceType": "script",
+      "allowed": true,
+      "reason": "static"
+    },
+    {
+      "method": "GET",
+      "url": "http://127.0.0.1:5173/src/layouts/MainLayout.vue",
+      "resourceType": "script",
+      "allowed": true,
+      "reason": "static"
+    },
+    {
+      "method": "GET",
+      "url": "http://127.0.0.1:5173/@id/__x00__plugin-vue:export-helper",
+      "resourceType": "script",
+      "allowed": true,
+      "reason": "static"
+    },
+    {
+      "method": "GET",
+      "url": "http://127.0.0.1:5173/node_modules/.vite/deps/pinia.js?v=46e20f96",
+      "resourceType": "script",
+      "allowed": true,
+      "reason": "static"
+    },
+    {
+      "method": "GET",
+      "url": "http://127.0.0.1:5173/node_modules/.vite/deps/chunk-YFT6OQ5R.js?v=46e20f96",
+      "resourceType": "script",
+      "allowed": true,
+      "reason": "static"
+    },
+    {
+      "method": "GET",
+      "url": "http://127.0.0.1:5173/src/stores/app.ts",
+      "resourceType": "script",
+      "allowed": true,
+      "reason": "static"
+    },
+    {
+      "method": "GET",
+      "url": "http://127.0.0.1:5173/src/layouts/Sidebar.vue",
+      "resourceType": "script",
+      "allowed": true,
+      "reason": "static"
+    },
+    {
+      "method": "GET",
+      "url": "http://127.0.0.1:5173/src/layouts/HeaderBar.vue",
+      "resourceType": "script",
+      "allowed": true,
+      "reason": "static"
+    },
+    {
+      "method": "GET",
+      "url": "http://127.0.0.1:5173/src/layouts/MainLayout.vue?vue&type=style&index=0&scoped=22686b16&lang.css",
+      "resourceType": "script",
+      "allowed": true,
+      "reason": "static"
+    },
+    {
+      "method": "GET",
+      "url": "http://127.0.0.1:5173/src/config/menu.ts",
+      "resourceType": "script",
+      "allowed": true,
+      "reason": "static"
+    },
+    {
+      "method": "GET",
+      "url": "http://127.0.0.1:5173/src/views/log-query/reinitBus.ts",
+      "resourceType": "script",
+      "allowed": true,
+      "reason": "static"
+    },
+    {
+      "method": "GET",
+      "url": "http://127.0.0.1:5173/src/layouts/Sidebar.vue?vue&type=style&index=0&scoped=cc56cb04&lang.css",
+      "resourceType": "script",
+      "allowed": true,
+      "reason": "static"
+    },
+    {
+      "method": "GET",
+      "url": "http://127.0.0.1:5173/node_modules/.vite/deps/@element-plus_icons-vue.js?v=46e20f96",
+      "resourceType": "script",
+      "allowed": true,
+      "reason": "static"
+    },
+    {
+      "method": "GET",
+      "url": "http://127.0.0.1:5173/src/layouts/HeaderBar.vue?vue&type=style&index=0&scoped=ddbc33b4&lang.css",
+      "resourceType": "script",
+      "allowed": true,
+      "reason": "static"
+    },
+    {
+      "method": "GET",
+      "url": "http://127.0.0.1:5173/node_modules/.vite/deps/chunk-YTRRJBUP.js?v=46e20f96",
+      "resourceType": "script",
+      "allowed": true,
+      "reason": "static"
+    },
+    {
+      "method": "GET",
+      "url": "http://127.0.0.1:5173/node_modules/.vite/deps/chunk-Q6SH2LQN.js?v=46e20f96",
+      "resourceType": "script",
+      "allowed": true,
+      "reason": "static"
+    },
+    {
+      "method": "GET",
+      "url": "http://127.0.0.1:5173/src/views/client-config/ClientConfigPage.vue",
+      "resourceType": "script",
+      "allowed": true,
+      "reason": "static"
+    },
+    {
+      "method": "GET",
+      "url": "http://127.0.0.1:5173/src/components/query-list/index.ts",
+      "resourceType": "script",
+      "allowed": true,
+      "reason": "static"
+    },
+    {
+      "method": "GET",
+      "url": "http://127.0.0.1:5173/src/styles/list-table/index.ts",
+      "resourceType": "script",
+      "allowed": true,
+      "reason": "static"
+    },
+    {
+      "method": "GET",
+      "url": "http://127.0.0.1:5173/src/views/client-config/listLayout.ts",
+      "resourceType": "script",
+      "allowed": true,
+      "reason": "static"
+    },
+    {
+      "method": "GET",
+      "url": "http://127.0.0.1:5173/src/api/clientConfig.ts",
+      "resourceType": "script",
+      "allowed": true,
+      "reason": "static"
+    },
+    {
+      "method": "GET",
+      "url": "http://127.0.0.1:5173/src/styles/list-table/list-table-visual.css?vue&type=style&index=0&src=093fb766&scoped=093fb766&lang.css",
+      "resourceType": "script",
+      "allowed": true,
+      "reason": "static"
+    },
+    {
+      "method": "GET",
+      "url": "http://127.0.0.1:5173/src/views/client-config/ClientConfigPage.vue?vue&type=style&index=1&scoped=093fb766&lang.css",
+      "resourceType": "script",
+      "allowed": true,
+      "reason": "static"
+    },
+    {
+      "method": "GET",
+      "url": "http://127.0.0.1:5173/src/views/client-config/ClientConfigPage.vue?vue&type=style&index=2&lang.css",
+      "resourceType": "script",
+      "allowed": true,
+      "reason": "static"
+    },
+    {
+      "method": "GET",
+      "url": "http://127.0.0.1:5173/src/views/client-config/ClientConfigPage.vue?vue&type=style&index=3&lang.css",
+      "resourceType": "script",
+      "allowed": true,
+      "reason": "static"
+    },
+    {
+      "method": "GET",
+      "url": "http://127.0.0.1:5173/src/views/client-config/ClientConfigPage.vue?vue&type=style&index=4&lang.css",
+      "resourceType": "script",
+      "allowed": true,
+      "reason": "static"
+    },
+    {
+      "method": "GET",
+      "url": "http://127.0.0.1:5173/vite.svg",
+      "resourceType": "other",
+      "allowed": true,
+      "reason": "static"
+    },
+    {
+      "method": "GET",
+      "url": "http://127.0.0.1:5173/src/components/query-list/QueryListPageShell.vue",
+      "resourceType": "script",
+      "allowed": true,
+      "reason": "static"
+    },
+    {
+      "method": "GET",
+      "url": "http://127.0.0.1:5173/src/components/query-list/QueryListQueryPanel.vue",
+      "resourceType": "script",
+      "allowed": true,
+      "reason": "static"
+    },
+    {
+      "method": "GET",
+      "url": "http://127.0.0.1:5173/src/components/query-list/QueryListActions.vue",
+      "resourceType": "script",
+      "allowed": true,
+      "reason": "static"
+    },
+    {
+      "method": "GET",
+      "url": "http://127.0.0.1:5173/src/components/query-list/QueryListResultPanel.vue",
+      "resourceType": "script",
+      "allowed": true,
+      "reason": "static"
+    },
+    {
+      "method": "GET",
+      "url": "http://127.0.0.1:5173/src/components/query-list/QueryListRefreshToolbar.vue",
+      "resourceType": "script",
+      "allowed": true,
+      "reason": "static"
+    },
+    {
+      "method": "GET",
+      "url": "http://127.0.0.1:5173/src/components/query-list/QueryListTooltipHost.vue",
+      "resourceType": "script",
+      "allowed": true,
+      "reason": "static"
+    },
+    {
+      "method": "GET",
+      "url": "http://127.0.0.1:5173/src/composables/query-list/useQueryListTooltip.ts",
+      "resourceType": "script",
+      "allowed": true,
+      "reason": "static"
+    },
+    {
+      "method": "GET",
+      "url": "http://127.0.0.1:5173/src/services/http.ts",
+      "resourceType": "script",
+      "allowed": true,
+      "reason": "static"
+    },
+    {
+      "method": "GET",
+      "url": "http://127.0.0.1:5173/src/components/query-list/QueryListPageShell.vue?vue&type=style&index=0&scoped=d1dfb007&lang.css",
+      "resourceType": "script",
+      "allowed": true,
+      "reason": "static"
+    },
+    {
+      "method": "GET",
+      "url": "http://127.0.0.1:5173/src/components/query-list/QueryListQueryPanel.vue?vue&type=style&index=0&scoped=590ed958&lang.css",
+      "resourceType": "script",
+      "allowed": true,
+      "reason": "static"
+    },
+    {
+      "method": "GET",
+      "url": "http://127.0.0.1:5173/src/components/query-list/QueryListActions.vue?vue&type=style&index=0&scoped=c3792fcc&lang.css",
+      "resourceType": "script",
+      "allowed": true,
+      "reason": "static"
+    },
+    {
+      "method": "GET",
+      "url": "http://127.0.0.1:5173/src/components/query-list/query-list-spinner.css?vue&type=style&index=1&src=c3792fcc&scoped=c3792fcc&lang.css",
+      "resourceType": "script",
+      "allowed": true,
+      "reason": "static"
+    },
+    {
+      "method": "GET",
+      "url": "http://127.0.0.1:5173/src/components/query-list/QueryListResultPanel.vue?vue&type=style&index=0&scoped=6a4c8a4f&lang.css",
+      "resourceType": "script",
+      "allowed": true,
+      "reason": "static"
+    },
+    {
+      "method": "GET",
+      "url": "http://127.0.0.1:5173/src/components/query-list/QueryListRefreshToolbar.vue?vue&type=style&index=0&scoped=92468505&lang.css",
+      "resourceType": "script",
+      "allowed": true,
+      "reason": "static"
+    },
+    {
+      "method": "GET",
+      "url": "http://127.0.0.1:5173/src/components/query-list/query-list-spinner.css?vue&type=style&index=1&src=92468505&scoped=92468505&lang.css",
+      "resourceType": "script",
+      "allowed": true,
+      "reason": "static"
+    },
+    {
+      "method": "GET",
+      "url": "http://127.0.0.1:5173/node_modules/.vite/deps/axios.js?v=46e20f96",
+      "resourceType": "script",
+      "allowed": true,
+      "reason": "static"
+    },
+    {
+      "method": "GET",
+      "url": "http://127.0.0.1:5173/src/components/query-list/QueryListTooltipHost.vue?vue&type=style&index=0&scoped=5ce3ff40&lang.css",
+      "resourceType": "script",
+      "allowed": true,
+      "reason": "static"
+    },
+    {
+      "method": "GET",
+      "url": "http://127.0.0.1:5173/api/clients?status=ALL",
+      "resourceType": "xhr",
+      "allowed": true,
+      "reason": "readonly-api-get"
+    },
+    {
+      "method": "GET",
+      "url": "http://127.0.0.1:5173/api/clients/data-source-options?excludeClientId=CCFG010-ABN1",
+      "resourceType": "xhr",
+      "allowed": true,
+      "reason": "readonly-api-get"
+    },
+    {
+      "method": "GET",
+      "url": "http://127.0.0.1:5173/api/clients/data-source-options?excludeClientId=CCFG010-ABN1",
+      "resourceType": "xhr",
+      "allowed": true,
+      "reason": "readonly-api-get"
+    },
+    {
+      "method": "GET",
+      "url": "http://127.0.0.1:5173/api/clients/data-source-options?excludeClientId=CCFG011-ABNORMAL-LENGTH-MAX-6789",
+      "resourceType": "xhr",
+      "allowed": true,
+      "reason": "readonly-api-get"
+    },
+    {
+      "method": "GET",
+      "url": "http://127.0.0.1:5173/api/clients/data-source-options?excludeClientId=CCFG011-ABNORMAL-LENGTH-MAX-6789",
+      "resourceType": "xhr",
+      "allowed": true,
+      "reason": "readonly-api-get"
+    },
+    {
+      "method": "GET",
+      "url": "http://127.0.0.1:5173/api/clients/data-source-options?excludeClientId=CCFG004-LONGID-0123456789ABCDEFG",
+      "resourceType": "xhr",
+      "allowed": true,
+      "reason": "readonly-api-get"
+    },
+    {
+      "method": "GET",
+      "url": "http://127.0.0.1:5173/config/data-source",
+      "resourceType": "document",
+      "allowed": true,
+      "reason": "static"
+    },
+    {
+      "method": "GET",
+      "url": "http://127.0.0.1:5173/@vite/client",
+      "resourceType": "script",
+      "allowed": true,
+      "reason": "static"
+    },
+    {
+      "method": "GET",
+      "url": "http://127.0.0.1:5173/src/main.ts",
+      "resourceType": "script",
+      "allowed": true,
+      "reason": "static"
+    },
+    {
+      "method": "GET",
+      "url": "http://127.0.0.1:5173/node_modules/.vite/deps/vue.js?v=46e20f96",
+      "resourceType": "script",
+      "allowed": true,
+      "reason": "static"
+    },
+    {
+      "method": "GET",
+      "url": "http://127.0.0.1:5173/node_modules/.vite/deps/element-plus.js?v=46e20f96",
+      "resourceType": "script",
+      "allowed": true,
+      "reason": "static"
+    },
+    {
+      "method": "GET",
+      "url": "http://127.0.0.1:5173/node_modules/element-plus/dist/index.css",
+      "resourceType": "script",
+      "allowed": true,
+      "reason": "static"
+    },
+    {
+      "method": "GET",
+      "url": "http://127.0.0.1:5173/node_modules/.vite/deps/element-plus_es_locale_lang_zh-cn.js?v=46e20f96",
+      "resourceType": "script",
+      "allowed": true,
+      "reason": "static"
+    },
+    {
+      "method": "GET",
+      "url": "http://127.0.0.1:5173/src/App.vue",
+      "resourceType": "script",
+      "allowed": true,
+      "reason": "static"
+    },
+    {
+      "method": "GET",
+      "url": "http://127.0.0.1:5173/src/router/index.ts",
+      "resourceType": "script",
+      "allowed": true,
+      "reason": "static"
+    },
+    {
+      "method": "GET",
+      "url": "http://127.0.0.1:5173/src/stores/index.ts",
+      "resourceType": "script",
+      "allowed": true,
+      "reason": "static"
+    },
+    {
+      "method": "GET",
+      "url": "http://127.0.0.1:5173/src/styles/global.css",
+      "resourceType": "script",
+      "allowed": true,
+      "reason": "static"
+    },
+    {
+      "method": "GET",
+      "url": "http://127.0.0.1:5173/src/styles/dialog/create-edit-dialog-visual.css",
+      "resourceType": "script",
+      "allowed": true,
+      "reason": "static"
+    },
+    {
+      "method": "GET",
+      "url": "http://127.0.0.1:5173/node_modules/vite/dist/client/env.mjs",
+      "resourceType": "script",
+      "allowed": true,
+      "reason": "static"
+    },
+    {
+      "method": "GET",
+      "url": "http://127.0.0.1:5173/node_modules/.vite/deps/chunk-J5D6QMP7.js?v=46e20f96",
+      "resourceType": "script",
+      "allowed": true,
+      "reason": "static"
+    },
+    {
+      "method": "GET",
+      "url": "http://127.0.0.1:5173/node_modules/.vite/deps/chunk-G3PMV62Z.js?v=46e20f96",
+      "resourceType": "script",
+      "allowed": true,
+      "reason": "static"
+    },
+    {
+      "method": "GET",
+      "url": "http://127.0.0.1:5173/node_modules/.vite/deps/vue-router.js?v=46e20f96",
+      "resourceType": "script",
+      "allowed": true,
+      "reason": "static"
+    },
+    {
+      "method": "GET",
+      "url": "http://127.0.0.1:5173/src/layouts/MainLayout.vue",
+      "resourceType": "script",
+      "allowed": true,
+      "reason": "static"
+    },
+    {
+      "method": "GET",
+      "url": "http://127.0.0.1:5173/@id/__x00__plugin-vue:export-helper",
+      "resourceType": "script",
+      "allowed": true,
+      "reason": "static"
+    },
+    {
+      "method": "GET",
+      "url": "http://127.0.0.1:5173/node_modules/.vite/deps/pinia.js?v=46e20f96",
+      "resourceType": "script",
+      "allowed": true,
+      "reason": "static"
+    },
+    {
+      "method": "GET",
+      "url": "http://127.0.0.1:5173/src/stores/app.ts",
+      "resourceType": "script",
+      "allowed": true,
+      "reason": "static"
+    },
+    {
+      "method": "GET",
+      "url": "http://127.0.0.1:5173/src/layouts/Sidebar.vue",
+      "resourceType": "script",
+      "allowed": true,
+      "reason": "static"
+    },
+    {
+      "method": "GET",
+      "url": "http://127.0.0.1:5173/src/layouts/HeaderBar.vue",
+      "resourceType": "script",
+      "allowed": true,
+      "reason": "static"
+    },
+    {
+      "method": "GET",
+      "url": "http://127.0.0.1:5173/src/layouts/MainLayout.vue?vue&type=style&index=0&scoped=22686b16&lang.css",
+      "resourceType": "script",
+      "allowed": true,
+      "reason": "static"
+    },
+    {
+      "method": "GET",
+      "url": "http://127.0.0.1:5173/node_modules/.vite/deps/chunk-YFT6OQ5R.js?v=46e20f96",
+      "resourceType": "script",
+      "allowed": true,
+      "reason": "static"
+    },
+    {
+      "method": "GET",
+      "url": "http://127.0.0.1:5173/src/config/menu.ts",
+      "resourceType": "script",
+      "allowed": true,
+      "reason": "static"
+    },
+    {
+      "method": "GET",
+      "url": "http://127.0.0.1:5173/src/views/log-query/reinitBus.ts",
+      "resourceType": "script",
+      "allowed": true,
+      "reason": "static"
+    },
+    {
+      "method": "GET",
+      "url": "http://127.0.0.1:5173/src/layouts/Sidebar.vue?vue&type=style&index=0&scoped=cc56cb04&lang.css",
+      "resourceType": "script",
+      "allowed": true,
+      "reason": "static"
+    },
+    {
+      "method": "GET",
+      "url": "http://127.0.0.1:5173/node_modules/.vite/deps/@element-plus_icons-vue.js?v=46e20f96",
+      "resourceType": "script",
+      "allowed": true,
+      "reason": "static"
+    },
+    {
+      "method": "GET",
+      "url": "http://127.0.0.1:5173/src/layouts/HeaderBar.vue?vue&type=style&index=0&scoped=ddbc33b4&lang.css",
+      "resourceType": "script",
+      "allowed": true,
+      "reason": "static"
+    },
+    {
+      "method": "GET",
+      "url": "http://127.0.0.1:5173/node_modules/.vite/deps/chunk-YTRRJBUP.js?v=46e20f96",
+      "resourceType": "script",
+      "allowed": true,
+      "reason": "static"
+    },
+    {
+      "method": "GET",
+      "url": "http://127.0.0.1:5173/node_modules/.vite/deps/chunk-Q6SH2LQN.js?v=46e20f96",
+      "resourceType": "script",
+      "allowed": true,
+      "reason": "static"
+    },
+    {
+      "method": "GET",
+      "url": "http://127.0.0.1:5173/src/views/data-source/DataSourcePage.vue",
+      "resourceType": "script",
+      "allowed": true,
+      "reason": "static"
+    },
+    {
+      "method": "GET",
+      "url": "http://127.0.0.1:5173/vite.svg",
+      "resourceType": "other",
+      "allowed": true,
+      "reason": "static"
+    },
+    {
+      "method": "GET",
+      "url": "http://127.0.0.1:5173/node_modules/.vite/deps/async-validator.js?v=46e20f96",
+      "resourceType": "script",
+      "allowed": true,
+      "reason": "static"
+    },
+    {
+      "method": "GET",
+      "url": "http://127.0.0.1:5173/src/views/data-source/draggableDialog.ts",
+      "resourceType": "script",
+      "allowed": true,
+      "reason": "static"
+    },
+    {
+      "method": "GET",
+      "url": "http://127.0.0.1:5173/src/components/query-list/index.ts",
+      "resourceType": "script",
+      "allowed": true,
+      "reason": "static"
+    },
+    {
+      "method": "GET",
+      "url": "http://127.0.0.1:5173/src/styles/list-table/index.ts",
+      "resourceType": "script",
+      "allowed": true,
+      "reason": "static"
+    },
+    {
+      "method": "GET",
+      "url": "http://127.0.0.1:5173/src/api/dataSource.ts",
+      "resourceType": "script",
+      "allowed": true,
+      "reason": "static"
+    },
+    {
+      "method": "GET",
+      "url": "http://127.0.0.1:5173/src/styles/list-table/list-table-visual.css?vue&type=style&index=0&src=814877e4&scoped=814877e4&lang.css",
+      "resourceType": "script",
+      "allowed": true,
+      "reason": "static"
+    },
+    {
+      "method": "GET",
+      "url": "http://127.0.0.1:5173/src/views/data-source/DataSourcePage.vue?vue&type=style&index=1&scoped=814877e4&lang.css",
+      "resourceType": "script",
+      "allowed": true,
+      "reason": "static"
+    },
+    {
+      "method": "GET",
+      "url": "http://127.0.0.1:5173/src/views/data-source/DataSourcePage.vue?vue&type=style&index=2&lang.css",
+      "resourceType": "script",
+      "allowed": true,
+      "reason": "static"
+    },
+    {
+      "method": "GET",
+      "url": "http://127.0.0.1:5173/src/components/query-list/QueryListPageShell.vue",
+      "resourceType": "script",
+      "allowed": true,
+      "reason": "static"
+    },
+    {
+      "method": "GET",
+      "url": "http://127.0.0.1:5173/src/components/query-list/QueryListQueryPanel.vue",
+      "resourceType": "script",
+      "allowed": true,
+      "reason": "static"
+    },
+    {
+      "method": "GET",
+      "url": "http://127.0.0.1:5173/src/components/query-list/QueryListActions.vue",
+      "resourceType": "script",
+      "allowed": true,
+      "reason": "static"
+    },
+    {
+      "method": "GET",
+      "url": "http://127.0.0.1:5173/src/components/query-list/QueryListResultPanel.vue",
+      "resourceType": "script",
+      "allowed": true,
+      "reason": "static"
+    },
+    {
+      "method": "GET",
+      "url": "http://127.0.0.1:5173/src/components/query-list/QueryListRefreshToolbar.vue",
+      "resourceType": "script",
+      "allowed": true,
+      "reason": "static"
+    },
+    {
+      "method": "GET",
+      "url": "http://127.0.0.1:5173/src/components/query-list/QueryListTooltipHost.vue",
+      "resourceType": "script",
+      "allowed": true,
+      "reason": "static"
+    },
+    {
+      "method": "GET",
+      "url": "http://127.0.0.1:5173/src/composables/query-list/useQueryListTooltip.ts",
+      "resourceType": "script",
+      "allowed": true,
+      "reason": "static"
+    },
+    {
+      "method": "GET",
+      "url": "http://127.0.0.1:5173/src/services/http.ts",
+      "resourceType": "script",
+      "allowed": true,
+      "reason": "static"
+    },
+    {
+      "method": "GET",
+      "url": "http://127.0.0.1:5173/src/components/query-list/QueryListPageShell.vue?vue&type=style&index=0&scoped=d1dfb007&lang.css",
+      "resourceType": "script",
+      "allowed": true,
+      "reason": "static"
+    },
+    {
+      "method": "GET",
+      "url": "http://127.0.0.1:5173/src/components/query-list/QueryListQueryPanel.vue?vue&type=style&index=0&scoped=590ed958&lang.css",
+      "resourceType": "script",
+      "allowed": true,
+      "reason": "static"
+    },
+    {
+      "method": "GET",
+      "url": "http://127.0.0.1:5173/src/components/query-list/QueryListActions.vue?vue&type=style&index=0&scoped=c3792fcc&lang.css",
+      "resourceType": "script",
+      "allowed": true,
+      "reason": "static"
+    },
+    {
+      "method": "GET",
+      "url": "http://127.0.0.1:5173/src/components/query-list/query-list-spinner.css?vue&type=style&index=1&src=c3792fcc&scoped=c3792fcc&lang.css",
+      "resourceType": "script",
+      "allowed": true,
+      "reason": "static"
+    },
+    {
+      "method": "GET",
+      "url": "http://127.0.0.1:5173/src/components/query-list/QueryListResultPanel.vue?vue&type=style&index=0&scoped=6a4c8a4f&lang.css",
+      "resourceType": "script",
+      "allowed": true,
+      "reason": "static"
+    },
+    {
+      "method": "GET",
+      "url": "http://127.0.0.1:5173/src/components/query-list/QueryListRefreshToolbar.vue?vue&type=style&index=0&scoped=92468505&lang.css",
+      "resourceType": "script",
+      "allowed": true,
+      "reason": "static"
+    },
+    {
+      "method": "GET",
+      "url": "http://127.0.0.1:5173/src/components/query-list/query-list-spinner.css?vue&type=style&index=1&src=92468505&scoped=92468505&lang.css",
+      "resourceType": "script",
+      "allowed": true,
+      "reason": "static"
+    },
+    {
+      "method": "GET",
+      "url": "http://127.0.0.1:5173/src/components/query-list/QueryListTooltipHost.vue?vue&type=style&index=0&scoped=5ce3ff40&lang.css",
+      "resourceType": "script",
+      "allowed": true,
+      "reason": "static"
+    },
+    {
+      "method": "GET",
+      "url": "http://127.0.0.1:5173/node_modules/.vite/deps/axios.js?v=46e20f96",
+      "resourceType": "script",
+      "allowed": true,
+      "reason": "static"
+    },
+    {
+      "method": "GET",
+      "url": "http://127.0.0.1:5173/api/data-sources",
+      "resourceType": "xhr",
+      "allowed": true,
+      "reason": "readonly-api-get"
+    }
+  ],
+  "backendNonGetForwarded": 0,
+  "blockedBusinessNonGet": 0,
+  "blockedCount": 0,
+  "allowedCount": 124
+}

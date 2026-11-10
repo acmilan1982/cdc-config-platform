@@ -1,0 +1,51 @@
+CLIENT-CONFIG-AC091-ABNORMAL-MARK-LAYOUT-FIX-AND-RETEST-011
+环境与版本（脱敏；不含连接串/凭据）
+
+仓库/分支
+- repo: /agent/cdc-config-platform
+- branch: develop
+- base_commit: 545e915b034e117e9c0b899ac9a16c7bd0aba1ad（010-R1 文档复审基线）
+- origin/develop（开工时与推送前）: 545e915b034e117e9c0b899ac9a16c7bd0aba1ad
+
+基础环境
+- java: 1.8.0_202 (Oracle JDK 8)
+- maven: Apache Maven 3.8.8 (/usr/local/maven/bin/mvn)
+- node: v24.17.0
+- npm: 11.13.0
+- database client: SQL*Plus / Oracle Instant Client（/opt/oracle/instantclient）
+- browser: Chrome for Testing 147.0.7727.15 (headless, playwright-core)
+- DPR: 1；页面缩放 100%；侧栏展开（.sidebar 实测 220px，无 collapsed）
+- viewport: 1440x900、1920x1080
+- document.fonts.status = loaded
+
+服务（本任务自行启动；仅停止本轮启动的进程）
+- backend: 既有产物 jar `backend/target/cdc-config-platform-backend-1.0.0-SNAPSHOT.jar`，
+  `--spring.profiles.active=dev`；实际监听 PID 3667（包装 PID 3665）；监听 *:8080；健康检查 200；
+  启动后未重新构建。
+- frontend: `node node_modules/.bin/vite --host 0.0.0.0 --port 5173`；
+  实际监听 PID 3717（包装 PID 3716）；监听 0.0.0.0:5173；页面 200；
+  Vite dev server 直接服务当前工作区源码（未构建）。
+- 基线与修复后页面：改前采集发生在工作区未修改源码时；改后采集在同一 Vite 实例上
+  重新导航，加载修改后的 `ClientConfigPage.vue`（HMR/重新编译）；后端 jar 全程未变。
+
+数据库
+- 目标：项目 CLAUDE.md §11 指定的 Oracle 19c 开发库 CDC schema（只读核对：
+  USER=CDC、DB_NAME=prod、SERVER_HOST=snoopy-linux），与开发地址一致。
+- 表：CDC_CLIENT_MULTIPLE（探针端探针定义）；列：
+  CLIENT_ID VARCHAR2(32) NOT NULL（PK PK_CDC_CLIENT_MULTIPLE），
+  CLIENT_DESC VARCHAR2(1024) NULL，DATA_SOURCE_ID VARCHAR2(1024) NULL，
+  FG_ACTIVE VARCHAR2(1) NOT NULL。
+- 约束：PK_CDC_CLIENT_MULTIPLE(CLIENT_ID)（P）；SYS_C007660(CLIENT_ID)（C，NOT NULL）；
+  SYS_C007661(FG_ACTIVE)（C，NOT NULL）；FG_ACTIVE 无 CHECK 枚举约束。
+- 本任务未访问其他业务表；未改表结构、配置、ZooKeeper、Kafka 或同步进程。
+
+网络门禁
+- context 级 route 于首次导航前安装；serviceWorkers='block'。
+- 仅放行同源静态资源 GET/HEAD/OPTIONS 与
+  /api/clients、/api/clients/data-source-options、/api/data-sources 三条只读 GET。
+- 阻断全部业务非 GET 与越界/外部请求；两视口各 124 条请求，business non-GET forwarded=0，
+  blocked=0，browser errors=0。详见 network/ledger-*.json 与 network/run-summary.json。
+
+采集时间（UTC）
+- before: 2026-11-10T05:17:53Z ~ 2026-11-10T05:18:46Z（1440x900 / 1920x1080）
+- after:  2026-11-10T05:19:05Z ~ 2026-11-10T05:19:54Z（1440x900 / 1920x1080）
