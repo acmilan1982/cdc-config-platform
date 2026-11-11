@@ -1,10 +1,10 @@
-# 公共列表管理页模板 · 能力盘点与第一步范围（第一步已确认；第二步最小实现已落地）
+# 公共列表管理页模板 · 能力盘点与第一步范围（第二步已收口，第三步待负责人确认）
 
 ```text
-list_management_page_template_document_status=PHASE_2_IMPLEMENTED_PENDING_REMOTE_REVIEW_AND_OWNER_VISUAL_ACCEPTANCE
+list_management_page_template_document_status=PHASE_2_ACCEPTANCE_CLOSED_PENDING_PHASE_3_SCOPE_DECISION
 list_management_page_template_baseline_status=NOT_APPROVED
-task_scope=PHASE_2_MINIMUM_IMPLEMENTATION_AND_DOC_SYNC
-task_code=PUBLIC-LIST-MANAGEMENT-TEMPLATE-PHASE-2-IMPLEMENTATION-001
+task_scope=PHASE_2_ACCEPTANCE_CLOSEOUT_DOC_ONLY
+task_code=PUBLIC-LIST-MANAGEMENT-TEMPLATE-PHASE-2-ACCEPTANCE-CLOSEOUT-001
 original_inventory_task_code=PUBLIC-LIST-MANAGEMENT-TEMPLATE-INVENTORY-AND-SCOPE-DRAFT-001
 inventory_source_commit=6560c73fb71aa5b8441de4a57fe777d7810b12da
 r0_result_commit=03e4bffa49e3a74300a7c604969130473017a631
@@ -15,20 +15,39 @@ owner_scope_confirmation_date=2026-11-11
 phase_1_scope_status=CONFIRMED
 phase_2_first_reference_page=/config/client
 phase_2_implementation_status=IMPLEMENTED
+phase_2_implementation_task_code=PUBLIC-LIST-MANAGEMENT-TEMPLATE-PHASE-2-IMPLEMENTATION-001
+phase_2_implementation_commit=e1880494a50d7ad9842b4db9026963efc84e6441
+phase_2_implementation_base_commit=4809577c3ee4733780052a674c54d9cecb215ef2
 phase_2_style_entry=frontend/src/styles/list-management/list-management-visual.css
 phase_2_probe_adoption=CLASSES_BOUND_OLD_PRIVATE_RULES_REMOVED
+phase_2_remote_code_review_status=APPROVED
+phase_2_remote_code_review_reviewer=CHATGPT
+phase_2_remote_code_review_date=2026-11-11
+phase_2_remote_code_review_target_commit=e1880494a50d7ad9842b4db9026963efc84e6441
+phase_2_owner_visual_acceptance_status=PASSED
+phase_2_owner_visual_acceptance_date=2026-11-11
+phase_2_owner_visual_acceptance_scope=/config/client_THREE_SHARED_STYLES_AND_PAGE_PRESENTATION
 phase_2_acceptance_status=NOT_EXECUTED
+phase_2_closeout_status=CLOSED
 phase_3_candidate_status=CANDIDATE_NOT_AUTHORIZED
-next_entry=REMOTE_CODE_REVIEW_AND_OWNER_VISUAL_ACCEPTANCE
+phase_3_scope_decision_status=PENDING_OWNER_DECISION
 product_code_change_status=PHASE_2_MINIMUM_ONLY
 page_migration_status=NOT_STARTED_BY_THIS_TASK
+next_entry=PHASE_3_SCOPE_AND_PAGE_CONFIRMATION_PENDING_OWNER_DECISION
 ```
 
 > 本文件是[README.md](./README.md)的配套盘点。第一步六项范围已由项目负责人于
 > `2026-11-11` 逐行确认（R2 草案锚点 `5695a2de345ae66e0d34081b7f1b7b033675a1f1`）；
-> 第二步最小实现已按确认范围在探针端管理落地（详见 README §0.1）。其余候选形态与候选页
-> 仍未被批准，不得引用为现行规则。第一步源码证据的路径与行号基于固定 SHA
+> 第二步最小实现提交 `e1880494a50d7ad9842b4db9026963efc84e6441`（基线
+> `4809577c3ee4733780052a674c54d9cecb215ef2`）已在探针端管理落地，ChatGPT 远端只读代码
+> 复审通过，项目负责人于 `2026-11-11` 对 `/config/client` 三项共用样式及页面呈现反馈
+> 视觉验收通过，第二步据此收口（详见 README §0.1–§0.2）。其余候选形态与候选页仍未被
+> 批准，不得引用为现行规则。第一步源码证据的路径与行号基于固定 SHA
 > `6560c73fb71aa5b8441de4a57fe777d7810b12da`；第二步实现事实以现行源码为准。
+>
+> **口径区分：** `phase_2_acceptance_status` 保持 `NOT_EXECUTED`，表示未单独开展
+> “独立正式验收执行”，不得解读为已通过；负责人视觉验收另以
+> `phase_2_owner_visual_acceptance_status=PASSED` 独立记录。
 >
 > 第二步只新增三项显式 opt-in 纯 CSS 并替换探针页四项私有同义规则；未迁移页面，
 > 未改变任何已批准模板、页面迁移状态或既有 Feature 验收状态。
@@ -48,14 +67,14 @@ page_migration_status=NOT_STARTED_BY_THIS_TASK
 | 分类 | 含义 |
 |---|---|
 | **直接复用** | 既有公共能力已覆盖，本模板只规定用法，不新增代码 |
-| **本期提取** | 第二阶段提取为新的公共能力（已在探针页落地，待复审与验收） |
+| **本期提取** | 第二阶段提取为新的公共能力（已在探针页落地，第二步已收口） |
 | **可选扩展** | 有跨页价值，但本期不做，留作后续独立评估 |
 | **业务专属** | 含业务语义或页面差异，应留在 Feature 页面 |
 | **暂不提取** | 本期仅固化契约与检查项，不新增公共代码 |
 
 ### 1.3 “本期”与“后续”
 
-- **本期** = 第一步范围确认后的**第二阶段最小提取**（已在探针页落地，待复审与验收）；
+- **本期** = 第一步范围确认后的**第二阶段最小提取**（已在探针页落地，第二步已收口）；
 - **后续** = 第三阶段及更晚的独立任务；
 - 三项 CSS 与统一交互约定已由负责人确认；选择器、公共菜单、确认框、状态标签与请求逻辑
   仍为候选或暂缓项，未获实施授权。
@@ -65,8 +84,8 @@ page_migration_status=NOT_STARTED_BY_THIS_TASK
 | # | 能力 | 现行实现位置 | 公共化状态 | 分类 | 目标形态 | 阶段 |
 |---|---|---|---|---|---|---|
 | C1 | 页面骨架 | `query-list/QueryListPageShell.vue` | 6 组件 + 1 composable 已实现；权威验收 21/21；参考页 + 两页页面级接入 | 直接复用 | Vue 组件（既有） | 已完成（范围已确认） |
-| C2 | 搜索栏 | `QueryListQueryPanel` + `QueryListActions` + 页面字段组 | 容器/按钮已实现；字段组已收敛到公共 CSS（探针页） | 直接复用 + 第二阶段提取（字段组 CSS，已落地） | 既有组件 + 纯 CSS opt-in；选择器候选 | 第二阶段（探针页已落地，待验收） |
-| C3 | 结果工具栏 | `QueryListResultPanel` 槽位 + 页面摘要/新增按钮 | 面板已实现；摘要与按钮已收敛到公共 CSS（探针页） | 直接复用 + 第二阶段提取（摘要/按钮 CSS，已落地） | 既有组件 + 纯 CSS opt-in | 第二阶段（探针页已落地，待验收） |
+| C2 | 搜索栏 | `QueryListQueryPanel` + `QueryListActions` + 页面字段组 | 容器/按钮已实现；字段组已收敛到公共 CSS（探针页） | 直接复用 + 第二阶段提取（字段组 CSS，已落地） | 既有组件 + 纯 CSS opt-in；选择器候选 | 第二阶段（已收口） |
+| C3 | 结果工具栏 | `QueryListResultPanel` 槽位 + 页面摘要/新增按钮 | 面板已实现；摘要与按钮已收敛到公共 CSS（探针页） | 直接复用 + 第二阶段提取（摘要/按钮 CSS，已落地） | 既有组件 + 纯 CSS opt-in | 第二阶段（已收口） |
 | C4 | 无分页表格 | `list-table-visual.css` + `lt-main-table` | 基础 + DS 参考页 14/14 最终接受；可选三点/单行高亮已实现、复审 `APPROVED`，探针页面级接入、待接受 | 直接复用 | 纯 CSS + 可选辅助类；成组入口统一三点 | 已完成（复用） |
 | C5 | 行操作菜单 | `lt-row-action__*` 外观 + 页面 `ElDropdown` | 仅三点外观公共化；菜单与忙碌状态页面实现 | 直接复用 + 用法契约（成组入口统一三点） | 既有 CSS + 用法契约 | 第三阶段评估（DS 替换单独记录） |
 | C6 | 新增／编辑弹窗 | `create-edit-dialog-visual.css` | 公共 CSS 已实现、代码复审 `APPROVED`；仅探针页面级接入且接入复审通过；模板正式验收 `NOT_EXECUTED`；Vue `NOT_CREATED` | 直接复用（CSS，按需）；暂不提取（Vue 包装） | 既有 CSS + 令牌 | 第三阶段评估（DS 弹窗单独记录） |
@@ -146,7 +165,7 @@ page_migration_status=NOT_STARTED_BY_THIS_TASK
 **分类（2026-11-11 已确认）：**
 
 - 容器、按钮、常量：**直接复用**；
-- 字段组排版（标签 + 控件）：**第二阶段提取（纯 CSS，已在探针页落地，待验收）**；
+- 字段组排版（标签 + 控件）：**第二阶段提取（纯 CSS，已在探针页落地，第二步已收口）**；
 - 文本查询控件：**直接复用现有基础控件**，查询字段与匹配方式由页面决定；
 - 数据源／探针端选择器：**公共控件候选**——选择已有数据源或探针端时用下拉框，
   允许选择多个对象的列表筛选用多选下拉框；两类选择器待实际使用它们的页面验证后
@@ -201,7 +220,7 @@ page_migration_status=NOT_STARTED_BY_THIS_TASK
 **分类（2026-11-11 已确认）：**
 
 - 结果面板结构与槽位：**直接复用**（左侧摘要、右侧按需放操作入口）；
-- 摘要文字样式、新增主按钮视觉：**第二阶段提取（纯 CSS，已在探针页落地，待验收）**；
+- 摘要文字样式、新增主按钮视觉：**第二阶段提取（纯 CSS，已在探针页落地，第二步已收口）**；
 - 自动刷新工具栏：**暂不提取**（只适用于只读查询页的 opt-in 能力，本模板不默认启用）。
 
 **已落地提取形态（第二阶段，探针页）**
@@ -572,7 +591,7 @@ Tooltip 共存需真实浏览器验证；未 opt-in 页面必须零匹配。三�
 页面**不得**保留与上述来源同义的私有副本；迁移时删除私有规则，
 而不是两套并存。
 
-## 5. 探针端管理接入改动（第二阶段，已落地，待复审与验收）
+## 5. 探针端管理接入改动（第二阶段，已落地并收口）
 
 探针端管理已是最接近目标的页面，第二阶段在此页**只做视觉归并**：
 
@@ -622,9 +641,20 @@ Tooltip 共存需真实浏览器验证；未 opt-in 页面必须零匹配。三�
 - 输入法选字回车与下拉回车未在本次浏览器环境单独复现，列为既有交互基线项，
   不重新声明为本次验证通过。
 
+**第二步复审与视觉验收（2026-11-11）：**
+
+- ChatGPT 已对实现提交 `e1880494a50d7ad9842b4db9026963efc84e6441` 做远端只读代码复审，
+  结论 `APPROVED`；复审范围为字段组排版、结果摘要、新增按钮样式的等价提取，
+  以及探针端管理页的接入和样式作用域；
+- 项目负责人对探针端管理 `/config/client` 的三项共用样式及页面呈现明确反馈
+  **视觉验收通过**（`phase_2_owner_visual_acceptance_status=PASSED`）；
+- 以上为负责人视觉验收与 Agent 技术验证，**不是**独立正式验收执行；
+  `phase_2_acceptance_status` 保持 `NOT_EXECUTED`；
+- 第二步据此收口（`phase_2_closeout_status=CLOSED`），模板整体基线仍为 `NOT_APPROVED`。
+
 **必须保留：** 157 条验收已覆盖的行为、AC-138 的条件占位、AC-091/088 的异常原值
 与 ID 省略、菜单事件隔离、请求防重、取消零写。该页面任何后续改动都必须另立任务，
-做等价回归并由负责人目视；本次第二阶段改动已按此执行并停在复审与验收节点。
+做等价回归并由负责人目视；本次第二阶段改动已按此执行并完成复审与视觉验收收口。
 
 ## 6. 第二页候选比较（第三阶段，未授权）
 
@@ -654,8 +684,8 @@ Tooltip 共存需真实浏览器验证；未 opt-in 页面必须零匹配。三�
 
 - 结构接近度：**最高**；已接入查询列表组件与 `lt-main-table`，
   适合直接验证三项样式在该页的复用；
-- **第三阶段接入范围**：由负责人在**第二阶段完成并通过复审／负责人接受后**确认；
-  第二阶段本身以探针端管理为首个参考页，不接入数据源页；
+- **第三阶段接入页及范围**：第二阶段已收口，接入页与范围**仍待负责人决定**；
+  第二阶段本身以探针端管理为首个参考页，未接入数据源页；
 - 首选范围：仅主列表上的三项样式（查询字段组排版、结果摘要、新增主按钮），
   不改变业务行为；业务属性/命名策略/连接测试不进入模板；
 - **分别记录、独立决定**（不与三项样式捆绑）：
@@ -667,7 +697,7 @@ Tooltip 共存需真实浏览器验证；未 opt-in 页面必须零匹配。三�
 
 **结论：推荐作为第三阶段第二页候选**，首选仅验证三项样式；其余业务专属流程排除在外，
 “更多”改三点、主弹窗接 `ced-dialog` 作为可独立决定的后续项。
-**仅为候选，未获迁移授权；接入范围待第二阶段收口后确认。**
+**仅为候选，未获迁移授权；接入页与范围待负责人确认。**
 
 ### 6.3 候选 B：数据订阅（`/config/subscribe`）
 
@@ -718,7 +748,7 @@ Tooltip 共存需真实浏览器验证；未 opt-in 页面必须零匹配。三�
 `5695a2de345ae66e0d34081b7f1b7b033675a1f1`）。**不运行**产品测试、构建、浏览器、
 业务接口或数据库。
 
-### 7.2 第二阶段（实现已完成，待远程复审与验收）
+### 7.2 第二阶段（已收口，2026-11-11）
 
 - **已完成**：静态契约测试（`frontend/src/styles/list-management/list-management-visual.spec.ts`）
   断言三项新 CSS 仅含 opt-in 选择器、无全局覆盖、无 `!important`、类数量与文档一致、
@@ -735,11 +765,18 @@ Tooltip 共存需真实浏览器验证；未 opt-in 页面必须零匹配。三�
   已应用条件更新时机、行选中/双击、菜单隔离、关闭顺序；下拉回车与输入法选字回车
   未单独复现，按既有交互基线保留；
 - **已完成**：数据源／探针端选择器保持候选，未在本阶段提取；
-- **待执行**：独立远程代码复审 + 负责人页面接受。
+- **已完成**：ChatGPT 对实现提交 `e1880494a50d7ad9842b4db9026963efc84e6441` 的远端只读
+  代码复审 `APPROVED`；
+- **已完成**：项目负责人 `2026-11-11` 对 `/config/client` 三项共用样式及页面呈现
+  视觉验收通过（`phase_2_owner_visual_acceptance_status=PASSED`）；
+- **未执行**：独立正式验收执行（`phase_2_acceptance_status=NOT_EXECUTED`）；
+  视觉验收键与正式验收键分别记录，不得合并解读；
+- 第二步已收口（`phase_2_closeout_status=CLOSED`）；模板整体基线仍为 `NOT_APPROVED`。
 
-### 7.3 第三阶段（第二阶段收口后确认接入范围）
+### 7.3 第三阶段（待负责人确认接入页及范围）
 
-- 数据源管理主列表的三项样式复用验证，**接入范围在第二阶段完成后确认**；
+- 数据源管理主列表为首选候选，**接入页与范围仍待负责人决定**；
+  首选仅验证查询字段组排版、结果摘要、新增按钮三项样式的复用；
 - 第二页选中范围的行为等价回归，含已接受 Feature 用例；
 - “更多”改三点、主弹窗接 `ced-dialog` 分别独立授权、独立实现、独立验收；
 - 真实后端成功/失败/超时响应；
@@ -767,10 +804,10 @@ Tooltip 与 `+N` 共存、后端结果、并发竞态、写路径。上述均须
    请求 composable，只固化统一契约与使用示例。
 4. **选择器候选：已确认** —— 数据源／探针端选择器（含多选下拉筛选）列为公共控件候选，
    在实际使用它们的页面验证后再决定是否封装，本阶段不提取。
-5. **第三阶段候选：待第二阶段收口后确认** —— 数据源管理主列表仍为复用验证候选；
+5. **第三阶段候选：接入页及范围待负责人确认** —— 数据源管理主列表仍为首选候选；
    其“更多”改三点、主弹窗接 `ced-dialog` 分别记录、独立决定；数据订阅保留为备选。
 
-> 下方代码块为第一步收口时的历史快照；第二步实现状态以文件头状态块为准。
+> 下方代码块为第一步收口时的历史快照；第二步实现与收口状态以文件头状态块为准。
 
 ```text
 phase_1_scope_status=CONFIRMED
@@ -836,7 +873,10 @@ next_step=SEPARATE_PHASE_2_IMPLEMENTATION_TASK
   批准或任何页面迁移授权；
 - 三项 CSS 已在探针页落地并通过静态契约、定向测试、构建与真实浏览器等价核对
   （见 §5）；选择器、公共菜单、确认框、状态标签与请求逻辑仍为候选或暂缓项，未获实施授权；
-- 第二步正式验收、负责人页面接受与第三步授权**均未执行**；
+- 第二步已收口：ChatGPT 远端代码复审 `APPROVED`、项目负责人视觉验收
+  `PASSED`（2026-11-11）；**独立正式验收执行仍为 `NOT_EXECUTED`**；
+  视觉验收键与正式验收键分别记录，不得互相替代；
+- 第三步授权**未执行**；接入页与范围待负责人决定；
 - 探针端管理的 157 条正式验收**不**传播为本模板或任何其他页面的验收结论；
-- 数据源管理是**候选页**，不是已授权迁移页；接入范围待第二阶段收口后确认；
+- 数据源管理是**候选页**，不是已授权迁移页；接入页与范围待负责人确认；
 - 已执行的运行验证只覆盖探针页三项样式归并与基线等价，不得把未运行项写成通过。
