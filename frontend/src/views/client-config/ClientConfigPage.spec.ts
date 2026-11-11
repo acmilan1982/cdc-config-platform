@@ -375,7 +375,7 @@ describe('查询列表页四组件接入与无刷新能力（CCFG-REQ-091、CCFG
 
   it('组件：查询区仍为“探针信息 + 探针状态”，操作组只含查询与重置两个按钮', async () => {
     const wrapper = await mountPage([enabledRow])
-    const labels = wrapper.findAll('.cc-q-label').map((l) => l.text())
+    const labels = wrapper.findAll('.lmt-q-label').map((l) => l.text())
     expect(labels).toEqual(['探针信息', '探针状态'])
     expect(wrapper.find('.cc-q-keyword input').attributes('placeholder')).toBe(
       '请输入探针 ID 或探针描述',
@@ -389,10 +389,10 @@ describe('查询列表页四组件接入与无刷新能力（CCFG-REQ-091、CCFG
 
   it('组件：结果区头部左侧摘要显示记录数，最右工具栏为本页“新增探针”', async () => {
     const wrapper = await mountPage([enabledRow, disabledRow])
-    expect(wrapper.find('.ql-result-panel__summary .cc-result-count').text()).toBe('共 2 条')
+    expect(wrapper.find('.ql-result-panel__summary .lmt-result-count').text()).toBe('共 2 条')
     const toolbar = wrapper.find('.ql-result-panel__toolbar')
-    expect(toolbar.find('.cc-btn-add').exists()).toBe(true)
-    expect(toolbar.find('.cc-btn-add').text().trim()).toBe('新增探针')
+    expect(toolbar.find('.lmt-add-button').exists()).toBe(true)
+    expect(toolbar.find('.lmt-add-button').text().trim()).toBe('新增探针')
     wrapper.unmount()
   })
 

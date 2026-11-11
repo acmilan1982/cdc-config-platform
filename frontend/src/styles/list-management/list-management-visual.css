@@ -1,0 +1,57 @@
+/* 公共列表管理模板 · 第二阶段最小公共视觉预设（全仓唯一来源）。
+ *
+ * 只包含三项、四个显式 opt-in 类：
+ *   - 查询字段组排版：`.lmt-q-field` / `.lmt-q-label`
+ *   - 结果摘要文字：`.lmt-result-count`
+ *   - 新增主按钮：`.lmt-add-button`
+ *
+ * 取值取自首个采用页（探针端管理 `/config/client`）的既有私有规则，属等价提取，
+ * 不新增视觉值、不新增令牌。页面通过 `<style scoped src>` 显式引入，未挂载对应类的
+ * 元素与其页面零命中；本文件不含全局元素选择器，也不覆盖 `.ql-*` / `.lt-*` / `.ced-*`。
+ *
+ * 字段组只负责自身内联布局与组内间距；换行位置与组间距沿用
+ * `QueryListQueryPanel` 既有 flex-wrap 契约，字段宽度由页面决定。
+ */
+
+.lmt-q-field {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  flex: 0 0 auto;
+}
+
+.lmt-q-label {
+  flex: 0 0 auto;
+  font-size: 13px;
+  color: var(--el-text-color-regular);
+  white-space: nowrap;
+}
+
+.lmt-result-count {
+  font-size: 14px;
+  font-weight: 600;
+  color: var(--el-text-color-primary);
+}
+
+/* 新增主按钮：普通、悬停/聚焦、按下三态；`:not(.is-disabled)` 限定仅正常态换色，
+   禁用态沿用 Element Plus 既有禁用视觉。文案、图标、可见与禁用条件、点击行为由页面提供。 */
+.lmt-add-button:not(.is-disabled) {
+  background: #09090b;
+  border-color: #09090b;
+  color: #ffffff;
+  border-radius: 6px;
+  font-weight: 500;
+}
+
+.lmt-add-button:not(.is-disabled):hover,
+.lmt-add-button:not(.is-disabled):focus {
+  background: #27272a;
+  border-color: #27272a;
+  color: #ffffff;
+}
+
+.lmt-add-button:not(.is-disabled):active {
+  background: #18181b;
+  border-color: #18181b;
+  color: #ffffff;
+}

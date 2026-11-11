@@ -1,10 +1,10 @@
-# 公共列表管理页模板 · 能力盘点与第一步范围（已确认）
+# 公共列表管理页模板 · 能力盘点与第一步范围（第一步已确认；第二步最小实现已落地）
 
 ```text
-list_management_page_template_document_status=PHASE_1_SCOPE_CONFIRMED
+list_management_page_template_document_status=PHASE_2_IMPLEMENTED_PENDING_REMOTE_REVIEW_AND_OWNER_VISUAL_ACCEPTANCE
 list_management_page_template_baseline_status=NOT_APPROVED
-task_scope=PHASE_1_SCOPE_APPROVAL_CLOSEOUT_DOC_ONLY
-task_code=PUBLIC-LIST-MANAGEMENT-TEMPLATE-SCOPE-APPROVAL-CLOSEOUT-001
+task_scope=PHASE_2_MINIMUM_IMPLEMENTATION_AND_DOC_SYNC
+task_code=PUBLIC-LIST-MANAGEMENT-TEMPLATE-PHASE-2-IMPLEMENTATION-001
 original_inventory_task_code=PUBLIC-LIST-MANAGEMENT-TEMPLATE-INVENTORY-AND-SCOPE-DRAFT-001
 inventory_source_commit=6560c73fb71aa5b8441de4a57fe777d7810b12da
 r0_result_commit=03e4bffa49e3a74300a7c604969130473017a631
@@ -14,21 +14,24 @@ owner_scope_confirmation_status=CONFIRMED_LINE_BY_LINE_SIX_OF_SIX
 owner_scope_confirmation_date=2026-11-11
 phase_1_scope_status=CONFIRMED
 phase_2_first_reference_page=/config/client
-phase_2_implementation_status=NOT_STARTED
+phase_2_implementation_status=IMPLEMENTED
+phase_2_style_entry=frontend/src/styles/list-management/list-management-visual.css
+phase_2_probe_adoption=CLASSES_BOUND_OLD_PRIVATE_RULES_REMOVED
 phase_2_acceptance_status=NOT_EXECUTED
 phase_3_candidate_status=CANDIDATE_NOT_AUTHORIZED
-next_entry=SEPARATE_PHASE_2_IMPLEMENTATION_TASK
-product_code_change_status=NONE
+next_entry=REMOTE_CODE_REVIEW_AND_OWNER_VISUAL_ACCEPTANCE
+product_code_change_status=PHASE_2_MINIMUM_ONLY
 page_migration_status=NOT_STARTED_BY_THIS_TASK
 ```
 
 > 本文件是[README.md](./README.md)的配套盘点。第一步六项范围已由项目负责人于
 > `2026-11-11` 逐行确认（R2 草案锚点 `5695a2de345ae66e0d34081b7f1b7b033675a1f1`）；
-> 其余候选形态与候选页仍未被批准，不得引用为现行规则。所有路径与行号均基于固定 SHA
-> `6560c73fb71aa5b8441de4a57fe777d7810b12da`。
+> 第二步最小实现已按确认范围在探针端管理落地（详见 README §0.1）。其余候选形态与候选页
+> 仍未被批准，不得引用为现行规则。第一步源码证据的路径与行号基于固定 SHA
+> `6560c73fb71aa5b8441de4a57fe777d7810b12da`；第二步实现事实以现行源码为准。
 >
-> 本轮为范围确认收口（纯文档）：同步已确认范围与详细条目；未开始第二阶段实现，
-> 未改变任何已批准模板、页面或验收状态。
+> 第二步只新增三项显式 opt-in 纯 CSS 并替换探针页四项私有同义规则；未迁移页面，
+> 未改变任何已批准模板、页面迁移状态或既有 Feature 验收状态。
 
 ## 1. 盘点方法与判定口径
 
@@ -45,14 +48,14 @@ page_migration_status=NOT_STARTED_BY_THIS_TASK
 | 分类 | 含义 |
 |---|---|
 | **直接复用** | 既有公共能力已覆盖，本模板只规定用法，不新增代码 |
-| **本期提取** | 第二阶段提取为新的公共能力（已确认范围，尚未实施） |
+| **本期提取** | 第二阶段提取为新的公共能力（已在探针页落地，待复审与验收） |
 | **可选扩展** | 有跨页价值，但本期不做，留作后续独立评估 |
 | **业务专属** | 含业务语义或页面差异，应留在 Feature 页面 |
 | **暂不提取** | 本期仅固化契约与检查项，不新增公共代码 |
 
 ### 1.3 “本期”与“后续”
 
-- **本期** = 第一步范围确认后的**第二阶段最小提取**（已确认范围，尚未实施）；
+- **本期** = 第一步范围确认后的**第二阶段最小提取**（已在探针页落地，待复审与验收）；
 - **后续** = 第三阶段及更晚的独立任务；
 - 三项 CSS 与统一交互约定已由负责人确认；选择器、公共菜单、确认框、状态标签与请求逻辑
   仍为候选或暂缓项，未获实施授权。
@@ -62,8 +65,8 @@ page_migration_status=NOT_STARTED_BY_THIS_TASK
 | # | 能力 | 现行实现位置 | 公共化状态 | 分类 | 目标形态 | 阶段 |
 |---|---|---|---|---|---|---|
 | C1 | 页面骨架 | `query-list/QueryListPageShell.vue` | 6 组件 + 1 composable 已实现；权威验收 21/21；参考页 + 两页页面级接入 | 直接复用 | Vue 组件（既有） | 已完成（范围已确认） |
-| C2 | 搜索栏 | `QueryListQueryPanel` + `QueryListActions` + 页面字段组 | 容器/按钮已实现；字段组页面重复 | 直接复用 + 第二阶段提取（字段组 CSS，已确认） | 既有组件 + 纯 CSS opt-in；选择器候选 | 第二阶段（未实施） |
-| C3 | 结果工具栏 | `QueryListResultPanel` 槽位 + 页面摘要/新增按钮 | 面板已实现；摘要与按钮页面重复 | 直接复用 + 第二阶段提取（摘要/按钮 CSS，已确认） | 既有组件 + 纯 CSS opt-in | 第二阶段（未实施） |
+| C2 | 搜索栏 | `QueryListQueryPanel` + `QueryListActions` + 页面字段组 | 容器/按钮已实现；字段组已收敛到公共 CSS（探针页） | 直接复用 + 第二阶段提取（字段组 CSS，已落地） | 既有组件 + 纯 CSS opt-in；选择器候选 | 第二阶段（探针页已落地，待验收） |
+| C3 | 结果工具栏 | `QueryListResultPanel` 槽位 + 页面摘要/新增按钮 | 面板已实现；摘要与按钮已收敛到公共 CSS（探针页） | 直接复用 + 第二阶段提取（摘要/按钮 CSS，已落地） | 既有组件 + 纯 CSS opt-in | 第二阶段（探针页已落地，待验收） |
 | C4 | 无分页表格 | `list-table-visual.css` + `lt-main-table` | 基础 + DS 参考页 14/14 最终接受；可选三点/单行高亮已实现、复审 `APPROVED`，探针页面级接入、待接受 | 直接复用 | 纯 CSS + 可选辅助类；成组入口统一三点 | 已完成（复用） |
 | C5 | 行操作菜单 | `lt-row-action__*` 外观 + 页面 `ElDropdown` | 仅三点外观公共化；菜单与忙碌状态页面实现 | 直接复用 + 用法契约（成组入口统一三点） | 既有 CSS + 用法契约 | 第三阶段评估（DS 替换单独记录） |
 | C6 | 新增／编辑弹窗 | `create-edit-dialog-visual.css` | 公共 CSS 已实现、代码复审 `APPROVED`；仅探针页面级接入且接入复审通过；模板正式验收 `NOT_EXECUTED`；Vue `NOT_CREATED` | 直接复用（CSS，按需）；暂不提取（Vue 包装） | 既有 CSS + 令牌 | 第三阶段评估（DS 弹窗单独记录） |
@@ -143,7 +146,7 @@ page_migration_status=NOT_STARTED_BY_THIS_TASK
 **分类（2026-11-11 已确认）：**
 
 - 容器、按钮、常量：**直接复用**；
-- 字段组排版（标签 + 控件）：**第二阶段提取（纯 CSS，已确认，未实施）**；
+- 字段组排版（标签 + 控件）：**第二阶段提取（纯 CSS，已在探针页落地，待验收）**；
 - 文本查询控件：**直接复用现有基础控件**，查询字段与匹配方式由页面决定；
 - 数据源／探针端选择器：**公共控件候选**——选择已有数据源或探针端时用下拉框，
   允许选择多个对象的列表筛选用多选下拉框；两类选择器待实际使用它们的页面验证后
@@ -151,8 +154,9 @@ page_migration_status=NOT_STARTED_BY_THIS_TASK
 - 来源／角色／状态候选与各页“全部”语义、回车绑定、重置默认值与已应用条件快照：
   **业务专属**，由页面实现，并按统一交互约定约束（见 [README.md](./README.md) §5.1）。
 
-**已确认提取形态（第二阶段实施，当前未实施）**
+**已落地提取形态（第二阶段，探针页）**
 
+- 公共源：`frontend/src/styles/list-management/list-management-visual.css`；
 - 新增显式 opt-in 类：`.lmt-q-field`（`inline-flex`、垂直居中、`gap:6px`）、
   `.lmt-q-label`（`13px`、常规文字色、`nowrap`）。固定字面量，不新增令牌。
 - 字段组排版提供**默认对齐、组内间距与整组换行**：标签与控件作为一个 flex 项整体换行，
@@ -185,9 +189,10 @@ page_migration_status=NOT_STARTED_BY_THIS_TASK
 - `QueryListResultPanel.vue:2-18`：DOM 顺序固定为
   `header → error-slot → divider → body`；`summary` 与 `toolbar` 两个槽位；
   props `summaryText`、`errorText`、`variant`。
-- 探针页：摘要 `.cc-result-count`（`ClientConfigPage.vue:1557-1561`），
+- 探针页（第一步固定 SHA 事实）：摘要 `.cc-result-count`（`ClientConfigPage.vue:1557-1561`），
   新增按钮 `.cc-btn-add`（`:1563-1590`，`#09090b/#27272a/#18181b`，
   `:not(.is-disabled)` 只改正常态），图标间距 `.cc-btn-icon`（`:1592-1595`）。
+  第二阶段已把摘要与按钮替换为 `.lmt-result-count` / `.lmt-add-button`，图标间距仍留页面。
 - 数据源页：摘要 `.ds-result-count`（`DataSourcePage.vue:1692-1696`），
   新增按钮 `.ds-add-button`（`:1698-1719`），数值与状态选择器与探针页一致。
 - 两页在 `toolbar` 槽放“新增”主按钮；本阶段不接入自动刷新工具栏
@@ -196,10 +201,12 @@ page_migration_status=NOT_STARTED_BY_THIS_TASK
 **分类（2026-11-11 已确认）：**
 
 - 结果面板结构与槽位：**直接复用**（左侧摘要、右侧按需放操作入口）；
-- 摘要文字样式、新增主按钮视觉：**第二阶段提取（纯 CSS，已确认，未实施）**；
+- 摘要文字样式、新增主按钮视觉：**第二阶段提取（纯 CSS，已在探针页落地，待验收）**；
 - 自动刷新工具栏：**暂不提取**（只适用于只读查询页的 opt-in 能力，本模板不默认启用）。
 
-**已确认提取形态（第二阶段实施，当前未实施）**
+**已落地提取形态（第二阶段，探针页）**
+
+- 公共源：`frontend/src/styles/list-management/list-management-visual.css`；
 
 - 结构不新增：结果摘要继续使用 `QueryListResultPanel` 既有 `summaryText` prop
   或 `summary` 槽渲染，新增按钮继续放在 `toolbar` 槽；公共层只替换文字／按钮视觉。
@@ -541,9 +548,9 @@ Tooltip 共存需真实浏览器验证；未 opt-in 页面必须零匹配。三�
 | 公共层负责 | 页面负责 |
 |---|---|
 | 页面骨架、查询容器、查询/重置按钮的几何与视觉 | API 地址、请求参数、字段映射 |
-| 字段组默认对齐、组内间距、整组换行（第二阶段已确认，未实施） | 字段数量、宽度、默认值、查询字段与匹配方式 |
+| 字段组默认对齐、组内间距、整组换行（第二阶段已落地） | 字段数量、宽度、默认值、查询字段与匹配方式 |
 | 结果卡片结构、错误槽与分隔线 | 错误码解释、错误文案、失败保留/清空策略 |
-| 结果摘要与新增主按钮视觉（第二阶段已确认，未实施） | 条数口径、文案、图标、可见/禁用条件、点击行为 |
+| 结果摘要与新增主按钮视觉（第二阶段已落地） | 条数口径、文案、图标、可见/禁用条件、点击行为 |
 | 表格基础视觉、内容驱动行高、可选三点外观、可选单行高亮 | 列定义、选中、双击编辑、分页、行事件 |
 | 成组入口统一三点、点击区域、键盘打开、ARIA“更多操作”名称 | 菜单项集合/顺序/文案/可用条件/锁定范围、业务行为 |
 | 弹窗标签、主提交按钮、错误提示视觉（按需） | 表单布局、校验规则、保存/关闭顺序、业务专属流程 |
@@ -560,20 +567,20 @@ Tooltip 共存需真实浏览器验证；未 opt-in 页面必须零匹配。三�
 | `.ql-page` / `.ql-q-panel` / `.ql-actions` / `.ql-result-panel` | `frontend/src/components/query-list/*` |
 | `.lt-main-table` / `--lt-*` / `lt-row-action__*` / `lt-row-highlight*` | `frontend/src/styles/list-table/list-table-visual.css` |
 | `.ced-dialog` / `ced-*` / `--ced-*` | `frontend/src/styles/dialog/create-edit-dialog-visual.css` |
-| 查询字段组、结果摘要、新增按钮（**第二阶段已确认新增，尚未实施**） | 第二阶段新建的 `list-management` 纯 CSS 预设（尚不存在） |
+| 查询字段组、结果摘要、新增按钮（**第二阶段已落地**） | `frontend/src/styles/list-management/list-management-visual.css` |
 
 页面**不得**保留与上述来源同义的私有副本；迁移时删除私有规则，
 而不是两套并存。
 
-## 5. 探针端管理预计接入改动（第二阶段，已确认范围，未实施）
+## 5. 探针端管理接入改动（第二阶段，已落地，待复审与验收）
 
 探针端管理已是最接近目标的页面，第二阶段在此页**只做视觉归并**：
 
-| 现状 | 预计改动 | 业务行为 |
+| 现状（第一步固定 SHA） | 已实施改动 | 业务行为 |
 |---|---|---|
-| `.cc-q-group/.cc-q-label` 私有字段组 | 改用已确认的公共字段组类（`.lmt-q-field`/`.lmt-q-label`） | 不变 |
-| `.cc-result-count` 私有摘要 | 改用已确认的公共摘要类（`.lmt-result-count`） | 不变 |
-| `.cc-btn-add` 私有新增按钮 | 改用已确认的公共新增按钮类（`.lmt-add-button`） | 不变 |
+| `.cc-q-group/.cc-q-label` 私有字段组 | 已改用公共字段组类（`.lmt-q-field`/`.lmt-q-label`），删除私有规则 | 不变 |
+| `.cc-result-count` 私有摘要 | 已改用公共摘要类（`.lmt-result-count`），删除私有规则 | 不变 |
+| `.cc-btn-add` 私有新增按钮 | 已改用公共新增按钮类（`.lmt-add-button`），删除私有规则 | 不变 |
 | 数据源／探针端下拉与多选下拉选择器 | 保持页面现有控件；公共化候选，不在本阶段提取 | 不变 |
 | `.cc-inactive-mark` 等状态胶囊 | **本期不动**（业务专属） | 不变 |
 | 三点入口、单行高亮 | 已接公共层，**不动** | 不变 |
@@ -585,8 +592,9 @@ Tooltip 共存需真实浏览器验证；未 opt-in 页面必须零匹配。三�
 
 - 只新增三项显式 opt-in 纯 CSS 类；继续复用现有 6 个查询组件与三套旧 CSS，
   不新增 Vue 组件、composable 或容器；
-- 新 CSS 文件只拥有“查询字段组排版、结果摘要、新增主按钮”三项视觉，
-  不得重写或复制 `.ql-*`、`.lt-*`、`.ced-*` 规则；
+- 公共源 `frontend/src/styles/list-management/list-management-visual.css` 只拥有
+  “查询字段组排版、结果摘要、新增主按钮”三项视觉，未重写或复制
+  `.ql-*`、`.lt-*`、`.ced-*` 规则；
 - 字段组换行沿用 `QueryListQueryPanel` 既有 flex-wrap 契约，不改其 gap；
   结果摘要继续走 `QueryListResultPanel` 的 `summaryText`/`summary` 槽；
   新增按钮继续走 `toolbar` 槽；
@@ -598,9 +606,25 @@ Tooltip 共存需真实浏览器验证；未 opt-in 页面必须零匹配。三�
 失败保留旧结果、稳定 ID 重选、AC-138 条件占位、AC-091/088 异常原值与 ID 省略；
 构建与真实浏览器视觉等价。
 
+**第二阶段实际验证（2026-11-11）：**
+
+- 静态契约 `frontend/src/styles/list-management/list-management-visual.spec.ts`：
+  四个类唯一来源、旧私有同义规则移除、非探针页零泄漏；
+- 任务相关定向 Vitest 195/195 通过（`list-management-visual.spec.ts` 9 +
+  `ClientConfigPage.spec.ts` 186）；`npm run build`（含 `vue-tsc --noEmit`）通过；
+- 相邻 `create-edit-dialog-visual.spec.ts` 在基线 `4809577` 已存在 2 项静态断言失败
+  （Feature 令牌清单与导入扫描），与本次改动无关，未修复，另行报告；
+- 真实浏览器 1280×800 与 900×800：与基线（起始提交 `4809577`）规范化几何/样式
+  JSON 零差异，探针页截图逐字节一致；未接入页 `/config/data-source` 的 `lmt-*`
+  零命中且截图一致；
+- 行为等价：文本框回车触发查询、重置不立即查询、新增入口打开/取消关闭、
+  三点菜单不固定行且点击外部关闭，均与基线一致；
+- 输入法选字回车与下拉回车未在本次浏览器环境单独复现，列为既有交互基线项，
+  不重新声明为本次验证通过。
+
 **必须保留：** 157 条验收已覆盖的行为、AC-138 的条件占位、AC-091/088 的异常原值
-与 ID 省略、菜单事件隔离、请求防重、取消零写。该页面任何改动都必须另立任务，
-做等价回归并由负责人目视；本任务**不授权**该改动。
+与 ID 省略、菜单事件隔离、请求防重、取消零写。该页面任何后续改动都必须另立任务，
+做等价回归并由负责人目视；本次第二阶段改动已按此执行并停在复审与验收节点。
 
 ## 6. 第二页候选比较（第三阶段，未授权）
 
@@ -694,20 +718,24 @@ Tooltip 共存需真实浏览器验证；未 opt-in 页面必须零匹配。三�
 `5695a2de345ae66e0d34081b7f1b7b033675a1f1`）。**不运行**产品测试、构建、浏览器、
 业务接口或数据库。
 
-### 7.2 第二阶段（已确认范围，未实施；另立任务）
+### 7.2 第二阶段（实现已完成，待远程复审与验收）
 
-- 静态契约测试：三项新 CSS 仅含 opt-in 选择器、无全局覆盖、无 `!important`、
-  类数量与文档一致；
-- 结构测试与构建（按 `frontend/package.json` 实际脚本）：
-  `npm run build`（已含 `vue-tsc --noEmit` 类型检查 + `vite build`）；
-  全量 `npm test`；必要的定向测试
-  `npx vitest run src/views/client-config/ClientConfigPage.spec.ts`
-  （以及新增 CSS 的静态契约测试文件）；当前无独立 `lint` / `type-check` 脚本，不得虚构命令；
-- 真实浏览器：查询字段整组换行与对齐、摘要/按钮状态矩阵、未启用页零泄漏；
-- 行为等价（只做视觉归并，行为不变）：文本查询回车、下拉回车、输入法选字回车、
-  重置默认条件与已应用条件更新时机、行选中/双击、菜单隔离、请求防重、关闭顺序；
-- 数据源／探针端选择器不在本阶段提取，只保持候选；
-- 独立远程代码复审 + 负责人页面接受。
+- **已完成**：静态契约测试（`frontend/src/styles/list-management/list-management-visual.spec.ts`）
+  断言三项新 CSS 仅含 opt-in 选择器、无全局覆盖、无 `!important`、类数量与文档一致、
+  旧私有同义规则移除、非探针页零泄漏；
+- **已完成**：定向测试与构建（按 `frontend/package.json` 实际脚本）：
+  任务相关定向用例 195/195 通过（新增静态契约 9 + 探针页 186）；`npm run build`
+  （已含 `vue-tsc --noEmit` 类型检查 + `vite build`）通过；
+  当前无独立 `lint` / `type-check` 脚本，未虚构命令；
+  相邻 `create-edit-dialog-visual.spec.ts` 的 2 项失败在基线 `4809577` 同样存在，
+  属既有无关失败，未纳入本次通过口径；
+- **已完成**：真实浏览器 1280×800 / 900×800：查询字段整组换行与对齐、
+  摘要/按钮状态矩阵、未启用页零泄漏，与基线截图逐字节一致；
+- **已完成**：行为等价（只做视觉归并，行为不变）：文本查询回车、重置默认条件与
+  已应用条件更新时机、行选中/双击、菜单隔离、关闭顺序；下拉回车与输入法选字回车
+  未单独复现，按既有交互基线保留；
+- **已完成**：数据源／探针端选择器保持候选，未在本阶段提取；
+- **待执行**：独立远程代码复审 + 负责人页面接受。
 
 ### 7.3 第三阶段（第二阶段收口后确认接入范围）
 
@@ -741,6 +769,8 @@ Tooltip 与 `+N` 共存、后端结果、并发竞态、写路径。上述均须
    在实际使用它们的页面验证后再决定是否封装，本阶段不提取。
 5. **第三阶段候选：待第二阶段收口后确认** —— 数据源管理主列表仍为复用验证候选；
    其“更多”改三点、主弹窗接 `ced-dialog` 分别记录、独立决定；数据订阅保留为备选。
+
+> 下方代码块为第一步收口时的历史快照；第二步实现状态以文件头状态块为准。
 
 ```text
 phase_1_scope_status=CONFIRMED
@@ -802,11 +832,11 @@ next_step=SEPARATE_PHASE_2_IMPLEMENTATION_TASK
 
 ## 11. 边界声明
 
-- 第一步六项范围已确认，但**模板基线仍为 `NOT_APPROVED`**；本收口不构成第二阶段实现
-  或任何页面迁移授权，第二阶段需另立任务；
-- 三项 CSS 与统一交互约定为**已确认范围、尚未实施**；选择器、公共菜单、确认框、
-  状态标签与请求逻辑仍为候选或暂缓项，未获实施授权；
+- 第一步六项范围已确认，但**模板基线仍为 `NOT_APPROVED`**；第二步实现不构成模板整体
+  批准或任何页面迁移授权；
+- 三项 CSS 已在探针页落地并通过静态契约、定向测试、构建与真实浏览器等价核对
+  （见 §5）；选择器、公共菜单、确认框、状态标签与请求逻辑仍为候选或暂缓项，未获实施授权；
+- 第二步正式验收、负责人页面接受与第三步授权**均未执行**；
 - 探针端管理的 157 条正式验收**不**传播为本模板或任何其他页面的验收结论；
 - 数据源管理是**候选页**，不是已授权迁移页；接入范围待第二阶段收口后确认；
-- 本任务未运行任何测试、构建、浏览器、业务接口、数据库或服务操作，
-  不得把本文件的静态结论写成运行验证通过。
+- 已执行的运行验证只覆盖探针页三项样式归并与基线等价，不得把未运行项写成通过。

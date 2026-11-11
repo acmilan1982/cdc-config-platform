@@ -8,8 +8,8 @@
   >
     <!-- 查询区：探针信息 + 探针状态，操作组由公共查询/重置动作组件提供；本页无刷新能力（CCFG-UI-033） -->
     <QueryListQueryPanel>
-      <div class="cc-q-group">
-        <span class="cc-q-label">探针信息</span>
+      <div class="lmt-q-field">
+        <span class="lmt-q-label">探针信息</span>
         <el-input
           v-model="queryKeyword"
           class="cc-q-keyword"
@@ -18,8 +18,8 @@
           @keyup.enter="onQuery"
         />
       </div>
-      <div class="cc-q-group">
-        <span class="cc-q-label">探针状态</span>
+      <div class="lmt-q-field">
+        <span class="lmt-q-label">探针状态</span>
         <el-select v-model="queryStatus" class="cc-q-status">
           <el-option label="全部" value="ALL" />
           <el-option label="启用" value="ENABLED" />
@@ -34,10 +34,10 @@
     <!-- 结果区：头部（左摘要 / 最右“新增探针”）→ 固定错误槽 → 固定分隔线 → 表格 body -->
     <QueryListResultPanel v-loading="listLoading">
       <template #summary>
-        <span class="cc-result-count">共 {{ listRows.length }} 条</span>
+        <span class="lmt-result-count">共 {{ listRows.length }} 条</span>
       </template>
       <template #toolbar>
-        <el-button class="cc-btn-add" @click="openCreate">
+        <el-button class="lmt-add-button" @click="openCreate">
           <el-icon class="cc-btn-icon"><Plus /></el-icon>新增探针
         </el-button>
       </template>
@@ -1527,24 +1527,15 @@ onBeforeUnmount(() => {
      其可选单行高亮预设再由并列的 `lt-row-highlight`（表级）+ 行级 `lt-row-highlight__row` 两级 opt-in 启用。 -->
 <style scoped src="@/styles/list-table/list-table-visual.css"></style>
 
+<!-- 公共列表管理模板第二阶段最小视觉预设：查询字段组排版、结果摘要、新增主按钮。
+     以显式 scoped src 引入，仅挂载 lmt-* 类的元素命中；未接入页面零泄漏。 -->
+<style scoped src="@/styles/list-management/list-management-visual.css"></style>
+
 <style scoped>
 /* 页面外壳、查询区容器、查询/重置动作与结果卡片盒模型全部由公共层提供
-   （.ql-page / .ql-q-panel / .ql-actions / .ql-result-panel）；本文件只保留 Feature 专属
-   字段组、结果区摘要、错误槽内容与表格样式，不复制公共层等价 CSS。 */
-.cc-q-group {
-  display: inline-flex;
-  align-items: center;
-  gap: 6px;
-  flex: 0 0 auto;
-}
-
-.cc-q-label {
-  flex: 0 0 auto;
-  font-size: 13px;
-  color: var(--el-text-color-regular);
-  white-space: nowrap;
-}
-
+   （.ql-page / .ql-q-panel / .ql-actions / .ql-result-panel）；字段组排版、结果摘要与
+   新增按钮视觉由列表管理模板的 lmt-* 公共预设提供。本文件只保留 Feature 专属
+   字段宽度、新增图标、错误槽内容与其余表格样式，不复制公共层等价 CSS。 */
 .cc-q-keyword {
   width: 300px;
 }
@@ -1553,36 +1544,8 @@ onBeforeUnmount(() => {
   width: 150px;
 }
 
-/* 结果区左上角摘要：共 n 条 */
-.cc-result-count {
-  font-size: 14px;
-  font-weight: 600;
-  color: var(--el-text-color-primary);
-}
-
-/* “新增探针”：黑色实心主按钮，与参考页“新增数据源”同款（CCFG-REQ-104/CCFG-UI-036）。
-   `:not(.is-disabled)` 限定仅正常态换色，禁用态沿用 Element Plus 既有禁用视觉。 */
-.cc-btn-add:not(.is-disabled) {
-  background: #09090b;
-  border-color: #09090b;
-  color: #ffffff;
-  border-radius: 6px;
-  font-weight: 500;
-}
-
-.cc-btn-add:not(.is-disabled):hover,
-.cc-btn-add:not(.is-disabled):focus {
-  background: #27272a;
-  border-color: #27272a;
-  color: #ffffff;
-}
-
-.cc-btn-add:not(.is-disabled):active {
-  background: #18181b;
-  border-color: #18181b;
-  color: #ffffff;
-}
-
+/* “新增探针”：黑色实心主按钮视觉由公共预设 `.lmt-add-button` 提供
+   （CCFG-REQ-104/CCFG-UI-036）；本页只保留图标排版与点击行为。 */
 .cc-btn-icon {
   margin-right: 2px;
   font-size: 14px;
