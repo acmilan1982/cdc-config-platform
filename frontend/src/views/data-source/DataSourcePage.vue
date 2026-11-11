@@ -9,8 +9,8 @@
   >
     <!-- 查询条件区：三个文本条件 + 角色单选下拉框，均作为字段组整组换行（DESIGN §11.4） -->
     <QueryListQueryPanel>
-      <div class="ds-q-group">
-        <span class="ds-q-label">数据源ID</span>
+      <div class="lmt-q-field">
+        <span class="lmt-q-label">数据源ID</span>
         <el-input
           v-model="query.id"
           class="ds-q-input"
@@ -20,8 +20,8 @@
           @keyup.enter="onQuery"
         />
       </div>
-      <div class="ds-q-group">
-        <span class="ds-q-label">名称</span>
+      <div class="lmt-q-field">
+        <span class="lmt-q-label">名称</span>
         <el-input
           v-model="query.name"
           class="ds-q-input"
@@ -31,8 +31,8 @@
           @keyup.enter="onQuery"
         />
       </div>
-      <div class="ds-q-group">
-        <span class="ds-q-label">角色</span>
+      <div class="lmt-q-field">
+        <span class="lmt-q-label">角色</span>
         <!-- 单选下拉框（非 Radio）；选项顺序与绑定值固定为 全部/''、源库/SOURCE、目标库/TARGET；
              宽度冻结 140px；非法值不被静默纠正，由服务端返回字段级错误 -->
         <el-select v-model="query.category" class="ds-q-category" placeholder="全部">
@@ -41,8 +41,8 @@
           <el-option label="目标库" value="TARGET" />
         </el-select>
       </div>
-      <div class="ds-q-group">
-        <span class="ds-q-label">主机</span>
+      <div class="lmt-q-field">
+        <span class="lmt-q-label">主机</span>
         <el-input
           v-model="query.host"
           class="ds-q-input"
@@ -60,10 +60,10 @@
     <!-- 结果区：头部（数据源列表 + 数量 / 新增数据源）→ 固定错误槽 → 固定分隔线 → body 主体槽 -->
     <QueryListResultPanel v-loading="loading">
       <template #summary>
-        <span class="ds-result-count">共 {{ rows.length }} 条</span>
+        <span class="lmt-result-count">共 {{ rows.length }} 条</span>
       </template>
       <template #toolbar>
-        <el-button class="ds-add-button" @click="openCreate">
+        <el-button class="lmt-add-button" @click="openCreate">
           <el-icon class="ds-add-icon"><Plus /></el-icon>新增数据源
         </el-button>
       </template>
@@ -1658,24 +1658,15 @@ onMounted(() => {
      并由 el-table 根元素上的并列类 `lt-main-table` 启用。 -->
 <style scoped src="@/styles/list-table/list-table-visual.css"></style>
 
+<!-- 公共列表管理模板：查询字段组排版、结果摘要、新增主按钮。
+     以显式 scoped src 引入，仅挂载 lmt-* 类的元素命中；未接入页面零泄漏。 -->
+<style scoped src="@/styles/list-management/list-management-visual.css"></style>
+
 <style scoped>
 /* 页面外壳、查询区容器、查询/重置按钮与结果卡片盒模型全部由公共层提供
-   （.ql-page / .ql-q-panel / .ql-actions / .ql-result-panel）；本文件只保留 Feature 专属字段组、
-   字段标签、控件宽度、结果区头部文字与表格样式，不复制公共层等价 CSS。 */
-.ds-q-group {
-  display: inline-flex;
-  align-items: center;
-  gap: 6px;
-  flex: 0 0 auto;
-}
-
-.ds-q-label {
-  flex: 0 0 auto;
-  font-size: 13px;
-  color: var(--el-text-color-regular);
-  white-space: nowrap;
-}
-
+   （.ql-page / .ql-q-panel / .ql-actions / .ql-result-panel）；查询字段组排版、结果摘要与
+   新增主按钮视觉由列表管理模板的 lmt-* 公共预设提供；本文件只保留 Feature 专属控件宽度、
+   图标间距、结果区错误样式与表格样式，不复制公共层等价 CSS。 */
 .ds-q-input {
   width: 180px;
 }
@@ -1686,36 +1677,6 @@ onMounted(() => {
   min-width: 140px;
   max-width: 140px;
   flex: 0 0 140px;
-}
-
-/* 结果区左上角只显示“共 n 条”（DS-REQ-141） */
-.ds-result-count {
-  font-size: 14px;
-  font-weight: 600;
-  color: var(--el-text-color-primary);
-}
-
-/* “新增数据源”：黑色实心主按钮，与页面“查询”按钮同一黑白灰视觉语言（DS-REQ-174）。
-   :not(.is-disabled) 限定仅正常态换色，禁用态沿用 Element Plus 既有禁用视觉。 */
-.ds-add-button:not(.is-disabled) {
-  background: #09090b;
-  border-color: #09090b;
-  color: #ffffff;
-  border-radius: 6px;
-  font-weight: 500;
-}
-
-.ds-add-button:not(.is-disabled):hover,
-.ds-add-button:not(.is-disabled):focus {
-  background: #27272a;
-  border-color: #27272a;
-  color: #ffffff;
-}
-
-.ds-add-button:not(.is-disabled):active {
-  background: #18181b;
-  border-color: #18181b;
-  color: #ffffff;
 }
 
 /* 主弹窗右下角“创建/保存”：与主列表“查询”“新增数据源”同一黑白灰视觉语言（DS-REQ-187）。

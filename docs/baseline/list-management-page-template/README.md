@@ -1,10 +1,10 @@
-# 公共列表管理页模板 · 组合入口与范围（第二步已收口，第三步待负责人确认）
+# 公共列表管理页模板 · 组合入口与范围（第三步数据源页已接入，待复审与视觉验收）
 
 ```text
-list_management_page_template_document_status=PHASE_2_ACCEPTANCE_CLOSED_PENDING_PHASE_3_SCOPE_DECISION
+list_management_page_template_document_status=PHASE_3_IMPLEMENTED_PENDING_REMOTE_REVIEW_AND_OWNER_VISUAL_ACCEPTANCE
 list_management_page_template_baseline_status=NOT_APPROVED
-task_scope=PHASE_2_ACCEPTANCE_CLOSEOUT_DOC_ONLY
-task_code=PUBLIC-LIST-MANAGEMENT-TEMPLATE-PHASE-2-ACCEPTANCE-CLOSEOUT-001
+task_scope=PHASE_3_DATA_SOURCE_THREE_STYLE_ADOPTION
+task_code=PUBLIC-LIST-MANAGEMENT-TEMPLATE-PHASE-3-DATA-SOURCE-ADOPTION-001
 original_inventory_task_code=PUBLIC-LIST-MANAGEMENT-TEMPLATE-INVENTORY-AND-SCOPE-DRAFT-001
 inventory_source_commit=6560c73fb71aa5b8441de4a57fe777d7810b12da
 r0_result_commit=03e4bffa49e3a74300a7c604969130473017a631
@@ -29,30 +29,48 @@ phase_2_owner_visual_acceptance_date=2026-11-11
 phase_2_owner_visual_acceptance_scope=/config/client_THREE_SHARED_STYLES_AND_PAGE_PRESENTATION
 phase_2_acceptance_status=NOT_EXECUTED
 phase_2_closeout_status=CLOSED
-phase_3_candidate_status=CANDIDATE_NOT_AUTHORIZED
-phase_3_scope_decision_status=PENDING_OWNER_DECISION
+owner_phase_3_scope_confirmation_status=CONFIRMED_THREE_STYLES_ONLY
+owner_phase_3_scope_confirmation_date=2026-11-11
+phase_3_candidate_status=SELECTED_AND_AUTHORIZED_FOR_THREE_STYLES
+phase_3_scope_decision_status=CONFIRMED_THREE_STYLES_ONLY
+phase_3_implementation_status=IMPLEMENTED
+phase_3_implementation_task_code=PUBLIC-LIST-MANAGEMENT-TEMPLATE-PHASE-3-DATA-SOURCE-ADOPTION-001
+phase_3_implementation_commit=RECORDED_IN_TASK_RESULT_OUTPUT
+phase_3_implementation_base_commit=0030a1c74776a37e41fec905a880af9eab831395
+phase_3_adoption_page=/config/data-source
+phase_3_adoption_scope=THREE_SHARED_STYLES_ONLY
+phase_3_adoption_status=CLASSES_BOUND_OLD_PRIVATE_RULES_REMOVED
+phase_3_remote_code_review_status=PENDING
+phase_3_owner_visual_acceptance_status=NOT_EXECUTED
+phase_3_closeout_status=NOT_CLOSED
 branch=develop
-product_code_change_status=PHASE_2_MINIMUM_ONLY
-page_migration_status=NOT_STARTED_BY_THIS_TASK
-next_entry=PHASE_3_SCOPE_AND_PAGE_CONFIRMATION_PENDING_OWNER_DECISION
+product_code_change_status=PHASE_3_THREE_STYLE_ADOPTION_ONLY
+page_migration_status=NOT_STARTED
+next_entry=PHASE_3_REMOTE_CODE_REVIEW_AND_OWNER_VISUAL_ACCEPTANCE
 ```
 
-> 本目录承载**第一步盘点与范围确认**、**第二步最小实现**及**第二步验收收口**。
-> 项目负责人已于 `2026-11-11` 逐行确认六项范围（R2 草案锚点
-> `5695a2de345ae66e0d34081b7f1b7b033675a1f1`），第一步范围状态为 `CONFIRMED`。
+> 本目录承载**第一步盘点与范围确认**、**第二步最小实现与验收收口**及
+> **第三步数据源主列表三项样式复用验证**。项目负责人已于 `2026-11-11` 逐行确认六项范围
+> （R2 草案锚点 `5695a2de345ae66e0d34081b7f1b7b033675a1f1`），第一步范围状态为 `CONFIRMED`。
 > 第二步最小实现提交 `e1880494a50d7ad9842b4db9026963efc84e6441`（基线
 > `4809577c3ee4733780052a674c54d9cecb215ef2`）已经 ChatGPT **远端只读代码复审通过**，
 > 项目负责人于 `2026-11-11` 对探针端管理 `/config/client` 的三项共用样式及页面呈现
-> 明确反馈**视觉验收通过**。第二步据此收口。
+> 明确反馈**视觉验收通过**，第二步据此收口。
+>
+> 项目负责人已明确确认第三步：**只验证数据源管理 `/config/data-source` 主列表的三项样式**
+> （查询字段组排版、结果摘要、新增按钮）。本轮已按该范围接入同一公共样式并删除页面私有
+> 同义规则，当前状态为**已实现、待远端复审与负责人视觉验收**（见 §0.3）。
+> “更多”改三点与新增／编辑主弹窗接入 `ced-dialog` **不在本轮范围**，留作后续独立决定。
 >
 > **口径区分：** 负责人视觉验收与 Agent 技术验证分别记录；`phase_2_acceptance_status`
-> 保持 `NOT_EXECUTED`，表示未单独开展“独立正式验收执行”，不得解读为已通过。
-> 模板整体基线仍为 `NOT_APPROVED`，**不是**实施设计，**不构成**任何页面迁移授权；
-> 第三步接入页与范围仍待负责人决定。
+> 与 `phase_3_owner_visual_acceptance_status` 各自独立。第二步的
+> `phase_2_acceptance_status` 保持 `NOT_EXECUTED`（未单独开展“独立正式验收执行”）。
+> 模板整体基线仍为 `NOT_APPROVED`，**不是**实施设计；第三步只构成数据源页的三项
+> 页面级样式接入，不构成模板整体批准或其他页面迁移授权。
 >
-> 第二步只新增三项显式 opt-in 纯 CSS 与探针页类替换，**未迁移**任何页面；
-> 未修改六份项目级基线或既有 Feature 验收状态；未执行数据库写操作或 ZooKeeper 写操作。
-> 验证证据边界见 §0.1–§0.2。
+> 两步改动均只涉及显式 opt-in 纯 CSS、页面类替换与静态测试；**未迁移**任何页面的
+> 查询结构、表格、弹窗或业务行为；未修改六份项目级基线或既有 Feature 验收状态；
+> 未执行数据库写操作或 ZooKeeper 写操作。验证证据边界见 §0.1–§0.3。
 
 ## 0. 第一步范围总表（负责人已确认）
 
@@ -132,9 +150,11 @@ next_entry=PHASE_3_SCOPE_AND_PAGE_CONFIRMATION_PENDING_OWNER_DECISION
    均已完成并通过（见 §0.1）；ChatGPT 远端只读代码复审通过，项目负责人于 `2026-11-11`
    明确反馈视觉验收通过（见 §0.2）。选择器候选、公共菜单／确认框／状态标签／请求逻辑
    不在本阶段提取。
-3. **第三阶段（待负责人确认）**：第二阶段已收口，负责人在此后确认接入页及范围；数据源管理
-   主列表仍为首选候选，建议只验证查询字段组排版、结果摘要、新增按钮三项样式的复用，
-   不与其他改动捆绑。其“更多”改三点、主弹窗接入 `ced-dialog` 分别记录、各自独立授权、
+3. **第三阶段（已实现，待远端复审与负责人视觉验收）**：项目负责人已确认只验证数据源管理
+   主列表 `/config/data-source` 的查询字段组排版、结果摘要、新增按钮三项样式复用，
+   不与其他改动捆绑（见 §0.3）。该页已显式引入同一公共样式并删除四项私有同义规则；
+   定向测试、构建、真实浏览器基线与行为等价核对均通过。其余范围仍待后续独立决定：
+   文字“更多”改三点、新增／编辑主弹窗接入 `ced-dialog` 分别记录、各自独立授权、
    实现、复审与验收；替换“更多”时保留原菜单项、顺序、禁用条件与业务行为。
    数据订阅保留为备选。
 
@@ -151,12 +171,12 @@ next_entry=PHASE_3_SCOPE_AND_PAGE_CONFIRMATION_PENDING_OWNER_DECISION
 | 探针页接入 | `frontend/src/views/client-config/ClientConfigPage.vue` 以 `<style scoped src="@/styles/list-management/list-management-visual.css"></style>` 引入并挂载四个公共类；删除 `.cc-q-group` / `.cc-q-label` / `.cc-result-count` / `.cc-btn-add` 四项私有同义规则 |
 | 静态契约 | `frontend/src/styles/list-management/list-management-visual.spec.ts` 断言四个类唯一来源、旧同义规则移除、非探针页零泄漏；探针页测试以旧类定位的选择器做定向迁移，原断言保留 |
 | 定向测试与构建 | 任务相关定向 Vitest 195/195 通过（`list-management-visual.spec.ts` 9 + `ClientConfigPage.spec.ts` 186）；`npm run build`（含 `vue-tsc --noEmit`）通过。相邻 `create-edit-dialog-visual.spec.ts` 在基线 `4809577` 已存在 2 项静态断言失败，与本次改动无关，未修复，另行列明 |
-| 真实浏览器等价 | 1280×800 与 900×800 下，与基线（起始提交 `4809577`）的规范化几何/样式 JSON 零差异，探针页截图逐字节一致；未接入页 `/config/data-source` 的 `lmt-*` 零命中且截图一致；文本框回车、重置不立即查询、新增入口、三点菜单事件隔离行为与基线一致 |
+| 真实浏览器等价 | 1280×800 与 900×800 下，与基线（起始提交 `4809577`）的规范化几何/样式 JSON 零差异，探针页截图逐字节一致；第二步时点作为未接入对照页的 `/config/data-source` 的 `lmt-*` 零命中且截图一致；文本框回车、重置不立即查询、新增入口、三点菜单事件隔离行为与基线一致 |
 | 远端代码复审 | ChatGPT 只读复审 `APPROVED`（2026-11-11，对象 `e1880494…`），范围含三项样式等价提取、探针页接入与样式作用域 |
 | 负责人视觉验收 | `PASSED`（2026-11-11），范围为 `/config/client` 三项共用样式及页面呈现 |
 | 独立正式验收执行 | `NOT_EXECUTED`（`phase_2_acceptance_status` 保持原义，不因视觉验收而改写） |
 | 模板整体批准 | 仍为 `NOT_APPROVED` |
-| 第三步授权 | `CANDIDATE_NOT_AUTHORIZED` |
+| 第三步授权（第二步收口时） | `CANDIDATE_NOT_AUTHORIZED`；其后由负责人确认三项样式，见 §0.3 |
 
 上述运行验证只覆盖探针页的三项样式归并；不传播为模板整体批准、页面迁移授权或其他页面结论。
 
@@ -175,10 +195,35 @@ next_entry=PHASE_3_SCOPE_AND_PAGE_CONFIRMATION_PENDING_OWNER_DECISION
 | 第二步收口 | `CLOSED`：实现 + 远端复审 + 负责人视觉验收三项齐备 |
 | 模板整体批准 | 仍为 `NOT_APPROVED` |
 | 页面迁移 | 仍为 `NOT_STARTED` / `NOT_GRANTED`；本收口不构成任何页面迁移授权 |
-| 第三步 | `PENDING_OWNER_DECISION`：接入页与范围待负责人确认 |
+| 第三步 | 收口当时为 `PENDING_OWNER_DECISION`；其后负责人确认三项样式范围，见 §0.3 |
 
 **证据边界：** 本次收口为纯文档任务，未重跑测试/构建、未启动服务、未访问数据库或
 ZooKeeper；上述验证事实沿用实现报告原文，不扩大为其他页面或模板整体结论。
+
+## 0.3 第三步数据源主列表接入记录（2026-11-11）
+
+任务 `PUBLIC-LIST-MANAGEMENT-TEMPLATE-PHASE-3-DATA-SOURCE-ADOPTION-001`。项目负责人已明确
+确认第三步：**只验证数据源管理主列表 `/config/data-source` 的三项样式**；实现基线为第二步
+验收收口提交 `0030a1c74776a37e41fec905a880af9eab831395`。
+
+| 项 | 实际状态 |
+| --- | --- |
+| 授权范围 | 仅查询字段组排版、结果摘要、新增按钮三项样式复用；不含“更多”改三点与主弹窗接入 `ced-dialog` |
+| 公共样式入口 | 复用既有唯一来源 `frontend/src/styles/list-management/list-management-visual.css`，**未修改公共样式值** |
+| 数据源页接入 | `frontend/src/views/data-source/DataSourcePage.vue` 以 `<style scoped src="@/styles/list-management/list-management-visual.css"></style>` 显式引入；`.ds-q-group/.ds-q-label` → `.lmt-q-field/.lmt-q-label`、`.ds-result-count` → `.lmt-result-count`、`.ds-add-button` → `.lmt-add-button`；删除四项私有同义规则，保留字段宽度、摘要文案、按钮图标、插槽与全部业务处理 |
+| 静态契约 | `frontend/src/styles/list-management/list-management-visual.spec.ts` 扩展为两个接入页：分别验证显式引入与类挂载、各自旧私有规则移除、公共 CSS 唯一来源、其余页面零泄漏；`dataSource.spec.ts` 仅定向迁移旧类选择器，原断言保留 |
+| 定向测试与构建 | 任务相关定向 Vitest 311/311 通过（`list-management-visual.spec.ts` 9 + `ClientConfigPage.spec.ts` 186 + `dataSource.spec.ts` 116）；`npm run build`（含 `vue-tsc --noEmit`）通过 |
+| 真实浏览器等价 | 1280×800 与 900×800 下，基线与实现的规范化几何/样式 JSON 除预期类名外零差异，数据源页截图**逐字节一致**；1280 四个字段组同排，900 为两行整组换行；摘要位置、新增按钮位置/样式及 normal/hover/focus/active 四态一致 |
+| 行为等价 | 初始列表请求、文本框回车查询、重置只清空草稿且不立即请求、下一次显式查询更新结果、新增弹窗打开并取消关闭，均与基线一致；只发 GET 只读请求，无数据库写入 |
+| 隔离与回归 | 探针端管理 `/config/client` 仍正常挂载 6 个 `lmt-*` 元素且样式/四态不变；未接入页 `/monitor/data-source-state` 的 `lmt-*` 零命中 |
+| 远端代码复审 | `PENDING`：待提交后远端只读复审 |
+| 负责人视觉验收 | `NOT_EXECUTED`：待复审后由负责人目测 `/config/data-source` |
+| 模板整体批准 | 仍为 `NOT_APPROVED` |
+
+**证据边界：** 本轮未改动查询结构、表格、弹窗或业务行为；未执行数据库写入或 ZooKeeper
+写操作。浏览器对照使用同一后端真实只读数据完成，未用模拟响应替代；输入法选字回车与
+下拉回车未在数据源页单独复现，按既有交互基线保留。结果提交 SHA 在本任务结果中报告，
+文档不预填自指 SHA。
 
 ## 1. 目标与非目标
 
@@ -285,8 +330,8 @@ QueryListPageShell
 
 - 没有一份“管理页如何组合上述三套能力”的**唯一契约**（本文件即候选）；
 - 查询字段组排版（标签 + 控件）、结果摘要文字、结果工具栏“新增”主按钮：探针端管理已在
-  第二阶段收敛到公共 `list-management` 纯 CSS（见 §0.1）；数据源管理仍为页面私有副本，
-  属第三阶段候选，未接入；
+  第二阶段收敛到公共 `list-management` 纯 CSS（见 §0.1）；数据源管理已在第三阶段接入
+  同一公共源（见 §0.3），旧私有副本已删除；
 - 行操作入口已统一为成组操作使用水平三点，但**触发器与菜单项忙碌状态、事件隔离、
   危险项呈现**仍只有页面级实现，公共表格层只提供三点**外观与用法契约**；
 - 数据源／探针端下拉选择器尚未公共化，已列为公共控件候选，待实际使用页面验证后再决定封装；
@@ -359,19 +404,20 @@ QueryListPageShell
 
 详细契约与检查项见 [INVENTORY-AND-SCOPE.md](./INVENTORY-AND-SCOPE.md) §3 C5/C9/C10 与 §4。
 
-## 6. 第三阶段复用验证候选（未授权）
+## 6. 第三阶段数据源主列表复用验证（已实现，待复审与视觉验收）
 
-- **候选**：数据源管理（`/config/data-source`）**主列表**，用于验证第二阶段三项样式
-  在第二个真实管理页的复用；只评估这三项，不改变业务行为。
-- **接入页与范围确认时点**：第二步已收口，数据源主列表的接入页与范围仍待负责人决定；
-  首选只验证三项样式的复用，不改变业务行为。
-- **分别记录、独立决定**（不与三项样式验证捆绑）：
+- **授权范围（负责人已确认）**：数据源管理（`/config/data-source`）**主列表**只验证
+  查询字段组排版、结果摘要、新增按钮三项样式的复用；不改变业务行为。
+- **已实施**：该页显式引入同一公共样式，替换四项私有同义类并删除私有规则；
+  验证证据见 §0.3。其余页面未接入。
+- **分别记录、独立决定**（不与三项样式验证捆绑，本轮均未实施）：
   1. 数据源“更多”文字入口改为公共三点入口——替换时保留原菜单项、顺序、禁用条件与
      业务行为，并保留点击区域、键盘打开和读屏“更多操作”名称；需页面级授权与验收；
   2. 数据源新增／编辑主弹窗接入既有 `ced-dialog` CSS——需保留 EP 表单校验、
      全局错误区等业务差异，并删除页面私有同义规则。
 - **备选**：数据订阅（`/config/subscribe`）——结构改造面更大，留作后续候选。
-- 数据源管理仅是**候选页**，当前**未获迁移授权**；任何迁移仍需逐页独立评估、授权、实施与验收。
+- 本轮仅构成数据源页三项样式的**页面级接入**，不构成模板整体批准；
+  其他页面迁移仍需逐页独立评估、授权、实施与验收。
 
 ## 7. 三阶段计划
 
@@ -399,20 +445,24 @@ QueryListPageShell
 8. **未执行**：独立正式验收执行（`phase_2_acceptance_status=NOT_EXECUTED`），
    与视觉验收分别记录，不得合并解读。
 
-### 第三阶段（待负责人确认接入页及范围）
+### 第三阶段（已实现，待远端复审与负责人视觉验收）
 
-- 在**第二个真实管理页**验证三项样式的复用；数据源管理主列表为首选候选，
-  接入页与范围待负责人决定，首选仅验证查询字段组排版、结果摘要、新增按钮三项；
-- 其“更多”改三点、主弹窗接 `ced-dialog` 分别记录、独立决定；
-- 替换“更多”时保留原菜单项、顺序、禁用条件与业务行为；
-- 业务属性、命名策略、连接测试等**业务专属流程不进模板**；
-- 每页独立授权、独立实现、独立复审与验收。
+1. **已完成**：负责人确认只验证数据源管理主列表的三项样式复用；
+2. **已完成**：数据源页显式引入同一公共样式，替换四项私有同义类并删除私有规则，
+   保留字段宽度、摘要文案、按钮图标、插槽与全部业务处理；
+3. **已完成**：静态契约扩至两个接入页；定向 Vitest 311/311、`npm run build` 通过；
+4. **已完成**：真实浏览器 1280×800 / 900×800 基线与实现几何/样式零差异、
+   截图逐字节一致；探针页回归正常、未接入页零泄漏；查询/回车/重置/新增弹窗行为一致；
+5. **待执行**：远端只读代码复审；
+6. **待执行**：负责人对 `/config/data-source` 的视觉验收；
+7. **未实施**：数据源“更多”改三点、主弹窗接 `ced-dialog`，分别记录、独立决定；
+8. 业务属性、命名策略、连接测试等**业务专属流程不进模板**。
 
 ## 8. 第一步收口当时明确未做（历史记录）
 
 > 以下为第一步范围确认收口（`PUBLIC-LIST-MANAGEMENT-TEMPLATE-SCOPE-APPROVAL-CLOSEOUT-001`）
-> 当时的事实快照。第二步实现与收口已由后续任务完成，现行状态以文件头状态块与
-> §0.1–§0.2 为准。
+> 当时的事实快照。第二、三步实现与收口已由后续任务完成，现行状态以文件头状态块与
+> §0.1–§0.3 为准。
 
 - 未创建或修改任何 CSS、Vue 组件、composable、TypeScript 类型或测试；
 - 未修改 `frontend/**`、`backend/**`、依赖、锁文件、配置或业务基线；
@@ -426,16 +476,16 @@ QueryListPageShell
 
 | 文件 | 职责 |
 |---|---|
-| `README.md`（本文件） | 已确认范围总表、组合入口、三套能力状态、组合示例与行为说明、二期提取范围、交互约定、三阶段计划、确认记录 |
-| [INVENTORY-AND-SCOPE.md](./INVENTORY-AND-SCOPE.md) | 11 项能力矩阵、逐项证据、职责边界、探针接入改动与实测、第二页比较、验证命令与完成标准、待决事项、源码索引 |
+| `README.md`（本文件） | 已确认范围总表、组合入口、三套能力状态、组合示例与行为说明、阶段实施与验收记录、交互约定、三阶段计划、确认记录 |
+| [INVENTORY-AND-SCOPE.md](./INVENTORY-AND-SCOPE.md) | 11 项能力矩阵、逐项证据、职责边界、探针页与数据源页接入改动及实测、验证命令与完成标准、待决事项、源码索引 |
 
 ## 10. 第一步范围确认记录（已完成）
 
 项目负责人已于 `2026-11-11` 逐行确认 §0 的六项范围，覆盖页面骨架／搜索栏、
 结果区／新增按钮、主表格、行操作／二次确认、新增／编辑主弹窗、状态标签／列表刷新。
 
-> 下方代码块为第一步收口时的历史快照；第二步实现与收口状态以文件头状态块与
-> §0.1–§0.2 为准。
+> 下方代码块为第一步收口时的历史快照；第二、三步实现与收口状态以文件头状态块与
+> §0.1–§0.3 为准。
 
 ```text
 phase_1_scope_status=CONFIRMED
@@ -451,18 +501,21 @@ next_step=SEPARATE_PHASE_2_IMPLEMENTATION_TASK
 ```
 
 **下一步：** 第二步已收口（实现提交 `e1880494a50d7ad9842b4db9026963efc84e6441`、
-远端复审 `APPROVED`、负责人视觉验收 `PASSED`）；仍待负责人决定第三阶段接入页及范围。
-数据源／探针端选择器仍为公共控件候选，待实际使用页面验证后再决定封装。
+远端复审 `APPROVED`、负责人视觉验收 `PASSED`）；第三步数据源主列表三项样式已实现，
+待远端代码复审与负责人视觉验收（见 §0.3）。数据源“更多”改三点、主弹窗接 `ced-dialog`
+仍分别待后续独立决定；数据源／探针端选择器仍为公共控件候选。
 
 ## 11. 边界声明
 
-- 第一步六项范围已确认，但模板基线仍为 `NOT_APPROVED`；第二步实现**不构成**
-  模板整体批准或任何页面迁移授权；
+- 第一步六项范围已确认，但模板基线仍为 `NOT_APPROVED`；第二、三步实现**均不构成**
+  模板整体批准或任何其他页面迁移授权；
 - 三项 CSS 已在探针页落地并通过静态契约、构建与真实浏览器等价核对（见 §0.1）；
   第二步已收口：远端代码复审 `APPROVED`、负责人视觉验收 `PASSED`（2026-11-11）；
   **独立正式验收执行仍为 `NOT_EXECUTED`**，视觉验收键与正式验收键分别记录；
-  选择器、公共菜单、确认框、状态标签与请求逻辑仍为候选或暂缓项；
-- 数据源管理主列表仅为第三阶段候选，未获迁移授权；接入页与范围待负责人决定；
+- 第三步仅覆盖 `/config/data-source` 主列表的三项样式复用，已实现但**远端复审
+  `PENDING`、负责人视觉验收 `NOT_EXECUTED`**；不得把本页接入写成模板整体通过；
+- 数据源“更多”改三点、主弹窗接 `ced-dialog` **未在本轮实施**，仍待各自独立决定；
+  数据订阅仅备选，未授权；
 - 静态盘点不能证明真实键盘行为、焦点顺序、几何布局、后端结果或写路径；
-  已执行的浏览器等价验证只覆盖探针页三项样式归并，其余仍需在后续阶段分别验证，
-  且不得把未运行项写成 `PASS`。
+  已执行的浏览器等价验证只覆盖探针页与数据源页的三项样式接入，其余仍需在后续阶段
+  分别验证，且不得把未运行项写成 `PASS`。

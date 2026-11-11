@@ -247,7 +247,7 @@ async function clickStrategyCard(w: PageWrapper, name: string) {
 
 /** 查询区字段组（标签 + 控件，公共查询面板的直接 flex 子项）。 */
 function queryGroup(w: PageWrapper, label: string) {
-  const group = w.findAll('.ds-q-group').find((g) => g.find('.ds-q-label').text() === label)
+  const group = w.findAll('.lmt-q-field').find((g) => g.find('.lmt-q-label').text() === label)
   if (!group) {
     throw new Error(`query group not found for label: ${label}`)
   }
@@ -918,7 +918,7 @@ describe('列表视觉调整：序号列、主机列宽与黑色主按钮（UI �
   it('新增数据源为黑色实心主按钮并保留加号图标', async () => {
     const wrapper = await mountPage()
 
-    const addButton = wrapper.find('.ql-result-panel__toolbar .ds-add-button')
+    const addButton = wrapper.find('.ql-result-panel__toolbar .lmt-add-button')
     expect(addButton.exists()).toBe(true)
     expect(addButton.text()).toContain('新增数据源')
     expect(addButton.find('.ds-add-icon').exists()).toBe(true)

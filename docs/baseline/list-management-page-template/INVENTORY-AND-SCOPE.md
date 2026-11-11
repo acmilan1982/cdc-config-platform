@@ -1,10 +1,10 @@
-# 公共列表管理页模板 · 能力盘点与第一步范围（第二步已收口，第三步待负责人确认）
+# 公共列表管理页模板 · 能力盘点与第一步范围（第三步数据源页已接入，待复审与视觉验收）
 
 ```text
-list_management_page_template_document_status=PHASE_2_ACCEPTANCE_CLOSED_PENDING_PHASE_3_SCOPE_DECISION
+list_management_page_template_document_status=PHASE_3_IMPLEMENTED_PENDING_REMOTE_REVIEW_AND_OWNER_VISUAL_ACCEPTANCE
 list_management_page_template_baseline_status=NOT_APPROVED
-task_scope=PHASE_2_ACCEPTANCE_CLOSEOUT_DOC_ONLY
-task_code=PUBLIC-LIST-MANAGEMENT-TEMPLATE-PHASE-2-ACCEPTANCE-CLOSEOUT-001
+task_scope=PHASE_3_DATA_SOURCE_THREE_STYLE_ADOPTION
+task_code=PUBLIC-LIST-MANAGEMENT-TEMPLATE-PHASE-3-DATA-SOURCE-ADOPTION-001
 original_inventory_task_code=PUBLIC-LIST-MANAGEMENT-TEMPLATE-INVENTORY-AND-SCOPE-DRAFT-001
 inventory_source_commit=6560c73fb71aa5b8441de4a57fe777d7810b12da
 r0_result_commit=03e4bffa49e3a74300a7c604969130473017a631
@@ -29,11 +29,23 @@ phase_2_owner_visual_acceptance_date=2026-11-11
 phase_2_owner_visual_acceptance_scope=/config/client_THREE_SHARED_STYLES_AND_PAGE_PRESENTATION
 phase_2_acceptance_status=NOT_EXECUTED
 phase_2_closeout_status=CLOSED
-phase_3_candidate_status=CANDIDATE_NOT_AUTHORIZED
-phase_3_scope_decision_status=PENDING_OWNER_DECISION
-product_code_change_status=PHASE_2_MINIMUM_ONLY
-page_migration_status=NOT_STARTED_BY_THIS_TASK
-next_entry=PHASE_3_SCOPE_AND_PAGE_CONFIRMATION_PENDING_OWNER_DECISION
+owner_phase_3_scope_confirmation_status=CONFIRMED_THREE_STYLES_ONLY
+owner_phase_3_scope_confirmation_date=2026-11-11
+phase_3_candidate_status=SELECTED_AND_AUTHORIZED_FOR_THREE_STYLES
+phase_3_scope_decision_status=CONFIRMED_THREE_STYLES_ONLY
+phase_3_implementation_status=IMPLEMENTED
+phase_3_implementation_task_code=PUBLIC-LIST-MANAGEMENT-TEMPLATE-PHASE-3-DATA-SOURCE-ADOPTION-001
+phase_3_implementation_commit=RECORDED_IN_TASK_RESULT_OUTPUT
+phase_3_implementation_base_commit=0030a1c74776a37e41fec905a880af9eab831395
+phase_3_adoption_page=/config/data-source
+phase_3_adoption_scope=THREE_SHARED_STYLES_ONLY
+phase_3_adoption_status=CLASSES_BOUND_OLD_PRIVATE_RULES_REMOVED
+phase_3_remote_code_review_status=PENDING
+phase_3_owner_visual_acceptance_status=NOT_EXECUTED
+phase_3_closeout_status=NOT_CLOSED
+product_code_change_status=PHASE_3_THREE_STYLE_ADOPTION_ONLY
+page_migration_status=NOT_STARTED
+next_entry=PHASE_3_REMOTE_CODE_REVIEW_AND_OWNER_VISUAL_ACCEPTANCE
 ```
 
 > 本文件是[README.md](./README.md)的配套盘点。第一步六项范围已由项目负责人于
@@ -41,15 +53,21 @@ next_entry=PHASE_3_SCOPE_AND_PAGE_CONFIRMATION_PENDING_OWNER_DECISION
 > 第二步最小实现提交 `e1880494a50d7ad9842b4db9026963efc84e6441`（基线
 > `4809577c3ee4733780052a674c54d9cecb215ef2`）已在探针端管理落地，ChatGPT 远端只读代码
 > 复审通过，项目负责人于 `2026-11-11` 对 `/config/client` 三项共用样式及页面呈现反馈
-> 视觉验收通过，第二步据此收口（详见 README §0.1–§0.2）。其余候选形态与候选页仍未被
-> 批准，不得引用为现行规则。第一步源码证据的路径与行号基于固定 SHA
-> `6560c73fb71aa5b8441de4a57fe777d7810b12da`；第二步实现事实以现行源码为准。
+> 视觉验收通过，第二步据此收口（详见 README §0.1–§0.2）。
+>
+> 项目负责人已确认第三步只验证数据源管理 `/config/data-source` 主列表的三项样式；
+> 本轮已按该范围接入同一公共样式、删除四项私有同义规则，当前为**已实现、待远端复审
+> 与负责人视觉验收**（详见 README §0.3）。其余候选形态与候选页仍未被批准，不得引用为
+> 现行规则。第一步源码证据的路径与行号基于固定 SHA
+> `6560c73fb71aa5b8441de4a57fe777d7810b12da`；第二、三步实现事实以现行源码为准。
 >
 > **口径区分：** `phase_2_acceptance_status` 保持 `NOT_EXECUTED`，表示未单独开展
-> “独立正式验收执行”，不得解读为已通过；负责人视觉验收另以
-> `phase_2_owner_visual_acceptance_status=PASSED` 独立记录。
+> “独立正式验收执行”，不得解读为已通过；第二步负责人视觉验收另以
+> `phase_2_owner_visual_acceptance_status=PASSED` 独立记录。第三步的
+> `phase_3_remote_code_review_status=PENDING`、`phase_3_owner_visual_acceptance_status=NOT_EXECUTED`
+> 同样不得预写通过。
 >
-> 第二步只新增三项显式 opt-in 纯 CSS 并替换探针页四项私有同义规则；未迁移页面，
+> 两步均只涉及三项显式 opt-in 纯 CSS、页面类替换与静态测试；未迁移页面结构或业务行为，
 > 未改变任何已批准模板、页面迁移状态或既有 Feature 验收状态。
 
 ## 1. 盘点方法与判定口径
@@ -67,15 +85,15 @@ next_entry=PHASE_3_SCOPE_AND_PAGE_CONFIRMATION_PENDING_OWNER_DECISION
 | 分类 | 含义 |
 |---|---|
 | **直接复用** | 既有公共能力已覆盖，本模板只规定用法，不新增代码 |
-| **本期提取** | 第二阶段提取为新的公共能力（已在探针页落地，第二步已收口） |
+| **本期提取** | 第二阶段提取为新的公共能力；已由探针页与数据源页显式接入 |
 | **可选扩展** | 有跨页价值，但本期不做，留作后续独立评估 |
 | **业务专属** | 含业务语义或页面差异，应留在 Feature 页面 |
 | **暂不提取** | 本期仅固化契约与检查项，不新增公共代码 |
 
 ### 1.3 “本期”与“后续”
 
-- **本期** = 第一步范围确认后的**第二阶段最小提取**（已在探针页落地，第二步已收口）；
-- **后续** = 第三阶段及更晚的独立任务；
+- **本期** = 第三步数据源管理主列表的**三项样式复用验证**（已实现，待复审与视觉验收）；
+- **后续** = 数据源“更多”改三点、主弹窗接入 `ced-dialog` 及其他页面的独立任务；
 - 三项 CSS 与统一交互约定已由负责人确认；选择器、公共菜单、确认框、状态标签与请求逻辑
   仍为候选或暂缓项，未获实施授权。
 
@@ -84,8 +102,8 @@ next_entry=PHASE_3_SCOPE_AND_PAGE_CONFIRMATION_PENDING_OWNER_DECISION
 | # | 能力 | 现行实现位置 | 公共化状态 | 分类 | 目标形态 | 阶段 |
 |---|---|---|---|---|---|---|
 | C1 | 页面骨架 | `query-list/QueryListPageShell.vue` | 6 组件 + 1 composable 已实现；权威验收 21/21；参考页 + 两页页面级接入 | 直接复用 | Vue 组件（既有） | 已完成（范围已确认） |
-| C2 | 搜索栏 | `QueryListQueryPanel` + `QueryListActions` + 页面字段组 | 容器/按钮已实现；字段组已收敛到公共 CSS（探针页） | 直接复用 + 第二阶段提取（字段组 CSS，已落地） | 既有组件 + 纯 CSS opt-in；选择器候选 | 第二阶段（已收口） |
-| C3 | 结果工具栏 | `QueryListResultPanel` 槽位 + 页面摘要/新增按钮 | 面板已实现；摘要与按钮已收敛到公共 CSS（探针页） | 直接复用 + 第二阶段提取（摘要/按钮 CSS，已落地） | 既有组件 + 纯 CSS opt-in | 第二阶段（已收口） |
+| C2 | 搜索栏 | `QueryListQueryPanel` + `QueryListActions` + 页面字段组 | 容器/按钮已实现；字段组已收敛到公共 CSS（探针页） | 直接复用 + 第二阶段提取（字段组 CSS，已落地） | 既有组件 + 纯 CSS opt-in；选择器候选 | 第二阶段已收口；第三步数据源页已接入（待复审与验收） |
+| C3 | 结果工具栏 | `QueryListResultPanel` 槽位 + 页面摘要/新增按钮 | 面板已实现；摘要与按钮已收敛到公共 CSS（探针页） | 直接复用 + 第二阶段提取（摘要/按钮 CSS，已落地） | 既有组件 + 纯 CSS opt-in | 第二阶段已收口；第三步数据源页已接入（待复审与验收） |
 | C4 | 无分页表格 | `list-table-visual.css` + `lt-main-table` | 基础 + DS 参考页 14/14 最终接受；可选三点/单行高亮已实现、复审 `APPROVED`，探针页面级接入、待接受 | 直接复用 | 纯 CSS + 可选辅助类；成组入口统一三点 | 已完成（复用） |
 | C5 | 行操作菜单 | `lt-row-action__*` 外观 + 页面 `ElDropdown` | 仅三点外观公共化；菜单与忙碌状态页面实现 | 直接复用 + 用法契约（成组入口统一三点） | 既有 CSS + 用法契约 | 第三阶段评估（DS 替换单独记录） |
 | C6 | 新增／编辑弹窗 | `create-edit-dialog-visual.css` | 公共 CSS 已实现、代码复审 `APPROVED`；仅探针页面级接入且接入复审通过；模板正式验收 `NOT_EXECUTED`；Vue `NOT_CREATED` | 直接复用（CSS，按需）；暂不提取（Vue 包装） | 既有 CSS + 令牌 | 第三阶段评估（DS 弹窗单独记录） |
@@ -148,10 +166,10 @@ next_entry=PHASE_3_SCOPE_AND_PAGE_CONFIRMATION_PENDING_OWNER_DECISION
   输入框 `@keyup.enter="onQuery"`（`:18`）。
 - 数据源页：`DataSourcePage.vue:11-58`，四个字段（输入 `180px`、角色下拉 `140px`），
   三个输入框均 `@keyup.enter="onQuery"`（`:20/31/52`）。
-- 字段组为页面私有：探针 `.cc-q-group/.cc-q-label`（`ClientConfigPage.vue:1534/1541`）；
-  数据源 `.ds-q-group/.ds-q-label`（`DataSourcePage.vue:1665/1672`）。
-  两处均为 `inline-flex; align-items:center; gap:6px` + 标签 `13px` 常规色、`nowrap`，
-  数值一致但无公共来源。
+- 字段组原为页面私有（接入前形态）：探针 `.cc-q-group/.cc-q-label`、
+  数据源 `.ds-q-group/.ds-q-label`；两处均为 `inline-flex; align-items:center; gap:6px`
+  + 标签 `13px` 常规色、`nowrap`，数值一致但无公共来源。第二、三阶段已分别改用
+  `.lmt-q-field/.lmt-q-label` 公共类并删除私有规则（见 §5、§5.1）。
 - 回车查询是**页面绑定**，不是组件能力。
 - 重置语义是**页面策略**：两页都只清空查询控件，**不发起请求**、不改已应用条件与当前结果
   （探针 `:705-711`；数据源 `:608-611`）。
@@ -173,11 +191,13 @@ next_entry=PHASE_3_SCOPE_AND_PAGE_CONFIRMATION_PENDING_OWNER_DECISION
 - 来源／角色／状态候选与各页“全部”语义、回车绑定、重置默认值与已应用条件快照：
   **业务专属**，由页面实现，并按统一交互约定约束（见 [README.md](./README.md) §5.1）。
 
-**已落地提取形态（第二阶段，探针页）**
+**已落地提取形态（第二、三阶段）**
 
 - 公共源：`frontend/src/styles/list-management/list-management-visual.css`；
 - 新增显式 opt-in 类：`.lmt-q-field`（`inline-flex`、垂直居中、`gap:6px`）、
   `.lmt-q-label`（`13px`、常规文字色、`nowrap`）。固定字面量，不新增令牌。
+- 接入页：探针端管理（第二阶段）、数据源管理（第三阶段，已实现待复审与验收）；
+  两页均替换各自私有字段组类并删除私有规则，字段宽度仍留页面。
 - 字段组排版提供**默认对齐、组内间距与整组换行**：标签与控件作为一个 flex 项整体换行，
   不拆开；换行位置仍由 `QueryListQueryPanel` 既有 `flex-wrap:wrap; gap:8px 14px` 决定，
   公共 CSS 不改写其 gap 或换行方式。
@@ -212,20 +232,23 @@ next_entry=PHASE_3_SCOPE_AND_PAGE_CONFIRMATION_PENDING_OWNER_DECISION
   新增按钮 `.cc-btn-add`（`:1563-1590`，`#09090b/#27272a/#18181b`，
   `:not(.is-disabled)` 只改正常态），图标间距 `.cc-btn-icon`（`:1592-1595`）。
   第二阶段已把摘要与按钮替换为 `.lmt-result-count` / `.lmt-add-button`，图标间距仍留页面。
-- 数据源页：摘要 `.ds-result-count`（`DataSourcePage.vue:1692-1696`），
-  新增按钮 `.ds-add-button`（`:1698-1719`），数值与状态选择器与探针页一致。
+- 数据源页（接入前形态）：摘要 `.ds-result-count`、新增按钮 `.ds-add-button`，
+  数值与状态选择器与探针页一致；第三阶段已替换为 `.lmt-result-count` / `.lmt-add-button`
+  并删除私有规则（见 §5.1）。
 - 两页在 `toolbar` 槽放“新增”主按钮；本阶段不接入自动刷新工具栏
   （两页均无自动刷新需求，`QueryListRefreshToolbar` 保持可选）。
 
 **分类（2026-11-11 已确认）：**
 
 - 结果面板结构与槽位：**直接复用**（左侧摘要、右侧按需放操作入口）；
-- 摘要文字样式、新增主按钮视觉：**第二阶段提取（纯 CSS，已在探针页落地，第二步已收口）**；
+- 摘要文字样式、新增主按钮视觉：**第二阶段提取（纯 CSS）；已由探针页与数据源页显式接入**；
 - 自动刷新工具栏：**暂不提取**（只适用于只读查询页的 opt-in 能力，本模板不默认启用）。
 
-**已落地提取形态（第二阶段，探针页）**
+**已落地提取形态（第二、三阶段）**
 
 - 公共源：`frontend/src/styles/list-management/list-management-visual.css`；
+- 接入页：探针端管理（第二阶段）、数据源管理（第三阶段，已实现待复审与验收）；
+  两页均保留各自摘要文案、按钮图标与点击行为，仅替换视觉类并删除私有规则。
 
 - 结构不新增：结果摘要继续使用 `QueryListResultPanel` 既有 `summaryText` prop
   或 `summary` 槽渲染，新增按钮继续放在 `toolbar` 槽；公共层只替换文字／按钮视觉。
@@ -586,7 +609,7 @@ Tooltip 共存需真实浏览器验证；未 opt-in 页面必须零匹配。三�
 | `.ql-page` / `.ql-q-panel` / `.ql-actions` / `.ql-result-panel` | `frontend/src/components/query-list/*` |
 | `.lt-main-table` / `--lt-*` / `lt-row-action__*` / `lt-row-highlight*` | `frontend/src/styles/list-table/list-table-visual.css` |
 | `.ced-dialog` / `ced-*` / `--ced-*` | `frontend/src/styles/dialog/create-edit-dialog-visual.css` |
-| 查询字段组、结果摘要、新增按钮（**第二阶段已落地**） | `frontend/src/styles/list-management/list-management-visual.css` |
+| 查询字段组、结果摘要、新增按钮（已由探针页与数据源页显式接入） | `frontend/src/styles/list-management/list-management-visual.css` |
 
 页面**不得**保留与上述来源同义的私有副本；迁移时删除私有规则，
 而不是两套并存。
@@ -656,7 +679,46 @@ Tooltip 共存需真实浏览器验证；未 opt-in 页面必须零匹配。三�
 与 ID 省略、菜单事件隔离、请求防重、取消零写。该页面任何后续改动都必须另立任务，
 做等价回归并由负责人目视；本次第二阶段改动已按此执行并完成复审与视觉验收收口。
 
-## 6. 第二页候选比较（第三阶段，未授权）
+### 5.1 数据源管理接入改动（第三阶段，已实现，待复审与视觉验收）
+
+项目负责人已确认第三步只验证数据源管理主列表的三项样式复用。本轮在该页**只做视觉归并**，
+不改查询结构、表格、弹窗或业务行为：
+
+| 数据源页原私有类 | 已实施改动 | 业务行为 |
+|---|---|---|
+| `.ds-q-group` / `.ds-q-label` 私有字段组 | 改用 `.lmt-q-field` / `.lmt-q-label`，删除私有规则；`.ds-q-input` 180px 与 `.ds-q-category` 140px 宽度保留 | 不变 |
+| `.ds-result-count` 私有摘要 | 改用 `.lmt-result-count`，删除私有规则；摘要文案保留 | 不变 |
+| `.ds-add-button` 私有新增按钮 | 改用 `.lmt-add-button`，删除四态私有规则；`.ds-add-icon` 图标间距、按钮文案、插槽与点击行为保留 | 不变 |
+| 文字“更多”入口 | **本期不动**；改三点为后续独立决定 | 不变 |
+| 新增/编辑主弹窗 `editor-dialog` | **本期不动**；接入 `ced-dialog` 为后续独立决定 | 不变 |
+| 查询/重置/错误处理、表格、各项业务操作 | **不动** | 不变 |
+
+**接入方式：** `DataSourcePage.vue` 以
+`<style scoped src="@/styles/list-management/list-management-visual.css"></style>` 显式引入，
+与探针页复用同一公共源；不修改公共样式值，不新增 Vue 组件或容器。
+静态契约 `list-management-visual.spec.ts` 的允许接入页由一页扩为两页，分别断言显式引入、
+类挂载、旧私有规则移除、公共源唯一与其他页面零泄漏；`dataSource.spec.ts` 仅定向迁移
+旧类选择器，原断言保留。
+
+**第三阶段实际验证（2026-11-11）：**
+
+- 定向 Vitest 311/311 通过（`list-management-visual.spec.ts` 9 +
+  `ClientConfigPage.spec.ts` 186 + `dataSource.spec.ts` 116）；`npm run build`
+  （含 `vue-tsc --noEmit`）通过；
+- 真实浏览器 1280×800 与 900×800：与实现前基线（同一后端只读数据，273 条）的规范化
+  几何/样式 JSON 除预期类名外零差异，数据源页截图**逐字节一致**；
+  1280 四个字段组同排、900 为两行整组换行；摘要位置与外观、新增按钮位置/样式及
+  normal/hover/focus/active 四态一致；
+- 行为等价：初始列表 GET、文本框回车查询、重置只清空草稿且不立即请求、
+  下一次显式查询更新结果、新增弹窗打开并取消关闭，均与基线一致；无数据库写入；
+- 回归与隔离：探针端管理 `/config/client` 仍正常挂载 6 个 `lmt-*` 元素，四态不变；
+  未接入页 `/monitor/data-source-state` 的 `lmt-*` 零命中；
+- 输入法选字回车与下拉回车未在数据源页单独复现，按既有交互基线保留。
+
+**待执行：** 远端只读代码复审、负责人对 `/config/data-source` 的视觉验收。
+模板整体基线仍为 `NOT_APPROVED`；本轮不构成其他页面迁移授权。
+
+## 6. 第二页候选比较（第三阶段范围已确认）
 
 ### 6.1 评估口径
 
@@ -684,8 +746,9 @@ Tooltip 共存需真实浏览器验证；未 opt-in 页面必须零匹配。三�
 
 - 结构接近度：**最高**；已接入查询列表组件与 `lt-main-table`，
   适合直接验证三项样式在该页的复用；
-- **第三阶段接入页及范围**：第二阶段已收口，接入页与范围**仍待负责人决定**；
-  第二阶段本身以探针端管理为首个参考页，未接入数据源页；
+- **第三阶段接入页及范围**：项目负责人已于 `2026-11-11` 明确确认第三步只验证
+  数据源管理主列表的三项样式；页面已按该范围接入（见 §5.1），
+  第二步本身以探针端管理为首个参考页；
 - 首选范围：仅主列表上的三项样式（查询字段组排版、结果摘要、新增主按钮），
   不改变业务行为；业务属性/命名策略/连接测试不进入模板；
 - **分别记录、独立决定**（不与三项样式捆绑）：
@@ -695,9 +758,10 @@ Tooltip 共存需真实浏览器验证；未 opt-in 页面必须零匹配。三�
      业务差异，并删除页面私有同义规则；
 - 风险：需回归已接受的 DS 行为；上述两项若实施，均需页面级授权与独立验收。
 
-**结论：推荐作为第三阶段第二页候选**，首选仅验证三项样式；其余业务专属流程排除在外，
-“更多”改三点、主弹窗接 `ced-dialog` 作为可独立决定的后续项。
-**仅为候选，未获迁移授权；接入页与范围待负责人确认。**
+**结论：作为第三阶段第二页**，范围限定为三项样式，其余业务专属流程排除在外；
+“更多”改三点、主弹窗接 `ced-dialog` 仍未实施，作为可独立决定的后续项。
+**第三步范围已由负责人确认并完成接入（待远端复审与负责人视觉验收）；
+页面级迁移授权仍为 `NOT_GRANTED`，本步不构成迁移。**
 
 ### 6.3 候选 B：数据订阅（`/config/subscribe`）
 
@@ -773,16 +837,23 @@ Tooltip 共存需真实浏览器验证；未 opt-in 页面必须零匹配。三�
   视觉验收键与正式验收键分别记录，不得合并解读；
 - 第二步已收口（`phase_2_closeout_status=CLOSED`）；模板整体基线仍为 `NOT_APPROVED`。
 
-### 7.3 第三阶段（待负责人确认接入页及范围）
+### 7.3 第三阶段（已实现，待远端复审与负责人视觉验收）
 
-- 数据源管理主列表为首选候选，**接入页与范围仍待负责人决定**；
-  首选仅验证查询字段组排版、结果摘要、新增按钮三项样式的复用；
-- 第二页选中范围的行为等价回归，含已接受 Feature 用例；
-- “更多”改三点、主弹窗接 `ced-dialog` 分别独立授权、独立实现、独立验收；
-- 真实后端成功/失败/超时响应；
-- 写操作（启停/删除/保存）如需数据库写入，必须另行审批；
-- 真实键盘/焦点/几何/窄视口验证；
-- 独立复审与负责人目测、独立正式验收。
+- 项目负责人已确认第三步只验证数据源管理主列表的三项样式：查询字段组排版、
+  结果摘要、新增主按钮；页面已按该范围接入，细节与验证见 §5.1；
+- **已完成**：定向 Vitest 311/311 通过（公共契约 9 + 探针页 186 + 数据源页 116）；
+  `npm run build`（含 `vue-tsc --noEmit`）通过；
+- **已完成**：真实浏览器 1280×800 / 900×800 与基线截图逐字节一致（273 行数据）；
+  字段组整组换行与对齐、摘要位置与样式、新增按钮普通/悬停/聚焦/按下态、
+  探针页不回归、未接入页 `/monitor/data-source-state` 零泄漏；
+- **已完成**：行为等价（只做视觉归并）：文本查询回车、重置与查询按钮、
+  新增弹窗打开与取消；未做任何数据库写操作；
+- **待执行**：ChatGPT 远端只读代码复审；项目负责人对 `/config/data-source` 的视觉验收；
+  独立正式验收（`NOT_EXECUTED`，与视觉验收分别记录）；
+- “更多”改三点、主弹窗接 `ced-dialog` 未实施，分别独立授权、独立实现、独立验收；
+- 真实后端失败/超时响应、键盘焦点顺序全量复现、写操作路径（如启停/删除/保存）
+  未在本阶段运行；写操作如需数据库写入必须另行审批；
+- 模板整体基线仍为 `NOT_APPROVED`；页面级迁移授权仍为 `NOT_GRANTED`。
 
 ### 7.4 静态分析的边界
 
@@ -804,10 +875,12 @@ Tooltip 与 `+N` 共存、后端结果、并发竞态、写路径。上述均须
    请求 composable，只固化统一契约与使用示例。
 4. **选择器候选：已确认** —— 数据源／探针端选择器（含多选下拉筛选）列为公共控件候选，
    在实际使用它们的页面验证后再决定是否封装，本阶段不提取。
-5. **第三阶段候选：接入页及范围待负责人确认** —— 数据源管理主列表仍为首选候选；
-   其“更多”改三点、主弹窗接 `ced-dialog` 分别记录、独立决定；数据订阅保留为备选。
+5. **第三阶段：已确认（第一步时点为候选）** —— 第一步收口时数据源管理主列表为
+   首选候选、接入页与范围待确认；`2026-11-11` 负责人已确认只验证三项样式并完成接入
+   （见 §5.1）；其“更多”改三点、主弹窗接 `ced-dialog` 仍未实施、分别记录、独立决定；
+   数据订阅保留为备选。
 
-> 下方代码块为第一步收口时的历史快照；第二步实现与收口状态以文件头状态块为准。
+> 下方代码块为第一步收口时的历史快照；第二、三步实现与收口状态以文件头状态块为准。
 
 ```text
 phase_1_scope_status=CONFIRMED
@@ -869,14 +942,17 @@ next_step=SEPARATE_PHASE_2_IMPLEMENTATION_TASK
 
 ## 11. 边界声明
 
-- 第一步六项范围已确认，但**模板基线仍为 `NOT_APPROVED`**；第二步实现不构成模板整体
-  批准或任何页面迁移授权；
-- 三项 CSS 已在探针页落地并通过静态契约、定向测试、构建与真实浏览器等价核对
-  （见 §5）；选择器、公共菜单、确认框、状态标签与请求逻辑仍为候选或暂缓项，未获实施授权；
+- 第一步六项范围已确认，但**模板基线仍为 `NOT_APPROVED`**；第二步、第三步实现均不构成
+  模板整体批准或任何页面迁移授权；
+- 三项 CSS 已在探针页与数据源页落地并通过静态契约、定向测试、构建与真实浏览器等价核对
+  （见 §5、§5.1）；选择器、公共菜单、确认框、状态标签与请求逻辑仍为候选或暂缓项，未获实施授权；
 - 第二步已收口：ChatGPT 远端代码复审 `APPROVED`、项目负责人视觉验收
   `PASSED`（2026-11-11）；**独立正式验收执行仍为 `NOT_EXECUTED`**；
   视觉验收键与正式验收键分别记录，不得互相替代；
-- 第三步授权**未执行**；接入页与范围待负责人决定；
+- 第三步已实现，**仅为数据源管理主列表的三项样式接入**；远端代码复审 `PENDING`、
+  负责人视觉验收 `NOT_EXECUTED`、独立正式验收 `NOT_EXECUTED`；
+  “更多”改三点、主弹窗接 `ced-dialog` 未实施；
 - 探针端管理的 157 条正式验收**不**传播为本模板或任何其他页面的验收结论；
-- 数据源管理是**候选页**，不是已授权迁移页；接入页与范围待负责人确认；
-- 已执行的运行验证只覆盖探针页三项样式归并与基线等价，不得把未运行项写成通过。
+- 数据源管理为第三步接入页，但**页面级迁移授权仍为 `NOT_GRANTED`**，
+  三项样式接入不等于迁移；除探针页与数据源页外无其他页面接入；
+- 已执行的运行验证只覆盖探针页与数据源页的三项样式归并及基线等价，不得把未运行项写成通过。

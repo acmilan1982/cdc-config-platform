@@ -3,13 +3,13 @@ import { existsSync, readdirSync, readFileSync, statSync } from 'node:fs'
 import { join, resolve } from 'node:path'
 
 /**
- * 公共列表管理模板第二阶段静态契约。
+ * 公共列表管理模板第二阶段静态契约（第三步扩至两个接入页）。
  *
  * 只断言源码文本与启用范围，不涉及 CSS 求值或布局：jsdom 不实现层叠与几何，
  * 视觉等价由真实浏览器回归承接。回归目标为四项：
- *   1. 四个公共类确实存在于唯一公共源，且取值与探针页原私有规则等价；
- *   2. 探针页通过 `<style scoped src>` 显式接入，且旧同义私有类与规则已移除；
- *   3. 除探针页外没有其他页面挂载公共类或引用公共源（零泄漏）；
+ *   1. 四个公共类确实存在于唯一公共源，且取值为已确认的等价预设；
+ *   2. 探针端管理与数据源管理通过 `<style scoped src>` 显式接入，旧同义私有类与规则已移除；
+ *   3. 除这两个接入页外没有其他页面挂载公共类或引用公共源（零泄漏）；
  *   4. 公共规则全仓唯一来源，无重复副本。
  */
 
@@ -18,15 +18,26 @@ const CSS_PATH = join(STYLE_DIR, 'list-management-visual.css')
 const SRC_DIR = resolve(process.cwd(), 'src')
 const VIEWS_DIR = join(SRC_DIR, 'views')
 const PAGE_PATH = join(VIEWS_DIR, 'client-config/ClientConfigPage.vue')
+const DATA_SOURCE_PAGE_PATH = join(VIEWS_DIR, 'data-source/DataSourcePage.vue')
 
 const CSS_RELATIVE = 'styles/list-management/list-management-visual.css'
 const PAGE_RELATIVE = 'views/client-config/ClientConfigPage.vue'
+const DATA_SOURCE_PAGE_RELATIVE = 'views/data-source/DataSourcePage.vue'
 const PAGE_STYLE_IMPORT =
   '<style scoped src="@/styles/list-management/list-management-visual.css"></style>'
 
 const CLASSES = ['lmt-q-field', 'lmt-q-label', 'lmt-result-count', 'lmt-add-button']
-/** 探针页在第二阶段被替换掉的私有同义类（公共源与页面均不得再出现）。 */
-const OLD_PRIVATE_CLASSES = ['cc-q-group', 'cc-q-label', 'cc-result-count', 'cc-btn-add']
+/** 探针页与数据源页被替换掉的私有同义类（公共源与页面均不得再出现）。 */
+const OLD_PRIVATE_CLASSES = [
+  'cc-q-group',
+  'cc-q-label',
+  'cc-result-count',
+  'cc-btn-add',
+  'ds-q-group',
+  'ds-q-label',
+  'ds-result-count',
+  'ds-add-button',
+]
 
 function read(file: string): string {
   return readFileSync(file, 'utf8')
@@ -145,35 +156,45 @@ describe('公共列表管理模板第二阶段公共层契约', () => {
     }
   })
 
-  it('6. 探针页以 scoped src 显式接入四个公共类，且旧私有类已移除', () => {
-    const page = read(PAGE_PATH)
-    expect(page).toContain(PAGE_STYLE_IMPORT)
-    for (const cls of CLASSES) {
-      expect(page, cls).toContain(`class="${cls}"`)
+  it('6. 两个接入页均以 scoped src 显式接入四个公共类，且各自旧私有类已移除', () => {
+    for (const [path, label] of [
+      [PAGE_PATH, '探针端管理'],
+      [DATA_SOURCE_PAGE_PATH, '数据源管理'],
+    ] as const) {
+      const page = read(path)
+      expect(page, label).toContain(PAGE_STYLE_IMPORT)
+      for (const cls of CLASSES) {
+        expect(page, `${label} ${cls}`).toContain(`class="${cls}"`)
+      }
     }
-    for (const oldClass of OLD_PRIVATE_CLASSES) {
-      expect(page, oldClass).not.toContain(oldClass)
+    const probePage = read(PAGE_PATH)
+    for (const oldClass of ['cc-q-group', 'cc-q-label', 'cc-result-count', 'cc-btn-add']) {
+      expect(probePage, oldClass).not.toContain(oldClass)
+    }
+    const dataSourcePage = read(DATA_SOURCE_PAGE_PATH)
+    for (const oldClass of ['ds-q-group', 'ds-q-label', 'ds-result-count', 'ds-add-button']) {
+      expect(dataSourcePage, oldClass).not.toContain(oldClass)
     }
   })
 
-  it('7. 只有探针页挂载公共类或引用公共源（其余页面零泄漏）', () => {
+  it('7. 只有两个接入页挂载公共类或引用公共源（其余页面零泄漏）', () => {
     const vueFiles = walk(VIEWS_DIR).filter((file) => file.endsWith('.vue'))
     const mounted = vueFiles
       .filter((file) => read(file).includes('lmt-'))
       .map(relative)
       .sort()
-    expect(mounted).toEqual([PAGE_RELATIVE])
+    expect(mounted).toEqual([PAGE_RELATIVE, DATA_SOURCE_PAGE_RELATIVE].sort())
     const imported = vueFiles
       .filter((file) => read(file).includes('styles/list-management/list-management-visual.css'))
       .map(relative)
       .sort()
-    expect(imported).toEqual([PAGE_RELATIVE])
+    expect(imported).toEqual([PAGE_RELATIVE, DATA_SOURCE_PAGE_RELATIVE].sort())
   })
 
   it('8. 公共规则与类名全仓唯一来源，无重复副本', () => {
     const files = walk(SRC_DIR).filter((file) => file.endsWith('.css') || file.endsWith('.vue'))
     const hits = files.filter((file) => read(file).includes('lmt-')).map(relative).sort()
-    expect(hits).toEqual([CSS_RELATIVE, PAGE_RELATIVE].sort())
+    expect(hits).toEqual([CSS_RELATIVE, PAGE_RELATIVE, DATA_SOURCE_PAGE_RELATIVE].sort())
   })
 
   it('9. 旧同义私有选择器未在任何样式或页面源码中重新出现', () => {
