@@ -1,13 +1,15 @@
-# 公共列表管理页模板 · 组合入口与范围草案（R1）
+# 公共列表管理页模板 · 组合入口与范围草案（R2）
 
 ```text
 list_management_page_template_document_status=DRAFT_PENDING_OWNER_CONFIRMATION
 list_management_page_template_baseline_status=NOT_APPROVED
 task_scope=PHASE_1_INVENTORY_AND_SCOPE_DRAFT_ONLY
-task_code=PUBLIC-LIST-MANAGEMENT-TEMPLATE-INVENTORY-AND-SCOPE-DRAFT-001-R1
+task_code=PUBLIC-LIST-MANAGEMENT-TEMPLATE-INVENTORY-AND-SCOPE-DRAFT-001-R2
 original_inventory_task_code=PUBLIC-LIST-MANAGEMENT-TEMPLATE-INVENTORY-AND-SCOPE-DRAFT-001
 inventory_source_commit=6560c73fb71aa5b8441de4a57fe777d7810b12da
 r0_result_commit=03e4bffa49e3a74300a7c604969130473017a631
+r1_result_commit=1550aac92f13d47bade188ade46d8524cec51c64
+inventory_sync_status=NOT_REQUIRED_SCOPE_TABLE_CONSISTENT
 branch=develop
 product_code_change_status=NONE
 page_migration_status=NOT_STARTED_BY_THIS_TASK
@@ -19,10 +21,78 @@ next_entry=OWNER_CONFIRM_PHASE_2_EXTRACTION_SCOPE_AND_FIRST_REFERENCE_PAGE
 > `DRAFT_PENDING_OWNER_CONFIRMATION`，**不是**已批准基线，**不是**实施设计，
 > **不构成**任何页面迁移或产品代码变更授权。
 >
-> 本 R1 为**纯文档定向修订**：**未修改**产品代码、CSS、Vue 组件、测试、依赖、配置、
-> 业务基线定义或既有验收状态；**未迁移**任何页面；**未运行**测试、构建、浏览器、
-> 业务接口或数据库操作；**未启停**任何服务；**未访问** ZooKeeper / Kafka / 业务源库或目标库。
+> 本 R2 在 R1 基础上新增首页模板范围表、新页面使用示例与三阶段完成条件，仍为**纯文档定向修订**：
+> **未修改**产品代码、CSS、Vue 组件、测试、依赖、配置、业务基线定义或既有验收状态；
+> **未迁移**任何页面；**未运行**测试、构建、浏览器、业务接口或数据库操作；
+> **未启停**任何服务；**未访问** ZooKeeper / Kafka / 业务源库或目标库。
 > 文中不能由静态源码或既有基线直接证明的运行效果，均列入后续验证项，**不写成已通过**。
+
+## 0. 模板范围总表（负责人确认用）
+
+> 本表是第一阶段的结论性摘要，供负责人确认第二阶段范围与首个参考页。
+> 逐项证据、源码行号与详细契约仍以 [INVENTORY-AND-SCOPE.md](./INVENTORY-AND-SCOPE.md) 为准；
+> 状态仍为 `DRAFT_PENDING_OWNER_CONFIRMATION`，本表不构成实施授权。
+
+| 能力 | 建议的模板范围 | 页面职责 |
+| --- | --- | --- |
+| 页面骨架、搜索栏 | 复用已有骨架、查询区、查询和重置按钮。建议提取字段组排版 CSS | 查询字段、默认值、回车与重置触发策略 |
+| 结果区、新增按钮 | 复用已有结果面板。建议提取结果摘要和新增按钮 CSS | 统计口径、按钮文案、可见及禁用条件 |
+| 无分页主表格 | 复用表头、间距和内容驱动行高。三点入口、单行高亮按需采用现有样式 | 业务列、是否选中或双击编辑。分页或专用布局按原页面需求处理 |
+| 行操作、二次确认 | 约定菜单防误触、取消确认零写入、同一操作防重。公共菜单与确认框实现暂缓 | 菜单项、可用条件、确认文案、锁当前行或整页 |
+| 新增／编辑主弹窗 | 按需复用已有标签、保存按钮和错误提示视觉 | 表单字段、校验、保存和关闭顺序，以及连接测试等专属流程 |
+| 状态标签、列表刷新 | 约定状态用文字表达、拒绝过期响应。公共标签与请求逻辑暂缓提取 | 状态判定与展示、刷新失败保留还是清空旧数据、是否重选 |
+
+**逐行的本期新增实现口径：** 第 1 行新增字段组排版 CSS，第 2 行新增结果摘要与新增按钮 CSS，
+合计即第二阶段拟提取的三项纯 CSS；第 3–6 行本期**不新增**公共实现，
+只复用既有能力或仅固化契约。表中“复用”均指直接使用三套既有模板的已实现能力，
+不新建 Vue 组件、composable 或容器。
+
+**新页面使用示例（示意，非现行代码）：**
+
+```vue
+<QueryListPageShell title="…" description="…">
+  <QueryListQueryPanel>
+    <!-- 字段组排版：本期拟提取 .lmt-q-field / .lmt-q-label -->
+    <div class="lmt-q-field"><span class="lmt-q-label">关键字</span><el-input … /></div>
+    <template #actions>
+      <!-- 查询/重置按钮：query-list 模板直接复用；探针页当前仅传 query-loading -->
+      <QueryListActions :query-loading="listLoading" @query="onQuery" @reset="onReset" />
+    </template>
+  </QueryListQueryPanel>
+  <QueryListResultPanel>
+    <!-- 结果摘要：本期拟提取 .lmt-result-count -->
+    <template #summary><span class="lmt-result-count">共 {{ rows.length }} 条</span></template>
+    <!-- 新增主按钮：本期拟提取 .lmt-add-button -->
+    <template #toolbar><el-button class="lmt-add-button" @click="openCreate">新增</el-button></template>
+    <!-- 表头/间距/行高：list-table 模板直接复用 -->
+    <template #body><el-table :class="LT_MAIN_TABLE_CLASS" … /></template>
+  </QueryListResultPanel>
+</QueryListPageShell>
+
+<!-- 新增／编辑主弹窗：ced 模板按需直接复用 -->
+<el-dialog class="ced-dialog" …> … <el-button class="ced-submit" …>保存</el-button></el-dialog>
+```
+
+三套既有模板与三项拟提取样式的组合关系：页面骨架／查询区／结果面板来自
+`query-list-page-template`，表格视觉来自 `list-table-visual-template`，弹窗视觉来自
+`create-edit-dialog-visual-template`；三项 `lmt-*` 类只在第二阶段提取后按需 opt-in，
+未启用页面零命中。完整组合结构与唯一维护位置见 §3。
+
+**三阶段完成条件：**
+
+1. **第一阶段（本阶段）**：范围表、新页面使用示例、交互约定与三阶段计划完成并交付；
+   负责人确认第二阶段提取范围与首个参考页。负责人确认是进入第二阶段的前置条件，
+   确认前状态保持 `DRAFT_PENDING_OWNER_CONFIRMATION`，不写产品代码。
+2. **第二阶段**：只新增三项显式 opt-in 纯 CSS（字段组排版、结果摘要、新增主按钮），
+   不新增 Vue 组件或 composable；探针端管理（`/config/client`）作为首个参考页完成视觉归并、
+   删除四项私有同义规则且业务行为不变；静态契约测试、零泄漏断言、`npm run build`
+   （已含 `vue-tsc --noEmit`）、真实浏览器等价核对通过，并通过独立远程代码复审
+   与负责人页面接受。
+3. **第三阶段**：负责人在第二阶段收口后单独确认候选与范围；数据源管理主列表
+   （`/config/data-source`）仅作为验证三项样式复用的主候选，需通过行为等价回归、
+   真实浏览器核对、独立复审与负责人接受；其“更多”改三点、主弹窗接入 `ced-dialog`
+   如实施，各自完成页面级授权、实现、复审与验收。数据订阅保留为备选。
+   候选页当前**未获迁移授权**。
 
 ## 1. 目标与非目标
 
@@ -87,14 +157,19 @@ QueryListPageShell
   <QueryListQueryPanel>
     <div class="lmt-q-field"><span class="lmt-q-label">关键字</span><el-input … /></div>
     <template #actions>
-      <QueryListActions :query-loading="listLoading" :busy="listBusy"
+      <!-- 探针端管理当前仅传 query-loading；busy 为可选阻断，页面未使用时不传 -->
+      <QueryListActions :query-loading="listLoading"
                         @query="onQuery" @reset="onReset" />
     </template>
   </QueryListQueryPanel>
   <QueryListResultPanel>
     <template #summary><span class="lmt-result-count">共 {{ rows.length }} 条</span></template>
     <template #toolbar><el-button class="lmt-add-button" @click="openCreate">新增</el-button></template>
-    <template #error><span>{{ loadError }}</span><el-button link @click="reload">重试</el-button></template>
+    <template #error>
+      <template v-if="loadError">
+        <span>{{ loadError }}</span><el-button link @click="reload">重试</el-button>
+      </template>
+    </template>
     <template #body><el-table :class="LT_MAIN_TABLE_CLASS" … /></template>
   </QueryListResultPanel>
 </QueryListPageShell>
@@ -190,7 +265,7 @@ QueryListPageShell
 
 ## 7. 三阶段计划
 
-### 第一阶段（本任务，已完成草案并完成 R1 修订）
+### 第一阶段（本任务，已完成草案并完成 R1、R2 修订）
 
 - 只读盘点、能力矩阵、第二页候选比较、范围草案与组合契约；
 - 状态 `DRAFT_PENDING_OWNER_CONFIRMATION`；
