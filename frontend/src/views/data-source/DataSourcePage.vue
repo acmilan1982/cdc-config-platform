@@ -126,63 +126,78 @@
           <el-table-column prop="userName" label="用户名" min-width="110" show-overflow-tooltip />
           <el-table-column label="操作" width="110" fixed="right">
             <template #default="{ row }">
-              <!-- 唯一带文字的“更多”入口（不含编辑）；trigger 与弹层事件均不冒泡到行双击（DS-REQ-134） -->
-              <el-dropdown
-                trigger="click"
-                popper-class="ds-more-popper"
-                @command="(command: string) => onRowCommand(command, row)"
-                @click.stop
+              <!-- 唯一带文字的“更多”入口（不含编辑）；trigger 与弹层事件均不冒泡到行双击（DS-REQ-134）。
+                   273 行共用页面底部的同一个下拉菜单实例，这里只保留轻量触发元素。 -->
+              <span
+                class="row-more"
+                role="button"
+                tabindex="0"
+                @click.stop="onRowMoreClick(row, $event)"
+                @keydown="onRowMoreKeydown(row, $event)"
                 @dblclick.stop
               >
-                <span class="row-more" @click.stop @dblclick.stop>
-                  更多<el-icon class="row-more-icon"><ArrowDown /></el-icon>
-                </span>
-                <template #dropdown>
-                  <el-dropdown-menu>
-                    <!-- 异常行（FG_ACTIVE 非 '0'/'1'）只保留归一化“停用”，隐藏全部业务写入口（DS-REQ-167）；
-                         “停用”与正常行一致使用页面警示色（DS-REQ-164） -->
-                    <template v-if="isAbnormal(row)">
-                      <el-dropdown-item
-                        command="disable"
-                        class="ds-more-warning"
-                        :disabled="rowBusy(row)"
-                      >停用</el-dropdown-item>
-                    </template>
-                    <template v-else>
-                      <el-dropdown-item
-                        v-if="row.dataSourceCategory === 'SOURCE'"
-                        command="naming"
-                      >目标库命名策略</el-dropdown-item>
-                      <el-dropdown-item
-                        v-if="row.dataSourceCategory === 'TARGET'"
-                        command="bizAttr"
-                      >业务属性</el-dropdown-item>
-                      <!-- 业务入口 → 一条分隔线 → 启用/停用 → 删除；“删除”为末项且不再产生第二条分隔线（DS-REQ-167） -->
-                      <el-dropdown-item
-                        v-if="!isInactive(row)"
-                        command="disable"
-                        divided
-                        class="ds-more-warning"
-                        :disabled="rowBusy(row)"
-                      >停用</el-dropdown-item>
-                      <el-dropdown-item
-                        v-else
-                        command="enable"
-                        divided
-                        :disabled="rowBusy(row)"
-                      >启用</el-dropdown-item>
-                      <el-dropdown-item
-                        command="delete"
-                        class="ds-more-danger"
-                        :disabled="deletingId !== '' || statusBusyId !== ''"
-                      >删除</el-dropdown-item>
-                    </template>
-                  </el-dropdown-menu>
-                </template>
-              </el-dropdown>
+                更多<el-icon class="row-more-icon"><ArrowDown /></el-icon>
+              </span>
             </template>
           </el-table-column>
         </el-table>
+        <!-- 共享“更多”菜单：整表唯一实例，通过 virtual-triggering 绑定到被点击行；零尺寸不可见宿主。 -->
+        <el-dropdown
+          :ref="setRowMenuRef"
+          class="ds-row-menu-host"
+          popper-class="ds-more-popper"
+          :trigger="ROW_MENU_TRIGGER"
+          virtual-triggering
+          :virtual-ref="rowMenuTrigger"
+          @command="onRowMenuCommand"
+          @visible-change="onRowMenuVisibleChange"
+        >
+          <template #dropdown>
+            <el-dropdown-menu>
+              <!-- 菜单项始终由当前绑定行推导，顺序/禁用条件与原逐行实现一致。 -->
+              <template v-if="rowMenu">
+                <!-- 异常行（FG_ACTIVE 非 '0'/'1'）只保留归一化“停用”，隐藏全部业务写入口（DS-REQ-167）；
+                     “停用”与正常行一致使用页面警示色（DS-REQ-164） -->
+                <template v-if="isAbnormal(rowMenu)">
+                  <el-dropdown-item
+                    command="disable"
+                    class="ds-more-warning"
+                    :disabled="rowBusy(rowMenu)"
+                  >停用</el-dropdown-item>
+                </template>
+                <template v-else>
+                  <el-dropdown-item
+                    v-if="rowMenu.dataSourceCategory === 'SOURCE'"
+                    command="naming"
+                  >目标库命名策略</el-dropdown-item>
+                  <el-dropdown-item
+                    v-if="rowMenu.dataSourceCategory === 'TARGET'"
+                    command="bizAttr"
+                  >业务属性</el-dropdown-item>
+                  <!-- 业务入口 → 一条分隔线 → 启用/停用 → 删除；“删除”为末项且不再产生第二条分隔线（DS-REQ-167） -->
+                  <el-dropdown-item
+                    v-if="!isInactive(rowMenu)"
+                    command="disable"
+                    divided
+                    class="ds-more-warning"
+                    :disabled="rowBusy(rowMenu)"
+                  >停用</el-dropdown-item>
+                  <el-dropdown-item
+                    v-else
+                    command="enable"
+                    divided
+                    :disabled="rowBusy(rowMenu)"
+                  >启用</el-dropdown-item>
+                  <el-dropdown-item
+                    command="delete"
+                    class="ds-more-danger"
+                    :disabled="deletingId !== '' || statusBusyId !== ''"
+                  >删除</el-dropdown-item>
+                </template>
+              </template>
+            </el-dropdown-menu>
+          </template>
+        </el-dropdown>
       </template>
     </QueryListResultPanel>
 
@@ -517,6 +532,69 @@ const effectiveQuery = ref<DataSourceListQuery | null>(null)
 /** 列表请求代次：只有最终生效的请求可更新列表与空状态，旧响应不得覆盖。 */
 const listToken = ref(0)
 
+// ---- 共享“更多”菜单 ----
+// 整表只渲染一个 el-dropdown（virtual-triggering）：打开时绑定到点击行的触发元素，
+// 避免 273 行各自创建下拉组件/浮层实例。菜单项、命令与禁用条件仍按绑定行推导。
+interface RowMenuController {
+  popperRef?: { onOpen?: (event?: Event) => void }
+  handleOpen?: () => void
+  handleClose?: () => void
+}
+const rowMenu = ref<DataSourceListRow | null>(null)
+const rowMenuTrigger = ref<HTMLElement | undefined>()
+const rowMenuOpen = ref(false)
+const rowMenuRef = ref<RowMenuController | null>(null)
+/** 空触发列表：开关完全由页面显式控制，不订阅悬浮/点击触发事件。 */
+const ROW_MENU_TRIGGER: Array<'click' | 'hover' | 'contextmenu'> = []
+
+function setRowMenuRef(el: unknown) {
+  rowMenuRef.value = (el as RowMenuController | null) ?? null
+}
+
+function openRowMenu(row: DataSourceListRow, event?: Event) {
+  rowMenu.value = row
+  const popper = rowMenuRef.value?.popperRef
+  if (popper?.onOpen) {
+    popper.onOpen(event)
+  } else {
+    rowMenuRef.value?.handleOpen?.()
+  }
+}
+
+/** 关闭共享菜单；列表刷新前后调用，保证旧行菜单不会继续响应。 */
+function closeRowMenu() {
+  rowMenuRef.value?.handleClose?.()
+}
+
+function onRowMenuVisibleChange(visible: boolean) {
+  rowMenuOpen.value = visible
+}
+
+function onRowMoreClick(row: DataSourceListRow, event: MouseEvent) {
+  // 同一行菜单已打开：再次点击触发器收起（真实鼠标下 pointerdown 会抑制浮层的点击外部关闭）
+  if (rowMenuOpen.value && rowMenu.value?.dataSourceId === row.dataSourceId) {
+    closeRowMenu()
+    return
+  }
+  rowMenuTrigger.value = event.currentTarget as HTMLElement
+  openRowMenu(row, event)
+}
+
+function onRowMoreKeydown(row: DataSourceListRow, event: KeyboardEvent) {
+  const { key } = event
+  if (key !== 'Enter' && key !== ' ' && key !== 'Spacebar' && key !== 'ArrowDown') {
+    return
+  }
+  event.preventDefault()
+  event.stopPropagation()
+  if (rowMenuOpen.value && rowMenu.value?.dataSourceId === row.dataSourceId) {
+    closeRowMenu()
+    return
+  }
+  rowMenuTrigger.value = event.currentTarget as HTMLElement
+  openRowMenu(row, event)
+}
+
 function categoryLabel(category: string): string {
   return category === 'SOURCE' ? '源库' : '目标库'
 }
@@ -558,6 +636,8 @@ function effectiveSnapshot(): DataSourceListQuery {
 
 async function loadList(querySnapshot: DataSourceListQuery = {}) {
   const token = ++listToken.value
+  // 刷新（查询、启停、删除后重载）一律先收起共享菜单，避免命令落到刷新前的旧行
+  closeRowMenu()
   loading.value = true
   loadError.value = ''
   try {
@@ -607,6 +687,19 @@ function onQuery() {
 /** 重置只清空查询控件：不发请求、不改动表格/总数/错误/已应用条件（DS-REQ-139/140，UI §11.5）。 */
 function onReset() {
   query.value = { id: '', name: '', host: '', category: '' }
+}
+
+/** 共享菜单命令派发：按绑定行 ID 取列表中的当前行对象，避免作用到已刷新的旧行。 */
+function onRowMenuCommand(command: string) {
+  const bound = rowMenu.value
+  if (!bound) {
+    return
+  }
+  const row = rows.value.find((item) => item.dataSourceId === bound.dataSourceId)
+  if (!row) {
+    return
+  }
+  onRowCommand(command, row)
 }
 
 /** “更多”菜单命令派发（稳定 command 值）：菜单不含编辑，编辑入口只保留双击行（DS-REQ-130/131）。 */
@@ -1717,6 +1810,17 @@ onMounted(() => {
   gap: 2px;
   cursor: pointer;
   color: var(--el-color-primary);
+  /* 与原先 el-dropdown 包裹层一致，保持行高与行内对齐不变 */
+  line-height: 1;
+  vertical-align: top;
+}
+
+/* 共享下拉的零尺寸宿主：不参与布局，浮层由 virtual-ref 定位并挂载到 body */
+.ds-row-menu-host {
+  position: absolute;
+  width: 0;
+  height: 0;
+  overflow: hidden;
 }
 
 .row-more-icon {

@@ -280,8 +280,9 @@ async function openEditRow(w: PageWrapper, row: DataSourceListRow) {
 
 /**
  * 第 rowIndex 行“更多”菜单的菜单项。
- * 菜单 teleport 到 body 且持久渲染（组件未卸载即长期留在 document 中），
- * 因此按触发器 `aria-controls` 指向的菜单 id 精确定位，避免命中其他页面的残留弹层。
+ * 整表共用同一个下拉实例（virtual-triggering）：同一时刻只有当前绑定行的触发器带
+ * `aria-controls`，因此先 `openRowMenu(rowIndex)` 再读取；菜单 teleport 到 body 且持久渲染，
+ * 按触发器的 `aria-controls` 指向的菜单 id 精确定位，避免命中其他页面的残留弹层。
  */
 function rowMenuItems(w: PageWrapper, rowIndex = 0): Element[] {
   const menuId = w.findAll('.row-more')[rowIndex]?.attributes('aria-controls')
@@ -569,6 +570,8 @@ describe('查询列表公共组件选择性接入（DS-REQ-116~138）', () => {
     await openRowMenu(wrapper, 1)
     expect(rowMenuLabels(wrapper, 1)).toEqual(['业务属性', '停用', '删除'])
 
+    // 共享菜单同一时刻只绑定一行：切回第 0 行后再检查其菜单结构
+    await openRowMenu(wrapper, 0)
     const menuId = wrapper.findAll('.row-more')[0].attributes('aria-controls')!
     const menu = document.getElementById(menuId)!
     // 分隔线独立渲染且恰好一条：位于业务入口与启用/停用之间（DS-REQ-167 / R1 §3.3）
