@@ -1,7 +1,7 @@
-# 公共列表管理页模板 · 能力盘点与第一步范围（第三步数据源页已接入，待复审与视觉验收）
+# 公共列表管理页模板 · 能力盘点与第一步范围（第三步数据源页已接入并完成验收收口）
 
 ```text
-list_management_page_template_document_status=PHASE_3_IMPLEMENTED_PENDING_REMOTE_REVIEW_AND_OWNER_VISUAL_ACCEPTANCE
+list_management_page_template_document_status=PHASE_3_ACCEPTED_AND_CLOSED
 list_management_page_template_baseline_status=NOT_APPROVED
 task_scope=PHASE_3_DATA_SOURCE_THREE_STYLE_ADOPTION
 task_code=PUBLIC-LIST-MANAGEMENT-TEMPLATE-PHASE-3-DATA-SOURCE-ADOPTION-001
@@ -35,17 +35,23 @@ phase_3_candidate_status=SELECTED_AND_AUTHORIZED_FOR_THREE_STYLES
 phase_3_scope_decision_status=CONFIRMED_THREE_STYLES_ONLY
 phase_3_implementation_status=IMPLEMENTED
 phase_3_implementation_task_code=PUBLIC-LIST-MANAGEMENT-TEMPLATE-PHASE-3-DATA-SOURCE-ADOPTION-001
-phase_3_implementation_commit=RECORDED_IN_TASK_RESULT_OUTPUT
+phase_3_implementation_commit=72027862e9e524403882a5344120476ba0d17a16
 phase_3_implementation_base_commit=0030a1c74776a37e41fec905a880af9eab831395
 phase_3_adoption_page=/config/data-source
 phase_3_adoption_scope=THREE_SHARED_STYLES_ONLY
 phase_3_adoption_status=CLASSES_BOUND_OLD_PRIVATE_RULES_REMOVED
-phase_3_remote_code_review_status=PENDING
-phase_3_owner_visual_acceptance_status=NOT_EXECUTED
-phase_3_closeout_status=NOT_CLOSED
+phase_3_remote_code_review_status=APPROVED
+phase_3_remote_code_review_reviewer=CHATGPT
+phase_3_remote_code_review_date=2026-11-11
+phase_3_remote_code_review_target_commit=72027862e9e524403882a5344120476ba0d17a16
+phase_3_owner_visual_acceptance_status=PASSED
+phase_3_owner_visual_acceptance_date=2026-11-12
+phase_3_owner_visual_acceptance_scope=/config/data-source_THREE_SHARED_STYLES_MAIN_LIST
+phase_3_acceptance_status=NOT_EXECUTED
+phase_3_closeout_status=CLOSED
 product_code_change_status=PHASE_3_THREE_STYLE_ADOPTION_ONLY
 page_migration_status=NOT_STARTED
-next_entry=PHASE_3_REMOTE_CODE_REVIEW_AND_OWNER_VISUAL_ACCEPTANCE
+next_entry=PHASE_3_CLOSED_FOLLOWUPS_PENDING_INDEPENDENT_OWNER_DECISION
 ```
 
 > 本文件是[README.md](./README.md)的配套盘点。第一步六项范围已由项目负责人于
@@ -56,18 +62,19 @@ next_entry=PHASE_3_REMOTE_CODE_REVIEW_AND_OWNER_VISUAL_ACCEPTANCE
 > 视觉验收通过，第二步据此收口（详见 README §0.1–§0.2）。
 >
 > 项目负责人已确认第三步只验证数据源管理 `/config/data-source` 主列表的三项样式；
-> 本轮已按该范围接入同一公共样式、删除四项私有同义规则，当前为**已实现、待远端复审
-> 与负责人视觉验收**（详见 README §0.3）。其余候选形态与候选页仍未被批准，不得引用为
+> 本轮已按该范围接入同一公共样式、删除四项私有同义规则；实现提交
+> `72027862e9e524403882a5344120476ba0d17a16` 已经 ChatGPT 远端只读代码复审通过
+> （2026-11-11），项目负责人于 `2026-11-12` 明确反馈第三步视觉验收通过，第三步据此
+> 收口（详见 README §0.3、§0.4）。其余候选形态与候选页仍未被批准，不得引用为
 > 现行规则。第一步源码证据的路径与行号基于固定 SHA
 > `6560c73fb71aa5b8441de4a57fe777d7810b12da`；第二、三步实现事实以现行源码为准。
 >
-> **口径区分：** `phase_2_acceptance_status` 保持 `NOT_EXECUTED`，表示未单独开展
-> “独立正式验收执行”，不得解读为已通过；第二步负责人视觉验收另以
-> `phase_2_owner_visual_acceptance_status=PASSED` 独立记录。第三步的
-> `phase_3_remote_code_review_status=PENDING`、`phase_3_owner_visual_acceptance_status=NOT_EXECUTED`
-> 同样不得预写通过。
+> **口径区分：** `phase_2_acceptance_status` 与 `phase_3_acceptance_status` 均保持
+> `NOT_EXECUTED`，表示未单独开展“独立正式验收执行”，不得解读为已通过；两步负责人
+> 视觉验收分别以 `phase_2_owner_visual_acceptance_status=PASSED` 与
+> `phase_3_owner_visual_acceptance_status=PASSED` 独立记录。
 >
-> 两步均只涉及三项显式 opt-in 纯 CSS、页面类替换与静态测试；未迁移页面结构或业务行为，
+> 各步均只涉及三项显式 opt-in 纯 CSS、页面类替换与静态测试；未迁移页面结构或业务行为，
 > 未改变任何已批准模板、页面迁移状态或既有 Feature 验收状态。
 
 ## 1. 盘点方法与判定口径
@@ -92,7 +99,7 @@ next_entry=PHASE_3_REMOTE_CODE_REVIEW_AND_OWNER_VISUAL_ACCEPTANCE
 
 ### 1.3 “本期”与“后续”
 
-- **本期** = 第三步数据源管理主列表的**三项样式复用验证**（已实现，待复审与视觉验收）；
+- **本期** = 第三步数据源管理主列表的**三项样式复用验证**（已实现，已完成复审与视觉验收并收口，2026-11-12）；
 - **后续** = 数据源“更多”改三点、主弹窗接入 `ced-dialog` 及其他页面的独立任务；
 - 三项 CSS 与统一交互约定已由负责人确认；选择器、公共菜单、确认框、状态标签与请求逻辑
   仍为候选或暂缓项，未获实施授权。
@@ -102,8 +109,8 @@ next_entry=PHASE_3_REMOTE_CODE_REVIEW_AND_OWNER_VISUAL_ACCEPTANCE
 | # | 能力 | 现行实现位置 | 公共化状态 | 分类 | 目标形态 | 阶段 |
 |---|---|---|---|---|---|---|
 | C1 | 页面骨架 | `query-list/QueryListPageShell.vue` | 6 组件 + 1 composable 已实现；权威验收 21/21；参考页 + 两页页面级接入 | 直接复用 | Vue 组件（既有） | 已完成（范围已确认） |
-| C2 | 搜索栏 | `QueryListQueryPanel` + `QueryListActions` + 页面字段组 | 容器/按钮已实现；字段组已收敛到公共 CSS（探针页） | 直接复用 + 第二阶段提取（字段组 CSS，已落地） | 既有组件 + 纯 CSS opt-in；选择器候选 | 第二阶段已收口；第三步数据源页已接入（待复审与验收） |
-| C3 | 结果工具栏 | `QueryListResultPanel` 槽位 + 页面摘要/新增按钮 | 面板已实现；摘要与按钮已收敛到公共 CSS（探针页） | 直接复用 + 第二阶段提取（摘要/按钮 CSS，已落地） | 既有组件 + 纯 CSS opt-in | 第二阶段已收口；第三步数据源页已接入（待复审与验收） |
+| C2 | 搜索栏 | `QueryListQueryPanel` + `QueryListActions` + 页面字段组 | 容器/按钮已实现；字段组已收敛到公共 CSS（探针页） | 直接复用 + 第二阶段提取（字段组 CSS，已落地） | 既有组件 + 纯 CSS opt-in；选择器候选 | 第二阶段已收口；第三步数据源页已接入并经复审与验收收口（2026-11-12） |
+| C3 | 结果工具栏 | `QueryListResultPanel` 槽位 + 页面摘要/新增按钮 | 面板已实现；摘要与按钮已收敛到公共 CSS（探针页） | 直接复用 + 第二阶段提取（摘要/按钮 CSS，已落地） | 既有组件 + 纯 CSS opt-in | 第二阶段已收口；第三步数据源页已接入并经复审与验收收口（2026-11-12） |
 | C4 | 无分页表格 | `list-table-visual.css` + `lt-main-table` | 基础 + DS 参考页 14/14 最终接受；可选三点/单行高亮已实现、复审 `APPROVED`，探针页面级接入、待接受 | 直接复用 | 纯 CSS + 可选辅助类；成组入口统一三点 | 已完成（复用） |
 | C5 | 行操作菜单 | `lt-row-action__*` 外观 + 页面 `ElDropdown` | 仅三点外观公共化；菜单与忙碌状态页面实现 | 直接复用 + 用法契约（成组入口统一三点） | 既有 CSS + 用法契约 | 第三阶段评估（DS 替换单独记录） |
 | C6 | 新增／编辑弹窗 | `create-edit-dialog-visual.css` | 公共 CSS 已实现、代码复审 `APPROVED`；仅探针页面级接入且接入复审通过；模板正式验收 `NOT_EXECUTED`；Vue `NOT_CREATED` | 直接复用（CSS，按需）；暂不提取（Vue 包装） | 既有 CSS + 令牌 | 第三阶段评估（DS 弹窗单独记录） |
@@ -196,7 +203,7 @@ next_entry=PHASE_3_REMOTE_CODE_REVIEW_AND_OWNER_VISUAL_ACCEPTANCE
 - 公共源：`frontend/src/styles/list-management/list-management-visual.css`；
 - 新增显式 opt-in 类：`.lmt-q-field`（`inline-flex`、垂直居中、`gap:6px`）、
   `.lmt-q-label`（`13px`、常规文字色、`nowrap`）。固定字面量，不新增令牌。
-- 接入页：探针端管理（第二阶段）、数据源管理（第三阶段，已实现待复审与验收）；
+- 接入页：探针端管理（第二阶段）、数据源管理（第三阶段，已实现并经复审与验收收口，2026-11-12）；
   两页均替换各自私有字段组类并删除私有规则，字段宽度仍留页面。
 - 字段组排版提供**默认对齐、组内间距与整组换行**：标签与控件作为一个 flex 项整体换行，
   不拆开；换行位置仍由 `QueryListQueryPanel` 既有 `flex-wrap:wrap; gap:8px 14px` 决定，
@@ -247,7 +254,7 @@ next_entry=PHASE_3_REMOTE_CODE_REVIEW_AND_OWNER_VISUAL_ACCEPTANCE
 **已落地提取形态（第二、三阶段）**
 
 - 公共源：`frontend/src/styles/list-management/list-management-visual.css`；
-- 接入页：探针端管理（第二阶段）、数据源管理（第三阶段，已实现待复审与验收）；
+- 接入页：探针端管理（第二阶段）、数据源管理（第三阶段，已实现并经复审与验收收口，2026-11-12）；
   两页均保留各自摘要文案、按钮图标与点击行为，仅替换视觉类并删除私有规则。
 
 - 结构不新增：结果摘要继续使用 `QueryListResultPanel` 既有 `summaryText` prop
@@ -679,7 +686,7 @@ Tooltip 共存需真实浏览器验证；未 opt-in 页面必须零匹配。三�
 与 ID 省略、菜单事件隔离、请求防重、取消零写。该页面任何后续改动都必须另立任务，
 做等价回归并由负责人目视；本次第二阶段改动已按此执行并完成复审与视觉验收收口。
 
-### 5.1 数据源管理接入改动（第三阶段，已实现，待复审与视觉验收）
+### 5.1 数据源管理接入改动（第三阶段，已实现，已完成复审与视觉验收收口）
 
 项目负责人已确认第三步只验证数据源管理主列表的三项样式复用。本轮在该页**只做视觉归并**，
 不改查询结构、表格、弹窗或业务行为：
@@ -715,8 +722,21 @@ Tooltip 共存需真实浏览器验证；未 opt-in 页面必须零匹配。三�
   未接入页 `/monitor/data-source-state` 的 `lmt-*` 零命中；
 - 输入法选字回车与下拉回车未在数据源页单独复现，按既有交互基线保留。
 
-**待执行：** 远端只读代码复审、负责人对 `/config/data-source` 的视觉验收。
-模板整体基线仍为 `NOT_APPROVED`；本轮不构成其他页面迁移授权。
+**第三步复审与视觉验收（2026-11-11 至 2026-11-12）：**
+
+- ChatGPT 已对实现提交 `72027862e9e524403882a5344120476ba0d17a16` 做远端只读代码复审，
+  结论 `APPROVED`（2026-11-11）；数据源主列表直接复用探针页已验收的同一份公共 CSS，
+  移除私有重复样式，页面事件处理保持原样；
+- 项目负责人对数据源管理主列表 `/config/data-source` 的查询字段组排版、结果摘要、
+  新增按钮明确反馈**第三步视觉验收通过**（2026-11-12，
+  `phase_3_owner_visual_acceptance_status=PASSED`）；第二步既有验收记录保留不变；
+- 以上为负责人视觉验收与 Agent 技术验证，**不是**独立正式验收执行；
+  `phase_3_acceptance_status` 保持 `NOT_EXECUTED`；
+- 第三步据此收口（`phase_3_closeout_status=CLOSED`）；模板整体基线仍为 `NOT_APPROVED`；
+  本轮不构成其他页面迁移授权。
+
+**后续独立事项：** 数据源“更多”改三点、新增／编辑主弹窗接入 `ced-dialog` 分别记录，
+各自独立授权、实现、复审与验收。
 
 ## 6. 第二页候选比较（第三阶段范围已确认）
 
@@ -760,8 +780,9 @@ Tooltip 共存需真实浏览器验证；未 opt-in 页面必须零匹配。三�
 
 **结论：作为第三阶段第二页**，范围限定为三项样式，其余业务专属流程排除在外；
 “更多”改三点、主弹窗接 `ced-dialog` 仍未实施，作为可独立决定的后续项。
-**第三步范围已由负责人确认并完成接入（待远端复审与负责人视觉验收）；
-页面级迁移授权仍为 `NOT_GRANTED`，本步不构成迁移。**
+**第三步范围已由负责人确认并完成接入，远端复审 `APPROVED`（2026-11-11）、负责人
+视觉验收 `PASSED`（2026-11-12）并收口；页面级迁移授权仍为 `NOT_GRANTED`，
+本步不构成迁移。**
 
 ### 6.3 候选 B：数据订阅（`/config/subscribe`）
 
@@ -837,7 +858,7 @@ Tooltip 共存需真实浏览器验证；未 opt-in 页面必须零匹配。三�
   视觉验收键与正式验收键分别记录，不得合并解读；
 - 第二步已收口（`phase_2_closeout_status=CLOSED`）；模板整体基线仍为 `NOT_APPROVED`。
 
-### 7.3 第三阶段（已实现，待远端复审与负责人视觉验收）
+### 7.3 第三阶段（已完成并收口，2026-11-12）
 
 - 项目负责人已确认第三步只验证数据源管理主列表的三项样式：查询字段组排版、
   结果摘要、新增主按钮；页面已按该范围接入，细节与验证见 §5.1；
@@ -848,8 +869,12 @@ Tooltip 共存需真实浏览器验证；未 opt-in 页面必须零匹配。三�
   探针页不回归、未接入页 `/monitor/data-source-state` 零泄漏；
 - **已完成**：行为等价（只做视觉归并）：文本查询回车、重置与查询按钮、
   新增弹窗打开与取消；未做任何数据库写操作；
-- **待执行**：ChatGPT 远端只读代码复审；项目负责人对 `/config/data-source` 的视觉验收；
-  独立正式验收（`NOT_EXECUTED`，与视觉验收分别记录）；
+- **已完成**：ChatGPT 对实现提交 `72027862e9e524403882a5344120476ba0d17a16` 的远端只读
+  代码复审 `APPROVED`（2026-11-11）；
+- **已完成**：项目负责人 `2026-11-12` 对 `/config/data-source` 主列表三项样式视觉验收
+  通过（`phase_3_owner_visual_acceptance_status=PASSED`）；独立正式验收仍为
+  `NOT_EXECUTED`，与视觉验收分别记录；
+- 第三步已收口（`phase_3_closeout_status=CLOSED`）；
 - “更多”改三点、主弹窗接 `ced-dialog` 未实施，分别独立授权、独立实现、独立验收；
 - 真实后端失败/超时响应、键盘焦点顺序全量复现、写操作路径（如启停/删除/保存）
   未在本阶段运行；写操作如需数据库写入必须另行审批；
@@ -877,10 +902,12 @@ Tooltip 与 `+N` 共存、后端结果、并发竞态、写路径。上述均须
    在实际使用它们的页面验证后再决定是否封装，本阶段不提取。
 5. **第三阶段：已确认（第一步时点为候选）** —— 第一步收口时数据源管理主列表为
    首选候选、接入页与范围待确认；`2026-11-11` 负责人已确认只验证三项样式并完成接入
-   （见 §5.1）；其“更多”改三点、主弹窗接 `ced-dialog` 仍未实施、分别记录、独立决定；
-   数据订阅保留为备选。
+   （见 §5.1），其后远端复审 `APPROVED`（2026-11-11）、负责人视觉验收 `PASSED`
+   （2026-11-12）并收口；其“更多”改三点、主弹窗接 `ced-dialog` 仍未实施、
+   分别记录、独立决定；数据订阅保留为备选。
 
-> 下方代码块为第一步收口时的历史快照；第二、三步实现与收口状态以文件头状态块为准。
+> 下方代码块为第一步收口时的历史快照；第二步于 `2026-11-11` 实现并验收收口，
+> 第三步于 `2026-11-12` 记录负责人视觉验收后收口，现行状态以文件头状态块为准。
 
 ```text
 phase_1_scope_status=CONFIRMED
@@ -949,9 +976,10 @@ next_step=SEPARATE_PHASE_2_IMPLEMENTATION_TASK
 - 第二步已收口：ChatGPT 远端代码复审 `APPROVED`、项目负责人视觉验收
   `PASSED`（2026-11-11）；**独立正式验收执行仍为 `NOT_EXECUTED`**；
   视觉验收键与正式验收键分别记录，不得互相替代；
-- 第三步已实现，**仅为数据源管理主列表的三项样式接入**；远端代码复审 `PENDING`、
-  负责人视觉验收 `NOT_EXECUTED`、独立正式验收 `NOT_EXECUTED`；
-  “更多”改三点、主弹窗接 `ced-dialog` 未实施；
+- 第三步已实现并收口，**仅为数据源管理主列表的三项样式接入**；远端代码复审
+  `APPROVED`（2026-11-11）、负责人视觉验收 `PASSED`（2026-11-12）、
+  独立正式验收 `NOT_EXECUTED`；“更多”改三点、主弹窗接 `ced-dialog` 未实施，
+  已记录为后续独立事项；
 - 探针端管理的 157 条正式验收**不**传播为本模板或任何其他页面的验收结论；
 - 数据源管理为第三步接入页，但**页面级迁移授权仍为 `NOT_GRANTED`**，
   三项样式接入不等于迁移；除探针页与数据源页外无其他页面接入；
