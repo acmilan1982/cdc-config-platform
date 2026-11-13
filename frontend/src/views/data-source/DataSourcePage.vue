@@ -153,7 +153,8 @@
           @visible-change="onRowMenuVisibleChange"
         >
           <template #dropdown>
-            <el-dropdown-menu>
+            <!-- Tab/Shift+Tab 在捕获阶段关闭共享菜单，并按默认顺序把焦点交给触发元素的后/前一项 -->
+            <el-dropdown-menu @keydown.capture="onRowMenuTabKeydown">
               <!-- 菜单项始终由当前绑定行推导，顺序/禁用条件与原逐行实现一致。 -->
               <template v-if="rowMenu">
                 <!-- 异常行（FG_ACTIVE 非 '0'/'1'）只保留归一化“停用”，隐藏全部业务写入口（DS-REQ-167）；
@@ -582,6 +583,14 @@ function onRowMoreClick(row: DataSourceListRow, event: MouseEvent) {
 
 function onRowMoreKeydown(row: DataSourceListRow, event: KeyboardEvent) {
   const { key } = event
+  if (key === 'Tab') {
+    // 菜单打开后焦点短暂留在触发器上时，先收起再交给浏览器默认 Tab 顺序；
+    // 不 preventDefault，焦点从触发器正常前进/后退，且不归还到触发器。
+    if (rowMenuOpen.value) {
+      closeRowMenuByTab(null)
+    }
+    return
+  }
   if (key !== 'Enter' && key !== ' ' && key !== 'Spacebar' && key !== 'ArrowDown') {
     return
   }
@@ -593,6 +602,95 @@ function onRowMoreKeydown(row: DataSourceListRow, event: KeyboardEvent) {
   }
   rowMenuTrigger.value = event.currentTarget as HTMLElement
   openRowMenu(row, event)
+}
+
+const FOCUSABLE_SELECTOR = [
+  'a[href]',
+  'button:not([disabled])',
+  'input:not([disabled])',
+  'select:not([disabled])',
+  'textarea:not([disabled])',
+  '[tabindex]:not([tabindex="-1"])',
+].join(',')
+
+/** 可见、可聚焦且不属于即将收起的共享浮层。 */
+function isFocusableCandidate(el: HTMLElement): boolean {
+  if (el.closest('.ds-more-popper') || el.closest('[aria-hidden="true"]')) {
+    return false
+  }
+  const style = window.getComputedStyle(el)
+  if (style.display === 'none' || style.visibility === 'hidden') {
+    return false
+  }
+  const rect = el.getBoundingClientRect()
+  return rect.width > 0 || rect.height > 0
+}
+
+/**
+ * 共享菜单的浮层 teleport 在 body 末尾，菜单项获得焦点后，浏览器默认 Tab 无法回到
+ * 触发行的自然顺序。这里以触发元素为锚点，取文档顺序中的前/后一个可见可聚焦元素。
+ */
+function focusTargetBesideTrigger(backward: boolean): HTMLElement | null {
+  const trigger = rowMenuTrigger.value
+  if (!trigger) {
+    return null
+  }
+  const all = Array.from(document.querySelectorAll<HTMLElement>(FOCUSABLE_SELECTOR))
+    .filter(isFocusableCandidate)
+  const index = all.indexOf(trigger)
+  if (index >= 0) {
+    return backward ? (all[index - 1] ?? null) : (all[index + 1] ?? null)
+  }
+  // 表格重绘导致触发元素不在当前列表时，按文档顺序兜底
+  if (backward) {
+    for (let i = all.length - 1; i >= 0; i--) {
+      if (trigger.compareDocumentPosition(all[i]) & Node.DOCUMENT_POSITION_PRECEDING) {
+        return all[i]
+      }
+    }
+    return null
+  }
+  for (const el of all) {
+    if (trigger.compareDocumentPosition(el) & Node.DOCUMENT_POSITION_FOLLOWING) {
+      return el
+    }
+  }
+  return null
+}
+
+/**
+ * Tab 关闭时 Element Plus 焦点陷阱默认把焦点归还给打开菜单前的元素（即原触发器），
+ * 会覆盖浏览器默认 Tab 顺序与我们选定的后继焦点。仅本次 Tab 关闭放行该归还。
+ */
+let suppressMenuFocusRestore = false
+
+function onMenuFocusTrapReleased(event: Event) {
+  if (!suppressMenuFocusRestore) {
+    return
+  }
+  suppressMenuFocusRestore = false
+  event.preventDefault()
+}
+
+/** Tab 关闭菜单：抑制焦点归还，按默认顺序把焦点交给触发元素的后/前一项。 */
+function closeRowMenuByTab(target: HTMLElement | null) {
+  suppressMenuFocusRestore = true
+  closeRowMenu()
+  window.setTimeout(() => {
+    suppressMenuFocusRestore = false
+  }, 0)
+  target?.focus()
+}
+
+/** 菜单内部按 Tab/Shift+Tab：关闭菜单，焦点按触发器前后顺序移动，保留其余菜单键盘操作。 */
+function onRowMenuTabKeydown(event: KeyboardEvent) {
+  if (event.key !== 'Tab' || !rowMenuOpen.value) {
+    return
+  }
+  event.preventDefault()
+  event.stopPropagation()
+  const target = focusTargetBesideTrigger(event.shiftKey)
+  closeRowMenuByTab(target)
 }
 
 function categoryLabel(category: string): string {
@@ -1133,6 +1231,7 @@ onBeforeUnmount(() => {
   detailToken.value += 1
   clearTestTimer()
   dragCleanups.forEach((destroy) => destroy())
+  document.removeEventListener('focus-trap.focus-after-released', onMenuFocusTrapReleased, true)
 })
 
 watch(
@@ -1743,6 +1842,7 @@ const dragCleanups = [
 ]
 
 onMounted(() => {
+  document.addEventListener('focus-trap.focus-after-released', onMenuFocusTrapReleased, true)
   loadList(effectiveSnapshot())
 })
 </script>

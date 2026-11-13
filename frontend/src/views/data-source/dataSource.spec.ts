@@ -717,6 +717,32 @@ describe('行状态标识与逐行启用/停用（DS-REQ-160~173）', () => {
     wrapper.unmount()
   })
 
+  it('切行后执行菜单命令只作用于新行：打开 A → 切到 B → 停用 B，不操作 A', async () => {
+    const wrapper = await mountPage()
+
+    await openRowMenu(wrapper, 0)
+    expect(rowMenuLabels(wrapper, 0)).toEqual(['目标库命名策略', '停用', '删除'])
+    // 不关闭 A，直接打开 B（共享实例重新绑定）
+    await openRowMenu(wrapper, 1)
+    expect(rowMenuLabels(wrapper, 1)).toEqual(['业务属性', '停用', '删除'])
+
+    const disableItem = rowMenuItems(wrapper, 1).find(
+      (el) => (el.textContent ?? '').trim() === '停用',
+    )!
+    ;(disableItem as HTMLElement).click()
+    await nextTick()
+    await flushPromises()
+    await nextTick()
+
+    expect(confirmSpy).toHaveBeenCalledTimes(1)
+    expect(String(confirmSpy.mock.calls[0][0])).toContain('TG001')
+    expect(String(confirmSpy.mock.calls[0][0])).not.toContain('SRC001')
+    expect(mockedDisable).toHaveBeenCalledWith('TG001')
+    expect(mockedDisable).not.toHaveBeenCalledWith('SRC001')
+    expect(mockedEnable).not.toHaveBeenCalled()
+    wrapper.unmount()
+  })
+
   it('异常行菜单收敛为仅“停用”：隐藏业务写入口与删除', async () => {
     mockedList.mockResolvedValue(okList([abnormalRow]))
     const wrapper = await mountPage()
