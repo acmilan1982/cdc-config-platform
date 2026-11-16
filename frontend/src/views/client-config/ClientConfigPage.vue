@@ -197,7 +197,8 @@
                均不冒泡到行双击，菜单靠右对齐以避免贴近右边缘时被裁切（CCFG-UI-041）。
                `class-name` 显式 opt-in 公共操作单元格（`lt-row-action__cell`），命中区与交互态视觉
                由公共层提供（CCFG-DESIGN-088/089）；EP 会同时把该类渲染到表头 th，故公共规则以
-               `td.el-table__cell` 限定，表头不受影响。 -->
+               `td.el-table__cell` 限定，表头不受影响。
+               整表共用表格下方的同一个下拉菜单实例，这里只保留轻量触发元素。 -->
           <el-table-column
             label="操作"
             width="110"
@@ -205,51 +206,62 @@
             class-name="lt-row-action__cell"
           >
             <template #default="{ row }">
-              <el-dropdown
-                trigger="click"
-                placement="bottom-end"
-                popper-class="cc-more-popper"
-                @command="(command: string) => onRowCommand(command, row)"
-                @click.stop
+              <span
+                class="cc-more-link lt-row-action__ellipsis"
+                role="button"
+                tabindex="0"
+                :aria-label="`更多操作：${row.clientId}`"
+                @click.stop="onRowMoreClick(row, $event)"
+                @keydown="onRowMoreKeydown(row, $event)"
                 @dblclick.stop
               >
-                <span
-                  class="cc-more-link lt-row-action__ellipsis"
-                  role="button"
-                  tabindex="0"
-                  :aria-label="`更多操作：${row.clientId}`"
-                  @click.stop
-                  @dblclick.stop
-                >
-                  <el-icon class="cc-more-icon"><MoreFilled /></el-icon>
-                </span>
-                <template #dropdown>
-                  <el-dropdown-menu>
-                    <!-- 条目顺序固定为先“停用/启用”、后“删除”；历史异常行只提供“停用”与“删除”；
-                         “删除”以分隔线单独隔开（CCFG-UI-041） -->
-                    <el-dropdown-item
-                      v-if="idState(row) !== 'off'"
-                      command="disable"
-                      class="cc-more-warning"
-                      :disabled="rowBusy(row)"
-                    >停用</el-dropdown-item>
-                    <el-dropdown-item
-                      v-else
-                      command="enable"
-                      :disabled="rowBusy(row)"
-                    >启用</el-dropdown-item>
-                    <el-dropdown-item
-                      command="delete"
-                      divided
-                      class="cc-more-danger"
-                      :disabled="rowBusy(row)"
-                    >删除</el-dropdown-item>
-                  </el-dropdown-menu>
-                </template>
-              </el-dropdown>
+                <el-icon class="cc-more-icon"><MoreFilled /></el-icon>
+              </span>
             </template>
           </el-table-column>
         </el-table>
+        <!-- 共享“更多”菜单：整表唯一实例，通过 virtual-triggering 绑定到被点击行；零尺寸不可见宿主。
+             菜单项、命令与禁用条件由当前绑定行推导，避免逐行创建 97 套下拉/浮层实例。 -->
+        <el-dropdown
+          :ref="setRowMenuRef"
+          class="cc-row-menu-host"
+          popper-class="cc-more-popper"
+          placement="bottom-end"
+          :trigger="ROW_MENU_TRIGGER"
+          virtual-triggering
+          :virtual-ref="rowMenuTrigger"
+          @command="onRowMenuCommand"
+          @visible-change="onRowMenuVisibleChange"
+          @click.stop
+          @dblclick.stop
+        >
+          <template #dropdown>
+            <!-- Tab/Shift+Tab 在捕获阶段关闭共享菜单，并按默认顺序把焦点交给触发元素的后/前一项 -->
+            <el-dropdown-menu @keydown.capture="onRowMenuKeydown">
+              <!-- 条目顺序固定为先“停用/启用”、后“删除”；历史异常行只提供“停用”与“删除”；
+                   “删除”以分隔线单独隔开（CCFG-UI-041） -->
+              <template v-if="rowMenu">
+                <el-dropdown-item
+                  v-if="idState(rowMenu) !== 'off'"
+                  command="disable"
+                  class="cc-more-warning"
+                  :disabled="rowBusy(rowMenu)"
+                >停用</el-dropdown-item>
+                <el-dropdown-item
+                  v-else
+                  command="enable"
+                  :disabled="rowBusy(rowMenu)"
+                >启用</el-dropdown-item>
+                <el-dropdown-item
+                  command="delete"
+                  divided
+                  class="cc-more-danger"
+                  :disabled="rowBusy(rowMenu)"
+                >删除</el-dropdown-item>
+              </template>
+            </el-dropdown-menu>
+          </template>
+        </el-dropdown>
       </template>
     </QueryListResultPanel>
 
@@ -737,6 +749,10 @@ function applySelectionAfterReload(reselectTarget: string | null): void {
  */
 async function loadList(reselectTarget: string | null = null): Promise<void> {
   clearTip()
+  // 刷新（查询、重试、启停、删除、新增/编辑成功）一律先收起共享菜单并清理绑定，
+  // 避免命令落到刷新前的旧行（CCFG-UI-041）。
+  closeRowMenu()
+  clearRowMenuBinding()
   cancelPendingRowClick()
   // 普通重载一律先清除此前固定选中；只有启停成功自身触发的重载（携带目标 ID）才保留旧选中待重选。
   if (reselectTarget === null) selectedClientId.value = null
@@ -789,6 +805,202 @@ function markBusy(clientId: string, busy: boolean): void {
   else busyClientIds.delete(clientId)
 }
 
+// ------------------------------------------------ 共享“更多”菜单（整表唯一实例）
+// 整表只渲染一个 el-dropdown（virtual-triggering）：打开时用同一份绑定保存实际触发元素与
+// 探针唯一标识，避免 97 行各自创建下拉/浮层实例。菜单项、命令与禁用条件都由当前绑定在
+// 当前列表中的目标行推导；刷新、目标消失或路由离开时关闭菜单并清理绑定。
+
+interface RowMenuController {
+  popperRef?: { onOpen?: (event?: Event) => void }
+  handleOpen?: () => void
+  handleClose?: () => void
+}
+
+interface RowMenuBinding {
+  clientId: string
+  trigger: HTMLElement
+}
+
+const rowMenuBinding = ref<RowMenuBinding | null>(null)
+const rowMenuOpen = ref(false)
+const rowMenuRef = ref<RowMenuController | null>(null)
+/** 空触发列表：开关完全由页面显式控制，不订阅悬浮/点击触发事件。 */
+const ROW_MENU_TRIGGER: Array<'click' | 'hover' | 'contextmenu'> = []
+
+/** 菜单项按绑定 ID 在当前列表中取行；绑定的目标已不在当前列表时返回 null。 */
+const rowMenu = computed<ClientListItemVO | null>(() => {
+  const binding = rowMenuBinding.value
+  if (!binding) return null
+  return listRows.value.find((r) => r.clientId === binding.clientId) ?? null
+})
+
+const rowMenuTrigger = computed<HTMLElement | undefined>(() => rowMenuBinding.value?.trigger)
+
+function setRowMenuRef(el: unknown): void {
+  rowMenuRef.value = (el as RowMenuController | null) ?? null
+}
+
+function openRowMenu(row: ClientListItemVO, trigger: HTMLElement, event?: Event): void {
+  rowMenuBinding.value = { clientId: row.clientId, trigger }
+  const popper = rowMenuRef.value?.popperRef
+  if (popper?.onOpen) {
+    popper.onOpen(event)
+  } else {
+    rowMenuRef.value?.handleOpen?.()
+  }
+}
+
+function closeRowMenu(): void {
+  rowMenuRef.value?.handleClose?.()
+}
+
+/** 清理当前绑定：刷新、目标消失、路由离开及菜单命令完成后调用，旧回调不得再命中新行。 */
+function clearRowMenuBinding(): void {
+  rowMenuBinding.value = null
+  rowMenuOpen.value = false
+}
+
+function onRowMenuVisibleChange(visible: boolean): void {
+  rowMenuOpen.value = visible
+}
+
+/** 点击触发器：同一行菜单已打开时再次点击收起；否则以本行与本触发元素重新绑定并打开。 */
+function onRowMoreClick(row: ClientListItemVO, event: MouseEvent): void {
+  const trigger = event.currentTarget
+  if (!(trigger instanceof HTMLElement)) return
+  if (rowMenuOpen.value && rowMenuBinding.value?.clientId === row.clientId) {
+    closeRowMenu()
+    return
+  }
+  openRowMenu(row, trigger, event)
+}
+
+/** 触发器键盘：Enter/Space/ArrowDown 打开或收起；菜单打开时 Tab 先收起再交给默认焦点顺序。 */
+function onRowMoreKeydown(row: ClientListItemVO, event: KeyboardEvent): void {
+  const { key } = event
+  if (key === 'Escape') {
+    if (rowMenuOpen.value) {
+      event.preventDefault()
+      closeRowMenu()
+    }
+    return
+  }
+  if (key === 'Tab') {
+    if (rowMenuOpen.value) closeRowMenu()
+    return
+  }
+  if (key !== 'Enter' && key !== ' ' && key !== 'Spacebar' && key !== 'ArrowDown') return
+  event.preventDefault()
+  event.stopPropagation()
+  if (rowMenuOpen.value && rowMenuBinding.value?.clientId === row.clientId) {
+    closeRowMenu()
+    return
+  }
+  const trigger = event.currentTarget
+  if (!(trigger instanceof HTMLElement)) return
+  openRowMenu(row, trigger, event)
+}
+
+const FOCUSABLE_SELECTOR = [
+  'a[href]',
+  'button:not([disabled])',
+  'input:not([disabled])',
+  'select:not([disabled])',
+  'textarea:not([disabled])',
+  '[tabindex]:not([tabindex="-1"])',
+].join(',')
+
+/** 可见、可聚焦且不属于即将收起的共享浮层。 */
+function isFocusableCandidate(el: HTMLElement): boolean {
+  if (el.closest('.cc-more-popper') || el.closest('[aria-hidden="true"]')) return false
+  const style = window.getComputedStyle(el)
+  if (style.display === 'none' || style.visibility === 'hidden') return false
+  const rect = el.getBoundingClientRect()
+  return rect.width > 0 || rect.height > 0
+}
+
+/**
+ * 共享菜单浮层 Teleport 在 body 末尾，菜单项获得焦点后浏览器默认 Tab 无法回到触发行的
+ * 自然顺序；以触发元素为锚点，取文档顺序中的前/后一个可见可聚焦元素。
+ */
+function focusTargetBesideTrigger(backward: boolean): HTMLElement | null {
+  const trigger = rowMenuTrigger.value
+  if (!trigger) return null
+  const all = Array.from(document.querySelectorAll<HTMLElement>(FOCUSABLE_SELECTOR)).filter(
+    isFocusableCandidate,
+  )
+  const index = all.indexOf(trigger)
+  if (index >= 0) {
+    return backward ? (all[index - 1] ?? null) : (all[index + 1] ?? null)
+  }
+  // 表格重绘导致触发元素不在当前列表时，按文档顺序兜底
+  if (backward) {
+    for (let i = all.length - 1; i >= 0; i--) {
+      if (trigger.compareDocumentPosition(all[i]) & Node.DOCUMENT_POSITION_PRECEDING) {
+        return all[i]
+      }
+    }
+    return null
+  }
+  for (const el of all) {
+    if (trigger.compareDocumentPosition(el) & Node.DOCUMENT_POSITION_FOLLOWING) return el
+  }
+  return null
+}
+
+/**
+ * Tab 关闭时 Element Plus 焦点陷阱默认把焦点归还给打开菜单前的元素（即原触发器），
+ * 会覆盖浏览器默认 Tab 顺序与选定的后继焦点；仅本次 Tab 关闭放行该归还。
+ */
+let suppressMenuFocusRestore = false
+
+function onMenuFocusTrapReleased(event: Event): void {
+  if (!suppressMenuFocusRestore) return
+  suppressMenuFocusRestore = false
+  event.preventDefault()
+}
+
+/** Tab 关闭菜单：抑制焦点归还，按默认顺序把焦点交给触发元素的后/前一项。 */
+function closeRowMenuByTab(target: HTMLElement | null): void {
+  suppressMenuFocusRestore = true
+  closeRowMenu()
+  window.setTimeout(() => {
+    suppressMenuFocusRestore = false
+  }, 0)
+  target?.focus()
+}
+
+/** 菜单内部键盘：Esc 关闭并回到当前触发按钮；Tab/Shift+Tab 关闭并按触发器前后顺序移动焦点。 */
+function onRowMenuKeydown(event: KeyboardEvent): void {
+  if (event.key === 'Escape') {
+    if (!rowMenuOpen.value) return
+    event.preventDefault()
+    event.stopPropagation()
+    const trigger = rowMenuBinding.value?.trigger
+    closeRowMenu()
+    // 当前菜单可能由别的触发按钮打开过，Esc 一律回到本次绑定的触发按钮
+    trigger?.focus()
+    return
+  }
+  if (event.key !== 'Tab' || !rowMenuOpen.value) return
+  event.preventDefault()
+  event.stopPropagation()
+  const target = focusTargetBesideTrigger(event.shiftKey)
+  closeRowMenuByTab(target)
+}
+
+/** 共享菜单命令派发：校验绑定并取当前列表中的目标行，拒绝作用到已刷新的旧行。 */
+function onRowMenuCommand(command: string): void {
+  const binding = rowMenuBinding.value
+  if (!binding) return
+  const row = listRows.value.find((item) => item.clientId === binding.clientId)
+  if (!row) {
+    clearRowMenuBinding()
+    return
+  }
+  onRowCommand(command, row)
+}
+
 function onRowCommand(command: string, row: ClientListItemVO): void {
   if (command === 'enable') {
     void onEnable(row)
@@ -804,30 +1016,33 @@ function onRowCommand(command: string, row: ClientListItemVO): void {
  *  仅用于把该弹窗主确认按钮渲染为黑底白字，不改变关闭顺序、文案与取消行为。 */
 async function onEnable(row: ClientListItemVO): Promise<void> {
   if (rowBusy(row)) return
-  markBusy(row.clientId, true)
+  // 打开确认框前固定本次操作对应的探针唯一标识：确认后请求只使用该标识，
+  // 不受确认期间菜单绑定或列表状态变化影响。
+  const targetId = row.clientId
+  markBusy(targetId, true)
   try {
-    await ElMessageBox.confirm(`确定启用探针 ${row.clientId} 吗？`, '启用探针', {
+    await ElMessageBox.confirm(`确定启用探针 ${targetId} 吗？`, '启用探针', {
       confirmButtonText: '启用',
       cancelButtonText: '取消',
       customClass: 'cc-confirm--enable',
     })
   } catch (e) {
     // 取消或关闭确认框：不发出启用写请求，也不改变原有固定选中
-    markBusy(row.clientId, false)
+    markBusy(targetId, false)
     return
   }
   try {
-    const res = await enableClient(row.clientId)
+    const res = await enableClient(targetId)
     if (res.code === 200) {
       ElMessage.success('启用成功')
-      await loadList(row.clientId)
+      await loadList(targetId)
     } else {
       ElMessage.error(res.message || '启用失败')
     }
   } catch (e) {
     ElMessage.error('启用失败，请检查网络后重试。')
   } finally {
-    markBusy(row.clientId, false)
+    markBusy(targetId, false)
   }
 }
 
@@ -836,49 +1051,53 @@ async function onEnable(row: ClientListItemVO): Promise<void> {
  *  仅用于把该弹窗主确认按钮渲染为黑底白字，不改变关闭顺序、文案与取消行为。 */
 async function onDisable(row: ClientListItemVO): Promise<void> {
   if (rowBusy(row)) return
-  markBusy(row.clientId, true)
+  // 打开确认框前固定本次操作对应的探针唯一标识（同上）。
+  const targetId = row.clientId
+  markBusy(targetId, true)
   try {
-    await ElMessageBox.confirm(`确定停用探针 ${row.clientId} 吗？`, '停用探针', {
+    await ElMessageBox.confirm(`确定停用探针 ${targetId} 吗？`, '停用探针', {
       confirmButtonText: '停用',
       cancelButtonText: '取消',
       type: 'warning',
       customClass: 'cc-confirm--disable',
     })
   } catch (e) {
-    markBusy(row.clientId, false)
+    markBusy(targetId, false)
     return
   }
   try {
-    const res = await disableClient(row.clientId)
+    const res = await disableClient(targetId)
     if (res.code === 200) {
       ElMessage.success('停用成功')
-      await loadList(row.clientId)
+      await loadList(targetId)
     } else {
       ElMessage.error(res.message || '停用失败')
     }
   } catch (e) {
     ElMessage.error('停用失败，请检查网络后重试。')
   } finally {
-    markBusy(row.clientId, false)
+    markBusy(targetId, false)
   }
 }
 
 /** 删除：二次确认后调 E5，成功按已生效条件重载（CCFG-DESIGN-043）。 */
 async function onDelete(row: ClientListItemVO): Promise<void> {
   if (rowBusy(row)) return
-  markBusy(row.clientId, true)
+  // 打开确认框前固定本次删除目标：确认后请求只使用该标识，菜单绑定/列表状态后续变化不改写目标。
+  const targetId = row.clientId
+  markBusy(targetId, true)
   try {
-    await ElMessageBox.confirm(`确定删除探针 ${row.clientId} 吗？该操作不可恢复。`, '删除探针', {
+    await ElMessageBox.confirm(`确定删除探针 ${targetId} 吗？该操作不可恢复。`, '删除探针', {
       confirmButtonText: '删除',
       cancelButtonText: '取消',
       type: 'warning',
     })
   } catch (e) {
-    markBusy(row.clientId, false)
+    markBusy(targetId, false)
     return
   }
   try {
-    const res = await deleteClient(row.clientId)
+    const res = await deleteClient(targetId)
     if (res.code === 200) {
       ElMessage.success('删除成功')
       await loadList()
@@ -888,7 +1107,7 @@ async function onDelete(row: ClientListItemVO): Promise<void> {
   } catch (e) {
     ElMessage.error('删除失败，请检查网络后重试。')
   } finally {
-    markBusy(row.clientId, false)
+    markBusy(targetId, false)
   }
 }
 
@@ -1493,6 +1712,7 @@ function onAbnormalEnter(event: MouseEvent, row: ClientListItemVO): void {
 }
 
 onMounted(() => {
+  document.addEventListener('focus-trap.focus-after-released', onMenuFocusTrapReleased, true)
   if (typeof ResizeObserver !== 'undefined') {
     rowObserver = new ResizeObserver((entries) => {
       for (const entry of entries) {
@@ -1512,6 +1732,10 @@ onMounted(() => {
 })
 
 onBeforeUnmount(() => {
+  // 路由离开：关闭共享菜单并清理绑定，旧回调不得再作用于本页行
+  closeRowMenu()
+  clearRowMenuBinding()
+  document.removeEventListener('focus-trap.focus-after-released', onMenuFocusTrapReleased, true)
   clearTip()
   cancelPendingRowClick()
   if (resizeHandler) window.removeEventListener('resize', resizeHandler)
@@ -1763,6 +1987,14 @@ onBeforeUnmount(() => {
    作为业务选择器钩子，并可访问名称由触发器上的 aria-label 提供。 */
 .cc-more-icon {
   font-size: 18px;
+}
+
+/* 共享下拉的零尺寸宿主：不参与布局，浮层由 virtual-ref 定位并挂载到 body */
+.cc-row-menu-host {
+  position: absolute;
+  width: 0;
+  height: 0;
+  overflow: hidden;
 }
 
 /* 页面级单实例悬停 Tooltip：Teleport 到 body，pointer-events:none（CCFG-UI-005/008） */

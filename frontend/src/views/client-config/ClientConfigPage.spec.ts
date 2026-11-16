@@ -989,6 +989,73 @@ describe('行操作：启用 / 停用 / 删除（CCFG-REQ-098、CCFG-DESIGN-042/
   })
 })
 
+// ============================================================ 共享“更多”菜单：单实例与目标绑定
+
+describe('共享“更多”菜单：整表单实例与目标绑定（CLIENT-CONFIG-LIST-SHARED-MENU-IMPLEMENTATION-001）', () => {
+  it('整表仅创建一个共享下拉宿主，行内只保留轻量触发元素', async () => {
+    const wrapper = await mountPage([enabledRow, disabledRow])
+    expect(wrapper.findAll('.cc-more-link')).toHaveLength(2)
+    expect(wrapper.findAll('.cc-row-menu-host')).toHaveLength(1)
+    expect(wrapper.findAllComponents({ name: 'ElDropdown' })).toHaveLength(1)
+    wrapper.unmount()
+  })
+
+  it('打开 A 行菜单后立即切到 B 行并删除：确认框与删除请求均指向 B，A 未被操作', async () => {
+    const wrapper = await mountPage([enabledRow, disabledRow])
+    // 先打开 A 行菜单
+    await openRowMenu(wrapper, 0)
+    expect(rowMenuLabels(wrapper, 0)).toEqual(['停用', '删除'])
+    // 不关闭 A 菜单，直接切换打开 B 行菜单
+    await openRowMenu(wrapper, 1)
+    expect(rowMenuLabels(wrapper, 1)).toEqual(['启用', '删除'])
+    const deleteItem = rowMenuItems(wrapper, 1).find(
+      (el) => (el.textContent ?? '').trim() === '删除',
+    )!
+    ;(deleteItem as HTMLElement).click()
+    await nextTick()
+    await flushPromises()
+    await nextTick()
+    // 确认框目标为 B
+    expect(confirmSpy).toHaveBeenCalledTimes(1)
+    expect(confirmSpy.mock.calls[0][0]).toContain('确定删除探针 probe-b 吗？该操作不可恢复。')
+    // 确认后删除请求目标为 B，且未对 A 发起任何删除
+    expect(mockedDelete).toHaveBeenCalledTimes(1)
+    expect(mockedDelete).toHaveBeenCalledWith('probe-b')
+    expect(mockedDelete.mock.calls.flat()).not.toContain('probe-a')
+    wrapper.unmount()
+  })
+
+  it('删除确认框打开后切换菜单绑定，不改变已固定的删除目标', async () => {
+    let resolveConfirm!: (value: unknown) => void
+    confirmSpy.mockReturnValueOnce(
+      new Promise((resolve) => {
+        resolveConfirm = resolve
+      }) as never,
+    )
+    const wrapper = await mountPage([enabledRow, disabledRow])
+    await openRowMenu(wrapper, 0)
+    const deleteItem = rowMenuItems(wrapper, 0).find(
+      (el) => (el.textContent ?? '').trim() === '删除',
+    )!
+    ;(deleteItem as HTMLElement).click()
+    await nextTick()
+    await flushPromises()
+    await nextTick()
+    expect(confirmSpy).toHaveBeenCalledTimes(1)
+    expect(confirmSpy.mock.calls[0][0]).toContain('确定删除探针 probe-a')
+    // 确认框挂起期间把共享菜单绑定切到 B 行，不应改写已固定的 A 目标
+    await openRowMenu(wrapper, 1)
+    expect(rowMenuLabels(wrapper, 1)).toEqual(['启用', '删除'])
+    resolveConfirm('confirm')
+    await flushPromises()
+    await nextTick()
+    await flushPromises()
+    expect(mockedDelete).toHaveBeenCalledTimes(1)
+    expect(mockedDelete).toHaveBeenCalledWith('probe-a')
+    wrapper.unmount()
+  })
+})
+
 // ============================================================ 更多入口事件边界与编辑入口
 
 describe('“更多”入口事件边界与编辑入口（CCFG-UI-032、R1-06）', () => {
