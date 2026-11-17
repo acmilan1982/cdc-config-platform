@@ -534,10 +534,21 @@ import type {
 
 const PASSWORD_MASK = '*********'
 const TEST_COUNTDOWN_SECONDS = 10
+/** 再次单击已固定行的取消判定窗口，与探针页一致。 */
+const CLICK_CANCEL_DELAY_MS = 260
 
 const rows = ref<DataSourceListRow[]>([])
 /** 单行固定选中的展示状态（页面会话内，不参与任何业务写操作）。 */
 const selectedDataSourceId = ref<string | null>(null)
+let pendingCancelTimer: ReturnType<typeof setTimeout> | undefined
+
+/** 撤销待定的“单击取消”，避免迟到计时器清掉之后的新选中或双击结果。 */
+function cancelPendingRowClick(): void {
+  if (pendingCancelTimer !== undefined) {
+    clearTimeout(pendingCancelTimer)
+    pendingCancelTimer = undefined
+  }
+}
 const loading = ref(false)
 const loadError = ref('')
 const query = ref<DataSourceListQuery>({ id: '', name: '', host: '', category: '' })
@@ -769,7 +780,8 @@ async function loadList(querySnapshot: DataSourceListQuery = {}) {
   const token = ++listToken.value
   // 刷新（查询、启停、删除后重载）一律先收起共享菜单，避免命令落到刷新前的旧行
   closeRowMenu()
-  // 普通刷新清除此前固定选中，避免查询/删除后残留旧行高亮
+  // 普通刷新清除此前固定选中与待定取消，避免查询/删除后残留旧行高亮或迟到计时器
+  cancelPendingRowClick()
   selectedDataSourceId.value = null
   loading.value = true
   loadError.value = ''
@@ -1139,9 +1151,20 @@ function openEdit(row: DataSourceListRow) {
   loadEditorDetail(row.dataSourceId)
 }
 
-/** 行单击：固定当前行（页面会话内本地展示状态，不触发请求）。 */
-function onRowClick(row: DataSourceListRow) {
-  selectedDataSourceId.value = row.dataSourceId
+/** 行单击：切换唯一固定行；再次单击已固定行在判定窗口后取消（与探针页一致）。 */
+function onRowClick(row: DataSourceListRow, _column: unknown, event: MouseEvent) {
+  // 双击所含的第二次及以后点击不参与切换
+  if (event && event.detail > 1) return
+  cancelPendingRowClick()
+  if (selectedDataSourceId.value !== row.dataSourceId) {
+    selectedDataSourceId.value = row.dataSourceId
+    return
+  }
+  const target = row.dataSourceId
+  pendingCancelTimer = setTimeout(() => {
+    pendingCancelTimer = undefined
+    if (selectedDataSourceId.value === target) selectedDataSourceId.value = null
+  }, CLICK_CANCEL_DELAY_MS)
 }
 
 /** 固定选中行挂公共行级 opt-in 类，由公共 §13.3 预设渲染整行高亮；同时最多一行。 */
@@ -1150,7 +1173,8 @@ function rowClassName({ row }: { row: DataSourceListRow }): string {
 }
 
 function onRowDoubleClick(row: DataSourceListRow) {
-  // 双击行同时固定选中，保持编辑入口与行选中视觉一致
+  // 双击行保持固定选中并打开编辑，撤销单击取消的待定动作
+  cancelPendingRowClick()
   selectedDataSourceId.value = row.dataSourceId
   // 异常行唯一允许的写操作是归一化停用：不提供编辑入口（DS-REQ-162/167）
   if (isAbnormal(row)) {
@@ -1277,6 +1301,7 @@ onBeforeUnmount(() => {
   // 组件卸载：使在途详情请求代次失效，并清理弹窗拖动监听
   detailToken.value += 1
   clearTestTimer()
+  cancelPendingRowClick()
   dragCleanups.forEach((destroy) => destroy())
   document.removeEventListener('focus-trap.focus-after-released', onMenuFocusTrapReleased, true)
 })

@@ -148,6 +148,11 @@ async function mountPage() {
 
 type PageWrapper = Awaited<ReturnType<typeof mountPage>>
 
+/** 略大于实现的 260ms 单击取消判定窗口。 */
+function sleep(ms: number): Promise<void> {
+  return new Promise((resolve) => setTimeout(resolve, ms))
+}
+
 const buttonByText = (w: PageWrapper, text: string) =>
   w.findAll('button').find((b) => b.text().includes(text))
 
@@ -2820,23 +2825,81 @@ describe('列表表格视觉模板：数据源管理参考页等价接入（SHAR
     // 固定操作列与被选行属于同一 tr；整行每个 td 由公共预设统一着色
     expect(wrapper.find('.lt-row-highlight__row td.lt-row-action__cell').exists()).toBe(true)
 
+    // 再次单击已固定行：判定窗口内保持，窗口后取消
+    tableVm.$emit('row-click', tgtRow, null, { detail: 1 })
+    await nextTick()
+    expect(wrapper.find('.lt-row-highlight__row').text()).toContain('TG001')
+    await sleep(320)
+    expect(wrapper.findAll('.lt-row-highlight__row')).toHaveLength(0)
+
     wrapper.unmount()
   })
 
-  it('双击行同时固定选中并打开编辑，不改变既有双击入口', async () => {
+  it('快速 A→B→A：待定取消被撤销，迟到计时器不覆盖当前固定行', async () => {
     const wrapper = await mountPage()
-    await openEditRow(wrapper, srcRow)
+    const tableVm = wrapper.findComponent({ name: 'ElTable' }).vm
+    // 单击 A 固定 → 再次单击 A 进入取消窗口 → 切到 B → 回到 A
+    tableVm.$emit('row-click', srcRow, null, { detail: 1 })
+    await nextTick()
+    tableVm.$emit('row-click', srcRow, null, { detail: 1 })
+    await nextTick()
+    tableVm.$emit('row-click', tgtRow, null, { detail: 1 })
+    await nextTick()
+    tableVm.$emit('row-click', srcRow, null, { detail: 1 })
+    await nextTick()
+    await sleep(320)
+    expect(wrapper.findAll('.lt-row-highlight__row')).toHaveLength(1)
+    expect(wrapper.find('.lt-row-highlight__row').text()).toContain('SRC001')
+    wrapper.unmount()
+  })
+
+  it('双击已固定行：撤销单击取消，固定选中保持并打开编辑', async () => {
+    const wrapper = await mountPage()
+    const tableVm = wrapper.findComponent({ name: 'ElTable' }).vm
+    // 先单击固定 A，再双击 A：第一次 click 进入取消窗口，dblclick 必须撤销
+    tableVm.$emit('row-click', srcRow, null, { detail: 1 })
+    await nextTick()
+    tableVm.$emit('row-click', srcRow, null, { detail: 1 })
+    tableVm.$emit('row-click', srcRow, null, { detail: 2 })
+    tableVm.$emit('row-dblclick', srcRow)
+    await flushPromises()
     expect(wrapper.findAll('.lt-row-highlight__row')).toHaveLength(1)
     expect(wrapper.find('.lt-row-highlight__row').text()).toContain('SRC001')
     expect(wrapper.find('.editor-dialog').exists()).toBe(true)
+    await sleep(320)
+    expect(wrapper.find('.lt-row-highlight__row').text()).toContain('SRC001')
     wrapper.unmount()
   })
 
-  it('三点菜单打开不产生行选中（菜单态与单行固定选中相互隔离）', async () => {
+  it('刷新清除固定选中与待定取消，迟到计时器不回写', async () => {
+    const wrapper = await mountPage()
+    const tableVm = wrapper.findComponent({ name: 'ElTable' }).vm
+    tableVm.$emit('row-click', srcRow, null, { detail: 1 })
+    await nextTick()
+    tableVm.$emit('row-click', srcRow, null, { detail: 1 })
+    await nextTick()
+    await buttonByText(wrapper, '查询')!.trigger('click')
+    await flushPromises()
+    expect(wrapper.findAll('.lt-row-highlight__row')).toHaveLength(0)
+    await sleep(320)
+    expect(wrapper.findAll('.lt-row-highlight__row')).toHaveLength(0)
+    wrapper.unmount()
+  })
+
+  it('三点菜单打开不产生或改变行选中（菜单态与单行固定选中相互隔离）', async () => {
     const wrapper = await mountPage()
     expect(pageSource()).toContain('@click.stop="onRowMoreClick')
-    await openRowMenu(wrapper, 0)
     expect(wrapper.findAll('.lt-row-highlight__row')).toHaveLength(0)
+
+    const tableVm = wrapper.findComponent({ name: 'ElTable' }).vm
+    tableVm.$emit('row-click', srcRow, null, { detail: 1 })
+    await nextTick()
+    expect(wrapper.find('.lt-row-highlight__row').text()).toContain('SRC001')
+
+    // 在另一行打开菜单：不新增选中、不改已固定行
+    await openRowMenu(wrapper, 1)
+    expect(wrapper.findAll('.lt-row-highlight__row')).toHaveLength(1)
+    expect(wrapper.find('.lt-row-highlight__row').text()).toContain('SRC001')
     wrapper.unmount()
   })
 
