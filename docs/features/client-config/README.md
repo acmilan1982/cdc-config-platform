@@ -849,6 +849,18 @@ adjustment7_formal_acceptance_execution_status=NOT_RUN
 - **边界**：本批 17 条通过**不等于** 157 条整体验收通过，也**不等于** Feature 正式接受或页面迁移授权；未运行全量测试/构建/lint；未执行恢复动作，故不报告 `RESTORED`。
 - **下一入口**：`CHATGPT_REMOTE_CLIENT_CONFIG_MULTI_AC_CRUD_AND_ABNORMAL_STATE_ACCEPTANCE_REVIEW`。
 
+### 1.34 探针端管理主列表行操作菜单共享实例性能优化（2026-11-16/17，`CLIENT-CONFIG-LIST-SHARED-MENU-IMPLEMENTATION-001` + `CLIENT-CONFIG-LIST-SHARED-MENU-MERGE-001`，真实浏览器 + 服务端性能对照）
+
+- **变更**：操作列由每行挂载 `ElDropdown`（97 个实例）改为整表唯一共享下拉，用 `virtual-triggering` + `virtual-ref` 绑定被点击行；行内只保留原三点触发器与真实 `clientId`。菜单项、顺序、禁用条件与确认框不变。
+- **绑定与目标**：打开时保存 `{clientId, trigger}`；`rowMenu` 由当前 `listRows` 派生；命令派发前按 `clientId` 重新查行，目标已消失则忽略并清除绑定；查询、重载、卸载先关闭并清理绑定，切换行按新行重新绑定。打开启用/停用/删除确认前固定 `targetId`，确认期间切换菜单绑定不改变已固定目标。
+- **键盘**：行内触发器保留 Enter/Space/ArrowDown 与 `aria-*`；菜单内 Tab/Shift+Tab 收起共享菜单并把焦点交给触发行的后/前一个可聚焦项，Esc 回触发器。实现依赖 Element Plus 内部事件 `focus-trap.focus-after-released`，升级依赖时需回归。
+- **测试与构建**：定向单测 **189/189** 通过；新增 3 条用例（整表一个共享宿主、切行后删除目标为新行、确认框打开后切绑定不改目标）；真实浏览器只读检查 **11/11** 通过、写请求 **0**；生产构建成功。
+- **性能**（生产构建预览、热缓存、同一 97 行数据集；口径为“行集可见且无 loading mask、汇总值正确”的首帧再加 1 帧 rAF，属服务端无头 Chrome **代理指标**，非 Windows 真机毫秒）：直接打开约 **1.62 → 0.85 s**，侧栏进入约 **1.50 → 0.70 s**；冷缓存约 1.69 → 0.92 s。对应候选提交 `4d3a1ec`。
+- **验收**：负责人 2026-11-17 在 Windows Chrome 验收 4187 候选版，确认比 4186 基线更快、速度符合预期，菜单定位与删除确认对象正确；未采集 Windows 精确毫秒。
+- **合入与边界**：候选提交 `4d3a1eca4428ecaa6753d18c15497560f103f426`（父提交 `49c968d`）于 2026-11-17 以普通快进推送进入 `origin/develop`；**未部署**、未写数据库/ZooKeeper；真实环境删除验证到确认框后取消。本条不改变 `CCFG-AC-*` 157 条验收状态与统计，也不改变任何已批准 UI 基线结论。
+- **证据**：`SHARED-MENU-REPORT.md`、`ACCEPTANCE-PREP.md`、`MERGE-001.md`（位于仓库外 `client-config-list-performance/`，本轮交付报告列出所在目录）。
+- **复用参考**：整表共享行操作菜单的适用判断、复用验证清单与两页差异见 [`docs/baseline/list-management-page-template/README.md`](../../baseline/list-management-page-template/README.md) §12。
+
 ## 2. 文档导航
 
 | 文档 | 职责 | 状态 |
