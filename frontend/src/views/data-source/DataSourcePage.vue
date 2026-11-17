@@ -124,19 +124,26 @@
           <el-table-column prop="port" label="端口" width="80" />
           <el-table-column prop="serviceName" label="Service Name/数据库名" min-width="150" show-overflow-tooltip />
           <el-table-column prop="userName" label="用户名" min-width="110" show-overflow-tooltip />
-          <el-table-column label="操作" width="110" fixed="right">
+          <el-table-column
+            label="操作"
+            width="110"
+            fixed="right"
+            class-name="lt-row-action__cell"
+          >
             <template #default="{ row }">
-              <!-- 唯一带文字的“更多”入口（不含编辑）；trigger 与弹层事件均不冒泡到行双击（DS-REQ-134）。
-                   273 行共用页面底部的同一个下拉菜单实例，这里只保留轻量触发元素。 -->
+              <!-- 唯一“更多操作”入口，统一使用水平三点图标（不含编辑）；trigger 与弹层事件均不冒泡到行双击（DS-REQ-134）。
+                   命中区、hover 与焦点视觉复用公共表格层的 lt-row-action__*；273 行共用页面底部的同一个下拉菜单实例，
+                   这里只保留轻量触发元素。 -->
               <span
-                class="row-more"
+                class="row-more lt-row-action__ellipsis"
                 role="button"
                 tabindex="0"
+                :aria-label="`更多操作：${row.dataSourceId}`"
                 @click.stop="onRowMoreClick(row, $event)"
                 @keydown="onRowMoreKeydown(row, $event)"
                 @dblclick.stop
               >
-                更多<el-icon class="row-more-icon"><ArrowDown /></el-icon>
+                <el-icon class="row-more-icon"><MoreFilled /></el-icon>
               </span>
             </template>
           </el-table-column>
@@ -149,12 +156,13 @@
           :trigger="ROW_MENU_TRIGGER"
           virtual-triggering
           :virtual-ref="rowMenuTrigger"
+          placement="bottom-end"
           @command="onRowMenuCommand"
           @visible-change="onRowMenuVisibleChange"
         >
           <template #dropdown>
             <!-- Tab/Shift+Tab 在捕获阶段关闭共享菜单，并按默认顺序把焦点交给触发元素的后/前一项 -->
-            <el-dropdown-menu @keydown.capture="onRowMenuTabKeydown">
+            <el-dropdown-menu @keydown.capture="onRowMenuKeydown">
               <!-- 菜单项始终由当前绑定行推导，顺序/禁用条件与原逐行实现一致。 -->
               <template v-if="rowMenu">
                 <!-- 异常行（FG_ACTIVE 非 '0'/'1'）只保留归一化“停用”，隐藏全部业务写入口（DS-REQ-167）；
@@ -481,7 +489,7 @@ import { computed, nextTick, onBeforeUnmount, onMounted, ref, watch } from 'vue'
 import type { Ref } from 'vue'
 import { ElMessage, ElMessageBox } from 'element-plus'
 import type { FormInstance, FormRules } from 'element-plus'
-import { ArrowDown, Plus } from '@element-plus/icons-vue'
+import { MoreFilled, Plus } from '@element-plus/icons-vue'
 import Schema from 'async-validator'
 import { enableDialogDrag, type DialogDragController } from './draggableDialog'
 import {
@@ -583,6 +591,14 @@ function onRowMoreClick(row: DataSourceListRow, event: MouseEvent) {
 
 function onRowMoreKeydown(row: DataSourceListRow, event: KeyboardEvent) {
   const { key } = event
+  if (key === 'Escape') {
+    // 菜单打开时 Esc 收起并留在当前触发器上；未打开时不拦截，交给浏览器默认行为。
+    if (rowMenuOpen.value) {
+      event.preventDefault()
+      closeRowMenu()
+    }
+    return
+  }
   if (key === 'Tab') {
     // 菜单打开后焦点短暂留在触发器上时，先收起再交给浏览器默认 Tab 顺序；
     // 不 preventDefault，焦点从触发器正常前进/后退，且不归还到触发器。
@@ -682,8 +698,19 @@ function closeRowMenuByTab(target: HTMLElement | null) {
   target?.focus()
 }
 
-/** 菜单内部按 Tab/Shift+Tab：关闭菜单，焦点按触发器前后顺序移动，保留其余菜单键盘操作。 */
-function onRowMenuTabKeydown(event: KeyboardEvent) {
+/** 菜单内部键盘：Esc 关闭并回到当前触发器；Tab/Shift+Tab 关闭并按触发器前后顺序移动焦点。 */
+function onRowMenuKeydown(event: KeyboardEvent) {
+  if (event.key === 'Escape') {
+    if (!rowMenuOpen.value) {
+      return
+    }
+    event.preventDefault()
+    event.stopPropagation()
+    const trigger = rowMenuTrigger.value
+    closeRowMenu()
+    trigger?.focus()
+    return
+  }
   if (event.key !== 'Tab' || !rowMenuOpen.value) {
     return
   }
@@ -1904,17 +1931,6 @@ onMounted(() => {
   margin: 0;
 }
 
-.row-more {
-  display: inline-flex;
-  align-items: center;
-  gap: 2px;
-  cursor: pointer;
-  color: var(--el-color-primary);
-  /* 与原先 el-dropdown 包裹层一致，保持行高与行内对齐不变 */
-  line-height: 1;
-  vertical-align: top;
-}
-
 /* 共享下拉的零尺寸宿主：不参与布局，浮层由 virtual-ref 定位并挂载到 body */
 .ds-row-menu-host {
   position: absolute;
@@ -1923,8 +1939,9 @@ onMounted(() => {
   overflow: hidden;
 }
 
+/* 与探针页同款水平三点图标尺寸；命中区与交互态由公共层 lt-row-action__ellipsis 承担 */
 .row-more-icon {
-  font-size: 12px;
+  font-size: 18px;
 }
 
 /* 主列表的表头/正文基础视觉纪律（表格宽度、EP 表令牌、表头排版、单元格上下内边距）

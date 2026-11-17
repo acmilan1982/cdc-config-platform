@@ -555,12 +555,24 @@ describe('查询列表公共组件选择性接入（DS-REQ-116~138）', () => {
     wrapper.unmount()
   })
 
-  it('操作列只有带文字的“更多”入口：无编辑按钮、菜单不含编辑，启用行菜单含停用与危险色删除正确', async () => {
+  it('操作列只有三点图标入口：无编辑按钮、触发器保留可访问名称与单菜单实例，菜单不含编辑，启用行菜单含停用与危险色删除正确', async () => {
     const wrapper = await mountPage()
 
-    // 无行内编辑按钮；操作列唯一入口是“更多”（DS-REQ-130/131）
+    // 无行内编辑按钮；操作列唯一入口是水平三点图标（DS-REQ-130/131）
     expect(wrapper.findAll('.data-table button').map((b) => b.text())).toEqual([])
-    expect(wrapper.findAll('.row-more').map((el) => el.text().trim())).toEqual(['更多', '更多'])
+    const triggers = wrapper.findAll('.row-more')
+    expect(triggers).toHaveLength(2)
+    // 图标入口不含可见文字，但仍以 aria-label 暴露可访问名称
+    expect(triggers.map((el) => el.text().trim())).toEqual(['', ''])
+    expect(triggers[0].classes()).toContain('lt-row-action__ellipsis')
+    expect(triggers[1].classes()).toContain('lt-row-action__ellipsis')
+    expect(triggers[0].attributes('aria-label')).toContain('更多操作')
+    expect(triggers[0].attributes('aria-label')).toContain('SRC001')
+    expect(triggers[1].attributes('aria-label')).toContain('更多操作')
+    expect(triggers[1].attributes('aria-label')).toContain('TG001')
+    expect(triggers[0].find('.row-more-icon svg').exists()).toBe(true)
+    // 整表只挂载一个共享下拉实例（virtual-triggering）
+    expect(wrapper.findAll('.ds-row-menu-host')).toHaveLength(1)
 
     // 启用源库行：目标库命名策略 / 分隔线 / 停用 / 删除（DS-REQ-132/167）
     await openRowMenu(wrapper, 0)

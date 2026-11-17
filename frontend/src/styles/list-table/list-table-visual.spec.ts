@@ -209,7 +209,7 @@ describe('列表表格视觉模板公共层契约（§4.1 / §6）', () => {
     )
   })
 
-  it('13. opt-in 辅助类在业务页面中只有探针端主列表挂载（未启用页零泄漏，§12.4/§12.7(3)）', () => {
+  it('13. opt-in 辅助类仅在已授权主列表挂载（未启用页零泄漏，§12.4/§12.7(3)）', () => {
     // 拼接构造扫描标记，避免本测试文件自身被计入。
     const token = ['lt-row-action', '__'].join('')
     const VIEWS_DIR = resolve(SRC_DIR, 'views')
@@ -217,7 +217,12 @@ describe('列表表格视觉模板公共层契约（§4.1 / §6）', () => {
       .filter((file) => file.endsWith('.vue'))
       .filter((file) => readFileSync(file, 'utf8').includes(token))
       .map(relative)
-    expect(mounted).toEqual(['views/client-config/ClientConfigPage.vue'])
+      .sort()
+    // 已授权的两个消费方：探针端主列表 + DATA-SOURCE-ROW-ACTION-ELLIPSIS-001 数据源主列表。
+    expect(mounted).toEqual([
+      'views/client-config/ClientConfigPage.vue',
+      'views/data-source/DataSourcePage.vue',
+    ])
   })
 
   it('12. 公共预设规则在全 frontend/src 中只有唯一来源文件', () => {

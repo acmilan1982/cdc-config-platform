@@ -1200,13 +1200,15 @@ describe('列表表格视觉模板：探针端主列表等价接入（CCFG-REQ-0
     wrapper.unmount()
   })
 
-  it('未启用范围零泄漏：弹窗与参考页均不挂 opt-in 辅助类', async () => {
+  it('未启用范围零泄漏：弹窗不挂 opt-in 辅助类；数据源页为独立授权消费方', async () => {
     const wrapper = await mountPage()
     await openCreate(wrapper)
     expect(wrapper.find('.cc-dialog .lt-row-action__cell').exists()).toBe(false)
     expect(wrapper.find('.cc-dialog .lt-row-action__ellipsis').exists()).toBe(false)
-    // 参考页（数据源管理）为只读对照，末轮仍为“更多”文字入口，不接入 opt-in。
-    expect(DS_PAGE_SOURCE).not.toContain('lt-row-action__')
+    // 数据源管理页已由 DATA-SOURCE-ROW-ACTION-ELLIPSIS-001 独立授权接入同一公共 opt-in，
+    // 不再作为“未启用”参考页；此处只确认其为显式 opt-in 而非意外注入。
+    expect(DS_PAGE_SOURCE).toContain('lt-row-action__cell')
+    expect(DS_PAGE_SOURCE).toContain('lt-row-action__ellipsis')
     wrapper.unmount()
   })
 })
