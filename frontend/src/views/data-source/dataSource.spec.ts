@@ -2799,6 +2799,57 @@ describe('列表表格视觉模板：数据源管理参考页等价接入（SHAR
     wrapper.unmount()
   })
 
+  it('显式启用可选单行固定高亮：表级 opt-in 与根类并列，行级类按单击行唯一挂载（§13.3）', async () => {
+    const wrapper = await mountPage()
+    const root = wrapper.find('.data-table')
+    expect(root.classes()).toContain('lt-row-highlight')
+    expect(wrapper.findAll('.lt-row-highlight__row')).toHaveLength(0)
+
+    const tableVm = wrapper.findComponent({ name: 'ElTable' }).vm
+    tableVm.$emit('row-click', srcRow, null, { detail: 1 })
+    await nextTick()
+    expect(wrapper.findAll('.lt-row-highlight__row')).toHaveLength(1)
+    expect(wrapper.find('.lt-row-highlight__row').text()).toContain('SRC001')
+
+    // 单击另一行：固定选中转移，全表同时最多一行
+    tableVm.$emit('row-click', tgtRow, null, { detail: 1 })
+    await nextTick()
+    expect(wrapper.findAll('.lt-row-highlight__row')).toHaveLength(1)
+    expect(wrapper.find('.lt-row-highlight__row').text()).toContain('TG001')
+
+    // 固定操作列与被选行属于同一 tr；整行每个 td 由公共预设统一着色
+    expect(wrapper.find('.lt-row-highlight__row td.lt-row-action__cell').exists()).toBe(true)
+
+    wrapper.unmount()
+  })
+
+  it('双击行同时固定选中并打开编辑，不改变既有双击入口', async () => {
+    const wrapper = await mountPage()
+    await openEditRow(wrapper, srcRow)
+    expect(wrapper.findAll('.lt-row-highlight__row')).toHaveLength(1)
+    expect(wrapper.find('.lt-row-highlight__row').text()).toContain('SRC001')
+    expect(wrapper.find('.editor-dialog').exists()).toBe(true)
+    wrapper.unmount()
+  })
+
+  it('三点菜单打开不产生行选中（菜单态与单行固定选中相互隔离）', async () => {
+    const wrapper = await mountPage()
+    expect(pageSource()).toContain('@click.stop="onRowMoreClick')
+    await openRowMenu(wrapper, 0)
+    expect(wrapper.findAll('.lt-row-highlight__row')).toHaveLength(0)
+    wrapper.unmount()
+  })
+
+  it('选中形态由页面状态 + 公共预设承担，未复制公共高亮字面量（§13.3 单一发布者）', () => {
+    const source = pageSource()
+    expect(source).toContain("'lt-row-highlight'")
+    expect(source).toContain(':row-class-name="rowClassName"')
+    expect(source).toContain('@row-click="onRowClick"')
+    expect(source).toContain("'lt-row-highlight__row'")
+    expect(source).not.toContain('e1e4e8')
+    expect(source).not.toContain('f4f4f5')
+  })
+
   it('未启用表格：命名策略弹窗表根元素不含公共类，且公共类全页仅一处（§7.2 断言 2/3）', async () => {
     const wrapper = await mountPage()
     await clickRowMenuAction(wrapper, 0, '目标库命名策略')

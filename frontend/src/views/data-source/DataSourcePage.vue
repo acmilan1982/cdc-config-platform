@@ -78,9 +78,13 @@
         />
       </template>
       <template #body>
+        <!-- 主列表并列挂公共表级 opt-in `lt-row-highlight`：hover、固定行底色与左缘强调均由公共
+             §13.3 预设承担；单击固定一行（页面会话内本地展示状态），行级类由 rowClassName 提供。 -->
         <el-table
           :data="rows"
-          :class="['data-table', LT_MAIN_TABLE_CLASS]"
+          :class="['data-table', LT_MAIN_TABLE_CLASS, 'lt-row-highlight']"
+          :row-class-name="rowClassName"
+          @row-click="onRowClick"
           @row-dblclick="onRowDoubleClick"
         >
           <template #empty>
@@ -532,6 +536,8 @@ const PASSWORD_MASK = '*********'
 const TEST_COUNTDOWN_SECONDS = 10
 
 const rows = ref<DataSourceListRow[]>([])
+/** 单行固定选中的展示状态（页面会话内，不参与任何业务写操作）。 */
+const selectedDataSourceId = ref<string | null>(null)
 const loading = ref(false)
 const loadError = ref('')
 const query = ref<DataSourceListQuery>({ id: '', name: '', host: '', category: '' })
@@ -763,6 +769,8 @@ async function loadList(querySnapshot: DataSourceListQuery = {}) {
   const token = ++listToken.value
   // 刷新（查询、启停、删除后重载）一律先收起共享菜单，避免命令落到刷新前的旧行
   closeRowMenu()
+  // 普通刷新清除此前固定选中，避免查询/删除后残留旧行高亮
+  selectedDataSourceId.value = null
   loading.value = true
   loadError.value = ''
   try {
@@ -1131,7 +1139,19 @@ function openEdit(row: DataSourceListRow) {
   loadEditorDetail(row.dataSourceId)
 }
 
+/** 行单击：固定当前行（页面会话内本地展示状态，不触发请求）。 */
+function onRowClick(row: DataSourceListRow) {
+  selectedDataSourceId.value = row.dataSourceId
+}
+
+/** 固定选中行挂公共行级 opt-in 类，由公共 §13.3 预设渲染整行高亮；同时最多一行。 */
+function rowClassName({ row }: { row: DataSourceListRow }): string {
+  return row.dataSourceId === selectedDataSourceId.value ? 'lt-row-highlight__row' : ''
+}
+
 function onRowDoubleClick(row: DataSourceListRow) {
+  // 双击行同时固定选中，保持编辑入口与行选中视觉一致
+  selectedDataSourceId.value = row.dataSourceId
   // 异常行唯一允许的写操作是归一化停用：不提供编辑入口（DS-REQ-162/167）
   if (isAbnormal(row)) {
     ElMessage.warning('该记录状态异常，请先停用以归一化状态')
