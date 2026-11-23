@@ -392,7 +392,7 @@ grep -ohF "$cand_marker" docs/baseline/list-table-visual-template/SHARED_COMPONE
 | `DESIGN.md` | 模板职责与 Feature 保留职责、启用与作用域隔离、行高与长文本策略、候选实现方案对比（**基线任务当时不定案**；下游已选 §8.4 并已落地，**目测已通过并通过本地正式验收**） |
 | `UI.md` | 参考实现主表当前事实、可提升为已批准模板规则的视觉内容、必须保留为 Feature 专属的内容 |
 | `MIGRATION.md` | 全量 `el-table` 使用点盘点矩阵、候选分类、逐页独立评估与授权要求 |
-| `SHARED_COMPONENT_DESIGN.md` | **公共实现详细设计（已批准）**：四个候选的唯一结论、公共契约、Feature 保护项、参考页等价接入清单、验证与回滚设计（`approval_scope=SHARED_IMPLEMENTATION_DETAILED_DESIGN_ONLY`；**批准的是设计文档**，该设计随后已由独立实施任务落地，**目测已通过**，**本地正式验收已通过，并已由项目负责人最终接受**）。**§12 为例外**：行内三点入口 opt-in **可选扩展**——其**设计基线**已于 2026-09-29 经 ChatGPT 远程复审 `APPROVED`、项目负责人批准（**R2 修订后口径**）；其**代码实现**已由独立任务 `CLIENT-CONFIG-ROW-HEIGHT-AND-OPTIONAL-ELLIPSIS-IMPLEMENTATION-001` 落地、`/config/client` 主列表接入，**代码复审状态**为 **`APPROVED`（2026-09-30，项目负责人转交的 ChatGPT 远程独立只读代码复审；复审对象为 R0 `d93f838…` 与 R1 `aa942dc1…`）**，**现行实现状态**为 **`IMPLEMENTED_PENDING_USER_ACCEPTANCE`（已实现且代码复审通过、仍待项目负责人最终接受或正式验收）**（其实现提交时点的复审待办值 `IMPLEMENTED_PENDING_CHATGPT_REVIEW` 为**历史值**）；其**已落地的现行事实**按 §7.3 阅读约定标注**参考事实标记**（**不**因复审进度而标为候选未实现），其独立计数见 §12.8）。**§13 为参照修正设计基线（已批准）**：分层可选契约（§13.3 单行固定高亮外观预设与行为边界、§13.4 归属处置）经 ChatGPT 从远程 Git 对 R4 提交 `aa6285f…` 复审 `APPROVED`、项目负责人于 2026-09-29 批准后**设计基线已批准**；其**公共实现已由独立任务 `LIST-TABLE-OPTIONAL-SINGLE-ROW-HIGHLIGHT-PUBLIC-IMPLEMENTATION-001`（2026-09-30）落地**，并经 ChatGPT 从远程 Git 对该实现 `5fa0edd…...f35fb5a…` 的**独立只读代码复审结论 `APPROVED`（2026-09-30，见 §8.4）**，**现行实现状态**为 **`IMPLEMENTED_PENDING_USER_ACCEPTANCE`（已实现且代码复审通过、仍待项目负责人最终接受或采用决定）**（其实现提交时点复审待办值 `IMPLEMENTED_PENDING_CHATGPT_REVIEW` 与批准时点值 `NOT_STARTED` 均为**历史值**）；经**页面级**授权，**仅** `/config/client`（探针端管理）**主列表**已采用该公共预设、待远程代码复审与负责人目测（见 §8.5），**其余任何页面**（含 `/config/data-source`）**不**自动接入、仍零挂载 |
+| `SHARED_COMPONENT_DESIGN.md` | **公共实现详细设计（已批准）**：四个候选的唯一结论、公共契约、Feature 保护项、参考页等价接入清单、验证与回滚设计（`approval_scope=SHARED_IMPLEMENTATION_DETAILED_DESIGN_ONLY`；**批准的是设计文档**，该设计随后已由独立实施任务落地，**目测已通过**，**本地正式验收已通过，并已由项目负责人最终接受**）。**§12 为例外**：行内三点入口 opt-in **可选扩展**——其**设计基线**已于 2026-09-29 经 ChatGPT 远程复审 `APPROVED`、项目负责人批准（**R2 修订后口径**）；其**代码实现**已由独立任务 `CLIENT-CONFIG-ROW-HEIGHT-AND-OPTIONAL-ELLIPSIS-IMPLEMENTATION-001` 落地、`/config/client` 主列表接入，**代码复审状态**为 **`APPROVED`（2026-09-30，项目负责人转交的 ChatGPT 远程独立只读代码复审；复审对象为 R0 `d93f838…` 与 R1 `aa942dc1…`）**，**现行实现状态**为 **`IMPLEMENTED_PENDING_USER_ACCEPTANCE`（已实现且代码复审通过、仍待项目负责人最终接受或正式验收）**（其实现提交时点的复审待办值 `IMPLEMENTED_PENDING_CHATGPT_REVIEW` 为**历史值**）；其**已落地的现行事实**按 §7.3 阅读约定标注**参考事实标记**（**不**因复审进度而标为候选未实现），其独立计数见 §12.8）。**§13 为参照修正设计基线（已批准）**：分层可选契约（§13.3 单行固定高亮外观预设与行为边界、§13.4 归属处置）经 ChatGPT 从远程 Git 对 R4 提交 `aa6285f…` 复审 `APPROVED`、项目负责人于 2026-09-29 批准后**设计基线已批准**；其**公共实现已由独立任务 `LIST-TABLE-OPTIONAL-SINGLE-ROW-HIGHLIGHT-PUBLIC-IMPLEMENTATION-001`（2026-09-30）落地**，并经 ChatGPT 从远程 Git 对该实现 `5fa0edd…...f35fb5a…` 的**独立只读代码复审结论 `APPROVED`（2026-09-30，见 §8.4）**，**现行实现状态**为 **`IMPLEMENTED_PENDING_USER_ACCEPTANCE`（已实现且代码复审通过、仍待项目负责人最终接受或采用决定）**（其实现提交时点复审待办值 `IMPLEMENTED_PENDING_CHATGPT_REVIEW` 与批准时点值 `NOT_STARTED` 均为**历史值**）；经**页面级**授权，**仅** `/config/client`（探针端管理）**主列表**已采用该公共预设、待远程代码复审与负责人目测（见 §8.5）；`/config/data-source` 主列表另于 2026-11-23 本地候选接入该预设并完成负责人 Windows Chrome 人工验收（页面级，见 §8.6）；**其余任何页面**不自动接入、仍零挂载 |
 | `reports/LIST-TABLE-VISUAL-TEMPLATE-BASELINE-001.md` | R0 建立任务的执行报告与校验证据（**历史报告，保留草案态标记，不修改**） |
 | `reports/LIST-TABLE-VISUAL-TEMPLATE-BASELINE-001-R1.md` | R1 定向修订执行报告（**历史报告，保留草案态标记，不修改**） |
 | `reports/LIST-TABLE-VISUAL-TEMPLATE-BASELINE-APPROVAL-CLOSEOUT-001.md` | 基线内容批准收口报告（历史执行报告，不修改） |
@@ -696,6 +696,37 @@ CCFG-UI      77（UI.md，ID 001–077，连续唯一）
   （模板侧交叉引用）。
 - **边界声明**：**接入代码复审通过 ≠ 正式验收通过；负责人页面操作无问题反馈 ≠ 逐条验收通过；页面接入并推送
   ≠ 远程文档复审通过 ≠ 其它页面已授权接入。**
+
+### 8.6 数据源管理主列表接入 §13 公共可选高亮与三点入口（`2026-11-23`，本地候选）—— 第二个页面，负责人页面级人工验收通过
+
+任务 `DATA-SOURCE-ROW-SELECTION-4175-ACCEPTANCE-CLOSEOUT-001` 在已批准设计基线（§13.3）与已落地、已复审通过的
+§13 公共实现之上，把同一公共外观接到 `/config/data-source` **主列表**，并把行操作入口由文字“更多”改为水平三点。
+**未**改变公共契约、令牌、helper 类或任何其它页面。
+
+- **接入范围（第二页）**：`/config/data-source` **主列表**表根显式挂表级 `.lt-main-table` + `.lt-row-highlight`，
+  行类回调为被固定行提供行级 `.lt-row-highlight__row`（弹窗内 `.naming-table` 不接入）。**其余页面**仍未授权、
+  零挂载；模板级页面迁移授权 `page_migration_authorization_status=NOT_GRANTED` **保持不变**，本记录不构成授权。
+- **三点入口**：操作列唯一行操作入口由文字“更多”改为**水平三点**图标触发器，沿用现有三点样式、点击区域、
+  键盘打开（Enter/Space/ArrowDown）与读屏“更多操作”名称；菜单项、顺序、禁用条件、确认框与命令分发不变。
+- **行高亮行为**：单击固定一行、再点取消、点他行转移、双击编辑；查询/刷新清除高亮；普通列与固定操作列
+  （sticky 同 `<tr>`）同色；取值沿用公共预设（固定底 `#e1e4e8`、悬停 `#f4f4f5`、左缘 `3px #18181b`）。
+- **实现要点（仅性能）**：`rowClassName` 不再读取响应式选中值，改用非响应式镜像 + 选中变化时命令式只增删
+  旧/新行类，避免整表体因选中重渲染（优化提交 `526f33b74addd9ea237bc8806e79aa111d6bced8`）；视觉与交互与
+  已验收实现一致。
+- **验证**：定向 Vitest 327/327（`dataSource.spec.ts` 123 + `ClientConfigPage.spec.ts` 189 +
+  `list-table-visual.spec.ts` 15）通过；`npm run build`（含 `vue-tsc`）通过；生产构建 35/35 浏览器回归，
+  全程 0 个非 GET 请求；`git diff --check` 通过。
+- **负责人人工验收（2026-11-23，Windows Chrome）**：项目负责人对生产构建候选
+  `http://192.168.174.70:4175/config/data-source` 实际操作复验三项均无问题（选中/切换/取消高亮一致；横向滚动
+  高亮一致、查询后旧高亮清除；A 选中时 B 三点菜单仍操作 B、删除确认后取消、双击打开对应行编辑框）。
+  `windows_acceptance_status=PASS_OPERATIONAL_NO_MS`（未采集毫秒）。
+- **性能依据（代理指标，单独记录）**：服务器无头 Chromium，数据源 273×10 首次选中 class 385.8 → 0.6 ms、
+  A→B 切换 367.8 → 0.6 ms、取消端到端 596.6 → 261.5 ms；**非** Windows 真机帧时延。
+- **状态与边界**：本次为**页面级**接入 + 负责人人工验收，**不**改变 §13 公共实现状态
+  `IMPLEMENTED_PENDING_USER_ACCEPTANCE` 与 `code_review_status=APPROVED`，**不**改变 §12 三点入口状态，**不**改变
+  模板级页面迁移授权 `NOT_GRANTED`，**不**构成模板整体批准或正式验收。候选分支 `ui/data-source-row-action-ellipsis`
+  基于远端 `develop@4eac2b9`，**未合入、未推送、未部署**；`reacceptance_required=NO`。
+- **边界声明**：**负责人页面级操作验收 ≠ 正式验收通过；第二页接入 ≠ 其它页面已授权；本地候选 ≠ 已合入/已部署。**
 
 ## 9. 后续阶段与授权边界
 
@@ -1171,3 +1202,11 @@ next_step=NONE_SHARED_IMPLEMENTATION_FINAL_ACCEPTED_AND_CLOSED_NO_PAGE_MIGRATION
   文档收口推送 ≠ 远程文档复审通过。** Feature 侧详见
   `docs/features/client-config/reports/CLIENT-CONFIG-OPTIONAL-ROW-HIGHLIGHT-ADOPTION-REVIEW-AND-OWNER-FEEDBACK-CLOSEOUT-001.md`。
   更新 §8.1 末与 §8.5。
+- 2026-11-23，**数据源管理主列表接入 §13 公共可选高亮与三点入口**（`DATA-SOURCE-ROW-SELECTION-4175-ACCEPTANCE-CLOSEOUT-001`，
+  **页面级接入 + 行高亮性能优化 + 文档同步；本地候选，未合入/未推送/未部署**）—— `/config/data-source` 主列表表根显式挂
+  `.lt-main-table` + `.lt-row-highlight`、行类回调提供 `.lt-row-highlight__row`；行操作入口由文字“更多”改为水平三点
+  （保留菜单项、顺序、禁用条件、点击区域、键盘打开与读屏“更多操作”名称）。行高亮改为非响应式镜像 + 命令式只增删
+  旧/新行类，避免整表重渲染（优化提交 `526f33b`）。定向 327/327、`npm run build`、生产构建 35/35（0 非 GET）通过；项目负责人
+  2026-11-23 Windows Chrome 对生产构建候选 `http://192.168.174.70:4175/config/data-source` 实际操作三项无问题
+  （`PASS_OPERATIONAL_NO_MS`）。**不**改变 §12/§13 公共实现状态、`lt_token_count`（9）/helper 类计数（4）、模板级页面迁移
+  `NOT_GRANTED` 或 157 条验收状态；**其余页面**仍未授权、零挂载；第二页接入 ≠ 其它页面授权、≠ 正式验收、≠ 已合入/部署。新增 §8.6。

@@ -258,6 +258,25 @@ ZooKeeper；上述验证事实沿用实现报告原文，不扩大为其他页�
 **证据边界：** 本次收口为纯文档任务，未重跑测试/构建、未启动服务、未访问数据库或
 ZooKeeper；上述验证事实沿用实现报告原文，不扩大为其他页面或模板整体结论。
 
+## 0.5 页面级视觉收口记录（2026-11-23，本地候选）
+
+任务 `DATA-SOURCE-ROW-SELECTION-4175-ACCEPTANCE-CLOSEOUT-001` 按已发生决定完成本地候选收口。
+本轮同步两项**数据源主列表页面级事实**，属页面记录，不改模板契约、令牌或正式验收统计：
+
+| 收口项 | 状态与证据 |
+| --- | --- |
+| 水平三点入口 | 数据源主列表操作列唯一行操作入口由文字“更多”改为**水平三点**图标触发器；保留菜单项、顺序、禁用条件、点击区域、键盘打开与读屏“更多操作”名称 |
+| 公共单行高亮 | 数据源主列表显式挂载 `.lt-main-table` + `.lt-row-highlight`，行级 `.lt-row-highlight__row`；单击固定、再点取消、点他行转移、双击编辑；查询/刷新清除；普通列与固定操作列同色 |
+| 人工验收 | `PASS_OPERATIONAL_NO_MS`：项目负责人 2026-11-23 在 Windows Chrome 对生产构建候选 `http://192.168.174.70:4175/config/data-source` 实际操作复验三项均无问题（选中/切换/取消高亮一致；滚动与查询；A 选中时 B 三点菜单与删除确认对象、双击编辑）；未采集毫秒 |
+| 性能依据 | 服务器无头 Chromium 代理指标（单独记录，非 Windows 真机时延）：数据源 273×10 首次选中 class 385.8 → 0.6 ms、A→B 切换 367.8 → 0.6 ms、取消端到端 596.6 → 261.5 ms；探针页与 250 ms 渐显保留 |
+| 候选与边界 | 优化提交 `526f33b74addd9ea237bc8806e79aa111d6bced8`（候选分支 `ui/data-source-row-action-ellipsis`，基于远端 `develop@4eac2b9`）；**未合入、未推送、未部署**，`reacceptance_required=NO` |
+| 模板整体批准 | 仍为 `NOT_APPROVED` |
+| 页面迁移 | 仍为 `NOT_STARTED` / `NOT_GRANTED`；本记录不构成任何页面迁移授权 |
+
+**证据边界：** 本次为页面级视觉收口 + 行高亮性能优化；代码优化提交与文档提交分离于候选分支，
+未推送/未部署；未访问数据库/ZooKeeper、未发送业务写请求；上述性能为代理指标，非 Windows 帧时延。
+详见 [`docs/features/data-source-management/reports/DATA-SOURCE-ROW-SELECTION-4175-ACCEPTANCE-CLOSEOUT-001.md`](../../features/data-source-management/reports/DATA-SOURCE-ROW-SELECTION-4175-ACCEPTANCE-CLOSEOUT-001.md)。
+
 ## 1. 目标与非目标
 
 ### 1.1 目标
@@ -286,7 +305,7 @@ ZooKeeper；上述验证事实沿用实现报告原文，不扩大为其他页�
 | 层 | 权威入口 | 已核实状态 | 本模板复用范围 |
 |---|---|---|---|
 | 页面／查询层 | [query-list-page-template](../query-list-page-template/README.md) · [组件设计](../query-list-page-template/SHARED_COMPONENT_DESIGN.md) | 6 个公共组件 + 1 个 Tooltip composable；参考页「源库快照状态」（`/monitor/data-source-state`）等价接入；**最终权威验收口径 21/21 PASS**（原 17/17 为历史阶段，二者是包含关系，不得相加）；项目负责人 2026-09-17 最终接受；页面迁移 `NOT_STARTED` / `NOT_GRANTED` | 页面骨架、查询区、查询/重置按钮、结果区外壳；可选刷新工具栏与 Tooltip 宿主 |
-| 表格视觉层 | [list-table-visual-template](../list-table-visual-template/README.md) · [共享实现设计](../list-table-visual-template/SHARED_COMPONENT_DESIGN.md) | 基线内容 `APPROVED`；公共实现与**数据源管理主列表**参考页接入 14/14 PASS，2026-09-22 项目负责人最终接受并关闭；**可选三点入口 / 单行高亮**：公共实现已落地、代码复审 `APPROVED`，`/config/client` 页面级接入，现行 `IMPLEMENTED_PENDING_USER_ACCEPTANCE`（未正式验收）；页面迁移 `NOT_STARTED` / `NOT_GRANTED` | `.lt-main-table` + 9 个 `--lt-*` 令牌；**可选**三点入口外观、**可选**单行固定高亮 |
+| 表格视觉层 | [list-table-visual-template](../list-table-visual-template/README.md) · [共享实现设计](../list-table-visual-template/SHARED_COMPONENT_DESIGN.md) | 基线内容 `APPROVED`；公共实现与**数据源管理主列表**参考页接入 14/14 PASS，2026-09-22 项目负责人最终接受并关闭；**可选三点入口 / 单行高亮**：公共实现已落地、代码复审 `APPROVED`，`/config/client` 页面级接入；`/config/data-source` 主列表已于 2026-11-23 本地候选接入水平三点入口 + 公共单行高亮并完成负责人 Windows Chrome 人工验收（页面级），模板整体仍 `IMPLEMENTED_PENDING_USER_ACCEPTANCE`（未正式验收）；页面迁移 `NOT_STARTED` / `NOT_GRANTED` | `.lt-main-table` + 9 个 `--lt-*` 令牌；**可选**三点入口外观、**可选**单行固定高亮 |
 | 弹窗视觉层 | [create-edit-dialog-visual-template](../create-edit-dialog-visual-template/README.md) | 设计 2026-09-30 批准；公共 CSS 已实现且**代码复审 `APPROVED`**；Vue 组件 `NOT_CREATED`；仅 `/config/client` 新增／编辑主弹窗获页面级授权并接入、接入复审 `APPROVED`；负责人人工测试 `NO_ISSUE_REPORTED`（**非**正式验收）；**正式验收 `NOT_EXECUTED`** | `ced-dialog` 根类 + 7 个辅助类 + 17 个 `--ced-*` 令牌；不建 Vue 包装 |
 
 三项独立事实：同一页面「已接入查询组件」「已接入表格视觉」「已接入弹窗视觉」互不等价，
@@ -349,7 +368,8 @@ QueryListPageShell
 **行操作入口约定：** 用于展开一组行操作的入口统一使用水平三点图标，沿用
 `list-table-visual-template` 的现有三点样式与点击区域，并保留键盘打开与读屏可识别的
 “更多操作”名称；“编辑”“查看”等直接操作按页面需求展示，单行高亮按需启用。
-数据源管理的文字“更多”替换列入后续接入计划，替换时保留原菜单项、顺序、禁用条件与业务行为。
+数据源管理主列表的文字“更多”已于 2026-11-23 本地候选改为水平三点入口并完成负责人
+Windows Chrome 人工验收（见 §0.5），替换保留了原菜单项、顺序、禁用条件与业务行为。
 
 **唯一维护位置原则：**
 
@@ -367,8 +387,9 @@ QueryListPageShell
   同一公共源（见 §0.3），旧私有副本已删除；
 - 行操作入口的**模板规则**已确认为成组操作使用水平三点，公共表格层只提供三点
   **外观与用法契约**；**触发器与菜单项忙碌状态、事件隔离、危险项呈现**仍只有页面级实现；
-- **当前页面实现**：探针端管理已使用三点；数据源管理仍为文字“更多”入口，改为三点为
-  后续独立任务（替换时保留原菜单项、顺序、禁用条件与业务行为）；
+- **当前页面实现**：探针端管理已使用三点；数据源管理主列表已在本地候选改为水平三点入口
+  并完成负责人 Windows Chrome 人工验收（见 §0.5），替换保留了原菜单项、顺序、禁用条件与
+  业务行为；
 - 数据源／探针端下拉选择器尚未公共化，已列为公共控件候选，待实际使用页面验证后再决定封装；
 - 数据源管理主弹窗仍使用页面私有标签与主提交按钮规则，未接入 `ced-dialog`；
 - 两页的错误处理与刷新语义**有意不同**（失败保留旧行 vs 清空旧行），不能直接抽成同一行为；
@@ -451,6 +472,10 @@ QueryListPageShell
      业务行为，并保留点击区域、键盘打开和读屏“更多操作”名称；需页面级授权与验收；
   2. 数据源新增／编辑主弹窗接入既有 `ced-dialog` CSS——需保留 EP 表单校验、
      全局错误区等业务差异，并删除页面私有同义规则。
+
+> 说明（2026-11-23）：上述第 1 项“更多”改三点已作为独立任务在本地候选实施并完成负责人
+> Windows Chrome 人工验收（见 §0.5）；第 2 项（主弹窗接入 `ced-dialog`）仍待另立任务。
+
 - **备选**：数据订阅（`/config/subscribe`）——结构改造面更大，留作后续候选。
 - 本轮仅构成数据源页三项样式的**页面级接入**，不构成模板整体批准；
   其他页面迁移仍需逐页独立评估、授权、实施与验收。
