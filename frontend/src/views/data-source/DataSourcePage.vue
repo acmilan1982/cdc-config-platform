@@ -541,6 +541,12 @@ const rows = ref<DataSourceListRow[]>([])
 /** 单行固定选中的展示状态（页面会话内，不参与任何业务写操作）。 */
 const selectedDataSourceId = ref<string | null>(null)
 let pendingCancelTimer: ReturnType<typeof setTimeout> | undefined
+const ROW_HIGHLIGHT_CLASS = 'lt-row-highlight__row'
+/**
+ * 行级高亮的非响应式镜像：切换选中时只增删旧行/新行的类，避免 rowClassName 读取响应式
+ * 选中值导致整张表体随选中变化重渲染。后续任何渲染仍按该值返回行级类，保持与稳定行 ID 同步。
+ */
+let highlightedDataSourceId: string | null = null
 
 /** 撤销待定的“单击取消”，避免迟到计时器清掉之后的新选中或双击结果。 */
 function cancelPendingRowClick(): void {
@@ -548,6 +554,21 @@ function cancelPendingRowClick(): void {
     clearTimeout(pendingCancelTimer)
     pendingCancelTimer = undefined
   }
+}
+
+/** 只切换行级高亮类的 DOM 同步点；不触发 Vue 表体重渲染。 */
+function syncRowHighlight(dataSourceId: string | null, rowEl?: HTMLElement | null, row?: DataSourceListRow): void {
+  highlightedDataSourceId = dataSourceId
+  let target = rowEl ?? null
+  if (!target && dataSourceId && row) {
+    const idx = rows.value.findIndex((item) => item.dataSourceId === dataSourceId)
+    target = (document.querySelectorAll('.data-table tbody tr.el-table__row')[idx] as HTMLElement | undefined) ?? null
+  }
+  if (!dataSourceId) target = null
+  document.querySelectorAll('.data-table tbody tr.' + ROW_HIGHLIGHT_CLASS).forEach((el) => {
+    if (el !== target) el.classList.remove(ROW_HIGHLIGHT_CLASS)
+  })
+  if (target) target.classList.add(ROW_HIGHLIGHT_CLASS)
 }
 const loading = ref(false)
 const loadError = ref('')
@@ -783,6 +804,7 @@ async function loadList(querySnapshot: DataSourceListQuery = {}) {
   // 普通刷新清除此前固定选中与待定取消，避免查询/删除后残留旧行高亮或迟到计时器
   cancelPendingRowClick()
   selectedDataSourceId.value = null
+  syncRowHighlight(null)
   loading.value = true
   loadError.value = ''
   try {
@@ -1156,26 +1178,37 @@ function onRowClick(row: DataSourceListRow, _column: unknown, event: MouseEvent)
   // 双击所含的第二次及以后点击不参与切换
   if (event && event.detail > 1) return
   cancelPendingRowClick()
+  const rowEl = event?.target instanceof Element
+    ? (event.target.closest('tr.el-table__row') as HTMLElement | null)
+    : null
   if (selectedDataSourceId.value !== row.dataSourceId) {
     selectedDataSourceId.value = row.dataSourceId
+    syncRowHighlight(row.dataSourceId, rowEl, row)
     return
   }
   const target = row.dataSourceId
   pendingCancelTimer = setTimeout(() => {
     pendingCancelTimer = undefined
-    if (selectedDataSourceId.value === target) selectedDataSourceId.value = null
+    if (selectedDataSourceId.value === target) {
+      selectedDataSourceId.value = null
+      syncRowHighlight(null)
+    }
   }, CLICK_CANCEL_DELAY_MS)
 }
 
 /** 固定选中行挂公共行级 opt-in 类，由公共 §13.3 预设渲染整行高亮；同时最多一行。 */
 function rowClassName({ row }: { row: DataSourceListRow }): string {
-  return row.dataSourceId === selectedDataSourceId.value ? 'lt-row-highlight__row' : ''
+  return row.dataSourceId === highlightedDataSourceId ? ROW_HIGHLIGHT_CLASS : ''
 }
 
-function onRowDoubleClick(row: DataSourceListRow) {
+function onRowDoubleClick(row: DataSourceListRow, _column?: unknown, event?: MouseEvent) {
   // 双击行保持固定选中并打开编辑，撤销单击取消的待定动作
   cancelPendingRowClick()
   selectedDataSourceId.value = row.dataSourceId
+  const rowEl = event?.target instanceof Element
+    ? (event.target.closest('tr.el-table__row') as HTMLElement | null)
+    : null
+  syncRowHighlight(row.dataSourceId, rowEl, row)
   // 异常行唯一允许的写操作是归一化停用：不提供编辑入口（DS-REQ-162/167）
   if (isAbnormal(row)) {
     ElMessage.warning('该记录状态异常，请先停用以归一化状态')
