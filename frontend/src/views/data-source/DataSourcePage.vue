@@ -222,7 +222,7 @@
       destroy-on-close
       :close-on-click-modal="false"
       :before-close="onEditorBeforeClose"
-      class="editor-dialog"
+      class="editor-dialog ced-dialog"
       @closed="onEditorClosed"
     >
       <el-form
@@ -281,7 +281,7 @@
         <el-form-item
           label="密码"
           prop="password"
-          :class="{ 'editor-password-required-mark': !isEdit }"
+          :class="{ 'ced-required-mark': !isEdit }"
         >
           <el-input
             v-model="passwordInput"
@@ -321,7 +321,7 @@
         <el-button :disabled="saving" @click="requestCloseEditor">取消</el-button>
         <el-button
           type="primary"
-          class="editor-submit-button"
+          class="editor-submit-button ced-submit"
           :loading="saving"
           :disabled="editorLoading"
           @click="onSaveEditor"
@@ -1977,30 +1977,6 @@ onMounted(() => {
   flex: 0 0 140px;
 }
 
-/* 主弹窗右下角“创建/保存”：与主列表“查询”“新增数据源”同一黑白灰视觉语言（DS-REQ-187）。
-   选择器限定在 .editor-dialog 内且 :not(.is-disabled) 仅覆盖正常态，
-   禁用态沿用 Element Plus 既有禁用视觉，取消/测试连接/其他弹窗按钮不受影响。 */
-:deep(.editor-dialog .editor-submit-button:not(.is-disabled)) {
-  background: #09090b;
-  border-color: #09090b;
-  color: #ffffff;
-  border-radius: 6px;
-  font-weight: 500;
-}
-
-:deep(.editor-dialog .editor-submit-button:not(.is-disabled):hover),
-:deep(.editor-dialog .editor-submit-button:not(.is-disabled):focus) {
-  background: #27272a;
-  border-color: #27272a;
-  color: #ffffff;
-}
-
-:deep(.editor-dialog .editor-submit-button:not(.is-disabled):active) {
-  background: #18181b;
-  border-color: #18181b;
-  color: #ffffff;
-}
-
 .ds-add-icon {
   margin-right: 4px;
 }
@@ -2114,24 +2090,6 @@ onMounted(() => {
 
 .editor-form .el-select {
   width: 100%;
-}
-
-/* 新增/编辑主弹窗配置项标签文字样式：使用页面默认无衬线字体，不套用列表 ID 的等宽字体与强视觉（DS-REQ-185）。
-   选择器限定在 .editor-dialog 内，不泄漏到业务属性、命名策略弹窗或其他页面。 */
-:deep(.editor-dialog .el-form-item__label) {
-  font-size: 14px;
-  font-weight: 500;
-  color: #3f3f46;
-}
-
-/* 新增模式密码前的红色星号：纯视觉标记（DS-REQ-186）。
-   不使用 el-form-item 的 required 属性，也不产生任何校验规则——密码输入绑定独立状态 passwordInput、
-   不在 editorForm 内，若用 required 会生成读取 editorForm.password 的隐式必填规则，
-   导致“密码已填仍报 password is required”。class 仅挂在密码表单项上且编辑模式不挂。 */
-:deep(.editor-dialog .editor-password-required-mark .el-form-item__label)::before {
-  content: "*";
-  color: var(--el-color-danger);
-  margin-right: 4px;
 }
 
 .field-tip {
@@ -2288,6 +2246,15 @@ onMounted(() => {
   font-size: 12px;
   line-height: 1.5;
   color: var(--el-text-color-secondary);
+}
+</style>
+
+<!-- 主弹窗接入公共新增／编辑弹窗视觉模板（根类 `ced-dialog`）所需的 Feature 令牌。
+     弹窗 Teleport 到 body，故用非 scoped 全局作用域并限定在根类组合选择器内，不泄漏其他弹窗。
+     本页为 Element Plus 表单，标签列宽仍由 `label-width` 承载，不消费标签列宽／间距令牌。 -->
+<style>
+.editor-dialog.ced-dialog {
+  --ced-dialog-safety-inset: 48px;
 }
 </style>
 

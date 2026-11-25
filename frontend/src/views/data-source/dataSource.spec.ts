@@ -987,16 +987,6 @@ describe('新增/编辑主弹窗表单与按钮视觉调整（DS-REQ-184~188）'
     return matched[1]
   }
 
-  /** 断言某条声明只出现在 `.editor-dialog` 限定范围内，不存在全局泄漏。 */
-  function expectDialogScopedRule(style: string, selector: string) {
-    const ruleIndex = style.indexOf(selector)
-    expect(ruleIndex, `selector not found: ${selector}`).toBeGreaterThan(-1)
-    // 规则起始位置必须带 `:deep(.editor-dialog`
-    const ruleStart = style.lastIndexOf('}', ruleIndex) + 1
-    const ruleHead = style.slice(ruleStart, ruleIndex + selector.length)
-    expect(ruleHead).toContain(':deep(.editor-dialog')
-  }
-
   it('新增弹窗标签宽度 120px 且右对齐（DS-REQ-184 / DS-AC-192）', async () => {
     const wrapper = await mountPage()
     await buttonByText(wrapper, '新增数据源')!.trigger('click')
@@ -1030,19 +1020,17 @@ describe('新增/编辑主弹窗表单与按钮视觉调整（DS-REQ-184~188）'
     wrapper.unmount()
   })
 
-  it('标签样式为 14px/500/#3f3f46、默认无衬线字体且限定在 .editor-dialog（DS-REQ-185 / DS-AC-194）', () => {
-    const style = scopedStyleBlock()
-    expectDialogScopedRule(style, '.el-form-item__label')
+  it('标签视觉由公共 ced-dialog 模板承担，页面不再私有复制（DS-REQ-185 / DS-AC-194）', async () => {
+    const wrapper = await mountPage()
+    await buttonByText(wrapper, '新增数据源')!.trigger('click')
+    await flushPromises()
 
-    const ruleStart = style.lastIndexOf('}', style.indexOf('.el-form-item__label')) + 1
-    const rule = style.slice(ruleStart, style.indexOf('}', style.indexOf('.el-form-item__label')) + 1)
-    expect(rule).toContain('font-size: 14px')
-    expect(rule).toContain('font-weight: 500')
-    expect(rule).toContain('color: #3f3f46')
-    // 不套用列表 ID 的等宽字体，也不复制其 600 字重与 #09090b 强色
-    expect(rule).not.toContain('font-family')
-    expect(rule).not.toContain('monospace')
-    expect(rule).not.toContain('#09090b')
+    // 主弹窗挂载公共 opt-in 根类，标签字号/字重/颜色/右对齐由公共模板统一提供
+    expect(wrapper.find('.el-dialog.editor-dialog.ced-dialog').exists()).toBe(true)
+    const style = scopedStyleBlock()
+    // 私有同义规则已删除，避免与公共模板双份维护
+    expect(style).not.toContain(':deep(.editor-dialog .el-form-item__label)')
+    wrapper.unmount()
   })
 
   it('新增模式密码星号来自专用视觉 class，不带 required 属性与 is-required 状态类（DS-REQ-186 / DS-AC-195~196）', async () => {
@@ -1051,8 +1039,8 @@ describe('新增/编辑主弹窗表单与按钮视觉调整（DS-REQ-184~188）'
     await flushPromises()
 
     const createItem = editorInput(wrapper, '密码').element.closest('.el-form-item')!
-    // 星号必须靠专用视觉 class 实现
-    expect(createItem.className).toContain('editor-password-required-mark')
+    // 星号必须靠公共模板的显式视觉 class 实现，且不产生校验语义
+    expect(createItem.className).toContain('ced-required-mark')
     // 不得退回 Element Plus 的 required 能力：password 绑定的是独立状态 passwordInput，
     // 而非 editorForm.password，required 会生成读取 editorForm.password 的隐式规则，
     // 导致“已填密码仍报 password is required”。
@@ -1065,22 +1053,16 @@ describe('新增/编辑主弹窗表单与按钮视觉调整（DS-REQ-184~188）'
     const editWrapper = await mountPage()
     await openEditRow(editWrapper, srcRow)
     const editItem = editorInput(editWrapper, '密码').element.closest('.el-form-item')!
-    expect(editItem.className).not.toContain('editor-password-required-mark')
+    expect(editItem.className).not.toContain('ced-required-mark')
     expect(editItem.className).not.toContain('is-required')
     editWrapper.unmount()
   })
 
-  it('专用视觉 class 的星号规则存在于 scoped 样式且不引入校验（DS-REQ-186）', () => {
+  it('星号规则由公共模板 .ced-required-mark 承担，页面不再私有复制且不引入校验（DS-REQ-186）', () => {
     const style = scopedStyleBlock()
-    const ruleIndex = style.indexOf('.editor-password-required-mark')
-    expect(ruleIndex).toBeGreaterThan(-1)
-    const ruleEnd = style.indexOf('}', ruleIndex)
-    const rule = style.slice(ruleIndex, ruleEnd + 1)
-    expect(rule).toContain('::before')
-    expect(rule).toContain('content: "*"')
-    expect(rule).toContain('var(--el-color-danger)')
-    // 纯视觉：不触发表单项校验状态
-    expect(rule).not.toContain('is-required')
+    // 私有星号规则已删除，交由公共模板的 .ced-dialog .ced-required-mark 提供
+    expect(style).not.toContain('editor-password-required-mark')
+    expect(style).not.toContain('content: "*"')
   })
 
   it('新增模式空密码被既有校验阻断（DS-AC-195）', async () => {
@@ -1152,37 +1134,33 @@ describe('新增/编辑主弹窗表单与按钮视觉调整（DS-REQ-184~188）'
     wrapper.unmount()
   })
 
-  it('创建/保存按钮使用专用局部 class，取消与测试连接按钮不受影响（DS-REQ-187~188 / DS-AC-197~199）', async () => {
+  it('创建/保存按钮接入公共 ced-submit，取消与测试连接按钮不受影响（DS-REQ-187~188 / DS-AC-197~199）', async () => {
     const wrapper = await mountPage()
     await buttonByText(wrapper, '新增数据源')!.trigger('click')
     await flushPromises()
 
     const createButton = exactButton(wrapper, '创建')!
     expect(createButton.classes()).toContain('editor-submit-button')
-    expect(exactButton(wrapper, '取消')!.classes()).not.toContain('editor-submit-button')
-    expect(exactButton(wrapper, '测试连接')!.classes()).not.toContain('editor-submit-button')
+    expect(createButton.classes()).toContain('ced-submit')
+    expect(exactButton(wrapper, '取消')!.classes()).not.toContain('ced-submit')
+    expect(exactButton(wrapper, '测试连接')!.classes()).not.toContain('ced-submit')
     wrapper.unmount()
 
     const editWrapper = await mountPage()
     await openEditRow(editWrapper, srcRow)
     const saveButton = exactButton(editWrapper, '保存')!
     expect(saveButton.classes()).toContain('editor-submit-button')
+    expect(saveButton.classes()).toContain('ced-submit')
     editWrapper.unmount()
   })
 
-  it('提交按钮四态黑色视觉限定在 .editor-dialog 且仅覆盖非禁用态（DS-REQ-187~188）', () => {
+  it('提交按钮黑灰视觉由公共 ced-submit 承担，页面不再私有复制四态规则（DS-REQ-187~188）', () => {
     const style = scopedStyleBlock()
-    expectDialogScopedRule(style, '.editor-submit-button:not(.is-disabled)')
-
-    expect(style).toContain('background: #09090b')
-    expect(style).toContain('background: #27272a')
-    expect(style).toContain('background: #18181b')
-    expect(style).toContain('color: #ffffff')
-    expect(style).toContain('border-radius: 6px')
-    expect(style).toContain('font-weight: 500')
-    // 禁用态不换色，沿用 Element Plus 既有禁用视觉
-    expect(style).toContain(':not(.is-disabled)')
-    expect(style).not.toContain('.editor-submit-button.is-disabled {')
+    // 私有四态规则已删除，交由公共模板 .ced-dialog .ced-submit 提供（禁用态沿用 EP 默认）
+    expect(style).not.toContain('.editor-submit-button:not(.is-disabled)')
+    expect(style).not.toContain('background: #09090b')
+    expect(style).not.toContain('background: #27272a')
+    expect(style).not.toContain('background: #18181b')
   })
 
   it('业务属性弹窗提交按钮不复用主弹窗专用 class（无样式泄漏，DS-AC-199）', async () => {

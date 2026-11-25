@@ -118,8 +118,17 @@ const CONSUME_ROOT = ['var(', '--ced-label-font-size'].join('')
  */
 const ROOT_RULE_RE = new RegExp(`(?:^|[\\s,{};])\\.${ROOT_CLASS}\\s*\\{`)
 
-/** 唯一授权接入公共预设的页面（CREATE-EDIT-DIALOG-CLIENT-CONFIG-FIRST-ADOPTION-001）。 */
-const ADOPTED_VIEW = ['views/client-config/', 'ClientConfigPage.vue'].join('')
+/** 授权接入公共预设的页面与其声明的 `--ced-*` 令牌集。
+ *  - 客户端配置（CREATE-EDIT-DIALOG-CLIENT-CONFIG-FIRST-ADOPTION-001）：私有表单，消费 4 个 Feature
+ *    令牌；另按 CC-AC-138（提交 2c830ad）覆盖公共占位令牌 `--ced-feedback-min-height` 为两行行高。
+ *  - 数据源管理（DATA-SOURCE-CREATE-EDIT-DIALOG-CED-ADOPTION-001）：EP 表单，标签列宽由 `label-width`
+ *    属性承载，仅需声明视口安全边距。 */
+const CLIENT_ADOPTED_VIEW = ['views/client-config/', 'ClientConfigPage.vue'].join('')
+const DATA_SOURCE_ADOPTED_VIEW = ['views/data-source/', 'DataSourcePage.vue'].join('')
+const ADOPTED_PAGE_TOKENS: Array<{ view: string; tokens: string[] }> = [
+  { view: CLIENT_ADOPTED_VIEW, tokens: [...EXPECTED_FEATURE_TOKENS, '--ced-feedback-min-height'] },
+  { view: DATA_SOURCE_ADOPTED_VIEW, tokens: ['--ced-dialog-safety-inset'] },
+]
 
 function stripComments(text: string): string {
   return text.replace(/\/\*[\s\S]*?\*\//g, '')
@@ -389,8 +398,9 @@ describe('新增／编辑弹窗公共视觉模板公共层契约', () => {
       .filter((file) => file.endsWith('.vue'))
       .filter((file) => readFileSync(file, 'utf8').includes(ROOT_CLASS))
       .map(relative)
-    // 仅探针端管理页新增/编辑主弹窗获授权接入；数据源管理及其他页面仍为零挂载。
-    expect(mounted).toEqual([ADOPTED_VIEW])
+      .sort()
+    // 仅客户端配置与数据源管理的新增/编辑主弹窗获授权接入；其他页面仍为零挂载。
+    expect(mounted).toEqual(ADOPTED_PAGE_TOKENS.map((p) => p.view).sort())
   })
 
   it('20. 公共预设规则在全 frontend/src 中只有唯一来源文件；接入页面只声明 Feature 令牌值', () => {
@@ -401,18 +411,22 @@ describe('新增／编辑弹窗公共视觉模板公共层契约', () => {
     }
     expect(hits).toEqual([`styles/dialog/${CSS_FILE}`])
 
-    // 授权接入页面：只允许以复合类作用域声明 4 个 Feature-owned 令牌值，
+    // 授权接入页面：只允许以复合类作用域声明本页所需 Feature-owned 令牌值，
     // 不得消费模板令牌（其默认值属公共层），也不得以根类起头定义公共规则。
-    const pageText = stripComments(readFileSync(resolve(SRC_DIR, ADOPTED_VIEW), 'utf8'))
-    const declared = [...new Set(pageText.match(/--ced-[\w-]+\s*:/g) ?? [])]
-      .map((s) => s.replace(/\s*:$/, ''))
-      .sort()
-    expect(declared).toEqual([...EXPECTED_FEATURE_TOKENS].sort())
-    expect(pageText).not.toContain(CONSUME_ROOT)
+    for (const { view, tokens } of ADOPTED_PAGE_TOKENS) {
+      const pageText = stripComments(readFileSync(resolve(SRC_DIR, view), 'utf8'))
+      const declared = [...new Set(pageText.match(/--ced-[\w-]+\s*:/g) ?? [])]
+        .map((s) => s.replace(/\s*:$/, ''))
+        .sort()
+      expect(declared, view).toEqual([...tokens].sort())
+      expect(pageText, view).not.toContain(CONSUME_ROOT)
+    }
   })
 
   it('21. 公共 CSS 经前端全局入口只做一次最小引入', () => {
+    // 只统计生产源码中的引入点；测试文件可能为静态校验而读取该 CSS 路径，不构成引入。
     const importing = walk(SRC_DIR)
+      .filter((file) => !/\.(spec|test)\.ts$/.test(file))
       .filter((file) => readFileSync(file, 'utf8').includes(IMPORT_PATH))
       .map(relative)
     expect(importing).toEqual(['main.ts'])
