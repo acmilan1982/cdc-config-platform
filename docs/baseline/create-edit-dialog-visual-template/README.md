@@ -1,4 +1,4 @@
-# 新增／编辑业务弹窗公共视觉模板 · 设计基线已批准；公共 CSS 已实现、代码复审通过；首个页面（探针端新增／编辑主弹窗）已接入并通过远程复审，负责人已作人工测试无问题反馈（非正式验收）
+# 新增／编辑业务弹窗公共视觉模板 · 设计基线已批准；公共 CSS 已实现、代码复审通过；两个页面（探针端、数据源管理新增／编辑主弹窗）已接入——探针端已通过远程复审并经负责人人工测试无问题，数据源管理为本地候选、负责人页面对话框人工验收通过（非正式验收，未合入／未推送）
 
 ```text
 create_edit_dialog_visual_template_document_status=APPROVED
@@ -13,8 +13,9 @@ public_css_code_review_date=2026-09-30
 public_css_code_review_objects=c8785e18dc3014396cf45534315ab0f10dbbe94d,8434b884904a34bed51a2d8364e217efb605f06c
 public_css_code_review_scope=PURE_CSS_PRESET_ROOT_CLASS_OPT_IN_17_TOKENS_REAL_EP_STATE_FIX_ZERO_PAGE_ADOPTION
 public_css_status_before_review=IMPLEMENTED_PENDING_CHATGPT_REMOTE_CODE_REVIEW
-page_adoption_authorization_status=PAGE_ADOPTION_AUTHORIZED_CLIENT_CONFIG_CREATE_EDIT_MAIN_DIALOG_ONLY
-page_adoption_decision_status=DECIDED_AND_GRANTED_FOR_CLIENT_CONFIG_CREATE_EDIT_MAIN_DIALOG_ONLY
+page_adoption_authorization_status=PAGE_ADOPTION_AUTHORIZED_CLIENT_CONFIG_AND_DATA_SOURCE_CREATE_EDIT_MAIN_DIALOGS
+page_adoption_decision_status=DECIDED_AND_GRANTED_CLIENT_CONFIG_2026-09-30_AND_DATA_SOURCE_VIA_ADOPTION_TASK
+page_adoption_authorization_history=CLIENT_CONFIG_GRANTED_2026-09-30;DATA_SOURCE_GRANTED_VIA_TASK_DATA-SOURCE-CREATE-EDIT-DIALOG-CED-ADOPTION-001
 page_adoption_implementation_status=IMPLEMENTED
 page_adoption_code_review_status=APPROVED
 page_adoption_code_review_date=2026-09-30
@@ -28,10 +29,23 @@ page_adoption_owner_manual_test_feedback_scope=CLIENT_CONFIG_CREATE_EDIT_MAIN_DI
 page_adoption_owner_manual_test_feedback_is_formal_acceptance=NO
 public_vue_component_status=NOT_CREATED
 formal_acceptance_execution_status=NOT_EXECUTED
-migrated_page_count=1
+migrated_page_count=2
 migrated_page_count_scope=REAL_BUSINESS_PAGES_WITH_CED_DIALOG_ROOT_CLASS_OPT_IN
 registered_token_count=17
-current_next_entry=CHATGPT_REMOTE_CREATE_EDIT_DIALOG_CLIENT_CONFIG_FIRST_ADOPTION_REVIEW_AND_OWNER_FEEDBACK_CLOSEOUT_REVIEW
+data_source_adoption_task=DATA-SOURCE-CREATE-EDIT-DIALOG-CED-ADOPTION-001
+data_source_adoption_baseline_commit=bf5d32e500ee41f4beb660a0ddd6b72abbffd906
+data_source_adoption_implementation_commit=5738b0f31fe1d69b70e9427d6b12bf724e0bb9d8
+data_source_adoption_implementation_status=IMPLEMENTED_LOCAL_CANDIDATE
+data_source_adoption_remote_review_status=PENDING_REMOTE_REVIEW
+data_source_adoption_owner_visual_acceptance=OWNER_MANUAL_PASS_LOCAL_CANDIDATE
+data_source_adoption_owner_visual_acceptance_date=2026-11-25
+data_source_adoption_owner_visual_acceptance_scope=CREATE_EDIT_MAIN_DIALOG_VISUAL_AND_FORM_INTERACTION_ONLY
+data_source_adoption_owner_visual_acceptance_preview=http://192.168.174.70:5200/config/data-source
+data_source_adoption_owner_visual_acceptance_is_formal_acceptance=NO
+data_source_adoption_backend_verification_status=NOT_EXECUTED_REAL_BACKEND_UNAVAILABLE
+data_source_adoption_merge_status=NOT_PERFORMED
+data_source_adoption_push_status=NOT_PERFORMED
+current_next_entry=CHATGPT_REMOTE_DATA_SOURCE_CED_DIALOG_ADOPTION_AND_VISUAL_ACCEPTANCE_CLOSEOUT_REVIEW
 ```
 
 ```text
@@ -66,7 +80,20 @@ candidate_capabilities=LABEL_TYPOGRAPHY_AND_ALIGNMENT,BLACK_PRIMARY_SUBMIT_BUTTO
 > 项目负责人已就本次实际页面人工测试反馈「我人工测试过了，没有问题」（`2026-09-30`，
 > **范围仅本次** `/config/client` 新增／编辑主弹窗；`page_adoption_owner_manual_test_feedback=NO_ISSUE_REPORTED`，
 > **非**正式验收，**不**构成任何 AC 的 `PASS`）；
-> **其余任何页面仍未被授权**；**未做正式验收**（`formal_acceptance_execution_status=NOT_EXECUTED`）。
+> **就本次首个采用时点而言其余页面未获授权**（数据源管理其后另行授权，见下段）；模板级**正式验收未执行**（`formal_acceptance_execution_status=NOT_EXECUTED`）。
+>
+> **第二个页面接入（数据源管理，2026-11-25，本地候选）**：项目负责人经独立任务
+> `DATA-SOURCE-CREATE-EDIT-DIALOG-CED-ADOPTION-001` 授权 `/config/data-source`（数据源管理）**新增／编辑业务主弹窗**
+> 接入本模板，实现提交 `5738b0f31fe1d69b70e9427d6b12bf724e0bb9d8`（基线 `bf5d32e500...`，`migrated_page_count=2`）。
+> 该接入**仅**替换该主弹窗的**标签排版／主提交按钮／必填星号**同义视觉规则为公共模板，业务行为、字段、校验、时序与子弹窗**不变**；
+> 页面级例外照旧保留（Element Plus `label-width="120px"`、`.test-bar` 120px、全局 `.form-error`），另声明 Feature 令牌
+> `--ced-dialog-safety-inset: 48px`。负责人已于 **2026-11-25** 在 `http://192.168.174.70:5200/config/data-source`
+> 作**实际页面对话框人工验收**（创建弹窗标签／密码星号／黑色「创建」按钮与「测试连接」对齐、空表单校验；双击编辑回填与密码掩码、
+> 取消与窗口内操作；行尾三点子弹窗维持原视觉），三项均符合预期
+> （`data_source_adoption_owner_visual_acceptance=OWNER_MANUAL_PASS_LOCAL_CANDIDATE`，**非**正式验收，不构成任何 AC 的 `PASS`）。
+> **该候选尚未合入、未推送、未部署**；预览使用只读 API 测试替身，真实后端因开发 Oracle 连接被拒未启动，**真实保存与真实连接测试均未执行**
+> （`data_source_adoption_backend_verification_status=NOT_EXECUTED_REAL_BACKEND_UNAVAILABLE`）。收口报告见
+> `../../features/data-source-management/reports/DATA-SOURCE-CED-DIALOG-VISUAL-ACCEPTANCE-CLOSEOUT-001.md`。
 > 本弹窗模板自身状态**不改变**列表表格视觉模板、
 > 查询列表页模板、探针端管理与数据源管理各自的现有状态。
 > **代码复审通过 ≠ 页面接入代码复审通过 ≠ 正式验收通过**；模板级**未选定试点**（`pilot_page_selection_status=NOT_DECIDED`），
@@ -175,8 +202,9 @@ candidate_capabilities=LABEL_TYPOGRAPHY_AND_ALIGNMENT,BLACK_PRIMARY_SUBMIT_BUTTO
 - **已落地**的候选能力（公共 CSS 工件、7 个 `ced-*` 辅助类、17 个 `--ced-*` 令牌登记、静态契约测试）
   标注为**已批准设计、已实现，且已通过远程代码复审（纯 CSS 公共能力）**，其存在性**不再是** `NOT_CREATED`。
 - **仍未创建**项（Vue 公共组件）标注为 `NOT_CREATED`；**页面级采用授权**现为
-  `PAGE_ADOPTION_AUTHORIZED_CLIENT_CONFIG_CREATE_EDIT_MAIN_DIALOG_ONLY`（**仅** `/config/client`
-  新增／编辑主弹窗，`migrated_page_count=1`，**实现与远程代码复审均已通过**〔`page_adoption_implementation_status=IMPLEMENTED`、`page_adoption_code_review_status=APPROVED`（`2026-09-30`）〕，项目负责人已作**本页本弹窗**实际人工测试反馈「我人工测试过了，没有问题」（**非**正式验收））；**其余页面仍未授权**，
+  `PAGE_ADOPTION_AUTHORIZED_CLIENT_CONFIG_AND_DATA_SOURCE_CREATE_EDIT_MAIN_DIALOGS`（`migrated_page_count=2`）：
+  ① `/config/client`（探针端管理）新增／编辑主弹窗，**实现与远程代码复审均已通过**〔`page_adoption_implementation_status=IMPLEMENTED`、`page_adoption_code_review_status=APPROVED`（`2026-09-30`）〕，项目负责人已作**本页本弹窗**实际人工测试反馈「我人工测试过了，没有问题」（**非**正式验收）；
+  ② `/config/data-source`（数据源管理）新增／编辑主弹窗，实现提交 `5738b0f...`（**本地候选**，`data_source_adoption_implementation_status=IMPLEMENTED_LOCAL_CANDIDATE`、`data_source_adoption_remote_review_status=PENDING_REMOTE_REVIEW`），项目负责人已于 `2026-11-25` 作**本页本弹窗**页面对话框人工验收通过（**非**正式验收，未合入／未推送／未部署，真实后端未执行）；**其余页面仍未授权**，
   模板级批量迁移与试点仍未决定（`pilot_page_selection_status=NOT_DECIDED`）。
 
 ## 5. 证据来源（两页实际位置）
@@ -184,7 +212,7 @@ candidate_capabilities=LABEL_TYPOGRAPHY_AND_ALIGNMENT,BLACK_PRIMARY_SUBMIT_BUTTO
 | 页面 | 组件 | 主新增／编辑弹窗 | 已批准条款（Feature 基线） |
 |---|---|---|---|
 | 探针端管理（**已接入**） | `frontend/src/views/client-config/ClientConfigPage.vue` | `<el-dialog class="cc-dialog ced-dialog" width="900px">`（根类 `ced-dialog` 已挂；`width="900px"` 经 EP `--el-dialog-width` 生效） | `docs/features/client-config/{REQUIREMENTS,ACCEPTANCE,DESIGN,UI}.md`：`CCFG-REQ-116/119/120/123/124/128/130/137/138`、`CCFG-UI-045/046/047/050/051/055/057`、`CCFG-DESIGN-056/059/061/062/066/068/072/073` |
-| 数据源管理 | `frontend/src/views/data-source/DataSourcePage.vue` | `<el-dialog class="editor-dialog" width="620px">`（约 190 行） | `docs/features/data-source-management/REQUIREMENTS.md`：`DS-REQ-185/186/187`（及该 Feature 已批准基线） |
+| 数据源管理（**已接入，本地候选**） | `frontend/src/views/data-source/DataSourcePage.vue` | `<el-dialog class="editor-dialog ced-dialog" width="620px">`（根类 `ced-dialog` 已挂；EP `el-form`，`label-width="120px"`／`label-position="right"`；Feature 令牌 `--ced-dialog-safety-inset: 48px`，`max-width` 由公共预设承载） | `docs/features/data-source-management/REQUIREMENTS.md`：`DS-REQ-184~188`（及该 Feature 已批准基线、`DS-AC-183~199`） |
 
 详细的一致与差异见 `DESIGN.md` 与 `MIGRATION.md`；公共契约（已批准设计、已实现）见 `SHARED_COMPONENT_DESIGN.md`；视觉规格见 `UI.md`。
 
@@ -207,6 +235,7 @@ candidate_capabilities=LABEL_TYPOGRAPHY_AND_ALIGNMENT,BLACK_PRIMARY_SUBMIT_BUTTO
 | `reports/CREATE-EDIT-DIALOG-VISUAL-TEMPLATE-PUBLIC-CSS-REVIEW-STATUS-SYNC-001.md` | 代码复审状态同步：门禁、复审来源与固定区间 R0→R1、状态旧→新、未变层、文件清单、静态核验、未执行项与下一入口 |
 | `../../features/client-config/reports/CLIENT-CONFIG-CREATE-EDIT-DIALOG-FIRST-ADOPTION-001.md` | **首个页面接入**（Feature 侧交叉引用报告）：`/config/client` 新增／编辑主弹窗接入本模板的门禁、视觉归属 before→after、测试与浏览器证据、零写计数、定义与状态保护、未执行项与下一入口 |
 | `../../features/client-config/reports/CLIENT-CONFIG-CREATE-EDIT-DIALOG-FIRST-ADOPTION-001-R1.md` | **首个页面接入 R1 定向纠错**（纯文档）：R0 接入复审 `CHANGES_REQUIRED` 的过时「页面接入未授权」现行表述纠正、逐位置旧→新表、现行/历史分层、定义与状态格保护、未执行项与 R1 下一入口 |
+| `../../features/data-source-management/reports/DATA-SOURCE-CED-DIALOG-VISUAL-ACCEPTANCE-CLOSEOUT-001.md` | **第二个页面接入与人工验收收口**（数据源管理新增／编辑主弹窗）：候选与远端／基线对应关系、before→after 视觉归属、页面级布局例外、负责人 2026-11-25 人工验收三项、只读测试替身 vs 未执行的真实后端项、文件清单与下一入口 |
 
 ## 7. 与其他模板的关系
 
@@ -219,10 +248,12 @@ candidate_capabilities=LABEL_TYPOGRAPHY_AND_ALIGNMENT,BLACK_PRIMARY_SUBMIT_BUTTO
 
 - **公共 CSS 已实现 ≠ 已通过远程代码复审 ≠ 页面接入已通过复审 ≠ 正式验收通过。**
   **公共代码复审通过（`APPROVED`, `2026-09-30`）≠ 页面接入代码复审通过 ≠ 正式验收通过。**
-- 现行页面级采用授权**仅限** `/config/client`（探针端管理）**新增／编辑业务主弹窗**
-  （`page_adoption_authorization_status=PAGE_ADOPTION_AUTHORIZED_CLIENT_CONFIG_CREATE_EDIT_MAIN_DIALOG_ONLY`，
-  `migrated_page_count=1`）；**数据源管理（`/config/data-source`）及其弹窗、其他任何页面均未获授权接入**，
-  该弹窗模板级批量迁移与试点仍**未作出**（`pilot_page_selection_status=NOT_DECIDED`）。
-  将来接入须由项目负责人**单独授权**，并另立实现与验收任务。
+- 现行页面级采用授权**仅限**两个新增／编辑业务主弹窗：`/config/client`（探针端管理）与
+  `/config/data-source`（数据源管理）
+  （`page_adoption_authorization_status=PAGE_ADOPTION_AUTHORIZED_CLIENT_CONFIG_AND_DATA_SOURCE_CREATE_EDIT_MAIN_DIALOGS`，
+  `migrated_page_count=2`）。其中数据源管理接入为**本地候选**（`5738b0f...`，**未合入／未推送／未部署**，
+  `data_source_adoption_owner_visual_acceptance=OWNER_MANUAL_PASS_LOCAL_CANDIDATE`，`2026-11-25`，**非**正式验收，
+  真实后端未执行）。**其他任何页面／弹窗均未获授权接入**，该弹窗模板级批量迁移与试点仍**未作出**
+  （`pilot_page_selection_status=NOT_DECIDED`）。将来接入须由项目负责人**单独授权**，并另立实现与验收任务。
 - **批准只覆盖设计契约**；公共 CSS 已由独立实现任务落地并**已通过远程代码复审**，
   **Vue 组件仍未创建**。**任何页面**在**获明确授权**前**不得**接入本模板、**不得**据本设计修改。

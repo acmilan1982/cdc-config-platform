@@ -659,6 +659,20 @@
 | DS-REQ-178、DS-REQ-179、DS-REQ-180、DS-REQ-181、DS-REQ-182 | DS-AC-183~DS-AC-188 | 无 UI 变化（服务端时间字段维护） |
 | DS-REQ-183 | DS-AC-189、DS-AC-190、DS-AC-191 | 无 UI 变化（服务端排序；前端**不做**二次排序） |
 
+### 13.7 公共 `ced-dialog` 视觉模板接入（本地候选，2026-11-25）
+
+> 分层状态：`adoption_task=DATA-SOURCE-CREATE-EDIT-DIALOG-CED-ADOPTION-001`、`adoption_implementation_status=IMPLEMENTED_LOCAL_CANDIDATE`、`adoption_remote_review_status=PENDING_REMOTE_REVIEW`、`adoption_implementation_commit=5738b0f...`、`owner_visual_acceptance=PASS`（2026-11-25）、`backend_verification_status=NOT_EXECUTED_REAL_BACKEND_UNAVAILABLE`、`merge_status=NOT_PERFORMED`、`push_status=NOT_PERFORMED`。
+
+- **变更性质**：将 §13.1~§13.4 描述的**视觉结果**改为由公共视觉模板 `frontend/src/styles/dialog/create-edit-dialog-visual.css`（根类 `ced-dialog`）单一提供，**不改变**任何已验收的视觉结论或业务行为。`DS-REQ-184~188` 与 `DS-AC-183~199` 的验收预期**逐字不变**，各条 `PASS` 状态**保持不变**。
+- **实现载体 before→after**：
+  - 弹窗根：`<el-dialog class="editor-dialog" width="620px">` → `<el-dialog class="editor-dialog ced-dialog" width="620px">`（保留 `editor-dialog` 用于拖拽绑定与既有选择器）。
+  - 标签排版：移除页私有 `:deep(.editor-dialog .el-form-item__label)` 字号／字重／颜色；由公共 `.ced-dialog .el-form-item__label` 提供（结果仍为 `14px`／`500`／`#3f3f46`／右对齐）。
+  - 密码星号：§13.3 的页私有类 `editor-password-required-mark` 伪元素改为公共类 `ced-required-mark`；仍为**纯视觉标记**、**不**带 `required` 属性、不产生校验副作用。
+  - 提交按钮：保留 `editor-submit-button`，另挂公共 `ced-submit`；移除页私有常态／悬停／激活色序，由公共模板提供（结果仍为 `#09090b`／`#27272a`／`#18181b`、圆角 `6px`、字重 `500`）。
+- **页面级布局例外（照旧保留，未并入模板）**：Element Plus `label-width="120px"`／`label-position="right"`（标签列宽仍由 EP 承载，**不消费**标签列宽／间距令牌）；“测试连接”`.test-bar { padding-left: 120px; }`；全局 `.form-error`（`role="alert"`）；弹窗宽度 `620px`；另以非 scoped 作用域声明 Feature 令牌 `--ced-dialog-safety-inset: 48px` 启用公共 `max-width`。
+- **人工验收（2026-11-25）**：项目负责人在 `http://192.168.174.70:5200/config/data-source` 确认三项均符合预期——新增弹窗标签／密码星号／黑色「创建」按钮与「测试连接」对齐及空表单校验；双击编辑弹窗回填与密码掩码、取消与窗口内操作；行尾三点子弹窗维持原视觉。记为候选**人工视觉及表单交互验收通过**，**非**正式验收。
+- **边界**：预览使用只读 API 测试替身，真实后端因开发 Oracle 连接被拒未启动，**真实保存与真实连接测试未执行**；本候选**未合入、未推送、未部署**。§13.0~§13.6 与 §14.1~§14.5 作为历史设计／验收记录**逐字保留**（其中对页私有选择器的描述为**接入前**的实现载体）。
+
 ## 14. 本轮调整变更记录
 
 ### 14.1 实现与状态回写（2026-09-20，任务 `DATA-SOURCE-CREATE-EDIT-TIME-SORT-FORM-UI-ADJUSTMENT-001`）
@@ -707,4 +721,14 @@
 - **触发**：ChatGPT 从远程 Git 对正式验收证据提交 `935478a0966d2ec6fe157c3494d813427b1e05ff` 完成正式验收复审，结论 `status=REVIEW_PASS`、`acceptance_result=PASS_17_OF_17`、`blocking_finding_count=0`、`nonblocking_finding_count=2`、`project_owner_final_acceptance_recommendation=ACCEPT`；项目负责人据此于 2026-09-20 作出**最终验收接受**决定。
 - **§13 标题与状态块更新**：标题更新为「（`APPROVED`，`IMPLEMENTED_ACCEPTED`，正式验收已在本地真实环境执行且 17 条全部 `PASS`，`final_acceptance_status=ACCEPTED`）」；`implementation_status` 由 `IMPLEMENTED_PENDING_FINAL_ACCEPTANCE` 更新为 `IMPLEMENTED_ACCEPTED`、`final_acceptance_status` 由 `NOT_ACCEPTED_PENDING_PROJECT_OWNER` 更新为 `ACCEPTED`，并新增 `accepted_scope`、`accepted_business_implementation_commit=55e6273b...`、`formal_acceptance_evidence_commit=935478a...`、`chatgpt_remote_formal_acceptance_review=REVIEW_PASS`、`blocking_finding_count=0`、`project_owner_final_acceptance_date=2026-09-20`；`formal_acceptance_execution_status=EXECUTED_PASSED_LOCAL`、`new_adjustment_acceptance_status=PASS_17_OF_17`、`project_owner_visual_review_status=PASS`、`password_false_required_defect_status=FIXED_CONFIRMED` **逐字保留**。
 - **§13.0~§13.6 既有 UI 设计正文继续逐字零变化**；`DS-REQ-178~188` 编号与正文零变化；`DS-AC-183~199` 编号、关联需求、前置条件、操作步骤、预期结果与 17 条 `PASS` 零变化。§14.4（含 `DS-AC-198` 禁用态证据层级说明）作为历史事实逐字保留。
+
 - **边界**：本次 `ACCEPTED` **严格只适用于** `DS-REQ-178~188`/`DS-AC-183~199` 当前调整，**不代表**数据源管理 Feature 整体正式验收状态（仍为既有 `PASS=113/FAIL=0/BLOCKED=2/NOT_RUN=0`）或系统生产可用；上一轮 `DS-AC-116~140`（25 条 `NOT_RUN`）与已最终接受的 `DS-AC-141~182`（42 条 `PASS`、`final_acceptance_status=ACCEPTED`）状态未改变。本收口为纯文档任务：未修改业务代码/测试/配置/依赖/锁文件/SQL，未访问数据库/ZK/Kafka/业务源库/目标库，未测试、未构建、未启停服务。报告：`reports/DATA-SOURCE-CREATE-EDIT-TIME-SORT-FORM-UI-ADJUSTMENT-FINAL-ACCEPTANCE-CLOSEOUT-001.md`。
+
+### 14.6 公共 `ced-dialog` 视觉模板接入与人工验收收口（2026-11-25，任务 `DATA-SOURCE-CED-DIALOG-VISUAL-ACCEPTANCE-CLOSEOUT-001`）
+
+- 新增 §13.7，记录数据源新增／编辑主弹窗接入公共 `ced-dialog` 视觉模板：根类 `editor-dialog ced-dialog`、密码星号公共 `ced-required-mark`、提交按钮 `editor-submit-button ced-submit`，移除页私有标签排版／密码星号伪元素／提交按钮色序；保留 EP `label-width="120px"`／`right`、`.test-bar` 120px、全局 `.form-error`、`620px` 宽度，另声明 `--ced-dialog-safety-inset: 48px`。
+- 实现提交 `5738b0f31fe1d69b70e9427d6b12bf724e0bb9d8`（基线 `bf5d32e`，`IMPLEMENTED_LOCAL_CANDIDATE`，`PENDING_REMOTE_REVIEW`）。
+- 项目负责人 2026-11-25 在 `http://192.168.174.70:5200/config/data-source` 确认三项均符合预期，记为候选**人工视觉及表单交互验收通过**（`owner_visual_acceptance=PASS`，**非**正式验收）。
+- 预览使用只读 API 测试替身；真实后端因开发 Oracle 连接被拒未启动，**真实保存与连接测试未执行**（`backend_verification_status=NOT_EXECUTED_REAL_BACKEND_UNAVAILABLE`）。候选实现阶段既有证据为定向测试 333 项、前端构建、Chrome 核对。
+- **不改变** `DS-REQ-178~188`／`DS-AC-183~199` 的编号、正文、预期结果与 17 条 `PASS`，也不改变 §13.0~§13.6、§14.1~§14.5 的历史结论；**未合入／未推送／未部署**。报告见 `reports/DATA-SOURCE-CED-DIALOG-VISUAL-ACCEPTANCE-CLOSEOUT-001.md`。
+- 本任务为纯文档收口：未修改业务代码／测试／配置／依赖／锁文件；未访问数据库/ZK/Kafka/业务源库/目标库；未重跑测试或构建（候选阶段证据如实引用、未重算）。
