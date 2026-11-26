@@ -1,8 +1,8 @@
 <template>
-  <div class="sidebar" :class="{ collapsed: widthCollapsed }">
+  <div class="sidebar" :class="{ collapsed }">
     <div class="brand">
       <span class="brand-text">
-        {{ menuVisible ? 'CDC 配置管理平台' : 'CDC' }}
+        {{ collapsed ? 'CDC' : 'CDC 配置管理平台' }}
       </span>
     </div>
 
@@ -14,9 +14,9 @@
       text-color="#D5DDE7"
       active-text-color="#B5D7FF"
       class="sidebar-menu"
-      :class="{ 'is-content-hidden': !menuVisible }"
-      :inert="!menuVisible"
-      :aria-hidden="!menuVisible"
+      :class="{ 'is-content-hidden': collapsed }"
+      :inert="collapsed"
+      :aria-hidden="collapsed"
       @select="onMenuSelect"
     >
       <template v-for="group in menuGroups" :key="group.title">
@@ -36,7 +36,7 @@
 </template>
 
 <script setup lang="ts">
-import { computed, onBeforeUnmount, ref, watch } from 'vue'
+import { computed, ref, watch } from 'vue'
 import { useRoute } from 'vue-router'
 import { useAppStore } from '@/stores/app'
 import { menuGroups } from '@/config/menu'
@@ -48,22 +48,12 @@ const route = useRoute()
 const currentPath = computed(() => route.path)
 
 /**
- * 折叠动画分两步：
- * - 收起：先隐藏菜单内容（含文字/图标并移出焦点树），下一帧再缩窄侧栏；
- * - 展开：先加宽侧栏，动画结束后再显示单行菜单，避免半截字、换行与行高跳动。
- * 快速连续切换时只保留最后一次序列的定时器，最终状态与 store 一致。
+ * 折叠/展开为单状态瞬时切换：宽度、标题与菜单可见性由同一 `collapsed` 派生并在同一次渲染中更新，
+ * 无过渡、无分阶段定时器，避免宽度动画逐帧改变主内容可用宽度而反复触发表格布局。
+ * 折叠时立即把菜单移出焦点树（inert + visibility:hidden），并主动清理残留焦点。
  */
-const widthCollapsed = ref(appStore.sidebarCollapsed)
-const menuVisible = ref(!appStore.sidebarCollapsed)
+const collapsed = computed(() => appStore.sidebarCollapsed)
 const menuRef = ref<{ $el?: HTMLElement } | null>(null)
-let settleTimer: ReturnType<typeof setTimeout> | undefined
-
-function clearSettleTimer() {
-  if (settleTimer !== undefined) {
-    clearTimeout(settleTimer)
-    settleTimer = undefined
-  }
-}
 
 function blurMenuFocus() {
   const menuEl = menuRef.value?.$el
@@ -72,28 +62,9 @@ function blurMenuFocus() {
   }
 }
 
-watch(
-  () => appStore.sidebarCollapsed,
-  (collapsed) => {
-    clearSettleTimer()
-    if (collapsed) {
-      blurMenuFocus()
-      menuVisible.value = false
-      settleTimer = setTimeout(() => {
-        widthCollapsed.value = true
-        settleTimer = undefined
-      }, 30)
-    } else {
-      widthCollapsed.value = false
-      settleTimer = setTimeout(() => {
-        menuVisible.value = true
-        settleTimer = undefined
-      }, 300)
-    }
-  }
-)
-
-onBeforeUnmount(clearSettleTimer)
+watch(collapsed, (isCollapsed) => {
+  if (isCollapsed) blurMenuFocus()
+})
 
 /**
  * 再次点击当前"日志查询"菜单项时触发页面完整重新初始化（LQ-UI-142~146 / LQ-AC-181）。
@@ -125,7 +96,6 @@ function onMenuSelect(index: string) {
   background-color: var(--sidebar-bg);
   display: flex;
   flex-direction: column;
-  transition: width 0.28s;
   z-index: 100;
   overflow: hidden;
 }
@@ -160,7 +130,7 @@ function onMenuSelect(index: string) {
   border-right: none;
 }
 
-/* 折叠/展开过渡期间整块菜单不可见且不接收焦点（inert 见模板）。 */
+/* 折叠时整块菜单不可见且不接收焦点（inert 见模板）。 */
 .sidebar-menu.is-content-hidden {
   visibility: hidden;
 }

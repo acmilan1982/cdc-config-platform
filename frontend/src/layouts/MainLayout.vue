@@ -84,7 +84,6 @@ watch(
   flex-direction: column;
   min-width: 0;
   margin-left: 220px;
-  transition: margin-left 0.28s;
 }
 
 .layout-right.collapsed {
