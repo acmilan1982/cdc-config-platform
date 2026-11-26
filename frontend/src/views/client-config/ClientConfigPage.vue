@@ -1495,6 +1495,19 @@ watch(
 
 const shownMap = reactive(new Map<string, number>())
 const srcEls = reactive(new Map<string, HTMLElement>())
+// keep-alive 切回时 ResizeObserver 会对每个单元格批量重放，Element Plus 布局尚未稳定时容器宽度
+// 还会先出现一次暂态值（先窄后宽），同一批里也存在大量重复的标签文本。离屏测量每次都会插入
+// 节点并强制布局，是切回时的主要重复成本之一。这里按“单次投递批次”缓存文本测量结果：每批
+// 开始清空，保证测量基准若有变化（字体/样式）下一批立即重测，同时把同一批内重复文本的强制
+// 布局降为每文本一次。打包纯计算本身很轻，仍按最新宽度逐行重算以维持正确的 +N 结果。
+const batchChipWidth = new Map<string, number>()
+function chipWidth(text: string): number {
+  const cached = batchChipWidth.get(text)
+  if (cached !== undefined) return cached
+  const width = measureChipWidth(text, CHIP_BOX)
+  batchChipWidth.set(text, width)
+  return width
+}
 let rowObserver: ResizeObserver | null = null
 let resizeHandler: (() => void) | null = null
 
@@ -1535,8 +1548,8 @@ function recomputeRow(clientId: string, containerWidth: number, srcEl?: HTMLElem
     if (rb && rb.offsetWidth > 0) avail = Math.max(0, avail - rb.offsetWidth - DS_GAP)
   }
   // 标签与 `+N` 槽位都按当前紧凑盒模型（CHIP_BOX）测量，与实际渲染宽度一致（CCFG-REQ-107）。
-  const widths = dss.map((ds) => measureChipWidth(dsBodyText(ds), CHIP_BOX))
-  const moreWidth = measureChipWidth(MORE_SLOT_TEXT, CHIP_BOX) || 40
+  const widths = dss.map((ds) => chipWidth(dsBodyText(ds)))
+  const moreWidth = chipWidth(MORE_SLOT_TEXT) || 40
   const { shown } = packChips({
     widths,
     containerWidth: avail,
@@ -1551,6 +1564,7 @@ function recomputeRow(clientId: string, containerWidth: number, srcEl?: HTMLElem
  * 按渲染期捕获的 clientId 维护的 srcEls 会过期，故直接读当前渲染结果，而非信任 ref 映射。 */
 function recomputeAllRows(): void {
   if (typeof document === 'undefined') return
+  batchChipWidth.clear()
   document.querySelectorAll<HTMLElement>('.cc-src[data-client-id]').forEach((el) => {
     const clientId = el.getAttribute('data-client-id')
     if (!clientId || !listRows.value.some((r) => r.clientId === clientId)) return
@@ -1715,6 +1729,7 @@ onMounted(() => {
   document.addEventListener('focus-trap.focus-after-released', onMenuFocusTrapReleased, true)
   if (typeof ResizeObserver !== 'undefined') {
     rowObserver = new ResizeObserver((entries) => {
+      batchChipWidth.clear()
       for (const entry of entries) {
         const el = entry.target
         if (!(el instanceof HTMLElement)) continue
