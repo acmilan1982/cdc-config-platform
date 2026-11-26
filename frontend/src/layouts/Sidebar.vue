@@ -122,17 +122,37 @@ function onMenuSelect(index: string) {
   letter-spacing: 1px;
 }
 
+/* 侧栏宽度瞬时切换（无 transition），仅让固定在 220px 的菜单视觉层做短时滑入滑出；
+   transform/opacity 不参与布局，因此主内容可用宽度只在切换瞬间变化一次，不会逐帧触发表格重排。
+   菜单层保持固定宽度，展开过程中条目始终单行、无纵向跳动。 */
 .sidebar-menu {
   flex: 1;
   width: 220px;
   overflow-y: auto;
   overflow-x: hidden;
   border-right: none;
+  transition: transform 160ms ease, opacity 160ms ease;
+  /* 主内容宽度一次性变化会让大表在同一帧重排（约百毫秒级）；提前提升为合成层，
+     让滑入/淡出尽量由合成器推进，而不是等主线程重排结束后才开始。 */
+  will-change: transform, opacity;
 }
 
-/* 折叠时整块菜单不可见且不接收焦点（inert 见模板）。 */
+/* 折叠时整块菜单滑出并淡出，动画结束后再移出可见性与焦点树（inert 见模板）；
+   动画期间立即禁止指针命中，避免可操作但正在离场的隐藏菜单。 */
 .sidebar-menu.is-content-hidden {
+  opacity: 0;
+  transform: translateX(-16px);
+  pointer-events: none;
   visibility: hidden;
+  transition: transform 160ms ease, opacity 160ms ease, visibility 0s linear 160ms;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .sidebar-menu,
+  .sidebar-menu.is-content-hidden {
+    transition: none;
+    transform: none;
+  }
 }
 
 /* 选中菜单：圆角蓝灰底 + 浅蓝字；普通菜单 / 悬停 / 键盘焦点状态清晰可辨。 */
