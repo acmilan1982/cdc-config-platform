@@ -139,8 +139,8 @@ watch(
   background: transparent;
   cursor: pointer;
   padding: 8px 10px;
-  font-size: 13px;
-  line-height: 1.4;
+  font-size: 14px;
+  line-height: 20px;
   color: #606266;
   white-space: nowrap;
 }

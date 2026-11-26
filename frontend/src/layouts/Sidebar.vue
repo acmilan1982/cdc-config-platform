@@ -1,19 +1,22 @@
 <template>
-  <div class="sidebar" :class="{ collapsed: appStore.sidebarCollapsed }">
+  <div class="sidebar" :class="{ collapsed: widthCollapsed }">
     <div class="brand">
       <span class="brand-text">
-        {{ appStore.sidebarCollapsed ? 'CDC' : 'CDC 配置管理平台' }}
+        {{ menuVisible ? 'CDC 配置管理平台' : 'CDC' }}
       </span>
     </div>
 
     <el-menu
+      ref="menuRef"
       :default-active="currentPath"
-      :collapse="appStore.sidebarCollapsed"
       :router="true"
       background-color="#232C38"
       text-color="#D5DDE7"
       active-text-color="#B5D7FF"
       class="sidebar-menu"
+      :class="{ 'is-content-hidden': !menuVisible }"
+      :inert="!menuVisible"
+      :aria-hidden="!menuVisible"
       @select="onMenuSelect"
     >
       <template v-for="group in menuGroups" :key="group.title">
@@ -33,7 +36,7 @@
 </template>
 
 <script setup lang="ts">
-import { computed } from 'vue'
+import { computed, onBeforeUnmount, ref, watch } from 'vue'
 import { useRoute } from 'vue-router'
 import { useAppStore } from '@/stores/app'
 import { menuGroups } from '@/config/menu'
@@ -43,6 +46,54 @@ const appStore = useAppStore()
 const route = useRoute()
 
 const currentPath = computed(() => route.path)
+
+/**
+ * 折叠动画分两步：
+ * - 收起：先隐藏菜单内容（含文字/图标并移出焦点树），下一帧再缩窄侧栏；
+ * - 展开：先加宽侧栏，动画结束后再显示单行菜单，避免半截字、换行与行高跳动。
+ * 快速连续切换时只保留最后一次序列的定时器，最终状态与 store 一致。
+ */
+const widthCollapsed = ref(appStore.sidebarCollapsed)
+const menuVisible = ref(!appStore.sidebarCollapsed)
+const menuRef = ref<{ $el?: HTMLElement } | null>(null)
+let settleTimer: ReturnType<typeof setTimeout> | undefined
+
+function clearSettleTimer() {
+  if (settleTimer !== undefined) {
+    clearTimeout(settleTimer)
+    settleTimer = undefined
+  }
+}
+
+function blurMenuFocus() {
+  const menuEl = menuRef.value?.$el
+  if (menuEl && document.activeElement && menuEl.contains(document.activeElement)) {
+    ;(document.activeElement as HTMLElement).blur()
+  }
+}
+
+watch(
+  () => appStore.sidebarCollapsed,
+  (collapsed) => {
+    clearSettleTimer()
+    if (collapsed) {
+      blurMenuFocus()
+      menuVisible.value = false
+      settleTimer = setTimeout(() => {
+        widthCollapsed.value = true
+        settleTimer = undefined
+      }, 30)
+    } else {
+      widthCollapsed.value = false
+      settleTimer = setTimeout(() => {
+        menuVisible.value = true
+        settleTimer = undefined
+      }, 300)
+    }
+  }
+)
+
+onBeforeUnmount(clearSettleTimer)
 
 /**
  * 再次点击当前"日志查询"菜单项时触发页面完整重新初始化（LQ-UI-142~146 / LQ-AC-181）。
@@ -103,23 +154,29 @@ function onMenuSelect(index: string) {
 
 .sidebar-menu {
   flex: 1;
+  width: 220px;
   overflow-y: auto;
   overflow-x: hidden;
   border-right: none;
 }
 
-.sidebar-menu:not(.el-menu--collapse) {
-  width: 220px;
+/* 折叠/展开过渡期间整块菜单不可见且不接收焦点（inert 见模板）。 */
+.sidebar-menu.is-content-hidden {
+  visibility: hidden;
 }
 
 /* 选中菜单：圆角蓝灰底 + 浅蓝字；普通菜单 / 悬停 / 键盘焦点状态清晰可辨。 */
-.sidebar-menu:not(.el-menu--collapse) :deep(.el-menu-item) {
+.sidebar-menu :deep(.el-menu-item) {
   margin: 2px 8px;
   border-radius: 6px;
+  font-size: 15px;
+  white-space: nowrap;
+  overflow: hidden;
+  color: var(--sidebar-item-text);
 }
 
-.sidebar-menu :deep(.el-menu-item) {
-  color: var(--sidebar-item-text);
+.sidebar-menu :deep(.el-menu-item span) {
+  white-space: nowrap;
 }
 
 .sidebar-menu :deep(.el-menu-item:hover) {
@@ -130,6 +187,7 @@ function onMenuSelect(index: string) {
 .sidebar-menu :deep(.el-menu-item.is-active) {
   background-color: var(--sidebar-item-active-bg);
   color: var(--sidebar-item-active-text);
+  font-weight: 500;
 }
 
 .sidebar-menu :deep(.el-menu-item.is-active:hover) {
@@ -146,5 +204,7 @@ function onMenuSelect(index: string) {
   color: var(--sidebar-group-text);
   font-size: 12px;
   padding: 12px 20px 4px;
+  white-space: nowrap;
+  overflow: hidden;
 }
 </style>

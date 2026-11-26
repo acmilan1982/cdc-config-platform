@@ -1,7 +1,16 @@
 <template>
   <div class="header-bar">
     <div class="header-left">
-      <el-icon class="collapse-btn" @click="appStore.toggleSidebar">
+      <el-icon
+        class="collapse-btn"
+        role="button"
+        tabindex="0"
+        :aria-label="appStore.sidebarCollapsed ? '展开侧栏' : '折叠侧栏'"
+        :aria-expanded="!appStore.sidebarCollapsed"
+        @click="appStore.toggleSidebar"
+        @keydown.enter.prevent="appStore.toggleSidebar"
+        @keydown.space.prevent="appStore.toggleSidebar"
+      >
         <Fold v-if="!appStore.sidebarCollapsed" />
         <Expand v-else />
       </el-icon>
@@ -55,6 +64,12 @@ const group = computed(() => route.meta?.group as string || '')
 
 .collapse-btn:hover {
   color: #409eff;
+}
+
+.collapse-btn:focus-visible {
+  outline: 2px solid #409eff;
+  outline-offset: 2px;
+  border-radius: 2px;
 }
 
 .breadcrumb {
