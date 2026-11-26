@@ -1,5 +1,14 @@
+import { h } from 'vue'
 import { createRouter, createWebHistory } from 'vue-router'
 import type { RouteRecordRaw } from 'vue-router'
+import pinia from '@/stores'
+import { useTabsStore } from '@/stores/tabs'
+
+/** 关闭最后一个标签后进入的公共空工作区（不产生业务标签，可从侧栏重新打开页面）。 */
+const EmptyWorkspaceView = {
+  name: 'EmptyWorkspaceView',
+  render: () => h('div', { class: 'empty-workspace-view' })
+}
 
 const routes: RouteRecordRaw[] = [
   {
@@ -85,6 +94,12 @@ const routes: RouteRecordRaw[] = [
     meta: { title: '故障过程详情', group: '运行监控' }
   },
   {
+    path: '/workspace',
+    name: 'Workspace',
+    component: EmptyWorkspaceView,
+    meta: { title: '', group: '', emptyWorkspace: true }
+  },
+  {
     path: '/large-screen',
     name: 'LargeScreen',
     component: () => import('@/views/large-screen/LargeScreenPage.vue'),
@@ -95,6 +110,24 @@ const routes: RouteRecordRaw[] = [
 const router = createRouter({
   history: createWebHistory(import.meta.env.BASE_URL),
   routes
+})
+
+/**
+ * 页面标签同步：在导航确认前写入标签状态（含首屏、前进/后退、重定向与查询参数变化），
+ * 使 MainLayout 的 keep-alive include 在目标页面渲染前即已就绪。
+ * 独立路由（standalone，如 /large-screen）沿用其原有布局，不参与标签。
+ */
+router.beforeEach((to) => {
+  if (to.meta.standalone === true) return
+  const tabs = useTabsStore(pinia)
+  if (to.meta.emptyWorkspace === true) {
+    tabs.clearActive()
+    return
+  }
+  const title = typeof to.meta.title === 'string' ? to.meta.title : ''
+  if (title) {
+    tabs.open(to.path, title)
+  }
 })
 
 export default router

@@ -5,7 +5,7 @@
         <Fold v-if="!appStore.sidebarCollapsed" />
         <Expand v-else />
       </el-icon>
-      <el-breadcrumb separator="/" class="breadcrumb">
+      <el-breadcrumb v-if="title || group" separator="/" class="breadcrumb">
         <el-breadcrumb-item v-if="group" :to="{ path: '' }">{{ group }}</el-breadcrumb-item>
         <el-breadcrumb-item>{{ title }}</el-breadcrumb-item>
       </el-breadcrumb>

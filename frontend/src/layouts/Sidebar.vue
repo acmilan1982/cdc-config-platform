@@ -10,9 +10,9 @@
       :default-active="currentPath"
       :collapse="appStore.sidebarCollapsed"
       :router="true"
-      background-color="#304156"
-      text-color="#bfcbd9"
-      active-text-color="#409eff"
+      background-color="#232C38"
+      text-color="#D5DDE7"
+      active-text-color="#B5D7FF"
       class="sidebar-menu"
       @select="onMenuSelect"
     >
@@ -56,13 +56,22 @@ function onMenuSelect(index: string) {
 </script>
 
 <style scoped>
+/* A 版深石板灰侧栏配色，统一收敛为局部主题变量，便于悬停/选中/分组状态复用。 */
 .sidebar {
+  --sidebar-bg: #232c38;
+  --sidebar-item-text: #d5dde7;
+  --sidebar-item-hover-bg: rgba(255, 255, 255, 0.06);
+  --sidebar-item-active-bg: #364a61;
+  --sidebar-item-active-text: #b5d7ff;
+  --sidebar-group-text: #a4b0c0;
+  --sidebar-brand-text: #f4f7fb;
+
   position: fixed;
   left: 0;
   top: 0;
   bottom: 0;
   width: 220px;
-  background-color: #304156;
+  background-color: var(--sidebar-bg);
   display: flex;
   flex-direction: column;
   transition: width 0.28s;
@@ -79,13 +88,14 @@ function onMenuSelect(index: string) {
   display: flex;
   align-items: center;
   justify-content: center;
+  background-color: var(--sidebar-bg);
   border-bottom: 1px solid rgba(255, 255, 255, 0.08);
   overflow: hidden;
   white-space: nowrap;
 }
 
 .brand-text {
-  color: #fff;
+  color: var(--sidebar-brand-text);
   font-size: 16px;
   font-weight: 600;
   letter-spacing: 1px;
@@ -102,8 +112,38 @@ function onMenuSelect(index: string) {
   width: 220px;
 }
 
+/* 选中菜单：圆角蓝灰底 + 浅蓝字；普通菜单 / 悬停 / 键盘焦点状态清晰可辨。 */
+.sidebar-menu:not(.el-menu--collapse) :deep(.el-menu-item) {
+  margin: 2px 8px;
+  border-radius: 6px;
+}
+
+.sidebar-menu :deep(.el-menu-item) {
+  color: var(--sidebar-item-text);
+}
+
+.sidebar-menu :deep(.el-menu-item:hover) {
+  background-color: var(--sidebar-item-hover-bg);
+  color: #fff;
+}
+
+.sidebar-menu :deep(.el-menu-item.is-active) {
+  background-color: var(--sidebar-item-active-bg);
+  color: var(--sidebar-item-active-text);
+}
+
+.sidebar-menu :deep(.el-menu-item.is-active:hover) {
+  background-color: #3d5571;
+  color: var(--sidebar-item-active-text);
+}
+
+.sidebar-menu :deep(.el-menu-item:focus-visible) {
+  outline: 2px solid var(--sidebar-item-active-text);
+  outline-offset: -2px;
+}
+
 .menu-group :deep(.el-menu-item-group__title) {
-  color: rgba(255, 255, 255, 0.4);
+  color: var(--sidebar-group-text);
   font-size: 12px;
   padding: 12px 20px 4px;
 }
