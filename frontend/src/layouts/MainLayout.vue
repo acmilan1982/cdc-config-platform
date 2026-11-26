@@ -1,7 +1,7 @@
 <template>
   <div class="main-layout">
     <Sidebar />
-    <div class="layout-right" :class="{ collapsed: appStore.sidebarCollapsed }">
+    <div class="layout-right">
       <HeaderBar />
       <PageTabs />
       <!-- 真实主内容纵向滚动容器仍是本 .content-area（overflow-y: auto）；
@@ -31,13 +31,11 @@
 <script setup lang="ts">
 import { computed, nextTick, ref, watch } from 'vue'
 import { useRoute } from 'vue-router'
-import { useAppStore } from '@/stores/app'
 import { useTabsStore } from '@/stores/tabs'
 import Sidebar from './Sidebar.vue'
 import HeaderBar from './HeaderBar.vue'
 import PageTabs from './PageTabs.vue'
 
-const appStore = useAppStore()
 const tabsStore = useTabsStore()
 const route = useRoute()
 
@@ -84,10 +82,6 @@ watch(
   flex-direction: column;
   min-width: 0;
   margin-left: 220px;
-}
-
-.layout-right.collapsed {
-  margin-left: 64px;
 }
 
 .content-area {
