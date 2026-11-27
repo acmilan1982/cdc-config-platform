@@ -13,9 +13,12 @@
 
 | 版本 | 提交 | 构建入口（`dist/index.html`） | 说明 |
 |---|---|---|---|
-| 5201 基线 | `bab094969ce07123d4094bc8c496a3c71da66bd9`（固定侧栏） | `assets/index-BXyxCQCa.js` / `index-DpeD4yk8.css` | 引用入口中不含 `in-doc-host`（keep-alive 卸载/重挂） |
-| 5202 候选 | `fe53383e81151718c9cff2e741ff2a8fbf2db352`（文档内承载） | `assets/index-1x59Uxdx.js` / `index-JgtIx6E-.css` | 引用入口中含 `in-doc-host`（文档内常驻承载） |
+| 5201 基线 | `bab094969ce07123d4094bc8c496a3c71da66bd9`（固定侧栏） | `assets/index-BXyxCQCa.js` / `index-DpeD4yk8.css` | 以 `KeepAlive` 保留组件实例；切回时把表格 DOM 移回页面，触发样式、布局与尺寸观察回调；入口不含 `in-doc-host` |
+| 5202 候选 | `fe53383e81151718c9cff2e741ff2a8fbf2db352`（文档内承载） | `assets/index-1x59Uxdx.js` / `index-JgtIx6E-.css` | 入口含 `in-doc-host`：在公共布局内原位保留已打开管理页 DOM，只切换可见性与交互性 |
 | 合入提交 | `fe53383e81151718c9cff2e741ff2a8fbf2db352` | 同上 | 快进合入 `origin/develop` |
+
+- **两种保留机制**：5201 由 `KeepAlive` 在 document 外缓存组件实例，切回时把表格 DOM 重新插入页面，触发样式重算、布局以及 chip 尺寸观察回调（`ResizeObserver`）的整批回放；5202 让已打开管理页的 DOM 始终留在公共布局内，仅切换 `visibility`/`pointer-events`/`inert` 等状态，切回不摘挂节点，因而避免重新插入引发的重排与观察回调。
+- 5202 的原位保留以 `MainLayout` 持续挂载为前提；同一浏览器标签内进入 `/large-screen` 会卸载公共布局，宿主内实例与标签随之销毁，返回后按当前 URL 重建。
 
 - 5202 相对 `bab0949` 仅 3 个文件：新增 `frontend/src/layouts/InDocumentPageHost.vue`，修改 `MainLayout.vue`、`stores/tabs.ts`。
 - 两版本共用同一开发后端（8081）与同一数据集（数据源 273 行、探针端 97 行）。
@@ -63,12 +66,13 @@
 | 数据源管理 | 基线 | 2 | 26 |
 | 数据源管理 | 候选 | 2 | 25 |
 
-探针端基线的大量布局/重算对应 chip 的 ResizeObserver 在重新插入时的整批回放；候选因保留有效宽度与实例，切回无需整表重算。数据源两版本布局次数接近，收益主要来自不再反复摘挂 273 行真实 DOM。
+探针端基线的大量布局/重算对应 `KeepAlive` 把表格重新插入页面时 chip 的 ResizeObserver 整批回放；候选因保留有效宽度与实例，切回无需整表重算。数据源两版本布局次数接近，收益主要来自不再反复摘挂 273 行真实 DOM。
 
 ## 6. 构建与测试事实（引用既有证据，本轮未重跑）
 
 - 生产构建成功：`vue-tsc --noEmit && vite build`；入口 `index-1x59Uxdx.js`，页面 chunk `DataSourcePage-g1E2YmCM.js`、`ClientConfigPage-Cp5nOvPM.js`。
-- 定向测试：**5 个相关测试文件、343 个用例**全部通过（现有证据只记录合计 343 与“5 个文件”，未逐项列出文件名）。
+- 定向测试：**5 个相关测试文件、343 个用例**全部通过（现有证据只记录合计 343 与“5 个文件”，未逐项列出文件名；本报告不补充推测的文件名）。
+- 本轮 R1 另在 5202 生产预览以真实浏览器复验关闭/重开滚动与同路径查询字符串变化，读数归档于验收用例 AS-AC-006、AS-AC-018；未重跑 A/B 与全量测试。
 - `git diff --check` 通过。
 - 72/72 有效 A/B 样本与上述指标均来自实验阶段（2026-11-26）产出，本验收留档引用而不重跑性能测量。
 
@@ -91,3 +95,4 @@
 | 日期 | 任务 | 说明 |
 |---|---|---|
 | 2026-11-27 | `CDC-APP-SHELL-FEATURE-BASELINE-DRAFT-001` | 建立本报告，汇总 5201/5202/合入事实 |
+| 2026-11-27 | `CDC-APP-SHELL-BASELINE-REVIEW-R1` | 修正 5201/5202 保留机制表述（KeepAlive 重插入 vs 文档内原位承载），保留人工体感与 A/B 数据 |

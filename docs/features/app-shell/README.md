@@ -2,7 +2,7 @@
 
 > 本文件是“平台公共布局”（`app-shell`）Feature 的**状态与导航入口**，不承载新的正式结论；正式结论以本目录各专门文档为准。
 >
-> 文档状态：`DRAFT_PENDING_OWNER_REVIEW`（本目录五份主文档为**本地草案**，待项目负责人审阅，尚未批准）
+> 文档状态：`DRAFT_PENDING_OWNER_REVIEW`（本目录五份主文档为**审阅分支草案**，位于分支 `docs/app-shell-baseline-review`，待项目负责人审阅，尚未批准）
 > 建立任务：`CDC-APP-SHELL-FEATURE-BASELINE-DRAFT-001`
 > 建立日期：2026-11-27
 > 实现版本（已合入 `origin/develop`）：`fe53383e81151718c9cff2e741ff2a8fbf2db352`
@@ -64,14 +64,15 @@
 
 - 实现由 7 笔提交组成（`b837d17 → ad6f5be → 572ba1a → 060aec1 → 6661eab → c2ee0c4 → bab0949 → fe53383`），最终以普通快进合入 `origin/develop`（`b837d17..fe53383`）。
 - **固定侧栏**：`bab0949` 之前已在 Windows Chrome 由项目负责人人工验收，原话“固定侧栏验收通过”。
-- **两个管理页标签切换体感**：`fe53383`（5202 候选）于 2026-11-27 由项目负责人人工验收，反馈“数据源管理与探针端管理的 tab 切换，感觉不到明显的停顿”；服务器侧另有 72/72 有效 A/B 样本、343 项定向测试与生产构建证据（见 [reports/APP-SHELL-ACCEPTANCE-5202.md](./reports/APP-SHELL-ACCEPTANCE-5202.md)）。
-- **文档状态**：本目录文档为草案，`docs_approval_status=PENDING_OWNER_REVIEW`，未获批准。
+- **两个管理页标签切换体感**：`fe53383`（5202 候选）于 2026-11-27 由项目负责人人工验收，反馈“数据源管理与探针端管理的 tab 切换，感觉不到明显的停顿”；服务器侧另有 72/72 有效 A/B 样本、5 个相关测试文件共 343 项通过（历史批次仅记合计）与生产构建证据（见 [reports/APP-SHELL-ACCEPTANCE-5202.md](./reports/APP-SHELL-ACCEPTANCE-5202.md)）。
+- **文档状态**：本目录文档为审阅分支草案，`docs_approval_status=PENDING_OWNER_REVIEW`，未获批准。
 
 ## 5. 与其他模板层的边界
 
 公共布局只负责**页面外层导航与容器**。业务页面内部的查询面板、结果表格、新增/编辑弹窗等模板，分别由项目级模板维护：
 
 - 查询列表页模板：[docs/baseline/query-list-page-template/README.md](../../baseline/query-list-page-template/README.md)
+- 公共列表管理页模板：[docs/baseline/list-management-page-template/README.md](../../baseline/list-management-page-template/README.md)（负责查询字段组排版、结果数量文字与新增主按钮的公共样式）
 - 列表表格视觉模板：[docs/baseline/list-table-visual-template/README.md](../../baseline/list-table-visual-template/README.md)
 - 新增/编辑弹窗视觉模板：[docs/baseline/create-edit-dialog-visual-template/README.md](../../baseline/create-edit-dialog-visual-template/README.md)
 
@@ -94,3 +95,4 @@
 | 日期 | 任务 | 说明 |
 |---|---|---|
 | 2026-11-27 | `CDC-APP-SHELL-FEATURE-BASELINE-DRAFT-001` | 建立本 Feature 五份主文档与验收报告草案，实现取材版本 `fe53383` |
+| 2026-11-27 | `CDC-APP-SHELL-BASELINE-REVIEW-R1` | 补充关闭/重开滚动实测与 5201/5202 机制区分，校正路由边界与需求—验收映射，补公共列表管理页模板链接 |

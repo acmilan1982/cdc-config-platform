@@ -32,7 +32,7 @@
   - `CACHEABLE_VIEWS` 映射“需保留实例”的路由路径 → SFC 组件名（当前仅 `/config/data-source`→`DataSourcePage`、`/config/client`→`ClientConfigPage`）；
   - `cachedViews` / `cachedPaths` 由已打开标签按 `CACHEABLE_VIEWS` 过滤得出（同源）；
   - `scrollPositions: Map<path, number>` 记录 `.content-area` 滚动位置（不参与响应式渲染）；
-  - `open()` 按路径去重；`close()` 优先返回右邻、否则左邻、最后 `null`，并删除该路径滚动记录。
+  - `open()` 按路径去重；`close()` 优先返回右邻、否则左邻、最后 `null`，并删除该路径滚动记录（仅删除 store 记录；随后路由切换的滚动保存可能再次写回离开页位置，见 §6）。
 - **MainLayout**：
   - `emptyWorkspace = route.meta.emptyWorkspace === true`；
   - `hostOwnsRoute = inDocumentPaths.includes(route.path)`；
@@ -44,10 +44,10 @@
 
 | 页面类型 | 首次进入 | 切走（离开路由） | 切回 | 关闭标签后 |
 |---|---|---|---|---|
-| **数据源管理 / 探针端管理**（常驻承载） | 首次实际打开时挂载进 `InDocumentPageHost`，发起一次列表请求 | 实例保留在 document 内：改为隐藏（`absolute` + `visibility:hidden` + `pointer-events:none` + `inert` + `aria-hidden`）；DOM、有效宽度、筛选/选中/滚动状态保留；不卸载 | 恢复可见与交互；还原 `.content-area` 滚动位置；**不发新列表请求**；因宽度未变，无需按新宽度整表重算 | 从宿主移除该路径实例、释放组件、清除滚动记录；若关闭的是激活标签则切换到右邻/左邻或空工作区；重开为全新实例 + 一次请求 |
+| **数据源管理 / 探针端管理**（常驻承载） | 首次实际打开时挂载进 `InDocumentPageHost`，发起一次列表请求 | 实例保留在 document 内：改为隐藏（`absolute` + `visibility:hidden` + `pointer-events:none` + `inert` + `aria-hidden`）；DOM、有效宽度、筛选/选中/滚动状态保留；不卸载 | 恢复可见与交互；还原 `.content-area` 滚动位置；**不发新列表请求**；因宽度未变，无需按新宽度整表重算 | 从宿主移除该路径实例、释放组件、清除滚动记录；若关闭的是激活标签则切换到右邻/左邻或空工作区；重开为全新实例 + 一次请求，用户可见滚动位置为顶部（本轮实测见 §6） |
 | **普通业务页**（如数据订阅、中心端配置） | RouterView 渲染，发起自身请求 | 卸载，DOM 移除；不在 `CACHEABLE_VIEWS`，不进入 keep-alive 缓存 | 重建组件，按原有数量重新请求 | 无保留实例；重开重建 |
 | **带轮询的监控页**（如 CDC 节点状态） | 挂载并启动自身定时器/轮询 | 卸载 → 定时器停止，不再后台轮询 | 重建 → 按既有节奏重新启动 | 同上；离开即停止轮询 |
-| **独立大屏 `/large-screen`** | 由 `App.vue` 直接渲染，不加载公共布局与标签 | 不参与标签/宿主 | 重新进入独立渲染 | 不适用（不入标签） |
+| **独立大屏 `/large-screen`** | 由 `App.vue` 直接渲染，不加载公共布局与标签 | 不参与标签/宿主；进入时 `App.vue` 卸载 `MainLayout`，已打开的常驻页实例与标签随之销毁 | 返回公共布局后按当前 URL 重建，管理页重新挂载并请求列表 | 不适用（不入标签） |
 
 ## 4. 两个管理页的承载机制（防重复挂载与重复请求）
 
@@ -65,6 +65,7 @@
 
    即当前路由仍指向刚关闭的管理页时，本帧继续由宿主承载它；路由跳转完成后路径自然退出。
 5. **无重复列表请求**：实例在切换间保持不变，故两管理页互切不触发列表 GET；关闭激活标签也不因瞬时重挂载而多发请求（生命周期证据见验收报告）。
+6. **挂载期边界**：原位保留只在 `MainLayout` 持续挂载期间成立。同一浏览器标签内进入 `/large-screen`（`meta.standalone`）时，`App.vue` 改为直接渲染 `<router-view/>`，`MainLayout` 与 `InDocumentPageHost` 卸载，宿主内实例、标签与滚动记录一并销毁；返回公共布局后按当前 URL 重建。同路径仅查询字符串变化则既不改变标签集合，也不重建宿主实例。
 
 ## 5. 隐藏页的点击 / 焦点 / 浮层隔离
 
@@ -76,9 +77,9 @@
 ## 6. 滚动归属
 
 - **唯一纵向滚动容器**：`.content-area`（`overflow-y:auto`）。页面自身不应再建立与之竞争的全高滚动根。
-- 切换标签时由 MainLayout 的 `route.path` watch 保存离开页 `scrollTop`、`nextTick` 还原目标页；滚动记录由 store 统一持有。
-- 因两个管理页实例常驻且宽度保留，切回时其表格不需要按“新宽度”重放 ResizeObserver / Element Plus 列布局；隐藏期间其自身滚动位置也保留。
-- 关闭标签会清除该路径滚动记录，因此重开从顶部开始。
+- 切换标签时由 MainLayout 的 `route.path` watch 保存离开页 `scrollTop`、`nextTick` 还原目标页；滚动记录由 store 统一持有。watch 以 `route.path` 为键，仅查询字符串变化不触发保存/恢复（本轮实测：变为 `?probe=1` 后标签数、宿主实例数与 `scrollTop` 均不变）。
+- 因两个管理页实例常驻且宽度保留，切回时其表格不需要按“新宽度”重放 ResizeObserver / Element Plus 列布局；隐藏期间其自身滚动位置也保留。实例保留场景下恢复有效（本轮实测 4800 → 切走 → 切回 4800）。
+- **关闭与重开的三层语义**：`close()` 删除该路径滚动记录；随后路由切换仍会执行一次“保存离开页 `scrollTop`”，可能把该路径记录再次写回；重开时新实例在列表返回前尚不具备完整滚动高度，恢复写入会被夹到 0。本轮 5202 实测：关前 `scrollTop=4873` → 关闭激活的数据源标签（跳到右邻“探针端管理”，0 次列表 GET）→ 从侧栏重开新增 1 次列表 GET、273 行，两帧及 0.5/1.5s 后 `scrollTop` 均为 0。该“重开在顶部”的结论绑定当次挂载/请求时序，不作为跨实现保证；若调整恢复时机需重新验证。
 
 ## 7. 新页面接入检查清单
 
@@ -86,7 +87,7 @@
 
 1. **路由元数据**：提供 `meta.title`、`meta.group`（驱动面包屑与标签标题）；仅在确需独立布局时设 `meta.standalone`；仅在需要稳定滚动条槽位时设 `meta.stableScrollbarGutter: true`（严格布尔）。
 2. **是否需要保留实例**：只有确需跨标签保留筛选/结果/滚动/选中态的页面才应常驻。加入常驻需**同时**：
-   - 在 `stores/tabs.ts` 的 `CACHEABLE_VIEWS` 增加“路径 → SFC 组件名”（组件名须与 `keep-alive include` / SFC `name` 一致）；
+   - 在 `stores/tabs.ts` 的 `CACHEABLE_VIEWS` 增加“路径 → SFC 组件名”（路径键须与宿主 `PAGE_COMPONENTS` 的映射一致）；
    - 在 `InDocumentPageHost.vue` 的 `PAGE_COMPONENTS` 注册同路径的 `defineAsyncComponent`。
    两处缺一会导致该路径被判定为可缓存却没有承载组件，或反之。
 3. **生命周期**：普通页与监控页必须在卸载时清理定时器/订阅/监听（`onUnmounted`），否则离开后仍在后台运行；常驻页应假定组件不会被反复重建，状态跨切换持续存在。
@@ -105,3 +106,4 @@
 | 日期 | 任务 | 说明 |
 |---|---|---|
 | 2026-11-27 | `CDC-APP-SHELL-FEATURE-BASELINE-DRAFT-001` | 初版草案，基于 `fe53383` 源码 |
+| 2026-11-27 | `CDC-APP-SHELL-BASELINE-REVIEW-R1` | 补充滚动重开实测与三层语义、公共布局卸载边界、查询字符串不触发滚动保存/恢复 |
