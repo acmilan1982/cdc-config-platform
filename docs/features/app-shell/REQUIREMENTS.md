@@ -1,13 +1,15 @@
 # CDC 平台公共布局（app-shell）需求基线（REQUIREMENTS）
 
-> 文档状态：`DRAFT_PENDING_OWNER_REVIEW`
+> 文档状态：`APPROVED`（2026-11-27 项目负责人批准，已审提交 `979180e`）
 > 建立任务：`CDC-APP-SHELL-FEATURE-BASELINE-DRAFT-001`
 > 建立日期：2026-11-27
 > 实现取材版本：`fe53383e81151718c9cff2e741ff2a8fbf2db352`（已合入 `origin/develop`）
 > 需求编号前缀：`AS-REQ-*`
 
 ```text
-requirements_status=DRAFT_PENDING_OWNER_REVIEW
+requirements_status=APPROVED
+approval_date=2026-11-27
+approval_reviewed_commit=979180ef302dc717298aba7d39fc619bc7c40e68
 implementation_status=IMPLEMENTED_MERGED
 fixed_sidebar_acceptance_status=PASSED_OWNER_MANUAL
 warm_tab_switch_acceptance_status=PASSED_OWNER_MANUAL
@@ -88,3 +90,4 @@ warm_tab_switch_acceptance_status=PASSED_OWNER_MANUAL
 |---|---|---|
 | 2026-11-27 | `CDC-APP-SHELL-FEATURE-BASELINE-DRAFT-001` | 初版草案，`AS-REQ-001~033`，基于 `fe53383` 源码核对 |
 | 2026-11-27 | `CDC-APP-SHELL-BASELINE-REVIEW-R1` | 校正 AS-REQ-007/020/031/032/033 路由与刷新边界，补充滚动重开三层语义与实测口径 |
+| 2026-11-27 | `CDC-APP-SHELL-BASELINE-CLOSEOUT-001` | 文档状态批准为 `APPROVED`（项目负责人批准，已审提交 `979180e`）；需求内容不变 |

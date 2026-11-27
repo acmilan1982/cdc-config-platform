@@ -3,7 +3,7 @@
 - 报告类型：Feature 验收留档（独立记录，供仓库读者理解采用理由）
 - 建立任务：`CDC-APP-SHELL-FEATURE-BASELINE-DRAFT-001`
 - 建立日期：2026-11-27
-- 文档状态：`DRAFT_PENDING_OWNER_REVIEW`
+- 文档状态：`APPROVED`（2026-11-27 项目负责人批准，已审提交 `979180e`）
 
 ## 1. 结论
 
@@ -96,3 +96,4 @@
 |---|---|---|
 | 2026-11-27 | `CDC-APP-SHELL-FEATURE-BASELINE-DRAFT-001` | 建立本报告，汇总 5201/5202/合入事实 |
 | 2026-11-27 | `CDC-APP-SHELL-BASELINE-REVIEW-R1` | 修正 5201/5202 保留机制表述（KeepAlive 重插入 vs 文档内原位承载），保留人工体感与 A/B 数据 |
+| 2026-11-27 | `CDC-APP-SHELL-BASELINE-CLOSEOUT-001` | 文档状态批准为 `APPROVED`（已审提交 `979180e`）；验收留档事实不变 |

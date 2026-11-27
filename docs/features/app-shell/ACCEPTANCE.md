@@ -1,6 +1,6 @@
 # CDC 平台公共布局（app-shell）——验收（ACCEPTANCE.md）
 
-> 文档状态：`DRAFT_PENDING_OWNER_REVIEW`
+> 文档状态：`APPROVED`（2026-11-27 项目负责人批准，已审提交 `979180e`；正式逐项验收维持 `NOT_RUN`）
 > 建立任务：`CDC-APP-SHELL-FEATURE-BASELINE-DRAFT-001`
 > 建立日期：2026-11-27
 > 实现取材版本：`fe53383e81151718c9cff2e741ff2a8fbf2db352`
@@ -10,7 +10,9 @@
 fixed_sidebar_acceptance_status=PASSED_OWNER_MANUAL       # Windows Chrome，原话“固定侧栏验收通过”
 warm_tab_switch_acceptance_status=PASSED_OWNER_MANUAL     # 2026-11-27，“两页切换感觉不到明显停顿”；未采集真机毫秒
 scroll_reopen_probe_status=PASSED_BROWSER_PROBE_5202_20261127  # 关闭激活标签后重开，scrollTop 稳定为 0
-formal_acceptance_execution_status=NOT_RUN               # 本草案不宣布逐项正式验收
+docs_approval_status=APPROVED                            # 2026-11-27 项目负责人批准，已审提交 979180e
+approval_reviewed_commit=979180ef302dc717298aba7d39fc619bc7c40e68
+formal_acceptance_execution_status=NOT_RUN               # 本次批准不宣布逐项正式验收已执行
 ```
 
 ## 1. 验收结果状态模型
@@ -131,3 +133,4 @@ formal_acceptance_execution_status=NOT_RUN               # 本草案不宣布逐
 | 2026-11-27 | `CDC-APP-SHELL-FEATURE-BASELINE-DRAFT-001` | 初版草案，`AS-AC-001~030` |
 | 2026-11-27 | `CDC-APP-SHELL-BASELINE-REVIEW-R1` | 补 AS-AC-018 滚动重开浏览器探针、AS-AC-006 查询字符串检查；校正 031/032/033 映射与 343 批次措辞 |
 | 2026-11-27 | `CDC-APP-SHELL-BASELINE-REVIEW-R2` | 逐对齐 AS-REQ-009/019；矩阵改为一对一行；展开合写编号并按可观察性修正 003/004/005、015/016、020/021/022、023/024 等关联 |
+| 2026-11-27 | `CDC-APP-SHELL-BASELINE-CLOSEOUT-001` | 文档状态批准为 `APPROVED`（已审提交 `979180e`）；正式逐项验收维持 `NOT_RUN`，待验证用例状态不变 |

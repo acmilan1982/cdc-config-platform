@@ -1,6 +1,6 @@
 # CDC 平台公共布局（app-shell）——设计（DESIGN.md）
 
-> 文档状态：`DRAFT_PENDING_OWNER_REVIEW`
+> 文档状态：`APPROVED`（2026-11-27 项目负责人批准，已审提交 `979180e`）
 > 建立任务：`CDC-APP-SHELL-FEATURE-BASELINE-DRAFT-001`
 > 建立日期：2026-11-27
 > 实现取材版本：`fe53383e81151718c9cff2e741ff2a8fbf2db352`
@@ -107,3 +107,4 @@
 |---|---|---|
 | 2026-11-27 | `CDC-APP-SHELL-FEATURE-BASELINE-DRAFT-001` | 初版草案，基于 `fe53383` 源码 |
 | 2026-11-27 | `CDC-APP-SHELL-BASELINE-REVIEW-R1` | 补充滚动重开实测与三层语义、公共布局卸载边界、查询字符串不触发滚动保存/恢复 |
+| 2026-11-27 | `CDC-APP-SHELL-BASELINE-CLOSEOUT-001` | 文档状态批准为 `APPROVED`（项目负责人批准，已审提交 `979180e`）；内容零业务语义变化 |

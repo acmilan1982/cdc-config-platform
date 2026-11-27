@@ -2,7 +2,7 @@
 
 > 本文件是“平台公共布局”（`app-shell`）Feature 的**状态与导航入口**，不承载新的正式结论；正式结论以本目录各专门文档为准。
 >
-> 文档状态：`DRAFT_PENDING_OWNER_REVIEW`（本目录五份主文档为**审阅分支草案**，位于分支 `docs/app-shell-baseline-review`，待项目负责人审阅，尚未批准）
+> 文档状态：`APPROVED`（项目负责人于 2026-11-27 批准，已审提交 `979180e`；正式逐项验收维持 `NOT_RUN`）
 > 建立任务：`CDC-APP-SHELL-FEATURE-BASELINE-DRAFT-001`
 > 建立日期：2026-11-27
 > 实现版本（已合入 `origin/develop`）：`fe53383e81151718c9cff2e741ff2a8fbf2db352`
@@ -12,7 +12,9 @@
 > implementation_status=IMPLEMENTED_MERGED          # fe53383 已快进合入 origin/develop
 > fixed_sidebar_acceptance_status=PASSED_OWNER_MANUAL
 > warm_tab_switch_acceptance_status=PASSED_OWNER_MANUAL
-> docs_approval_status=PENDING_OWNER_REVIEW
+> docs_approval_status=APPROVED
+> approval_date=2026-11-27
+> approval_reviewed_commit=979180ef302dc717298aba7d39fc619bc7c40e68
 > ```
 
 ## 1. 功能定位
@@ -65,7 +67,7 @@
 - 实现由 7 笔提交组成（`b837d17 → ad6f5be → 572ba1a → 060aec1 → 6661eab → c2ee0c4 → bab0949 → fe53383`），最终以普通快进合入 `origin/develop`（`b837d17..fe53383`）。
 - **固定侧栏**：`bab0949` 之前已在 Windows Chrome 由项目负责人人工验收，原话“固定侧栏验收通过”。
 - **两个管理页标签切换体感**：`fe53383`（5202 候选）于 2026-11-27 由项目负责人人工验收，反馈“数据源管理与探针端管理的 tab 切换，感觉不到明显的停顿”；服务器侧另有 72/72 有效 A/B 样本、5 个相关测试文件共 343 项通过（历史批次仅记合计）与生产构建证据（见 [reports/APP-SHELL-ACCEPTANCE-5202.md](./reports/APP-SHELL-ACCEPTANCE-5202.md)）。
-- **文档状态**：本目录文档为审阅分支草案，`docs_approval_status=PENDING_OWNER_REVIEW`，未获批准。
+- **文档状态**：本目录文档已于 2026-11-27 由项目负责人批准（已审提交 `979180e`），`docs_approval_status=APPROVED`，并随本任务合入 `develop`；正式逐项验收维持 `NOT_RUN`。
 
 ## 5. 与其他模板层的边界
 
@@ -96,3 +98,4 @@
 |---|---|---|
 | 2026-11-27 | `CDC-APP-SHELL-FEATURE-BASELINE-DRAFT-001` | 建立本 Feature 五份主文档与验收报告草案，实现取材版本 `fe53383` |
 | 2026-11-27 | `CDC-APP-SHELL-BASELINE-REVIEW-R1` | 补充关闭/重开滚动实测与 5201/5202 机制区分，校正路由边界与需求—验收映射，补公共列表管理页模板链接 |
+| 2026-11-27 | `CDC-APP-SHELL-BASELINE-CLOSEOUT-001` | 文档基线经项目负责人批准（已审提交 `979180e`），`docs_approval_status=APPROVED` 并合入 `develop`；正式逐项验收维持 `NOT_RUN` |

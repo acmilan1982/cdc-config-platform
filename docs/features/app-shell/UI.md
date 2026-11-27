@@ -1,6 +1,6 @@
 # CDC 平台公共布局（app-shell）——UI 设计（UI.md）
 
-> 文档状态：`DRAFT_PENDING_OWNER_REVIEW`
+> 文档状态：`APPROVED`（2026-11-27 项目负责人批准，已审提交 `979180e`）
 > 建立任务：`CDC-APP-SHELL-FEATURE-BASELINE-DRAFT-001`
 > 建立日期：2026-11-27
 > 实现取材版本：`fe53383e81151718c9cff2e741ff2a8fbf2db352`
@@ -100,3 +100,4 @@ Element Plus 菜单的 `background-color`/`text-color`/`active-text-color` 绑�
 | 日期 | 任务 | 说明 |
 |---|---|---|
 | 2026-11-27 | `CDC-APP-SHELL-FEATURE-BASELINE-DRAFT-001` | 初版草案，CSS 取值以 `fe53383` 源码核对 |
+| 2026-11-27 | `CDC-APP-SHELL-BASELINE-CLOSEOUT-001` | 文档状态批准为 `APPROVED`（项目负责人批准，已审提交 `979180e`）；UI 取值不变 |
