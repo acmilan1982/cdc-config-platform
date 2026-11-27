@@ -17,11 +17,13 @@
             <p class="empty-workspace__title">暂无打开的页面</p>
             <p class="empty-workspace__hint">请从左侧菜单打开页面</p>
           </div>
-          <router-view v-else v-slot="{ Component }">
+          <router-view v-if="!emptyWorkspace && !hostOwnsRoute" v-slot="{ Component }">
             <keep-alive :include="cachedViews">
               <component :is="Component" :key="route.path" />
             </keep-alive>
           </router-view>
+          <!-- 已打开的目标页留在 document 内承载；命中时 RouterView 不再渲染第二份。 -->
+          <InDocumentPageHost v-if="inDocumentPaths.length > 0" :paths="inDocumentPaths" />
         </div>
       </div>
     </div>
@@ -31,10 +33,11 @@
 <script setup lang="ts">
 import { computed, nextTick, ref, watch } from 'vue'
 import { useRoute } from 'vue-router'
-import { useTabsStore } from '@/stores/tabs'
+import { useTabsStore, isPersistentViewPath } from '@/stores/tabs'
 import Sidebar from './Sidebar.vue'
 import HeaderBar from './HeaderBar.vue'
 import PageTabs from './PageTabs.vue'
+import InDocumentPageHost from './InDocumentPageHost.vue'
 
 const tabsStore = useTabsStore()
 const route = useRoute()
@@ -47,6 +50,17 @@ const route = useRoute()
 const stableScrollbarGutter = computed(() => route.meta.stableScrollbarGutter === true)
 const emptyWorkspace = computed(() => route.meta.emptyWorkspace === true)
 const cachedViews = computed(() => tabsStore.cachedViews)
+/**
+ * 宿主承载的路径 = 已打开且需保留实例的标签路径；若当前路由本身是要保留的页面
+ * （如关闭其激活标签后、路由跳转尚未完成），在本帧内继续由宿主承载该页，
+ * 避免 RouterView 在标签移除与路由跳转之间重新挂载页面并重复发起列表请求。
+ */
+const inDocumentPaths = computed(() => {
+  const open = tabsStore.cachedPaths
+  return isPersistentViewPath(route.path) && !open.includes(route.path) ? [...open, route.path] : open
+})
+/** 当前路由由 in-document 宿主承载时，RouterView 不再渲染该页。 */
+const hostOwnsRoute = computed(() => inDocumentPaths.value.includes(route.path))
 
 const contentAreaRef = ref<HTMLElement | null>(null)
 

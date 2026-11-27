@@ -16,6 +16,11 @@ const CACHEABLE_VIEWS: Record<string, string> = {
   '/config/client': 'ClientConfigPage'
 }
 
+/** 该路由是否属于“保留页面实例”的页面（与标签显示无关，载入时路由守卫会先补开标签）。 */
+export function isPersistentViewPath(path: string): boolean {
+  return Object.prototype.hasOwnProperty.call(CACHEABLE_VIEWS, path)
+}
+
 export const useTabsStore = defineStore('tabs', () => {
   /** 页面标签仅保存在本次页面会话内：刷新浏览器后从当前 URL 重新建立。 */
   const tabs = ref<PageTab[]>([])
@@ -28,6 +33,11 @@ export const useTabsStore = defineStore('tabs', () => {
     tabs.value
       .map((tab) => CACHEABLE_VIEWS[tab.path])
       .filter((name): name is string => Boolean(name))
+  )
+
+  /** 已打开且需要保留实例（in-document 承载）的路由路径，与 cachedViews 同源。 */
+  const cachedPaths = computed(() =>
+    tabs.value.map((tab) => tab.path).filter((path) => Boolean(CACHEABLE_VIEWS[path]))
   )
 
   function has(path: string): boolean {
@@ -77,6 +87,7 @@ export const useTabsStore = defineStore('tabs', () => {
     tabs,
     activePath,
     cachedViews,
+    cachedPaths,
     has,
     open,
     close,
